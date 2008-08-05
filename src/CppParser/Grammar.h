@@ -39,6 +39,7 @@ struct Grammar: public boost::spirit::grammar<Grammar>
 
         boost::spirit::rule<ScannerT> program_file;
         boost::spirit::rule<ScannerT> program;
+        boost::spirit::rule<ScannerT> program_item;
 
         boost::spirit::rule<ScannerT> source_character_set;
         boost::spirit::rule<ScannerT> keyword;
@@ -46,7 +47,7 @@ struct Grammar: public boost::spirit::grammar<Grammar>
         //1.2 - Lexical conventions [gram.lex]
         boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> hex_quad;
         boost::spirit::rule<ScannerT> universal_character_name;
-        /*boost::spirit::rule<ScannerT> preprocessing_token;*/
+        boost::spirit::rule<ScannerT> preprocessing_token;
         boost::spirit::rule<ScannerT> token;
         boost::spirit::rule<ScannerT> header_name;
         boost::spirit::rule<ScannerT> h_char_sequence;
@@ -255,7 +256,7 @@ struct Grammar: public boost::spirit::grammar<Grammar>
         boost::spirit::rule<ScannerT> throw_expression;
         boost::spirit::rule<ScannerT> exception_specification;
         boost::spirit::rule<ScannerT> type_id_list;
-
+*/
         //1.14 - Preprocessing directives [gram.cpp]
         boost::spirit::rule<ScannerT> preprocessing_file;
         boost::spirit::rule<ScannerT> group;
@@ -267,10 +268,8 @@ struct Grammar: public boost::spirit::grammar<Grammar>
         boost::spirit::rule<ScannerT> else_group;
         boost::spirit::rule<ScannerT> endif_line;
         boost::spirit::rule<ScannerT> control_line;
-        boost::spirit::rule<ScannerT> lparen;
         boost::spirit::rule<ScannerT> replacement_list;
         boost::spirit::rule<ScannerT> pp_tokens;
-        boost::spirit::rule<ScannerT> new_line;*/
     };
 };
 
@@ -281,11 +280,16 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     using namespace boost::spirit;
 
     program_file
-        = program >> end_p;
+        = program >> end_p
     ;
 
     program
-        = statement
+        = +program_item
+    ;
+
+    program_item
+        = ch_p('#') >> "include" >> pp_tokens
+        | statement
         | declaration
     ;
 
@@ -418,17 +422,17 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
         = lexeme_d[str_p("\\u") >> hex_quad]
         | lexeme_d[str_p("\\U") >> hex_quad >> hex_quad]
     ;
-/*
+
     preprocessing_token
         = header_name
         | identifier
-        | pp_number
+        //| pp_number
         | character_literal
         | string_literal
-        | preprocessing_op_or_punc
+        //| preprocessing_op_or_punc
         | alpha_p //each non_white_space character that cannot be one of the above
     ;
-*/
+
     token
         = identifier
         | keyword
@@ -447,7 +451,7 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     ;
 
     h_char
-        = source_character_set & ~ch_p('\n') & ~ch_p('>');
+        = source_character_set - (ch_p('\n') | ch_p('>'));
     ;
 
     q_char_sequence
@@ -455,7 +459,7 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     ;
 
     q_char
-        = source_character_set & ~ch_p('\n') & ~ch_p('\"');
+        = source_character_set - (ch_p('\n') | ch_p('\"'));
     ;
 /*
     pp_number
@@ -733,7 +737,7 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     ;
 
     /*
-    The following rule is wrotten like this in the standard:
+    The following rule is written like this in the standard:
         postfix_expression
             = primary_expression
             | postfix_expression >> '[' >> expression >> ']'
@@ -1013,7 +1017,7 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     ;
 
     /*
-    The following rule is wrotten like this in the standard:
+    The following rule is written like this in the standard:
         simple_declaration
             = !decl_specifier_seq >> !init_declarator_list >> ch_p(';')
         ;
@@ -1324,6 +1328,7 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     ;
 
     /*
+    Original rule is:
         direct_abstract_declarator
             = !direct_abstract_declarator >> '(' >> parameter_declaration_clause >> ')' >> !cv_qualifier_seq >> !exception_specification
             | !direct_abstract_declarator >> '[' >> !constant_expression >> ']'
@@ -1373,6 +1378,7 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     ;
 
     /*
+    Original rule is:
         function_definition
             = !decl_specifier_seq >> declarator >> !ctor_initializer >> function_body
             | !decl_specifier_seq >> declarator >> function_try_block
@@ -1392,7 +1398,6 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     function_definition_decl_specifier_seq3
         = +(decl_specifier - (declarator /*>> function_try_block*/))
     ;
-
 
     function_body
         = compound_statement
@@ -1655,10 +1660,18 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     type_id_list
         = type_id >> *(',' >> type_id)
     ;
-
+*/
     //1.14 - Preprocessing directives [gram.cpp]
+    /*
+    The rule, as written in the standard, define preprocessing_file as an optional group.
+    However, the only rule where preprocessing_file is used put it inside a kleen star.
+    Leave preprocessing_file rule as is will lead to an infinite loop.
+        preprocessing_file
+            = !group
+        ;
+    */
     preprocessing_file
-        = !group
+        = group
     ;
 
     group
@@ -1666,9 +1679,9 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     ;
 
     group_part
-        = !pp_tokens >> new_line
+        = /* !pp_tokens >> '\n'
         | if_section
-        | control_line
+        |*/ control_line
     ;
 
     if_section
@@ -1676,54 +1689,46 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     ;
 
     if_group
-        = ch_p('#') >> "if" >> constant_expression >> new_line >> !group
-        | ch_p('#') >> "ifdef" >> identifier >> new_line >> !group
-        | ch_p('#') >> "ifndef" >> identifier >> new_line >> !group
+        = ch_p('#') >> "if" >> constant_expression >> '\n' >> !group
+        | ch_p('#') >> "ifdef" >> identifier >> '\n' >> !group
+        | ch_p('#') >> "ifndef" >> identifier >> '\n' >> !group
     ;
 
     elif_groups
-        = elif_group
-        | elif_groups >> elif_group
+        = +elif_group
     ;
 
     elif_group
-        = ch_p('#') >> "elif" >> constant_expression >> new_line >> !group
+        = ch_p('#') >> "elif" >> constant_expression >> '\n' >> !group
     ;
 
     else_group
-        = ch_p('#') >> "else" >> new_line >> !group
+        = ch_p('#') >> "else" >> '\n' >> !group
     ;
 
     endif_line
-        = ch_p('#') >> "endif" >> new_line
+        = ch_p('#') >> "endif" >> '\n'
     ;
 
     control_line
-        = ch_p('#') >> "include" >> pp_tokens >> new_line
-        | ch_p('#') >> "define" >> identifier >> replacement_list >> new_line
-        | ch_p('#') >> "define" >> identifier >> lparen '(' >> *identifier >> ')' >> replacement_list >> new_line
-        | ch_p('#') >> "undef" >> identifier >> new_line
-        | ch_p('#') >> "line" >> pp_tokens >> new_line
-        | ch_p('#') >> "error" >> !pp_tokens >> new_line
-        | ch_p('#') >> "pragma" >> !pp_tokens >> new_line
-        | ch_p('#') >> new_line
+        = ch_p('#') >> "include" >> pp_tokens >> '\n'
+        | ch_p('#') >> "define" >> identifier >> replacement_list >> '\n'
+        | ch_p('#') >> "define" >> lexeme_d[identifier >> '('] >> *identifier >> ')' >> replacement_list >> '\n' //it cannot be a space between a macro function's name and the left parenthesis
+        | ch_p('#') >> "undef" >> identifier >> '\n'
+        | ch_p('#') >> "line" >> pp_tokens >> '\n'
+        | ch_p('#') >> "error" >> !pp_tokens >> '\n'
+        | ch_p('#') >> "pragma" >> !pp_tokens >> '\n'
+        | ch_p('#') >> '\n'
     ;
-
-    //lparen
-    //    = //the left_parenthesis character without preceding white_space
-    //;
 
     replacement_list
         = !pp_tokens
     ;
 
+    //TODO there should be a + prefix, but it causes issues
     pp_tokens
-        = +preprocessing_token
+        = /*+*/preprocessing_token
     ;
-
-    new_line
-        = ch_p('\n')
-    ;*/
 }
 
 template<typename ScannerT>
