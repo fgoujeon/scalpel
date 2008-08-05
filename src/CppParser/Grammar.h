@@ -190,7 +190,14 @@ struct Grammar: public boost::spirit::grammar<Grammar>
         boost::spirit::rule<ScannerT> parameter_declaration_clause;
         boost::spirit::rule<ScannerT> parameter_declaration_list;
         boost::spirit::rule<ScannerT> parameter_declaration;
+        boost::spirit::rule<ScannerT> parameter_declaration_decl_specifier_seq1;
+        boost::spirit::rule<ScannerT> parameter_declaration_decl_specifier_seq2;
+        boost::spirit::rule<ScannerT> parameter_declaration_decl_specifier_seq3;
+        boost::spirit::rule<ScannerT> parameter_declaration_decl_specifier_seq4;
         boost::spirit::rule<ScannerT> function_definition;
+        boost::spirit::rule<ScannerT> function_definition_decl_specifier_seq1;
+        boost::spirit::rule<ScannerT> function_definition_decl_specifier_seq2;
+        boost::spirit::rule<ScannerT> function_definition_decl_specifier_seq3;
         boost::spirit::rule<ScannerT> function_body;
         boost::spirit::rule<ScannerT> initializer;
         boost::spirit::rule<ScannerT> initializer_clause;
@@ -282,14 +289,43 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
         | declaration
     ;
 
-    source_character_set = chset_p
-    (
-        "abcdefghijklmnopqrstuvwxyz"
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        "0123456789"
-        "_{}[]#()<>%:;.?*+-/^&|~!=,\\\"\'"
-        " \t\v\f\n" //space, horizontal tab, vertical tab, form feed, new line
-    );
+    source_character_set
+        = chset_p("a-zA-Z0-9")
+        | '_'
+        | '{'
+        | '}'
+        | '['
+        | ']'
+        | '#'
+        | '('
+        | ')'
+        | '<'
+        | '>'
+        | '%'
+        | ':'
+        | ';'
+        | '.'
+        | '?'
+        | '*'
+        | '+'
+        | '-'
+        | '/'
+        | '^'
+        | '&'
+        | '|'
+        | '~'
+        | '!'
+        | '='
+        | ','
+        | '\\'
+        | '"'
+        | '\''
+        | ' ' //space
+        | '\t' //horizontal tab
+        | '\v' //vertical tab
+        | '\f' //form feed
+        | '\n' //new line
+    ;
 
     /*
     Sorted in inverse alphabetical order to prevent scanner to parse e.g. "do" when scanning "double"
@@ -1249,7 +1285,6 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
         )
         >>
         *(
-
             '(' >> parameter_declaration_clause >> ')' >> !cv_qualifier_seq //>> !exception_specification
             | '[' >> !constant_expression >> ']'
         )
@@ -1316,17 +1351,48 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
         = parameter_declaration % ','
     ;
 
+    //TODO check whether every parameter_declaration_decl_specifier_seq* is necessary
     parameter_declaration
-        = /*decl_specifier_seq >> declarator
-        | decl_specifier_seq >> declarator >> '=' >> assignment_expression
-        |*/ decl_specifier_seq >> !abstract_declarator
-        /*| decl_specifier_seq >> !abstract_declarator >> '=' >> assignment_expression*/
+        = parameter_declaration_decl_specifier_seq1 >> declarator
+        | parameter_declaration_decl_specifier_seq2 >> declarator >> '=' >> assignment_expression
+        | parameter_declaration_decl_specifier_seq3 >> !abstract_declarator
+        | parameter_declaration_decl_specifier_seq4 >> abstract_declarator >> '=' >> assignment_expression
+        | decl_specifier_seq >> '=' >> assignment_expression
+    ;
+    parameter_declaration_decl_specifier_seq1
+        = +(decl_specifier - declarator)
+    ;
+    parameter_declaration_decl_specifier_seq2
+        = +(decl_specifier - (declarator >> '=' >> assignment_expression))
+    ;
+    parameter_declaration_decl_specifier_seq3
+        = +(decl_specifier - abstract_declarator)
+    ;
+    parameter_declaration_decl_specifier_seq4
+        = +(decl_specifier - (abstract_declarator >> '=' >> assignment_expression))
     ;
 
+    /*
+        function_definition
+            = !decl_specifier_seq >> declarator >> !ctor_initializer >> function_body
+            | !decl_specifier_seq >> declarator >> function_try_block
+        ;
+    */
     function_definition
-        = !decl_specifier_seq >> declarator >> /* !ctor_initializer >>*/ function_body
-        //| !decl_specifier_seq >> declarator >> function_try_block
+        = !function_definition_decl_specifier_seq1 >> declarator /*>> ctor_initializer*/ >> function_body
+        | !function_definition_decl_specifier_seq2 >> declarator >> function_body
+        | !function_definition_decl_specifier_seq3 >> declarator /*>> function_try_block*/
     ;
+    function_definition_decl_specifier_seq1
+        = +(decl_specifier - (declarator /*>> ctor_initializer*/ >> function_body))
+    ;
+    function_definition_decl_specifier_seq2
+        = +(decl_specifier - (declarator >> function_body))
+    ;
+    function_definition_decl_specifier_seq3
+        = +(decl_specifier - (declarator /*>> function_try_block*/))
+    ;
+
 
     function_body
         = compound_statement

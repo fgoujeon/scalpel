@@ -27,7 +27,9 @@ main()
 
 
     parse_info<> info = parse(buffer.str().c_str(), grammar, space_p);
-    cout << "*" << buffer.str() << "*" << endl;
+    cout << "=============================\n";
+    cout << buffer.str() << endl;
+    cout << "=============================\n";
     if(info.full) //success
     {
         cout << "Parsing succeeded!\n";

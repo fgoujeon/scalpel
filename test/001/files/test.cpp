@@ -1,3 +1,3 @@
-int square(Object o)
+int main(int argc, char** argv)
 {
 }
