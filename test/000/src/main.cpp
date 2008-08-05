@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstring>
 #include <boost/spirit.hpp>
-#include "CppParser/Grammar.h"
+#include <CppParser/Grammar.h>
 
 using namespace boost::spirit;
 using namespace std;
@@ -13,7 +13,7 @@ main()
 
     const char* tests[][2] =
     {
-        /*{
+        {
             "test<double(friend ...)>;",
             "ok"
         },
@@ -332,10 +332,10 @@ main()
         {
             "asm"
             "("
-            "    \"movb 0x61,\%al\""
+            "    \"movb 0x61,al\""
             ");",
             "ok"
-        },*/
+        },
         {
             "namespace io = boost::iostreams;",
             "ok"

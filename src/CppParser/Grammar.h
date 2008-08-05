@@ -37,6 +37,9 @@ struct Grammar: public boost::spirit::grammar<Grammar>
         Comments refer to ISO/IEC 14882:1998(E) (C++98 Standard), Annex A (Grammar summary)
         */
 
+        boost::spirit::rule<ScannerT> program_file;
+        boost::spirit::rule<ScannerT> program;
+
         boost::spirit::rule<ScannerT> source_character_set;
         boost::spirit::rule<ScannerT> keyword;
 
@@ -93,7 +96,6 @@ struct Grammar: public boost::spirit::grammar<Grammar>
         boost::spirit::rule<ScannerT> nested_name_specifier;
         boost::spirit::rule<ScannerT> class_or_namespace_name;
         boost::spirit::rule<ScannerT> postfix_expression;
-        boost::spirit::rule<ScannerT> postfix_expression_helper;
         boost::spirit::rule<ScannerT> expression_list;
         boost::spirit::rule<ScannerT> pseudo_destructor_name;
         boost::spirit::rule<ScannerT> unary_expression;
@@ -270,6 +272,15 @@ template<typename ScannerT>
 Grammar::definition<ScannerT>::definition(const Grammar& self)
 {
     using namespace boost::spirit;
+
+    program_file
+        = program >> end_p;
+    ;
+
+    program
+        = statement
+        | declaration
+    ;
 
     source_character_set = chset_p
     (
@@ -692,48 +703,49 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
             | postfix_expression >> '[' >> expression >> ']'
             | postfix_expression >> '(' >> !expression_list >> ')'
             | simple_type_specifier >> '(' >> !expression_list >> ')'
-            | typename >> !str_p("::") >> nested_name_specifier >> identifier >> '(' >> !expression_list >> ')'
-            | typename >> !str_p("::") >> nested_name_specifier >> !str_p("template") >> template_id >> '(' >> !expression_list >> ')'
+            | str_p("typename") >> !str_p("::") >> nested_name_specifier >> identifier >> '(' >> !expression_list >> ')'
+            | str_p("typename") >> !str_p("::") >> nested_name_specifier >> !str_p("template") >> template_id >> '(' >> !expression_list >> ')'
             | postfix_expression >> '.' >> !str_p("template") >> id_expression
             | postfix_expression >> "->" >> !str_p("template") >> id_expression
             | postfix_expression >> '.' >> pseudo_destructor_name
             | postfix_expression >> "->" >> pseudo_destructor_name
             | postfix_expression >> "++"
             | postfix_expression >> "--"
-            | dynamic_cast >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
-            | static_cast >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
-            | reinterpret_cast >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
-            | const_cast >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
-            | typeid >> '(' >> expression >> ')'
-            | typeid >> '(' >> type_id >> ')'
+            | str_p("dynamic_cast") >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
+            | str_p("static_cast") >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
+            | str_p("reinterpret_cast") >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
+            | str_p("const_cast") >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
+            | str_p("typeid") >> '(' >> expression >> ')'
+            | str_p("typeid") >> '(' >> type_id >> ')'
         ;
-    There are some left recursions that we had to eliminate by writing a helper rule.
+    There are some left recursions that we had to eliminate.
+    See direct_declarator rule for more information about the different steps to follow.
     */
     postfix_expression
-        = postfix_expression_helper >>
-            !(
-                '[' >> expression >> ']'
-                | '(' >> !expression_list >> ')'
-                | '.' >> !str_p("template") >> id_expression
-                | "->" >> !str_p("template") >> id_expression
-                | '.' >> pseudo_destructor_name
-                | "->" >> pseudo_destructor_name
-                | "++"
-                | "--"
-            )
-    ;
-
-    postfix_expression_helper
-        = str_p("typename") >> !str_p("::") >> nested_name_specifier >> identifier >> '(' >> !expression_list >> ')'
-        | str_p("typename") >> !str_p("::") >> nested_name_specifier >> !str_p("template") >> template_id >> '(' >> !expression_list >> ')'
-        | str_p("dynamic_cast") >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
-        | str_p("static_cast") >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
-        | str_p("reinterpret_cast") >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
-        | str_p("const_cast") >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
-        | str_p("typeid") >> '(' >> expression >> ')'
-        | str_p("typeid") >> '(' >> type_id >> ')'
-        | simple_type_specifier >> '(' >> !expression_list >> ')'
-        | primary_expression
+        =
+        (
+            primary_expression
+            | simple_type_specifier >> '(' >> !expression_list >> ')'
+            | str_p("typename") >> !str_p("::") >> nested_name_specifier >> identifier >> '(' >> !expression_list >> ')'
+            | str_p("typename") >> !str_p("::") >> nested_name_specifier >> !str_p("template") >> template_id >> '(' >> !expression_list >> ')'
+            | str_p("dynamic_cast") >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
+            | str_p("static_cast") >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
+            | str_p("reinterpret_cast") >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
+            | str_p("const_cast") >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
+            | str_p("typeid") >> '(' >> expression >> ')'
+            | str_p("typeid") >> '(' >> type_id >> ')'
+        )
+        >>
+        *(
+            '[' >> expression >> ']'
+            | '(' >> !expression_list >> ')'
+            | '.' >> !str_p("template") >> id_expression
+            | "->" >> !str_p("template") >> id_expression
+            | '.' >> pseudo_destructor_name
+            | "->" >> pseudo_destructor_name
+            | "++"
+            | "--"
+        )
     ;
 
     expression_list
@@ -1152,11 +1164,95 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
         | ptr_operator >> declarator
     ;
 
+    /*
+    Original rule is:
+        direct_declarator
+            = declarator_id
+            | direct_declarator >> '(' >> parameter_declaration_clause >> ')' >> !cv_qualifier_seq >> !exception_specification
+            | direct_declarator >> '[' >> !constant_expression >> ']'
+            | '(' >> declarator >> ')'
+        ;
+
+    We have to eliminate left recursion. There are the different steps on this elimination:
+
+        direct_declarator
+            = declarator_id
+            | '(' >> declarator >> ')'
+            | direct_declarator >> direct_declarator_rest
+        ;
+        direct_declarator_rest
+            = '(' >> parameter_declaration_clause >> ')' >> !cv_qualifier_seq >> !exception_specification
+            | '[' >> !constant_expression >> ']'
+        ;
+
+        ***
+
+        direct_declarator
+            = (declarator_id | '(' >> declarator >> ')') >> direct_declarator_rest
+
+        ;
+        direct_declarator_rest
+            = '(' >> parameter_declaration_clause >> ')' >> !cv_qualifier_seq >> !exception_specification >> direct_declarator_rest
+            | '[' >> !constant_expression >> ']' >> direct_declarator_rest
+            | epsilon_p
+        ;
+
+        ***
+
+        direct_declarator
+            = (declarator_id | '(' >> declarator >> ')') >> direct_declarator_rest
+        ;
+        direct_declarator_rest
+            =
+                (
+                    '(' >> parameter_declaration_clause >> ')' >> !cv_qualifier_seq >> !exception_specification
+                    | '[' >> !constant_expression >> ']'
+                ) >> direct_declarator_rest
+            | epsilon_p
+        ;
+
+        ***
+
+        direct_declarator
+            = (declarator_id | '(' >> declarator >> ')') >> direct_declarator_rest
+        ;
+        direct_declarator_rest
+            =
+                !(
+                    (
+                        '(' >> parameter_declaration_clause >> ')' >> !cv_qualifier_seq >> !exception_specification
+                        | '[' >> !constant_expression >> ']'
+                    )
+                    >> direct_declarator_rest
+                )
+        ;
+
+        ***
+
+        direct_declarator
+            = (declarator_id | '(' >> declarator >> ')') >> direct_declarator_rest
+        ;
+        direct_declarator_rest
+            =
+                *(
+
+                    '(' >> parameter_declaration_clause >> ')' >> !cv_qualifier_seq >> !exception_specification
+                    | '[' >> !constant_expression >> ']'
+                )
+        ;
+    */
     direct_declarator
-        = '(' >> declarator >> ')'
-        | declarator_id
-        /*| direct_declarator >> '(' >> parameter_declaration_clause >> ')' >> !cv_qualifier_seq >> !exception_specification
-        | direct_declarator >> '[' >> !constant_expression >> ']'*/
+        =
+        (
+            declarator_id
+            | '(' >> declarator >> ')'
+        )
+        >>
+        *(
+
+            '(' >> parameter_declaration_clause >> ')' >> !cv_qualifier_seq //>> !exception_specification
+            | '[' >> !constant_expression >> ']'
+        )
     ;
 
     ptr_operator
@@ -1201,12 +1297,14 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     */
     direct_abstract_declarator
         =
-            +
-            (
-                '(' >> parameter_declaration_clause >> ')' >> !cv_qualifier_seq //>> !exception_specification
-                //| '[' >> !constant_expression >> ']'
-            )
-        | '(' >> abstract_declarator >> ')'
+        !(
+            '(' >> abstract_declarator >> ')'
+        )
+        >>
+        *(
+            '(' >> parameter_declaration_clause >> ')' >> !cv_qualifier_seq //>> !exception_specification
+            | '[' >> !constant_expression >> ']'
+        )
     ;
 
     parameter_declaration_clause
@@ -1537,7 +1635,7 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     control_line
         = ch_p('#') >> "include" >> pp_tokens >> new_line
         | ch_p('#') >> "define" >> identifier >> replacement_list >> new_line
-        | ch_p('#') >> "define" >> identifier >> /*lparen '(' >> *identifier >> ')' >> replacement_list >> new_line
+        | ch_p('#') >> "define" >> identifier >> lparen '(' >> *identifier >> ')' >> replacement_list >> new_line
         | ch_p('#') >> "undef" >> identifier >> new_line
         | ch_p('#') >> "line" >> pp_tokens >> new_line
         | ch_p('#') >> "error" >> !pp_tokens >> new_line
@@ -1568,7 +1666,7 @@ Grammar::definition<ScannerT>::start() const
 {
     //return token;
     //return statement;
-    return declaration;
+    return program_file;
 }
 
 } //namespace CppParser

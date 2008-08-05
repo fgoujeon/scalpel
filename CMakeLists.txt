@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 2.6)
 set(CMAKE_VERBOSE_MAKEFILE off)
 
-project(CppParser)
-set(EXECUTABLE_OUTPUT_PATH bin)
+project(CppParser CXX)
+set(LIBRARY_OUTPUT_PATH lib)
 
 file(
 	GLOB_RECURSE sources
@@ -12,8 +12,9 @@ file(
 	GLOB_RECURSE headers
 	src/*.h
 )
-add_executable(
-	Demo
+add_library(
+	cppparser
+	SHARED
 	${sources}
 	${headers}
 )

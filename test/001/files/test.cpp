@@ -1,0 +1,3 @@
+int square(Object o)
+{
+}
