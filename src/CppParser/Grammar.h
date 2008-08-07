@@ -134,6 +134,7 @@ struct Grammar: public boost::spirit::grammar<Grammar>
         boost::spirit::rule<ScannerT> statement_seq;
         boost::spirit::rule<ScannerT> selection_statement;
         boost::spirit::rule<ScannerT> condition;
+        boost::spirit::rule<ScannerT> condition_type_specifier_seq;
         boost::spirit::rule<ScannerT> iteration_statement;
         boost::spirit::rule<ScannerT> for_init_statement;
         boost::spirit::rule<ScannerT> jump_statement;
@@ -288,7 +289,7 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     ;
 
     program_item
-        = ch_p('#') >> "include" >> pp_tokens
+        = preprocessing_file
         | statement
         | declaration
     ;
@@ -324,7 +325,7 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
         | '\\'
         | '"'
         | '\''
-        | ' ' //space
+        | ' '  //space
         | '\t' //horizontal tab
         | '\v' //vertical tab
         | '\f' //form feed
@@ -871,7 +872,7 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     ;
 
     relational_expression
-        = shift_expression % (ch_p('<') | '>' | "<=" | ">=")
+        = shift_expression % (str_p("<=") | ">=" | '<' | '>')
     ;
 
     equality_expression
@@ -961,14 +962,22 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     ;
 
     selection_statement
-        = str_p("if") >> '(' >> condition >> ')' >> statement
-        | str_p("if") >> '(' >> condition >> ')' >> statement >> "else" >> statement
+        = str_p("if") >> '(' >> condition >> ')' >> statement >> !("else" >> statement)
         | str_p("switch") >> '(' >> condition >> ')' >> statement
     ;
 
+    /*
+        condition
+            = expression
+            | type_specifier_seq >> declarator >> '=' >> assignment_expression
+        ;
+    */
     condition
         = expression
-        //| type_specifier_seq >> declarator >> '=' >> assignment_expression
+        | condition_type_specifier_seq >> declarator >> '=' >> assignment_expression
+    ;
+    condition_type_specifier_seq
+        = +(type_specifier - (declarator >> '=' >> assignment_expression))
     ;
 
     iteration_statement
@@ -979,7 +988,7 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
 
     for_init_statement
         = expression_statement
-        //| simple_declaration
+        | simple_declaration
     ;
 
     jump_statement
@@ -1365,13 +1374,13 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
         | decl_specifier_seq >> '=' >> assignment_expression
     ;
     parameter_declaration_decl_specifier_seq1
-        = +(decl_specifier - declarator)
+        = +(decl_specifier - (declarator >> (ch_p(',') >> ')' >> "...")))
     ;
     parameter_declaration_decl_specifier_seq2
         = +(decl_specifier - (declarator >> '=' >> assignment_expression))
     ;
     parameter_declaration_decl_specifier_seq3
-        = +(decl_specifier - abstract_declarator)
+        = +(decl_specifier - (abstract_declarator >> (ch_p(',') >> ')' >> "...")))
     ;
     parameter_declaration_decl_specifier_seq4
         = +(decl_specifier - (abstract_declarator >> '=' >> assignment_expression))
@@ -1679,9 +1688,9 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     ;
 
     group_part
-        = /* !pp_tokens >> '\n'
+        = !pp_tokens >> '\n'
         | if_section
-        |*/ control_line
+        | control_line
     ;
 
     if_section
@@ -1710,15 +1719,16 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
         = ch_p('#') >> "endif" >> '\n'
     ;
 
+    //TODO control lines should be ended by an end-of-line character
     control_line
-        = ch_p('#') >> "include" >> pp_tokens >> '\n'
-        | ch_p('#') >> "define" >> identifier >> replacement_list >> '\n'
-        | ch_p('#') >> "define" >> lexeme_d[identifier >> '('] >> *identifier >> ')' >> replacement_list >> '\n' //it cannot be a space between a macro function's name and the left parenthesis
-        | ch_p('#') >> "undef" >> identifier >> '\n'
-        | ch_p('#') >> "line" >> pp_tokens >> '\n'
-        | ch_p('#') >> "error" >> !pp_tokens >> '\n'
-        | ch_p('#') >> "pragma" >> !pp_tokens >> '\n'
-        | ch_p('#') >> '\n'
+        = ch_p('#') >> "include" >> pp_tokens //>> '\n'
+        | ch_p('#') >> "define" >> identifier >> replacement_list //>> '\n'
+        | ch_p('#') >> "define" >> lexeme_d[identifier >> '('] >> *identifier >> ')' >> replacement_list //>> '\n' //it cannot be a space between a macro function's name and the left parenthesis
+        | ch_p('#') >> "undef" >> identifier //>> '\n'
+        | ch_p('#') >> "line" >> pp_tokens //>> '\n'
+        | ch_p('#') >> "error" >> !pp_tokens //>> '\n'
+        | ch_p('#') >> "pragma" >> !pp_tokens //>> '\n'
+        | ch_p('#') //>> '\n'
     ;
 
     replacement_list
@@ -1735,8 +1745,6 @@ template<typename ScannerT>
 boost::spirit::rule<ScannerT> const&
 Grammar::definition<ScannerT>::start() const
 {
-    //return token;
-    //return statement;
     return program_file;
 }
 

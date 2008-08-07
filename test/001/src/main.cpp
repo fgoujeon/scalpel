@@ -1,8 +1,7 @@
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <string>
-#include <exception>
-#include <stdexcept>
 #include <boost/spirit.hpp>
 #include <CppParser/Grammar.h>
 
@@ -14,30 +13,40 @@ main()
 {
     CppParser::Grammar grammar;
 
-    std::string file_name("files/test.cpp");
-    std::ifstream file(file_name.c_str());
-    if(!file)
+    for(unsigned int i = 0; ; ++i)
     {
-        std::runtime_error e(("Unable to open " + file_name).c_str());
-        throw e;
-    }
-    std::stringstream buffer;
-    buffer << file.rdbuf();
-    file.close();
+        std::ostringstream file_name_oss;
+        file_name_oss << "files/test" << setfill('0') << setw(3) << i << ".cpp";
+        std::string file_name(file_name_oss.str());
 
+        std::ifstream file(file_name.c_str());
+        if(!file)
+        {
+            break;
+        }
 
-    parse_info<> info = parse(buffer.str().c_str(), grammar, space_p);
-    cout << "=============================\n";
-    cout << buffer.str() << endl;
-    cout << "=============================\n";
-    if(info.full) //success
-    {
-        cout << "Parsing succeeded!\n";
-    }
-    else
-    {
-        cout << "Parsing failed\n";
-        cout << "stopped at: \": " << info.stop << "\"\n";
+        std::stringstream buffer;
+        buffer << file.rdbuf();
+        file.close();
+
+        cout << "Parsing " << file_name << "... ";
+        parse_info<> info = parse(buffer.str().c_str(), grammar, space_p);
+        if(info.full) //success
+        {
+            cout << "Success!";
+        }
+        else
+        {
+            cout << "\n=============================\n";
+            cout << buffer.str() << endl;
+            cout << "=============================\n";
+            cout << "/////////////////////////////\n";
+            cout << "Parsing failed\n";
+            cout << "stopped at: \": " << info.stop << "\"\n";
+            cout << "/////////////////////////////\n";
+        }
+
+        cout << '\n';
     }
 
     return 0;
