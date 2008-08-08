@@ -207,11 +207,12 @@ struct Grammar: public boost::spirit::grammar<Grammar>
 
         //1.8 - Classes [gram.class]
         boost::spirit::rule<ScannerT> class_name;
-        /*boost::spirit::rule<ScannerT> class_specifier;
-        boost::spirit::rule<ScannerT> class_head;*/
+        boost::spirit::rule<ScannerT> class_specifier;
+        boost::spirit::rule<ScannerT> class_head;
         boost::spirit::rule<ScannerT> class_key;
-        /*boost::spirit::rule<ScannerT> member_specification;
+        boost::spirit::rule<ScannerT> member_specification;
         boost::spirit::rule<ScannerT> member_declaration;
+        boost::spirit::rule<ScannerT> member_declaration_decl_specifier_seq;
         boost::spirit::rule<ScannerT> member_declarator_list;
         boost::spirit::rule<ScannerT> member_declarator;
         boost::spirit::rule<ScannerT> pure_specifier;
@@ -222,16 +223,16 @@ struct Grammar: public boost::spirit::grammar<Grammar>
         boost::spirit::rule<ScannerT> base_specifier_list;
         boost::spirit::rule<ScannerT> base_specifier;
         boost::spirit::rule<ScannerT> access_specifier;
-*/
+
         //1.10 - Special member functions [gram.special]
         boost::spirit::rule<ScannerT> conversion_function_id;
         boost::spirit::rule<ScannerT> conversion_type_id;
         boost::spirit::rule<ScannerT> conversion_declarator;
-        /*boost::spirit::rule<ScannerT> ctor_initializer;
+        boost::spirit::rule<ScannerT> ctor_initializer;
         boost::spirit::rule<ScannerT> mem_initializer_list;
         boost::spirit::rule<ScannerT> mem_initializer;
         boost::spirit::rule<ScannerT> mem_initializer_id;
-*/
+
         //1.11 - Overloading [gram.over]
         boost::spirit::rule<ScannerT> operator_function_id;
         boost::spirit::rule<ScannerT> operator_;
@@ -431,7 +432,7 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
         | character_literal
         | string_literal
         //| preprocessing_op_or_punc
-        | alpha_p //each non_white_space character that cannot be one of the above
+        //| alpha_p //each non_white_space character that cannot be one of the above
     ;
 
     token
@@ -1034,15 +1035,13 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
         int i, j;
     The scanner will parse "i" as a decl_specifier (it is indeed a correct type_name).
     Consequently, when it will try to parse the comma, it will raise an error.
+
+    In order to solve this issue, we have to create an extra rule which specify a tail parser.
     */
     //TODO semantic disambiguation between decl_specifier and init_declarator_list
     simple_declaration
         = !simple_declaration_decl_specifier_seq >> !init_declarator_list >> ch_p(';')
     ;
-
-    /*
-    In order to solve the previous rule's issue, we had to create a rule which specify a tail parser.
-    */
     simple_declaration_decl_specifier_seq
         = +(decl_specifier - (init_declarator_list >> ch_p(';')));
     ;
@@ -1079,7 +1078,7 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
 
     type_specifier
         = simple_type_specifier
-        //| class_specifier
+        | class_specifier
         | enum_specifier
         | elaborated_type_specifier
         | cv_qualifier
@@ -1394,12 +1393,12 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
         ;
     */
     function_definition
-        = !function_definition_decl_specifier_seq1 >> declarator /*>> ctor_initializer*/ >> function_body
+        = !function_definition_decl_specifier_seq1 >> declarator >> ctor_initializer >> function_body
         | !function_definition_decl_specifier_seq2 >> declarator >> function_body
         | !function_definition_decl_specifier_seq3 >> declarator /*>> function_try_block*/
     ;
     function_definition_decl_specifier_seq1
-        = +(decl_specifier - (declarator /*>> ctor_initializer*/ >> function_body))
+        = +(decl_specifier - (declarator >> ctor_initializer >> function_body))
     ;
     function_definition_decl_specifier_seq2
         = +(decl_specifier - (declarator >> function_body))
@@ -1427,50 +1426,51 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
         = initializer_clause % ','
     ;
 
-    //1.8 - Classes [gram.str_p("class")]
+    //1.8 - Classes [gram.class]
     class_name
         = template_id
         | identifier
     ;
-/*
+
     class_specifier
         = class_head >> ch_p('{') >> !member_specification >> ch_p('}')
     ;
 
     class_head
-        = class_key >> !identifier >> !base_clause
-        | class_key >> nested_name_specifier >> identifier >> !base_clause
-        | class_key >> !nested_name_specifier >> template_id >> !base_clause
+        = class_key >> nested_name_specifier >> identifier >> !base_clause
+        | class_key >> !identifier >> !base_clause
+        //| class_key >> !nested_name_specifier >> template_id >> !base_clause
     ;
-*/
+
     class_key
         = str_p("class")
         | "struct"
         | "union"
     ;
-/*
+
     member_specification
         = member_declaration >> !member_specification
         | access_specifier >> ':' >> !member_specification
     ;
 
     member_declaration
-        = !decl_specifier_seq >> !member_declarator_list >> ch_p(';')
+        = !member_declaration_decl_specifier_seq >> !member_declarator_list >> ch_p(';')
         | function_definition >> !ch_p(';')
         | !str_p("::") >> nested_name_specifier >> !str_p("template") >> unqualified_id >> ch_p(';')
         | using_declaration
-        | template_declaration
+        //| template_declaration
+    ;
+    member_declaration_decl_specifier_seq
+        = +(decl_specifier - (member_declarator_list >> ch_p(';')))
     ;
 
     member_declarator_list
-        = member_declarator
-        | member_declarator_list >> ',' >> member_declarator
+        = member_declarator % ','
     ;
 
     member_declarator
-        = declarator >> !pure_specifier
-        | declarator >> !constant_initializer
-        | !identifier >> ':' >> constant_expression
+        = declarator >> !(pure_specifier | constant_initializer) //TODO find what declarator >> constant_initializer stands for
+        | !identifier >> ':' >> constant_expression //TODO find what's that
     ;
 
     pure_specifier
@@ -1501,7 +1501,7 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
         | "protected"
         | "public"
     ;
-*/
+
     //1.10 - Special member functions [gram.special]
     conversion_function_id
         = str_p("operator") >> conversion_type_id
@@ -1514,13 +1514,13 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     conversion_declarator
         = +ptr_operator
     ;
-/*
+
     ctor_initializer
         = ':' >> mem_initializer_list
     ;
 
     mem_initializer_list
-        = mem_initializer >> *(',' >> mem_initializer)
+        = mem_initializer % ','
     ;
 
     mem_initializer
@@ -1531,7 +1531,7 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
         = !str_p("::") >> !nested_name_specifier >> class_name
         | identifier
     ;
-*/
+
     //1.11 - Overloading [gram.over]
     operator_function_id
         = str_p("operator") >> operator_
@@ -1688,9 +1688,9 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     ;
 
     group_part
-        = !pp_tokens >> '\n'
-        | if_section
+        = if_section
         | control_line
+        | !pp_tokens >> '\n'
     ;
 
     if_section
