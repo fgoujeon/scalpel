@@ -11,6 +11,6 @@ class Virtual
 		static int foo;
 };
 
-Virtual::foo = 2;
+int Virtual::foo = 2;
 
 #endif

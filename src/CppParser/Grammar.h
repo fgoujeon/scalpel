@@ -250,15 +250,15 @@ struct Grammar: public boost::spirit::grammar<Grammar>
         boost::spirit::rule<ScannerT> explicit_specialization;
 
         //1.13 - Exception handling [gram.except]
-        /*boost::spirit::rule<ScannerT> try_block;
+        boost::spirit::rule<ScannerT> try_block;
         boost::spirit::rule<ScannerT> function_try_block;
         boost::spirit::rule<ScannerT> handler_seq;
         boost::spirit::rule<ScannerT> handler;
         boost::spirit::rule<ScannerT> exception_declaration;
         boost::spirit::rule<ScannerT> throw_expression;
-        boost::spirit::rule<ScannerT> exception_specification;
-        boost::spirit::rule<ScannerT> type_id_list;
-*/
+        //boost::spirit::rule<ScannerT> exception_specification;
+        //boost::spirit::rule<ScannerT> type_id_list;
+
         //1.14 - Preprocessing directives [gram.cpp]
         boost::spirit::rule<ScannerT> preprocessing_file;
         boost::spirit::rule<ScannerT> group;
@@ -290,8 +290,7 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     ;
 
     program_item
-        = explicit_specialization
-        | preprocessing_file
+        = preprocessing_file
         | statement
         | declaration
     ;
@@ -908,7 +907,7 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     assignment_expression
         = logical_or_expression >> assignment_operator >> assignment_expression
         | conditional_expression
-        //| throw_expression
+        | throw_expression
     ;
 
     assignment_operator
@@ -942,7 +941,7 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
         | iteration_statement
         | jump_statement
         | declaration_statement
-        //| try_block
+        | try_block
     ;
 
     labeled_statement
@@ -1635,16 +1634,16 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     explicit_specialization
         = str_p("template") >> '<' >> '>' >> declaration
     ;
-/*
+
     //1.13 - Exception handling [gram.except]
     try_block
         = str_p("try") >> compound_statement >> handler_seq
     ;
-
+/*
     function_try_block
         = str_p("try") >> !ctor_initializer >> function_body >> handler_seq
     ;
-
+*/
     handler_seq
         = +handler
     ;
@@ -1663,13 +1662,13 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     throw_expression
         = "throw" >> !assignment_expression
     ;
-
+/*
     exception_specification
         = str_p("throw") >> '(' >> !type_id_list >> ')'
     ;
 
     type_id_list
-        = type_id >> *(',' >> type_id)
+        = type_id % ','
     ;
 */
     //1.14 - Preprocessing directives [gram.cpp]

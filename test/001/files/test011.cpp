@@ -22,7 +22,4 @@ class Array<bool, 8>
 		short data;
 };
 
-
-
-
 #endif
