@@ -238,10 +238,10 @@ struct Grammar: public boost::spirit::grammar<Grammar>
         boost::spirit::rule<ScannerT> operator_;
 
         //1.12 - Templates [gram.temp]
-        /*boost::spirit::rule<ScannerT> template_declaration;
+        boost::spirit::rule<ScannerT> template_declaration;
         boost::spirit::rule<ScannerT> template_parameter_list;
         boost::spirit::rule<ScannerT> template_parameter;
-        boost::spirit::rule<ScannerT> type_parameter;*/
+        boost::spirit::rule<ScannerT> type_parameter;
         boost::spirit::rule<ScannerT> template_id;
         boost::spirit::rule<ScannerT> template_name;
         boost::spirit::rule<ScannerT> template_argument_list;
@@ -290,7 +290,8 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     ;
 
     program_item
-        = preprocessing_file
+        = explicit_specialization
+        | preprocessing_file
         | statement
         | declaration
     ;
@@ -722,8 +723,8 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     ;
 
     qualified_id
-        = str_p("::") >> operator_function_id
-        | !str_p("::") >> nested_name_specifier >> !str_p("template") >> unqualified_id
+        = !str_p("::") >> nested_name_specifier >> !str_p("template") >> unqualified_id
+        | str_p("::") >> operator_function_id
         | str_p("::") >> template_id
         | str_p("::") >> identifier
     ;
@@ -1011,7 +1012,7 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     declaration
         = block_declaration
         | function_definition
-//        | template_declaration
+        | template_declaration
         | explicit_instantiation
         | explicit_specialization
         | linkage_specification
@@ -1437,9 +1438,9 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     ;
 
     class_head
-        = class_key >> nested_name_specifier >> identifier >> !base_clause
+        = class_key >> !nested_name_specifier >> template_id >> !base_clause
+        | class_key >> nested_name_specifier >> identifier >> !base_clause
         | class_key >> !identifier >> !base_clause
-        //| class_key >> !nested_name_specifier >> template_id >> !base_clause
     ;
 
     class_key
@@ -1458,7 +1459,7 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
         | function_definition >> !ch_p(';')
         | !str_p("::") >> nested_name_specifier >> !str_p("template") >> unqualified_id >> ch_p(';')
         | using_declaration
-        //| template_declaration
+        | template_declaration
     ;
     member_declaration_decl_specifier_seq
         = +(decl_specifier - (member_declarator_list >> ch_p(';')))
@@ -1581,14 +1582,14 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
         | "<"
         | ">"
     ;
-/*
+
     //1.12 - Templates [gram.temp]
     template_declaration
         = !str_p("export") >> str_p("template") >> '<' >> template_parameter_list >> '>' >> declaration
     ;
 
     template_parameter_list
-        = template_parameter >> *(',' >> template_parameter)
+        = template_parameter % ','
     ;
 
     template_parameter
@@ -1597,14 +1598,14 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     ;
 
     type_parameter
-        = str_p("class") >> !identifier
-        | str_p("class") >> !identifier >> '=' >> type_id
-        | str_p("typename") >> !identifier
+        = str_p("class") >> !identifier >> '=' >> type_id
+        | str_p("class") >> !identifier
         | str_p("typename") >> !identifier >> '=' >> type_id
-        | str_p("template") >> '<' >> template_parameter_list >> '>' >> str_p("class") >> !identifier
+        | str_p("typename") >> !identifier
         | str_p("template") >> '<' >> template_parameter_list >> '>' >> str_p("class") >> !identifier >> '=' >> id_expression
+        | str_p("template") >> '<' >> template_parameter_list >> '>' >> str_p("class") >> !identifier
     ;
-*/
+
     template_id
         = template_name >> '<' >> !template_argument_list >> '>'
     ;
@@ -1620,7 +1621,8 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     template_argument
         = longest_d
         [
-            assignment_expression
+            //assignment_expression //TODO: We have to allow this, but it's complicated because assignment_expression can contain a '>'.
+            additive_expression //in place of assignment_expression
             | type_id
             | id_expression
         ]
