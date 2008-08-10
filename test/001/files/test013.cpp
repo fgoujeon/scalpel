@@ -1,5 +1,3 @@
-#include "Test.h"
-
 Test::Test(int n)
 try:
 	number(n)

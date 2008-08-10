@@ -1,6 +1,3 @@
-#ifndef VIRTUAL_H
-#define VIRTUAL_H
-
 class Virtual
 {
 	protected:
@@ -12,5 +9,3 @@ class Virtual
 };
 
 int Virtual::foo = 2;
-
-#endif

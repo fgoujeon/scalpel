@@ -1,9 +1,3 @@
-#ifndef DOG_H
-#define DOG_H
-
-#include "Animal.h"
-#include "Walking/Quadruped.h"
-
 class Something::Kennel;
 
 class Dog: public Animal, virtual private Walking::Quadruped
@@ -18,4 +12,3 @@ class Dog: public Animal, virtual private Walking::Quadruped
 		const Something::Kennel& kennel;
 };
 
-#endif

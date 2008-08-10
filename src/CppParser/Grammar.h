@@ -256,8 +256,8 @@ struct Grammar: public boost::spirit::grammar<Grammar>
         boost::spirit::rule<ScannerT> handler;
         boost::spirit::rule<ScannerT> exception_declaration;
         boost::spirit::rule<ScannerT> throw_expression;
-        //boost::spirit::rule<ScannerT> exception_specification;
-        //boost::spirit::rule<ScannerT> type_id_list;
+        boost::spirit::rule<ScannerT> exception_specification;
+        boost::spirit::rule<ScannerT> type_id_list;
 
         //1.14 - Preprocessing directives [gram.cpp]
         boost::spirit::rule<ScannerT> preprocessing_file;
@@ -290,8 +290,7 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     ;
 
     program_item
-        = preprocessing_file
-        | statement
+        = statement
         | declaration
     ;
 
@@ -1297,7 +1296,7 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
         )
         >>
         *(
-            '(' >> parameter_declaration_clause >> ')' >> !cv_qualifier_seq //>> !exception_specification
+            '(' >> parameter_declaration_clause >> ')' >> !cv_qualifier_seq >> !exception_specification
             | '[' >> !constant_expression >> ']'
         )
     ;
@@ -1350,7 +1349,7 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
         )
         >>
         *(
-            '(' >> parameter_declaration_clause >> ')' >> !cv_qualifier_seq //>> !exception_specification
+            '(' >> parameter_declaration_clause >> ')' >> !cv_qualifier_seq >> !exception_specification
             | '[' >> !constant_expression >> ']'
         )
     ;
@@ -1395,7 +1394,7 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     function_definition
         = !function_definition_decl_specifier_seq1 >> declarator >> ctor_initializer >> function_body
         | !function_definition_decl_specifier_seq2 >> declarator >> function_body
-        | !function_definition_decl_specifier_seq3 >> declarator /*>> function_try_block*/
+        | !function_definition_decl_specifier_seq3 >> declarator >> function_try_block
     ;
     function_definition_decl_specifier_seq1
         = +(decl_specifier - (declarator >> ctor_initializer >> function_body))
@@ -1404,7 +1403,7 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
         = +(decl_specifier - (declarator >> function_body))
     ;
     function_definition_decl_specifier_seq3
-        = +(decl_specifier - (declarator /*>> function_try_block*/))
+        = +(decl_specifier - (declarator >> function_try_block))
     ;
 
     function_body
@@ -1455,8 +1454,8 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
 
     member_declaration
         = !member_declaration_decl_specifier_seq >> !member_declarator_list >> ch_p(';')
-        | function_definition >> !ch_p(';')
         | !str_p("::") >> nested_name_specifier >> !str_p("template") >> unqualified_id >> ch_p(';')
+        | function_definition >> !ch_p(';')
         | using_declaration
         | template_declaration
     ;
@@ -1481,7 +1480,7 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
         = '=' >> constant_expression
     ;
 
-    //1.9 - Derived classes [gram.str_p("class").derived]
+    //1.9 - Derived classes [gram.class.derived]
     base_clause
         = ':' >> base_specifier_list
     ;
@@ -1639,11 +1638,11 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     try_block
         = str_p("try") >> compound_statement >> handler_seq
     ;
-/*
+
     function_try_block
         = str_p("try") >> !ctor_initializer >> function_body >> handler_seq
     ;
-*/
+
     handler_seq
         = +handler
     ;
@@ -1662,7 +1661,7 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     throw_expression
         = "throw" >> !assignment_expression
     ;
-/*
+
     exception_specification
         = str_p("throw") >> '(' >> !type_id_list >> ')'
     ;
@@ -1670,8 +1669,11 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     type_id_list
         = type_id % ','
     ;
-*/
+
     //1.14 - Preprocessing directives [gram.cpp]
+    //TODO Parsing should be processed just like it was a compilation.
+    //This part of the grammar should be used for the preprocessing phase.
+
     /*
     The rule, as written in the standard, define preprocessing_file as an optional group.
     However, the only rule where preprocessing_file is used put it inside a kleen star.

@@ -1,6 +1,3 @@
-#ifndef VIRTUAL_H
-#define VIRTUAL_H
-
 template<typename T>
 class Complex
 {
@@ -27,4 +24,3 @@ Complex<T>::Complex(T r, T i):
 {
 }
 
-#endif

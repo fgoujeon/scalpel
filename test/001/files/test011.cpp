@@ -1,6 +1,3 @@
-#ifndef ARRAY_H
-#define ARRAY_H
-
 template<class T, size_t size>
 class Array
 {
@@ -22,4 +19,3 @@ class Array<bool, 8>
 		short data;
 };
 
-#endif

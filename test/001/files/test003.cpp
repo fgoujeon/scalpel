@@ -1,8 +1,3 @@
-#include <iostream>
-#include <vector>
-#include <string>
-#include <sstream>
-
 std::string dump(const std::vector v)
 {
 	std::ostringstream oss;
