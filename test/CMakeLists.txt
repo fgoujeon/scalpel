@@ -1,11 +1,10 @@
 cmake_minimum_required(VERSION 2.6)
-#set(CMAKE_BUILD_TYPE Debug)
 
 #project
-project(Test.CppParser)
+project(CppParser.Test)
 set(EXECUTABLE_OUTPUT_PATH bin)
 
-#exe target
+#executable
 file(
 	GLOB_RECURSE sources
 	src/*.cpp
@@ -25,8 +24,14 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
 	add_definitions(-Wall -pedantic -Wno-long-long)
 endif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
 
-#include paths
+#include CppParser
 include_directories(
-	../../src
+	../src
+)
+
+#link with CppUnit
+target_link_libraries(
+	test
+	cppunit
 )
 
