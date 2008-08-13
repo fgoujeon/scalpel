@@ -270,6 +270,9 @@ struct Grammar: public boost::spirit::grammar<Grammar>
         boost::spirit::rule<ScannerT> control_line;
         boost::spirit::rule<ScannerT> replacement_list;
         boost::spirit::rule<ScannerT> pp_tokens;
+
+        //GCC extensions
+        boost::spirit::rule<ScannerT> gcc_typeof;
     };
 };
 
@@ -336,6 +339,9 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
         | "using"
         | "unsigned"
         | "union"
+        #ifndef CPP_PARSER_ANSI
+        | lexeme_d[!str_p("__") >> "typeof" >> !str_p("__")]
+        #endif
         | "typename"
         | "typeid"
         | "typedef"
@@ -1070,6 +1076,7 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
         | enum_specifier
         | elaborated_type_specifier
         | cv_qualifier
+        | gcc_typeof
     ;
 
     simple_type_specifier
@@ -1355,24 +1362,25 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
 
     //TODO check whether every parameter_declaration_decl_specifier_seq* is necessary
     parameter_declaration
-        = parameter_declaration_decl_specifier_seq1 >> declarator
-        | parameter_declaration_decl_specifier_seq2 >> declarator >> '=' >> assignment_expression
-        | parameter_declaration_decl_specifier_seq3 >> !abstract_declarator
-        | parameter_declaration_decl_specifier_seq4 >> abstract_declarator >> '=' >> assignment_expression
+        = parameter_declaration_decl_specifier_seq1 >> declarator >> '=' >> assignment_expression
+        | parameter_declaration_decl_specifier_seq2 >> declarator
+        | parameter_declaration_decl_specifier_seq3 >> abstract_declarator >> '=' >> assignment_expression
+        | parameter_declaration_decl_specifier_seq4 >> !abstract_declarator
         | decl_specifier_seq >> '=' >> assignment_expression
     ;
     parameter_declaration_decl_specifier_seq1
-        = +(decl_specifier - (declarator >> (ch_p(',') >> ')' >> "...")))
-    ;
-    parameter_declaration_decl_specifier_seq2
         = +(decl_specifier - (declarator >> '=' >> assignment_expression))
     ;
-    parameter_declaration_decl_specifier_seq3
-        = +(decl_specifier - (abstract_declarator >> (ch_p(',') >> ')' >> "...")))
+    parameter_declaration_decl_specifier_seq2
+        = +(decl_specifier - (declarator >> (ch_p(',') >> ')' >> "...")))
     ;
-    parameter_declaration_decl_specifier_seq4
+    parameter_declaration_decl_specifier_seq3
         = +(decl_specifier - (abstract_declarator >> '=' >> assignment_expression))
     ;
+    parameter_declaration_decl_specifier_seq4
+        = +(decl_specifier - (abstract_declarator >> (ch_p(',') >> ')' >> "...")))
+    ;
+
 
     /*
     Original rule is:
@@ -1732,6 +1740,13 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     pp_tokens
         = /*+*/preprocessing_token
     ;
+
+    #ifndef CPP_PARSER_ANSI
+    //GCC extensions
+    gcc_typeof
+        = lexeme_d[!str_p("__") >> "typeof" >> !str_p("__")] >> '(' >> expression >> ')' //GCC typeof extension
+    ;
+    #endif
 }
 
 template<typename ScannerT>

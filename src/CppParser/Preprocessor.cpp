@@ -32,6 +32,9 @@ std::string Preprocessor::operator()(const std::string& filename)
     // The following preprocesses a given input file.
     // Open the file and read it into a string variable
     std::ifstream instream(filename.c_str());
+
+    if(!instream) throw std::runtime_error("Cannot open " + filename);
+
     std::string input
     (
         std::istreambuf_iterator<char>(instream.rdbuf()),

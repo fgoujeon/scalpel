@@ -10,7 +10,7 @@ int main(int argc, char** argv)
     if(argc > 1)
         test_file_name = argv[1];
     else
-        test_file_name = "test/resources/single_files_with_pp_tokens/000.cpp";
+        test_file_name = "test/testfiles/single_files_with_pp_tokens/000.cpp";
 
     Preprocessor preprocessor;
     std::string preprocessed_code = preprocessor(test_file_name);
