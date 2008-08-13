@@ -1625,7 +1625,7 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     ;
 
     explicit_instantiation
-        = str_p("template") >> declaration
+        = !str_p("extern") >> str_p("template") >> declaration
     ;
 
     explicit_specialization
