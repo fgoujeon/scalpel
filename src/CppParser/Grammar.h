@@ -37,9 +37,7 @@ struct Grammar: public boost::spirit::grammar<Grammar>
         Comments refer to ISO/IEC 14882:1998(E) (C++98 Standard), Annex A (Grammar summary)
         */
 
-        boost::spirit::rule<ScannerT> program_file;
-        boost::spirit::rule<ScannerT> program;
-        boost::spirit::rule<ScannerT> program_item;
+        boost::spirit::rule<ScannerT> file;
 
         boost::spirit::rule<ScannerT> source_character_set;
         boost::spirit::rule<ScannerT> keyword;
@@ -87,7 +85,7 @@ struct Grammar: public boost::spirit::grammar<Grammar>
         boost::spirit::rule<ScannerT> boolean_literal;
 
         //1.3 - Basic concepts [gram.basic]
-        //boost::spirit::rule<ScannerT> translation_unit;
+        boost::spirit::rule<ScannerT> translation_unit;
 
         //1.4 - Expressions [gram.expr]
         boost::spirit::rule<ScannerT> primary_expression;
@@ -281,17 +279,8 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
 {
     using namespace boost::spirit;
 
-    program_file
-        = program >> end_p
-    ;
-
-    program
-        = +program_item
-    ;
-
-    program_item
-        = statement
-        | declaration
+    file
+        = translation_unit >> end_p
     ;
 
     source_character_set
@@ -695,10 +684,10 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     ;
 
     //1.3 - Basic concepts [gram.basic]
-    /*translation_unit
+    translation_unit
         = !declaration_seq
     ;
-*/
+
     //1.4 - Expressions [gram.expr]
     primary_expression
         = "this"
@@ -1106,10 +1095,11 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     ;
 
     elaborated_type_specifier
-        = class_key >> !str_p("::") >> !nested_name_specifier >> identifier
+        = class_key >> !str_p("::") >> !nested_name_specifier >> template_id //not in the standard, but seems to be required for parsing standard library
+        | class_key >> !str_p("::") >> !nested_name_specifier >> identifier
         | str_p("enum") >> !str_p("::") >> !nested_name_specifier >> identifier
-        | str_p("typename") >> !str_p("::") >> nested_name_specifier >> identifier
         | str_p("typename") >> !str_p("::") >> nested_name_specifier >> !str_p("template") >> template_id
+        | str_p("typename") >> !str_p("::") >> nested_name_specifier >> identifier
     ;
 
     enum_name
@@ -1748,7 +1738,7 @@ template<typename ScannerT>
 boost::spirit::rule<ScannerT> const&
 Grammar::definition<ScannerT>::start() const
 {
-    return program_file;
+    return file;
 }
 
 } //namespace CppParser

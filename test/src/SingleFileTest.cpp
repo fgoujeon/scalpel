@@ -1,3 +1,22 @@
+/*
+CppParser - Standard C++ programming language parsing library
+Copyright © 2008  Florian Goujeon
+
+This file is part of CppParser.
+
+CppParser is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, version 3 of the License.
+
+CppParser is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include <sstream>
 #include <iomanip>
 #include <stdexcept>
@@ -16,13 +35,12 @@ void SingleFileTest::parse_files()
 
     for(unsigned int i = 0; ; ++i)
     {
-		//generate filename
+		//generate file's name
         std::ostringstream file_name_oss;
-        file_name_oss << "resources/single_files/test" << setfill('0') << setw(3) << i << ".cpp";
-        std::string file_name(file_name_oss.str());
+        file_name_oss << "testfiles/single_files/test" << setfill('0') << setw(3) << i << ".cpp";
 
 		//open file
-        std::ifstream file(file_name.c_str());
+        std::ifstream file(file_name_oss.str().c_str());
         if(!file)
         {
             if(i == 0)
@@ -40,10 +58,11 @@ void SingleFileTest::parse_files()
 
 		//parse file
         parse_info<> info = parse(buffer.str().c_str(), grammar, space_p);
+        std::string stopped_at = info.stop;
 
         ostringstream failure_message;
         failure_message << "Failed to parse " << file_name_oss.str() << "\n";
-        failure_message << "Parsing stopped at:\n\t" << info.stop;
+        failure_message << "Parsing stopped at:\n***\n" << stopped_at << "\n***";
 
         CPPUNIT_ASSERT_MESSAGE
         (

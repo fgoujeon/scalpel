@@ -12,7 +12,7 @@ class Array<bool, size>
 		bitset<size> data;
 };
 
-template <>
+template<>
 class Array<bool, 8>
 {
 	private:

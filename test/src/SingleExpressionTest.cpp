@@ -1,3 +1,22 @@
+/*
+CppParser - Standard C++ programming language parsing library
+Copyright © 2008  Florian Goujeon
+
+This file is part of CppParser.
+
+CppParser is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, version 3 of the License.
+
+CppParser is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include <sstream>
 #include <boost/spirit.hpp>
 #include <CppParser/Grammar.h>
@@ -14,7 +33,7 @@ void SingleExpressionTest::setUp()
      * Well formed expressions
     */
     well_formed_expressions.push_back("test<double(friend ...)>;");
-    well_formed_expressions.push_back("0543;");
+    well_formed_expressions.push_back("int i = 0543;");
     well_formed_expressions.push_back("vector<char(friend, typedef, ...)>;");
     well_formed_expressions.push_back("vector<char(friend, typedef, auto, register, static, bool...)>;");
     well_formed_expressions.push_back("vector<char(friend, typedef, auto, inline, virtual, char, bool...)>;");
@@ -135,46 +154,44 @@ void SingleExpressionTest::setUp()
         ">;"
     );
     well_formed_expressions.push_back("vector<sizeof(double)>;");
-    well_formed_expressions.push_back("(cond1 && cond2);");
-    well_formed_expressions.push_back("number = 42;");
-    well_formed_expressions.push_back("dynamic_cast<double>(42);");
-    well_formed_expressions.push_back("typeid(something);");
-    well_formed_expressions.push_back("typename truc::bidule::chouette();");
-    well_formed_expressions.push_back("typename truc::bidule::chouette<double, const char*>();");
-    well_formed_expressions.push_back("char();");
-    well_formed_expressions.push_back("++i;");
-    well_formed_expressions.push_back("i++;");
-    well_formed_expressions.push_back("table[34];");
-    well_formed_expressions.push_back("object.~object;");
-    well_formed_expressions.push_back("std::vector.::std::~vector;");
-    well_formed_expressions.push_back("new Potatoe(RED, 50);");
-    well_formed_expressions.push_back("new ::Networking::HttpClient;");
-    well_formed_expressions.push_back("::new (42, 32 + 3)(bubble)(STRAWBERRY);");
-    well_formed_expressions.push_back("new double&[plouf];");
-    well_formed_expressions.push_back("delete this;");
-    well_formed_expressions.push_back("label: do_this();");
-    well_formed_expressions.push_back("case 2: do_this();");
+    well_formed_expressions.push_back("bool b = (cond1 && cond2);");
+    well_formed_expressions.push_back("int number = 42;");
+    well_formed_expressions.push_back("double b = dynamic_cast<double>(42);");
+    well_formed_expressions.push_back("type_info& o = typeid(something);");
+    well_formed_expressions.push_back("int i = typename truc::bidule::chouette();");
+    well_formed_expressions.push_back("int i = typename truc::bidule::chouette<double, const char*>();");
+    well_formed_expressions.push_back("char c = char();");
+    well_formed_expressions.push_back("int n = ++i;");
+    well_formed_expressions.push_back("int n = i++;");
+    well_formed_expressions.push_back("table t[34];");
+    well_formed_expressions.push_back("void destroy() {object.~object;}");
+    well_formed_expressions.push_back("void destroy() {std::vector.::std::~vector;}");
+    well_formed_expressions.push_back("Potatoe* p = new Potatoe(RED, 50);");
+    well_formed_expressions.push_back("::Networking::HttpClient* client = new ::Networking::HttpClient;");
+    well_formed_expressions.push_back("object* o = ::new (42, 32 + 3)(bubble)(STRAWBERRY);");
+    well_formed_expressions.push_back("double&* d = new double&[plouf];");
+    well_formed_expressions.push_back("void free() {delete this;}");
+    well_formed_expressions.push_back("void foo() {label: do_this();}");
     well_formed_expressions.push_back
     (
+        "int main()"
         "{"
-        "   i++;"
+        "   for(i = 0; i < 23; ++i)"
+        "   {"
+        "       do_something();"
+        "   }"
         "}"
     );
-    well_formed_expressions.push_back
-    (
-        "for(i = 0; i < 23; ++i)"
-        "{"
-        "    do_something();"
-        "}"
-    );
-    well_formed_expressions.push_back("return return_value;");
     well_formed_expressions.push_back("const unsigned int i;");
     well_formed_expressions.push_back
     (
-        "asm"
-        "("
-        "    \"movb 0x61,al\""
-        ");"
+        "int main()"
+        "{"
+        "   asm"
+        "   ("
+        "       \"movb 0x61,al\""
+        "   );"
+        "}"
     );
     well_formed_expressions.push_back("namespace io = boost::iostreams;");
     well_formed_expressions.push_back("using namespace boost::iostreams;");
