@@ -17,13 +17,16 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef CPP_PARSER_SINGLE_DECLARATION_TEST
+#define CPP_PARSER_SINGLE_DECLARATION_TEST
+
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <CppParser/Grammar.h>
 
-class SingleExpressionTest: public CppUnit::TestFixture
+class SingleDeclarationTest: public CppUnit::TestFixture
 {
-    CPPUNIT_TEST_SUITE(SingleExpressionTest);
+    CPPUNIT_TEST_SUITE(SingleDeclarationTest);
     CPPUNIT_TEST(parse_well_formed_expressions);
     CPPUNIT_TEST(parse_ill_formed_expressions);
     CPPUNIT_TEST_SUITE_END();
@@ -40,3 +43,4 @@ class SingleExpressionTest: public CppUnit::TestFixture
         std::vector<std::string> ill_formed_expressions;
 };
 
+#endif

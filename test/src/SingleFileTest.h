@@ -17,6 +17,9 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef CPP_PARSER_SINGLE_FILE_TEST
+#define CPP_PARSER_SINGLE_FILE_TEST
+
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <CppParser/Grammar.h>
@@ -34,3 +37,4 @@ class SingleFileTest: public CppUnit::TestFixture
         CppParser::Grammar grammar;
 };
 
+#endif

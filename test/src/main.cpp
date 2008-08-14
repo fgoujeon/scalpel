@@ -18,14 +18,14 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <cppunit/ui/text/TestRunner.h>
-#include "SingleExpressionTest.h"
+#include "SingleDeclarationTest.h"
 #include "SingleFileTest.h"
 
 int main(int argc, char **argv)
 {
 	CppUnit::TextUi::TestRunner runner;
 
-	runner.addTest(SingleExpressionTest::suite());
+	runner.addTest(SingleDeclarationTest::suite());
 	runner.addTest(SingleFileTest::suite());
 	runner.run();
 

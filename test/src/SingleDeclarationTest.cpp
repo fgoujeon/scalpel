@@ -22,12 +22,12 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 #include <CppParser/Grammar.h>
 #include <cppunit/TestSuite.h>
 
-#include "SingleExpressionTest.h"
+#include "SingleDeclarationTest.h"
 
 using namespace boost::spirit;
 using namespace std;
 
-void SingleExpressionTest::setUp()
+void SingleDeclarationTest::setUp()
 {
     /*
      * Well formed expressions
@@ -254,13 +254,13 @@ void SingleExpressionTest::setUp()
     ill_formed_expressions.push_back("test::template;");
 }
 
-void SingleExpressionTest::tearDown()
+void SingleDeclarationTest::tearDown()
 {
     well_formed_expressions.clear();
     ill_formed_expressions.clear();
 }
 
-void SingleExpressionTest::parse_well_formed_expressions()
+void SingleDeclarationTest::parse_well_formed_expressions()
 {
     for(vector<string>::const_iterator i = well_formed_expressions.begin(); i != well_formed_expressions.end(); ++i)
     {
@@ -278,7 +278,7 @@ void SingleExpressionTest::parse_well_formed_expressions()
     }
 }
 
-void SingleExpressionTest::parse_ill_formed_expressions()
+void SingleDeclarationTest::parse_ill_formed_expressions()
 {
     for(vector<string>::const_iterator i = ill_formed_expressions.begin(); i != ill_formed_expressions.end(); ++i)
     {

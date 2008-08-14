@@ -25,257 +25,271 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 namespace CppParser
 {
 
-struct Grammar: public boost::spirit::grammar<Grammar>
+class Grammar: public boost::spirit::grammar<Grammar>
 {
-    template <typename ScannerT>
-    struct definition
-    {
-        definition(const Grammar& self);
-        boost::spirit::rule<ScannerT> const& start() const;
+    public:
+        Grammar(bool gcc_extensions_support_enabled = true):
+            m_gcc_extensions_support_enabled(gcc_extensions_support_enabled)
+        {
+        }
 
-        /*
-        Comments refer to ISO/IEC 14882:1998(E) (C++98 Standard), Annex A (Grammar summary)
-        */
+        bool is_gcc_extensions_support_enabled() const
+        {
+            return m_gcc_extensions_support_enabled;
+        }
 
-        boost::spirit::rule<ScannerT> file;
+        template <typename ScannerT>
+        struct definition
+        {
+            definition(const Grammar& self);
+            boost::spirit::rule<ScannerT> const& start() const;
 
-        boost::spirit::rule<ScannerT> source_character_set;
-        boost::spirit::rule<ScannerT> keyword;
 
-        //1.2 - Lexical conventions [gram.lex]
-        boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> hex_quad;
-        boost::spirit::rule<ScannerT> universal_character_name;
-        boost::spirit::rule<ScannerT> preprocessing_token;
-        boost::spirit::rule<ScannerT> token;
-        boost::spirit::rule<ScannerT> header_name;
-        boost::spirit::rule<ScannerT> h_char_sequence;
-        boost::spirit::rule<ScannerT> h_char;
-        boost::spirit::rule<ScannerT> q_char_sequence;
-        boost::spirit::rule<ScannerT> q_char;
-        //boost::spirit::rule<ScannerT> pp_number;
-        boost::spirit::rule<ScannerT> identifier;
-        boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> nondigit;
-        /*boost::spirit::rule<ScannerT> preprocessing_op_or_punc;*/
-        boost::spirit::rule<ScannerT> literal;
-        boost::spirit::rule<ScannerT> integer_literal;
-        boost::spirit::rule<ScannerT> decimal_literal;
-        boost::spirit::rule<ScannerT> octal_literal;
-        boost::spirit::rule<ScannerT> hexadecimal_literal;
-        boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> hexadecimal_digit;
-        boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> octal_digit;
-        boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> nonzero_digit;
-        boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> integer_suffix;
-        boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> unsigned_suffix;
-        boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> long_suffix;
-        boost::spirit::rule<ScannerT> character_literal;
-        boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> c_char_sequence;
-        boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> c_char;
-        boost::spirit::rule<ScannerT> escape_sequence;
-        boost::spirit::rule<ScannerT> simple_escape_sequence;
-        boost::spirit::rule<ScannerT> octal_escape_sequence;
-        boost::spirit::rule<ScannerT> hexadecimal_escape_sequence;
-        boost::spirit::rule<ScannerT> floating_literal;
-        boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> fractional_constant;
-        boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> exponent_part;
-        boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> digit_sequence;
-        boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> floating_suffix;
-        boost::spirit::rule<ScannerT> string_literal;
-        boost::spirit::rule<ScannerT> s_char_sequence;
-        boost::spirit::rule<ScannerT> s_char;
-        boost::spirit::rule<ScannerT> boolean_literal;
+            /*
+            Comments refer to ISO/IEC 14882:1998(E) (C++98 Standard), Annex A (Grammar summary)
+            */
 
-        //1.3 - Basic concepts [gram.basic]
-        boost::spirit::rule<ScannerT> translation_unit;
+            boost::spirit::rule<ScannerT> file;
 
-        //1.4 - Expressions [gram.expr]
-        boost::spirit::rule<ScannerT> primary_expression;
-        boost::spirit::rule<ScannerT> id_expression;
-        boost::spirit::rule<ScannerT> unqualified_id;
-        boost::spirit::rule<ScannerT> qualified_id;
-        boost::spirit::rule<ScannerT> nested_name_specifier;
-        boost::spirit::rule<ScannerT> class_or_namespace_name;
-        boost::spirit::rule<ScannerT> postfix_expression;
-        boost::spirit::rule<ScannerT> expression_list;
-        boost::spirit::rule<ScannerT> pseudo_destructor_name;
-        boost::spirit::rule<ScannerT> unary_expression;
-        boost::spirit::rule<ScannerT> unary_operator;
-        boost::spirit::rule<ScannerT> new_expression;
-        boost::spirit::rule<ScannerT> new_placement;
-        boost::spirit::rule<ScannerT> new_type_id;
-        boost::spirit::rule<ScannerT> new_declarator;
-        boost::spirit::rule<ScannerT> direct_new_declarator;
-        boost::spirit::rule<ScannerT> new_initializer;
-        boost::spirit::rule<ScannerT> delete_expression;
-        boost::spirit::rule<ScannerT> cast_expression;
-        boost::spirit::rule<ScannerT> pm_expression;
-        boost::spirit::rule<ScannerT> multiplicative_expression;
-        boost::spirit::rule<ScannerT> additive_expression;
-        boost::spirit::rule<ScannerT> shift_expression;
-        boost::spirit::rule<ScannerT> relational_expression;
-        boost::spirit::rule<ScannerT> equality_expression;
-        boost::spirit::rule<ScannerT> and_expression;
-        boost::spirit::rule<ScannerT> exclusive_or_expression;
-        boost::spirit::rule<ScannerT> inclusive_or_expression;
-        boost::spirit::rule<ScannerT> logical_and_expression;
-        boost::spirit::rule<ScannerT> logical_or_expression;
-        boost::spirit::rule<ScannerT> conditional_expression;
-        boost::spirit::rule<ScannerT> assignment_expression;
-        boost::spirit::rule<ScannerT> assignment_operator;
-        boost::spirit::rule<ScannerT> expression;
-        boost::spirit::rule<ScannerT> constant_expression;
+            boost::spirit::rule<ScannerT> source_character_set;
+            boost::spirit::rule<ScannerT> keyword;
 
-        //1.5 - Statements [gram.stmt.stmt]
-        boost::spirit::rule<ScannerT> statement;
-        boost::spirit::rule<ScannerT> labeled_statement;
-        boost::spirit::rule<ScannerT> expression_statement;
-        boost::spirit::rule<ScannerT> compound_statement;
-        boost::spirit::rule<ScannerT> statement_seq;
-        boost::spirit::rule<ScannerT> selection_statement;
-        boost::spirit::rule<ScannerT> condition;
-        boost::spirit::rule<ScannerT> condition_type_specifier_seq;
-        boost::spirit::rule<ScannerT> iteration_statement;
-        boost::spirit::rule<ScannerT> for_init_statement;
-        boost::spirit::rule<ScannerT> jump_statement;
-        boost::spirit::rule<ScannerT> declaration_statement;
+            //1.2 - Lexical conventions [gram.lex]
+            boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> hex_quad;
+            boost::spirit::rule<ScannerT> universal_character_name;
+            boost::spirit::rule<ScannerT> preprocessing_token;
+            boost::spirit::rule<ScannerT> token;
+            boost::spirit::rule<ScannerT> header_name;
+            boost::spirit::rule<ScannerT> h_char_sequence;
+            boost::spirit::rule<ScannerT> h_char;
+            boost::spirit::rule<ScannerT> q_char_sequence;
+            boost::spirit::rule<ScannerT> q_char;
+            //boost::spirit::rule<ScannerT> pp_number;
+            boost::spirit::rule<ScannerT> identifier;
+            boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> nondigit;
+            /*boost::spirit::rule<ScannerT> preprocessing_op_or_punc;*/
+            boost::spirit::rule<ScannerT> literal;
+            boost::spirit::rule<ScannerT> integer_literal;
+            boost::spirit::rule<ScannerT> decimal_literal;
+            boost::spirit::rule<ScannerT> octal_literal;
+            boost::spirit::rule<ScannerT> hexadecimal_literal;
+            boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> hexadecimal_digit;
+            boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> octal_digit;
+            boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> nonzero_digit;
+            boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> integer_suffix;
+            boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> unsigned_suffix;
+            boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> long_suffix;
+            boost::spirit::rule<ScannerT> character_literal;
+            boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> c_char_sequence;
+            boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> c_char;
+            boost::spirit::rule<ScannerT> escape_sequence;
+            boost::spirit::rule<ScannerT> simple_escape_sequence;
+            boost::spirit::rule<ScannerT> octal_escape_sequence;
+            boost::spirit::rule<ScannerT> hexadecimal_escape_sequence;
+            boost::spirit::rule<ScannerT> floating_literal;
+            boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> fractional_constant;
+            boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> exponent_part;
+            boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> digit_sequence;
+            boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> floating_suffix;
+            boost::spirit::rule<ScannerT> string_literal;
+            boost::spirit::rule<ScannerT> s_char_sequence;
+            boost::spirit::rule<ScannerT> s_char;
+            boost::spirit::rule<ScannerT> boolean_literal;
 
-        //1.6 - Declarations [gram.dcl.dcl]
-        boost::spirit::rule<ScannerT> declaration_seq;
-        boost::spirit::rule<ScannerT> declaration;
-        boost::spirit::rule<ScannerT> block_declaration;
-        boost::spirit::rule<ScannerT> simple_declaration;
-        boost::spirit::rule<ScannerT> simple_declaration_decl_specifier_seq;
-        boost::spirit::rule<ScannerT> decl_specifier;
-        boost::spirit::rule<ScannerT> decl_specifier_seq;
-        boost::spirit::rule<ScannerT> storage_class_specifier;
-        boost::spirit::rule<ScannerT> function_specifier;
-        boost::spirit::rule<ScannerT> typedef_name;
-        boost::spirit::rule<ScannerT> type_specifier;
-        boost::spirit::rule<ScannerT> simple_type_specifier;
-        boost::spirit::rule<ScannerT> type_name;
-        boost::spirit::rule<ScannerT> elaborated_type_specifier;
-        boost::spirit::rule<ScannerT> enum_name;
-        boost::spirit::rule<ScannerT> enum_specifier;
-        boost::spirit::rule<ScannerT> enumerator_list;
-        boost::spirit::rule<ScannerT> enumerator_definition;
-        boost::spirit::rule<ScannerT> enumerator;
-        boost::spirit::rule<ScannerT> namespace_name;
-        boost::spirit::rule<ScannerT> original_namespace_name;
-        boost::spirit::rule<ScannerT> namespace_definition;
-        boost::spirit::rule<ScannerT> named_namespace_definition;
-        boost::spirit::rule<ScannerT> original_namespace_definition;
-        boost::spirit::rule<ScannerT> extension_namespace_definition;
-        boost::spirit::rule<ScannerT> unnamed_namespace_definition;
-        boost::spirit::rule<ScannerT> namespace_body;
-        boost::spirit::rule<ScannerT> namespace_alias;
-        boost::spirit::rule<ScannerT> namespace_alias_definition;
-        boost::spirit::rule<ScannerT> qualified_namespace_specifier;
-        boost::spirit::rule<ScannerT> using_declaration;
-        boost::spirit::rule<ScannerT> using_directive;
-        boost::spirit::rule<ScannerT> asm_definition;
-        boost::spirit::rule<ScannerT> linkage_specification;
+            //1.3 - Basic concepts [gram.basic]
+            boost::spirit::rule<ScannerT> translation_unit;
 
-        //1.7 - Declarators [gram.dcl.decl]
-        boost::spirit::rule<ScannerT> init_declarator_list;
-        boost::spirit::rule<ScannerT> init_declarator;
-        boost::spirit::rule<ScannerT> declarator;
-        boost::spirit::rule<ScannerT> direct_declarator;
-        boost::spirit::rule<ScannerT> ptr_operator;
-        boost::spirit::rule<ScannerT> cv_qualifier_seq;
-        boost::spirit::rule<ScannerT> cv_qualifier;
-        boost::spirit::rule<ScannerT> declarator_id;
-        boost::spirit::rule<ScannerT> type_id;
-        boost::spirit::rule<ScannerT> type_specifier_seq;
-        boost::spirit::rule<ScannerT> abstract_declarator;
-        boost::spirit::rule<ScannerT> direct_abstract_declarator;
-        boost::spirit::rule<ScannerT> parameter_declaration_clause;
-        boost::spirit::rule<ScannerT> parameter_declaration_list;
-        boost::spirit::rule<ScannerT> parameter_declaration;
-        boost::spirit::rule<ScannerT> parameter_declaration_decl_specifier_seq1;
-        boost::spirit::rule<ScannerT> parameter_declaration_decl_specifier_seq2;
-        boost::spirit::rule<ScannerT> parameter_declaration_decl_specifier_seq3;
-        boost::spirit::rule<ScannerT> parameter_declaration_decl_specifier_seq4;
-        boost::spirit::rule<ScannerT> function_definition;
-        boost::spirit::rule<ScannerT> function_definition_decl_specifier_seq1;
-        boost::spirit::rule<ScannerT> function_definition_decl_specifier_seq2;
-        boost::spirit::rule<ScannerT> function_definition_decl_specifier_seq3;
-        boost::spirit::rule<ScannerT> function_body;
-        boost::spirit::rule<ScannerT> initializer;
-        boost::spirit::rule<ScannerT> initializer_clause;
-        boost::spirit::rule<ScannerT> initializer_list;
+            //1.4 - Expressions [gram.expr]
+            boost::spirit::rule<ScannerT> primary_expression;
+            boost::spirit::rule<ScannerT> id_expression;
+            boost::spirit::rule<ScannerT> unqualified_id;
+            boost::spirit::rule<ScannerT> qualified_id;
+            boost::spirit::rule<ScannerT> nested_name_specifier;
+            boost::spirit::rule<ScannerT> class_or_namespace_name;
+            boost::spirit::rule<ScannerT> postfix_expression;
+            boost::spirit::rule<ScannerT> expression_list;
+            boost::spirit::rule<ScannerT> pseudo_destructor_name;
+            boost::spirit::rule<ScannerT> unary_expression;
+            boost::spirit::rule<ScannerT> unary_operator;
+            boost::spirit::rule<ScannerT> new_expression;
+            boost::spirit::rule<ScannerT> new_placement;
+            boost::spirit::rule<ScannerT> new_type_id;
+            boost::spirit::rule<ScannerT> new_declarator;
+            boost::spirit::rule<ScannerT> direct_new_declarator;
+            boost::spirit::rule<ScannerT> new_initializer;
+            boost::spirit::rule<ScannerT> delete_expression;
+            boost::spirit::rule<ScannerT> cast_expression;
+            boost::spirit::rule<ScannerT> pm_expression;
+            boost::spirit::rule<ScannerT> multiplicative_expression;
+            boost::spirit::rule<ScannerT> additive_expression;
+            boost::spirit::rule<ScannerT> shift_expression;
+            boost::spirit::rule<ScannerT> relational_expression;
+            boost::spirit::rule<ScannerT> equality_expression;
+            boost::spirit::rule<ScannerT> and_expression;
+            boost::spirit::rule<ScannerT> exclusive_or_expression;
+            boost::spirit::rule<ScannerT> inclusive_or_expression;
+            boost::spirit::rule<ScannerT> logical_and_expression;
+            boost::spirit::rule<ScannerT> logical_or_expression;
+            boost::spirit::rule<ScannerT> conditional_expression;
+            boost::spirit::rule<ScannerT> assignment_expression;
+            boost::spirit::rule<ScannerT> assignment_operator;
+            boost::spirit::rule<ScannerT> expression;
+            boost::spirit::rule<ScannerT> constant_expression;
 
-        //1.8 - Classes [gram.class]
-        boost::spirit::rule<ScannerT> class_name;
-        boost::spirit::rule<ScannerT> class_specifier;
-        boost::spirit::rule<ScannerT> class_head;
-        boost::spirit::rule<ScannerT> class_key;
-        boost::spirit::rule<ScannerT> member_specification;
-        boost::spirit::rule<ScannerT> member_declaration;
-        boost::spirit::rule<ScannerT> member_declaration_decl_specifier_seq;
-        boost::spirit::rule<ScannerT> member_declarator_list;
-        boost::spirit::rule<ScannerT> member_declarator;
-        boost::spirit::rule<ScannerT> pure_specifier;
-        boost::spirit::rule<ScannerT> constant_initializer;
+            //1.5 - Statements [gram.stmt.stmt]
+            boost::spirit::rule<ScannerT> statement;
+            boost::spirit::rule<ScannerT> labeled_statement;
+            boost::spirit::rule<ScannerT> expression_statement;
+            boost::spirit::rule<ScannerT> compound_statement;
+            boost::spirit::rule<ScannerT> statement_seq;
+            boost::spirit::rule<ScannerT> selection_statement;
+            boost::spirit::rule<ScannerT> condition;
+            boost::spirit::rule<ScannerT> condition_type_specifier_seq;
+            boost::spirit::rule<ScannerT> iteration_statement;
+            boost::spirit::rule<ScannerT> for_init_statement;
+            boost::spirit::rule<ScannerT> jump_statement;
+            boost::spirit::rule<ScannerT> declaration_statement;
 
-        //1.9 - Derived classes [gram.class.derived]
-        boost::spirit::rule<ScannerT> base_clause;
-        boost::spirit::rule<ScannerT> base_specifier_list;
-        boost::spirit::rule<ScannerT> base_specifier;
-        boost::spirit::rule<ScannerT> access_specifier;
+            //1.6 - Declarations [gram.dcl.dcl]
+            boost::spirit::rule<ScannerT> declaration_seq;
+            boost::spirit::rule<ScannerT> declaration;
+            boost::spirit::rule<ScannerT> block_declaration;
+            boost::spirit::rule<ScannerT> simple_declaration;
+            boost::spirit::rule<ScannerT> simple_declaration_decl_specifier_seq;
+            boost::spirit::rule<ScannerT> decl_specifier;
+            boost::spirit::rule<ScannerT> decl_specifier_seq;
+            boost::spirit::rule<ScannerT> storage_class_specifier;
+            boost::spirit::rule<ScannerT> function_specifier;
+            boost::spirit::rule<ScannerT> typedef_name;
+            boost::spirit::rule<ScannerT> type_specifier;
+            boost::spirit::rule<ScannerT> simple_type_specifier;
+            boost::spirit::rule<ScannerT> type_name;
+            boost::spirit::rule<ScannerT> elaborated_type_specifier;
+            boost::spirit::rule<ScannerT> enum_name;
+            boost::spirit::rule<ScannerT> enum_specifier;
+            boost::spirit::rule<ScannerT> enumerator_list;
+            boost::spirit::rule<ScannerT> enumerator_definition;
+            boost::spirit::rule<ScannerT> enumerator;
+            boost::spirit::rule<ScannerT> namespace_name;
+            boost::spirit::rule<ScannerT> original_namespace_name;
+            boost::spirit::rule<ScannerT> namespace_definition;
+            boost::spirit::rule<ScannerT> named_namespace_definition;
+            boost::spirit::rule<ScannerT> original_namespace_definition;
+            boost::spirit::rule<ScannerT> extension_namespace_definition;
+            boost::spirit::rule<ScannerT> unnamed_namespace_definition;
+            boost::spirit::rule<ScannerT> namespace_body;
+            boost::spirit::rule<ScannerT> namespace_alias;
+            boost::spirit::rule<ScannerT> namespace_alias_definition;
+            boost::spirit::rule<ScannerT> qualified_namespace_specifier;
+            boost::spirit::rule<ScannerT> using_declaration;
+            boost::spirit::rule<ScannerT> using_directive;
+            boost::spirit::rule<ScannerT> asm_definition;
+            boost::spirit::rule<ScannerT> linkage_specification;
 
-        //1.10 - Special member functions [gram.special]
-        boost::spirit::rule<ScannerT> conversion_function_id;
-        boost::spirit::rule<ScannerT> conversion_type_id;
-        boost::spirit::rule<ScannerT> conversion_declarator;
-        boost::spirit::rule<ScannerT> ctor_initializer;
-        boost::spirit::rule<ScannerT> mem_initializer_list;
-        boost::spirit::rule<ScannerT> mem_initializer;
-        boost::spirit::rule<ScannerT> mem_initializer_id;
+            //1.7 - Declarators [gram.dcl.decl]
+            boost::spirit::rule<ScannerT> init_declarator_list;
+            boost::spirit::rule<ScannerT> init_declarator;
+            boost::spirit::rule<ScannerT> declarator;
+            boost::spirit::rule<ScannerT> direct_declarator;
+            boost::spirit::rule<ScannerT> ptr_operator;
+            boost::spirit::rule<ScannerT> cv_qualifier_seq;
+            boost::spirit::rule<ScannerT> cv_qualifier;
+            boost::spirit::rule<ScannerT> declarator_id;
+            boost::spirit::rule<ScannerT> type_id;
+            boost::spirit::rule<ScannerT> type_specifier_seq;
+            boost::spirit::rule<ScannerT> abstract_declarator;
+            boost::spirit::rule<ScannerT> direct_abstract_declarator;
+            boost::spirit::rule<ScannerT> parameter_declaration_clause;
+            boost::spirit::rule<ScannerT> parameter_declaration_list;
+            boost::spirit::rule<ScannerT> parameter_declaration;
+            boost::spirit::rule<ScannerT> parameter_declaration_decl_specifier_seq1;
+            boost::spirit::rule<ScannerT> parameter_declaration_decl_specifier_seq2;
+            boost::spirit::rule<ScannerT> parameter_declaration_decl_specifier_seq3;
+            boost::spirit::rule<ScannerT> parameter_declaration_decl_specifier_seq4;
+            boost::spirit::rule<ScannerT> function_definition;
+            boost::spirit::rule<ScannerT> function_definition_decl_specifier_seq1;
+            boost::spirit::rule<ScannerT> function_definition_decl_specifier_seq2;
+            boost::spirit::rule<ScannerT> function_definition_decl_specifier_seq3;
+            boost::spirit::rule<ScannerT> function_body;
+            boost::spirit::rule<ScannerT> initializer;
+            boost::spirit::rule<ScannerT> initializer_clause;
+            boost::spirit::rule<ScannerT> initializer_list;
 
-        //1.11 - Overloading [gram.over]
-        boost::spirit::rule<ScannerT> operator_function_id;
-        boost::spirit::rule<ScannerT> operator_;
+            //1.8 - Classes [gram.class]
+            boost::spirit::rule<ScannerT> class_name;
+            boost::spirit::rule<ScannerT> class_specifier;
+            boost::spirit::rule<ScannerT> class_head;
+            boost::spirit::rule<ScannerT> class_key;
+            boost::spirit::rule<ScannerT> member_specification;
+            boost::spirit::rule<ScannerT> member_declaration;
+            boost::spirit::rule<ScannerT> member_declaration_decl_specifier_seq;
+            boost::spirit::rule<ScannerT> member_declarator_list;
+            boost::spirit::rule<ScannerT> member_declarator;
+            boost::spirit::rule<ScannerT> pure_specifier;
+            boost::spirit::rule<ScannerT> constant_initializer;
 
-        //1.12 - Templates [gram.temp]
-        boost::spirit::rule<ScannerT> template_declaration;
-        boost::spirit::rule<ScannerT> template_parameter_list;
-        boost::spirit::rule<ScannerT> template_parameter;
-        boost::spirit::rule<ScannerT> type_parameter;
-        boost::spirit::rule<ScannerT> template_id;
-        boost::spirit::rule<ScannerT> template_name;
-        boost::spirit::rule<ScannerT> template_argument_list;
-        boost::spirit::rule<ScannerT> template_argument;
-        boost::spirit::rule<ScannerT> explicit_instantiation;
-        boost::spirit::rule<ScannerT> explicit_specialization;
+            //1.9 - Derived classes [gram.class.derived]
+            boost::spirit::rule<ScannerT> base_clause;
+            boost::spirit::rule<ScannerT> base_specifier_list;
+            boost::spirit::rule<ScannerT> base_specifier;
+            boost::spirit::rule<ScannerT> access_specifier;
 
-        //1.13 - Exception handling [gram.except]
-        boost::spirit::rule<ScannerT> try_block;
-        boost::spirit::rule<ScannerT> function_try_block;
-        boost::spirit::rule<ScannerT> handler_seq;
-        boost::spirit::rule<ScannerT> handler;
-        boost::spirit::rule<ScannerT> exception_declaration;
-        boost::spirit::rule<ScannerT> throw_expression;
-        boost::spirit::rule<ScannerT> exception_specification;
-        boost::spirit::rule<ScannerT> type_id_list;
+            //1.10 - Special member functions [gram.special]
+            boost::spirit::rule<ScannerT> conversion_function_id;
+            boost::spirit::rule<ScannerT> conversion_type_id;
+            boost::spirit::rule<ScannerT> conversion_declarator;
+            boost::spirit::rule<ScannerT> ctor_initializer;
+            boost::spirit::rule<ScannerT> mem_initializer_list;
+            boost::spirit::rule<ScannerT> mem_initializer;
+            boost::spirit::rule<ScannerT> mem_initializer_id;
 
-        //1.14 - Preprocessing directives [gram.cpp]
-        boost::spirit::rule<ScannerT> preprocessing_file;
-        boost::spirit::rule<ScannerT> group;
-        boost::spirit::rule<ScannerT> group_part;
-        boost::spirit::rule<ScannerT> if_section;
-        boost::spirit::rule<ScannerT> if_group;
-        boost::spirit::rule<ScannerT> elif_groups;
-        boost::spirit::rule<ScannerT> elif_group;
-        boost::spirit::rule<ScannerT> else_group;
-        boost::spirit::rule<ScannerT> endif_line;
-        boost::spirit::rule<ScannerT> control_line;
-        boost::spirit::rule<ScannerT> replacement_list;
-        boost::spirit::rule<ScannerT> pp_tokens;
+            //1.11 - Overloading [gram.over]
+            boost::spirit::rule<ScannerT> operator_function_id;
+            boost::spirit::rule<ScannerT> operator_;
 
-        //GCC extensions
-        boost::spirit::rule<ScannerT> gcc_typeof;
-    };
+            //1.12 - Templates [gram.temp]
+            boost::spirit::rule<ScannerT> template_declaration;
+            boost::spirit::rule<ScannerT> template_parameter_list;
+            boost::spirit::rule<ScannerT> template_parameter;
+            boost::spirit::rule<ScannerT> type_parameter;
+            boost::spirit::rule<ScannerT> template_id;
+            boost::spirit::rule<ScannerT> template_name;
+            boost::spirit::rule<ScannerT> template_argument_list;
+            boost::spirit::rule<ScannerT> template_argument;
+            boost::spirit::rule<ScannerT> explicit_instantiation;
+            boost::spirit::rule<ScannerT> explicit_specialization;
+
+            //1.13 - Exception handling [gram.except]
+            boost::spirit::rule<ScannerT> try_block;
+            boost::spirit::rule<ScannerT> function_try_block;
+            boost::spirit::rule<ScannerT> handler_seq;
+            boost::spirit::rule<ScannerT> handler;
+            boost::spirit::rule<ScannerT> exception_declaration;
+            boost::spirit::rule<ScannerT> throw_expression;
+            boost::spirit::rule<ScannerT> exception_specification;
+            boost::spirit::rule<ScannerT> type_id_list;
+
+            //1.14 - Preprocessing directives [gram.cpp]
+            boost::spirit::rule<ScannerT> preprocessing_file;
+            boost::spirit::rule<ScannerT> group;
+            boost::spirit::rule<ScannerT> group_part;
+            boost::spirit::rule<ScannerT> if_section;
+            boost::spirit::rule<ScannerT> if_group;
+            boost::spirit::rule<ScannerT> elif_groups;
+            boost::spirit::rule<ScannerT> elif_group;
+            boost::spirit::rule<ScannerT> else_group;
+            boost::spirit::rule<ScannerT> endif_line;
+            boost::spirit::rule<ScannerT> control_line;
+            boost::spirit::rule<ScannerT> replacement_list;
+            boost::spirit::rule<ScannerT> pp_tokens;
+
+            //GCC extensions
+            boost::spirit::rule<ScannerT> gcc_typeof;
+        };
+
+    private:
+        bool m_gcc_extensions_support_enabled;
 };
-
 
 template<typename ScannerT>
 Grammar::definition<ScannerT>::definition(const Grammar& self)
@@ -339,9 +353,7 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
         | "using"
         | "unsigned"
         | "union"
-        #ifndef CPP_PARSER_ANSI
         | lexeme_d[!str_p("__") >> "typeof" >> !str_p("__")]
-        #endif
         | "typename"
         | "typeid"
         | "typedef"
@@ -1204,8 +1216,8 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     ;
 
     declarator
-        = direct_declarator
-        | ptr_operator >> declarator
+        = ptr_operator >> declarator
+        | direct_declarator
     ;
 
     /*
@@ -1360,7 +1372,6 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
         = parameter_declaration % ','
     ;
 
-    //TODO check whether every parameter_declaration_decl_specifier_seq* is necessary
     parameter_declaration
         = parameter_declaration_decl_specifier_seq1 >> declarator >> '=' >> assignment_expression
         | parameter_declaration_decl_specifier_seq2 >> declarator
@@ -1741,12 +1752,13 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
         = /*+*/preprocessing_token
     ;
 
-    #ifndef CPP_PARSER_ANSI
     //GCC extensions
-    gcc_typeof
-        = lexeme_d[!str_p("__") >> "typeof" >> !str_p("__")] >> '(' >> expression >> ')' //GCC typeof extension
-    ;
-    #endif
+    if(self.is_gcc_extensions_support_enabled())
+    {
+        gcc_typeof
+            = lexeme_d[!str_p("__") >> "typeof" >> !str_p("__")] >> '(' >> expression >> ')' //GCC typeof extension
+        ;
+    }
 }
 
 template<typename ScannerT>
