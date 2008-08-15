@@ -21,7 +21,6 @@ set(CMAKE_VERBOSE_MAKEFILE off)
 #project
 project(CppParser)
 set(LIBRARY_OUTPUT_PATH lib)
-set(EXECUTABLE_OUTPUT_PATH bin)
 
 #library
 file(
@@ -39,16 +38,10 @@ add_library(
 	${headers}
 )
 
-add_executable(
-	test
-	${sources}
-	${headers}
-)
-
 #Boost
 include(FindBoost)
 find_package(
-	Boost 1.35.0
+	Boost 1.36.0
 	REQUIRED system filesystem thread wave
 )
 link_directories(${Boost_LIBRARY_DIRS})
@@ -57,10 +50,6 @@ include_directories(${Boost_INCLUDE_DIRS})
 #link
 target_link_libraries(
 	cppparser
-	${Boost_LIBRARIES}
-)
-target_link_libraries(
-	test
 	${Boost_LIBRARIES}
 )
 

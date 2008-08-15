@@ -20,18 +20,16 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 #include <cppunit/ui/text/TestRunner.h>
 #include "SingleDeclarationTest.h"
 #include "SingleFileTest.h"
-#include <CppParser/Preprocessor.h>
+#include "SinglePreprocessingFileTest.h"
 
 int main(int argc, char **argv)
 {
-	/*CppUnit::TextUi::TestRunner runner;
+	CppUnit::TextUi::TestRunner runner;
 
 	runner.addTest(SingleDeclarationTest::suite());
 	runner.addTest(SingleFileTest::suite());
-	runner.run();*/
-
-    CppParser::Preprocessor p;
-    p.process("testfiles/single_preprocessing_files/test000.cpp");
+	runner.addTest(SinglePreprocessingFileTest::suite());
+	runner.run();
 
 	return 0;
 }

@@ -28,7 +28,7 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 namespace CppParser
 {
 
-std::string Preprocessor::process(const std::string& filename)
+std::string Preprocessor::operator()(const std::string& filename)
 {
     using namespace boost::wave;
 
@@ -80,28 +80,22 @@ std::string Preprocessor::process(const std::string& filename)
     ctx.add_sysinclude_path("/usr/lib/gcc/i486-linux-gnu/4.3/include/");
     //ctx.add_macro_definition(...);
 
-    // Get the preprocessor iterators and use them to generate
-    // the token sequence.
-    context_type::iterator_type first = ctx.begin();
-    context_type::iterator_type last = ctx.end();
-
-
-    std::ostringstream preprocessed_output;
 
     // The input stream is preprocessed for you during iteration
     // over [first, last)
-    //try
+    std::ostringstream preprocessed_output;
+    try
     {
-        for(context_type::iterator_type i = first; i != last; ++i)
+        for(context_type::iterator_type i = ctx.begin(); i != ctx.end(); ++i)
         {
             preprocessed_output << (*i).get_value();
         }
     }
-    /*catch(const preprocess_exception& e)
+    catch(const preprocess_exception& e)
     {
         std::cout << e.description() << '\n';
         std::cout << "in " << e.file_name() << ", line " << e.line_no() << ", column " << e.column_no();
-    }*/
+    }
 
     return preprocessed_output.str();
 }

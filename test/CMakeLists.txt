@@ -42,6 +42,14 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
 	add_definitions(-Wall -pedantic -Wno-long-long)
 endif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
 
+#Boost
+include(FindBoost)
+find_package(
+	Boost 1.36.0
+	REQUIRED system filesystem thread wave
+)
+include_directories(${Boost_INCLUDE_DIRS})
+
 #CppParser
 include(
 	../cppparser.cmake

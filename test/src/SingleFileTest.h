@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CPP_PARSER_SINGLE_FILE_TEST
-#define CPP_PARSER_SINGLE_FILE_TEST
+#ifndef SINGLE_FILE_TEST_H
+#define SINGLE_FILE_TEST_H
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
