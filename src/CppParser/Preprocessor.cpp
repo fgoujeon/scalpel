@@ -25,7 +25,10 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Preprocessor.h"
 
-std::string Preprocessor::operator()(const std::string& filename)
+namespace CppParser
+{
+
+std::string Preprocessor::process(const std::string& filename)
 {
     using namespace boost::wave;
 
@@ -101,4 +104,6 @@ std::string Preprocessor::operator()(const std::string& filename)
     }*/
 
     return preprocessed_output.str();
+}
+
 }

@@ -22,10 +22,15 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string>
 
+namespace CppParser
+{
+
 class Preprocessor
 {
     public:
-        std::string operator()(const std::string& filename);
+        std::string process(const std::string& filename);
 };
+
+}
 
 #endif
