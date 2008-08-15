@@ -79,6 +79,7 @@ class Grammar: public boost::spirit::grammar<Grammar>
             boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> integer_suffix;
             boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> unsigned_suffix;
             boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> long_suffix;
+            boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> long_long_suffix;
             boost::spirit::rule<ScannerT> character_literal;
             boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> c_char_sequence;
             boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> c_char;
@@ -600,8 +601,8 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     ;
 
     integer_suffix
-        = unsigned_suffix >> !long_suffix
-        | long_suffix >> !unsigned_suffix
+        = unsigned_suffix >> !(long_long_suffix | long_suffix)
+        | (long_long_suffix | long_suffix) >> !unsigned_suffix
     ;
 
     unsigned_suffix
@@ -610,6 +611,10 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
 
     long_suffix
         = ch_p('l') | 'L'
+    ;
+
+    long_long_suffix
+        = str_p("ll") | "LL"
     ;
 
     character_literal
