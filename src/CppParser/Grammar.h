@@ -286,6 +286,61 @@ class Grammar: public boost::spirit::grammar<Grammar>
 
             //GCC extensions
             boost::spirit::rule<ScannerT> gcc_typeof;
+
+
+            /*
+            * functor parsers
+            */
+
+            /*
+            * An assignment expression can contain '>' characters.
+            * So we can't use assignment_expression rule as is in a template_argument_list context.
+            * We use this functor parser instead.
+            * The first non-nested '>' is taken as the end of the template_argument_list.
+            */
+            struct template_argument_assignment_expression_parser
+            {
+                const definition<ScannerT>& m_definition;
+
+                typedef typename ScannerT::value_t result_t;
+
+                template_argument_assignment_expression_parser(const definition<ScannerT>& definition):
+                    m_definition(definition)
+                {
+                }
+
+                template <typename ScannerT_>
+                std::ptrdiff_t
+                operator()(ScannerT_ const& scan, result_t& result) const
+                {
+                    using namespace boost::spirit;
+
+                    //we scan until the first non-nested '>' or comma
+                    std::string matching_input;
+                    char ch;
+                    unsigned int open_bracket_count = 0;
+                    while(!scan.at_end())
+                    {
+                        ch = *scan;
+
+                        if(ch == '(')
+                            ++open_bracket_count;
+                        else if(ch == ')')
+                            --open_bracket_count;
+                        else if((ch == '>' || ch == ',') && open_bracket_count == 0)
+                            break;
+
+                        matching_input += ch;
+
+                        ++scan;
+                    }
+
+                    //parse the resulting matched string with assignment_expression rule and return the matching character count
+                    parse_info<> info = boost::spirit::parse(matching_input.c_str(), m_definition.assignment_expression, space_p);
+                    return info.length;
+                }
+            };
+            boost::spirit::functor_parser<template_argument_assignment_expression_parser> template_argument_assignment_expression_p;
         };
 
     private:
@@ -293,7 +348,8 @@ class Grammar: public boost::spirit::grammar<Grammar>
 };
 
 template<typename ScannerT>
-Grammar::definition<ScannerT>::definition(const Grammar& self)
+Grammar::definition<ScannerT>::definition(const Grammar& self):
+    template_argument_assignment_expression_p(*this)
 {
     using namespace boost::spirit;
 
@@ -687,8 +743,8 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     ;
 
     string_literal
-        = '"' >> !s_char_sequence >> '"'
-        | "L\"" >> !s_char_sequence >> '"'
+        = +('"' >> !s_char_sequence >> '"')
+        | +("L\"" >> !s_char_sequence >> '"')
     ;
 
     s_char_sequence
@@ -1633,8 +1689,7 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
     template_argument
         = longest_d
         [
-            //assignment_expression //TODO: We have to allow this, but it's complicated because assignment_expression can contain a '>'.
-            additive_expression //in place of assignment_expression
+            lexeme_d[template_argument_assignment_expression_p] //As assignment_expression can contain a '>', we cannot use it directly
             | type_id
             | id_expression
         ]

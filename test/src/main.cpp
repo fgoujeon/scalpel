@@ -28,7 +28,7 @@ int main(int argc, char **argv)
 
 	runner.addTest(SingleDeclarationTest::suite());
 	runner.addTest(SingleFileTest::suite());
-	runner.addTest(SinglePreprocessingFileTest::suite()); //takes a very long time
+	//runner.addTest(SinglePreprocessingFileTest::suite()); //takes a very long time
 	runner.run();
 
 	return 0;

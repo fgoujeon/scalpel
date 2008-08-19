@@ -1,4 +1,4 @@
-#include <algorithm>
+#include <numeric>
 
 int main(int argc, char** argv)
 {

@@ -1,4 +1,4 @@
-#include <algorithm>
+#include <bitset>
 
 int main(int argc, char** argv)
 {

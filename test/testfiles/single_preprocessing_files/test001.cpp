@@ -1,4 +1,4 @@
-#include <algorithm>
+#include <streambuf>
 
 int main(int argc, char** argv)
 {

@@ -242,7 +242,11 @@ void SingleDeclarationTest::setUp()
         "{"
         "}"
     );
+    well_formed_expressions.push_back("Test<1> test;");
     well_formed_expressions.push_back("Test<(1 > 2)> test;");
+    well_formed_expressions.push_back("Test<(value < (1 > 2))> test;");
+    well_formed_expressions.push_back("Test<(1 > Foo<>::value)> test;");
+    well_formed_expressions.push_back("Test<(1 > Foo<>::value), (1 > 2)> test;");
 
 
     /*

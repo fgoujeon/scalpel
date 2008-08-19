@@ -1,4 +1,4 @@
-#include <algorithm>
+#include <valarray>
 
 int main(int argc, char** argv)
 {

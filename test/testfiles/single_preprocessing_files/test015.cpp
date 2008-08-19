@@ -1,4 +1,4 @@
-#include <algorithm>
+#include <deque>
 
 int main(int argc, char** argv)
 {

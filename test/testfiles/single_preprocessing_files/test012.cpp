@@ -1,4 +1,4 @@
-#include <algorithm>
+#include <iosfwd>
 
 int main(int argc, char** argv)
 {

@@ -1,4 +1,4 @@
-#include <algorithm>
+#include <new>
 
 int main(int argc, char** argv)
 {
