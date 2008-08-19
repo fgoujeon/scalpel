@@ -124,15 +124,25 @@ class Grammar: public boost::spirit::grammar<Grammar>
             boost::spirit::rule<ScannerT> multiplicative_expression;
             boost::spirit::rule<ScannerT> additive_expression;
             boost::spirit::rule<ScannerT> shift_expression;
+            boost::spirit::rule<ScannerT> template_argument_shift_expression;
             boost::spirit::rule<ScannerT> relational_expression;
+            boost::spirit::rule<ScannerT> template_argument_relational_expression;
             boost::spirit::rule<ScannerT> equality_expression;
+            boost::spirit::rule<ScannerT> template_argument_equality_expression;
             boost::spirit::rule<ScannerT> and_expression;
+            boost::spirit::rule<ScannerT> template_argument_and_expression;
             boost::spirit::rule<ScannerT> exclusive_or_expression;
+            boost::spirit::rule<ScannerT> template_argument_exclusive_or_expression;
             boost::spirit::rule<ScannerT> inclusive_or_expression;
+            boost::spirit::rule<ScannerT> template_argument_inclusive_or_expression;
             boost::spirit::rule<ScannerT> logical_and_expression;
+            boost::spirit::rule<ScannerT> template_argument_logical_and_expression;
             boost::spirit::rule<ScannerT> logical_or_expression;
+            boost::spirit::rule<ScannerT> template_argument_logical_or_expression;
             boost::spirit::rule<ScannerT> conditional_expression;
+            boost::spirit::rule<ScannerT> template_argument_conditional_expression;
             boost::spirit::rule<ScannerT> assignment_expression;
+            boost::spirit::rule<ScannerT> template_argument_assignment_expression;
             boost::spirit::rule<ScannerT> assignment_operator;
             boost::spirit::rule<ScannerT> expression;
             boost::spirit::rule<ScannerT> constant_expression;
@@ -286,61 +296,6 @@ class Grammar: public boost::spirit::grammar<Grammar>
 
             //GCC extensions
             boost::spirit::rule<ScannerT> gcc_typeof;
-
-
-            /*
-            * functor parsers
-            */
-
-            /*
-            * An assignment expression can contain '>' characters.
-            * So we can't use assignment_expression rule as is in a template_argument_list context.
-            * We use this functor parser instead.
-            * The first non-nested '>' is taken as the end of the template_argument_list.
-            */
-            struct template_argument_assignment_expression_parser
-            {
-                const definition<ScannerT>& m_definition;
-
-                typedef typename ScannerT::value_t result_t;
-
-                template_argument_assignment_expression_parser(const definition<ScannerT>& definition):
-                    m_definition(definition)
-                {
-                }
-
-                template <typename ScannerT_>
-                std::ptrdiff_t
-                operator()(ScannerT_ const& scan, result_t& result) const
-                {
-                    using namespace boost::spirit;
-
-                    //we scan until the first non-nested '>' or comma
-                    std::string matching_input;
-                    char ch;
-                    unsigned int open_bracket_count = 0;
-                    while(!scan.at_end())
-                    {
-                        ch = *scan;
-
-                        if(ch == '(')
-                            ++open_bracket_count;
-                        else if(ch == ')')
-                            --open_bracket_count;
-                        else if((ch == '>' || ch == ',') && open_bracket_count == 0)
-                            break;
-
-                        matching_input += ch;
-
-                        ++scan;
-                    }
-
-                    //parse the resulting matched string with assignment_expression rule and return the matching character count
-                    parse_info<> info = boost::spirit::parse(matching_input.c_str(), m_definition.assignment_expression, space_p);
-                    return info.length;
-                }
-            };
-            boost::spirit::functor_parser<template_argument_assignment_expression_parser> template_argument_assignment_expression_p;
         };
 
     private:
@@ -348,8 +303,7 @@ class Grammar: public boost::spirit::grammar<Grammar>
 };
 
 template<typename ScannerT>
-Grammar::definition<ScannerT>::definition(const Grammar& self):
-    template_argument_assignment_expression_p(*this)
+Grammar::definition<ScannerT>::definition(const Grammar& self)
 {
     using namespace boost::spirit;
 
@@ -938,42 +892,78 @@ Grammar::definition<ScannerT>::definition(const Grammar& self):
     shift_expression
         = additive_expression % (str_p("<<") | ">>")
     ;
+    //a shift expression used as a template argument must be placed between brackets if it contains any '>' characters
+    template_argument_shift_expression
+        = '(' >> (additive_expression % (str_p("<<") | ">>")) >> ')'
+        | additive_expression % str_p("<<")
+    ;
 
     relational_expression
         = shift_expression % (str_p("<=") | ">=" | '<' | '>')
+    ;
+    //a relational_expression used as a template argument must be placed between brackets if it contains any '>' characters
+    template_argument_relational_expression
+        = '(' >> (shift_expression % (str_p("<=") | ">=" | '<' | '>')) >> ')'
+        | template_argument_shift_expression % (str_p("<=") | '<')
     ;
 
     equality_expression
         = relational_expression % (str_p("==") | "!=")
     ;
+    template_argument_equality_expression
+        = template_argument_relational_expression % (str_p("==") | "!=")
+    ;
 
     and_expression
         = equality_expression % '&'
+    ;
+    template_argument_and_expression
+        = template_argument_equality_expression % '&'
     ;
 
     exclusive_or_expression
         = and_expression % '^'
     ;
+    template_argument_exclusive_or_expression
+        = template_argument_and_expression % '^'
+    ;
 
     inclusive_or_expression
         = exclusive_or_expression % '|'
+    ;
+    template_argument_inclusive_or_expression
+        = template_argument_exclusive_or_expression % '|'
     ;
 
     logical_and_expression
         = inclusive_or_expression % "&&"
     ;
+    template_argument_logical_and_expression
+        = template_argument_inclusive_or_expression % "&&"
+    ;
 
     logical_or_expression
         = logical_and_expression % "||"
+    ;
+    template_argument_logical_or_expression
+        = template_argument_logical_and_expression % "||"
     ;
 
     conditional_expression
         = logical_or_expression >> !('?' >> expression >> ':' >> assignment_expression)
     ;
+    template_argument_conditional_expression
+        = template_argument_logical_or_expression >> !('?' >> expression >> ':' >> template_argument_assignment_expression)
+    ;
 
     assignment_expression
         = logical_or_expression >> assignment_operator >> assignment_expression
         | conditional_expression
+        | throw_expression
+    ;
+    template_argument_assignment_expression
+        = template_argument_logical_or_expression >> assignment_operator >> template_argument_assignment_expression
+        | template_argument_conditional_expression
         | throw_expression
     ;
 
@@ -1689,7 +1679,7 @@ Grammar::definition<ScannerT>::definition(const Grammar& self):
     template_argument
         = longest_d
         [
-            lexeme_d[template_argument_assignment_expression_p] //As assignment_expression can contain a '>', we cannot use it directly
+            template_argument_assignment_expression //As assignment_expression can contain a '>', we cannot use it directly
             | type_id
             | id_expression
         ]
