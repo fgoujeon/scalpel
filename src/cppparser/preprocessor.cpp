@@ -23,12 +23,12 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/wave/cpplexer/cpp_lex_iterator.hpp>
 #include <boost/wave/cpplexer/cpp_lex_token.hpp>
 
-#include "Preprocessor.h"
+#include "preprocessor.h"
 
-namespace CppParser
+namespace cppparser
 {
 
-std::string Preprocessor::operator()(const std::string& filename)
+std::string preprocessor::operator()(const std::string& filename)
 {
     using namespace boost::wave;
 

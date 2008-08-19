@@ -17,30 +17,26 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SINGLE_DECLARATION_TEST_H
-#define SINGLE_DECLARATION_TEST_H
+#ifndef SINGLE_PREPROCESSING_FILE_TEST_H
+#define SINGLE_PREPROCESSING_FILE_TEST_H
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <CppParser/Grammar.h>
+#include <cppparser/preprocessor.h>
+#include <cppparser/grammar.h>
 
-class SingleDeclarationTest: public CppUnit::TestFixture
+class single_preprocessing_file_test: public CppUnit::TestFixture
 {
-    CPPUNIT_TEST_SUITE(SingleDeclarationTest);
-    CPPUNIT_TEST(parse_well_formed_expressions);
-    CPPUNIT_TEST(parse_ill_formed_expressions);
+    CPPUNIT_TEST_SUITE(single_preprocessing_file_test);
+    CPPUNIT_TEST(parse_files);
     CPPUNIT_TEST_SUITE_END();
 
     public:
-        void setUp();
-        void tearDown();
-        void parse_well_formed_expressions();
-        void parse_ill_formed_expressions();
+        void parse_files();
 
     private:
-        CppParser::Grammar grammar;
-        std::vector<std::string> well_formed_expressions;
-        std::vector<std::string> ill_formed_expressions;
+        cppparser::preprocessor m_preprocessor;
+        cppparser::grammar m_grammar;
 };
 
 #endif

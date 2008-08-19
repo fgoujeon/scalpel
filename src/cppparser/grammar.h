@@ -22,13 +22,13 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <boost/spirit.hpp>
 
-namespace CppParser
+namespace cppparser
 {
 
-class Grammar: public boost::spirit::grammar<Grammar>
+class grammar: public boost::spirit::grammar<grammar>
 {
     public:
-        Grammar(bool gcc_extensions_support_enabled = true):
+        grammar(bool gcc_extensions_support_enabled = true):
             m_gcc_extensions_support_enabled(gcc_extensions_support_enabled)
         {
         }
@@ -41,12 +41,12 @@ class Grammar: public boost::spirit::grammar<Grammar>
         template <typename ScannerT>
         struct definition
         {
-            definition(const Grammar& self);
+            definition(const grammar& self);
             boost::spirit::rule<ScannerT> const& start() const;
 
 
             /*
-            Comments refer to ISO/IEC 14882:1998(E) (C++98 Standard), Annex A (Grammar summary)
+            Comments refer to ISO/IEC 14882:1998(E) (C++98 Standard), Annex A (grammar summary)
             */
 
             boost::spirit::rule<ScannerT> file;
@@ -303,7 +303,7 @@ class Grammar: public boost::spirit::grammar<Grammar>
 };
 
 template<typename ScannerT>
-Grammar::definition<ScannerT>::definition(const Grammar& self)
+grammar::definition<ScannerT>::definition(const grammar& self)
 {
     using namespace boost::spirit;
 
@@ -1813,12 +1813,12 @@ Grammar::definition<ScannerT>::definition(const Grammar& self)
 
 template<typename ScannerT>
 boost::spirit::rule<ScannerT> const&
-Grammar::definition<ScannerT>::start() const
+grammar::definition<ScannerT>::start() const
 {
     return file;
 }
 
-} //namespace CppParser
+} //namespace cppparser
 
 
 #endif

@@ -22,11 +22,11 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <CppParser/Grammar.h>
+#include <cppparser/grammar.h>
 
-class SingleFileTest: public CppUnit::TestFixture
+class single_file_test: public CppUnit::TestFixture
 {
-    CPPUNIT_TEST_SUITE(SingleFileTest);
+    CPPUNIT_TEST_SUITE(single_file_test);
     CPPUNIT_TEST(parse_files);
     CPPUNIT_TEST_SUITE_END();
 
@@ -34,7 +34,7 @@ class SingleFileTest: public CppUnit::TestFixture
         void parse_files();
 
     private:
-        CppParser::Grammar grammar;
+        cppparser::grammar m_grammar;
 };
 
 #endif

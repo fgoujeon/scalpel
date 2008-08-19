@@ -19,15 +19,15 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <sstream>
 #include <boost/spirit.hpp>
-#include <CppParser/Grammar.h>
+#include <cppparser/grammar.h>
 #include <cppunit/TestSuite.h>
 
-#include "SingleDeclarationTest.h"
+#include "single_declaration_test.h"
 
 using namespace boost::spirit;
 using namespace std;
 
-void SingleDeclarationTest::setUp()
+void single_declaration_test::setUp()
 {
     /*
      * Well formed expressions
@@ -246,6 +246,7 @@ void SingleDeclarationTest::setUp()
     well_formed_expressions.push_back("Test<(1 > 2)> test;");
     well_formed_expressions.push_back("Test<1 < 2> test;");
     well_formed_expressions.push_back("Test<1 << 2> test;");
+    well_formed_expressions.push_back("Test<value && (a > b)> test;");
     well_formed_expressions.push_back("Test<(value < (1 > 2))> test;");
     well_formed_expressions.push_back("Test<(1 > Foo<>::value)> test;");
     well_formed_expressions.push_back("Test<(1 > Foo<>::value), (1 > 2)> test;");
@@ -261,13 +262,13 @@ void SingleDeclarationTest::setUp()
     ill_formed_expressions.push_back("test::template;");
 }
 
-void SingleDeclarationTest::tearDown()
+void single_declaration_test::tearDown()
 {
     well_formed_expressions.clear();
     ill_formed_expressions.clear();
 }
 
-void SingleDeclarationTest::parse_well_formed_expressions()
+void single_declaration_test::parse_well_formed_expressions()
 {
     for(vector<string>::const_iterator i = well_formed_expressions.begin(); i != well_formed_expressions.end(); ++i)
     {
@@ -285,7 +286,7 @@ void SingleDeclarationTest::parse_well_formed_expressions()
     }
 }
 
-void SingleDeclarationTest::parse_ill_formed_expressions()
+void single_declaration_test::parse_ill_formed_expressions()
 {
     for(vector<string>::const_iterator i = ill_formed_expressions.begin(); i != ill_formed_expressions.end(); ++i)
     {

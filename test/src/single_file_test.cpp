@@ -21,23 +21,23 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 #include <iomanip>
 #include <stdexcept>
 #include <boost/spirit.hpp>
-#include <CppParser/Grammar.h>
+#include <cppparser/grammar.h>
 #include <cppunit/TestSuite.h>
 
-#include "SinglePreprocessingFileTest.h"
+#include "single_file_test.h"
 
 using namespace boost::spirit;
 using namespace std;
 
-void SinglePreprocessingFileTest::parse_files()
+void single_file_test::parse_files()
 {
     for(unsigned int i = 0; ; ++i)
     {
 		//generate file's name
         std::ostringstream file_name_oss;
-        file_name_oss << "testfiles/single_preprocessing_files/test" << setfill('0') << setw(3) << i << ".cpp";
+        file_name_oss << "testfiles/single_files/test" << setfill('0') << setw(3) << i << ".cpp";
 
-		//check whether file exists
+		//open file
         std::ifstream file(file_name_oss.str().c_str());
         if(!file)
         {
@@ -47,11 +47,15 @@ void SinglePreprocessingFileTest::parse_files()
                 break; //exit if file doesn't exist
         }
 
-		//preprocess file
-		std::string preprocessed_code = preprocessor(file_name_oss.str());
+		//read file
+        ostringstream buffer;
+        buffer << file.rdbuf();
 
-		//parse preprocessed code
-        parse_info<> info = parse(preprocessed_code.c_str(), grammar, space_p);
+		//close file
+        file.close();
+
+		//parse file
+        parse_info<> info = parse(buffer.str().c_str(), m_grammar, space_p);
         std::string stopped_at = info.stop;
 
         ostringstream failure_message;
