@@ -17,18 +17,28 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CPPPARSER_PREPROCESSOR_H
-#define CPPPARSER_PREPROCESSOR_H
+#ifndef CPPPARSER_PROGRAM_H
+#define CPPPARSER_PROGRAM_H
 
-#include <string>
+#include "namespace_.h"
 
 namespace cppparser
 {
 
-class preprocessor
+/**
+Represents a C++ program.
+A program can be either a executable or a library.
+*/
+class program
 {
     public:
-        std::string operator()(const std::string& filename);
+        /**
+        @return the global anonymous namespace of the program.
+        */
+        namespace_& global_namespace();
+
+    private:
+        namespace_ m_global_namespace;
 };
 
 }

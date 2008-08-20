@@ -17,18 +17,23 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CPPPARSER_PREPROCESSOR_H
-#define CPPPARSER_PREPROCESSOR_H
+#ifndef CPPPARSER_TYPE_H
+#define CPPPARSER_TYPE_H
 
 #include <string>
 
 namespace cppparser
 {
 
-class preprocessor
+class type
 {
     public:
-        std::string operator()(const std::string& filename);
+        type(const std::string& name);
+
+        const std::string& name() const;
+
+    private:
+        std::string m_name;
 };
 
 }

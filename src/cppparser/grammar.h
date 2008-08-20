@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CPP_PARSER_GRAMMAR_H
-#define CPP_PARSER_GRAMMAR_H
+#ifndef CPPPARSER_GRAMMAR_H
+#define CPPPARSER_GRAMMAR_H
 
 #include <boost/spirit.hpp>
 
@@ -892,7 +892,7 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     shift_expression
         = additive_expression % (str_p("<<") | ">>")
     ;
-    //a shift expression used as a template argument must be placed between brackets if it contains any '>' characters
+    //a shift expression used as a template argument must be placed between braces if it contains any '>' characters
     template_argument_shift_expression
         = '(' >> (additive_expression % (str_p("<<") | ">>")) >> ')'
         | additive_expression % str_p("<<")
@@ -901,7 +901,7 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     relational_expression
         = shift_expression % (str_p("<=") | ">=" | '<' | '>')
     ;
-    //a relational_expression used as a template argument must be placed between brackets if it contains any '>' characters
+    //a relational_expression used as a template argument must be placed between braces if it contains any '>' characters
     template_argument_relational_expression
         = '(' >> (shift_expression % (str_p("<=") | ">=" | '<' | '>')) >> ')'
         | template_argument_shift_expression % (str_p("<=") | '<')
