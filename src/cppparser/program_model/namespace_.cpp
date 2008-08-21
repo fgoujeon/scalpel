@@ -116,8 +116,19 @@ namespace_::add(std::shared_ptr<namespace_> a_namespace)
         throw std::runtime_error(m_name + " already contains a namespace named \"" + a_namespace->name() + "\".");
     }
 
+    //tell namespace that we (i.e. this) are its parent
+    a_namespace->parent(m_shared_this);
+    a_namespace->shared_this(a_namespace); ///< @todo find better than that dirty trick
+
+    //add namespace to private containers
     m_namespaces.push_back(a_namespace);
     m_items.push_back(a_namespace);
+}
+
+void
+namespace_::shared_this(std::shared_ptr<namespace_> ptr)
+{
+    m_shared_this = ptr;
 }
 
 }} //namespace cppparser::program_model

@@ -93,8 +93,13 @@ class namespace_: public namespace_item
         void
         add(std::shared_ptr<namespace_> a_namespace);
 
+        ///@todo find better than that dirty trick
+        void
+        shared_this(std::shared_ptr<namespace_> ptr);
+
     private:
         std::string m_name;
+        std::shared_ptr<namespace_> m_shared_this;
         std::vector<std::shared_ptr<namespace_item>> m_items;
         std::vector<std::shared_ptr<namespace_>> m_namespaces;
 };

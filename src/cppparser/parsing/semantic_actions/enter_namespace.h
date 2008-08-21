@@ -62,7 +62,6 @@ enter_namespace<IteratorT>::operator()(const IteratorT* first, const IteratorT* 
         entered_namespace = std::make_shared<program_model::namespace_>(namespace_name);
         //add the new namespace to the current namespace
         current_namespace->add(entered_namespace);
-        entered_namespace->parent(current_namespace); ///@todo I'd like this operation to be done by namespace_::add() function itself
     }
 
     //make point the cursor to the entered namespace
