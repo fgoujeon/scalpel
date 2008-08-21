@@ -17,9 +17,9 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace cppparser
+namespace cppparser { namespace program_model
 {
 
 
 
-}
+}} //namespace cppparser::program_model

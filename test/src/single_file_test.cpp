@@ -21,7 +21,6 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 #include <iomanip>
 #include <stdexcept>
 #include <boost/spirit.hpp>
-#include <cppparser/grammar.h>
 #include <cppunit/TestSuite.h>
 
 #include "single_file_test.h"

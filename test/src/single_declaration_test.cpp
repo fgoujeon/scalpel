@@ -19,7 +19,6 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <sstream>
 #include <boost/spirit.hpp>
-#include <cppparser/grammar.h>
 #include <cppunit/TestSuite.h>
 
 #include "single_declaration_test.h"
@@ -272,7 +271,7 @@ void single_declaration_test::parse_well_formed_expressions()
 {
     for(vector<string>::const_iterator i = well_formed_expressions.begin(); i != well_formed_expressions.end(); ++i)
     {
-        parse_info<> info = parse(i->c_str(), grammar, space_p);
+        parse_info<> info = parse(i->c_str(), m_grammar, space_p);
 
         ostringstream failure_message;
         failure_message << "Failed to parse:\n\t" << *i << "\n";
@@ -290,7 +289,7 @@ void single_declaration_test::parse_ill_formed_expressions()
 {
     for(vector<string>::const_iterator i = ill_formed_expressions.begin(); i != ill_formed_expressions.end(); ++i)
     {
-        parse_info<> info = parse(i->c_str(), grammar, space_p);
+        parse_info<> info = parse(i->c_str(), m_grammar, space_p);
 
         ostringstream failure_message;
         failure_message << "Unexpectedly succeeded in parsing:\n\t" << *i;

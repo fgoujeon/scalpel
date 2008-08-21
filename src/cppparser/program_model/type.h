@@ -17,12 +17,12 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CPPPARSER_TYPE_H
-#define CPPPARSER_TYPE_H
+#ifndef CPPPARSER_PROGRAM_MODEL_TYPE_H
+#define CPPPARSER_PROGRAM_MODEL_TYPE_H
 
 #include <string>
 
-namespace cppparser
+namespace cppparser { namespace program_model
 {
 
 class type
@@ -36,6 +36,6 @@ class type
         std::string m_name;
 };
 
-}
+}} //namespace cppparser::program_model
 
 #endif

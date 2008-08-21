@@ -17,20 +17,37 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CPPPARSER_PROGRAM_MODEL_CLASS_H
-#define CPPPARSER_PROGRAM_MODEL_CLASS_H
+#ifndef CPPPARSER_PARSING_CURSOR_H
+#define CPPPARSER_PARSING_CURSOR_H
 
-#include "type.h"
-#include "namespace_item.h"
+#include <memory>
+#include "../program_model/program.h"
 
-namespace cppparser { namespace program_model
+namespace cppparser { namespace parsing
 {
 
-class class_: public type, public namespace_item
+class cursor
 {
+    public:
+        cursor();
 
+        program_model::program&
+        program_model();
+
+        std::weak_ptr<program_model::namespace_>
+        current_namespace();
+
+        void
+        enter_namespace(std::weak_ptr<program_model::namespace_> a_namespace);
+
+        void
+        leave_current_namespace();
+
+    private:
+        program_model::program m_program_model;
+        std::weak_ptr<program_model::namespace_> m_current_namespace;
 };
 
-}} //namespace cppparser::program_model
+}} //namespace cppparser::parsing
 
 #endif

@@ -19,7 +19,7 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "type.h"
 
-namespace cppparser
+namespace cppparser { namespace program_model
 {
 
 type::type(const std::string& name):
@@ -33,4 +33,4 @@ type::name() const
     return m_name;
 }
 
-}
+}} //namespace cppparser::program_model

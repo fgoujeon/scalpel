@@ -23,7 +23,7 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppparser/preprocessor.h>
-#include <cppparser/grammar.h>
+#include <cppparser/parsing/grammar.h>
 
 class single_preprocessing_file_test: public CppUnit::TestFixture
 {
@@ -36,7 +36,7 @@ class single_preprocessing_file_test: public CppUnit::TestFixture
 
     private:
         cppparser::preprocessor m_preprocessor;
-        cppparser::grammar m_grammar;
+        cppparser::parsing::grammar m_grammar;
 };
 
 #endif

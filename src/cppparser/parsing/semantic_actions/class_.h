@@ -17,20 +17,21 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CPPPARSER_PROGRAM_MODEL_CLASS_H
-#define CPPPARSER_PROGRAM_MODEL_CLASS_H
+#ifndef CPPPARSER_PARSING_SEMANTIC_ACTIONS_CLASS_H
+#define CPPPARSER_PARSING_SEMANTIC_ACTIONS_CLASS_H
 
-#include "type.h"
-#include "namespace_item.h"
-
-namespace cppparser { namespace program_model
+namespace cppparser { namespace parsing { namespace semantic_actions
 {
 
-class class_: public type, public namespace_item
+template <class IteratorT>
+class class_
 {
-
+    public:
+        void operator()(IteratorT first, IteratorT last) const
+        {
+        }
 };
 
-}} //namespace cppparser::program_model
+}}} //namespace cppparser::parsing::semantic_actions
 
 #endif

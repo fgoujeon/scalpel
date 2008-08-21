@@ -17,14 +17,15 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CPPPARSER_NAMESPACE_H
-#define CPPPARSER_NAMESPACE_H
+#ifndef CPPPARSER_PROGRAM_MODEL_NAMESPACE_H
+#define CPPPARSER_PROGRAM_MODEL_NAMESPACE_H
 
 #include <string>
-#include <list>
+#include <vector>
+#include <memory>
 #include "namespace_item.h"
 
-namespace cppparser
+namespace cppparser { namespace program_model
 {
 
 class class_;
@@ -46,29 +47,46 @@ class namespace_: public namespace_item
         Creates a named namespace.
         @param name the namespace's name.
         */
-        namespace_(const std::string& name);
+        explicit namespace_(const std::string& name);
+
+        /**
+        Destructor.
+        */
+        ~namespace_();
 
         /**
         @return the name of the namespace.
         Anonymous namespaces return an empty string.
         */
-        const std::string& name() const;
+        const std::string&
+        name() const;
+
+        /**
+        @return the full name of the namespace, including all parents (e.g. ::foo::bar).
+        */
+        std::string
+        full_name() const;
+
+        /**
+        @return true if the namespace is the global one.
+        */
+        bool
+        is_global() const;
 
         /**
         @return the item list of the namespace, i.e. the list of classes, function, etc.
         */
-        const std::list<namespace_item*>& items() const;
+        const std::vector<std::shared_ptr<namespace_item>>&
+        items() const;
 
-        void add(namespace_& a_namespace);
-        void add(class_& a_class);
-        void add(enum_& an_enum);
-        void add(typedef_& a_typedef);
+        void
+        add(std::shared_ptr<namespace_item> a_namespace_item);
 
     private:
         std::string m_name;
-        std::list<namespace_item*> m_items;
+        std::vector<std::shared_ptr<namespace_item>> m_items;
 };
 
-}
+}} //namespace cppparser::program_model
 
 #endif

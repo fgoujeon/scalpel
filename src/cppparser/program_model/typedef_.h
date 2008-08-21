@@ -17,13 +17,13 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CPPPARSER_TYPEDEF_H
-#define CPPPARSER_TYPEDEF_H
+#ifndef CPPPARSER_PROGRAM_MODEL_TYPEDEF_H
+#define CPPPARSER_PROGRAM_MODEL_TYPEDEF_H
 
 #include "type.h"
 #include "namespace_item.h"
 
-namespace cppparser
+namespace cppparser { namespace program_model
 {
 
 class typedef_: public type, public namespace_item
@@ -31,6 +31,6 @@ class typedef_: public type, public namespace_item
 
 };
 
-}
+}} //namespace cppparser::program_model
 
 #endif

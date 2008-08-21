@@ -1,4 +1,15 @@
-bool fun(bool a, bool b, bool c, bool d)
+namespace foo
 {
-    return a < b || c > d;
+	int test;
+
+	namespace bar
+	{
+		int i;
+	}
+
+	namespace
+	{
+		char c;
+	}
+
 }

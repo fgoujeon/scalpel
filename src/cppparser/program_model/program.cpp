@@ -19,13 +19,28 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "program.h"
 
-namespace cppparser
+namespace cppparser { namespace program_model
 {
 
-namespace_&
+namespace
+{
+struct null_deleter
+{
+    void operator()(void const *) const
+    {
+    }
+};
+}
+
+program::program():
+    m_global_namespace_ptr(&m_global_namespace, null_deleter())
+{
+}
+
+std::shared_ptr<namespace_>
 program::global_namespace()
 {
-    return m_global_namespace;
+    return m_global_namespace_ptr;
 }
 
-}
+}} //namespace cppparser::program_model

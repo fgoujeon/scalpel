@@ -17,16 +17,37 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CPPPARSER_NAMESPACE_ITEM_H
-#define CPPPARSER_NAMESPACE_ITEM_H
+#ifndef CPPPARSER_PROGRAM_MODEL_NAMESPACE_ITEM_H
+#define CPPPARSER_PROGRAM_MODEL_NAMESPACE_ITEM_H
 
-namespace cppparser
+#include <memory>
+
+namespace cppparser { namespace program_model
 {
+
+class namespace_;
 
 class namespace_item
 {
+    public:
+        virtual ~namespace_item();
+
+        bool
+        has_parent() const;
+
+        std::weak_ptr<namespace_>
+        parent();
+
+        const std::weak_ptr<namespace_>
+        parent() const;
+
+        void
+        parent(std::weak_ptr<namespace_> parent);
+
+    private:
+        std::weak_ptr<namespace_> m_parent;
 };
 
-}
+}} //namespace cppparser::program_model
 
 #endif

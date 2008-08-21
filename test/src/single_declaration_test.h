@@ -22,7 +22,7 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <cppparser/grammar.h>
+#include <cppparser/parsing/grammar.h>
 
 class single_declaration_test: public CppUnit::TestFixture
 {
@@ -38,7 +38,7 @@ class single_declaration_test: public CppUnit::TestFixture
         void parse_ill_formed_expressions();
 
     private:
-        cppparser::grammar grammar;
+        cppparser::parsing::grammar m_grammar;
         std::vector<std::string> well_formed_expressions;
         std::vector<std::string> ill_formed_expressions;
 };
