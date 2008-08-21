@@ -18,6 +18,8 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <iostream>
+#include <algorithm>
+#include <stdexcept>
 #include "class_.h"
 #include "enum_.h"
 #include "typedef_.h"
@@ -66,16 +68,56 @@ namespace_::is_global() const
     return has_parent();
 }
 
+std::shared_ptr<namespace_>
+namespace_::find_namespace(const std::string& name) const
+{
+    ///@todo use STL algo. instead
+    for
+    (
+        std::vector<std::shared_ptr<namespace_>>::const_iterator i = m_namespaces.begin();
+        i != m_namespaces.end();
+        ++i
+    )
+    {
+        std::shared_ptr<namespace_> n = *i;
+        if(n->name() == name)
+        {
+            return n;
+        }
+    }
+
+    return std::shared_ptr<namespace_>();
+}
+
 const std::vector<std::shared_ptr<namespace_item>>&
 namespace_::items() const
 {
     return m_items;
 }
-
+/*
 void
 namespace_::add(std::shared_ptr<namespace_item> a_namespace_item)
 {
+    //check whether no already existing namespace has the same name
+    if(contains_namespace(a_namespace_item->name()))
+    {
+        throw std::runtime_error(m_name + " already contains a namespace named \"" + a_namespace_item->name() + "\".");
+    }
+
     m_items.push_back(a_namespace_item);
+}*/
+
+void
+namespace_::add(std::shared_ptr<namespace_> a_namespace)
+{
+    //check whether no already existing namespace has the same name
+    if(find_namespace(a_namespace->name()))
+    {
+        throw std::runtime_error(m_name + " already contains a namespace named \"" + a_namespace->name() + "\".");
+    }
+
+    m_namespaces.push_back(a_namespace);
+    m_items.push_back(a_namespace);
 }
 
 }} //namespace cppparser::program_model

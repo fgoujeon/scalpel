@@ -39,7 +39,7 @@ class namespace_: public namespace_item
 {
     public:
         /**
-        Creates an anonymous namespace.
+        Creates an anonymous namespace. Equivalent to namespace_("").
         */
         namespace_();
 
@@ -68,10 +68,18 @@ class namespace_: public namespace_item
         full_name() const;
 
         /**
-        @return true if the namespace is the global one.
+        @return true if the namespace is the global one, false otherwise.
         */
         bool
         is_global() const;
+
+        /**
+        Check whether an already declared symbol has the given name.
+        @param name the name of the namespace to search.
+        @return true if an already existing namespace has the same name, false otherwise.
+        */
+        std::shared_ptr<namespace_>
+        find_namespace(const std::string& name) const;
 
         /**
         @return the item list of the namespace, i.e. the list of classes, function, etc.
@@ -79,12 +87,16 @@ class namespace_: public namespace_item
         const std::vector<std::shared_ptr<namespace_item>>&
         items() const;
 
+        /*void
+        add(std::shared_ptr<namespace_item> a_namespace_item);*/
+
         void
-        add(std::shared_ptr<namespace_item> a_namespace_item);
+        add(std::shared_ptr<namespace_> a_namespace);
 
     private:
         std::string m_name;
         std::vector<std::shared_ptr<namespace_item>> m_items;
+        std::vector<std::shared_ptr<namespace_>> m_namespaces;
 };
 
 }} //namespace cppparser::program_model

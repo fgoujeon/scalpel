@@ -1107,7 +1107,7 @@ grammar::definition<ScannerT>::definition(const grammar& self):
 
     In order to solve this issue, we have to create an extra rule which specify a tail parser.
     */
-    //TODO semantic disambiguation between decl_specifier and init_declarator_list
+    ///@todo semantic disambiguation between decl_specifier and init_declarator_list
     simple_declaration
         = !simple_declaration_decl_specifier_seq >> !init_declarator_list >> ch_p(';')
     ;
@@ -1540,8 +1540,8 @@ grammar::definition<ScannerT>::definition(const grammar& self):
     ;
 
     member_declarator
-        = declarator >> !(pure_specifier | constant_initializer) //TODO find what declarator >> constant_initializer stands for
-        | !identifier >> ':' >> constant_expression //TODO find what's that
+        = declarator >> !(pure_specifier | constant_initializer) ///@todo find what declarator >> constant_initializer stands for
+        | !identifier >> ':' >> constant_expression ///@todo find what's that
     ;
 
     pure_specifier
@@ -1742,7 +1742,7 @@ grammar::definition<ScannerT>::definition(const grammar& self):
     ;
 
     //1.14 - Preprocessing directives [gram.cpp]
-    //TODO Parsing should be processed just like it was a compilation.
+    ///@todo Parsing should be processed just like it was a compilation.
     //This part of the grammar should be used for the preprocessing phase.
 
     /*
@@ -1793,7 +1793,7 @@ grammar::definition<ScannerT>::definition(const grammar& self):
         = ch_p('#') >> "endif" >> '\n'
     ;
 
-    //TODO control lines should be ended by an end-of-line character
+    ///@todo control lines should be ended by an end-of-line character
     control_line
         = ch_p('#') >> "include" >> pp_tokens //>> '\n'
         | ch_p('#') >> "define" >> identifier >> replacement_list //>> '\n'
@@ -1809,7 +1809,7 @@ grammar::definition<ScannerT>::definition(const grammar& self):
         = !pp_tokens
     ;
 
-    //TODO there should be a + prefix, but it causes issues
+    ///@todo there should be a + prefix, but it causes issues
     pp_tokens
         = /*+*/preprocessing_token
     ;

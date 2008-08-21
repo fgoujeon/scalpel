@@ -28,7 +28,7 @@ namespace cppparser { namespace program_model
 
 /**
 Represents a C++ program.
-A program can be either a executable or a library.
+A program can be either an executable or a library.
 */
 class program
 {

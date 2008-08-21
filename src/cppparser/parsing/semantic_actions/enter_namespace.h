@@ -50,12 +50,23 @@ template <class IteratorT>
 void
 enter_namespace<IteratorT>::operator()(const IteratorT* first, const IteratorT* last) const
 {
-    //create a namespace and put cursor into it
-    std::string str(first, last);
-    std::shared_ptr<program_model::namespace_> new_namespace = std::make_shared<program_model::namespace_>(str);
-    m_cursor.current_namespace().lock()->add(new_namespace);
-    new_namespace->parent(m_cursor.current_namespace()); //TODO I'd like this operation to be handled by namespace_::add() function itself
-    m_cursor.enter_namespace(new_namespace);
+    std::string namespace_name(first, last);
+    std::shared_ptr<program_model::namespace_> current_namespace = m_cursor.current_namespace().lock();
+
+    //try to get an already existing namespace with the same name
+    std::shared_ptr<program_model::namespace_> entered_namespace = current_namespace->find_namespace(namespace_name);
+
+    if(!entered_namespace) //if the entered namespace is a new one
+    {
+        //create a namespace
+        entered_namespace = std::make_shared<program_model::namespace_>(namespace_name);
+        //add the new namespace to the current namespace
+        current_namespace->add(entered_namespace);
+        entered_namespace->parent(current_namespace); ///@todo I'd like this operation to be done by namespace_::add() function itself
+    }
+
+    //make point the cursor to the entered namespace
+    m_cursor.enter_namespace(entered_namespace);
 }
 
 }}} //namespace cppparser::parsing::semantic_actions

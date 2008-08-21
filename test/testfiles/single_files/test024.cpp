@@ -7,6 +7,11 @@ namespace foo
 		int i;
 	}
 
+	namespace bar
+	{
+		int j;
+	}
+
 	namespace
 	{
 		char c;
