@@ -17,15 +17,15 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CPPPARSER_PARSING_GRAMMAR_H
-#define CPPPARSER_PARSING_GRAMMAR_H
+#ifndef CPPPARSER_GRAMMAR_H
+#define CPPPARSER_GRAMMAR_H
 
 #include <boost/spirit.hpp>
-#include "cursor.h"
+#include "scope_cursor.h"
 #include "semantic_actions/enter_namespace.h"
 #include "semantic_actions/leave_namespace.h"
 
-namespace cppparser { namespace parsing
+namespace cppparser
 {
 
 class grammar: public boost::spirit::grammar<grammar>
@@ -302,9 +302,9 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT> gcc_typeof;
 
             //semantic actions
-            cursor m_cursor;
-            semantic_actions::enter_namespace<typename ScannerT::value_t> enter_namespace_a;
-            semantic_actions::leave_namespace<typename ScannerT::value_t> leave_namespace_a;
+            scope_cursor m_scope_cursor;
+            enter_namespace<typename ScannerT::value_t> enter_namespace_a;
+            leave_namespace<typename ScannerT::value_t> leave_namespace_a;
         };
 
     private:
@@ -314,8 +314,8 @@ class grammar: public boost::spirit::grammar<grammar>
 
 template<typename ScannerT>
 grammar::definition<ScannerT>::definition(const grammar& self):
-    enter_namespace_a(m_cursor),
-    leave_namespace_a(m_cursor)
+    enter_namespace_a(m_scope_cursor),
+    leave_namespace_a(m_scope_cursor)
 {
     using namespace boost::spirit;
 
@@ -1037,6 +1037,7 @@ grammar::definition<ScannerT>::definition(const grammar& self):
     ;
 
     /*
+    Original rule is:
         condition
             = expression
             | type_specifier_seq >> declarator >> '=' >> assignment_expression
@@ -1742,7 +1743,6 @@ grammar::definition<ScannerT>::definition(const grammar& self):
     ;
 
     //1.14 - Preprocessing directives [gram.cpp]
-    ///@todo Parsing should be processed just like it was a compilation.
     //This part of the grammar should be used for the preprocessing phase.
 
     /*
@@ -1830,6 +1830,6 @@ grammar::definition<ScannerT>::start() const
     return file;
 }
 
-}} //namespace cppparser::parsing
+} //namespace cppparser
 
 #endif

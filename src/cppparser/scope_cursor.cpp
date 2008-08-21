@@ -18,40 +18,40 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <iostream>
-#include "cursor.h"
+#include "scope_cursor.h"
 
-namespace cppparser { namespace parsing
+namespace cppparser
 {
 
-cursor::cursor():
+scope_cursor::scope_cursor():
     m_current_namespace(m_program_model.global_namespace())
 {
 }
 
 program_model::program&
-cursor::program_model()
+scope_cursor::program_model()
 {
     return m_program_model;
 }
 
 std::weak_ptr<program_model::namespace_>
-cursor::current_namespace()
+scope_cursor::current_namespace()
 {
     return m_current_namespace;
 }
 
 void
-cursor::enter_namespace(std::weak_ptr<program_model::namespace_> a_namespace)
+scope_cursor::enter_namespace(std::weak_ptr<program_model::namespace_> a_namespace)
 {
     m_current_namespace = a_namespace;
     std::cout << "entering in namespace: " << m_current_namespace.lock()->full_name() << std::endl;
 }
 
 void
-cursor::leave_current_namespace()
+scope_cursor::leave_current_namespace()
 {
     m_current_namespace = m_current_namespace.lock()->parent();
     std::cout << "leaving namespace to: " << m_current_namespace.lock()->full_name() << std::endl;
 }
 
-}} //namespace cppparser::parsing
+} //namespace cppparser

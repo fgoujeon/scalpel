@@ -94,18 +94,6 @@ namespace_::items() const
 {
     return m_items;
 }
-/*
-void
-namespace_::add(std::shared_ptr<namespace_item> a_namespace_item)
-{
-    //check whether no already existing namespace has the same name
-    if(contains_namespace(a_namespace_item->name()))
-    {
-        throw std::runtime_error(m_name + " already contains a namespace named \"" + a_namespace_item->name() + "\".");
-    }
-
-    m_items.push_back(a_namespace_item);
-}*/
 
 void
 namespace_::add(std::shared_ptr<namespace_> a_namespace)

@@ -17,14 +17,14 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CPPPARSER_PARSING_SEMANTIC_ACTIONS_ENUM_H
-#define CPPPARSER_PARSING_SEMANTIC_ACTIONS_ENUM_H
+#ifndef CPPPARSER_TYPEDEF_H
+#define CPPPARSER_TYPEDEF_H
 
-namespace cppparser { namespace parsing { namespace semantic_actions
+namespace cppparser
 {
 
 
 
-}}} //namespace cppparser::parsing::semantic_actions
+} //namespace cppparser
 
 #endif

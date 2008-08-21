@@ -17,19 +17,19 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CPPPARSER_PARSING_CURSOR_H
-#define CPPPARSER_PARSING_CURSOR_H
+#ifndef CPPPARSER_SCOPE_CURSOR_H
+#define CPPPARSER_SCOPE_CURSOR_H
 
 #include <memory>
-#include "../program_model/program.h"
+#include "program_model/program.h"
 
-namespace cppparser { namespace parsing
+namespace cppparser
 {
 
-class cursor
+class scope_cursor
 {
     public:
-        cursor();
+        scope_cursor();
 
         program_model::program&
         program_model();
@@ -48,6 +48,6 @@ class cursor
         std::weak_ptr<program_model::namespace_> m_current_namespace;
 };
 
-}} //namespace cppparser::parsing
+} //namespace cppparser
 
 #endif

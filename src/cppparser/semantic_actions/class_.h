@@ -17,10 +17,10 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CPPPARSER_PARSING_SEMANTIC_ACTIONS_CLASS_H
-#define CPPPARSER_PARSING_SEMANTIC_ACTIONS_CLASS_H
+#ifndef CPPPARSER_CLASS_H
+#define CPPPARSER_CLASS_H
 
-namespace cppparser { namespace parsing { namespace semantic_actions
+namespace cppparser
 {
 
 template <class IteratorT>
@@ -32,6 +32,6 @@ class class_
         }
 };
 
-}}} //namespace cppparser::parsing::semantic_actions
+} //namespace cppparser
 
 #endif
