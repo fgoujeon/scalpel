@@ -18,14 +18,14 @@
 cmake_minimum_required(VERSION 2.6)
 set(CMAKE_VERBOSE_MAKEFILE off)
 
-#gcc settings
-#if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
-	add_definitions(-std=c++0x)
-#endif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
-
 #project
 project(CppParser)
 set(LIBRARY_OUTPUT_PATH lib)
+
+#gcc settings
+if(CMAKE_COMPILER_IS_GNUCXX)
+	add_definitions(-std=c++0x)
+endif(CMAKE_COMPILER_IS_GNUCXX)
 
 #library
 file(

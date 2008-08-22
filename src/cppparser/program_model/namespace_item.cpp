@@ -32,7 +32,7 @@ namespace_item::~namespace_item()
 bool
 namespace_item::has_parent() const
 {
-    return m_parent.expired();
+    return !m_parent.expired();
 }
 
 std::weak_ptr<namespace_>

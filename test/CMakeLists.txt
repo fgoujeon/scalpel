@@ -38,9 +38,9 @@ add_executable(
 )
 
 #gcc settings
-#if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
+if(CMAKE_COMPILER_IS_GNUCXX)
 	add_definitions(-std=c++0x)
-#endif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
+endif(CMAKE_COMPILER_IS_GNUCXX)
 
 #Boost
 include(FindBoost)

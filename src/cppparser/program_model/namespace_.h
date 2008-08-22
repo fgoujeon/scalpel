@@ -35,7 +35,7 @@ class typedef_;
 /**
 Represents a C++ namespace.
 */
-class namespace_: public namespace_item
+class namespace_: public namespace_item, public std::enable_shared_from_this<namespace_>
 {
     public:
         /**
@@ -62,7 +62,7 @@ class namespace_: public namespace_item
         name() const;
 
         /**
-        @return the full name of the namespace, including all parents (e.g. ::foo::bar).
+        @return the full name of the namespace, including all parent namespaces (e.g. ::foo::bar).
         */
         std::string
         full_name() const;
@@ -82,7 +82,7 @@ class namespace_: public namespace_item
         find_namespace(const std::string& name) const;
 
         /**
-        @return the item list of the namespace, i.e. the list of classes, function, etc.
+        @return the item list of the namespace, i.e. the list of namespaces, classes, functions, etc.
         */
         const std::vector<std::shared_ptr<namespace_item>>&
         items() const;

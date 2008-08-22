@@ -65,7 +65,7 @@ namespace_::full_name() const
 bool
 namespace_::is_global() const
 {
-    return has_parent();
+    return !has_parent();
 }
 
 std::shared_ptr<namespace_>
@@ -86,7 +86,7 @@ namespace_::find_namespace(const std::string& name) const
         }
     }
 
-    return std::shared_ptr<namespace_>();
+    return std::shared_ptr<namespace_>(); //return a null pointer if no namespace found
 }
 
 const std::vector<std::shared_ptr<namespace_item>>&
@@ -101,10 +101,11 @@ namespace_::add(std::shared_ptr<namespace_> a_namespace)
     //check whether no already existing namespace has the same name
     if(find_namespace(a_namespace->name()))
     {
-        throw std::runtime_error(m_name + " already contains a namespace named \"" + a_namespace->name() + "\".");
+        throw std::runtime_error(full_name() + " already contains a namespace named \"" + a_namespace->name() + "\".");
     }
 
     //tell namespace that we (i.e. this) are its parent
+    //a_namespace->parent(shared_from_this());
     a_namespace->parent(m_shared_this);
     a_namespace->shared_this(a_namespace); ///< @todo find better than that dirty trick
 
