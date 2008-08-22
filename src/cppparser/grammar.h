@@ -22,8 +22,9 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <boost/spirit.hpp>
 #include "scope_cursor.h"
-#include "semantic_actions/enter_namespace.h"
-#include "semantic_actions/leave_namespace.h"
+#include "semantic_actions/new_namespace.h"
+#include "semantic_actions/enter_namespace_scope.h"
+#include "semantic_actions/leave_namespace_scope.h"
 
 namespace cppparser
 {
@@ -303,8 +304,9 @@ class grammar: public boost::spirit::grammar<grammar>
 
             //semantic actions
             scope_cursor m_scope_cursor;
-            enter_namespace<typename ScannerT::value_t> enter_namespace_a;
-            leave_namespace<typename ScannerT::value_t> leave_namespace_a;
+            new_namespace<typename ScannerT::value_t> new_namespace_a;
+            enter_namespace_scope<typename ScannerT::value_t> enter_namespace_scope_a;
+            leave_namespace_scope<typename ScannerT::value_t> leave_namespace_scope_a;
         };
 
     private:
@@ -314,8 +316,9 @@ class grammar: public boost::spirit::grammar<grammar>
 
 template<typename ScannerT>
 grammar::definition<ScannerT>::definition(const grammar& self):
-    enter_namespace_a(m_scope_cursor),
-    leave_namespace_a(m_scope_cursor)
+    new_namespace_a(m_scope_cursor),
+    enter_namespace_scope_a(m_scope_cursor),
+    leave_namespace_scope_a(m_scope_cursor)
 {
     using namespace boost::spirit;
 
@@ -1220,20 +1223,20 @@ grammar::definition<ScannerT>::definition(const grammar& self):
     ;
 
     named_namespace_definition
-        = original_namespace_definition
-        | extension_namespace_definition
+        = original_namespace_definition/*
+        | extension_namespace_definition*/
     ;
 
     original_namespace_definition
-        = str_p("namespace") >> identifier[enter_namespace_a] >> ch_p('{') >> namespace_body >> str_p("}")[leave_namespace_a]
+        = str_p("namespace") >> identifier[new_namespace_a][enter_namespace_scope_a] >> ch_p('{') >> namespace_body >> str_p("}")[leave_namespace_scope_a]
     ;
 
-    extension_namespace_definition
-        = str_p("namespace") >> original_namespace_name >> ch_p('{') >> namespace_body >> ch_p('}')
-    ;
+    /*extension_namespace_definition
+        = str_p("namespace") >> original_namespace_name[enter_namespace_scope_a] >> ch_p('{') >> namespace_body >> ch_p('}')
+    ;*/
 
     unnamed_namespace_definition
-        = str_p("namespace") >> ch_p('{') >> str_p("")[enter_namespace_a] >> namespace_body >> ch_p('}')
+        = str_p("namespace") >> ch_p('{') >> str_p("")[new_namespace_a][enter_namespace_scope_a] >> namespace_body >> str_p("}")[leave_namespace_scope_a]
     ;
 
     namespace_body
@@ -1511,7 +1514,7 @@ grammar::definition<ScannerT>::definition(const grammar& self):
     class_head
         = class_key >> !nested_name_specifier >> template_id >> !base_clause
         | class_key >> nested_name_specifier >> identifier >> !base_clause
-        | class_key >> !identifier >> !base_clause
+        | class_key >> !identifier/*[enter_class_a]*/ >> !base_clause
     ;
 
     class_key

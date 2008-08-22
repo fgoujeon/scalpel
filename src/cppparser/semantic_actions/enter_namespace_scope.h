@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CPPPARSER_ENTER_NAMESPACE_H
-#define CPPPARSER_ENTER_NAMESPACE_H
+#ifndef CPPPARSER_ENTER_NAMESPACE_SCOPE_H
+#define CPPPARSER_ENTER_NAMESPACE_SCOPE_H
 
 #include <string>
 #include <iostream>
@@ -30,10 +30,10 @@ namespace cppparser
 {
 
 template <class IteratorT>
-class enter_namespace
+class enter_namespace_scope
 {
     public:
-        enter_namespace(scope_cursor& scope_cursor);
+        enter_namespace_scope(scope_cursor& scope_cursor);
         void operator()(const IteratorT* first, const IteratorT* last) const;
 
     private:
@@ -41,28 +41,23 @@ class enter_namespace
 };
 
 template <class IteratorT>
-enter_namespace<IteratorT>::enter_namespace(scope_cursor& scope_cursor):
+enter_namespace_scope<IteratorT>::enter_namespace_scope(scope_cursor& scope_cursor):
     m_scope_cursor(scope_cursor)
 {
 }
 
 template <class IteratorT>
 void
-enter_namespace<IteratorT>::operator()(const IteratorT* first, const IteratorT* last) const
+enter_namespace_scope<IteratorT>::operator()(const IteratorT* first, const IteratorT* last) const
 {
     std::string namespace_name(first, last);
     std::shared_ptr<program_model::namespace_> current_namespace = m_scope_cursor.current_namespace().lock();
 
-    //try to get an already existing namespace with the same name
+    //get the namespace_ object representing the entered namespace
     std::shared_ptr<program_model::namespace_> entered_namespace = current_namespace->find_namespace(namespace_name);
 
-    if(!entered_namespace) //if the entered namespace is a new one
-    {
-        //create a namespace object
-        entered_namespace = std::make_shared<program_model::namespace_>(namespace_name);
-        //add the new namespace to the current namespace
-        current_namespace->add(entered_namespace);
-    }
+    //assert that... well, you can read
+    assert(entered_namespace && (namespace_name + " doesn't exist").c_str());
 
     //make point the scope cursor to the entered namespace
     m_scope_cursor.enter_namespace(entered_namespace);

@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CPPPARSER_LEAVE_NAMESPACE_H
-#define CPPPARSER_LEAVE_NAMESPACE_H
+#ifndef CPPPARSER_LEAVE_NAMESPACE_SCOPE_H
+#define CPPPARSER_LEAVE_NAMESPACE_SCOPE_H
 
 #include <string>
 #include <iostream>
@@ -30,10 +30,10 @@ namespace cppparser
 {
 
 template <class IteratorT>
-class leave_namespace
+class leave_namespace_scope
 {
     public:
-        leave_namespace(scope_cursor& scope_cursor);
+        leave_namespace_scope(scope_cursor& scope_cursor);
         void operator()(const IteratorT* first, const IteratorT* last) const;
 
     private:
@@ -41,14 +41,14 @@ class leave_namespace
 };
 
 template <class IteratorT>
-leave_namespace<IteratorT>::leave_namespace(scope_cursor& scope_cursor):
+leave_namespace_scope<IteratorT>::leave_namespace_scope(scope_cursor& scope_cursor):
     m_scope_cursor(scope_cursor)
 {
 }
 
 template <class IteratorT>
 void
-leave_namespace<IteratorT>::operator()(const IteratorT* first, const IteratorT* last) const
+leave_namespace_scope<IteratorT>::operator()(const IteratorT* first, const IteratorT* last) const
 {
     m_scope_cursor.leave_current_namespace();
 }
