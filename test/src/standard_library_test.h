@@ -25,9 +25,9 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 #include <cppparser/preprocessor.h>
 #include <cppparser/grammar.h>
 
-class single_preprocessing_file_test: public CppUnit::TestFixture
+class standard_library_test: public CppUnit::TestFixture
 {
-    CPPUNIT_TEST_SUITE(single_preprocessing_file_test);
+    CPPUNIT_TEST_SUITE(standard_library_test);
     CPPUNIT_TEST(parse_files);
     CPPUNIT_TEST_SUITE_END();
 

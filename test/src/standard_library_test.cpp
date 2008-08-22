@@ -23,18 +23,18 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/spirit.hpp>
 #include <cppunit/TestSuite.h>
 
-#include "single_preprocessing_file_test.h"
+#include "standard_library_test.h"
 
 using namespace boost::spirit;
 using namespace std;
 
-void single_preprocessing_file_test::parse_files()
+void standard_library_test::parse_files()
 {
     for(unsigned int i = 0; ; ++i)
     {
 		//generate file's name
         std::ostringstream file_name_oss;
-        file_name_oss << "testfiles/single_preprocessing_files/test" << setfill('0') << setw(3) << i << ".cpp";
+        file_name_oss << "testfiles/standard_library/test" << setfill('0') << setw(3) << i << ".cpp";
 
 		//check whether file exists
         std::ifstream file(file_name_oss.str().c_str());
