@@ -23,7 +23,7 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 #include <memory>
-#include "namespace_item.h"
+#include "namespace_member.h"
 
 namespace cppparser { namespace program_model
 {
@@ -35,7 +35,7 @@ class typedef_;
 /**
 Represents a C++ namespace.
 */
-class namespace_: public namespace_item, public std::enable_shared_from_this<namespace_>
+class namespace_: public namespace_member, public std::enable_shared_from_this<namespace_>
 {
     public:
         /**
@@ -74,7 +74,7 @@ class namespace_: public namespace_item, public std::enable_shared_from_this<nam
         is_global() const;
 
         /**
-        Check whether an already declared symbol has the given name.
+        Check whether an already declared member has the given name.
         @param name the name of the namespace to search.
         @return true if an already existing namespace has the same name, false otherwise.
         */
@@ -82,13 +82,13 @@ class namespace_: public namespace_item, public std::enable_shared_from_this<nam
         find_namespace(const std::string& name) const;
 
         /**
-        @return the item list of the namespace, i.e. the list of namespaces, classes, functions, etc.
+        @return the member list of the namespace, i.e. the list of namespaces, classes, functions, etc.
         */
-        const std::vector<std::shared_ptr<namespace_item>>&
-        items() const;
+        const std::vector<std::shared_ptr<namespace_member>>&
+        members() const;
 
         /*void
-        add(std::shared_ptr<namespace_item> a_namespace_item);*/
+        add(std::shared_ptr<namespace_member> a_namespace_member);*/
 
         void
         add(std::shared_ptr<namespace_> a_namespace);
@@ -100,7 +100,7 @@ class namespace_: public namespace_item, public std::enable_shared_from_this<nam
     private:
         std::string m_name;
         std::shared_ptr<namespace_> m_shared_this;
-        std::vector<std::shared_ptr<namespace_item>> m_items;
+        std::vector<std::shared_ptr<namespace_member>> m_members;
         std::vector<std::shared_ptr<namespace_>> m_namespaces;
 };
 

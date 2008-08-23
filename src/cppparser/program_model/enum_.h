@@ -25,7 +25,7 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 namespace cppparser { namespace program_model
 {
 
-class enum_: public type, public namespace_item
+class enum_: public type, public namespace_member
 {
 };
 

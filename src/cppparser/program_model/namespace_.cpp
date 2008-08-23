@@ -89,10 +89,10 @@ namespace_::find_namespace(const std::string& name) const
     return std::shared_ptr<namespace_>(); //return a null pointer if no namespace found
 }
 
-const std::vector<std::shared_ptr<namespace_item>>&
-namespace_::items() const
+const std::vector<std::shared_ptr<namespace_member>>&
+namespace_::members() const
 {
-    return m_items;
+    return m_members;
 }
 
 void
@@ -111,7 +111,7 @@ namespace_::add(std::shared_ptr<namespace_> a_namespace)
 
     //add namespace to private containers
     m_namespaces.push_back(a_namespace);
-    m_items.push_back(a_namespace);
+    m_members.push_back(a_namespace);
 }
 
 void

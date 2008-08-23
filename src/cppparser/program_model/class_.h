@@ -21,12 +21,12 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 #define CPPPARSER_PROGRAM_MODEL_CLASS_H
 
 #include "type.h"
-#include "namespace_item.h"
+#include "namespace_member.h"
 
 namespace cppparser { namespace program_model
 {
 
-class class_: public type, public namespace_item
+class class_: public type, public namespace_member
 {
 
 };

@@ -17,37 +17,40 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CPPPARSER_PROGRAM_MODEL_NAMESPACE_ITEM_H
-#define CPPPARSER_PROGRAM_MODEL_NAMESPACE_ITEM_H
+#include <iostream>
+#include "program.h"
 
-#include <memory>
+#include "namespace_member.h"
 
 namespace cppparser { namespace program_model
 {
 
-class namespace_;
-
-class namespace_item
+namespace_member::~namespace_member()
 {
-    public:
-        virtual ~namespace_item();
+}
 
-        bool
-        has_parent() const;
+bool
+namespace_member::has_parent() const
+{
+    return !m_parent.expired();
+}
 
-        std::weak_ptr<namespace_>
-        parent();
+std::weak_ptr<namespace_>
+namespace_member::parent()
+{
+    return m_parent;
+}
 
-        const std::weak_ptr<namespace_>
-        parent() const;
+const std::weak_ptr<namespace_>
+namespace_member::parent() const
+{
+    return m_parent;
+}
 
-        void
-        parent(std::weak_ptr<namespace_> parent);
-
-    private:
-        std::weak_ptr<namespace_> m_parent;
-};
+void
+namespace_member::parent(std::weak_ptr<namespace_> parent)
+{
+    m_parent = parent;
+}
 
 }} //namespace cppparser::program_model
-
-#endif
