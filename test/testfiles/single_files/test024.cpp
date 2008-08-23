@@ -1,6 +1,9 @@
 namespace foo
 {
 	int test;
+	class bidule
+	{
+	};
 
 	namespace bar
 	{
@@ -10,6 +13,12 @@ namespace foo
 	namespace bar
 	{
 		int j;
+		class machin
+		{
+		};
+		class bidule
+		{
+		};
 	}
 
 	namespace

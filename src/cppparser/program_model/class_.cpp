@@ -17,9 +17,20 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "class_.h"
+
 namespace cppparser { namespace program_model
 {
 
+class_::class_(const std::string& name):
+    type(name)
+{
+}
 
+void
+class_::shared_this(std::shared_ptr<class_> ptr)
+{
+    m_shared_this = ptr;
+}
 
 }} //namespace cppparser::program_model

@@ -47,19 +47,21 @@ template <class IteratorT>
 void
 new_class<IteratorT>::operator()(const IteratorT* first, const IteratorT* last) const
 {
-    /*std::string class_name(first, last);
+    std::string class_name(first, last);
     std::shared_ptr<program_model::namespace_> current_namespace = m_scope_cursor.current_namespace().lock();
 
     //try to get an already existing class with the same name
-    std::shared_ptr<program_model::class_> new_class = current_namespace->find_symbol_by_name<program_model::class_>(class_name);
+    std::shared_ptr<program_model::class_> new_class = current_namespace->find_member_by_name<program_model::class_>(class_name);
 
-    if(!new_class) //if the entered namespace is a new one
+    if(!new_class) //if the class is really a new one
     {
         //create a class object
         new_class = std::make_shared<program_model::class_>(class_name);
         //add the new class to the current namespace
         current_namespace->add(new_class);
-    }*/
+
+        std::cout << "new class " << class_name << std::endl;
+    }
 }
 
 } //namespace cppparser

@@ -54,7 +54,7 @@ new_namespace<IteratorT>::operator()(const IteratorT* first, const IteratorT* la
     std::shared_ptr<program_model::namespace_> current_namespace = m_scope_cursor.current_namespace().lock();
 
     //try to get an already existing namespace with the same name
-    std::shared_ptr<program_model::namespace_> new_namespace = current_namespace->find_member<program_model::namespace_>(namespace_name);
+    std::shared_ptr<program_model::namespace_> new_namespace = current_namespace->find_member_by_name<program_model::namespace_>(namespace_name);
 
     if(!new_namespace) //if the namespace is a new one
     {

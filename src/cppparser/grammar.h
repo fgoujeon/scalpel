@@ -25,6 +25,7 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 #include "semantic_actions/new_namespace.h"
 #include "semantic_actions/enter_namespace_scope.h"
 #include "semantic_actions/leave_namespace_scope.h"
+#include "semantic_actions/new_class.h"
 
 namespace cppparser
 {
@@ -307,6 +308,7 @@ class grammar: public boost::spirit::grammar<grammar>
             new_namespace<typename ScannerT::value_t> new_namespace_a;
             enter_namespace_scope<typename ScannerT::value_t> enter_namespace_scope_a;
             leave_namespace_scope<typename ScannerT::value_t> leave_namespace_scope_a;
+            new_class<typename ScannerT::value_t> new_class_a;
         };
 
     private:
@@ -318,7 +320,8 @@ template<typename ScannerT>
 grammar::definition<ScannerT>::definition(const grammar& self):
     new_namespace_a(m_scope_cursor),
     enter_namespace_scope_a(m_scope_cursor),
-    leave_namespace_scope_a(m_scope_cursor)
+    leave_namespace_scope_a(m_scope_cursor),
+    new_class_a(m_scope_cursor)
 {
     using namespace boost::spirit;
 
@@ -1512,9 +1515,9 @@ grammar::definition<ScannerT>::definition(const grammar& self):
     ;
 
     class_head
-        = class_key >> !nested_name_specifier >> template_id >> !base_clause
-        | class_key >> nested_name_specifier >> identifier >> !base_clause
-        | class_key >> !identifier/*[enter_class_a]*/ >> !base_clause
+        = class_key >> !nested_name_specifier >> template_id >> !base_clause //in that case, a forward declaration has been already done
+        | class_key >> nested_name_specifier >> identifier >> !base_clause //ibidem
+        | class_key >> (!identifier)[new_class_a] >> !base_clause
     ;
 
     class_key

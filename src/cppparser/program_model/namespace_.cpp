@@ -67,17 +67,24 @@ namespace_::is_global() const
     return !has_parent();
 }
 
-template <>
-const std::vector<std::shared_ptr<namespace_>>&
-namespace_::specific_members() const
-{
-    return m_namespaces;
-}
-
 const std::vector<std::shared_ptr<namespace_member>>&
 namespace_::members() const
 {
     return m_members;
+}
+
+template <>
+const std::vector<std::shared_ptr<namespace_>>&
+namespace_::members() const
+{
+    return m_namespaces;
+}
+
+template <>
+const std::vector<std::shared_ptr<class_>>&
+namespace_::members() const
+{
+    return m_classes;
 }
 
 void
