@@ -1,3 +1,8 @@
+template<class T, class U>
+class pair
+{
+};
+
 int foo()
 {
     return (__y.first < __x.first);

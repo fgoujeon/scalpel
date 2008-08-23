@@ -31,8 +31,12 @@ void single_declaration_test::setUp()
     /*
      * Well formed expressions
     */
-    well_formed_expressions.push_back("test<double(friend ...)>;");
-    well_formed_expressions.push_back("int i = 0543;");
+    well_formed_expressions.push_back
+    (
+        "class test{};"
+        "test<double> t;"
+    );
+    /*well_formed_expressions.push_back("int i = 0543;");
     well_formed_expressions.push_back("vector<char(friend, typedef, ...)>;");
     well_formed_expressions.push_back("vector<char(friend, typedef, auto, register, static, bool...)>;");
     well_formed_expressions.push_back("vector<char(friend, typedef, auto, inline, virtual, char, bool...)>;");
@@ -250,7 +254,7 @@ void single_declaration_test::setUp()
     well_formed_expressions.push_back("Test<(1 > Foo<>::value)> test;");
     well_formed_expressions.push_back("Test<(1 > Foo<>::value), (1 > 2)> test;");
     well_formed_expressions.push_back("Test<\"tricky string(\"> test;");
-
+*/
 
     /*
      * Ill formed expressions

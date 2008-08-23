@@ -1,3 +1,8 @@
+template<int i>
+class bitset
+{
+};
+
 template<class T, size_t size>
 class Array
 {

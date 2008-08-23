@@ -23,6 +23,13 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 namespace cppparser
 {
 
+void
+print_out(char const* first, char const* last)
+{
+    std::string str(first, last);
+    std::cout << str << std::endl;
+}
+
 scope_cursor::scope_cursor():
     m_current_namespace(m_program_model.global_namespace())
 {
@@ -36,6 +43,12 @@ scope_cursor::program_model()
 
 std::weak_ptr<program_model::namespace_>
 scope_cursor::current_namespace()
+{
+    return m_current_namespace;
+}
+
+const std::weak_ptr<program_model::namespace_>
+scope_cursor::current_namespace() const
 {
     return m_current_namespace;
 }

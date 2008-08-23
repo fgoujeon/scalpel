@@ -26,6 +26,9 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 namespace cppparser
 {
 
+void
+print_out(char const* first, char const* last);
+
 class scope_cursor
 {
     public:
@@ -36,6 +39,9 @@ class scope_cursor
 
         std::weak_ptr<program_model::namespace_>
         current_namespace();
+
+        const std::weak_ptr<program_model::namespace_>
+        current_namespace() const;
 
         void
         enter_namespace(std::weak_ptr<program_model::namespace_> a_namespace);

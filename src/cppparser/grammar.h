@@ -26,6 +26,7 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 #include "semantic_actions/enter_namespace_scope.h"
 #include "semantic_actions/leave_namespace_scope.h"
 #include "semantic_actions/new_class.h"
+#include "functor_parsers/template_name_parser.h"
 
 namespace cppparser
 {
@@ -309,6 +310,10 @@ class grammar: public boost::spirit::grammar<grammar>
             enter_namespace_scope<typename ScannerT::value_t> enter_namespace_scope_a;
             leave_namespace_scope<typename ScannerT::value_t> leave_namespace_scope_a;
             new_class<typename ScannerT::value_t> new_class_a;
+
+            //functor parsers
+            template_name_parser<ScannerT> m_template_name_parser;
+            boost::spirit::functor_parser<template_name_parser<ScannerT>> template_name_p;
         };
 
     private:
@@ -321,7 +326,9 @@ grammar::definition<ScannerT>::definition(const grammar& self):
     new_namespace_a(m_scope_cursor),
     enter_namespace_scope_a(m_scope_cursor),
     leave_namespace_scope_a(m_scope_cursor),
-    new_class_a(m_scope_cursor)
+    new_class_a(m_scope_cursor),
+    m_template_name_parser(m_scope_cursor, identifier),
+    template_name_p(m_template_name_parser)
 {
     using namespace boost::spirit;
 
@@ -1688,7 +1695,7 @@ grammar::definition<ScannerT>::definition(const grammar& self):
     ;
 
     template_name
-        = identifier
+        = "" >> template_name_p
     ;
 
     template_argument_list
