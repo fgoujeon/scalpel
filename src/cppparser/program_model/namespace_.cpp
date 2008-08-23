@@ -18,8 +18,7 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <iostream>
-#include <algorithm>
-#include <stdexcept>
+#include <cassert>
 #include "class_.h"
 #include "enum_.h"
 #include "typedef_.h"
@@ -69,7 +68,7 @@ namespace_::is_global() const
 }
 
 template <>
-const std::vector<std::shared_ptr<namespace_>>
+const std::vector<std::shared_ptr<namespace_>>&
 namespace_::specific_members() const
 {
     return m_namespaces;
@@ -79,25 +78,6 @@ const std::vector<std::shared_ptr<namespace_member>>&
 namespace_::members() const
 {
     return m_members;
-}
-
-void
-namespace_::add(std::shared_ptr<namespace_> a_namespace)
-{
-    //check whether no already existing namespace has the same name
-    if(find_member<namespace_>(a_namespace->name()))
-    {
-        throw std::runtime_error(full_name() + " already contains a namespace named \"" + a_namespace->name() + "\".");
-    }
-
-    //tell namespace that we (i.e. this) are its parent
-    //a_namespace->parent(shared_from_this());
-    a_namespace->parent(m_shared_this);
-    a_namespace->shared_this(a_namespace); ///< @todo find better than that dirty trick
-
-    //add namespace to private containers
-    m_namespaces.push_back(a_namespace);
-    m_members.push_back(a_namespace);
 }
 
 void

@@ -55,9 +55,7 @@ enter_namespace_scope<IteratorT>::operator()(const IteratorT* first, const Itera
 
     //get the namespace_ object representing the entered namespace
     std::shared_ptr<program_model::namespace_> entered_namespace = current_namespace->find_member<program_model::namespace_>(namespace_name);
-
-    //assert that... well, you can read
-    assert(entered_namespace && (namespace_name + " doesn't exist").c_str());
+    assert(entered_namespace && "that namespace doesn't exist");
 
     //make point the scope cursor to the entered namespace
     m_scope_cursor.enter_namespace(entered_namespace);

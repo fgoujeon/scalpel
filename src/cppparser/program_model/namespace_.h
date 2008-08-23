@@ -23,6 +23,7 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 #include <memory>
+#include <stdexcept>
 #include "namespace_member.h"
 
 namespace cppparser { namespace program_model
@@ -88,8 +89,9 @@ class namespace_: public namespace_member, public std::enable_shared_from_this<n
         const std::vector<std::shared_ptr<namespace_member>>&
         members() const;
 
+        template <class MemberT>
         void
-        add(std::shared_ptr<namespace_> a_namespace);
+        add(std::shared_ptr<MemberT> member);
 
         ///@todo find better than that dirty trick
         void
@@ -97,8 +99,12 @@ class namespace_: public namespace_member, public std::enable_shared_from_this<n
 
     private:
         template <class MemberT>
-        const std::vector<std::shared_ptr<MemberT>>
+        const std::vector<std::shared_ptr<MemberT>>&
         specific_members() const;
+
+        template <class MemberT>
+        std::vector<std::shared_ptr<MemberT>>&
+        non_const_specific_members();
 
         std::string m_name;
         std::shared_ptr<namespace_> m_shared_this;
@@ -127,6 +133,33 @@ namespace_::find_member(const std::string& name) const
     }
 
     return std::shared_ptr<namespace_>(); //return a null pointer if no namespace found
+}
+
+template <class MemberT>
+void
+namespace_::add(std::shared_ptr<MemberT> member)
+{
+    //check whether no already existing namespace has the same name
+    if(find_member<MemberT>(member->name()))
+    {
+        throw std::runtime_error(full_name() + " already contains a member named \"" + member->name() + "\" of the same type.");
+    }
+
+    //tell namespace that we (i.e. this) are its parent
+    //member->parent(shared_from_this());
+    member->parent(m_shared_this);
+    member->shared_this(member); ///< @todo find better than that dirty trick
+
+    //add namespace to private containers
+    non_const_specific_members<MemberT>().push_back(member);
+    m_members.push_back(member);
+}
+
+template <class MemberT>
+std::vector<std::shared_ptr<MemberT>>&
+namespace_::non_const_specific_members()
+{
+    return const_cast<std::vector<std::shared_ptr<MemberT>>&>(specific_members<MemberT>());
 }
 
 }} //namespace cppparser::program_model
