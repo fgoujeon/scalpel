@@ -74,21 +74,19 @@ class namespace_: public namespace_member, public std::enable_shared_from_this<n
         is_global() const;
 
         /**
-        Check whether an already declared member has the given name.
-        @param name the name of the namespace to search.
-        @return true if an already existing namespace has the same name, false otherwise.
+        Find an already declared member which has the given name.
+        @param name the name of the member to search.
+        @return a pointer to the member if found, a null pointer otherwise.
         */
+        template <class MemberT>
         std::shared_ptr<namespace_>
-        find_namespace(const std::string& name) const;
+        find_member(const std::string& name) const;
 
         /**
         @return the member list of the namespace, i.e. the list of namespaces, classes, functions, etc.
         */
         const std::vector<std::shared_ptr<namespace_member>>&
         members() const;
-
-        /*void
-        add(std::shared_ptr<namespace_member> a_namespace_member);*/
 
         void
         add(std::shared_ptr<namespace_> a_namespace);
@@ -98,11 +96,38 @@ class namespace_: public namespace_member, public std::enable_shared_from_this<n
         shared_this(std::shared_ptr<namespace_> ptr);
 
     private:
+        template <class MemberT>
+        const std::vector<std::shared_ptr<MemberT>>
+        specific_members() const;
+
         std::string m_name;
         std::shared_ptr<namespace_> m_shared_this;
         std::vector<std::shared_ptr<namespace_member>> m_members;
         std::vector<std::shared_ptr<namespace_>> m_namespaces;
 };
+
+template <class MemberT>
+std::shared_ptr<namespace_>
+namespace_::find_member(const std::string& name) const
+{
+    ///@todo use STL algo. instead
+    std::vector<std::shared_ptr<MemberT>> members = specific_members<MemberT>();
+    for
+    (
+        typename std::vector<std::shared_ptr<MemberT>>::const_iterator i = members.begin();
+        i != members.end();
+        ++i
+    )
+    {
+        std::shared_ptr<MemberT> n = *i;
+        if(n->name() == name)
+        {
+            return n;
+        }
+    }
+
+    return std::shared_ptr<namespace_>(); //return a null pointer if no namespace found
+}
 
 }} //namespace cppparser::program_model
 

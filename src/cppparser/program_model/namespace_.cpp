@@ -68,25 +68,11 @@ namespace_::is_global() const
     return !has_parent();
 }
 
-std::shared_ptr<namespace_>
-namespace_::find_namespace(const std::string& name) const
+template <>
+const std::vector<std::shared_ptr<namespace_>>
+namespace_::specific_members() const
 {
-    ///@todo use STL algo. instead
-    for
-    (
-        std::vector<std::shared_ptr<namespace_>>::const_iterator i = m_namespaces.begin();
-        i != m_namespaces.end();
-        ++i
-    )
-    {
-        std::shared_ptr<namespace_> n = *i;
-        if(n->name() == name)
-        {
-            return n;
-        }
-    }
-
-    return std::shared_ptr<namespace_>(); //return a null pointer if no namespace found
+    return m_namespaces;
 }
 
 const std::vector<std::shared_ptr<namespace_member>>&
@@ -99,7 +85,7 @@ void
 namespace_::add(std::shared_ptr<namespace_> a_namespace)
 {
     //check whether no already existing namespace has the same name
-    if(find_namespace(a_namespace->name()))
+    if(find_member<namespace_>(a_namespace->name()))
     {
         throw std::runtime_error(full_name() + " already contains a namespace named \"" + a_namespace->name() + "\".");
     }
