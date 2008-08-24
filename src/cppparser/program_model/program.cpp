@@ -17,25 +17,23 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <iostream>
+#include "../util/null_deleter.h"
+
 #include "program.h"
 
 namespace cppparser { namespace program_model
 {
 
-namespace
-{
-struct null_deleter
-{
-    void operator()(void const *) const
-    {
-    }
-};
-}
-
 program::program():
-    m_global_namespace_ptr(&m_global_namespace, null_deleter())
+    m_global_namespace_ptr(&m_global_namespace, util::null_deleter())
 {
     m_global_namespace_ptr->shared_this(m_global_namespace_ptr);
+}
+
+program::~program()
+{
+    std::cout << "destruction of program" << std::endl;
 }
 
 std::shared_ptr<namespace_>

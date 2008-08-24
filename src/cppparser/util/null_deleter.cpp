@@ -17,40 +17,14 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <iostream>
-#include "program.h"
+#include "null_deleter.h"
 
-#include "namespace_member.h"
-
-namespace cppparser { namespace program_model
+namespace cppparser { namespace util
 {
-
-namespace_member::~namespace_member()
-{
-}
-
-bool
-namespace_member::has_parent() const
-{
-    return !m_parent.expired();
-}
-
-std::shared_ptr<namespace_>
-namespace_member::parent()
-{
-    return m_parent.lock();
-}
-
-const std::shared_ptr<namespace_>
-namespace_member::parent() const
-{
-    return m_parent.lock();
-}
 
 void
-namespace_member::parent(std::shared_ptr<namespace_> parent)
+null_deleter::operator()(void const *) const
 {
-    m_parent = parent;
 }
 
-}} //namespace cppparser::program_model
+}} //namespace cppparser::util

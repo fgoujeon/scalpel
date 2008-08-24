@@ -35,14 +35,14 @@ class namespace_member
         bool
         has_parent() const;
 
-        std::weak_ptr<namespace_>
+        std::shared_ptr<namespace_>
         parent();
 
-        const std::weak_ptr<namespace_>
+        const std::shared_ptr<namespace_>
         parent() const;
 
         void
-        parent(std::weak_ptr<namespace_> parent);
+        parent(std::shared_ptr<namespace_> parent);
 
     private:
         std::weak_ptr<namespace_> m_parent;

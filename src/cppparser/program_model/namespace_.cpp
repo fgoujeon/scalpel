@@ -22,6 +22,7 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 #include "class_.h"
 #include "enum_.h"
 #include "typedef_.h"
+#include "../util/null_deleter.h"
 
 #include "namespace_.h"
 
@@ -37,8 +38,15 @@ namespace_::namespace_(const std::string& name):
 {
 }
 
+namespace_::namespace_(const namespace_& source):
+    m_name(source.m_name)
+{
+    std::cout << "argh" << std::endl;
+}
+
 namespace_::~namespace_()
 {
+    std::cout << "destruction of namespace " << full_name() << std::endl;
 }
 
 const std::string&
@@ -54,7 +62,7 @@ namespace_::full_name() const
 
     if(!is_global())
     {
-        full_name = parent().lock()->full_name() + "::";
+        full_name = parent()->full_name() + "::";
     }
     full_name += m_name;
 
@@ -90,7 +98,7 @@ namespace_::members() const
 void
 namespace_::shared_this(std::shared_ptr<namespace_> ptr)
 {
-    m_shared_this = ptr;
+    m_weak_this = ptr;
 }
 
 }} //namespace cppparser::program_model

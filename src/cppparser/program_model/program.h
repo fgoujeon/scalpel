@@ -35,6 +35,8 @@ class program
     public:
         program();
 
+        ~program();
+
         /**
         @return the global namespace of the program.
         */
