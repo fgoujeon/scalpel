@@ -56,7 +56,8 @@ new_class<IteratorT>::operator()(const IteratorT* first, const IteratorT* last) 
     if(!new_class) //if the class is really a new one
     {
         //create a class object
-        new_class = std::make_shared<program_model::class_>(class_name);
+        //new_class = std::make_shared<program_model::class_>(class_name);
+        new_class = std::shared_ptr<program_model::class_>(new program_model::class_(class_name));
         //add the new class to the current namespace
         current_namespace->add(new_class);
 

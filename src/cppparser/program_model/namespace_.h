@@ -120,7 +120,6 @@ class namespace_: public namespace_member, public std::enable_shared_from_this<n
         non_const_members();
 
         std::string m_name;
-        std::weak_ptr<namespace_> m_weak_this;
         std::vector<std::shared_ptr<namespace_member>> m_members;
         std::vector<std::shared_ptr<namespace_>> m_namespaces;
         std::vector<std::shared_ptr<class_>> m_classes;
@@ -160,9 +159,7 @@ namespace_::add(std::shared_ptr<MemberT> member)
     }
 
     //tell namespace that we (i.e. this) are its parent
-    //member->parent(shared_from_this());
-    member->parent(m_weak_this.lock());
-    member->shared_this(member); ///< @todo find better than that dirty trick
+    member->parent(shared_from_this());
 
     //add namespace to private containers
     non_const_members<MemberT>().push_back(member);

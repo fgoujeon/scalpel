@@ -26,7 +26,7 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 namespace cppparser { namespace program_model
 {
 
-class class_: public type, public namespace_member
+class class_: public type, public namespace_member, public std::enable_shared_from_this<class_>
 {
     public:
         /**
@@ -34,13 +34,6 @@ class class_: public type, public namespace_member
         @param name the class' name
         */
         explicit class_(const std::string& name);
-
-        ///@todo find better than that dirty trick
-        void
-        shared_this(std::shared_ptr<class_> ptr);
-
-    private:
-        std::shared_ptr<class_> m_shared_this;
 };
 
 }} //namespace cppparser::program_model

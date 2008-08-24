@@ -59,7 +59,8 @@ new_namespace<IteratorT>::operator()(const IteratorT* first, const IteratorT* la
     if(!new_namespace) //if the namespace is a new one
     {
         //create a namespace object
-        new_namespace = std::make_shared<program_model::namespace_>(namespace_name);
+        //new_namespace = std::make_shared<program_model::namespace_>(namespace_name);
+        new_namespace = std::shared_ptr<program_model::namespace_>(new program_model::namespace_(namespace_name));
         //add the new namespace to the current namespace
         current_namespace->add(new_namespace);
     }

@@ -27,10 +27,4 @@ class_::class_(const std::string& name):
 {
 }
 
-void
-class_::shared_this(std::shared_ptr<class_> ptr)
-{
-    m_shared_this = ptr;
-}
-
 }} //namespace cppparser::program_model

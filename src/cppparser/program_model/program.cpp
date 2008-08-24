@@ -28,7 +28,6 @@ namespace cppparser { namespace program_model
 program::program():
     m_global_namespace_ptr(&m_global_namespace, util::null_deleter())
 {
-    m_global_namespace_ptr->shared_this(m_global_namespace_ptr);
 }
 
 program::~program()

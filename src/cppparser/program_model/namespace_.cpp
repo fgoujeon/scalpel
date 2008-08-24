@@ -38,12 +38,6 @@ namespace_::namespace_(const std::string& name):
 {
 }
 
-namespace_::namespace_(const namespace_& source):
-    m_name(source.m_name)
-{
-    std::cout << "argh" << std::endl;
-}
-
 namespace_::~namespace_()
 {
     std::cout << "destruction of namespace " << full_name() << std::endl;
@@ -93,12 +87,6 @@ const std::vector<std::shared_ptr<class_>>&
 namespace_::members() const
 {
     return m_classes;
-}
-
-void
-namespace_::shared_this(std::shared_ptr<namespace_> ptr)
-{
-    m_weak_this = ptr;
 }
 
 }} //namespace cppparser::program_model
