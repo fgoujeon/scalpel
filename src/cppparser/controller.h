@@ -17,27 +17,19 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SINGLE_PREPROCESSING_FILE_TEST_H
-#define SINGLE_PREPROCESSING_FILE_TEST_H
+#ifndef CPPPARSER_CONTROLLER_H
+#define CPPPARSER_CONTROLLER_H
 
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppparser/preprocessor.h>
-//#include <cppparser/grammar.h>
-#include <cppparser/declaration_grammar.h>
+#include <string>
 
-class standard_library_test: public CppUnit::TestFixture
+namespace cppparser
 {
-    CPPUNIT_TEST_SUITE(standard_library_test);
-    CPPUNIT_TEST(parse_files);
-    CPPUNIT_TEST_SUITE_END();
 
-    public:
-        void parse_files();
+class controller
+{
 
-    private:
-        cppparser::preprocessor m_preprocessor;
-        cppparser::declaration_grammar m_grammar;
 };
+
+}
 
 #endif

@@ -22,7 +22,8 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <cppparser/grammar.h>
+//#include <cppparser/grammar.h>
+#include <cppparser/declaration_grammar.h>
 
 class single_file_test: public CppUnit::TestFixture
 {
@@ -34,7 +35,7 @@ class single_file_test: public CppUnit::TestFixture
         void parse_files();
 
     private:
-        cppparser::grammar m_grammar;
+        cppparser::declaration_grammar m_grammar;
 };
 
 #endif

@@ -17,24 +17,18 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CPPPARSER_GRAMMAR_H
-#define CPPPARSER_GRAMMAR_H
+#ifndef CPPPARSER_DECLARATION_GRAMMAR_H
+#define CPPPARSER_DECLARATION_GRAMMAR_H
 
 #include <boost/spirit.hpp>
-#include "scope_cursor.h"
-#include "semantic_actions/new_namespace.h"
-#include "semantic_actions/enter_namespace_scope.h"
-#include "semantic_actions/leave_namespace_scope.h"
-#include "semantic_actions/new_class.h"
-#include "functor_parsers/template_name_parser.h"
 
 namespace cppparser
 {
 
-class grammar: public boost::spirit::grammar<grammar>
+class declaration_grammar: public boost::spirit::grammar<declaration_grammar>
 {
     public:
-        grammar(bool gcc_extensions_support_enabled = true):
+        declaration_grammar(bool gcc_extensions_support_enabled = true):
             m_gcc_extensions_support_enabled(gcc_extensions_support_enabled)
         {
         }
@@ -48,12 +42,12 @@ class grammar: public boost::spirit::grammar<grammar>
         template <typename ScannerT>
         struct definition
         {
-            definition(const grammar& self);
+            definition(const declaration_grammar& self);
             boost::spirit::rule<ScannerT> const& start() const;
 
 
             /*
-            Comments refer to ISO/IEC 14882:1998(E) (C++98 Standard), Annex A (grammar summary)
+            Comments refer to ISO/IEC 14882:1998(E) (C++98 Standard), Annex A (declaration_grammar summary)
             */
 
             boost::spirit::rule<ScannerT> file;
@@ -155,18 +149,18 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT> constant_expression;
 
             //1.5 - Statements [gram.stmt.stmt]
-            boost::spirit::rule<ScannerT> statement;
-            boost::spirit::rule<ScannerT> labeled_statement;
-            boost::spirit::rule<ScannerT> expression_statement;
+//            boost::spirit::rule<ScannerT> statement;
+//            boost::spirit::rule<ScannerT> labeled_statement;
+//            boost::spirit::rule<ScannerT> expression_statement;
             boost::spirit::rule<ScannerT> compound_statement;
             boost::spirit::rule<ScannerT> statement_seq;
-            boost::spirit::rule<ScannerT> selection_statement;
-            boost::spirit::rule<ScannerT> condition;
-            boost::spirit::rule<ScannerT> condition_type_specifier_seq;
-            boost::spirit::rule<ScannerT> iteration_statement;
-            boost::spirit::rule<ScannerT> for_init_statement;
-            boost::spirit::rule<ScannerT> jump_statement;
-            boost::spirit::rule<ScannerT> declaration_statement;
+//            boost::spirit::rule<ScannerT> selection_statement;
+//            boost::spirit::rule<ScannerT> condition;
+//            boost::spirit::rule<ScannerT> condition_type_specifier_seq;
+//            boost::spirit::rule<ScannerT> iteration_statement;
+//            boost::spirit::rule<ScannerT> for_init_statement;
+//            boost::spirit::rule<ScannerT> jump_statement;
+//            boost::spirit::rule<ScannerT> declaration_statement;
 
             //1.6 - Declarations [gram.dcl.dcl]
             boost::spirit::rule<ScannerT> declaration_seq;
@@ -301,35 +295,24 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT> replacement_list;
             boost::spirit::rule<ScannerT> pp_tokens;
 
+            //Convenience rules for declaration-only mode
+            boost::spirit::rule<ScannerT> declonly_statement_seq_item;
+            boost::spirit::rule<ScannerT> declonly_non_special_char_seq;
+            boost::spirit::rule<ScannerT> declonly_non_special_char;
+
             //GCC extensions
-            boost::spirit::rule<ScannerT> gcc_typeof;
-
-            //semantic actions
-            scope_cursor m_scope_cursor;
-            new_namespace<typename ScannerT::value_t> new_namespace_a;
-            enter_namespace_scope<typename ScannerT::value_t> enter_namespace_scope_a;
-            leave_namespace_scope<typename ScannerT::value_t> leave_namespace_scope_a;
-            new_class<typename ScannerT::value_t> new_class_a;
-
-            //functor parsers
-            template_name_parser<ScannerT> m_template_name_parser;
-            boost::spirit::functor_parser<template_name_parser<ScannerT>> template_name_p;
+            boost::spirit::rule<ScannerT> typeof_expression;
+            boost::spirit::rule<ScannerT> typeof_keyword;
+            boost::spirit::rule<ScannerT> restrict_keyword;
         };
 
     private:
         //options
-        ///@todo write a struct with boolean values for each option, instead of the following
         bool m_gcc_extensions_support_enabled;
 };
 
 template<typename ScannerT>
-grammar::definition<ScannerT>::definition(const grammar& self):
-    new_namespace_a(m_scope_cursor),
-    enter_namespace_scope_a(m_scope_cursor),
-    leave_namespace_scope_a(m_scope_cursor),
-    new_class_a(m_scope_cursor),
-    m_template_name_parser(m_scope_cursor, identifier),
-    template_name_p(m_template_name_parser)
+declaration_grammar::definition<ScannerT>::definition(const declaration_grammar& self)
 {
     using namespace boost::spirit;
 
@@ -390,7 +373,7 @@ grammar::definition<ScannerT>::definition(const grammar& self):
         | "using"
         | "unsigned"
         | "union"
-        | lexeme_d[!str_p("__") >> "typeof" >> !str_p("__")]
+        | typeof_keyword
         | "typename"
         | "typeid"
         | "typedef"
@@ -407,7 +390,7 @@ grammar::definition<ScannerT>::definition(const grammar& self):
         | "signed"
         | "short"
         | "return"
-        | lexeme_d[!str_p("__") >> "restrict" >> !str_p("__")]
+        | restrict_keyword
         | "reinterpret_cast"
         | "register"
         | "public"
@@ -770,7 +753,7 @@ grammar::definition<ScannerT>::definition(const grammar& self):
     ;
 
     qualified_id
-        = !str_p("::") >> nested_name_specifier[&print_out][enter_namespace_scope_a] >> !str_p("template") >> unqualified_id[leave_namespace_scope_a]
+        = !str_p("::") >> nested_name_specifier >> !str_p("template") >> unqualified_id
         | str_p("::") >> operator_function_id
         | str_p("::") >> template_id
         | str_p("::") >> identifier
@@ -1017,39 +1000,45 @@ grammar::definition<ScannerT>::definition(const grammar& self):
     ;
 
     //1.5 - Statements [gram.stmt.stmt]
-    statement
-        = labeled_statement
-        | expression_statement
-        | compound_statement
-        | selection_statement
-        | iteration_statement
-        | jump_statement
-        | declaration_statement
-        | try_block
-    ;
+//    statement
+//        = labeled_statement
+//        | expression_statement
+//        | compound_statement
+//        | selection_statement
+//        | iteration_statement
+//        | jump_statement
+//        | declaration_statement
+//        | try_block
+//    ;
 
-    labeled_statement
-        = str_p("case") >> constant_expression >> ':' >> statement
-        | str_p("default") >> ':' >> statement
-        | identifier >> ':' >> statement
-    ;
-
-    expression_statement
-        = !expression >> ch_p(';')
-    ;
+//    labeled_statement
+//        = str_p("case") >> constant_expression >> ':' >> statement
+//        | str_p("default") >> ':' >> statement
+//        | identifier >> ':' >> statement
+//    ;
+//
+//    expression_statement
+//        = !expression >> ch_p(';')
+//    ;
 
     compound_statement
         = ch_p('{') >> !statement_seq >> ch_p('}')
     ;
 
     statement_seq
-        = +statement
+        = +declonly_statement_seq_item
+    ;
+    declonly_statement_seq_item
+        = character_literal
+        | string_literal
+        | compound_statement
+        | declonly_non_special_char_seq
     ;
 
-    selection_statement
-        = str_p("if") >> '(' >> condition >> ')' >> statement >> !("else" >> statement)
-        | str_p("switch") >> '(' >> condition >> ')' >> statement
-    ;
+//    selection_statement
+//        = str_p("if") >> '(' >> condition >> ')' >> statement >> !("else" >> statement)
+//        | str_p("switch") >> '(' >> condition >> ')' >> statement
+//    ;
 
     /*
     Original rule is:
@@ -1058,35 +1047,35 @@ grammar::definition<ScannerT>::definition(const grammar& self):
             | type_specifier_seq >> declarator >> '=' >> assignment_expression
         ;
     */
-    condition
-        = expression
-        | condition_type_specifier_seq >> declarator >> '=' >> assignment_expression
-    ;
-    condition_type_specifier_seq
-        = +(type_specifier - (declarator >> '=' >> assignment_expression))
-    ;
+//    condition
+//        = expression
+//        | condition_type_specifier_seq >> declarator >> '=' >> assignment_expression
+//    ;
+//    condition_type_specifier_seq
+//        = +(type_specifier - (declarator >> '=' >> assignment_expression))
+//    ;
 
-    iteration_statement
-        = str_p("while") >> '(' >> condition >> ')' >> statement
-        | str_p("do") >> statement >> "while" >> '(' >> expression >> ')' >> ch_p(';')
-        | str_p("for") >> '(' >> for_init_statement >> !condition >> ch_p(';') >> !expression >> ')' >> statement
-    ;
+//    iteration_statement
+//        = str_p("while") >> '(' >> condition >> ')' >> statement
+//        | str_p("do") >> statement >> "while" >> '(' >> expression >> ')' >> ch_p(';')
+//        | str_p("for") >> '(' >> for_init_statement >> !condition >> ch_p(';') >> !expression >> ')' >> statement
+//    ;
 
-    for_init_statement
-        = expression_statement
-        | simple_declaration
-    ;
-
-    jump_statement
-        = str_p("break") >> ch_p(';')
-        | str_p("continue") >> ch_p(';')
-        | str_p("return") >> !expression >> ch_p(';')
-        | str_p("goto") >> identifier >> ch_p(';')
-    ;
-
-    declaration_statement
-        = block_declaration
-    ;
+//    for_init_statement
+//        = expression_statement
+//        | simple_declaration
+//    ;
+//
+//    jump_statement
+//        = str_p("break") >> ch_p(';')
+//        | str_p("continue") >> ch_p(';')
+//        | str_p("return") >> !expression >> ch_p(';')
+//        | str_p("goto") >> identifier >> ch_p(';')
+//    ;
+//
+//    declaration_statement
+//        = block_declaration
+//    ;
 
     //1.6 - Declarations [gram.dcl.dcl]
     declaration_seq
@@ -1167,7 +1156,7 @@ grammar::definition<ScannerT>::definition(const grammar& self):
         | enum_specifier
         | elaborated_type_specifier
         | cv_qualifier
-        | gcc_typeof
+        | typeof_expression
     ;
 
     simple_type_specifier
@@ -1240,7 +1229,7 @@ grammar::definition<ScannerT>::definition(const grammar& self):
     ;
 
     original_namespace_definition
-        = str_p("namespace") >> identifier[new_namespace_a][enter_namespace_scope_a] >> ch_p('{') >> namespace_body >> str_p("}")[leave_namespace_scope_a]
+        = str_p("namespace") >> identifier >> ch_p('{') >> namespace_body >> str_p("}")
     ;
 
     /*extension_namespace_definition
@@ -1248,7 +1237,7 @@ grammar::definition<ScannerT>::definition(const grammar& self):
     ;*/
 
     unnamed_namespace_definition
-        = str_p("namespace") >> ch_p('{') >> str_p("")[new_namespace_a][enter_namespace_scope_a] >> namespace_body >> str_p("}")[leave_namespace_scope_a]
+        = str_p("namespace") >> ch_p('{') >> str_p("") >> namespace_body >> str_p("}")
     ;
 
     namespace_body
@@ -1402,7 +1391,7 @@ grammar::definition<ScannerT>::definition(const grammar& self):
     cv_qualifier
         = str_p("const")
         | "volatile"
-        | lexeme_d[!str_p("__") >> "restrict" >> !str_p("__")]
+        | restrict_keyword
     ;
 
     declarator_id
@@ -1527,7 +1516,7 @@ grammar::definition<ScannerT>::definition(const grammar& self):
     class_head
         = class_key >> !nested_name_specifier >> template_id >> !base_clause //in that case, a forward declaration has been already done
         | class_key >> nested_name_specifier >> identifier >> !base_clause //ibidem
-        | class_key >> (!identifier)[new_class_a] >> !base_clause
+        | class_key >> !identifier >> !base_clause
     ;
 
     class_key
@@ -1698,7 +1687,7 @@ grammar::definition<ScannerT>::definition(const grammar& self):
     ;
 
     template_name
-        = "" >> template_name_p
+        = identifier
     ;
 
     template_argument_list
@@ -1759,7 +1748,7 @@ grammar::definition<ScannerT>::definition(const grammar& self):
     ;
 
     //1.14 - Preprocessing directives [gram.cpp]
-    //This part of the grammar should be used for the preprocessing phase.
+    //This part of the declaration_grammar should be used for the preprocessing phase.
 
     /*
     The rule, as written in the standard, define preprocessing_file as an optional group.
@@ -1830,18 +1819,39 @@ grammar::definition<ScannerT>::definition(const grammar& self):
         = /*+*/preprocessing_token
     ;
 
-    //GCC extensions
+
+    //Convenience rules for declaration-only mode
+    declonly_non_special_char_seq
+        = +declonly_non_special_char
+    ;
+    declonly_non_special_char
+        = anychar_p - (ch_p('"') | '\'' | '{' | '}')
+    ;
+
+    //extensions
     if(self.is_gcc_extensions_support_enabled())
     {
-        gcc_typeof
-            = lexeme_d[!str_p("__") >> "typeof" >> !str_p("__")] >> '(' >> expression >> ')' //GCC typeof extension
+        typeof_expression
+            = typeof_keyword >> '(' >> expression >> ')'
         ;
     }
+
+    typeof_keyword
+        = str_p("__typeof__")
+        | "__typeof"
+        | "typeof"
+    ;
+
+    restrict_keyword
+        = str_p("__restrict__")
+        | "__restrict"
+        | "restrict"
+    ;
 }
 
 template<typename ScannerT>
 boost::spirit::rule<ScannerT> const&
-grammar::definition<ScannerT>::start() const
+declaration_grammar::definition<ScannerT>::start() const
 {
     return file;
 }
