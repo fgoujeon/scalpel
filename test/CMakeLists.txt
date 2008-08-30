@@ -21,6 +21,7 @@ set(CMAKE_VERBOSE_MAKEFILE off)
 #project
 project(CppParser.Test)
 set(EXECUTABLE_OUTPUT_PATH bin)
+set(CMAKE_BUILD_TYPE Release)
 
 #executable
 file(

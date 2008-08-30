@@ -18,7 +18,6 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <cppunit/ui/text/TestRunner.h>
-#include "single_declaration_test.h"
 #include "single_file_test.h"
 #include "standard_library_test.h"
 
@@ -26,8 +25,7 @@ int main(int argc, char **argv)
 {
 	CppUnit::TextUi::TestRunner runner;
 
-	//runner.addTest(single_declaration_test::suite());
-	//runner.addTest(single_file_test::suite());
+	runner.addTest(single_file_test::suite());
 	runner.addTest(standard_library_test::suite()); //takes a very long time
 	runner.run();
 

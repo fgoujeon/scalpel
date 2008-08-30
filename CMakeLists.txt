@@ -21,6 +21,7 @@ set(CMAKE_VERBOSE_MAKEFILE off)
 #project
 project(CppParser)
 set(LIBRARY_OUTPUT_PATH lib)
+set(CMAKE_BUILD_TYPE Release)
 
 #gcc settings
 if(CMAKE_COMPILER_IS_GNUCXX)

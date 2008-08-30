@@ -28,6 +28,12 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 using namespace boost::spirit;
 using namespace std;
 
+single_file_test::single_file_test():
+    m_grammar(m_grammar_configuration)
+{
+    m_grammar_configuration.skip_function_bodies = true;
+}
+
 void single_file_test::parse_files()
 {
     for(unsigned int i = 0; ; ++i)

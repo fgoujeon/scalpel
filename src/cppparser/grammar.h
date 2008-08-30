@@ -21,12 +21,6 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 #define CPPPARSER_GRAMMAR_H
 
 #include <boost/spirit.hpp>
-#include "scope_cursor.h"
-#include "semantic_actions/new_namespace.h"
-#include "semantic_actions/enter_namespace_scope.h"
-#include "semantic_actions/leave_namespace_scope.h"
-#include "semantic_actions/new_class.h"
-#include "functor_parsers/template_name_parser.h"
 
 namespace cppparser
 {
@@ -34,16 +28,27 @@ namespace cppparser
 class grammar: public boost::spirit::grammar<grammar>
 {
     public:
-        grammar(bool gcc_extensions_support_enabled = true):
-            m_gcc_extensions_support_enabled(gcc_extensions_support_enabled)
+        struct configuration;
+
+        grammar(configuration& a_configuration):
+            m_configuration(a_configuration)
         {
         }
 
-        bool
-        is_gcc_extensions_support_enabled() const
+        struct configuration
         {
-            return m_gcc_extensions_support_enabled;
-        }
+            configuration():
+                skip_function_bodies(false),
+                enable_typeof_support(true),
+                enable_restrict_support(true)
+            {
+            }
+
+            bool skip_function_bodies;
+
+            bool enable_typeof_support;
+            bool enable_restrict_support;
+        };
 
         template <typename ScannerT>
         struct definition
@@ -53,7 +58,7 @@ class grammar: public boost::spirit::grammar<grammar>
 
 
             /*
-            Comments refer to ISO/IEC 14882:1998(E) (C++98 Standard), Annex A (grammar summary)
+            Chapter numbers refer to ISO/IEC 14882:1998(E) (C++98 Standard), Annex A (grammar summary)
             */
 
             boost::spirit::rule<ScannerT> file;
@@ -64,17 +69,8 @@ class grammar: public boost::spirit::grammar<grammar>
             //1.2 - Lexical conventions [gram.lex]
             boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> hex_quad;
             boost::spirit::rule<ScannerT> universal_character_name;
-            boost::spirit::rule<ScannerT> preprocessing_token;
-            boost::spirit::rule<ScannerT> token;
-            boost::spirit::rule<ScannerT> header_name;
-            boost::spirit::rule<ScannerT> h_char_sequence;
-            boost::spirit::rule<ScannerT> h_char;
-            boost::spirit::rule<ScannerT> q_char_sequence;
-            boost::spirit::rule<ScannerT> q_char;
-            //boost::spirit::rule<ScannerT> pp_number;
             boost::spirit::rule<ScannerT> identifier;
             boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> nondigit;
-            /*boost::spirit::rule<ScannerT> preprocessing_op_or_punc;*/
             boost::spirit::rule<ScannerT> literal;
             boost::spirit::rule<ScannerT> integer_literal;
             boost::spirit::rule<ScannerT> decimal_literal;
@@ -192,8 +188,6 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT> original_namespace_name;
             boost::spirit::rule<ScannerT> namespace_definition;
             boost::spirit::rule<ScannerT> named_namespace_definition;
-            boost::spirit::rule<ScannerT> original_namespace_definition;
-            boost::spirit::rule<ScannerT> extension_namespace_definition;
             boost::spirit::rule<ScannerT> unnamed_namespace_definition;
             boost::spirit::rule<ScannerT> namespace_body;
             boost::spirit::rule<ScannerT> namespace_alias;
@@ -287,49 +281,29 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT> exception_specification;
             boost::spirit::rule<ScannerT> type_id_list;
 
-            //1.14 - Preprocessing directives [gram.cpp]
-            boost::spirit::rule<ScannerT> preprocessing_file;
-            boost::spirit::rule<ScannerT> group;
-            boost::spirit::rule<ScannerT> group_part;
-            boost::spirit::rule<ScannerT> if_section;
-            boost::spirit::rule<ScannerT> if_group;
-            boost::spirit::rule<ScannerT> elif_groups;
-            boost::spirit::rule<ScannerT> elif_group;
-            boost::spirit::rule<ScannerT> else_group;
-            boost::spirit::rule<ScannerT> endif_line;
-            boost::spirit::rule<ScannerT> control_line;
-            boost::spirit::rule<ScannerT> replacement_list;
-            boost::spirit::rule<ScannerT> pp_tokens;
 
-            //GCC extensions
-            boost::spirit::rule<ScannerT> gcc_typeof;
+            /*
+            Convenience rules for 'skip function bodies' mode
+            */
+            boost::spirit::rule<ScannerT> skip_function_bodies_mode_statement_seq_item;
+            boost::spirit::rule<ScannerT> skip_function_bodies_mode_non_special_char_seq;
+            boost::spirit::rule<ScannerT> skip_function_bodies_mode_non_special_char;
 
-            //semantic actions
-            scope_cursor m_scope_cursor;
-            new_namespace<typename ScannerT::value_t> new_namespace_a;
-            enter_namespace_scope<typename ScannerT::value_t> enter_namespace_scope_a;
-            leave_namespace_scope<typename ScannerT::value_t> leave_namespace_scope_a;
-            new_class<typename ScannerT::value_t> new_class_a;
 
-            //functor parsers
-            template_name_parser<ScannerT> m_template_name_parser;
-            boost::spirit::functor_parser<template_name_parser<ScannerT>> template_name_p;
+            /*
+            Non-standard extensions
+            */
+            boost::spirit::rule<ScannerT> typeof_expression;
+            boost::spirit::rule<ScannerT> typeof_keyword;
+            boost::spirit::rule<ScannerT> restrict_keyword;
         };
 
     private:
-        //options
-        ///@todo write a struct with boolean values for each option, instead of the following
-        bool m_gcc_extensions_support_enabled;
+        configuration& m_configuration;
 };
 
 template<typename ScannerT>
-grammar::definition<ScannerT>::definition(const grammar& self):
-    new_namespace_a(m_scope_cursor),
-    enter_namespace_scope_a(m_scope_cursor),
-    leave_namespace_scope_a(m_scope_cursor),
-    new_class_a(m_scope_cursor),
-    m_template_name_parser(m_scope_cursor, identifier),
-    template_name_p(m_template_name_parser)
+grammar::definition<ScannerT>::definition(const grammar& self)
 {
     using namespace boost::spirit;
 
@@ -390,7 +364,7 @@ grammar::definition<ScannerT>::definition(const grammar& self):
         | "using"
         | "unsigned"
         | "union"
-        | lexeme_d[!str_p("__") >> "typeof" >> !str_p("__")]
+        | typeof_keyword
         | "typename"
         | "typeid"
         | "typedef"
@@ -407,7 +381,7 @@ grammar::definition<ScannerT>::definition(const grammar& self):
         | "signed"
         | "short"
         | "return"
-        | lexeme_d[!str_p("__") >> "restrict" >> !str_p("__")]
+        | restrict_keyword
         | "reinterpret_cast"
         | "register"
         | "public"
@@ -469,55 +443,6 @@ grammar::definition<ScannerT>::definition(const grammar& self):
         | lexeme_d[str_p("\\U") >> hex_quad >> hex_quad]
     ;
 
-    preprocessing_token
-        = header_name
-        | identifier
-        //| pp_number
-        | character_literal
-        | string_literal
-        //| preprocessing_op_or_punc
-        //| alpha_p //each non_white_space character that cannot be one of the above
-    ;
-
-    token
-        = identifier
-        | keyword
-        | literal
-        | operator_
-        //| punctuator
-    ;
-
-    header_name
-        = '<' >> h_char_sequence >> '>'
-        | '"' >> q_char_sequence >> '"'
-    ;
-
-    h_char_sequence
-        = +h_char
-    ;
-
-    h_char
-        = source_character_set - (ch_p('\n') | ch_p('>'));
-    ;
-
-    q_char_sequence
-        = +q_char
-    ;
-
-    q_char
-        = source_character_set - (ch_p('\n') | ch_p('\"'));
-    ;
-/*
-    pp_number
-        = digit_p
-        | '.' >> digit_p
-        | pp_number >> digit_p
-        | pp_number >> nondigit
-        | pp_number >> 'e' >> sign
-        | pp_number >> 'E' >> sign
-        | pp_number >> '.'
-    ;
-*/
     identifier
         = lexeme_d[ nondigit >> *(nondigit | digit_p) ] - keyword
     ;
@@ -528,77 +453,6 @@ grammar::definition<ScannerT>::definition(const grammar& self):
         | '_'
     ;
 
-/*    preprocessing_op_or_punc
-        = str_p("{")
-        | "}"
-        | "["
-        | "]"
-        | "#"
-        | "##"
-        | "("
-        | ")"
-        | "<:"
-        | ":>"
-        | "<%"
-        | "%>"
-        | "%:"
-        | "%:%:"
-        | ";"
-        | ":"
-        | "..."
-        | "new"
-        | "delete"
-        | "?"
-        | "::"
-        | "."
-        | ".*"
-        | "+"
-        | "-"
-        | "*"
-        | "/"
-        | "%"
-        | "^"
-        | "&"
-        | "|"
-        | "~"
-        | "!"
-        | "="
-        | "<"
-        | ">"
-        | "+="
-        | "-="
-        | "*="
-        | "/="
-        | "%="
-        | "^="
-        | "&="
-        | "|="
-        | "<<"
-        | ">>"
-        | ">>="
-        | "<<="
-        | "=="
-        | "!="
-        | "<="
-        | ">="
-        | "&&"
-        | "--"
-        | ","
-        | "->*"
-        | "->"
-        | "and"
-        | "and_eq"
-        | "bitand"
-        | "bitor"
-        | "compl"
-        | "not"
-        | "not_eq"
-        | "or"
-        | "or_eq"
-        | "xor"
-        | "xor_eq"
-    ;
-*/
     literal
         = boolean_literal
         | character_literal
@@ -770,7 +624,7 @@ grammar::definition<ScannerT>::definition(const grammar& self):
     ;
 
     qualified_id
-        = !str_p("::") >> nested_name_specifier[&print_out][enter_namespace_scope_a] >> !str_p("template") >> unqualified_id[leave_namespace_scope_a]
+        = !str_p("::") >> nested_name_specifier >> !str_p("template") >> unqualified_id
         | str_p("::") >> operator_function_id
         | str_p("::") >> template_id
         | str_p("::") >> identifier
@@ -1042,9 +896,24 @@ grammar::definition<ScannerT>::definition(const grammar& self):
         = ch_p('{') >> !statement_seq >> ch_p('}')
     ;
 
-    statement_seq
-        = +statement
-    ;
+    if(self.m_configuration.skip_function_bodies)
+    {
+        statement_seq
+            = +skip_function_bodies_mode_statement_seq_item
+        ;
+        skip_function_bodies_mode_statement_seq_item
+            = character_literal
+            | string_literal
+            | compound_statement
+            | skip_function_bodies_mode_non_special_char_seq
+        ;
+    }
+    else
+    {
+        statement_seq
+            = +statement
+        ;
+    }
 
     selection_statement
         = str_p("if") >> '(' >> condition >> ')' >> statement >> !("else" >> statement)
@@ -1167,7 +1036,7 @@ grammar::definition<ScannerT>::definition(const grammar& self):
         | enum_specifier
         | elaborated_type_specifier
         | cv_qualifier
-        | gcc_typeof
+        | typeof_expression
     ;
 
     simple_type_specifier
@@ -1235,20 +1104,11 @@ grammar::definition<ScannerT>::definition(const grammar& self):
     ;
 
     named_namespace_definition
-        = original_namespace_definition/*
-        | extension_namespace_definition*/
+        = str_p("namespace") >> identifier >> '{' >> namespace_body >> '}'
     ;
-
-    original_namespace_definition
-        = str_p("namespace") >> identifier[new_namespace_a][enter_namespace_scope_a] >> ch_p('{') >> namespace_body >> str_p("}")[leave_namespace_scope_a]
-    ;
-
-    /*extension_namespace_definition
-        = str_p("namespace") >> original_namespace_name[enter_namespace_scope_a] >> ch_p('{') >> namespace_body >> ch_p('}')
-    ;*/
 
     unnamed_namespace_definition
-        = str_p("namespace") >> ch_p('{') >> str_p("")[new_namespace_a][enter_namespace_scope_a] >> namespace_body >> str_p("}")[leave_namespace_scope_a]
+        = str_p("namespace") >> '{' >> namespace_body >> '}'
     ;
 
     namespace_body
@@ -1527,7 +1387,7 @@ grammar::definition<ScannerT>::definition(const grammar& self):
     class_head
         = class_key >> !nested_name_specifier >> template_id >> !base_clause //in that case, a forward declaration has been already done
         | class_key >> nested_name_specifier >> identifier >> !base_clause //ibidem
-        | class_key >> (!identifier)[new_class_a] >> !base_clause
+        | class_key >> !identifier >> !base_clause
     ;
 
     class_key
@@ -1698,7 +1558,7 @@ grammar::definition<ScannerT>::definition(const grammar& self):
     ;
 
     template_name
-        = "" >> template_name_p
+        = identifier
     ;
 
     template_argument_list
@@ -1758,83 +1618,41 @@ grammar::definition<ScannerT>::definition(const grammar& self):
         = type_id % ','
     ;
 
-    //1.14 - Preprocessing directives [gram.cpp]
-    //This part of the grammar should be used for the preprocessing phase.
 
     /*
-    The rule, as written in the standard, define preprocessing_file as an optional group.
-    However, the only rule where preprocessing_file is used put it inside a kleen star.
-    Leave preprocessing_file rule as is will lead to an infinite loop.
-        preprocessing_file
-            = !group
-        ;
+    Convenience rules for declaration-only mode
     */
-    preprocessing_file
-        = group
+    skip_function_bodies_mode_non_special_char_seq
+        = +skip_function_bodies_mode_non_special_char
+    ;
+    skip_function_bodies_mode_non_special_char
+        = anychar_p - (ch_p('"') | '\'' | '{' | '}')
     ;
 
-    group
-        = +group_part
-    ;
 
-    group_part
-        = if_section
-        | control_line
-        | !pp_tokens >> '\n'
-    ;
-
-    if_section
-        = if_group >> !elif_groups >> !else_group >> endif_line
-    ;
-
-    if_group
-        = ch_p('#') >> "if" >> constant_expression >> '\n' >> !group
-        | ch_p('#') >> "ifdef" >> identifier >> '\n' >> !group
-        | ch_p('#') >> "ifndef" >> identifier >> '\n' >> !group
-    ;
-
-    elif_groups
-        = +elif_group
-    ;
-
-    elif_group
-        = ch_p('#') >> "elif" >> constant_expression >> '\n' >> !group
-    ;
-
-    else_group
-        = ch_p('#') >> "else" >> '\n' >> !group
-    ;
-
-    endif_line
-        = ch_p('#') >> "endif" >> '\n'
-    ;
-
-    ///@todo control lines should be ended by an end-of-line character
-    control_line
-        = ch_p('#') >> "include" >> pp_tokens //>> '\n'
-        | ch_p('#') >> "define" >> identifier >> replacement_list //>> '\n'
-        | ch_p('#') >> "define" >> lexeme_d[identifier >> '('] >> *identifier >> ')' >> replacement_list //>> '\n' //it cannot be a space between a macro function's name and the left parenthesis
-        | ch_p('#') >> "undef" >> identifier //>> '\n'
-        | ch_p('#') >> "line" >> pp_tokens //>> '\n'
-        | ch_p('#') >> "error" >> !pp_tokens //>> '\n'
-        | ch_p('#') >> "pragma" >> !pp_tokens //>> '\n'
-        | ch_p('#') //>> '\n'
-    ;
-
-    replacement_list
-        = !pp_tokens
-    ;
-
-    ///@todo there should be a + prefix, but it causes issues
-    pp_tokens
-        = /*+*/preprocessing_token
-    ;
-
-    //GCC extensions
-    if(self.is_gcc_extensions_support_enabled())
+    /*
+    Extensions
+    These rules are not in the standard, but are required to parse some standard library implementations
+    */
+    if(self.m_configuration.enable_typeof_support)
     {
-        gcc_typeof
-            = lexeme_d[!str_p("__") >> "typeof" >> !str_p("__")] >> '(' >> expression >> ')' //GCC typeof extension
+        typeof_expression
+            = typeof_keyword >> '(' >> expression >> ')'
+        ;
+
+        typeof_keyword
+            = str_p("__typeof__")
+            | "__typeof"
+            | "typeof"
+        ;
+    }
+
+    if(self.m_configuration.enable_typeof_support)
+    {
+        restrict_keyword
+            = str_p("__restrict__")
+            | "__restrict"
+            | "restrict"
         ;
     }
 }
