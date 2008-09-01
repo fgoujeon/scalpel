@@ -17,18 +17,30 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <cppunit/ui/text/TestRunner.h>
-#include "single_file_test.h"
-#include "standard_library_test.h"
+#ifndef CPPPARSER_DECLARATION_SYNTAX_ANALYZER_H
+#define CPPPARSER_DECLARATION_SYNTAX_ANALYZER_H
 
-int main(int argc, char **argv)
+#include <string>
+#include <boost/spirit.hpp>
+#include <boost/spirit/include/classic_ast.hpp>
+#include "grammar.h"
+
+namespace cppparser
 {
-	CppUnit::TextUi::TestRunner runner;
 
-	runner.addTest(single_file_test::suite());
-//	runner.addTest(standard_library_test::suite()); //takes a very long time
-	runner.run();
+class declaration_syntax_analyzer
+{
+    public:
+        declaration_syntax_analyzer();
 
-	return 0;
+        boost::spirit::tree_match<const char*>::container_t
+        analyze(const std::string& input);
+
+    private:
+        grammar::configuration m_grammar_configuration;
+        grammar m_grammar;
+};
+
 }
 
+#endif

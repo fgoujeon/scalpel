@@ -17,18 +17,25 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <cppunit/ui/text/TestRunner.h>
-#include "single_file_test.h"
-#include "standard_library_test.h"
+#ifndef CPPPARSER_PROGRAM_MODEL_UNION_H
+#define CPPPARSER_PROGRAM_MODEL_UNION_H
 
-int main(int argc, char **argv)
+#include "type.h"
+#include "namespace_member.h"
+
+namespace cppparser { namespace program_model
 {
-	CppUnit::TextUi::TestRunner runner;
 
-	runner.addTest(single_file_test::suite());
-//	runner.addTest(standard_library_test::suite()); //takes a very long time
-	runner.run();
+class union_: public type, public namespace_member, public std::enable_shared_from_this<union_>
+{
+    public:
+        /**
+        Creates a named union.
+        @param name the union's name
+        */
+        explicit union_(const std::string& name);
+};
 
-	return 0;
-}
+}} //namespace cppparser::program_model
 
+#endif

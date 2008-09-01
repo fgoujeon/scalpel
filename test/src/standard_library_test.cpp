@@ -28,12 +28,6 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 using namespace boost::spirit;
 using namespace std;
 
-standard_library_test::standard_library_test():
-    m_grammar(m_grammar_configuration)
-{
-    m_grammar_configuration.skip_function_bodies = true;
-}
-
 void
 standard_library_test::parse_files()
 {
@@ -57,18 +51,7 @@ standard_library_test::parse_files()
 		std::string preprocessed_code = m_preprocessor(file_name_oss.str());
 
 		//parse preprocessed code
-        parse_info<> info = parse(preprocessed_code.c_str(), m_grammar, space_p);
-        std::string stopped_at = info.stop;
-
-        ostringstream failure_message;
-        failure_message << "Failed to parse " << file_name_oss.str() << "\n";
-        failure_message << "Parsing stopped at:\n***\n" << stopped_at << "\n***";
-
-        CPPUNIT_ASSERT_MESSAGE
-        (
-            failure_message.str(),
-            info.full
-        );
+        m_declaration_syntax_analyzer.analyze(preprocessed_code); //throws an exception if parsing fails
     }
 }
 

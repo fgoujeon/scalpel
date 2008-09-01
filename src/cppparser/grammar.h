@@ -21,6 +21,7 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 #define CPPPARSER_GRAMMAR_H
 
 #include <boost/spirit.hpp>
+#include <boost/spirit/include/classic_ast.hpp>
 
 namespace cppparser
 {
@@ -50,6 +51,244 @@ class grammar: public boost::spirit::grammar<grammar>
             bool enable_restrict_support;
         };
 
+        enum parser_id
+        {
+            FILE,
+            SOURCE_CHARACTER_SET,
+            KEYWORD,
+
+            //1.2 - LEXICAL CONVENTIONS [GRAM.LEX]
+            HEX_QUAD,
+            UNIVERSAL_CHARACTER_NAME,
+            IDENTIFIER,
+            NONDIGIT,
+            LITERAL,
+            INTEGER_LITERAL,
+            DECIMAL_LITERAL,
+            OCTAL_LITERAL,
+            HEXADECIMAL_LITERAL,
+            HEXADECIMAL_DIGIT,
+            OCTAL_DIGIT,
+            NONZERO_DIGIT,
+            INTEGER_SUFFIX,
+            UNSIGNED_SUFFIX,
+            LONG_SUFFIX,
+            LONG_LONG_SUFFIX,
+            CHARACTER_LITERAL,
+            C_CHAR_SEQUENCE,
+            C_CHAR,
+            ESCAPE_SEQUENCE,
+            SIMPLE_ESCAPE_SEQUENCE,
+            OCTAL_ESCAPE_SEQUENCE,
+            HEXADECIMAL_ESCAPE_SEQUENCE,
+            FLOATING_LITERAL,
+            FRACTIONAL_CONSTANT,
+            EXPONENT_PART,
+            DIGIT_SEQUENCE,
+            FLOATING_SUFFIX,
+            STRING_LITERAL,
+            S_CHAR_SEQUENCE,
+            S_CHAR,
+            BOOLEAN_LITERAL,
+
+            //1.3 - BASIC CONCEPTS [GRAM.BASIC]
+            TRANSLATION_UNIT,
+
+            //1.4 - EXPRESSIONS [GRAM.EXPR]
+            PRIMARY_EXPRESSION,
+            ID_EXPRESSION,
+            UNQUALIFIED_ID,
+            QUALIFIED_ID,
+            NESTED_NAME_SPECIFIER,
+            CLASS_OR_NAMESPACE_NAME,
+            POSTFIX_EXPRESSION,
+            EXPRESSION_LIST,
+            PSEUDO_DESTRUCTOR_NAME,
+            UNARY_EXPRESSION,
+            UNARY_OPERATOR,
+            NEW_EXPRESSION,
+            NEW_PLACEMENT,
+            NEW_TYPE_ID,
+            NEW_DECLARATOR,
+            DIRECT_NEW_DECLARATOR,
+            NEW_INITIALIZER,
+            DELETE_EXPRESSION,
+            CAST_EXPRESSION,
+            PM_EXPRESSION,
+            MULTIPLICATIVE_EXPRESSION,
+            ADDITIVE_EXPRESSION,
+            SHIFT_EXPRESSION,
+            TEMPLATE_ARGUMENT_SHIFT_EXPRESSION,
+            RELATIONAL_EXPRESSION,
+            TEMPLATE_ARGUMENT_RELATIONAL_EXPRESSION,
+            EQUALITY_EXPRESSION,
+            TEMPLATE_ARGUMENT_EQUALITY_EXPRESSION,
+            AND_EXPRESSION,
+            TEMPLATE_ARGUMENT_AND_EXPRESSION,
+            EXCLUSIVE_OR_EXPRESSION,
+            TEMPLATE_ARGUMENT_EXCLUSIVE_OR_EXPRESSION,
+            INCLUSIVE_OR_EXPRESSION,
+            TEMPLATE_ARGUMENT_INCLUSIVE_OR_EXPRESSION,
+            LOGICAL_AND_EXPRESSION,
+            TEMPLATE_ARGUMENT_LOGICAL_AND_EXPRESSION,
+            LOGICAL_OR_EXPRESSION,
+            TEMPLATE_ARGUMENT_LOGICAL_OR_EXPRESSION,
+            CONDITIONAL_EXPRESSION,
+            TEMPLATE_ARGUMENT_CONDITIONAL_EXPRESSION,
+            ASSIGNMENT_EXPRESSION,
+            TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION,
+            ASSIGNMENT_OPERATOR,
+            EXPRESSION,
+            CONSTANT_EXPRESSION,
+
+            //1.5 - STATEMENTS [GRAM.STMT.STMT]
+            STATEMENT,
+            LABELED_STATEMENT,
+            EXPRESSION_STATEMENT,
+            COMPOUND_STATEMENT,
+            STATEMENT_SEQ,
+            SELECTION_STATEMENT,
+            CONDITION,
+            CONDITION_TYPE_SPECIFIER_SEQ,
+            ITERATION_STATEMENT,
+            FOR_INIT_STATEMENT,
+            JUMP_STATEMENT,
+            DECLARATION_STATEMENT,
+
+            //1.6 - DECLARATIONS [GRAM.DCL.DCL]
+            DECLARATION_SEQ,
+            DECLARATION,
+            BLOCK_DECLARATION,
+            SIMPLE_DECLARATION,
+            SIMPLE_DECLARATION_DECL_SPECIFIER_SEQ,
+            DECL_SPECIFIER,
+            DECL_SPECIFIER_SEQ,
+            STORAGE_CLASS_SPECIFIER,
+            FUNCTION_SPECIFIER,
+            TYPEDEF_NAME,
+            TYPE_SPECIFIER,
+            SIMPLE_TYPE_SPECIFIER,
+            TYPE_NAME,
+            ELABORATED_TYPE_SPECIFIER,
+            ENUM_NAME,
+            ENUM_SPECIFIER,
+            ENUMERATOR_LIST,
+            ENUMERATOR_DEFINITION,
+            ENUMERATOR,
+            NAMESPACE_NAME,
+            ORIGINAL_NAMESPACE_NAME,
+            NAMESPACE_DEFINITION,
+            NAMED_NAMESPACE_DEFINITION,
+            UNNAMED_NAMESPACE_DEFINITION,
+            NAMESPACE_BODY,
+            NAMESPACE_ALIAS,
+            NAMESPACE_ALIAS_DEFINITION,
+            QUALIFIED_NAMESPACE_SPECIFIER,
+            USING_DECLARATION,
+            USING_DIRECTIVE,
+            ASM_DEFINITION,
+            LINKAGE_SPECIFICATION,
+
+            //1.7 - DECLARATORS [GRAM.DCL.DECL]
+            INIT_DECLARATOR_LIST,
+            INIT_DECLARATOR,
+            DECLARATOR,
+            DIRECT_DECLARATOR,
+            PTR_OPERATOR,
+            CV_QUALIFIER_SEQ,
+            CV_QUALIFIER,
+            DECLARATOR_ID,
+            TYPE_ID,
+            TYPE_SPECIFIER_SEQ,
+            ABSTRACT_DECLARATOR,
+            DIRECT_ABSTRACT_DECLARATOR,
+            PARAMETER_DECLARATION_CLAUSE,
+            PARAMETER_DECLARATION_LIST,
+            PARAMETER_DECLARATION,
+            PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ1,
+            PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ2,
+            PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ3,
+            PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ4,
+            FUNCTION_DEFINITION,
+            FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ1,
+            FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ2,
+            FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ3,
+            FUNCTION_BODY,
+            INITIALIZER,
+            INITIALIZER_CLAUSE,
+            INITIALIZER_LIST,
+
+            //1.8 - CLASSES [GRAM.CLASS]
+            CLASS_NAME,
+            CLASS_SPECIFIER,
+            CLASS_HEAD,
+            CLASS_KEY,
+            MEMBER_SPECIFICATION,
+            MEMBER_DECLARATION,
+            MEMBER_DECLARATION_DECL_SPECIFIER_SEQ,
+            MEMBER_DECLARATOR_LIST,
+            MEMBER_DECLARATOR,
+            PURE_SPECIFIER,
+            CONSTANT_INITIALIZER,
+
+            //1.9 - DERIVED CLASSES [GRAM.CLASS.DERIVED]
+            BASE_CLAUSE,
+            BASE_SPECIFIER_LIST,
+            BASE_SPECIFIER,
+            ACCESS_SPECIFIER,
+
+            //1.10 - SPECIAL MEMBER FUNCTIONS [GRAM.SPECIAL]
+            CONVERSION_FUNCTION_ID,
+            CONVERSION_TYPE_ID,
+            CONVERSION_DECLARATOR,
+            CTOR_INITIALIZER,
+            MEM_INITIALIZER_LIST,
+            MEM_INITIALIZER,
+            MEM_INITIALIZER_ID,
+
+            //1.11 - OVERLOADING [GRAM.OVER]
+            OPERATOR_FUNCTION_ID,
+            OPERATOR_,
+
+            //1.12 - TEMPLATES [GRAM.TEMP]
+            TEMPLATE_DECLARATION,
+            TEMPLATE_PARAMETER_LIST,
+            TEMPLATE_PARAMETER,
+            TYPE_PARAMETER,
+            TEMPLATE_ID,
+            TEMPLATE_NAME,
+            TEMPLATE_ARGUMENT_LIST,
+            TEMPLATE_ARGUMENT,
+            EXPLICIT_INSTANTIATION,
+            EXPLICIT_SPECIALIZATION,
+
+            //1.13 - EXCEPTION HANDLING [GRAM.EXCEPT]
+            TRY_BLOCK,
+            FUNCTION_TRY_BLOCK,
+            HANDLER_SEQ,
+            HANDLER,
+            EXCEPTION_DECLARATION,
+            THROW_EXPRESSION,
+            EXCEPTION_SPECIFICATION,
+            TYPE_ID_LIST,
+
+
+            /*
+            CONVENIENCE RULES FOR 'SKIP FUNCTION BODIES' MODE
+            */
+            SKIP_FUNCTION_BODIES_MODE_STATEMENT_SEQ_ITEM,
+            SKIP_FUNCTION_BODIES_MODE_NON_SPECIAL_CHAR_SEQ,
+            SKIP_FUNCTION_BODIES_MODE_NON_SPECIAL_CHAR,
+
+
+            /*
+            NON-STANDARD EXTENSIONS
+            */
+            TYPEOF_EXPRESSION,
+            TYPEOF_KEYWORD,
+            RESTRICT_KEYWORD,
+        };
+
         template <typename ScannerT>
         struct definition
         {
@@ -69,7 +308,7 @@ class grammar: public boost::spirit::grammar<grammar>
             //1.2 - Lexical conventions [gram.lex]
             boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> hex_quad;
             boost::spirit::rule<ScannerT> universal_character_name;
-            boost::spirit::rule<ScannerT> identifier;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<IDENTIFIER>> identifier;
             boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> nondigit;
             boost::spirit::rule<ScannerT> literal;
             boost::spirit::rule<ScannerT> integer_literal;
@@ -184,10 +423,10 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT> enumerator_list;
             boost::spirit::rule<ScannerT> enumerator_definition;
             boost::spirit::rule<ScannerT> enumerator;
-            boost::spirit::rule<ScannerT> namespace_name;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<NAMESPACE_NAME>> namespace_name;
             boost::spirit::rule<ScannerT> original_namespace_name;
             boost::spirit::rule<ScannerT> namespace_definition;
-            boost::spirit::rule<ScannerT> named_namespace_definition;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<NAMED_NAMESPACE_DEFINITION>> named_namespace_definition;
             boost::spirit::rule<ScannerT> unnamed_namespace_definition;
             boost::spirit::rule<ScannerT> namespace_body;
             boost::spirit::rule<ScannerT> namespace_alias;
@@ -229,9 +468,9 @@ class grammar: public boost::spirit::grammar<grammar>
 
             //1.8 - Classes [gram.class]
             boost::spirit::rule<ScannerT> class_name;
-            boost::spirit::rule<ScannerT> class_specifier;
-            boost::spirit::rule<ScannerT> class_head;
-            boost::spirit::rule<ScannerT> class_key;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<CLASS_SPECIFIER>> class_specifier;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<CLASS_HEAD>> class_head;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<CLASS_KEY>> class_key;
             boost::spirit::rule<ScannerT> member_specification;
             boost::spirit::rule<ScannerT> member_declaration;
             boost::spirit::rule<ScannerT> member_declaration_decl_specifier_seq;
@@ -241,7 +480,7 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT> constant_initializer;
 
             //1.9 - Derived classes [gram.class.derived]
-            boost::spirit::rule<ScannerT> base_clause;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<BASE_CLAUSE>> base_clause;
             boost::spirit::rule<ScannerT> base_specifier_list;
             boost::spirit::rule<ScannerT> base_specifier;
             boost::spirit::rule<ScannerT> access_specifier;
@@ -444,13 +683,19 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     ;
 
     identifier
-        = lexeme_d[ nondigit >> *(nondigit | digit_p) ] - keyword
+        = leaf_node_d
+        [
+            (nondigit >> *(nondigit | digit_p)) - keyword
+        ]
     ;
 
     nondigit
-        = universal_character_name
-        | chset_p("a-zA-Z")
-        | '_'
+        = leaf_node_d
+        [
+            universal_character_name
+            | chset_p("a-zA-Z")
+            | '_'
+        ]
     ;
 
     literal
@@ -902,10 +1147,10 @@ grammar::definition<ScannerT>::definition(const grammar& self)
             = +skip_function_bodies_mode_statement_seq_item
         ;
         skip_function_bodies_mode_statement_seq_item
-            = character_literal
+            = leaf_node_d[character_literal
             | string_literal
             | compound_statement
-            | skip_function_bodies_mode_non_special_char_seq
+            | skip_function_bodies_mode_non_special_char_seq]
         ;
     }
     else
@@ -1090,8 +1335,8 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     ;
 
     namespace_name
-        = original_namespace_name
-        | namespace_alias
+        = root_node_d[original_namespace_name]
+        | root_node_d[namespace_alias]
     ;
 
     original_namespace_name
@@ -1104,7 +1349,7 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     ;
 
     named_namespace_definition
-        = str_p("namespace") >> identifier >> '{' >> namespace_body >> '}'
+        = root_node_d[str_p("namespace") >> identifier >> '{' >> namespace_body >> '}']
     ;
 
     unnamed_namespace_definition
@@ -1376,24 +1621,33 @@ grammar::definition<ScannerT>::definition(const grammar& self)
 
     //1.8 - Classes [gram.class]
     class_name
-        = template_id
-        | identifier
+        = leaf_node_d
+        [
+            template_id
+            | identifier
+        ]
     ;
 
     class_specifier
-        = class_head >> ch_p('{') >> !member_specification >> ch_p('}')
+        = root_node_d
+        [
+            class_head >> ch_p('{') >> !member_specification >> ch_p('}')
+        ]
     ;
 
     class_head
-        = class_key >> !nested_name_specifier >> template_id >> !base_clause //in that case, a forward declaration has been already done
+        = class_key >> !nested_name_specifier >> template_id >> !base_clause //in that case, a forward declaration has already been done
         | class_key >> nested_name_specifier >> identifier >> !base_clause //ibidem
         | class_key >> !identifier >> !base_clause
     ;
 
     class_key
-        = str_p("class")
-        | "struct"
-        | "union"
+        = leaf_node_d
+        [
+            str_p("class")
+            | "struct"
+            | "union"
+        ]
     ;
 
     member_specification
@@ -1431,7 +1685,7 @@ grammar::definition<ScannerT>::definition(const grammar& self)
 
     //1.9 - Derived classes [gram.class.derived]
     base_clause
-        = ':' >> base_specifier_list
+        = ':' >> root_node_d[base_specifier_list]
     ;
 
     base_specifier_list

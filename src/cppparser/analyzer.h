@@ -17,11 +17,19 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "controller.h"
+#ifndef CPPPARSER_ANALYZER_H
+#define CPPPARSER_ANALYZER_H
+
+#include <string>
 
 namespace cppparser
 {
 
+class analyzer
+{
 
+};
 
 }
+
+#endif

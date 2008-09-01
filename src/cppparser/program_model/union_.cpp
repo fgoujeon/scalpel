@@ -17,19 +17,14 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CPPPARSER_CONTROLLER_H
-#define CPPPARSER_CONTROLLER_H
+#include "union_.h"
 
-#include <string>
-
-namespace cppparser
+namespace cppparser { namespace program_model
 {
 
-class controller
+union_::union_(const std::string& name):
+    type(name)
 {
-
-};
-
 }
 
-#endif
+}} //namespace cppparser::program_model
