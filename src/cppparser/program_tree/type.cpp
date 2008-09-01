@@ -17,9 +17,20 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace cppparser { namespace program_model
+#include "type.h"
+
+namespace cppparser { namespace program_tree
 {
 
+type::type(const std::string& name):
+    m_name(name)
+{
+}
 
+const std::string&
+type::name() const
+{
+    return m_name;
+}
 
-}} //namespace cppparser::program_model
+}} //namespace cppparser::program_tree

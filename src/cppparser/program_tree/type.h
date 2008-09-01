@@ -17,18 +17,25 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CPPPARSER_PROGRAM_MODEL_ENUM_H
-#define CPPPARSER_PROGRAM_MODEL_ENUM_H
+#ifndef CPPPARSER_PROGRAM_TREE_TYPE_H
+#define CPPPARSER_PROGRAM_TREE_TYPE_H
 
-#include "type.h"
+#include <string>
 
-namespace cppparser { namespace program_model
+namespace cppparser { namespace program_tree
 {
 
-class enum_: public type, public namespace_member
+class type
 {
+    public:
+        type(const std::string& name);
+
+        const std::string& name() const;
+
+    private:
+        std::string m_name;
 };
 
-}} //namespace cppparser::program_model
+}} //namespace cppparser::program_tree
 
 #endif

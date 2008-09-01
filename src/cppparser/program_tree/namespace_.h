@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CPPPARSER_PROGRAM_MODEL_NAMESPACE_H
-#define CPPPARSER_PROGRAM_MODEL_NAMESPACE_H
+#ifndef CPPPARSER_PROGRAM_TREE_NAMESPACE_H
+#define CPPPARSER_PROGRAM_TREE_NAMESPACE_H
 
 #include <string>
 #include <vector>
@@ -27,7 +27,7 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 #include "namespace_member.h"
 #include "class_.h"
 
-namespace cppparser { namespace program_model
+namespace cppparser { namespace program_tree
 {
 
 class class_;
@@ -173,6 +173,6 @@ namespace_::non_const_members()
     return const_cast<std::vector<std::shared_ptr<MemberT>>&>(members<MemberT>());
 }
 
-}} //namespace cppparser::program_model
+}} //namespace cppparser::program_tree
 
 #endif

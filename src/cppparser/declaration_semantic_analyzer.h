@@ -23,7 +23,7 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <boost/spirit.hpp>
 #include <boost/spirit/include/classic_ast.hpp>
-#include "program_model/program.h"
+#include "program_tree/program.h"
 
 namespace cppparser
 {
@@ -45,10 +45,10 @@ class declaration_semantic_analyzer
 
     private:
         void
-        evaluate_tree(const tree_node_t& node, std::shared_ptr<program_model::namespace_> global_namespace, unsigned int level = 0);
+        evaluate_tree(const tree_node_t& node, std::shared_ptr<program_tree::namespace_> global_namespace, unsigned int level = 0);
 
         void
-        evaluate_named_namespace_definition(const tree_node_t& node, std::shared_ptr<program_model::namespace_> parent_namespace);
+        evaluate_named_namespace_definition(const tree_node_t& node, std::shared_ptr<program_tree::namespace_> parent_namespace);
 
         void
         evaluate_class_specifier(const tree_node_t& node);

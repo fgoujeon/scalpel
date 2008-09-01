@@ -26,7 +26,7 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "namespace_.h"
 
-namespace cppparser { namespace program_model
+namespace cppparser { namespace program_tree
 {
 
 namespace_::namespace_()
@@ -89,4 +89,4 @@ namespace_::members() const
     return m_classes;
 }
 
-}} //namespace cppparser::program_model
+}} //namespace cppparser::program_tree

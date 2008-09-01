@@ -17,25 +17,25 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CPPPARSER_PROGRAM_MODEL_TYPE_H
-#define CPPPARSER_PROGRAM_MODEL_TYPE_H
+#ifndef CPPPARSER_PROGRAM_TREE_CLASS_H
+#define CPPPARSER_PROGRAM_TREE_CLASS_H
 
-#include <string>
+#include "type.h"
+#include "namespace_member.h"
 
-namespace cppparser { namespace program_model
+namespace cppparser { namespace program_tree
 {
 
-class type
+class class_: public type, public namespace_member, public std::enable_shared_from_this<class_>
 {
     public:
-        type(const std::string& name);
-
-        const std::string& name() const;
-
-    private:
-        std::string m_name;
+        /**
+        Creates a named class.
+        @param name the class' name
+        */
+        explicit class_(const std::string& name);
 };
 
-}} //namespace cppparser::program_model
+}} //namespace cppparser::program_tree
 
 #endif

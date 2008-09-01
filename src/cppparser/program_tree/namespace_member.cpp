@@ -17,25 +17,40 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CPPPARSER_PROGRAM_MODEL_UNION_H
-#define CPPPARSER_PROGRAM_MODEL_UNION_H
+#include <iostream>
+#include "program.h"
 
-#include "type.h"
 #include "namespace_member.h"
 
-namespace cppparser { namespace program_model
+namespace cppparser { namespace program_tree
 {
 
-class union_: public type, public namespace_member, public std::enable_shared_from_this<union_>
+namespace_member::~namespace_member()
 {
-    public:
-        /**
-        Creates a named union.
-        @param name the union's name
-        */
-        explicit union_(const std::string& name);
-};
+}
 
-}} //namespace cppparser::program_model
+bool
+namespace_member::has_parent() const
+{
+    return !m_parent.expired();
+}
 
-#endif
+std::shared_ptr<namespace_>
+namespace_member::parent()
+{
+    return m_parent.lock();
+}
+
+const std::shared_ptr<namespace_>
+namespace_member::parent() const
+{
+    return m_parent.lock();
+}
+
+void
+namespace_member::parent(std::shared_ptr<namespace_> parent)
+{
+    m_parent = parent;
+}
+
+}} //namespace cppparser::program_tree

@@ -17,20 +17,28 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "type.h"
+#include <iostream>
+#include "../util/null_deleter.h"
 
-namespace cppparser { namespace program_model
+#include "program.h"
+
+namespace cppparser { namespace program_tree
 {
 
-type::type(const std::string& name):
-    m_name(name)
+program::program():
+    m_global_namespace_ptr(&m_global_namespace, util::null_deleter())
 {
 }
 
-const std::string&
-type::name() const
+program::~program()
 {
-    return m_name;
+    std::cout << "destruction of program" << std::endl;
 }
 
-}} //namespace cppparser::program_model
+std::shared_ptr<namespace_>
+program::global_namespace()
+{
+    return m_global_namespace_ptr;
+}
+
+}} //namespace cppparser::program_tree

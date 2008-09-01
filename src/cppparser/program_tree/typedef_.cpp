@@ -17,14 +17,9 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "union_.h"
-
-namespace cppparser { namespace program_model
+namespace cppparser { namespace program_tree
 {
 
-union_::union_(const std::string& name):
-    type(name)
-{
-}
 
-}} //namespace cppparser::program_model
+
+}} //namespace cppparser::program_tree

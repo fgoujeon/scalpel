@@ -17,40 +17,20 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <iostream>
-#include "program.h"
+#ifndef CPPPARSER_PROGRAM_TREE_TYPEDEF_H
+#define CPPPARSER_PROGRAM_TREE_TYPEDEF_H
 
+#include "type.h"
 #include "namespace_member.h"
 
-namespace cppparser { namespace program_model
+namespace cppparser { namespace program_tree
 {
 
-namespace_member::~namespace_member()
+class typedef_: public type, public namespace_member
 {
-}
 
-bool
-namespace_member::has_parent() const
-{
-    return !m_parent.expired();
-}
+};
 
-std::shared_ptr<namespace_>
-namespace_member::parent()
-{
-    return m_parent.lock();
-}
+}} //namespace cppparser::program_tree
 
-const std::shared_ptr<namespace_>
-namespace_member::parent() const
-{
-    return m_parent.lock();
-}
-
-void
-namespace_member::parent(std::shared_ptr<namespace_> parent)
-{
-    m_parent = parent;
-}
-
-}} //namespace cppparser::program_model
+#endif

@@ -22,15 +22,15 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 #include <sstream>
 #include <stdexcept>
 #include "grammar.h"
-#include "program_model/class_.h"
-#include "program_model/union_.h"
+#include "program_tree/class_.h"
+#include "program_tree/union_.h"
 
 #include "declaration_semantic_analyzer.h"
 
 namespace cppparser
 {
 
-using namespace program_model;
+using namespace program_tree;
 
 void
 declaration_semantic_analyzer::analyze(const tree_t& abstract_syntax_tree)
