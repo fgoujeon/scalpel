@@ -57,7 +57,6 @@ class grammar: public boost::spirit::grammar<grammar>
             SOURCE_CHARACTER_SET,
             KEYWORD,
 
-            //1.2 - LEXICAL CONVENTIONS [GRAM.LEX]
             HEX_QUAD,
             UNIVERSAL_CHARACTER_NAME,
             IDENTIFIER,
@@ -91,10 +90,8 @@ class grammar: public boost::spirit::grammar<grammar>
             S_CHAR,
             BOOLEAN_LITERAL,
 
-            //1.3 - BASIC CONCEPTS [GRAM.BASIC]
             TRANSLATION_UNIT,
 
-            //1.4 - EXPRESSIONS [GRAM.EXPR]
             PRIMARY_EXPRESSION,
             ID_EXPRESSION,
             UNQUALIFIED_ID,
@@ -141,7 +138,6 @@ class grammar: public boost::spirit::grammar<grammar>
             EXPRESSION,
             CONSTANT_EXPRESSION,
 
-            //1.5 - STATEMENTS [GRAM.STMT.STMT]
             STATEMENT,
             LABELED_STATEMENT,
             EXPRESSION_STATEMENT,
@@ -155,7 +151,6 @@ class grammar: public boost::spirit::grammar<grammar>
             JUMP_STATEMENT,
             DECLARATION_STATEMENT,
 
-            //1.6 - DECLARATIONS [GRAM.DCL.DCL]
             DECLARATION_SEQ,
             DECLARATION,
             BLOCK_DECLARATION,
@@ -189,7 +184,6 @@ class grammar: public boost::spirit::grammar<grammar>
             ASM_DEFINITION,
             LINKAGE_SPECIFICATION,
 
-            //1.7 - DECLARATORS [GRAM.DCL.DECL]
             INIT_DECLARATOR_LIST,
             INIT_DECLARATOR,
             DECLARATOR,
@@ -218,7 +212,6 @@ class grammar: public boost::spirit::grammar<grammar>
             INITIALIZER_CLAUSE,
             INITIALIZER_LIST,
 
-            //1.8 - CLASSES [GRAM.CLASS]
             CLASS_NAME,
             CLASS_SPECIFIER,
             CLASS_HEAD,
@@ -231,13 +224,11 @@ class grammar: public boost::spirit::grammar<grammar>
             PURE_SPECIFIER,
             CONSTANT_INITIALIZER,
 
-            //1.9 - DERIVED CLASSES [GRAM.CLASS.DERIVED]
             BASE_CLAUSE,
             BASE_SPECIFIER_LIST,
             BASE_SPECIFIER,
             ACCESS_SPECIFIER,
 
-            //1.10 - SPECIAL MEMBER FUNCTIONS [GRAM.SPECIAL]
             CONVERSION_FUNCTION_ID,
             CONVERSION_TYPE_ID,
             CONVERSION_DECLARATOR,
@@ -246,11 +237,9 @@ class grammar: public boost::spirit::grammar<grammar>
             MEM_INITIALIZER,
             MEM_INITIALIZER_ID,
 
-            //1.11 - OVERLOADING [GRAM.OVER]
             OPERATOR_FUNCTION_ID,
             OPERATOR_,
 
-            //1.12 - TEMPLATES [GRAM.TEMP]
             TEMPLATE_DECLARATION,
             TEMPLATE_PARAMETER_LIST,
             TEMPLATE_PARAMETER,
@@ -262,7 +251,6 @@ class grammar: public boost::spirit::grammar<grammar>
             EXPLICIT_INSTANTIATION,
             EXPLICIT_SPECIALIZATION,
 
-            //1.13 - EXCEPTION HANDLING [GRAM.EXCEPT]
             TRY_BLOCK,
             FUNCTION_TRY_BLOCK,
             HANDLER_SEQ,
@@ -273,20 +261,14 @@ class grammar: public boost::spirit::grammar<grammar>
             TYPE_ID_LIST,
 
 
-            /*
-            CONVENIENCE RULES FOR 'SKIP FUNCTION BODIES' MODE
-            */
             SKIP_FUNCTION_BODIES_MODE_STATEMENT_SEQ_ITEM,
             SKIP_FUNCTION_BODIES_MODE_NON_SPECIAL_CHAR_SEQ,
             SKIP_FUNCTION_BODIES_MODE_NON_SPECIAL_CHAR,
 
 
-            /*
-            NON-STANDARD EXTENSIONS
-            */
             TYPEOF_EXPRESSION,
             TYPEOF_KEYWORD,
-            RESTRICT_KEYWORD,
+            RESTRICT_KEYWORD
         };
 
         template <typename ScannerT>
@@ -340,7 +322,7 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT> boolean_literal;
 
             //1.3 - Basic concepts [gram.basic]
-            boost::spirit::rule<ScannerT> translation_unit;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<TRANSLATION_UNIT>> translation_unit;
 
             //1.4 - Expressions [gram.expr]
             boost::spirit::rule<ScannerT> primary_expression;
@@ -404,7 +386,7 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT> declaration_statement;
 
             //1.6 - Declarations [gram.dcl.dcl]
-            boost::spirit::rule<ScannerT> declaration_seq;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<DECLARATION_SEQ>> declaration_seq;
             boost::spirit::rule<ScannerT> declaration;
             boost::spirit::rule<ScannerT> block_declaration;
             boost::spirit::rule<ScannerT> simple_declaration;
@@ -452,12 +434,12 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT> direct_abstract_declarator;
             boost::spirit::rule<ScannerT> parameter_declaration_clause;
             boost::spirit::rule<ScannerT> parameter_declaration_list;
-            boost::spirit::rule<ScannerT> parameter_declaration;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<PARAMETER_DECLARATION>> parameter_declaration;
             boost::spirit::rule<ScannerT> parameter_declaration_decl_specifier_seq1;
             boost::spirit::rule<ScannerT> parameter_declaration_decl_specifier_seq2;
             boost::spirit::rule<ScannerT> parameter_declaration_decl_specifier_seq3;
             boost::spirit::rule<ScannerT> parameter_declaration_decl_specifier_seq4;
-            boost::spirit::rule<ScannerT> function_definition;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<FUNCTION_DEFINITION>> function_definition;
             boost::spirit::rule<ScannerT> function_definition_decl_specifier_seq1;
             boost::spirit::rule<ScannerT> function_definition_decl_specifier_seq2;
             boost::spirit::rule<ScannerT> function_definition_decl_specifier_seq3;
@@ -472,7 +454,7 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<CLASS_HEAD>> class_head;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<CLASS_KEY>> class_key;
             boost::spirit::rule<ScannerT> member_specification;
-            boost::spirit::rule<ScannerT> member_declaration;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<MEMBER_DECLARATION>> member_declaration;
             boost::spirit::rule<ScannerT> member_declaration_decl_specifier_seq;
             boost::spirit::rule<ScannerT> member_declarator_list;
             boost::spirit::rule<ScannerT> member_declarator;
@@ -499,7 +481,7 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT> operator_;
 
             //1.12 - Templates [gram.temp]
-            boost::spirit::rule<ScannerT> template_declaration;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<TEMPLATE_DECLARATION>> template_declaration;
             boost::spirit::rule<ScannerT> template_parameter_list;
             boost::spirit::rule<ScannerT> template_parameter;
             boost::spirit::rule<ScannerT> type_parameter;
@@ -507,8 +489,8 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT> template_name;
             boost::spirit::rule<ScannerT> template_argument_list;
             boost::spirit::rule<ScannerT> template_argument;
-            boost::spirit::rule<ScannerT> explicit_instantiation;
-            boost::spirit::rule<ScannerT> explicit_specialization;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<EXPLICIT_INSTANTIATION>> explicit_instantiation;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<EXPLICIT_SPECIALIZATION>> explicit_specialization;
 
             //1.13 - Exception handling [gram.except]
             boost::spirit::rule<ScannerT> try_block;
@@ -547,7 +529,7 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     using namespace boost::spirit;
 
     file
-        = translation_unit >> end_p
+        = translation_unit
     ;
 
     source_character_set
@@ -844,7 +826,7 @@ grammar::definition<ScannerT>::definition(const grammar& self)
 
     //1.3 - Basic concepts [gram.basic]
     translation_unit
-        = !declaration_seq
+        = root_node_d[!declaration_seq >> end_p]
     ;
 
     //1.4 - Expressions [gram.expr]
@@ -1204,7 +1186,7 @@ grammar::definition<ScannerT>::definition(const grammar& self)
 
     //1.6 - Declarations [gram.dcl.dcl]
     declaration_seq
-        = +declaration
+        = root_node_d[+declaration]
     ;
 
     declaration
@@ -1230,7 +1212,7 @@ grammar::definition<ScannerT>::definition(const grammar& self)
         simple_declaration
             = !decl_specifier_seq >> !init_declarator_list >> ch_p(';')
         ;
-    If we wrote it in that way, with such an input:
+    If we wrote it that way, with such an input:
         int i, j;
     The scanner will parse "i" as a decl_specifier (it is indeed a correct type_name).
     Consequently, when it will try to parse the comma, it will raise an error.
@@ -1558,11 +1540,14 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     ;
 
     parameter_declaration
-        = parameter_declaration_decl_specifier_seq1 >> declarator >> '=' >> assignment_expression
-        | parameter_declaration_decl_specifier_seq2 >> declarator
-        | parameter_declaration_decl_specifier_seq3 >> abstract_declarator >> '=' >> assignment_expression
-        | parameter_declaration_decl_specifier_seq4 >> !abstract_declarator
-        | decl_specifier_seq >> '=' >> assignment_expression
+        = root_node_d
+        [
+            parameter_declaration_decl_specifier_seq1 >> declarator >> '=' >> assignment_expression
+            | parameter_declaration_decl_specifier_seq2 >> declarator
+            | parameter_declaration_decl_specifier_seq3 >> abstract_declarator >> '=' >> assignment_expression
+            | parameter_declaration_decl_specifier_seq4 >> !abstract_declarator
+            | decl_specifier_seq >> '=' >> assignment_expression
+        ]
     ;
     parameter_declaration_decl_specifier_seq1
         = +(decl_specifier - (declarator >> '=' >> assignment_expression))
@@ -1586,9 +1571,12 @@ grammar::definition<ScannerT>::definition(const grammar& self)
         ;
     */
     function_definition
-        = !function_definition_decl_specifier_seq1 >> declarator >> ctor_initializer >> function_body
-        | !function_definition_decl_specifier_seq2 >> declarator >> function_body
-        | !function_definition_decl_specifier_seq3 >> declarator >> function_try_block
+        = root_node_d
+        [
+            !function_definition_decl_specifier_seq1 >> declarator >> ctor_initializer >> function_body
+            | !function_definition_decl_specifier_seq2 >> declarator >> function_body
+            | !function_definition_decl_specifier_seq3 >> declarator >> function_try_block
+        ]
     ;
     function_definition_decl_specifier_seq1
         = +(decl_specifier - (declarator >> ctor_initializer >> function_body))
@@ -1656,11 +1644,14 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     ;
 
     member_declaration
-        = !member_declaration_decl_specifier_seq >> !member_declarator_list >> ch_p(';')
-        | !str_p("::") >> nested_name_specifier >> !str_p("template") >> unqualified_id >> ch_p(';')
-        | function_definition >> !ch_p(';')
-        | using_declaration
-        | template_declaration
+        = root_node_d
+        [
+            !member_declaration_decl_specifier_seq >> !member_declarator_list >> ch_p(';')
+            | !str_p("::") >> nested_name_specifier >> !str_p("template") >> unqualified_id >> ch_p(';')
+            | function_definition >> !ch_p(';')
+            | using_declaration
+            | template_declaration
+        ]
     ;
     member_declaration_decl_specifier_seq
         = +(decl_specifier - (member_declarator_list >> ch_p(';')))
@@ -1786,7 +1777,7 @@ grammar::definition<ScannerT>::definition(const grammar& self)
 
     //1.12 - Templates [gram.temp]
     template_declaration
-        = !str_p("export") >> str_p("template") >> '<' >> template_parameter_list >> '>' >> declaration
+        = root_node_d[!str_p("export") >> str_p("template") >> '<' >> template_parameter_list >> '>' >> declaration]
     ;
 
     template_parameter_list
@@ -1829,11 +1820,11 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     ;
 
     explicit_instantiation
-        = !str_p("extern") >> str_p("template") >> declaration
+        = root_node_d[!str_p("extern") >> str_p("template") >> declaration]
     ;
 
     explicit_specialization
-        = str_p("template") >> '<' >> '>' >> declaration
+        = root_node_d[str_p("template") >> '<' >> '>' >> declaration]
     ;
 
     //1.13 - Exception handling [gram.except]

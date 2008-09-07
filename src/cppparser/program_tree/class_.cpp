@@ -22,8 +22,9 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 namespace cppparser { namespace program_tree
 {
 
-class_::class_(const std::string& name):
-    type(name)
+class_::class_(const std::string& name, key class_key):
+    type(name),
+    m_key(class_key)
 {
 }
 

@@ -25,7 +25,7 @@ set(CMAKE_BUILD_TYPE Release)
 
 #gcc settings
 if(CMAKE_COMPILER_IS_GNUCXX)
-	add_definitions(-std=c++0x)
+	add_definitions(-std=c++0x -W -Wall)
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
 #library

@@ -30,40 +30,9 @@ namespace cppparser
 
 class declaration_semantic_analyzer
 {
-    private:
-        typedef char const* iterator_t;
-        typedef boost::spirit::tree_match<iterator_t> parse_tree_match_t;
-        typedef parse_tree_match_t::container_t tree_t;
-        typedef parse_tree_match_t::node_t tree_node_t;
-        typedef parse_tree_match_t::const_tree_iterator tree_node_iterator_t;
-        typedef tree_node_t::parse_node_t tree_node_value_t;
-        typedef tree_node_value_t::const_iterator_t tree_node_value_iterator_t;
-
     public:
-        void
-        analyze(const tree_t& abstract_syntax_tree);
-
-    private:
-        void
-        evaluate_tree(const tree_node_t& node, std::shared_ptr<program_tree::namespace_> global_namespace, unsigned int level = 0);
-
-        void
-        evaluate_named_namespace_definition(const tree_node_t& node, std::shared_ptr<program_tree::namespace_> parent_namespace);
-
-        void
-        evaluate_class_specifier(const tree_node_t& node);
-
-        const tree_node_t*
-        find_child_node(const tree_node_t& parent_node, int child_id);
-
-        std::string
-        get_value(const tree_node_t& node);
-
-        std::string
-        strip_redundant_spaces(const std::string& str);
-
-        std::string
-        indent(const std::string& str, unsigned int indentation_count);
+        std::shared_ptr<program_tree::program>
+        analyze();
 };
 
 }

@@ -30,11 +30,6 @@ program::program():
 {
 }
 
-program::~program()
-{
-    std::cout << "destruction of program" << std::endl;
-}
-
 std::shared_ptr<namespace_>
 program::global_namespace()
 {

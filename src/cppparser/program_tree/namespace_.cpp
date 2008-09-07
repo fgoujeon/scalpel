@@ -38,11 +38,6 @@ namespace_::namespace_(const std::string& name):
 {
 }
 
-namespace_::~namespace_()
-{
-    std::cout << "destruction of namespace " << full_name() << std::endl;
-}
-
 const std::string&
 namespace_::name() const
 {
@@ -87,6 +82,13 @@ const std::vector<std::shared_ptr<class_>>&
 namespace_::members() const
 {
     return m_classes;
+}
+
+template <>
+const std::vector<std::shared_ptr<union_>>&
+namespace_::members() const
+{
+    return m_unions;
 }
 
 }} //namespace cppparser::program_tree

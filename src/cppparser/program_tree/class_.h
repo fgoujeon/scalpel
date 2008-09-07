@@ -29,11 +29,20 @@ namespace cppparser { namespace program_tree
 class class_: public type, public namespace_member, public std::enable_shared_from_this<class_>
 {
     public:
+        enum key
+        {
+            CLASS,
+            STRUCT
+        };
+
         /**
         Creates a named class.
         @param name the class' name
         */
-        explicit class_(const std::string& name);
+        explicit class_(const std::string& name, key class_key);
+
+    private:
+        key m_key;
 };
 
 }} //namespace cppparser::program_tree

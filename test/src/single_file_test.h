@@ -24,6 +24,7 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppparser/declaration_syntax_analyzer.h>
 #include <cppparser/declaration_semantic_analyzer.h>
+#include <cppparser/program_syntax_tree_to_string_converter.h>
 
 class single_file_test: public CppUnit::TestFixture
 {
@@ -38,6 +39,7 @@ class single_file_test: public CppUnit::TestFixture
     private:
         cppparser::declaration_syntax_analyzer m_declaration_syntax_analyzer;
         cppparser::declaration_semantic_analyzer m_declaration_semantic_analyzer;
+        cppparser::program_syntax_tree_to_string_converter m_program_syntax_tree_to_string_converter;
 };
 
 #endif

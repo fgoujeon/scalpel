@@ -22,6 +22,7 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdexcept>
 #include <boost/spirit.hpp>
 #include <cppunit/TestSuite.h>
+#include <cppparser/program_syntax_tree/declaration_seq.h>
 
 #include "single_file_test.h"
 
@@ -53,10 +54,9 @@ void single_file_test::parse_files()
 		//close file
         file.close();
 
-		//parse file
-        boost::spirit::tree_match<const char*>::container_t tree = m_declaration_syntax_analyzer.analyze(buffer.str()); //throws an exception if parsing fails
-
-        m_declaration_semantic_analyzer.analyze(tree);
+		//analyze file
+        std::shared_ptr<cppparser::program_syntax_tree::declaration_seq> program_tree = m_declaration_syntax_analyzer.analyze(buffer.str()); //throws an exception if parsing fails
+        std::cout << m_program_syntax_tree_to_string_converter(program_tree);
     }
 }
 

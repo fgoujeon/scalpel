@@ -17,35 +17,33 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CPPPARSER_PROGRAM_TREE_PROGRAM_H
-#define CPPPARSER_PROGRAM_TREE_PROGRAM_H
+#ifndef CPPPARSER_PROGRAM_SYNTAX_TREE_DECLARATION_SEQ_H
+#define CPPPARSER_PROGRAM_SYNTAX_TREE_DECLARATION_SEQ_H
 
+#include <vector>
 #include <memory>
-#include "namespace_.h"
+#include "item.h"
+#include "declaration.h"
 
-namespace cppparser { namespace program_tree
+namespace cppparser { namespace program_syntax_tree
 {
 
-/**
-Represents a C++ program.
-A program can be either an executable or a library.
-*/
-class program
+class declaration_seq: public item, public std::enable_shared_from_this<declaration_seq>
 {
     public:
-        program();
+        const std::vector<std::shared_ptr<declaration>>&
+        declarations() const;
 
-        /**
-        @return the global namespace of the program.
-        */
-        std::shared_ptr<namespace_>
-        global_namespace();
+        void
+        add(std::shared_ptr<declaration> a_declaration);
+
+        void
+        accept(visitor& a_visitor) const;
 
     private:
-        namespace_ m_global_namespace;
-        std::shared_ptr<namespace_> m_global_namespace_ptr;
+        std::vector<std::shared_ptr<declaration>> m_declarations;
 };
 
-}} //namespace cppparser::program_tree
+}} //namespace cppparser::program_syntax_tree
 
 #endif

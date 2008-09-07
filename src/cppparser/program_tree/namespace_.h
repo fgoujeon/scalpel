@@ -26,6 +26,7 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdexcept>
 #include "namespace_member.h"
 #include "class_.h"
+#include "union_.h"
 
 namespace cppparser { namespace program_tree
 {
@@ -52,11 +53,6 @@ class namespace_: public namespace_member, public std::enable_shared_from_this<n
         explicit namespace_(const std::string& name);
 
         namespace_(const namespace_& source);
-
-        /**
-        Destructor.
-        */
-        ~namespace_();
 
         /**
         @return the name of the namespace
@@ -123,6 +119,7 @@ class namespace_: public namespace_member, public std::enable_shared_from_this<n
         std::vector<std::shared_ptr<namespace_member>> m_members;
         std::vector<std::shared_ptr<namespace_>> m_namespaces;
         std::vector<std::shared_ptr<class_>> m_classes;
+        std::vector<std::shared_ptr<union_>> m_unions;
 };
 
 template <class MemberT>
