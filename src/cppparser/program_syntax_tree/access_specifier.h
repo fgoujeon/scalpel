@@ -17,28 +17,35 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CPPPARSER_PROGRAM_SYNTAX_TREE_CLASS_SPECIFIER_H
-#define CPPPARSER_PROGRAM_SYNTAX_TREE_CLASS_SPECIFIER_H
+#ifndef CPPPARSER_PROGRAM_SYNTAX_TREE_ACCESS_SPECIFIER_H
+#define CPPPARSER_PROGRAM_SYNTAX_TREE_ACCESS_SPECIFIER_H
 
-#include <string>
-#include "decl_specifier.h"
+#include "member_specification_item.h"
+#include "item.h"
 
 namespace cppparser { namespace program_syntax_tree
 {
 
-class class_specifier: public decl_specifier
+class access_specifier: public member_specification_item, public item
 {
     public:
-        explicit class_specifier(const std::string& name);
+        enum possible_value
+        {
+            PUBLIC,
+            PROTECTED,
+            PRIVATE
+        };
 
-        const std::string&
-        name() const;
+        access_specifier(possible_value value);
+
+        possible_value
+        value() const;
 
         void
         accept(visitor& a_visitor) const;
 
     private:
-        std::string m_name;
+        possible_value m_value;
 };
 
 }} //namespace cppparser::program_syntax_tree

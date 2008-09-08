@@ -21,8 +21,8 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 #define CPPPARSER_PROGRAM_SYNTAX_TREE_NAMESPACE_DEFINITION_H
 
 #include <string>
-#include "declaration_seq.h"
 #include "declaration.h"
+#include "declaration_seq.h"
 
 namespace cppparser { namespace program_syntax_tree
 {

@@ -84,6 +84,26 @@ program_syntax_tree_to_string_converter::visit(const class_specifier& item)
 }
 
 void
+program_syntax_tree_to_string_converter::visit(const member_specification& item)
+{
+}
+
+void
+program_syntax_tree_to_string_converter::visit(const access_specifier& item)
+{
+}
+
+void
+program_syntax_tree_to_string_converter::visit(const template_declaration& item)
+{
+}
+
+void
+program_syntax_tree_to_string_converter::visit(const simple_declaration& item)
+{
+}
+
+void
 program_syntax_tree_to_string_converter::indent()
 {
     for(unsigned int i = 0; i < m_indentation_level; ++i)

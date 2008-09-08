@@ -26,6 +26,10 @@ namespace cppparser { namespace program_syntax_tree
 class declaration_seq;
 class namespace_definition;
 class class_specifier;
+class member_specification;
+class access_specifier;
+class template_declaration;
+class simple_declaration;
 
 class visitor
 {
@@ -40,6 +44,18 @@ class visitor
 
         virtual void
         visit(const class_specifier& item) = 0;
+
+        virtual void
+        visit(const member_specification& item) = 0;
+
+        virtual void
+        visit(const access_specifier& item) = 0;
+
+        virtual void
+        visit(const template_declaration& item) = 0;
+
+        virtual void
+        visit(const simple_declaration& item) = 0;
 };
 
 }} //namespace cppparser::program_syntax_tree

@@ -28,13 +28,6 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 namespace cppparser
 {
 
-namespace program_syntax_tree
-{
-class declaration_seq;
-class namespace_definition;
-class class_specifier;
-}
-
 class program_syntax_tree_to_string_converter: public program_syntax_tree::visitor
 {
     public:
@@ -52,6 +45,18 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
 
         void
         visit(const program_syntax_tree::class_specifier& item);
+
+        void
+        visit(const program_syntax_tree::member_specification& item);
+
+        void
+        visit(const program_syntax_tree::access_specifier& item);
+
+        void
+        visit(const program_syntax_tree::template_declaration& item);
+
+        void
+        visit(const program_syntax_tree::simple_declaration& item);
 
         void
         indent();

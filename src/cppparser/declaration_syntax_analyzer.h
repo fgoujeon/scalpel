@@ -26,6 +26,7 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/spirit/include/classic_ast.hpp>
 #include "grammar.h"
 #include "program_syntax_tree/declaration_seq.h"
+#include "program_syntax_tree/simple_declaration.h"
 
 namespace cppparser
 {
@@ -48,20 +49,32 @@ class declaration_syntax_analyzer
         analyze(const std::string& input);
 
     private:
-        void
-        evaluate_tree(const tree_node_t& node, program_syntax_tree::declaration_seq& translation_unit);
+        std::shared_ptr<program_syntax_tree::declaration_seq>
+        evaluate_tree(const tree_node_t& node);
 
         void
-        evaluate_declaration_seq(const tree_node_t& node, program_syntax_tree::declaration_seq& translation_unit);
+        evaluate_declaration_seq(const tree_node_t& node, program_syntax_tree::declaration_seq& ds);
+
+        std::shared_ptr<program_syntax_tree::declaration>
+        evaluate_declaration(const tree_node_t& node);
+
+        std::shared_ptr<program_syntax_tree::simple_declaration>
+        evaluate_simple_declaration(const tree_node_t& node);
+
+        std::shared_ptr<program_syntax_tree::decl_specifier>
+        evaluate_decl_specifier(const tree_node_t& node);
 
         void
-        evaluate_declaration(const tree_node_t& node, program_syntax_tree::declaration_seq& parent);
+        evaluate_decl_specifier_seq(const tree_node_t& node, program_syntax_tree::decl_specifier_seq& dss);
 
-        void
-        evaluate_named_namespace_definition(const tree_node_t& node, program_syntax_tree::declaration_seq& parent);
+        std::shared_ptr<program_syntax_tree::namespace_definition>
+        evaluate_named_namespace_definition(const tree_node_t& node);
 
-        void
-        evaluate_class_specifier(const tree_node_t& node, program_syntax_tree::declaration_seq& parent);
+        std::shared_ptr<program_syntax_tree::class_specifier>
+        evaluate_class_specifier(const tree_node_t& node);
+
+        std::shared_ptr<program_syntax_tree::template_declaration>
+        evaluate_template_declaration(const tree_node_t& node);
 
         const tree_node_t*
         find_child_node(const tree_node_t& parent_node, int child_id);
@@ -72,8 +85,8 @@ class declaration_syntax_analyzer
         std::string
         strip_redundant_spaces(const std::string& str);
 
-        std::string
-        indent(const std::string& str, unsigned int indentation_count);
+        const std::string
+        get_id(const tree_node_t& node);
 
 
         grammar::configuration m_grammar_configuration;
