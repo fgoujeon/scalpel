@@ -32,6 +32,9 @@ class simple_declaration: public declaration
         decl_specifier_seq&
         decl_specifiers();
 
+        const decl_specifier_seq&
+        decl_specifiers() const;
+
         void
         accept(visitor& a_visitor) const;
 

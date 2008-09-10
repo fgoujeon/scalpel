@@ -59,6 +59,9 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         visit(const program_syntax_tree::simple_declaration& item);
 
         void
+        visit(const program_syntax_tree::decl_specifier_seq& item);
+
+        void
         indent();
 
         std::ostringstream m_result_oss;

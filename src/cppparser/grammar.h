@@ -395,32 +395,32 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<SIMPLE_DECLARATION>> simple_declaration;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<SIMPLE_DECLARATION_DECL_SPECIFIER_SEQ>> simple_declaration_decl_specifier_seq;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<DECL_SPECIFIER>> decl_specifier;
-            boost::spirit::rule<ScannerT> decl_specifier_seq;
-            boost::spirit::rule<ScannerT> storage_class_specifier;
-            boost::spirit::rule<ScannerT> function_specifier;
-            boost::spirit::rule<ScannerT> typedef_name;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<DECL_SPECIFIER_SEQ>> decl_specifier_seq;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<STORAGE_CLASS_SPECIFIER>> storage_class_specifier;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<FUNCTION_SPECIFIER>> function_specifier;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<TYPEDEF_NAME>> typedef_name;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<TYPE_SPECIFIER>> type_specifier;
-            boost::spirit::rule<ScannerT> simple_type_specifier;
-            boost::spirit::rule<ScannerT> type_name;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<SIMPLE_TYPE_SPECIFIER>> simple_type_specifier;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<TYPE_NAME>> type_name;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<ELABORATED_TYPE_SPECIFIER>> elaborated_type_specifier;
-            boost::spirit::rule<ScannerT> enum_name;
-            boost::spirit::rule<ScannerT> enum_specifier;
-            boost::spirit::rule<ScannerT> enumerator_list;
-            boost::spirit::rule<ScannerT> enumerator_definition;
-            boost::spirit::rule<ScannerT> enumerator;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<ENUM_NAME>> enum_name;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<ENUM_SPECIFIER>> enum_specifier;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<ENUMERATOR_LIST>> enumerator_list;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<ENUMERATOR_DEFINITION>> enumerator_definition;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<ENUMERATOR>> enumerator;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<NAMESPACE_NAME>> namespace_name;
-            boost::spirit::rule<ScannerT> original_namespace_name;
-            boost::spirit::rule<ScannerT> namespace_definition;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<ORIGINAL_NAMESPACE_NAME>> original_namespace_name;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<NAMESPACE_DEFINITION>> namespace_definition;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<NAMED_NAMESPACE_DEFINITION>> named_namespace_definition;
-            boost::spirit::rule<ScannerT> unnamed_namespace_definition;
-            boost::spirit::rule<ScannerT> namespace_body;
-            boost::spirit::rule<ScannerT> namespace_alias;
-            boost::spirit::rule<ScannerT> namespace_alias_definition;
-            boost::spirit::rule<ScannerT> qualified_namespace_specifier;
-            boost::spirit::rule<ScannerT> using_declaration;
-            boost::spirit::rule<ScannerT> using_directive;
-            boost::spirit::rule<ScannerT> asm_definition;
-            boost::spirit::rule<ScannerT> linkage_specification;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<UNNAMED_NAMESPACE_DEFINITION>> unnamed_namespace_definition;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<NAMESPACE_BODY>> namespace_body;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<NAMESPACE_ALIAS>> namespace_alias;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<NAMESPACE_ALIAS_DEFINITION>> namespace_alias_definition;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<QUALIFIED_NAMESPACE_SPECIFIER>> qualified_namespace_specifier;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<USING_DECLARATION>> using_declaration;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<USING_DIRECTIVE>> using_directive;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<ASM_DEFINITION>> asm_definition;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<LINKAGE_SPECIFICATION>> linkage_specification;
 
             //1.7 - Declarators [gram.dcl.decl]
             boost::spirit::rule<ScannerT> init_declarator_list;
@@ -429,7 +429,7 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT> direct_declarator;
             boost::spirit::rule<ScannerT> ptr_operator;
             boost::spirit::rule<ScannerT> cv_qualifier_seq;
-            boost::spirit::rule<ScannerT> cv_qualifier;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<CV_QUALIFIER>> cv_qualifier;
             boost::spirit::rule<ScannerT> declarator_id;
             boost::spirit::rule<ScannerT> type_id;
             boost::spirit::rule<ScannerT> type_specifier_seq;
@@ -517,7 +517,7 @@ class grammar: public boost::spirit::grammar<grammar>
             /*
             Non-standard extensions
             */
-            boost::spirit::rule<ScannerT> typeof_expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<TYPEOF_EXPRESSION>> typeof_expression;
             boost::spirit::rule<ScannerT> typeof_keyword;
             boost::spirit::rule<ScannerT> restrict_keyword;
         };
@@ -536,41 +536,44 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     ;
 
     source_character_set
-        = chset_p("a-zA-Z0-9")
-        | '_'
-        | '{'
-        | '}'
-        | '['
-        | ']'
-        | '#'
-        | '('
-        | ')'
-        | '<'
-        | '>'
-        | '%'
-        | ':'
-        | ';'
-        | '.'
-        | '?'
-        | '*'
-        | '+'
-        | '-'
-        | '/'
-        | '^'
-        | '&'
-        | '|'
-        | '~'
-        | '!'
-        | '='
-        | ','
-        | '\\'
-        | '"'
-        | '\''
-        | ' '  //space
-        | '\t' //horizontal tab
-        | '\v' //vertical tab
-        | '\f' //form feed
-        | '\n' //new line
+        = no_node_d
+        [
+            chset_p("a-zA-Z0-9")
+            | '_'
+            | '{'
+            | '}'
+            | '['
+            | ']'
+            | '#'
+            | '('
+            | ')'
+            | '<'
+            | '>'
+            | '%'
+            | ':'
+            | ';'
+            | '.'
+            | '?'
+            | '*'
+            | '+'
+            | '-'
+            | '/'
+            | '^'
+            | '&'
+            | '|'
+            | '~'
+            | '!'
+            | '='
+            | ','
+            | '\\'
+            | '"'
+            | '\''
+            | ' '  //space
+            | '\t' //horizontal tab
+            | '\v' //vertical tab
+            | '\f' //form feed
+            | '\n' //new line
+        ]
     ;
 
     /*
@@ -578,86 +581,89 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     Longest to shortest order would have been right too.
     */
     keyword
-        = str_p("xor_eq")
-        | "xor"
-        | "while"
-        | "wchar_t"
-        | "volatile"
-        | "void"
-        | "virtual"
-        | "using"
-        | "unsigned"
-        | "union"
-        | typeof_keyword
-        | "typename"
-        | "typeid"
-        | "typedef"
-        | "try"
-        | "true"
-        | "throw"
-        | "this"
-        | "template"
-        | "switch"
-        | "struct"
-        | "static_cast"
-        | "static"
-        | "sizeof"
-        | "signed"
-        | "short"
-        | "return"
-        | restrict_keyword
-        | "reinterpret_cast"
-        | "register"
-        | "public"
-        | "protected"
-        | "private"
-        | "or_eq"
-        | "or"
-        | "operator"
-        | "not_eq"
-        | "not"
-        | "new"
-        | "namespace"
-        | "mutable"
-        | "long"
-        | "int"
-        | "inline"
-        | "if"
-        | "goto"
-        | "friend"
-        | "for"
-        | "float"
-        | "false"
-        | "extern"
-        | "export"
-        | "explicit"
-        | "enum"
-        | "else"
-        | "dynamic_cast"
-        | "double"
-        | "do"
-        | "delete"
-        | "default"
-        | "continue"
-        | "const_cast"
-        | "const"
-        | "compl"
-        | "class"
-        | "char"
-        | "catch"
-        | "case"
-        | "break"
-        | "bool"
-        | "bitor"
-        | "bitand"
-        | "auto"
-        | "asm"
-        | "and_eq"
-        | "and"
+        = no_node_d
+        [
+            str_p("xor_eq")
+            | "xor"
+            | "while"
+            | "wchar_t"
+            | "volatile"
+            | "void"
+            | "virtual"
+            | "using"
+            | "unsigned"
+            | "union"
+            | typeof_keyword
+            | "typename"
+            | "typeid"
+            | "typedef"
+            | "try"
+            | "true"
+            | "throw"
+            | "this"
+            | "template"
+            | "switch"
+            | "struct"
+            | "static_cast"
+            | "static"
+            | "sizeof"
+            | "signed"
+            | "short"
+            | "return"
+            | restrict_keyword
+            | "reinterpret_cast"
+            | "register"
+            | "public"
+            | "protected"
+            | "private"
+            | "or_eq"
+            | "or"
+            | "operator"
+            | "not_eq"
+            | "not"
+            | "new"
+            | "namespace"
+            | "mutable"
+            | "long"
+            | "int"
+            | "inline"
+            | "if"
+            | "goto"
+            | "friend"
+            | "for"
+            | "float"
+            | "false"
+            | "extern"
+            | "export"
+            | "explicit"
+            | "enum"
+            | "else"
+            | "dynamic_cast"
+            | "double"
+            | "do"
+            | "delete"
+            | "default"
+            | "continue"
+            | "const_cast"
+            | "const"
+            | "compl"
+            | "class"
+            | "char"
+            | "catch"
+            | "case"
+            | "break"
+            | "bool"
+            | "bitor"
+            | "bitand"
+            | "auto"
+            | "asm"
+            | "and_eq"
+            | "and"
+        ]
     ;
 
     export_keyword
-        = leaf_node_d[str_p("export")]
+        = no_node_d[str_p("export")]
     ;
 
 
@@ -672,14 +678,14 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     ;
 
     identifier
-        = leaf_node_d
+        = token_node_d
         [
             (nondigit >> *(nondigit | digit_p)) - keyword
         ]
     ;
 
     nondigit
-        = leaf_node_d
+        = no_node_d
         [
             universal_character_name
             | chset_p("a-zA-Z")
@@ -833,7 +839,7 @@ grammar::definition<ScannerT>::definition(const grammar& self)
 
     //1.3 - Basic concepts [gram.basic]
     translation_unit
-        = root_node_d[!declaration_seq >> end_p]
+        = !declaration_seq >> end_p
     ;
 
     //1.4 - Expressions [gram.expr]
@@ -1136,10 +1142,13 @@ grammar::definition<ScannerT>::definition(const grammar& self)
             = +skip_function_bodies_mode_statement_seq_item
         ;
         skip_function_bodies_mode_statement_seq_item
-            = leaf_node_d[character_literal
-            | string_literal
-            | compound_statement
-            | skip_function_bodies_mode_non_special_char_seq]
+            = token_node_d
+            [
+                character_literal
+                | string_literal
+                | compound_statement
+                | skip_function_bodies_mode_non_special_char_seq
+            ]
         ;
     }
     else
@@ -1193,7 +1202,7 @@ grammar::definition<ScannerT>::definition(const grammar& self)
 
     //1.6 - Declarations [gram.dcl.dcl]
     declaration_seq
-        = root_node_d[+declaration]
+        = +declaration
     ;
 
     declaration
@@ -1228,16 +1237,10 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     */
     ///@todo semantic disambiguation between decl_specifier and init_declarator_list
     simple_declaration
-        = root_node_d
-        [
-            !simple_declaration_decl_specifier_seq >> !init_declarator_list >> ch_p(';')
-        ]
+        = !simple_declaration_decl_specifier_seq >> !init_declarator_list >> ch_p(';')
     ;
     simple_declaration_decl_specifier_seq
-        = root_node_d
-        [
-            +(decl_specifier - (init_declarator_list >> ch_p(';')))
-        ]
+        = +(decl_specifier - (init_declarator_list >> ch_p(';')))
     ;
 
     decl_specifier
@@ -1302,14 +1305,11 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     ;
 
     elaborated_type_specifier
-        = root_node_d
-        [
-            class_key >> !str_p("::") >> !nested_name_specifier >> template_id //not in the standard, but seems to be required for parsing standard library
-            | class_key >> !str_p("::") >> !nested_name_specifier >> identifier
-            | str_p("enum") >> !str_p("::") >> !nested_name_specifier >> identifier
-            | str_p("typename") >> !str_p("::") >> nested_name_specifier >> !str_p("template") >> template_id
-            | str_p("typename") >> !str_p("::") >> nested_name_specifier >> identifier
-        ]
+        = class_key >> !str_p("::") >> !nested_name_specifier >> template_id //not in the standard, but seems to be required for parsing standard library
+        | class_key >> !str_p("::") >> !nested_name_specifier >> identifier
+        | str_p("enum") >> !str_p("::") >> !nested_name_specifier >> identifier
+        | str_p("typename") >> !str_p("::") >> nested_name_specifier >> !str_p("template") >> template_id
+        | str_p("typename") >> !str_p("::") >> nested_name_specifier >> identifier
     ;
 
     enum_name
@@ -1333,8 +1333,8 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     ;
 
     namespace_name
-        = root_node_d[original_namespace_name]
-        | root_node_d[namespace_alias]
+        = original_namespace_name
+        | namespace_alias
     ;
 
     original_namespace_name
@@ -1347,7 +1347,7 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     ;
 
     named_namespace_definition
-        = root_node_d[str_p("namespace") >> identifier >> '{' >> namespace_body >> '}']
+        = str_p("namespace") >> identifier >> '{' >> namespace_body >> '}'
     ;
 
     unnamed_namespace_definition
@@ -1556,14 +1556,11 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     ;
 
     parameter_declaration
-        = root_node_d
-        [
-            parameter_declaration_decl_specifier_seq1 >> declarator >> '=' >> assignment_expression
-            | parameter_declaration_decl_specifier_seq2 >> declarator
-            | parameter_declaration_decl_specifier_seq3 >> abstract_declarator >> '=' >> assignment_expression
-            | parameter_declaration_decl_specifier_seq4 >> !abstract_declarator
-            | decl_specifier_seq >> '=' >> assignment_expression
-        ]
+        = parameter_declaration_decl_specifier_seq1 >> declarator >> '=' >> assignment_expression
+        | parameter_declaration_decl_specifier_seq2 >> declarator
+        | parameter_declaration_decl_specifier_seq3 >> abstract_declarator >> '=' >> assignment_expression
+        | parameter_declaration_decl_specifier_seq4 >> !abstract_declarator
+        | decl_specifier_seq >> '=' >> assignment_expression
     ;
     parameter_declaration_decl_specifier_seq1
         = +(decl_specifier - (declarator >> '=' >> assignment_expression))
@@ -1587,12 +1584,9 @@ grammar::definition<ScannerT>::definition(const grammar& self)
         ;
     */
     function_definition
-        = root_node_d
-        [
-            !function_definition_decl_specifier_seq1 >> declarator >> ctor_initializer >> function_body
-            | !function_definition_decl_specifier_seq2 >> declarator >> function_body
-            | !function_definition_decl_specifier_seq3 >> declarator >> function_try_block
-        ]
+        = !function_definition_decl_specifier_seq1 >> declarator >> ctor_initializer >> function_body
+        | !function_definition_decl_specifier_seq2 >> declarator >> function_body
+        | !function_definition_decl_specifier_seq3 >> declarator >> function_try_block
     ;
     function_definition_decl_specifier_seq1
         = +(decl_specifier - (declarator >> ctor_initializer >> function_body))
@@ -1625,7 +1619,7 @@ grammar::definition<ScannerT>::definition(const grammar& self)
 
     //1.8 - Classes [gram.class]
     class_name
-        = leaf_node_d
+        = token_node_d
         [
             template_id
             | identifier
@@ -1633,20 +1627,17 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     ;
 
     class_specifier
-        = root_node_d
-        [
-            class_head >> ch_p('{') >> !member_specification >> ch_p('}')
-        ]
+        = class_head >> ch_p('{') >> !member_specification >> ch_p('}')
     ;
 
     class_head
         = class_key >> !nested_name_specifier >> template_id >> !base_clause //in that case, a forward declaration has already been done
-        | class_key >> nested_name_specifier >> identifier >> !base_clause //ibidem
+        | class_key >> nested_name_specifier >> identifier >> !base_clause //ditto
         | class_key >> !identifier >> !base_clause
     ;
 
     class_key
-        = leaf_node_d
+        = token_node_d
         [
             str_p("class")
             | "struct"
@@ -1655,22 +1646,16 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     ;
 
     member_specification
-        = root_node_d
-        [
-            member_declaration >> !member_specification
-            | access_specifier >> ':' >> !member_specification
-        ]
+        = member_declaration >> !member_specification
+        | access_specifier >> ':' >> !member_specification
     ;
 
     member_declaration
-        = root_node_d
-        [
-              !member_declaration_decl_specifier_seq >> !member_declarator_list >> ch_p(';')
-            | !str_p("::") >> nested_name_specifier >> !str_p("template") >> unqualified_id >> ch_p(';')
-            | function_definition >> !ch_p(';')
-            | using_declaration
-            | template_declaration
-        ]
+        = !member_declaration_decl_specifier_seq >> !member_declarator_list >> ch_p(';')
+        | !str_p("::") >> nested_name_specifier >> !str_p("template") >> unqualified_id >> ch_p(';')
+        | function_definition >> !ch_p(';')
+        | using_declaration
+        | template_declaration
     ;
     member_declaration_decl_specifier_seq
         = +(decl_specifier - (member_declarator_list >> ch_p(';')))
@@ -1695,7 +1680,7 @@ grammar::definition<ScannerT>::definition(const grammar& self)
 
     //1.9 - Derived classes [gram.class.derived]
     base_clause
-        = ':' >> root_node_d[base_specifier_list]
+        = ':' >> base_specifier_list
     ;
 
     base_specifier_list
@@ -1709,7 +1694,7 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     ;
 
     access_specifier
-        = leaf_node_d
+        = token_node_d
         [
             str_p("private")
             | "protected"
@@ -1799,7 +1784,7 @@ grammar::definition<ScannerT>::definition(const grammar& self)
 
     //1.12 - Templates [gram.temp]
     template_declaration
-        = root_node_d[!export_keyword >> str_p("template") >> '<' >> template_parameter_list >> '>' >> declaration]
+        = !export_keyword >> str_p("template") >> '<' >> template_parameter_list >> '>' >> declaration
     ;
 
     template_parameter_list
@@ -1842,11 +1827,11 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     ;
 
     explicit_instantiation
-        = root_node_d[!str_p("extern") >> str_p("template") >> declaration]
+        = !str_p("extern") >> str_p("template") >> declaration
     ;
 
     explicit_specialization
-        = root_node_d[str_p("template") >> '<' >> '>' >> declaration]
+        = str_p("template") >> '<' >> '>' >> declaration
     ;
 
     //1.13 - Exception handling [gram.except]

@@ -28,6 +28,12 @@ simple_declaration::decl_specifiers()
     return m_decl_specifiers;
 }
 
+const decl_specifier_seq&
+simple_declaration::decl_specifiers() const
+{
+    return m_decl_specifiers;
+}
+
 void
 simple_declaration::accept(visitor& a_visitor) const
 {

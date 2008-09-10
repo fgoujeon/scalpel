@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <iostream>
 #include "class_specifier.h"
 
 namespace cppparser { namespace program_syntax_tree

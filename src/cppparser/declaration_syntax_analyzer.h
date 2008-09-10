@@ -23,10 +23,11 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <memory>
 #include <boost/spirit.hpp>
-#include <boost/spirit/include/classic_ast.hpp>
+#include <boost/spirit/include/classic_parse_tree.hpp>
 #include "grammar.h"
 #include "program_syntax_tree/declaration_seq.h"
 #include "program_syntax_tree/simple_declaration.h"
+#include "program_syntax_tree/type_specifier.h"
 
 namespace cppparser
 {
@@ -50,13 +51,16 @@ class declaration_syntax_analyzer
 
     private:
         std::shared_ptr<program_syntax_tree::declaration_seq>
-        evaluate_tree(const tree_node_t& node);
+        evaluate_translation_unit(const tree_node_t& node);
 
         void
         evaluate_declaration_seq(const tree_node_t& node, program_syntax_tree::declaration_seq& ds);
 
         std::shared_ptr<program_syntax_tree::declaration>
         evaluate_declaration(const tree_node_t& node);
+
+        std::shared_ptr<program_syntax_tree::declaration>
+        evaluate_block_declaration(const tree_node_t& node);
 
         std::shared_ptr<program_syntax_tree::simple_declaration>
         evaluate_simple_declaration(const tree_node_t& node);
@@ -66,6 +70,12 @@ class declaration_syntax_analyzer
 
         void
         evaluate_decl_specifier_seq(const tree_node_t& node, program_syntax_tree::decl_specifier_seq& dss);
+
+        std::shared_ptr<program_syntax_tree::type_specifier>
+        evaluate_type_specifier(const tree_node_t& node);
+
+        std::shared_ptr<program_syntax_tree::namespace_definition>
+        evaluate_namespace_definition(const tree_node_t& node);
 
         std::shared_ptr<program_syntax_tree::namespace_definition>
         evaluate_named_namespace_definition(const tree_node_t& node);
