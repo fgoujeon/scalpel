@@ -1,20 +1,20 @@
 /*
-CppParser - Standard C++ programming language parsing library
+Socoa - Source Code Analysis Library
 Copyright © 2008  Florian Goujeon
 
-This file is part of CppParser.
+This file is part of Socoa.
 
-CppParser is free software: you can redistribute it and/or modify
+Socoa is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, version 3 of the License.
 
-CppParser is distributed in the hope that it will be useful,
+Socoa is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
+along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <sstream>
@@ -22,7 +22,7 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdexcept>
 #include <boost/spirit.hpp>
 #include <cppunit/TestSuite.h>
-#include <cppparser/program_syntax_tree/declaration_seq.h>
+#include <socoa/cpp/program_syntax_tree/declaration_seq.h>
 
 #include "single_file_test.h"
 
@@ -55,7 +55,7 @@ void single_file_test::parse_files()
         file.close();
 
 		//analyze file
-        std::shared_ptr<cppparser::program_syntax_tree::declaration_seq> program_tree = m_declaration_syntax_analyzer.analyze(buffer.str()); //throws an exception if parsing fails
+        std::shared_ptr<socoa::cpp::program_syntax_tree::declaration_seq> program_tree = m_declaration_syntax_analyzer.analyze(buffer.str()); //throws an exception if parsing fails
         std::cout << m_program_syntax_tree_to_string_converter(program_tree);
     }
 }

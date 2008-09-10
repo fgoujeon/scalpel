@@ -17,29 +17,34 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SINGLE_PREPROCESSING_FILE_TEST_H
-#define SINGLE_PREPROCESSING_FILE_TEST_H
+#ifndef SOCOA_CPP_PROGRAM_TREE_CLASS_H
+#define SOCOA_CPP_PROGRAM_TREE_CLASS_H
 
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <socoa/cpp/preprocessor.h>
-#include <socoa/cpp/declaration_syntax_analyzer.h>
+#include "type.h"
+#include "namespace_member.h"
 
-class standard_library_test: public CppUnit::TestFixture
+namespace socoa { namespace cpp { namespace program_tree
 {
-    CPPUNIT_TEST_SUITE(standard_library_test);
-    CPPUNIT_TEST(parse_files);
-    CPPUNIT_TEST_SUITE_END();
 
+class class_: public type, public namespace_member, public std::enable_shared_from_this<class_>
+{
     public:
-        standard_library_test();
+        enum key
+        {
+            CLASS,
+            STRUCT
+        };
 
-        void
-        parse_files();
+        /**
+        Creates a named class.
+        @param name the class' name
+        */
+        explicit class_(const std::string& name, key class_key);
 
     private:
-        socoa::cpp::preprocessor m_preprocessor;
-        socoa::cpp::declaration_syntax_analyzer m_declaration_syntax_analyzer;
+        key m_key;
 };
+
+}}} //namespace socoa::cpp::program_tree
 
 #endif

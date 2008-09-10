@@ -1,20 +1,20 @@
 /*
-CppParser - Standard C++ programming language parsing library
+Socoa - Source Code Analysis Library
 Copyright © 2008  Florian Goujeon
 
-This file is part of CppParser.
+This file is part of Socoa.
 
-CppParser is free software: you can redistribute it and/or modify
+Socoa is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, version 3 of the License.
 
-CppParser is distributed in the hope that it will be useful,
+Socoa is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
+along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #ifndef SINGLE_FILE_TEST_H
@@ -22,9 +22,9 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <cppparser/declaration_syntax_analyzer.h>
-#include <cppparser/declaration_semantic_analyzer.h>
-#include <cppparser/program_syntax_tree_to_string_converter.h>
+#include <socoa/cpp/declaration_syntax_analyzer.h>
+#include <socoa/cpp/declaration_semantic_analyzer.h>
+#include <socoa/cpp/program_syntax_tree_to_string_converter.h>
 
 class single_file_test: public CppUnit::TestFixture
 {
@@ -37,9 +37,9 @@ class single_file_test: public CppUnit::TestFixture
         parse_files();
 
     private:
-        cppparser::declaration_syntax_analyzer m_declaration_syntax_analyzer;
-        cppparser::declaration_semantic_analyzer m_declaration_semantic_analyzer;
-        cppparser::program_syntax_tree_to_string_converter m_program_syntax_tree_to_string_converter;
+        socoa::cpp::declaration_syntax_analyzer m_declaration_syntax_analyzer;
+        socoa::cpp::declaration_semantic_analyzer m_declaration_semantic_analyzer;
+        socoa::cpp::program_syntax_tree_to_string_converter m_program_syntax_tree_to_string_converter;
 };
 
 #endif

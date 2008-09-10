@@ -17,29 +17,23 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SINGLE_PREPROCESSING_FILE_TEST_H
-#define SINGLE_PREPROCESSING_FILE_TEST_H
+#include <iostream>
+#include "../../util/null_deleter.h"
 
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <socoa/cpp/preprocessor.h>
-#include <socoa/cpp/declaration_syntax_analyzer.h>
+#include "program.h"
 
-class standard_library_test: public CppUnit::TestFixture
+namespace socoa { namespace cpp { namespace program_tree
 {
-    CPPUNIT_TEST_SUITE(standard_library_test);
-    CPPUNIT_TEST(parse_files);
-    CPPUNIT_TEST_SUITE_END();
 
-    public:
-        standard_library_test();
+program::program():
+    m_global_namespace_ptr(&m_global_namespace, util::null_deleter())
+{
+}
 
-        void
-        parse_files();
+std::shared_ptr<namespace_>
+program::global_namespace()
+{
+    return m_global_namespace_ptr;
+}
 
-    private:
-        socoa::cpp::preprocessor m_preprocessor;
-        socoa::cpp::declaration_syntax_analyzer m_declaration_syntax_analyzer;
-};
-
-#endif
+}}} //namespace socoa::cpp::program_tree

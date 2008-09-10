@@ -1,25 +1,25 @@
-# CppParser - Standard C++ programming language parsing library
+# Socoa - Source Code Analysis Library
 # Copyright © 2008  Florian Goujeon
 #
-# This file is part of CppParser.
+# This file is part of Socoa.
 #
-# CppParser is free software: you can redistribute it and/or modify
+# Socoa is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
 # the Free Software Foundation, version 3 of the License.
 #
-# CppParser is distributed in the hope that it will be useful,
+# Socoa is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License for more details.
 #
 # You should have received a copy of the GNU Lesser General Public License
-# along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
+# along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 cmake_minimum_required(VERSION 2.6)
 set(CMAKE_VERBOSE_MAKEFILE off)
 
 #project
-project(CppParser.Test)
+project(Socoa.Test)
 set(EXECUTABLE_OUTPUT_PATH bin)
 set(CMAKE_BUILD_TYPE Debug)
 
@@ -51,9 +51,9 @@ find_package(
 )
 include_directories(${Boost_INCLUDE_DIRS})
 
-#CppParser
+#Socoa
 include(
-	../cppparser.cmake
+	../socoa.cmake
 )
 include_directories(
 	../src
@@ -62,7 +62,7 @@ include_directories(
 #link
 target_link_libraries(
 	test
-	cppparser
+	socoa
 	cppunit
 )
 

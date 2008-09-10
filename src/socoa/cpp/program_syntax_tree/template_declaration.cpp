@@ -17,29 +17,33 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SINGLE_PREPROCESSING_FILE_TEST_H
-#define SINGLE_PREPROCESSING_FILE_TEST_H
+#include "template_declaration.h"
 
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <socoa/cpp/preprocessor.h>
-#include <socoa/cpp/declaration_syntax_analyzer.h>
-
-class standard_library_test: public CppUnit::TestFixture
+namespace socoa { namespace cpp { namespace program_syntax_tree
 {
-    CPPUNIT_TEST_SUITE(standard_library_test);
-    CPPUNIT_TEST(parse_files);
-    CPPUNIT_TEST_SUITE_END();
 
-    public:
-        standard_library_test();
+template_declaration::template_declaration(bool exported, std::shared_ptr<declaration> declaration_part):
+    m_exported(exported),
+    m_declaration_part(declaration_part)
+{
+}
 
-        void
-        parse_files();
+bool
+template_declaration::exported() const
+{
+    return m_exported;
+}
 
-    private:
-        socoa::cpp::preprocessor m_preprocessor;
-        socoa::cpp::declaration_syntax_analyzer m_declaration_syntax_analyzer;
-};
+const std::shared_ptr<declaration>
+template_declaration::declaration_part() const
+{
+    return m_declaration_part;
+}
 
-#endif
+void
+template_declaration::accept(visitor& a_visitor) const
+{
+    a_visitor.visit(*this);
+}
+
+}}} //namespace socoa::cpp::program_syntax_tree

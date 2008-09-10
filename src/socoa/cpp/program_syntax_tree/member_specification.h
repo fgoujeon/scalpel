@@ -17,29 +17,33 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SINGLE_PREPROCESSING_FILE_TEST_H
-#define SINGLE_PREPROCESSING_FILE_TEST_H
+#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_MEMBER_SPECIFICATION_H
+#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_MEMBER_SPECIFICATION_H
 
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <socoa/cpp/preprocessor.h>
-#include <socoa/cpp/declaration_syntax_analyzer.h>
+#include <vector>
+#include <memory>
+#include "item.h"
+#include "member_specification_item.h"
 
-class standard_library_test: public CppUnit::TestFixture
+namespace socoa { namespace cpp { namespace program_syntax_tree
 {
-    CPPUNIT_TEST_SUITE(standard_library_test);
-    CPPUNIT_TEST(parse_files);
-    CPPUNIT_TEST_SUITE_END();
 
+class member_specification: public item
+{
     public:
-        standard_library_test();
+        const std::vector<std::shared_ptr<member_specification_item>>&
+        items() const;
 
         void
-        parse_files();
+        add(std::shared_ptr<member_specification_item> item);
+
+        void
+        accept(visitor& a_visitor) const;
 
     private:
-        socoa::cpp::preprocessor m_preprocessor;
-        socoa::cpp::declaration_syntax_analyzer m_declaration_syntax_analyzer;
+        std::vector<std::shared_ptr<member_specification_item>> m_items;
 };
+
+}}} //namespace socoa::cpp::program_syntax_tree
 
 #endif

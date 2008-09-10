@@ -17,29 +17,31 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SINGLE_PREPROCESSING_FILE_TEST_H
-#define SINGLE_PREPROCESSING_FILE_TEST_H
+#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_SIMPLE_DECLARATION_H
+#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_SIMPLE_DECLARATION_H
 
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <socoa/cpp/preprocessor.h>
-#include <socoa/cpp/declaration_syntax_analyzer.h>
+#include "declaration.h"
+#include "decl_specifier_seq.h"
 
-class standard_library_test: public CppUnit::TestFixture
+namespace socoa { namespace cpp { namespace program_syntax_tree
 {
-    CPPUNIT_TEST_SUITE(standard_library_test);
-    CPPUNIT_TEST(parse_files);
-    CPPUNIT_TEST_SUITE_END();
 
+class simple_declaration: public declaration
+{
     public:
-        standard_library_test();
+        decl_specifier_seq&
+        decl_specifiers();
+
+        const decl_specifier_seq&
+        decl_specifiers() const;
 
         void
-        parse_files();
+        accept(visitor& a_visitor) const;
 
     private:
-        socoa::cpp::preprocessor m_preprocessor;
-        socoa::cpp::declaration_syntax_analyzer m_declaration_syntax_analyzer;
+        decl_specifier_seq m_decl_specifiers;
 };
+
+}}} //namespace socoa::cpp::program_syntax_tree
 
 #endif
