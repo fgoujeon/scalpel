@@ -24,7 +24,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <memory>
 #include <boost/spirit.hpp>
 #include <boost/spirit/include/classic_parse_tree.hpp>
-#include "grammar.h"
+#include "spirit_launcher.h"
 #include "program_syntax_tree/declaration_seq.h"
 #include "program_syntax_tree/simple_declaration.h"
 #include "program_syntax_tree/type_specifier.h"
@@ -44,8 +44,6 @@ class declaration_syntax_analyzer
         typedef tree_node_value_t::const_iterator_t tree_node_value_iterator_t;
 
     public:
-        declaration_syntax_analyzer();
-
         std::shared_ptr<program_syntax_tree::declaration_seq>
         analyze(const std::string& input);
 
@@ -99,8 +97,7 @@ class declaration_syntax_analyzer
         get_id(const tree_node_t& node);
 
 
-        grammar::configuration m_grammar_configuration;
-        grammar m_grammar;
+        spirit_launcher m_spirit_launcher;
 };
 
 }} //namespace socoa::cpp

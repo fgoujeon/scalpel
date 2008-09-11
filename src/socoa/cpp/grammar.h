@@ -22,6 +22,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <boost/spirit.hpp>
 #include <boost/spirit/include/classic_ast.hpp>
+#include "grammar_configuration.h"
+#include "grammar_parser_id.h"
 
 namespace socoa { namespace cpp
 {
@@ -29,248 +31,10 @@ namespace socoa { namespace cpp
 class grammar: public boost::spirit::grammar<grammar>
 {
     public:
-        struct configuration;
-
-        grammar(configuration& a_configuration):
+        grammar(grammar_configuration& a_configuration):
             m_configuration(a_configuration)
         {
         }
-
-        struct configuration
-        {
-            configuration():
-                skip_function_bodies(false),
-                enable_typeof_support(true),
-                enable_restrict_support(true)
-            {
-            }
-
-            bool skip_function_bodies;
-
-            bool enable_typeof_support;
-            bool enable_restrict_support;
-        };
-
-        enum parser_id
-        {
-            FILE,
-            SOURCE_CHARACTER_SET,
-            KEYWORD,
-            EXPORT_KEYWORD,
-
-            HEX_QUAD,
-            UNIVERSAL_CHARACTER_NAME,
-            IDENTIFIER,
-            NONDIGIT,
-            LITERAL,
-            INTEGER_LITERAL,
-            DECIMAL_LITERAL,
-            OCTAL_LITERAL,
-            HEXADECIMAL_LITERAL,
-            HEXADECIMAL_DIGIT,
-            OCTAL_DIGIT,
-            NONZERO_DIGIT,
-            INTEGER_SUFFIX,
-            UNSIGNED_SUFFIX,
-            LONG_SUFFIX,
-            LONG_LONG_SUFFIX,
-            CHARACTER_LITERAL,
-            C_CHAR_SEQUENCE,
-            C_CHAR,
-            ESCAPE_SEQUENCE,
-            SIMPLE_ESCAPE_SEQUENCE,
-            OCTAL_ESCAPE_SEQUENCE,
-            HEXADECIMAL_ESCAPE_SEQUENCE,
-            FLOATING_LITERAL,
-            FRACTIONAL_CONSTANT,
-            EXPONENT_PART,
-            DIGIT_SEQUENCE,
-            FLOATING_SUFFIX,
-            STRING_LITERAL,
-            S_CHAR_SEQUENCE,
-            S_CHAR,
-            BOOLEAN_LITERAL,
-
-            TRANSLATION_UNIT,
-
-            PRIMARY_EXPRESSION,
-            ID_EXPRESSION,
-            UNQUALIFIED_ID,
-            QUALIFIED_ID,
-            NESTED_NAME_SPECIFIER,
-            CLASS_OR_NAMESPACE_NAME,
-            POSTFIX_EXPRESSION,
-            EXPRESSION_LIST,
-            PSEUDO_DESTRUCTOR_NAME,
-            UNARY_EXPRESSION,
-            UNARY_OPERATOR,
-            NEW_EXPRESSION,
-            NEW_PLACEMENT,
-            NEW_TYPE_ID,
-            NEW_DECLARATOR,
-            DIRECT_NEW_DECLARATOR,
-            NEW_INITIALIZER,
-            DELETE_EXPRESSION,
-            CAST_EXPRESSION,
-            PM_EXPRESSION,
-            MULTIPLICATIVE_EXPRESSION,
-            ADDITIVE_EXPRESSION,
-            SHIFT_EXPRESSION,
-            TEMPLATE_ARGUMENT_SHIFT_EXPRESSION,
-            RELATIONAL_EXPRESSION,
-            TEMPLATE_ARGUMENT_RELATIONAL_EXPRESSION,
-            EQUALITY_EXPRESSION,
-            TEMPLATE_ARGUMENT_EQUALITY_EXPRESSION,
-            AND_EXPRESSION,
-            TEMPLATE_ARGUMENT_AND_EXPRESSION,
-            EXCLUSIVE_OR_EXPRESSION,
-            TEMPLATE_ARGUMENT_EXCLUSIVE_OR_EXPRESSION,
-            INCLUSIVE_OR_EXPRESSION,
-            TEMPLATE_ARGUMENT_INCLUSIVE_OR_EXPRESSION,
-            LOGICAL_AND_EXPRESSION,
-            TEMPLATE_ARGUMENT_LOGICAL_AND_EXPRESSION,
-            LOGICAL_OR_EXPRESSION,
-            TEMPLATE_ARGUMENT_LOGICAL_OR_EXPRESSION,
-            CONDITIONAL_EXPRESSION,
-            TEMPLATE_ARGUMENT_CONDITIONAL_EXPRESSION,
-            ASSIGNMENT_EXPRESSION,
-            TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION,
-            ASSIGNMENT_OPERATOR,
-            EXPRESSION,
-            CONSTANT_EXPRESSION,
-
-            STATEMENT,
-            LABELED_STATEMENT,
-            EXPRESSION_STATEMENT,
-            COMPOUND_STATEMENT,
-            STATEMENT_SEQ,
-            SELECTION_STATEMENT,
-            CONDITION,
-            CONDITION_TYPE_SPECIFIER_SEQ,
-            ITERATION_STATEMENT,
-            FOR_INIT_STATEMENT,
-            JUMP_STATEMENT,
-            DECLARATION_STATEMENT,
-
-            DECLARATION_SEQ,
-            DECLARATION,
-            BLOCK_DECLARATION,
-            SIMPLE_DECLARATION,
-            SIMPLE_DECLARATION_DECL_SPECIFIER_SEQ,
-            DECL_SPECIFIER,
-            DECL_SPECIFIER_SEQ,
-            STORAGE_CLASS_SPECIFIER,
-            FUNCTION_SPECIFIER,
-            TYPEDEF_NAME,
-            TYPE_SPECIFIER,
-            SIMPLE_TYPE_SPECIFIER,
-            TYPE_NAME,
-            ELABORATED_TYPE_SPECIFIER,
-            ENUM_NAME,
-            ENUM_SPECIFIER,
-            ENUMERATOR_LIST,
-            ENUMERATOR_DEFINITION,
-            ENUMERATOR,
-            NAMESPACE_NAME,
-            ORIGINAL_NAMESPACE_NAME,
-            NAMESPACE_DEFINITION,
-            NAMED_NAMESPACE_DEFINITION,
-            UNNAMED_NAMESPACE_DEFINITION,
-            NAMESPACE_BODY,
-            NAMESPACE_ALIAS,
-            NAMESPACE_ALIAS_DEFINITION,
-            QUALIFIED_NAMESPACE_SPECIFIER,
-            USING_DECLARATION,
-            USING_DIRECTIVE,
-            ASM_DEFINITION,
-            LINKAGE_SPECIFICATION,
-
-            INIT_DECLARATOR_LIST,
-            INIT_DECLARATOR,
-            DECLARATOR,
-            DIRECT_DECLARATOR,
-            PTR_OPERATOR,
-            CV_QUALIFIER_SEQ,
-            CV_QUALIFIER,
-            DECLARATOR_ID,
-            TYPE_ID,
-            TYPE_SPECIFIER_SEQ,
-            ABSTRACT_DECLARATOR,
-            DIRECT_ABSTRACT_DECLARATOR,
-            PARAMETER_DECLARATION_CLAUSE,
-            PARAMETER_DECLARATION_LIST,
-            PARAMETER_DECLARATION,
-            PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ1,
-            PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ2,
-            PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ3,
-            PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ4,
-            FUNCTION_DEFINITION,
-            FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ1,
-            FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ2,
-            FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ3,
-            FUNCTION_BODY,
-            INITIALIZER,
-            INITIALIZER_CLAUSE,
-            INITIALIZER_LIST,
-
-            CLASS_NAME,
-            CLASS_SPECIFIER,
-            CLASS_HEAD,
-            CLASS_KEY,
-            MEMBER_SPECIFICATION,
-            MEMBER_DECLARATION,
-            MEMBER_DECLARATION_DECL_SPECIFIER_SEQ,
-            MEMBER_DECLARATOR_LIST,
-            MEMBER_DECLARATOR,
-            PURE_SPECIFIER,
-            CONSTANT_INITIALIZER,
-
-            BASE_CLAUSE,
-            BASE_SPECIFIER_LIST,
-            BASE_SPECIFIER,
-            ACCESS_SPECIFIER,
-
-            CONVERSION_FUNCTION_ID,
-            CONVERSION_TYPE_ID,
-            CONVERSION_DECLARATOR,
-            CTOR_INITIALIZER,
-            MEM_INITIALIZER_LIST,
-            MEM_INITIALIZER,
-            MEM_INITIALIZER_ID,
-
-            OPERATOR_FUNCTION_ID,
-            OPERATOR_,
-
-            TEMPLATE_DECLARATION,
-            TEMPLATE_PARAMETER_LIST,
-            TEMPLATE_PARAMETER,
-            TYPE_PARAMETER,
-            TEMPLATE_ID,
-            TEMPLATE_NAME,
-            TEMPLATE_ARGUMENT_LIST,
-            TEMPLATE_ARGUMENT,
-            EXPLICIT_INSTANTIATION,
-            EXPLICIT_SPECIALIZATION,
-
-            TRY_BLOCK,
-            FUNCTION_TRY_BLOCK,
-            HANDLER_SEQ,
-            HANDLER,
-            EXCEPTION_DECLARATION,
-            THROW_EXPRESSION,
-            EXCEPTION_SPECIFICATION,
-            TYPE_ID_LIST,
-
-
-            SKIP_FUNCTION_BODIES_MODE_STATEMENT_SEQ_ITEM,
-            SKIP_FUNCTION_BODIES_MODE_NON_SPECIAL_CHAR_SEQ,
-            SKIP_FUNCTION_BODIES_MODE_NON_SPECIAL_CHAR,
-
-
-            TYPEOF_EXPRESSION,
-            TYPEOF_KEYWORD,
-            RESTRICT_KEYWORD
-        };
 
         template <typename ScannerT>
         struct definition
@@ -288,12 +52,12 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT> source_character_set;
             boost::spirit::rule<ScannerT> keyword;
 
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<EXPORT_KEYWORD>> export_keyword;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::EXPORT_KEYWORD>> export_keyword;
 
             //1.2 - Lexical conventions [gram.lex]
             boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> hex_quad;
             boost::spirit::rule<ScannerT> universal_character_name;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<IDENTIFIER>> identifier;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::IDENTIFIER>> identifier;
             boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> nondigit;
             boost::spirit::rule<ScannerT> literal;
             boost::spirit::rule<ScannerT> integer_literal;
@@ -325,7 +89,7 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT> boolean_literal;
 
             //1.3 - Basic concepts [gram.basic]
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<TRANSLATION_UNIT>> translation_unit;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::TRANSLATION_UNIT>> translation_unit;
 
             //1.4 - Expressions [gram.expr]
             boost::spirit::rule<ScannerT> primary_expression;
@@ -389,38 +153,38 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT> declaration_statement;
 
             //1.6 - Declarations [gram.dcl.dcl]
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<DECLARATION_SEQ>> declaration_seq;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<DECLARATION>> declaration;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<BLOCK_DECLARATION>> block_declaration;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<SIMPLE_DECLARATION>> simple_declaration;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<SIMPLE_DECLARATION_DECL_SPECIFIER_SEQ>> simple_declaration_decl_specifier_seq;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<DECL_SPECIFIER>> decl_specifier;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<DECL_SPECIFIER_SEQ>> decl_specifier_seq;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<STORAGE_CLASS_SPECIFIER>> storage_class_specifier;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<FUNCTION_SPECIFIER>> function_specifier;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<TYPEDEF_NAME>> typedef_name;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<TYPE_SPECIFIER>> type_specifier;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<SIMPLE_TYPE_SPECIFIER>> simple_type_specifier;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<TYPE_NAME>> type_name;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<ELABORATED_TYPE_SPECIFIER>> elaborated_type_specifier;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<ENUM_NAME>> enum_name;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<ENUM_SPECIFIER>> enum_specifier;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<ENUMERATOR_LIST>> enumerator_list;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<ENUMERATOR_DEFINITION>> enumerator_definition;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<ENUMERATOR>> enumerator;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<NAMESPACE_NAME>> namespace_name;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<ORIGINAL_NAMESPACE_NAME>> original_namespace_name;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<NAMESPACE_DEFINITION>> namespace_definition;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<NAMED_NAMESPACE_DEFINITION>> named_namespace_definition;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<UNNAMED_NAMESPACE_DEFINITION>> unnamed_namespace_definition;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<NAMESPACE_BODY>> namespace_body;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<NAMESPACE_ALIAS>> namespace_alias;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<NAMESPACE_ALIAS_DEFINITION>> namespace_alias_definition;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<QUALIFIED_NAMESPACE_SPECIFIER>> qualified_namespace_specifier;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<USING_DECLARATION>> using_declaration;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<USING_DIRECTIVE>> using_directive;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<ASM_DEFINITION>> asm_definition;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<LINKAGE_SPECIFICATION>> linkage_specification;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::DECLARATION_SEQ>> declaration_seq;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::DECLARATION>> declaration;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::BLOCK_DECLARATION>> block_declaration;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::SIMPLE_DECLARATION>> simple_declaration;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::SIMPLE_DECLARATION_DECL_SPECIFIER_SEQ>> simple_declaration_decl_specifier_seq;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::DECL_SPECIFIER>> decl_specifier;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::DECL_SPECIFIER_SEQ>> decl_specifier_seq;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::STORAGE_CLASS_SPECIFIER>> storage_class_specifier;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::FUNCTION_SPECIFIER>> function_specifier;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::TYPEDEF_NAME>> typedef_name;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::TYPE_SPECIFIER>> type_specifier;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::SIMPLE_TYPE_SPECIFIER>> simple_type_specifier;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::TYPE_NAME>> type_name;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::ELABORATED_TYPE_SPECIFIER>> elaborated_type_specifier;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::ENUM_NAME>> enum_name;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::ENUM_SPECIFIER>> enum_specifier;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::ENUMERATOR_LIST>> enumerator_list;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::ENUMERATOR_DEFINITION>> enumerator_definition;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::ENUMERATOR>> enumerator;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::NAMESPACE_NAME>> namespace_name;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::ORIGINAL_NAMESPACE_NAME>> original_namespace_name;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::NAMESPACE_DEFINITION>> namespace_definition;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::NAMED_NAMESPACE_DEFINITION>> named_namespace_definition;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::UNNAMED_NAMESPACE_DEFINITION>> unnamed_namespace_definition;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::NAMESPACE_BODY>> namespace_body;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::NAMESPACE_ALIAS>> namespace_alias;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::NAMESPACE_ALIAS_DEFINITION>> namespace_alias_definition;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::QUALIFIED_NAMESPACE_SPECIFIER>> qualified_namespace_specifier;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::USING_DECLARATION>> using_declaration;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::USING_DIRECTIVE>> using_directive;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::ASM_DEFINITION>> asm_definition;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::LINKAGE_SPECIFICATION>> linkage_specification;
 
             //1.7 - Declarators [gram.dcl.decl]
             boost::spirit::rule<ScannerT> init_declarator_list;
@@ -429,7 +193,7 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT> direct_declarator;
             boost::spirit::rule<ScannerT> ptr_operator;
             boost::spirit::rule<ScannerT> cv_qualifier_seq;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<CV_QUALIFIER>> cv_qualifier;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::CV_QUALIFIER>> cv_qualifier;
             boost::spirit::rule<ScannerT> declarator_id;
             boost::spirit::rule<ScannerT> type_id;
             boost::spirit::rule<ScannerT> type_specifier_seq;
@@ -437,12 +201,12 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT> direct_abstract_declarator;
             boost::spirit::rule<ScannerT> parameter_declaration_clause;
             boost::spirit::rule<ScannerT> parameter_declaration_list;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<PARAMETER_DECLARATION>> parameter_declaration;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::PARAMETER_DECLARATION>> parameter_declaration;
             boost::spirit::rule<ScannerT> parameter_declaration_decl_specifier_seq1;
             boost::spirit::rule<ScannerT> parameter_declaration_decl_specifier_seq2;
             boost::spirit::rule<ScannerT> parameter_declaration_decl_specifier_seq3;
             boost::spirit::rule<ScannerT> parameter_declaration_decl_specifier_seq4;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<FUNCTION_DEFINITION>> function_definition;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::FUNCTION_DEFINITION>> function_definition;
             boost::spirit::rule<ScannerT> function_definition_decl_specifier_seq1;
             boost::spirit::rule<ScannerT> function_definition_decl_specifier_seq2;
             boost::spirit::rule<ScannerT> function_definition_decl_specifier_seq3;
@@ -453,11 +217,11 @@ class grammar: public boost::spirit::grammar<grammar>
 
             //1.8 - Classes [gram.class]
             boost::spirit::rule<ScannerT> class_name;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<CLASS_SPECIFIER>> class_specifier;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<CLASS_HEAD>> class_head;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<CLASS_KEY>> class_key;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<MEMBER_SPECIFICATION>> member_specification;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<MEMBER_DECLARATION>> member_declaration;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::CLASS_SPECIFIER>> class_specifier;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::CLASS_HEAD>> class_head;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::CLASS_KEY>> class_key;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::MEMBER_SPECIFICATION>> member_specification;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::MEMBER_DECLARATION>> member_declaration;
             boost::spirit::rule<ScannerT> member_declaration_decl_specifier_seq;
             boost::spirit::rule<ScannerT> member_declarator_list;
             boost::spirit::rule<ScannerT> member_declarator;
@@ -465,10 +229,10 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT> constant_initializer;
 
             //1.9 - Derived classes [gram.class.derived]
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<BASE_CLAUSE>> base_clause;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::BASE_CLAUSE>> base_clause;
             boost::spirit::rule<ScannerT> base_specifier_list;
             boost::spirit::rule<ScannerT> base_specifier;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<ACCESS_SPECIFIER>> access_specifier;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::ACCESS_SPECIFIER>> access_specifier;
 
             //1.10 - Special member functions [gram.special]
             boost::spirit::rule<ScannerT> conversion_function_id;
@@ -484,7 +248,7 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT> operator_;
 
             //1.12 - Templates [gram.temp]
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<TEMPLATE_DECLARATION>> template_declaration;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::TEMPLATE_DECLARATION>> template_declaration;
             boost::spirit::rule<ScannerT> template_parameter_list;
             boost::spirit::rule<ScannerT> template_parameter;
             boost::spirit::rule<ScannerT> type_parameter;
@@ -492,8 +256,8 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT> template_name;
             boost::spirit::rule<ScannerT> template_argument_list;
             boost::spirit::rule<ScannerT> template_argument;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<EXPLICIT_INSTANTIATION>> explicit_instantiation;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<EXPLICIT_SPECIALIZATION>> explicit_specialization;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::EXPLICIT_INSTANTIATION>> explicit_instantiation;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::EXPLICIT_SPECIALIZATION>> explicit_specialization;
 
             //1.13 - Exception handling [gram.except]
             boost::spirit::rule<ScannerT> try_block;
@@ -517,13 +281,13 @@ class grammar: public boost::spirit::grammar<grammar>
             /*
             Non-standard extensions
             */
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<TYPEOF_EXPRESSION>> typeof_expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::TYPEOF_EXPRESSION>> typeof_expression;
             boost::spirit::rule<ScannerT> typeof_keyword;
             boost::spirit::rule<ScannerT> restrict_keyword;
         };
 
     private:
-        configuration& m_configuration;
+        grammar_configuration& m_configuration;
 };
 
 template<typename ScannerT>
