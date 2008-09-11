@@ -22,6 +22,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "program_syntax_tree/class_specifier.h"
 #include "program_syntax_tree/simple_declaration.h"
 #include "program_syntax_tree/decl_specifier_seq.h"
+#include "program_syntax_tree/simple_type_specifier.h"
 
 #include "program_syntax_tree_to_string_converter.h"
 
@@ -104,13 +105,20 @@ program_syntax_tree_to_string_converter::visit(const simple_declaration& item)
 }
 
 void
-program_syntax_tree_to_string_converter::visit(const program_syntax_tree::decl_specifier_seq& item)
+program_syntax_tree_to_string_converter::visit(const decl_specifier_seq& item)
 {
     const std::vector<std::shared_ptr<decl_specifier>>& decl_specifiers = item.decl_specifiers();
     for(std::vector<std::shared_ptr<decl_specifier>>::const_iterator i = decl_specifiers.begin(); i != decl_specifiers.end(); ++i)
     {
         (**i).accept(*this);
     }
+}
+
+void
+program_syntax_tree_to_string_converter::visit(const simple_type_specifier& item)
+{
+    indent();
+    m_result_oss << item.type() << "\n";
 }
 
 void

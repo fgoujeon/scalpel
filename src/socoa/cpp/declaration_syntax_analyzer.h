@@ -28,6 +28,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "program_syntax_tree/declaration_seq.h"
 #include "program_syntax_tree/simple_declaration.h"
 #include "program_syntax_tree/type_specifier.h"
+#include "program_syntax_tree/simple_type_specifier.h"
 
 namespace socoa { namespace cpp
 {
@@ -71,6 +72,9 @@ class declaration_syntax_analyzer
 
         std::shared_ptr<program_syntax_tree::type_specifier>
         evaluate_type_specifier(const tree_node_t& node);
+
+        std::shared_ptr<program_syntax_tree::simple_type_specifier>
+        evaluate_simple_type_specifier(const tree_node_t& node);
 
         std::shared_ptr<program_syntax_tree::namespace_definition>
         evaluate_namespace_definition(const tree_node_t& node);

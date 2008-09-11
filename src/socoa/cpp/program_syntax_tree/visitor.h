@@ -30,6 +30,7 @@ class member_specification;
 class access_specifier;
 class template_declaration;
 class simple_declaration;
+class simple_type_specifier;
 
 class visitor
 {
@@ -56,6 +57,9 @@ class visitor
 
         virtual void
         visit(const simple_declaration& item) = 0;
+
+        virtual void
+        visit(const simple_type_specifier& item) = 0;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

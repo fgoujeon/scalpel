@@ -17,34 +17,30 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_spirit_launcher_H
-#define SOCOA_CPP_spirit_launcher_H
+#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_SIMPLE_TYPE_SPECIFIER_H
+#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_SIMPLE_TYPE_SPECIFIER_H
 
 #include <string>
-#include <boost/spirit.hpp>
-#include <boost/spirit/include/classic_parse_tree.hpp>
-#include "grammar_configuration.h"
+#include "type_specifier.h"
 
-namespace socoa { namespace cpp
+namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class grammar;
-
-class spirit_launcher
+class simple_type_specifier: public type_specifier
 {
     public:
-        spirit_launcher();
+        simple_type_specifier(const std::string& type);
 
-        ~spirit_launcher();
+        const std::string&
+        type() const;
 
-        const boost::spirit::tree_match<const char*>::node_t
-        operator()(const std::string& input);
+        void
+        accept(visitor& a_visitor) const;
 
     private:
-        grammar_configuration m_grammar_configuration;
-        grammar& m_grammar;
+        std::string m_type;
 };
 
-}} //namespace socoa::cpp
+}}} //namespace socoa::cpp::program_syntax_tree
 
 #endif

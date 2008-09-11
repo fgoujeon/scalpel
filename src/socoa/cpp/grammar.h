@@ -1049,7 +1049,7 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     simple_type_specifier
         = !str_p("::") >> !nested_name_specifier >> type_name
         | !str_p("::") >> nested_name_specifier >> "template" >> template_id
-        | str_p("char")
+        | "char"
         | "wchar_t"
         | "bool"
         | "short"

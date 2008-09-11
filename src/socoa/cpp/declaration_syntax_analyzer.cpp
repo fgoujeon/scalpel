@@ -270,7 +270,7 @@ declaration_syntax_analyzer::evaluate_type_specifier(const tree_node_t& node)
     if(child_id == grammar_parser_id::SIMPLE_TYPE_SPECIFIER)
     {
         std::cout << "simple_type_specifier" << std::endl;
-        //return evaluate_named_namespace_definition(node);
+        return evaluate_simple_type_specifier(child_node);
     }
     else if(child_id == grammar_parser_id::CLASS_SPECIFIER)
     {
@@ -303,6 +303,29 @@ declaration_syntax_analyzer::evaluate_type_specifier(const tree_node_t& node)
     }
 
     return std::shared_ptr<type_specifier>();
+}
+
+std::shared_ptr<simple_type_specifier>
+declaration_syntax_analyzer::evaluate_simple_type_specifier(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar_parser_id::SIMPLE_TYPE_SPECIFIER);
+
+    if(node.children.size() == 1)
+    {
+        std::string value = get_value(node);
+
+        if(value.size() > 2)
+        {
+            std::cout << value << std::endl;
+            return std::shared_ptr<simple_type_specifier>(new simple_type_specifier(value));
+        }
+    }
+    else
+    {
+
+    }
+
+    return std::shared_ptr<simple_type_specifier>();
 }
 
 std::shared_ptr<namespace_definition>
