@@ -17,21 +17,26 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_item_H
-#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_item_H
+#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_DECLARATOR_ID_H
+#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_DECLARATOR_ID_H
 
-#include "visitor.h"
+#include <memory>
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class item
+class id_expression;
+
+class declarator_id
 {
     public:
-        virtual ~item(){};
+        explicit declarator_id(std::shared_ptr<id_expression> an_id_expression);
 
-        virtual void
-        accept(visitor& a_visitor) const = 0;
+        const std::shared_ptr<id_expression>
+        get_id_expression() const;
+
+    private:
+        std::shared_ptr<id_expression> m_id_expression;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

@@ -20,26 +20,36 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_SIMPLE_DECLARATION_H
 #define SOCOA_CPP_PROGRAM_SYNTAX_TREE_SIMPLE_DECLARATION_H
 
+#include <memory>
 #include "declaration.h"
 #include "decl_specifier_seq.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
+class init_declarator_list;
+
 class simple_declaration: public declaration
 {
     public:
         decl_specifier_seq&
-        decl_specifiers();
+        get_decl_specifier_seq();
 
         const decl_specifier_seq&
-        decl_specifiers() const;
+        get_decl_specifier_seq() const;
+
+        const std::shared_ptr<init_declarator_list>
+        get_init_declarator_list() const;
+
+        void
+        set_init_declarator_list(std::shared_ptr<init_declarator_list> an_init_declarator_list);
 
         void
         accept(visitor& a_visitor) const;
 
     private:
-        decl_specifier_seq m_decl_specifiers;
+        decl_specifier_seq m_decl_specifier_seq;
+        std::shared_ptr<init_declarator_list> m_init_declarator_list;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

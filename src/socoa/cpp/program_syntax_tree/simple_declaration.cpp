@@ -23,15 +23,27 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
 decl_specifier_seq&
-simple_declaration::decl_specifiers()
+simple_declaration::get_decl_specifier_seq()
 {
-    return m_decl_specifiers;
+    return m_decl_specifier_seq;
 }
 
 const decl_specifier_seq&
-simple_declaration::decl_specifiers() const
+simple_declaration::get_decl_specifier_seq() const
 {
-    return m_decl_specifiers;
+    return m_decl_specifier_seq;
+}
+
+const std::shared_ptr<init_declarator_list>
+simple_declaration::get_init_declarator_list() const
+{
+    return m_init_declarator_list;
+}
+
+void
+simple_declaration::set_init_declarator_list(std::shared_ptr<init_declarator_list> an_init_declarator_list)
+{
+    m_init_declarator_list = an_init_declarator_list;
 }
 
 void

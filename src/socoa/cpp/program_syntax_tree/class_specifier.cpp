@@ -29,7 +29,7 @@ class_specifier::class_specifier(const std::string& name):
 }
 
 const std::string&
-class_specifier::name() const
+class_specifier::get_name() const
 {
     return m_name;
 }

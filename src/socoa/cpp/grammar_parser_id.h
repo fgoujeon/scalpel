@@ -198,6 +198,7 @@ namespace grammar_parser_id
         MEMBER_DECLARATOR,
         PURE_SPECIFIER,
         CONSTANT_INITIALIZER,
+        DESTRUCTOR_NAME,
 
         BASE_CLAUSE,
         BASE_SPECIFIER_LIST,

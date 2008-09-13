@@ -22,23 +22,20 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <vector>
 #include <memory>
-#include "item.h"
+#include "visitable.h"
 #include "member_specification_item.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class member_specification: public item
+class member_specification
 {
     public:
         const std::vector<std::shared_ptr<member_specification_item>>&
         items() const;
 
         void
-        add(std::shared_ptr<member_specification_item> item);
-
-        void
-        accept(visitor& a_visitor) const;
+        add(std::shared_ptr<member_specification_item> visitable);
 
     private:
         std::vector<std::shared_ptr<member_specification_item>> m_items;

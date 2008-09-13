@@ -23,7 +23,7 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
 const std::vector<std::shared_ptr<decl_specifier>>&
-decl_specifier_seq::decl_specifiers() const
+decl_specifier_seq::get_decl_specifiers() const
 {
     return m_decl_specifiers;
 }

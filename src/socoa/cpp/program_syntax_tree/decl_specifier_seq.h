@@ -22,16 +22,17 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <vector>
 #include <memory>
-#include "decl_specifier.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
+
+class decl_specifier;
 
 class decl_specifier_seq
 {
     public:
         const std::vector<std::shared_ptr<decl_specifier>>&
-        decl_specifiers() const;
+        get_decl_specifiers() const;
 
         void
         add(std::shared_ptr<decl_specifier> specifier);

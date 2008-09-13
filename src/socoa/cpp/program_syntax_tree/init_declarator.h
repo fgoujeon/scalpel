@@ -17,34 +17,28 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_ACCESS_SPECIFIER_H
-#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_ACCESS_SPECIFIER_H
+#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_INIT_DECLARATOR_H
+#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_INIT_DECLARATOR_H
 
-#include "member_specification_item.h"
+#include <memory>
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class access_specifier: public member_specification_item
+class declarator;
+
+class init_declarator
 {
     public:
-        enum value
-        {
-            PUBLIC,
-            PROTECTED,
-            PRIVATE
-        };
-
-        access_specifier(value a_value);
-
-        value
-        get_value() const;
+        const std::shared_ptr<declarator>
+        get_declarator() const;
 
         void
-        accept(visitor& a_visitor) const;
+        set_declarator(std::shared_ptr<declarator> a_declarator);
 
     private:
-        value m_value;
+        std::shared_ptr<declarator> m_declarator;
+        //std::shared_ptr<initializer> m_initializer;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

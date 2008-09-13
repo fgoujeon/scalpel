@@ -33,13 +33,13 @@ class namespace_definition: public declaration, public std::enable_shared_from_t
         explicit namespace_definition(const std::string& name);
 
         const std::string&
-        name() const;
+        get_name() const;
 
         declaration_seq&
-        body();
+        get_body();
 
         const declaration_seq&
-        body() const;
+        get_body() const;
 
         void
         accept(visitor& a_visitor) const;

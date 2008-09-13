@@ -92,51 +92,51 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::TRANSLATION_UNIT>> translation_unit;
 
             //1.4 - Expressions [gram.expr]
-            boost::spirit::rule<ScannerT> primary_expression;
-            boost::spirit::rule<ScannerT> id_expression;
-            boost::spirit::rule<ScannerT> unqualified_id;
-            boost::spirit::rule<ScannerT> qualified_id;
-            boost::spirit::rule<ScannerT> nested_name_specifier;
-            boost::spirit::rule<ScannerT> class_or_namespace_name;
-            boost::spirit::rule<ScannerT> postfix_expression;
-            boost::spirit::rule<ScannerT> expression_list;
-            boost::spirit::rule<ScannerT> pseudo_destructor_name;
-            boost::spirit::rule<ScannerT> unary_expression;
-            boost::spirit::rule<ScannerT> unary_operator;
-            boost::spirit::rule<ScannerT> new_expression;
-            boost::spirit::rule<ScannerT> new_placement;
-            boost::spirit::rule<ScannerT> new_type_id;
-            boost::spirit::rule<ScannerT> new_declarator;
-            boost::spirit::rule<ScannerT> direct_new_declarator;
-            boost::spirit::rule<ScannerT> new_initializer;
-            boost::spirit::rule<ScannerT> delete_expression;
-            boost::spirit::rule<ScannerT> cast_expression;
-            boost::spirit::rule<ScannerT> pm_expression;
-            boost::spirit::rule<ScannerT> multiplicative_expression;
-            boost::spirit::rule<ScannerT> additive_expression;
-            boost::spirit::rule<ScannerT> shift_expression;
-            boost::spirit::rule<ScannerT> template_argument_shift_expression;
-            boost::spirit::rule<ScannerT> relational_expression;
-            boost::spirit::rule<ScannerT> template_argument_relational_expression;
-            boost::spirit::rule<ScannerT> equality_expression;
-            boost::spirit::rule<ScannerT> template_argument_equality_expression;
-            boost::spirit::rule<ScannerT> and_expression;
-            boost::spirit::rule<ScannerT> template_argument_and_expression;
-            boost::spirit::rule<ScannerT> exclusive_or_expression;
-            boost::spirit::rule<ScannerT> template_argument_exclusive_or_expression;
-            boost::spirit::rule<ScannerT> inclusive_or_expression;
-            boost::spirit::rule<ScannerT> template_argument_inclusive_or_expression;
-            boost::spirit::rule<ScannerT> logical_and_expression;
-            boost::spirit::rule<ScannerT> template_argument_logical_and_expression;
-            boost::spirit::rule<ScannerT> logical_or_expression;
-            boost::spirit::rule<ScannerT> template_argument_logical_or_expression;
-            boost::spirit::rule<ScannerT> conditional_expression;
-            boost::spirit::rule<ScannerT> template_argument_conditional_expression;
-            boost::spirit::rule<ScannerT> assignment_expression;
-            boost::spirit::rule<ScannerT> template_argument_assignment_expression;
-            boost::spirit::rule<ScannerT> assignment_operator;
-            boost::spirit::rule<ScannerT> expression;
-            boost::spirit::rule<ScannerT> constant_expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::PRIMARY_EXPRESSION>> primary_expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::ID_EXPRESSION>> id_expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::UNQUALIFIED_ID>> unqualified_id;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::QUALIFIED_ID>> qualified_id;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::NESTED_NAME_SPECIFIER>> nested_name_specifier;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::CLASS_OR_NAMESPACE_NAME>> class_or_namespace_name;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::POSTFIX_EXPRESSION>> postfix_expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::EXPRESSION_LIST>> expression_list;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::PSEUDO_DESTRUCTOR_NAME>> pseudo_destructor_name;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::UNARY_EXPRESSION>> unary_expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::UNARY_OPERATOR>> unary_operator;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::NEW_EXPRESSION>> new_expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::NEW_PLACEMENT>> new_placement;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::NEW_TYPE_ID>> new_type_id;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::NEW_DECLARATOR>> new_declarator;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::DIRECT_NEW_DECLARATOR>> direct_new_declarator;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::NEW_INITIALIZER>> new_initializer;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::DELETE_EXPRESSION>> delete_expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::CAST_EXPRESSION>> cast_expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::PM_EXPRESSION>> pm_expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::MULTIPLICATIVE_EXPRESSION>> multiplicative_expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::ADDITIVE_EXPRESSION>> additive_expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::SHIFT_EXPRESSION>> shift_expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::TEMPLATE_ARGUMENT_SHIFT_EXPRESSION>> template_argument_shift_expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::RELATIONAL_EXPRESSION>> relational_expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::TEMPLATE_ARGUMENT_RELATIONAL_EXPRESSION>> template_argument_relational_expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::EQUALITY_EXPRESSION>> equality_expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::TEMPLATE_ARGUMENT_EQUALITY_EXPRESSION>> template_argument_equality_expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::AND_EXPRESSION>> and_expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::TEMPLATE_ARGUMENT_AND_EXPRESSION>> template_argument_and_expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::EXCLUSIVE_OR_EXPRESSION>> exclusive_or_expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::TEMPLATE_ARGUMENT_EXCLUSIVE_OR_EXPRESSION>> template_argument_exclusive_or_expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::INCLUSIVE_OR_EXPRESSION>> inclusive_or_expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::TEMPLATE_ARGUMENT_INCLUSIVE_OR_EXPRESSION>> template_argument_inclusive_or_expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::LOGICAL_AND_EXPRESSION>> logical_and_expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::TEMPLATE_ARGUMENT_LOGICAL_AND_EXPRESSION>> template_argument_logical_and_expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::LOGICAL_OR_EXPRESSION>> logical_or_expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::TEMPLATE_ARGUMENT_LOGICAL_OR_EXPRESSION>> template_argument_logical_or_expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::CONDITIONAL_EXPRESSION>> conditional_expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::TEMPLATE_ARGUMENT_CONDITIONAL_EXPRESSION>> template_argument_conditional_expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::ASSIGNMENT_EXPRESSION>> assignment_expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION>> template_argument_assignment_expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::ASSIGNMENT_OPERATOR>> assignment_operator;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::EXPRESSION>> expression;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::CONSTANT_EXPRESSION>> constant_expression;
 
             //1.5 - Statements [gram.stmt.stmt]
             boost::spirit::rule<ScannerT> statement;
@@ -187,16 +187,16 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::LINKAGE_SPECIFICATION>> linkage_specification;
 
             //1.7 - Declarators [gram.dcl.decl]
-            boost::spirit::rule<ScannerT> init_declarator_list;
-            boost::spirit::rule<ScannerT> init_declarator;
-            boost::spirit::rule<ScannerT> declarator;
-            boost::spirit::rule<ScannerT> direct_declarator;
-            boost::spirit::rule<ScannerT> ptr_operator;
-            boost::spirit::rule<ScannerT> cv_qualifier_seq;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::INIT_DECLARATOR_LIST>> init_declarator_list;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::INIT_DECLARATOR>> init_declarator;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::DECLARATOR>> declarator;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::DIRECT_DECLARATOR>> direct_declarator;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::PTR_OPERATOR>> ptr_operator;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::CV_QUALIFIER_SEQ>> cv_qualifier_seq;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::CV_QUALIFIER>> cv_qualifier;
-            boost::spirit::rule<ScannerT> declarator_id;
-            boost::spirit::rule<ScannerT> type_id;
-            boost::spirit::rule<ScannerT> type_specifier_seq;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::DECLARATOR_ID>> declarator_id;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::TYPE_ID>> type_id;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::TYPE_SPECIFIER_SEQ>> type_specifier_seq;
             boost::spirit::rule<ScannerT> abstract_declarator;
             boost::spirit::rule<ScannerT> direct_abstract_declarator;
             boost::spirit::rule<ScannerT> parameter_declaration_clause;
@@ -227,6 +227,7 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT> member_declarator;
             boost::spirit::rule<ScannerT> pure_specifier;
             boost::spirit::rule<ScannerT> constant_initializer;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::DESTRUCTOR_NAME>> destructor_name;
 
             //1.9 - Derived classes [gram.class.derived]
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::BASE_CLAUSE>> base_clause;
@@ -622,7 +623,7 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     unqualified_id
         = operator_function_id
         | conversion_function_id
-        | '~' >> class_name
+        | destructor_name
         | template_id
         | identifier
     ;
@@ -1161,9 +1162,15 @@ grammar::definition<ScannerT>::definition(const grammar& self)
         = declarator >> !initializer
     ;
 
+    /*
+    Original rule is:
+        declarator
+            = ptr_operator >> declarator
+            | direct_declarator
+        ;
+    */
     declarator
-        = ptr_operator >> declarator
-        | direct_declarator
+        = *ptr_operator >> direct_declarator
     ;
 
     /*
@@ -1441,6 +1448,12 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     constant_initializer
         = '=' >> constant_expression
     ;
+
+    //convenience rule, not explicitly in the standard
+    destructor_name
+        = '~' >> class_name
+    ;
+
 
     //1.9 - Derived classes [gram.class.derived]
     base_clause

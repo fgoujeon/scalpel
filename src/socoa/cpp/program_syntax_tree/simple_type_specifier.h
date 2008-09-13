@@ -32,7 +32,7 @@ class simple_type_specifier: public type_specifier
         simple_type_specifier(const std::string& type);
 
         const std::string&
-        type() const;
+        get_type() const;
 
         void
         accept(visitor& a_visitor) const;

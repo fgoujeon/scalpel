@@ -20,12 +20,12 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_DECLARATION_H
 #define SOCOA_CPP_PROGRAM_SYNTAX_TREE_DECLARATION_H
 
-#include "item.h"
+#include "visitable.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class declaration: public item
+class declaration: public visitable
 {
     public:
         virtual ~declaration();

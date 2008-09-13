@@ -43,7 +43,7 @@ simple_type_specifier::simple_type_specifier(const std::string& type):
 }
 
 const std::string&
-simple_type_specifier::type() const
+simple_type_specifier::get_type() const
 {
     return m_type;
 }

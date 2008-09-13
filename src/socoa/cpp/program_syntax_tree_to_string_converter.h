@@ -28,6 +28,17 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp
 {
 
+namespace program_syntax_tree
+{
+
+class declaration_seq;
+class decl_specifier_seq;
+class init_declarator_list;
+class init_declarator;
+class declarator;
+
+} //namespace syntax_program_tree
+
 class program_syntax_tree_to_string_converter: public program_syntax_tree::visitor
 {
     public:
@@ -38,10 +49,22 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
 
     private:
         void
+        visit(const program_syntax_tree::identifier& item);
+
+        void
         visit(const program_syntax_tree::declaration_seq& item);
 
         void
         visit(const program_syntax_tree::namespace_definition& item);
+
+        void
+        visit(const program_syntax_tree::init_declarator_list& item);
+
+        void
+        visit(const program_syntax_tree::init_declarator& item);
+
+        void
+        visit(const program_syntax_tree::declarator& item);
 
         void
         visit(const program_syntax_tree::class_specifier& item);
@@ -67,7 +90,7 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         void
         indent();
 
-        std::ostringstream m_result_oss;
+        std::ostringstream m_result;
         unsigned int m_indentation_level;
 };
 

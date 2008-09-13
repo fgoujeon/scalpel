@@ -23,7 +23,7 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
 const std::vector<std::shared_ptr<declaration>>&
-declaration_seq::declarations() const
+declaration_seq::get_declarations() const
 {
     return m_declarations;
 }
@@ -32,12 +32,6 @@ void
 declaration_seq::add(std::shared_ptr<declaration> a_declaration)
 {
     m_declarations.push_back(a_declaration);
-}
-
-void
-declaration_seq::accept(visitor& a_visitor) const
-{
-    a_visitor.visit(*this);
 }
 
 }}} //namespace socoa::cpp::program_syntax_tree

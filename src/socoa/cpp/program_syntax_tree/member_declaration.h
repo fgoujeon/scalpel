@@ -21,12 +21,11 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_PROGRAM_SYNTAX_TREE_MEMBER_DECLARATION_H
 
 #include "member_specification_item.h"
-#include "item.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class member_declaration: public member_specification_item//, public item
+class member_declaration//: public member_specification_item
 {
 
 };

@@ -22,13 +22,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-access_specifier::access_specifier(possible_value value):
-    m_value(value)
+access_specifier::access_specifier(value a_value):
+    m_value(a_value)
 {
 }
 
-access_specifier::possible_value
-access_specifier::value() const
+access_specifier::value
+access_specifier::get_value() const
 {
     return m_value;
 }

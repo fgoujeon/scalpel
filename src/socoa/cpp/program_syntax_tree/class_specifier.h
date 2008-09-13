@@ -32,7 +32,7 @@ class class_specifier: public type_specifier
         explicit class_specifier(const std::string& name);
 
         const std::string&
-        name() const;
+        get_name() const;
 
         void
         accept(visitor& a_visitor) const;

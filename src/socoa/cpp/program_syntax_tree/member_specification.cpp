@@ -29,15 +29,9 @@ member_specification::items() const
 }
 
 void
-member_specification::add(std::shared_ptr<member_specification_item> item)
+member_specification::add(std::shared_ptr<member_specification_item> visitable)
 {
-    m_items.push_back(item);
-}
-
-void
-member_specification::accept(visitor& a_visitor) const
-{
-    a_visitor.visit(*this);
+    m_items.push_back(visitable);
 }
 
 }}} //namespace socoa::cpp::program_syntax_tree

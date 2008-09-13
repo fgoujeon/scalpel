@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_spirit_launcher_H
-#define SOCOA_CPP_spirit_launcher_H
+#ifndef SOCOA_CPP_SPIRIT_LAUNCHER_H
+#define SOCOA_CPP_SPIRIT_LAUNCHER_H
 
 #include <string>
 #include <boost/spirit.hpp>

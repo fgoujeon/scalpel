@@ -23,7 +23,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class declaration_seq;
+class identifier;
 class namespace_definition;
 class class_specifier;
 class member_specification;
@@ -38,28 +38,25 @@ class visitor
         virtual ~visitor(){};
 
         virtual void
-        visit(const declaration_seq& item) = 0;
+        visit(const identifier& visitable) = 0;
 
         virtual void
-        visit(const namespace_definition& item) = 0;
+        visit(const namespace_definition& visitable) = 0;
 
         virtual void
-        visit(const class_specifier& item) = 0;
+        visit(const class_specifier& visitable) = 0;
 
         virtual void
-        visit(const member_specification& item) = 0;
+        visit(const access_specifier& visitable) = 0;
 
         virtual void
-        visit(const access_specifier& item) = 0;
+        visit(const template_declaration& visitable) = 0;
 
         virtual void
-        visit(const template_declaration& item) = 0;
+        visit(const simple_declaration& visitable) = 0;
 
         virtual void
-        visit(const simple_declaration& item) = 0;
-
-        virtual void
-        visit(const simple_type_specifier& item) = 0;
+        visit(const simple_type_specifier& visitable) = 0;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

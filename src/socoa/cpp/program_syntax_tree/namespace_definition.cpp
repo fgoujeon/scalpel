@@ -28,19 +28,19 @@ namespace_definition::namespace_definition(const std::string& name):
 }
 
 const std::string&
-namespace_definition::name() const
+namespace_definition::get_name() const
 {
     return m_name;
 }
 
 declaration_seq&
-namespace_definition::body()
+namespace_definition::get_body()
 {
     return m_body;
 }
 
 const declaration_seq&
-namespace_definition::body() const
+namespace_definition::get_body() const
 {
     return m_body;
 }
