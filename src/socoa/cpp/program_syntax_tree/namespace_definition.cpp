@@ -22,6 +22,10 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
+namespace_definition::namespace_definition()
+{
+}
+
 namespace_definition::namespace_definition(const std::string& name):
     m_name(name)
 {

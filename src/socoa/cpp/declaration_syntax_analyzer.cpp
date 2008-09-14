@@ -426,38 +426,20 @@ declaration_syntax_analyzer::evaluate_namespace_definition(const tree_node_t& no
 {
     assert(node.value.id() == grammar_parser_id::NAMESPACE_DEFINITION);
 
-    assert(node.children.size() == 1);
-    const tree_node_t& namespace_definition_node = *node.children.begin();
-
-    boost::spirit::parser_id id = namespace_definition_node.value.id();
-    if(id == grammar_parser_id::NAMED_NAMESPACE_DEFINITION)
-    {
-        std::cout << "NAMED_NAMESPACE_DEFINITION" << std::endl;
-        return evaluate_named_namespace_definition(namespace_definition_node);
-    }
-    else if(id == grammar_parser_id::UNNAMED_NAMESPACE_DEFINITION)
-    {
-        std::cout << "UNNAMED_NAMESPACE_DEFINITION" << std::endl;
-        return std::shared_ptr<namespace_definition>();
-    }
-    else
-    {
-        assert(false && "incorrect namespace definition's node");
-    }
-}
-
-std::shared_ptr<namespace_definition>
-declaration_syntax_analyzer::evaluate_named_namespace_definition(const tree_node_t& node)
-{
-    assert(node.value.id() == grammar_parser_id::NAMED_NAMESPACE_DEFINITION);
+    std::shared_ptr<namespace_definition> new_namespace_definition;
 
     //get the name of the namespace
     const tree_node_t* identifier_node = find_child_node(node, grammar_parser_id::IDENTIFIER);
-    assert(identifier_node);
-    std::string name = get_value(*identifier_node);
-
-    //create a new namespace with this name
-    std::shared_ptr<namespace_definition> new_namespace_definition(new namespace_definition(name));
+    if(identifier_node)
+    {
+        std::string name = get_value(*identifier_node);
+        //create a new namespace with this name
+        new_namespace_definition = std::make_shared<namespace_definition>(name);
+    }
+    else //this is an anonymous namespace
+    {
+        new_namespace_definition = std::make_shared<namespace_definition>();
+    }
 
     //get the declaration_seq node of the namespace's body...
     const tree_node_t* body_node = find_child_node(node, grammar_parser_id::NAMESPACE_BODY);

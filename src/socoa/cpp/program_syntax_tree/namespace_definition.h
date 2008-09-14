@@ -30,6 +30,8 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 class namespace_definition: public declaration, public std::enable_shared_from_this<namespace_definition>
 {
     public:
+        namespace_definition();
+
         explicit namespace_definition(const std::string& name);
 
         const std::string&
