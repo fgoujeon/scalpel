@@ -36,6 +36,8 @@ class decl_specifier_seq;
 class init_declarator_list;
 class init_declarator;
 class declarator;
+class direct_declarator;
+class declarator_id;
 
 } //namespace syntax_program_tree
 
@@ -65,6 +67,12 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
 
         void
         visit(const program_syntax_tree::declarator& item);
+
+        void
+        visit(const program_syntax_tree::direct_declarator& item);
+
+        void
+        visit(const program_syntax_tree::declarator_id& item);
 
         void
         visit(const program_syntax_tree::class_specifier& item);

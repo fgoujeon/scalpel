@@ -81,7 +81,7 @@ declaration_syntax_analyzer::evaluate_identifier(const tree_node_t& node)
 {
     assert(node.value.id() == grammar_parser_id::IDENTIFIER);
 
-    return std::shared_ptr<identifier>(new identifier("identifier"));
+    return std::make_shared<identifier>(get_value(node));
 }
 
 std::shared_ptr<id_expression>
@@ -543,21 +543,27 @@ declaration_syntax_analyzer::evaluate_declarator(const tree_node_t& node)
 std::shared_ptr<direct_declarator>
 declaration_syntax_analyzer::evaluate_direct_declarator(const tree_node_t& node)
 {
+    /*
+    There is a particularily difficult node to evaluate, because the original
+    rule have been highly rewritten. We have to create an object which
+    represents a direct declarator just like the rule didn't have been
+    rewritten.
+    */
+
     assert(node.value.id() == grammar_parser_id::DIRECT_DECLARATOR);
 
     //get declarator_id node
     const tree_node_t* declarator_id_node = find_child_node(node, grammar_parser_id::DECLARATOR_ID);
+    if(declarator_id_node)
+    {
+        return std::make_shared<direct_declarator>(evaluate_declarator_id(*declarator_id_node));
+    }
 
     //get declarator node
     const tree_node_t* declarator_node = find_child_node(node, grammar_parser_id::DECLARATOR);
-
-    //one of these nodes must be set
-    assert((declarator_id_node && !declarator_node) || (!declarator_id_node && declarator_node));
-
-    if(declarator_id_node)
+    if(declarator_node)
     {
-        std::shared_ptr<direct_declarator> new_direct_declarator(new direct_declarator(evaluate_declarator_id(*declarator_id_node)));
-        return new_direct_declarator;
+        return std::make_shared<direct_declarator>(evaluate_declarator(*declarator_node));
     }
 
     return std::shared_ptr<direct_declarator>();

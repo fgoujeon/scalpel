@@ -247,8 +247,38 @@ program_syntax_tree_to_string_converter::visit(const init_declarator& item)
 void
 program_syntax_tree_to_string_converter::visit(const declarator& item)
 {
-    m_result << "declarator";
-    //visit(item.get_direct_declarator());
+    visit(*item.get_direct_declarator());
+}
+
+void
+program_syntax_tree_to_string_converter::visit(const direct_declarator& item)
+{
+    const std::shared_ptr<declarator_id> a_declarator_id = item.get_declarator_id();
+    if(a_declarator_id)
+    {
+        visit(*a_declarator_id);
+        return;
+    }
+
+    const std::shared_ptr<declarator> a_declarator = item.get_declarator();
+    if(a_declarator)
+    {
+        m_result << '(';
+        visit(*a_declarator);
+        m_result << ')';
+        return;
+    }
+}
+
+void
+program_syntax_tree_to_string_converter::visit(const declarator_id& item)
+{
+    const std::shared_ptr<id_expression> an_id_expression = item.get_id_expression();
+    if(an_id_expression)
+    {
+        an_id_expression->accept(*this);
+        return;
+    }
 }
 
 void

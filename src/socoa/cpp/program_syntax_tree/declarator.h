@@ -30,10 +30,7 @@ class direct_declarator;
 class declarator
 {
     public:
-        declarator
-        (
-            std::shared_ptr<direct_declarator> a_direct_declarator
-        );
+        explicit declarator(std::shared_ptr<direct_declarator> a_direct_declarator);
 
         /*const std::vector<std::shared_ptr<ptr_operator>>&
         get_ptr_operators() const;

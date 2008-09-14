@@ -27,6 +27,11 @@ direct_declarator::direct_declarator(std::shared_ptr<declarator_id> a_declarator
 {
 }
 
+direct_declarator::direct_declarator(std::shared_ptr<declarator> a_declarator):
+    m_declarator(a_declarator)
+{
+}
+
 const std::shared_ptr<declarator_id>
 direct_declarator::get_declarator_id() const
 {

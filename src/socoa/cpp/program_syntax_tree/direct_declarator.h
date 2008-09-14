@@ -33,6 +33,8 @@ class direct_declarator
     public:
         explicit direct_declarator(std::shared_ptr<declarator_id> a_declarator_id);
 
+        explicit direct_declarator(std::shared_ptr<declarator> a_declarator);
+
         const std::shared_ptr<declarator_id>
         get_declarator_id() const;
 

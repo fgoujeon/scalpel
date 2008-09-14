@@ -1182,7 +1182,7 @@ grammar::definition<ScannerT>::definition(const grammar& self)
             | '(' >> declarator >> ')'
         ;
 
-    We have to eliminate left recursion. There are the different steps on this elimination:
+    We had to eliminate left recursion. There have been the different steps for this elimination:
 
         direct_declarator
             = declarator_id
