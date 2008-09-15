@@ -204,6 +204,7 @@ program_syntax_tree_to_string_converter::visit(const declaration_seq& item)
     const std::vector<std::shared_ptr<declaration>>& declarations = item.get_declarations();
     for(std::vector<std::shared_ptr<declaration>>::const_iterator i = declarations.begin(); i != declarations.end(); ++i)
     {
+        m_result << indentation();
         (**i).accept(*this);
     }
 }
@@ -211,17 +212,10 @@ program_syntax_tree_to_string_converter::visit(const declaration_seq& item)
 void
 program_syntax_tree_to_string_converter::visit(const namespace_definition& item)
 {
-    indent();
-    m_result << "namespace " << item.get_name() << "\n";
-    indent();
-    m_result << "{\n";
-
-    ++m_indentation_level;
+    m_result << "namespace " << item.get_name();
+    m_result << opening_brace();
     visit(item.get_body());
-    --m_indentation_level;
-
-    indent();
-    m_result << "}\n";
+    m_result << closing_brace() << new_line();
 }
 
 void
@@ -284,11 +278,10 @@ program_syntax_tree_to_string_converter::visit(const declarator_id& item)
 void
 program_syntax_tree_to_string_converter::visit(const class_specifier& item)
 {
-    m_result << "class " << item.get_name() << "\n";
-    indent();
-    m_result << "{\n";
-    indent();
-    m_result << "}";
+    m_result << "class " << item.get_name();
+    m_result << opening_brace();
+
+    m_result << closing_brace();
 }
 
 void
@@ -309,15 +302,13 @@ program_syntax_tree_to_string_converter::visit(const template_declaration& item)
 void
 program_syntax_tree_to_string_converter::visit(const simple_declaration& item)
 {
-    indent();
-
     visit(item.get_decl_specifier_seq());
 
     std::shared_ptr<init_declarator_list> init_declarators = item.get_init_declarator_list();
     if(init_declarators)
         visit(*init_declarators);
 
-    m_result << ";\n";
+    m_result << ";" << new_line();
 }
 
 void
@@ -336,13 +327,37 @@ program_syntax_tree_to_string_converter::visit(const simple_type_specifier& item
     m_result << item.get_type() << " ";
 }
 
-void
-program_syntax_tree_to_string_converter::indent()
+const std::string
+program_syntax_tree_to_string_converter::new_line()
 {
+    return "\n";
+}
+
+const std::string
+program_syntax_tree_to_string_converter::opening_brace()
+{
+    std::string result = new_line() + indentation() + "{";
+    ++m_indentation_level;
+    result += new_line();
+    return result;
+}
+
+const std::string
+program_syntax_tree_to_string_converter::closing_brace()
+{
+    --m_indentation_level;
+    return indentation() + "}";
+}
+
+const std::string
+program_syntax_tree_to_string_converter::indentation()
+{
+    std::ostringstream result;
     for(unsigned int i = 0; i < m_indentation_level; ++i)
     {
-        m_result << "  ";
+        result << "    ";
     }
+    return result.str();
 }
 
 }} //namespace socoa::cpp

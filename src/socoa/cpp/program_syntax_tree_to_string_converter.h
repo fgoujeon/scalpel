@@ -95,8 +95,17 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         void
         visit(const program_syntax_tree::simple_type_specifier& item);
 
-        void
-        indent();
+        const std::string
+        new_line();
+
+        const std::string
+        opening_brace();
+
+        const std::string
+        closing_brace();
+
+        const std::string
+        indentation();
 
         std::ostringstream m_result;
         unsigned int m_indentation_level;
