@@ -116,7 +116,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 //#include "program_syntax_tree/parameter_declaration_clause.h"
 //#include "program_syntax_tree/parameter_declaration_list.h"
 //#include "program_syntax_tree/parameter_declaration.h"
-//#include "program_syntax_tree/function_definition.h"
+#include "program_syntax_tree/function_definition.h"
 //#include "program_syntax_tree/function_body.h"
 //#include "program_syntax_tree/initializer.h"
 //#include "program_syntax_tree/initializer_clause.h"
@@ -241,7 +241,11 @@ program_syntax_tree_to_string_converter::visit(const init_declarator& item)
 void
 program_syntax_tree_to_string_converter::visit(const declarator& item)
 {
-    visit(*item.get_direct_declarator());
+    const std::shared_ptr<direct_declarator> a_direct_declarator(item.get_direct_declarator());
+    if(a_direct_declarator)
+    {
+        visit(*a_direct_declarator);
+    }
 }
 
 void
@@ -276,6 +280,20 @@ program_syntax_tree_to_string_converter::visit(const declarator_id& item)
 }
 
 void
+program_syntax_tree_to_string_converter::visit(const function_definition& item)
+{
+    const std::shared_ptr<decl_specifier_seq> a_decl_specifier_seq = item.get_decl_specifier_seq();
+    if(a_decl_specifier_seq)
+        visit(*a_decl_specifier_seq);
+
+    visit(item.get_declarator());
+    m_result << opening_brace();
+
+    m_result << closing_brace();
+    m_result << new_line();
+}
+
+void
 program_syntax_tree_to_string_converter::visit(const class_specifier& item)
 {
     m_result << "class " << item.get_name();
@@ -302,7 +320,9 @@ program_syntax_tree_to_string_converter::visit(const template_declaration& item)
 void
 program_syntax_tree_to_string_converter::visit(const simple_declaration& item)
 {
-    visit(item.get_decl_specifier_seq());
+    std::shared_ptr<decl_specifier_seq> decl_specifiers = item.get_decl_specifier_seq();
+    if(decl_specifiers)
+        visit(*decl_specifiers);
 
     std::shared_ptr<init_declarator_list> init_declarators = item.get_init_declarator_list();
     if(init_declarators)

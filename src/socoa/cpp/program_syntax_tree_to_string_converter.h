@@ -75,6 +75,9 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         visit(const program_syntax_tree::declarator_id& item);
 
         void
+        visit(const program_syntax_tree::function_definition& item);
+
+        void
         visit(const program_syntax_tree::class_specifier& item);
 
         void

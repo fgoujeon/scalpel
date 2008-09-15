@@ -205,9 +205,9 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT> parameter_declaration_decl_specifier_seq3;
             boost::spirit::rule<ScannerT> parameter_declaration_decl_specifier_seq4;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::FUNCTION_DEFINITION>> function_definition;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ1>> function_definition_decl_specifier_seq1;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ2>> function_definition_decl_specifier_seq2;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ3>> function_definition_decl_specifier_seq3;
+            boost::spirit::rule<ScannerT> function_definition_decl_specifier_seq1;
+            boost::spirit::rule<ScannerT> function_definition_decl_specifier_seq2;
+            boost::spirit::rule<ScannerT> function_definition_decl_specifier_seq3;
             boost::spirit::rule<ScannerT> function_body;
             boost::spirit::rule<ScannerT> initializer;
             boost::spirit::rule<ScannerT> initializer_clause;

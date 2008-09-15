@@ -38,6 +38,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "program_syntax_tree/declarator.h"
 #include "program_syntax_tree/direct_declarator.h"
 #include "program_syntax_tree/declarator_id.h"
+#include "program_syntax_tree/function_definition.h"
 #include "program_syntax_tree/class_specifier.h"
 #include "program_syntax_tree/template_declaration.h"
 
@@ -181,41 +182,32 @@ declaration_syntax_analyzer::evaluate_declaration(const tree_node_t& node)
     const tree_node_t& child_node = *node.children.begin();
     boost::spirit::parser_id child_id = child_node.value.id();
 
-    std::cout << get_id(child_node);
-
     if(child_id == grammar_parser_id::BLOCK_DECLARATION)
     {
-        std::cout << "BLOCK_DECLARATION" << std::endl;
         return evaluate_block_declaration(child_node);
     }
     else if(child_id == grammar_parser_id::FUNCTION_DEFINITION)
     {
-        std::cout << "FUNCTION_DEFINITION" << std::endl;
-        //return evaluate_named_namespace_definition(node);
+        return evaluate_function_definition(child_node);
     }
     else if(child_id == grammar_parser_id::TEMPLATE_DECLARATION)
     {
-        std::cout << "TEMPLATE_DECLARATION" << std::endl;
         //return evaluate_named_namespace_definition(node);
     }
     else if(child_id == grammar_parser_id::EXPLICIT_INSTANTIATION)
     {
-        std::cout << "EXPLICIT_INSTANTIATION" << std::endl;
         //return evaluate_named_namespace_definition(node);
     }
     else if(child_id == grammar_parser_id::EXPLICIT_SPECIALIZATION)
     {
-        std::cout << "EXPLICIT_SPECIALIZATION" << std::endl;
         //return evaluate_named_namespace_definition(node);
     }
     else if(child_id == grammar_parser_id::LINKAGE_SPECIFICATION)
     {
-        std::cout << "LINKAGE_SPECIFICATION" << std::endl;
         //return evaluate_named_namespace_definition(node);
     }
     else if(child_id == grammar_parser_id::NAMESPACE_DEFINITION)
     {
-        std::cout << "NAMESPACE_DEFINITION" << std::endl;
         return evaluate_namespace_definition(child_node);
     }
     else
@@ -235,31 +227,24 @@ declaration_syntax_analyzer::evaluate_block_declaration(const tree_node_t& node)
     const tree_node_t& child_node = *node.children.begin();
     boost::spirit::parser_id child_id = child_node.value.id();
 
-    std::cout << get_id(child_node);
-
     if(child_id == grammar_parser_id::ASM_DEFINITION)
     {
-        std::cout << "asm_definition" << std::endl;
         //return evaluate_named_namespace_definition(node);
     }
     else if(child_id == grammar_parser_id::SIMPLE_DECLARATION)
     {
-        std::cout << "simple_declaration" << std::endl;
         return evaluate_simple_declaration(child_node);
     }
     else if(child_id == grammar_parser_id::NAMESPACE_ALIAS_DEFINITION)
     {
-        std::cout << "namespace_alias_definition" << std::endl;
         //return evaluate_named_namespace_definition(node);
     }
     else if(child_id == grammar_parser_id::USING_DECLARATION)
     {
-        std::cout << "using_declaration" << std::endl;
         //return evaluate_named_namespace_definition(node);
     }
     else if(child_id == grammar_parser_id::USING_DIRECTIVE)
     {
-        std::cout << "using_directive" << std::endl;
         //return evaluate_named_namespace_definition(node);
     }
     else
@@ -275,29 +260,30 @@ declaration_syntax_analyzer::evaluate_simple_declaration(const tree_node_t& node
 {
     assert(node.value.id() == grammar_parser_id::SIMPLE_DECLARATION);
 
-    std::shared_ptr<simple_declaration> new_simple_declaration(new simple_declaration());
-
-    //std::cout << get_id(*node.children.begin());
+    std::shared_ptr<decl_specifier_seq> new_decl_specifier_seq;
+    std::shared_ptr<init_declarator_list> new_init_declarator_list;
 
     //get decl_specifier_seq node...
     const tree_node_t* decl_specifier_seq_node = find_child_node(node, grammar_parser_id::SIMPLE_DECLARATION_DECL_SPECIFIER_SEQ);
     if(decl_specifier_seq_node)
     {
-        std::cout << "decl_specifier_seq" << std::endl;
         //...and evaluate it
-        evaluate_decl_specifier_seq(*decl_specifier_seq_node, new_simple_declaration->get_decl_specifier_seq());
+        new_decl_specifier_seq = evaluate_decl_specifier_seq(*decl_specifier_seq_node);
     }
 
     //get init_declarator_list node...
     const tree_node_t* init_declarator_list_node = find_child_node(node, grammar_parser_id::INIT_DECLARATOR_LIST);
     if(init_declarator_list_node)
     {
-        std::cout << "init_declarator_list" << std::endl;
         //...and evaluate it
-        new_simple_declaration->set_init_declarator_list(evaluate_init_declarator_list(*init_declarator_list_node));
+        new_init_declarator_list = evaluate_init_declarator_list(*init_declarator_list_node);
     }
 
-    return new_simple_declaration;
+    return std::make_shared<simple_declaration>
+    (
+        new_decl_specifier_seq,
+        new_init_declarator_list
+    );
 }
 
 std::shared_ptr<decl_specifier>
@@ -309,21 +295,16 @@ declaration_syntax_analyzer::evaluate_decl_specifier(const tree_node_t& node)
     const tree_node_t& child_node = *node.children.begin();
     boost::spirit::parser_id child_id = child_node.value.id();
 
-    std::cout << get_id(child_node);
-
     if(child_id == grammar_parser_id::STORAGE_CLASS_SPECIFIER)
     {
-        std::cout << "storage_class_specifier" << std::endl;
         //return evaluate_named_namespace_definition(node);
     }
     else if(child_id == grammar_parser_id::TYPE_SPECIFIER)
     {
-        std::cout << "type_specifier" << std::endl;
         return evaluate_type_specifier(child_node);
     }
     else if(child_id == grammar_parser_id::FUNCTION_SPECIFIER)
     {
-        std::cout << "function_specifier" << std::endl;
         //return evaluate_named_namespace_definition(node);
     }
     else
@@ -334,9 +315,11 @@ declaration_syntax_analyzer::evaluate_decl_specifier(const tree_node_t& node)
     return std::shared_ptr<decl_specifier>();
 }
 
-void
-declaration_syntax_analyzer::evaluate_decl_specifier_seq(const tree_node_t& node, decl_specifier_seq& dss)
+std::shared_ptr<decl_specifier_seq>
+declaration_syntax_analyzer::evaluate_decl_specifier_seq(const tree_node_t& node)
 {
+    std::shared_ptr<decl_specifier_seq> new_decl_specifier_seq(std::make_shared<decl_specifier_seq>());
+
     for(tree_node_iterator_t i = node.children.begin(); i != node.children.end(); ++i) //for each child
     {
         const tree_node_t& child_node = *i;
@@ -344,9 +327,11 @@ declaration_syntax_analyzer::evaluate_decl_specifier_seq(const tree_node_t& node
 
         if(specifier)
         {
-            dss.add(specifier);
+            new_decl_specifier_seq->add(specifier);
         }
     }
+
+    return new_decl_specifier_seq;
 }
 
 std::shared_ptr<type_specifier>
@@ -358,36 +343,28 @@ declaration_syntax_analyzer::evaluate_type_specifier(const tree_node_t& node)
     const tree_node_t& child_node = *node.children.begin();
     boost::spirit::parser_id child_id = child_node.value.id();
 
-    std::cout << get_id(child_node);
-
     if(child_id == grammar_parser_id::SIMPLE_TYPE_SPECIFIER)
     {
-        std::cout << "simple_type_specifier" << std::endl;
         return evaluate_simple_type_specifier(child_node);
     }
     else if(child_id == grammar_parser_id::CLASS_SPECIFIER)
     {
-        std::cout << "class_specifier" << std::endl;
         return evaluate_class_specifier(child_node);
     }
     else if(child_id == grammar_parser_id::ENUM_SPECIFIER)
     {
-        std::cout << "enum_specifier" << std::endl;
         //return evaluate_named_namespace_definition(node);
     }
     else if(child_id == grammar_parser_id::ELABORATED_TYPE_SPECIFIER)
     {
-        std::cout << "elaborated_type_specifier" << std::endl;
         //return evaluate_named_namespace_definition(node);
     }
     else if(child_id == grammar_parser_id::CV_QUALIFIER)
     {
-        std::cout << "cv_qualifier" << std::endl;
         //return evaluate_named_namespace_definition(node);
     }
     else if(child_id == grammar_parser_id::TYPEOF_EXPRESSION)
     {
-        std::cout << "typeof_expression" << std::endl;
         //return evaluate_named_namespace_definition(node);
     }
     else
@@ -409,7 +386,6 @@ declaration_syntax_analyzer::evaluate_simple_type_specifier(const tree_node_t& n
 
         if(value.size() > 2)
         {
-            std::cout << value << std::endl;
             return std::shared_ptr<simple_type_specifier>(new simple_type_specifier(value));
         }
     }
@@ -564,6 +540,39 @@ declaration_syntax_analyzer::evaluate_declarator_id(const tree_node_t& node)
     }
 
     return std::shared_ptr<declarator_id>();
+}
+
+std::shared_ptr<function_definition>
+declaration_syntax_analyzer::evaluate_function_definition(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar_parser_id::FUNCTION_DEFINITION);
+
+    //find decl_specifier_seq node...
+    const tree_node_t* decl_specifier_seq_node;
+    decl_specifier_seq_node = find_child_node(node, grammar_parser_id::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ1);
+    if(!decl_specifier_seq_node)
+        decl_specifier_seq_node = find_child_node(node, grammar_parser_id::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ2);
+    if(!decl_specifier_seq_node)
+        decl_specifier_seq_node = find_child_node(node, grammar_parser_id::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ3);
+
+    //... and evaluate it
+    std::shared_ptr<decl_specifier_seq> new_decl_specifier_seq;
+    if(decl_specifier_seq_node)
+    {
+        new_decl_specifier_seq = evaluate_decl_specifier_seq(*decl_specifier_seq_node);
+    }
+
+    //get declarator node
+    const tree_node_t* declarator_node = find_child_node(node, grammar_parser_id::DECLARATOR);
+    assert(declarator_node);
+    std::shared_ptr<declarator> new_declarator = evaluate_declarator(*declarator_node);
+
+    //create function definition object
+    return std::make_shared<function_definition>
+    (
+        new_decl_specifier_seq,
+        *new_declarator
+    );
 }
 
 std::shared_ptr<class_specifier>

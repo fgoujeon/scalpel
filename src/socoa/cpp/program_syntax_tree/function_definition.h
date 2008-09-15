@@ -17,39 +17,42 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_SIMPLE_DECLARATION_H
-#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_SIMPLE_DECLARATION_H
+#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_FUNCTION_DEFINITION_H
+#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_FUNCTION_DEFINITION_H
 
 #include <memory>
 #include "declaration.h"
-#include "decl_specifier_seq.h"
+#include "declarator.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class init_declarator_list;
+class decl_specifier_seq;
 
-class simple_declaration: public declaration
+class function_definition: public declaration
 {
     public:
-        simple_declaration
+        function_definition
         (
             std::shared_ptr<decl_specifier_seq> a_decl_specifier_seq,
-            std::shared_ptr<init_declarator_list> an_init_declarator_list
+            declarator&& a_declarator
         );
 
         const std::shared_ptr<decl_specifier_seq>
         get_decl_specifier_seq() const;
 
-        const std::shared_ptr<init_declarator_list>
-        get_init_declarator_list() const;
+        const declarator&
+        get_declarator() const;
 
         void
-        accept(visitor& a_visitor) const;
+        accept(visitor& a_visitor) const
+        {
+            a_visitor.visit(*this);
+        }
 
     private:
         std::shared_ptr<decl_specifier_seq> m_decl_specifier_seq;
-        std::shared_ptr<init_declarator_list> m_init_declarator_list;
+        declarator m_declarator;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

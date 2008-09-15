@@ -49,6 +49,7 @@ class init_declarator;
 class declarator;
 class direct_declarator;
 class declarator_id;
+class function_definition;
 class class_specifier;
 class template_declaration;
 
@@ -97,8 +98,8 @@ class declaration_syntax_analyzer
         std::shared_ptr<program_syntax_tree::decl_specifier>
         evaluate_decl_specifier(const tree_node_t& node);
 
-        void
-        evaluate_decl_specifier_seq(const tree_node_t& node, program_syntax_tree::decl_specifier_seq& dss);
+        std::shared_ptr<program_syntax_tree::decl_specifier_seq>
+        evaluate_decl_specifier_seq(const tree_node_t& node);
 
         std::shared_ptr<program_syntax_tree::type_specifier>
         evaluate_type_specifier(const tree_node_t& node);
@@ -126,6 +127,9 @@ class declaration_syntax_analyzer
 
         std::shared_ptr<program_syntax_tree::declarator_id>
         evaluate_declarator_id(const tree_node_t& node);
+
+        std::shared_ptr<program_syntax_tree::function_definition>
+        evaluate_function_definition(const tree_node_t& node);
 
         std::shared_ptr<program_syntax_tree::class_specifier>
         evaluate_class_specifier(const tree_node_t& node);

@@ -31,6 +31,7 @@ class access_specifier;
 class template_declaration;
 class simple_declaration;
 class simple_type_specifier;
+class function_definition;
 
 class visitor
 {
@@ -38,25 +39,28 @@ class visitor
         virtual ~visitor(){};
 
         virtual void
-        visit(const identifier& visitable) = 0;
+        visit(const identifier&) = 0;
 
         virtual void
-        visit(const namespace_definition& visitable) = 0;
+        visit(const namespace_definition&) = 0;
 
         virtual void
-        visit(const class_specifier& visitable) = 0;
+        visit(const class_specifier&) = 0;
 
         virtual void
-        visit(const access_specifier& visitable) = 0;
+        visit(const access_specifier&) = 0;
 
         virtual void
-        visit(const template_declaration& visitable) = 0;
+        visit(const template_declaration&) = 0;
 
         virtual void
-        visit(const simple_declaration& visitable) = 0;
+        visit(const simple_declaration&) = 0;
 
         virtual void
-        visit(const simple_type_specifier& visitable) = 0;
+        visit(const simple_type_specifier&) = 0;
+
+        virtual void
+        visit(const function_definition&) = 0;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

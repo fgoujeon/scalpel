@@ -17,37 +17,31 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "simple_declaration.h"
+#include "function_definition.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-simple_declaration::simple_declaration
+function_definition::function_definition
 (
     std::shared_ptr<decl_specifier_seq> a_decl_specifier_seq,
-    std::shared_ptr<init_declarator_list> an_init_declarator_list
+    declarator&& a_declarator
 ):
     m_decl_specifier_seq(a_decl_specifier_seq),
-    m_init_declarator_list(an_init_declarator_list)
+    m_declarator(a_declarator)
 {
 }
 
 const std::shared_ptr<decl_specifier_seq>
-simple_declaration::get_decl_specifier_seq() const
+function_definition::get_decl_specifier_seq() const
 {
     return m_decl_specifier_seq;
 }
 
-const std::shared_ptr<init_declarator_list>
-simple_declaration::get_init_declarator_list() const
+const declarator&
+function_definition::get_declarator() const
 {
-    return m_init_declarator_list;
-}
-
-void
-simple_declaration::accept(visitor& a_visitor) const
-{
-    a_visitor.visit(*this);
+    return m_declarator;
 }
 
 }}} //namespace socoa::cpp::program_syntax_tree
