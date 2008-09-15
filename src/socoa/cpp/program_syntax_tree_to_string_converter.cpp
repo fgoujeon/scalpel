@@ -18,160 +18,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "program_syntax_tree_to_string_converter.h"
-
-#include "program_syntax_tree/identifier.h"
-
-//#include "program_syntax_tree/primary_expression.h"
-#include "program_syntax_tree/id_expression.h"
-#include "program_syntax_tree/unqualified_id.h"
-//#include "program_syntax_tree/qualified_id.h"
-//#include "program_syntax_tree/nested_name_specifier.h"
-//#include "program_syntax_tree/class_or_namespace_name.h"
-//#include "program_syntax_tree/postfix_expression.h"
-//#include "program_syntax_tree/expression_list.h"
-//#include "program_syntax_tree/pseudo_destructor_name.h"
-//#include "program_syntax_tree/unary_expression.h"
-//#include "program_syntax_tree/unary_operator.h"
-//#include "program_syntax_tree/new_expression.h"
-//#include "program_syntax_tree/new_placement.h"
-//#include "program_syntax_tree/new_type_id.h"
-//#include "program_syntax_tree/new_declarator.h"
-//#include "program_syntax_tree/direct_new_declarator.h"
-//#include "program_syntax_tree/new_initializer.h"
-//#include "program_syntax_tree/delete_expression.h"
-//#include "program_syntax_tree/cast_expression.h"
-//#include "program_syntax_tree/pm_expression.h"
-//#include "program_syntax_tree/multiplicative_expression.h"
-//#include "program_syntax_tree/additive_expression.h"
-//#include "program_syntax_tree/shift_expression.h"
-//#include "program_syntax_tree/relational_expression.h"
-//#include "program_syntax_tree/equality_expression.h"
-//#include "program_syntax_tree/and_expression.h"
-//#include "program_syntax_tree/exclusive_or_expression.h"
-//#include "program_syntax_tree/inclusive_or_expression.h"
-//#include "program_syntax_tree/logical_and_expression.h"
-//#include "program_syntax_tree/logical_or_expression.h"
-//#include "program_syntax_tree/conditional_expression.h"
-//#include "program_syntax_tree/assignment_expression.h"
-//#include "program_syntax_tree/assignment_operator.h"
-//#include "program_syntax_tree/expression.h"
-//#include "program_syntax_tree/constant_expression.h"
-
-//#include "program_syntax_tree/statement.h"
-//#include "program_syntax_tree/labeled_statement.h"
-//#include "program_syntax_tree/expression_statement.h"
-//#include "program_syntax_tree/compound_statement.h"
-//#include "program_syntax_tree/statement_seq.h"
-//#include "program_syntax_tree/selection_statement.h"
-//#include "program_syntax_tree/condition.h"
-//#include "program_syntax_tree/condition_type_specifier_seq.h"
-//#include "program_syntax_tree/iteration_statement.h"
-//#include "program_syntax_tree/for_init_statement.h"
-//#include "program_syntax_tree/jump_statement.h"
-//#include "program_syntax_tree/declaration_statement.h"
-//
-//#include "program_syntax_tree/declaration_seq.h"
-#include "program_syntax_tree/declaration.h"
-//#include "program_syntax_tree/block_declaration.h"
-#include "program_syntax_tree/simple_declaration.h"
-//#include "program_syntax_tree/decl_specifier.h"
-#include "program_syntax_tree/decl_specifier_seq.h"
-//#include "program_syntax_tree/storage_class_specifier.h"
-//#include "program_syntax_tree/function_specifier.h"
-//#include "program_syntax_tree/typedef_name.h"
-//#include "program_syntax_tree/type_specifier.h"
-#include "program_syntax_tree/simple_type_specifier.h"
-//#include "program_syntax_tree/type_name.h"
-//#include "program_syntax_tree/elaborated_type_specifier.h"
-//#include "program_syntax_tree/enum_name.h"
-//#include "program_syntax_tree/enum_specifier.h"
-//#include "program_syntax_tree/enumerator_list.h"
-//#include "program_syntax_tree/enumerator_definition.h"
-//#include "program_syntax_tree/enumerator.h"
-//#include "program_syntax_tree/namespace_name.h"
-#include "program_syntax_tree/namespace_definition.h"
-//#include "program_syntax_tree/named_namespace_definition.h"
-//#include "program_syntax_tree/unnamed_namespace_definition.h"
-//#include "program_syntax_tree/namespace_body.h"
-//#include "program_syntax_tree/namespace_alias.h"
-//#include "program_syntax_tree/namespace_alias_definition.h"
-//#include "program_syntax_tree/qualified_namespace_specifier.h"
-//#include "program_syntax_tree/using_declaration.h"
-//#include "program_syntax_tree/using_directive.h"
-//#include "program_syntax_tree/asm_definition.h"
-//#include "program_syntax_tree/linkage_specification.h"
-//
-#include "program_syntax_tree/init_declarator_list.h"
-#include "program_syntax_tree/init_declarator.h"
-#include "program_syntax_tree/declarator.h"
-#include "program_syntax_tree/direct_declarator.h"
-//#include "program_syntax_tree/ptr_operator.h"
-//#include "program_syntax_tree/cv_qualifier_seq.h"
-//#include "program_syntax_tree/cv_qualifier.h"
-#include "program_syntax_tree/declarator_id.h"
-//#include "program_syntax_tree/type_id.h"
-//#include "program_syntax_tree/type_specifier_seq.h"
-//#include "program_syntax_tree/abstract_declarator.h"
-//#include "program_syntax_tree/direct_abstract_declarator.h"
-//#include "program_syntax_tree/parameter_declaration_clause.h"
-//#include "program_syntax_tree/parameter_declaration_list.h"
-//#include "program_syntax_tree/parameter_declaration.h"
-#include "program_syntax_tree/function_definition.h"
-//#include "program_syntax_tree/function_body.h"
-//#include "program_syntax_tree/initializer.h"
-//#include "program_syntax_tree/initializer_clause.h"
-//#include "program_syntax_tree/initializer_list.h"
-//
-//#include "program_syntax_tree/class_name.h"
-#include "program_syntax_tree/class_specifier.h"
-//#include "program_syntax_tree/class_head.h"
-//#include "program_syntax_tree/class_key.h"
-//#include "program_syntax_tree/member_specification.h"
-//#include "program_syntax_tree/member_declaration.h"
-//#include "program_syntax_tree/member_declaration_decl_specifier_seq.h"
-//#include "program_syntax_tree/member_declarator_list.h"
-//#include "program_syntax_tree/member_declarator.h"
-//#include "program_syntax_tree/pure_specifier.h"
-//#include "program_syntax_tree/constant_initializer.h"
-//#include "program_syntax_tree/destructor_name.h"
-//
-//#include "program_syntax_tree/base_clause.h"
-//#include "program_syntax_tree/base_specifier_list.h"
-//#include "program_syntax_tree/base_specifier.h"
-//#include "program_syntax_tree/access_specifier.h"
-//
-//#include "program_syntax_tree/conversion_function_id.h"
-//#include "program_syntax_tree/conversion_type_id.h"
-//#include "program_syntax_tree/conversion_declarator.h"
-//#include "program_syntax_tree/ctor_initializer.h"
-//#include "program_syntax_tree/mem_initializer_list.h"
-//#include "program_syntax_tree/mem_initializer.h"
-//#include "program_syntax_tree/mem_initializer_id.h"
-//
-//#include "program_syntax_tree/operator_function_id.h"
-//#include "program_syntax_tree/operator_.h"
-//
-//#include "program_syntax_tree/template_declaration.h"
-//#include "program_syntax_tree/template_parameter_list.h"
-//#include "program_syntax_tree/template_parameter.h"
-//#include "program_syntax_tree/type_parameter.h"
-//#include "program_syntax_tree/template_id.h"
-//#include "program_syntax_tree/template_name.h"
-//#include "program_syntax_tree/template_argument_list.h"
-//#include "program_syntax_tree/template_argument.h"
-//#include "program_syntax_tree/explicit_instantiation.h"
-//#include "program_syntax_tree/explicit_specialization.h"
-//
-//#include "program_syntax_tree/try_block.h"
-//#include "program_syntax_tree/function_try_block.h"
-//#include "program_syntax_tree/handler_seq.h"
-//#include "program_syntax_tree/handler.h"
-//#include "program_syntax_tree/exception_declaration.h"
-//#include "program_syntax_tree/throw_expression.h"
-//#include "program_syntax_tree/exception_specification.h"
-//#include "program_syntax_tree/type_id_list.h"
-//
-//#include "program_syntax_tree/typeof_expression.h"
+#include "program_syntax_tree.h"
 
 namespace socoa { namespace cpp
 {
@@ -255,7 +102,6 @@ program_syntax_tree_to_string_converter::visit(const direct_declarator& item)
     if(a_declarator_id)
     {
         visit(*a_declarator_id);
-        return;
     }
 
     const std::shared_ptr<declarator> a_declarator = item.get_declarator();
@@ -264,8 +110,34 @@ program_syntax_tree_to_string_converter::visit(const direct_declarator& item)
         m_result << '(';
         visit(*a_declarator);
         m_result << ')';
-        return;
     }
+
+    const std::vector<std::shared_ptr<direct_declarator_part>>& other_parts = item.get_other_parts();
+    for
+    (
+        std::vector<std::shared_ptr<direct_declarator_part>>::const_iterator i = other_parts.begin();
+        i != other_parts.end();
+        ++i
+    )
+    {
+        (**i).accept(*this);
+    }
+}
+
+void
+program_syntax_tree_to_string_converter::visit(const function_direct_declarator_part& item)
+{
+    m_result << '(';
+    visit(item.get_parameter_declaration_clause());
+    m_result << ')';
+}
+
+void
+program_syntax_tree_to_string_converter::visit(const array_direct_declarator_part& item)
+{
+    m_result << '[';
+
+    m_result << ']';
 }
 
 void
@@ -277,6 +149,45 @@ program_syntax_tree_to_string_converter::visit(const declarator_id& item)
         an_id_expression->accept(*this);
         return;
     }
+}
+
+void
+program_syntax_tree_to_string_converter::visit(const parameter_declaration_clause& item)
+{
+    const std::shared_ptr<parameter_declaration_list> a_parameter_declaration_list(item.get_parameter_declaration_list());
+    if(a_parameter_declaration_list)
+    {
+        visit(*a_parameter_declaration_list);
+    }
+
+    if(item.has_trailing_comma())
+        m_result << ", ";
+
+    if(item.has_ellipsis())
+        m_result << "...";
+}
+
+void
+program_syntax_tree_to_string_converter::visit(const parameter_declaration_list& item)
+{
+    const std::vector<std::shared_ptr<parameter_declaration>> parameter_declarations = item.get_parameter_declarations();
+    for
+    (
+        std::vector<std::shared_ptr<parameter_declaration>>::const_iterator i = parameter_declarations.begin();
+        i != parameter_declarations.end();
+        ++i
+    )
+    {
+        if(i != parameter_declarations.begin())
+            m_result << ", ";
+        visit(**i);
+    }
+}
+
+void
+program_syntax_tree_to_string_converter::visit(const parameter_declaration& item)
+{
+    visit(item.get_decl_specifier_seq());
 }
 
 void

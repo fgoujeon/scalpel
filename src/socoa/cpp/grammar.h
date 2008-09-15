@@ -189,29 +189,31 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::INIT_DECLARATOR>> init_declarator;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::DECLARATOR>> declarator;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::DIRECT_DECLARATOR>> direct_declarator;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::FUNCTION_DIRECT_DECLARATOR_PART>> function_direct_declarator_part;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::ARRAY_DIRECT_DECLARATOR_PART>> array_direct_declarator_part;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::PTR_OPERATOR>> ptr_operator;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::CV_QUALIFIER_SEQ>> cv_qualifier_seq;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::CV_QUALIFIER>> cv_qualifier;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::DECLARATOR_ID>> declarator_id;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::TYPE_ID>> type_id;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::TYPE_SPECIFIER_SEQ>> type_specifier_seq;
-            boost::spirit::rule<ScannerT> abstract_declarator;
-            boost::spirit::rule<ScannerT> direct_abstract_declarator;
-            boost::spirit::rule<ScannerT> parameter_declaration_clause;
-            boost::spirit::rule<ScannerT> parameter_declaration_list;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::ABSTRACT_DECLARATOR>> abstract_declarator;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::DIRECT_ABSTRACT_DECLARATOR>> direct_abstract_declarator;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::PARAMETER_DECLARATION_CLAUSE>> parameter_declaration_clause;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::PARAMETER_DECLARATION_LIST>> parameter_declaration_list;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::PARAMETER_DECLARATION>> parameter_declaration;
-            boost::spirit::rule<ScannerT> parameter_declaration_decl_specifier_seq1;
-            boost::spirit::rule<ScannerT> parameter_declaration_decl_specifier_seq2;
-            boost::spirit::rule<ScannerT> parameter_declaration_decl_specifier_seq3;
-            boost::spirit::rule<ScannerT> parameter_declaration_decl_specifier_seq4;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ1>> parameter_declaration_decl_specifier_seq1;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ2>> parameter_declaration_decl_specifier_seq2;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ3>> parameter_declaration_decl_specifier_seq3;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ4>> parameter_declaration_decl_specifier_seq4;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::FUNCTION_DEFINITION>> function_definition;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ1>> function_definition_decl_specifier_seq1;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ2>> function_definition_decl_specifier_seq2;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ3>> function_definition_decl_specifier_seq3;
-            boost::spirit::rule<ScannerT> function_body;
-            boost::spirit::rule<ScannerT> initializer;
-            boost::spirit::rule<ScannerT> initializer_clause;
-            boost::spirit::rule<ScannerT> initializer_list;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::FUNCTION_BODY>> function_body;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::INITIALIZER>> initializer;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::INITIALIZER_CLAUSE>> initializer_clause;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::INITIALIZER_LIST>> initializer_list;
 
             //1.8 - Classes [gram.class]
             boost::spirit::rule<ScannerT> class_name;
@@ -1247,9 +1249,15 @@ grammar::definition<ScannerT>::definition(const grammar& self)
         )
         >>
         *(
-            '(' >> parameter_declaration_clause >> ')' >> !cv_qualifier_seq >> !exception_specification
-            | '[' >> !constant_expression >> ']'
+            function_direct_declarator_part
+            | array_direct_declarator_part
         )
+    ;
+    function_direct_declarator_part
+        = '(' >> parameter_declaration_clause >> ')' >> !cv_qualifier_seq >> !exception_specification
+    ;
+    array_direct_declarator_part
+        = '[' >> !constant_expression >> ']'
     ;
 
     ptr_operator

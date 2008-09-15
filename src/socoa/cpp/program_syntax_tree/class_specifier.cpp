@@ -34,10 +34,4 @@ class_specifier::get_name() const
     return m_name;
 }
 
-void
-class_specifier::accept(visitor& a_visitor) const
-{
-    a_visitor.visit(*this);
-}
-
 }}} //namespace socoa::cpp::program_syntax_tree

@@ -161,6 +161,8 @@ namespace grammar_parser_id
         INIT_DECLARATOR,
         DECLARATOR,
         DIRECT_DECLARATOR,
+        FUNCTION_DIRECT_DECLARATOR_PART,
+        ARRAY_DIRECT_DECLARATOR_PART,
         PTR_OPERATOR,
         CV_QUALIFIER_SEQ,
         CV_QUALIFIER,

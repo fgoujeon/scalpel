@@ -17,33 +17,39 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_CLASS_SPECIFIER_H
-#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_CLASS_SPECIFIER_H
-
-#include <string>
-#include "type_specifier.h"
+#include "parameter_declaration_clause.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class class_specifier: public type_specifier
+parameter_declaration_clause::parameter_declaration_clause
+(
+    std::shared_ptr<parameter_declaration_list> a_parameter_declaration_list,
+    bool trailing_comma,
+    bool ellipsis
+):
+    m_parameter_declaration_list(a_parameter_declaration_list),
+    m_trailing_comma(trailing_comma),
+    m_ellipsis(ellipsis)
 {
-    public:
-        explicit class_specifier(const std::string& name);
+}
 
-        const std::string&
-        get_name() const;
+const std::shared_ptr<parameter_declaration_list>
+parameter_declaration_clause::get_parameter_declaration_list() const
+{
+    return m_parameter_declaration_list;
+}
 
-        void
-        accept(visitor& a_visitor) const
-        {
-            a_visitor.visit(*this);
-        }
+bool
+parameter_declaration_clause::has_trailing_comma() const
+{
+    return m_trailing_comma;
+}
 
-    private:
-        std::string m_name;
-};
+bool
+parameter_declaration_clause::has_ellipsis() const
+{
+    return m_ellipsis;
+}
 
 }}} //namespace socoa::cpp::program_syntax_tree
-
-#endif

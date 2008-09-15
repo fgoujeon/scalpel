@@ -25,35 +25,10 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/spirit.hpp>
 #include <boost/spirit/include/classic_parse_tree.hpp>
 #include "spirit_launcher.h"
-
+#include "program_syntax_tree_fwd.h"
 
 namespace socoa { namespace cpp
 {
-
-namespace program_syntax_tree
-{
-
-class identifier;
-class id_expression;
-class unqualified_id;
-class declaration_seq;
-class declaration;
-class simple_declaration;
-class decl_specifier_seq;
-class decl_specifier;
-class type_specifier;
-class simple_type_specifier;
-class namespace_definition;
-class init_declarator_list;
-class init_declarator;
-class declarator;
-class direct_declarator;
-class declarator_id;
-class function_definition;
-class class_specifier;
-class template_declaration;
-
-} //namespace program_syntax_tree
 
 class declaration_syntax_analyzer
 {
@@ -125,8 +100,23 @@ class declaration_syntax_analyzer
         std::shared_ptr<program_syntax_tree::direct_declarator>
         evaluate_direct_declarator(const tree_node_t& node);
 
+        std::shared_ptr<program_syntax_tree::function_direct_declarator_part>
+        evaluate_function_direct_declarator_part(const tree_node_t& node);
+
+        std::shared_ptr<program_syntax_tree::array_direct_declarator_part>
+        evaluate_array_direct_declarator_part(const tree_node_t& node);
+
         std::shared_ptr<program_syntax_tree::declarator_id>
         evaluate_declarator_id(const tree_node_t& node);
+
+        std::shared_ptr<program_syntax_tree::parameter_declaration_clause>
+        evaluate_parameter_declaration_clause(const tree_node_t& node);
+
+        std::shared_ptr<program_syntax_tree::parameter_declaration_list>
+        evaluate_parameter_declaration_list(const tree_node_t& node);
+
+        std::shared_ptr<program_syntax_tree::parameter_declaration>
+        evaluate_parameter_declaration(const tree_node_t& node);
 
         std::shared_ptr<program_syntax_tree::function_definition>
         evaluate_function_definition(const tree_node_t& node);

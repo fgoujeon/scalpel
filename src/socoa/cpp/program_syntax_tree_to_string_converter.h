@@ -24,22 +24,10 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <sstream>
 #include <memory>
 #include "program_syntax_tree/visitor.h"
+#include "program_syntax_tree_fwd.h"
 
 namespace socoa { namespace cpp
 {
-
-namespace program_syntax_tree
-{
-
-class declaration_seq;
-class decl_specifier_seq;
-class init_declarator_list;
-class init_declarator;
-class declarator;
-class direct_declarator;
-class declarator_id;
-
-} //namespace syntax_program_tree
 
 class program_syntax_tree_to_string_converter: public program_syntax_tree::visitor
 {
@@ -72,7 +60,22 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         visit(const program_syntax_tree::direct_declarator& item);
 
         void
+        visit(const program_syntax_tree::function_direct_declarator_part& item);
+
+        void
+        visit(const program_syntax_tree::array_direct_declarator_part& item);
+
+        void
         visit(const program_syntax_tree::declarator_id& item);
+
+        void
+        visit(const program_syntax_tree::parameter_declaration_clause& item);
+
+        void
+        visit(const program_syntax_tree::parameter_declaration_list& item);
+
+        void
+        visit(const program_syntax_tree::parameter_declaration& item);
 
         void
         visit(const program_syntax_tree::function_definition& item);

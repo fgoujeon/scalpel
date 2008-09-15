@@ -17,31 +17,40 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_CLASS_SPECIFIER_H
-#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_CLASS_SPECIFIER_H
+#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_PARAMETER_DECLARATION_H
+#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_PARAMETER_DECLARATION_H
 
-#include <string>
-#include "type_specifier.h"
+#include <memory>
+#include "decl_specifier_seq.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class class_specifier: public type_specifier
+class declarator;
+
+class parameter_declaration
 {
     public:
-        explicit class_specifier(const std::string& name);
+        parameter_declaration
+        (
+            decl_specifier_seq&& a_decl_specifier_seq,
+            std::shared_ptr<declarator> a_declarator,
+            bool equal
+        );
 
-        const std::string&
-        get_name() const;
+        const decl_specifier_seq&
+        get_decl_specifier_seq() const;
 
-        void
-        accept(visitor& a_visitor) const
-        {
-            a_visitor.visit(*this);
-        }
+        const std::shared_ptr<declarator>
+        get_declarator() const;
+
+        bool
+        has_equal() const;
 
     private:
-        std::string m_name;
+        decl_specifier_seq m_decl_specifier_seq;
+        std::shared_ptr<declarator> m_declarator;
+        bool m_equal;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

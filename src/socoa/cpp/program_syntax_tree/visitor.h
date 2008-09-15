@@ -32,6 +32,8 @@ class template_declaration;
 class simple_declaration;
 class simple_type_specifier;
 class function_definition;
+class function_direct_declarator_part;
+class array_direct_declarator_part;
 
 class visitor
 {
@@ -61,6 +63,12 @@ class visitor
 
         virtual void
         visit(const function_definition&) = 0;
+
+        virtual void
+        visit(const function_direct_declarator_part&) = 0;
+
+        virtual void
+        visit(const array_direct_declarator_part&) = 0;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree
