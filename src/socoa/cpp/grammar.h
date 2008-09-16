@@ -1329,7 +1329,7 @@ grammar::definition<ScannerT>::definition(const grammar& self)
         = +(decl_specifier - (abstract_declarator >> '=' >> assignment_expression))
     ;
     parameter_declaration_decl_specifier_seq4
-        = +(decl_specifier - (abstract_declarator >> (ch_p(',') >> ')' >> "...")))
+        = +(decl_specifier - (abstract_declarator >> (ch_p(',') | ')' | "...")))
     ;
 
 

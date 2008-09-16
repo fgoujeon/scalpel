@@ -426,19 +426,20 @@ declaration_syntax_analyzer::evaluate_declarator(const tree_node_t& node)
     assert(node.value.id() == grammar_parser_id::DECLARATOR);
 
     //get ptr_operator nodes
-    /*for(tree_node_iterator_t i = node.children.begin(); i != node.children.end(); ++i) //for each child
+    std::vector<std::shared_ptr<ptr_operator>> ptr_operators;
+    for(tree_node_iterator_t i = node.children.begin(); i != node.children.end(); ++i) //for each child
     {
         const tree_node_t& child_node = *i;
-        std::shared_ptr<init_declarator> new_init_declarator(evaluate_init_declarator(child_node));
 
-        if(new_init_declarator)
+        if(child_node.value.id() == grammar_parser_id::PTR_OPERATOR)
         {
-            new_init_declarator_list->add(new_init_declarator);
+            ptr_operators.push_back(evaluate_ptr_operator(child_node));
         }
-    }*/
+    }
 
     return std::make_shared<declarator>
     (
+        std::move(ptr_operators),
         *ASSERTED_EVALUATE(direct_declarator, DIRECT_DECLARATOR)
     );
 }
@@ -522,6 +523,26 @@ declaration_syntax_analyzer::evaluate_array_direct_declarator_part(const tree_no
     assert(node.value.id() == grammar_parser_id::ARRAY_DIRECT_DECLARATOR_PART);
 
     return std::shared_ptr<array_direct_declarator_part>();
+}
+
+std::shared_ptr<ptr_operator>
+declaration_syntax_analyzer::evaluate_ptr_operator(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar_parser_id::PTR_OPERATOR);
+
+    bool asterisk = find_value(node, "*");
+    bool ampersand = find_value(node, "&", 0);
+    assert
+    (
+        (asterisk && !ampersand) ||
+        (!asterisk && ampersand)
+    );
+
+    return std::make_shared<ptr_operator>
+    (
+        asterisk ? ptr_operator::ASTERISK : ptr_operator::AMPERSAND,
+        find_value(node, "::", 0)
+    );
 }
 
 std::shared_ptr<declarator_id>

@@ -92,6 +92,12 @@ program_syntax_tree_to_string_converter::visit(const init_declarator& item)
 void
 program_syntax_tree_to_string_converter::visit(const declarator& item)
 {
+    const std::vector<std::shared_ptr<ptr_operator>>& ptr_operators = item.get_ptr_operators();
+    for(std::vector<std::shared_ptr<ptr_operator>>::const_iterator i = ptr_operators.begin(); i != ptr_operators.end(); ++i)
+    {
+        visit(**i);
+    }
+
     visit(item.get_direct_declarator());
 }
 
@@ -138,6 +144,23 @@ program_syntax_tree_to_string_converter::visit(const array_direct_declarator_par
     m_result << '[';
 
     m_result << ']';
+}
+
+void
+program_syntax_tree_to_string_converter::visit(const ptr_operator& item)
+{
+    if(item.has_leading_double_colon())
+        m_result << "::";
+
+    switch(item.get_type())
+    {
+        case ptr_operator::ASTERISK:
+            m_result << '*';
+            break;
+        case ptr_operator::AMPERSAND:
+            m_result << '&';
+            break;
+    }
 }
 
 void

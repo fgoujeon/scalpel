@@ -66,6 +66,9 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         visit(const program_syntax_tree::array_direct_declarator_part& item);
 
         void
+        visit(const program_syntax_tree::ptr_operator& item);
+
+        void
         visit(const program_syntax_tree::declarator_id& item);
 
         void

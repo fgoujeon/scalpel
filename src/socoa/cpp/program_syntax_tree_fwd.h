@@ -40,6 +40,7 @@ class declarator;
 class direct_declarator;
 class function_direct_declarator_part;
 class array_direct_declarator_part;
+class ptr_operator;
 class declarator_id;
 class parameter_declaration_clause;
 class parameter_declaration_list;

@@ -20,28 +20,32 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_DECLARATOR_H
 #define SOCOA_CPP_PROGRAM_SYNTAX_TREE_DECLARATOR_H
 
+#include <vector>
 #include <memory>
 #include "direct_declarator.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
+class ptr_operator;
+
 class declarator
 {
     public:
-        explicit declarator(direct_declarator&& a_direct_declarator);
+        declarator
+        (
+            std::vector<std::shared_ptr<ptr_operator>>&& ptr_operators,
+            direct_declarator&& a_direct_declarator
+        );
 
-        /*const std::vector<std::shared_ptr<ptr_operator>>&
+        const std::vector<std::shared_ptr<ptr_operator>>&
         get_ptr_operators() const;
-
-        void
-        add(std::shared_ptr<ptr_operator> a_ptr_operator);*/
 
         const direct_declarator&
         get_direct_declarator() const;
 
     private:
-        //std::vector<std::shared_ptr<ptr_operator>> m_ptr_operators;
+        std::vector<std::shared_ptr<ptr_operator>> m_ptr_operators;
         direct_declarator m_direct_declarator;
 };
 

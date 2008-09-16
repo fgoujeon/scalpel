@@ -17,31 +17,33 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "declarator.h"
+#include "ptr_operator.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-declarator::declarator
+ptr_operator::ptr_operator
 (
-    std::vector<std::shared_ptr<ptr_operator>>&& ptr_operators,
-    direct_declarator&& a_direct_declarator
+    type a_type,
+    bool leading_double_colon
+    //std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
+    //std::shared_ptr<cv_qualifier_seq> a_cv_qualifier_seq
 ):
-    m_ptr_operators(ptr_operators),
-    m_direct_declarator(a_direct_declarator)
+    m_type(a_type),
+    m_leading_double_colon(leading_double_colon)
 {
 }
 
-const std::vector<std::shared_ptr<ptr_operator>>&
-declarator::get_ptr_operators() const
+ptr_operator::type
+ptr_operator::get_type() const
 {
-    return m_ptr_operators;
+    return m_type;
 }
 
-const direct_declarator&
-declarator::get_direct_declarator() const
+bool
+ptr_operator::has_leading_double_colon() const
 {
-    return m_direct_declarator;
+    return m_leading_double_colon;
 }
 
 }}} //namespace socoa::cpp::program_syntax_tree

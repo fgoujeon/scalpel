@@ -107,6 +107,9 @@ class declaration_syntax_analyzer
         std::shared_ptr<program_syntax_tree::array_direct_declarator_part>
         evaluate_array_direct_declarator_part(const tree_node_t& node);
 
+        std::shared_ptr<program_syntax_tree::ptr_operator>
+        evaluate_ptr_operator(const tree_node_t& node);
+
         std::shared_ptr<program_syntax_tree::declarator_id>
         evaluate_declarator_id(const tree_node_t& node);
 
