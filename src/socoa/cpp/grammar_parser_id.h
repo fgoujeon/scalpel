@@ -30,7 +30,6 @@ namespace grammar_parser_id
         FILE,
         SOURCE_CHARACTER_SET,
         KEYWORD,
-        EXPORT_KEYWORD,
 
         HEX_QUAD,
         UNIVERSAL_CHARACTER_NAME,

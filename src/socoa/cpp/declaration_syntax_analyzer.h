@@ -141,8 +141,17 @@ class declaration_syntax_analyzer
         const tree_node_t*
         find_child_node(const tree_node_t& parent_node, int child_id);
 
-        std::string
+        bool
+        find_value(const tree_node_t& parent_node, const std::string& value, unsigned int position);
+
+        bool
+        find_value(const tree_node_t& parent_node, const std::string& value);
+
+        const std::string
         get_value(const tree_node_t& node);
+
+        const std::string
+        get_unique_child_value(const tree_node_t& node);
 
         std::string
         strip_redundant_spaces(const std::string& str);

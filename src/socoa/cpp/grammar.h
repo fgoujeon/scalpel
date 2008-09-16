@@ -52,8 +52,6 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT> source_character_set;
             boost::spirit::rule<ScannerT> keyword;
 
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::EXPORT_KEYWORD>> export_keyword;
-
             //1.2 - Lexical conventions [gram.lex]
             boost::spirit::rule<typename boost::spirit::lexeme_scanner<ScannerT>::type> hex_quad;
             boost::spirit::rule<ScannerT> universal_character_name;
@@ -424,10 +422,6 @@ grammar::definition<ScannerT>::definition(const grammar& self)
             | "and_eq"
             | "and"
         ]
-    ;
-
-    export_keyword
-        = no_node_d[str_p("export")]
     ;
 
 
@@ -1553,7 +1547,7 @@ grammar::definition<ScannerT>::definition(const grammar& self)
 
     //1.12 - Templates [gram.temp]
     template_declaration
-        = !export_keyword >> str_p("template") >> '<' >> template_parameter_list >> '>' >> declaration
+        = !str_p("export") >> str_p("template") >> '<' >> template_parameter_list >> '>' >> declaration
     ;
 
     template_parameter_list

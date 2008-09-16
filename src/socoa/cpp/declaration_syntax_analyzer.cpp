@@ -78,9 +78,9 @@ declaration_syntax_analyzer::evaluate_identifier(const tree_node_t& node)
 {
     assert(node.value.id() == grammar_parser_id::IDENTIFIER);
 
-    std::cout << "identifier: " << get_value(node) << "\n";
+    std::cout << "identifier: " << get_unique_child_value(node) << "\n";
 
-    return std::make_shared<identifier>(get_value(node));
+    return std::make_shared<identifier>(get_unique_child_value(node));
 }
 
 std::shared_ptr<id_expression>
@@ -357,7 +357,7 @@ declaration_syntax_analyzer::evaluate_simple_type_specifier(const tree_node_t& n
 
     if(node.children.size() == 1)
     {
-        std::string value = get_value(node);
+        std::string value = get_unique_child_value(node);
 
         if(value.size() > 2)
         {
@@ -542,36 +542,10 @@ declaration_syntax_analyzer::evaluate_parameter_declaration_clause(const tree_no
 {
     assert(node.value.id() == grammar_parser_id::PARAMETER_DECLARATION_CLAUSE);
 
-    bool trailing_comma = false;
-    bool ellipsis = false;
+    bool trailing_comma = find_value(node, ",", 1);
+    bool ellipsis = find_value(node, "...");
 
-    //find trailing comma
-    if(node.children.size() >= 2)
-    {
-        tree_node_iterator_t i = node.children.begin();
-        ++i;
-
-        if(get_value(*i) == ",")
-        {
-            trailing_comma = true;
-            ellipsis = true;
-
-            ++i;
-            assert(get_value(*i) == "...");
-        }
-    }
-
-    //find ellipsis
-    if(!trailing_comma) //if there's a trailing comma, there's an ellipsis, so we don't search in that case
-    {
-        tree_node_iterator_t i = node.children.end();
-        --i;
-
-        if(get_value(*i) == "...")
-        {
-            ellipsis = true;
-        }
-    }
+    if(trailing_comma) assert(ellipsis);
 
     return std::make_shared<parameter_declaration_clause>
     (
@@ -671,13 +645,13 @@ declaration_syntax_analyzer::evaluate_class_specifier(const tree_node_t& node)
     const tree_node_t* identifier_node = find_child_node(*class_head_node, grammar_parser_id::IDENTIFIER);
     if(identifier_node)
     {
-        name = get_value(*identifier_node);
+        name = get_unique_child_value(*identifier_node);
     }
 
     //get the key of the class
     const tree_node_t* class_key_node = find_child_node(*class_head_node, grammar_parser_id::CLASS_KEY);
     assert(class_key_node);
-    std::string class_key = get_value(*class_key_node);
+    std::string class_key = get_unique_child_value(*class_key_node);
 
     //create a class/struct/union and add it to the parent namespace
     if(class_key == "class")
@@ -707,7 +681,7 @@ declaration_syntax_analyzer::evaluate_template_declaration(const tree_node_t& no
     assert(node.value.id() == grammar_parser_id::TEMPLATE_DECLARATION);
 
     //is the declaration exported?
-    bool exported = find_child_node(node, grammar_parser_id::EXPORT_KEYWORD);
+    bool exported = find_value(node, "export", 0);
 
     //get declaration part
     const tree_node_t declaration_part_node = *node.children.rbegin();
@@ -735,17 +709,47 @@ declaration_syntax_analyzer::find_child_node(const tree_node_t& parent_node, int
     return 0;
 }
 
-std::string
-declaration_syntax_analyzer::get_value(const tree_node_t& node)
+bool
+declaration_syntax_analyzer::find_value(const tree_node_t& parent_node, const std::string& value, unsigned int position)
 {
-    //assert(node.children.size() == 1);
+    if(parent_node.children.size() <= position)
+        return false;
+
+    return get_value(parent_node.children[position]) == value;
+}
+
+bool
+declaration_syntax_analyzer::find_value(const tree_node_t& parent_node, const std::string& value)
+{
+    for(tree_node_iterator_t i = parent_node.children.begin(); i != parent_node.children.end(); ++i) //for each child
+    {
+        const tree_node_t& child_node = *i;
+        if(get_value(child_node) == value)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+const std::string
+declaration_syntax_analyzer::get_unique_child_value(const tree_node_t& node)
+{
+    assert(node.children.size() == 1);
 
     //get child node
     const tree_node_t& child_node = *node.children.begin();
 
+    return get_value(child_node);
+}
+
+const std::string
+declaration_syntax_analyzer::get_value(const tree_node_t& node)
+{
     //get value
     std::ostringstream value_oss;
-    for(tree_node_value_iterator_t i = child_node.value.begin(); i != child_node.value.end(); ++i) //iterate node value
+    for(tree_node_value_iterator_t i = node.value.begin(); i != node.value.end(); ++i) //iterate node value
     {
         value_oss << *i;
     }
