@@ -78,8 +78,6 @@ declaration_syntax_analyzer::evaluate_identifier(const tree_node_t& node)
 {
     assert(node.value.id() == grammar_parser_id::IDENTIFIER);
 
-    std::cout << "identifier: " << get_unique_child_value(node) << "\n";
-
     return std::make_shared<identifier>(get_unique_child_value(node));
 }
 

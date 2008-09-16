@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SINGLE_PREPROCESSING_FILE_TEST_H
-#define SINGLE_PREPROCESSING_FILE_TEST_H
+#ifndef SINGLE_PREPROCESSING_STANDARD_LIBRARY_TEST_H
+#define SINGLE_PREPROCESSING_STANDARD_LIBRARY_TEST_H
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
@@ -32,8 +32,6 @@ class standard_library_test: public CppUnit::TestFixture
     CPPUNIT_TEST_SUITE_END();
 
     public:
-        standard_library_test();
-
         void
         parse_files();
 
