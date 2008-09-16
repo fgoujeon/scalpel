@@ -52,18 +52,16 @@ declaration_syntax_analyzer::evaluate_translation_unit(const tree_node_t& node)
 {
     assert(node.value.id() == grammar_parser_id::TRANSLATION_UNIT);
 
-    std::shared_ptr<declaration_seq> translation_unit(new declaration_seq());
-
     const tree_node_t& declaration_seq_node = *node.children.begin();
-    evaluate_declaration_seq(declaration_seq_node, *translation_unit);
-
-    return translation_unit;
+    return evaluate_declaration_seq(declaration_seq_node);
 }
 
 std::shared_ptr<identifier>
 declaration_syntax_analyzer::evaluate_identifier(const tree_node_t& node)
 {
     assert(node.value.id() == grammar_parser_id::IDENTIFIER);
+
+    std::cout << "identifier: " << get_value(node) << "\n";
 
     return std::make_shared<identifier>(get_value(node));
 }
@@ -130,18 +128,12 @@ declaration_syntax_analyzer::evaluate_unqualified_id(const tree_node_t& node)
     return std::shared_ptr<unqualified_id>();
 }
 
-void
-declaration_syntax_analyzer::evaluate_declaration_seq(const tree_node_t& node, declaration_seq& ds)
+std::shared_ptr<declaration_seq>
+declaration_syntax_analyzer::evaluate_declaration_seq(const tree_node_t& node)
 {
     assert(node.value.id() == grammar_parser_id::DECLARATION_SEQ);
 
-    /*
-    The declaration_seq node we're evaluating is either the root node or a
-    statically created member variable of a previously created object (such as
-    namespace_definition), so a corresponding declaration_seq object has
-    already been created.
-    'ds' is this object.
-    */
+    std::shared_ptr<declaration_seq> new_declaration_seq(std::make_shared<declaration_seq>());
 
     for(tree_node_iterator_t i = node.children.begin(); i != node.children.end(); ++i) //for each child
     {
@@ -151,9 +143,11 @@ declaration_syntax_analyzer::evaluate_declaration_seq(const tree_node_t& node, d
 
         if(decl)
         {
-            ds.add(decl);
+            new_declaration_seq->add(decl);
         }
     }
+
+    return new_declaration_seq;
 }
 
 std::shared_ptr<declaration>
@@ -388,29 +382,28 @@ declaration_syntax_analyzer::evaluate_namespace_definition(const tree_node_t& no
     std::shared_ptr<namespace_definition> new_namespace_definition;
 
     //get the name of the namespace
+    std::shared_ptr<identifier> new_identifier;
     const tree_node_t* identifier_node = find_child_node(node, grammar_parser_id::IDENTIFIER);
     if(identifier_node)
     {
-        std::string name = get_value(*identifier_node);
-        //create a new namespace with this name
-        new_namespace_definition = std::make_shared<namespace_definition>(name);
-    }
-    else //this is an anonymous namespace
-    {
-        new_namespace_definition = std::make_shared<namespace_definition>();
+        new_identifier = evaluate_identifier(*identifier_node);
     }
 
     //get the declaration_seq node of the namespace's body...
-    const tree_node_t* body_node = find_child_node(node, grammar_parser_id::NAMESPACE_BODY);
-    assert(body_node);
-    const tree_node_t* declaration_seq_node = find_child_node(*body_node, grammar_parser_id::DECLARATION_SEQ);
+    std::shared_ptr<declaration_seq> namespace_body;
+    const tree_node_t* declaration_seq_node = find_child_node(node, grammar_parser_id::DECLARATION_SEQ);
     if(declaration_seq_node)
     {
         //..and evaluate it
-        evaluate_declaration_seq(*declaration_seq_node, new_namespace_definition->get_body());
+        namespace_body = evaluate_declaration_seq(*declaration_seq_node);
     }
 
-    return new_namespace_definition;
+
+    return std::make_shared<namespace_definition>
+    (
+        new_identifier,
+        namespace_body
+    );
 }
 
 std::shared_ptr<init_declarator_list>
@@ -463,7 +456,6 @@ declaration_syntax_analyzer::evaluate_declarator(const tree_node_t& node)
     //get direct_declarator node
     const tree_node_t* direct_declarator_node = find_child_node(node, grammar_parser_id::DIRECT_DECLARATOR);
     assert(direct_declarator_node);
-
     std::shared_ptr<declarator> new_declarator(new declarator(evaluate_direct_declarator(*direct_declarator_node)));
 
     //get ptr_operator nodes

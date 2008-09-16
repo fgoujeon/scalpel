@@ -22,37 +22,26 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-namespace_definition::namespace_definition()
+namespace_definition::namespace_definition
+(
+    std::shared_ptr<identifier> an_identifier,
+    std::shared_ptr<declaration_seq> a_declaration_seq
+):
+    m_identifier(an_identifier),
+    m_declaration_seq(a_declaration_seq)
 {
 }
 
-namespace_definition::namespace_definition(const std::string& name):
-    m_name(name)
+const std::shared_ptr<identifier>
+namespace_definition::get_identifier() const
 {
+    return m_identifier;
 }
 
-const std::string&
-namespace_definition::get_name() const
+const std::shared_ptr<declaration_seq>
+namespace_definition::get_declaration_seq() const
 {
-    return m_name;
-}
-
-declaration_seq&
-namespace_definition::get_body()
-{
-    return m_body;
-}
-
-const declaration_seq&
-namespace_definition::get_body() const
-{
-    return m_body;
-}
-
-void
-namespace_definition::accept(visitor& a_visitor) const
-{
-    a_visitor.visit(*this);
+    return m_declaration_seq;
 }
 
 }}} //namespace socoa::cpp::program_syntax_tree

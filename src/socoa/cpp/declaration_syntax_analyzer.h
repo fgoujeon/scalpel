@@ -58,8 +58,8 @@ class declaration_syntax_analyzer
         std::shared_ptr<program_syntax_tree::unqualified_id>
         evaluate_unqualified_id(const tree_node_t& node);
 
-        void
-        evaluate_declaration_seq(const tree_node_t& node, program_syntax_tree::declaration_seq& ds);
+        std::shared_ptr<program_syntax_tree::declaration_seq>
+        evaluate_declaration_seq(const tree_node_t& node);
 
         std::shared_ptr<program_syntax_tree::declaration>
         evaluate_declaration(const tree_node_t& node);

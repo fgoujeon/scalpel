@@ -175,7 +175,6 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::NAMESPACE_NAME>> namespace_name;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::ORIGINAL_NAMESPACE_NAME>> original_namespace_name;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::NAMESPACE_DEFINITION>> namespace_definition;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::NAMESPACE_BODY>> namespace_body;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::NAMESPACE_ALIAS>> namespace_alias;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::NAMESPACE_ALIAS_DEFINITION>> namespace_alias_definition;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::QUALIFIED_NAMESPACE_SPECIFIER>> qualified_namespace_specifier;
@@ -1107,11 +1106,7 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     ;
 
     namespace_definition
-        = str_p("namespace") >> !identifier >> '{' >> namespace_body >> '}'
-    ;
-
-    namespace_body
-        = !declaration_seq
+        = str_p("namespace") >> !identifier >> '{' >> !declaration_seq >> '}'
     ;
 
     namespace_alias

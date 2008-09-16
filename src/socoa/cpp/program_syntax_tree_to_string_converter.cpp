@@ -59,9 +59,16 @@ program_syntax_tree_to_string_converter::visit(const declaration_seq& item)
 void
 program_syntax_tree_to_string_converter::visit(const namespace_definition& item)
 {
-    m_result << "namespace " << item.get_name();
+    m_result << "namespace ";
+
+    if(std::shared_ptr<identifier> namespace_name = item.get_identifier())
+        visit(*namespace_name);
+
     m_result << opening_brace();
-    visit(item.get_body());
+
+    if(std::shared_ptr<declaration_seq> namespace_body = item.get_declaration_seq())
+        visit(*namespace_body);
+
     m_result << closing_brace() << new_line();
 }
 
@@ -188,6 +195,12 @@ void
 program_syntax_tree_to_string_converter::visit(const parameter_declaration& item)
 {
     visit(item.get_decl_specifier_seq());
+
+    const std::shared_ptr<declarator> a_declarator = item.get_declarator();
+    if(a_declarator)
+    {
+        visit(*a_declarator);
+    }
 }
 
 void

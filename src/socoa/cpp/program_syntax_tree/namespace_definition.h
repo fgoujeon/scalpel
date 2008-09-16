@@ -20,6 +20,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_NAMESPACE_DEFINITION_H
 #define SOCOA_CPP_PROGRAM_SYNTAX_TREE_NAMESPACE_DEFINITION_H
 
+#include <memory>
 #include <string>
 #include "declaration.h"
 #include "declaration_seq.h"
@@ -27,28 +28,32 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class namespace_definition: public declaration, public std::enable_shared_from_this<namespace_definition>
+class identifier;
+
+class namespace_definition: public declaration
 {
     public:
-        namespace_definition();
+        namespace_definition
+        (
+            std::shared_ptr<identifier> an_identifier,
+            std::shared_ptr<declaration_seq> a_declaration_seq
+        );
 
-        explicit namespace_definition(const std::string& name);
+        const std::shared_ptr<identifier>
+        get_identifier() const;
 
-        const std::string&
-        get_name() const;
-
-        declaration_seq&
-        get_body();
-
-        const declaration_seq&
-        get_body() const;
+        const std::shared_ptr<declaration_seq>
+        get_declaration_seq() const;
 
         void
-        accept(visitor& a_visitor) const;
+        accept(visitor& a_visitor) const
+        {
+            a_visitor.visit(*this);
+        }
 
     private:
-        std::string m_name;
-        declaration_seq m_body;
+        std::shared_ptr<identifier> m_identifier;
+        std::shared_ptr<declaration_seq> m_declaration_seq;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree
