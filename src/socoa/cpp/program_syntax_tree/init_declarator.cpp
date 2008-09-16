@@ -22,16 +22,18 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-const std::shared_ptr<declarator>
+init_declarator::init_declarator
+(
+    declarator&& a_declarator
+):
+    m_declarator(a_declarator)
+{
+}
+
+const declarator&
 init_declarator::get_declarator() const
 {
     return m_declarator;
-}
-
-void
-init_declarator::set_declarator(std::shared_ptr<declarator> a_declarator)
-{
-    m_declarator = a_declarator;
 }
 
 }}} //namespace socoa::cpp::program_syntax_tree

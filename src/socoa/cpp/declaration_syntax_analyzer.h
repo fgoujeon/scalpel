@@ -25,6 +25,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/spirit.hpp>
 #include <boost/spirit/include/classic_parse_tree.hpp>
 #include "spirit_launcher.h"
+#include "grammar_parser_id.h"
 #include "program_syntax_tree_fwd.h"
 
 namespace socoa { namespace cpp
@@ -127,6 +128,16 @@ class declaration_syntax_analyzer
         std::shared_ptr<program_syntax_tree::template_declaration>
         evaluate_template_declaration(const tree_node_t& node);
 
+        template <class T>
+        std::shared_ptr<T>
+        evaluate
+        (
+            const tree_node_t& parent_node,
+            const int id,
+            std::shared_ptr<T> (declaration_syntax_analyzer::*evaluation_function)(const tree_node_t&),
+            bool assert_node_exists = false
+        );
+
         const tree_node_t*
         find_child_node(const tree_node_t& parent_node, int child_id);
 
@@ -142,6 +153,33 @@ class declaration_syntax_analyzer
 
         spirit_launcher m_spirit_launcher;
 };
+
+template <class T>
+std::shared_ptr<T>
+declaration_syntax_analyzer::evaluate
+(
+    const tree_node_t& parent_node,
+    const int id,
+    std::shared_ptr<T> (declaration_syntax_analyzer::*evaluation_function)(const tree_node_t&),
+    bool assert_node_exists
+)
+{
+    const tree_node_t* node = find_child_node(parent_node, id);
+
+    if(assert_node_exists)
+    {
+        assert(node);
+        return (this->*evaluation_function)(*node);
+    }
+    else if(node)
+    {
+        return (this->*evaluation_function)(*node);
+    }
+    else
+    {
+        return std::shared_ptr<T>();
+    }
+}
 
 }} //namespace socoa::cpp
 

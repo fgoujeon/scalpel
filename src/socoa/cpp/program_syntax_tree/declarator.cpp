@@ -24,7 +24,7 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 
 declarator::declarator
 (
-    std::shared_ptr<direct_declarator> a_direct_declarator
+    direct_declarator&& a_direct_declarator
 ):
     m_direct_declarator(a_direct_declarator)
 {
@@ -42,7 +42,7 @@ declarator::add(std::shared_ptr<ptr_operator> a_ptr_operator)
     m_ptr_operators.push_back(a_ptr_operator);
 }
 */
-const std::shared_ptr<direct_declarator>
+const direct_declarator&
 declarator::get_direct_declarator() const
 {
     return m_direct_declarator;

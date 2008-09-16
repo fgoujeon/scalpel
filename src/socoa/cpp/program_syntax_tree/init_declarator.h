@@ -21,23 +21,24 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_PROGRAM_SYNTAX_TREE_INIT_DECLARATOR_H
 
 #include <memory>
+#include "declarator.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class declarator;
-
 class init_declarator
 {
     public:
-        const std::shared_ptr<declarator>
+        explicit init_declarator
+        (
+            declarator&& a_declarator
+        );
+
+        const declarator&
         get_declarator() const;
 
-        void
-        set_declarator(std::shared_ptr<declarator> a_declarator);
-
     private:
-        std::shared_ptr<declarator> m_declarator;
+        declarator m_declarator;
         //std::shared_ptr<initializer> m_initializer;
 };
 

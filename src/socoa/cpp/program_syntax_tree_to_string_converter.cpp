@@ -86,20 +86,13 @@ program_syntax_tree_to_string_converter::visit(const init_declarator_list& item)
 void
 program_syntax_tree_to_string_converter::visit(const init_declarator& item)
 {
-    std::shared_ptr<declarator> decl = item.get_declarator();
-
-    if(decl)
-        visit(*decl);
+    visit(item.get_declarator());
 }
 
 void
 program_syntax_tree_to_string_converter::visit(const declarator& item)
 {
-    const std::shared_ptr<direct_declarator> a_direct_declarator(item.get_direct_declarator());
-    if(a_direct_declarator)
-    {
-        visit(*a_direct_declarator);
-    }
+    visit(item.get_direct_declarator());
 }
 
 void
