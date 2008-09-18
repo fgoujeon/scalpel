@@ -95,7 +95,7 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::UNQUALIFIED_ID>> unqualified_id;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::QUALIFIED_ID>> qualified_id;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::NESTED_NAME_SPECIFIER>> nested_name_specifier;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::CLASS_OR_NAMESPACE_NAME>> class_or_namespace_name;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::NESTED_NAME_SPECIFIER_TEMPLATE_ID>> nested_name_specifier_template_id;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::POSTFIX_EXPRESSION>> postfix_expression;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::EXPRESSION_LIST>> expression_list;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::PSEUDO_DESTRUCTOR_NAME>> pseudo_destructor_name;
@@ -160,20 +160,14 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::DECL_SPECIFIER_SEQ>> decl_specifier_seq;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::STORAGE_CLASS_SPECIFIER>> storage_class_specifier;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::FUNCTION_SPECIFIER>> function_specifier;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::TYPEDEF_NAME>> typedef_name;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::TYPE_SPECIFIER>> type_specifier;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::SIMPLE_TYPE_SPECIFIER>> simple_type_specifier;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::TYPE_NAME>> type_name;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::IDENTIFIER_OR_TEMPLATE_ID>> identifier_or_template_id;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::ELABORATED_TYPE_SPECIFIER>> elaborated_type_specifier;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::ENUM_NAME>> enum_name;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::ENUM_SPECIFIER>> enum_specifier;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::ENUMERATOR_LIST>> enumerator_list;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::ENUMERATOR_DEFINITION>> enumerator_definition;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::ENUMERATOR>> enumerator;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::NAMESPACE_NAME>> namespace_name;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::ORIGINAL_NAMESPACE_NAME>> original_namespace_name;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::NAMESPACE_DEFINITION>> namespace_definition;
-            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::NAMESPACE_ALIAS>> namespace_alias;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::NAMESPACE_ALIAS_DEFINITION>> namespace_alias_definition;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::QUALIFIED_NAMESPACE_SPECIFIER>> qualified_namespace_specifier;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::USING_DECLARATION>> using_declaration;
@@ -213,7 +207,6 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::INITIALIZER_LIST>> initializer_list;
 
             //1.8 - Classes [gram.class]
-            boost::spirit::rule<ScannerT> class_name;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::CLASS_SPECIFIER>> class_specifier;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::CLASS_HEAD>> class_head;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::CLASS_KEY>> class_key;
@@ -251,7 +244,6 @@ class grammar: public boost::spirit::grammar<grammar>
             boost::spirit::rule<ScannerT> template_parameter;
             boost::spirit::rule<ScannerT> type_parameter;
             boost::spirit::rule<ScannerT> template_id;
-            boost::spirit::rule<ScannerT> template_name;
             boost::spirit::rule<ScannerT> template_argument_list;
             boost::spirit::rule<ScannerT> template_argument;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::EXPLICIT_INSTANTIATION>> explicit_instantiation;
@@ -628,14 +620,23 @@ grammar::definition<ScannerT>::definition(const grammar& self)
         | str_p("::") >> identifier
     ;
 
+    /*
+        nested_name_specifier
+            = identifier_or_template_id >> "::"
+            | nested_name_specifier >> identifier >> "::"
+            | nested_name_specifier >> !str_p("template") >> template_id >> "::"
+        ;
+    */
     nested_name_specifier
-        = class_or_namespace_name >> str_p("::") >> "template" >> nested_name_specifier
-        | class_or_namespace_name >> str_p("::") >> !nested_name_specifier
+        =
+        identifier_or_template_id >> "::" >>
+        *(
+            identifier >> "::"
+            | nested_name_specifier_template_id >> "::"
+        )
     ;
-
-    class_or_namespace_name
-        = class_name
-        | namespace_name
+    nested_name_specifier_template_id
+        = !str_p("template") >> template_id
     ;
 
     /*
@@ -695,9 +696,9 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     ;
 
     pseudo_destructor_name
-        = !str_p("::") >> !nested_name_specifier >> type_name >> str_p("::") >> '~' >> type_name
-        | !str_p("::") >> nested_name_specifier >> str_p("template") >> template_id >> str_p("::") >> '~' >> type_name
-        | !str_p("::") >> !nested_name_specifier >> '~' >> type_name
+        = !str_p("::") >> !nested_name_specifier >> identifier_or_template_id >> str_p("::") >> '~' >> identifier_or_template_id
+        | !str_p("::") >> nested_name_specifier >> str_p("template") >> template_id >> str_p("::") >> '~' >> identifier_or_template_id
+        | !str_p("::") >> !nested_name_specifier >> '~' >> identifier_or_template_id
     ;
 
     unary_expression
@@ -988,7 +989,7 @@ grammar::definition<ScannerT>::definition(const grammar& self)
         ;
     If we wrote it that way, with such an input:
         int i, j;
-    The scanner will parse "i" as a decl_specifier (it is indeed a correct type_name).
+    The scanner will parse "i" as a decl_specifier (it is indeed a correct identifier_or_template_id).
     Consequently, when it will try to parse the comma, it will raise an error.
 
     In order to solve this issue, we have to create an extra rule which specifies a tail parser.
@@ -1027,10 +1028,6 @@ grammar::definition<ScannerT>::definition(const grammar& self)
         | "explicit"
     ;
 
-    typedef_name
-        = identifier
-    ;
-
     type_specifier
         = simple_type_specifier
         | class_specifier
@@ -1041,7 +1038,7 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     ;
 
     simple_type_specifier
-        = !str_p("::") >> !nested_name_specifier >> type_name
+        = !str_p("::") >> !nested_name_specifier >> identifier_or_template_id
         | !str_p("::") >> nested_name_specifier >> "template" >> template_id
         | "char"
         | "wchar_t"
@@ -1056,10 +1053,9 @@ grammar::definition<ScannerT>::definition(const grammar& self)
         | "void"
     ;
 
-    type_name
-        = class_name
-        | enum_name
-        | typedef_name
+    identifier_or_template_id
+        = template_id
+        | identifier
     ;
 
     elaborated_type_specifier
@@ -1068,10 +1064,6 @@ grammar::definition<ScannerT>::definition(const grammar& self)
         | str_p("enum") >> !str_p("::") >> !nested_name_specifier >> identifier
         | str_p("typename") >> !str_p("::") >> nested_name_specifier >> !str_p("template") >> template_id
         | str_p("typename") >> !str_p("::") >> nested_name_specifier >> identifier
-    ;
-
-    enum_name
-        = identifier
     ;
 
     enum_specifier
@@ -1083,28 +1075,11 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     ;
 
     enumerator_definition
-        = enumerator >> !('=' >> constant_expression)
-    ;
-
-    enumerator
-        = identifier
-    ;
-
-    namespace_name
-        = original_namespace_name
-        | namespace_alias
-    ;
-
-    original_namespace_name
-        = identifier
+        = identifier >> !('=' >> constant_expression)
     ;
 
     namespace_definition
         = str_p("namespace") >> !identifier >> '{' >> !declaration_seq >> '}'
-    ;
-
-    namespace_alias
-        = identifier
     ;
 
     namespace_alias_definition
@@ -1112,7 +1087,7 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     ;
 
     qualified_namespace_specifier
-        = !str_p("::") >> !nested_name_specifier >> namespace_name
+        = !str_p("::") >> !nested_name_specifier >> identifier
     ;
 
     using_declaration
@@ -1121,7 +1096,7 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     ;
 
     using_directive
-        = str_p("using") >> "namespace" >> !str_p("::") >> !nested_name_specifier >> namespace_name >> ch_p(';')
+        = str_p("using") >> "namespace" >> !str_p("::") >> !nested_name_specifier >> identifier >> ch_p(';')
     ;
 
     asm_definition
@@ -1267,7 +1242,7 @@ grammar::definition<ScannerT>::definition(const grammar& self)
 
     declarator_id
         = id_expression
-        | !str_p("::") >> !nested_name_specifier >> type_name
+        | !str_p("::") >> !nested_name_specifier >> identifier_or_template_id
     ;
 
     type_id
@@ -1375,14 +1350,6 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     ;
 
     //1.8 - Classes [gram.class]
-    class_name
-        = token_node_d
-        [
-            template_id
-            | identifier
-        ]
-    ;
-
     class_specifier
         = class_head >> ch_p('{') >> !member_specification >> ch_p('}')
     ;
@@ -1437,7 +1404,7 @@ grammar::definition<ScannerT>::definition(const grammar& self)
 
     //convenience rule, not explicitly in the standard
     destructor_name
-        = '~' >> class_name
+        = '~' >> identifier_or_template_id
     ;
 
 
@@ -1451,9 +1418,9 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     ;
 
     base_specifier
-        = !str_p("::") >> !nested_name_specifier >> class_name
-        | "virtual" >> !access_specifier >> !str_p("::") >> !nested_name_specifier >> class_name
-        | access_specifier >> !str_p("virtual") >> !str_p("::") >> !nested_name_specifier >> class_name
+        = !str_p("::") >> !nested_name_specifier >> identifier_or_template_id
+        | "virtual" >> !access_specifier >> !str_p("::") >> !nested_name_specifier >> identifier_or_template_id
+        | access_specifier >> !str_p("virtual") >> !str_p("::") >> !nested_name_specifier >> identifier_or_template_id
     ;
 
     access_specifier
@@ -1491,7 +1458,7 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     ;
 
     mem_initializer_id
-        = !str_p("::") >> !nested_name_specifier >> class_name
+        = !str_p("::") >> !nested_name_specifier >> identifier_or_template_id
         | identifier
     ;
 
@@ -1569,11 +1536,7 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     ;
 
     template_id
-        = template_name >> '<' >> !template_argument_list >> '>'
-    ;
-
-    template_name
-        = identifier
+        = identifier >> '<' >> !template_argument_list >> '>'
     ;
 
     template_argument_list

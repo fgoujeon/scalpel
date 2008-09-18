@@ -20,8 +20,8 @@ set(CMAKE_VERBOSE_MAKEFILE off)
 
 #project
 project(Socoa)
-set(LIBRARY_OUTPUT_PATH lib)
 set(CMAKE_BUILD_TYPE Debug)
+set(LIBRARY_OUTPUT_PATH lib/${CMAKE_BUILD_TYPE})
 
 #gcc settings
 if(CMAKE_COMPILER_IS_GNUCXX)
