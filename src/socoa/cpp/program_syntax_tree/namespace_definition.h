@@ -45,11 +45,7 @@ class namespace_definition: public declaration
         const std::shared_ptr<declaration_seq>
         get_declaration_seq() const;
 
-        void
-        accept(visitor& a_visitor) const
-        {
-            a_visitor.visit(*this);
-        }
+        SOCOA_CPP_DEFINE_VISITABLE()
 
     private:
         std::shared_ptr<identifier> m_identifier;

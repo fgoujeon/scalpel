@@ -17,30 +17,31 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_VISITABLE_H
-#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_VISITABLE_H
-
-#include "visitor.h"
-
-#define SOCOA_CPP_DEFINE_VISITABLE()    \
-    void                                \
-    accept(visitor& a_visitor) const    \
-    {                                   \
-        a_visitor.visit(*this);         \
-    }
+#include "nested_name_specifier_template_id.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class visitable
+nested_name_specifier_template_id::nested_name_specifier_template_id
+(
+    bool template_keyword,
+    template_id&& a_template_id
+):
+    m_template_keyword(template_keyword),
+    m_template_id(a_template_id)
 {
-    public:
-        virtual ~visitable(){};
+}
 
-        virtual void
-        accept(visitor& a_visitor) const = 0;
-};
+bool
+nested_name_specifier_template_id::has_template_keyword() const
+{
+    return m_template_keyword;
+}
+
+const template_id&
+nested_name_specifier_template_id::get_template_id() const
+{
+    return m_template_id;
+}
 
 }}} //namespace socoa::cpp::program_syntax_tree
-
-#endif

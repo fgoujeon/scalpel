@@ -240,12 +240,12 @@ class grammar: public boost::spirit::grammar<grammar>
 
             //1.12 - Templates [gram.temp]
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::TEMPLATE_DECLARATION>> template_declaration;
-            boost::spirit::rule<ScannerT> template_parameter_list;
-            boost::spirit::rule<ScannerT> template_parameter;
-            boost::spirit::rule<ScannerT> type_parameter;
-            boost::spirit::rule<ScannerT> template_id;
-            boost::spirit::rule<ScannerT> template_argument_list;
-            boost::spirit::rule<ScannerT> template_argument;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::TEMPLATE_PARAMETER_LIST>> template_parameter_list;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::TEMPLATE_PARAMETER>> template_parameter;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::TYPE_PARAMETER>> type_parameter;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::TEMPLATE_ID>> template_id;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::TEMPLATE_ARGUMENT_LIST>> template_argument_list;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::TEMPLATE_ARGUMENT>> template_argument;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::EXPLICIT_INSTANTIATION>> explicit_instantiation;
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::EXPLICIT_SPECIALIZATION>> explicit_specialization;
 
@@ -628,12 +628,7 @@ grammar::definition<ScannerT>::definition(const grammar& self)
         ;
     */
     nested_name_specifier
-        =
-        identifier_or_template_id >> "::" >>
-        *(
-            identifier >> "::"
-            | nested_name_specifier_template_id >> "::"
-        )
+        = identifier_or_template_id >> "::" >> *((identifier | nested_name_specifier_template_id) >> "::")
     ;
     nested_name_specifier_template_id
         = !str_p("template") >> template_id

@@ -34,11 +34,7 @@ class class_specifier: public type_specifier
         const std::string&
         get_name() const;
 
-        void
-        accept(visitor& a_visitor) const
-        {
-            a_visitor.visit(*this);
-        }
+        SOCOA_CPP_DEFINE_VISITABLE()
 
     private:
         std::string m_name;

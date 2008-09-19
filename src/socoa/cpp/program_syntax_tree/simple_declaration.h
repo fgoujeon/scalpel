@@ -44,8 +44,7 @@ class simple_declaration: public declaration
         const std::shared_ptr<init_declarator_list>
         get_init_declarator_list() const;
 
-        void
-        accept(visitor& a_visitor) const;
+        SOCOA_CPP_DEFINE_VISITABLE()
 
     private:
         std::shared_ptr<decl_specifier_seq> m_decl_specifier_seq;

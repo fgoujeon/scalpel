@@ -42,6 +42,12 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         visit(const program_syntax_tree::identifier& item);
 
         void
+        visit(const program_syntax_tree::nested_name_specifier& item);
+
+        void
+        visit(const program_syntax_tree::nested_name_specifier_template_id& item);
+
+        void
         visit(const program_syntax_tree::declaration_seq& item);
 
         void
@@ -103,6 +109,9 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
 
         void
         visit(const program_syntax_tree::simple_type_specifier& item);
+
+        void
+        visit(const program_syntax_tree::template_id& item);
 
         const std::string
         new_line();

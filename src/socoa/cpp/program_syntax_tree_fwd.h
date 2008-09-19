@@ -26,6 +26,9 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 class identifier;
 class id_expression;
 class unqualified_id;
+class nested_name_specifier;
+class nested_name_specifier_part;
+class nested_name_specifier_template_id;
 class declaration_seq;
 class declaration;
 class simple_declaration;
@@ -33,6 +36,7 @@ class decl_specifier_seq;
 class decl_specifier;
 class type_specifier;
 class simple_type_specifier;
+class identifier_or_template_id;
 class namespace_definition;
 class init_declarator_list;
 class init_declarator;
@@ -48,6 +52,7 @@ class parameter_declaration;
 class function_definition;
 class class_specifier;
 class template_declaration;
+class template_id;
 
 }}} //namespace socoa::cpp::program_syntax_tree
 

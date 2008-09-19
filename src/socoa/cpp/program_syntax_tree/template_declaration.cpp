@@ -40,10 +40,4 @@ template_declaration::declaration_part() const
     return m_declaration_part;
 }
 
-void
-template_declaration::accept(visitor& a_visitor) const
-{
-    a_visitor.visit(*this);
-}
-
 }}} //namespace socoa::cpp::program_syntax_tree

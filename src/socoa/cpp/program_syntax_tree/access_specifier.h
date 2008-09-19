@@ -40,8 +40,7 @@ class access_specifier: public member_specification_item
         value
         get_value() const;
 
-        void
-        accept(visitor& a_visitor) const;
+        SOCOA_CPP_DEFINE_VISITABLE()
 
     private:
         value m_value;

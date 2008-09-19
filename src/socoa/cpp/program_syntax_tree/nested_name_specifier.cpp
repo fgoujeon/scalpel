@@ -17,30 +17,31 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_VISITABLE_H
-#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_VISITABLE_H
-
-#include "visitor.h"
-
-#define SOCOA_CPP_DEFINE_VISITABLE()    \
-    void                                \
-    accept(visitor& a_visitor) const    \
-    {                                   \
-        a_visitor.visit(*this);         \
-    }
+#include "nested_name_specifier.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class visitable
+nested_name_specifier::nested_name_specifier
+(
+    std::shared_ptr<identifier_or_template_id> an_identifier_or_template_id,
+    std::vector<std::shared_ptr<nested_name_specifier_part>>&& a_nested_name_specifier_part
+):
+    m_identifier_or_template_id(an_identifier_or_template_id),
+    m_nested_name_specifier_part(a_nested_name_specifier_part)
 {
-    public:
-        virtual ~visitable(){};
+}
 
-        virtual void
-        accept(visitor& a_visitor) const = 0;
-};
+const std::shared_ptr<identifier_or_template_id>
+nested_name_specifier::get_identifier_or_template_id() const
+{
+    return m_identifier_or_template_id;
+}
+
+const std::vector<std::shared_ptr<nested_name_specifier_part>>&
+nested_name_specifier::get_other_parts() const
+{
+    return m_nested_name_specifier_part;
+}
 
 }}} //namespace socoa::cpp::program_syntax_tree
-
-#endif

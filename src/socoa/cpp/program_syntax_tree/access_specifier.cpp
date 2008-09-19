@@ -33,10 +33,4 @@ access_specifier::get_value() const
     return m_value;
 }
 
-void
-access_specifier::accept(visitor& a_visitor) const
-{
-    a_visitor.visit(*this);
-}
-
 }}} //namespace socoa::cpp::program_syntax_tree

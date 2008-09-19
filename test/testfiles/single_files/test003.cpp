@@ -1,4 +1,4 @@
-std::string dump(const std::vector v)
+std::string dump(const std::vector& v)
 {
 	std::ostringstream oss;
 

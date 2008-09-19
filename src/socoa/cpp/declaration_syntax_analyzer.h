@@ -59,6 +59,12 @@ class declaration_syntax_analyzer
         std::shared_ptr<program_syntax_tree::unqualified_id>
         evaluate_unqualified_id(const tree_node_t& node);
 
+        std::shared_ptr<program_syntax_tree::nested_name_specifier>
+        evaluate_nested_name_specifier(const tree_node_t& node);
+
+        std::shared_ptr<program_syntax_tree::nested_name_specifier_template_id>
+        evaluate_nested_name_specifier_template_id(const tree_node_t& node);
+
         std::shared_ptr<program_syntax_tree::declaration_seq>
         evaluate_declaration_seq(const tree_node_t& node);
 
@@ -82,6 +88,9 @@ class declaration_syntax_analyzer
 
         std::shared_ptr<program_syntax_tree::simple_type_specifier>
         evaluate_simple_type_specifier(const tree_node_t& node);
+
+        std::shared_ptr<program_syntax_tree::identifier_or_template_id>
+        evaluate_identifier_or_template_id(const tree_node_t& node);
 
         std::shared_ptr<program_syntax_tree::namespace_definition>
         evaluate_namespace_definition(const tree_node_t& node);
@@ -130,6 +139,9 @@ class declaration_syntax_analyzer
 
         std::shared_ptr<program_syntax_tree::template_declaration>
         evaluate_template_declaration(const tree_node_t& node);
+
+        std::shared_ptr<program_syntax_tree::template_id>
+        evaluate_template_id(const tree_node_t& node);
 
         template <class T>
         std::shared_ptr<T>

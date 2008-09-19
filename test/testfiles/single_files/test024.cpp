@@ -13,6 +13,7 @@ namespace foo
 	namespace bar
 	{
 		int j;
+		bidule a_bidule;
 		class machin
 		{
 		};
@@ -24,6 +25,7 @@ namespace foo
 	namespace
 	{
 		char c;
+		bar::bidule another_bidule;
 	}
 
 }

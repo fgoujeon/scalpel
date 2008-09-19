@@ -17,38 +17,36 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_FUNCTION_DEFINITION_H
-#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_FUNCTION_DEFINITION_H
+#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_NESTED_NAME_SPECIFIER_H
+#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_NESTED_NAME_SPECIFIER_H
 
+#include <vector>
 #include <memory>
-#include "declaration.h"
-#include "declarator.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class decl_specifier_seq;
+class identifier_or_template_id;
+class nested_name_specifier_part;
 
-class function_definition: public declaration
+class nested_name_specifier
 {
     public:
-        function_definition
+        nested_name_specifier
         (
-            std::shared_ptr<decl_specifier_seq> a_decl_specifier_seq,
-            declarator&& a_declarator
+            std::shared_ptr<identifier_or_template_id> an_identifier_or_template_id,
+            std::vector<std::shared_ptr<nested_name_specifier_part>>&& a_nested_name_specifier_part
         );
 
-        const std::shared_ptr<decl_specifier_seq>
-        get_decl_specifier_seq() const;
+        const std::shared_ptr<identifier_or_template_id>
+        get_identifier_or_template_id() const;
 
-        const declarator&
-        get_declarator() const;
-
-        SOCOA_CPP_DEFINE_VISITABLE()
+        const std::vector<std::shared_ptr<nested_name_specifier_part>>&
+        get_other_parts() const;
 
     private:
-        std::shared_ptr<decl_specifier_seq> m_decl_specifier_seq;
-        declarator m_declarator;
+        std::shared_ptr<identifier_or_template_id> m_identifier_or_template_id;
+        std::vector<std::shared_ptr<nested_name_specifier_part>> m_nested_name_specifier_part;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

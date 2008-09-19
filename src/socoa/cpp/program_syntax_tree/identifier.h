@@ -22,11 +22,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string>
 #include "unqualified_id.h"
+#include "nested_name_specifier_part.h"
+#include "identifier_or_template_id.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class identifier: public unqualified_id
+class identifier: public unqualified_id, public nested_name_specifier_part, public identifier_or_template_id
 {
     public:
         explicit identifier(const std::string& value);
@@ -34,8 +36,7 @@ class identifier: public unqualified_id
         const std::string&
         get_value() const;
 
-        void
-        accept(visitor& a_visitor) const;
+        SOCOA_CPP_DEFINE_VISITABLE()
 
     private:
         std::string m_value;

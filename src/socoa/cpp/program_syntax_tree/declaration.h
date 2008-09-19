@@ -28,7 +28,7 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 class declaration: public visitable
 {
     public:
-        virtual ~declaration();
+        virtual ~declaration(){};
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

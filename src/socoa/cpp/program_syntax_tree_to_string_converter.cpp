@@ -46,6 +46,32 @@ program_syntax_tree_to_string_converter::visit(const identifier& item)
 }
 
 void
+program_syntax_tree_to_string_converter::visit(const nested_name_specifier& item)
+{
+    item.get_identifier_or_template_id()->accept(*this);
+    m_result << "::";
+    for
+    (
+        std::vector<std::shared_ptr<nested_name_specifier_part>>::const_iterator i = item.get_other_parts().begin();
+        i != item.get_other_parts().end();
+        ++i
+    )
+    {
+        (**i).accept(*this);
+        m_result << "::";
+    }
+}
+
+void
+program_syntax_tree_to_string_converter::visit(const nested_name_specifier_template_id& item)
+{
+    if(item.has_template_keyword())
+        m_result << "template ";
+
+    visit(item.get_template_id());
+}
+
+void
 program_syntax_tree_to_string_converter::visit(const declaration_seq& item)
 {
     const std::vector<std::shared_ptr<declaration>>& declarations = item.get_declarations();
@@ -284,7 +310,70 @@ program_syntax_tree_to_string_converter::visit(const decl_specifier_seq& item)
 void
 program_syntax_tree_to_string_converter::visit(const simple_type_specifier& item)
 {
-    m_result << item.get_type() << " ";
+    switch(item.get_type())
+    {
+        case simple_type_specifier::CHAR:
+            m_result << "char";
+            break;
+        case simple_type_specifier::WCHAR_T:
+            m_result << "wchar_t";
+            break;
+        case simple_type_specifier::BOOL:
+            m_result << "bool";
+            break;
+        case simple_type_specifier::SHORT:
+            m_result << "short";
+            break;
+        case simple_type_specifier::INT:
+            m_result << "int";
+            break;
+        case simple_type_specifier::LONG:
+            m_result << "long";
+            break;
+        case simple_type_specifier::SIGNED:
+            m_result << "signed";
+            break;
+        case simple_type_specifier::UNSIGNED:
+            m_result << "unsigned";
+            break;
+        case simple_type_specifier::FLOAT:
+            m_result << "float";
+            break;
+        case simple_type_specifier::DOUBLE:
+            m_result << "double";
+            break;
+        case simple_type_specifier::VOID:
+            m_result << "void";
+            break;
+        case simple_type_specifier::OTHER:
+        {
+            if(item.has_leading_double_colon())
+                m_result << "::";
+
+            if(item.get_nested_name_specifier())
+                visit(*item.get_nested_name_specifier());
+
+            if(item.get_template_id())
+            {
+                m_result << "template ";
+                visit(*item.get_template_id());
+            }
+            else
+            {
+                item.get_identifier_or_template_id()->accept(*this);
+            }
+
+            break;
+        }
+    }
+
+    m_result << ' ';
+}
+
+void
+program_syntax_tree_to_string_converter::visit(const template_id& item)
+{
+    m_result << item.get_identifier().get_value() << "<>";
 }
 
 const std::string

@@ -44,10 +44,4 @@ simple_declaration::get_init_declarator_list() const
     return m_init_declarator_list;
 }
 
-void
-simple_declaration::accept(visitor& a_visitor) const
-{
-    a_visitor.visit(*this);
-}
-
 }}} //namespace socoa::cpp::program_syntax_tree

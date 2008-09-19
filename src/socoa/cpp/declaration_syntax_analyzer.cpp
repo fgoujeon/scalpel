@@ -143,6 +143,52 @@ declaration_syntax_analyzer::evaluate_unqualified_id(const tree_node_t& node)
     return std::shared_ptr<unqualified_id>();
 }
 
+std::shared_ptr<nested_name_specifier>
+declaration_syntax_analyzer::evaluate_nested_name_specifier(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar_parser_id::NESTED_NAME_SPECIFIER);
+
+    std::vector<std::shared_ptr<nested_name_specifier_part>> other_parts;
+    for(tree_node_iterator_t i = node.children.begin(); i != node.children.end(); ++i) //for each child
+    {
+        const tree_node_t& child_node = *i;
+
+        std::shared_ptr<nested_name_specifier_part> part;
+
+        if(child_node.value.id() == grammar_parser_id::IDENTIFIER)
+        {
+            part = evaluate_identifier(child_node);
+        }
+        else if(child_node.value.id() == grammar_parser_id::NESTED_NAME_SPECIFIER_TEMPLATE_ID)
+        {
+            part = evaluate_nested_name_specifier_template_id(child_node);
+        }
+
+        if(part)
+        {
+            other_parts.push_back(part);
+        }
+    }
+
+    return std::make_shared<nested_name_specifier>
+    (
+        ASSERTED_EVALUATE(identifier_or_template_id, IDENTIFIER_OR_TEMPLATE_ID),
+        other_parts
+    );
+}
+
+std::shared_ptr<nested_name_specifier_template_id>
+declaration_syntax_analyzer::evaluate_nested_name_specifier_template_id(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar_parser_id::NESTED_NAME_SPECIFIER_TEMPLATE_ID);
+
+    return std::make_shared<nested_name_specifier_template_id>
+    (
+        find_value(node, "template", 0),
+        std::move(*ASSERTED_EVALUATE(template_id, TEMPLATE_ID))
+    );
+}
+
 std::shared_ptr<declaration_seq>
 declaration_syntax_analyzer::evaluate_declaration_seq(const tree_node_t& node)
 {
@@ -356,18 +402,83 @@ declaration_syntax_analyzer::evaluate_simple_type_specifier(const tree_node_t& n
     if(node.children.size() == 1)
     {
         std::string value = get_unique_child_value(node);
+        simple_type_specifier::type value_id;
 
-        if(value.size() > 2)
+        if(value == "char")
+            value_id = simple_type_specifier::CHAR;
+        else if(value == "wchar_t")
+            value_id = simple_type_specifier::WCHAR_T;
+        else if(value == "bool")
+            value_id = simple_type_specifier::BOOL;
+        else if(value == "short")
+            value_id = simple_type_specifier::SHORT;
+        else if(value == "int")
+            value_id = simple_type_specifier::INT;
+        else if(value == "long")
+            value_id = simple_type_specifier::LONG;
+        else if(value == "signed")
+            value_id = simple_type_specifier::SIGNED;
+        else if(value == "unsigned")
+            value_id = simple_type_specifier::UNSIGNED;
+        else if(value == "float")
+            value_id = simple_type_specifier::FLOAT;
+        else if(value == "double")
+            value_id = simple_type_specifier::DOUBLE;
+        else if(value == "void")
+            value_id = simple_type_specifier::VOID;
+        else
+            value_id = simple_type_specifier::OTHER;
+
+        if(value_id != simple_type_specifier::OTHER)
         {
-            return std::make_shared<simple_type_specifier>(value);
+            return std::make_shared<simple_type_specifier>(value_id);
         }
+    }
+
+    bool leading_double_colon = find_value(node, "::", 0);
+
+    if(find_value(node, "template", 1) || find_value(node, "template", 2))
+    {
+        return std::make_shared<simple_type_specifier>
+        (
+            leading_double_colon,
+            ASSERTED_EVALUATE(nested_name_specifier, NESTED_NAME_SPECIFIER),
+            ASSERTED_EVALUATE(template_id, TEMPLATE_ID)
+        );
     }
     else
     {
-
+        return std::make_shared<simple_type_specifier>
+        (
+            leading_double_colon,
+            EVALUATE(nested_name_specifier, NESTED_NAME_SPECIFIER),
+            ASSERTED_EVALUATE(identifier_or_template_id, IDENTIFIER_OR_TEMPLATE_ID)
+        );
     }
+}
 
-    return std::shared_ptr<simple_type_specifier>();
+std::shared_ptr<identifier_or_template_id>
+declaration_syntax_analyzer::evaluate_identifier_or_template_id(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar_parser_id::IDENTIFIER_OR_TEMPLATE_ID);
+
+    assert(node.children.size() == 1);
+    const tree_node_t& child_node = *node.children.begin();
+    boost::spirit::parser_id child_id = child_node.value.id();
+
+    if(child_id == grammar_parser_id::IDENTIFIER)
+    {
+        return evaluate_identifier(child_node);
+    }
+    else if(child_id == grammar_parser_id::TEMPLATE_ID)
+    {
+        return evaluate_template_id(child_node);
+    }
+    else
+    {
+        assert(false);
+        return std::shared_ptr<identifier_or_template_id>();
+    }
 }
 
 std::shared_ptr<namespace_definition>
@@ -709,6 +820,17 @@ declaration_syntax_analyzer::evaluate_template_declaration(const tree_node_t& no
     //create corresponding template_declaration object
     std::shared_ptr<template_declaration> new_template_declaration(new template_declaration(exported, declaration_part));
     return new_template_declaration;
+}
+
+std::shared_ptr<template_id>
+declaration_syntax_analyzer::evaluate_template_id(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar_parser_id::TEMPLATE_ID);
+
+    return std::make_shared<template_id>
+    (
+        *ASSERTED_EVALUATE(identifier, IDENTIFIER)
+    );
 }
 
 const declaration_syntax_analyzer::tree_node_t*

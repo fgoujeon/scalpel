@@ -28,11 +28,7 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 class array_direct_declarator_part: public direct_declarator_part
 {
     public:
-        void
-        accept(visitor& a_visitor) const
-        {
-            a_visitor.visit(*this);
-        }
+        SOCOA_CPP_DEFINE_VISITABLE()
 
 
     private:

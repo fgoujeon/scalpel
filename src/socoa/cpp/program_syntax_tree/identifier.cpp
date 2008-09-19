@@ -33,10 +33,4 @@ identifier::get_value() const
     return m_value;
 }
 
-void
-identifier::accept(visitor& a_visitor) const
-{
-    a_visitor.visit(*this);
-}
-
 }}} //namespace socoa::cpp::program_syntax_tree

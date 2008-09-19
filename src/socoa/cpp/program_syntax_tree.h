@@ -22,6 +22,9 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "program_syntax_tree/identifier.h"
 #include "program_syntax_tree/id_expression.h"
+#include "program_syntax_tree/nested_name_specifier.h"
+#include "program_syntax_tree/nested_name_specifier_part.h"
+#include "program_syntax_tree/nested_name_specifier_template_id.h"
 #include "program_syntax_tree/declaration_seq.h"
 #include "program_syntax_tree/declaration.h"
 #include "program_syntax_tree/simple_declaration.h"
@@ -29,6 +32,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "program_syntax_tree/decl_specifier.h"
 #include "program_syntax_tree/type_specifier.h"
 #include "program_syntax_tree/simple_type_specifier.h"
+#include "program_syntax_tree/identifier_or_template_id.h"
 #include "program_syntax_tree/namespace_definition.h"
 #include "program_syntax_tree/init_declarator_list.h"
 #include "program_syntax_tree/init_declarator.h"
@@ -45,5 +49,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "program_syntax_tree/function_definition.h"
 #include "program_syntax_tree/class_specifier.h"
 #include "program_syntax_tree/template_declaration.h"
+#include "program_syntax_tree/template_id.h"
 
 #endif

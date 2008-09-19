@@ -23,35 +23,69 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-simple_type_specifier::simple_type_specifier(const std::string& type):
-    m_type(type)
+simple_type_specifier::simple_type_specifier(type a_type):
+    m_type(a_type)
 {
-    assert
-    (
-        type == "char" ||
-        type == "wchar_t" ||
-        type == "bool" ||
-        type == "short" ||
-        type == "int" ||
-        type == "long" ||
-        type == "signed" ||
-        type == "unsigned" ||
-        type == "float" ||
-        type == "double" ||
-        type == "void"
-    );
+    assert((a_type != OTHER) && "Use another constructor for 'other' type.");
 }
 
-const std::string&
+simple_type_specifier::simple_type_specifier
+(
+    bool leading_double_colon,
+    std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
+    std::shared_ptr<identifier_or_template_id> an_identifier_or_template_id
+):
+    m_type(OTHER),
+    m_leading_double_colon(leading_double_colon),
+    m_nested_name_specifier(a_nested_name_specifier),
+    m_identifier_or_template_id(an_identifier_or_template_id)
+{
+    assert(an_identifier_or_template_id);
+}
+
+simple_type_specifier::simple_type_specifier
+(
+    bool leading_double_colon,
+    std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
+    std::shared_ptr<template_id> a_template_id
+):
+    m_type(OTHER),
+    m_leading_double_colon(leading_double_colon),
+    m_nested_name_specifier(a_nested_name_specifier),
+    m_template_id(a_template_id)
+{
+    assert(a_nested_name_specifier);
+    assert(a_template_id);
+}
+
+simple_type_specifier::type
 simple_type_specifier::get_type() const
 {
     return m_type;
 }
 
-void
-simple_type_specifier::accept(visitor& a_visitor) const
+bool
+simple_type_specifier::has_leading_double_colon() const
 {
-    a_visitor.visit(*this);
+    return m_leading_double_colon;
+}
+
+const std::shared_ptr<nested_name_specifier>
+simple_type_specifier::get_nested_name_specifier() const
+{
+    return m_nested_name_specifier;
+}
+
+const std::shared_ptr<identifier_or_template_id>
+simple_type_specifier::get_identifier_or_template_id() const
+{
+    return m_identifier_or_template_id;
+}
+
+const std::shared_ptr<template_id>
+simple_type_specifier::get_template_id() const
+{
+    return m_template_id;
 }
 
 }}} //namespace socoa::cpp::program_syntax_tree

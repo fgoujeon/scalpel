@@ -37,11 +37,7 @@ class function_direct_declarator_part: public direct_declarator_part
         const parameter_declaration_clause&
         get_parameter_declaration_clause() const;
 
-        void
-        accept(visitor& a_visitor) const
-        {
-            a_visitor.visit(*this);
-        }
+        SOCOA_CPP_DEFINE_VISITABLE()
 
     private:
         parameter_declaration_clause m_parameter_declaration_clause;

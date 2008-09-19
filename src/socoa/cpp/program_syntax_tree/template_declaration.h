@@ -37,8 +37,7 @@ class template_declaration: public declaration
         const std::shared_ptr<declaration>
         declaration_part() const;
 
-        void
-        accept(visitor& a_visitor) const;
+        SOCOA_CPP_DEFINE_VISITABLE()
 
     private:
         bool m_exported;
