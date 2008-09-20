@@ -75,6 +75,12 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         visit(const program_syntax_tree::ptr_operator& item);
 
         void
+        visit(const program_syntax_tree::cv_qualifier_seq& item);
+
+        void
+        visit(const program_syntax_tree::cv_qualifier& item);
+
+        void
         visit(const program_syntax_tree::declarator_id& item);
 
         void

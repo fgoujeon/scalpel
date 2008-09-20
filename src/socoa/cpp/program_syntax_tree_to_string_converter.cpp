@@ -187,6 +187,42 @@ program_syntax_tree_to_string_converter::visit(const ptr_operator& item)
             m_result << '&';
             break;
     }
+
+    if(item.get_cv_qualifier_seq())
+        visit(*item.get_cv_qualifier_seq());
+}
+
+void
+program_syntax_tree_to_string_converter::visit(const cv_qualifier_seq& item)
+{
+    for
+    (
+        std::vector<std::shared_ptr<cv_qualifier>>::const_iterator i = item.get_cv_qualifiers().begin();
+        i != item.get_cv_qualifiers().end();
+        ++i
+    )
+    {
+        visit(**i);
+    }
+}
+
+void
+program_syntax_tree_to_string_converter::visit(const cv_qualifier& item)
+{
+    switch(item.get_type())
+    {
+        case cv_qualifier::CONST:
+            m_result << "const";
+            break;
+        case cv_qualifier::VOLATILE:
+            m_result << "volatile";
+            break;
+        case cv_qualifier::RESTRICT:
+            m_result << "__restrict__";
+            break;
+    }
+
+    m_result << " ";
 }
 
 void
@@ -196,7 +232,6 @@ program_syntax_tree_to_string_converter::visit(const declarator_id& item)
     if(an_id_expression)
     {
         an_id_expression->accept(*this);
-        return;
     }
 }
 

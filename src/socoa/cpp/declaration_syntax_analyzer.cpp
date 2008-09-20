@@ -380,7 +380,7 @@ declaration_syntax_analyzer::evaluate_type_specifier(const tree_node_t& node)
     }
     else if(child_id == grammar_parser_id::CV_QUALIFIER)
     {
-        //return evaluate_named_namespace_definition(node);
+        return evaluate_cv_qualifier(child_node);
     }
     else if(child_id == grammar_parser_id::TYPEOF_EXPRESSION)
     {
@@ -537,16 +537,15 @@ declaration_syntax_analyzer::evaluate_declarator(const tree_node_t& node)
     assert(node.value.id() == grammar_parser_id::DECLARATOR);
 
     //get ptr_operator nodes
-    std::vector<std::shared_ptr<ptr_operator>> ptr_operators;
-    for(tree_node_iterator_t i = node.children.begin(); i != node.children.end(); ++i) //for each child
-    {
-        const tree_node_t& child_node = *i;
-
-        if(child_node.value.id() == grammar_parser_id::PTR_OPERATOR)
-        {
-            ptr_operators.push_back(evaluate_ptr_operator(child_node));
-        }
-    }
+    std::vector<std::shared_ptr<ptr_operator>> ptr_operators
+    (
+        evaluate_seq
+        (
+            node,
+            grammar_parser_id::PTR_OPERATOR,
+            &declaration_syntax_analyzer::evaluate_ptr_operator
+        )
+    );
 
     return std::make_shared<declarator>
     (
@@ -560,8 +559,8 @@ declaration_syntax_analyzer::evaluate_direct_declarator(const tree_node_t& node)
 {
     assert(node.value.id() == grammar_parser_id::DIRECT_DECLARATOR);
 
-    std::shared_ptr<declarator_id> new_declarator_id = EVALUATE(declarator_id, DECLARATOR_ID);
-    std::shared_ptr<declarator> new_declarator = EVALUATE(declarator, DECLARATOR);
+    std::shared_ptr<declarator_id> new_declarator_id(EVALUATE(declarator_id, DECLARATOR_ID));
+    std::shared_ptr<declarator> new_declarator(EVALUATE(declarator, DECLARATOR));
 
     //get other parts
     std::vector<std::shared_ptr<direct_declarator_part>> other_parts;
@@ -652,8 +651,50 @@ declaration_syntax_analyzer::evaluate_ptr_operator(const tree_node_t& node)
     return std::make_shared<ptr_operator>
     (
         asterisk ? ptr_operator::ASTERISK : ptr_operator::AMPERSAND,
-        find_value(node, "::", 0)
+        find_value(node, "::", 0),
+        EVALUATE(nested_name_specifier, NESTED_NAME_SPECIFIER),
+        EVALUATE(cv_qualifier_seq, CV_QUALIFIER_SEQ)
     );
+}
+
+std::shared_ptr<cv_qualifier_seq>
+declaration_syntax_analyzer::evaluate_cv_qualifier_seq(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar_parser_id::CV_QUALIFIER_SEQ);
+
+    return std::make_shared<cv_qualifier_seq>
+    (
+        evaluate_seq
+        (
+            node,
+            grammar_parser_id::CV_QUALIFIER,
+            &declaration_syntax_analyzer::evaluate_cv_qualifier
+        )
+    );
+}
+
+std::shared_ptr<cv_qualifier>
+declaration_syntax_analyzer::evaluate_cv_qualifier(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar_parser_id::CV_QUALIFIER);
+
+    const std::string value = get_unique_child_value(node);
+    assert(node.children.size() == 1);
+    const tree_node_t child_node = *node.children.begin();
+    const parser_id child_id = child_node.value.id();
+
+    //the value is either const, volatile or restrict
+    if(value == "const")
+        return std::make_shared<cv_qualifier>(cv_qualifier::CONST);
+    else if(value == "volatile")
+        return std::make_shared<cv_qualifier>(cv_qualifier::VOLATILE);
+    else if(child_id == grammar_parser_id::RESTRICT_KEYWORD)
+        return std::make_shared<cv_qualifier>(cv_qualifier::RESTRICT);
+    else
+    {
+        assert(false);
+        return std::shared_ptr<cv_qualifier>();
+    }
 }
 
 std::shared_ptr<declarator_id>
@@ -926,24 +967,20 @@ declaration_syntax_analyzer::strip_redundant_spaces(const std::string& str)
     return result;
 }
 
-const std::string
+int
 declaration_syntax_analyzer::get_id(const tree_node_t& node)
 {
     boost::spirit::parser_id id = node.value.id();
-    std::ostringstream oss;
 
-    oss << "[";
     for(unsigned int i = 0; i < 400; ++i)
     {
         if(id == i)
         {
-            oss << i;
-            break;
+            return i;
         }
     }
-    oss << "]";
 
-    return oss.str();
+    return -1;
 }
 
 }} //namespace socoa::cpp

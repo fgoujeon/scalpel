@@ -21,6 +21,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_DECLARATION_SYNTAX_ANALYZER_H
 
 #include <string>
+#include <map>
 #include <memory>
 #include <boost/spirit.hpp>
 #include <boost/spirit/include/classic_parse_tree.hpp>
@@ -31,6 +32,9 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp
 {
 
+/**
+@brief Analyses the syntax of every declaration token of a source code.
+*/
 class declaration_syntax_analyzer
 {
     private:
@@ -119,6 +123,12 @@ class declaration_syntax_analyzer
         std::shared_ptr<program_syntax_tree::ptr_operator>
         evaluate_ptr_operator(const tree_node_t& node);
 
+        std::shared_ptr<program_syntax_tree::cv_qualifier_seq>
+        evaluate_cv_qualifier_seq(const tree_node_t& node);
+
+        std::shared_ptr<program_syntax_tree::cv_qualifier>
+        evaluate_cv_qualifier(const tree_node_t& node);
+
         std::shared_ptr<program_syntax_tree::declarator_id>
         evaluate_declarator_id(const tree_node_t& node);
 
@@ -143,14 +153,62 @@ class declaration_syntax_analyzer
         std::shared_ptr<program_syntax_tree::template_id>
         evaluate_template_id(const tree_node_t& node);
 
+        /**
+        Finds a node in the given parent node, with the given id and evatuates
+        it.
+        @tparam T the type representing the syntax of the node to be evaluated
+        @param parent_node the parent node where to find the node to be
+               evaluated
+        @param id the parser_id of the node to be evaluated
+        @param evaluate_function a pointer to the function to be called to
+               evaluate the node
+        @param assert_node_exists if true, the function will call the assert()
+               macro to ensure that the given parent node does have a child
+               node of the given id
+        @return a pointer to an object representing the syntax of the
+                evaluated node
+        */
         template <class T>
         std::shared_ptr<T>
         evaluate
         (
             const tree_node_t& parent_node,
             const int id,
-            std::shared_ptr<T> (declaration_syntax_analyzer::*evaluation_function)(const tree_node_t&),
+            std::shared_ptr<T> (declaration_syntax_analyzer::*evaluate_function)(const tree_node_t&),
             bool assert_node_exists = false
+        );
+
+        /**
+        Finds a list of nodes in the given parent node, with the given id and
+        evatuates them.
+        @tparam T the type representing the syntax of the nodes to be evaluated
+        @param parent_node the parent node where to find the nodes to be
+               evaluated
+        @param id the parser_id of the nodes to be evaluated
+        @param evaluate_function a pointer to the function to be called to
+               evaluate the nodes
+        @return a vector of pointers to objects representing the syntax of each
+                evaluated node
+        */
+        template <class T>
+        std::vector<std::shared_ptr<T>>
+        evaluate_seq
+        (
+            const tree_node_t& parent_node,
+            int id,
+            std::shared_ptr<T> (declaration_syntax_analyzer::*evaluate_function)(const tree_node_t&)
+        );
+
+        template <class T>
+        std::vector<std::shared_ptr<T>>
+        evaluate_seq
+        (
+            const tree_node_t& parent_node,
+            const std::map
+            <
+                int,
+                std::shared_ptr<T> (declaration_syntax_analyzer::*)(const tree_node_t&)
+            >& id_evaluate_function_map
         );
 
         const tree_node_t*
@@ -171,7 +229,7 @@ class declaration_syntax_analyzer
         std::string
         strip_redundant_spaces(const std::string& str);
 
-        const std::string
+        int
         get_id(const tree_node_t& node);
 
 
@@ -184,7 +242,7 @@ declaration_syntax_analyzer::evaluate
 (
     const tree_node_t& parent_node,
     const int id,
-    std::shared_ptr<T> (declaration_syntax_analyzer::*evaluation_function)(const tree_node_t&),
+    std::shared_ptr<T> (declaration_syntax_analyzer::*evaluate_function)(const tree_node_t&),
     bool assert_node_exists
 )
 {
@@ -193,16 +251,80 @@ declaration_syntax_analyzer::evaluate
     if(assert_node_exists)
     {
         assert(node);
-        return (this->*evaluation_function)(*node);
+        return (this->*evaluate_function)(*node);
     }
     else if(node)
     {
-        return (this->*evaluation_function)(*node);
+        return (this->*evaluate_function)(*node);
     }
     else
     {
         return std::shared_ptr<T>();
     }
+}
+
+template <class T>
+std::vector<std::shared_ptr<T>>
+declaration_syntax_analyzer::evaluate_seq
+(
+    const tree_node_t& parent_node,
+    const std::map
+    <
+        int,
+        std::shared_ptr<T> (declaration_syntax_analyzer::*)(const tree_node_t&)
+    >& id_evaluate_function_map
+)
+{
+    typedef std::shared_ptr<T> (declaration_syntax_analyzer::*evaluate_function_t)(const tree_node_t&);
+    typedef std::map<int, evaluate_function_t> id_evaluate_function_map_t;
+
+    std::vector<std::shared_ptr<T>> seq;
+    for(tree_node_iterator_t i = parent_node.children.begin(); i != parent_node.children.end(); ++i) //for each child
+    {
+        const tree_node_t& child_node = *i;
+
+        for
+        (
+            typename id_evaluate_function_map_t::const_iterator j = id_evaluate_function_map.begin();
+            j != id_evaluate_function_map.end();
+            ++j
+        ) //for each id/evaluate function
+        {
+            const int id = j->first;
+            const evaluate_function_t evaluate_function = j->second;
+
+            if(child_node.value.id() == id)
+            {
+                seq.push_back((this->*evaluate_function)(child_node));
+                break;
+            }
+        }
+    }
+
+    return seq;
+}
+
+template <class T>
+std::vector<std::shared_ptr<T>>
+declaration_syntax_analyzer::evaluate_seq
+(
+    const tree_node_t& parent_node,
+    int id,
+    std::shared_ptr<T> (declaration_syntax_analyzer::*evaluate_function)(const tree_node_t&)
+)
+{
+    std::vector<std::shared_ptr<T>> seq;
+    for(tree_node_iterator_t i = parent_node.children.begin(); i != parent_node.children.end(); ++i) //for each child
+    {
+        const tree_node_t& child_node = *i;
+
+        if(child_node.value.id() == id)
+        {
+            seq.push_back((this->*evaluate_function)(child_node));
+        }
+    }
+
+    return seq;
 }
 
 }} //namespace socoa::cpp

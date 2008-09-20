@@ -17,51 +17,33 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_PTR_OPERATOR_H
-#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_PTR_OPERATOR_H
+#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_CV_QUALIFIER_H
+#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_CV_QUALIFIER_H
 
-#include <memory>
+#include "type_specifier.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class nested_name_specifier;
-class cv_qualifier_seq;
-
-class ptr_operator
+class cv_qualifier: public type_specifier
 {
     public:
         enum type
         {
-            ASTERISK,
-            AMPERSAND
+            CONST,
+            VOLATILE,
+            RESTRICT
         };
 
-        ptr_operator
-        (
-            type a_type,
-            bool leading_double_colon,
-            std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
-            std::shared_ptr<cv_qualifier_seq> a_cv_qualifier_seq
-        );
+        explicit cv_qualifier(type a_type);
 
         type
         get_type() const;
 
-        bool
-        has_leading_double_colon() const;
-
-        const std::shared_ptr<nested_name_specifier>
-        get_nested_name_specifier() const;
-
-        const std::shared_ptr<cv_qualifier_seq>
-        get_cv_qualifier_seq() const;
+        SOCOA_CPP_DEFINE_VISITABLE()
 
     private:
         type m_type;
-        bool m_leading_double_colon;
-        std::shared_ptr<nested_name_specifier> m_nested_name_specifier;
-        std::shared_ptr<cv_qualifier_seq> m_cv_qualifier_seq;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

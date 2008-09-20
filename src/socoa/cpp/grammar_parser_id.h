@@ -23,7 +23,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp
 {
 
-namespace grammar_parser_id
+struct grammar_parser_id
 {
     enum
     {
@@ -236,7 +236,7 @@ namespace grammar_parser_id
         TYPEOF_KEYWORD,
         RESTRICT_KEYWORD
     };
-}
+};
 
 }} //namespace socoa::cpp
 

@@ -36,6 +36,7 @@ class function_definition;
 class function_direct_declarator_part;
 class array_direct_declarator_part;
 class template_id;
+class cv_qualifier;
 
 class visitor
 {
@@ -77,6 +78,9 @@ class visitor
 
         virtual void
         visit(const template_id&) = 0;
+
+        virtual void
+        visit(const cv_qualifier&) = 0;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

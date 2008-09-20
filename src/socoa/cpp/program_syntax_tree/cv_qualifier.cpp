@@ -17,47 +17,20 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ptr_operator.h"
+#include "cv_qualifier.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-ptr_operator::ptr_operator
-(
-    type a_type,
-    bool leading_double_colon,
-    std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
-    std::shared_ptr<cv_qualifier_seq> a_cv_qualifier_seq
-):
-    m_type(a_type),
-    m_leading_double_colon(leading_double_colon),
-    m_nested_name_specifier(a_nested_name_specifier),
-    m_cv_qualifier_seq(a_cv_qualifier_seq)
+cv_qualifier::cv_qualifier(type a_type):
+    m_type(a_type)
 {
 }
 
-ptr_operator::type
-ptr_operator::get_type() const
+cv_qualifier::type
+cv_qualifier::get_type() const
 {
     return m_type;
-}
-
-bool
-ptr_operator::has_leading_double_colon() const
-{
-    return m_leading_double_colon;
-}
-
-const std::shared_ptr<nested_name_specifier>
-ptr_operator::get_nested_name_specifier() const
-{
-    return m_nested_name_specifier;
-}
-
-const std::shared_ptr<cv_qualifier_seq>
-ptr_operator::get_cv_qualifier_seq() const
-{
-    return m_cv_qualifier_seq;
 }
 
 }}} //namespace socoa::cpp::program_syntax_tree

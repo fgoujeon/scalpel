@@ -272,8 +272,8 @@ class grammar: public boost::spirit::grammar<grammar>
             Non-standard extensions
             */
             boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::TYPEOF_EXPRESSION>> typeof_expression;
-            boost::spirit::rule<ScannerT> typeof_keyword;
-            boost::spirit::rule<ScannerT> restrict_keyword;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::TYPEOF_KEYWORD>> typeof_keyword;
+            boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar_parser_id::RESTRICT_KEYWORD>> restrict_keyword;
         };
 
     private:
@@ -1232,7 +1232,7 @@ grammar::definition<ScannerT>::definition(const grammar& self)
     cv_qualifier
         = str_p("const")
         | "volatile"
-        | lexeme_d[!str_p("__") >> "restrict" >> !str_p("__")]
+        | restrict_keyword
     ;
 
     declarator_id
@@ -1620,7 +1620,7 @@ grammar::definition<ScannerT>::definition(const grammar& self)
         ;
     }
 
-    if(self.m_configuration.enable_typeof_support)
+    if(self.m_configuration.enable_restrict_support)
     {
         restrict_keyword
             = str_p("__restrict__")
