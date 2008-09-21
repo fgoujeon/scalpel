@@ -31,15 +31,23 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 class class_specifier: public type_specifier
 {
     public:
-        explicit class_specifier(class_head&& head);
+        class_specifier
+        (
+            class_head&& head,
+            std::shared_ptr<member_specification> a_member_specification
+        );
 
         const class_head&
         get_head() const;
 
+        const std::shared_ptr<member_specification>
+        get_member_specification() const;
+
         SOCOA_CPP_DEFINE_VISITABLE()
 
     private:
-        class_head m_head;
+        class_head head_;
+        std::shared_ptr<member_specification> member_specification_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

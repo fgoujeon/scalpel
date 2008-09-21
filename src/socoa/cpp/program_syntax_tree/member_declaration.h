@@ -26,9 +26,11 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class member_declaration//: public member_specification_item
+class member_declaration: public member_specification_item
 {
+    public:
 
+        SOCOA_CPP_DEFINE_VISITABLE()
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

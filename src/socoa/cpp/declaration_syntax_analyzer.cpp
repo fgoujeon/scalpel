@@ -830,7 +830,8 @@ declaration_syntax_analyzer::evaluate_class_specifier(const tree_node_t& node)
 
     return std::make_shared<class_specifier>
     (
-        *ASSERTED_EVALUATE(class_head, CLASS_HEAD)
+        *ASSERTED_EVALUATE(class_head, CLASS_HEAD),
+        EVALUATE(member_specification, MEMBER_SPECIFICATION)
     );
 }
 
@@ -871,7 +872,53 @@ declaration_syntax_analyzer::evaluate_class_key(const tree_node_t& node)
 std::shared_ptr<member_specification>
 declaration_syntax_analyzer::evaluate_member_specification(const tree_node_t& node)
 {
+    assert(node.value.id() == grammar::MEMBER_SPECIFICATION);
 
+    typedef std::shared_ptr<member_specification_item> return_type_t;
+    typedef std::function<return_type_t (declaration_syntax_analyzer*, const tree_node_t&)> function_type_t;
+
+    std::map<int, function_type_t> id_eval;
+
+    id_eval.insert(std::make_pair(grammar::MEMBER_DECLARATION, &declaration_syntax_analyzer::evaluate_member_declaration));
+    id_eval.insert(std::make_pair(grammar::ACCESS_SPECIFIER, &declaration_syntax_analyzer::evaluate_access_specifier));
+
+    return std::make_shared<member_specification>
+    (
+        evaluate_seq(node, id_eval)
+    );
+}
+
+std::shared_ptr<member_declaration>
+declaration_syntax_analyzer::evaluate_member_declaration(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar::MEMBER_DECLARATION);
+
+    return std::make_shared<member_declaration>
+    (
+    );
+}
+
+std::shared_ptr<access_specifier>
+declaration_syntax_analyzer::evaluate_access_specifier(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar::ACCESS_SPECIFIER);
+
+    std::string value_str(get_unique_child_value(node));
+
+    access_specifier::value value;
+    if(value_str == "public")
+        value = access_specifier::PUBLIC;
+    else if(value_str == "protected")
+        value = access_specifier::PROTECTED;
+    else if(value_str == "private")
+        value = access_specifier::PRIVATE;
+    else
+        assert(false);
+
+    return std::make_shared<access_specifier>
+    (
+        value
+    );
 }
 
 std::shared_ptr<template_declaration>

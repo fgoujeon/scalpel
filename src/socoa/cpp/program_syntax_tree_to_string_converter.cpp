@@ -299,6 +299,15 @@ void
 program_syntax_tree_to_string_converter::visit(const class_specifier& item)
 {
     visit(item.get_head());
+
+    m_result << opening_brace();
+
+    if(item.get_member_specification())
+    {
+        visit(*item.get_member_specification());
+    }
+
+    m_result << closing_brace();
 }
 
 void
@@ -315,10 +324,6 @@ program_syntax_tree_to_string_converter::visit(const class_head& item)
 
     if(item.get_identifier())
         visit(*item.get_identifier());
-
-    m_result << opening_brace();
-
-    m_result << closing_brace();
 }
 
 void
@@ -341,11 +346,41 @@ program_syntax_tree_to_string_converter::visit(const class_key& item)
 void
 program_syntax_tree_to_string_converter::visit(const member_specification& item)
 {
+    for
+    (
+        std::vector<std::shared_ptr<member_specification_item>>::const_iterator i = item.get_parts().begin();
+        i != item.get_parts().end();
+        ++i
+    )
+    {
+        (**i).accept(*this);
+    }
+}
+
+void
+program_syntax_tree_to_string_converter::visit(const member_declaration& item)
+{
 }
 
 void
 program_syntax_tree_to_string_converter::visit(const access_specifier& item)
 {
+    m_result << indentation();
+
+    switch(item.get_value())
+    {
+        case access_specifier::PUBLIC:
+            m_result << "public";
+            break;
+        case access_specifier::PROTECTED:
+            m_result << "protected";
+            break;
+        case access_specifier::PRIVATE:
+            m_result << "private";
+            break;
+    }
+
+    m_result << ":" << new_line();
 }
 
 void

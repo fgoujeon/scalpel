@@ -205,7 +205,6 @@ struct grammar_definition_impl
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CLASS_HEAD>> class_head;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CLASS_KEY>> class_key;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MEMBER_SPECIFICATION>> member_specification;
-    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MEMBER_SPECIFICATION_ACCESS_SPECIFIER>> member_specification_access_specifier;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MEMBER_DECLARATION>> member_declaration;
     boost::spirit::rule<ScannerT> member_declaration_decl_specifier_seq;
     boost::spirit::rule<ScannerT> member_declarator_list;
@@ -1356,10 +1355,7 @@ grammar_definition_impl<ScannerT>::grammar_definition_impl(const grammar& self)
     ;
 
     member_specification
-        = *(member_declaration | member_specification_access_specifier)
-    ;
-    member_specification_access_specifier
-        = access_specifier >> ':'
+        = *(member_declaration | (access_specifier >> ':'))
     ;
 
     member_declaration

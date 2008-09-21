@@ -162,6 +162,12 @@ class declaration_syntax_analyzer
         std::shared_ptr<program_syntax_tree::member_specification>
         evaluate_member_specification(const tree_node_t& node);
 
+        std::shared_ptr<program_syntax_tree::member_declaration>
+        evaluate_member_declaration(const tree_node_t& node);
+
+        std::shared_ptr<program_syntax_tree::access_specifier>
+        evaluate_access_specifier(const tree_node_t& node);
+
         std::shared_ptr<program_syntax_tree::template_declaration>
         evaluate_template_declaration(const tree_node_t& node);
 
@@ -222,7 +228,7 @@ class declaration_syntax_analyzer
             const std::map
             <
                 int,
-                std::shared_ptr<T> (declaration_syntax_analyzer::*)(const tree_node_t&)
+                std::function<std::shared_ptr<T> (declaration_syntax_analyzer*, const tree_node_t&)>
             >& id_evaluate_function_map
         );
 
@@ -284,14 +290,37 @@ std::vector<std::shared_ptr<T>>
 declaration_syntax_analyzer::evaluate_seq
 (
     const tree_node_t& parent_node,
+    int id,
+    std::shared_ptr<T> (declaration_syntax_analyzer::*evaluate_function)(const tree_node_t&)
+)
+{
+    std::vector<std::shared_ptr<T>> seq;
+    for(tree_node_iterator_t i = parent_node.children.begin(); i != parent_node.children.end(); ++i) //for each child
+    {
+        const tree_node_t& child_node = *i;
+
+        if(child_node.value.id() == id)
+        {
+            seq.push_back((this->*evaluate_function)(child_node));
+        }
+    }
+
+    return seq;
+}
+
+template <class T>
+std::vector<std::shared_ptr<T>>
+declaration_syntax_analyzer::evaluate_seq
+(
+    const tree_node_t& parent_node,
     const std::map
     <
         int,
-        std::shared_ptr<T> (declaration_syntax_analyzer::*)(const tree_node_t&)
+        std::function<std::shared_ptr<T> (declaration_syntax_analyzer*, const tree_node_t&)>
     >& id_evaluate_function_map
 )
 {
-    typedef std::shared_ptr<T> (declaration_syntax_analyzer::*evaluate_function_t)(const tree_node_t&);
+    typedef std::function<std::shared_ptr<T> (declaration_syntax_analyzer*, const tree_node_t&)> evaluate_function_t;
     typedef std::map<int, evaluate_function_t> id_evaluate_function_map_t;
 
     std::vector<std::shared_ptr<T>> seq;
@@ -311,32 +340,9 @@ declaration_syntax_analyzer::evaluate_seq
 
             if(child_node.value.id() == id)
             {
-                seq.push_back((this->*evaluate_function)(child_node));
+                seq.push_back(evaluate_function(this, child_node));
                 break;
             }
-        }
-    }
-
-    return seq;
-}
-
-template <class T>
-std::vector<std::shared_ptr<T>>
-declaration_syntax_analyzer::evaluate_seq
-(
-    const tree_node_t& parent_node,
-    int id,
-    std::shared_ptr<T> (declaration_syntax_analyzer::*evaluate_function)(const tree_node_t&)
-)
-{
-    std::vector<std::shared_ptr<T>> seq;
-    for(tree_node_iterator_t i = parent_node.children.begin(); i != parent_node.children.end(); ++i) //for each child
-    {
-        const tree_node_t& child_node = *i;
-
-        if(child_node.value.id() == id)
-        {
-            seq.push_back((this->*evaluate_function)(child_node));
         }
     }
 

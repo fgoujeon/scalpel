@@ -23,15 +23,26 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class_specifier::class_specifier(class_head&& head):
-    m_head(head)
+class_specifier::class_specifier
+(
+    class_head&& head,
+    std::shared_ptr<member_specification> a_member_specification
+):
+    head_(head),
+    member_specification_(a_member_specification)
 {
 }
 
 const class_head&
 class_specifier::get_head() const
 {
-    return m_head;
+    return head_;
+}
+
+const std::shared_ptr<member_specification>
+class_specifier::get_member_specification() const
+{
+    return member_specification_;
 }
 
 }}} //namespace socoa::cpp::program_syntax_tree

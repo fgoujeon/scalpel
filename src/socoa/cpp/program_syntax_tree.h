@@ -54,6 +54,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "program_syntax_tree/class_head.h"
 #include "program_syntax_tree/class_key.h"
 #include "program_syntax_tree/member_specification.h"
+#include "program_syntax_tree/member_declaration.h"
+#include "program_syntax_tree/access_specifier.h"
 #include "program_syntax_tree/template_declaration.h"
 #include "program_syntax_tree/template_id.h"
 

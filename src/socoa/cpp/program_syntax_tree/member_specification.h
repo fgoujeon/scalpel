@@ -32,14 +32,13 @@ class member_specification_item;
 class member_specification
 {
     public:
-        const std::vector<std::shared_ptr<member_specification_item>>&
-        items() const;
+        explicit member_specification(std::vector<std::shared_ptr<member_specification_item>>&& parts);
 
-        void
-        add(std::shared_ptr<member_specification_item> visitable);
+        const std::vector<std::shared_ptr<member_specification_item>>&
+        get_parts() const;
 
     private:
-        std::vector<std::shared_ptr<member_specification_item>> m_items;
+        std::vector<std::shared_ptr<member_specification_item>> parts_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

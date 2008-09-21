@@ -57,6 +57,8 @@ class class_specifier;
 class class_head;
 class class_key;
 class member_specification;
+class member_declaration;
+class access_specifier;
 class template_declaration;
 class template_id;
 

@@ -219,7 +219,6 @@ class grammar: public boost::spirit::grammar<grammar>
             CLASS_HEAD,
             CLASS_KEY,
             MEMBER_SPECIFICATION,
-            MEMBER_SPECIFICATION_ACCESS_SPECIFIER,
             MEMBER_DECLARATION,
             MEMBER_DECLARATION_DECL_SPECIFIER_SEQ,
             MEMBER_DECLARATOR_LIST,
