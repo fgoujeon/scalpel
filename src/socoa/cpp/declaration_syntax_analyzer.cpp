@@ -809,41 +809,44 @@ declaration_syntax_analyzer::evaluate_class_specifier(const tree_node_t& node)
 {
     assert(node.value.id() == grammar_parser_id::CLASS_SPECIFIER);
 
-    //get the name of the class
-    std::string name;
-    const tree_node_t* class_head_node = find_child_node(node, grammar_parser_id::CLASS_HEAD);
-    assert(class_head_node);
-    const tree_node_t* identifier_node = find_child_node(*class_head_node, grammar_parser_id::IDENTIFIER);
-    if(identifier_node)
-    {
-        name = get_unique_child_value(*identifier_node);
-    }
+    return std::make_shared<class_specifier>
+    (
+        *ASSERTED_EVALUATE(class_head, CLASS_HEAD)
+    );
+}
 
-    //get the key of the class
-    const tree_node_t* class_key_node = find_child_node(*class_head_node, grammar_parser_id::CLASS_KEY);
-    assert(class_key_node);
-    std::string class_key = get_unique_child_value(*class_key_node);
+std::shared_ptr<class_head>
+declaration_syntax_analyzer::evaluate_class_head(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar_parser_id::CLASS_HEAD);
 
-    //create a class/struct/union and add it to the parent namespace
-    if(class_key == "class")
-    {
-    }
-    else if(class_key == "struct")
-    {
-    }
-    else if(class_key == "union")
-    {
-    }
+    return std::make_shared<class_head>
+    (
+        *ASSERTED_EVALUATE(class_key, CLASS_KEY),
+        EVALUATE(nested_name_specifier, NESTED_NAME_SPECIFIER),
+        EVALUATE(template_id, TEMPLATE_ID),
+        EVALUATE(identifier, IDENTIFIER)
+    );
+}
+
+std::shared_ptr<class_key>
+declaration_syntax_analyzer::evaluate_class_key(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar_parser_id::CLASS_KEY);
+
+    std::string key = get_unique_child_value(node);
+
+    if(key == "class")
+        return std::make_shared<class_key>(class_key::CLASS);
+    else if(key == "struct")
+        return std::make_shared<class_key>(class_key::STRUCT);
+    else if(key == "union")
+        return std::make_shared<class_key>(class_key::UNION);
     else
     {
-        assert(false && "incorrect class key");
+        assert(false && "invalid class key");
+        return std::shared_ptr<class_key>();
     }
-    std::shared_ptr<class_specifier> new_class_specifier = std::shared_ptr<class_specifier>(new class_specifier(name));
-
-    //evaluate children
-    //...
-
-    return new_class_specifier;
 }
 
 std::shared_ptr<template_declaration>

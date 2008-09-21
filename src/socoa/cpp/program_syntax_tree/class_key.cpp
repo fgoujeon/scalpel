@@ -17,30 +17,20 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_CLASS_SPECIFIER_H
-#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_CLASS_SPECIFIER_H
-
-#include <string>
-#include "type_specifier.h"
-#include "class_head.h"
+#include "class_key.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class class_specifier: public type_specifier
+class_key::class_key(value a_value):
+    m_value(a_value)
 {
-    public:
-        explicit class_specifier(class_head&& head);
+}
 
-        const class_head&
-        get_head() const;
-
-        SOCOA_CPP_DEFINE_VISITABLE()
-
-    private:
-        class_head m_head;
-};
+class_key::value
+class_key::get_value() const
+{
+    return m_value;
+}
 
 }}} //namespace socoa::cpp::program_syntax_tree
-
-#endif

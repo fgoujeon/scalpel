@@ -22,11 +22,11 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <vector>
 #include <memory>
-#include "visitable.h"
-#include "member_specification_item.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
+
+class member_specification_item;
 
 class member_specification
 {

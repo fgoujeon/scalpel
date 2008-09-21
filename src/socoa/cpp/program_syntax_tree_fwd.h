@@ -53,6 +53,8 @@ class parameter_declaration_list;
 class parameter_declaration;
 class function_definition;
 class class_specifier;
+class class_head;
+class class_key;
 class template_declaration;
 class template_id;
 

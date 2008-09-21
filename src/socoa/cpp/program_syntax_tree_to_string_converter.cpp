@@ -297,10 +297,44 @@ program_syntax_tree_to_string_converter::visit(const function_definition& item)
 void
 program_syntax_tree_to_string_converter::visit(const class_specifier& item)
 {
-    m_result << "class " << item.get_name();
+    visit(item.get_head());
+}
+
+void
+program_syntax_tree_to_string_converter::visit(const class_head& item)
+{
+    visit(item.get_key());
+    m_result << " ";
+
+    if(item.get_nested_name_specifier())
+        visit(*item.get_nested_name_specifier());
+
+    if(item.get_template_id())
+        visit(*item.get_template_id());
+
+    if(item.get_identifier())
+        visit(*item.get_identifier());
+
     m_result << opening_brace();
 
     m_result << closing_brace();
+}
+
+void
+program_syntax_tree_to_string_converter::visit(const class_key& item)
+{
+    switch(item.get_value())
+    {
+        case class_key::CLASS:
+            m_result << "class";
+            break;
+        case class_key::STRUCT:
+            m_result << "struct";
+            break;
+        case class_key::UNION:
+            m_result << "union";
+            break;
+    }
 }
 
 void

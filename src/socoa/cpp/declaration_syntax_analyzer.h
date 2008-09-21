@@ -147,6 +147,12 @@ class declaration_syntax_analyzer
         std::shared_ptr<program_syntax_tree::class_specifier>
         evaluate_class_specifier(const tree_node_t& node);
 
+        std::shared_ptr<program_syntax_tree::class_head>
+        evaluate_class_head(const tree_node_t& node);
+
+        std::shared_ptr<program_syntax_tree::class_key>
+        evaluate_class_key(const tree_node_t& node);
+
         std::shared_ptr<program_syntax_tree::template_declaration>
         evaluate_template_declaration(const tree_node_t& node);
 

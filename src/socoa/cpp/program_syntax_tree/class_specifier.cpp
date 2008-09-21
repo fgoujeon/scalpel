@@ -17,21 +17,20 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <iostream>
 #include "class_specifier.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class_specifier::class_specifier(const std::string& name):
-    m_name(name)
+class_specifier::class_specifier(class_head&& head):
+    m_head(head)
 {
 }
 
-const std::string&
-class_specifier::get_name() const
+const class_head&
+class_specifier::get_head() const
 {
-    return m_name;
+    return m_head;
 }
 
 }}} //namespace socoa::cpp::program_syntax_tree
