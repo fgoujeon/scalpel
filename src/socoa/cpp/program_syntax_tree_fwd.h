@@ -56,6 +56,7 @@ class function_definition;
 class class_specifier;
 class class_head;
 class class_key;
+class member_specification;
 class template_declaration;
 class template_id;
 

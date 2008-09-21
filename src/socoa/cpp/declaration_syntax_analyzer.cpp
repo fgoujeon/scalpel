@@ -22,15 +22,16 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <sstream>
 #include <stdexcept>
+#include <iostream>
 #include <iomanip>
-#include "grammar_parser_id.h"
+#include "grammar.h"
 #include "program_syntax_tree.h"
 
 #define EVALUATE(type, id)                              \
 evaluate                                                \
 (                                                       \
     node,                                               \
-    grammar_parser_id::id,                              \
+    grammar::id,                                        \
     &declaration_syntax_analyzer::evaluate_##type       \
 )
 
@@ -38,7 +39,7 @@ evaluate                                                \
 evaluate                                                \
 (                                                       \
     node,                                               \
-    grammar_parser_id::id,                              \
+    grammar::id,                                        \
     &declaration_syntax_analyzer::evaluate_##type,      \
     true                                                \
 )
@@ -49,13 +50,30 @@ using namespace socoa::cpp::program_syntax_tree;
 namespace socoa { namespace cpp
 {
 
+declaration_syntax_analyzer::declaration_syntax_analyzer():
+    m_grammar(*new grammar(m_grammar_configuration))
+{
+    m_grammar_configuration.skip_function_bodies = true;
+}
+
 std::shared_ptr<declaration_seq>
-declaration_syntax_analyzer::analyze(const std::string& input)
+declaration_syntax_analyzer::operator()(const std::string& input)
 {
     std::cout << std::endl;
 
+    //parse the input with the C++ grammar
+    tree_parse_info<> info = pt_parse(input.c_str(), m_grammar, space_p);
+
+    //throw an exception if parsing failed
+    if(!info.full)
+    {
+        std::ostringstream failure_message;
+        failure_message << "Parsing stopped at:\n***\n" << info.stop << "\n***";
+        throw std::runtime_error(failure_message.str().c_str());
+    }
+
     //declare a new declaration_seq object and populate it
-    const tree_node_t& root_node = m_spirit_launcher(input);
+    const tree_node_t& root_node = *info.trees.begin();
     const tree_node_t& translation_unit_node = *root_node.children.begin();
 
     std::shared_ptr<declaration_seq> new_declaration_seq(evaluate_translation_unit(translation_unit_node));
@@ -68,7 +86,7 @@ declaration_syntax_analyzer::analyze(const std::string& input)
 std::shared_ptr<declaration_seq>
 declaration_syntax_analyzer::evaluate_translation_unit(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::TRANSLATION_UNIT);
+    assert(node.value.id() == grammar::TRANSLATION_UNIT);
 
     const tree_node_t& declaration_seq_node = *node.children.begin();
     return evaluate_declaration_seq(declaration_seq_node);
@@ -77,7 +95,7 @@ declaration_syntax_analyzer::evaluate_translation_unit(const tree_node_t& node)
 std::shared_ptr<identifier>
 declaration_syntax_analyzer::evaluate_identifier(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::IDENTIFIER);
+    assert(node.value.id() == grammar::IDENTIFIER);
 
     return std::make_shared<identifier>(get_unique_child_value(node));
 }
@@ -85,17 +103,17 @@ declaration_syntax_analyzer::evaluate_identifier(const tree_node_t& node)
 std::shared_ptr<id_expression>
 declaration_syntax_analyzer::evaluate_id_expression(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::ID_EXPRESSION);
+    assert(node.value.id() == grammar::ID_EXPRESSION);
 
     assert(node.children.size() == 1);
     const tree_node_t& child_node = *node.children.begin();
     boost::spirit::parser_id child_id = child_node.value.id();
 
-    if(child_id == grammar_parser_id::QUALIFIED_ID)
+    if(child_id == grammar::QUALIFIED_ID)
     {
         //return evaluate_qualified_id(*child_node);
     }
-    else if(child_id == grammar_parser_id::UNQUALIFIED_ID)
+    else if(child_id == grammar::UNQUALIFIED_ID)
     {
         return evaluate_unqualified_id(child_node);
     }
@@ -110,29 +128,29 @@ declaration_syntax_analyzer::evaluate_id_expression(const tree_node_t& node)
 std::shared_ptr<unqualified_id>
 declaration_syntax_analyzer::evaluate_unqualified_id(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::UNQUALIFIED_ID);
+    assert(node.value.id() == grammar::UNQUALIFIED_ID);
 
     assert(node.children.size() == 1);
     const tree_node_t& child_node = *node.children.begin();
     boost::spirit::parser_id child_id = child_node.value.id();
 
-    if(child_id == grammar_parser_id::OPERATOR_FUNCTION_ID)
+    if(child_id == grammar::OPERATOR_FUNCTION_ID)
     {
         //return evaluate_qualified_id(*child_node);
     }
-    else if(child_id == grammar_parser_id::CONVERSION_FUNCTION_ID)
+    else if(child_id == grammar::CONVERSION_FUNCTION_ID)
     {
         //return evaluate_unqualified_id(*child_node);
     }
-    else if(child_id == grammar_parser_id::DESTRUCTOR_NAME)
+    else if(child_id == grammar::DESTRUCTOR_NAME)
     {
         //return evaluate_unqualified_id(*child_node);
     }
-    else if(child_id == grammar_parser_id::TEMPLATE_ID)
+    else if(child_id == grammar::TEMPLATE_ID)
     {
         //return evaluate_unqualified_id(*child_node);
     }
-    else if(child_id == grammar_parser_id::IDENTIFIER)
+    else if(child_id == grammar::IDENTIFIER)
     {
         return evaluate_identifier(child_node);
     }
@@ -147,7 +165,7 @@ declaration_syntax_analyzer::evaluate_unqualified_id(const tree_node_t& node)
 std::shared_ptr<nested_name_specifier>
 declaration_syntax_analyzer::evaluate_nested_name_specifier(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::NESTED_NAME_SPECIFIER);
+    assert(node.value.id() == grammar::NESTED_NAME_SPECIFIER);
 
     std::vector<std::shared_ptr<nested_name_specifier_part>> other_parts;
     for(tree_node_iterator_t i = node.children.begin(); i != node.children.end(); ++i) //for each child
@@ -156,11 +174,11 @@ declaration_syntax_analyzer::evaluate_nested_name_specifier(const tree_node_t& n
 
         std::shared_ptr<nested_name_specifier_part> part;
 
-        if(child_node.value.id() == grammar_parser_id::IDENTIFIER)
+        if(child_node.value.id() == grammar::IDENTIFIER)
         {
             part = evaluate_identifier(child_node);
         }
-        else if(child_node.value.id() == grammar_parser_id::NESTED_NAME_SPECIFIER_TEMPLATE_ID)
+        else if(child_node.value.id() == grammar::NESTED_NAME_SPECIFIER_TEMPLATE_ID)
         {
             part = evaluate_nested_name_specifier_template_id(child_node);
         }
@@ -181,7 +199,7 @@ declaration_syntax_analyzer::evaluate_nested_name_specifier(const tree_node_t& n
 std::shared_ptr<nested_name_specifier_template_id>
 declaration_syntax_analyzer::evaluate_nested_name_specifier_template_id(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::NESTED_NAME_SPECIFIER_TEMPLATE_ID);
+    assert(node.value.id() == grammar::NESTED_NAME_SPECIFIER_TEMPLATE_ID);
 
     return std::make_shared<nested_name_specifier_template_id>
     (
@@ -193,7 +211,7 @@ declaration_syntax_analyzer::evaluate_nested_name_specifier_template_id(const tr
 std::shared_ptr<declaration_seq>
 declaration_syntax_analyzer::evaluate_declaration_seq(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::DECLARATION_SEQ);
+    assert(node.value.id() == grammar::DECLARATION_SEQ);
 
     std::shared_ptr<declaration_seq> new_declaration_seq(std::make_shared<declaration_seq>());
 
@@ -215,37 +233,37 @@ declaration_syntax_analyzer::evaluate_declaration_seq(const tree_node_t& node)
 std::shared_ptr<declaration>
 declaration_syntax_analyzer::evaluate_declaration(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::DECLARATION);
+    assert(node.value.id() == grammar::DECLARATION);
 
     assert(node.children.size() == 1);
     const tree_node_t& child_node = *node.children.begin();
     boost::spirit::parser_id child_id = child_node.value.id();
 
-    if(child_id == grammar_parser_id::BLOCK_DECLARATION)
+    if(child_id == grammar::BLOCK_DECLARATION)
     {
         return evaluate_block_declaration(child_node);
     }
-    else if(child_id == grammar_parser_id::FUNCTION_DEFINITION)
+    else if(child_id == grammar::FUNCTION_DEFINITION)
     {
         return evaluate_function_definition(child_node);
     }
-    else if(child_id == grammar_parser_id::TEMPLATE_DECLARATION)
+    else if(child_id == grammar::TEMPLATE_DECLARATION)
     {
         //return evaluate_named_namespace_definition(node);
     }
-    else if(child_id == grammar_parser_id::EXPLICIT_INSTANTIATION)
+    else if(child_id == grammar::EXPLICIT_INSTANTIATION)
     {
         //return evaluate_named_namespace_definition(node);
     }
-    else if(child_id == grammar_parser_id::EXPLICIT_SPECIALIZATION)
+    else if(child_id == grammar::EXPLICIT_SPECIALIZATION)
     {
         //return evaluate_named_namespace_definition(node);
     }
-    else if(child_id == grammar_parser_id::LINKAGE_SPECIFICATION)
+    else if(child_id == grammar::LINKAGE_SPECIFICATION)
     {
         //return evaluate_named_namespace_definition(node);
     }
-    else if(child_id == grammar_parser_id::NAMESPACE_DEFINITION)
+    else if(child_id == grammar::NAMESPACE_DEFINITION)
     {
         return evaluate_namespace_definition(child_node);
     }
@@ -260,29 +278,29 @@ declaration_syntax_analyzer::evaluate_declaration(const tree_node_t& node)
 std::shared_ptr<declaration>
 declaration_syntax_analyzer::evaluate_block_declaration(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::BLOCK_DECLARATION);
+    assert(node.value.id() == grammar::BLOCK_DECLARATION);
 
     assert(node.children.size() == 1);
     const tree_node_t& child_node = *node.children.begin();
     boost::spirit::parser_id child_id = child_node.value.id();
 
-    if(child_id == grammar_parser_id::ASM_DEFINITION)
+    if(child_id == grammar::ASM_DEFINITION)
     {
         //return evaluate_named_namespace_definition(node);
     }
-    else if(child_id == grammar_parser_id::SIMPLE_DECLARATION)
+    else if(child_id == grammar::SIMPLE_DECLARATION)
     {
         return evaluate_simple_declaration(child_node);
     }
-    else if(child_id == grammar_parser_id::NAMESPACE_ALIAS_DEFINITION)
+    else if(child_id == grammar::NAMESPACE_ALIAS_DEFINITION)
     {
         //return evaluate_named_namespace_definition(node);
     }
-    else if(child_id == grammar_parser_id::USING_DECLARATION)
+    else if(child_id == grammar::USING_DECLARATION)
     {
         //return evaluate_named_namespace_definition(node);
     }
-    else if(child_id == grammar_parser_id::USING_DIRECTIVE)
+    else if(child_id == grammar::USING_DIRECTIVE)
     {
         //return evaluate_named_namespace_definition(node);
     }
@@ -297,7 +315,7 @@ declaration_syntax_analyzer::evaluate_block_declaration(const tree_node_t& node)
 std::shared_ptr<simple_declaration>
 declaration_syntax_analyzer::evaluate_simple_declaration(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::SIMPLE_DECLARATION);
+    assert(node.value.id() == grammar::SIMPLE_DECLARATION);
 
     return std::make_shared<simple_declaration>
     (
@@ -309,21 +327,21 @@ declaration_syntax_analyzer::evaluate_simple_declaration(const tree_node_t& node
 std::shared_ptr<decl_specifier>
 declaration_syntax_analyzer::evaluate_decl_specifier(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::DECL_SPECIFIER);
+    assert(node.value.id() == grammar::DECL_SPECIFIER);
 
     assert(node.children.size() == 1);
     const tree_node_t& child_node = *node.children.begin();
     boost::spirit::parser_id child_id = child_node.value.id();
 
-    if(child_id == grammar_parser_id::STORAGE_CLASS_SPECIFIER)
+    if(child_id == grammar::STORAGE_CLASS_SPECIFIER)
     {
         //return evaluate_named_namespace_definition(node);
     }
-    else if(child_id == grammar_parser_id::TYPE_SPECIFIER)
+    else if(child_id == grammar::TYPE_SPECIFIER)
     {
         return evaluate_type_specifier(child_node);
     }
-    else if(child_id == grammar_parser_id::FUNCTION_SPECIFIER)
+    else if(child_id == grammar::FUNCTION_SPECIFIER)
     {
         //return evaluate_named_namespace_definition(node);
     }
@@ -357,33 +375,33 @@ declaration_syntax_analyzer::evaluate_decl_specifier_seq(const tree_node_t& node
 std::shared_ptr<type_specifier>
 declaration_syntax_analyzer::evaluate_type_specifier(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::TYPE_SPECIFIER);
+    assert(node.value.id() == grammar::TYPE_SPECIFIER);
 
     assert(node.children.size() == 1);
     const tree_node_t& child_node = *node.children.begin();
     boost::spirit::parser_id child_id = child_node.value.id();
 
-    if(child_id == grammar_parser_id::SIMPLE_TYPE_SPECIFIER)
+    if(child_id == grammar::SIMPLE_TYPE_SPECIFIER)
     {
         return evaluate_simple_type_specifier(child_node);
     }
-    else if(child_id == grammar_parser_id::CLASS_SPECIFIER)
+    else if(child_id == grammar::CLASS_SPECIFIER)
     {
         return evaluate_class_specifier(child_node);
     }
-    else if(child_id == grammar_parser_id::ENUM_SPECIFIER)
+    else if(child_id == grammar::ENUM_SPECIFIER)
     {
         //return evaluate_named_namespace_definition(node);
     }
-    else if(child_id == grammar_parser_id::ELABORATED_TYPE_SPECIFIER)
+    else if(child_id == grammar::ELABORATED_TYPE_SPECIFIER)
     {
         //return evaluate_named_namespace_definition(node);
     }
-    else if(child_id == grammar_parser_id::CV_QUALIFIER)
+    else if(child_id == grammar::CV_QUALIFIER)
     {
         return evaluate_cv_qualifier(child_node);
     }
-    else if(child_id == grammar_parser_id::TYPEOF_EXPRESSION)
+    else if(child_id == grammar::TYPEOF_EXPRESSION)
     {
         //return evaluate_named_namespace_definition(node);
     }
@@ -398,7 +416,7 @@ declaration_syntax_analyzer::evaluate_type_specifier(const tree_node_t& node)
 std::shared_ptr<simple_type_specifier>
 declaration_syntax_analyzer::evaluate_simple_type_specifier(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::SIMPLE_TYPE_SPECIFIER);
+    assert(node.value.id() == grammar::SIMPLE_TYPE_SPECIFIER);
 
     if(node.children.size() == 1)
     {
@@ -461,17 +479,17 @@ declaration_syntax_analyzer::evaluate_simple_type_specifier(const tree_node_t& n
 std::shared_ptr<identifier_or_template_id>
 declaration_syntax_analyzer::evaluate_identifier_or_template_id(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::IDENTIFIER_OR_TEMPLATE_ID);
+    assert(node.value.id() == grammar::IDENTIFIER_OR_TEMPLATE_ID);
 
     assert(node.children.size() == 1);
     const tree_node_t& child_node = *node.children.begin();
     boost::spirit::parser_id child_id = child_node.value.id();
 
-    if(child_id == grammar_parser_id::IDENTIFIER)
+    if(child_id == grammar::IDENTIFIER)
     {
         return evaluate_identifier(child_node);
     }
-    else if(child_id == grammar_parser_id::TEMPLATE_ID)
+    else if(child_id == grammar::TEMPLATE_ID)
     {
         return evaluate_template_id(child_node);
     }
@@ -485,7 +503,7 @@ declaration_syntax_analyzer::evaluate_identifier_or_template_id(const tree_node_
 std::shared_ptr<namespace_definition>
 declaration_syntax_analyzer::evaluate_namespace_definition(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::NAMESPACE_DEFINITION);
+    assert(node.value.id() == grammar::NAMESPACE_DEFINITION);
 
     return std::make_shared<namespace_definition>
     (
@@ -497,7 +515,7 @@ declaration_syntax_analyzer::evaluate_namespace_definition(const tree_node_t& no
 std::shared_ptr<init_declarator_list>
 declaration_syntax_analyzer::evaluate_init_declarator_list(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::INIT_DECLARATOR_LIST);
+    assert(node.value.id() == grammar::INIT_DECLARATOR_LIST);
 
     //create init declarator list
     std::shared_ptr<init_declarator_list> new_init_declarator_list(std::make_shared<init_declarator_list>());
@@ -507,7 +525,7 @@ declaration_syntax_analyzer::evaluate_init_declarator_list(const tree_node_t& no
     {
         const tree_node_t& child_node = *i;
 
-        if(child_node.value.id() == grammar_parser_id::INIT_DECLARATOR)
+        if(child_node.value.id() == grammar::INIT_DECLARATOR)
         {
             std::shared_ptr<init_declarator> new_init_declarator(evaluate_init_declarator(child_node));
 
@@ -524,7 +542,7 @@ declaration_syntax_analyzer::evaluate_init_declarator_list(const tree_node_t& no
 std::shared_ptr<init_declarator>
 declaration_syntax_analyzer::evaluate_init_declarator(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::INIT_DECLARATOR);
+    assert(node.value.id() == grammar::INIT_DECLARATOR);
 
     return std::make_shared<init_declarator>
     (
@@ -535,7 +553,7 @@ declaration_syntax_analyzer::evaluate_init_declarator(const tree_node_t& node)
 std::shared_ptr<declarator>
 declaration_syntax_analyzer::evaluate_declarator(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::DECLARATOR);
+    assert(node.value.id() == grammar::DECLARATOR);
 
     //get ptr_operator nodes
     std::vector<std::shared_ptr<ptr_operator>> ptr_operators
@@ -543,7 +561,7 @@ declaration_syntax_analyzer::evaluate_declarator(const tree_node_t& node)
         evaluate_seq
         (
             node,
-            grammar_parser_id::PTR_OPERATOR,
+            grammar::PTR_OPERATOR,
             &declaration_syntax_analyzer::evaluate_ptr_operator
         )
     );
@@ -558,7 +576,7 @@ declaration_syntax_analyzer::evaluate_declarator(const tree_node_t& node)
 std::shared_ptr<direct_declarator>
 declaration_syntax_analyzer::evaluate_direct_declarator(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::DIRECT_DECLARATOR);
+    assert(node.value.id() == grammar::DIRECT_DECLARATOR);
 
     std::shared_ptr<declarator_id> new_declarator_id(EVALUATE(declarator_id, DECLARATOR_ID));
     std::shared_ptr<declarator> new_declarator(EVALUATE(declarator, DECLARATOR));
@@ -570,11 +588,11 @@ declaration_syntax_analyzer::evaluate_direct_declarator(const tree_node_t& node)
         const tree_node_t& child_node = *i;
         parser_id child_node_id = child_node.value.id();
 
-        if(child_node_id == grammar_parser_id::FUNCTION_DIRECT_DECLARATOR_PART)
+        if(child_node_id == grammar::FUNCTION_DIRECT_DECLARATOR_PART)
         {
             other_parts.push_back(evaluate_function_direct_declarator_part(child_node));
         }
-        else if(child_node_id == grammar_parser_id::ARRAY_DIRECT_DECLARATOR_PART)
+        else if(child_node_id == grammar::ARRAY_DIRECT_DECLARATOR_PART)
         {
             //other_parts.push_back(evaluate_array_direct_declarator_part(child_node));
         }
@@ -606,7 +624,7 @@ declaration_syntax_analyzer::evaluate_direct_declarator(const tree_node_t& node)
 std::shared_ptr<function_direct_declarator_part>
 declaration_syntax_analyzer::evaluate_function_direct_declarator_part(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::FUNCTION_DIRECT_DECLARATOR_PART);
+    assert(node.value.id() == grammar::FUNCTION_DIRECT_DECLARATOR_PART);
 
     std::shared_ptr<parameter_declaration_clause> new_parameter_declaration_clause = EVALUATE(parameter_declaration_clause, PARAMETER_DECLARATION_CLAUSE);
 
@@ -631,7 +649,7 @@ declaration_syntax_analyzer::evaluate_function_direct_declarator_part(const tree
 std::shared_ptr<array_direct_declarator_part>
 declaration_syntax_analyzer::evaluate_array_direct_declarator_part(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::ARRAY_DIRECT_DECLARATOR_PART);
+    assert(node.value.id() == grammar::ARRAY_DIRECT_DECLARATOR_PART);
 
     return std::shared_ptr<array_direct_declarator_part>();
 }
@@ -639,7 +657,7 @@ declaration_syntax_analyzer::evaluate_array_direct_declarator_part(const tree_no
 std::shared_ptr<ptr_operator>
 declaration_syntax_analyzer::evaluate_ptr_operator(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::PTR_OPERATOR);
+    assert(node.value.id() == grammar::PTR_OPERATOR);
 
     bool asterisk = find_value(node, "*");
     bool ampersand = find_value(node, "&", 0);
@@ -661,14 +679,14 @@ declaration_syntax_analyzer::evaluate_ptr_operator(const tree_node_t& node)
 std::shared_ptr<cv_qualifier_seq>
 declaration_syntax_analyzer::evaluate_cv_qualifier_seq(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::CV_QUALIFIER_SEQ);
+    assert(node.value.id() == grammar::CV_QUALIFIER_SEQ);
 
     return std::make_shared<cv_qualifier_seq>
     (
         evaluate_seq
         (
             node,
-            grammar_parser_id::CV_QUALIFIER,
+            grammar::CV_QUALIFIER,
             &declaration_syntax_analyzer::evaluate_cv_qualifier
         )
     );
@@ -677,7 +695,7 @@ declaration_syntax_analyzer::evaluate_cv_qualifier_seq(const tree_node_t& node)
 std::shared_ptr<cv_qualifier>
 declaration_syntax_analyzer::evaluate_cv_qualifier(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::CV_QUALIFIER);
+    assert(node.value.id() == grammar::CV_QUALIFIER);
 
     const std::string value = get_unique_child_value(node);
     assert(node.children.size() == 1);
@@ -689,7 +707,7 @@ declaration_syntax_analyzer::evaluate_cv_qualifier(const tree_node_t& node)
         return std::make_shared<cv_qualifier>(cv_qualifier::CONST);
     else if(value == "volatile")
         return std::make_shared<cv_qualifier>(cv_qualifier::VOLATILE);
-    else if(child_id == grammar_parser_id::RESTRICT_KEYWORD)
+    else if(child_id == grammar::RESTRICT_KEYWORD)
         return std::make_shared<cv_qualifier>(cv_qualifier::RESTRICT);
     else
     {
@@ -701,7 +719,7 @@ declaration_syntax_analyzer::evaluate_cv_qualifier(const tree_node_t& node)
 std::shared_ptr<declarator_id>
 declaration_syntax_analyzer::evaluate_declarator_id(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::DECLARATOR_ID);
+    assert(node.value.id() == grammar::DECLARATOR_ID);
 
     return std::make_shared<declarator_id>
     (
@@ -712,7 +730,7 @@ declaration_syntax_analyzer::evaluate_declarator_id(const tree_node_t& node)
 std::shared_ptr<parameter_declaration_clause>
 declaration_syntax_analyzer::evaluate_parameter_declaration_clause(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::PARAMETER_DECLARATION_CLAUSE);
+    assert(node.value.id() == grammar::PARAMETER_DECLARATION_CLAUSE);
 
     bool trailing_comma = find_value(node, ",", 1);
     bool ellipsis = find_value(node, "...");
@@ -730,7 +748,7 @@ declaration_syntax_analyzer::evaluate_parameter_declaration_clause(const tree_no
 std::shared_ptr<parameter_declaration_list>
 declaration_syntax_analyzer::evaluate_parameter_declaration_list(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::PARAMETER_DECLARATION_LIST);
+    assert(node.value.id() == grammar::PARAMETER_DECLARATION_LIST);
 
     std::shared_ptr<parameter_declaration_list> new_parameter_declaration_list(std::make_shared<parameter_declaration_list>());
 
@@ -739,7 +757,7 @@ declaration_syntax_analyzer::evaluate_parameter_declaration_list(const tree_node
         const tree_node_t& parameter_declaration_node = *i;
         parser_id parameter_declaration_node_id = parameter_declaration_node.value.id();
 
-        if(parameter_declaration_node_id == grammar_parser_id::PARAMETER_DECLARATION)
+        if(parameter_declaration_node_id == grammar::PARAMETER_DECLARATION)
         {
             new_parameter_declaration_list->add(evaluate_parameter_declaration(parameter_declaration_node));
         }
@@ -751,7 +769,7 @@ declaration_syntax_analyzer::evaluate_parameter_declaration_list(const tree_node
 std::shared_ptr<parameter_declaration>
 declaration_syntax_analyzer::evaluate_parameter_declaration(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::PARAMETER_DECLARATION);
+    assert(node.value.id() == grammar::PARAMETER_DECLARATION);
 
     std::shared_ptr<decl_specifier_seq> new_decl_specifier_seq;
     std::shared_ptr<declarator> new_declarator;
@@ -761,11 +779,11 @@ declaration_syntax_analyzer::evaluate_parameter_declaration(const tree_node_t& n
     parser_id decl_specifier_seq_node_id = decl_specifier_seq_node.value.id();
     assert
     (
-        decl_specifier_seq_node_id == grammar_parser_id::PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ1 ||
-        decl_specifier_seq_node_id == grammar_parser_id::PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ2 ||
-        decl_specifier_seq_node_id == grammar_parser_id::PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ3 ||
-        decl_specifier_seq_node_id == grammar_parser_id::PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ4 ||
-        decl_specifier_seq_node_id == grammar_parser_id::DECL_SPECIFIER_SEQ
+        decl_specifier_seq_node_id == grammar::PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ1 ||
+        decl_specifier_seq_node_id == grammar::PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ2 ||
+        decl_specifier_seq_node_id == grammar::PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ3 ||
+        decl_specifier_seq_node_id == grammar::PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ4 ||
+        decl_specifier_seq_node_id == grammar::DECL_SPECIFIER_SEQ
     );
     new_decl_specifier_seq = evaluate_decl_specifier_seq(decl_specifier_seq_node);
 
@@ -780,15 +798,15 @@ declaration_syntax_analyzer::evaluate_parameter_declaration(const tree_node_t& n
 std::shared_ptr<function_definition>
 declaration_syntax_analyzer::evaluate_function_definition(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::FUNCTION_DEFINITION);
+    assert(node.value.id() == grammar::FUNCTION_DEFINITION);
 
     //find decl_specifier_seq node...
     const tree_node_t* decl_specifier_seq_node;
-    decl_specifier_seq_node = find_child_node(node, grammar_parser_id::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ1);
+    decl_specifier_seq_node = find_child_node(node, grammar::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ1);
     if(!decl_specifier_seq_node)
-        decl_specifier_seq_node = find_child_node(node, grammar_parser_id::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ2);
+        decl_specifier_seq_node = find_child_node(node, grammar::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ2);
     if(!decl_specifier_seq_node)
-        decl_specifier_seq_node = find_child_node(node, grammar_parser_id::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ3);
+        decl_specifier_seq_node = find_child_node(node, grammar::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ3);
 
     //... and evaluate it
     std::shared_ptr<decl_specifier_seq> new_decl_specifier_seq;
@@ -808,7 +826,7 @@ declaration_syntax_analyzer::evaluate_function_definition(const tree_node_t& nod
 std::shared_ptr<class_specifier>
 declaration_syntax_analyzer::evaluate_class_specifier(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::CLASS_SPECIFIER);
+    assert(node.value.id() == grammar::CLASS_SPECIFIER);
 
     return std::make_shared<class_specifier>
     (
@@ -819,7 +837,7 @@ declaration_syntax_analyzer::evaluate_class_specifier(const tree_node_t& node)
 std::shared_ptr<class_head>
 declaration_syntax_analyzer::evaluate_class_head(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::CLASS_HEAD);
+    assert(node.value.id() == grammar::CLASS_HEAD);
 
     return std::make_shared<class_head>
     (
@@ -833,7 +851,7 @@ declaration_syntax_analyzer::evaluate_class_head(const tree_node_t& node)
 std::shared_ptr<class_key>
 declaration_syntax_analyzer::evaluate_class_key(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::CLASS_KEY);
+    assert(node.value.id() == grammar::CLASS_KEY);
 
     std::string key = get_unique_child_value(node);
 
@@ -850,10 +868,16 @@ declaration_syntax_analyzer::evaluate_class_key(const tree_node_t& node)
     }
 }
 
+std::shared_ptr<member_specification>
+declaration_syntax_analyzer::evaluate_member_specification(const tree_node_t& node)
+{
+
+}
+
 std::shared_ptr<template_declaration>
 declaration_syntax_analyzer::evaluate_template_declaration(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::TEMPLATE_DECLARATION);
+    assert(node.value.id() == grammar::TEMPLATE_DECLARATION);
 
     //is the declaration exported?
     bool exported = find_value(node, "export", 0);
@@ -870,7 +894,7 @@ declaration_syntax_analyzer::evaluate_template_declaration(const tree_node_t& no
 std::shared_ptr<template_id>
 declaration_syntax_analyzer::evaluate_template_id(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar_parser_id::TEMPLATE_ID);
+    assert(node.value.id() == grammar::TEMPLATE_ID);
 
     return std::make_shared<template_id>
     (

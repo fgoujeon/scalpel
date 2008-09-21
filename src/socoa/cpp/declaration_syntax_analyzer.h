@@ -24,10 +24,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <map>
 #include <memory>
-#include <boost/spirit.hpp>
-#include <boost/spirit/include/classic_parse_tree.hpp>
-#include "spirit_launcher.h"
-#include "grammar_parser_id.h"
+#include <boost/spirit/tree/parse_tree.hpp>
+#include "grammar.h"
 #include "program_syntax_tree_fwd.h"
 
 namespace socoa { namespace cpp
@@ -35,6 +33,11 @@ namespace socoa { namespace cpp
 
 /**
 @brief Analyses the syntax of every declaration token of a source code.
+
+Analyses the syntax of a source code, by calling the operator() function.
+This analyzer configures the grammar so it parses declaration tokens only.
+After parsing the input, it generates a syntax tree of the source code and
+returns it.
 */
 class declaration_syntax_analyzer
 {
@@ -48,8 +51,10 @@ class declaration_syntax_analyzer
         typedef tree_node_value_t::const_iterator_t tree_node_value_iterator_t;
 
     public:
+        declaration_syntax_analyzer();
+
         std::shared_ptr<program_syntax_tree::declaration_seq>
-        analyze(const std::string& input);
+        operator()(const std::string& input);
 
     private:
         std::shared_ptr<program_syntax_tree::declaration_seq>
@@ -154,6 +159,9 @@ class declaration_syntax_analyzer
         std::shared_ptr<program_syntax_tree::class_key>
         evaluate_class_key(const tree_node_t& node);
 
+        std::shared_ptr<program_syntax_tree::member_specification>
+        evaluate_member_specification(const tree_node_t& node);
+
         std::shared_ptr<program_syntax_tree::template_declaration>
         evaluate_template_declaration(const tree_node_t& node);
 
@@ -240,7 +248,8 @@ class declaration_syntax_analyzer
         get_id(const tree_node_t& node);
 
 
-        spirit_launcher m_spirit_launcher;
+        grammar::configuration m_grammar_configuration;
+        grammar m_grammar;
 };
 
 template <class T>
