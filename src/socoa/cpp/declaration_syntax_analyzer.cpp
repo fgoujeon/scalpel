@@ -178,9 +178,9 @@ declaration_syntax_analyzer::evaluate_nested_name_specifier(const tree_node_t& n
         {
             part = evaluate_identifier(child_node);
         }
-        else if(child_node.value.id() == grammar::NESTED_NAME_SPECIFIER_TEMPLATE_ID)
+        else if(child_node.value.id() == grammar::NESTED_NAME_SPECIFIER_TEMPLATE_ID_PART)
         {
-            part = evaluate_nested_name_specifier_template_id(child_node);
+            part = evaluate_nested_name_specifier_template_id_part(child_node);
         }
 
         if(part)
@@ -196,12 +196,12 @@ declaration_syntax_analyzer::evaluate_nested_name_specifier(const tree_node_t& n
     );
 }
 
-std::shared_ptr<nested_name_specifier_template_id>
-declaration_syntax_analyzer::evaluate_nested_name_specifier_template_id(const tree_node_t& node)
+std::shared_ptr<nested_name_specifier_template_id_part>
+declaration_syntax_analyzer::evaluate_nested_name_specifier_template_id_part(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar::NESTED_NAME_SPECIFIER_TEMPLATE_ID);
+    assert(node.value.id() == grammar::NESTED_NAME_SPECIFIER_TEMPLATE_ID_PART);
 
-    return std::make_shared<nested_name_specifier_template_id>
+    return std::make_shared<nested_name_specifier_template_id_part>
     (
         find_value(node, "template", 0),
         std::move(*ASSERTED_EVALUATE(template_id, TEMPLATE_ID))
@@ -588,13 +588,13 @@ declaration_syntax_analyzer::evaluate_direct_declarator(const tree_node_t& node)
         const tree_node_t& child_node = *i;
         parser_id child_node_id = child_node.value.id();
 
-        if(child_node_id == grammar::FUNCTION_DIRECT_DECLARATOR_PART)
+        if(child_node_id == grammar::DIRECT_DECLARATOR_FUNCTION_PART)
         {
-            other_parts.push_back(evaluate_function_direct_declarator_part(child_node));
+            other_parts.push_back(evaluate_direct_declarator_function_part(child_node));
         }
-        else if(child_node_id == grammar::ARRAY_DIRECT_DECLARATOR_PART)
+        else if(child_node_id == grammar::DIRECT_DECLARATOR_ARRAY_PART)
         {
-            //other_parts.push_back(evaluate_array_direct_declarator_part(child_node));
+            //other_parts.push_back(evaluate_direct_declarator_array_part(child_node));
         }
     }
 
@@ -621,10 +621,10 @@ declaration_syntax_analyzer::evaluate_direct_declarator(const tree_node_t& node)
     }
 }
 
-std::shared_ptr<function_direct_declarator_part>
-declaration_syntax_analyzer::evaluate_function_direct_declarator_part(const tree_node_t& node)
+std::shared_ptr<direct_declarator_function_part>
+declaration_syntax_analyzer::evaluate_direct_declarator_function_part(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar::FUNCTION_DIRECT_DECLARATOR_PART);
+    assert(node.value.id() == grammar::DIRECT_DECLARATOR_FUNCTION_PART);
 
     std::shared_ptr<parameter_declaration_clause> new_parameter_declaration_clause = EVALUATE(parameter_declaration_clause, PARAMETER_DECLARATION_CLAUSE);
 
@@ -640,18 +640,18 @@ declaration_syntax_analyzer::evaluate_function_direct_declarator_part(const tree
         );
     }
 
-    return std::make_shared<function_direct_declarator_part>
+    return std::make_shared<direct_declarator_function_part>
     (
         *new_parameter_declaration_clause
     );
 }
 
-std::shared_ptr<array_direct_declarator_part>
-declaration_syntax_analyzer::evaluate_array_direct_declarator_part(const tree_node_t& node)
+std::shared_ptr<direct_declarator_array_part>
+declaration_syntax_analyzer::evaluate_direct_declarator_array_part(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar::ARRAY_DIRECT_DECLARATOR_PART);
+    assert(node.value.id() == grammar::DIRECT_DECLARATOR_ARRAY_PART);
 
-    return std::shared_ptr<array_direct_declarator_part>();
+    return std::shared_ptr<direct_declarator_array_part>();
 }
 
 std::shared_ptr<ptr_operator>
@@ -874,7 +874,7 @@ declaration_syntax_analyzer::evaluate_member_specification(const tree_node_t& no
 {
     assert(node.value.id() == grammar::MEMBER_SPECIFICATION);
 
-    typedef std::shared_ptr<member_specification_item> return_type_t;
+    typedef std::shared_ptr<member_specification_part> return_type_t;
     typedef std::function<return_type_t (declaration_syntax_analyzer*, const tree_node_t&)> function_type_t;
 
     std::map<int, function_type_t> id_eval;

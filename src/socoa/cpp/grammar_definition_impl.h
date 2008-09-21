@@ -89,7 +89,7 @@ struct grammar_definition_impl
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::UNQUALIFIED_ID>> unqualified_id;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::QUALIFIED_ID>> qualified_id;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::NESTED_NAME_SPECIFIER>> nested_name_specifier;
-    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::NESTED_NAME_SPECIFIER_TEMPLATE_ID>> nested_name_specifier_template_id;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::NESTED_NAME_SPECIFIER_TEMPLATE_ID_PART>> nested_name_specifier_template_id_part;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::POSTFIX_EXPRESSION>> postfix_expression;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EXPRESSION_LIST>> expression_list;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PSEUDO_DESTRUCTOR_NAME>> pseudo_destructor_name;
@@ -174,8 +174,8 @@ struct grammar_definition_impl
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::INIT_DECLARATOR>> init_declarator;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DECLARATOR>> declarator;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DIRECT_DECLARATOR>> direct_declarator;
-    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::FUNCTION_DIRECT_DECLARATOR_PART>> function_direct_declarator_part;
-    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ARRAY_DIRECT_DECLARATOR_PART>> array_direct_declarator_part;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DIRECT_DECLARATOR_FUNCTION_PART>> direct_declarator_function_part;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DIRECT_DECLARATOR_ARRAY_PART>> direct_declarator_array_part;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PTR_OPERATOR>> ptr_operator;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CV_QUALIFIER_SEQ>> cv_qualifier_seq;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CV_QUALIFIER>> cv_qualifier;
@@ -618,9 +618,9 @@ grammar_definition_impl<ScannerT>::grammar_definition_impl(const grammar& self)
         ;
     */
     nested_name_specifier
-        = identifier_or_template_id >> "::" >> *((identifier | nested_name_specifier_template_id) >> "::")
+        = identifier_or_template_id >> "::" >> *((identifier | nested_name_specifier_template_id_part) >> "::")
     ;
-    nested_name_specifier_template_id
+    nested_name_specifier_template_id_part
         = !str_p("template") >> template_id
     ;
 
@@ -1198,14 +1198,14 @@ grammar_definition_impl<ScannerT>::grammar_definition_impl(const grammar& self)
         )
         >>
         *(
-            function_direct_declarator_part
-            | array_direct_declarator_part
+            direct_declarator_function_part
+            | direct_declarator_array_part
         )
     ;
-    function_direct_declarator_part
+    direct_declarator_function_part
         = '(' >> parameter_declaration_clause >> ')' >> !cv_qualifier_seq >> !exception_specification
     ;
-    array_direct_declarator_part
+    direct_declarator_array_part
         = '[' >> !constant_expression >> ']'
     ;
 

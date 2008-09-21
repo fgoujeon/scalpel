@@ -18,21 +18,35 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_ARRAY_DIRECT_DECLARATOR_PART_H
-#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_ARRAY_DIRECT_DECLARATOR_PART_H
+#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_nested_name_specifier_template_id_part_H
+#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_nested_name_specifier_template_id_part_H
 
-#include "direct_declarator_part.h"
+#include "nested_name_specifier_part.h"
+#include "template_id.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class array_direct_declarator_part: public direct_declarator_part
+class nested_name_specifier_template_id_part: public nested_name_specifier_part
 {
     public:
+        nested_name_specifier_template_id_part
+        (
+            bool template_keyword,
+            template_id&& a_template_id
+        );
+
+        bool
+        has_template_keyword() const;
+
+        const template_id&
+        get_template_id() const;
+
         SOCOA_CPP_DEFINE_VISITABLE()
 
-
     private:
+        bool m_template_keyword;
+        template_id m_template_id;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

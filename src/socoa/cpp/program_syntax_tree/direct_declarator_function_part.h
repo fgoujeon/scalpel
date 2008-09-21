@@ -18,35 +18,30 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_NESTED_NAME_SPECIFIER_TEMPLATE_ID_H
-#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_NESTED_NAME_SPECIFIER_TEMPLATE_ID_H
+#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_DIRECT_DECLARATOR_FUNCTION_PART_H
+#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_DIRECT_DECLARATOR_FUNCTION_PART_H
 
-#include "nested_name_specifier_part.h"
-#include "template_id.h"
+#include "direct_declarator_part.h"
+#include "parameter_declaration_clause.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class nested_name_specifier_template_id: public nested_name_specifier_part
+class direct_declarator_function_part: public direct_declarator_part
 {
     public:
-        nested_name_specifier_template_id
+        explicit direct_declarator_function_part
         (
-            bool template_keyword,
-            template_id&& a_template_id
+            parameter_declaration_clause&& a_parameter_declaration_clause
         );
 
-        bool
-        has_template_keyword() const;
-
-        const template_id&
-        get_template_id() const;
+        const parameter_declaration_clause&
+        get_parameter_declaration_clause() const;
 
         SOCOA_CPP_DEFINE_VISITABLE()
 
     private:
-        bool m_template_keyword;
-        template_id m_template_id;
+        parameter_declaration_clause m_parameter_declaration_clause;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

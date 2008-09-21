@@ -18,11 +18,31 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "array_direct_declarator_part.h"
+#include "nested_name_specifier_template_id_part.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
+nested_name_specifier_template_id_part::nested_name_specifier_template_id_part
+(
+    bool template_keyword,
+    template_id&& a_template_id
+):
+    m_template_keyword(template_keyword),
+    m_template_id(a_template_id)
+{
+}
 
+bool
+nested_name_specifier_template_id_part::has_template_keyword() const
+{
+    return m_template_keyword;
+}
+
+const template_id&
+nested_name_specifier_template_id_part::get_template_id() const
+{
+    return m_template_id;
+}
 
 }}} //namespace socoa::cpp::program_syntax_tree

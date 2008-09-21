@@ -18,20 +18,23 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_MEMBER_SPECIFICATION_ITEM_H
-#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_MEMBER_SPECIFICATION_ITEM_H
-
-#include "visitable.h"
+#include "direct_declarator_function_part.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class member_specification_item: public visitable
+direct_declarator_function_part::direct_declarator_function_part
+(
+    parameter_declaration_clause&& a_parameter_declaration_clause
+):
+    m_parameter_declaration_clause(a_parameter_declaration_clause)
 {
-    public:
-        virtual ~member_specification_item(){};
-};
+}
+
+const parameter_declaration_clause&
+direct_declarator_function_part::get_parameter_declaration_clause() const
+{
+    return m_parameter_declaration_clause;
+}
 
 }}} //namespace socoa::cpp::program_syntax_tree
-
-#endif

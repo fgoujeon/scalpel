@@ -46,7 +46,7 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         visit(const program_syntax_tree::nested_name_specifier& item);
 
         void
-        visit(const program_syntax_tree::nested_name_specifier_template_id& item);
+        visit(const program_syntax_tree::nested_name_specifier_template_id_part& item);
 
         void
         visit(const program_syntax_tree::declaration_seq& item);
@@ -67,10 +67,10 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         visit(const program_syntax_tree::direct_declarator& item);
 
         void
-        visit(const program_syntax_tree::function_direct_declarator_part& item);
+        visit(const program_syntax_tree::direct_declarator_function_part& item);
 
         void
-        visit(const program_syntax_tree::array_direct_declarator_part& item);
+        visit(const program_syntax_tree::direct_declarator_array_part& item);
 
         void
         visit(const program_syntax_tree::ptr_operator& item);

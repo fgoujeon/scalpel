@@ -64,7 +64,7 @@ program_syntax_tree_to_string_converter::visit(const nested_name_specifier& item
 }
 
 void
-program_syntax_tree_to_string_converter::visit(const nested_name_specifier_template_id& item)
+program_syntax_tree_to_string_converter::visit(const nested_name_specifier_template_id_part& item)
 {
     if(item.has_template_keyword())
         m_result << "template ";
@@ -158,7 +158,7 @@ program_syntax_tree_to_string_converter::visit(const direct_declarator& item)
 }
 
 void
-program_syntax_tree_to_string_converter::visit(const function_direct_declarator_part& item)
+program_syntax_tree_to_string_converter::visit(const direct_declarator_function_part& item)
 {
     m_result << '(';
     visit(item.get_parameter_declaration_clause());
@@ -166,7 +166,7 @@ program_syntax_tree_to_string_converter::visit(const function_direct_declarator_
 }
 
 void
-program_syntax_tree_to_string_converter::visit(const array_direct_declarator_part& item)
+program_syntax_tree_to_string_converter::visit(const direct_declarator_array_part& item)
 {
     m_result << '[';
 
@@ -348,7 +348,7 @@ program_syntax_tree_to_string_converter::visit(const member_specification& item)
 {
     for
     (
-        std::vector<std::shared_ptr<member_specification_item>>::const_iterator i = item.get_parts().begin();
+        std::vector<std::shared_ptr<member_specification_part>>::const_iterator i = item.get_parts().begin();
         i != item.get_parts().end();
         ++i
     )

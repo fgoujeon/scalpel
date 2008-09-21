@@ -72,8 +72,8 @@ class declaration_syntax_analyzer
         std::shared_ptr<program_syntax_tree::nested_name_specifier>
         evaluate_nested_name_specifier(const tree_node_t& node);
 
-        std::shared_ptr<program_syntax_tree::nested_name_specifier_template_id>
-        evaluate_nested_name_specifier_template_id(const tree_node_t& node);
+        std::shared_ptr<program_syntax_tree::nested_name_specifier_template_id_part>
+        evaluate_nested_name_specifier_template_id_part(const tree_node_t& node);
 
         std::shared_ptr<program_syntax_tree::declaration_seq>
         evaluate_declaration_seq(const tree_node_t& node);
@@ -120,11 +120,11 @@ class declaration_syntax_analyzer
         std::shared_ptr<program_syntax_tree::direct_declarator>
         evaluate_direct_declarator(const tree_node_t& node);
 
-        std::shared_ptr<program_syntax_tree::function_direct_declarator_part>
-        evaluate_function_direct_declarator_part(const tree_node_t& node);
+        std::shared_ptr<program_syntax_tree::direct_declarator_function_part>
+        evaluate_direct_declarator_function_part(const tree_node_t& node);
 
-        std::shared_ptr<program_syntax_tree::array_direct_declarator_part>
-        evaluate_array_direct_declarator_part(const tree_node_t& node);
+        std::shared_ptr<program_syntax_tree::direct_declarator_array_part>
+        evaluate_direct_declarator_array_part(const tree_node_t& node);
 
         std::shared_ptr<program_syntax_tree::ptr_operator>
         evaluate_ptr_operator(const tree_node_t& node);

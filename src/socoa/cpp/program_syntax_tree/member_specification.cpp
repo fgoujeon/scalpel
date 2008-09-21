@@ -23,12 +23,12 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-member_specification::member_specification(std::vector<std::shared_ptr<member_specification_item>>&& parts):
+member_specification::member_specification(std::vector<std::shared_ptr<member_specification_part>>&& parts):
     parts_(parts)
 {
 }
 
-const std::vector<std::shared_ptr<member_specification_item>>&
+const std::vector<std::shared_ptr<member_specification_part>>&
 member_specification::get_parts() const
 {
     return parts_;
