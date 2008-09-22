@@ -100,6 +100,12 @@ program_syntax_tree_to_string_converter::visit(const namespace_definition& item)
 }
 
 void
+program_syntax_tree_to_string_converter::visit(const using_declaration& item)
+{
+
+}
+
+void
 program_syntax_tree_to_string_converter::visit(const init_declarator_list& item)
 {
     const std::vector<std::shared_ptr<init_declarator>>& init_declarators = item.get_init_declarators();
@@ -353,13 +359,29 @@ program_syntax_tree_to_string_converter::visit(const member_specification& item)
         ++i
     )
     {
-        (**i).accept(*this);
+        if(*i)
+            (**i).accept(*this);
+        else
+            m_result << "NOT IMPLEMENTED\n";
     }
 }
 
 void
-program_syntax_tree_to_string_converter::visit(const member_declaration& item)
+program_syntax_tree_to_string_converter::visit(const member_declaration_member_declarator_list& item)
 {
+
+}
+
+void
+program_syntax_tree_to_string_converter::visit(const member_declaration_unqualified_id& item)
+{
+
+}
+
+void
+program_syntax_tree_to_string_converter::visit(const member_declaration_function_definition& item)
+{
+
 }
 
 void

@@ -27,18 +27,21 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 class identifier;
 class nested_name_specifier_template_id_part;
 class namespace_definition;
+class using_declaration;
+
+class function_definition;
 class class_specifier;
-class member_specification;
+class member_declaration_member_declarator_list;
+class member_declaration_unqualified_id;
+class member_declaration_function_definition;
 class access_specifier;
 class template_declaration;
 class simple_declaration;
 class simple_type_specifier;
-class function_definition;
 class direct_declarator_function_part;
 class direct_declarator_array_part;
 class template_id;
 class cv_qualifier;
-class member_declaration;
 
 class visitor
 {
@@ -55,7 +58,19 @@ class visitor
         visit(const namespace_definition&) = 0;
 
         virtual void
+        visit(const using_declaration&) = 0;
+
+        virtual void
         visit(const class_specifier&) = 0;
+
+        virtual void
+        visit(const member_declaration_member_declarator_list&) = 0;
+
+        virtual void
+        visit(const member_declaration_unqualified_id&) = 0;
+
+        virtual void
+        visit(const member_declaration_function_definition&) = 0;
 
         virtual void
         visit(const access_specifier&) = 0;
@@ -83,9 +98,6 @@ class visitor
 
         virtual void
         visit(const cv_qualifier&) = 0;
-
-        virtual void
-        visit(const member_declaration&) = 0;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

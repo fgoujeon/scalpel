@@ -28,6 +28,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
+class member_specification;
+
 class class_specifier: public type_specifier
 {
     public:

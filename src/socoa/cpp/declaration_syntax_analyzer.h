@@ -50,6 +50,14 @@ class declaration_syntax_analyzer
         typedef tree_node_t::parse_node_t tree_node_value_t;
         typedef tree_node_value_t::const_iterator_t tree_node_value_iterator_t;
 
+        template <class T>
+        struct evaluate_function_typedefs
+        {
+            typedef std::shared_ptr<T> return_type_t;
+            typedef std::function<return_type_t (declaration_syntax_analyzer*, const tree_node_t&)> function_type_t;
+            typedef std::map<int, function_type_t> id_function_map_t;
+        };
+
     public:
         declaration_syntax_analyzer();
 
@@ -191,7 +199,7 @@ class declaration_syntax_analyzer
         */
         template <class T>
         std::shared_ptr<T>
-        evaluate
+        evaluate_node
         (
             const tree_node_t& parent_node,
             const int id,
@@ -213,7 +221,7 @@ class declaration_syntax_analyzer
         */
         template <class T>
         std::vector<std::shared_ptr<T>>
-        evaluate_seq
+        evaluate_nodes
         (
             const tree_node_t& parent_node,
             int id,
@@ -236,7 +244,7 @@ class declaration_syntax_analyzer
         */
         template <class T>
         std::vector<std::shared_ptr<T>>
-        evaluate_seq
+        evaluate_nodes
         (
             const tree_node_t& parent_node,
             const std::map
@@ -244,6 +252,19 @@ class declaration_syntax_analyzer
                 int,
                 std::function<std::shared_ptr<T> (declaration_syntax_analyzer*, const tree_node_t&)>
             >& id_evaluate_function_map
+        );
+
+        template <class T>
+        std::shared_ptr<T>
+        evaluate_only_child_node
+        (
+            const tree_node_t& parent_node,
+            const std::map
+            <
+                int,
+                std::function<std::shared_ptr<T> (declaration_syntax_analyzer*, const tree_node_t&)>
+            >& id_evaluate_function_map,
+            bool assert_evaluated = true
         );
 
         const tree_node_t*
@@ -274,7 +295,7 @@ class declaration_syntax_analyzer
 
 template <class T>
 std::shared_ptr<T>
-declaration_syntax_analyzer::evaluate
+declaration_syntax_analyzer::evaluate_node
 (
     const tree_node_t& parent_node,
     const int id,
@@ -301,7 +322,7 @@ declaration_syntax_analyzer::evaluate
 
 template <class T>
 std::vector<std::shared_ptr<T>>
-declaration_syntax_analyzer::evaluate_seq
+declaration_syntax_analyzer::evaluate_nodes
 (
     const tree_node_t& parent_node,
     int id,
@@ -324,7 +345,7 @@ declaration_syntax_analyzer::evaluate_seq
 
 template <class T>
 std::vector<std::shared_ptr<T>>
-declaration_syntax_analyzer::evaluate_seq
+declaration_syntax_analyzer::evaluate_nodes
 (
     const tree_node_t& parent_node,
     const std::map
@@ -361,6 +382,47 @@ declaration_syntax_analyzer::evaluate_seq
     }
 
     return seq;
+}
+
+template <class T>
+std::shared_ptr<T>
+declaration_syntax_analyzer::evaluate_only_child_node
+(
+    const tree_node_t& parent_node,
+    const std::map
+    <
+        int,
+        std::function<std::shared_ptr<T> (declaration_syntax_analyzer*, const tree_node_t&)>
+    >& id_evaluate_function_map,
+    bool assert_evaluated
+)
+{
+    typedef std::function<std::shared_ptr<T> (declaration_syntax_analyzer*, const tree_node_t&)> evaluate_function_t;
+    typedef std::map<int, evaluate_function_t> id_evaluate_function_map_t;
+
+    assert(parent_node.children.size() == 1);
+    const tree_node_t& child_node = *parent_node.children.begin();
+    boost::spirit::parser_id child_id = child_node.value.id();
+
+    for
+    (
+        typename id_evaluate_function_map_t::const_iterator i = id_evaluate_function_map.begin();
+        i != id_evaluate_function_map.end();
+        ++i
+    ) //for each id/evaluate function
+    {
+        const int id = i->first;
+        const evaluate_function_t evaluate_function = i->second;
+
+        if(child_node.value.id() == id)
+        {
+            return evaluate_function(this, child_node);
+        }
+    }
+
+    assert(!assert_evaluated && "No node with this id has been found");
+
+    return std::shared_ptr<T>();
 }
 
 }} //namespace socoa::cpp

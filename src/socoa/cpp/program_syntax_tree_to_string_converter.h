@@ -55,6 +55,9 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         visit(const program_syntax_tree::namespace_definition& item);
 
         void
+        visit(const program_syntax_tree::using_declaration& item);
+
+        void
         visit(const program_syntax_tree::init_declarator_list& item);
 
         void
@@ -109,7 +112,13 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         visit(const program_syntax_tree::member_specification& item);
 
         void
-        visit(const program_syntax_tree::member_declaration& item);
+        visit(const program_syntax_tree::member_declaration_member_declarator_list&);
+
+        void
+        visit(const program_syntax_tree::member_declaration_unqualified_id&);
+
+        void
+        visit(const program_syntax_tree::member_declaration_function_definition&);
 
         void
         visit(const program_syntax_tree::access_specifier& item);
