@@ -220,6 +220,20 @@ class declaration_syntax_analyzer
             std::shared_ptr<T> (declaration_syntax_analyzer::*evaluate_function)(const tree_node_t&)
         );
 
+        /**
+        Finds a list of nodes in the given parent node, with the given id and
+        evatuates them.
+        @tparam T the type representing the syntax of the nodes to be evaluated
+        @param parent_node the parent node where to find the nodes to be
+               evaluated
+        @param id_evaluate_function_map list of parser_ids that searched nodes
+               may have, associated with the corresponding function to be
+               called to evaluate the nodes (e.g. one pair for
+               IDENTIFIER/evaluate_identifier, another one for
+               TEMPLATE_ID/evaluate_template_id, etc.)
+        @return a vector of pointers to objects representing the syntax of each
+                evaluated node
+        */
         template <class T>
         std::vector<std::shared_ptr<T>>
         evaluate_seq

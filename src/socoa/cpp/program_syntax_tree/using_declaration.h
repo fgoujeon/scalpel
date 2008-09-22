@@ -18,33 +18,48 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_TEMPLATE_DECLARATION_H
-#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_TEMPLATE_DECLARATION_H
+#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_USING_DECLARATION_H
+#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_USING_DECLARATION_H
 
 #include <memory>
-#include "declaration.h"
 #include "member_declaration.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class template_declaration: public declaration, public member_declaration
+class nested_name_specifier;
+class unqualified_id;
+
+class using_declaration: public member_declaration
 {
     public:
-        template_declaration(bool exported, std::shared_ptr<declaration> declaration_part);
+        using_declaration
+        (
+            bool typename_keyword,
+            bool leading_double_colon,
+            std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
+            std::shared_ptr<unqualified_id> an_unqualified_id
+        );
 
         bool
-        exported() const;
+        has_typename_keyword() const;
 
-        const std::shared_ptr<declaration>
-        declaration_part() const;
+        bool
+        has_leading_double_colon() const;
+
+        const std::shared_ptr<nested_name_specifier>
+        get_nested_name_specifier() const;
+
+        const std::shared_ptr<unqualified_id>
+        get_unqualified_id() const;
 
         SOCOA_CPP_DEFINE_VISITABLE()
 
     private:
-        bool m_exported;
-        //template_parameter_list m_template_parameter_list;
-        std::shared_ptr<declaration> m_declaration_part;
+        bool typename_keyword_;
+        bool leading_double_colon_;
+        std::shared_ptr<nested_name_specifier> nested_name_specifier_;
+        std::shared_ptr<unqualified_id> unqualified_id_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

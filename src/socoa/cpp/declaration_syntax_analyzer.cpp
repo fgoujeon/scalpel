@@ -893,9 +893,8 @@ declaration_syntax_analyzer::evaluate_member_declaration(const tree_node_t& node
 {
     assert(node.value.id() == grammar::MEMBER_DECLARATION);
 
-    return std::make_shared<member_declaration>
-    (
-    );
+
+    return std::shared_ptr<member_declaration>();
 }
 
 std::shared_ptr<access_specifier>

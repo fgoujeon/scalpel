@@ -18,11 +18,23 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "member_declaration.h"
+#include "member_declaration_function_definition.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
+member_declaration_function_definition::member_declaration_function_definition
+(
+    function_definition&& a_function_definition
+):
+    function_definition_(a_function_definition)
+{
+}
 
+const function_definition&
+member_declaration_function_definition::get_function_definition() const
+{
+    return function_definition_;
+}
 
 }}} //namespace socoa::cpp::program_syntax_tree

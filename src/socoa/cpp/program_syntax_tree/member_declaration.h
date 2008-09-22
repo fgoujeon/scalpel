@@ -29,8 +29,7 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 class member_declaration: public member_specification_part
 {
     public:
-
-        SOCOA_CPP_DEFINE_VISITABLE()
+		virtual ~member_declaration(){};
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

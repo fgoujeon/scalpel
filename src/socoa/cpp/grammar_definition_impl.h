@@ -206,6 +206,9 @@ struct grammar_definition_impl
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CLASS_KEY>> class_key;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MEMBER_SPECIFICATION>> member_specification;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MEMBER_DECLARATION>> member_declaration;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MEMBER_DECLARATION_MEMBER_DECLARATOR_LIST>> member_declaration_member_declarator_list;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MEMBER_DECLARATION_UNQUALIFIED_ID>> member_declaration_unqualified_id;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MEMBER_DECLARATION_FUNCTION_DEFINITION>> member_declaration_function_definition;
     boost::spirit::rule<ScannerT> member_declaration_decl_specifier_seq;
     boost::spirit::rule<ScannerT> member_declarator_list;
     boost::spirit::rule<ScannerT> member_declarator;
@@ -1359,11 +1362,20 @@ grammar_definition_impl<ScannerT>::grammar_definition_impl(const grammar& self)
     ;
 
     member_declaration
-        = !member_declaration_decl_specifier_seq >> !member_declarator_list >> ch_p(';')
-        | !str_p("::") >> nested_name_specifier >> !str_p("template") >> unqualified_id >> ch_p(';')
-        | function_definition >> !ch_p(';')
+        = member_declaration_member_declarator_list
+        | member_declaration_unqualified_id
+        | member_declaration_function_definition
         | using_declaration
         | template_declaration
+    ;
+    member_declaration_member_declarator_list
+        = !member_declaration_decl_specifier_seq >> !member_declarator_list >> ch_p(';')
+    ;
+    member_declaration_unqualified_id
+        = !str_p("::") >> nested_name_specifier >> !str_p("template") >> unqualified_id >> ch_p(';')
+    ;
+    member_declaration_function_definition
+        = function_definition >> !ch_p(';')
     ;
     member_declaration_decl_specifier_seq
         = +(decl_specifier - (member_declarator_list >> ch_p(';')))
