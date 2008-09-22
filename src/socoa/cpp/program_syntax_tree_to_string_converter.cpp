@@ -102,7 +102,22 @@ program_syntax_tree_to_string_converter::visit(const namespace_definition& item)
 void
 program_syntax_tree_to_string_converter::visit(const using_declaration& item)
 {
+    m_result << indentation();
+    m_result << "using ";
 
+    if(item.has_typename_keyword())
+        m_result << "typename ";
+
+    if(item.has_leading_double_colon())
+        m_result << "::";
+
+    if(item.get_nested_name_specifier())
+        visit(*item.get_nested_name_specifier());
+
+    item.get_unqualified_id()->accept(*this);
+
+    m_result << ";";
+    m_result << new_line();
 }
 
 void
@@ -290,6 +305,8 @@ program_syntax_tree_to_string_converter::visit(const parameter_declaration& item
 void
 program_syntax_tree_to_string_converter::visit(const function_definition& item)
 {
+    m_result << indentation();
+
     const std::shared_ptr<decl_specifier_seq> a_decl_specifier_seq = item.get_decl_specifier_seq();
     if(a_decl_specifier_seq)
         visit(*a_decl_specifier_seq);
@@ -375,13 +392,23 @@ program_syntax_tree_to_string_converter::visit(const member_declaration_member_d
 void
 program_syntax_tree_to_string_converter::visit(const member_declaration_unqualified_id& item)
 {
+    if(item.has_leading_double_colon())
+        m_result << "::";
 
+    visit(item.get_nested_name_specifier());
+
+    if(item.has_template_keyword())
+        m_result << "template ";
+
+    item.get_unqualified_id()->accept(*this);
+
+    m_result << ";" << new_line();
 }
 
 void
 program_syntax_tree_to_string_converter::visit(const member_declaration_function_definition& item)
 {
-
+    visit(item.get_function_definition());
 }
 
 void

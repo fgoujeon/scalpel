@@ -27,7 +27,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "grammar.h"
 #include "program_syntax_tree.h"
 
-#define EVALUATE(type, id)                              \
+#define EVALUATE_NODE(type, id)                         \
 evaluate_node                                           \
 (                                                       \
     node,                                               \
@@ -35,7 +35,7 @@ evaluate_node                                           \
     &declaration_syntax_analyzer::evaluate_##type       \
 )
 
-#define ASSERTED_EVALUATE(type, id)                     \
+#define ASSERTED_EVALUATE_NODE(type, id)                \
 evaluate_node                                           \
 (                                                       \
     node,                                               \
@@ -97,7 +97,7 @@ declaration_syntax_analyzer::evaluate_identifier(const tree_node_t& node)
 {
     assert(node.value.id() == grammar::IDENTIFIER);
 
-    return std::make_shared<identifier>(get_unique_child_value(node));
+    return std::make_shared<identifier>(get_only_child_value(node));
 }
 
 std::shared_ptr<id_expression>
@@ -138,7 +138,7 @@ declaration_syntax_analyzer::evaluate_nested_name_specifier(const tree_node_t& n
 
     return std::make_shared<nested_name_specifier>
     (
-        ASSERTED_EVALUATE(identifier_or_template_id, IDENTIFIER_OR_TEMPLATE_ID),
+        ASSERTED_EVALUATE_NODE(identifier_or_template_id, IDENTIFIER_OR_TEMPLATE_ID),
         evaluate_nodes(node, id_eval)
     );
 }
@@ -150,8 +150,8 @@ declaration_syntax_analyzer::evaluate_nested_name_specifier_template_id_part(con
 
     return std::make_shared<nested_name_specifier_template_id_part>
     (
-        find_value(node, "template", 0),
-        std::move(*ASSERTED_EVALUATE(template_id, TEMPLATE_ID))
+        check_value_existence(node, "template", 0),
+        std::move(*ASSERTED_EVALUATE_NODE(template_id, TEMPLATE_ID))
     );
 }
 
@@ -216,8 +216,8 @@ declaration_syntax_analyzer::evaluate_simple_declaration(const tree_node_t& node
 
     return std::make_shared<simple_declaration>
     (
-        EVALUATE(decl_specifier_seq, SIMPLE_DECLARATION_DECL_SPECIFIER_SEQ),
-        EVALUATE(init_declarator_list, INIT_DECLARATOR_LIST)
+        EVALUATE_NODE(decl_specifier_seq, SIMPLE_DECLARATION_DECL_SPECIFIER_SEQ),
+        EVALUATE_NODE(init_declarator_list, INIT_DECLARATOR_LIST)
     );
 }
 
@@ -276,7 +276,7 @@ declaration_syntax_analyzer::evaluate_simple_type_specifier(const tree_node_t& n
 
     if(node.children.size() == 1)
     {
-        std::string value = get_unique_child_value(node);
+        std::string value = get_only_child_value(node);
         simple_type_specifier::type value_id;
 
         if(value == "char")
@@ -310,15 +310,15 @@ declaration_syntax_analyzer::evaluate_simple_type_specifier(const tree_node_t& n
         }
     }
 
-    bool leading_double_colon = find_value(node, "::", 0);
+    bool leading_double_colon = check_value_existence(node, "::", 0);
 
-    if(find_value(node, "template", 1) || find_value(node, "template", 2))
+    if(check_value_existence(node, "template", 1) || check_value_existence(node, "template", 2))
     {
         return std::make_shared<simple_type_specifier>
         (
             leading_double_colon,
-            ASSERTED_EVALUATE(nested_name_specifier, NESTED_NAME_SPECIFIER),
-            ASSERTED_EVALUATE(template_id, TEMPLATE_ID)
+            ASSERTED_EVALUATE_NODE(nested_name_specifier, NESTED_NAME_SPECIFIER),
+            ASSERTED_EVALUATE_NODE(template_id, TEMPLATE_ID)
         );
     }
     else
@@ -326,8 +326,8 @@ declaration_syntax_analyzer::evaluate_simple_type_specifier(const tree_node_t& n
         return std::make_shared<simple_type_specifier>
         (
             leading_double_colon,
-            EVALUATE(nested_name_specifier, NESTED_NAME_SPECIFIER),
-            ASSERTED_EVALUATE(identifier_or_template_id, IDENTIFIER_OR_TEMPLATE_ID)
+            EVALUATE_NODE(nested_name_specifier, NESTED_NAME_SPECIFIER),
+            ASSERTED_EVALUATE_NODE(identifier_or_template_id, IDENTIFIER_OR_TEMPLATE_ID)
         );
     }
 }
@@ -351,8 +351,22 @@ declaration_syntax_analyzer::evaluate_namespace_definition(const tree_node_t& no
 
     return std::make_shared<namespace_definition>
     (
-        EVALUATE(identifier, IDENTIFIER),
-        EVALUATE(declaration_seq, DECLARATION_SEQ)
+        EVALUATE_NODE(identifier, IDENTIFIER),
+        EVALUATE_NODE(declaration_seq, DECLARATION_SEQ)
+    );
+}
+
+std::shared_ptr<using_declaration>
+declaration_syntax_analyzer::evaluate_using_declaration(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar::USING_DECLARATION);
+
+    return std::make_shared<using_declaration>
+    (
+        check_value_existence(node, "typename", 1),
+        check_value_existence(node, "::"),
+        EVALUATE_NODE(nested_name_specifier, NESTED_NAME_SPECIFIER),
+        ASSERTED_EVALUATE_NODE(unqualified_id, UNQUALIFIED_ID)
     );
 }
 
@@ -390,7 +404,7 @@ declaration_syntax_analyzer::evaluate_init_declarator(const tree_node_t& node)
 
     return std::make_shared<init_declarator>
     (
-        *ASSERTED_EVALUATE(declarator, DECLARATOR)
+        *ASSERTED_EVALUATE_NODE(declarator, DECLARATOR)
     );
 }
 
@@ -413,7 +427,7 @@ declaration_syntax_analyzer::evaluate_declarator(const tree_node_t& node)
     return std::make_shared<declarator>
     (
         std::move(ptr_operators),
-        *ASSERTED_EVALUATE(direct_declarator, DIRECT_DECLARATOR)
+        *ASSERTED_EVALUATE_NODE(direct_declarator, DIRECT_DECLARATOR)
     );
 }
 
@@ -422,8 +436,8 @@ declaration_syntax_analyzer::evaluate_direct_declarator(const tree_node_t& node)
 {
     assert(node.value.id() == grammar::DIRECT_DECLARATOR);
 
-    std::shared_ptr<declarator_id> new_declarator_id(EVALUATE(declarator_id, DECLARATOR_ID));
-    std::shared_ptr<declarator> new_declarator(EVALUATE(declarator, DECLARATOR));
+    std::shared_ptr<declarator_id> new_declarator_id(EVALUATE_NODE(declarator_id, DECLARATOR_ID));
+    std::shared_ptr<declarator> new_declarator(EVALUATE_NODE(declarator, DECLARATOR));
 
     //get other parts
     std::vector<std::shared_ptr<direct_declarator_part>> other_parts;
@@ -470,7 +484,7 @@ declaration_syntax_analyzer::evaluate_direct_declarator_function_part(const tree
 {
     assert(node.value.id() == grammar::DIRECT_DECLARATOR_FUNCTION_PART);
 
-    std::shared_ptr<parameter_declaration_clause> new_parameter_declaration_clause = EVALUATE(parameter_declaration_clause, PARAMETER_DECLARATION_CLAUSE);
+    std::shared_ptr<parameter_declaration_clause> new_parameter_declaration_clause = EVALUATE_NODE(parameter_declaration_clause, PARAMETER_DECLARATION_CLAUSE);
 
     //grammar defines that this node MUST exist, but in practice it's not always the case
     if(!new_parameter_declaration_clause)
@@ -503,8 +517,8 @@ declaration_syntax_analyzer::evaluate_ptr_operator(const tree_node_t& node)
 {
     assert(node.value.id() == grammar::PTR_OPERATOR);
 
-    bool asterisk = find_value(node, "*");
-    bool ampersand = find_value(node, "&", 0);
+    bool asterisk = check_value_existence(node, "*");
+    bool ampersand = check_value_existence(node, "&", 0);
     assert
     (
         (asterisk && !ampersand) ||
@@ -514,9 +528,9 @@ declaration_syntax_analyzer::evaluate_ptr_operator(const tree_node_t& node)
     return std::make_shared<ptr_operator>
     (
         asterisk ? ptr_operator::ASTERISK : ptr_operator::AMPERSAND,
-        find_value(node, "::", 0),
-        EVALUATE(nested_name_specifier, NESTED_NAME_SPECIFIER),
-        EVALUATE(cv_qualifier_seq, CV_QUALIFIER_SEQ)
+        check_value_existence(node, "::", 0),
+        EVALUATE_NODE(nested_name_specifier, NESTED_NAME_SPECIFIER),
+        EVALUATE_NODE(cv_qualifier_seq, CV_QUALIFIER_SEQ)
     );
 }
 
@@ -541,7 +555,7 @@ declaration_syntax_analyzer::evaluate_cv_qualifier(const tree_node_t& node)
 {
     assert(node.value.id() == grammar::CV_QUALIFIER);
 
-    const std::string value = get_unique_child_value(node);
+    const std::string value = get_only_child_value(node);
     assert(node.children.size() == 1);
     const tree_node_t child_node = *node.children.begin();
     const parser_id child_id = child_node.value.id();
@@ -567,7 +581,7 @@ declaration_syntax_analyzer::evaluate_declarator_id(const tree_node_t& node)
 
     return std::make_shared<declarator_id>
     (
-        EVALUATE(id_expression, ID_EXPRESSION)
+        EVALUATE_NODE(id_expression, ID_EXPRESSION)
     );
 }
 
@@ -576,14 +590,14 @@ declaration_syntax_analyzer::evaluate_parameter_declaration_clause(const tree_no
 {
     assert(node.value.id() == grammar::PARAMETER_DECLARATION_CLAUSE);
 
-    bool trailing_comma = find_value(node, ",", 1);
-    bool ellipsis = find_value(node, "...");
+    bool trailing_comma = check_value_existence(node, ",", 1);
+    bool ellipsis = check_value_existence(node, "...");
 
     if(trailing_comma) assert(ellipsis);
 
     return std::make_shared<parameter_declaration_clause>
     (
-        EVALUATE(parameter_declaration_list, PARAMETER_DECLARATION_LIST),
+        EVALUATE_NODE(parameter_declaration_list, PARAMETER_DECLARATION_LIST),
         trailing_comma,
         ellipsis
     );
@@ -634,7 +648,7 @@ declaration_syntax_analyzer::evaluate_parameter_declaration(const tree_node_t& n
     return std::make_shared<parameter_declaration>
     (
         *new_decl_specifier_seq,
-        EVALUATE(declarator, DECLARATOR),
+        EVALUATE_NODE(declarator, DECLARATOR),
         false
     );
 }
@@ -663,7 +677,7 @@ declaration_syntax_analyzer::evaluate_function_definition(const tree_node_t& nod
     return std::make_shared<function_definition>
     (
         new_decl_specifier_seq,
-        *ASSERTED_EVALUATE(declarator, DECLARATOR)
+        *ASSERTED_EVALUATE_NODE(declarator, DECLARATOR)
     );
 }
 
@@ -674,8 +688,8 @@ declaration_syntax_analyzer::evaluate_class_specifier(const tree_node_t& node)
 
     return std::make_shared<class_specifier>
     (
-        *ASSERTED_EVALUATE(class_head, CLASS_HEAD),
-        EVALUATE(member_specification, MEMBER_SPECIFICATION)
+        *ASSERTED_EVALUATE_NODE(class_head, CLASS_HEAD),
+        EVALUATE_NODE(member_specification, MEMBER_SPECIFICATION)
     );
 }
 
@@ -686,10 +700,10 @@ declaration_syntax_analyzer::evaluate_class_head(const tree_node_t& node)
 
     return std::make_shared<class_head>
     (
-        *ASSERTED_EVALUATE(class_key, CLASS_KEY),
-        EVALUATE(nested_name_specifier, NESTED_NAME_SPECIFIER),
-        EVALUATE(template_id, TEMPLATE_ID),
-        EVALUATE(identifier, IDENTIFIER)
+        *ASSERTED_EVALUATE_NODE(class_key, CLASS_KEY),
+        EVALUATE_NODE(nested_name_specifier, NESTED_NAME_SPECIFIER),
+        EVALUATE_NODE(template_id, TEMPLATE_ID),
+        EVALUATE_NODE(identifier, IDENTIFIER)
     );
 }
 
@@ -698,7 +712,7 @@ declaration_syntax_analyzer::evaluate_class_key(const tree_node_t& node)
 {
     assert(node.value.id() == grammar::CLASS_KEY);
 
-    std::string key = get_unique_child_value(node);
+    std::string key = get_only_child_value(node);
 
     if(key == "class")
         return std::make_shared<class_key>(class_key::CLASS);
@@ -735,12 +749,47 @@ declaration_syntax_analyzer::evaluate_member_declaration(const tree_node_t& node
 
     evaluate_function_typedefs<member_declaration>::id_function_map_t id_eval;
 //    id_eval.insert(std::make_pair(grammar::MEMBER_DECLARATION_MEMBER_DECLARATOR_LIST, &declaration_syntax_analyzer::));
-//    id_eval.insert(std::make_pair(grammar::MEMBER_DECLARATION_UNQUALIFIED_ID, &declaration_syntax_analyzer::));
-//    id_eval.insert(std::make_pair(grammar::MEMBER_DECLARATION_FUNCTION_DEFINITION, &declaration_syntax_analyzer::));
-//    id_eval.insert(std::make_pair(grammar::USING_DECLARATION, &declaration_syntax_analyzer::));
+    id_eval.insert(std::make_pair(grammar::MEMBER_DECLARATION_UNQUALIFIED_ID, &declaration_syntax_analyzer::evaluate_member_declaration_unqualified_id));
+    id_eval.insert(std::make_pair(grammar::MEMBER_DECLARATION_FUNCTION_DEFINITION, &declaration_syntax_analyzer::evaluate_member_declaration_function_definition));
+    id_eval.insert(std::make_pair(grammar::USING_DECLARATION, &declaration_syntax_analyzer::evaluate_using_declaration));
     id_eval.insert(std::make_pair(grammar::TEMPLATE_DECLARATION, &declaration_syntax_analyzer::evaluate_template_declaration));
 
     return evaluate_only_child_node(node, id_eval, false);
+}
+
+std::shared_ptr<member_declaration_member_declarator_list>
+declaration_syntax_analyzer::evaluate_member_declaration_member_declarator_list(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar::MEMBER_DECLARATION_MEMBER_DECLARATOR_LIST);
+
+    return std::make_shared<member_declaration_member_declarator_list>
+    (
+    );
+}
+
+std::shared_ptr<member_declaration_unqualified_id>
+declaration_syntax_analyzer::evaluate_member_declaration_unqualified_id(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar::MEMBER_DECLARATION_UNQUALIFIED_ID);
+
+    return std::make_shared<member_declaration_unqualified_id>
+    (
+        check_value_existence(node, "::", 0),
+        *ASSERTED_EVALUATE_NODE(nested_name_specifier, NESTED_NAME_SPECIFIER),
+        check_value_existence(node, "template"),
+        EVALUATE_NODE(unqualified_id, UNQUALIFIED_ID)
+    );
+}
+
+std::shared_ptr<member_declaration_function_definition>
+declaration_syntax_analyzer::evaluate_member_declaration_function_definition(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar::MEMBER_DECLARATION_FUNCTION_DEFINITION);
+
+    return std::make_shared<member_declaration_function_definition>
+    (
+        *ASSERTED_EVALUATE_NODE(function_definition, FUNCTION_DEFINITION)
+    );
 }
 
 std::shared_ptr<access_specifier>
@@ -748,7 +797,7 @@ declaration_syntax_analyzer::evaluate_access_specifier(const tree_node_t& node)
 {
     assert(node.value.id() == grammar::ACCESS_SPECIFIER);
 
-    std::string value_str(get_unique_child_value(node));
+    std::string value_str(get_only_child_value(node));
 
     access_specifier::value value;
     if(value_str == "public")
@@ -772,7 +821,7 @@ declaration_syntax_analyzer::evaluate_template_declaration(const tree_node_t& no
     assert(node.value.id() == grammar::TEMPLATE_DECLARATION);
 
     //is the declaration exported?
-    bool exported = find_value(node, "export", 0);
+    bool exported = check_value_existence(node, "export", 0);
 
     //get declaration part
     const tree_node_t declaration_part_node = *node.children.rbegin();
@@ -790,7 +839,7 @@ declaration_syntax_analyzer::evaluate_template_id(const tree_node_t& node)
 
     return std::make_shared<template_id>
     (
-        *ASSERTED_EVALUATE(identifier, IDENTIFIER)
+        *ASSERTED_EVALUATE_NODE(identifier, IDENTIFIER)
     );
 }
 
@@ -812,7 +861,7 @@ declaration_syntax_analyzer::find_child_node(const tree_node_t& parent_node, int
 }
 
 bool
-declaration_syntax_analyzer::find_value(const tree_node_t& parent_node, const std::string& value, unsigned int position)
+declaration_syntax_analyzer::check_value_existence(const tree_node_t& parent_node, const std::string& value, unsigned int position)
 {
     if(parent_node.children.size() <= position)
         return false;
@@ -821,7 +870,7 @@ declaration_syntax_analyzer::find_value(const tree_node_t& parent_node, const st
 }
 
 bool
-declaration_syntax_analyzer::find_value(const tree_node_t& parent_node, const std::string& value)
+declaration_syntax_analyzer::check_value_existence(const tree_node_t& parent_node, const std::string& value)
 {
     for(tree_node_iterator_t i = parent_node.children.begin(); i != parent_node.children.end(); ++i) //for each child
     {
@@ -836,7 +885,7 @@ declaration_syntax_analyzer::find_value(const tree_node_t& parent_node, const st
 }
 
 const std::string
-declaration_syntax_analyzer::get_unique_child_value(const tree_node_t& node)
+declaration_syntax_analyzer::get_only_child_value(const tree_node_t& node)
 {
     assert(node.children.size() == 1);
 
@@ -905,5 +954,5 @@ declaration_syntax_analyzer::get_id(const tree_node_t& node)
 
 }} //namespace socoa::cpp
 
-#undef EVALUATE
-#undef ASSERTED_EVALUATE
+#undef EVALUATE_NODE
+#undef ASSERTED_EVALUATE_NODE

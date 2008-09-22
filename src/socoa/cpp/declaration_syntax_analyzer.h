@@ -113,8 +113,8 @@ class declaration_syntax_analyzer
         std::shared_ptr<program_syntax_tree::namespace_definition>
         evaluate_namespace_definition(const tree_node_t& node);
 
-        std::shared_ptr<program_syntax_tree::namespace_definition>
-        evaluate_named_namespace_definition(const tree_node_t& node);
+        std::shared_ptr<program_syntax_tree::using_declaration>
+        evaluate_using_declaration(const tree_node_t& node);
 
         std::shared_ptr<program_syntax_tree::init_declarator_list>
         evaluate_init_declarator_list(const tree_node_t& node);
@@ -172,6 +172,15 @@ class declaration_syntax_analyzer
 
         std::shared_ptr<program_syntax_tree::member_declaration>
         evaluate_member_declaration(const tree_node_t& node);
+
+        std::shared_ptr<program_syntax_tree::member_declaration_member_declarator_list>
+        evaluate_member_declaration_member_declarator_list(const tree_node_t& node);
+
+        std::shared_ptr<program_syntax_tree::member_declaration_unqualified_id>
+        evaluate_member_declaration_unqualified_id(const tree_node_t& node);
+
+        std::shared_ptr<program_syntax_tree::member_declaration_function_definition>
+        evaluate_member_declaration_function_definition(const tree_node_t& node);
 
         std::shared_ptr<program_syntax_tree::access_specifier>
         evaluate_access_specifier(const tree_node_t& node);
@@ -271,16 +280,16 @@ class declaration_syntax_analyzer
         find_child_node(const tree_node_t& parent_node, int child_id);
 
         bool
-        find_value(const tree_node_t& parent_node, const std::string& value, unsigned int position);
+        check_value_existence(const tree_node_t& parent_node, const std::string& value, unsigned int position);
 
         bool
-        find_value(const tree_node_t& parent_node, const std::string& value);
+        check_value_existence(const tree_node_t& parent_node, const std::string& value);
 
         const std::string
         get_value(const tree_node_t& node);
 
         const std::string
-        get_unique_child_value(const tree_node_t& node);
+        get_only_child_value(const tree_node_t& node);
 
         std::string
         strip_redundant_spaces(const std::string& str);
