@@ -18,6 +18,7 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <cassert>
 #include "program_syntax_tree_to_string_converter.h"
 #include "program_syntax_tree.h"
 
@@ -78,7 +79,6 @@ program_syntax_tree_to_string_converter::visit(const declaration_seq& item)
     const std::vector<std::shared_ptr<declaration>>& declarations = item.get_declarations();
     for(std::vector<std::shared_ptr<declaration>>::const_iterator i = declarations.begin(); i != declarations.end(); ++i)
     {
-        m_result << indentation();
         (**i).accept(*this);
     }
 }
@@ -86,6 +86,7 @@ program_syntax_tree_to_string_converter::visit(const declaration_seq& item)
 void
 program_syntax_tree_to_string_converter::visit(const namespace_definition& item)
 {
+    m_result << indentation();
     m_result << "namespace ";
 
     if(std::shared_ptr<identifier> namespace_name = item.get_identifier())
@@ -144,6 +145,7 @@ program_syntax_tree_to_string_converter::visit(const declarator& item)
     for(std::vector<std::shared_ptr<ptr_operator>>::const_iterator i = ptr_operators.begin(); i != ptr_operators.end(); ++i)
     {
         visit(**i);
+        m_result << ' ';
     }
 
     visit(item.get_direct_declarator());
@@ -321,6 +323,7 @@ program_syntax_tree_to_string_converter::visit(const function_definition& item)
 void
 program_syntax_tree_to_string_converter::visit(const class_specifier& item)
 {
+    //m_result << indentation();
     visit(item.get_head());
 
     m_result << opening_brace();
@@ -376,22 +379,30 @@ program_syntax_tree_to_string_converter::visit(const member_specification& item)
         ++i
     )
     {
-        if(*i)
-            (**i).accept(*this);
-        else
-            m_result << "NOT IMPLEMENTED\n";
+        assert(*i);
+        (**i).accept(*this);
     }
 }
 
 void
 program_syntax_tree_to_string_converter::visit(const member_declaration_member_declarator_list& item)
 {
+    m_result << indentation();
 
+    if(item.get_decl_specifier_seq())
+        visit(*item.get_decl_specifier_seq());
+
+    if(item.get_member_declarator_list())
+        visit(*item.get_member_declarator_list());
+
+    m_result << ";" << new_line();
 }
 
 void
 program_syntax_tree_to_string_converter::visit(const member_declaration_unqualified_id& item)
 {
+    m_result << indentation();
+
     if(item.has_leading_double_colon())
         m_result << "::";
 
@@ -409,6 +420,41 @@ void
 program_syntax_tree_to_string_converter::visit(const member_declaration_function_definition& item)
 {
     visit(item.get_function_definition());
+}
+
+void
+program_syntax_tree_to_string_converter::visit(const member_declarator_list& item)
+{
+    for
+    (
+        std::vector<std::shared_ptr<member_declarator>>::const_iterator i = item.get_member_declarators().begin();
+        i != item.get_member_declarators().end();
+        ++i
+    )
+    {
+        (**i).accept(*this);
+    }
+}
+
+void
+program_syntax_tree_to_string_converter::visit(const member_declarator_declarator& item)
+{
+    //m_result << indentation();
+
+    if(item.get_declarator())
+        visit(*item.get_declarator());
+
+    if(item.has_pure_specifier())
+        m_result << " = 0";
+}
+
+void
+program_syntax_tree_to_string_converter::visit(const member_declarator_bit_field_member& item)
+{
+    if(item.get_identifier())
+        visit(*item.get_identifier());
+
+    m_result << ": ";
 }
 
 void
@@ -440,6 +486,8 @@ program_syntax_tree_to_string_converter::visit(const template_declaration& item)
 void
 program_syntax_tree_to_string_converter::visit(const simple_declaration& item)
 {
+    m_result << indentation();
+
     std::shared_ptr<decl_specifier_seq> decl_specifiers = item.get_decl_specifier_seq();
     if(decl_specifiers)
         visit(*decl_specifiers);

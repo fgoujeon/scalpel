@@ -182,6 +182,18 @@ class declaration_syntax_analyzer
         std::shared_ptr<program_syntax_tree::member_declaration_function_definition>
         evaluate_member_declaration_function_definition(const tree_node_t& node);
 
+        std::shared_ptr<program_syntax_tree::member_declarator_list>
+        evaluate_member_declarator_list(const tree_node_t& node);
+
+        std::shared_ptr<program_syntax_tree::member_declarator>
+        evaluate_member_declarator(const tree_node_t& node);
+
+        std::shared_ptr<program_syntax_tree::member_declarator_declarator>
+        evaluate_member_declarator_declarator(const tree_node_t& node);
+
+        std::shared_ptr<program_syntax_tree::member_declarator_bit_field_member>
+        evaluate_member_declarator_bit_field_member(const tree_node_t& node);
+
         std::shared_ptr<program_syntax_tree::access_specifier>
         evaluate_access_specifier(const tree_node_t& node);
 
@@ -280,10 +292,16 @@ class declaration_syntax_analyzer
         find_child_node(const tree_node_t& parent_node, int child_id);
 
         bool
-        check_value_existence(const tree_node_t& parent_node, const std::string& value, unsigned int position);
+        check_node_existence(const tree_node_t& parent_node, const std::string& value, unsigned int position);
 
         bool
-        check_value_existence(const tree_node_t& parent_node, const std::string& value);
+        check_node_existence(const tree_node_t& parent_node, const std::string& value);
+
+        bool
+        check_node_existence(const tree_node_t& parent_node, grammar::parser_id id, unsigned int position);
+
+        bool
+        check_node_existence(const tree_node_t& parent_node, grammar::parser_id id);
 
         const std::string
         get_value(const tree_node_t& node);
@@ -429,7 +447,7 @@ declaration_syntax_analyzer::evaluate_only_child_node
         }
     }
 
-    assert(!assert_evaluated && "No node with this id has been found");
+    assert(!assert_evaluated && "The only child node's id is not is the map");
 
     return std::shared_ptr<T>();
 }

@@ -18,31 +18,23 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "member_declaration_member_declarator_list.h"
+#include "member_declarator_list.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-member_declaration_member_declarator_list::member_declaration_member_declarator_list
+member_declarator_list::member_declarator_list
 (
-    std::shared_ptr<decl_specifier_seq> a_decl_specifier_seq,
-    std::shared_ptr<member_declarator_list> a_member_declarator_list
+    std::vector<std::shared_ptr<member_declarator>>&& member_declarators
 ):
-    decl_specifier_seq_(a_decl_specifier_seq),
-    member_declarator_list_(a_member_declarator_list)
+    member_declarators_(member_declarators)
 {
 }
 
-const std::shared_ptr<decl_specifier_seq>
-member_declaration_member_declarator_list::get_decl_specifier_seq() const
+const std::vector<std::shared_ptr<member_declarator>>&
+member_declarator_list::get_member_declarators() const
 {
-    return decl_specifier_seq_;
-}
-
-const std::shared_ptr<member_declarator_list>
-member_declaration_member_declarator_list::get_member_declarator_list() const
-{
-    return member_declarator_list_;
+    return member_declarators_;
 }
 
 }}} //namespace socoa::cpp::program_syntax_tree

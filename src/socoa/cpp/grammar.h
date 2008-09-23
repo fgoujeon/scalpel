@@ -226,6 +226,8 @@ class grammar: public boost::spirit::grammar<grammar>
             MEMBER_DECLARATION_DECL_SPECIFIER_SEQ,
             MEMBER_DECLARATOR_LIST,
             MEMBER_DECLARATOR,
+            MEMBER_DECLARATOR_DECLARATOR,
+            MEMBER_DECLARATOR_BIT_FIELD_MEMBER,
             PURE_SPECIFIER,
             CONSTANT_INITIALIZER,
             DESTRUCTOR_NAME,

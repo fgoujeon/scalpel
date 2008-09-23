@@ -209,11 +209,13 @@ struct grammar_definition_impl
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MEMBER_DECLARATION_MEMBER_DECLARATOR_LIST>> member_declaration_member_declarator_list;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MEMBER_DECLARATION_UNQUALIFIED_ID>> member_declaration_unqualified_id;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MEMBER_DECLARATION_FUNCTION_DEFINITION>> member_declaration_function_definition;
-    boost::spirit::rule<ScannerT> member_declaration_decl_specifier_seq;
-    boost::spirit::rule<ScannerT> member_declarator_list;
-    boost::spirit::rule<ScannerT> member_declarator;
-    boost::spirit::rule<ScannerT> pure_specifier;
-    boost::spirit::rule<ScannerT> constant_initializer;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MEMBER_DECLARATION_DECL_SPECIFIER_SEQ>> member_declaration_decl_specifier_seq;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MEMBER_DECLARATOR_LIST>> member_declarator_list;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MEMBER_DECLARATOR>> member_declarator;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MEMBER_DECLARATOR_DECLARATOR>> member_declarator_declarator;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MEMBER_DECLARATOR_BIT_FIELD_MEMBER>> member_declarator_bit_field_member;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PURE_SPECIFIER>> pure_specifier;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CONSTANT_INITIALIZER>> constant_initializer;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DESTRUCTOR_NAME>> destructor_name;
 
     //1.9 - Derived classes [gram.class.derived]
@@ -1386,8 +1388,14 @@ grammar_definition_impl<ScannerT>::grammar_definition_impl(const grammar& self)
     ;
 
     member_declarator
+        = member_declarator_declarator
+        | member_declarator_bit_field_member
+    ;
+    member_declarator_declarator
         = declarator >> !(pure_specifier | constant_initializer) ///@todo find what declarator >> constant_initializer stands for
-        | !identifier >> ':' >> constant_expression //bit field member
+    ;
+    member_declarator_bit_field_member
+        = !identifier >> ':' >> constant_expression //bit field member
     ;
 
     pure_specifier

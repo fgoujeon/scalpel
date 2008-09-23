@@ -112,13 +112,22 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         visit(const program_syntax_tree::member_specification& item);
 
         void
-        visit(const program_syntax_tree::member_declaration_member_declarator_list&);
+        visit(const program_syntax_tree::member_declaration_member_declarator_list& item);
 
         void
-        visit(const program_syntax_tree::member_declaration_unqualified_id&);
+        visit(const program_syntax_tree::member_declaration_unqualified_id& item);
 
         void
-        visit(const program_syntax_tree::member_declaration_function_definition&);
+        visit(const program_syntax_tree::member_declaration_function_definition& item);
+
+        void
+        visit(const program_syntax_tree::member_declarator_list& item);
+
+        void
+        visit(const program_syntax_tree::member_declarator_declarator& item);
+
+        void
+        visit(const program_syntax_tree::member_declarator_bit_field_member& item);
 
         void
         visit(const program_syntax_tree::access_specifier& item);

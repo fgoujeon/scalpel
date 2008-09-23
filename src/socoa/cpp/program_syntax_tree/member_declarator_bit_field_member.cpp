@@ -18,31 +18,23 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "member_declaration_member_declarator_list.h"
+#include "member_declarator_bit_field_member.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-member_declaration_member_declarator_list::member_declaration_member_declarator_list
+member_declarator_bit_field_member::member_declarator_bit_field_member
 (
-    std::shared_ptr<decl_specifier_seq> a_decl_specifier_seq,
-    std::shared_ptr<member_declarator_list> a_member_declarator_list
+    std::shared_ptr<identifier> an_identifier
 ):
-    decl_specifier_seq_(a_decl_specifier_seq),
-    member_declarator_list_(a_member_declarator_list)
+    identifier_(an_identifier)
 {
 }
 
-const std::shared_ptr<decl_specifier_seq>
-member_declaration_member_declarator_list::get_decl_specifier_seq() const
+const std::shared_ptr<identifier>
+member_declarator_bit_field_member::get_identifier() const
 {
-    return decl_specifier_seq_;
-}
-
-const std::shared_ptr<member_declarator_list>
-member_declaration_member_declarator_list::get_member_declarator_list() const
-{
-    return member_declarator_list_;
+    return identifier_;
 }
 
 }}} //namespace socoa::cpp::program_syntax_tree

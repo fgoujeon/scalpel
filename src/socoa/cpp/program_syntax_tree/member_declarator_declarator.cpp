@@ -18,31 +18,31 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "member_declaration_member_declarator_list.h"
+#include "member_declarator_declarator.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-member_declaration_member_declarator_list::member_declaration_member_declarator_list
+member_declarator_declarator::member_declarator_declarator
 (
-    std::shared_ptr<decl_specifier_seq> a_decl_specifier_seq,
-    std::shared_ptr<member_declarator_list> a_member_declarator_list
+    std::shared_ptr<declarator> a_declarator,
+    bool pure_specifier
 ):
-    decl_specifier_seq_(a_decl_specifier_seq),
-    member_declarator_list_(a_member_declarator_list)
+    declarator_(a_declarator),
+    pure_specifier_(pure_specifier)
 {
 }
 
-const std::shared_ptr<decl_specifier_seq>
-member_declaration_member_declarator_list::get_decl_specifier_seq() const
+const std::shared_ptr<declarator>
+member_declarator_declarator::get_declarator() const
 {
-    return decl_specifier_seq_;
+    return declarator_;
 }
 
-const std::shared_ptr<member_declarator_list>
-member_declaration_member_declarator_list::get_member_declarator_list() const
+bool
+member_declarator_declarator::has_pure_specifier() const
 {
-    return member_declarator_list_;
+    return pure_specifier_;
 }
 
 }}} //namespace socoa::cpp::program_syntax_tree

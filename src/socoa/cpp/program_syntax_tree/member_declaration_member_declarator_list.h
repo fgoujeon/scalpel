@@ -28,16 +28,28 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
 class decl_specifier_seq;
+class member_declarator_list;
 
 class member_declaration_member_declarator_list: public member_declaration
 {
     public:
+        member_declaration_member_declarator_list
+        (
+            std::shared_ptr<decl_specifier_seq> a_decl_specifier_seq,
+            std::shared_ptr<member_declarator_list> a_member_declarator_list
+        );
 
+        const std::shared_ptr<decl_specifier_seq>
+        get_decl_specifier_seq() const;
+
+        const std::shared_ptr<member_declarator_list>
+        get_member_declarator_list() const;
 
         SOCOA_CPP_DEFINE_VISITABLE()
 
     private:
         std::shared_ptr<decl_specifier_seq> decl_specifier_seq_;
+        std::shared_ptr<member_declarator_list> member_declarator_list_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

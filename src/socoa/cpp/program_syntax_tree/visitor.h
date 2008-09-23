@@ -34,6 +34,8 @@ class class_specifier;
 class member_declaration_member_declarator_list;
 class member_declaration_unqualified_id;
 class member_declaration_function_definition;
+class member_declarator_declarator;
+class member_declarator_bit_field_member;
 class access_specifier;
 class template_declaration;
 class simple_declaration;
@@ -71,6 +73,12 @@ class visitor
 
         virtual void
         visit(const member_declaration_function_definition&) = 0;
+
+        virtual void
+        visit(const member_declarator_declarator&) = 0;
+
+        virtual void
+        visit(const member_declarator_bit_field_member&) = 0;
 
         virtual void
         visit(const access_specifier&) = 0;

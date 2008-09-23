@@ -124,7 +124,7 @@ declaration_syntax_analyzer::evaluate_unqualified_id(const tree_node_t& node)
     id_eval.insert(std::make_pair(grammar::TEMPLATE_ID, &declaration_syntax_analyzer::evaluate_nested_name_specifier_template_id_part));*/
     id_eval.insert(std::make_pair(grammar::IDENTIFIER, &declaration_syntax_analyzer::evaluate_identifier));
 
-    return evaluate_only_child_node(node, id_eval);
+    return evaluate_only_child_node(node, id_eval, false);
 }
 
 std::shared_ptr<nested_name_specifier>
@@ -150,7 +150,7 @@ declaration_syntax_analyzer::evaluate_nested_name_specifier_template_id_part(con
 
     return std::make_shared<nested_name_specifier_template_id_part>
     (
-        check_value_existence(node, "template", 0),
+        check_node_existence(node, "template", 0),
         std::move(*ASSERTED_EVALUATE_NODE(template_id, TEMPLATE_ID))
     );
 }
@@ -310,9 +310,9 @@ declaration_syntax_analyzer::evaluate_simple_type_specifier(const tree_node_t& n
         }
     }
 
-    bool leading_double_colon = check_value_existence(node, "::", 0);
+    bool leading_double_colon = check_node_existence(node, "::", 0);
 
-    if(check_value_existence(node, "template", 1) || check_value_existence(node, "template", 2))
+    if(check_node_existence(node, "template", 1) || check_node_existence(node, "template", 2))
     {
         return std::make_shared<simple_type_specifier>
         (
@@ -363,8 +363,8 @@ declaration_syntax_analyzer::evaluate_using_declaration(const tree_node_t& node)
 
     return std::make_shared<using_declaration>
     (
-        check_value_existence(node, "typename", 1),
-        check_value_existence(node, "::"),
+        check_node_existence(node, "typename", 1),
+        check_node_existence(node, "::"),
         EVALUATE_NODE(nested_name_specifier, NESTED_NAME_SPECIFIER),
         ASSERTED_EVALUATE_NODE(unqualified_id, UNQUALIFIED_ID)
     );
@@ -517,8 +517,8 @@ declaration_syntax_analyzer::evaluate_ptr_operator(const tree_node_t& node)
 {
     assert(node.value.id() == grammar::PTR_OPERATOR);
 
-    bool asterisk = check_value_existence(node, "*");
-    bool ampersand = check_value_existence(node, "&", 0);
+    bool asterisk = check_node_existence(node, "*");
+    bool ampersand = check_node_existence(node, "&", 0);
     assert
     (
         (asterisk && !ampersand) ||
@@ -528,7 +528,7 @@ declaration_syntax_analyzer::evaluate_ptr_operator(const tree_node_t& node)
     return std::make_shared<ptr_operator>
     (
         asterisk ? ptr_operator::ASTERISK : ptr_operator::AMPERSAND,
-        check_value_existence(node, "::", 0),
+        check_node_existence(node, "::", 0),
         EVALUATE_NODE(nested_name_specifier, NESTED_NAME_SPECIFIER),
         EVALUATE_NODE(cv_qualifier_seq, CV_QUALIFIER_SEQ)
     );
@@ -590,8 +590,8 @@ declaration_syntax_analyzer::evaluate_parameter_declaration_clause(const tree_no
 {
     assert(node.value.id() == grammar::PARAMETER_DECLARATION_CLAUSE);
 
-    bool trailing_comma = check_value_existence(node, ",", 1);
-    bool ellipsis = check_value_existence(node, "...");
+    bool trailing_comma = check_node_existence(node, ",", 1);
+    bool ellipsis = check_node_existence(node, "...");
 
     if(trailing_comma) assert(ellipsis);
 
@@ -748,13 +748,13 @@ declaration_syntax_analyzer::evaluate_member_declaration(const tree_node_t& node
     assert(node.value.id() == grammar::MEMBER_DECLARATION);
 
     evaluate_function_typedefs<member_declaration>::id_function_map_t id_eval;
-//    id_eval.insert(std::make_pair(grammar::MEMBER_DECLARATION_MEMBER_DECLARATOR_LIST, &declaration_syntax_analyzer::));
+    id_eval.insert(std::make_pair(grammar::MEMBER_DECLARATION_MEMBER_DECLARATOR_LIST, &declaration_syntax_analyzer::evaluate_member_declaration_member_declarator_list));
     id_eval.insert(std::make_pair(grammar::MEMBER_DECLARATION_UNQUALIFIED_ID, &declaration_syntax_analyzer::evaluate_member_declaration_unqualified_id));
     id_eval.insert(std::make_pair(grammar::MEMBER_DECLARATION_FUNCTION_DEFINITION, &declaration_syntax_analyzer::evaluate_member_declaration_function_definition));
     id_eval.insert(std::make_pair(grammar::USING_DECLARATION, &declaration_syntax_analyzer::evaluate_using_declaration));
     id_eval.insert(std::make_pair(grammar::TEMPLATE_DECLARATION, &declaration_syntax_analyzer::evaluate_template_declaration));
 
-    return evaluate_only_child_node(node, id_eval, false);
+    return evaluate_only_child_node(node, id_eval);
 }
 
 std::shared_ptr<member_declaration_member_declarator_list>
@@ -764,6 +764,8 @@ declaration_syntax_analyzer::evaluate_member_declaration_member_declarator_list(
 
     return std::make_shared<member_declaration_member_declarator_list>
     (
+        EVALUATE_NODE(decl_specifier_seq, MEMBER_DECLARATION_DECL_SPECIFIER_SEQ),
+        EVALUATE_NODE(member_declarator_list, MEMBER_DECLARATOR_LIST)
     );
 }
 
@@ -774,9 +776,9 @@ declaration_syntax_analyzer::evaluate_member_declaration_unqualified_id(const tr
 
     return std::make_shared<member_declaration_unqualified_id>
     (
-        check_value_existence(node, "::", 0),
+        check_node_existence(node, "::", 0),
         *ASSERTED_EVALUATE_NODE(nested_name_specifier, NESTED_NAME_SPECIFIER),
-        check_value_existence(node, "template"),
+        check_node_existence(node, "template"),
         EVALUATE_NODE(unqualified_id, UNQUALIFIED_ID)
     );
 }
@@ -789,6 +791,52 @@ declaration_syntax_analyzer::evaluate_member_declaration_function_definition(con
     return std::make_shared<member_declaration_function_definition>
     (
         *ASSERTED_EVALUATE_NODE(function_definition, FUNCTION_DEFINITION)
+    );
+}
+
+std::shared_ptr<member_declarator_list>
+declaration_syntax_analyzer::evaluate_member_declarator_list(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar::MEMBER_DECLARATOR_LIST);
+
+    return std::make_shared<member_declarator_list>
+    (
+        evaluate_nodes(node, grammar::MEMBER_DECLARATOR, &declaration_syntax_analyzer::evaluate_member_declarator)
+    );
+}
+
+std::shared_ptr<member_declarator>
+declaration_syntax_analyzer::evaluate_member_declarator(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar::MEMBER_DECLARATOR);
+
+    evaluate_function_typedefs<member_declarator>::id_function_map_t id_eval;
+    id_eval.insert(std::make_pair(grammar::MEMBER_DECLARATOR_DECLARATOR, &declaration_syntax_analyzer::evaluate_member_declarator_declarator));
+    id_eval.insert(std::make_pair(grammar::MEMBER_DECLARATOR_BIT_FIELD_MEMBER, &declaration_syntax_analyzer::evaluate_member_declarator_bit_field_member));
+
+    return evaluate_only_child_node(node, id_eval);
+}
+
+std::shared_ptr<member_declarator_declarator>
+declaration_syntax_analyzer::evaluate_member_declarator_declarator(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar::MEMBER_DECLARATOR_DECLARATOR);
+
+    return std::make_shared<member_declarator_declarator>
+    (
+        ASSERTED_EVALUATE_NODE(declarator, DECLARATOR),
+        check_node_existence(node, grammar::PURE_SPECIFIER, 1)
+    );
+}
+
+std::shared_ptr<member_declarator_bit_field_member>
+declaration_syntax_analyzer::evaluate_member_declarator_bit_field_member(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar::MEMBER_DECLARATOR_BIT_FIELD_MEMBER);
+
+    return std::make_shared<member_declarator_bit_field_member>
+    (
+        EVALUATE_NODE(identifier, IDENTIFIER)
     );
 }
 
@@ -821,7 +869,7 @@ declaration_syntax_analyzer::evaluate_template_declaration(const tree_node_t& no
     assert(node.value.id() == grammar::TEMPLATE_DECLARATION);
 
     //is the declaration exported?
-    bool exported = check_value_existence(node, "export", 0);
+    bool exported = check_node_existence(node, "export", 0);
 
     //get declaration part
     const tree_node_t declaration_part_node = *node.children.rbegin();
@@ -861,7 +909,7 @@ declaration_syntax_analyzer::find_child_node(const tree_node_t& parent_node, int
 }
 
 bool
-declaration_syntax_analyzer::check_value_existence(const tree_node_t& parent_node, const std::string& value, unsigned int position)
+declaration_syntax_analyzer::check_node_existence(const tree_node_t& parent_node, const std::string& value, unsigned int position)
 {
     if(parent_node.children.size() <= position)
         return false;
@@ -870,12 +918,38 @@ declaration_syntax_analyzer::check_value_existence(const tree_node_t& parent_nod
 }
 
 bool
-declaration_syntax_analyzer::check_value_existence(const tree_node_t& parent_node, const std::string& value)
+declaration_syntax_analyzer::check_node_existence(const tree_node_t& parent_node, const std::string& value)
 {
     for(tree_node_iterator_t i = parent_node.children.begin(); i != parent_node.children.end(); ++i) //for each child
     {
         const tree_node_t& child_node = *i;
         if(get_value(child_node) == value)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool
+declaration_syntax_analyzer::check_node_existence(const tree_node_t& parent_node, grammar::parser_id id, unsigned int position)
+{
+    if(parent_node.children.size() <= position)
+        return false;
+
+    return parent_node.children[position].value.id() == id;
+}
+
+bool
+declaration_syntax_analyzer::check_node_existence(const tree_node_t& parent_node, grammar::parser_id id)
+{
+    for(tree_node_iterator_t i = parent_node.children.begin(); i != parent_node.children.end(); ++i) //for each child
+    {
+        const tree_node_t& child_node = *i;
+        const parser_id child_id = child_node.value.id();
+
+        if(child_id == id)
         {
             return true;
         }
