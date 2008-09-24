@@ -21,23 +21,15 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_DECLARATOR_ID_H
 #define SOCOA_CPP_PROGRAM_SYNTAX_TREE_DECLARATOR_ID_H
 
-#include <memory>
+#include "visitable.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class id_expression;
-
-class declarator_id
+class declarator_id: public visitable
 {
     public:
-        explicit declarator_id(std::shared_ptr<id_expression> an_id_expression);
-
-        const std::shared_ptr<id_expression>
-        get_id_expression() const;
-
-    private:
-        std::shared_ptr<id_expression> m_id_expression;
+        virtual ~declarator_id(){};
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

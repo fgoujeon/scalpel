@@ -260,8 +260,9 @@ struct grammar_definition_impl
 
 
     /*
-    Convenience rules for 'skip function bodies' mode
+    Convenience rules
     */
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::NESTED_IDENTIFIER_OR_TEMPLATE_ID>> nested_identifier_or_template_id;
     boost::spirit::rule<ScannerT> skip_function_bodies_mode_statement_seq_item;
     boost::spirit::rule<ScannerT> skip_function_bodies_mode_non_special_char_seq;
     boost::spirit::rule<ScannerT> skip_function_bodies_mode_non_special_char;
@@ -1232,7 +1233,7 @@ grammar_definition_impl<ScannerT>::grammar_definition_impl(const grammar& self)
 
     declarator_id
         = id_expression
-        | !str_p("::") >> !nested_name_specifier >> identifier_or_template_id
+        | nested_identifier_or_template_id
     ;
 
     type_id
@@ -1602,8 +1603,13 @@ grammar_definition_impl<ScannerT>::grammar_definition_impl(const grammar& self)
 
 
     /*
-    Convenience rules for declaration-only mode
+    Convenience rules
     */
+    nested_identifier_or_template_id
+        = !str_p("::") >> !nested_name_specifier >> identifier_or_template_id
+    ;
+
+    //Convenience rules for declaration-only mode
     skip_function_bodies_mode_non_special_char_seq
         = +skip_function_bodies_mode_non_special_char
     ;

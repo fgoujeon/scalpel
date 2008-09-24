@@ -69,6 +69,7 @@ class member_declarator_bit_field_member;
 class access_specifier;
 class template_declaration;
 class template_id;
+class nested_identifier_or_template_id;
 
 }}} //namespace socoa::cpp::program_syntax_tree
 

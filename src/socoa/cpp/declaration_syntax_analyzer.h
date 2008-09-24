@@ -203,6 +203,9 @@ class declaration_syntax_analyzer
         std::shared_ptr<program_syntax_tree::template_id>
         evaluate_template_id(const tree_node_t& node);
 
+        std::shared_ptr<program_syntax_tree::nested_identifier_or_template_id>
+        evaluate_nested_identifier_or_template_id(const tree_node_t& node);
+
         /**
         Finds a node in the given parent node, with the given id and evatuates
         it.

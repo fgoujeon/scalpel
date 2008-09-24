@@ -44,6 +44,7 @@ class direct_declarator_function_part;
 class direct_declarator_array_part;
 class template_id;
 class cv_qualifier;
+class nested_identifier_or_template_id;
 
 class visitor
 {
@@ -106,6 +107,9 @@ class visitor
 
         virtual void
         visit(const cv_qualifier&) = 0;
+
+        virtual void
+        visit(const nested_identifier_or_template_id&) = 0;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

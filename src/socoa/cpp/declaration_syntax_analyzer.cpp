@@ -436,47 +436,16 @@ declaration_syntax_analyzer::evaluate_direct_declarator(const tree_node_t& node)
 {
     assert(node.value.id() == grammar::DIRECT_DECLARATOR);
 
-    std::shared_ptr<declarator_id> new_declarator_id(EVALUATE_NODE(declarator_id, DECLARATOR_ID));
-    std::shared_ptr<declarator> new_declarator(EVALUATE_NODE(declarator, DECLARATOR));
+    evaluate_function_typedefs<direct_declarator_part>::id_function_map_t id_eval;
+    id_eval.insert(std::make_pair(grammar::DIRECT_DECLARATOR_FUNCTION_PART, &declaration_syntax_analyzer::evaluate_direct_declarator_function_part));
+    //id_eval.insert(std::make_pair(grammar::DIRECT_DECLARATOR_ARRAY_PART, &declaration_syntax_analyzer::evaluate_direct_declarator_array_part));
 
-    //get other parts
-    std::vector<std::shared_ptr<direct_declarator_part>> other_parts;
-    for(tree_node_iterator_t i = node.children.begin(); i != node.children.end(); ++i)
-    {
-        const tree_node_t& child_node = *i;
-        parser_id child_node_id = child_node.value.id();
-
-        if(child_node_id == grammar::DIRECT_DECLARATOR_FUNCTION_PART)
-        {
-            other_parts.push_back(evaluate_direct_declarator_function_part(child_node));
-        }
-        else if(child_node_id == grammar::DIRECT_DECLARATOR_ARRAY_PART)
-        {
-            //other_parts.push_back(evaluate_direct_declarator_array_part(child_node));
-        }
-    }
-
-    if(new_declarator_id)
-    {
-        return std::make_shared<direct_declarator>
-        (
-            new_declarator_id,
-            other_parts
-        );
-    }
-    else if(new_declarator)
-    {
-        return std::make_shared<direct_declarator>
-        (
-            new_declarator,
-            other_parts
-        );
-    }
-    else
-    {
-        assert(false);
-        return std::shared_ptr<direct_declarator>();
-    }
+    return std::make_shared<direct_declarator>
+    (
+        EVALUATE_NODE(declarator_id, DECLARATOR_ID),
+        EVALUATE_NODE(declarator, DECLARATOR),
+        evaluate_nodes(node, id_eval)
+    );
 }
 
 std::shared_ptr<direct_declarator_function_part>
@@ -579,10 +548,11 @@ declaration_syntax_analyzer::evaluate_declarator_id(const tree_node_t& node)
 {
     assert(node.value.id() == grammar::DECLARATOR_ID);
 
-    return std::make_shared<declarator_id>
-    (
-        EVALUATE_NODE(id_expression, ID_EXPRESSION)
-    );
+    evaluate_function_typedefs<declarator_id>::id_function_map_t id_eval;
+    id_eval.insert(std::make_pair(grammar::ID_EXPRESSION, &declaration_syntax_analyzer::evaluate_id_expression));
+    id_eval.insert(std::make_pair(grammar::NESTED_IDENTIFIER_OR_TEMPLATE_ID, &declaration_syntax_analyzer::evaluate_nested_identifier_or_template_id));
+
+    return evaluate_only_child_node(node, id_eval);
 }
 
 std::shared_ptr<parameter_declaration_clause>
@@ -890,6 +860,20 @@ declaration_syntax_analyzer::evaluate_template_id(const tree_node_t& node)
         *ASSERTED_EVALUATE_NODE(identifier, IDENTIFIER)
     );
 }
+
+std::shared_ptr<nested_identifier_or_template_id>
+declaration_syntax_analyzer::evaluate_nested_identifier_or_template_id(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar::NESTED_IDENTIFIER_OR_TEMPLATE_ID);
+
+    return std::make_shared<nested_identifier_or_template_id>
+    (
+        check_node_existence(node, "::", 0),
+        EVALUATE_NODE(nested_name_specifier, NESTED_NAME_SPECIFIER),
+        ASSERTED_EVALUATE_NODE(identifier_or_template_id, IDENTIFIER_OR_TEMPLATE_ID)
+    );
+}
+
 
 const declaration_syntax_analyzer::tree_node_t*
 declaration_syntax_analyzer::find_child_node(const tree_node_t& parent_node, int child_id)

@@ -37,11 +37,6 @@ class direct_declarator
         direct_declarator
         (
             std::shared_ptr<declarator_id> a_declarator_id,
-            std::vector<std::shared_ptr<direct_declarator_part>>&& other_parts
-        );
-
-        direct_declarator
-        (
             std::shared_ptr<declarator> a_declarator,
             std::vector<std::shared_ptr<direct_declarator_part>>&& other_parts
         );

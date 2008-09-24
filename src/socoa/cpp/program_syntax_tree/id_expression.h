@@ -21,12 +21,12 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_ID_EXPRESSION_H
 #define SOCOA_CPP_PROGRAM_SYNTAX_TREE_ID_EXPRESSION_H
 
-#include "visitable.h"
+#include "declarator_id.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class id_expression: public visitable
+class id_expression: public declarator_id
 {
     public:
         virtual ~id_expression(){};

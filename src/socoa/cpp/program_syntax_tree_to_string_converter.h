@@ -85,9 +85,6 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         visit(const program_syntax_tree::cv_qualifier& item);
 
         void
-        visit(const program_syntax_tree::declarator_id& item);
-
-        void
         visit(const program_syntax_tree::parameter_declaration_clause& item);
 
         void
@@ -147,6 +144,9 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         void
         visit(const program_syntax_tree::template_id& item);
 
+        void
+        visit(const program_syntax_tree::nested_identifier_or_template_id& item);
+
         const std::string
         new_line();
 
@@ -159,7 +159,7 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         const std::string
         indentation();
 
-        std::ostringstream m_result;
+        std::ostringstream result_;
         unsigned int m_indentation_level;
 };
 

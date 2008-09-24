@@ -26,18 +26,10 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 direct_declarator::direct_declarator
 (
     std::shared_ptr<declarator_id> a_declarator_id,
-    std::vector<std::shared_ptr<direct_declarator_part>>&& other_parts
-):
-    m_declarator_id(a_declarator_id),
-    m_other_parts(other_parts)
-{
-}
-
-direct_declarator::direct_declarator
-(
     std::shared_ptr<declarator> a_declarator,
     std::vector<std::shared_ptr<direct_declarator_part>>&& other_parts
 ):
+    m_declarator_id(a_declarator_id),
     m_declarator(a_declarator),
     m_other_parts(other_parts)
 {

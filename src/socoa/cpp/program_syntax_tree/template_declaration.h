@@ -31,20 +31,20 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 class template_declaration: public declaration, public member_declaration
 {
     public:
-        template_declaration(bool exported, std::shared_ptr<declaration> declaration_part);
+        template_declaration(bool export_keyword, std::shared_ptr<declaration> a_declaration);
 
         bool
-        exported() const;
+        has_export_keyword() const;
 
         const std::shared_ptr<declaration>
-        declaration_part() const;
+        get_declaration() const;
 
         SOCOA_CPP_DEFINE_VISITABLE()
 
     private:
-        bool m_exported;
+        bool export_keyword_;
         //template_parameter_list m_template_parameter_list;
-        std::shared_ptr<declaration> m_declaration_part;
+        std::shared_ptr<declaration> declaration_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree
