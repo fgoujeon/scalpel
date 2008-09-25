@@ -106,10 +106,10 @@ declaration_syntax_analyzer::evaluate_id_expression(const tree_node_t& node)
     assert(node.value.id() == grammar::ID_EXPRESSION);
 
     evaluate_function_typedefs<id_expression>::id_function_map_t id_eval;
-    //id_eval.insert(std::make_pair(grammar::QUALIFIED_ID, &declaration_syntax_analyzer::evaluate_qualified_id));
     id_eval.insert(std::make_pair(grammar::UNQUALIFIED_ID, &declaration_syntax_analyzer::evaluate_unqualified_id));
+    id_eval.insert(std::make_pair(grammar::QUALIFIED_ID, &declaration_syntax_analyzer::evaluate_qualified_id));
 
-    return evaluate_only_child_node(node, id_eval, false);
+    return evaluate_only_child_node(node, id_eval);
 }
 
 std::shared_ptr<unqualified_id>
@@ -125,6 +125,67 @@ declaration_syntax_analyzer::evaluate_unqualified_id(const tree_node_t& node)
     id_eval.insert(std::make_pair(grammar::IDENTIFIER, &declaration_syntax_analyzer::evaluate_identifier));
 
     return evaluate_only_child_node(node, id_eval, false);
+}
+
+std::shared_ptr<qualified_id>
+declaration_syntax_analyzer::evaluate_qualified_id(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar::QUALIFIED_ID);
+
+    evaluate_function_typedefs<qualified_id>::id_function_map_t id_eval;
+    id_eval.insert(std::make_pair(grammar::QUALIFIED_NESTED_ID, &declaration_syntax_analyzer::evaluate_qualified_nested_id));
+    id_eval.insert(std::make_pair(grammar::QUALIFIED_OPERATOR_FUNCTION_ID, &declaration_syntax_analyzer::evaluate_qualified_operator_function_id));
+    id_eval.insert(std::make_pair(grammar::QUALIFIED_TEMPLATE_ID, &declaration_syntax_analyzer::evaluate_qualified_template_id));
+    id_eval.insert(std::make_pair(grammar::QUALIFIED_IDENTIFIER, &declaration_syntax_analyzer::evaluate_qualified_identifier));
+
+    return evaluate_only_child_node(node, id_eval);
+}
+
+std::shared_ptr<qualified_nested_id>
+declaration_syntax_analyzer::evaluate_qualified_nested_id(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar::QUALIFIED_NESTED_ID);
+
+    return std::make_shared<qualified_nested_id>
+    (
+        check_node_existence(node, "::", 0),
+        *ASSERTED_EVALUATE_NODE(nested_name_specifier, NESTED_NAME_SPECIFIER),
+        check_node_existence(node, "template", 1) || check_node_existence(node, "template", 2),
+        ASSERTED_EVALUATE_NODE(unqualified_id, UNQUALIFIED_ID)
+    );
+}
+
+std::shared_ptr<qualified_operator_function_id>
+declaration_syntax_analyzer::evaluate_qualified_operator_function_id(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar::QUALIFIED_OPERATOR_FUNCTION_ID);
+
+    return std::make_shared<qualified_operator_function_id>
+    (
+        //ASSERTED_EVALUATE_NODE(operator_function_id, OPERATOR_FUNCTION_ID)
+    );
+}
+
+std::shared_ptr<qualified_template_id>
+declaration_syntax_analyzer::evaluate_qualified_template_id(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar::QUALIFIED_TEMPLATE_ID);
+
+    return std::make_shared<qualified_template_id>
+    (
+        *ASSERTED_EVALUATE_NODE(template_id, TEMPLATE_ID)
+    );
+}
+
+std::shared_ptr<qualified_identifier>
+declaration_syntax_analyzer::evaluate_qualified_identifier(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar::QUALIFIED_IDENTIFIER);
+
+    return std::make_shared<qualified_identifier>
+    (
+        *ASSERTED_EVALUATE_NODE(identifier, IDENTIFIER)
+    );
 }
 
 std::shared_ptr<nested_name_specifier>

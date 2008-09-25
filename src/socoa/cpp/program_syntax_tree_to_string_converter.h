@@ -43,6 +43,18 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         visit(const program_syntax_tree::identifier& item);
 
         void
+        visit(const program_syntax_tree::qualified_nested_id& item);
+
+        void
+        visit(const program_syntax_tree::qualified_operator_function_id& item);
+
+        void
+        visit(const program_syntax_tree::qualified_template_id& item);
+
+        void
+        visit(const program_syntax_tree::qualified_identifier& item);
+
+        void
         visit(const program_syntax_tree::nested_name_specifier& item);
 
         void

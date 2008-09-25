@@ -88,6 +88,10 @@ struct grammar_definition_impl
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ID_EXPRESSION>> id_expression;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::UNQUALIFIED_ID>> unqualified_id;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::QUALIFIED_ID>> qualified_id;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::QUALIFIED_NESTED_ID>> qualified_nested_id;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::QUALIFIED_OPERATOR_FUNCTION_ID>> qualified_operator_function_id;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::QUALIFIED_TEMPLATE_ID>> qualified_template_id;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::QUALIFIED_IDENTIFIER>> qualified_identifier;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::NESTED_NAME_SPECIFIER>> nested_name_specifier;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::NESTED_NAME_SPECIFIER_TEMPLATE_ID_PART>> nested_name_specifier_template_id_part;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::POSTFIX_EXPRESSION>> postfix_expression;
@@ -610,10 +614,22 @@ grammar_definition_impl<ScannerT>::grammar_definition_impl(const grammar& self)
     ;
 
     qualified_id
+        = qualified_nested_id
+        | qualified_operator_function_id
+        | qualified_template_id
+        | qualified_identifier
+    ;
+    qualified_nested_id
         = !str_p("::") >> nested_name_specifier >> !str_p("template") >> unqualified_id
-        | str_p("::") >> operator_function_id
-        | str_p("::") >> template_id
-        | str_p("::") >> identifier
+    ;
+    qualified_operator_function_id
+        = str_p("::") >> operator_function_id
+    ;
+    qualified_template_id
+        = str_p("::") >> template_id
+    ;
+    qualified_identifier
+        = str_p("::") >> identifier
     ;
 
     /*

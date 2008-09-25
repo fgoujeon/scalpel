@@ -25,10 +25,13 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
 class identifier;
+class qualified_nested_id;
+class qualified_operator_function_id;
+class qualified_template_id;
+class qualified_identifier;
 class nested_name_specifier_template_id_part;
 class namespace_definition;
 class using_declaration;
-
 class function_definition;
 class class_specifier;
 class member_declaration_member_declarator_list;
@@ -53,6 +56,18 @@ class visitor
 
         virtual void
         visit(const identifier&) = 0;
+
+        virtual void
+        visit(const qualified_nested_id&) = 0;
+
+        virtual void
+        visit(const qualified_operator_function_id&) = 0;
+
+        virtual void
+        visit(const qualified_template_id&) = 0;
+
+        virtual void
+        visit(const qualified_identifier&) = 0;
 
         virtual void
         visit(const nested_name_specifier_template_id_part&) = 0;

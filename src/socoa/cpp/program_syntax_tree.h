@@ -23,6 +23,12 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "program_syntax_tree/identifier.h"
 #include "program_syntax_tree/id_expression.h"
+#include "program_syntax_tree/unqualified_id.h"
+#include "program_syntax_tree/qualified_id.h"
+#include "program_syntax_tree/qualified_nested_id.h"
+#include "program_syntax_tree/qualified_operator_function_id.h"
+#include "program_syntax_tree/qualified_template_id.h"
+#include "program_syntax_tree/qualified_identifier.h"
 #include "program_syntax_tree/nested_name_specifier.h"
 #include "program_syntax_tree/nested_name_specifier_part.h"
 #include "program_syntax_tree/nested_name_specifier_template_id_part.h"

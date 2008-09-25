@@ -27,6 +27,11 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 class identifier;
 class id_expression;
 class unqualified_id;
+class qualified_id;
+class qualified_nested_id;
+class qualified_operator_function_id;
+class qualified_template_id;
+class qualified_identifier;
 class nested_name_specifier;
 class nested_name_specifier_part;
 class nested_name_specifier_template_id_part;

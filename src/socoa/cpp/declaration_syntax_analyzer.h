@@ -77,6 +77,21 @@ class declaration_syntax_analyzer
         std::shared_ptr<program_syntax_tree::unqualified_id>
         evaluate_unqualified_id(const tree_node_t& node);
 
+        std::shared_ptr<program_syntax_tree::qualified_id>
+        evaluate_qualified_id(const tree_node_t& node);
+
+        std::shared_ptr<program_syntax_tree::qualified_nested_id>
+        evaluate_qualified_nested_id(const tree_node_t& node);
+
+        std::shared_ptr<program_syntax_tree::qualified_operator_function_id>
+        evaluate_qualified_operator_function_id(const tree_node_t& node);
+
+        std::shared_ptr<program_syntax_tree::qualified_template_id>
+        evaluate_qualified_template_id(const tree_node_t& node);
+
+        std::shared_ptr<program_syntax_tree::qualified_identifier>
+        evaluate_qualified_identifier(const tree_node_t& node);
+
         std::shared_ptr<program_syntax_tree::nested_name_specifier>
         evaluate_nested_name_specifier(const tree_node_t& node);
 

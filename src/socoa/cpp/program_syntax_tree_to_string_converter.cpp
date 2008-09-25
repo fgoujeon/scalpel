@@ -48,6 +48,42 @@ program_syntax_tree_to_string_converter::visit(const identifier& item)
 }
 
 void
+program_syntax_tree_to_string_converter::visit(const qualified_nested_id& item)
+{
+    if(item.has_leading_double_colon())
+        result_ << "::";
+
+    visit(item.get_nested_name_specifier());
+
+    if(item.has_template_keyword())
+        result_ << "template ";
+
+    item.get_unqualified_id()->accept(*this);
+}
+
+void
+program_syntax_tree_to_string_converter::visit(const qualified_operator_function_id& item)
+{
+    result_ << "::";
+
+    result_ << "[NOT IMPLEMENTED]";
+}
+
+void
+program_syntax_tree_to_string_converter::visit(const qualified_template_id& item)
+{
+    result_ << "::";
+    visit(item.get_template_id());
+}
+
+void
+program_syntax_tree_to_string_converter::visit(const qualified_identifier& item)
+{
+    result_ << "::";
+    visit(item.get_identifier());
+}
+
+void
 program_syntax_tree_to_string_converter::visit(const nested_name_specifier& item)
 {
     item.get_identifier_or_template_id()->accept(*this);
