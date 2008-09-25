@@ -640,7 +640,7 @@ grammar_definition_impl<ScannerT>::grammar_definition_impl(const grammar& self)
         ;
     */
     nested_name_specifier
-        = identifier_or_template_id >> "::" >> *((identifier | nested_name_specifier_template_id_part) >> "::")
+        = identifier_or_template_id >> "::" >> *((nested_name_specifier_template_id_part | identifier) >> "::")
     ;
     nested_name_specifier_template_id_part
         = !str_p("template") >> template_id
