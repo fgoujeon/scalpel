@@ -159,6 +159,10 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         void
         visit(const program_syntax_tree::nested_identifier_or_template_id& item);
 
+        template <class T>
+        void
+        convert_if_exists(std::shared_ptr<T> item);
+
         const std::string
         new_line();
 
@@ -174,6 +178,14 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         std::ostringstream result_;
         unsigned int m_indentation_level;
 };
+
+template <class T>
+void
+program_syntax_tree_to_string_converter::convert_if_exists(std::shared_ptr<T> item)
+{
+    if(item)
+        visit(*item);
+}
 
 }} //namespace socoa::cpp
 

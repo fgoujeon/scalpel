@@ -125,13 +125,11 @@ program_syntax_tree_to_string_converter::visit(const namespace_definition& item)
     result_ << indentation();
     result_ << "namespace ";
 
-    if(std::shared_ptr<identifier> namespace_name = item.get_identifier())
-        visit(*namespace_name);
+    convert_if_exists(item.get_identifier());
 
     result_ << opening_brace();
 
-    if(std::shared_ptr<declaration_seq> namespace_body = item.get_declaration_seq())
-        visit(*namespace_body);
+    convert_if_exists(item.get_declaration_seq());
 
     result_ << closing_brace() << new_line();
 }
@@ -148,8 +146,7 @@ program_syntax_tree_to_string_converter::visit(const using_declaration& item)
     if(item.has_leading_double_colon())
         result_ << "::";
 
-    if(item.get_nested_name_specifier())
-        visit(*item.get_nested_name_specifier());
+    convert_if_exists(item.get_nested_name_specifier());
 
     item.get_unqualified_id()->accept(*this);
 
@@ -248,8 +245,7 @@ program_syntax_tree_to_string_converter::visit(const ptr_operator& item)
             break;
     }
 
-    if(item.get_cv_qualifier_seq())
-        visit(*item.get_cv_qualifier_seq());
+    convert_if_exists(item.get_cv_qualifier_seq());
 }
 
 void
@@ -288,11 +284,7 @@ program_syntax_tree_to_string_converter::visit(const cv_qualifier& item)
 void
 program_syntax_tree_to_string_converter::visit(const parameter_declaration_clause& item)
 {
-    const std::shared_ptr<parameter_declaration_list> a_parameter_declaration_list(item.get_parameter_declaration_list());
-    if(a_parameter_declaration_list)
-    {
-        visit(*a_parameter_declaration_list);
-    }
+    convert_if_exists(item.get_parameter_declaration_list());
 
     if(item.has_trailing_comma())
         result_ << ", ";
@@ -323,11 +315,7 @@ program_syntax_tree_to_string_converter::visit(const parameter_declaration& item
 {
     visit(item.get_decl_specifier_seq());
 
-    const std::shared_ptr<declarator> a_declarator = item.get_declarator();
-    if(a_declarator)
-    {
-        visit(*a_declarator);
-    }
+    convert_if_exists(item.get_declarator());
 }
 
 void
@@ -335,8 +323,7 @@ program_syntax_tree_to_string_converter::visit(const function_definition& item)
 {
     result_ << indentation();
 
-    if(item.get_decl_specifier_seq())
-        visit(*item.get_decl_specifier_seq());
+    convert_if_exists(item.get_decl_specifier_seq());
 
     visit(item.get_declarator());
     result_ << opening_brace();
@@ -353,10 +340,7 @@ program_syntax_tree_to_string_converter::visit(const class_specifier& item)
 
     result_ << opening_brace();
 
-    if(item.get_member_specification())
-    {
-        visit(*item.get_member_specification());
-    }
+    convert_if_exists(item.get_member_specification());
 
     result_ << closing_brace();
 }
@@ -367,14 +351,9 @@ program_syntax_tree_to_string_converter::visit(const class_head& item)
     visit(item.get_key());
     result_ << " ";
 
-    if(item.get_nested_name_specifier())
-        visit(*item.get_nested_name_specifier());
-
-    if(item.get_template_id())
-        visit(*item.get_template_id());
-
-    if(item.get_identifier())
-        visit(*item.get_identifier());
+    convert_if_exists(item.get_nested_name_specifier());
+    convert_if_exists(item.get_template_id());
+    convert_if_exists(item.get_identifier());
 }
 
 void
@@ -414,11 +393,8 @@ program_syntax_tree_to_string_converter::visit(const member_declaration_member_d
 {
     result_ << indentation();
 
-    if(item.get_decl_specifier_seq())
-        visit(*item.get_decl_specifier_seq());
-
-    if(item.get_member_declarator_list())
-        visit(*item.get_member_declarator_list());
+    convert_if_exists(item.get_decl_specifier_seq());
+    convert_if_exists(item.get_member_declarator_list());
 
     result_ << ";" << new_line();
 }
@@ -466,8 +442,7 @@ program_syntax_tree_to_string_converter::visit(const member_declarator_declarato
 {
     //result_ << indentation();
 
-    if(item.get_declarator())
-        visit(*item.get_declarator());
+    convert_if_exists(item.get_declarator());
 
     if(item.has_pure_specifier())
         result_ << " = 0";
@@ -476,8 +451,7 @@ program_syntax_tree_to_string_converter::visit(const member_declarator_declarato
 void
 program_syntax_tree_to_string_converter::visit(const member_declarator_bit_field_member& item)
 {
-    if(item.get_identifier())
-        visit(*item.get_identifier());
+    convert_if_exists(item.get_identifier());
 
     result_ << ": ";
 }
@@ -523,13 +497,8 @@ program_syntax_tree_to_string_converter::visit(const simple_declaration& item)
 {
     result_ << indentation();
 
-    std::shared_ptr<decl_specifier_seq> decl_specifiers = item.get_decl_specifier_seq();
-    if(decl_specifiers)
-        visit(*decl_specifiers);
-
-    std::shared_ptr<init_declarator_list> init_declarators = item.get_init_declarator_list();
-    if(init_declarators)
-        visit(*init_declarators);
+    convert_if_exists(item.get_decl_specifier_seq());
+    convert_if_exists(item.get_init_declarator_list());
 
     result_ << ";" << new_line();
 }
@@ -587,8 +556,7 @@ program_syntax_tree_to_string_converter::visit(const simple_type_specifier& item
             if(item.has_leading_double_colon())
                 result_ << "::";
 
-            if(item.get_nested_name_specifier())
-                visit(*item.get_nested_name_specifier());
+            convert_if_exists(item.get_nested_name_specifier());
 
             if(item.get_template_id())
             {
@@ -619,8 +587,7 @@ program_syntax_tree_to_string_converter::visit(const nested_identifier_or_templa
     if(item.has_leading_double_colon())
         result_ << "::";
 
-    if(item.get_nested_name_specifier())
-        visit(*item.get_nested_name_specifier());
+    convert_if_exists(item.get_nested_name_specifier());
 
     item.get_identifier_or_template_id()->accept(*this);
 }
