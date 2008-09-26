@@ -54,7 +54,7 @@ declaration_syntax_analyzer::declaration_syntax_analyzer():
     m_grammar_configuration.skip_function_bodies = true;
 }
 
-std::shared_ptr<declaration_seq>
+std::shared_ptr<program_syntax_tree::sequence<declaration>>
 declaration_syntax_analyzer::operator()(const std::string& input)
 {
     //parse the input with the C++ grammar
@@ -68,22 +68,35 @@ declaration_syntax_analyzer::operator()(const std::string& input)
         throw std::runtime_error(failure_message.str().c_str());
     }
 
-    //declare a new declaration_seq object and populate it
+    //declare a new sequence<declaration> object and populate it
     const tree_node_t& root_node = *info.trees.begin();
     const tree_node_t& translation_unit_node = *root_node.children.begin();
 
-    std::shared_ptr<declaration_seq> new_declaration_seq(evaluate_translation_unit(translation_unit_node));
+    std::shared_ptr<program_syntax_tree::sequence<declaration>> new_declaration_seq(evaluate_translation_unit(translation_unit_node));
 
     return new_declaration_seq;
 }
 
-std::shared_ptr<declaration_seq>
+std::shared_ptr<program_syntax_tree::sequence<declaration>>
 declaration_syntax_analyzer::evaluate_translation_unit(const tree_node_t& node)
 {
     assert(node.value.id() == grammar::TRANSLATION_UNIT);
 
-    const tree_node_t& declaration_seq_node = *node.children.begin();
-    return evaluate_declaration_seq(declaration_seq_node);
+    evaluate_function_typedefs<program_syntax_tree::sequence<declaration>>::id_function_map_t id_eval;
+    id_eval.insert
+    (
+        std::make_pair
+        (
+            grammar::DECLARATION_SEQ,
+            &declaration_syntax_analyzer::evaluate_sequence
+            <
+                declaration,
+                &declaration_syntax_analyzer::evaluate_declaration
+            >
+        )
+    );
+
+    return evaluate_only_child_node(node, id_eval);
 }
 
 std::shared_ptr<identifier>
@@ -210,28 +223,6 @@ declaration_syntax_analyzer::evaluate_nested_name_specifier_template_id_part(con
     );
 }
 
-std::shared_ptr<declaration_seq>
-declaration_syntax_analyzer::evaluate_declaration_seq(const tree_node_t& node)
-{
-    assert(node.value.id() == grammar::DECLARATION_SEQ);
-
-    std::shared_ptr<declaration_seq> new_declaration_seq(std::make_shared<declaration_seq>());
-
-    for(tree_node_iterator_t i = node.children.begin(); i != node.children.end(); ++i) //for each child
-    {
-        const tree_node_t& child_node = *i;
-
-        std::shared_ptr<declaration> decl = evaluate_declaration(child_node);
-
-        if(decl)
-        {
-            new_declaration_seq->add(decl);
-        }
-    }
-
-    return new_declaration_seq;
-}
-
 std::shared_ptr<declaration>
 declaration_syntax_analyzer::evaluate_declaration(const tree_node_t& node)
 {
@@ -271,7 +262,16 @@ declaration_syntax_analyzer::evaluate_simple_declaration(const tree_node_t& node
 
     return std::make_shared<simple_declaration>
     (
-        EVALUATE_NODE(decl_specifier_seq, SIMPLE_DECLARATION_DECL_SPECIFIER_SEQ),
+        evaluate_node
+        (
+            node,
+            grammar::SIMPLE_DECLARATION_DECL_SPECIFIER_SEQ,
+            &declaration_syntax_analyzer::evaluate_sequence
+            <
+                decl_specifier,
+                &declaration_syntax_analyzer::evaluate_decl_specifier
+            >
+        ),
         EVALUATE_NODE(init_declarator_list, INIT_DECLARATOR_LIST)
     );
 }
@@ -287,25 +287,6 @@ declaration_syntax_analyzer::evaluate_decl_specifier(const tree_node_t& node)
     //id_function_map.insert(std::make_pair(grammar::FUNCTION_SPECIFIER, &declaration_syntax_analyzer::evaluate_template_declaration));
 
     return evaluate_only_child_node(node, id_function_map, false);
-}
-
-std::shared_ptr<decl_specifier_seq>
-declaration_syntax_analyzer::evaluate_decl_specifier_seq(const tree_node_t& node)
-{
-    std::shared_ptr<decl_specifier_seq> new_decl_specifier_seq(std::make_shared<decl_specifier_seq>());
-
-    for(tree_node_iterator_t i = node.children.begin(); i != node.children.end(); ++i) //for each child
-    {
-        const tree_node_t& child_node = *i;
-        std::shared_ptr<decl_specifier> specifier = evaluate_decl_specifier(child_node);
-
-        if(specifier)
-        {
-            new_decl_specifier_seq->add(specifier);
-        }
-    }
-
-    return new_decl_specifier_seq;
 }
 
 std::shared_ptr<type_specifier>
@@ -409,7 +390,16 @@ declaration_syntax_analyzer::evaluate_namespace_definition(const tree_node_t& no
     return std::make_shared<namespace_definition>
     (
         EVALUATE_NODE(identifier, IDENTIFIER),
-        EVALUATE_NODE(declaration_seq, DECLARATION_SEQ)
+        evaluate_node
+        (
+            node,
+            grammar::DECLARATION_SEQ,
+            &declaration_syntax_analyzer::evaluate_sequence
+            <
+                declaration,
+                &declaration_syntax_analyzer::evaluate_declaration
+            >
+        )
     );
 }
 
@@ -556,22 +546,15 @@ declaration_syntax_analyzer::evaluate_ptr_operator(const tree_node_t& node)
         asterisk ? ptr_operator::ASTERISK : ptr_operator::AMPERSAND,
         check_node_existence(node, "::", 0),
         EVALUATE_NODE(nested_name_specifier, NESTED_NAME_SPECIFIER),
-        EVALUATE_NODE(cv_qualifier_seq, CV_QUALIFIER_SEQ)
-    );
-}
-
-std::shared_ptr<cv_qualifier_seq>
-declaration_syntax_analyzer::evaluate_cv_qualifier_seq(const tree_node_t& node)
-{
-    assert(node.value.id() == grammar::CV_QUALIFIER_SEQ);
-
-    return std::make_shared<cv_qualifier_seq>
-    (
-        evaluate_nodes
+        evaluate_node
         (
             node,
-            grammar::CV_QUALIFIER,
-            &declaration_syntax_analyzer::evaluate_cv_qualifier
+            grammar::CV_QUALIFIER_SEQ,
+            &declaration_syntax_analyzer::evaluate_sequence
+            <
+                cv_qualifier,
+                &declaration_syntax_analyzer::evaluate_cv_qualifier
+            >
         )
     );
 }
@@ -656,10 +639,10 @@ declaration_syntax_analyzer::evaluate_parameter_declaration(const tree_node_t& n
 {
     assert(node.value.id() == grammar::PARAMETER_DECLARATION);
 
-    std::shared_ptr<decl_specifier_seq> new_decl_specifier_seq;
+    std::shared_ptr<program_syntax_tree::sequence<decl_specifier>> new_decl_specifier_seq;
     std::shared_ptr<declarator> new_declarator;
 
-    //get decl_specifier_seq node
+    //get sequence<decl_specifier> node
     const tree_node_t& decl_specifier_seq_node = *node.children.begin();
     parser_id decl_specifier_seq_node_id = decl_specifier_seq_node.value.id();
     assert
@@ -670,7 +653,7 @@ declaration_syntax_analyzer::evaluate_parameter_declaration(const tree_node_t& n
         decl_specifier_seq_node_id == grammar::PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ4 ||
         decl_specifier_seq_node_id == grammar::DECL_SPECIFIER_SEQ
     );
-    new_decl_specifier_seq = evaluate_decl_specifier_seq(decl_specifier_seq_node);
+    new_decl_specifier_seq = evaluate_sequence<decl_specifier, &declaration_syntax_analyzer::evaluate_decl_specifier>(decl_specifier_seq_node);
 
     return std::make_shared<parameter_declaration>
     (
@@ -694,10 +677,10 @@ declaration_syntax_analyzer::evaluate_function_definition(const tree_node_t& nod
         decl_specifier_seq_node = find_child_node(node, grammar::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ3);
 
     //... and evaluate it
-    std::shared_ptr<decl_specifier_seq> new_decl_specifier_seq;
+    std::shared_ptr<program_syntax_tree::sequence<decl_specifier>> new_decl_specifier_seq;
     if(decl_specifier_seq_node)
     {
-        new_decl_specifier_seq = evaluate_decl_specifier_seq(*decl_specifier_seq_node);
+        new_decl_specifier_seq = evaluate_sequence<decl_specifier, &declaration_syntax_analyzer::evaluate_decl_specifier>(*decl_specifier_seq_node);
     }
 
     //create function definition object
@@ -791,7 +774,16 @@ declaration_syntax_analyzer::evaluate_member_declaration_member_declarator_list(
 
     return std::make_shared<member_declaration_member_declarator_list>
     (
-        EVALUATE_NODE(decl_specifier_seq, MEMBER_DECLARATION_DECL_SPECIFIER_SEQ),
+        evaluate_node
+        (
+            node,
+            grammar::MEMBER_DECLARATION_DECL_SPECIFIER_SEQ,
+            &declaration_syntax_analyzer::evaluate_sequence
+            <
+                decl_specifier,
+                &declaration_syntax_analyzer::evaluate_decl_specifier
+            >
+        ),
         EVALUATE_NODE(member_declarator_list, MEMBER_DECLARATOR_LIST)
     );
 }

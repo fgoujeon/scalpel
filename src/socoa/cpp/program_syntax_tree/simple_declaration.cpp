@@ -25,7 +25,7 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 
 simple_declaration::simple_declaration
 (
-    std::shared_ptr<decl_specifier_seq> a_decl_specifier_seq,
+    std::shared_ptr<sequence<decl_specifier>> a_decl_specifier_seq,
     std::shared_ptr<init_declarator_list> an_init_declarator_list
 ):
     m_decl_specifier_seq(a_decl_specifier_seq),
@@ -33,7 +33,7 @@ simple_declaration::simple_declaration
 {
 }
 
-const std::shared_ptr<decl_specifier_seq>
+const std::shared_ptr<sequence<decl_specifier>>
 simple_declaration::get_decl_specifier_seq() const
 {
     return m_decl_specifier_seq;

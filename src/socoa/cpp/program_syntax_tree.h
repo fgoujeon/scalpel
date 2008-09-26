@@ -32,10 +32,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "program_syntax_tree/nested_name_specifier.h"
 #include "program_syntax_tree/nested_name_specifier_part.h"
 #include "program_syntax_tree/nested_name_specifier_template_id_part.h"
-#include "program_syntax_tree/declaration_seq.h"
 #include "program_syntax_tree/declaration.h"
 #include "program_syntax_tree/simple_declaration.h"
-#include "program_syntax_tree/decl_specifier_seq.h"
 #include "program_syntax_tree/decl_specifier.h"
 #include "program_syntax_tree/type_specifier.h"
 #include "program_syntax_tree/simple_type_specifier.h"
@@ -52,7 +50,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "program_syntax_tree/direct_declarator_function_part.h"
 #include "program_syntax_tree/direct_declarator_array_part.h"
 #include "program_syntax_tree/ptr_operator.h"
-#include "program_syntax_tree/cv_qualifier_seq.h"
 #include "program_syntax_tree/cv_qualifier.h"
 #include "program_syntax_tree/declarator_id.h"
 #include "program_syntax_tree/parameter_declaration_clause.h"
@@ -77,5 +74,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "program_syntax_tree/template_argument_list.h"
 #include "program_syntax_tree/template_argument.h"
 #include "program_syntax_tree/nested_identifier_or_template_id.h"
+
+#include "program_syntax_tree/sequence.h"
 
 #endif

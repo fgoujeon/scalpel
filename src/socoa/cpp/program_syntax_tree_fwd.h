@@ -35,10 +35,8 @@ class qualified_identifier;
 class nested_name_specifier;
 class nested_name_specifier_part;
 class nested_name_specifier_template_id_part;
-class declaration_seq;
 class declaration;
 class simple_declaration;
-class decl_specifier_seq;
 class decl_specifier;
 class type_specifier;
 class simple_type_specifier;
@@ -54,7 +52,6 @@ class direct_declarator;
 class direct_declarator_function_part;
 class direct_declarator_array_part;
 class ptr_operator;
-class cv_qualifier_seq;
 class cv_qualifier;
 class declarator_id;
 class parameter_declaration_clause;
@@ -79,6 +76,9 @@ class template_id;
 class template_argument_list;
 class template_argument;
 class nested_identifier_or_template_id;
+
+template <class T>
+class sequence;
 
 }}} //namespace socoa::cpp::program_syntax_tree
 

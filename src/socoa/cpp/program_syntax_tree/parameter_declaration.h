@@ -22,24 +22,25 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_PROGRAM_SYNTAX_TREE_PARAMETER_DECLARATION_H
 
 #include <memory>
-#include "decl_specifier_seq.h"
+#include "sequence.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
 class declarator;
+class decl_specifier;
 
 class parameter_declaration
 {
     public:
         parameter_declaration
         (
-            decl_specifier_seq&& a_decl_specifier_seq,
+            sequence<decl_specifier>&& a_decl_specifier_seq,
             std::shared_ptr<declarator> a_declarator,
             bool equal
         );
 
-        const decl_specifier_seq&
+        const sequence<decl_specifier>&
         get_decl_specifier_seq() const;
 
         const std::shared_ptr<declarator>
@@ -49,7 +50,7 @@ class parameter_declaration
         has_equal() const;
 
     private:
-        decl_specifier_seq m_decl_specifier_seq;
+        sequence<decl_specifier> m_decl_specifier_seq;
         std::shared_ptr<declarator> m_declarator;
         bool m_equal;
 };

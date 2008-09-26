@@ -33,7 +33,7 @@ program_syntax_tree_to_string_converter::program_syntax_tree_to_string_converter
 }
 
 std::string
-program_syntax_tree_to_string_converter::operator()(const std::shared_ptr<program_syntax_tree::declaration_seq> translation_unit)
+program_syntax_tree_to_string_converter::operator()(const std::shared_ptr<program_syntax_tree::sequence<declaration>> translation_unit)
 {
     result_.str("");
     m_indentation_level = 0;
@@ -108,16 +108,6 @@ program_syntax_tree_to_string_converter::visit(const nested_name_specifier_templ
         result_ << "template ";
 
     safe_convert(item.get_template_id());
-}
-
-void
-program_syntax_tree_to_string_converter::visit(const declaration_seq& item)
-{
-    const std::vector<std::shared_ptr<declaration>>& declarations = item.get_declarations();
-    for(std::vector<std::shared_ptr<declaration>>::const_iterator i = declarations.begin(); i != declarations.end(); ++i)
-    {
-        (**i).accept(*this);
-    }
 }
 
 void
@@ -301,20 +291,6 @@ program_syntax_tree_to_string_converter::visit(const ptr_operator& item)
     }
 
     safe_convert(item.get_cv_qualifier_seq());
-}
-
-void
-program_syntax_tree_to_string_converter::visit(const cv_qualifier_seq& item)
-{
-    for
-    (
-        std::vector<std::shared_ptr<cv_qualifier>>::const_iterator i = item.get_cv_qualifiers().begin();
-        i != item.get_cv_qualifiers().end();
-        ++i
-    )
-    {
-        safe_convert(**i);
-    }
 }
 
 void
@@ -554,16 +530,6 @@ program_syntax_tree_to_string_converter::visit(const simple_declaration& item)
     safe_convert(item.get_init_declarator_list());
 
     result_ << ";" << new_line();
-}
-
-void
-program_syntax_tree_to_string_converter::visit(const decl_specifier_seq& item)
-{
-    const std::vector<std::shared_ptr<decl_specifier>>& decl_specifiers = item.get_decl_specifiers();
-    for(std::vector<std::shared_ptr<decl_specifier>>::const_iterator i = decl_specifiers.begin(); i != decl_specifiers.end(); ++i)
-    {
-        (**i).accept(*this);
-    }
 }
 
 void

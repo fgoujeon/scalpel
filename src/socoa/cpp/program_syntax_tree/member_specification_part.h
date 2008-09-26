@@ -26,7 +26,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class member_specification_part: public visitable
+class member_specification_part: virtual public visitable
 {
     public:
         virtual ~member_specification_part(){};

@@ -23,7 +23,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdexcept>
 #include <boost/spirit.hpp>
 #include <cppunit/TestSuite.h>
-#include <socoa/cpp/program_syntax_tree/declaration_seq.h>
 
 #include "single_file_test.h"
 
@@ -56,7 +55,7 @@ void single_file_test::parse_files()
         file.close();
 
 		//analyze file
-        std::shared_ptr<socoa::cpp::program_syntax_tree::declaration_seq> program_tree = m_declaration_syntax_analyzer(buffer.str()); //throws an exception if parsing fails
+        std::shared_ptr<socoa::cpp::program_syntax_tree::sequence<socoa::cpp::program_syntax_tree::declaration>> program_tree = m_declaration_syntax_analyzer(buffer.str()); //throws an exception if parsing fails
         std::cout << "---\n" << file_name_oss.str() << ":\n---\n";
         std::cout << m_program_syntax_tree_to_string_converter(program_tree);
         std::cout << "\n\n";

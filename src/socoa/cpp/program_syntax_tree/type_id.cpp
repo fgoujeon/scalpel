@@ -18,21 +18,11 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "decl_specifier_seq.h"
+#include "type_id.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-const std::vector<std::shared_ptr<decl_specifier>>&
-decl_specifier_seq::get_decl_specifiers() const
-{
-    return m_decl_specifiers;
-}
 
-void
-decl_specifier_seq::add(std::shared_ptr<decl_specifier> specifier)
-{
-    m_decl_specifiers.push_back(specifier);
-}
 
 }}} //namespace socoa::cpp::program_syntax_tree

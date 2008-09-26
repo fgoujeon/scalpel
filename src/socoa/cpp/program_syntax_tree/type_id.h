@@ -18,21 +18,20 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "declaration_seq.h"
+#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_TYPE_ID_H
+#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_TYPE_ID_H
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-const std::vector<std::shared_ptr<declaration>>&
-declaration_seq::get_declarations() const
+class type_id
 {
-    return m_declarations;
-}
+    public:
 
-void
-declaration_seq::add(std::shared_ptr<declaration> a_declaration)
-{
-    m_declarations.push_back(a_declaration);
-}
+
+    private:
+};
 
 }}} //namespace socoa::cpp::program_syntax_tree
+
+#endif

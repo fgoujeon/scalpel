@@ -23,6 +23,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string>
 #include <sstream>
+#include <vector>
 #include <memory>
 #include "program_syntax_tree/visitor.h"
 #include "program_syntax_tree_fwd.h"
@@ -36,7 +37,7 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         program_syntax_tree_to_string_converter();
 
         std::string
-        operator()(const std::shared_ptr<program_syntax_tree::declaration_seq> translation_unit);
+        operator()(const std::shared_ptr<program_syntax_tree::sequence<program_syntax_tree::declaration>> translation_unit);
 
     private:
         void
@@ -59,9 +60,6 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
 
         void
         visit(const program_syntax_tree::nested_name_specifier_template_id_part& item);
-
-        void
-        visit(const program_syntax_tree::declaration_seq& item);
 
         void
         visit(const program_syntax_tree::simple_template_type_specifier& item);
@@ -95,9 +93,6 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
 
         void
         visit(const program_syntax_tree::ptr_operator& item);
-
-        void
-        visit(const program_syntax_tree::cv_qualifier_seq& item);
 
         void
         visit(const program_syntax_tree::cv_qualifier& item);
@@ -154,9 +149,6 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         visit(const program_syntax_tree::simple_declaration& item);
 
         void
-        visit(const program_syntax_tree::decl_specifier_seq& item);
-
-        void
         visit(const program_syntax_tree::template_id& item);
 
         void
@@ -164,6 +156,10 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
 
         void
         visit(const program_syntax_tree::nested_identifier_or_template_id& item);
+
+        template <class T>
+        void
+        visit(const program_syntax_tree::sequence<T>& seq);
 
         template <class T>
         inline
@@ -192,6 +188,19 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         std::ostringstream result_;
         unsigned int m_indentation_level;
 };
+
+template <class T>
+void
+program_syntax_tree_to_string_converter::visit(const program_syntax_tree::sequence<T>& seq)
+{
+    typedef std::vector<std::shared_ptr<T>> item_list_t;
+
+    for(typename item_list_t::const_iterator i = seq.get_items().begin(); i != seq.get_items().end(); ++i)
+    {
+        if(*i)
+            (**i).accept(*this);
+    }
+}
 
 template <class T>
 void

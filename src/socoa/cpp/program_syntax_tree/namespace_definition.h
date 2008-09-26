@@ -24,7 +24,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <memory>
 #include <string>
 #include "declaration.h"
-#include "declaration_seq.h"
+#include "sequence.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
@@ -37,20 +37,20 @@ class namespace_definition: public declaration
         namespace_definition
         (
             std::shared_ptr<identifier> an_identifier,
-            std::shared_ptr<declaration_seq> a_declaration_seq
+            std::shared_ptr<sequence<declaration>> a_declaration_seq
         );
 
         const std::shared_ptr<identifier>
         get_identifier() const;
 
-        const std::shared_ptr<declaration_seq>
+        const std::shared_ptr<sequence<declaration>>
         get_declaration_seq() const;
 
         SOCOA_CPP_DEFINE_VISITABLE()
 
     private:
         std::shared_ptr<identifier> identifier_;
-        std::shared_ptr<declaration_seq> m_declaration_seq;
+        std::shared_ptr<sequence<declaration>> m_declaration_seq;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

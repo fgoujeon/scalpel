@@ -22,12 +22,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_PROGRAM_SYNTAX_TREE_PTR_OPERATOR_H
 
 #include <memory>
+#include "sequence.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
 class nested_name_specifier;
-class cv_qualifier_seq;
+class cv_qualifier;
 
 class ptr_operator
 {
@@ -43,7 +44,7 @@ class ptr_operator
             type a_type,
             bool leading_double_colon,
             std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
-            std::shared_ptr<cv_qualifier_seq> a_cv_qualifier_seq
+            std::shared_ptr<sequence<cv_qualifier>> a_cv_qualifier_seq
         );
 
         type
@@ -55,14 +56,14 @@ class ptr_operator
         const std::shared_ptr<nested_name_specifier>
         get_nested_name_specifier() const;
 
-        const std::shared_ptr<cv_qualifier_seq>
+        const std::shared_ptr<sequence<cv_qualifier>>
         get_cv_qualifier_seq() const;
 
     private:
         type m_type;
         bool m_leading_double_colon;
         std::shared_ptr<nested_name_specifier> m_nested_name_specifier;
-        std::shared_ptr<cv_qualifier_seq> m_cv_qualifier_seq;
+        std::shared_ptr<sequence<cv_qualifier>> m_cv_qualifier_seq;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

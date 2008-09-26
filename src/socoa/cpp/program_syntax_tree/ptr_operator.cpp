@@ -28,7 +28,7 @@ ptr_operator::ptr_operator
     type a_type,
     bool leading_double_colon,
     std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
-    std::shared_ptr<cv_qualifier_seq> a_cv_qualifier_seq
+    std::shared_ptr<sequence<cv_qualifier>> a_cv_qualifier_seq
 ):
     m_type(a_type),
     m_leading_double_colon(leading_double_colon),
@@ -55,7 +55,7 @@ ptr_operator::get_nested_name_specifier() const
     return m_nested_name_specifier;
 }
 
-const std::shared_ptr<cv_qualifier_seq>
+const std::shared_ptr<sequence<cv_qualifier>>
 ptr_operator::get_cv_qualifier_seq() const
 {
     return m_cv_qualifier_seq;

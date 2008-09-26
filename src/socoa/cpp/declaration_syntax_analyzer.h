@@ -27,6 +27,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/spirit/tree/parse_tree.hpp>
 #include "grammar.h"
 #include "program_syntax_tree_fwd.h"
+#include "program_syntax_tree/sequence.h"
 
 namespace socoa { namespace cpp
 {
@@ -61,11 +62,11 @@ class declaration_syntax_analyzer
     public:
         declaration_syntax_analyzer();
 
-        std::shared_ptr<program_syntax_tree::declaration_seq>
+        std::shared_ptr<program_syntax_tree::sequence<program_syntax_tree::declaration>>
         operator()(const std::string& input);
 
     private:
-        std::shared_ptr<program_syntax_tree::declaration_seq>
+        std::shared_ptr<program_syntax_tree::sequence<program_syntax_tree::declaration>>
         evaluate_translation_unit(const tree_node_t& node);
 
         std::shared_ptr<program_syntax_tree::identifier>
@@ -98,9 +99,6 @@ class declaration_syntax_analyzer
         std::shared_ptr<program_syntax_tree::nested_name_specifier_template_id_part>
         evaluate_nested_name_specifier_template_id_part(const tree_node_t& node);
 
-        std::shared_ptr<program_syntax_tree::declaration_seq>
-        evaluate_declaration_seq(const tree_node_t& node);
-
         std::shared_ptr<program_syntax_tree::declaration>
         evaluate_declaration(const tree_node_t& node);
 
@@ -112,9 +110,6 @@ class declaration_syntax_analyzer
 
         std::shared_ptr<program_syntax_tree::decl_specifier>
         evaluate_decl_specifier(const tree_node_t& node);
-
-        std::shared_ptr<program_syntax_tree::decl_specifier_seq>
-        evaluate_decl_specifier_seq(const tree_node_t& node);
 
         std::shared_ptr<program_syntax_tree::type_specifier>
         evaluate_type_specifier(const tree_node_t& node);
@@ -157,9 +152,6 @@ class declaration_syntax_analyzer
 
         std::shared_ptr<program_syntax_tree::ptr_operator>
         evaluate_ptr_operator(const tree_node_t& node);
-
-        std::shared_ptr<program_syntax_tree::cv_qualifier_seq>
-        evaluate_cv_qualifier_seq(const tree_node_t& node);
 
         std::shared_ptr<program_syntax_tree::cv_qualifier>
         evaluate_cv_qualifier(const tree_node_t& node);
@@ -233,6 +225,14 @@ class declaration_syntax_analyzer
         std::shared_ptr<program_syntax_tree::nested_identifier_or_template_id>
         evaluate_nested_identifier_or_template_id(const tree_node_t& node);
 
+        template
+        <
+            class T,
+            std::shared_ptr<T> (declaration_syntax_analyzer::*EvaluateFunction)(const tree_node_t&)
+        >
+        std::shared_ptr<program_syntax_tree::sequence<T>>
+        evaluate_sequence(const tree_node_t& node);
+
         /**
         Finds a node in the given parent node, with the given id and evatuates
         it.
@@ -256,6 +256,24 @@ class declaration_syntax_analyzer
             const int id,
             std::shared_ptr<T> (declaration_syntax_analyzer::*evaluate_function)(const tree_node_t&),
             bool assert_node_exists = false
+        );
+
+        /**
+        Evaluates each child node of the given parent node.
+        @tparam T the type representing the syntax of the nodes to be evaluated
+        @param parent_node the parent node where to find the nodes to be
+               evaluated
+        @param evaluate_function a pointer to the function to be called to
+               evaluate the nodes
+        @return a vector of pointers to objects representing the syntax of each
+                evaluated node
+        */
+        template <class T>
+        std::vector<std::shared_ptr<T>>
+        evaluate_nodes
+        (
+            const tree_node_t& parent_node,
+            std::shared_ptr<T> (declaration_syntax_analyzer::*evaluate_function)(const tree_node_t&)
         );
 
         /**
@@ -350,6 +368,24 @@ class declaration_syntax_analyzer
         grammar m_grammar;
 };
 
+template
+<
+    class T,
+    std::shared_ptr<T> (declaration_syntax_analyzer::*EvaluateFunction)(const declaration_syntax_analyzer::tree_node_t&)
+>
+std::shared_ptr<program_syntax_tree::sequence<T>>
+declaration_syntax_analyzer::evaluate_sequence(const tree_node_t& node)
+{
+    return std::make_shared<program_syntax_tree::sequence<T>>
+    (
+        evaluate_nodes
+        (
+            node,
+            EvaluateFunction
+        )
+    );
+}
+
 template <class T>
 std::shared_ptr<T>
 declaration_syntax_analyzer::evaluate_node
@@ -375,6 +411,24 @@ declaration_syntax_analyzer::evaluate_node
     {
         return std::shared_ptr<T>();
     }
+}
+
+template <class T>
+std::vector<std::shared_ptr<T>>
+declaration_syntax_analyzer::evaluate_nodes
+(
+    const tree_node_t& parent_node,
+    std::shared_ptr<T> (declaration_syntax_analyzer::*evaluate_function)(const tree_node_t&)
+)
+{
+    std::vector<std::shared_ptr<T>> seq;
+    for(tree_node_iterator_t i = parent_node.children.begin(); i != parent_node.children.end(); ++i) //for each child
+    {
+        const tree_node_t& child_node = *i;
+        seq.push_back((this->*evaluate_function)(child_node));
+    }
+
+    return seq;
 }
 
 template <class T>

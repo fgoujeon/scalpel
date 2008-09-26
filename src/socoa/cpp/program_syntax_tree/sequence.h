@@ -18,8 +18,8 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_CV_QUALIFIER_SEQ_H
-#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_CV_QUALIFIER_SEQ_H
+#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_SEQUENCE_H
+#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_SEQUENCE_H
 
 #include <vector>
 #include <memory>
@@ -27,22 +27,37 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class cv_qualifier;
-
-class cv_qualifier_seq
+template <class T>
+class sequence
 {
     public:
-        explicit cv_qualifier_seq
+        explicit sequence
         (
-            std::vector<std::shared_ptr<cv_qualifier>> cv_qualifiers
+            std::vector<std::shared_ptr<T>>&& items
         );
 
-        const std::vector<std::shared_ptr<cv_qualifier>>&
-        get_cv_qualifiers() const;
+        const std::vector<std::shared_ptr<T>>&
+        get_items() const;
 
     private:
-        std::vector<std::shared_ptr<cv_qualifier>> m_cv_qualifiers;
+        std::vector<std::shared_ptr<T>> items_;
 };
+
+template <class T>
+sequence<T>::sequence
+(
+    std::vector<std::shared_ptr<T>>&& items
+):
+    items_(items)
+{
+}
+
+template <class T>
+const std::vector<std::shared_ptr<T>>&
+sequence<T>::get_items() const
+{
+    return items_;
+}
 
 }}} //namespace socoa::cpp::program_syntax_tree
 

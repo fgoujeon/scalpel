@@ -23,23 +23,24 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <memory>
 #include "declaration.h"
-#include "decl_specifier_seq.h"
+#include "sequence.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
 class init_declarator_list;
+class decl_specifier;
 
 class simple_declaration: public declaration
 {
     public:
         simple_declaration
         (
-            std::shared_ptr<decl_specifier_seq> a_decl_specifier_seq,
+            std::shared_ptr<sequence<decl_specifier>> a_decl_specifier_seq,
             std::shared_ptr<init_declarator_list> an_init_declarator_list
         );
 
-        const std::shared_ptr<decl_specifier_seq>
+        const std::shared_ptr<sequence<decl_specifier>>
         get_decl_specifier_seq() const;
 
         const std::shared_ptr<init_declarator_list>
@@ -48,7 +49,7 @@ class simple_declaration: public declaration
         SOCOA_CPP_DEFINE_VISITABLE()
 
     private:
-        std::shared_ptr<decl_specifier_seq> m_decl_specifier_seq;
+        std::shared_ptr<sequence<decl_specifier>> m_decl_specifier_seq;
         std::shared_ptr<init_declarator_list> m_init_declarator_list;
 };
 

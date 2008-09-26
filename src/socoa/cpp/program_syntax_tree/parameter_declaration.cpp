@@ -25,7 +25,7 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 
 parameter_declaration::parameter_declaration
 (
-    decl_specifier_seq&& a_decl_specifier_seq,
+    sequence<decl_specifier>&& a_decl_specifier_seq,
     std::shared_ptr<declarator> a_declarator,
     bool equal
 ):
@@ -35,7 +35,7 @@ parameter_declaration::parameter_declaration
 {
 }
 
-const decl_specifier_seq&
+const sequence<decl_specifier>&
 parameter_declaration::get_decl_specifier_seq() const
 {
     return m_decl_specifier_seq;
