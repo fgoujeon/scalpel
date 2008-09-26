@@ -57,7 +57,9 @@ void single_file_test::parse_files()
 
 		//analyze file
         std::shared_ptr<socoa::cpp::program_syntax_tree::declaration_seq> program_tree = m_declaration_syntax_analyzer(buffer.str()); //throws an exception if parsing fails
+        std::cout << "---\n" << file_name_oss.str() << ":\n---\n";
         std::cout << m_program_syntax_tree_to_string_converter(program_tree);
+        std::cout << "\n\n";
     }
 }
 

@@ -3,18 +3,18 @@ class bitset
 {
 };
 
-template<class T, size_t size>
+template<class T, size_t Size>
 class Array
 {
 	private:
 		T* data;
 };
 
-template<size_t size>
-class Array<bool, size>
+template<size_t Size>
+class Array<bool, Size>
 {
 	private:
-		bitset<size> data;
+		bitset<Size> data;
 };
 
 template<>

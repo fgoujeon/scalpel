@@ -62,7 +62,7 @@ class class_head
         class_key m_key;
         std::shared_ptr<nested_name_specifier> m_nested_name_specifier;
         std::shared_ptr<template_id> m_template_id;
-        std::shared_ptr<identifier> m_identifier;
+        std::shared_ptr<identifier> identifier_;
         //std::shared_ptr<base_clause> m_base_clause;
 };
 

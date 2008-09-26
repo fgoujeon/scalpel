@@ -25,16 +25,24 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 
 template_id::template_id
 (
-    identifier&& an_identifier
+    identifier&& an_identifier,
+    std::shared_ptr<template_argument_list> a_template_argument_list
 ):
-    m_identifier(an_identifier)
+    identifier_(an_identifier),
+    template_argument_list_(a_template_argument_list)
 {
 }
 
 const identifier&
 template_id::get_identifier() const
 {
-    return m_identifier;
+    return identifier_;
+}
+
+const std::shared_ptr<template_argument_list>&
+template_id::get_template_argument_list() const
+{
+    return template_argument_list_;
 }
 
 }}} //namespace socoa::cpp::program_syntax_tree

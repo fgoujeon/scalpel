@@ -914,8 +914,36 @@ declaration_syntax_analyzer::evaluate_template_id(const tree_node_t& node)
 
     return std::make_shared<template_id>
     (
-        *ASSERTED_EVALUATE_NODE(identifier, IDENTIFIER)
+        *ASSERTED_EVALUATE_NODE(identifier, IDENTIFIER),
+        EVALUATE_NODE(template_argument_list, TEMPLATE_ARGUMENT_LIST)
     );
+}
+
+std::shared_ptr<template_argument_list>
+declaration_syntax_analyzer::evaluate_template_argument_list(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar::TEMPLATE_ARGUMENT_LIST);
+
+    evaluate_function_typedefs<template_argument>::id_function_map_t id_eval;
+    id_eval.insert(std::make_pair(grammar::TEMPLATE_ARGUMENT, &declaration_syntax_analyzer::evaluate_template_argument));
+
+    return std::make_shared<template_argument_list>
+    (
+        evaluate_nodes(node, id_eval)
+    );
+}
+
+std::shared_ptr<template_argument>
+declaration_syntax_analyzer::evaluate_template_argument(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar::TEMPLATE_ARGUMENT);
+
+    evaluate_function_typedefs<template_argument>::id_function_map_t id_eval;
+    //id_eval.insert(std::make_pair(grammar::TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION, &declaration_syntax_analyzer::evaluate_assignment_expression));
+    //id_eval.insert(std::make_pair(grammar::TYPE_ID, &declaration_syntax_analyzer::evaluate_type_id));
+    id_eval.insert(std::make_pair(grammar::ID_EXPRESSION, &declaration_syntax_analyzer::evaluate_id_expression));
+
+    return evaluate_only_child_node(node, id_eval, false);
 }
 
 std::shared_ptr<nested_identifier_or_template_id>

@@ -160,11 +160,19 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         visit(const program_syntax_tree::template_id& item);
 
         void
+        visit(const program_syntax_tree::template_argument_list& item);
+
+        void
         visit(const program_syntax_tree::nested_identifier_or_template_id& item);
 
         template <class T>
+        inline
         void
-        convert_if_exists(std::shared_ptr<T> item);
+        safe_convert(T item);
+
+        template <class T>
+        void
+        safe_convert(std::shared_ptr<T> item);
 
         void
         add_space();
@@ -187,7 +195,14 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
 
 template <class T>
 void
-program_syntax_tree_to_string_converter::convert_if_exists(std::shared_ptr<T> item)
+program_syntax_tree_to_string_converter::safe_convert(T item)
+{
+    visit(item);
+}
+
+template<class T>
+void
+program_syntax_tree_to_string_converter::safe_convert(std::shared_ptr<T> item)
 {
     if(item)
         visit(*item);

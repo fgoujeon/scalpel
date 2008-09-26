@@ -34,7 +34,7 @@ class_head::class_head
     m_key(key),
     m_nested_name_specifier(a_nested_name_specifier),
     m_template_id(a_template_id),
-    m_identifier(an_identifier)/*,
+    identifier_(an_identifier)/*,
     std::shared_ptr<base_clause> a_base_clause;*/
 {
 }
@@ -60,7 +60,7 @@ class_head::get_template_id() const
 const std::shared_ptr<identifier>
 class_head::get_identifier() const
 {
-    return m_identifier;
+    return identifier_;
 }
 
 //const std::shared_ptr<base_clause>

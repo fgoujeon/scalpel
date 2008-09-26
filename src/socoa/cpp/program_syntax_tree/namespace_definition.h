@@ -49,7 +49,7 @@ class namespace_definition: public declaration
         SOCOA_CPP_DEFINE_VISITABLE()
 
     private:
-        std::shared_ptr<identifier> m_identifier;
+        std::shared_ptr<identifier> identifier_;
         std::shared_ptr<declaration_seq> m_declaration_seq;
 };
 

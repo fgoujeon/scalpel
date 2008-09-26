@@ -28,7 +28,7 @@ namespace_definition::namespace_definition
     std::shared_ptr<identifier> an_identifier,
     std::shared_ptr<declaration_seq> a_declaration_seq
 ):
-    m_identifier(an_identifier),
+    identifier_(an_identifier),
     m_declaration_seq(a_declaration_seq)
 {
 }
@@ -36,7 +36,7 @@ namespace_definition::namespace_definition
 const std::shared_ptr<identifier>
 namespace_definition::get_identifier() const
 {
-    return m_identifier;
+    return identifier_;
 }
 
 const std::shared_ptr<declaration_seq>

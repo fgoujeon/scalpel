@@ -22,11 +22,12 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_PROGRAM_SYNTAX_TREE_ID_EXPRESSION_H
 
 #include "declarator_id.h"
+#include "template_argument.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class id_expression: public declarator_id
+class id_expression: public declarator_id, public template_argument
 {
     public:
         virtual ~id_expression(){};

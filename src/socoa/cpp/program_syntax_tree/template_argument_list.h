@@ -18,38 +18,30 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_TEMPLATE_ID_H
-#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_TEMPLATE_ID_H
+#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_TEMPLATE_ARGUMENT_LIST_H
+#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_TEMPLATE_ARGUMENT_LIST_H
 
+#include <vector>
 #include <memory>
-#include "identifier.h"
-#include "identifier_or_template_id.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class template_argument_list;
+class template_argument;
 
-class template_id: public identifier_or_template_id
+class template_argument_list
 {
     public:
-        explicit template_id
+        explicit template_argument_list
         (
-            identifier&& an_identifier,
-            std::shared_ptr<template_argument_list> a_template_argument_list
+            std::vector<std::shared_ptr<template_argument>>&& arguments
         );
 
-        const identifier&
-        get_identifier() const;
-
-        const std::shared_ptr<template_argument_list>&
-        get_template_argument_list() const;
-
-        SOCOA_CPP_DEFINE_VISITABLE()
+        const std::vector<std::shared_ptr<template_argument>>&
+        get_arguments() const;
 
     private:
-        identifier identifier_;
-        std::shared_ptr<template_argument_list> template_argument_list_;
+        std::vector<std::shared_ptr<template_argument>> arguments_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

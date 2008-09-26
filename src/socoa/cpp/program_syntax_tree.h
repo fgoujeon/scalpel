@@ -74,6 +74,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "program_syntax_tree/access_specifier.h"
 #include "program_syntax_tree/template_declaration.h"
 #include "program_syntax_tree/template_id.h"
+#include "program_syntax_tree/template_argument_list.h"
+#include "program_syntax_tree/template_argument.h"
 #include "program_syntax_tree/nested_identifier_or_template_id.h"
 
 #endif
