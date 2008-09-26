@@ -64,6 +64,12 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         visit(const program_syntax_tree::declaration_seq& item);
 
         void
+        visit(const program_syntax_tree::simple_template_type_specifier& item);
+
+        void
+        visit(const program_syntax_tree::built_in_type_specifier& item);
+
+        void
         visit(const program_syntax_tree::namespace_definition& item);
 
         void
@@ -151,9 +157,6 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         visit(const program_syntax_tree::decl_specifier_seq& item);
 
         void
-        visit(const program_syntax_tree::simple_type_specifier& item);
-
-        void
         visit(const program_syntax_tree::template_id& item);
 
         void
@@ -162,6 +165,9 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         template <class T>
         void
         convert_if_exists(std::shared_ptr<T> item);
+
+        void
+        add_space();
 
         const std::string
         new_line();

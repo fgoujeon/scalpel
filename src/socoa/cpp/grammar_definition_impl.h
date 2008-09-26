@@ -160,7 +160,8 @@ struct grammar_definition_impl
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::FUNCTION_SPECIFIER>> function_specifier;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TYPE_SPECIFIER>> type_specifier;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::SIMPLE_TYPE_SPECIFIER>> simple_type_specifier;
-    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::IDENTIFIER_OR_TEMPLATE_ID>> identifier_or_template_id;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::SIMPLE_TEMPLATE_TYPE_SPECIFIER>> simple_template_type_specifier;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::BUILT_IN_TYPE_SPECIFIER>> built_in_type_specifier;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ELABORATED_TYPE_SPECIFIER>> elaborated_type_specifier;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ENUM_SPECIFIER>> enum_specifier;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ENUMERATOR_LIST>> enumerator_list;
@@ -266,6 +267,7 @@ struct grammar_definition_impl
     /*
     Convenience rules
     */
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::IDENTIFIER_OR_TEMPLATE_ID>> identifier_or_template_id;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::NESTED_IDENTIFIER_OR_TEMPLATE_ID>> nested_identifier_or_template_id;
     boost::spirit::rule<ScannerT> skip_function_bodies_mode_statement_seq_item;
     boost::spirit::rule<ScannerT> skip_function_bodies_mode_non_special_char_seq;
@@ -703,7 +705,7 @@ grammar_definition_impl<ScannerT>::grammar_definition_impl(const grammar& self)
     ;
 
     pseudo_destructor_name
-        = !str_p("::") >> !nested_name_specifier >> identifier_or_template_id >> str_p("::") >> '~' >> identifier_or_template_id
+        = nested_identifier_or_template_id >> str_p("::") >> '~' >> identifier_or_template_id
         | !str_p("::") >> nested_name_specifier >> str_p("template") >> template_id >> str_p("::") >> '~' >> identifier_or_template_id
         | !str_p("::") >> !nested_name_specifier >> '~' >> identifier_or_template_id
     ;
@@ -1045,9 +1047,15 @@ grammar_definition_impl<ScannerT>::grammar_definition_impl(const grammar& self)
     ;
 
     simple_type_specifier
-        = !str_p("::") >> !nested_name_specifier >> identifier_or_template_id
-        | !str_p("::") >> nested_name_specifier >> "template" >> template_id
-        | "char"
+        = nested_identifier_or_template_id
+        | simple_template_type_specifier
+        | built_in_type_specifier
+    ;
+    simple_template_type_specifier
+        = !str_p("::") >> nested_name_specifier >> "template" >> template_id
+    ;
+    built_in_type_specifier
+        = str_p("char")
         | "wchar_t"
         | "bool"
         | "short"
@@ -1058,11 +1066,6 @@ grammar_definition_impl<ScannerT>::grammar_definition_impl(const grammar& self)
         | "float"
         | "double"
         | "void"
-    ;
-
-    identifier_or_template_id
-        = template_id
-        | identifier
     ;
 
     elaborated_type_specifier
@@ -1439,9 +1442,9 @@ grammar_definition_impl<ScannerT>::grammar_definition_impl(const grammar& self)
     ;
 
     base_specifier
-        = !str_p("::") >> !nested_name_specifier >> identifier_or_template_id
-        | "virtual" >> !access_specifier >> !str_p("::") >> !nested_name_specifier >> identifier_or_template_id
-        | access_specifier >> !str_p("virtual") >> !str_p("::") >> !nested_name_specifier >> identifier_or_template_id
+        = nested_identifier_or_template_id
+        | "virtual" >> !access_specifier >> nested_identifier_or_template_id
+        | access_specifier >> !str_p("virtual") >> nested_identifier_or_template_id
     ;
 
     access_specifier
@@ -1479,7 +1482,7 @@ grammar_definition_impl<ScannerT>::grammar_definition_impl(const grammar& self)
     ;
 
     mem_initializer_id
-        = !str_p("::") >> !nested_name_specifier >> identifier_or_template_id
+        = nested_identifier_or_template_id
         | identifier
     ;
 
@@ -1621,6 +1624,11 @@ grammar_definition_impl<ScannerT>::grammar_definition_impl(const grammar& self)
     /*
     Convenience rules
     */
+    identifier_or_template_id
+        = template_id
+        | identifier
+    ;
+
     nested_identifier_or_template_id
         = !str_p("::") >> !nested_name_specifier >> identifier_or_template_id
     ;

@@ -30,6 +30,8 @@ class qualified_operator_function_id;
 class qualified_template_id;
 class qualified_identifier;
 class nested_name_specifier_template_id_part;
+class simple_template_type_specifier;
+class built_in_type_specifier;
 class namespace_definition;
 class using_declaration;
 class function_definition;
@@ -42,7 +44,6 @@ class member_declarator_bit_field_member;
 class access_specifier;
 class template_declaration;
 class simple_declaration;
-class simple_type_specifier;
 class direct_declarator_function_part;
 class direct_declarator_array_part;
 class template_id;
@@ -71,6 +72,12 @@ class visitor
 
         virtual void
         visit(const nested_name_specifier_template_id_part&) = 0;
+
+        virtual void
+        visit(const simple_template_type_specifier&) = 0;
+
+        virtual void
+        visit(const built_in_type_specifier&) = 0;
 
         virtual void
         visit(const namespace_definition&) = 0;
@@ -104,9 +111,6 @@ class visitor
 
         virtual void
         visit(const simple_declaration&) = 0;
-
-        virtual void
-        visit(const simple_type_specifier&) = 0;
 
         virtual void
         visit(const function_definition&) = 0;

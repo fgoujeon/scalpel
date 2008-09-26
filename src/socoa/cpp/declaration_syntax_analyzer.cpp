@@ -22,8 +22,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <sstream>
 #include <stdexcept>
-#include <iostream>
-#include <iomanip>
 #include "grammar.h"
 #include "program_syntax_tree.h"
 
@@ -59,8 +57,6 @@ declaration_syntax_analyzer::declaration_syntax_analyzer():
 std::shared_ptr<declaration_seq>
 declaration_syntax_analyzer::operator()(const std::string& input)
 {
-    std::cout << std::endl;
-
     //parse the input with the C++ grammar
     tree_parse_info<> info = pt_parse(input.c_str(), m_grammar, space_p);
 
@@ -77,8 +73,6 @@ declaration_syntax_analyzer::operator()(const std::string& input)
     const tree_node_t& translation_unit_node = *root_node.children.begin();
 
     std::shared_ptr<declaration_seq> new_declaration_seq(evaluate_translation_unit(translation_unit_node));
-
-    std::cout << "--" << std::endl;
 
     return new_declaration_seq;
 }
@@ -335,62 +329,64 @@ declaration_syntax_analyzer::evaluate_simple_type_specifier(const tree_node_t& n
 {
     assert(node.value.id() == grammar::SIMPLE_TYPE_SPECIFIER);
 
-    if(node.children.size() == 1)
-    {
-        std::string value = get_only_child_value(node);
-        simple_type_specifier::type value_id;
+    evaluate_function_typedefs<simple_type_specifier>::id_function_map_t id_function_map;
+    id_function_map.insert(std::make_pair(grammar::NESTED_IDENTIFIER_OR_TEMPLATE_ID, &declaration_syntax_analyzer::evaluate_nested_identifier_or_template_id));
+    id_function_map.insert(std::make_pair(grammar::SIMPLE_TEMPLATE_TYPE_SPECIFIER, &declaration_syntax_analyzer::evaluate_simple_template_type_specifier));
+    id_function_map.insert(std::make_pair(grammar::BUILT_IN_TYPE_SPECIFIER, &declaration_syntax_analyzer::evaluate_built_in_type_specifier));
 
-        if(value == "char")
-            value_id = simple_type_specifier::CHAR;
-        else if(value == "wchar_t")
-            value_id = simple_type_specifier::WCHAR_T;
-        else if(value == "bool")
-            value_id = simple_type_specifier::BOOL;
-        else if(value == "short")
-            value_id = simple_type_specifier::SHORT;
-        else if(value == "int")
-            value_id = simple_type_specifier::INT;
-        else if(value == "long")
-            value_id = simple_type_specifier::LONG;
-        else if(value == "signed")
-            value_id = simple_type_specifier::SIGNED;
-        else if(value == "unsigned")
-            value_id = simple_type_specifier::UNSIGNED;
-        else if(value == "float")
-            value_id = simple_type_specifier::FLOAT;
-        else if(value == "double")
-            value_id = simple_type_specifier::DOUBLE;
-        else if(value == "void")
-            value_id = simple_type_specifier::VOID;
-        else
-            value_id = simple_type_specifier::OTHER;
+    return evaluate_only_child_node(node, id_function_map);
+}
 
-        if(value_id != simple_type_specifier::OTHER)
-        {
-            return std::make_shared<simple_type_specifier>(value_id);
-        }
-    }
+std::shared_ptr<simple_template_type_specifier>
+declaration_syntax_analyzer::evaluate_simple_template_type_specifier(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar::SIMPLE_TEMPLATE_TYPE_SPECIFIER);
 
-    bool leading_double_colon = check_node_existence(node, "::", 0);
+    return std::make_shared<simple_template_type_specifier>
+    (
+        check_node_existence(node, "::", 0),
+        ASSERTED_EVALUATE_NODE(nested_name_specifier, NESTED_NAME_SPECIFIER),
+        ASSERTED_EVALUATE_NODE(template_id, TEMPLATE_ID)
+    );
+}
 
-    if(check_node_existence(node, "template", 1) || check_node_existence(node, "template", 2))
-    {
-        return std::make_shared<simple_type_specifier>
-        (
-            leading_double_colon,
-            ASSERTED_EVALUATE_NODE(nested_name_specifier, NESTED_NAME_SPECIFIER),
-            ASSERTED_EVALUATE_NODE(template_id, TEMPLATE_ID)
-        );
-    }
+std::shared_ptr<built_in_type_specifier>
+declaration_syntax_analyzer::evaluate_built_in_type_specifier(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar::BUILT_IN_TYPE_SPECIFIER);
+
+    std::string value = get_only_child_value(node);
+    built_in_type_specifier::type value_id;
+
+    if(value == "char")
+        value_id = built_in_type_specifier::CHAR;
+    else if(value == "wchar_t")
+        value_id = built_in_type_specifier::WCHAR_T;
+    else if(value == "bool")
+        value_id = built_in_type_specifier::BOOL;
+    else if(value == "short")
+        value_id = built_in_type_specifier::SHORT;
+    else if(value == "int")
+        value_id = built_in_type_specifier::INT;
+    else if(value == "long")
+        value_id = built_in_type_specifier::LONG;
+    else if(value == "signed")
+        value_id = built_in_type_specifier::SIGNED;
+    else if(value == "unsigned")
+        value_id = built_in_type_specifier::UNSIGNED;
+    else if(value == "float")
+        value_id = built_in_type_specifier::FLOAT;
+    else if(value == "double")
+        value_id = built_in_type_specifier::DOUBLE;
+    else if(value == "void")
+        value_id = built_in_type_specifier::VOID;
     else
-    {
-        return std::make_shared<simple_type_specifier>
-        (
-            leading_double_colon,
-            EVALUATE_NODE(nested_name_specifier, NESTED_NAME_SPECIFIER),
-            ASSERTED_EVALUATE_NODE(identifier_or_template_id, IDENTIFIER_OR_TEMPLATE_ID)
-        );
-    }
+        assert(false);
+
+    return std::make_shared<built_in_type_specifier>
+    (
+        value_id
+    );
 }
 
 std::shared_ptr<identifier_or_template_id>

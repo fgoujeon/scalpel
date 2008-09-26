@@ -39,6 +39,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "program_syntax_tree/decl_specifier.h"
 #include "program_syntax_tree/type_specifier.h"
 #include "program_syntax_tree/simple_type_specifier.h"
+#include "program_syntax_tree/simple_template_type_specifier.h"
+#include "program_syntax_tree/built_in_type_specifier.h"
 #include "program_syntax_tree/identifier_or_template_id.h"
 #include "program_syntax_tree/namespace_definition.h"
 #include "program_syntax_tree/using_declaration.h"

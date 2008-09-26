@@ -42,6 +42,8 @@ class decl_specifier_seq;
 class decl_specifier;
 class type_specifier;
 class simple_type_specifier;
+class simple_template_type_specifier;
+class built_in_type_specifier;
 class identifier_or_template_id;
 class namespace_definition;
 class using_declaration;

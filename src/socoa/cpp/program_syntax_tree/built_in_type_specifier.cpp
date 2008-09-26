@@ -18,21 +18,20 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_SIMPLE_TYPE_SPECIFIER_H
-#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_SIMPLE_TYPE_SPECIFIER_H
-
-#include "type_specifier.h"
+#include "built_in_type_specifier.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class simple_type_specifier: public type_specifier
+built_in_type_specifier::built_in_type_specifier(type a_type):
+    m_type(a_type)
 {
-    public:
-        virtual ~simple_type_specifier(){};
+}
 
-};
+built_in_type_specifier::type
+built_in_type_specifier::get_type() const
+{
+    return m_type;
+}
 
 }}} //namespace socoa::cpp::program_syntax_tree
-
-#endif

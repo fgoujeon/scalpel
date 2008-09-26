@@ -38,12 +38,14 @@ program_syntax_tree_to_string_converter::operator()(const std::shared_ptr<progra
     result_.str("");
     m_indentation_level = 0;
     visit(*translation_unit);
+    result_ << "\n--\n";
     return result_.str();
 }
 
 void
 program_syntax_tree_to_string_converter::visit(const identifier& item)
 {
+    add_space();
     result_ << item.get_value();
 }
 
@@ -120,6 +122,61 @@ program_syntax_tree_to_string_converter::visit(const declaration_seq& item)
 }
 
 void
+program_syntax_tree_to_string_converter::visit(const simple_template_type_specifier& item)
+{
+    if(item.has_leading_double_colon())
+        result_ << "::";
+
+    convert_if_exists(item.get_nested_name_specifier());
+
+    result_ << "template ";
+    convert_if_exists(item.get_template_id());
+}
+
+void
+program_syntax_tree_to_string_converter::visit(const built_in_type_specifier& item)
+{
+    add_space();
+
+    switch(item.get_type())
+    {
+        case built_in_type_specifier::CHAR:
+            result_ << "char";
+            break;
+        case built_in_type_specifier::WCHAR_T:
+            result_ << "wchar_t";
+            break;
+        case built_in_type_specifier::BOOL:
+            result_ << "bool";
+            break;
+        case built_in_type_specifier::SHORT:
+            result_ << "short";
+            break;
+        case built_in_type_specifier::INT:
+            result_ << "int";
+            break;
+        case built_in_type_specifier::LONG:
+            result_ << "long";
+            break;
+        case built_in_type_specifier::SIGNED:
+            result_ << "signed";
+            break;
+        case built_in_type_specifier::UNSIGNED:
+            result_ << "unsigned";
+            break;
+        case built_in_type_specifier::FLOAT:
+            result_ << "float";
+            break;
+        case built_in_type_specifier::DOUBLE:
+            result_ << "double";
+            break;
+        case built_in_type_specifier::VOID:
+            result_ << "void";
+            break;
+    }
+}
+
+void
 program_syntax_tree_to_string_converter::visit(const namespace_definition& item)
 {
     result_ << indentation();
@@ -178,7 +235,6 @@ program_syntax_tree_to_string_converter::visit(const declarator& item)
     for(std::vector<std::shared_ptr<ptr_operator>>::const_iterator i = ptr_operators.begin(); i != ptr_operators.end(); ++i)
     {
         visit(**i);
-        result_ << ' ';
     }
 
     visit(item.get_direct_declarator());
@@ -265,6 +321,8 @@ program_syntax_tree_to_string_converter::visit(const cv_qualifier_seq& item)
 void
 program_syntax_tree_to_string_converter::visit(const cv_qualifier& item)
 {
+    add_space();
+
     switch(item.get_type())
     {
         case cv_qualifier::CONST:
@@ -277,8 +335,6 @@ program_syntax_tree_to_string_converter::visit(const cv_qualifier& item)
             result_ << "__restrict__";
             break;
     }
-
-    result_ << " ";
 }
 
 void
@@ -314,7 +370,6 @@ void
 program_syntax_tree_to_string_converter::visit(const parameter_declaration& item)
 {
     visit(item.get_decl_specifier_seq());
-
     convert_if_exists(item.get_declarator());
 }
 
@@ -349,7 +404,6 @@ void
 program_syntax_tree_to_string_converter::visit(const class_head& item)
 {
     visit(item.get_key());
-    result_ << " ";
 
     convert_if_exists(item.get_nested_name_specifier());
     convert_if_exists(item.get_template_id());
@@ -485,7 +539,7 @@ program_syntax_tree_to_string_converter::visit(const template_declaration& item)
     if(item.has_export_keyword())
         result_ << "export ";
 
-    result_ << "template ";
+    result_ << "template";
     result_ << "<";
     result_ << ">\n";
 
@@ -514,71 +568,10 @@ program_syntax_tree_to_string_converter::visit(const decl_specifier_seq& item)
 }
 
 void
-program_syntax_tree_to_string_converter::visit(const simple_type_specifier& item)
-{
-    switch(item.get_type())
-    {
-        case simple_type_specifier::CHAR:
-            result_ << "char";
-            break;
-        case simple_type_specifier::WCHAR_T:
-            result_ << "wchar_t";
-            break;
-        case simple_type_specifier::BOOL:
-            result_ << "bool";
-            break;
-        case simple_type_specifier::SHORT:
-            result_ << "short";
-            break;
-        case simple_type_specifier::INT:
-            result_ << "int";
-            break;
-        case simple_type_specifier::LONG:
-            result_ << "long";
-            break;
-        case simple_type_specifier::SIGNED:
-            result_ << "signed";
-            break;
-        case simple_type_specifier::UNSIGNED:
-            result_ << "unsigned";
-            break;
-        case simple_type_specifier::FLOAT:
-            result_ << "float";
-            break;
-        case simple_type_specifier::DOUBLE:
-            result_ << "double";
-            break;
-        case simple_type_specifier::VOID:
-            result_ << "void";
-            break;
-        case simple_type_specifier::OTHER:
-        {
-            if(item.has_leading_double_colon())
-                result_ << "::";
-
-            convert_if_exists(item.get_nested_name_specifier());
-
-            if(item.get_template_id())
-            {
-                result_ << "template ";
-                visit(*item.get_template_id());
-            }
-            else
-            {
-                item.get_identifier_or_template_id()->accept(*this);
-            }
-
-            break;
-        }
-    }
-
-    result_ << ' ';
-}
-
-void
 program_syntax_tree_to_string_converter::visit(const template_id& item)
 {
-    result_ << item.get_identifier().get_value() << "<>";
+    visit(item.get_identifier());
+    result_ << "<>";
 }
 
 void
@@ -590,6 +583,28 @@ program_syntax_tree_to_string_converter::visit(const nested_identifier_or_templa
     convert_if_exists(item.get_nested_name_specifier());
 
     item.get_identifier_or_template_id()->accept(*this);
+}
+
+void
+program_syntax_tree_to_string_converter::add_space()
+{
+    if(result_.str().size() > 0)
+    {
+        //get last character added to result
+        const char last_char = *result_.str().rbegin();
+
+        //if last char is neither a white space or a punctuation sign, let's add a space
+        if
+        (
+            (last_char >= 'a' && last_char <= 'z') ||
+            (last_char >= 'A' && last_char <= 'Z') ||
+            (last_char >= '0' && last_char <= '9') ||
+            last_char == '*' || last_char == '&' || last_char == '>'
+        )
+        {
+            result_ << ' ';
+        }
+    }
 }
 
 const std::string

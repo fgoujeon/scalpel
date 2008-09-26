@@ -176,6 +176,8 @@ class grammar: public boost::spirit::grammar<grammar>
             FUNCTION_SPECIFIER,
             TYPE_SPECIFIER,
             SIMPLE_TYPE_SPECIFIER,
+            SIMPLE_TEMPLATE_TYPE_SPECIFIER,
+            BUILT_IN_TYPE_SPECIFIER,
             IDENTIFIER_OR_TEMPLATE_ID,
             ELABORATED_TYPE_SPECIFIER,
             ENUM_SPECIFIER,

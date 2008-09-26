@@ -122,6 +122,12 @@ class declaration_syntax_analyzer
         std::shared_ptr<program_syntax_tree::simple_type_specifier>
         evaluate_simple_type_specifier(const tree_node_t& node);
 
+        std::shared_ptr<program_syntax_tree::simple_template_type_specifier>
+        evaluate_simple_template_type_specifier(const tree_node_t& node);
+
+        std::shared_ptr<program_syntax_tree::built_in_type_specifier>
+        evaluate_built_in_type_specifier(const tree_node_t& node);
+
         std::shared_ptr<program_syntax_tree::identifier_or_template_id>
         evaluate_identifier_or_template_id(const tree_node_t& node);
 
