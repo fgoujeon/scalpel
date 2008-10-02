@@ -183,6 +183,9 @@ class declaration_syntax_analyzer
         std::shared_ptr<program_syntax_tree::member_specification>
         evaluate_member_specification(const tree_node_t& node);
 
+        std::shared_ptr<program_syntax_tree::member_specification_access_specifier>
+        evaluate_member_specification_access_specifier(const tree_node_t& node);
+
         std::shared_ptr<program_syntax_tree::member_declaration>
         evaluate_member_declaration(const tree_node_t& node);
 

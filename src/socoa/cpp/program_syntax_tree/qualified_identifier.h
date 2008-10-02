@@ -21,6 +21,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_QUALIFIED_IDENTIFIER_H
 #define SOCOA_CPP_PROGRAM_SYNTAX_TREE_QUALIFIED_IDENTIFIER_H
 
+#include "visitor.h"
 #include "qualified_id.h"
 #include "identifier.h"
 

@@ -225,6 +225,7 @@ class grammar: public boost::spirit::grammar<grammar>
             CLASS_HEAD,
             CLASS_KEY,
             MEMBER_SPECIFICATION,
+            MEMBER_SPECIFICATION_ACCESS_SPECIFIER,
             MEMBER_DECLARATION,
             MEMBER_DECLARATION_MEMBER_DECLARATOR_LIST,
             MEMBER_DECLARATION_UNQUALIFIED_ID,

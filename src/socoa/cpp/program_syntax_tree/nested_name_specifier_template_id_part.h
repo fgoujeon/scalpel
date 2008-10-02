@@ -18,9 +18,10 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_nested_name_specifier_template_id_part_H
-#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_nested_name_specifier_template_id_part_H
+#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_NESTED_NAME_SPECIFIER_TEMPLATE_ID_PART_H
+#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_NESTED_NAME_SPECIFIER_TEMPLATE_ID_PART_H
 
+#include "visitor.h"
 #include "nested_name_specifier_part.h"
 #include "template_id.h"
 

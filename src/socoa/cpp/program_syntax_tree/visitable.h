@@ -21,8 +21,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_VISITABLE_H
 #define SOCOA_CPP_PROGRAM_SYNTAX_TREE_VISITABLE_H
 
-#include "visitor.h"
-
 #define SOCOA_CPP_DEFINE_VISITABLE()    \
     void                                \
     accept(visitor& a_visitor) const    \
@@ -32,6 +30,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
+
+class visitor;
 
 class visitable
 {

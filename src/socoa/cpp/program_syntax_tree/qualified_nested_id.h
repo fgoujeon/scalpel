@@ -22,6 +22,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_PROGRAM_SYNTAX_TREE_QUALIFIED_NESTED_ID_H
 
 #include <memory>
+#include "visitor.h"
 #include "qualified_id.h"
 #include "nested_name_specifier.h"
 

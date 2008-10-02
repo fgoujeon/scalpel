@@ -22,6 +22,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_PROGRAM_SYNTAX_TREE_CLASS_SPECIFIER_H
 
 #include <string>
+#include "visitor.h"
 #include "type_specifier.h"
 #include "class_head.h"
 

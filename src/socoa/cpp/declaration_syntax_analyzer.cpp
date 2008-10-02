@@ -42,6 +42,18 @@ evaluate_node                                           \
     true                                                \
 )
 
+#define EVALUATE_SEQUENCE_NODE(type, id)                \
+evaluate_node                                           \
+(                                                       \
+    node,                                               \
+    grammar::id,                                        \
+    &declaration_syntax_analyzer::evaluate_sequence     \
+    <                                                   \
+        type,                                           \
+        &declaration_syntax_analyzer::evaluate_##type   \
+    >                                                   \
+)
+
 using namespace boost::spirit;
 using namespace socoa::cpp::program_syntax_tree;
 
@@ -262,16 +274,7 @@ declaration_syntax_analyzer::evaluate_simple_declaration(const tree_node_t& node
 
     return std::make_shared<simple_declaration>
     (
-        evaluate_node
-        (
-            node,
-            grammar::SIMPLE_DECLARATION_DECL_SPECIFIER_SEQ,
-            &declaration_syntax_analyzer::evaluate_sequence
-            <
-                decl_specifier,
-                &declaration_syntax_analyzer::evaluate_decl_specifier
-            >
-        ),
+        EVALUATE_SEQUENCE_NODE(decl_specifier, SIMPLE_DECLARATION_DECL_SPECIFIER_SEQ),
         EVALUATE_NODE(init_declarator_list, INIT_DECLARATOR_LIST)
     );
 }
@@ -390,16 +393,7 @@ declaration_syntax_analyzer::evaluate_namespace_definition(const tree_node_t& no
     return std::make_shared<namespace_definition>
     (
         EVALUATE_NODE(identifier, IDENTIFIER),
-        evaluate_node
-        (
-            node,
-            grammar::DECLARATION_SEQ,
-            &declaration_syntax_analyzer::evaluate_sequence
-            <
-                declaration,
-                &declaration_syntax_analyzer::evaluate_declaration
-            >
-        )
+        EVALUATE_SEQUENCE_NODE(declaration, DECLARATION_SEQ)
     );
 }
 
@@ -546,16 +540,7 @@ declaration_syntax_analyzer::evaluate_ptr_operator(const tree_node_t& node)
         asterisk ? ptr_operator::ASTERISK : ptr_operator::AMPERSAND,
         check_node_existence(node, "::", 0),
         EVALUATE_NODE(nested_name_specifier, NESTED_NAME_SPECIFIER),
-        evaluate_node
-        (
-            node,
-            grammar::CV_QUALIFIER_SEQ,
-            &declaration_syntax_analyzer::evaluate_sequence
-            <
-                cv_qualifier,
-                &declaration_syntax_analyzer::evaluate_cv_qualifier
-            >
-        )
+        EVALUATE_SEQUENCE_NODE(cv_qualifier, CV_QUALIFIER_SEQ)
     );
 }
 
@@ -744,11 +729,22 @@ declaration_syntax_analyzer::evaluate_member_specification(const tree_node_t& no
 
     evaluate_function_typedefs<member_specification_part>::id_function_map_t id_eval;
     id_eval.insert(std::make_pair(grammar::MEMBER_DECLARATION, &declaration_syntax_analyzer::evaluate_member_declaration));
-    id_eval.insert(std::make_pair(grammar::ACCESS_SPECIFIER, &declaration_syntax_analyzer::evaluate_access_specifier));
+    id_eval.insert(std::make_pair(grammar::MEMBER_SPECIFICATION_ACCESS_SPECIFIER, &declaration_syntax_analyzer::evaluate_member_specification_access_specifier));
 
     return std::make_shared<member_specification>
     (
         evaluate_nodes(node, id_eval)
+    );
+}
+
+std::shared_ptr<member_specification_access_specifier>
+declaration_syntax_analyzer::evaluate_member_specification_access_specifier(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar::MEMBER_SPECIFICATION_ACCESS_SPECIFIER);
+
+    return std::make_shared<member_specification_access_specifier>
+    (
+        *ASSERTED_EVALUATE_NODE(access_specifier, ACCESS_SPECIFIER)
     );
 }
 
@@ -774,16 +770,7 @@ declaration_syntax_analyzer::evaluate_member_declaration_member_declarator_list(
 
     return std::make_shared<member_declaration_member_declarator_list>
     (
-        evaluate_node
-        (
-            node,
-            grammar::MEMBER_DECLARATION_DECL_SPECIFIER_SEQ,
-            &declaration_syntax_analyzer::evaluate_sequence
-            <
-                decl_specifier,
-                &declaration_syntax_analyzer::evaluate_decl_specifier
-            >
-        ),
+        EVALUATE_SEQUENCE_NODE(decl_specifier, MEMBER_DECLARATION_DECL_SPECIFIER_SEQ),
         EVALUATE_NODE(member_declarator_list, MEMBER_DECLARATOR_LIST)
     );
 }
@@ -864,21 +851,9 @@ declaration_syntax_analyzer::evaluate_access_specifier(const tree_node_t& node)
 {
     assert(node.value.id() == grammar::ACCESS_SPECIFIER);
 
-    std::string value_str(get_only_child_value(node));
-
-    access_specifier::value value;
-    if(value_str == "public")
-        value = access_specifier::PUBLIC;
-    else if(value_str == "protected")
-        value = access_specifier::PROTECTED;
-    else if(value_str == "private")
-        value = access_specifier::PRIVATE;
-    else
-        assert(false);
-
     return std::make_shared<access_specifier>
     (
-        value
+        get_only_child_value(node)
     );
 }
 
@@ -1091,3 +1066,4 @@ declaration_syntax_analyzer::get_id(const tree_node_t& node)
 
 #undef EVALUATE_NODE
 #undef ASSERTED_EVALUATE_NODE
+#undef EVALUATE_SEQUENCE_NODE

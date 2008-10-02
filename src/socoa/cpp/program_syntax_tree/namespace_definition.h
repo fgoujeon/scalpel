@@ -23,6 +23,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <memory>
 #include <string>
+#include "visitor.h"
 #include "declaration.h"
 #include "sequence.h"
 

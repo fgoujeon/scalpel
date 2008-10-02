@@ -22,6 +22,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_PROGRAM_SYNTAX_TREE_SIMPLE_TEMPLATE_TYPE_SPECIFIER_H
 
 #include <memory>
+#include "visitor.h"
 #include "simple_type_specifier.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree

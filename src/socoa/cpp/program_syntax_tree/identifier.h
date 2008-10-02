@@ -22,6 +22,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_PROGRAM_SYNTAX_TREE_IDENTIFIER_H
 
 #include <string>
+#include "visitor.h"
 #include "unqualified_id.h"
 #include "nested_name_specifier_part.h"
 #include "identifier_or_template_id.h"

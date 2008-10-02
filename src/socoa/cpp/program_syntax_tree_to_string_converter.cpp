@@ -418,6 +418,14 @@ program_syntax_tree_to_string_converter::visit(const member_specification& item)
 }
 
 void
+program_syntax_tree_to_string_converter::visit(const member_specification_access_specifier& item)
+{
+    result_ << indentation();
+    safe_convert(item.get_access_specifier());
+    result_ << ":" << new_line();
+}
+
+void
 program_syntax_tree_to_string_converter::visit(const member_declaration_member_declarator_list& item)
 {
     result_ << indentation();
@@ -488,22 +496,7 @@ program_syntax_tree_to_string_converter::visit(const member_declarator_bit_field
 void
 program_syntax_tree_to_string_converter::visit(const access_specifier& item)
 {
-    result_ << indentation();
-
-    switch(item.get_value())
-    {
-        case access_specifier::PUBLIC:
-            result_ << "public";
-            break;
-        case access_specifier::PROTECTED:
-            result_ << "protected";
-            break;
-        case access_specifier::PRIVATE:
-            result_ << "private";
-            break;
-    }
-
-    result_ << ":" << new_line();
+    result_ << item.get_value();
 }
 
 void

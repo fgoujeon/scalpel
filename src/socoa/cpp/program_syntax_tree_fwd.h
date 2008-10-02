@@ -21,6 +21,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_FWD_H
 #define SOCOA_CPP_PROGRAM_SYNTAX_TREE_FWD_H
 
+#include "program_syntax_tree/access_specifier.h"
+
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
@@ -62,6 +64,7 @@ class class_specifier;
 class class_head;
 class class_key;
 class member_specification;
+class member_specification_access_specifier;
 class member_declaration;
 class member_declaration_member_declarator_list;
 class member_declaration_unqualified_id;
@@ -70,7 +73,7 @@ class member_declarator_list;
 class member_declarator;
 class member_declarator_declarator;
 class member_declarator_bit_field_member;
-class access_specifier;
+//class access_specifier;
 class template_declaration;
 class template_id;
 class template_argument_list;

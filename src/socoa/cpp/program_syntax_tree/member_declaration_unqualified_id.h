@@ -21,6 +21,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_MEMBER_DECLARATION_UNQUALIFIED_ID_H
 #define SOCOA_CPP_PROGRAM_SYNTAX_TREE_MEMBER_DECLARATION_UNQUALIFIED_ID_H
 
+#include "visitor.h"
 #include "member_declaration.h"
 #include "nested_name_specifier.h"
 

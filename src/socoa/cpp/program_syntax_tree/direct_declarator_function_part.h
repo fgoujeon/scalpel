@@ -21,6 +21,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_DIRECT_DECLARATOR_FUNCTION_PART_H
 #define SOCOA_CPP_PROGRAM_SYNTAX_TREE_DIRECT_DECLARATOR_FUNCTION_PART_H
 
+#include "visitor.h"
 #include "direct_declarator_part.h"
 #include "parameter_declaration_clause.h"
 

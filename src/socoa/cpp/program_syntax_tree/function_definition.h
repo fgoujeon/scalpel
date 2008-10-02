@@ -22,6 +22,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_PROGRAM_SYNTAX_TREE_FUNCTION_DEFINITION_H
 
 #include <memory>
+#include "visitor.h"
 #include "declaration.h"
 #include "declarator.h"
 #include "sequence.h"

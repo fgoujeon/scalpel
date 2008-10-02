@@ -23,6 +23,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <memory>
 #include <cassert>
+#include "visitor.h"
 #include "declarator_id.h"
 #include "simple_type_specifier.h"
 

@@ -18,17 +18,32 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_ACCESS_SPECIFIER_H
-#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_ACCESS_SPECIFIER_H
+#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_MEMBER_SPECIFICATION_ACCESS_SPECIFIER_H
+#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_MEMBER_SPECIFICATION_ACCESS_SPECIFIER_H
 
+#include "visitor.h"
 #include "member_specification_part.h"
-#include "string_enumeration.h"
+#include "access_specifier.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-extern const char* access_specifier_string_list[];
-typedef string_enumeration<access_specifier_string_list> access_specifier;
+class member_specification_access_specifier: public member_specification_part
+{
+    public:
+        explicit member_specification_access_specifier
+        (
+            access_specifier&& an_access_specifier
+        );
+
+        const access_specifier&
+        get_access_specifier() const;
+
+        SOCOA_CPP_DEFINE_VISITABLE()
+
+    private:
+        access_specifier access_specifier_;
+};
 
 }}} //namespace socoa::cpp::program_syntax_tree
 
