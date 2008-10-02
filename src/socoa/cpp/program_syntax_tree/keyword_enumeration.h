@@ -18,8 +18,8 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_STRING_ENUMERATION_H
-#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_STRING_ENUMERATION_H
+#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_KEYWORD_ENUMERATION_H
+#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_KEYWORD_ENUMERATION_H
 
 #include <cassert>
 #include <string>
@@ -28,10 +28,10 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
 template<const char** StringList>
-class string_enumeration
+class keyword_enumeration
 {
     public:
-        string_enumeration(const std::string& value);
+        keyword_enumeration(const std::string& value);
 
         const char*
         get_value() const;
@@ -42,7 +42,7 @@ class string_enumeration
 };
 
 template<const char** StringList>
-string_enumeration<StringList>::string_enumeration(const std::string& value)
+keyword_enumeration<StringList>::keyword_enumeration(const std::string& value)
 {
     bool found = false;
 
@@ -61,13 +61,13 @@ string_enumeration<StringList>::string_enumeration(const std::string& value)
 
 template<const char** StringList>
 const char*
-string_enumeration<StringList>::get_value() const
+keyword_enumeration<StringList>::get_value() const
 {
     return string_list_[value_index_];
 }
 
 template<const char** StringList>
-const char** string_enumeration<StringList>::string_list_ = StringList;
+const char** keyword_enumeration<StringList>::string_list_ = StringList;
 
 }}} //namespace socoa::cpp::program_syntax_tree
 

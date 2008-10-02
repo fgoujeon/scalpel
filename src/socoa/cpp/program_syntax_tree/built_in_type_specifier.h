@@ -21,7 +21,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_BUILT_IN_TYPE_SPECIFIER_H
 #define SOCOA_CPP_PROGRAM_SYNTAX_TREE_BUILT_IN_TYPE_SPECIFIER_H
 
-#include "string_enumeration.h"
+#include "keyword_enumeration.h"
 #include "simple_type_specifier.h"
 #include "visitor.h"
 
@@ -29,7 +29,7 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
 extern const char* built_in_type_specifier_string_list[];
-struct built_in_type_specifier: public string_enumeration<built_in_type_specifier_string_list>, public simple_type_specifier
+struct built_in_type_specifier: public keyword_enumeration<built_in_type_specifier_string_list>, public simple_type_specifier
 {
     built_in_type_specifier(const std::string& value);
 

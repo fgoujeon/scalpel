@@ -21,13 +21,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_CLASS_KEY_H
 #define SOCOA_CPP_PROGRAM_SYNTAX_TREE_CLASS_KEY_H
 
-#include "string_enumeration.h"
+#include "keyword_enumeration.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
 extern const char* class_key_string_list[];
-typedef string_enumeration<class_key_string_list> class_key;
+typedef keyword_enumeration<class_key_string_list> class_key;
 
 }}} //namespace socoa::cpp::program_syntax_tree
 

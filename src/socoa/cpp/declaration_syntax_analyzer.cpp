@@ -315,7 +315,7 @@ declaration_syntax_analyzer::evaluate_simple_type_specifier(const tree_node_t& n
     evaluate_function_typedefs<simple_type_specifier>::id_function_map_t id_function_map;
     id_function_map.insert(std::make_pair(grammar::NESTED_IDENTIFIER_OR_TEMPLATE_ID, &declaration_syntax_analyzer::evaluate_nested_identifier_or_template_id));
     id_function_map.insert(std::make_pair(grammar::SIMPLE_TEMPLATE_TYPE_SPECIFIER, &declaration_syntax_analyzer::evaluate_simple_template_type_specifier));
-    id_function_map.insert(std::make_pair(grammar::BUILT_IN_TYPE_SPECIFIER, &declaration_syntax_analyzer::evaluate_string_enumeration<built_in_type_specifier>));
+    id_function_map.insert(std::make_pair(grammar::BUILT_IN_TYPE_SPECIFIER, &declaration_syntax_analyzer::evaluate_keyword_enumeration<built_in_type_specifier>));
 
     return evaluate_only_child_node(node, id_function_map);
 }
@@ -652,7 +652,7 @@ declaration_syntax_analyzer::evaluate_class_head(const tree_node_t& node)
 
     return std::make_shared<class_head>
     (
-        *ASSERTED_EVALUATE_NODE(string_enumeration<class_key>, CLASS_KEY),
+        *ASSERTED_EVALUATE_NODE(keyword_enumeration<class_key>, CLASS_KEY),
         EVALUATE_NODE(nested_name_specifier, NESTED_NAME_SPECIFIER),
         EVALUATE_NODE(template_id, TEMPLATE_ID),
         EVALUATE_NODE(identifier, IDENTIFIER)
@@ -681,7 +681,7 @@ declaration_syntax_analyzer::evaluate_member_specification_access_specifier(cons
 
     return std::make_shared<member_specification_access_specifier>
     (
-        *ASSERTED_EVALUATE_NODE(string_enumeration<access_specifier>, ACCESS_SPECIFIER)
+        *ASSERTED_EVALUATE_NODE(keyword_enumeration<access_specifier>, ACCESS_SPECIFIER)
     );
 }
 

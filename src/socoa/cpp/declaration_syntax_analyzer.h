@@ -228,7 +228,7 @@ class declaration_syntax_analyzer
 
         template<class T>
         std::shared_ptr<T>
-        evaluate_string_enumeration(const tree_node_t& node);
+        evaluate_keyword_enumeration(const tree_node_t& node);
 
         /**
         Finds a node in the given parent node, with the given id and evatuates
@@ -385,7 +385,7 @@ declaration_syntax_analyzer::evaluate_sequence(const tree_node_t& node)
 
 template<class T>
 std::shared_ptr<T>
-declaration_syntax_analyzer::evaluate_string_enumeration(const tree_node_t& node)
+declaration_syntax_analyzer::evaluate_keyword_enumeration(const tree_node_t& node)
 {
     return std::make_shared<T>
     (
