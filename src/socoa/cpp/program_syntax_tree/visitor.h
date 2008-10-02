@@ -21,8 +21,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_VISITOR_H
 #define SOCOA_CPP_PROGRAM_SYNTAX_TREE_VISITOR_H
 
-#include "access_specifier.h"
-
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
@@ -44,7 +42,6 @@ class member_declaration_unqualified_id;
 class member_declaration_function_definition;
 class member_declarator_declarator;
 class member_declarator_bit_field_member;
-class member_specification_part;
 class template_declaration;
 class simple_declaration;
 class direct_declarator_function_part;

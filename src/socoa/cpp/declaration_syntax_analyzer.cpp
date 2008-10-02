@@ -23,7 +23,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <sstream>
 #include <stdexcept>
 #include "grammar.h"
-#include "program_syntax_tree.h"
 
 #define EVALUATE_NODE(type, id)                         \
 evaluate_node                                           \
@@ -316,7 +315,7 @@ declaration_syntax_analyzer::evaluate_simple_type_specifier(const tree_node_t& n
     evaluate_function_typedefs<simple_type_specifier>::id_function_map_t id_function_map;
     id_function_map.insert(std::make_pair(grammar::NESTED_IDENTIFIER_OR_TEMPLATE_ID, &declaration_syntax_analyzer::evaluate_nested_identifier_or_template_id));
     id_function_map.insert(std::make_pair(grammar::SIMPLE_TEMPLATE_TYPE_SPECIFIER, &declaration_syntax_analyzer::evaluate_simple_template_type_specifier));
-    id_function_map.insert(std::make_pair(grammar::BUILT_IN_TYPE_SPECIFIER, &declaration_syntax_analyzer::evaluate_built_in_type_specifier));
+    id_function_map.insert(std::make_pair(grammar::BUILT_IN_TYPE_SPECIFIER, &declaration_syntax_analyzer::evaluate_string_enumeration<built_in_type_specifier>));
 
     return evaluate_only_child_node(node, id_function_map);
 }
@@ -331,45 +330,6 @@ declaration_syntax_analyzer::evaluate_simple_template_type_specifier(const tree_
         check_node_existence(node, "::", 0),
         ASSERTED_EVALUATE_NODE(nested_name_specifier, NESTED_NAME_SPECIFIER),
         ASSERTED_EVALUATE_NODE(template_id, TEMPLATE_ID)
-    );
-}
-
-std::shared_ptr<built_in_type_specifier>
-declaration_syntax_analyzer::evaluate_built_in_type_specifier(const tree_node_t& node)
-{
-    assert(node.value.id() == grammar::BUILT_IN_TYPE_SPECIFIER);
-
-    std::string value = get_only_child_value(node);
-    built_in_type_specifier::type value_id;
-
-    if(value == "char")
-        value_id = built_in_type_specifier::CHAR;
-    else if(value == "wchar_t")
-        value_id = built_in_type_specifier::WCHAR_T;
-    else if(value == "bool")
-        value_id = built_in_type_specifier::BOOL;
-    else if(value == "short")
-        value_id = built_in_type_specifier::SHORT;
-    else if(value == "int")
-        value_id = built_in_type_specifier::INT;
-    else if(value == "long")
-        value_id = built_in_type_specifier::LONG;
-    else if(value == "signed")
-        value_id = built_in_type_specifier::SIGNED;
-    else if(value == "unsigned")
-        value_id = built_in_type_specifier::UNSIGNED;
-    else if(value == "float")
-        value_id = built_in_type_specifier::FLOAT;
-    else if(value == "double")
-        value_id = built_in_type_specifier::DOUBLE;
-    else if(value == "void")
-        value_id = built_in_type_specifier::VOID;
-    else
-        assert(false);
-
-    return std::make_shared<built_in_type_specifier>
-    (
-        value_id
     );
 }
 

@@ -26,8 +26,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <memory>
 #include <boost/spirit/tree/parse_tree.hpp>
 #include "grammar.h"
-#include "program_syntax_tree_fwd.h"
-#include "program_syntax_tree/sequence.h"
+#include "program_syntax_tree.h"
 
 namespace socoa { namespace cpp
 {
@@ -119,9 +118,6 @@ class declaration_syntax_analyzer
 
         std::shared_ptr<program_syntax_tree::simple_template_type_specifier>
         evaluate_simple_template_type_specifier(const tree_node_t& node);
-
-        std::shared_ptr<program_syntax_tree::built_in_type_specifier>
-        evaluate_built_in_type_specifier(const tree_node_t& node);
 
         std::shared_ptr<program_syntax_tree::identifier_or_template_id>
         evaluate_identifier_or_template_id(const tree_node_t& node);

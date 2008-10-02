@@ -25,8 +25,14 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <sstream>
 #include <vector>
 #include <memory>
-#include "program_syntax_tree/visitor.h"
-#include "program_syntax_tree_fwd.h"
+#include "program_syntax_tree.h"
+
+#define VISIT_DEFINITION(VisitableT)                    \
+void                                                    \
+visit(const program_syntax_tree::VisitableT& item)      \
+{                                                       \
+    convert(item);                                      \
+}
 
 namespace socoa { namespace cpp
 {
@@ -41,126 +47,123 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
 
     private:
         void
-        visit(const program_syntax_tree::identifier& item);
+        convert(const program_syntax_tree::identifier& item);
 
         void
-        visit(const program_syntax_tree::qualified_nested_id& item);
+        convert(const program_syntax_tree::qualified_nested_id& item);
 
         void
-        visit(const program_syntax_tree::qualified_operator_function_id& item);
+        convert(const program_syntax_tree::qualified_operator_function_id& item);
 
         void
-        visit(const program_syntax_tree::qualified_template_id& item);
+        convert(const program_syntax_tree::qualified_template_id& item);
 
         void
-        visit(const program_syntax_tree::qualified_identifier& item);
+        convert(const program_syntax_tree::qualified_identifier& item);
 
         void
-        visit(const program_syntax_tree::nested_name_specifier& item);
+        convert(const program_syntax_tree::nested_name_specifier& item);
 
         void
-        visit(const program_syntax_tree::nested_name_specifier_template_id_part& item);
+        convert(const program_syntax_tree::nested_name_specifier_template_id_part& item);
 
         void
-        visit(const program_syntax_tree::simple_template_type_specifier& item);
+        convert(const program_syntax_tree::simple_template_type_specifier& item);
 
         void
-        visit(const program_syntax_tree::built_in_type_specifier& item);
+        convert(const program_syntax_tree::namespace_definition& item);
 
         void
-        visit(const program_syntax_tree::namespace_definition& item);
+        convert(const program_syntax_tree::using_declaration& item);
 
         void
-        visit(const program_syntax_tree::using_declaration& item);
+        convert(const program_syntax_tree::init_declarator_list& item);
 
         void
-        visit(const program_syntax_tree::init_declarator_list& item);
+        convert(const program_syntax_tree::init_declarator& item);
 
         void
-        visit(const program_syntax_tree::init_declarator& item);
+        convert(const program_syntax_tree::declarator& item);
 
         void
-        visit(const program_syntax_tree::declarator& item);
+        convert(const program_syntax_tree::direct_declarator& item);
 
         void
-        visit(const program_syntax_tree::direct_declarator& item);
+        convert(const program_syntax_tree::direct_declarator_function_part& item);
 
         void
-        visit(const program_syntax_tree::direct_declarator_function_part& item);
+        convert(const program_syntax_tree::direct_declarator_array_part& item);
 
         void
-        visit(const program_syntax_tree::direct_declarator_array_part& item);
+        convert(const program_syntax_tree::ptr_operator& item);
 
         void
-        visit(const program_syntax_tree::ptr_operator& item);
+        convert(const program_syntax_tree::cv_qualifier& item);
 
         void
-        visit(const program_syntax_tree::cv_qualifier& item);
+        convert(const program_syntax_tree::parameter_declaration_clause& item);
 
         void
-        visit(const program_syntax_tree::parameter_declaration_clause& item);
+        convert(const program_syntax_tree::parameter_declaration_list& item);
 
         void
-        visit(const program_syntax_tree::parameter_declaration_list& item);
+        convert(const program_syntax_tree::parameter_declaration& item);
 
         void
-        visit(const program_syntax_tree::parameter_declaration& item);
+        convert(const program_syntax_tree::function_definition& item);
 
         void
-        visit(const program_syntax_tree::function_definition& item);
+        convert(const program_syntax_tree::class_specifier& item);
 
         void
-        visit(const program_syntax_tree::class_specifier& item);
+        convert(const program_syntax_tree::class_head& item);
 
         void
-        visit(const program_syntax_tree::class_head& item);
+        convert(const program_syntax_tree::member_specification& item);
 
         void
-        visit(const program_syntax_tree::member_specification& item);
+        convert(const program_syntax_tree::member_specification_access_specifier& item);
 
         void
-        visit(const program_syntax_tree::member_specification_access_specifier& item);
+        convert(const program_syntax_tree::member_declaration_member_declarator_list& item);
 
         void
-        visit(const program_syntax_tree::member_declaration_member_declarator_list& item);
+        convert(const program_syntax_tree::member_declaration_unqualified_id& item);
 
         void
-        visit(const program_syntax_tree::member_declaration_unqualified_id& item);
+        convert(const program_syntax_tree::member_declaration_function_definition& item);
 
         void
-        visit(const program_syntax_tree::member_declaration_function_definition& item);
+        convert(const program_syntax_tree::member_declarator_list& item);
 
         void
-        visit(const program_syntax_tree::member_declarator_list& item);
+        convert(const program_syntax_tree::member_declarator_declarator& item);
 
         void
-        visit(const program_syntax_tree::member_declarator_declarator& item);
+        convert(const program_syntax_tree::member_declarator_bit_field_member& item);
 
         void
-        visit(const program_syntax_tree::member_declarator_bit_field_member& item);
+        convert(const program_syntax_tree::template_declaration& item);
 
         void
-        visit(const program_syntax_tree::template_declaration& item);
+        convert(const program_syntax_tree::simple_declaration& item);
 
         void
-        visit(const program_syntax_tree::simple_declaration& item);
+        convert(const program_syntax_tree::template_id& item);
 
         void
-        visit(const program_syntax_tree::template_id& item);
+        convert(const program_syntax_tree::template_argument_list& item);
 
         void
-        visit(const program_syntax_tree::template_argument_list& item);
-
-        void
-        visit(const program_syntax_tree::nested_identifier_or_template_id& item);
+        convert(const program_syntax_tree::nested_identifier_or_template_id& item);
 
         template<class T>
         void
-        visit(const program_syntax_tree::sequence<T>& seq);
+        convert(const program_syntax_tree::sequence<T>& seq);
 
         template<class T>
         void
-        visit(const T& a_string_enumeration);
+        convert(const T& a_string_enumeration);
 
         template<class T>
         inline
@@ -170,6 +173,32 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         template<class T>
         void
         safe_convert(std::shared_ptr<T> item);
+
+        VISIT_DEFINITION(identifier)
+        VISIT_DEFINITION(qualified_nested_id)
+        VISIT_DEFINITION(qualified_operator_function_id)
+        VISIT_DEFINITION(qualified_template_id)
+        VISIT_DEFINITION(qualified_identifier)
+        VISIT_DEFINITION(nested_name_specifier_template_id_part)
+        VISIT_DEFINITION(simple_template_type_specifier)
+        VISIT_DEFINITION(built_in_type_specifier)
+        VISIT_DEFINITION(namespace_definition)
+        VISIT_DEFINITION(using_declaration)
+        VISIT_DEFINITION(function_definition)
+        VISIT_DEFINITION(class_specifier)
+        VISIT_DEFINITION(member_specification_access_specifier)
+        VISIT_DEFINITION(member_declaration_member_declarator_list)
+        VISIT_DEFINITION(member_declaration_unqualified_id)
+        VISIT_DEFINITION(member_declaration_function_definition)
+        VISIT_DEFINITION(member_declarator_declarator)
+        VISIT_DEFINITION(member_declarator_bit_field_member)
+        VISIT_DEFINITION(template_declaration)
+        VISIT_DEFINITION(simple_declaration)
+        VISIT_DEFINITION(direct_declarator_function_part)
+        VISIT_DEFINITION(direct_declarator_array_part)
+        VISIT_DEFINITION(template_id)
+        VISIT_DEFINITION(cv_qualifier)
+        VISIT_DEFINITION(nested_identifier_or_template_id)
 
         void
         add_space();
@@ -190,9 +219,9 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         unsigned int m_indentation_level;
 };
 
-template <class T>
+template<class T>
 void
-program_syntax_tree_to_string_converter::visit(const program_syntax_tree::sequence<T>& seq)
+program_syntax_tree_to_string_converter::convert(const program_syntax_tree::sequence<T>& seq)
 {
     typedef std::vector<std::shared_ptr<T>> item_list_t;
 
@@ -205,16 +234,17 @@ program_syntax_tree_to_string_converter::visit(const program_syntax_tree::sequen
 
 template<class T>
 void
-program_syntax_tree_to_string_converter::visit(const T& a_string_enumeration)
+program_syntax_tree_to_string_converter::convert(const T& a_string_enumeration)
 {
+    add_space();
     result_ << a_string_enumeration.get_value();
 }
 
-template <class T>
+template<class T>
 void
 program_syntax_tree_to_string_converter::safe_convert(T item)
 {
-    visit(item);
+    convert(item);
 }
 
 template<class T>
@@ -222,9 +252,12 @@ void
 program_syntax_tree_to_string_converter::safe_convert(std::shared_ptr<T> item)
 {
     if(item)
-        visit(*item);
+        convert(*item);
 }
 
 }} //namespace socoa::cpp
+
+
+#undef VISIT_DEFINITION
 
 #endif

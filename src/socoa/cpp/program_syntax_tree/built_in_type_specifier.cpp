@@ -23,15 +23,25 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-built_in_type_specifier::built_in_type_specifier(type a_type):
-    m_type(a_type)
+const char* built_in_type_specifier_string_list[] =
 {
-}
+    "char",
+    "wchar_t",
+    "bool",
+    "short",
+    "int",
+    "long",
+    "signed",
+    "unsigned",
+    "float",
+    "double",
+    "void",
+    ""
+};
 
-built_in_type_specifier::type
-built_in_type_specifier::get_type() const
+built_in_type_specifier::built_in_type_specifier(const std::string& value):
+    string_enumeration<built_in_type_specifier_string_list>(value)
 {
-    return m_type;
 }
 
 }}} //namespace socoa::cpp::program_syntax_tree
