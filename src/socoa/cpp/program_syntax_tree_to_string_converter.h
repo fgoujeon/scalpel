@@ -116,9 +116,6 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         visit(const program_syntax_tree::class_head& item);
 
         void
-        visit(const program_syntax_tree::class_key& item);
-
-        void
         visit(const program_syntax_tree::member_specification& item);
 
         void
@@ -143,9 +140,6 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         visit(const program_syntax_tree::member_declarator_bit_field_member& item);
 
         void
-        visit(const program_syntax_tree::access_specifier& item);
-
-        void
         visit(const program_syntax_tree::template_declaration& item);
 
         void
@@ -160,16 +154,20 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         void
         visit(const program_syntax_tree::nested_identifier_or_template_id& item);
 
-        template <class T>
+        template<class T>
         void
         visit(const program_syntax_tree::sequence<T>& seq);
 
-        template <class T>
+        template<class T>
+        void
+        visit(const T& a_string_enumeration);
+
+        template<class T>
         inline
         void
         safe_convert(T item);
 
-        template <class T>
+        template<class T>
         void
         safe_convert(std::shared_ptr<T> item);
 
@@ -203,6 +201,13 @@ program_syntax_tree_to_string_converter::visit(const program_syntax_tree::sequen
         if(*i)
             (**i).accept(*this);
     }
+}
+
+template<class T>
+void
+program_syntax_tree_to_string_converter::visit(const T& a_string_enumeration)
+{
+    result_ << a_string_enumeration.get_value();
 }
 
 template <class T>

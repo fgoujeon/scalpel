@@ -386,23 +386,6 @@ program_syntax_tree_to_string_converter::visit(const class_head& item)
 }
 
 void
-program_syntax_tree_to_string_converter::visit(const class_key& item)
-{
-    switch(item.get_value())
-    {
-        case class_key::CLASS:
-            result_ << "class";
-            break;
-        case class_key::STRUCT:
-            result_ << "struct";
-            break;
-        case class_key::UNION:
-            result_ << "union";
-            break;
-    }
-}
-
-void
 program_syntax_tree_to_string_converter::visit(const member_specification& item)
 {
     for
@@ -491,12 +474,6 @@ program_syntax_tree_to_string_converter::visit(const member_declarator_bit_field
     safe_convert(item.get_identifier());
 
     result_ << ": ";
-}
-
-void
-program_syntax_tree_to_string_converter::visit(const access_specifier& item)
-{
-    result_ << item.get_value();
 }
 
 void

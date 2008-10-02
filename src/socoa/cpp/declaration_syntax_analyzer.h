@@ -177,9 +177,6 @@ class declaration_syntax_analyzer
         std::shared_ptr<program_syntax_tree::class_head>
         evaluate_class_head(const tree_node_t& node);
 
-        std::shared_ptr<program_syntax_tree::class_key>
-        evaluate_class_key(const tree_node_t& node);
-
         std::shared_ptr<program_syntax_tree::member_specification>
         evaluate_member_specification(const tree_node_t& node);
 
@@ -210,9 +207,6 @@ class declaration_syntax_analyzer
         std::shared_ptr<program_syntax_tree::member_declarator_bit_field_member>
         evaluate_member_declarator_bit_field_member(const tree_node_t& node);
 
-        std::shared_ptr<program_syntax_tree::access_specifier>
-        evaluate_access_specifier(const tree_node_t& node);
-
         std::shared_ptr<program_syntax_tree::template_declaration>
         evaluate_template_declaration(const tree_node_t& node);
 
@@ -235,6 +229,10 @@ class declaration_syntax_analyzer
         >
         std::shared_ptr<program_syntax_tree::sequence<T>>
         evaluate_sequence(const tree_node_t& node);
+
+        template<class T>
+        std::shared_ptr<T>
+        evaluate_string_enumeration(const tree_node_t& node);
 
         /**
         Finds a node in the given parent node, with the given id and evatuates
@@ -386,6 +384,16 @@ declaration_syntax_analyzer::evaluate_sequence(const tree_node_t& node)
             node,
             EvaluateFunction
         )
+    );
+}
+
+template<class T>
+std::shared_ptr<T>
+declaration_syntax_analyzer::evaluate_string_enumeration(const tree_node_t& node)
+{
+    return std::make_shared<T>
+    (
+        get_only_child_value(node)
     );
 }
 

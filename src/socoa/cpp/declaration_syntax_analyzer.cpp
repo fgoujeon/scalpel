@@ -454,20 +454,17 @@ declaration_syntax_analyzer::evaluate_declarator(const tree_node_t& node)
 {
     assert(node.value.id() == grammar::DECLARATOR);
 
-    //get ptr_operator nodes
-    std::vector<std::shared_ptr<ptr_operator>> ptr_operators
-    (
-        evaluate_nodes
-        (
-            node,
-            grammar::PTR_OPERATOR,
-            &declaration_syntax_analyzer::evaluate_ptr_operator
-        )
-    );
-
     return std::make_shared<declarator>
     (
-        std::move(ptr_operators),
+        std::move
+        (
+            evaluate_nodes
+            (
+                node,
+                grammar::PTR_OPERATOR,
+                &declaration_syntax_analyzer::evaluate_ptr_operator
+            )
+        ),
         *ASSERTED_EVALUATE_NODE(direct_declarator, DIRECT_DECLARATOR)
     );
 }
@@ -695,31 +692,11 @@ declaration_syntax_analyzer::evaluate_class_head(const tree_node_t& node)
 
     return std::make_shared<class_head>
     (
-        *ASSERTED_EVALUATE_NODE(class_key, CLASS_KEY),
+        *ASSERTED_EVALUATE_NODE(string_enumeration<class_key>, CLASS_KEY),
         EVALUATE_NODE(nested_name_specifier, NESTED_NAME_SPECIFIER),
         EVALUATE_NODE(template_id, TEMPLATE_ID),
         EVALUATE_NODE(identifier, IDENTIFIER)
     );
-}
-
-std::shared_ptr<class_key>
-declaration_syntax_analyzer::evaluate_class_key(const tree_node_t& node)
-{
-    assert(node.value.id() == grammar::CLASS_KEY);
-
-    std::string key = get_only_child_value(node);
-
-    if(key == "class")
-        return std::make_shared<class_key>(class_key::CLASS);
-    else if(key == "struct")
-        return std::make_shared<class_key>(class_key::STRUCT);
-    else if(key == "union")
-        return std::make_shared<class_key>(class_key::UNION);
-    else
-    {
-        assert(false && "invalid class key");
-        return std::shared_ptr<class_key>();
-    }
 }
 
 std::shared_ptr<member_specification>
@@ -744,7 +721,7 @@ declaration_syntax_analyzer::evaluate_member_specification_access_specifier(cons
 
     return std::make_shared<member_specification_access_specifier>
     (
-        *ASSERTED_EVALUATE_NODE(access_specifier, ACCESS_SPECIFIER)
+        *ASSERTED_EVALUATE_NODE(string_enumeration<access_specifier>, ACCESS_SPECIFIER)
     );
 }
 
@@ -843,17 +820,6 @@ declaration_syntax_analyzer::evaluate_member_declarator_bit_field_member(const t
     return std::make_shared<member_declarator_bit_field_member>
     (
         EVALUATE_NODE(identifier, IDENTIFIER)
-    );
-}
-
-std::shared_ptr<access_specifier>
-declaration_syntax_analyzer::evaluate_access_specifier(const tree_node_t& node)
-{
-    assert(node.value.id() == grammar::ACCESS_SPECIFIER);
-
-    return std::make_shared<access_specifier>
-    (
-        get_only_child_value(node)
     );
 }
 
