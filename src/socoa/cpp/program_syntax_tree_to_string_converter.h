@@ -77,9 +77,6 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         convert(const program_syntax_tree::using_declaration& item);
 
         void
-        convert(const program_syntax_tree::init_declarator_list& item);
-
-        void
         convert(const program_syntax_tree::init_declarator& item);
 
         void
@@ -102,9 +99,6 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
 
         void
         convert(const program_syntax_tree::parameter_declaration_clause& item);
-
-        void
-        convert(const program_syntax_tree::parameter_declaration_list& item);
 
         void
         convert(const program_syntax_tree::parameter_declaration& item);
@@ -159,7 +153,11 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
 
         template<class T>
         void
-        convert(const program_syntax_tree::sequence<T>& seq);
+        convert(const program_syntax_tree::sequence<T, ' '>& seq);
+
+        template<class T, char Separator>
+        void
+        convert(const program_syntax_tree::sequence<T, Separator>& seq);
 
         template<class T>
         void
@@ -221,7 +219,7 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
 
 template<class T>
 void
-program_syntax_tree_to_string_converter::convert(const program_syntax_tree::sequence<T>& seq)
+program_syntax_tree_to_string_converter::convert(const program_syntax_tree::sequence<T, ' '>& seq)
 {
     typedef std::vector<std::shared_ptr<T>> item_list_t;
 
@@ -229,6 +227,22 @@ program_syntax_tree_to_string_converter::convert(const program_syntax_tree::sequ
     {
         if(*i)
             (**i).accept(*this);
+    }
+}
+
+template<class T, char Separator>
+void
+program_syntax_tree_to_string_converter::convert(const program_syntax_tree::sequence<T, Separator>& seq)
+{
+    typedef std::vector<std::shared_ptr<T>> item_list_t;
+
+    for(typename item_list_t::const_iterator i = seq.get_items().begin(); i != seq.get_items().end(); ++i)
+    {
+        //add separator
+        if(i != seq.get_items().begin())
+            result_ << Separator << ' ';
+
+        safe_convert(*i);
     }
 }
 

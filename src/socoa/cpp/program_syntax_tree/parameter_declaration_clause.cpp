@@ -25,7 +25,7 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 
 parameter_declaration_clause::parameter_declaration_clause
 (
-    std::shared_ptr<parameter_declaration_list> a_parameter_declaration_list,
+    std::shared_ptr<sequence<parameter_declaration, ','>> a_parameter_declaration_list,
     bool trailing_comma,
     bool ellipsis
 ):
@@ -35,7 +35,7 @@ parameter_declaration_clause::parameter_declaration_clause
 {
 }
 
-const std::shared_ptr<parameter_declaration_list>
+const std::shared_ptr<sequence<parameter_declaration, ','>>
 parameter_declaration_clause::get_parameter_declaration_list() const
 {
     return m_parameter_declaration_list;

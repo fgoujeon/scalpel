@@ -53,6 +53,19 @@ evaluate_node                                           \
     >                                                   \
 )
 
+#define EVALUATE_SEPARATED_SEQUENCE_NODE(type, id, separator)       \
+evaluate_node                                                       \
+(                                                                   \
+    node,                                                           \
+    grammar::id,                                                    \
+    &declaration_syntax_analyzer::evaluate_sequence                 \
+    <                                                               \
+        type,                                                       \
+        &declaration_syntax_analyzer::evaluate_##type,              \
+        separator                                                   \
+    >                                                               \
+)
+
 using namespace boost::spirit;
 using namespace socoa::cpp::program_syntax_tree;
 
@@ -274,7 +287,7 @@ declaration_syntax_analyzer::evaluate_simple_declaration(const tree_node_t& node
     return std::make_shared<simple_declaration>
     (
         EVALUATE_SEQUENCE_NODE(decl_specifier, SIMPLE_DECLARATION_DECL_SPECIFIER_SEQ),
-        EVALUATE_NODE(init_declarator_list, INIT_DECLARATOR_LIST)
+        EVALUATE_SEPARATED_SEQUENCE_NODE(init_declarator, INIT_DECLARATOR_LIST, ',')
     );
 }
 
@@ -371,33 +384,6 @@ declaration_syntax_analyzer::evaluate_using_declaration(const tree_node_t& node)
     );
 }
 
-std::shared_ptr<init_declarator_list>
-declaration_syntax_analyzer::evaluate_init_declarator_list(const tree_node_t& node)
-{
-    assert(node.value.id() == grammar::INIT_DECLARATOR_LIST);
-
-    //create init declarator list
-    std::shared_ptr<init_declarator_list> new_init_declarator_list(std::make_shared<init_declarator_list>());
-
-    //fill the list
-    for(tree_node_iterator_t i = node.children.begin(); i != node.children.end(); ++i) //for each child
-    {
-        const tree_node_t& child_node = *i;
-
-        if(child_node.value.id() == grammar::INIT_DECLARATOR)
-        {
-            std::shared_ptr<init_declarator> new_init_declarator(evaluate_init_declarator(child_node));
-
-            if(new_init_declarator)
-            {
-                new_init_declarator_list->add(new_init_declarator);
-            }
-        }
-    }
-
-    return new_init_declarator_list;
-}
-
 std::shared_ptr<init_declarator>
 declaration_syntax_analyzer::evaluate_init_declarator(const tree_node_t& node)
 {
@@ -453,13 +439,16 @@ declaration_syntax_analyzer::evaluate_direct_declarator_function_part(const tree
 
     std::shared_ptr<parameter_declaration_clause> new_parameter_declaration_clause = EVALUATE_NODE(parameter_declaration_clause, PARAMETER_DECLARATION_CLAUSE);
 
+    typedef program_syntax_tree::sequence<parameter_declaration, ','> parameter_declaration_seq;
+
+    ///@todo why should I do this?
     //grammar defines that this node MUST exist, but in practice it's not always the case
     if(!new_parameter_declaration_clause)
     {
         //create an empty parameter declaration clause, if node didn't have been found
         new_parameter_declaration_clause = std::make_shared<parameter_declaration_clause>
         (
-            std::shared_ptr<parameter_declaration_list>(),
+            std::shared_ptr<parameter_declaration_seq>(),
             false,
             false
         );
@@ -549,31 +538,10 @@ declaration_syntax_analyzer::evaluate_parameter_declaration_clause(const tree_no
 
     return std::make_shared<parameter_declaration_clause>
     (
-        EVALUATE_NODE(parameter_declaration_list, PARAMETER_DECLARATION_LIST),
+        EVALUATE_SEPARATED_SEQUENCE_NODE(parameter_declaration, PARAMETER_DECLARATION_LIST, ','),
         trailing_comma,
         ellipsis
     );
-}
-
-std::shared_ptr<parameter_declaration_list>
-declaration_syntax_analyzer::evaluate_parameter_declaration_list(const tree_node_t& node)
-{
-    assert(node.value.id() == grammar::PARAMETER_DECLARATION_LIST);
-
-    std::shared_ptr<parameter_declaration_list> new_parameter_declaration_list(std::make_shared<parameter_declaration_list>());
-
-    for(tree_node_iterator_t i = node.children.begin(); i != node.children.end(); ++i)
-    {
-        const tree_node_t& parameter_declaration_node = *i;
-        parser_id parameter_declaration_node_id = parameter_declaration_node.value.id();
-
-        if(parameter_declaration_node_id == grammar::PARAMETER_DECLARATION)
-        {
-            new_parameter_declaration_list->add(evaluate_parameter_declaration(parameter_declaration_node));
-        }
-    }
-
-    return new_parameter_declaration_list;
 }
 
 std::shared_ptr<parameter_declaration>

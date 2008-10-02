@@ -158,17 +158,6 @@ program_syntax_tree_to_string_converter::convert(const using_declaration& item)
 }
 
 void
-program_syntax_tree_to_string_converter::convert(const init_declarator_list& item)
-{
-    const std::vector<std::shared_ptr<init_declarator>>& init_declarators = item.get_init_declarators();
-    for(std::vector<std::shared_ptr<init_declarator>>::const_iterator i = init_declarators.begin(); i != init_declarators.end(); ++i)
-    {
-        const init_declarator& init_decl = **i;
-        safe_convert(init_decl);
-    }
-}
-
-void
 program_syntax_tree_to_string_converter::convert(const init_declarator& item)
 {
     safe_convert(item.get_declarator());
@@ -279,23 +268,6 @@ program_syntax_tree_to_string_converter::convert(const parameter_declaration_cla
 
     if(item.has_ellipsis())
         result_ << "...";
-}
-
-void
-program_syntax_tree_to_string_converter::convert(const parameter_declaration_list& item)
-{
-    const std::vector<std::shared_ptr<parameter_declaration>> parameter_declarations = item.get_parameter_declarations();
-    for
-    (
-        std::vector<std::shared_ptr<parameter_declaration>>::const_iterator i = parameter_declarations.begin();
-        i != parameter_declarations.end();
-        ++i
-    )
-    {
-        if(i != parameter_declarations.begin())
-            result_ << ", ";
-        safe_convert(**i);
-    }
 }
 
 void

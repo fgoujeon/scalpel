@@ -27,7 +27,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-template <class T>
+template<class T, char Separator = ' '>
 class sequence
 {
     public:
@@ -39,12 +39,15 @@ class sequence
         const std::vector<std::shared_ptr<T>>&
         get_items() const;
 
+        char
+        get_separator() const;
+
     private:
         std::vector<std::shared_ptr<T>> items_;
 };
 
-template <class T>
-sequence<T>::sequence
+template<class T, char Separator>
+sequence<T, Separator>::sequence
 (
     std::vector<std::shared_ptr<T>>&& items
 ):
@@ -52,11 +55,18 @@ sequence<T>::sequence
 {
 }
 
-template <class T>
+template<class T, char Separator>
 const std::vector<std::shared_ptr<T>>&
-sequence<T>::get_items() const
+sequence<T, Separator>::get_items() const
 {
     return items_;
+}
+
+template<class T, char Separator>
+char
+sequence<T, Separator>::get_separator() const
+{
+    return Separator;
 }
 
 }}} //namespace socoa::cpp::program_syntax_tree

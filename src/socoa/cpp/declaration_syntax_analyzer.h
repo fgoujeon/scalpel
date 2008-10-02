@@ -128,9 +128,6 @@ class declaration_syntax_analyzer
         std::shared_ptr<program_syntax_tree::using_declaration>
         evaluate_using_declaration(const tree_node_t& node);
 
-        std::shared_ptr<program_syntax_tree::init_declarator_list>
-        evaluate_init_declarator_list(const tree_node_t& node);
-
         std::shared_ptr<program_syntax_tree::init_declarator>
         evaluate_init_declarator(const tree_node_t& node);
 
@@ -157,9 +154,6 @@ class declaration_syntax_analyzer
 
         std::shared_ptr<program_syntax_tree::parameter_declaration_clause>
         evaluate_parameter_declaration_clause(const tree_node_t& node);
-
-        std::shared_ptr<program_syntax_tree::parameter_declaration_list>
-        evaluate_parameter_declaration_list(const tree_node_t& node);
 
         std::shared_ptr<program_syntax_tree::parameter_declaration>
         evaluate_parameter_declaration(const tree_node_t& node);
@@ -221,9 +215,10 @@ class declaration_syntax_analyzer
         template
         <
             class T,
-            std::shared_ptr<T> (declaration_syntax_analyzer::*EvaluateFunction)(const tree_node_t&)
+            std::shared_ptr<T> (declaration_syntax_analyzer::*EvaluateFunction)(const tree_node_t&),
+            char Separator = ' '
         >
-        std::shared_ptr<program_syntax_tree::sequence<T>>
+        std::shared_ptr<program_syntax_tree::sequence<T, Separator>>
         evaluate_sequence(const tree_node_t& node);
 
         template<class T>
@@ -271,6 +266,27 @@ class declaration_syntax_analyzer
         (
             const tree_node_t& parent_node,
             std::shared_ptr<T> (declaration_syntax_analyzer::*evaluate_function)(const tree_node_t&)
+        );
+
+        /**
+        Evaluates each child node of the given parent node.
+        @tparam T the type representing the syntax of the nodes to be evaluated
+        @param parent_node the parent node where to find the nodes to be
+               evaluated
+        @param evaluate_function a pointer to the function to be called to
+               evaluate the nodes
+        @param separator value of the nodes to be ignored (useful for comma
+               separated lists)
+        @return a vector of pointers to objects representing the syntax of each
+                evaluated node
+        */
+        template <class T>
+        std::vector<std::shared_ptr<T>>
+        evaluate_nodes
+        (
+            const tree_node_t& parent_node,
+            std::shared_ptr<T> (declaration_syntax_analyzer::*evaluate_function)(const tree_node_t&),
+            char separator
         );
 
         /**
@@ -368,17 +384,19 @@ class declaration_syntax_analyzer
 template
 <
     class T,
-    std::shared_ptr<T> (declaration_syntax_analyzer::*EvaluateFunction)(const declaration_syntax_analyzer::tree_node_t&)
+    std::shared_ptr<T> (declaration_syntax_analyzer::*EvaluateFunction)(const declaration_syntax_analyzer::tree_node_t&),
+    char Separator
 >
-std::shared_ptr<program_syntax_tree::sequence<T>>
+std::shared_ptr<program_syntax_tree::sequence<T, Separator>>
 declaration_syntax_analyzer::evaluate_sequence(const tree_node_t& node)
 {
-    return std::make_shared<program_syntax_tree::sequence<T>>
+    return std::make_shared<program_syntax_tree::sequence<T, Separator>>
     (
         evaluate_nodes
         (
             node,
-            EvaluateFunction
+            EvaluateFunction,
+            Separator
         )
     );
 }
@@ -433,6 +451,32 @@ declaration_syntax_analyzer::evaluate_nodes
     {
         const tree_node_t& child_node = *i;
         seq.push_back((this->*evaluate_function)(child_node));
+    }
+
+    return seq;
+}
+
+template <class T>
+std::vector<std::shared_ptr<T>>
+declaration_syntax_analyzer::evaluate_nodes
+(
+    const tree_node_t& parent_node,
+    std::shared_ptr<T> (declaration_syntax_analyzer::*evaluate_function)(const tree_node_t&),
+    char separator
+)
+{
+    std::vector<std::shared_ptr<T>> seq;
+    for(tree_node_iterator_t i = parent_node.children.begin(); i != parent_node.children.end(); ++i) //for each child
+    {
+        const tree_node_t& child_node = *i;
+        const std::string child_value = get_value(child_node);
+
+        if
+        (
+            child_value.size() == 0 ||
+            (child_value.size() > 0 && child_value.at(0) != separator)
+        ) //if the current node is not a separator
+            seq.push_back((this->*evaluate_function)(child_node));
     }
 
     return seq;
