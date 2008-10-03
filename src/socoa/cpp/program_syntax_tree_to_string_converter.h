@@ -128,9 +128,6 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         convert(const program_syntax_tree::member_declaration_function_definition& item);
 
         void
-        convert(const program_syntax_tree::member_declarator_list& item);
-
-        void
         convert(const program_syntax_tree::member_declarator_declarator& item);
 
         void
@@ -144,9 +141,6 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
 
         void
         convert(const program_syntax_tree::template_id& item);
-
-        void
-        convert(const program_syntax_tree::template_argument_list& item);
 
         void
         convert(const program_syntax_tree::nested_identifier_or_template_id& item);

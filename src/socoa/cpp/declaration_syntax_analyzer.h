@@ -185,9 +185,6 @@ class declaration_syntax_analyzer
         std::shared_ptr<program_syntax_tree::member_declaration_function_definition>
         evaluate_member_declaration_function_definition(const tree_node_t& node);
 
-        std::shared_ptr<program_syntax_tree::member_declarator_list>
-        evaluate_member_declarator_list(const tree_node_t& node);
-
         std::shared_ptr<program_syntax_tree::member_declarator>
         evaluate_member_declarator(const tree_node_t& node);
 
@@ -202,9 +199,6 @@ class declaration_syntax_analyzer
 
         std::shared_ptr<program_syntax_tree::template_id>
         evaluate_template_id(const tree_node_t& node);
-
-        std::shared_ptr<program_syntax_tree::template_argument_list>
-        evaluate_template_argument_list(const tree_node_t& node);
 
         std::shared_ptr<program_syntax_tree::template_argument>
         evaluate_template_argument(const tree_node_t& node);

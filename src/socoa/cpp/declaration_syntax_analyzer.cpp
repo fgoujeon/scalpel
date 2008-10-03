@@ -439,12 +439,12 @@ declaration_syntax_analyzer::evaluate_direct_declarator_function_part(const tree
 
     std::shared_ptr<parameter_declaration_clause> new_parameter_declaration_clause = EVALUATE_NODE(parameter_declaration_clause, PARAMETER_DECLARATION_CLAUSE);
 
-    typedef program_syntax_tree::sequence<parameter_declaration, ','> parameter_declaration_seq;
-
     ///@todo why should I do this?
     //grammar defines that this node MUST exist, but in practice it's not always the case
     if(!new_parameter_declaration_clause)
     {
+        typedef program_syntax_tree::sequence<parameter_declaration, ','> parameter_declaration_seq;
+
         //create an empty parameter declaration clause, if node didn't have been found
         new_parameter_declaration_clause = std::make_shared<parameter_declaration_clause>
         (
@@ -676,7 +676,7 @@ declaration_syntax_analyzer::evaluate_member_declaration_member_declarator_list(
     return std::make_shared<member_declaration_member_declarator_list>
     (
         EVALUATE_SEQUENCE_NODE(decl_specifier, MEMBER_DECLARATION_DECL_SPECIFIER_SEQ),
-        EVALUATE_NODE(member_declarator_list, MEMBER_DECLARATOR_LIST)
+        EVALUATE_SEPARATED_SEQUENCE_NODE(member_declarator, MEMBER_DECLARATOR_LIST, ',')
     );
 }
 
@@ -702,17 +702,6 @@ declaration_syntax_analyzer::evaluate_member_declaration_function_definition(con
     return std::make_shared<member_declaration_function_definition>
     (
         *ASSERTED_EVALUATE_NODE(function_definition, FUNCTION_DEFINITION)
-    );
-}
-
-std::shared_ptr<member_declarator_list>
-declaration_syntax_analyzer::evaluate_member_declarator_list(const tree_node_t& node)
-{
-    assert(node.value.id() == grammar::MEMBER_DECLARATOR_LIST);
-
-    return std::make_shared<member_declarator_list>
-    (
-        evaluate_nodes(node, grammar::MEMBER_DECLARATOR, &declaration_syntax_analyzer::evaluate_member_declarator)
     );
 }
 
@@ -776,21 +765,7 @@ declaration_syntax_analyzer::evaluate_template_id(const tree_node_t& node)
     return std::make_shared<template_id>
     (
         *ASSERTED_EVALUATE_NODE(identifier, IDENTIFIER),
-        EVALUATE_NODE(template_argument_list, TEMPLATE_ARGUMENT_LIST)
-    );
-}
-
-std::shared_ptr<template_argument_list>
-declaration_syntax_analyzer::evaluate_template_argument_list(const tree_node_t& node)
-{
-    assert(node.value.id() == grammar::TEMPLATE_ARGUMENT_LIST);
-
-    evaluate_function_typedefs<template_argument>::id_function_map_t id_eval;
-    id_eval.insert(std::make_pair(grammar::TEMPLATE_ARGUMENT, &declaration_syntax_analyzer::evaluate_template_argument));
-
-    return std::make_shared<template_argument_list>
-    (
-        evaluate_nodes(node, id_eval)
+        EVALUATE_SEPARATED_SEQUENCE_NODE(template_argument, TEMPLATE_ARGUMENT_LIST, ',')
     );
 }
 

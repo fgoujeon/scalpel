@@ -373,20 +373,6 @@ program_syntax_tree_to_string_converter::convert(const member_declaration_functi
 }
 
 void
-program_syntax_tree_to_string_converter::convert(const member_declarator_list& item)
-{
-    for
-    (
-        std::vector<std::shared_ptr<member_declarator>>::const_iterator i = item.get_member_declarators().begin();
-        i != item.get_member_declarators().end();
-        ++i
-    )
-    {
-        (**i).accept(*this);
-    }
-}
-
-void
 program_syntax_tree_to_string_converter::convert(const member_declarator_declarator& item)
 {
     //result_ << indentation();
@@ -441,24 +427,6 @@ program_syntax_tree_to_string_converter::convert(const template_id& item)
 }
 
 void
-program_syntax_tree_to_string_converter::convert(const template_argument_list& item)
-{
-    for
-    (
-        std::vector<std::shared_ptr<template_argument>>::const_iterator i = item.get_arguments().begin();
-        i != item.get_arguments().end();
-        ++i
-    )
-    {
-        if(i != item.get_arguments().begin())
-            result_ << ", ";
-
-        if(*i)
-            (**i).accept(*this);
-    }
-}
-
-void
 program_syntax_tree_to_string_converter::convert(const nested_identifier_or_template_id& item)
 {
     if(item.has_leading_double_colon())
@@ -467,6 +435,51 @@ program_syntax_tree_to_string_converter::convert(const nested_identifier_or_temp
     safe_convert(item.get_nested_name_specifier());
 
     item.get_identifier_or_template_id()->accept(*this);
+}
+
+/**
+@todo could be simplified with C++0x concepts:
+    template<Visitable T>
+    ...
+*/
+//contrary to other comma-separated list classes, these classes require visitation
+template<>
+void
+program_syntax_tree_to_string_converter::convert
+(
+    const program_syntax_tree::sequence<program_syntax_tree::member_declarator, ','>& seq
+)
+{
+    typedef std::vector<std::shared_ptr<program_syntax_tree::member_declarator>> item_list_t;
+
+    for(item_list_t::const_iterator i = seq.get_items().begin(); i != seq.get_items().end(); ++i)
+    {
+        //add separator
+        if(i != seq.get_items().begin())
+            result_ << seq.get_separator() << ' ';
+
+        if(*i)
+            (**i).accept(*this);
+    }
+}
+template<>
+void
+program_syntax_tree_to_string_converter::convert
+(
+    const program_syntax_tree::sequence<program_syntax_tree::template_argument, ','>& seq
+)
+{
+    typedef std::vector<std::shared_ptr<program_syntax_tree::template_argument>> item_list_t;
+
+    for(item_list_t::const_iterator i = seq.get_items().begin(); i != seq.get_items().end(); ++i)
+    {
+        //add separator
+        if(i != seq.get_items().begin())
+            result_ << seq.get_separator() << ' ';
+
+        if(*i)
+            (**i).accept(*this);
+    }
 }
 
 void
