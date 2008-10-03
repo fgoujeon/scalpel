@@ -25,7 +25,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "visitor.h"
 #include "declaration.h"
 #include "declarator.h"
-#include "sequence.h"
+#include "../../util/sequence.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
@@ -37,11 +37,11 @@ class function_definition: public declaration
     public:
         function_definition
         (
-            std::shared_ptr<sequence<decl_specifier>> a_decl_specifier_seq,
+            std::shared_ptr<util::sequence<decl_specifier>> a_decl_specifier_seq,
             declarator&& a_declarator
         );
 
-        const std::shared_ptr<sequence<decl_specifier>>
+        const std::shared_ptr<util::sequence<decl_specifier>>
         get_decl_specifier_seq() const;
 
         const declarator&
@@ -50,7 +50,7 @@ class function_definition: public declaration
         SOCOA_CPP_DEFINE_VISITABLE()
 
     private:
-        std::shared_ptr<sequence<decl_specifier>> m_decl_specifier_seq;
+        std::shared_ptr<util::sequence<decl_specifier>> m_decl_specifier_seq;
         declarator m_declarator;
 };
 

@@ -26,7 +26,7 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 namespace_definition::namespace_definition
 (
     std::shared_ptr<identifier> an_identifier,
-    std::shared_ptr<sequence<declaration>> a_declaration_seq
+    std::shared_ptr<util::sequence<declaration>> a_declaration_seq
 ):
     identifier_(an_identifier),
     m_declaration_seq(a_declaration_seq)
@@ -39,7 +39,7 @@ namespace_definition::get_identifier() const
     return identifier_;
 }
 
-const std::shared_ptr<sequence<declaration>>
+const std::shared_ptr<util::sequence<declaration>>
 namespace_definition::get_declaration_seq() const
 {
     return m_declaration_seq;

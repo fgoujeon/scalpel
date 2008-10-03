@@ -18,13 +18,13 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_KEYWORD_ENUMERATION_H
-#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_KEYWORD_ENUMERATION_H
+#ifndef SOCOA_UTIL_KEYWORD_ENUMERATION_H
+#define SOCOA_UTIL_KEYWORD_ENUMERATION_H
 
 #include <cassert>
 #include <string>
 
-namespace socoa { namespace cpp { namespace program_syntax_tree
+namespace socoa { namespace util
 {
 
 template<const char** StringList>
@@ -69,6 +69,6 @@ keyword_enumeration<StringList>::get_value() const
 template<const char** StringList>
 const char** keyword_enumeration<StringList>::string_list_ = StringList;
 
-}}} //namespace socoa::cpp::program_syntax_tree
+}} //namespace socoa::util
 
 #endif

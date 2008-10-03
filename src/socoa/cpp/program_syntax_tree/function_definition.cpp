@@ -25,7 +25,7 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 
 function_definition::function_definition
 (
-    std::shared_ptr<sequence<decl_specifier>> a_decl_specifier_seq,
+    std::shared_ptr<util::sequence<decl_specifier>> a_decl_specifier_seq,
     declarator&& a_declarator
 ):
     m_decl_specifier_seq(a_decl_specifier_seq),
@@ -33,7 +33,7 @@ function_definition::function_definition
 {
 }
 
-const std::shared_ptr<sequence<decl_specifier>>
+const std::shared_ptr<util::sequence<decl_specifier>>
 function_definition::get_decl_specifier_seq() const
 {
     return m_decl_specifier_seq;

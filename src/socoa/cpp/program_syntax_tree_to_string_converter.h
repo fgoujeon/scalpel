@@ -43,7 +43,7 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         program_syntax_tree_to_string_converter();
 
         std::string
-        operator()(const std::shared_ptr<program_syntax_tree::sequence<program_syntax_tree::declaration>> translation_unit);
+        operator()(const std::shared_ptr<util::sequence<program_syntax_tree::declaration>> translation_unit);
 
     private:
         void
@@ -147,11 +147,11 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
 
         template<class T>
         void
-        convert(const program_syntax_tree::sequence<T, ' '>& seq);
+        convert(const util::sequence<T, ' '>& seq);
 
         template<class T, char Separator>
         void
-        convert(const program_syntax_tree::sequence<T, Separator>& seq);
+        convert(const util::sequence<T, Separator>& seq);
 
         template<class T>
         void
@@ -213,7 +213,7 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
 
 template<class T>
 void
-program_syntax_tree_to_string_converter::convert(const program_syntax_tree::sequence<T, ' '>& seq)
+program_syntax_tree_to_string_converter::convert(const util::sequence<T, ' '>& seq)
 {
     typedef std::vector<std::shared_ptr<T>> item_list_t;
 
@@ -226,7 +226,7 @@ program_syntax_tree_to_string_converter::convert(const program_syntax_tree::sequ
 
 template<class T, char Separator>
 void
-program_syntax_tree_to_string_converter::convert(const program_syntax_tree::sequence<T, Separator>& seq)
+program_syntax_tree_to_string_converter::convert(const util::sequence<T, Separator>& seq)
 {
     typedef std::vector<std::shared_ptr<T>> item_list_t;
 

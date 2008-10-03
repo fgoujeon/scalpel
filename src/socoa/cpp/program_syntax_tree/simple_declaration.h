@@ -24,7 +24,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <memory>
 #include "visitor.h"
 #include "declaration.h"
-#include "sequence.h"
+#include "../../util/sequence.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
@@ -37,21 +37,21 @@ class simple_declaration: public declaration
     public:
         simple_declaration
         (
-            std::shared_ptr<sequence<decl_specifier>> a_decl_specifier_seq,
-            std::shared_ptr<sequence<init_declarator, ','>> an_init_declarator_list
+            std::shared_ptr<util::sequence<decl_specifier>> a_decl_specifier_seq,
+            std::shared_ptr<util::sequence<init_declarator, ','>> an_init_declarator_list
         );
 
-        const std::shared_ptr<sequence<decl_specifier>>
+        const std::shared_ptr<util::sequence<decl_specifier>>
         get_decl_specifier_seq() const;
 
-        const std::shared_ptr<sequence<init_declarator, ','>>
+        const std::shared_ptr<util::sequence<init_declarator, ','>>
         get_init_declarator_list() const;
 
         SOCOA_CPP_DEFINE_VISITABLE()
 
     private:
-        std::shared_ptr<sequence<decl_specifier>> m_decl_specifier_seq;
-        std::shared_ptr<sequence<init_declarator, ','>> m_init_declarator_list;
+        std::shared_ptr<util::sequence<decl_specifier>> m_decl_specifier_seq;
+        std::shared_ptr<util::sequence<init_declarator, ','>> m_init_declarator_list;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

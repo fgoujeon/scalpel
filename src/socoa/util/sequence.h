@@ -18,13 +18,13 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_SEQUENCE_H
-#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_SEQUENCE_H
+#ifndef SOCOA_UTIL_SEQUENCE_H
+#define SOCOA_UTIL_SEQUENCE_H
 
 #include <vector>
 #include <memory>
 
-namespace socoa { namespace cpp { namespace program_syntax_tree
+namespace socoa { namespace util
 {
 
 template<class T, char Separator = ' '>
@@ -69,6 +69,6 @@ sequence<T, Separator>::get_separator() const
     return Separator;
 }
 
-}}} //namespace socoa::cpp::program_syntax_tree
+}} //namespace socoa::util
 
 #endif

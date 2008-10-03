@@ -68,6 +68,7 @@ evaluate_node                                                       \
 
 using namespace boost::spirit;
 using namespace socoa::cpp::program_syntax_tree;
+using namespace socoa::util;
 
 namespace socoa { namespace cpp
 {
@@ -78,7 +79,7 @@ declaration_syntax_analyzer::declaration_syntax_analyzer():
     m_grammar_configuration.skip_function_bodies = true;
 }
 
-std::shared_ptr<program_syntax_tree::sequence<declaration>>
+std::shared_ptr<util::sequence<declaration>>
 declaration_syntax_analyzer::operator()(const std::string& input)
 {
     //parse the input with the C++ grammar
@@ -96,17 +97,17 @@ declaration_syntax_analyzer::operator()(const std::string& input)
     const tree_node_t& root_node = *info.trees.begin();
     const tree_node_t& translation_unit_node = *root_node.children.begin();
 
-    std::shared_ptr<program_syntax_tree::sequence<declaration>> new_declaration_seq(evaluate_translation_unit(translation_unit_node));
+    std::shared_ptr<util::sequence<declaration>> new_declaration_seq(evaluate_translation_unit(translation_unit_node));
 
     return new_declaration_seq;
 }
 
-std::shared_ptr<program_syntax_tree::sequence<declaration>>
+std::shared_ptr<util::sequence<declaration>>
 declaration_syntax_analyzer::evaluate_translation_unit(const tree_node_t& node)
 {
     assert(node.value.id() == grammar::TRANSLATION_UNIT);
 
-    evaluate_function_typedefs<program_syntax_tree::sequence<declaration>>::id_function_map_t id_eval;
+    evaluate_function_typedefs<util::sequence<declaration>>::id_function_map_t id_eval;
     id_eval.insert
     (
         std::make_pair
@@ -443,7 +444,7 @@ declaration_syntax_analyzer::evaluate_direct_declarator_function_part(const tree
     //grammar defines that this node MUST exist, but in practice it's not always the case
     if(!new_parameter_declaration_clause)
     {
-        typedef program_syntax_tree::sequence<parameter_declaration, ','> parameter_declaration_seq;
+        typedef util::sequence<parameter_declaration, ','> parameter_declaration_seq;
 
         //create an empty parameter declaration clause, if node didn't have been found
         new_parameter_declaration_clause = std::make_shared<parameter_declaration_clause>
@@ -549,7 +550,7 @@ declaration_syntax_analyzer::evaluate_parameter_declaration(const tree_node_t& n
 {
     assert(node.value.id() == grammar::PARAMETER_DECLARATION);
 
-    std::shared_ptr<program_syntax_tree::sequence<decl_specifier>> new_decl_specifier_seq;
+    std::shared_ptr<util::sequence<decl_specifier>> new_decl_specifier_seq;
     std::shared_ptr<declarator> new_declarator;
 
     //get sequence<decl_specifier> node
@@ -587,7 +588,7 @@ declaration_syntax_analyzer::evaluate_function_definition(const tree_node_t& nod
         decl_specifier_seq_node = find_child_node(node, grammar::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ3);
 
     //... and evaluate it
-    std::shared_ptr<program_syntax_tree::sequence<decl_specifier>> new_decl_specifier_seq;
+    std::shared_ptr<util::sequence<decl_specifier>> new_decl_specifier_seq;
     if(decl_specifier_seq_node)
     {
         new_decl_specifier_seq = evaluate_sequence<decl_specifier, &declaration_syntax_analyzer::evaluate_decl_specifier>(*decl_specifier_seq_node);

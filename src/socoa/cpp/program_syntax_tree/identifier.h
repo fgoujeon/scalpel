@@ -41,7 +41,7 @@ class identifier: public unqualified_id, public nested_name_specifier_part, publ
         SOCOA_CPP_DEFINE_VISITABLE()
 
     private:
-        std::string m_value;
+        std::string value_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

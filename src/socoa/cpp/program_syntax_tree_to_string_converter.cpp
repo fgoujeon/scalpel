@@ -33,7 +33,7 @@ program_syntax_tree_to_string_converter::program_syntax_tree_to_string_converter
 }
 
 std::string
-program_syntax_tree_to_string_converter::operator()(const std::shared_ptr<program_syntax_tree::sequence<declaration>> translation_unit)
+program_syntax_tree_to_string_converter::operator()(const std::shared_ptr<util::sequence<declaration>> translation_unit)
 {
     result_.str("");
     m_indentation_level = 0;
@@ -447,7 +447,7 @@ template<>
 void
 program_syntax_tree_to_string_converter::convert
 (
-    const program_syntax_tree::sequence<program_syntax_tree::member_declarator, ','>& seq
+    const util::sequence<program_syntax_tree::member_declarator, ','>& seq
 )
 {
     typedef std::vector<std::shared_ptr<program_syntax_tree::member_declarator>> item_list_t;
@@ -466,7 +466,7 @@ template<>
 void
 program_syntax_tree_to_string_converter::convert
 (
-    const program_syntax_tree::sequence<program_syntax_tree::template_argument, ','>& seq
+    const util::sequence<program_syntax_tree::template_argument, ','>& seq
 )
 {
     typedef std::vector<std::shared_ptr<program_syntax_tree::template_argument>> item_list_t;

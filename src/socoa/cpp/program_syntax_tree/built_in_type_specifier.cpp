@@ -40,7 +40,7 @@ const char* built_in_type_specifier_string_list[] =
 };
 
 built_in_type_specifier::built_in_type_specifier(const std::string& value):
-    keyword_enumeration<built_in_type_specifier_string_list>(value)
+    util::keyword_enumeration<built_in_type_specifier_string_list>(value)
 {
 }
 

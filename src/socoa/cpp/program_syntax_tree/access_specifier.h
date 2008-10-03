@@ -22,13 +22,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_PROGRAM_SYNTAX_TREE_ACCESS_SPECIFIER_H
 
 #include "member_specification_part.h"
-#include "keyword_enumeration.h"
+#include "../../util/keyword_enumeration.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
 extern const char* access_specifier_string_list[];
-typedef keyword_enumeration<access_specifier_string_list> access_specifier;
+typedef util::keyword_enumeration<access_specifier_string_list> access_specifier;
 
 }}} //namespace socoa::cpp::program_syntax_tree
 

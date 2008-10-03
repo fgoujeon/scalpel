@@ -22,7 +22,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_PROGRAM_SYNTAX_TREE_PARAMETER_DECLARATION_CLAUSE_H
 
 #include <memory>
-#include "sequence.h"
+#include "../../util/sequence.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
@@ -34,12 +34,12 @@ class parameter_declaration_clause
     public:
         parameter_declaration_clause
         (
-            std::shared_ptr<sequence<parameter_declaration, ','>> a_parameter_declaration_list,
+            std::shared_ptr<util::sequence<parameter_declaration, ','>> a_parameter_declaration_list,
             bool trailing_comma,
             bool ellipsis
         );
 
-        const std::shared_ptr<sequence<parameter_declaration, ','>>
+        const std::shared_ptr<util::sequence<parameter_declaration, ','>>
         get_parameter_declaration_list() const;
 
         bool
@@ -49,7 +49,7 @@ class parameter_declaration_clause
         has_ellipsis() const;
 
     private:
-        std::shared_ptr<sequence<parameter_declaration, ','>> m_parameter_declaration_list;
+        std::shared_ptr<util::sequence<parameter_declaration, ','>> m_parameter_declaration_list;
         bool m_trailing_comma;
         bool m_ellipsis;
 };

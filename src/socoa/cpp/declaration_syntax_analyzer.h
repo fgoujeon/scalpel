@@ -61,11 +61,11 @@ class declaration_syntax_analyzer
     public:
         declaration_syntax_analyzer();
 
-        std::shared_ptr<program_syntax_tree::sequence<program_syntax_tree::declaration>>
+        std::shared_ptr<util::sequence<program_syntax_tree::declaration>>
         operator()(const std::string& input);
 
     private:
-        std::shared_ptr<program_syntax_tree::sequence<program_syntax_tree::declaration>>
+        std::shared_ptr<util::sequence<program_syntax_tree::declaration>>
         evaluate_translation_unit(const tree_node_t& node);
 
         std::shared_ptr<program_syntax_tree::identifier>
@@ -212,7 +212,7 @@ class declaration_syntax_analyzer
             std::shared_ptr<T> (declaration_syntax_analyzer::*EvaluateFunction)(const tree_node_t&),
             char Separator = ' '
         >
-        std::shared_ptr<program_syntax_tree::sequence<T, Separator>>
+        std::shared_ptr<util::sequence<T, Separator>>
         evaluate_sequence(const tree_node_t& node);
 
         template<class T>
@@ -381,10 +381,10 @@ template
     std::shared_ptr<T> (declaration_syntax_analyzer::*EvaluateFunction)(const declaration_syntax_analyzer::tree_node_t&),
     char Separator
 >
-std::shared_ptr<program_syntax_tree::sequence<T, Separator>>
+std::shared_ptr<util::sequence<T, Separator>>
 declaration_syntax_analyzer::evaluate_sequence(const tree_node_t& node)
 {
-    return std::make_shared<program_syntax_tree::sequence<T, Separator>>
+    return std::make_shared<util::sequence<T, Separator>>
     (
         evaluate_nodes
         (
