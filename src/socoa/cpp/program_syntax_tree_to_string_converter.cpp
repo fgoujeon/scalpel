@@ -303,8 +303,9 @@ program_syntax_tree_to_string_converter::convert(const function_definition& item
     result_ << indentation();
 
     safe_convert(item.decl_specifier_seq_);
-
     safe_convert(item.declarator_);
+    safe_convert(item.ctor_initializer_);
+
     result_ << opening_brace();
 
     result_ << closing_brace();
@@ -412,6 +413,26 @@ program_syntax_tree_to_string_converter::convert(const member_declarator_bit_fie
 }
 
 void
+program_syntax_tree_to_string_converter::convert(const ctor_initializer& item)
+{
+    result_ << ":";
+    ++m_indentation_level;
+    safe_convert(item.mem_initializer_list_);
+    --m_indentation_level;
+}
+
+void
+program_syntax_tree_to_string_converter::convert(const mem_initializer& item)
+{
+    result_ << new_line();
+    result_ << indentation();
+    item.mem_initializer_id_->accept(*this);
+    result_ << "(";
+    //safe_convert(item.expression_list_);
+    result_ << ")";
+}
+
+void
 program_syntax_tree_to_string_converter::convert(const template_declaration& item)
 {
     result_ << indentation();
@@ -462,7 +483,7 @@ program_syntax_tree_to_string_converter::convert(const nested_identifier_or_temp
     template<Visitable T>
     ...
 */
-//contrary to other comma-separated list classes, these classes require visitation
+//unlike other comma-separated list classes, these classes require visitation
 template<>
 void
 program_syntax_tree_to_string_converter::convert
@@ -470,17 +491,7 @@ program_syntax_tree_to_string_converter::convert
     const util::sequence<program_syntax_tree::member_declarator, ','>& seq
 )
 {
-    typedef std::vector<std::shared_ptr<program_syntax_tree::member_declarator>> item_list_t;
-
-    for(item_list_t::const_iterator i = seq.get_items().begin(); i != seq.get_items().end(); ++i)
-    {
-        //add separator
-        if(i != seq.get_items().begin())
-            result_ << seq.get_separator() << ' ';
-
-        if(*i)
-            (**i).accept(*this);
-    }
+    convert_visitable(seq);
 }
 template<>
 void
@@ -489,17 +500,7 @@ program_syntax_tree_to_string_converter::convert
     const util::sequence<program_syntax_tree::template_argument, ','>& seq
 )
 {
-    typedef std::vector<std::shared_ptr<program_syntax_tree::template_argument>> item_list_t;
-
-    for(item_list_t::const_iterator i = seq.get_items().begin(); i != seq.get_items().end(); ++i)
-    {
-        //add separator
-        if(i != seq.get_items().begin())
-            result_ << seq.get_separator() << ' ';
-
-        if(*i)
-            (**i).accept(*this);
-    }
+    convert_visitable(seq);
 }
 
 void

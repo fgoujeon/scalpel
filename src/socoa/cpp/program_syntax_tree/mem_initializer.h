@@ -18,35 +18,21 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_FUNCTION_DEFINITION_H
-#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_FUNCTION_DEFINITION_H
+#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_MEM_INITIALIZER_H
+#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_MEM_INITIALIZER_H
 
 #include <memory>
-#include "visitor.h"
-#include "declaration.h"
-#include "declarator.h"
-#include "../../util/sequence.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class decl_specifier;
-class ctor_initializer;
+class mem_initializer_id;
+//class assignment_expression;
 
-struct function_definition: public declaration
+struct mem_initializer
 {
-    function_definition
-    (
-        std::shared_ptr<util::sequence<decl_specifier>> a_decl_specifier_seq,
-        declarator&& a_declarator,
-        std::shared_ptr<ctor_initializer> a_ctor_initializer
-    );
-
-    SOCOA_CPP_DEFINE_VISITABLE()
-
-    const std::shared_ptr<util::sequence<decl_specifier>> decl_specifier_seq_;
-    const declarator declarator_;
-    const std::shared_ptr<ctor_initializer> ctor_initializer_;
+    const std::shared_ptr<mem_initializer_id> mem_initializer_id_;
+    //const std::shared_ptr<util::sequence<assignment_expression, ','>> expression_list_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

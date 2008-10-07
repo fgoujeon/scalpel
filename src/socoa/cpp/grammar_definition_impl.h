@@ -226,22 +226,22 @@ struct grammar_definition_impl
 
     //1.9 - Derived classes [gram.class.derived]
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::BASE_CLAUSE>> base_clause;
-    boost::spirit::rule<ScannerT> base_specifier_list;
-    boost::spirit::rule<ScannerT> base_specifier;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::BASE_SPECIFIER_LIST>> base_specifier_list;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::BASE_SPECIFIER>> base_specifier;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ACCESS_SPECIFIER>> access_specifier;
 
     //1.10 - Special member functions [gram.special]
-    boost::spirit::rule<ScannerT> conversion_function_id;
-    boost::spirit::rule<ScannerT> conversion_type_id;
-    boost::spirit::rule<ScannerT> conversion_declarator;
-    boost::spirit::rule<ScannerT> ctor_initializer;
-    boost::spirit::rule<ScannerT> mem_initializer_list;
-    boost::spirit::rule<ScannerT> mem_initializer;
-    boost::spirit::rule<ScannerT> mem_initializer_id;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CONVERSION_FUNCTION_ID>> conversion_function_id;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CONVERSION_TYPE_ID>> conversion_type_id;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CONVERSION_DECLARATOR>> conversion_declarator;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CTOR_INITIALIZER>> ctor_initializer;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MEM_INITIALIZER_LIST>> mem_initializer_list;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MEM_INITIALIZER>> mem_initializer;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MEM_INITIALIZER_ID>> mem_initializer_id;
 
     //1.11 - Overloading [gram.over]
-    boost::spirit::rule<ScannerT> operator_function_id;
-    boost::spirit::rule<ScannerT> operator_;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::OPERATOR_FUNCTION_ID>> operator_function_id;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::OPERATOR_>> operator_;
 
     //1.12 - Templates [gram.temp]
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_DECLARATION>> template_declaration;
@@ -255,14 +255,14 @@ struct grammar_definition_impl
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EXPLICIT_SPECIALIZATION>> explicit_specialization;
 
     //1.13 - Exception handling [gram.except]
-    boost::spirit::rule<ScannerT> try_block;
-    boost::spirit::rule<ScannerT> function_try_block;
-    boost::spirit::rule<ScannerT> handler_seq;
-    boost::spirit::rule<ScannerT> handler;
-    boost::spirit::rule<ScannerT> exception_declaration;
-    boost::spirit::rule<ScannerT> throw_expression;
-    boost::spirit::rule<ScannerT> exception_specification;
-    boost::spirit::rule<ScannerT> type_id_list;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TRY_BLOCK>> try_block;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::FUNCTION_TRY_BLOCK>> function_try_block;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::HANDLER_SEQ>> handler_seq;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::HANDLER>> handler;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EXCEPTION_DECLARATION>> exception_declaration;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::THROW_EXPRESSION>> throw_expression;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EXCEPTION_SPECIFICATION>> exception_specification;
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TYPE_ID_LIST>> type_id_list;
 
 
     /*

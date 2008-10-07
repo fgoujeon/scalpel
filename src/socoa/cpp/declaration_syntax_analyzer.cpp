@@ -20,6 +20,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "declaration_syntax_analyzer.h"
 
+#include <iostream>
 #include <sstream>
 #include <stdexcept>
 #include "grammar.h"
@@ -691,7 +692,8 @@ declaration_syntax_analyzer::evaluate_function_definition(const tree_node_t& nod
     return std::make_shared<function_definition>
     (
         new_decl_specifier_seq,
-        *ASSERTED_EVALUATE_NODE(declarator, DECLARATOR)
+        *ASSERTED_EVALUATE_NODE(declarator, DECLARATOR),
+        EVALUATE_NODE(ctor_initializer, CTOR_INITIALIZER)
     );
 }
 
@@ -849,6 +851,50 @@ declaration_syntax_analyzer::evaluate_member_declarator_bit_field_member(const t
     return std::make_shared<member_declarator_bit_field_member>
     (
         EVALUATE_NODE(identifier, IDENTIFIER)
+    );
+}
+
+std::shared_ptr<ctor_initializer>
+declaration_syntax_analyzer::evaluate_ctor_initializer(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar::CTOR_INITIALIZER);
+
+    return std::make_shared<ctor_initializer>
+    (
+        ctor_initializer
+        {
+            *EVALUATE_SEPARATED_SEQUENCE_NODE(mem_initializer, MEM_INITIALIZER_LIST, ',')
+        }
+    );
+}
+
+std::shared_ptr<mem_initializer>
+declaration_syntax_analyzer::evaluate_mem_initializer(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar::MEM_INITIALIZER);
+
+    return std::make_shared<mem_initializer>
+    (
+        mem_initializer
+        {
+            ASSERTED_EVALUATE_NODE(mem_initializer_id, MEM_INITIALIZER_ID)
+        }
+    );
+}
+
+std::shared_ptr<mem_initializer_id>
+declaration_syntax_analyzer::evaluate_mem_initializer_id(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar::MEM_INITIALIZER_ID);
+
+    return evaluate_only_child_node
+    (
+        node,
+        evaluate_function_typedefs<mem_initializer_id>::id_function_map_t
+        {
+            {grammar::NESTED_IDENTIFIER_OR_TEMPLATE_ID, &declaration_syntax_analyzer::evaluate_nested_identifier_or_template_id},
+            {grammar::IDENTIFIER, &declaration_syntax_analyzer::evaluate_identifier}
+        }
     );
 }
 

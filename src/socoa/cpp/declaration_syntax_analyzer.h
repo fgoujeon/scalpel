@@ -197,6 +197,15 @@ class declaration_syntax_analyzer
         std::shared_ptr<program_syntax_tree::member_declarator_bit_field_member>
         evaluate_member_declarator_bit_field_member(const tree_node_t& node);
 
+        std::shared_ptr<program_syntax_tree::ctor_initializer>
+        evaluate_ctor_initializer(const tree_node_t& node);
+
+        std::shared_ptr<program_syntax_tree::mem_initializer>
+        evaluate_mem_initializer(const tree_node_t& node);
+
+        std::shared_ptr<program_syntax_tree::mem_initializer_id>
+        evaluate_mem_initializer_id(const tree_node_t& node);
+
         std::shared_ptr<program_syntax_tree::template_declaration>
         evaluate_template_declaration(const tree_node_t& node);
 

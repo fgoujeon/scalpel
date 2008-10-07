@@ -26,10 +26,12 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 function_definition::function_definition
 (
     std::shared_ptr<util::sequence<decl_specifier>> a_decl_specifier_seq,
-    declarator&& a_declarator
+    declarator&& a_declarator,
+    std::shared_ptr<ctor_initializer> a_ctor_initializer
 ):
     decl_specifier_seq_(a_decl_specifier_seq),
-    declarator_(a_declarator)
+    declarator_(a_declarator),
+    ctor_initializer_(a_ctor_initializer)
 {
 }
 

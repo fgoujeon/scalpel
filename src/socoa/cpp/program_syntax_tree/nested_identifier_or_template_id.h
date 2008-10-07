@@ -22,10 +22,10 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_PROGRAM_SYNTAX_TREE_NESTED_IDENTIFIER_OR_TEMPLATE_ID_H
 
 #include <memory>
-#include <cassert>
 #include "visitor.h"
 #include "declarator_id.h"
 #include "simple_type_specifier.h"
+#include "mem_initializer_id.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
@@ -33,7 +33,10 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 class nested_name_specifier;
 class identifier_or_template_id;
 
-struct nested_identifier_or_template_id: public declarator_id, public simple_type_specifier
+struct nested_identifier_or_template_id:
+    public declarator_id,
+    public simple_type_specifier,
+    public mem_initializer_id
 {
     nested_identifier_or_template_id
     (

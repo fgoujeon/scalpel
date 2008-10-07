@@ -80,6 +80,8 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         CONVERT_DECLARATION(member_declaration_function_definition)
         CONVERT_DECLARATION(member_declarator_declarator)
         CONVERT_DECLARATION(member_declarator_bit_field_member)
+        CONVERT_DECLARATION(ctor_initializer)
+        CONVERT_DECLARATION(mem_initializer)
         CONVERT_DECLARATION(template_declaration)
         CONVERT_DECLARATION(simple_declaration)
         CONVERT_DECLARATION(template_id)
@@ -93,6 +95,10 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
         void
         convert(const util::sequence<T, Separator>& seq);
 
+        template<class T, char Separator>
+        void
+        convert_visitable(const util::sequence<T, Separator>& seq);
+
         template<class T>
         void
         convert(const T& a_string_enumeration);
@@ -104,7 +110,7 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
 
         template<class T>
         void
-        safe_convert(std::shared_ptr<T> item);
+        safe_convert(const std::shared_ptr<T> item);
 
         VISIT_DEFINITION(identifier)
         VISIT_DEFINITION(qualified_nested_id)
@@ -181,6 +187,23 @@ program_syntax_tree_to_string_converter::convert(const util::sequence<T, Separat
     }
 }
 
+template<class T, char Separator>
+void
+program_syntax_tree_to_string_converter::convert_visitable(const util::sequence<T, Separator>& seq)
+{
+    typedef std::vector<std::shared_ptr<T>> item_list_t;
+
+    for(typename item_list_t::const_iterator i = seq.get_items().begin(); i != seq.get_items().end(); ++i)
+    {
+        //add separator
+        if(i != seq.get_items().begin())
+            result_ << Separator << ' ';
+
+        if(*i)
+            (**i).accept(*this);
+    }
+}
+
 template<class T>
 void
 program_syntax_tree_to_string_converter::convert(const T& a_string_enumeration)
@@ -198,7 +221,7 @@ program_syntax_tree_to_string_converter::safe_convert(T item)
 
 template<class T>
 void
-program_syntax_tree_to_string_converter::safe_convert(std::shared_ptr<T> item)
+program_syntax_tree_to_string_converter::safe_convert(const std::shared_ptr<T> item)
 {
     if(item)
         convert(*item);

@@ -26,11 +26,16 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "unqualified_id.h"
 #include "nested_name_specifier_part.h"
 #include "identifier_or_template_id.h"
+#include "mem_initializer_id.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-struct identifier: public unqualified_id, public nested_name_specifier_part, public identifier_or_template_id
+struct identifier:
+    public unqualified_id,
+    public nested_name_specifier_part,
+    public identifier_or_template_id,
+    public mem_initializer_id
 {
     explicit identifier(std::string&& value);
 
