@@ -26,7 +26,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-extern const char* class_key_string_list[];
+extern const std::vector<std::string> class_key_string_list;
 typedef util::keyword_enumeration<class_key_string_list> class_key;
 
 }}} //namespace socoa::cpp::program_syntax_tree

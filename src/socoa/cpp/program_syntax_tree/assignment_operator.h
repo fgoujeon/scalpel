@@ -18,16 +18,16 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_ACCESS_SPECIFIER_H
-#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_ACCESS_SPECIFIER_H
+#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_ASSIGNMENT_OPERATOR_H
+#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_ASSIGNMENT_OPERATOR_H
 
 #include "../../util/keyword_enumeration.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-extern const std::vector<std::string> access_specifier_string_list;
-typedef util::keyword_enumeration<access_specifier_string_list> access_specifier;
+extern const std::vector<std::string> assignment_operator_string_list;
+typedef util::keyword_enumeration<assignment_operator_string_list> assignment_operator;
 
 }}} //namespace socoa::cpp::program_syntax_tree
 

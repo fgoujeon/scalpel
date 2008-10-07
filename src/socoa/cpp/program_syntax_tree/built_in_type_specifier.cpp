@@ -23,7 +23,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-const char* built_in_type_specifier_string_list[] =
+const std::vector<std::string> built_in_type_specifier_string_list
 {
     "char",
     "wchar_t",
@@ -35,8 +35,7 @@ const char* built_in_type_specifier_string_list[] =
     "unsigned",
     "float",
     "double",
-    "void",
-    ""
+    "void"
 };
 
 built_in_type_specifier::built_in_type_specifier(const std::string& value):

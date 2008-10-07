@@ -22,52 +22,45 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_UTIL_KEYWORD_ENUMERATION_H
 
 #include <cassert>
+#include <vector>
 #include <string>
+#include <algorithm>
 
 namespace socoa { namespace util
 {
 
-template<const char** StringList>
+template<const std::vector<std::string>& StringList>
 class keyword_enumeration
 {
     public:
         keyword_enumeration(const std::string& value);
 
-        const char*
+        const std::string&
         get_value() const;
 
     private:
-        static const char** string_list_;
-        unsigned int value_index_;
+        std::vector<std::string>::const_iterator value_ptr_;
 };
 
-template<const char** StringList>
+template<const std::vector<std::string>& StringList>
 keyword_enumeration<StringList>::keyword_enumeration(const std::string& value)
 {
-    bool found = false;
+    value_ptr_ = std::find
+    (
+        StringList.begin(),
+        StringList.end(),
+        value
+    );
 
-    for(unsigned int i = 0; string_list_[i] != std::string(""); ++i)
-    {
-        if(value == string_list_[i])
-        {
-            value_index_ = i;
-            found = true;
-            break;
-        }
-    }
-
-    assert(found);
+    assert(value_ptr_ != StringList.end());
 }
 
-template<const char** StringList>
-const char*
+template<const std::vector<std::string>& StringList>
+const std::string&
 keyword_enumeration<StringList>::get_value() const
 {
-    return string_list_[value_index_];
+    return *value_ptr_;
 }
-
-template<const char** StringList>
-const char** keyword_enumeration<StringList>::string_list_ = StringList;
 
 }} //namespace socoa::util
 

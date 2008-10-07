@@ -23,6 +23,11 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-const char* access_specifier_string_list[] = {"public", "protected", "private", ""};
+const std::vector<std::string> access_specifier_string_list
+{
+    "public",
+    "protected",
+    "private"
+};
 
 }}} //namespace socoa::cpp::program_syntax_tree

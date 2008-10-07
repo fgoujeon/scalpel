@@ -782,7 +782,7 @@ grammar_definition_impl<ScannerT>::grammar_definition_impl(const grammar& self)
     shift_expression
         = additive_expression % (str_p("<<") | ">>")
     ;
-    //a shift expression used as a template argument must be placed between braces if it contains any '>' characters
+    //a shift expression used as a template argument must be placed between brackets if it contains any '>' characters
     template_argument_shift_expression
         = '(' >> (additive_expression % (str_p("<<") | ">>")) >> ')'
         | additive_expression % str_p("<<")
@@ -791,7 +791,7 @@ grammar_definition_impl<ScannerT>::grammar_definition_impl(const grammar& self)
     relational_expression
         = shift_expression % (str_p("<=") | ">=" | '<' | '>')
     ;
-    //a relational_expression used as a template argument must be placed between braces if it contains any '>' characters
+    //a relational_expression used as a template argument must be placed between brackets if it contains any '>' characters
     template_argument_relational_expression
         = '(' >> (shift_expression % (str_p("<=") | ">=" | '<' | '>')) >> ')'
         | template_argument_shift_expression % (str_p("<=") | '<')

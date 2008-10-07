@@ -28,7 +28,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-extern const char* built_in_type_specifier_string_list[];
+extern const std::vector<std::string> built_in_type_specifier_string_list;
 struct built_in_type_specifier: public util::keyword_enumeration<built_in_type_specifier_string_list>, public simple_type_specifier
 {
     built_in_type_specifier(const std::string& value);

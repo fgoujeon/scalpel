@@ -23,6 +23,11 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-const char* class_key_string_list[] = {"class", "struct", "union", ""};
+const std::vector<std::string> class_key_string_list
+{
+    "class",
+    "struct",
+    "union"
+};
 
 }}} //namespace socoa::cpp::program_syntax_tree
