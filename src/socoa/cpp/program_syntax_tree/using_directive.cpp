@@ -18,34 +18,22 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_SIMPLE_DECLARATION_H
-#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_SIMPLE_DECLARATION_H
-
-#include <memory>
-#include "visitor.h"
-#include "block_declaration.h"
-#include "../../util/sequence.h"
+#include "using_directive.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class init_declarator;
-class decl_specifier;
-
-struct simple_declaration: public block_declaration
+using_directive::using_directive
+(
+    bool leading_double_colon,
+    std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
+    identifier&& an_identifier
+):
+    leading_double_colon_(leading_double_colon),
+    nested_name_specifier_(a_nested_name_specifier),
+    identifier_(an_identifier)
 {
-    simple_declaration
-    (
-        std::shared_ptr<util::sequence<decl_specifier>> a_decl_specifier_seq,
-        std::shared_ptr<util::sequence<init_declarator, ','>> an_init_declarator_list
-    );
-
-    SOCOA_CPP_DEFINE_VISITABLE()
-
-    const std::shared_ptr<util::sequence<decl_specifier>> decl_specifier_seq_;
-    const std::shared_ptr<util::sequence<init_declarator, ','>> init_declarator_list_;
-};
+}
 
 }}} //namespace socoa::cpp::program_syntax_tree
 
-#endif

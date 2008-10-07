@@ -18,32 +18,33 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_SIMPLE_DECLARATION_H
-#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_SIMPLE_DECLARATION_H
+#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_USING_DIRECTIVE_H
+#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_USING_DIRECTIVE_H
 
 #include <memory>
 #include "visitor.h"
 #include "block_declaration.h"
-#include "../../util/sequence.h"
+#include "identifier.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class init_declarator;
-class decl_specifier;
+class nested_name_specifier;
 
-struct simple_declaration: public block_declaration
+struct using_directive: public block_declaration
 {
-    simple_declaration
+    using_directive
     (
-        std::shared_ptr<util::sequence<decl_specifier>> a_decl_specifier_seq,
-        std::shared_ptr<util::sequence<init_declarator, ','>> an_init_declarator_list
+        bool leading_double_colon,
+        std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
+        identifier&& an_identifier
     );
 
     SOCOA_CPP_DEFINE_VISITABLE()
 
-    const std::shared_ptr<util::sequence<decl_specifier>> decl_specifier_seq_;
-    const std::shared_ptr<util::sequence<init_declarator, ','>> init_declarator_list_;
+    const bool leading_double_colon_;
+    const std::shared_ptr<nested_name_specifier> nested_name_specifier_;
+    const identifier identifier_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

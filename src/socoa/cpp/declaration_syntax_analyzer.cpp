@@ -302,9 +302,9 @@ declaration_syntax_analyzer::evaluate_block_declaration(const tree_node_t& node)
         {
             //{grammar::ASM_DEFINITION, &declaration_syntax_analyzer::evaluate_block_declaration},
             {grammar::SIMPLE_DECLARATION, &declaration_syntax_analyzer::evaluate_simple_declaration},
-            /*{grammar::NAMESPACE_ALIAS_DEFINITION, &declaration_syntax_analyzer::evaluate_template_declaration},
-            {grammar::USING_DECLARATION, &declaration_syntax_analyzer::},
-            {grammar::USING_DIRECTIVE, &declaration_syntax_analyzer::}*/
+            //{grammar::NAMESPACE_ALIAS_DEFINITION, &declaration_syntax_analyzer::evaluate_template_declaration},
+            {grammar::USING_DECLARATION, &declaration_syntax_analyzer::evaluate_using_declaration},
+            {grammar::USING_DIRECTIVE, &declaration_syntax_analyzer::evaluate_using_directive}
         },
         false
     );
@@ -430,6 +430,19 @@ declaration_syntax_analyzer::evaluate_using_declaration(const tree_node_t& node)
         check_node_existence(node, "::"),
         EVALUATE_NODE(nested_name_specifier, NESTED_NAME_SPECIFIER),
         ASSERTED_EVALUATE_NODE(unqualified_id, UNQUALIFIED_ID)
+    );
+}
+
+std::shared_ptr<using_directive>
+declaration_syntax_analyzer::evaluate_using_directive(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar::USING_DIRECTIVE);
+
+    return std::make_shared<using_directive>
+    (
+        check_node_existence(node, "::", 2),
+        EVALUATE_NODE(nested_name_specifier, NESTED_NAME_SPECIFIER),
+        *ASSERTED_EVALUATE_NODE(identifier, IDENTIFIER)
     );
 }
 
@@ -1034,3 +1047,4 @@ declaration_syntax_analyzer::get_id(const tree_node_t& node)
 #undef EVALUATE_NODE
 #undef ASSERTED_EVALUATE_NODE
 #undef EVALUATE_SEQUENCE_NODE
+#undef EVALUATE_SEPARATED_SEQUENCE_NODE

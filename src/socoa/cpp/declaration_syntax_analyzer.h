@@ -128,6 +128,9 @@ class declaration_syntax_analyzer
         std::shared_ptr<program_syntax_tree::using_declaration>
         evaluate_using_declaration(const tree_node_t& node);
 
+        std::shared_ptr<program_syntax_tree::using_directive>
+        evaluate_using_directive(const tree_node_t& node);
+
         std::shared_ptr<program_syntax_tree::init_declarator>
         evaluate_init_declarator(const tree_node_t& node);
 

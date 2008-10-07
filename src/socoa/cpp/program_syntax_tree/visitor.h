@@ -34,6 +34,7 @@ class simple_template_type_specifier;
 class built_in_type_specifier;
 class namespace_definition;
 class using_declaration;
+class using_directive;
 class function_definition;
 class class_specifier;
 class member_specification_access_specifier;
@@ -84,6 +85,9 @@ class visitor
 
         virtual void
         visit(const using_declaration&) = 0;
+
+        virtual void
+        visit(const using_directive&) = 0;
 
         virtual void
         visit(const class_specifier&) = 0;

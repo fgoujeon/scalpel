@@ -24,6 +24,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <memory>
 #include "visitor.h"
 #include "member_declaration.h"
+#include "block_declaration.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
@@ -31,7 +32,7 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 class nested_name_specifier;
 class unqualified_id;
 
-struct using_declaration: public member_declaration
+struct using_declaration: public member_declaration, public block_declaration
 {
     using_declaration
     (

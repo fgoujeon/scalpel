@@ -158,6 +158,22 @@ program_syntax_tree_to_string_converter::convert(const using_declaration& item)
 }
 
 void
+program_syntax_tree_to_string_converter::convert(const using_directive& item)
+{
+    result_ << indentation();
+    result_ << "using namespace ";
+
+    if(item.leading_double_colon_)
+        result_ << "::";
+
+    safe_convert(item.nested_name_specifier_);
+    safe_convert(item.identifier_);
+
+    result_ << ";";
+    result_ << new_line();
+}
+
+void
 program_syntax_tree_to_string_converter::convert(const init_declarator& item)
 {
     safe_convert(item.declarator_);
