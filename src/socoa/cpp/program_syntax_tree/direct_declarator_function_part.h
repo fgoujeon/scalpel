@@ -30,14 +30,16 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 
 struct direct_declarator_function_part: public direct_declarator_part
 {
-    explicit direct_declarator_function_part
+    direct_declarator_function_part
     (
-        parameter_declaration_clause&& a_parameter_declaration_clause
+        parameter_declaration_clause&& a_parameter_declaration_clause,
+        std::shared_ptr<util::sequence<cv_qualifier>> a_cv_qualifier_seq
     );
 
     SOCOA_CPP_DEFINE_VISITABLE()
 
     const parameter_declaration_clause parameter_declaration_clause_;
+    const std::shared_ptr<util::sequence<cv_qualifier>> cv_qualifier_seq_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

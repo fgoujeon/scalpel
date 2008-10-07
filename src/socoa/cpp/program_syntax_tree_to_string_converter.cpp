@@ -226,6 +226,10 @@ program_syntax_tree_to_string_converter::convert(const direct_declarator_functio
     result_ << '(';
     safe_convert(item.parameter_declaration_clause_);
     result_ << ')';
+
+    if(item.cv_qualifier_seq_)
+        result_ << ' ';
+    safe_convert(item.cv_qualifier_seq_);
 }
 
 void
@@ -512,7 +516,10 @@ program_syntax_tree_to_string_converter::add_space()
             (last_char >= 'a' && last_char <= 'z') ||
             (last_char >= 'A' && last_char <= 'Z') ||
             (last_char >= '0' && last_char <= '9') ||
-            last_char == '*' || last_char == '&' || last_char == '>'
+            last_char == '*' ||
+            last_char == '&' ||
+            last_char == '>' ||
+            last_char == ')'
         )
         {
             result_ << ' ';

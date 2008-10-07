@@ -534,7 +534,8 @@ declaration_syntax_analyzer::evaluate_direct_declarator_function_part(const tree
 
     return std::make_shared<direct_declarator_function_part>
     (
-        *new_parameter_declaration_clause
+        *new_parameter_declaration_clause,
+        EVALUATE_SEQUENCE_NODE(cv_qualifier, CV_QUALIFIER_SEQ)
     );
 }
 
