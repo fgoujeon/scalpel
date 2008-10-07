@@ -31,10 +31,4 @@ member_declarator_bit_field_member::member_declarator_bit_field_member
 {
 }
 
-const std::shared_ptr<identifier>
-member_declarator_bit_field_member::get_identifier() const
-{
-    return identifier_;
-}
-
 }}} //namespace socoa::cpp::program_syntax_tree

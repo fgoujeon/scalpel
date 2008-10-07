@@ -33,16 +33,4 @@ template_id::template_id
 {
 }
 
-const identifier&
-template_id::get_identifier() const
-{
-    return identifier_;
-}
-
-const std::shared_ptr<util::sequence<template_argument, ','>>&
-template_id::get_template_argument_list() const
-{
-    return template_argument_list_;
-}
-
 }}} //namespace socoa::cpp::program_syntax_tree

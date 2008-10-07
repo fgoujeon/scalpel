@@ -30,24 +30,10 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 class identifier_or_template_id;
 class nested_name_specifier_part;
 
-class nested_name_specifier
+struct nested_name_specifier
 {
-    public:
-        nested_name_specifier
-        (
-            std::shared_ptr<identifier_or_template_id> an_identifier_or_template_id,
-            std::vector<std::shared_ptr<nested_name_specifier_part>>&& a_nested_name_specifier_part
-        );
-
-        const std::shared_ptr<identifier_or_template_id>
-        get_identifier_or_template_id() const;
-
-        const std::vector<std::shared_ptr<nested_name_specifier_part>>&
-        get_other_parts() const;
-
-    private:
-        std::shared_ptr<identifier_or_template_id> m_identifier_or_template_id;
-        std::vector<std::shared_ptr<nested_name_specifier_part>> m_nested_name_specifier_part;
+    const std::shared_ptr<identifier_or_template_id> identifier_or_template_id_;
+    const std::vector<std::shared_ptr<nested_name_specifier_part>> parts_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

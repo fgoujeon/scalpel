@@ -29,20 +29,8 @@ namespace_definition::namespace_definition
     std::shared_ptr<util::sequence<declaration>> a_declaration_seq
 ):
     identifier_(an_identifier),
-    m_declaration_seq(a_declaration_seq)
+    declaration_seq_(a_declaration_seq)
 {
-}
-
-const std::shared_ptr<identifier>
-namespace_definition::get_identifier() const
-{
-    return identifier_;
-}
-
-const std::shared_ptr<util::sequence<declaration>>
-namespace_definition::get_declaration_seq() const
-{
-    return m_declaration_seq;
 }
 
 }}} //namespace socoa::cpp::program_syntax_tree

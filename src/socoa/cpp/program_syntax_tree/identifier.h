@@ -30,18 +30,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class identifier: public unqualified_id, public nested_name_specifier_part, public identifier_or_template_id
+struct identifier: public unqualified_id, public nested_name_specifier_part, public identifier_or_template_id
 {
-    public:
-        explicit identifier(const std::string& value);
+    explicit identifier(std::string&& value);
 
-        const std::string&
-        get_value() const;
+    SOCOA_CPP_DEFINE_VISITABLE()
 
-        SOCOA_CPP_DEFINE_VISITABLE()
-
-    private:
-        std::string value_;
+    const std::string value_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

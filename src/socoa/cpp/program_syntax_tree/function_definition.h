@@ -32,26 +32,18 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 
 class decl_specifier;
 
-class function_definition: public declaration
+struct function_definition: public declaration
 {
-    public:
-        function_definition
-        (
-            std::shared_ptr<util::sequence<decl_specifier>> a_decl_specifier_seq,
-            declarator&& a_declarator
-        );
+    function_definition
+    (
+        std::shared_ptr<util::sequence<decl_specifier>> a_decl_specifier_seq,
+        declarator&& a_declarator
+    );
 
-        const std::shared_ptr<util::sequence<decl_specifier>>
-        get_decl_specifier_seq() const;
+    SOCOA_CPP_DEFINE_VISITABLE()
 
-        const declarator&
-        get_declarator() const;
-
-        SOCOA_CPP_DEFINE_VISITABLE()
-
-    private:
-        std::shared_ptr<util::sequence<decl_specifier>> m_decl_specifier_seq;
-        declarator m_declarator;
+    const std::shared_ptr<util::sequence<decl_specifier>> decl_specifier_seq_;
+    const declarator declarator_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

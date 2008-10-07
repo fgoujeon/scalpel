@@ -32,26 +32,18 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 class init_declarator;
 class decl_specifier;
 
-class simple_declaration: public declaration
+struct simple_declaration: public declaration
 {
-    public:
-        simple_declaration
-        (
-            std::shared_ptr<util::sequence<decl_specifier>> a_decl_specifier_seq,
-            std::shared_ptr<util::sequence<init_declarator, ','>> an_init_declarator_list
-        );
+    simple_declaration
+    (
+        std::shared_ptr<util::sequence<decl_specifier>> a_decl_specifier_seq,
+        std::shared_ptr<util::sequence<init_declarator, ','>> an_init_declarator_list
+    );
 
-        const std::shared_ptr<util::sequence<decl_specifier>>
-        get_decl_specifier_seq() const;
+    SOCOA_CPP_DEFINE_VISITABLE()
 
-        const std::shared_ptr<util::sequence<init_declarator, ','>>
-        get_init_declarator_list() const;
-
-        SOCOA_CPP_DEFINE_VISITABLE()
-
-    private:
-        std::shared_ptr<util::sequence<decl_specifier>> m_decl_specifier_seq;
-        std::shared_ptr<util::sequence<init_declarator, ','>> m_init_declarator_list;
+    const std::shared_ptr<util::sequence<decl_specifier>> decl_specifier_seq_;
+    const std::shared_ptr<util::sequence<init_declarator, ','>> init_declarator_list_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

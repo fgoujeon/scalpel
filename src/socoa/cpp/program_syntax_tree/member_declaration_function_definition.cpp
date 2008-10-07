@@ -31,10 +31,4 @@ member_declaration_function_definition::member_declaration_function_definition
 {
 }
 
-const function_definition&
-member_declaration_function_definition::get_function_definition() const
-{
-    return function_definition_;
-}
-
 }}} //namespace socoa::cpp::program_syntax_tree

@@ -29,16 +29,9 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 
 class member_specification_part;
 
-class member_specification
+struct member_specification
 {
-    public:
-        explicit member_specification(std::vector<std::shared_ptr<member_specification_part>>&& parts);
-
-        const std::vector<std::shared_ptr<member_specification_part>>&
-        get_parts() const;
-
-    private:
-        std::vector<std::shared_ptr<member_specification_part>> parts_;
+    const std::vector<std::shared_ptr<member_specification_part>> parts_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

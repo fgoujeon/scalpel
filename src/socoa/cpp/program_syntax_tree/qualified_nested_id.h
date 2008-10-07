@@ -31,36 +31,22 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 
 class unqualified_id;
 
-class qualified_nested_id: public qualified_id
+struct qualified_nested_id: public qualified_id
 {
-    public:
-        qualified_nested_id
-        (
-            bool leading_double_colon,
-            nested_name_specifier&& a_nested_name_specifier,
-            bool template_keyword,
-            std::shared_ptr<unqualified_id> an_unqualified_id
-        );
+    qualified_nested_id
+    (
+        bool leading_double_colon,
+        nested_name_specifier&& a_nested_name_specifier,
+        bool template_keyword,
+        std::shared_ptr<unqualified_id> a_unqualified_id
+    );
 
-        bool
-        has_leading_double_colon() const;
+    SOCOA_CPP_DEFINE_VISITABLE()
 
-        const nested_name_specifier&
-        get_nested_name_specifier() const;
-
-        bool
-        has_template_keyword() const;
-
-        const std::shared_ptr<unqualified_id>
-        get_unqualified_id() const;
-
-        SOCOA_CPP_DEFINE_VISITABLE()
-
-    private:
-        bool leading_double_colon_;
-        nested_name_specifier nested_name_specifier_;
-        bool template_keyword_;
-        std::shared_ptr<unqualified_id> unqualified_id_;
+    const bool leading_double_colon_;
+    const nested_name_specifier nested_name_specifier_;
+    const bool template_keyword_;
+    const std::shared_ptr<unqualified_id> unqualified_id_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

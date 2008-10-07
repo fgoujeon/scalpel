@@ -33,16 +33,4 @@ member_declaration_member_declarator_list::member_declaration_member_declarator_
 {
 }
 
-const std::shared_ptr<util::sequence<decl_specifier>>
-member_declaration_member_declarator_list::get_decl_specifier_seq() const
-{
-    return decl_specifier_seq_;
-}
-
-const std::shared_ptr<util::sequence<member_declarator, ','>>
-member_declaration_member_declarator_list::get_member_declarator_list() const
-{
-    return member_declarator_list_;
-}
-
 }}} //namespace socoa::cpp::program_syntax_tree

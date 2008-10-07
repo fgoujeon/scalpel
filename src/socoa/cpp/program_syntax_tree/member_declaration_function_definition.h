@@ -28,21 +28,16 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class member_declaration_function_definition: public member_declaration
+struct member_declaration_function_definition: public member_declaration
 {
-    public:
-        explicit member_declaration_function_definition
-        (
-            function_definition&& a_function_definition
-        );
+    explicit member_declaration_function_definition
+    (
+        function_definition&& a_function_definition
+    );
 
-        const function_definition&
-        get_function_definition() const;
+    SOCOA_CPP_DEFINE_VISITABLE()
 
-        SOCOA_CPP_DEFINE_VISITABLE()
-
-    private:
-        function_definition function_definition_;
+    const function_definition function_definition_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

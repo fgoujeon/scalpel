@@ -37,28 +37,4 @@ using_declaration::using_declaration
 {
 }
 
-bool
-using_declaration::has_typename_keyword() const
-{
-    return typename_keyword_;
-}
-
-bool
-using_declaration::has_leading_double_colon() const
-{
-    return leading_double_colon_;
-}
-
-const std::shared_ptr<nested_name_specifier>
-using_declaration::get_nested_name_specifier() const
-{
-    return nested_name_specifier_;
-}
-
-const std::shared_ptr<unqualified_id>
-using_declaration::get_unqualified_id() const
-{
-    return unqualified_id_;
-}
-
 }}} //namespace socoa::cpp::program_syntax_tree

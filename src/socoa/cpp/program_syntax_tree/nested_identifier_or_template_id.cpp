@@ -33,25 +33,6 @@ nested_identifier_or_template_id::nested_identifier_or_template_id
     nested_name_specifier_(a_nested_name_specifier),
     identifier_or_template_id_(an_identifier_or_template_id)
 {
-    assert(an_identifier_or_template_id);
-}
-
-bool
-nested_identifier_or_template_id::has_leading_double_colon() const
-{
-    return leading_double_colon_;
-}
-
-const std::shared_ptr<nested_name_specifier>
-nested_identifier_or_template_id::get_nested_name_specifier() const
-{
-    return nested_name_specifier_;
-}
-
-const std::shared_ptr<identifier_or_template_id>
-nested_identifier_or_template_id::get_identifier_or_template_id() const
-{
-    return identifier_or_template_id_;
 }
 
 }}} //namespace socoa::cpp::program_syntax_tree

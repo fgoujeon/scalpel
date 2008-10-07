@@ -33,16 +33,4 @@ member_declarator_declarator::member_declarator_declarator
 {
 }
 
-const std::shared_ptr<declarator>
-member_declarator_declarator::get_declarator() const
-{
-    return declarator_;
-}
-
-bool
-member_declarator_declarator::has_pure_specifier() const
-{
-    return pure_specifier_;
-}
-
 }}} //namespace socoa::cpp::program_syntax_tree

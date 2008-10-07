@@ -25,7 +25,7 @@ namespace socoa { namespace cpp { namespace program_tree
 
 class_::class_(const std::string& name, key class_key):
     type(name),
-    m_key(class_key)
+    key_(class_key)
 {
 }
 

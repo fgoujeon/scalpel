@@ -30,29 +30,11 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 class declarator;
 class decl_specifier;
 
-class parameter_declaration
+struct parameter_declaration
 {
-    public:
-        parameter_declaration
-        (
-            util::sequence<decl_specifier>&& a_decl_specifier_seq,
-            std::shared_ptr<declarator> a_declarator,
-            bool equal
-        );
-
-        const util::sequence<decl_specifier>&
-        get_decl_specifier_seq() const;
-
-        const std::shared_ptr<declarator>
-        get_declarator() const;
-
-        bool
-        has_equal() const;
-
-    private:
-        util::sequence<decl_specifier> m_decl_specifier_seq;
-        std::shared_ptr<declarator> m_declarator;
-        bool m_equal;
+    const util::sequence<decl_specifier> decl_specifier_seq_;
+    const std::shared_ptr<declarator> declarator_;
+    const bool equal_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

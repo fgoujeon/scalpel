@@ -30,22 +30,16 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 
 class identifier;
 
-class member_declarator_bit_field_member: public member_declarator
+struct member_declarator_bit_field_member: public member_declarator
 {
-    public:
-        explicit member_declarator_bit_field_member
-        (
-            std::shared_ptr<identifier> an_identifier
-        );
+    member_declarator_bit_field_member
+    (
+        std::shared_ptr<identifier> an_identifier
+    );
 
-        const std::shared_ptr<identifier>
-        get_identifier() const;
+    SOCOA_CPP_DEFINE_VISITABLE()
 
-        SOCOA_CPP_DEFINE_VISITABLE()
-
-    private:
-        std::shared_ptr<identifier> identifier_;
-
+    const std::shared_ptr<identifier> identifier_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

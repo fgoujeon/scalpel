@@ -32,26 +32,18 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 
 class identifier;
 
-class namespace_definition: public declaration
+struct namespace_definition: public declaration
 {
-    public:
-        namespace_definition
-        (
-            std::shared_ptr<identifier> an_identifier,
-            std::shared_ptr<util::sequence<declaration>> a_declaration_seq
-        );
+    namespace_definition
+    (
+        std::shared_ptr<identifier> an_identifier,
+        std::shared_ptr<util::sequence<declaration>> a_declaration_seq
+    );
 
-        const std::shared_ptr<identifier>
-        get_identifier() const;
+    SOCOA_CPP_DEFINE_VISITABLE()
 
-        const std::shared_ptr<util::sequence<declaration>>
-        get_declaration_seq() const;
-
-        SOCOA_CPP_DEFINE_VISITABLE()
-
-    private:
-        std::shared_ptr<identifier> identifier_;
-        std::shared_ptr<util::sequence<declaration>> m_declaration_seq;
+    const std::shared_ptr<identifier> identifier_;
+    const std::shared_ptr<util::sequence<declaration>> declaration_seq_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

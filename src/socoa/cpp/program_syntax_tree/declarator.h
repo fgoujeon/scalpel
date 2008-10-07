@@ -30,24 +30,10 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 
 class ptr_operator;
 
-class declarator
+struct declarator
 {
-    public:
-        declarator
-        (
-            std::vector<std::shared_ptr<ptr_operator>>&& ptr_operators,
-            direct_declarator&& a_direct_declarator
-        );
-
-        const std::vector<std::shared_ptr<ptr_operator>>&
-        get_ptr_operators() const;
-
-        const direct_declarator&
-        get_direct_declarator() const;
-
-    private:
-        std::vector<std::shared_ptr<ptr_operator>> m_ptr_operators;
-        direct_declarator m_direct_declarator;
+    const std::vector<std::shared_ptr<ptr_operator>> ptr_operators_;
+    const direct_declarator direct_declarator_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

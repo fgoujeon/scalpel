@@ -24,14 +24,8 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
 cv_qualifier::cv_qualifier(type a_type):
-    m_type(a_type)
+    type_(a_type)
 {
-}
-
-cv_qualifier::type
-cv_qualifier::get_type() const
-{
-    return m_type;
 }
 
 }}} //namespace socoa::cpp::program_syntax_tree

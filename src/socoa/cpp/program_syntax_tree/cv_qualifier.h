@@ -27,25 +27,20 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class cv_qualifier: public type_specifier
+struct cv_qualifier: public type_specifier
 {
-    public:
-        enum type
-        {
-            CONST,
-            VOLATILE,
-            RESTRICT
-        };
+    enum type
+    {
+        CONST,
+        VOLATILE,
+        RESTRICT
+    };
 
-        explicit cv_qualifier(type a_type);
+    explicit cv_qualifier(type a_type);
 
-        type
-        get_type() const;
+    SOCOA_CPP_DEFINE_VISITABLE()
 
-        SOCOA_CPP_DEFINE_VISITABLE()
-
-    private:
-        type m_type;
+    const type type_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

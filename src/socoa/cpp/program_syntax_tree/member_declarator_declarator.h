@@ -30,26 +30,18 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 
 class declarator;
 
-class member_declarator_declarator: public member_declarator
+struct member_declarator_declarator: public member_declarator
 {
-    public:
-        member_declarator_declarator
-        (
-            std::shared_ptr<declarator> a_declarator,
-            bool pure_specifier
-        );
+    member_declarator_declarator
+    (
+        std::shared_ptr<declarator> a_declarator,
+        bool pure_specifier
+    );
 
-        const std::shared_ptr<declarator>
-        get_declarator() const;
+    SOCOA_CPP_DEFINE_VISITABLE()
 
-        bool
-        has_pure_specifier() const;
-
-        SOCOA_CPP_DEFINE_VISITABLE()
-
-    private:
-        std::shared_ptr<declarator> declarator_;
-        bool pure_specifier_;
+    const std::shared_ptr<declarator> declarator_;
+    const bool pure_specifier_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

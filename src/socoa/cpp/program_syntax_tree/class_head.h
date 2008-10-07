@@ -31,39 +31,13 @@ class nested_name_specifier;
 class template_id;
 class identifier;
 
-class class_head
+struct class_head
 {
-    public:
-        class_head
-        (
-            class_key&& key,
-            std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
-            std::shared_ptr<template_id> a_template_id,
-            std::shared_ptr<identifier> an_identifier/*,
-            std::shared_ptr<base_clause> a_base_clause;*/
-        );
-
-        const class_key&
-        get_key() const;
-
-        const std::shared_ptr<nested_name_specifier>
-        get_nested_name_specifier() const;
-
-        const std::shared_ptr<template_id>
-        get_template_id() const;
-
-        const std::shared_ptr<identifier>
-        get_identifier() const;
-
-        //const std::shared_ptr<base_clause>
-        //get_base_clause() const;
-
-    private:
-        class_key m_key;
-        std::shared_ptr<nested_name_specifier> m_nested_name_specifier;
-        std::shared_ptr<template_id> m_template_id;
-        std::shared_ptr<identifier> identifier_;
-        //std::shared_ptr<base_clause> m_base_clause;
+    const class_key key_;
+    const std::shared_ptr<nested_name_specifier> nested_name_specifier_;
+    const std::shared_ptr<template_id> template_id_;
+    const std::shared_ptr<identifier> identifier_;
+    //const std::shared_ptr<base_clause> base_clause_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

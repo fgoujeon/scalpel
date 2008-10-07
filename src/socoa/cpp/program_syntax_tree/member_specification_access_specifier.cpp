@@ -25,16 +25,10 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 
 member_specification_access_specifier::member_specification_access_specifier
 (
-    access_specifier&& an_access_specifier
+    access_specifier&& a_access_specifier
 ):
-    access_specifier_(an_access_specifier)
+    access_specifier_(a_access_specifier)
 {
-}
-
-const access_specifier&
-member_specification_access_specifier::get_access_specifier() const
-{
-    return access_specifier_;
 }
 
 }}} //namespace socoa::cpp::program_syntax_tree

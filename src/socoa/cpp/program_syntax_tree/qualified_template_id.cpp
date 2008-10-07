@@ -31,10 +31,4 @@ qualified_template_id::qualified_template_id
 {
 }
 
-const template_id&
-qualified_template_id::get_template_id() const
-{
-    return template_id_;
-}
-
 }}} //namespace socoa::cpp::program_syntax_tree

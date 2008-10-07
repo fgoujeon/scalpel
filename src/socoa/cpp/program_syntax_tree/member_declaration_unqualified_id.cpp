@@ -28,37 +28,13 @@ member_declaration_unqualified_id::member_declaration_unqualified_id
     bool leading_double_colon,
     nested_name_specifier&& a_nested_name_specifier,
     bool template_keyword,
-    std::shared_ptr<unqualified_id> id
+    std::shared_ptr<unqualified_id> an_unqualified_id
 ):
     leading_double_colon_(leading_double_colon),
     nested_name_specifier_(a_nested_name_specifier),
     template_keyword_(template_keyword),
-    unqualified_id_(id)
+    unqualified_id_(an_unqualified_id)
 {
-}
-
-bool
-member_declaration_unqualified_id::has_leading_double_colon() const
-{
-    return leading_double_colon_;
-}
-
-const nested_name_specifier&
-member_declaration_unqualified_id::get_nested_name_specifier() const
-{
-    return nested_name_specifier_;
-}
-
-bool
-member_declaration_unqualified_id::has_template_keyword() const
-{
-    return template_keyword_;
-}
-
-const std::shared_ptr<unqualified_id>
-member_declaration_unqualified_id::get_unqualified_id() const
-{
-    return unqualified_id_;
 }
 
 }}} //namespace socoa::cpp::program_syntax_tree

@@ -30,40 +30,18 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 class nested_name_specifier;
 class cv_qualifier;
 
-class ptr_operator
+struct ptr_operator
 {
-    public:
-        enum type
-        {
-            ASTERISK,
-            AMPERSAND
-        };
+    enum type
+    {
+        ASTERISK,
+        AMPERSAND
+    };
 
-        ptr_operator
-        (
-            type a_type,
-            bool leading_double_colon,
-            std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
-            std::shared_ptr<util::sequence<cv_qualifier>> a_cv_qualifier_seq
-        );
-
-        type
-        get_type() const;
-
-        bool
-        has_leading_double_colon() const;
-
-        const std::shared_ptr<nested_name_specifier>
-        get_nested_name_specifier() const;
-
-        const std::shared_ptr<util::sequence<cv_qualifier>>
-        get_cv_qualifier_seq() const;
-
-    private:
-        type m_type;
-        bool m_leading_double_colon;
-        std::shared_ptr<nested_name_specifier> m_nested_name_specifier;
-        std::shared_ptr<util::sequence<cv_qualifier>> m_cv_qualifier_seq;
+    const type type_;
+    const bool leading_double_colon_;
+    const std::shared_ptr<nested_name_specifier> nested_name_specifier_;
+    const std::shared_ptr<util::sequence<cv_qualifier>> cv_qualifier_seq_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

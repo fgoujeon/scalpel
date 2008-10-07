@@ -31,10 +31,4 @@ qualified_identifier::qualified_identifier
 {
 }
 
-const identifier&
-qualified_identifier::get_identifier() const
-{
-    return identifier_;
-}
-
 }}} //namespace socoa::cpp::program_syntax_tree

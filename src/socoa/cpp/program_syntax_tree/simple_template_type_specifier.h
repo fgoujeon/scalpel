@@ -31,31 +31,20 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 class nested_name_specifier;
 class template_id;
 
-class simple_template_type_specifier: public simple_type_specifier
+struct simple_template_type_specifier: public simple_type_specifier
 {
-    public:
-        simple_template_type_specifier
-        (
-            bool leading_double_colon,
-            std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
-            std::shared_ptr<template_id> a_template_id
-        );
+    simple_template_type_specifier
+    (
+        bool leading_double_colon,
+        std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
+        std::shared_ptr<template_id> a_template_id
+    );
 
-        bool
-        has_leading_double_colon() const;
+    SOCOA_CPP_DEFINE_VISITABLE()
 
-        const std::shared_ptr<nested_name_specifier>
-        get_nested_name_specifier() const;
-
-        const std::shared_ptr<template_id>
-        get_template_id() const;
-
-        SOCOA_CPP_DEFINE_VISITABLE()
-
-    private:
-        bool m_leading_double_colon;
-        std::shared_ptr<nested_name_specifier> m_nested_name_specifier;
-        std::shared_ptr<template_id> m_template_id;
+    const bool leading_double_colon_;
+    const std::shared_ptr<nested_name_specifier> nested_name_specifier_;
+    const std::shared_ptr<template_id> template_id_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

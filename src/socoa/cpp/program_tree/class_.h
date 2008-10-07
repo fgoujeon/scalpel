@@ -43,7 +43,7 @@ class class_: public type, public namespace_member, public std::enable_shared_fr
         explicit class_(const std::string& name, key class_key);
 
     private:
-        key m_key;
+        key key_;
 };
 
 }}} //namespace socoa::cpp::program_tree

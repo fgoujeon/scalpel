@@ -358,10 +358,10 @@ class declaration_syntax_analyzer
         bool
         check_node_existence(const tree_node_t& parent_node, grammar::parser_id id);
 
-        const std::string
+        std::string
         get_value(const tree_node_t& node);
 
-        const std::string
+        std::string
         get_only_child_value(const tree_node_t& node);
 
         std::string

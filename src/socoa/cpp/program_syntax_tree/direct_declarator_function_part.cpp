@@ -27,14 +27,8 @@ direct_declarator_function_part::direct_declarator_function_part
 (
     parameter_declaration_clause&& a_parameter_declaration_clause
 ):
-    m_parameter_declaration_clause(a_parameter_declaration_clause)
+    parameter_declaration_clause_(a_parameter_declaration_clause)
 {
-}
-
-const parameter_declaration_clause&
-direct_declarator_function_part::get_parameter_declaration_clause() const
-{
-    return m_parameter_declaration_clause;
 }
 
 }}} //namespace socoa::cpp::program_syntax_tree

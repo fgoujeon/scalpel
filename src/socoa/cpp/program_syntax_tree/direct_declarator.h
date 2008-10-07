@@ -31,29 +31,11 @@ class declarator_id;
 class declarator;
 class direct_declarator_part;
 
-class direct_declarator
+struct direct_declarator
 {
-    public:
-        direct_declarator
-        (
-            std::shared_ptr<declarator_id> a_declarator_id,
-            std::shared_ptr<declarator> a_declarator,
-            std::vector<std::shared_ptr<direct_declarator_part>>&& other_parts
-        );
-
-        const std::shared_ptr<declarator_id>
-        get_declarator_id() const;
-
-        const std::shared_ptr<declarator>
-        get_declarator() const;
-
-        const std::vector<std::shared_ptr<direct_declarator_part>>&
-        get_other_parts() const;
-
-    private:
-        std::shared_ptr<declarator_id> m_declarator_id;
-        std::shared_ptr<declarator> m_declarator;
-        std::vector<std::shared_ptr<direct_declarator_part>> m_other_parts;
+    const std::shared_ptr<declarator_id> declarator_id_;
+    const std::shared_ptr<declarator> declarator_;
+    const std::vector<std::shared_ptr<direct_declarator_part>> other_parts_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

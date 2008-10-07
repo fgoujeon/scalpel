@@ -28,21 +28,16 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class member_specification_access_specifier: public member_specification_part
+struct member_specification_access_specifier: public member_specification_part
 {
-    public:
-        explicit member_specification_access_specifier
-        (
-            access_specifier&& an_access_specifier
-        );
+    explicit member_specification_access_specifier
+    (
+        access_specifier&& a_access_specifier
+    );
 
-        const access_specifier&
-        get_access_specifier() const;
+    SOCOA_CPP_DEFINE_VISITABLE()
 
-        SOCOA_CPP_DEFINE_VISITABLE()
-
-    private:
-        access_specifier access_specifier_;
+    const access_specifier access_specifier_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

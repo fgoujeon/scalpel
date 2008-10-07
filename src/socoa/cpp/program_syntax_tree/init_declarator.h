@@ -27,20 +27,10 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class init_declarator
+struct init_declarator
 {
-    public:
-        explicit init_declarator
-        (
-            declarator&& a_declarator
-        );
-
-        const declarator&
-        get_declarator() const;
-
-    private:
-        declarator m_declarator;
-        //std::shared_ptr<initializer> m_initializer;
+    const declarator declarator_;
+    //const std::shared_ptr<initializer> initializer_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

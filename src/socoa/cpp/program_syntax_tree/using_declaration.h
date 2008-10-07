@@ -31,36 +31,22 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 class nested_name_specifier;
 class unqualified_id;
 
-class using_declaration: public member_declaration
+struct using_declaration: public member_declaration
 {
-    public:
-        using_declaration
-        (
-            bool typename_keyword,
-            bool leading_double_colon,
-            std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
-            std::shared_ptr<unqualified_id> an_unqualified_id
-        );
+    using_declaration
+    (
+        bool typename_keyword,
+        bool leading_double_colon,
+        std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
+        std::shared_ptr<unqualified_id> an_unqualified_id
+    );
 
-        bool
-        has_typename_keyword() const;
+    SOCOA_CPP_DEFINE_VISITABLE()
 
-        bool
-        has_leading_double_colon() const;
-
-        const std::shared_ptr<nested_name_specifier>
-        get_nested_name_specifier() const;
-
-        const std::shared_ptr<unqualified_id>
-        get_unqualified_id() const;
-
-        SOCOA_CPP_DEFINE_VISITABLE()
-
-    private:
-        bool typename_keyword_;
-        bool leading_double_colon_;
-        std::shared_ptr<nested_name_specifier> nested_name_specifier_;
-        std::shared_ptr<unqualified_id> unqualified_id_;
+    const bool typename_keyword_;
+    const bool leading_double_colon_;
+    const std::shared_ptr<nested_name_specifier> nested_name_specifier_;
+    const std::shared_ptr<unqualified_id> unqualified_id_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree
