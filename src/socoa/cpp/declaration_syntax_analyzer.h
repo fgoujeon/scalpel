@@ -222,7 +222,7 @@ class declaration_syntax_analyzer
         <
             class T,
             std::shared_ptr<T> (declaration_syntax_analyzer::*EvaluateFunction)(const tree_node_t&),
-            char Separator = ' '
+            const std::string& Separator// = util::space
         >
         std::shared_ptr<util::sequence<T, Separator>>
         evaluate_sequence(const tree_node_t& node);
@@ -292,7 +292,7 @@ class declaration_syntax_analyzer
         (
             const tree_node_t& parent_node,
             std::shared_ptr<T> (declaration_syntax_analyzer::*evaluate_function)(const tree_node_t&),
-            char separator
+            const std::string& separator
         );
 
         /**
@@ -391,7 +391,7 @@ template
 <
     class T,
     std::shared_ptr<T> (declaration_syntax_analyzer::*EvaluateFunction)(const declaration_syntax_analyzer::tree_node_t&),
-    char Separator
+    const std::string& Separator
 >
 std::shared_ptr<util::sequence<T, Separator>>
 declaration_syntax_analyzer::evaluate_sequence(const tree_node_t& node)
@@ -468,7 +468,7 @@ declaration_syntax_analyzer::evaluate_nodes
 (
     const tree_node_t& parent_node,
     std::shared_ptr<T> (declaration_syntax_analyzer::*evaluate_function)(const tree_node_t&),
-    char separator
+    const std::string& separator
 )
 {
     std::vector<std::shared_ptr<T>> seq;
@@ -477,12 +477,10 @@ declaration_syntax_analyzer::evaluate_nodes
         const tree_node_t& child_node = *i;
         const std::string child_value = get_value(child_node);
 
-        if
-        (
-            child_value.size() == 0 ||
-            (child_value.size() > 0 && child_value.at(0) != separator)
-        ) //if the current node is not a separator
+        if(child_value != separator) //if the current node is not a separator
+        {
             seq.push_back((this->*evaluate_function)(child_node));
+        }
     }
 
     return seq;

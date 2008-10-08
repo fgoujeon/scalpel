@@ -23,6 +23,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <memory>
 #include "../../util/sequence.h"
+#include "../../util/extern_strings.h"
 #include "visitor.h"
 #include "identifier.h"
 #include "identifier_or_template_id.h"
@@ -38,13 +39,13 @@ struct template_id: public identifier_or_template_id, public unqualified_id
     template_id
     (
         identifier&& an_identifier,
-        std::shared_ptr<util::sequence<template_argument, ','>> a_template_argument_list
+        std::shared_ptr<util::sequence<template_argument, util::comma>> a_template_argument_list
     );
 
     SOCOA_CPP_DEFINE_VISITABLE()
 
     const identifier identifier_;
-    const std::shared_ptr<util::sequence<template_argument, ','>> template_argument_list_;
+    const std::shared_ptr<util::sequence<template_argument, util::comma>> template_argument_list_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

@@ -488,7 +488,7 @@ template<>
 void
 program_syntax_tree_to_string_converter::convert
 (
-    const util::sequence<program_syntax_tree::member_declarator, ','>& seq
+    const util::sequence<program_syntax_tree::member_declarator, util::comma>& seq
 )
 {
     convert_visitable(seq);
@@ -497,7 +497,7 @@ template<>
 void
 program_syntax_tree_to_string_converter::convert
 (
-    const util::sequence<program_syntax_tree::template_argument, ','>& seq
+    const util::sequence<program_syntax_tree::template_argument, util::comma>& seq
 )
 {
     convert_visitable(seq);

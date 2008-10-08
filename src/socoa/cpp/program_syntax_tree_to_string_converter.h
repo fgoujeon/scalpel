@@ -89,13 +89,13 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
 
         template<class T>
         void
-        convert(const util::sequence<T, ' '>& seq);
+        convert(const util::sequence<T, util::space>& seq);
 
-        template<class T, char Separator>
+        template<class T, const std::string& Separator>
         void
         convert(const util::sequence<T, Separator>& seq);
 
-        template<class T, char Separator>
+        template<class T, const std::string& Separator>
         void
         convert_visitable(const util::sequence<T, Separator>& seq);
 
@@ -160,7 +160,7 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
 
 template<class T>
 void
-program_syntax_tree_to_string_converter::convert(const util::sequence<T, ' '>& seq)
+program_syntax_tree_to_string_converter::convert(const util::sequence<T, util::space>& seq)
 {
     typedef std::vector<std::shared_ptr<T>> item_list_t;
 
@@ -171,7 +171,7 @@ program_syntax_tree_to_string_converter::convert(const util::sequence<T, ' '>& s
     }
 }
 
-template<class T, char Separator>
+template<class T, const std::string& Separator>
 void
 program_syntax_tree_to_string_converter::convert(const util::sequence<T, Separator>& seq)
 {
@@ -187,7 +187,7 @@ program_syntax_tree_to_string_converter::convert(const util::sequence<T, Separat
     }
 }
 
-template<class T, char Separator>
+template<class T, const std::string& Separator>
 void
 program_syntax_tree_to_string_converter::convert_visitable(const util::sequence<T, Separator>& seq)
 {

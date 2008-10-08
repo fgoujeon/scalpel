@@ -50,7 +50,8 @@ evaluate_node                                           \
     &declaration_syntax_analyzer::evaluate_sequence     \
     <                                                   \
         type,                                           \
-        &declaration_syntax_analyzer::evaluate_##type   \
+        &declaration_syntax_analyzer::evaluate_##type,  \
+        util::space                                     \
     >                                                   \
 )
 
@@ -116,7 +117,8 @@ declaration_syntax_analyzer::evaluate_translation_unit(const tree_node_t& node)
                 &declaration_syntax_analyzer::evaluate_sequence
                 <
                     declaration,
-                    &declaration_syntax_analyzer::evaluate_declaration
+                    &declaration_syntax_analyzer::evaluate_declaration,
+                    util::space
                 >
             }
         }
@@ -157,9 +159,9 @@ declaration_syntax_analyzer::evaluate_unqualified_id(const tree_node_t& node)
         node,
         evaluate_function_typedefs<unqualified_id>::id_function_map_t
         {
-            /*{grammar::OPERATOR_FUNCTION_ID, &declaration_syntax_analyzer::evaluate_identifier},
-            {grammar::CONVERSION_FUNCTION_ID, &declaration_syntax_analyzer::evaluate_nested_name_specifier_template_id_part},
-            {grammar::DESTRUCTOR_NAME, &declaration_syntax_analyzer::evaluate_nested_name_specifier_template_id_part},*/
+//            {grammar::OPERATOR_FUNCTION_ID, &declaration_syntax_analyzer::evaluate_identifier},
+//            {grammar::CONVERSION_FUNCTION_ID, &declaration_syntax_analyzer::evaluate_nested_name_specifier_template_id_part},
+//            {grammar::DESTRUCTOR_NAME, &declaration_syntax_analyzer::evaluate_nested_name_specifier_template_id_part},
             {grammar::TEMPLATE_ID, &declaration_syntax_analyzer::evaluate_template_id},
             {grammar::IDENTIFIER, &declaration_syntax_analyzer::evaluate_identifier}
         },
@@ -282,9 +284,9 @@ declaration_syntax_analyzer::evaluate_declaration(const tree_node_t& node)
             {grammar::BLOCK_DECLARATION, &declaration_syntax_analyzer::evaluate_block_declaration},
             {grammar::FUNCTION_DEFINITION, &declaration_syntax_analyzer::evaluate_function_definition},
             {grammar::TEMPLATE_DECLARATION, &declaration_syntax_analyzer::evaluate_template_declaration},
-            /*{grammar::EXPLICIT_INSTANTIATION, &declaration_syntax_analyzer::},
-            {grammar::EXPLICIT_SPECIALIZATION, &declaration_syntax_analyzer::},
-            {grammar::LINKAGE_SPECIFICATION, &declaration_syntax_analyzer::},*/
+//            {grammar::EXPLICIT_INSTANTIATION, &declaration_syntax_analyzer::},
+//            {grammar::EXPLICIT_SPECIALIZATION, &declaration_syntax_analyzer::},
+//            {grammar::LINKAGE_SPECIFICATION, &declaration_syntax_analyzer::},
             {grammar::NAMESPACE_DEFINITION, &declaration_syntax_analyzer::evaluate_namespace_definition}
         },
         false
@@ -319,7 +321,7 @@ declaration_syntax_analyzer::evaluate_simple_declaration(const tree_node_t& node
     return std::make_shared<simple_declaration>
     (
         EVALUATE_SEQUENCE_NODE(decl_specifier, SIMPLE_DECLARATION_DECL_SPECIFIER_SEQ),
-        EVALUATE_SEPARATED_SEQUENCE_NODE(init_declarator, INIT_DECLARATOR_LIST, ',')
+        EVALUATE_SEPARATED_SEQUENCE_NODE(init_declarator, INIT_DECLARATOR_LIST, util::comma)
     );
 }
 
@@ -519,7 +521,7 @@ declaration_syntax_analyzer::evaluate_direct_declarator_function_part(const tree
     //grammar defines that this node MUST exist, but in practice it's not always the case
     if(!new_parameter_declaration_clause)
     {
-        typedef util::sequence<parameter_declaration, ','> parameter_declaration_seq;
+        typedef util::sequence<parameter_declaration, util::comma> parameter_declaration_seq;
 
         //create an empty parameter declaration clause, if node didn't have been found
         new_parameter_declaration_clause = std::make_shared<parameter_declaration_clause>
@@ -629,13 +631,14 @@ declaration_syntax_analyzer::evaluate_parameter_declaration_clause(const tree_no
     (
         parameter_declaration_clause
         {
-            EVALUATE_SEPARATED_SEQUENCE_NODE(parameter_declaration, PARAMETER_DECLARATION_LIST, ','),
+            EVALUATE_SEPARATED_SEQUENCE_NODE(parameter_declaration, PARAMETER_DECLARATION_LIST, util::comma),
             trailing_comma,
             ellipsis
         }
     );
 }
 
+///@todo factorize it
 std::shared_ptr<parameter_declaration>
 declaration_syntax_analyzer::evaluate_parameter_declaration(const tree_node_t& node)
 {
@@ -655,7 +658,12 @@ declaration_syntax_analyzer::evaluate_parameter_declaration(const tree_node_t& n
         decl_specifier_seq_node_id == grammar::PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ4 ||
         decl_specifier_seq_node_id == grammar::DECL_SPECIFIER_SEQ
     );
-    new_decl_specifier_seq = evaluate_sequence<decl_specifier, &declaration_syntax_analyzer::evaluate_decl_specifier>(decl_specifier_seq_node);
+    new_decl_specifier_seq = evaluate_sequence
+    <
+        decl_specifier,
+        &declaration_syntax_analyzer::evaluate_decl_specifier,
+        util::space
+    >(decl_specifier_seq_node);
 
     return std::make_shared<parameter_declaration>
     (
@@ -668,6 +676,7 @@ declaration_syntax_analyzer::evaluate_parameter_declaration(const tree_node_t& n
     );
 }
 
+///@todo factorize it
 std::shared_ptr<function_definition>
 declaration_syntax_analyzer::evaluate_function_definition(const tree_node_t& node)
 {
@@ -685,7 +694,12 @@ declaration_syntax_analyzer::evaluate_function_definition(const tree_node_t& nod
     std::shared_ptr<util::sequence<decl_specifier>> new_decl_specifier_seq;
     if(decl_specifier_seq_node)
     {
-        new_decl_specifier_seq = evaluate_sequence<decl_specifier, &declaration_syntax_analyzer::evaluate_decl_specifier>(*decl_specifier_seq_node);
+        new_decl_specifier_seq = evaluate_sequence
+        <
+            decl_specifier,
+            &declaration_syntax_analyzer::evaluate_decl_specifier,
+            util::space
+        >(*decl_specifier_seq_node);
     }
 
     //create function definition object
@@ -786,7 +800,7 @@ declaration_syntax_analyzer::evaluate_member_declaration_member_declarator_list(
     return std::make_shared<member_declaration_member_declarator_list>
     (
         EVALUATE_SEQUENCE_NODE(decl_specifier, MEMBER_DECLARATION_DECL_SPECIFIER_SEQ),
-        EVALUATE_SEPARATED_SEQUENCE_NODE(member_declarator, MEMBER_DECLARATOR_LIST, ',')
+        EVALUATE_SEPARATED_SEQUENCE_NODE(member_declarator, MEMBER_DECLARATOR_LIST, util::comma)
     );
 }
 
@@ -863,7 +877,7 @@ declaration_syntax_analyzer::evaluate_ctor_initializer(const tree_node_t& node)
     (
         ctor_initializer
         {
-            *EVALUATE_SEPARATED_SEQUENCE_NODE(mem_initializer, MEM_INITIALIZER_LIST, ',')
+            *EVALUATE_SEPARATED_SEQUENCE_NODE(mem_initializer, MEM_INITIALIZER_LIST, util::comma)
         }
     );
 }
@@ -918,7 +932,7 @@ declaration_syntax_analyzer::evaluate_template_id(const tree_node_t& node)
     return std::make_shared<template_id>
     (
         *ASSERTED_EVALUATE_NODE(identifier, IDENTIFIER),
-        EVALUATE_SEPARATED_SEQUENCE_NODE(template_argument, TEMPLATE_ARGUMENT_LIST, ',')
+        EVALUATE_SEPARATED_SEQUENCE_NODE(template_argument, TEMPLATE_ARGUMENT_LIST, util::comma)
     );
 }
 

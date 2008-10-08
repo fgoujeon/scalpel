@@ -18,21 +18,22 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_CTOR_INITIALIZER_H
-#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_CTOR_INITIALIZER_H
+#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_EXPRESSIONS_H
+#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_EXPRESSIONS_H
 
 #include "../../util/sequence.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
-
-class mem_initializer;
-
-struct ctor_initializer
-{
-    const util::sequence<mem_initializer, util::comma> mem_initializer_list_;
-};
-
+/*
+typedef util::sequence<, util::inequal_sign> inequality_expression;
+typedef util::sequence<inequality_expression, util::equal_sign> equality_expression;
+typedef util::sequence<equality_expression, util::ampersand> and_expression;
+typedef util::sequence<and_expression, util::circumflex> exclusive_or_expression;
+typedef util::sequence<exclusive_or_expression, util::pipe> inclusive_or_expression;
+typedef util::sequence<inclusive_or_expression, util::double_ampersand> logical_and_expression;
+typedef util::sequence<logical_and_expression, util::double_pipe> logical_or_expression;
+*/
 }}} //namespace socoa::cpp::program_syntax_tree
 
 #endif

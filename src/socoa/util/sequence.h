@@ -23,11 +23,12 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <vector>
 #include <memory>
+#include "extern_strings.h"
 
 namespace socoa { namespace util
 {
 
-template<class T, char Separator = ' '>
+template<class T, const std::string& Separator = space>
 class sequence
 {
     public:
@@ -39,14 +40,16 @@ class sequence
         const std::vector<std::shared_ptr<T>>&
         get_items() const;
 
-        char
+        const std::string&
         get_separator() const;
+
+        static const std::string& separator;
 
     private:
         std::vector<std::shared_ptr<T>> items_;
 };
 
-template<class T, char Separator>
+template<class T, const std::string& Separator>
 sequence<T, Separator>::sequence
 (
     std::vector<std::shared_ptr<T>>&& items
@@ -55,19 +58,22 @@ sequence<T, Separator>::sequence
 {
 }
 
-template<class T, char Separator>
+template<class T, const std::string& Separator>
 const std::vector<std::shared_ptr<T>>&
 sequence<T, Separator>::get_items() const
 {
     return items_;
 }
 
-template<class T, char Separator>
-char
+template<class T, const std::string& Separator>
+const std::string&
 sequence<T, Separator>::get_separator() const
 {
     return Separator;
 }
+
+template<class T, const std::string& Separator>
+const std::string& sequence<T, Separator>::separator = Separator;
 
 }} //namespace socoa::util
 

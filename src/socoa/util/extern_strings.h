@@ -18,19 +18,22 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "member_declaration_member_declarator_list.h"
+#ifndef SOCOA_UTIL_EXTERN_STRINGS_H
+#define SOCOA_UTIL_EXTERN_STRINGS_H
 
-namespace socoa { namespace cpp { namespace program_syntax_tree
+#include <string>
+
+namespace socoa { namespace util
 {
 
-member_declaration_member_declarator_list::member_declaration_member_declarator_list
-(
-    std::shared_ptr<util::sequence<decl_specifier>> a_decl_specifier_seq,
-    std::shared_ptr<util::sequence<member_declarator, util::comma>> a_member_declarator_list
-):
-    decl_specifier_seq_(a_decl_specifier_seq),
-    member_declarator_list_(a_member_declarator_list)
-{
-}
+extern const std::string space;
+extern const std::string comma;
+extern const std::string pipe;
+extern const std::string double_pipe;
+extern const std::string ampersand;
+extern const std::string double_ampersand;
+extern const std::string circumflex;
 
-}}} //namespace socoa::cpp::program_syntax_tree
+}} //namespace socoa::util
+
+#endif

@@ -39,19 +39,21 @@ class keyword_enumeration
         get_value() const;
 
     private:
-        std::vector<std::string>::const_iterator value_ptr_;
+        const std::vector<std::string>::const_iterator value_ptr_;
 };
 
 template<const std::vector<std::string>& StringList>
-keyword_enumeration<StringList>::keyword_enumeration(const std::string& value)
-{
-    value_ptr_ = std::find
+keyword_enumeration<StringList>::keyword_enumeration(const std::string& value):
+    value_ptr_
     (
-        StringList.begin(),
-        StringList.end(),
-        value
-    );
-
+        std::find
+        (
+            StringList.begin(),
+            StringList.end(),
+            value
+        )
+    )
+{
     assert(value_ptr_ != StringList.end());
 }
 

@@ -37,13 +37,13 @@ struct member_declaration_member_declarator_list: public member_declaration
     member_declaration_member_declarator_list
     (
         std::shared_ptr<util::sequence<decl_specifier>> a_decl_specifier_seq,
-        std::shared_ptr<util::sequence<member_declarator, ','>> a_member_declarator_list
+        std::shared_ptr<util::sequence<member_declarator, util::comma>> a_member_declarator_list
     );
 
     SOCOA_CPP_DEFINE_VISITABLE()
 
     const std::shared_ptr<util::sequence<decl_specifier>> decl_specifier_seq_;
-    const std::shared_ptr<util::sequence<member_declarator, ','>> member_declarator_list_;
+    const std::shared_ptr<util::sequence<member_declarator, util::comma>> member_declarator_list_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree
