@@ -80,7 +80,13 @@ std::string preprocessor::operator()(const std::string& filename)
     ctx.add_sysinclude_path("/usr/include/c++/4.3/i486-linux-gnu/");
     ctx.add_sysinclude_path("/usr/include/linux/");
     ctx.add_sysinclude_path("/usr/lib/gcc/i486-linux-gnu/4.3/include/");
-
+    /*ctx.add_sysinclude_path("/usr/include");
+    ctx.add_sysinclude_path("/usr/include/");
+    ctx.add_sysinclude_path("/usr/local/include/c++/4.4.0/");
+    ctx.add_sysinclude_path("/usr/local/include/c++/4.4.0/ext/");
+    ctx.add_sysinclude_path("/usr/local/include/c++/4.4.0/i686-pc-linux-gnu/");
+    ctx.add_sysinclude_path("/usr/include/linux/");
+    ctx.add_sysinclude_path("/usr/local/lib/gcc/i686-pc-linux-gnu/4.4.0/include/");*/
 
     // The input stream is preprocessed for you during iteration
     // over [first, last)

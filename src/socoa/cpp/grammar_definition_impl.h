@@ -107,13 +107,26 @@ struct grammar_definition_impl
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::NEW_INITIALIZER>> new_initializer;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DELETE_EXPRESSION>> delete_expression;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CAST_EXPRESSION>> cast_expression;
-    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PM_EXPRESSION>> pm_expression;
-    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MULTIPLICATIVE_EXPRESSION>> multiplicative_expression;
-    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ADDITIVE_EXPRESSION>> additive_expression;
-    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::SHIFT_EXPRESSION>> shift_expression;
-    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_SHIFT_EXPRESSION>> template_argument_shift_expression;
-    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::RELATIONAL_EXPRESSION>> relational_expression;
-    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_RELATIONAL_EXPRESSION>> template_argument_relational_expression;
+    boost::spirit::rule<ScannerT> pm_ptr_expression;
+    boost::spirit::rule<ScannerT> pm_ref_expression;
+    boost::spirit::rule<ScannerT> modulo_expression;
+    boost::spirit::rule<ScannerT> divisive_expression;
+    boost::spirit::rule<ScannerT> multiplicative_expression;
+    boost::spirit::rule<ScannerT> subtractive_expression;
+    boost::spirit::rule<ScannerT> additive_expression;
+    boost::spirit::rule<ScannerT> left_shift_expression;
+    boost::spirit::rule<ScannerT> right_shift_expression;
+    boost::spirit::rule<ScannerT> template_argument_right_shift_expression;
+    boost::spirit::rule<ScannerT> less_than_or_equal_to_expression;
+    boost::spirit::rule<ScannerT> template_less_than_or_equal_to_expression;
+    boost::spirit::rule<ScannerT> less_than_expression;
+    boost::spirit::rule<ScannerT> template_less_than_expression;
+    boost::spirit::rule<ScannerT> greater_than_or_equal_to_expression;
+    boost::spirit::rule<ScannerT> template_greater_than_or_equal_to_expression;
+    boost::spirit::rule<ScannerT> greater_than_expression;
+    boost::spirit::rule<ScannerT> template_greater_than_expression;
+    boost::spirit::rule<ScannerT> inequality_expression;
+    boost::spirit::rule<ScannerT> template_argument_inequality_expression;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EQUALITY_EXPRESSION>> equality_expression;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_EQUALITY_EXPRESSION>> template_argument_equality_expression;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::AND_EXPRESSION>> and_expression;
@@ -767,41 +780,91 @@ grammar_definition_impl<ScannerT>::grammar_definition_impl(const grammar& self)
         | unary_expression
     ;
 
-    pm_expression
-        = cast_expression % (str_p(".*") | "->*")
+    pm_ptr_expression
+        = cast_expression % "->*"
+    ;
+
+    pm_ref_expression
+        = pm_ptr_expression % ".*"
+    ;
+
+    modulo_expression
+        = pm_ref_expression % '%'
+    ;
+
+    divisive_expression
+        = modulo_expression % '/'
     ;
 
     multiplicative_expression
-        = pm_expression % (ch_p('*') | '/' | '%')
+        = divisive_expression % '*'
+    ;
+
+    subtractive_expression
+        = multiplicative_expression % '-'
     ;
 
     additive_expression
-        = multiplicative_expression % (ch_p('+') | '-')
+        = subtractive_expression % '+'
     ;
 
-    shift_expression
-        = additive_expression % (str_p("<<") | ">>")
+    left_shift_expression
+        = additive_expression % "<<"
+    ;
+
+    right_shift_expression
+        = left_shift_expression % ">>"
     ;
     //a shift expression used as a template argument must be placed between brackets if it contains any '>' characters
-    template_argument_shift_expression
-        = '(' >> (additive_expression % (str_p("<<") | ">>")) >> ')'
-        | additive_expression % str_p("<<")
+    template_argument_right_shift_expression
+        = '(' >> (left_shift_expression % ">>") >> ')'
+        | left_shift_expression
     ;
 
-    relational_expression
-        = shift_expression % (str_p("<=") | ">=" | '<' | '>')
+    less_than_or_equal_to_expression
+        = right_shift_expression % "<="
     ;
-    //a relational_expression used as a template argument must be placed between brackets if it contains any '>' characters
-    template_argument_relational_expression
-        = '(' >> (shift_expression % (str_p("<=") | ">=" | '<' | '>')) >> ')'
-        | template_argument_shift_expression % (str_p("<=") | '<')
+    template_less_than_or_equal_to_expression
+        = template_argument_right_shift_expression
+    ;
+
+    less_than_expression
+        = less_than_or_equal_to_expression % '<'
+    ;
+    template_less_than_expression
+        = template_less_than_or_equal_to_expression
+    ;
+
+    greater_than_or_equal_to_expression
+        = less_than_expression % ">="
+    ;
+    //a shift expression used as a template argument must be placed between brackets if it contains any '>' characters
+    template_greater_than_or_equal_to_expression
+        = '(' >> (less_than_expression % ">=") >> ')'
+        | template_less_than_expression
+    ;
+
+    greater_than_expression
+        = greater_than_or_equal_to_expression % '>'
+    ;
+    //a shift expression used as a template argument must be placed between brackets if it contains any '>' characters
+    template_greater_than_expression
+        = '(' >> (greater_than_or_equal_to_expression % '>') >> ')'
+        | template_greater_than_or_equal_to_expression
+    ;
+
+    inequality_expression
+        = greater_than_expression % "!="
+    ;
+    template_argument_inequality_expression
+        = template_greater_than_expression % "!="
     ;
 
     equality_expression
-        = relational_expression % (str_p("==") | "!=")
+        = inequality_expression % "=="
     ;
     template_argument_equality_expression
-        = template_argument_relational_expression % (str_p("==") | "!=")
+        = template_argument_inequality_expression % "=="
     ;
 
     and_expression
