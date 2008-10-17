@@ -78,19 +78,6 @@ new_namespace<IteratorT>::operator()(const IteratorT* first, const IteratorT* la
         )
     );
 
-    std::cout << "try to find an already existing namespace named '" << namespace_name << "'...\n";
-    std::cout << "there are " << existing_namespaces.size() << " namespace(s) in the current namespace.\n";
-    if(same_namespace_it == existing_namespaces.end())
-    {
-        std::cout << "no such namespace found";
-    }
-    else
-    {
-        std::cout << "namespace found!";
-    }
-    std::cout << "\n\n";
-
-
     //create the new namespace or get the existing one
     std::shared_ptr<program_tree::namespace_> new_namespace;
     if(same_namespace_it == existing_namespaces.end()) //if no similar namespace has been found
@@ -105,7 +92,7 @@ new_namespace<IteratorT>::operator()(const IteratorT* first, const IteratorT* la
         new_namespace = *same_namespace_it;
     }
 
-    //tell the scope cursor that we will enter in the namespace
+    //tell the scope cursor that we will enter in the new namespace
     scope_cursor_.set_last_created_scope(new_namespace);
 }
 

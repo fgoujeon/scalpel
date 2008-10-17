@@ -94,8 +94,6 @@ namespace_::add(std::shared_ptr<namespace_member> member)
 
     //add member to private container
     members_.push_back(member);
-
-    std::cout << member->get_name() << " added in " << get_full_name() << '\n';
 }
 
 void
@@ -110,21 +108,8 @@ namespace_::add(std::shared_ptr<namespace_> a_namespace)
 void
 namespace_::clear()
 {
-    for
-    (
-        std::vector<std::shared_ptr<namespace_member>>::iterator i = members_.begin();
-        i != members_.end();
-        ++i
-    )
-    {
-        std::shared_ptr<namespace_member> member = *i;
-        member->set_parent(std::shared_ptr<namespace_>());
-    }
-
     members_.clear();
     namespaces_.clear();
-    assert(members_.empty() && namespaces_.empty());
-    std::cout << "namespace '" << get_full_name() << "' has been cleared.\n";
 }
 
 }}} //namespace socoa::cpp::program_tree

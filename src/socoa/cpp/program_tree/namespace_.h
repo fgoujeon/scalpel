@@ -55,6 +55,8 @@ class namespace_:
         */
         explicit namespace_(const std::string& name);
 
+        namespace_(const namespace_& n) = delete;
+
         /**
         Destructor.
         */

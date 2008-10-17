@@ -30,7 +30,7 @@ evaluate_node                                           \
 (                                                       \
     node,                                               \
     grammar::id,                                        \
-    &syntax_analyzer::evaluate_##type       \
+    &syntax_analyzer::evaluate_##type                   \
 )
 
 #define ASSERTED_EVALUATE_NODE(type, id)                \
@@ -38,7 +38,7 @@ evaluate_node                                           \
 (                                                       \
     node,                                               \
     grammar::id,                                        \
-    &syntax_analyzer::evaluate_##type,      \
+    &syntax_analyzer::evaluate_##type,                  \
     true                                                \
 )
 
@@ -47,10 +47,10 @@ evaluate_node                                           \
 (                                                       \
     node,                                               \
     grammar::id,                                        \
-    &syntax_analyzer::evaluate_sequence     \
+    &syntax_analyzer::evaluate_sequence                 \
     <                                                   \
         type,                                           \
-        &syntax_analyzer::evaluate_##type,  \
+        &syntax_analyzer::evaluate_##type,              \
         util::space                                     \
     >                                                   \
 )
@@ -60,10 +60,10 @@ evaluate_node                                                       \
 (                                                                   \
     node,                                                           \
     grammar::id,                                                    \
-    &syntax_analyzer::evaluate_sequence                 \
+    &syntax_analyzer::evaluate_sequence                             \
     <                                                               \
         type,                                                       \
-        &syntax_analyzer::evaluate_##type,              \
+        &syntax_analyzer::evaluate_##type,                          \
         separator                                                   \
     >                                                               \
 )
@@ -76,7 +76,7 @@ namespace socoa { namespace cpp
 {
 
 syntax_analyzer::syntax_analyzer():
-    grammar_(*new grammar(grammar_configuration_))
+    grammar_(grammar_configuration_)
 {
     grammar_configuration_.skip_function_bodies = true;
 }
