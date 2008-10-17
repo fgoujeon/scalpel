@@ -29,9 +29,10 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "scope_cursor.h"
 #include "program_tree/namespace_.h"
 #include "semantic_actions/print_out.h"
-#include "semantic_actions/new_namespace.h"
 #include "semantic_actions/enter_scope.h"
 #include "semantic_actions/leave_scope.h"
+#include "semantic_actions/new_namespace.h"
+#include "semantic_actions/new_class.h"
 
 namespace socoa { namespace cpp
 {
@@ -311,18 +312,19 @@ struct grammar_definition_impl
     Semantic actions
     */
     scope_cursor& scope_cursor_;
-    new_namespace<typename ScannerT::value_t> new_namespace_a;
     enter_scope<typename ScannerT::value_t> enter_scope_a;
     leave_scope<typename ScannerT::value_t> leave_scope_a;
-    //new_class<typename ScannerT::value_t> new_class_a;
+    new_namespace<typename ScannerT::value_t> new_namespace_a;
+    new_class<typename ScannerT::value_t> new_class_a;
 };
 
 template<typename ScannerT>
 grammar_definition_impl<ScannerT>::grammar_definition_impl(const grammar& self):
     scope_cursor_(self.scope_cursor_),
-    new_namespace_a(scope_cursor_),
     enter_scope_a(scope_cursor_),
-    leave_scope_a(scope_cursor_)
+    leave_scope_a(scope_cursor_),
+    new_namespace_a(scope_cursor_),
+    new_class_a(scope_cursor_)
 {
     using namespace boost::spirit;
 
@@ -1450,13 +1452,13 @@ grammar_definition_impl<ScannerT>::grammar_definition_impl(const grammar& self):
 
     //1.8 - Classes [gram.class]
     class_specifier
-        = class_head >> ch_p('{') >> !member_specification >> ch_p('}')
+        = class_head >> '{' >> epsilon_p[enter_scope_a] >> !member_specification >> '}' >> epsilon_p[leave_scope_a]
     ;
 
     class_head
         = class_key >> !nested_name_specifier >> template_id >> !base_clause //in that case, a forward declaration has already been done
         | class_key >> nested_name_specifier >> identifier >> !base_clause //ditto
-        | class_key >> !identifier >> !base_clause
+        | class_key >> !identifier[new_class_a] >> !base_clause
     ;
 
     class_key

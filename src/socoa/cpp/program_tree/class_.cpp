@@ -18,39 +18,40 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "namespace_.h"
+#include "class_.h"
 
 #include <iostream>
 #include <cassert>
+#include "namespace_.h"
 
 namespace socoa { namespace cpp { namespace program_tree
 {
 
-namespace_::namespace_()
+class_::class_()
 {
-    std::cout << "new anonymous namespace" << std::endl;
+    std::cout << "new anonymous class" << std::endl;
 }
 
-namespace_::namespace_(const std::string& name):
+class_::class_(const std::string& name):
     name_(name)
 {
-    std::cout << "new namespace " << get_full_name() << std::endl;
+    std::cout << "new class " << get_full_name() << std::endl;
 }
 
 const std::string&
-namespace_::get_name() const
+class_::get_name() const
 {
     return name_;
 }
 
 bool
-namespace_::has_that_name(const std::string& name) const
+class_::has_that_name(const std::string& name) const
 {
     return name_ == name;
 }
 
 const std::string
-namespace_::get_full_name() const
+class_::get_full_name() const
 {
     std::string full_name;
 
@@ -64,53 +65,71 @@ namespace_::get_full_name() const
 }
 
 bool
-namespace_::is_global() const
+class_::is_global() const
 {
     return !has_parent();
 }
 
-const std::vector<std::shared_ptr<namespace_member>>&
-namespace_::get_members() const
+bool
+class_::has_parent() const
+{
+    return !parent_.expired();;
+}
+
+std::shared_ptr<named_scope>
+class_::get_parent()
+{
+    return parent_.lock();
+}
+
+const std::shared_ptr<named_scope>
+class_::get_parent() const
+{
+    return parent_.lock();
+}
+
+void
+class_::set_parent(std::shared_ptr<class_> parent)
+{
+    assert(parent_.expired()); //assert that member doesn't have any parent yet
+    parent_ = parent;
+}
+
+void
+class_::set_parent(std::shared_ptr<namespace_> parent)
+{
+    assert(parent_.expired()); //assert that member doesn't have any parent yet
+    parent_ = parent;
+}
+
+const std::vector<std::shared_ptr<class_member>>&
+class_::get_members() const
 {
     return members_;
 }
 
-const std::vector<std::shared_ptr<namespace_>>&
-namespace_::get_namespaces() const
-{
-    return namespaces_;
-}
-
 const std::vector<std::shared_ptr<class_>>&
-namespace_::get_classes() const
+class_::get_classes() const
 {
     return classes_;
 }
 
 void
-namespace_::add(std::shared_ptr<namespace_> member)
-{
-    namespaces_.push_back(member);
-    add_member(member);
-}
-
-void
-namespace_::add(std::shared_ptr<class_> member)
+class_::add(std::shared_ptr<class_> member)
 {
     classes_.push_back(member);
     add_member(member);
 }
 
 void
-namespace_::clear()
+class_::clear()
 {
     members_.clear();
-    namespaces_.clear();
     classes_.clear();
 }
 
 void
-namespace_::add_member(std::shared_ptr<namespace_member> member)
+class_::add_member(std::shared_ptr<class_member> member)
 {
     //tell member that 'this' is its parent
     member->set_parent(shared_from_this());

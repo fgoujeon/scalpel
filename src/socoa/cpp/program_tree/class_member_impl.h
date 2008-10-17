@@ -18,32 +18,33 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_TREE_CLASS_PARENT_H
-#define SOCOA_CPP_PROGRAM_TREE_CLASS_PARENT_H
+#ifndef SOCOA_CPP_PROGRAM_TREE_CLASS_MEMBER_IMPL_H
+#define SOCOA_CPP_PROGRAM_TREE_CLASS_MEMBER_IMPL_H
 
-#include "named_scope.h"
+#include <memory>
 
 namespace socoa { namespace cpp { namespace program_tree
 {
 
 class class_;
 
-struct class_parent: virtual public named_scope
+class class_member_impl
 {
-    virtual
-    ~class_parent(){};
+    public:
+        bool
+        has_parent() const;
 
-    virtual
-    const std::vector<std::shared_ptr<class_>>&
-    get_classes() const = 0;
+        std::shared_ptr<class_>
+        get_parent();
 
-    virtual
-    void
-    add(std::shared_ptr<class_> a_class) = 0;
+        const std::shared_ptr<class_>
+        get_parent() const;
 
-    virtual
-    bool
-    is_global() const = 0;
+        void
+        set_parent(std::shared_ptr<class_> parent);
+
+    private:
+        std::weak_ptr<class_> parent_;
 };
 
 }}} //namespace socoa::cpp::program_tree

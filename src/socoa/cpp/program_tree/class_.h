@@ -18,45 +18,45 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_TREE_NAMESPACE_H
-#define SOCOA_CPP_PROGRAM_TREE_NAMESPACE_H
+#ifndef SOCOA_CPP_PROGRAM_TREE_CLASS_H
+#define SOCOA_CPP_PROGRAM_TREE_CLASS_H
 
 #include <string>
 #include <vector>
 #include <memory>
 #include "namespace_member.h"
-#include "namespace_member_impl.h"
-#include "namespace_parent.h"
+#include "class_member.h"
 #include "class_parent.h"
 #include "named_scope.h"
-#include "class_.h"
 
 namespace socoa { namespace cpp { namespace program_tree
 {
 
+class namespace_;
+
 /**
 Represents a C++ namespace.
 */
-class namespace_:
+class class_:
     public namespace_member,
-    public namespace_parent,
+    public class_member,
     public class_parent,
     public virtual named_scope,
-    public std::enable_shared_from_this<namespace_>
+    public std::enable_shared_from_this<class_>
 {
     public:
         /**
-        Creates an anonymous namespace. Equivalent to namespace_("").
+        Creates an anonymous namespace. Equivalent to class_("").
         */
-        namespace_();
+        class_();
 
         /**
         Creates a named namespace.
         @param name the namespace's name
         */
-        explicit namespace_(const std::string& name);
+        explicit class_(const std::string& name);
 
-        namespace_(const namespace_& n) = delete;
+        class_(const class_& n) = delete;
 
         /**
         @return the name of the namespace
@@ -87,55 +87,37 @@ class namespace_:
         @return true if the namespace has a parent scope
         */
         bool
-        has_parent() const
-        {
-            return namespace_member_impl_.has_parent();
-        }
+        has_parent() const;
 
         /**
         @return the parent of the namespace
         */
         std::shared_ptr<named_scope>
-        get_parent()
-        {
-            return namespace_member_impl_.get_parent();
-        }
+        get_parent();
 
         /**
         @return the parent of the namespace
         */
         const std::shared_ptr<named_scope>
-        get_parent() const
-        {
-            return namespace_member_impl_.get_parent();
-        }
+        get_parent() const;
 
         /**
         Sets the parent of the namespace.
         */
         void
-        set_parent(std::shared_ptr<namespace_> parent)
-        {
-            namespace_member_impl_.set_parent(parent);
-        }
+        set_parent(std::shared_ptr<class_> parent);
+
+        void
+        set_parent(std::shared_ptr<namespace_> parent);
 
         /**
         @return the namespace's member list (i.e. the list of namespaces, classes, functions, etc.)
         */
-        const std::vector<std::shared_ptr<namespace_member>>&
+        const std::vector<std::shared_ptr<class_member>>&
         get_members() const;
-
-        /**
-        @return the namespace's namespace member list (i.e. the list of namespaces without classes, functions, etc.)
-        */
-        const std::vector<std::shared_ptr<namespace_>>&
-        get_namespaces() const;
 
         const std::vector<std::shared_ptr<class_>>&
         get_classes() const;
-
-        void
-        add(std::shared_ptr<namespace_> member);
 
         void
         add(std::shared_ptr<class_> member);
@@ -149,12 +131,12 @@ class namespace_:
         @param member the member to be added
         */
         void
-        add_member(std::shared_ptr<namespace_member> member);
+        add_member(std::shared_ptr<class_member> member);
 
-        namespace_member_impl namespace_member_impl_;
         std::string name_;
-        std::vector<std::shared_ptr<namespace_member>> members_;
-        std::vector<std::shared_ptr<namespace_>> namespaces_;
+        std::weak_ptr<class_parent> parent_;
+        std::vector<std::shared_ptr<class_member>> members_;
+        std::vector<std::shared_ptr<class_>> namespaces_;
         std::vector<std::shared_ptr<class_>> classes_;
 };
 

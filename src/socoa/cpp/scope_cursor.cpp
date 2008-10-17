@@ -70,6 +70,7 @@ scope_cursor::enter_last_created_scope()
 {
     assert(last_created_scope_ && "no scope had been created yet");
     enter_scope(last_created_scope_);
+    last_created_scope_.reset();
 }
 
 }} //namespace socoa::cpp
