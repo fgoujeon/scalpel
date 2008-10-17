@@ -31,6 +31,12 @@ struct namespace_parent: virtual public named_scope
     virtual
     ~namespace_parent(){};
 
+    const std::vector<std::shared_ptr<namespace_>>&
+    get_specific_members() const
+    {
+        return get_namespaces();
+    }
+
     virtual
     const std::vector<std::shared_ptr<namespace_>>&
     get_namespaces() const = 0;

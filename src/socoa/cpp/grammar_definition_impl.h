@@ -28,11 +28,11 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "grammar.h"
 #include "scope_cursor.h"
 #include "program_tree/namespace_.h"
+#include "program_tree/class_.h"
 #include "semantic_actions/print_out.h"
 #include "semantic_actions/enter_scope.h"
 #include "semantic_actions/leave_scope.h"
-#include "semantic_actions/new_namespace.h"
-#include "semantic_actions/new_class.h"
+#include "semantic_actions/new_named_scope.h"
 
 namespace socoa { namespace cpp
 {
@@ -314,8 +314,9 @@ struct grammar_definition_impl
     scope_cursor& scope_cursor_;
     enter_scope<typename ScannerT::value_t> enter_scope_a;
     leave_scope<typename ScannerT::value_t> leave_scope_a;
-    new_namespace<typename ScannerT::value_t> new_namespace_a;
-    new_class<typename ScannerT::value_t> new_class_a;
+    //new_namespace<typename ScannerT::value_t> new_namespace_a;
+    new_named_scope<typename ScannerT::value_t, program_tree::namespace_> new_namespace_a;
+    new_named_scope<typename ScannerT::value_t, program_tree::class_> new_class_a;
 };
 
 template<typename ScannerT>

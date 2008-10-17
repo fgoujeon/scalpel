@@ -17,25 +17,24 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_NEW_CLASS_H
-#define SOCOA_CPP_NEW_CLASS_H
+#ifndef SOCOA_CPP_NEW_NAMED_SCOPE_H
+#define SOCOA_CPP_NEW_NAMED_SCOPE_H
 
 #include <string>
 #include <iostream>
 #include <algorithm>
 #include <functional>
 #include "../scope_cursor.h"
-#include "../program_tree/class_.h"
 #include "../program_tree/named_scope.h"
 
 namespace socoa { namespace cpp
 {
 
-template <class IteratorT>
-class new_class
+template <class IteratorT, class ScopeT>
+class new_named_scope
 {
     public:
-        new_class(scope_cursor& a_scope_cursor);
+        new_named_scope(scope_cursor& a_scope_cursor);
 
         void
         operator()(const IteratorT* first, const IteratorT* last) const;
@@ -44,56 +43,56 @@ class new_class
         scope_cursor& scope_cursor_;
 };
 
-template <class IteratorT>
-new_class<IteratorT>::new_class(scope_cursor& a_scope_cursor):
+template <class IteratorT, class ScopeT>
+new_named_scope<IteratorT, ScopeT>::new_named_scope(scope_cursor& a_scope_cursor):
     scope_cursor_(a_scope_cursor)
 {
 }
 
-template <class IteratorT>
+template <class IteratorT, class ScopeT>
 void
-new_class<IteratorT>::operator()(const IteratorT* first, const IteratorT* last) const
+new_named_scope<IteratorT, ScopeT>::operator()(const IteratorT* first, const IteratorT* last) const
 {
-    std::string class_name(first, last);
+    std::string scope_name(first, last);
 
-    //get the current scope (if it's a class_parent)
-    std::shared_ptr<program_tree::class_parent> current_scope = std::dynamic_pointer_cast<program_tree::class_parent>
+    //get the current scope (if it's able to hold a ScopeT == if its type is ScopeT::parent)
+    std::shared_ptr<typename ScopeT::parent> current_scope = std::dynamic_pointer_cast<typename ScopeT::parent>
     (
         scope_cursor_.get_current_scope()
     );
-    assert(current_scope);
+    assert(current_scope); //should exist as grammar defined it
 
-    //try to get an already existing namespace with the same name
-    typedef std::vector<std::shared_ptr<program_tree::class_>> class_vector;
-    const class_vector& existing_classes = current_scope->get_classes();
-    const class_vector::const_iterator same_namespace_it = std::find_if
+    //try to get an already existing named scope with the same name
+    typedef std::vector<std::shared_ptr<ScopeT>> scope_vector_t;
+    const scope_vector_t& existing_scopes = current_scope->get_specific_members();
+    typename scope_vector_t::const_iterator same_scope_it = std::find_if
     (
-        existing_classes.begin(),
-		existing_classes.end(),
+        existing_scopes.begin(),
+		existing_scopes.end(),
         std::bind
         (
-            &program_tree::class_::has_that_name,
+            &ScopeT::has_that_name,
             std::placeholders::_1,
-            class_name
+            scope_name
         )
     );
 
     //create the new namespace or get the existing one
-    std::shared_ptr<program_tree::class_> new_class;
-    if(same_namespace_it == existing_classes.end()) //if no similar namespace has been found
+    std::shared_ptr<ScopeT> new_named_scope;
+    if(same_scope_it == existing_scopes.end()) //if no similar namespace has been found
     {
         //create a namespace object
-        new_class = std::make_shared<program_tree::class_>(class_name);
+        new_named_scope = std::make_shared<ScopeT>(scope_name);
         //add the new namespace to the current namespace
-        current_scope->add(new_class);
+        current_scope->add(new_named_scope);
     }
     else
     {
-        new_class = *same_namespace_it;
+        new_named_scope = *same_scope_it;
     }
 
     //tell the scope cursor that we will enter in the new namespace
-    scope_cursor_.set_last_created_scope(new_class);
+    scope_cursor_.set_last_created_scope(new_named_scope);
 }
 
 }} //namespace socoa::cpp

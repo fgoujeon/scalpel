@@ -33,6 +33,12 @@ struct class_parent: virtual public named_scope
     virtual
     ~class_parent(){};
 
+    const std::vector<std::shared_ptr<class_>>&
+    get_specific_members() const
+    {
+        return get_classes();
+    }
+
     virtual
     const std::vector<std::shared_ptr<class_>>&
     get_classes() const = 0;

@@ -45,6 +45,8 @@ class class_:
     public std::enable_shared_from_this<class_>
 {
     public:
+        typedef class_parent parent;
+
         /**
         Creates an anonymous namespace. Equivalent to class_("").
         */

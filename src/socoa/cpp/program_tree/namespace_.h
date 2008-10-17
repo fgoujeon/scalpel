@@ -45,6 +45,8 @@ class namespace_:
     public std::enable_shared_from_this<namespace_>
 {
     public:
+        typedef namespace_parent parent;
+
         /**
         Creates an anonymous namespace. Equivalent to namespace_("").
         */
@@ -123,6 +125,10 @@ class namespace_:
         @return the namespace's member list (i.e. the list of namespaces, classes, functions, etc.)
         */
         const std::vector<std::shared_ptr<namespace_member>>&
+        get_members() const;
+
+        template <class ScopeT>
+        const std::vector<std::shared_ptr<ScopeT>>&
         get_members() const;
 
         /**

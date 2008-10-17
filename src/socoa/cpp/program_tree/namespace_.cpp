@@ -75,6 +75,20 @@ namespace_::get_members() const
     return members_;
 }
 
+template <>
+const std::vector<std::shared_ptr<namespace_>>&
+namespace_::get_members() const
+{
+    return namespaces_;
+}
+
+template <>
+const std::vector<std::shared_ptr<class_>>&
+namespace_::get_members() const
+{
+    return classes_;
+}
+
 const std::vector<std::shared_ptr<namespace_>>&
 namespace_::get_namespaces() const
 {
