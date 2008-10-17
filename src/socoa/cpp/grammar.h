@@ -23,6 +23,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <memory>
 #include <boost/spirit/core.hpp>
+#include "scope_cursor.h"
+#include "program_tree/namespace_.h"
 
 namespace socoa { namespace cpp
 {
@@ -45,6 +47,9 @@ class grammar: public boost::spirit::grammar<grammar>
             private:
                 std::shared_ptr<grammar_definition_impl<ScannerT>> pimpl_;
         };
+
+        template <typename ScannerT>
+        friend class grammar_definition_impl;
 
         struct configuration
         {
@@ -288,11 +293,17 @@ class grammar: public boost::spirit::grammar<grammar>
 
         grammar(configuration& a_configuration);
 
+        void
+        reset();
+
         const configuration&
         get_configuration() const;
 
     private:
         configuration& configuration_;
+        program_tree::namespace_ global_namespace_;
+        std::shared_ptr<program_tree::namespace_> global_namespace_ptr_;
+        mutable scope_cursor scope_cursor_;
 };
 
 }} //namespace socoa::cpp

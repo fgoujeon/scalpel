@@ -18,15 +18,15 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "class_.h"
+#ifndef SOCOA_CPP_PRINT_OUT_H
+#define SOCOA_CPP_PRINT_OUT_H
 
-namespace socoa { namespace cpp { namespace program_tree
+namespace socoa { namespace cpp
 {
 
-class_::class_(const std::string& name, key class_key):
-    type(name),
-    key_(class_key)
-{
-}
+void
+print_out(char const* first, char const* last);
 
-}}} //namespace socoa::cpp::program_tree
+}} //namespace socoa::cpp
+
+#endif

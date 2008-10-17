@@ -18,27 +18,46 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <iostream>
-#include <iomanip>
-#include <sstream>
-#include <stdexcept>
-#include "grammar.h"
-#include "program_tree/class_.h"
-#include "program_tree/union_.h"
+#ifndef SOCOA_CPP_PROGRAM_TREE_NAMED_SCOPE_H
+#define SOCOA_CPP_PROGRAM_TREE_NAMED_SCOPE_H
 
-#include "declaration_semantic_analyzer.h"
+#include <string>
 
-namespace socoa { namespace cpp
+namespace socoa { namespace cpp { namespace program_tree
 {
 
-using namespace program_tree;
+class named_scope_member;
 
-std::shared_ptr<program>
-declaration_semantic_analyzer::analyze()
+struct named_scope
 {
-    std::shared_ptr<program> new_program(new program());
+    virtual
+    ~named_scope(){};
 
-    return new_program;
-}
+    virtual
+    const std::string&
+    get_name() const = 0;
 
-}} //namespace socoa::cpp
+    virtual
+    const std::string
+    get_full_name() const = 0;
+
+    virtual
+    bool
+    is_global() const = 0;
+
+    virtual
+    bool
+    has_parent() const = 0;
+
+    virtual
+    std::shared_ptr<named_scope>
+    get_parent() = 0;
+
+    virtual
+    const std::shared_ptr<named_scope>
+    get_parent() const = 0;
+};
+
+}}} //namespace socoa::cpp::program_tree
+
+#endif

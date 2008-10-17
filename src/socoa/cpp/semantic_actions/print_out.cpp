@@ -18,9 +18,19 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace socoa { namespace cpp { namespace program_tree
+#include "print_out.h"
+
+#include <iostream>
+#include <string>
+
+namespace socoa { namespace cpp
 {
 
+void
+print_out(char const* first, char const* last)
+{
+    std::string str(first, last);
+    std::cout << str << std::endl;
+}
 
-
-}}} //namespace socoa::cpp::program_tree
+}} //namespace socoa::cpp

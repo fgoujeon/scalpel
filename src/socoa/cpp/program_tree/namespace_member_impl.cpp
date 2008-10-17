@@ -18,34 +18,36 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_TREE_CLASS_H
-#define SOCOA_CPP_PROGRAM_TREE_CLASS_H
+#include "namespace_member_impl.h"
 
-#include "type.h"
-#include "namespace_member.h"
+#include <cassert>
 
 namespace socoa { namespace cpp { namespace program_tree
 {
 
-class class_: public type, public namespace_member, public std::enable_shared_from_this<class_>
+bool
+namespace_member_impl::has_parent() const
 {
-    public:
-        enum key
-        {
-            CLASS,
-            STRUCT
-        };
+    return !parent_.expired();
+}
 
-        /**
-        Creates a named class.
-        @param name the class' name
-        */
-        explicit class_(const std::string& name, key class_key);
+std::shared_ptr<namespace_>
+namespace_member_impl::get_parent()
+{
+    return parent_.lock();
+}
 
-    private:
-        key key_;
-};
+const std::shared_ptr<namespace_>
+namespace_member_impl::get_parent() const
+{
+    return parent_.lock();
+}
+
+void
+namespace_member_impl::set_parent(std::shared_ptr<namespace_> parent)
+{
+    assert(parent_.expired()); //assert that member doesn't have any parent yet
+    parent_ = parent;
+}
 
 }}} //namespace socoa::cpp::program_tree
-
-#endif

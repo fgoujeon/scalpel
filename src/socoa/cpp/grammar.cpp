@@ -27,8 +27,17 @@ namespace socoa { namespace cpp
 {
 
 grammar::grammar(grammar::configuration& a_configuration):
-    configuration_(a_configuration)
+    configuration_(a_configuration),
+    global_namespace_ptr_(&global_namespace_, util::null_deleter()),
+    scope_cursor_(global_namespace_ptr_)
 {
+}
+
+void
+grammar::reset()
+{
+    scope_cursor_.reset();
+    global_namespace_.clear();
 }
 
 const grammar::configuration&

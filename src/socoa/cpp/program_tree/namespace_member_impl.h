@@ -18,24 +18,35 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_DECLARATION_SEMANTIC_ANALYZER_H
-#define SOCOA_CPP_DECLARATION_SEMANTIC_ANALYZER_H
+#ifndef SOCOA_CPP_PROGRAM_TREE_NAMESPACE_MEMBER_IMPL_H
+#define SOCOA_CPP_PROGRAM_TREE_NAMESPACE_MEMBER_IMPL_H
 
-#include <string>
-#include <boost/spirit.hpp>
-#include <boost/spirit/include/classic_ast.hpp>
-#include "program_tree/program.h"
+#include <memory>
 
-namespace socoa { namespace cpp
+namespace socoa { namespace cpp { namespace program_tree
 {
 
-class declaration_semantic_analyzer
+class namespace_;
+
+class namespace_member_impl
 {
     public:
-        std::shared_ptr<program_tree::program>
-        analyze();
+        bool
+        has_parent() const;
+
+        std::shared_ptr<namespace_>
+        get_parent();
+
+        const std::shared_ptr<namespace_>
+        get_parent() const;
+
+        void
+        set_parent(std::shared_ptr<namespace_> parent);
+
+    private:
+        std::weak_ptr<namespace_> parent_;
 };
 
-}} //namespace socoa::cpp
+}}} //namespace socoa::cpp::program_tree
 
 #endif

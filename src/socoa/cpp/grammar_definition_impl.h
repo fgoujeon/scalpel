@@ -21,9 +21,17 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_GRAMMAR_DEFINITION_IMPL_H
 #define SOCOA_CPP_GRAMMAR_DEFINITION_IMPL_H
 
+#include <memory>
 #include <boost/spirit/core.hpp>
 #include <boost/spirit/utility/chset.hpp>
+#include "../util/null_deleter.h"
 #include "grammar.h"
+#include "scope_cursor.h"
+#include "program_tree/namespace_.h"
+#include "semantic_actions/print_out.h"
+#include "semantic_actions/new_namespace.h"
+#include "semantic_actions/enter_scope.h"
+#include "semantic_actions/leave_scope.h"
 
 namespace socoa { namespace cpp
 {
@@ -35,6 +43,9 @@ struct grammar_definition_impl
 
     const boost::spirit::rule<ScannerT>&
     start() const;
+
+    void
+    reset();
 
 
     /*
@@ -294,10 +305,24 @@ struct grammar_definition_impl
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TYPEOF_EXPRESSION>> typeof_expression;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TYPEOF_KEYWORD>> typeof_keyword;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::RESTRICT_KEYWORD>> restrict_keyword;
+
+
+    /*
+    Semantic actions
+    */
+    scope_cursor& scope_cursor_;
+    new_namespace<typename ScannerT::value_t> new_namespace_a;
+    enter_scope<typename ScannerT::value_t> enter_scope_a;
+    leave_scope<typename ScannerT::value_t> leave_scope_a;
+    //new_class<typename ScannerT::value_t> new_class_a;
 };
 
 template<typename ScannerT>
-grammar_definition_impl<ScannerT>::grammar_definition_impl(const grammar& self)
+grammar_definition_impl<ScannerT>::grammar_definition_impl(const grammar& self):
+    scope_cursor_(self.scope_cursor_),
+    new_namespace_a(scope_cursor_),
+    enter_scope_a(scope_cursor_),
+    leave_scope_a(scope_cursor_)
 {
     using namespace boost::spirit;
 
@@ -1153,7 +1178,7 @@ grammar_definition_impl<ScannerT>::grammar_definition_impl(const grammar& self)
     ;
 
     namespace_definition
-        = str_p("namespace") >> !identifier >> '{' >> !declaration_seq >> '}'
+        = str_p("namespace") >> (identifier[new_namespace_a] | epsilon_p[new_namespace_a]) >> '{' >> epsilon_p[enter_scope_a] >> !declaration_seq >> '}' >> epsilon_p[leave_scope_a]
     ;
 
     namespace_alias_definition

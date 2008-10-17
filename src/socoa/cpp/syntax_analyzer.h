@@ -18,8 +18,8 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_DECLARATION_SYNTAX_ANALYZER_H
-#define SOCOA_CPP_DECLARATION_SYNTAX_ANALYZER_H
+#ifndef SOCOA_CPP_SYNTAX_ANALYZER_H
+#define SOCOA_CPP_SYNTAX_ANALYZER_H
 
 #include <string>
 #include <map>
@@ -39,7 +39,7 @@ This analyzer configures the grammar so it parses declaration tokens only.
 After parsing the input, it generates a syntax tree of the source code and
 returns it.
 */
-class declaration_syntax_analyzer
+class syntax_analyzer
 {
     private:
         typedef char const* iterator_t;
@@ -54,12 +54,12 @@ class declaration_syntax_analyzer
         struct evaluate_function_typedefs
         {
             typedef std::shared_ptr<T> return_type_t;
-            typedef std::function<return_type_t (declaration_syntax_analyzer*, const tree_node_t&)> function_type_t;
+            typedef std::function<return_type_t (syntax_analyzer*, const tree_node_t&)> function_type_t;
             typedef std::map<int, function_type_t> id_function_map_t;
         };
 
     public:
-        declaration_syntax_analyzer();
+        syntax_analyzer();
 
         std::shared_ptr<util::sequence<program_syntax_tree::declaration>>
         operator()(const std::string& input);
@@ -221,7 +221,7 @@ class declaration_syntax_analyzer
         template
         <
             class T,
-            std::shared_ptr<T> (declaration_syntax_analyzer::*EvaluateFunction)(const tree_node_t&),
+            std::shared_ptr<T> (syntax_analyzer::*EvaluateFunction)(const tree_node_t&),
             const std::string& Separator// = util::space
         >
         std::shared_ptr<util::sequence<T, Separator>>
@@ -252,7 +252,7 @@ class declaration_syntax_analyzer
         (
             const tree_node_t& parent_node,
             const int id,
-            std::shared_ptr<T> (declaration_syntax_analyzer::*evaluate_function)(const tree_node_t&),
+            std::shared_ptr<T> (syntax_analyzer::*evaluate_function)(const tree_node_t&),
             bool assert_node_exists = false
         );
 
@@ -271,7 +271,7 @@ class declaration_syntax_analyzer
         evaluate_nodes
         (
             const tree_node_t& parent_node,
-            std::shared_ptr<T> (declaration_syntax_analyzer::*evaluate_function)(const tree_node_t&)
+            std::shared_ptr<T> (syntax_analyzer::*evaluate_function)(const tree_node_t&)
         );
 
         /**
@@ -291,7 +291,7 @@ class declaration_syntax_analyzer
         evaluate_nodes
         (
             const tree_node_t& parent_node,
-            std::shared_ptr<T> (declaration_syntax_analyzer::*evaluate_function)(const tree_node_t&),
+            std::shared_ptr<T> (syntax_analyzer::*evaluate_function)(const tree_node_t&),
             const std::string& separator
         );
 
@@ -313,7 +313,7 @@ class declaration_syntax_analyzer
         (
             const tree_node_t& parent_node,
             int id,
-            std::shared_ptr<T> (declaration_syntax_analyzer::*evaluate_function)(const tree_node_t&)
+            std::shared_ptr<T> (syntax_analyzer::*evaluate_function)(const tree_node_t&)
         );
 
         /**
@@ -338,7 +338,7 @@ class declaration_syntax_analyzer
             const std::map
             <
                 int,
-                std::function<std::shared_ptr<T> (declaration_syntax_analyzer*, const tree_node_t&)>
+                std::function<std::shared_ptr<T> (syntax_analyzer*, const tree_node_t&)>
             >& id_evaluate_function_map
         );
 
@@ -350,7 +350,7 @@ class declaration_syntax_analyzer
             const std::map
             <
                 int,
-                std::function<std::shared_ptr<T> (declaration_syntax_analyzer*, const tree_node_t&)>
+                std::function<std::shared_ptr<T> (syntax_analyzer*, const tree_node_t&)>
             >& id_evaluate_function_map,
             bool assert_evaluated = true
         );
@@ -382,19 +382,18 @@ class declaration_syntax_analyzer
         int
         get_id(const tree_node_t& node);
 
-
-        grammar::configuration m_grammar_configuration;
-        grammar m_grammar;
+        grammar::configuration grammar_configuration_;
+        grammar grammar_;
 };
 
 template
 <
     class T,
-    std::shared_ptr<T> (declaration_syntax_analyzer::*EvaluateFunction)(const declaration_syntax_analyzer::tree_node_t&),
+    std::shared_ptr<T> (syntax_analyzer::*EvaluateFunction)(const syntax_analyzer::tree_node_t&),
     const std::string& Separator
 >
 std::shared_ptr<util::sequence<T, Separator>>
-declaration_syntax_analyzer::evaluate_sequence(const tree_node_t& node)
+syntax_analyzer::evaluate_sequence(const tree_node_t& node)
 {
     return std::make_shared<util::sequence<T, Separator>>
     (
@@ -409,7 +408,7 @@ declaration_syntax_analyzer::evaluate_sequence(const tree_node_t& node)
 
 template<class T>
 std::shared_ptr<T>
-declaration_syntax_analyzer::evaluate_keyword_enumeration(const tree_node_t& node)
+syntax_analyzer::evaluate_keyword_enumeration(const tree_node_t& node)
 {
     return std::make_shared<T>
     (
@@ -419,11 +418,11 @@ declaration_syntax_analyzer::evaluate_keyword_enumeration(const tree_node_t& nod
 
 template <class T>
 std::shared_ptr<T>
-declaration_syntax_analyzer::evaluate_node
+syntax_analyzer::evaluate_node
 (
     const tree_node_t& parent_node,
     const int id,
-    std::shared_ptr<T> (declaration_syntax_analyzer::*evaluate_function)(const tree_node_t&),
+    std::shared_ptr<T> (syntax_analyzer::*evaluate_function)(const tree_node_t&),
     bool assert_node_exists
 )
 {
@@ -446,10 +445,10 @@ declaration_syntax_analyzer::evaluate_node
 
 template <class T>
 std::vector<std::shared_ptr<T>>
-declaration_syntax_analyzer::evaluate_nodes
+syntax_analyzer::evaluate_nodes
 (
     const tree_node_t& parent_node,
-    std::shared_ptr<T> (declaration_syntax_analyzer::*evaluate_function)(const tree_node_t&)
+    std::shared_ptr<T> (syntax_analyzer::*evaluate_function)(const tree_node_t&)
 )
 {
     std::vector<std::shared_ptr<T>> seq;
@@ -464,10 +463,10 @@ declaration_syntax_analyzer::evaluate_nodes
 
 template <class T>
 std::vector<std::shared_ptr<T>>
-declaration_syntax_analyzer::evaluate_nodes
+syntax_analyzer::evaluate_nodes
 (
     const tree_node_t& parent_node,
-    std::shared_ptr<T> (declaration_syntax_analyzer::*evaluate_function)(const tree_node_t&),
+    std::shared_ptr<T> (syntax_analyzer::*evaluate_function)(const tree_node_t&),
     const std::string& separator
 )
 {
@@ -488,11 +487,11 @@ declaration_syntax_analyzer::evaluate_nodes
 
 template <class T>
 std::vector<std::shared_ptr<T>>
-declaration_syntax_analyzer::evaluate_nodes
+syntax_analyzer::evaluate_nodes
 (
     const tree_node_t& parent_node,
     int id,
-    std::shared_ptr<T> (declaration_syntax_analyzer::*evaluate_function)(const tree_node_t&)
+    std::shared_ptr<T> (syntax_analyzer::*evaluate_function)(const tree_node_t&)
 )
 {
     std::vector<std::shared_ptr<T>> seq;
@@ -511,17 +510,17 @@ declaration_syntax_analyzer::evaluate_nodes
 
 template <class T>
 std::vector<std::shared_ptr<T>>
-declaration_syntax_analyzer::evaluate_nodes
+syntax_analyzer::evaluate_nodes
 (
     const tree_node_t& parent_node,
     const std::map
     <
         int,
-        std::function<std::shared_ptr<T> (declaration_syntax_analyzer*, const tree_node_t&)>
+        std::function<std::shared_ptr<T> (syntax_analyzer*, const tree_node_t&)>
     >& id_evaluate_function_map
 )
 {
-    typedef std::function<std::shared_ptr<T> (declaration_syntax_analyzer*, const tree_node_t&)> evaluate_function_t;
+    typedef std::function<std::shared_ptr<T> (syntax_analyzer*, const tree_node_t&)> evaluate_function_t;
     typedef std::map<int, evaluate_function_t> id_evaluate_function_map_t;
 
     std::vector<std::shared_ptr<T>> seq;
@@ -552,18 +551,18 @@ declaration_syntax_analyzer::evaluate_nodes
 
 template <class T>
 std::shared_ptr<T>
-declaration_syntax_analyzer::evaluate_only_child_node
+syntax_analyzer::evaluate_only_child_node
 (
     const tree_node_t& parent_node,
     const std::map
     <
         int,
-        std::function<std::shared_ptr<T> (declaration_syntax_analyzer*, const tree_node_t&)>
+        std::function<std::shared_ptr<T> (syntax_analyzer*, const tree_node_t&)>
     >& id_evaluate_function_map,
     bool assert_evaluated
 )
 {
-    typedef std::function<std::shared_ptr<T> (declaration_syntax_analyzer*, const tree_node_t&)> evaluate_function_t;
+    typedef std::function<std::shared_ptr<T> (syntax_analyzer*, const tree_node_t&)> evaluate_function_t;
     typedef std::map<int, evaluate_function_t> id_evaluate_function_map_t;
 
     assert(parent_node.children.size() == 1);

@@ -18,43 +18,52 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "namespace_.h"
+
 #include <iostream>
 #include <cassert>
-#include "class_.h"
-#include "enum_.h"
-#include "typedef_.h"
-#include "../../util/null_deleter.h"
-
-#include "namespace_.h"
 
 namespace socoa { namespace cpp { namespace program_tree
 {
 
 namespace_::namespace_()
 {
+    std::cout << "new anonymous namespace" << std::endl;
 }
 
 namespace_::namespace_(const std::string& name):
-    m_name(name)
+    name_(name)
 {
+    std::cout << "new namespace " << get_full_name() << std::endl;
+}
+
+namespace_::~namespace_()
+{
+    std::cout << "destruction of namespace " << get_full_name() << std::endl;
 }
 
 const std::string&
-namespace_::name() const
+namespace_::get_name() const
 {
-    return m_name;
+    return name_;
 }
 
-std::string
-namespace_::full_name() const
+bool
+namespace_::has_that_name(const std::string& name) const
+{
+    return name_ == name;
+}
+
+const std::string
+namespace_::get_full_name() const
 {
     std::string full_name;
 
-    if(!is_global())
+    if(has_parent() && !get_parent()->is_global()) //don't add a leading "::"
     {
-        full_name = parent()->full_name() + "::";
+        full_name = get_parent()->get_full_name() + "::";
     }
-    full_name += m_name;
+    full_name += name_;
 
     return full_name;
 }
@@ -66,30 +75,56 @@ namespace_::is_global() const
 }
 
 const std::vector<std::shared_ptr<namespace_member>>&
-namespace_::members() const
+namespace_::get_members() const
 {
-    return m_members;
+    return members_;
 }
 
-template <>
 const std::vector<std::shared_ptr<namespace_>>&
-namespace_::members() const
+namespace_::get_namespaces() const
 {
-    return m_namespaces;
+    return namespaces_;
 }
 
-template <>
-const std::vector<std::shared_ptr<class_>>&
-namespace_::members() const
+void
+namespace_::add(std::shared_ptr<namespace_member> member)
 {
-    return m_classes;
+    //tell member that 'this' is its parent
+    member->set_parent(shared_from_this());
+
+    //add member to private container
+    members_.push_back(member);
+
+    std::cout << member->get_name() << " added in " << get_full_name() << '\n';
 }
 
-template <>
-const std::vector<std::shared_ptr<union_>>&
-namespace_::members() const
+void
+namespace_::add(std::shared_ptr<namespace_> a_namespace)
 {
-    return m_unions;
+    add(static_cast<std::shared_ptr<namespace_member>>(a_namespace));
+
+    //add member to private container
+    namespaces_.push_back(a_namespace);
+}
+
+void
+namespace_::clear()
+{
+    for
+    (
+        std::vector<std::shared_ptr<namespace_member>>::iterator i = members_.begin();
+        i != members_.end();
+        ++i
+    )
+    {
+        std::shared_ptr<namespace_member> member = *i;
+        member->set_parent(std::shared_ptr<namespace_>());
+    }
+
+    members_.clear();
+    namespaces_.clear();
+    assert(members_.empty() && namespaces_.empty());
+    std::cout << "namespace '" << get_full_name() << "' has been cleared.\n";
 }
 
 }}} //namespace socoa::cpp::program_tree

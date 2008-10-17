@@ -18,23 +18,30 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_TREE_UNION_H
-#define SOCOA_CPP_PROGRAM_TREE_UNION_H
+#ifndef SOCOA_CPP_PROGRAM_TREE_NAMESPACE_PARENT_H
+#define SOCOA_CPP_PROGRAM_TREE_NAMESPACE_PARENT_H
 
-#include "type.h"
-#include "namespace_member.h"
+#include "named_scope.h"
 
 namespace socoa { namespace cpp { namespace program_tree
 {
 
-class union_: public type, public namespace_member, public std::enable_shared_from_this<union_>
+struct namespace_parent: virtual public named_scope
 {
-    public:
-        /**
-        Creates a named union.
-        @param name the union's name
-        */
-        explicit union_(const std::string& name);
+    virtual
+    ~namespace_parent(){};
+
+    virtual
+    const std::vector<std::shared_ptr<namespace_>>&
+    get_namespaces() const = 0;
+
+    virtual
+    void
+    add(std::shared_ptr<namespace_> a_namespace) = 0;
+
+    virtual
+    bool
+    is_global() const = 0;
 };
 
 }}} //namespace socoa::cpp::program_tree

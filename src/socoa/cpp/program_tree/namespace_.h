@@ -24,22 +24,24 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 #include <memory>
-#include <stdexcept>
 #include "namespace_member.h"
-#include "class_.h"
-#include "union_.h"
+#include "namespace_member_impl.h"
+#include "namespace_parent.h"
+#include "class_parent.h"
+#include "named_scope.h"
 
 namespace socoa { namespace cpp { namespace program_tree
 {
 
-class class_;
-class enum_;
-class typedef_;
-
 /**
 Represents a C++ namespace.
 */
-class namespace_: public namespace_member, public std::enable_shared_from_this<namespace_>
+class namespace_:
+    public namespace_member,
+    public namespace_parent,
+    public class_parent,
+    public virtual named_scope,
+    public std::enable_shared_from_this<namespace_>
 {
     public:
         /**
@@ -53,20 +55,29 @@ class namespace_: public namespace_member, public std::enable_shared_from_this<n
         */
         explicit namespace_(const std::string& name);
 
-        namespace_(const namespace_& source);
+        /**
+        Destructor.
+        */
+        ~namespace_();
 
         /**
         @return the name of the namespace
         Anonymous namespaces return an empty string.
         */
         const std::string&
-        name() const;
+        get_name() const;
+
+        /**
+        @return true if the namespace has the given name
+        */
+        bool
+        has_that_name(const std::string& name) const;
 
         /**
         @return the full name of the namespace, including all parent namespaces (e.g. ::foo::bar)
         */
-        std::string
-        full_name() const;
+        const std::string
+        get_full_name() const;
 
         /**
         @return true if the namespace is the global one, false otherwise
@@ -75,101 +86,76 @@ class namespace_: public namespace_member, public std::enable_shared_from_this<n
         is_global() const;
 
         /**
-        Tries to find an already declared member of this namespace.
-        @tparam MemberT the type of the member to be found
-        @param name the name of the member to be found
-        @return a pointer to the member if found, a null pointer otherwise
+        @return true if the namespace has a parent scope
         */
-        template <class MemberT>
-        std::shared_ptr<MemberT>
-        find_member_by_name(const std::string& name) const;
+        bool
+        has_parent() const
+        {
+            return namespace_member_impl_.has_parent();
+        }
+
+        /**
+        @return the parent of the namespace
+        */
+        std::shared_ptr<named_scope>
+        get_parent()
+        {
+            return namespace_member_impl_.get_parent();
+        }
+
+        /**
+        @return the parent of the namespace
+        */
+        const std::shared_ptr<named_scope>
+        get_parent() const
+        {
+            return namespace_member_impl_.get_parent();
+        }
+
+        /**
+        Sets the parent of the namespace.
+        */
+        void
+        set_parent(std::shared_ptr<namespace_> parent)
+        {
+            namespace_member_impl_.set_parent(parent);
+        }
 
         /**
         @return the namespace's member list (i.e. the list of namespaces, classes, functions, etc.)
         */
         const std::vector<std::shared_ptr<namespace_member>>&
-        members() const;
+        get_members() const;
 
         /**
-        @tparam MemberT type of the members to be returned
-        @return the namespace's member list of the specified type
+        @return the namespace's namespace member list (i.e. the list of namespaces without classes, functions, etc.)
         */
-        template <class MemberT>
-        const std::vector<std::shared_ptr<MemberT>>&
-        members() const;
+        const std::vector<std::shared_ptr<namespace_>>&
+        get_namespaces() const;
 
         /**
         Adds a member to the namespace.
-        @tparam MemberT type of the member to be added
         @param member the member to be added
         */
-        template <class MemberT>
         void
-        add(std::shared_ptr<MemberT> member);
+        add(std::shared_ptr<namespace_member> member);
 
-        ///@todo find better than that dirty trick
+        /**
+        Adds a namespace to the namespace.
+        @param a_namespace the namespace to be added
+        */
         void
-        shared_this(std::shared_ptr<namespace_> ptr);
+        add(std::shared_ptr<namespace_> a_namespace);
+
+        void
+        clear();
 
     private:
-        template <class MemberT>
-        std::vector<std::shared_ptr<MemberT>>&
-        non_const_members();
-
-        std::string m_name;
-        std::vector<std::shared_ptr<namespace_member>> m_members;
-        std::vector<std::shared_ptr<namespace_>> m_namespaces;
-        std::vector<std::shared_ptr<class_>> m_classes;
-        std::vector<std::shared_ptr<union_>> m_unions;
+        namespace_member_impl namespace_member_impl_;
+        std::string name_;
+        std::vector<std::shared_ptr<namespace_member>> members_;
+        std::vector<std::shared_ptr<namespace_>> namespaces_;
 };
-
-template <class MemberT>
-std::shared_ptr<MemberT>
-namespace_::find_member_by_name(const std::string& name) const
-{
-    ///@todo use an STL algo. instead
-    std::vector<std::shared_ptr<MemberT>> member_list = members<MemberT>();
-    for
-    (
-        typename std::vector<std::shared_ptr<MemberT>>::const_iterator i = member_list.begin();
-        i != member_list.end();
-        ++i
-    )
-    {
-        std::shared_ptr<MemberT> n = *i;
-        if(n->name() == name)
-        {
-            return n;
-        }
-    }
-
-    return std::shared_ptr<MemberT>(); //return a null pointer if no namespace found
-}
-
-template <class MemberT>
-void
-namespace_::add(std::shared_ptr<MemberT> member)
-{
-    //check whether no already existing namespace has the same name
-    if(find_member_by_name<MemberT>(member->name()))
-    {
-        throw std::runtime_error(full_name() + " already contains a member named \"" + member->name() + "\" of the same type.");
-    }
-
-    //tell namespace that we (i.e. this) are its parent
-    member->parent(shared_from_this());
-
-    //add namespace to private containers
-    non_const_members<MemberT>().push_back(member);
-    m_members.push_back(member);
-}
-
-template <class MemberT>
-std::vector<std::shared_ptr<MemberT>>&
-namespace_::non_const_members()
-{
-    return const_cast<std::vector<std::shared_ptr<MemberT>>&>(members<MemberT>());
-}
 
 }}} //namespace socoa::cpp::program_tree
 

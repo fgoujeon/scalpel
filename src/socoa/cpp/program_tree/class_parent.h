@@ -18,9 +18,18 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef SOCOA_CPP_PROGRAM_TREE_CLASS_PARENT_H
+#define SOCOA_CPP_PROGRAM_TREE_CLASS_PARENT_H
+
 namespace socoa { namespace cpp { namespace program_tree
 {
 
-
+struct class_parent
+{
+    virtual
+    ~class_parent(){};
+};
 
 }}} //namespace socoa::cpp::program_tree
+
+#endif
