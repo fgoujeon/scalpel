@@ -69,6 +69,31 @@ namespace_::is_global() const
     return !has_parent();
 }
 
+bool
+namespace_::has_parent() const
+{
+    return !parent_.expired();
+}
+
+std::shared_ptr<named_scope>
+namespace_::get_parent()
+{
+    return parent_.lock();
+}
+
+const std::shared_ptr<named_scope>
+namespace_::get_parent() const
+{
+    return parent_.lock();
+}
+
+void
+namespace_::set_parent(std::shared_ptr<namespace_> parent)
+{
+    assert(parent_.expired()); //assert that member doesn't have any parent yet
+    parent_ = parent;
+}
+
 const std::vector<std::shared_ptr<namespace_member>>&
 namespace_::get_members() const
 {

@@ -130,7 +130,7 @@ class class_:
         add_member(std::shared_ptr<class_member> member);
 
         std::string name_;
-        std::weak_ptr<class_parent> parent_;
+        std::weak_ptr<parent> parent_;
         std::vector<std::shared_ptr<class_member>> members_;
         std::vector<std::shared_ptr<class_>> classes_;
 };

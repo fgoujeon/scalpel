@@ -25,7 +25,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <vector>
 #include <memory>
 #include "namespace_member.h"
-#include "namespace_member_impl.h"
 #include "namespace_parent.h"
 #include "class_parent.h"
 #include "named_scope.h"
@@ -89,37 +88,25 @@ class namespace_:
         @return true if the namespace has a parent scope
         */
         bool
-        has_parent() const
-        {
-            return namespace_member_impl_.has_parent();
-        }
+        has_parent() const;
 
         /**
         @return the parent of the namespace
         */
         std::shared_ptr<named_scope>
-        get_parent()
-        {
-            return namespace_member_impl_.get_parent();
-        }
+        get_parent();
 
         /**
         @return the parent of the namespace
         */
         const std::shared_ptr<named_scope>
-        get_parent() const
-        {
-            return namespace_member_impl_.get_parent();
-        }
+        get_parent() const;
 
         /**
         Sets the parent of the namespace.
         */
         void
-        set_parent(std::shared_ptr<namespace_> parent)
-        {
-            namespace_member_impl_.set_parent(parent);
-        }
+        set_parent(std::shared_ptr<namespace_> parent);
 
         /**
         @return the namespace's member list (i.e. the list of namespaces, classes, functions, etc.)
@@ -157,8 +144,8 @@ class namespace_:
         void
         add_member(std::shared_ptr<namespace_member> member);
 
-        namespace_member_impl namespace_member_impl_;
         std::string name_;
+        std::weak_ptr<parent> parent_;
         std::vector<std::shared_ptr<namespace_member>> members_;
         std::vector<std::shared_ptr<namespace_>> namespaces_;
         std::vector<std::shared_ptr<class_>> classes_;
