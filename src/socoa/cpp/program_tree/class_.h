@@ -35,7 +35,7 @@ namespace socoa { namespace cpp { namespace program_tree
 class namespace_;
 
 /**
-Represents a C++ namespace.
+Represents a C++ class.
 */
 class class_:
     public namespace_member,
@@ -48,63 +48,57 @@ class class_:
         typedef class_parent parent;
 
         /**
-        Creates an anonymous namespace. Equivalent to class_("").
-        */
-        class_();
-
-        /**
-        Creates a named namespace.
-        @param name the namespace's name
+        Creates a class.
+        @param name the class' name
         */
         explicit class_(const std::string& name);
 
         class_(const class_& n) = delete;
 
         /**
-        @return the name of the namespace
-        Anonymous namespaces return an empty string.
+        @return the name of the class
         */
         const std::string&
         get_name() const;
 
         /**
-        @return true if the namespace has the given name
+        @return true if the class has the given name
         */
         bool
         has_that_name(const std::string& name) const;
 
         /**
-        @return the full name of the namespace, including all parent namespaces (e.g. ::foo::bar)
+        @return the full name of the class, including all parent scopes (e.g. foo::bar)
         */
         const std::string
         get_full_name() const;
 
         /**
-        @return true if the namespace is the global one, false otherwise
+        @return false, because a class cannot be the global namespace...
         */
         bool
         is_global() const;
 
         /**
-        @return true if the namespace has a parent scope
+        @return true if the class has a parent scope
         */
         bool
         has_parent() const;
 
         /**
-        @return the parent of the namespace
+        @return the parent of the class
         */
         std::shared_ptr<named_scope>
         get_parent();
 
         /**
-        @return the parent of the namespace
+        @return the parent of the class
         */
         const std::shared_ptr<named_scope>
         get_parent() const;
 
         /**
-        Sets the parent of the namespace.
+        Sets the parent of the class.
         */
         void
         set_parent(std::shared_ptr<class_> parent);
@@ -113,7 +107,7 @@ class class_:
         set_parent(std::shared_ptr<namespace_> parent);
 
         /**
-        @return the namespace's member list (i.e. the list of namespaces, classes, functions, etc.)
+        @return the class' member list (i.e. the list of classes, functions, etc.)
         */
         const std::vector<std::shared_ptr<class_member>>&
         get_members() const;
@@ -129,7 +123,7 @@ class class_:
 
     private:
         /**
-        Adds a member to the namespace.
+        Adds a member to the class.
         @param member the member to be added
         */
         void
@@ -138,7 +132,6 @@ class class_:
         std::string name_;
         std::weak_ptr<class_parent> parent_;
         std::vector<std::shared_ptr<class_member>> members_;
-        std::vector<std::shared_ptr<class_>> namespaces_;
         std::vector<std::shared_ptr<class_>> classes_;
 };
 

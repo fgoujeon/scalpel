@@ -27,11 +27,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace program_tree
 {
 
-class_::class_()
-{
-    std::cout << "new anonymous class" << std::endl;
-}
-
 class_::class_(const std::string& name):
     name_(name)
 {
@@ -67,13 +62,13 @@ class_::get_full_name() const
 bool
 class_::is_global() const
 {
-    return !has_parent();
+    return false;
 }
 
 bool
 class_::has_parent() const
 {
-    return !parent_.expired();;
+    return !parent_.expired();
 }
 
 std::shared_ptr<named_scope>
