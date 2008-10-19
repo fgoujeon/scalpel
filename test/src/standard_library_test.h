@@ -24,13 +24,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <socoa/cpp/preprocessor.h>
-#include <socoa/cpp/declaration_syntax_analyzer.h>
+#include <socoa/cpp/syntax_analyzer.h>
 
 class standard_library_test: public CppUnit::TestFixture
 {
-    CPPUNIT_TEST_SUITE(standard_library_test);
+    /*CPPUNIT_TEST_SUITE(standard_library_test);
     CPPUNIT_TEST(parse_files);
-    CPPUNIT_TEST_SUITE_END();
+    CPPUNIT_TEST_SUITE_END();*/
 
     public:
         void
@@ -38,7 +38,7 @@ class standard_library_test: public CppUnit::TestFixture
 
     private:
         socoa::cpp::preprocessor m_preprocessor;
-        socoa::cpp::declaration_syntax_analyzer m_declaration_syntax_analyzer;
+        socoa::cpp::syntax_analyzer m_syntax_analyzer;
 };
 
 #endif

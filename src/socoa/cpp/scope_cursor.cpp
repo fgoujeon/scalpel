@@ -39,7 +39,7 @@ scope_cursor::reset()
 }
 
 const std::shared_ptr<program_tree::named_scope>
-scope_cursor::get_current_scope()
+scope_cursor::get_current_scope() const
 {
     return current_scope_;
 }

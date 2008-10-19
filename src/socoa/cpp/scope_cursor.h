@@ -37,7 +37,7 @@ class scope_cursor
         reset();
 
         const std::shared_ptr<program_tree::named_scope>
-        get_current_scope();
+        get_current_scope() const;
 
         void
         enter_scope(std::shared_ptr<program_tree::named_scope> a_named_scope);

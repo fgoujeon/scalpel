@@ -23,23 +23,21 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <socoa/cpp/declaration_syntax_analyzer.h>
-#include <socoa/cpp/declaration_semantic_analyzer.h>
+#include <socoa/cpp/syntax_analyzer.h>
 #include <socoa/cpp/program_syntax_tree_to_string_converter.h>
 
 class single_file_test: public CppUnit::TestFixture
 {
-    CPPUNIT_TEST_SUITE(single_file_test);
+    /*CPPUNIT_TEST_SUITE(single_file_test);
     CPPUNIT_TEST(parse_files);
-    CPPUNIT_TEST_SUITE_END();
+    CPPUNIT_TEST_SUITE_END();*/
 
     public:
         void
         parse_files();
 
     private:
-        socoa::cpp::declaration_syntax_analyzer m_declaration_syntax_analyzer;
-        socoa::cpp::declaration_semantic_analyzer m_declaration_semantic_analyzer;
+        socoa::cpp::syntax_analyzer m_syntax_analyzer;
         socoa::cpp::program_syntax_tree_to_string_converter m_program_syntax_tree_to_string_converter;
 };
 

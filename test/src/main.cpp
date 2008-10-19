@@ -24,11 +24,14 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 int main(int argc, char **argv)
 {
-	CppUnit::TextUi::TestRunner runner;
+	//CppUnit::TextUi::TestRunner runner;
 
-	runner.addTest(single_file_test::suite());
+	//runner.addTest(single_file_test::suite());
  	//runner.addTest(standard_library_test::suite()); //takes a very long time
-	runner.run();
+	//runner.run();
+
+	single_file_test t;
+	t.parse_files();
 
 	return 0;
 }

@@ -52,7 +52,7 @@ standard_library_test::parse_files()
 		std::string preprocessed_code = m_preprocessor(file_name_oss.str());
 
 		//parse preprocessed code
-        m_declaration_syntax_analyzer(preprocessed_code); //throws an exception if parsing fails
+        m_syntax_analyzer(preprocessed_code); //throws an exception if parsing fails
     }
 }
 

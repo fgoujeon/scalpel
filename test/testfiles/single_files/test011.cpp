@@ -1,26 +1,10 @@
-template<int i>
-class bitset
+template<class T>
+class crtp
 {
 };
 
-template<class T, size_t Size>
-class Array
+class foo: public crtp<foo>
 {
-	private:
-		T* data;
 };
 
-template<size_t Size>
-class Array<bool, Size>
-{
-	private:
-		bitset<Size> data;
-};
-
-template<>
-class Array<bool, 8>
-{
-	private:
-		short data;
-};
 

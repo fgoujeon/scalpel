@@ -1,7 +1,14 @@
-char* c1;
-const char* c2;
-char const* c3;
-char* const c4;
-const char* const c5;
+class Foo
+{
+	public:
+		class Bar;
+		class Babar
+		{
+			public:
+				Babar();
+		};
+};
 
-volatile char* v1;
+class Foo::Bar: public Parent
+{
+};
