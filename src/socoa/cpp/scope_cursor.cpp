@@ -38,14 +38,14 @@ scope_cursor::reset()
     last_created_scope_.reset();
 }
 
-const std::shared_ptr<program_tree::named_scope>
+const std::shared_ptr<program_tree::name_tree_composite>
 scope_cursor::get_current_scope() const
 {
     return current_scope_;
 }
 
 void
-scope_cursor::enter_scope(std::shared_ptr<program_tree::named_scope> a_named_scope)
+scope_cursor::enter_scope(std::shared_ptr<program_tree::name_tree_composite> a_named_scope)
 {
     current_scope_ = a_named_scope;
 
@@ -60,7 +60,7 @@ scope_cursor::leave_current_scope()
 }
 
 void
-scope_cursor::set_last_created_scope(std::shared_ptr<program_tree::named_scope> a_named_scope)
+scope_cursor::set_last_created_scope(std::shared_ptr<program_tree::name_tree_composite> a_named_scope)
 {
     last_created_scope_ = a_named_scope;
 }

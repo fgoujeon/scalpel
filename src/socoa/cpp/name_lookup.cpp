@@ -18,46 +18,18 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_TREE_NAMED_SCOPE_H
-#define SOCOA_CPP_PROGRAM_TREE_NAMED_SCOPE_H
+#include "name_lookup.h"
 
-#include <string>
+#include "program_tree/name_tree_composite.h"
 
-namespace socoa { namespace cpp { namespace program_tree
+namespace socoa { namespace cpp
 {
-
-class named_scope_member;
-
-struct named_scope
+/*
+program_tree::name_tree_composite*
+find_unqualified_name(const program_tree::name_tree_composite& current_scope, const std::string& name)
 {
-    virtual
-    ~named_scope(){};
-
-    virtual
-    const std::string&
-    get_name() const = 0;
-
-    virtual
-    const std::string
-    get_full_name() const = 0;
-
-    virtual
-    bool
-    is_global() const = 0;
-
-    virtual
-    bool
-    has_parent() const = 0;
-
-    virtual
-    std::shared_ptr<named_scope>
-    get_parent() = 0;
-
-    virtual
-    const std::shared_ptr<named_scope>
-    get_parent() const = 0;
-};
-
-}}} //namespace socoa::cpp::program_tree
-
-#endif
+    //1. Current scope
+    //current_scope.find_member_by_name(name);
+}
+*/
+}} //namespace socoa::cpp

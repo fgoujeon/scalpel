@@ -25,7 +25,6 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 #include <algorithm>
 #include <functional>
 #include "../scope_cursor.h"
-#include "../program_tree/named_scope.h"
 
 namespace socoa { namespace cpp
 {

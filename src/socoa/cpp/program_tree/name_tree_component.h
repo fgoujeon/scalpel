@@ -18,33 +18,41 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_TREE_CLASS_MEMBER_H
-#define SOCOA_CPP_PROGRAM_TREE_CLASS_MEMBER_H
+#ifndef SOCOA_CPP_PROGRAM_TREE_NAME_TREE_COMPONENT_H
+#define SOCOA_CPP_PROGRAM_TREE_NAME_TREE_COMPONENT_H
 
+#include <string>
 #include <memory>
-#include "name_tree_component.h"
 
 namespace socoa { namespace cpp { namespace program_tree
 {
 
-class class_;
+class name_tree_composite;
 
-struct class_member: public virtual name_tree_component
+struct name_tree_component
 {
     virtual
-    ~class_member(){};
+    ~name_tree_component(){};
+
+    virtual
+    const std::string&
+    get_name() const = 0;
+
+    virtual
+    const std::string
+    get_full_name() const = 0;
 
     virtual
     bool
     has_parent() const = 0;
 
     virtual
-    void
-    set_parent(std::shared_ptr<class_> parent) = 0;
+    std::shared_ptr<name_tree_composite>
+    get_parent() = 0;
 
     virtual
-    const std::string&
-    get_name() const = 0;
+    const std::shared_ptr<name_tree_composite>
+    get_parent() const = 0;
 };
 
 }}} //namespace socoa::cpp::program_tree

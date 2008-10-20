@@ -77,16 +77,13 @@ class type_name
 
             //Check whether the identifier really designates a type name.
             //It does only if a class of the same name has been declared.
-            const std::shared_ptr<program_tree::named_scope> current_scope = scope_cursor_.get_current_scope();
+            //const std::shared_ptr<program_tree::named_scope> current_scope = scope_cursor_.get_current_scope();
             /*if(current_scope->find_member_by_name<program_tree::class_>(identifier_name))
             {
                 return info.length; //successful match
-            }
+            }*/
 
             return -1; //unsuccessful match
-            */
-
-            return info.length;
         }
 
     private:

@@ -21,14 +21,14 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_PROGRAM_TREE_CLASS_PARENT_H
 #define SOCOA_CPP_PROGRAM_TREE_CLASS_PARENT_H
 
-#include "named_scope.h"
+#include "name_tree_composite.h"
 
 namespace socoa { namespace cpp { namespace program_tree
 {
 
 class class_;
 
-struct class_parent: virtual public named_scope
+struct class_parent: virtual public name_tree_composite
 {
     virtual
     ~class_parent(){};

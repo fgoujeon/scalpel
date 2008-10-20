@@ -71,13 +71,13 @@ class_::has_parent() const
     return !parent_.expired();
 }
 
-std::shared_ptr<named_scope>
+std::shared_ptr<name_tree_composite>
 class_::get_parent()
 {
     return parent_.lock();
 }
 
-const std::shared_ptr<named_scope>
+const std::shared_ptr<name_tree_composite>
 class_::get_parent() const
 {
     return parent_.lock();
@@ -97,7 +97,7 @@ class_::set_parent(std::shared_ptr<namespace_> parent)
     parent_ = parent;
 }
 
-const std::vector<std::shared_ptr<class_member>>&
+const std::vector<std::shared_ptr<name_tree_component>>&
 class_::get_members() const
 {
     return members_;

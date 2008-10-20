@@ -36,25 +36,25 @@ class scope_cursor
         void
         reset();
 
-        const std::shared_ptr<program_tree::named_scope>
+        const std::shared_ptr<program_tree::name_tree_composite>
         get_current_scope() const;
 
         void
-        enter_scope(std::shared_ptr<program_tree::named_scope> a_named_scope);
+        enter_scope(std::shared_ptr<program_tree::name_tree_composite> a_named_scope);
 
         void
         leave_current_scope();
 
         void
-        set_last_created_scope(std::shared_ptr<program_tree::named_scope> a_named_scope);
+        set_last_created_scope(std::shared_ptr<program_tree::name_tree_composite> a_named_scope);
 
         void
         enter_last_created_scope();
 
     private:
-        std::shared_ptr<program_tree::named_scope> global_namespace_;
-        std::shared_ptr<program_tree::named_scope> current_scope_;
-        std::shared_ptr<program_tree::named_scope> last_created_scope_;
+        std::shared_ptr<program_tree::name_tree_composite> global_namespace_;
+        std::shared_ptr<program_tree::name_tree_composite> current_scope_;
+        std::shared_ptr<program_tree::name_tree_composite> last_created_scope_;
 };
 
 }} //namespace socoa::cpp

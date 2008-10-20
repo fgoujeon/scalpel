@@ -27,7 +27,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "namespace_member.h"
 #include "namespace_parent.h"
 #include "class_parent.h"
-#include "named_scope.h"
+#include "name_tree_composite.h"
 #include "class_.h"
 
 namespace socoa { namespace cpp { namespace program_tree
@@ -40,7 +40,7 @@ class namespace_:
     public namespace_member,
     public namespace_parent,
     public class_parent,
-    public virtual named_scope,
+    public virtual name_tree_composite,
     public std::enable_shared_from_this<namespace_>
 {
     public:
@@ -93,13 +93,13 @@ class namespace_:
         /**
         @return the parent of the namespace
         */
-        std::shared_ptr<named_scope>
+        std::shared_ptr<name_tree_composite>
         get_parent();
 
         /**
         @return the parent of the namespace
         */
-        const std::shared_ptr<named_scope>
+        const std::shared_ptr<name_tree_composite>
         get_parent() const;
 
         /**
@@ -111,7 +111,7 @@ class namespace_:
         /**
         @return the namespace's member list (i.e. the list of namespaces, classes, functions, etc.)
         */
-        const std::vector<std::shared_ptr<namespace_member>>&
+        const std::vector<std::shared_ptr<name_tree_component>>&
         get_members() const;
 
         template <class ScopeT>
@@ -146,7 +146,7 @@ class namespace_:
 
         std::string name_;
         std::weak_ptr<parent> parent_;
-        std::vector<std::shared_ptr<namespace_member>> members_;
+        std::vector<std::shared_ptr<name_tree_component>> members_;
         std::vector<std::shared_ptr<namespace_>> namespaces_;
         std::vector<std::shared_ptr<class_>> classes_;
 };

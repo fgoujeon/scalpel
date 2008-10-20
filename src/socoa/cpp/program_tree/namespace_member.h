@@ -22,14 +22,14 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_PROGRAM_TREE_NAMESPACE_MEMBER_H
 
 #include <memory>
-#include "named_scope.h"
+#include "name_tree_component.h"
 
 namespace socoa { namespace cpp { namespace program_tree
 {
 
 class namespace_;
 
-struct namespace_member: public virtual named_scope
+struct namespace_member: public virtual name_tree_component
 {
     virtual
     ~namespace_member(){};
