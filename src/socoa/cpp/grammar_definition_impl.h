@@ -36,8 +36,140 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "semantic_actions/new_named_scope.h"
 #include "functor_parsers/type_name.h"
 
+#define RULE(name, definition) const decltype(definition) name = definition
+
 namespace socoa { namespace cpp
 {
+
+namespace
+{
+
+using namespace boost::spirit;
+
+RULE
+(
+    s_typeof_keyword,
+    str_p("__typeof__") | "__typeof" | "typeof"
+);
+
+RULE
+(
+    s_restrict_keyword,
+    str_p("__restrict__") | "__restrict" | "restrict"
+);
+
+RULE
+(
+    s_keyword,
+    str_p("xor_eq")
+    | "xor"
+    | "while"
+    | "wchar_t"
+    | "volatile"
+    | "void"
+    | "virtual"
+    | "using"
+    | "unsigned"
+    | "union"
+    | s_typeof_keyword
+    | "typename"
+    | "typeid"
+    | "typedef"
+    | "try"
+    | "true"
+    | "throw"
+    | "this"
+    | "template"
+    | "switch"
+    | "struct"
+    | "static_cast"
+    | "static"
+    | "sizeof"
+    | "signed"
+    | "short"
+    | "return"
+    | s_restrict_keyword
+    | "reinterpret_cast"
+    | "register"
+    | "public"
+    | "protected"
+    | "private"
+    | "or_eq"
+    | "or"
+    | "operator"
+    | "not_eq"
+    | "not"
+    | "new"
+    | "namespace"
+    | "mutable"
+    | "long"
+    | "int"
+    | "inline"
+    | "if"
+    | "goto"
+    | "friend"
+    | "for"
+    | "float"
+    | "false"
+    | "extern"
+    | "export"
+    | "explicit"
+    | "enum"
+    | "else"
+    | "dynamic_cast"
+    | "double"
+    | "do"
+    | "delete"
+    | "default"
+    | "continue"
+    | "const_cast"
+    | "const"
+    | "compl"
+    | "class"
+    | "char"
+    | "catch"
+    | "case"
+    | "break"
+    | "bool"
+    | "bitor"
+    | "bitand"
+    | "auto"
+    | "asm"
+    | "and_eq"
+    | "and"
+);
+
+RULE
+(
+    s_hexadecimal_digit,
+    chset_p("0-9a-fA-F")
+);
+
+RULE
+(
+    s_hex_quad,
+    s_hexadecimal_digit >> s_hexadecimal_digit >> s_hexadecimal_digit >> s_hexadecimal_digit
+);
+
+RULE
+(
+    s_universal_character_name,
+    lexeme_d[str_p("\\u") >> s_hex_quad] | lexeme_d[str_p("\\U") >> s_hex_quad >> s_hex_quad]
+);
+
+RULE
+(
+    s_nondigit,
+    s_universal_character_name | chset_p("a-zA-Z") | '_'
+);
+
+RULE
+(
+    s_identifier,
+    (s_nondigit >> *(s_nondigit | digit_p)) - s_keyword
+);
+
+} //namespace
 
 template <typename ScannerT>
 struct grammar_definition_impl
@@ -46,32 +178,6 @@ struct grammar_definition_impl
 
     const boost::spirit::rule<ScannerT>&
     start() const;
-
-    void
-    reset();
-
-
-    //typedefs
-    typedef
-        boost::spirit::alternative<boost::spirit::alternative<boost::spirit::strlit<const char*>, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >
-        typeof_keyword_t
-    ;
-    typedef
-        boost::spirit::alternative<boost::spirit::alternative<boost::spirit::strlit<const char*>, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >
-        restrict_keyword_t
-    ;
-    typedef
-        boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::strlit<const char*>, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::alternative<boost::spirit::alternative<boost::spirit::strlit<const char*>, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> > >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::alternative<boost::spirit::alternative<boost::spirit::strlit<const char*>, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> > >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >
-        keyword_t
-    ;
-    typedef
-        boost::spirit::chset<char>
-        nondigit_t
-    ;
-    typedef
-        boost::spirit::difference<boost::spirit::sequence<boost::spirit::chset<char>, boost::spirit::kleene_star<boost::spirit::alternative<boost::spirit::chset<char>, boost::spirit::digit_parser> > >, boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::alternative<boost::spirit::strlit<const char*>, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::alternative<boost::spirit::alternative<boost::spirit::strlit<const char*>, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> > >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::alternative<boost::spirit::alternative<boost::spirit::strlit<const char*>, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> > >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> >, boost::spirit::strlit<const char*> > >
-        identifier_t
-    ;
 
 
     /*
@@ -337,22 +443,11 @@ struct grammar_definition_impl
 
 
     /*
-    Static parsers
-    */
-    typeof_keyword_t typeof_keyword_static;
-    restrict_keyword_t restrict_keyword_static;
-    keyword_t keyword_static;
-    nondigit_t nondigit_static;
-    identifier_t identifier_static;
-
-
-    /*
     Semantic actions
     */
     scope_cursor& scope_cursor_;
     enter_scope<typename ScannerT::value_t> enter_scope_a;
     leave_scope<typename ScannerT::value_t> leave_scope_a;
-    //new_namespace<typename ScannerT::value_t> new_namespace_a;
     new_named_scope<typename ScannerT::value_t, program_tree::namespace_> new_namespace_a;
     new_named_scope<typename ScannerT::value_t, program_tree::class_> new_class_a;
 
@@ -360,113 +455,18 @@ struct grammar_definition_impl
     /*
     Functor parsers
     */
-    functor_parsers::type_name<ScannerT, identifier_t> type_name_parser_;
-    boost::spirit::functor_parser<functor_parsers::type_name<ScannerT, identifier_t>> type_name_p;
+    functor_parsers::type_name<ScannerT, decltype(s_identifier)> type_name_parser_;
+    boost::spirit::functor_parser<functor_parsers::type_name<ScannerT, decltype(s_identifier)>> type_name_p;
 };
 
 template<typename ScannerT>
 grammar_definition_impl<ScannerT>::grammar_definition_impl(const grammar& self):
-    typeof_keyword_static
-    (
-        boost::spirit::str_p("__typeof__") | "__typeof" | "typeof"
-    ),
-    restrict_keyword_static
-    (
-        boost::spirit::str_p("__restrict__") | "__restrict" | "restrict"
-    ),
-    keyword_static
-    (
-        boost::spirit::str_p("xor_eq")
-        | "xor"
-        | "while"
-        | "wchar_t"
-        | "volatile"
-        | "void"
-        | "virtual"
-        | "using"
-        | "unsigned"
-        | "union"
-        | typeof_keyword_static
-        | "typename"
-        | "typeid"
-        | "typedef"
-        | "try"
-        | "true"
-        | "throw"
-        | "this"
-        | "template"
-        | "switch"
-        | "struct"
-        | "static_cast"
-        | "static"
-        | "sizeof"
-        | "signed"
-        | "short"
-        | "return"
-        | restrict_keyword_static
-        | "reinterpret_cast"
-        | "register"
-        | "public"
-        | "protected"
-        | "private"
-        | "or_eq"
-        | "or"
-        | "operator"
-        | "not_eq"
-        | "not"
-        | "new"
-        | "namespace"
-        | "mutable"
-        | "long"
-        | "int"
-        | "inline"
-        | "if"
-        | "goto"
-        | "friend"
-        | "for"
-        | "float"
-        | "false"
-        | "extern"
-        | "export"
-        | "explicit"
-        | "enum"
-        | "else"
-        | "dynamic_cast"
-        | "double"
-        | "do"
-        | "delete"
-        | "default"
-        | "continue"
-        | "const_cast"
-        | "const"
-        | "compl"
-        | "class"
-        | "char"
-        | "catch"
-        | "case"
-        | "break"
-        | "bool"
-        | "bitor"
-        | "bitand"
-        | "auto"
-        | "asm"
-        | "and_eq"
-        | "and"
-    ),
-    nondigit_static
-    (
-        boost::spirit::chset_p("a-zA-Z") | '_'
-    ),
-    identifier_static
-    (
-        (nondigit_static >> *(nondigit_static | boost::spirit::digit_p)) - keyword_static
-    ),
     scope_cursor_(self.scope_cursor_),
     enter_scope_a(scope_cursor_),
     leave_scope_a(scope_cursor_),
     new_namespace_a(scope_cursor_),
     new_class_a(scope_cursor_),
-    type_name_parser_(scope_cursor_, identifier_static),
+    type_name_parser_(scope_cursor_, s_identifier),
     type_name_p(type_name_parser_)
 {
     using namespace boost::spirit;
@@ -1797,7 +1797,7 @@ grammar_definition_impl<ScannerT>::grammar_definition_impl(const grammar& self):
     ;
 
     template_id
-        = type_name_p >> '<' >> !template_argument_list >> '>'
+        = (identifier & type_name_p) >> '<' >> !template_argument_list >> '>'
     ;
 
     template_argument_list

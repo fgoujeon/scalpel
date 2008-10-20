@@ -21,7 +21,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_FUNCTOR_PARSERS_TEMPLATE_NAME_H
 #define SOCOA_CPP_FUNCTOR_PARSERS_TEMPLATE_NAME_H
 
-#include <boost/spirit.hpp>
+#include <boost/spirit/core.hpp>
+#include <boost/spirit/actor/assign_actor.hpp>
 #include "../scope_cursor.h"
 #include "../program_tree/namespace_.h"
 #include "../program_tree/class_.h"
@@ -46,12 +47,20 @@ class type_name
         {
             using namespace boost::spirit;
 
+            //don't go further if the input is exhausted
+            if(scan.at_end())
+            {
+                return -1;
+            }
+
             //get identifier's name by parsing input with identifier rule
+            std::string identifier_name;
             parse_info<> info = parse
             (
                 scan.first,
                 scan.last,
-                identifier_rule_
+                identifier_rule_[assign_a(identifier_name)],
+                space_p
             );
 
             //not an identifier?
@@ -60,17 +69,14 @@ class type_name
                 return -1; //tell the parser that this in an unsuccessful match
             }
 
-            //create identifier string from begin and end pointers
-            std::string identifier_name(scan.first, info.stop);
-
             //move the scanner forward to the end of identifier
             for(unsigned int i = 0; i < info.length; ++i)
             {
                 ++scan;
             }
 
-            //Check whether the identifier is really a type name
-            //the identifier really designates the name of a class template only if a class of the same name has been declared.
+            //Check whether the identifier really designates a type name.
+            //It does only if a class of the same name has been declared.
             const std::shared_ptr<program_tree::named_scope> current_scope = scope_cursor_.get_current_scope();
             /*if(current_scope->find_member_by_name<program_tree::class_>(identifier_name))
             {
