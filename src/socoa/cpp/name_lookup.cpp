@@ -20,16 +20,38 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "name_lookup.h"
 
+#include <algorithm>
+#include <functional>
 #include "program_tree/name_tree_composite.h"
 
 namespace socoa { namespace cpp
 {
-/*
-program_tree::name_tree_composite*
-find_unqualified_name(const program_tree::name_tree_composite& current_scope, const std::string& name)
+
+using namespace program_tree;
+
+const std::shared_ptr<name_tree_component>
+find_unqualified_name(const name_tree_composite& current_scope, const std::string& name)
 {
     //1. Current scope
-    //current_scope.find_member_by_name(name);
+    const std::vector<std::shared_ptr<name_tree_component>> members = current_scope.get_members();
+    std::vector<std::shared_ptr<name_tree_component>>::const_iterator member_it = std::find_if
+    (
+        members.begin(),
+		members.end(),
+        std::bind
+        (
+            &name_tree_component::has_that_name,
+            std::placeholders::_1,
+            name
+        )
+    );
+
+    if(member_it != members.end()) //a name has been found
+    {
+        return *member_it;
+    }
+
+    return std::shared_ptr<name_tree_component>();
 }
-*/
+
 }} //namespace socoa::cpp

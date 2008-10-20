@@ -64,6 +64,12 @@ namespace_::get_full_name() const
 }
 
 bool
+namespace_::is_a_type() const
+{
+    return false;
+}
+
+bool
 namespace_::is_global() const
 {
     return !has_parent();

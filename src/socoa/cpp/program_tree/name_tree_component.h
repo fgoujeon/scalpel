@@ -39,8 +39,16 @@ struct name_tree_component
     get_name() const = 0;
 
     virtual
+    bool
+    has_that_name(const std::string& name) const = 0;
+
+    virtual
     const std::string
     get_full_name() const = 0;
+
+    virtual
+    bool
+    is_a_type() const = 0;
 
     virtual
     bool

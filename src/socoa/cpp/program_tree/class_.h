@@ -73,6 +73,9 @@ class class_:
         const std::string
         get_full_name() const;
 
+        bool
+        is_a_type() const;
+
         /**
         @return false, because a class cannot be the global namespace...
         */

@@ -22,14 +22,15 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_NAME_LOOKUP_H
 
 #include <string>
-#include "program_tree/name_tree_composite.h"
+#include <memory>
+#include "program_tree/name_tree_component.h"
 
 namespace socoa { namespace cpp
 {
-/*
-program_tree::name_tree_composite*
+
+const std::shared_ptr<program_tree::name_tree_component>
 find_unqualified_name(const program_tree::name_tree_composite& current_scope, const std::string& name);
-*/
+
 }} //namespace socoa::cpp
 
 #endif

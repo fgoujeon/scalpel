@@ -60,6 +60,12 @@ class_::get_full_name() const
 }
 
 bool
+class_::is_a_type() const
+{
+    return true;
+}
+
+bool
 class_::is_global() const
 {
     return false;

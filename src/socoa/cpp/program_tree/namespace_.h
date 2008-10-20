@@ -78,6 +78,9 @@ class namespace_:
         const std::string
         get_full_name() const;
 
+        bool
+        is_a_type() const;
+
         /**
         @return true if the namespace is the global one, false otherwise
         */
