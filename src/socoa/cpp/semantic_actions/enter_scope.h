@@ -17,12 +17,12 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_ENTER_SCOPE_H
-#define SOCOA_CPP_ENTER_SCOPE_H
+#ifndef SOCOA_CPP_SEMANTIC_ACTIONS_ENTER_SCOPE_H
+#define SOCOA_CPP_SEMANTIC_ACTIONS_ENTER_SCOPE_H
 
 #include "../scope_cursor.h"
 
-namespace socoa { namespace cpp
+namespace socoa { namespace cpp { namespace semantic_actions
 {
 
 template <class IteratorT>
@@ -51,6 +51,6 @@ enter_scope<IteratorT>::operator()(const IteratorT*, const IteratorT*) const
     scope_cursor_.enter_last_created_scope();
 }
 
-}} //namespace socoa::cpp
+}}} //namespace socoa::cpp::semantic_actions
 
 #endif

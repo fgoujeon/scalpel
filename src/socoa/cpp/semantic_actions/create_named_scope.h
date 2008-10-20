@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_NEW_NAMED_SCOPE_H
-#define SOCOA_CPP_NEW_NAMED_SCOPE_H
+#ifndef SOCOA_CPP_SEMANTIC_ACTIONS_NEW_NAMED_SCOPE_H
+#define SOCOA_CPP_SEMANTIC_ACTIONS_NEW_NAMED_SCOPE_H
 
 #include <string>
 #include <iostream>
@@ -26,14 +26,14 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 #include <functional>
 #include "../scope_cursor.h"
 
-namespace socoa { namespace cpp
+namespace socoa { namespace cpp { namespace semantic_actions
 {
 
 template <class IteratorT, class ScopeT>
-class new_named_scope
+class create_named_scope
 {
     public:
-        new_named_scope(scope_cursor& a_scope_cursor);
+        create_named_scope(scope_cursor& a_scope_cursor);
 
         void
         operator()(const IteratorT* first, const IteratorT* last) const;
@@ -43,14 +43,14 @@ class new_named_scope
 };
 
 template <class IteratorT, class ScopeT>
-new_named_scope<IteratorT, ScopeT>::new_named_scope(scope_cursor& a_scope_cursor):
+create_named_scope<IteratorT, ScopeT>::create_named_scope(scope_cursor& a_scope_cursor):
     scope_cursor_(a_scope_cursor)
 {
 }
 
 template <class IteratorT, class ScopeT>
 void
-new_named_scope<IteratorT, ScopeT>::operator()(const IteratorT* first, const IteratorT* last) const
+create_named_scope<IteratorT, ScopeT>::operator()(const IteratorT* first, const IteratorT* last) const
 {
     std::string scope_name(first, last);
 
@@ -77,23 +77,23 @@ new_named_scope<IteratorT, ScopeT>::operator()(const IteratorT* first, const Ite
     );
 
     //create the new namespace or get the existing one
-    std::shared_ptr<ScopeT> new_named_scope;
+    std::shared_ptr<ScopeT> create_named_scope;
     if(same_scope_it == existing_scopes.end()) //if no similar namespace has been found
     {
         //create a namespace object
-        new_named_scope = std::make_shared<ScopeT>(scope_name);
+        create_named_scope = std::make_shared<ScopeT>(scope_name);
         //add the new namespace to the current namespace
-        current_scope->add(new_named_scope);
+        current_scope->add(create_named_scope);
     }
     else
     {
-        new_named_scope = *same_scope_it;
+        create_named_scope = *same_scope_it;
     }
 
     //tell the scope cursor that we will enter in the new namespace
-    scope_cursor_.set_last_created_scope(new_named_scope);
+    scope_cursor_.set_last_created_scope(create_named_scope);
 }
 
-}} //namespace socoa::cpp
+}}} //namespace socoa::cpp::semantic_actions
 
 #endif

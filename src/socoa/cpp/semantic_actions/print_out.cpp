@@ -23,7 +23,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <iostream>
 #include <string>
 
-namespace socoa { namespace cpp
+namespace socoa { namespace cpp { namespace semantic_actions
 {
 
 void
@@ -33,4 +33,4 @@ print_out(char const* first, char const* last)
     std::cout << str << std::endl;
 }
 
-}} //namespace socoa::cpp
+}}} //namespace socoa::cpp::semantic_actions

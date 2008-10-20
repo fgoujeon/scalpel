@@ -33,7 +33,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "semantic_actions/print_out.h"
 #include "semantic_actions/enter_scope.h"
 #include "semantic_actions/leave_scope.h"
-#include "semantic_actions/new_named_scope.h"
+#include "semantic_actions/create_named_scope.h"
 #include "functor_parsers/type_name.h"
 
 #define RULE(name, definition) const decltype(definition) name = definition
@@ -446,10 +446,10 @@ struct grammar_definition_impl
     Semantic actions
     */
     scope_cursor& scope_cursor_;
-    enter_scope<typename ScannerT::value_t> enter_scope_a;
-    leave_scope<typename ScannerT::value_t> leave_scope_a;
-    new_named_scope<typename ScannerT::value_t, program_tree::namespace_> new_namespace_a;
-    new_named_scope<typename ScannerT::value_t, program_tree::class_> new_class_a;
+    semantic_actions::enter_scope<typename ScannerT::value_t> enter_scope_a;
+    semantic_actions::leave_scope<typename ScannerT::value_t> leave_scope_a;
+    semantic_actions::create_named_scope<typename ScannerT::value_t, program_tree::namespace_> create_namespace_a;
+    semantic_actions::create_named_scope<typename ScannerT::value_t, program_tree::class_> create_class_a;
 
 
     /*
@@ -464,12 +464,13 @@ grammar_definition_impl<ScannerT>::grammar_definition_impl(const grammar& self):
     scope_cursor_(self.scope_cursor_),
     enter_scope_a(scope_cursor_),
     leave_scope_a(scope_cursor_),
-    new_namespace_a(scope_cursor_),
-    new_class_a(scope_cursor_),
+    create_namespace_a(scope_cursor_),
+    create_class_a(scope_cursor_),
     type_name_parser_(scope_cursor_, s_identifier),
     type_name_p(type_name_parser_)
 {
     using namespace boost::spirit;
+    using namespace semantic_actions;
 
     file
         = translation_unit
@@ -1323,7 +1324,7 @@ grammar_definition_impl<ScannerT>::grammar_definition_impl(const grammar& self):
     ;
 
     namespace_definition
-        = str_p("namespace") >> (identifier[new_namespace_a] | epsilon_p[new_namespace_a]) >> '{' >> epsilon_p[enter_scope_a] >> !declaration_seq >> '}' >> epsilon_p[leave_scope_a]
+        = str_p("namespace") >> (identifier[create_namespace_a] | epsilon_p[create_namespace_a]) >> '{' >> epsilon_p[enter_scope_a] >> !declaration_seq >> '}' >> epsilon_p[leave_scope_a]
     ;
 
     namespace_alias_definition
@@ -1601,7 +1602,7 @@ grammar_definition_impl<ScannerT>::grammar_definition_impl(const grammar& self):
     class_head
         = class_key >> !nested_name_specifier >> template_id >> !base_clause //class template specialization -> the class already had been declared
         | class_key >> (nested_name_specifier >> identifier)[&print_out] >> !base_clause //ditto
-        | class_key >> !identifier[new_class_a] >> !base_clause
+        | class_key >> !identifier[create_class_a] >> !base_clause
     ;
 
     class_key

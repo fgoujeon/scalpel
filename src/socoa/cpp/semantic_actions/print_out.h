@@ -18,15 +18,15 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PRINT_OUT_H
-#define SOCOA_CPP_PRINT_OUT_H
+#ifndef SOCOA_CPP_SEMANTIC_ACTIONS_PRINT_OUT_H
+#define SOCOA_CPP_SEMANTIC_ACTIONS_PRINT_OUT_H
 
-namespace socoa { namespace cpp
+namespace socoa { namespace cpp { namespace semantic_actions
 {
 
 void
 print_out(char const* first, char const* last);
 
-}} //namespace socoa::cpp
+}}} //namespace socoa::cpp::semantic_actions
 
 #endif
