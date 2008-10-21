@@ -50,7 +50,8 @@ class scope_cursor
         leave_current_scope();
 
         /*!
-         * Sets the corresponding scope of the last encountered scope's header.\n
+         * Saves the corresponding scope of the last encountered scope's header
+         * in order to enter it later.\n
          * E.g. in this context:
          * \code
          * namespace n //when the scanner is at this point

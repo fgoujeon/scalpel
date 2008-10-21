@@ -79,7 +79,7 @@ class type_name
             //Check whether the identifier really designates a type name.
             //It does only if a type of the same name has been declared.
             const std::shared_ptr<program_tree::name_tree_composite> current_scope = scope_cursor_.get_current_scope(); //get current scope
-            const std::shared_ptr<program_tree::name_tree_component> found_symbol = find_unqualified_name(*current_scope, identifier_name); //find the name from the current scope
+            const std::shared_ptr<program_tree::name_tree_component> found_symbol = find_unqualified_name(current_scope, identifier_name); //find the name from the current scope
             if(found_symbol && found_symbol->is_a_type()) //if a type with that name has been found
             {
                 return info.length; //successful match

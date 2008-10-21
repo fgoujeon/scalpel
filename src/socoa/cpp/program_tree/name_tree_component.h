@@ -23,6 +23,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string>
 #include <memory>
+#include <vector>
 
 namespace socoa { namespace cpp { namespace program_tree
 {
@@ -61,6 +62,10 @@ struct name_tree_component
     virtual
     const std::shared_ptr<name_tree_composite>
     get_enclosing_scope() const = 0;
+
+    virtual
+    const std::vector<std::shared_ptr<name_tree_component>>&
+    get_members() const = 0;
 };
 
 }}} //namespace socoa::cpp::program_tree

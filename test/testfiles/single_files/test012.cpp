@@ -1,16 +1,27 @@
-int main(int argc, char** argv)
+template<typename T>
+class c1;
+
+namespace a
 {
-	try
+	template<typename T>
+	class c2
 	{
-		may_throw_exception();
-	}
-	catch(const SomeErrorType& e)
+	};
+
+	namespace n
 	{
-		throw e;
-	}
-	catch(...)
-	{
-		throw;
+		template<typename T>
+		class c3
+		{
+		};
+
+		c3<int> a_c3;
+		c2<int> a_c2;
+		c1<int> a c1;
 	}
 }
 
+template<typename T>
+class c1
+{
+};

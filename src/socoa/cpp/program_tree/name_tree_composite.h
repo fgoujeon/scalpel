@@ -35,10 +35,6 @@ struct name_tree_composite: public virtual name_tree_component
     virtual
     bool
     is_global() const = 0;
-
-    virtual
-    const std::vector<std::shared_ptr<name_tree_component>> &
-    get_members() const = 0;
 };
 
 }}} //namespace socoa::cpp::program_tree

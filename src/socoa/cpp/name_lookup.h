@@ -29,7 +29,7 @@ namespace socoa { namespace cpp
 {
 
 const std::shared_ptr<program_tree::name_tree_component>
-find_unqualified_name(const program_tree::name_tree_composite& current_scope, const std::string& name);
+find_unqualified_name(const std::shared_ptr<program_tree::name_tree_component> current_scope, const std::string& name);
 
 }} //namespace socoa::cpp
 
