@@ -35,7 +35,7 @@ void
 scope_cursor::reset()
 {
     enter_scope(global_namespace_);
-    last_created_scope_.reset();
+    last_encountered_scope_header_scope_.reset();
 }
 
 const std::shared_ptr<program_tree::name_tree_composite>
@@ -45,9 +45,9 @@ scope_cursor::get_current_scope() const
 }
 
 void
-scope_cursor::enter_scope(std::shared_ptr<program_tree::name_tree_composite> a_named_scope)
+scope_cursor::enter_scope(std::shared_ptr<program_tree::name_tree_composite> scope)
 {
-    current_scope_ = a_named_scope;
+    current_scope_ = scope;
 
     std::string current_scope_name = current_scope_->get_full_name();
     std::cout << "entering in " << (current_scope_name == "" ? "global namespace" : current_scope_name) << std::endl;
@@ -60,17 +60,17 @@ scope_cursor::leave_current_scope()
 }
 
 void
-scope_cursor::set_last_created_scope(std::shared_ptr<program_tree::name_tree_composite> a_named_scope)
+scope_cursor::set_last_encountered_scope_header_scope(std::shared_ptr<program_tree::name_tree_composite> scope)
 {
-    last_created_scope_ = a_named_scope;
+    last_encountered_scope_header_scope_ = scope;
 }
 
 void
-scope_cursor::enter_last_created_scope()
+scope_cursor::enter_last_encountered_scope_header_scope()
 {
-    assert(last_created_scope_ && "no scope had been created yet");
-    enter_scope(last_created_scope_);
-    last_created_scope_.reset();
+    assert(last_encountered_scope_header_scope_ && "no scope header had been encountered yet");
+    enter_scope(last_encountered_scope_header_scope_);
+    last_encountered_scope_header_scope_.reset();
 }
 
 }} //namespace socoa::cpp

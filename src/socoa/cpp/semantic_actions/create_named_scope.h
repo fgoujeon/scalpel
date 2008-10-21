@@ -91,7 +91,7 @@ create_named_scope<IteratorT, ScopeT>::operator()(const IteratorT* first, const 
     }
 
     //tell the scope cursor that we will enter in the new namespace
-    scope_cursor_.set_last_created_scope(create_named_scope);
+    scope_cursor_.set_last_encountered_scope_header_scope(create_named_scope);
 }
 
 }}} //namespace socoa::cpp::semantic_actions

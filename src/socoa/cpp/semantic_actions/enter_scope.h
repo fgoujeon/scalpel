@@ -48,7 +48,7 @@ template <class IteratorT>
 void
 enter_scope<IteratorT>::operator()(const IteratorT*, const IteratorT*) const
 {
-    scope_cursor_.enter_last_created_scope();
+    scope_cursor_.enter_last_encountered_scope_header_scope();
 }
 
 }}} //namespace socoa::cpp::semantic_actions

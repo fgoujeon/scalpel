@@ -27,6 +27,10 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp
 {
 
+/**
+Used by grammar.
+Its instance points to the currently scanned scope.
+*/
 class scope_cursor
 {
     public:
@@ -40,21 +44,32 @@ class scope_cursor
         get_current_scope() const;
 
         void
-        enter_scope(std::shared_ptr<program_tree::name_tree_composite> a_named_scope);
+        enter_scope(std::shared_ptr<program_tree::name_tree_composite> scope);
 
         void
         leave_current_scope();
 
+        /*!
+         * Sets the corresponding scope of the last encountered scope's header.\n
+         * E.g. in this context:
+         * \code
+         * namespace n //when the scanner is at this point
+         * {
+         *     //...
+         * }
+         * \endcode
+         * 'n' is the scope of last encountered scope's header.
+         */
         void
-        set_last_created_scope(std::shared_ptr<program_tree::name_tree_composite> a_named_scope);
+        set_last_encountered_scope_header_scope(std::shared_ptr<program_tree::name_tree_composite> scope);
 
         void
-        enter_last_created_scope();
+        enter_last_encountered_scope_header_scope();
 
     private:
         std::shared_ptr<program_tree::name_tree_composite> global_namespace_;
         std::shared_ptr<program_tree::name_tree_composite> current_scope_;
-        std::shared_ptr<program_tree::name_tree_composite> last_created_scope_;
+        std::shared_ptr<program_tree::name_tree_composite> last_encountered_scope_header_scope_;
 };
 
 }} //namespace socoa::cpp
