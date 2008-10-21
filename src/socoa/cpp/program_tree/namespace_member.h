@@ -36,11 +36,11 @@ struct namespace_member: public virtual name_tree_component
 
     virtual
     bool
-    has_parent() const = 0;
+    has_enclosing_scope() const = 0;
 
     virtual
     void
-    set_parent(std::shared_ptr<namespace_> parent) = 0;
+    set_enclosing_scope(std::shared_ptr<namespace_> enclosing_scope) = 0;
 
     virtual
     const std::string&

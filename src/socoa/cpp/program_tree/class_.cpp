@@ -50,9 +50,9 @@ class_::get_full_name() const
 {
     std::string full_name;
 
-    if(has_parent() && !get_parent()->is_global()) //don't add a leading "::"
+    if(has_enclosing_scope() && !get_enclosing_scope()->is_global()) //don't add a leading "::"
     {
-        full_name = get_parent()->get_full_name() + "::";
+        full_name = get_enclosing_scope()->get_full_name() + "::";
     }
     full_name += name_;
 
@@ -72,35 +72,35 @@ class_::is_global() const
 }
 
 bool
-class_::has_parent() const
+class_::has_enclosing_scope() const
 {
-    return !parent_.expired();
+    return !enclosing_scope_.expired();
 }
 
 std::shared_ptr<name_tree_composite>
-class_::get_parent()
+class_::get_enclosing_scope()
 {
-    return parent_.lock();
+    return enclosing_scope_.lock();
 }
 
 const std::shared_ptr<name_tree_composite>
-class_::get_parent() const
+class_::get_enclosing_scope() const
 {
-    return parent_.lock();
+    return enclosing_scope_.lock();
 }
 
 void
-class_::set_parent(std::shared_ptr<class_> parent)
+class_::set_enclosing_scope(std::shared_ptr<class_> enclosing_scope)
 {
-    assert(parent_.expired()); //assert that member doesn't have any parent yet
-    parent_ = parent;
+    assert(enclosing_scope_.expired()); //assert that member doesn't have any enclosing scope yet
+    enclosing_scope_ = enclosing_scope;
 }
 
 void
-class_::set_parent(std::shared_ptr<namespace_> parent)
+class_::set_enclosing_scope(std::shared_ptr<namespace_> enclosing_scope)
 {
-    assert(parent_.expired()); //assert that member doesn't have any parent yet
-    parent_ = parent;
+    assert(enclosing_scope_.expired()); //assert that member doesn't have any enclosing scope yet
+    enclosing_scope_ = enclosing_scope;
 }
 
 const std::vector<std::shared_ptr<name_tree_component>>&
@@ -132,8 +132,8 @@ class_::clear()
 void
 class_::add_member(std::shared_ptr<class_member> member)
 {
-    //tell member that 'this' is its parent
-    member->set_parent(shared_from_this());
+    //tell member that 'this' is its enclosing scope
+    member->set_enclosing_scope(shared_from_this());
 
     //add member to private container
     members_.push_back(member);

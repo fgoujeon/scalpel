@@ -56,7 +56,7 @@ scope_cursor::enter_scope(std::shared_ptr<program_tree::name_tree_composite> a_n
 void
 scope_cursor::leave_current_scope()
 {
-    enter_scope(current_scope_->get_parent());
+    enter_scope(current_scope_->get_enclosing_scope());
 }
 
 void

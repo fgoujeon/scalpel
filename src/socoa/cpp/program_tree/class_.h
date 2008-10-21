@@ -26,7 +26,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <memory>
 #include "namespace_member.h"
 #include "class_member.h"
-#include "class_parent.h"
+#include "class_enclosing_scope.h"
 #include "name_tree_composite.h"
 
 namespace socoa { namespace cpp { namespace program_tree
@@ -40,12 +40,12 @@ Represents a C++ class.
 class class_:
     public namespace_member,
     public class_member,
-    public class_parent,
+    public class_enclosing_scope,
     public virtual name_tree_composite,
     public std::enable_shared_from_this<class_>
 {
     public:
-        typedef class_parent parent;
+        typedef class_enclosing_scope enclosing_scope;
 
         /**
         Creates a class.
@@ -68,7 +68,7 @@ class class_:
         has_that_name(const std::string& name) const;
 
         /**
-        @return the full name of the class, including all parent scopes (e.g. foo::bar)
+        @return the full name of the class, including all enclosing scopes (e.g. foo::bar)
         */
         const std::string
         get_full_name() const;
@@ -83,31 +83,31 @@ class class_:
         is_global() const;
 
         /**
-        @return true if the class has a parent scope
+        @return true if the class has a enclosing scope scope
         */
         bool
-        has_parent() const;
+        has_enclosing_scope() const;
 
         /**
-        @return the parent of the class
+        @return the enclosing scope of the class
         */
         std::shared_ptr<name_tree_composite>
-        get_parent();
+        get_enclosing_scope();
 
         /**
-        @return the parent of the class
+        @return the enclosing scope of the class
         */
         const std::shared_ptr<name_tree_composite>
-        get_parent() const;
+        get_enclosing_scope() const;
 
         /**
-        Sets the parent of the class.
+        Sets the enclosing scope of the class.
         */
         void
-        set_parent(std::shared_ptr<class_> parent);
+        set_enclosing_scope(std::shared_ptr<class_> enclosing_scope);
 
         void
-        set_parent(std::shared_ptr<namespace_> parent);
+        set_enclosing_scope(std::shared_ptr<namespace_> enclosing_scope);
 
         /**
         @return the class' member list (i.e. the list of classes, functions, etc.)
@@ -133,7 +133,7 @@ class class_:
         add_member(std::shared_ptr<class_member> member);
 
         std::string name_;
-        std::weak_ptr<parent> parent_;
+        std::weak_ptr<enclosing_scope> enclosing_scope_;
         std::vector<std::shared_ptr<name_tree_component>> members_;
         std::vector<std::shared_ptr<class_>> classes_;
 };

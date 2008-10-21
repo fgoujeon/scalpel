@@ -52,15 +52,15 @@ struct name_tree_component
 
     virtual
     bool
-    has_parent() const = 0;
+    has_enclosing_scope() const = 0;
 
     virtual
     std::shared_ptr<name_tree_composite>
-    get_parent() = 0;
+    get_enclosing_scope() = 0;
 
     virtual
     const std::shared_ptr<name_tree_composite>
-    get_parent() const = 0;
+    get_enclosing_scope() const = 0;
 };
 
 }}} //namespace socoa::cpp::program_tree

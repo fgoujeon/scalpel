@@ -54,8 +54,8 @@ create_named_scope<IteratorT, ScopeT>::operator()(const IteratorT* first, const 
 {
     std::string scope_name(first, last);
 
-    //get the current scope (if it's able to hold a ScopeT == if its type is ScopeT::parent)
-    std::shared_ptr<typename ScopeT::parent> current_scope = std::dynamic_pointer_cast<typename ScopeT::parent>
+    //get the current scope (if it's able to hold a ScopeT == if its type is ScopeT::enclosing_scope)
+    std::shared_ptr<typename ScopeT::enclosing_scope> current_scope = std::dynamic_pointer_cast<typename ScopeT::enclosing_scope>
     (
         scope_cursor_.get_current_scope()
     );

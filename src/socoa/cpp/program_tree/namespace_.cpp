@@ -54,9 +54,9 @@ namespace_::get_full_name() const
 {
     std::string full_name;
 
-    if(has_parent() && !get_parent()->is_global()) //don't add a leading "::"
+    if(has_enclosing_scope() && !get_enclosing_scope()->is_global()) //don't add a leading "::"
     {
-        full_name = get_parent()->get_full_name() + "::";
+        full_name = get_enclosing_scope()->get_full_name() + "::";
     }
     full_name += name_;
 
@@ -72,32 +72,32 @@ namespace_::is_a_type() const
 bool
 namespace_::is_global() const
 {
-    return !has_parent();
+    return !has_enclosing_scope();
 }
 
 bool
-namespace_::has_parent() const
+namespace_::has_enclosing_scope() const
 {
-    return !parent_.expired();
+    return !enclosing_scope_.expired();
 }
 
 std::shared_ptr<name_tree_composite>
-namespace_::get_parent()
+namespace_::get_enclosing_scope()
 {
-    return parent_.lock();
+    return enclosing_scope_.lock();
 }
 
 const std::shared_ptr<name_tree_composite>
-namespace_::get_parent() const
+namespace_::get_enclosing_scope() const
 {
-    return parent_.lock();
+    return enclosing_scope_.lock();
 }
 
 void
-namespace_::set_parent(std::shared_ptr<namespace_> parent)
+namespace_::set_enclosing_scope(std::shared_ptr<namespace_> enclosing_scope)
 {
-    assert(parent_.expired()); //assert that member doesn't have any parent yet
-    parent_ = parent;
+    assert(enclosing_scope_.expired()); //assert that member doesn't have any enclosing scope yet
+    enclosing_scope_ = enclosing_scope;
 }
 
 const std::vector<std::shared_ptr<name_tree_component>>&
@@ -157,8 +157,8 @@ namespace_::clear()
 void
 namespace_::add_member(std::shared_ptr<namespace_member> member)
 {
-    //tell member that 'this' is its parent
-    member->set_parent(shared_from_this());
+    //tell member that 'this' is its enclosing scope
+    member->set_enclosing_scope(shared_from_this());
 
     //add member to private container
     members_.push_back(member);

@@ -25,8 +25,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <vector>
 #include <memory>
 #include "namespace_member.h"
-#include "namespace_parent.h"
-#include "class_parent.h"
+#include "namespace_enclosing_scope.h"
+#include "class_enclosing_scope.h"
 #include "name_tree_composite.h"
 #include "class_.h"
 
@@ -38,13 +38,13 @@ Represents a C++ namespace.
 */
 class namespace_:
     public namespace_member,
-    public namespace_parent,
-    public class_parent,
+    public namespace_enclosing_scope,
+    public class_enclosing_scope,
     public virtual name_tree_composite,
     public std::enable_shared_from_this<namespace_>
 {
     public:
-        typedef namespace_parent parent;
+        typedef namespace_enclosing_scope enclosing_scope;
 
         /**
         Creates an anonymous namespace. Equivalent to namespace_("").
@@ -73,7 +73,7 @@ class namespace_:
         has_that_name(const std::string& name) const;
 
         /**
-        @return the full name of the namespace, including all parent namespaces (e.g. ::foo::bar)
+        @return the full name of the namespace, including all enclosing scopes (e.g. ::foo::bar)
         */
         const std::string
         get_full_name() const;
@@ -88,28 +88,28 @@ class namespace_:
         is_global() const;
 
         /**
-        @return true if the namespace has a parent scope
+        @return true if the namespace has a enclosing scope scope
         */
         bool
-        has_parent() const;
+        has_enclosing_scope() const;
 
         /**
-        @return the parent of the namespace
+        @return the enclosing scope of the namespace
         */
         std::shared_ptr<name_tree_composite>
-        get_parent();
+        get_enclosing_scope();
 
         /**
-        @return the parent of the namespace
+        @return the enclosing scope of the namespace
         */
         const std::shared_ptr<name_tree_composite>
-        get_parent() const;
+        get_enclosing_scope() const;
 
         /**
-        Sets the parent of the namespace.
+        Sets the enclosing scope of the namespace.
         */
         void
-        set_parent(std::shared_ptr<namespace_> parent);
+        set_enclosing_scope(std::shared_ptr<namespace_> enclosing_scope);
 
         /**
         @return the namespace's member list (i.e. the list of namespaces, classes, functions, etc.)
@@ -148,7 +148,7 @@ class namespace_:
         add_member(std::shared_ptr<namespace_member> member);
 
         std::string name_;
-        std::weak_ptr<parent> parent_;
+        std::weak_ptr<enclosing_scope> enclosing_scope_;
         std::vector<std::shared_ptr<name_tree_component>> members_;
         std::vector<std::shared_ptr<namespace_>> namespaces_;
         std::vector<std::shared_ptr<class_>> classes_;
