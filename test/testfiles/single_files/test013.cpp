@@ -1,11 +1,21 @@
-Test::Test(int n)
-try:
-	number(n)
+namespace M
 {
-
+    struct B
+    {
+        template <typename T>
+        class C
+        {
+        };
+    };
 }
-catch(const std::exception& e)
+
+namespace N
 {
-	throw e;
+    class Y: public M::B
+    {
+        class X
+        {
+            C<int> c;
+        };
+    };
 }
-

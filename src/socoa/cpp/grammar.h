@@ -280,6 +280,7 @@ class grammar: public boost::spirit::grammar<grammar>
             TYPE_ID_LIST,
 
 
+            TYPE_NAME,
             NESTED_IDENTIFIER_OR_TEMPLATE_ID,
             SKIP_FUNCTION_BODIES_MODE_STATEMENT_SEQ_ITEM,
             SKIP_FUNCTION_BODIES_MODE_NON_SPECIAL_CHAR_SEQ,

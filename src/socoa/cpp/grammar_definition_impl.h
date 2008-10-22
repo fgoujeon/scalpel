@@ -25,6 +25,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/spirit/core.hpp>
 #include <boost/spirit/utility/chset.hpp>
 #include <boost/spirit/utility/functor_parser.hpp>
+#include <boost/spirit/actor/assign_actor.hpp>
 #include "../util/null_deleter.h"
 #include "grammar.h"
 #include "scope_cursor.h"
@@ -36,140 +37,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "semantic_actions/create_named_scope.h"
 #include "functor_parsers/type_name.h"
 
-#define RULE(name, definition) const decltype(definition) name = definition
-
 namespace socoa { namespace cpp
 {
-
-namespace
-{
-
-using namespace boost::spirit;
-
-RULE
-(
-    s_typeof_keyword,
-    str_p("__typeof__") | "__typeof" | "typeof"
-);
-
-RULE
-(
-    s_restrict_keyword,
-    str_p("__restrict__") | "__restrict" | "restrict"
-);
-
-RULE
-(
-    s_keyword,
-    str_p("xor_eq")
-    | "xor"
-    | "while"
-    | "wchar_t"
-    | "volatile"
-    | "void"
-    | "virtual"
-    | "using"
-    | "unsigned"
-    | "union"
-    | s_typeof_keyword
-    | "typename"
-    | "typeid"
-    | "typedef"
-    | "try"
-    | "true"
-    | "throw"
-    | "this"
-    | "template"
-    | "switch"
-    | "struct"
-    | "static_cast"
-    | "static"
-    | "sizeof"
-    | "signed"
-    | "short"
-    | "return"
-    | s_restrict_keyword
-    | "reinterpret_cast"
-    | "register"
-    | "public"
-    | "protected"
-    | "private"
-    | "or_eq"
-    | "or"
-    | "operator"
-    | "not_eq"
-    | "not"
-    | "new"
-    | "namespace"
-    | "mutable"
-    | "long"
-    | "int"
-    | "inline"
-    | "if"
-    | "goto"
-    | "friend"
-    | "for"
-    | "float"
-    | "false"
-    | "extern"
-    | "export"
-    | "explicit"
-    | "enum"
-    | "else"
-    | "dynamic_cast"
-    | "double"
-    | "do"
-    | "delete"
-    | "default"
-    | "continue"
-    | "const_cast"
-    | "const"
-    | "compl"
-    | "class"
-    | "char"
-    | "catch"
-    | "case"
-    | "break"
-    | "bool"
-    | "bitor"
-    | "bitand"
-    | "auto"
-    | "asm"
-    | "and_eq"
-    | "and"
-);
-
-RULE
-(
-    s_hexadecimal_digit,
-    chset_p("0-9a-fA-F")
-);
-
-RULE
-(
-    s_hex_quad,
-    s_hexadecimal_digit >> s_hexadecimal_digit >> s_hexadecimal_digit >> s_hexadecimal_digit
-);
-
-RULE
-(
-    s_universal_character_name,
-    lexeme_d[str_p("\\u") >> s_hex_quad] | lexeme_d[str_p("\\U") >> s_hex_quad >> s_hex_quad]
-);
-
-RULE
-(
-    s_nondigit,
-    s_universal_character_name | chset_p("a-zA-Z") | '_'
-);
-
-RULE
-(
-    s_identifier,
-    (s_nondigit >> *(s_nondigit | digit_p)) - s_keyword
-);
-
-} //namespace
 
 template <typename ScannerT>
 struct grammar_definition_impl
@@ -427,6 +296,7 @@ struct grammar_definition_impl
     /*
     Convenience rules
     */
+    boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TYPE_NAME>> type_name;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::IDENTIFIER_OR_TEMPLATE_ID>> identifier_or_template_id;
     boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::NESTED_IDENTIFIER_OR_TEMPLATE_ID>> nested_identifier_or_template_id;
     boost::spirit::rule<ScannerT> skip_function_bodies_mode_statement_seq_item;
@@ -455,8 +325,14 @@ struct grammar_definition_impl
     /*
     Functor parsers
     */
-    functor_parsers::type_name<ScannerT, decltype(s_identifier)> type_name_parser_;
-    boost::spirit::functor_parser<functor_parsers::type_name<ScannerT, decltype(s_identifier)>> type_name_p;
+    functor_parsers::type_name type_name_parser_;
+    boost::spirit::functor_parser<functor_parsers::type_name> type_name_p;
+
+
+    /*
+
+    */
+    std::string last_parsed_identifier_;
 };
 
 template<typename ScannerT>
@@ -466,7 +342,7 @@ grammar_definition_impl<ScannerT>::grammar_definition_impl(const grammar& self):
     leave_scope_a(scope_cursor_),
     create_namespace_a(scope_cursor_),
     create_class_a(scope_cursor_),
-    type_name_parser_(scope_cursor_, s_identifier),
+    type_name_parser_(scope_cursor_, last_parsed_identifier_),
     type_name_p(type_name_parser_)
 {
     using namespace boost::spirit;
@@ -617,7 +493,7 @@ grammar_definition_impl<ScannerT>::grammar_definition_impl(const grammar& self):
     identifier
         = token_node_d
         [
-            (nondigit >> *(nondigit | digit_p)) - keyword
+            ((nondigit >> *(nondigit | digit_p)) - keyword)[assign_a(last_parsed_identifier_)]
         ]
     ;
 
@@ -1798,7 +1674,7 @@ grammar_definition_impl<ScannerT>::grammar_definition_impl(const grammar& self):
     ;
 
     template_id
-        = (identifier & type_name_p) >> '<' >> !template_argument_list >> '>'
+        = type_name >> '<' >> !template_argument_list >> '>'
     ;
 
     template_argument_list
@@ -1862,6 +1738,12 @@ grammar_definition_impl<ScannerT>::grammar_definition_impl(const grammar& self):
     /*
     Convenience rules
     */
+    // !space_p   -> we don't want to have to parse any space char in type_name_p
+    // identifier -> we have to read last_parsed_identifier_ in type_name_p
+    type_name
+        = token_node_d[!space_p >> (identifier & type_name_p)]
+    ;
+
     identifier_or_template_id
         = template_id
         | identifier

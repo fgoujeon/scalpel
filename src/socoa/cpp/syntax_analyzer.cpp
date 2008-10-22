@@ -131,7 +131,11 @@ syntax_analyzer::evaluate_translation_unit(const tree_node_t& node)
 std::shared_ptr<identifier>
 syntax_analyzer::evaluate_identifier(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar::IDENTIFIER);
+    assert
+    (
+        node.value.id() == grammar::IDENTIFIER ||
+        node.value.id() == grammar::TYPE_NAME
+    );
 
     return std::make_shared<identifier>(get_only_child_value(node));
 }
@@ -934,7 +938,7 @@ syntax_analyzer::evaluate_template_id(const tree_node_t& node)
 
     return std::make_shared<template_id>
     (
-        *ASSERTED_EVALUATE_NODE(identifier, IDENTIFIER),
+        *ASSERTED_EVALUATE_NODE(identifier, TYPE_NAME),
         EVALUATE_SEPARATED_SEQUENCE_NODE(template_argument, TEMPLATE_ARGUMENT_LIST, util::comma)
     );
 }
