@@ -30,7 +30,7 @@ class mem_initializer;
 
 struct ctor_initializer
 {
-    const util::sequence<mem_initializer, util::comma> mem_initializer_list_;
+    const util::sequence<mem_initializer, util::extern_strings::comma> mem_initializer_list_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

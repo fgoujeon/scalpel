@@ -26,13 +26,16 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace util
 {
 
-extern const std::string space;
-extern const std::string comma;
-extern const std::string pipe;
-extern const std::string double_pipe;
-extern const std::string ampersand;
-extern const std::string double_ampersand;
-extern const std::string circumflex;
+namespace extern_strings
+{
+    extern const std::string space;
+    extern const std::string comma;
+    extern const std::string pipe;
+    extern const std::string double_pipe;
+    extern const std::string ampersand;
+    extern const std::string double_ampersand;
+    extern const std::string circumflex;
+}
 
 }} //namespace socoa::util
 

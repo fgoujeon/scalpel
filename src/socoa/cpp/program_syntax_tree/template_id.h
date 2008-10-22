@@ -39,13 +39,13 @@ struct template_id: public identifier_or_template_id, public unqualified_id
     template_id
     (
         identifier&& an_identifier,
-        std::shared_ptr<util::sequence<template_argument, util::comma>> a_template_argument_list
+        std::shared_ptr<util::sequence<template_argument, util::extern_strings::comma>> a_template_argument_list
     );
 
     SOCOA_CPP_DEFINE_VISITABLE()
 
     const identifier identifier_;
-    const std::shared_ptr<util::sequence<template_argument, util::comma>> template_argument_list_;
+    const std::shared_ptr<util::sequence<template_argument, util::extern_strings::comma>> template_argument_list_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

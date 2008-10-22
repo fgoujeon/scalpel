@@ -26,7 +26,7 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 member_declaration_member_declarator_list::member_declaration_member_declarator_list
 (
     std::shared_ptr<util::sequence<decl_specifier>> a_decl_specifier_seq,
-    std::shared_ptr<util::sequence<member_declarator, util::comma>> a_member_declarator_list
+    std::shared_ptr<util::sequence<member_declarator, util::extern_strings::comma>> a_member_declarator_list
 ):
     decl_specifier_seq_(a_decl_specifier_seq),
     member_declarator_list_(a_member_declarator_list)

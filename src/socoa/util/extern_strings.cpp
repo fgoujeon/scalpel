@@ -23,12 +23,15 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace util
 {
 
-const std::string space(" ");
-const std::string comma(",");
-const std::string pipe("|");
-const std::string double_pipe("||");
-const std::string ampersand("&");
-const std::string double_ampersand("&&");
-const std::string circumflex("^");
+namespace extern_strings
+{
+    const std::string space(" ");
+    const std::string comma(",");
+    const std::string pipe("|");
+    const std::string double_pipe("||");
+    const std::string ampersand("&");
+    const std::string double_ampersand("&&");
+    const std::string circumflex("^");
+}
 
 }} //namespace socoa::util

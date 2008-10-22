@@ -89,7 +89,7 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
 
         template<class T>
         void
-        convert(const util::sequence<T, util::space>& seq);
+        convert(const util::sequence<T, util::extern_strings::space>& seq);
 
         template<class T, const std::string& Separator>
         void
@@ -160,7 +160,7 @@ class program_syntax_tree_to_string_converter: public program_syntax_tree::visit
 
 template<class T>
 void
-program_syntax_tree_to_string_converter::convert(const util::sequence<T, util::space>& seq)
+program_syntax_tree_to_string_converter::convert(const util::sequence<T, util::extern_strings::space>& seq)
 {
     typedef std::vector<std::shared_ptr<T>> item_list_t;
 

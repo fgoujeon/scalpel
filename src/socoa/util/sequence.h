@@ -28,7 +28,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace util
 {
 
-template<class T, const std::string& Separator = space>
+template<class T, const std::string& Separator = extern_strings::space>
 class sequence
 {
     public:

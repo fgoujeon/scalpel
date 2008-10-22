@@ -222,7 +222,7 @@ class syntax_analyzer
         <
             class T,
             std::shared_ptr<T> (syntax_analyzer::*EvaluateFunction)(const tree_node_t&),
-            const std::string& Separator// = util::space
+            const std::string& Separator// = util::extern_strings::space
         >
         std::shared_ptr<util::sequence<T, Separator>>
         evaluate_sequence(const tree_node_t& node);

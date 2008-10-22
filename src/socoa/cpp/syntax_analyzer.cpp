@@ -51,7 +51,7 @@ evaluate_node                                           \
     <                                                   \
         type,                                           \
         &syntax_analyzer::evaluate_##type,              \
-        util::space                                     \
+        util::extern_strings::space                                     \
     >                                                   \
 )
 
@@ -121,7 +121,7 @@ syntax_analyzer::evaluate_translation_unit(const tree_node_t& node)
                 <
                     declaration,
                     &syntax_analyzer::evaluate_declaration,
-                    util::space
+                    util::extern_strings::space
                 >
             }
         }
@@ -328,7 +328,7 @@ syntax_analyzer::evaluate_simple_declaration(const tree_node_t& node)
     return std::make_shared<simple_declaration>
     (
         EVALUATE_SEQUENCE_NODE(decl_specifier, SIMPLE_DECLARATION_DECL_SPECIFIER_SEQ),
-        EVALUATE_SEPARATED_SEQUENCE_NODE(init_declarator, INIT_DECLARATOR_LIST, util::comma)
+        EVALUATE_SEPARATED_SEQUENCE_NODE(init_declarator, INIT_DECLARATOR_LIST, util::extern_strings::comma)
     );
 }
 
@@ -528,7 +528,7 @@ syntax_analyzer::evaluate_direct_declarator_function_part(const tree_node_t& nod
     //grammar defines that this node MUST exist, but in practice it's not always the case
     if(!new_parameter_declaration_clause)
     {
-        typedef util::sequence<parameter_declaration, util::comma> parameter_declaration_seq;
+        typedef util::sequence<parameter_declaration, util::extern_strings::comma> parameter_declaration_seq;
 
         //create an empty parameter declaration clause, if node didn't have been found
         new_parameter_declaration_clause = std::make_shared<parameter_declaration_clause>
@@ -638,7 +638,7 @@ syntax_analyzer::evaluate_parameter_declaration_clause(const tree_node_t& node)
     (
         parameter_declaration_clause
         {
-            EVALUATE_SEPARATED_SEQUENCE_NODE(parameter_declaration, PARAMETER_DECLARATION_LIST, util::comma),
+            EVALUATE_SEPARATED_SEQUENCE_NODE(parameter_declaration, PARAMETER_DECLARATION_LIST, util::extern_strings::comma),
             trailing_comma,
             ellipsis
         }
@@ -669,7 +669,7 @@ syntax_analyzer::evaluate_parameter_declaration(const tree_node_t& node)
     <
         decl_specifier,
         &syntax_analyzer::evaluate_decl_specifier,
-        util::space
+        util::extern_strings::space
     >(decl_specifier_seq_node);
 
     return std::make_shared<parameter_declaration>
@@ -705,7 +705,7 @@ syntax_analyzer::evaluate_function_definition(const tree_node_t& node)
         <
             decl_specifier,
             &syntax_analyzer::evaluate_decl_specifier,
-            util::space
+            util::extern_strings::space
         >(*decl_specifier_seq_node);
     }
 
@@ -807,7 +807,7 @@ syntax_analyzer::evaluate_member_declaration_member_declarator_list(const tree_n
     return std::make_shared<member_declaration_member_declarator_list>
     (
         EVALUATE_SEQUENCE_NODE(decl_specifier, MEMBER_DECLARATION_DECL_SPECIFIER_SEQ),
-        EVALUATE_SEPARATED_SEQUENCE_NODE(member_declarator, MEMBER_DECLARATOR_LIST, util::comma)
+        EVALUATE_SEPARATED_SEQUENCE_NODE(member_declarator, MEMBER_DECLARATOR_LIST, util::extern_strings::comma)
     );
 }
 
@@ -884,7 +884,7 @@ syntax_analyzer::evaluate_ctor_initializer(const tree_node_t& node)
     (
         ctor_initializer
         {
-            *EVALUATE_SEPARATED_SEQUENCE_NODE(mem_initializer, MEM_INITIALIZER_LIST, util::comma)
+            *EVALUATE_SEPARATED_SEQUENCE_NODE(mem_initializer, MEM_INITIALIZER_LIST, util::extern_strings::comma)
         }
     );
 }
@@ -939,7 +939,7 @@ syntax_analyzer::evaluate_template_id(const tree_node_t& node)
     return std::make_shared<template_id>
     (
         *ASSERTED_EVALUATE_NODE(identifier, TYPE_NAME),
-        EVALUATE_SEPARATED_SEQUENCE_NODE(template_argument, TEMPLATE_ARGUMENT_LIST, util::comma)
+        EVALUATE_SEPARATED_SEQUENCE_NODE(template_argument, TEMPLATE_ARGUMENT_LIST, util::extern_strings::comma)
     );
 }
 

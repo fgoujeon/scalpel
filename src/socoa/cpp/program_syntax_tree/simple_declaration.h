@@ -38,13 +38,13 @@ struct simple_declaration: public block_declaration
     simple_declaration
     (
         std::shared_ptr<util::sequence<decl_specifier>> a_decl_specifier_seq,
-        std::shared_ptr<util::sequence<init_declarator, util::comma>> an_init_declarator_list
+        std::shared_ptr<util::sequence<init_declarator, util::extern_strings::comma>> an_init_declarator_list
     );
 
     SOCOA_CPP_DEFINE_VISITABLE()
 
     const std::shared_ptr<util::sequence<decl_specifier>> decl_specifier_seq_;
-    const std::shared_ptr<util::sequence<init_declarator, util::comma>> init_declarator_list_;
+    const std::shared_ptr<util::sequence<init_declarator, util::extern_strings::comma>> init_declarator_list_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

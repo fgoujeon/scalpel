@@ -32,7 +32,7 @@ class mem_initializer_id;
 struct mem_initializer
 {
     const std::shared_ptr<mem_initializer_id> mem_initializer_id_;
-    //const std::shared_ptr<util::sequence<assignment_expression, util::comma>> expression_list_;
+    //const std::shared_ptr<util::sequence<assignment_expression, util::extern_strings::comma>> expression_list_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

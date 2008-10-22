@@ -31,7 +31,7 @@ class parameter_declaration;
 
 struct parameter_declaration_clause
 {
-    const std::shared_ptr<util::sequence<parameter_declaration, util::comma>> parameter_declaration_list_;
+    const std::shared_ptr<util::sequence<parameter_declaration, util::extern_strings::comma>> parameter_declaration_list_;
     const bool trailing_comma_;
     const bool ellipsis_;
 };
