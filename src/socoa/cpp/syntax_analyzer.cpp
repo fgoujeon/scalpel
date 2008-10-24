@@ -88,7 +88,7 @@ syntax_analyzer::operator()(const std::string& input)
     grammar_.reset();
 
     //parse the input with the C++ grammar
-    tree_parse_info<> info = pt_parse(input.c_str(), grammar_, space_p);
+    tree_parse_info<> info = pt_parse(input.c_str(), grammar_.use_parser<grammar::START_FILE>(), space_p);
 
     //throw an exception if parsing fails
     if(!info.full)

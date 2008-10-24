@@ -21,7 +21,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "grammar.h"
 
 #include <boost/spirit/tree/parse_tree.hpp>
-#include "grammar_definition_impl.h"
+#include "grammar_definition_initializer.h"
 
 namespace socoa { namespace cpp
 {
@@ -71,15 +71,16 @@ typedef
 
 template<>
 grammar::definition<scanner_t>::definition(const grammar& self):
-    pimpl_(std::make_shared<grammar_definition_impl<scanner_t>>(self))
+    grammar_definition_initializer_(std::make_shared<grammar_definition_initializer<scanner_t>>(*this, self))
 {
+    start_parsers(file, base_specifier);
 }
 
 template<>
 const boost::spirit::rule<scanner_t>&
 grammar::definition<scanner_t>::start() const
 {
-    return pimpl_->start();
+    return file;
 }
 
 }} //namespace socoa::cpp
