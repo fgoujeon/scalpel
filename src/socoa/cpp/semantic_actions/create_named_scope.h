@@ -76,22 +76,22 @@ create_named_scope<IteratorT, ScopeT>::operator()(const IteratorT* first, const 
         )
     );
 
-    //create the new namespace or get the existing one
-    std::shared_ptr<ScopeT> create_named_scope;
-    if(same_scope_it == existing_scopes.end()) //if no similar namespace has been found
+    //create the new scope or get the existing one
+    std::shared_ptr<ScopeT> new_scope;
+    if(same_scope_it == existing_scopes.end()) //if no similar scope has been found
     {
-        //create a namespace object
-        create_named_scope = std::make_shared<ScopeT>(scope_name);
-        //add the new namespace to the current namespace
-        current_scope->add(create_named_scope);
+        //create a scope object
+        new_scope = std::make_shared<ScopeT>(scope_name);
+        //add the new scope to the current scope
+        current_scope->add(new_scope);
     }
     else
     {
-        create_named_scope = *same_scope_it;
+        new_scope = *same_scope_it;
     }
 
     //tell the scope cursor that we will enter in the new namespace
-    scope_cursor_.set_last_encountered_scope_header_scope(create_named_scope);
+    scope_cursor_.set_last_encountered_scope_header_scope(new_scope);
 }
 
 }}} //namespace socoa::cpp::semantic_actions
