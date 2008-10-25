@@ -32,7 +32,7 @@ class enter_scope
         enter_scope(scope_cursor& a_scope_cursor);
 
         void
-        operator()(const IteratorT*, const IteratorT*) const;
+        operator()(IteratorT, IteratorT) const;
 
     private:
         scope_cursor& scope_cursor_;
@@ -46,7 +46,7 @@ enter_scope<IteratorT>::enter_scope(scope_cursor& a_scope_cursor):
 
 template <class IteratorT>
 void
-enter_scope<IteratorT>::operator()(const IteratorT*, const IteratorT*) const
+enter_scope<IteratorT>::operator()(IteratorT, IteratorT) const
 {
     scope_cursor_.enter_last_encountered_scope_header_scope();
 }

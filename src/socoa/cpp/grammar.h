@@ -570,7 +570,7 @@ class grammar: public boost::spirit::grammar<grammar>
         template <typename ScannerT>
         friend class grammar_definition_initializer;
 
-        grammar(configuration& a_configuration);
+        grammar();
 
         void
         reset();
@@ -578,8 +578,11 @@ class grammar: public boost::spirit::grammar<grammar>
         const configuration&
         get_configuration() const;
 
+        void
+        set_configuration(const configuration& a_configuration);
+
     private:
-        configuration& configuration_;
+        configuration configuration_;
         program_tree::namespace_ global_namespace_;
         std::shared_ptr<program_tree::namespace_> global_namespace_ptr_;
         mutable scope_cursor scope_cursor_;

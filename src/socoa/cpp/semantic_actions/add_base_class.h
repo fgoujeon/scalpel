@@ -21,8 +21,10 @@ along with CppParser.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SEMANTIC_ACTIONS_ADD_BASE_CLASS_H
 
 #include <iostream>
+#include <memory>
 #include <boost/spirit/core.hpp>
 #include "../grammar.h"
+#include "../generic_syntax_analyzer.h"
 
 namespace socoa { namespace cpp { namespace semantic_actions
 {
@@ -31,41 +33,39 @@ template <class IteratorT>
 class add_base_class
 {
     public:
-        add_base_class
-        (
-            const grammar& cpp_grammar
-        );
+        add_base_class(const grammar& grammar);
 
         void
-        operator()(const IteratorT* first, const IteratorT* last) const;
+        operator()(IteratorT first, IteratorT last) const;
 
     private:
-        const grammar& grammar_;
+        std::shared_ptr<generic_syntax_analyzer> analyzer_;
 };
 
 template <class IteratorT>
-add_base_class<IteratorT>::add_base_class
-(
-    const grammar& cpp_grammar
-):
-    grammar_(cpp_grammar)
+add_base_class<IteratorT>::add_base_class(const grammar& grammar):
+    analyzer_(std::make_shared<generic_syntax_analyzer>(grammar))
 {
 }
 
 template <class IteratorT>
 void
-add_base_class<IteratorT>::operator()(const IteratorT* first, const IteratorT* last) const
+add_base_class<IteratorT>::operator()(IteratorT first, IteratorT last) const
 {
     using namespace boost::spirit;
 
-    std::cout << "base specifier: " << std::string(first, last) << '\n';
+    std::string base_specifier(first, last);
 
-    pt_parse
+    std::cout << "base specifier: " << base_specifier << '\n';
+
+    analyzer_->convert
+    <
+        program_syntax_tree::base_specifier,
+        grammar::start_parser_id::START_BASE_SPECIFIER
+    >
     (
-        first,
-        last,
-        grammar_.use_parser<grammar::START_BASE_SPECIFIER>(),
-        space_p
+        base_specifier,
+        &generic_syntax_analyzer::evaluate_base_specifier
     );
 }
 

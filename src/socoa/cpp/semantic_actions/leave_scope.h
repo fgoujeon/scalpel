@@ -32,7 +32,7 @@ class leave_scope
         leave_scope(scope_cursor& a_scope_cursor);
 
         void
-        operator()(const IteratorT*, const IteratorT*) const;
+        operator()(IteratorT, IteratorT) const;
 
     private:
         scope_cursor& scope_cursor_;
@@ -46,7 +46,7 @@ leave_scope<IteratorT>::leave_scope(scope_cursor& a_scope_cursor):
 
 template <class IteratorT>
 void
-leave_scope<IteratorT>::operator()(const IteratorT*, const IteratorT*) const
+leave_scope<IteratorT>::operator()(IteratorT, IteratorT) const
 {
     scope_cursor_.leave_current_scope();
 }

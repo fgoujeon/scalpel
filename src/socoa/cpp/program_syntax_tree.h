@@ -67,6 +67,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "program_syntax_tree/member_declarator.h"
 #include "program_syntax_tree/member_declarator_declarator.h"
 #include "program_syntax_tree/member_declarator_bit_field_member.h"
+#include "program_syntax_tree/base_clause.h"
+#include "program_syntax_tree/base_specifier.h"
 #include "program_syntax_tree/access_specifier.h"
 #include "program_syntax_tree/ctor_initializer.h"
 #include "program_syntax_tree/mem_initializer.h"

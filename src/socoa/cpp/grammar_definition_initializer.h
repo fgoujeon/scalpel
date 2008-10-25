@@ -45,17 +45,23 @@ namespace socoa { namespace cpp
 template <typename ScannerT>
 struct grammar_definition_initializer
 {
-    grammar_definition_initializer(grammar::definition<ScannerT>& def, const grammar& gram);
+    typedef typename ScannerT::iterator_t iterator_t;
+
+    grammar_definition_initializer
+    (
+        grammar::definition<ScannerT>& def,
+        const grammar& gram
+    );
 
     /*
     Semantic actions
     */
     scope_cursor& scope_cursor_;
-    semantic_actions::enter_scope<typename ScannerT::value_t> enter_scope_a;
-    semantic_actions::leave_scope<typename ScannerT::value_t> leave_scope_a;
-    semantic_actions::create_named_scope<typename ScannerT::value_t, program_tree::namespace_> create_namespace_a;
-    semantic_actions::create_named_scope<typename ScannerT::value_t, program_tree::class_> create_class_a;
-    semantic_actions::add_base_class<typename ScannerT::value_t> add_base_class_a;
+    semantic_actions::enter_scope<iterator_t> enter_scope_a;
+    semantic_actions::leave_scope<iterator_t> leave_scope_a;
+    semantic_actions::create_named_scope<iterator_t, program_tree::namespace_> create_namespace_a;
+    semantic_actions::create_named_scope<iterator_t, program_tree::class_> create_class_a;
+    semantic_actions::add_base_class<iterator_t> add_base_class_a;
 
 
     /*
@@ -1218,7 +1224,7 @@ grammar_definition_initializer<ScannerT>::grammar_definition_initializer
 
     def.class_head
         = def.class_key >> !def.nested_name_specifier >> def.template_id >> !def.base_clause //class template specialization -> the class already had been declared
-        | def.class_key >> (def.nested_name_specifier >> def.identifier)[&print_out] >> !def.base_clause //ditto
+        | def.class_key >> def.nested_name_specifier >> def.identifier >> !def.base_clause //ditto
         | def.class_key >> !def.identifier[create_class_a] >> !def.base_clause
     ;
 

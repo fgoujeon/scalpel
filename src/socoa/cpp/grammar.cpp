@@ -26,8 +26,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp
 {
 
-grammar::grammar(grammar::configuration& a_configuration):
-    configuration_(a_configuration),
+grammar::grammar():
     global_namespace_ptr_(&global_namespace_, util::null_deleter()),
     scope_cursor_(global_namespace_ptr_)
 {
@@ -46,6 +45,13 @@ grammar::get_configuration() const
     return configuration_;
 }
 
+void
+grammar::set_configuration(const configuration& a_configuration)
+{
+    configuration_ = a_configuration;
+}
+
+//scanner type of boost::spirit::pt_parse() function
 typedef
     boost::spirit::scanner
     <
@@ -71,7 +77,14 @@ typedef
 
 template<>
 grammar::definition<scanner_t>::definition(const grammar& self):
-    grammar_definition_initializer_(std::make_shared<grammar_definition_initializer<scanner_t>>(*this, self))
+    grammar_definition_initializer_
+    (
+        std::make_shared<grammar_definition_initializer<scanner_t>>
+        (
+            *this,
+            self
+        )
+    )
 {
     start_parsers(file, base_specifier);
 }

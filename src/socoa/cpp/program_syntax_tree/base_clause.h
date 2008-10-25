@@ -18,27 +18,20 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_CLASS_HEAD_H
-#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_CLASS_HEAD_H
+#ifndef SOCOA_CPP_PROGRAM_SYNTAX_TREE_BASE_CLAUSE_H
+#define SOCOA_CPP_PROGRAM_SYNTAX_TREE_BASE_CLAUSE_H
 
 #include <memory>
-#include "class_key.h"
+#include "../../util/sequence.h"
+#include "../../util/extern_strings.h"
+#include "base_specifier.h"
 
 namespace socoa { namespace cpp { namespace program_syntax_tree
 {
 
-class nested_name_specifier;
-class template_id;
-class identifier;
-class base_clause;
-
-struct class_head
+struct base_clause
 {
-    const class_key key_;
-    const std::shared_ptr<nested_name_specifier> nested_name_specifier_;
-    const std::shared_ptr<template_id> template_id_;
-    const std::shared_ptr<identifier> identifier_;
-    const std::shared_ptr<base_clause> base_clause_;
+    const std::shared_ptr<util::sequence<base_specifier, util::extern_strings::comma>> base_specifier_list_;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

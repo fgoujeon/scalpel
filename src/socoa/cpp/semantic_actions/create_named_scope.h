@@ -36,7 +36,7 @@ class create_named_scope
         create_named_scope(scope_cursor& a_scope_cursor);
 
         void
-        operator()(const IteratorT* first, const IteratorT* last) const;
+        operator()(IteratorT first, IteratorT last) const;
 
     private:
         scope_cursor& scope_cursor_;
@@ -50,7 +50,7 @@ create_named_scope<IteratorT, ScopeT>::create_named_scope(scope_cursor& a_scope_
 
 template <class IteratorT, class ScopeT>
 void
-create_named_scope<IteratorT, ScopeT>::operator()(const IteratorT* first, const IteratorT* last) const
+create_named_scope<IteratorT, ScopeT>::operator()(IteratorT first, IteratorT last) const
 {
     std::string scope_name(first, last);
 
