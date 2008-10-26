@@ -21,20 +21,14 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SINGLE_FILE_TEST_H
 #define SINGLE_FILE_TEST_H
 
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
 #include <socoa/cpp/syntax_analyzer.h>
 #include <socoa/cpp/program_syntax_tree_to_string_converter.h>
 
-class single_file_test: public CppUnit::TestFixture
+class single_file_test
 {
-    /*CPPUNIT_TEST_SUITE(single_file_test);
-    CPPUNIT_TEST(parse_files);
-    CPPUNIT_TEST_SUITE_END();*/
-
     public:
         void
-        parse_files();
+        parse_files(const std::string& test_directory);
 
     private:
         socoa::cpp::syntax_analyzer m_syntax_analyzer;

@@ -21,17 +21,11 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SINGLE_PREPROCESSING_STANDARD_LIBRARY_TEST_H
 #define SINGLE_PREPROCESSING_STANDARD_LIBRARY_TEST_H
 
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
 #include <socoa/cpp/preprocessor.h>
 #include <socoa/cpp/syntax_analyzer.h>
 
-class standard_library_test: public CppUnit::TestFixture
+class standard_library_test
 {
-    /*CPPUNIT_TEST_SUITE(standard_library_test);
-    CPPUNIT_TEST(parse_files);
-    CPPUNIT_TEST_SUITE_END();*/
-
     public:
         void
         parse_files();

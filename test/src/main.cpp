@@ -18,21 +18,38 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <cppunit/ui/text/TestRunner.h>
+#define BOOST_TEST_ALTERNATIVE_INIT_API
+
+#include <functional>
+#include <boost/test/included/unit_test.hpp>
+#include <boost/test/parameterized_test.hpp>
+#include <boost/bind.hpp>
 #include "single_file_test.h"
-#include "standard_library_test.h"
 
-int main(int argc, char **argv)
+using namespace boost::unit_test;
+
+single_file_test t;
+
+bool
+init_unit_test()
 {
-	//CppUnit::TextUi::TestRunner runner;
+    const std::vector<std::string> directories
+    {
+        "basic",
+        "name_lookup"
+    };
 
-	//runner.addTest(single_file_test::suite());
- 	//runner.addTest(standard_library_test::suite()); //takes a very long time
-	//runner.run();
+    boost::unit_test::callback1<std::string> tm = std::bind(&single_file_test::parse_files, &t, std::placeholders::_1);
 
-	single_file_test t;
-	t.parse_files();
+    framework::master_test_suite().add
+    (
+        boost::unit_test::ut_detail::param_test_case_generator
+        <
+            std::string,
+            std::vector<std::string>::const_iterator
+        >(tm, "Single file tests", directories.begin(), directories.end())
+    );
 
-	return 0;
+    return true;
 }
 

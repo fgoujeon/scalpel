@@ -64,6 +64,5 @@ include_directories(
 target_link_libraries(
 	test
 	socoa
-	cppunit
 )
 

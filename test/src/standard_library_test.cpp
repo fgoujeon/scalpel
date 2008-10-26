@@ -18,13 +18,13 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "standard_library_test.h"
+
 #include <sstream>
+#include <fstream>
 #include <iomanip>
 #include <stdexcept>
 #include <boost/spirit.hpp>
-#include <cppunit/TestSuite.h>
-
-#include "standard_library_test.h"
 
 using namespace boost::spirit;
 using namespace std;

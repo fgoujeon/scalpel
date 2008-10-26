@@ -54,19 +54,44 @@ add_base_class<IteratorT>::operator()(IteratorT first, IteratorT last) const
 {
     using namespace boost::spirit;
 
-    std::string base_specifier(first, last);
+    std::string base_specifier_str(first, last);
 
-    std::cout << "base specifier: " << base_specifier << '\n';
+    std::cout << "base specifier: " << base_specifier_str << '\n';
 
-    analyzer_->convert
+    //analyze base specifier
+    const std::shared_ptr<program_syntax_tree::base_specifier> base_specifier = analyzer_->convert
     <
         program_syntax_tree::base_specifier,
         grammar::start_parser_id::START_BASE_SPECIFIER
     >
     (
-        base_specifier,
+        base_specifier_str,
         &generic_syntax_analyzer::evaluate_base_specifier
     );
+
+
+    const std::shared_ptr
+    <
+        program_syntax_tree::nested_identifier_or_template_id
+    > nested_identifier_or_template_id = base_specifier->nested_identifier_or_template_id_;
+    if(!nested_identifier_or_template_id) return;
+
+    const std::shared_ptr
+    <
+        program_syntax_tree::identifier_or_template_id
+    > identifier_or_template_id = nested_identifier_or_template_id->identifier_or_template_id_;
+    if(!identifier_or_template_id) return;
+
+    const std::shared_ptr
+    <
+        program_syntax_tree::identifier
+    > identifier = std::dynamic_pointer_cast<program_syntax_tree::identifier>(identifier_or_template_id);
+    if(identifier)
+    {
+        const std::string& value = identifier->value_;
+
+        std::cout << "base class: " << value << '\n';
+    }
 }
 
 }}} //namespace socoa::cpp::semantic_actions
