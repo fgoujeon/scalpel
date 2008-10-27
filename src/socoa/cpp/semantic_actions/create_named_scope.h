@@ -33,18 +33,28 @@ template <class IteratorT, class ScopeT>
 class create_named_scope
 {
     public:
-        create_named_scope(scope_cursor& a_scope_cursor);
+        create_named_scope
+        (
+            scope_cursor& a_scope_cursor,
+            std::shared_ptr<ScopeT>& scope_reference
+        );
 
         void
         operator()(IteratorT first, IteratorT last) const;
 
     private:
         scope_cursor& scope_cursor_;
+        std::shared_ptr<ScopeT>& scope_reference_;
 };
 
 template <class IteratorT, class ScopeT>
-create_named_scope<IteratorT, ScopeT>::create_named_scope(scope_cursor& a_scope_cursor):
-    scope_cursor_(a_scope_cursor)
+create_named_scope<IteratorT, ScopeT>::create_named_scope
+(
+    scope_cursor& a_scope_cursor,
+    std::shared_ptr<ScopeT>& scope_reference
+):
+    scope_cursor_(a_scope_cursor),
+    scope_reference_(scope_reference)
 {
 }
 
@@ -92,6 +102,7 @@ create_named_scope<IteratorT, ScopeT>::operator()(IteratorT first, IteratorT las
 
     //tell the scope cursor that we will enter in the new namespace
     scope_cursor_.set_last_encountered_scope_header_scope(new_scope);
+    scope_reference_ = new_scope;
 }
 
 }}} //namespace socoa::cpp::semantic_actions

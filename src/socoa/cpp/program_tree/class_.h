@@ -28,6 +28,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "class_member.h"
 #include "class_enclosing_scope.h"
 #include "name_tree_composite.h"
+#include "base_specifier.h"
 
 namespace socoa { namespace cpp { namespace program_tree
 {
@@ -51,7 +52,8 @@ class class_:
         Creates a class.
         @param name the class' name
         */
-        explicit class_(const std::string& name);
+        explicit
+        class_(const std::string& name);
 
         class_(const class_& n) = delete;
 
@@ -73,6 +75,9 @@ class class_:
         const std::string
         get_full_name() const;
 
+        /**
+        @return true
+        */
         bool
         is_a_type() const;
 
@@ -119,10 +124,16 @@ class class_:
         get_classes() const;
 
         void
-        add(std::shared_ptr<class_> member);
+        add(std::shared_ptr<class_> nested_class);
 
         void
         clear();
+
+        const std::vector<base_specifier>&
+        get_base_specifiers() const;
+
+        void
+        add(const base_specifier& specifier);
 
     private:
         /**
@@ -135,7 +146,8 @@ class class_:
         std::string name_;
         std::weak_ptr<enclosing_scope> enclosing_scope_;
         std::vector<std::shared_ptr<name_tree_component>> members_;
-        std::vector<std::shared_ptr<class_>> classes_;
+        std::vector<std::shared_ptr<class_>> nested_classes_;
+        std::vector<base_specifier> base_specifiers_;
 };
 
 }}} //namespace socoa::cpp::program_tree

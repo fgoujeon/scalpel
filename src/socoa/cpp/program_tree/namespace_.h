@@ -139,6 +139,10 @@ class namespace_:
         void
         clear();
 
+        inline
+        const std::vector<base_specifier>&
+        get_base_specifiers() const;
+
     private:
         /**
         Adds a member to the namespace.
@@ -152,7 +156,15 @@ class namespace_:
         std::vector<std::shared_ptr<name_tree_component>> members_;
         std::vector<std::shared_ptr<namespace_>> namespaces_;
         std::vector<std::shared_ptr<class_>> classes_;
+        std::vector<base_specifier> empty_base_specifiers_;
 };
+
+inline
+const std::vector<base_specifier>&
+namespace_::get_base_specifiers() const
+{
+    return empty_base_specifiers_;
+}
 
 }}} //namespace socoa::cpp::program_tree
 

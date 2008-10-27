@@ -112,21 +112,33 @@ class_::get_members() const
 const std::vector<std::shared_ptr<class_>>&
 class_::get_classes() const
 {
-    return classes_;
+    return nested_classes_;
 }
 
 void
-class_::add(std::shared_ptr<class_> member)
+class_::add(std::shared_ptr<class_> nested_class)
 {
-    classes_.push_back(member);
-    add_member(member);
+    nested_classes_.push_back(nested_class);
+    add_member(nested_class);
 }
 
 void
 class_::clear()
 {
     members_.clear();
-    classes_.clear();
+    nested_classes_.clear();
+}
+
+const std::vector<base_specifier>&
+class_::get_base_specifiers() const
+{
+    return base_specifiers_;
+}
+
+void
+class_::add(const base_specifier& specifier)
+{
+    base_specifiers_.push_back(specifier);
 }
 
 void

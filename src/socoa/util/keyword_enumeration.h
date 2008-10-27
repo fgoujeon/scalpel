@@ -39,7 +39,7 @@ class keyword_enumeration
         get_value() const;
 
     private:
-        const std::vector<std::string>::const_iterator value_ptr_;
+        std::vector<std::string>::const_iterator value_ptr_;
 };
 
 template<const std::vector<std::string>& StringList>

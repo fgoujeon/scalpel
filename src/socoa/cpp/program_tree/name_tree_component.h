@@ -29,6 +29,7 @@ namespace socoa { namespace cpp { namespace program_tree
 {
 
 class name_tree_composite;
+class base_specifier;
 
 struct name_tree_component
 {
@@ -66,6 +67,10 @@ struct name_tree_component
     virtual
     const std::vector<std::shared_ptr<name_tree_component>>&
     get_members() const = 0;
+
+    virtual
+    const std::vector<base_specifier>&
+    get_base_specifiers() const = 0;
 };
 
 }}} //namespace socoa::cpp::program_tree

@@ -1,16 +1,21 @@
-template<bool b>
-class Foo
+namespace M
 {
-};
-
-Foo<a && b>
-bar()
-{
-    return 0;
+    struct B
+    {
+        template <typename T>
+        class C
+        {
+        };
+    };
 }
 
-Foo<(a > b)>
-bar2()
+namespace N
 {
-    return 0;
+    class Y: public M::B
+    {
+        class X
+        {
+            C<int> c;
+        };
+    };
 }

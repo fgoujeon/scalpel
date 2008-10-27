@@ -75,6 +75,8 @@ struct grammar_definition_initializer
     Last parsed symbols (evolve during parsing)
     */
     std::string last_parsed_identifier_;
+    std::shared_ptr<program_tree::namespace_> last_namespace_;
+    std::shared_ptr<program_tree::class_> last_class_;
 };
 
 template<typename ScannerT>
@@ -86,9 +88,9 @@ grammar_definition_initializer<ScannerT>::grammar_definition_initializer
     scope_cursor_(gram.scope_cursor_),
     enter_scope_a(scope_cursor_),
     leave_scope_a(scope_cursor_),
-    create_namespace_a(scope_cursor_),
-    create_class_a(scope_cursor_),
-    add_base_class_a(gram),
+    create_namespace_a(scope_cursor_, last_namespace_),
+    create_class_a(scope_cursor_, last_class_),
+    add_base_class_a(gram, scope_cursor_, last_class_),
     type_name_parser_(scope_cursor_, last_parsed_identifier_),
     type_name_p(type_name_parser_)
 {

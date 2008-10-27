@@ -1,17 +1,14 @@
-namespace M
+struct B
 {
-    struct B
+    template <typename T>
+    class C
     {
-        template <typename T>
-        class C
-        {
-        };
     };
-}
+};
 
 namespace N
 {
-    class Y: public M::B
+    class Y: public B
     {
         class X
         {
