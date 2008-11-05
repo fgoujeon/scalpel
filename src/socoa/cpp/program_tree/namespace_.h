@@ -57,8 +57,6 @@ class namespace_:
         */
         explicit namespace_(const std::string& name);
 
-        namespace_(const namespace_& n) = delete;
-
         /**
         @return the name of the namespace
         Anonymous namespaces return an empty string.

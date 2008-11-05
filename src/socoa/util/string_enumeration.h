@@ -18,8 +18,8 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_UTIL_KEYWORD_ENUMERATION_H
-#define SOCOA_UTIL_KEYWORD_ENUMERATION_H
+#ifndef SOCOA_UTIL_STRING_ENUMERATION_H
+#define SOCOA_UTIL_STRING_ENUMERATION_H
 
 #include <cassert>
 #include <vector>
@@ -30,10 +30,10 @@ namespace socoa { namespace util
 {
 
 template<const std::vector<std::string>& StringList>
-class keyword_enumeration
+class string_enumeration
 {
     public:
-        keyword_enumeration(const std::string& value);
+        string_enumeration(const std::string& value);
 
         const std::string&
         get_value() const;
@@ -43,7 +43,7 @@ class keyword_enumeration
 };
 
 template<const std::vector<std::string>& StringList>
-keyword_enumeration<StringList>::keyword_enumeration(const std::string& value):
+string_enumeration<StringList>::string_enumeration(const std::string& value):
     value_ptr_
     (
         std::find
@@ -59,7 +59,7 @@ keyword_enumeration<StringList>::keyword_enumeration(const std::string& value):
 
 template<const std::vector<std::string>& StringList>
 const std::string&
-keyword_enumeration<StringList>::get_value() const
+string_enumeration<StringList>::get_value() const
 {
     return *value_ptr_;
 }

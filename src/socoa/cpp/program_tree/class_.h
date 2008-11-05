@@ -55,8 +55,6 @@ class class_:
         explicit
         class_(const std::string& name);
 
-        class_(const class_& n) = delete;
-
         /**
         @return the name of the class
         */
@@ -120,14 +118,17 @@ class class_:
         const std::vector<std::shared_ptr<name_tree_component>>&
         get_members() const;
 
+        /**
+        @return the nested classes
+        */
         const std::vector<std::shared_ptr<class_>>&
         get_classes() const;
 
+        /**
+        Adds a nested class.
+        */
         void
         add(std::shared_ptr<class_> nested_class);
-
-        void
-        clear();
 
         const std::vector<base_specifier>&
         get_base_specifiers() const;

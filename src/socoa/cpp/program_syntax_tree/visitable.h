@@ -33,13 +33,14 @@ namespace socoa { namespace cpp { namespace program_syntax_tree
 
 class visitor;
 
-class visitable
+struct visitable
 {
-    public:
-        virtual ~visitable(){};
+    virtual
+    ~visitable(){};
 
-        virtual void
-        accept(visitor& a_visitor) const = 0;
+    virtual
+    void
+    accept(visitor& a_visitor) const = 0;
 };
 
 }}} //namespace socoa::cpp::program_syntax_tree

@@ -122,13 +122,6 @@ class_::add(std::shared_ptr<class_> nested_class)
     add_member(nested_class);
 }
 
-void
-class_::clear()
-{
-    members_.clear();
-    nested_classes_.clear();
-}
-
 const std::vector<base_specifier>&
 class_::get_base_specifiers() const
 {

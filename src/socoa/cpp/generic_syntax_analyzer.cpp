@@ -359,7 +359,7 @@ generic_syntax_analyzer::evaluate_simple_type_specifier(const tree_node_t& node)
         {
             {grammar::NESTED_IDENTIFIER_OR_TEMPLATE_ID, &generic_syntax_analyzer::evaluate_nested_identifier_or_template_id},
             {grammar::SIMPLE_TEMPLATE_TYPE_SPECIFIER, &generic_syntax_analyzer::evaluate_simple_template_type_specifier},
-            {grammar::BUILT_IN_TYPE_SPECIFIER, &generic_syntax_analyzer::evaluate_keyword_enumeration<built_in_type_specifier>}
+            {grammar::BUILT_IN_TYPE_SPECIFIER, &generic_syntax_analyzer::evaluate_string_enumeration<built_in_type_specifier>}
         }
     );
 }
@@ -715,7 +715,7 @@ generic_syntax_analyzer::evaluate_class_head(const tree_node_t& node)
     (
         class_head
         {
-            *ASSERTED_EVALUATE_NODE(keyword_enumeration<class_key>, CLASS_KEY),
+            *ASSERTED_EVALUATE_NODE(string_enumeration<class_key>, CLASS_KEY),
             EVALUATE_NODE(nested_name_specifier, NESTED_NAME_SPECIFIER),
             EVALUATE_NODE(template_id, TEMPLATE_ID),
             EVALUATE_NODE(identifier, IDENTIFIER),
@@ -753,7 +753,7 @@ generic_syntax_analyzer::evaluate_member_specification_access_specifier(const tr
 
     return std::make_shared<member_specification_access_specifier>
     (
-        *ASSERTED_EVALUATE_NODE(keyword_enumeration<access_specifier>, ACCESS_SPECIFIER)
+        *ASSERTED_EVALUATE_NODE(string_enumeration<access_specifier>, ACCESS_SPECIFIER)
     );
 }
 
@@ -877,7 +877,7 @@ generic_syntax_analyzer::evaluate_base_specifier(const tree_node_t& node)
         base_specifier
         {
             check_node_existence(node, "virtual"),
-            evaluate_keyword_enumeration<program_syntax_tree::access_specifier>
+            evaluate_string_enumeration<program_syntax_tree::access_specifier>
             (
                 *find_child_node(node, grammar::ACCESS_SPECIFIER)
             ),

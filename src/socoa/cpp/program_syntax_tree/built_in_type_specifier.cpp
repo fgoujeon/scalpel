@@ -39,7 +39,7 @@ const std::vector<std::string> built_in_type_specifier_string_list
 };
 
 built_in_type_specifier::built_in_type_specifier(const std::string& value):
-    util::keyword_enumeration<built_in_type_specifier_string_list>(value)
+    util::string_enumeration<built_in_type_specifier_string_list>(value)
 {
 }
 

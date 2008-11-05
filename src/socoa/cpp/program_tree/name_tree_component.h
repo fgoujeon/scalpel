@@ -33,6 +33,13 @@ class base_specifier;
 
 struct name_tree_component
 {
+    name_tree_component() = default;
+
+    name_tree_component(const name_tree_component&) = delete;
+
+    name_tree_component&
+    operator=(const name_tree_component&) = delete;
+
     virtual
     ~name_tree_component(){};
 
