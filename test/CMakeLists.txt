@@ -48,7 +48,6 @@ endif(CMAKE_COMPILER_IS_GNUCXX)
 include(FindBoost)
 find_package(
 	Boost 1.36.0
-	REQUIRED system filesystem thread wave
 )
 include_directories(${Boost_INCLUDE_DIRS})
 
@@ -57,7 +56,7 @@ include(
 	../socoa.cmake
 )
 include_directories(
-	../src
+	../include
 )
 
 #link

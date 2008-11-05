@@ -32,20 +32,21 @@ endif(CMAKE_COMPILER_IS_GNUCXX)
 #library
 file(
 	GLOB_RECURSE sources
-	src/*.cpp
-)
-file(
-	GLOB_RECURSE headers
-	src/*.h
+	src/*
+	include/*
 )
 add_library(
 	socoa
 	SHARED
 	${sources}
-	${headers}
 )
 
-#Boost
+#include public headers
+include_directories(
+	include
+)
+
+#include Boost
 include(FindBoost)
 find_package(
 	Boost 1.36.0
@@ -60,8 +61,8 @@ target_link_libraries(
 	${Boost_LIBRARIES}
 )
 
-#export
+#export target
 export(
 	TARGETS socoa
-    FILE socoa.cmake
+	FILE socoa.cmake
 )
