@@ -44,7 +44,7 @@ syntax_analyzer::operator()(const std::string& input)
     //reset the grammar
     grammar_.reset();
 
-    return analyzer_.convert
+    return analyzer_.analyze
     <
         util::sequence<program_syntax_tree::declaration>,
         grammar::start_parser_id::START_FILE

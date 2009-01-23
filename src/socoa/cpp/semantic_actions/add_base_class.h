@@ -74,7 +74,7 @@ add_base_class<IteratorT>::operator()(IteratorT first, IteratorT last) const
     std::cout << "base specifier: " << base_specifier_str << '\n';
 
     //analyze base specifier
-    const std::shared_ptr<program_syntax_tree::base_specifier> base_specifier = analyzer_->convert
+    const std::shared_ptr<program_syntax_tree::base_specifier> base_specifier = analyzer_->analyze
     <
         program_syntax_tree::base_specifier,
         grammar::start_parser_id::START_BASE_SPECIFIER

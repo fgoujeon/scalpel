@@ -36,9 +36,10 @@ namespace socoa { namespace cpp
 @brief Analyses the syntax of every declaration token of a source code.
 
 Analyses the syntax of a source code, by calling the operator() function.
-This analyzer configures the grammar so it parses declaration tokens only.
 After parsing the input, it generates a syntax tree of the source code and
 returns it.
+This class can analyze any kind of C++ token, by passing the correct template
+parameters to the analyze() function.
 */
 class generic_syntax_analyzer
 {
@@ -64,7 +65,7 @@ class generic_syntax_analyzer
 
         template <class ReturnT, int StartParserId>
         std::shared_ptr<ReturnT>
-        convert
+        analyze
         (
             const std::string& input,
             std::function
@@ -406,7 +407,7 @@ class generic_syntax_analyzer
 
 template <class ReturnT, int StartParserId>
 std::shared_ptr<ReturnT>
-generic_syntax_analyzer::convert
+generic_syntax_analyzer::analyze
 (
     const std::string& input,
     std::function

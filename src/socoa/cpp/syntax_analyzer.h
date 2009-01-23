@@ -36,9 +36,10 @@ namespace socoa { namespace cpp
 @brief Analyses the syntax of every declaration token of a source code.
 
 Analyses the syntax of a source code, by calling the operator() function.
-This analyzer configures the grammar so it parses declaration tokens only.
 After parsing the input, it generates a syntax tree of the source code and
 returns it.
+This class can analyze the source code of full programs only. See
+generic_syntax_analyzer for an any token analysis.
 */
 class syntax_analyzer
 {
