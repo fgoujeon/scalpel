@@ -1,6 +1,6 @@
 /*
 CppParser - Standard C++ programming language parsing library
-Copyright © 2008  Florian Goujeon
+Copyright © 2008, 2009  Florian Goujeon
 
 This file is part of CppParser.
 

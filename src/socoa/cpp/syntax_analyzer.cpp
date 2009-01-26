@@ -1,6 +1,6 @@
 /*
 Socoa - Source Code Analysis Library
-Copyright © 2008  Florian Goujeon
+Copyright © 2008, 2009  Florian Goujeon
 
 This file is part of Socoa.
 
@@ -20,9 +20,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "syntax_analyzer.h"
 
-#include <iostream>
-#include <sstream>
-#include <stdexcept>
 #include "grammar.h"
 
 using namespace boost::spirit;
@@ -41,9 +38,6 @@ syntax_analyzer::syntax_analyzer():
 std::shared_ptr<util::sequence<program_syntax_tree::declaration>>
 syntax_analyzer::operator()(const std::string& input)
 {
-    //reset the grammar
-    grammar_.reset();
-
     return analyzer_.analyze
     <
         util::sequence<program_syntax_tree::declaration>,

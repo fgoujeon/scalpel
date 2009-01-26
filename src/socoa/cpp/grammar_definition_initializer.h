@@ -1,6 +1,6 @@
 /*
 Socoa - Source Code Analysis Library
-Copyright © 2008  Florian Goujeon
+Copyright © 2008, 2009  Florian Goujeon
 
 This file is part of Socoa.
 
@@ -26,17 +26,11 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/spirit/utility/chset.hpp>
 #include <boost/spirit/utility/functor_parser.hpp>
 #include <boost/spirit/utility/grammar_def.hpp>
-#include <boost/spirit/actor/assign_actor.hpp>
 #include "../util/null_deleter.h"
 #include "grammar.h"
 #include "scope_cursor.h"
 #include "program_tree/namespace_.h"
 #include "program_tree/class_.h"
-#include "semantic_actions/print_out.h"
-#include "semantic_actions/enter_scope.h"
-#include "semantic_actions/leave_scope.h"
-#include "semantic_actions/create_named_scope.h"
-#include "semantic_actions/add_base_class.h"
 #include "functor_parsers/type_name.h"
 
 namespace socoa { namespace cpp
@@ -53,30 +47,12 @@ struct grammar_definition_initializer
         const grammar& gram
     );
 
-    /*
-    Semantic actions
-    */
-    scope_cursor& scope_cursor_;
-    semantic_actions::enter_scope<iterator_t> enter_scope_a;
-    semantic_actions::leave_scope<iterator_t> leave_scope_a;
-    semantic_actions::create_named_scope<iterator_t, program_tree::namespace_> create_namespace_a;
-    semantic_actions::create_named_scope<iterator_t, program_tree::class_> create_class_a;
-    semantic_actions::add_base_class<iterator_t> add_base_class_a;
-
 
     /*
     Functor parsers
     */
     functor_parsers::type_name type_name_parser_;
     boost::spirit::functor_parser<functor_parsers::type_name> type_name_p;
-
-
-    /*
-    Last parsed symbols (evolve during parsing)
-    */
-    std::string last_parsed_identifier_;
-    std::shared_ptr<program_tree::namespace_> last_namespace_;
-    std::shared_ptr<program_tree::class_> last_class_;
 };
 
 template<typename ScannerT>
@@ -85,17 +61,9 @@ grammar_definition_initializer<ScannerT>::grammar_definition_initializer
     grammar::definition<ScannerT>& def,
     const grammar& gram
 ):
-    scope_cursor_(gram.scope_cursor_),
-    enter_scope_a(scope_cursor_),
-    leave_scope_a(scope_cursor_),
-    create_namespace_a(scope_cursor_, last_namespace_),
-    create_class_a(scope_cursor_, last_class_),
-    add_base_class_a(gram, scope_cursor_, last_class_),
-    type_name_parser_(scope_cursor_, last_parsed_identifier_),
     type_name_p(type_name_parser_)
 {
     using namespace boost::spirit;
-    using namespace semantic_actions;
 
     def.file
         = def.translation_unit
@@ -242,7 +210,7 @@ grammar_definition_initializer<ScannerT>::grammar_definition_initializer
     def.identifier
         = token_node_d
         [
-            ((def.nondigit >> *(def.nondigit | digit_p)) - def.keyword)[assign_a(last_parsed_identifier_)]
+            (def.nondigit >> *(def.nondigit | digit_p)) - def.keyword
         ]
     ;
 
@@ -949,7 +917,7 @@ grammar_definition_initializer<ScannerT>::grammar_definition_initializer
     ;
 
     def.namespace_definition
-        = str_p("namespace") >> (def.identifier[create_namespace_a] | epsilon_p[create_namespace_a]) >> '{' >> epsilon_p[enter_scope_a] >> !def.declaration_seq >> '}' >> epsilon_p[leave_scope_a]
+        = str_p("namespace") >> !def.identifier >> '{' >> !def.declaration_seq >> '}'
     ;
 
     def.namespace_alias_definition
@@ -1221,13 +1189,13 @@ grammar_definition_initializer<ScannerT>::grammar_definition_initializer
 
     //1.8 - Classes [gram.class]
     def.class_specifier
-        = def.class_head >> '{' >> epsilon_p[enter_scope_a] >> !def.member_specification >> '}' >> epsilon_p[leave_scope_a]
+        = def.class_head >> '{' >> !def.member_specification >> '}'
     ;
 
     def.class_head
         = def.class_key >> !def.nested_name_specifier >> def.template_id >> !def.base_clause //class template specialization -> the class already had been declared
         | def.class_key >> def.nested_name_specifier >> def.identifier >> !def.base_clause //ditto
-        | def.class_key >> !def.identifier[create_class_a] >> !def.base_clause
+        | def.class_key >> !def.identifier >> !def.base_clause
     ;
 
     def.class_key
@@ -1301,7 +1269,7 @@ grammar_definition_initializer<ScannerT>::grammar_definition_initializer
     ;
 
     def.base_specifier_list
-        = def.base_specifier[add_base_class_a] % ','
+        = def.base_specifier % ','
     ;
 
     def.base_specifier

@@ -1,6 +1,6 @@
 /*
 Socoa - Source Code Analysis Library
-Copyright © 2008  Florian Goujeon
+Copyright © 2008, 2009  Florian Goujeon
 
 This file is part of Socoa.
 
@@ -25,19 +25,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace socoa { namespace cpp
 {
-
-grammar::grammar():
-    global_namespace_ptr_(&global_namespace_, util::null_deleter()),
-    scope_cursor_(global_namespace_ptr_)
-{
-}
-
-void
-grammar::reset()
-{
-    scope_cursor_.reset();
-    global_namespace_.clear();
-}
 
 const grammar::configuration&
 grammar::get_configuration() const

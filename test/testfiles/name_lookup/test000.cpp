@@ -1,3 +1,6 @@
+class BrandName;
+class Color;
+
 class Phone
 {
 	public:

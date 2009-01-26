@@ -1,6 +1,6 @@
 /*
 Socoa - Source Code Analysis Library
-Copyright © 2008  Florian Goujeon
+Copyright © 2008, 2009  Florian Goujeon
 
 This file is part of Socoa.
 

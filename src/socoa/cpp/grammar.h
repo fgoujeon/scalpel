@@ -1,6 +1,6 @@
 /*
 Socoa - Source Code Analysis Library
-Copyright © 2008  Florian Goujeon
+Copyright © 2008, 2009  Florian Goujeon
 
 This file is part of Socoa.
 
@@ -570,11 +570,6 @@ class grammar: public boost::spirit::grammar<grammar>
         template <typename ScannerT>
         friend class grammar_definition_initializer;
 
-        grammar();
-
-        void
-        reset();
-
         const configuration&
         get_configuration() const;
 
@@ -583,9 +578,6 @@ class grammar: public boost::spirit::grammar<grammar>
 
     private:
         configuration configuration_;
-        program_tree::namespace_ global_namespace_;
-        std::shared_ptr<program_tree::namespace_> global_namespace_ptr_;
-        mutable scope_cursor scope_cursor_;
 };
 
 }} //namespace socoa::cpp
