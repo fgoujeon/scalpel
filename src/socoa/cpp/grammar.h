@@ -21,11 +21,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_GRAMMAR_H
 #define SOCOA_CPP_GRAMMAR_H
 
-#include <memory>
 #include <boost/spirit/core.hpp>
 #include <boost/spirit/utility/grammar_def.hpp>
-#include "scope_cursor.h"
-#include "program_tree/namespace_.h"
 
 namespace socoa { namespace cpp
 {

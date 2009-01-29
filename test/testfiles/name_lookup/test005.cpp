@@ -17,7 +17,7 @@ namespace a
 
 		c3<int> a_c3;
 		c2<int> a_c2;
-		c1<int> a c1;
+		c1<int> a_c1;
 	}
 }
 

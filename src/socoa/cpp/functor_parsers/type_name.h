@@ -23,7 +23,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <iostream>
 #include <boost/spirit/core.hpp>
-#include "../scope_cursor.h"
 #include "../name_lookup.h"
 
 namespace socoa { namespace cpp { namespace functor_parsers
