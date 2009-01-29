@@ -73,7 +73,6 @@ grammar::definition<scanner_t>::definition(const grammar& self):
         )
     )
 {
-    start_parsers(file, base_specifier);
 }
 
 template<>

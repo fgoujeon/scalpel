@@ -78,4 +78,11 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "program_syntax_tree/template_argument.h"
 #include "program_syntax_tree/nested_identifier_or_template_id.h"
 
+namespace socoa { namespace cpp
+{
+
+typedef util::sequence<program_syntax_tree::declaration> program_syntax_tree_t;
+
+}} //namespace socoa::cpp
+
 #endif

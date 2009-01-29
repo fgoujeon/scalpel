@@ -24,7 +24,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/spirit/core.hpp>
 #include <boost/spirit/utility/chset.hpp>
 #include <boost/spirit/utility/functor_parser.hpp>
-#include <boost/spirit/utility/grammar_def.hpp>
 #include "grammar.h"
 #include "functor_parsers/type_name.h"
 

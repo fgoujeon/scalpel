@@ -22,7 +22,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_GRAMMAR_H
 
 #include <boost/spirit/core.hpp>
-#include <boost/spirit/utility/grammar_def.hpp>
 
 namespace socoa { namespace cpp
 {
@@ -274,19 +273,8 @@ class grammar: public boost::spirit::grammar<grammar>
             RESTRICT_KEYWORD
         };
 
-        enum class start_parser_id
-        {
-            START_FILE = 0,
-            START_BASE_SPECIFIER = 1
-        };
-
         template <typename ScannerT>
-        class definition:
-            public boost::spirit::grammar_def
-            <
-                boost::spirit::rule<ScannerT>,
-                boost::spirit::rule<ScannerT, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::BASE_SPECIFIER>>
-            >
+        class definition
         {
             private:
                 /*
