@@ -74,9 +74,17 @@ using namespace socoa::util;
 namespace socoa { namespace cpp
 {
 
+syntax_analyzer::syntax_analyzer():
+	grammar_(type_name_parser_)
+{
+}
+
 std::shared_ptr<program_syntax_tree_t>
 syntax_analyzer::operator()(const std::string& input)
 {
+    //configure functor parsers
+    type_name_parser_.set_input(input);
+
     //parse the input with the C++ grammar
     boost::spirit::tree_parse_info<> info = boost::spirit::pt_parse
     (

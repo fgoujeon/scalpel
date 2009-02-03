@@ -25,7 +25,36 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp
 {
 
-grammar::grammar()
+/*-----------------------------------------------*
+ *    class internal_type_name_functor_parser    *
+ *-----------------------------------------------*/
+
+grammar::internal_type_name_functor_parser::internal_type_name_functor_parser
+(
+    type_name_parser& a_type_name_parser
+):
+    type_name_parser_(a_type_name_parser)
+{
+}
+
+std::ptrdiff_t
+grammar::internal_type_name_functor_parser::operator()
+(
+    const scanner_t& scan,
+    internal_type_name_functor_parser::result_t&
+) const
+{
+    return type_name_parser_(scan);
+}
+
+
+/*------------------------------*
+ *        class grammar         *
+ *------------------------------*/
+
+grammar::grammar(type_name_parser& a_type_name_parser):
+    internal_type_name_parser_(a_type_name_parser),
+	type_name_p(internal_type_name_parser_)
 {
     using namespace boost::spirit;
 

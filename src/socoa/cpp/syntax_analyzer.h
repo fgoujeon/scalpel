@@ -28,6 +28,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/spirit/tree/parse_tree.hpp>
 #include "grammar.h"
 #include "program_syntax_tree.h"
+#include "parsers/type_name.h"
 
 namespace socoa { namespace cpp
 {
@@ -59,7 +60,9 @@ class syntax_analyzer
         };
 
     public:
-        std::shared_ptr<program_syntax_tree_t>
+		syntax_analyzer();
+
+		std::shared_ptr<program_syntax_tree_t>
         operator()(const std::string& input);
 
     private:
@@ -387,6 +390,7 @@ class syntax_analyzer
         int
         get_id(const tree_node_t& node);
 
+        parsers::type_name type_name_parser_;
         grammar grammar_;
 };
 

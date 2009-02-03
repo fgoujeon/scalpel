@@ -25,7 +25,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/spirit/tree/parse_tree.hpp>
 #include <boost/spirit/utility/functor_parser.hpp>
 #include "scanner.h"
-#include "functor_parsers/type_name.h"
 
 namespace socoa { namespace cpp
 {
@@ -274,6 +273,38 @@ class grammar
             RESTRICT_KEYWORD
         };
 
+        struct type_name_parser
+        {
+            virtual std::ptrdiff_t
+            operator()(const scanner_t& scan) const = 0;
+        };
+
+    private:
+        class internal_type_name_functor_parser
+        {
+            public:
+                typedef boost::spirit::nil_t result_t;
+
+                internal_type_name_functor_parser(type_name_parser& a_type_name_parser);
+
+                std::ptrdiff_t
+                operator()(const scanner_t& scan, result_t&) const;
+
+            private:
+                type_name_parser& type_name_parser_;
+        };
+
+    public:
+        grammar(type_name_parser& a_type_name_parser);
+
+        const boost::spirit::rule<scanner_t>&
+        get_start_rule() const;
+
+        const configuration&
+        get_configuration() const;
+
+        void
+        set_configuration(const configuration& a_configuration);
 
     private:
         /*
@@ -542,23 +573,13 @@ class grammar
         /*
         Functor parsers
         */
-        functor_parsers::type_name type_name_parser_;
-        boost::spirit::functor_parser<functor_parsers::type_name> type_name_p;
+        internal_type_name_functor_parser internal_type_name_parser_;
+        boost::spirit::functor_parser<internal_type_name_functor_parser> type_name_p;
 
 
-    public:
-        grammar();
-
-        const boost::spirit::rule<scanner_t>&
-        get_start_rule() const;
-
-        const configuration&
-        get_configuration() const;
-
-        void
-        set_configuration(const configuration& a_configuration);
-
-    private:
+        /*
+        Others
+        */
         configuration configuration_;
 };
 

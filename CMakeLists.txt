@@ -17,11 +17,9 @@
 # along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 cmake_minimum_required(VERSION 2.6)
-set(CMAKE_VERBOSE_MAKEFILE off)
 
 #project
 project(Socoa)
-set(CMAKE_BUILD_TYPE Debug)
 set(LIBRARY_OUTPUT_PATH lib/${CMAKE_BUILD_TYPE})
 
 #gcc settings
@@ -33,16 +31,12 @@ endif(CMAKE_COMPILER_IS_GNUCXX)
 file(
 	GLOB_RECURSE sources
 	src/*.cpp
-)
-file(
-	GLOB_RECURSE headers
 	src/*.h
 )
 add_library(
 	socoa
 	SHARED
 	${sources}
-	${headers}
 )
 
 #Boost
