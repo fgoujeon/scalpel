@@ -22,7 +22,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_FUNCTOR_PARSERS_TEMPLATE_NAME_H
 
 #include <iostream>
-#include <boost/spirit/core.hpp>
 #include "../name_lookup.h"
 #include "../scanner.h"
 #include "../grammar.h"
@@ -40,8 +39,61 @@ class type_name: public grammar::type_name_parser
         operator()(const scanner_t& scan) const;
 
     private:
+        /**
+        Replace string literal content by white spaces
+        */
+        inline
+        void
+        purify_string_literals(std::string& str) const;
+
 		const std::string* input_;
 };
+
+inline
+void
+type_name::purify_string_literals(std::string& str) const
+{
+    bool in_string_literal = false;
+    bool in_char_literal = false;
+    bool previous_char_was_espace_char = false;
+    for
+    (
+        std::string::iterator i = str.begin();
+        i != str.end();
+        ++i
+    )
+    {
+        bool replace_by_white_space = false;
+
+        if(in_string_literal)
+        {
+            if(*i == '"' && !previous_char_was_espace_char)
+            {
+                in_string_literal = false;
+            }
+            else
+                replace_by_white_space = true;
+        }
+        else if(in_char_literal)
+        {
+            if(*i == '\'' && !previous_char_was_espace_char)
+            {
+                in_char_literal = false;
+            }
+            else
+                replace_by_white_space = true;
+        }
+        else
+        {
+            if(*i == '"') in_string_literal = true;
+            else if(*i == '\'') in_char_literal = true;
+        }
+
+        previous_char_was_espace_char = (*i == '\\' && !previous_char_was_espace_char);
+
+        if(replace_by_white_space) *i = ' ';
+    }
+}
 
 }}} //namespace socoa::cpp::parsers
 
