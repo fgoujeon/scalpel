@@ -18,21 +18,21 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SINGLE_FILE_TEST_H
-#define SINGLE_FILE_TEST_H
+#include "function_definition.h"
 
-#include <socoa/cpp/syntax_analyzer.h>
-#include <socoa/cpp/syntax_tree_to_string_converter.h>
-
-class single_file_test
+namespace socoa { namespace cpp { namespace syntax_tree
 {
-    public:
-        void
-        parse_files(const std::string& test_directory);
 
-    private:
-        socoa::cpp::syntax_analyzer m_syntax_analyzer;
-        socoa::cpp::syntax_tree_to_string_converter m_syntax_tree_to_string_converter;
-};
+function_definition::function_definition
+(
+    std::shared_ptr<util::sequence<decl_specifier>> a_decl_specifier_seq,
+    declarator&& a_declarator,
+    std::shared_ptr<ctor_initializer> a_ctor_initializer
+):
+    decl_specifier_seq_(a_decl_specifier_seq),
+    declarator_(a_declarator),
+    ctor_initializer_(a_ctor_initializer)
+{
+}
 
-#endif
+}}} //namespace socoa::cpp::syntax_tree

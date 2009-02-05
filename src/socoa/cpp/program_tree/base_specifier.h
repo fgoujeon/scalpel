@@ -22,7 +22,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_PROGRAM_TREE_BASE_SPECIFIER_H
 
 #include <memory>
-#include "../program_syntax_tree/access_specifier.h"
+#include "../syntax_tree/access_specifier.h"
 
 namespace socoa { namespace cpp { namespace program_tree
 {
@@ -35,7 +35,7 @@ class base_specifier
         base_specifier
         (
             std::shared_ptr<class_> a_class,
-            program_syntax_tree::access_specifier access_specifier,
+            syntax_tree::access_specifier access_specifier,
             bool is_virtual = false
         );
 
@@ -45,7 +45,7 @@ class base_specifier
             return base_class_;
         }
 
-        const program_syntax_tree::access_specifier&
+        const syntax_tree::access_specifier&
         get_access_specifier() const
         {
             return access_specifier_;
@@ -59,7 +59,7 @@ class base_specifier
 
     private:
         std::shared_ptr<class_> base_class_;
-        program_syntax_tree::access_specifier access_specifier_;
+        syntax_tree::access_specifier access_specifier_;
         bool virtual_;
 };
 

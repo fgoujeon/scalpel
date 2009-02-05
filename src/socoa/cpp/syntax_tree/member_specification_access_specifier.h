@@ -18,21 +18,28 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SINGLE_FILE_TEST_H
-#define SINGLE_FILE_TEST_H
+#ifndef SOCOA_CPP_SYNTAX_TREE_MEMBER_SPECIFICATION_ACCESS_SPECIFIER_H
+#define SOCOA_CPP_SYNTAX_TREE_MEMBER_SPECIFICATION_ACCESS_SPECIFIER_H
 
-#include <socoa/cpp/syntax_analyzer.h>
-#include <socoa/cpp/syntax_tree_to_string_converter.h>
+#include "visitor.h"
+#include "member_specification_part.h"
+#include "access_specifier.h"
 
-class single_file_test
+namespace socoa { namespace cpp { namespace syntax_tree
 {
-    public:
-        void
-        parse_files(const std::string& test_directory);
 
-    private:
-        socoa::cpp::syntax_analyzer m_syntax_analyzer;
-        socoa::cpp::syntax_tree_to_string_converter m_syntax_tree_to_string_converter;
+struct member_specification_access_specifier: public member_specification_part
+{
+    explicit member_specification_access_specifier
+    (
+        access_specifier&& a_access_specifier
+    );
+
+    SOCOA_CPP_DEFINE_VISITABLE()
+
+    const access_specifier access_specifier_;
 };
+
+}}} //namespace socoa::cpp::syntax_tree
 
 #endif

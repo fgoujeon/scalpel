@@ -18,21 +18,24 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SINGLE_FILE_TEST_H
-#define SINGLE_FILE_TEST_H
+#ifndef SOCOA_CPP_SYNTAX_TREE_BUILT_IN_TYPE_SPECIFIER_H
+#define SOCOA_CPP_SYNTAX_TREE_BUILT_IN_TYPE_SPECIFIER_H
 
-#include <socoa/cpp/syntax_analyzer.h>
-#include <socoa/cpp/syntax_tree_to_string_converter.h>
+#include "../../util/string_enumeration.h"
+#include "simple_type_specifier.h"
+#include "visitor.h"
 
-class single_file_test
+namespace socoa { namespace cpp { namespace syntax_tree
 {
-    public:
-        void
-        parse_files(const std::string& test_directory);
 
-    private:
-        socoa::cpp::syntax_analyzer m_syntax_analyzer;
-        socoa::cpp::syntax_tree_to_string_converter m_syntax_tree_to_string_converter;
+extern const std::vector<std::string> built_in_type_specifier_string_list;
+struct built_in_type_specifier: public util::string_enumeration<built_in_type_specifier_string_list>, public simple_type_specifier
+{
+    built_in_type_specifier(const std::string& value);
+
+    SOCOA_CPP_DEFINE_VISITABLE()
 };
+
+}}} //namespace socoa::cpp::syntax_tree
 
 #endif

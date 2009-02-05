@@ -18,21 +18,24 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SINGLE_FILE_TEST_H
-#define SINGLE_FILE_TEST_H
+#ifndef SOCOA_CPP_SYNTAX_TREE_NESTED_NAME_SPECIFIER_H
+#define SOCOA_CPP_SYNTAX_TREE_NESTED_NAME_SPECIFIER_H
 
-#include <socoa/cpp/syntax_analyzer.h>
-#include <socoa/cpp/syntax_tree_to_string_converter.h>
+#include <vector>
+#include <memory>
 
-class single_file_test
+namespace socoa { namespace cpp { namespace syntax_tree
 {
-    public:
-        void
-        parse_files(const std::string& test_directory);
 
-    private:
-        socoa::cpp::syntax_analyzer m_syntax_analyzer;
-        socoa::cpp::syntax_tree_to_string_converter m_syntax_tree_to_string_converter;
+class identifier_or_template_id;
+class nested_name_specifier_part;
+
+struct nested_name_specifier
+{
+    const std::shared_ptr<identifier_or_template_id> identifier_or_template_id_;
+    const std::vector<std::shared_ptr<nested_name_specifier_part>> parts_;
 };
+
+}}} //namespace socoa::cpp::syntax_tree
 
 #endif

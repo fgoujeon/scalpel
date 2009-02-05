@@ -26,7 +26,7 @@ namespace socoa { namespace cpp { namespace program_tree
 base_specifier::base_specifier
 (
     std::shared_ptr<class_> a_class,
-    program_syntax_tree::access_specifier access_specifier,
+    syntax_tree::access_specifier access_specifier,
     bool is_virtual
 ):
     base_class_(a_class),
