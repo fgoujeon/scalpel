@@ -59,7 +59,7 @@ syntax_analyzer::operator()(const std::string& input)
     }
 
     //convert spirit's parse tree to syntax tree
-    return parse_tree_to_syntax_tree::evaluate_file(*info.trees.begin());
+    return parse_tree_to_syntax_tree::convert_file(*info.trees.begin());
 }
 
 }} //namespace socoa::cpp

@@ -43,7 +43,7 @@ namespace parse_tree_to_syntax_tree
     typedef tree_node_value_t::const_iterator_t tree_node_value_iterator_t;
 
     template <class T>
-    struct evaluate_function_typedefs
+    struct convert_function_typedefs
     {
         typedef std::shared_ptr<T> return_type_t;
         typedef std::function<return_type_t (const tree_node_t&)> function_type_t;
@@ -52,163 +52,163 @@ namespace parse_tree_to_syntax_tree
 
 
     std::shared_ptr<util::sequence<syntax_tree::declaration>>
-    evaluate_file(const tree_node_t& node);
+    convert_file(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::identifier>
-    evaluate_identifier(const tree_node_t& node);
+    convert_identifier(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::id_expression>
-    evaluate_id_expression(const tree_node_t& node);
+    convert_id_expression(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::unqualified_id>
-    evaluate_unqualified_id(const tree_node_t& node);
+    convert_unqualified_id(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::qualified_id>
-    evaluate_qualified_id(const tree_node_t& node);
+    convert_qualified_id(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::qualified_nested_id>
-    evaluate_qualified_nested_id(const tree_node_t& node);
+    convert_qualified_nested_id(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::qualified_operator_function_id>
-    evaluate_qualified_operator_function_id(const tree_node_t& node);
+    convert_qualified_operator_function_id(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::qualified_template_id>
-    evaluate_qualified_template_id(const tree_node_t& node);
+    convert_qualified_template_id(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::qualified_identifier>
-    evaluate_qualified_identifier(const tree_node_t& node);
+    convert_qualified_identifier(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::nested_name_specifier>
-    evaluate_nested_name_specifier(const tree_node_t& node);
+    convert_nested_name_specifier(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::nested_name_specifier_template_id_part>
-    evaluate_nested_name_specifier_template_id_part(const tree_node_t& node);
+    convert_nested_name_specifier_template_id_part(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::declaration>
-    evaluate_declaration(const tree_node_t& node);
+    convert_declaration(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::declaration>
-    evaluate_block_declaration(const tree_node_t& node);
+    convert_block_declaration(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::simple_declaration>
-    evaluate_simple_declaration(const tree_node_t& node);
+    convert_simple_declaration(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::decl_specifier>
-    evaluate_decl_specifier(const tree_node_t& node);
+    convert_decl_specifier(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::type_specifier>
-    evaluate_type_specifier(const tree_node_t& node);
+    convert_type_specifier(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::simple_type_specifier>
-    evaluate_simple_type_specifier(const tree_node_t& node);
+    convert_simple_type_specifier(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::simple_template_type_specifier>
-    evaluate_simple_template_type_specifier(const tree_node_t& node);
+    convert_simple_template_type_specifier(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::identifier_or_template_id>
-    evaluate_identifier_or_template_id(const tree_node_t& node);
+    convert_identifier_or_template_id(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::namespace_definition>
-    evaluate_namespace_definition(const tree_node_t& node);
+    convert_namespace_definition(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::using_declaration>
-    evaluate_using_declaration(const tree_node_t& node);
+    convert_using_declaration(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::using_directive>
-    evaluate_using_directive(const tree_node_t& node);
+    convert_using_directive(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::init_declarator>
-    evaluate_init_declarator(const tree_node_t& node);
+    convert_init_declarator(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::declarator>
-    evaluate_declarator(const tree_node_t& node);
+    convert_declarator(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::direct_declarator>
-    evaluate_direct_declarator(const tree_node_t& node);
+    convert_direct_declarator(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::direct_declarator_function_part>
-    evaluate_direct_declarator_function_part(const tree_node_t& node);
+    convert_direct_declarator_function_part(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::direct_declarator_array_part>
-    evaluate_direct_declarator_array_part(const tree_node_t& node);
+    convert_direct_declarator_array_part(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::ptr_operator>
-    evaluate_ptr_operator(const tree_node_t& node);
+    convert_ptr_operator(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::cv_qualifier>
-    evaluate_cv_qualifier(const tree_node_t& node);
+    convert_cv_qualifier(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::declarator_id>
-    evaluate_declarator_id(const tree_node_t& node);
+    convert_declarator_id(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::parameter_declaration_clause>
-    evaluate_parameter_declaration_clause(const tree_node_t& node);
+    convert_parameter_declaration_clause(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::parameter_declaration>
-    evaluate_parameter_declaration(const tree_node_t& node);
+    convert_parameter_declaration(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::function_definition>
-    evaluate_function_definition(const tree_node_t& node);
+    convert_function_definition(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::class_specifier>
-    evaluate_class_specifier(const tree_node_t& node);
+    convert_class_specifier(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::class_head>
-    evaluate_class_head(const tree_node_t& node);
+    convert_class_head(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::member_specification>
-    evaluate_member_specification(const tree_node_t& node);
+    convert_member_specification(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::member_specification_access_specifier>
-    evaluate_member_specification_access_specifier(const tree_node_t& node);
+    convert_member_specification_access_specifier(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::member_declaration>
-    evaluate_member_declaration(const tree_node_t& node);
+    convert_member_declaration(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::member_declaration_member_declarator_list>
-    evaluate_member_declaration_member_declarator_list(const tree_node_t& node);
+    convert_member_declaration_member_declarator_list(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::member_declaration_unqualified_id>
-    evaluate_member_declaration_unqualified_id(const tree_node_t& node);
+    convert_member_declaration_unqualified_id(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::member_declaration_function_definition>
-    evaluate_member_declaration_function_definition(const tree_node_t& node);
+    convert_member_declaration_function_definition(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::member_declarator>
-    evaluate_member_declarator(const tree_node_t& node);
+    convert_member_declarator(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::member_declarator_declarator>
-    evaluate_member_declarator_declarator(const tree_node_t& node);
+    convert_member_declarator_declarator(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::member_declarator_bit_field_member>
-    evaluate_member_declarator_bit_field_member(const tree_node_t& node);
+    convert_member_declarator_bit_field_member(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::base_clause>
-    evaluate_base_clause(const tree_node_t& node);
+    convert_base_clause(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::base_specifier>
-    evaluate_base_specifier(const tree_node_t& node);
+    convert_base_specifier(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::ctor_initializer>
-    evaluate_ctor_initializer(const tree_node_t& node);
+    convert_ctor_initializer(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::mem_initializer>
-    evaluate_mem_initializer(const tree_node_t& node);
+    convert_mem_initializer(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::mem_initializer_id>
-    evaluate_mem_initializer_id(const tree_node_t& node);
+    convert_mem_initializer_id(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::template_declaration>
-    evaluate_template_declaration(const tree_node_t& node);
+    convert_template_declaration(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::template_id>
-    evaluate_template_id(const tree_node_t& node);
+    convert_template_id(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::template_argument>
-    evaluate_template_argument(const tree_node_t& node);
+    convert_template_argument(const tree_node_t& node);
 
     std::shared_ptr<syntax_tree::nested_identifier_or_template_id>
-    evaluate_nested_identifier_or_template_id(const tree_node_t& node);
+    convert_nested_identifier_or_template_id(const tree_node_t& node);
 
 
     template
@@ -218,11 +218,11 @@ namespace parse_tree_to_syntax_tree
         const std::string& Separator// = util::extern_strings::space
     >
     std::shared_ptr<util::sequence<T, Separator>>
-    evaluate_sequence(const tree_node_t& node);
+    convert_sequence(const tree_node_t& node);
 
     template<class T>
     std::shared_ptr<T>
-    evaluate_string_enumeration(const tree_node_t& node);
+    convert_string_enumeration(const tree_node_t& node);
 
     /**
     Finds a node in the given parent node, with the given id and evatuates
@@ -231,7 +231,7 @@ namespace parse_tree_to_syntax_tree
     @param parent_node the parent node where to find the node to be
            evaluated
     @param id the parser_id of the node to be evaluated
-    @param evaluate_function a pointer to the function to be called to
+    @param convert_function a pointer to the function to be called to
            evaluate the node
     @param assert_node_exists if true, the function will call the assert()
            macro to ensure that the given parent node does have a child
@@ -241,11 +241,11 @@ namespace parse_tree_to_syntax_tree
     */
     template <class T>
     std::shared_ptr<T>
-    evaluate_node
+    convert_node
     (
         const tree_node_t& parent_node,
         const grammar::parser_id id,
-        std::shared_ptr<T> (*evaluate_function)(const tree_node_t&),
+        std::shared_ptr<T> (*convert_function)(const tree_node_t&),
         bool assert_node_exists = false
     );
 
@@ -254,17 +254,17 @@ namespace parse_tree_to_syntax_tree
     @tparam T the type representing the syntax of the nodes to be evaluated
     @param parent_node the parent node where to find the nodes to be
            evaluated
-    @param evaluate_function a pointer to the function to be called to
+    @param convert_function a pointer to the function to be called to
            evaluate the nodes
     @return a vector of pointers to objects representing the syntax of each
             evaluated node
     */
     template <class T>
     std::vector<std::shared_ptr<T>>
-    evaluate_nodes
+    convert_nodes
     (
         const tree_node_t& parent_node,
-        std::shared_ptr<T> (*evaluate_function)(const tree_node_t&)
+        std::shared_ptr<T> (*convert_function)(const tree_node_t&)
     );
 
     /**
@@ -272,7 +272,7 @@ namespace parse_tree_to_syntax_tree
     @tparam T the type representing the syntax of the nodes to be evaluated
     @param parent_node the parent node where to find the nodes to be
            evaluated
-    @param evaluate_function a pointer to the function to be called to
+    @param convert_function a pointer to the function to be called to
            evaluate the nodes
     @param separator value of the nodes to be ignored (useful for comma
            separated lists)
@@ -281,10 +281,10 @@ namespace parse_tree_to_syntax_tree
     */
     template <class T>
     std::vector<std::shared_ptr<T>>
-    evaluate_nodes
+    convert_nodes
     (
         const tree_node_t& parent_node,
-        std::shared_ptr<T> (*evaluate_function)(const tree_node_t&),
+        std::shared_ptr<T> (*convert_function)(const tree_node_t&),
         const std::string& separator
     );
 
@@ -295,18 +295,18 @@ namespace parse_tree_to_syntax_tree
     @param parent_node the parent node where to find the nodes to be
            evaluated
     @param id the parser_id of the nodes to be evaluated
-    @param evaluate_function a pointer to the function to be called to
+    @param convert_function a pointer to the function to be called to
            evaluate the nodes
     @return a vector of pointers to objects representing the syntax of each
             evaluated node
     */
     template <class T>
     std::vector<std::shared_ptr<T>>
-    evaluate_nodes
+    convert_nodes
     (
         const tree_node_t& parent_node,
         const grammar::parser_id id,
-        std::shared_ptr<T> (*evaluate_function)(const tree_node_t&)
+        std::shared_ptr<T> (*convert_function)(const tree_node_t&)
     );
 
     /**
@@ -318,14 +318,14 @@ namespace parse_tree_to_syntax_tree
     @param id_evaluate_function_map list of parser_ids that searched nodes
            may have, associated with the corresponding function to be
            called to evaluate the nodes (e.g. one pair for
-           IDENTIFIER/evaluate_identifier, another one for
-           TEMPLATE_ID/evaluate_template_id, etc.)
+           IDENTIFIER/convert_identifier, another one for
+           TEMPLATE_ID/convert_template_id, etc.)
     @return a vector of pointers to objects representing the syntax of each
             evaluated node
     */
     template <class T>
     std::vector<std::shared_ptr<T>>
-    evaluate_nodes
+    convert_nodes
     (
         const tree_node_t& parent_node,
         const std::map
@@ -337,7 +337,7 @@ namespace parse_tree_to_syntax_tree
 
     template <class T>
     std::shared_ptr<T>
-    evaluate_only_child_node
+    convert_only_child_node
     (
         const tree_node_t& parent_node,
         const std::map
@@ -384,11 +384,11 @@ namespace parse_tree_to_syntax_tree
         const std::string& Separator
     >
     std::shared_ptr<util::sequence<T, Separator>>
-    evaluate_sequence(const tree_node_t& node)
+    convert_sequence(const tree_node_t& node)
     {
         return std::make_shared<util::sequence<T, Separator>>
         (
-            evaluate_nodes
+            convert_nodes
             (
                 node,
                 EvaluateFunction,
@@ -399,7 +399,7 @@ namespace parse_tree_to_syntax_tree
 
     template<class T>
     std::shared_ptr<T>
-    evaluate_string_enumeration(const tree_node_t& node)
+    convert_string_enumeration(const tree_node_t& node)
     {
         return std::make_shared<T>
         (
@@ -409,11 +409,11 @@ namespace parse_tree_to_syntax_tree
 
     template <class T>
     std::shared_ptr<T>
-    evaluate_node
+    convert_node
     (
         const tree_node_t& parent_node,
         const grammar::parser_id id,
-        std::shared_ptr<T> (*evaluate_function)(const tree_node_t&),
+        std::shared_ptr<T> (*convert_function)(const tree_node_t&),
         bool assert_node_exists
     )
     {
@@ -422,11 +422,11 @@ namespace parse_tree_to_syntax_tree
         if(assert_node_exists)
         {
             assert(node);
-            return (*evaluate_function)(*node);
+            return (*convert_function)(*node);
         }
         else if(node)
         {
-            return (*evaluate_function)(*node);
+            return (*convert_function)(*node);
         }
         else
         {
@@ -436,17 +436,17 @@ namespace parse_tree_to_syntax_tree
 
     template <class T>
     std::vector<std::shared_ptr<T>>
-    evaluate_nodes
+    convert_nodes
     (
         const tree_node_t& parent_node,
-        std::shared_ptr<T> (*evaluate_function)(const tree_node_t&)
+        std::shared_ptr<T> (*convert_function)(const tree_node_t&)
     )
     {
         std::vector<std::shared_ptr<T>> seq;
         for(tree_node_iterator_t i = parent_node.children.begin(); i != parent_node.children.end(); ++i) //for each child
         {
             const tree_node_t& child_node = *i;
-            seq.push_back((*evaluate_function)(child_node));
+            seq.push_back((*convert_function)(child_node));
         }
 
         return seq;
@@ -454,10 +454,10 @@ namespace parse_tree_to_syntax_tree
 
     template <class T>
     std::vector<std::shared_ptr<T>>
-    evaluate_nodes
+    convert_nodes
     (
         const tree_node_t& parent_node,
-        std::shared_ptr<T> (*evaluate_function)(const tree_node_t&),
+        std::shared_ptr<T> (*convert_function)(const tree_node_t&),
         const std::string& separator
     )
     {
@@ -469,7 +469,7 @@ namespace parse_tree_to_syntax_tree
 
             if(child_value != separator) //if the current node is not a separator
             {
-                seq.push_back((*evaluate_function)(child_node));
+                seq.push_back((*convert_function)(child_node));
             }
         }
 
@@ -478,11 +478,11 @@ namespace parse_tree_to_syntax_tree
 
     template <class T>
     std::vector<std::shared_ptr<T>>
-    evaluate_nodes
+    convert_nodes
     (
         const tree_node_t& parent_node,
         const grammar::parser_id id,
-        std::shared_ptr<T> (*evaluate_function)(const tree_node_t&)
+        std::shared_ptr<T> (*convert_function)(const tree_node_t&)
     )
     {
         std::vector<std::shared_ptr<T>> seq;
@@ -492,7 +492,7 @@ namespace parse_tree_to_syntax_tree
 
             if(child_node.value.id() == id)
             {
-                seq.push_back((*evaluate_function)(child_node));
+                seq.push_back((*convert_function)(child_node));
             }
         }
 
@@ -501,7 +501,7 @@ namespace parse_tree_to_syntax_tree
 
     template <class T>
     std::vector<std::shared_ptr<T>>
-    evaluate_nodes
+    convert_nodes
     (
         const tree_node_t& parent_node,
         const std::map
@@ -511,8 +511,8 @@ namespace parse_tree_to_syntax_tree
         >& id_evaluate_function_map
     )
     {
-        typedef std::function<std::shared_ptr<T> (const tree_node_t&)> evaluate_function_t;
-        typedef std::map<const grammar::parser_id, evaluate_function_t> id_evaluate_function_map_t;
+        typedef std::function<std::shared_ptr<T> (const tree_node_t&)> convert_function_t;
+        typedef std::map<const grammar::parser_id, convert_function_t> id_evaluate_function_map_t;
 
         std::vector<std::shared_ptr<T>> seq;
         for(tree_node_iterator_t i = parent_node.children.begin(); i != parent_node.children.end(); ++i) //for each child
@@ -527,11 +527,11 @@ namespace parse_tree_to_syntax_tree
             ) //for each id/evaluate function
             {
                 const grammar::parser_id id = j->first;
-                const evaluate_function_t evaluate_function = j->second;
+                const convert_function_t convert_function = j->second;
 
                 if(child_node.value.id() == id)
                 {
-                    seq.push_back(evaluate_function(child_node));
+                    seq.push_back(convert_function(child_node));
                     break;
                 }
             }
@@ -542,7 +542,7 @@ namespace parse_tree_to_syntax_tree
 
     template <class T>
     std::shared_ptr<T>
-    evaluate_only_child_node
+    convert_only_child_node
     (
         const tree_node_t& parent_node,
         const std::map
@@ -553,8 +553,8 @@ namespace parse_tree_to_syntax_tree
         bool assert_evaluated
     )
     {
-        typedef std::function<std::shared_ptr<T> (const tree_node_t&)> evaluate_function_t;
-        typedef std::map<const grammar::parser_id, evaluate_function_t> id_evaluate_function_map_t;
+        typedef std::function<std::shared_ptr<T> (const tree_node_t&)> convert_function_t;
+        typedef std::map<const grammar::parser_id, convert_function_t> id_evaluate_function_map_t;
 
         assert(parent_node.children.size() == 1);
         const tree_node_t& child_node = *parent_node.children.begin();
@@ -568,11 +568,11 @@ namespace parse_tree_to_syntax_tree
         ) //for each id/evaluate function
         {
             const int id = i->first;
-            const evaluate_function_t evaluate_function = i->second;
+            const convert_function_t convert_function = i->second;
 
             if(child_node.value.id() == id)
             {
-                return evaluate_function(child_node);
+                return convert_function(child_node);
             }
         }
 
