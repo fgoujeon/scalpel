@@ -24,7 +24,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <memory>
 #include "grammar.h"
 #include "syntax_tree.h"
-#include "parsers/type_name.h"
 
 namespace socoa { namespace cpp
 {
@@ -39,17 +38,35 @@ source code and returns it.
 class syntax_analyzer
 {
     public:
+        class type_name_parser: public grammar::type_name_parser
+        {
+            public:
+                type_name_parser(syntax_analyzer& a);
+
+                std::ptrdiff_t
+                operator()(const scanner_t& scan) const;
+
+            private:
+                syntax_analyzer& syntax_analyzer_;
+        };
+        friend class type_name_parser;
+
+    public:
 		syntax_analyzer();
 
 		std::shared_ptr<syntax_tree_t>
         operator()(const std::string& input);
 
-        std::ptrdiff_t
-        operator()(const scanner_t& scan);
-
     private:
-        parsers::type_name type_name_parser_;
+        std::shared_ptr<syntax_tree_t>
+        analyze(const std::string& input);
+
+        std::ptrdiff_t
+        parse_type_name(const scanner_t& scan);
+
+        type_name_parser type_name_parser_;
         grammar grammar_;
+        const std::string* input_;
 };
 
 }} //namespace socoa::cpp

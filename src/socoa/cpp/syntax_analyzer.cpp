@@ -23,6 +23,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <iostream>
 #include <boost/spirit/tree/parse_tree.hpp>
 #include "parse_tree_to_syntax_tree.h"
+#include "source_code_completion.h"
 
 using namespace boost::spirit;
 using namespace socoa::cpp::syntax_tree;
@@ -31,7 +32,20 @@ using namespace socoa::util;
 namespace socoa { namespace cpp
 {
 
+syntax_analyzer::type_name_parser::type_name_parser(syntax_analyzer& a):
+    syntax_analyzer_(a)
+{
+}
+
+std::ptrdiff_t
+syntax_analyzer::type_name_parser::operator()(const scanner_t& scan) const
+{
+    return syntax_analyzer_.parse_type_name(scan);
+}
+
+
 syntax_analyzer::syntax_analyzer():
+    type_name_parser_(*this),
 	grammar_(type_name_parser_)
 {
 }
@@ -39,9 +53,14 @@ syntax_analyzer::syntax_analyzer():
 std::shared_ptr<syntax_tree_t>
 syntax_analyzer::operator()(const std::string& input)
 {
-    //configure functor parsers
-    type_name_parser_.set_input(input);
+    input_ = &input;
 
+    return analyze(input);
+}
+
+std::shared_ptr<syntax_tree_t>
+syntax_analyzer::analyze(const std::string& input)
+{
     //parse the input with the C++ grammar
     boost::spirit::tree_parse_info<> info = boost::spirit::pt_parse
     (
@@ -60,6 +79,27 @@ syntax_analyzer::operator()(const std::string& input)
 
     //convert spirit's parse tree to syntax tree
     return parse_tree_to_syntax_tree::convert_file(*info.trees.begin());
+}
+
+std::ptrdiff_t
+syntax_analyzer::parse_type_name(const scanner_t& scan)
+{
+    assert(input_);
+
+    std::cout << "Parsing type name...\n";
+
+    /*
+    Create a new string from the beginning of the input to the current
+    location of the scanner.
+    */
+    std::string partial_input(&*(input_->begin()), scan.first);
+    std::cout << "Fragment of input succesfully parsed:\n";
+    std::cout << "***\n" << partial_input << "\n***\n";
+
+    source_code_completion::complete(partial_input);
+
+    std::cout << "\n";
+    return -1;
 }
 
 }} //namespace socoa::cpp
