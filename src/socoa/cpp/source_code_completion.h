@@ -21,9 +21,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SOURCE_CODE_COMPLETION_H
 #define SOCOA_CPP_SOURCE_CODE_COMPLETION_H
 
-#include <memory>
-#include "grammar.h"
-#include "syntax_tree.h"
+#include <string>
 
 namespace socoa { namespace cpp
 {
@@ -94,8 +92,6 @@ namespace source_code_completion
             }
 
             str = str.substr(0, last_declaration_index + 1);
-            std::cout << "Interesting part:\n";
-            std::cout << "***\n" << str << "\n***\n";
         }
 
         /*
@@ -160,9 +156,6 @@ namespace source_code_completion
             {
                 str.append("};");
             }
-
-            std::cout << "Completed input:\n";
-            std::cout << "***\n" << str << "\n***\n";
         }
     }
 

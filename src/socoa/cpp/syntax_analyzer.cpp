@@ -24,6 +24,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/spirit/tree/parse_tree.hpp>
 #include "parse_tree_to_syntax_tree.h"
 #include "source_code_completion.h"
+#include "../util/raii_affector.h"
 
 using namespace boost::spirit;
 using namespace socoa::cpp::syntax_tree;
@@ -54,6 +55,8 @@ std::shared_ptr<syntax_tree_t>
 syntax_analyzer::operator()(const std::string& input)
 {
     input_ = &input;
+    parsing_progress_ = 0;
+    performing_semantic_analysis_ = false;
 
     return analyze(input);
 }
@@ -84,21 +87,41 @@ syntax_analyzer::analyze(const std::string& input)
 std::ptrdiff_t
 syntax_analyzer::parse_type_name(const scanner_t& scan)
 {
-    assert(input_);
+    const char* parsing_progress = scan.first;
 
-    std::cout << "Parsing type name...\n";
+    //don't analyze if we already did it at the same point
+    if(parsing_progress != parsing_progress_)
+    {
+        //if we're not already performing a semantic analysis (avoid recursive call)
+        if(!performing_semantic_analysis_)
+        {
+            raii_affector<bool, true, false> raii_aff(performing_semantic_analysis_);
 
-    /*
-    Create a new string from the beginning of the input to the current
-    location of the scanner.
-    */
-    std::string partial_input(&*(input_->begin()), scan.first);
-    std::cout << "Fragment of input succesfully parsed:\n";
-    std::cout << "***\n" << partial_input << "\n***\n";
+            /*
+            Create a new string from the beginning of the input to the current
+            location of the scanner.
+            */
+            assert(input_);
+            std::string partial_input(&*(input_->begin()), scan.first);
+            std::cout << "Fragment of input succesfully parsed:\n";
+            std::cout << "***\n" << partial_input << "\n***\n";
 
-    source_code_completion::complete(partial_input);
+            /*
+            Complete the scanned source code
+            */
+            source_code_completion::complete(partial_input);
+            std::cout << "Completed input:\n";
+            std::cout << "***\n" << partial_input << "\n***\n";
 
-    std::cout << "\n";
+            /*
+            Analyze the source code's syntax
+            */
+            std::shared_ptr<syntax_tree_t> syntax_tree = analyze(partial_input);
+        }
+
+        parsing_progress_ = parsing_progress;
+    }
+
     return -1;
 }
 

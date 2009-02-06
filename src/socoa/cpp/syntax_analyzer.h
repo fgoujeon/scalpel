@@ -67,6 +67,8 @@ class syntax_analyzer
         type_name_parser type_name_parser_;
         grammar grammar_;
         const std::string* input_;
+        const char* parsing_progress_;
+        bool performing_semantic_analysis_;
 };
 
 }} //namespace socoa::cpp

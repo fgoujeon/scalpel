@@ -32,6 +32,8 @@ template<class T, const std::string& Separator = extern_strings::space>
 class sequence
 {
     public:
+        sequence();
+
         explicit sequence
         (
             std::vector<std::shared_ptr<T>>&& items
@@ -48,6 +50,11 @@ class sequence
     private:
         std::vector<std::shared_ptr<T>> items_;
 };
+
+template<class T, const std::string& Separator>
+sequence<T, Separator>::sequence()
+{
+}
 
 template<class T, const std::string& Separator>
 sequence<T, Separator>::sequence

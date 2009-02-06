@@ -97,7 +97,8 @@ convert_file(const tree_node_t& node)
                     util::extern_strings::space
                 >
             }
-        }
+        },
+        false //the file may be empty
     );
 }
 
