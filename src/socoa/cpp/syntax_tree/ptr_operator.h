@@ -30,19 +30,73 @@ namespace socoa { namespace cpp { namespace syntax_tree
 class nested_name_specifier;
 class cv_qualifier;
 
-struct ptr_operator
+class ptr_operator
 {
-    enum type
-    {
-        ASTERISK,
-        AMPERSAND
-    };
+	public:
+		enum type
+		{
+			ASTERISK,
+			AMPERSAND
+		};
 
-    const type type_;
-    const bool leading_double_colon_;
-    const std::shared_ptr<nested_name_specifier> nested_name_specifier_;
-    const std::shared_ptr<util::sequence<cv_qualifier>> cv_qualifier_seq_;
+		ptr_operator
+		(
+			type a_type,
+			bool leading_double_colon,
+			std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
+			std::shared_ptr<util::sequence<cv_qualifier>> a_cv_qualifier_seq
+		);
+
+		inline
+		type
+		get_type() const;
+
+		inline
+		bool
+		has_leading_double_colon() const;
+
+		inline
+		const std::shared_ptr<const nested_name_specifier>
+		get_nested_name_specifier() const;
+
+		inline
+		const std::shared_ptr<const util::sequence<cv_qualifier>>
+		get_cv_qualifier_seq() const;
+
+	private:
+		type type_;
+		bool leading_double_colon_;
+		std::shared_ptr<nested_name_specifier> nested_name_specifier_;
+		std::shared_ptr<util::sequence<cv_qualifier>> cv_qualifier_seq_;
 };
+
+inline
+ptr_operator::type
+ptr_operator::get_type() const
+{
+	return type_;
+}
+
+inline
+bool
+ptr_operator::has_leading_double_colon() const
+{
+	return leading_double_colon_;
+}
+
+inline
+const std::shared_ptr<const nested_name_specifier>
+ptr_operator::get_nested_name_specifier() const
+{
+	return nested_name_specifier_;
+}
+
+inline
+const std::shared_ptr<const util::sequence<cv_qualifier>>
+ptr_operator::get_cv_qualifier_seq() const
+{
+	return cv_qualifier_seq_;
+}
 
 }}} //namespace socoa::cpp::syntax_tree
 

@@ -31,21 +31,56 @@ namespace socoa { namespace cpp { namespace syntax_tree
 class nested_name_specifier;
 class template_id;
 
-struct simple_template_type_specifier: public simple_type_specifier
+class simple_template_type_specifier: public simple_type_specifier
 {
-    simple_template_type_specifier
-    (
-        bool leading_double_colon,
-        std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
-        std::shared_ptr<template_id> a_template_id
-    );
+	public:
+		simple_template_type_specifier
+		(
+			bool leading_double_colon,
+			std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
+			std::shared_ptr<template_id> a_template_id
+		);
 
-    SOCOA_CPP_DEFINE_VISITABLE()
+		inline
+		bool
+		has_leading_double_colon() const;
 
-    const bool leading_double_colon_;
-    const std::shared_ptr<nested_name_specifier> nested_name_specifier_;
-    const std::shared_ptr<template_id> template_id_;
+		inline
+		const std::shared_ptr<const nested_name_specifier>
+		get_nested_name_specifier() const;
+
+		inline
+		const std::shared_ptr<const template_id>
+		get_template_id() const;
+
+		SOCOA_CPP_DEFINE_VISITABLE()
+
+	private:
+		bool leading_double_colon_;
+		std::shared_ptr<nested_name_specifier> nested_name_specifier_;
+		std::shared_ptr<template_id> template_id_;
 };
+
+inline
+bool
+simple_template_type_specifier::has_leading_double_colon() const
+{
+	return leading_double_colon_;
+}
+
+inline
+const std::shared_ptr<const nested_name_specifier>
+simple_template_type_specifier::get_nested_name_specifier() const
+{
+	return nested_name_specifier_;
+}
+
+inline
+const std::shared_ptr<const template_id>
+simple_template_type_specifier::get_template_id() const
+{
+	return template_id_;
+}
 
 }}} //namespace socoa::cpp::syntax_tree
 

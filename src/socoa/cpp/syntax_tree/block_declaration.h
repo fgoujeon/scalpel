@@ -26,10 +26,10 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class block_declaration: public declaration
+struct block_declaration: public declaration
 {
-    public:
-        virtual ~block_declaration(){};
+	virtual
+	~block_declaration();
 };
 
 }}} //namespace socoa::cpp::syntax_tree

@@ -29,11 +29,30 @@ namespace socoa { namespace cpp { namespace syntax_tree
 class mem_initializer_id;
 //class assignment_expression;
 
-struct mem_initializer
+class mem_initializer
 {
-    const std::shared_ptr<mem_initializer_id> mem_initializer_id_;
-    //const std::shared_ptr<util::sequence<assignment_expression, util::extern_strings::comma>> expression_list_;
+	public:
+		explicit
+		mem_initializer
+		(
+			std::shared_ptr<mem_initializer_id> a_mem_initializer_id
+		);
+
+		inline
+		const std::shared_ptr<const mem_initializer_id>
+		get_mem_initializer_id() const;
+
+	private:
+		std::shared_ptr<mem_initializer_id> mem_initializer_id_;
+		//const std::shared_ptr<util::sequence<assignment_expression, util::extern_strings::comma>> expression_list_;
 };
+
+inline
+const std::shared_ptr<const mem_initializer_id>
+mem_initializer::get_mem_initializer_id() const
+{
+	return mem_initializer_id_;
+}
 
 }}} //namespace socoa::cpp::syntax_tree
 

@@ -29,11 +29,12 @@ namespace socoa { namespace cpp { namespace syntax_tree
 {
 
 extern const std::vector<std::string> built_in_type_specifier_string_list;
-struct built_in_type_specifier: public util::string_enumeration<built_in_type_specifier_string_list>, public simple_type_specifier
+class built_in_type_specifier: public util::string_enumeration<built_in_type_specifier_string_list>, public simple_type_specifier
 {
-    built_in_type_specifier(const std::string& value);
+    public:
+        built_in_type_specifier(const std::string& value);
 
-    SOCOA_CPP_DEFINE_VISITABLE()
+        SOCOA_CPP_DEFINE_VISITABLE()
 };
 
 }}} //namespace socoa::cpp::syntax_tree

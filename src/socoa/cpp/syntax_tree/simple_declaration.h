@@ -33,19 +33,43 @@ namespace socoa { namespace cpp { namespace syntax_tree
 class init_declarator;
 class decl_specifier;
 
-struct simple_declaration: public block_declaration
+class simple_declaration: public block_declaration
 {
-    simple_declaration
-    (
-        std::shared_ptr<util::sequence<decl_specifier>> a_decl_specifier_seq,
-        std::shared_ptr<util::sequence<init_declarator, util::extern_strings::comma>> an_init_declarator_list
-    );
+	public:
+		simple_declaration
+		(
+			std::shared_ptr<util::sequence<decl_specifier>> a_decl_specifier_seq,
+			std::shared_ptr<util::sequence<init_declarator, util::extern_strings::comma>> an_init_declarator_list
+		);
 
-    SOCOA_CPP_DEFINE_VISITABLE()
+		inline
+		const std::shared_ptr<const util::sequence<decl_specifier>>
+		get_decl_specifier_seq() const;
 
-    const std::shared_ptr<util::sequence<decl_specifier>> decl_specifier_seq_;
-    const std::shared_ptr<util::sequence<init_declarator, util::extern_strings::comma>> init_declarator_list_;
+		inline
+		const std::shared_ptr<const util::sequence<init_declarator, util::extern_strings::comma>>
+		get_init_declarator_list() const;
+
+		SOCOA_CPP_DEFINE_VISITABLE()
+
+	private:
+		std::shared_ptr<util::sequence<decl_specifier>> decl_specifier_seq_;
+		std::shared_ptr<util::sequence<init_declarator, util::extern_strings::comma>> init_declarator_list_;
 };
+
+inline
+const std::shared_ptr<const util::sequence<decl_specifier>>
+simple_declaration::get_decl_specifier_seq() const
+{
+	return decl_specifier_seq_;
+}
+
+inline
+const std::shared_ptr<const util::sequence<init_declarator, util::extern_strings::comma>>
+simple_declaration::get_init_declarator_list() const
+{
+	return init_declarator_list_;
+}
 
 }}} //namespace socoa::cpp::syntax_tree
 

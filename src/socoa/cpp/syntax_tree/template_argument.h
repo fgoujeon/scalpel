@@ -26,10 +26,10 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class template_argument: virtual public visitable
+struct template_argument: virtual public visitable
 {
-    public:
-        virtual ~template_argument(){};
+	virtual
+	~template_argument();
 };
 
 }}} //namespace socoa::cpp::syntax_tree

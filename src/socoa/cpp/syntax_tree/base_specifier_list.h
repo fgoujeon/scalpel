@@ -18,38 +18,24 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_QUALIFIED_TEMPLATE_ID_H
-#define SOCOA_CPP_SYNTAX_TREE_QUALIFIED_TEMPLATE_ID_H
+#ifndef SOCOA_CPP_SYNTAX_TREE_BASE_SPECIFIER_LIST_H
+#define SOCOA_CPP_SYNTAX_TREE_BASE_SPECIFIER_LIST_H
 
-#include "visitor.h"
-#include "qualified_id.h"
-#include "template_id.h"
+#include "../../util/sequence.h"
+#include "../../util/extern_strings.h"
+#include "base_specifier.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class qualified_template_id: public qualified_id
-{
-	public:
-		explicit
-		qualified_template_id(template_id&& a_template_id);
-
-		inline
-		const template_id&
-		get_template_id() const;
-
-		SOCOA_CPP_DEFINE_VISITABLE()
-
-	private:
-		template_id template_id_;
-};
-
-inline
-const template_id&
-qualified_template_id::get_template_id() const
-{
-	return template_id_;
-}
+typedef
+    util::sequence
+    <
+        base_specifier,
+        util::extern_strings::comma
+    >
+    base_specifier_list_t
+;
 
 }}} //namespace socoa::cpp::syntax_tree
 

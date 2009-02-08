@@ -24,6 +24,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <memory>
 #include "visitor.h"
 #include "member_declaration.h"
+#include "member_declarator_list.h"
 #include "../../util/sequence.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
@@ -32,19 +33,43 @@ namespace socoa { namespace cpp { namespace syntax_tree
 class decl_specifier;
 class member_declarator;
 
-struct member_declaration_member_declarator_list: public member_declaration
+class member_declaration_member_declarator_list: public member_declaration
 {
-    member_declaration_member_declarator_list
-    (
-        std::shared_ptr<util::sequence<decl_specifier>> a_decl_specifier_seq,
-        std::shared_ptr<util::sequence<member_declarator, util::extern_strings::comma>> a_member_declarator_list
-    );
+	public:
+		member_declaration_member_declarator_list
+		(
+			std::shared_ptr<util::sequence<decl_specifier>> a_decl_specifier_seq,
+			std::shared_ptr<member_declarator_list_t> a_member_declarator_list
+		);
 
-    SOCOA_CPP_DEFINE_VISITABLE()
+		inline
+		const std::shared_ptr<const util::sequence<decl_specifier>>
+		get_decl_specifier_seq() const;
 
-    const std::shared_ptr<util::sequence<decl_specifier>> decl_specifier_seq_;
-    const std::shared_ptr<util::sequence<member_declarator, util::extern_strings::comma>> member_declarator_list_;
+		inline
+		const std::shared_ptr<const util::sequence<member_declarator, util::extern_strings::comma>>
+		get_member_declarator_list() const;
+
+		SOCOA_CPP_DEFINE_VISITABLE()
+
+	private:
+		std::shared_ptr<util::sequence<decl_specifier>> decl_specifier_seq_;
+		std::shared_ptr<member_declarator_list_t> member_declarator_list_;
 };
+
+inline
+const std::shared_ptr<const util::sequence<decl_specifier>>
+member_declaration_member_declarator_list::get_decl_specifier_seq() const
+{
+	return decl_specifier_seq_;
+}
+
+inline
+const std::shared_ptr<const member_declarator_list_t>
+member_declaration_member_declarator_list::get_member_declarator_list() const
+{
+	return member_declarator_list_;
+}
 
 }}} //namespace socoa::cpp::syntax_tree
 

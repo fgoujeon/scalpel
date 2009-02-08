@@ -26,11 +26,10 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class simple_type_specifier: public type_specifier
+struct simple_type_specifier: public type_specifier
 {
-    public:
-        virtual ~simple_type_specifier(){};
-
+	virtual
+	~simple_type_specifier() = default;
 };
 
 }}} //namespace socoa::cpp::syntax_tree

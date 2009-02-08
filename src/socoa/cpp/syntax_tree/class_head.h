@@ -32,14 +32,80 @@ class template_id;
 class identifier;
 class base_clause;
 
-struct class_head
+class class_head
 {
-    const class_key key_;
-    const std::shared_ptr<nested_name_specifier> nested_name_specifier_;
-    const std::shared_ptr<template_id> template_id_;
-    const std::shared_ptr<identifier> identifier_;
-    const std::shared_ptr<base_clause> base_clause_;
+    public:
+        class_head
+        (
+            class_key&& a_class_key,
+            std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
+            std::shared_ptr<template_id> a_template_id,
+            std::shared_ptr<identifier> an_identifier,
+            std::shared_ptr<base_clause> a_base_clause
+        );
+
+        inline
+        const class_key&
+        get_class_key() const;
+
+        inline
+        const std::shared_ptr<const nested_name_specifier>
+        get_nested_name_specifier() const;
+
+        inline
+        const std::shared_ptr<const template_id>
+        get_template_id() const;
+
+        inline
+        const std::shared_ptr<const identifier>
+        get_identifier() const;
+
+        inline
+        const std::shared_ptr<const base_clause>
+        get_base_clause() const;
+
+    private:
+        class_key class_key_;
+        std::shared_ptr<nested_name_specifier> nested_name_specifier_;
+        std::shared_ptr<template_id> template_id_;
+        std::shared_ptr<identifier> identifier_;
+        std::shared_ptr<base_clause> base_clause_;
 };
+
+inline
+const class_key&
+class_head::get_class_key() const
+{
+    return class_key_;
+}
+
+inline
+const std::shared_ptr<const nested_name_specifier>
+class_head::get_nested_name_specifier() const
+{
+    return nested_name_specifier_;
+}
+
+inline
+const std::shared_ptr<const template_id>
+class_head::get_template_id() const
+{
+    return template_id_;
+}
+
+inline
+const std::shared_ptr<const identifier>
+class_head::get_identifier() const
+{
+    return identifier_;
+}
+
+inline
+const std::shared_ptr<const base_clause>
+class_head::get_base_clause() const
+{
+    return base_clause_;
+}
 
 }}} //namespace socoa::cpp::syntax_tree
 

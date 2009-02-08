@@ -29,12 +29,54 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 class parameter_declaration;
 
-struct parameter_declaration_clause
+class parameter_declaration_clause
 {
-    const std::shared_ptr<util::sequence<parameter_declaration, util::extern_strings::comma>> parameter_declaration_list_;
-    const bool trailing_comma_;
-    const bool ellipsis_;
+	public:
+		parameter_declaration_clause
+		(
+			std::shared_ptr<util::sequence<parameter_declaration, util::extern_strings::comma>> a_parameter_declaration_list,
+			bool trailing_comma,
+			bool ellipsis
+		);
+
+		inline
+		const std::shared_ptr<const util::sequence<parameter_declaration, util::extern_strings::comma>>
+		get_parameter_declaration_list() const;
+
+		inline
+		bool
+		has_trailing_comma() const;
+
+		inline
+		bool
+		has_ellipsis() const;
+
+	private:
+		std::shared_ptr<util::sequence<parameter_declaration, util::extern_strings::comma>> parameter_declaration_list_;
+		bool trailing_comma_;
+		bool ellipsis_;
 };
+
+inline
+const std::shared_ptr<const util::sequence<parameter_declaration, util::extern_strings::comma>>
+parameter_declaration_clause::get_parameter_declaration_list() const
+{
+	return parameter_declaration_list_;
+}
+
+inline
+bool
+parameter_declaration_clause::has_trailing_comma() const
+{
+	return trailing_comma_;
+}
+
+inline
+bool
+parameter_declaration_clause::has_ellipsis() const
+{
+	return ellipsis_;
+}
 
 }}} //namespace socoa::cpp::syntax_tree
 

@@ -28,14 +28,31 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-struct qualified_identifier: public qualified_id
+class qualified_identifier: public qualified_id
 {
-    explicit qualified_identifier(identifier&& an_identifier);
+	public:
+		explicit
+		qualified_identifier
+		(
+			identifier&& an_identifier
+		);
 
-    SOCOA_CPP_DEFINE_VISITABLE()
+		inline
+		const identifier&
+	   	get_identifier() const;
 
-    const identifier identifier_;
+		SOCOA_CPP_DEFINE_VISITABLE()
+
+	private:
+		identifier identifier_;
 };
+
+inline
+const identifier&
+qualified_identifier::get_identifier() const
+{
+	return identifier_;
+}
 
 }}} //namespace socoa::cpp::syntax_tree
 

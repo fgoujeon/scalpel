@@ -31,21 +31,56 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 class nested_name_specifier;
 
-struct using_directive: public block_declaration
+class using_directive: public block_declaration
 {
-    using_directive
-    (
-        bool leading_double_colon,
-        std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
-        identifier&& an_identifier
-    );
+	public:
+		using_directive
+		(
+			bool leading_double_colon,
+			std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
+			identifier&& an_identifier
+		);
 
-    SOCOA_CPP_DEFINE_VISITABLE()
+		inline
+		bool
+		has_leading_double_colon() const;
 
-    const bool leading_double_colon_;
-    const std::shared_ptr<nested_name_specifier> nested_name_specifier_;
-    const identifier identifier_;
+		inline
+		const std::shared_ptr<const nested_name_specifier>
+		get_nested_name_specifier() const;
+
+		inline
+		const identifier&
+	   	get_identifier() const;
+
+		SOCOA_CPP_DEFINE_VISITABLE()
+
+	private:
+		bool leading_double_colon_;
+		std::shared_ptr<nested_name_specifier> nested_name_specifier_;
+		identifier identifier_;
 };
+
+inline
+bool
+using_directive::has_leading_double_colon() const
+{
+	return leading_double_colon_;
+}
+
+inline
+const std::shared_ptr<const nested_name_specifier>
+using_directive::get_nested_name_specifier() const
+{
+	return nested_name_specifier_;
+}
+
+inline
+const identifier&
+using_directive::get_identifier() const
+{
+	return identifier_;
+}
 
 }}} //namespace socoa::cpp::syntax_tree
 

@@ -28,19 +28,43 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-struct direct_declarator_function_part: public direct_declarator_part
+class direct_declarator_function_part: public direct_declarator_part
 {
-    direct_declarator_function_part
-    (
-        parameter_declaration_clause&& a_parameter_declaration_clause,
-        std::shared_ptr<util::sequence<cv_qualifier>> a_cv_qualifier_seq
-    );
+    public:
+        direct_declarator_function_part
+        (
+            parameter_declaration_clause&& a_parameter_declaration_clause,
+            std::shared_ptr<util::sequence<cv_qualifier>> a_cv_qualifier_seq
+        );
 
-    SOCOA_CPP_DEFINE_VISITABLE()
+        inline
+        const parameter_declaration_clause&
+        get_parameter_declaration_clause() const;
 
-    const parameter_declaration_clause parameter_declaration_clause_;
-    const std::shared_ptr<util::sequence<cv_qualifier>> cv_qualifier_seq_;
+        inline
+        const std::shared_ptr<const util::sequence<cv_qualifier>>
+        get_cv_qualifier_seq() const;
+
+        SOCOA_CPP_DEFINE_VISITABLE()
+
+    private:
+        parameter_declaration_clause parameter_declaration_clause_;
+        std::shared_ptr<util::sequence<cv_qualifier>> cv_qualifier_seq_;
 };
+
+inline
+const parameter_declaration_clause&
+direct_declarator_function_part::get_parameter_declaration_clause() const
+{
+    return parameter_declaration_clause_;
+}
+
+inline
+const std::shared_ptr<const util::sequence<cv_qualifier>>
+direct_declarator_function_part::get_cv_qualifier_seq() const
+{
+    return cv_qualifier_seq_;
+}
 
 }}} //namespace socoa::cpp::syntax_tree
 

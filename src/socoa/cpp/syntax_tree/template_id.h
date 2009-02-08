@@ -34,19 +34,43 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 class template_argument;
 
-struct template_id: public identifier_or_template_id, public unqualified_id
+class template_id: public identifier_or_template_id, public unqualified_id
 {
-    template_id
-    (
-        identifier&& an_identifier,
-        std::shared_ptr<util::sequence<template_argument, util::extern_strings::comma>> a_template_argument_list
-    );
+	public:
+		template_id
+		(
+			identifier&& an_identifier,
+			std::shared_ptr<util::sequence<template_argument, util::extern_strings::comma>> a_template_argument_list
+		);
 
-    SOCOA_CPP_DEFINE_VISITABLE()
+		inline
+		const identifier&
+		get_identifier() const;
 
-    const identifier identifier_;
-    const std::shared_ptr<util::sequence<template_argument, util::extern_strings::comma>> template_argument_list_;
+		inline
+		const std::shared_ptr<const util::sequence<template_argument, util::extern_strings::comma>>
+		get_template_argument_list() const;
+
+		SOCOA_CPP_DEFINE_VISITABLE()
+
+	private:
+		identifier identifier_;
+		std::shared_ptr<util::sequence<template_argument, util::extern_strings::comma>> template_argument_list_;
 };
+
+inline
+const identifier&
+template_id::get_identifier() const
+{
+	return identifier_;
+}
+
+inline
+const std::shared_ptr<const util::sequence<template_argument, util::extern_strings::comma>>
+template_id::get_template_argument_list() const
+{
+	return template_argument_list_;
+}
 
 }}} //namespace socoa::cpp::syntax_tree
 

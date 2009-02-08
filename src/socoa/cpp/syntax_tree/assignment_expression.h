@@ -26,12 +26,30 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-struct assignment_expression
+class assignment_expression
 {
-    //const logical_or_expression logical_or_expression_;
-    const assignment_operator assignment_operator_;
-    //const std::shared_ptr<> ;
+    public:
+        assignment_expression
+        (
+            assignment_operator&& an_assignment_operator
+        );
+
+        inline
+        const assignment_operator&
+        get_assignment_operator() const;
+
+    private:
+        //logical_or_expression logical_or_expression_;
+        assignment_operator assignment_operator_;
+        //std::shared_ptr<> ;
 };
+
+inline
+const assignment_operator&
+assignment_expression::get_assignment_operator() const
+{
+    return assignment_operator_;
+}
 
 }}} //namespace socoa::cpp::syntax_tree
 

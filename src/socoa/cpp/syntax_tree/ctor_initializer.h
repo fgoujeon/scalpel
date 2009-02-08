@@ -21,17 +21,32 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_CTOR_INITIALIZER_H
 #define SOCOA_CPP_SYNTAX_TREE_CTOR_INITIALIZER_H
 
-#include "../../util/sequence.h"
+#include "mem_initializer_list.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
 class mem_initializer;
 
-struct ctor_initializer
+class ctor_initializer
 {
-    const util::sequence<mem_initializer, util::extern_strings::comma> mem_initializer_list_;
+    public:
+        ctor_initializer(mem_initializer_list_t&& a_mem_initializer_list);
+
+        inline
+        const mem_initializer_list_t&
+        get_mem_initializer_list() const;
+
+    private:
+        mem_initializer_list_t mem_initializer_list_;
 };
+
+inline
+const mem_initializer_list_t&
+ctor_initializer::get_mem_initializer_list() const
+{
+    return mem_initializer_list_;
+}
 
 }}} //namespace socoa::cpp::syntax_tree
 

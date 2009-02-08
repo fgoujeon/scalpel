@@ -30,11 +30,41 @@ namespace socoa { namespace cpp { namespace syntax_tree
 class identifier_or_template_id;
 class nested_name_specifier_part;
 
-struct nested_name_specifier
+class nested_name_specifier
 {
-    const std::shared_ptr<identifier_or_template_id> identifier_or_template_id_;
-    const std::vector<std::shared_ptr<nested_name_specifier_part>> parts_;
+	public:
+		nested_name_specifier
+		(
+			std::shared_ptr<identifier_or_template_id> an_identifier_or_template_id,
+			std::vector<std::shared_ptr<nested_name_specifier_part>> parts
+		);
+
+		inline
+		const std::shared_ptr<const identifier_or_template_id>
+		get_identifier_or_template_id() const;
+
+		inline
+		const std::vector<std::shared_ptr<nested_name_specifier_part>>
+		get_parts() const;
+
+	private:
+		std::shared_ptr<identifier_or_template_id> identifier_or_template_id_;
+		std::vector<std::shared_ptr<nested_name_specifier_part>> parts_;
 };
+
+inline
+const std::shared_ptr<const identifier_or_template_id>
+nested_name_specifier::get_identifier_or_template_id() const
+{
+	return identifier_or_template_id_;
+}
+
+inline
+const std::vector<std::shared_ptr<nested_name_specifier_part>>
+nested_name_specifier::get_parts() const
+{
+	return parts_;
+}
 
 }}} //namespace socoa::cpp::syntax_tree
 

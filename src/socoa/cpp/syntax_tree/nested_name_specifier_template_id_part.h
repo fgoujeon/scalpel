@@ -28,19 +28,43 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-struct nested_name_specifier_template_id_part: public nested_name_specifier_part
+class nested_name_specifier_template_id_part: public nested_name_specifier_part
 {
-    nested_name_specifier_template_id_part
-    (
-        bool template_keyword,
-        template_id&& a_template_id
-    );
+	public:
+		nested_name_specifier_template_id_part
+		(
+			bool template_keyword,
+			template_id&& a_template_id
+		);
 
-    SOCOA_CPP_DEFINE_VISITABLE()
+		inline
+		bool
+		has_template_keyword() const;
 
-    const bool template_keyword_;
-    const template_id template_id_;
+		inline
+		const template_id&
+		get_template_id() const;
+
+		SOCOA_CPP_DEFINE_VISITABLE()
+
+	private:
+		bool template_keyword_;
+		template_id template_id_;
 };
+
+inline
+bool
+nested_name_specifier_template_id_part::has_template_keyword() const
+{
+	return template_keyword_;
+}
+
+inline
+const template_id&
+nested_name_specifier_template_id_part::get_template_id() const
+{
+	return template_id_;
+}
 
 }}} //namespace socoa::cpp::syntax_tree
 

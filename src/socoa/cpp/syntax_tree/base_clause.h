@@ -22,17 +22,31 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_BASE_CLAUSE_H
 
 #include <memory>
-#include "../../util/sequence.h"
-#include "../../util/extern_strings.h"
 #include "base_specifier.h"
+#include "base_specifier_list.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-struct base_clause
+class base_clause
 {
-    const std::shared_ptr<util::sequence<base_specifier, util::extern_strings::comma>> base_specifier_list_;
+    public:
+        base_clause(std::shared_ptr<base_specifier_list_t>&& a_base_specifier_list);
+
+        inline
+        const std::shared_ptr<const base_specifier_list_t>
+        get_base_specifier_list() const;
+
+    private:
+        std::shared_ptr<base_specifier_list_t> base_specifier_list_;
 };
+
+inline
+const std::shared_ptr<const base_specifier_list_t>
+base_clause::get_base_specifier_list() const
+{
+    return base_specifier_list_;
+}
 
 }}} //namespace socoa::cpp::syntax_tree
 

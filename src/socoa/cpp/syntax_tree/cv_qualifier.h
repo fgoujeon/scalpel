@@ -29,19 +29,33 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 struct cv_qualifier: public type_specifier
 {
-    enum type
-    {
-        CONST,
-        VOLATILE,
-        RESTRICT
-    };
+    public:
+        enum type
+        {
+            CONST,
+            VOLATILE,
+            RESTRICT
+        };
 
-    explicit cv_qualifier(type a_type);
+        explicit
+        cv_qualifier(type a_type);
 
-    SOCOA_CPP_DEFINE_VISITABLE()
+        inline
+        type
+        get_type() const;
 
-    const type type_;
+        SOCOA_CPP_DEFINE_VISITABLE()
+
+    private:
+        type type_;
 };
+
+inline
+cv_qualifier::type
+cv_qualifier::get_type() const
+{
+    return type_;
+}
 
 }}} //namespace socoa::cpp::syntax_tree
 

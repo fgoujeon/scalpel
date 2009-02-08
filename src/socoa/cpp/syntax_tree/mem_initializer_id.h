@@ -28,7 +28,8 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 struct mem_initializer_id: virtual public visitable
 {
-    virtual ~mem_initializer_id(){};
+    virtual
+	~mem_initializer_id();
 };
 
 }}} //namespace socoa::cpp::syntax_tree

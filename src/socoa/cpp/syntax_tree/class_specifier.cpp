@@ -25,10 +25,10 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 class_specifier::class_specifier
 (
-    const class_head&& head,
-    const std::shared_ptr<member_specification> a_member_specification
+    class_head&& head,
+    std::shared_ptr<member_specification> a_member_specification
 ):
-    head_(head),
+    class_head_(head),
     member_specification_(a_member_specification)
 {
 }

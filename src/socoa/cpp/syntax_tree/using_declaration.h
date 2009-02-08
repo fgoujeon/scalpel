@@ -32,23 +32,69 @@ namespace socoa { namespace cpp { namespace syntax_tree
 class nested_name_specifier;
 class unqualified_id;
 
-struct using_declaration: public member_declaration, public block_declaration
+class using_declaration: public member_declaration, public block_declaration
 {
-    using_declaration
-    (
-        bool typename_keyword,
-        bool leading_double_colon,
-        std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
-        std::shared_ptr<unqualified_id> an_unqualified_id
-    );
+	public:
+		using_declaration
+		(
+			bool typename_keyword,
+			bool leading_double_colon,
+			std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
+			std::shared_ptr<unqualified_id> an_unqualified_id
+		);
 
-    SOCOA_CPP_DEFINE_VISITABLE()
+		inline
+		bool
+		has_typename_keyword() const;
 
-    const bool typename_keyword_;
-    const bool leading_double_colon_;
-    const std::shared_ptr<nested_name_specifier> nested_name_specifier_;
-    const std::shared_ptr<unqualified_id> unqualified_id_;
+		inline
+		bool
+		has_leading_double_colon() const;
+
+		inline
+		const std::shared_ptr<const nested_name_specifier>
+		get_nested_name_specifier() const;
+
+		inline
+		const std::shared_ptr<const unqualified_id>
+		get_unqualified_id() const;
+
+		SOCOA_CPP_DEFINE_VISITABLE()
+
+	private:
+		bool typename_keyword_;
+		bool leading_double_colon_;
+		std::shared_ptr<nested_name_specifier> nested_name_specifier_;
+		std::shared_ptr<unqualified_id> unqualified_id_;
 };
+
+inline
+bool
+using_declaration::has_typename_keyword() const
+{
+	return typename_keyword_;
+}
+
+inline
+bool
+using_declaration::has_leading_double_colon() const
+{
+	return leading_double_colon_;
+}
+
+inline
+const std::shared_ptr<const nested_name_specifier>
+using_declaration::get_nested_name_specifier() const
+{
+	return nested_name_specifier_;
+}
+
+inline
+const std::shared_ptr<const unqualified_id>
+using_declaration::get_unqualified_id() const
+{
+	return unqualified_id_;
+}
 
 }}} //namespace socoa::cpp::syntax_tree
 

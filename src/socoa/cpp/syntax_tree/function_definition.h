@@ -33,21 +33,56 @@ namespace socoa { namespace cpp { namespace syntax_tree
 class decl_specifier;
 class ctor_initializer;
 
-struct function_definition: public declaration
+class function_definition: public declaration
 {
-    function_definition
-    (
-        std::shared_ptr<util::sequence<decl_specifier>> a_decl_specifier_seq,
-        declarator&& a_declarator,
-        std::shared_ptr<ctor_initializer> a_ctor_initializer
-    );
+    public:
+        function_definition
+        (
+            std::shared_ptr<util::sequence<decl_specifier>> a_decl_specifier_seq,
+            declarator&& a_declarator,
+            std::shared_ptr<ctor_initializer> a_ctor_initializer
+        );
 
-    SOCOA_CPP_DEFINE_VISITABLE()
+		inline
+		const std::shared_ptr<const util::sequence<decl_specifier>>
+		get_decl_specifier_seq() const;
 
-    const std::shared_ptr<util::sequence<decl_specifier>> decl_specifier_seq_;
-    const declarator declarator_;
-    const std::shared_ptr<ctor_initializer> ctor_initializer_;
+		inline
+		const declarator&
+		get_declarator() const;
+
+		inline
+		const std::shared_ptr<const ctor_initializer> 
+		get_ctor_initializer() const;
+
+        SOCOA_CPP_DEFINE_VISITABLE()
+
+    private:
+        std::shared_ptr<util::sequence<decl_specifier>> decl_specifier_seq_;
+        declarator declarator_;
+        std::shared_ptr<ctor_initializer> ctor_initializer_;
 };
+
+inline
+const std::shared_ptr<const util::sequence<decl_specifier>>
+function_definition::get_decl_specifier_seq() const
+{
+	return decl_specifier_seq_;
+}
+
+inline
+const declarator&
+function_definition::get_declarator() const
+{
+	return declarator_;
+}
+
+inline
+const std::shared_ptr<const ctor_initializer> 
+function_definition::get_ctor_initializer() const
+{
+	return ctor_initializer_;
+}
 
 }}} //namespace socoa::cpp::syntax_tree
 

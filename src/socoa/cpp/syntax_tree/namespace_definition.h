@@ -32,19 +32,43 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 class identifier;
 
-struct namespace_definition: public declaration
+class namespace_definition: public declaration
 {
-    namespace_definition
-    (
-        std::shared_ptr<identifier> an_identifier,
-        std::shared_ptr<util::sequence<declaration>> a_declaration_seq
-    );
+	public:
+		namespace_definition
+		(
+			std::shared_ptr<identifier> an_identifier,
+			std::shared_ptr<util::sequence<declaration>> a_declaration_seq
+		);
 
-    SOCOA_CPP_DEFINE_VISITABLE()
+		inline
+		const std::shared_ptr<const identifier>
+	   	get_identifier() const;
 
-    const std::shared_ptr<identifier> identifier_;
-    const std::shared_ptr<util::sequence<declaration>> declaration_seq_;
+		inline
+		const std::shared_ptr<const util::sequence<declaration>>
+		get_declaration_seq() const;
+
+		SOCOA_CPP_DEFINE_VISITABLE()
+
+	private:
+		std::shared_ptr<identifier> identifier_;
+		std::shared_ptr<util::sequence<declaration>> declaration_seq_;
 };
+
+inline
+const std::shared_ptr<const identifier>
+namespace_definition::get_identifier() const
+{
+	return identifier_;
+}
+
+inline
+const std::shared_ptr<const util::sequence<declaration>>
+namespace_definition::get_declaration_seq() const
+{
+	return declaration_seq_;
+}
 
 }}} //namespace socoa::cpp::syntax_tree
 

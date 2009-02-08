@@ -18,39 +18,26 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_QUALIFIED_TEMPLATE_ID_H
-#define SOCOA_CPP_SYNTAX_TREE_QUALIFIED_TEMPLATE_ID_H
-
-#include "visitor.h"
-#include "qualified_id.h"
-#include "template_id.h"
+#include "class_head.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class qualified_template_id: public qualified_id
+class_head::class_head
+(
+    class_key&& a_class_key,
+    std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
+    std::shared_ptr<template_id> a_template_id,
+    std::shared_ptr<identifier> an_identifier,
+    std::shared_ptr<base_clause> a_base_clause
+):
+    class_key_(a_class_key),
+    nested_name_specifier_(a_nested_name_specifier),
+    template_id_(a_template_id),
+    identifier_(an_identifier),
+    base_clause_(a_base_clause)
 {
-	public:
-		explicit
-		qualified_template_id(template_id&& a_template_id);
-
-		inline
-		const template_id&
-		get_template_id() const;
-
-		SOCOA_CPP_DEFINE_VISITABLE()
-
-	private:
-		template_id template_id_;
-};
-
-inline
-const template_id&
-qualified_template_id::get_template_id() const
-{
-	return template_id_;
 }
 
-}}} //namespace socoa::cpp::syntax_tree
 
-#endif
+}}} //namespace socoa::cpp::syntax_tree

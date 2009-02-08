@@ -29,21 +29,45 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-struct template_declaration: public declaration, public member_declaration
+class template_declaration: public declaration, public member_declaration
 {
-    template_declaration
-    (
-        bool export_keyword,
-        //template_parameter_list m_template_parameter_list;
-        std::shared_ptr<declaration> a_declaration
-    );
+	public:
+		template_declaration
+		(
+			bool export_keyword,
+			//template_parameter_list m_template_parameter_list;
+			std::shared_ptr<declaration> a_declaration
+		);
 
-    SOCOA_CPP_DEFINE_VISITABLE()
+		inline
+		bool
+		has_export_keyword() const;
 
-    const bool export_keyword_;
-    //const template_parameter_list m_template_parameter_list;
-    const std::shared_ptr<declaration> declaration_;
+		inline
+		const std::shared_ptr<const declaration>
+		get_declaration() const;
+
+		SOCOA_CPP_DEFINE_VISITABLE()
+
+	private:
+		bool export_keyword_;
+		//template_parameter_list m_template_parameter_list;
+		std::shared_ptr<declaration> declaration_;
 };
+
+inline
+bool
+template_declaration::has_export_keyword() const
+{
+	return export_keyword_;
+}
+
+inline
+const std::shared_ptr<const declaration>
+template_declaration::get_declaration() const
+{
+	return declaration_;
+}
 
 }}} //namespace socoa::cpp::syntax_tree
 
