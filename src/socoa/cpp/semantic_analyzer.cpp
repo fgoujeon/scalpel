@@ -38,4 +38,3 @@ semantic_analyzer::operator()(const syntax_tree_t& tree)
 
 }} //namespace socoa::cpp
 
-#endif

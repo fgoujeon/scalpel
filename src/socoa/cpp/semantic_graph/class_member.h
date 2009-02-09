@@ -24,7 +24,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <memory>
 #include "name_tree_component.h"
 
-namespace socoa { namespace cpp { namespace program_tree
+namespace socoa { namespace cpp { namespace semantic_graph
 {
 
 class class_;
@@ -47,6 +47,6 @@ struct class_member: public virtual name_tree_component
     get_name() const = 0;
 };
 
-}}} //namespace socoa::cpp::program_tree
+}}} //namespace socoa::cpp::semantic_graph
 
 #endif

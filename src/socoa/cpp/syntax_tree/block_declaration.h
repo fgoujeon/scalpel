@@ -29,7 +29,7 @@ namespace socoa { namespace cpp { namespace syntax_tree
 struct block_declaration: public declaration
 {
 	virtual
-	~block_declaration();
+	~block_declaration(){};
 };
 
 }}} //namespace socoa::cpp::syntax_tree

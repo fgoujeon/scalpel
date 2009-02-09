@@ -54,7 +54,7 @@ class nested_identifier_or_template_id;
 struct visitor
 {
 	virtual
-	~visitor();
+	~visitor(){};
 
 	virtual
 	void

@@ -36,7 +36,7 @@ class visitor;
 struct visitable
 {
     virtual
-    ~visitable();
+    ~visitable(){};
 
     virtual
     void

@@ -34,5 +34,3 @@ nested_name_specifier::nested_name_specifier
 }
 
 }}} //namespace socoa::cpp::syntax_tree
-
-#endif

@@ -30,7 +30,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "name_tree_composite.h"
 #include "base_specifier.h"
 
-namespace socoa { namespace cpp { namespace program_tree
+namespace socoa { namespace cpp { namespace semantic_graph
 {
 
 class namespace_;
@@ -151,6 +151,6 @@ class class_:
         std::vector<base_specifier> base_specifiers_;
 };
 
-}}} //namespace socoa::cpp::program_tree
+}}} //namespace socoa::cpp::semantic_graph
 
 #endif

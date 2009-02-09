@@ -24,7 +24,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <memory>
 #include "../syntax_tree/access_specifier.h"
 
-namespace socoa { namespace cpp { namespace program_tree
+namespace socoa { namespace cpp { namespace semantic_graph
 {
 
 class class_;
@@ -63,6 +63,6 @@ class base_specifier
         bool virtual_;
 };
 
-}}} //namespace socoa::cpp::program_tree
+}}} //namespace socoa::cpp::semantic_graph
 
 #endif

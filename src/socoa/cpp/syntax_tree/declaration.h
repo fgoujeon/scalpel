@@ -29,7 +29,7 @@ namespace socoa { namespace cpp { namespace syntax_tree
 struct declaration: virtual public visitable
 {
 	virtual
-	~declaration();
+	~declaration(){};
 };
 
 }}} //namespace socoa::cpp::syntax_tree

@@ -22,6 +22,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SEMANTIC_ANALYZER_H
 
 #include <memory>
+#include "syntax_tree.h"
 #include "semantic_graph.h"
 
 namespace socoa { namespace cpp

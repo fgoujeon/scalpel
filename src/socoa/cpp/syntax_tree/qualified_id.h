@@ -29,7 +29,7 @@ namespace socoa { namespace cpp { namespace syntax_tree
 struct qualified_id: public id_expression
 {
 	virtual
-	~qualified_id();
+	~qualified_id(){};
 };
 
 }}} //namespace socoa::cpp::syntax_tree

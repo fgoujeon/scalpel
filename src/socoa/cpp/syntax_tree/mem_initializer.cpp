@@ -23,7 +23,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-explicit
 mem_initializer::mem_initializer
 (
 	std::shared_ptr<mem_initializer_id> a_mem_initializer_id
@@ -32,5 +31,4 @@ mem_initializer::mem_initializer
 {
 }
 
-}
-
+}}} //namespace socoa::cpp::syntax_tree

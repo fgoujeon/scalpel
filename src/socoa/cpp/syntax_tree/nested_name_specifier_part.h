@@ -29,7 +29,7 @@ namespace socoa { namespace cpp { namespace syntax_tree
 struct nested_name_specifier_part: virtual public visitable
 {
 	virtual
-	~nested_name_specifier_part();
+	~nested_name_specifier_part(){};
 };
 
 }}} //namespace socoa::cpp::syntax_tree

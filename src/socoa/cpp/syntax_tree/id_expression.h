@@ -30,7 +30,7 @@ namespace socoa { namespace cpp { namespace syntax_tree
 struct id_expression: public declarator_id, public template_argument
 {
 	virtual
-	~id_expression();
+	~id_expression(){};
 };
 
 }}} //namespace socoa::cpp::syntax_tree

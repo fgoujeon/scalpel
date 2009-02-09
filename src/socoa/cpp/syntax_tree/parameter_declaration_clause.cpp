@@ -36,5 +36,3 @@ parameter_declaration_clause::parameter_declaration_clause
 }
 
 }}} //namespace socoa::cpp::syntax_tree
-
-#endif

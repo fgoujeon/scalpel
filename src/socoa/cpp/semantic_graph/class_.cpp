@@ -24,7 +24,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <cassert>
 #include "namespace_.h"
 
-namespace socoa { namespace cpp { namespace program_tree
+namespace socoa { namespace cpp { namespace semantic_graph
 {
 
 class_::class_(const std::string& name):
@@ -144,4 +144,4 @@ class_::add_member(std::shared_ptr<class_member> member)
     members_.push_back(member);
 }
 
-}}} //namespace socoa::cpp::program_tree
+}}} //namespace socoa::cpp::semantic_graph

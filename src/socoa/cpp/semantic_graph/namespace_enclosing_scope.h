@@ -23,7 +23,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "name_tree_composite.h"
 
-namespace socoa { namespace cpp { namespace program_tree
+namespace socoa { namespace cpp { namespace semantic_graph
 {
 
 struct namespace_enclosing_scope: virtual public name_tree_composite
@@ -50,6 +50,6 @@ struct namespace_enclosing_scope: virtual public name_tree_composite
     is_global() const = 0;
 };
 
-}}} //namespace socoa::cpp::program_tree
+}}} //namespace socoa::cpp::semantic_graph
 
 #endif

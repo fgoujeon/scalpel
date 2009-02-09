@@ -29,5 +29,3 @@ init_declarator::init_declarator(declarator&& a_declarator):
 }
 
 }}} //namespace socoa::cpp::syntax_tree
-
-#endif

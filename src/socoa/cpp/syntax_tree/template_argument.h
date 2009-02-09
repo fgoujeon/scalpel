@@ -29,7 +29,7 @@ namespace socoa { namespace cpp { namespace syntax_tree
 struct template_argument: virtual public visitable
 {
 	virtual
-	~template_argument();
+	~template_argument(){};
 };
 
 }}} //namespace socoa::cpp::syntax_tree
