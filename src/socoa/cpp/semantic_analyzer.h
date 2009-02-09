@@ -18,18 +18,28 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_NAME_LOOKUP_H
-#define SOCOA_CPP_NAME_LOOKUP_H
+#ifndef SOCOA_CPP_SEMANTIC_ANALYZER_H
+#define SOCOA_CPP_SEMANTIC_ANALYZER_H
 
-#include <string>
 #include <memory>
-#include "program_tree/name_tree_component.h"
+#include "semantic_graph.h"
 
 namespace socoa { namespace cpp
 {
 
-const std::shared_ptr<program_tree::name_tree_component>
-find_unqualified_name(const std::shared_ptr<program_tree::name_tree_component> current_scope, const std::string& name);
+/**
+@brief Analyses the semantic of the source code of a full C++ program.
+*/
+class semantic_analyzer
+{
+    public:
+		semantic_analyzer();
+
+		const std::shared_ptr<semantic_graph_t>
+		operator()(const syntax_tree_t& tree);
+
+    private:
+};
 
 }} //namespace socoa::cpp
 

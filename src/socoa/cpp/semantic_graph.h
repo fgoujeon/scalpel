@@ -18,17 +18,16 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PROGRAM_TREE_H
-#define SOCOA_CPP_PROGRAM_TREE_H
+#ifndef SOCOA_CPP_SEMANTIC_GRAPH_H
+#define SOCOA_CPP_SEMANTIC_GRAPH_H
 
-#include "program_tree/base_specifier.h"
-#include "program_tree/class_enclosing_scope.h"
-#include "program_tree/class_.h"
-#include "program_tree/class_member.h"
-#include "program_tree/namespace_enclosing_scope.h"
-#include "program_tree/namespace_.h"
-#include "program_tree/namespace_member.h"
-#include "program_tree/name_tree_component.h"
-#include "program_tree/name_tree_composite.h"
+#include "semantic_graph/namespace_.h"
+
+namespace socoa { namespace cpp
+{
+
+typedef semantic_graph::namespace_ semantic_graph_t;
+
+}} //namespace socoa::cpp
 
 #endif
