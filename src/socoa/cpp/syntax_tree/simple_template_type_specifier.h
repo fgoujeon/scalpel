@@ -24,12 +24,11 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <memory>
 #include "visitor.h"
 #include "simple_type_specifier.h"
+#include "nested_name_specifier.h"
+#include "template_id.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
-
-class nested_name_specifier;
-class template_id;
 
 class simple_template_type_specifier: public simple_type_specifier
 {
@@ -46,19 +45,19 @@ class simple_template_type_specifier: public simple_type_specifier
 		has_leading_double_colon() const;
 
 		inline
-		const std::shared_ptr<const nested_name_specifier>
+		const nested_name_specifier&
 		get_nested_name_specifier() const;
 
 		inline
-		const std::shared_ptr<const template_id>
+		const template_id&
 		get_template_id() const;
 
 		SOCOA_CPP_DEFINE_VISITABLE()
 
 	private:
 		bool leading_double_colon_;
-		std::shared_ptr<nested_name_specifier> nested_name_specifier_;
-		std::shared_ptr<template_id> template_id_;
+		nested_name_specifier nested_name_specifier_;
+		template_id template_id_;
 };
 
 inline
@@ -69,14 +68,14 @@ simple_template_type_specifier::has_leading_double_colon() const
 }
 
 inline
-const std::shared_ptr<const nested_name_specifier>
+const nested_name_specifier&
 simple_template_type_specifier::get_nested_name_specifier() const
 {
 	return nested_name_specifier_;
 }
 
 inline
-const std::shared_ptr<const template_id>
+const template_id&
 simple_template_type_specifier::get_template_id() const
 {
 	return template_id_;

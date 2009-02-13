@@ -29,10 +29,11 @@ parameter_declaration_clause::parameter_declaration_clause
 	bool trailing_comma,
 	bool ellipsis
 ):
-	parameter_declaration_list_(a_parameter_declaration_list),
+//	parameter_declaration_list_(a_parameter_declaration_list),
 	trailing_comma_(trailing_comma),
 	ellipsis_(ellipsis)
 {
+	if(a_parameter_declaration_list) parameter_declaration_list_ = *a_parameter_declaration_list;
 }
 
 }}} //namespace socoa::cpp::syntax_tree

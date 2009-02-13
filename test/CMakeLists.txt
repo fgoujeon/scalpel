@@ -22,11 +22,6 @@ cmake_minimum_required(VERSION 2.6)
 project(Socoa.Test)
 set(EXECUTABLE_OUTPUT_PATH bin/${CMAKE_BUILD_TYPE})
 
-#gcc settings
-if(CMAKE_COMPILER_IS_GNUCXX)
-	add_definitions(-std=c++0x -W -Wall)
-endif(CMAKE_COMPILER_IS_GNUCXX)
-
 #executable
 file(
 	GLOB_RECURSE sources
@@ -38,17 +33,7 @@ add_executable(
 	${sources}
 )
 
-#Boost
-include(FindBoost)
-find_package(
-	Boost 1.36.0
-)
-include_directories(${Boost_INCLUDE_DIRS})
-
 #Socoa
-include(
-	../socoa.cmake
-)
 include_directories(
 	../src
 )

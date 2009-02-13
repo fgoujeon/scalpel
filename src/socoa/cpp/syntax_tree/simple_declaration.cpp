@@ -27,10 +27,12 @@ simple_declaration::simple_declaration
 (
     std::shared_ptr<util::sequence<decl_specifier>> a_decl_specifier_seq,
     std::shared_ptr<util::sequence<init_declarator, util::extern_strings::comma>> an_init_declarator_list
-):
+)/*:
     decl_specifier_seq_(a_decl_specifier_seq),
-    init_declarator_list_(an_init_declarator_list)
+    init_declarator_list_(an_init_declarator_list)*/
 {
+	if(a_decl_specifier_seq) decl_specifier_seq_ = *a_decl_specifier_seq;
+	if(an_init_declarator_list) init_declarator_list_ = *an_init_declarator_list;
 }
 
 }}} //namespace socoa::cpp::syntax_tree

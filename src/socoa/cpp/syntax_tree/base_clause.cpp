@@ -23,9 +23,11 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-base_clause::base_clause(std::shared_ptr<base_specifier_list_t>&& a_base_specifier_list):
-    base_specifier_list_(a_base_specifier_list)
+base_clause::base_clause(std::shared_ptr<base_specifier_list_t>&& a_base_specifier_list)/*:
+    base_specifier_list_(a_base_specifier_list)*/
 {
+	if(a_base_specifier_list)
+		base_specifier_list_ = *a_base_specifier_list;
 }
 
 }}} //namespace socoa::cpp::syntax_tree

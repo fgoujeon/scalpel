@@ -22,6 +22,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_BASE_SPECIFIER_H
 
 #include <memory>
+#include <boost/optional.hpp>
 #include "access_specifier.h"
 #include "nested_identifier_or_template_id.h"
 
@@ -43,17 +44,17 @@ class base_specifier
         has_virtual_keyword() const;
 
         inline
-        const std::shared_ptr<const access_specifier>
+        const boost::optional<const access_specifier&>
         get_access_specifier() const;
 
         inline
-        const std::shared_ptr<const nested_identifier_or_template_id>
+        const boost::optional<const nested_identifier_or_template_id&>
         get_nested_identifier_or_template_id() const;
 
     private:
         bool virtual_keyword_;
-        std::shared_ptr<access_specifier> access_specifier_;
-        std::shared_ptr<nested_identifier_or_template_id> nested_identifier_or_template_id_;
+		boost::optional<access_specifier> access_specifier_;
+		boost::optional<nested_identifier_or_template_id> nested_identifier_or_template_id_;
 };
 
 inline
@@ -64,17 +65,17 @@ base_specifier::has_virtual_keyword() const
 }
 
 inline
-const std::shared_ptr<const access_specifier>
+const boost::optional<const access_specifier&>
 base_specifier::get_access_specifier() const
 {
-    return access_specifier_;
+    return boost::optional<const access_specifier&>(access_specifier_);
 }
 
 inline
-const std::shared_ptr<const nested_identifier_or_template_id>
+const boost::optional<const nested_identifier_or_template_id&>
 base_specifier::get_nested_identifier_or_template_id() const
 {
-    return nested_identifier_or_template_id_;
+    return boost::optional<const nested_identifier_or_template_id&>(nested_identifier_or_template_id_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

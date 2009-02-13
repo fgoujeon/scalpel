@@ -22,15 +22,15 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_NAMESPACE_DEFINITION_H
 
 #include <memory>
+#include <boost/optional.hpp>
 #include <string>
 #include "visitor.h"
 #include "declaration.h"
+#include "identifier.h"
 #include "../../util/sequence.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
-
-class identifier;
 
 class namespace_definition: public declaration
 {
@@ -42,32 +42,32 @@ class namespace_definition: public declaration
 		);
 
 		inline
-		const std::shared_ptr<const identifier>
+		const boost::optional<const identifier&>
 	   	get_identifier() const;
 
 		inline
-		const std::shared_ptr<const util::sequence<declaration>>
+		const boost::optional<const util::sequence<declaration>&>
 		get_declaration_seq() const;
 
 		SOCOA_CPP_DEFINE_VISITABLE()
 
 	private:
-		std::shared_ptr<identifier> identifier_;
-		std::shared_ptr<util::sequence<declaration>> declaration_seq_;
+		boost::optional<identifier> identifier_;
+		boost::optional<util::sequence<declaration>> declaration_seq_;
 };
 
 inline
-const std::shared_ptr<const identifier>
+const boost::optional<const identifier&>
 namespace_definition::get_identifier() const
 {
-	return identifier_;
+	return boost::optional<const identifier&>(identifier_);
 }
 
 inline
-const std::shared_ptr<const util::sequence<declaration>>
+const boost::optional<const util::sequence<declaration>&>
 namespace_definition::get_declaration_seq() const
 {
-	return declaration_seq_;
+	return boost::optional<const util::sequence<declaration>&>(declaration_seq_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

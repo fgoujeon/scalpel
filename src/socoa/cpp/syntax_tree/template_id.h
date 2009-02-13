@@ -22,17 +22,17 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_TEMPLATE_ID_H
 
 #include <memory>
+#include <boost/optional.hpp>
 #include "../../util/sequence.h"
 #include "../../util/extern_strings.h"
 #include "visitor.h"
 #include "identifier.h"
 #include "identifier_or_template_id.h"
 #include "unqualified_id.h"
+#include "template_argument.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
-
-class template_argument;
 
 class template_id: public identifier_or_template_id, public unqualified_id
 {
@@ -48,14 +48,14 @@ class template_id: public identifier_or_template_id, public unqualified_id
 		get_identifier() const;
 
 		inline
-		const std::shared_ptr<const util::sequence<template_argument, util::extern_strings::comma>>
+		const boost::optional<const util::sequence<template_argument, util::extern_strings::comma>&>
 		get_template_argument_list() const;
 
 		SOCOA_CPP_DEFINE_VISITABLE()
 
 	private:
 		identifier identifier_;
-		std::shared_ptr<util::sequence<template_argument, util::extern_strings::comma>> template_argument_list_;
+		boost::optional<util::sequence<template_argument, util::extern_strings::comma>> template_argument_list_;
 };
 
 inline
@@ -66,10 +66,10 @@ template_id::get_identifier() const
 }
 
 inline
-const std::shared_ptr<const util::sequence<template_argument, util::extern_strings::comma>>
+const boost::optional<const util::sequence<template_argument, util::extern_strings::comma>&>
 template_id::get_template_argument_list() const
 {
-	return template_argument_list_;
+	return boost::optional<const util::sequence<template_argument, util::extern_strings::comma>&>(template_argument_list_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

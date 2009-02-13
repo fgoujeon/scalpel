@@ -22,15 +22,15 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_CLASS_HEAD_H
 
 #include <memory>
+#include <boost/optional.hpp>
 #include "class_key.h"
+#include "nested_name_specifier.h"
+#include "template_id.h"
+#include "identifier.h"
+#include "base_clause.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
-
-class nested_name_specifier;
-class template_id;
-class identifier;
-class base_clause;
 
 class class_head
 {
@@ -49,27 +49,27 @@ class class_head
         get_class_key() const;
 
         inline
-        const std::shared_ptr<const nested_name_specifier>
+        const boost::optional<const nested_name_specifier&>
         get_nested_name_specifier() const;
 
         inline
-        const std::shared_ptr<const template_id>
+        const boost::optional<const template_id&>
         get_template_id() const;
 
         inline
-        const std::shared_ptr<const identifier>
+        const boost::optional<const identifier&>
         get_identifier() const;
 
         inline
-        const std::shared_ptr<const base_clause>
+        const boost::optional<const base_clause&>
         get_base_clause() const;
 
     private:
         class_key class_key_;
-        std::shared_ptr<nested_name_specifier> nested_name_specifier_;
-        std::shared_ptr<template_id> template_id_;
-        std::shared_ptr<identifier> identifier_;
-        std::shared_ptr<base_clause> base_clause_;
+        boost::optional<nested_name_specifier> nested_name_specifier_;
+        boost::optional<template_id> template_id_;
+        boost::optional<identifier> identifier_;
+        boost::optional<base_clause> base_clause_;
 };
 
 inline
@@ -80,31 +80,31 @@ class_head::get_class_key() const
 }
 
 inline
-const std::shared_ptr<const nested_name_specifier>
+const boost::optional<const nested_name_specifier&>
 class_head::get_nested_name_specifier() const
 {
-    return nested_name_specifier_;
+    return boost::optional<const nested_name_specifier&>(nested_name_specifier_);
 }
 
 inline
-const std::shared_ptr<const template_id>
+const boost::optional<const template_id&>
 class_head::get_template_id() const
 {
-    return template_id_;
+    return boost::optional<const template_id&>(template_id_);
 }
 
 inline
-const std::shared_ptr<const identifier>
+const boost::optional<const identifier&>
 class_head::get_identifier() const
 {
-    return identifier_;
+    return boost::optional<const identifier&>(identifier_);
 }
 
 inline
-const std::shared_ptr<const base_clause>
+const boost::optional<const base_clause&>
 class_head::get_base_clause() const
 {
-    return base_clause_;
+    return boost::optional<const base_clause&>(base_clause_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

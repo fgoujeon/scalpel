@@ -31,12 +31,16 @@ class_head::class_head
     std::shared_ptr<identifier> an_identifier,
     std::shared_ptr<base_clause> a_base_clause
 ):
-    class_key_(a_class_key),
+    class_key_(a_class_key)/*,
     nested_name_specifier_(a_nested_name_specifier),
     template_id_(a_template_id),
     identifier_(an_identifier),
-    base_clause_(a_base_clause)
+    base_clause_(a_base_clause)*/
 {
+	if(a_nested_name_specifier) nested_name_specifier_ = *a_nested_name_specifier;
+	if(a_template_id) template_id_ = *a_template_id;
+	if(an_identifier) identifier_ = *an_identifier;
+	if(a_base_clause) base_clause_ = *a_base_clause;
 }
 
 

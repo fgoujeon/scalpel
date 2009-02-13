@@ -18,21 +18,16 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "member_declaration_member_declarator_list.h"
+#ifndef SOCOA_CPP_SYNTAX_TREE_DECLARATION_SEQ_H
+#define SOCOA_CPP_SYNTAX_TREE_DECLARATION_SEQ_H
+
+#include "../../util/sequence.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-member_declaration_member_declarator_list::member_declaration_member_declarator_list
-(
-    std::shared_ptr<util::sequence<decl_specifier>> a_decl_specifier_seq,
-    std::shared_ptr<util::sequence<member_declarator, util::extern_strings::comma>> a_member_declarator_list
-)/*:
-    decl_specifier_seq_(a_decl_specifier_seq),
-    member_declarator_list_(a_member_declarator_list)*/
-{
-	if(a_decl_specifier_seq) decl_specifier_seq_ = *a_decl_specifier_seq;
-	if(a_member_declarator_list) member_declarator_list_ = *a_member_declarator_list;
-}
+typedef util::sequence<declaration> declaration_seq;
 
 }}} //namespace socoa::cpp::syntax_tree
+
+#endif

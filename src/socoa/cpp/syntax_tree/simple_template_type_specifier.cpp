@@ -30,8 +30,8 @@ simple_template_type_specifier::simple_template_type_specifier
     std::shared_ptr<template_id> a_template_id
 ):
     leading_double_colon_(leading_double_colon),
-    nested_name_specifier_(a_nested_name_specifier),
-    template_id_(a_template_id)
+    nested_name_specifier_(*a_nested_name_specifier),
+    template_id_(*a_template_id)
 {
 }
 

@@ -54,8 +54,7 @@ target_link_libraries(
 	${Boost_LIBRARIES}
 )
 
-#export
-export(
-	TARGETS socoa
-    FILE socoa.cmake
+add_subdirectory(
+	test
 )
+

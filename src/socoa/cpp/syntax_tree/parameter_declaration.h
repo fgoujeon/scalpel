@@ -22,12 +22,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_PARAMETER_DECLARATION_H
 
 #include <memory>
+#include <boost/optional.hpp>
+#include "declarator.h"
 #include "../../util/sequence.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class declarator;
 class decl_specifier;
 
 class parameter_declaration
@@ -45,7 +46,7 @@ class parameter_declaration
 		get_decl_specifier_seq() const;
 
 		inline
-		const std::shared_ptr<const declarator>
+		const boost::optional<const declarator&>
 		get_declarator() const;
 
 		inline
@@ -54,7 +55,7 @@ class parameter_declaration
 
 	private:
 		util::sequence<decl_specifier> decl_specifier_seq_;
-		std::shared_ptr<declarator> declarator_;
+		boost::optional<declarator> declarator_;
 		bool equal_;
 };
 
@@ -66,10 +67,10 @@ parameter_declaration::get_decl_specifier_seq() const
 }
 
 inline
-const std::shared_ptr<const declarator>
+const boost::optional<const declarator&>
 parameter_declaration::get_declarator() const
 {
-	return declarator_;
+	return boost::optional<const declarator&>(declarator_);
 }
 
 inline

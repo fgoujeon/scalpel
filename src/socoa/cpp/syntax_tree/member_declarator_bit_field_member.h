@@ -22,13 +22,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_MEMBER_DECLARATOR_BIT_FIELD_MEMBER_H
 
 #include <memory>
+#include <boost/optional.hpp>
 #include "visitor.h"
 #include "member_declarator.h"
+#include "identifier.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
-
-class identifier;
 
 class member_declarator_bit_field_member: public member_declarator
 {
@@ -39,20 +39,20 @@ class member_declarator_bit_field_member: public member_declarator
 		);
 
 		inline
-		const std::shared_ptr<const identifier>
+		const boost::optional<const identifier&>
 		get_identifier() const;
 
 		SOCOA_CPP_DEFINE_VISITABLE()
 
 	private:
-		std::shared_ptr<identifier> identifier_;
+		boost::optional<identifier> identifier_;
 };
 
 inline
-const std::shared_ptr<const identifier>
+const boost::optional<const identifier&>
 member_declarator_bit_field_member::get_identifier() const
 {
-	return identifier_;
+	return boost::optional<const identifier&>(identifier_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

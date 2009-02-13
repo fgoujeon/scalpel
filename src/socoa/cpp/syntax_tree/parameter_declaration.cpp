@@ -30,9 +30,10 @@ parameter_declaration::parameter_declaration
 	bool equal
 ):
 	decl_specifier_seq_(a_decl_specifier_seq),
-	declarator_(a_declarator),
+	//declarator_(a_declarator),
 	equal_(equal)
 {
+	if(a_declarator) declarator_ = *a_declarator;
 }
 
 }}} //namespace socoa::cpp::syntax_tree

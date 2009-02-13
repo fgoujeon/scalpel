@@ -22,13 +22,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_MEMBER_DECLARATOR_DECLARATOR_H
 
 #include <memory>
+#include <boost/optional.hpp>
 #include "visitor.h"
 #include "member_declarator.h"
+#include "declarator.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
-
-class declarator;
 
 class member_declarator_declarator: public member_declarator
 {
@@ -40,7 +40,7 @@ class member_declarator_declarator: public member_declarator
 		);
 
 		inline
-		const std::shared_ptr<const declarator>
+		const boost::optional<const declarator&>
 		get_declarator() const;
 
 		inline
@@ -50,15 +50,15 @@ class member_declarator_declarator: public member_declarator
 		SOCOA_CPP_DEFINE_VISITABLE()
 
 	private:
-		std::shared_ptr<declarator> declarator_;
+		boost::optional<declarator> declarator_;
 		bool pure_specifier_;
 };
 
 inline
-const std::shared_ptr<const declarator>
+const boost::optional<const declarator&>
 member_declarator_declarator::get_declarator() const
 {
-	return declarator_;
+	return boost::optional<const declarator&>(declarator_);
 }
 
 inline

@@ -22,6 +22,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_PARAMETER_DECLARATION_CLAUSE_H
 
 #include <memory>
+#include <boost/optional.hpp>
 #include "../../util/sequence.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
@@ -40,7 +41,7 @@ class parameter_declaration_clause
 		);
 
 		inline
-		const std::shared_ptr<const util::sequence<parameter_declaration, util::extern_strings::comma>>
+		const boost::optional<const util::sequence<parameter_declaration, util::extern_strings::comma>&>
 		get_parameter_declaration_list() const;
 
 		inline
@@ -52,16 +53,16 @@ class parameter_declaration_clause
 		has_ellipsis() const;
 
 	private:
-		std::shared_ptr<util::sequence<parameter_declaration, util::extern_strings::comma>> parameter_declaration_list_;
+		boost::optional<util::sequence<parameter_declaration, util::extern_strings::comma>> parameter_declaration_list_;
 		bool trailing_comma_;
 		bool ellipsis_;
 };
 
 inline
-const std::shared_ptr<const util::sequence<parameter_declaration, util::extern_strings::comma>>
+const boost::optional<const util::sequence<parameter_declaration, util::extern_strings::comma>&>
 parameter_declaration_clause::get_parameter_declaration_list() const
 {
-	return parameter_declaration_list_;
+	return boost::optional<const util::sequence<parameter_declaration, util::extern_strings::comma>&>(parameter_declaration_list_);
 }
 
 inline

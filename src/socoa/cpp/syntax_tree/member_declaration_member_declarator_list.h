@@ -22,16 +22,16 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_MEMBER_DECLARATION_MEMBER_DECLARATOR_LIST_H
 
 #include <memory>
+#include <boost/optional.hpp>
 #include "visitor.h"
 #include "member_declaration.h"
 #include "member_declarator_list.h"
+#include "decl_specifier.h"
+#include "member_declarator.h"
 #include "../../util/sequence.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
-
-class decl_specifier;
-class member_declarator;
 
 class member_declaration_member_declarator_list: public member_declaration
 {
@@ -43,32 +43,32 @@ class member_declaration_member_declarator_list: public member_declaration
 		);
 
 		inline
-		const std::shared_ptr<const util::sequence<decl_specifier>>
+		const boost::optional<const util::sequence<decl_specifier>&>
 		get_decl_specifier_seq() const;
 
 		inline
-		const std::shared_ptr<const util::sequence<member_declarator, util::extern_strings::comma>>
+		const boost::optional<const util::sequence<member_declarator, util::extern_strings::comma>&>
 		get_member_declarator_list() const;
 
 		SOCOA_CPP_DEFINE_VISITABLE()
 
 	private:
-		std::shared_ptr<util::sequence<decl_specifier>> decl_specifier_seq_;
-		std::shared_ptr<member_declarator_list_t> member_declarator_list_;
+		boost::optional<util::sequence<decl_specifier>> decl_specifier_seq_;
+		boost::optional<member_declarator_list_t> member_declarator_list_;
 };
 
 inline
-const std::shared_ptr<const util::sequence<decl_specifier>>
+const boost::optional<const util::sequence<decl_specifier>&>
 member_declaration_member_declarator_list::get_decl_specifier_seq() const
 {
-	return decl_specifier_seq_;
+	return boost::optional<const util::sequence<decl_specifier>&>(decl_specifier_seq_);
 }
 
 inline
-const std::shared_ptr<const member_declarator_list_t>
+const boost::optional<const member_declarator_list_t&>
 member_declaration_member_declarator_list::get_member_declarator_list() const
 {
-	return member_declarator_list_;
+	return boost::optional<const member_declarator_list_t&>(member_declarator_list_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

@@ -112,6 +112,10 @@ class syntax_tree_to_string_converter: public syntax_tree::visitor
         void
         safe_convert(const std::shared_ptr<T> item);
 
+        template<class T>
+        void
+        safe_convert(const boost::optional<T> item);
+
         VISIT_DEFINITION(identifier)
         VISIT_DEFINITION(qualified_nested_id)
         VISIT_DEFINITION(qualified_operator_function_id)
@@ -222,6 +226,14 @@ syntax_tree_to_string_converter::safe_convert(T item)
 template<class T>
 void
 syntax_tree_to_string_converter::safe_convert(const std::shared_ptr<T> item)
+{
+    if(item)
+        convert(*item);
+}
+
+template<class T>
+void
+syntax_tree_to_string_converter::safe_convert(const boost::optional<T> item)
 {
     if(item)
         convert(*item);

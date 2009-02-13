@@ -22,16 +22,16 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_SIMPLE_DECLARATION_H
 
 #include <memory>
+#include <boost/optional.hpp>
 #include "visitor.h"
 #include "block_declaration.h"
+#include "init_declarator.h"
+#include "decl_specifier.h"
 #include "../../util/sequence.h"
 #include "../../util/extern_strings.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
-
-class init_declarator;
-class decl_specifier;
 
 class simple_declaration: public block_declaration
 {
@@ -43,32 +43,32 @@ class simple_declaration: public block_declaration
 		);
 
 		inline
-		const std::shared_ptr<const util::sequence<decl_specifier>>
+		const boost::optional<const util::sequence<decl_specifier>&>
 		get_decl_specifier_seq() const;
 
 		inline
-		const std::shared_ptr<const util::sequence<init_declarator, util::extern_strings::comma>>
+		const boost::optional<const util::sequence<init_declarator, util::extern_strings::comma>&>
 		get_init_declarator_list() const;
 
 		SOCOA_CPP_DEFINE_VISITABLE()
 
 	private:
-		std::shared_ptr<util::sequence<decl_specifier>> decl_specifier_seq_;
-		std::shared_ptr<util::sequence<init_declarator, util::extern_strings::comma>> init_declarator_list_;
+		boost::optional<util::sequence<decl_specifier>> decl_specifier_seq_;
+		boost::optional<util::sequence<init_declarator, util::extern_strings::comma>> init_declarator_list_;
 };
 
 inline
-const std::shared_ptr<const util::sequence<decl_specifier>>
+const boost::optional<const util::sequence<decl_specifier>&>
 simple_declaration::get_decl_specifier_seq() const
 {
-	return decl_specifier_seq_;
+	return boost::optional<const util::sequence<decl_specifier>&>(decl_specifier_seq_);
 }
 
 inline
-const std::shared_ptr<const util::sequence<init_declarator, util::extern_strings::comma>>
+const boost::optional<const util::sequence<init_declarator, util::extern_strings::comma>&>
 simple_declaration::get_init_declarator_list() const
 {
-	return init_declarator_list_;
+	return boost::optional<const util::sequence<init_declarator, util::extern_strings::comma>&>(init_declarator_list_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

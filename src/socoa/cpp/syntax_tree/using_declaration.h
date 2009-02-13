@@ -22,14 +22,15 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_USING_DECLARATION_H
 
 #include <memory>
+#include <boost/optional.hpp>
 #include "visitor.h"
 #include "member_declaration.h"
 #include "block_declaration.h"
+#include "nested_name_specifier.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class nested_name_specifier;
 class unqualified_id;
 
 class using_declaration: public member_declaration, public block_declaration
@@ -52,7 +53,7 @@ class using_declaration: public member_declaration, public block_declaration
 		has_leading_double_colon() const;
 
 		inline
-		const std::shared_ptr<const nested_name_specifier>
+		const boost::optional<const nested_name_specifier&>
 		get_nested_name_specifier() const;
 
 		inline
@@ -64,7 +65,7 @@ class using_declaration: public member_declaration, public block_declaration
 	private:
 		bool typename_keyword_;
 		bool leading_double_colon_;
-		std::shared_ptr<nested_name_specifier> nested_name_specifier_;
+		boost::optional<nested_name_specifier> nested_name_specifier_;
 		std::shared_ptr<unqualified_id> unqualified_id_;
 };
 
@@ -83,10 +84,10 @@ using_declaration::has_leading_double_colon() const
 }
 
 inline
-const std::shared_ptr<const nested_name_specifier>
+const boost::optional<const nested_name_specifier&>
 using_declaration::get_nested_name_specifier() const
 {
-	return nested_name_specifier_;
+	return boost::optional<const nested_name_specifier&>(nested_name_specifier_);
 }
 
 inline

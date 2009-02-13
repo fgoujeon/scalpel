@@ -28,9 +28,10 @@ template_id::template_id
     identifier&& an_identifier,
     std::shared_ptr<util::sequence<template_argument, util::extern_strings::comma>> a_template_argument_list
 ):
-    identifier_(an_identifier),
-    template_argument_list_(a_template_argument_list)
+    identifier_(an_identifier)//,
+//    template_argument_list_(a_template_argument_list)
 {
+	if(a_template_argument_list) template_argument_list_ = *a_template_argument_list;
 }
 
 }}} //namespace socoa::cpp::syntax_tree

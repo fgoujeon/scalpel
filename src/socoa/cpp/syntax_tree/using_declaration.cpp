@@ -32,9 +32,10 @@ using_declaration::using_declaration
 ):
     typename_keyword_(typename_keyword),
     leading_double_colon_(leading_double_colon),
-    nested_name_specifier_(a_nested_name_specifier),
+//    nested_name_specifier_(a_nested_name_specifier),
     unqualified_id_(an_unqualified_id)
 {
+	if(a_nested_name_specifier) nested_name_specifier_ = *a_nested_name_specifier;
 }
 
 }}} //namespace socoa::cpp::syntax_tree

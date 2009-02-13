@@ -26,9 +26,10 @@ namespace socoa { namespace cpp { namespace syntax_tree
 member_declarator_bit_field_member::member_declarator_bit_field_member
 (
     std::shared_ptr<identifier> an_identifier
-):
-    identifier_(an_identifier)
+)/*:
+    identifier_(an_identifier)*/
 {
+	if(an_identifier) identifier_ = *an_identifier;
 }
 
 }}} //namespace socoa::cpp::syntax_tree

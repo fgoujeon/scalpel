@@ -29,10 +29,12 @@ function_definition::function_definition
     declarator&& a_declarator,
     std::shared_ptr<ctor_initializer> a_ctor_initializer
 ):
-    decl_specifier_seq_(a_decl_specifier_seq),
-    declarator_(a_declarator),
-    ctor_initializer_(a_ctor_initializer)
+//    decl_specifier_seq_(a_decl_specifier_seq),
+    declarator_(a_declarator)/*,
+    ctor_initializer_(a_ctor_initializer)*/
 {
+	if(a_decl_specifier_seq) decl_specifier_seq_ = *a_decl_specifier_seq;
+	if(a_ctor_initializer) ctor_initializer_ = *a_ctor_initializer;
 }
 
 }}} //namespace socoa::cpp::syntax_tree

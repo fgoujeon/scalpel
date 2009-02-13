@@ -27,10 +27,12 @@ namespace_definition::namespace_definition
 (
     std::shared_ptr<identifier> an_identifier,
     std::shared_ptr<util::sequence<declaration>> a_declaration_seq
-):
+)/*:
     identifier_(an_identifier),
-    declaration_seq_(a_declaration_seq)
+    declaration_seq_(a_declaration_seq)*/
 {
+	if(an_identifier) identifier_ = *an_identifier;
+	if(a_declaration_seq) declaration_seq_ = *a_declaration_seq;
 }
 
 }}} //namespace socoa::cpp::syntax_tree
