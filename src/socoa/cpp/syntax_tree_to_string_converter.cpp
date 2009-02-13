@@ -182,10 +182,10 @@ syntax_tree_to_string_converter::convert(const init_declarator& item)
 void
 syntax_tree_to_string_converter::convert(const declarator& item)
 {
-    const std::vector<std::shared_ptr<ptr_operator>>& ptr_operators = item.get_ptr_operators();
-    for(std::vector<std::shared_ptr<ptr_operator>>::const_iterator i = ptr_operators.begin(); i != ptr_operators.end(); ++i)
+    const std::vector<ptr_operator>& ptr_operators = item.get_ptr_operators();
+    for(std::vector<ptr_operator>::const_iterator i = ptr_operators.begin(); i != ptr_operators.end(); ++i)
     {
-        safe_convert(**i);
+        safe_convert(*i);
     }
 
     safe_convert(item.get_direct_declarator());

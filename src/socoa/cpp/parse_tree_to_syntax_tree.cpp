@@ -451,19 +451,13 @@ convert_declarator(const tree_node_t& node)
 
     return std::make_shared<declarator>
     (
-        declarator
-        {
-            std::move
-            (
-                convert_nodes
-                (
-                    node,
-                    grammar::PTR_OPERATOR,
-                    &convert_ptr_operator
-                )
-            ),
-            *ASSERTED_CONVERT_NODE(direct_declarator, DIRECT_DECLARATOR)
-        }
+		convert_nodes
+		(
+			node,
+			grammar::PTR_OPERATOR,
+			&convert_ptr_operator
+		),
+		*ASSERTED_CONVERT_NODE(direct_declarator, DIRECT_DECLARATOR)
     );
 }
 

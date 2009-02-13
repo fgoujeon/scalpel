@@ -25,7 +25,7 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 declarator::declarator
 (
-    std::vector<std::shared_ptr<ptr_operator>>&& ptr_operators,
+    std::vector<ptr_operator>&& ptr_operators,
     direct_declarator&& a_direct_declarator
 ):
     ptr_operators_(ptr_operators),

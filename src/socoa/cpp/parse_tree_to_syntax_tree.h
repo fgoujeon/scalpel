@@ -301,7 +301,7 @@ namespace parse_tree_to_syntax_tree
             evaluated node
     */
     template <class T>
-    std::vector<std::shared_ptr<T>>
+    std::vector<T>
     convert_nodes
     (
         const tree_node_t& parent_node,
@@ -477,7 +477,7 @@ namespace parse_tree_to_syntax_tree
     }
 
     template <class T>
-    std::vector<std::shared_ptr<T>>
+    std::vector<T>
     convert_nodes
     (
         const tree_node_t& parent_node,
@@ -485,14 +485,16 @@ namespace parse_tree_to_syntax_tree
         std::shared_ptr<T> (*convert_function)(const tree_node_t&)
     )
     {
-        std::vector<std::shared_ptr<T>> seq;
+        std::vector<T> seq;
         for(tree_node_iterator_t i = parent_node.children.begin(); i != parent_node.children.end(); ++i) //for each child
         {
             const tree_node_t& child_node = *i;
 
             if(child_node.value.id() == id)
             {
-                seq.push_back((*convert_function)(child_node));
+				std::shared_ptr<T> item = (*convert_function)(child_node);
+				if(item)
+					seq.push_back(*item);
             }
         }
 
