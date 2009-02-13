@@ -311,7 +311,7 @@ convert_decl_specifier(const tree_node_t& node)
 {
     assert(node.value.id() == grammar::DECL_SPECIFIER);
 
-    return convert_only_child_node
+ /*   auto child_node_value = convert_only_child_node
     (
         node,
         convert_function_typedefs<decl_specifier>::id_function_map_t
@@ -321,7 +321,17 @@ convert_decl_specifier(const tree_node_t& node)
             //{grammar::FUNCTION_SPECIFIER, &convert_template_declaration));
         },
         false
-    );
+    );*/
+
+	if(node.children.begin()->value.id() == grammar::TYPE_SPECIFIER)
+	{
+		auto child_node_value = convert_type_specifier(*(node.children.begin()));
+		return std::make_shared<decl_specifier>(child_node_value);
+	}
+	else
+	{
+		return std::shared_ptr<decl_specifier>();
+	}
 }
 
 std::shared_ptr<type_specifier>

@@ -87,6 +87,9 @@ class syntax_tree_to_string_converter: public syntax_tree::visitor
         CONVERT_DECLARATION(template_id)
         CONVERT_DECLARATION(nested_identifier_or_template_id)
 
+		void
+		convert(const syntax_tree::decl_specifier_seq& seq);
+
         template<class T>
         void
         convert(const util::sequence<T, util::extern_strings::space>& seq);
@@ -115,6 +118,10 @@ class syntax_tree_to_string_converter: public syntax_tree::visitor
         template<class T>
         void
         safe_convert(const boost::optional<T> item);
+
+		template<class T, class U>
+		void
+		safe_convert(const boost::variant<T, U> item);
 
         VISIT_DEFINITION(identifier)
         VISIT_DEFINITION(qualified_nested_id)
@@ -237,6 +244,12 @@ syntax_tree_to_string_converter::safe_convert(const boost::optional<T> item)
 {
     if(item)
         convert(*item);
+}
+
+template<class T, class U>
+void
+syntax_tree_to_string_converter::safe_convert(const boost::variant<T, U> item)
+{
 }
 
 }} //namespace socoa::cpp

@@ -18,19 +18,19 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_TYPE_SPECIFIER_H
-#define SOCOA_CPP_SYNTAX_TREE_TYPE_SPECIFIER_H
+#ifndef SOCOA_CPP_SYNTAX_TREE_DECL_SPECIFIER_SEQ_H
+#define SOCOA_CPP_SYNTAX_TREE_DECL_SPECIFIER_SEQ_H
 
-#include "visitable.h"
+#include "../../util/sequence.h"
+#include "decl_specifier.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-struct type_specifier: public virtual visitable
-{
-	virtual
-	~type_specifier() = default;
-};
+typedef
+	util::sequence<decl_specifier>
+   	decl_specifier_seq
+;
 
 }}} //namespace socoa::cpp::syntax_tree
 

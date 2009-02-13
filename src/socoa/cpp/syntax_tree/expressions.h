@@ -26,7 +26,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-
+/*
 typedef util::sequence<, util::inequal_sign>                            inequality_expression;
 typedef util::sequence<inequality_expression, util::equal_sign>         equality_expression;
 typedef util::sequence<equality_expression, util::ampersand>            and_expression;
@@ -34,7 +34,7 @@ typedef util::sequence<and_expression, util::circumflex>                exclusiv
 typedef util::sequence<exclusive_or_expression, util::pipe>             inclusive_or_expression;
 typedef util::sequence<inclusive_or_expression, util::double_ampersand> logical_and_expression;
 typedef util::sequence<logical_and_expression, util::double_pipe>       logical_or_expression;
-
+*/
 }}} //namespace socoa::cpp::syntax_tree
 
 #endif

@@ -32,6 +32,8 @@ template<class T, const std::string& Separator = extern_strings::space>
 class sequence
 {
     public:
+		typedef std::vector<std::shared_ptr<T>> list_t;
+
         sequence();
 
         explicit sequence
@@ -39,16 +41,14 @@ class sequence
             std::vector<std::shared_ptr<T>>&& items
         );
 
-        const std::vector<std::shared_ptr<T>>&
+        const list_t&
         get_items() const;
 
         const std::string&
         get_separator() const;
 
-        static const std::string& separator;
-
     private:
-        std::vector<std::shared_ptr<T>> items_;
+        list_t items_;
 };
 
 template<class T, const std::string& Separator>
@@ -66,7 +66,7 @@ sequence<T, Separator>::sequence
 }
 
 template<class T, const std::string& Separator>
-const std::vector<std::shared_ptr<T>>&
+const typename sequence<T, Separator>::list_t&
 sequence<T, Separator>::get_items() const
 {
     return items_;
@@ -78,9 +78,6 @@ sequence<T, Separator>::get_separator() const
 {
     return Separator;
 }
-
-template<class T, const std::string& Separator>
-const std::string& sequence<T, Separator>::separator = Separator;
 
 }} //namespace socoa::util
 

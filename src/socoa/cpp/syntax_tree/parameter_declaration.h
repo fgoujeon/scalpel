@@ -24,12 +24,11 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <memory>
 #include <boost/optional.hpp>
 #include "declarator.h"
+#include "decl_specifier_seq.h"
 #include "../../util/sequence.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
-
-class decl_specifier;
 
 class parameter_declaration
 {
@@ -42,7 +41,7 @@ class parameter_declaration
 		);
 
 		inline
-		const util::sequence<decl_specifier>
+		const decl_specifier_seq&
 		get_decl_specifier_seq() const;
 
 		inline
@@ -54,13 +53,13 @@ class parameter_declaration
 		has_equal() const;
 
 	private:
-		util::sequence<decl_specifier> decl_specifier_seq_;
+		decl_specifier_seq decl_specifier_seq_;
 		boost::optional<declarator> declarator_;
 		bool equal_;
 };
 
 inline
-const util::sequence<decl_specifier>
+const decl_specifier_seq&
 parameter_declaration::get_decl_specifier_seq() const
 {
 	return decl_specifier_seq_;

@@ -503,6 +503,27 @@ syntax_tree_to_string_converter::convert
     convert_visitable(seq);
 }
 
+
+/**@todo to be factorized*/
+void
+syntax_tree_to_string_converter::convert(const syntax_tree::decl_specifier_seq& seq)
+{
+    typedef syntax_tree::decl_specifier_seq::list_t item_list_t;
+
+    for(item_list_t::const_iterator i = seq.get_items().begin(); i != seq.get_items().end(); ++i)
+    {
+        if(*i)
+		{
+			auto var = **i;
+			if(std::shared_ptr<syntax_tree::type_specifier>* type_spec = boost::get<std::shared_ptr<syntax_tree::type_specifier>>(&var))
+			{
+				if(type_spec)
+					(*type_spec)->accept(*this);
+			}
+		}
+    }
+}
+
 void
 syntax_tree_to_string_converter::add_space()
 {
