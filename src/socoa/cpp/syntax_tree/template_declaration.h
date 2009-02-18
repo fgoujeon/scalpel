@@ -21,22 +21,19 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_TEMPLATE_DECLARATION_H
 #define SOCOA_CPP_SYNTAX_TREE_TEMPLATE_DECLARATION_H
 
-#include <memory>
-#include "visitor.h"
 #include "declaration.h"
-#include "member_declaration.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class template_declaration: public declaration, public member_declaration
+class template_declaration
 {
 	public:
 		template_declaration
 		(
 			bool export_keyword,
 			//template_parameter_list m_template_parameter_list;
-			std::shared_ptr<declaration> a_declaration
+			declaration&& a_declaration
 		);
 
 		inline
@@ -44,15 +41,13 @@ class template_declaration: public declaration, public member_declaration
 		has_export_keyword() const;
 
 		inline
-		const std::shared_ptr<const declaration>
+		const declaration&
 		get_declaration() const;
-
-		SOCOA_CPP_DEFINE_VISITABLE()
 
 	private:
 		bool export_keyword_;
 		//template_parameter_list m_template_parameter_list;
-		std::shared_ptr<declaration> declaration_;
+		declaration declaration_;
 };
 
 inline
@@ -63,7 +58,7 @@ template_declaration::has_export_keyword() const
 }
 
 inline
-const std::shared_ptr<const declaration>
+const declaration&
 template_declaration::get_declaration() const
 {
 	return declaration_;

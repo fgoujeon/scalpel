@@ -21,16 +21,21 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_MEM_INITIALIZER_ID_H
 #define SOCOA_CPP_SYNTAX_TREE_MEM_INITIALIZER_ID_H
 
-#include "visitable.h"
+#include <boost/variant.hpp>
+//#include "mem_initializer_list.h"
+#include "identifier.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-struct mem_initializer_id: virtual public visitable
-{
-    virtual
-	~mem_initializer_id(){};
-};
+typedef
+	boost::variant
+	<
+		//mem_initializer_list,
+		identifier
+	>
+	mem_initializer_id
+;
 
 }}} //namespace socoa::cpp::syntax_tree
 

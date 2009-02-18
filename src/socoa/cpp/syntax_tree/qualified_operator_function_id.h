@@ -21,16 +21,14 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_QUALIFIED_OPERATOR_FUNCTION_ID_H
 #define SOCOA_CPP_SYNTAX_TREE_QUALIFIED_OPERATOR_FUNCTION_ID_H
 
-#include "visitor.h"
 #include "qualified_id.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class qualified_operator_function_id: public qualified_id
+class qualified_operator_function_id
 {
     public:
-        SOCOA_CPP_DEFINE_VISITABLE()
 
 };
 

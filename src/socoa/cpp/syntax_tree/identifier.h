@@ -22,20 +22,11 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_IDENTIFIER_H
 
 #include <string>
-#include "visitor.h"
-#include "unqualified_id.h"
-#include "nested_name_specifier_part.h"
-#include "identifier_or_template_id.h"
-#include "mem_initializer_id.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class identifier:
-    public unqualified_id,
-    public nested_name_specifier_part,
-    public identifier_or_template_id,
-    public mem_initializer_id
+class identifier
 {
 	public:
 		explicit
@@ -44,8 +35,6 @@ class identifier:
 		inline
 		const std::string&
 		get_value() const;
-
-		SOCOA_CPP_DEFINE_VISITABLE()
 
 	private:
 		std::string value_;

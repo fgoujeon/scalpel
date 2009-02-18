@@ -27,15 +27,14 @@ using_declaration::using_declaration
 (
     bool typename_keyword,
     bool leading_double_colon,
-    std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
-    std::shared_ptr<unqualified_id> an_unqualified_id
+    boost::optional<nested_name_specifier> a_nested_name_specifier,
+    boost::optional<unqualified_id> an_unqualified_id
 ):
     typename_keyword_(typename_keyword),
     leading_double_colon_(leading_double_colon),
-//    nested_name_specifier_(a_nested_name_specifier),
+    nested_name_specifier_(a_nested_name_specifier),
     unqualified_id_(an_unqualified_id)
 {
-	if(a_nested_name_specifier) nested_name_specifier_ = *a_nested_name_specifier;
 }
 
 }}} //namespace socoa::cpp::syntax_tree

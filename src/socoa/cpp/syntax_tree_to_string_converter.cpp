@@ -33,11 +33,11 @@ syntax_tree_to_string_converter::syntax_tree_to_string_converter():
 }
 
 std::string
-syntax_tree_to_string_converter::operator()(const std::shared_ptr<util::sequence<declaration>> translation_unit)
+syntax_tree_to_string_converter::operator()(const syntax_tree_t& a_syntax_tree)
 {
     result_.str("");
     m_indentation_level = 0;
-    safe_convert(*translation_unit);
+    //convert(a_syntax_tree);
     return result_.str();
 }
 
@@ -59,7 +59,7 @@ syntax_tree_to_string_converter::convert(const qualified_nested_id& item)
     if(item.has_template_keyword())
         result_ << "template ";
 
-    item.get_unqualified_id()->accept(*this);
+    //item.get_unqualified_id()->accept(*this);
 }
 
 void
@@ -87,16 +87,16 @@ syntax_tree_to_string_converter::convert(const qualified_identifier& item)
 void
 syntax_tree_to_string_converter::convert(const nested_name_specifier& item)
 {
-    item.get_identifier_or_template_id()->accept(*this);
+    //item.get_identifier_or_template_id()->accept(*this);
     result_ << "::";
     for
     (
-        std::vector<std::shared_ptr<nested_name_specifier_part>>::const_iterator i = item.get_parts().begin();
+        std::vector<nested_name_specifier_part>::const_iterator i = item.get_parts().begin();
         i != item.get_parts().end();
         ++i
     )
     {
-        (**i).accept(*this);
+        //(**i).accept(*this);
         result_ << "::";
     }
 }
@@ -151,7 +151,7 @@ syntax_tree_to_string_converter::convert(const using_declaration& item)
 
     safe_convert(item.get_nested_name_specifier());
 
-    item.get_unqualified_id()->accept(*this);
+    //item.get_unqualified_id()->accept(*this);
 
     result_ << ";";
     result_ << new_line();
@@ -194,13 +194,13 @@ syntax_tree_to_string_converter::convert(const declarator& item)
 void
 syntax_tree_to_string_converter::convert(const direct_declarator& item)
 {
-    const std::shared_ptr<const declarator_id> a_declarator_id = item.get_declarator_id();
+    const boost::optional<const declarator_id&> a_declarator_id = item.get_declarator_id();
     if(a_declarator_id)
     {
-        a_declarator_id->accept(*this);
+        //a_declarator_id->accept(*this);
     }
 
-    const std::shared_ptr<const declarator> a_declarator = item.get_declarator();
+    const boost::optional<const declarator&> a_declarator = item.get_declarator();
     if(a_declarator)
     {
         result_ << '(';
@@ -208,15 +208,15 @@ syntax_tree_to_string_converter::convert(const direct_declarator& item)
         result_ << ')';
     }
 
-    const std::vector<std::shared_ptr<direct_declarator_part>>& other_parts = item.get_other_parts();
+    const std::vector<direct_declarator_part>& other_parts = item.get_other_parts();
     for
     (
-        std::vector<std::shared_ptr<direct_declarator_part>>::const_iterator i = other_parts.begin();
+        std::vector<direct_declarator_part>::const_iterator i = other_parts.begin();
         i != other_parts.end();
         ++i
     )
     {
-        (**i).accept(*this);
+        //(**i).accept(*this);
     }
 }
 
@@ -229,7 +229,7 @@ syntax_tree_to_string_converter::convert(const direct_declarator_function_part& 
 
     if(item.get_cv_qualifier_seq())
         result_ << ' ';
-    safe_convert(item.get_cv_qualifier_seq());
+    ///@todo safe_convert(item.get_cv_qualifier_seq());
 }
 
 void
@@ -256,7 +256,7 @@ syntax_tree_to_string_converter::convert(const ptr_operator& item)
             break;
     }
 
-    safe_convert(item.get_cv_qualifier_seq());
+    ///@todo safe_convert(item.get_cv_qualifier_seq());
 }
 
 void
@@ -340,13 +340,12 @@ syntax_tree_to_string_converter::convert(const member_specification& item)
 {
     for
     (
-        std::vector<std::shared_ptr<member_specification_part>>::const_iterator i = item.get_parts().begin();
+        std::vector<member_specification_part>::const_iterator i = item.get_parts().begin();
         i != item.get_parts().end();
         ++i
     )
     {
-        assert(*i);
-        (**i).accept(*this);
+        //(**i).accept(*this);
     }
 }
 
@@ -382,7 +381,7 @@ syntax_tree_to_string_converter::convert(const member_declaration_unqualified_id
     if(item.has_template_keyword())
         result_ << "template ";
 
-    item.get_unqualified_id()->accept(*this);
+//    item.get_unqualified_id()->accept(*this);
 
     result_ << ";" << new_line();
 }
@@ -426,7 +425,7 @@ syntax_tree_to_string_converter::convert(const mem_initializer& item)
 {
     result_ << new_line();
     result_ << indentation();
-    item.get_mem_initializer_id()->accept(*this);
+//    item.get_mem_initializer_id()->accept(*this);
     result_ << "(";
     //safe_convert(item.expression_list_);
     result_ << ")";
@@ -444,7 +443,7 @@ syntax_tree_to_string_converter::convert(const template_declaration& item)
     result_ << "<";
     result_ << ">\n";
 
-    item.get_declaration()->accept(*this);
+//    item.get_declaration()->accept(*this);
 }
 
 void
@@ -475,34 +474,8 @@ syntax_tree_to_string_converter::convert(const nested_identifier_or_template_id&
 
     safe_convert(item.get_nested_name_specifier());
 
-    item.get_identifier_or_template_id()->accept(*this);
+//    item.get_identifier_or_template_id()->accept(*this);
 }
-
-/**
-@todo could be simplified with C++0x concepts:
-    template<Visitable T>
-    ...
-*/
-//unlike other comma-separated list classes, these classes require visitation
-template<>
-void
-syntax_tree_to_string_converter::convert
-(
-    const util::sequence<syntax_tree::member_declarator, util::extern_strings::comma>& seq
-)
-{
-    convert_visitable(seq);
-}
-template<>
-void
-syntax_tree_to_string_converter::convert
-(
-    const util::sequence<syntax_tree::template_argument, util::extern_strings::comma>& seq
-)
-{
-    convert_visitable(seq);
-}
-
 
 /**@todo to be factorized*/
 void
@@ -512,14 +485,11 @@ syntax_tree_to_string_converter::convert(const syntax_tree::decl_specifier_seq& 
 
     for(item_list_t::const_iterator i = seq.get_items().begin(); i != seq.get_items().end(); ++i)
     {
-        if(*i)
+		auto var = *i;
+		if(syntax_tree::type_specifier* type_spec = boost::get<syntax_tree::type_specifier>(&var))
 		{
-			auto var = **i;
-			if(std::shared_ptr<syntax_tree::type_specifier>* type_spec = boost::get<std::shared_ptr<syntax_tree::type_specifier>>(&var))
-			{
-				if(type_spec)
-					(*type_spec)->accept(*this);
-			}
+			//if(type_spec)
+			//	(*type_spec)->accept(*this);
 		}
     }
 }

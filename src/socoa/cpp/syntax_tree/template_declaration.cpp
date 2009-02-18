@@ -27,7 +27,7 @@ template_declaration::template_declaration
 (
     bool export_keyword,
     //template_parameter_list m_template_parameter_list;
-    std::shared_ptr<declaration> a_declaration
+    declaration&& a_declaration
 ):
     export_keyword_(export_keyword),
     declaration_(a_declaration)

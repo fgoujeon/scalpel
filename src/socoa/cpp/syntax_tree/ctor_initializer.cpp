@@ -25,7 +25,7 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 ctor_initializer::ctor_initializer
 (
-    mem_initializer_list_t&& a_mem_initializer_list
+    mem_initializer_list&& a_mem_initializer_list
 ):
     mem_initializer_list_(a_mem_initializer_list)
 {

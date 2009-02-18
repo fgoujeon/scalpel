@@ -21,13 +21,10 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_CV_QUALIFIER_H
 #define SOCOA_CPP_SYNTAX_TREE_CV_QUALIFIER_H
 
-#include "visitor.h"
-#include "type_specifier.h"
-
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-struct cv_qualifier: public type_specifier
+struct cv_qualifier
 {
     public:
         enum type
@@ -43,8 +40,6 @@ struct cv_qualifier: public type_specifier
         inline
         type
         get_type() const;
-
-        SOCOA_CPP_DEFINE_VISITABLE()
 
     private:
         type type_;

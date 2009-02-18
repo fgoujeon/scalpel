@@ -1,21 +1,21 @@
 /*
 Socoa - Source Code Analysis Library
-Copyri.h"t © 2008, 2009  Florian Goujeon
+Copyright © 2008, 2009  Florian Goujeon
 
-.h"is file is part of Socoa.
+This file is part of Socoa.
 
 Socoa is free software: you can redistribute it and/or modify
-it under .h"e terms of .h"e GNU General Public License as publi.h"ed by
-.h"e Free Software Foundation, ei.h"er version 3 of .h"e License, or
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-Socoa is distributed in .h"e.h"ope .h"at it will be useful,
-but WITHOUT ANY WARRANTY; wi.h"out even .h"e implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See .h"e
+Socoa is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
-You .h"ould.h"ave received a copy of .h"e GNU General Public License
-along wi.h" Socoa.  If not, see .h"ttp://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License
+along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #ifndef SOCOA_CPP_SYNTAX_TREE_H
@@ -81,6 +81,7 @@ along wi.h" Socoa.  If not, see .h"ttp://www.gnu.org/licenses/>.
 #include "syntax_tree/simple_template_type_specifier.h"
 #include "syntax_tree/simple_type_specifier.h"
 #include "syntax_tree/template_argument.h"
+#include "syntax_tree/template_argument_list.h"
 #include "syntax_tree/template_declaration.h"
 #include "syntax_tree/template_id.h"
 #include "syntax_tree/type_id.h"
@@ -88,8 +89,6 @@ along wi.h" Socoa.  If not, see .h"ttp://www.gnu.org/licenses/>.
 #include "syntax_tree/unqualified_id.h"
 #include "syntax_tree/using_declaration.h"
 #include "syntax_tree/using_directive.h"
-#include "syntax_tree/visitable.h"
-#include "syntax_tree/visitor.h"
 
 namespace socoa { namespace cpp
 {

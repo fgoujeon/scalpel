@@ -21,16 +21,27 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_MEMBER_DECLARATION_H
 #define SOCOA_CPP_SYNTAX_TREE_MEMBER_DECLARATION_H
 
-#include "member_specification_part.h"
+#include <boost/variant.hpp>
+#include "member_declaration_function_definition.h"
+//#include "member_declaration_member_declarator_list.h"
+#include "member_declaration_unqualified_id.h"
+#include "using_declaration.h"
+#include "template_declaration.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-struct member_declaration: public member_specification_part
-{
-	virtual
-	~member_declaration() = default;
-};
+typedef
+	boost::variant
+	<
+		member_declaration_function_definition,
+		//member_declaration_member_declarator_list,
+		member_declaration_unqualified_id,
+		using_declaration,
+		template_declaration
+	>
+	member_declaration
+;
 
 }}} //namespace socoa::cpp::syntax_tree
 

@@ -22,45 +22,44 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_NESTED_NAME_SPECIFIER_H
 
 #include <vector>
-#include <memory>
+#include <boost/optional.hpp>
+#include "identifier_or_template_id.h"
+#include "nested_name_specifier_part.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
-
-class identifier_or_template_id;
-class nested_name_specifier_part;
 
 class nested_name_specifier
 {
 	public:
 		nested_name_specifier
 		(
-			std::shared_ptr<identifier_or_template_id> an_identifier_or_template_id,
-			std::vector<std::shared_ptr<nested_name_specifier_part>> parts
+			boost::optional<identifier_or_template_id> an_identifier_or_template_id,
+			std::vector<nested_name_specifier_part> parts
 		);
 
 		inline
-		const std::shared_ptr<const identifier_or_template_id>
+		const boost::optional<const identifier_or_template_id&>
 		get_identifier_or_template_id() const;
 
 		inline
-		const std::vector<std::shared_ptr<nested_name_specifier_part>>
+		const std::vector<nested_name_specifier_part>
 		get_parts() const;
 
 	private:
-		std::shared_ptr<identifier_or_template_id> identifier_or_template_id_;
-		std::vector<std::shared_ptr<nested_name_specifier_part>> parts_;
+		boost::optional<identifier_or_template_id> identifier_or_template_id_;
+		std::vector<nested_name_specifier_part> parts_;
 };
 
 inline
-const std::shared_ptr<const identifier_or_template_id>
+const boost::optional<const identifier_or_template_id&>
 nested_name_specifier::get_identifier_or_template_id() const
 {
-	return identifier_or_template_id_;
+	return boost::optional<const identifier_or_template_id&>(identifier_or_template_id_);
 }
 
 inline
-const std::vector<std::shared_ptr<nested_name_specifier_part>>
+const std::vector<nested_name_specifier_part>
 nested_name_specifier::get_parts() const
 {
 	return parts_;

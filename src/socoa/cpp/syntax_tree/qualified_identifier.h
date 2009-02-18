@@ -21,14 +21,12 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_QUALIFIED_IDENTIFIER_H
 #define SOCOA_CPP_SYNTAX_TREE_QUALIFIED_IDENTIFIER_H
 
-#include "visitor.h"
-#include "qualified_id.h"
 #include "identifier.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class qualified_identifier: public qualified_id
+class qualified_identifier
 {
 	public:
 		explicit
@@ -40,8 +38,6 @@ class qualified_identifier: public qualified_id
 		inline
 		const identifier&
 	   	get_identifier() const;
-
-		SOCOA_CPP_DEFINE_VISITABLE()
 
 	private:
 		identifier identifier_;

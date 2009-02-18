@@ -18,31 +18,19 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_VISITABLE_H
-#define SOCOA_CPP_SYNTAX_TREE_VISITABLE_H
-
-#define SOCOA_CPP_DEFINE_VISITABLE()    \
-    void                                \
-    accept(visitor& a_visitor) const    \
-    {                                   \
-        a_visitor.visit(*this);         \
-    }
+#include "template_id_impl.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class visitor;
-
-struct visitable
+template_id_impl::template_id_impl
+(
+    identifier&& an_identifier,
+    boost::optional<util::sequence<template_argument, util::extern_strings::comma>> a_template_argument_list
+):
+    identifier_(an_identifier),
+    template_argument_list_(a_template_argument_list)
 {
-    virtual
-    ~visitable(){};
-
-    virtual
-    void
-    accept(visitor& a_visitor) const = 0;
-};
+}
 
 }}} //namespace socoa::cpp::syntax_tree
-
-#endif

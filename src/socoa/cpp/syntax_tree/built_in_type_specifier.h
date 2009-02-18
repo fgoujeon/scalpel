@@ -22,19 +22,15 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_BUILT_IN_TYPE_SPECIFIER_H
 
 #include "../../util/string_enumeration.h"
-#include "simple_type_specifier.h"
-#include "visitor.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
 extern const std::vector<std::string> built_in_type_specifier_string_list;
-class built_in_type_specifier: public util::string_enumeration<built_in_type_specifier_string_list>, public simple_type_specifier
+class built_in_type_specifier: public util::string_enumeration<built_in_type_specifier_string_list>
 {
     public:
         built_in_type_specifier(const std::string& value);
-
-        SOCOA_CPP_DEFINE_VISITABLE()
 };
 
 }}} //namespace socoa::cpp::syntax_tree

@@ -25,8 +25,8 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 nested_name_specifier::nested_name_specifier
 (
-	std::shared_ptr<identifier_or_template_id> an_identifier_or_template_id,
-	std::vector<std::shared_ptr<nested_name_specifier_part>> parts
+	boost::optional<identifier_or_template_id> an_identifier_or_template_id,
+	std::vector<nested_name_specifier_part> parts
 ):
 	identifier_or_template_id_(an_identifier_or_template_id),
 	parts_(parts)

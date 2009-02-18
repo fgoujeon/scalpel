@@ -23,21 +23,19 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <memory>
 #include <boost/optional.hpp>
-#include "visitor.h"
-#include "block_declaration.h"
 #include "identifier.h"
 #include "nested_name_specifier.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class using_directive: public block_declaration
+class using_directive
 {
 	public:
 		using_directive
 		(
 			bool leading_double_colon,
-			std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
+			boost::optional<nested_name_specifier> a_nested_name_specifier,
 			identifier&& an_identifier
 		);
 
@@ -52,8 +50,6 @@ class using_directive: public block_declaration
 		inline
 		const identifier&
 	   	get_identifier() const;
-
-		SOCOA_CPP_DEFINE_VISITABLE()
 
 	private:
 		bool leading_double_colon_;

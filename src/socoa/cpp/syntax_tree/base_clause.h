@@ -21,9 +21,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_BASE_CLAUSE_H
 #define SOCOA_CPP_SYNTAX_TREE_BASE_CLAUSE_H
 
-#include <memory>
 #include <boost/optional.hpp>
-#include "base_specifier.h"
 #include "base_specifier_list.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
@@ -32,21 +30,21 @@ namespace socoa { namespace cpp { namespace syntax_tree
 class base_clause
 {
     public:
-        base_clause(std::shared_ptr<base_specifier_list_t>&& a_base_specifier_list);
+        base_clause(base_specifier_list&& a_base_specifier_list);
 
         inline
-        const boost::optional<const base_specifier_list_t&>
+        const base_specifier_list&
         get_base_specifier_list() const;
 
     private:
-		boost::optional<base_specifier_list_t> base_specifier_list_;
+		base_specifier_list base_specifier_list_;
 };
 
 inline
-const boost::optional<const base_specifier_list_t&>
+const base_specifier_list&
 base_clause::get_base_specifier_list() const
 {
-    return boost::optional<const base_specifier_list_t&>(base_specifier_list_);
+    return base_specifier_list_;
 }
 
 }}} //namespace socoa::cpp::syntax_tree

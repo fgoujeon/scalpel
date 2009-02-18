@@ -25,15 +25,14 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 parameter_declaration_clause::parameter_declaration_clause
 (
-	std::shared_ptr<util::sequence<parameter_declaration, util::extern_strings::comma>> a_parameter_declaration_list,
+	boost::optional<util::sequence<parameter_declaration, util::extern_strings::comma>> a_parameter_declaration_list,
 	bool trailing_comma,
 	bool ellipsis
 ):
-//	parameter_declaration_list_(a_parameter_declaration_list),
+	parameter_declaration_list_(a_parameter_declaration_list),
 	trailing_comma_(trailing_comma),
 	ellipsis_(ellipsis)
 {
-	if(a_parameter_declaration_list) parameter_declaration_list_ = *a_parameter_declaration_list;
 }
 
 }}} //namespace socoa::cpp::syntax_tree

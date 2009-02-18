@@ -22,22 +22,20 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_SIMPLE_TEMPLATE_TYPE_SPECIFIER_H
 
 #include <memory>
-#include "visitor.h"
-#include "simple_type_specifier.h"
 #include "nested_name_specifier.h"
 #include "template_id.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class simple_template_type_specifier: public simple_type_specifier
+class simple_template_type_specifier
 {
 	public:
 		simple_template_type_specifier
 		(
 			bool leading_double_colon,
-			std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
-			std::shared_ptr<template_id> a_template_id
+			nested_name_specifier&& a_nested_name_specifier,
+			template_id&& a_template_id
 		);
 
 		inline
@@ -51,8 +49,6 @@ class simple_template_type_specifier: public simple_type_specifier
 		inline
 		const template_id&
 		get_template_id() const;
-
-		SOCOA_CPP_DEFINE_VISITABLE()
 
 	private:
 		bool leading_double_colon_;

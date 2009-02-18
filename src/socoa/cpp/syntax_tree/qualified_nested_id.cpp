@@ -28,12 +28,12 @@ qualified_nested_id::qualified_nested_id
     bool leading_double_colon,
     nested_name_specifier&& a_nested_name_specifier,
     bool template_keyword,
-    std::shared_ptr<unqualified_id> a_unqualified_id
+    unqualified_id an_unqualified_id
 ):
     leading_double_colon_(leading_double_colon),
     nested_name_specifier_(a_nested_name_specifier),
     template_keyword_(template_keyword),
-    unqualified_id_(a_unqualified_id)
+    unqualified_id_(an_unqualified_id)
 {
 }
 

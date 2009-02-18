@@ -26,15 +26,13 @@ namespace socoa { namespace cpp { namespace syntax_tree
 base_specifier::base_specifier
 (
     bool virtual_keyword,
-    std::shared_ptr<access_specifier> an_access_specifier,
-    std::shared_ptr<nested_identifier_or_template_id> a_nested_identifier_or_template_id
+    boost::optional<access_specifier> an_access_specifier,
+    boost::optional<nested_identifier_or_template_id> a_nested_identifier_or_template_id
 ):
-    virtual_keyword_(virtual_keyword)/*,
+    virtual_keyword_(virtual_keyword),
     access_specifier_(an_access_specifier),
-    nested_identifier_or_template_id_(a_nested_identifier_or_template_id)*/
+    nested_identifier_or_template_id_(a_nested_identifier_or_template_id)
 {
-	if(an_access_specifier) access_specifier_ = *an_access_specifier;
-	if(a_nested_identifier_or_template_id) nested_identifier_or_template_id_ = *a_nested_identifier_or_template_id;
 }
 
 }}} //namespace socoa::cpp::syntax_tree

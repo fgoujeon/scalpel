@@ -21,14 +21,12 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_QUALIFIED_TEMPLATE_ID_H
 #define SOCOA_CPP_SYNTAX_TREE_QUALIFIED_TEMPLATE_ID_H
 
-#include "visitor.h"
-#include "qualified_id.h"
 #include "template_id.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class qualified_template_id: public qualified_id
+class qualified_template_id
 {
 	public:
 		explicit
@@ -37,8 +35,6 @@ class qualified_template_id: public qualified_id
 		inline
 		const template_id&
 		get_template_id() const;
-
-		SOCOA_CPP_DEFINE_VISITABLE()
 
 	private:
 		template_id template_id_;

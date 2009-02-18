@@ -26,14 +26,13 @@ namespace socoa { namespace cpp { namespace syntax_tree
 nested_identifier_or_template_id::nested_identifier_or_template_id
 (
     bool leading_double_colon,
-    std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
-    std::shared_ptr<identifier_or_template_id> an_identifier_or_template_id
+    boost::optional<nested_name_specifier> a_nested_name_specifier,
+    identifier_or_template_id&& an_identifier_or_template_id
 ):
     leading_double_colon_(leading_double_colon),
- //   nested_name_specifier_(a_nested_name_specifier),
+    nested_name_specifier_(a_nested_name_specifier),
     identifier_or_template_id_(an_identifier_or_template_id)
 {
-	if(a_nested_name_specifier) nested_name_specifier_ = *a_nested_name_specifier;
 }
 
 }}} //namespace socoa::cpp::syntax_tree

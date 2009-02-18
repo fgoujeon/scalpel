@@ -21,17 +21,21 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_ID_EXPRESSION_H
 #define SOCOA_CPP_SYNTAX_TREE_ID_EXPRESSION_H
 
-#include "declarator_id.h"
-#include "template_argument.h"
+#include <boost/variant.hpp>
+#include "unqualified_id.h"
+#include "qualified_id.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-struct id_expression: public declarator_id, public template_argument
-{
-	virtual
-	~id_expression(){};
-};
+typedef
+	boost::variant
+	<
+		unqualified_id,
+		qualified_id
+	>
+	id_expression
+;
 
 }}} //namespace socoa::cpp::syntax_tree
 

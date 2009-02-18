@@ -21,30 +21,21 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_NESTED_IDENTIFIER_OR_TEMPLATE_ID_H
 #define SOCOA_CPP_SYNTAX_TREE_NESTED_IDENTIFIER_OR_TEMPLATE_ID_H
 
-#include <memory>
 #include <boost/optional.hpp>
-#include "visitor.h"
-#include "declarator_id.h"
-#include "simple_type_specifier.h"
-#include "mem_initializer_id.h"
 #include "nested_name_specifier.h"
+#include "identifier_or_template_id.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class identifier_or_template_id;
-
-class nested_identifier_or_template_id:
-    public declarator_id,
-    public simple_type_specifier,
-    public mem_initializer_id
+class nested_identifier_or_template_id
 {
 	public:
 		nested_identifier_or_template_id
 		(
 			bool leading_double_colon,
-			std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
-			std::shared_ptr<identifier_or_template_id> an_identifier_or_template_id
+			boost::optional<nested_name_specifier> a_nested_name_specifier,
+			identifier_or_template_id&& an_identifier_or_template_id
 		);
 
 		inline
@@ -56,15 +47,13 @@ class nested_identifier_or_template_id:
 		get_nested_name_specifier() const;
 
 		inline
-		const std::shared_ptr<const identifier_or_template_id>
+		const identifier_or_template_id&
 		get_identifier_or_template_id() const;
-
-		SOCOA_CPP_DEFINE_VISITABLE()
 
 	private:
 		bool leading_double_colon_;
 		boost::optional<nested_name_specifier> nested_name_specifier_;
-		std::shared_ptr<identifier_or_template_id> identifier_or_template_id_;
+		identifier_or_template_id identifier_or_template_id_;
 };
 
 inline
@@ -82,7 +71,7 @@ nested_identifier_or_template_id::get_nested_name_specifier() const
 }
 
 inline
-const std::shared_ptr<const identifier_or_template_id>
+const identifier_or_template_id&
 nested_identifier_or_template_id::get_identifier_or_template_id() const
 {
 	return identifier_or_template_id_;

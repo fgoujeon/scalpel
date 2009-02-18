@@ -23,21 +23,19 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string>
 #include <boost/optional.hpp>
-#include "visitor.h"
-#include "type_specifier.h"
 #include "class_head.h"
 #include "member_specification.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class class_specifier: public type_specifier
+class class_specifier
 {
     public:
         class_specifier
         (
             class_head&& head,
-            std::shared_ptr<member_specification> a_member_specification
+            boost::optional<member_specification> a_member_specification
         );
 
         inline
@@ -47,8 +45,6 @@ class class_specifier: public type_specifier
         inline
         const boost::optional<const member_specification&>
         get_member_specification() const;
-
-        SOCOA_CPP_DEFINE_VISITABLE()
 
     private:
         class_head class_head_;

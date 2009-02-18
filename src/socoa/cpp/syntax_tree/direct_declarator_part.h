@@ -21,16 +21,21 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_DIRECT_DECLARATOR_PART_H
 #define SOCOA_CPP_SYNTAX_TREE_DIRECT_DECLARATOR_PART_H
 
-#include "visitable.h"
+#include <boost/variant.hpp>
+#include "direct_declarator_array_part.h"
+#include "direct_declarator_function_part.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-struct direct_declarator_part: public visitable
-{
-    virtual
-    ~direct_declarator_part() = default;
-};
+typedef
+	boost::variant
+	<
+		direct_declarator_array_part,
+		direct_declarator_function_part
+	>
+	direct_declarator_part
+;
 
 }}} //namespace socoa::cpp::syntax_tree
 

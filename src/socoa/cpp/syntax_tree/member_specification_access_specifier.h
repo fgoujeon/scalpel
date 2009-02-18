@@ -21,14 +21,12 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_MEMBER_SPECIFICATION_ACCESS_SPECIFIER_H
 #define SOCOA_CPP_SYNTAX_TREE_MEMBER_SPECIFICATION_ACCESS_SPECIFIER_H
 
-#include "visitor.h"
-#include "member_specification_part.h"
 #include "access_specifier.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class member_specification_access_specifier: public member_specification_part
+class member_specification_access_specifier
 {
 	public:
 		explicit member_specification_access_specifier
@@ -39,8 +37,6 @@ class member_specification_access_specifier: public member_specification_part
 		inline
 		const access_specifier&
 	   	get_access_specifier() const;
-
-		SOCOA_CPP_DEFINE_VISITABLE()
 
 	private:
 		access_specifier access_specifier_;

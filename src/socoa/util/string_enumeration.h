@@ -33,13 +33,15 @@ template<const std::vector<std::string>& StringList>
 class string_enumeration
 {
     public:
+		typedef std::vector<std::string> string_list_t;
+
         string_enumeration(const std::string& value);
 
         const std::string&
         get_value() const;
 
     private:
-        std::vector<std::string>::const_iterator value_ptr_;
+        string_list_t::const_iterator value_ptr_;
 };
 
 template<const std::vector<std::string>& StringList>

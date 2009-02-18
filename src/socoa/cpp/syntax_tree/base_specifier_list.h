@@ -34,7 +34,7 @@ typedef
         base_specifier,
         util::extern_strings::comma
     >
-    base_specifier_list_t
+    base_specifier_list
 ;
 
 }}} //namespace socoa::cpp::syntax_tree

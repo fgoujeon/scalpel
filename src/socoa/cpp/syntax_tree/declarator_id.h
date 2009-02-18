@@ -21,16 +21,21 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_DECLARATOR_ID_H
 #define SOCOA_CPP_SYNTAX_TREE_DECLARATOR_ID_H
 
-#include "visitable.h"
+#include <boost/variant.hpp>
+#include "id_expression.h"
+#include "nested_identifier_or_template_id.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-struct declarator_id: virtual public visitable
-{
-	virtual
-	~declarator_id(){};
-};
+typedef
+	boost::variant
+	<
+        id_expression,
+        nested_identifier_or_template_id
+	>
+	declarator_id
+;
 
 }}} //namespace socoa::cpp::syntax_tree
 

@@ -25,9 +25,9 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 direct_declarator::direct_declarator
 (
-    std::shared_ptr<declarator_id> a_declarator_id,
-    std::shared_ptr<declarator> a_declarator,
-    std::vector<std::shared_ptr<direct_declarator_part>> other_parts
+    boost::optional<declarator_id> a_declarator_id,
+    boost::optional<declarator> a_declarator,
+    std::vector<direct_declarator_part>&& other_parts
 ):
     declarator_id_(a_declarator_id),
     declarator_(a_declarator),

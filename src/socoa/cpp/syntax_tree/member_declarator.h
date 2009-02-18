@@ -21,16 +21,21 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_MEMBER_DECLARATOR_H
 #define SOCOA_CPP_SYNTAX_TREE_MEMBER_DECLARATOR_H
 
-#include "visitable.h"
+#include <boost/variant.hpp>
+#include "member_declarator_declarator.h"
+#include "member_declarator_bit_field_member.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-struct member_declarator: public visitable
-{
-	virtual
-	~member_declarator() = default;
-};
+typedef
+	boost::variant
+	<
+        member_declarator_declarator,
+        member_declarator_bit_field_member
+	>
+	member_declarator
+;
 
 }}} //namespace socoa::cpp::syntax_tree
 

@@ -26,14 +26,13 @@ namespace socoa { namespace cpp { namespace syntax_tree
 using_directive::using_directive
 (
     bool leading_double_colon,
-    std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
+    boost::optional<nested_name_specifier> a_nested_name_specifier,
     identifier&& an_identifier
 ):
     leading_double_colon_(leading_double_colon),
-//    nested_name_specifier_(a_nested_name_specifier),
+    nested_name_specifier_(a_nested_name_specifier),
     identifier_(an_identifier)
 {
-	if(a_nested_name_specifier) nested_name_specifier_ = *a_nested_name_specifier;
 }
 
 }}} //namespace socoa::cpp::syntax_tree

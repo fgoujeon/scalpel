@@ -31,18 +31,18 @@ class mem_initializer;
 class ctor_initializer
 {
     public:
-        ctor_initializer(mem_initializer_list_t&& a_mem_initializer_list);
+        ctor_initializer(mem_initializer_list&& a_mem_initializer_list);
 
         inline
-        const mem_initializer_list_t&
+        const mem_initializer_list&
         get_mem_initializer_list() const;
 
     private:
-        mem_initializer_list_t mem_initializer_list_;
+        mem_initializer_list mem_initializer_list_;
 };
 
 inline
-const mem_initializer_list_t&
+const mem_initializer_list&
 ctor_initializer::get_mem_initializer_list() const
 {
     return mem_initializer_list_;

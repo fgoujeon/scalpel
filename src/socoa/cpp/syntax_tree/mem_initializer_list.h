@@ -30,7 +30,7 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 typedef
     util::sequence<mem_initializer, util::extern_strings::comma>
-    mem_initializer_list_t
+    mem_initializer_list
 ;
 
 }}} //namespace socoa::cpp::syntax_tree

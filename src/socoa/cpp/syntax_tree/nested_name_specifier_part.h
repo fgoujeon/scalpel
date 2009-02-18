@@ -21,16 +21,21 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_NESTED_NAME_SPECIFIER_PART_H
 #define SOCOA_CPP_SYNTAX_TREE_NESTED_NAME_SPECIFIER_PART_H
 
-#include "visitable.h"
+#include <boost/variant.hpp>
+#include "nested_name_specifier_template_id_part.h"
+#include "identifier.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-struct nested_name_specifier_part: virtual public visitable
-{
-	virtual
-	~nested_name_specifier_part(){};
-};
+typedef
+	boost::variant
+	<
+        nested_name_specifier_template_id_part,
+		identifier
+	>
+	nested_name_specifier_part
+;
 
 }}} //namespace socoa::cpp::syntax_tree
 

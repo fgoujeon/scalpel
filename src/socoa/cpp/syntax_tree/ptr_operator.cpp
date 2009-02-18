@@ -27,16 +27,14 @@ ptr_operator::ptr_operator
 (
 	type a_type,
 	bool leading_double_colon,
-	std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
-	std::shared_ptr<util::sequence<cv_qualifier>> a_cv_qualifier_seq
+	boost::optional<nested_name_specifier> a_nested_name_specifier,
+	boost::optional<util::sequence<cv_qualifier>> a_cv_qualifier_seq
 ):
 	type_(a_type),
-	leading_double_colon_(leading_double_colon)//,
-//	nested_name_specifier_(a_nested_name_specifier),
-//	cv_qualifier_seq_(a_cv_qualifier_seq)
+	leading_double_colon_(leading_double_colon),
+	nested_name_specifier_(a_nested_name_specifier),
+	cv_qualifier_seq_(a_cv_qualifier_seq)
 {
-	if(a_nested_name_specifier) nested_name_specifier_ = *a_nested_name_specifier;
-	if(a_cv_qualifier_seq) cv_qualifier_seq_ = *a_cv_qualifier_seq;
 }
 
 }}} //namespace socoa::cpp::syntax_tree

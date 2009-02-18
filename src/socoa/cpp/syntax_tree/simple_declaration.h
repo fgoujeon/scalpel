@@ -23,52 +23,48 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <memory>
 #include <boost/optional.hpp>
-#include "visitor.h"
-#include "block_declaration.h"
-#include "init_declarator.h"
-#include "decl_specifier.h"
+#include "init_declarator_list.h"
+#include "decl_specifier_seq.h"
 #include "../../util/sequence.h"
 #include "../../util/extern_strings.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class simple_declaration: public block_declaration
+class simple_declaration
 {
 	public:
 		simple_declaration
 		(
-			std::shared_ptr<util::sequence<decl_specifier>> a_decl_specifier_seq,
-			std::shared_ptr<util::sequence<init_declarator, util::extern_strings::comma>> an_init_declarator_list
+			boost::optional<decl_specifier_seq> a_decl_specifier_seq,
+			boost::optional<init_declarator_list> an_init_declarator_list
 		);
 
 		inline
-		const boost::optional<const util::sequence<decl_specifier>&>
+		const boost::optional<const decl_specifier_seq&>
 		get_decl_specifier_seq() const;
 
 		inline
-		const boost::optional<const util::sequence<init_declarator, util::extern_strings::comma>&>
+		const boost::optional<const init_declarator_list&>
 		get_init_declarator_list() const;
 
-		SOCOA_CPP_DEFINE_VISITABLE()
-
 	private:
-		boost::optional<util::sequence<decl_specifier>> decl_specifier_seq_;
-		boost::optional<util::sequence<init_declarator, util::extern_strings::comma>> init_declarator_list_;
+		boost::optional<decl_specifier_seq> decl_specifier_seq_;
+		boost::optional<init_declarator_list> init_declarator_list_;
 };
 
 inline
-const boost::optional<const util::sequence<decl_specifier>&>
+const boost::optional<const decl_specifier_seq&>
 simple_declaration::get_decl_specifier_seq() const
 {
-	return boost::optional<const util::sequence<decl_specifier>&>(decl_specifier_seq_);
+	return boost::optional<const decl_specifier_seq&>(decl_specifier_seq_);
 }
 
 inline
-const boost::optional<const util::sequence<init_declarator, util::extern_strings::comma>&>
+const boost::optional<const init_declarator_list&>
 simple_declaration::get_init_declarator_list() const
 {
-	return boost::optional<const util::sequence<init_declarator, util::extern_strings::comma>&>(init_declarator_list_);
+	return boost::optional<const init_declarator_list&>(init_declarator_list_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

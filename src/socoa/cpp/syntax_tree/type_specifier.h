@@ -21,16 +21,27 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_TYPE_SPECIFIER_H
 #define SOCOA_CPP_SYNTAX_TREE_TYPE_SPECIFIER_H
 
-#include "visitable.h"
+#include <memory>
+#include "simple_type_specifier.h"
+#include "class_specifier.h"
+//#include "enum_specifier.h"
+//#include "elaborated_type_specifier.h"
+#include "cv_qualifier.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-struct type_specifier: public virtual visitable
-{
-	virtual
-	~type_specifier() = default;
-};
+typedef
+	boost::variant
+	<
+		std::shared_ptr<simple_type_specifier>,
+		class_specifier,
+//		enum_specifier,
+//		elaborated_type_specifier,
+		cv_qualifier
+	>
+	type_specifier
+;
 
 }}} //namespace socoa::cpp::syntax_tree
 

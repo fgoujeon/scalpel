@@ -43,8 +43,8 @@ class ptr_operator
 		(
 			type a_type,
 			bool leading_double_colon,
-			std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
-			std::shared_ptr<util::sequence<cv_qualifier>> a_cv_qualifier_seq
+			boost::optional<nested_name_specifier> a_nested_name_specifier,
+			boost::optional<util::sequence<cv_qualifier>> a_cv_qualifier_seq
 		);
 
 		inline

@@ -20,19 +20,42 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "namespace_definition.h"
 
+#include "namespace_definition_impl.h"
+
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
 namespace_definition::namespace_definition
 (
-    std::shared_ptr<identifier> an_identifier,
-    std::shared_ptr<util::sequence<declaration>> a_declaration_seq
-)/*:
-    identifier_(an_identifier),
-    declaration_seq_(a_declaration_seq)*/
+    boost::optional<identifier> an_identifier,
+    boost::optional<util::sequence<declaration>> a_declaration_seq
+):
+	pimpl_
+	(
+		new namespace_definition_impl
+		(
+			an_identifier,
+			a_declaration_seq
+		)
+	)
 {
-	if(an_identifier) identifier_ = *an_identifier;
-	if(a_declaration_seq) declaration_seq_ = *a_declaration_seq;
+}
+
+namespace_definition::~namespace_definition()
+{
+	delete pimpl_;
+}
+
+const boost::optional<const identifier&>
+namespace_definition::get_identifier() const
+{
+	return pimpl_->get_identifier();
+}
+
+const boost::optional<const util::sequence<declaration>&>
+namespace_definition::get_declaration_seq() const
+{
+	return pimpl_->get_declaration_seq();
 }
 
 }}} //namespace socoa::cpp::syntax_tree

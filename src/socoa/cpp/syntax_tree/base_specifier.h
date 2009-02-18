@@ -21,7 +21,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_BASE_SPECIFIER_H
 #define SOCOA_CPP_SYNTAX_TREE_BASE_SPECIFIER_H
 
-#include <memory>
 #include <boost/optional.hpp>
 #include "access_specifier.h"
 #include "nested_identifier_or_template_id.h"
@@ -35,8 +34,8 @@ class base_specifier
         base_specifier
         (
             bool virtual_keyword,
-            std::shared_ptr<access_specifier> an_access_specifier,
-            std::shared_ptr<nested_identifier_or_template_id> a_nested_identifier_or_template_id
+            boost::optional<access_specifier> an_access_specifier,
+            boost::optional<nested_identifier_or_template_id> a_nested_identifier_or_template_id
         );
 
         inline

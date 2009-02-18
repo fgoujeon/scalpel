@@ -32,13 +32,13 @@ template<class T, const std::string& Separator = extern_strings::space>
 class sequence
 {
     public:
-		typedef std::vector<std::shared_ptr<T>> list_t;
+		typedef std::vector<T> list_t;
 
         sequence();
 
         explicit sequence
         (
-            std::vector<std::shared_ptr<T>>&& items
+            list_t&& items
         );
 
         const list_t&
@@ -59,7 +59,7 @@ sequence<T, Separator>::sequence()
 template<class T, const std::string& Separator>
 sequence<T, Separator>::sequence
 (
-    std::vector<std::shared_ptr<T>>&& items
+    list_t&& items
 ):
     items_(items)
 {

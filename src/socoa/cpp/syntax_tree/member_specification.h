@@ -22,12 +22,10 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_MEMBER_SPECIFICATION_H
 
 #include <vector>
-#include <memory>
+#include "member_specification_part.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
-
-class member_specification_part;
 
 class member_specification
 {
@@ -35,19 +33,19 @@ class member_specification
 		explicit
 		member_specification
 		(
-			std::vector<std::shared_ptr<member_specification_part>> parts
+			std::vector<member_specification_part> parts
 		);
 
 		inline
-		const std::vector<std::shared_ptr<member_specification_part>>&
+		const std::vector<member_specification_part>&
 		get_parts() const;
 
 	private:
-		std::vector<std::shared_ptr<member_specification_part>> parts_;
+		std::vector<member_specification_part> parts_;
 };
 
 inline
-const std::vector<std::shared_ptr<member_specification_part>>&
+const std::vector<member_specification_part>&
 member_specification::get_parts() const
 {
 	return parts_;

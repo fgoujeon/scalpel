@@ -21,16 +21,27 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_UNQUALIFIED_ID_H
 #define SOCOA_CPP_SYNTAX_TREE_UNQUALIFIED_ID_H
 
-#include "id_expression.h"
+#include <boost/variant.hpp>
+//#include "operator_function_id.h"
+//#include "conversion_function_id.h"
+//#include "destructor_name.h"
+//#include "template_id.h"
+#include "identifier.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-struct unqualified_id: public id_expression
-{
-	virtual
-	~unqualified_id(){};
-};
+typedef
+	boost::variant
+	<
+ //       operator_function_id,
+ //       conversion_function_id,
+ //       destructor_name,
+ //       template_id,
+        identifier
+	>
+	unqualified_id
+;
 
 }}} //namespace socoa::cpp::syntax_tree
 

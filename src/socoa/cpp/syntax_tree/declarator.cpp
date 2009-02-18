@@ -20,17 +20,44 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "declarator.h"
 
+#include "declarator_impl.h"
+#include "ptr_operator.h"
+#include "direct_declarator.h"
+
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
 declarator::declarator
 (
-    std::vector<ptr_operator>&& ptr_operators,
-    direct_declarator&& a_direct_declarator
+	std::vector<ptr_operator>&& ptr_operators,
+	direct_declarator&& a_direct_declarator
 ):
-    ptr_operators_(ptr_operators),
-    direct_declarator_(a_direct_declarator)
+	pimpl_
+	(
+		new declarator_impl
+		(
+			ptr_operators,
+			a_direct_declarator
+		)
+	)
 {
+}
+
+declarator::~declarator()
+{
+	delete pimpl_;
+}
+
+const std::vector<ptr_operator>&
+declarator::get_ptr_operators() const
+{
+    return pimpl_->get_ptr_operators();
+}
+
+const direct_declarator&
+declarator::get_direct_declarator() const
+{
+    return pimpl_->get_direct_declarator();
 }
 
 }}} //namespace socoa::cpp::syntax_tree

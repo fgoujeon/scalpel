@@ -21,16 +21,14 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_DIRECT_DECLARATOR_ARRAY_PART_H
 #define SOCOA_CPP_SYNTAX_TREE_DIRECT_DECLARATOR_ARRAY_PART_H
 
-#include "visitor.h"
 #include "direct_declarator_part.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class direct_declarator_array_part: public direct_declarator_part
+class direct_declarator_array_part
 {
     public:
-        SOCOA_CPP_DEFINE_VISITABLE()
 
 
     private:

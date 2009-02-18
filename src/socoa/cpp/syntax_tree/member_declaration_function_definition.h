@@ -21,14 +21,12 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_MEMBER_DECLARATION_FUNCTION_DEFINITION_H
 #define SOCOA_CPP_SYNTAX_TREE_MEMBER_DECLARATION_FUNCTION_DEFINITION_H
 
-#include "visitor.h"
-#include "member_declaration.h"
 #include "function_definition.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class member_declaration_function_definition: public member_declaration
+class member_declaration_function_definition
 {
 	public:
 		explicit member_declaration_function_definition
@@ -39,8 +37,6 @@ class member_declaration_function_definition: public member_declaration
 		inline
 		const function_definition&
 		get_function_definition() const;
-
-		SOCOA_CPP_DEFINE_VISITABLE()
 
 	private:
 		function_definition function_definition_;

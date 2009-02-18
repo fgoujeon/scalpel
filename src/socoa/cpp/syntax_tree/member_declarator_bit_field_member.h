@@ -21,28 +21,23 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_MEMBER_DECLARATOR_BIT_FIELD_MEMBER_H
 #define SOCOA_CPP_SYNTAX_TREE_MEMBER_DECLARATOR_BIT_FIELD_MEMBER_H
 
-#include <memory>
 #include <boost/optional.hpp>
-#include "visitor.h"
-#include "member_declarator.h"
 #include "identifier.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class member_declarator_bit_field_member: public member_declarator
+class member_declarator_bit_field_member
 {
 	public:
 		member_declarator_bit_field_member
 		(
-			std::shared_ptr<identifier> an_identifier
+			boost::optional<identifier> an_identifier
 		);
 
 		inline
 		const boost::optional<const identifier&>
 		get_identifier() const;
-
-		SOCOA_CPP_DEFINE_VISITABLE()
 
 	private:
 		boost::optional<identifier> identifier_;

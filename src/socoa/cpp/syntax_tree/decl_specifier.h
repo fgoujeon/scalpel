@@ -30,14 +30,14 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 class function_specifier{};
 
-typedef
-	boost::variant
+class decl_specifier:
+	public boost::variant
 	<
-		std::shared_ptr<type_specifier>,
+		type_specifier,
 		function_specifier
 	>
-	decl_specifier
-;
+{
+};
 
 }}} //namespace socoa::cpp::syntax_tree
 

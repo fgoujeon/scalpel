@@ -21,14 +21,12 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_NESTED_NAME_SPECIFIER_TEMPLATE_ID_PART_H
 #define SOCOA_CPP_SYNTAX_TREE_NESTED_NAME_SPECIFIER_TEMPLATE_ID_PART_H
 
-#include "visitor.h"
-#include "nested_name_specifier_part.h"
 #include "template_id.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class nested_name_specifier_template_id_part: public nested_name_specifier_part
+class nested_name_specifier_template_id_part
 {
 	public:
 		nested_name_specifier_template_id_part
@@ -44,8 +42,6 @@ class nested_name_specifier_template_id_part: public nested_name_specifier_part
 		inline
 		const template_id&
 		get_template_id() const;
-
-		SOCOA_CPP_DEFINE_VISITABLE()
 
 	private:
 		bool template_keyword_;

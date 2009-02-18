@@ -21,7 +21,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_PARAMETER_DECLARATION_H
 #define SOCOA_CPP_SYNTAX_TREE_PARAMETER_DECLARATION_H
 
-#include <memory>
 #include <boost/optional.hpp>
 #include "declarator.h"
 #include "decl_specifier_seq.h"
@@ -36,7 +35,7 @@ class parameter_declaration
 		parameter_declaration
 		(
 			util::sequence<decl_specifier> a_decl_specifier_seq,
-			std::shared_ptr<declarator> a_declarator,
+			boost::optional<declarator> a_declarator,
 			bool equal
 		);
 

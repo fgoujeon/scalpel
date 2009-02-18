@@ -54,11 +54,11 @@ class syntax_analyzer
     public:
 		syntax_analyzer();
 
-		std::shared_ptr<syntax_tree_t>
+		syntax_tree_t
         operator()(const std::string& input);
 
     private:
-        std::shared_ptr<syntax_tree_t>
+        syntax_tree_t
         analyze(const std::string& input);
 
         std::ptrdiff_t

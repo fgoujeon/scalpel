@@ -26,14 +26,13 @@ namespace socoa { namespace cpp { namespace syntax_tree
 parameter_declaration::parameter_declaration
 (
 	util::sequence<decl_specifier> a_decl_specifier_seq,
-	std::shared_ptr<declarator> a_declarator,
+	boost::optional<declarator> a_declarator,
 	bool equal
 ):
 	decl_specifier_seq_(a_decl_specifier_seq),
-	//declarator_(a_declarator),
+	declarator_(a_declarator),
 	equal_(equal)
 {
-	if(a_declarator) declarator_ = *a_declarator;
 }
 
 }}} //namespace socoa::cpp::syntax_tree

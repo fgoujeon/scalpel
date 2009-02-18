@@ -22,16 +22,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_QUALIFIED_NESTED_ID_H
 
 #include <memory>
-#include "visitor.h"
-#include "qualified_id.h"
 #include "nested_name_specifier.h"
+#include "unqualified_id.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class unqualified_id;
-
-class qualified_nested_id: public qualified_id
+class qualified_nested_id
 {
 	public:
 		qualified_nested_id
@@ -39,7 +36,7 @@ class qualified_nested_id: public qualified_id
 			bool leading_double_colon,
 			nested_name_specifier&& a_nested_name_specifier,
 			bool template_keyword,
-			std::shared_ptr<unqualified_id> a_unqualified_id
+			unqualified_id an_unqualified_id
 		);
 
 		inline
@@ -55,16 +52,14 @@ class qualified_nested_id: public qualified_id
 		has_template_keyword() const;
 
 		inline
-		const std::shared_ptr<const unqualified_id>
+		const unqualified_id&
 		get_unqualified_id() const;
-
-		SOCOA_CPP_DEFINE_VISITABLE()
 
 	private:
 		bool leading_double_colon_;
 		nested_name_specifier nested_name_specifier_;
 		bool template_keyword_;
-		std::shared_ptr<unqualified_id> unqualified_id_;
+		unqualified_id unqualified_id_;
 };
 
 inline
@@ -89,7 +84,7 @@ qualified_nested_id::has_template_keyword() const
 }
 
 inline
-const std::shared_ptr<const unqualified_id>
+const unqualified_id&
 qualified_nested_id::get_unqualified_id() const
 {
 	return unqualified_id_;

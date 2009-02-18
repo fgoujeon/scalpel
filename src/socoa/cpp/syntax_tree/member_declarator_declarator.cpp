@@ -25,13 +25,12 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 member_declarator_declarator::member_declarator_declarator
 (
-    std::shared_ptr<declarator> a_declarator,
+    declarator&& a_declarator,
     bool pure_specifier
 ):
- //   declarator_(a_declarator),
+    declarator_(a_declarator),
     pure_specifier_(pure_specifier)
 {
-	if(a_declarator) declarator_ = *a_declarator;
 }
 
 }}} //namespace socoa::cpp::syntax_tree

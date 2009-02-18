@@ -31,23 +31,16 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 void                                                    \
 convert(const syntax_tree::type& item);
 
-#define VISIT_DEFINITION(VisitableT)                    \
-void                                                    \
-visit(const syntax_tree::VisitableT& item)              \
-{                                                       \
-    convert(item);                                      \
-}
-
 namespace socoa { namespace cpp
 {
 
-class syntax_tree_to_string_converter: public syntax_tree::visitor
+class syntax_tree_to_string_converter
 {
     public:
         syntax_tree_to_string_converter();
 
         std::string
-        operator()(const std::shared_ptr<util::sequence<syntax_tree::declaration>> translation_unit);
+        operator()(const syntax_tree_t& a_syntax_tree);
 
     private:
         CONVERT_DECLARATION(identifier)
@@ -90,21 +83,13 @@ class syntax_tree_to_string_converter: public syntax_tree::visitor
 		void
 		convert(const syntax_tree::decl_specifier_seq& seq);
 
-        template<class T>
-        void
-        convert(const util::sequence<T, util::extern_strings::space>& seq);
-
         template<class T, const std::string& Separator>
         void
         convert(const util::sequence<T, Separator>& seq);
 
-        template<class T, const std::string& Separator>
+        template<const std::vector<std::string>& StringList>
         void
-        convert_visitable(const util::sequence<T, Separator>& seq);
-
-        template<class T>
-        void
-        convert(const T& a_string_enumeration);
+        convert(const util::string_enumeration<StringList>& a_string_enumeration);
 
         template<class T>
         inline
@@ -113,42 +98,11 @@ class syntax_tree_to_string_converter: public syntax_tree::visitor
 
         template<class T>
         void
-        safe_convert(const std::shared_ptr<T> item);
-
-        template<class T>
-        void
         safe_convert(const boost::optional<T> item);
 
 		template<class T, class U>
 		void
 		safe_convert(const boost::variant<T, U> item);
-
-        VISIT_DEFINITION(identifier)
-        VISIT_DEFINITION(qualified_nested_id)
-        VISIT_DEFINITION(qualified_operator_function_id)
-        VISIT_DEFINITION(qualified_template_id)
-        VISIT_DEFINITION(qualified_identifier)
-        VISIT_DEFINITION(nested_name_specifier_template_id_part)
-        VISIT_DEFINITION(simple_template_type_specifier)
-        VISIT_DEFINITION(built_in_type_specifier)
-        VISIT_DEFINITION(namespace_definition)
-        VISIT_DEFINITION(using_declaration)
-        VISIT_DEFINITION(using_directive)
-        VISIT_DEFINITION(function_definition)
-        VISIT_DEFINITION(class_specifier)
-        VISIT_DEFINITION(member_specification_access_specifier)
-        VISIT_DEFINITION(member_declaration_member_declarator_list)
-        VISIT_DEFINITION(member_declaration_unqualified_id)
-        VISIT_DEFINITION(member_declaration_function_definition)
-        VISIT_DEFINITION(member_declarator_declarator)
-        VISIT_DEFINITION(member_declarator_bit_field_member)
-        VISIT_DEFINITION(template_declaration)
-        VISIT_DEFINITION(simple_declaration)
-        VISIT_DEFINITION(direct_declarator_function_part)
-        VISIT_DEFINITION(direct_declarator_array_part)
-        VISIT_DEFINITION(template_id)
-        VISIT_DEFINITION(cv_qualifier)
-        VISIT_DEFINITION(nested_identifier_or_template_id)
 
         void
         add_space();
@@ -169,55 +123,25 @@ class syntax_tree_to_string_converter: public syntax_tree::visitor
         unsigned int m_indentation_level;
 };
 
-template<class T>
-void
-syntax_tree_to_string_converter::convert(const util::sequence<T, util::extern_strings::space>& seq)
-{
-    typedef std::vector<std::shared_ptr<T>> item_list_t;
-
-    for(typename item_list_t::const_iterator i = seq.get_items().begin(); i != seq.get_items().end(); ++i)
-    {
-        if(*i)
-            (**i).accept(*this);
-    }
-}
-
 template<class T, const std::string& Separator>
 void
 syntax_tree_to_string_converter::convert(const util::sequence<T, Separator>& seq)
 {
-    typedef std::vector<std::shared_ptr<T>> item_list_t;
+    typedef typename util::sequence<T>::list_t item_list_t;
 
     for(typename item_list_t::const_iterator i = seq.get_items().begin(); i != seq.get_items().end(); ++i)
     {
         //add separator
-        if(i != seq.get_items().begin())
+        if(i != seq.get_items().begin()) //don't add a separator before the first item
             result_ << Separator << ' ';
 
         safe_convert(*i);
     }
 }
 
-template<class T, const std::string& Separator>
+template<const std::vector<std::string>& StringList>
 void
-syntax_tree_to_string_converter::convert_visitable(const util::sequence<T, Separator>& seq)
-{
-    typedef std::vector<std::shared_ptr<T>> item_list_t;
-
-    for(typename item_list_t::const_iterator i = seq.get_items().begin(); i != seq.get_items().end(); ++i)
-    {
-        //add separator
-        if(i != seq.get_items().begin())
-            result_ << Separator << ' ';
-
-        if(*i)
-            (**i).accept(*this);
-    }
-}
-
-template<class T>
-void
-syntax_tree_to_string_converter::convert(const T& a_string_enumeration)
+syntax_tree_to_string_converter::convert(const util::string_enumeration<StringList>& a_string_enumeration)
 {
     add_space();
     result_ << a_string_enumeration.get_value();
@@ -227,15 +151,7 @@ template<class T>
 void
 syntax_tree_to_string_converter::safe_convert(T item)
 {
-    convert(item);
-}
-
-template<class T>
-void
-syntax_tree_to_string_converter::safe_convert(const std::shared_ptr<T> item)
-{
-    if(item)
-        convert(*item);
+    //convert(item);
 }
 
 template<class T>
@@ -255,7 +171,6 @@ syntax_tree_to_string_converter::safe_convert(const boost::variant<T, U> item)
 }} //namespace socoa::cpp
 
 
-#undef VISIT_DEFINITION
 #undef CONVERT_DECLARATION
 
 #endif

@@ -51,7 +51,7 @@ syntax_analyzer::syntax_analyzer():
 {
 }
 
-std::shared_ptr<syntax_tree_t>
+syntax_tree_t
 syntax_analyzer::operator()(const std::string& input)
 {
     input_ = &input;
@@ -61,7 +61,7 @@ syntax_analyzer::operator()(const std::string& input)
     return analyze(input);
 }
 
-std::shared_ptr<syntax_tree_t>
+syntax_tree_t
 syntax_analyzer::analyze(const std::string& input)
 {
     //parse the input with the C++ grammar
@@ -81,7 +81,7 @@ syntax_analyzer::analyze(const std::string& input)
     }
 
     //convert spirit's parse tree to syntax tree
-    return parse_tree_to_syntax_tree::convert_file(*info.trees.begin());
+    return parse_tree_to_syntax_tree::convert_tree(*info.trees.begin());
 }
 
 std::ptrdiff_t
@@ -116,7 +116,7 @@ syntax_analyzer::parse_type_name(const scanner_t& scan)
             /*
             Analyze the source code's syntax
             */
-            std::shared_ptr<syntax_tree_t> syntax_tree = analyze(partial_input);
+            syntax_tree_t syntax_tree = analyze(partial_input);
         }
 
         parsing_progress_ = parsing_progress;

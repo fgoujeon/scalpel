@@ -21,60 +21,58 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_DIRECT_DECLARATOR_H
 #define SOCOA_CPP_SYNTAX_TREE_DIRECT_DECLARATOR_H
 
-#include <vector>
 #include <memory>
+#include "declarator_id.h"
+#include "declarator.h"
+#include "direct_declarator_part.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
-
-class declarator_id;
-class declarator;
-class direct_declarator_part;
 
 class direct_declarator
 {
     public:
         direct_declarator
         (
-            std::shared_ptr<declarator_id> a_declarator_id,
-            std::shared_ptr<declarator> a_declarator,
-            std::vector<std::shared_ptr<direct_declarator_part>> other_parts
+            boost::optional<declarator_id> a_declarator_id,
+            boost::optional<declarator> a_declarator,
+            std::vector<direct_declarator_part>&& other_parts
         );
 
         inline
-        const std::shared_ptr<const declarator_id>
+        const boost::optional<const declarator_id&>
         get_declarator_id() const;
 
         inline
-        const std::shared_ptr<const declarator>
+        const boost::optional<const declarator&>
         get_declarator() const;
 
         inline
-        const std::vector<std::shared_ptr<direct_declarator_part>>
+        const std::vector<direct_declarator_part>&
         get_other_parts() const;
 
     private:
-        std::shared_ptr<declarator_id> declarator_id_;
-        std::shared_ptr<declarator> declarator_;
-        std::vector<std::shared_ptr<direct_declarator_part>> other_parts_;
+        boost::optional<declarator_id> declarator_id_;
+        boost::optional<declarator> declarator_;
+        std::vector<direct_declarator_part> other_parts_;
 };
 
 inline
-const std::shared_ptr<const declarator_id>
+const boost::optional<const declarator_id&>
 direct_declarator::get_declarator_id() const
 {
-    return declarator_id_;
+    return boost::optional<const declarator_id&>(declarator_id_);
 }
 
 inline
-const std::shared_ptr<const declarator>
+const boost::optional<const declarator&>
 direct_declarator::get_declarator() const
 {
-    return declarator_;
+    return boost::optional<const declarator&>(declarator_);
 }
 
 inline
-const std::vector<std::shared_ptr<direct_declarator_part>>
+const std::vector<direct_declarator_part>&
 direct_declarator::get_other_parts() const
 {
     return other_parts_;

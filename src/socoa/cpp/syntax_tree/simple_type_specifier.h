@@ -21,16 +21,23 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_SIMPLE_TYPE_SPECIFIER_H
 #define SOCOA_CPP_SYNTAX_TREE_SIMPLE_TYPE_SPECIFIER_H
 
-#include "type_specifier.h"
+#include <boost/variant.hpp>
+#include "nested_identifier_or_template_id.h"
+#include "simple_template_type_specifier.h"
+#include "built_in_type_specifier.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-struct simple_type_specifier: public type_specifier
-{
-	virtual
-	~simple_type_specifier() = default;
-};
+typedef
+	boost::variant
+	<
+        nested_identifier_or_template_id,
+        simple_template_type_specifier,
+        built_in_type_specifier
+	>
+	simple_type_specifier
+;
 
 }}} //namespace socoa::cpp::syntax_tree
 

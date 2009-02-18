@@ -28,7 +28,7 @@ member_declaration_unqualified_id::member_declaration_unqualified_id
     bool leading_double_colon,
     nested_name_specifier&& a_nested_name_specifier,
     bool template_keyword,
-    std::shared_ptr<unqualified_id> an_unqualified_id
+    unqualified_id&& an_unqualified_id
 ):
     leading_double_colon_(leading_double_colon),
     nested_name_specifier_(a_nested_name_specifier),

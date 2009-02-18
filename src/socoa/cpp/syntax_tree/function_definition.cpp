@@ -20,21 +20,50 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "function_definition.h"
 
+#include "function_definition_impl.h"
+
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
 function_definition::function_definition
 (
-    std::shared_ptr<util::sequence<decl_specifier>> a_decl_specifier_seq,
+    boost::optional<util::sequence<decl_specifier>> a_decl_specifier_seq,
     declarator&& a_declarator,
-    std::shared_ptr<ctor_initializer> a_ctor_initializer
+    boost::optional<ctor_initializer> a_ctor_initializer
 ):
-//    decl_specifier_seq_(a_decl_specifier_seq),
-    declarator_(a_declarator)/*,
-    ctor_initializer_(a_ctor_initializer)*/
+	pimpl_
+	(
+		new function_definition_impl
+		(
+			a_decl_specifier_seq,
+			a_declarator,
+			a_ctor_initializer
+		)
+	)
 {
-	if(a_decl_specifier_seq) decl_specifier_seq_ = *a_decl_specifier_seq;
-	if(a_ctor_initializer) ctor_initializer_ = *a_ctor_initializer;
+}
+
+function_definition::~function_definition()
+{
+	delete pimpl_;
+}
+
+const boost::optional<const util::sequence<decl_specifier>&>
+function_definition::get_decl_specifier_seq() const
+{
+	return pimpl_->get_decl_specifier_seq();
+}
+
+const declarator&
+function_definition::get_declarator() const
+{
+	return pimpl_->get_declarator();
+}
+
+const boost::optional<const ctor_initializer&>
+function_definition::get_ctor_initializer() const
+{
+	return pimpl_->get_ctor_initializer();
 }
 
 }}} //namespace socoa::cpp::syntax_tree

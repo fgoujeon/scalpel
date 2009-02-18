@@ -21,15 +21,30 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_DECLARATION_H
 #define SOCOA_CPP_SYNTAX_TREE_DECLARATION_H
 
-#include "visitable.h"
+#include <boost/variant.hpp>
+//#include "block_declaration.h"
+#include "function_definition.h"
+//#include "template_declaration.h"
+//#include "explicit_instantiation.h"
+//#include "explicit_specialization.h"
+//#include "linkage_specification.h"
+#include "namespace_definition.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-struct declaration: virtual public visitable
+class declaration:
+	public boost::variant
+	<
+		//block_declaration,
+		function_definition,
+		//template_declaration,
+		//explicit_instantiation,
+		//explicit_specialization,
+		//linkage_specification,
+		namespace_definition
+	>
 {
-	virtual
-	~declaration(){};
 };
 
 }}} //namespace socoa::cpp::syntax_tree

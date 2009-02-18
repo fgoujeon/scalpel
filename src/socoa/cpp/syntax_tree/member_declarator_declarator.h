@@ -21,44 +21,39 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_MEMBER_DECLARATOR_DECLARATOR_H
 #define SOCOA_CPP_SYNTAX_TREE_MEMBER_DECLARATOR_DECLARATOR_H
 
-#include <memory>
 #include <boost/optional.hpp>
-#include "visitor.h"
-#include "member_declarator.h"
 #include "declarator.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class member_declarator_declarator: public member_declarator
+class member_declarator_declarator
 {
 	public:
 		member_declarator_declarator
 		(
-			std::shared_ptr<declarator> a_declarator,
+			declarator&& a_declarator,
 			bool pure_specifier
 		);
 
 		inline
-		const boost::optional<const declarator&>
+		const declarator&
 		get_declarator() const;
 
 		inline
 		bool
 		has_pure_specifier() const;
 
-		SOCOA_CPP_DEFINE_VISITABLE()
-
 	private:
-		boost::optional<declarator> declarator_;
+		declarator declarator_;
 		bool pure_specifier_;
 };
 
 inline
-const boost::optional<const declarator&>
+const declarator&
 member_declarator_declarator::get_declarator() const
 {
-	return boost::optional<const declarator&>(declarator_);
+	return declarator_;
 }
 
 inline

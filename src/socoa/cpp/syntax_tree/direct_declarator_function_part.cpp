@@ -26,12 +26,11 @@ namespace socoa { namespace cpp { namespace syntax_tree
 direct_declarator_function_part::direct_declarator_function_part
 (
     parameter_declaration_clause&& a_parameter_declaration_clause,
-    std::shared_ptr<util::sequence<cv_qualifier>> a_cv_qualifier_seq
+    boost::optional<util::sequence<cv_qualifier>> a_cv_qualifier_seq
 ):
-    parameter_declaration_clause_(a_parameter_declaration_clause)/*,
-    cv_qualifier_seq_(a_cv_qualifier_seq)*/
+    parameter_declaration_clause_(a_parameter_declaration_clause),
+    cv_qualifier_seq_(a_cv_qualifier_seq)
 {
-	if(a_cv_qualifier_seq) cv_qualifier_seq_ = *a_cv_qualifier_seq;
 }
 
 }}} //namespace socoa::cpp::syntax_tree

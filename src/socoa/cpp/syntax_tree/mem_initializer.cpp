@@ -25,7 +25,7 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 mem_initializer::mem_initializer
 (
-	std::shared_ptr<mem_initializer_id> a_mem_initializer_id
+	mem_initializer_id&& a_mem_initializer_id
 ):
 	mem_initializer_id_(a_mem_initializer_id)
 {

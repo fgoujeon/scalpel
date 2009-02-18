@@ -21,16 +21,21 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_MEMBER_SPECIFICATION_PART_H
 #define SOCOA_CPP_SYNTAX_TREE_MEMBER_SPECIFICATION_PART_H
 
-#include "visitable.h"
+#include <boost/optional.hpp>
+#include "member_declaration.h"
+#include "member_specification_access_specifier.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-struct member_specification_part: virtual public visitable
-{
-	virtual
-	~member_specification_part() = default;
-};
+typedef
+	boost::variant
+	<
+        member_declaration,
+		member_specification_access_specifier
+	>
+	member_specification_part
+;
 
 }}} //namespace socoa::cpp::syntax_tree
 

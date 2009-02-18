@@ -26,12 +26,11 @@ namespace socoa { namespace cpp { namespace syntax_tree
 class_specifier::class_specifier
 (
     class_head&& head,
-    std::shared_ptr<member_specification> a_member_specification
+    boost::optional<member_specification> a_member_specification
 ):
-    class_head_(head)/*,
-    member_specification_(a_member_specification)*/
+    class_head_(head),
+    member_specification_(a_member_specification)
 {
-	if(a_member_specification) member_specification_ = *a_member_specification;
 }
 
 }}} //namespace socoa::cpp::syntax_tree

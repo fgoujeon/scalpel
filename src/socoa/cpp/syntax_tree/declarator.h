@@ -22,11 +22,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_DECLARATOR_H
 
 #include <vector>
-#include "direct_declarator.h"
-#include "ptr_operator.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
+
+class declarator_impl;
+class ptr_operator;
+class direct_declarator;
 
 class declarator
 {
@@ -37,32 +39,17 @@ class declarator
             direct_declarator&& a_direct_declarator
         );
 
-        inline
+		~declarator();
+
         const std::vector<ptr_operator>&
         get_ptr_operators() const;
 
-        inline
         const direct_declarator&
         get_direct_declarator() const;
 
     private:
-        std::vector<ptr_operator> ptr_operators_;
-        direct_declarator direct_declarator_;
+		declarator_impl* pimpl_;
 };
-
-inline
-const std::vector<ptr_operator>&
-declarator::get_ptr_operators() const
-{
-    return ptr_operators_;
-}
-
-inline
-const direct_declarator&
-declarator::get_direct_declarator() const
-{
-    return direct_declarator_;
-}
 
 }}} //namespace socoa::cpp::syntax_tree
 

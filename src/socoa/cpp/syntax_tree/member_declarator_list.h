@@ -34,7 +34,7 @@ typedef
 		member_declarator,
 		util::extern_strings::comma
 	>
-	member_declarator_list_t
+	member_declarator_list
 ;
 
 }}} //namespace socoa::cpp::syntax_tree

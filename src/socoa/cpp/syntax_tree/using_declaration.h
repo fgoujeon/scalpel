@@ -21,27 +21,22 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_USING_DECLARATION_H
 #define SOCOA_CPP_SYNTAX_TREE_USING_DECLARATION_H
 
-#include <memory>
 #include <boost/optional.hpp>
-#include "visitor.h"
-#include "member_declaration.h"
-#include "block_declaration.h"
 #include "nested_name_specifier.h"
+#include "unqualified_id.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class unqualified_id;
-
-class using_declaration: public member_declaration, public block_declaration
+class using_declaration
 {
 	public:
 		using_declaration
 		(
 			bool typename_keyword,
 			bool leading_double_colon,
-			std::shared_ptr<nested_name_specifier> a_nested_name_specifier,
-			std::shared_ptr<unqualified_id> an_unqualified_id
+			boost::optional<nested_name_specifier> a_nested_name_specifier,
+			boost::optional<unqualified_id> an_unqualified_id
 		);
 
 		inline
@@ -57,16 +52,14 @@ class using_declaration: public member_declaration, public block_declaration
 		get_nested_name_specifier() const;
 
 		inline
-		const std::shared_ptr<const unqualified_id>
+		const boost::optional<const unqualified_id>
 		get_unqualified_id() const;
-
-		SOCOA_CPP_DEFINE_VISITABLE()
 
 	private:
 		bool typename_keyword_;
 		bool leading_double_colon_;
 		boost::optional<nested_name_specifier> nested_name_specifier_;
-		std::shared_ptr<unqualified_id> unqualified_id_;
+		boost::optional<unqualified_id> unqualified_id_;
 };
 
 inline
@@ -91,10 +84,10 @@ using_declaration::get_nested_name_specifier() const
 }
 
 inline
-const std::shared_ptr<const unqualified_id>
+const boost::optional<const unqualified_id>
 using_declaration::get_unqualified_id() const
 {
-	return unqualified_id_;
+	return boost::optional<const unqualified_id>(unqualified_id_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

@@ -22,20 +22,19 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_DIRECT_DECLARATOR_FUNCTION_PART_H
 
 #include <boost/optional.hpp>
-#include "visitor.h"
-#include "direct_declarator_part.h"
 #include "parameter_declaration_clause.h"
+#include "cv_qualifier_seq.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class direct_declarator_function_part: public direct_declarator_part
+class direct_declarator_function_part
 {
     public:
         direct_declarator_function_part
         (
             parameter_declaration_clause&& a_parameter_declaration_clause,
-            std::shared_ptr<util::sequence<cv_qualifier>> a_cv_qualifier_seq
+            boost::optional<cv_qualifier_seq> a_cv_qualifier_seq
         );
 
         inline
@@ -43,14 +42,12 @@ class direct_declarator_function_part: public direct_declarator_part
         get_parameter_declaration_clause() const;
 
         inline
-        const boost::optional<const util::sequence<cv_qualifier>&>
+        const boost::optional<const cv_qualifier_seq&>
         get_cv_qualifier_seq() const;
-
-        SOCOA_CPP_DEFINE_VISITABLE()
 
     private:
         parameter_declaration_clause parameter_declaration_clause_;
-		boost::optional<util::sequence<cv_qualifier>> cv_qualifier_seq_;
+		boost::optional<cv_qualifier_seq> cv_qualifier_seq_;
 };
 
 inline
@@ -61,10 +58,10 @@ direct_declarator_function_part::get_parameter_declaration_clause() const
 }
 
 inline
-const boost::optional<const util::sequence<cv_qualifier>&>
+const boost::optional<const cv_qualifier_seq&>
 direct_declarator_function_part::get_cv_qualifier_seq() const
 {
-    return boost::optional<const util::sequence<cv_qualifier>&>(cv_qualifier_seq_);
+    return boost::optional<const cv_qualifier_seq&>(cv_qualifier_seq_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree
