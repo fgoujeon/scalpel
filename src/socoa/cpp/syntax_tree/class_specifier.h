@@ -21,7 +21,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_CLASS_SPECIFIER_H
 #define SOCOA_CPP_SYNTAX_TREE_CLASS_SPECIFIER_H
 
-#include <string>
 #include <boost/optional.hpp>
 #include "class_head.h"
 #include "member_specification.h"

@@ -34,11 +34,11 @@ namespace socoa { namespace cpp { namespace syntax_tree
 typedef
 	boost::variant
 	<
-		simple_declaration,
+		simple_declaration//,
 //		asm_definition,
 //		namespace_alias_definition,
-		using_declaration,
-		using_directive
+//		using_declaration,
+//		using_directive
 	>
 	block_declaration
 ;

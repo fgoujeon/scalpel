@@ -29,6 +29,18 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "grammar.h"
 #include "syntax_tree.h"
 
+#define GENERATE_CONVERT_FUNCTION_MAP_PAIR(id, type)					\
+template<>																\
+struct convert_function_map<grammar::parser_id::id>						\
+{																		\
+	static																\
+	convert_function_traits<syntax_tree::type>::function_ptr_t			\
+	get_convert_function()												\
+	{																	\
+		return &convert_##type;											\
+	}																	\
+};
+
 namespace socoa { namespace cpp
 {
 
@@ -50,6 +62,15 @@ namespace parse_tree_to_syntax_tree
         typedef std::function<return_t (const tree_node_t&)> function_t;
         typedef std::map<const grammar::parser_id, function_t> id_function_map_t;
     };
+
+
+
+
+
+
+
+
+
 
     syntax_tree_t
     convert_tree(const tree_node_t& node);
@@ -353,6 +374,10 @@ namespace parse_tree_to_syntax_tree
     const tree_node_t*
     find_child_node(const tree_node_t& parent_node, const grammar::parser_id child_id);
 
+	inline
+	const tree_node_t&
+	get_only_child_node(const tree_node_t& parent_node);
+
     bool
     check_node_existence(const tree_node_t& parent_node, const std::string& value, unsigned int position);
 
@@ -376,6 +401,45 @@ namespace parse_tree_to_syntax_tree
 
     int
     get_id(const tree_node_t& node);
+
+
+
+
+
+	/**
+	Get the convert_* function corresponding to the given grammar's parser id.
+	*/
+	template<int ParserId>
+	struct convert_function_map;
+
+		//GENERATE_CONVERT_FUNCTION_MAP_PAIR(id::ASM_DEFINITION,
+	GENERATE_CONVERT_FUNCTION_MAP_PAIR(BLOCK_DECLARATION, block_declaration)
+	//GENERATE_CONVERT_FUNCTION_MAP_PAIR(CONVERSION_FUNCTION_ID, conversion_function_id)
+	//GENERATE_CONVERT_FUNCTION_MAP_PAIR(DESTRUCTOR_NAME, destructor_name)
+//            id::EXPLICIT_INSTANTIATION,
+//            id::EXPLICIT_SPECIALIZATION,
+	GENERATE_CONVERT_FUNCTION_MAP_PAIR(FUNCTION_DEFINITION, function_definition)
+	GENERATE_CONVERT_FUNCTION_MAP_PAIR(ID_EXPRESSION, id_expression)
+	GENERATE_CONVERT_FUNCTION_MAP_PAIR(IDENTIFIER, identifier)
+//            id::LINKAGE_SPECIFICATION,
+		//id::NAMESPACE_ALIAS_DEFINITION,
+	GENERATE_CONVERT_FUNCTION_MAP_PAIR(NAMESPACE_DEFINITION, namespace_definition)
+	//GENERATE_CONVERT_FUNCTION_MAP_PAIR(OPERATOR_FUNCTION_ID, operator_function_id)
+	GENERATE_CONVERT_FUNCTION_MAP_PAIR(QUALIFIED_ID, qualified_id)
+	GENERATE_CONVERT_FUNCTION_MAP_PAIR(QUALIFIED_NESTED_ID, qualified_nested_id)
+	GENERATE_CONVERT_FUNCTION_MAP_PAIR(QUALIFIED_OPERATOR_FUNCTION_ID, qualified_operator_function_id)
+	GENERATE_CONVERT_FUNCTION_MAP_PAIR(QUALIFIED_TEMPLATE_ID, qualified_template_id)
+	GENERATE_CONVERT_FUNCTION_MAP_PAIR(QUALIFIED_IDENTIFIER, qualified_identifier)
+	GENERATE_CONVERT_FUNCTION_MAP_PAIR(SIMPLE_DECLARATION, simple_declaration)
+	//GENERATE_CONVERT_FUNCTION_MAP_PAIR(TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION, assignment_expression)
+	GENERATE_CONVERT_FUNCTION_MAP_PAIR(TEMPLATE_DECLARATION, template_declaration)
+	GENERATE_CONVERT_FUNCTION_MAP_PAIR(TEMPLATE_ID, template_id)
+	//GENERATE_CONVERT_FUNCTION_MAP_PAIR(TYPE_ID, type_id)
+	GENERATE_CONVERT_FUNCTION_MAP_PAIR(UNQUALIFIED_ID, unqualified_id)
+	GENERATE_CONVERT_FUNCTION_MAP_PAIR(USING_DECLARATION, using_declaration)
+	GENERATE_CONVERT_FUNCTION_MAP_PAIR(USING_DIRECTIVE, using_directive)
+
+
 
 
 
@@ -565,7 +629,7 @@ namespace parse_tree_to_syntax_tree
             typename id_convert_function_map_t::const_iterator i = id_convert_function_map.begin();
             i != id_convert_function_map.end();
             ++i
-        ) //for each id/convert function
+        ) //for each id/convert_function pair
         {
             const int id = i->first;
             const convert_function_t convert_function = i->second;
@@ -576,10 +640,18 @@ namespace parse_tree_to_syntax_tree
             }
         }
 
-        assert(!assert_converted && "The only child node's id is not is the map");
+        assert(!assert_converted && "The child node's id is not in the map");
 
         return boost::optional<T>();
     }
+
+	inline
+	const tree_node_t&
+	get_only_child_node(const tree_node_t& parent_node)
+	{
+		assert(parent_node.children.size() == 1);
+		return *parent_node.children.begin();
+	}
 }
 
 }} //namespace socoa::cpp

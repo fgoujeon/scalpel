@@ -28,13 +28,11 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class function_specifier{};
-
 class decl_specifier:
 	public boost::variant
 	<
-		type_specifier,
-		function_specifier
+		type_specifier
+//		function_specifier
 	>
 {
 };

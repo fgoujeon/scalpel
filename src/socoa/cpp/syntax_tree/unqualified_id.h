@@ -25,7 +25,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 //#include "operator_function_id.h"
 //#include "conversion_function_id.h"
 //#include "destructor_name.h"
-//#include "template_id.h"
+#include "template_id.h"
 #include "identifier.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
@@ -37,7 +37,7 @@ typedef
  //       operator_function_id,
  //       conversion_function_id,
  //       destructor_name,
- //       template_id,
+        template_id,
         identifier
 	>
 	unqualified_id
