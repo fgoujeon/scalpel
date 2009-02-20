@@ -33,8 +33,8 @@ typedef
 	boost::variant
 	<
         nested_identifier_or_template_id,
-        simple_template_type_specifier//,
-//        built_in_type_specifier
+        simple_template_type_specifier,
+        built_in_type_specifier
 	>
 	simple_type_specifier
 ;

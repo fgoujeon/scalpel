@@ -29,16 +29,16 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "grammar.h"
 #include "syntax_tree.h"
 
-#define SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(id, type)			\
-template<>																\
-struct convert_function_map<grammar::parser_id::id>						\
-{																		\
-	static																\
-	convert_function_traits<syntax_tree::type>::function_ptr_t			\
-	get_convert_function()												\
-	{																	\
-		return &convert_##type;											\
-	}																	\
+#define SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(id, return_type, convert_function)			\
+template<>																						\
+struct convert_function_map<grammar::parser_id::id>												\
+{																								\
+	static																						\
+	convert_function_traits<syntax_tree::return_type>::function_ptr_t							\
+	get_convert_function()																		\
+	{																							\
+		return &convert_##convert_function;														\
+	}																							\
 };
 
 namespace socoa { namespace cpp
@@ -413,43 +413,226 @@ namespace parse_tree_to_syntax_tree
 	struct convert_function_map;
 
 		//SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(id::ASM_DEFINITION,
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(BLOCK_DECLARATION, block_declaration)
-//	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(BUILT_IN_TYPE_SPECIFIER, built_in_type_specifier)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(CLASS_SPECIFIER, class_specifier)
-	//SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(CONVERSION_FUNCTION_ID, conversion_function_id)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(CV_QUALIFIER, cv_qualifier)
-	//SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(DESTRUCTOR_NAME, destructor_name)
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		BLOCK_DECLARATION,
+		block_declaration,
+		block_declaration
+	)
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		BUILT_IN_TYPE_SPECIFIER,
+		built_in_type_specifier,
+		string_enumeration
+	)
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		CLASS_SPECIFIER,
+		class_specifier,
+		class_specifier
+	)
+	/*SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		CONVERSION_FUNCTION_ID,
+		conversion_function_id,
+		conversion_function_id
+	)*/
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		CV_QUALIFIER,
+		cv_qualifier,
+		cv_qualifier
+	)
+	/*SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		DESTRUCTOR_NAME,
+		destructor_name,
+		destructor_name
+	)*/
 //            id::EXPLICIT_INSTANTIATION,
 //            id::EXPLICIT_SPECIALIZATION,
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(FUNCTION_DEFINITION, function_definition)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(ID_EXPRESSION, id_expression)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(IDENTIFIER, identifier)
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		FUNCTION_DEFINITION,
+		function_definition,
+		function_definition
+	)
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		ID_EXPRESSION,
+		id_expression,
+		id_expression
+	)
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		IDENTIFIER,
+		identifier,
+		identifier
+	)
 //            id::LINKAGE_SPECIFICATION,
 		//id::NAMESPACE_ALIAS_DEFINITION,
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(MEMBER_DECLARATION_FUNCTION_DEFINITION, member_declaration_function_definition)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(MEMBER_DECLARATION_MEMBER_DECLARATOR_LIST, member_declaration_member_declarator_list)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(MEMBER_DECLARATION_UNQUALIFIED_ID, member_declaration_unqualified_id)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(MEMBER_DECLARATOR_BIT_FIELD_MEMBER, member_declarator_bit_field_member)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(MEMBER_DECLARATOR_DECLARATOR, member_declarator_declarator)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(NAMESPACE_DEFINITION, namespace_definition)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(NESTED_IDENTIFIER_OR_TEMPLATE_ID, nested_identifier_or_template_id)
-	//SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(OPERATOR_FUNCTION_ID, operator_function_id)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(QUALIFIED_ID, qualified_id)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(QUALIFIED_NESTED_ID, qualified_nested_id)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(QUALIFIED_OPERATOR_FUNCTION_ID, qualified_operator_function_id)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(QUALIFIED_TEMPLATE_ID, qualified_template_id)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(QUALIFIED_IDENTIFIER, qualified_identifier)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(SIMPLE_DECLARATION, simple_declaration)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(SIMPLE_TYPE_SPECIFIER, simple_type_specifier)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(SIMPLE_TEMPLATE_TYPE_SPECIFIER, simple_template_type_specifier)
-	//SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION, assignment_expression)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(TEMPLATE_DECLARATION, template_declaration)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(TEMPLATE_ID, template_id)
-	//SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(TYPE_ID, type_id)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(TYPE_SPECIFIER, type_specifier)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(UNQUALIFIED_ID, unqualified_id)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(USING_DECLARATION, using_declaration)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(USING_DIRECTIVE, using_directive)
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		MEMBER_DECLARATION,
+		member_declaration,
+		member_declaration
+	)
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		MEMBER_DECLARATION_FUNCTION_DEFINITION,
+		member_declaration_function_definition,
+		member_declaration_function_definition
+	)
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		MEMBER_DECLARATION_MEMBER_DECLARATOR_LIST,
+		member_declaration_member_declarator_list,
+		member_declaration_member_declarator_list
+	)
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		MEMBER_DECLARATION_UNQUALIFIED_ID,
+		member_declaration_unqualified_id,
+		member_declaration_unqualified_id
+	)
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		MEMBER_DECLARATOR_BIT_FIELD_MEMBER,
+		member_declarator_bit_field_member,
+		member_declarator_bit_field_member
+	)
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		MEMBER_DECLARATOR_DECLARATOR,
+		member_declarator_declarator,
+		member_declarator_declarator
+	)
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		MEMBER_SPECIFICATION_ACCESS_SPECIFIER,
+		member_specification_access_specifier,
+		member_specification_access_specifier
+	)
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		NAMESPACE_DEFINITION,
+		namespace_definition,
+		namespace_definition
+	)
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		NESTED_IDENTIFIER_OR_TEMPLATE_ID,
+		nested_identifier_or_template_id,
+		nested_identifier_or_template_id
+	)
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		NESTED_NAME_SPECIFIER_TEMPLATE_ID_PART,
+		nested_name_specifier_template_id_part,
+		nested_name_specifier_template_id_part
+	)
+	/*SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		OPERATOR_FUNCTION_ID,
+		operator_function_id,
+		operator_function_id
+	)*/
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		QUALIFIED_ID,
+		qualified_id,
+		qualified_id
+	)
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		QUALIFIED_NESTED_ID,
+		qualified_nested_id,
+		qualified_nested_id
+	)
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		QUALIFIED_OPERATOR_FUNCTION_ID,
+		qualified_operator_function_id,
+		qualified_operator_function_id
+	)
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		QUALIFIED_TEMPLATE_ID,
+		qualified_template_id,
+		qualified_template_id
+	)
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		QUALIFIED_IDENTIFIER,
+		qualified_identifier,
+		qualified_identifier
+	)
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		SIMPLE_DECLARATION,
+		simple_declaration,
+		simple_declaration
+	)
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		SIMPLE_TYPE_SPECIFIER,
+		simple_type_specifier,
+		simple_type_specifier
+	)
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		SIMPLE_TEMPLATE_TYPE_SPECIFIER,
+		simple_template_type_specifier,
+		simple_template_type_specifier
+	)
+	/*SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION,
+		assignment_expression,
+		assignment_expression
+	)*/
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		TEMPLATE_DECLARATION,
+		template_declaration,
+		template_declaration
+	)
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		TEMPLATE_ID,
+		template_id,
+		template_id
+	)
+	/*SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		TYPE_ID,
+		type_id,
+		type_id
+	)*/
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		TYPE_SPECIFIER,
+		type_specifier,
+		type_specifier
+	)
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		UNQUALIFIED_ID,
+		unqualified_id,
+		unqualified_id
+	)
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		USING_DECLARATION,
+		using_declaration,
+		using_declaration
+	)
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		USING_DIRECTIVE,
+		using_directive,
+		using_directive
+	)
 
 
 

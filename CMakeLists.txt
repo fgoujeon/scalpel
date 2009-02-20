@@ -25,6 +25,8 @@ set(LIBRARY_OUTPUT_PATH lib/${CMAKE_BUILD_TYPE})
 #gcc settings
 if(CMAKE_COMPILER_IS_GNUCXX)
 	add_definitions(-std=c++0x -W -Wall)
+else(CMAKE_COMPILER_IS_GNUCXX)
+	message(STATUS "Your compiler doesn't support C++0x")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
 #library

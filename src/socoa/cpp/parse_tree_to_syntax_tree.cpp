@@ -88,8 +88,9 @@ namespace parse_tree_to_syntax_tree
 typedef grammar::parser_id id;
 
 /**
-Get the syntax_tree node from the parse_tree node given to convert static function.
-\tparam SyntaxNodeT type of the syntax_node (usually typedef of a boost::variant<...>)
+Convert the parse_tree node given to the convert() static function to the
+correspondant syntax_tree node.
+\tparam SyntaxNodeT type of the syntax_node (must be a boost::variant<...>)
 \tparam Ids list of the potential values of the given node's parser_id
 */
 template<class SyntaxNodeT, int... Ids>
@@ -116,7 +117,7 @@ struct variant_node_converter<SyntaxNodeT, Id, Ids...>
 		const int node_id = get_id(node);
 		if(node_id == Id)
 		{
-			return SyntaxNodeT(convert_function_map<Id>::get_convert_function()(node));
+			return convert_function_map<Id>::get_convert_function()(node);
 		}
 		else
 		{
@@ -124,6 +125,28 @@ struct variant_node_converter<SyntaxNodeT, Id, Ids...>
 		}
 	}
 };
+
+
+
+
+template<class SyntaxNodeT, int... Ids>
+struct variant_node_sequence_converter
+{
+	static
+	std::vector<SyntaxNodeT>
+	convert(const tree_node_t& parent_node)
+	{
+		std::vector<SyntaxNodeT> seq;
+        for(tree_node_iterator_t i = parent_node.children.begin(); i != parent_node.children.end(); ++i) //for each child node
+        {
+            const tree_node_t& child_node = *i;
+			seq.push_back(variant_node_converter<SyntaxNodeT, Ids...>::convert(child_node));
+		}
+		return seq;
+	}
+};
+
+
 
 
 /*------------------------------------------
@@ -154,8 +177,11 @@ convert_tree(const tree_node_t& node)
         },
         false //the tree may be empty
     );
-	assert(syntax_tree);
-	return *syntax_tree;
+
+	if(syntax_tree)
+		return *syntax_tree;
+	else
+		return syntax_tree_t();
 }
 
 identifier
@@ -278,15 +304,12 @@ convert_nested_name_specifier(const tree_node_t& node)
     return nested_name_specifier
     (
         ASSERTED_CONVERT_NODE(identifier_or_template_id, IDENTIFIER_OR_TEMPLATE_ID),
-        convert_nodes
-        (
-            node,
-            convert_function_traits<nested_name_specifier_part>::id_function_map_t
-            {
-                {grammar::IDENTIFIER, &convert_identifier},
-                {grammar::NESTED_NAME_SPECIFIER_TEMPLATE_ID_PART, &convert_nested_name_specifier_template_id_part}
-            }
-        )
+		variant_node_sequence_converter
+		<
+			nested_name_specifier_part,
+			id::IDENTIFIER,
+			id::NESTED_NAME_SPECIFIER_TEMPLATE_ID_PART
+		>::convert(node)
     );
 }
 
@@ -400,8 +423,8 @@ convert_simple_type_specifier(const tree_node_t& node)
 	<
 		simple_type_specifier,
 		id::NESTED_IDENTIFIER_OR_TEMPLATE_ID,
-		id::SIMPLE_TEMPLATE_TYPE_SPECIFIER//,
-//		id::BUILT_IN_TYPE_SPECIFIER
+		id::SIMPLE_TEMPLATE_TYPE_SPECIFIER,
+		id::BUILT_IN_TYPE_SPECIFIER
 	>::convert
 	(
 		get_only_child_node(node)
@@ -513,15 +536,12 @@ convert_direct_declarator(const tree_node_t& node)
     (
 		CONVERT_NODE(declarator_id, DECLARATOR_ID),
 		CONVERT_NODE(declarator, DECLARATOR),
-		convert_nodes
-		(
-			node,
-			convert_function_traits<direct_declarator_part>::id_function_map_t
-			{
-				{grammar::DIRECT_DECLARATOR_FUNCTION_PART, &convert_direct_declarator_function_part},
-				//{grammar::DIRECT_DECLARATOR_ARRAY_PART, &convert_direct_declarator_array_part},
-			}
-		)
+		variant_node_sequence_converter
+		<
+			direct_declarator_part,
+			id::DIRECT_DECLARATOR_FUNCTION_PART,
+			//id::DIRECT_DECLARATOR_ARRAY_PART
+		>::convert(node)
     );
 }
 
@@ -750,15 +770,12 @@ convert_member_specification(const tree_node_t& node)
 
     return member_specification
     (
-		convert_nodes
-		(
-			node,
-			convert_function_traits<member_specification_part>::id_function_map_t
-			{
-				{grammar::MEMBER_DECLARATION, &convert_member_declaration},
-				{grammar::MEMBER_SPECIFICATION_ACCESS_SPECIFIER, &convert_member_specification_access_specifier}
-			}
-		)
+		variant_node_sequence_converter
+		<
+			member_specification_part,
+			id::MEMBER_DECLARATION,
+			id::MEMBER_SPECIFICATION_ACCESS_SPECIFIER
+		>::convert(node)
     );
 }
 
