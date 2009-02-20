@@ -29,14 +29,26 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
+typedef
+	boost::variant
+	<
+//		assignment_expression,
+//		type_id,
+		id_expression
+	>
+	template_argument_t
+;
+
 class template_argument:
 	public boost::variant
 	<
-		assignment_expression,
-		type_id,
+//		assignment_expression,
+//		type_id,
 		id_expression
 	>
 {
+	public:
+		template_argument(const id_expression& o): template_argument_t(o){}
 };
 
 }}} //namespace socoa::cpp::syntax_tree

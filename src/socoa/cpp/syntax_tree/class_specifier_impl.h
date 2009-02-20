@@ -18,38 +18,53 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_CLASS_SPECIFIER_H
-#define SOCOA_CPP_SYNTAX_TREE_CLASS_SPECIFIER_H
+#ifndef SOCOA_CPP_SYNTAX_TREE_CLASS_SPECIFIER_IMPL_H
+#define SOCOA_CPP_SYNTAX_TREE_CLASS_SPECIFIER_IMPL_H
 
 #include <boost/optional.hpp>
+#include "class_head.h"
+#include "member_specification.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class class_specifier_impl;
-class class_head;
 class member_specification;
 
-class class_specifier
+class class_specifier_impl
 {
     public:
-        class_specifier
+        class_specifier_impl
         (
             class_head&& head,
             boost::optional<member_specification> a_member_specification
         );
 
-        ~class_specifier();
-
+        inline
         const class_head&
         get_class_head() const;
 
+        inline
         const boost::optional<const member_specification&>
         get_member_specification() const;
 
     private:
-		class_specifier_impl* pimpl_;
+        class_head class_head_;
+		boost::optional<member_specification> member_specification_;
 };
+
+inline
+const class_head&
+class_specifier_impl::get_class_head() const
+{
+    return class_head_;
+}
+
+inline
+const boost::optional<const member_specification&>
+class_specifier_impl::get_member_specification() const
+{
+    return boost::optional<const member_specification&>(member_specification_);
+}
 
 }}} //namespace socoa::cpp::syntax_tree
 

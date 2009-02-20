@@ -23,7 +23,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <boost/variant.hpp>
 #include "member_declaration_function_definition.h"
-//#include "member_declaration_member_declarator_list.h"
+#include "member_declaration_member_declarator_list.h"
 #include "member_declaration_unqualified_id.h"
 #include "using_declaration.h"
 #include "template_declaration.h"
@@ -35,7 +35,7 @@ typedef
 	boost::variant
 	<
 		member_declaration_function_definition,
-		//member_declaration_member_declarator_list,
+		member_declaration_member_declarator_list,
 		member_declaration_unqualified_id,
 		using_declaration,
 		template_declaration

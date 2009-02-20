@@ -18,30 +18,51 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_BLOCK_DECLARATION_H
-#define SOCOA_CPP_SYNTAX_TREE_BLOCK_DECLARATION_H
+#ifndef SOCOA_CPP_SYNTAX_TREE_TEMPLATE_DECLARATION_IMPL_H
+#define SOCOA_CPP_SYNTAX_TREE_TEMPLATE_DECLARATION_IMPL_H
 
-#include <boost/variant.hpp>
-#include "simple_declaration.h"
-//#include "asm_definition.h"
-//#include "namespace_alias_definition.h"
-#include "using_declaration.h"
-#include "using_directive.h"
+#include "declaration.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-typedef
-	boost::variant
-	<
-		simple_declaration,
-//		asm_definition,
-//		namespace_alias_definition,
-		using_declaration,
-		using_directive
-	>
-	block_declaration
-;
+class template_declaration_impl
+{
+	public:
+		template_declaration_impl
+		(
+			bool export_keyword,
+			//template_parameter_list m_template_parameter_list;
+			declaration&& a_declaration
+		);
+
+		inline
+		bool
+		has_export_keyword() const;
+
+		inline
+		const declaration&
+		get_declaration() const;
+
+	private:
+		bool export_keyword_;
+		//template_parameter_list m_template_parameter_list;
+		declaration declaration_;
+};
+
+inline
+bool
+template_declaration_impl::has_export_keyword() const
+{
+	return export_keyword_;
+}
+
+inline
+const declaration&
+template_declaration_impl::get_declaration() const
+{
+	return declaration_;
+}
 
 }}} //namespace socoa::cpp::syntax_tree
 

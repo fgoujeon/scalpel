@@ -18,31 +18,19 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_BLOCK_DECLARATION_H
-#define SOCOA_CPP_SYNTAX_TREE_BLOCK_DECLARATION_H
-
-#include <boost/variant.hpp>
-#include "simple_declaration.h"
-//#include "asm_definition.h"
-//#include "namespace_alias_definition.h"
-#include "using_declaration.h"
-#include "using_directive.h"
+#include "class_specifier_impl.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-typedef
-	boost::variant
-	<
-		simple_declaration,
-//		asm_definition,
-//		namespace_alias_definition,
-		using_declaration,
-		using_directive
-	>
-	block_declaration
-;
+class_specifier_impl::class_specifier_impl
+(
+    class_head&& head,
+    boost::optional<member_specification> a_member_specification
+):
+    class_head_(head),
+    member_specification_(a_member_specification)
+{
+}
 
 }}} //namespace socoa::cpp::syntax_tree
-
-#endif

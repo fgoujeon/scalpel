@@ -28,7 +28,8 @@ namespace socoa { namespace cpp
 using namespace syntax_tree;
 
 syntax_tree_to_string_converter::syntax_tree_to_string_converter():
-    m_indentation_level(0)
+	static_visitor_(*this),
+    indentation_level_(0)
 {
 }
 
@@ -36,7 +37,7 @@ std::string
 syntax_tree_to_string_converter::operator()(const syntax_tree_t& a_syntax_tree)
 {
     result_.str("");
-    m_indentation_level = 0;
+    indentation_level_ = 0;
     //convert(a_syntax_tree);
     return result_.str();
 }
@@ -415,9 +416,9 @@ void
 syntax_tree_to_string_converter::convert(const ctor_initializer& item)
 {
     result_ << ":";
-    ++m_indentation_level;
+    ++indentation_level_;
     safe_convert(item.get_mem_initializer_list());
-    --m_indentation_level;
+    --indentation_level_;
 }
 
 void
@@ -529,7 +530,7 @@ const std::string
 syntax_tree_to_string_converter::opening_brace()
 {
     std::string result = new_line() + indentation() + "{";
-    ++m_indentation_level;
+    ++indentation_level_;
     result += new_line();
     return result;
 }
@@ -537,7 +538,7 @@ syntax_tree_to_string_converter::opening_brace()
 const std::string
 syntax_tree_to_string_converter::closing_brace()
 {
-    --m_indentation_level;
+    --indentation_level_;
     return indentation() + "}";
 }
 
@@ -545,7 +546,7 @@ const std::string
 syntax_tree_to_string_converter::indentation()
 {
     std::ostringstream result;
-    for(unsigned int i = 0; i < m_indentation_level; ++i)
+    for(unsigned int i = 0; i < indentation_level_; ++i)
     {
         result << "    ";
     }

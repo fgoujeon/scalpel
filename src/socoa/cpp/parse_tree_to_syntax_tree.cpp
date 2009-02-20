@@ -116,7 +116,7 @@ struct variant_node_converter<SyntaxNodeT, Id, Ids...>
 		const int node_id = get_id(node);
 		if(node_id == Id)
 		{
-			return convert_function_map<Id>::get_convert_function()(node);
+			return SyntaxNodeT(convert_function_map<Id>::get_convert_function()(node));
 		}
 		else
 		{
@@ -126,9 +126,9 @@ struct variant_node_converter<SyntaxNodeT, Id, Ids...>
 };
 
 
-/*--------------------------------------
-	Convert_* functions' definitions.
---------------------------------------*/
+/*------------------------------------------
+			convert_* functions
+------------------------------------------*/
 
 syntax_tree_t
 convert_tree(const tree_node_t& node)
@@ -400,8 +400,8 @@ convert_simple_type_specifier(const tree_node_t& node)
 	<
 		simple_type_specifier,
 		id::NESTED_IDENTIFIER_OR_TEMPLATE_ID,
-		id::SIMPLE_TEMPLATE_TYPE_SPECIFIER,
-		id::BUILT_IN_TYPE_SPECIFIER
+		id::SIMPLE_TEMPLATE_TYPE_SPECIFIER//,
+//		id::BUILT_IN_TYPE_SPECIFIER
 	>::convert
 	(
 		get_only_child_node(node)

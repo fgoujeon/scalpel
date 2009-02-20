@@ -20,6 +20,9 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "class_specifier.h"
 
+#include "class_specifier_impl.h"
+#include "member_specification.h"
+
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
@@ -28,9 +31,32 @@ class_specifier::class_specifier
     class_head&& head,
     boost::optional<member_specification> a_member_specification
 ):
-    class_head_(head),
-    member_specification_(a_member_specification)
+	pimpl_
+	(
+		new class_specifier_impl
+		(
+			head,
+			a_member_specification
+		)
+	)
 {
+}
+
+class_specifier::~class_specifier()
+{
+	delete pimpl_;
+}
+
+const class_head&
+class_specifier::get_class_head() const
+{
+	return pimpl_->get_class_head();
+}
+
+const boost::optional<const member_specification&>
+class_specifier::get_member_specification() const
+{
+	return pimpl_->get_member_specification();
 }
 
 }}} //namespace socoa::cpp::syntax_tree

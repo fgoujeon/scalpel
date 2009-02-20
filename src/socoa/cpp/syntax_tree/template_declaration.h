@@ -21,10 +21,11 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_TEMPLATE_DECLARATION_H
 #define SOCOA_CPP_SYNTAX_TREE_TEMPLATE_DECLARATION_H
 
-#include "declaration.h"
-
 namespace socoa { namespace cpp { namespace syntax_tree
 {
+
+class template_declaration_impl;
+class declaration;
 
 class template_declaration
 {
@@ -36,33 +37,17 @@ class template_declaration
 			declaration&& a_declaration
 		);
 
-		inline
+		~template_declaration();
+
 		bool
 		has_export_keyword() const;
 
-		inline
 		const declaration&
 		get_declaration() const;
 
 	private:
-		bool export_keyword_;
-		//template_parameter_list m_template_parameter_list;
-		declaration declaration_;
+		template_declaration_impl* pimpl_;
 };
-
-inline
-bool
-template_declaration::has_export_keyword() const
-{
-	return export_keyword_;
-}
-
-inline
-const declaration&
-template_declaration::get_declaration() const
-{
-	return declaration_;
-}
 
 }}} //namespace socoa::cpp::syntax_tree
 

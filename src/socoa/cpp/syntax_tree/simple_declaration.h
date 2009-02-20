@@ -21,7 +21,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_SIMPLE_DECLARATION_H
 #define SOCOA_CPP_SYNTAX_TREE_SIMPLE_DECLARATION_H
 
-#include <memory>
 #include <boost/optional.hpp>
 #include "init_declarator_list.h"
 #include "decl_specifier_seq.h"

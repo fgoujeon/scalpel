@@ -22,7 +22,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_MEM_INITIALIZER_ID_H
 
 #include <boost/variant.hpp>
-//#include "mem_initializer_list.h"
+#include "nested_identifier_or_template_id.h"
 #include "identifier.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
@@ -31,7 +31,7 @@ namespace socoa { namespace cpp { namespace syntax_tree
 typedef
 	boost::variant
 	<
-		//mem_initializer_list,
+		nested_identifier_or_template_id,
 		identifier
 	>
 	mem_initializer_id

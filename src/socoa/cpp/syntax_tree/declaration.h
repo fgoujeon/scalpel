@@ -22,9 +22,9 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_DECLARATION_H
 
 #include <boost/variant.hpp>
-//#include "block_declaration.h"
+#include "block_declaration.h"
 #include "function_definition.h"
-//#include "template_declaration.h"
+#include "template_declaration.h"
 //#include "explicit_instantiation.h"
 //#include "explicit_specialization.h"
 //#include "linkage_specification.h"
@@ -33,18 +33,26 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class declaration:
-	public boost::variant
+typedef
+	boost::variant
 	<
-		//block_declaration,
+		block_declaration,
 		function_definition,
-		//template_declaration,
+		template_declaration,
 		//explicit_instantiation,
 		//explicit_specialization,
 		//linkage_specification,
 		namespace_definition
 	>
+	declaration_t
+;
+
+struct declaration: public declaration_t
 {
+	declaration(const block_declaration& o): declaration_t(o){};
+	declaration(const function_definition& o): declaration_t(o){};
+	declaration(const template_declaration& o): declaration_t(o){};
+	declaration(const namespace_definition& o): declaration_t(o){};
 };
 
 }}} //namespace socoa::cpp::syntax_tree
