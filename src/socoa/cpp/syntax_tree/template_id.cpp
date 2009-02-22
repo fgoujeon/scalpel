@@ -32,18 +32,13 @@ template_id::template_id
 ):
 	pimpl_
 	(
-		new template_id_impl
+		std::make_shared<template_id_impl>
 		(
 			an_identifier,
 			a_template_argument_list
 		)
 	)
 {
-}
-
-template_id::~template_id()
-{
-	delete pimpl_;
 }
 
 const identifier&

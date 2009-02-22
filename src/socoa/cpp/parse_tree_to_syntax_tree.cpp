@@ -160,7 +160,7 @@ convert_tree(const tree_node_t& node)
     const tree_node_t& declaration_sequence_node = *node.children.begin();
     assert(declaration_sequence_node.value.id() == grammar::TRANSLATION_UNIT);
 
-	boost::optional<syntax_tree_t> syntax_tree = convert_only_child_node<declaration_seq>
+	convert_only_child_node<declaration_seq>
     (
         declaration_sequence_node,
         convert_function_traits<declaration_seq>::id_function_map_t
@@ -178,9 +178,9 @@ convert_tree(const tree_node_t& node)
         false //the tree may be empty
     );
 
-	if(syntax_tree)
+/*	if(syntax_tree)
 		return *syntax_tree;
-	else
+	else*/
 		return syntax_tree_t();
 }
 
@@ -220,9 +220,9 @@ convert_unqualified_id(const tree_node_t& node)
 	return variant_node_converter
 	<
 		unqualified_id,
-//		id::OPERATOR_FUNCTION_ID,
-//		id::CONVERSION_FUNCTION_ID,
-//		id::DESTRUCTOR_NAME,
+		id::OPERATOR_FUNCTION_ID,
+		id::CONVERSION_FUNCTION_ID,
+		id::DESTRUCTOR_NAME,
 		id::TEMPLATE_ID,
 		id::IDENTIFIER
 	>::convert
@@ -303,25 +303,25 @@ convert_nested_name_specifier(const tree_node_t& node)
 
     return nested_name_specifier
     (
-        ASSERTED_CONVERT_NODE(identifier_or_template_id, IDENTIFIER_OR_TEMPLATE_ID),
-		variant_node_sequence_converter
+        *ASSERTED_CONVERT_NODE(identifier_or_template_id, IDENTIFIER_OR_TEMPLATE_ID),
+	/*	variant_node_sequence_converter
 		<
-			nested_name_specifier_part,
-			id::IDENTIFIER,
-			id::NESTED_NAME_SPECIFIER_TEMPLATE_ID_PART
-		>::convert(node)
+			nested_name_specifier::second_part,
+			id::NESTED_NAME_SPECIFIER_SECOND_PART,
+		>::convert(node)*/
+		std::vector<nested_name_specifier::second_part>()
     );
 }
 
-nested_name_specifier_template_id_part
-convert_nested_name_specifier_template_id_part(const tree_node_t& node)
+nested_name_specifier::second_part
+convert_nested_name_specifier_second_part(const tree_node_t& node)
 {
-    assert(node.value.id() == grammar::NESTED_NAME_SPECIFIER_TEMPLATE_ID_PART);
+    assert(node.value.id() == grammar::NESTED_NAME_SPECIFIER_SECOND_PART);
 
-    return nested_name_specifier_template_id_part
+    return nested_name_specifier::second_part
     (
 		check_node_existence(node, "template", 0),
-		std::move(*ASSERTED_CONVERT_NODE(template_id, TEMPLATE_ID))
+		*ASSERTED_CONVERT_NODE(identifier_or_template_id, IDENTIFIER_OR_TEMPLATE_ID)
     );
 }
 
@@ -385,9 +385,9 @@ convert_decl_specifier(const tree_node_t& node)
 	return variant_node_converter
 	<
 		decl_specifier,
-		//id::STORAGE_CLASS_SPECIFIER,
-		id::TYPE_SPECIFIER
-		//id::FUNCTION_SPECIFIER
+		id::STORAGE_CLASS_SPECIFIER,
+		id::TYPE_SPECIFIER,
+		id::FUNCTION_SPECIFIER
 	>::convert
 	(
 		get_only_child_node(node)
@@ -405,7 +405,7 @@ convert_type_specifier(const tree_node_t& node)
 		id::SIMPLE_TYPE_SPECIFIER,
 		id::CLASS_SPECIFIER,
 		//id::ENUM_SPECIFIER,
-		//id::ELABORATED_TYPE_SPECIFIER,
+		id::ELABORATED_TYPE_SPECIFIER,
 		id::CV_QUALIFIER
 		//id::TYPEOF_EXPRESSION
 	>::convert
@@ -532,7 +532,18 @@ convert_direct_declarator(const tree_node_t& node)
 {
     assert(node.value.id() == grammar::DIRECT_DECLARATOR);
 
-    return direct_declarator
+	boost::optional<declarator_id> o1 = CONVERT_NODE(declarator_id, DECLARATOR_ID);
+	boost::optional<declarator> o2 = CONVERT_NODE(declarator, DECLARATOR);
+	std::vector<direct_declarator_part> o3/* =
+		variant_node_sequence_converter
+		<
+			direct_declarator_part,
+			id::DIRECT_DECLARATOR_FUNCTION_PART,
+			//id::DIRECT_DECLARATOR_ARRAY_PART
+		>::convert(node)*/
+	;
+/*
+    direct_declarator decl
     (
 		CONVERT_NODE(declarator_id, DECLARATOR_ID),
 		CONVERT_NODE(declarator, DECLARATOR),
@@ -543,6 +554,10 @@ convert_direct_declarator(const tree_node_t& node)
 			//id::DIRECT_DECLARATOR_ARRAY_PART
 		>::convert(node)
     );
+*/
+	direct_declarator decl(o1, o2, o3);
+
+	return decl;
 }
 
 direct_declarator_function_part
@@ -890,10 +905,15 @@ convert_base_clause(const tree_node_t& node)
 {
     assert(node.value.id() == grammar::BASE_CLAUSE);
 
+	boost::optional<base_specifier_list> obs = CONVERT_LIST_NODE(base_specifier, BASE_SPECIFIER);
+	base_specifier_list bs;
+	if(obs)
+		bs = *obs;
+
     //unlike what grammar defines, base specifier may be missing
     return base_clause
     (
-		*CONVERT_LIST_NODE(base_specifier, BASE_SPECIFIER)
+		bs
     );
 }
 
@@ -1003,6 +1023,38 @@ convert_nested_identifier_or_template_id(const tree_node_t& node)
         CONVERT_NODE(nested_name_specifier, NESTED_NAME_SPECIFIER),
         *ASSERTED_CONVERT_NODE(identifier_or_template_id, IDENTIFIER_OR_TEMPLATE_ID)
     );
+}
+
+elaborated_type_specifier
+convert_elaborated_type_specifier(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar::ELABORATED_TYPE_SPECIFIER);
+
+	return elaborated_type_specifier();
+}
+
+destructor_name
+convert_destructor_name(const tree_node_t& node)
+{
+    assert(node.value.id() == grammar::DESTRUCTOR_NAME);
+
+	return destructor_name(identifier(""));
+}
+
+operator_function_id
+convert_operator_function_id(const tree_node_t& node)
+{
+    assert(node.value.id() == id::OPERATOR_FUNCTION_ID);
+
+	return operator_function_id();
+}
+
+conversion_function_id
+convert_conversion_function_id(const tree_node_t& node)
+{
+    assert(node.value.id() == id::CONVERSION_FUNCTION_ID);
+
+	return conversion_function_id();
 }
 
 

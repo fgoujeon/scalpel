@@ -24,7 +24,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "simple_type_specifier.h"
 #include "class_specifier.h"
 //#include "enum_specifier.h"
-//#include "elaborated_type_specifier.h"
+#include "elaborated_type_specifier.h"
 #include "cv_qualifier.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
@@ -36,7 +36,7 @@ typedef
 		simple_type_specifier,
 		class_specifier,
 //		enum_specifier,
-//		elaborated_type_specifier,
+		elaborated_type_specifier,
 		cv_qualifier
 	>
 	type_specifier

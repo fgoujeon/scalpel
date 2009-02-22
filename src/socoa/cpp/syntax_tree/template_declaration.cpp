@@ -33,18 +33,13 @@ template_declaration::template_declaration
 ):
 	pimpl_
 	(
-		new template_declaration_impl
+		std::make_shared<template_declaration_impl>
 		(
 			export_keyword,
 			a_declaration
 		)
 	)
 {
-}
-
-template_declaration::~template_declaration()
-{
-	delete pimpl_;
 }
 
 bool

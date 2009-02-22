@@ -21,7 +21,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_ANALYZER_H
 #define SOCOA_CPP_SYNTAX_ANALYZER_H
 
-#include <memory>
 #include "grammar.h"
 #include "syntax_tree.h"
 

@@ -23,10 +23,20 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
+nested_name_specifier::second_part::second_part
+(
+	bool template_keyword,
+	identifier_or_template_id&& an_identifier_or_template_id
+):
+	template_keyword_(template_keyword),
+	identifier_or_template_id_(an_identifier_or_template_id)
+{
+}
+
 nested_name_specifier::nested_name_specifier
 (
-	boost::optional<identifier_or_template_id> an_identifier_or_template_id,
-	std::vector<nested_name_specifier_part> parts
+	identifier_or_template_id&& an_identifier_or_template_id,
+	std::vector<nested_name_specifier::second_part>&& parts
 ):
 	identifier_or_template_id_(an_identifier_or_template_id),
 	parts_(parts)

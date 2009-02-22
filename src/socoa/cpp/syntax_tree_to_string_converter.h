@@ -37,6 +37,7 @@ namespace socoa { namespace cpp
 class syntax_tree_to_string_converter
 {
 	private:
+		/*
 		class static_visitor: public boost::static_visitor<>
 		{
 			public:
@@ -55,6 +56,7 @@ class syntax_tree_to_string_converter
 			private:
 				syntax_tree_to_string_converter& converter_;
 		};
+		*/
 
     public:
         syntax_tree_to_string_converter();
@@ -69,7 +71,6 @@ class syntax_tree_to_string_converter
         CONVERT_DECLARATION(qualified_template_id)
         CONVERT_DECLARATION(qualified_identifier)
         CONVERT_DECLARATION(nested_name_specifier)
-        CONVERT_DECLARATION(nested_name_specifier_template_id_part)
         CONVERT_DECLARATION(simple_template_type_specifier)
         CONVERT_DECLARATION(namespace_definition)
         CONVERT_DECLARATION(using_declaration)
@@ -139,7 +140,7 @@ class syntax_tree_to_string_converter
         const std::string
         indentation();
 
-		static_visitor static_visitor_;
+//		static_visitor static_visitor_;
         std::ostringstream result_;
         unsigned int indentation_level_;
 };

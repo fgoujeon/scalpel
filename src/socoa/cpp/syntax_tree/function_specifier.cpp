@@ -18,38 +18,16 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_DECLARATOR_H
-#define SOCOA_CPP_SYNTAX_TREE_DECLARATOR_H
-
-#include <memory>
-#include <vector>
+#include "function_specifier.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class declarator_impl;
-class ptr_operator;
-class direct_declarator;
-
-class declarator
+const std::vector<std::string> function_specifier_string_list
 {
-    public:
-        declarator
-        (
-            std::vector<ptr_operator>&& ptr_operators,
-            direct_declarator&& a_direct_declarator
-        );
-
-        const std::vector<ptr_operator>&
-        get_ptr_operators() const;
-
-        const direct_declarator&
-        get_direct_declarator() const;
-
-    private:
-		std::shared_ptr<declarator_impl> pimpl_;
+	"inline",
+	"virtual",
+	"explicit"
 };
 
 }}} //namespace socoa::cpp::syntax_tree
-
-#endif

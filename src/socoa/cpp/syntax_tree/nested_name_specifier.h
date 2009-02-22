@@ -22,9 +22,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_NESTED_NAME_SPECIFIER_H
 
 #include <vector>
-#include <boost/optional.hpp>
 #include "identifier_or_template_id.h"
-#include "nested_name_specifier_part.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
@@ -32,34 +30,70 @@ namespace socoa { namespace cpp { namespace syntax_tree
 class nested_name_specifier
 {
 	public:
+		class second_part
+		{
+			public:
+				second_part
+				(
+					bool template_keyword,
+					identifier_or_template_id&& an_identifier_or_template_id
+				);
+
+				inline
+				bool
+				has_template_keyword() const;
+
+				inline
+				const identifier_or_template_id&
+				get_identifier_or_template_id() const;
+
+			private:
+				bool template_keyword_;
+				identifier_or_template_id identifier_or_template_id_;
+		};
+
 		nested_name_specifier
 		(
-			boost::optional<identifier_or_template_id> an_identifier_or_template_id,
-			std::vector<nested_name_specifier_part> parts
+			identifier_or_template_id&& an_identifier_or_template_id,
+			std::vector<second_part>&& parts
 		);
 
 		inline
-		const boost::optional<const identifier_or_template_id&>
+		const identifier_or_template_id&
 		get_identifier_or_template_id() const;
 
 		inline
-		const std::vector<nested_name_specifier_part>
+		const std::vector<second_part>&
 		get_parts() const;
 
 	private:
-		boost::optional<identifier_or_template_id> identifier_or_template_id_;
-		std::vector<nested_name_specifier_part> parts_;
+		identifier_or_template_id identifier_or_template_id_;
+		std::vector<second_part> parts_;
 };
 
 inline
-const boost::optional<const identifier_or_template_id&>
-nested_name_specifier::get_identifier_or_template_id() const
+bool
+nested_name_specifier::second_part::has_template_keyword() const
 {
-	return boost::optional<const identifier_or_template_id&>(identifier_or_template_id_);
+	return template_keyword_;
 }
 
 inline
-const std::vector<nested_name_specifier_part>
+const identifier_or_template_id&
+nested_name_specifier::second_part::get_identifier_or_template_id() const
+{
+	return identifier_or_template_id_;
+}
+
+inline
+const identifier_or_template_id&
+nested_name_specifier::get_identifier_or_template_id() const
+{
+	return identifier_or_template_id_;
+}
+
+inline
+const std::vector<nested_name_specifier::second_part>&
 nested_name_specifier::get_parts() const
 {
 	return parts_;

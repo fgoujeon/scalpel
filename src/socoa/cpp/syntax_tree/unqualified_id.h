@@ -22,9 +22,9 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_UNQUALIFIED_ID_H
 
 #include <boost/variant.hpp>
-//#include "operator_function_id.h"
-//#include "conversion_function_id.h"
-//#include "destructor_name.h"
+#include "operator_function_id.h"
+#include "conversion_function_id.h"
+#include "destructor_name.h"
 #include "template_id.h"
 #include "identifier.h"
 
@@ -34,9 +34,9 @@ namespace socoa { namespace cpp { namespace syntax_tree
 typedef
 	boost::variant
 	<
- //       operator_function_id,
- //       conversion_function_id,
- //       destructor_name,
+        operator_function_id,
+        conversion_function_id,
+        destructor_name,
         template_id,
         identifier
 	>

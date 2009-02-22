@@ -21,6 +21,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_CLASS_SPECIFIER_H
 #define SOCOA_CPP_SYNTAX_TREE_CLASS_SPECIFIER_H
 
+#include <memory>
 #include <boost/optional.hpp>
 
 namespace socoa { namespace cpp { namespace syntax_tree
@@ -39,8 +40,6 @@ class class_specifier
             boost::optional<member_specification> a_member_specification
         );
 
-        ~class_specifier();
-
         const class_head&
         get_class_head() const;
 
@@ -48,7 +47,7 @@ class class_specifier
         get_member_specification() const;
 
     private:
-		class_specifier_impl* pimpl_;
+		std::shared_ptr<class_specifier_impl> pimpl_;
 };
 
 }}} //namespace socoa::cpp::syntax_tree

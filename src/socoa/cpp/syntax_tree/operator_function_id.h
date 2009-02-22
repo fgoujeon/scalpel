@@ -18,19 +18,20 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "nested_name_specifier_template_id_part.h"
+#ifndef SOCOA_CPP_SYNTAX_TREE_OPERATOR_FUNCTION_ID_H
+#define SOCOA_CPP_SYNTAX_TREE_OPERATOR_FUNCTION_ID_H
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-nested_name_specifier_template_id_part::nested_name_specifier_template_id_part
-(
-    bool template_keyword,
-    template_id&& a_template_id
-):
-    template_keyword_(template_keyword),
-    template_id_(a_template_id)
+class operator_function_id
 {
-}
+    public:
+
+
+    private:
+};
 
 }}} //namespace socoa::cpp::syntax_tree
+
+#endif

@@ -33,7 +33,7 @@ function_definition::function_definition
 ):
 	pimpl_
 	(
-		new function_definition_impl
+		std::make_shared<function_definition_impl>
 		(
 			a_decl_specifier_seq,
 			a_declarator,
@@ -41,11 +41,6 @@ function_definition::function_definition
 		)
 	)
 {
-}
-
-function_definition::~function_definition()
-{
-	delete pimpl_;
 }
 
 const boost::optional<const util::sequence<decl_specifier>&>

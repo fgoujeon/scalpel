@@ -34,18 +34,13 @@ declarator::declarator
 ):
 	pimpl_
 	(
-		new declarator_impl
+		std::make_shared<declarator_impl>
 		(
 			ptr_operators,
 			a_direct_declarator
 		)
 	)
 {
-}
-
-declarator::~declarator()
-{
-	delete pimpl_;
 }
 
 const std::vector<ptr_operator>&

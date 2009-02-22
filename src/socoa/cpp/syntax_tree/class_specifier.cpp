@@ -33,18 +33,13 @@ class_specifier::class_specifier
 ):
 	pimpl_
 	(
-		new class_specifier_impl
+		std::make_shared<class_specifier_impl>
 		(
 			head,
 			a_member_specification
 		)
 	)
 {
-}
-
-class_specifier::~class_specifier()
-{
-	delete pimpl_;
 }
 
 const class_head&

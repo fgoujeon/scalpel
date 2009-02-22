@@ -405,18 +405,108 @@ grammar::grammar(type_name_parser& a_type_name_parser):
         = str_p("::") >> identifier
     ;
 
+	/*
+	Original rule:
+		nested_name_specifier
+			= identifier_or_template_id >> "::" >> !nested_name_specifier
+			| identifier_or_template_id >> "::" >> "template" >> nested_name_specifier
+		;
+
+		nested_name_specifier
+			= identifier_or_template_id >> "::"
+			| identifier_or_template_id >> "::" >> nested_name_specifier
+			| identifier_or_template_id >> "::" >> "template" >> nested_name_specifier
+		;
+
+		nested_name_specifier
+			= identifier_or_template_id >> "::" >> nested_name_specifier_second_part
+		;
+		nested_name_specifier_second_part
+			= epsilon_p
+			| nested_name_specifier
+			| "template" >> nested_name_specifier
+		;
+
+		nested_name_specifier
+			= identifier_or_template_id >> "::" >> nested_name_specifier_second_part
+		;
+		nested_name_specifier_second_part
+			= epsilon_p
+			| !str_p("template") >> nested_name_specifier
+		;
+
+		nested_name_specifier
+			= identifier_or_template_id >> "::" >> nested_name_specifier_second_part
+		;
+		nested_name_specifier_second_part
+			= epsilon_p
+			| !str_p("template") >> identifier_or_template_id >> "::" >> nested_name_specifier_second_part
+		;
+
+		nested_name_specifier
+			= identifier_or_template_id >> "::" >> nested_name_specifier_second_part
+		;
+		nested_name_specifier_second_part
+			= *(!str_p("template") >> identifier_or_template_id >> "::")
+		;
+	*/
+	nested_name_specifier
+		= identifier_or_template_id >> "::" >> *nested_name_specifier_second_part
+	;
+	nested_name_specifier_second_part
+		= !str_p("template") >> identifier_or_template_id >> "::"
+	;
+
     /*
-        nested_name_specifier
-            = identifier_or_template_id >> "::"
-            | nested_name_specifier >> identifier >> "::"
-            | nested_name_specifier >> !str_p("template") >> template_id >> "::"
+    The following rule is written like this in the standard:
+        postfix_expression
+            = primary_expression
+            | postfix_expression >> '[' >> expression >> ']'
+            | postfix_expression >> '(' >> !expression_list >> ')'
+            | simple_type_specifier >> '(' >> !expression_list >> ')'
+            | str_p("typename") >> !str_p("::") >> nested_name_specifier >> identifier >> '(' >> !expression_list >> ')'
+            | str_p("typename") >> !str_p("::") >> nested_name_specifier >> !str_p("template") >> template_id >> '(' >> !expression_list >> ')'
+            | postfix_expression >> '.' >> !str_p("template") >> id_expression
+            | postfix_expression >> "->" >> !str_p("template") >> id_expression
+            | postfix_expression >> '.' >> pseudo_destructor_name
+            | postfix_expression >> "->" >> pseudo_destructor_name
+            | postfix_expression >> "++"
+            | postfix_expression >> "--"
+            | str_p("dynamic_cast") >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
+            | str_p("static_cast") >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
+            | str_p("reinterpret_cast") >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
+            | str_p("const_cast") >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
+            | str_p("typeid") >> '(' >> expression >> ')'
+            | str_p("typeid") >> '(' >> type_id >> ')'
         ;
+    There are some left recursions that we had to eliminate.
+    See direct_declarator rule for more information about the different steps to follow.
     */
-    nested_name_specifier
-        = identifier_or_template_id >> "::" >> *((nested_name_specifier_template_id_part | identifier) >> "::")
-    ;
-    nested_name_specifier_template_id_part
-        = !str_p("template") >> template_id
+    postfix_expression
+        =
+        (
+            primary_expression
+            | simple_type_specifier >> '(' >> !expression_list >> ')'
+            | str_p("typename") >> !str_p("::") >> nested_name_specifier >> identifier >> '(' >> !expression_list >> ')'
+            | str_p("typename") >> !str_p("::") >> nested_name_specifier >> !str_p("template") >> template_id >> '(' >> !expression_list >> ')'
+            | str_p("dynamic_cast") >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
+            | str_p("static_cast") >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
+            | str_p("reinterpret_cast") >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
+            | str_p("const_cast") >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
+            | str_p("typeid") >> '(' >> expression >> ')'
+            | str_p("typeid") >> '(' >> type_id >> ')'
+        )
+        >>
+        *(
+            '[' >> expression >> ']'
+            | '(' >> !expression_list >> ')'
+            | '.' >> !str_p("template") >> id_expression
+            | "->" >> !str_p("template") >> id_expression
+            | '.' >> pseudo_destructor_name
+            | "->" >> pseudo_destructor_name
+            | "++"
+            | "--"
+        )
     ;
 
     /*

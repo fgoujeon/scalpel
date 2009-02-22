@@ -42,8 +42,6 @@ class template_id
 			boost::optional<util::sequence<template_argument, util::extern_strings::comma>> a_template_argument_list
 		);
 
-		~template_id();
-
 		const identifier&
 		get_identifier() const;
 
@@ -51,7 +49,7 @@ class template_id
 		get_template_argument_list() const;
 
 	private:
-		template_id_impl* pimpl_;
+		std::shared_ptr<template_id_impl> pimpl_;
 };
 
 }}} //namespace socoa::cpp::syntax_tree

@@ -18,42 +18,17 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_FUNCTION_DEFINITION_H
-#define SOCOA_CPP_SYNTAX_TREE_FUNCTION_DEFINITION_H
-
-#include <memory>
-#include <boost/optional.hpp>
-#include "../../util/sequence.h"
+#ifndef SOCOA_CPP_SYNTAX_TREE_CONVERSION_FUNCTION_ID_H
+#define SOCOA_CPP_SYNTAX_TREE_CONVERSION_FUNCTION_ID_H
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class function_definition_impl;
-class decl_specifier;
-class declarator;
-class ctor_initializer;
-
-class function_definition
+class conversion_function_id
 {
     public:
-        function_definition
-        (
-            boost::optional<util::sequence<decl_specifier>> a_decl_specifier_seq,
-            declarator&& a_declarator,
-            boost::optional<ctor_initializer> a_ctor_initializer
-        );
-
-		const boost::optional<const util::sequence<decl_specifier>&>
-		get_decl_specifier_seq() const;
-
-		const declarator&
-		get_declarator() const;
-
-		const boost::optional<const ctor_initializer&>
-		get_ctor_initializer() const;
 
     private:
-		std::shared_ptr<function_definition_impl> pimpl_;
 };
 
 }}} //namespace socoa::cpp::syntax_tree

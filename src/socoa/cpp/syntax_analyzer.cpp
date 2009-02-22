@@ -97,26 +97,26 @@ syntax_analyzer::parse_type_name(const scanner_t& scan)
         {
             raii_affector<bool, true, false> raii_aff(performing_semantic_analysis_);
 
-            /*
-            Create a new string from the beginning of the input to the current
-            location of the scanner.
-            */
+            //
+            //Create a new string from the beginning of the input to the current
+            //location of the scanner.
+            //
             assert(input_);
             std::string partial_input(&*(input_->begin()), scan.first);
             std::cout << "Fragment of input succesfully parsed:\n";
             std::cout << "***\n" << partial_input << "\n***\n";
 
-            /*
-            Complete the scanned source code
-            */
+            //
+            //Complete the scanned source code
+            //
             source_code_completion::complete(partial_input);
             std::cout << "Completed input:\n";
             std::cout << "***\n" << partial_input << "\n***\n";
 
-            /*
-            Analyze the source code's syntax
-            */
-            syntax_tree_t syntax_tree = analyze(partial_input);
+            //
+            //Analyze the source code's syntax
+            //
+//            syntax_tree_t syntax_tree = analyze(partial_input);
         }
 
         parsing_progress_ = parsing_progress;

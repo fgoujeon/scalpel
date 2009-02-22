@@ -102,8 +102,8 @@ namespace parse_tree_to_syntax_tree
     syntax_tree::nested_name_specifier
     convert_nested_name_specifier(const tree_node_t& node);
 
-    syntax_tree::nested_name_specifier_template_id_part
-    convert_nested_name_specifier_template_id_part(const tree_node_t& node);
+    syntax_tree::nested_name_specifier::second_part
+    convert_nested_name_specifier_second_part(const tree_node_t& node);
 
     syntax_tree::declaration
     convert_declaration(const tree_node_t& node);
@@ -230,6 +230,19 @@ namespace parse_tree_to_syntax_tree
 
     syntax_tree::nested_identifier_or_template_id
     convert_nested_identifier_or_template_id(const tree_node_t& node);
+
+    syntax_tree::elaborated_type_specifier
+    convert_elaborated_type_specifier(const tree_node_t& node);
+
+    syntax_tree::destructor_name
+    convert_destructor_name(const tree_node_t& node);
+
+    syntax_tree::operator_function_id
+    convert_operator_function_id(const tree_node_t& node);
+
+    syntax_tree::conversion_function_id
+    convert_conversion_function_id(const tree_node_t& node);
+
 
 
     template
@@ -443,12 +456,18 @@ namespace parse_tree_to_syntax_tree
 		cv_qualifier,
 		cv_qualifier
 	)
-	/*SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
 	(
 		DESTRUCTOR_NAME,
 		destructor_name,
 		destructor_name
-	)*/
+	)
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		ELABORATED_TYPE_SPECIFIER,
+		elaborated_type_specifier,
+		elaborated_type_specifier
+	)
 //            id::EXPLICIT_INSTANTIATION,
 //            id::EXPLICIT_SPECIALIZATION,
 	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
@@ -456,6 +475,18 @@ namespace parse_tree_to_syntax_tree
 		FUNCTION_DEFINITION,
 		function_definition,
 		function_definition
+	)
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		CONVERSION_FUNCTION_ID,
+		conversion_function_id,
+		conversion_function_id
+	)
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		FUNCTION_SPECIFIER,
+		function_specifier,
+		string_enumeration
 	)
 	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
 	(
@@ -527,16 +558,16 @@ namespace parse_tree_to_syntax_tree
 	)
 	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
 	(
-		NESTED_NAME_SPECIFIER_TEMPLATE_ID_PART,
-		nested_name_specifier_template_id_part,
-		nested_name_specifier_template_id_part
+		NESTED_NAME_SPECIFIER_SECOND_PART,
+		nested_name_specifier::second_part,
+		nested_name_specifier_second_part
 	)
-	/*SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
 	(
 		OPERATOR_FUNCTION_ID,
 		operator_function_id,
 		operator_function_id
-	)*/
+	)
 	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
 	(
 		QUALIFIED_ID,
@@ -584,6 +615,12 @@ namespace parse_tree_to_syntax_tree
 		SIMPLE_TEMPLATE_TYPE_SPECIFIER,
 		simple_template_type_specifier,
 		simple_template_type_specifier
+	)
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
+		STORAGE_CLASS_SPECIFIER,
+		storage_class_specifier,
+		string_enumeration
 	)
 	/*SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
 	(

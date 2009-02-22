@@ -21,8 +21,9 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_NAMESPACE_DEFINITION_H
 #define SOCOA_CPP_SYNTAX_TREE_NAMESPACE_DEFINITION_H
 
-#include <boost/optional.hpp>
+#include <memory>
 #include <string>
+#include <boost/optional.hpp>
 #include "identifier.h"
 #include "../../util/sequence.h"
 
@@ -41,8 +42,6 @@ class namespace_definition
 			boost::optional<util::sequence<declaration>> a_declaration_seq
 		);
 
-		~namespace_definition();
-
 		const boost::optional<const identifier&>
 	   	get_identifier() const;
 
@@ -50,7 +49,7 @@ class namespace_definition
 		get_declaration_seq() const;
 
 	private:
-		namespace_definition_impl* pimpl_;
+		std::shared_ptr<namespace_definition_impl> pimpl_;
 };
 
 }}} //namespace socoa::cpp::syntax_tree

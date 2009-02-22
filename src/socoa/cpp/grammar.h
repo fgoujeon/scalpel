@@ -97,7 +97,7 @@ class grammar
             QUALIFIED_TEMPLATE_ID,
             QUALIFIED_IDENTIFIER,
             NESTED_NAME_SPECIFIER,
-            NESTED_NAME_SPECIFIER_TEMPLATE_ID_PART,
+            NESTED_NAME_SPECIFIER_SECOND_PART,
             POSTFIX_EXPRESSION,
             EXPRESSION_LIST,
             PSEUDO_DESTRUCTOR_NAME,
@@ -366,7 +366,7 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::QUALIFIED_TEMPLATE_ID>> qualified_template_id;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::QUALIFIED_IDENTIFIER>> qualified_identifier;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::NESTED_NAME_SPECIFIER>> nested_name_specifier;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::NESTED_NAME_SPECIFIER_TEMPLATE_ID_PART>> nested_name_specifier_template_id_part;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::NESTED_NAME_SPECIFIER_SECOND_PART>> nested_name_specifier_second_part;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::POSTFIX_EXPRESSION>> postfix_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EXPRESSION_LIST>> expression_list;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PSEUDO_DESTRUCTOR_NAME>> pseudo_destructor_name;

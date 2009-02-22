@@ -24,6 +24,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <memory>
 #include <boost/variant.hpp>
 #include "type_specifier.h"
+#include "function_specifier.h"
+#include "storage_class_specifier.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
@@ -31,8 +33,9 @@ namespace socoa { namespace cpp { namespace syntax_tree
 typedef
 	boost::variant
 	<
-		type_specifier
-//		function_specifier
+		type_specifier,
+		function_specifier,
+		storage_class_specifier
 	>
 	decl_specifier_t
 ;
@@ -41,6 +44,8 @@ class decl_specifier: public decl_specifier_t
 {
 	public:
 		decl_specifier(const type_specifier& o): decl_specifier_t(o){}
+		decl_specifier(const function_specifier& o): decl_specifier_t(o){}
+		decl_specifier(const storage_class_specifier& o): decl_specifier_t(o){}
 };
 
 }}} //namespace socoa::cpp::syntax_tree

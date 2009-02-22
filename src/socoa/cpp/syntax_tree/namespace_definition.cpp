@@ -32,18 +32,13 @@ namespace_definition::namespace_definition
 ):
 	pimpl_
 	(
-		new namespace_definition_impl
+		std::make_shared<namespace_definition_impl>
 		(
 			an_identifier,
 			a_declaration_seq
 		)
 	)
 {
-}
-
-namespace_definition::~namespace_definition()
-{
-	delete pimpl_;
 }
 
 const boost::optional<const identifier&>

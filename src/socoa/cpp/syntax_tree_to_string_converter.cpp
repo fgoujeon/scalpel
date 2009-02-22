@@ -28,7 +28,7 @@ namespace socoa { namespace cpp
 using namespace syntax_tree;
 
 syntax_tree_to_string_converter::syntax_tree_to_string_converter():
-	static_visitor_(*this),
+//	static_visitor_(*this),
     indentation_level_(0)
 {
 }
@@ -92,7 +92,7 @@ syntax_tree_to_string_converter::convert(const nested_name_specifier& item)
     result_ << "::";
     for
     (
-        std::vector<nested_name_specifier_part>::const_iterator i = item.get_parts().begin();
+        std::vector<nested_name_specifier::second_part>::const_iterator i = item.get_parts().begin();
         i != item.get_parts().end();
         ++i
     )
@@ -100,15 +100,6 @@ syntax_tree_to_string_converter::convert(const nested_name_specifier& item)
         //(**i).accept(*this);
         result_ << "::";
     }
-}
-
-void
-syntax_tree_to_string_converter::convert(const nested_name_specifier_template_id_part& item)
-{
-    if(item.has_template_keyword())
-        result_ << "template ";
-
-    safe_convert(item.get_template_id());
 }
 
 void

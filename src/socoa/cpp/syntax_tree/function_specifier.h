@@ -18,49 +18,16 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_NESTED_NAME_SPECIFIER_TEMPLATE_ID_PART_H
-#define SOCOA_CPP_SYNTAX_TREE_NESTED_NAME_SPECIFIER_TEMPLATE_ID_PART_H
+#ifndef SOCOA_CPP_SYNTAX_TREE_FUNCTION_SPECIFIER_H
+#define SOCOA_CPP_SYNTAX_TREE_FUNCTION_SPECIFIER_H
 
-#include "template_id.h"
+#include "../../util/string_enumeration.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class nested_name_specifier_template_id_part
-{
-	public:
-		nested_name_specifier_template_id_part
-		(
-			bool template_keyword,
-			template_id&& a_template_id
-		);
-
-		inline
-		bool
-		has_template_keyword() const;
-
-		inline
-		const template_id&
-		get_template_id() const;
-
-	private:
-		bool template_keyword_;
-		template_id template_id_;
-};
-
-inline
-bool
-nested_name_specifier_template_id_part::has_template_keyword() const
-{
-	return template_keyword_;
-}
-
-inline
-const template_id&
-nested_name_specifier_template_id_part::get_template_id() const
-{
-	return template_id_;
-}
+extern const std::vector<std::string> function_specifier_string_list;
+typedef util::string_enumeration<function_specifier_string_list> function_specifier;
 
 }}} //namespace socoa::cpp::syntax_tree
 
