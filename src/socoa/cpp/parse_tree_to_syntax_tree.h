@@ -444,12 +444,12 @@ namespace parse_tree_to_syntax_tree
 		class_specifier,
 		class_specifier
 	)
-	/*SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
 	(
 		CONVERSION_FUNCTION_ID,
 		conversion_function_id,
 		conversion_function_id
-	)*/
+	)
 	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
 	(
 		CV_QUALIFIER,
@@ -464,6 +464,12 @@ namespace parse_tree_to_syntax_tree
 	)
 	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
 	(
+		DIRECT_DECLARATOR_FUNCTION_PART,
+		direct_declarator_function_part,
+		direct_declarator_function_part
+	)
+	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	(
 		ELABORATED_TYPE_SPECIFIER,
 		elaborated_type_specifier,
 		elaborated_type_specifier
@@ -475,12 +481,6 @@ namespace parse_tree_to_syntax_tree
 		FUNCTION_DEFINITION,
 		function_definition,
 		function_definition
-	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
-	(
-		CONVERSION_FUNCTION_ID,
-		conversion_function_id,
-		conversion_function_id
 	)
 	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
 	(

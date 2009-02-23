@@ -107,6 +107,19 @@ struct variant_node_converter<SyntaxNodeT>
 	}
 };
 
+//If the node is optional, return an empty node instead of
+//throwing an error.
+template<class SyntaxNodeT>
+struct variant_node_converter<boost::optional<SyntaxNodeT>>
+{
+	static
+	boost::optional<SyntaxNodeT>
+	convert(const tree_node_t&)
+	{
+		return boost::optional<SyntaxNodeT>();
+	}
+};
+
 template<class SyntaxNodeT, int Id, int... Ids>
 struct variant_node_converter<SyntaxNodeT, Id, Ids...>
 {
@@ -117,7 +130,7 @@ struct variant_node_converter<SyntaxNodeT, Id, Ids...>
 		const int node_id = get_id(node);
 		if(node_id == Id)
 		{
-			return convert_function_map<Id>::get_convert_function()(node);
+			return SyntaxNodeT(convert_function_map<Id>::get_convert_function()(node));
 		}
 		else
 		{
@@ -128,24 +141,22 @@ struct variant_node_converter<SyntaxNodeT, Id, Ids...>
 
 
 
-
 template<class SyntaxNodeT, int... Ids>
-struct variant_node_sequence_converter
+static
+std::vector<SyntaxNodeT>
+convert_variant_node_sequence(const tree_node_t& parent_node)
 {
-	static
-	std::vector<SyntaxNodeT>
-	convert(const tree_node_t& parent_node)
+	std::vector<SyntaxNodeT> seq;
+    for(tree_node_iterator_t i = parent_node.children.begin(); i != parent_node.children.end(); ++i) //for each child node
 	{
-		std::vector<SyntaxNodeT> seq;
-        for(tree_node_iterator_t i = parent_node.children.begin(); i != parent_node.children.end(); ++i) //for each child node
-        {
-            const tree_node_t& child_node = *i;
-			seq.push_back(variant_node_converter<SyntaxNodeT, Ids...>::convert(child_node));
-		}
-		return seq;
-	}
-};
+		const tree_node_t& child_node = *i;
 
+		boost::optional<SyntaxNodeT> optional_node = variant_node_converter<boost::optional<SyntaxNodeT>, Ids...>::convert(child_node);
+		if(optional_node)
+			seq.push_back(*optional_node);
+	}
+	return seq;
+}
 
 
 
@@ -178,9 +189,9 @@ convert_tree(const tree_node_t& node)
         false //the tree may be empty
     );
 
-/*	if(syntax_tree)
+	if(syntax_tree)
 		return *syntax_tree;
-	else*/
+	else
 		return syntax_tree_t();
 }
 
@@ -304,12 +315,11 @@ convert_nested_name_specifier(const tree_node_t& node)
     return nested_name_specifier
     (
         *ASSERTED_CONVERT_NODE(identifier_or_template_id, IDENTIFIER_OR_TEMPLATE_ID),
-	/*	variant_node_sequence_converter
+		convert_variant_node_sequence
 		<
 			nested_name_specifier::second_part,
-			id::NESTED_NAME_SPECIFIER_SECOND_PART,
-		>::convert(node)*/
-		std::vector<nested_name_specifier::second_part>()
+			id::NESTED_NAME_SPECIFIER_SECOND_PART
+		>(node)
     );
 }
 
@@ -532,30 +542,17 @@ convert_direct_declarator(const tree_node_t& node)
 {
     assert(node.value.id() == grammar::DIRECT_DECLARATOR);
 
-	boost::optional<declarator_id> o1 = CONVERT_NODE(declarator_id, DECLARATOR_ID);
-	boost::optional<declarator> o2 = CONVERT_NODE(declarator, DECLARATOR);
-	std::vector<direct_declarator_part> o3/* =
-		variant_node_sequence_converter
-		<
-			direct_declarator_part,
-			id::DIRECT_DECLARATOR_FUNCTION_PART,
-			//id::DIRECT_DECLARATOR_ARRAY_PART
-		>::convert(node)*/
-	;
-/*
     direct_declarator decl
     (
 		CONVERT_NODE(declarator_id, DECLARATOR_ID),
 		CONVERT_NODE(declarator, DECLARATOR),
-		variant_node_sequence_converter
+		convert_variant_node_sequence
 		<
 			direct_declarator_part,
-			id::DIRECT_DECLARATOR_FUNCTION_PART,
+			id::DIRECT_DECLARATOR_FUNCTION_PART
 			//id::DIRECT_DECLARATOR_ARRAY_PART
-		>::convert(node)
+		>(node)
     );
-*/
-	direct_declarator decl(o1, o2, o3);
 
 	return decl;
 }
@@ -785,12 +782,12 @@ convert_member_specification(const tree_node_t& node)
 
     return member_specification
     (
-		variant_node_sequence_converter
+		convert_variant_node_sequence
 		<
 			member_specification_part,
 			id::MEMBER_DECLARATION,
 			id::MEMBER_SPECIFICATION_ACCESS_SPECIFIER
-		>::convert(node)
+		>(node)
     );
 }
 
