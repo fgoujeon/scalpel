@@ -47,6 +47,9 @@ class sequence
         const std::string&
         get_separator() const;
 
+		void
+		push_back(const T& t);
+
     private:
         list_t items_;
 };
@@ -77,6 +80,13 @@ const std::string&
 sequence<T, Separator>::get_separator() const
 {
     return Separator;
+}
+
+template<class T, const std::string& Separator>
+void
+sequence<T, Separator>::push_back(const T& t)
+{
+	items_.push_back(t);
 }
 
 }} //namespace socoa::util

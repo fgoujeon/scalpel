@@ -29,17 +29,33 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "grammar.h"
 #include "syntax_tree.h"
 
-#define SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(id, return_type, convert_function)			\
-template<>																						\
-struct convert_function_map<grammar::parser_id::id>												\
+#define SOCOA_CPP_GENERATE_GENERIC_CONVERTER_FROM_ID_SPECIALIZATION(id, return_type, convert_function)\
+template<class T>																				\
+struct generic_converter_from_id<T, grammar::parser_id::id>										\
 {																								\
 	static																						\
-	convert_function_traits<syntax_tree::return_type>::function_ptr_t							\
-	get_convert_function()																		\
+	syntax_tree::return_type																	\
+	convert(const tree_node_t& node)															\
 	{																							\
-		return &convert_##convert_function;														\
+		return convert_##convert_function(node);												\
 	}																							\
 };
+
+#define SOCOA_CPP_GENERATE_GENERIC_CONVERTER_FROM_TYPE_SPECIALIZATION(return_type, convert_function)\
+template<>																						\
+struct generic_converter_from_type<syntax_tree::return_type>									\
+{																								\
+	static																						\
+	syntax_tree::return_type																	\
+	convert(const tree_node_t& node)															\
+	{																							\
+		return convert_##convert_function(node);												\
+	}																							\
+};
+
+#define SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION(id, return_type, convert_function)\
+SOCOA_CPP_GENERATE_GENERIC_CONVERTER_FROM_ID_SPECIALIZATION(id, return_type, convert_function)\
+SOCOA_CPP_GENERATE_GENERIC_CONVERTER_FROM_TYPE_SPECIALIZATION(return_type, convert_function)
 
 namespace socoa { namespace cpp
 {
@@ -53,23 +69,6 @@ namespace parse_tree_to_syntax_tree
     typedef parse_tree_match_t::const_tree_iterator tree_node_iterator_t;
     typedef tree_node_t::parse_node_t tree_node_value_t;
     typedef tree_node_value_t::const_iterator_t tree_node_value_iterator_t;
-
-    template<class T>
-    struct convert_function_traits
-    {
-        typedef T return_t;
-        typedef return_t (*function_ptr_t)(const tree_node_t&);
-        typedef std::function<return_t (const tree_node_t&)> function_t;
-        typedef std::map<const grammar::parser_id, function_t> id_function_map_t;
-    };
-
-
-
-
-
-
-
-
 
 
     syntax_tree_t
@@ -248,7 +247,6 @@ namespace parse_tree_to_syntax_tree
     template
     <
         class T,
-		typename convert_function_traits<T>::function_ptr_t ConvertFunction,
         const std::string& Separator// = util::extern_strings::space
     >
     util::sequence<T, Separator>
@@ -259,57 +257,11 @@ namespace parse_tree_to_syntax_tree
     convert_string_enumeration(const tree_node_t& node);
 
     /**
-    Finds a node in the given parent node, with the given id and converts
-    it.
-    @tparam T the type representing the syntax of the node to be converted
-    @param parent_node the parent node where to find the node to be
-           converted
-    @param id the parser_id of the node to be converted
-    @param convert_function a pointer to the function to be called to
-           convert the node
-    @param assert_node_exists if true, the function will call the assert()
-           macro to ensure that the given parent node does have a child
-           node of the given id
-    @return an optional (empty if no node has been found) object
-			representing the syntax tree node of the converted node
-    */
-    template <class T>
-    boost::optional<T>
-    convert_node
-    (
-        const tree_node_t& parent_node,
-        const grammar::parser_id id,
-		typename convert_function_traits<T>::function_ptr_t convert_function,
-        bool assert_node_exists = false
-    );
-
-    /**
     Converts each child node of the given parent node. All the nodes must
 	be of the same type.
     @tparam T the type representing the syntax of the nodes to be converted
     @param parent_node the parent node where to find the nodes to be
            converted
-    @param convert_function a pointer to the function to be called to
-           convert the nodes
-    @return a vector of objects representing the syntax of each
-            converted node
-    */
-    template <class T>
-    std::vector<T>
-    convert_nodes
-    (
-        const tree_node_t& parent_node,
-		typename convert_function_traits<T>::function_ptr_t convert_function
-    );
-
-    /**
-    Converts each child node of the given parent node. All the nodes must
-	be of the same type.
-    @tparam T the type representing the syntax of the nodes to be converted
-    @param parent_node the parent node where to find the nodes to be
-           converted
-    @param convert_function a pointer to the function to be called to
-           convert the nodes
     @param separator value of the nodes to be ignored (useful for comma
            separated lists)
     @return a vector of pointers to objects representing the syntax of each
@@ -317,71 +269,10 @@ namespace parse_tree_to_syntax_tree
     */
     template <class T>
     std::vector<T>
-    convert_nodes
+    convert_separated_nodes
     (
         const tree_node_t& parent_node,
-		typename convert_function_traits<T>::function_ptr_t convert_function,
         const std::string& separator
-    );
-
-    /**
-    Converts each child node of the given parent node that have the given
-	id. All the nodes must be of the same type.
-    @tparam T the type representing the syntax of the nodes to be converted
-    @param parent_node the parent node where to find the nodes to be
-           converted
-    @param id the parser_id of the nodes to be converted
-    @param convert_function a pointer to the function to be called to
-           convert the nodes
-    @return a vector of pointers to objects representing the syntax of each
-            converted node
-    */
-    template <class T>
-    std::vector<T>
-    convert_nodes
-    (
-        const tree_node_t& parent_node,
-        const grammar::parser_id id,
-		typename convert_function_traits<T>::function_ptr_t convert_function
-    );
-
-    /**
-    Converts each child node of the given parent node that have the given
-	ids. Each id is associated with a convert function. All the nodes must
-	be of the same type.
-	@tparam T the type representing the syntax of the nodes to be converted
-    @param parent_node the parent node where to find the nodes to be
-           converted
-    @param id_convert_function_map list of parser_ids that searched nodes
-           may have, associated with the corresponding function to be
-           called to convert the nodes (e.g. one pair for
-           IDENTIFIER/convert_identifier, another one for
-           TEMPLATE_ID/convert_template_id, etc.)
-    @return a vector of pointers to objects representing the syntax of each
-            converted node
-    */
-    template <class T>
-    std::vector<T>
-    convert_nodes
-    (
-        const tree_node_t& parent_node,
-        const std::map
-        <
-            const grammar::parser_id,
-            std::function<T (const tree_node_t&)>
-        >& id_convert_function_map
-    );
-
-	/**
-	Converts the only child node of the given parent node.
-	*/
-    template <class T>
-    boost::optional<T>
-    convert_only_child_node
-    (
-        const tree_node_t& parent_node,
-		typename convert_function_traits<T>::id_function_map_t id_convert_function_map,
-        bool assert_converted = true
     );
 
     const tree_node_t*
@@ -422,53 +313,137 @@ namespace parse_tree_to_syntax_tree
 	/**
 	Get the convert_* function corresponding to the given grammar's parser id.
 	*/
-	template<int ParserId>
-	struct convert_function_map;
+	template<class T, int ParserId>
+	struct generic_converter_from_id;
 
-		//SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR(id::ASM_DEFINITION,
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	template<class T>
+	struct generic_converter_from_type;
+
+	//specialization for sequences
+	template<class T, const std::string& Separator, int ParserId>
+	struct generic_converter_from_id<util::sequence<T, Separator>, ParserId>
+	{
+		static
+		util::sequence<T, Separator>
+		convert(const tree_node_t& node)
+		{
+			return convert_sequence
+			<
+				T,
+				Separator
+			>(node);
+		}
+	};
+
+	//specialization for string enumerations
+	template<const std::vector<std::string>& StringList, int ParserId>
+	struct generic_converter_from_id<util::string_enumeration<StringList>, ParserId>
+	{
+		static
+		util::string_enumeration<StringList>
+		convert(const tree_node_t& node)
+		{
+			return convert_string_enumeration<util::string_enumeration<StringList>>(node);
+		}
+	};
+
+	//other specializations
+	//SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION(id::ASM_DEFINITION,
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
+	(
+		BASE_CLAUSE,
+		base_clause,
+		base_clause
+	)
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_FROM_TYPE_SPECIALIZATION
+	(
+		base_specifier,
+		base_specifier
+	)
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		BLOCK_DECLARATION,
 		block_declaration,
 		block_declaration
 	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		BUILT_IN_TYPE_SPECIFIER,
 		built_in_type_specifier,
-		string_enumeration
+		string_enumeration<syntax_tree::built_in_type_specifier>
 	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
+	(
+        CLASS_HEAD,
+        class_head,
+        class_head
+	)
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		CLASS_SPECIFIER,
 		class_specifier,
 		class_specifier
 	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		CONVERSION_FUNCTION_ID,
 		conversion_function_id,
 		conversion_function_id
 	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
+	(
+		CTOR_INITIALIZER,
+		ctor_initializer,
+		ctor_initializer
+	)
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		CV_QUALIFIER,
 		cv_qualifier,
 		cv_qualifier
 	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_FROM_TYPE_SPECIALIZATION
+	(
+		decl_specifier,
+		decl_specifier
+	)
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
+	(
+		DECLARATION,
+		declaration,
+		declaration
+	)
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
+	(
+		DECLARATOR,
+		declarator,
+		declarator
+	)
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
+	(
+		DECLARATOR_ID,
+		declarator_id,
+		declarator_id
+	)
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		DESTRUCTOR_NAME,
 		destructor_name,
 		destructor_name
 	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
+	(
+		DIRECT_DECLARATOR,
+		direct_declarator,
+		direct_declarator
+	)
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		DIRECT_DECLARATOR_FUNCTION_PART,
 		direct_declarator_function_part,
 		direct_declarator_function_part
 	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		ELABORATED_TYPE_SPECIFIER,
 		elaborated_type_specifier,
@@ -476,195 +451,262 @@ namespace parse_tree_to_syntax_tree
 	)
 //            id::EXPLICIT_INSTANTIATION,
 //            id::EXPLICIT_SPECIALIZATION,
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		FUNCTION_DEFINITION,
 		function_definition,
 		function_definition
 	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		FUNCTION_SPECIFIER,
 		function_specifier,
-		string_enumeration
+		string_enumeration<syntax_tree::function_specifier>
 	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		ID_EXPRESSION,
 		id_expression,
 		id_expression
 	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		IDENTIFIER,
 		identifier,
 		identifier
 	)
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
+	(
+		IDENTIFIER_OR_TEMPLATE_ID,
+		identifier_or_template_id,
+		identifier_or_template_id
+	)
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_FROM_TYPE_SPECIALIZATION
+	(
+		init_declarator,
+		init_declarator
+	)
 //            id::LINKAGE_SPECIFICATION,
 		//id::NAMESPACE_ALIAS_DEFINITION,
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_FROM_TYPE_SPECIALIZATION
+	(
+		mem_initializer,
+		mem_initializer
+	)
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
+	(
+		MEM_INITIALIZER_ID,
+		mem_initializer_id,
+		mem_initializer_id
+	)
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		MEMBER_DECLARATION,
 		member_declaration,
 		member_declaration
 	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		MEMBER_DECLARATION_FUNCTION_DEFINITION,
 		member_declaration_function_definition,
 		member_declaration_function_definition
 	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		MEMBER_DECLARATION_MEMBER_DECLARATOR_LIST,
 		member_declaration_member_declarator_list,
 		member_declaration_member_declarator_list
 	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		MEMBER_DECLARATION_UNQUALIFIED_ID,
 		member_declaration_unqualified_id,
 		member_declaration_unqualified_id
 	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_FROM_TYPE_SPECIALIZATION
+	(
+		member_declarator,
+		member_declarator
+	)
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		MEMBER_DECLARATOR_BIT_FIELD_MEMBER,
 		member_declarator_bit_field_member,
 		member_declarator_bit_field_member
 	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		MEMBER_DECLARATOR_DECLARATOR,
 		member_declarator_declarator,
 		member_declarator_declarator
 	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
+	(
+		MEMBER_SPECIFICATION,
+		member_specification,
+		member_specification
+	)
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		MEMBER_SPECIFICATION_ACCESS_SPECIFIER,
 		member_specification_access_specifier,
 		member_specification_access_specifier
 	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		NAMESPACE_DEFINITION,
 		namespace_definition,
 		namespace_definition
 	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		NESTED_IDENTIFIER_OR_TEMPLATE_ID,
 		nested_identifier_or_template_id,
 		nested_identifier_or_template_id
 	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
+	(
+		NESTED_NAME_SPECIFIER,
+		nested_name_specifier,
+		nested_name_specifier
+	)
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		NESTED_NAME_SPECIFIER_SECOND_PART,
 		nested_name_specifier::second_part,
 		nested_name_specifier_second_part
 	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		OPERATOR_FUNCTION_ID,
 		operator_function_id,
 		operator_function_id
 	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_FROM_TYPE_SPECIALIZATION
+	(
+		parameter_declaration,
+		parameter_declaration
+	)
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
+	(
+		PARAMETER_DECLARATION_CLAUSE,
+		parameter_declaration_clause,
+		parameter_declaration_clause
+	)
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
+	(
+		PTR_OPERATOR,
+		ptr_operator,
+		ptr_operator
+	)
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		QUALIFIED_ID,
 		qualified_id,
 		qualified_id
 	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		QUALIFIED_NESTED_ID,
 		qualified_nested_id,
 		qualified_nested_id
 	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		QUALIFIED_OPERATOR_FUNCTION_ID,
 		qualified_operator_function_id,
 		qualified_operator_function_id
 	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		QUALIFIED_TEMPLATE_ID,
 		qualified_template_id,
 		qualified_template_id
 	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		QUALIFIED_IDENTIFIER,
 		qualified_identifier,
 		qualified_identifier
 	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		SIMPLE_DECLARATION,
 		simple_declaration,
 		simple_declaration
 	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		SIMPLE_TYPE_SPECIFIER,
 		simple_type_specifier,
 		simple_type_specifier
 	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		SIMPLE_TEMPLATE_TYPE_SPECIFIER,
 		simple_template_type_specifier,
 		simple_template_type_specifier
 	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		STORAGE_CLASS_SPECIFIER,
 		storage_class_specifier,
-		string_enumeration
+		string_enumeration<syntax_tree::storage_class_specifier>
 	)
-	/*SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_FROM_TYPE_SPECIALIZATION
+	(
+		template_argument,
+		template_argument
+	)
+	/*SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION,
 		assignment_expression,
 		assignment_expression
 	)*/
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		TEMPLATE_DECLARATION,
 		template_declaration,
 		template_declaration
 	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		TEMPLATE_ID,
 		template_id,
 		template_id
 	)
-	/*SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	/*SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		TYPE_ID,
 		type_id,
 		type_id
 	)*/
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_FROM_ID_SPECIALIZATION
+	(
+		TYPE_NAME,
+		identifier,
+		identifier
+	)
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		TYPE_SPECIFIER,
 		type_specifier,
 		type_specifier
 	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		UNQUALIFIED_ID,
 		unqualified_id,
 		unqualified_id
 	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		USING_DECLARATION,
 		using_declaration,
 		using_declaration
 	)
-	SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		USING_DIRECTIVE,
 		using_directive,
@@ -674,11 +716,9 @@ namespace parse_tree_to_syntax_tree
 
 
 
-
     template
     <
         class T,
-		typename convert_function_traits<T>::function_ptr_t ConvertFunction,
         const std::string& Separator
     >
     util::sequence<T, Separator>
@@ -686,10 +726,9 @@ namespace parse_tree_to_syntax_tree
     {
         return util::sequence<T, Separator>
         (
-            convert_nodes<T>
+            convert_separated_nodes<T>
             (
                 node,
-                ConvertFunction,
                 Separator
             )
         );
@@ -706,56 +745,10 @@ namespace parse_tree_to_syntax_tree
     }
 
     template <class T>
-    boost::optional<T>
-    convert_node
-    (
-        const tree_node_t& parent_node,
-        const grammar::parser_id id,
-		typename convert_function_traits<T>::function_ptr_t convert_function,
-        bool assert_node_exists
-    )
-    {
-        const tree_node_t* node = find_child_node(parent_node, id);
-
-        if(assert_node_exists)
-        {
-            assert(node);
-            return (*convert_function)(*node);
-        }
-        else if(node)
-        {
-            return (*convert_function)(*node);
-        }
-        else
-        {
-            return boost::optional<T>();
-        }
-    }
-
-    template <class T>
     std::vector<T>
-    convert_nodes
+    convert_separated_nodes
     (
         const tree_node_t& parent_node,
-		typename convert_function_traits<T>::function_ptr_t convert_function
-    )
-    {
-        std::vector<T> seq;
-        for(tree_node_iterator_t i = parent_node.children.begin(); i != parent_node.children.end(); ++i) //for each child
-        {
-            const tree_node_t& child_node = *i;
-            seq.push_back((*convert_function)(child_node));
-        }
-
-        return seq;
-    }
-
-    template <class T>
-    std::vector<T>
-    convert_nodes
-    (
-        const tree_node_t& parent_node,
-		typename convert_function_traits<T>::function_ptr_t convert_function,
         const std::string& separator
     )
     {
@@ -767,114 +760,11 @@ namespace parse_tree_to_syntax_tree
 
             if(child_value != separator) //if the current node is not a separator
             {
-                seq.push_back((*convert_function)(child_node));
+                seq.push_back(generic_converter_from_type<T>::convert(child_node));
             }
         }
 
         return seq;
-    }
-
-    template <class T>
-    std::vector<T>
-    convert_nodes
-    (
-        const tree_node_t& parent_node,
-        const grammar::parser_id id,
-		typename convert_function_traits<T>::function_ptr_t convert_function
-    )
-    {
-        std::vector<T> seq;
-        for(tree_node_iterator_t i = parent_node.children.begin(); i != parent_node.children.end(); ++i) //for each child
-        {
-            const tree_node_t& child_node = *i;
-
-            if(child_node.value.id() == id)
-            {
-				boost::optional<T> item = (*convert_function)(child_node);
-				if(item)
-					seq.push_back(*item);
-            }
-        }
-
-        return seq;
-    }
-
-    template <class T>
-    std::vector<T>
-    convert_nodes
-    (
-        const tree_node_t& parent_node,
-        const std::map
-        <
-            const grammar::parser_id,
-            std::function<boost::optional<T> (const tree_node_t&)>
-        >& id_convert_function_map
-    )
-    {
-        typedef std::function<boost::optional<T> (const tree_node_t&)> convert_function_t;
-        typedef std::map<const grammar::parser_id, convert_function_t> id_convert_function_map_t;
-
-        std::vector<T> seq;
-        for(tree_node_iterator_t i = parent_node.children.begin(); i != parent_node.children.end(); ++i) //for each child
-        {
-            const tree_node_t& child_node = *i;
-
-            for
-            (
-                typename id_convert_function_map_t::const_iterator j = id_convert_function_map.begin();
-                j != id_convert_function_map.end();
-                ++j
-            ) //for each id/convert function
-            {
-                const grammar::parser_id id = j->first;
-                const convert_function_t convert_function = j->second;
-
-                if(child_node.value.id() == id)
-                {
-                    seq.push_back(convert_function(child_node));
-                    break;
-                }
-            }
-        }
-
-        return seq;
-    }
-
-    template <class T>
-    boost::optional<T>
-    convert_only_child_node
-    (
-        const tree_node_t& parent_node,
-		typename convert_function_traits<T>::id_function_map_t id_convert_function_map,
-        bool assert_converted = true
-    )
-    {
-        typedef typename convert_function_traits<T>::function_t convert_function_t;
-        typedef typename convert_function_traits<T>::id_function_map_t id_convert_function_map_t;
-
-        assert(parent_node.children.size() == 1);
-        const tree_node_t& child_node = *parent_node.children.begin();
-        boost::spirit::parser_id child_id = child_node.value.id();
-
-        for
-        (
-            typename id_convert_function_map_t::const_iterator i = id_convert_function_map.begin();
-            i != id_convert_function_map.end();
-            ++i
-        ) //for each id/convert_function pair
-        {
-            const int id = i->first;
-            const convert_function_t convert_function = i->second;
-
-            if(child_node.value.id() == id)
-            {
-                return convert_function(child_node);
-            }
-        }
-
-        assert(!assert_converted && "The child node's id is not in the map");
-
-        return boost::optional<T>();
     }
 
 	inline
@@ -888,6 +778,8 @@ namespace parse_tree_to_syntax_tree
 
 }} //namespace socoa::cpp
 
-#undef SOCOA_CPP_GENERATE_CONVERT_FUNCTION_MAP_PAIR
+#undef SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
+#undef SOCOA_CPP_GENERATE_GENERIC_CONVERTER_FROM_ID_SPECIALIZATION
+#undef SOCOA_CPP_GENERATE_GENERIC_CONVERTER_FROM_TYPE_SPECIALIZATION
 
 #endif
