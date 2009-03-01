@@ -28,6 +28,13 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 class mem_initializer;
 
+/**
+\verbatim
+ctor_initializer
+    = ":", mem_initializer_list
+;
+\endverbatim
+*/
 class ctor_initializer
 {
     public:

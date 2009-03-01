@@ -31,6 +31,15 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
+/**
+\verbatim
+class_head
+	= class_key, [identifier], [base_clause]
+	| class_key, nested_name_specifier, identifier, [base_clause]
+	| class_key, [nested_name_specifier], template_id, [base_clause]
+;
+\endverbatim
+*/
 class class_head
 {
     public:

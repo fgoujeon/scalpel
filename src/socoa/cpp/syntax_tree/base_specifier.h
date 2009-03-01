@@ -28,6 +28,15 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
+/**
+\verbatim
+base_specifier
+	= ["::"], [nested_name_specifier], class_name
+	| "virtual", [access_specifier], ["::"], [nested_name_specifier], class_name
+	| access_specifier, ["virtual"], ["::"], [nested_name_specifier], class_name
+;
+\endverbatim
+*/
 class base_specifier
 {
     public:

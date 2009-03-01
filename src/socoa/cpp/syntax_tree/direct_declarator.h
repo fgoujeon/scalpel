@@ -21,22 +21,82 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_DIRECT_DECLARATOR_H
 #define SOCOA_CPP_SYNTAX_TREE_DIRECT_DECLARATOR_H
 
-#include <memory>
 #include "declarator_id.h"
 #include "declarator.h"
-#include "direct_declarator_part.h"
+#include "parameter_declaration_clause.h"
+#include "cv_qualifier_seq.h"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
+/**
+\verbatim
+direct_declarator
+	=
+	(
+		declarator_id
+		| "(", declarator, ")"
+	),
+	{
+		direct_declarator::function_part
+		| direct_declarator::array_part
+	}
+;
+direct_declarator::function_part
+	= "(", parameter_declaration_clause, ")", [cv_qualifier_seq], [exception_specification]
+;
+direct_declarator::array_part
+	= "[", [constant_expression], "]"
+;
+\endverbatim
+*/
 class direct_declarator
 {
     public:
+		class function_part
+		{
+			public:
+				function_part
+				(
+					parameter_declaration_clause&& a_parameter_declaration_clause,
+					boost::optional<cv_qualifier_seq> a_cv_qualifier_seq
+				);
+
+				inline
+				const parameter_declaration_clause&
+				get_parameter_declaration_clause() const;
+
+				inline
+				const boost::optional<const cv_qualifier_seq&>
+				get_cv_qualifier_seq() const;
+
+			private:
+				parameter_declaration_clause parameter_declaration_clause_;
+				boost::optional<cv_qualifier_seq> cv_qualifier_seq_;
+		};
+
+		class array_part
+		{
+			public:
+
+
+			private:
+		};
+
+		typedef
+			boost::variant
+			<
+				array_part,
+				function_part
+			>
+			other_part
+		;
+
         direct_declarator
         (
             boost::optional<declarator_id> a_declarator_id,
             boost::optional<declarator> a_declarator,
-            std::vector<direct_declarator_part>&& other_parts
+            std::vector<other_part>&& other_parts
         );
 
         inline
@@ -48,13 +108,13 @@ class direct_declarator
         get_declarator() const;
 
         inline
-        const std::vector<direct_declarator_part>&
+        const std::vector<other_part>&
         get_other_parts() const;
 
     private:
         boost::optional<declarator_id> declarator_id_;
         boost::optional<declarator> declarator_;
-        std::vector<direct_declarator_part> other_parts_;
+        std::vector<other_part> other_parts_;
 };
 
 inline
@@ -72,10 +132,25 @@ direct_declarator::get_declarator() const
 }
 
 inline
-const std::vector<direct_declarator_part>&
+const std::vector<direct_declarator::other_part>&
 direct_declarator::get_other_parts() const
 {
     return other_parts_;
+}
+
+
+inline
+const parameter_declaration_clause&
+direct_declarator::function_part::get_parameter_declaration_clause() const
+{
+    return parameter_declaration_clause_;
+}
+
+inline
+const boost::optional<const cv_qualifier_seq&>
+direct_declarator::function_part::get_cv_qualifier_seq() const
+{
+    return boost::optional<const cv_qualifier_seq&>(cv_qualifier_seq_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

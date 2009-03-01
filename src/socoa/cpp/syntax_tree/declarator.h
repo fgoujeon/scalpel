@@ -31,6 +31,13 @@ class declarator_impl;
 class ptr_operator;
 class direct_declarator;
 
+/**
+\verbatim
+declarator
+	= {ptr_operator}, direct_declarator
+;
+\endverbatim
+*/
 class declarator
 {
     public:

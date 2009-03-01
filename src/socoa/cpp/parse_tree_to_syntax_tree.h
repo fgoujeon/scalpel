@@ -146,10 +146,10 @@ namespace parse_tree_to_syntax_tree
     syntax_tree::direct_declarator
     convert_direct_declarator(const tree_node_t& node);
 
-    syntax_tree::direct_declarator_function_part
+    syntax_tree::direct_declarator::function_part
     convert_direct_declarator_function_part(const tree_node_t& node);
 
-    syntax_tree::direct_declarator_array_part
+    syntax_tree::direct_declarator::array_part
     convert_direct_declarator_array_part(const tree_node_t& node);
 
     syntax_tree::ptr_operator
@@ -277,6 +277,42 @@ namespace parse_tree_to_syntax_tree
 
     const tree_node_t*
     find_child_node(const tree_node_t& parent_node, const grammar::parser_id child_id);
+
+	template<const grammar::parser_id... Ids>
+    struct child_node_finder;
+
+	template<>
+    struct child_node_finder<>
+	{
+		static
+		const tree_node_t*
+		find(const tree_node_t&)
+		{
+			return 0;
+		}
+	};
+
+	template<const grammar::parser_id Id, const grammar::parser_id... Ids>
+    struct child_node_finder<Id, Ids...>
+	{
+		static
+		const tree_node_t*
+		find(const tree_node_t& parent_node)
+		{
+			const tree_node_t* found_node = find_child_node(parent_node, Id);
+			if(found_node)
+				return found_node;
+			else
+				return child_node_finder<Ids...>::find(parent_node);
+		}
+	};
+
+	template<const grammar::parser_id... Ids>
+    const tree_node_t*
+    find_child_node(const tree_node_t& parent_node)
+	{
+		return child_node_finder<Ids...>::find(parent_node);
+	}
 
 	inline
 	const tree_node_t&
@@ -440,7 +476,7 @@ namespace parse_tree_to_syntax_tree
 	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION
 	(
 		DIRECT_DECLARATOR_FUNCTION_PART,
-		direct_declarator_function_part,
+		direct_declarator::function_part,
 		direct_declarator_function_part
 	)
 	SOCOA_CPP_GENERATE_GENERIC_CONVERTER_SPECIALIZATION

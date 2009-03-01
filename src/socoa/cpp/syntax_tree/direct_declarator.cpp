@@ -27,11 +27,21 @@ direct_declarator::direct_declarator
 (
     boost::optional<declarator_id> a_declarator_id,
     boost::optional<declarator> a_declarator,
-    std::vector<direct_declarator_part>&& other_parts
+    std::vector<other_part>&& other_parts
 ):
     declarator_id_(a_declarator_id),
     declarator_(a_declarator),
     other_parts_(other_parts)
+{
+}
+
+direct_declarator::function_part::function_part
+(
+    parameter_declaration_clause&& a_parameter_declaration_clause,
+    boost::optional<util::sequence<cv_qualifier>> a_cv_qualifier_seq
+):
+    parameter_declaration_clause_(a_parameter_declaration_clause),
+    cv_qualifier_seq_(a_cv_qualifier_seq)
 {
 }
 

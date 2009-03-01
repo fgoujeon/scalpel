@@ -31,6 +31,13 @@ class class_specifier_impl;
 class class_head;
 class member_specification;
 
+/**
+\verbatim
+class_specifier
+	= class_head, "{", [member_specification], "}"
+;
+\endverbatim
+*/
 class class_specifier
 {
     public:

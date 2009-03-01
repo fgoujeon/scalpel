@@ -33,6 +33,14 @@ class decl_specifier;
 class declarator;
 class ctor_initializer;
 
+/**
+\verbatim
+function_definition
+	= [decl_specifier_seq], declarator, [ctor_initializer], function_body
+	| [decl_specifier_seq], declarator, [function_try_block]
+;
+\endverbatim
+*/
 class function_definition
 {
     public:

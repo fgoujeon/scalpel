@@ -25,7 +25,7 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 parameter_declaration::parameter_declaration
 (
-	util::sequence<decl_specifier> a_decl_specifier_seq,
+	decl_specifier_seq&& a_decl_specifier_seq,
 	boost::optional<declarator> a_declarator,
 	bool equal
 ):

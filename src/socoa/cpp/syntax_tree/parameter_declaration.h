@@ -34,7 +34,7 @@ class parameter_declaration
 	public:
 		parameter_declaration
 		(
-			util::sequence<decl_specifier> a_decl_specifier_seq,
+			decl_specifier_seq&& a_decl_specifier_seq,
 			boost::optional<declarator> a_declarator,
 			bool equal
 		);

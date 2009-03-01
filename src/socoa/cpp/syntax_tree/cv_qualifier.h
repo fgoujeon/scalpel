@@ -21,36 +21,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_CV_QUALIFIER_H
 #define SOCOA_CPP_SYNTAX_TREE_CV_QUALIFIER_H
 
+#include "../../util/string_enumeration.h"
+
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-struct cv_qualifier
-{
-    public:
-        enum type
-        {
-            CONST,
-            VOLATILE,
-            RESTRICT
-        };
-
-        explicit
-        cv_qualifier(type a_type);
-
-        inline
-        type
-        get_type() const;
-
-    private:
-        type type_;
-};
-
-inline
-cv_qualifier::type
-cv_qualifier::get_type() const
-{
-    return type_;
-}
+extern const std::vector<std::string> cv_qualifier_string_list;
+typedef util::string_enumeration<cv_qualifier_string_list> cv_qualifier;
 
 }}} //namespace socoa::cpp::syntax_tree
 

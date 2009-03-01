@@ -23,9 +23,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-cv_qualifier::cv_qualifier(type a_type):
-    type_(a_type)
+const std::vector<std::string> cv_qualifier_string_list
 {
-}
+	"const",
+	"volatile",
+	"restrict",
+	"__restrict",
+	"__restrict__"
+};
 
 }}} //namespace socoa::cpp::syntax_tree
