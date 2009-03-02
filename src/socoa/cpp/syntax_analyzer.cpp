@@ -21,6 +21,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "syntax_analyzer.h"
 
 #include <iostream>
+#include <stdexcept>
 #include <boost/spirit/tree/parse_tree.hpp>
 #include "parse_tree_to_syntax_tree.h"
 #include "source_code_completion.h"
@@ -81,7 +82,7 @@ syntax_analyzer::analyze(const std::string& input)
     }
 
     //convert spirit's parse tree to syntax tree
-    return parse_tree_to_syntax_tree::convert_tree(*info.trees.begin());
+    return convert_parse_tree_to_syntax_tree(*info.trees.begin());
 }
 
 std::ptrdiff_t
