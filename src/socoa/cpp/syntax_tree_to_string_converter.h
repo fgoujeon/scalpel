@@ -25,8 +25,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <sstream>
 #include <iostream>
 #include <vector>
-#include <memory>
 #include "syntax_tree.h"
+#include "syntax_tree_to_any_conversion_helper.h"
 
 #define CONVERT_DECLARATION(type)                       \
 void                                                    \
@@ -37,26 +37,6 @@ namespace socoa { namespace cpp
 
 class syntax_tree_to_string_converter
 {
-	private:
-		class static_visitor: public boost::static_visitor<>
-		{
-			public:
-				static_visitor(syntax_tree_to_string_converter& converter):
-					converter_(converter)
-				{
-				}
-
-				template<class T>
-				void
-				operator()(const T& item) const
-				{
-					converter_.convert(item);
-				}
-
-			private:
-				syntax_tree_to_string_converter& converter_;
-		};
-
     public:
         syntax_tree_to_string_converter();
 
@@ -122,6 +102,9 @@ class syntax_tree_to_string_converter
         convert(const boost::optional<T> item);
 
         void
+        convert_separator(const std::string& separator);
+
+        void
         add_space();
 
         const std::string
@@ -136,7 +119,9 @@ class syntax_tree_to_string_converter
         const std::string
         indentation();
 
-		static_visitor static_visitor_;
+		friend class syntax_tree_to_any_conversion_helper<syntax_tree_to_string_converter>;
+
+		syntax_tree_to_any_conversion_helper<syntax_tree_to_string_converter> conversion_helper_;
         std::ostringstream result_;
         unsigned int indentation_level_;
 };
@@ -145,22 +130,7 @@ template<class T, const std::string& Separator>
 void
 syntax_tree_to_string_converter::convert(const util::sequence<T, Separator>& seq)
 {
-    typedef typename util::sequence<T>::list_t item_list_t;
-	const item_list_t& item_list = seq.get_items();
-
-    for(typename item_list_t::const_iterator i = item_list.begin(); i != item_list.end(); ++i)
-    {
-        //add separator
-        if(i != item_list.begin()) //don't add a separator before the first item
-		{
-			if(Separator == " ")
-				add_space();
-			else
-				result_ << Separator << " ";
-		}
-
-        convert(*i);
-    }
+	conversion_helper_.convert(seq);
 }
 
 template<const std::vector<std::string>& StringList>
@@ -175,15 +145,14 @@ template<BOOST_VARIANT_ENUM_PARAMS(typename T)>
 void
 syntax_tree_to_string_converter::convert(const boost::variant<BOOST_VARIANT_ENUM_PARAMS(T)>& item)
 {
-	boost::apply_visitor(static_visitor_, item);
+	conversion_helper_.convert(item);
 }
 
 template<class T>
 void
 syntax_tree_to_string_converter::convert(const boost::optional<T> item)
 {
-    if(item)
-        convert(*item);
+	conversion_helper_.convert(item);
 }
 
 }} //namespace socoa::cpp

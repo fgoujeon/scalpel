@@ -28,7 +28,7 @@ namespace socoa { namespace cpp
 using namespace syntax_tree;
 
 syntax_tree_to_string_converter::syntax_tree_to_string_converter():
-	static_visitor_(*this),
+	conversion_helper_(*this),
     indentation_level_(0)
 {
 }
@@ -60,7 +60,7 @@ syntax_tree_to_string_converter::convert(const qualified_nested_id& item)
     if(item.has_template_keyword())
         result_ << "template ";
 
-	boost::apply_visitor(static_visitor_, item.get_unqualified_id());
+	convert(item.get_unqualified_id());
 }
 
 void
@@ -88,7 +88,7 @@ syntax_tree_to_string_converter::convert(const qualified_identifier& item)
 void
 syntax_tree_to_string_converter::convert(const nested_name_specifier& item)
 {
-	boost::apply_visitor(static_visitor_, item.get_identifier_or_template_id());
+	convert(item.get_identifier_or_template_id());
     result_ << "::";
     for
     (
@@ -477,6 +477,16 @@ syntax_tree_to_string_converter::convert(const conversion_function_id&)
 void
 syntax_tree_to_string_converter::convert(const destructor_name&)
 {
+}
+
+
+void
+syntax_tree_to_string_converter::convert_separator(const std::string& separator)
+{
+	if(separator == " ")
+		add_space();
+	else
+		result_ << separator << " ";
 }
 
 void
