@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "class_head.h"
+#include "class_head.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {

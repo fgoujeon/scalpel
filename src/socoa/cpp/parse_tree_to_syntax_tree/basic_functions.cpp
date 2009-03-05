@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "basic_functions.h"
+#include "basic_functions.hpp"
 
 namespace socoa { namespace cpp { namespace parse_tree_to_syntax_tree
 {

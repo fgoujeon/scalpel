@@ -24,7 +24,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/wave/cpplexer/cpp_lex_iterator.hpp>
 #include <boost/wave/cpplexer/cpp_lex_token.hpp>
 
-#include "preprocessor.h"
+#include "preprocessor.hpp"
 
 namespace socoa { namespace cpp
 {

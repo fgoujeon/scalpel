@@ -18,10 +18,10 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "parse_tree_to_syntax_tree.h"
+#include "parse_tree_to_syntax_tree.hpp"
 
-#include "parse_tree_to_syntax_tree/generic_convert_functions.h"
-#include "parse_tree_to_syntax_tree/basic_functions.h"
+#include "parse_tree_to_syntax_tree/generic_convert_functions.hpp"
+#include "parse_tree_to_syntax_tree/basic_functions.hpp"
 
 namespace socoa { namespace cpp
 {

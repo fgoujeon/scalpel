@@ -18,10 +18,10 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "class_specifier.h"
+#include "class_specifier.hpp"
 
-#include "class_specifier_impl.h"
-#include "member_specification.h"
+#include "class_specifier_impl.hpp"
+#include "member_specification.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {

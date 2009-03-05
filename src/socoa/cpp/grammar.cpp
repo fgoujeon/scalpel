@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "grammar.h"
+#include "grammar.hpp"
 
 #include <boost/spirit/utility/chset.hpp>
 
@@ -129,7 +129,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
             | "throw"
             | "this"
             | "template"
-            | "switch"
+            | "swit.hpp"
             | "struct"
             | "static_cast"
             | "static"
@@ -176,7 +176,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
             | "compl"
             | "class"
             | "char"
-            | "catch"
+            | "cat.hpp"
             | "case"
             | "break"
             | "bool"
@@ -839,7 +839,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 
     selection_statement
         = str_p("if") >> '(' >> condition >> ')' >> statement >> !("else" >> statement)
-        | str_p("switch") >> '(' >> condition >> ')' >> statement
+        | str_p("swit.hpp") >> '(' >> condition >> ')' >> statement
     ;
 
     /*
@@ -1512,7 +1512,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
     ;
 
     handler
-        = str_p("catch") >> '(' >> exception_declaration >> ')' >> compound_statement
+        = str_p("cat.hpp") >> '(' >> exception_declaration >> ')' >> compound_statement
     ;
 
     exception_declaration

@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "standard_library_test.h"
+#include "standard_library_test.hpp"
 
 #include <sstream>
 #include <fstream>

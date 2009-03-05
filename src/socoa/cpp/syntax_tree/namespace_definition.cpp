@@ -18,9 +18,9 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "namespace_definition.h"
+#include "namespace_definition.hpp"
 
-#include "namespace_definition_impl.h"
+#include "namespace_definition_impl.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {

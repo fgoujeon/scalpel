@@ -24,7 +24,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/parameterized_test.hpp>
 #include <boost/bind.hpp>
-#include "single_file_test.h"
+#include "single_file_test.hpp"
 
 using namespace boost::unit_test;
 

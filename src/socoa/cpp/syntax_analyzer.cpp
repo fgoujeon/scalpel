@@ -18,14 +18,14 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "syntax_analyzer.h"
+#include "syntax_analyzer.hpp"
 
 #include <iostream>
 #include <stdexcept>
 #include <boost/spirit/tree/parse_tree.hpp>
-#include "parse_tree_to_syntax_tree.h"
-#include "source_code_completion.h"
-#include "../util/raii_affector.h"
+#include "parse_tree_to_syntax_tree.hpp"
+#include "source_code_completion.hpp"
+#include "../util/raii_affector.hpp"
 
 using namespace boost::spirit;
 using namespace socoa::cpp::syntax_tree;

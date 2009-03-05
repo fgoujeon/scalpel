@@ -18,11 +18,11 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "class_.h"
+#include "class_.hpp"
 
 #include <iostream>
 #include <cassert>
-#include "namespace_.h"
+#include "namespace_.hpp"
 
 namespace socoa { namespace cpp { namespace semantic_graph
 {

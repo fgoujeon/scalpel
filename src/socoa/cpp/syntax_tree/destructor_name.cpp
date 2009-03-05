@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "destructor_name.h"
+#include "destructor_name.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {

@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "semantic_analyzer.h"
+#include "semantic_analyzer.hpp"
 
 namespace socoa { namespace cpp
 {

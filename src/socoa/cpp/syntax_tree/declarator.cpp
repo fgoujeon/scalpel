@@ -18,11 +18,11 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "declarator.h"
+#include "declarator.hpp"
 
-#include "declarator_impl.h"
-#include "ptr_operator.h"
-#include "direct_declarator.h"
+#include "declarator_impl.hpp"
+#include "ptr_operator.hpp"
+#include "direct_declarator.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {

@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "syntax_tree_to_string_converter.h"
+#include "syntax_tree_to_string_converter.hpp"
 
 #include <cassert>
 

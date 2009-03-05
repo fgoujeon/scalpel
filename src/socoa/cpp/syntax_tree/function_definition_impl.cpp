@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "function_definition_impl.h"
+#include "function_definition_impl.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {

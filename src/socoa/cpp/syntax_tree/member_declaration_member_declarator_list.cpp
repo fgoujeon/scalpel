@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "member_declaration_member_declarator_list.h"
+#include "member_declaration_member_declarator_list.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {

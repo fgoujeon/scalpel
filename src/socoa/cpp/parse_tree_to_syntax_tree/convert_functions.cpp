@@ -18,12 +18,12 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "convert_functions.h"
+#include "convert_functions.hpp"
 
-#include "../grammar.h"
-#include "basic_functions.h"
-#include "generic_convert_functions.h"
-#include "special_convert_functions.h"
+#include "../grammar.hpp"
+#include "basic_functions.hpp"
+#include "generic_convert_functions.hpp"
+#include "special_convert_functions.hpp"
 
 using namespace socoa::cpp::syntax_tree;
 

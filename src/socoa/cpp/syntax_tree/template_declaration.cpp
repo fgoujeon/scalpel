@@ -18,9 +18,9 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "template_declaration.h"
+#include "template_declaration.hpp"
 
-#include "template_declaration_impl.h"
+#include "template_declaration_impl.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {

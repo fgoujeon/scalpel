@@ -24,7 +24,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <fstream>
 #include <boost/spirit.hpp>
 
-#include "single_file_test.h"
+#include "single_file_test.hpp"
 
 using namespace boost::spirit;
 using namespace std;

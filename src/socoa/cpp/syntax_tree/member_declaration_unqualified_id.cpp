@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "member_declaration_unqualified_id.h"
+#include "member_declaration_unqualified_id.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
