@@ -27,11 +27,12 @@ semantic_analyzer::semantic_analyzer()
 {
 }
 
-const std::shared_ptr<semantic_graph_t>
+semantic_graph_t
 semantic_analyzer::operator()(const syntax_tree_t& tree)
 {
 	//create global namespace
-	std::shared_ptr<semantic_graph::namespace_> global_namespace = std::make_shared<semantic_graph::namespace_>();
+	semantic_graph_t global_namespace;
+	semantic_graph_ = &global_namespace;
 
 	return global_namespace;
 }

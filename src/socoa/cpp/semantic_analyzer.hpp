@@ -36,10 +36,11 @@ class semantic_analyzer
     public:
 		semantic_analyzer();
 
-		const std::shared_ptr<semantic_graph_t>
+		semantic_graph_t
 		operator()(const syntax_tree_t& tree);
 
     private:
+		semantic_graph_t* semantic_graph_;
 };
 
 }} //namespace socoa::cpp

@@ -37,6 +37,12 @@ namespace_::namespace_(const std::string& name):
     std::cout << "new namespace " << get_full_name() << std::endl;
 }
 
+/*
+namespace_::namespace_(namespace_&& n)
+{
+}
+*/
+
 const std::string&
 namespace_::get_name() const
 {
@@ -54,11 +60,11 @@ namespace_::get_full_name() const
 {
     std::string full_name;
 
-    if(has_enclosing_scope() && !get_enclosing_scope()->is_global()) //don't add a leading "::"
-    {
-        full_name = get_enclosing_scope()->get_full_name() + "::";
-    }
-    full_name += name_;
+//    if(has_enclosing_scope() && !get_enclosing_scope()->is_global()) //don't add a leading "::"
+//    {
+//        full_name = get_enclosing_scope()->get_full_name() + "::";
+//    }
+//    full_name += name_;
 
     return full_name;
 }
@@ -69,99 +75,53 @@ namespace_::is_a_type() const
     return false;
 }
 
-bool
-namespace_::is_global() const
-{
-    return !has_enclosing_scope();
-}
+//bool
+//namespace_::is_global() const
+//{
+//    return !has_enclosing_scope();
+//}
+//
+//bool
+//namespace_::has_enclosing_scope() const
+//{
+//    return !enclosing_scope_.expired();
+//}
+//
+//std::shared_ptr<name_tree_composite>
+//namespace_::get_enclosing_scope()
+//{
+//    return enclosing_scope_.lock();
+//}
+//
+//const std::shared_ptr<name_tree_composite>
+//namespace_::get_enclosing_scope() const
+//{
+//    return enclosing_scope_.lock();
+//}
+//
+//void
+//namespace_::set_enclosing_scope(std::shared_ptr<namespace_> enclosing_scope)
+//{
+//    assert(enclosing_scope_.expired()); //assert that member doesn't have any enclosing scope yet
+//    enclosing_scope_ = enclosing_scope;
+//}
 
-bool
-namespace_::has_enclosing_scope() const
-{
-    return !enclosing_scope_.expired();
-}
-
-std::shared_ptr<name_tree_composite>
-namespace_::get_enclosing_scope()
-{
-    return enclosing_scope_.lock();
-}
-
-const std::shared_ptr<name_tree_composite>
-namespace_::get_enclosing_scope() const
-{
-    return enclosing_scope_.lock();
-}
-
-void
-namespace_::set_enclosing_scope(std::shared_ptr<namespace_> enclosing_scope)
-{
-    assert(enclosing_scope_.expired()); //assert that member doesn't have any enclosing scope yet
-    enclosing_scope_ = enclosing_scope;
-}
-
-const std::vector<std::shared_ptr<name_tree_component>>&
+const std::vector<namespace_::member_t>&
 namespace_::get_members() const
 {
     return members_;
 }
 
-template <>
-const std::vector<std::shared_ptr<namespace_>>&
-namespace_::get_members() const
-{
-    return namespaces_;
-}
-
-template <>
-const std::vector<std::shared_ptr<class_>>&
-namespace_::get_members() const
-{
-    return classes_;
-}
-
-const std::vector<std::shared_ptr<namespace_>>&
-namespace_::get_namespaces() const
-{
-    return namespaces_;
-}
-
-const std::vector<std::shared_ptr<class_>>&
-namespace_::get_classes() const
-{
-    return classes_;
-}
-
 void
-namespace_::add(std::shared_ptr<namespace_> member)
+namespace_::add(namespace_&& member)
 {
-    namespaces_.push_back(member);
-    add_member(member);
-}
-
-void
-namespace_::add(std::shared_ptr<class_> member)
-{
-    classes_.push_back(member);
-    add_member(member);
+    members_.push_back(member);
 }
 
 void
 namespace_::clear()
 {
     members_.clear();
-    namespaces_.clear();
-    classes_.clear();
-}
-
-void
-namespace_::add_member(std::shared_ptr<namespace_member> member)
-{
-    //tell member that 'this' is its enclosing scope
-    member->set_enclosing_scope(shared_from_this());
-
-    //add member to private container
-    members_.push_back(member);
 }
 
 }}} //namespace socoa::cpp::semantic_graph
