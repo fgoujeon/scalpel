@@ -31,9 +31,11 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp
 {
 
-class syntax_tree_to_string_converter
+class syntax_tree_to_string_converter: public syntax_tree_to_any_conversion_helper
 {
     public:
+		typedef syntax_tree_to_any_conversion_helper conversion_helper;
+
         syntax_tree_to_string_converter();
 
         std::string
@@ -160,21 +162,14 @@ class syntax_tree_to_string_converter
         void
 		convert(const syntax_tree::using_directive& item);
 
-        template<class T, const std::string& Separator>
-        void
-        convert(const util::sequence<T, Separator>& seq);
-
         template<const std::vector<std::string>& StringList>
         void
         convert(const util::string_enumeration<StringList>& a_string_enumeration);
 
-		template<BOOST_VARIANT_ENUM_PARAMS(typename T)>
-		void
-		convert(const boost::variant<BOOST_VARIANT_ENUM_PARAMS(T)>& item);
-
-        template<class T>
+		template<class T>
         void
-        convert(const boost::optional<T> item);
+		convert(const T& item);
+
 
         void
         convert_separator(const std::string& separator);
@@ -194,19 +189,9 @@ class syntax_tree_to_string_converter
         const std::string
         indentation();
 
-		friend class syntax_tree_to_any_conversion_helper<syntax_tree_to_string_converter>;
-
-		syntax_tree_to_any_conversion_helper<syntax_tree_to_string_converter> conversion_helper_;
         std::ostringstream result_;
         unsigned int indentation_level_;
 };
-
-template<class T, const std::string& Separator>
-void
-syntax_tree_to_string_converter::convert(const util::sequence<T, Separator>& seq)
-{
-	conversion_helper_.convert(seq);
-}
 
 template<const std::vector<std::string>& StringList>
 void
@@ -216,23 +201,13 @@ syntax_tree_to_string_converter::convert(const util::string_enumeration<StringLi
     result_ << a_string_enumeration.get_value();
 }
 
-template<BOOST_VARIANT_ENUM_PARAMS(typename T)>
-void
-syntax_tree_to_string_converter::convert(const boost::variant<BOOST_VARIANT_ENUM_PARAMS(T)>& item)
-{
-	conversion_helper_.convert(item);
-}
-
 template<class T>
 void
-syntax_tree_to_string_converter::convert(const boost::optional<T> item)
+syntax_tree_to_string_converter::convert(const T& item)
 {
-	conversion_helper_.convert(item);
+	conversion_helper::convert(item);
 }
 
 }} //namespace socoa::cpp
-
-
-#undef CONVERT_DECLARATION
 
 #endif

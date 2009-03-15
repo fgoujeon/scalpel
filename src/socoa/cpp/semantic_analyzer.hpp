@@ -180,7 +180,7 @@ class semantic_analyzer
         convert_separator(const std::string& separator);
 
     private:
-		syntax_tree_to_any_conversion_helper<semantic_analyzer> conversion_helper_;
+//		syntax_tree_to_any_conversion_helper<semantic_analyzer> conversion_helper_;
 		semantic_graph_t* semantic_graph_;
 };
 
@@ -188,7 +188,7 @@ template<class T, const std::string& Separator>
 void
 semantic_analyzer::convert(const util::sequence<T, Separator>& seq)
 {
-	conversion_helper_.convert(seq);
+//	conversion_helper_.convert(seq);
 }
 
 template<const std::vector<std::string>& StringList>
@@ -201,14 +201,14 @@ template<BOOST_VARIANT_ENUM_PARAMS(typename T)>
 void
 semantic_analyzer::convert(const boost::variant<BOOST_VARIANT_ENUM_PARAMS(T)>& item)
 {
-	conversion_helper_.convert(item);
+//	conversion_helper_.convert(item);
 }
 
 template<class T>
 void
 semantic_analyzer::convert(const boost::optional<T> item)
 {
-	conversion_helper_.convert(item);
+//	conversion_helper_.convert(item);
 }
 
 }} //namespace socoa::cpp
