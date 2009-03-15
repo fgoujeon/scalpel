@@ -28,10 +28,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "syntax_tree.hpp"
 #include "syntax_tree_to_any_conversion_helper.hpp"
 
-#define CONVERT_DECLARATION(type)                       \
-void                                                    \
-convert(const syntax_tree::type& item);
-
 namespace socoa { namespace cpp
 {
 
@@ -44,46 +40,125 @@ class syntax_tree_to_string_converter
         operator()(const syntax_tree_t& a_syntax_tree);
 
     private:
-        CONVERT_DECLARATION(class_head)
-        CONVERT_DECLARATION(class_specifier)
-        CONVERT_DECLARATION(conversion_function_id)
-        CONVERT_DECLARATION(ctor_initializer)
-        CONVERT_DECLARATION(cv_qualifier)
-        CONVERT_DECLARATION(declarator)
-        CONVERT_DECLARATION(destructor_name)
-        CONVERT_DECLARATION(direct_declarator)
-        CONVERT_DECLARATION(direct_declarator::array_part)
-        CONVERT_DECLARATION(direct_declarator::function_part)
-        CONVERT_DECLARATION(elaborated_type_specifier)
-        CONVERT_DECLARATION(function_definition)
-        CONVERT_DECLARATION(identifier)
-        CONVERT_DECLARATION(init_declarator)
-        CONVERT_DECLARATION(mem_initializer)
-        CONVERT_DECLARATION(member_declaration_function_definition)
-        CONVERT_DECLARATION(member_declaration_member_declarator_list)
-        CONVERT_DECLARATION(member_declaration_unqualified_id)
-        CONVERT_DECLARATION(member_declarator_bit_field_member)
-        CONVERT_DECLARATION(member_declarator_declarator)
-        CONVERT_DECLARATION(member_specification)
-        CONVERT_DECLARATION(member_specification_access_specifier)
-        CONVERT_DECLARATION(namespace_definition)
-        CONVERT_DECLARATION(nested_identifier_or_template_id)
-        CONVERT_DECLARATION(nested_name_specifier)
-        CONVERT_DECLARATION(nested_name_specifier::second_part)
-        CONVERT_DECLARATION(operator_function_id)
-        CONVERT_DECLARATION(parameter_declaration)
-        CONVERT_DECLARATION(parameter_declaration_clause)
-        CONVERT_DECLARATION(ptr_operator)
-        CONVERT_DECLARATION(qualified_identifier)
-        CONVERT_DECLARATION(qualified_nested_id)
-        CONVERT_DECLARATION(qualified_operator_function_id)
-        CONVERT_DECLARATION(qualified_template_id)
-        CONVERT_DECLARATION(simple_declaration)
-        CONVERT_DECLARATION(simple_template_type_specifier)
-        CONVERT_DECLARATION(template_declaration)
-        CONVERT_DECLARATION(template_id)
-        CONVERT_DECLARATION(using_declaration)
-        CONVERT_DECLARATION(using_directive)
+        void
+		convert(const syntax_tree::class_head& item);
+
+        void
+		convert(const syntax_tree::class_specifier& item);
+
+        void
+		convert(const syntax_tree::conversion_function_id& item);
+
+        void
+		convert(const syntax_tree::ctor_initializer& item);
+
+        void
+		convert(const syntax_tree::cv_qualifier& item);
+
+        void
+		convert(const syntax_tree::declarator& item);
+
+        void
+		convert(const syntax_tree::destructor_name& item);
+
+        void
+		convert(const syntax_tree::direct_declarator& item);
+
+        void
+		convert(const syntax_tree::direct_declarator::array_part& item);
+
+        void
+		convert(const syntax_tree::direct_declarator::function_part& item);
+
+        void
+		convert(const syntax_tree::elaborated_type_specifier& item);
+
+        void
+		convert(const syntax_tree::function_definition& item);
+
+        void
+		convert(const syntax_tree::identifier& item);
+
+        void
+		convert(const syntax_tree::init_declarator& item);
+
+        void
+		convert(const syntax_tree::mem_initializer& item);
+
+        void
+		convert(const syntax_tree::member_declaration_function_definition& item);
+
+        void
+		convert(const syntax_tree::member_declaration_member_declarator_list& item);
+
+        void
+		convert(const syntax_tree::member_declaration_unqualified_id& item);
+
+        void
+		convert(const syntax_tree::member_declarator_bit_field_member& item);
+
+        void
+		convert(const syntax_tree::member_declarator_declarator& item);
+
+        void
+		convert(const syntax_tree::member_specification& item);
+
+        void
+		convert(const syntax_tree::member_specification_access_specifier& item);
+
+        void
+		convert(const syntax_tree::namespace_definition& item);
+
+        void
+		convert(const syntax_tree::nested_identifier_or_template_id& item);
+
+        void
+		convert(const syntax_tree::nested_name_specifier& item);
+
+        void
+		convert(const syntax_tree::nested_name_specifier::second_part& item);
+
+        void
+		convert(const syntax_tree::operator_function_id& item);
+
+        void
+		convert(const syntax_tree::parameter_declaration& item);
+
+        void
+		convert(const syntax_tree::parameter_declaration_clause& item);
+
+        void
+		convert(const syntax_tree::ptr_operator& item);
+
+        void
+		convert(const syntax_tree::qualified_identifier& item);
+
+        void
+		convert(const syntax_tree::qualified_nested_id& item);
+
+        void
+		convert(const syntax_tree::qualified_operator_function_id& item);
+
+        void
+		convert(const syntax_tree::qualified_template_id& item);
+
+        void
+		convert(const syntax_tree::simple_declaration& item);
+
+        void
+		convert(const syntax_tree::simple_template_type_specifier& item);
+
+        void
+		convert(const syntax_tree::template_declaration& item);
+
+        void
+		convert(const syntax_tree::template_id& item);
+
+        void
+		convert(const syntax_tree::using_declaration& item);
+
+        void
+		convert(const syntax_tree::using_directive& item);
 
         template<class T, const std::string& Separator>
         void
