@@ -277,6 +277,7 @@ template<const std::vector<std::string>& StringList>
 void
 syntax_tree_to_any_conversion_helper::convert(const util::string_enumeration<StringList>& a_string_enumeration)
 {
+	///\todo reintegrate this into _to_string_converter
 //    add_space();
  //   result_ << a_string_enumeration.get_value();
 }

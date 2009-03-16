@@ -32,11 +32,9 @@ namespace socoa { namespace cpp
 /**
 @brief Analyses the semantic of the source code of a full C++ program.
 */
-class semantic_analyzer
+class semantic_analyzer: private syntax_tree_to_any_conversion_helper
 {
     public:
-		semantic_analyzer();
-
 		semantic_graph_t
 		operator()(const syntax_tree_t& tree);
 
@@ -160,55 +158,22 @@ class semantic_analyzer
         void
 		convert(const syntax_tree::using_directive& item);
 
-        template<class T, const std::string& Separator>
-        void
-        convert(const util::sequence<T, Separator>& seq);
-
-        template<const std::vector<std::string>& StringList>
-        void
-        convert(const util::string_enumeration<StringList>& a_string_enumeration);
-
-		template<BOOST_VARIANT_ENUM_PARAMS(typename T)>
-		void
-		convert(const boost::variant<BOOST_VARIANT_ENUM_PARAMS(T)>& item);
-
         template<class T>
         void
-        convert(const boost::optional<T> item);
+        convert(const T& item);
 
         void
         convert_separator(const std::string& separator);
 
     private:
-//		syntax_tree_to_any_conversion_helper<semantic_analyzer> conversion_helper_;
-		semantic_graph_t* semantic_graph_;
+		semantic_graph_t semantic_graph_;
 };
-
-template<class T, const std::string& Separator>
-void
-semantic_analyzer::convert(const util::sequence<T, Separator>& seq)
-{
-//	conversion_helper_.convert(seq);
-}
-
-template<const std::vector<std::string>& StringList>
-void
-semantic_analyzer::convert(const util::string_enumeration<StringList>& a_string_enumeration)
-{
-}
-
-template<BOOST_VARIANT_ENUM_PARAMS(typename T)>
-void
-semantic_analyzer::convert(const boost::variant<BOOST_VARIANT_ENUM_PARAMS(T)>& item)
-{
-//	conversion_helper_.convert(item);
-}
 
 template<class T>
 void
-semantic_analyzer::convert(const boost::optional<T> item)
+semantic_analyzer::convert(const T& item)
 {
-//	conversion_helper_.convert(item);
+	syntax_tree_to_any_conversion_helper::convert(item);
 }
 
 }} //namespace socoa::cpp

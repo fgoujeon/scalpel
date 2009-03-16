@@ -36,17 +36,22 @@ convert_parse_tree_to_syntax_tree(const tree_node_t& node)
     assert(child_node.value.id() == id_t::TRANSLATION_UNIT);
 
 	const tree_node_t& grandchild_node = get_only_child_node(child_node);
-    assert(grandchild_node.value.id() == id_t::DECLARATION_SEQ);
-
-	return convert_nodes
-	<
-		declaration_seq,
-		declaration,
-		id_t::DECLARATION
-	>
-	(
-		grandchild_node
-	);
+    if(grandchild_node.value.id() == id_t::DECLARATION_SEQ) //the tree may be empty
+	{
+		return convert_nodes
+		<
+			declaration_seq,
+			declaration,
+			id_t::DECLARATION
+		>
+		(
+			grandchild_node
+		);
+	}
+	else
+	{
+		return syntax_tree_t();
+	}
 }
 
 }} //namespace socoa::cpp

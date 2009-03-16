@@ -23,9 +23,10 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <iostream>
 #include <stdexcept>
 #include <boost/spirit/tree/parse_tree.hpp>
+#include "../util/raii_affector.hpp"
 #include "parse_tree_to_syntax_tree.hpp"
 #include "source_code_completion.hpp"
-#include "../util/raii_affector.hpp"
+#include "semantic_graph.hpp"
 
 using namespace boost::spirit;
 using namespace socoa::cpp::syntax_tree;
@@ -85,6 +86,10 @@ syntax_analyzer::analyze(const std::string& input)
     return convert_parse_tree_to_syntax_tree(*info.trees.begin());
 }
 
+/**
+ * This function is called when the grammar has to check whether a name
+ * represents a type or not.
+ */
 std::ptrdiff_t
 syntax_analyzer::parse_type_name(const scanner_t& scan)
 {
@@ -104,11 +109,37 @@ syntax_analyzer::parse_type_name(const scanner_t& scan)
             //
             assert(input_);
             std::string partial_input(&*(input_->begin()), scan.first);
+
+			//
+			//Get the name which type (type name or simple variable name) must be
+			//checked.
+			//
+			std::string name;
+			char ch = *scan;
+			while
+			(
+				!scan.at_end() &&
+				(
+					(ch >= 'a' && ch <= 'z') ||
+					(ch >= 'A' && ch <= 'Z') ||
+					(ch == '_') ||
+					(ch >= '0' && ch <= '9')
+				)
+			)
+            {
+				name += ch;
+                ++scan;
+				ch = *scan;
+            }
+
+
+            std::cout << "\nTry to determine whether '" << name << "' is a type name...\n";
             std::cout << "Fragment of input succesfully parsed:\n";
             std::cout << "***\n" << partial_input << "\n***\n";
 
             //
-            //Complete the scanned source code
+            //Complete the scanned source code (partial_input) in order to have
+			//a syntactically correct input to analyze.
             //
             source_code_completion::complete(partial_input);
             std::cout << "Completed input:\n";
@@ -117,7 +148,14 @@ syntax_analyzer::parse_type_name(const scanner_t& scan)
             //
             //Analyze the source code's syntax
             //
-//            syntax_tree_t syntax_tree = analyze(partial_input);
+            std::cout << "Syntax analysis:\n";
+            syntax_tree_t syntax_tree = analyze(partial_input);
+
+			//
+			//Analyze the source code's semantic
+			//
+            std::cout << "Semantic analysis:\n";
+            semantic_graph_t semantic_graph = semantic_analyzer_(syntax_tree);
         }
 
         parsing_progress_ = parsing_progress;

@@ -23,6 +23,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "grammar.hpp"
 #include "syntax_tree.hpp"
+#include "semantic_analyzer.hpp"
 
 namespace socoa { namespace cpp
 {
@@ -68,6 +69,7 @@ class syntax_analyzer
         const std::string* input_;
         const char* parsing_progress_;
         bool performing_semantic_analysis_;
+		semantic_analyzer semantic_analyzer_;
 };
 
 }} //namespace socoa::cpp

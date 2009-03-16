@@ -28,13 +28,11 @@ namespace socoa { namespace cpp { namespace semantic_graph
 
 namespace_::namespace_()
 {
-    std::cout << "new anonymous namespace" << std::endl;
 }
 
 namespace_::namespace_(const std::string& name):
     name_(name)
 {
-    std::cout << "new namespace " << get_full_name() << std::endl;
 }
 
 /*
