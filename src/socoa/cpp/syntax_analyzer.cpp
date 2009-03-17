@@ -27,6 +27,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "parse_tree_to_syntax_tree.hpp"
 #include "source_code_completion.hpp"
 #include "semantic_graph.hpp"
+#include "name_lookup.hpp"
 
 using namespace boost::spirit;
 using namespace socoa::cpp::syntax_tree;
@@ -111,8 +112,8 @@ syntax_analyzer::parse_type_name(const scanner_t& scan)
             std::string partial_input(&*(input_->begin()), scan.first);
 
 			//
-			//Get the name which type (type name or simple variable name) must be
-			//checked.
+			//Get the name of which type (type name or simple variable name)
+			//must be checked.
 			//
 			std::string name;
 			char ch = *scan;
@@ -141,7 +142,7 @@ syntax_analyzer::parse_type_name(const scanner_t& scan)
             //Complete the scanned source code (partial_input) in order to have
 			//a syntactically correct input to analyze.
             //
-            source_code_completion::complete(partial_input);
+            unsigned int closed_scope_count = source_code_completion::complete(partial_input);
             std::cout << "Completed input:\n";
             std::cout << "***\n" << partial_input << "\n***\n";
 
@@ -156,6 +157,34 @@ syntax_analyzer::parse_type_name(const scanner_t& scan)
 			//
             std::cout << "Semantic analysis:\n";
             semantic_graph_t semantic_graph = semantic_analyzer_(syntax_tree);
+
+			//
+			//Get the scope from where to find the given type name.
+			//
+			semantic_graph::scope* scope = &semantic_graph;
+			/*
+			for(unsigned int i = 0; i < closed_scope_count; ++i)
+			{
+				if(!scope->get_scopes().empty())
+					scope = *scope->get_scopes().rbegin();
+				else
+					break;
+			}
+			*/
+
+			//
+			//Check whether the name is really a type name.
+			//
+			const semantic_graph::named_item* const item = name_lookup::find_unqualified_name(*scope, name);
+			if(item && item->is_a_type())
+			{
+				std::cout << "'" << name << "' is a type name.\n";
+				return name.size(); //successful match
+			}
+			else
+			{
+				std::cout << "'" << name << "' isn't a type name.\n";
+			}
         }
 
         parsing_progress_ = parsing_progress;

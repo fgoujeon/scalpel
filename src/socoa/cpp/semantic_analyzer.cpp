@@ -47,6 +47,12 @@ semantic_analyzer::convert(const class_head& item)
 void
 semantic_analyzer::convert(const class_specifier& item)
 {
+	boost::optional<const identifier&> id = item.get_class_head().get_identifier();
+
+	if(id)
+	{
+		semantic_graph_.add(class_(id->get_value()));
+	}
 }
 
 void
@@ -213,6 +219,7 @@ semantic_analyzer::convert(const qualified_template_id& item)
 void
 semantic_analyzer::convert(const simple_declaration& item)
 {
+	convert(item.get_decl_specifier_seq());
 }
 
 void

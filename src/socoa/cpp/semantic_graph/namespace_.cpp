@@ -110,16 +110,46 @@ namespace_::get_members() const
     return members_;
 }
 
+const std::vector<scope*>&
+namespace_::get_scopes() const
+{
+	return scopes_;
+}
+
+const std::vector<named_item*>&
+namespace_::get_named_items() const
+{
+	return named_items_;
+}
+
 void
 namespace_::add(namespace_&& member)
 {
     members_.push_back(member);
+
+	namespace_& member_ref = boost::get<namespace_&>(*members_.rbegin());
+
+	scopes_.push_back(&member_ref);
+	named_items_.push_back(&member_ref);
+}
+
+void
+namespace_::add(class_&& member)
+{
+    members_.push_back(member);
+
+	class_& member_ref = boost::get<class_&>(*members_.rbegin());
+
+	scopes_.push_back(&member_ref);
+	named_items_.push_back(&member_ref);
 }
 
 void
 namespace_::clear()
 {
     members_.clear();
+	scopes_.clear();
+	named_items_.clear();
 }
 
 }}} //namespace socoa::cpp::semantic_graph
