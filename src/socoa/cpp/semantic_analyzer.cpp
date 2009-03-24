@@ -28,6 +28,11 @@ namespace socoa { namespace cpp
 using namespace syntax_tree;
 using namespace semantic_graph;
 
+semantic_analyzer::semantic_analyzer():
+	conversion_helper_(*this)
+{
+}
+
 semantic_graph_t
 semantic_analyzer::operator()(const syntax_tree_t& tree)
 {

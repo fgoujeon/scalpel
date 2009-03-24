@@ -28,6 +28,7 @@ namespace socoa { namespace cpp
 using namespace syntax_tree;
 
 syntax_tree_to_string_converter::syntax_tree_to_string_converter():
+	conversion_helper_(*this),
     indentation_level_(0)
 {
 }

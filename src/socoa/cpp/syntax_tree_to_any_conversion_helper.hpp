@@ -18,8 +18,8 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_TO_ANY_CONVERSION_HELPER_HPP
-#define SOCOA_CPP_SYNTAX_TREE_TO_ANY_CONVERSION_HELPER_HPP
+#ifndef SOCOA_CPP_SYNTAX_TREE_TO_CONVERSION_HELPER_HPP
+#define SOCOA_CPP_SYNTAX_TREE_TO_CONVERSION_HELPER_HPP
 
 #include <string>
 #include <boost/variant.hpp>
@@ -30,6 +30,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp
 {
 
+template<class ConverterT>
 class syntax_tree_to_any_conversion_helper
 {
     private:
@@ -45,203 +46,92 @@ class syntax_tree_to_any_conversion_helper
 				void
 				operator()(const T& item) const
 				{
-					converter_.convert(item);
+					converter_.convert_any_node(item);
 				}
 
 			private:
 				syntax_tree_to_any_conversion_helper& converter_;
 		};
 
+		friend class static_visitor;
+
 	public:
-		syntax_tree_to_any_conversion_helper();
+		syntax_tree_to_any_conversion_helper(ConverterT& converter);
 
         template<class T, const std::string& Separator>
+		inline
         void
         convert(const util::sequence<T, Separator>& seq);
 
-		virtual
-        void
-        convert_separator(const std::string& separator) = 0;
-
 		template<BOOST_VARIANT_ENUM_PARAMS(typename T)>
+		inline
         void
 		convert(const boost::variant<BOOST_VARIANT_ENUM_PARAMS(T)>& item);
 
         template<class T>
+		inline
         void
         convert(const boost::optional<T>& item);
 
-		template<const std::vector<std::string>& StringList>
-		void
-		convert(const util::string_enumeration<StringList>& a_string_enumeration);
-
-        virtual
-		void
-		convert(const syntax_tree::class_head& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::class_specifier& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::conversion_function_id& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::ctor_initializer& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::cv_qualifier& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::declarator& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::destructor_name& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::direct_declarator& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::direct_declarator::array_part& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::direct_declarator::function_part& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::elaborated_type_specifier& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::function_definition& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::identifier& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::init_declarator& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::mem_initializer& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::member_declaration_function_definition& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::member_declaration_member_declarator_list& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::member_declaration_unqualified_id& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::member_declarator_bit_field_member& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::member_declarator_declarator& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::member_specification& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::member_specification_access_specifier& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::namespace_definition& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::nested_identifier_or_template_id& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::nested_name_specifier& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::nested_name_specifier::second_part& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::operator_function_id& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::parameter_declaration& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::parameter_declaration_clause& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::ptr_operator& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::qualified_identifier& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::qualified_nested_id& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::qualified_operator_function_id& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::qualified_template_id& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::simple_declaration& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::simple_template_type_specifier& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::template_declaration& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::template_id& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::using_declaration& item) = 0;
-
-        virtual
-		void
-		convert(const syntax_tree::using_directive& item) = 0;
-
 	private:
+        template<class T, const std::string& Separator>
+        void
+        convert_sequence_node(const util::sequence<T, Separator>& seq);
+
+		template<BOOST_VARIANT_ENUM_PARAMS(typename T)>
+        void
+		convert_variant_node(const boost::variant<BOOST_VARIANT_ENUM_PARAMS(T)>& item);
+
+        template<class T>
+        void
+        convert_optional_node(const boost::optional<T>& item);
+
+        template<class T>
+        void
+        convert_any_node(const T& item);
+
+		ConverterT& converter_;
 		static_visitor static_visitor_;
 };
 
+template<class ConverterT>
+syntax_tree_to_any_conversion_helper<ConverterT>::syntax_tree_to_any_conversion_helper
+(
+	ConverterT& converter
+):
+	converter_(converter),
+	static_visitor_(*this)
+{
+}
+
+template<class ConverterT>
 template<class T, const std::string& Separator>
 void
-syntax_tree_to_any_conversion_helper::convert(const util::sequence<T, Separator>& seq)
+syntax_tree_to_any_conversion_helper<ConverterT>::convert(const util::sequence<T, Separator>& seq)
+{
+	convert_sequence_node(seq);
+}
+
+template<class ConverterT>
+template<BOOST_VARIANT_ENUM_PARAMS(typename T)>
+void
+syntax_tree_to_any_conversion_helper<ConverterT>::convert(const boost::variant<BOOST_VARIANT_ENUM_PARAMS(T)>& item)
+{
+	convert_variant_node(item);
+}
+
+template<class ConverterT>
+template<class T>
+void
+syntax_tree_to_any_conversion_helper<ConverterT>::convert(const boost::optional<T>& item)
+{
+	convert_optional_node(item);
+}
+
+template<class ConverterT>
+template<class T, const std::string& Separator>
+void
+syntax_tree_to_any_conversion_helper<ConverterT>::convert_sequence_node(const util::sequence<T, Separator>& seq)
 {
     typedef typename util::sequence<T>::list_t item_list_t;
 	const item_list_t& item_list = seq.get_items();
@@ -251,35 +141,47 @@ syntax_tree_to_any_conversion_helper::convert(const util::sequence<T, Separator>
         //add separator
         if(i != item_list.begin()) //don't add a separator before the first item
 		{
-			convert_separator(Separator);
+			converter_.convert_separator(Separator);
 		}
 
-        convert(*i);
+        convert_any_node(*i);
     }
 }
 
+template<class ConverterT>
 template<BOOST_VARIANT_ENUM_PARAMS(typename T)>
 void
-syntax_tree_to_any_conversion_helper::convert(const boost::variant<BOOST_VARIANT_ENUM_PARAMS(T)>& item)
+syntax_tree_to_any_conversion_helper<ConverterT>::convert_variant_node(const boost::variant<BOOST_VARIANT_ENUM_PARAMS(T)>& item)
 {
 	boost::apply_visitor(static_visitor_, item);
 }
 
+template<class ConverterT>
 template<class T>
 void
-syntax_tree_to_any_conversion_helper::convert(const boost::optional<T>& item)
+syntax_tree_to_any_conversion_helper<ConverterT>::convert_optional_node(const boost::optional<T>& item)
 {
     if(item)
-        convert(*item);
+        convert_any_node(*item);
 }
 
-template<const std::vector<std::string>& StringList>
+template<class ConverterT>
+template<class T>
 void
-syntax_tree_to_any_conversion_helper::convert(const util::string_enumeration<StringList>& a_string_enumeration)
+syntax_tree_to_any_conversion_helper<ConverterT>::convert_any_node(const T& item)
 {
-	///\todo reintegrate this into _to_string_converter
-//    add_space();
- //   result_ << a_string_enumeration.get_value();
+	//This may call either one of the ConverterT's basic node convert functions
+	//or the ConverterT's generic convert function template which will call one
+	//of the syntax_tree_to_any_conversion_helper's convert functions in its
+	//turn.
+	//The ConverterT's generic convert function template definition must be:
+	//	template<class T>
+	//	void
+	//	syntax_tree_to_string_converter::convert(const T& item)
+	//	{
+	//		conversion_helper_.convert(item);
+	//	}
+	converter_.convert(item);
 }
 
 }} //namespace socoa::cpp

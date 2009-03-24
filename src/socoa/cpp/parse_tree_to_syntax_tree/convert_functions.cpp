@@ -828,7 +828,17 @@ convert_elaborated_type_specifier(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::ELABORATED_TYPE_SPECIFIER);
 
-	return elaborated_type_specifier();
+	return elaborated_type_specifier
+	(
+		find_and_convert_node<boost::optional<class_key>, id_t::CLASS_KEY>(node),
+		find_and_convert_node<boost::optional<nested_name_specifier>, id_t::NESTED_NAME_SPECIFIER>(node),
+		find_and_convert_node<boost::optional<template_id>, id_t::TEMPLATE_ID>(node),
+		find_and_convert_node<boost::optional<identifier>, id_t::IDENTIFIER>(node),
+		check_node_existence(node, "::", 1),
+		check_node_existence(node, "enum", 0),
+		check_node_existence(node, "typename", 0),
+		check_node_existence(node, "template")
+	);
 }
 
 destructor_name

@@ -31,11 +31,9 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp
 {
 
-class syntax_tree_to_string_converter: public syntax_tree_to_any_conversion_helper
+class syntax_tree_to_string_converter
 {
     public:
-		typedef syntax_tree_to_any_conversion_helper conversion_helper;
-
         syntax_tree_to_string_converter();
 
         std::string
@@ -189,6 +187,9 @@ class syntax_tree_to_string_converter: public syntax_tree_to_any_conversion_help
         const std::string
         indentation();
 
+		friend class syntax_tree_to_any_conversion_helper<syntax_tree_to_string_converter>;
+
+		syntax_tree_to_any_conversion_helper<syntax_tree_to_string_converter> conversion_helper_;
         std::ostringstream result_;
         unsigned int indentation_level_;
 };
@@ -205,7 +206,7 @@ template<class T>
 void
 syntax_tree_to_string_converter::convert(const T& item)
 {
-	conversion_helper::convert(item);
+	conversion_helper_.convert(item);
 }
 
 }} //namespace socoa::cpp
