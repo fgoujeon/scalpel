@@ -65,8 +65,6 @@ class class_:
 		class_&
 		operator=(const class_& c);
 
-		~class_();
-
         /**
         @return the name of the class
         */

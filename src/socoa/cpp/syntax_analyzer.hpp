@@ -21,6 +21,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_ANALYZER_HPP
 #define SOCOA_CPP_SYNTAX_ANALYZER_HPP
 
+#include <map>
 #include "grammar.hpp"
 #include "syntax_tree.hpp"
 #include "semantic_analyzer.hpp"
@@ -67,9 +68,10 @@ class syntax_analyzer
         type_name_parser type_name_parser_;
         grammar grammar_;
         const std::string* input_;
-        const char* parsing_progress_;
+        const char* highest_parsing_progress_;
         bool performing_semantic_analysis_;
 		semantic_analyzer semantic_analyzer_;
+		std::map<const char*, bool> type_name_map_;
 };
 
 }} //namespace socoa::cpp

@@ -30,7 +30,6 @@ namespace socoa { namespace cpp { namespace semantic_graph
 class_::class_(const std::string& name):
     name_(name)
 {
-	std::cout << "Construction of class " << name_ << std::endl;
 }
 
 class_::class_(const class_& c):
@@ -59,11 +58,6 @@ class_::operator=(const class_& c)
 	class_ temp(c);
 	std::swap(*this, temp);
 	return *this;
-}
-
-class_::~class_()
-{
-	std::cout << "Destruction of class " << name_ << std::endl;
 }
 
 const std::string&

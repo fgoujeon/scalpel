@@ -58,8 +58,9 @@ syntax_tree_t
 syntax_analyzer::operator()(const std::string& input)
 {
     input_ = &input;
-    parsing_progress_ = 0;
+    highest_parsing_progress_ = 0;
     performing_semantic_analysis_ = false;
+	type_name_map_.clear();
 
     return analyze(input);
 }
@@ -96,98 +97,107 @@ syntax_analyzer::parse_type_name(const scanner_t& scan)
 {
     const char* parsing_progress = scan.first;
 
-    //don't analyze if we already did it at the same point
-    if(parsing_progress != parsing_progress_)
-    {
-        //if we're not already performing a semantic analysis (avoid recursive call)
-        if(!performing_semantic_analysis_)
-        {
-            raii_affector<bool, true, false> raii_aff(performing_semantic_analysis_);
+	//
+	//Get the name of which type (type name or simple variable name)
+	//must be checked.
+	//
+	std::string name;
+	char ch = *scan;
+	while
+	(
+		!scan.at_end() &&
+		(
+			(ch >= 'a' && ch <= 'z') ||
+			(ch >= 'A' && ch <= 'Z') ||
+			(ch == '_') ||
+			(ch >= '0' && ch <= '9')
+		)
+	)
+	{
+		name += ch;
+		++scan;
+		ch = *scan;
+	}
 
-            //
-            //Create a new string from the beginning of the input to the current
-            //location of the scanner.
-            //
-            assert(input_);
-            std::string partial_input(&*(input_->begin()), scan.first);
-
-			//
-			//Get the name of which type (type name or simple variable name)
-			//must be checked.
-			//
-			std::string name;
-			char ch = *scan;
-			while
-			(
-				!scan.at_end() &&
-				(
-					(ch >= 'a' && ch <= 'z') ||
-					(ch >= 'A' && ch <= 'Z') ||
-					(ch == '_') ||
-					(ch >= '0' && ch <= '9')
-				)
-			)
-            {
-				name += ch;
-                ++scan;
-				ch = *scan;
-            }
-
-
-            std::cout << "\nTry to determine whether '" << name << "' is a type name...\n";
-            std::cout << "Fragment of input succesfully parsed:\n";
-            std::cout << "***\n" << partial_input << "\n***\n";
-
-            //
-            //Complete the scanned source code (partial_input) in order to have
-			//a syntactically correct input to analyze.
-            //
-            unsigned int closed_scope_count = source_code_completion::complete(partial_input);
-            std::cout << "Completed input:\n";
-            std::cout << "***\n" << partial_input << "\n***\n";
-
-            //
-            //Analyze the source code's syntax
-            //
-            std::cout << "Syntax analysis:\n";
-            syntax_tree_t syntax_tree = analyze(partial_input);
-
-			//
-			//Analyze the source code's semantic
-			//
-            std::cout << "Semantic analysis:\n";
-            semantic_graph_t semantic_graph = semantic_analyzer_(syntax_tree);
-
-			//
-			//Get the scope from where to find the given type name.
-			//
-			semantic_graph::scope* scope = &semantic_graph;
-			/*
-			for(unsigned int i = 0; i < closed_scope_count; ++i)
-			{
-				if(!scope->get_scopes().empty())
-					scope = *scope->get_scopes().rbegin();
-				else
-					break;
-			}
-			*/
-
-			//
-			//Check whether the name is really a type name.
-			//
-			const semantic_graph::named_item* const item = name_lookup::find_unqualified_name(*scope, name);
-			if(item && item->is_a_type())
-			{
-				std::cout << "'" << name << "' is a type name.\n";
+	//if we already checked that name at the same progress point, we stored the result
+	if(highest_parsing_progress_ >= parsing_progress)
+	{
+		std::map<const char*, bool>::const_iterator is_a_type_it = type_name_map_.find(parsing_progress);
+		if(is_a_type_it != type_name_map_.end())
+		{
+			if(is_a_type_it->second)
 				return name.size(); //successful match
-			}
 			else
-			{
-				std::cout << "'" << name << "' isn't a type name.\n";
-			}
-        }
+				return -1;
+		}
+	}
 
-        parsing_progress_ = parsing_progress;
+	//if we're not already performing a semantic analysis (avoid recursive call)
+	if(!performing_semantic_analysis_)
+	{
+		raii_affector<bool, true, false> raii_aff(performing_semantic_analysis_);
+
+		//
+		//Create a new string from the beginning of the input to the current
+		//location of the scanner.
+		//
+		assert(input_);
+		std::string partial_input(&*(input_->begin()), scan.first);
+
+
+		std::cout << "\nTry to determine whether '" << name << "' is a type name...\n";
+		std::cout << "Fragment of input succesfully parsed:\n";
+		std::cout << "***\n" << partial_input << "\n***\n";
+
+		//
+		//Complete the scanned source code (partial_input) in order to have
+		//a syntactically correct input to analyze.
+		//
+		unsigned int closed_scope_count = source_code_completion::complete(partial_input);
+		std::cout << "Completed input:\n";
+		std::cout << "***\n" << partial_input << "\n***\n";
+
+		//
+		//Analyze the source code's syntax
+		//
+		std::cout << "Syntax analysis:\n";
+		syntax_tree_t syntax_tree = analyze(partial_input);
+
+		//
+		//Analyze the source code's semantic
+		//
+		std::cout << "Semantic analysis:\n";
+		semantic_graph_t semantic_graph = semantic_analyzer_(syntax_tree);
+
+		//
+		//Get the scope from where to find the given type name.
+		//
+		semantic_graph::scope* scope = &semantic_graph;
+		for(unsigned int i = 0; i < closed_scope_count; ++i)
+		{
+			if(!scope->get_scopes().empty()) ///\todo should be an assert when scope tree construction implementation will be full
+				scope = scope->get_scopes().back();
+			else
+				break;
+		}
+
+		//
+		//Check whether the name is really a type name.
+		//
+		const semantic_graph::named_item* const item = name_lookup::find_unqualified_name(*scope, name);
+		if(item && item->is_a_type())
+		{
+			std::cout << "'" << name << "' is a type name.\n";
+			type_name_map_.insert(std::make_pair<const char*, bool>(parsing_progress, true));
+			return name.size(); //successful match
+		}
+		else
+		{
+			std::cout << "'" << name << "' isn't a type name.\n";
+			type_name_map_.insert(std::make_pair<const char*, bool>(parsing_progress, false));
+		}
+
+        highest_parsing_progress_ = parsing_progress;
     }
 
     return -1;
