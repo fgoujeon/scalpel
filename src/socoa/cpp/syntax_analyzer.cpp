@@ -68,6 +68,8 @@ syntax_analyzer::operator()(const std::string& input)
 syntax_tree_t
 syntax_analyzer::analyze(const std::string& input)
 {
+	currently_analyzed_partial_input_ = &input;
+
     //parse the input with the C++ grammar
     boost::spirit::tree_parse_info<> info = boost::spirit::pt_parse
     (
@@ -75,6 +77,8 @@ syntax_analyzer::analyze(const std::string& input)
         grammar_.get_start_rule(),
         boost::spirit::space_p
     );
+
+	currently_analyzed_partial_input_ = input_;
 
     //throw an exception if parsing fails
     if(!info.full)
@@ -95,11 +99,10 @@ syntax_analyzer::analyze(const std::string& input)
 std::ptrdiff_t
 syntax_analyzer::parse_type_name(const scanner_t& scan)
 {
-    const char* parsing_progress = scan.first;
+    unsigned int parsing_progress = scan.first - &*(currently_analyzed_partial_input_->begin());
 
 	//
-	//Get the name of which type (type name or simple variable name)
-	//must be checked.
+	//Get the name to be checked.
 	//
 	std::string name;
 	char ch = *scan;
@@ -119,18 +122,35 @@ syntax_analyzer::parse_type_name(const scanner_t& scan)
 		ch = *scan;
 	}
 
-	//if we already checked that name at the same progress point, we stored the result
-	if(highest_parsing_progress_ >= parsing_progress)
+	std::cout << "\nTry to determine whether '" << name << "' is a type name...\n";
+
+	//if we already checked that name at the same progress point...
+	if
+	(
+		highest_parsing_progress_ != 0 &&
+		highest_parsing_progress_ >= parsing_progress
+	)
 	{
-		std::map<const char*, bool>::const_iterator is_a_type_it = type_name_map_.find(parsing_progress);
-		if(is_a_type_it != type_name_map_.end())
+		//... just return the result we stored
+		std::map<unsigned int, bool>::const_iterator is_a_type_it = type_name_map_.find(parsing_progress);
+		if(is_a_type_it == type_name_map_.end())
 		{
-			if(is_a_type_it->second)
-				return name.size(); //successful match
-			else
-				return -1;
+			std::cout << "parsing progress = " << parsing_progress << "\n";
+			print_type_name_map_();
+			assert(false);
+		}
+		if(is_a_type_it->second)
+		{
+			std::cout << "'" << name << "' is a type name.\n";
+			return name.size(); //successful match
+		}
+		else
+		{
+			std::cout << "'" << name << "' isn't a type name.\n";
+			return -1;
 		}
 	}
+	highest_parsing_progress_ = parsing_progress;
 
 	//if we're not already performing a semantic analysis (avoid recursive call)
 	if(!performing_semantic_analysis_)
@@ -141,11 +161,10 @@ syntax_analyzer::parse_type_name(const scanner_t& scan)
 		//Create a new string from the beginning of the input to the current
 		//location of the scanner.
 		//
-		assert(input_);
-		std::string partial_input(&*(input_->begin()), scan.first);
+		assert(currently_analyzed_partial_input_);
+		std::string partial_input(&*(currently_analyzed_partial_input_->begin()), scan.first);
 
 
-		std::cout << "\nTry to determine whether '" << name << "' is a type name...\n";
 		std::cout << "Fragment of input succesfully parsed:\n";
 		std::cout << "***\n" << partial_input << "\n***\n";
 
@@ -188,19 +207,31 @@ syntax_analyzer::parse_type_name(const scanner_t& scan)
 		if(item && item->is_a_type())
 		{
 			std::cout << "'" << name << "' is a type name.\n";
-			type_name_map_.insert(std::make_pair<const char*, bool>(parsing_progress, true));
+			type_name_map_.insert(std::make_pair<unsigned int, bool>(parsing_progress, true));
 			return name.size(); //successful match
 		}
 		else
 		{
 			std::cout << "'" << name << "' isn't a type name.\n";
-			type_name_map_.insert(std::make_pair<const char*, bool>(parsing_progress, false));
+			type_name_map_.insert(std::make_pair<unsigned int, bool>(parsing_progress, false));
 		}
-
-        highest_parsing_progress_ = parsing_progress;
     }
 
     return -1;
+}
+
+void
+syntax_analyzer::print_type_name_map_()
+{
+	for
+	(
+		std::map<unsigned int, bool>::iterator i = type_name_map_.begin();
+		i != type_name_map_.end();
+		++i
+	)
+	{
+		std::cout << "type_name_map[" << i->first << "] = " << i->second << "\n";
+	}
 }
 
 }} //namespace socoa::cpp

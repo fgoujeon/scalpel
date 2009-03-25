@@ -65,13 +65,17 @@ class syntax_analyzer
         std::ptrdiff_t
         parse_type_name(const scanner_t& scan);
 
+		void
+		print_type_name_map_();
+
         type_name_parser type_name_parser_;
         grammar grammar_;
         const std::string* input_;
-        const char* highest_parsing_progress_;
+        const std::string* currently_analyzed_partial_input_;
+        unsigned int highest_parsing_progress_;
         bool performing_semantic_analysis_;
 		semantic_analyzer semantic_analyzer_;
-		std::map<const char*, bool> type_name_map_;
+		std::map<unsigned int, bool> type_name_map_;
 };
 
 }} //namespace socoa::cpp
