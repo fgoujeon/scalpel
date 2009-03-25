@@ -54,6 +54,19 @@ class class_:
         explicit
         class_(const std::string& name);
 
+		/**
+		 * Copy constructor.
+		 */
+		class_(const class_& c);
+
+		/*
+		 * Assignment operator.
+		 */
+		class_&
+		operator=(const class_& c);
+
+		~class_();
+
         /**
         @return the name of the class
         */
@@ -143,6 +156,7 @@ class class_:
 
     private:
         std::string name_;
+		std::vector<class_> classes_;
 //        std::weak_ptr<enclosing_scope> enclosing_scope_;
         std::vector<member_t> members_;
         std::vector<scope*> scopes_;
@@ -152,14 +166,14 @@ class class_:
 };
 
 typedef
-	boost::variant<class_>
+	boost::variant<class_*>
 	class_member_t
 ;
 
 class class_::member_t: public class_member_t
 {
 	public:
-		member_t(class_&& o): class_member_t(o){}
+		member_t(class_* o): class_member_t(o){}
 };
 
 }}} //namespace socoa::cpp::semantic_graph

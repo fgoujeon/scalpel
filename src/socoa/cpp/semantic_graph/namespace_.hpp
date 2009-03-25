@@ -57,6 +57,14 @@ class namespace_:
 		namespace_(const std::string& name);
 
 		/**
+		 * Copy constructor.
+		 */
+		namespace_(const namespace_& n);
+
+		namespace_&
+		operator=(const namespace_& n);
+
+		/**
 		 * Move constructor.
 		 */
 		//namespace_(namespace_&& n);
@@ -140,21 +148,23 @@ class namespace_:
 
     private:
         std::string name_;
+        std::vector<namespace_> namespaces_;
+        std::vector<class_> classes_;
         std::vector<member_t> members_;
         std::vector<scope*> scopes_;
         std::vector<named_item*> named_items_;
 };
 
 typedef
-	boost::variant<namespace_, class_>
+	boost::variant<namespace_*, class_*>
 	namespace_member_t
 ;
 
 class namespace_::member_t: public namespace_member_t
 {
 	public:
-		member_t(namespace_&& o): namespace_member_t(o){}
-		member_t(class_&& o): namespace_member_t(o){}
+		member_t(namespace_* o): namespace_member_t(o){}
+		member_t(class_* o): namespace_member_t(o){}
 };
 
 //inline

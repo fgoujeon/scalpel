@@ -35,6 +35,47 @@ namespace_::namespace_(const std::string& name):
 {
 }
 
+namespace_::namespace_(const namespace_& n):
+	name_(n.name_),
+	namespaces_(n.namespaces_),
+	classes_(n.classes_)
+{
+	//members_, scopes_ and named_items_ pointers must point to the copied
+	//objects.
+	for
+	(
+		std::vector<class_>::iterator i = classes_.begin();
+		i != classes_.end();
+		++i
+	)
+	{
+		class_* c = &*i;
+		members_.push_back(c);
+		scopes_.push_back(c);
+		named_items_.push_back(c);
+	}
+	for
+	(
+		std::vector<namespace_>::iterator i = namespaces_.begin();
+		i != namespaces_.end();
+		++i
+	)
+	{
+		namespace_* n = &*i;
+		members_.push_back(n);
+		scopes_.push_back(n);
+		named_items_.push_back(n);
+	}
+}
+
+namespace_&
+namespace_::operator=(const namespace_& n)
+{
+	namespace_ temp(n);
+	std::swap(*this, temp);
+	return *this;
+}
+
 /*
 namespace_::namespace_(namespace_&& n)
 {
@@ -125,28 +166,32 @@ namespace_::get_named_items() const
 void
 namespace_::add(namespace_&& member)
 {
-    members_.push_back(member);
+    namespaces_.push_back(member);
 
-	namespace_& member_ref = boost::get<namespace_&>(*members_.rbegin());
+	namespace_* member_ptr = &namespaces_.back();
 
-	scopes_.push_back(&member_ref);
-	named_items_.push_back(&member_ref);
+	members_.push_back(member_ptr);
+	scopes_.push_back(member_ptr);
+	named_items_.push_back(member_ptr);
 }
 
 void
 namespace_::add(class_&& member)
 {
-    members_.push_back(member);
+    classes_.push_back(member);
 
-	class_& member_ref = boost::get<class_&>(*members_.rbegin());
+	class_* member_ptr = &classes_.back();
 
-	scopes_.push_back(&member_ref);
-	named_items_.push_back(&member_ref);
+	members_.push_back(member_ptr);
+	scopes_.push_back(member_ptr);
+	named_items_.push_back(member_ptr);
 }
 
 void
 namespace_::clear()
 {
+	namespaces_.clear();
+	classes_.clear();
     members_.clear();
 	scopes_.clear();
 	named_items_.clear();

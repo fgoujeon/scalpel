@@ -103,6 +103,13 @@ semantic_analyzer::convert(const direct_declarator::function_part& item)
 void
 semantic_analyzer::convert(const elaborated_type_specifier& item)
 {
+	const boost::optional<const class_key&> a_class_key = item.get_class_key();
+	const boost::optional<const identifier&> an_identifier = item.get_identifier();
+
+	if(a_class_key && an_identifier)
+	{
+		semantic_graph_.add(class_(an_identifier->get_value()));
+	}
 }
 
 void

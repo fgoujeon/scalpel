@@ -30,7 +30,40 @@ namespace socoa { namespace cpp { namespace semantic_graph
 class_::class_(const std::string& name):
     name_(name)
 {
-    std::cout << "new class " << get_full_name() << std::endl;
+	std::cout << "Construction of class " << name_ << std::endl;
+}
+
+class_::class_(const class_& c):
+	name_(c.name_),
+	classes_(c.classes_)
+{
+	//members_, scopes_ and named_items_ pointers must point to the copied
+	//objects.
+	for
+	(
+		std::vector<class_>::iterator i = classes_.begin();
+		i != classes_.end();
+		++i
+	)
+	{
+		class_* c = &*i;
+		members_.push_back(c);
+		scopes_.push_back(c);
+		named_items_.push_back(c);
+	}
+}
+
+class_&
+class_::operator=(const class_& c)
+{
+	class_ temp(c);
+	std::swap(*this, temp);
+	return *this;
+}
+
+class_::~class_()
+{
+	std::cout << "Destruction of class " << name_ << std::endl;
 }
 
 const std::string&
@@ -48,15 +81,16 @@ class_::has_that_name(const std::string& name) const
 const std::string
 class_::get_full_name() const
 {
-    std::string full_name;
-
+//    std::string full_name;
+//
 //    if(has_enclosing_scope() && !get_enclosing_scope()->is_global()) //don't add a leading "::"
 //    {
 //        full_name = get_enclosing_scope()->get_full_name() + "::";
 //    }
 //    full_name += name_;
-
-    return full_name;
+//
+//    return full_name;
+	return name_;
 }
 
 bool
@@ -131,12 +165,13 @@ class_::get_classes() const
 void
 class_::add(class_&& nested_class)
 {
-    members_.push_back(nested_class);
+	classes_.push_back(nested_class);
 
-	class_& member_ref = boost::get<class_&>(*members_.rbegin());
+	class_* member_ptr = &classes_.back();
 
-	scopes_.push_back(&member_ref);
-	named_items_.push_back(&member_ref);
+	members_.push_back(member_ptr);
+	scopes_.push_back(member_ptr);
+	named_items_.push_back(member_ptr);
 }
 
 /*

@@ -45,7 +45,7 @@ find_unqualified_name(const scope& current_scope, const std::string& name, bool 
     1. Current scope
     */
     {
-        const std::vector<named_item*> members = current_scope.get_named_items();
+        const std::vector<named_item*>& members = current_scope.get_named_items();
         std::vector<named_item*>::const_iterator member_it = std::find_if
         (
             members.begin(),
@@ -57,7 +57,6 @@ find_unqualified_name(const scope& current_scope, const std::string& name, bool 
                 name
             )
         );
-
         if(member_it != members.end()) //if a name has been found
         {
             return *member_it;

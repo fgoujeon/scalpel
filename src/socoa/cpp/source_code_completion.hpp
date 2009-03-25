@@ -67,6 +67,8 @@ namespace source_code_completion
             /*
             Search last declaration.
             */
+            std::string::size_type last_declaration_index = str.find_last_of(";{}");
+			/*
             std::string::size_type last_declaration_index = std::string::npos;
             std::string::size_type search_from = std::string::npos;
             bool continue_search = true;
@@ -90,6 +92,7 @@ namespace source_code_completion
                     continue_search = false;
                 }
             }
+			*/
 
             str = str.substr(0, last_declaration_index + 1);
         }
