@@ -36,7 +36,8 @@ class_::class_(const std::string& name):
 class_::class_(const class_& c):
 	name_(c.name_),
 	enclosing_scope_(0),
-	classes_(c.classes_)
+	classes_(c.classes_),
+	functions_(c.functions_)
 {
 	//members_, scopes_ and named_items_ pointers must point to the copied
 	//objects.
@@ -48,6 +49,18 @@ class_::class_(const class_& c):
 	)
 	{
 		class_* c = &*i;
+		members_.push_back(c);
+		scopes_.push_back(c);
+		named_items_.push_back(c);
+	}
+	for
+	(
+		std::vector<function>::iterator i = functions_.begin();
+		i != functions_.end();
+		++i
+	)
+	{
+		function* c = &*i;
 		members_.push_back(c);
 		scopes_.push_back(c);
 		named_items_.push_back(c);
@@ -164,6 +177,20 @@ class_::add(class_&& nested_class)
 	classes_.push_back(nested_class);
 
 	class_* member_ptr = &classes_.back();
+
+	member_ptr->set_enclosing_scope(*this);
+
+	members_.push_back(member_ptr);
+	scopes_.push_back(member_ptr);
+	named_items_.push_back(member_ptr);
+}
+
+void
+class_::add(function&& member)
+{
+    functions_.push_back(member);
+
+	function* member_ptr = &functions_.back();
 
 	member_ptr->set_enclosing_scope(*this);
 

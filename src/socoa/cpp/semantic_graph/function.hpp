@@ -18,63 +18,45 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SEMANTIC_GRAPH_CLASS_HPP
-#define SOCOA_CPP_SEMANTIC_GRAPH_CLASS_HPP
+#ifndef SOCOA_CPP_SEMANTIC_GRAPH_FUNCTION_HPP
+#define SOCOA_CPP_SEMANTIC_GRAPH_FUNCTION_HPP
 
 #include <string>
 #include <vector>
-#include <boost/variant.hpp>
 #include "scope.hpp"
 #include "named_item.hpp"
-#include "function.hpp"
 
 namespace socoa { namespace cpp { namespace semantic_graph
 {
 
 class namespace_;
+class class_;
 
 /**
-Represents a C++ class.
+Represents a C++ function.
 */
-class class_:
+class function:
 	public scope,
 	public named_item
 {
     public:
-		class member_t;
-
-        /**
-        Creates a class.
-        @param name the class' name
-        */
         explicit
-        class_(const std::string& name);
-
-		/**
-		 * Copy constructor.
-		 */
-		class_(const class_& c);
-
-		/*
-		 * Assignment operator.
-		 */
-		class_&
-		operator=(const class_& c);
+        function(const std::string& name);
 
         /**
-        @return the name of the class
+        @return the name of the function
         */
         const std::string&
         get_name() const;
 
         /**
-        @return true if the class has the given name
+        @return true if the function has the given name
         */
         bool
         has_that_name(const std::string& name) const;
 
         /**
-        @return the full name of the class, including all enclosing scopes (e.g. foo::bar)
+        @return the full name of the function, including all enclosing scopes (e.g. foo::bar)
         */
         const std::string
         get_full_name() const;
@@ -86,31 +68,31 @@ class class_:
         is_a_type() const;
 
         /**
-        @return false, because a class cannot be the global namespace...
+        @return false, because a function cannot be the global namespace...
         */
         bool
         is_global() const;
 
         /**
-        @return true if the class has a enclosing scope scope
+        @return true if the function has an enclosing scope
         */
         bool
         has_enclosing_scope() const;
 
         /**
-        @return the enclosing scope of the class
+        @return the enclosing scope of the function
         */
 		scope&
         get_enclosing_scope();
 
         /**
-        @return the enclosing scope of the class
+        @return the enclosing scope of the function
         */
         const scope&
         get_enclosing_scope() const;
 
         /**
-        Sets the enclosing scope of the class.
+        Sets the enclosing scope of the function.
         */
         void
         set_enclosing_scope(class_& enclosing_scope);
@@ -118,65 +100,17 @@ class class_:
         void
         set_enclosing_scope(namespace_& enclosing_scope);
 
-        /**
-        @return the class' member list (i.e. the list of classes, functions, etc.)
-        */
-        const std::vector<member_t>&
-        get_members() const;
-
         const std::vector<scope*>&
         get_scopes() const;
 
         const std::vector<named_item*>&
         get_named_items() const;
 
-//        /**
-//        @return the nested classes
-//        */
-//        const std::vector<std::shared_ptr<class_>>&
-//        get_classes() const;
-
-        /**
-        Adds a nested class.
-        */
-        void
-        add(class_&& nested_class);
-
-        void
-        add(function&& member);
-
-//        const std::vector<base_specifier>&
-//        get_base_specifiers() const;
-//
-//        void
-//        add(const base_specifier& specifier);
-
     private:
         std::string name_;
         scope* enclosing_scope_;
-		std::vector<class_> classes_;
-		std::vector<function> functions_;
-        std::vector<member_t> members_;
         std::vector<scope*> scopes_;
         std::vector<named_item*> named_items_;
-//        std::vector<std::shared_ptr<class_>> nested_classes_;
-//        std::vector<base_specifier> base_specifiers_;
-};
-
-typedef
-	boost::variant
-	<
-		class_*,
-		function*
-	>
-	class_member_t
-;
-
-class class_::member_t: public class_member_t
-{
-	public:
-		member_t(class_* o): class_member_t(o){}
-		member_t(function* o): class_member_t(o){}
 };
 
 }}} //namespace socoa::cpp::semantic_graph

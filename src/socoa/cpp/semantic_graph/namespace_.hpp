@@ -140,6 +140,9 @@ class namespace_:
         add(class_&& member);
 
         void
+        add(function&& member);
+
+        void
         clear();
 
 //        inline
@@ -151,13 +154,19 @@ class namespace_:
 		scope* enclosing_scope_;
         std::vector<namespace_> namespaces_;
         std::vector<class_> classes_;
+        std::vector<function> functions_;
         std::vector<member_t> members_;
         std::vector<scope*> scopes_;
         std::vector<named_item*> named_items_;
 };
 
 typedef
-	boost::variant<namespace_*, class_*>
+	boost::variant
+	<
+		namespace_*,
+		class_*,
+		function*
+	>
 	namespace_member_t
 ;
 
@@ -166,6 +175,7 @@ class namespace_::member_t: public namespace_member_t
 	public:
 		member_t(namespace_* o): namespace_member_t(o){}
 		member_t(class_* o): namespace_member_t(o){}
+		member_t(function* o): namespace_member_t(o){}
 };
 
 //inline

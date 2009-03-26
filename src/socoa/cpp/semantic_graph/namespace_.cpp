@@ -41,7 +41,8 @@ namespace_::namespace_(const namespace_& n):
 	name_(n.name_),
 	enclosing_scope_(0),
 	namespaces_(n.namespaces_),
-	classes_(n.classes_)
+	classes_(n.classes_),
+	functions_(n.functions_)
 {
 	//members_, scopes_ and named_items_ pointers must point to the copied
 	//objects.
@@ -65,6 +66,18 @@ namespace_::namespace_(const namespace_& n):
 	)
 	{
 		namespace_* n = &*i;
+		members_.push_back(n);
+		scopes_.push_back(n);
+		named_items_.push_back(n);
+	}
+	for
+	(
+		std::vector<function>::iterator i = functions_.begin();
+		i != functions_.end();
+		++i
+	)
+	{
+		function* n = &*i;
 		members_.push_back(n);
 		scopes_.push_back(n);
 		named_items_.push_back(n);
@@ -195,10 +208,25 @@ namespace_::add(class_&& member)
 }
 
 void
+namespace_::add(function&& member)
+{
+    functions_.push_back(member);
+
+	function* member_ptr = &functions_.back();
+
+	member_ptr->set_enclosing_scope(*this);
+
+	members_.push_back(member_ptr);
+	scopes_.push_back(member_ptr);
+	named_items_.push_back(member_ptr);
+}
+
+void
 namespace_::clear()
 {
 	namespaces_.clear();
 	classes_.clear();
+	functions_.clear();
     members_.clear();
 	scopes_.clear();
 	named_items_.clear();
