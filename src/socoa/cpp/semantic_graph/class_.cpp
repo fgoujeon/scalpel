@@ -28,12 +28,14 @@ namespace socoa { namespace cpp { namespace semantic_graph
 {
 
 class_::class_(const std::string& name):
-    name_(name)
+    name_(name),
+	enclosing_scope_(0)
 {
 }
 
 class_::class_(const class_& c):
 	name_(c.name_),
+	enclosing_scope_(0),
 	classes_(c.classes_)
 {
 	//members_, scopes_ and named_items_ pointers must point to the copied
@@ -98,39 +100,39 @@ class_::is_global() const
 {
     return false;
 }
-/*
+
 bool
 class_::has_enclosing_scope() const
 {
-    return !enclosing_scope_.expired();
+    return enclosing_scope_;
 }
 
-std::shared_ptr<name_tree_composite>
+scope&
 class_::get_enclosing_scope()
 {
-    return enclosing_scope_.lock();
+    return *enclosing_scope_;
 }
 
-const std::shared_ptr<name_tree_composite>
+const scope&
 class_::get_enclosing_scope() const
 {
-    return enclosing_scope_.lock();
+    return *enclosing_scope_;
 }
 
 void
-class_::set_enclosing_scope(std::shared_ptr<class_> enclosing_scope)
+class_::set_enclosing_scope(class_& enclosing_scope)
 {
-    assert(enclosing_scope_.expired()); //assert that member doesn't have any enclosing scope yet
-    enclosing_scope_ = enclosing_scope;
+    assert(!enclosing_scope_); //assert that member doesn't have any enclosing scope yet
+    enclosing_scope_ = &enclosing_scope;
 }
 
 void
-class_::set_enclosing_scope(std::shared_ptr<namespace_> enclosing_scope)
+class_::set_enclosing_scope(namespace_& enclosing_scope)
 {
-    assert(enclosing_scope_.expired()); //assert that member doesn't have any enclosing scope yet
-    enclosing_scope_ = enclosing_scope;
+    assert(!enclosing_scope_); //assert that member doesn't have any enclosing scope yet
+    enclosing_scope_ = &enclosing_scope;
 }
-*/
+
 const std::vector<class_::member_t>&
 class_::get_members() const
 {
@@ -162,6 +164,8 @@ class_::add(class_&& nested_class)
 	classes_.push_back(nested_class);
 
 	class_* member_ptr = &classes_.back();
+
+	member_ptr->set_enclosing_scope(*this);
 
 	members_.push_back(member_ptr);
 	scopes_.push_back(member_ptr);

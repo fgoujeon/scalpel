@@ -91,36 +91,36 @@ class namespace_:
         bool
         is_a_type() const;
 
-//        /**
-//        @return true if the namespace is the global one, false otherwise
-//        */
-//        bool
-//        is_global() const;
-//
-//        /**
-//        @return true if the namespace has a enclosing scope scope
-//        */
-//        bool
-//        has_enclosing_scope() const;
-//
-//        /**
-//        @return the enclosing scope of the namespace
-//        */
-//        std::shared_ptr<name_tree_composite>
-//        get_enclosing_scope();
-//
-//        /**
-//        @return the enclosing scope of the namespace
-//        */
-//        const std::shared_ptr<name_tree_composite>
-//        get_enclosing_scope() const;
-//
-//        /**
-//        Sets the enclosing scope of the namespace.
-//        */
-//        void
-//        set_enclosing_scope(std::shared_ptr<namespace_> enclosing_scope);
-//
+        /**
+        @return true if the namespace is the global one, false otherwise
+        */
+        bool
+        is_global() const;
+
+        /**
+        @return true if the namespace has a enclosing scope scope
+        */
+        bool
+        has_enclosing_scope() const;
+
+        /**
+        @return the enclosing scope of the namespace
+        */
+		scope&
+        get_enclosing_scope();
+
+        /**
+        @return the enclosing scope of the namespace
+        */
+		const scope&
+        get_enclosing_scope() const;
+
+        /**
+        Sets the enclosing scope of the namespace.
+        */
+        void
+        set_enclosing_scope(namespace_& enclosing_scope);
+
         /**
         @return the namespace's member list (i.e. the list of namespaces, classes, functions, etc.)
         */
@@ -148,6 +148,7 @@ class namespace_:
 
     private:
         std::string name_;
+		scope* enclosing_scope_;
         std::vector<namespace_> namespaces_;
         std::vector<class_> classes_;
         std::vector<member_t> members_;

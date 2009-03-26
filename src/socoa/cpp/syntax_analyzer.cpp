@@ -122,7 +122,6 @@ syntax_analyzer::parse_type_name(const scanner_t& scan)
 		ch = *scan;
 	}
 
-	std::cout << "\nTry to determine whether '" << name << "' is a type name...\n";
 
 	//if we already checked that name at the same progress point...
 	if
@@ -133,22 +132,11 @@ syntax_analyzer::parse_type_name(const scanner_t& scan)
 	{
 		//... just return the result we stored
 		std::map<unsigned int, bool>::const_iterator is_a_type_it = type_name_map_.find(parsing_progress);
-		if(is_a_type_it == type_name_map_.end())
-		{
-			std::cout << "parsing progress = " << parsing_progress << "\n";
-			print_type_name_map_();
-			assert(false);
-		}
+		assert(is_a_type_it != type_name_map_.end()); //assert that a result is found
 		if(is_a_type_it->second)
-		{
-			std::cout << "'" << name << "' is a type name.\n";
 			return name.size(); //successful match
-		}
 		else
-		{
-			std::cout << "'" << name << "' isn't a type name.\n";
 			return -1;
-		}
 	}
 	highest_parsing_progress_ = parsing_progress;
 
@@ -164,7 +152,7 @@ syntax_analyzer::parse_type_name(const scanner_t& scan)
 		assert(currently_analyzed_partial_input_);
 		std::string partial_input(&*(currently_analyzed_partial_input_->begin()), scan.first);
 
-
+		std::cout << "\nTry to determine whether '" << name << "' is a type name...\n";
 		std::cout << "Fragment of input succesfully parsed:\n";
 		std::cout << "***\n" << partial_input << "\n***\n";
 

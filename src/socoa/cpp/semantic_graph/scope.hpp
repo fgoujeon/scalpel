@@ -39,6 +39,20 @@ struct scope
 	virtual
 	const std::vector<named_item*>&
 	get_named_items() const = 0;
+
+	/**
+	@return true if the object has a enclosing scope scope
+	*/
+	virtual
+	bool
+	has_enclosing_scope() const = 0;
+
+	/**
+	@return the enclosing scope of the object
+	*/
+	virtual
+	const scope&
+	get_enclosing_scope() const = 0;
 };
 
 }}} //namespace socoa::cpp::semantic_graph

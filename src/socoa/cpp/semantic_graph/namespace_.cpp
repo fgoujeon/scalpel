@@ -26,17 +26,20 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace semantic_graph
 {
 
-namespace_::namespace_()
+namespace_::namespace_():
+	enclosing_scope_(0)
 {
 }
 
 namespace_::namespace_(const std::string& name):
-    name_(name)
+    name_(name),
+	enclosing_scope_(0)
 {
 }
 
 namespace_::namespace_(const namespace_& n):
 	name_(n.name_),
+	enclosing_scope_(0),
 	namespaces_(n.namespaces_),
 	classes_(n.classes_)
 {
@@ -114,36 +117,36 @@ namespace_::is_a_type() const
     return false;
 }
 
-//bool
-//namespace_::is_global() const
-//{
-//    return !has_enclosing_scope();
-//}
-//
-//bool
-//namespace_::has_enclosing_scope() const
-//{
-//    return !enclosing_scope_.expired();
-//}
-//
-//std::shared_ptr<name_tree_composite>
-//namespace_::get_enclosing_scope()
-//{
-//    return enclosing_scope_.lock();
-//}
-//
-//const std::shared_ptr<name_tree_composite>
-//namespace_::get_enclosing_scope() const
-//{
-//    return enclosing_scope_.lock();
-//}
-//
-//void
-//namespace_::set_enclosing_scope(std::shared_ptr<namespace_> enclosing_scope)
-//{
-//    assert(enclosing_scope_.expired()); //assert that member doesn't have any enclosing scope yet
-//    enclosing_scope_ = enclosing_scope;
-//}
+bool
+namespace_::is_global() const
+{
+    return !has_enclosing_scope();
+}
+
+bool
+namespace_::has_enclosing_scope() const
+{
+    return enclosing_scope_;
+}
+
+scope&
+namespace_::get_enclosing_scope()
+{
+    return *enclosing_scope_;
+}
+
+const scope&
+namespace_::get_enclosing_scope() const
+{
+    return *enclosing_scope_;
+}
+
+void
+namespace_::set_enclosing_scope(namespace_& enclosing_scope)
+{
+    assert(!enclosing_scope_); //assert that member doesn't have any enclosing scope yet
+    enclosing_scope_ = &enclosing_scope;
+}
 
 const std::vector<namespace_::member_t>&
 namespace_::get_members() const
@@ -170,6 +173,8 @@ namespace_::add(namespace_&& member)
 
 	namespace_* member_ptr = &namespaces_.back();
 
+	member_ptr->set_enclosing_scope(*this);
+
 	members_.push_back(member_ptr);
 	scopes_.push_back(member_ptr);
 	named_items_.push_back(member_ptr);
@@ -181,6 +186,8 @@ namespace_::add(class_&& member)
     classes_.push_back(member);
 
 	class_* member_ptr = &classes_.back();
+
+	member_ptr->set_enclosing_scope(*this);
 
 	members_.push_back(member_ptr);
 	scopes_.push_back(member_ptr);

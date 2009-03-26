@@ -95,32 +95,32 @@ class class_:
         bool
         is_global() const;
 
-//        /**
-//        @return true if the class has a enclosing scope scope
-//        */
-//        bool
-//        has_enclosing_scope() const;
-//
-//        /**
-//        @return the enclosing scope of the class
-//        */
-//        std::shared_ptr<name_tree_composite>
-//        get_enclosing_scope();
-//
-//        /**
-//        @return the enclosing scope of the class
-//        */
-//        const std::shared_ptr<name_tree_composite>
-//        get_enclosing_scope() const;
-//
-//        /**
-//        Sets the enclosing scope of the class.
-//        */
-//        void
-//        set_enclosing_scope(std::shared_ptr<class_> enclosing_scope);
-//
-//        void
-//        set_enclosing_scope(std::shared_ptr<namespace_> enclosing_scope);
+        /**
+        @return true if the class has a enclosing scope scope
+        */
+        bool
+        has_enclosing_scope() const;
+
+        /**
+        @return the enclosing scope of the class
+        */
+		scope&
+        get_enclosing_scope();
+
+        /**
+        @return the enclosing scope of the class
+        */
+        const scope&
+        get_enclosing_scope() const;
+
+        /**
+        Sets the enclosing scope of the class.
+        */
+        void
+        set_enclosing_scope(class_& enclosing_scope);
+
+        void
+        set_enclosing_scope(namespace_& enclosing_scope);
 
         /**
         @return the class' member list (i.e. the list of classes, functions, etc.)
@@ -154,8 +154,8 @@ class class_:
 
     private:
         std::string name_;
+        scope* enclosing_scope_;
 		std::vector<class_> classes_;
-//        std::weak_ptr<enclosing_scope> enclosing_scope_;
         std::vector<member_t> members_;
         std::vector<scope*> scopes_;
         std::vector<named_item*> named_items_;

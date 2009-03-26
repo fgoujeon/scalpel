@@ -64,25 +64,25 @@ find_unqualified_name(const scope& current_scope, const std::string& name, bool 
     }
 
 
-//    /*
-//    2. Enclosing scopes (recursive call)
-//    */
-//    {
-//        if
-//        (
-//            recursive &&
-//            current_scope->has_enclosing_scope() //is there at least an enclosing scope?
-//        )
-//        {
-//            const std::shared_ptr<semantic_graph::named_item> found_symbol = find_unqualified_name(current_scope->get_enclosing_scope(), name, true);
-//            if(found_symbol)
-//            {
-//                return found_symbol;
-//            }
-//        }
-//    }
-//
-//
+    /*
+    2. Enclosing scopes (recursive call)
+    */
+    {
+        if
+        (
+            recursive &&
+            current_scope.has_enclosing_scope() //is there at least an enclosing scope?
+        )
+        {
+            const semantic_graph::named_item* found_symbol = find_unqualified_name(current_scope.get_enclosing_scope(), name, true);
+            if(found_symbol)
+            {
+                return found_symbol;
+            }
+        }
+    }
+
+
 //    /*
 //    3. Base classes (non-recursive)
 //    */
