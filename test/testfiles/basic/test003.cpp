@@ -1,3 +1,10 @@
+namespace std
+{
+	class ostringstream;
+	class string;
+	class vector;
+}
+
 std::string dump(const std::vector& v)
 {
 	std::ostringstream oss;

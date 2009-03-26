@@ -314,7 +314,7 @@ convert_namespace_definition(const tree_node_t& node)
     return namespace_definition
     (
         find_and_convert_node<boost::optional<identifier>, id_t::IDENTIFIER>(node),
-        find_and_convert_node<declaration_seq, id_t::DECLARATION_SEQ>(node)
+        find_and_convert_node<boost::optional<declaration_seq>, id_t::DECLARATION_SEQ>(node)
     );
 }
 
