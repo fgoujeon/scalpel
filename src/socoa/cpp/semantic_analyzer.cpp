@@ -39,6 +39,9 @@ semantic_analyzer::operator()(const syntax_tree_t& tree)
 	//reinit semantic graph
 	semantic_graph_.clear();
 
+	//current scope = global namespace
+	scope_cursor_.set_scope(semantic_graph_);
+
 	convert(tree);
 
 	return semantic_graph_;
@@ -56,7 +59,7 @@ semantic_analyzer::convert(const class_specifier& item)
 
 	if(id)
 	{
-		semantic_graph_.add(class_(id->get_value()));
+		scope_cursor_.add_to_scope(class_(id->get_value()));
 	}
 }
 
@@ -108,7 +111,7 @@ semantic_analyzer::convert(const elaborated_type_specifier& item)
 
 	if(a_class_key && an_identifier)
 	{
-		semantic_graph_.add(class_(an_identifier->get_value()));
+		scope_cursor_.add_to_scope(class_(an_identifier->get_value()));
 	}
 }
 

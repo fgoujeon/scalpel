@@ -75,6 +75,12 @@ class_::operator=(const class_& c)
 	return *this;
 }
 
+void
+class_::accept(scope_visitor& v)
+{
+	v.visit(*this);
+}
+
 const std::string&
 class_::get_name() const
 {

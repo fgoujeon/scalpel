@@ -61,6 +61,9 @@ class class_:
 		class_&
 		operator=(const class_& c);
 
+		void
+		accept(scope_visitor& v);
+
         /**
         @return the name of the class
         */

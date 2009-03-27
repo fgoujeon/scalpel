@@ -18,48 +18,50 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SEMANTIC_GRAPH_SCOPE_HPP
-#define SOCOA_CPP_SEMANTIC_GRAPH_SCOPE_HPP
+#include "scope_cursor.hpp"
 
-#include <vector>
-#include "named_item.hpp"
-#include "scope_visitor.hpp"
-
-namespace socoa { namespace cpp { namespace semantic_graph
+namespace socoa { namespace cpp
 {
 
-struct scope
+semantic_graph::scope&
+scope_cursor::get_scope()
 {
-	virtual
-	~scope(){}
+	assert(scope_);
+	return *scope_;
+}
 
-	virtual
-	void
-	accept(scope_visitor&) = 0;
+void
+scope_cursor::set_scope(semantic_graph::scope& a_scope)
+{
+	scope_ = &a_scope;
+}
 
-	virtual
-	const std::vector<scope*>&
-	get_scopes() const = 0;
+void
+scope_cursor::add_to_scope(semantic_graph::namespace_&& o)
+{
+	scope_->accept(*this);
+}
 
-	virtual
-	const std::vector<named_item*>&
-	get_named_items() const = 0;
+void
+scope_cursor::add_to_scope(semantic_graph::class_&& o)
+{
+	scope_->accept(*this);
+}
 
-	/**
-	@return true if the object has a enclosing scope scope
-	*/
-	virtual
-	bool
-	has_enclosing_scope() const = 0;
+void
+scope_cursor::visit(semantic_graph::namespace_& o)
+{
+}
 
-	/**
-	@return the enclosing scope of the object
-	*/
-	virtual
-	const scope&
-	get_enclosing_scope() const = 0;
-};
+void
+scope_cursor::visit(semantic_graph::class_& o)
+{
+}
 
-}}} //namespace socoa::cpp::semantic_graph
+void
+scope_cursor::visit(semantic_graph::function& o)
+{
+}
 
-#endif
+}} //namespace socoa::cpp
+

@@ -18,46 +18,32 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SEMANTIC_GRAPH_SCOPE_HPP
-#define SOCOA_CPP_SEMANTIC_GRAPH_SCOPE_HPP
-
-#include <vector>
-#include "named_item.hpp"
-#include "scope_visitor.hpp"
+#ifndef SOCOA_CPP_SEMANTIC_GRAPH_SCOPE_VISITOR_HPP
+#define SOCOA_CPP_SEMANTIC_GRAPH_SCOPE_VISITOR_HPP
 
 namespace socoa { namespace cpp { namespace semantic_graph
 {
 
-struct scope
+class namespace_;
+class class_;
+class function;
+
+struct scope_visitor
 {
 	virtual
-	~scope(){}
+	~scope_visitor(){}
 
 	virtual
 	void
-	accept(scope_visitor&) = 0;
+	visit(namespace_&) = 0;
 
 	virtual
-	const std::vector<scope*>&
-	get_scopes() const = 0;
+	void
+	visit(class_&) = 0;
 
 	virtual
-	const std::vector<named_item*>&
-	get_named_items() const = 0;
-
-	/**
-	@return true if the object has a enclosing scope scope
-	*/
-	virtual
-	bool
-	has_enclosing_scope() const = 0;
-
-	/**
-	@return the enclosing scope of the object
-	*/
-	virtual
-	const scope&
-	get_enclosing_scope() const = 0;
+	void
+	visit(function&) = 0;
 };
 
 }}} //namespace socoa::cpp::semantic_graph

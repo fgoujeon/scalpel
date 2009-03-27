@@ -43,6 +43,9 @@ class function:
         explicit
         function(const std::string& name);
 
+		void
+		accept(scope_visitor& v);
+
         /**
         @return the name of the function
         */

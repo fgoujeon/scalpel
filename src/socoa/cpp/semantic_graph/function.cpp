@@ -34,6 +34,12 @@ function::function(const std::string& name):
 {
 }
 
+void
+function::accept(scope_visitor& v)
+{
+	v.visit(*this);
+}
+
 const std::string&
 function::get_name() const
 {

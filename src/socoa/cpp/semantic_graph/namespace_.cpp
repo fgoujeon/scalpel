@@ -98,6 +98,12 @@ namespace_::namespace_(namespace_&& n)
 }
 */
 
+void
+namespace_::accept(scope_visitor& v)
+{
+	v.visit(*this);
+}
+
 const std::string&
 namespace_::get_name() const
 {
