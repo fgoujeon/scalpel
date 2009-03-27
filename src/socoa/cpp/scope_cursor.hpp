@@ -30,9 +30,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp
 {
 
-class scope_cursor: public semantic_graph::scope_visitor
+class scope_cursor
 {
 	public:
+		class scope_visitor_namespace;
+		class scope_visitor_class;
+		class scope_visitor_function;
+
 		semantic_graph::scope&
 		get_scope();
 
@@ -46,6 +50,18 @@ class scope_cursor: public semantic_graph::scope_visitor
 		add_to_scope(semantic_graph::class_&& o);
 
 		void
+		add_to_scope(semantic_graph::function&& o);
+
+	private:
+		semantic_graph::scope* scope_;
+};
+
+class scope_cursor::scope_visitor_namespace: public semantic_graph::scope_visitor
+{
+	public:
+		scope_visitor_namespace(semantic_graph::namespace_&& n);
+
+		void
 		visit(semantic_graph::namespace_& o);
 
 		void
@@ -55,7 +71,43 @@ class scope_cursor: public semantic_graph::scope_visitor
 		visit(semantic_graph::function& o);
 
 	private:
-		semantic_graph::scope* scope_;
+		semantic_graph::namespace_ n_;
+};
+
+class scope_cursor::scope_visitor_class: public semantic_graph::scope_visitor
+{
+	public:
+		scope_visitor_class(semantic_graph::class_&& c);
+
+		void
+		visit(semantic_graph::namespace_& o);
+
+		void
+		visit(semantic_graph::class_& o);
+
+		void
+		visit(semantic_graph::function& o);
+
+	private:
+		semantic_graph::class_ c_;
+};
+
+class scope_cursor::scope_visitor_function: public semantic_graph::scope_visitor
+{
+	public:
+		scope_visitor_function(semantic_graph::function&& f);
+
+		void
+		visit(semantic_graph::namespace_& o);
+
+		void
+		visit(semantic_graph::class_& o);
+
+		void
+		visit(semantic_graph::function& o);
+
+	private:
+		semantic_graph::function f_;
 };
 
 }} //namespace socoa::cpp

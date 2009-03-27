@@ -23,6 +23,10 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp
 {
 
+//
+//scope_cursor
+//
+
 semantic_graph::scope&
 scope_cursor::get_scope()
 {
@@ -39,28 +43,106 @@ scope_cursor::set_scope(semantic_graph::scope& a_scope)
 void
 scope_cursor::add_to_scope(semantic_graph::namespace_&& o)
 {
-	scope_->accept(*this);
+	scope_visitor_namespace v(o);
+	scope_->accept(v);
 }
 
 void
 scope_cursor::add_to_scope(semantic_graph::class_&& o)
 {
-	scope_->accept(*this);
+	scope_visitor_class v(o);
+	scope_->accept(v);
 }
 
 void
-scope_cursor::visit(semantic_graph::namespace_& o)
+scope_cursor::add_to_scope(semantic_graph::function&& o)
+{
+	scope_visitor_function v(o);
+	scope_->accept(v);
+}
+
+
+//
+//scope_cursor::scope_visitor_namespace
+//
+
+scope_cursor::scope_visitor_namespace::scope_visitor_namespace(semantic_graph::namespace_&& n):
+	n_(n)
 {
 }
 
 void
-scope_cursor::visit(semantic_graph::class_& o)
+scope_cursor::scope_visitor_namespace::visit(semantic_graph::namespace_& o)
+{
+	o.add(n_);
+}
+
+void
+scope_cursor::scope_visitor_namespace::visit(semantic_graph::class_&)
+{
+	assert(false);
+}
+
+void
+scope_cursor::scope_visitor_namespace::visit(semantic_graph::function&)
+{
+	assert(false);
+}
+
+
+//
+//scope_cursor::scope_visitor_class
+//
+
+scope_cursor::scope_visitor_class::scope_visitor_class(semantic_graph::class_&& c):
+	c_(c)
 {
 }
 
 void
-scope_cursor::visit(semantic_graph::function& o)
+scope_cursor::scope_visitor_class::visit(semantic_graph::namespace_& o)
 {
+	o.add(c_);
+}
+
+void
+scope_cursor::scope_visitor_class::visit(semantic_graph::class_& o)
+{
+	o.add(c_);
+}
+
+void
+scope_cursor::scope_visitor_class::visit(semantic_graph::function&)
+{
+	assert(false);
+}
+
+
+//
+//scope_cursor::scope_visitor_function
+//
+
+scope_cursor::scope_visitor_function::scope_visitor_function(semantic_graph::function&& f):
+	f_(f)
+{
+}
+
+void
+scope_cursor::scope_visitor_function::visit(semantic_graph::namespace_& o)
+{
+	o.add(f_);
+}
+
+void
+scope_cursor::scope_visitor_function::visit(semantic_graph::class_& o)
+{
+	o.add(f_);
+}
+
+void
+scope_cursor::scope_visitor_function::visit(semantic_graph::function&)
+{
+	assert(false);
 }
 
 }} //namespace socoa::cpp
