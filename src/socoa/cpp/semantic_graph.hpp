@@ -22,6 +22,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SEMANTIC_GRAPH_HPP
 
 #include "semantic_graph/namespace_.hpp"
+#include "semantic_graph/class_.hpp"
+#include "semantic_graph/function.hpp"
 
 namespace socoa { namespace cpp
 {

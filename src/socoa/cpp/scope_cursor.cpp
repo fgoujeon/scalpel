@@ -30,35 +30,49 @@ namespace socoa { namespace cpp
 semantic_graph::scope&
 scope_cursor::get_scope()
 {
-	assert(scope_);
-	return *scope_;
+	assert(current_scope_);
+	return *current_scope_;
 }
 
 void
 scope_cursor::set_scope(semantic_graph::scope& a_scope)
 {
-	scope_ = &a_scope;
+	current_scope_ = &a_scope;
 }
 
 void
 scope_cursor::add_to_scope(semantic_graph::namespace_&& o)
 {
 	scope_visitor_namespace v(o);
-	scope_->accept(v);
+	current_scope_->accept(v);
 }
 
 void
 scope_cursor::add_to_scope(semantic_graph::class_&& o)
 {
 	scope_visitor_class v(o);
-	scope_->accept(v);
+	current_scope_->accept(v);
 }
 
 void
 scope_cursor::add_to_scope(semantic_graph::function&& o)
 {
 	scope_visitor_function v(o);
-	scope_->accept(v);
+	current_scope_->accept(v);
+}
+
+void
+scope_cursor::enter_last_added_scope()
+{
+	assert(!current_scope_->get_scopes().empty());
+	current_scope_ = current_scope_->get_scopes().back();
+}
+
+void
+scope_cursor::leave_scope()
+{
+	assert(current_scope_->has_enclosing_scope());
+	current_scope_ = &current_scope_->get_enclosing_scope();
 }
 
 

@@ -182,7 +182,7 @@ class semantic_analyzer
 
 template<const std::vector<std::string>& StringList>
 void
-semantic_analyzer::convert(const util::string_enumeration<StringList>& a_string_enumeration)
+semantic_analyzer::convert(const util::string_enumeration<StringList>&)
 {
 }
 

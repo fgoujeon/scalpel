@@ -52,8 +52,15 @@ class scope_cursor
 		void
 		add_to_scope(semantic_graph::function&& o);
 
+		void
+		enter_last_added_scope();
+
+		void
+		leave_scope();
+
 	private:
-		semantic_graph::scope* scope_;
+		semantic_graph::scope* current_scope_;
+		semantic_graph::scope* last_added_scope_;
 };
 
 class scope_cursor::scope_visitor_namespace: public semantic_graph::scope_visitor

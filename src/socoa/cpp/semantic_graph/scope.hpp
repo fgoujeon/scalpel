@@ -58,6 +58,14 @@ struct scope
 	virtual
 	const scope&
 	get_enclosing_scope() const = 0;
+
+	/**
+	@return the enclosing scope of the object
+	*/
+	virtual
+	scope&
+	get_enclosing_scope() = 0;
+
 };
 
 }}} //namespace socoa::cpp::semantic_graph

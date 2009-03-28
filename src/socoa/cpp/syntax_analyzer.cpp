@@ -195,13 +195,13 @@ syntax_analyzer::parse_type_name(const scanner_t& scan)
 		if(item && item->is_a_type())
 		{
 			std::cout << "'" << name << "' is a type name.\n";
-			type_name_map_.insert(std::make_pair<unsigned int, bool>(parsing_progress, true));
+			type_name_map_.insert(std::make_pair<unsigned int, bool>(parsing_progress, true)); //store the result
 			return name.size(); //successful match
 		}
 		else
 		{
 			std::cout << "'" << name << "' isn't a type name.\n";
-			type_name_map_.insert(std::make_pair<unsigned int, bool>(parsing_progress, false));
+			type_name_map_.insert(std::make_pair<unsigned int, bool>(parsing_progress, false)); //store the result
 		}
     }
 

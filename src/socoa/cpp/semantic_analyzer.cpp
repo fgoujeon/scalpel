@@ -118,6 +118,24 @@ semantic_analyzer::convert(const elaborated_type_specifier& item)
 void
 semantic_analyzer::convert(const function_definition& item)
 {
+	const boost::optional<const declarator_id&> a_declarator_id = item.get_declarator().get_direct_declarator().get_declarator_id();
+	if(a_declarator_id)
+	{
+		const id_expression* const an_id_expression = boost::get<id_expression>(&*a_declarator_id);
+		if(an_id_expression)
+		{
+			const unqualified_id* const an_unqualified_id = boost::get<unqualified_id>(&*an_id_expression);
+			if(an_unqualified_id)
+			{
+				const identifier* const an_identifier = boost::get<identifier>(&*an_unqualified_id);
+				if(an_identifier)
+				{
+					const std::string& function_name = an_identifier->get_value();
+					scope_cursor_.add_to_scope(function(function_name));
+				}
+			}
+		}
+	}
 }
 
 void
@@ -173,7 +191,21 @@ semantic_analyzer::convert(const member_specification_access_specifier& item)
 void
 semantic_analyzer::convert(const namespace_definition& item)
 {
-	std::cout << "namespace\n";
+	std::string namespace_name;
+	const boost::optional<const identifier&> an_identifier = item.get_identifier();
+	if(an_identifier)
+	{
+		namespace_name = an_identifier->get_value();
+	}
+	scope_cursor_.add_to_scope(namespace_(namespace_name));
+
+	const boost::optional<const declaration_seq&> a_declaration_seq = item.get_declaration_seq();
+	if(a_declaration_seq)
+	{
+		scope_cursor_.enter_last_added_scope();
+		convert(*a_declaration_seq);
+		scope_cursor_.leave_scope();
+	}
 }
 
 void
