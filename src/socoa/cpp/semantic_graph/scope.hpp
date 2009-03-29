@@ -21,7 +21,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SEMANTIC_GRAPH_SCOPE_HPP
 #define SOCOA_CPP_SEMANTIC_GRAPH_SCOPE_HPP
 
-#include <vector>
+#include <list>
 #include "named_item.hpp"
 #include "scope_visitor.hpp"
 
@@ -38,11 +38,11 @@ struct scope
 	accept(scope_visitor&) = 0;
 
 	virtual
-	const std::vector<scope*>&
+	const std::list<scope*>&
 	get_scopes() const = 0;
 
 	virtual
-	const std::vector<named_item*>&
+	const std::list<named_item*>&
 	get_named_items() const = 0;
 
 	/**
@@ -65,7 +65,6 @@ struct scope
 	virtual
 	scope&
 	get_enclosing_scope() = 0;
-
 };
 
 }}} //namespace socoa::cpp::semantic_graph

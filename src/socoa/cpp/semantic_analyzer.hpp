@@ -176,7 +176,6 @@ class semantic_analyzer
 		friend class syntax_tree_to_any_conversion_helper<semantic_analyzer>;
 
 		syntax_tree_to_any_conversion_helper<semantic_analyzer> conversion_helper_;
-		semantic_graph_t semantic_graph_;
 		scope_cursor scope_cursor_;
 };
 

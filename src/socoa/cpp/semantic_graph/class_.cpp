@@ -33,45 +33,31 @@ class_::class_(const std::string& name):
 {
 }
 
-class_::class_(const class_& c):
-	name_(c.name_),
+class_::class_(class_&& c):
+	name_(std::move(c.name_)),
 	enclosing_scope_(0),
-	classes_(c.classes_),
-	functions_(c.functions_)
+	classes_(std::move(c.classes_)),
+	functions_(std::move(c.functions_)),
+	members_(std::move(c.members_)),
+	scopes_(std::move(c.scopes_)),
+	named_items_(std::move(c.named_items_))
 {
-	//members_, scopes_ and named_items_ pointers must point to the copied
-	//objects.
-	for
-	(
-		std::vector<class_>::iterator i = classes_.begin();
-		i != classes_.end();
-		++i
-	)
-	{
-		class_* c = &*i;
-		members_.push_back(c);
-		scopes_.push_back(c);
-		named_items_.push_back(c);
-	}
-	for
-	(
-		std::vector<function>::iterator i = functions_.begin();
-		i != functions_.end();
-		++i
-	)
-	{
-		function* c = &*i;
-		members_.push_back(c);
-		scopes_.push_back(c);
-		named_items_.push_back(c);
-	}
+	assert(!c.enclosing_scope_);
 }
 
-class_&
-class_::operator=(const class_& c)
+const class_&
+class_::operator=(class_&& c)
 {
-	class_ temp(c);
-	std::swap(*this, temp);
+	assert(!c.enclosing_scope_);
+
+	name_ = std::move(c.name_);
+	enclosing_scope_ = 0;
+	classes_ = std::move(c.classes_);
+	functions_ = std::move(c.functions_);
+	members_ = std::move(c.members_);
+	scopes_ = std::move(c.scopes_);
+	named_items_ = std::move(c.named_items_);
+
 	return *this;
 }
 
@@ -152,25 +138,31 @@ class_::set_enclosing_scope(namespace_& enclosing_scope)
     enclosing_scope_ = &enclosing_scope;
 }
 
-const std::vector<class_::member_t>&
+void
+class_::clear_enclosing_scope()
+{
+	enclosing_scope_ = 0;
+}
+
+const std::list<class_::member_t>&
 class_::get_members() const
 {
     return members_;
 }
 
-const std::vector<scope*>&
+const std::list<scope*>&
 class_::get_scopes() const
 {
 	return scopes_;
 }
 
-const std::vector<named_item*>&
+const std::list<named_item*>&
 class_::get_named_items() const
 {
 	return named_items_;
 }
 /*
-const std::vector<std::shared_ptr<class_>>&
+const std::list<std::shared_ptr<class_>>&
 class_::get_classes() const
 {
     return nested_classes_;
@@ -180,7 +172,7 @@ class_::get_classes() const
 void
 class_::add(class_&& nested_class)
 {
-	classes_.push_back(nested_class);
+	classes_.push_back(std::move(nested_class));
 
 	class_* member_ptr = &classes_.back();
 
@@ -194,7 +186,7 @@ class_::add(class_&& nested_class)
 void
 class_::add(function&& member)
 {
-    functions_.push_back(member);
+    functions_.push_back(std::move(member));
 
 	function* member_ptr = &functions_.back();
 
@@ -206,7 +198,7 @@ class_::add(function&& member)
 }
 
 /*
-const std::vector<base_specifier>&
+const std::list<base_specifier>&
 class_::get_base_specifiers() const
 {
     return base_specifiers_;

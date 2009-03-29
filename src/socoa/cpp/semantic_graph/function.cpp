@@ -34,6 +34,28 @@ function::function(const std::string& name):
 {
 }
 
+function::function(function&& f):
+	name_(std::move(f.name_)),
+	enclosing_scope_(0),
+	scopes_(std::move(f.scopes_)),
+	named_items_(std::move(f.named_items_))
+{
+	assert(!f.enclosing_scope_);
+}
+
+const function&
+function::operator=(function&& f)
+{
+	assert(!f.enclosing_scope_);
+
+	name_ = std::move(f.name_);
+	enclosing_scope_ = 0;
+	scopes_ = std::move(f.scopes_);
+	named_items_ = std::move(f.named_items_);
+
+	return *this;
+}
+
 void
 function::accept(scope_visitor& v)
 {
@@ -111,13 +133,19 @@ function::set_enclosing_scope(namespace_& enclosing_scope)
     enclosing_scope_ = &enclosing_scope;
 }
 
-const std::vector<scope*>&
+void
+function::clear_enclosing_scope()
+{
+	enclosing_scope_ = 0;
+}
+
+const std::list<scope*>&
 function::get_scopes() const
 {
 	return scopes_;
 }
 
-const std::vector<named_item*>&
+const std::list<named_item*>&
 function::get_named_items() const
 {
 	return named_items_;

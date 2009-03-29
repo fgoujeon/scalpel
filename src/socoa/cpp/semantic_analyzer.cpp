@@ -36,15 +36,15 @@ semantic_analyzer::semantic_analyzer():
 semantic_graph_t
 semantic_analyzer::operator()(const syntax_tree_t& tree)
 {
-	//reinit semantic graph
-	semantic_graph_.clear();
+	//create global namespace
+	semantic_graph_t global_namespace;
 
 	//current scope = global namespace
-	scope_cursor_.set_scope(semantic_graph_);
+	scope_cursor_.set_scope(global_namespace);
 
 	convert(tree);
 
-	return semantic_graph_;
+	return global_namespace;
 }
 
 void

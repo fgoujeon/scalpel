@@ -45,8 +45,8 @@ find_unqualified_name(const scope& current_scope, const std::string& name, bool 
     1. Current scope
     */
     {
-        const std::vector<named_item*>& members = current_scope.get_named_items();
-        std::vector<named_item*>::const_iterator member_it = std::find_if
+        const std::list<named_item*>& members = current_scope.get_named_items();
+        std::list<named_item*>::const_iterator member_it = std::find_if
         (
             members.begin(),
             members.end(),
@@ -87,10 +87,10 @@ find_unqualified_name(const scope& current_scope, const std::string& name, bool 
 //    3. Base classes (non-recursive)
 //    */
 //    {
-//        const std::vector<base_specifier>& base_specifiers = current_scope->get_base_specifiers();
+//        const std::list<base_specifier>& base_specifiers = current_scope->get_base_specifiers();
 //        for
 //        (
-//            std::vector<base_specifier>::const_iterator i = base_specifiers.begin();
+//            std::list<base_specifier>::const_iterator i = base_specifiers.begin();
 //            i != base_specifiers.end();
 //            ++i
 //        ) //for each base specifier (== for each base class)

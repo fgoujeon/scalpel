@@ -81,7 +81,7 @@ scope_cursor::leave_scope()
 //
 
 scope_cursor::scope_visitor_namespace::scope_visitor_namespace(semantic_graph::namespace_&& n):
-	n_(n)
+	n_(std::move(n))
 {
 }
 
@@ -109,7 +109,7 @@ scope_cursor::scope_visitor_namespace::visit(semantic_graph::function&)
 //
 
 scope_cursor::scope_visitor_class::scope_visitor_class(semantic_graph::class_&& c):
-	c_(c)
+	c_(std::move(c))
 {
 }
 
@@ -137,7 +137,7 @@ scope_cursor::scope_visitor_class::visit(semantic_graph::function&)
 //
 
 scope_cursor::scope_visitor_function::scope_visitor_function(semantic_graph::function&& f):
-	f_(f)
+	f_(std::move(f))
 {
 }
 

@@ -22,8 +22,9 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SEMANTIC_GRAPH_CLASS_HPP
 
 #include <string>
-#include <vector>
+#include <list>
 #include <boost/variant.hpp>
+#include <boost/noncopyable.hpp>
 #include "scope.hpp"
 #include "named_item.hpp"
 #include "function.hpp"
@@ -38,7 +39,8 @@ Represents a C++ class.
 */
 class class_:
 	public scope,
-	public named_item
+	public named_item,
+	public boost::noncopyable
 {
     public:
 		class member_t;
@@ -51,15 +53,15 @@ class class_:
         class_(const std::string& name);
 
 		/**
-		 * Copy constructor.
+		 * Move constructor.
 		 */
-		class_(const class_& c);
+		class_(class_&& c);
 
 		/*
-		 * Assignment operator.
+		 * Move assignment operator.
 		 */
-		class_&
-		operator=(const class_& c);
+		const class_&
+		operator=(class_&& c);
 
 		void
 		accept(scope_visitor& v);
@@ -121,22 +123,25 @@ class class_:
         void
         set_enclosing_scope(namespace_& enclosing_scope);
 
+		void
+		clear_enclosing_scope();
+
         /**
         @return the class' member list (i.e. the list of classes, functions, etc.)
         */
-        const std::vector<member_t>&
+        const std::list<member_t>&
         get_members() const;
 
-        const std::vector<scope*>&
+        const std::list<scope*>&
         get_scopes() const;
 
-        const std::vector<named_item*>&
+        const std::list<named_item*>&
         get_named_items() const;
 
 //        /**
 //        @return the nested classes
 //        */
-//        const std::vector<std::shared_ptr<class_>>&
+//        const std::list<std::shared_ptr<class_>>&
 //        get_classes() const;
 
         /**
@@ -148,7 +153,7 @@ class class_:
         void
         add(function&& member);
 
-//        const std::vector<base_specifier>&
+//        const std::list<base_specifier>&
 //        get_base_specifiers() const;
 //
 //        void
@@ -157,13 +162,13 @@ class class_:
     private:
         std::string name_;
         scope* enclosing_scope_;
-		std::vector<class_> classes_;
-		std::vector<function> functions_;
-        std::vector<member_t> members_;
-        std::vector<scope*> scopes_;
-        std::vector<named_item*> named_items_;
-//        std::vector<std::shared_ptr<class_>> nested_classes_;
-//        std::vector<base_specifier> base_specifiers_;
+		std::list<class_> classes_;
+		std::list<function> functions_;
+        std::list<member_t> members_;
+        std::list<scope*> scopes_;
+        std::list<named_item*> named_items_;
+//        std::list<std::shared_ptr<class_>> nested_classes_;
+//        std::list<base_specifier> base_specifiers_;
 };
 
 typedef

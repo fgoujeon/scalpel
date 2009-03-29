@@ -22,7 +22,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SEMANTIC_GRAPH_FUNCTION_HPP
 
 #include <string>
-#include <vector>
+#include <list>
+#include <boost/noncopyable.hpp>
 #include "scope.hpp"
 #include "named_item.hpp"
 
@@ -37,11 +38,17 @@ Represents a C++ function.
 */
 class function:
 	public scope,
-	public named_item
+	public named_item,
+	public boost::noncopyable
 {
     public:
         explicit
         function(const std::string& name);
+
+		function(function&& f);
+
+		const function&
+		operator=(function&& f);
 
 		void
 		accept(scope_visitor& v);
@@ -103,17 +110,20 @@ class function:
         void
         set_enclosing_scope(namespace_& enclosing_scope);
 
-        const std::vector<scope*>&
+		void
+		clear_enclosing_scope();
+
+        const std::list<scope*>&
         get_scopes() const;
 
-        const std::vector<named_item*>&
+        const std::list<named_item*>&
         get_named_items() const;
 
     private:
         std::string name_;
         scope* enclosing_scope_;
-        std::vector<scope*> scopes_;
-        std::vector<named_item*> named_items_;
+        std::list<scope*> scopes_;
+        std::list<named_item*> named_items_;
 };
 
 }}} //namespace socoa::cpp::semantic_graph

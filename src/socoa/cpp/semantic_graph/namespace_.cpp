@@ -37,66 +37,35 @@ namespace_::namespace_(const std::string& name):
 {
 }
 
-namespace_::namespace_(const namespace_& n):
-	name_(n.name_),
+namespace_::namespace_(namespace_&& n):
+	name_(std::move(n.name_)),
 	enclosing_scope_(0),
-	namespaces_(n.namespaces_),
-	classes_(n.classes_),
-	functions_(n.functions_)
+	namespaces_(std::move(n.namespaces_)),
+	classes_(std::move(n.classes_)),
+	functions_(std::move(n.functions_)),
+    members_(std::move(n.members_)),
+    scopes_(std::move(n.scopes_)),
+    named_items_(std::move(n.named_items_))
 {
-	//members_, scopes_ and named_items_ pointers must point to the copied
-	//objects.
-	for
-	(
-		std::vector<class_>::iterator i = classes_.begin();
-		i != classes_.end();
-		++i
-	)
-	{
-		class_* c = &*i;
-		members_.push_back(c);
-		scopes_.push_back(c);
-		named_items_.push_back(c);
-	}
-	for
-	(
-		std::vector<namespace_>::iterator i = namespaces_.begin();
-		i != namespaces_.end();
-		++i
-	)
-	{
-		namespace_* n = &*i;
-		members_.push_back(n);
-		scopes_.push_back(n);
-		named_items_.push_back(n);
-	}
-	for
-	(
-		std::vector<function>::iterator i = functions_.begin();
-		i != functions_.end();
-		++i
-	)
-	{
-		function* n = &*i;
-		members_.push_back(n);
-		scopes_.push_back(n);
-		named_items_.push_back(n);
-	}
+	assert(!n.enclosing_scope_);
 }
 
-namespace_&
-namespace_::operator=(const namespace_& n)
+const namespace_&
+namespace_::operator=(namespace_&& n)
 {
-	namespace_ temp(n);
-	std::swap(*this, temp);
+	assert(!n.enclosing_scope_);
+
+	name_ = std::move(n.name_);
+	enclosing_scope_ = 0;
+	namespaces_ = std::move(n.namespaces_);
+	classes_ = std::move(n.classes_);
+	functions_ = std::move(n.functions_);
+    members_ = std::move(n.members_);
+    scopes_ = std::move(n.scopes_);
+    named_items_ = std::move(n.named_items_);
+
 	return *this;
 }
-
-/*
-namespace_::namespace_(namespace_&& n)
-{
-}
-*/
 
 void
 namespace_::accept(scope_visitor& v)
@@ -167,19 +136,25 @@ namespace_::set_enclosing_scope(namespace_& enclosing_scope)
     enclosing_scope_ = &enclosing_scope;
 }
 
-const std::vector<namespace_::member_t>&
+void
+namespace_::clear_enclosing_scope()
+{
+	enclosing_scope_ = 0;
+}
+
+const std::list<namespace_::member_t>&
 namespace_::get_members() const
 {
     return members_;
 }
 
-const std::vector<scope*>&
+const std::list<scope*>&
 namespace_::get_scopes() const
 {
 	return scopes_;
 }
 
-const std::vector<named_item*>&
+const std::list<named_item*>&
 namespace_::get_named_items() const
 {
 	return named_items_;
@@ -188,7 +163,7 @@ namespace_::get_named_items() const
 void
 namespace_::add(namespace_&& member)
 {
-    namespaces_.push_back(member);
+    namespaces_.push_back(std::move(member));
 
 	namespace_* member_ptr = &namespaces_.back();
 
@@ -202,7 +177,7 @@ namespace_::add(namespace_&& member)
 void
 namespace_::add(class_&& member)
 {
-    classes_.push_back(member);
+    classes_.push_back(std::move(member));
 
 	class_* member_ptr = &classes_.back();
 
@@ -216,7 +191,7 @@ namespace_::add(class_&& member)
 void
 namespace_::add(function&& member)
 {
-    functions_.push_back(member);
+    functions_.push_back(std::move(member));
 
 	function* member_ptr = &functions_.back();
 
@@ -225,17 +200,6 @@ namespace_::add(function&& member)
 	members_.push_back(member_ptr);
 	scopes_.push_back(member_ptr);
 	named_items_.push_back(member_ptr);
-}
-
-void
-namespace_::clear()
-{
-	namespaces_.clear();
-	classes_.clear();
-	functions_.clear();
-    members_.clear();
-	scopes_.clear();
-	named_items_.clear();
 }
 
 }}} //namespace socoa::cpp::semantic_graph

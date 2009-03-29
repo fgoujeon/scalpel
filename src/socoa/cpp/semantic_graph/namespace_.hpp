@@ -22,7 +22,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SEMANTIC_GRAPH_NAMESPACE_HPP
 
 #include <string>
-#include <vector>
+#include <list>
 #include <boost/variant.hpp>
 #include <boost/noncopyable.hpp>
 #include "scope.hpp"
@@ -32,14 +32,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace semantic_graph
 {
 
-///\todo should be noncopyable, but boost::variant doesn't support move semantics (yet?).
 /**
 Represents a C++ namespace.
 */
 class namespace_:
-	//public boost::noncopyable,
 	public scope,
-	public named_item
+	public named_item,
+	public boost::noncopyable
 {
     public:
 		class member_t;
@@ -57,17 +56,15 @@ class namespace_:
 		namespace_(const std::string& name);
 
 		/**
-		 * Copy constructor.
-		 */
-		namespace_(const namespace_& n);
-
-		namespace_&
-		operator=(const namespace_& n);
-
-		/**
 		 * Move constructor.
 		 */
-		//namespace_(namespace_&& n);
+		namespace_(namespace_&& n);
+
+		/**
+		 * Move assignment operator.
+		 */
+		const namespace_&
+		operator=(namespace_&& n);
 
 		void
 		accept(scope_visitor& v);
@@ -124,16 +121,19 @@ class namespace_:
         void
         set_enclosing_scope(namespace_& enclosing_scope);
 
+		void
+		clear_enclosing_scope();
+
         /**
         @return the namespace's member list (i.e. the list of namespaces, classes, functions, etc.)
         */
-        const std::vector<member_t>&
+        const std::list<member_t>&
         get_members() const;
 
-        const std::vector<scope*>&
+        const std::list<scope*>&
         get_scopes() const;
 
-        const std::vector<named_item*>&
+        const std::list<named_item*>&
         get_named_items() const;
 
         void
@@ -145,22 +145,19 @@ class namespace_:
         void
         add(function&& member);
 
-        void
-        clear();
-
 //        inline
-//        const std::vector<base_specifier>&
+//        const std::list<base_specifier>&
 //        get_base_specifiers() const;
 
     private:
         std::string name_;
 		scope* enclosing_scope_;
-        std::vector<namespace_> namespaces_;
-        std::vector<class_> classes_;
-        std::vector<function> functions_;
-        std::vector<member_t> members_;
-        std::vector<scope*> scopes_;
-        std::vector<named_item*> named_items_;
+        std::list<namespace_> namespaces_;
+        std::list<class_> classes_;
+        std::list<function> functions_;
+        std::list<member_t> members_;
+        std::list<scope*> scopes_;
+        std::list<named_item*> named_items_;
 };
 
 typedef
@@ -182,7 +179,7 @@ class namespace_::member_t: public namespace_member_t
 };
 
 //inline
-//const std::vector<base_specifier>&
+//const std::list<base_specifier>&
 //namespace_::get_base_specifiers() const
 //{
 //    return empty_base_specifiers_;
