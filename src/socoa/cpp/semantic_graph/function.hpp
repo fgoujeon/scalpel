@@ -67,12 +67,6 @@ class function:
         has_that_name(const std::string& name) const;
 
         /**
-        @return the full name of the function, including all enclosing scopes (e.g. foo::bar)
-        */
-        const std::string
-        get_full_name() const;
-
-        /**
         @return true
         */
         bool
@@ -111,11 +105,17 @@ class function:
         void
         set_enclosing_scope(namespace_& enclosing_scope);
 
+		scope_iterator_range
+        get_scopes();
+
 		scope_const_iterator_range
         get_scopes() const;
 
-        const std::list<named_item*>&
-        get_named_items() const;
+		named_item_iterator_range
+		get_named_items();
+
+		named_item_const_iterator_range
+		get_named_items() const;
 
     private:
 		scope_impl scope_impl_;

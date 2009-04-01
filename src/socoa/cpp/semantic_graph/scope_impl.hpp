@@ -39,17 +39,23 @@ class scope_impl: public boost::noncopyable
 		const scope_impl&
 		operator=(scope_impl&& s);
 
-		void
-		add_to_scopes(scope& s);
-
-		void
-		add_to_named_items(named_item& n);
+		scope::scope_iterator_range
+		get_scopes();
 
 		scope::scope_const_iterator_range
 		get_scopes() const;
 
-		const std::list<named_item*>&
+		void
+		add_to_scopes(scope& s);
+
+		scope::named_item_iterator_range
+		get_named_items();
+
+		scope::named_item_const_iterator_range
 		get_named_items() const;
+
+		void
+		add_to_named_items(named_item& n);
 
 		bool
 		has_enclosing_scope() const;
@@ -66,7 +72,7 @@ class scope_impl: public boost::noncopyable
 	private:
 		scope* enclosing_scope_;
 		scope::scopes_t scopes_;
-        std::list<named_item*> named_items_;
+		scope::named_items_t named_items_;
 };
 
 }}} //namespace socoa::cpp::semantic_graph

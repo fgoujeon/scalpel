@@ -45,8 +45,8 @@ find_unqualified_name(const scope& current_scope, const std::string& name, bool 
     1. Current scope
     */
     {
-        const std::list<named_item*>& members = current_scope.get_named_items();
-        std::list<named_item*>::const_iterator member_it = std::find_if
+		scope::named_item_const_iterator_range members = current_scope.get_named_items();
+		scope::named_item_const_indirect_iterator member_it = std::find_if
         (
             members.begin(),
             members.end(),
@@ -59,7 +59,7 @@ find_unqualified_name(const scope& current_scope, const std::string& name, bool 
         );
         if(member_it != members.end()) //if a name has been found
         {
-            return *member_it;
+            return &*member_it;
         }
     }
 

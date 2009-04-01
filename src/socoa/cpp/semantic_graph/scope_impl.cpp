@@ -29,7 +29,9 @@ scope_impl::scope_impl():
 }
 
 scope_impl::scope_impl(scope_impl&& s):
-	enclosing_scope_(0)
+	enclosing_scope_(0),
+	scopes_(std::move(s.scopes_)),
+	named_items_(std::move(s.named_items_))
 {
 	assert(s.enclosing_scope_ == 0);
 }
@@ -39,19 +41,21 @@ scope_impl::operator=(scope_impl&& s)
 {
 	assert(s.enclosing_scope_ == 0);
 
+	scopes_ = std::move(s.scopes_);
+	named_items_ = std::move(s.named_items_);
+
 	return *this;
 }
 
-void
-scope_impl::add_to_scopes(scope& s)
+scope::scope_iterator_range
+scope_impl::get_scopes()
 {
-	scopes_.push_back(&s);
-}
+	scope::scope_iterator first = scopes_.begin();
+	scope::scope_iterator last = scopes_.end();
 
-void
-scope_impl::add_to_named_items(named_item& n)
-{
-	named_items_.push_back(&n);
+	scope::scope_indirect_iterator indirect_first(first), indirect_last(last);
+
+	return scope::scope_iterator_range(indirect_first, indirect_last);
 }
 
 scope::scope_const_iterator_range
@@ -65,10 +69,38 @@ scope_impl::get_scopes() const
 	return scope::scope_const_iterator_range(const_indirect_first, const_indirect_last);
 }
 
-const std::list<named_item*>&
+void
+scope_impl::add_to_scopes(scope& s)
+{
+	scopes_.push_back(&s);
+}
+
+scope::named_item_iterator_range
+scope_impl::get_named_items()
+{
+	scope::named_item_iterator first = named_items_.begin();
+	scope::named_item_iterator last = named_items_.end();
+
+	scope::named_item_indirect_iterator indirect_first(first), indirect_last(last);
+
+	return scope::named_item_iterator_range(indirect_first, indirect_last);
+}
+
+scope::named_item_const_iterator_range
 scope_impl::get_named_items() const
 {
-	return named_items_;
+	scope::named_item_const_iterator first = named_items_.begin();
+	scope::named_item_const_iterator last = named_items_.end();
+
+	scope::named_item_const_indirect_iterator const_indirect_first(first), const_indirect_last(last);
+
+	return scope::named_item_const_iterator_range(const_indirect_first, const_indirect_last);
+}
+
+void
+scope_impl::add_to_named_items(named_item& n)
+{
+	named_items_.push_back(&n);
 }
 
 bool

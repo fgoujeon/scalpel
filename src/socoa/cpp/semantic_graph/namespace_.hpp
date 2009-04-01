@@ -83,12 +83,6 @@ class namespace_:
         bool
         has_that_name(const std::string& name) const;
 
-        /**
-        @return the full name of the namespace, including all enclosing scopes (e.g. ::foo::bar)
-        */
-        const std::string
-        get_full_name() const;
-
         bool
         is_a_type() const;
 
@@ -128,11 +122,17 @@ class namespace_:
         const std::list<member_t>&
         get_members() const;
 
+		scope_iterator_range
+        get_scopes();
+
 		scope_const_iterator_range
         get_scopes() const;
 
-        const std::list<named_item*>&
-        get_named_items() const;
+		named_item_iterator_range
+		get_named_items();
+
+		named_item_const_iterator_range
+		get_named_items() const;
 
         void
         add(namespace_&& member);
@@ -142,10 +142,6 @@ class namespace_:
 
         void
         add(function&& member);
-
-//        inline
-//        const std::list<base_specifier>&
-//        get_base_specifiers() const;
 
     private:
 		scope_impl scope_impl_;
@@ -173,13 +169,6 @@ class namespace_::member_t: public namespace_member_t
 		member_t(class_* o): namespace_member_t(o){}
 		member_t(function* o): namespace_member_t(o){}
 };
-
-//inline
-//const std::list<base_specifier>&
-//namespace_::get_base_specifiers() const
-//{
-//    return empty_base_specifiers_;
-//}
 
 }}} //namespace socoa::cpp::semantic_graph
 

@@ -34,8 +34,19 @@ struct scope
 {
 	typedef std::list<scope*> scopes_t;
 	typedef scopes_t::const_iterator scope_const_iterator;
-	typedef boost::indirect_iterator<scope_const_iterator> scope_const_indirect_iterator;
+	typedef boost::indirect_iterator<scope_const_iterator, const scope&> scope_const_indirect_iterator;
 	typedef boost::iterator_range<scope_const_indirect_iterator> scope_const_iterator_range;
+	typedef scopes_t::iterator scope_iterator;
+	typedef boost::indirect_iterator<scope_iterator, scope&> scope_indirect_iterator;
+	typedef boost::iterator_range<scope_indirect_iterator> scope_iterator_range;
+
+	typedef std::list<named_item*> named_items_t;
+	typedef named_items_t::const_iterator named_item_const_iterator;
+	typedef boost::indirect_iterator<named_item_const_iterator, const named_item&> named_item_const_indirect_iterator;
+	typedef boost::iterator_range<named_item_const_indirect_iterator> named_item_const_iterator_range;
+	typedef named_items_t::iterator named_item_iterator;
+	typedef boost::indirect_iterator<named_item_iterator, named_item&> named_item_indirect_iterator;
+	typedef boost::iterator_range<named_item_indirect_iterator> named_item_iterator_range;
 
 	virtual
 	~scope(){}
@@ -45,11 +56,19 @@ struct scope
 	accept(scope_visitor&) = 0;
 
 	virtual
+	scope_iterator_range
+	get_scopes() = 0;
+
+	virtual
 	scope_const_iterator_range
 	get_scopes() const = 0;
 
 	virtual
-	const std::list<named_item*>&
+	named_item_iterator_range
+	get_named_items() = 0;
+
+	virtual
+	named_item_const_iterator_range
 	get_named_items() const = 0;
 
 	/**

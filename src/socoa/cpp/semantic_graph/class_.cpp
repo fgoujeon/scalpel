@@ -71,21 +71,6 @@ class_::has_that_name(const std::string& name) const
     return name_ == name;
 }
 
-const std::string
-class_::get_full_name() const
-{
-//    std::string full_name;
-//
-//    if(has_enclosing_scope() && !get_enclosing_scope()->is_global()) //don't add a leading "::"
-//    {
-//        full_name = get_enclosing_scope()->get_full_name() + "::";
-//    }
-//    full_name += name_;
-//
-//    return full_name;
-	return name_;
-}
-
 bool
 class_::is_a_type() const
 {
@@ -134,24 +119,29 @@ class_::get_members() const
     return members_;
 }
 
+scope::scope_iterator_range
+class_::get_scopes()
+{
+	return scope_impl_.get_scopes();
+}
+
 scope::scope_const_iterator_range
 class_::get_scopes() const
 {
 	return scope_impl_.get_scopes();
 }
 
-const std::list<named_item*>&
+scope::named_item_iterator_range
+class_::get_named_items()
+{
+	return scope_impl_.get_named_items();
+}
+
+scope::named_item_const_iterator_range
 class_::get_named_items() const
 {
 	return scope_impl_.get_named_items();
 }
-/*
-const std::list<std::shared_ptr<class_>>&
-class_::get_classes() const
-{
-    return nested_classes_;
-}
-*/
 
 void
 class_::add(class_&& nested_class)
@@ -180,19 +170,5 @@ class_::add(function&& member)
 	scope_impl_.add_to_scopes(member_ref);
 	scope_impl_.add_to_named_items(member_ref);
 }
-
-/*
-const std::list<base_specifier>&
-class_::get_base_specifiers() const
-{
-    return base_specifiers_;
-}
-
-void
-class_::add(const base_specifier& specifier)
-{
-    base_specifiers_.push_back(specifier);
-}
-*/
 
 }}} //namespace socoa::cpp::semantic_graph

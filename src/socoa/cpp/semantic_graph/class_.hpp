@@ -80,12 +80,6 @@ class class_:
         has_that_name(const std::string& name) const;
 
         /**
-        @return the full name of the class, including all enclosing scopes (e.g. foo::bar)
-        */
-        const std::string
-        get_full_name() const;
-
-        /**
         @return true
         */
         bool
@@ -130,17 +124,17 @@ class class_:
         const std::list<member_t>&
         get_members() const;
 
+		scope_iterator_range
+        get_scopes();
+
 		scope_const_iterator_range
         get_scopes() const;
 
-        const std::list<named_item*>&
-        get_named_items() const;
+		named_item_iterator_range
+		get_named_items();
 
-//        /**
-//        @return the nested classes
-//        */
-//        const std::list<std::shared_ptr<class_>>&
-//        get_classes() const;
+		named_item_const_iterator_range
+		get_named_items() const;
 
         /**
         Adds a nested class.
@@ -151,20 +145,12 @@ class class_:
         void
         add(function&& member);
 
-//        const std::list<base_specifier>&
-//        get_base_specifiers() const;
-//
-//        void
-//        add(const base_specifier& specifier);
-
     private:
 		scope_impl scope_impl_;
         std::string name_;
 		std::list<class_> classes_;
 		std::list<function> functions_;
         std::list<member_t> members_;
-//        std::list<std::shared_ptr<class_>> nested_classes_;
-//        std::list<base_specifier> base_specifiers_;
 };
 
 typedef

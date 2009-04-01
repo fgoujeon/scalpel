@@ -76,20 +76,6 @@ namespace_::has_that_name(const std::string& name) const
     return name_ == name;
 }
 
-const std::string
-namespace_::get_full_name() const
-{
-    std::string full_name;
-
-//    if(has_enclosing_scope() && !get_enclosing_scope()->is_global()) //don't add a leading "::"
-//    {
-//        full_name = get_enclosing_scope()->get_full_name() + "::";
-//    }
-//    full_name += name_;
-
-    return full_name;
-}
-
 bool
 namespace_::is_a_type() const
 {
@@ -132,13 +118,25 @@ namespace_::get_members() const
     return members_;
 }
 
+scope::scope_iterator_range
+namespace_::get_scopes()
+{
+	return scope_impl_.get_scopes();
+}
+
 scope::scope_const_iterator_range
 namespace_::get_scopes() const
 {
 	return scope_impl_.get_scopes();
 }
 
-const std::list<named_item*>&
+scope::named_item_iterator_range
+namespace_::get_named_items()
+{
+	return scope_impl_.get_named_items();
+}
+
+scope::named_item_const_iterator_range
 namespace_::get_named_items() const
 {
 	return scope_impl_.get_named_items();
