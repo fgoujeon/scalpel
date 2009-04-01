@@ -26,6 +26,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/variant.hpp>
 #include <boost/noncopyable.hpp>
 #include "scope.hpp"
+#include "scope_impl.hpp"
 #include "named_item.hpp"
 #include "class_.hpp"
 
@@ -121,16 +122,13 @@ class namespace_:
         void
         set_enclosing_scope(namespace_& enclosing_scope);
 
-		void
-		clear_enclosing_scope();
-
         /**
         @return the namespace's member list (i.e. the list of namespaces, classes, functions, etc.)
         */
         const std::list<member_t>&
         get_members() const;
 
-        const std::list<scope*>&
+		scope_const_iterator_range
         get_scopes() const;
 
         const std::list<named_item*>&
@@ -150,14 +148,12 @@ class namespace_:
 //        get_base_specifiers() const;
 
     private:
+		scope_impl scope_impl_;
         std::string name_;
-		scope* enclosing_scope_;
         std::list<namespace_> namespaces_;
         std::list<class_> classes_;
         std::list<function> functions_;
         std::list<member_t> members_;
-        std::list<scope*> scopes_;
-        std::list<named_item*> named_items_;
 };
 
 typedef

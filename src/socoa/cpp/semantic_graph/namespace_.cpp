@@ -26,43 +26,34 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace semantic_graph
 {
 
-namespace_::namespace_():
-	enclosing_scope_(0)
+namespace_::namespace_()
 {
 }
 
 namespace_::namespace_(const std::string& name):
-    name_(name),
-	enclosing_scope_(0)
+    name_(name)
 {
 }
 
 namespace_::namespace_(namespace_&& n):
+	scope_impl_(std::move(n.scope_impl_)),
 	name_(std::move(n.name_)),
-	enclosing_scope_(0),
 	namespaces_(std::move(n.namespaces_)),
 	classes_(std::move(n.classes_)),
 	functions_(std::move(n.functions_)),
-    members_(std::move(n.members_)),
-    scopes_(std::move(n.scopes_)),
-    named_items_(std::move(n.named_items_))
+    members_(std::move(n.members_))
 {
-	assert(!n.enclosing_scope_);
 }
 
 const namespace_&
 namespace_::operator=(namespace_&& n)
 {
-	assert(!n.enclosing_scope_);
-
+	scope_impl_ = std::move(n.scope_impl_);
 	name_ = std::move(n.name_);
-	enclosing_scope_ = 0;
 	namespaces_ = std::move(n.namespaces_);
 	classes_ = std::move(n.classes_);
 	functions_ = std::move(n.functions_);
     members_ = std::move(n.members_);
-    scopes_ = std::move(n.scopes_);
-    named_items_ = std::move(n.named_items_);
 
 	return *this;
 }
@@ -114,32 +105,25 @@ namespace_::is_global() const
 bool
 namespace_::has_enclosing_scope() const
 {
-    return enclosing_scope_;
+    return scope_impl_.has_enclosing_scope();
 }
 
 scope&
 namespace_::get_enclosing_scope()
 {
-    return *enclosing_scope_;
+    return scope_impl_.get_enclosing_scope();
 }
 
 const scope&
 namespace_::get_enclosing_scope() const
 {
-    return *enclosing_scope_;
+    return scope_impl_.get_enclosing_scope();
 }
 
 void
 namespace_::set_enclosing_scope(namespace_& enclosing_scope)
 {
-    assert(!enclosing_scope_); //assert that member doesn't have any enclosing scope yet
-    enclosing_scope_ = &enclosing_scope;
-}
-
-void
-namespace_::clear_enclosing_scope()
-{
-	enclosing_scope_ = 0;
+	return scope_impl_.set_enclosing_scope(enclosing_scope);
 }
 
 const std::list<namespace_::member_t>&
@@ -148,16 +132,16 @@ namespace_::get_members() const
     return members_;
 }
 
-const std::list<scope*>&
+scope::scope_const_iterator_range
 namespace_::get_scopes() const
 {
-	return scopes_;
+	return scope_impl_.get_scopes();
 }
 
 const std::list<named_item*>&
 namespace_::get_named_items() const
 {
-	return named_items_;
+	return scope_impl_.get_named_items();
 }
 
 void
@@ -165,13 +149,13 @@ namespace_::add(namespace_&& member)
 {
     namespaces_.push_back(std::move(member));
 
-	namespace_* member_ptr = &namespaces_.back();
+	namespace_& member_ref = namespaces_.back();
 
-	member_ptr->set_enclosing_scope(*this);
+	member_ref.set_enclosing_scope(*this);
 
-	members_.push_back(member_ptr);
-	scopes_.push_back(member_ptr);
-	named_items_.push_back(member_ptr);
+	members_.push_back(&member_ref);
+	scope_impl_.add_to_scopes(member_ref);
+	scope_impl_.add_to_named_items(member_ref);
 }
 
 void
@@ -179,13 +163,13 @@ namespace_::add(class_&& member)
 {
     classes_.push_back(std::move(member));
 
-	class_* member_ptr = &classes_.back();
+	class_& member_ref = classes_.back();
 
-	member_ptr->set_enclosing_scope(*this);
+	member_ref.set_enclosing_scope(*this);
 
-	members_.push_back(member_ptr);
-	scopes_.push_back(member_ptr);
-	named_items_.push_back(member_ptr);
+	members_.push_back(&member_ref);
+	scope_impl_.add_to_scopes(member_ref);
+	scope_impl_.add_to_named_items(member_ref);
 }
 
 void
@@ -193,13 +177,13 @@ namespace_::add(function&& member)
 {
     functions_.push_back(std::move(member));
 
-	function* member_ptr = &functions_.back();
+	function& member_ref = functions_.back();
 
-	member_ptr->set_enclosing_scope(*this);
+	member_ref.set_enclosing_scope(*this);
 
-	members_.push_back(member_ptr);
-	scopes_.push_back(member_ptr);
-	named_items_.push_back(member_ptr);
+	members_.push_back(&member_ref);
+	scope_impl_.add_to_scopes(member_ref);
+	scope_impl_.add_to_named_items(member_ref);
 }
 
 }}} //namespace socoa::cpp::semantic_graph

@@ -28,35 +28,27 @@ namespace socoa { namespace cpp { namespace semantic_graph
 {
 
 class_::class_(const std::string& name):
-    name_(name),
-	enclosing_scope_(0)
+    name_(name)
 {
 }
 
 class_::class_(class_&& c):
+	scope_impl_(std::move(c.scope_impl_)),
 	name_(std::move(c.name_)),
-	enclosing_scope_(0),
 	classes_(std::move(c.classes_)),
 	functions_(std::move(c.functions_)),
-	members_(std::move(c.members_)),
-	scopes_(std::move(c.scopes_)),
-	named_items_(std::move(c.named_items_))
+	members_(std::move(c.members_))
 {
-	assert(!c.enclosing_scope_);
 }
 
 const class_&
 class_::operator=(class_&& c)
 {
-	assert(!c.enclosing_scope_);
-
+	scope_impl_ = std::move(c.scope_impl_);
 	name_ = std::move(c.name_);
-	enclosing_scope_ = 0;
 	classes_ = std::move(c.classes_);
 	functions_ = std::move(c.functions_);
 	members_ = std::move(c.members_);
-	scopes_ = std::move(c.scopes_);
-	named_items_ = std::move(c.named_items_);
 
 	return *this;
 }
@@ -109,39 +101,31 @@ class_::is_global() const
 bool
 class_::has_enclosing_scope() const
 {
-    return enclosing_scope_;
+    return scope_impl_.has_enclosing_scope();
 }
 
 scope&
 class_::get_enclosing_scope()
 {
-    return *enclosing_scope_;
+    return scope_impl_.get_enclosing_scope();
 }
 
 const scope&
 class_::get_enclosing_scope() const
 {
-    return *enclosing_scope_;
+    return scope_impl_.get_enclosing_scope();
 }
 
 void
 class_::set_enclosing_scope(class_& enclosing_scope)
 {
-    assert(!enclosing_scope_); //assert that member doesn't have any enclosing scope yet
-    enclosing_scope_ = &enclosing_scope;
+    scope_impl_.set_enclosing_scope(enclosing_scope);
 }
 
 void
 class_::set_enclosing_scope(namespace_& enclosing_scope)
 {
-    assert(!enclosing_scope_); //assert that member doesn't have any enclosing scope yet
-    enclosing_scope_ = &enclosing_scope;
-}
-
-void
-class_::clear_enclosing_scope()
-{
-	enclosing_scope_ = 0;
+    scope_impl_.set_enclosing_scope(enclosing_scope);
 }
 
 const std::list<class_::member_t>&
@@ -150,16 +134,16 @@ class_::get_members() const
     return members_;
 }
 
-const std::list<scope*>&
+scope::scope_const_iterator_range
 class_::get_scopes() const
 {
-	return scopes_;
+	return scope_impl_.get_scopes();
 }
 
 const std::list<named_item*>&
 class_::get_named_items() const
 {
-	return named_items_;
+	return scope_impl_.get_named_items();
 }
 /*
 const std::list<std::shared_ptr<class_>>&
@@ -174,13 +158,13 @@ class_::add(class_&& nested_class)
 {
 	classes_.push_back(std::move(nested_class));
 
-	class_* member_ptr = &classes_.back();
+	class_& member_ref = classes_.back();
 
-	member_ptr->set_enclosing_scope(*this);
+	member_ref.set_enclosing_scope(*this);
 
-	members_.push_back(member_ptr);
-	scopes_.push_back(member_ptr);
-	named_items_.push_back(member_ptr);
+	members_.push_back(&member_ref);
+	scope_impl_.add_to_scopes(member_ref);
+	scope_impl_.add_to_named_items(member_ref);
 }
 
 void
@@ -188,13 +172,13 @@ class_::add(function&& member)
 {
     functions_.push_back(std::move(member));
 
-	function* member_ptr = &functions_.back();
+	function& member_ref = functions_.back();
 
-	member_ptr->set_enclosing_scope(*this);
+	member_ref.set_enclosing_scope(*this);
 
-	members_.push_back(member_ptr);
-	scopes_.push_back(member_ptr);
-	named_items_.push_back(member_ptr);
+	members_.push_back(&member_ref);
+	scope_impl_.add_to_scopes(member_ref);
+	scope_impl_.add_to_named_items(member_ref);
 }
 
 /*

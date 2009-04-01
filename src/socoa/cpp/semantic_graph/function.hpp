@@ -25,6 +25,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <list>
 #include <boost/noncopyable.hpp>
 #include "scope.hpp"
+#include "scope_impl.hpp"
 #include "named_item.hpp"
 
 namespace socoa { namespace cpp { namespace semantic_graph
@@ -110,20 +111,15 @@ class function:
         void
         set_enclosing_scope(namespace_& enclosing_scope);
 
-		void
-		clear_enclosing_scope();
-
-        const std::list<scope*>&
+		scope_const_iterator_range
         get_scopes() const;
 
         const std::list<named_item*>&
         get_named_items() const;
 
     private:
+		scope_impl scope_impl_;
         std::string name_;
-        scope* enclosing_scope_;
-        std::list<scope*> scopes_;
-        std::list<named_item*> named_items_;
 };
 
 }}} //namespace socoa::cpp::semantic_graph

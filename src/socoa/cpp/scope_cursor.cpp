@@ -65,7 +65,7 @@ void
 scope_cursor::enter_last_added_scope()
 {
 	assert(!current_scope_->get_scopes().empty());
-	current_scope_ = current_scope_->get_scopes().back();
+	current_scope_ = &current_scope_->get_scopes().back();
 }
 
 void

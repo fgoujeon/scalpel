@@ -22,6 +22,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SEMANTIC_GRAPH_SCOPE_HPP
 
 #include <list>
+#include <boost/iterator/indirect_iterator.hpp>
+#include <boost/range/iterator_range.hpp>
 #include "named_item.hpp"
 #include "scope_visitor.hpp"
 
@@ -30,6 +32,11 @@ namespace socoa { namespace cpp { namespace semantic_graph
 
 struct scope
 {
+	typedef std::list<scope*> scopes_t;
+	typedef scopes_t::const_iterator scope_const_iterator;
+	typedef boost::indirect_iterator<scope_const_iterator> scope_const_indirect_iterator;
+	typedef boost::iterator_range<scope_const_indirect_iterator> scope_const_iterator_range;
+
 	virtual
 	~scope(){}
 
@@ -38,7 +45,7 @@ struct scope
 	accept(scope_visitor&) = 0;
 
 	virtual
-	const std::list<scope*>&
+	scope_const_iterator_range
 	get_scopes() const = 0;
 
 	virtual

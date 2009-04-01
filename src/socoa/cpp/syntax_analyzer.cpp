@@ -183,7 +183,7 @@ syntax_analyzer::parse_type_name(const scanner_t& scan)
 		for(unsigned int i = 0; i < closed_scope_count; ++i)
 		{
 			if(!scope->get_scopes().empty()) ///\todo should be an assert when scope tree construction implementation will be full
-				scope = scope->get_scopes().back();
+				scope = &scope->get_scopes().back();
 			else
 				break;
 		}

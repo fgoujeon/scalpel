@@ -29,29 +29,21 @@ namespace socoa { namespace cpp { namespace semantic_graph
 {
 
 function::function(const std::string& name):
-    name_(name),
-	enclosing_scope_(0)
+    name_(name)
 {
 }
 
 function::function(function&& f):
-	name_(std::move(f.name_)),
-	enclosing_scope_(0),
-	scopes_(std::move(f.scopes_)),
-	named_items_(std::move(f.named_items_))
+	scope_impl_(std::move(f.scope_impl_)),
+	name_(std::move(f.name_))
 {
-	assert(!f.enclosing_scope_);
 }
 
 const function&
 function::operator=(function&& f)
 {
-	assert(!f.enclosing_scope_);
-
+	scope_impl_ = std::move(f.scope_impl_);
 	name_ = std::move(f.name_);
-	enclosing_scope_ = 0;
-	scopes_ = std::move(f.scopes_);
-	named_items_ = std::move(f.named_items_);
 
 	return *this;
 }
@@ -104,51 +96,43 @@ function::is_global() const
 bool
 function::has_enclosing_scope() const
 {
-    return enclosing_scope_;
+    return scope_impl_.has_enclosing_scope();
 }
 
 scope&
 function::get_enclosing_scope()
 {
-    return *enclosing_scope_;
+    return scope_impl_.get_enclosing_scope();
 }
 
 const scope&
 function::get_enclosing_scope() const
 {
-    return *enclosing_scope_;
+    return scope_impl_.get_enclosing_scope();
 }
 
 void
 function::set_enclosing_scope(class_& enclosing_scope)
 {
-    assert(!enclosing_scope_); //assert that member doesn't have any enclosing scope yet
-    enclosing_scope_ = &enclosing_scope;
+    scope_impl_.set_enclosing_scope(enclosing_scope);
 }
 
 void
 function::set_enclosing_scope(namespace_& enclosing_scope)
 {
-    assert(!enclosing_scope_); //assert that member doesn't have any enclosing scope yet
-    enclosing_scope_ = &enclosing_scope;
+    scope_impl_.set_enclosing_scope(enclosing_scope);
 }
 
-void
-function::clear_enclosing_scope()
-{
-	enclosing_scope_ = 0;
-}
-
-const std::list<scope*>&
+scope::scope_const_iterator_range
 function::get_scopes() const
 {
-	return scopes_;
+	return scope_impl_.get_scopes();
 }
 
 const std::list<named_item*>&
 function::get_named_items() const
 {
-	return named_items_;
+	return scope_impl_.get_named_items();
 }
 
 }}} //namespace socoa::cpp::semantic_graph
