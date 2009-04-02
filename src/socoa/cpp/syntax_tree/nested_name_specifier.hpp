@@ -22,6 +22,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_NESTED_NAME_SPECIFIER_HPP
 
 #include <vector>
+#include <boost/range/iterator_range.hpp>
 #include "identifier_or_template_id.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
@@ -30,32 +31,16 @@ namespace socoa { namespace cpp { namespace syntax_tree
 class nested_name_specifier
 {
 	public:
-		class second_part
-		{
-			public:
-				second_part
-				(
-					bool template_keyword,
-					identifier_or_template_id&& an_identifier_or_template_id
-				);
+		class second_part;
 
-				inline
-				bool
-				has_template_keyword() const;
-
-				inline
-				const identifier_or_template_id&
-				get_identifier_or_template_id() const;
-
-			private:
-				bool template_keyword_;
-				identifier_or_template_id identifier_or_template_id_;
-		};
+		typedef std::vector<second_part> second_parts_t;
+		typedef second_parts_t::const_iterator second_part_const_iterator;
+		typedef boost::iterator_range<second_part_const_iterator> second_part_const_iterator_range;
 
 		nested_name_specifier
 		(
 			identifier_or_template_id&& an_identifier_or_template_id,
-			std::vector<second_part>&& parts
+			second_parts_t&& parts
 		);
 
 		inline
@@ -63,12 +48,34 @@ class nested_name_specifier
 		get_identifier_or_template_id() const;
 
 		inline
-		const std::vector<second_part>&
+		second_part_const_iterator_range
 		get_parts() const;
 
 	private:
 		identifier_or_template_id identifier_or_template_id_;
-		std::vector<second_part> parts_;
+		second_parts_t parts_;
+};
+
+class nested_name_specifier::second_part
+{
+	public:
+		second_part
+		(
+			bool template_keyword,
+			identifier_or_template_id&& an_identifier_or_template_id
+		);
+
+		inline
+		bool
+		has_template_keyword() const;
+
+		inline
+		const identifier_or_template_id&
+		get_identifier_or_template_id() const;
+
+	private:
+		bool template_keyword_;
+		identifier_or_template_id identifier_or_template_id_;
 };
 
 inline
@@ -93,10 +100,10 @@ nested_name_specifier::get_identifier_or_template_id() const
 }
 
 inline
-const std::vector<nested_name_specifier::second_part>&
+nested_name_specifier::second_part_const_iterator_range
 nested_name_specifier::get_parts() const
 {
-	return parts_;
+	return boost::iterator_range<second_part_const_iterator>(parts_.begin(), parts_.end());
 }
 
 }}} //namespace socoa::cpp::syntax_tree

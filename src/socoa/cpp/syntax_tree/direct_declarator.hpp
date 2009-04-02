@@ -21,6 +21,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_DIRECT_DECLARATOR_HPP
 #define SOCOA_CPP_SYNTAX_TREE_DIRECT_DECLARATOR_HPP
 
+#include <boost/range/iterator_range.hpp>
 #include "declarator_id.hpp"
 #include "declarator.hpp"
 #include "parameter_declaration_clause.hpp"
@@ -53,35 +54,8 @@ direct_declarator::array_part
 class direct_declarator
 {
     public:
-		class function_part
-		{
-			public:
-				function_part
-				(
-					parameter_declaration_clause&& a_parameter_declaration_clause,
-					boost::optional<cv_qualifier_seq> a_cv_qualifier_seq
-				);
-
-				inline
-				const parameter_declaration_clause&
-				get_parameter_declaration_clause() const;
-
-				inline
-				const boost::optional<const cv_qualifier_seq&>
-				get_cv_qualifier_seq() const;
-
-			private:
-				parameter_declaration_clause parameter_declaration_clause_;
-				boost::optional<cv_qualifier_seq> cv_qualifier_seq_;
-		};
-
-		class array_part
-		{
-			public:
-
-
-			private:
-		};
+		class function_part;
+		class array_part;
 
 		typedef
 			boost::variant
@@ -92,11 +66,15 @@ class direct_declarator
 			other_part
 		;
 
+		typedef std::vector<other_part> other_parts_t;
+		typedef other_parts_t::const_iterator other_part_const_iterator;
+		typedef boost::iterator_range<other_part_const_iterator> other_part_const_iterator_range;
+
         direct_declarator
         (
             boost::optional<declarator_id> a_declarator_id,
             boost::optional<declarator> a_declarator,
-            std::vector<other_part>&& other_parts
+            other_parts_t&& other_parts
         );
 
         inline
@@ -108,51 +86,47 @@ class direct_declarator
         get_declarator() const;
 
         inline
-        const std::vector<other_part>&
+		other_part_const_iterator_range
         get_other_parts() const;
 
     private:
         boost::optional<declarator_id> declarator_id_;
         boost::optional<declarator> declarator_;
-        std::vector<other_part> other_parts_;
+        other_parts_t other_parts_;
 };
 
-inline
-const boost::optional<const declarator_id&>
-direct_declarator::get_declarator_id() const
+class direct_declarator::function_part
 {
-    return boost::optional<const declarator_id&>(declarator_id_);
-}
+	public:
+		function_part
+		(
+			parameter_declaration_clause&& a_parameter_declaration_clause,
+			boost::optional<cv_qualifier_seq> a_cv_qualifier_seq
+		);
 
-inline
-const boost::optional<const declarator&>
-direct_declarator::get_declarator() const
+		inline
+		const parameter_declaration_clause&
+		get_parameter_declaration_clause() const;
+
+		inline
+		const boost::optional<const cv_qualifier_seq&>
+		get_cv_qualifier_seq() const;
+
+	private:
+		parameter_declaration_clause parameter_declaration_clause_;
+		boost::optional<cv_qualifier_seq> cv_qualifier_seq_;
+};
+
+class direct_declarator::array_part
 {
-    return boost::optional<const declarator&>(declarator_);
-}
-
-inline
-const std::vector<direct_declarator::other_part>&
-direct_declarator::get_other_parts() const
-{
-    return other_parts_;
-}
+	public:
 
 
-inline
-const parameter_declaration_clause&
-direct_declarator::function_part::get_parameter_declaration_clause() const
-{
-    return parameter_declaration_clause_;
-}
-
-inline
-const boost::optional<const cv_qualifier_seq&>
-direct_declarator::function_part::get_cv_qualifier_seq() const
-{
-    return boost::optional<const cv_qualifier_seq&>(cv_qualifier_seq_);
-}
+	private:
+};
 
 }}} //namespace socoa::cpp::syntax_tree
+
+#include "direct_declarator.ipp"
 
 #endif

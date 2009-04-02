@@ -201,7 +201,7 @@ syntax_tree_to_string_converter::convert(const direct_declarator& item)
         result_ << ')';
     }
 
-    const std::vector<direct_declarator::other_part>& other_parts = item.get_other_parts();
+	direct_declarator::other_part_const_iterator_range other_parts = item.get_other_parts();
     for
     (
         std::vector<direct_declarator::other_part>::const_iterator i = other_parts.begin();

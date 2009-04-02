@@ -25,7 +25,7 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 member_specification::member_specification
 (
-	std::vector<member_specification_part> parts
+	parts_t&& parts
 ):
 	parts_(parts)
 {

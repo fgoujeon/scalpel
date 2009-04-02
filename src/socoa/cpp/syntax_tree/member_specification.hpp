@@ -30,25 +30,30 @@ namespace socoa { namespace cpp { namespace syntax_tree
 class member_specification
 {
 	public:
+		typedef std::vector<member_specification_part> parts_t;
+		typedef parts_t::const_iterator part_const_iterator;
+		typedef boost::iterator_range<part_const_iterator> part_const_iterator_range;
+
+	public:
 		explicit
 		member_specification
 		(
-			std::vector<member_specification_part> parts
+			parts_t&& parts
 		);
 
 		inline
-		const std::vector<member_specification_part>&
+		part_const_iterator_range
 		get_parts() const;
 
 	private:
-		std::vector<member_specification_part> parts_;
+		parts_t parts_;
 };
 
 inline
-const std::vector<member_specification_part>&
+member_specification::part_const_iterator_range
 member_specification::get_parts() const
 {
-	return parts_;
+	return part_const_iterator_range(parts_.begin(), parts_.end());
 }
 
 }}} //namespace socoa::cpp::syntax_tree

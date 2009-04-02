@@ -22,7 +22,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_UTIL_SEQUENCE_HPP
 
 #include <vector>
-#include <memory>
 #include "extern_strings.hpp"
 
 namespace socoa { namespace util
@@ -32,26 +31,30 @@ template<class T, const std::string& Separator = extern_strings::space>
 class sequence
 {
     public:
-		typedef std::vector<T> list_t;
+		typedef std::vector<T> items_t;
+		typedef typename items_t::const_iterator const_iterator;
 
         sequence();
 
         explicit sequence
         (
-            list_t&& items
+            items_t&& items
         );
 
-        const list_t&
-        get_items() const;
+		const_iterator
+		begin() const;
+
+		const_iterator
+		end() const;
 
         const std::string&
         get_separator() const;
 
 		void
-		push_back(const T& t);
+		push_back(T&& t);
 
     private:
-        list_t items_;
+        items_t items_;
 };
 
 template<class T, const std::string& Separator>
@@ -62,17 +65,24 @@ sequence<T, Separator>::sequence()
 template<class T, const std::string& Separator>
 sequence<T, Separator>::sequence
 (
-    list_t&& items
+    items_t&& items
 ):
     items_(items)
 {
 }
 
 template<class T, const std::string& Separator>
-const typename sequence<T, Separator>::list_t&
-sequence<T, Separator>::get_items() const
+typename sequence<T, Separator>::const_iterator
+sequence<T, Separator>::begin() const
 {
-    return items_;
+	return items_.begin();
+}
+
+template<class T, const std::string& Separator>
+typename sequence<T, Separator>::const_iterator
+sequence<T, Separator>::end() const
+{
+	return items_.end();
 }
 
 template<class T, const std::string& Separator>
@@ -84,7 +94,7 @@ sequence<T, Separator>::get_separator() const
 
 template<class T, const std::string& Separator>
 void
-sequence<T, Separator>::push_back(const T& t)
+sequence<T, Separator>::push_back(T&& t)
 {
 	items_.push_back(t);
 }

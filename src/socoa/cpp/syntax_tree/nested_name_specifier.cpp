@@ -36,7 +36,7 @@ nested_name_specifier::second_part::second_part
 nested_name_specifier::nested_name_specifier
 (
 	identifier_or_template_id&& an_identifier_or_template_id,
-	std::vector<nested_name_specifier::second_part>&& parts
+	second_parts_t&& parts
 ):
 	identifier_or_template_id_(an_identifier_or_template_id),
 	parts_(parts)

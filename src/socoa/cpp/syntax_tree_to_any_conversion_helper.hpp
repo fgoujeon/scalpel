@@ -133,13 +133,10 @@ template<class T, const std::string& Separator>
 void
 syntax_tree_to_any_conversion_helper<ConverterT>::convert_sequence_node(const util::sequence<T, Separator>& seq)
 {
-    typedef typename util::sequence<T>::list_t item_list_t;
-	const item_list_t& item_list = seq.get_items();
-
-    for(typename item_list_t::const_iterator i = item_list.begin(); i != item_list.end(); ++i)
+    for(auto i = seq.begin(); i != seq.end(); ++i)
     {
         //add separator
-        if(i != item_list.begin()) //don't add a separator before the first item
+        if(i != seq.begin()) //don't add a separator before the first item
 		{
 			converter_.convert_separator(Separator);
 		}
