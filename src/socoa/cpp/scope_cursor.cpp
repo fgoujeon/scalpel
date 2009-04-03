@@ -41,23 +41,30 @@ scope_cursor::set_scope(semantic_graph::scope& a_scope)
 }
 
 void
-scope_cursor::add_to_scope(semantic_graph::namespace_&& o)
+scope_cursor::add_to_current_scope(semantic_graph::namespace_&& o)
 {
-	scope_visitor_namespace v(o);
+	namespace_adder v(o);
 	current_scope_->accept(v);
 }
 
 void
-scope_cursor::add_to_scope(semantic_graph::class_&& o)
+scope_cursor::add_to_current_scope(semantic_graph::class_&& o)
 {
-	scope_visitor_class v(o);
+	class_adder v(o);
 	current_scope_->accept(v);
 }
 
 void
-scope_cursor::add_to_scope(semantic_graph::function&& o)
+scope_cursor::add_to_current_scope(semantic_graph::function&& o)
 {
-	scope_visitor_function v(o);
+	function_adder v(o);
+	current_scope_->accept(v);
+}
+
+void
+scope_cursor::add_to_current_scope(semantic_graph::variable&& o)
+{
+	variable_adder v(o);
 	current_scope_->accept(v);
 }
 
@@ -77,86 +84,114 @@ scope_cursor::leave_scope()
 
 
 //
-//scope_cursor::scope_visitor_namespace
+//scope_cursor::namespace_adder
 //
 
-scope_cursor::scope_visitor_namespace::scope_visitor_namespace(semantic_graph::namespace_&& n):
+scope_cursor::namespace_adder::namespace_adder(semantic_graph::namespace_&& n):
 	n_(std::move(n))
 {
 }
 
 void
-scope_cursor::scope_visitor_namespace::visit(semantic_graph::namespace_& o)
+scope_cursor::namespace_adder::visit(semantic_graph::namespace_& o)
 {
 	o.add(n_);
 }
 
 void
-scope_cursor::scope_visitor_namespace::visit(semantic_graph::class_&)
+scope_cursor::namespace_adder::visit(semantic_graph::class_&)
 {
 	assert(false);
 }
 
 void
-scope_cursor::scope_visitor_namespace::visit(semantic_graph::function&)
+scope_cursor::namespace_adder::visit(semantic_graph::function&)
 {
 	assert(false);
 }
 
 
 //
-//scope_cursor::scope_visitor_class
+//scope_cursor::class_adder
 //
 
-scope_cursor::scope_visitor_class::scope_visitor_class(semantic_graph::class_&& c):
+scope_cursor::class_adder::class_adder(semantic_graph::class_&& c):
 	c_(std::move(c))
 {
 }
 
 void
-scope_cursor::scope_visitor_class::visit(semantic_graph::namespace_& o)
+scope_cursor::class_adder::visit(semantic_graph::namespace_& o)
 {
 	o.add(c_);
 }
 
 void
-scope_cursor::scope_visitor_class::visit(semantic_graph::class_& o)
+scope_cursor::class_adder::visit(semantic_graph::class_& o)
 {
 	o.add(c_);
 }
 
 void
-scope_cursor::scope_visitor_class::visit(semantic_graph::function&)
+scope_cursor::class_adder::visit(semantic_graph::function&)
 {
 	assert(false);
 }
 
 
 //
-//scope_cursor::scope_visitor_function
+//scope_cursor::function_adder
 //
 
-scope_cursor::scope_visitor_function::scope_visitor_function(semantic_graph::function&& f):
+scope_cursor::function_adder::function_adder(semantic_graph::function&& f):
 	f_(std::move(f))
 {
 }
 
 void
-scope_cursor::scope_visitor_function::visit(semantic_graph::namespace_& o)
+scope_cursor::function_adder::visit(semantic_graph::namespace_& o)
 {
 	o.add(f_);
 }
 
 void
-scope_cursor::scope_visitor_function::visit(semantic_graph::class_& o)
+scope_cursor::function_adder::visit(semantic_graph::class_& o)
 {
 	o.add(f_);
 }
 
 void
-scope_cursor::scope_visitor_function::visit(semantic_graph::function&)
+scope_cursor::function_adder::visit(semantic_graph::function&)
 {
 	assert(false);
+}
+
+
+//
+//scope_cursor::variable_adder
+//
+
+scope_cursor::variable_adder::variable_adder(semantic_graph::variable&& v):
+	v_(std::move(v))
+{
+}
+
+void
+scope_cursor::variable_adder::visit(semantic_graph::namespace_& o)
+{
+	o.add(v_);
+}
+
+void
+scope_cursor::variable_adder::visit(semantic_graph::class_& o)
+{
+	o.add(v_);
+}
+
+void
+scope_cursor::variable_adder::visit(semantic_graph::function& o)
+{
+	o.add(v_);
 }
 
 }} //namespace socoa::cpp

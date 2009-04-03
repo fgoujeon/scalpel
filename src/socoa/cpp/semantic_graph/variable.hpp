@@ -23,6 +23,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string>
 #include <boost/noncopyable.hpp>
+#include "scope.hpp"
 #include "named_item.hpp"
 
 namespace socoa { namespace cpp { namespace semantic_graph
@@ -43,10 +44,20 @@ class variable:
 		const variable&
 		operator=(variable&& v);
 
+		void
+		set_enclosing_scope(scope& s);
+
 		const std::string&
 		get_name() const;
 
+		bool
+		has_that_name(const std::string& name) const;
+
+		bool
+		is_a_type() const;
+
 	private:
+		scope* enclosing_scope_;
 		std::string name_;
 };
 

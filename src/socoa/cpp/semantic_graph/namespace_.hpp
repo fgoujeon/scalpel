@@ -29,6 +29,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "scope_impl.hpp"
 #include "named_item.hpp"
 #include "class_.hpp"
+#include "function.hpp"
+#include "variable.hpp"
 
 namespace socoa { namespace cpp { namespace semantic_graph
 {
@@ -143,12 +145,16 @@ class namespace_:
         void
         add(function&& member);
 
+        void
+        add(variable&& member);
+
     private:
 		scope_impl scope_impl_;
         std::string name_;
         std::list<namespace_> namespaces_;
         std::list<class_> classes_;
         std::list<function> functions_;
+        std::list<variable> variables_;
         std::list<member_t> members_;
 };
 
@@ -157,7 +163,8 @@ typedef
 	<
 		namespace_*,
 		class_*,
-		function*
+		function*,
+		variable*
 	>
 	namespace_member_t
 ;
@@ -168,6 +175,7 @@ class namespace_::member_t: public namespace_member_t
 		member_t(namespace_* o): namespace_member_t(o){}
 		member_t(class_* o): namespace_member_t(o){}
 		member_t(function* o): namespace_member_t(o){}
+		member_t(variable* o): namespace_member_t(o){}
 };
 
 }}} //namespace socoa::cpp::semantic_graph

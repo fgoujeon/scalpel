@@ -59,7 +59,7 @@ semantic_analyzer::convert(const class_specifier& item)
 
 	if(id)
 	{
-		scope_cursor_.add_to_scope(class_(id->get_value()));
+		scope_cursor_.add_to_current_scope(class_(id->get_value()));
 	}
 }
 
@@ -111,7 +111,7 @@ semantic_analyzer::convert(const elaborated_type_specifier& item)
 
 	if(a_class_key && an_identifier)
 	{
-		scope_cursor_.add_to_scope(class_(an_identifier->get_value()));
+		scope_cursor_.add_to_current_scope(class_(an_identifier->get_value()));
 	}
 }
 
@@ -132,7 +132,7 @@ semantic_analyzer::convert(const function_definition& item)
 				if(an_identifier)
 				{
 					const std::string& function_name = an_identifier->get_value();
-					scope_cursor_.add_to_scope(function(function_name));
+					scope_cursor_.add_to_current_scope(function(function_name));
 				}
 			}
 		}
@@ -199,7 +199,7 @@ semantic_analyzer::convert(const namespace_definition& item)
 	{
 		namespace_name = an_identifier->get_value();
 	}
-	scope_cursor_.add_to_scope(namespace_(namespace_name));
+	scope_cursor_.add_to_current_scope(namespace_(namespace_name));
 
 	const boost::optional<const declaration_seq&> a_declaration_seq = item.get_declaration_seq();
 	if(a_declaration_seq)
@@ -297,6 +297,8 @@ semantic_analyzer::convert(const simple_declaration& item)
 				}
 			}
 
+			//create the appropriate semantic graph node and add it to the current scope
+			bool is_item_a_function = false;
 			auto a_direct_declarator_other_parts = a_direct_declarator.get_other_parts();
 			for(auto j = a_direct_declarator_other_parts.begin(); j != a_direct_declarator_other_parts.end(); ++j)
 			{
@@ -305,11 +307,19 @@ semantic_analyzer::convert(const simple_declaration& item)
 				if(direct_declarator::function_part* function_part = boost::get<direct_declarator::function_part>(&other_part))
 				{
 					//item is a function declaration!
+					is_item_a_function = true;
 
 					if(!name.empty())
-						scope_cursor_.add_to_scope(function(name));
+						scope_cursor_.add_to_current_scope(function(name));
 				}
 			}
+			if(!is_item_a_function)
+			{
+				//item is a variable declaration!
+				if(!name.empty())
+					scope_cursor_.add_to_current_scope(variable(name));
+			}
+
 		}
 	}
 }

@@ -132,4 +132,10 @@ function::get_named_items() const
 	return scope_impl_.get_named_items();
 }
 
+void
+function::add(variable&& v)
+{
+	variables_.push_back(std::move(v));
+}
+
 }}} //namespace socoa::cpp::semantic_graph

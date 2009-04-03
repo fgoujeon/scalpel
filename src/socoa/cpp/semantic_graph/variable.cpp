@@ -24,27 +24,49 @@ namespace socoa { namespace cpp { namespace semantic_graph
 {
 
 variable::variable(std::string&& name):
+	enclosing_scope_(0),
 	name_(std::move(name))
 {
 }
 
 variable::variable(variable&& v):
+	enclosing_scope_(0),
 	name_(std::move(v.name_))
 {
+	assert(v.enclosing_scope_ == 0);
 }
 
 const variable&
 variable::operator=(variable&& v)
 {
+	assert(v.enclosing_scope_ == 0);
 	name_ = std::move(v.name_);
 
 	return *this;
+}
+
+void
+variable::set_enclosing_scope(scope& s)
+{
+	enclosing_scope_ = &s;
 }
 
 const std::string&
 variable::get_name() const
 {
 	return name_;
+}
+
+bool
+variable::has_that_name(const std::string& name) const
+{
+	return name == name_;
+}
+
+bool
+variable::is_a_type() const
+{
+	return false;
 }
 
 }}} //namespace socoa::cpp::semantic_graph

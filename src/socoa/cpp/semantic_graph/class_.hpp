@@ -29,6 +29,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "scope_impl.hpp"
 #include "named_item.hpp"
 #include "function.hpp"
+#include "variable.hpp"
 
 namespace socoa { namespace cpp { namespace semantic_graph
 {
@@ -145,11 +146,15 @@ class class_:
         void
         add(function&& member);
 
+		void
+		add(variable&& member);
+
     private:
 		scope_impl scope_impl_;
         std::string name_;
 		std::list<class_> classes_;
 		std::list<function> functions_;
+		std::list<variable> variables_;
         std::list<member_t> members_;
 };
 
@@ -157,7 +162,8 @@ typedef
 	boost::variant
 	<
 		class_*,
-		function*
+		function*,
+		variable*
 	>
 	class_member_t
 ;
@@ -167,6 +173,7 @@ class class_::member_t: public class_member_t
 	public:
 		member_t(class_* o): class_member_t(o){}
 		member_t(function* o): class_member_t(o){}
+		member_t(variable* o): class_member_t(o){}
 };
 
 }}} //namespace socoa::cpp::semantic_graph

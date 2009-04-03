@@ -171,4 +171,17 @@ class_::add(function&& member)
 	scope_impl_.add_to_named_items(member_ref);
 }
 
+void
+class_::add(variable&& member)
+{
+    variables_.push_back(std::move(member));
+
+	variable& member_ref = variables_.back();
+
+	member_ref.set_enclosing_scope(*this);
+
+	members_.push_back(&member_ref);
+	scope_impl_.add_to_named_items(member_ref);
+}
+
 }}} //namespace socoa::cpp::semantic_graph

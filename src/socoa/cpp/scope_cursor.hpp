@@ -32,11 +32,13 @@ namespace socoa { namespace cpp
 
 class scope_cursor
 {
-	public:
-		class scope_visitor_namespace;
-		class scope_visitor_class;
-		class scope_visitor_function;
+	private:
+		class namespace_adder;
+		class class_adder;
+		class function_adder;
+		class variable_adder;
 
+	public:
 		semantic_graph::scope&
 		get_scope();
 
@@ -44,13 +46,16 @@ class scope_cursor
 		set_scope(semantic_graph::scope& a_scope);
 
 		void
-		add_to_scope(semantic_graph::namespace_&& o);
+		add_to_current_scope(semantic_graph::namespace_&& o);
 
 		void
-		add_to_scope(semantic_graph::class_&& o);
+		add_to_current_scope(semantic_graph::class_&& o);
 
 		void
-		add_to_scope(semantic_graph::function&& o);
+		add_to_current_scope(semantic_graph::function&& o);
+
+		void
+		add_to_current_scope(semantic_graph::variable&& o);
 
 		void
 		enter_last_added_scope();
@@ -63,10 +68,10 @@ class scope_cursor
 		semantic_graph::scope* last_added_scope_;
 };
 
-class scope_cursor::scope_visitor_namespace: public semantic_graph::scope_visitor
+class scope_cursor::namespace_adder: public semantic_graph::scope_visitor
 {
 	public:
-		scope_visitor_namespace(semantic_graph::namespace_&& n);
+		namespace_adder(semantic_graph::namespace_&& n);
 
 		void
 		visit(semantic_graph::namespace_& o);
@@ -81,10 +86,10 @@ class scope_cursor::scope_visitor_namespace: public semantic_graph::scope_visito
 		semantic_graph::namespace_ n_;
 };
 
-class scope_cursor::scope_visitor_class: public semantic_graph::scope_visitor
+class scope_cursor::class_adder: public semantic_graph::scope_visitor
 {
 	public:
-		scope_visitor_class(semantic_graph::class_&& c);
+		class_adder(semantic_graph::class_&& c);
 
 		void
 		visit(semantic_graph::namespace_& o);
@@ -99,10 +104,10 @@ class scope_cursor::scope_visitor_class: public semantic_graph::scope_visitor
 		semantic_graph::class_ c_;
 };
 
-class scope_cursor::scope_visitor_function: public semantic_graph::scope_visitor
+class scope_cursor::function_adder: public semantic_graph::scope_visitor
 {
 	public:
-		scope_visitor_function(semantic_graph::function&& f);
+		function_adder(semantic_graph::function&& f);
 
 		void
 		visit(semantic_graph::namespace_& o);
@@ -115,6 +120,24 @@ class scope_cursor::scope_visitor_function: public semantic_graph::scope_visitor
 
 	private:
 		semantic_graph::function f_;
+};
+
+class scope_cursor::variable_adder: public semantic_graph::scope_visitor
+{
+	public:
+		variable_adder(semantic_graph::variable&& v);
+
+		void
+		visit(semantic_graph::namespace_& o);
+
+		void
+		visit(semantic_graph::class_& o);
+
+		void
+		visit(semantic_graph::function& o);
+
+	private:
+		semantic_graph::variable v_;
 };
 
 }} //namespace socoa::cpp

@@ -27,6 +27,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "scope.hpp"
 #include "scope_impl.hpp"
 #include "named_item.hpp"
+#include "variable.hpp"
 
 namespace socoa { namespace cpp { namespace semantic_graph
 {
@@ -117,9 +118,13 @@ class function:
 		named_item_const_iterator_range
 		get_named_items() const;
 
+		void
+		add(variable&& v);
+
     private:
 		scope_impl scope_impl_;
         std::string name_;
+		std::list<variable> variables_;
 };
 
 }}} //namespace socoa::cpp::semantic_graph
