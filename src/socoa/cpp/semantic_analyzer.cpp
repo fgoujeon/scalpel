@@ -118,6 +118,7 @@ semantic_analyzer::convert(const elaborated_type_specifier& item)
 void
 semantic_analyzer::convert(const function_definition& item)
 {
+	/*
 	const boost::optional<const declarator_id&> a_declarator_id = item.get_declarator().get_direct_declarator().get_declarator_id();
 	if(a_declarator_id)
 	{
@@ -136,6 +137,7 @@ semantic_analyzer::convert(const function_definition& item)
 			}
 		}
 	}
+	*/
 }
 
 void
@@ -266,7 +268,50 @@ semantic_analyzer::convert(const qualified_template_id& item)
 void
 semantic_analyzer::convert(const simple_declaration& item)
 {
-	convert(item.get_decl_specifier_seq());
+	const boost::optional<const decl_specifier_seq&> a_decl_specifier_seq = item.get_decl_specifier_seq();
+	const boost::optional<const init_declarator_list&> an_optional_init_declarator_list = item.get_init_declarator_list();
+
+	if(an_optional_init_declarator_list)
+	{
+		const init_declarator_list& an_init_declarator_list = *an_optional_init_declarator_list;
+		for(auto i = an_init_declarator_list.begin(); i != an_init_declarator_list.end(); ++i)
+		{
+			const declarator& a_declarator = i->get_declarator();
+			const direct_declarator& a_direct_declarator = a_declarator.get_direct_declarator();
+
+			//get the item name
+			std::string name;
+			const boost::optional<const declarator_id&> an_optional_declarator_id = a_direct_declarator.get_declarator_id();
+			if(an_optional_declarator_id)
+			{
+				const declarator_id& a_declarator_id = *an_optional_declarator_id;
+				if(const id_expression* an_id_expression = boost::get<id_expression>(&a_declarator_id))
+				{
+					if(const unqualified_id* an_unqualified_id = boost::get<unqualified_id>(an_id_expression))
+					{
+						if(const identifier* an_identifier = boost::get<identifier>(an_unqualified_id))
+						{
+							name = an_identifier->get_value();
+						}
+					}
+				}
+			}
+
+			auto a_direct_declarator_other_parts = a_direct_declarator.get_other_parts();
+			for(auto j = a_direct_declarator_other_parts.begin(); j != a_direct_declarator_other_parts.end(); ++j)
+			{
+				direct_declarator::other_part other_part = *j;
+
+				if(direct_declarator::function_part* function_part = boost::get<direct_declarator::function_part>(&other_part))
+				{
+					//item is a function declaration!
+
+					if(!name.empty())
+						scope_cursor_.add_to_scope(function(name));
+				}
+			}
+		}
+	}
 }
 
 void
