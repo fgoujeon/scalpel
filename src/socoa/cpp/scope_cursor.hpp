@@ -21,6 +21,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SCOPE_CURSOR_HPP
 #define SOCOA_CPP_SCOPE_CURSOR_HPP
 
+#include <boost/noncopyable.hpp>
 #include "semantic_graph/scope.hpp"
 #include "semantic_graph/scope_visitor.hpp"
 #include "semantic_graph/namespace_.hpp"
@@ -30,7 +31,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp
 {
 
-class scope_cursor
+class scope_cursor: public boost::noncopyable
 {
 	private:
 		class namespace_adder;
@@ -39,11 +40,16 @@ class scope_cursor
 		class variable_adder;
 
 	public:
-		semantic_graph::scope&
-		get_scope();
+		scope_cursor();
 
 		void
-		set_scope(semantic_graph::scope& a_scope);
+		initialize(semantic_graph::scope& a_scope);
+
+		semantic_graph::scope&
+		get_global_scope();
+
+		semantic_graph::scope&
+		get_current_scope();
 
 		void
 		add_to_current_scope(semantic_graph::namespace_&& o);
@@ -64,6 +70,7 @@ class scope_cursor
 		leave_scope();
 
 	private:
+		semantic_graph::scope* global_scope_;
 		semantic_graph::scope* current_scope_;
 		semantic_graph::scope* last_added_scope_;
 };

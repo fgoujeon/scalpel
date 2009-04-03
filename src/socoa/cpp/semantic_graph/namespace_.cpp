@@ -33,6 +33,7 @@ namespace_::namespace_()
 namespace_::namespace_(const std::string& name):
     name_(name)
 {
+	std::cout << "New namespace " << name << "\n";
 }
 
 namespace_::namespace_(namespace_&& n):

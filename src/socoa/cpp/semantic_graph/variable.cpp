@@ -20,6 +20,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "variable.hpp"
 
+#include <iostream>
+
 namespace socoa { namespace cpp { namespace semantic_graph
 {
 
@@ -27,6 +29,7 @@ variable::variable(std::string&& name):
 	enclosing_scope_(0),
 	name_(std::move(name))
 {
+	std::cout << "New variable " << name << "\n";
 }
 
 variable::variable(variable&& v):

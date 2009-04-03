@@ -22,6 +22,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_NAME_LOOKUP_HPP
 
 #include <string>
+#include "syntax_tree.hpp"
 #include "semantic_graph.hpp"
 
 namespace socoa { namespace cpp { namespace name_lookup
@@ -29,6 +30,13 @@ namespace socoa { namespace cpp { namespace name_lookup
 
 const semantic_graph::named_item*
 find_unqualified_name(const semantic_graph::scope& current_scope, const std::string& name);
+
+semantic_graph::scope*
+find_scope
+(
+	semantic_graph::scope& current_scope,
+	const syntax_tree::nested_name_specifier& nested_name_specifier
+);
 
 }}} //namespace socoa::cpp::name_lookup
 

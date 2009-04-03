@@ -31,6 +31,7 @@ namespace socoa { namespace cpp { namespace semantic_graph
 function::function(const std::string& name):
     name_(name)
 {
+	std::cout << "New function " << name << "\n";
 }
 
 function::function(function&& f):

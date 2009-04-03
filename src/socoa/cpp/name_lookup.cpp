@@ -109,5 +109,15 @@ find_unqualified_name(const scope& current_scope, const std::string& name, bool 
     return 0;
 }
 
+semantic_graph::scope*
+find_scope
+(
+	semantic_graph::scope& current_scope,
+	const syntax_tree::nested_name_specifier& nested_name_specifier
+)
+{
+	return 0;
+}
+
 }}} //namespace socoa::cpp::name_lookup
 

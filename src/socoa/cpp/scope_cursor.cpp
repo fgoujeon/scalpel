@@ -27,17 +27,32 @@ namespace socoa { namespace cpp
 //scope_cursor
 //
 
-semantic_graph::scope&
-scope_cursor::get_scope()
+scope_cursor::scope_cursor():
+	global_scope_(0),
+	current_scope_(0),
+	last_added_scope_(0)
 {
-	assert(current_scope_);
-	return *current_scope_;
 }
 
 void
-scope_cursor::set_scope(semantic_graph::scope& a_scope)
+scope_cursor::initialize(semantic_graph::scope& a_scope)
 {
+	global_scope_ = &a_scope;
 	current_scope_ = &a_scope;
+}
+
+semantic_graph::scope&
+scope_cursor::get_global_scope()
+{
+	assert(global_scope_);
+	return *global_scope_;
+}
+
+semantic_graph::scope&
+scope_cursor::get_current_scope()
+{
+	assert(current_scope_);
+	return *current_scope_;
 }
 
 void

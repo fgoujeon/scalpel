@@ -21,6 +21,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "semantic_analyzer.hpp"
 
 #include <iostream>
+#include "name_lookup.hpp"
 
 namespace socoa { namespace cpp
 {
@@ -40,7 +41,7 @@ semantic_analyzer::operator()(const syntax_tree_t& tree)
 	semantic_graph_t global_namespace;
 
 	//current scope = global namespace
-	scope_cursor_.set_scope(global_namespace);
+	scope_cursor_.initialize(global_namespace);
 
 	convert(tree);
 
@@ -118,26 +119,68 @@ semantic_analyzer::convert(const elaborated_type_specifier& item)
 void
 semantic_analyzer::convert(const function_definition& item)
 {
-	/*
+	//get the name and the enclosing scope of the function
+	std::string name;
+	scope* enclosing_scope;
 	const boost::optional<const declarator_id&> a_declarator_id = item.get_declarator().get_direct_declarator().get_declarator_id();
 	if(a_declarator_id)
 	{
 		const id_expression* const an_id_expression = boost::get<id_expression>(&*a_declarator_id);
 		if(an_id_expression)
 		{
-			const unqualified_id* const an_unqualified_id = boost::get<unqualified_id>(&*an_id_expression);
+			const unqualified_id* const an_unqualified_id = boost::get<unqualified_id>(an_id_expression);
+			const qualified_id* const a_qualified_id = boost::get<qualified_id>(an_id_expression);
+
 			if(an_unqualified_id)
 			{
-				const identifier* const an_identifier = boost::get<identifier>(&*an_unqualified_id);
+				const identifier* const an_identifier = boost::get<identifier>(an_unqualified_id);
 				if(an_identifier)
 				{
-					const std::string& function_name = an_identifier->get_value();
-					scope_cursor_.add_to_current_scope(function(function_name));
+					name = an_identifier->get_value();
 				}
+
+				enclosing_scope = &scope_cursor_.get_current_scope();
+			}
+			else if(a_qualified_id)
+			{
+				const qualified_identifier* const a_qualified_identifier =
+					boost::get<qualified_identifier>(a_qualified_id)
+				;
+				const qualified_nested_id* const a_qualified_nested_id =
+					boost::get<qualified_nested_id>(a_qualified_id)
+				;
+				const qualified_operator_function_id* const a_qualified_operator_function_id =
+				   	boost::get<qualified_operator_function_id>(a_qualified_id)
+				;
+				const qualified_template_id* const a_qualified_template_id =
+				   	boost::get<qualified_template_id>(a_qualified_id)
+				;
+
+				if(a_qualified_nested_id)
+				{
+					bool leading_double_colon = a_qualified_nested_id->has_leading_double_colon();
+					const nested_name_specifier& a_nested_name_specifier = a_qualified_nested_id->get_nested_name_specifier();
+
+					if(leading_double_colon)
+					{
+						enclosing_scope = name_lookup::find_scope(scope_cursor_.get_global_scope(), a_nested_name_specifier);
+					}
+					else
+					{
+						enclosing_scope = name_lookup::find_scope(scope_cursor_.get_current_scope(), a_nested_name_specifier);
+					}
+				}
+			}
+			else
+			{
+				assert(false);
 			}
 		}
 	}
-	*/
+
+
+
+	//scope_cursor_.add_to_current_scope(function(function_name));
 }
 
 void

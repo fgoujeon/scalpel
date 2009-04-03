@@ -30,6 +30,7 @@ namespace socoa { namespace cpp { namespace semantic_graph
 class_::class_(const std::string& name):
     name_(name)
 {
+	std::cout << "New class " << name << "\n";
 }
 
 class_::class_(class_&& c):
