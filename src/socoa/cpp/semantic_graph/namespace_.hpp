@@ -77,7 +77,7 @@ class namespace_:
         Anonymous namespaces return an empty string.
         */
         const std::string&
-        get_name() const;
+        name() const;
 
         bool
         is_a_type() const;
@@ -95,37 +95,37 @@ class namespace_:
         @return the enclosing scope of the namespace
         */
 		scope&
-        get_enclosing_scope();
+        enclosing_scope();
 
         /**
         @return the enclosing scope of the namespace
         */
 		const scope&
-        get_enclosing_scope() const;
+        enclosing_scope() const;
 
         /**
         Sets the enclosing scope of the namespace.
         */
         void
-        set_enclosing_scope(namespace_& enclosing_scope);
+        enclosing_scope(namespace_& enclosing_scope);
 
         /**
         @return the namespace's member list (i.e. the list of namespaces, classes, functions, etc.)
         */
         const std::list<member_t>&
-        get_members() const;
+        members() const;
 
 		scope_iterator_range
-        get_scopes();
+        scopes();
 
 		scope_const_iterator_range
-        get_scopes() const;
+        scopes() const;
 
 		named_entity_iterator_range
-		get_named_entities();
+		named_entities();
 
 		named_entity_const_iterator_range
-		get_named_entities() const;
+		named_entities() const;
 
         void
         add(namespace_&& member);

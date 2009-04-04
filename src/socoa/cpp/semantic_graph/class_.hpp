@@ -72,7 +72,7 @@ class class_:
         @return the name of the class
         */
         const std::string&
-        get_name() const;
+        name() const;
 
         /**
         @return true
@@ -96,40 +96,40 @@ class class_:
         @return the enclosing scope of the class
         */
 		scope&
-        get_enclosing_scope();
+        enclosing_scope();
 
         /**
         @return the enclosing scope of the class
         */
         const scope&
-        get_enclosing_scope() const;
+        enclosing_scope() const;
 
         /**
         Sets the enclosing scope of the class.
         */
         void
-        set_enclosing_scope(class_& enclosing_scope);
+        enclosing_scope(class_& enclosing_scope);
 
         void
-        set_enclosing_scope(namespace_& enclosing_scope);
+        enclosing_scope(namespace_& enclosing_scope);
 
         /**
         @return the class' member list (i.e. the list of classes, functions, etc.)
         */
         const std::list<member_t>&
-        get_members() const;
+        members() const;
 
 		scope_iterator_range
-        get_scopes();
+        scopes();
 
 		scope_const_iterator_range
-        get_scopes() const;
+        scopes() const;
 
 		named_entity_iterator_range
-		get_named_entities();
+		named_entities();
 
 		named_entity_const_iterator_range
-		get_named_entities() const;
+		named_entities() const;
 
         /**
         Adds a nested class.

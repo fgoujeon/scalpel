@@ -40,19 +40,19 @@ class scope_impl: public boost::noncopyable
 		operator=(scope_impl&& s);
 
 		scope::scope_iterator_range
-		get_scopes();
+		scopes();
 
 		scope::scope_const_iterator_range
-		get_scopes() const;
+		scopes() const;
 
 		void
 		add_to_scopes(scope& s);
 
 		scope::named_entity_iterator_range
-		get_named_entities();
+		named_entities();
 
 		scope::named_entity_const_iterator_range
-		get_named_entities() const;
+		named_entities() const;
 
 		void
 		add_to_named_entities(named_entity& n);
@@ -61,13 +61,13 @@ class scope_impl: public boost::noncopyable
 		has_enclosing_scope() const;
 
 		const scope&
-		get_enclosing_scope() const;
+		enclosing_scope() const;
 
 		scope&
-		get_enclosing_scope();
+		enclosing_scope();
 
 		void
-		set_enclosing_scope(scope& enclosing_scope);
+		enclosing_scope(scope& enclosing_scope);
 
 	private:
 		scope* enclosing_scope_;

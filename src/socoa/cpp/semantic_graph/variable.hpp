@@ -45,10 +45,10 @@ class variable:
 		operator=(variable&& v);
 
 		void
-		set_enclosing_scope(scope& s);
+		enclosing_scope(scope& s);
 
 		const std::string&
-		get_name() const;
+		name() const;
 
 		bool
 		is_a_type() const;

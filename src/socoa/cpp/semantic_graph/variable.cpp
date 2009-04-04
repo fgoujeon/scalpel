@@ -49,13 +49,13 @@ variable::operator=(variable&& v)
 }
 
 void
-variable::set_enclosing_scope(scope& s)
+variable::enclosing_scope(scope& s)
 {
 	enclosing_scope_ = &s;
 }
 
 const std::string&
-variable::get_name() const
+variable::name() const
 {
 	return name_;
 }

@@ -61,7 +61,7 @@ class_::accept(scope_visitor& v)
 }
 
 const std::string&
-class_::get_name() const
+class_::name() const
 {
     return name_;
 }
@@ -85,57 +85,57 @@ class_::has_enclosing_scope() const
 }
 
 scope&
-class_::get_enclosing_scope()
+class_::enclosing_scope()
 {
-    return scope_impl_.get_enclosing_scope();
+    return scope_impl_.enclosing_scope();
 }
 
 const scope&
-class_::get_enclosing_scope() const
+class_::enclosing_scope() const
 {
-    return scope_impl_.get_enclosing_scope();
+    return scope_impl_.enclosing_scope();
 }
 
 void
-class_::set_enclosing_scope(class_& enclosing_scope)
+class_::enclosing_scope(class_& enclosing_scope)
 {
-    scope_impl_.set_enclosing_scope(enclosing_scope);
+    scope_impl_.enclosing_scope(enclosing_scope);
 }
 
 void
-class_::set_enclosing_scope(namespace_& enclosing_scope)
+class_::enclosing_scope(namespace_& enclosing_scope)
 {
-    scope_impl_.set_enclosing_scope(enclosing_scope);
+    scope_impl_.enclosing_scope(enclosing_scope);
 }
 
 const std::list<class_::member_t>&
-class_::get_members() const
+class_::members() const
 {
     return members_;
 }
 
 scope::scope_iterator_range
-class_::get_scopes()
+class_::scopes()
 {
-	return scope_impl_.get_scopes();
+	return scope_impl_.scopes();
 }
 
 scope::scope_const_iterator_range
-class_::get_scopes() const
+class_::scopes() const
 {
-	return scope_impl_.get_scopes();
+	return scope_impl_.scopes();
 }
 
 scope::named_entity_iterator_range
-class_::get_named_entities()
+class_::named_entities()
 {
-	return scope_impl_.get_named_entities();
+	return scope_impl_.named_entities();
 }
 
 scope::named_entity_const_iterator_range
-class_::get_named_entities() const
+class_::named_entities() const
 {
-	return scope_impl_.get_named_entities();
+	return scope_impl_.named_entities();
 }
 
 void
@@ -145,7 +145,7 @@ class_::add(class_&& nested_class)
 
 	class_& member_ref = classes_.back();
 
-	member_ref.set_enclosing_scope(*this);
+	member_ref.enclosing_scope(*this);
 
 	members_.push_back(&member_ref);
 	scope_impl_.add_to_scopes(member_ref);
@@ -159,7 +159,7 @@ class_::add(function&& member)
 
 	function& member_ref = functions_.back();
 
-	member_ref.set_enclosing_scope(*this);
+	member_ref.enclosing_scope(*this);
 
 	members_.push_back(&member_ref);
 	scope_impl_.add_to_scopes(member_ref);
@@ -173,7 +173,7 @@ class_::add(variable&& member)
 
 	variable& member_ref = variables_.back();
 
-	member_ref.set_enclosing_scope(*this);
+	member_ref.enclosing_scope(*this);
 
 	members_.push_back(&member_ref);
 	scope_impl_.add_to_named_entities(member_ref);

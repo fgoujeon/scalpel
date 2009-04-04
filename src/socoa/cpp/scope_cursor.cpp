@@ -86,15 +86,15 @@ scope_cursor::add_to_current_scope(semantic_graph::variable&& o)
 void
 scope_cursor::enter_last_added_scope()
 {
-	assert(!current_scope_->get_scopes().empty());
-	current_scope_ = &current_scope_->get_scopes().back();
+	assert(!current_scope_->scopes().empty());
+	current_scope_ = &current_scope_->scopes().back();
 }
 
 void
 scope_cursor::leave_scope()
 {
 	assert(current_scope_->has_enclosing_scope());
-	current_scope_ = &current_scope_->get_enclosing_scope();
+	current_scope_ = &current_scope_->enclosing_scope();
 }
 
 

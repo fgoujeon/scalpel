@@ -184,12 +184,12 @@ semantic_analyzer::convert(const function_definition& item)
 	bool already_declared = false;
 	if(!name.empty() && enclosing_scope)
 	{
-		auto entities = enclosing_scope->get_named_entities();
+		auto entities = enclosing_scope->named_entities();
 		for(auto i = entities.begin(); i != entities.end(); ++i)
 		{
 			const named_entity& entity = *i;
 			///\todo check function signature
-			if(entity.get_name() == name)
+			if(entity.name() == name)
 			{
 				already_declared = true;
 				break;

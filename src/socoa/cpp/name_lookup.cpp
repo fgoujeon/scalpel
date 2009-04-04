@@ -46,7 +46,7 @@ find_unqualified_name(const scope& current_scope, const std::string& name, bool 
     1. Current scope
     */
     {
-		scope::named_entity_const_iterator_range members = current_scope.get_named_entities();
+		scope::named_entity_const_iterator_range members = current_scope.named_entities();
 		scope::named_entity_const_indirect_iterator member_it = std::find_if
         (
             members.begin(),
@@ -57,7 +57,7 @@ find_unqualified_name(const scope& current_scope, const std::string& name, bool 
 				std::cref(name),
 				std::bind
 				(
-					&named_entity::get_name,
+					&named_entity::name,
 					std::placeholders::_1
 				)
 			)
@@ -80,7 +80,7 @@ find_unqualified_name(const scope& current_scope, const std::string& name, bool 
             current_scope.has_enclosing_scope() //is there at least an enclosing scope?
         )
         {
-            const semantic_graph::named_entity* found_symbol = find_unqualified_name(current_scope.get_enclosing_scope(), name, true);
+            const semantic_graph::named_entity* found_symbol = find_unqualified_name(current_scope.enclosing_scope(), name, true);
             if(found_symbol)
             {
                 return found_symbol;
@@ -132,7 +132,7 @@ find_scope
 		const std::string& scope_name = an_identifier->get_value();
 
 		//find the scope which has that name
-		auto scopes = current_scope.get_scopes();
+		auto scopes = current_scope.scopes();
 		auto scope_it = std::find_if
         (
             scopes.begin(),
@@ -143,7 +143,7 @@ find_scope
 				std::cref(scope_name),
 				std::bind
 				(
-					&scope::get_name,
+					&scope::name,
 					std::placeholders::_1
 				)
 			)
@@ -170,7 +170,7 @@ find_scope
 				const std::string& scope_name = an_identifier->get_value();
 
 				//find the scope which has that name
-				auto scopes = current_scope.get_scopes();
+				auto scopes = current_scope.scopes();
 				auto scope_it = std::find_if
 				(
 					scopes.begin(),
@@ -181,7 +181,7 @@ find_scope
 						std::cref(scope_name),
 						std::bind
 						(
-							&scope::get_name,
+							&scope::name,
 							std::placeholders::_1
 						)
 					)

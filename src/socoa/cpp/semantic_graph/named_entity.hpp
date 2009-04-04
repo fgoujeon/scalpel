@@ -36,7 +36,7 @@ struct named_entity
 	*/
 	virtual
 	const std::string&
-	get_name() const = 0;
+	name() const = 0;
 
 	virtual
 	bool

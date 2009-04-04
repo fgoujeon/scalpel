@@ -56,7 +56,7 @@ function::accept(scope_visitor& v)
 }
 
 const std::string&
-function::get_name() const
+function::name() const
 {
     return name_;
 }
@@ -80,51 +80,51 @@ function::has_enclosing_scope() const
 }
 
 scope&
-function::get_enclosing_scope()
+function::enclosing_scope()
 {
-    return scope_impl_.get_enclosing_scope();
+    return scope_impl_.enclosing_scope();
 }
 
 const scope&
-function::get_enclosing_scope() const
+function::enclosing_scope() const
 {
-    return scope_impl_.get_enclosing_scope();
+    return scope_impl_.enclosing_scope();
 }
 
 void
-function::set_enclosing_scope(class_& enclosing_scope)
+function::enclosing_scope(class_& enclosing_scope)
 {
-    scope_impl_.set_enclosing_scope(enclosing_scope);
+    scope_impl_.enclosing_scope(enclosing_scope);
 }
 
 void
-function::set_enclosing_scope(namespace_& enclosing_scope)
+function::enclosing_scope(namespace_& enclosing_scope)
 {
-    scope_impl_.set_enclosing_scope(enclosing_scope);
+    scope_impl_.enclosing_scope(enclosing_scope);
 }
 
 scope::scope_iterator_range
-function::get_scopes()
+function::scopes()
 {
-	return scope_impl_.get_scopes();
+	return scope_impl_.scopes();
 }
 
 scope::scope_const_iterator_range
-function::get_scopes() const
+function::scopes() const
 {
-	return scope_impl_.get_scopes();
+	return scope_impl_.scopes();
 }
 
 scope::named_entity_iterator_range
-function::get_named_entities()
+function::named_entities()
 {
-	return scope_impl_.get_named_entities();
+	return scope_impl_.named_entities();
 }
 
 scope::named_entity_const_iterator_range
-function::get_named_entities() const
+function::named_entities() const
 {
-	return scope_impl_.get_named_entities();
+	return scope_impl_.named_entities();
 }
 
 void

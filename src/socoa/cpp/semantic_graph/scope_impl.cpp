@@ -48,7 +48,7 @@ scope_impl::operator=(scope_impl&& s)
 }
 
 scope::scope_iterator_range
-scope_impl::get_scopes()
+scope_impl::scopes()
 {
 	scope::scope_iterator first = scopes_.begin();
 	scope::scope_iterator last = scopes_.end();
@@ -59,7 +59,7 @@ scope_impl::get_scopes()
 }
 
 scope::scope_const_iterator_range
-scope_impl::get_scopes() const
+scope_impl::scopes() const
 {
 	scope::scope_const_iterator first = scopes_.begin();
 	scope::scope_const_iterator last = scopes_.end();
@@ -76,7 +76,7 @@ scope_impl::add_to_scopes(scope& s)
 }
 
 scope::named_entity_iterator_range
-scope_impl::get_named_entities()
+scope_impl::named_entities()
 {
 	scope::named_entity_iterator first = named_entities_.begin();
 	scope::named_entity_iterator last = named_entities_.end();
@@ -87,7 +87,7 @@ scope_impl::get_named_entities()
 }
 
 scope::named_entity_const_iterator_range
-scope_impl::get_named_entities() const
+scope_impl::named_entities() const
 {
 	scope::named_entity_const_iterator first = named_entities_.begin();
 	scope::named_entity_const_iterator last = named_entities_.end();
@@ -110,19 +110,19 @@ scope_impl::has_enclosing_scope() const
 }
 
 const scope&
-scope_impl::get_enclosing_scope() const
+scope_impl::enclosing_scope() const
 {
 	return *enclosing_scope_;
 }
 
 scope&
-scope_impl::get_enclosing_scope()
+scope_impl::enclosing_scope()
 {
 	return *enclosing_scope_;
 }
 
 void
-scope_impl::set_enclosing_scope(scope& enclosing_scope)
+scope_impl::enclosing_scope(scope& enclosing_scope)
 {
     assert(!enclosing_scope_); //assert that member doesn't have any enclosing scope yet
     enclosing_scope_ = &enclosing_scope;

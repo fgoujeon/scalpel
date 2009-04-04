@@ -57,23 +57,23 @@ struct scope
 
 	virtual
 	const std::string&
-	get_name() const = 0;
+	name() const = 0;
 
 	virtual
 	scope_iterator_range
-	get_scopes() = 0;
+	scopes() = 0;
 
 	virtual
 	scope_const_iterator_range
-	get_scopes() const = 0;
+	scopes() const = 0;
 
 	virtual
 	named_entity_iterator_range
-	get_named_entities() = 0;
+	named_entities() = 0;
 
 	virtual
 	named_entity_const_iterator_range
-	get_named_entities() const = 0;
+	named_entities() const = 0;
 
 	/**
 	@return true if the object has a enclosing scope scope
@@ -87,14 +87,14 @@ struct scope
 	*/
 	virtual
 	const scope&
-	get_enclosing_scope() const = 0;
+	enclosing_scope() const = 0;
 
 	/**
 	@return the enclosing scope of the object
 	*/
 	virtual
 	scope&
-	get_enclosing_scope() = 0;
+	enclosing_scope() = 0;
 };
 
 }}} //namespace socoa::cpp::semantic_graph

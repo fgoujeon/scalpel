@@ -66,7 +66,7 @@ namespace_::accept(scope_visitor& v)
 }
 
 const std::string&
-namespace_::get_name() const
+namespace_::name() const
 {
     return name_;
 }
@@ -90,51 +90,51 @@ namespace_::has_enclosing_scope() const
 }
 
 scope&
-namespace_::get_enclosing_scope()
+namespace_::enclosing_scope()
 {
-    return scope_impl_.get_enclosing_scope();
+    return scope_impl_.enclosing_scope();
 }
 
 const scope&
-namespace_::get_enclosing_scope() const
+namespace_::enclosing_scope() const
 {
-    return scope_impl_.get_enclosing_scope();
+    return scope_impl_.enclosing_scope();
 }
 
 void
-namespace_::set_enclosing_scope(namespace_& enclosing_scope)
+namespace_::enclosing_scope(namespace_& enclosing_scope)
 {
-	return scope_impl_.set_enclosing_scope(enclosing_scope);
+	return scope_impl_.enclosing_scope(enclosing_scope);
 }
 
 const std::list<namespace_::member_t>&
-namespace_::get_members() const
+namespace_::members() const
 {
     return members_;
 }
 
 scope::scope_iterator_range
-namespace_::get_scopes()
+namespace_::scopes()
 {
-	return scope_impl_.get_scopes();
+	return scope_impl_.scopes();
 }
 
 scope::scope_const_iterator_range
-namespace_::get_scopes() const
+namespace_::scopes() const
 {
-	return scope_impl_.get_scopes();
+	return scope_impl_.scopes();
 }
 
 scope::named_entity_iterator_range
-namespace_::get_named_entities()
+namespace_::named_entities()
 {
-	return scope_impl_.get_named_entities();
+	return scope_impl_.named_entities();
 }
 
 scope::named_entity_const_iterator_range
-namespace_::get_named_entities() const
+namespace_::named_entities() const
 {
-	return scope_impl_.get_named_entities();
+	return scope_impl_.named_entities();
 }
 
 void
@@ -144,7 +144,7 @@ namespace_::add(namespace_&& member)
 
 	namespace_& member_ref = namespaces_.back();
 
-	member_ref.set_enclosing_scope(*this);
+	member_ref.enclosing_scope(*this);
 
 	members_.push_back(&member_ref);
 	scope_impl_.add_to_scopes(member_ref);
@@ -158,7 +158,7 @@ namespace_::add(class_&& member)
 
 	class_& member_ref = classes_.back();
 
-	member_ref.set_enclosing_scope(*this);
+	member_ref.enclosing_scope(*this);
 
 	members_.push_back(&member_ref);
 	scope_impl_.add_to_scopes(member_ref);
@@ -172,7 +172,7 @@ namespace_::add(function&& member)
 
 	function& member_ref = functions_.back();
 
-	member_ref.set_enclosing_scope(*this);
+	member_ref.enclosing_scope(*this);
 
 	members_.push_back(&member_ref);
 	scope_impl_.add_to_scopes(member_ref);
@@ -186,7 +186,7 @@ namespace_::add(variable&& member)
 
 	variable& member_ref = variables_.back();
 
-	member_ref.set_enclosing_scope(*this);
+	member_ref.enclosing_scope(*this);
 
 	members_.push_back(&member_ref);
 	scope_impl_.add_to_named_entities(member_ref);
