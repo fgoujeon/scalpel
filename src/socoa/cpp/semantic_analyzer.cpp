@@ -105,15 +105,8 @@ semantic_analyzer::convert(const direct_declarator::function_part&)
 }
 
 void
-semantic_analyzer::convert(const elaborated_type_specifier& item)
+semantic_analyzer::convert(const elaborated_type_specifier&)
 {
-	const boost::optional<const class_key&> a_class_key = item.get_class_key();
-	const boost::optional<const identifier&> an_identifier = item.get_identifier();
-
-	if(a_class_key && an_identifier)
-	{
-		scope_cursor_.add_to_current_scope(class_(an_identifier->get_value()));
-	}
 }
 
 void
@@ -332,8 +325,40 @@ semantic_analyzer::convert(const qualified_template_id&)
 void
 semantic_analyzer::convert(const simple_declaration& item)
 {
-	const boost::optional<const decl_specifier_seq&> a_decl_specifier_seq = item.get_decl_specifier_seq();
+	std::string name;
+	bool is_a_class_declaration = false;
+	bool is_a_class_forward_declaration = false;
+	bool is_a_function_declaration = false;
+
+	const boost::optional<const decl_specifier_seq&> an_optional_decl_specifier_seq = item.get_decl_specifier_seq();
 	const boost::optional<const init_declarator_list&> an_optional_init_declarator_list = item.get_init_declarator_list();
+
+	if(an_optional_decl_specifier_seq)
+	{
+		const decl_specifier_seq& a_decl_specifier_seq = *an_optional_decl_specifier_seq;
+		for(auto i = a_decl_specifier_seq.begin(); i != a_decl_specifier_seq.end(); ++i)
+		{
+			const decl_specifier& a_decl_specifier = *i;
+
+			if(auto a_type_specifier_ptr = boost::get<type_specifier>(&a_decl_specifier))
+			{
+				if(boost::get<class_specifier>(a_type_specifier_ptr))
+				{
+					is_a_class_declaration = true;
+				}
+				else if(auto an_elaborated_type_specifier_ptr = boost::get<elaborated_type_specifier>(a_type_specifier_ptr))
+				{
+					if(an_elaborated_type_specifier_ptr->get_class_key())
+					{
+						is_a_class_forward_declaration = true;
+						auto an_optional_identifier = an_elaborated_type_specifier_ptr->get_identifier();
+						assert(an_optional_identifier);
+						name = an_optional_identifier->get_value();
+					}
+				}
+			}
+		}
+	}
 
 	if(an_optional_init_declarator_list)
 	{
@@ -344,7 +369,6 @@ semantic_analyzer::convert(const simple_declaration& item)
 			const direct_declarator& a_direct_declarator = a_declarator.get_direct_declarator();
 
 			//get the item name
-			std::string name;
 			const boost::optional<const declarator_id&> an_optional_declarator_id = a_direct_declarator.get_declarator_id();
 			if(an_optional_declarator_id)
 			{
@@ -355,14 +379,14 @@ semantic_analyzer::convert(const simple_declaration& item)
 					{
 						if(const identifier* an_identifier = boost::get<identifier>(an_unqualified_id))
 						{
+							assert(name.empty());
 							name = an_identifier->get_value();
 						}
 					}
 				}
 			}
 
-			//create the appropriate semantic graph node and add it to the current scope
-			bool is_item_a_function = false;
+			//determine the appropriate semantic graph node
 			auto a_direct_declarator_other_parts = a_direct_declarator.get_other_parts();
 			for(auto j = a_direct_declarator_other_parts.begin(); j != a_direct_declarator_other_parts.end(); ++j)
 			{
@@ -371,20 +395,26 @@ semantic_analyzer::convert(const simple_declaration& item)
 				if(boost::get<direct_declarator::function_part>(&other_part))
 				{
 					//item is a function declaration!
-					is_item_a_function = true;
+					is_a_function_declaration = true;
 
 					if(!name.empty())
 						scope_cursor_.add_to_current_scope(function(name));
 				}
 			}
-			if(!is_item_a_function)
-			{
-				//item is a variable declaration!
-				if(!name.empty())
-					scope_cursor_.add_to_current_scope(variable(name));
-			}
 
 		}
+	}
+
+	if(is_a_class_declaration || is_a_class_forward_declaration)
+	{
+		if(!name.empty())
+			scope_cursor_.add_to_current_scope(class_(name));
+	}
+	else if(!is_a_function_declaration && !is_a_class_forward_declaration)
+	{
+		//item is a variable declaration!
+		if(!name.empty())
+			scope_cursor_.add_to_current_scope(variable(name));
 	}
 }
 
