@@ -31,7 +31,7 @@ scope_impl::scope_impl():
 scope_impl::scope_impl(scope_impl&& s):
 	enclosing_scope_(0),
 	scopes_(std::move(s.scopes_)),
-	named_items_(std::move(s.named_items_))
+	named_entities_(std::move(s.named_entities_))
 {
 	assert(s.enclosing_scope_ == 0);
 }
@@ -42,7 +42,7 @@ scope_impl::operator=(scope_impl&& s)
 	assert(s.enclosing_scope_ == 0);
 
 	scopes_ = std::move(s.scopes_);
-	named_items_ = std::move(s.named_items_);
+	named_entities_ = std::move(s.named_entities_);
 
 	return *this;
 }
@@ -75,32 +75,32 @@ scope_impl::add_to_scopes(scope& s)
 	scopes_.push_back(&s);
 }
 
-scope::named_item_iterator_range
-scope_impl::get_named_items()
+scope::named_entity_iterator_range
+scope_impl::get_named_entities()
 {
-	scope::named_item_iterator first = named_items_.begin();
-	scope::named_item_iterator last = named_items_.end();
+	scope::named_entity_iterator first = named_entities_.begin();
+	scope::named_entity_iterator last = named_entities_.end();
 
-	scope::named_item_indirect_iterator indirect_first(first), indirect_last(last);
+	scope::named_entity_indirect_iterator indirect_first(first), indirect_last(last);
 
-	return scope::named_item_iterator_range(indirect_first, indirect_last);
+	return scope::named_entity_iterator_range(indirect_first, indirect_last);
 }
 
-scope::named_item_const_iterator_range
-scope_impl::get_named_items() const
+scope::named_entity_const_iterator_range
+scope_impl::get_named_entities() const
 {
-	scope::named_item_const_iterator first = named_items_.begin();
-	scope::named_item_const_iterator last = named_items_.end();
+	scope::named_entity_const_iterator first = named_entities_.begin();
+	scope::named_entity_const_iterator last = named_entities_.end();
 
-	scope::named_item_const_indirect_iterator const_indirect_first(first), const_indirect_last(last);
+	scope::named_entity_const_indirect_iterator const_indirect_first(first), const_indirect_last(last);
 
-	return scope::named_item_const_iterator_range(const_indirect_first, const_indirect_last);
+	return scope::named_entity_const_iterator_range(const_indirect_first, const_indirect_last);
 }
 
 void
-scope_impl::add_to_named_items(named_item& n)
+scope_impl::add_to_named_entities(named_entity& n)
 {
-	named_items_.push_back(&n);
+	named_entities_.push_back(&n);
 }
 
 bool

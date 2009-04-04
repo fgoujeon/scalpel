@@ -67,12 +67,6 @@ class_::get_name() const
 }
 
 bool
-class_::has_that_name(const std::string& name) const
-{
-    return name_ == name;
-}
-
-bool
 class_::is_a_type() const
 {
     return true;
@@ -132,16 +126,16 @@ class_::get_scopes() const
 	return scope_impl_.get_scopes();
 }
 
-scope::named_item_iterator_range
-class_::get_named_items()
+scope::named_entity_iterator_range
+class_::get_named_entities()
 {
-	return scope_impl_.get_named_items();
+	return scope_impl_.get_named_entities();
 }
 
-scope::named_item_const_iterator_range
-class_::get_named_items() const
+scope::named_entity_const_iterator_range
+class_::get_named_entities() const
 {
-	return scope_impl_.get_named_items();
+	return scope_impl_.get_named_entities();
 }
 
 void
@@ -155,7 +149,7 @@ class_::add(class_&& nested_class)
 
 	members_.push_back(&member_ref);
 	scope_impl_.add_to_scopes(member_ref);
-	scope_impl_.add_to_named_items(member_ref);
+	scope_impl_.add_to_named_entities(member_ref);
 }
 
 void
@@ -169,7 +163,7 @@ class_::add(function&& member)
 
 	members_.push_back(&member_ref);
 	scope_impl_.add_to_scopes(member_ref);
-	scope_impl_.add_to_named_items(member_ref);
+	scope_impl_.add_to_named_entities(member_ref);
 }
 
 void
@@ -182,7 +176,7 @@ class_::add(variable&& member)
 	member_ref.set_enclosing_scope(*this);
 
 	members_.push_back(&member_ref);
-	scope_impl_.add_to_named_items(member_ref);
+	scope_impl_.add_to_named_entities(member_ref);
 }
 
 }}} //namespace socoa::cpp::semantic_graph

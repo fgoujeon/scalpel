@@ -62,12 +62,6 @@ function::get_name() const
 }
 
 bool
-function::has_that_name(const std::string& name) const
-{
-    return name_ == name;
-}
-
-bool
 function::is_a_type() const
 {
     return true;
@@ -121,16 +115,16 @@ function::get_scopes() const
 	return scope_impl_.get_scopes();
 }
 
-scope::named_item_iterator_range
-function::get_named_items()
+scope::named_entity_iterator_range
+function::get_named_entities()
 {
-	return scope_impl_.get_named_items();
+	return scope_impl_.get_named_entities();
 }
 
-scope::named_item_const_iterator_range
-function::get_named_items() const
+scope::named_entity_const_iterator_range
+function::get_named_entities() const
 {
-	return scope_impl_.get_named_items();
+	return scope_impl_.get_named_entities();
 }
 
 void

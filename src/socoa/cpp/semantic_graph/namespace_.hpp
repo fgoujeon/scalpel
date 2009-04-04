@@ -27,7 +27,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/noncopyable.hpp>
 #include "scope.hpp"
 #include "scope_impl.hpp"
-#include "named_item.hpp"
+#include "named_entity.hpp"
 #include "class_.hpp"
 #include "function.hpp"
 #include "variable.hpp"
@@ -40,7 +40,7 @@ Represents a C++ namespace.
 */
 class namespace_:
 	public scope,
-	public named_item,
+	public named_entity,
 	public boost::noncopyable
 {
     public:
@@ -79,12 +79,6 @@ class namespace_:
         const std::string&
         get_name() const;
 
-        /**
-        @return true if the namespace has the given name
-        */
-        bool
-        has_that_name(const std::string& name) const;
-
         bool
         is_a_type() const;
 
@@ -94,11 +88,8 @@ class namespace_:
         bool
         is_global() const;
 
-        /**
-        @return true if the namespace has a enclosing scope scope
-        */
-        bool
-        has_enclosing_scope() const;
+		bool
+		has_enclosing_scope() const;
 
         /**
         @return the enclosing scope of the namespace
@@ -130,11 +121,11 @@ class namespace_:
 		scope_const_iterator_range
         get_scopes() const;
 
-		named_item_iterator_range
-		get_named_items();
+		named_entity_iterator_range
+		get_named_entities();
 
-		named_item_const_iterator_range
-		get_named_items() const;
+		named_entity_const_iterator_range
+		get_named_entities() const;
 
         void
         add(namespace_&& member);

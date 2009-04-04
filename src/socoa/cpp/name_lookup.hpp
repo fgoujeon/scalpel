@@ -28,7 +28,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace name_lookup
 {
 
-const semantic_graph::named_item*
+const semantic_graph::named_entity*
 find_unqualified_name(const semantic_graph::scope& current_scope, const std::string& name);
 
 semantic_graph::scope*

@@ -26,37 +26,43 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace name_lookup
 {
 
+using namespace syntax_tree;
 using namespace semantic_graph;
 
-const named_item*
+const named_entity*
 find_unqualified_name(const scope& current_scope, const std::string& name, bool recursive);
 
 
-const named_item*
+const named_entity*
 find_unqualified_name(const scope& current_scope, const std::string& name)
 {
     return find_unqualified_name(current_scope, name, true);
 }
 
-const named_item*
+const named_entity*
 find_unqualified_name(const scope& current_scope, const std::string& name, bool recursive)
 {
     /*
     1. Current scope
     */
     {
-		scope::named_item_const_iterator_range members = current_scope.get_named_items();
-		scope::named_item_const_indirect_iterator member_it = std::find_if
+		scope::named_entity_const_iterator_range members = current_scope.get_named_entities();
+		scope::named_entity_const_indirect_iterator member_it = std::find_if
         (
             members.begin(),
             members.end(),
-            std::bind
-            (
-                &named_item::has_that_name,
-                std::placeholders::_1,
-                name
-            )
+			std::bind
+			(
+				std::equal_to<std::string>(),
+				std::cref(name),
+				std::bind
+				(
+					&named_entity::get_name,
+					std::placeholders::_1
+				)
+			)
         );
+
         if(member_it != members.end()) //if a name has been found
         {
             return &*member_it;
@@ -74,7 +80,7 @@ find_unqualified_name(const scope& current_scope, const std::string& name, bool 
             current_scope.has_enclosing_scope() //is there at least an enclosing scope?
         )
         {
-            const semantic_graph::named_item* found_symbol = find_unqualified_name(current_scope.get_enclosing_scope(), name, true);
+            const semantic_graph::named_entity* found_symbol = find_unqualified_name(current_scope.get_enclosing_scope(), name, true);
             if(found_symbol)
             {
                 return found_symbol;
@@ -97,7 +103,7 @@ find_unqualified_name(const scope& current_scope, const std::string& name, bool 
 //        {
 //            const base_specifier& base_spec = *i;
 //            const std::shared_ptr<class_> base_class = base_spec.get_class();
-//            const std::shared_ptr<semantic_graph::named_item> found_symbol = find_unqualified_name(base_class, name, false);
+//            const std::shared_ptr<semantic_graph::named_entity> found_symbol = find_unqualified_name(base_class, name, false);
 //            if(found_symbol)
 //            {
 //                return found_symbol;
@@ -112,11 +118,84 @@ find_unqualified_name(const scope& current_scope, const std::string& name, bool 
 semantic_graph::scope*
 find_scope
 (
-	semantic_graph::scope& current_scope,
-	const syntax_tree::nested_name_specifier& nested_name_specifier
+	scope& current_scope,
+	const nested_name_specifier& a_nested_name_specifier
 )
 {
-	return 0;
+	scope* found_scope = 0;
+
+	auto an_identifier_or_template_id = a_nested_name_specifier.get_identifier_or_template_id();
+	identifier* an_identifier = boost::get<identifier>(&an_identifier_or_template_id);
+
+	if(an_identifier)
+	{
+		const std::string& scope_name = an_identifier->get_value();
+
+		//find the scope which has that name
+		auto scopes = current_scope.get_scopes();
+		auto scope_it = std::find_if
+        (
+            scopes.begin(),
+            scopes.end(),
+			std::bind
+			(
+				std::equal_to<std::string>(),
+				std::cref(scope_name),
+				std::bind
+				(
+					&scope::get_name,
+					std::placeholders::_1
+				)
+			)
+        );
+
+		if(scope_it == scopes.end())
+			return 0;
+
+		found_scope = &*scope_it;
+	}
+
+	if(found_scope)
+	{
+		auto next_parts = a_nested_name_specifier.get_parts();
+		for(auto i = next_parts.begin(); i != next_parts.end(); ++i)
+		{
+			auto next_part = *i;
+
+			auto an_identifier_or_template_id = next_part.get_identifier_or_template_id();
+			identifier* an_identifier = boost::get<identifier>(&an_identifier_or_template_id);
+
+			if(an_identifier)
+			{
+				const std::string& scope_name = an_identifier->get_value();
+
+				//find the scope which has that name
+				auto scopes = current_scope.get_scopes();
+				auto scope_it = std::find_if
+				(
+					scopes.begin(),
+					scopes.end(),
+					std::bind
+					(
+						std::equal_to<std::string>(),
+						std::cref(scope_name),
+						std::bind
+						(
+							&scope::get_name,
+							std::placeholders::_1
+						)
+					)
+				);
+
+				if(scope_it == scopes.end())
+					return 0;
+
+				found_scope = &*scope_it;
+			}
+		}
+	}
+
+	return found_scope;
 }
 
 }}} //namespace socoa::cpp::name_lookup

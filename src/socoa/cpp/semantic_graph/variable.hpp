@@ -24,7 +24,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <boost/noncopyable.hpp>
 #include "scope.hpp"
-#include "named_item.hpp"
+#include "named_entity.hpp"
 
 namespace socoa { namespace cpp { namespace semantic_graph
 {
@@ -33,7 +33,7 @@ namespace socoa { namespace cpp { namespace semantic_graph
 Represents a C++ variable.
 */
 class variable:
-	public named_item,
+	public named_entity,
 	public boost::noncopyable
 {
 	public:
@@ -49,9 +49,6 @@ class variable:
 
 		const std::string&
 		get_name() const;
-
-		bool
-		has_that_name(const std::string& name) const;
 
 		bool
 		is_a_type() const;

@@ -24,7 +24,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <list>
 #include <boost/iterator/indirect_iterator.hpp>
 #include <boost/range/iterator_range.hpp>
-#include "named_item.hpp"
+#include "named_entity.hpp"
 #include "scope_visitor.hpp"
 
 namespace socoa { namespace cpp { namespace semantic_graph
@@ -40,13 +40,13 @@ struct scope
 	typedef boost::indirect_iterator<scope_iterator, scope&> scope_indirect_iterator;
 	typedef boost::iterator_range<scope_indirect_iterator> scope_iterator_range;
 
-	typedef std::list<named_item*> named_items_t;
-	typedef named_items_t::const_iterator named_item_const_iterator;
-	typedef boost::indirect_iterator<named_item_const_iterator, const named_item&> named_item_const_indirect_iterator;
-	typedef boost::iterator_range<named_item_const_indirect_iterator> named_item_const_iterator_range;
-	typedef named_items_t::iterator named_item_iterator;
-	typedef boost::indirect_iterator<named_item_iterator, named_item&> named_item_indirect_iterator;
-	typedef boost::iterator_range<named_item_indirect_iterator> named_item_iterator_range;
+	typedef std::list<named_entity*> named_entities_t;
+	typedef named_entities_t::const_iterator named_entity_const_iterator;
+	typedef boost::indirect_iterator<named_entity_const_iterator, const named_entity&> named_entity_const_indirect_iterator;
+	typedef boost::iterator_range<named_entity_const_indirect_iterator> named_entity_const_iterator_range;
+	typedef named_entities_t::iterator named_entity_iterator;
+	typedef boost::indirect_iterator<named_entity_iterator, named_entity&> named_entity_indirect_iterator;
+	typedef boost::iterator_range<named_entity_indirect_iterator> named_entity_iterator_range;
 
 	virtual
 	~scope(){}
@@ -54,6 +54,10 @@ struct scope
 	virtual
 	void
 	accept(scope_visitor&) = 0;
+
+	virtual
+	const std::string&
+	get_name() const = 0;
 
 	virtual
 	scope_iterator_range
@@ -64,12 +68,12 @@ struct scope
 	get_scopes() const = 0;
 
 	virtual
-	named_item_iterator_range
-	get_named_items() = 0;
+	named_entity_iterator_range
+	get_named_entities() = 0;
 
 	virtual
-	named_item_const_iterator_range
-	get_named_items() const = 0;
+	named_entity_const_iterator_range
+	get_named_entities() const = 0;
 
 	/**
 	@return true if the object has a enclosing scope scope

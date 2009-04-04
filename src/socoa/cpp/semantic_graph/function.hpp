@@ -26,7 +26,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/noncopyable.hpp>
 #include "scope.hpp"
 #include "scope_impl.hpp"
-#include "named_item.hpp"
+#include "named_entity.hpp"
 #include "variable.hpp"
 
 namespace socoa { namespace cpp { namespace semantic_graph
@@ -40,7 +40,7 @@ Represents a C++ function.
 */
 class function:
 	public scope,
-	public named_item,
+	public named_entity,
 	public boost::noncopyable
 {
     public:
@@ -60,12 +60,6 @@ class function:
         */
         const std::string&
         get_name() const;
-
-        /**
-        @return true if the function has the given name
-        */
-        bool
-        has_that_name(const std::string& name) const;
 
         /**
         @return true
@@ -112,11 +106,11 @@ class function:
 		scope_const_iterator_range
         get_scopes() const;
 
-		named_item_iterator_range
-		get_named_items();
+		named_entity_iterator_range
+		get_named_entities();
 
-		named_item_const_iterator_range
-		get_named_items() const;
+		named_entity_const_iterator_range
+		get_named_entities() const;
 
 		void
 		add(variable&& v);

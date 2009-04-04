@@ -191,7 +191,7 @@ syntax_analyzer::parse_type_name(const scanner_t& scan)
 		//
 		//Check whether the name is really a type name.
 		//
-		const semantic_graph::named_item* const item = name_lookup::find_unqualified_name(*scope, name);
+		const semantic_graph::named_entity* const item = name_lookup::find_unqualified_name(*scope, name);
 		if(item && item->is_a_type())
 		{
 			std::cout << "'" << name << "' is a type name.\n";

@@ -23,7 +23,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <list>
 #include "scope.hpp"
-#include "named_item.hpp"
+#include "named_entity.hpp"
 #include "scope_visitor.hpp"
 
 namespace socoa { namespace cpp { namespace semantic_graph
@@ -48,14 +48,14 @@ class scope_impl: public boost::noncopyable
 		void
 		add_to_scopes(scope& s);
 
-		scope::named_item_iterator_range
-		get_named_items();
+		scope::named_entity_iterator_range
+		get_named_entities();
 
-		scope::named_item_const_iterator_range
-		get_named_items() const;
+		scope::named_entity_const_iterator_range
+		get_named_entities() const;
 
 		void
-		add_to_named_items(named_item& n);
+		add_to_named_entities(named_entity& n);
 
 		bool
 		has_enclosing_scope() const;
@@ -72,7 +72,7 @@ class scope_impl: public boost::noncopyable
 	private:
 		scope* enclosing_scope_;
 		scope::scopes_t scopes_;
-		scope::named_items_t named_items_;
+		scope::named_entities_t named_entities_;
 };
 
 }}} //namespace socoa::cpp::semantic_graph

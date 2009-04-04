@@ -61,12 +61,6 @@ variable::get_name() const
 }
 
 bool
-variable::has_that_name(const std::string& name) const
-{
-	return name == name_;
-}
-
-bool
 variable::is_a_type() const
 {
 	return false;

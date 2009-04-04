@@ -18,18 +18,18 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SEMANTIC_GRAPH_NAMED_ITEM_HPP
-#define SOCOA_CPP_SEMANTIC_GRAPH_NAMED_ITEM_HPP
+#ifndef SOCOA_CPP_SEMANTIC_GRAPH_NAMED_ENTITY_HPP
+#define SOCOA_CPP_SEMANTIC_GRAPH_NAMED_ENTITY_HPP
 
 #include <string>
 
 namespace socoa { namespace cpp { namespace semantic_graph
 {
 
-struct named_item
+struct named_entity
 {
 	virtual
-	~named_item(){}
+	~named_entity(){}
 
 	/**
 	@return the name of the item
@@ -37,13 +37,6 @@ struct named_item
 	virtual
 	const std::string&
 	get_name() const = 0;
-
-	/**
-	@return true if the item has the given name
-	*/
-	virtual
-	bool
-	has_that_name(const std::string& name) const = 0;
 
 	virtual
 	bool
