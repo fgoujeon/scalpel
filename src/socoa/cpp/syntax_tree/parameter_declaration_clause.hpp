@@ -23,12 +23,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <boost/optional.hpp>
 #include "../../util/sequence.hpp"
+#include "composite_node.hpp"
 #include "parameter_declaration_list.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class parameter_declaration_clause
+class parameter_declaration_clause: public composite_node
 {
 	public:
 		parameter_declaration_clause

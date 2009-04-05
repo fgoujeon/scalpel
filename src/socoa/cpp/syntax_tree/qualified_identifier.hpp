@@ -21,12 +21,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_QUALIFIED_IDENTIFIER_HPP
 #define SOCOA_CPP_SYNTAX_TREE_QUALIFIED_IDENTIFIER_HPP
 
+#include "composite_node.hpp"
 #include "identifier.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class qualified_identifier
+class qualified_identifier: public composite_node
 {
 	public:
 		explicit

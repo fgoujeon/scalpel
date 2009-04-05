@@ -22,12 +22,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_MEMBER_SPECIFICATION_HPP
 
 #include <vector>
+#include "composite_node.hpp"
 #include "member_specification_part.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class member_specification
+class member_specification: public composite_node
 {
 	public:
 		typedef std::vector<member_specification_part> parts_t;

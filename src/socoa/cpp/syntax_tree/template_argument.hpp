@@ -22,6 +22,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_TEMPLATE_ARGUMENT_HPP
 
 #include <boost/variant.hpp>
+#include "composite_node.hpp"
 #include "assignment_expression.hpp"
 #include "type_id.hpp"
 #include "id_expression.hpp"
@@ -39,7 +40,7 @@ typedef
 	template_argument_t
 ;
 
-class template_argument: public template_argument_t
+class template_argument: public template_argument_t, public composite_node
 {
 	public:
 		template_argument(const id_expression& o): template_argument_t(o){}

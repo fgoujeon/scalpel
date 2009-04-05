@@ -22,6 +22,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_DECLARATION_HPP
 
 #include <boost/variant.hpp>
+#include "composite_node.hpp"
 #include "block_declaration.hpp"
 #include "function_definition.hpp"
 #include "template_declaration.hpp"
@@ -47,7 +48,7 @@ typedef
 	declaration_t
 ;
 
-struct declaration: public declaration_t
+struct declaration: public declaration_t, public composite_node
 {
 	declaration(const block_declaration& o): declaration_t(o){};
 	declaration(const function_definition& o): declaration_t(o){};

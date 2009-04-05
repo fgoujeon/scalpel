@@ -22,6 +22,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_DIRECT_DECLARATOR_HPP
 
 #include <boost/range/iterator_range.hpp>
+#include "composite_node.hpp"
 #include "declarator_id.hpp"
 #include "declarator.hpp"
 #include "parameter_declaration_clause.hpp"
@@ -51,7 +52,7 @@ direct_declarator::array_part
 ;
 \endverbatim
 */
-class direct_declarator
+class direct_declarator: public composite_node
 {
     public:
 		class function_part;

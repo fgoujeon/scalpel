@@ -22,6 +22,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_TEMPLATE_DECLARATION_HPP
 
 #include <memory>
+#include "composite_node.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
@@ -29,7 +30,7 @@ namespace socoa { namespace cpp { namespace syntax_tree
 class template_declaration_impl;
 class declaration;
 
-class template_declaration
+class template_declaration: public composite_node
 {
 	public:
 		template_declaration

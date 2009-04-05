@@ -18,39 +18,30 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_TEMPLATE_ID_HPP
-#define SOCOA_CPP_SYNTAX_TREE_TEMPLATE_ID_HPP
+#ifndef SOCOA_CPP_SYNTAX_TREE_COMPOSITE_NODE_HPP
+#define SOCOA_CPP_SYNTAX_TREE_COMPOSITE_NODE_HPP
 
-#include <memory>
-#include <boost/optional.hpp>
-#include "../../util/sequence.hpp"
-#include "../../util/extern_strings.hpp"
-#include "composite_node.hpp"
-#include "identifier.hpp"
+#include <vector>
+#include <string>
+#include "node.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class template_id_impl;
-class template_argument;
-
-class template_id: public composite_node
+class composite_node: public node
 {
 	public:
-		template_id
-		(
-			identifier&& an_identifier,
-			boost::optional<util::sequence<template_argument, util::extern_strings::comma>> a_template_argument_list
-		);
+		typedef std::vector<const node*> nodes_t;
 
-		const identifier&
-		get_identifier() const;
+		const std::string
+		raw_code() const;
 
-		const boost::optional<const util::sequence<template_argument, util::extern_strings::comma>&>
-		get_template_argument_list() const;
+	protected:
+		void
+		add(const node& a_node);
 
 	private:
-		std::shared_ptr<template_id_impl> pimpl_;
+		nodes_t nodes_;
 };
 
 }}} //namespace socoa::cpp::syntax_tree

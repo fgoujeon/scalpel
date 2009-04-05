@@ -22,12 +22,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_BASE_CLAUSE_HPP
 
 #include <boost/optional.hpp>
+#include "composite_node.hpp"
 #include "base_specifier_list.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class base_clause
+class base_clause: public composite_node
 {
     public:
         base_clause(base_specifier_list&& a_base_specifier_list);

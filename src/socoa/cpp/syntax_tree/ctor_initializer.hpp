@@ -21,6 +21,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_CTOR_INITIALIZER_HPP
 #define SOCOA_CPP_SYNTAX_TREE_CTOR_INITIALIZER_HPP
 
+#include "composite_node.hpp"
 #include "mem_initializer_list.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
@@ -35,7 +36,7 @@ ctor_initializer
 ;
 \endverbatim
 */
-class ctor_initializer
+class ctor_initializer: public composite_node
 {
     public:
         ctor_initializer(mem_initializer_list&& a_mem_initializer_list);

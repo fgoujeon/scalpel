@@ -21,12 +21,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_MEMBER_DECLARATION_FUNCTION_DEFINITION_HPP
 #define SOCOA_CPP_SYNTAX_TREE_MEMBER_DECLARATION_FUNCTION_DEFINITION_HPP
 
+#include "composite_node.hpp"
 #include "function_definition.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class member_declaration_function_definition
+class member_declaration_function_definition: public composite_node
 {
 	public:
 		explicit member_declaration_function_definition

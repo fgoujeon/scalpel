@@ -22,12 +22,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_INIT_DECLARATOR_HPP
 
 #include <memory>
+#include "composite_node.hpp"
 #include "declarator.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class init_declarator
+class init_declarator: public composite_node
 {
 	public:
 		init_declarator(declarator&& a_declarator);

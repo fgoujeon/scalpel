@@ -21,12 +21,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_ASSIGNMENT_EXPRESSION_HPP
 #define SOCOA_CPP_SYNTAX_TREE_ASSIGNMENT_EXPRESSION_HPP
 
+#include "composite_node.hpp"
 #include "assignment_operator.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class assignment_expression
+class assignment_expression: public composite_node
 {
     public:
         assignment_expression

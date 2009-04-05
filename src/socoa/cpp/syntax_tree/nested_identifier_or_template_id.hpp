@@ -22,13 +22,14 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_NESTED_IDENTIFIER_OR_TEMPLATE_ID_HPP
 
 #include <boost/optional.hpp>
+#include "composite_node.hpp"
 #include "nested_name_specifier.hpp"
 #include "identifier_or_template_id.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class nested_identifier_or_template_id
+class nested_identifier_or_template_id: public composite_node
 {
 	public:
 		nested_identifier_or_template_id

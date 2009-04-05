@@ -21,12 +21,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_QUALIFIED_TEMPLATE_ID_HPP
 #define SOCOA_CPP_SYNTAX_TREE_QUALIFIED_TEMPLATE_ID_HPP
 
+#include "composite_node.hpp"
 #include "template_id.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class qualified_template_id
+class qualified_template_id: public composite_node
 {
 	public:
 		explicit

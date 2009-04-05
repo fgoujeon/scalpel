@@ -23,12 +23,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <vector>
 #include <boost/range/iterator_range.hpp>
+#include "composite_node.hpp"
 #include "identifier_or_template_id.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class nested_name_specifier
+class nested_name_specifier: public composite_node
 {
 	public:
 		class second_part;

@@ -22,6 +22,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_MEMBER_DECLARATION_MEMBER_DECLARATOR_LIST_HPP
 
 #include <boost/optional.hpp>
+#include "composite_node.hpp"
 #include "member_declarator_list.hpp"
 #include "decl_specifier_seq.hpp"
 #include "../../util/sequence.hpp"
@@ -29,7 +30,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class member_declaration_member_declarator_list
+class member_declaration_member_declarator_list: public composite_node
 {
 	public:
 		member_declaration_member_declarator_list

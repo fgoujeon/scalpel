@@ -23,6 +23,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <memory>
 #include <boost/optional.hpp>
+#include "composite_node.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
@@ -38,7 +39,7 @@ class_specifier
 ;
 \endverbatim
 */
-class class_specifier
+class class_specifier: public composite_node
 {
     public:
         class_specifier

@@ -18,39 +18,19 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_TEMPLATE_ID_HPP
-#define SOCOA_CPP_SYNTAX_TREE_TEMPLATE_ID_HPP
+#ifndef SOCOA_CPP_SYNTAX_TREE_NODE_HPP
+#define SOCOA_CPP_SYNTAX_TREE_NODE_HPP
 
-#include <memory>
-#include <boost/optional.hpp>
-#include "../../util/sequence.hpp"
-#include "../../util/extern_strings.hpp"
-#include "composite_node.hpp"
-#include "identifier.hpp"
+#include <string>
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class template_id_impl;
-class template_argument;
-
-class template_id: public composite_node
+struct node
 {
-	public:
-		template_id
-		(
-			identifier&& an_identifier,
-			boost::optional<util::sequence<template_argument, util::extern_strings::comma>> a_template_argument_list
-		);
-
-		const identifier&
-		get_identifier() const;
-
-		const boost::optional<const util::sequence<template_argument, util::extern_strings::comma>&>
-		get_template_argument_list() const;
-
-	private:
-		std::shared_ptr<template_id_impl> pimpl_;
+	virtual
+	const std::string
+	raw_code() const = 0;
 };
 
 }}} //namespace socoa::cpp::syntax_tree

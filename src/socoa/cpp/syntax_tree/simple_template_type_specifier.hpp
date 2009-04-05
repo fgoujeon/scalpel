@@ -22,13 +22,14 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_SIMPLE_TEMPLATE_TYPE_SPECIFIER_HPP
 
 #include <memory>
+#include "composite_node.hpp"
 #include "nested_name_specifier.hpp"
 #include "template_id.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class simple_template_type_specifier
+class simple_template_type_specifier: public composite_node
 {
 	public:
 		simple_template_type_specifier

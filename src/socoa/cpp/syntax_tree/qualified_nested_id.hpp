@@ -22,13 +22,14 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_QUALIFIED_NESTED_ID_HPP
 
 #include <memory>
+#include "composite_node.hpp"
 #include "nested_name_specifier.hpp"
 #include "unqualified_id.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class qualified_nested_id
+class qualified_nested_id: public composite_node
 {
 	public:
 		qualified_nested_id

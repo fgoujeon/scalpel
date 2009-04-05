@@ -23,13 +23,14 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <memory>
 #include <boost/optional.hpp>
+#include "composite_node.hpp"
 #include "identifier.hpp"
 #include "nested_name_specifier.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class using_directive
+class using_directive: public composite_node
 {
 	public:
 		using_directive

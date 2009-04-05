@@ -23,6 +23,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <memory>
 #include <boost/variant.hpp>
+#include "composite_node.hpp"
 #include "type_specifier.hpp"
 #include "function_specifier.hpp"
 #include "storage_class_specifier.hpp"
@@ -40,7 +41,7 @@ typedef
 	decl_specifier_t
 ;
 
-class decl_specifier: public decl_specifier_t
+class decl_specifier: public decl_specifier_t, public composite_node
 {
 	public:
 		decl_specifier(const type_specifier& o): decl_specifier_t(o){}

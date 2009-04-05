@@ -22,6 +22,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_SIMPLE_DECLARATION_HPP
 
 #include <boost/optional.hpp>
+#include "composite_node.hpp"
 #include "init_declarator_list.hpp"
 #include "decl_specifier_seq.hpp"
 #include "../../util/sequence.hpp"
@@ -30,7 +31,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class simple_declaration
+class simple_declaration: public composite_node
 {
 	public:
 		simple_declaration

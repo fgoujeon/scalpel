@@ -21,12 +21,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_DESTRUCTOR_NAME_HPP
 #define SOCOA_CPP_SYNTAX_TREE_DESTRUCTOR_NAME_HPP
 
+#include "composite_node.hpp"
 #include "identifier.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class destructor_name
+class destructor_name: public composite_node
 {
 	public:
 		explicit

@@ -22,6 +22,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_BASE_SPECIFIER_HPP
 
 #include <boost/optional.hpp>
+#include "composite_node.hpp"
 #include "access_specifier.hpp"
 #include "nested_identifier_or_template_id.hpp"
 
@@ -37,7 +38,7 @@ base_specifier
 ;
 \endverbatim
 */
-class base_specifier
+class base_specifier: public composite_node
 {
     public:
         base_specifier

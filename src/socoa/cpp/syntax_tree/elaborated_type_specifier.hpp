@@ -22,6 +22,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_ELABORATED_TYPE_SPECIFIER_HPP
 
 #include <boost/optional.hpp>
+#include "composite_node.hpp"
 #include "class_key.hpp"
 #include "nested_name_specifier.hpp"
 #include "template_id.hpp"
@@ -30,7 +31,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class elaborated_type_specifier
+class elaborated_type_specifier: public composite_node
 {
     public:
 		elaborated_type_specifier

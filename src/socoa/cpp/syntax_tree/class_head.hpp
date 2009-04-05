@@ -22,6 +22,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_CLASS_HEAD_HPP
 
 #include <boost/optional.hpp>
+#include "composite_node.hpp"
 #include "class_key.hpp"
 #include "nested_name_specifier.hpp"
 #include "template_id.hpp"
@@ -40,7 +41,7 @@ class_head
 ;
 \endverbatim
 */
-class class_head
+class class_head: public composite_node
 {
     public:
         class_head

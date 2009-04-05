@@ -22,13 +22,14 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_USING_DECLARATION_HPP
 
 #include <boost/optional.hpp>
+#include "composite_node.hpp"
 #include "nested_name_specifier.hpp"
 #include "unqualified_id.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class using_declaration
+class using_declaration: public composite_node
 {
 	public:
 		using_declaration

@@ -18,41 +18,27 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_TEMPLATE_ID_HPP
-#define SOCOA_CPP_SYNTAX_TREE_TEMPLATE_ID_HPP
-
-#include <memory>
-#include <boost/optional.hpp>
-#include "../../util/sequence.hpp"
-#include "../../util/extern_strings.hpp"
 #include "composite_node.hpp"
-#include "identifier.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class template_id_impl;
-class template_argument;
-
-class template_id: public composite_node
+const std::string
+composite_node::raw_code() const
 {
-	public:
-		template_id
-		(
-			identifier&& an_identifier,
-			boost::optional<util::sequence<template_argument, util::extern_strings::comma>> a_template_argument_list
-		);
+	std::string code;
+	for(nodes_t::const_iterator i = nodes_.begin(); i != nodes_.end(); ++i)
+	{
+		const node& child_node = **i;
+		code += child_node.raw_code();
+	}
+	return code;
+}
 
-		const identifier&
-		get_identifier() const;
-
-		const boost::optional<const util::sequence<template_argument, util::extern_strings::comma>&>
-		get_template_argument_list() const;
-
-	private:
-		std::shared_ptr<template_id_impl> pimpl_;
-};
+void
+composite_node::add(const node& a_node)
+{
+	nodes_.push_back(&a_node);
+}
 
 }}} //namespace socoa::cpp::syntax_tree
-
-#endif

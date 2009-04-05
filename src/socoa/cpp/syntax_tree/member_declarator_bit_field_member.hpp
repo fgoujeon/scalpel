@@ -22,12 +22,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_MEMBER_DECLARATOR_BIT_FIELD_MEMBER_HPP
 
 #include <boost/optional.hpp>
+#include "composite_node.hpp"
 #include "identifier.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class member_declarator_bit_field_member
+class member_declarator_bit_field_member: public composite_node
 {
 	public:
 		member_declarator_bit_field_member

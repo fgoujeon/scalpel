@@ -23,6 +23,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <memory>
 #include <vector>
+#include "composite_node.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
@@ -38,7 +39,7 @@ declarator
 ;
 \endverbatim
 */
-class declarator
+class declarator: public composite_node
 {
     public:
         declarator

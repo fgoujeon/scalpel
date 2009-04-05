@@ -21,12 +21,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_MEMBER_SPECIFICATION_ACCESS_SPECIFIER_HPP
 #define SOCOA_CPP_SYNTAX_TREE_MEMBER_SPECIFICATION_ACCESS_SPECIFIER_HPP
 
+#include "composite_node.hpp"
 #include "access_specifier.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class member_specification_access_specifier
+class member_specification_access_specifier: public composite_node
 {
 	public:
 		explicit member_specification_access_specifier

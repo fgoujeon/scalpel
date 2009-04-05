@@ -24,6 +24,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <memory>
 #include <string>
 #include <boost/optional.hpp>
+#include "composite_node.hpp"
 #include "identifier.hpp"
 #include "../../util/sequence.hpp"
 
@@ -33,7 +34,7 @@ namespace socoa { namespace cpp { namespace syntax_tree
 class namespace_definition_impl;
 class declaration;
 
-class namespace_definition
+class namespace_definition: public composite_node
 {
 	public:
 		namespace_definition

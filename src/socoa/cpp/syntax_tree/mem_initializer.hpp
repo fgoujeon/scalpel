@@ -21,12 +21,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_MEM_INITIALIZER_HPP
 #define SOCOA_CPP_SYNTAX_TREE_MEM_INITIALIZER_HPP
 
+#include "composite_node.hpp"
 #include "mem_initializer_id.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class mem_initializer
+class mem_initializer: public composite_node
 {
 	public:
 		explicit

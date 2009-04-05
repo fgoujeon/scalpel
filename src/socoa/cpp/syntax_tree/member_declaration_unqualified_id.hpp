@@ -21,13 +21,14 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_MEMBER_DECLARATION_UNQUALIFIED_ID_HPP
 #define SOCOA_CPP_SYNTAX_TREE_MEMBER_DECLARATION_UNQUALIFIED_ID_HPP
 
+#include "composite_node.hpp"
 #include "nested_name_specifier.hpp"
 #include "unqualified_id.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class member_declaration_unqualified_id
+class member_declaration_unqualified_id: public composite_node
 {
 	public:
 		member_declaration_unqualified_id

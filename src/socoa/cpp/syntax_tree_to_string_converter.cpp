@@ -279,7 +279,7 @@ syntax_tree_to_string_converter::convert(const parameter_declaration& item)
 }
 
 void
-syntax_tree_to_string_converter::convert(const elaborated_type_specifier& item)
+syntax_tree_to_string_converter::convert(const elaborated_type_specifier&)
 {
 }
 
