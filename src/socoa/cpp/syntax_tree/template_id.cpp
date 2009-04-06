@@ -20,7 +20,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "template_id.hpp"
 
-#include "template_id_impl.hpp"
+#include "template_argument_list.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
@@ -30,27 +30,10 @@ template_id::template_id
     identifier&& an_identifier,
     boost::optional<util::sequence<template_argument, util::extern_strings::comma>> a_template_argument_list
 ):
-	pimpl_
-	(
-		std::make_shared<template_id_impl>
-		(
-			an_identifier,
-			a_template_argument_list
-		)
-	)
+    identifier_(an_identifier)
 {
-}
-
-const identifier&
-template_id::get_identifier() const
-{
-	return pimpl_->get_identifier();
-}
-
-const boost::optional<const util::sequence<template_argument, util::extern_strings::comma>&>
-template_id::get_template_argument_list() const
-{
-	return pimpl_->get_template_argument_list();
+	if(a_template_argument_list)
+		template_argument_list_ = std::make_shared<template_argument_list>(*a_template_argument_list);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

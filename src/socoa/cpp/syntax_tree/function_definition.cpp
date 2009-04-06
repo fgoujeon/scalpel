@@ -20,7 +20,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "function_definition.hpp"
 
-#include "function_definition_impl.hpp"
+#include "declarator.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
@@ -31,34 +31,10 @@ function_definition::function_definition
     declarator&& a_declarator,
     boost::optional<ctor_initializer> a_ctor_initializer
 ):
-	pimpl_
-	(
-		std::make_shared<function_definition_impl>
-		(
-			a_decl_specifier_seq,
-			a_declarator,
-			a_ctor_initializer
-		)
-	)
+    decl_specifier_seq_(a_decl_specifier_seq),
+    declarator_(std::make_shared<declarator>(a_declarator)),
+    ctor_initializer_(a_ctor_initializer)
 {
-}
-
-const boost::optional<const util::sequence<decl_specifier>&>
-function_definition::get_decl_specifier_seq() const
-{
-	return pimpl_->get_decl_specifier_seq();
-}
-
-const declarator&
-function_definition::get_declarator() const
-{
-	return pimpl_->get_declarator();
-}
-
-const boost::optional<const ctor_initializer&>
-function_definition::get_ctor_initializer() const
-{
-	return pimpl_->get_ctor_initializer();
 }
 
 }}} //namespace socoa::cpp::syntax_tree

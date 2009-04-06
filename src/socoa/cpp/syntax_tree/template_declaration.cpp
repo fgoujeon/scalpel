@@ -20,7 +20,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "template_declaration.hpp"
 
-#include "template_declaration_impl.hpp"
+#include "declaration.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
@@ -31,27 +31,9 @@ template_declaration::template_declaration
     //template_parameter_list m_template_parameter_list;
     declaration&& a_declaration
 ):
-	pimpl_
-	(
-		std::make_shared<template_declaration_impl>
-		(
-			export_keyword,
-			a_declaration
-		)
-	)
+    export_keyword_(export_keyword),
+    declaration_(std::make_shared<declaration>(a_declaration))
 {
-}
-
-bool
-template_declaration::has_export_keyword() const
-{
-	return pimpl_->has_export_keyword();
-}
-
-const declaration&
-template_declaration::get_declaration() const
-{
-	return pimpl_->get_declaration();
 }
 
 }}} //namespace socoa::cpp::syntax_tree

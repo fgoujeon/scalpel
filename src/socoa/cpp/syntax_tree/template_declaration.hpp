@@ -27,7 +27,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class template_declaration_impl;
 class declaration;
 
 class template_declaration: public composite_node
@@ -40,15 +39,33 @@ class template_declaration: public composite_node
 			declaration&& a_declaration
 		);
 
+		inline
 		bool
 		has_export_keyword() const;
 
+		inline
 		const declaration&
 		get_declaration() const;
 
 	private:
-		std::shared_ptr<template_declaration_impl> pimpl_;
+		bool export_keyword_;
+		//template_parameter_list m_template_parameter_list;
+		std::shared_ptr<declaration> declaration_;
 };
+
+inline
+bool
+template_declaration::has_export_keyword() const
+{
+	return export_keyword_;
+}
+
+inline
+const declaration&
+template_declaration::get_declaration() const
+{
+	return *declaration_;
+}
 
 }}} //namespace socoa::cpp::syntax_tree
 

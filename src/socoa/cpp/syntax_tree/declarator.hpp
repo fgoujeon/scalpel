@@ -24,12 +24,11 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <memory>
 #include <vector>
 #include "composite_node.hpp"
+#include "ptr_operator.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class declarator_impl;
-class ptr_operator;
 class direct_declarator;
 
 /**
@@ -41,22 +40,39 @@ declarator
 */
 class declarator: public composite_node
 {
-    public:
+	public:
         declarator
         (
             std::vector<ptr_operator>&& ptr_operators,
             direct_declarator&& a_direct_declarator
         );
 
+        inline
         const std::vector<ptr_operator>&
         get_ptr_operators() const;
 
+        inline
         const direct_declarator&
         get_direct_declarator() const;
 
     private:
-		std::shared_ptr<declarator_impl> pimpl_;
+        std::vector<ptr_operator> ptr_operators_;
+		std::shared_ptr<direct_declarator> direct_declarator_;
 };
+
+inline
+const std::vector<ptr_operator>&
+declarator::get_ptr_operators() const
+{
+    return ptr_operators_;
+}
+
+inline
+const direct_declarator&
+declarator::get_direct_declarator() const
+{
+    return *direct_declarator_;
+}
 
 }}} //namespace socoa::cpp::syntax_tree
 

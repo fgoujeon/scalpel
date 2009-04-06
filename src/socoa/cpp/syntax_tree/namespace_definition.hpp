@@ -31,7 +31,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class namespace_definition_impl;
 class declaration;
 
 class namespace_definition: public composite_node
@@ -43,15 +42,35 @@ class namespace_definition: public composite_node
 			boost::optional<util::sequence<declaration>> a_declaration_seq
 		);
 
+		inline
 		const boost::optional<const identifier&>
 	   	get_identifier() const;
 
+		inline
 		const boost::optional<const util::sequence<declaration>&>
 		get_declaration_seq() const;
 
 	private:
-		std::shared_ptr<namespace_definition_impl> pimpl_;
+		boost::optional<identifier> identifier_;
+		std::shared_ptr<util::sequence<declaration>> declaration_seq_;
 };
+
+inline
+const boost::optional<const identifier&>
+namespace_definition::get_identifier() const
+{
+	return boost::optional<const identifier&>(identifier_);
+}
+
+inline
+const boost::optional<const util::sequence<declaration>&>
+namespace_definition::get_declaration_seq() const
+{
+	if(declaration_seq_)
+		return boost::optional<const util::sequence<declaration>&>(*declaration_seq_);
+	else
+		return boost::optional<const util::sequence<declaration>&>();
+}
 
 }}} //namespace socoa::cpp::syntax_tree
 

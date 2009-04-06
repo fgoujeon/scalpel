@@ -23,23 +23,15 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <memory>
 #include <boost/optional.hpp>
-#include "composite_node.hpp"
+#include "class_head.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class class_specifier_impl;
-class class_head;
+//use of forward declarations and pointers to avoid cyclic dependency
 class member_specification;
 
-/**
-\verbatim
-class_specifier
-	= class_head, "{", [member_specification], "}"
-;
-\endverbatim
-*/
-class class_specifier: public composite_node
+class class_specifier
 {
     public:
         class_specifier
@@ -48,15 +40,35 @@ class class_specifier: public composite_node
             boost::optional<member_specification> a_member_specification
         );
 
+        inline
         const class_head&
         get_class_head() const;
 
+        inline
         const boost::optional<const member_specification&>
         get_member_specification() const;
 
     private:
-		std::shared_ptr<class_specifier_impl> pimpl_;
+		class_head class_head_;
+		std::shared_ptr<member_specification> member_specification_;
 };
+
+inline
+const class_head&
+class_specifier::get_class_head() const
+{
+    return class_head_;
+}
+
+inline
+const boost::optional<const member_specification&>
+class_specifier::get_member_specification() const
+{
+	if(member_specification_)
+		return boost::optional<const member_specification&>(*member_specification_);
+	else
+		return boost::optional<const member_specification&>();
+}
 
 }}} //namespace socoa::cpp::syntax_tree
 
