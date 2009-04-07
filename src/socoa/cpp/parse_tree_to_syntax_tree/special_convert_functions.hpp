@@ -31,20 +31,16 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace parse_tree_to_syntax_tree
 {
 
-template
-<
-	class T,
-	const std::string& Separator
->
-util::sequence<T, Separator>
+template<class T>
+T
 convert_sequence(const tree_node_t& node)
 {
-	return util::sequence<T, Separator>
+	return T
 	(
-		convert_separated_nodes<T>
+		convert_separated_nodes<typename T::type>
 		(
 			node,
-			Separator
+			T::separator
 		)
 	);
 }

@@ -73,18 +73,14 @@ template<class T>
 struct convert_function_caller_from_type;
 
 //specialization for sequences
-template<class T, const std::string& Separator, int ParserId>
-struct convert_function_caller_from_id<util::sequence<T, Separator>, ParserId>
+template<class T, int ParserId>
+struct convert_function_caller_from_id
 {
 	static
-	util::sequence<T, Separator>
+	T
 	convert(const tree_node_t& node)
 	{
-		return convert_sequence
-		<
-			T,
-			Separator
-		>(node);
+		return convert_sequence<T>(node);
 	}
 };
 

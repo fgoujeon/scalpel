@@ -31,6 +31,7 @@ template<class T, const std::string& Separator = extern_strings::space>
 class sequence
 {
     public:
+		typedef T type;
 		typedef std::vector<T> items_t;
 		typedef typename items_t::const_iterator const_iterator;
 
@@ -52,6 +53,8 @@ class sequence
 
 		void
 		push_back(T&& t);
+
+		static const std::string& separator;
 
     private:
         items_t items_;
@@ -98,6 +101,10 @@ sequence<T, Separator>::push_back(T&& t)
 {
 	items_.push_back(t);
 }
+
+template<class T, const std::string& Separator>
+const std::string&
+sequence<T, Separator>::separator = Separator;
 
 }} //namespace socoa::util
 
