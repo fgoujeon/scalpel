@@ -21,7 +21,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_SIMPLE_TYPE_SPECIFIER_HPP
 #define SOCOA_CPP_SYNTAX_TREE_SIMPLE_TYPE_SPECIFIER_HPP
 
-#include <boost/variant.hpp>
+#include "alternative_node.hpp"
 #include "nested_identifier_or_template_id.hpp"
 #include "simple_template_type_specifier.hpp"
 #include "built_in_type_specifier.hpp"
@@ -30,7 +30,7 @@ namespace socoa { namespace cpp { namespace syntax_tree
 {
 
 typedef
-	boost::variant
+	alternative_node
 	<
         nested_identifier_or_template_id,
         simple_template_type_specifier,

@@ -22,7 +22,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_DECL_SPECIFIER_HPP
 
 #include <memory>
-#include <boost/variant.hpp>
+#include "alternative_node.hpp"
 #include "composite_node.hpp"
 #include "type_specifier.hpp"
 #include "function_specifier.hpp"
@@ -32,7 +32,7 @@ namespace socoa { namespace cpp { namespace syntax_tree
 {
 
 typedef
-	boost::variant
+	alternative_node
 	<
 		type_specifier,
 		function_specifier,

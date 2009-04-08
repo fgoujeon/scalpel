@@ -21,7 +21,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_TEMPLATE_ARGUMENT_HPP
 #define SOCOA_CPP_SYNTAX_TREE_TEMPLATE_ARGUMENT_HPP
 
-#include <boost/variant.hpp>
+#include "alternative_node.hpp"
 #include "composite_node.hpp"
 #include "assignment_expression.hpp"
 #include "type_id.hpp"
@@ -31,7 +31,7 @@ namespace socoa { namespace cpp { namespace syntax_tree
 {
 
 typedef
-	boost::variant
+	alternative_node
 	<
 //		assignment_expression,
 //		type_id,

@@ -59,7 +59,7 @@ class direct_declarator: public composite_node
 		class array_part;
 
 		typedef
-			boost::variant
+			alternative_node
 			<
 				array_part,
 				function_part

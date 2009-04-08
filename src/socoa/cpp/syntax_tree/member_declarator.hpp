@@ -21,7 +21,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_MEMBER_DECLARATOR_HPP
 #define SOCOA_CPP_SYNTAX_TREE_MEMBER_DECLARATOR_HPP
 
-#include <boost/variant.hpp>
+#include "alternative_node.hpp"
 #include "member_declarator_declarator.hpp"
 #include "member_declarator_bit_field_member.hpp"
 
@@ -29,7 +29,7 @@ namespace socoa { namespace cpp { namespace syntax_tree
 {
 
 typedef
-	boost::variant
+	alternative_node
 	<
         member_declarator_declarator,
         member_declarator_bit_field_member

@@ -21,7 +21,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_QUALIFIED_ID_HPP
 #define SOCOA_CPP_SYNTAX_TREE_QUALIFIED_ID_HPP
 
-#include <boost/variant.hpp>
+#include "alternative_node.hpp"
 #include "qualified_identifier.hpp"
 #include "qualified_nested_id.hpp"
 #include "qualified_operator_function_id.hpp"
@@ -31,7 +31,7 @@ namespace socoa { namespace cpp { namespace syntax_tree
 {
 
 typedef
-	boost::variant
+	alternative_node
 	<
 		qualified_identifier,
 		qualified_nested_id,

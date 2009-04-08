@@ -38,7 +38,7 @@ syntax_tree_to_string_converter::operator()(const syntax_tree_t& a_syntax_tree)
 {
     result_.str("");
     indentation_level_ = 0;
-    convert(a_syntax_tree);
+    //convert(a_syntax_tree);
     return result_.str();
 }
 
@@ -60,7 +60,7 @@ syntax_tree_to_string_converter::convert(const qualified_nested_id& item)
     if(item.has_template_keyword())
         result_ << "template ";
 
-	convert(item.get_unqualified_id());
+	//convert(item.get_unqualified_id());
 }
 
 void
@@ -88,7 +88,7 @@ syntax_tree_to_string_converter::convert(const qualified_identifier& item)
 void
 syntax_tree_to_string_converter::convert(const nested_name_specifier& item)
 {
-	convert(item.get_identifier_or_template_id());
+	//convert(item.get_identifier_or_template_id());
     result_ << "::";
     for
     (
@@ -129,7 +129,7 @@ syntax_tree_to_string_converter::convert(const namespace_definition& item)
 
     result_ << opening_brace();
 
-	convert(item.get_declaration_seq());
+	//convert(item.get_declaration_seq());
 
     result_ << closing_brace() << new_line();
 }
@@ -148,7 +148,7 @@ syntax_tree_to_string_converter::convert(const using_declaration& item)
 
     convert(item.get_nested_name_specifier());
 
-    convert(item.get_unqualified_id());
+    //convert(item.get_unqualified_id());
 
     result_ << ";";
     result_ << new_line();
@@ -191,7 +191,7 @@ syntax_tree_to_string_converter::convert(const declarator& item)
 void
 syntax_tree_to_string_converter::convert(const direct_declarator& item)
 {
-	convert(item.get_declarator_id());
+	//convert(item.get_declarator_id());
 
     const boost::optional<const declarator&> a_declarator = item.get_declarator();
     if(a_declarator)
@@ -209,7 +209,7 @@ syntax_tree_to_string_converter::convert(const direct_declarator& item)
         ++i
     )
     {
-		convert(*i);
+		//convert(*i);
     }
 }
 
@@ -274,7 +274,7 @@ syntax_tree_to_string_converter::convert(const parameter_declaration_clause& ite
 void
 syntax_tree_to_string_converter::convert(const parameter_declaration& item)
 {
-    convert(item.get_decl_specifier_seq());
+    //convert(item.get_decl_specifier_seq());
     convert(item.get_declarator());
 }
 
@@ -288,7 +288,7 @@ syntax_tree_to_string_converter::convert(const function_definition& item)
 {
     result_ << indentation();
 
-    convert(item.get_decl_specifier_seq());
+    //convert(item.get_decl_specifier_seq());
     convert(item.get_declarator());
     convert(item.get_ctor_initializer());
 
@@ -331,7 +331,7 @@ syntax_tree_to_string_converter::convert(const member_specification& item)
         ++i
     )
     {
-		convert(*i);
+		//convert(*i);
     }
 }
 
@@ -350,8 +350,8 @@ syntax_tree_to_string_converter::convert(const member_declaration_member_declara
 {
     result_ << indentation();
 
-    convert(item.get_decl_specifier_seq());
-    convert(item.get_member_declarator_list());
+    //convert(item.get_decl_specifier_seq());
+    //convert(item.get_member_declarator_list());
 
     result_ << ";" << new_line();
 }
@@ -369,7 +369,7 @@ syntax_tree_to_string_converter::convert(const member_declaration_unqualified_id
     if(item.has_template_keyword())
         result_ << "template ";
 
-    convert(item.get_unqualified_id());
+    //convert(item.get_unqualified_id());
 
     result_ << ";" << new_line();
 }
@@ -413,7 +413,7 @@ syntax_tree_to_string_converter::convert(const mem_initializer& item)
 {
     result_ << new_line();
     result_ << indentation();
-    convert(item.get_mem_initializer_id());
+    //convert(item.get_mem_initializer_id());
     result_ << "(";
     //convert(item.get_expression_list());
     result_ << ")";
@@ -431,7 +431,7 @@ syntax_tree_to_string_converter::convert(const template_declaration& item)
     result_ << "<";
     result_ << ">\n";
 
-    convert(item.get_declaration());
+    //convert(item.get_declaration());
 }
 
 void
@@ -439,7 +439,7 @@ syntax_tree_to_string_converter::convert(const simple_declaration& item)
 {
     result_ << indentation();
 
-    convert(item.get_decl_specifier_seq());
+    //convert(item.get_decl_specifier_seq());
     convert(item.get_init_declarator_list());
 
     result_ << ";" << new_line();
@@ -450,7 +450,7 @@ syntax_tree_to_string_converter::convert(const template_id& item)
 {
     convert(item.get_identifier());
     result_ << "<";
-    convert(item.get_template_argument_list());
+    //convert(item.get_template_argument_list());
     result_ << ">";
 }
 
@@ -461,7 +461,7 @@ syntax_tree_to_string_converter::convert(const nested_identifier_or_template_id&
         result_ << "::";
 
     convert(item.get_nested_name_specifier());
-    convert(item.get_identifier_or_template_id());
+    //convert(item.get_identifier_or_template_id());
 }
 
 void

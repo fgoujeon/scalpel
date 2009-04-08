@@ -125,7 +125,7 @@ find_scope
 	scope* found_scope = 0;
 
 	auto an_identifier_or_template_id = a_nested_name_specifier.get_identifier_or_template_id();
-	identifier* an_identifier = boost::get<identifier>(&an_identifier_or_template_id);
+	boost::optional<const identifier&> an_identifier = get_alternative<identifier>(an_identifier_or_template_id);
 
 	if(an_identifier)
 	{
@@ -163,7 +163,7 @@ find_scope
 			auto next_part = *i;
 
 			auto an_identifier_or_template_id = next_part.get_identifier_or_template_id();
-			identifier* an_identifier = boost::get<identifier>(&an_identifier_or_template_id);
+			boost::optional<const identifier&> an_identifier = get_alternative<identifier>(an_identifier_or_template_id);
 
 			if(an_identifier)
 			{

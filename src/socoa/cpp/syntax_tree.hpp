@@ -24,6 +24,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "syntax_tree/access_specifier.hpp"
 #include "syntax_tree/assignment_expression.hpp"
 #include "syntax_tree/assignment_operator.hpp"
+#include "syntax_tree/alternative_node.hpp"
 #include "syntax_tree/base_clause.hpp"
 #include "syntax_tree/base_specifier.hpp"
 #include "syntax_tree/base_specifier_list.hpp"

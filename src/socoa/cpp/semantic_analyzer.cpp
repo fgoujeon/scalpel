@@ -50,7 +50,18 @@ semantic_analyzer::operator()(const syntax_tree_t& tree)
 		++i
 	)
 	{
-		convert(*i);
+		//convert(*i);
+		auto a_declaration = *i;
+
+		boost::optional<const block_declaration&> a_block_declaration = get_alternative<block_declaration>(a_declaration);
+		boost::optional<const function_definition&> a_function_definition = get_alternative<function_definition>(a_declaration);
+		boost::optional<const template_declaration&> a_template_declaration = get_alternative<template_declaration>(a_declaration);
+		boost::optional<const namespace_definition&> a_namespace_definition = get_alternative<namespace_definition>(a_declaration);
+
+		//if(a_block_declaration) convert(*a_block_declaration);
+		if(a_function_definition) convert(*a_function_definition);
+		if(a_template_declaration) convert(*a_template_declaration);
+		if(a_namespace_definition) convert(*a_namespace_definition);
 	}
 
 	return global_namespace;
@@ -126,15 +137,15 @@ semantic_analyzer::convert(const function_definition& item)
 	const boost::optional<const declarator_id&> a_declarator_id = item.get_declarator().get_direct_declarator().get_declarator_id();
 	if(a_declarator_id)
 	{
-		const id_expression* const an_id_expression = boost::get<id_expression>(&*a_declarator_id);
+		boost::optional<const id_expression&> an_id_expression = get_alternative<id_expression>(*a_declarator_id);
 		if(an_id_expression)
 		{
-			const unqualified_id* const an_unqualified_id = boost::get<unqualified_id>(an_id_expression);
-			const qualified_id* const a_qualified_id = boost::get<qualified_id>(an_id_expression);
+			boost::optional<const unqualified_id&> an_unqualified_id = get_alternative<unqualified_id>(*an_id_expression);
+			boost::optional<const qualified_id&> a_qualified_id = get_alternative<qualified_id>(*an_id_expression);
 
 			if(an_unqualified_id)
 			{
-				const identifier* const an_identifier = boost::get<identifier>(an_unqualified_id);
+				boost::optional<const identifier&> an_identifier = get_alternative<identifier>(*an_unqualified_id);
 				if(an_identifier)
 				{
 					name = an_identifier->get_value();
@@ -147,9 +158,7 @@ semantic_analyzer::convert(const function_definition& item)
 			//	const qualified_identifier* const a_qualified_identifier =
 			//		boost::get<qualified_identifier>(a_qualified_id)
 			//	;
-				const qualified_nested_id* const a_qualified_nested_id =
-					boost::get<qualified_nested_id>(a_qualified_id)
-				;
+				boost::optional<const qualified_nested_id&> a_qualified_nested_id = get_alternative<qualified_nested_id>(*a_qualified_id);
 			//	const qualified_operator_function_id* const a_qualified_operator_function_id =
 			//	   	boost::get<qualified_operator_function_id>(a_qualified_id)
 			//	;
@@ -270,7 +279,7 @@ semantic_analyzer::convert(const namespace_definition& item)
 	if(a_declaration_seq)
 	{
 		scope_cursor_.enter_last_added_scope();
-		convert(*a_declaration_seq);
+		//convert(*a_declaration_seq);
 		scope_cursor_.leave_scope();
 	}
 }
@@ -348,6 +357,7 @@ semantic_analyzer::convert(const simple_declaration& item)
 		{
 			const decl_specifier& a_decl_specifier = *i;
 
+			/*
 			if(auto a_type_specifier_ptr = boost::get<type_specifier>(&a_decl_specifier))
 			{
 				if(boost::get<class_specifier>(a_type_specifier_ptr))
@@ -365,11 +375,13 @@ semantic_analyzer::convert(const simple_declaration& item)
 					}
 				}
 			}
+			*/
 		}
 	}
 
 	if(an_optional_init_declarator_list)
 	{
+		/*
 		const init_declarator_list& an_init_declarator_list = *an_optional_init_declarator_list;
 		for(auto i = an_init_declarator_list.begin(); i != an_init_declarator_list.end(); ++i)
 		{
@@ -411,6 +423,7 @@ semantic_analyzer::convert(const simple_declaration& item)
 			}
 
 		}
+		*/
 	}
 
 	if(is_a_class_declaration || is_a_class_forward_declaration)

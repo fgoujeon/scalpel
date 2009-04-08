@@ -31,7 +31,7 @@ namespace socoa { namespace cpp { namespace syntax_tree
 {
 
 typedef
-	boost::variant
+	alternative_node
 	<
 		simple_type_specifier,
 		class_specifier,

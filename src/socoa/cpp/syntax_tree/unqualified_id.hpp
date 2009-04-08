@@ -21,7 +21,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_UNQUALIFIED_ID_HPP
 #define SOCOA_CPP_SYNTAX_TREE_UNQUALIFIED_ID_HPP
 
-#include <boost/variant.hpp>
+#include "alternative_node.hpp"
 #include "operator_function_id.hpp"
 #include "conversion_function_id.hpp"
 #include "destructor_name.hpp"
@@ -32,7 +32,7 @@ namespace socoa { namespace cpp { namespace syntax_tree
 {
 
 typedef
-	boost::variant
+	alternative_node
 	<
         operator_function_id,
         conversion_function_id,

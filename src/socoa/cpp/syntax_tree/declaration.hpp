@@ -21,7 +21,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_DECLARATION_HPP
 #define SOCOA_CPP_SYNTAX_TREE_DECLARATION_HPP
 
-#include <boost/variant.hpp>
+#include "alternative_node.hpp"
 #include "composite_node.hpp"
 #include "block_declaration.hpp"
 #include "function_definition.hpp"
@@ -35,7 +35,7 @@ namespace socoa { namespace cpp { namespace syntax_tree
 {
 
 typedef
-	boost::variant
+	alternative_node
 	<
 		block_declaration,
 		function_definition,
