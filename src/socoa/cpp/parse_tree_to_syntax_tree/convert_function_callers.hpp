@@ -86,13 +86,13 @@ struct convert_function_caller_from_id
 
 //specialization for string enumerations
 template<const std::vector<std::string>& StringList, int ParserId>
-struct convert_function_caller_from_id<util::string_enumeration<StringList>, ParserId>
+struct convert_function_caller_from_id<syntax_tree::string_enumeration_node<StringList>, ParserId>
 {
 	static
-	util::string_enumeration<StringList>
+	syntax_tree::string_enumeration_node<StringList>
 	convert(const tree_node_t& node)
 	{
-		return convert_string_enumeration<util::string_enumeration<StringList>>(node);
+		return convert_string_enumeration<syntax_tree::string_enumeration_node<StringList>>(node);
 	}
 };
 

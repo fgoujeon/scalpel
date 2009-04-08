@@ -23,6 +23,11 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
+leaf_node::leaf_node(const std::string& raw_code):
+	raw_code_(raw_code)
+{
+}
+
 leaf_node::leaf_node(std::string&& raw_code):
 	raw_code_(std::move(raw_code))
 {

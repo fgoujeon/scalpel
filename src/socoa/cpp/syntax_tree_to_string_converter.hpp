@@ -162,7 +162,7 @@ class syntax_tree_to_string_converter
 
         template<const std::vector<std::string>& StringList>
         void
-        convert(const util::string_enumeration<StringList>& a_string_enumeration);
+        convert(const syntax_tree::string_enumeration_node<StringList>& a_string_enumeration);
 
 		template<class T>
         void
@@ -196,10 +196,10 @@ class syntax_tree_to_string_converter
 
 template<const std::vector<std::string>& StringList>
 void
-syntax_tree_to_string_converter::convert(const util::string_enumeration<StringList>& a_string_enumeration)
+syntax_tree_to_string_converter::convert(const syntax_tree::string_enumeration_node<StringList>& a_string_enumeration)
 {
     add_space();
-    result_ << a_string_enumeration.get_value();
+    result_ << a_string_enumeration.value();
 }
 
 template<class T>

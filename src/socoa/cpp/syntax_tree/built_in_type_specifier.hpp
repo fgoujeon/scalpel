@@ -21,14 +21,14 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_BUILT_IN_TYPE_SPECIFIER_HPP
 #define SOCOA_CPP_SYNTAX_TREE_BUILT_IN_TYPE_SPECIFIER_HPP
 
-#include "../../util/string_enumeration.hpp"
+#include "string_enumeration_node.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
 extern const std::vector<std::string> built_in_type_specifier_string_list;
 typedef
-	util::string_enumeration<built_in_type_specifier_string_list>
+	string_enumeration_node<built_in_type_specifier_string_list>
 	built_in_type_specifier
 ;
 

@@ -21,13 +21,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_FUNCTION_SPECIFIER_HPP
 #define SOCOA_CPP_SYNTAX_TREE_FUNCTION_SPECIFIER_HPP
 
-#include "../../util/string_enumeration.hpp"
+#include "string_enumeration_node.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
 extern const std::vector<std::string> function_specifier_string_list;
-typedef util::string_enumeration<function_specifier_string_list> function_specifier;
+typedef string_enumeration_node<function_specifier_string_list> function_specifier;
 
 }}} //namespace socoa::cpp::syntax_tree
 

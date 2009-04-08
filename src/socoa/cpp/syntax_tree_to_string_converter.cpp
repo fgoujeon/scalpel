@@ -256,7 +256,7 @@ void
 syntax_tree_to_string_converter::convert(const cv_qualifier& item)
 {
     add_space();
-	result_ << item.get_value();
+	result_ << item.value();
 }
 
 void

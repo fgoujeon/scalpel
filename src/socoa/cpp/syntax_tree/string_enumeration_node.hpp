@@ -18,54 +18,46 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_UTIL_STRING_ENUMERATION_HPP
-#define SOCOA_UTIL_STRING_ENUMERATION_HPP
+#ifndef SOCOA_CPP_SYNTAX_TREE_STRING_ENUMERATION_NODE_HPP
+#define SOCOA_CPP_SYNTAX_TREE_STRING_ENUMERATION_NODE_HPP
 
-#include <cassert>
-#include <vector>
 #include <string>
-#include <algorithm>
+#include "../../util/string_enumeration.hpp"
+#include "leaf_node.hpp"
 
-namespace socoa { namespace util
+namespace socoa { namespace cpp { namespace syntax_tree
 {
 
 template<const std::vector<std::string>& StringList>
-class string_enumeration
+class string_enumeration_node: public leaf_node
 {
-    public:
-		typedef std::vector<std::string> string_list_t;
+	private:
+		typedef util::string_enumeration<StringList> string_enumeration_t;
 
-        string_enumeration(const std::string& value);
+	public:
+        string_enumeration_node(const std::string& value);
 
-        const std::string&
-        value() const;
+		const std::string&
+		value() const;
 
-    private:
-        string_list_t::const_iterator value_ptr_;
+	private:
+		string_enumeration_t string_enumeration_;
 };
 
 template<const std::vector<std::string>& StringList>
-string_enumeration<StringList>::string_enumeration(const std::string& value):
-    value_ptr_
-    (
-        std::find
-        (
-            StringList.begin(),
-            StringList.end(),
-            value
-        )
-    )
+string_enumeration_node<StringList>::string_enumeration_node(const std::string& value):
+	leaf_node(value),
+	string_enumeration_(value)
 {
-    assert(value_ptr_ != StringList.end());
 }
 
 template<const std::vector<std::string>& StringList>
 const std::string&
-string_enumeration<StringList>::value() const
+string_enumeration_node<StringList>::value() const
 {
-    return *value_ptr_;
+    return string_enumeration_.value();
 }
 
-}} //namespace socoa::util
+}}} //namespace socoa::cpp::syntax_tree
 
 #endif

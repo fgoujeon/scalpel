@@ -30,6 +30,9 @@ class leaf_node
 {
 	public:
 		explicit
+		leaf_node(const std::string& raw_code);
+
+		explicit
 		leaf_node(std::string&& raw_code);
 
 		const std::string
