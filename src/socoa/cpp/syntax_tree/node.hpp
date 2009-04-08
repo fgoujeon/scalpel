@@ -29,6 +29,9 @@ namespace socoa { namespace cpp { namespace syntax_tree
 struct node
 {
 	virtual
+	~node(){};
+
+	virtual
 	const std::string
 	raw_code() const = 0;
 };

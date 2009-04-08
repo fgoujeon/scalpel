@@ -33,6 +33,9 @@ class composite_node: public node
 	public:
 		typedef std::vector<const node*> nodes_t;
 
+		virtual
+		~composite_node();
+
 		const std::string
 		raw_code() const;
 

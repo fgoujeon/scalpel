@@ -23,6 +23,10 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
+composite_node::~composite_node()
+{
+}
+
 const std::string
 composite_node::raw_code() const
 {

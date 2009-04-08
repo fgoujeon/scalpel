@@ -35,6 +35,9 @@ class leaf_node
 		explicit
 		leaf_node(std::string&& raw_code);
 
+		virtual
+		~leaf_node();
+
 		const std::string
 		raw_code() const;
 
