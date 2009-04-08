@@ -21,15 +21,15 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_INIT_DECLARATOR_LIST_HPP
 #define SOCOA_CPP_SYNTAX_TREE_INIT_DECLARATOR_LIST_HPP
 
-#include "init_declarator.hpp"
-#include "../../util/sequence.hpp"
 #include "../../util/extern_strings.hpp"
+#include "sequence_node.hpp"
+#include "init_declarator.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
 typedef
-	util::sequence<init_declarator, util::extern_strings::comma>
+	sequence_node<init_declarator, util::extern_strings::comma>
    	init_declarator_list
 ;
 

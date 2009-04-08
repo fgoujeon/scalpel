@@ -44,7 +44,7 @@ class member_declaration_member_declarator_list: public composite_node
 		get_decl_specifier_seq() const;
 
 		inline
-		const boost::optional<const util::sequence<member_declarator, util::extern_strings::comma>&>
+		const boost::optional<const member_declarator_list&>
 		get_member_declarator_list() const;
 
 	private:

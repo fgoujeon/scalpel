@@ -77,6 +77,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "syntax_tree/qualified_nested_id.hpp"
 #include "syntax_tree/qualified_operator_function_id.hpp"
 #include "syntax_tree/qualified_template_id.hpp"
+#include "syntax_tree/sequence_node.hpp"
 #include "syntax_tree/simple_declaration.hpp"
 #include "syntax_tree/simple_template_type_specifier.hpp"
 #include "syntax_tree/simple_type_specifier.hpp"
@@ -94,7 +95,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp
 {
 
-typedef util::sequence<syntax_tree::declaration> syntax_tree_t;
+typedef syntax_tree::declaration_seq syntax_tree_t;
 
 }} //namespace socoa::cpp
 

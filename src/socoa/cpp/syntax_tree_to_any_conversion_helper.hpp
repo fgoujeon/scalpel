@@ -24,7 +24,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <boost/variant.hpp>
 #include <boost/optional.hpp>
-#include "../util/sequence.hpp"
 #include "syntax_tree.hpp"
 
 namespace socoa { namespace cpp
@@ -61,7 +60,7 @@ class syntax_tree_to_any_conversion_helper
         template<class T, const std::string& Separator>
 		inline
         void
-        convert(const util::sequence<T, Separator>& seq);
+        convert(const syntax_tree::sequence_node<T, Separator>& seq);
 
 		template<BOOST_VARIANT_ENUM_PARAMS(typename T)>
 		inline
@@ -76,7 +75,7 @@ class syntax_tree_to_any_conversion_helper
 	private:
         template<class T, const std::string& Separator>
         void
-        convert_sequence_node(const util::sequence<T, Separator>& seq);
+        convert_sequence_node(const syntax_tree::sequence_node<T, Separator>& seq);
 
 		template<BOOST_VARIANT_ENUM_PARAMS(typename T)>
         void
@@ -107,7 +106,7 @@ syntax_tree_to_any_conversion_helper<ConverterT>::syntax_tree_to_any_conversion_
 template<class ConverterT>
 template<class T, const std::string& Separator>
 void
-syntax_tree_to_any_conversion_helper<ConverterT>::convert(const util::sequence<T, Separator>& seq)
+syntax_tree_to_any_conversion_helper<ConverterT>::convert(const syntax_tree::sequence_node<T, Separator>& seq)
 {
 	convert_sequence_node(seq);
 }
@@ -131,7 +130,7 @@ syntax_tree_to_any_conversion_helper<ConverterT>::convert(const boost::optional<
 template<class ConverterT>
 template<class T, const std::string& Separator>
 void
-syntax_tree_to_any_conversion_helper<ConverterT>::convert_sequence_node(const util::sequence<T, Separator>& seq)
+syntax_tree_to_any_conversion_helper<ConverterT>::convert_sequence_node(const syntax_tree::sequence_node<T, Separator>& seq)
 {
     for(auto i = seq.begin(); i != seq.end(); ++i)
     {

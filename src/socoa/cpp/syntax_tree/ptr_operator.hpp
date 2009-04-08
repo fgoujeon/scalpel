@@ -26,7 +26,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "composite_node.hpp"
 #include "../../util/sequence.hpp"
 #include "nested_name_specifier.hpp"
-#include "cv_qualifier.hpp"
+#include "cv_qualifier_seq.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
@@ -45,7 +45,7 @@ class ptr_operator: public composite_node
 			type a_type,
 			bool leading_double_colon,
 			boost::optional<nested_name_specifier> a_nested_name_specifier,
-			boost::optional<util::sequence<cv_qualifier>> a_cv_qualifier_seq
+			boost::optional<cv_qualifier_seq> a_cv_qualifier_seq
 		);
 
 		inline
@@ -61,14 +61,14 @@ class ptr_operator: public composite_node
 		get_nested_name_specifier() const;
 
 		inline
-		const boost::optional<const util::sequence<cv_qualifier>&>
+		const boost::optional<const cv_qualifier_seq&>
 		get_cv_qualifier_seq() const;
 
 	private:
 		type type_;
 		bool leading_double_colon_;
 		boost::optional<nested_name_specifier> nested_name_specifier_;
-		boost::optional<util::sequence<cv_qualifier>> cv_qualifier_seq_;
+		boost::optional<cv_qualifier_seq> cv_qualifier_seq_;
 };
 
 inline
@@ -93,10 +93,10 @@ ptr_operator::get_nested_name_specifier() const
 }
 
 inline
-const boost::optional<const util::sequence<cv_qualifier>&>
+const boost::optional<const cv_qualifier_seq&>
 ptr_operator::get_cv_qualifier_seq() const
 {
-	return boost::optional<const util::sequence<cv_qualifier>&>(cv_qualifier_seq_);
+	return boost::optional<const cv_qualifier_seq&>(cv_qualifier_seq_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

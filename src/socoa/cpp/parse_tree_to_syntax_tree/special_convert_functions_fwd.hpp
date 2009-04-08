@@ -50,8 +50,8 @@ be of the same type.
 @return a vector of pointers to objects representing the syntax of each
 		converted node
 */
-template <class T>
-std::vector<T>
+template<class ContainerT, class T>
+ContainerT
 convert_separated_nodes
 (
 	const tree_node_t& parent_node,

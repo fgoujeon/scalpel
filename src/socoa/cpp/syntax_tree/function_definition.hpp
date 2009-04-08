@@ -25,7 +25,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/optional.hpp>
 #include "../../util/sequence.hpp"
 #include "composite_node.hpp"
-#include "decl_specifier.hpp"
+#include "decl_specifier_seq.hpp"
 #include "ctor_initializer.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
@@ -46,13 +46,13 @@ class function_definition: public composite_node
 	public:
         function_definition
         (
-            boost::optional<util::sequence<decl_specifier>> a_decl_specifier_seq,
+            boost::optional<decl_specifier_seq> a_decl_specifier_seq,
             declarator&& a_declarator,
             boost::optional<ctor_initializer> a_ctor_initializer
         );
 
 		inline
-		const boost::optional<const util::sequence<decl_specifier>&>
+		const boost::optional<const decl_specifier_seq&>
 		get_decl_specifier_seq() const;
 
 		inline
@@ -64,16 +64,16 @@ class function_definition: public composite_node
 		get_ctor_initializer() const;
 
     private:
-		boost::optional<util::sequence<decl_specifier>> decl_specifier_seq_;
+		boost::optional<decl_specifier_seq> decl_specifier_seq_;
 		std::shared_ptr<declarator> declarator_;
 		boost::optional<ctor_initializer> ctor_initializer_;
 };
 
 inline
-const boost::optional<const util::sequence<decl_specifier>&>
+const boost::optional<const decl_specifier_seq&>
 function_definition::get_decl_specifier_seq() const
 {
-	return boost::optional<const util::sequence<decl_specifier>&>(decl_specifier_seq_);
+	return boost::optional<const decl_specifier_seq&>(decl_specifier_seq_);
 }
 
 inline

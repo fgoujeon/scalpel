@@ -21,14 +21,14 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_CV_QUALIFIER_SEQ_HPP
 #define SOCOA_CPP_SYNTAX_TREE_CV_QUALIFIER_SEQ_HPP
 
-#include "../../util/sequence.hpp"
+#include "sequence_node.hpp"
 #include "cv_qualifier.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
 typedef
-	util::sequence<cv_qualifier>
+	sequence_node<cv_qualifier>
    	cv_qualifier_seq
 ;
 

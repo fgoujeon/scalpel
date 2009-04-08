@@ -28,7 +28,7 @@ namespace socoa { namespace cpp { namespace syntax_tree
 template_id::template_id
 (
     identifier&& an_identifier,
-    boost::optional<util::sequence<template_argument, util::extern_strings::comma>> a_template_argument_list
+    boost::optional<template_argument_list> a_template_argument_list
 ):
     identifier_(an_identifier)
 {

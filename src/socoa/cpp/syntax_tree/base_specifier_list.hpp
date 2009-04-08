@@ -23,51 +23,16 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../../util/sequence.hpp"
 #include "../../util/extern_strings.hpp"
+#include "sequence_node.hpp"
 #include "base_specifier.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
 typedef
-    util::sequence
-    <
-        base_specifier,
-        util::extern_strings::comma
-    >
-    base_specifier_list_t
+	sequence_node<base_specifier, util::extern_strings::comma>
+	base_specifier_list
 ;
-
-class base_specifier_list
-{
-    public:
-		typedef base_specifier type;
-		typedef std::vector<base_specifier> items_t;
-		typedef items_t::const_iterator const_iterator;
-
-        base_specifier_list();
-
-        explicit base_specifier_list
-        (
-            items_t&& items
-        );
-
-		const_iterator
-		begin() const;
-
-		const_iterator
-		end() const;
-
-        const std::string&
-        get_separator() const;
-
-		void
-		push_back(base_specifier&& t);
-
-		static const std::string& separator;
-
-    private:
-        items_t items_;
-};
 
 }}} //namespace socoa::cpp::syntax_tree
 

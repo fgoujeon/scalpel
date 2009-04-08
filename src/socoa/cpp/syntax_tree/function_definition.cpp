@@ -27,7 +27,7 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 function_definition::function_definition
 (
-    boost::optional<util::sequence<decl_specifier>> a_decl_specifier_seq,
+    boost::optional<decl_specifier_seq> a_decl_specifier_seq,
     declarator&& a_declarator,
     boost::optional<ctor_initializer> a_ctor_initializer
 ):

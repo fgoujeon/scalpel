@@ -21,14 +21,14 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_DECL_SPECIFIER_SEQ_HPP
 #define SOCOA_CPP_SYNTAX_TREE_DECL_SPECIFIER_SEQ_HPP
 
-#include "../../util/sequence.hpp"
+#include "sequence_node.hpp"
 #include "decl_specifier.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
 typedef
-	util::sequence<decl_specifier>
+	sequence_node<decl_specifier>
    	decl_specifier_seq
 ;
 

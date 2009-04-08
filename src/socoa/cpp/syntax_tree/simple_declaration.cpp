@@ -25,8 +25,8 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 simple_declaration::simple_declaration
 (
-    boost::optional<util::sequence<decl_specifier>> a_decl_specifier_seq,
-    boost::optional<util::sequence<init_declarator, util::extern_strings::comma>> an_init_declarator_list
+    boost::optional<decl_specifier_seq> a_decl_specifier_seq,
+    boost::optional<init_declarator_list> an_init_declarator_list
 ):
     decl_specifier_seq_(a_decl_specifier_seq),
     init_declarator_list_(an_init_declarator_list)

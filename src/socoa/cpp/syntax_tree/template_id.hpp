@@ -23,9 +23,9 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <memory>
 #include <boost/optional.hpp>
-#include "../../util/sequence.hpp"
 #include "../../util/extern_strings.hpp"
 #include "composite_node.hpp"
+#include "sequence_node.hpp"
 #include "identifier.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
@@ -39,7 +39,7 @@ class template_id: public composite_node
 		template_id
 		(
 			identifier&& an_identifier,
-			boost::optional<util::sequence<template_argument, util::extern_strings::comma>> a_template_argument_list
+			boost::optional<sequence_node<template_argument, util::extern_strings::comma>> a_template_argument_list
 		);
 
 		inline
@@ -47,12 +47,12 @@ class template_id: public composite_node
 		get_identifier() const;
 
 		inline
-		const boost::optional<const util::sequence<template_argument, util::extern_strings::comma>&>
+		const boost::optional<const sequence_node<template_argument, util::extern_strings::comma>&>
 		get_template_argument_list() const;
 
 	private:
 		identifier identifier_;
-		std::shared_ptr<util::sequence<template_argument, util::extern_strings::comma>> template_argument_list_;
+		std::shared_ptr<sequence_node<template_argument, util::extern_strings::comma>> template_argument_list_;
 };
 
 inline
@@ -63,13 +63,13 @@ template_id::get_identifier() const
 }
 
 inline
-const boost::optional<const util::sequence<template_argument, util::extern_strings::comma>&>
+const boost::optional<const sequence_node<template_argument, util::extern_strings::comma>&>
 template_id::get_template_argument_list() const
 {
 	if(template_argument_list_)
-		return boost::optional<const util::sequence<template_argument, util::extern_strings::comma>&>(*template_argument_list_);
+		return boost::optional<const sequence_node<template_argument, util::extern_strings::comma>&>(*template_argument_list_);
 	else
-		return boost::optional<const util::sequence<template_argument, util::extern_strings::comma>&>();
+		return boost::optional<const sequence_node<template_argument, util::extern_strings::comma>&>();
 }
 
 }}} //namespace socoa::cpp::syntax_tree

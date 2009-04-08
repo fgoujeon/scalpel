@@ -37,7 +37,7 @@ convert_sequence(const tree_node_t& node)
 {
 	return T
 	(
-		convert_separated_nodes<typename T::type>
+		convert_separated_nodes<T, typename T::type>
 		(
 			node,
 			T::separator
@@ -55,15 +55,15 @@ convert_string_enumeration(const tree_node_t& node)
 	);
 }
 
-template <class T>
-std::vector<T>
+template<class ContainerT, class T>
+ContainerT
 convert_separated_nodes
 (
 	const tree_node_t& parent_node,
 	const std::string& separator
 )
 {
-	std::vector<T> seq;
+	ContainerT seq;
 	for(tree_node_iterator_t i = parent_node.children.begin(); i != parent_node.children.end(); ++i) //for each child
 	{
 		const tree_node_t& child_node = *i;

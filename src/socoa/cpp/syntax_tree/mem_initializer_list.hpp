@@ -21,15 +21,15 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_MEM_INITIALIZER_LIST_HPP
 #define SOCOA_CPP_SYNTAX_TREE_MEM_INITIALIZER_LIST_HPP
 
-#include "../../util/sequence.hpp"
 #include "../../util/extern_strings.hpp"
+#include "sequence_node.hpp"
 #include "mem_initializer.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
 typedef
-    util::sequence<mem_initializer, util::extern_strings::comma>
+    sequence_node<mem_initializer, util::extern_strings::comma>
     mem_initializer_list
 ;
 

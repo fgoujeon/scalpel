@@ -21,13 +21,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_DECLARATION_SEQ_HPP
 #define SOCOA_CPP_SYNTAX_TREE_DECLARATION_SEQ_HPP
 
-#include "../../util/sequence.hpp"
+#include "sequence_node.hpp"
 #include "declaration.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-typedef util::sequence<declaration> declaration_seq;
+typedef sequence_node<declaration> declaration_seq;
 
 }}} //namespace socoa::cpp::syntax_tree
 

@@ -25,7 +25,7 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 parameter_declaration_clause::parameter_declaration_clause
 (
-	boost::optional<util::sequence<parameter_declaration, util::extern_strings::comma>> a_parameter_declaration_list,
+	boost::optional<parameter_declaration_list> a_parameter_declaration_list,
 	bool trailing_comma,
 	bool ellipsis
 ):

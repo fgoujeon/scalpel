@@ -43,7 +43,15 @@ semantic_analyzer::operator()(const syntax_tree_t& tree)
 	//current scope = global namespace
 	scope_cursor_.initialize(global_namespace);
 
-	convert(tree);
+	for
+	(
+		auto i = tree.begin();
+		i != tree.end();
+		++i
+	)
+	{
+		convert(*i);
+	}
 
 	return global_namespace;
 }

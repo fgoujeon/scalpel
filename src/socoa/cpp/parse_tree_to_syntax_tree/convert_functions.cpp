@@ -405,7 +405,7 @@ convert_direct_declarator_function_part(const tree_node_t& node)
     //grammar defines that this node MUST exist, but in practice it's not always the case
     if(!new_parameter_declaration_clause)
     {
-        typedef util::sequence<parameter_declaration, util::extern_strings::comma> parameter_declaration_seq;
+        typedef sequence_node<parameter_declaration, util::extern_strings::comma> parameter_declaration_seq;
 
         //create an empty parameter declaration clause, if node didn't have been found
         new_parameter_declaration_clause = parameter_declaration_clause

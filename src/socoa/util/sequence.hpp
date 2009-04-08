@@ -37,19 +37,13 @@ class sequence
 
         sequence();
 
-        explicit sequence
-        (
-            items_t&& items
-        );
+        sequence(sequence&& s);
 
 		const_iterator
 		begin() const;
 
 		const_iterator
 		end() const;
-
-        const std::string&
-        get_separator() const;
 
 		void
 		push_back(T&& t);
@@ -66,11 +60,8 @@ sequence<T, Separator>::sequence()
 }
 
 template<class T, const std::string& Separator>
-sequence<T, Separator>::sequence
-(
-    items_t&& items
-):
-    items_(items)
+sequence<T, Separator>::sequence(sequence&& s):
+    items_(s.items_)
 {
 }
 
@@ -86,13 +77,6 @@ typename sequence<T, Separator>::const_iterator
 sequence<T, Separator>::end() const
 {
 	return items_.end();
-}
-
-template<class T, const std::string& Separator>
-const std::string&
-sequence<T, Separator>::get_separator() const
-{
-    return Separator;
 }
 
 template<class T, const std::string& Separator>

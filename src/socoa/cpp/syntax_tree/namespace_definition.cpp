@@ -28,7 +28,7 @@ namespace socoa { namespace cpp { namespace syntax_tree
 namespace_definition::namespace_definition
 (
     boost::optional<identifier> an_identifier,
-    boost::optional<util::sequence<declaration>> a_declaration_seq
+    boost::optional<declaration_seq> a_declaration_seq
 ):
     identifier_(an_identifier)
 {
