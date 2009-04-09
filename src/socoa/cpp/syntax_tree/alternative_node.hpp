@@ -29,7 +29,7 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 template<class T>
 void
-assign_if_same_type(T& t1, T& t2)
+assign_if_same_type(boost::optional<T>& t1, const T& t2)
 {
 	t1 = t2;
 }
@@ -72,7 +72,7 @@ class alternative_node<NodeT, NodesT...>: public alternative_node<NodesT...>
 
 	protected:
 		void
-		get_node(boost::optional<const NodeT&>) const;
+		get_node(boost::optional<const NodeT&>&) const;
 
 		using alternative_node<NodesT...>::get_node;
 
@@ -100,7 +100,7 @@ alternative_node<NodeT, NodesT...>::alternative_node(const NodeT2& node):
 
 template<class NodeT, class... NodesT>
 void
-alternative_node<NodeT, NodesT...>::get_node(boost::optional<const NodeT&> node) const
+alternative_node<NodeT, NodesT...>::get_node(boost::optional<const NodeT&>& node) const
 {
 	node = node_;
 }
@@ -150,9 +150,13 @@ class private_visitor<AlternativeVisitorT, AlternativeNodeT, NodeT, NodesT...>
 		{
 			boost::optional<const NodeT&> node = get<NodeT>(&alt_node);
 			if(node)
+			{
 				alt_visitor(*node);
+			}
 			else
+			{
 				private_visitor<AlternativeVisitorT, AlternativeNodeT, NodesT...>::visit(alt_visitor, alt_node);
+			}
 		}
 };
 

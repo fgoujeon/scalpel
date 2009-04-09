@@ -46,7 +46,7 @@ class string_enumeration_node: public leaf_node
 
 template<const std::vector<std::string>& StringList>
 string_enumeration_node<StringList>::string_enumeration_node(const std::string& value):
-	leaf_node(value),
+	leaf_node(" " + value),
 	string_enumeration_(value)
 {
 }

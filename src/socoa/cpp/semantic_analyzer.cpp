@@ -50,8 +50,7 @@ semantic_analyzer::operator()(const syntax_tree_t& tree)
 		++i
 	)
 	{
-		const declaration_t& a_declaration = *i;
-		convert(a_declaration);
+		convert(*i);
 	}
 
 	return global_namespace;
@@ -269,7 +268,7 @@ semantic_analyzer::convert(const namespace_definition& item)
 	if(a_declaration_seq)
 	{
 		scope_cursor_.enter_last_added_scope();
-		//convert(*a_declaration_seq);
+		convert(*a_declaration_seq);
 		scope_cursor_.leave_scope();
 	}
 }

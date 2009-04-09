@@ -72,6 +72,10 @@ class syntax_tree_to_any_conversion_helper
         void
         convert(const boost::optional<T>& item);
 
+		inline
+		void
+		convert(const syntax_tree::declaration& a_declaration);
+
 	private:
         template<class T, const std::string& Separator>
         void
@@ -126,6 +130,14 @@ void
 syntax_tree_to_any_conversion_helper<ConverterT>::convert(const boost::optional<T>& item)
 {
 	convert_optional_node(item);
+}
+
+template<class ConverterT>
+void
+syntax_tree_to_any_conversion_helper<ConverterT>::convert(const syntax_tree::declaration& a_declaration)
+{
+	const syntax_tree::declaration_t& decl = a_declaration;
+	convert_alternative_node(decl);
 }
 
 template<class ConverterT>
