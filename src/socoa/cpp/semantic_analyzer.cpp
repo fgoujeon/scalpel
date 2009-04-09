@@ -50,18 +50,8 @@ semantic_analyzer::operator()(const syntax_tree_t& tree)
 		++i
 	)
 	{
-		//convert(*i);
-		auto a_declaration = *i;
-
-		boost::optional<const block_declaration&> a_block_declaration = get_alternative<block_declaration>(a_declaration);
-		boost::optional<const function_definition&> a_function_definition = get_alternative<function_definition>(a_declaration);
-		boost::optional<const template_declaration&> a_template_declaration = get_alternative<template_declaration>(a_declaration);
-		boost::optional<const namespace_definition&> a_namespace_definition = get_alternative<namespace_definition>(a_declaration);
-
-		//if(a_block_declaration) convert(*a_block_declaration);
-		if(a_function_definition) convert(*a_function_definition);
-		if(a_template_declaration) convert(*a_template_declaration);
-		if(a_namespace_definition) convert(*a_namespace_definition);
+		const declaration_t& a_declaration = *i;
+		convert(a_declaration);
 	}
 
 	return global_namespace;

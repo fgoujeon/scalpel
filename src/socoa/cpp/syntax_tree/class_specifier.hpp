@@ -23,6 +23,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <memory>
 #include <boost/optional.hpp>
+#include "composite_node.hpp"
 #include "class_head.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
@@ -31,7 +32,7 @@ namespace socoa { namespace cpp { namespace syntax_tree
 //use of forward declarations and pointers to avoid cyclic dependency
 class member_specification;
 
-class class_specifier
+class class_specifier: public composite_node
 {
     public:
         class_specifier

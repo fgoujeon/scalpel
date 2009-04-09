@@ -40,7 +40,7 @@ typedef
 	template_argument_t
 ;
 
-class template_argument: public template_argument_t, public composite_node
+class template_argument: public template_argument_t
 {
 	public:
 		template_argument(const id_expression& o): template_argument_t(o){}

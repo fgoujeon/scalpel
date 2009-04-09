@@ -41,7 +41,7 @@ typedef
 	decl_specifier_t
 ;
 
-class decl_specifier: public decl_specifier_t, public composite_node
+class decl_specifier: public decl_specifier_t
 {
 	public:
 		decl_specifier(const type_specifier& o): decl_specifier_t(o){}

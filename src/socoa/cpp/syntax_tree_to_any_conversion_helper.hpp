@@ -22,7 +22,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_TO_CONVERSION_HELPER_HPP
 
 #include <string>
-#include <boost/variant.hpp>
 #include <boost/optional.hpp>
 #include "syntax_tree.hpp"
 
@@ -33,10 +32,10 @@ template<class ConverterT>
 class syntax_tree_to_any_conversion_helper
 {
     private:
-		class static_visitor: public boost::static_visitor<>
+		class alternative_visitor
 		{
 			public:
-				static_visitor(syntax_tree_to_any_conversion_helper& converter):
+				alternative_visitor(syntax_tree_to_any_conversion_helper& converter):
 					converter_(converter)
 				{
 				}
@@ -53,6 +52,7 @@ class syntax_tree_to_any_conversion_helper
 		};
 
 		friend class static_visitor;
+		friend class alternative_visitor;
 
 	public:
 		syntax_tree_to_any_conversion_helper(ConverterT& converter);
@@ -62,10 +62,10 @@ class syntax_tree_to_any_conversion_helper
         void
         convert(const syntax_tree::sequence_node<T, Separator>& seq);
 
-		template<BOOST_VARIANT_ENUM_PARAMS(typename T)>
+		template<class... NodesT>
 		inline
         void
-		convert(const boost::variant<BOOST_VARIANT_ENUM_PARAMS(T)>& item);
+		convert(const syntax_tree::alternative_node<NodesT...>& item);
 
         template<class T>
 		inline
@@ -77,9 +77,9 @@ class syntax_tree_to_any_conversion_helper
         void
         convert_sequence_node(const syntax_tree::sequence_node<T, Separator>& seq);
 
-		template<BOOST_VARIANT_ENUM_PARAMS(typename T)>
+		template<class... NodesT>
         void
-		convert_variant_node(const boost::variant<BOOST_VARIANT_ENUM_PARAMS(T)>& item);
+		convert_alternative_node(const syntax_tree::alternative_node<NodesT...>& item);
 
         template<class T>
         void
@@ -90,7 +90,7 @@ class syntax_tree_to_any_conversion_helper
         convert_any_node(const T& item);
 
 		ConverterT& converter_;
-		static_visitor static_visitor_;
+		alternative_visitor alternative_visitor_;
 };
 
 template<class ConverterT>
@@ -99,7 +99,7 @@ syntax_tree_to_any_conversion_helper<ConverterT>::syntax_tree_to_any_conversion_
 	ConverterT& converter
 ):
 	converter_(converter),
-	static_visitor_(*this)
+	alternative_visitor_(*this)
 {
 }
 
@@ -112,11 +112,12 @@ syntax_tree_to_any_conversion_helper<ConverterT>::convert(const syntax_tree::seq
 }
 
 template<class ConverterT>
-template<BOOST_VARIANT_ENUM_PARAMS(typename T)>
+template<class... NodesT>
+inline
 void
-syntax_tree_to_any_conversion_helper<ConverterT>::convert(const boost::variant<BOOST_VARIANT_ENUM_PARAMS(T)>& item)
+syntax_tree_to_any_conversion_helper<ConverterT>::convert(const syntax_tree::alternative_node<NodesT...>& item)
 {
-	convert_variant_node(item);
+	convert_alternative_node(item);
 }
 
 template<class ConverterT>
@@ -145,11 +146,11 @@ syntax_tree_to_any_conversion_helper<ConverterT>::convert_sequence_node(const sy
 }
 
 template<class ConverterT>
-template<BOOST_VARIANT_ENUM_PARAMS(typename T)>
+template<class... NodesT>
 void
-syntax_tree_to_any_conversion_helper<ConverterT>::convert_variant_node(const boost::variant<BOOST_VARIANT_ENUM_PARAMS(T)>& item)
+syntax_tree_to_any_conversion_helper<ConverterT>::convert_alternative_node(const syntax_tree::alternative_node<NodesT...>& item)
 {
-	boost::apply_visitor(static_visitor_, item);
+	syntax_tree::apply_visitor(alternative_visitor_, item);
 }
 
 template<class ConverterT>

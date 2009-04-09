@@ -48,7 +48,7 @@ typedef
 	declaration_t
 ;
 
-struct declaration: public declaration_t, public composite_node
+struct declaration: public declaration_t
 {
 	declaration(const block_declaration& o): declaration_t(o){};
 	declaration(const function_definition& o): declaration_t(o){};

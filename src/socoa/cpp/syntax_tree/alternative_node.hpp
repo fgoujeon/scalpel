@@ -22,6 +22,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_ALTERNATIVE_NODE_HPP
 
 #include <boost/optional.hpp>
+#include "composite_node.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
@@ -40,12 +41,13 @@ assign_if_same_type(T1&, T2&)
 	//does nothing
 }
 
+
 template<class... NodesT>
 class alternative_node;
 
 
 template<>
-class alternative_node<>
+class alternative_node<>: public composite_node
 {
 	public:
 		template<class NodeT2>
@@ -98,6 +100,7 @@ alternative_node<NodeT, NodesT...>::get_node(boost::optional<const NodeT&> node)
 	node = node_;
 }
 
+
 template<class ReturnNodeT, class AlternativeNodeT>
 boost::optional<const ReturnNodeT&>
 get_alternative(const AlternativeNodeT& node)
@@ -105,6 +108,45 @@ get_alternative(const AlternativeNodeT& node)
 	boost::optional<const ReturnNodeT&> return_node;
 	node.get_node(return_node);
 	return return_node;
+}
+
+
+template<class AlternativeVisitorT, class AlternativeNodeT, class... NodesT>
+class visitor;
+
+template<class AlternativeVisitorT, class AlternativeNodeT>
+class visitor<AlternativeVisitorT, AlternativeNodeT>
+{
+	public:
+		static
+		void
+		visit(const AlternativeVisitorT&, const AlternativeNodeT&)
+		{
+			//does nothing
+		}
+};
+
+template<class AlternativeVisitorT, class AlternativeNodeT, class NodeT, class... NodesT>
+class visitor<AlternativeVisitorT, AlternativeNodeT, NodeT, NodesT...>
+{
+	public:
+		static
+		void
+		visit(const AlternativeVisitorT& alt_visitor, const AlternativeNodeT& alt_node)
+		{
+			boost::optional<const NodeT&> node = get_alternative<NodeT>(alt_node);
+			if(node)
+				alt_visitor(*node);
+			else
+				visitor<AlternativeVisitorT, AlternativeNodeT, NodesT...>::visit(alt_visitor, alt_node);
+		}
+};
+
+template<class AlternativeVisitorT, class... NodesT>
+void
+apply_visitor(const AlternativeVisitorT& alt_visitor, const alternative_node<NodesT...>& node)
+{
+	visitor<AlternativeVisitorT, alternative_node<NodesT...>, NodesT...>::visit(alt_visitor, node);
 }
 
 }}} //namespace socoa::cpp::syntax_tree
