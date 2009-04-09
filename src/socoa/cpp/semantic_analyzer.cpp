@@ -127,15 +127,15 @@ semantic_analyzer::convert(const function_definition& item)
 	const boost::optional<const declarator_id&> a_declarator_id = item.get_declarator().get_direct_declarator().get_declarator_id();
 	if(a_declarator_id)
 	{
-		boost::optional<const id_expression&> an_id_expression = get_alternative<id_expression>(*a_declarator_id);
+		boost::optional<const id_expression&> an_id_expression = get<id_expression>(a_declarator_id);
 		if(an_id_expression)
 		{
-			boost::optional<const unqualified_id&> an_unqualified_id = get_alternative<unqualified_id>(*an_id_expression);
-			boost::optional<const qualified_id&> a_qualified_id = get_alternative<qualified_id>(*an_id_expression);
+			boost::optional<const unqualified_id&> an_unqualified_id = get<unqualified_id>(an_id_expression);
+			boost::optional<const qualified_id&> a_qualified_id = get<qualified_id>(an_id_expression);
 
 			if(an_unqualified_id)
 			{
-				boost::optional<const identifier&> an_identifier = get_alternative<identifier>(*an_unqualified_id);
+				boost::optional<const identifier&> an_identifier = get<identifier>(an_unqualified_id);
 				if(an_identifier)
 				{
 					name = an_identifier->get_value();
@@ -148,7 +148,7 @@ semantic_analyzer::convert(const function_definition& item)
 			//	const qualified_identifier* const a_qualified_identifier =
 			//		boost::get<qualified_identifier>(a_qualified_id)
 			//	;
-				boost::optional<const qualified_nested_id&> a_qualified_nested_id = get_alternative<qualified_nested_id>(*a_qualified_id);
+				boost::optional<const qualified_nested_id&> a_qualified_nested_id = get<qualified_nested_id>(a_qualified_id);
 			//	const qualified_operator_function_id* const a_qualified_operator_function_id =
 			//	   	boost::get<qualified_operator_function_id>(a_qualified_id)
 			//	;
@@ -347,14 +347,13 @@ semantic_analyzer::convert(const simple_declaration& item)
 		{
 			const decl_specifier& a_decl_specifier = *i;
 
-			/*
-			if(auto a_type_specifier_ptr = boost::get<type_specifier>(&a_decl_specifier))
+			if(auto a_type_specifier_ptr = get<type_specifier>(&a_decl_specifier))
 			{
-				if(boost::get<class_specifier>(a_type_specifier_ptr))
+				if(get<class_specifier>(a_type_specifier_ptr))
 				{
 					is_a_class_declaration = true;
 				}
-				else if(auto an_elaborated_type_specifier_ptr = boost::get<elaborated_type_specifier>(a_type_specifier_ptr))
+				else if(auto an_elaborated_type_specifier_ptr = get<elaborated_type_specifier>(a_type_specifier_ptr))
 				{
 					if(an_elaborated_type_specifier_ptr->get_class_key())
 					{
@@ -365,13 +364,11 @@ semantic_analyzer::convert(const simple_declaration& item)
 					}
 				}
 			}
-			*/
 		}
 	}
 
 	if(an_optional_init_declarator_list)
 	{
-		/*
 		const init_declarator_list& an_init_declarator_list = *an_optional_init_declarator_list;
 		for(auto i = an_init_declarator_list.begin(); i != an_init_declarator_list.end(); ++i)
 		{
@@ -383,11 +380,11 @@ semantic_analyzer::convert(const simple_declaration& item)
 			if(an_optional_declarator_id)
 			{
 				const declarator_id& a_declarator_id = *an_optional_declarator_id;
-				if(const id_expression* an_id_expression = boost::get<id_expression>(&a_declarator_id))
+				if(boost::optional<const id_expression&> an_id_expression = get<id_expression>(&a_declarator_id))
 				{
-					if(const unqualified_id* an_unqualified_id = boost::get<unqualified_id>(an_id_expression))
+					if(boost::optional<const unqualified_id&> an_unqualified_id = get<unqualified_id>(an_id_expression))
 					{
-						if(const identifier* an_identifier = boost::get<identifier>(an_unqualified_id))
+						if(boost::optional<const identifier&> an_identifier = get<identifier>(an_unqualified_id))
 						{
 							assert(name.empty());
 							name = an_identifier->get_value();
@@ -402,7 +399,7 @@ semantic_analyzer::convert(const simple_declaration& item)
 			{
 				direct_declarator::other_part other_part = *j;
 
-				if(boost::get<direct_declarator::function_part>(&other_part))
+				if(get<direct_declarator::function_part>(&other_part))
 				{
 					//item is a function declaration!
 					is_a_function_declaration = true;
@@ -413,7 +410,6 @@ semantic_analyzer::convert(const simple_declaration& item)
 			}
 
 		}
-		*/
 	}
 
 	if(is_a_class_declaration || is_a_class_forward_declaration)
