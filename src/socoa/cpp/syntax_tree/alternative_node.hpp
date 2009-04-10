@@ -34,6 +34,13 @@ assign_if_same_type(boost::optional<T>& t1, const T& t2)
 	t1 = t2;
 }
 
+template<class T>
+void
+assign_if_same_type(boost::optional<T>& t1, const boost::optional<T>& t2)
+{
+	t1 = t2;
+}
+
 template<class T1, class T2>
 void
 assign_if_same_type(T1&, T2&)
@@ -53,9 +60,16 @@ class alternative_node<>: public composite_node
 		template<class NodeT2>
 		alternative_node(const NodeT2&){};
 
-		alternative_node(const alternative_node<>&) = delete;
+		alternative_node(const alternative_node<>&): composite_node(){};
 
 		alternative_node(alternative_node<>&&){};
+
+		const alternative_node&
+		operator=(const alternative_node<>&)
+		{
+			clear();
+			return *this;
+		};
 
 		virtual
 		~alternative_node(){};
@@ -72,9 +86,12 @@ class alternative_node<NodeT, NodesT...>: public alternative_node<NodesT...>
 		template<class NodeT2>
 		alternative_node(NodeT2&&);
 
-		alternative_node(const alternative_node<NodeT, NodesT...>&) = delete;
+		alternative_node(const alternative_node<NodeT, NodesT...>& n);
 
 		alternative_node(alternative_node<NodeT, NodesT...>&& n);
+
+		const alternative_node<NodeT, NodesT...>&
+		operator=(const alternative_node<NodeT, NodesT...>& n);
 
 		~alternative_node(){};
 
@@ -109,12 +126,36 @@ alternative_node<NodeT, NodesT...>::alternative_node(NodeT2&& node):
 }
 
 template<class NodeT, class... NodesT>
+alternative_node<NodeT, NodesT...>::alternative_node(const alternative_node<NodeT, NodesT...>& n):
+	alternative_node<NodesT...>(n.node_)
+{
+	assign_if_same_type(node_, n.node_);
+	if(node_)
+		add(*node_);
+}
+
+template<class NodeT, class... NodesT>
 alternative_node<NodeT, NodesT...>::alternative_node(alternative_node<NodeT, NodesT...>&& n):
 	alternative_node<NodesT...>(std::move(n.node_))
 {
 	assign_if_same_type(node_, n.node_);
 	if(node_)
 		add(*node_);
+}
+
+template<class NodeT, class... NodesT>
+const alternative_node<NodeT, NodesT...>&
+alternative_node<NodeT, NodesT...>::operator=(const alternative_node<NodeT, NodesT...>& n)
+{
+	alternative_node<NodesT...>::operator=(n);
+
+	node_ = boost::optional<NodeT>();
+
+	assign_if_same_type(node_, n.node_);
+	if(node_)
+		add(*node_);
+
+	return *this;
 }
 
 template<class NodeT, class... NodesT>

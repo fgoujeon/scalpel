@@ -54,9 +54,12 @@ class class_head: public composite_node
             boost::optional<base_clause>&& a_base_clause
         );
 
-		class_head(const class_head&) = delete;
+		class_head(const class_head& o);
 
 		class_head(class_head&& o);
+
+		const class_head&
+		operator=(const class_head& o);
 
         inline
         const class_key&
@@ -79,17 +82,14 @@ class class_head: public composite_node
         get_base_clause() const;
 
     private:
+		void
+		update_node_list();
+
         class_key class_key_;
-		/*
         boost::optional<nested_name_specifier> nested_name_specifier_;
         boost::optional<template_id> template_id_;
         boost::optional<identifier> identifier_;
         boost::optional<base_clause> base_clause_;
-		*/
-		std::unique_ptr<nested_name_specifier> nested_name_specifier_;
-        std::unique_ptr<template_id> template_id_;
-        std::unique_ptr<identifier> identifier_;
-        std::unique_ptr<base_clause> base_clause_;
 };
 
 inline
@@ -103,40 +103,28 @@ inline
 const boost::optional<const nested_name_specifier&>
 class_head::get_nested_name_specifier() const
 {
-	if(nested_name_specifier_)
-		return boost::optional<const nested_name_specifier&>(*nested_name_specifier_);
-	else
-		return boost::optional<const nested_name_specifier&>();
+	return boost::optional<const nested_name_specifier&>(nested_name_specifier_);
 }
 
 inline
 const boost::optional<const template_id&>
 class_head::get_template_id() const
 {
-	if(template_id_)
-		return boost::optional<const template_id&>(*template_id_);
-	else
-		return boost::optional<const template_id&>();
+	return boost::optional<const template_id&>(template_id_);
 }
 
 inline
 const boost::optional<const identifier&>
 class_head::get_identifier() const
 {
-	if(identifier_)
-		return boost::optional<const identifier&>(*identifier_);
-	else
-		return boost::optional<const identifier&>();
+	return boost::optional<const identifier&>(identifier_);
 }
 
 inline
 const boost::optional<const base_clause&>
 class_head::get_base_clause() const
 {
-	if(base_clause_)
-		return boost::optional<const base_clause&>(*base_clause_);
-	else
-		return boost::optional<const base_clause&>();
+	return boost::optional<const base_clause&>(base_clause_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

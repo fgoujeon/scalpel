@@ -29,12 +29,36 @@ ctor_initializer::ctor_initializer
 ):
     mem_initializer_list_(a_mem_initializer_list)
 {
-	add(mem_initializer_list_);
+	update_node_list();
+}
+
+ctor_initializer::ctor_initializer(const ctor_initializer& o):
+	composite_node(),
+    mem_initializer_list_(o.mem_initializer_list_)
+{
+	update_node_list();
 }
 
 ctor_initializer::ctor_initializer(ctor_initializer&& o):
     mem_initializer_list_(std::move(o.mem_initializer_list_))
 {
+	update_node_list();
+}
+
+const ctor_initializer&
+ctor_initializer::operator=(const ctor_initializer& o)
+{
+    mem_initializer_list_ = std::move(o.mem_initializer_list_);
+	update_node_list();
+
+	return *this;
+}
+
+void
+ctor_initializer::update_node_list()
+{
+	clear();
+	add(mem_initializer_list_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

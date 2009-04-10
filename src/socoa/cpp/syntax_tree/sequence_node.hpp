@@ -42,6 +42,9 @@ class sequence_node: public composite_node
 
         sequence_node(sequence_node&& s);
 
+        const sequence_node&
+		operator=(const sequence_node& s);
+
 		const sequence_node&
 		operator=(sequence_node&& s);
 
@@ -61,11 +64,16 @@ class sequence_node: public composite_node
 		push_back(T&& t)
 		{
 			seq_.push_back(std::move(t));
+			update_node_list(); ///\todo why add() doesn't work?
+//			add(seq_.back());
 		}
 
 		static const std::string& separator;
 
 	private:
+		void
+		update_node_list();
+
 		seq_t seq_;
 };
 
@@ -75,9 +83,28 @@ sequence_node<T, Separator>::sequence_node()
 }
 
 template<class T, const std::string& Separator>
+sequence_node<T, Separator>::sequence_node(const sequence_node& s):
+	composite_node(),
+	seq_(s.seq_)
+{
+	update_node_list();
+}
+
+template<class T, const std::string& Separator>
 sequence_node<T, Separator>::sequence_node(sequence_node&& s):
 	seq_(std::move(s.seq_))
 {
+	update_node_list();
+}
+
+template<class T, const std::string& Separator>
+const sequence_node<T, Separator>&
+sequence_node<T, Separator>::operator=(const sequence_node& s)
+{
+	seq_ = s.seq_;
+	update_node_list();
+
+	return *this;
 }
 
 template<class T, const std::string& Separator>
@@ -85,6 +112,15 @@ const sequence_node<T, Separator>&
 sequence_node<T, Separator>::operator=(sequence_node&& s)
 {
 	seq_ = std::move(s.seq_);
+	update_node_list();
+}
+
+template<class T, const std::string& Separator>
+void
+sequence_node<T, Separator>::update_node_list()
+{
+	clear();
+	for(auto i = seq_.begin(); i != seq_.end(); ++i) add(*i);
 }
 
 template<class T, const std::string& Separator>

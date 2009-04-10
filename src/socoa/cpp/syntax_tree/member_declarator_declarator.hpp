@@ -37,7 +37,12 @@ class member_declarator_declarator: public composite_node
 			bool pure_specifier
 		);
 
+		member_declarator_declarator(const member_declarator_declarator& o);
+
 		member_declarator_declarator(member_declarator_declarator&& o);
+
+		const member_declarator_declarator&
+		operator=(const member_declarator_declarator& o);
 
 		inline
 		const declarator&
@@ -48,6 +53,9 @@ class member_declarator_declarator: public composite_node
 		has_pure_specifier() const;
 
 	private:
+		void
+		update_node_list();
+
 		declarator declarator_;
 		bool pure_specifier_;
 };

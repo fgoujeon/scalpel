@@ -36,13 +36,21 @@ class member_declaration_function_definition: public composite_node
 			function_definition&& a_function_definition
 		);
 
+		member_declaration_function_definition(const member_declaration_function_definition& o);
+
 		member_declaration_function_definition(member_declaration_function_definition&& o);
+
+		const member_declaration_function_definition&
+		operator=(const member_declaration_function_definition& o);
 
 		inline
 		const function_definition&
 		get_function_definition() const;
 
 	private:
+		void
+		update_node_list();
+
 		function_definition function_definition_;
 };
 

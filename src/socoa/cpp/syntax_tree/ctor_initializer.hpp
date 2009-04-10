@@ -42,13 +42,21 @@ class ctor_initializer: public composite_node
 		explicit
         ctor_initializer(mem_initializer_list&& a_mem_initializer_list);
 
+        ctor_initializer(const ctor_initializer& o);
+
         ctor_initializer(ctor_initializer&& o);
+
+		const ctor_initializer&
+        operator=(const ctor_initializer& o);
 
         inline
         const mem_initializer_list&
         get_mem_initializer_list() const;
 
     private:
+		void
+		update_node_list();
+
         mem_initializer_list mem_initializer_list_;
 };
 

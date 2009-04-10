@@ -39,9 +39,12 @@ class nested_identifier_or_template_id: public composite_node
 			identifier_or_template_id&& an_identifier_or_template_id
 		);
 
-		nested_identifier_or_template_id(const nested_identifier_or_template_id&) = delete;
+		nested_identifier_or_template_id(const nested_identifier_or_template_id& o);
 
 		nested_identifier_or_template_id(nested_identifier_or_template_id&& o);
+
+		const nested_identifier_or_template_id&
+		operator=(const nested_identifier_or_template_id& o);
 
 		inline
 		bool
@@ -56,9 +59,11 @@ class nested_identifier_or_template_id: public composite_node
 		get_identifier_or_template_id() const;
 
 	private:
+		void
+		update_node_list();
+
 		bool leading_double_colon_;
-		//boost::optional<nested_name_specifier> nested_name_specifier_;
-		std::unique_ptr<nested_name_specifier> nested_name_specifier_;
+		boost::optional<nested_name_specifier> nested_name_specifier_;
 		identifier_or_template_id identifier_or_template_id_;
 };
 
@@ -73,10 +78,7 @@ inline
 const boost::optional<const nested_name_specifier&>
 nested_identifier_or_template_id::get_nested_name_specifier() const
 {
-	if(nested_name_specifier_)
-		return boost::optional<const nested_name_specifier&>(*nested_name_specifier_);
-	else
-		return boost::optional<const nested_name_specifier&>();
+	return boost::optional<const nested_name_specifier&>(nested_name_specifier_);
 }
 
 inline

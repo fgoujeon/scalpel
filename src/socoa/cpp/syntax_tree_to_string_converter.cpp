@@ -31,6 +31,7 @@ std::string
 syntax_tree_to_string_converter::operator()(const syntax_tree_t& a_syntax_tree)
 {
     return a_syntax_tree.raw_code();
+//    return std::string();
 }
 
 }} //namespace socoa::cpp

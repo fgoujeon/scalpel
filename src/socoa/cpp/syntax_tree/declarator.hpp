@@ -47,9 +47,12 @@ class declarator: public composite_node
             direct_declarator&& a_direct_declarator
         );
 
-		declarator(const declarator&) = delete;
+		declarator(const declarator& o);
 
 		declarator(declarator&& o);
+
+		const declarator&
+		operator=(const declarator& o);
 
         inline
         const std::vector<ptr_operator>&
@@ -60,6 +63,9 @@ class declarator: public composite_node
         get_direct_declarator() const;
 
     private:
+		void
+		update_node_list();
+
         std::vector<ptr_operator> ptr_operators_;
 		std::shared_ptr<direct_declarator> direct_declarator_;
 };

@@ -36,13 +36,21 @@ class member_specification_access_specifier: public composite_node
 			access_specifier&& a_access_specifier
 		);
 
+		member_specification_access_specifier(const member_specification_access_specifier& o);
+
 		member_specification_access_specifier(member_specification_access_specifier&& o);
+
+		const member_specification_access_specifier&
+		operator=(const member_specification_access_specifier& o);
 
 		inline
 		const access_specifier&
 	   	get_access_specifier() const;
 
 	private:
+		void
+		update_node_list();
+
 		access_specifier access_specifier_;
 };
 

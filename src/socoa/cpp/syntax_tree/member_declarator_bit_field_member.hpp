@@ -37,25 +37,29 @@ class member_declarator_bit_field_member: public composite_node
 			boost::optional<identifier>&& an_identifier
 		);
 
+		member_declarator_bit_field_member(const member_declarator_bit_field_member& o);
+
 		member_declarator_bit_field_member(member_declarator_bit_field_member&& o);
+
+		const member_declarator_bit_field_member&
+		operator=(const member_declarator_bit_field_member& o);
 
 		inline
 		const boost::optional<const identifier&>
 		get_identifier() const;
 
 	private:
-		//boost::optional<identifier> identifier_;
-		std::unique_ptr<identifier> identifier_;
+		void
+		update_node_list();
+
+		boost::optional<identifier> identifier_;
 };
 
 inline
 const boost::optional<const identifier&>
 member_declarator_bit_field_member::get_identifier() const
 {
-	if(identifier_)
-		return boost::optional<const identifier&>(*identifier_);
-	else
-		return boost::optional<const identifier&>();
+	return boost::optional<const identifier&>(identifier_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

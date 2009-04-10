@@ -30,14 +30,19 @@ using_directive::using_directive
     identifier&& an_identifier
 ):
     leading_double_colon_(leading_double_colon),
-    //nested_name_specifier_(a_nested_name_specifier),
+    nested_name_specifier_(a_nested_name_specifier),
     identifier_(std::move(an_identifier))
 {
-	if(a_nested_name_specifier)
-		nested_name_specifier_ = std::move(std::unique_ptr<nested_name_specifier>(new nested_name_specifier(std::move(*a_nested_name_specifier))));
+	update_node_list();
+}
 
-	if(nested_name_specifier_) add(*nested_name_specifier_);
-	add(identifier_);
+using_directive::using_directive(const using_directive& o):
+	composite_node(),
+    leading_double_colon_(o.leading_double_colon_),
+    nested_name_specifier_(o.nested_name_specifier_),
+    identifier_(o.identifier_)
+{
+	update_node_list();
 }
 
 using_directive::using_directive(using_directive&& o):
@@ -45,6 +50,26 @@ using_directive::using_directive(using_directive&& o):
     nested_name_specifier_(std::move(o.nested_name_specifier_)),
     identifier_(std::move(o.identifier_))
 {
+	update_node_list();
+}
+
+const using_directive&
+using_directive::operator=(const using_directive& o)
+{
+    leading_double_colon_ = o.leading_double_colon_;
+    nested_name_specifier_ = o.nested_name_specifier_;
+    identifier_ = o.identifier_;
+	update_node_list();
+
+	return *this;
+}
+
+void
+using_directive::update_node_list()
+{
+	clear();
+	if(nested_name_specifier_) add(*nested_name_specifier_);
+	add(identifier_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

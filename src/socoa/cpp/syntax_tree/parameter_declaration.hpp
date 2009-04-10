@@ -40,7 +40,12 @@ class parameter_declaration: public composite_node
 			bool equal
 		);
 
+		parameter_declaration(const parameter_declaration& o);
+
 		parameter_declaration(parameter_declaration&& o);
+
+		const parameter_declaration&
+		operator=(const parameter_declaration& o);
 
 		inline
 		const decl_specifier_seq&
@@ -55,9 +60,11 @@ class parameter_declaration: public composite_node
 		has_equal() const;
 
 	private:
+		void
+		update_node_list();
+
 		decl_specifier_seq decl_specifier_seq_;
-//		boost::optional<declarator> declarator_;
-		std::shared_ptr<declarator> declarator_;
+		boost::optional<declarator> declarator_;
 		bool equal_;
 };
 
@@ -72,10 +79,7 @@ inline
 const boost::optional<const declarator&>
 parameter_declaration::get_declarator() const
 {
-	if(declarator_)
-		return boost::optional<const declarator&>(*declarator_);
-	else
-		return boost::optional<const declarator&>();
+	return boost::optional<const declarator&>(declarator_);
 }
 
 inline

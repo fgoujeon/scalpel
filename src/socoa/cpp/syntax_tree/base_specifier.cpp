@@ -26,22 +26,23 @@ namespace socoa { namespace cpp { namespace syntax_tree
 base_specifier::base_specifier
 (
     bool virtual_keyword,
-//    boost::optional<access_specifier>&& an_access_specifier,
+    boost::optional<access_specifier>&& an_access_specifier,
     boost::optional<nested_identifier_or_template_id>&& a_nested_identifier_or_template_id
 ):
-    virtual_keyword_(virtual_keyword)/*,
+    virtual_keyword_(virtual_keyword),
     access_specifier_(an_access_specifier),
-    nested_identifier_or_template_id_(a_nested_identifier_or_template_id)*/
+    nested_identifier_or_template_id_(a_nested_identifier_or_template_id)
 {
-	/*
-	if(an_access_specifier)
-		access_specifier_ = std::move(std::unique_ptr<access_specifier>(new access_specifier(std::move(*an_access_specifier))));
-		*/
-	if(a_nested_identifier_or_template_id)
-		nested_identifier_or_template_id_ = std::move(std::unique_ptr<nested_identifier_or_template_id>(new nested_identifier_or_template_id(std::move(*a_nested_identifier_or_template_id))));
+	update_node_list();
+}
 
-	if(access_specifier_) add(*access_specifier_);
-	if(nested_identifier_or_template_id_) add(*nested_identifier_or_template_id_);
+base_specifier::base_specifier(const base_specifier& o):
+	composite_node(),
+    virtual_keyword_(o.virtual_keyword_),
+    access_specifier_(o.access_specifier_),
+    nested_identifier_or_template_id_(o.nested_identifier_or_template_id_)
+{
+	update_node_list();
 }
 
 base_specifier::base_specifier(base_specifier&& o):
@@ -49,6 +50,26 @@ base_specifier::base_specifier(base_specifier&& o):
     access_specifier_(std::move(o.access_specifier_)),
     nested_identifier_or_template_id_(std::move(o.nested_identifier_or_template_id_))
 {
+	update_node_list();
+}
+
+const base_specifier&
+base_specifier::operator=(const base_specifier& o)
+{
+    virtual_keyword_ = o.virtual_keyword_;
+    access_specifier_ = o.access_specifier_;
+    nested_identifier_or_template_id_ = o.nested_identifier_or_template_id_;
+	update_node_list();
+
+	return *this;
+}
+
+void
+base_specifier::update_node_list()
+{
+	clear();
+	if(access_specifier_) add(*access_specifier_);
+	if(nested_identifier_or_template_id_) add(*nested_identifier_or_template_id_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

@@ -32,14 +32,20 @@ using_declaration::using_declaration
 ):
     typename_keyword_(typename_keyword),
     leading_double_colon_(leading_double_colon),
-    //nested_name_specifier_(a_nested_name_specifier),
+    nested_name_specifier_(a_nested_name_specifier),
     unqualified_id_(an_unqualified_id)
 {
-	if(a_nested_name_specifier)
-		nested_name_specifier_ = std::move(std::unique_ptr<nested_name_specifier>(new nested_name_specifier(std::move(*a_nested_name_specifier))));
+	update_node_list();
+}
 
-	if(nested_name_specifier_) add(*nested_name_specifier_);
-	add(unqualified_id_);
+using_declaration::using_declaration(const using_declaration& o):
+	composite_node(),
+    typename_keyword_(o.typename_keyword_),
+    leading_double_colon_(o.leading_double_colon_),
+    nested_name_specifier_(o.nested_name_specifier_),
+    unqualified_id_(o.unqualified_id_)
+{
+	update_node_list();
 }
 
 using_declaration::using_declaration(using_declaration&& o):
@@ -48,6 +54,27 @@ using_declaration::using_declaration(using_declaration&& o):
     nested_name_specifier_(std::move(o.nested_name_specifier_)),
     unqualified_id_(std::move(o.unqualified_id_))
 {
+	update_node_list();
+}
+
+const using_declaration&
+using_declaration::operator=(const using_declaration& o)
+{
+    typename_keyword_ = o.typename_keyword_;
+    leading_double_colon_ = o.leading_double_colon_;
+    nested_name_specifier_ = o.nested_name_specifier_;
+    unqualified_id_ = o.unqualified_id_;
+	update_node_list();
+
+	return *this;
+}
+
+void
+using_declaration::update_node_list()
+{
+	clear();
+	if(nested_name_specifier_) add(*nested_name_specifier_);
+	add(unqualified_id_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

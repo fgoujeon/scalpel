@@ -39,7 +39,12 @@ class template_declaration: public composite_node
 			declaration&& a_declaration
 		);
 
+		template_declaration(const template_declaration& o);
+
 		template_declaration(template_declaration&& o);
+
+		const template_declaration&
+		operator=(const template_declaration& o);
 
 		inline
 		bool
@@ -50,6 +55,9 @@ class template_declaration: public composite_node
 		get_declaration() const;
 
 	private:
+		void
+		update_node_list();
+
 		bool export_keyword_;
 		//template_parameter_list m_template_parameter_list;
 		std::shared_ptr<declaration> declaration_;

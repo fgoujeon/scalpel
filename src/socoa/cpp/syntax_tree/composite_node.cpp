@@ -27,12 +27,6 @@ composite_node::composite_node()
 {
 }
 
-composite_node::composite_node(composite_node&& n):
-	node(std::move(n)),
-	nodes_(std::move(n.nodes_))
-{
-}
-
 composite_node::~composite_node()
 {
 }
@@ -50,9 +44,15 @@ composite_node::raw_code() const
 }
 
 void
-composite_node::add(node& a_node)
+composite_node::add(const node& a_node)
 {
 	nodes_.push_back(&a_node);
+}
+
+void
+composite_node::clear()
+{
+	nodes_.clear();
 }
 
 }}} //namespace socoa::cpp::syntax_tree

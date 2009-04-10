@@ -55,9 +55,11 @@ struct declaration: public declaration_t
 	declaration(template_declaration&& o): declaration_t(o){};
 	declaration(namespace_definition&& o): declaration_t(o){};
 
-	declaration(const declaration&) = delete;
+	declaration(const declaration& o): declaration_t(o){};
 
 	declaration(declaration&& o): declaration_t(o){};
+
+	using declaration_t::operator=;
 };
 
 }}} //namespace socoa::cpp::syntax_tree

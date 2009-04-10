@@ -27,8 +27,19 @@ qualified_operator_function_id::qualified_operator_function_id()
 {
 }
 
+qualified_operator_function_id::qualified_operator_function_id(const qualified_operator_function_id&):
+	composite_node()
+{
+}
+
 qualified_operator_function_id::qualified_operator_function_id(qualified_operator_function_id&&)
 {
+}
+
+const qualified_operator_function_id&
+qualified_operator_function_id::operator=(const qualified_operator_function_id&)
+{
+	return *this;
 }
 
 }}} //namespace socoa::cpp::syntax_tree

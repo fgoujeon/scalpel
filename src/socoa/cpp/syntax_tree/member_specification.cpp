@@ -29,13 +29,37 @@ member_specification::member_specification
 ):
 	parts_(std::move(parts))
 {
-	for(auto i = parts_.begin(); i != parts_.end(); ++i)
-		add(*i);
+	update_node_list();
+}
+
+member_specification::member_specification(const member_specification& o):
+	composite_node(),
+	parts_(o.parts_)
+{
+	update_node_list();
 }
 
 member_specification::member_specification(member_specification&& o):
 	parts_(std::move(o.parts_))
 {
+	update_node_list();
+}
+
+const member_specification&
+member_specification::operator=(const member_specification& o)
+{
+	parts_ = o.parts_;
+	update_node_list();
+
+	return *this;
+}
+
+void
+member_specification::update_node_list()
+{
+	clear();
+	for(auto i = parts_.begin(); i != parts_.end(); ++i)
+		add(*i);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

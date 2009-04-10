@@ -45,6 +45,9 @@ class sequence
 		const_iterator
 		end() const;
 
+		const T&
+		back() const;
+
 		void
 		push_back(T&& t);
 
@@ -77,6 +80,13 @@ typename sequence<T, Separator>::const_iterator
 sequence<T, Separator>::end() const
 {
 	return items_.end();
+}
+
+template<class T, const std::string& Separator>
+const T&
+sequence<T, Separator>::back() const
+{
+	return items_.back();
 }
 
 template<class T, const std::string& Separator>

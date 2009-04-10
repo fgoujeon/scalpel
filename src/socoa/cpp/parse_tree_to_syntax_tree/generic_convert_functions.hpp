@@ -41,10 +41,8 @@ convert_nodes(const tree_node_t& parent_node)
 	{
 		const tree_node_t& child_node = *i;
 
-		/*
 		if(check_id<Ids...>(child_node))
-			c.push_back(std::move(convert_node<SyntaxNodeT, Ids...>(child_node)));
-			*/
+			c.push_back(convert_node<SyntaxNodeT, Ids...>(child_node));
 	}
 	return c;
 }

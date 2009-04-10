@@ -33,8 +33,16 @@ simple_template_type_specifier::simple_template_type_specifier
     nested_name_specifier_(std::move(a_nested_name_specifier)),
     template_id_(std::move(a_template_id))
 {
-	add(nested_name_specifier_);
-	add(template_id_);
+	update_node_list();
+}
+
+simple_template_type_specifier::simple_template_type_specifier(const simple_template_type_specifier& o):
+	composite_node(),
+    leading_double_colon_(o.leading_double_colon_),
+    nested_name_specifier_(o.nested_name_specifier_),
+    template_id_(o.template_id_)
+{
+	update_node_list();
 }
 
 simple_template_type_specifier::simple_template_type_specifier(simple_template_type_specifier&& o):
@@ -42,6 +50,26 @@ simple_template_type_specifier::simple_template_type_specifier(simple_template_t
     nested_name_specifier_(std::move(o.nested_name_specifier_)),
     template_id_(std::move(o.template_id_))
 {
+	update_node_list();
+}
+
+const simple_template_type_specifier&
+simple_template_type_specifier::operator=(const simple_template_type_specifier& o)
+{
+    leading_double_colon_ = o.leading_double_colon_;
+    nested_name_specifier_ = o.nested_name_specifier_;
+    template_id_ = o.template_id_;
+	update_node_list();
+
+	return *this;
+}
+
+void
+simple_template_type_specifier::update_node_list()
+{
+	clear();
+	add(nested_name_specifier_);
+	add(template_id_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

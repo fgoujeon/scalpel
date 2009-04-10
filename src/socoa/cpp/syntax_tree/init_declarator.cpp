@@ -26,12 +26,36 @@ namespace socoa { namespace cpp { namespace syntax_tree
 init_declarator::init_declarator(declarator&& a_declarator):
 	declarator_(std::move(a_declarator))
 {
-	add(declarator_);
+	update_node_list();
+}
+
+init_declarator::init_declarator(const init_declarator& o):
+	composite_node(),
+	declarator_(o.declarator_)
+{
+	update_node_list();
 }
 
 init_declarator::init_declarator(init_declarator&& o):
 	declarator_(std::move(o.declarator_))
 {
+	update_node_list();
+}
+
+const init_declarator&
+init_declarator::operator=(const init_declarator& o)
+{
+	declarator_ = o.declarator_;
+	update_node_list();
+
+	return *this;
+}
+
+void
+init_declarator::update_node_list()
+{
+	clear();
+	add(declarator_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

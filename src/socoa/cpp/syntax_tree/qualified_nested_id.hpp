@@ -40,7 +40,12 @@ class qualified_nested_id: public composite_node
 			unqualified_id&& an_unqualified_id
 		);
 
+		qualified_nested_id(const qualified_nested_id& o);
+
 		qualified_nested_id(qualified_nested_id&& o);
+
+		const qualified_nested_id&
+		operator=(const qualified_nested_id& o);
 
 		inline
 		bool
@@ -59,6 +64,9 @@ class qualified_nested_id: public composite_node
 		get_unqualified_id() const;
 
 	private:
+		void
+		update_node_list();
+
 		bool leading_double_colon_;
 		nested_name_specifier nested_name_specifier_;
 		bool template_keyword_;

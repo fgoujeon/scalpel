@@ -29,24 +29,47 @@ namespace_definition::namespace_definition
 (
     boost::optional<identifier>&& an_identifier,
     boost::optional<declaration_seq>&& a_declaration_seq
-)/*:
-    identifier_(an_identifier)*/
+):
+    identifier_(an_identifier)
 {
-	if(an_identifier)
-		identifier_ = std::move(std::unique_ptr<identifier>(new identifier(std::move(*an_identifier))));
-
-	if(identifier_) add(*identifier_);
 	if(a_declaration_seq)
 	{
 		declaration_seq_ = std::make_shared<declaration_seq>(*a_declaration_seq);
-		add(*declaration_seq_);
 	}
+	update_node_list();
+}
+
+namespace_definition::namespace_definition(const namespace_definition& o):
+	composite_node(),
+	identifier_(o.identifier_),
+	declaration_seq_(o.declaration_seq_)
+{
+	update_node_list();
 }
 
 namespace_definition::namespace_definition(namespace_definition&& o):
 	identifier_(std::move(o.identifier_)),
 	declaration_seq_(std::move(o.declaration_seq_))
 {
+	update_node_list();
+}
+
+const namespace_definition&
+namespace_definition::operator=(const namespace_definition& o)
+{
+	identifier_ = o.identifier_;
+	declaration_seq_ = o.declaration_seq_;
+	update_node_list();
+
+	return *this;
+}
+
+void
+namespace_definition::update_node_list()
+{
+	clear();
+	if(identifier_) add(*identifier_);
+	if(declaration_seq_) add(*declaration_seq_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

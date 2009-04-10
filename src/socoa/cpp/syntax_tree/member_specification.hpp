@@ -42,13 +42,21 @@ class member_specification: public composite_node
 			parts_t&& parts
 		);
 
+		member_specification(const member_specification& o);
+
 		member_specification(member_specification&& o);
+
+		const member_specification&
+		operator=(const member_specification& o);
 
 		inline
 		part_const_iterator_range
 		get_parts() const;
 
 	private:
+		void
+		update_node_list();
+
 		parts_t parts_;
 };
 

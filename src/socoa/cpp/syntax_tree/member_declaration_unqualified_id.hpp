@@ -39,7 +39,12 @@ class member_declaration_unqualified_id: public composite_node
 			unqualified_id&& an_unqualified_id
 		);
 
+		member_declaration_unqualified_id(const member_declaration_unqualified_id& o);
+
 		member_declaration_unqualified_id(member_declaration_unqualified_id&& o);
+
+		const member_declaration_unqualified_id&
+		operator=(const member_declaration_unqualified_id& o);
 
 		inline
 		bool
@@ -58,6 +63,9 @@ class member_declaration_unqualified_id: public composite_node
 		get_unqualified_id() const;
 
 	private:
+		void
+		update_node_list();
+
 		bool leading_double_colon_;
 		nested_name_specifier nested_name_specifier_;
 		bool template_keyword_;

@@ -33,9 +33,12 @@ class identifier: public leaf_node
 		explicit
 		identifier(std::string&& value);
 
-		identifier(const identifier&) = delete;
+		identifier(const identifier& i);
 
 		identifier(identifier&& i);
+
+		const identifier&
+		operator=(const identifier& i);
 
 		const identifier&
 		operator=(identifier&& i);

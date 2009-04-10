@@ -21,13 +21,17 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_TYPE_ID_HPP
 #define SOCOA_CPP_SYNTAX_TREE_TYPE_ID_HPP
 
+#include "composite_node.hpp"
+
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class type_id
+class type_id: public composite_node
 {
     public:
 		type_id();
+
+		type_id(const type_id& o);
 
 		type_id(type_id&& o);
 

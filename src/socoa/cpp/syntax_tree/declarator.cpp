@@ -33,16 +33,41 @@ declarator::declarator
     ptr_operators_(std::move(ptr_operators)),
     direct_declarator_(std::make_shared<direct_declarator>(std::move(a_direct_declarator)))
 {
-	for(auto i = ptr_operators_.begin(); i != ptr_operators_.end(); ++i)
-		add(*i);
+	update_node_list();
+}
 
-	add(*direct_declarator_);
+declarator::declarator(const declarator& o):
+	composite_node(),
+    ptr_operators_(o.ptr_operators_),
+    direct_declarator_(o.direct_declarator_)
+{
+	update_node_list();
 }
 
 declarator::declarator(declarator&& o):
     ptr_operators_(std::move(o.ptr_operators_)),
     direct_declarator_(std::move(o.direct_declarator_))
 {
+	update_node_list();
+}
+
+const declarator&
+declarator::operator=(const declarator& o)
+{
+    ptr_operators_ = o.ptr_operators_;
+    direct_declarator_ = o.direct_declarator_;
+	update_node_list();
+
+	return *this;
+}
+
+void
+declarator::update_node_list()
+{
+	clear();
+	for(auto i = ptr_operators_.begin(); i != ptr_operators_.end(); ++i)
+		add(*i);
+	add(*direct_declarator_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

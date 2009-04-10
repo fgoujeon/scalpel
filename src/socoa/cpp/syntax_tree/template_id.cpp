@@ -32,17 +32,44 @@ template_id::template_id
 ):
     identifier_(std::move(an_identifier))
 {
-	add(identifier_);
 	if(a_template_argument_list)
 	{
 		template_argument_list_ = std::make_shared<template_argument_list>(*a_template_argument_list);
-		add(*template_argument_list_);
 	}
+	update_node_list();
+}
+
+template_id::template_id(const template_id& o):
+	composite_node(),
+    identifier_(o.identifier_),
+	template_argument_list_(o.template_argument_list_)
+{
+	update_node_list();
 }
 
 template_id::template_id(template_id&& o):
-    identifier_(std::move(o.identifier_))
+    identifier_(std::move(o.identifier_)),
+	template_argument_list_(std::move(o.template_argument_list_))
 {
+	update_node_list();
+}
+
+const template_id&
+template_id::operator=(const template_id& o)
+{
+    identifier_ = o.identifier_;
+	template_argument_list_ = o.template_argument_list_;
+	update_node_list();
+
+	return *this;
+}
+
+void
+template_id::update_node_list()
+{
+	clear();
+	add(identifier_);
+	if(template_argument_list_) add(*template_argument_list_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

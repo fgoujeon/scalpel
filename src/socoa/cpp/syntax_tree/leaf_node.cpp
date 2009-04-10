@@ -33,6 +33,11 @@ leaf_node::leaf_node(std::string&& raw_code):
 {
 }
 
+leaf_node::leaf_node(const leaf_node& n):
+	raw_code_(n.raw_code_)
+{
+}
+
 leaf_node::leaf_node(leaf_node&& n):
 	raw_code_(std::move(n.raw_code_))
 {
@@ -46,6 +51,12 @@ const std::string
 leaf_node::raw_code() const
 {
 	return raw_code_;
+}
+
+void
+leaf_node::raw_code(std::string&& code)
+{
+	raw_code_ = code;
 }
 
 }}} //namespace socoa::cpp::syntax_tree

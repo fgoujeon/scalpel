@@ -31,12 +31,40 @@ nested_name_specifier::nested_name_specifier
 	identifier_or_template_id_(std::move(an_identifier_or_template_id)),
 	parts_(std::move(parts))
 {
+	update_node_list();
+}
+
+nested_name_specifier::nested_name_specifier(const nested_name_specifier& o):
+	composite_node(),
+	identifier_or_template_id_(o.identifier_or_template_id_),
+	parts_(o.parts_)
+{
+	update_node_list();
 }
 
 nested_name_specifier::nested_name_specifier(nested_name_specifier&& o):
 	identifier_or_template_id_(std::move(o.identifier_or_template_id_)),
 	parts_(std::move(o.parts_))
 {
+	update_node_list();
+}
+
+const nested_name_specifier&
+nested_name_specifier::operator=(const nested_name_specifier& o)
+{
+	identifier_or_template_id_ = o.identifier_or_template_id_;
+	parts_ = o.parts_;
+	update_node_list();
+
+	return *this;
+}
+
+void
+nested_name_specifier::update_node_list()
+{
+	clear();
+	add(identifier_or_template_id_);
+	for(auto i = parts_.begin(); i != parts_.end(); ++i) add(*i);
 }
 
 
@@ -48,13 +76,39 @@ nested_name_specifier::second_part::second_part
 	template_keyword_(template_keyword),
 	identifier_or_template_id_(an_identifier_or_template_id)
 {
-	add(identifier_or_template_id_);
+	update_node_list();
+}
+
+nested_name_specifier::second_part::second_part(const second_part& o):
+	composite_node(),
+	template_keyword_(o.template_keyword_),
+	identifier_or_template_id_(o.identifier_or_template_id_)
+{
+	update_node_list();
 }
 
 nested_name_specifier::second_part::second_part(second_part&& o):
 	template_keyword_(std::move(o.template_keyword_)),
 	identifier_or_template_id_(std::move(o.identifier_or_template_id_))
 {
+	update_node_list();
+}
+
+const nested_name_specifier::second_part&
+nested_name_specifier::second_part::operator=(const second_part& o)
+{
+	template_keyword_ = o.template_keyword_;
+	identifier_or_template_id_ = o.identifier_or_template_id_;
+	update_node_list();
+
+	return *this;
+}
+
+void
+nested_name_specifier::second_part::update_node_list()
+{
+	clear();
+	add(identifier_or_template_id_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

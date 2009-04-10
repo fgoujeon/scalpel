@@ -36,13 +36,40 @@ class_specifier::class_specifier
 	if(a_member_specification)
 	{
 		member_specification_ = std::make_shared<member_specification>(std::move(*a_member_specification));
-		add(*member_specification_);
 	}
+	update_node_list();
+}
+
+class_specifier::class_specifier(const class_specifier& o):
+	composite_node(),
+    class_head_(o.class_head_),
+    member_specification_(o.member_specification_)
+{
+	update_node_list();
 }
 
 class_specifier::class_specifier(class_specifier&& o):
-    class_head_(std::move(o.class_head_))
+    class_head_(std::move(o.class_head_)),
+    member_specification_(std::move(o.member_specification_))
 {
+	update_node_list();
+}
+
+const class_specifier&
+class_specifier::operator=(const class_specifier& o)
+{
+    class_head_ = o.class_head_;
+    member_specification_ = o.member_specification_;
+	update_node_list();
+
+	return *this;
+}
+
+void
+class_specifier::update_node_list()
+{
+	clear();
+	if(member_specification_) add(*member_specification_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

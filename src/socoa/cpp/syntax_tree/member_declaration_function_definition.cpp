@@ -29,12 +29,36 @@ member_declaration_function_definition::member_declaration_function_definition
 ):
     function_definition_(std::move(a_function_definition))
 {
-	add(function_definition_);
+	update_node_list();
+}
+
+member_declaration_function_definition::member_declaration_function_definition(const member_declaration_function_definition& o):
+	composite_node(),
+    function_definition_(o.function_definition_)
+{
+	update_node_list();
 }
 
 member_declaration_function_definition::member_declaration_function_definition(member_declaration_function_definition&& o):
     function_definition_(std::move(o.function_definition_))
 {
+	update_node_list();
+}
+
+const member_declaration_function_definition&
+member_declaration_function_definition::operator=(const member_declaration_function_definition& o)
+{
+    function_definition_ = o.function_definition_;
+	update_node_list();
+
+	return *this;
+}
+
+void
+member_declaration_function_definition::update_node_list()
+{
+	clear();
+	add(function_definition_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

@@ -29,12 +29,36 @@ member_specification_access_specifier::member_specification_access_specifier
 ):
     access_specifier_(std::move(a_access_specifier))
 {
-	add(access_specifier_);
+	update_node_list();
+}
+
+member_specification_access_specifier::member_specification_access_specifier(const member_specification_access_specifier& o):
+	composite_node(),
+    access_specifier_(o.access_specifier_)
+{
+	update_node_list();
 }
 
 member_specification_access_specifier::member_specification_access_specifier(member_specification_access_specifier&& o):
     access_specifier_(std::move(o.access_specifier_))
 {
+	update_node_list();
+}
+
+const member_specification_access_specifier&
+member_specification_access_specifier::operator=(const member_specification_access_specifier& o)
+{
+    access_specifier_ = o.access_specifier_;
+	update_node_list();
+
+	return *this;
+}
+
+void
+member_specification_access_specifier::update_node_list()
+{
+	clear();
+	add(access_specifier_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

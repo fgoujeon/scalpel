@@ -29,12 +29,36 @@ qualified_template_id::qualified_template_id
 ):
     template_id_(std::move(a_template_id))
 {
-	add(template_id_);
+	update_node_list();
+}
+
+qualified_template_id::qualified_template_id(const qualified_template_id& o):
+	composite_node(),
+    template_id_(o.template_id_)
+{
+	update_node_list();
 }
 
 qualified_template_id::qualified_template_id(qualified_template_id&& o):
     template_id_(std::move(o.template_id_))
 {
+	update_node_list();
+}
+
+const qualified_template_id&
+qualified_template_id::operator=(const qualified_template_id& o)
+{
+    template_id_ = o.template_id_;
+	update_node_list();
+
+	return *this;
+}
+
+void
+qualified_template_id::update_node_list()
+{
+	clear();
+	add(template_id_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

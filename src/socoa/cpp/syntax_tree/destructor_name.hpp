@@ -33,13 +33,21 @@ class destructor_name: public composite_node
 		explicit
 		destructor_name(identifier&& an_identifier);
 
+		destructor_name(const destructor_name& o);
+
 		destructor_name(destructor_name&& o);
+
+		const destructor_name&
+		operator=(const destructor_name& o);
 
 		inline
 		const identifier&
 		get_identifier() const;
 
 	private:
+		void
+		update_node_list();
+
 		identifier identifier_;
 };
 

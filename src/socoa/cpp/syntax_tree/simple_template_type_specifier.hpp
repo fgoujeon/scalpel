@@ -39,7 +39,12 @@ class simple_template_type_specifier: public composite_node
 			template_id&& a_template_id
 		);
 
+		simple_template_type_specifier(const simple_template_type_specifier& o);
+
 		simple_template_type_specifier(simple_template_type_specifier&& o);
+
+		const simple_template_type_specifier&
+		operator=(const simple_template_type_specifier& o);
 
 		inline
 		bool
@@ -54,6 +59,9 @@ class simple_template_type_specifier: public composite_node
 		get_template_id() const;
 
 	private:
+		void
+		update_node_list();
+
 		bool leading_double_colon_;
 		nested_name_specifier nested_name_specifier_;
 		template_id template_id_;

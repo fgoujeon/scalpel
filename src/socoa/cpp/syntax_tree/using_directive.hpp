@@ -40,7 +40,12 @@ class using_directive: public composite_node
 			identifier&& an_identifier
 		);
 
+		using_directive(const using_directive& o);
+
 		using_directive(using_directive&& o);
+
+		const using_directive&
+		operator=(const using_directive& o);
 
 		inline
 		bool
@@ -55,9 +60,11 @@ class using_directive: public composite_node
 	   	get_identifier() const;
 
 	private:
+		void
+		update_node_list();
+
 		bool leading_double_colon_;
-		//boost::optional<nested_name_specifier> nested_name_specifier_;
-		std::unique_ptr<nested_name_specifier> nested_name_specifier_;
+		boost::optional<nested_name_specifier> nested_name_specifier_;
 		identifier identifier_;
 };
 
@@ -72,10 +79,7 @@ inline
 const boost::optional<const nested_name_specifier&>
 using_directive::get_nested_name_specifier() const
 {
-	if(nested_name_specifier_)
-		return boost::optional<const nested_name_specifier&>(*nested_name_specifier_);
-	else
-		return boost::optional<const nested_name_specifier&>();
+	return boost::optional<const nested_name_specifier&>(nested_name_specifier_);
 }
 
 inline

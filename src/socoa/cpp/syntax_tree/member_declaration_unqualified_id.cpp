@@ -35,8 +35,17 @@ member_declaration_unqualified_id::member_declaration_unqualified_id
     template_keyword_(template_keyword),
     unqualified_id_(std::move(an_unqualified_id))
 {
-	add(nested_name_specifier_);
-	add(unqualified_id_);
+	update_node_list();
+}
+
+member_declaration_unqualified_id::member_declaration_unqualified_id(const member_declaration_unqualified_id& o):
+	composite_node(),
+    leading_double_colon_(o.leading_double_colon_),
+    nested_name_specifier_(o.nested_name_specifier_),
+    template_keyword_(o.template_keyword_),
+    unqualified_id_(o.unqualified_id_)
+{
+	update_node_list();
 }
 
 member_declaration_unqualified_id::member_declaration_unqualified_id(member_declaration_unqualified_id&& o):
@@ -45,6 +54,27 @@ member_declaration_unqualified_id::member_declaration_unqualified_id(member_decl
     template_keyword_(std::move(o.template_keyword_)),
     unqualified_id_(std::move(o.unqualified_id_))
 {
+	update_node_list();
+}
+
+const member_declaration_unqualified_id&
+member_declaration_unqualified_id::operator=(const member_declaration_unqualified_id& o)
+{
+    leading_double_colon_ = o.leading_double_colon_;
+    nested_name_specifier_ = o.nested_name_specifier_;
+    template_keyword_ = o.template_keyword_;
+    unqualified_id_ = o.unqualified_id_;
+	update_node_list();
+
+	return *this;
+}
+
+void
+member_declaration_unqualified_id::update_node_list()
+{
+	clear();
+	add(nested_name_specifier_);
+	add(unqualified_id_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

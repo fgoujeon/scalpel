@@ -44,9 +44,12 @@ class nested_name_specifier: public composite_node
 			second_parts_t&& parts
 		);
 
-		nested_name_specifier(const nested_name_specifier&) = delete;
+		nested_name_specifier(const nested_name_specifier& o);
 
 		nested_name_specifier(nested_name_specifier&& o);
+
+		const nested_name_specifier&
+		operator=(const nested_name_specifier& o);
 
 		inline
 		const identifier_or_template_id&
@@ -57,6 +60,9 @@ class nested_name_specifier: public composite_node
 		get_parts() const;
 
 	private:
+		void
+		update_node_list();
+
 		identifier_or_template_id identifier_or_template_id_;
 		second_parts_t parts_;
 };
@@ -70,9 +76,12 @@ class nested_name_specifier::second_part: public composite_node
 			identifier_or_template_id&& an_identifier_or_template_id
 		);
 
-		second_part(const second_part& o) = delete;
+		second_part(const second_part& o);
 
 		second_part(second_part&& o);
+
+		const second_part&
+		operator=(const second_part& o);
 
 		inline
 		bool
@@ -83,6 +92,9 @@ class nested_name_specifier::second_part: public composite_node
 		get_identifier_or_template_id() const;
 
 	private:
+		void
+		update_node_list();
+
 		bool template_keyword_;
 		identifier_or_template_id identifier_or_template_id_;
 };

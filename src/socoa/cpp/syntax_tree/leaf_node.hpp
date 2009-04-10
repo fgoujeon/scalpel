@@ -36,7 +36,7 @@ class leaf_node: public node
 		explicit
 		leaf_node(std::string&& raw_code);
 
-		leaf_node(const leaf_node&) = delete;
+		leaf_node(const leaf_node& n);
 
 		leaf_node(leaf_node&& n);
 
@@ -45,6 +45,9 @@ class leaf_node: public node
 
 		const std::string
 		raw_code() const;
+
+		void
+		raw_code(std::string&& code);
 
 	private:
 		std::string raw_code_;

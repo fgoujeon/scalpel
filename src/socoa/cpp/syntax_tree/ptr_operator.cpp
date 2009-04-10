@@ -31,17 +31,21 @@ ptr_operator::ptr_operator
 	boost::optional<cv_qualifier_seq>&& a_cv_qualifier_seq
 ):
 	type_(a_type),
-	leading_double_colon_(leading_double_colon)/*,
+	leading_double_colon_(leading_double_colon),
 	nested_name_specifier_(a_nested_name_specifier),
-	cv_qualifier_seq_(a_cv_qualifier_seq)*/
+	cv_qualifier_seq_(a_cv_qualifier_seq)
 {
-	if(a_nested_name_specifier)
-		nested_name_specifier_ = std::move(std::unique_ptr<nested_name_specifier>(new nested_name_specifier(std::move(*a_nested_name_specifier))));
-	if(a_cv_qualifier_seq)
-		cv_qualifier_seq_ = std::move(std::unique_ptr<cv_qualifier_seq>(new cv_qualifier_seq(std::move(*a_cv_qualifier_seq))));
+	update_node_list();
+}
 
-	if(nested_name_specifier_) add(*nested_name_specifier_);
-	if(cv_qualifier_seq_) add(*cv_qualifier_seq_);
+ptr_operator::ptr_operator(const ptr_operator& o):
+	composite_node(),
+	type_(o.type_),
+	leading_double_colon_(o.leading_double_colon_),
+	nested_name_specifier_(o.nested_name_specifier_),
+	cv_qualifier_seq_(o.cv_qualifier_seq_)
+{
+	update_node_list();
 }
 
 ptr_operator::ptr_operator(ptr_operator&& o):
@@ -50,6 +54,27 @@ ptr_operator::ptr_operator(ptr_operator&& o):
 	nested_name_specifier_(std::move(o.nested_name_specifier_)),
 	cv_qualifier_seq_(std::move(o.cv_qualifier_seq_))
 {
+	update_node_list();
+}
+
+const ptr_operator&
+ptr_operator::operator=(const ptr_operator& o)
+{
+	type_ = o.type_;
+	leading_double_colon_ = o.leading_double_colon_;
+	nested_name_specifier_ = o.nested_name_specifier_;
+	cv_qualifier_seq_ = o.cv_qualifier_seq_;
+	update_node_list();
+
+	return *this;
+}
+
+void
+ptr_operator::update_node_list()
+{
+	clear();
+	if(nested_name_specifier_) add(*nested_name_specifier_);
+	if(cv_qualifier_seq_) add(*cv_qualifier_seq_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

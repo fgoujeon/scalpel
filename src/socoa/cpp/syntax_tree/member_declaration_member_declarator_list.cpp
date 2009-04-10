@@ -31,14 +31,40 @@ member_declaration_member_declarator_list::member_declaration_member_declarator_
     decl_specifier_seq_(a_decl_specifier_seq),
     member_declarator_list_(a_member_declarator_list)
 {
-	if(decl_specifier_seq_) add(*decl_specifier_seq_);
-	if(member_declarator_list_) add(*member_declarator_list_);
+	update_node_list();
+}
+
+member_declaration_member_declarator_list::member_declaration_member_declarator_list(const member_declaration_member_declarator_list& o):
+	composite_node(),
+    decl_specifier_seq_(o.decl_specifier_seq_),
+    member_declarator_list_(o.member_declarator_list_)
+{
+	update_node_list();
 }
 
 member_declaration_member_declarator_list::member_declaration_member_declarator_list(member_declaration_member_declarator_list&& o):
     decl_specifier_seq_(std::move(o.decl_specifier_seq_)),
     member_declarator_list_(std::move(o.member_declarator_list_))
 {
+	update_node_list();
+}
+
+const member_declaration_member_declarator_list&
+member_declaration_member_declarator_list::operator=(const member_declaration_member_declarator_list& o)
+{
+    decl_specifier_seq_ = o.decl_specifier_seq_;
+    member_declarator_list_ = o.member_declarator_list_;
+	update_node_list();
+
+	return *this;
+}
+
+void
+member_declaration_member_declarator_list::update_node_list()
+{
+	clear();
+	if(decl_specifier_seq_) add(*decl_specifier_seq_);
+	if(member_declarator_list_) add(*member_declarator_list_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

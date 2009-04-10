@@ -31,13 +31,39 @@ member_declarator_declarator::member_declarator_declarator
     declarator_(std::move(a_declarator)),
     pure_specifier_(pure_specifier)
 {
-	add(declarator_);
+	update_node_list();
+}
+
+member_declarator_declarator::member_declarator_declarator(const member_declarator_declarator& o):
+	composite_node(),
+    declarator_(o.declarator_),
+    pure_specifier_(o.pure_specifier_)
+{
+	update_node_list();
 }
 
 member_declarator_declarator::member_declarator_declarator(member_declarator_declarator&& o):
     declarator_(std::move(o.declarator_)),
     pure_specifier_(std::move(o.pure_specifier_))
 {
+	update_node_list();
+}
+
+const member_declarator_declarator&
+member_declarator_declarator::operator=(const member_declarator_declarator& o)
+{
+    declarator_ = o.declarator_;
+    pure_specifier_ = o.pure_specifier_;
+	update_node_list();
+
+	return *this;
+}
+
+void
+member_declarator_declarator::update_node_list()
+{
+	clear();
+	add(declarator_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

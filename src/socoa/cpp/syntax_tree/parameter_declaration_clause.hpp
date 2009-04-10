@@ -39,9 +39,12 @@ class parameter_declaration_clause: public composite_node
 			bool ellipsis
 		);
 
-		parameter_declaration_clause(const parameter_declaration_clause&) = delete;
+		parameter_declaration_clause(const parameter_declaration_clause& o);
 
 		parameter_declaration_clause(parameter_declaration_clause&& o);
+
+		const parameter_declaration_clause&
+		operator=(const parameter_declaration_clause& o);
 
 		inline
 		const boost::optional<const parameter_declaration_list&>
@@ -56,6 +59,9 @@ class parameter_declaration_clause: public composite_node
 		has_ellipsis() const;
 
 	private:
+		void
+		update_node_list();
+
 		boost::optional<parameter_declaration_list> parameter_declaration_list_;
 		bool trailing_comma_;
 		bool ellipsis_;

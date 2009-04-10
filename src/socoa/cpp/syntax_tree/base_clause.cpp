@@ -26,12 +26,35 @@ namespace socoa { namespace cpp { namespace syntax_tree
 base_clause::base_clause(base_specifier_list&& a_base_specifier_list):
     base_specifier_list_(a_base_specifier_list)
 {
-	add(base_specifier_list_);
+	update_node_list();
+}
+
+base_clause::base_clause(const base_clause& o):
+	composite_node(),
+    base_specifier_list_(o.base_specifier_list_)
+{
+	update_node_list();
 }
 
 base_clause::base_clause(base_clause&& o):
     base_specifier_list_(std::move(o.base_specifier_list_))
 {
+	update_node_list();
+}
+
+const base_clause&
+base_clause::operator=(const base_clause& o)
+{
+	base_specifier_list_ = o.base_specifier_list_;
+	update_node_list();
+
+	return *this;
+}
+
+void
+base_clause::update_node_list()
+{
+	clear();
 	add(base_specifier_list_);
 }
 

@@ -31,7 +31,12 @@ class conversion_function_id: public composite_node
     public:
 		conversion_function_id();
 
+		conversion_function_id(const conversion_function_id& o);
+
 		conversion_function_id(conversion_function_id&& o);
+
+		const conversion_function_id&
+		operator=(const conversion_function_id& o);
 
     private:
 };

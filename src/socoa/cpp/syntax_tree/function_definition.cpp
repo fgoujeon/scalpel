@@ -31,18 +31,20 @@ function_definition::function_definition
     declarator&& a_declarator,
     boost::optional<ctor_initializer>&& a_ctor_initializer
 ):
-    //decl_specifier_seq_(a_decl_specifier_seq),
-    declarator_(std::make_shared<declarator>(std::move(a_declarator)))/*,
-    ctor_initializer_(a_ctor_initializer)*/
+    decl_specifier_seq_(a_decl_specifier_seq),
+    declarator_(std::make_shared<declarator>(std::move(a_declarator))),
+    ctor_initializer_(a_ctor_initializer)
 {
-	if(a_decl_specifier_seq)
-		decl_specifier_seq_ = std::move(std::unique_ptr<decl_specifier_seq>(new decl_specifier_seq(std::move(*a_decl_specifier_seq))));
-	if(a_ctor_initializer)
-		ctor_initializer_ = std::move(std::unique_ptr<ctor_initializer>(new ctor_initializer(std::move(*a_ctor_initializer))));
+	update_node_list();
+}
 
-	if(decl_specifier_seq_) add(*decl_specifier_seq_);
-	add(*declarator_);
-	if(ctor_initializer_) add(*ctor_initializer_);
+function_definition::function_definition(const function_definition& o):
+	composite_node(),
+    decl_specifier_seq_(o.decl_specifier_seq_),
+    declarator_(o.declarator_),
+    ctor_initializer_(o.ctor_initializer_)
+{
+	update_node_list();
 }
 
 function_definition::function_definition(function_definition&& o):
@@ -50,6 +52,27 @@ function_definition::function_definition(function_definition&& o):
     declarator_(std::move(o.declarator_)),
     ctor_initializer_(std::move(o.ctor_initializer_))
 {
+	update_node_list();
+}
+
+const function_definition&
+function_definition::operator=(const function_definition& o)
+{
+    decl_specifier_seq_ = o.decl_specifier_seq_;
+    declarator_ = o.declarator_;
+    ctor_initializer_ = o.ctor_initializer_;
+	update_node_list();
+
+	return *this;
+}
+
+void
+function_definition::update_node_list()
+{
+	clear();
+	if(decl_specifier_seq_) add(*decl_specifier_seq_);
+	add(*declarator_);
+	if(ctor_initializer_) add(*ctor_initializer_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

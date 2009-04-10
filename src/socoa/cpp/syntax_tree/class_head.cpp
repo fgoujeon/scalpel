@@ -31,22 +31,24 @@ class_head::class_head
     boost::optional<identifier>&& an_identifier,
     boost::optional<base_clause>&& a_base_clause
 ):
-    class_key_(std::move(a_class_key))/*,
+    class_key_(std::move(a_class_key)),
     nested_name_specifier_(a_nested_name_specifier),
     template_id_(a_template_id),
     identifier_(an_identifier),
-    base_clause_(a_base_clause)*/
+    base_clause_(a_base_clause)
 {
-	if(a_nested_name_specifier) nested_name_specifier_ = std::move(std::unique_ptr<nested_name_specifier>(new nested_name_specifier(std::move(*a_nested_name_specifier))));
-	if(a_template_id) template_id_ = std::move(std::unique_ptr<template_id>(new template_id(std::move(*a_template_id))));
-	if(an_identifier) identifier_ = std::move(std::unique_ptr<identifier>(new identifier(std::move(*an_identifier))));
-	if(a_base_clause) base_clause_ = std::move(std::unique_ptr<base_clause>(new base_clause(std::move(*a_base_clause))));
+	update_node_list();
+}
 
-    add(class_key_);
-    if(nested_name_specifier_) add(*nested_name_specifier_);
-    if(template_id_) add(*template_id_);
-    if(identifier_) add(*identifier_);
-    if(base_clause_) add(*base_clause_);
+class_head::class_head(const class_head& o):
+	composite_node(),
+    class_key_(o.class_key_),
+    nested_name_specifier_(o.nested_name_specifier_),
+    template_id_(o.template_id_),
+    identifier_(o.identifier_),
+    base_clause_(o.base_clause_)
+{
+	update_node_list();
 }
 
 class_head::class_head(class_head&& o):
@@ -56,7 +58,31 @@ class_head::class_head(class_head&& o):
     identifier_(std::move(o.identifier_)),
     base_clause_(std::move(o.base_clause_))
 {
+	update_node_list();
 }
 
+const class_head&
+class_head::operator=(const class_head& o)
+{
+    class_key_ = o.class_key_;
+    nested_name_specifier_ = o.nested_name_specifier_;
+    template_id_ = o.template_id_;
+    identifier_ = o.identifier_;
+    base_clause_ = o.base_clause_;
+	update_node_list();
+
+	return *this;
+}
+
+void
+class_head::update_node_list()
+{
+	clear();
+	add(class_key_);
+    if(nested_name_specifier_) add(*nested_name_specifier_);
+    if(template_id_) add(*template_id_);
+    if(identifier_) add(*identifier_);
+    if(base_clause_) add(*base_clause_);
+}
 
 }}} //namespace socoa::cpp::syntax_tree

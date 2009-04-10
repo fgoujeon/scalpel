@@ -48,9 +48,12 @@ class ptr_operator: public composite_node
 			boost::optional<cv_qualifier_seq>&& a_cv_qualifier_seq
 		);
 
-		ptr_operator(ptr_operator&) = delete;
+		ptr_operator(const ptr_operator& o);
 
 		ptr_operator(ptr_operator&& o);
+
+		const ptr_operator&
+		operator=(const ptr_operator& o);
 
 		inline
 		type
@@ -69,14 +72,13 @@ class ptr_operator: public composite_node
 		get_cv_qualifier_seq() const;
 
 	private:
+		void
+		update_node_list();
+
 		type type_;
 		bool leading_double_colon_;
-		/*
 		boost::optional<nested_name_specifier> nested_name_specifier_;
 		boost::optional<cv_qualifier_seq> cv_qualifier_seq_;
-		*/
-		std::unique_ptr<nested_name_specifier> nested_name_specifier_;
-		std::unique_ptr<cv_qualifier_seq> cv_qualifier_seq_;
 };
 
 inline
@@ -97,20 +99,14 @@ inline
 const boost::optional<const nested_name_specifier&>
 ptr_operator::get_nested_name_specifier() const
 {
-	if(nested_name_specifier_)
-		return boost::optional<const nested_name_specifier&>(*nested_name_specifier_);
-	else
-		return boost::optional<const nested_name_specifier&>();
+	return boost::optional<const nested_name_specifier&>(nested_name_specifier_);
 }
 
 inline
 const boost::optional<const cv_qualifier_seq&>
 ptr_operator::get_cv_qualifier_seq() const
 {
-	if(cv_qualifier_seq_)
-		return boost::optional<const cv_qualifier_seq&>(*cv_qualifier_seq_);
-	else
-		return boost::optional<const cv_qualifier_seq&>();
+	return boost::optional<const cv_qualifier_seq&>(cv_qualifier_seq_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

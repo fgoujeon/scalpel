@@ -29,12 +29,35 @@ assignment_expression::assignment_expression
 ):
     assignment_operator_(std::move(an_assignment_operator))
 {
-	add(assignment_operator_);
+	update_node_list();
+}
+
+assignment_expression::assignment_expression(const assignment_expression& o):
+	composite_node(),
+	assignment_operator_(o.assignment_operator_)
+{
+	update_node_list();
 }
 
 assignment_expression::assignment_expression(assignment_expression&& o):
 	assignment_operator_(std::move(o.assignment_operator_))
 {
+	update_node_list();
+}
+
+const assignment_expression&
+assignment_expression::operator=(const assignment_expression& o)
+{
+	assignment_operator_ = o.assignment_operator_;
+	update_node_list();
+
+	return *this;
+}
+
+void
+assignment_expression::update_node_list()
+{
+	clear();
 	add(assignment_operator_);
 }
 

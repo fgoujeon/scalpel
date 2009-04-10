@@ -29,12 +29,36 @@ qualified_identifier::qualified_identifier
 ):
     identifier_(std::move(an_identifier))
 {
-	add(identifier_);
+	update_node_list();
+}
+
+qualified_identifier::qualified_identifier(const qualified_identifier& o):
+	composite_node(),
+    identifier_(o.identifier_)
+{
+	update_node_list();
 }
 
 qualified_identifier::qualified_identifier(qualified_identifier&& o):
     identifier_(std::move(o.identifier_))
 {
+	update_node_list();
+}
+
+const qualified_identifier&
+qualified_identifier::operator=(const qualified_identifier& o)
+{
+    identifier_ = o.identifier_;
+	update_node_list();
+
+	return *this;
+}
+
+void
+qualified_identifier::update_node_list()
+{
+	clear();
+	add(identifier_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

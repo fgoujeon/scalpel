@@ -31,14 +31,40 @@ simple_declaration::simple_declaration
     decl_specifier_seq_(a_decl_specifier_seq),
     init_declarator_list_(an_init_declarator_list)
 {
-	if(decl_specifier_seq_) add(*decl_specifier_seq_);
-	if(init_declarator_list_) add(*init_declarator_list_);
+	update_node_list();
+}
+
+simple_declaration::simple_declaration(const simple_declaration& o):
+	composite_node(),
+    decl_specifier_seq_(o.decl_specifier_seq_),
+    init_declarator_list_(o.init_declarator_list_)
+{
+	update_node_list();
 }
 
 simple_declaration::simple_declaration(simple_declaration&& o):
     decl_specifier_seq_(std::move(o.decl_specifier_seq_)),
     init_declarator_list_(std::move(o.init_declarator_list_))
 {
+	update_node_list();
+}
+
+const simple_declaration&
+simple_declaration::operator=(const simple_declaration& o)
+{
+    decl_specifier_seq_ = o.decl_specifier_seq_;
+    init_declarator_list_ = o.init_declarator_list_;
+	update_node_list();
+
+	return *this;
+}
+
+void
+simple_declaration::update_node_list()
+{
+	clear();
+	if(decl_specifier_seq_) add(*decl_specifier_seq_);
+	if(init_declarator_list_) add(*init_declarator_list_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

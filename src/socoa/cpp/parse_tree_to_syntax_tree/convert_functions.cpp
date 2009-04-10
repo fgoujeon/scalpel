@@ -732,17 +732,25 @@ convert_base_specifier(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::BASE_SPECIFIER);
 
-    return base_specifier
-    (
-		check_node_existence(node, "virtual"),
-		/*
-		convert_string_enumeration<syntax_tree::access_specifier>
+	const tree_node_t* access_specifier_node = find_child_node(node, id_t::ACCESS_SPECIFIER);
+
+	if(access_specifier_node)
+		return base_specifier
 		(
-			*find_child_node(node, id_t::ACCESS_SPECIFIER)
-		),
-		*/
-		find_and_convert_node<boost::optional<nested_identifier_or_template_id>, id_t::NESTED_IDENTIFIER_OR_TEMPLATE_ID>(node)
-    );
+			check_node_existence(node, "virtual"),
+			convert_string_enumeration<access_specifier>
+			(
+				*find_child_node(node, id_t::ACCESS_SPECIFIER)
+			),
+			find_and_convert_node<boost::optional<nested_identifier_or_template_id>, id_t::NESTED_IDENTIFIER_OR_TEMPLATE_ID>(node)
+		);
+	else
+		return base_specifier
+		(
+			check_node_existence(node, "virtual"),
+			boost::optional<access_specifier>(),
+			find_and_convert_node<boost::optional<nested_identifier_or_template_id>, id_t::NESTED_IDENTIFIER_OR_TEMPLATE_ID>(node)
+		);
 }
 
 ctor_initializer

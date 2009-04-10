@@ -48,7 +48,11 @@ class decl_specifier: public decl_specifier_t
 		decl_specifier(function_specifier&& o): decl_specifier_t(o){}
 		decl_specifier(storage_class_specifier&& o): decl_specifier_t(o){}
 
+		decl_specifier(const decl_specifier& o): decl_specifier_t(o){}
+
 		decl_specifier(decl_specifier&& o): decl_specifier_t(o){}
+
+		using decl_specifier_t::operator=;
 };
 
 }}} //namespace socoa::cpp::syntax_tree

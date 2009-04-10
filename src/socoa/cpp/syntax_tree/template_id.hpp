@@ -42,9 +42,12 @@ class template_id: public composite_node
 			boost::optional<sequence_node<template_argument, util::extern_strings::comma>>&& a_template_argument_list
 		);
 
-		template_id(const template_id&) = delete;
+		template_id(const template_id& o);
 
 		template_id(template_id&& o);
+
+		const template_id&
+		operator=(const template_id& o);
 
 		inline
 		const identifier&
@@ -55,6 +58,9 @@ class template_id: public composite_node
 		get_template_argument_list() const;
 
 	private:
+		void
+		update_node_list();
+
 		identifier identifier_;
 		std::shared_ptr<sequence_node<template_argument, util::extern_strings::comma>> template_argument_list_;
 };

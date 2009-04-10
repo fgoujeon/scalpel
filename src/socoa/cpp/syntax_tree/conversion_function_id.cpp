@@ -27,8 +27,19 @@ conversion_function_id::conversion_function_id()
 {
 }
 
+conversion_function_id::conversion_function_id(const conversion_function_id&):
+	composite_node()
+{
+}
+
 conversion_function_id::conversion_function_id(conversion_function_id&&)
 {
+}
+
+const conversion_function_id&
+conversion_function_id::operator=(const conversion_function_id&)
+{
+	return *this;
 }
 
 }}} //namespace socoa::cpp::syntax_tree

@@ -29,20 +29,20 @@ direct_declarator::direct_declarator
     boost::optional<declarator>&& a_declarator,
     std::vector<other_part>&& other_parts
 ):
-	/*
     declarator_id_(a_declarator_id),
-    declarator_(a_declarator),*/
+    declarator_(a_declarator),
     other_parts_(std::move(other_parts))
 {
-	if(a_declarator_id)
-		declarator_id_ = std::move(std::unique_ptr<declarator_id>(new declarator_id(std::move(*a_declarator_id))));
-	if(a_declarator)
-		declarator_ = std::move(std::unique_ptr<declarator>(new declarator(std::move(*a_declarator))));
+	update_node_list();
+}
 
-	if(declarator_id_) add(*declarator_id_);
-	if(declarator_) add(*declarator_);
-	for(auto i = other_parts_.begin(); i != other_parts_.end(); ++i)
-		add(*i);
+direct_declarator::direct_declarator(const direct_declarator& o):
+	composite_node(),
+    declarator_id_(o.declarator_id_),
+    declarator_(o.declarator_),
+    other_parts_(o.other_parts_)
+{
+	update_node_list();
 }
 
 direct_declarator::direct_declarator(direct_declarator&& o):
@@ -50,27 +50,62 @@ direct_declarator::direct_declarator(direct_declarator&& o):
     declarator_(std::move(o.declarator_)),
     other_parts_(std::move(o.other_parts_))
 {
+	update_node_list();
 }
+
+void
+direct_declarator::update_node_list()
+{
+	clear();
+	if(declarator_id_) add(*declarator_id_);
+	if(declarator_) add(*declarator_);
+	for(auto i = other_parts_.begin(); i != other_parts_.end(); ++i)
+		add(*i);
+}
+
 
 direct_declarator::function_part::function_part
 (
     parameter_declaration_clause&& a_parameter_declaration_clause,
     boost::optional<cv_qualifier_seq>&& a_cv_qualifier_seq
 ):
-    parameter_declaration_clause_(std::move(a_parameter_declaration_clause))/*,
-    cv_qualifier_seq_(a_cv_qualifier_seq)*/
+    parameter_declaration_clause_(std::move(a_parameter_declaration_clause)),
+    cv_qualifier_seq_(a_cv_qualifier_seq)
 {
-	if(a_cv_qualifier_seq)
-		cv_qualifier_seq_ = std::move(std::unique_ptr<cv_qualifier_seq>(new cv_qualifier_seq(std::move(*a_cv_qualifier_seq))));
+	update_node_list();
+}
 
-	add(parameter_declaration_clause_);
-	if(cv_qualifier_seq_) add(*cv_qualifier_seq_);
+direct_declarator::function_part::function_part(const function_part& o):
+	composite_node(),
+    parameter_declaration_clause_(o.parameter_declaration_clause_),
+    cv_qualifier_seq_(o.cv_qualifier_seq_)
+{
+	update_node_list();
 }
 
 direct_declarator::function_part::function_part(function_part&& o):
     parameter_declaration_clause_(std::move(o.parameter_declaration_clause_)),
     cv_qualifier_seq_(std::move(o.cv_qualifier_seq_))
 {
+	update_node_list();
+}
+
+const direct_declarator::function_part&
+direct_declarator::function_part::operator=(const function_part& o)
+{
+    parameter_declaration_clause_ = o.parameter_declaration_clause_;
+    cv_qualifier_seq_ = o.cv_qualifier_seq_;
+	update_node_list();
+
+	return *this;
+}
+
+void
+direct_declarator::function_part::update_node_list()
+{
+	clear();
+	add(parameter_declaration_clause_);
+	if(cv_qualifier_seq_) add(*cv_qualifier_seq_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

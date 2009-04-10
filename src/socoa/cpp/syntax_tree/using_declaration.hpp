@@ -40,9 +40,12 @@ class using_declaration: public composite_node
 			unqualified_id&& an_unqualified_id
 		);
 
-		using_declaration(const using_declaration&) = delete;
+		using_declaration(const using_declaration& o);
 
 		using_declaration(using_declaration&& o);
+
+		const using_declaration&
+		operator=(const using_declaration& o);
 
 		inline
 		bool
@@ -61,12 +64,12 @@ class using_declaration: public composite_node
 		get_unqualified_id() const;
 
 	private:
+		void
+		update_node_list();
+
 		bool typename_keyword_;
 		bool leading_double_colon_;
-		/*
 		boost::optional<nested_name_specifier> nested_name_specifier_;
-		*/
-		std::unique_ptr<nested_name_specifier> nested_name_specifier_;
 		unqualified_id unqualified_id_;
 };
 
@@ -88,10 +91,7 @@ inline
 const boost::optional<const nested_name_specifier&>
 using_declaration::get_nested_name_specifier() const
 {
-	if(nested_name_specifier_)
-		return boost::optional<const nested_name_specifier&>(*nested_name_specifier_);
-	else
-		return boost::optional<const nested_name_specifier&>();
+	return boost::optional<const nested_name_specifier&>(nested_name_specifier_);
 }
 
 inline

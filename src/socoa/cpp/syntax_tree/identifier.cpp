@@ -29,6 +29,12 @@ identifier::identifier(std::string&& value):
 {
 }
 
+identifier::identifier(const identifier& i):
+	leaf_node(" " + i.value_),
+    value_(i.value_)
+{
+}
+
 identifier::identifier(identifier&& i):
 	leaf_node(" " + i.value_),
     value_(std::move(i.value_))
@@ -36,8 +42,18 @@ identifier::identifier(identifier&& i):
 }
 
 const identifier&
+identifier::operator=(const identifier& i)
+{
+	raw_code(" " + i.value_);
+    value_ = i.value_;
+
+	return *this;
+}
+
+const identifier&
 identifier::operator=(identifier&& i)
 {
+	raw_code(" " + i.value_);
 	value_ = std::move(i.value_);
 	return *this;
 }

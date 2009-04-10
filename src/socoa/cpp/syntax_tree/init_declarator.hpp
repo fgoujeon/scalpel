@@ -33,13 +33,21 @@ class init_declarator: public composite_node
 	public:
 		init_declarator(declarator&& a_declarator);
 
+		init_declarator(const init_declarator& o);
+
 		init_declarator(init_declarator&& o);
+
+		const init_declarator&
+		operator=(const init_declarator& o);
 
 		inline
 		const declarator&
 		get_declarator() const;
 
 	private:
+		void
+		update_node_list();
+
 		declarator declarator_;
 		//const std::shared_ptr<initializer> initializer_;
 };

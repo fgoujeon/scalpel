@@ -26,12 +26,36 @@ namespace socoa { namespace cpp { namespace syntax_tree
 destructor_name::destructor_name(identifier&& an_identifier):
 	identifier_(std::move(an_identifier))
 {
-	add(identifier_);
+	update_node_list();
+}
+
+destructor_name::destructor_name(const destructor_name& o):
+	composite_node(),
+	identifier_(o.identifier_)
+{
+	update_node_list();
 }
 
 destructor_name::destructor_name(destructor_name&& o):
 	identifier_(std::move(o.identifier_))
 {
+	update_node_list();
+}
+
+const destructor_name&
+destructor_name::operator=(const destructor_name& o)
+{
+	identifier_ = o.identifier_;
+	update_node_list();
+
+	return *this;
+}
+
+void
+destructor_name::update_node_list()
+{
+	clear();
+	add(identifier_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

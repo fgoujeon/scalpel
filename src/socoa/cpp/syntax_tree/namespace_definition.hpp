@@ -42,9 +42,12 @@ class namespace_definition: public composite_node
 			boost::optional<sequence_node<declaration>>&& a_declaration_seq
 		);
 
-		namespace_definition(const namespace_definition&) = delete;
+		namespace_definition(const namespace_definition& o);
 
 		namespace_definition(namespace_definition&& o);
+
+		const namespace_definition&
+		operator=(const namespace_definition& o);
 
 		inline
 		const boost::optional<const identifier&>
@@ -55,8 +58,10 @@ class namespace_definition: public composite_node
 		get_declaration_seq() const;
 
 	private:
-		//boost::optional<identifier> identifier_;
-		std::unique_ptr<identifier> identifier_;
+		void
+		update_node_list();
+
+		boost::optional<identifier> identifier_;
 		std::shared_ptr<sequence_node<declaration>> declaration_seq_;
 };
 
@@ -64,10 +69,7 @@ inline
 const boost::optional<const identifier&>
 namespace_definition::get_identifier() const
 {
-	if(identifier_)
-		return boost::optional<const identifier&>(*identifier_);
-	else
-		return boost::optional<const identifier&>();
+	return boost::optional<const identifier&>(identifier_);
 }
 
 inline

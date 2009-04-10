@@ -41,7 +41,12 @@ class class_specifier: public composite_node
             boost::optional<member_specification>&& a_member_specification
         );
 
+        class_specifier(const class_specifier& o);
+
         class_specifier(class_specifier&& o);
+
+        const class_specifier&
+		operator=(const class_specifier& o);
 
         inline
         const class_head&
@@ -52,6 +57,9 @@ class class_specifier: public composite_node
         get_member_specification() const;
 
     private:
+		void
+		update_node_list();
+
 		class_head class_head_;
 		std::shared_ptr<member_specification> member_specification_;
 };

@@ -34,13 +34,39 @@ template_declaration::template_declaration
     export_keyword_(export_keyword),
     declaration_(std::make_shared<declaration>(std::move(a_declaration)))
 {
-	add(*declaration_);
+	update_node_list();
+}
+
+template_declaration::template_declaration(const template_declaration& o):
+	composite_node(),
+    export_keyword_(o.export_keyword_),
+    declaration_(o.declaration_)
+{
+	update_node_list();
 }
 
 template_declaration::template_declaration(template_declaration&& o):
     export_keyword_(std::move(o.export_keyword_)),
     declaration_(std::move(o.declaration_))
 {
+	update_node_list();
+}
+
+const template_declaration&
+template_declaration::operator=(const template_declaration& o)
+{
+    export_keyword_ = o.export_keyword_;
+    declaration_ = o.declaration_;
+	update_node_list();
+
+	return *this;
+}
+
+void
+template_declaration::update_node_list()
+{
+	clear();
+	add(*declaration_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

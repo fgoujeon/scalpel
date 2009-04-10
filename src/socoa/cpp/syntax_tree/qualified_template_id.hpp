@@ -33,13 +33,21 @@ class qualified_template_id: public composite_node
 		explicit
 		qualified_template_id(template_id&& a_template_id);
 
+		qualified_template_id(const qualified_template_id& o);
+
 		qualified_template_id(qualified_template_id&& o);
+
+		const qualified_template_id&
+		operator=(const qualified_template_id& o);
 
 		inline
 		const template_id&
 		get_template_id() const;
 
 	private:
+		void
+		update_node_list();
+
 		template_id template_id_;
 };
 

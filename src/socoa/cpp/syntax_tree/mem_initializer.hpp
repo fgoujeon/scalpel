@@ -36,13 +36,21 @@ class mem_initializer: public composite_node
 			mem_initializer_id&& a_mem_initializer_id
 		);
 
+		mem_initializer(const mem_initializer& o);
+
 		mem_initializer(mem_initializer&& o);
+
+		const mem_initializer&
+		operator=(const mem_initializer& o);
 
 		inline
 		const mem_initializer_id&
 		get_mem_initializer_id() const;
 
 	private:
+		void
+		update_node_list();
+
 		mem_initializer_id mem_initializer_id_;
 		//const std::shared_ptr<util::sequence<assignment_expression, util::extern_strings::comma>> expression_list_;
 };

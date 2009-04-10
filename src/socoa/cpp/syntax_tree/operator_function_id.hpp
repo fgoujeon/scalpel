@@ -31,7 +31,12 @@ class operator_function_id: public composite_node
     public:
 		operator_function_id();
 
+		operator_function_id(const operator_function_id& o);
+
 		operator_function_id(operator_function_id&& o);
+
+		const operator_function_id&
+		operator=(const operator_function_id& o);
 
     private:
 };

@@ -34,30 +34,30 @@ elaborated_type_specifier::elaborated_type_specifier
 	bool typename_keyword,
 	bool template_keyword
 ):
-	/*
 	class_key_(a_class_key),
 	nested_name_specifier_(a_nested_name_specifier),
 	template_id_(a_template_id),
 	identifier_(an_identifier),
-	*/
 	leading_double_colon_(leading_double_colon),
 	enum_keyword_(enum_keyword),
 	typename_keyword_(typename_keyword),
 	template_keyword_(template_keyword)
 {
-	if(a_class_key)
-		class_key_ = std::move(std::unique_ptr<class_key>(new class_key(std::move(*a_class_key))));
-	if(a_nested_name_specifier)
-		nested_name_specifier_ = std::move(std::unique_ptr<nested_name_specifier>(new nested_name_specifier(std::move(*a_nested_name_specifier))));
-	if(a_template_id)
-		template_id_ = std::move(std::unique_ptr<template_id>(new template_id(std::move(*a_template_id))));
-	if(an_identifier)
-		identifier_ = std::move(std::unique_ptr<identifier>(new identifier(std::move(*an_identifier))));
+	update_node_list();
+}
 
-	if(class_key_) add(*class_key_);
-	if(nested_name_specifier_) add(*nested_name_specifier_);
-	if(template_id_) add(*template_id_);
-	if(identifier_) add(*identifier_);
+elaborated_type_specifier::elaborated_type_specifier(const elaborated_type_specifier& o):
+	composite_node(),
+	class_key_(o.class_key_),
+	nested_name_specifier_(o.nested_name_specifier_),
+	template_id_(o.template_id_),
+	identifier_(o.identifier_),
+	leading_double_colon_(o.leading_double_colon_),
+	enum_keyword_(o.enum_keyword_),
+	typename_keyword_(o.typename_keyword_),
+	template_keyword_(o.template_keyword_)
+{
+	update_node_list();
 }
 
 elaborated_type_specifier::elaborated_type_specifier(elaborated_type_specifier&& o):
@@ -70,42 +70,47 @@ elaborated_type_specifier::elaborated_type_specifier(elaborated_type_specifier&&
 	typename_keyword_(std::move(o.typename_keyword_)),
 	template_keyword_(std::move(o.template_keyword_))
 {
+	update_node_list();
+}
+
+const elaborated_type_specifier&
+elaborated_type_specifier::operator=(const elaborated_type_specifier& o)
+{
+	class_key_ = o.class_key_;
+	nested_name_specifier_ = o.nested_name_specifier_;
+	template_id_ = o.template_id_;
+	identifier_ = o.identifier_;
+	leading_double_colon_ = o.leading_double_colon_;
+	enum_keyword_ = o.enum_keyword_;
+	typename_keyword_ = o.typename_keyword_;
+	template_keyword_ = o.template_keyword_;
+	update_node_list();
+
+	return *this;
 }
 
 const boost::optional<const class_key&>
 elaborated_type_specifier::get_class_key() const
 {
-	if(class_key_)
-		return boost::optional<const class_key&>(*class_key_);
-	else
-		return boost::optional<const class_key&>();
+	return boost::optional<const class_key&>(class_key_);
 }
 
 const boost::optional<const nested_name_specifier&>
 elaborated_type_specifier::get_nested_name_specifier() const
 {
-	if(nested_name_specifier_)
-		return boost::optional<const nested_name_specifier&>(*nested_name_specifier_);
-	else
-		return boost::optional<const nested_name_specifier&>();
+	return boost::optional<const nested_name_specifier&>(nested_name_specifier_);
 }
 
 const boost::optional<const template_id&>
 elaborated_type_specifier::get_template_id() const
 {
-	if(template_id_)
-		return boost::optional<const template_id&>(*template_id_);
-	else
-		return boost::optional<const template_id&>();
+	return boost::optional<const template_id&>(template_id_);
 }
 
 const boost::optional<const identifier&>
 elaborated_type_specifier::get_identifier() const
 {
-	if(identifier_)
-		return boost::optional<const identifier&>(*identifier_);
-	else
-		return boost::optional<const identifier&>();
+	return boost::optional<const identifier&>(identifier_);
 }
 
 bool
@@ -130,6 +135,16 @@ bool
 elaborated_type_specifier::has_template_keyword() const
 {
 	return template_keyword_;
+}
+
+void
+elaborated_type_specifier::update_node_list()
+{
+	clear();
+	if(class_key_) add(*class_key_);
+	if(nested_name_specifier_) add(*nested_name_specifier_);
+	if(template_id_) add(*template_id_);
+	if(identifier_) add(*identifier_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

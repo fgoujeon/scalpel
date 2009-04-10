@@ -36,13 +36,21 @@ class qualified_identifier: public composite_node
 			identifier&& an_identifier
 		);
 
+		qualified_identifier(const qualified_identifier& o);
+
 		qualified_identifier(qualified_identifier&& o);
+
+		const qualified_identifier&
+		operator=(const qualified_identifier& o);
 
 		inline
 		const identifier&
 	   	get_identifier() const;
 
 	private:
+		void
+		update_node_list();
+
 		identifier identifier_;
 };
 

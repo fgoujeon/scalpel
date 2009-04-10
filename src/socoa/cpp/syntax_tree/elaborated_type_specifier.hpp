@@ -46,7 +46,12 @@ class elaborated_type_specifier: public composite_node
 			bool template_keyword
 		);
 
+		elaborated_type_specifier(const elaborated_type_specifier& o);
+
 		elaborated_type_specifier(elaborated_type_specifier&& o);
+
+		const elaborated_type_specifier&
+		operator=(const elaborated_type_specifier& o);
 
 		const boost::optional<const class_key&>
 		get_class_key() const;
@@ -73,18 +78,13 @@ class elaborated_type_specifier: public composite_node
 		has_template_keyword() const;
 
     private:
-		///\todo Use boost::optional instead ofunique_ptr when boost will
-		//support C++0x's move semantics.
-		/*
+		void
+		update_node_list();
+
 		boost::optional<class_key> class_key_;
 		boost::optional<nested_name_specifier> nested_name_specifier_;
 		boost::optional<template_id> template_id_;
 		boost::optional<identifier> identifier_;
-		*/
-		std::unique_ptr<class_key> class_key_;
-		std::unique_ptr<nested_name_specifier> nested_name_specifier_;
-		std::unique_ptr<template_id> template_id_;
-		std::unique_ptr<identifier> identifier_;
 		bool leading_double_colon_;
 		bool enum_keyword_;
 		bool typename_keyword_;

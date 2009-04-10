@@ -33,7 +33,16 @@ parameter_declaration_clause::parameter_declaration_clause
 	trailing_comma_(trailing_comma),
 	ellipsis_(ellipsis)
 {
-	if(parameter_declaration_list_) add(*parameter_declaration_list_);
+	update_node_list();
+}
+
+parameter_declaration_clause::parameter_declaration_clause(const parameter_declaration_clause& o):
+	composite_node(),
+	parameter_declaration_list_(o.parameter_declaration_list_),
+	trailing_comma_(o.trailing_comma_),
+	ellipsis_(o.ellipsis_)
+{
+	update_node_list();
 }
 
 parameter_declaration_clause::parameter_declaration_clause(parameter_declaration_clause&& o):
@@ -41,6 +50,25 @@ parameter_declaration_clause::parameter_declaration_clause(parameter_declaration
 	trailing_comma_(o.trailing_comma_),
 	ellipsis_(o.ellipsis_)
 {
+	update_node_list();
+}
+
+const parameter_declaration_clause&
+parameter_declaration_clause::operator=(const parameter_declaration_clause& o)
+{
+	parameter_declaration_list_ = o.parameter_declaration_list_;
+	trailing_comma_ = o.trailing_comma_;
+	ellipsis_ = o.ellipsis_;
+	update_node_list();
+
+	return *this;
+}
+
+void
+parameter_declaration_clause::update_node_list()
+{
+	clear();
+	if(parameter_declaration_list_) add(*parameter_declaration_list_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

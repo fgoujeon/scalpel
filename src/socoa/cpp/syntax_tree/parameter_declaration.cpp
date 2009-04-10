@@ -30,13 +30,19 @@ parameter_declaration::parameter_declaration
 	bool equal
 ):
 	decl_specifier_seq_(a_decl_specifier_seq),
-//	declarator_(a_declarator),
+	declarator_(a_declarator),
 	equal_(equal)
 {
-	if(a_declarator) declarator_ = std::make_shared<declarator>(std::move(*a_declarator));
+	update_node_list();
+}
 
-	add(decl_specifier_seq_);
-	if(declarator_) add(*declarator_);
+parameter_declaration::parameter_declaration(const parameter_declaration& o):
+	composite_node(),
+	decl_specifier_seq_(o.decl_specifier_seq_),
+	declarator_(o.declarator_),
+	equal_(o.equal_)
+{
+	update_node_list();
 }
 
 parameter_declaration::parameter_declaration(parameter_declaration&& o):
@@ -44,6 +50,26 @@ parameter_declaration::parameter_declaration(parameter_declaration&& o):
 	declarator_(std::move(o.declarator_)),
 	equal_(o.equal_)
 {
+	update_node_list();
+}
+
+const parameter_declaration&
+parameter_declaration::operator=(const parameter_declaration& o)
+{
+	decl_specifier_seq_ = o.decl_specifier_seq_;
+	declarator_ = o.declarator_;
+	equal_ = o.equal_;
+	update_node_list();
+
+	return *this;
+}
+
+void
+parameter_declaration::update_node_list()
+{
+	clear();
+	add(decl_specifier_seq_);
+	if(declarator_) add(*declarator_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

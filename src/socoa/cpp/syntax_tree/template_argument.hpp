@@ -45,6 +45,8 @@ class template_argument: public template_argument_t
 	public:
 		template_argument(id_expression&& o): template_argument_t(o){}
 
+		template_argument(const template_argument& o): template_argument_t(o){}
+
 		template_argument(template_argument&& o): template_argument_t(o){}
 };
 

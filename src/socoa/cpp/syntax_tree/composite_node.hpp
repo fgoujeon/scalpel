@@ -37,7 +37,10 @@ class composite_node: public node
 
 		composite_node(const composite_node&) = delete;
 
-		composite_node(composite_node&& n);
+		composite_node(composite_node&&) = delete;
+
+		const composite_node&
+		operator=(const composite_node&) = delete;
 
 		virtual
 		~composite_node();
@@ -47,7 +50,10 @@ class composite_node: public node
 
 	protected:
 		void
-		add(node& a_node);
+		add(const node& a_node);
+
+		void
+		clear();
 
 	private:
 		nodes_t nodes_;

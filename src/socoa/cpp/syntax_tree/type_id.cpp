@@ -27,6 +27,11 @@ type_id::type_id()
 {
 }
 
+type_id::type_id(const type_id&):
+	composite_node()
+{
+}
+
 type_id::type_id(type_id&&)
 {
 }

@@ -37,14 +37,20 @@ class string_enumeration_node: public leaf_node
 	public:
         string_enumeration_node(const std::string& value);
 
-        string_enumeration_node(const string_enumeration_node&) = delete;
+        string_enumeration_node(const string_enumeration_node& o);
 
         string_enumeration_node(string_enumeration_node&& o);
+
+        const string_enumeration_node&
+		operator=(const string_enumeration_node& o);
 
 		const std::string&
 		value() const;
 
 	private:
+		void
+		update_node_list();
+
 		string_enumeration_t string_enumeration_;
 };
 
@@ -56,10 +62,26 @@ string_enumeration_node<StringList>::string_enumeration_node(const std::string& 
 }
 
 template<const std::vector<std::string>& StringList>
+string_enumeration_node<StringList>::string_enumeration_node(const string_enumeration_node& o):
+	leaf_node(" " + o.string_enumeration_.value()),
+	string_enumeration_(o.string_enumeration_)
+{
+}
+
+template<const std::vector<std::string>& StringList>
 string_enumeration_node<StringList>::string_enumeration_node(string_enumeration_node&& o):
 	leaf_node(" " + o.string_enumeration_.value()),
 	string_enumeration_(std::move(o.string_enumeration_))
 {
+}
+
+template<const std::vector<std::string>& StringList>
+const string_enumeration_node<StringList>&
+string_enumeration_node<StringList>::operator=(const string_enumeration_node& o)
+{
+	raw_code(" " + o.string_enumeration_.value());
+	string_enumeration_ = o.string_enumeration_;
+	return *this;
 }
 
 template<const std::vector<std::string>& StringList>

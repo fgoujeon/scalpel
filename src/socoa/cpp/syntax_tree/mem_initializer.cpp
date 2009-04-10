@@ -29,12 +29,36 @@ mem_initializer::mem_initializer
 ):
 	mem_initializer_id_(a_mem_initializer_id)
 {
-	add(mem_initializer_id_);
+	update_node_list();
+}
+
+mem_initializer::mem_initializer(const mem_initializer& o):
+	composite_node(),
+	mem_initializer_id_(o.mem_initializer_id_)
+{
+	update_node_list();
 }
 
 mem_initializer::mem_initializer(mem_initializer&& o):
 	mem_initializer_id_(std::move(o.mem_initializer_id_))
 {
+	update_node_list();
+}
+
+const mem_initializer&
+mem_initializer::operator=(const mem_initializer& o)
+{
+	mem_initializer_id_ = o.mem_initializer_id_;
+	update_node_list();
+
+	return *this;
+}
+
+void
+mem_initializer::update_node_list()
+{
+	clear();
+	add(mem_initializer_id_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

@@ -35,13 +35,21 @@ class assignment_expression: public composite_node
             assignment_operator&& an_assignment_operator
         );
 
+		assignment_expression(const assignment_expression& o);
+
 		assignment_expression(assignment_expression&& o);
+
+		const assignment_expression&
+		operator=(const assignment_expression& o);
 
         inline
         const assignment_operator&
         get_assignment_operator() const;
 
     private:
+		void
+		update_node_list();
+
         //logical_or_expression logical_or_expression_;
         assignment_operator assignment_operator_;
         //std::shared_ptr<> ;
