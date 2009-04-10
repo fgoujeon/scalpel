@@ -36,6 +36,8 @@ class mem_initializer: public composite_node
 			mem_initializer_id&& a_mem_initializer_id
 		);
 
+		mem_initializer(mem_initializer&& o);
+
 		inline
 		const mem_initializer_id&
 		get_mem_initializer_id() const;

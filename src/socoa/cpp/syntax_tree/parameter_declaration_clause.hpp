@@ -34,10 +34,14 @@ class parameter_declaration_clause: public composite_node
 	public:
 		parameter_declaration_clause
 		(
-			boost::optional<parameter_declaration_list> a_parameter_declaration_list,
+			boost::optional<parameter_declaration_list>&& a_parameter_declaration_list,
 			bool trailing_comma,
 			bool ellipsis
 		);
+
+		parameter_declaration_clause(const parameter_declaration_clause&) = delete;
+
+		parameter_declaration_clause(parameter_declaration_clause&& o);
 
 		inline
 		const boost::optional<const parameter_declaration_list&>

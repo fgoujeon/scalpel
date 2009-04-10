@@ -36,7 +36,7 @@ convert_parse_tree_to_syntax_tree(const tree_node_t& node)
     assert(child_node.value.id() == id_t::TRANSLATION_UNIT);
 
 	const tree_node_t& grandchild_node = get_only_child_node(child_node);
-    if(grandchild_node.value.id() == id_t::DECLARATION_SEQ) //the tree may be empty
+    if(grandchild_node.value.id() == id_t::DECLARATION_SEQ) //check the tree is not empty
 	{
 		return convert_nodes
 		<

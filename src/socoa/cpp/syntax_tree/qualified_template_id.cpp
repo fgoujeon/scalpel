@@ -27,7 +27,13 @@ qualified_template_id::qualified_template_id
 (
     template_id&& a_template_id
 ):
-    template_id_(a_template_id)
+    template_id_(std::move(a_template_id))
+{
+	add(template_id_);
+}
+
+qualified_template_id::qualified_template_id(qualified_template_id&& o):
+    template_id_(std::move(o.template_id_))
 {
 }
 

@@ -30,8 +30,18 @@ declarator::declarator
     std::vector<ptr_operator>&& ptr_operators,
     direct_declarator&& a_direct_declarator
 ):
-    ptr_operators_(ptr_operators),
-    direct_declarator_(std::make_shared<direct_declarator>(a_direct_declarator))
+    ptr_operators_(std::move(ptr_operators)),
+    direct_declarator_(std::make_shared<direct_declarator>(std::move(a_direct_declarator)))
+{
+	for(auto i = ptr_operators_.begin(); i != ptr_operators_.end(); ++i)
+		add(*i);
+
+	add(*direct_declarator_);
+}
+
+declarator::declarator(declarator&& o):
+    ptr_operators_(std::move(o.ptr_operators_)),
+    direct_declarator_(std::move(o.direct_declarator_))
 {
 }
 

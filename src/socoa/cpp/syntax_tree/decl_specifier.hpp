@@ -44,9 +44,11 @@ typedef
 class decl_specifier: public decl_specifier_t
 {
 	public:
-		decl_specifier(const type_specifier& o): decl_specifier_t(o){}
-		decl_specifier(const function_specifier& o): decl_specifier_t(o){}
-		decl_specifier(const storage_class_specifier& o): decl_specifier_t(o){}
+		decl_specifier(type_specifier&& o): decl_specifier_t(o){}
+		decl_specifier(function_specifier&& o): decl_specifier_t(o){}
+		decl_specifier(storage_class_specifier&& o): decl_specifier_t(o){}
+
+		decl_specifier(decl_specifier&& o): decl_specifier_t(o){}
 };
 
 }}} //namespace socoa::cpp::syntax_tree

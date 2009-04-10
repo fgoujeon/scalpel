@@ -25,11 +25,19 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 simple_declaration::simple_declaration
 (
-    boost::optional<decl_specifier_seq> a_decl_specifier_seq,
-    boost::optional<init_declarator_list> an_init_declarator_list
+    boost::optional<decl_specifier_seq>&& a_decl_specifier_seq,
+    boost::optional<init_declarator_list>&& an_init_declarator_list
 ):
     decl_specifier_seq_(a_decl_specifier_seq),
     init_declarator_list_(an_init_declarator_list)
+{
+	if(decl_specifier_seq_) add(*decl_specifier_seq_);
+	if(init_declarator_list_) add(*init_declarator_list_);
+}
+
+simple_declaration::simple_declaration(simple_declaration&& o):
+    decl_specifier_seq_(std::move(o.decl_specifier_seq_)),
+    init_declarator_list_(std::move(o.init_declarator_list_))
 {
 }
 

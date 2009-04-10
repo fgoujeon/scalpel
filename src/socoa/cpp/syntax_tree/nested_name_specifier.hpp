@@ -44,6 +44,10 @@ class nested_name_specifier: public composite_node
 			second_parts_t&& parts
 		);
 
+		nested_name_specifier(const nested_name_specifier&) = delete;
+
+		nested_name_specifier(nested_name_specifier&& o);
+
 		inline
 		const identifier_or_template_id&
 		get_identifier_or_template_id() const;
@@ -57,7 +61,7 @@ class nested_name_specifier: public composite_node
 		second_parts_t parts_;
 };
 
-class nested_name_specifier::second_part
+class nested_name_specifier::second_part: public composite_node
 {
 	public:
 		second_part
@@ -65,6 +69,10 @@ class nested_name_specifier::second_part
 			bool template_keyword,
 			identifier_or_template_id&& an_identifier_or_template_id
 		);
+
+		second_part(const second_part& o) = delete;
+
+		second_part(second_part&& o);
 
 		inline
 		bool

@@ -33,6 +33,8 @@ class init_declarator: public composite_node
 	public:
 		init_declarator(declarator&& a_declarator);
 
+		init_declarator(init_declarator&& o);
+
 		inline
 		const declarator&
 		get_declarator() const;

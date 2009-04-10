@@ -27,7 +27,13 @@ member_declaration_function_definition::member_declaration_function_definition
 (
     function_definition&& a_function_definition
 ):
-    function_definition_(a_function_definition)
+    function_definition_(std::move(a_function_definition))
+{
+	add(function_definition_);
+}
+
+member_declaration_function_definition::member_declaration_function_definition(member_declaration_function_definition&& o):
+    function_definition_(std::move(o.function_definition_))
 {
 }
 

@@ -27,7 +27,13 @@ member_specification_access_specifier::member_specification_access_specifier
 (
     access_specifier&& a_access_specifier
 ):
-    access_specifier_(a_access_specifier)
+    access_specifier_(std::move(a_access_specifier))
+{
+	add(access_specifier_);
+}
+
+member_specification_access_specifier::member_specification_access_specifier(member_specification_access_specifier&& o):
+    access_specifier_(std::move(o.access_specifier_))
 {
 }
 

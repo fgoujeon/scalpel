@@ -35,9 +35,11 @@ class member_declaration_member_declarator_list: public composite_node
 	public:
 		member_declaration_member_declarator_list
 		(
-			boost::optional<decl_specifier_seq> a_decl_specifier_seq,
-			boost::optional<member_declarator_list> a_member_declarator_list
+			boost::optional<decl_specifier_seq>&& a_decl_specifier_seq,
+			boost::optional<member_declarator_list>&& a_member_declarator_list
 		);
+
+		member_declaration_member_declarator_list(member_declaration_member_declarator_list&& o);
 
 		inline
 		const boost::optional<const decl_specifier_seq&>

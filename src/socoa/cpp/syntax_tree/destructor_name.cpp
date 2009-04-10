@@ -24,7 +24,13 @@ namespace socoa { namespace cpp { namespace syntax_tree
 {
 
 destructor_name::destructor_name(identifier&& an_identifier):
-	identifier_(an_identifier)
+	identifier_(std::move(an_identifier))
+{
+	add(identifier_);
+}
+
+destructor_name::destructor_name(destructor_name&& o):
+	identifier_(std::move(o.identifier_))
 {
 }
 

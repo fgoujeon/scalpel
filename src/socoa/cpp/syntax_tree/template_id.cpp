@@ -28,12 +28,21 @@ namespace socoa { namespace cpp { namespace syntax_tree
 template_id::template_id
 (
     identifier&& an_identifier,
-    boost::optional<template_argument_list> a_template_argument_list
+    boost::optional<template_argument_list>&& a_template_argument_list
 ):
-    identifier_(an_identifier)
+    identifier_(std::move(an_identifier))
 {
+	add(identifier_);
 	if(a_template_argument_list)
+	{
 		template_argument_list_ = std::make_shared<template_argument_list>(*a_template_argument_list);
+		add(*template_argument_list_);
+	}
+}
+
+template_id::template_id(template_id&& o):
+    identifier_(std::move(o.identifier_))
+{
 }
 
 }}} //namespace socoa::cpp::syntax_tree

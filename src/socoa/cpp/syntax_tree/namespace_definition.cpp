@@ -27,13 +27,26 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 namespace_definition::namespace_definition
 (
-    boost::optional<identifier> an_identifier,
-    boost::optional<declaration_seq> a_declaration_seq
-):
-    identifier_(an_identifier)
+    boost::optional<identifier>&& an_identifier,
+    boost::optional<declaration_seq>&& a_declaration_seq
+)/*:
+    identifier_(an_identifier)*/
 {
+	if(an_identifier)
+		identifier_ = std::move(std::unique_ptr<identifier>(new identifier(std::move(*an_identifier))));
+
+	if(identifier_) add(*identifier_);
 	if(a_declaration_seq)
+	{
 		declaration_seq_ = std::make_shared<declaration_seq>(*a_declaration_seq);
+		add(*declaration_seq_);
+	}
+}
+
+namespace_definition::namespace_definition(namespace_definition&& o):
+	identifier_(std::move(o.identifier_)),
+	declaration_seq_(std::move(o.declaration_seq_))
+{
 }
 
 }}} //namespace socoa::cpp::syntax_tree

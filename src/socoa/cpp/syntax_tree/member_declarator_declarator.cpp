@@ -28,8 +28,15 @@ member_declarator_declarator::member_declarator_declarator
     declarator&& a_declarator,
     bool pure_specifier
 ):
-    declarator_(a_declarator),
+    declarator_(std::move(a_declarator)),
     pure_specifier_(pure_specifier)
+{
+	add(declarator_);
+}
+
+member_declarator_declarator::member_declarator_declarator(member_declarator_declarator&& o):
+    declarator_(std::move(o.declarator_)),
+    pure_specifier_(std::move(o.pure_specifier_))
 {
 }
 

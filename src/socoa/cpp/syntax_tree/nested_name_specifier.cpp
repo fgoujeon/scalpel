@@ -23,6 +23,23 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
+nested_name_specifier::nested_name_specifier
+(
+	identifier_or_template_id&& an_identifier_or_template_id,
+	second_parts_t&& parts
+):
+	identifier_or_template_id_(std::move(an_identifier_or_template_id)),
+	parts_(std::move(parts))
+{
+}
+
+nested_name_specifier::nested_name_specifier(nested_name_specifier&& o):
+	identifier_or_template_id_(std::move(o.identifier_or_template_id_)),
+	parts_(std::move(o.parts_))
+{
+}
+
+
 nested_name_specifier::second_part::second_part
 (
 	bool template_keyword,
@@ -31,15 +48,12 @@ nested_name_specifier::second_part::second_part
 	template_keyword_(template_keyword),
 	identifier_or_template_id_(an_identifier_or_template_id)
 {
+	add(identifier_or_template_id_);
 }
 
-nested_name_specifier::nested_name_specifier
-(
-	identifier_or_template_id&& an_identifier_or_template_id,
-	second_parts_t&& parts
-):
-	identifier_or_template_id_(an_identifier_or_template_id),
-	parts_(parts)
+nested_name_specifier::second_part::second_part(second_part&& o):
+	template_keyword_(std::move(o.template_keyword_)),
+	identifier_or_template_id_(std::move(o.identifier_or_template_id_))
 {
 }
 

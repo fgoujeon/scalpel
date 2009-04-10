@@ -39,6 +39,8 @@ class member_declaration_unqualified_id: public composite_node
 			unqualified_id&& an_unqualified_id
 		);
 
+		member_declaration_unqualified_id(member_declaration_unqualified_id&& o);
+
 		inline
 		bool
 		has_leading_double_colon() const;

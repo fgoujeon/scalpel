@@ -42,6 +42,8 @@ class member_specification: public composite_node
 			parts_t&& parts
 		);
 
+		member_specification(member_specification&& o);
+
 		inline
 		part_const_iterator_range
 		get_parts() const;

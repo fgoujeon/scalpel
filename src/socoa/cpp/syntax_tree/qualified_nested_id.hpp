@@ -37,8 +37,10 @@ class qualified_nested_id: public composite_node
 			bool leading_double_colon,
 			nested_name_specifier&& a_nested_name_specifier,
 			bool template_keyword,
-			unqualified_id an_unqualified_id
+			unqualified_id&& an_unqualified_id
 		);
+
+		qualified_nested_id(qualified_nested_id&& o);
 
 		inline
 		bool

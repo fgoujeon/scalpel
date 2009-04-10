@@ -25,13 +25,21 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 parameter_declaration_clause::parameter_declaration_clause
 (
-	boost::optional<parameter_declaration_list> a_parameter_declaration_list,
+	boost::optional<parameter_declaration_list>&& a_parameter_declaration_list,
 	bool trailing_comma,
 	bool ellipsis
 ):
 	parameter_declaration_list_(a_parameter_declaration_list),
 	trailing_comma_(trailing_comma),
 	ellipsis_(ellipsis)
+{
+	if(parameter_declaration_list_) add(*parameter_declaration_list_);
+}
+
+parameter_declaration_clause::parameter_declaration_clause(parameter_declaration_clause&& o):
+	parameter_declaration_list_(std::move(o.parameter_declaration_list_)),
+	trailing_comma_(o.trailing_comma_),
+	ellipsis_(o.ellipsis_)
 {
 }
 

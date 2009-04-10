@@ -36,9 +36,11 @@ class simple_declaration: public composite_node
 	public:
 		simple_declaration
 		(
-			boost::optional<decl_specifier_seq> a_decl_specifier_seq,
-			boost::optional<init_declarator_list> an_init_declarator_list
+			boost::optional<decl_specifier_seq>&& a_decl_specifier_seq,
+			boost::optional<init_declarator_list>&& an_init_declarator_list
 		);
+
+		simple_declaration(simple_declaration&& o);
 
 		inline
 		const boost::optional<const decl_specifier_seq&>

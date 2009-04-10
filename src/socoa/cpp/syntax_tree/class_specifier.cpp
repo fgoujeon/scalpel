@@ -29,12 +29,20 @@ namespace socoa { namespace cpp { namespace syntax_tree
 class_specifier::class_specifier
 (
     class_head&& head,
-    boost::optional<member_specification> a_member_specification
+    boost::optional<member_specification>&& a_member_specification
 ):
-    class_head_(head)
+    class_head_(std::move(head))
 {
 	if(a_member_specification)
-		member_specification_ = std::make_shared<member_specification>(*a_member_specification);
+	{
+		member_specification_ = std::make_shared<member_specification>(std::move(*a_member_specification));
+		add(*member_specification_);
+	}
+}
+
+class_specifier::class_specifier(class_specifier&& o):
+    class_head_(std::move(o.class_head_))
+{
 }
 
 }}} //namespace socoa::cpp::syntax_tree

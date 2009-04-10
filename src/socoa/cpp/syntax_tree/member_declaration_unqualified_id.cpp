@@ -31,9 +31,19 @@ member_declaration_unqualified_id::member_declaration_unqualified_id
     unqualified_id&& an_unqualified_id
 ):
     leading_double_colon_(leading_double_colon),
-    nested_name_specifier_(a_nested_name_specifier),
+    nested_name_specifier_(std::move(a_nested_name_specifier)),
     template_keyword_(template_keyword),
-    unqualified_id_(an_unqualified_id)
+    unqualified_id_(std::move(an_unqualified_id))
+{
+	add(nested_name_specifier_);
+	add(unqualified_id_);
+}
+
+member_declaration_unqualified_id::member_declaration_unqualified_id(member_declaration_unqualified_id&& o):
+    leading_double_colon_(std::move(o.leading_double_colon_)),
+    nested_name_specifier_(std::move(o.nested_name_specifier_)),
+    template_keyword_(std::move(o.template_keyword_)),
+    unqualified_id_(std::move(o.unqualified_id_))
 {
 }
 

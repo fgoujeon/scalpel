@@ -27,7 +27,14 @@ member_specification::member_specification
 (
 	parts_t&& parts
 ):
-	parts_(parts)
+	parts_(std::move(parts))
+{
+	for(auto i = parts_.begin(); i != parts_.end(); ++i)
+		add(*i);
+}
+
+member_specification::member_specification(member_specification&& o):
+	parts_(std::move(o.parts_))
 {
 }
 

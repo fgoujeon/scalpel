@@ -30,10 +30,13 @@ namespace socoa { namespace cpp { namespace syntax_tree
 class member_declaration_function_definition: public composite_node
 {
 	public:
-		explicit member_declaration_function_definition
+		explicit
+		member_declaration_function_definition
 		(
 			function_definition&& a_function_definition
 		);
+
+		member_declaration_function_definition(member_declaration_function_definition&& o);
 
 		inline
 		const function_definition&

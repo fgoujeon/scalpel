@@ -27,13 +27,28 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 function_definition::function_definition
 (
-    boost::optional<decl_specifier_seq> a_decl_specifier_seq,
+    boost::optional<decl_specifier_seq>&& a_decl_specifier_seq,
     declarator&& a_declarator,
-    boost::optional<ctor_initializer> a_ctor_initializer
+    boost::optional<ctor_initializer>&& a_ctor_initializer
 ):
-    decl_specifier_seq_(a_decl_specifier_seq),
-    declarator_(std::make_shared<declarator>(a_declarator)),
-    ctor_initializer_(a_ctor_initializer)
+    //decl_specifier_seq_(a_decl_specifier_seq),
+    declarator_(std::make_shared<declarator>(std::move(a_declarator)))/*,
+    ctor_initializer_(a_ctor_initializer)*/
+{
+	if(a_decl_specifier_seq)
+		decl_specifier_seq_ = std::move(std::unique_ptr<decl_specifier_seq>(new decl_specifier_seq(std::move(*a_decl_specifier_seq))));
+	if(a_ctor_initializer)
+		ctor_initializer_ = std::move(std::unique_ptr<ctor_initializer>(new ctor_initializer(std::move(*a_ctor_initializer))));
+
+	if(decl_specifier_seq_) add(*decl_specifier_seq_);
+	add(*declarator_);
+	if(ctor_initializer_) add(*ctor_initializer_);
+}
+
+function_definition::function_definition(function_definition&& o):
+    decl_specifier_seq_(std::move(o.decl_specifier_seq_)),
+    declarator_(std::move(o.declarator_)),
+    ctor_initializer_(std::move(o.ctor_initializer_))
 {
 }
 

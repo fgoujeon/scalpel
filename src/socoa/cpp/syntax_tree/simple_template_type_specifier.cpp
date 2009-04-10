@@ -30,8 +30,17 @@ simple_template_type_specifier::simple_template_type_specifier
     template_id&& a_template_id
 ):
     leading_double_colon_(leading_double_colon),
-    nested_name_specifier_(a_nested_name_specifier),
-    template_id_(a_template_id)
+    nested_name_specifier_(std::move(a_nested_name_specifier)),
+    template_id_(std::move(a_template_id))
+{
+	add(nested_name_specifier_);
+	add(template_id_);
+}
+
+simple_template_type_specifier::simple_template_type_specifier(simple_template_type_specifier&& o):
+    leading_double_colon_(std::move(o.leading_double_colon_)),
+    nested_name_specifier_(std::move(o.nested_name_specifier_)),
+    template_id_(std::move(o.template_id_))
 {
 }
 

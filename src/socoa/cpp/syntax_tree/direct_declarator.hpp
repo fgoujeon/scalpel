@@ -73,10 +73,12 @@ class direct_declarator: public composite_node
 
         direct_declarator
         (
-            boost::optional<declarator_id> a_declarator_id,
-            boost::optional<declarator> a_declarator,
+            boost::optional<declarator_id>&& a_declarator_id,
+            boost::optional<declarator>&& a_declarator,
             other_parts_t&& other_parts
         );
+
+        direct_declarator(direct_declarator&& o);
 
         inline
         const boost::optional<const declarator_id&>
@@ -91,19 +93,25 @@ class direct_declarator: public composite_node
         get_other_parts() const;
 
     private:
+		/*
         boost::optional<declarator_id> declarator_id_;
         boost::optional<declarator> declarator_;
+		*/
+        std::unique_ptr<declarator_id> declarator_id_;
+        std::unique_ptr<declarator> declarator_;
         other_parts_t other_parts_;
 };
 
-class direct_declarator::function_part
+class direct_declarator::function_part: public composite_node
 {
 	public:
 		function_part
 		(
 			parameter_declaration_clause&& a_parameter_declaration_clause,
-			boost::optional<cv_qualifier_seq> a_cv_qualifier_seq
+			boost::optional<cv_qualifier_seq>&& a_cv_qualifier_seq
 		);
+
+		function_part(function_part&& o);
 
 		inline
 		const parameter_declaration_clause&
@@ -115,13 +123,18 @@ class direct_declarator::function_part
 
 	private:
 		parameter_declaration_clause parameter_declaration_clause_;
-		boost::optional<cv_qualifier_seq> cv_qualifier_seq_;
+		//boost::optional<cv_qualifier_seq> cv_qualifier_seq_;
+		std::unique_ptr<cv_qualifier_seq> cv_qualifier_seq_;
 };
 
-class direct_declarator::array_part
+class direct_declarator::array_part: public composite_node
 {
 	public:
+		array_part(){}
 
+		array_part(const array_part&) = delete;
+
+		array_part(array_part&&){}
 
 	private:
 };

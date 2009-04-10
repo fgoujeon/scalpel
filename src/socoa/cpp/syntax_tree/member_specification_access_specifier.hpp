@@ -30,10 +30,13 @@ namespace socoa { namespace cpp { namespace syntax_tree
 class member_specification_access_specifier: public composite_node
 {
 	public:
-		explicit member_specification_access_specifier
+		explicit
+		member_specification_access_specifier
 		(
 			access_specifier&& a_access_specifier
 		);
+
+		member_specification_access_specifier(member_specification_access_specifier&& o);
 
 		inline
 		const access_specifier&

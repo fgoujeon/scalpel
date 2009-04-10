@@ -396,7 +396,7 @@ semantic_analyzer::convert(const simple_declaration& item)
 			auto a_direct_declarator_other_parts = a_direct_declarator.get_other_parts();
 			for(auto j = a_direct_declarator_other_parts.begin(); j != a_direct_declarator_other_parts.end(); ++j)
 			{
-				direct_declarator::other_part other_part = *j;
+				const direct_declarator::other_part& other_part = *j;
 
 				if(get<direct_declarator::function_part>(&other_part))
 				{

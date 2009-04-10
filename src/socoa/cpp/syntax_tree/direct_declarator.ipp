@@ -28,14 +28,20 @@ inline
 const boost::optional<const declarator_id&>
 direct_declarator::get_declarator_id() const
 {
-    return boost::optional<const declarator_id&>(declarator_id_);
+	if(declarator_id_)
+		return boost::optional<const declarator_id&>(*declarator_id_);
+	else
+		return boost::optional<const declarator_id&>();
 }
 
 inline
 const boost::optional<const declarator&>
 direct_declarator::get_declarator() const
 {
-    return boost::optional<const declarator&>(declarator_);
+	if(declarator_)
+		return boost::optional<const declarator&>(*declarator_);
+	else
+		return boost::optional<const declarator&>();
 }
 
 inline
@@ -57,7 +63,10 @@ inline
 const boost::optional<const cv_qualifier_seq&>
 direct_declarator::function_part::get_cv_qualifier_seq() const
 {
-    return boost::optional<const cv_qualifier_seq&>(cv_qualifier_seq_);
+	if(cv_qualifier_seq_)
+		return boost::optional<const cv_qualifier_seq&>(*cv_qualifier_seq_);
+	else
+		return boost::optional<const cv_qualifier_seq&>();
 }
 
 }}} //namespace socoa::cpp::syntax_tree

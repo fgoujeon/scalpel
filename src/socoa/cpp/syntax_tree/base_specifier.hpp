@@ -44,9 +44,13 @@ class base_specifier: public composite_node
         base_specifier
         (
             bool virtual_keyword,
-            boost::optional<access_specifier> an_access_specifier,
-            boost::optional<nested_identifier_or_template_id> a_nested_identifier_or_template_id
+//            boost::optional<access_specifier>&& an_access_specifier,
+            boost::optional<nested_identifier_or_template_id>&& a_nested_identifier_or_template_id
         );
+
+		base_specifier(base_specifier&) = delete;
+
+		base_specifier(base_specifier&& o);
 
         inline
         bool
@@ -62,8 +66,12 @@ class base_specifier: public composite_node
 
     private:
         bool virtual_keyword_;
+		/*
 		boost::optional<access_specifier> access_specifier_;
 		boost::optional<nested_identifier_or_template_id> nested_identifier_or_template_id_;
+		*/
+		std::unique_ptr<access_specifier> access_specifier_;
+		std::unique_ptr<nested_identifier_or_template_id> nested_identifier_or_template_id_;
 };
 
 inline
@@ -77,14 +85,20 @@ inline
 const boost::optional<const access_specifier&>
 base_specifier::get_access_specifier() const
 {
-    return boost::optional<const access_specifier&>(access_specifier_);
+	if(access_specifier_)
+		return boost::optional<const access_specifier&>(*access_specifier_);
+	else
+		return boost::optional<const access_specifier&>();
 }
 
 inline
 const boost::optional<const nested_identifier_or_template_id&>
 base_specifier::get_nested_identifier_or_template_id() const
 {
-    return boost::optional<const nested_identifier_or_template_id&>(nested_identifier_or_template_id_);
+	if(nested_identifier_or_template_id_)
+		return boost::optional<const nested_identifier_or_template_id&>(*nested_identifier_or_template_id_);
+	else
+		return boost::optional<const nested_identifier_or_template_id&>();
 }
 
 }}} //namespace socoa::cpp::syntax_tree

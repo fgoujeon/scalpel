@@ -36,9 +36,13 @@ class using_declaration: public composite_node
 		(
 			bool typename_keyword,
 			bool leading_double_colon,
-			boost::optional<nested_name_specifier> a_nested_name_specifier,
-			boost::optional<unqualified_id> an_unqualified_id
+			boost::optional<nested_name_specifier>&& a_nested_name_specifier,
+			unqualified_id&& an_unqualified_id
 		);
+
+		using_declaration(const using_declaration&) = delete;
+
+		using_declaration(using_declaration&& o);
 
 		inline
 		bool
@@ -53,14 +57,17 @@ class using_declaration: public composite_node
 		get_nested_name_specifier() const;
 
 		inline
-		const boost::optional<const unqualified_id>
+		const boost::optional<const unqualified_id&>
 		get_unqualified_id() const;
 
 	private:
 		bool typename_keyword_;
 		bool leading_double_colon_;
+		/*
 		boost::optional<nested_name_specifier> nested_name_specifier_;
-		boost::optional<unqualified_id> unqualified_id_;
+		*/
+		std::unique_ptr<nested_name_specifier> nested_name_specifier_;
+		unqualified_id unqualified_id_;
 };
 
 inline
@@ -81,14 +88,17 @@ inline
 const boost::optional<const nested_name_specifier&>
 using_declaration::get_nested_name_specifier() const
 {
-	return boost::optional<const nested_name_specifier&>(nested_name_specifier_);
+	if(nested_name_specifier_)
+		return boost::optional<const nested_name_specifier&>(*nested_name_specifier_);
+	else
+		return boost::optional<const nested_name_specifier&>();
 }
 
 inline
-const boost::optional<const unqualified_id>
+const boost::optional<const unqualified_id&>
 using_declaration::get_unqualified_id() const
 {
-	return boost::optional<const unqualified_id>(unqualified_id_);
+	return unqualified_id_;
 }
 
 }}} //namespace socoa::cpp::syntax_tree

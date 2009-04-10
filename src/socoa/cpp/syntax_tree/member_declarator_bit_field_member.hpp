@@ -21,6 +21,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_MEMBER_DECLARATOR_BIT_FIELD_MEMBER_HPP
 #define SOCOA_CPP_SYNTAX_TREE_MEMBER_DECLARATOR_BIT_FIELD_MEMBER_HPP
 
+#include <memory>
 #include <boost/optional.hpp>
 #include "composite_node.hpp"
 #include "identifier.hpp"
@@ -33,22 +34,28 @@ class member_declarator_bit_field_member: public composite_node
 	public:
 		member_declarator_bit_field_member
 		(
-			boost::optional<identifier> an_identifier
+			boost::optional<identifier>&& an_identifier
 		);
+
+		member_declarator_bit_field_member(member_declarator_bit_field_member&& o);
 
 		inline
 		const boost::optional<const identifier&>
 		get_identifier() const;
 
 	private:
-		boost::optional<identifier> identifier_;
+		//boost::optional<identifier> identifier_;
+		std::unique_ptr<identifier> identifier_;
 };
 
 inline
 const boost::optional<const identifier&>
 member_declarator_bit_field_member::get_identifier() const
 {
-	return boost::optional<const identifier&>(identifier_);
+	if(identifier_)
+		return boost::optional<const identifier&>(*identifier_);
+	else
+		return boost::optional<const identifier&>();
 }
 
 }}} //namespace socoa::cpp::syntax_tree

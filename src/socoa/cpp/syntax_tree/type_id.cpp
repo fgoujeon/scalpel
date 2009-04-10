@@ -18,23 +18,18 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ctor_initializer.hpp"
+#include "type_id.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-ctor_initializer::ctor_initializer
-(
-    mem_initializer_list&& a_mem_initializer_list
-):
-    mem_initializer_list_(a_mem_initializer_list)
+type_id::type_id()
 {
-	add(mem_initializer_list_);
 }
 
-ctor_initializer::ctor_initializer(ctor_initializer&& o):
-    mem_initializer_list_(std::move(o.mem_initializer_list_))
+type_id::type_id(type_id&&)
 {
 }
 
 }}} //namespace socoa::cpp::syntax_tree
+

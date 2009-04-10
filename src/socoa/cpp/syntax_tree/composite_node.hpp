@@ -33,6 +33,12 @@ class composite_node: public node
 	public:
 		typedef std::vector<const node*> nodes_t;
 
+		composite_node();
+
+		composite_node(const composite_node&) = delete;
+
+		composite_node(composite_node&& n);
+
 		virtual
 		~composite_node();
 
@@ -41,7 +47,7 @@ class composite_node: public node
 
 	protected:
 		void
-		add(const node& a_node);
+		add(node& a_node);
 
 	private:
 		nodes_t nodes_;

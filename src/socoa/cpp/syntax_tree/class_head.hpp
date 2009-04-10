@@ -21,6 +21,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_CLASS_HEAD_HPP
 #define SOCOA_CPP_SYNTAX_TREE_CLASS_HEAD_HPP
 
+#include <memory>
 #include <boost/optional.hpp>
 #include "composite_node.hpp"
 #include "class_key.hpp"
@@ -47,11 +48,15 @@ class class_head: public composite_node
         class_head
         (
             class_key&& a_class_key,
-            boost::optional<nested_name_specifier> a_nested_name_specifier,
-            boost::optional<template_id> a_template_id,
-            boost::optional<identifier> an_identifier,
-            boost::optional<base_clause> a_base_clause
+            boost::optional<nested_name_specifier>&& a_nested_name_specifier,
+            boost::optional<template_id>&& a_template_id,
+            boost::optional<identifier>&& an_identifier,
+            boost::optional<base_clause>&& a_base_clause
         );
+
+		class_head(const class_head&) = delete;
+
+		class_head(class_head&& o);
 
         inline
         const class_key&
@@ -75,10 +80,16 @@ class class_head: public composite_node
 
     private:
         class_key class_key_;
+		/*
         boost::optional<nested_name_specifier> nested_name_specifier_;
         boost::optional<template_id> template_id_;
         boost::optional<identifier> identifier_;
         boost::optional<base_clause> base_clause_;
+		*/
+		std::unique_ptr<nested_name_specifier> nested_name_specifier_;
+        std::unique_ptr<template_id> template_id_;
+        std::unique_ptr<identifier> identifier_;
+        std::unique_ptr<base_clause> base_clause_;
 };
 
 inline
@@ -92,28 +103,40 @@ inline
 const boost::optional<const nested_name_specifier&>
 class_head::get_nested_name_specifier() const
 {
-    return boost::optional<const nested_name_specifier&>(nested_name_specifier_);
+	if(nested_name_specifier_)
+		return boost::optional<const nested_name_specifier&>(*nested_name_specifier_);
+	else
+		return boost::optional<const nested_name_specifier&>();
 }
 
 inline
 const boost::optional<const template_id&>
 class_head::get_template_id() const
 {
-    return boost::optional<const template_id&>(template_id_);
+	if(template_id_)
+		return boost::optional<const template_id&>(*template_id_);
+	else
+		return boost::optional<const template_id&>();
 }
 
 inline
 const boost::optional<const identifier&>
 class_head::get_identifier() const
 {
-    return boost::optional<const identifier&>(identifier_);
+	if(identifier_)
+		return boost::optional<const identifier&>(*identifier_);
+	else
+		return boost::optional<const identifier&>();
 }
 
 inline
 const boost::optional<const base_clause&>
 class_head::get_base_clause() const
 {
-    return boost::optional<const base_clause&>(base_clause_);
+	if(base_clause_)
+		return boost::optional<const base_clause&>(*base_clause_);
+	else
+		return boost::optional<const base_clause&>();
 }
 
 }}} //namespace socoa::cpp::syntax_tree

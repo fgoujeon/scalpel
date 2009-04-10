@@ -39,8 +39,12 @@ class template_id: public composite_node
 		template_id
 		(
 			identifier&& an_identifier,
-			boost::optional<sequence_node<template_argument, util::extern_strings::comma>> a_template_argument_list
+			boost::optional<sequence_node<template_argument, util::extern_strings::comma>>&& a_template_argument_list
 		);
+
+		template_id(const template_id&) = delete;
+
+		template_id(template_id&& o);
 
 		inline
 		const identifier&

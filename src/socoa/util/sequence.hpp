@@ -61,7 +61,7 @@ sequence<T, Separator>::sequence()
 
 template<class T, const std::string& Separator>
 sequence<T, Separator>::sequence(sequence&& s):
-    items_(s.items_)
+    items_(std::move(s.items_))
 {
 }
 
@@ -83,7 +83,7 @@ template<class T, const std::string& Separator>
 void
 sequence<T, Separator>::push_back(T&& t)
 {
-	items_.push_back(t);
+	items_.push_back(std::move(t));
 }
 
 template<class T, const std::string& Separator>

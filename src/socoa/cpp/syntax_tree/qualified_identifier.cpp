@@ -27,7 +27,13 @@ qualified_identifier::qualified_identifier
 (
     identifier&& an_identifier
 ):
-    identifier_(an_identifier)
+    identifier_(std::move(an_identifier))
+{
+	add(identifier_);
+}
+
+qualified_identifier::qualified_identifier(qualified_identifier&& o):
+    identifier_(std::move(o.identifier_))
 {
 }
 

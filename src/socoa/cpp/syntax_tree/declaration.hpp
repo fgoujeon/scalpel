@@ -50,10 +50,14 @@ typedef
 
 struct declaration: public declaration_t
 {
-	declaration(const block_declaration& o): declaration_t(o){};
-	declaration(const function_definition& o): declaration_t(o){};
-	declaration(const template_declaration& o): declaration_t(o){};
-	declaration(const namespace_definition& o): declaration_t(o){};
+	declaration(block_declaration&& o): declaration_t(o){};
+	declaration(function_definition&& o): declaration_t(o){};
+	declaration(template_declaration&& o): declaration_t(o){};
+	declaration(namespace_definition&& o): declaration_t(o){};
+
+	declaration(const declaration&) = delete;
+
+	declaration(declaration&& o): declaration_t(o){};
 };
 
 }}} //namespace socoa::cpp::syntax_tree

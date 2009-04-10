@@ -29,6 +29,12 @@ mem_initializer::mem_initializer
 ):
 	mem_initializer_id_(a_mem_initializer_id)
 {
+	add(mem_initializer_id_);
+}
+
+mem_initializer::mem_initializer(mem_initializer&& o):
+	mem_initializer_id_(std::move(o.mem_initializer_id_))
+{
 }
 
 }}} //namespace socoa::cpp::syntax_tree

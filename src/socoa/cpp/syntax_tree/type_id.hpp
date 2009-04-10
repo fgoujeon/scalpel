@@ -27,7 +27,9 @@ namespace socoa { namespace cpp { namespace syntax_tree
 class type_id
 {
     public:
+		type_id();
 
+		type_id(type_id&& o);
 
     private:
 };

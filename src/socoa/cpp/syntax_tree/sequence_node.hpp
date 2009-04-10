@@ -38,7 +38,12 @@ class sequence_node: public composite_node
 
         sequence_node();
 
+        sequence_node(const sequence_node& s);
+
         sequence_node(sequence_node&& s);
+
+		const sequence_node&
+		operator=(sequence_node&& s);
 
 		const_iterator
 		begin() const
@@ -55,7 +60,7 @@ class sequence_node: public composite_node
 		void
 		push_back(T&& t)
 		{
-			seq_.push_back(t);
+			seq_.push_back(std::move(t));
 		}
 
 		static const std::string& separator;
@@ -73,6 +78,13 @@ template<class T, const std::string& Separator>
 sequence_node<T, Separator>::sequence_node(sequence_node&& s):
 	seq_(std::move(s.seq_))
 {
+}
+
+template<class T, const std::string& Separator>
+const sequence_node<T, Separator>&
+sequence_node<T, Separator>::operator=(sequence_node&& s)
+{
+	seq_ = std::move(s.seq_);
 }
 
 template<class T, const std::string& Separator>

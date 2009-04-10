@@ -27,13 +27,28 @@ ptr_operator::ptr_operator
 (
 	type a_type,
 	bool leading_double_colon,
-	boost::optional<nested_name_specifier> a_nested_name_specifier,
-	boost::optional<cv_qualifier_seq> a_cv_qualifier_seq
+	boost::optional<nested_name_specifier>&& a_nested_name_specifier,
+	boost::optional<cv_qualifier_seq>&& a_cv_qualifier_seq
 ):
 	type_(a_type),
-	leading_double_colon_(leading_double_colon),
+	leading_double_colon_(leading_double_colon)/*,
 	nested_name_specifier_(a_nested_name_specifier),
-	cv_qualifier_seq_(a_cv_qualifier_seq)
+	cv_qualifier_seq_(a_cv_qualifier_seq)*/
+{
+	if(a_nested_name_specifier)
+		nested_name_specifier_ = std::move(std::unique_ptr<nested_name_specifier>(new nested_name_specifier(std::move(*a_nested_name_specifier))));
+	if(a_cv_qualifier_seq)
+		cv_qualifier_seq_ = std::move(std::unique_ptr<cv_qualifier_seq>(new cv_qualifier_seq(std::move(*a_cv_qualifier_seq))));
+
+	if(nested_name_specifier_) add(*nested_name_specifier_);
+	if(cv_qualifier_seq_) add(*cv_qualifier_seq_);
+}
+
+ptr_operator::ptr_operator(ptr_operator&& o):
+	type_(std::move(o.type_)),
+	leading_double_colon_(std::move(o.leading_double_colon_)),
+	nested_name_specifier_(std::move(o.nested_name_specifier_)),
+	cv_qualifier_seq_(std::move(o.cv_qualifier_seq_))
 {
 }
 

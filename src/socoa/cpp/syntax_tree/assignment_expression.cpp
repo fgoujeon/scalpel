@@ -27,8 +27,15 @@ assignment_expression::assignment_expression
 (
     assignment_operator&& an_assignment_operator
 ):
-    assignment_operator_(an_assignment_operator)
+    assignment_operator_(std::move(an_assignment_operator))
 {
+	add(assignment_operator_);
+}
+
+assignment_expression::assignment_expression(assignment_expression&& o):
+	assignment_operator_(std::move(o.assignment_operator_))
+{
+	add(assignment_operator_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

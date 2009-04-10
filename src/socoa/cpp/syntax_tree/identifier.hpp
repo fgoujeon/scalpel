@@ -22,15 +22,23 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_IDENTIFIER_HPP
 
 #include <string>
+#include "leaf_node.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class identifier
+class identifier: public leaf_node
 {
 	public:
 		explicit
 		identifier(std::string&& value);
+
+		identifier(const identifier&) = delete;
+
+		identifier(identifier&& i);
+
+		const identifier&
+		operator=(identifier&& i);
 
 		inline
 		const std::string&

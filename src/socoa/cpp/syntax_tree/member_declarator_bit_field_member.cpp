@@ -25,9 +25,18 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 member_declarator_bit_field_member::member_declarator_bit_field_member
 (
-    boost::optional<identifier> an_identifier
-):
-    identifier_(an_identifier)
+    boost::optional<identifier>&& an_identifier
+)/*:
+    identifier_(an_identifier)*/
+{
+	if(an_identifier)
+		identifier_ = std::move(std::unique_ptr<identifier>(new identifier(std::move(*an_identifier))));
+
+	if(identifier_) add(*identifier_);
+}
+
+member_declarator_bit_field_member::member_declarator_bit_field_member(member_declarator_bit_field_member&& o):
+    identifier_(std::move(o.identifier_))
 {
 }
 

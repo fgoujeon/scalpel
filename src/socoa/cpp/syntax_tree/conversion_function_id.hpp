@@ -21,12 +21,17 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_CONVERSION_FUNCTION_ID_HPP
 #define SOCOA_CPP_SYNTAX_TREE_CONVERSION_FUNCTION_ID_HPP
 
+#include "composite_node.hpp"
+
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class conversion_function_id
+class conversion_function_id: public composite_node
 {
     public:
+		conversion_function_id();
+
+		conversion_function_id(conversion_function_id&& o);
 
     private:
 };

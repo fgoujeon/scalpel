@@ -24,8 +24,22 @@ namespace socoa { namespace cpp { namespace syntax_tree
 {
 
 identifier::identifier(std::string&& value):
+	leaf_node(" " + value),
     value_(value)
 {
+}
+
+identifier::identifier(identifier&& i):
+	leaf_node(" " + i.value_),
+    value_(std::move(i.value_))
+{
+}
+
+const identifier&
+identifier::operator=(identifier&& i)
+{
+	value_ = std::move(i.value_);
+	return *this;
 }
 
 }}} //namespace socoa::cpp::syntax_tree

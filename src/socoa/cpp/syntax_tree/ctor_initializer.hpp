@@ -39,7 +39,10 @@ ctor_initializer
 class ctor_initializer: public composite_node
 {
     public:
+		explicit
         ctor_initializer(mem_initializer_list&& a_mem_initializer_list);
+
+        ctor_initializer(ctor_initializer&& o);
 
         inline
         const mem_initializer_list&

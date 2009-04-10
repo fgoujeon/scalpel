@@ -33,6 +33,8 @@ class base_clause: public composite_node
     public:
         base_clause(base_specifier_list&& a_base_specifier_list);
 
+		base_clause(base_clause&& o);
+
         inline
         const base_specifier_list&
         get_base_specifier_list() const;

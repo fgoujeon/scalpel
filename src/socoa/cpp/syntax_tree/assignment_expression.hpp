@@ -35,6 +35,8 @@ class assignment_expression: public composite_node
             assignment_operator&& an_assignment_operator
         );
 
+		assignment_expression(assignment_expression&& o);
+
         inline
         const assignment_operator&
         get_assignment_operator() const;

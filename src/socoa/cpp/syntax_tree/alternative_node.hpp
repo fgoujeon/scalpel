@@ -53,6 +53,10 @@ class alternative_node<>: public composite_node
 		template<class NodeT2>
 		alternative_node(const NodeT2&){};
 
+		alternative_node(const alternative_node<>&) = delete;
+
+		alternative_node(alternative_node<>&&){};
+
 		virtual
 		~alternative_node(){};
 
@@ -66,7 +70,11 @@ class alternative_node<NodeT, NodesT...>: public alternative_node<NodesT...>
 {
 	public:
 		template<class NodeT2>
-		alternative_node(const NodeT2&);
+		alternative_node(NodeT2&&);
+
+		alternative_node(const alternative_node<NodeT, NodesT...>&) = delete;
+
+		alternative_node(alternative_node<NodeT, NodesT...>&& n);
 
 		~alternative_node(){};
 
@@ -92,10 +100,21 @@ class alternative_node<NodeT, NodesT...>: public alternative_node<NodesT...>
 
 template<class NodeT, class... NodesT>
 template<class NodeT2>
-alternative_node<NodeT, NodesT...>::alternative_node(const NodeT2& node):
+alternative_node<NodeT, NodesT...>::alternative_node(NodeT2&& node):
 	alternative_node<NodesT...>(node)
 {
 	assign_if_same_type(node_, node);
+	if(node_)
+		add(*node_);
+}
+
+template<class NodeT, class... NodesT>
+alternative_node<NodeT, NodesT...>::alternative_node(alternative_node<NodeT, NodesT...>&& n):
+	alternative_node<NodesT...>(std::move(n.node_))
+{
+	assign_if_same_type(node_, n.node_);
+	if(node_)
+		add(*node_);
 }
 
 template<class NodeT, class... NodesT>

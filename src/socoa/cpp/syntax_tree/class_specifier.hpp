@@ -38,8 +38,10 @@ class class_specifier: public composite_node
         class_specifier
         (
             class_head&& head,
-            boost::optional<member_specification> a_member_specification
+            boost::optional<member_specification>&& a_member_specification
         );
+
+        class_specifier(class_specifier&& o);
 
         inline
         const class_head&

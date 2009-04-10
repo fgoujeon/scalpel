@@ -22,11 +22,12 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_LEAF_NODE_HPP
 
 #include <string>
+#include "node.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class leaf_node
+class leaf_node: public node
 {
 	public:
 		explicit
@@ -34,6 +35,10 @@ class leaf_node
 
 		explicit
 		leaf_node(std::string&& raw_code);
+
+		leaf_node(const leaf_node&) = delete;
+
+		leaf_node(leaf_node&& n);
 
 		virtual
 		~leaf_node();

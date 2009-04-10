@@ -33,6 +33,8 @@ class qualified_template_id: public composite_node
 		explicit
 		qualified_template_id(template_id&& a_template_id);
 
+		qualified_template_id(qualified_template_id&& o);
+
 		inline
 		const template_id&
 		get_template_id() const;

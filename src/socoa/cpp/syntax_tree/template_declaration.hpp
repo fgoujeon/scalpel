@@ -39,6 +39,8 @@ class template_declaration: public composite_node
 			declaration&& a_declaration
 		);
 
+		template_declaration(template_declaration&& o);
+
 		inline
 		bool
 		has_export_keyword() const;

@@ -24,7 +24,13 @@ namespace socoa { namespace cpp { namespace syntax_tree
 {
 
 init_declarator::init_declarator(declarator&& a_declarator):
-	declarator_(a_declarator)
+	declarator_(std::move(a_declarator))
+{
+	add(declarator_);
+}
+
+init_declarator::init_declarator(init_declarator&& o):
+	declarator_(std::move(o.declarator_))
 {
 }
 

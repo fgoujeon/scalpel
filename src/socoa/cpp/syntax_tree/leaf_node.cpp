@@ -33,6 +33,11 @@ leaf_node::leaf_node(std::string&& raw_code):
 {
 }
 
+leaf_node::leaf_node(leaf_node&& n):
+	raw_code_(std::move(n.raw_code_))
+{
+}
+
 leaf_node::~leaf_node()
 {
 }

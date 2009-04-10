@@ -46,10 +46,14 @@ class function_definition: public composite_node
 	public:
         function_definition
         (
-            boost::optional<decl_specifier_seq> a_decl_specifier_seq,
+            boost::optional<decl_specifier_seq>&& a_decl_specifier_seq,
             declarator&& a_declarator,
-            boost::optional<ctor_initializer> a_ctor_initializer
+            boost::optional<ctor_initializer>&& a_ctor_initializer
         );
+
+		function_definition(const function_definition&) = delete;
+
+		function_definition(function_definition&& o);
 
 		inline
 		const boost::optional<const decl_specifier_seq&>
@@ -64,16 +68,21 @@ class function_definition: public composite_node
 		get_ctor_initializer() const;
 
     private:
-		boost::optional<decl_specifier_seq> decl_specifier_seq_;
+		//boost::optional<decl_specifier_seq> decl_specifier_seq_;
+		std::unique_ptr<decl_specifier_seq> decl_specifier_seq_;
 		std::shared_ptr<declarator> declarator_;
-		boost::optional<ctor_initializer> ctor_initializer_;
+		//boost::optional<ctor_initializer> ctor_initializer_;
+		std::unique_ptr<ctor_initializer> ctor_initializer_;
 };
 
 inline
 const boost::optional<const decl_specifier_seq&>
 function_definition::get_decl_specifier_seq() const
 {
-	return boost::optional<const decl_specifier_seq&>(decl_specifier_seq_);
+	if(decl_specifier_seq_)
+		return boost::optional<const decl_specifier_seq&>(*decl_specifier_seq_);
+	else
+		return boost::optional<const decl_specifier_seq&>();
 }
 
 inline
@@ -87,7 +96,10 @@ inline
 const boost::optional<const ctor_initializer&>
 function_definition::get_ctor_initializer() const
 {
-	return boost::optional<const ctor_initializer&>(ctor_initializer_);
+	if(ctor_initializer_)
+		return boost::optional<const ctor_initializer&>(*ctor_initializer_);
+	else
+		return boost::optional<const ctor_initializer&>();
 }
 
 }}} //namespace socoa::cpp::syntax_tree

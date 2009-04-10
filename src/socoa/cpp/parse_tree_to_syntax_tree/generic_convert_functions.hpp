@@ -41,11 +41,10 @@ convert_nodes(const tree_node_t& parent_node)
 	{
 		const tree_node_t& child_node = *i;
 
-		boost::optional<SyntaxNodeT> optional_node = convert_node<boost::optional<SyntaxNodeT>, Ids...>(child_node);
-		if(optional_node)
-		{
-			c.push_back(*optional_node);
-		}
+		/*
+		if(check_id<Ids...>(child_node))
+			c.push_back(std::move(convert_node<SyntaxNodeT, Ids...>(child_node)));
+			*/
 	}
 	return c;
 }

@@ -39,6 +39,8 @@ class simple_template_type_specifier: public composite_node
 			template_id&& a_template_id
 		);
 
+		simple_template_type_specifier(simple_template_type_specifier&& o);
+
 		inline
 		bool
 		has_leading_double_colon() const;

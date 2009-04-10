@@ -22,7 +22,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_QUALIFIED_OPERATOR_FUNCTION_ID_HPP
 
 #include "composite_node.hpp"
-#include "qualified_id.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
@@ -30,6 +29,9 @@ namespace socoa { namespace cpp { namespace syntax_tree
 class qualified_operator_function_id: public composite_node
 {
     public:
+		qualified_operator_function_id();
+
+		qualified_operator_function_id(qualified_operator_function_id&& o);
 
 };
 

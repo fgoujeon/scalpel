@@ -36,6 +36,8 @@ class qualified_identifier: public composite_node
 			identifier&& an_identifier
 		);
 
+		qualified_identifier(qualified_identifier&& o);
+
 		inline
 		const identifier&
 	   	get_identifier() const;
