@@ -22,7 +22,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SINGLE_FILE_TEST_HPP
 
 #include <socoa/cpp/syntax_analyzer.hpp>
-#include <socoa/cpp/syntax_tree_to_string_converter.hpp>
 
 class single_file_test
 {
@@ -32,7 +31,6 @@ class single_file_test
 
     private:
         socoa::cpp::syntax_analyzer m_syntax_analyzer;
-        socoa::cpp::syntax_tree_to_string_converter m_syntax_tree_to_string_converter;
 };
 
 #endif
