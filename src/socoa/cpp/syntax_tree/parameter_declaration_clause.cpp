@@ -68,7 +68,10 @@ void
 parameter_declaration_clause::update_node_list()
 {
 	clear();
-	if(parameter_declaration_list_) add(*parameter_declaration_list_);
+	if(parameter_declaration_list_)
+	{
+		add(*parameter_declaration_list_);
+	}
 }
 
 }}} //namespace socoa::cpp::syntax_tree

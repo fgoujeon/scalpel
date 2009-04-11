@@ -69,6 +69,7 @@ void
 class_specifier::update_node_list()
 {
 	clear();
+    add(class_head_);
 	if(member_specification_) add(*member_specification_);
 }
 

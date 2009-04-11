@@ -24,6 +24,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "../../util/sequence.hpp"
 #include "../../util/extern_strings.hpp"
 #include "composite_node.hpp"
+#include "identifier.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
@@ -120,7 +121,10 @@ void
 sequence_node<T, Separator>::update_node_list()
 {
 	clear();
-	for(auto i = seq_.begin(); i != seq_.end(); ++i) add(*i);
+	for(auto i = seq_.begin(); i != seq_.end(); ++i)
+	{
+		add(*i);
+	}
 }
 
 template<class T, const std::string& Separator>

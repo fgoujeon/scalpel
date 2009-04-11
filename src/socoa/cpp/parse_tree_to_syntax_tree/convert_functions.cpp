@@ -399,7 +399,6 @@ convert_direct_declarator_function_part(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::DIRECT_DECLARATOR_FUNCTION_PART);
 
-	/*
 	boost::optional<parameter_declaration_clause> new_parameter_declaration_clause = find_and_convert_node<boost::optional<parameter_declaration_clause>, id_t::PARAMETER_DECLARATION_CLAUSE>(node);
 
     ///@todo why must I do this?
@@ -420,17 +419,6 @@ convert_direct_declarator_function_part(const tree_node_t& node)
     return direct_declarator::function_part
     (
         *new_parameter_declaration_clause,
-        find_and_convert_node<boost::optional<cv_qualifier_seq>, id_t::CV_QUALIFIER_SEQ>(node)
-    );
-	*/
-	return direct_declarator::function_part
-    (
-		parameter_declaration_clause
-        (
-			parameter_declaration_list(),
-			false,
-			false
-        ),
         find_and_convert_node<boost::optional<cv_qualifier_seq>, id_t::CV_QUALIFIER_SEQ>(node)
     );
 }
