@@ -55,9 +55,9 @@ struct declaration: public declaration_t
 	declaration(template_declaration&& o): declaration_t(o){};
 	declaration(namespace_definition&& o): declaration_t(o){};
 
-	declaration(const declaration& o): declaration_t(o){};
+	declaration(const declaration& o): declaration_t(static_cast<const declaration_t&>(o)){};
 
-	declaration(declaration&& o): declaration_t(o){};
+	declaration(declaration&& o): declaration_t(std::move(static_cast<declaration_t&&>(o))){};
 
 	using declaration_t::operator=;
 };

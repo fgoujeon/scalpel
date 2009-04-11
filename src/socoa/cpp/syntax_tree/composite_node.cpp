@@ -38,7 +38,7 @@ composite_node::raw_code() const
 	for(nodes_t::const_iterator i = nodes_.begin(); i != nodes_.end(); ++i)
 	{
 		const node& child_node = **i;
-		code += child_node.raw_code();
+		code += "." + child_node.raw_code();
 	}
 	return code;
 }

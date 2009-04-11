@@ -27,28 +27,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-template<class T>
-void
-assign_if_same_type(boost::optional<T>& t1, const T& t2)
-{
-	t1 = t2;
-}
-
-template<class T>
-void
-assign_if_same_type(boost::optional<T>& t1, const boost::optional<T>& t2)
-{
-	t1 = t2;
-}
-
-template<class T1, class T2>
-void
-assign_if_same_type(T1&, T2&)
-{
-	//does nothing
-}
-
-
 template<class... NodesT>
 class alternative_node;
 
@@ -56,39 +34,89 @@ class alternative_node;
 template<>
 class alternative_node<>: public composite_node
 {
+	protected:
+		alternative_node():
+		   	initialized_(false)
+		{
+		}
+
 	public:
-		template<class NodeT2>
-		alternative_node(const NodeT2&){};
+		alternative_node(const alternative_node<>&):
+			composite_node(),
+			initialized_(false)
+		{
+		}
 
-		alternative_node(const alternative_node<>&): composite_node(){};
-
-		alternative_node(alternative_node<>&&){};
+		alternative_node(alternative_node<>&&):
+			initialized_(false)
+		{
+		}
 
 		const alternative_node&
 		operator=(const alternative_node<>&)
 		{
 			clear();
 			return *this;
-		};
+		}
 
 		virtual
-		~alternative_node(){};
+		~alternative_node(){}
+
+		bool
+		initialized() const
+		{
+			return initialized_;
+		}
+
+	protected:
+		void
+		get_node() const{}
 
 		void
-		get_node() const{};
+		set_node(){}
+
+		void
+		initialized(bool b)
+		{
+			initialized_ = b;
+		}
+
+	private:
+		bool initialized_;
 };
 
 
 template<class NodeT, class... NodesT>
 class alternative_node<NodeT, NodesT...>: public alternative_node<NodesT...>
 {
-	public:
-		template<class NodeT2>
-		alternative_node(NodeT2&&);
+	protected:
+		/**
+		 * Default constructor which does nothing (useful for internal use).
+		 */
+		alternative_node();
 
+	public:
+		/*
+		 * Copy constructor.
+		 */
 		alternative_node(const alternative_node<NodeT, NodesT...>& n);
 
+		/*
+		 * Copy constructor.
+		 */
+		alternative_node(alternative_node<NodeT, NodesT...>& n);
+
+		/**
+		 * Move constructor.
+		 */
 		alternative_node(alternative_node<NodeT, NodesT...>&& n);
+
+		/*
+		 * Constructor. Must be placed after move constructor, otherwise
+		 * this constructor will be chosen for move construction.
+		 */
+		template<class NodeT2>
+		alternative_node(NodeT2&&);
 
 		const alternative_node<NodeT, NodesT...>&
 		operator=(const alternative_node<NodeT, NodesT...>& n);
@@ -100,6 +128,13 @@ class alternative_node<NodeT, NodesT...>: public alternative_node<NodesT...>
 		get_node(boost::optional<const NodeT&>&) const;
 
 		using alternative_node<NodesT...>::get_node;
+
+		void
+		set_node(const NodeT&);
+
+		using alternative_node<NodesT...>::set_node;
+
+
 
 		template<class ReturnNodeT, class AlternativeNodeT>
 		friend
@@ -116,44 +151,67 @@ class alternative_node<NodeT, NodesT...>: public alternative_node<NodesT...>
 };
 
 template<class NodeT, class... NodesT>
-template<class NodeT2>
-alternative_node<NodeT, NodesT...>::alternative_node(NodeT2&& node):
-	alternative_node<NodesT...>(node)
+alternative_node<NodeT, NodesT...>::alternative_node()
 {
-	assign_if_same_type(node_, node);
-	if(node_)
-		add(*node_);
+	//does nothing
 }
 
 template<class NodeT, class... NodesT>
 alternative_node<NodeT, NodesT...>::alternative_node(const alternative_node<NodeT, NodesT...>& n):
-	alternative_node<NodesT...>(n.node_)
+	alternative_node<NodesT...>(static_cast<const alternative_node<NodesT...>&>(n)),
+	node_(n.node_)
 {
-	assign_if_same_type(node_, n.node_);
 	if(node_)
+	{
 		add(*node_);
+		alternative_node<>::initialized(true);
+	}
+}
+
+template<class NodeT, class... NodesT>
+alternative_node<NodeT, NodesT...>::alternative_node(alternative_node<NodeT, NodesT...>& n):
+	alternative_node<NodesT...>(static_cast<alternative_node<NodesT...>&>(n)),
+	node_(n.node_)
+{
+	if(node_)
+	{
+		add(*node_);
+		alternative_node<>::initialized(true);
+	}
 }
 
 template<class NodeT, class... NodesT>
 alternative_node<NodeT, NodesT...>::alternative_node(alternative_node<NodeT, NodesT...>&& n):
-	alternative_node<NodesT...>(std::move(n.node_))
+	alternative_node<NodesT...>(static_cast<alternative_node<NodesT...>&&>(n)),
+	node_(n.node_)
 {
-	assign_if_same_type(node_, n.node_);
 	if(node_)
+	{
 		add(*node_);
+		alternative_node<>::initialized(true);
+	}
+}
+
+template<class NodeT, class... NodesT>
+template<class NodeT2>
+alternative_node<NodeT, NodesT...>::alternative_node(NodeT2&& node):
+	alternative_node<NodesT...>()
+{
+	set_node(node);
 }
 
 template<class NodeT, class... NodesT>
 const alternative_node<NodeT, NodesT...>&
 alternative_node<NodeT, NodesT...>::operator=(const alternative_node<NodeT, NodesT...>& n)
 {
-	alternative_node<NodesT...>::operator=(n);
+	alternative_node<NodesT...>::operator=(static_cast<const alternative_node<NodesT...>&>(n));
 
-	node_ = boost::optional<NodeT>();
-
-	assign_if_same_type(node_, n.node_);
+	node_ = n.node_;
 	if(node_)
+	{
 		add(*node_);
+		alternative_node<>::initialized(true);
+	}
 
 	return *this;
 }
@@ -165,11 +223,21 @@ alternative_node<NodeT, NodesT...>::get_node(boost::optional<const NodeT&>& node
 	node = node_;
 }
 
+template<class NodeT, class... NodesT>
+void
+alternative_node<NodeT, NodesT...>::set_node(const NodeT& node)
+{
+	node_ = node;
+	if(node_) add(*node_);
+	alternative_node<>::initialized(true);
+}
+
 
 template<class ReturnNodeT, class AlternativeNodeT>
 boost::optional<const ReturnNodeT&>
 get(const AlternativeNodeT* node)
 {
+	assert(node->initialized());
 	boost::optional<const ReturnNodeT&> return_node;
 	node->get_node(return_node);
 	return return_node;
@@ -179,6 +247,7 @@ template<class ReturnNodeT, class AlternativeNodeT>
 boost::optional<const ReturnNodeT&>
 get(boost::optional<const AlternativeNodeT&> node)
 {
+	assert(node->initialized());
 	boost::optional<const ReturnNodeT&> return_node;
 	node->get_node(return_node);
 	return return_node;
