@@ -129,7 +129,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
             | "throw"
             | "this"
             | "template"
-            | "swit.hpp"
+            | "switch"
             | "struct"
             | "static_cast"
             | "static"
@@ -176,7 +176,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
             | "compl"
             | "class"
             | "char"
-            | "cat.hpp"
+            | "catch"
             | "case"
             | "break"
             | "bool"
@@ -509,58 +509,6 @@ grammar::grammar(type_name_parser& a_type_name_parser):
         )
     ;
 
-    /*
-    The following rule is written like this in the standard:
-        postfix_expression
-            = primary_expression
-            | postfix_expression >> '[' >> expression >> ']'
-            | postfix_expression >> '(' >> !expression_list >> ')'
-            | simple_type_specifier >> '(' >> !expression_list >> ')'
-            | str_p("typename") >> !str_p("::") >> nested_name_specifier >> identifier >> '(' >> !expression_list >> ')'
-            | str_p("typename") >> !str_p("::") >> nested_name_specifier >> !str_p("template") >> template_id >> '(' >> !expression_list >> ')'
-            | postfix_expression >> '.' >> !str_p("template") >> id_expression
-            | postfix_expression >> "->" >> !str_p("template") >> id_expression
-            | postfix_expression >> '.' >> pseudo_destructor_name
-            | postfix_expression >> "->" >> pseudo_destructor_name
-            | postfix_expression >> "++"
-            | postfix_expression >> "--"
-            | str_p("dynamic_cast") >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
-            | str_p("static_cast") >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
-            | str_p("reinterpret_cast") >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
-            | str_p("const_cast") >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
-            | str_p("typeid") >> '(' >> expression >> ')'
-            | str_p("typeid") >> '(' >> type_id >> ')'
-        ;
-    There are some left recursions that we had to eliminate.
-    See direct_declarator rule for more information about the different steps to follow.
-    */
-    postfix_expression
-        =
-        (
-            primary_expression
-            | simple_type_specifier >> '(' >> !expression_list >> ')'
-            | str_p("typename") >> !str_p("::") >> nested_name_specifier >> identifier >> '(' >> !expression_list >> ')'
-            | str_p("typename") >> !str_p("::") >> nested_name_specifier >> !str_p("template") >> template_id >> '(' >> !expression_list >> ')'
-            | str_p("dynamic_cast") >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
-            | str_p("static_cast") >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
-            | str_p("reinterpret_cast") >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
-            | str_p("const_cast") >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
-            | str_p("typeid") >> '(' >> expression >> ')'
-            | str_p("typeid") >> '(' >> type_id >> ')'
-        )
-        >>
-        *(
-            '[' >> expression >> ']'
-            | '(' >> !expression_list >> ')'
-            | '.' >> !str_p("template") >> id_expression
-            | "->" >> !str_p("template") >> id_expression
-            | '.' >> pseudo_destructor_name
-            | "->" >> pseudo_destructor_name
-            | "++"
-            | "--"
-        )
-    ;
-
     expression_list
         = assignment_expression % ','
     ;
@@ -839,7 +787,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 
     selection_statement
         = str_p("if") >> '(' >> condition >> ')' >> statement >> !("else" >> statement)
-        | str_p("swit.hpp") >> '(' >> condition >> ')' >> statement
+        | str_p("switch") >> '(' >> condition >> ')' >> statement
     ;
 
     /*
@@ -1512,7 +1460,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
     ;
 
     handler
-        = str_p("cat.hpp") >> '(' >> exception_declaration >> ')' >> compound_statement
+        = str_p("catch") >> '(' >> exception_declaration >> ')' >> compound_statement
     ;
 
     exception_declaration
