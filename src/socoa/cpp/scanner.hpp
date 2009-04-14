@@ -31,11 +31,7 @@ typedef
         const char*,
         boost::spirit::scanner_policies
         <
-            boost::spirit::skip_parser_iteration_policy
-            <
-                boost::spirit::space_parser,
-                boost::spirit::iteration_policy
-            >,
+			boost::spirit::iteration_policy,
             boost::spirit::pt_match_policy
             <
                 const char*,

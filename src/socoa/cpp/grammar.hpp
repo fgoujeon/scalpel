@@ -51,6 +51,7 @@ class grammar
         {
             FILE,
             SOURCE_CHARACTER_SET,
+            SPACE,
             KEYWORD,
 
             HEX_QUAD,
@@ -317,37 +318,38 @@ class grammar
         //
         boost::spirit::rule<scanner_t> file;
         boost::spirit::rule<scanner_t> source_character_set;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::SPACE>> s;
         boost::spirit::rule<scanner_t> keyword;
 
         //1.2 - Lexical conventions [gram.lex]
-        boost::spirit::rule<boost::spirit::lexeme_scanner<scanner_t>::type> hex_quad;
+        boost::spirit::rule<scanner_t> hex_quad;
         boost::spirit::rule<scanner_t> universal_character_name;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::IDENTIFIER>> identifier;
-        boost::spirit::rule<boost::spirit::lexeme_scanner<scanner_t>::type> nondigit;
+        boost::spirit::rule<scanner_t> nondigit;
         boost::spirit::rule<scanner_t> literal;
         boost::spirit::rule<scanner_t> integer_literal;
         boost::spirit::rule<scanner_t> decimal_literal;
         boost::spirit::rule<scanner_t> octal_literal;
         boost::spirit::rule<scanner_t> hexadecimal_literal;
-        boost::spirit::rule<boost::spirit::lexeme_scanner<scanner_t>::type> hexadecimal_digit;
-        boost::spirit::rule<boost::spirit::lexeme_scanner<scanner_t>::type> octal_digit;
-        boost::spirit::rule<boost::spirit::lexeme_scanner<scanner_t>::type> nonzero_digit;
-        boost::spirit::rule<boost::spirit::lexeme_scanner<scanner_t>::type> integer_suffix;
-        boost::spirit::rule<boost::spirit::lexeme_scanner<scanner_t>::type> unsigned_suffix;
-        boost::spirit::rule<boost::spirit::lexeme_scanner<scanner_t>::type> long_suffix;
-        boost::spirit::rule<boost::spirit::lexeme_scanner<scanner_t>::type> long_long_suffix;
+        boost::spirit::rule<scanner_t> hexadecimal_digit;
+        boost::spirit::rule<scanner_t> octal_digit;
+        boost::spirit::rule<scanner_t> nonzero_digit;
+        boost::spirit::rule<scanner_t> integer_suffix;
+        boost::spirit::rule<scanner_t> unsigned_suffix;
+        boost::spirit::rule<scanner_t> long_suffix;
+        boost::spirit::rule<scanner_t> long_long_suffix;
         boost::spirit::rule<scanner_t> character_literal;
-        boost::spirit::rule<boost::spirit::lexeme_scanner<scanner_t>::type> c_char_sequence;
-        boost::spirit::rule<boost::spirit::lexeme_scanner<scanner_t>::type> c_char;
+        boost::spirit::rule<scanner_t> c_char_sequence;
+        boost::spirit::rule<scanner_t> c_char;
         boost::spirit::rule<scanner_t> escape_sequence;
         boost::spirit::rule<scanner_t> simple_escape_sequence;
         boost::spirit::rule<scanner_t> octal_escape_sequence;
         boost::spirit::rule<scanner_t> hexadecimal_escape_sequence;
         boost::spirit::rule<scanner_t> floating_literal;
-        boost::spirit::rule<boost::spirit::lexeme_scanner<scanner_t>::type> fractional_constant;
-        boost::spirit::rule<boost::spirit::lexeme_scanner<scanner_t>::type> exponent_part;
-        boost::spirit::rule<boost::spirit::lexeme_scanner<scanner_t>::type> digit_sequence;
-        boost::spirit::rule<boost::spirit::lexeme_scanner<scanner_t>::type> floating_suffix;
+        boost::spirit::rule<scanner_t> fractional_constant;
+        boost::spirit::rule<scanner_t> exponent_part;
+        boost::spirit::rule<scanner_t> digit_sequence;
+        boost::spirit::rule<scanner_t> floating_suffix;
         boost::spirit::rule<scanner_t> string_literal;
         boost::spirit::rule<scanner_t> s_char_sequence;
         boost::spirit::rule<scanner_t> s_char;

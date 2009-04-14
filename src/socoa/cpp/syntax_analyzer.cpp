@@ -74,8 +74,7 @@ syntax_analyzer::analyze(const std::string& input)
     boost::spirit::tree_parse_info<> info = boost::spirit::pt_parse
     (
         input.c_str(),
-        grammar_.get_start_rule(),
-        boost::spirit::space_p
+        grammar_.get_start_rule()
     );
 
 	currently_analyzed_partial_input_ = input_;

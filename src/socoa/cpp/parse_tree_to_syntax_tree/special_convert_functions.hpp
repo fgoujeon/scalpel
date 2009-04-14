@@ -69,7 +69,7 @@ convert_separated_nodes
 		const tree_node_t& child_node = *i;
 		const std::string child_value = get_value(child_node);
 
-		if(child_value != separator) //if the current node is not a separator
+		if(child_value != separator && child_node.value.id() != id_t::SPACE) //if the current node is not a separator
 		{
 			seq.push_back(convert_function_caller_from_type<T>::convert(child_node));
 		}
