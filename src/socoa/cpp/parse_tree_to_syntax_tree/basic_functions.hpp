@@ -31,7 +31,7 @@ inline
 const tree_node_t&
 get_only_child_node(const tree_node_t& parent_node);
 
-const tree_node_t*
+tree_node_iterator_t
 find_child_node(const tree_node_t& parent_node, const id_t child_id);
 
 bool

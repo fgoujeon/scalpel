@@ -23,7 +23,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace parse_tree_to_syntax_tree
 {
 
-const tree_node_t*
+tree_node_iterator_t
 find_child_node(const tree_node_t& parent_node, grammar::parser_id child_id)
 {
     for(tree_node_iterator_t i = parent_node.children.begin(); i != parent_node.children.end(); ++i) //for each child
@@ -33,11 +33,11 @@ find_child_node(const tree_node_t& parent_node, grammar::parser_id child_id)
         boost::spirit::parser_id id = child_node.value.id();
         if(id == child_id)
         {
-            return &child_node;
+            return i;
         }
     }
 
-    return 0;
+    return parent_node.children.end();
 }
 
 bool

@@ -720,15 +720,15 @@ convert_base_specifier(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::BASE_SPECIFIER);
 
-	const tree_node_t* access_specifier_node = find_child_node(node, id_t::ACCESS_SPECIFIER);
+	tree_node_iterator_t access_specifier_node = find_child_node(node, id_t::ACCESS_SPECIFIER);
 
-	if(access_specifier_node)
+	if(access_specifier_node != node.children.end())
 		return base_specifier
 		(
 			check_node_existence(node, "virtual"),
 			convert_string_enumeration<access_specifier>
 			(
-				*find_child_node(node, id_t::ACCESS_SPECIFIER)
+				*access_specifier_node
 			),
 			find_and_convert_node<boost::optional<nested_identifier_or_template_id>, id_t::NESTED_IDENTIFIER_OR_TEMPLATE_ID>(node)
 		);

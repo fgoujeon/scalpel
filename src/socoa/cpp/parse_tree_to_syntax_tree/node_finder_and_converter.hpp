@@ -42,8 +42,8 @@ struct node_finder_and_converter
 	SyntaxNodeT
 	convert(const tree_node_t& parent_node)
 	{
-		const tree_node_t* child_node = find_node<Ids...>(parent_node);
-		assert(child_node);
+		tree_node_iterator_t child_node = find_node<Ids...>(parent_node);
+		assert(child_node != parent_node.children.end());
 		return node_converter<SyntaxNodeT, Ids...>::convert
 		(
 			*child_node
@@ -58,8 +58,8 @@ struct node_finder_and_converter<boost::optional<SyntaxNodeT>, Ids...>
 	boost::optional<SyntaxNodeT>
 	convert(const tree_node_t& parent_node)
 	{
-		const tree_node_t* child_node = find_node<Ids...>(parent_node);
-		if(child_node)
+		tree_node_iterator_t child_node = find_node<Ids...>(parent_node);
+		if(child_node != parent_node.children.end())
 			return boost::optional<SyntaxNodeT>
 			(
 				node_converter<SyntaxNodeT, Ids...>::convert

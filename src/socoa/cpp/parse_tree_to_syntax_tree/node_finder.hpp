@@ -34,10 +34,10 @@ template<>
 struct node_finder<>
 {
 	static
-	const tree_node_t*
-	find(const tree_node_t&)
+	tree_node_iterator_t
+	find(const tree_node_t& parent_node)
 	{
-		return 0;
+		return parent_node.children.end();
 	}
 };
 
@@ -45,11 +45,11 @@ template<const id_t Id, const grammar::parser_id... Ids>
 struct node_finder<Id, Ids...>
 {
 	static
-	const tree_node_t*
+	tree_node_iterator_t
 	find(const tree_node_t& parent_node)
 	{
-		const tree_node_t* found_node = find_child_node(parent_node, Id);
-		if(found_node)
+		tree_node_iterator_t found_node = find_child_node(parent_node, Id);
+		if(found_node != parent_node.children.end())
 			return found_node;
 		else
 			return node_finder<Ids...>::find(parent_node);
@@ -61,7 +61,7 @@ Convenient free function to be used in place of node_finder class.
 */
 template<const id_t... Ids>
 inline
-const tree_node_t*
+tree_node_iterator_t
 find_node(const tree_node_t& parent_node)
 {
 	return node_finder<Ids...>::find(parent_node);
