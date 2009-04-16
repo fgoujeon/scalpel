@@ -22,8 +22,9 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../grammar.hpp"
 #include "basic_functions.hpp"
-#include "generic_convert_functions.hpp"
 #include "special_convert_functions.hpp"
+#include "node_converter.hpp"
+#include "node_finder_and_converter.hpp"
 
 using namespace socoa::cpp::syntax_tree;
 

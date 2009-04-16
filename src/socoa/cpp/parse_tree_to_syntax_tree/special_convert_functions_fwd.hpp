@@ -33,30 +33,18 @@ namespace socoa { namespace cpp { namespace parse_tree_to_syntax_tree
 
 template<class T>
 T
-convert_sequence(const tree_node_t& node);
-
-template<class T>
-T
 convert_string_enumeration(const tree_node_t& node);
 
 /**
 Converts each child node of the given parent node. All the nodes must
 be of the same type.
-@tparam T the type representing the syntax of the nodes to be converted
-@param parent_node the parent node where to find the nodes to be
-	   converted
-@param separator value of the nodes to be ignored (useful for comma
-	   separated lists)
-@return a vector of pointers to objects representing the syntax of each
-		converted node
+@tparam ContainerT the type representing the syntax of the sequence node to be converted
+@param node the parse node of the sequence node
+@return the syntax node of the sequence
 */
-template<class ContainerT, class T>
+template<class ContainerT>
 ContainerT
-convert_separated_nodes
-(
-	const tree_node_t& parent_node,
-	const std::string& separator
-);
+convert_sequence(const tree_node_t& node);
 
 }}} //namespace socoa::cpp::parse_tree_to_syntax_tree
 

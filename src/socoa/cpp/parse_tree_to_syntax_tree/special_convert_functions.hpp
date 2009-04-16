@@ -33,20 +33,6 @@ namespace socoa { namespace cpp { namespace parse_tree_to_syntax_tree
 
 template<class T>
 T
-convert_sequence(const tree_node_t& node)
-{
-	return T
-	(
-		convert_separated_nodes<T, typename T::type>
-		(
-			node,
-			T::separator
-		)
-	);
-}
-
-template<class T>
-T
 convert_string_enumeration(const tree_node_t& node)
 {
 	return T
@@ -55,23 +41,20 @@ convert_string_enumeration(const tree_node_t& node)
 	);
 }
 
-template<class ContainerT, class T>
+template<class ContainerT>
 ContainerT
-convert_separated_nodes
-(
-	const tree_node_t& parent_node,
-	const std::string& separator
-)
+convert_sequence(const tree_node_t& node)
 {
 	ContainerT seq;
-	for(tree_node_iterator_t i = parent_node.children.begin(); i != parent_node.children.end(); ++i) //for each child
+	for(tree_node_iterator_t i = node.children.begin(); i != node.children.end(); ++i) //for each child node
 	{
 		const tree_node_t& child_node = *i;
 		const std::string child_value = get_value(child_node);
 
-		if(child_value != separator && child_node.value.id() != id_t::SPACE) //if the current node is not a separator
+		if(child_value != ContainerT::separator && child_node.value.id() != id_t::SPACE) //if the current node is not a separator
 		{
-			seq.push_back(convert_function_caller_from_type<T>::convert(child_node));
+			//add it to the sequence
+			seq.push_back(convert_function_caller_from_type<typename ContainerT::type>::convert(child_node));
 		}
 	}
 
