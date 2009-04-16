@@ -60,12 +60,9 @@ struct node_finder_and_converter<boost::optional<SyntaxNodeT>, Ids...>
 	{
 		tree_node_iterator_t child_node = find_node<Ids...>(parent_node);
 		if(child_node != parent_node.children.end())
-			return boost::optional<SyntaxNodeT>
+			return node_converter<SyntaxNodeT, Ids...>::convert
 			(
-				node_converter<SyntaxNodeT, Ids...>::convert
-				(
-					*child_node
-				)
+				*child_node
 			);
 		else
 			return boost::optional<SyntaxNodeT>();

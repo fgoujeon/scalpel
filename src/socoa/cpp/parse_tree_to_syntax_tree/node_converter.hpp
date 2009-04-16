@@ -48,19 +48,6 @@ struct node_converter<SyntaxNodeT>
 	}
 };
 
-//If the node is optional, return an empty node instead of
-//throwing an error.
-template<class SyntaxNodeT>
-struct node_converter<boost::optional<SyntaxNodeT>>
-{
-	static
-	boost::optional<SyntaxNodeT>
-	convert(const tree_node_t&)
-	{
-		return boost::optional<SyntaxNodeT>();
-	}
-};
-
 template<class SyntaxNodeT, int Id, int... Ids>
 struct node_converter<SyntaxNodeT, Id, Ids...>
 {

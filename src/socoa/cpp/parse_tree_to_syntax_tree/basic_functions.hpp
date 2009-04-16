@@ -52,10 +52,6 @@ get_value(const tree_node_t& node);
 std::string
 get_only_child_value(const tree_node_t& node);
 
-template<int... Ids>
-bool
-check_id(const tree_node_t& node);
-
 int
 get_id(const tree_node_t& node);
 
@@ -67,42 +63,6 @@ get_only_child_node(const tree_node_t& parent_node)
 {
 	assert(parent_node.children.size() == 1);
 	return *parent_node.children.begin();
-}
-
-
-template<int... Ids>
-class id_checker;
-
-template<>
-struct id_checker<>
-{
-	static
-	bool
-	check(const tree_node_t&)
-	{
-		return false;
-	}
-};
-
-template<int Id, int... Ids>
-struct id_checker<Id, Ids...>
-{
-	static
-	bool
-	check(const tree_node_t& node)
-	{
-		if(get_id(node) == Id)
-			return true;
-		else
-			return id_checker<Ids...>::check(node);
-	}
-};
-
-template<int... Ids>
-bool
-check_id(const tree_node_t& node)
-{
-	return id_checker<Ids...>::check(node);
 }
 
 }}} //namespace socoa::cpp
