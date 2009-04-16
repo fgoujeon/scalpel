@@ -39,10 +39,10 @@ direct_declarator::get_declarator() const
 }
 
 inline
-direct_declarator::other_part_const_iterator_range
-direct_declarator::get_other_parts() const
+const boost::optional<const direct_declarator::next_part_seq&>
+direct_declarator::get_next_part_seq() const
 {
-    return boost::iterator_range<other_part_const_iterator>(other_parts_.begin(), other_parts_.end());
+	return boost::optional<const direct_declarator::next_part_seq&>(next_part_seq_);
 }
 
 

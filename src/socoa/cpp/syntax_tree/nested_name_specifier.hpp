@@ -32,16 +32,14 @@ namespace socoa { namespace cpp { namespace syntax_tree
 class nested_name_specifier: public composite_node
 {
 	public:
-		class second_part;
+		class next_part;
 
-		typedef std::vector<second_part> second_parts_t;
-		typedef second_parts_t::const_iterator second_part_const_iterator;
-		typedef boost::iterator_range<second_part_const_iterator> second_part_const_iterator_range;
+		typedef sequence_node<next_part> next_part_seq;
 
 		nested_name_specifier
 		(
 			identifier_or_template_id&& an_identifier_or_template_id,
-			second_parts_t&& parts
+			boost::optional<next_part_seq>&& a_next_part_seq
 		);
 
 		nested_name_specifier(const nested_name_specifier& o);
@@ -56,32 +54,32 @@ class nested_name_specifier: public composite_node
 		get_identifier_or_template_id() const;
 
 		inline
-		second_part_const_iterator_range
-		get_parts() const;
+		const boost::optional<const next_part_seq&>
+		get_next_part_seq() const;
 
 	private:
 		void
 		update_node_list();
 
 		identifier_or_template_id identifier_or_template_id_;
-		second_parts_t parts_;
+		boost::optional<next_part_seq>&& next_part_seq_;
 };
 
-class nested_name_specifier::second_part: public composite_node
+class nested_name_specifier::next_part: public composite_node
 {
 	public:
-		second_part
+		next_part
 		(
 			bool template_keyword,
 			identifier_or_template_id&& an_identifier_or_template_id
 		);
 
-		second_part(const second_part& o);
+		next_part(const next_part& o);
 
-		second_part(second_part&& o);
+		next_part(next_part&& o);
 
-		const second_part&
-		operator=(const second_part& o);
+		const next_part&
+		operator=(const next_part& o);
 
 		inline
 		bool
@@ -101,14 +99,14 @@ class nested_name_specifier::second_part: public composite_node
 
 inline
 bool
-nested_name_specifier::second_part::has_template_keyword() const
+nested_name_specifier::next_part::has_template_keyword() const
 {
 	return template_keyword_;
 }
 
 inline
 const identifier_or_template_id&
-nested_name_specifier::second_part::get_identifier_or_template_id() const
+nested_name_specifier::next_part::get_identifier_or_template_id() const
 {
 	return identifier_or_template_id_;
 }
@@ -121,10 +119,10 @@ nested_name_specifier::get_identifier_or_template_id() const
 }
 
 inline
-nested_name_specifier::second_part_const_iterator_range
-nested_name_specifier::get_parts() const
+const boost::optional<const nested_name_specifier::next_part_seq&>
+nested_name_specifier::get_next_part_seq() const
 {
-	return boost::iterator_range<second_part_const_iterator>(parts_.begin(), parts_.end());
+	return boost::optional<const nested_name_specifier::next_part_seq&>(next_part_seq_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

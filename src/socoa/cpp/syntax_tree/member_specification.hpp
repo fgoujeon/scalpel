@@ -21,51 +21,37 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_MEMBER_SPECIFICATION_HPP
 #define SOCOA_CPP_SYNTAX_TREE_MEMBER_SPECIFICATION_HPP
 
-#include <vector>
-#include "composite_node.hpp"
-#include "member_specification_part.hpp"
+#include "sequence_node.hpp"
+#include "alternative_node.hpp"
+#include "member_declaration.hpp"
+#include "member_specification_access_specifier.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class member_specification: public composite_node
+typedef
+	alternative_node
+	<
+		member_declaration,
+		member_specification_access_specifier
+	>
+	member_specification_part
+;
+
+typedef
+	sequence_node<member_specification_part>
+	member_specification_t
+;
+
+class member_specification: public member_specification_t
 {
 	public:
-		typedef std::vector<member_specification_part> parts_t;
-		typedef parts_t::const_iterator part_const_iterator;
-		typedef boost::iterator_range<part_const_iterator> part_const_iterator_range;
+        member_specification(){};
 
-	public:
-		explicit
-		member_specification
-		(
-			parts_t&& parts
-		);
+        member_specification(const member_specification& s): member_specification_t(static_cast<const member_specification_t&>(s)){};
 
-		member_specification(const member_specification& o);
-
-		member_specification(member_specification&& o);
-
-		const member_specification&
-		operator=(const member_specification& o);
-
-		inline
-		part_const_iterator_range
-		get_parts() const;
-
-	private:
-		void
-		update_node_list();
-
-		parts_t parts_;
+        member_specification(member_specification&& s): member_specification_t(static_cast<member_specification_t&&>(s)){};
 };
-
-inline
-member_specification::part_const_iterator_range
-member_specification::get_parts() const
-{
-	return part_const_iterator_range(parts_.begin(), parts_.end());
-}
 
 }}} //namespace socoa::cpp::syntax_tree
 

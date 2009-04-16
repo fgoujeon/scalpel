@@ -157,40 +157,43 @@ find_scope
 
 	if(found_scope)
 	{
-		auto next_parts = a_nested_name_specifier.get_parts();
-		for(auto i = next_parts.begin(); i != next_parts.end(); ++i)
+		auto next_part_seq = a_nested_name_specifier.get_next_part_seq();
+		if(next_part_seq)
 		{
-			const nested_name_specifier::second_part& next_part = *i;
-
-			const identifier_or_template_id& an_identifier_or_template_id = next_part.get_identifier_or_template_id();
-			boost::optional<const identifier&> an_identifier = get<identifier>(&an_identifier_or_template_id);
-
-			if(an_identifier)
+			for(auto i = next_part_seq->begin(); i != next_part_seq->end(); ++i)
 			{
-				const std::string& scope_name = an_identifier->get_value();
+				const nested_name_specifier::next_part& next_part = *i;
 
-				//find the scope which has that name
-				auto scopes = current_scope.scopes();
-				auto scope_it = std::find_if
-				(
-					scopes.begin(),
-					scopes.end(),
-					std::bind
+				const identifier_or_template_id& an_identifier_or_template_id = next_part.get_identifier_or_template_id();
+				boost::optional<const identifier&> an_identifier = get<identifier>(&an_identifier_or_template_id);
+
+				if(an_identifier)
+				{
+					const std::string& scope_name = an_identifier->get_value();
+
+					//find the scope which has that name
+					auto scopes = current_scope.scopes();
+					auto scope_it = std::find_if
 					(
-						std::equal_to<std::string>(),
-						std::cref(scope_name),
+						scopes.begin(),
+						scopes.end(),
 						std::bind
 						(
-							&scope::name,
-							std::placeholders::_1
+							std::equal_to<std::string>(),
+							std::cref(scope_name),
+							std::bind
+							(
+								&scope::name,
+								std::placeholders::_1
+							)
 						)
-					)
-				);
+					);
 
-				if(scope_it == scopes.end())
-					return 0;
+					if(scope_it == scopes.end())
+						return 0;
 
-				found_scope = &*scope_it;
+					found_scope = &*scope_it;
+				}
 			}
 		}
 	}

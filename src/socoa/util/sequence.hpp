@@ -39,6 +39,9 @@ class sequence
 
         sequence(sequence&& s);
 
+		bool
+		empty() const;
+
 		const_iterator
 		begin() const;
 
@@ -66,6 +69,13 @@ template<class T, const std::string& Separator>
 sequence<T, Separator>::sequence(sequence&& s):
     items_(std::move(s.items_))
 {
+}
+
+template<class T, const std::string& Separator>
+bool
+sequence<T, Separator>::empty() const
+{
+	return items_.empty();
 }
 
 template<class T, const std::string& Separator>

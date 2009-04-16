@@ -65,7 +65,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "syntax_tree/member_declarator_list.hpp"
 #include "syntax_tree/member_specification.hpp"
 #include "syntax_tree/member_specification_access_specifier.hpp"
-#include "syntax_tree/member_specification_part.hpp"
 #include "syntax_tree/namespace_definition.hpp"
 #include "syntax_tree/nested_identifier_or_template_id.hpp"
 #include "syntax_tree/nested_name_specifier.hpp"

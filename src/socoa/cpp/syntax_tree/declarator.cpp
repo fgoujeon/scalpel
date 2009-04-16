@@ -27,10 +27,10 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 declarator::declarator
 (
-    std::vector<ptr_operator>&& ptr_operators,
+	boost::optional<sequence_node<ptr_operator>>&& ptr_operator_seq,
     direct_declarator&& a_direct_declarator
 ):
-    ptr_operators_(std::move(ptr_operators)),
+    ptr_operator_seq_(std::move(ptr_operator_seq)),
     direct_declarator_(std::make_shared<direct_declarator>(std::move(a_direct_declarator)))
 {
 	update_node_list();
@@ -38,14 +38,14 @@ declarator::declarator
 
 declarator::declarator(const declarator& o):
 	composite_node(),
-    ptr_operators_(o.ptr_operators_),
+    ptr_operator_seq_(o.ptr_operator_seq_),
     direct_declarator_(o.direct_declarator_)
 {
 	update_node_list();
 }
 
 declarator::declarator(declarator&& o):
-    ptr_operators_(std::move(o.ptr_operators_)),
+    ptr_operator_seq_(std::move(o.ptr_operator_seq_)),
     direct_declarator_(std::move(o.direct_declarator_))
 {
 	update_node_list();
@@ -54,7 +54,7 @@ declarator::declarator(declarator&& o):
 const declarator&
 declarator::operator=(const declarator& o)
 {
-    ptr_operators_ = o.ptr_operators_;
+    ptr_operator_seq_ = o.ptr_operator_seq_;
     direct_declarator_ = o.direct_declarator_;
 	update_node_list();
 
@@ -65,8 +65,7 @@ void
 declarator::update_node_list()
 {
 	clear();
-	for(auto i = ptr_operators_.begin(); i != ptr_operators_.end(); ++i)
-		add(*i);
+	if(ptr_operator_seq_) add(*ptr_operator_seq_);
 	add(*direct_declarator_);
 }
 

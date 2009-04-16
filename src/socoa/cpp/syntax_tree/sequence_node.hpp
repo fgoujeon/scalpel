@@ -49,6 +49,12 @@ class sequence_node: public composite_node
 		const sequence_node&
 		operator=(sequence_node&& s);
 
+		bool
+		empty() const
+		{
+			return seq_.empty();
+		}
+
 		const_iterator
 		begin() const
 		{
@@ -114,6 +120,8 @@ sequence_node<T, Separator>::operator=(sequence_node&& s)
 {
 	seq_ = std::move(s.seq_);
 	update_node_list();
+
+	return *this;
 }
 
 template<class T, const std::string& Separator>

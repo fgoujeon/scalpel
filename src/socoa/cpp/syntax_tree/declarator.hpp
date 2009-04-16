@@ -43,7 +43,7 @@ class declarator: public composite_node
 	public:
         declarator
         (
-            std::vector<ptr_operator>&& ptr_operators,
+            boost::optional<sequence_node<ptr_operator>>&& ptr_operator_seq,
             direct_declarator&& a_direct_declarator
         );
 
@@ -55,8 +55,8 @@ class declarator: public composite_node
 		operator=(const declarator& o);
 
         inline
-        const std::vector<ptr_operator>&
-        get_ptr_operators() const;
+        const boost::optional<const sequence_node<ptr_operator>&>
+        get_ptr_operator_seq() const;
 
         inline
         const direct_declarator&
@@ -66,15 +66,15 @@ class declarator: public composite_node
 		void
 		update_node_list();
 
-        std::vector<ptr_operator> ptr_operators_;
+		boost::optional<sequence_node<ptr_operator>> ptr_operator_seq_;
 		std::shared_ptr<direct_declarator> direct_declarator_;
 };
 
 inline
-const std::vector<ptr_operator>&
-declarator::get_ptr_operators() const
+const boost::optional<const sequence_node<ptr_operator>&>
+declarator::get_ptr_operator_seq() const
 {
-    return ptr_operators_;
+	return boost::optional<const sequence_node<ptr_operator>&>(ptr_operator_seq_);
 }
 
 inline

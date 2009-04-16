@@ -455,9 +455,12 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		;
 	*/
 	nested_name_specifier
-		= identifier_or_template_id >> !s >> "::" >> *(!s >> nested_name_specifier_second_part)
+		= identifier_or_template_id >> !s >> "::" >> !(!s >> nested_name_specifier_next_part_seq)
 	;
-	nested_name_specifier_second_part
+	nested_name_specifier_next_part_seq
+		= nested_name_specifier_next_part % !s
+	;
+	nested_name_specifier_next_part
 		= !(str_p("template") >> !s) >> identifier_or_template_id >> !s >> "::"
 	;
 
@@ -1001,7 +1004,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		;
 	*/
 	declarator
-		= *(ptr_operator >> !s) >> direct_declarator
+		= !(ptr_operator_seq >> !s) >> direct_declarator
 	;
 
 	/*
@@ -1087,20 +1090,24 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 			declarator_id
 			| '(' >> !s >> declarator >> !s >> ')'
 		)
-		>>
-		*(
-			!s >>
-			(
-				direct_declarator_function_part
-				| direct_declarator_array_part
-			)
-		)
+		>> !(!s >> direct_declarator_next_part_seq)
+	;
+	direct_declarator_next_part_seq
+		= direct_declarator_next_part % !s
+	;
+	direct_declarator_next_part
+		= direct_declarator_function_part
+		| direct_declarator_array_part
 	;
 	direct_declarator_function_part
 		= '(' >> !s >> parameter_declaration_clause >> !s >> ')' >> !(!s >> cv_qualifier_seq) >> !(!s >> exception_specification)
 	;
 	direct_declarator_array_part
 		= '[' >> !s >> !constant_expression >> !s >> ']'
+	;
+
+	ptr_operator_seq
+		= ptr_operator % !s
 	;
 
 	ptr_operator
@@ -1254,8 +1261,11 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	member_specification
-		= !(member_declaration | member_specification_access_specifier) >>
-		*(!s >> (member_declaration | member_specification_access_specifier))
+		= member_specification_part % !s
+	;
+	member_specification_part
+		= member_declaration
+		| member_specification_access_specifier
 	;
 	member_specification_access_specifier
 		= access_specifier >> !s >> ':'

@@ -284,7 +284,7 @@ semantic_analyzer::convert(const nested_name_specifier&)
 }
 
 void
-semantic_analyzer::convert(const nested_name_specifier::second_part&)
+semantic_analyzer::convert(const nested_name_specifier::next_part&)
 {
 }
 
@@ -393,21 +393,23 @@ semantic_analyzer::convert(const simple_declaration& item)
 			}
 
 			//determine the appropriate semantic graph node
-			auto a_direct_declarator_other_parts = a_direct_declarator.get_other_parts();
-			for(auto j = a_direct_declarator_other_parts.begin(); j != a_direct_declarator_other_parts.end(); ++j)
+			auto a_direct_declarator_next_part_seq = a_direct_declarator.get_next_part_seq();
+			if(a_direct_declarator_next_part_seq)
 			{
-				const direct_declarator::other_part& other_part = *j;
-
-				if(get<direct_declarator::function_part>(&other_part))
+				for(auto j = a_direct_declarator_next_part_seq->begin(); j != a_direct_declarator_next_part_seq->end(); ++j)
 				{
-					//item is a function declaration!
-					is_a_function_declaration = true;
+					const direct_declarator::next_part& next_part = *j;
 
-					if(!name.empty())
-						scope_cursor_.add_to_current_scope(function(name));
+					if(get<direct_declarator::function_part>(&next_part))
+					{
+						//item is a function declaration!
+						is_a_function_declaration = true;
+
+						if(!name.empty())
+							scope_cursor_.add_to_current_scope(function(name));
+					}
 				}
 			}
-
 		}
 	}
 

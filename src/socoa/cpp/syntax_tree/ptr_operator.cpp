@@ -20,6 +20,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "ptr_operator.hpp"
 
+#include "common_nodes.hpp"
+
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
@@ -74,6 +76,15 @@ ptr_operator::update_node_list()
 {
 	clear();
 	if(nested_name_specifier_) add(*nested_name_specifier_);
+	switch(type_)
+	{
+		case ASTERISK:
+			add(asterisk);
+			break;
+		case AMPERSAND:
+			add(ampersand);
+			break;
+	}
 	if(cv_qualifier_seq_) add(*cv_qualifier_seq_);
 }
 

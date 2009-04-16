@@ -118,7 +118,7 @@ class semantic_analyzer
 		convert(const syntax_tree::nested_name_specifier& item);
 
         void
-		convert(const syntax_tree::nested_name_specifier::second_part& item);
+		convert(const syntax_tree::nested_name_specifier::next_part& item);
 
         void
 		convert(const syntax_tree::operator_function_id& item);

@@ -63,18 +63,16 @@ class direct_declarator: public composite_node
 				array_part,
 				function_part
 			>
-			other_part
+			next_part
 		;
 
-		typedef std::vector<other_part> other_parts_t;
-		typedef other_parts_t::const_iterator other_part_const_iterator;
-		typedef boost::iterator_range<other_part_const_iterator> other_part_const_iterator_range;
+		typedef sequence_node<next_part> next_part_seq;
 
         direct_declarator
         (
             boost::optional<declarator_id>&& a_declarator_id,
             boost::optional<declarator>&& a_declarator,
-            other_parts_t&& other_parts
+			boost::optional<sequence_node<next_part>>&& a_next_part_seq
         );
 
         direct_declarator(const direct_declarator& o);
@@ -90,8 +88,8 @@ class direct_declarator: public composite_node
         get_declarator() const;
 
         inline
-		other_part_const_iterator_range
-        get_other_parts() const;
+		const boost::optional<const next_part_seq&>
+        get_next_part_seq() const;
 
     private:
 		void
@@ -99,7 +97,7 @@ class direct_declarator: public composite_node
 
         boost::optional<declarator_id> declarator_id_;
         boost::optional<declarator> declarator_;
-        other_parts_t other_parts_;
+		boost::optional<next_part_seq> next_part_seq_;
 };
 
 /**

@@ -150,21 +150,16 @@ convert_nested_name_specifier(const tree_node_t& node)
     return nested_name_specifier
     (
         find_and_convert_node<identifier_or_template_id, id_t::IDENTIFIER_OR_TEMPLATE_ID>(node),
-		convert_nodes
-		<
-			std::vector<nested_name_specifier::second_part>,
-			nested_name_specifier::second_part,
-			id_t::NESTED_NAME_SPECIFIER_SECOND_PART
-		>(node)
+        find_and_convert_node<boost::optional<sequence_node<nested_name_specifier::next_part>>, id_t::NESTED_NAME_SPECIFIER_NEXT_PART_SEQ>(node)
     );
 }
 
-nested_name_specifier::second_part
-convert_nested_name_specifier_second_part(const tree_node_t& node)
+nested_name_specifier::next_part
+convert_nested_name_specifier_next_part(const tree_node_t& node)
 {
-    assert(node.value.id() == id_t::NESTED_NAME_SPECIFIER_SECOND_PART);
+    assert(node.value.id() == id_t::NESTED_NAME_SPECIFIER_NEXT_PART);
 
-    return nested_name_specifier::second_part
+    return nested_name_specifier::next_part
     (
 		check_node_existence(node, "template", 0),
 		find_and_convert_node<identifier_or_template_id, id_t::IDENTIFIER_OR_TEMPLATE_ID>(node)
@@ -363,12 +358,7 @@ convert_declarator(const tree_node_t& node)
 
     return declarator
     (
-		convert_nodes
-		<
-			std::vector<ptr_operator>,
-			ptr_operator,
-			id_t::PTR_OPERATOR
-		>(node),
+		find_and_convert_node<boost::optional<sequence_node<ptr_operator>>, id_t::PTR_OPERATOR_SEQ>(node),
 		find_and_convert_node<direct_declarator, id_t::DIRECT_DECLARATOR>(node)
     );
 }
@@ -382,13 +372,7 @@ convert_direct_declarator(const tree_node_t& node)
     (
 		find_and_convert_node<boost::optional<declarator_id>, id_t::DECLARATOR_ID>(node),
 		find_and_convert_node<boost::optional<declarator>, id_t::DECLARATOR>(node),
-		convert_nodes
-		<
-			std::vector<direct_declarator::other_part>,
-			direct_declarator::other_part,
-			id_t::DIRECT_DECLARATOR_FUNCTION_PART
-			//id_t::DIRECT_DECLARATOR_ARRAY_PART
-		>(node)
+		find_and_convert_node<boost::optional<sequence_node<direct_declarator::next_part>>, id_t::DIRECT_DECLARATOR_NEXT_PART_SEQ>(node)
     );
 
 	return decl;
@@ -472,6 +456,22 @@ convert_direct_declarator_function_part(const tree_node_t& node)
 		space3,
 		a_cv_qualifier_seq
     );
+}
+
+direct_declarator::next_part
+convert_direct_declarator_next_part(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::DIRECT_DECLARATOR_NEXT_PART);
+
+	return convert_node
+	<
+		direct_declarator::next_part,
+		id_t::DIRECT_DECLARATOR_FUNCTION_PART,
+		id_t::DIRECT_DECLARATOR_ARRAY_PART
+	>
+	(
+		get_only_child_node(node)
+	);
 }
 
 direct_declarator::array_part
@@ -626,21 +626,20 @@ convert_class_head(const tree_node_t& node)
     );
 }
 
-member_specification
-convert_member_specification(const tree_node_t& node)
+member_specification_part
+convert_member_specification_part(const tree_node_t& node)
 {
-    assert(node.value.id() == id_t::MEMBER_SPECIFICATION);
+    assert(node.value.id() == id_t::MEMBER_SPECIFICATION_PART);
 
-    return member_specification
-    (
-		convert_nodes
-		<
-			std::vector<member_specification_part>,
-			member_specification_part,
-			id_t::MEMBER_DECLARATION,
-			id_t::MEMBER_SPECIFICATION_ACCESS_SPECIFIER
-		>(node)
-    );
+    return convert_node
+	<
+		member_specification_part,
+		id_t::MEMBER_DECLARATION,
+		id_t::MEMBER_SPECIFICATION_ACCESS_SPECIFIER
+	>
+	(
+		get_only_child_node(node)
+	);
 }
 
 member_specification_access_specifier

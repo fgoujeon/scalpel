@@ -54,8 +54,8 @@ convert_qualified_identifier(const tree_node_t& node);
 syntax_tree::nested_name_specifier
 convert_nested_name_specifier(const tree_node_t& node);
 
-syntax_tree::nested_name_specifier::second_part
-convert_nested_name_specifier_second_part(const tree_node_t& node);
+syntax_tree::nested_name_specifier::next_part
+convert_nested_name_specifier_next_part(const tree_node_t& node);
 
 syntax_tree::declaration
 convert_declaration(const tree_node_t& node);
@@ -105,6 +105,9 @@ convert_direct_declarator_function_part(const tree_node_t& node);
 syntax_tree::direct_declarator::array_part
 convert_direct_declarator_array_part(const tree_node_t& node);
 
+syntax_tree::direct_declarator::next_part
+convert_direct_declarator_next_part(const tree_node_t& node);
+
 syntax_tree::ptr_operator
 convert_ptr_operator(const tree_node_t& node);
 
@@ -129,8 +132,8 @@ convert_class_specifier(const tree_node_t& node);
 syntax_tree::class_head
 convert_class_head(const tree_node_t& node);
 
-syntax_tree::member_specification
-convert_member_specification(const tree_node_t& node);
+syntax_tree::member_specification_part
+convert_member_specification_part(const tree_node_t& node);
 
 syntax_tree::member_specification_access_specifier
 convert_member_specification_access_specifier(const tree_node_t& node);

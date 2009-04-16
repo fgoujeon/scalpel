@@ -26,10 +26,10 @@ namespace socoa { namespace cpp { namespace syntax_tree
 nested_name_specifier::nested_name_specifier
 (
 	identifier_or_template_id&& an_identifier_or_template_id,
-	second_parts_t&& parts
+	boost::optional<next_part_seq>&& a_next_part_seq
 ):
 	identifier_or_template_id_(std::move(an_identifier_or_template_id)),
-	parts_(std::move(parts))
+	next_part_seq_(std::move(a_next_part_seq))
 {
 	update_node_list();
 }
@@ -37,14 +37,14 @@ nested_name_specifier::nested_name_specifier
 nested_name_specifier::nested_name_specifier(const nested_name_specifier& o):
 	composite_node(),
 	identifier_or_template_id_(o.identifier_or_template_id_),
-	parts_(o.parts_)
+	next_part_seq_(o.next_part_seq_)
 {
 	update_node_list();
 }
 
 nested_name_specifier::nested_name_specifier(nested_name_specifier&& o):
 	identifier_or_template_id_(std::move(o.identifier_or_template_id_)),
-	parts_(std::move(o.parts_))
+	next_part_seq_(std::move(o.next_part_seq_))
 {
 	update_node_list();
 }
@@ -53,7 +53,7 @@ const nested_name_specifier&
 nested_name_specifier::operator=(const nested_name_specifier& o)
 {
 	identifier_or_template_id_ = o.identifier_or_template_id_;
-	parts_ = o.parts_;
+	next_part_seq_ = o.next_part_seq_;
 	update_node_list();
 
 	return *this;
@@ -64,11 +64,11 @@ nested_name_specifier::update_node_list()
 {
 	clear();
 	add(identifier_or_template_id_);
-	for(auto i = parts_.begin(); i != parts_.end(); ++i) add(*i);
+	if(next_part_seq_) add(*next_part_seq_);
 }
 
 
-nested_name_specifier::second_part::second_part
+nested_name_specifier::next_part::next_part
 (
 	bool template_keyword,
 	identifier_or_template_id&& an_identifier_or_template_id
@@ -79,7 +79,7 @@ nested_name_specifier::second_part::second_part
 	update_node_list();
 }
 
-nested_name_specifier::second_part::second_part(const second_part& o):
+nested_name_specifier::next_part::next_part(const next_part& o):
 	composite_node(),
 	template_keyword_(o.template_keyword_),
 	identifier_or_template_id_(o.identifier_or_template_id_)
@@ -87,15 +87,15 @@ nested_name_specifier::second_part::second_part(const second_part& o):
 	update_node_list();
 }
 
-nested_name_specifier::second_part::second_part(second_part&& o):
+nested_name_specifier::next_part::next_part(next_part&& o):
 	template_keyword_(std::move(o.template_keyword_)),
 	identifier_or_template_id_(std::move(o.identifier_or_template_id_))
 {
 	update_node_list();
 }
 
-const nested_name_specifier::second_part&
-nested_name_specifier::second_part::operator=(const second_part& o)
+const nested_name_specifier::next_part&
+nested_name_specifier::next_part::operator=(const next_part& o)
 {
 	template_keyword_ = o.template_keyword_;
 	identifier_or_template_id_ = o.identifier_or_template_id_;
@@ -105,7 +105,7 @@ nested_name_specifier::second_part::operator=(const second_part& o)
 }
 
 void
-nested_name_specifier::second_part::update_node_list()
+nested_name_specifier::next_part::update_node_list()
 {
 	clear();
 	add(identifier_or_template_id_);
