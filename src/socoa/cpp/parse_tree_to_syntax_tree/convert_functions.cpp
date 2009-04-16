@@ -25,6 +25,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "special_convert_functions.hpp"
 #include "node_converter.hpp"
 #include "node_finder_and_converter.hpp"
+#include "space_convert_functions.hpp"
 
 using namespace socoa::cpp::syntax_tree;
 
@@ -412,15 +413,10 @@ convert_direct_declarator_function_part(const tree_node_t& node)
 		a_parameter_declaration_clause = convert_node<parameter_declaration_clause, id_t::PARAMETER_DECLARATION_CLAUSE>(*i);
 
 		//check whether the previous node is a space node and convert it
-		--i;
-		if(get_id(*i) == id_t::SPACE)
-			space1 = convert_node<space, id_t::SPACE>(*i);
+		space1 = convert_previous_space(i);
 
 		//ditto for the next node
-		++i;
-		++i;
-		if(get_id(*i) == id_t::SPACE)
-			space2 = convert_node<space, id_t::SPACE>(*i);
+		space2 = convert_next_space(i);
 	}
 
 	i = find_node<id_t::CV_QUALIFIER_SEQ>(node);
@@ -429,10 +425,7 @@ convert_direct_declarator_function_part(const tree_node_t& node)
 		//convert it
 		a_cv_qualifier_seq = convert_node<cv_qualifier_seq, id_t::CV_QUALIFIER_SEQ>(*i);
 
-		//check whether the previous node is a space node and convert it
-		--i;
-		if(get_id(*i) == id_t::SPACE)
-			space3 = convert_node<space, id_t::SPACE>(*i);
+		space3 = convert_previous_space(i);
 	}
 
 	/*
