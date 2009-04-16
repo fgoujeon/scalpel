@@ -24,28 +24,24 @@ namespace socoa { namespace cpp { namespace syntax_tree
 {
 
 identifier::identifier(std::string&& value):
-	leaf_node(" " + value),
-    value_(value)
+	leaf_node(value)
 {
 }
 
 identifier::identifier(const identifier& i):
-	leaf_node(" " + i.value_),
-    value_(i.value_)
+	leaf_node(i.get_value())
 {
 }
 
 identifier::identifier(identifier&& i):
-	leaf_node(" " + i.value_),
-    value_(std::move(i.value_))
+	leaf_node(i.get_value())
 {
 }
 
 const identifier&
 identifier::operator=(const identifier& i)
 {
-	raw_code(" " + i.value_);
-    value_ = i.value_;
+	raw_code(i.get_value());
 
 	return *this;
 }
@@ -53,8 +49,8 @@ identifier::operator=(const identifier& i)
 const identifier&
 identifier::operator=(identifier&& i)
 {
-	raw_code(" " + i.value_);
-	value_ = std::move(i.value_);
+	raw_code(i.get_value());
+
 	return *this;
 }
 

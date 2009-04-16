@@ -27,6 +27,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "declarator.hpp"
 #include "parameter_declaration_clause.hpp"
 #include "cv_qualifier_seq.hpp"
+#include "space.hpp"
+#include "common_nodes.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
@@ -43,9 +45,6 @@ direct_declarator
 		direct_declarator::function_part
 		| direct_declarator::array_part
 	}
-;
-direct_declarator::function_part
-	= "(", parameter_declaration_clause, ")", [cv_qualifier_seq], [exception_specification]
 ;
 direct_declarator::array_part
 	= "[", [constant_expression], "]"
@@ -103,12 +102,22 @@ class direct_declarator: public composite_node
         other_parts_t other_parts_;
 };
 
+/**
+\verbatim
+direct_declarator::function_part
+	= "(", [s1], parameter_declaration_clause, [s2], ")", [[s3], cv_qualifier_seq], [[s4], exception_specification]
+;
+\endverbatim
+*/
 class direct_declarator::function_part: public composite_node
 {
 	public:
 		function_part
 		(
+			boost::optional<space>&& space1,
 			parameter_declaration_clause&& a_parameter_declaration_clause,
+			boost::optional<space>&& space2,
+			boost::optional<space>&& space3,
 			boost::optional<cv_qualifier_seq>&& a_cv_qualifier_seq
 		);
 
@@ -131,7 +140,10 @@ class direct_declarator::function_part: public composite_node
 		void
 		update_node_list();
 
+		boost::optional<space> space1_;
 		parameter_declaration_clause parameter_declaration_clause_;
+		boost::optional<space> space2_;
+		boost::optional<space> space3_;
 		boost::optional<cv_qualifier_seq> cv_qualifier_seq_;
 };
 

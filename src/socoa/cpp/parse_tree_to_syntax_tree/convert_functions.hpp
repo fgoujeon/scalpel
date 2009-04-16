@@ -195,6 +195,9 @@ convert_operator_function_id(const tree_node_t& node);
 syntax_tree::conversion_function_id
 convert_conversion_function_id(const tree_node_t& node);
 
+syntax_tree::space
+convert_space(const tree_node_t& node);
+
 }}} //namespace socoa::cpp
 
 #endif

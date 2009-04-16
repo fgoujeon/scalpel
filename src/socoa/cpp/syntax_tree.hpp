@@ -82,6 +82,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "syntax_tree/simple_declaration.hpp"
 #include "syntax_tree/simple_template_type_specifier.hpp"
 #include "syntax_tree/simple_type_specifier.hpp"
+#include "syntax_tree/space.hpp"
 #include "syntax_tree/string_enumeration_node.hpp"
 #include "syntax_tree/storage_class_specifier.hpp"
 #include "syntax_tree/template_argument.hpp"

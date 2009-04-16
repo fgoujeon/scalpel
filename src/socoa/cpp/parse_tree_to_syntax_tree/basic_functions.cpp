@@ -130,35 +130,7 @@ get_value(const tree_node_t& node)
         value_oss << *i;
     }
 
-    return strip_redundant_spaces(value_oss.str());
-}
-
-std::string
-strip_redundant_spaces(const std::string& str)
-{
-    std::string result;
-
-    bool skip = true;
-    for(unsigned int i = 0; i < str.size(); ++i)
-    {
-        const char c = str[i];
-
-        if(c == ' ' || c == '\t' || c == '\n')
-        {
-            if(!skip)
-            {
-                result += ' ';
-                skip = true;
-            }
-        }
-        else
-        {
-            result += c;
-            skip = false;
-        }
-    }
-
-    return result;
+    return value_oss.str();
 }
 
 int

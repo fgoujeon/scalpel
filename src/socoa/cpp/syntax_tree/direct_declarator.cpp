@@ -66,10 +66,16 @@ direct_declarator::update_node_list()
 
 direct_declarator::function_part::function_part
 (
-    parameter_declaration_clause&& a_parameter_declaration_clause,
-    boost::optional<cv_qualifier_seq>&& a_cv_qualifier_seq
+	boost::optional<space>&& space1,
+	parameter_declaration_clause&& a_parameter_declaration_clause,
+	boost::optional<space>&& space2,
+	boost::optional<space>&& space3,
+	boost::optional<cv_qualifier_seq>&& a_cv_qualifier_seq
 ):
+	space1_(space1),
     parameter_declaration_clause_(std::move(a_parameter_declaration_clause)),
+	space2_(space2),
+	space3_(space3),
     cv_qualifier_seq_(a_cv_qualifier_seq)
 {
 	update_node_list();
@@ -77,14 +83,20 @@ direct_declarator::function_part::function_part
 
 direct_declarator::function_part::function_part(const function_part& o):
 	composite_node(),
+	space1_(o.space1_),
     parameter_declaration_clause_(o.parameter_declaration_clause_),
+	space2_(o.space2_),
+	space3_(o.space3_),
     cv_qualifier_seq_(o.cv_qualifier_seq_)
 {
 	update_node_list();
 }
 
 direct_declarator::function_part::function_part(function_part&& o):
+	space1_(o.space1_),
     parameter_declaration_clause_(std::move(o.parameter_declaration_clause_)),
+	space2_(o.space2_),
+	space3_(o.space3_),
     cv_qualifier_seq_(std::move(o.cv_qualifier_seq_))
 {
 	update_node_list();
@@ -93,8 +105,12 @@ direct_declarator::function_part::function_part(function_part&& o):
 const direct_declarator::function_part&
 direct_declarator::function_part::operator=(const function_part& o)
 {
+	space1_ = o.space1_;
     parameter_declaration_clause_ = o.parameter_declaration_clause_;
+	space2_ = o.space2_;
+	space3_ = o.space3_;
     cv_qualifier_seq_ = o.cv_qualifier_seq_;
+
 	update_node_list();
 
 	return *this;
@@ -104,7 +120,13 @@ void
 direct_declarator::function_part::update_node_list()
 {
 	clear();
+
+	add(opening_bracket);
+	if(space1_) add(*space1_);
 	add(parameter_declaration_clause_);
+	if(space2_) add(*space2_);
+	add(closing_bracket);
+	if(space3_) add(*space3_);
 	if(cv_qualifier_seq_) add(*cv_qualifier_seq_);
 }
 

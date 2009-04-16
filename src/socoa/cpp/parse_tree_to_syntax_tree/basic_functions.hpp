@@ -52,9 +52,6 @@ get_value(const tree_node_t& node);
 std::string
 get_only_child_value(const tree_node_t& node);
 
-std::string
-strip_redundant_spaces(const std::string& str);
-
 template<int... Ids>
 bool
 check_id(const tree_node_t& node);

@@ -54,9 +54,15 @@ leaf_node::raw_code() const
 }
 
 void
-leaf_node::raw_code(std::string&& code)
+leaf_node::raw_code(const std::string& code)
 {
 	raw_code_ = code;
+}
+
+void
+leaf_node::raw_code(std::string&& code)
+{
+	raw_code_ = std::move(code);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

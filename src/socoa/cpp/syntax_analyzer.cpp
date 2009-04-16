@@ -98,6 +98,7 @@ syntax_analyzer::analyze(const std::string& input)
 std::ptrdiff_t
 syntax_analyzer::parse_type_name(const scanner_t& scan)
 {
+	/*
     unsigned int parsing_progress = scan.first - &*(currently_analyzed_partial_input_->begin());
 
 	//
@@ -203,6 +204,7 @@ syntax_analyzer::parse_type_name(const scanner_t& scan)
 			type_name_map_.insert(std::make_pair<unsigned int, bool>(parsing_progress, false)); //store the result
 		}
     }
+*/
 
     return -1;
 }

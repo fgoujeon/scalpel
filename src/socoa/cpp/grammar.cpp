@@ -104,7 +104,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	//white separator
-	s = *(ch_p(' ') | '\t' | '\v' | '\f' | '\n');
+	s = token_node_d[*(ch_p(' ') | '\t' | '\v' | '\f' | '\n')];
 
 
 	/*
@@ -1097,7 +1097,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		)
 	;
 	direct_declarator_function_part
-		= '(' >> !s >> parameter_declaration_clause >> !s >> ')' >> !s >> !cv_qualifier_seq >> !s >> !exception_specification
+		= '(' >> !s >> parameter_declaration_clause >> !s >> ')' >> !(!s >> cv_qualifier_seq) >> !(!s >> exception_specification)
 	;
 	direct_declarator_array_part
 		= '[' >> !s >> !constant_expression >> !s >> ']'
@@ -1162,7 +1162,9 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 
 	parameter_declaration_clause
 		= parameter_declaration_list >> !s >> ',' >> !s >> "..."
-		| !parameter_declaration_list >> !s >> !str_p("...")
+		| parameter_declaration_list >> !s >> str_p("...")
+		| parameter_declaration_list
+		| str_p("...")
 	;
 
 	parameter_declaration_list

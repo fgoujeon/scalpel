@@ -18,43 +18,15 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_LEAF_NODE_HPP
-#define SOCOA_CPP_SYNTAX_TREE_LEAF_NODE_HPP
+#ifndef SOCOA_CPP_SYNTAX_TREE_SPACE_HPP
+#define SOCOA_CPP_SYNTAX_TREE_SPACE_HPP
 
-#include <string>
-#include "node.hpp"
+#include "leaf_node.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class leaf_node: public node
-{
-	public:
-		explicit
-		leaf_node(const std::string& raw_code);
-
-		explicit
-		leaf_node(std::string&& raw_code);
-
-		leaf_node(const leaf_node& n);
-
-		leaf_node(leaf_node&& n);
-
-		virtual
-		~leaf_node();
-
-		const std::string
-		raw_code() const;
-
-		void
-		raw_code(const std::string& code);
-
-		void
-		raw_code(std::string&& code);
-
-	private:
-		std::string raw_code_;
-};
+typedef leaf_node space;
 
 }}} //namespace socoa::cpp::syntax_tree
 

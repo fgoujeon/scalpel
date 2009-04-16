@@ -399,27 +399,78 @@ convert_direct_declarator_function_part(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::DIRECT_DECLARATOR_FUNCTION_PART);
 
-	boost::optional<parameter_declaration_clause> new_parameter_declaration_clause = find_and_convert_node<boost::optional<parameter_declaration_clause>, id_t::PARAMETER_DECLARATION_CLAUSE>(node);
-
     ///@todo why must I do this?
     //grammar defines that this node MUST exist, but in practice it's not always the case
-    if(!new_parameter_declaration_clause)
-    {
-        typedef sequence_node<parameter_declaration, util::extern_strings::comma> parameter_declaration_seq;
+	//create an empty parameter declaration clause, if node didn't have been found
+	parameter_declaration_clause empty_parameter_declaration_clause
+	(
+		parameter_declaration_list(),
+		false,
+		false
+	);
 
-        //create an empty parameter declaration clause, if node didn't have been found
-        new_parameter_declaration_clause = parameter_declaration_clause
-        (
-			parameter_declaration_seq(),
-			false,
-			false
-        );
-    }
+	//'(' >> !s >> parameter_declaration_clause >> !s >> ')' >> !(!s >> cv_qualifier_seq) >> !(!s >> exception_specification)
+	boost::optional<space> space1;
+	boost::optional<parameter_declaration_clause> a_parameter_declaration_clause;
+	boost::optional<space> space2;
+	boost::optional<space> space3;
+	boost::optional<cv_qualifier_seq> a_cv_qualifier_seq;
+	//boost::optional<space> space4;
+	//boost::optional<exception_specification> an_exception_specification;
+
+	tree_node_iterator_t i;
+
+	i = find_node<id_t::PARAMETER_DECLARATION_CLAUSE>(node);
+	if(i != node.children.end()) //if a parameter declaration clause node has been found
+	{
+		//convert it
+		a_parameter_declaration_clause = convert_node<parameter_declaration_clause, id_t::PARAMETER_DECLARATION_CLAUSE>(*i);
+
+		//check whether the previous node is a space node and convert it
+		--i;
+		if(get_id(*i) == id_t::SPACE)
+			space1 = convert_node<space, id_t::SPACE>(*i);
+
+		//ditto for the next node
+		++i;
+		++i;
+		if(get_id(*i) == id_t::SPACE)
+			space2 = convert_node<space, id_t::SPACE>(*i);
+	}
+
+	i = find_node<id_t::CV_QUALIFIER_SEQ>(node);
+	if(i != node.children.end()) //if a cv qualifier sequence node has been found
+	{
+		//convert it
+		a_cv_qualifier_seq = convert_node<cv_qualifier_seq, id_t::CV_QUALIFIER_SEQ>(*i);
+
+		//check whether the previous node is a space node and convert it
+		--i;
+		if(get_id(*i) == id_t::SPACE)
+			space3 = convert_node<space, id_t::SPACE>(*i);
+	}
+
+	/*
+	i = find_node<id_t::EXCEPTION_SPECIFICATION>(node);
+	if(i != node.children.end()) //if a cv qualifier sequence node has been found
+	{
+		//convert it
+		an_exception_specification = convert_node<boost::optional<exception_specification>, id_t::EXCEPTION_SPECIFICATION>(*i);
+
+		//check whether the previous node is a space node and convert it
+		--i;
+		if(get_id(*i) == id_t::SPACE)
+			space4 = convert_node<boost::optional<space>, id_t::SPACE>(*i);
+	}
+	*/
 
     return direct_declarator::function_part
     (
-        *new_parameter_declaration_clause,
-        find_and_convert_node<boost::optional<cv_qualifier_seq>, id_t::CV_QUALIFIER_SEQ>(node)
+		space1,
+		a_parameter_declaration_clause ? *a_parameter_declaration_clause : empty_parameter_declaration_clause,
+		space2,
+		space3,
+		a_cv_qualifier_seq
     );
 }
 
@@ -873,6 +924,14 @@ convert_conversion_function_id(const tree_node_t& node)
     assert(node.value.id() == id_t::CONVERSION_FUNCTION_ID);
 
 	return conversion_function_id();
+}
+
+space
+convert_space(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::SPACE);
+
+	return space(get_only_child_value(node));
 }
 
 }}} //namespace socoa::cpp

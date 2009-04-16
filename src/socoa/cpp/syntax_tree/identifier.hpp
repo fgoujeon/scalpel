@@ -44,18 +44,15 @@ class identifier: public leaf_node
 		operator=(identifier&& i);
 
 		inline
-		const std::string&
+		const std::string
 		get_value() const;
-
-	private:
-		std::string value_;
 };
 
 inline
-const std::string&
+const std::string
 identifier::get_value() const
 {
-	return value_;
+	return raw_code();
 }
 
 }}} //namespace socoa::cpp::syntax_tree
