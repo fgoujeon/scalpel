@@ -84,6 +84,18 @@ struct convert_function_caller_from_id
 	}
 };
 
+//specialization for sequences
+template<class T, const syntax_tree::leaf_node& SeparatorNode, int ParserId>
+struct convert_function_caller_from_id<syntax_tree::sequence_node2<T, SeparatorNode>, ParserId>
+{
+	static
+	syntax_tree::sequence_node2<T, SeparatorNode>
+	convert(const tree_node_t& node)
+	{
+		return convert_sequence2<syntax_tree::sequence_node2<T, SeparatorNode>>(node);
+	}
+};
+
 //specialization for string enumerations
 template<const std::vector<std::string>& StringList, int ParserId>
 struct convert_function_caller_from_id<syntax_tree::string_enumeration_node<StringList>, ParserId>

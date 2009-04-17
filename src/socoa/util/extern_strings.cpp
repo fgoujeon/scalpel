@@ -25,6 +25,7 @@ namespace socoa { namespace util
 
 namespace extern_strings
 {
+    const std::string empty("");
     const std::string space(" ");
     const std::string comma(",");
     const std::string pipe("|");

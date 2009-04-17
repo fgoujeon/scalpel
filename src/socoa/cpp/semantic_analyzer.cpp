@@ -50,7 +50,7 @@ semantic_analyzer::operator()(const syntax_tree_t& tree)
 		++i
 	)
 	{
-		convert(*i);
+		convert(i->main_node());
 	}
 
 	return global_namespace;

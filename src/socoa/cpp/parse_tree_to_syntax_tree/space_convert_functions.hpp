@@ -28,9 +28,15 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace parse_tree_to_syntax_tree
 {
 
+/**
+ * Check whether the previous node is a space node, and if so, convert it.
+ */
 boost::optional<syntax_tree::space>
 convert_previous_space(const tree_node_iterator_t& i);
 
+/**
+ * Check whether the next node is a space node, and if so, convert it.
+ */
 boost::optional<syntax_tree::space>
 convert_next_space(const tree_node_iterator_t& i);
 

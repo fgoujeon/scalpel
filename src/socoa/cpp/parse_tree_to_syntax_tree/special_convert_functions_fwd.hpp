@@ -46,6 +46,17 @@ template<class ContainerT>
 ContainerT
 convert_sequence(const tree_node_t& node);
 
+/**
+Converts each child node of the given parent node. All the nodes must
+be of the same type.
+@tparam ContainerT the type representing the syntax of the sequence node to be converted
+@param node the parse node of the sequence node
+@return the syntax node of the sequence
+*/
+template<class ContainerT>
+ContainerT
+convert_sequence2(const tree_node_t& node);
+
 }}} //namespace socoa::cpp::parse_tree_to_syntax_tree
 
 #endif

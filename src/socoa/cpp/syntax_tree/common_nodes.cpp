@@ -25,8 +25,10 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 const leaf_node asterisk("*");
 const leaf_node ampersand("&");
-const leaf_node opening_bracket("(");
+const leaf_node empty("");
 const leaf_node closing_bracket(")");
+const leaf_node comma(",");
+const leaf_node opening_bracket("(");
 
 }}} //namespace socoa::cpp::syntax_tree
 

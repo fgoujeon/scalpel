@@ -62,6 +62,11 @@ class syntax_tree_to_any_conversion_helper
         void
         convert(const syntax_tree::sequence_node<T, Separator>& seq);
 
+        template<class T, const syntax_tree::leaf_node& SeparatorNode>
+		inline
+        void
+        convert(const syntax_tree::sequence_node2<T, SeparatorNode>& seq);
+
 		template<class... NodesT>
 		inline
         void
@@ -80,6 +85,10 @@ class syntax_tree_to_any_conversion_helper
         template<class T, const std::string& Separator>
         void
         convert_sequence_node(const syntax_tree::sequence_node<T, Separator>& seq);
+
+        template<class T, const syntax_tree::leaf_node& SeparatorNode>
+        void
+        convert_sequence_node(const syntax_tree::sequence_node2<T, SeparatorNode>& seq);
 
 		template<class... NodesT>
         void
@@ -111,6 +120,14 @@ template<class ConverterT>
 template<class T, const std::string& Separator>
 void
 syntax_tree_to_any_conversion_helper<ConverterT>::convert(const syntax_tree::sequence_node<T, Separator>& seq)
+{
+	convert_sequence_node(seq);
+}
+
+template<class ConverterT>
+template<class T, const syntax_tree::leaf_node& SeparatorNode>
+void
+syntax_tree_to_any_conversion_helper<ConverterT>::convert(const syntax_tree::sequence_node2<T, SeparatorNode>& seq)
 {
 	convert_sequence_node(seq);
 }
@@ -154,6 +171,17 @@ syntax_tree_to_any_conversion_helper<ConverterT>::convert_sequence_node(const sy
 		}
 
         convert_any_node(*i);
+    }
+}
+
+template<class ConverterT>
+template<class T, const syntax_tree::leaf_node& SeparatorNode>
+void
+syntax_tree_to_any_conversion_helper<ConverterT>::convert_sequence_node(const syntax_tree::sequence_node2<T, SeparatorNode>& seq)
+{
+    for(auto i = seq.begin(); i != seq.end(); ++i)
+    {
+        convert_any_node(i->main_node());
     }
 }
 
