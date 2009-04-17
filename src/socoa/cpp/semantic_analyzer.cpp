@@ -344,7 +344,7 @@ semantic_analyzer::convert(const simple_declaration& item)
 		const decl_specifier_seq& a_decl_specifier_seq = *an_optional_decl_specifier_seq;
 		for(auto i = a_decl_specifier_seq.begin(); i != a_decl_specifier_seq.end(); ++i)
 		{
-			const decl_specifier& a_decl_specifier = *i;
+			const decl_specifier& a_decl_specifier = i->main_node();
 
 			if(auto a_type_specifier_ptr = get<type_specifier>(&a_decl_specifier))
 			{
@@ -371,7 +371,7 @@ semantic_analyzer::convert(const simple_declaration& item)
 		const init_declarator_list& an_init_declarator_list = *an_optional_init_declarator_list;
 		for(auto i = an_init_declarator_list.begin(); i != an_init_declarator_list.end(); ++i)
 		{
-			const declarator& a_declarator = i->get_declarator();
+			const declarator& a_declarator = i->main_node().get_declarator();
 			const direct_declarator& a_direct_declarator = a_declarator.get_direct_declarator();
 
 			//get the item name
@@ -398,7 +398,7 @@ semantic_analyzer::convert(const simple_declaration& item)
 			{
 				for(auto j = a_direct_declarator_next_part_seq->begin(); j != a_direct_declarator_next_part_seq->end(); ++j)
 				{
-					const direct_declarator::next_part& next_part = *j;
+					const direct_declarator::next_part& next_part = j->main_node();
 
 					if(get<direct_declarator::function_part>(&next_part))
 					{

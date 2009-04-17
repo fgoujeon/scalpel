@@ -18,23 +18,26 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_SEQUENCE_NODE_HPP
-#define SOCOA_CPP_SYNTAX_TREE_SEQUENCE_NODE_HPP
+#ifndef SOCOA_CPP_SYNTAX_TREE_SEQUENCE_NODE2_HPP
+#define SOCOA_CPP_SYNTAX_TREE_SEQUENCE_NODE2_HPP
 
-#include "../../util/sequence.hpp"
+#include <boost/optional.hpp>
 #include "../../util/extern_strings.hpp"
 #include "composite_node.hpp"
-#include "identifier.hpp"
+#include "common_nodes.hpp"
+#include "space.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-template<class T, const std::string& Separator = util::extern_strings::space>
+template<class T, const leaf_node& SeparatorNode = empty>
 class sequence_node: public composite_node
 {
     public:
-		typedef util::sequence<T, Separator> seq_t;
-		typedef typename seq_t::type type;
+		class item;
+
+		typedef std::vector<item> seq_t;
+		typedef T type;
 		typedef typename seq_t::const_iterator const_iterator;
 
         sequence_node();
@@ -68,14 +71,14 @@ class sequence_node: public composite_node
 		}
 
 		void
-		push_back(T&& t)
+		push_back(item&& t)
 		{
 			seq_.push_back(std::move(t));
 			update_node_list(); ///\todo why add() doesn't work?
 //			add(seq_.back());
 		}
 
-		static const std::string& separator;
+		static const leaf_node& separator_node;
 
 	private:
 		void
@@ -84,29 +87,64 @@ class sequence_node: public composite_node
 		seq_t seq_;
 };
 
-template<class T, const std::string& Separator>
-sequence_node<T, Separator>::sequence_node()
+template<class T, const leaf_node& SeparatorNode = empty>
+class sequence_node<T, SeparatorNode>::item: public composite_node
+{
+	public:
+		item
+		(
+			boost::optional<space>&& space1,
+			boost::optional<space>&& space2,
+			T&& main_node
+		);
+
+		item(const item& i);
+
+		const item&
+		operator=(const item& i);
+
+		const boost::optional<const space&>
+		pre_separator_space_node() const;
+
+		const boost::optional<const space&>
+		post_separator_space_node() const;
+
+		const T&
+		main_node() const;
+
+	private:
+		void
+		update_node_list();
+
+		boost::optional<space> space1_;
+		boost::optional<space> space2_;
+		T main_node_;
+};
+
+
+template<class T, const leaf_node& SeparatorNode>
+sequence_node<T, SeparatorNode>::sequence_node()
 {
 }
 
-template<class T, const std::string& Separator>
-sequence_node<T, Separator>::sequence_node(const sequence_node& s):
+template<class T, const leaf_node& SeparatorNode>
+sequence_node<T, SeparatorNode>::sequence_node(const sequence_node& s):
 	composite_node(),
 	seq_(s.seq_)
 {
 	update_node_list();
 }
 
-template<class T, const std::string& Separator>
-sequence_node<T, Separator>::sequence_node(sequence_node&& s):
+template<class T, const leaf_node& SeparatorNode>
+sequence_node<T, SeparatorNode>::sequence_node(sequence_node&& s):
 	seq_(std::move(s.seq_))
 {
 	update_node_list();
 }
 
-template<class T, const std::string& Separator>
-const sequence_node<T, Separator>&
-sequence_node<T, Separator>::operator=(const sequence_node& s)
+template<class T, const leaf_node& SeparatorNode>
+const sequence_node<T, SeparatorNode>&
+sequence_node<T, SeparatorNode>::operator=(const sequence_node& s)
 {
 	seq_ = s.seq_;
 	update_node_list();
@@ -114,9 +152,9 @@ sequence_node<T, Separator>::operator=(const sequence_node& s)
 	return *this;
 }
 
-template<class T, const std::string& Separator>
-const sequence_node<T, Separator>&
-sequence_node<T, Separator>::operator=(sequence_node&& s)
+template<class T, const leaf_node& SeparatorNode>
+const sequence_node<T, SeparatorNode>&
+sequence_node<T, SeparatorNode>::operator=(sequence_node&& s)
 {
 	seq_ = std::move(s.seq_);
 	update_node_list();
@@ -124,20 +162,102 @@ sequence_node<T, Separator>::operator=(sequence_node&& s)
 	return *this;
 }
 
-template<class T, const std::string& Separator>
+template<class T, const leaf_node& SeparatorNode>
 void
-sequence_node<T, Separator>::update_node_list()
+sequence_node<T, SeparatorNode>::update_node_list()
 {
 	clear();
+
+	bool first_item = true;
 	for(auto i = seq_.begin(); i != seq_.end(); ++i)
 	{
-		add(*i);
+		if(first_item)
+		{
+			add(i->main_node());
+			first_item = false;
+		}
+		else
+		{
+			if(i->pre_separator_space_node()) add(*i->pre_separator_space_node());
+			add(SeparatorNode);
+			if(i->post_separator_space_node()) add(*i->post_separator_space_node());
+			add(i->main_node());
+		}
 	}
 }
 
-template<class T, const std::string& Separator>
-const std::string&
-sequence_node<T, Separator>::separator = Separator;
+template<class T, const leaf_node& SeparatorNode>
+const leaf_node&
+sequence_node<T, SeparatorNode>::separator_node = SeparatorNode;
+
+
+template<class T, const leaf_node& SeparatorNode>
+sequence_node<T, SeparatorNode>::item::item
+(
+	boost::optional<space>&& space1,
+	boost::optional<space>&& space2,
+	T&& main_node
+):
+	space1_(space1),
+	space2_(space2),
+	main_node_(main_node)
+{
+	update_node_list();
+}
+
+template<class T, const leaf_node& SeparatorNode>
+sequence_node<T, SeparatorNode>::item::item(const item& i):
+	composite_node(),
+	space1_(i.space1_),
+	space2_(i.space2_),
+	main_node_(i.main_node_)
+{
+	update_node_list();
+}
+
+template<class T, const leaf_node& SeparatorNode>
+const boost::optional<const space&>
+sequence_node<T, SeparatorNode>::item::pre_separator_space_node() const
+{
+	return boost::optional<const space&>(space1_);
+}
+
+template<class T, const leaf_node& SeparatorNode>
+const boost::optional<const space&>
+sequence_node<T, SeparatorNode>::item::post_separator_space_node() const
+{
+	return boost::optional<const space&>(space2_);
+}
+
+template<class T, const leaf_node& SeparatorNode>
+const T&
+sequence_node<T, SeparatorNode>::item::main_node() const
+{
+	return main_node_;
+}
+
+template<class T, const leaf_node& SeparatorNode>
+const typename sequence_node<T, SeparatorNode>::item&
+sequence_node<T, SeparatorNode>::item::operator=(const item& i)
+{
+	space1_ = i.space1_;
+	space2_ = i.space2_;
+	main_node_ = i.main_node_;
+
+	update_node_list();
+
+	return *this;
+}
+
+template<class T, const leaf_node& SeparatorNode>
+void
+sequence_node<T, SeparatorNode>::item::update_node_list()
+{
+	clear();
+	if(space1_) add(*space1_);
+	if(space2_) add(*space2_);
+	add(main_node_);
+}
 
 }}} //namespace socoa::cpp::syntax_tree
 

@@ -22,7 +22,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_PARAMETER_DECLARATION_CLAUSE_HPP
 
 #include <boost/optional.hpp>
-#include "../../util/sequence.hpp"
 #include "composite_node.hpp"
 #include "parameter_declaration_list.hpp"
 

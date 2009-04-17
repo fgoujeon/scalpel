@@ -29,7 +29,7 @@ namespace socoa { namespace cpp { namespace syntax_tree
 {
 
 typedef
-	sequence_node<init_declarator, util::extern_strings::comma>
+	sequence_node<init_declarator, comma>
    	init_declarator_list
 ;
 

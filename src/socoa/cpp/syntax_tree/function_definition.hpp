@@ -23,7 +23,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <memory>
 #include <boost/optional.hpp>
-#include "../../util/sequence.hpp"
 #include "composite_node.hpp"
 #include "decl_specifier_seq.hpp"
 #include "ctor_initializer.hpp"

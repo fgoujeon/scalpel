@@ -23,7 +23,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string>
 #include <vector>
-#include "../../util/sequence.hpp"
 #include "../../util/string_enumeration.hpp"
 #include "typedefs.hpp"
 #include "convert_function_callers.hpp"
@@ -40,26 +39,6 @@ convert_string_enumeration(const tree_node_t& node)
 	(
 		get_only_child_value(node)
 	);
-}
-
-template<class ContainerT>
-ContainerT
-convert_sequence(const tree_node_t& node)
-{
-	ContainerT seq;
-	for(tree_node_iterator_t i = node.children.begin(); i != node.children.end(); ++i) //for each child node
-	{
-		const tree_node_t& child_node = *i;
-		const std::string child_value = get_value(child_node);
-
-		if(child_value != ContainerT::separator && child_node.value.id() != id_t::SPACE) //if the current node is not a separator
-		{
-			//add it to the sequence
-			seq.push_back(convert_function_caller_from_type<typename ContainerT::type>::convert(child_node));
-		}
-	}
-
-	return seq;
 }
 
 template<class ContainerT>

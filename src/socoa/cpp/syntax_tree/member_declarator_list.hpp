@@ -32,7 +32,7 @@ typedef
 	sequence_node
 	<
 		member_declarator,
-		util::extern_strings::comma
+		comma
 	>
 	member_declarator_list
 ;

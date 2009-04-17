@@ -26,7 +26,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/optional.hpp>
 #include "composite_node.hpp"
 #include "identifier.hpp"
-#include "sequence_node2.hpp"
+#include "sequence_node.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
@@ -39,7 +39,7 @@ class namespace_definition: public composite_node
 		namespace_definition
 		(
 			boost::optional<identifier>&& an_identifier,
-			boost::optional<sequence_node2<declaration>>&& a_declaration_seq
+			boost::optional<sequence_node<declaration>>&& a_declaration_seq
 		);
 
 		namespace_definition(const namespace_definition& o);
@@ -54,7 +54,7 @@ class namespace_definition: public composite_node
 	   	get_identifier() const;
 
 		inline
-		const boost::optional<const sequence_node2<declaration>&>
+		const boost::optional<const sequence_node<declaration>&>
 		get_declaration_seq() const;
 
 	private:
@@ -62,7 +62,7 @@ class namespace_definition: public composite_node
 		update_node_list();
 
 		boost::optional<identifier> identifier_;
-		std::shared_ptr<sequence_node2<declaration>> declaration_seq_;
+		std::shared_ptr<sequence_node<declaration>> declaration_seq_;
 };
 
 inline
@@ -73,13 +73,13 @@ namespace_definition::get_identifier() const
 }
 
 inline
-const boost::optional<const sequence_node2<declaration>&>
+const boost::optional<const sequence_node<declaration>&>
 namespace_definition::get_declaration_seq() const
 {
 	if(declaration_seq_)
-		return boost::optional<const sequence_node2<declaration>&>(*declaration_seq_);
+		return boost::optional<const sequence_node<declaration>&>(*declaration_seq_);
 	else
-		return boost::optional<const sequence_node2<declaration>&>();
+		return boost::optional<const sequence_node<declaration>&>();
 }
 
 }}} //namespace socoa::cpp::syntax_tree

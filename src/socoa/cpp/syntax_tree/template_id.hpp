@@ -39,7 +39,7 @@ class template_id: public composite_node
 		template_id
 		(
 			identifier&& an_identifier,
-			boost::optional<sequence_node<template_argument, util::extern_strings::comma>>&& a_template_argument_list
+			boost::optional<sequence_node<template_argument, comma>>&& a_template_argument_list
 		);
 
 		template_id(const template_id& o);
@@ -54,7 +54,7 @@ class template_id: public composite_node
 		get_identifier() const;
 
 		inline
-		const boost::optional<const sequence_node<template_argument, util::extern_strings::comma>&>
+		const boost::optional<const sequence_node<template_argument, comma>&>
 		get_template_argument_list() const;
 
 	private:
@@ -62,7 +62,7 @@ class template_id: public composite_node
 		update_node_list();
 
 		identifier identifier_;
-		std::shared_ptr<sequence_node<template_argument, util::extern_strings::comma>> template_argument_list_;
+		std::shared_ptr<sequence_node<template_argument, comma>> template_argument_list_;
 };
 
 inline
@@ -73,13 +73,13 @@ template_id::get_identifier() const
 }
 
 inline
-const boost::optional<const sequence_node<template_argument, util::extern_strings::comma>&>
+const boost::optional<const sequence_node<template_argument, comma>&>
 template_id::get_template_argument_list() const
 {
 	if(template_argument_list_)
-		return boost::optional<const sequence_node<template_argument, util::extern_strings::comma>&>(*template_argument_list_);
+		return boost::optional<const sequence_node<template_argument, comma>&>(*template_argument_list_);
 	else
-		return boost::optional<const sequence_node<template_argument, util::extern_strings::comma>&>();
+		return boost::optional<const sequence_node<template_argument, comma>&>();
 }
 
 }}} //namespace socoa::cpp::syntax_tree

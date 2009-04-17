@@ -25,7 +25,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "composite_node.hpp"
 #include "declarator.hpp"
 #include "decl_specifier_seq.hpp"
-#include "../../util/sequence.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {

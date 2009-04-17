@@ -21,7 +21,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_BASE_SPECIFIER_LIST_HPP
 #define SOCOA_CPP_SYNTAX_TREE_BASE_SPECIFIER_LIST_HPP
 
-#include "../../util/sequence.hpp"
 #include "../../util/extern_strings.hpp"
 #include "sequence_node.hpp"
 #include "base_specifier.hpp"
@@ -30,7 +29,7 @@ namespace socoa { namespace cpp { namespace syntax_tree
 {
 
 typedef
-	sequence_node<base_specifier, util::extern_strings::comma>
+	sequence_node<base_specifier, comma>
 	base_specifier_list
 ;
 

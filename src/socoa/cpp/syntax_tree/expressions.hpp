@@ -21,7 +21,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_TREE_EXPRESSIONS_HPP
 #define SOCOA_CPP_SYNTAX_TREE_EXPRESSIONS_HPP
 
-#include "../../util/sequence.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {

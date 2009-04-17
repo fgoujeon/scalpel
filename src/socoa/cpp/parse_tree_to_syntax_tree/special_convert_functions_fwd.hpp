@@ -23,7 +23,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string>
 #include <vector>
-#include "../../util/sequence.hpp"
 #include "../../util/string_enumeration.hpp"
 #include "typedefs.hpp"
 #include "convert_function_callers.hpp"
@@ -34,17 +33,6 @@ namespace socoa { namespace cpp { namespace parse_tree_to_syntax_tree
 template<class T>
 T
 convert_string_enumeration(const tree_node_t& node);
-
-/**
-Converts each child node of the given parent node. All the nodes must
-be of the same type.
-@tparam ContainerT the type representing the syntax of the sequence node to be converted
-@param node the parse node of the sequence node
-@return the syntax node of the sequence
-*/
-template<class ContainerT>
-ContainerT
-convert_sequence(const tree_node_t& node);
 
 /**
 Converts each child node of the given parent node. All the nodes must

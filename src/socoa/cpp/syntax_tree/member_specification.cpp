@@ -18,21 +18,13 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_MEM_INITIALIZER_LIST_HPP
-#define SOCOA_CPP_SYNTAX_TREE_MEM_INITIALIZER_LIST_HPP
-
-#include "../../util/extern_strings.hpp"
-#include "sequence_node.hpp"
-#include "mem_initializer.hpp"
+#include "member_specification.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-typedef
-    sequence_node<mem_initializer, comma>
-    mem_initializer_list
-;
+const leaf_node&
+member_specification::separator_node = member_specification_t::separator_node;
 
 }}} //namespace socoa::cpp::syntax_tree
 
-#endif

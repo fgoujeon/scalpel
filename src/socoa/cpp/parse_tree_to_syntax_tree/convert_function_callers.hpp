@@ -22,7 +22,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_PARSE_TREE_TO_SYNTAX_TREE_CONVERT_FUNCTION_CALLERS_HPP
 
 #include <string>
-#include "../../util/sequence.hpp"
 #include "../../util/string_enumeration.hpp"
 #include "../grammar.hpp"
 #include "convert_functions.hpp"
@@ -80,19 +79,7 @@ struct convert_function_caller_from_id
 	T
 	convert(const tree_node_t& node)
 	{
-		return convert_sequence<T>(node);
-	}
-};
-
-//specialization for sequences
-template<class T, const syntax_tree::leaf_node& SeparatorNode, int ParserId>
-struct convert_function_caller_from_id<syntax_tree::sequence_node2<T, SeparatorNode>, ParserId>
-{
-	static
-	syntax_tree::sequence_node2<T, SeparatorNode>
-	convert(const tree_node_t& node)
-	{
-		return convert_sequence2<syntax_tree::sequence_node2<T, SeparatorNode>>(node);
+		return convert_sequence2<T>(node);
 	}
 };
 

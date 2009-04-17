@@ -162,7 +162,7 @@ find_scope
 		{
 			for(auto i = next_part_seq->begin(); i != next_part_seq->end(); ++i)
 			{
-				const nested_name_specifier::next_part& next_part = *i;
+				const nested_name_specifier::next_part& next_part = i->main_node();
 
 				const identifier_or_template_id& an_identifier_or_template_id = next_part.get_identifier_or_template_id();
 				boost::optional<const identifier&> an_identifier = get<identifier>(&an_identifier_or_template_id);

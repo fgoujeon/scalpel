@@ -24,7 +24,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <memory>
 #include <boost/optional.hpp>
 #include "composite_node.hpp"
-#include "../../util/sequence.hpp"
 #include "nested_name_specifier.hpp"
 #include "cv_qualifier_seq.hpp"
 
