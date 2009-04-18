@@ -29,12 +29,24 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
+/**
+\verbatim
+parameter_declaration
+	= decl_specifier_seq >> !s >> declarator >> !s >> '=' >> !s >> assignment_expression
+	| decl_specifier_seq >> !s >> declarator
+	| decl_specifier_seq >> !s >> abstract_declarator >> !s >> '=' >> !s >> assignment_expression
+	| decl_specifier_seq >> !(!s >> abstract_declarator)
+	| decl_specifier_seq >> !s >> '=' >> !s >> assignment_expression
+;
+\endverbatim
+*/
 class parameter_declaration: public composite_node
 {
 	public:
 		parameter_declaration
 		(
 			decl_specifier_seq&& a_decl_specifier_seq,
+			boost::optional<space>&& pre_declarator_space_node,
 			boost::optional<declarator>&& a_declarator,
 			bool equal
 		);
@@ -63,6 +75,7 @@ class parameter_declaration: public composite_node
 		update_node_list();
 
 		decl_specifier_seq decl_specifier_seq_;
+		boost::optional<space> pre_declarator_space_node_; //before declarator or before abstract_declarator
 		boost::optional<declarator> declarator_;
 		bool equal_;
 };

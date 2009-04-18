@@ -1111,9 +1111,9 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	ptr_operator
-		= ch_p('*') >> !s >> !cv_qualifier_seq
+		= ch_p('*') >> !(!s >> cv_qualifier_seq)
 		| ch_p('&')
-		| !str_p("::") >> !s >> nested_name_specifier >> !s >> '*' >> !s >> !cv_qualifier_seq
+		| !str_p("::") >> !s >> nested_name_specifier >> !s >> '*' >> !(!s >> cv_qualifier_seq)
 	;
 
 	cv_qualifier_seq

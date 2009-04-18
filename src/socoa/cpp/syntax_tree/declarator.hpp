@@ -24,7 +24,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <memory>
 #include <vector>
 #include "composite_node.hpp"
-#include "ptr_operator.hpp"
+#include "ptr_operator_seq.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
@@ -43,7 +43,8 @@ class declarator: public composite_node
 	public:
         declarator
         (
-            boost::optional<sequence_node<ptr_operator>>&& ptr_operator_seq,
+            boost::optional<ptr_operator_seq>&& ptr_operator_seq,
+			boost::optional<space>&& post_ptr_operator_seq_space_node,
             direct_declarator&& a_direct_declarator
         );
 
@@ -55,7 +56,7 @@ class declarator: public composite_node
 		operator=(const declarator& o);
 
         inline
-        const boost::optional<const sequence_node<ptr_operator>&>
+        const boost::optional<const ptr_operator_seq&>
         get_ptr_operator_seq() const;
 
         inline
@@ -66,15 +67,16 @@ class declarator: public composite_node
 		void
 		update_node_list();
 
-		boost::optional<sequence_node<ptr_operator>> ptr_operator_seq_;
+		boost::optional<ptr_operator_seq> ptr_operator_seq_;
+		boost::optional<space> post_ptr_operator_seq_space_node_;
 		std::shared_ptr<direct_declarator> direct_declarator_;
 };
 
 inline
-const boost::optional<const sequence_node<ptr_operator>&>
+const boost::optional<const ptr_operator_seq&>
 declarator::get_ptr_operator_seq() const
 {
-	return boost::optional<const sequence_node<ptr_operator>&>(ptr_operator_seq_);
+	return boost::optional<const ptr_operator_seq&>(ptr_operator_seq_);
 }
 
 inline

@@ -358,9 +358,22 @@ convert_declarator(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::DECLARATOR);
 
+	boost::optional<ptr_operator_seq> ptr_operator_seq_node;
+	boost::optional<space> post_ptr_operator_seq_space_node;
+
+	tree_node_iterator_t i;
+
+	i = find_node<id_t::PTR_OPERATOR_SEQ>(node);
+	if(i != node.children.end())
+	{
+		ptr_operator_seq_node = convert_node<ptr_operator_seq, id_t::PTR_OPERATOR_SEQ>(*i);
+		post_ptr_operator_seq_space_node = convert_next_space(i);
+	}
+
     return declarator
     (
-		find_and_convert_node<boost::optional<sequence_node<ptr_operator>>, id_t::PTR_OPERATOR_SEQ>(node),
+		ptr_operator_seq_node,
+		post_ptr_operator_seq_space_node,
 		find_and_convert_node<direct_declarator, id_t::DIRECT_DECLARATOR>(node)
     );
 }
@@ -557,6 +570,29 @@ parameter_declaration
 convert_parameter_declaration(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::PARAMETER_DECLARATION);
+/**
+\verbatim
+parameter_declaration
+	= decl_specifier_seq >> !s >> declarator >> !s >> '=' >> !s >> assignment_expression
+	| decl_specifier_seq >> !s >> declarator
+	| decl_specifier_seq >> !s >> abstract_declarator >> !s >> '=' >> !s >> assignment_expression
+	| decl_specifier_seq >> !(!s >> abstract_declarator)
+	| decl_specifier_seq >> !s >> '=' >> !s >> assignment_expression
+;
+\endverbatim
+*/
+	boost::optional<space> pre_declarator_space_node;
+	boost::optional<declarator> declarator_node;
+
+	tree_node_iterator_t i;
+
+	i = find_node<id_t::DECLARATOR>(node);
+
+	if(i != node.children.end())
+	{
+		pre_declarator_space_node = convert_previous_space(i);
+		declarator_node = convert_node<boost::optional<declarator>, id_t::DECLARATOR>(*i);
+	}
 
     return parameter_declaration
     (
@@ -569,7 +605,8 @@ convert_parameter_declaration(const tree_node_t& node)
 			id_t::PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ4,
 			id_t::DECL_SPECIFIER_SEQ
 		>(node),
-		find_and_convert_node<boost::optional<declarator>, id_t::DECLARATOR>(node),
+		pre_declarator_space_node,
+		declarator_node,
 		false
     );
 }

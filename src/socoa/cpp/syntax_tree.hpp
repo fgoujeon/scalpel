@@ -74,6 +74,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "syntax_tree/parameter_declaration.hpp"
 #include "syntax_tree/parameter_declaration_clause.hpp"
 #include "syntax_tree/ptr_operator.hpp"
+#include "syntax_tree/ptr_operator_seq.hpp"
 #include "syntax_tree/qualified_id.hpp"
 #include "syntax_tree/qualified_identifier.hpp"
 #include "syntax_tree/qualified_nested_id.hpp"

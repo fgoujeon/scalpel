@@ -26,10 +26,12 @@ namespace socoa { namespace cpp { namespace syntax_tree
 parameter_declaration::parameter_declaration
 (
 	decl_specifier_seq&& a_decl_specifier_seq,
+	boost::optional<space>&& pre_declarator_space_node,
 	boost::optional<declarator>&& a_declarator,
 	bool equal
 ):
 	decl_specifier_seq_(a_decl_specifier_seq),
+	pre_declarator_space_node_(pre_declarator_space_node),
 	declarator_(a_declarator),
 	equal_(equal)
 {
@@ -39,6 +41,7 @@ parameter_declaration::parameter_declaration
 parameter_declaration::parameter_declaration(const parameter_declaration& o):
 	composite_node(),
 	decl_specifier_seq_(o.decl_specifier_seq_),
+	pre_declarator_space_node_(o.pre_declarator_space_node_),
 	declarator_(o.declarator_),
 	equal_(o.equal_)
 {
@@ -47,6 +50,7 @@ parameter_declaration::parameter_declaration(const parameter_declaration& o):
 
 parameter_declaration::parameter_declaration(parameter_declaration&& o):
 	decl_specifier_seq_(std::move(o.decl_specifier_seq_)),
+	pre_declarator_space_node_(std::move(o.pre_declarator_space_node_)),
 	declarator_(std::move(o.declarator_)),
 	equal_(o.equal_)
 {
@@ -57,6 +61,7 @@ const parameter_declaration&
 parameter_declaration::operator=(const parameter_declaration& o)
 {
 	decl_specifier_seq_ = o.decl_specifier_seq_;
+	pre_declarator_space_node_ = o.pre_declarator_space_node_;
 	declarator_ = o.declarator_;
 	equal_ = o.equal_;
 	update_node_list();
@@ -69,6 +74,7 @@ parameter_declaration::update_node_list()
 {
 	clear();
 	add(decl_specifier_seq_);
+	if(pre_declarator_space_node_) add(*pre_declarator_space_node_);
 	if(declarator_) add(*declarator_);
 }
 
