@@ -79,7 +79,7 @@ struct convert_function_caller_from_id
 	T
 	convert(const tree_node_t& node)
 	{
-		return convert_sequence2<T>(node);
+		return convert_sequence<T>(node);
 	}
 };
 

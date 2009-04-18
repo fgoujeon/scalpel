@@ -28,10 +28,21 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
+/**
+\verbatim
+base_clause
+	= ":", [s], base_specifier_list
+;
+\endverbatim
+*/
 class base_clause: public composite_node
 {
     public:
-        base_clause(base_specifier_list&& a_base_specifier_list);
+        base_clause
+		(
+			boost::optional<space>&& space_node,
+			base_specifier_list&& a_base_specifier_list
+		);
 
 		base_clause(const base_clause& o);
 
@@ -39,6 +50,10 @@ class base_clause: public composite_node
 
 		const base_clause&
 		operator=(const base_clause& o);
+
+		inline
+		const boost::optional<const space&>
+		space_node() const;
 
         inline
         const base_specifier_list&
@@ -48,8 +63,16 @@ class base_clause: public composite_node
 		void
 		update_node_list();
 
+		boost::optional<space> space_;
 		base_specifier_list base_specifier_list_;
 };
+
+inline
+const boost::optional<const space&>
+base_clause::space_node() const
+{
+	return boost::optional<const space&>(space_);
+}
 
 inline
 const base_specifier_list&

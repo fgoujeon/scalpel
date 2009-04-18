@@ -579,17 +579,49 @@ convert_function_definition(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::FUNCTION_DEFINITION);
 
-    return function_definition
-    (
-		find_and_convert_node
+	boost::optional<decl_specifier_seq> decl_specifier_seq_node;
+	boost::optional<space> post_decl_specifier_seq_space;
+	boost::optional<space> pre_ctor_initializer_space;
+	boost::optional<ctor_initializer> ctor_initializer_node;
+
+	tree_node_iterator_t i;
+
+	i = find_node
+	<
+		id_t::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ1,
+		id_t::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ2,
+		id_t::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ3
+	>(node);
+	if(i != node.children.end())
+	{
+		decl_specifier_seq_node = convert_node
 		<
-			boost::optional<decl_specifier_seq>,
+			decl_specifier_seq,
 			id_t::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ1,
 			id_t::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ2,
 			id_t::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ3
-		>(node),
-        find_and_convert_node<declarator, id_t::DECLARATOR>(node),
-        find_and_convert_node<boost::optional<ctor_initializer>, id_t::CTOR_INITIALIZER>(node)
+		>(*i);
+		post_decl_specifier_seq_space = convert_next_space(i);
+	}
+
+	i = find_node<id_t::CTOR_INITIALIZER>(node);
+	if(i != node.children.end())
+	{
+		pre_ctor_initializer_space = convert_previous_space(i);
+		ctor_initializer_node = convert_node
+		<
+			ctor_initializer,
+			id_t::CTOR_INITIALIZER
+		>(*i);
+	}
+
+    return function_definition
+    (
+		decl_specifier_seq_node,
+		post_decl_specifier_seq_space,
+		find_and_convert_node<declarator, id_t::DECLARATOR>(node),
+		pre_ctor_initializer_space,
+		ctor_initializer_node
     );
 }
 
@@ -747,15 +779,20 @@ convert_base_clause(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::BASE_CLAUSE);
 
-	boost::optional<base_specifier_list> obs = find_and_convert_node<boost::optional<base_specifier_list>, id_t::BASE_SPECIFIER>(node);
-	base_specifier_list bs;
-	if(obs)
-		bs = *obs;
+	tree_node_iterator_t i = find_node<id_t::BASE_SPECIFIER_LIST>(node);
+	boost::optional<base_specifier_list> base_specifier_list_node;
+	boost::optional<space> space_node;
+	if(i != node.children.end())
+	{
+		base_specifier_list_node = convert_node<base_specifier_list, id_t::BASE_SPECIFIER_LIST>(*i);
+		space_node = convert_previous_space(i);
+	}
 
     //unlike what grammar defines, base specifier may be missing
     return base_clause
     (
-		bs
+		space_node,
+		base_specifier_list_node ? *base_specifier_list_node : base_specifier_list()
     );
 }
 

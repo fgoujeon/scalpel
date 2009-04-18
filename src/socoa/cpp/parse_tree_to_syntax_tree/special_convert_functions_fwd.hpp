@@ -43,7 +43,7 @@ be of the same type.
 */
 template<class ContainerT>
 ContainerT
-convert_sequence2(const tree_node_t& node);
+convert_sequence(const tree_node_t& node);
 
 }}} //namespace socoa::cpp::parse_tree_to_syntax_tree
 

@@ -27,12 +27,16 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 function_definition::function_definition
 (
-    boost::optional<decl_specifier_seq>&& a_decl_specifier_seq,
-    declarator&& a_declarator,
-    boost::optional<ctor_initializer>&& a_ctor_initializer
+	boost::optional<decl_specifier_seq>&& a_decl_specifier_seq,
+	boost::optional<space>&& post_decl_specifier_seq_space,
+	declarator&& a_declarator,
+	boost::optional<space>&& pre_ctor_initializer_space,
+	boost::optional<ctor_initializer>&& a_ctor_initializer
 ):
     decl_specifier_seq_(a_decl_specifier_seq),
+	post_decl_specifier_seq_space_(post_decl_specifier_seq_space),
     declarator_(std::make_shared<declarator>(std::move(a_declarator))),
+	pre_ctor_initializer_space_(pre_ctor_initializer_space),
     ctor_initializer_(a_ctor_initializer)
 {
 	update_node_list();
@@ -41,7 +45,9 @@ function_definition::function_definition
 function_definition::function_definition(const function_definition& o):
 	composite_node(),
     decl_specifier_seq_(o.decl_specifier_seq_),
+	post_decl_specifier_seq_space_(o.post_decl_specifier_seq_space_),
     declarator_(o.declarator_),
+	pre_ctor_initializer_space_(o.pre_ctor_initializer_space_),
     ctor_initializer_(o.ctor_initializer_)
 {
 	update_node_list();
@@ -49,7 +55,9 @@ function_definition::function_definition(const function_definition& o):
 
 function_definition::function_definition(function_definition&& o):
     decl_specifier_seq_(std::move(o.decl_specifier_seq_)),
+	post_decl_specifier_seq_space_(std::move(o.post_decl_specifier_seq_space_)),
     declarator_(std::move(o.declarator_)),
+	pre_ctor_initializer_space_(std::move(o.pre_ctor_initializer_space_)),
     ctor_initializer_(std::move(o.ctor_initializer_))
 {
 	update_node_list();
@@ -59,8 +67,11 @@ const function_definition&
 function_definition::operator=(const function_definition& o)
 {
     decl_specifier_seq_ = o.decl_specifier_seq_;
+	post_decl_specifier_seq_space_ = o.post_decl_specifier_seq_space_;
     declarator_ = o.declarator_;
+	pre_ctor_initializer_space_ = o.pre_ctor_initializer_space_;
     ctor_initializer_ = o.ctor_initializer_;
+
 	update_node_list();
 
 	return *this;
@@ -71,7 +82,9 @@ function_definition::update_node_list()
 {
 	clear();
 	if(decl_specifier_seq_) add(*decl_specifier_seq_);
+	if(post_decl_specifier_seq_space_) add(*post_decl_specifier_seq_space_);
 	add(*declarator_);
+	if(pre_ctor_initializer_space_) add(*pre_ctor_initializer_space_);
 	if(ctor_initializer_) add(*ctor_initializer_);
 }
 

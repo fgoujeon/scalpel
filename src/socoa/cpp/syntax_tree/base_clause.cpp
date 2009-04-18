@@ -20,10 +20,17 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "base_clause.hpp"
 
+#include "common_nodes.hpp"
+
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-base_clause::base_clause(base_specifier_list&& a_base_specifier_list):
+base_clause::base_clause
+(
+	boost::optional<space>&& space_node,
+	base_specifier_list&& a_base_specifier_list
+):
+	space_(space_node),
     base_specifier_list_(a_base_specifier_list)
 {
 	update_node_list();
@@ -31,12 +38,14 @@ base_clause::base_clause(base_specifier_list&& a_base_specifier_list):
 
 base_clause::base_clause(const base_clause& o):
 	composite_node(),
+	space_(o.space_),
     base_specifier_list_(o.base_specifier_list_)
 {
 	update_node_list();
 }
 
 base_clause::base_clause(base_clause&& o):
+	space_(std::move(o.space_)),
     base_specifier_list_(std::move(o.base_specifier_list_))
 {
 	update_node_list();
@@ -45,7 +54,9 @@ base_clause::base_clause(base_clause&& o):
 const base_clause&
 base_clause::operator=(const base_clause& o)
 {
+	space_ = o.space_;
 	base_specifier_list_ = o.base_specifier_list_;
+
 	update_node_list();
 
 	return *this;
@@ -55,6 +66,8 @@ void
 base_clause::update_node_list()
 {
 	clear();
+	add(semicolon);
+	if(space_) add(*space_);
 	add(base_specifier_list_);
 }
 

@@ -23,12 +23,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-const leaf_node asterisk("*");
 const leaf_node ampersand("&");
-const leaf_node empty("");
+const leaf_node asterisk("*");
 const leaf_node closing_bracket(")");
 const leaf_node comma(",");
+const leaf_node empty("");
 const leaf_node opening_bracket("(");
+const leaf_node semicolon(";");
 
 }}} //namespace socoa::cpp::syntax_tree
 

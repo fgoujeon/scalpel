@@ -88,7 +88,7 @@ class sequence_node: public composite_node
 };
 
 template<class T, const leaf_node& SeparatorNode = empty>
-class sequence_node<T, SeparatorNode>::item: public composite_node
+class sequence_node<T, SeparatorNode>::item
 {
 	public:
 		item
@@ -113,9 +113,6 @@ class sequence_node<T, SeparatorNode>::item: public composite_node
 		main_node() const;
 
 	private:
-		void
-		update_node_list();
-
 		boost::optional<space> space1_;
 		boost::optional<space> space2_;
 		T main_node_;
@@ -202,17 +199,14 @@ sequence_node<T, SeparatorNode>::item::item
 	space2_(space2),
 	main_node_(main_node)
 {
-	update_node_list();
 }
 
 template<class T, const leaf_node& SeparatorNode>
 sequence_node<T, SeparatorNode>::item::item(const item& i):
-	composite_node(),
 	space1_(i.space1_),
 	space2_(i.space2_),
 	main_node_(i.main_node_)
 {
-	update_node_list();
 }
 
 template<class T, const leaf_node& SeparatorNode>
@@ -244,19 +238,7 @@ sequence_node<T, SeparatorNode>::item::operator=(const item& i)
 	space2_ = i.space2_;
 	main_node_ = i.main_node_;
 
-	update_node_list();
-
 	return *this;
-}
-
-template<class T, const leaf_node& SeparatorNode>
-void
-sequence_node<T, SeparatorNode>::item::update_node_list()
-{
-	clear();
-	if(space1_) add(*space1_);
-	if(space2_) add(*space2_);
-	add(main_node_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

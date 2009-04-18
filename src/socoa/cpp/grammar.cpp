@@ -397,7 +397,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		| qualified_identifier
 	;
 	qualified_nested_id
-		= !str_p("::") >> !s >> nested_name_specifier >> !s >> !str_p("template") >> !s >> unqualified_id
+		= !(str_p("::") >> !s) >> nested_name_specifier >> !(!s >> str_p("template")) >> !s >> unqualified_id
 	;
 	qualified_operator_function_id
 		= str_p("::") >> !s >> operator_function_id
@@ -1132,7 +1132,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	type_id
-		= type_specifier_seq >> !s >> !abstract_declarator
+		= type_specifier_seq >> !(!s >> abstract_declarator)
 	;
 
 	type_specifier_seq
@@ -1182,7 +1182,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		= parameter_declaration_decl_specifier_seq1 >> !s >> declarator >> !s >> '=' >> !s >> assignment_expression
 		| parameter_declaration_decl_specifier_seq2 >> !s >> declarator
 		| parameter_declaration_decl_specifier_seq3 >> !s >> abstract_declarator >> !s >> '=' >> !s >> assignment_expression
-		| parameter_declaration_decl_specifier_seq4 >> !s >> !abstract_declarator
+		| parameter_declaration_decl_specifier_seq4 >> !(!s >> abstract_declarator)
 		| decl_specifier_seq >> !s >> '=' >> !s >> assignment_expression
 	;
 	parameter_declaration_decl_specifier_seq1
@@ -1207,9 +1207,9 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		;
 	*/
 	function_definition
-		= !function_definition_decl_specifier_seq1 >> !s >> declarator >> !s >> ctor_initializer >> !s >> function_body
-		| !function_definition_decl_specifier_seq2 >> !s >> declarator >> !s >> function_body
-		| !function_definition_decl_specifier_seq3 >> !s >> declarator >> !s >> function_try_block
+		= !(function_definition_decl_specifier_seq1 >> !s) >> declarator >> !s >> ctor_initializer >> !s >> function_body
+		| !(function_definition_decl_specifier_seq2 >> !s) >> declarator >> !s >> function_body
+		| !(function_definition_decl_specifier_seq3 >> !s) >> declarator >> !s >> function_try_block
 	;
 	function_definition_decl_specifier_seq1
 		= (decl_specifier - (declarator >> !s >> ctor_initializer >> !s >> function_body)) % !s

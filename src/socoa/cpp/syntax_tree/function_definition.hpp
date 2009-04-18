@@ -26,6 +26,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "composite_node.hpp"
 #include "decl_specifier_seq.hpp"
 #include "ctor_initializer.hpp"
+#include "space.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
@@ -46,7 +47,9 @@ class function_definition: public composite_node
         function_definition
         (
             boost::optional<decl_specifier_seq>&& a_decl_specifier_seq,
+			boost::optional<space>&& post_decl_specifier_seq_space,
             declarator&& a_declarator,
+			boost::optional<space>&& pre_ctor_initializer_space,
             boost::optional<ctor_initializer>&& a_ctor_initializer
         );
 
@@ -62,8 +65,16 @@ class function_definition: public composite_node
 		get_decl_specifier_seq() const;
 
 		inline
+		const boost::optional<const space&>
+		post_decl_specifier_seq_space_node() const;
+
+		inline
 		const declarator&
 		get_declarator() const;
+
+		inline
+		const boost::optional<const space&>
+		pre_ctor_initializer_space_node() const;
 
 		inline
 		const boost::optional<const ctor_initializer&>
@@ -74,7 +85,9 @@ class function_definition: public composite_node
 		update_node_list();
 
 		boost::optional<decl_specifier_seq> decl_specifier_seq_;
+		boost::optional<space> post_decl_specifier_seq_space_;
 		std::shared_ptr<declarator> declarator_;
+		boost::optional<space> pre_ctor_initializer_space_;
 		boost::optional<ctor_initializer> ctor_initializer_;
 };
 
@@ -82,7 +95,17 @@ inline
 const boost::optional<const decl_specifier_seq&>
 function_definition::get_decl_specifier_seq() const
 {
-	return boost::optional<const decl_specifier_seq&>(*decl_specifier_seq_);
+	if(decl_specifier_seq_)
+		return boost::optional<const decl_specifier_seq&>(*decl_specifier_seq_);
+	else
+		return boost::optional<const decl_specifier_seq&>();
+}
+
+inline
+const boost::optional<const space&>
+function_definition::post_decl_specifier_seq_space_node() const
+{
+	return boost::optional<const space&>(post_decl_specifier_seq_space_);
 }
 
 inline
@@ -90,6 +113,13 @@ const declarator&
 function_definition::get_declarator() const
 {
 	return *declarator_;
+}
+
+inline
+const boost::optional<const space&>
+function_definition::pre_ctor_initializer_space_node() const
+{
+	return boost::optional<const space&>(pre_ctor_initializer_space_);
 }
 
 inline
