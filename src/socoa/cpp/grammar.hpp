@@ -35,13 +35,10 @@ class grammar
         struct configuration
         {
             configuration():
-                skip_function_bodies(false),
                 enable_typeof_support(true),
                 enable_restrict_support(true)
             {
             }
-
-            bool skip_function_bodies;
 
             bool enable_typeof_support;
             bool enable_restrict_support;
@@ -567,9 +564,6 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TYPE_NAME>> type_name;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::IDENTIFIER_OR_TEMPLATE_ID>> identifier_or_template_id;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::NESTED_IDENTIFIER_OR_TEMPLATE_ID>> nested_identifier_or_template_id;
-        boost::spirit::rule<scanner_t> skip_function_bodies_mode_statement_seq_item;
-        boost::spirit::rule<scanner_t> skip_function_bodies_mode_non_special_char_seq;
-        boost::spirit::rule<scanner_t> skip_function_bodies_mode_non_special_char;
 
 
         /*

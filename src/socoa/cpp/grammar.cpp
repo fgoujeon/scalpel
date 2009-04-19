@@ -773,27 +773,9 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		= ch_p('{') >> !s >> !(statement_seq >> !s) >> ch_p('}')
 	;
 
-	if(configuration_.skip_function_bodies)
-	{
-		statement_seq
-			= +skip_function_bodies_mode_statement_seq_item
-		;
-		skip_function_bodies_mode_statement_seq_item
-			= token_node_d
-			[
-				character_literal
-				| string_literal
-				| compound_statement
-				| skip_function_bodies_mode_non_special_char_seq
-			]
-		;
-	}
-	else
-	{
-		statement_seq
-			= statement % !s
-		;
-	}
+	statement_seq
+		= statement % !s
+	;
 
 	selection_statement
 		= str_p("if") >> !s >> '(' >> !s >> condition >> !s >> ')' >> !s >> statement >> !(!s >> "else" >> !s >> statement)
@@ -1521,14 +1503,6 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 
 	nested_identifier_or_template_id
 		= !str_p("::") >> !s >> !nested_name_specifier >> !s >> identifier_or_template_id
-	;
-
-	//Convenience rules for declaration-only mode
-	skip_function_bodies_mode_non_special_char_seq
-		= skip_function_bodies_mode_non_special_char % !s
-	;
-	skip_function_bodies_mode_non_special_char
-		= anychar_p - (ch_p('"') | '\'' | '{' | '}')
 	;
 
 
