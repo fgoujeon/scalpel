@@ -29,10 +29,12 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 extern const leaf_node ampersand;
 extern const leaf_node asterisk;
+extern const leaf_node closing_brace;
 extern const leaf_node closing_bracket;
 extern const leaf_node comma;
 extern const leaf_node empty;
 extern const leaf_node opening_bracket;
+extern const leaf_node opening_brace;
 extern const leaf_node semicolon;
 
 }}} //namespace socoa::cpp::syntax_tree

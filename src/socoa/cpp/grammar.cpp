@@ -1202,27 +1202,23 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	/*
 	Original rule is:
 		function_definition
-			= !decl_specifier_seq >> declarator >> !ctor_initializer >> function_body
+			= !decl_specifier_seq >> declarator >> !ctor_initializer >> compound_statement
 			| !decl_specifier_seq >> declarator >> function_try_block
 		;
 	*/
 	function_definition
-		= !(function_definition_decl_specifier_seq1 >> !s) >> declarator >> !s >> ctor_initializer >> !s >> function_body
-		| !(function_definition_decl_specifier_seq2 >> !s) >> declarator >> !s >> function_body
+		= !(function_definition_decl_specifier_seq1 >> !s) >> declarator >> !s >> ctor_initializer >> !s >> compound_statement
+		| !(function_definition_decl_specifier_seq2 >> !s) >> declarator >> !s >> compound_statement
 		| !(function_definition_decl_specifier_seq3 >> !s) >> declarator >> !s >> function_try_block
 	;
 	function_definition_decl_specifier_seq1
-		= (decl_specifier - (declarator >> !s >> ctor_initializer >> !s >> function_body)) % !s
+		= (decl_specifier - (declarator >> !s >> ctor_initializer >> !s >> compound_statement)) % !s
 	;
 	function_definition_decl_specifier_seq2
-		= (decl_specifier - (declarator >> !s >> function_body)) % !s
+		= (decl_specifier - (declarator >> !s >> compound_statement)) % !s
 	;
 	function_definition_decl_specifier_seq3
 		= (decl_specifier - (declarator >> !s >> function_try_block)) % !s
-	;
-
-	function_body
-		= compound_statement
 	;
 
 	initializer
@@ -1478,7 +1474,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	function_try_block
-		= str_p("try") >> !s >> !ctor_initializer >> !s >> function_body >> !s >> handler_seq
+		= str_p("try") >> !s >> !ctor_initializer >> !s >> compound_statement >> !s >> handler_seq
 	;
 
 	handler_seq

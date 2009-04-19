@@ -207,7 +207,6 @@ class grammar
             FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ1,
             FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ2,
             FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ3,
-            FUNCTION_BODY,
             INITIALIZER,
             INITIALIZER_CLAUSE,
             INITIALIZER_LIST,
@@ -429,18 +428,18 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CONSTANT_EXPRESSION>> constant_expression;
 
         //1.5 - Statements [gram.stmt.stmt]
-        boost::spirit::rule<scanner_t> statement;
-        boost::spirit::rule<scanner_t> labeled_statement;
-        boost::spirit::rule<scanner_t> expression_statement;
-        boost::spirit::rule<scanner_t> compound_statement;
-        boost::spirit::rule<scanner_t> statement_seq;
-        boost::spirit::rule<scanner_t> selection_statement;
-        boost::spirit::rule<scanner_t> condition;
-        boost::spirit::rule<scanner_t> condition_type_specifier_seq;
-        boost::spirit::rule<scanner_t> iteration_statement;
-        boost::spirit::rule<scanner_t> for_init_statement;
-        boost::spirit::rule<scanner_t> jump_statement;
-        boost::spirit::rule<scanner_t> declaration_statement;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::STATEMENT>> statement;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::LABELED_STATEMENT>> labeled_statement;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EXPRESSION_STATEMENT>> expression_statement;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::COMPOUND_STATEMENT>> compound_statement;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::STATEMENT_SEQ>> statement_seq;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::SELECTION_STATEMENT>> selection_statement;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CONDITION>> condition;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CONDITION_TYPE_SPECIFIER_SEQ>> condition_type_specifier_seq;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ITERATION_STATEMENT>> iteration_statement;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::FOR_INIT_STATEMENT>> for_init_statement;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::JUMP_STATEMENT>> jump_statement;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DECLARATION_STATEMENT>> declaration_statement;
 
         //1.6 - Declarations [gram.dcl.dcl]
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DECLARATION_SEQ>> declaration_seq;
@@ -497,7 +496,6 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ1>> function_definition_decl_specifier_seq1;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ2>> function_definition_decl_specifier_seq2;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ3>> function_definition_decl_specifier_seq3;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::FUNCTION_BODY>> function_body;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::INITIALIZER>> initializer;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::INITIALIZER_CLAUSE>> initializer_clause;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::INITIALIZER_LIST>> initializer_list;

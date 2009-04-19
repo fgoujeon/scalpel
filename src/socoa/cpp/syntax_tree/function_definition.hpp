@@ -27,6 +27,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "decl_specifier_seq.hpp"
 #include "ctor_initializer.hpp"
 #include "space.hpp"
+#include "compound_statement.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
@@ -36,7 +37,7 @@ class declarator;
 /**
 \verbatim
 function_definition
-	= [decl_specifier_seq], declarator, [ctor_initializer], function_body
+	= [decl_specifier_seq], declarator, [ctor_initializer], compound_statement
 	| [decl_specifier_seq], declarator, [function_try_block]
 ;
 \endverbatim
@@ -50,7 +51,9 @@ class function_definition: public composite_node
 			boost::optional<space>&& post_decl_specifier_seq_space,
             declarator&& a_declarator,
 			boost::optional<space>&& pre_ctor_initializer_space,
-            boost::optional<ctor_initializer>&& a_ctor_initializer
+            boost::optional<ctor_initializer>&& a_ctor_initializer,
+			boost::optional<space>&& pre_compound_statement_space,
+            boost::optional<compound_statement>&& compound_statement_node
         );
 
 		function_definition(const function_definition& o);
@@ -89,6 +92,8 @@ class function_definition: public composite_node
 		std::shared_ptr<declarator> declarator_;
 		boost::optional<space> pre_ctor_initializer_space_;
 		boost::optional<ctor_initializer> ctor_initializer_;
+		boost::optional<space> pre_compound_statement_space_;
+		boost::optional<compound_statement> compound_statement_;
 };
 
 inline

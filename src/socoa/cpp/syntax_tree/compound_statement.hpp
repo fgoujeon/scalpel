@@ -18,20 +18,47 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "common_nodes.hpp"
+#ifndef SOCOA_CPP_SYNTAX_TREE_COMPOUND_STATEMENT_HPP
+#define SOCOA_CPP_SYNTAX_TREE_COMPOUND_STATEMENT_HPP
+
+#include <boost/optional.hpp>
+#include "composite_node.hpp"
+#include "space.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-const leaf_node ampersand("&");
-const leaf_node asterisk("*");
-const leaf_node closing_brace("}");
-const leaf_node closing_bracket(")");
-const leaf_node comma(",");
-const leaf_node empty("");
-const leaf_node opening_brace("{");
-const leaf_node opening_bracket("(");
-const leaf_node semicolon(";");
+/**
+\verbatim
+compound_statement
+	= "{", [statement_seq], "}"
+;
+\endverbatim
+*/
+class compound_statement: public composite_node
+{
+	public:
+		compound_statement
+		(
+			boost::optional<space>&& post_opening_brace_space,
+			boost::optional<space>&& post_statement_seq_space
+		);
+
+		compound_statement(const compound_statement& o);
+
+		compound_statement(compound_statement&& o);
+
+		const compound_statement&
+		operator=(const compound_statement& o);
+
+	private:
+		void
+		update_node_list();
+
+		boost::optional<space> post_opening_brace_space_;
+		boost::optional<space> post_statement_seq_space_;
+};
 
 }}} //namespace socoa::cpp::syntax_tree
 
+#endif

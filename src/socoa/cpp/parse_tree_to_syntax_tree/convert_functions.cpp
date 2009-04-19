@@ -620,6 +620,8 @@ convert_function_definition(const tree_node_t& node)
 	boost::optional<space> post_decl_specifier_seq_space;
 	boost::optional<space> pre_ctor_initializer_space;
 	boost::optional<ctor_initializer> ctor_initializer_node;
+	boost::optional<space> pre_compound_statement_space;
+	boost::optional<compound_statement> compound_statement_node;
 
 	tree_node_iterator_t i;
 
@@ -652,13 +654,22 @@ convert_function_definition(const tree_node_t& node)
 		>(*i);
 	}
 
+	i = find_node<id_t::COMPOUND_STATEMENT>(node);
+	if(i != node.children.end())
+	{
+		pre_compound_statement_space = convert_previous_space(i);
+		compound_statement_node = convert_node<compound_statement, id_t::COMPOUND_STATEMENT>(*i);
+	}
+
     return function_definition
     (
 		decl_specifier_seq_node,
 		post_decl_specifier_seq_space,
 		find_and_convert_node<declarator, id_t::DECLARATOR>(node),
 		pre_ctor_initializer_space,
-		ctor_initializer_node
+		ctor_initializer_node,
+		pre_compound_statement_space,
+		compound_statement_node
     );
 }
 
@@ -672,6 +683,35 @@ convert_class_specifier(const tree_node_t& node)
         find_and_convert_node<class_head, id_t::CLASS_HEAD>(node),
         find_and_convert_node<boost::optional<member_specification>, id_t::MEMBER_SPECIFICATION>(node)
     );
+}
+
+compound_statement
+convert_compound_statement(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::COMPOUND_STATEMENT);
+
+	boost::optional<space> post_opening_brace_space_node;
+//	boost::optional<statement_seq> statement_seq_node;
+	boost::optional<space> post_statement_seq_space_node;
+
+	tree_node_iterator_t i;
+
+	i = node.children.begin();
+	post_opening_brace_space_node = convert_next_space(i);
+
+	i = find_node<id_t::STATEMENT_SEQ>(node);
+	if(i != node.children.end())
+	{
+//		statement_seq_node = convert_node<statement_seq, id_t::STATEMENT_SEQ>(*i);
+		post_statement_seq_space_node = convert_next_space(i);
+	}
+
+	return compound_statement
+	(
+		post_opening_brace_space_node,
+//		statement_seq_node,
+		post_statement_seq_space_node
+	);
 }
 
 class_head

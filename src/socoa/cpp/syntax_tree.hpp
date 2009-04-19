@@ -34,6 +34,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "syntax_tree/class_key.hpp"
 #include "syntax_tree/class_specifier.hpp"
 #include "syntax_tree/common_nodes.hpp"
+#include "syntax_tree/compound_statement.hpp"
 #include "syntax_tree/conversion_function_id.hpp"
 #include "syntax_tree/ctor_initializer.hpp"
 #include "syntax_tree/cv_qualifier.hpp"
