@@ -686,7 +686,7 @@ convert_compound_statement(const tree_node_t& node)
     assert(node.value.id() == id_t::COMPOUND_STATEMENT);
 
 	boost::optional<space> post_opening_brace_space_node;
-//	boost::optional<statement_seq> statement_seq_node;
+	boost::optional<statement_seq> statement_seq_node;
 	boost::optional<space> post_statement_seq_space_node;
 
 	tree_node_iterator_t i;
@@ -697,14 +697,14 @@ convert_compound_statement(const tree_node_t& node)
 	i = find_node<id_t::STATEMENT_SEQ>(node);
 	if(i != node.children.end())
 	{
-//		statement_seq_node = convert_node<statement_seq, id_t::STATEMENT_SEQ>(*i);
+		statement_seq_node = convert_node<statement_seq>(*i);
 		post_statement_seq_space_node = convert_next_space(i);
 	}
 
 	return compound_statement
 	(
 		post_opening_brace_space_node,
-//		statement_seq_node,
+		statement_seq_node,
 		post_statement_seq_space_node
 	);
 }
@@ -721,7 +721,7 @@ convert_class_head(const tree_node_t& node)
 		find_and_convert_node<boost::optional<template_id>, id_t::TEMPLATE_ID>(node),
 		find_and_convert_node<boost::optional<identifier>, id_t::IDENTIFIER>(node),
 		find_and_convert_node<boost::optional<base_clause>, id_t::BASE_CLAUSE>(node)
-    );
+   );
 }
 
 member_specification_part
@@ -1028,12 +1028,87 @@ convert_conversion_function_id(const tree_node_t& node)
 	return conversion_function_id();
 }
 
+declaration_statement
+convert_declaration_statement(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::DECLARATION_STATEMENT);
+
+	return declaration_statement();
+}
+
+expression_statement
+convert_expression_statement(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::EXPRESSION_STATEMENT);
+
+	return expression_statement();
+}
+
+iteration_statement
+convert_iteration_statement(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::ITERATION_STATEMENT);
+
+	return iteration_statement();
+}
+
+jump_statement
+convert_jump_statement(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::JUMP_STATEMENT);
+
+	return jump_statement();
+}
+
+labeled_statement
+convert_labeled_statement(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::LABELED_STATEMENT);
+
+	return labeled_statement();
+}
+
+selection_statement
+convert_selection_statement(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::SELECTION_STATEMENT);
+
+	return selection_statement();
+}
+
 space
 convert_space(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::SPACE);
 
 	return space(get_only_child_value(node));
+}
+
+statement
+convert_statement(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::STATEMENT);
+
+	return convert_alternative
+	<
+		statement,
+		id_t::LABELED_STATEMENT,
+		id_t::EXPRESSION_STATEMENT,
+		id_t::COMPOUND_STATEMENT,
+		id_t::SELECTION_STATEMENT,
+		id_t::ITERATION_STATEMENT,
+		id_t::JUMP_STATEMENT,
+		id_t::DECLARATION_STATEMENT,
+		id_t::TRY_BLOCK
+	>(node);
+}
+
+try_block
+convert_try_block(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::TRY_BLOCK);
+
+	return try_block();
 }
 
 }}} //namespace socoa::cpp

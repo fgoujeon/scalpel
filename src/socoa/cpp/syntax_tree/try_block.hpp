@@ -18,51 +18,31 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_COMPOUND_STATEMENT_HPP
-#define SOCOA_CPP_SYNTAX_TREE_COMPOUND_STATEMENT_HPP
+#ifndef SOCOA_CPP_SYNTAX_TREE_TRY_BLOCK_HPP
+#define SOCOA_CPP_SYNTAX_TREE_TRY_BLOCK_HPP
 
-#include <memory>
-#include <boost/optional.hpp>
 #include "composite_node.hpp"
-#include "sequence_node.hpp"
-#include "space.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class statement;
-
-/**
-\verbatim
-compound_statement
-	= "{", [sequence_node<statement>], "}"
-;
-\endverbatim
-*/
-class compound_statement: public composite_node
+class try_block: public composite_node
 {
 	public:
-		compound_statement
+		try_block
 		(
-			boost::optional<space>&& post_opening_brace_space,
-			boost::optional<sequence_node<statement>>&& statement_seq_node,
-			boost::optional<space>&& post_statement_seq_space
 		);
 
-		compound_statement(const compound_statement& o);
+		try_block(const try_block& o);
 
-		compound_statement(compound_statement&& o);
+		try_block(try_block&& o);
 
-		const compound_statement&
-		operator=(const compound_statement& o);
+		const try_block&
+		operator=(const try_block& o);
 
 	private:
 		void
 		update_node_list();
-
-		boost::optional<space> post_opening_brace_space_;
-		std::shared_ptr<sequence_node<statement>> statement_seq_;
-		boost::optional<space> post_statement_seq_space_;
 };
 
 }}} //namespace socoa::cpp::syntax_tree

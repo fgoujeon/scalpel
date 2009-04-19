@@ -60,6 +60,9 @@ convert_decl_specifier(const tree_node_t& node);
 syntax_tree::declaration
 convert_declaration(const tree_node_t& node);
 
+syntax_tree::declaration_statement
+convert_declaration_statement(const tree_node_t& node);
+
 syntax_tree::declarator
 convert_declarator(const tree_node_t& node);
 
@@ -84,6 +87,9 @@ convert_direct_declarator_next_part(const tree_node_t& node);
 syntax_tree::elaborated_type_specifier
 convert_elaborated_type_specifier(const tree_node_t& node);
 
+syntax_tree::expression_statement
+convert_expression_statement(const tree_node_t& node);
+
 syntax_tree::function_definition
 convert_function_definition(const tree_node_t& node);
 
@@ -98,6 +104,15 @@ convert_identifier_or_template_id(const tree_node_t& node);
 
 syntax_tree::init_declarator
 convert_init_declarator(const tree_node_t& node);
+
+syntax_tree::iteration_statement
+convert_iteration_statement(const tree_node_t& node);
+
+syntax_tree::jump_statement
+convert_jump_statement(const tree_node_t& node);
+
+syntax_tree::labeled_statement
+convert_labeled_statement(const tree_node_t& node);
 
 syntax_tree::mem_initializer
 convert_mem_initializer(const tree_node_t& node);
@@ -171,6 +186,9 @@ convert_qualified_operator_function_id(const tree_node_t& node);
 syntax_tree::qualified_template_id
 convert_qualified_template_id(const tree_node_t& node);
 
+syntax_tree::selection_statement
+convert_selection_statement(const tree_node_t& node);
+
 syntax_tree::simple_declaration
 convert_simple_declaration(const tree_node_t& node);
 
@@ -183,6 +201,9 @@ convert_simple_type_specifier(const tree_node_t& node);
 syntax_tree::space
 convert_space(const tree_node_t& node);
 
+syntax_tree::statement
+convert_statement(const tree_node_t& node);
+
 syntax_tree::template_argument
 convert_template_argument(const tree_node_t& node);
 
@@ -191,6 +212,9 @@ convert_template_declaration(const tree_node_t& node);
 
 syntax_tree::template_id
 convert_template_id(const tree_node_t& node);
+
+syntax_tree::try_block
+convert_try_block(const tree_node_t& node);
 
 syntax_tree::type_specifier
 convert_type_specifier(const tree_node_t& node);

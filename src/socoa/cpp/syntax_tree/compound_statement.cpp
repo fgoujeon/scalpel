@@ -21,6 +21,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "compound_statement.hpp"
 
 #include "common_nodes.hpp"
+#include "statement_seq.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
@@ -28,17 +29,22 @@ namespace socoa { namespace cpp { namespace syntax_tree
 compound_statement::compound_statement
 (
 	boost::optional<space>&& post_opening_brace_space,
+	boost::optional<statement_seq>&& statement_seq_node,
 	boost::optional<space>&& post_statement_seq_space
 ):
 	post_opening_brace_space_(post_opening_brace_space),
 	post_statement_seq_space_(post_statement_seq_space)
 {
+	if(statement_seq_node)
+		statement_seq_ = std::make_shared<statement_seq>(*statement_seq_node);
+
 	update_node_list();
 }
 
 compound_statement::compound_statement(const compound_statement& o):
 	composite_node(),
 	post_opening_brace_space_(o.post_opening_brace_space_),
+	statement_seq_(o.statement_seq_),
 	post_statement_seq_space_(o.post_statement_seq_space_)
 {
 	update_node_list();
@@ -47,6 +53,7 @@ compound_statement::compound_statement(const compound_statement& o):
 compound_statement::compound_statement(compound_statement&& o):
 	composite_node(),
 	post_opening_brace_space_(std::move(o.post_opening_brace_space_)),
+	statement_seq_(std::move(o.statement_seq_)),
 	post_statement_seq_space_(std::move(o.post_statement_seq_space_))
 {
 	update_node_list();
@@ -56,6 +63,7 @@ const compound_statement&
 compound_statement::operator=(const compound_statement& o)
 {
 	post_opening_brace_space_ = o.post_opening_brace_space_;
+	statement_seq_ = o.statement_seq_;
 	post_statement_seq_space_ = o.post_statement_seq_space_;
 
 	update_node_list();
@@ -70,6 +78,7 @@ compound_statement::update_node_list()
 
 	add(opening_brace);
 	if(post_opening_brace_space_) add(*post_opening_brace_space_);
+	if(statement_seq_) add(*statement_seq_);
 	if(post_statement_seq_space_) add(*post_statement_seq_space_);
 	add(closing_brace);
 }
