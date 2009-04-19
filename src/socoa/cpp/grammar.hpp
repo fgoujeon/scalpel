@@ -148,7 +148,6 @@ class grammar
             ITERATION_STATEMENT,
             FOR_INIT_STATEMENT,
             JUMP_STATEMENT,
-            DECLARATION_STATEMENT,
 
             DECLARATION_SEQ,
             DECLARATION,
@@ -436,7 +435,6 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ITERATION_STATEMENT>> iteration_statement;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::FOR_INIT_STATEMENT>> for_init_statement;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::JUMP_STATEMENT>> jump_statement;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DECLARATION_STATEMENT>> declaration_statement;
 
         //1.6 - Declarations [gram.dcl.dcl]
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DECLARATION_SEQ>> declaration_seq;

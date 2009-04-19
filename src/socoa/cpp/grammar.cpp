@@ -755,7 +755,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		| selection_statement
 		| iteration_statement
 		| jump_statement
-		| declaration_statement
+		| block_declaration
 		| try_block
 	;
 
@@ -813,10 +813,6 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		| str_p("continue") >> !s >> ch_p(';')
 		| str_p("return") >> !s >> !expression >> !s >> ch_p(';')
 		| str_p("goto") >> !s >> identifier >> !s >> ch_p(';')
-	;
-
-	declaration_statement
-		= block_declaration
 	;
 
 	//1.6 - Declarations [gram.dcl.dcl]
@@ -1490,10 +1486,8 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	/*
 	Convenience rules
 	*/
-	// !space_p   -> we don't want to have to parse any space char in type_name_p
-	// identifier -> we have to read last_parsed_identifier_ in type_name_p
 	type_name
-		= token_node_d[!space_p >> !s >> (identifier & type_name_p)]
+		= type_name_p
 	;
 
 	identifier_or_template_id
@@ -1502,7 +1496,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	nested_identifier_or_template_id
-		= !str_p("::") >> !s >> !nested_name_specifier >> !s >> identifier_or_template_id
+		= !(str_p("::") >> !s) >> !(nested_name_specifier >> !s) >> identifier_or_template_id
 	;
 
 

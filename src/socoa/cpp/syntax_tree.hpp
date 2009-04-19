@@ -42,7 +42,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "syntax_tree/decl_specifier_seq.hpp"
 #include "syntax_tree/declaration.hpp"
 #include "syntax_tree/declaration_seq.hpp"
-#include "syntax_tree/declaration_statement.hpp"
 #include "syntax_tree/declarator.hpp"
 #include "syntax_tree/declarator_id.hpp"
 #include "syntax_tree/destructor_name.hpp"

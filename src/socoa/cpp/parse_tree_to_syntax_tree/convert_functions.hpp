@@ -60,9 +60,6 @@ convert_decl_specifier(const tree_node_t& node);
 syntax_tree::declaration
 convert_declaration(const tree_node_t& node);
 
-syntax_tree::declaration_statement
-convert_declaration_statement(const tree_node_t& node);
-
 syntax_tree::declarator
 convert_declarator(const tree_node_t& node);
 

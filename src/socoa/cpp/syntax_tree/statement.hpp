@@ -28,7 +28,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "selection_statement.hpp"
 #include "iteration_statement.hpp"
 #include "jump_statement.hpp"
-#include "declaration_statement.hpp"
+#include "block_declaration.hpp"
 #include "try_block.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
@@ -43,7 +43,7 @@ typedef
 		selection_statement,
 		iteration_statement,
 		jump_statement,
-		declaration_statement,
+		block_declaration,
 		try_block
 	>
 	statement_t
@@ -57,7 +57,7 @@ struct statement: public statement_t
 	statement(selection_statement&& o): statement_t(std::move(o)){};
 	statement(iteration_statement&& o): statement_t(std::move(o)){};
 	statement(jump_statement&& o): statement_t(std::move(o)){};
-	statement(declaration_statement&& o): statement_t(std::move(o)){};
+	statement(block_declaration&& o): statement_t(std::move(o)){};
 	statement(try_block&& o): statement_t(std::move(o)){};
 
 	statement(const statement& o): statement_t(static_cast<const statement_t&>(o)){};

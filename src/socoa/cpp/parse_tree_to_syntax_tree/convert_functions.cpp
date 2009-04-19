@@ -1028,14 +1028,6 @@ convert_conversion_function_id(const tree_node_t& node)
 	return conversion_function_id();
 }
 
-declaration_statement
-convert_declaration_statement(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::DECLARATION_STATEMENT);
-
-	return declaration_statement();
-}
-
 expression_statement
 convert_expression_statement(const tree_node_t& node)
 {
@@ -1098,7 +1090,7 @@ convert_statement(const tree_node_t& node)
 		id_t::SELECTION_STATEMENT,
 		id_t::ITERATION_STATEMENT,
 		id_t::JUMP_STATEMENT,
-		id_t::DECLARATION_STATEMENT,
+		id_t::BLOCK_DECLARATION,
 		id_t::TRY_BLOCK
 	>(node);
 }
