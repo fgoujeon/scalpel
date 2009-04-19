@@ -25,7 +25,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "../grammar.hpp"
 #include "typedefs.hpp"
 #include "basic_functions.hpp"
-#include "node_converter.hpp"
 #include "node_finder.hpp"
 
 namespace socoa { namespace cpp { namespace parse_tree_to_syntax_tree
@@ -44,7 +43,7 @@ struct node_finder_and_converter
 	{
 		tree_node_iterator_t child_node = find_node<Ids...>(parent_node);
 		assert(child_node != parent_node.children.end());
-		return node_converter<SyntaxNodeT, Ids...>::convert
+		return convert_node<SyntaxNodeT>
 		(
 			*child_node
 		);
@@ -60,7 +59,7 @@ struct node_finder_and_converter<boost::optional<SyntaxNodeT>, Ids...>
 	{
 		tree_node_iterator_t child_node = find_node<Ids...>(parent_node);
 		if(child_node != parent_node.children.end())
-			return node_converter<SyntaxNodeT, Ids...>::convert
+			return convert_node<SyntaxNodeT>
 			(
 				*child_node
 			);

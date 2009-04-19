@@ -21,7 +21,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "space_convert_functions.hpp"
 
 #include "basic_functions.hpp"
-#include "node_converter.hpp"
+#include "generic_node_converters.hpp"
 
 namespace socoa { namespace cpp { namespace parse_tree_to_syntax_tree
 {
@@ -32,7 +32,7 @@ convert_previous_space(const tree_node_iterator_t& i)
 	tree_node_iterator_t it = i;
 	--it;
 	if(get_id(*it) == id_t::SPACE)
-		return convert_node<syntax_tree::space, id_t::SPACE>(*it);
+		return convert_node<syntax_tree::space>(*it);
 	else
 		return boost::optional<syntax_tree::space>();
 }
@@ -43,7 +43,7 @@ convert_next_space(const tree_node_iterator_t& i)
 	tree_node_iterator_t it = i;
 	++it;
 	if(get_id(*it) == id_t::SPACE)
-		return convert_node<syntax_tree::space, id_t::SPACE>(*it);
+		return convert_node<syntax_tree::space>(*it);
 	else
 		return boost::optional<syntax_tree::space>();
 }

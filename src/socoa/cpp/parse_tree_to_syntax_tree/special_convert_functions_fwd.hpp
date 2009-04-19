@@ -25,7 +25,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <vector>
 #include "../../util/string_enumeration.hpp"
 #include "typedefs.hpp"
-#include "convert_function_callers.hpp"
+#include "generic_node_converters.hpp"
 
 namespace socoa { namespace cpp { namespace parse_tree_to_syntax_tree
 {
@@ -44,6 +44,11 @@ be of the same type.
 template<class ContainerT>
 ContainerT
 convert_sequence(const tree_node_t& node);
+
+template<class SyntaxNodeT, int... Ids>
+inline
+SyntaxNodeT
+convert_alternative(const tree_node_t& node);
 
 }}} //namespace socoa::cpp::parse_tree_to_syntax_tree
 

@@ -20,7 +20,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "parse_tree_to_syntax_tree.hpp"
 
-#include "parse_tree_to_syntax_tree/node_converter.hpp"
+#include "parse_tree_to_syntax_tree/generic_node_converters.hpp"
 #include "parse_tree_to_syntax_tree/node_finder.hpp"
 #include "parse_tree_to_syntax_tree/basic_functions.hpp"
 
@@ -39,14 +39,7 @@ convert_parse_tree_to_syntax_tree(const tree_node_t& node)
 	tree_node_iterator_t grandchild_node = find_node<id_t::DECLARATION_SEQ>(child_node);
     if(grandchild_node != node.children.end()) //check whether the tree is not empty
 	{
-		return convert_node
-		<
-			declaration_seq,
-			id_t::DECLARATION_SEQ
-		>
-		(
-			*grandchild_node
-		);
+		return convert_node<declaration_seq>(*grandchild_node);
 	}
 	else
 	{

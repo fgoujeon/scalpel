@@ -25,8 +25,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <vector>
 #include "../../util/string_enumeration.hpp"
 #include "typedefs.hpp"
-#include "convert_function_callers.hpp"
-#include "node_converter.hpp"
+#include "generic_node_converters.hpp"
 
 namespace socoa { namespace cpp { namespace parse_tree_to_syntax_tree
 {
@@ -57,7 +56,7 @@ convert_sequence(const tree_node_t& node)
 
 			if(child_node.value.id() == id_t::SPACE)
 			{
-				space_node = convert_node<syntax_tree::space, id_t::SPACE>(child_node);
+				space_node = convert_node<syntax_tree::space>(child_node);
 			}
 			else
 			{
@@ -65,7 +64,7 @@ convert_sequence(const tree_node_t& node)
 				(
 					space_node,
 					boost::optional<syntax_tree::space>(),
-					convert_function_caller_from_type<typename ContainerT::type>::convert(child_node)
+					convert_node<typename ContainerT::type>(child_node)
 				);
 				seq.push_back(item);
 
@@ -92,12 +91,12 @@ convert_sequence(const tree_node_t& node)
 			{
 				if(!will_read_space_node2)
 				{
-					space_node1 = convert_node<syntax_tree::space, id_t::SPACE>(child_node);
+					space_node1 = convert_node<syntax_tree::space>(child_node);
 					will_read_space_node2 = true;
 				}
 				else
 				{
-					space_node2 = convert_node<syntax_tree::space, id_t::SPACE>(child_node);
+					space_node2 = convert_node<syntax_tree::space>(child_node);
 					will_read_space_node2 = false;
 				}
 			}
@@ -107,7 +106,7 @@ convert_sequence(const tree_node_t& node)
 				(
 					space_node1,
 					space_node2,
-					convert_function_caller_from_type<typename ContainerT::type>::convert(child_node)
+					convert_node<typename ContainerT::type>(child_node)
 				);
 				seq.push_back(item);
 
@@ -118,6 +117,51 @@ convert_sequence(const tree_node_t& node)
 
 	return seq;
 }
+
+template<class SyntaxNodeT, int... Ids>
+struct alternative_node_converter;
+
+template<class SyntaxNodeT>
+struct alternative_node_converter<SyntaxNodeT>
+{
+	static
+	SyntaxNodeT
+	convert(const tree_node_t&)
+	{
+		assert(false);
+	}
+};
+
+template<class SyntaxNodeT, int Id, int... Ids>
+struct alternative_node_converter<SyntaxNodeT, Id, Ids...>
+{
+	static
+	SyntaxNodeT
+	convert(const tree_node_t& node)
+	{
+		const int node_id = get_id(node);
+		if(node_id == Id)
+		{
+			return SyntaxNodeT(node_converter_from_id<SyntaxNodeT, Id>::convert(node));
+		}
+		else
+		{
+			return alternative_node_converter<SyntaxNodeT, Ids...>::convert(node);
+		}
+	}
+};
+
+template<class SyntaxNodeT, int... Ids>
+inline
+SyntaxNodeT
+convert_alternative(const tree_node_t& node)
+{
+	return alternative_node_converter<SyntaxNodeT, Ids...>::convert
+	(
+		get_only_child_node(node)
+	);
+}
+
 
 }}} //namespace socoa::cpp::parse_tree_to_syntax_tree
 
