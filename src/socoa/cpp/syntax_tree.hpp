@@ -30,6 +30,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "syntax_tree/base_specifier_list.hpp"
 #include "syntax_tree/block_declaration.hpp"
 #include "syntax_tree/built_in_type_specifier.hpp"
+#include "syntax_tree/cast_expression.hpp"
 #include "syntax_tree/class_head.hpp"
 #include "syntax_tree/class_key.hpp"
 #include "syntax_tree/class_specifier.hpp"

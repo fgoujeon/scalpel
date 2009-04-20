@@ -22,17 +22,47 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_ASSIGNMENT_EXPRESSION_HPP
 
 #include "composite_node.hpp"
+#include "alternative_node.hpp"
+#include "sequence_node.hpp"
 #include "assignment_operator.hpp"
+#include "conditional_expression.hpp"
+#include "expressions.hpp"
+//#include "throw_expression.hpp"
+#include "space.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
+/**
+\verbatim
+assignment_expression
+	= [assignment_expression_first_part_seq], (conditional_expression | throw_expression)
+;
+assignment_expression::first_part_seq
+	= {assignment_expression::first_part}
+;
+assignment_expression::first_part
+	= logical_or_expression, assignment_operator
+;
+\endverbatim
+*/
 class assignment_expression: public composite_node
 {
     public:
+		class first_part;
+
+		typedef sequence_node<first_part> first_part_seq;
+
+		typedef
+			alternative_node<conditional_expression/*, throw_expression*/>
+			conditional_or_throw_expression
+		;
+
         assignment_expression
         (
-            assignment_operator&& an_assignment_operator
+			boost::optional<first_part_seq>&& first_part_seq_node,
+			boost::optional<space>&& space_node,
+			conditional_or_throw_expression&& conditional_or_throw_expression_node
         );
 
 		assignment_expression(const assignment_expression& o);
@@ -42,22 +72,48 @@ class assignment_expression: public composite_node
 		const assignment_expression&
 		operator=(const assignment_expression& o);
 
-        inline
-        const assignment_operator&
-        get_assignment_operator() const;
-
     private:
 		void
 		update_node_list();
 
-        //logical_or_expression logical_or_expression_;
+		boost::optional<first_part_seq> first_part_seq_;
+		boost::optional<space> space_;
+		conditional_or_throw_expression conditional_or_throw_expression_;
+};
+
+class assignment_expression::first_part: public composite_node
+{
+	public:
+        first_part
+        (
+			logical_or_expression&& logical_or_expression_node,
+			boost::optional<space>&& space_node,
+            assignment_operator&& assignment_operator_node
+        );
+
+		first_part(const first_part& o);
+
+		first_part(first_part&& o);
+
+		const first_part&
+		operator=(const first_part& o);
+
+        inline
+        const assignment_operator&
+        assignment_operator_node() const;
+
+	private:
+		void
+		update_node_list();
+
+        logical_or_expression logical_or_expression_;
+		boost::optional<space> space_;
         assignment_operator assignment_operator_;
-        //std::shared_ptr<> ;
 };
 
 inline
 const assignment_operator&
-assignment_expression::get_assignment_operator() const
+assignment_expression::first_part::assignment_operator_node() const
 {
     return assignment_operator_;
 }

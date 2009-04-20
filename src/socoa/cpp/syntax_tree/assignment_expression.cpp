@@ -25,22 +25,31 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 assignment_expression::assignment_expression
 (
-    assignment_operator&& an_assignment_operator
+	boost::optional<first_part_seq>&& first_part_seq_node,
+	boost::optional<space>&& space_node,
+	conditional_or_throw_expression&& conditional_or_throw_expression_node
 ):
-    assignment_operator_(std::move(an_assignment_operator))
+	first_part_seq_(first_part_seq_node),
+	space_(space_node),
+	conditional_or_throw_expression_(conditional_or_throw_expression_node)
 {
 	update_node_list();
 }
 
 assignment_expression::assignment_expression(const assignment_expression& o):
 	composite_node(),
-	assignment_operator_(o.assignment_operator_)
+	first_part_seq_(o.first_part_seq_),
+	space_(o.space_),
+	conditional_or_throw_expression_(o.conditional_or_throw_expression_)
 {
 	update_node_list();
 }
 
 assignment_expression::assignment_expression(assignment_expression&& o):
-	assignment_operator_(std::move(o.assignment_operator_))
+	composite_node(),
+	first_part_seq_(std::move(o.first_part_seq_)),
+	space_(std::move(o.space_)),
+	conditional_or_throw_expression_(std::move(o.conditional_or_throw_expression_))
 {
 	update_node_list();
 }
@@ -48,7 +57,10 @@ assignment_expression::assignment_expression(assignment_expression&& o):
 const assignment_expression&
 assignment_expression::operator=(const assignment_expression& o)
 {
-	assignment_operator_ = o.assignment_operator_;
+	first_part_seq_ = o.first_part_seq_;
+	space_ = o.space_;
+	conditional_or_throw_expression_ = o.conditional_or_throw_expression_;
+
 	update_node_list();
 
 	return *this;
@@ -58,6 +70,62 @@ void
 assignment_expression::update_node_list()
 {
 	clear();
+	if(first_part_seq_) add(*first_part_seq_);
+	if(space_) add(*space_);
+	add(conditional_or_throw_expression_);
+}
+
+
+assignment_expression::first_part::first_part
+(
+	logical_or_expression&& logical_or_expression_node,
+	boost::optional<space>&& space_node,
+	assignment_operator&& assignment_operator_node
+):
+	logical_or_expression_(logical_or_expression_node),
+	space_(space_node),
+	assignment_operator_(assignment_operator_node)
+{
+	update_node_list();
+}
+
+assignment_expression::first_part::first_part(const assignment_expression::first_part::first_part& o):
+	composite_node(),
+	logical_or_expression_(o.logical_or_expression_),
+	space_(o.space_),
+	assignment_operator_(o.assignment_operator_)
+{
+	update_node_list();
+}
+
+assignment_expression::first_part::first_part(assignment_expression::first_part::first_part&& o):
+	composite_node(),
+	logical_or_expression_(std::move(o.logical_or_expression_)),
+	space_(std::move(o.space_)),
+	assignment_operator_(std::move(o.assignment_operator_))
+{
+	update_node_list();
+}
+
+const assignment_expression::first_part::first_part&
+assignment_expression::first_part::operator=(const assignment_expression::first_part::first_part& o)
+{
+	logical_or_expression_ = o.logical_or_expression_;
+	space_ = o.space_;
+	assignment_operator_ = o.assignment_operator_;
+
+	update_node_list();
+
+	return *this;
+}
+
+void
+assignment_expression::first_part::update_node_list()
+{
+	clear();
+
+	add(logical_or_expression_);
+	if(space_) add(*space_);
 	add(assignment_operator_);
 }
 

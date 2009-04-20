@@ -18,47 +18,43 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_EXPRESSION_STATEMENT_HPP
-#define SOCOA_CPP_SYNTAX_TREE_EXPRESSION_STATEMENT_HPP
-
-#include "composite_node.hpp"
-#include "expression.hpp"
-#include "space.hpp"
+#include "cast_expression.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-/**
-\verbatim
-expression_statement
-	= [expression], ";"
-;
-\endverbatim
-*/
-class expression_statement: public composite_node
+cast_expression::cast_expression
+(
+)
 {
-	public:
-		expression_statement
-		(
-			boost::optional<expression>&& expression_node,
-			boost::optional<space>&& post_expression_space_node
-		);
+	update_node_list();
+}
 
-		expression_statement(const expression_statement& o);
+cast_expression::cast_expression(const cast_expression& o):
+	composite_node()
+{
+	update_node_list();
+}
 
-		expression_statement(expression_statement&& o);
+cast_expression::cast_expression(cast_expression&& o):
+	composite_node()
+{
+	update_node_list();
+}
 
-		const expression_statement&
-		operator=(const expression_statement& o);
+const cast_expression&
+cast_expression::operator=(const cast_expression& o)
+{
+	update_node_list();
 
-	private:
-		void
-		update_node_list();
+	return *this;
+}
 
-		boost::optional<expression> expression_;
-		boost::optional<space> post_expression_space_;
-};
+void
+cast_expression::update_node_list()
+{
+	clear();
+}
 
 }}} //namespace socoa::cpp::syntax_tree
 
-#endif

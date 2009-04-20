@@ -18,45 +18,38 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "expression_statement.hpp"
-
-#include "common_nodes.hpp"
+#include "conditional_expression.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-expression_statement::expression_statement
+conditional_expression::conditional_expression
 (
-	boost::optional<expression>&& expression_node,
-	boost::optional<space>&& post_expression_space_node
+	logical_or_expression&& logical_or_expression_node
 ):
-	expression_(expression_node),
-	post_expression_space_(post_expression_space_node)
+	logical_or_expression_(logical_or_expression_node)
 {
 	update_node_list();
 }
 
-expression_statement::expression_statement(const expression_statement& o):
+conditional_expression::conditional_expression(const conditional_expression& o):
 	composite_node(),
-	expression_(o.expression_),
-	post_expression_space_(o.post_expression_space_)
+	logical_or_expression_(o.logical_or_expression_)
 {
 	update_node_list();
 }
 
-expression_statement::expression_statement(expression_statement&& o):
+conditional_expression::conditional_expression(conditional_expression&& o):
 	composite_node(),
-	expression_(std::move(o.expression_)),
-	post_expression_space_(std::move(o.post_expression_space_))
+	logical_or_expression_(std::move(o.logical_or_expression_))
 {
 	update_node_list();
 }
 
-const expression_statement&
-expression_statement::operator=(const expression_statement& o)
+const conditional_expression&
+conditional_expression::operator=(const conditional_expression& o)
 {
-	expression_ = o.expression_;
-	post_expression_space_ = o.post_expression_space_;
+	logical_or_expression_ = o.logical_or_expression_;
 
 	update_node_list();
 
@@ -64,13 +57,11 @@ expression_statement::operator=(const expression_statement& o)
 }
 
 void
-expression_statement::update_node_list()
+conditional_expression::update_node_list()
 {
 	clear();
 
-	if(expression_) add(*expression_);
-	if(post_expression_space_) add(*post_expression_space_);
-	add(semicolon);
+	add(logical_or_expression_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

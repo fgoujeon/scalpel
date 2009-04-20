@@ -1020,6 +1020,66 @@ convert_operator_function_id(const tree_node_t& node)
 	return operator_function_id();
 }
 
+assignment_expression
+convert_assignment_expression(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::ASSIGNMENT_EXPRESSION);
+
+	boost::optional<assignment_expression::first_part_seq> first_part_seq_node;
+	boost::optional<space> space_node;
+
+	tree_node_iterator_t i = find_node<id_t::ASSIGNMENT_EXPRESSION_FIRST_PART_SEQ>(node);
+	if(i != node.children.end())
+	{
+		first_part_seq_node = convert_node<assignment_expression::first_part_seq>(*i);
+		space_node = convert_next_space(i);
+	}
+
+	return assignment_expression
+	(
+		first_part_seq_node,
+		space_node,
+		convert_alternative
+		<
+			assignment_expression::conditional_or_throw_expression,
+			id_t::CONDITIONAL_EXPRESSION/*,
+			id_t::THROW_EXPRESSION*/
+		>(node)
+	);
+}
+
+assignment_expression::first_part
+convert_assignment_expression_first_part(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::ASSIGNMENT_EXPRESSION_FIRST_PART);
+
+	return assignment_expression::first_part
+	(
+		find_and_convert_node<logical_or_expression, id_t::LOGICAL_OR_EXPRESSION>(node),
+		find_and_convert_node<boost::optional<space>, id_t::SPACE>(node),
+		find_and_convert_node<assignment_operator, id_t::ASSIGNMENT_OPERATOR>(node)
+	);
+}
+
+cast_expression
+convert_cast_expression(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::CAST_EXPRESSION);
+
+	return cast_expression();
+}
+
+conditional_expression
+convert_conditional_expression(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::CONDITIONAL_EXPRESSION);
+
+	return conditional_expression
+	(
+		find_and_convert_node<logical_or_expression, id_t::LOGICAL_OR_EXPRESSION>(node)
+	);
+}
+
 conversion_function_id
 convert_conversion_function_id(const tree_node_t& node)
 {
@@ -1033,7 +1093,21 @@ convert_expression_statement(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::EXPRESSION_STATEMENT);
 
-	return expression_statement();
+	boost::optional<expression> expression_node;
+	boost::optional<space> post_expression_space_node;
+
+	tree_node_iterator_t i = find_node<id_t::EXPRESSION>(node);
+	if(i != node.children.end())
+	{
+		expression_node = convert_node<expression>(*i);
+		post_expression_space_node = convert_next_space(i);
+	}
+
+	return expression_statement
+	(
+		expression_node,
+		post_expression_space_node
+	);
 }
 
 iteration_statement

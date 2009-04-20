@@ -27,6 +27,12 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace parse_tree_to_syntax_tree
 {
 
+syntax_tree::assignment_expression
+convert_assignment_expression(const tree_node_t& node);
+
+syntax_tree::assignment_expression::first_part
+convert_assignment_expression_first_part(const tree_node_t& node);
+
 syntax_tree::base_clause
 convert_base_clause(const tree_node_t& node);
 
@@ -36,6 +42,9 @@ convert_base_specifier(const tree_node_t& node);
 syntax_tree::block_declaration
 convert_block_declaration(const tree_node_t& node);
 
+syntax_tree::cast_expression
+convert_cast_expression(const tree_node_t& node);
+
 syntax_tree::class_head
 convert_class_head(const tree_node_t& node);
 
@@ -44,6 +53,9 @@ convert_class_specifier(const tree_node_t& node);
 
 syntax_tree::compound_statement
 convert_compound_statement(const tree_node_t& node);
+
+syntax_tree::conditional_expression
+convert_conditional_expression(const tree_node_t& node);
 
 syntax_tree::conversion_function_id
 convert_conversion_function_id(const tree_node_t& node);

@@ -18,45 +18,42 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_EXPRESSION_STATEMENT_HPP
-#define SOCOA_CPP_SYNTAX_TREE_EXPRESSION_STATEMENT_HPP
+#ifndef SOCOA_CPP_SYNTAX_TREE_CONDITIONAL_EXPRESSION_HPP
+#define SOCOA_CPP_SYNTAX_TREE_CONDITIONAL_EXPRESSION_HPP
 
 #include "composite_node.hpp"
-#include "expression.hpp"
-#include "space.hpp"
+#include "expressions.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
 /**
 \verbatim
-expression_statement
-	= [expression], ";"
+conditional_expression
+	= logical_or_expression, ["?", expression, ":", assignment_expression]
 ;
 \endverbatim
 */
-class expression_statement: public composite_node
+class conditional_expression: public composite_node
 {
 	public:
-		expression_statement
+		conditional_expression
 		(
-			boost::optional<expression>&& expression_node,
-			boost::optional<space>&& post_expression_space_node
+			logical_or_expression&& logical_or_expression_node
 		);
 
-		expression_statement(const expression_statement& o);
+		conditional_expression(const conditional_expression& o);
 
-		expression_statement(expression_statement&& o);
+		conditional_expression(conditional_expression&& o);
 
-		const expression_statement&
-		operator=(const expression_statement& o);
+		const conditional_expression&
+		operator=(const conditional_expression& o);
 
 	private:
 		void
 		update_node_list();
 
-		boost::optional<expression> expression_;
-		boost::optional<space> post_expression_space_;
+		logical_or_expression logical_or_expression_;
 };
 
 }}} //namespace socoa::cpp::syntax_tree

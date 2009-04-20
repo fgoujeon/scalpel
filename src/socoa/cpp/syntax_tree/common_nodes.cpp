@@ -24,14 +24,32 @@ namespace socoa { namespace cpp { namespace syntax_tree
 {
 
 const leaf_node ampersand("&");
+const leaf_node arrow_and_asterisk("->*");
 const leaf_node asterisk("*");
+const leaf_node circumflex("^");
 const leaf_node closing_brace("}");
 const leaf_node closing_bracket(")");
 const leaf_node comma(",");
+const leaf_node dot_and_asterisk(".*");
+const leaf_node double_ampersand("&&");
+const leaf_node double_equal("==");
+const leaf_node double_left_angle_bracket("<<");
+const leaf_node double_pipe("||");
+const leaf_node double_right_angle_bracket(">>");
 const leaf_node empty("");
+const leaf_node inequal("!=");
+const leaf_node left_angle_bracket("<");
+const leaf_node left_angle_bracket_and_equal("<=");
+const leaf_node minus("-");
 const leaf_node opening_brace("{");
 const leaf_node opening_bracket("(");
+const leaf_node percent("%");
+const leaf_node pipe("|");
+const leaf_node plus("+");
+const leaf_node right_angle_bracket(">");
+const leaf_node right_angle_bracket_and_equal(">=");
 const leaf_node semicolon(";");
+const leaf_node slash("/");
 
 }}} //namespace socoa::cpp::syntax_tree
 
