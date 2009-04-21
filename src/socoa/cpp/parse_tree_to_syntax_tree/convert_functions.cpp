@@ -1270,7 +1270,22 @@ convert_string_literal(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::STRING_LITERAL);
 
-	return string_literal();
+	bool wide = false;
+
+	tree_node_iterator_t i = node.children.begin();
+	if(get_value(*i) == "L")
+	{
+		wide = true;
+		++i;
+	}
+
+	++i; //iterate to string value
+
+	return string_literal
+	(
+		wide,
+		get_value(*i)
+	);
 }
 
 try_block

@@ -20,24 +20,34 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "string_literal.hpp"
 
+#include "common_nodes.hpp"
+
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
 string_literal::string_literal
 (
-)
+	bool wide,
+	std::string&& value
+):
+	wide_(wide),
+	value_(value)
 {
 	update_node_list();
 }
 
 string_literal::string_literal(const string_literal& o):
-	composite_node()
+	composite_node(),
+	wide_(o.wide_),
+	value_(o.value_)
 {
 	update_node_list();
 }
 
 string_literal::string_literal(string_literal&& o):
-	composite_node()
+	composite_node(),
+	wide_(std::move(o.wide_)),
+	value_(std::move(o.value_))
 {
 	update_node_list();
 }
@@ -45,6 +55,9 @@ string_literal::string_literal(string_literal&& o):
 const string_literal&
 string_literal::operator=(const string_literal& o)
 {
+	wide_ = o.wide_;
+	value_ = o.value_;
+
 	update_node_list();
 
 	return *this;
@@ -54,6 +67,11 @@ void
 string_literal::update_node_list()
 {
 	clear();
+
+	if(wide_) add(capital_l);
+	add(double_quote);
+	add(value_);
+	add(double_quote);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

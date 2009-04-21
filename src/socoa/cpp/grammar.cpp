@@ -345,8 +345,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	string_literal
-		= +('"' >> !s_char_sequence >> '"')
-		| +("L\"" >> !s_char_sequence >> '"')
+		= !ch_p('L') >> '"' >> !token_node_d[s_char_sequence] >> '"'
 	;
 
 	s_char_sequence

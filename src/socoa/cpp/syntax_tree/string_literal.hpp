@@ -22,15 +22,25 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_TREE_STRING_LITERAL_HPP
 
 #include "composite_node.hpp"
+#include "leaf_node.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
+/**
+\verbatim
+string_literal
+	= ["L"], ´"´, string_value, ´"´
+;
+\endverbatim
+*/
 class string_literal: public composite_node
 {
 	public:
 		string_literal
 		(
+			bool wide,
+			std::string&& value
 		);
 
 		string_literal(const string_literal& o);
@@ -43,6 +53,9 @@ class string_literal: public composite_node
 	private:
 		void
 		update_node_list();
+
+		bool wide_;
+		leaf_node value_;
 };
 
 }}} //namespace socoa::cpp::syntax_tree

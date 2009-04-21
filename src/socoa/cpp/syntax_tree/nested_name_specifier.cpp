@@ -65,6 +65,7 @@ nested_name_specifier::update_node_list()
 {
 	clear();
 	add(identifier_or_template_id_);
+	add(double_colon);
 	if(next_part_seq_) add(*next_part_seq_);
 }
 
@@ -110,6 +111,7 @@ nested_name_specifier::next_part::update_node_list()
 {
 	clear();
 	add(identifier_or_template_id_);
+	add(double_colon);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

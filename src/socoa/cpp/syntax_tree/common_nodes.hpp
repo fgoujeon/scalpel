@@ -30,15 +30,19 @@ namespace socoa { namespace cpp { namespace syntax_tree
 extern const leaf_node ampersand;
 extern const leaf_node arrow_and_asterisk;
 extern const leaf_node asterisk;
+extern const leaf_node capital_l;
 extern const leaf_node circumflex;
 extern const leaf_node closing_brace;
 extern const leaf_node closing_bracket;
+extern const leaf_node colon;
 extern const leaf_node comma;
 extern const leaf_node dot_and_asterisk;
 extern const leaf_node double_ampersand;
+extern const leaf_node double_colon;
 extern const leaf_node double_equal;
 extern const leaf_node double_left_angle_bracket;
 extern const leaf_node double_pipe;
+extern const leaf_node double_quote;
 extern const leaf_node double_right_angle_bracket;
 extern const leaf_node empty;
 extern const leaf_node inequal;
@@ -53,6 +57,7 @@ extern const leaf_node plus;
 extern const leaf_node right_angle_bracket;
 extern const leaf_node right_angle_bracket_and_equal;
 extern const leaf_node semicolon;
+extern const leaf_node single_quote;
 extern const leaf_node slash;
 
 }}} //namespace socoa::cpp::syntax_tree
