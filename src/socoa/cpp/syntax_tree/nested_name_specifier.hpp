@@ -62,7 +62,7 @@ class nested_name_specifier: public composite_node
 		update_node_list();
 
 		identifier_or_template_id identifier_or_template_id_;
-		boost::optional<next_part_seq>&& next_part_seq_;
+		boost::optional<next_part_seq> next_part_seq_;
 };
 
 class nested_name_specifier::next_part: public composite_node

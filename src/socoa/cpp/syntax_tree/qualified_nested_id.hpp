@@ -29,6 +29,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
+/**
+\verbatim
+qualified_nested_id
+	= ["::"], nested_name_specifier, ["template"], unqualified_id
+;
+\endverbatim
+*/
 class qualified_nested_id: public composite_node
 {
 	public:

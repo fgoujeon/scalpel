@@ -530,9 +530,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	unary_expression
-		= "++" >> !s >> cast_expression
-		| "--" >> !s >> cast_expression
-		| unary_operator >> !s >> cast_expression
+		= unary_operator >> !s >> cast_expression
 		| str_p("sizeof") >> !s >> '(' >> !s >> type_id >> !s >> ')'
 		| str_p("sizeof") >> !s >> unary_expression
 		| postfix_expression
@@ -541,7 +539,9 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	unary_operator
-		= ch_p('*')
+		= str_p("++")
+		| "--"
+		| '*'
 		| '&'
 		| '+'
 		| '-'
@@ -715,11 +715,12 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	/*
-	assignment_expression
-		= logical_or_expression >> !s >> assignment_operator >> !s >> assignment_expression
-		| conditional_expression
-		| throw_expression
-	;
+	Original rule is:
+		assignment_expression
+			= logical_or_expression >> !s >> assignment_operator >> !s >> assignment_expression
+			| conditional_expression
+			| throw_expression
+		;
 	*/
 	assignment_expression
 		= !(assignment_expression_first_part_seq >> !s) >> (conditional_expression | throw_expression)

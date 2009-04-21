@@ -328,11 +328,11 @@ class grammar
         boost::spirit::rule<scanner_t> universal_character_name;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::IDENTIFIER>> identifier;
         boost::spirit::rule<scanner_t> nondigit;
-        boost::spirit::rule<scanner_t> literal;
-        boost::spirit::rule<scanner_t> integer_literal;
-        boost::spirit::rule<scanner_t> decimal_literal;
-        boost::spirit::rule<scanner_t> octal_literal;
-        boost::spirit::rule<scanner_t> hexadecimal_literal;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::LITERAL>> literal;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::INTEGER_LITERAL>> integer_literal;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DECIMAL_LITERAL>> decimal_literal;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::OCTAL_LITERAL>> octal_literal;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::HEXADECIMAL_LITERAL>> hexadecimal_literal;
         boost::spirit::rule<scanner_t> hexadecimal_digit;
         boost::spirit::rule<scanner_t> octal_digit;
         boost::spirit::rule<scanner_t> nonzero_digit;
@@ -340,22 +340,22 @@ class grammar
         boost::spirit::rule<scanner_t> unsigned_suffix;
         boost::spirit::rule<scanner_t> long_suffix;
         boost::spirit::rule<scanner_t> long_long_suffix;
-        boost::spirit::rule<scanner_t> character_literal;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CHARACTER_LITERAL>> character_literal;
         boost::spirit::rule<scanner_t> c_char_sequence;
         boost::spirit::rule<scanner_t> c_char;
         boost::spirit::rule<scanner_t> escape_sequence;
         boost::spirit::rule<scanner_t> simple_escape_sequence;
         boost::spirit::rule<scanner_t> octal_escape_sequence;
         boost::spirit::rule<scanner_t> hexadecimal_escape_sequence;
-        boost::spirit::rule<scanner_t> floating_literal;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::FLOATING_LITERAL>> floating_literal;
         boost::spirit::rule<scanner_t> fractional_constant;
         boost::spirit::rule<scanner_t> exponent_part;
         boost::spirit::rule<scanner_t> digit_sequence;
         boost::spirit::rule<scanner_t> floating_suffix;
-        boost::spirit::rule<scanner_t> string_literal;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::STRING_LITERAL>> string_literal;
         boost::spirit::rule<scanner_t> s_char_sequence;
         boost::spirit::rule<scanner_t> s_char;
-        boost::spirit::rule<scanner_t> boolean_literal;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::BOOLEAN_LITERAL>> boolean_literal;
 
         //1.3 - Basic concepts [gram.basic]
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TRANSLATION_UNIT>> translation_unit;

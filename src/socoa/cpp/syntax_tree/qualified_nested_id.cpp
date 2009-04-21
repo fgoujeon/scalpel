@@ -64,6 +64,7 @@ qualified_nested_id::operator=(const qualified_nested_id& o)
     nested_name_specifier_ = o.nested_name_specifier_;
     template_keyword_ = o.template_keyword_;
     unqualified_id_ = o.unqualified_id_;
+
 	update_node_list();
 
 	return *this;

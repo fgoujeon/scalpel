@@ -18,36 +18,24 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_CAST_EXPRESSION_HPP
-#define SOCOA_CPP_SYNTAX_TREE_CAST_EXPRESSION_HPP
+#ifndef SOCOA_CPP_SYNTAX_TREE_PRIMARY_EXPRESSION_HPP
+#define SOCOA_CPP_SYNTAX_TREE_PRIMARY_EXPRESSION_HPP
 
-#include "composite_node.hpp"
-#include "unary_expression.hpp"
+#include "alternative_node.hpp"
+#include "literal.hpp"
+#include "id_expression.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class cast_expression: public composite_node
-{
-	public:
-		cast_expression
-		(
-			unary_expression&& unary_expression_node
-		);
-
-		cast_expression(const cast_expression& o);
-
-		cast_expression(cast_expression&& o);
-
-		const cast_expression&
-		operator=(const cast_expression& o);
-
-	private:
-		void
-		update_node_list();
-
-		unary_expression unary_expression_;
-};
+typedef
+	alternative_node
+	<
+		literal,
+		id_expression
+	>
+	primary_expression
+;
 
 }}} //namespace socoa::cpp::syntax_tree
 

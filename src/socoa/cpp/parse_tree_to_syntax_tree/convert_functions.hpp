@@ -39,11 +39,17 @@ convert_base_clause(const tree_node_t& node);
 syntax_tree::base_specifier
 convert_base_specifier(const tree_node_t& node);
 
+syntax_tree::boolean_literal
+convert_boolean_literal(const tree_node_t& node);
+
 syntax_tree::block_declaration
 convert_block_declaration(const tree_node_t& node);
 
 syntax_tree::cast_expression
 convert_cast_expression(const tree_node_t& node);
+
+syntax_tree::character_literal
+convert_character_literal(const tree_node_t& node);
 
 syntax_tree::class_head
 convert_class_head(const tree_node_t& node);
@@ -78,6 +84,9 @@ convert_declarator(const tree_node_t& node);
 syntax_tree::declarator_id
 convert_declarator_id(const tree_node_t& node);
 
+syntax_tree::delete_expression
+convert_delete_expression(const tree_node_t& node);
+
 syntax_tree::destructor_name
 convert_destructor_name(const tree_node_t& node);
 
@@ -99,6 +108,9 @@ convert_elaborated_type_specifier(const tree_node_t& node);
 syntax_tree::expression_statement
 convert_expression_statement(const tree_node_t& node);
 
+syntax_tree::floating_literal
+convert_floating_literal(const tree_node_t& node);
+
 syntax_tree::function_definition
 convert_function_definition(const tree_node_t& node);
 
@@ -114,6 +126,9 @@ convert_identifier_or_template_id(const tree_node_t& node);
 syntax_tree::init_declarator
 convert_init_declarator(const tree_node_t& node);
 
+syntax_tree::integer_literal
+convert_integer_literal(const tree_node_t& node);
+
 syntax_tree::iteration_statement
 convert_iteration_statement(const tree_node_t& node);
 
@@ -122,6 +137,9 @@ convert_jump_statement(const tree_node_t& node);
 
 syntax_tree::labeled_statement
 convert_labeled_statement(const tree_node_t& node);
+
+syntax_tree::literal
+convert_literal(const tree_node_t& node);
 
 syntax_tree::mem_initializer
 convert_mem_initializer(const tree_node_t& node);
@@ -168,6 +186,9 @@ convert_nested_name_specifier(const tree_node_t& node);
 syntax_tree::nested_name_specifier::next_part
 convert_nested_name_specifier_next_part(const tree_node_t& node);
 
+syntax_tree::new_expression
+convert_new_expression(const tree_node_t& node);
+
 syntax_tree::operator_function_id
 convert_operator_function_id(const tree_node_t& node);
 
@@ -176,6 +197,12 @@ convert_parameter_declaration(const tree_node_t& node);
 
 syntax_tree::parameter_declaration_clause
 convert_parameter_declaration_clause(const tree_node_t& node);
+
+syntax_tree::postfix_expression
+convert_postfix_expression(const tree_node_t& node);
+
+syntax_tree::primary_expression
+convert_primary_expression(const tree_node_t& node);
 
 syntax_tree::ptr_operator
 convert_ptr_operator(const tree_node_t& node);
@@ -213,6 +240,9 @@ convert_space(const tree_node_t& node);
 syntax_tree::statement
 convert_statement(const tree_node_t& node);
 
+syntax_tree::string_literal
+convert_string_literal(const tree_node_t& node);
+
 syntax_tree::template_argument
 convert_template_argument(const tree_node_t& node);
 
@@ -227,6 +257,9 @@ convert_try_block(const tree_node_t& node);
 
 syntax_tree::type_specifier
 convert_type_specifier(const tree_node_t& node);
+
+syntax_tree::unary_expression
+convert_unary_expression(const tree_node_t& node);
 
 syntax_tree::unqualified_id
 convert_unqualified_id(const tree_node_t& node);

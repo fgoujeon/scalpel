@@ -54,6 +54,7 @@ nested_name_specifier::operator=(const nested_name_specifier& o)
 {
 	identifier_or_template_id_ = o.identifier_or_template_id_;
 	next_part_seq_ = o.next_part_seq_;
+
 	update_node_list();
 
 	return *this;

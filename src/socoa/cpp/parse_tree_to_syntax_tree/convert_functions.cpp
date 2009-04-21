@@ -1020,6 +1020,11 @@ convert_operator_function_id(const tree_node_t& node)
 	return operator_function_id();
 }
 
+
+
+
+
+
 assignment_expression
 convert_assignment_expression(const tree_node_t& node)
 {
@@ -1061,12 +1066,31 @@ convert_assignment_expression_first_part(const tree_node_t& node)
 	);
 }
 
+boolean_literal
+convert_boolean_literal(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::BOOLEAN_LITERAL);
+
+	return boolean_literal();
+}
+
 cast_expression
 convert_cast_expression(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::CAST_EXPRESSION);
 
-	return cast_expression();
+	return cast_expression
+	(
+		find_and_convert_node<unary_expression, id_t::UNARY_EXPRESSION>(node)
+	);
+}
+
+character_literal
+convert_character_literal(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::CHARACTER_LITERAL);
+
+	return character_literal();
 }
 
 conditional_expression
@@ -1086,6 +1110,14 @@ convert_conversion_function_id(const tree_node_t& node)
     assert(node.value.id() == id_t::CONVERSION_FUNCTION_ID);
 
 	return conversion_function_id();
+}
+
+delete_expression
+convert_delete_expression(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::DELETE_EXPRESSION);
+
+	return delete_expression();
 }
 
 expression_statement
@@ -1110,6 +1142,22 @@ convert_expression_statement(const tree_node_t& node)
 	);
 }
 
+floating_literal
+convert_floating_literal(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::FLOATING_LITERAL);
+
+	return floating_literal();
+}
+
+integer_literal
+convert_integer_literal(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::INTEGER_LITERAL);
+
+	return integer_literal();
+}
+
 iteration_statement
 convert_iteration_statement(const tree_node_t& node)
 {
@@ -1132,6 +1180,54 @@ convert_labeled_statement(const tree_node_t& node)
     assert(node.value.id() == id_t::LABELED_STATEMENT);
 
 	return labeled_statement();
+}
+
+literal
+convert_literal(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::LITERAL);
+
+	return convert_alternative
+	<
+		literal,
+		id_t::BOOLEAN_LITERAL,
+		id_t::CHARACTER_LITERAL,
+		id_t::INTEGER_LITERAL,
+		id_t::FLOATING_LITERAL,
+		id_t::STRING_LITERAL
+	>(node);
+}
+
+new_expression
+convert_new_expression(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::NEW_EXPRESSION);
+
+	return new_expression();
+}
+
+postfix_expression
+convert_postfix_expression(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::POSTFIX_EXPRESSION);
+
+	return postfix_expression
+	(
+		find_and_convert_node<boost::optional<primary_expression>, id_t::PRIMARY_EXPRESSION>(node)
+	);
+}
+
+primary_expression
+convert_primary_expression(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::PRIMARY_EXPRESSION);
+
+	return convert_alternative
+	<
+		primary_expression,
+		id_t::LITERAL,
+		id_t::ID_EXPRESSION
+	>(node);
 }
 
 selection_statement
@@ -1169,12 +1265,34 @@ convert_statement(const tree_node_t& node)
 	>(node);
 }
 
+string_literal
+convert_string_literal(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::STRING_LITERAL);
+
+	return string_literal();
+}
+
 try_block
 convert_try_block(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::TRY_BLOCK);
 
 	return try_block();
+}
+
+unary_expression
+convert_unary_expression(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::UNARY_EXPRESSION);
+
+	return convert_alternative
+	<
+		unary_expression,
+		id_t::POSTFIX_EXPRESSION,
+		id_t::NEW_EXPRESSION,
+		id_t::DELETE_EXPRESSION
+	>(node);
 }
 
 }}} //namespace socoa::cpp

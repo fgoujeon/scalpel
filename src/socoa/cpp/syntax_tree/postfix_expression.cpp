@@ -18,38 +18,38 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "cast_expression.hpp"
+#include "postfix_expression.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-cast_expression::cast_expression
+postfix_expression::postfix_expression
 (
-	unary_expression&& unary_expression_node
+	boost::optional<primary_expression>&& primary_expression_node
 ):
-	unary_expression_(std::move(unary_expression_node))
+	primary_expression_(primary_expression_node)
 {
 	update_node_list();
 }
 
-cast_expression::cast_expression(const cast_expression& o):
+postfix_expression::postfix_expression(const postfix_expression& o):
 	composite_node(),
-	unary_expression_(o.unary_expression_)
+	primary_expression_(o.primary_expression_)
 {
 	update_node_list();
 }
 
-cast_expression::cast_expression(cast_expression&& o):
+postfix_expression::postfix_expression(postfix_expression&& o):
 	composite_node(),
-	unary_expression_(std::move(o.unary_expression_))
+	primary_expression_(std::move(o.primary_expression_))
 {
 	update_node_list();
 }
 
-const cast_expression&
-cast_expression::operator=(const cast_expression& o)
+const postfix_expression&
+postfix_expression::operator=(const postfix_expression& o)
 {
-	unary_expression_ = o.unary_expression_;
+	primary_expression_ = o.primary_expression_;
 
 	update_node_list();
 
@@ -57,11 +57,10 @@ cast_expression::operator=(const cast_expression& o)
 }
 
 void
-cast_expression::update_node_list()
+postfix_expression::update_node_list()
 {
 	clear();
-
-	add(unary_expression_);
+	if(primary_expression_) add(*primary_expression_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

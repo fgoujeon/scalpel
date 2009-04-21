@@ -18,51 +18,33 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "cast_expression.hpp"
+#ifndef SOCOA_CPP_SYNTAX_TREE_FLOATING_LITERAL_HPP
+#define SOCOA_CPP_SYNTAX_TREE_FLOATING_LITERAL_HPP
+
+#include "composite_node.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-cast_expression::cast_expression
-(
-	unary_expression&& unary_expression_node
-):
-	unary_expression_(std::move(unary_expression_node))
+class floating_literal: public composite_node
 {
-	update_node_list();
-}
+	public:
+		floating_literal
+		(
+		);
 
-cast_expression::cast_expression(const cast_expression& o):
-	composite_node(),
-	unary_expression_(o.unary_expression_)
-{
-	update_node_list();
-}
+		floating_literal(const floating_literal& o);
 
-cast_expression::cast_expression(cast_expression&& o):
-	composite_node(),
-	unary_expression_(std::move(o.unary_expression_))
-{
-	update_node_list();
-}
+		floating_literal(floating_literal&& o);
 
-const cast_expression&
-cast_expression::operator=(const cast_expression& o)
-{
-	unary_expression_ = o.unary_expression_;
+		const floating_literal&
+		operator=(const floating_literal& o);
 
-	update_node_list();
-
-	return *this;
-}
-
-void
-cast_expression::update_node_list()
-{
-	clear();
-
-	add(unary_expression_);
-}
+	private:
+		void
+		update_node_list();
+};
 
 }}} //namespace socoa::cpp::syntax_tree
 
+#endif
