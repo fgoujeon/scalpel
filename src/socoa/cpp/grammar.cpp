@@ -229,9 +229,12 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	integer_literal
-		= decimal_literal >> !integer_suffix
-		| hexadecimal_literal >> !integer_suffix
-		| octal_literal >> !integer_suffix
+		= token_node_d
+		[
+			decimal_literal >> !integer_suffix
+			| hexadecimal_literal >> !integer_suffix
+			| octal_literal >> !integer_suffix
+		]
 	;
 
 	decimal_literal
@@ -820,11 +823,28 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	jump_statement
-		= str_p("break") >> !s >> ch_p(';')
-		| str_p("continue") >> !s >> ch_p(';')
-		| str_p("return") >> !s >> !expression >> !s >> ch_p(';')
-		| str_p("goto") >> !s >> identifier >> !s >> ch_p(';')
+		= break_statement
+		| continue_statement
+		| return_statement
+		| goto_statement
 	;
+
+	break_statement
+		= str_p("break") >> !s >> ch_p(';')
+	;
+
+	continue_statement
+		= str_p("continue") >> !s >> ch_p(';')
+	;
+
+	return_statement
+		= str_p("return") >> !s >> !(expression >> !s) >> ch_p(';')
+	;
+
+	goto_statement
+		= str_p("goto") >> !s >> identifier >> !s >> ch_p(';')
+	;
+
 
 	//1.6 - Declarations [gram.dcl.dcl]
 	declaration_seq

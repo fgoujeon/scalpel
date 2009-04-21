@@ -1074,6 +1074,17 @@ convert_boolean_literal(const tree_node_t& node)
 	return boolean_literal();
 }
 
+break_statement
+convert_break_statement(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::BREAK_STATEMENT);
+
+	return break_statement
+	(
+		find_and_convert_node<boost::optional<space>, id_t::SPACE>(node)
+	);
+}
+
 cast_expression
 convert_cast_expression(const tree_node_t& node)
 {
@@ -1101,6 +1112,17 @@ convert_conditional_expression(const tree_node_t& node)
 	return conditional_expression
 	(
 		find_and_convert_node<logical_or_expression, id_t::LOGICAL_OR_EXPRESSION>(node)
+	);
+}
+
+continue_statement
+convert_continue_statement(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::CONTINUE_STATEMENT);
+
+	return continue_statement
+	(
+		find_and_convert_node<boost::optional<space>, id_t::SPACE>(node)
 	);
 }
 
@@ -1150,12 +1172,37 @@ convert_floating_literal(const tree_node_t& node)
 	return floating_literal();
 }
 
+goto_statement
+convert_goto_statement(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::GOTO_STATEMENT);
+
+	boost::optional<space> post_return_space_node;
+
+	tree_node_iterator_t i = node.children.begin();
+	++i;
+	if(i->value.id() == id_t::SPACE)
+		post_return_space_node = convert_node<space>(*i);
+
+	i = find_node<id_t::IDENTIFIER>(node);
+
+	return goto_statement
+	(
+		post_return_space_node,
+		convert_node<identifier>(*i),
+		convert_next_space(i)
+	);
+}
+
 integer_literal
 convert_integer_literal(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::INTEGER_LITERAL);
 
-	return integer_literal();
+	return integer_literal
+	(
+		get_value(get_only_child_node(node))
+	);
 }
 
 iteration_statement
@@ -1171,7 +1218,14 @@ convert_jump_statement(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::JUMP_STATEMENT);
 
-	return jump_statement();
+	return convert_alternative
+	<
+		jump_statement,
+		id_t::BREAK_STATEMENT,
+		id_t::CONTINUE_STATEMENT,
+		id_t::RETURN_STATEMENT,
+		id_t::GOTO_STATEMENT
+	>(node);
 }
 
 labeled_statement
@@ -1228,6 +1282,36 @@ convert_primary_expression(const tree_node_t& node)
 		id_t::LITERAL,
 		id_t::ID_EXPRESSION
 	>(node);
+}
+
+return_statement
+convert_return_statement(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::RETURN_STATEMENT);
+
+	boost::optional<space> post_return_space_node;
+	boost::optional<expression> expression_node;
+	boost::optional<space> post_expression_space_node;
+
+	tree_node_iterator_t i = node.children.begin();
+	++i;
+	if(i->value.id() == id_t::SPACE)
+		post_return_space_node = convert_node<space>(*i);
+
+	i = find_node<id_t::EXPRESSION>(node);
+	if(i != node.children.end())
+		expression_node = convert_node<expression>(*i);
+
+	++i;
+	if(i->value.id() == id_t::SPACE)
+		post_expression_space_node = convert_node<space>(*i);
+
+	return return_statement
+	(
+		post_return_space_node,
+		expression_node,
+		post_expression_space_node
+	);
 }
 
 selection_statement

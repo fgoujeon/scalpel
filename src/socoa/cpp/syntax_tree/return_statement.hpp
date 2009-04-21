@@ -18,35 +18,48 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_INTEGER_LITERAL_HPP
-#define SOCOA_CPP_SYNTAX_TREE_INTEGER_LITERAL_HPP
+#ifndef SOCOA_CPP_SYNTAX_TREE_RETURN_STATEMENT_HPP
+#define SOCOA_CPP_SYNTAX_TREE_RETURN_STATEMENT_HPP
 
+#include <boost/optional.hpp>
 #include "composite_node.hpp"
-#include "leaf_node.hpp"
+#include "space.hpp"
+#include "expression.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-class integer_literal: public composite_node
+/**
+\verbatim
+return_statement
+	= "return", [expression], ";"
+;
+\endverbatim
+*/
+class return_statement: public composite_node
 {
 	public:
-		integer_literal
+		return_statement
 		(
-			std::string&& value
+			boost::optional<space>&& post_return_space_node,
+			boost::optional<expression>&& expression_node,
+			boost::optional<space>&& post_expression_space_node
 		);
 
-		integer_literal(const integer_literal& o);
+		return_statement(const return_statement& o);
 
-		integer_literal(integer_literal&& o);
+		return_statement(return_statement&& o);
 
-		const integer_literal&
-		operator=(const integer_literal& o);
+		const return_statement&
+		operator=(const return_statement& o);
 
 	private:
 		void
 		update_node_list();
 
-		leaf_node value_;
+		boost::optional<space> post_return_space_;
+		boost::optional<expression> expression_;
+		boost::optional<space> post_expression_space_;
 };
 
 }}} //namespace socoa::cpp::syntax_tree

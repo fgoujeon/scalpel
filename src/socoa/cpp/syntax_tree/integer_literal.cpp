@@ -25,19 +25,23 @@ namespace socoa { namespace cpp { namespace syntax_tree
 
 integer_literal::integer_literal
 (
-)
+	std::string&& value
+):
+	value_(value)
 {
 	update_node_list();
 }
 
 integer_literal::integer_literal(const integer_literal& o):
-	composite_node()
+	composite_node(),
+	value_(o.value_)
 {
 	update_node_list();
 }
 
 integer_literal::integer_literal(integer_literal&& o):
-	composite_node()
+	composite_node(),
+	value_(std::move(o.value_))
 {
 	update_node_list();
 }
@@ -45,6 +49,8 @@ integer_literal::integer_literal(integer_literal&& o):
 const integer_literal&
 integer_literal::operator=(const integer_literal& o)
 {
+	value_ = o.value_;
+
 	update_node_list();
 
 	return *this;
@@ -54,6 +60,7 @@ void
 integer_literal::update_node_list()
 {
 	clear();
+	add(value_);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

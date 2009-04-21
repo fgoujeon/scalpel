@@ -18,42 +18,54 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "jump_statement.hpp"
+#include "continue_statement.hpp"
+
+#include "common_nodes.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-jump_statement::jump_statement
+continue_statement::continue_statement
 (
-)
+	boost::optional<space>&& space_node
+):
+	space_(space_node)
 {
 	update_node_list();
 }
 
-jump_statement::jump_statement(const jump_statement& o):
-	composite_node()
+continue_statement::continue_statement(const continue_statement& o):
+	composite_node(),
+	space_(o.space_)
 {
 	update_node_list();
 }
 
-jump_statement::jump_statement(jump_statement&& o):
-	composite_node()
+continue_statement::continue_statement(continue_statement&& o):
+	composite_node(),
+	space_(std::move(o.space_))
 {
 	update_node_list();
 }
 
-const jump_statement&
-jump_statement::operator=(const jump_statement& o)
+const continue_statement&
+continue_statement::operator=(const continue_statement& o)
 {
+	space_ = o.space_;
+
 	update_node_list();
 
 	return *this;
 }
 
 void
-jump_statement::update_node_list()
+continue_statement::update_node_list()
 {
 	clear();
+
+	add(continue_keyword);
+	if(space_) add(*space_);
+	add(semicolon);
 }
 
 }}} //namespace socoa::cpp::syntax_tree

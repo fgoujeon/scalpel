@@ -150,6 +150,10 @@ class grammar
             ITERATION_STATEMENT,
             FOR_INIT_STATEMENT,
             JUMP_STATEMENT,
+			BREAK_STATEMENT,
+			CONTINUE_STATEMENT,
+			RETURN_STATEMENT,
+			GOTO_STATEMENT,
 
             DECLARATION_SEQ,
             DECLARATION,
@@ -439,6 +443,10 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ITERATION_STATEMENT>> iteration_statement;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::FOR_INIT_STATEMENT>> for_init_statement;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::JUMP_STATEMENT>> jump_statement;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::BREAK_STATEMENT>> break_statement;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CONTINUE_STATEMENT>> continue_statement;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::RETURN_STATEMENT>> return_statement;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::GOTO_STATEMENT>> goto_statement;
 
         //1.6 - Declarations [gram.dcl.dcl]
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DECLARATION_SEQ>> declaration_seq;

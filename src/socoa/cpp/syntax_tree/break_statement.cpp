@@ -18,29 +18,55 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_JUMP_STATEMENT_HPP
-#define SOCOA_CPP_SYNTAX_TREE_JUMP_STATEMENT_HPP
-
-#include "alternative_node.hpp"
 #include "break_statement.hpp"
-#include "continue_statement.hpp"
-#include "return_statement.hpp"
-#include "goto_statement.hpp"
+
+#include "common_nodes.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-typedef
-	alternative_node
-	<
-		break_statement,
-		continue_statement,
-		return_statement,
-		goto_statement
-	>
-	jump_statement
-;
+break_statement::break_statement
+(
+	boost::optional<space>&& space_node
+):
+	space_(space_node)
+{
+	update_node_list();
+}
+
+break_statement::break_statement(const break_statement& o):
+	composite_node(),
+	space_(o.space_)
+{
+	update_node_list();
+}
+
+break_statement::break_statement(break_statement&& o):
+	composite_node(),
+	space_(std::move(o.space_))
+{
+	update_node_list();
+}
+
+const break_statement&
+break_statement::operator=(const break_statement& o)
+{
+	space_ = o.space_;
+
+	update_node_list();
+
+	return *this;
+}
+
+void
+break_statement::update_node_list()
+{
+	clear();
+
+	add(break_keyword);
+	if(space_) add(*space_);
+	add(semicolon);
+}
 
 }}} //namespace socoa::cpp::syntax_tree
 
-#endif

@@ -18,28 +18,49 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_JUMP_STATEMENT_HPP
-#define SOCOA_CPP_SYNTAX_TREE_JUMP_STATEMENT_HPP
+#ifndef SOCOA_CPP_SYNTAX_TREE_GOTO_STATEMENT_HPP
+#define SOCOA_CPP_SYNTAX_TREE_GOTO_STATEMENT_HPP
 
-#include "alternative_node.hpp"
-#include "break_statement.hpp"
-#include "continue_statement.hpp"
-#include "return_statement.hpp"
-#include "goto_statement.hpp"
+#include <boost/optional.hpp>
+#include "composite_node.hpp"
+#include "space.hpp"
+#include "identifier.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-typedef
-	alternative_node
-	<
-		break_statement,
-		continue_statement,
-		return_statement,
-		goto_statement
-	>
-	jump_statement
+/**
+\verbatim
+goto_statement
+	= "goto", identifier, ";"
 ;
+\endverbatim
+*/
+class goto_statement: public composite_node
+{
+	public:
+		goto_statement
+		(
+			boost::optional<space>&& post_return_space_node,
+			identifier&& identifier_node,
+			boost::optional<space>&& post_identifier_space_node
+		);
+
+		goto_statement(const goto_statement& o);
+
+		goto_statement(goto_statement&& o);
+
+		const goto_statement&
+		operator=(const goto_statement& o);
+
+	private:
+		void
+		update_node_list();
+
+		boost::optional<space> post_return_space_;
+		identifier identifier_;
+		boost::optional<space> post_identifier_space_;
+};
 
 }}} //namespace socoa::cpp::syntax_tree
 

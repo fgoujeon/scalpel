@@ -39,11 +39,14 @@ convert_base_clause(const tree_node_t& node);
 syntax_tree::base_specifier
 convert_base_specifier(const tree_node_t& node);
 
+syntax_tree::block_declaration
+convert_block_declaration(const tree_node_t& node);
+
 syntax_tree::boolean_literal
 convert_boolean_literal(const tree_node_t& node);
 
-syntax_tree::block_declaration
-convert_block_declaration(const tree_node_t& node);
+syntax_tree::break_statement
+convert_break_statement(const tree_node_t& node);
 
 syntax_tree::cast_expression
 convert_cast_expression(const tree_node_t& node);
@@ -62,6 +65,9 @@ convert_compound_statement(const tree_node_t& node);
 
 syntax_tree::conditional_expression
 convert_conditional_expression(const tree_node_t& node);
+
+syntax_tree::continue_statement
+convert_continue_statement(const tree_node_t& node);
 
 syntax_tree::conversion_function_id
 convert_conversion_function_id(const tree_node_t& node);
@@ -113,6 +119,9 @@ convert_floating_literal(const tree_node_t& node);
 
 syntax_tree::function_definition
 convert_function_definition(const tree_node_t& node);
+
+syntax_tree::goto_statement
+convert_goto_statement(const tree_node_t& node);
 
 syntax_tree::id_expression
 convert_id_expression(const tree_node_t& node);
@@ -221,6 +230,9 @@ convert_qualified_operator_function_id(const tree_node_t& node);
 
 syntax_tree::qualified_template_id
 convert_qualified_template_id(const tree_node_t& node);
+
+syntax_tree::return_statement
+convert_return_statement(const tree_node_t& node);
 
 syntax_tree::selection_statement
 convert_selection_statement(const tree_node_t& node);

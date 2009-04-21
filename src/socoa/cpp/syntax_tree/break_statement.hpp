@@ -18,28 +18,44 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_JUMP_STATEMENT_HPP
-#define SOCOA_CPP_SYNTAX_TREE_JUMP_STATEMENT_HPP
+#ifndef SOCOA_CPP_SYNTAX_TREE_BREAK_STATEMENT_HPP
+#define SOCOA_CPP_SYNTAX_TREE_BREAK_STATEMENT_HPP
 
-#include "alternative_node.hpp"
-#include "break_statement.hpp"
-#include "continue_statement.hpp"
-#include "return_statement.hpp"
-#include "goto_statement.hpp"
+#include <boost/optional.hpp>
+#include "composite_node.hpp"
+#include "space.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
-typedef
-	alternative_node
-	<
-		break_statement,
-		continue_statement,
-		return_statement,
-		goto_statement
-	>
-	jump_statement
+/**
+\verbatim
+break_statement
+	= "break", ";"
 ;
+\endverbatim
+*/
+class break_statement: public composite_node
+{
+	public:
+		break_statement
+		(
+			boost::optional<space>&& space_node
+		);
+
+		break_statement(const break_statement& o);
+
+		break_statement(break_statement&& o);
+
+		const break_statement&
+		operator=(const break_statement& o);
+
+	private:
+		void
+		update_node_list();
+
+		boost::optional<space> space_;
+};
 
 }}} //namespace socoa::cpp::syntax_tree
 

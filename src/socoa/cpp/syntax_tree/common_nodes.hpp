@@ -27,6 +27,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_tree
 {
 
+//symbols
 extern const leaf_node ampersand;
 extern const leaf_node arrow_and_asterisk;
 extern const leaf_node asterisk;
@@ -59,6 +60,12 @@ extern const leaf_node right_angle_bracket_and_equal;
 extern const leaf_node semicolon;
 extern const leaf_node single_quote;
 extern const leaf_node slash;
+
+//keywords
+extern const leaf_node break_keyword;
+extern const leaf_node continue_keyword;
+extern const leaf_node goto_keyword;
+extern const leaf_node return_keyword;
 
 }}} //namespace socoa::cpp::syntax_tree
 
