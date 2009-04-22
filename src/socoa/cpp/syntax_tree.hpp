@@ -111,6 +111,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "syntax_nodes/template_argument_list.hpp"
 #include "syntax_nodes/template_declaration.hpp"
 #include "syntax_nodes/template_id.hpp"
+#include "syntax_nodes/translation_unit.hpp"
 #include "syntax_nodes/try_block.hpp"
 #include "syntax_nodes/type_id.hpp"
 #include "syntax_nodes/type_specifier.hpp"
@@ -122,7 +123,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp
 {
 
-typedef syntax_nodes::declaration_seq syntax_tree;
+typedef syntax_nodes::translation_unit syntax_tree;
 
 }} //namespace socoa::cpp
 

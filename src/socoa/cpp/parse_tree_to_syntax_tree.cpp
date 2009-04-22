@@ -34,17 +34,7 @@ syntax_tree
 convert_parse_tree_to_syntax_tree(const tree_node_t& node)
 {
 	const tree_node_t& child_node = get_only_child_node(node);
-    assert(child_node.value.id() == id_t::TRANSLATION_UNIT);
-
-	tree_node_iterator_t grandchild_node = find_node<id_t::DECLARATION_SEQ>(child_node);
-    if(grandchild_node != node.children.end()) //check whether the tree is not empty
-	{
-		return convert_node<declaration_seq>(*grandchild_node);
-	}
-	else
-	{
-		return syntax_tree();
-	}
+	return parse_tree_to_syntax_tree::convert_translation_unit(child_node);
 }
 
 }} //namespace socoa::cpp

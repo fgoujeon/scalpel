@@ -1372,6 +1372,34 @@ convert_string_literal(const tree_node_t& node)
 	);
 }
 
+translation_unit
+convert_translation_unit(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::TRANSLATION_UNIT);
+
+	boost::optional<space> first_space_node;
+	boost::optional<declaration_seq> declaration_seq_node;
+	boost::optional<space> post_declaration_seq_node;
+
+	tree_node_iterator_t i = node.children.begin();
+	if(i->value.id() == id_t::SPACE)
+		first_space_node = convert_node<space>(*i);
+
+	i = find_node<id_t::DECLARATION_SEQ>(node);
+	if(i != node.children.end())
+	{
+		declaration_seq_node = convert_node<declaration_seq>(*i);
+		post_declaration_seq_node = convert_next_space(i);
+	}
+
+	return translation_unit
+	(
+		first_space_node,
+		declaration_seq_node,
+		post_declaration_seq_node
+	);
+}
+
 try_block
 convert_try_block(const tree_node_t& node)
 {

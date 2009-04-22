@@ -264,6 +264,9 @@ convert_template_declaration(const tree_node_t& node);
 syntax_nodes::template_id
 convert_template_id(const tree_node_t& node);
 
+syntax_nodes::translation_unit
+convert_translation_unit(const tree_node_t& node);
+
 syntax_nodes::try_block
 convert_try_block(const tree_node_t& node);
 

@@ -43,14 +43,20 @@ semantic_analyzer::operator()(const syntax_tree& tree)
 	//current scope = global namespace
 	scope_cursor_.initialize(global_namespace);
 
-	for
-	(
-		auto i = tree.begin();
-		i != tree.end();
-		++i
-	)
+	auto opt_declaration_seq_node = tree.declaration_seq_node();
+
+	if(opt_declaration_seq_node)
 	{
-		convert(i->main_node());
+		auto declaration_seq_node = *opt_declaration_seq_node;
+		for
+		(
+			auto i = declaration_seq_node.begin();
+			i != declaration_seq_node.end();
+			++i
+		)
+		{
+			convert(i->main_node());
+		}
 	}
 
 	return global_namespace;
