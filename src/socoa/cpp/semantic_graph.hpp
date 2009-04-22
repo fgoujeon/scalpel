@@ -21,14 +21,14 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SEMANTIC_GRAPH_HPP
 #define SOCOA_CPP_SEMANTIC_GRAPH_HPP
 
-#include "semantic_graph/namespace_.hpp"
-#include "semantic_graph/class_.hpp"
-#include "semantic_graph/function.hpp"
+#include "semantic_nodes/namespace_.hpp"
+#include "semantic_nodes/class_.hpp"
+#include "semantic_nodes/function.hpp"
 
 namespace socoa { namespace cpp
 {
 
-typedef semantic_graph::namespace_ semantic_graph_t;
+typedef semantic_nodes::namespace_ semantic_graph;
 
 }} //namespace socoa::cpp
 

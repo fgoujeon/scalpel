@@ -26,7 +26,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "node_finder_and_converter.hpp"
 #include "space_convert_functions.hpp"
 
-using namespace socoa::cpp::syntax_tree;
+using namespace socoa::cpp::syntax_nodes;
 
 namespace socoa { namespace cpp { namespace parse_tree_to_syntax_tree
 {

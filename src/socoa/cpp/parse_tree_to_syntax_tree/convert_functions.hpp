@@ -27,259 +27,259 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace parse_tree_to_syntax_tree
 {
 
-syntax_tree::assignment_expression
+syntax_nodes::assignment_expression
 convert_assignment_expression(const tree_node_t& node);
 
-syntax_tree::assignment_expression::first_part
+syntax_nodes::assignment_expression::first_part
 convert_assignment_expression_first_part(const tree_node_t& node);
 
-syntax_tree::base_clause
+syntax_nodes::base_clause
 convert_base_clause(const tree_node_t& node);
 
-syntax_tree::base_specifier
+syntax_nodes::base_specifier
 convert_base_specifier(const tree_node_t& node);
 
-syntax_tree::block_declaration
+syntax_nodes::block_declaration
 convert_block_declaration(const tree_node_t& node);
 
-syntax_tree::boolean_literal
+syntax_nodes::boolean_literal
 convert_boolean_literal(const tree_node_t& node);
 
-syntax_tree::break_statement
+syntax_nodes::break_statement
 convert_break_statement(const tree_node_t& node);
 
-syntax_tree::cast_expression
+syntax_nodes::cast_expression
 convert_cast_expression(const tree_node_t& node);
 
-syntax_tree::character_literal
+syntax_nodes::character_literal
 convert_character_literal(const tree_node_t& node);
 
-syntax_tree::class_head
+syntax_nodes::class_head
 convert_class_head(const tree_node_t& node);
 
-syntax_tree::class_specifier
+syntax_nodes::class_specifier
 convert_class_specifier(const tree_node_t& node);
 
-syntax_tree::compound_statement
+syntax_nodes::compound_statement
 convert_compound_statement(const tree_node_t& node);
 
-syntax_tree::conditional_expression
+syntax_nodes::conditional_expression
 convert_conditional_expression(const tree_node_t& node);
 
-syntax_tree::continue_statement
+syntax_nodes::continue_statement
 convert_continue_statement(const tree_node_t& node);
 
-syntax_tree::conversion_function_id
+syntax_nodes::conversion_function_id
 convert_conversion_function_id(const tree_node_t& node);
 
-syntax_tree::ctor_initializer
+syntax_nodes::ctor_initializer
 convert_ctor_initializer(const tree_node_t& node);
 
-syntax_tree::cv_qualifier
+syntax_nodes::cv_qualifier
 convert_cv_qualifier(const tree_node_t& node);
 
-syntax_tree::decl_specifier
+syntax_nodes::decl_specifier
 convert_decl_specifier(const tree_node_t& node);
 
-syntax_tree::declaration
+syntax_nodes::declaration
 convert_declaration(const tree_node_t& node);
 
-syntax_tree::declarator
+syntax_nodes::declarator
 convert_declarator(const tree_node_t& node);
 
-syntax_tree::declarator_id
+syntax_nodes::declarator_id
 convert_declarator_id(const tree_node_t& node);
 
-syntax_tree::delete_expression
+syntax_nodes::delete_expression
 convert_delete_expression(const tree_node_t& node);
 
-syntax_tree::destructor_name
+syntax_nodes::destructor_name
 convert_destructor_name(const tree_node_t& node);
 
-syntax_tree::direct_declarator
+syntax_nodes::direct_declarator
 convert_direct_declarator(const tree_node_t& node);
 
-syntax_tree::direct_declarator::array_part
+syntax_nodes::direct_declarator::array_part
 convert_direct_declarator_array_part(const tree_node_t& node);
 
-syntax_tree::direct_declarator::function_part
+syntax_nodes::direct_declarator::function_part
 convert_direct_declarator_function_part(const tree_node_t& node);
 
-syntax_tree::direct_declarator::next_part
+syntax_nodes::direct_declarator::next_part
 convert_direct_declarator_next_part(const tree_node_t& node);
 
-syntax_tree::elaborated_type_specifier
+syntax_nodes::elaborated_type_specifier
 convert_elaborated_type_specifier(const tree_node_t& node);
 
-syntax_tree::expression_statement
+syntax_nodes::expression_statement
 convert_expression_statement(const tree_node_t& node);
 
-syntax_tree::floating_literal
+syntax_nodes::floating_literal
 convert_floating_literal(const tree_node_t& node);
 
-syntax_tree::function_definition
+syntax_nodes::function_definition
 convert_function_definition(const tree_node_t& node);
 
-syntax_tree::goto_statement
+syntax_nodes::goto_statement
 convert_goto_statement(const tree_node_t& node);
 
-syntax_tree::id_expression
+syntax_nodes::id_expression
 convert_id_expression(const tree_node_t& node);
 
-syntax_tree::identifier
+syntax_nodes::identifier
 convert_identifier(const tree_node_t& node);
 
-syntax_tree::identifier_or_template_id
+syntax_nodes::identifier_or_template_id
 convert_identifier_or_template_id(const tree_node_t& node);
 
-syntax_tree::init_declarator
+syntax_nodes::init_declarator
 convert_init_declarator(const tree_node_t& node);
 
-syntax_tree::integer_literal
+syntax_nodes::integer_literal
 convert_integer_literal(const tree_node_t& node);
 
-syntax_tree::iteration_statement
+syntax_nodes::iteration_statement
 convert_iteration_statement(const tree_node_t& node);
 
-syntax_tree::jump_statement
+syntax_nodes::jump_statement
 convert_jump_statement(const tree_node_t& node);
 
-syntax_tree::labeled_statement
+syntax_nodes::labeled_statement
 convert_labeled_statement(const tree_node_t& node);
 
-syntax_tree::literal
+syntax_nodes::literal
 convert_literal(const tree_node_t& node);
 
-syntax_tree::mem_initializer
+syntax_nodes::mem_initializer
 convert_mem_initializer(const tree_node_t& node);
 
-syntax_tree::mem_initializer_id
+syntax_nodes::mem_initializer_id
 convert_mem_initializer_id(const tree_node_t& node);
 
-syntax_tree::member_declaration
+syntax_nodes::member_declaration
 convert_member_declaration(const tree_node_t& node);
 
-syntax_tree::member_declaration_function_definition
+syntax_nodes::member_declaration_function_definition
 convert_member_declaration_function_definition(const tree_node_t& node);
 
-syntax_tree::member_declaration_member_declarator_list
+syntax_nodes::member_declaration_member_declarator_list
 convert_member_declaration_member_declarator_list(const tree_node_t& node);
 
-syntax_tree::member_declaration_unqualified_id
+syntax_nodes::member_declaration_unqualified_id
 convert_member_declaration_unqualified_id(const tree_node_t& node);
 
-syntax_tree::member_declarator
+syntax_nodes::member_declarator
 convert_member_declarator(const tree_node_t& node);
 
-syntax_tree::member_declarator_bit_field_member
+syntax_nodes::member_declarator_bit_field_member
 convert_member_declarator_bit_field_member(const tree_node_t& node);
 
-syntax_tree::member_declarator_declarator
+syntax_nodes::member_declarator_declarator
 convert_member_declarator_declarator(const tree_node_t& node);
 
-syntax_tree::member_specification_access_specifier
+syntax_nodes::member_specification_access_specifier
 convert_member_specification_access_specifier(const tree_node_t& node);
 
-syntax_tree::member_specification_part
+syntax_nodes::member_specification_part
 convert_member_specification_part(const tree_node_t& node);
 
-syntax_tree::namespace_definition
+syntax_nodes::namespace_definition
 convert_namespace_definition(const tree_node_t& node);
 
-syntax_tree::nested_identifier_or_template_id
+syntax_nodes::nested_identifier_or_template_id
 convert_nested_identifier_or_template_id(const tree_node_t& node);
 
-syntax_tree::nested_name_specifier
+syntax_nodes::nested_name_specifier
 convert_nested_name_specifier(const tree_node_t& node);
 
-syntax_tree::nested_name_specifier::next_part
+syntax_nodes::nested_name_specifier::next_part
 convert_nested_name_specifier_next_part(const tree_node_t& node);
 
-syntax_tree::new_expression
+syntax_nodes::new_expression
 convert_new_expression(const tree_node_t& node);
 
-syntax_tree::operator_function_id
+syntax_nodes::operator_function_id
 convert_operator_function_id(const tree_node_t& node);
 
-syntax_tree::parameter_declaration
+syntax_nodes::parameter_declaration
 convert_parameter_declaration(const tree_node_t& node);
 
-syntax_tree::parameter_declaration_clause
+syntax_nodes::parameter_declaration_clause
 convert_parameter_declaration_clause(const tree_node_t& node);
 
-syntax_tree::postfix_expression
+syntax_nodes::postfix_expression
 convert_postfix_expression(const tree_node_t& node);
 
-syntax_tree::primary_expression
+syntax_nodes::primary_expression
 convert_primary_expression(const tree_node_t& node);
 
-syntax_tree::ptr_operator
+syntax_nodes::ptr_operator
 convert_ptr_operator(const tree_node_t& node);
 
-syntax_tree::qualified_id
+syntax_nodes::qualified_id
 convert_qualified_id(const tree_node_t& node);
 
-syntax_tree::qualified_identifier
+syntax_nodes::qualified_identifier
 convert_qualified_identifier(const tree_node_t& node);
 
-syntax_tree::qualified_nested_id
+syntax_nodes::qualified_nested_id
 convert_qualified_nested_id(const tree_node_t& node);
 
-syntax_tree::qualified_operator_function_id
+syntax_nodes::qualified_operator_function_id
 convert_qualified_operator_function_id(const tree_node_t& node);
 
-syntax_tree::qualified_template_id
+syntax_nodes::qualified_template_id
 convert_qualified_template_id(const tree_node_t& node);
 
-syntax_tree::return_statement
+syntax_nodes::return_statement
 convert_return_statement(const tree_node_t& node);
 
-syntax_tree::selection_statement
+syntax_nodes::selection_statement
 convert_selection_statement(const tree_node_t& node);
 
-syntax_tree::simple_declaration
+syntax_nodes::simple_declaration
 convert_simple_declaration(const tree_node_t& node);
 
-syntax_tree::simple_template_type_specifier
+syntax_nodes::simple_template_type_specifier
 convert_simple_template_type_specifier(const tree_node_t& node);
 
-syntax_tree::simple_type_specifier
+syntax_nodes::simple_type_specifier
 convert_simple_type_specifier(const tree_node_t& node);
 
-syntax_tree::space
+syntax_nodes::space
 convert_space(const tree_node_t& node);
 
-syntax_tree::statement
+syntax_nodes::statement
 convert_statement(const tree_node_t& node);
 
-syntax_tree::string_literal
+syntax_nodes::string_literal
 convert_string_literal(const tree_node_t& node);
 
-syntax_tree::template_argument
+syntax_nodes::template_argument
 convert_template_argument(const tree_node_t& node);
 
-syntax_tree::template_declaration
+syntax_nodes::template_declaration
 convert_template_declaration(const tree_node_t& node);
 
-syntax_tree::template_id
+syntax_nodes::template_id
 convert_template_id(const tree_node_t& node);
 
-syntax_tree::try_block
+syntax_nodes::try_block
 convert_try_block(const tree_node_t& node);
 
-syntax_tree::type_specifier
+syntax_nodes::type_specifier
 convert_type_specifier(const tree_node_t& node);
 
-syntax_tree::unary_expression
+syntax_nodes::unary_expression
 convert_unary_expression(const tree_node_t& node);
 
-syntax_tree::unqualified_id
+syntax_nodes::unqualified_id
 convert_unqualified_id(const tree_node_t& node);
 
-syntax_tree::using_declaration
+syntax_nodes::using_declaration
 convert_using_declaration(const tree_node_t& node);
 
-syntax_tree::using_directive
+syntax_nodes::using_directive
 convert_using_directive(const tree_node_t& node);
 
 }}} //namespace socoa::cpp

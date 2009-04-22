@@ -57,15 +57,15 @@ class syntax_tree_to_any_conversion_helper
 	public:
 		syntax_tree_to_any_conversion_helper(ConverterT& converter);
 
-        template<class T, const syntax_tree::leaf_node& SeparatorNode>
+        template<class T, const syntax_nodes::leaf_node& SeparatorNode>
 		inline
         void
-        convert(const syntax_tree::sequence_node<T, SeparatorNode>& seq);
+        convert(const syntax_nodes::sequence_node<T, SeparatorNode>& seq);
 
 		template<class... NodesT>
 		inline
         void
-		convert(const syntax_tree::alternative_node<NodesT...>& item);
+		convert(const syntax_nodes::alternative_node<NodesT...>& item);
 
         template<class T>
 		inline
@@ -74,16 +74,16 @@ class syntax_tree_to_any_conversion_helper
 
 		inline
 		void
-		convert(const syntax_tree::declaration& a_declaration);
+		convert(const syntax_nodes::declaration& a_declaration);
 
 	private:
-        template<class T, const syntax_tree::leaf_node& SeparatorNode>
+        template<class T, const syntax_nodes::leaf_node& SeparatorNode>
         void
-        convert_sequence_node(const syntax_tree::sequence_node<T, SeparatorNode>& seq);
+        convert_sequence_node(const syntax_nodes::sequence_node<T, SeparatorNode>& seq);
 
 		template<class... NodesT>
         void
-		convert_alternative_node(const syntax_tree::alternative_node<NodesT...>& item);
+		convert_alternative_node(const syntax_nodes::alternative_node<NodesT...>& item);
 
         template<class T>
         void
@@ -108,9 +108,9 @@ syntax_tree_to_any_conversion_helper<ConverterT>::syntax_tree_to_any_conversion_
 }
 
 template<class ConverterT>
-template<class T, const syntax_tree::leaf_node& SeparatorNode>
+template<class T, const syntax_nodes::leaf_node& SeparatorNode>
 void
-syntax_tree_to_any_conversion_helper<ConverterT>::convert(const syntax_tree::sequence_node<T, SeparatorNode>& seq)
+syntax_tree_to_any_conversion_helper<ConverterT>::convert(const syntax_nodes::sequence_node<T, SeparatorNode>& seq)
 {
 	convert_sequence_node(seq);
 }
@@ -119,7 +119,7 @@ template<class ConverterT>
 template<class... NodesT>
 inline
 void
-syntax_tree_to_any_conversion_helper<ConverterT>::convert(const syntax_tree::alternative_node<NodesT...>& item)
+syntax_tree_to_any_conversion_helper<ConverterT>::convert(const syntax_nodes::alternative_node<NodesT...>& item)
 {
 	convert_alternative_node(item);
 }
@@ -134,16 +134,16 @@ syntax_tree_to_any_conversion_helper<ConverterT>::convert(const boost::optional<
 
 template<class ConverterT>
 void
-syntax_tree_to_any_conversion_helper<ConverterT>::convert(const syntax_tree::declaration& a_declaration)
+syntax_tree_to_any_conversion_helper<ConverterT>::convert(const syntax_nodes::declaration& a_declaration)
 {
-	const syntax_tree::declaration_t& decl = a_declaration;
+	const syntax_nodes::declaration_t& decl = a_declaration;
 	convert_alternative_node(decl);
 }
 
 template<class ConverterT>
-template<class T, const syntax_tree::leaf_node& SeparatorNode>
+template<class T, const syntax_nodes::leaf_node& SeparatorNode>
 void
-syntax_tree_to_any_conversion_helper<ConverterT>::convert_sequence_node(const syntax_tree::sequence_node<T, SeparatorNode>& seq)
+syntax_tree_to_any_conversion_helper<ConverterT>::convert_sequence_node(const syntax_nodes::sequence_node<T, SeparatorNode>& seq)
 {
     for(auto i = seq.begin(); i != seq.end(); ++i)
     {
@@ -154,9 +154,9 @@ syntax_tree_to_any_conversion_helper<ConverterT>::convert_sequence_node(const sy
 template<class ConverterT>
 template<class... NodesT>
 void
-syntax_tree_to_any_conversion_helper<ConverterT>::convert_alternative_node(const syntax_tree::alternative_node<NodesT...>& item)
+syntax_tree_to_any_conversion_helper<ConverterT>::convert_alternative_node(const syntax_nodes::alternative_node<NodesT...>& item)
 {
-	syntax_tree::apply_visitor(alternative_visitor_, item);
+	syntax_nodes::apply_visitor(alternative_visitor_, item);
 }
 
 template<class ConverterT>
@@ -180,7 +180,7 @@ syntax_tree_to_any_conversion_helper<ConverterT>::convert_any_node(const T& item
 	//The ConverterT's generic convert function template definition must be:
 	//	template<class T>
 	//	void
-	//	syntax_tree_to_string_converter::convert(const T& item)
+	//	convert(const T& item)
 	//	{
 	//		conversion_helper_.convert(item);
 	//	}

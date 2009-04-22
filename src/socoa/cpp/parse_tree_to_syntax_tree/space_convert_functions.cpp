@@ -26,26 +26,26 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace parse_tree_to_syntax_tree
 {
 
-boost::optional<syntax_tree::space>
+boost::optional<syntax_nodes::space>
 convert_previous_space(const tree_node_iterator_t& i)
 {
 	tree_node_iterator_t it = i;
 	--it;
 	if(get_id(*it) == id_t::SPACE)
-		return convert_node<syntax_tree::space>(*it);
+		return convert_node<syntax_nodes::space>(*it);
 	else
-		return boost::optional<syntax_tree::space>();
+		return boost::optional<syntax_nodes::space>();
 }
 
-boost::optional<syntax_tree::space>
+boost::optional<syntax_nodes::space>
 convert_next_space(const tree_node_iterator_t& i)
 {
 	tree_node_iterator_t it = i;
 	++it;
 	if(get_id(*it) == id_t::SPACE)
-		return convert_node<syntax_tree::space>(*it);
+		return convert_node<syntax_nodes::space>(*it);
 	else
-		return boost::optional<syntax_tree::space>();
+		return boost::optional<syntax_nodes::space>();
 }
 
 }}} //namespace socoa::cpp::parse_tree_to_syntax_tree

@@ -30,7 +30,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "name_lookup.hpp"
 
 using namespace boost::spirit;
-using namespace socoa::cpp::syntax_tree;
+using namespace socoa::cpp::syntax_nodes;
 using namespace socoa::util;
 
 namespace socoa { namespace cpp
@@ -54,7 +54,7 @@ syntax_analyzer::syntax_analyzer():
 {
 }
 
-syntax_tree_t
+syntax_tree
 syntax_analyzer::operator()(const std::string& input)
 {
     input_ = &input;
@@ -65,7 +65,7 @@ syntax_analyzer::operator()(const std::string& input)
     return analyze(input);
 }
 
-syntax_tree_t
+syntax_tree
 syntax_analyzer::analyze(const std::string& input)
 {
 	currently_analyzed_partial_input_ = &input;
@@ -168,18 +168,18 @@ syntax_analyzer::parse_type_name(const scanner_t& scan)
 		//Analyze the source code's syntax
 		//
 		std::cout << "Syntax analysis:\n";
-		syntax_tree_t syntax_tree = analyze(partial_input);
+		syntax_tree syntax_nodes = analyze(partial_input);
 
 		//
 		//Analyze the source code's semantic
 		//
 		std::cout << "Semantic analysis:\n";
-		semantic_graph_t semantic_graph = semantic_analyzer_(syntax_tree);
+		semantic_graph semantic_nodes = semantic_analyzer_(syntax_nodes);
 
 		//
 		//Get the scope from where to find the given type name.
 		//
-		semantic_graph::scope* scope = &semantic_graph;
+		semantic_nodes::scope* scope = &semantic_nodes;
 		for(unsigned int i = 0; i < closed_scope_count; ++i)
 		{
 			if(!scope->scopes().empty()) ///\todo should be an assert when scope tree construction implementation will be full
@@ -191,7 +191,7 @@ syntax_analyzer::parse_type_name(const scanner_t& scan)
 		//
 		//Check whether the name is really a type name.
 		//
-		const semantic_graph::named_entity* const item = name_lookup::find_unqualified_name(*scope, name);
+		const semantic_nodes::named_entity* const item = name_lookup::find_unqualified_name(*scope, name);
 		if(item && item->is_a_type())
 		{
 			std::cout << "'" << name << "' is a type name.\n";

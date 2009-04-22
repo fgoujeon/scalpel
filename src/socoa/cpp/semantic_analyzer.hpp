@@ -38,129 +38,129 @@ class semantic_analyzer
     public:
 		semantic_analyzer();
 
-		semantic_graph_t
-		operator()(const syntax_tree_t& tree);
+		semantic_graph
+		operator()(const syntax_tree& tree);
 
 	private:
         void
-		convert(const syntax_tree::class_head& item);
+		convert(const syntax_nodes::class_head& item);
 
         void
-		convert(const syntax_tree::class_specifier& item);
+		convert(const syntax_nodes::class_specifier& item);
 
         void
-		convert(const syntax_tree::conversion_function_id& item);
+		convert(const syntax_nodes::conversion_function_id& item);
 
         void
-		convert(const syntax_tree::ctor_initializer& item);
+		convert(const syntax_nodes::ctor_initializer& item);
 
         void
-		convert(const syntax_tree::cv_qualifier& item);
+		convert(const syntax_nodes::cv_qualifier& item);
 
         void
-		convert(const syntax_tree::declarator& item);
+		convert(const syntax_nodes::declarator& item);
 
         void
-		convert(const syntax_tree::destructor_name& item);
+		convert(const syntax_nodes::destructor_name& item);
 
         void
-		convert(const syntax_tree::direct_declarator& item);
+		convert(const syntax_nodes::direct_declarator& item);
 
         void
-		convert(const syntax_tree::direct_declarator::array_part& item);
+		convert(const syntax_nodes::direct_declarator::array_part& item);
 
         void
-		convert(const syntax_tree::direct_declarator::function_part& item);
+		convert(const syntax_nodes::direct_declarator::function_part& item);
 
         void
-		convert(const syntax_tree::elaborated_type_specifier& item);
+		convert(const syntax_nodes::elaborated_type_specifier& item);
 
         void
-		convert(const syntax_tree::function_definition& item);
+		convert(const syntax_nodes::function_definition& item);
 
         void
-		convert(const syntax_tree::identifier& item);
+		convert(const syntax_nodes::identifier& item);
 
         void
-		convert(const syntax_tree::init_declarator& item);
+		convert(const syntax_nodes::init_declarator& item);
 
         void
-		convert(const syntax_tree::mem_initializer& item);
+		convert(const syntax_nodes::mem_initializer& item);
 
         void
-		convert(const syntax_tree::member_declaration_function_definition& item);
+		convert(const syntax_nodes::member_declaration_function_definition& item);
 
         void
-		convert(const syntax_tree::member_declaration_member_declarator_list& item);
+		convert(const syntax_nodes::member_declaration_member_declarator_list& item);
 
         void
-		convert(const syntax_tree::member_declaration_unqualified_id& item);
+		convert(const syntax_nodes::member_declaration_unqualified_id& item);
 
         void
-		convert(const syntax_tree::member_declarator_bit_field_member& item);
+		convert(const syntax_nodes::member_declarator_bit_field_member& item);
 
         void
-		convert(const syntax_tree::member_declarator_declarator& item);
+		convert(const syntax_nodes::member_declarator_declarator& item);
 
         void
-		convert(const syntax_tree::member_specification& item);
+		convert(const syntax_nodes::member_specification& item);
 
         void
-		convert(const syntax_tree::member_specification_access_specifier& item);
+		convert(const syntax_nodes::member_specification_access_specifier& item);
 
         void
-		convert(const syntax_tree::namespace_definition& item);
+		convert(const syntax_nodes::namespace_definition& item);
 
         void
-		convert(const syntax_tree::nested_identifier_or_template_id& item);
+		convert(const syntax_nodes::nested_identifier_or_template_id& item);
 
         void
-		convert(const syntax_tree::nested_name_specifier& item);
+		convert(const syntax_nodes::nested_name_specifier& item);
 
         void
-		convert(const syntax_tree::nested_name_specifier::next_part& item);
+		convert(const syntax_nodes::nested_name_specifier::next_part& item);
 
         void
-		convert(const syntax_tree::operator_function_id& item);
+		convert(const syntax_nodes::operator_function_id& item);
 
         void
-		convert(const syntax_tree::parameter_declaration& item);
+		convert(const syntax_nodes::parameter_declaration& item);
 
         void
-		convert(const syntax_tree::parameter_declaration_clause& item);
+		convert(const syntax_nodes::parameter_declaration_clause& item);
 
         void
-		convert(const syntax_tree::ptr_operator& item);
+		convert(const syntax_nodes::ptr_operator& item);
 
         void
-		convert(const syntax_tree::qualified_identifier& item);
+		convert(const syntax_nodes::qualified_identifier& item);
 
         void
-		convert(const syntax_tree::qualified_nested_id& item);
+		convert(const syntax_nodes::qualified_nested_id& item);
 
         void
-		convert(const syntax_tree::qualified_operator_function_id& item);
+		convert(const syntax_nodes::qualified_operator_function_id& item);
 
         void
-		convert(const syntax_tree::qualified_template_id& item);
+		convert(const syntax_nodes::qualified_template_id& item);
 
         void
-		convert(const syntax_tree::simple_declaration& item);
+		convert(const syntax_nodes::simple_declaration& item);
 
         void
-		convert(const syntax_tree::simple_template_type_specifier& item);
+		convert(const syntax_nodes::simple_template_type_specifier& item);
 
         void
-		convert(const syntax_tree::template_declaration& item);
+		convert(const syntax_nodes::template_declaration& item);
 
         void
-		convert(const syntax_tree::template_id& item);
+		convert(const syntax_nodes::template_id& item);
 
         void
-		convert(const syntax_tree::using_declaration& item);
+		convert(const syntax_nodes::using_declaration& item);
 
         void
-		convert(const syntax_tree::using_directive& item);
+		convert(const syntax_nodes::using_directive& item);
 
 		template<const std::vector<std::string>& StringList>
 		void

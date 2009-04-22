@@ -31,7 +31,7 @@ template<class T>																				\
 struct node_converter_from_id<T, grammar::parser_id::id>								\
 {																								\
 	static																						\
-	syntax_tree::return_type																	\
+	syntax_nodes::return_type																	\
 	convert(const tree_node_t& node)															\
 	{																							\
 		return convert_##convert_function(node);												\
@@ -40,10 +40,10 @@ struct node_converter_from_id<T, grammar::parser_id::id>								\
 
 #define SOCOA_CPP_GENERATE_NODE_CONVERTER_FROM_TYPE_SPECIALIZATION(return_type, convert_function)\
 template<>																						\
-struct node_converter_from_type<syntax_tree::return_type>										\
+struct node_converter_from_type<syntax_nodes::return_type>										\
 {																								\
 	static																						\
-	syntax_tree::return_type																	\
+	syntax_nodes::return_type																	\
 	convert(const tree_node_t& node)															\
 	{																							\
 		return convert_##convert_function(node);												\
@@ -64,7 +64,7 @@ template<class T, int ParserId>
 struct node_converter_from_id;
 
 /**
-Calls the convert_* function corresponding to the given syntax_tree node type.
+Calls the convert_* function corresponding to the given syntax node type.
 */
 template<class T>
 struct node_converter_from_type;
@@ -83,13 +83,13 @@ struct node_converter_from_type
 
 //specialization for string enumerations
 template<const std::vector<std::string>& StringList>
-struct node_converter_from_type<syntax_tree::string_enumeration_node<StringList>>
+struct node_converter_from_type<syntax_nodes::string_enumeration_node<StringList>>
 {
 	static
-	syntax_tree::string_enumeration_node<StringList>
+	syntax_nodes::string_enumeration_node<StringList>
 	convert(const tree_node_t& node)
 	{
-		return convert_string_enumeration<syntax_tree::string_enumeration_node<StringList>>(node);
+		return convert_string_enumeration<syntax_nodes::string_enumeration_node<StringList>>(node);
 	}
 };
 
@@ -140,7 +140,7 @@ SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
 (
 	BUILT_IN_TYPE_SPECIFIER,
 	built_in_type_specifier,
-	string_enumeration<syntax_tree::built_in_type_specifier>
+	string_enumeration<syntax_nodes::built_in_type_specifier>
 )
 SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
 (
@@ -291,7 +291,7 @@ SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
 (
 	FUNCTION_SPECIFIER,
 	function_specifier,
-	string_enumeration<syntax_tree::function_specifier>
+	string_enumeration<syntax_nodes::function_specifier>
 )
 SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
 (
@@ -559,7 +559,7 @@ SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
 (
 	STORAGE_CLASS_SPECIFIER,
 	storage_class_specifier,
-	string_enumeration<syntax_tree::storage_class_specifier>
+	string_enumeration<syntax_nodes::storage_class_specifier>
 )
 SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
 (

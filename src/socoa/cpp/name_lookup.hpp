@@ -28,14 +28,14 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace name_lookup
 {
 
-const semantic_graph::named_entity*
-find_unqualified_name(const semantic_graph::scope& current_scope, const std::string& name);
+const semantic_nodes::named_entity*
+find_unqualified_name(const semantic_nodes::scope& current_scope, const std::string& name);
 
-semantic_graph::scope*
+semantic_nodes::scope*
 find_scope
 (
-	semantic_graph::scope& current_scope,
-	const syntax_tree::nested_name_specifier& nested_name_specifier
+	semantic_nodes::scope& current_scope,
+	const syntax_nodes::nested_name_specifier& nested_name_specifier
 );
 
 }}} //namespace socoa::cpp::name_lookup

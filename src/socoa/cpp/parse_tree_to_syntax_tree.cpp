@@ -27,10 +27,10 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp
 {
 
-using namespace socoa::cpp::syntax_tree;
+using namespace socoa::cpp::syntax_nodes;
 using namespace socoa::cpp::parse_tree_to_syntax_tree;
 
-syntax_tree_t
+syntax_tree
 convert_parse_tree_to_syntax_tree(const tree_node_t& node)
 {
 	const tree_node_t& child_node = get_only_child_node(node);
@@ -43,7 +43,7 @@ convert_parse_tree_to_syntax_tree(const tree_node_t& node)
 	}
 	else
 	{
-		return syntax_tree_t();
+		return syntax_tree();
 	}
 }
 

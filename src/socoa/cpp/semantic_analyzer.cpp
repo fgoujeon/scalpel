@@ -26,19 +26,19 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp
 {
 
-using namespace syntax_tree;
-using namespace semantic_graph;
+using namespace syntax_nodes;
+using namespace semantic_nodes;
 
 semantic_analyzer::semantic_analyzer():
 	conversion_helper_(*this)
 {
 }
 
-semantic_graph_t
-semantic_analyzer::operator()(const syntax_tree_t& tree)
+semantic_graph
+semantic_analyzer::operator()(const syntax_tree& tree)
 {
 	//create global namespace
-	semantic_graph_t global_namespace;
+	semantic_graph global_namespace;
 
 	//current scope = global namespace
 	scope_cursor_.initialize(global_namespace);

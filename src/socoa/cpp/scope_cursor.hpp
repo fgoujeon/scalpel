@@ -22,11 +22,11 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SCOPE_CURSOR_HPP
 
 #include <boost/noncopyable.hpp>
-#include "semantic_graph/scope.hpp"
-#include "semantic_graph/scope_visitor.hpp"
-#include "semantic_graph/namespace_.hpp"
-#include "semantic_graph/class_.hpp"
-#include "semantic_graph/function.hpp"
+#include "semantic_nodes/scope.hpp"
+#include "semantic_nodes/scope_visitor.hpp"
+#include "semantic_nodes/namespace_.hpp"
+#include "semantic_nodes/class_.hpp"
+#include "semantic_nodes/function.hpp"
 
 namespace socoa { namespace cpp
 {
@@ -43,25 +43,25 @@ class scope_cursor: public boost::noncopyable
 		scope_cursor();
 
 		void
-		initialize(semantic_graph::scope& a_scope);
+		initialize(semantic_nodes::scope& a_scope);
 
-		semantic_graph::scope&
+		semantic_nodes::scope&
 		get_global_scope();
 
-		semantic_graph::scope&
+		semantic_nodes::scope&
 		get_current_scope();
 
 		void
-		add_to_current_scope(semantic_graph::namespace_&& o);
+		add_to_current_scope(semantic_nodes::namespace_&& o);
 
 		void
-		add_to_current_scope(semantic_graph::class_&& o);
+		add_to_current_scope(semantic_nodes::class_&& o);
 
 		void
-		add_to_current_scope(semantic_graph::function&& o);
+		add_to_current_scope(semantic_nodes::function&& o);
 
 		void
-		add_to_current_scope(semantic_graph::variable&& o);
+		add_to_current_scope(semantic_nodes::variable&& o);
 
 		void
 		enter_last_added_scope();
@@ -70,81 +70,81 @@ class scope_cursor: public boost::noncopyable
 		leave_scope();
 
 	private:
-		semantic_graph::scope* global_scope_;
-		semantic_graph::scope* current_scope_;
-		semantic_graph::scope* last_added_scope_;
+		semantic_nodes::scope* global_scope_;
+		semantic_nodes::scope* current_scope_;
+		semantic_nodes::scope* last_added_scope_;
 };
 
-class scope_cursor::namespace_adder: public semantic_graph::scope_visitor
+class scope_cursor::namespace_adder: public semantic_nodes::scope_visitor
 {
 	public:
-		namespace_adder(semantic_graph::namespace_&& n);
+		namespace_adder(semantic_nodes::namespace_&& n);
 
 		void
-		visit(semantic_graph::namespace_& o);
+		visit(semantic_nodes::namespace_& o);
 
 		void
-		visit(semantic_graph::class_& o);
+		visit(semantic_nodes::class_& o);
 
 		void
-		visit(semantic_graph::function& o);
+		visit(semantic_nodes::function& o);
 
 	private:
-		semantic_graph::namespace_ n_;
+		semantic_nodes::namespace_ n_;
 };
 
-class scope_cursor::class_adder: public semantic_graph::scope_visitor
+class scope_cursor::class_adder: public semantic_nodes::scope_visitor
 {
 	public:
-		class_adder(semantic_graph::class_&& c);
+		class_adder(semantic_nodes::class_&& c);
 
 		void
-		visit(semantic_graph::namespace_& o);
+		visit(semantic_nodes::namespace_& o);
 
 		void
-		visit(semantic_graph::class_& o);
+		visit(semantic_nodes::class_& o);
 
 		void
-		visit(semantic_graph::function& o);
+		visit(semantic_nodes::function& o);
 
 	private:
-		semantic_graph::class_ c_;
+		semantic_nodes::class_ c_;
 };
 
-class scope_cursor::function_adder: public semantic_graph::scope_visitor
+class scope_cursor::function_adder: public semantic_nodes::scope_visitor
 {
 	public:
-		function_adder(semantic_graph::function&& f);
+		function_adder(semantic_nodes::function&& f);
 
 		void
-		visit(semantic_graph::namespace_& o);
+		visit(semantic_nodes::namespace_& o);
 
 		void
-		visit(semantic_graph::class_& o);
+		visit(semantic_nodes::class_& o);
 
 		void
-		visit(semantic_graph::function& o);
+		visit(semantic_nodes::function& o);
 
 	private:
-		semantic_graph::function f_;
+		semantic_nodes::function f_;
 };
 
-class scope_cursor::variable_adder: public semantic_graph::scope_visitor
+class scope_cursor::variable_adder: public semantic_nodes::scope_visitor
 {
 	public:
-		variable_adder(semantic_graph::variable&& v);
+		variable_adder(semantic_nodes::variable&& v);
 
 		void
-		visit(semantic_graph::namespace_& o);
+		visit(semantic_nodes::namespace_& o);
 
 		void
-		visit(semantic_graph::class_& o);
+		visit(semantic_nodes::class_& o);
 
 		void
-		visit(semantic_graph::function& o);
+		visit(semantic_nodes::function& o);
 
 	private:
-		semantic_graph::variable v_;
+		semantic_nodes::variable v_;
 };
 
 }} //namespace socoa::cpp

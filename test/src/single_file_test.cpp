@@ -59,7 +59,7 @@ single_file_test::parse_files(const std::string& test_directory)
 
 		//analyze file
 		std::cout << "---\nParsing " << file_name_oss.str() << "...\n---\n";
-        socoa::cpp::syntax_tree_t tree = m_syntax_analyzer(buffer.str()); //throws an exception if parsing fails
+        socoa::cpp::syntax_tree tree = m_syntax_analyzer(buffer.str()); //throws an exception if parsing fails
         std::cout << "---\n" << file_name_oss.str() << "'s content reconstruction:\n---\n";
         std::cout << tree.raw_code();
         std::cout << "\n\n";

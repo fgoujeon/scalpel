@@ -35,20 +35,20 @@ scope_cursor::scope_cursor():
 }
 
 void
-scope_cursor::initialize(semantic_graph::scope& a_scope)
+scope_cursor::initialize(semantic_nodes::scope& a_scope)
 {
 	global_scope_ = &a_scope;
 	current_scope_ = &a_scope;
 }
 
-semantic_graph::scope&
+semantic_nodes::scope&
 scope_cursor::get_global_scope()
 {
 	assert(global_scope_);
 	return *global_scope_;
 }
 
-semantic_graph::scope&
+semantic_nodes::scope&
 scope_cursor::get_current_scope()
 {
 	assert(current_scope_);
@@ -56,28 +56,28 @@ scope_cursor::get_current_scope()
 }
 
 void
-scope_cursor::add_to_current_scope(semantic_graph::namespace_&& o)
+scope_cursor::add_to_current_scope(semantic_nodes::namespace_&& o)
 {
 	namespace_adder v(o);
 	current_scope_->accept(v);
 }
 
 void
-scope_cursor::add_to_current_scope(semantic_graph::class_&& o)
+scope_cursor::add_to_current_scope(semantic_nodes::class_&& o)
 {
 	class_adder v(o);
 	current_scope_->accept(v);
 }
 
 void
-scope_cursor::add_to_current_scope(semantic_graph::function&& o)
+scope_cursor::add_to_current_scope(semantic_nodes::function&& o)
 {
 	function_adder v(o);
 	current_scope_->accept(v);
 }
 
 void
-scope_cursor::add_to_current_scope(semantic_graph::variable&& o)
+scope_cursor::add_to_current_scope(semantic_nodes::variable&& o)
 {
 	variable_adder v(o);
 	current_scope_->accept(v);
@@ -102,25 +102,25 @@ scope_cursor::leave_scope()
 //scope_cursor::namespace_adder
 //
 
-scope_cursor::namespace_adder::namespace_adder(semantic_graph::namespace_&& n):
+scope_cursor::namespace_adder::namespace_adder(semantic_nodes::namespace_&& n):
 	n_(std::move(n))
 {
 }
 
 void
-scope_cursor::namespace_adder::visit(semantic_graph::namespace_& o)
+scope_cursor::namespace_adder::visit(semantic_nodes::namespace_& o)
 {
 	o.add(n_);
 }
 
 void
-scope_cursor::namespace_adder::visit(semantic_graph::class_&)
+scope_cursor::namespace_adder::visit(semantic_nodes::class_&)
 {
 	assert(false);
 }
 
 void
-scope_cursor::namespace_adder::visit(semantic_graph::function&)
+scope_cursor::namespace_adder::visit(semantic_nodes::function&)
 {
 	assert(false);
 }
@@ -130,25 +130,25 @@ scope_cursor::namespace_adder::visit(semantic_graph::function&)
 //scope_cursor::class_adder
 //
 
-scope_cursor::class_adder::class_adder(semantic_graph::class_&& c):
+scope_cursor::class_adder::class_adder(semantic_nodes::class_&& c):
 	c_(std::move(c))
 {
 }
 
 void
-scope_cursor::class_adder::visit(semantic_graph::namespace_& o)
+scope_cursor::class_adder::visit(semantic_nodes::namespace_& o)
 {
 	o.add(c_);
 }
 
 void
-scope_cursor::class_adder::visit(semantic_graph::class_& o)
+scope_cursor::class_adder::visit(semantic_nodes::class_& o)
 {
 	o.add(c_);
 }
 
 void
-scope_cursor::class_adder::visit(semantic_graph::function&)
+scope_cursor::class_adder::visit(semantic_nodes::function&)
 {
 	assert(false);
 }
@@ -158,25 +158,25 @@ scope_cursor::class_adder::visit(semantic_graph::function&)
 //scope_cursor::function_adder
 //
 
-scope_cursor::function_adder::function_adder(semantic_graph::function&& f):
+scope_cursor::function_adder::function_adder(semantic_nodes::function&& f):
 	f_(std::move(f))
 {
 }
 
 void
-scope_cursor::function_adder::visit(semantic_graph::namespace_& o)
+scope_cursor::function_adder::visit(semantic_nodes::namespace_& o)
 {
 	o.add(f_);
 }
 
 void
-scope_cursor::function_adder::visit(semantic_graph::class_& o)
+scope_cursor::function_adder::visit(semantic_nodes::class_& o)
 {
 	o.add(f_);
 }
 
 void
-scope_cursor::function_adder::visit(semantic_graph::function&)
+scope_cursor::function_adder::visit(semantic_nodes::function&)
 {
 	assert(false);
 }
@@ -186,25 +186,25 @@ scope_cursor::function_adder::visit(semantic_graph::function&)
 //scope_cursor::variable_adder
 //
 
-scope_cursor::variable_adder::variable_adder(semantic_graph::variable&& v):
+scope_cursor::variable_adder::variable_adder(semantic_nodes::variable&& v):
 	v_(std::move(v))
 {
 }
 
 void
-scope_cursor::variable_adder::visit(semantic_graph::namespace_& o)
+scope_cursor::variable_adder::visit(semantic_nodes::namespace_& o)
 {
 	o.add(v_);
 }
 
 void
-scope_cursor::variable_adder::visit(semantic_graph::class_& o)
+scope_cursor::variable_adder::visit(semantic_nodes::class_& o)
 {
 	o.add(v_);
 }
 
 void
-scope_cursor::variable_adder::visit(semantic_graph::function& o)
+scope_cursor::variable_adder::visit(semantic_nodes::function& o)
 {
 	o.add(v_);
 }

@@ -26,8 +26,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace name_lookup
 {
 
-using namespace syntax_tree;
-using namespace semantic_graph;
+using namespace syntax_nodes;
+using namespace semantic_nodes;
 
 const named_entity*
 find_unqualified_name(const scope& current_scope, const std::string& name, bool recursive);
@@ -80,7 +80,7 @@ find_unqualified_name(const scope& current_scope, const std::string& name, bool 
             current_scope.has_enclosing_scope() //is there at least an enclosing scope?
         )
         {
-            const semantic_graph::named_entity* found_symbol = find_unqualified_name(current_scope.enclosing_scope(), name, true);
+            const semantic_nodes::named_entity* found_symbol = find_unqualified_name(current_scope.enclosing_scope(), name, true);
             if(found_symbol)
             {
                 return found_symbol;
@@ -103,7 +103,7 @@ find_unqualified_name(const scope& current_scope, const std::string& name, bool 
 //        {
 //            const base_specifier& base_spec = *i;
 //            const std::shared_ptr<class_> base_class = base_spec.get_class();
-//            const std::shared_ptr<semantic_graph::named_entity> found_symbol = find_unqualified_name(base_class, name, false);
+//            const std::shared_ptr<semantic_nodes::named_entity> found_symbol = find_unqualified_name(base_class, name, false);
 //            if(found_symbol)
 //            {
 //                return found_symbol;
@@ -115,7 +115,7 @@ find_unqualified_name(const scope& current_scope, const std::string& name, bool 
     return 0;
 }
 
-semantic_graph::scope*
+semantic_nodes::scope*
 find_scope
 (
 	scope& current_scope,

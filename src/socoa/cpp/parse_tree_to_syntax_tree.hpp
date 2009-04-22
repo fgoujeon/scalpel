@@ -27,7 +27,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp
 {
 
-syntax_tree_t
+syntax_tree
 convert_parse_tree_to_syntax_tree(const parse_tree_to_syntax_tree::tree_node_t& node);
 
 }} //namespace socoa::cpp
