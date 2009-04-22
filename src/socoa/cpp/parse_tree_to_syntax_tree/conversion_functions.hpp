@@ -108,6 +108,9 @@ convert_direct_declarator_function_part(const tree_node_t& node);
 syntax_nodes::direct_declarator::next_part
 convert_direct_declarator_next_part(const tree_node_t& node);
 
+syntax_nodes::do_while_statement
+convert_do_while_statement(const tree_node_t& node);
+
 syntax_nodes::elaborated_type_specifier
 convert_elaborated_type_specifier(const tree_node_t& node);
 
@@ -116,6 +119,9 @@ convert_expression_statement(const tree_node_t& node);
 
 syntax_nodes::floating_literal
 convert_floating_literal(const tree_node_t& node);
+
+syntax_nodes::for_statement
+convert_for_statement(const tree_node_t& node);
 
 syntax_nodes::function_definition
 convert_function_definition(const tree_node_t& node);
@@ -284,6 +290,9 @@ convert_using_declaration(const tree_node_t& node);
 
 syntax_nodes::using_directive
 convert_using_directive(const tree_node_t& node);
+
+syntax_nodes::while_statement
+convert_while_statement(const tree_node_t& node);
 
 }}} //namespace socoa::cpp
 

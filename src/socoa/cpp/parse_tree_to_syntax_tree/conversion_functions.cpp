@@ -1142,6 +1142,14 @@ convert_delete_expression(const tree_node_t& node)
 	return delete_expression();
 }
 
+do_while_statement
+convert_do_while_statement(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::DO_WHILE_STATEMENT);
+
+	return do_while_statement();
+}
+
 expression_statement
 convert_expression_statement(const tree_node_t& node)
 {
@@ -1170,6 +1178,99 @@ convert_floating_literal(const tree_node_t& node)
     assert(node.value.id() == id_t::FLOATING_LITERAL);
 
 	return floating_literal();
+}
+
+for_statement
+convert_for_statement(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::FOR_STATEMENT);
+
+	boost::optional<space> post_for_keyword_space_node;
+	boost::optional<space> post_opening_bracket_space_node;
+	//boost::optional<for_init_statement> for_init_statement_node;
+	boost::optional<space> post_for_init_statement_space_node;
+	//boost::optional<condition> condition_node;
+	boost::optional<space> post_condition_space_node;
+	boost::optional<space> post_semicolon_space_node;
+	boost::optional<expression> expression_node;
+	boost::optional<space> post_expression_space_node;
+	boost::optional<space> post_closing_bracket_space_node;
+
+	tree_node_iterator_t i = node.children.begin();
+	++i;
+	if(i->value.id() == id_t::SPACE)
+	{
+		post_for_keyword_space_node = convert_node<space>(*i);
+		++i;
+	}
+
+	++i;
+	if(i->value.id() == id_t::SPACE)
+	{
+		post_opening_bracket_space_node = convert_node<space>(*i);
+		++i;
+	}
+
+	assert(i->value.id() == id_t::FOR_INIT_STATEMENT);
+	//for_init_statement_node = convert_node<for_init_statement>(*i);
+
+	++i;
+	if(i->value.id() == id_t::SPACE)
+	{
+		post_for_init_statement_space_node = convert_node<space>(*i);
+		++i;
+	}
+
+	if(i->value.id() == id_t::CONDITION)
+	{
+		//condition_node = convert_node<condition>(*i);
+		++i;
+		if(i->value.id() == id_t::SPACE)
+		{
+			post_condition_space_node = convert_node<space>(*i);
+			++i;
+		}
+	}
+
+	++i;
+	if(i->value.id() == id_t::SPACE)
+	{
+		post_semicolon_space_node = convert_node<space>(*i);
+		++i;
+	}
+
+	if(i->value.id() == id_t::EXPRESSION)
+	{
+//		expression_node = convert_node<expression>(*i);
+		++i;
+		if(i->value.id() == id_t::SPACE)
+		{
+			post_expression_space_node = convert_node<space>(*i);
+			++i;
+		}
+	}
+
+	++i;
+	if(i->value.id() == id_t::SPACE)
+	{
+		post_closing_bracket_space_node = convert_node<space>(*i);
+		++i;
+	}
+
+	return for_statement
+	(
+		post_for_keyword_space_node,
+		post_opening_bracket_space_node,
+		//for_init_statement_node,
+		post_for_init_statement_space_node,
+		//condition_node,
+		post_condition_space_node,
+		post_semicolon_space_node,
+		expression_node,
+		post_expression_space_node,
+		post_closing_bracket_space_node,
+		find_and_convert_node<statement, id_t::STATEMENT>(node)
+	);
 }
 
 goto_statement
@@ -1210,7 +1311,13 @@ convert_iteration_statement(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::ITERATION_STATEMENT);
 
-	return iteration_statement();
+	return convert_alternative
+	<
+		iteration_statement,
+		id_t::WHILE_STATEMENT,
+		id_t::DO_WHILE_STATEMENT,
+		id_t::FOR_STATEMENT
+	>(node);
 }
 
 jump_statement
@@ -1420,6 +1527,14 @@ convert_unary_expression(const tree_node_t& node)
 		id_t::NEW_EXPRESSION,
 		id_t::DELETE_EXPRESSION
 	>(node);
+}
+
+while_statement
+convert_while_statement(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::WHILE_STATEMENT);
+
+	return while_statement();
 }
 
 }}} //namespace socoa::cpp

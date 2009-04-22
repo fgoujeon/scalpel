@@ -18,26 +18,32 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_NODES_ITERATION_STATEMENT_HPP
-#define SOCOA_CPP_SYNTAX_NODES_ITERATION_STATEMENT_HPP
+#ifndef SOCOA_CPP_SYNTAX_NODES_DO_WHILE_STATEMENT_HPP
+#define SOCOA_CPP_SYNTAX_NODES_DO_WHILE_STATEMENT_HPP
 
-#include "alternative_node.hpp"
-#include "while_statement.hpp"
-#include "do_while_statement.hpp"
-#include "for_statement.hpp"
+#include "composite_node.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
-typedef
-	alternative_node
-	<
-		while_statement,
-		do_while_statement,
-		for_statement
-	>
-	iteration_statement
-;
+class do_while_statement: public composite_node
+{
+	public:
+		do_while_statement
+		(
+		);
+
+		do_while_statement(const do_while_statement& o);
+
+		do_while_statement(do_while_statement&& o);
+
+		const do_while_statement&
+		operator=(const do_while_statement& o);
+
+	private:
+		void
+		update_node_list();
+};
 
 }}} //namespace socoa::cpp::syntax_nodes
 

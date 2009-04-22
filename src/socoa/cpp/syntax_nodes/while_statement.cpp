@@ -18,32 +18,32 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "iteration_statement.hpp"
+#include "while_statement.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
-iteration_statement::iteration_statement
+while_statement::while_statement
 (
 )
 {
 	update_node_list();
 }
 
-iteration_statement::iteration_statement(const iteration_statement& o):
+while_statement::while_statement(const while_statement& o):
 	composite_node()
 {
 	update_node_list();
 }
 
-iteration_statement::iteration_statement(iteration_statement&& o):
+while_statement::while_statement(while_statement&& o):
 	composite_node()
 {
 	update_node_list();
 }
 
-const iteration_statement&
-iteration_statement::operator=(const iteration_statement& o)
+const while_statement&
+while_statement::operator=(const while_statement& o)
 {
 	update_node_list();
 
@@ -51,7 +51,7 @@ iteration_statement::operator=(const iteration_statement& o)
 }
 
 void
-iteration_statement::update_node_list()
+while_statement::update_node_list()
 {
 	clear();
 }

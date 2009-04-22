@@ -18,11 +18,11 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <iostream>
 #include <sstream>
 #include <iomanip>
 #include <stdexcept>
 #include <fstream>
-#include <boost/spirit.hpp>
 
 #include "single_file_test.hpp"
 
@@ -58,11 +58,24 @@ single_file_test::parse_files(const std::string& test_directory)
         file.close();
 
 		//analyze file
-		std::cout << "---\nParsing " << file_name_oss.str() << "...\n---\n";
+		std::cout << "Analyzing " << file_name_oss.str() << "...\n";
         socoa::cpp::syntax_tree tree = m_syntax_analyzer(buffer.str()); //throws an exception if parsing fails
-        std::cout << "---\n" << file_name_oss.str() << "'s content reconstruction:\n---\n";
-        std::cout << tree.raw_code();
-        std::cout << "\n\n";
+
+		//check syntax analysis results
+		if(buffer.str() != tree.raw_code())
+		{
+			std::cout << "Analysis error!\n";
+			std::cout << "Original content of " << file_name_oss.str() << ":\n";
+			std::cout << "***\n";
+			std::cout << buffer.str();
+			std::cout << "\n***\n";
+			std::cout << "Analysis results:\n";
+			std::cout << "***\n";
+			std::cout << tree.raw_code();
+			std::cout << "\n***\n\n";
+
+			throw "Analysis error!";
+		}
     }
 }
 

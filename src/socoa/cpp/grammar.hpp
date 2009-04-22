@@ -148,6 +148,9 @@ class grammar
             CONDITION,
             CONDITION_TYPE_SPECIFIER_SEQ,
             ITERATION_STATEMENT,
+			WHILE_STATEMENT,
+			DO_WHILE_STATEMENT,
+			FOR_STATEMENT,
             FOR_INIT_STATEMENT,
             JUMP_STATEMENT,
 			BREAK_STATEMENT,
@@ -441,6 +444,9 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CONDITION>> condition;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CONDITION_TYPE_SPECIFIER_SEQ>> condition_type_specifier_seq;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ITERATION_STATEMENT>> iteration_statement;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::WHILE_STATEMENT>> while_statement;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DO_WHILE_STATEMENT>> do_while_statement;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::FOR_STATEMENT>> for_statement;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::FOR_INIT_STATEMENT>> for_init_statement;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::JUMP_STATEMENT>> jump_statement;
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::BREAK_STATEMENT>> break_statement;

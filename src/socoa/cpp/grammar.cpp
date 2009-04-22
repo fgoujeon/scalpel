@@ -812,9 +812,21 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	iteration_statement
+		= while_statement
+		| do_while_statement
+		| for_statement
+	;
+
+	while_statement
 		= str_p("while") >> !s >> '(' >> !s >> condition >> !s >> ')' >> !s >> statement
-		| str_p("do") >> !s >> statement >> !s >> "while" >> !s >> '(' >> !s >> expression >> !s >> ')' >> !s >> ch_p(';')
-		| str_p("for") >> !s >> '(' >> !s >> for_init_statement >> !s >> !condition >> !s >> ch_p(';') >> !s >> !expression >> !s >> ')' >> !s >> statement
+	;
+
+	do_while_statement
+		= str_p("do") >> !s >> statement >> !s >> "while" >> !s >> '(' >> !s >> expression >> !s >> ')' >> !s >> ch_p(';')
+	;
+
+	for_statement
+		= str_p("for") >> !s >> '(' >> !s >> for_init_statement >> !s >> !(condition >> !s) >> ch_p(';') >> !s >> !(expression >> !s) >> ')' >> !s >> statement
 	;
 
 	for_init_statement
