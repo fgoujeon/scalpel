@@ -23,8 +23,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string>
 #include "../grammar.hpp"
-#include "convert_functions.hpp"
-#include "special_convert_functions_fwd.hpp"
+#include "conversion_functions.hpp"
+#include "special_conversion_functions_fwd.hpp"
 
 #define SOCOA_CPP_GENERATE_NODE_CONVERTER_FROM_ID_SPECIALIZATION(id, return_type, convert_function)\
 template<class T>																				\

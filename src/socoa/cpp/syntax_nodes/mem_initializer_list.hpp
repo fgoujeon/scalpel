@@ -18,8 +18,8 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_MEM_INITIALIZER_LIST_HPP
-#define SOCOA_CPP_SYNTAX_TREE_MEM_INITIALIZER_LIST_HPP
+#ifndef SOCOA_CPP_SYNTAX_NODES_MEM_INITIALIZER_LIST_HPP
+#define SOCOA_CPP_SYNTAX_NODES_MEM_INITIALIZER_LIST_HPP
 
 #include "../../util/extern_strings.hpp"
 #include "sequence_node.hpp"

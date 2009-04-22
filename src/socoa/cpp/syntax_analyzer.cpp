@@ -24,7 +24,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdexcept>
 #include <boost/spirit/tree/parse_tree.hpp>
 #include "../util/raii_affector.hpp"
-#include "parse_tree_to_syntax_tree.hpp"
+#include "parse_tree_to_syntax_tree/conversion_functions.hpp"
+#include "parse_tree_to_syntax_tree/basic_functions.hpp"
 #include "source_code_completion.hpp"
 #include "semantic_graph.hpp"
 #include "name_lookup.hpp"
@@ -87,8 +88,14 @@ syntax_analyzer::analyze(const std::string& input)
         throw std::runtime_error(failure_message.str().c_str());
     }
 
-    //convert spirit's parse tree to syntax tree
-    return convert_parse_tree_to_syntax_tree(*info.trees.begin());
+    //convert spirit's parse tree to syntax tree and return the result
+	return parse_tree_to_syntax_tree::convert_translation_unit
+	(
+		parse_tree_to_syntax_tree::get_only_child_node
+		(
+			*info.trees.begin()
+		)
+	);
 }
 
 /**

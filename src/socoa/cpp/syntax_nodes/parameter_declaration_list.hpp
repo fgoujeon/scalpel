@@ -18,8 +18,8 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_PARAMETER_DECLARATION_LIST_HPP
-#define SOCOA_CPP_SYNTAX_TREE_PARAMETER_DECLARATION_LIST_HPP
+#ifndef SOCOA_CPP_SYNTAX_NODES_PARAMETER_DECLARATION_LIST_HPP
+#define SOCOA_CPP_SYNTAX_NODES_PARAMETER_DECLARATION_LIST_HPP
 
 #include "../../util/extern_strings.hpp"
 #include "sequence_node.hpp"

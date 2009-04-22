@@ -18,8 +18,8 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_MEMBER_SPECIFICATION_ACCESS_SPECIFIER_HPP
-#define SOCOA_CPP_SYNTAX_TREE_MEMBER_SPECIFICATION_ACCESS_SPECIFIER_HPP
+#ifndef SOCOA_CPP_SYNTAX_NODES_MEMBER_SPECIFICATION_ACCESS_SPECIFIER_HPP
+#define SOCOA_CPP_SYNTAX_NODES_MEMBER_SPECIFICATION_ACCESS_SPECIFIER_HPP
 
 #include "composite_node.hpp"
 #include "access_specifier.hpp"

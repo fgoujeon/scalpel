@@ -18,8 +18,8 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_QUALIFIED_ID_HPP
-#define SOCOA_CPP_SYNTAX_TREE_QUALIFIED_ID_HPP
+#ifndef SOCOA_CPP_SYNTAX_NODES_QUALIFIED_ID_HPP
+#define SOCOA_CPP_SYNTAX_NODES_QUALIFIED_ID_HPP
 
 #include "alternative_node.hpp"
 #include "qualified_identifier.hpp"

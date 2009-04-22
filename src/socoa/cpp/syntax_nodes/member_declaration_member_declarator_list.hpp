@@ -18,8 +18,8 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_MEMBER_DECLARATION_MEMBER_DECLARATOR_LIST_HPP
-#define SOCOA_CPP_SYNTAX_TREE_MEMBER_DECLARATION_MEMBER_DECLARATOR_LIST_HPP
+#ifndef SOCOA_CPP_SYNTAX_NODES_MEMBER_DECLARATION_MEMBER_DECLARATOR_LIST_HPP
+#define SOCOA_CPP_SYNTAX_NODES_MEMBER_DECLARATION_MEMBER_DECLARATOR_LIST_HPP
 
 #include <boost/optional.hpp>
 #include "composite_node.hpp"

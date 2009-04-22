@@ -18,8 +18,8 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_MEMBER_DECLARATION_FUNCTION_DEFINITION_HPP
-#define SOCOA_CPP_SYNTAX_TREE_MEMBER_DECLARATION_FUNCTION_DEFINITION_HPP
+#ifndef SOCOA_CPP_SYNTAX_NODES_MEMBER_DECLARATION_FUNCTION_DEFINITION_HPP
+#define SOCOA_CPP_SYNTAX_NODES_MEMBER_DECLARATION_FUNCTION_DEFINITION_HPP
 
 #include "composite_node.hpp"
 #include "function_definition.hpp"

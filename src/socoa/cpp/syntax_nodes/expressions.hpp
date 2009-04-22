@@ -18,8 +18,8 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_EXPRESSIONS_HPP
-#define SOCOA_CPP_SYNTAX_TREE_EXPRESSIONS_HPP
+#ifndef SOCOA_CPP_SYNTAX_NODES_EXPRESSIONS_HPP
+#define SOCOA_CPP_SYNTAX_NODES_EXPRESSIONS_HPP
 
 #include "sequence_node.hpp"
 #include "common_nodes.hpp"

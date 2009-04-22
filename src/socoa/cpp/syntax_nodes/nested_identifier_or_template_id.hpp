@@ -18,8 +18,8 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_NESTED_IDENTIFIER_OR_TEMPLATE_ID_HPP
-#define SOCOA_CPP_SYNTAX_TREE_NESTED_IDENTIFIER_OR_TEMPLATE_ID_HPP
+#ifndef SOCOA_CPP_SYNTAX_NODES_NESTED_IDENTIFIER_OR_TEMPLATE_ID_HPP
+#define SOCOA_CPP_SYNTAX_NODES_NESTED_IDENTIFIER_OR_TEMPLATE_ID_HPP
 
 #include <boost/optional.hpp>
 #include "composite_node.hpp"

@@ -18,8 +18,8 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_MEM_INITIALIZER_ID_HPP
-#define SOCOA_CPP_SYNTAX_TREE_MEM_INITIALIZER_ID_HPP
+#ifndef SOCOA_CPP_SYNTAX_NODES_MEM_INITIALIZER_ID_HPP
+#define SOCOA_CPP_SYNTAX_NODES_MEM_INITIALIZER_ID_HPP
 
 #include "alternative_node.hpp"
 #include "nested_identifier_or_template_id.hpp"

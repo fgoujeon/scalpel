@@ -18,13 +18,13 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "convert_functions.hpp"
+#include "conversion_functions.hpp"
 
 #include "../grammar.hpp"
 #include "basic_functions.hpp"
-#include "special_convert_functions.hpp"
+#include "special_conversion_functions.hpp"
 #include "node_finder_and_converter.hpp"
-#include "space_convert_functions.hpp"
+#include "space_conversion_functions.hpp"
 
 using namespace socoa::cpp::syntax_nodes;
 

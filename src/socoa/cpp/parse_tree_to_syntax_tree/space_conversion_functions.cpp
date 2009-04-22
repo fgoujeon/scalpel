@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "space_convert_functions.hpp"
+#include "space_conversion_functions.hpp"
 
 #include "basic_functions.hpp"
 #include "generic_node_converters.hpp"
