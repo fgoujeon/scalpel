@@ -25,6 +25,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "composite_node.hpp"
 #include "space.hpp"
 #include "expression.hpp"
+#include "for_init_statement.hpp"
+#include "condition.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
@@ -45,9 +47,9 @@ class for_statement: public composite_node
 		(
 			boost::optional<space>&& post_for_keyword_space_node,
 			boost::optional<space>&& post_opening_bracket_space_node,
-			//boost::optional<for_init_statement>&& for_init_statement_node,
+			boost::optional<for_init_statement>&& for_init_statement_node,
 			boost::optional<space>&& post_for_init_statement_space_node,
-			//boost::optional<condition>&& condition_node,
+			boost::optional<condition>&& condition_node,
 			boost::optional<space>&& post_condition_space_node,
 			boost::optional<space>&& post_semicolon_space_node,
 			boost::optional<expression>&& expression_node,
@@ -69,9 +71,9 @@ class for_statement: public composite_node
 
 		boost::optional<space> post_for_keyword_space_;
 		boost::optional<space> post_opening_bracket_space_;
-		//boost::optional<for_init_statement> for_init_statement_;
+		boost::optional<for_init_statement> for_init_statement_;
 		boost::optional<space> post_for_init_statement_space_;
-		//boost::optional<condition> condition_;
+		boost::optional<condition> condition_;
 		boost::optional<space> post_condition_space_;
 		boost::optional<space> post_semicolon_space_;
 		boost::optional<expression> expression_;

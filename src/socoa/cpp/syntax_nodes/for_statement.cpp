@@ -29,9 +29,9 @@ for_statement::for_statement
 (
 	boost::optional<space>&& post_for_keyword_space_node,
 	boost::optional<space>&& post_opening_bracket_space_node,
-	//boost::optional<for_init_statement>&& for_init_statement_node,
+	boost::optional<for_init_statement>&& for_init_statement_node,
 	boost::optional<space>&& post_for_init_statement_space_node,
-	//boost::optional<condition>&& condition_node,
+	boost::optional<condition>&& condition_node,
 	boost::optional<space>&& post_condition_space_node,
 	boost::optional<space>&& post_semicolon_space_node,
 	boost::optional<expression>&& expression_node,
@@ -41,9 +41,9 @@ for_statement::for_statement
 ):
 	post_for_keyword_space_(post_for_keyword_space_node),
 	post_opening_bracket_space_(post_opening_bracket_space_node),
-	//for_init_statement_(for_init_statement_node),
+	for_init_statement_(for_init_statement_node),
 	post_for_init_statement_space_(post_for_init_statement_space_node),
-	//condition_(condition_node),
+	condition_(condition_node),
 	post_condition_space_(post_condition_space_node),
 	post_semicolon_space_(post_semicolon_space_node),
 	expression_(expression_node),
@@ -58,9 +58,9 @@ for_statement::for_statement(const for_statement& o):
 	composite_node(),
 	post_for_keyword_space_(o.post_for_keyword_space_),
 	post_opening_bracket_space_(o.post_opening_bracket_space_),
-	//for_init_statement_(o.for_init_statement_),
+	for_init_statement_(o.for_init_statement_),
 	post_for_init_statement_space_(o.post_for_init_statement_space_),
-	//condition_(o.condition_),
+	condition_(o.condition_),
 	post_condition_space_(o.post_condition_space_),
 	post_semicolon_space_(o.post_semicolon_space_),
 	expression_(o.expression_),
@@ -75,9 +75,9 @@ for_statement::for_statement(for_statement&& o):
 	composite_node(),
 	post_for_keyword_space_(std::move(o.post_for_keyword_space_)),
 	post_opening_bracket_space_(std::move(o.post_opening_bracket_space_)),
-	//for_init_statement_(std::move(o.for_init_statement_)),
+	for_init_statement_(std::move(o.for_init_statement_)),
 	post_for_init_statement_space_(std::move(o.post_for_init_statement_space_)),
-	//condition_(std::move(o.condition_)),
+	condition_(std::move(o.condition_)),
 	post_condition_space_(std::move(o.post_condition_space_)),
 	post_semicolon_space_(std::move(o.post_semicolon_space_)),
 	expression_(std::move(o.expression_)),
@@ -93,9 +93,9 @@ for_statement::operator=(const for_statement& o)
 {
 	post_for_keyword_space_ = o.post_for_keyword_space_;
 	post_opening_bracket_space_ = o.post_opening_bracket_space_;
-	//for_init_statement_ = o.for_init_statement_;
+	for_init_statement_ = o.for_init_statement_;
 	post_for_init_statement_space_ = o.post_for_init_statement_space_;
-	//condition_ = o.condition_;
+	condition_ = o.condition_;
 	post_condition_space_ = o.post_condition_space_;
 	post_semicolon_space_ = o.post_semicolon_space_;
 	expression_ = o.expression_;
@@ -116,9 +116,9 @@ for_statement::update_node_list()
 	if(post_for_keyword_space_) add(*post_for_keyword_space_);
 	add(opening_bracket);
 	if(post_opening_bracket_space_) add(*post_opening_bracket_space_);
-	//if(for_init_statement_) add(*for_init_statement_);
+	if(for_init_statement_) add(*for_init_statement_);
 	if(post_for_init_statement_space_) add(*post_for_init_statement_space_);
-	//if(condition_) add(*condition_);
+	if(condition_) add(*condition_);
 	if(post_condition_space_) add(*post_condition_space_);
 	add(semicolon);
 	if(post_semicolon_space_) add(*post_semicolon_space_);

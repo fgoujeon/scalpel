@@ -18,16 +18,12 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_NODES_UNARY_EXPRESSION_HPP
-#define SOCOA_CPP_SYNTAX_NODES_UNARY_EXPRESSION_HPP
+#ifndef SOCOA_CPP_SYNTAX_NODES_CONDITION_HPP
+#define SOCOA_CPP_SYNTAX_NODES_CONDITION_HPP
 
 #include "alternative_node.hpp"
-#include "unary_operator_unary_expression.hpp"
-#include "type_id_sizeof_expression.hpp"
-#include "unary_sizeof_expression.hpp"
-#include "postfix_expression.hpp"
-#include "new_expression.hpp"
-#include "delete_expression.hpp"
+#include "expression.hpp"
+#include "assignment_expression_condition.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
@@ -35,14 +31,10 @@ namespace socoa { namespace cpp { namespace syntax_nodes
 typedef
 	alternative_node
 	<
-		unary_operator_unary_expression,
-		type_id_sizeof_expression,
-		unary_sizeof_expression,
-		postfix_expression,
-		new_expression,
-		delete_expression
+		expression,
+		assignment_expression_condition
 	>
-	unary_expression
+	condition
 ;
 
 }}} //namespace socoa::cpp::syntax_nodes

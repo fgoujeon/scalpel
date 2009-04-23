@@ -23,12 +23,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string>
 #include "../grammar.hpp"
+#include "../syntax_tree.hpp"
 #include "conversion_functions.hpp"
 #include "special_conversion_functions_fwd.hpp"
 
 #define SOCOA_CPP_GENERATE_NODE_CONVERTER_FROM_ID_SPECIALIZATION(id, return_type, convert_function)\
 template<class T>																				\
-struct node_converter_from_id<T, grammar::parser_id::id>								\
+struct node_converter_from_id<T, grammar::parser_id::id>										\
 {																								\
 	static																						\
 	syntax_nodes::return_type																	\
@@ -103,6 +104,12 @@ SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
 )
 SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
 (
+	ASSIGNMENT_EXPRESSION_CONDITION,
+	assignment_expression_condition,
+	assignment_expression_condition
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
 	ASSIGNMENT_EXPRESSION_FIRST_PART,
 	assignment_expression::first_part,
 	assignment_expression_first_part
@@ -171,6 +178,12 @@ SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
 	COMPOUND_STATEMENT,
 	compound_statement,
 	compound_statement
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	CONDITION,
+	condition,
+	condition
 )
 SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
 (
@@ -275,6 +288,12 @@ SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
 )
 SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
 (
+	EXPRESSION,
+	expression,
+	sequence<syntax_nodes::expression>
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
 	EXPRESSION_STATEMENT,
 	expression_statement,
 	expression_statement
@@ -286,6 +305,12 @@ SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
 	FLOATING_LITERAL,
 	floating_literal,
 	floating_literal
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	FOR_INIT_STATEMENT,
+	for_init_statement,
+	for_init_statement
 )
 SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
 (
@@ -628,6 +653,12 @@ SOCOA_CPP_GENERATE_NODE_CONVERTER_FROM_ID_SPECIALIZATION
 )
 SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
 (
+	TYPE_ID_SIZEOF_EXPRESSION,
+	type_id_sizeof_expression,
+	type_id_sizeof_expression
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
 	TYPE_SPECIFIER,
 	type_specifier,
 	type_specifier
@@ -637,6 +668,18 @@ SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
 	UNARY_EXPRESSION,
 	unary_expression,
 	unary_expression
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	UNARY_OPERATOR_UNARY_EXPRESSION,
+	unary_operator_unary_expression,
+	unary_operator_unary_expression
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	UNARY_SIZEOF_EXPRESSION,
+	unary_sizeof_expression,
+	unary_sizeof_expression
 )
 SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
 (

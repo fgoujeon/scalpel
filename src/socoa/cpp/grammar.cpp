@@ -532,12 +532,24 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	unary_expression
-		= unary_operator >> !s >> cast_expression
-		| str_p("sizeof") >> !s >> '(' >> !s >> type_id >> !s >> ')'
-		| str_p("sizeof") >> !s >> unary_expression
+		= unary_operator_unary_expression
+		| type_id_sizeof_expression
+		| unary_sizeof_expression
 		| postfix_expression
 		| new_expression
 		| delete_expression
+	;
+
+	unary_operator_unary_expression
+		= unary_operator >> !s >> cast_expression
+	;
+
+	type_id_sizeof_expression
+		= str_p("sizeof") >> !s >> '(' >> !s >> type_id >> !s >> ')'
+	;
+
+	unary_sizeof_expression
+		= str_p("sizeof") >> !s >> unary_expression
 	;
 
 	unary_operator
@@ -583,8 +595,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	cast_expression
-		= '(' >> !s >> type_id >> !s >> ')' >> !s >> cast_expression
-		| unary_expression
+		= *('(' >> !s >> type_id >> !s >> ')' >> !s) >> unary_expression
 	;
 
 	pm_ptr_expression
@@ -805,9 +816,13 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	*/
 	condition
 		= expression
-		| condition_type_specifier_seq >> !s >> declarator >> !s >> '=' >> !s >> assignment_expression
+		| assignment_expression_condition
 	;
-	condition_type_specifier_seq
+
+	assignment_expression_condition
+		= assignment_expression_condition_type_specifier_seq >> !s >> declarator >> !s >> '=' >> !s >> assignment_expression
+	;
+	assignment_expression_condition_type_specifier_seq
 		= +(type_specifier - (declarator >> !s >> '=' >> !s >> assignment_expression))
 	;
 

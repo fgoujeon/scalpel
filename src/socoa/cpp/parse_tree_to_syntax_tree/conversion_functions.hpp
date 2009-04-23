@@ -30,6 +30,9 @@ namespace socoa { namespace cpp { namespace parse_tree_to_syntax_tree
 syntax_nodes::assignment_expression
 convert_assignment_expression(const tree_node_t& node);
 
+syntax_nodes::assignment_expression_condition
+convert_assignment_expression_condition(const tree_node_t& node);
+
 syntax_nodes::assignment_expression::first_part
 convert_assignment_expression_first_part(const tree_node_t& node);
 
@@ -62,6 +65,9 @@ convert_class_specifier(const tree_node_t& node);
 
 syntax_nodes::compound_statement
 convert_compound_statement(const tree_node_t& node);
+
+syntax_nodes::condition
+convert_condition(const tree_node_t& node);
 
 syntax_nodes::conditional_expression
 convert_conditional_expression(const tree_node_t& node);
@@ -119,6 +125,9 @@ convert_expression_statement(const tree_node_t& node);
 
 syntax_nodes::floating_literal
 convert_floating_literal(const tree_node_t& node);
+
+syntax_nodes::for_init_statement
+convert_for_init_statement(const tree_node_t& node);
 
 syntax_nodes::for_statement
 convert_for_statement(const tree_node_t& node);
@@ -276,11 +285,20 @@ convert_translation_unit(const tree_node_t& node);
 syntax_nodes::try_block
 convert_try_block(const tree_node_t& node);
 
+syntax_nodes::type_id_sizeof_expression
+convert_type_id_sizeof_expression(const tree_node_t& node);
+
 syntax_nodes::type_specifier
 convert_type_specifier(const tree_node_t& node);
 
 syntax_nodes::unary_expression
 convert_unary_expression(const tree_node_t& node);
+
+syntax_nodes::unary_operator_unary_expression
+convert_unary_operator_unary_expression(const tree_node_t& node);
+
+syntax_nodes::unary_sizeof_expression
+convert_unary_sizeof_expression(const tree_node_t& node);
 
 syntax_nodes::unqualified_id
 convert_unqualified_id(const tree_node_t& node);

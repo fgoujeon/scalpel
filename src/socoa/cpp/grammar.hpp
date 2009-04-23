@@ -101,6 +101,9 @@ class grammar
             EXPRESSION_LIST,
             PSEUDO_DESTRUCTOR_NAME,
             UNARY_EXPRESSION,
+			UNARY_OPERATOR_UNARY_EXPRESSION,
+			TYPE_ID_SIZEOF_EXPRESSION,
+			UNARY_SIZEOF_EXPRESSION,
             UNARY_OPERATOR,
             NEW_EXPRESSION,
             NEW_PLACEMENT,
@@ -146,7 +149,8 @@ class grammar
             STATEMENT_SEQ,
             SELECTION_STATEMENT,
             CONDITION,
-            CONDITION_TYPE_SPECIFIER_SEQ,
+			ASSIGNMENT_EXPRESSION_CONDITION,
+			ASSIGNMENT_EXPRESSION_CONDITION_TYPE_SPECIFIER_SEQ,
             ITERATION_STATEMENT,
 			WHILE_STATEMENT,
 			DO_WHILE_STATEMENT,
@@ -383,6 +387,9 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EXPRESSION_LIST>> expression_list;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PSEUDO_DESTRUCTOR_NAME>> pseudo_destructor_name;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::UNARY_EXPRESSION>> unary_expression;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::UNARY_OPERATOR_UNARY_EXPRESSION>> unary_operator_unary_expression;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TYPE_ID_SIZEOF_EXPRESSION>> type_id_sizeof_expression;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::UNARY_SIZEOF_EXPRESSION>> unary_sizeof_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::UNARY_OPERATOR>> unary_operator;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::NEW_EXPRESSION>> new_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::NEW_PLACEMENT>> new_placement;
@@ -442,7 +449,8 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::STATEMENT_SEQ>> statement_seq;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::SELECTION_STATEMENT>> selection_statement;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CONDITION>> condition;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CONDITION_TYPE_SPECIFIER_SEQ>> condition_type_specifier_seq;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ASSIGNMENT_EXPRESSION_CONDITION>> assignment_expression_condition;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ASSIGNMENT_EXPRESSION_CONDITION_TYPE_SPECIFIER_SEQ>> assignment_expression_condition_type_specifier_seq;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ITERATION_STATEMENT>> iteration_statement;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::WHILE_STATEMENT>> while_statement;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DO_WHILE_STATEMENT>> do_while_statement;

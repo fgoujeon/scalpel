@@ -18,33 +18,43 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_NODES_UNARY_EXPRESSION_HPP
-#define SOCOA_CPP_SYNTAX_NODES_UNARY_EXPRESSION_HPP
-
-#include "alternative_node.hpp"
 #include "unary_operator_unary_expression.hpp"
-#include "type_id_sizeof_expression.hpp"
-#include "unary_sizeof_expression.hpp"
-#include "postfix_expression.hpp"
-#include "new_expression.hpp"
-#include "delete_expression.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
-typedef
-	alternative_node
-	<
-		unary_operator_unary_expression,
-		type_id_sizeof_expression,
-		unary_sizeof_expression,
-		postfix_expression,
-		new_expression,
-		delete_expression
-	>
-	unary_expression
-;
+unary_operator_unary_expression::unary_operator_unary_expression
+(
+)
+{
+	update_node_list();
+}
+
+unary_operator_unary_expression::unary_operator_unary_expression(const unary_operator_unary_expression& o):
+	composite_node()
+{
+	update_node_list();
+}
+
+unary_operator_unary_expression::unary_operator_unary_expression(unary_operator_unary_expression&& o):
+	composite_node()
+{
+	update_node_list();
+}
+
+const unary_operator_unary_expression&
+unary_operator_unary_expression::operator=(const unary_operator_unary_expression& o)
+{
+	update_node_list();
+
+	return *this;
+}
+
+void
+unary_operator_unary_expression::update_node_list()
+{
+	clear();
+}
 
 }}} //namespace socoa::cpp::syntax_nodes
 
-#endif
