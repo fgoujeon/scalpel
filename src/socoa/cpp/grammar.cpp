@@ -910,7 +910,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	*/
 	///@todo semantic disambiguation between decl_specifier and init_declarator_list
 	simple_declaration
-		= !simple_declaration_decl_specifier_seq >> !s >> !init_declarator_list >> !s >> ch_p(';')
+		= !(simple_declaration_decl_specifier_seq >> !s) >> !(init_declarator_list >> !s) >> ch_p(';')
 	;
 	simple_declaration_decl_specifier_seq
 		= +(decl_specifier - (init_declarator_list >> !s >> ch_p(';')))

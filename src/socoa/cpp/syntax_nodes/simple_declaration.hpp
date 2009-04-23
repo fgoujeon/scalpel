@@ -22,21 +22,30 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_NODES_SIMPLE_DECLARATION_HPP
 
 #include <boost/optional.hpp>
-#include "../../util/extern_strings.hpp"
 #include "composite_node.hpp"
 #include "init_declarator_list.hpp"
 #include "decl_specifier_seq.hpp"
+#include "space.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
+/**
+\verbatim
+simple_declaration
+	= [decl_specifier_seq], [init_declarator_list], ";"
+;
+\endverbatim
+*/
 class simple_declaration: public composite_node
 {
 	public:
 		simple_declaration
 		(
 			boost::optional<decl_specifier_seq>&& a_decl_specifier_seq,
-			boost::optional<init_declarator_list>&& an_init_declarator_list
+			boost::optional<space>&& post_decl_specifier_seq_space_node,
+			boost::optional<init_declarator_list>&& an_init_declarator_list,
+			boost::optional<space>&& post_init_declarator_list_space_node
 		);
 
 		simple_declaration(const simple_declaration& o);
@@ -59,7 +68,9 @@ class simple_declaration: public composite_node
 		update_node_list();
 
 		boost::optional<decl_specifier_seq> decl_specifier_seq_;
+		boost::optional<space> post_decl_specifier_seq_space_;
 		boost::optional<init_declarator_list> init_declarator_list_;
+		boost::optional<space> post_init_declarator_list_space_;
 };
 
 inline

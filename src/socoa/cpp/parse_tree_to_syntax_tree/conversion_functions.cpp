@@ -201,10 +201,7 @@ convert_block_declaration(const tree_node_t& node)
 		//id_t::NAMESPACE_ALIAS_DEFINITION,
 		id_t::USING_DECLARATION,
 		id_t::USING_DIRECTIVE
-	>
-	(
-		node
-	);
+	>(node);
 }
 
 simple_declaration
@@ -212,10 +209,23 @@ convert_simple_declaration(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::SIMPLE_DECLARATION);
 
+	boost::optional<decl_specifier_seq> decl_specifier_seq_node;
+	boost::optional<init_declarator_list> init_declarator_list_node;
+
+	tree_node_iterator_t decl_specifier_seq_it = find_node<id_t::SIMPLE_DECLARATION_DECL_SPECIFIER_SEQ>(node);
+	if(decl_specifier_seq_it != node.children.end())
+		decl_specifier_seq_node = convert_node<decl_specifier_seq>(*decl_specifier_seq_it);
+
+	tree_node_iterator_t init_declarator_list_it = find_node<id_t::INIT_DECLARATOR_LIST>(node);
+	if(init_declarator_list_it != node.children.end())
+		init_declarator_list_node = convert_node<init_declarator_list>(*init_declarator_list_it);
+
     return simple_declaration
     (
-		find_and_convert_node<boost::optional<decl_specifier_seq>, id_t::SIMPLE_DECLARATION_DECL_SPECIFIER_SEQ>(node),
-		find_and_convert_node<boost::optional<init_declarator_list>, id_t::INIT_DECLARATOR_LIST>(node)
+		decl_specifier_seq_node,
+		convert_next_space(decl_specifier_seq_it),
+		init_declarator_list_node,
+		convert_next_space(init_declarator_list_it)
     );
 }
 
