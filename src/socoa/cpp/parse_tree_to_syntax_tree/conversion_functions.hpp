@@ -48,6 +48,9 @@ convert_block_declaration(const tree_node_t& node);
 syntax_nodes::boolean_literal
 convert_boolean_literal(const tree_node_t& node);
 
+syntax_nodes::bracketed_initializer
+convert_bracketed_initializer(const tree_node_t& node);
+
 syntax_nodes::break_statement
 convert_break_statement(const tree_node_t& node);
 
@@ -120,6 +123,12 @@ convert_do_while_statement(const tree_node_t& node);
 syntax_nodes::elaborated_type_specifier
 convert_elaborated_type_specifier(const tree_node_t& node);
 
+syntax_nodes::equal_initializer
+convert_equal_initializer(const tree_node_t& node);
+
+syntax_nodes::empty_initializer_list_initializer_clause
+convert_empty_initializer_list_initializer_clause(const tree_node_t& node);
+
 syntax_nodes::expression_statement
 convert_expression_statement(const tree_node_t& node);
 
@@ -149,6 +158,15 @@ convert_identifier_or_template_id(const tree_node_t& node);
 
 syntax_nodes::init_declarator
 convert_init_declarator(const tree_node_t& node);
+
+syntax_nodes::initializer
+convert_initializer(const tree_node_t& node);
+
+syntax_nodes::initializer_clause
+convert_initializer_clause(const tree_node_t& node);
+
+syntax_nodes::initializer_list_initializer_clause
+convert_initializer_list_initializer_clause(const tree_node_t& node);
 
 syntax_nodes::integer_literal
 convert_integer_literal(const tree_node_t& node);

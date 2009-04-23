@@ -42,6 +42,7 @@ const leaf_node double_pipe("||");
 const leaf_node double_quote("\"");
 const leaf_node double_right_angle_bracket(">>");
 const leaf_node empty("");
+const leaf_node equal("=");
 const leaf_node inequal("!=");
 const leaf_node left_angle_bracket("<");
 const leaf_node left_angle_bracket_and_equal("<=");

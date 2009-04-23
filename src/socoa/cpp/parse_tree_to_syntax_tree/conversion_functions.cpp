@@ -356,10 +356,55 @@ convert_init_declarator(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::INIT_DECLARATOR);
 
+	boost::optional<initializer> initializer_node;
+
+	tree_node_iterator_t initializer_it = find_node<id_t::INITIALIZER>(node);
+	if(initializer_it != node.children.end())
+		initializer_node = convert_node<initializer>(*initializer_it);
+
     return init_declarator
     (
-		find_and_convert_node<declarator, id_t::DECLARATOR>(node)
+		find_and_convert_node<declarator, id_t::DECLARATOR>(node),
+		convert_previous_space(initializer_it),
+		initializer_node
     );
+}
+
+initializer
+convert_initializer(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::INITIALIZER);
+
+	return convert_alternative
+	<
+		initializer,
+		id_t::EQUAL_INITIALIZER,
+		id_t::BRACKETED_INITIALIZER
+	>(node);
+}
+
+initializer_clause
+convert_initializer_clause(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::INITIALIZER_CLAUSE);
+
+	return convert_alternative
+	<
+		initializer_clause,
+		id_t::ASSIGNMENT_EXPRESSION,
+		id_t::INITIALIZER_LIST_INITIALIZER_CLAUSE,
+		id_t::EMPTY_INITIALIZER_LIST_INITIALIZER_CLAUSE
+	>(node);
+}
+
+initializer_list_initializer_clause
+convert_initializer_list_initializer_clause(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::INITIALIZER_LIST_INITIALIZER_CLAUSE);
+
+	return initializer_list_initializer_clause
+	(
+	);
 }
 
 declarator
@@ -384,7 +429,7 @@ convert_declarator(const tree_node_t& node)
 		ptr_operator_seq_node,
 		post_ptr_operator_seq_space_node,
 		find_and_convert_node<direct_declarator, id_t::DIRECT_DECLARATOR>(node)
-    );
+	);
 }
 
 direct_declarator
@@ -1094,6 +1139,14 @@ convert_boolean_literal(const tree_node_t& node)
 	return boolean_literal();
 }
 
+bracketed_initializer
+convert_bracketed_initializer(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::BRACKETED_INITIALIZER);
+
+	return bracketed_initializer();
+}
+
 break_statement
 convert_break_statement(const tree_node_t& node)
 {
@@ -1196,6 +1249,28 @@ convert_do_while_statement(const tree_node_t& node)
     assert(node.value.id() == id_t::DO_WHILE_STATEMENT);
 
 	return do_while_statement();
+}
+
+equal_initializer
+convert_equal_initializer(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::EQUAL_INITIALIZER);
+
+	tree_node_iterator_t i = find_node<id_t::INITIALIZER_CLAUSE>(node);
+
+	return equal_initializer
+	(
+		convert_previous_space(i),
+		convert_node<initializer_clause>(*i)
+	);
+}
+
+empty_initializer_list_initializer_clause
+convert_empty_initializer_list_initializer_clause(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::EMPTY_INITIALIZER_LIST_INITIALIZER_CLAUSE);
+
+	return empty_initializer_list_initializer_clause();
 }
 
 expression_statement

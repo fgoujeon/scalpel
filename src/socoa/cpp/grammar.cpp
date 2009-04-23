@@ -1257,14 +1257,30 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	initializer
+		= equal_initializer
+		| bracketed_initializer
+	;
+
+	equal_initializer
 		= ch_p('=') >> !s >> initializer_clause
-		| ch_p('(') >> !s >> expression_list >> !s >> ')'
+	;
+
+	bracketed_initializer
+		= ch_p('(') >> !s >> expression_list >> !s >> ')'
 	;
 
 	initializer_clause
 		= assignment_expression
-		| ch_p('{') >> !s >> initializer_list >> !s >> !ch_p(',') >> !s >> ch_p('}')
-		| ch_p('{') >> !s >> ch_p('}')
+		| initializer_list_initializer_clause
+		| empty_initializer_list_initializer_clause
+	;
+
+	initializer_list_initializer_clause
+		= ch_p('{') >> !s >> initializer_list >> !s >> !(ch_p(',') >> !s) >> ch_p('}')
+	;
+
+	empty_initializer_list_initializer_clause
+		= ch_p('{') >> !s >> ch_p('}')
 	;
 
 	initializer_list

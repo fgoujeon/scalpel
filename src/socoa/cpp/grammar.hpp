@@ -217,7 +217,11 @@ class grammar
             FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ2,
             FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ3,
             INITIALIZER,
+			EQUAL_INITIALIZER,
+			BRACKETED_INITIALIZER,
             INITIALIZER_CLAUSE,
+			INITIALIZER_LIST_INITIALIZER_CLAUSE,
+			EMPTY_INITIALIZER_LIST_INITIALIZER_CLAUSE,
             INITIALIZER_LIST,
 
             CLASS_SPECIFIER,
@@ -518,7 +522,11 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ2>> function_definition_decl_specifier_seq2;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ3>> function_definition_decl_specifier_seq3;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::INITIALIZER>> initializer;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EQUAL_INITIALIZER>> equal_initializer;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::BRACKETED_INITIALIZER>> bracketed_initializer;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::INITIALIZER_CLAUSE>> initializer_clause;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::INITIALIZER_LIST_INITIALIZER_CLAUSE>> initializer_list_initializer_clause;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EMPTY_INITIALIZER_LIST_INITIALIZER_CLAUSE>> empty_initializer_list_initializer_clause;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::INITIALIZER_LIST>> initializer_list;
 
         //1.8 - Classes [gram.class]

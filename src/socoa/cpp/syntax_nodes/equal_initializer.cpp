@@ -18,48 +18,45 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "init_declarator.hpp"
+#include "equal_initializer.hpp"
+
+#include "common_nodes.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
-init_declarator::init_declarator
+equal_initializer::equal_initializer
 (
-	declarator&& a_declarator,
 	boost::optional<space>&& space_node,
-	boost::optional<initializer>&& initializer_node
+	initializer_clause&& initializer_clause_node
 ):
-	declarator_(std::move(a_declarator)),
 	space_(space_node),
-	initializer_(initializer_node)
+	initializer_clause_(initializer_clause_node)
 {
 	update_node_list();
 }
 
-init_declarator::init_declarator(const init_declarator& o):
+equal_initializer::equal_initializer(const equal_initializer& o):
 	composite_node(),
-	declarator_(o.declarator_),
 	space_(o.space_),
-	initializer_(o.initializer_)
+	initializer_clause_(o.initializer_clause_)
 {
 	update_node_list();
 }
 
-init_declarator::init_declarator(init_declarator&& o):
+equal_initializer::equal_initializer(equal_initializer&& o):
 	composite_node(),
-	declarator_(std::move(o.declarator_)),
 	space_(std::move(o.space_)),
-	initializer_(std::move(o.initializer_))
+	initializer_clause_(std::move(o.initializer_clause_))
 {
 	update_node_list();
 }
 
-const init_declarator&
-init_declarator::operator=(const init_declarator& o)
+const equal_initializer&
+equal_initializer::operator=(const equal_initializer& o)
 {
-	declarator_ = o.declarator_;
 	space_ = o.space_;
-	initializer_ = o.initializer_;
+	initializer_clause_ = o.initializer_clause_;
 
 	update_node_list();
 
@@ -67,12 +64,13 @@ init_declarator::operator=(const init_declarator& o)
 }
 
 void
-init_declarator::update_node_list()
+equal_initializer::update_node_list()
 {
 	clear();
-	add(declarator_);
+	add(equal);
 	if(space_) add(*space_);
-	if(initializer_) add(*initializer_);
+	add(initializer_clause_);
 }
 
 }}} //namespace socoa::cpp::syntax_nodes
+

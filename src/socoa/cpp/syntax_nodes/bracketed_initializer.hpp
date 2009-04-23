@@ -18,61 +18,32 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_NODES_INIT_DECLARATOR_HPP
-#define SOCOA_CPP_SYNTAX_NODES_INIT_DECLARATOR_HPP
+#ifndef SOCOA_CPP_SYNTAX_NODES_BRACKETED_INITIALIZER_HPP
+#define SOCOA_CPP_SYNTAX_NODES_BRACKETED_INITIALIZER_HPP
 
-#include <boost/optional.hpp>
 #include "composite_node.hpp"
-#include "declarator.hpp"
-#include "space.hpp"
-#include "initializer.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
-/**
-\verbatim
-init_declarator
-	= declarator, [initializer]
-;
-\endverbatim
-*/
-class init_declarator: public composite_node
+class bracketed_initializer: public composite_node
 {
 	public:
-		init_declarator
+		bracketed_initializer
 		(
-			declarator&& a_declarator,
-			boost::optional<space>&& space_node,
-			boost::optional<initializer>&& initializer_node
 		);
 
-		init_declarator(const init_declarator& o);
+		bracketed_initializer(const bracketed_initializer& o);
 
-		init_declarator(init_declarator&& o);
+		bracketed_initializer(bracketed_initializer&& o);
 
-		const init_declarator&
-		operator=(const init_declarator& o);
-
-		inline
-		const declarator&
-		get_declarator() const;
+		const bracketed_initializer&
+		operator=(const bracketed_initializer& o);
 
 	private:
 		void
 		update_node_list();
-
-		declarator declarator_;
-		boost::optional<space> space_;
-		boost::optional<initializer> initializer_;
 };
-
-inline
-const declarator&
-init_declarator::get_declarator() const
-{
-	return declarator_;
-}
 
 }}} //namespace socoa::cpp::syntax_nodes
 

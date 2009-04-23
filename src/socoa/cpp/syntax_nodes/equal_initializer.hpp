@@ -18,61 +18,47 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_NODES_INIT_DECLARATOR_HPP
-#define SOCOA_CPP_SYNTAX_NODES_INIT_DECLARATOR_HPP
+#ifndef SOCOA_CPP_SYNTAX_NODES_EQUAL_INITIALIZER_HPP
+#define SOCOA_CPP_SYNTAX_NODES_EQUAL_INITIALIZER_HPP
 
 #include <boost/optional.hpp>
 #include "composite_node.hpp"
-#include "declarator.hpp"
 #include "space.hpp"
-#include "initializer.hpp"
+#include "initializer_clause.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
 /**
 \verbatim
-init_declarator
-	= declarator, [initializer]
+equal_initializer
+	= "=", initializer_clause
 ;
 \endverbatim
 */
-class init_declarator: public composite_node
+class equal_initializer: public composite_node
 {
 	public:
-		init_declarator
+		equal_initializer
 		(
-			declarator&& a_declarator,
 			boost::optional<space>&& space_node,
-			boost::optional<initializer>&& initializer_node
+			initializer_clause&& initializer_clause_node
 		);
 
-		init_declarator(const init_declarator& o);
+		equal_initializer(const equal_initializer& o);
 
-		init_declarator(init_declarator&& o);
+		equal_initializer(equal_initializer&& o);
 
-		const init_declarator&
-		operator=(const init_declarator& o);
-
-		inline
-		const declarator&
-		get_declarator() const;
+		const equal_initializer&
+		operator=(const equal_initializer& o);
 
 	private:
 		void
 		update_node_list();
 
-		declarator declarator_;
 		boost::optional<space> space_;
-		boost::optional<initializer> initializer_;
+		initializer_clause initializer_clause_;
 };
-
-inline
-const declarator&
-init_declarator::get_declarator() const
-{
-	return declarator_;
-}
 
 }}} //namespace socoa::cpp::syntax_nodes
 

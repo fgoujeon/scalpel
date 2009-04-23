@@ -46,6 +46,7 @@ extern const leaf_node double_pipe;
 extern const leaf_node double_quote;
 extern const leaf_node double_right_angle_bracket;
 extern const leaf_node empty;
+extern const leaf_node equal;
 extern const leaf_node inequal;
 extern const leaf_node left_angle_bracket;
 extern const leaf_node left_angle_bracket_and_equal;
