@@ -20,24 +20,38 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "unary_operator_unary_expression.hpp"
 
+#include "cast_expression.hpp"
+
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
 unary_operator_unary_expression::unary_operator_unary_expression
 (
-)
+	unary_operator&& unary_operator_node,
+	boost::optional<space>&& space_node,
+	cast_expression&& cast_expression_node
+):
+	unary_operator_(unary_operator_node),
+	space_(space_node),
+	cast_expression_(new cast_expression(cast_expression_node))
 {
 	update_node_list();
 }
 
 unary_operator_unary_expression::unary_operator_unary_expression(const unary_operator_unary_expression& o):
-	composite_node()
+	composite_node(),
+	unary_operator_(o.unary_operator_),
+	space_(o.space_),
+	cast_expression_(new cast_expression(*o.cast_expression_))
 {
 	update_node_list();
 }
 
 unary_operator_unary_expression::unary_operator_unary_expression(unary_operator_unary_expression&& o):
-	composite_node()
+	composite_node(),
+	unary_operator_(std::move(o.unary_operator_)),
+	space_(std::move(o.space_)),
+	cast_expression_(std::move(o.cast_expression_))
 {
 	update_node_list();
 }
@@ -45,6 +59,10 @@ unary_operator_unary_expression::unary_operator_unary_expression(unary_operator_
 const unary_operator_unary_expression&
 unary_operator_unary_expression::operator=(const unary_operator_unary_expression& o)
 {
+	unary_operator_ = o.unary_operator_;
+	space_ = o.space_;
+	cast_expression_ = std::move(std::unique_ptr<cast_expression>(new cast_expression(*o.cast_expression_)));
+
 	update_node_list();
 
 	return *this;
@@ -54,6 +72,9 @@ void
 unary_operator_unary_expression::update_node_list()
 {
 	clear();
+	add(unary_operator_);
+	if(space_) add(*space_);
+	add(*cast_expression_);
 }
 
 }}} //namespace socoa::cpp::syntax_nodes

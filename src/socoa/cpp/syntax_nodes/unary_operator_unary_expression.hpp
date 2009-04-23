@@ -21,16 +21,32 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_NODES_UNARY_OPERATOR_UNARY_EXPRESSION_HPP
 #define SOCOA_CPP_SYNTAX_NODES_UNARY_OPERATOR_UNARY_EXPRESSION_HPP
 
+#include <memory>
+#include <boost/optional.hpp>
 #include "composite_node.hpp"
+#include "unary_operator.hpp"
+#include "space.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
+class cast_expression;
+
+/**
+\verbatim
+unary_operator_unary_expression
+	= unary_operator, cast_expression
+;
+\endverbatim
+*/
 class unary_operator_unary_expression: public composite_node
 {
 	public:
 		unary_operator_unary_expression
 		(
+			unary_operator&& unary_operator_node,
+			boost::optional<space>&& space_node,
+			cast_expression&& cast_expression_node
 		);
 
 		unary_operator_unary_expression(const unary_operator_unary_expression& o);
@@ -43,6 +59,10 @@ class unary_operator_unary_expression: public composite_node
 	private:
 		void
 		update_node_list();
+
+		unary_operator unary_operator_;
+		boost::optional<space> space_;
+		std::unique_ptr<cast_expression> cast_expression_;
 };
 
 }}} //namespace socoa::cpp::syntax_nodes

@@ -1029,7 +1029,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	init_declarator
-		= declarator >> !s >> !initializer
+		= declarator >> !(!s >> initializer)
 	;
 
 	/*

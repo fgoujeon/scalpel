@@ -1592,7 +1592,15 @@ convert_unary_operator_unary_expression(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::UNARY_OPERATOR_UNARY_EXPRESSION);
 
-	return unary_operator_unary_expression();
+	tree_node_iterator_t unary_operator_it = find_node<id_t::UNARY_OPERATOR>(node);
+	tree_node_iterator_t cast_expression_it = find_node<id_t::CAST_EXPRESSION>(node);
+
+	return unary_operator_unary_expression
+	(
+		convert_node<unary_operator>(*unary_operator_it),
+		convert_next_space(unary_operator_it),
+		convert_node<cast_expression>(*cast_expression_it)
+	);
 }
 
 unary_sizeof_expression
