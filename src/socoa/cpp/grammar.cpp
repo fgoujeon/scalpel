@@ -279,8 +279,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	character_literal
-		= '\'' >> c_char_sequence >> '\''
-		| "L\'" >> c_char_sequence >> '\''
+		= !ch_p('L') >> '\'' >> token_node_d[c_char_sequence] >> '\''
 	;
 
 	c_char_sequence

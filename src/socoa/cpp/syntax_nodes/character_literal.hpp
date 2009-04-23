@@ -22,6 +22,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_NODES_CHARACTER_LITERAL_HPP
 
 #include "composite_node.hpp"
+#include "leaf_node.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
@@ -31,6 +32,8 @@ class character_literal: public composite_node
 	public:
 		character_literal
 		(
+			bool wide,
+			std::string&& value
 		);
 
 		character_literal(const character_literal& o);
@@ -43,6 +46,9 @@ class character_literal: public composite_node
 	private:
 		void
 		update_node_list();
+
+		bool wide_;
+		leaf_node value_;
 };
 
 }}} //namespace socoa::cpp::syntax_nodes
