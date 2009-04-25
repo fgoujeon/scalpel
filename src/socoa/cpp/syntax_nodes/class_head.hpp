@@ -36,10 +36,16 @@ namespace socoa { namespace cpp { namespace syntax_nodes
 /**
 \verbatim
 class_head
-	= class_key, [identifier], [base_clause]
+	= class_key, [nested_name_specifier], template_id, [base_clause]
 	| class_key, nested_name_specifier, identifier, [base_clause]
-	| class_key, [nested_name_specifier], template_id, [base_clause]
+	| class_key, [identifier], [base_clause]
 ;
+
+	class_head
+		= class_key >> !(!s >> nested_name_specifier) >> !s >> template_id >> !(!s >> base_clause)
+		| class_key >> !s >> nested_name_specifier >> !s >> identifier >> !(!s >> base_clause)
+		| class_key >> !(!s >> identifier) >> !(!s >> base_clause)
+	;
 \endverbatim
 */
 class class_head: public composite_node
@@ -47,11 +53,15 @@ class class_head: public composite_node
     public:
         class_head
         (
-            class_key&& a_class_key,
-            boost::optional<nested_name_specifier>&& a_nested_name_specifier,
-            boost::optional<template_id>&& a_template_id,
-            boost::optional<identifier>&& an_identifier,
-            boost::optional<base_clause>&& a_base_clause
+            class_key&& class_key_node,
+            boost::optional<space>&& pre_nested_name_specifier_space_node,
+            boost::optional<nested_name_specifier>&& nested_name_specifier_node,
+            boost::optional<space>&& pre_template_id_space_node,
+            boost::optional<template_id>&& template_id_node,
+            boost::optional<space>&& pre_identifier_space_node,
+            boost::optional<identifier>&& identifier_node,
+            boost::optional<space>&& pre_base_clause_space_node,
+            boost::optional<base_clause>&& base_clause_node
         );
 
 		class_head(const class_head& o);
@@ -85,11 +95,15 @@ class class_head: public composite_node
 		void
 		update_node_list();
 
-        class_key class_key_;
-        boost::optional<nested_name_specifier> nested_name_specifier_;
-        boost::optional<template_id> template_id_;
-        boost::optional<identifier> identifier_;
-        boost::optional<base_clause> base_clause_;
+		class_key class_key_;
+		boost::optional<space> pre_nested_name_specifier_space_;
+		boost::optional<nested_name_specifier> nested_name_specifier_;
+		boost::optional<space> pre_template_id_space_;
+		boost::optional<template_id> template_id_;
+		boost::optional<space> pre_identifier_space_;
+		boost::optional<identifier> identifier_;
+		boost::optional<space> pre_base_clause_space_;
+		boost::optional<base_clause> base_clause_;
 };
 
 inline

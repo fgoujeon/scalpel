@@ -32,13 +32,23 @@ namespace socoa { namespace cpp { namespace syntax_nodes
 //use of forward declarations and pointers to avoid cyclic dependency
 class member_specification;
 
+/**
+\verbatim
+class_specifier
+	= class_head, "{", [member_specification], "}"
+;
+\endverbatim
+*/
 class class_specifier: public composite_node
 {
     public:
         class_specifier
         (
-            class_head&& head,
-            boost::optional<member_specification>&& a_member_specification
+            class_head&& class_head_node,
+			boost::optional<space>&& post_class_head_space_node,
+			boost::optional<space>&& post_opening_brace_space_node,
+            boost::optional<member_specification>&& member_specification_node,
+			boost::optional<space>&& post_member_specification_space_node
         );
 
         class_specifier(const class_specifier& o);
@@ -61,7 +71,10 @@ class class_specifier: public composite_node
 		update_node_list();
 
 		class_head class_head_;
+		boost::optional<space> post_class_head_space_;
+		boost::optional<space> post_opening_brace_space_;
 		std::shared_ptr<member_specification> member_specification_;
+		boost::optional<space> post_member_specification_space_;
 };
 
 inline

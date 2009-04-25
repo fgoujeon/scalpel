@@ -1356,13 +1356,13 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 
 	//1.8 - Classes [gram.class]
 	class_specifier
-		= class_head >> !s >> '{' >> !s >> !member_specification >> !s >> '}'
+		= class_head >> !s >> '{' >> !s >> !(member_specification >> !s) >> '}'
 	;
 
 	class_head
-		= class_key >> !s >> !nested_name_specifier >> !s >> template_id >> !s >> !base_clause //class template specialization -> the class already had been declared
-		| class_key >> !s >> nested_name_specifier >> !s >> identifier >> !s >> !base_clause //ditto
-		| class_key >> !s >> !identifier >> !s >> !base_clause
+		= class_key >> !(!s >> nested_name_specifier) >> !s >> template_id >> !(!s >> base_clause)
+		| class_key >> !s >> nested_name_specifier >> !s >> identifier >> !(!s >> base_clause)
+		| class_key >> !(!s >> identifier) >> !(!s >> base_clause)
 	;
 
 	class_key
@@ -1393,13 +1393,13 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		| template_declaration
 	;
 	member_declaration_member_declarator_list
-		= !member_declaration_decl_specifier_seq >> !s >> !member_declarator_list >> !s >> ch_p(';')
+		= !(member_declaration_decl_specifier_seq >> !s) >> !(member_declarator_list >> !s) >> ch_p(';')
 	;
 	member_declaration_unqualified_id
-		= !str_p("::") >> !s >> nested_name_specifier >> !s >> !str_p("template") >> !s >> unqualified_id >> !s >> ch_p(';')
+		= !(str_p("::") >> !s) >> nested_name_specifier >> !s >> !(str_p("template") >> !s) >> unqualified_id >> !s >> ch_p(';')
 	;
 	member_declaration_function_definition
-		= function_definition >> !s >> !ch_p(';')
+		= function_definition >> !(!s >> ch_p(';'))
 	;
 	member_declaration_decl_specifier_seq
 		= +(decl_specifier - (member_declarator_list >> !s >> ch_p(';')))
@@ -1417,7 +1417,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		= declarator >> !s >> !(pure_specifier | constant_initializer) ///@todo find what declarator >> !s >> constant_initializer stands for
 	;
 	member_declarator_bit_field_member
-		= !identifier >> !s >> ':' >> !s >> constant_expression //bit field member
+		= !(identifier >> !s) >> ':' >> !s >> constant_expression //bit field member
 	;
 
 	pure_specifier
@@ -1540,7 +1540,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 
 	//1.12 - Templates [gram.temp]
 	template_declaration
-		= !str_p("export") >> !s >> str_p("template") >> !s >> '<' >> !s >> template_parameter_list >> !s >> '>' >> !s >> declaration
+		= !(str_p("export") >> !s) >> str_p("template") >> !s >> '<' >> !s >> template_parameter_list >> !s >> '>' >> !s >> declaration
 	;
 
 	template_parameter_list
@@ -1558,11 +1558,11 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		| str_p("typename") >> !s >> !identifier >> !s >> '=' >> !s >> type_id
 		| str_p("typename") >> !s >> !identifier
 		| str_p("template") >> !s >> '<' >> !s >> template_parameter_list >> !s >> '>' >> !s >> str_p("class") >> !s >> !identifier >> !s >> '=' >> !s >> id_expression
-		| str_p("template") >> !s >> '<' >> !s >> template_parameter_list >> !s >> '>' >> !s >> str_p("class") >> !s >> !identifier
+		| str_p("template") >> !s >> '<' >> !s >> template_parameter_list >> !s >> '>' >> !s >> str_p("class") >> !(!s >> identifier)
 	;
 
 	template_id
-		= type_name >> !s >> '<' >> !s >> !template_argument_list >> !s >> '>'
+		= type_name >> !s >> '<' >> !s >> !(template_argument_list >> !s) >> '>'
 	;
 
 	template_argument_list

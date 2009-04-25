@@ -718,10 +718,26 @@ convert_class_specifier(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::CLASS_SPECIFIER);
 
+	boost::optional<member_specification> member_specification_node;
+
+	tree_node_iterator_t class_head_it = node.children.begin();
+
+	tree_node_iterator_t opening_brace_it = class_head_it;
+	++opening_brace_it;
+	if(opening_brace_it->value.id() == id_t::SPACE)
+		++opening_brace_it;
+
+	tree_node_iterator_t member_specification_it = find_node<id_t::MEMBER_SPECIFICATION>(node);
+	if(member_specification_it != node.children.end())
+		member_specification_node = convert_node<member_specification>(*member_specification_it);
+
     return class_specifier
     (
         find_and_convert_node<class_head, id_t::CLASS_HEAD>(node),
-        find_and_convert_node<boost::optional<member_specification>, id_t::MEMBER_SPECIFICATION>(node)
+		convert_next_space(class_head_it),
+		convert_next_space(opening_brace_it),
+		member_specification_node,
+		convert_next_space(member_specification_it)
     );
 }
 
@@ -759,14 +775,55 @@ convert_class_head(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::CLASS_HEAD);
 
+	boost::optional<space> pre_nested_name_specifier_space_node;
+	boost::optional<nested_name_specifier> nested_name_specifier_node;
+	boost::optional<space> pre_template_id_space_node;
+	boost::optional<template_id> template_id_node;
+	boost::optional<space> pre_identifier_space_node;
+	boost::optional<identifier> identifier_node;
+	boost::optional<space> pre_base_clause_space_node;
+	boost::optional<base_clause> base_clause_node;
+
+	tree_node_iterator_t i = find_node<id_t::NESTED_NAME_SPECIFIER>(node);
+	if(i != node.children.end())
+	{
+		pre_nested_name_specifier_space_node = convert_previous_space(i);
+		nested_name_specifier_node = convert_node<nested_name_specifier>(*i);
+	}
+
+	i = find_node<id_t::TEMPLATE_ID>(node);
+	if(i != node.children.end())
+	{
+		pre_template_id_space_node = convert_previous_space(i);
+		template_id_node = convert_node<template_id>(*i);
+	}
+
+	i = find_node<id_t::IDENTIFIER>(node);
+	if(i != node.children.end())
+	{
+		pre_identifier_space_node = convert_previous_space(i);
+		identifier_node = convert_node<identifier>(*i);
+	}
+
+	i = find_node<id_t::BASE_CLAUSE>(node);
+	if(i != node.children.end())
+	{
+		pre_base_clause_space_node = convert_previous_space(i);
+		base_clause_node = convert_node<base_clause>(*i);
+	}
+
     return class_head
     (
 		find_and_convert_node<class_key, id_t::CLASS_KEY>(node),
-		find_and_convert_node<boost::optional<nested_name_specifier>, id_t::NESTED_NAME_SPECIFIER>(node),
-		find_and_convert_node<boost::optional<template_id>, id_t::TEMPLATE_ID>(node),
-		find_and_convert_node<boost::optional<identifier>, id_t::IDENTIFIER>(node),
-		find_and_convert_node<boost::optional<base_clause>, id_t::BASE_CLAUSE>(node)
-   );
+		pre_nested_name_specifier_space_node,
+		nested_name_specifier_node,
+		pre_template_id_space_node,
+		template_id_node,
+		pre_identifier_space_node,
+		identifier_node,
+		pre_base_clause_space_node,
+		base_clause_node
+	);
 }
 
 member_specification_part
