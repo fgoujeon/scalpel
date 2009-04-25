@@ -35,6 +35,7 @@ const leaf_node closing_bracket(")");
 const leaf_node closing_square_bracket("]");
 const leaf_node colon(":");
 const leaf_node comma(",");
+const leaf_node dot(".");
 const leaf_node dot_and_asterisk(".*");
 const leaf_node double_ampersand("&&");
 const leaf_node double_colon("::");
@@ -68,6 +69,7 @@ const leaf_node continue_keyword("continue");
 const leaf_node for_keyword("for");
 const leaf_node goto_keyword("goto");
 const leaf_node return_keyword("return");
+const leaf_node template_keyword("template");
 
 }}} //namespace socoa::cpp::syntax_nodes
 

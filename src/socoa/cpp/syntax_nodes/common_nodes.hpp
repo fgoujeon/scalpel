@@ -39,6 +39,7 @@ extern const leaf_node closing_bracket;
 extern const leaf_node closing_square_bracket;
 extern const leaf_node colon;
 extern const leaf_node comma;
+extern const leaf_node dot;
 extern const leaf_node dot_and_asterisk;
 extern const leaf_node double_ampersand;
 extern const leaf_node double_colon;
@@ -72,6 +73,7 @@ extern const leaf_node continue_keyword;
 extern const leaf_node for_keyword;
 extern const leaf_node goto_keyword;
 extern const leaf_node return_keyword;
+extern const leaf_node template_keyword;
 
 }}} //namespace socoa::cpp::syntax_nodes
 

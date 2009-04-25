@@ -1906,7 +1906,30 @@ convert_bracketed_expression_list(const tree_node_t& node)
 {
 	assert(node.value.id() == id_t::BRACKETED_EXPRESSION_LIST);
 
-	return bracketed_expression_list();
+	boost::optional<space> post_opening_bracket_space_node;
+	boost::optional<expression_list> expression_list_node;
+	boost::optional<space> post_expression_list_space_node;
+
+	tree_node_iterator_t i = node.children.begin();
+	++i;
+	if(i->value.id() == id_t::SPACE)
+	{
+		post_opening_bracket_space_node = convert_node<space>(*i);
+	}
+
+	i = find_node<id_t::EXPRESSION_LIST>(node);
+	if(i != node.children.end())
+	{
+		expression_list_node = convert_node<expression_list>(*i);
+		post_expression_list_space_node = convert_next_space(i);
+	}
+
+	return bracketed_expression_list
+	(
+		post_opening_bracket_space_node,
+		expression_list_node,
+		post_expression_list_space_node
+	);
 }
 
 dot_id_expression
@@ -1914,7 +1937,31 @@ convert_dot_id_expression(const tree_node_t& node)
 {
 	assert(node.value.id() == id_t::DOT_ID_EXPRESSION);
 
-	return dot_id_expression();
+	boost::optional<space> post_dot_space_node;
+	bool template_keyword = false;
+	boost::optional<space> post_template_keyword_space_node;
+
+	tree_node_iterator_t i = node.children.begin();
+	++i;
+	if(i->value.id() == id_t::SPACE)
+	{
+		post_dot_space_node = convert_node<space>(*i);
+		++i;
+	}
+
+	if(get_value(*i) == "template")
+	{
+		template_keyword = true;
+		post_template_keyword_space_node = convert_next_space(i);
+	}
+
+	return dot_id_expression
+	(
+		post_dot_space_node,
+		template_keyword,
+		post_template_keyword_space_node,
+		find_and_convert_node<id_expression, id_t::ID_EXPRESSION>(node)
+	);
 }
 
 arrow_id_expression

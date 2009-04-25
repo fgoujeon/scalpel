@@ -20,24 +20,42 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "dot_id_expression.hpp"
 
+#include "common_nodes.hpp"
+
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
 dot_id_expression::dot_id_expression
 (
-)
+	boost::optional<space>&& post_dot_space_node,
+	bool template_keyword,
+	boost::optional<space>&& post_template_keyword_space_node,
+	id_expression&& id_expression_node
+):
+	post_dot_space_(post_dot_space_node),
+	template_keyword_(template_keyword),
+	post_template_keyword_space_(post_template_keyword_space_node),
+	id_expression_(id_expression_node)
 {
 	update_node_list();
 }
 
 dot_id_expression::dot_id_expression(const dot_id_expression& o):
-	composite_node()
+	composite_node(),
+	post_dot_space_(o.post_dot_space_),
+	template_keyword_(o.template_keyword_),
+	post_template_keyword_space_(o.post_template_keyword_space_),
+	id_expression_(o.id_expression_)
 {
 	update_node_list();
 }
 
 dot_id_expression::dot_id_expression(dot_id_expression&& o):
-	composite_node()
+	composite_node(),
+	post_dot_space_(std::move(o.post_dot_space_)),
+	template_keyword_(o.template_keyword_),
+	post_template_keyword_space_(std::move(o.post_template_keyword_space_)),
+	id_expression_(std::move(o.id_expression_))
 {
 	update_node_list();
 }
@@ -45,6 +63,11 @@ dot_id_expression::dot_id_expression(dot_id_expression&& o):
 const dot_id_expression&
 dot_id_expression::operator=(const dot_id_expression& o)
 {
+	post_dot_space_ = o.post_dot_space_;
+	template_keyword_ = o.template_keyword_;
+	post_template_keyword_space_ = o.post_template_keyword_space_;
+	id_expression_ = o.id_expression_;
+
 	update_node_list();
 
 	return *this;
@@ -54,6 +77,11 @@ void
 dot_id_expression::update_node_list()
 {
 	clear();
+	add(dot);
+	if(post_dot_space_) add(*post_dot_space_);
+	if(template_keyword_) add(template_keyword);
+	if(post_template_keyword_space_) add(*post_template_keyword_space_);
+	add(id_expression_);
 }
 
 }}} //namespace socoa::cpp::syntax_nodes
