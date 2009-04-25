@@ -18,43 +18,33 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "selection_statement.hpp"
+#ifndef SOCOA_CPP_SYNTAX_NODES_SWITCH_STATEMENT_HPP
+#define SOCOA_CPP_SYNTAX_NODES_SWITCH_STATEMENT_HPP
+
+#include "composite_node.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
-selection_statement::selection_statement
-(
-)
+class switch_statement: public composite_node
 {
-	update_node_list();
-}
+	public:
+		switch_statement
+		(
+		);
 
-selection_statement::selection_statement(const selection_statement& o):
-	composite_node()
-{
-	update_node_list();
-}
+		switch_statement(const switch_statement& o);
 
-selection_statement::selection_statement(selection_statement&& o):
-	composite_node()
-{
-	update_node_list();
-}
+		switch_statement(switch_statement&& o);
 
-const selection_statement&
-selection_statement::operator=(const selection_statement& o)
-{
-	update_node_list();
+		const switch_statement&
+		operator=(const switch_statement& o);
 
-	return *this;
-}
-
-void
-selection_statement::update_node_list()
-{
-	clear();
-}
+	private:
+		void
+		update_node_list();
+};
 
 }}} //namespace socoa::cpp::syntax_nodes
 
+#endif

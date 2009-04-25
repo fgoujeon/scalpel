@@ -1,30 +1,31 @@
-namespace std
-{
-	class ostringstream;
-	class string;
-	class vector;
-}
-
-std::string dump(const std::vector& v)
-{
-	std::ostringstream oss;
-
-	for(std::vector<unsigned int>::const_iterator i = v.begin(); i != v.end(); ++i)
-	{
-		oss << *i << '\n';
-	}
-	
-	return oss.str();
-}
-
 int main(int argc, char** argv)
 {
-	std::vector<unsigned int> v;
+	if(argc <= 1)
+	{
+		std::cout << "There's no argument";
+	}
+	else
+	{
+		std::cout << "There's ";
+		
+		switch(argc - 1)
+		{
+			case 1:
+				std::cout << "one";
+			case 2:
+				std::cout << "two";
+			case 3:
+			case 4:
+			case 5:
+				std::cout << "more than two";
+			default:
+				std::cout << "a lot of";
+		}
 
-	v.push_back(23);
-	v.push_back(663);
+		std::cout << " argument";
 
-	std::cout << dump(v);
+		if(argc > 2) std::cout << "s";
+	}
 
 	return 0;
 }

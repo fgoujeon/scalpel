@@ -855,6 +855,18 @@ SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
 	double_minus,
 	double_minus
 )*/
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	IF_STATEMENT,
+	if_statement,
+	if_statement
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	SWITCH_STATEMENT,
+	switch_statement,
+	switch_statement
+)
 
 template<class SyntaxNodeT>
 inline

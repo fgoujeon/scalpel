@@ -383,6 +383,12 @@ convert_dot_pseudo_destructor_name(const tree_node_t& node);
 syntax_nodes::arrow_pseudo_destructor_name
 convert_arrow_pseudo_destructor_name(const tree_node_t& node);
 
+syntax_nodes::if_statement
+convert_if_statement(const tree_node_t& node);
+
+syntax_nodes::switch_statement
+convert_switch_statement(const tree_node_t& node);
+
 
 }}} //namespace socoa::cpp
 

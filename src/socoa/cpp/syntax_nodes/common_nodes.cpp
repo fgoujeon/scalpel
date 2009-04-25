@@ -66,9 +66,12 @@ const leaf_node slash("/");
 //keywords
 const leaf_node break_keyword("break");
 const leaf_node continue_keyword("continue");
+const leaf_node else_keyword("else");
 const leaf_node for_keyword("for");
 const leaf_node goto_keyword("goto");
+const leaf_node if_keyword("if");
 const leaf_node return_keyword("return");
+const leaf_node switch_keyword("switch");
 const leaf_node template_keyword("template");
 
 }}} //namespace socoa::cpp::syntax_nodes

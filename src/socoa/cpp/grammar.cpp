@@ -869,8 +869,16 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	selection_statement
+		= if_statement
+		| switch_statement
+	;
+
+	if_statement
 		= str_p("if") >> !s >> '(' >> !s >> condition >> !s >> ')' >> !s >> statement >> !(!s >> "else" >> !s >> statement)
-		| str_p("switch") >> !s >> '(' >> !s >> condition >> !s >> ')' >> !s >> statement
+	;
+
+	switch_statement
+		= str_p("switch") >> !s >> '(' >> !s >> condition >> !s >> ')' >> !s >> statement
 	;
 
 	/*

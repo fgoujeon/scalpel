@@ -168,6 +168,8 @@ class grammar
             COMPOUND_STATEMENT,
             STATEMENT_SEQ,
             SELECTION_STATEMENT,
+			IF_STATEMENT,
+			SWITCH_STATEMENT,
             CONDITION,
 			ASSIGNMENT_EXPRESSION_CONDITION,
 			ASSIGNMENT_EXPRESSION_CONDITION_TYPE_SPECIFIER_SEQ,
@@ -492,6 +494,8 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::COMPOUND_STATEMENT>> compound_statement;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::STATEMENT_SEQ>> statement_seq;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::SELECTION_STATEMENT>> selection_statement;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::IF_STATEMENT>> if_statement;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::SWITCH_STATEMENT>> switch_statement;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CONDITION>> condition;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ASSIGNMENT_EXPRESSION_CONDITION>> assignment_expression_condition;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ASSIGNMENT_EXPRESSION_CONDITION_TYPE_SPECIFIER_SEQ>> assignment_expression_condition_type_specifier_seq;
