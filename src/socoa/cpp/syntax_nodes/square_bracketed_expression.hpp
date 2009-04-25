@@ -22,20 +22,38 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_NODES_SQUARE_BRACKETED_EXPRESION_HPP
 
 #include "composite_node.hpp"
+#include "sequence_node.hpp"
+#include "space.hpp"
+#include "common_nodes.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
+class assignment_expression;
+typedef sequence_node<assignment_expression, comma> expression;
+
+/**
+\verbatim
+square_bracketed_expression
+	= "[", expression, "]"
+;
+\endverbatim
+*/
 class square_bracketed_expression: public composite_node
 {
 	public:
 		square_bracketed_expression
 		(
+			boost::optional<space>&& pre_expression_space_node,
+			expression&& expression_node,
+			boost::optional<space>&& post_expression_space_node
 		);
 
 		square_bracketed_expression(const square_bracketed_expression& o);
 
 		square_bracketed_expression(square_bracketed_expression&& o);
+
+		~square_bracketed_expression();
 
 		const square_bracketed_expression&
 		operator=(const square_bracketed_expression& o);
@@ -43,6 +61,10 @@ class square_bracketed_expression: public composite_node
 	private:
 		void
 		update_node_list();
+
+		boost::optional<space> pre_expression_space_;
+		expression* expression_; ///\todo why does the usage of std::unique_ptr<> lead to an error?
+		boost::optional<space> post_expression_space_;
 };
 
 }}} //namespace socoa::cpp::syntax_nodes

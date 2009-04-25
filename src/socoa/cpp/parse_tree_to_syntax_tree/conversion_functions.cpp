@@ -1834,7 +1834,14 @@ convert_square_bracketed_expression(const tree_node_t& node)
 {
 	assert(node.value.id() == id_t::SQUARE_BRACKETED_EXPRESSION);
 
-	return square_bracketed_expression();
+	tree_node_iterator_t i = find_node<id_t::EXPRESSION>(node);
+
+	return square_bracketed_expression
+	(
+		convert_previous_space(i),
+		convert_node<expression>(*i),
+		convert_next_space(i)
+	);
 }
 
 bracketed_expression_list

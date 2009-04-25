@@ -20,31 +20,56 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "square_bracketed_expression.hpp"
 
+#include "expression.hpp"
+
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
 square_bracketed_expression::square_bracketed_expression
 (
-)
+	boost::optional<space>&& pre_expression_space_node,
+	expression&& expression_node,
+	boost::optional<space>&& post_expression_space_node
+):
+	pre_expression_space_(pre_expression_space_node),
+	expression_(new expression(expression_node)),
+	post_expression_space_(post_expression_space_node)
 {
 	update_node_list();
 }
 
 square_bracketed_expression::square_bracketed_expression(const square_bracketed_expression& o):
-	composite_node()
+	composite_node(),
+	pre_expression_space_(o.pre_expression_space_),
+	expression_(new expression(*o.expression_)),
+	post_expression_space_(o.post_expression_space_)
 {
 	update_node_list();
 }
 
 square_bracketed_expression::square_bracketed_expression(square_bracketed_expression&& o):
-	composite_node()
+	composite_node(),
+	pre_expression_space_(std::move(o.pre_expression_space_)),
+	expression_(o.expression_),
+	post_expression_space_(std::move(o.post_expression_space_))
 {
+	o.expression_ = 0;
 	update_node_list();
+}
+
+square_bracketed_expression::~square_bracketed_expression()
+{
+	delete expression_;
 }
 
 const square_bracketed_expression&
 square_bracketed_expression::operator=(const square_bracketed_expression& o)
 {
+	pre_expression_space_ = o.pre_expression_space_;
+	delete expression_;
+	expression_ = new expression(*o.expression_);
+	post_expression_space_ = o.post_expression_space_;
+
 	update_node_list();
 
 	return *this;
@@ -54,6 +79,11 @@ void
 square_bracketed_expression::update_node_list()
 {
 	clear();
+	add(opening_square_bracket);
+	if(pre_expression_space_) add(*pre_expression_space_);
+	add(*expression_);
+	if(post_expression_space_) add(*post_expression_space_);
+	add(closing_square_bracket);
 }
 
 }}} //namespace socoa::cpp::syntax_nodes
