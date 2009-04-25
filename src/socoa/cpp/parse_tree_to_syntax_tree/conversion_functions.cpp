@@ -2075,7 +2075,50 @@ convert_switch_statement(const tree_node_t& node)
 {
 	assert(node.value.id() == id_t::SWITCH_STATEMENT);
 
-	return switch_statement();
+	boost::optional<space> post_switch_keyword_space_node;
+	boost::optional<space> post_opening_bracket_space_node;
+	boost::optional<space> post_condition_space_node;
+	boost::optional<space> post_closing_bracket_space_node;
+
+	tree_node_iterator_t i = node.children.begin();
+	++i;
+	if(i->value.id() == id_t::SPACE)
+	{
+		post_switch_keyword_space_node = convert_node<space>(*i);
+		++i;
+	}
+
+	++i;
+	if(i->value.id() == id_t::SPACE)
+	{
+		post_opening_bracket_space_node = convert_node<space>(*i);
+		++i;
+	}
+
+	++i;
+	if(i->value.id() == id_t::SPACE)
+	{
+		post_condition_space_node = convert_node<space>(*i);
+		++i;
+	}
+
+	++i;
+	if(i->value.id() == id_t::SPACE)
+	{
+		post_closing_bracket_space_node = convert_node<space>(*i);
+		++i;
+	}
+
+
+	return switch_statement
+	(
+		post_switch_keyword_space_node,
+		post_opening_bracket_space_node,
+		find_and_convert_node<condition, id_t::CONDITION>(node),
+		post_condition_space_node,
+		post_closing_bracket_space_node,
+		find_and_convert_node<statement, id_t::STATEMENT>(node)
+	);
 }
 
 
