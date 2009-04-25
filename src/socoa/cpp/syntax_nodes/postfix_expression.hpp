@@ -22,17 +22,80 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_NODES_POSTFIX_EXPRESSION_HPP
 
 #include "composite_node.hpp"
+#include "alternative_node.hpp"
 #include "primary_expression.hpp"
+#include "simple_type_specifier_postfix_expression.hpp"
+#include "typename_expression.hpp"
+#include "template_typename_expression.hpp"
+#include "dynamic_cast_expression.hpp"
+#include "static_cast_expression.hpp"
+#include "reinterpret_cast_expression.hpp"
+#include "const_cast_expression.hpp"
+#include "typeid_expression.hpp"
+#include "type_id_typeid_expression.hpp"
+#include "square_bracketed_expression.hpp"
+#include "bracketed_expression_list.hpp"
+#include "dot_id_expression.hpp"
+#include "arrow_id_expression.hpp"
+#include "dot_pseudo_destructor_name.hpp"
+#include "arrow_pseudo_destructor_name.hpp"
+/*
+#include "double_plus.hpp"
+#include "double_minus.hpp"
+*/
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
+/**
+\verbatim
+postfix_expression
+	= postfix_expression_first_part >> !(!s >> postfix_expression_last_part_seq)
+;
+\endverbatim
+*/
 class postfix_expression: public composite_node
 {
 	public:
+		typedef
+			alternative_node
+			<
+				primary_expression,
+				simple_type_specifier_postfix_expression,
+				typename_expression,
+				template_typename_expression,
+				dynamic_cast_expression,
+				static_cast_expression,
+				reinterpret_cast_expression,
+				const_cast_expression,
+				typeid_expression,
+				type_id_typeid_expression
+			>
+			first_part
+		;
+
+		typedef
+			alternative_node
+			<
+				square_bracketed_expression,
+				bracketed_expression_list,
+				dot_id_expression,
+				arrow_id_expression,
+				dot_pseudo_destructor_name,
+				arrow_pseudo_destructor_name/*,
+				double_plus,
+				double_minus*/
+			>
+			last_part
+		;
+
+		typedef sequence_node<last_part> last_part_seq;
+
 		postfix_expression
 		(
-			boost::optional<primary_expression>&& primary_expression_node
+			first_part&& first_part_node,
+			boost::optional<space>&& space_node,
+			boost::optional<last_part_seq>&& last_part_seq_node
 		);
 
 		postfix_expression(const postfix_expression& o);
@@ -46,7 +109,9 @@ class postfix_expression: public composite_node
 		void
 		update_node_list();
 
-		boost::optional<primary_expression> primary_expression_;
+		first_part first_part_;
+		boost::optional<space> space_;
+		boost::optional<last_part_seq> last_part_seq_;
 };
 
 }}} //namespace socoa::cpp::syntax_nodes

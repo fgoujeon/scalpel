@@ -25,23 +25,31 @@ namespace socoa { namespace cpp { namespace syntax_nodes
 
 postfix_expression::postfix_expression
 (
-	boost::optional<primary_expression>&& primary_expression_node
+	first_part&& first_part_node,
+	boost::optional<space>&& space_node,
+	boost::optional<last_part_seq>&& last_part_seq_node
 ):
-	primary_expression_(primary_expression_node)
+	first_part_(first_part_node),
+	space_(space_node),
+	last_part_seq_(last_part_seq_node)
 {
 	update_node_list();
 }
 
 postfix_expression::postfix_expression(const postfix_expression& o):
 	composite_node(),
-	primary_expression_(o.primary_expression_)
+	first_part_(o.first_part_),
+	space_(o.space_),
+	last_part_seq_(o.last_part_seq_)
 {
 	update_node_list();
 }
 
 postfix_expression::postfix_expression(postfix_expression&& o):
 	composite_node(),
-	primary_expression_(std::move(o.primary_expression_))
+	first_part_(std::move(o.first_part_)),
+	space_(std::move(o.space_)),
+	last_part_seq_(std::move(o.last_part_seq_))
 {
 	update_node_list();
 }
@@ -49,7 +57,9 @@ postfix_expression::postfix_expression(postfix_expression&& o):
 const postfix_expression&
 postfix_expression::operator=(const postfix_expression& o)
 {
-	primary_expression_ = o.primary_expression_;
+	first_part_ = o.first_part_;
+	space_ = o.space_;
+	last_part_seq_ = o.last_part_seq_;
 
 	update_node_list();
 
@@ -60,7 +70,9 @@ void
 postfix_expression::update_node_list()
 {
 	clear();
-	if(primary_expression_) add(*primary_expression_);
+	add(first_part_);
+	if(space_) add(*space_);
+	if(last_part_seq_) add(*last_part_seq_);
 }
 
 }}} //namespace socoa::cpp::syntax_nodes

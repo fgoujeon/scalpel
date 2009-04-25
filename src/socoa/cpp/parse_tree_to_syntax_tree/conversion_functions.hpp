@@ -330,6 +330,60 @@ convert_using_directive(const tree_node_t& node);
 syntax_nodes::while_statement
 convert_while_statement(const tree_node_t& node);
 
+
+
+syntax_nodes::postfix_expression::first_part
+convert_postfix_expression_first_part(const tree_node_t& node);
+
+syntax_nodes::simple_type_specifier_postfix_expression
+convert_simple_type_specifier_postfix_expression(const tree_node_t& node);
+
+syntax_nodes::typename_expression
+convert_typename_expression(const tree_node_t& node);
+
+syntax_nodes::template_typename_expression
+convert_template_typename_expression(const tree_node_t& node);
+
+syntax_nodes::dynamic_cast_expression
+convert_dynamic_cast_expression(const tree_node_t& node);
+
+syntax_nodes::static_cast_expression
+convert_static_cast_expression(const tree_node_t& node);
+
+syntax_nodes::reinterpret_cast_expression
+convert_reinterpret_cast_expression(const tree_node_t& node);
+
+syntax_nodes::const_cast_expression
+convert_const_cast_expression(const tree_node_t& node);
+
+syntax_nodes::typeid_expression
+convert_typeid_expression(const tree_node_t& node);
+
+syntax_nodes::type_id_typeid_expression
+convert_type_id_typeid_expression(const tree_node_t& node);
+
+syntax_nodes::postfix_expression::last_part
+convert_postfix_expression_last_part(const tree_node_t& node);
+
+syntax_nodes::square_bracketed_expression
+convert_square_bracketed_expression(const tree_node_t& node);
+
+syntax_nodes::bracketed_expression_list
+convert_bracketed_expression_list(const tree_node_t& node);
+
+syntax_nodes::dot_id_expression
+convert_dot_id_expression(const tree_node_t& node);
+
+syntax_nodes::arrow_id_expression
+convert_arrow_id_expression(const tree_node_t& node);
+
+syntax_nodes::dot_pseudo_destructor_name
+convert_dot_pseudo_destructor_name(const tree_node_t& node);
+
+syntax_nodes::arrow_pseudo_destructor_name
+convert_arrow_pseudo_destructor_name(const tree_node_t& node);
+
+
 }}} //namespace socoa::cpp
 
 #endif

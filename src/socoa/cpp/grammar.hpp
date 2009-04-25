@@ -98,6 +98,26 @@ class grammar
             NESTED_NAME_SPECIFIER_NEXT_PART_SEQ,
             NESTED_NAME_SPECIFIER_NEXT_PART,
             POSTFIX_EXPRESSION,
+			POSTFIX_EXPRESSION_FIRST_PART,
+			SIMPLE_TYPE_SPECIFIER_POSTFIX_EXPRESSION,
+			TYPENAME_EXPRESSION,
+			TEMPLATE_TYPENAME_EXPRESSION,
+			DYNAMIC_CAST_EXPRESSION,
+			STATIC_CAST_EXPRESSION,
+			REINTERPRET_CAST_EXPRESSION,
+			CONST_CAST_EXPRESSION,
+			TYPEID_EXPRESSION,
+			TYPE_ID_TYPEID_EXPRESSION,
+			POSTFIX_EXPRESSION_LAST_PART_SEQ,
+			POSTFIX_EXPRESSION_LAST_PART,
+			SQUARE_BRACKETED_EXPRESSION,
+			BRACKETED_EXPRESSION_LIST,
+			DOT_ID_EXPRESSION,
+			ARROW_ID_EXPRESSION,
+			DOT_PSEUDO_DESTRUCTOR_NAME,
+			ARROW_PSEUDO_DESTRUCTOR_NAME,
+			DOUBLE_PLUS,
+			DOUBLE_MINUS,
             EXPRESSION_LIST,
             PSEUDO_DESTRUCTOR_NAME,
             UNARY_EXPRESSION,
@@ -388,6 +408,26 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::NESTED_NAME_SPECIFIER_NEXT_PART_SEQ>> nested_name_specifier_next_part_seq;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::NESTED_NAME_SPECIFIER_NEXT_PART>> nested_name_specifier_next_part;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::POSTFIX_EXPRESSION>> postfix_expression;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::POSTFIX_EXPRESSION_FIRST_PART>> postfix_expression_first_part;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::SIMPLE_TYPE_SPECIFIER_POSTFIX_EXPRESSION>> simple_type_specifier_postfix_expression;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TYPENAME_EXPRESSION>> typename_expression;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_TYPENAME_EXPRESSION>> template_typename_expression;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DYNAMIC_CAST_EXPRESSION>> dynamic_cast_expression;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::STATIC_CAST_EXPRESSION>> static_cast_expression;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::REINTERPRET_CAST_EXPRESSION>> reinterpret_cast_expression;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CONST_CAST_EXPRESSION>> const_cast_expression;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TYPEID_EXPRESSION>> typeid_expression;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TYPE_ID_TYPEID_EXPRESSION>> type_id_typeid_expression;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::POSTFIX_EXPRESSION_LAST_PART_SEQ>> postfix_expression_last_part_seq;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::POSTFIX_EXPRESSION_LAST_PART>> postfix_expression_last_part;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::SQUARE_BRACKETED_EXPRESSION>> square_bracketed_expression;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::BRACKETED_EXPRESSION_LIST>> bracketed_expression_list;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DOT_ID_EXPRESSION>> dot_id_expression;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ARROW_ID_EXPRESSION>> arrow_id_expression;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DOT_PSEUDO_DESTRUCTOR_NAME>> dot_pseudo_destructor_name;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ARROW_PSEUDO_DESTRUCTOR_NAME>> arrow_pseudo_destructor_name;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DOUBLE_PLUS>> double_plus;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DOUBLE_MINUS>> double_minus;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EXPRESSION_LIST>> expression_list;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PSEUDO_DESTRUCTOR_NAME>> pseudo_destructor_name;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::UNARY_EXPRESSION>> unary_expression;

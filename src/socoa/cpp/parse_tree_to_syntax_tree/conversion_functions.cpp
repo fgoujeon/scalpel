@@ -1509,9 +1509,19 @@ convert_postfix_expression(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::POSTFIX_EXPRESSION);
 
+	boost::optional<postfix_expression::last_part_seq> last_part_seq_node;
+
+	tree_node_iterator_t first_part_it = node.children.begin();
+
+	tree_node_iterator_t i = find_node<id_t::POSTFIX_EXPRESSION_LAST_PART_SEQ>(node);
+	if(i != node.children.end())
+		last_part_seq_node = convert_node<postfix_expression::last_part_seq>(*i);
+
 	return postfix_expression
 	(
-		find_and_convert_node<boost::optional<primary_expression>, id_t::PRIMARY_EXPRESSION>(node)
+		convert_node<postfix_expression::first_part>(*first_part_it),
+		convert_previous_space(i),
+		last_part_seq_node
 	);
 }
 
@@ -1708,6 +1718,166 @@ convert_while_statement(const tree_node_t& node)
 
 	return while_statement();
 }
+
+postfix_expression::first_part
+convert_postfix_expression_first_part(const tree_node_t& node)
+{
+	assert(node.value.id() == id_t::POSTFIX_EXPRESSION_FIRST_PART);
+
+	return convert_alternative
+	<
+		postfix_expression::first_part,
+		id_t::PRIMARY_EXPRESSION,
+		id_t::SIMPLE_TYPE_SPECIFIER_POSTFIX_EXPRESSION,
+		id_t::TYPENAME_EXPRESSION,
+		id_t::TEMPLATE_TYPENAME_EXPRESSION,
+		id_t::DYNAMIC_CAST_EXPRESSION,
+		id_t::STATIC_CAST_EXPRESSION,
+		id_t::REINTERPRET_CAST_EXPRESSION,
+		id_t::CONST_CAST_EXPRESSION,
+		id_t::TYPEID_EXPRESSION,
+		id_t::TYPE_ID_TYPEID_EXPRESSION
+	>(node);
+}
+
+simple_type_specifier_postfix_expression
+convert_simple_type_specifier_postfix_expression(const tree_node_t& node)
+{
+	assert(node.value.id() == id_t::SIMPLE_TYPE_SPECIFIER_POSTFIX_EXPRESSION);
+
+	return simple_type_specifier_postfix_expression();
+}
+
+typename_expression
+convert_typename_expression(const tree_node_t& node)
+{
+	assert(node.value.id() == id_t::TYPENAME_EXPRESSION);
+
+	return typename_expression();
+}
+
+template_typename_expression
+convert_template_typename_expression(const tree_node_t& node)
+{
+	assert(node.value.id() == id_t::TEMPLATE_TYPENAME_EXPRESSION);
+
+	return template_typename_expression();
+}
+
+dynamic_cast_expression
+convert_dynamic_cast_expression(const tree_node_t& node)
+{
+	assert(node.value.id() == id_t::DYNAMIC_CAST_EXPRESSION);
+
+	return dynamic_cast_expression();
+}
+
+static_cast_expression
+convert_static_cast_expression(const tree_node_t& node)
+{
+	assert(node.value.id() == id_t::STATIC_CAST_EXPRESSION);
+
+	return static_cast_expression();
+}
+
+reinterpret_cast_expression
+convert_reinterpret_cast_expression(const tree_node_t& node)
+{
+	assert(node.value.id() == id_t::REINTERPRET_CAST_EXPRESSION);
+
+	return reinterpret_cast_expression();
+}
+
+const_cast_expression
+convert_const_cast_expression(const tree_node_t& node)
+{
+	assert(node.value.id() == id_t::CONST_CAST_EXPRESSION);
+
+	return const_cast_expression();
+}
+
+typeid_expression
+convert_typeid_expression(const tree_node_t& node)
+{
+	assert(node.value.id() == id_t::TYPEID_EXPRESSION);
+
+	return typeid_expression();
+}
+
+type_id_typeid_expression
+convert_type_id_typeid_expression(const tree_node_t& node)
+{
+	assert(node.value.id() == id_t::TYPE_ID_TYPEID_EXPRESSION);
+
+	return type_id_typeid_expression();
+}
+
+postfix_expression::last_part
+convert_postfix_expression_last_part(const tree_node_t& node)
+{
+	assert(node.value.id() == id_t::POSTFIX_EXPRESSION_LAST_PART);
+
+	return convert_alternative
+	<
+		postfix_expression::last_part,
+		id_t::SQUARE_BRACKETED_EXPRESSION,
+		id_t::BRACKETED_EXPRESSION_LIST,
+		id_t::DOT_ID_EXPRESSION,
+		id_t::ARROW_ID_EXPRESSION,
+		id_t::DOT_PSEUDO_DESTRUCTOR_NAME,
+		id_t::ARROW_PSEUDO_DESTRUCTOR_NAME
+	>(node);
+}
+
+square_bracketed_expression
+convert_square_bracketed_expression(const tree_node_t& node)
+{
+	assert(node.value.id() == id_t::SQUARE_BRACKETED_EXPRESSION);
+
+	return square_bracketed_expression();
+}
+
+bracketed_expression_list
+convert_bracketed_expression_list(const tree_node_t& node)
+{
+	assert(node.value.id() == id_t::BRACKETED_EXPRESSION_LIST);
+
+	return bracketed_expression_list();
+}
+
+dot_id_expression
+convert_dot_id_expression(const tree_node_t& node)
+{
+	assert(node.value.id() == id_t::DOT_ID_EXPRESSION);
+
+	return dot_id_expression();
+}
+
+arrow_id_expression
+convert_arrow_id_expression(const tree_node_t& node)
+{
+	assert(node.value.id() == id_t::ARROW_ID_EXPRESSION);
+
+	return arrow_id_expression();
+}
+
+dot_pseudo_destructor_name
+convert_dot_pseudo_destructor_name(const tree_node_t& node)
+{
+	assert(node.value.id() == id_t::DOT_PSEUDO_DESTRUCTOR_NAME);
+
+	return dot_pseudo_destructor_name();
+}
+
+arrow_pseudo_destructor_name
+convert_arrow_pseudo_destructor_name(const tree_node_t& node)
+{
+	assert(node.value.id() == id_t::ARROW_PSEUDO_DESTRUCTOR_NAME);
+
+	return arrow_pseudo_destructor_name();
+}
+
+
 
 }}} //namespace socoa::cpp
 

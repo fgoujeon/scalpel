@@ -741,6 +741,120 @@ SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
 	while_statement,
 	while_statement
 )
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	POSTFIX_EXPRESSION_FIRST_PART,
+	postfix_expression::first_part,
+	postfix_expression_first_part
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	SIMPLE_TYPE_SPECIFIER_POSTFIX_EXPRESSION,
+	simple_type_specifier_postfix_expression,
+	simple_type_specifier_postfix_expression
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	TYPENAME_EXPRESSION,
+	typename_expression,
+	typename_expression
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	TEMPLATE_TYPENAME_EXPRESSION,
+	template_typename_expression,
+	template_typename_expression
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	DYNAMIC_CAST_EXPRESSION,
+	dynamic_cast_expression,
+	dynamic_cast_expression
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	STATIC_CAST_EXPRESSION,
+	static_cast_expression,
+	static_cast_expression
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	REINTERPRET_CAST_EXPRESSION,
+	reinterpret_cast_expression,
+	reinterpret_cast_expression
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	CONST_CAST_EXPRESSION,
+	const_cast_expression,
+	const_cast_expression
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	TYPEID_EXPRESSION,
+	typeid_expression,
+	typeid_expression
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	TYPE_ID_TYPEID_EXPRESSION,
+	type_id_typeid_expression,
+	type_id_typeid_expression
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	POSTFIX_EXPRESSION_LAST_PART,
+	postfix_expression::last_part,
+	postfix_expression_last_part
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	SQUARE_BRACKETED_EXPRESSION,
+	square_bracketed_expression,
+	square_bracketed_expression
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	BRACKETED_EXPRESSION_LIST,
+	bracketed_expression_list,
+	bracketed_expression_list
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	DOT_ID_EXPRESSION,
+	dot_id_expression,
+	dot_id_expression
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	ARROW_ID_EXPRESSION,
+	arrow_id_expression,
+	arrow_id_expression
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	DOT_PSEUDO_DESTRUCTOR_NAME,
+	dot_pseudo_destructor_name,
+	dot_pseudo_destructor_name
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	ARROW_PSEUDO_DESTRUCTOR_NAME,
+	arrow_pseudo_destructor_name,
+	arrow_pseudo_destructor_name
+)
+/*SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	DOUBLE_PLUS,
+	double_plus,
+	double_plus
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	DOUBLE_MINUS,
+	double_minus,
+	double_minus
+)*/
 
 template<class SyntaxNodeT>
 inline

@@ -491,33 +491,100 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	See direct_declarator rule for more information about the different steps to follow.
 	*/
 	postfix_expression
-		=
-		(
-			primary_expression
-			| simple_type_specifier >> !s >> '(' >> !s >> !expression_list >> !s >> ')'
-			| str_p("typename") >> !s >> !str_p("::") >> !s >> nested_name_specifier >> !s >> identifier >> !s >> '(' >> !s >> !expression_list >> !s >> ')'
-			| str_p("typename") >> !s >> !str_p("::") >> !s >> nested_name_specifier >> !s >> !str_p("template") >> !s >> template_id >> !s >> '(' >> !s >> !expression_list >> !s >> ')'
-			| str_p("dynamic_cast") >> !s >> '<' >> !s >> type_id >> !s >> '>' >> !s >> '(' >> !s >> expression >> !s >> ')'
-			| str_p("static_cast") >> !s >> '<' >> !s >> type_id >> !s >> '>' >> !s >> '(' >> !s >> expression >> !s >> ')'
-			| str_p("reinterpret_cast") >> !s >> '<' >> !s >> type_id >> !s >> '>' >> !s >> '(' >> !s >> expression >> !s >> ')'
-			| str_p("const_cast") >> !s >> '<' >> !s >> type_id >> !s >> '>' >> !s >> '(' >> !s >> expression >> !s >> ')'
-			| str_p("typeid") >> !s >> '(' >> !s >> expression >> !s >> ')'
-			| str_p("typeid") >> !s >> '(' >> !s >> type_id >> !s >> ')'
-		)
-		>>
-		*(
-			!s >>
-			(
-				'[' >> !s >> expression >> !s >> ']'
-				| '(' >> !s >> !expression_list >> !s >> ')'
-				| '.' >> !s >> !str_p("template") >> !s >> id_expression
-				| "->" >> !s >> !str_p("template") >> !s >> id_expression
-				| '.' >> !s >> pseudo_destructor_name
-				| "->" >> !s >> pseudo_destructor_name
-				| "++"
-				| "--"
-			)
-		)
+		= postfix_expression_first_part >> !(!s >> postfix_expression_last_part_seq)
+	;
+	postfix_expression_first_part
+		= primary_expression
+		| simple_type_specifier_postfix_expression
+		| typename_expression
+		| template_typename_expression
+		| dynamic_cast_expression
+		| static_cast_expression
+		| reinterpret_cast_expression
+		| const_cast_expression
+		| typeid_expression
+		| type_id_typeid_expression
+	;
+	postfix_expression_last_part_seq
+		= postfix_expression_last_part % !s
+	;
+	postfix_expression_last_part
+		= square_bracketed_expression
+		| bracketed_expression_list
+		| dot_id_expression
+		| arrow_id_expression
+		| dot_pseudo_destructor_name
+		| arrow_pseudo_destructor_name
+		| double_plus
+		| double_minus
+	;
+
+	simple_type_specifier_postfix_expression
+		= simple_type_specifier >> !s >> '(' >> !s >> !(expression_list >> !s) >> ')'
+	;
+
+	typename_expression
+		= str_p("typename") >> !s >> !(str_p("::") >> !s) >> nested_name_specifier >> !s >> identifier >> !s >> '(' >> !s >> !(expression_list >> !s) >> ')'
+	;
+
+	template_typename_expression
+		= str_p("typename") >> !s >> !(str_p("::") >> !s) >> nested_name_specifier >> !s >> !(str_p("template") >> !s) >> template_id >> !s >> '(' >> !s >> !(expression_list >> !s) >> ')'
+	;
+
+	dynamic_cast_expression
+		= str_p("dynamic_cast") >> !s >> '<' >> !s >> type_id >> !s >> '>' >> !s >> '(' >> !s >> expression >> !s >> ')'
+	;
+
+	static_cast_expression
+		= str_p("static_cast") >> !s >> '<' >> !s >> type_id >> !s >> '>' >> !s >> '(' >> !s >> expression >> !s >> ')'
+	;
+
+	reinterpret_cast_expression
+		= str_p("reinterpret_cast") >> !s >> '<' >> !s >> type_id >> !s >> '>' >> !s >> '(' >> !s >> expression >> !s >> ')'
+	;
+
+	const_cast_expression
+		= str_p("const_cast") >> !s >> '<' >> !s >> type_id >> !s >> '>' >> !s >> '(' >> !s >> expression >> !s >> ')'
+	;
+
+	typeid_expression
+		= str_p("typeid") >> !s >> '(' >> !s >> expression >> !s >> ')'
+	;
+
+	type_id_typeid_expression
+		= str_p("typeid") >> !s >> '(' >> !s >> type_id >> !s >> ')'
+	;
+
+	square_bracketed_expression
+		= '[' >> !s >> expression >> !s >> ']'
+	;
+
+	bracketed_expression_list
+		= '(' >> !s >> !(expression_list >> !s) >> ')'
+	;
+
+	dot_id_expression
+		= '.' >> !s >> !(str_p("template") >> !s) >> id_expression
+	;
+
+	arrow_id_expression
+		= "->" >> !s >> !(str_p("template") >> !s) >> id_expression
+	;
+
+	dot_pseudo_destructor_name
+		= '.' >> !s >> pseudo_destructor_name
+	;
+
+	arrow_pseudo_destructor_name
+		= "->" >> !s >> pseudo_destructor_name
+	;
+
+	double_plus
+		= str_p("++")
+	;
+
+	double_minus
+		= str_p("--")
 	;
 
 	expression_list
@@ -527,7 +594,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	pseudo_destructor_name
 		= nested_identifier_or_template_id >> !s >> str_p("::") >> !s >> '~' >> !s >> identifier_or_template_id
 		| !str_p("::") >> !s >> nested_name_specifier >> !s >> str_p("template") >> !s >> template_id >> !s >> str_p("::") >> !s >> '~' >> !s >> identifier_or_template_id
-		| !str_p("::") >> !s >> !nested_name_specifier >> !s >> '~' >> !s >> identifier_or_template_id
+		| !str_p("::") >> !s >> !(nested_name_specifier >> !s) >> '~' >> !s >> identifier_or_template_id
 	;
 
 	unary_expression
@@ -563,8 +630,8 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	new_expression
-		= !str_p("::") >> !s >> str_p("new") >> !s >> !new_placement >> !s >> '(' >> !s >> type_id >> !s >> ')' >> !s >> !new_initializer
-		| !str_p("::") >> !s >> str_p("new") >> !s >> !new_placement >> !s >> new_type_id >> !s >> !new_initializer
+		= !str_p("::") >> !s >> str_p("new") >> !s >> !(new_placement >> !s) >> '(' >> !s >> type_id >> !s >> ')' >> !(!s >> new_initializer)
+		| !str_p("::") >> !s >> str_p("new") >> !s >> !(new_placement >> !s) >> new_type_id >> !(!s >> new_initializer)
 	;
 
 	new_placement
