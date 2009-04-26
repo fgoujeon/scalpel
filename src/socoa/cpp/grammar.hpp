@@ -160,7 +160,6 @@ class grammar
             TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION,
             ASSIGNMENT_OPERATOR,
             EXPRESSION,
-            CONSTANT_EXPRESSION,
 
             STATEMENT,
             LABELED_STATEMENT,
@@ -488,7 +487,6 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION>> template_argument_assignment_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ASSIGNMENT_OPERATOR>> assignment_operator;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EXPRESSION>> expression;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CONSTANT_EXPRESSION>> constant_expression;
 
         //1.5 - Statements [gram.stmt.stmt]
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::STATEMENT>> statement;

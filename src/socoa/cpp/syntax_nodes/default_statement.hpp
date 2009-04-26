@@ -21,16 +21,31 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_NODES_DEFAULT_STATEMENT_HPP
 #define SOCOA_CPP_SYNTAX_NODES_DEFAULT_STATEMENT_HPP
 
+#include <memory>
+#include <boost/optional.hpp>
 #include "composite_node.hpp"
+#include "space.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
+class statement;
+
+/**
+\verbatim
+default_statement
+	= str_p("default") >> !s >> ':' >> !s >> statement
+;
+\endverbatim
+*/
 class default_statement: public composite_node
 {
 	public:
 		default_statement
 		(
+			boost::optional<space>&& post_default_keyword_space_node,
+			boost::optional<space>&& post_colon_space_node,
+			statement&& statement_node
 		);
 
 		default_statement(const default_statement& o);
@@ -43,6 +58,10 @@ class default_statement: public composite_node
 	private:
 		void
 		update_node_list();
+
+		boost::optional<space> post_default_keyword_space_;
+		boost::optional<space> post_colon_space_;
+		std::unique_ptr<statement> statement_;
 };
 
 }}} //namespace socoa::cpp::syntax_nodes

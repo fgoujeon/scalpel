@@ -648,7 +648,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	direct_new_declarator
-		= '[' >> !s >> expression >> !s >> ']' >> !s >> !('[' >> !s >> constant_expression >> !s >> ']')
+		= '[' >> !s >> expression >> !s >> ']' >> !s >> !('[' >> !s >> conditional_expression >> !s >> ']')
 	;
 
 	new_initializer
@@ -834,10 +834,6 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		= assignment_expression % (!s >> ',' >> !s)
 	;
 
-	constant_expression
-		= conditional_expression
-	;
-
 	//1.5 - Statements [gram.stmt.stmt]
 	statement
 		= labeled_statement
@@ -857,7 +853,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	case_statement
-		= str_p("case") >> !s >> constant_expression >> !s >> ':' >> !s >> statement
+		= str_p("case") >> !s >> conditional_expression >> !s >> ':' >> !s >> statement
 	;
 
 	default_statement
@@ -1076,7 +1072,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	enumerator_definition
-		= identifier >> !s >> !('=' >> !s >> constant_expression)
+		= identifier >> !s >> !('=' >> !s >> conditional_expression)
 	;
 
 	namespace_definition
@@ -1134,7 +1130,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		direct_declarator
 			= declarator_id
 			| direct_declarator >> '(' >> parameter_declaration_clause >> ')' >> !cv_qualifier_seq >> !exception_specification
-			| direct_declarator >> '[' >> !constant_expression >> ']'
+			| direct_declarator >> '[' >> !conditional_expression >> ']'
 			| '(' >> declarator >> ')'
 		;
 
@@ -1147,7 +1143,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		;
 		direct_declarator_rest
 			= '(' >> parameter_declaration_clause >> ')' >> !cv_qualifier_seq >> !exception_specification
-			| '[' >> !constant_expression >> ']'
+			| '[' >> !conditional_expression >> ']'
 		;
 
 		***
@@ -1158,7 +1154,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		;
 		direct_declarator_rest
 			= '(' >> parameter_declaration_clause >> ')' >> !cv_qualifier_seq >> !exception_specification >> direct_declarator_rest
-			| '[' >> !constant_expression >> ']' >> direct_declarator_rest
+			| '[' >> !conditional_expression >> ']' >> direct_declarator_rest
 			| epsilon_p
 		;
 
@@ -1171,7 +1167,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 			=
 				(
 					'(' >> parameter_declaration_clause >> ')' >> !cv_qualifier_seq >> !exception_specification
-					| '[' >> !constant_expression >> ']'
+					| '[' >> !conditional_expression >> ']'
 				) >> direct_declarator_rest
 			| epsilon_p
 		;
@@ -1186,7 +1182,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 				!(
 					(
 						'(' >> parameter_declaration_clause >> ')' >> !cv_qualifier_seq >> !exception_specification
-						| '[' >> !constant_expression >> ']'
+						| '[' >> !conditional_expression >> ']'
 					)
 					>> direct_declarator_rest
 				)
@@ -1202,7 +1198,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 				*(
 
 					'(' >> parameter_declaration_clause >> ')' >> !cv_qualifier_seq >> !exception_specification
-					| '[' >> !constant_expression >> ']'
+					| '[' >> !conditional_expression >> ']'
 				)
 		;
 	*/
@@ -1225,7 +1221,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		= '(' >> !s >> parameter_declaration_clause >> !s >> ')' >> !(!s >> cv_qualifier_seq) >> !(!s >> exception_specification)
 	;
 	direct_declarator_array_part
-		= '[' >> !s >> !constant_expression >> !s >> ']'
+		= '[' >> !s >> !conditional_expression >> !s >> ']'
 	;
 
 	ptr_operator_seq
@@ -1270,7 +1266,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	Original rule is:
 		direct_abstract_declarator
 			= !direct_abstract_declarator >> '(' >> parameter_declaration_clause >> ')' >> !cv_qualifier_seq >> !exception_specification
-			| !direct_abstract_declarator >> '[' >> !constant_expression >> ']'
+			| !direct_abstract_declarator >> '[' >> !conditional_expression >> ']'
 			| '(' >> abstract_declarator >> ')'
 		;
 	*/
@@ -1284,7 +1280,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 			!s >>
 			(
 				'(' >> !s >> parameter_declaration_clause >> !s >> ')' >> !s >> !cv_qualifier_seq >> !s >> !exception_specification
-				| '[' >> !s >> !constant_expression >> !s >> ']'
+				| '[' >> !s >> !conditional_expression >> !s >> ']'
 			)
 		)
 	;
@@ -1437,7 +1433,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		= declarator >> !s >> !(pure_specifier | constant_initializer) ///@todo find what declarator >> !s >> constant_initializer stands for
 	;
 	member_declarator_bit_field_member
-		= !(identifier >> !s) >> ':' >> !s >> constant_expression //bit field member
+		= !(identifier >> !s) >> ':' >> !s >> conditional_expression //bit field member
 	;
 
 	pure_specifier
@@ -1445,7 +1441,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	constant_initializer
-		= '=' >> !s >> constant_expression
+		= '=' >> !s >> conditional_expression
 	;
 
 	//convenience rule, not explicitly in the standard
