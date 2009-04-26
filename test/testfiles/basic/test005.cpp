@@ -1,11 +1,7 @@
-using namespace std;
+char* c1;
+const char* c2;
+char const* c3;
+char* const c4;
+const char* const c5;
 
-int main(int argc, char** argv)
-{
-	if(argc <= 1)
-	{
-		cout << "There's no argument";
-	}
-
-	return 0;
-}
+volatile char* v1;

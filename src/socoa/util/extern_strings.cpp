@@ -29,7 +29,9 @@ namespace extern_strings
     const std::string space(" ");
     const std::string comma(",");
     const std::string pipe("|");
+    const std::string double_minus("--");
     const std::string double_pipe("||");
+    const std::string double_plus("++");
     const std::string ampersand("&");
     const std::string double_ampersand("&&");
     const std::string circumflex("^");

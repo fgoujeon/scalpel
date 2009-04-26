@@ -18,28 +18,25 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_UTIL_EXTERN_STRINGS_HPP
-#define SOCOA_UTIL_EXTERN_STRINGS_HPP
+#ifndef SOCOA_CPP_SYNTAX_NODES_SIMPLE_TEXT_NODE_HPP
+#define SOCOA_CPP_SYNTAX_NODES_SIMPLE_TEXT_NODE_HPP
 
-#include <string>
-
-namespace socoa { namespace util
+namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
-namespace extern_strings
+template<const std::string& Text>
+class simple_text_node: public leaf_node
 {
-    extern const std::string empty;
-    extern const std::string space;
-    extern const std::string comma;
-    extern const std::string pipe;
-    extern const std::string double_minus;
-    extern const std::string double_pipe;
-    extern const std::string double_plus;
-    extern const std::string ampersand;
-    extern const std::string double_ampersand;
-    extern const std::string circumflex;
+	public:
+		simple_text_node();
+};
+
+template<const std::string& Text>
+simple_text_node<Text>::simple_text_node():
+	leaf_node(Text)
+{
 }
 
-}} //namespace socoa::util
+}}} //namespace socoa::cpp::syntax_nodes
 
 #endif

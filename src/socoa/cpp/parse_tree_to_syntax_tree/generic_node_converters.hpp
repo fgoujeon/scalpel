@@ -885,6 +885,18 @@ SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
 	classic_labeled_statement,
 	classic_labeled_statement
 )
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	DOUBLE_PLUS,
+	simple_text_node<util::extern_strings::double_plus>,
+	simple_text<util::extern_strings::double_plus>
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	DOUBLE_MINUS,
+	simple_text_node<util::extern_strings::double_minus>,
+	simple_text<util::extern_strings::double_minus>
+)
 
 template<class SyntaxNodeT>
 inline

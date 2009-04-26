@@ -21,6 +21,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_NODES_POSTFIX_EXPRESSION_HPP
 #define SOCOA_CPP_SYNTAX_NODES_POSTFIX_EXPRESSION_HPP
 
+#include "../../util/extern_strings.hpp"
 #include "composite_node.hpp"
 #include "alternative_node.hpp"
 #include "primary_expression.hpp"
@@ -39,10 +40,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "arrow_id_expression.hpp"
 #include "dot_pseudo_destructor_name.hpp"
 #include "arrow_pseudo_destructor_name.hpp"
-/*
-#include "double_plus.hpp"
-#include "double_minus.hpp"
-*/
+#include "simple_text_node.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
@@ -50,7 +48,7 @@ namespace socoa { namespace cpp { namespace syntax_nodes
 /**
 \verbatim
 postfix_expression
-	= postfix_expression_first_part >> !(!s >> postfix_expression_last_part_seq)
+	= postfix_expression::first_part, [postfix_expression::last_part_seq]
 ;
 \endverbatim
 */
@@ -82,9 +80,9 @@ class postfix_expression: public composite_node
 				dot_id_expression,
 				arrow_id_expression,
 				dot_pseudo_destructor_name,
-				arrow_pseudo_destructor_name/*,
-				double_plus,
-				double_minus*/
+				arrow_pseudo_destructor_name,
+				simple_text_node<util::extern_strings::double_plus>,
+				simple_text_node<util::extern_strings::double_minus>
 			>
 			last_part
 		;

@@ -1278,7 +1278,9 @@ convert_postfix_expression_last_part(const tree_node_t& node)
 		id_t::DOT_ID_EXPRESSION,
 		id_t::ARROW_ID_EXPRESSION,
 		id_t::DOT_PSEUDO_DESTRUCTOR_NAME,
-		id_t::ARROW_PSEUDO_DESTRUCTOR_NAME
+		id_t::ARROW_PSEUDO_DESTRUCTOR_NAME,
+		id_t::DOUBLE_MINUS,
+		id_t::DOUBLE_PLUS
 	>(node);
 }
 
