@@ -30,6 +30,15 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
+/**
+\verbatim
+ptr_operator
+	= ch_p('*') >> !(!s >> cv_qualifier_seq)
+	| ch_p('&')
+	| !(str_p("::") >> !s) >> nested_name_specifier >> !s >> '*' >> !(!s >> cv_qualifier_seq)
+;
+\endverbatim
+*/
 class ptr_operator: public composite_node
 {
 	public:
@@ -43,8 +52,11 @@ class ptr_operator: public composite_node
 		(
 			type a_type,
 			bool leading_double_colon,
-			boost::optional<nested_name_specifier>&& a_nested_name_specifier,
-			boost::optional<cv_qualifier_seq>&& a_cv_qualifier_seq
+			boost::optional<space>&& post_leading_double_colon_space_node,
+			boost::optional<nested_name_specifier>&& nested_name_specifier_node,
+			boost::optional<space>&& post_nested_name_specifier_space_node,
+			boost::optional<space>&& pre_cv_qualifier_seq_space_node,
+			boost::optional<cv_qualifier_seq>&& cv_qualifier_seq_node
 		);
 
 		ptr_operator(const ptr_operator& o);
@@ -76,7 +88,10 @@ class ptr_operator: public composite_node
 
 		type type_;
 		bool leading_double_colon_;
+		boost::optional<space> post_leading_double_colon_space_;
 		boost::optional<nested_name_specifier> nested_name_specifier_;
+		boost::optional<space> post_nested_name_specifier_space_;
+		boost::optional<space> pre_cv_qualifier_seq_space_;
 		boost::optional<cv_qualifier_seq> cv_qualifier_seq_;
 };
 

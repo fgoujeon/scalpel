@@ -29,13 +29,19 @@ ptr_operator::ptr_operator
 (
 	type a_type,
 	bool leading_double_colon,
-	boost::optional<nested_name_specifier>&& a_nested_name_specifier,
-	boost::optional<cv_qualifier_seq>&& a_cv_qualifier_seq
+	boost::optional<space>&& post_leading_double_colon_space_node,
+	boost::optional<nested_name_specifier>&& nested_name_specifier_node,
+	boost::optional<space>&& post_nested_name_specifier_space_node,
+	boost::optional<space>&& pre_cv_qualifier_seq_space_node,
+	boost::optional<cv_qualifier_seq>&& cv_qualifier_seq_node
 ):
 	type_(a_type),
 	leading_double_colon_(leading_double_colon),
-	nested_name_specifier_(a_nested_name_specifier),
-	cv_qualifier_seq_(a_cv_qualifier_seq)
+	post_leading_double_colon_space_(post_leading_double_colon_space_node),
+	nested_name_specifier_(nested_name_specifier_node),
+	post_nested_name_specifier_space_(post_nested_name_specifier_space_node),
+	pre_cv_qualifier_seq_space_(pre_cv_qualifier_seq_space_node),
+	cv_qualifier_seq_(cv_qualifier_seq_node)
 {
 	update_node_list();
 }
@@ -44,7 +50,10 @@ ptr_operator::ptr_operator(const ptr_operator& o):
 	composite_node(),
 	type_(o.type_),
 	leading_double_colon_(o.leading_double_colon_),
+	post_leading_double_colon_space_(o.post_leading_double_colon_space_),
 	nested_name_specifier_(o.nested_name_specifier_),
+	post_nested_name_specifier_space_(o.post_nested_name_specifier_space_),
+	pre_cv_qualifier_seq_space_(o.pre_cv_qualifier_seq_space_),
 	cv_qualifier_seq_(o.cv_qualifier_seq_)
 {
 	update_node_list();
@@ -53,7 +62,10 @@ ptr_operator::ptr_operator(const ptr_operator& o):
 ptr_operator::ptr_operator(ptr_operator&& o):
 	type_(std::move(o.type_)),
 	leading_double_colon_(std::move(o.leading_double_colon_)),
+	post_leading_double_colon_space_(std::move(o.post_leading_double_colon_space_)),
 	nested_name_specifier_(std::move(o.nested_name_specifier_)),
+	post_nested_name_specifier_space_(std::move(o.post_nested_name_specifier_space_)),
+	pre_cv_qualifier_seq_space_(std::move(o.pre_cv_qualifier_seq_space_)),
 	cv_qualifier_seq_(std::move(o.cv_qualifier_seq_))
 {
 	update_node_list();
@@ -64,8 +76,12 @@ ptr_operator::operator=(const ptr_operator& o)
 {
 	type_ = o.type_;
 	leading_double_colon_ = o.leading_double_colon_;
+	post_leading_double_colon_space_ = o.post_leading_double_colon_space_;
 	nested_name_specifier_ = o.nested_name_specifier_;
+	post_nested_name_specifier_space_ = o.post_nested_name_specifier_space_;
+	pre_cv_qualifier_seq_space_ = o.pre_cv_qualifier_seq_space_;
 	cv_qualifier_seq_ = o.cv_qualifier_seq_;
+
 	update_node_list();
 
 	return *this;
@@ -75,7 +91,10 @@ void
 ptr_operator::update_node_list()
 {
 	clear();
+	if(leading_double_colon_) add(double_colon);
+	if(post_leading_double_colon_space_) add(*post_leading_double_colon_space_);
 	if(nested_name_specifier_) add(*nested_name_specifier_);
+	if(post_nested_name_specifier_space_) add(*post_nested_name_specifier_space_);
 	switch(type_)
 	{
 		case ASTERISK:
@@ -85,6 +104,7 @@ ptr_operator::update_node_list()
 			add(ampersand);
 			break;
 	}
+	if(pre_cv_qualifier_seq_space_) add(*pre_cv_qualifier_seq_space_);
 	if(cv_qualifier_seq_) add(*cv_qualifier_seq_);
 }
 

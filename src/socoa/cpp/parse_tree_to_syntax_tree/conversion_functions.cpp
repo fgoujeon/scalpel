@@ -1328,12 +1328,19 @@ convert_ptr_operator(const tree_node_t& node)
     );
     #endif
 
+	tree_node_iterator_t leading_double_colon_it = find_node(node, "::");
+	tree_node_iterator_t nested_name_specifier_it = find_node<id_t::NESTED_NAME_SPECIFIER>(node);
+	tree_node_iterator_t cv_qualifier_seq_it = find_node<id_t::CV_QUALIFIER_SEQ>(node);
+
     return ptr_operator
 	(
 		check_node_existence(node, "*") ? ptr_operator::ASTERISK : ptr_operator::AMPERSAND,
-		check_node_existence(node, "::", 0),
-		find_and_convert_node<boost::optional<nested_name_specifier>, id_t::NESTED_NAME_SPECIFIER>(node),
-		find_and_convert_node<boost::optional<cv_qualifier_seq>, id_t::CV_QUALIFIER_SEQ>(node)
+		leading_double_colon_it != node.children.end(),
+		convert_next_space(leading_double_colon_it),
+		convert_optional<nested_name_specifier>(nested_name_specifier_it, node),
+		convert_next_space(nested_name_specifier_it),
+		convert_previous_space(cv_qualifier_seq_it),
+		convert_optional<cv_qualifier_seq>(cv_qualifier_seq_it, node)
     );
 }
 
