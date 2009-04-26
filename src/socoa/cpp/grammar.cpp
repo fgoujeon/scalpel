@@ -905,7 +905,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		= assignment_expression_condition_type_specifier_seq >> !s >> declarator >> !s >> '=' >> !s >> assignment_expression
 	;
 	assignment_expression_condition_type_specifier_seq
-		= +(type_specifier - (declarator >> !s >> '=' >> !s >> assignment_expression))
+		= (type_specifier - (declarator >> !s >> '=' >> !s >> assignment_expression)) % !s
 	;
 
 	iteration_statement
@@ -1218,10 +1218,10 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		| direct_declarator_array_part
 	;
 	direct_declarator_function_part
-		= '(' >> !s >> parameter_declaration_clause >> !s >> ')' >> !(!s >> cv_qualifier_seq) >> !(!s >> exception_specification)
+		= '(' >> !s >> !(parameter_declaration_clause >> !s) >> ')' >> !(!s >> cv_qualifier_seq) >> !(!s >> exception_specification)
 	;
 	direct_declarator_array_part
-		= '[' >> !s >> !conditional_expression >> !s >> ']'
+		= '[' >> !s >> !(conditional_expression >> !s) >> ']'
 	;
 
 	ptr_operator_seq
@@ -1279,7 +1279,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		*(
 			!s >>
 			(
-				'(' >> !s >> parameter_declaration_clause >> !s >> ')' >> !s >> !cv_qualifier_seq >> !s >> !exception_specification
+				'(' >> !s >> !(parameter_declaration_clause >> !s) >> ')' >> !s >> !cv_qualifier_seq >> !s >> !exception_specification
 				| '[' >> !s >> !conditional_expression >> !s >> ']'
 			)
 		)
@@ -1418,7 +1418,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		= function_definition >> !(!s >> ch_p(';'))
 	;
 	member_declaration_decl_specifier_seq
-		= +(decl_specifier - (member_declarator_list >> !s >> ch_p(';')))
+		= (decl_specifier - (member_declarator_list >> !s >> ch_p(';'))) % !s
 	;
 
 	member_declarator_list

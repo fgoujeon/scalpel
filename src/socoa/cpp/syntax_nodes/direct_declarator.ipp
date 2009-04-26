@@ -47,10 +47,10 @@ direct_declarator::get_next_part_seq() const
 
 
 inline
-const parameter_declaration_clause&
+const boost::optional<const parameter_declaration_clause&>
 direct_declarator::function_part::get_parameter_declaration_clause() const
 {
-    return parameter_declaration_clause_;
+    return boost::optional<const parameter_declaration_clause&>(parameter_declaration_clause_);
 }
 
 inline

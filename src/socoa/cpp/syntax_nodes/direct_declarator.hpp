@@ -114,10 +114,10 @@ class direct_declarator::function_part: public composite_node
 	public:
 		function_part
 		(
-			boost::optional<space>&& space1,
-			parameter_declaration_clause&& a_parameter_declaration_clause,
-			boost::optional<space>&& space2,
-			boost::optional<space>&& space3,
+			boost::optional<space>&& post_opening_bracket_space_node,
+			boost::optional<parameter_declaration_clause>&& a_parameter_declaration_clause,
+			boost::optional<space>&& post_parameter_declaration_clause_space_node,
+			boost::optional<space>&& cv_qualifier_seq_space_node,
 			boost::optional<cv_qualifier_seq>&& a_cv_qualifier_seq
 		);
 
@@ -129,7 +129,7 @@ class direct_declarator::function_part: public composite_node
 		operator=(const function_part& o);
 
 		inline
-		const parameter_declaration_clause&
+		const boost::optional<const parameter_declaration_clause&>
 		get_parameter_declaration_clause() const;
 
 		inline
@@ -140,10 +140,10 @@ class direct_declarator::function_part: public composite_node
 		void
 		update_node_list();
 
-		boost::optional<space> space1_;
-		parameter_declaration_clause parameter_declaration_clause_;
-		boost::optional<space> space2_;
-		boost::optional<space> space3_;
+		boost::optional<space> post_opening_bracket_space_;
+		boost::optional<parameter_declaration_clause> parameter_declaration_clause_;
+		boost::optional<space> post_parameter_declaration_clause_space_;
+		boost::optional<space> cv_qualifier_seq_space_;
 		boost::optional<cv_qualifier_seq> cv_qualifier_seq_;
 };
 
