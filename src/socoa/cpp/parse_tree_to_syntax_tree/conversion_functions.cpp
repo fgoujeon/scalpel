@@ -1796,11 +1796,22 @@ convert_using_directive(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::USING_DIRECTIVE);
 
+	tree_node_iterator_t using_keyword_it = node.children.begin();
+	tree_node_iterator_t namespace_keyword_it = find_node(node, "namespace");
+	tree_node_iterator_t leading_double_colon_it = find_node(node, "::");
+	tree_node_iterator_t nested_name_specifier_it = find_node<id_t::NESTED_NAME_SPECIFIER>(node);
+	tree_node_iterator_t identifier_it = find_node<id_t::IDENTIFIER>(node);
+
     return using_directive
     (
-        check_node_existence(node, "::", 2),
-        find_and_convert_node<boost::optional<nested_name_specifier>, id_t::NESTED_NAME_SPECIFIER>(node),
-        find_and_convert_node<identifier, id_t::IDENTIFIER>(node)
+		convert_next_space(using_keyword_it),
+		convert_next_space(namespace_keyword_it),
+		leading_double_colon_it != node.children.end(),
+		convert_next_space(leading_double_colon_it),
+		convert_optional<nested_name_specifier>(nested_name_specifier_it, node),
+		convert_next_space(nested_name_specifier_it),
+		convert_node<identifier>(*identifier_it),
+		convert_next_space(identifier_it)
     );
 }
 

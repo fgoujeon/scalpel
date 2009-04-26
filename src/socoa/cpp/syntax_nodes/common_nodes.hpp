@@ -76,9 +76,11 @@ extern const leaf_node else_keyword;
 extern const leaf_node for_keyword;
 extern const leaf_node goto_keyword;
 extern const leaf_node if_keyword;
+extern const leaf_node namespace_keyword;
 extern const leaf_node return_keyword;
 extern const leaf_node switch_keyword;
 extern const leaf_node template_keyword;
+extern const leaf_node using_keyword;
 
 }}} //namespace socoa::cpp::syntax_nodes
 

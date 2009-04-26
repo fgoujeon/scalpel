@@ -72,9 +72,11 @@ const leaf_node else_keyword("else");
 const leaf_node for_keyword("for");
 const leaf_node goto_keyword("goto");
 const leaf_node if_keyword("if");
+const leaf_node namespace_keyword("namespace");
 const leaf_node return_keyword("return");
 const leaf_node switch_keyword("switch");
 const leaf_node template_keyword("template");
+const leaf_node using_keyword("using");
 
 }}} //namespace socoa::cpp::syntax_nodes
 

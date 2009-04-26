@@ -21,23 +21,35 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_NODES_USING_DIRECTIVE_HPP
 #define SOCOA_CPP_SYNTAX_NODES_USING_DIRECTIVE_HPP
 
-#include <memory>
 #include <boost/optional.hpp>
 #include "composite_node.hpp"
 #include "identifier.hpp"
 #include "nested_name_specifier.hpp"
+#include "space.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
+/**
+\verbatim
+using_directive
+	= "using" >> !s >> "namespace" >> !s >> !(str_p("::") >> !s) >> !(nested_name_specifier >> !s) >> identifier >> !s >> ch_p(';')
+;
+\endverbatim
+*/
 class using_directive: public composite_node
 {
 	public:
 		using_directive
 		(
+			boost::optional<space>&& post_using_keyword_space_node,
+			boost::optional<space>&& post_namespace_keyword_space_node,
 			bool leading_double_colon,
-			boost::optional<nested_name_specifier>&& a_nested_name_specifier,
-			identifier&& an_identifier
+			boost::optional<space>&& post_leading_double_colon_space_node,
+			boost::optional<nested_name_specifier>&& nested_name_specifier_node,
+			boost::optional<space>&& post_nested_name_specifier_space_node,
+			identifier&& identifier_node,
+			boost::optional<space>&& post_identifier_space_node
 		);
 
 		using_directive(const using_directive& o);
@@ -63,9 +75,14 @@ class using_directive: public composite_node
 		void
 		update_node_list();
 
+		boost::optional<space> post_using_keyword_space_;
+		boost::optional<space> post_namespace_keyword_space_;
 		bool leading_double_colon_;
+		boost::optional<space> post_leading_double_colon_space_;
 		boost::optional<nested_name_specifier> nested_name_specifier_;
+		boost::optional<space> post_nested_name_specifier_space_;
 		identifier identifier_;
+		boost::optional<space> post_identifier_space_;
 };
 
 inline

@@ -178,7 +178,7 @@ convert_optional(const tree_node_iterator_t& it, const tree_node_t& parent_node)
 
 template<const std::string&& Text>
 syntax_nodes::simple_text_node<Text>
-convert_simple_text(const tree_node_t& node)
+convert_simple_text(const tree_node_t&)
 {
 	return syntax_nodes::simple_text_node<Text>();
 }
