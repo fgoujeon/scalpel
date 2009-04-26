@@ -607,11 +607,14 @@ convert_direct_declarator(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::DIRECT_DECLARATOR);
 
+	tree_node_iterator_t next_part_seq_it = find_node<id_t::DIRECT_DECLARATOR_NEXT_PART_SEQ>(node);
+
     return direct_declarator
     (
 		find_and_convert_node<boost::optional<declarator_id>, id_t::DECLARATOR_ID>(node),
 		find_and_convert_node<boost::optional<declarator>, id_t::DECLARATOR>(node),
-		find_and_convert_node<boost::optional<sequence_node<direct_declarator::next_part>>, id_t::DIRECT_DECLARATOR_NEXT_PART_SEQ>(node)
+		convert_previous_space(next_part_seq_it),
+		convert_optional<sequence_node<direct_declarator::next_part>>(next_part_seq_it, node)
     );
 }
 
@@ -771,6 +774,7 @@ convert_function_definition(const tree_node_t& node)
 		id_t::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ2,
 		id_t::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ3
 	>(node);
+	tree_node_iterator_t declarator_it = find_node<id_t::DECLARATOR>(node);
 	tree_node_iterator_t ctor_initializer_it = find_node<id_t::CTOR_INITIALIZER>(node);
 	tree_node_iterator_t compound_statement_it = find_node<id_t::COMPOUND_STATEMENT>(node);
 
@@ -778,10 +782,10 @@ convert_function_definition(const tree_node_t& node)
     (
 		convert_optional<decl_specifier_seq>(decl_specifier_seq_it, node),
 		convert_next_space(decl_specifier_seq_it),
-		find_and_convert_node<declarator, id_t::DECLARATOR>(node),
-		convert_previous_space(ctor_initializer_it),
+		convert_node<declarator>(*declarator_it),
+		convert_next_space(declarator_it),
 		convert_optional<ctor_initializer>(ctor_initializer_it, node),
-		convert_previous_space(compound_statement_it),
+		convert_next_space(ctor_initializer_it),
 		convert_optional<compound_statement>(compound_statement_it, node)
     );
 }
@@ -1170,10 +1174,15 @@ convert_nested_name_specifier(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::NESTED_NAME_SPECIFIER);
 
+	tree_node_iterator_t identifier_or_template_id_it = find_node<id_t::IDENTIFIER_OR_TEMPLATE_ID>(node);
+	tree_node_iterator_t next_part_seq_it = find_node<id_t::NESTED_NAME_SPECIFIER_NEXT_PART_SEQ>(node);
+
     return nested_name_specifier
     (
-        find_and_convert_node<identifier_or_template_id, id_t::IDENTIFIER_OR_TEMPLATE_ID>(node),
-        find_and_convert_node<boost::optional<sequence_node<nested_name_specifier::next_part>>, id_t::NESTED_NAME_SPECIFIER_NEXT_PART_SEQ>(node)
+        convert_node<identifier_or_template_id>(*identifier_or_template_id_it),
+		convert_next_space(identifier_or_template_id_it),
+		convert_previous_space(next_part_seq_it),
+        convert_optional<nested_name_specifier::next_part_seq>(next_part_seq_it, node)
     );
 }
 
@@ -1357,11 +1366,18 @@ convert_qualified_nested_id(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::QUALIFIED_NESTED_ID);
 
+	tree_node_iterator_t double_colon_it = find_node(node, "::");
+	tree_node_iterator_t nested_name_specifier_it = find_node<id_t::NESTED_NAME_SPECIFIER>(node);
+	tree_node_iterator_t template_keyword_it = find_node(node, "template");
+
     return qualified_nested_id
     (
-		check_node_existence(node, "::", 0),
-		find_and_convert_node<nested_name_specifier, id_t::NESTED_NAME_SPECIFIER>(node),
-		check_node_existence(node, "template", 1) || check_node_existence(node, "template", 2),
+		double_colon_it != node.children.end(),
+		convert_next_space(double_colon_it),
+		convert_node<nested_name_specifier>(*nested_name_specifier_it),
+		convert_next_space(nested_name_specifier_it),
+		template_keyword_it != node.children.end(),
+		convert_next_space(template_keyword_it),
 		find_and_convert_node<unqualified_id, id_t::UNQUALIFIED_ID>(node)
     );
 }

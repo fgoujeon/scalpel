@@ -30,17 +30,17 @@ function_definition::function_definition
 	boost::optional<decl_specifier_seq>&& a_decl_specifier_seq,
 	boost::optional<space>&& post_decl_specifier_seq_space,
 	declarator&& a_declarator,
-	boost::optional<space>&& pre_ctor_initializer_space,
+	boost::optional<space>&& post_declarator_space,
 	boost::optional<ctor_initializer>&& a_ctor_initializer,
-	boost::optional<space>&& pre_compound_statement_space,
+	boost::optional<space>&& post_ctor_initializer_space,
 	boost::optional<compound_statement>&& compound_statement_node
 ):
     decl_specifier_seq_(a_decl_specifier_seq),
 	post_decl_specifier_seq_space_(post_decl_specifier_seq_space),
     declarator_(std::make_shared<declarator>(std::move(a_declarator))),
-	pre_ctor_initializer_space_(pre_ctor_initializer_space),
+	post_declarator_space_(post_declarator_space),
     ctor_initializer_(a_ctor_initializer),
-	pre_compound_statement_space_(pre_compound_statement_space),
+	post_ctor_initializer_space_(post_ctor_initializer_space),
     compound_statement_(compound_statement_node)
 {
 	update_node_list();
@@ -51,9 +51,9 @@ function_definition::function_definition(const function_definition& o):
     decl_specifier_seq_(o.decl_specifier_seq_),
 	post_decl_specifier_seq_space_(o.post_decl_specifier_seq_space_),
     declarator_(o.declarator_),
-	pre_ctor_initializer_space_(o.pre_ctor_initializer_space_),
+	post_declarator_space_(o.post_declarator_space_),
     ctor_initializer_(o.ctor_initializer_),
-	pre_compound_statement_space_(o.pre_compound_statement_space_),
+	post_ctor_initializer_space_(o.post_ctor_initializer_space_),
     compound_statement_(o.compound_statement_)
 {
 	update_node_list();
@@ -63,9 +63,9 @@ function_definition::function_definition(function_definition&& o):
     decl_specifier_seq_(std::move(o.decl_specifier_seq_)),
 	post_decl_specifier_seq_space_(std::move(o.post_decl_specifier_seq_space_)),
     declarator_(std::move(o.declarator_)),
-	pre_ctor_initializer_space_(std::move(o.pre_ctor_initializer_space_)),
+	post_declarator_space_(std::move(o.post_declarator_space_)),
     ctor_initializer_(std::move(o.ctor_initializer_)),
-	pre_compound_statement_space_(std::move(o.pre_compound_statement_space_)),
+	post_ctor_initializer_space_(std::move(o.post_ctor_initializer_space_)),
     compound_statement_(std::move(o.compound_statement_))
 {
 	update_node_list();
@@ -77,9 +77,9 @@ function_definition::operator=(const function_definition& o)
     decl_specifier_seq_ = o.decl_specifier_seq_;
 	post_decl_specifier_seq_space_ = o.post_decl_specifier_seq_space_;
     declarator_ = o.declarator_;
-	pre_ctor_initializer_space_ = o.pre_ctor_initializer_space_;
+	post_declarator_space_ = o.post_declarator_space_;
     ctor_initializer_ = o.ctor_initializer_;
-	pre_compound_statement_space_ = o.pre_compound_statement_space_;
+	post_ctor_initializer_space_ = o.post_ctor_initializer_space_;
     compound_statement_ = o.compound_statement_;
 
 	update_node_list();
@@ -94,9 +94,9 @@ function_definition::update_node_list()
 	if(decl_specifier_seq_) add(*decl_specifier_seq_);
 	if(post_decl_specifier_seq_space_) add(*post_decl_specifier_seq_space_);
 	add(*declarator_);
-	if(pre_ctor_initializer_space_) add(*pre_ctor_initializer_space_);
+	if(post_declarator_space_) add(*post_declarator_space_);
 	if(ctor_initializer_) add(*ctor_initializer_);
-	if(pre_compound_statement_space_) add(*pre_compound_statement_space_);
+	if(post_ctor_initializer_space_) add(*post_ctor_initializer_space_);
     if(compound_statement_) add(*compound_statement_);
 }
 

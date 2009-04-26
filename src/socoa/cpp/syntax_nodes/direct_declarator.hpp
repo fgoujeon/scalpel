@@ -72,6 +72,7 @@ class direct_declarator: public composite_node
         (
             boost::optional<declarator_id>&& a_declarator_id,
             boost::optional<declarator>&& a_declarator,
+			boost::optional<space>&& pre_next_part_seq_space_node,
 			boost::optional<sequence_node<next_part>>&& a_next_part_seq
         );
 
@@ -97,6 +98,7 @@ class direct_declarator: public composite_node
 
         boost::optional<declarator_id> declarator_id_;
         boost::optional<declarator> declarator_;
+		boost::optional<space> pre_next_part_seq_space_;
 		boost::optional<next_part_seq> next_part_seq_;
 };
 

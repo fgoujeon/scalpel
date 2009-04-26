@@ -50,9 +50,9 @@ class function_definition: public composite_node
             boost::optional<decl_specifier_seq>&& a_decl_specifier_seq,
 			boost::optional<space>&& post_decl_specifier_seq_space,
             declarator&& a_declarator,
-			boost::optional<space>&& pre_ctor_initializer_space,
+			boost::optional<space>&& post_declarator_space,
             boost::optional<ctor_initializer>&& a_ctor_initializer,
-			boost::optional<space>&& pre_compound_statement_space,
+			boost::optional<space>&& post_ctor_initializer_space,
             boost::optional<compound_statement>&& compound_statement_node
         );
 
@@ -77,7 +77,7 @@ class function_definition: public composite_node
 
 		inline
 		const boost::optional<const space&>
-		pre_ctor_initializer_space_node() const;
+		post_declarator_space_node() const;
 
 		inline
 		const boost::optional<const ctor_initializer&>
@@ -90,9 +90,9 @@ class function_definition: public composite_node
 		boost::optional<decl_specifier_seq> decl_specifier_seq_;
 		boost::optional<space> post_decl_specifier_seq_space_;
 		std::shared_ptr<declarator> declarator_;
-		boost::optional<space> pre_ctor_initializer_space_;
+		boost::optional<space> post_declarator_space_;
 		boost::optional<ctor_initializer> ctor_initializer_;
-		boost::optional<space> pre_compound_statement_space_;
+		boost::optional<space> post_ctor_initializer_space_;
 		boost::optional<compound_statement> compound_statement_;
 };
 
@@ -122,9 +122,9 @@ function_definition::get_declarator() const
 
 inline
 const boost::optional<const space&>
-function_definition::pre_ctor_initializer_space_node() const
+function_definition::post_declarator_space_node() const
 {
-	return boost::optional<const space&>(pre_ctor_initializer_space_);
+	return boost::optional<const space&>(post_declarator_space_);
 }
 
 inline

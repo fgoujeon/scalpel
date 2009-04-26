@@ -398,7 +398,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		| qualified_identifier
 	;
 	qualified_nested_id
-		= !(str_p("::") >> !s) >> nested_name_specifier >> !(!s >> str_p("template")) >> !s >> unqualified_id
+		= !(str_p("::") >> !s) >> nested_name_specifier >> !s >> !("template" >> !s) >> unqualified_id
 	;
 	qualified_operator_function_id
 		= str_p("::") >> !s >> operator_function_id
@@ -656,8 +656,8 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	delete_expression
-		= !str_p("::") >> !s >> "delete" >> !s >> '[' >> !s >> ']' >> !s >> cast_expression
-		| !str_p("::") >> !s >> "delete" >> !s >> cast_expression
+		= !(str_p("::") >> !s) >> "delete" >> !s >> '[' >> !s >> ']' >> !s >> cast_expression
+		| !(str_p("::") >> !s) >> "delete" >> !s >> cast_expression
 	;
 
 	cast_expression
@@ -1039,7 +1039,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		| built_in_type_specifier
 	;
 	simple_template_type_specifier
-		= !str_p("::") >> !s >> nested_name_specifier >> !s >> "template" >> !s >> template_id
+		= !(str_p("::") >> !s) >> nested_name_specifier >> !s >> "template" >> !s >> template_id
 	;
 	built_in_type_specifier
 		= str_p("char")
@@ -1056,15 +1056,15 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	elaborated_type_specifier
-		= class_key >> !s >> !str_p("::") >> !s >> !nested_name_specifier >> !s >> template_id //not in the standard, but seems to be required for parsing standard library
-		| class_key >> !s >> !str_p("::") >> !s >> !nested_name_specifier >> !s >> identifier
-		| str_p("enum") >> !s >> !str_p("::") >> !s >> !nested_name_specifier >> !s >> identifier
-		| str_p("typename") >> !s >> !str_p("::") >> !s >> nested_name_specifier >> !s >> !str_p("template") >> !s >> template_id
-		| str_p("typename") >> !s >> !str_p("::") >> !s >> nested_name_specifier >> !s >> identifier
+		= class_key >> !s >> !(str_p("::") >> !s) >> !(nested_name_specifier >> !s) >> template_id //not in the standard, but seems to be required for parsing GCC's standard library
+		| class_key >> !s >> !(str_p("::") >> !s) >> !(nested_name_specifier >> !s) >> identifier
+		| str_p("enum") >> !s >> !(str_p("::") >> !s) >> !(nested_name_specifier >> !s) >> identifier
+		| str_p("typename") >> !s >> !(str_p("::") >> !s) >> nested_name_specifier >> !s >> !(str_p("template") >> !s) >> template_id
+		| str_p("typename") >> !s >> !(str_p("::") >> !s) >> nested_name_specifier >> !s >> identifier
 	;
 
 	enum_specifier
-		= str_p("enum") >> !s >> !identifier >> !s >> ch_p('{') >> !s >> !enumerator_list >> !s >> ch_p('}')
+		= str_p("enum") >> !s >> !(identifier >> !s) >> ch_p('{') >> !s >> !(enumerator_list >> !s) >> ch_p('}')
 	;
 
 	enumerator_list
@@ -1084,16 +1084,16 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	qualified_namespace_specifier
-		= !str_p("::") >> !s >> !nested_name_specifier >> !s >> identifier
+		= !(str_p("::") >> !s) >> !(nested_name_specifier >> !s) >> identifier
 	;
 
 	using_declaration
-		= "using" >> !s >> !str_p("typename") >> !s >> !str_p("::") >> !s >> nested_name_specifier >> !s >> unqualified_id >> !s >> ch_p(';')
+		= "using" >> !s >> !(str_p("typename") >> !s) >> !(str_p("::") >> !s) >> nested_name_specifier >> !s >> unqualified_id >> !s >> ch_p(';')
 		| "using" >> !s >> str_p("::") >> !s >> unqualified_id >> !s >> ch_p(';')
 	;
 
 	using_directive
-		= str_p("using") >> !s >> "namespace" >> !s >> !str_p("::") >> !s >> !nested_name_specifier >> !s >> identifier >> !s >> ch_p(';')
+		= str_p("using") >> !s >> "namespace" >> !s >> !(str_p("::") >> !s) >> !(nested_name_specifier >> !s) >> identifier >> !s >> ch_p(';')
 	;
 
 	asm_definition
@@ -1231,7 +1231,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	ptr_operator
 		= ch_p('*') >> !(!s >> cv_qualifier_seq)
 		| ch_p('&')
-		| !str_p("::") >> !s >> nested_name_specifier >> !s >> '*' >> !(!s >> cv_qualifier_seq)
+		| !(str_p("::") >> !s) >> nested_name_specifier >> !s >> '*' >> !(!s >> cv_qualifier_seq)
 	;
 
 	cv_qualifier_seq
@@ -1258,7 +1258,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	abstract_declarator
-		= +ptr_operator
+		= ptr_operator_seq
 		| direct_abstract_declarator
 	;
 
@@ -1484,7 +1484,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	conversion_declarator
-		= +ptr_operator
+		= ptr_operator_seq
 	;
 
 	ctor_initializer

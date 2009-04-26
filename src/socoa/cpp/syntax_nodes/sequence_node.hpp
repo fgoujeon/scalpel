@@ -93,8 +93,8 @@ class sequence_node<T, SeparatorNode>::item
 	public:
 		item
 		(
-			boost::optional<space>&& space1,
-			boost::optional<space>&& space2,
+			boost::optional<space>&& pre_separator_space,
+			boost::optional<space>&& post_separator_space,
 			T&& main_node
 		);
 
@@ -113,8 +113,8 @@ class sequence_node<T, SeparatorNode>::item
 		main_node() const;
 
 	private:
-		boost::optional<space> space1_;
-		boost::optional<space> space2_;
+		boost::optional<space> pre_separator_space_;
+		boost::optional<space> post_separator_space_;
 		T main_node_;
 };
 
@@ -191,20 +191,20 @@ sequence_node<T, SeparatorNode>::separator_node = SeparatorNode;
 template<class T, const leaf_node& SeparatorNode>
 sequence_node<T, SeparatorNode>::item::item
 (
-	boost::optional<space>&& space1,
-	boost::optional<space>&& space2,
+	boost::optional<space>&& pre_separator_space,
+	boost::optional<space>&& post_separator_space,
 	T&& main_node
 ):
-	space1_(space1),
-	space2_(space2),
+	pre_separator_space_(pre_separator_space),
+	post_separator_space_(post_separator_space),
 	main_node_(main_node)
 {
 }
 
 template<class T, const leaf_node& SeparatorNode>
 sequence_node<T, SeparatorNode>::item::item(const item& i):
-	space1_(i.space1_),
-	space2_(i.space2_),
+	pre_separator_space_(i.pre_separator_space_),
+	post_separator_space_(i.post_separator_space_),
 	main_node_(i.main_node_)
 {
 }
@@ -213,14 +213,14 @@ template<class T, const leaf_node& SeparatorNode>
 const boost::optional<const space&>
 sequence_node<T, SeparatorNode>::item::pre_separator_space_node() const
 {
-	return boost::optional<const space&>(space1_);
+	return boost::optional<const space&>(pre_separator_space_);
 }
 
 template<class T, const leaf_node& SeparatorNode>
 const boost::optional<const space&>
 sequence_node<T, SeparatorNode>::item::post_separator_space_node() const
 {
-	return boost::optional<const space&>(space2_);
+	return boost::optional<const space&>(post_separator_space_);
 }
 
 template<class T, const leaf_node& SeparatorNode>
@@ -234,8 +234,8 @@ template<class T, const leaf_node& SeparatorNode>
 const typename sequence_node<T, SeparatorNode>::item&
 sequence_node<T, SeparatorNode>::item::operator=(const item& i)
 {
-	space1_ = i.space1_;
-	space2_ = i.space2_;
+	pre_separator_space_ = i.pre_separator_space_;
+	post_separator_space_ = i.post_separator_space_;
 	main_node_ = i.main_node_;
 
 	return *this;

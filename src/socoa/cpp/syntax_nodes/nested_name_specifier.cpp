@@ -26,9 +26,13 @@ namespace socoa { namespace cpp { namespace syntax_nodes
 nested_name_specifier::nested_name_specifier
 (
 	identifier_or_template_id&& an_identifier_or_template_id,
+	boost::optional<space>&& post_identifier_or_template_id_space_node,
+	boost::optional<space>&& pre_next_part_seq_space_node,
 	boost::optional<next_part_seq>&& a_next_part_seq
 ):
 	identifier_or_template_id_(std::move(an_identifier_or_template_id)),
+	post_identifier_or_template_id_space_(post_identifier_or_template_id_space_node),
+	pre_next_part_seq_space_(pre_next_part_seq_space_node),
 	next_part_seq_(std::move(a_next_part_seq))
 {
 	update_node_list();
@@ -37,6 +41,8 @@ nested_name_specifier::nested_name_specifier
 nested_name_specifier::nested_name_specifier(const nested_name_specifier& o):
 	composite_node(),
 	identifier_or_template_id_(o.identifier_or_template_id_),
+	post_identifier_or_template_id_space_(o.post_identifier_or_template_id_space_),
+	pre_next_part_seq_space_(o.pre_next_part_seq_space_),
 	next_part_seq_(o.next_part_seq_)
 {
 	update_node_list();
@@ -44,6 +50,8 @@ nested_name_specifier::nested_name_specifier(const nested_name_specifier& o):
 
 nested_name_specifier::nested_name_specifier(nested_name_specifier&& o):
 	identifier_or_template_id_(std::move(o.identifier_or_template_id_)),
+	post_identifier_or_template_id_space_(std::move(o.post_identifier_or_template_id_space_)),
+	pre_next_part_seq_space_(std::move(o.pre_next_part_seq_space_)),
 	next_part_seq_(std::move(o.next_part_seq_))
 {
 	update_node_list();
@@ -53,6 +61,8 @@ const nested_name_specifier&
 nested_name_specifier::operator=(const nested_name_specifier& o)
 {
 	identifier_or_template_id_ = o.identifier_or_template_id_;
+	post_identifier_or_template_id_space_ = o.post_identifier_or_template_id_space_;
+	pre_next_part_seq_space_ = o.pre_next_part_seq_space_;
 	next_part_seq_ = o.next_part_seq_;
 
 	update_node_list();
@@ -65,7 +75,9 @@ nested_name_specifier::update_node_list()
 {
 	clear();
 	add(identifier_or_template_id_);
+	if(post_identifier_or_template_id_space_) add(*post_identifier_or_template_id_space_);
 	add(double_colon);
+	if(pre_next_part_seq_space_) add(*pre_next_part_seq_space_);
 	if(next_part_seq_) add(*next_part_seq_);
 }
 

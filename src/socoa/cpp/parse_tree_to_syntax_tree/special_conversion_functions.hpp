@@ -75,9 +75,9 @@ convert_sequence(const tree_node_t& node)
 	}
 	else
 	{
-		boost::optional<syntax_nodes::space> space_node1;
-		boost::optional<syntax_nodes::space> space_node2;
-		bool will_read_space_node2 = false;
+		boost::optional<syntax_nodes::space> pre_separator_space;
+		boost::optional<syntax_nodes::space> post_separator_space;
+		bool will_read_post_separator_space = false;
 		for(tree_node_iterator_t i = node.children.begin(); i != node.children.end(); ++i) //for each child node
 		{
 			const tree_node_t& child_node = *i;
@@ -85,32 +85,34 @@ convert_sequence(const tree_node_t& node)
 
 			if(child_value == ContainerT::separator_node.raw_code()) //if the node is a separator
 			{
-				will_read_space_node2 = true;
+				will_read_post_separator_space = true;
 			}
-			else if(child_node.value.id() == id_t::SPACE)
+			else if(child_node.value.id() == id_t::SPACE) //the node is a space
 			{
-				if(!will_read_space_node2)
+				if(!will_read_post_separator_space)
 				{
-					space_node1 = convert_node<syntax_nodes::space>(child_node);
-					will_read_space_node2 = true;
+					pre_separator_space = convert_node<syntax_nodes::space>(child_node);
+					will_read_post_separator_space = true;
 				}
 				else
 				{
-					space_node2 = convert_node<syntax_nodes::space>(child_node);
-					will_read_space_node2 = false;
+					post_separator_space = convert_node<syntax_nodes::space>(child_node);
+					will_read_post_separator_space = false;
 				}
 			}
-			else
+			else //the node is the main node
 			{
 				typename ContainerT::item item
 				(
-					space_node1,
-					space_node2,
+					pre_separator_space,
+					post_separator_space,
 					convert_node<typename ContainerT::type>(child_node)
 				);
 				seq.push_back(item);
 
-				will_read_space_node2 = false;
+				pre_separator_space = boost::optional<syntax_nodes::space>();
+				post_separator_space = boost::optional<syntax_nodes::space>();
+				will_read_post_separator_space = false;
 			}
 		}
 	}
