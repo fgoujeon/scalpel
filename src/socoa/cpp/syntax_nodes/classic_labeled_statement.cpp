@@ -18,27 +18,43 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_NODES_LABELED_STATEMENT_HPP
-#define SOCOA_CPP_SYNTAX_NODES_LABELED_STATEMENT_HPP
-
-#include "alternative_node.hpp"
-#include "case_statement.hpp"
-#include "default_statement.hpp"
 #include "classic_labeled_statement.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
-typedef
-	alternative_node
-	<
-		case_statement,
-		default_statement,
-		classic_labeled_statement
-	>
-	labeled_statement
-;
+classic_labeled_statement::classic_labeled_statement
+(
+)
+{
+	update_node_list();
+}
+
+classic_labeled_statement::classic_labeled_statement(const classic_labeled_statement& o):
+	composite_node()
+{
+	update_node_list();
+}
+
+classic_labeled_statement::classic_labeled_statement(classic_labeled_statement&& o):
+	composite_node()
+{
+	update_node_list();
+}
+
+const classic_labeled_statement&
+classic_labeled_statement::operator=(const classic_labeled_statement& o)
+{
+	update_node_list();
+
+	return *this;
+}
+
+void
+classic_labeled_statement::update_node_list()
+{
+	clear();
+}
 
 }}} //namespace socoa::cpp::syntax_nodes
 
-#endif

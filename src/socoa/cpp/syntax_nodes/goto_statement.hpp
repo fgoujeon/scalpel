@@ -41,7 +41,7 @@ class goto_statement: public composite_node
 	public:
 		goto_statement
 		(
-			boost::optional<space>&& post_return_space_node,
+			boost::optional<space>&& post_goto_space_node,
 			identifier&& identifier_node,
 			boost::optional<space>&& post_identifier_space_node
 		);
@@ -57,7 +57,7 @@ class goto_statement: public composite_node
 		void
 		update_node_list();
 
-		boost::optional<space> post_return_space_;
+		boost::optional<space> post_goto_space_;
 		identifier identifier_;
 		boost::optional<space> post_identifier_space_;
 };

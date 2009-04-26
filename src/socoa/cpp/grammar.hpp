@@ -164,6 +164,9 @@ class grammar
 
             STATEMENT,
             LABELED_STATEMENT,
+			CASE_STATEMENT,
+			DEFAULT_STATEMENT,
+			CLASSIC_LABELED_STATEMENT,
             EXPRESSION_STATEMENT,
             COMPOUND_STATEMENT,
             STATEMENT_SEQ,
@@ -490,6 +493,9 @@ class grammar
         //1.5 - Statements [gram.stmt.stmt]
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::STATEMENT>> statement;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::LABELED_STATEMENT>> labeled_statement;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CASE_STATEMENT>> case_statement;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DEFAULT_STATEMENT>> default_statement;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CLASSIC_LABELED_STATEMENT>> classic_labeled_statement;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EXPRESSION_STATEMENT>> expression_statement;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::COMPOUND_STATEMENT>> compound_statement;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::STATEMENT_SEQ>> statement_seq;

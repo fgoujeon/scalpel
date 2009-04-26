@@ -53,10 +53,7 @@ convert_id_expression(const tree_node_t& node)
 		id_expression,
 		id_t::UNQUALIFIED_ID,
 	   	id_t::QUALIFIED_ID
-	>
-	(
-		node
-	);
+	>(node);
 }
 
 unqualified_id
@@ -72,10 +69,7 @@ convert_unqualified_id(const tree_node_t& node)
 		id_t::DESTRUCTOR_NAME,
 		id_t::TEMPLATE_ID,
 		id_t::IDENTIFIER
-	>
-	(
-		node
-	);
+	>(node);
 }
 
 qualified_id
@@ -90,10 +84,7 @@ convert_qualified_id(const tree_node_t& node)
 		id_t::QUALIFIED_OPERATOR_FUNCTION_ID,
 		id_t::QUALIFIED_TEMPLATE_ID,
 		id_t::QUALIFIED_IDENTIFIER
-	>
-	(
-		node
-	);
+	>(node);
 }
 
 qualified_nested_id
@@ -182,10 +173,7 @@ convert_declaration(const tree_node_t& node)
 //            id_t::EXPLICIT_SPECIALIZATION,
 //            id_t::LINKAGE_SPECIFICATION,
 		id_t::NAMESPACE_DEFINITION
-	>
-	(
-		node
-	);
+	>(node);
 }
 
 block_declaration
@@ -209,22 +197,14 @@ convert_simple_declaration(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::SIMPLE_DECLARATION);
 
-	boost::optional<decl_specifier_seq> decl_specifier_seq_node;
-	boost::optional<init_declarator_list> init_declarator_list_node;
-
 	tree_node_iterator_t decl_specifier_seq_it = find_node<id_t::SIMPLE_DECLARATION_DECL_SPECIFIER_SEQ>(node);
-	if(decl_specifier_seq_it != node.children.end())
-		decl_specifier_seq_node = convert_node<decl_specifier_seq>(*decl_specifier_seq_it);
-
 	tree_node_iterator_t init_declarator_list_it = find_node<id_t::INIT_DECLARATOR_LIST>(node);
-	if(init_declarator_list_it != node.children.end())
-		init_declarator_list_node = convert_node<init_declarator_list>(*init_declarator_list_it);
 
     return simple_declaration
     (
-		decl_specifier_seq_node,
+		convert_optional<decl_specifier_seq>(decl_specifier_seq_it, node),
 		convert_next_space(decl_specifier_seq_it),
-		init_declarator_list_node,
+		convert_optional<init_declarator_list>(init_declarator_list_it, node),
 		convert_next_space(init_declarator_list_it)
     );
 }
@@ -240,10 +220,7 @@ convert_decl_specifier(const tree_node_t& node)
 		id_t::STORAGE_CLASS_SPECIFIER,
 		id_t::TYPE_SPECIFIER,
 		id_t::FUNCTION_SPECIFIER
-	>
-	(
-		node
-	);
+	>(node);
 }
 
 type_specifier
@@ -260,10 +237,7 @@ convert_type_specifier(const tree_node_t& node)
 		id_t::ELABORATED_TYPE_SPECIFIER,
 		id_t::CV_QUALIFIER
 		//id_t::TYPEOF_EXPRESSION
-	>
-	(
-		node
-	);
+	>(node);
 }
 
 simple_type_specifier
@@ -277,10 +251,7 @@ convert_simple_type_specifier(const tree_node_t& node)
 		id_t::NESTED_IDENTIFIER_OR_TEMPLATE_ID,
 		id_t::SIMPLE_TEMPLATE_TYPE_SPECIFIER,
 		id_t::BUILT_IN_TYPE_SPECIFIER
-	>
-	(
-		node
-	);
+	>(node);
 }
 
 simple_template_type_specifier
@@ -306,10 +277,7 @@ convert_identifier_or_template_id(const tree_node_t& node)
 		identifier_or_template_id,
 		id_t::IDENTIFIER,
 		id_t::TEMPLATE_ID
-	>
-	(
-		node
-	);
+	>(node);
 }
 
 namespace_definition
@@ -356,17 +324,13 @@ convert_init_declarator(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::INIT_DECLARATOR);
 
-	boost::optional<initializer> initializer_node;
-
 	tree_node_iterator_t initializer_it = find_node<id_t::INITIALIZER>(node);
-	if(initializer_it != node.children.end())
-		initializer_node = convert_node<initializer>(*initializer_it);
 
     return init_declarator
     (
 		find_and_convert_node<declarator, id_t::DECLARATOR>(node),
 		convert_previous_space(initializer_it),
-		initializer_node
+		convert_optional<initializer>(initializer_it, node)
     );
 }
 
@@ -412,22 +376,12 @@ convert_declarator(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::DECLARATOR);
 
-	boost::optional<ptr_operator_seq> ptr_operator_seq_node;
-	boost::optional<space> post_ptr_operator_seq_space_node;
-
-	tree_node_iterator_t i;
-
-	i = find_node<id_t::PTR_OPERATOR_SEQ>(node);
-	if(i != node.children.end())
-	{
-		ptr_operator_seq_node = convert_node<ptr_operator_seq>(*i);
-		post_ptr_operator_seq_space_node = convert_next_space(i);
-	}
+	tree_node_iterator_t ptr_operator_seq_it = find_node<id_t::PTR_OPERATOR_SEQ>(node);
 
     return declarator
     (
-		ptr_operator_seq_node,
-		post_ptr_operator_seq_space_node,
+		convert_optional<ptr_operator_seq>(ptr_operator_seq_it, node),
+		convert_next_space(ptr_operator_seq_it),
 		find_and_convert_node<direct_declarator, id_t::DIRECT_DECLARATOR>(node)
 	);
 }
@@ -437,14 +391,12 @@ convert_direct_declarator(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::DIRECT_DECLARATOR);
 
-    direct_declarator decl
+    return direct_declarator
     (
 		find_and_convert_node<boost::optional<declarator_id>, id_t::DECLARATOR_ID>(node),
 		find_and_convert_node<boost::optional<declarator>, id_t::DECLARATOR>(node),
 		find_and_convert_node<boost::optional<sequence_node<direct_declarator::next_part>>, id_t::DIRECT_DECLARATOR_NEXT_PART_SEQ>(node)
     );
-
-	return decl;
 }
 
 direct_declarator::function_part
@@ -529,10 +481,7 @@ convert_direct_declarator_next_part(const tree_node_t& node)
 		direct_declarator::next_part,
 		id_t::DIRECT_DECLARATOR_FUNCTION_PART,
 		id_t::DIRECT_DECLARATOR_ARRAY_PART
-	>
-	(
-		node
-	);
+	>(node);
 }
 
 direct_declarator::array_part
@@ -596,10 +545,7 @@ convert_declarator_id(const tree_node_t& node)
 		declarator_id,
 		id_t::ID_EXPRESSION,
 		id_t::NESTED_IDENTIFIER_OR_TEMPLATE_ID
-	>
-	(
-		node
-	);
+	>(node);
 }
 
 parameter_declaration_clause
@@ -625,18 +571,7 @@ convert_parameter_declaration(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::PARAMETER_DECLARATION);
 
-	boost::optional<space> pre_declarator_space_node;
-	boost::optional<declarator> declarator_node;
-
-	tree_node_iterator_t i;
-
-	i = find_node<id_t::DECLARATOR>(node);
-
-	if(i != node.children.end())
-	{
-		pre_declarator_space_node = convert_previous_space(i);
-		declarator_node = convert_node<declarator>(*i);
-	}
+	tree_node_iterator_t declarator_it = find_node<id_t::DECLARATOR>(node);
 
     return parameter_declaration
     (
@@ -649,8 +584,8 @@ convert_parameter_declaration(const tree_node_t& node)
 			id_t::PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ4,
 			id_t::DECL_SPECIFIER_SEQ
 		>(node),
-		pre_declarator_space_node,
-		declarator_node,
+		convert_previous_space(declarator_it),
+		convert_optional<declarator>(declarator_it, node),
 		false
     );
 }
@@ -660,56 +595,24 @@ convert_function_definition(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::FUNCTION_DEFINITION);
 
-	boost::optional<decl_specifier_seq> decl_specifier_seq_node;
-	boost::optional<space> post_decl_specifier_seq_space;
-	boost::optional<space> pre_ctor_initializer_space;
-	boost::optional<ctor_initializer> ctor_initializer_node;
-	boost::optional<space> pre_compound_statement_space;
-	boost::optional<compound_statement> compound_statement_node;
-
-	tree_node_iterator_t i;
-
-	i = find_node
+	tree_node_iterator_t decl_specifier_seq_it = find_node
 	<
 		id_t::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ1,
 		id_t::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ2,
 		id_t::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ3
 	>(node);
-	if(i != node.children.end())
-	{
-		decl_specifier_seq_node = convert_node
-		<
-			decl_specifier_seq
-		>(*i);
-		post_decl_specifier_seq_space = convert_next_space(i);
-	}
-
-	i = find_node<id_t::CTOR_INITIALIZER>(node);
-	if(i != node.children.end())
-	{
-		pre_ctor_initializer_space = convert_previous_space(i);
-		ctor_initializer_node = convert_node
-		<
-			ctor_initializer
-		>(*i);
-	}
-
-	i = find_node<id_t::COMPOUND_STATEMENT>(node);
-	if(i != node.children.end())
-	{
-		pre_compound_statement_space = convert_previous_space(i);
-		compound_statement_node = convert_node<compound_statement>(*i);
-	}
+	tree_node_iterator_t ctor_initializer_it = find_node<id_t::CTOR_INITIALIZER>(node);
+	tree_node_iterator_t compound_statement_it = find_node<id_t::COMPOUND_STATEMENT>(node);
 
     return function_definition
     (
-		decl_specifier_seq_node,
-		post_decl_specifier_seq_space,
+		convert_optional<decl_specifier_seq>(decl_specifier_seq_it, node),
+		convert_next_space(decl_specifier_seq_it),
 		find_and_convert_node<declarator, id_t::DECLARATOR>(node),
-		pre_ctor_initializer_space,
-		ctor_initializer_node,
-		pre_compound_statement_space,
-		compound_statement_node
+		convert_previous_space(ctor_initializer_it),
+		convert_optional<ctor_initializer>(ctor_initializer_it, node),
+		convert_previous_space(compound_statement_it),
+		convert_optional<compound_statement>(compound_statement_it, node)
     );
 }
 
@@ -746,27 +649,14 @@ convert_compound_statement(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::COMPOUND_STATEMENT);
 
-	boost::optional<space> post_opening_brace_space_node;
-	boost::optional<statement_seq> statement_seq_node;
-	boost::optional<space> post_statement_seq_space_node;
-
-	tree_node_iterator_t i;
-
-	i = node.children.begin();
-	post_opening_brace_space_node = convert_next_space(i);
-
-	i = find_node<id_t::STATEMENT_SEQ>(node);
-	if(i != node.children.end())
-	{
-		statement_seq_node = convert_node<statement_seq>(*i);
-		post_statement_seq_space_node = convert_next_space(i);
-	}
+	tree_node_iterator_t opening_brace_it = node.children.begin();
+	tree_node_iterator_t statement_seq_it = find_node<id_t::STATEMENT_SEQ>(node);
 
 	return compound_statement
 	(
-		post_opening_brace_space_node,
-		statement_seq_node,
-		post_statement_seq_space_node
+		convert_next_space(opening_brace_it),
+		convert_optional<statement_seq>(statement_seq_it, node),
+		convert_next_space(statement_seq_it)
 	);
 }
 
@@ -775,54 +665,22 @@ convert_class_head(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::CLASS_HEAD);
 
-	boost::optional<space> pre_nested_name_specifier_space_node;
-	boost::optional<nested_name_specifier> nested_name_specifier_node;
-	boost::optional<space> pre_template_id_space_node;
-	boost::optional<template_id> template_id_node;
-	boost::optional<space> pre_identifier_space_node;
-	boost::optional<identifier> identifier_node;
-	boost::optional<space> pre_base_clause_space_node;
-	boost::optional<base_clause> base_clause_node;
-
-	tree_node_iterator_t i = find_node<id_t::NESTED_NAME_SPECIFIER>(node);
-	if(i != node.children.end())
-	{
-		pre_nested_name_specifier_space_node = convert_previous_space(i);
-		nested_name_specifier_node = convert_node<nested_name_specifier>(*i);
-	}
-
-	i = find_node<id_t::TEMPLATE_ID>(node);
-	if(i != node.children.end())
-	{
-		pre_template_id_space_node = convert_previous_space(i);
-		template_id_node = convert_node<template_id>(*i);
-	}
-
-	i = find_node<id_t::IDENTIFIER>(node);
-	if(i != node.children.end())
-	{
-		pre_identifier_space_node = convert_previous_space(i);
-		identifier_node = convert_node<identifier>(*i);
-	}
-
-	i = find_node<id_t::BASE_CLAUSE>(node);
-	if(i != node.children.end())
-	{
-		pre_base_clause_space_node = convert_previous_space(i);
-		base_clause_node = convert_node<base_clause>(*i);
-	}
+	tree_node_iterator_t nested_name_specifier_it = find_node<id_t::NESTED_NAME_SPECIFIER>(node);
+	tree_node_iterator_t template_id_it = find_node<id_t::TEMPLATE_ID>(node);
+	tree_node_iterator_t identifier_it = find_node<id_t::IDENTIFIER>(node);
+	tree_node_iterator_t base_clause_it = find_node<id_t::BASE_CLAUSE>(node);
 
     return class_head
     (
 		find_and_convert_node<class_key, id_t::CLASS_KEY>(node),
-		pre_nested_name_specifier_space_node,
-		nested_name_specifier_node,
-		pre_template_id_space_node,
-		template_id_node,
-		pre_identifier_space_node,
-		identifier_node,
-		pre_base_clause_space_node,
-		base_clause_node
+		convert_previous_space(nested_name_specifier_it),
+		convert_optional<nested_name_specifier>(nested_name_specifier_it, node),
+		convert_previous_space(template_id_it),
+		convert_optional<template_id>(template_id_it, node),
+		convert_previous_space(identifier_it),
+		convert_optional<identifier>(identifier_it, node),
+		convert_previous_space(base_clause_it),
+		convert_optional<base_clause>(base_clause_it, node)
 	);
 }
 
@@ -836,10 +694,7 @@ convert_member_specification_part(const tree_node_t& node)
 		member_specification_part,
 		id_t::MEMBER_DECLARATION,
 		id_t::MEMBER_SPECIFICATION_ACCESS_SPECIFIER
-	>
-	(
-		node
-	);
+	>(node);
 }
 
 member_specification_access_specifier
@@ -866,10 +721,7 @@ convert_member_declaration(const tree_node_t& node)
 		id_t::MEMBER_DECLARATION_FUNCTION_DEFINITION,
 		id_t::USING_DECLARATION,
 		id_t::TEMPLATE_DECLARATION
-	>
-	(
-		node
-	);
+	>(node);
 }
 
 member_declaration_member_declarator_list
@@ -919,10 +771,7 @@ convert_member_declarator(const tree_node_t& node)
 		member_declarator,
 		id_t::MEMBER_DECLARATOR_DECLARATOR,
 		id_t::MEMBER_DECLARATOR_BIT_FIELD_MEMBER
-	>
-	(
-		node
-	);
+	>(node);
 }
 
 member_declarator_declarator
@@ -1028,10 +877,7 @@ convert_mem_initializer_id(const tree_node_t& node)
 		mem_initializer_id,
 		id_t::NESTED_IDENTIFIER_OR_TEMPLATE_ID,
 		id_t::IDENTIFIER
-	>
-	(
-		node
-	);
+	>(node);
 }
 
 template_declaration
@@ -1069,10 +915,7 @@ convert_template_argument(const tree_node_t& node)
 		//id_t::TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION,
 		//id_t::TYPE_ID,
 		id_t::ID_EXPRESSION
-	>
-	(
-		node
-	);
+	>(node);
 }
 
 nested_identifier_or_template_id
@@ -1132,20 +975,12 @@ convert_assignment_expression(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::ASSIGNMENT_EXPRESSION);
 
-	boost::optional<assignment_expression::first_part_seq> first_part_seq_node;
-	boost::optional<space> space_node;
-
 	tree_node_iterator_t i = find_node<id_t::ASSIGNMENT_EXPRESSION_FIRST_PART_SEQ>(node);
-	if(i != node.children.end())
-	{
-		first_part_seq_node = convert_node<assignment_expression::first_part_seq>(*i);
-		space_node = convert_next_space(i);
-	}
 
 	return assignment_expression
 	(
-		first_part_seq_node,
-		space_node,
+		convert_optional<assignment_expression::first_part_seq>(i, node),
+		convert_next_space(i),
 		convert_alternative
 		<
 			assignment_expression::conditional_or_throw_expression,
@@ -1335,20 +1170,12 @@ convert_expression_statement(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::EXPRESSION_STATEMENT);
 
-	boost::optional<expression> expression_node;
-	boost::optional<space> post_expression_space_node;
-
-	tree_node_iterator_t i = find_node<id_t::EXPRESSION>(node);
-	if(i != node.children.end())
-	{
-		expression_node = convert_node<expression>(*i);
-		post_expression_space_node = convert_next_space(i);
-	}
+	tree_node_iterator_t expression_it = find_node<id_t::EXPRESSION>(node);
 
 	return expression_statement
 	(
-		expression_node,
-		post_expression_space_node
+		convert_optional<expression>(expression_it, node),
+		convert_next_space(expression_it)
 	);
 }
 
@@ -1370,8 +1197,7 @@ convert_for_init_statement(const tree_node_t& node)
 		for_init_statement,
 		id_t::EXPRESSION_STATEMENT,
 		id_t::SIMPLE_DECLARATION
-	>
-	(node);
+	>(node);
 }
 
 for_statement
@@ -1379,90 +1205,26 @@ convert_for_statement(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::FOR_STATEMENT);
 
-	boost::optional<space> post_for_keyword_space_node;
-	boost::optional<space> post_opening_bracket_space_node;
-	boost::optional<for_init_statement> for_init_statement_node;
-	boost::optional<space> post_for_init_statement_space_node;
-	boost::optional<condition> condition_node;
-	boost::optional<space> post_condition_space_node;
-	boost::optional<space> post_semicolon_space_node;
-	boost::optional<expression> expression_node;
-	boost::optional<space> post_expression_space_node;
-	boost::optional<space> post_closing_bracket_space_node;
-
-	tree_node_iterator_t i = node.children.begin();
-	++i;
-	if(i->value.id() == id_t::SPACE)
-	{
-		post_for_keyword_space_node = convert_node<space>(*i);
-		++i;
-	}
-
-	++i;
-	if(i->value.id() == id_t::SPACE)
-	{
-		post_opening_bracket_space_node = convert_node<space>(*i);
-		++i;
-	}
-
-	assert(i->value.id() == id_t::FOR_INIT_STATEMENT);
-	for_init_statement_node = convert_node<for_init_statement>(*i);
-
-	++i;
-	if(i->value.id() == id_t::SPACE)
-	{
-		post_for_init_statement_space_node = convert_node<space>(*i);
-		++i;
-	}
-
-	if(i->value.id() == id_t::CONDITION)
-	{
-		condition_node = convert_node<condition>(*i);
-		++i;
-		if(i->value.id() == id_t::SPACE)
-		{
-			post_condition_space_node = convert_node<space>(*i);
-			++i;
-		}
-	}
-
-	++i;
-	if(i->value.id() == id_t::SPACE)
-	{
-		post_semicolon_space_node = convert_node<space>(*i);
-		++i;
-	}
-
-	if(i->value.id() == id_t::EXPRESSION)
-	{
-		expression_node = convert_node<expression>(*i);
-		++i;
-		if(i->value.id() == id_t::SPACE)
-		{
-			post_expression_space_node = convert_node<space>(*i);
-			++i;
-		}
-	}
-
-	++i;
-	if(i->value.id() == id_t::SPACE)
-	{
-		post_closing_bracket_space_node = convert_node<space>(*i);
-		++i;
-	}
+	tree_node_iterator_t for_keyword_it = node.children.begin();
+	tree_node_iterator_t opening_bracket_it = find_node(node, "(");
+	tree_node_iterator_t for_init_statement_it = find_node<id_t::FOR_INIT_STATEMENT>(node);
+	tree_node_iterator_t condition_it = find_node<id_t::CONDITION>(node);
+	tree_node_iterator_t semicolon_it = find_node(node, ";");
+	tree_node_iterator_t expression_it = find_node<id_t::EXPRESSION>(node);
+	tree_node_iterator_t closing_bracket_it = find_node(node, ")");
 
 	return for_statement
 	(
-		post_for_keyword_space_node,
-		post_opening_bracket_space_node,
-		for_init_statement_node,
-		post_for_init_statement_space_node,
-		condition_node,
-		post_condition_space_node,
-		post_semicolon_space_node,
-		expression_node,
-		post_expression_space_node,
-		post_closing_bracket_space_node,
+		convert_next_space(for_keyword_it),
+		convert_next_space(opening_bracket_it),
+		convert_optional<for_init_statement>(for_init_statement_it, node),
+		convert_next_space(for_init_statement_it),
+		convert_optional<condition>(condition_it, node),
+		convert_next_space(condition_it),
+		convert_next_space(semicolon_it),
+		convert_optional<expression>(expression_it, node),
+		convert_next_space(expression_it),
+		convert_next_space(closing_bracket_it),
 		find_and_convert_node<statement, id_t::STATEMENT>(node)
 	);
 }
@@ -1472,20 +1234,14 @@ convert_goto_statement(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::GOTO_STATEMENT);
 
-	boost::optional<space> post_return_space_node;
-
-	tree_node_iterator_t i = node.children.begin();
-	++i;
-	if(i->value.id() == id_t::SPACE)
-		post_return_space_node = convert_node<space>(*i);
-
-	i = find_node<id_t::IDENTIFIER>(node);
+	tree_node_iterator_t goto_keyword_it = node.children.begin();
+	tree_node_iterator_t identifier_it = find_node<id_t::IDENTIFIER>(node);
 
 	return goto_statement
 	(
-		post_return_space_node,
-		convert_node<identifier>(*i),
-		convert_next_space(i)
+		convert_next_space(goto_keyword_it),
+		convert_node<identifier>(*identifier_it),
+		convert_next_space(identifier_it)
 	);
 }
 
@@ -1534,7 +1290,13 @@ convert_labeled_statement(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::LABELED_STATEMENT);
 
-	return labeled_statement();
+	return convert_alternative
+	<
+		labeled_statement,
+		id_t::CASE_STATEMENT,
+		id_t::DEFAULT_STATEMENT,
+		id_t::CLASSIC_LABELED_STATEMENT
+	>(node);
 }
 
 literal
@@ -1566,19 +1328,14 @@ convert_postfix_expression(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::POSTFIX_EXPRESSION);
 
-	boost::optional<postfix_expression::last_part_seq> last_part_seq_node;
-
 	tree_node_iterator_t first_part_it = node.children.begin();
-
-	tree_node_iterator_t i = find_node<id_t::POSTFIX_EXPRESSION_LAST_PART_SEQ>(node);
-	if(i != node.children.end())
-		last_part_seq_node = convert_node<postfix_expression::last_part_seq>(*i);
+	tree_node_iterator_t last_part_it = find_node<id_t::POSTFIX_EXPRESSION_LAST_PART_SEQ>(node);
 
 	return postfix_expression
 	(
 		convert_node<postfix_expression::first_part>(*first_part_it),
-		convert_previous_space(i),
-		last_part_seq_node
+		convert_previous_space(last_part_it),
+		convert_optional<postfix_expression::last_part_seq>(last_part_it, node)
 	);
 }
 
@@ -1600,28 +1357,14 @@ convert_return_statement(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::RETURN_STATEMENT);
 
-	boost::optional<space> post_return_space_node;
-	boost::optional<expression> expression_node;
-	boost::optional<space> post_expression_space_node;
-
-	tree_node_iterator_t i = node.children.begin();
-	++i;
-	if(i->value.id() == id_t::SPACE)
-		post_return_space_node = convert_node<space>(*i);
-
-	i = find_node<id_t::EXPRESSION>(node);
-	if(i != node.children.end())
-		expression_node = convert_node<expression>(*i);
-
-	++i;
-	if(i->value.id() == id_t::SPACE)
-		post_expression_space_node = convert_node<space>(*i);
+	tree_node_iterator_t return_keyword_it = node.children.begin();
+	tree_node_iterator_t expression_it = find_node<id_t::EXPRESSION>(node);
 
 	return return_statement
 	(
-		post_return_space_node,
-		expression_node,
-		post_expression_space_node
+		convert_next_space(return_keyword_it),
+		convert_optional<expression>(expression_it, node),
+		convert_next_space(expression_it)
 	);
 }
 
@@ -1911,29 +1654,14 @@ convert_bracketed_expression_list(const tree_node_t& node)
 {
 	assert(node.value.id() == id_t::BRACKETED_EXPRESSION_LIST);
 
-	boost::optional<space> post_opening_bracket_space_node;
-	boost::optional<expression_list> expression_list_node;
-	boost::optional<space> post_expression_list_space_node;
-
-	tree_node_iterator_t i = node.children.begin();
-	++i;
-	if(i->value.id() == id_t::SPACE)
-	{
-		post_opening_bracket_space_node = convert_node<space>(*i);
-	}
-
-	i = find_node<id_t::EXPRESSION_LIST>(node);
-	if(i != node.children.end())
-	{
-		expression_list_node = convert_node<expression_list>(*i);
-		post_expression_list_space_node = convert_next_space(i);
-	}
+	tree_node_iterator_t opening_bracket_it = node.children.begin();
+	tree_node_iterator_t expression_list_it = find_node<id_t::EXPRESSION_LIST>(node);
 
 	return bracketed_expression_list
 	(
-		post_opening_bracket_space_node,
-		expression_list_node,
-		post_expression_list_space_node
+		convert_next_space(opening_bracket_it),
+		convert_optional<expression_list>(expression_list_it, node),
+		convert_next_space(expression_list_it)
 	);
 }
 
@@ -1942,29 +1670,14 @@ convert_dot_id_expression(const tree_node_t& node)
 {
 	assert(node.value.id() == id_t::DOT_ID_EXPRESSION);
 
-	boost::optional<space> post_dot_space_node;
-	bool template_keyword = false;
-	boost::optional<space> post_template_keyword_space_node;
-
-	tree_node_iterator_t i = node.children.begin();
-	++i;
-	if(i->value.id() == id_t::SPACE)
-	{
-		post_dot_space_node = convert_node<space>(*i);
-		++i;
-	}
-
-	if(get_value(*i) == "template")
-	{
-		template_keyword = true;
-		post_template_keyword_space_node = convert_next_space(i);
-	}
+	tree_node_iterator_t dot_it = node.children.begin();
+	tree_node_iterator_t template_keyword_it = find_node(node, "template");
 
 	return dot_id_expression
 	(
-		post_dot_space_node,
-		template_keyword,
-		post_template_keyword_space_node,
+		convert_next_space(dot_it),
+		template_keyword_it != node.children.end(),
+		convert_next_space(template_keyword_it),
 		find_and_convert_node<id_expression, id_t::ID_EXPRESSION>(node)
 	);
 }
@@ -1998,75 +1711,27 @@ convert_if_statement(const tree_node_t& node)
 {
 	assert(node.value.id() == id_t::IF_STATEMENT);
 
-	//= str_p("if") >> !s >> '(' >> !s >> condition >> !s >> ')' >> !s >> statement >> !(!s >> "else" >> !s >> statement)
+	tree_node_iterator_t if_keyword_it = node.children.begin();
+	tree_node_iterator_t opening_bracket_it = find_node(node, "(");
+	tree_node_iterator_t condition_it = find_node<id_t::CONDITION>(node);
+	tree_node_iterator_t closing_bracket_it = find_node(node, ")");
+	tree_node_iterator_t else_keyword_it = find_node(node, "else");
+	tree_node_iterator_t else_statement_it = node.children.end();
 
-	boost::optional<space> post_if_keyword_space_node;
-	boost::optional<space> post_opening_bracket_space_node;
-	boost::optional<space> post_condition_space_node;
-	boost::optional<space> post_closing_bracket_space_node;
-	boost::optional<space> pre_else_keyword_space_node;
-	boost::optional<statement> else_statement_node;
-	boost::optional<space> post_else_keyword_space_node;
-
-	tree_node_iterator_t i = node.children.begin();
-	++i;
-	if(i->value.id() == id_t::SPACE)
-	{
-		post_if_keyword_space_node = convert_node<space>(*i);
-		++i;
-	}
-
-	++i;
-	if(i->value.id() == id_t::SPACE)
-	{
-		post_opening_bracket_space_node = convert_node<space>(*i);
-		++i;
-	}
-
-	++i;
-	if(i->value.id() == id_t::SPACE)
-	{
-		post_condition_space_node = convert_node<space>(*i);
-		++i;
-	}
-
-	++i;
-	if(i->value.id() == id_t::SPACE)
-	{
-		post_closing_bracket_space_node = convert_node<space>(*i);
-		++i;
-	}
-
-	++i;
-	if(i->value.id() == id_t::SPACE)
-	{
-		pre_else_keyword_space_node = convert_node<space>(*i);
-		++i;
-	}
-
-	++i;
-	if(i->value.id() == id_t::SPACE)
-	{
-		post_else_keyword_space_node = convert_node<space>(*i);
-		++i;
-	}
-
-	if(i->value.id() == id_t::STATEMENT)
-	{
-		else_statement_node = convert_node<statement>(*i);
-	}
+	if(else_keyword_it != node.children.end())
+		--else_statement_it;
 
 	return if_statement
 	(
-		post_if_keyword_space_node,
-		post_opening_bracket_space_node,
-		find_and_convert_node<condition, id_t::CONDITION>(node),
-		post_condition_space_node,
-		post_closing_bracket_space_node,
+		convert_next_space(if_keyword_it),
+		convert_next_space(opening_bracket_it),
+		convert_node<condition>(*condition_it),
+		convert_next_space(condition_it),
+		convert_next_space(closing_bracket_it),
 		find_and_convert_node<statement, id_t::STATEMENT>(node),
-		pre_else_keyword_space_node,
-		else_statement_node,
-		post_else_keyword_space_node
+		convert_previous_space(else_keyword_it),
+		convert_optional<statement>(else_statement_it, node),
+		convert_next_space(else_keyword_it)
 	);
 }
 
@@ -2075,52 +1740,45 @@ convert_switch_statement(const tree_node_t& node)
 {
 	assert(node.value.id() == id_t::SWITCH_STATEMENT);
 
-	boost::optional<space> post_switch_keyword_space_node;
-	boost::optional<space> post_opening_bracket_space_node;
-	boost::optional<space> post_condition_space_node;
-	boost::optional<space> post_closing_bracket_space_node;
-
-	tree_node_iterator_t i = node.children.begin();
-	++i;
-	if(i->value.id() == id_t::SPACE)
-	{
-		post_switch_keyword_space_node = convert_node<space>(*i);
-		++i;
-	}
-
-	++i;
-	if(i->value.id() == id_t::SPACE)
-	{
-		post_opening_bracket_space_node = convert_node<space>(*i);
-		++i;
-	}
-
-	++i;
-	if(i->value.id() == id_t::SPACE)
-	{
-		post_condition_space_node = convert_node<space>(*i);
-		++i;
-	}
-
-	++i;
-	if(i->value.id() == id_t::SPACE)
-	{
-		post_closing_bracket_space_node = convert_node<space>(*i);
-		++i;
-	}
-
+	tree_node_iterator_t switch_keyword_it = node.children.begin();
+	tree_node_iterator_t opening_bracket_it = find_node(node, "(");
+	tree_node_iterator_t condition_it = find_node<id_t::CONDITION>(node);
+	tree_node_iterator_t closing_bracket_it = find_node(node, ")");
 
 	return switch_statement
 	(
-		post_switch_keyword_space_node,
-		post_opening_bracket_space_node,
-		find_and_convert_node<condition, id_t::CONDITION>(node),
-		post_condition_space_node,
-		post_closing_bracket_space_node,
+		convert_next_space(switch_keyword_it),
+		convert_next_space(opening_bracket_it),
+		convert_node<condition>(*condition_it),
+		convert_next_space(condition_it),
+		convert_next_space(closing_bracket_it),
 		find_and_convert_node<statement, id_t::STATEMENT>(node)
 	);
 }
 
+case_statement
+convert_case_statement(const tree_node_t& node)
+{
+	assert(node.value.id() == id_t::CASE_STATEMENT);
+
+	return case_statement();
+}
+
+default_statement
+convert_default_statement(const tree_node_t& node)
+{
+	assert(node.value.id() == id_t::DEFAULT_STATEMENT);
+
+	return default_statement();
+}
+
+classic_labeled_statement
+convert_classic_labeled_statement(const tree_node_t& node)
+{
+	assert(node.value.id() == id_t::CLASSIC_LABELED_STATEMENT);
+
+	return classic_labeled_statement();
+}
 
 }}} //namespace socoa::cpp
 

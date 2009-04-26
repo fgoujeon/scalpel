@@ -851,9 +851,21 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	labeled_statement
+		= case_statement
+		| default_statement
+		| classic_labeled_statement
+	;
+
+	case_statement
 		= str_p("case") >> !s >> constant_expression >> !s >> ':' >> !s >> statement
-		| str_p("default") >> !s >> ':' >> !s >> statement
-		| identifier >> !s >> ':' >> !s >> statement
+	;
+
+	default_statement
+		= str_p("default") >> !s >> ':' >> !s >> statement
+	;
+
+	classic_labeled_statement
+		= identifier >> !s >> ':' >> !s >> statement
 	;
 
 	expression_statement

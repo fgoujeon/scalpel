@@ -867,6 +867,24 @@ SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
 	switch_statement,
 	switch_statement
 )
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	CASE_STATEMENT,
+	case_statement,
+	case_statement
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	DEFAULT_STATEMENT,
+	default_statement,
+	default_statement
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	CLASSIC_LABELED_STATEMENT,
+	classic_labeled_statement,
+	classic_labeled_statement
+)
 
 template<class SyntaxNodeT>
 inline

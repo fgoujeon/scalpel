@@ -27,11 +27,11 @@ namespace socoa { namespace cpp { namespace syntax_nodes
 
 goto_statement::goto_statement
 (
-	boost::optional<space>&& post_return_space_node,
+	boost::optional<space>&& post_goto_space_node,
 	identifier&& identifier_node,
 	boost::optional<space>&& post_identifier_space_node
 ):
-	post_return_space_(post_return_space_node),
+	post_goto_space_(post_goto_space_node),
 	identifier_(identifier_node),
 	post_identifier_space_(post_identifier_space_node)
 {
@@ -40,7 +40,7 @@ goto_statement::goto_statement
 
 goto_statement::goto_statement(const goto_statement& o):
 	composite_node(),
-	post_return_space_(o.post_return_space_),
+	post_goto_space_(o.post_goto_space_),
 	identifier_(o.identifier_),
 	post_identifier_space_(o.post_identifier_space_)
 {
@@ -49,7 +49,7 @@ goto_statement::goto_statement(const goto_statement& o):
 
 goto_statement::goto_statement(goto_statement&& o):
 	composite_node(),
-	post_return_space_(std::move(o.post_return_space_)),
+	post_goto_space_(std::move(o.post_goto_space_)),
 	identifier_(std::move(o.identifier_)),
 	post_identifier_space_(std::move(o.post_identifier_space_))
 {
@@ -59,7 +59,7 @@ goto_statement::goto_statement(goto_statement&& o):
 const goto_statement&
 goto_statement::operator=(const goto_statement& o)
 {
-	post_return_space_ = o.post_return_space_;
+	post_goto_space_ = o.post_goto_space_;
 	identifier_ = o.identifier_;
 	post_identifier_space_ = o.post_identifier_space_;
 
@@ -72,7 +72,8 @@ void
 goto_statement::update_node_list()
 {
 	clear();
-	if(post_return_space_) add(*post_return_space_);
+	add(goto_keyword);
+	if(post_goto_space_) add(*post_goto_space_);
 	add(identifier_);
 	if(post_identifier_space_) add(*post_identifier_space_);
 }

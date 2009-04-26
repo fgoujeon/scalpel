@@ -12,12 +12,15 @@ int main(int argc, char** argv)
 		{
 			case 1:
 				std::cout << "one";
+				break;
 			case 2:
 				std::cout << "two";
+				break ;
 			case 3:
 			case 4:
 			case 5:
 				std::cout << "more than two";
+				break;
 			default:
 				std::cout << "a lot of";
 		}

@@ -65,7 +65,9 @@ const leaf_node slash("/");
 
 //keywords
 const leaf_node break_keyword("break");
+const leaf_node case_keyword("case");
 const leaf_node continue_keyword("continue");
+const leaf_node default_keyword("default");
 const leaf_node else_keyword("else");
 const leaf_node for_keyword("for");
 const leaf_node goto_keyword("goto");

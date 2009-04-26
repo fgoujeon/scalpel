@@ -389,6 +389,17 @@ convert_if_statement(const tree_node_t& node);
 syntax_nodes::switch_statement
 convert_switch_statement(const tree_node_t& node);
 
+syntax_nodes::case_statement
+convert_case_statement(const tree_node_t& node);
+
+syntax_nodes::default_statement
+convert_default_statement(const tree_node_t& node);
+
+syntax_nodes::classic_labeled_statement
+convert_classic_labeled_statement(const tree_node_t& node);
+
+
+
 
 }}} //namespace socoa::cpp
 

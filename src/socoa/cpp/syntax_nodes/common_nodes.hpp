@@ -69,7 +69,9 @@ extern const leaf_node slash;
 
 //keywords
 extern const leaf_node break_keyword;
+extern const leaf_node case_keyword;
 extern const leaf_node continue_keyword;
+extern const leaf_node default_keyword;
 extern const leaf_node else_keyword;
 extern const leaf_node for_keyword;
 extern const leaf_node goto_keyword;

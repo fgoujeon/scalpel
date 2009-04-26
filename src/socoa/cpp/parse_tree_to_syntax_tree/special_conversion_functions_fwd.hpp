@@ -50,6 +50,10 @@ inline
 SyntaxNodeT
 convert_alternative(const tree_node_t& node);
 
+template<class T>
+boost::optional<T>
+convert_optional(const tree_node_iterator_t& it, const tree_node_t& parent_node);
+
 }}} //namespace socoa::cpp::parse_tree_to_syntax_tree
 
 #endif

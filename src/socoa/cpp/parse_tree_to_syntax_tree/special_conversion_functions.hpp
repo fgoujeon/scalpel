@@ -163,6 +163,16 @@ convert_alternative(const tree_node_t& node)
 }
 
 
+template<class T>
+boost::optional<T>
+convert_optional(const tree_node_iterator_t& it, const tree_node_t& parent_node)
+{
+	if(it != parent_node.children.end())
+		return convert_node<T>(*it);
+	else
+		return boost::optional<T>();
+}
+
 }}} //namespace socoa::cpp::parse_tree_to_syntax_tree
 
 #endif
