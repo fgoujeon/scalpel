@@ -1783,12 +1783,9 @@ convert_try_block(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::TRY_BLOCK);
 
-	const tree_node_iterator_t try_keyword_it = node.children.begin();
-	const tree_node_iterator_t compound_statement_it = find_node<id_t::COMPOUND_STATEMENT>(node);
-	const tree_node_iterator_t handler_seq_it = find_node<id_t::HANDLER_SEQ>(node);
-
-	///\todo if i remove the following line, an assert fails at execution. wtf?
-	boost::optional<space> o3 = convert_next_space(compound_statement_it);
+	tree_node_iterator_t try_keyword_it = node.children.begin();
+	tree_node_iterator_t compound_statement_it = find_node<id_t::COMPOUND_STATEMENT>(node);
+	tree_node_iterator_t handler_seq_it = find_node<id_t::HANDLER_SEQ>(node);
 
 	return try_block
 	(
