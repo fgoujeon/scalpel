@@ -66,6 +66,7 @@ const leaf_node slash("/");
 //keywords
 const leaf_node break_keyword("break");
 const leaf_node case_keyword("case");
+const leaf_node catch_keyword("catch");
 const leaf_node continue_keyword("continue");
 const leaf_node default_keyword("default");
 const leaf_node else_keyword("else");
@@ -76,6 +77,7 @@ const leaf_node namespace_keyword("namespace");
 const leaf_node return_keyword("return");
 const leaf_node switch_keyword("switch");
 const leaf_node template_keyword("template");
+const leaf_node try_keyword("try");
 const leaf_node using_keyword("using");
 
 }}} //namespace socoa::cpp::syntax_nodes

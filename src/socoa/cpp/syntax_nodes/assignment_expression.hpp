@@ -27,7 +27,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "assignment_operator.hpp"
 #include "conditional_expression.hpp"
 #include "expressions.hpp"
-//#include "throw_expression.hpp"
+#include "throw_expression.hpp"
 #include "space.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
@@ -54,7 +54,7 @@ class assignment_expression: public composite_node
 		typedef sequence_node<first_part> first_part_seq;
 
 		typedef
-			alternative_node<conditional_expression/*, throw_expression*/>
+			alternative_node<conditional_expression, throw_expression>
 			conditional_or_throw_expression
 		;
 

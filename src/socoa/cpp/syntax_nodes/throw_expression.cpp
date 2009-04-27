@@ -18,26 +18,43 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "extern_strings.hpp"
+#include "throw_expression.hpp"
 
-namespace socoa { namespace util
+namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
-namespace extern_strings
+throw_expression::throw_expression
+(
+)
 {
-    const std::string ampersand("&");
-    const std::string circumflex("^");
-    const std::string comma(",");
-    const std::string double_ampersand("&&");
-    const std::string double_minus("--");
-    const std::string double_pipe("||");
-    const std::string double_plus("++");
-    const std::string empty("");
-    const std::string ellipsis("...");
-    const std::string pipe("|");
-    const std::string space(" ");
-
-	const std::string this_("this");
+	update_node_list();
 }
 
-}} //namespace socoa::util
+throw_expression::throw_expression(const throw_expression& o):
+	composite_node()
+{
+	update_node_list();
+}
+
+throw_expression::throw_expression(throw_expression&& o):
+	composite_node()
+{
+	update_node_list();
+}
+
+const throw_expression&
+throw_expression::operator=(const throw_expression& o)
+{
+	update_node_list();
+
+	return *this;
+}
+
+void
+throw_expression::update_node_list()
+{
+	clear();
+}
+
+}}} //namespace socoa::cpp::syntax_nodes
+

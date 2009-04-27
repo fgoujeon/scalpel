@@ -159,6 +159,15 @@ convert_empty_initializer_list_initializer_clause(const tree_node_t& node);
 syntax_nodes::equal_initializer
 convert_equal_initializer(const tree_node_t& node);
 
+syntax_nodes::exception_abstract_declarator
+convert_exception_abstract_declarator(const tree_node_t& node);
+
+syntax_nodes::exception_declaration
+convert_exception_declaration(const tree_node_t& node);
+
+syntax_nodes::exception_declarator
+convert_exception_declarator(const tree_node_t& node);
+
 syntax_nodes::expression_statement
 convert_expression_statement(const tree_node_t& node);
 
@@ -176,6 +185,9 @@ convert_function_definition(const tree_node_t& node);
 
 syntax_nodes::goto_statement
 convert_goto_statement(const tree_node_t& node);
+
+syntax_nodes::handler
+convert_handler(const tree_node_t& node);
 
 syntax_nodes::id_expression
 convert_id_expression(const tree_node_t& node);
@@ -356,6 +368,9 @@ convert_template_id(const tree_node_t& node);
 
 syntax_nodes::template_typename_expression
 convert_template_typename_expression(const tree_node_t& node);
+
+syntax_nodes::throw_expression
+convert_throw_expression(const tree_node_t& node);
 
 syntax_nodes::translation_unit
 convert_translation_unit(const tree_node_t& node);

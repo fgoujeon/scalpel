@@ -843,18 +843,6 @@ SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
 	arrow_pseudo_destructor_name,
 	arrow_pseudo_destructor_name
 )
-/*SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
-(
-	DOUBLE_PLUS,
-	double_plus,
-	double_plus
-)
-SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
-(
-	DOUBLE_MINUS,
-	double_minus,
-	double_minus
-)*/
 SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
 (
 	IF_STATEMENT,
@@ -909,7 +897,48 @@ SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
 	round_bracketed_expression,
 	round_bracketed_expression
 )
-
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	HANDLER,
+	handler,
+	handler
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	THROW_EXPRESSION,
+	throw_expression,
+	throw_expression
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	EXCEPTION_DECLARATION,
+	exception_declaration,
+	exception_declaration
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	EXCEPTION_DECLARATOR,
+	exception_declarator,
+	exception_declarator
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	EXCEPTION_ABSTRACT_DECLARATOR,
+	exception_abstract_declarator,
+	exception_abstract_declarator
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	ELLIPSIS,
+	simple_text_node<util::extern_strings::ellipsis>,
+	simple_text<util::extern_strings::ellipsis>
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	TYPE_SPECIFIER_SEQ,
+	type_specifier_seq,
+	sequence<syntax_nodes::type_specifier_seq>
+)
 
 template<class SyntaxNodeT>
 inline

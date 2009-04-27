@@ -18,26 +18,33 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "extern_strings.hpp"
+#ifndef SOCOA_CPP_SYNTAX_NODES_EXCEPTION_DECLARATOR_HPP
+#define SOCOA_CPP_SYNTAX_NODES_EXCEPTION_DECLARATOR_HPP
 
-namespace socoa { namespace util
+#include "composite_node.hpp"
+
+namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
-namespace extern_strings
+class exception_declarator: public composite_node
 {
-    const std::string ampersand("&");
-    const std::string circumflex("^");
-    const std::string comma(",");
-    const std::string double_ampersand("&&");
-    const std::string double_minus("--");
-    const std::string double_pipe("||");
-    const std::string double_plus("++");
-    const std::string empty("");
-    const std::string ellipsis("...");
-    const std::string pipe("|");
-    const std::string space(" ");
+	public:
+		exception_declarator
+		(
+		);
 
-	const std::string this_("this");
-}
+		exception_declarator(const exception_declarator& o);
 
-}} //namespace socoa::util
+		exception_declarator(exception_declarator&& o);
+
+		const exception_declarator&
+		operator=(const exception_declarator& o);
+
+	private:
+		void
+		update_node_list();
+};
+
+}}} //namespace socoa::cpp::syntax_nodes
+
+#endif

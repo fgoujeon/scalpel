@@ -18,26 +18,20 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "extern_strings.hpp"
+#ifndef SOCOA_CPP_SYNTAX_NODES_HANDLER_SEQ_HPP
+#define SOCOA_CPP_SYNTAX_NODES_HANDLER_SEQ_HPP
 
-namespace socoa { namespace util
+#include "sequence_node.hpp"
+#include "handler.hpp"
+
+namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
-namespace extern_strings
-{
-    const std::string ampersand("&");
-    const std::string circumflex("^");
-    const std::string comma(",");
-    const std::string double_ampersand("&&");
-    const std::string double_minus("--");
-    const std::string double_pipe("||");
-    const std::string double_plus("++");
-    const std::string empty("");
-    const std::string ellipsis("...");
-    const std::string pipe("|");
-    const std::string space(" ");
+typedef
+	sequence_node<handler>
+	handler_seq
+;
 
-	const std::string this_("this");
-}
+}}} //namespace socoa::cpp::syntax_nodes
 
-}} //namespace socoa::util
+#endif

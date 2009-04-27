@@ -35,6 +35,7 @@ namespace extern_strings
     extern const std::string double_minus;
     extern const std::string double_pipe;
     extern const std::string double_plus;
+    extern const std::string ellipsis;
     extern const std::string empty;
     extern const std::string pipe;
     extern const std::string space;

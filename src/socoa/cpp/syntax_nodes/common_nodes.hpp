@@ -70,6 +70,7 @@ extern const leaf_node slash;
 //keywords
 extern const leaf_node break_keyword;
 extern const leaf_node case_keyword;
+extern const leaf_node catch_keyword;
 extern const leaf_node continue_keyword;
 extern const leaf_node default_keyword;
 extern const leaf_node else_keyword;
@@ -80,6 +81,7 @@ extern const leaf_node namespace_keyword;
 extern const leaf_node return_keyword;
 extern const leaf_node switch_keyword;
 extern const leaf_node template_keyword;
+extern const leaf_node try_keyword;
 extern const leaf_node using_keyword;
 
 }}} //namespace socoa::cpp::syntax_nodes

@@ -32,13 +32,13 @@ namespace socoa { namespace cpp { namespace parse_tree_to_syntax_tree
  * Check whether the previous node is a space node, and if so, convert it.
  */
 boost::optional<syntax_nodes::space>
-convert_previous_space(const tree_node_iterator_t& i);
+convert_previous_space(tree_node_iterator_t i);
 
 /**
  * Check whether the next node is a space node, and if so, convert it.
  */
 boost::optional<syntax_nodes::space>
-convert_next_space(const tree_node_iterator_t& i);
+convert_next_space(tree_node_iterator_t i);
 
 }}} //namespace socoa::cpp::parse_tree_to_syntax_tree
 

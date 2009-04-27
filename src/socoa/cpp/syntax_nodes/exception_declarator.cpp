@@ -18,26 +18,43 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "extern_strings.hpp"
+#include "exception_declarator.hpp"
 
-namespace socoa { namespace util
+namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
-namespace extern_strings
+exception_declarator::exception_declarator
+(
+)
 {
-    const std::string ampersand("&");
-    const std::string circumflex("^");
-    const std::string comma(",");
-    const std::string double_ampersand("&&");
-    const std::string double_minus("--");
-    const std::string double_pipe("||");
-    const std::string double_plus("++");
-    const std::string empty("");
-    const std::string ellipsis("...");
-    const std::string pipe("|");
-    const std::string space(" ");
-
-	const std::string this_("this");
+	update_node_list();
 }
 
-}} //namespace socoa::util
+exception_declarator::exception_declarator(const exception_declarator& o):
+	composite_node()
+{
+	update_node_list();
+}
+
+exception_declarator::exception_declarator(exception_declarator&& o):
+	composite_node()
+{
+	update_node_list();
+}
+
+const exception_declarator&
+exception_declarator::operator=(const exception_declarator& o)
+{
+	update_node_list();
+
+	return *this;
+}
+
+void
+exception_declarator::update_node_list()
+{
+	clear();
+}
+
+}}} //namespace socoa::cpp::syntax_nodes
+

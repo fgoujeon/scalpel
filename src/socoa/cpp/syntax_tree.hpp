@@ -52,6 +52,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "syntax_nodes/destructor_name.hpp"
 #include "syntax_nodes/direct_declarator.hpp"
 #include "syntax_nodes/elaborated_type_specifier.hpp"
+#include "syntax_nodes/exception_declaration.hpp"
 #include "syntax_nodes/expression.hpp"
 #include "syntax_nodes/expressions.hpp"
 #include "syntax_nodes/expression_statement.hpp"

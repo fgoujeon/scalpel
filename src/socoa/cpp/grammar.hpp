@@ -300,6 +300,9 @@ class grammar
             HANDLER_SEQ,
             HANDLER,
             EXCEPTION_DECLARATION,
+			EXCEPTION_DECLARATOR,
+			EXCEPTION_ABSTRACT_DECLARATOR,
+			ELLIPSIS,
             THROW_EXPRESSION,
             EXCEPTION_SPECIFICATION,
             TYPE_ID_LIST,
@@ -637,6 +640,9 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::HANDLER_SEQ>> handler_seq;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::HANDLER>> handler;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EXCEPTION_DECLARATION>> exception_declaration;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EXCEPTION_DECLARATOR>> exception_declarator;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EXCEPTION_ABSTRACT_DECLARATOR>> exception_abstract_declarator;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ELLIPSIS>> ellipsis;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::THROW_EXPRESSION>> throw_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EXCEPTION_SPECIFICATION>> exception_specification;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TYPE_ID_LIST>> type_id_list;

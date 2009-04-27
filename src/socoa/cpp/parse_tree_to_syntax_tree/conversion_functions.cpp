@@ -20,7 +20,9 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "conversion_functions.hpp"
 
+#include <iostream>
 #include "../grammar.hpp"
+#include "../syntax_tree.hpp"
 #include "basic_functions.hpp"
 #include "special_conversion_functions.hpp"
 #include "node_finder_and_converter.hpp"
@@ -65,20 +67,32 @@ convert_assignment_expression(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::ASSIGNMENT_EXPRESSION);
 
-	tree_node_iterator_t i = find_node<id_t::ASSIGNMENT_EXPRESSION_FIRST_PART_SEQ>(node);
+	tree_node_iterator_t first_part_seq_it = find_node<id_t::ASSIGNMENT_EXPRESSION_FIRST_PART_SEQ>(node);
 	tree_node_iterator_t conditional_expression_it = find_node<id_t::CONDITIONAL_EXPRESSION>(node);
 	tree_node_iterator_t throw_expression_it = find_node<id_t::THROW_EXPRESSION>(node);
 
-	assert((conditional_expression_it != node.children.end()) || (throw_expression_it != node.children.end()));
-
-	return assignment_expression
-	(
-		convert_optional<assignment_expression::first_part_seq>(i, node),
-		convert_next_space(i),
-//		(conditional_expression_it != node.children.end()) ?
-			convert_node<conditional_expression>(*conditional_expression_it) /*:
-			convert_node<throw_expression>(*throw_expression_it)*/
-	);
+	if(conditional_expression_it != node.children.end())
+	{
+		return assignment_expression
+		(
+			convert_optional<assignment_expression::first_part_seq>(first_part_seq_it, node),
+			convert_next_space(first_part_seq_it),
+			convert_node<conditional_expression>(*conditional_expression_it)
+		);
+	}
+	else if(throw_expression_it != node.children.end())
+	{
+		return assignment_expression
+		(
+			convert_optional<assignment_expression::first_part_seq>(first_part_seq_it, node),
+			convert_next_space(first_part_seq_it),
+			convert_node<throw_expression>(*throw_expression_it)
+		);
+	}
+	else
+	{
+		assert(false);
+	}
 }
 
 assignment_expression_condition
@@ -647,6 +661,37 @@ convert_equal_initializer(const tree_node_t& node)
 	);
 }
 
+exception_abstract_declarator
+convert_exception_abstract_declarator(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::EXCEPTION_ABSTRACT_DECLARATOR);
+
+	return exception_abstract_declarator();
+}
+
+exception_declaration
+convert_exception_declaration(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::EXCEPTION_DECLARATION);
+
+	return convert_alternative
+	<
+		exception_declaration,
+		id_t::EXCEPTION_DECLARATOR,
+		id_t::EXCEPTION_ABSTRACT_DECLARATOR,
+		id_t::TYPE_SPECIFIER_SEQ,
+		id_t::ELLIPSIS
+	>(node);
+}
+
+exception_declarator
+convert_exception_declarator(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::EXCEPTION_DECLARATOR);
+
+	return exception_declarator();
+}
+
 expression_statement
 convert_expression_statement(const tree_node_t& node)
 {
@@ -751,6 +796,28 @@ convert_goto_statement(const tree_node_t& node)
 		convert_next_space(goto_keyword_it),
 		convert_node<identifier>(*identifier_it),
 		convert_next_space(identifier_it)
+	);
+}
+
+handler
+convert_handler(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::HANDLER);
+
+	tree_node_iterator_t catch_keyword_it = node.children.begin();
+	tree_node_iterator_t opening_bracket_it = find_node(node, "(");
+	tree_node_iterator_t exception_declaration_it = find_node<id_t::EXCEPTION_DECLARATION>(node);
+	tree_node_iterator_t closing_bracket_it = find_node(node, ")");
+	tree_node_iterator_t compound_statement_it = find_node<id_t::COMPOUND_STATEMENT>(node);
+
+	return handler
+	(
+		convert_next_space(catch_keyword_it),
+		convert_next_space(opening_bracket_it),
+		convert_node<exception_declaration>(*exception_declaration_it),
+		convert_next_space(exception_declaration_it),
+		convert_next_space(closing_bracket_it),
+		convert_node<compound_statement>(*compound_statement_it)
 	);
 }
 
@@ -1608,6 +1675,14 @@ convert_template_typename_expression(const tree_node_t& node)
 	return template_typename_expression();
 }
 
+throw_expression
+convert_throw_expression(const tree_node_t& node)
+{
+	assert(node.value.id() == id_t::THROW_EXPRESSION);
+
+	return throw_expression();
+}
+
 translation_unit
 convert_translation_unit(const tree_node_t& node)
 {
@@ -1641,7 +1716,20 @@ convert_try_block(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::TRY_BLOCK);
 
-	return try_block();
+	const tree_node_iterator_t try_keyword_it = node.children.begin();
+	const tree_node_iterator_t compound_statement_it = find_node<id_t::COMPOUND_STATEMENT>(node);
+	const tree_node_iterator_t handler_seq_it = find_node<id_t::HANDLER_SEQ>(node);
+
+	///\todo if i remove the following line, an assert fails at execution. wtf?
+	boost::optional<space> o3 = convert_next_space(compound_statement_it);
+
+	return try_block
+	(
+		convert_next_space(try_keyword_it),
+		convert_node<compound_statement>(*compound_statement_it),
+		convert_next_space(compound_statement_it),
+		convert_node<handler_seq>(*handler_seq_it)
+	);
 }
 
 type_id_sizeof_expression

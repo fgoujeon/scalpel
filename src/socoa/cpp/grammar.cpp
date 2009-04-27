@@ -1631,10 +1631,22 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	exception_declaration
-		= type_specifier_seq >> !s >> declarator
-		| type_specifier_seq >> !s >> abstract_declarator
+		= exception_declarator
+		| exception_abstract_declarator
 		| type_specifier_seq
-		| "..."
+		| ellipsis
+	;
+
+	exception_declarator
+		= type_specifier_seq >> !s >> declarator
+	;
+
+	exception_abstract_declarator
+		= type_specifier_seq >> !s >> abstract_declarator
+	;
+
+	ellipsis
+		= str_p("...")
 	;
 
 	throw_expression
