@@ -77,6 +77,7 @@ const leaf_node namespace_keyword("namespace");
 const leaf_node return_keyword("return");
 const leaf_node switch_keyword("switch");
 const leaf_node template_keyword("template");
+const leaf_node throw_keyword("throw");
 const leaf_node try_keyword("try");
 const leaf_node using_keyword("using");
 

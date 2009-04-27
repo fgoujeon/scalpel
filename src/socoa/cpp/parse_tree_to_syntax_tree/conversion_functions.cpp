@@ -1719,7 +1719,13 @@ convert_throw_expression(const tree_node_t& node)
 {
 	assert(node.value.id() == id_t::THROW_EXPRESSION);
 
-	return throw_expression();
+	tree_node_iterator_t assignment_expression_it = find_node<id_t::ASSIGNMENT_EXPRESSION>(node);
+
+	return throw_expression
+	(
+		convert_previous_space(assignment_expression_it),
+		convert_optional<assignment_expression>(assignment_expression_it, node)
+	);
 }
 
 translation_unit

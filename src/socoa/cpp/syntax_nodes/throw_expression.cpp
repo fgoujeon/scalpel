@@ -20,24 +20,39 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "throw_expression.hpp"
 
+#include "assignment_expression.hpp"
+#include "common_nodes.hpp"
+
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
 throw_expression::throw_expression
 (
-)
+	boost::optional<space>&& pre_assignment_expression_space_node,
+	boost::optional<assignment_expression>&& assignment_expression_node
+):
+	pre_assignment_expression_space_(pre_assignment_expression_space_node)
 {
+	if(assignment_expression_node)
+		assignment_expression_ = std::move(std::unique_ptr<assignment_expression>(new assignment_expression(*assignment_expression_node)));
+
 	update_node_list();
 }
 
 throw_expression::throw_expression(const throw_expression& o):
-	composite_node()
+	composite_node(),
+	pre_assignment_expression_space_(o.pre_assignment_expression_space_)
 {
+	if(o.assignment_expression_)
+		assignment_expression_ = std::move(std::unique_ptr<assignment_expression>(new assignment_expression(*o.assignment_expression_)));
+
 	update_node_list();
 }
 
 throw_expression::throw_expression(throw_expression&& o):
-	composite_node()
+	composite_node(),
+	pre_assignment_expression_space_(std::move(o.pre_assignment_expression_space_)),
+	assignment_expression_(std::move(o.assignment_expression_))
 {
 	update_node_list();
 }
@@ -45,6 +60,10 @@ throw_expression::throw_expression(throw_expression&& o):
 const throw_expression&
 throw_expression::operator=(const throw_expression& o)
 {
+	pre_assignment_expression_space_ = o.pre_assignment_expression_space_;
+	if(o.assignment_expression_)
+		assignment_expression_ = std::move(std::unique_ptr<assignment_expression>(new assignment_expression(*o.assignment_expression_)));
+
 	update_node_list();
 
 	return *this;
@@ -54,6 +73,9 @@ void
 throw_expression::update_node_list()
 {
 	clear();
+	add(throw_keyword);
+	if(pre_assignment_expression_space_) add(*pre_assignment_expression_space_);
+	if(assignment_expression_) add(*assignment_expression_);
 }
 
 }}} //namespace socoa::cpp::syntax_nodes

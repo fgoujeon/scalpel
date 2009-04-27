@@ -1650,7 +1650,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	throw_expression
-		= "throw" >> !s >> !assignment_expression
+		= "throw" >> !(!s >> assignment_expression)
 	;
 
 	exception_specification

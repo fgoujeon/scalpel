@@ -81,6 +81,7 @@ extern const leaf_node namespace_keyword;
 extern const leaf_node return_keyword;
 extern const leaf_node switch_keyword;
 extern const leaf_node template_keyword;
+extern const leaf_node throw_keyword;
 extern const leaf_node try_keyword;
 extern const leaf_node using_keyword;
 
