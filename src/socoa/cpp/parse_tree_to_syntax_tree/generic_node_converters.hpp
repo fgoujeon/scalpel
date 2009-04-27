@@ -957,6 +957,13 @@ SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
 	abstract_declarator,
 	abstract_declarator
 )
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	FUNCTION_TRY_BLOCK,
+	function_try_block,
+	function_try_block
+)
+
 
 template<class SyntaxNodeT>
 inline

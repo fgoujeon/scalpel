@@ -33,7 +33,8 @@ function_definition::function_definition
 	boost::optional<space>&& post_declarator_space,
 	boost::optional<ctor_initializer>&& a_ctor_initializer,
 	boost::optional<space>&& post_ctor_initializer_space,
-	boost::optional<compound_statement>&& compound_statement_node
+	boost::optional<compound_statement>&& compound_statement_node,
+	boost::optional<function_try_block>&& function_try_block_node
 ):
     decl_specifier_seq_(a_decl_specifier_seq),
 	post_decl_specifier_seq_space_(post_decl_specifier_seq_space),
@@ -41,7 +42,8 @@ function_definition::function_definition
 	post_declarator_space_(post_declarator_space),
     ctor_initializer_(a_ctor_initializer),
 	post_ctor_initializer_space_(post_ctor_initializer_space),
-    compound_statement_(compound_statement_node)
+    compound_statement_(compound_statement_node),
+	function_try_block_(function_try_block_node)
 {
 	update_node_list();
 }
@@ -54,7 +56,8 @@ function_definition::function_definition(const function_definition& o):
 	post_declarator_space_(o.post_declarator_space_),
     ctor_initializer_(o.ctor_initializer_),
 	post_ctor_initializer_space_(o.post_ctor_initializer_space_),
-    compound_statement_(o.compound_statement_)
+    compound_statement_(o.compound_statement_),
+	function_try_block_(o.function_try_block_)
 {
 	update_node_list();
 }
@@ -66,7 +69,8 @@ function_definition::function_definition(function_definition&& o):
 	post_declarator_space_(std::move(o.post_declarator_space_)),
     ctor_initializer_(std::move(o.ctor_initializer_)),
 	post_ctor_initializer_space_(std::move(o.post_ctor_initializer_space_)),
-    compound_statement_(std::move(o.compound_statement_))
+    compound_statement_(std::move(o.compound_statement_)),
+	function_try_block_(std::move(o.function_try_block_))
 {
 	update_node_list();
 }
@@ -81,6 +85,7 @@ function_definition::operator=(const function_definition& o)
     ctor_initializer_ = o.ctor_initializer_;
 	post_ctor_initializer_space_ = o.post_ctor_initializer_space_;
     compound_statement_ = o.compound_statement_;
+	function_try_block_ = o.function_try_block_;
 
 	update_node_list();
 
@@ -98,6 +103,7 @@ function_definition::update_node_list()
 	if(ctor_initializer_) add(*ctor_initializer_);
 	if(post_ctor_initializer_space_) add(*post_ctor_initializer_space_);
     if(compound_statement_) add(*compound_statement_);
+	if(function_try_block_) add(*function_try_block_);
 }
 
 }}} //namespace socoa::cpp::syntax_nodes

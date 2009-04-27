@@ -59,6 +59,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "syntax_nodes/floating_literal.hpp"
 #include "syntax_nodes/function_definition.hpp"
 #include "syntax_nodes/function_specifier.hpp"
+#include "syntax_nodes/function_try_block.hpp"
 #include "syntax_nodes/goto_statement.hpp"
 #include "syntax_nodes/id_expression.hpp"
 #include "syntax_nodes/identifier.hpp"

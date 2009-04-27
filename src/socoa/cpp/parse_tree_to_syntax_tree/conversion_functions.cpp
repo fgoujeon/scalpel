@@ -809,6 +809,7 @@ convert_function_definition(const tree_node_t& node)
 	tree_node_iterator_t declarator_it = find_node<id_t::DECLARATOR>(node);
 	tree_node_iterator_t ctor_initializer_it = find_node<id_t::CTOR_INITIALIZER>(node);
 	tree_node_iterator_t compound_statement_it = find_node<id_t::COMPOUND_STATEMENT>(node);
+	tree_node_iterator_t function_try_block_it = find_node<id_t::FUNCTION_TRY_BLOCK>(node);
 
     return function_definition
     (
@@ -818,8 +819,29 @@ convert_function_definition(const tree_node_t& node)
 		convert_next_space(declarator_it),
 		convert_optional<ctor_initializer>(ctor_initializer_it, node),
 		convert_next_space(ctor_initializer_it),
-		convert_optional<compound_statement>(compound_statement_it, node)
+		convert_optional<compound_statement>(compound_statement_it, node),
+		convert_optional<function_try_block>(function_try_block_it, node)
     );
+}
+
+function_try_block
+convert_function_try_block(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::FUNCTION_TRY_BLOCK);
+
+	tree_node_iterator_t try_keyword_it = node.children.begin();
+	tree_node_iterator_t ctor_initializer_it = find_node<id_t::CTOR_INITIALIZER>(node);
+	tree_node_iterator_t compound_statement_it = find_node<id_t::COMPOUND_STATEMENT>(node);
+
+	return function_try_block
+	(
+		convert_next_space(try_keyword_it),
+		convert_optional<ctor_initializer>(ctor_initializer_it, node),
+		convert_next_space(ctor_initializer_it),
+		convert_node<compound_statement>(*compound_statement_it),
+		convert_next_space(compound_statement_it),
+		find_and_convert_node<handler_seq, id_t::HANDLER_SEQ>(node)
+	);
 }
 
 goto_statement

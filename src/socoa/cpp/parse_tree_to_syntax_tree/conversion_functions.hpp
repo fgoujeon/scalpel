@@ -189,6 +189,9 @@ convert_for_statement(const tree_node_t& node);
 syntax_nodes::function_definition
 convert_function_definition(const tree_node_t& node);
 
+syntax_nodes::function_try_block
+convert_function_try_block(const tree_node_t& node);
+
 syntax_nodes::goto_statement
 convert_goto_statement(const tree_node_t& node);
 

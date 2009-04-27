@@ -28,6 +28,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "ctor_initializer.hpp"
 #include "space.hpp"
 #include "compound_statement.hpp"
+#include "function_try_block.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
@@ -53,7 +54,8 @@ class function_definition: public composite_node
 			boost::optional<space>&& post_declarator_space,
             boost::optional<ctor_initializer>&& a_ctor_initializer,
 			boost::optional<space>&& post_ctor_initializer_space,
-            boost::optional<compound_statement>&& compound_statement_node
+            boost::optional<compound_statement>&& compound_statement_node,
+			boost::optional<function_try_block>&& function_try_block_node
         );
 
 		function_definition(const function_definition& o);
@@ -94,6 +96,7 @@ class function_definition: public composite_node
 		boost::optional<ctor_initializer> ctor_initializer_;
 		boost::optional<space> post_ctor_initializer_space_;
 		boost::optional<compound_statement> compound_statement_;
+		boost::optional<function_try_block> function_try_block_;
 };
 
 inline

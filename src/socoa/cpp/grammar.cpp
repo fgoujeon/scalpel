@@ -1619,7 +1619,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	function_try_block
-		= str_p("try") >> !s >> !ctor_initializer >> !s >> compound_statement >> !s >> handler_seq
+		= str_p("try") >> !s >> !(ctor_initializer >> !s) >> compound_statement >> !s >> handler_seq
 	;
 
 	handler_seq
