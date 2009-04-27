@@ -25,19 +25,23 @@ namespace socoa { namespace cpp { namespace syntax_nodes
 
 floating_literal::floating_literal
 (
-)
+	std::string&& value
+):
+	value_(value)
 {
 	update_node_list();
 }
 
 floating_literal::floating_literal(const floating_literal& o):
-	composite_node()
+	composite_node(),
+	value_(o.value_)
 {
 	update_node_list();
 }
 
 floating_literal::floating_literal(floating_literal&& o):
-	composite_node()
+	composite_node(),
+	value_(std::move(o.value_))
 {
 	update_node_list();
 }
@@ -45,6 +49,8 @@ floating_literal::floating_literal(floating_literal&& o):
 const floating_literal&
 floating_literal::operator=(const floating_literal& o)
 {
+	value_ = o.value_;
+
 	update_node_list();
 
 	return *this;
@@ -54,6 +60,7 @@ void
 floating_literal::update_node_list()
 {
 	clear();
+	add(value_);
 }
 
 }}} //namespace socoa::cpp::syntax_nodes

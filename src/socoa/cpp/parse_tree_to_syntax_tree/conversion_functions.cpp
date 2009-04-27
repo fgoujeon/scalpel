@@ -66,17 +66,18 @@ convert_assignment_expression(const tree_node_t& node)
     assert(node.value.id() == id_t::ASSIGNMENT_EXPRESSION);
 
 	tree_node_iterator_t i = find_node<id_t::ASSIGNMENT_EXPRESSION_FIRST_PART_SEQ>(node);
+	tree_node_iterator_t conditional_expression_it = find_node<id_t::CONDITIONAL_EXPRESSION>(node);
+	tree_node_iterator_t throw_expression_it = find_node<id_t::THROW_EXPRESSION>(node);
+
+	assert((conditional_expression_it != node.children.end()) || (throw_expression_it != node.children.end()));
 
 	return assignment_expression
 	(
 		convert_optional<assignment_expression::first_part_seq>(i, node),
 		convert_next_space(i),
-		convert_alternative
-		<
-			assignment_expression::conditional_or_throw_expression,
-			id_t::CONDITIONAL_EXPRESSION/*,
-			id_t::THROW_EXPRESSION*/
-		>(node)
+//		(conditional_expression_it != node.children.end()) ?
+			convert_node<conditional_expression>(*conditional_expression_it) /*:
+			convert_node<throw_expression>(*throw_expression_it)*/
 	);
 }
 
@@ -665,7 +666,7 @@ convert_floating_literal(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::FLOATING_LITERAL);
 
-	return floating_literal();
+	return floating_literal(get_only_child_value(node));
 }
 
 for_init_statement
@@ -1255,7 +1256,9 @@ convert_primary_expression(const tree_node_t& node)
 	return convert_alternative
 	<
 		primary_expression,
+		id_t::THIS_KEYWORD,
 		id_t::LITERAL,
+		id_t::ROUND_BRACKETED_EXPRESSION,
 		id_t::ID_EXPRESSION
 	>(node);
 }
@@ -1380,6 +1383,22 @@ convert_return_statement(const tree_node_t& node)
 	(
 		convert_next_space(return_keyword_it),
 		convert_optional<expression>(expression_it, node),
+		convert_next_space(expression_it)
+	);
+}
+
+round_bracketed_expression
+convert_round_bracketed_expression(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::ROUND_BRACKETED_EXPRESSION);
+
+	tree_node_iterator_t opening_bracket_it = node.children.begin();
+	tree_node_iterator_t expression_it = find_node<id_t::EXPRESSION>(node);
+
+	return round_bracketed_expression
+	(
+		convert_next_space(opening_bracket_it),
+		convert_node<expression>(*expression_it),
 		convert_next_space(expression_it)
 	);
 }

@@ -22,7 +22,9 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_NODES_PRIMARY_EXPRESSION_HPP
 
 #include "alternative_node.hpp"
+#include "simple_text_node.hpp"
 #include "literal.hpp"
+#include "round_bracketed_expression.hpp"
 #include "id_expression.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
@@ -31,7 +33,9 @@ namespace socoa { namespace cpp { namespace syntax_nodes
 typedef
 	alternative_node
 	<
+		simple_text_node<util::extern_strings::this_>,
 		literal,
+		round_bracketed_expression,
 		id_expression
 	>
 	primary_expression

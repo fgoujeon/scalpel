@@ -21,6 +21,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_NODES_SIMPLE_TEXT_NODE_HPP
 #define SOCOA_CPP_SYNTAX_NODES_SIMPLE_TEXT_NODE_HPP
 
+#include "leaf_node.hpp"
+
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 

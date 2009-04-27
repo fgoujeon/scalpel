@@ -1,4 +1,16 @@
-void function(int i) throw(std::exception, CustomExceptionType)
+int main(int argc, char** argv)
 {
-	do_something(i);
+	try
+	{
+		may_throw_exception();
+	}
+	catch(const SomeErrorType& e)
+	{
+		throw e;
+	}
+	catch(...)
+	{
+		throw;
+	}
 }
+

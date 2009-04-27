@@ -321,8 +321,11 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	floating_literal
-		= fractional_constant >> !exponent_part >> !floating_suffix
-		| digit_sequence >> exponent_part >> !floating_suffix
+		= token_node_d
+		[
+			fractional_constant >> !exponent_part >> !floating_suffix
+			| digit_sequence >> exponent_part >> !floating_suffix
+		]
 	;
 
 	fractional_constant
@@ -372,10 +375,18 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 
 	//1.4 - Expressions [gram.expr]
 	primary_expression
-		= "this"
+		= this_keyword
 		| literal
-		| '(' >> !s >> expression >> !s >> ')'
+		| round_bracketed_expression
 		| id_expression
+	;
+
+	this_keyword
+		= str_p("this")
+	;
+
+	round_bracketed_expression
+		= '(' >> !s >> expression >> !s >> ')'
 	;
 
 	id_expression

@@ -897,6 +897,19 @@ SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
 	simple_text_node<util::extern_strings::double_minus>,
 	simple_text<util::extern_strings::double_minus>
 )
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	THIS_KEYWORD,
+	simple_text_node<util::extern_strings::this_>,
+	simple_text<util::extern_strings::this_>
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	ROUND_BRACKETED_EXPRESSION,
+	round_bracketed_expression,
+	round_bracketed_expression
+)
+
 
 template<class SyntaxNodeT>
 inline

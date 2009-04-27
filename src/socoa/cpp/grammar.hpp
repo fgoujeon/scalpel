@@ -87,6 +87,8 @@ class grammar
             TRANSLATION_UNIT,
 
             PRIMARY_EXPRESSION,
+			THIS_KEYWORD,
+			ROUND_BRACKETED_EXPRESSION,
             ID_EXPRESSION,
             UNQUALIFIED_ID,
             QUALIFIED_ID,
@@ -401,6 +403,8 @@ class grammar
 
         //1.4 - Expressions [gram.expr]
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PRIMARY_EXPRESSION>> primary_expression;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::THIS_KEYWORD>> this_keyword;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ROUND_BRACKETED_EXPRESSION>> round_bracketed_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ID_EXPRESSION>> id_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::UNQUALIFIED_ID>> unqualified_id;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::QUALIFIED_ID>> qualified_id;

@@ -21,7 +21,9 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_NODES_FLOATING_LITERAL_HPP
 #define SOCOA_CPP_SYNTAX_NODES_FLOATING_LITERAL_HPP
 
+#include <string>
 #include "composite_node.hpp"
+#include "leaf_node.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
@@ -31,6 +33,7 @@ class floating_literal: public composite_node
 	public:
 		floating_literal
 		(
+			std::string&& value
 		);
 
 		floating_literal(const floating_literal& o);
@@ -43,6 +46,8 @@ class floating_literal: public composite_node
 	private:
 		void
 		update_node_list();
+
+		leaf_node value_;
 };
 
 }}} //namespace socoa::cpp::syntax_nodes

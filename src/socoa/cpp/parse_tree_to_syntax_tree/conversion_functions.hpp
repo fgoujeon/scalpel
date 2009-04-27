@@ -309,6 +309,9 @@ convert_reinterpret_cast_expression(const tree_node_t& node);
 syntax_nodes::return_statement
 convert_return_statement(const tree_node_t& node);
 
+syntax_nodes::round_bracketed_expression
+convert_round_bracketed_expression(const tree_node_t& node);
+
 syntax_nodes::selection_statement
 convert_selection_statement(const tree_node_t& node);
 

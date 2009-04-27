@@ -25,16 +25,18 @@ namespace socoa { namespace util
 
 namespace extern_strings
 {
-    const std::string empty("");
-    const std::string space(" ");
+    const std::string ampersand("&");
+    const std::string circumflex("^");
     const std::string comma(",");
-    const std::string pipe("|");
+    const std::string double_ampersand("&&");
     const std::string double_minus("--");
     const std::string double_pipe("||");
     const std::string double_plus("++");
-    const std::string ampersand("&");
-    const std::string double_ampersand("&&");
-    const std::string circumflex("^");
+    const std::string empty("");
+    const std::string pipe("|");
+    const std::string space(" ");
+
+	const std::string this_("this");
 }
 
 }} //namespace socoa::util
