@@ -27,6 +27,9 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace parse_tree_to_syntax_tree
 {
 
+syntax_nodes::abstract_declarator
+convert_abstract_declarator(const tree_node_t& node);
+
 syntax_nodes::arrow_id_expression
 convert_arrow_id_expression(const tree_node_t& node);
 
@@ -125,6 +128,9 @@ convert_delete_expression(const tree_node_t& node);
 
 syntax_nodes::destructor_name
 convert_destructor_name(const tree_node_t& node);
+
+syntax_nodes::direct_abstract_declarator
+convert_direct_abstract_declarator(const tree_node_t& node);
 
 syntax_nodes::direct_declarator::array_part
 convert_direct_declarator_array_part(const tree_node_t& node);

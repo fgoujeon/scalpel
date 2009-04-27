@@ -33,6 +33,19 @@ using namespace socoa::cpp::syntax_nodes;
 namespace socoa { namespace cpp { namespace parse_tree_to_syntax_tree
 {
 
+abstract_declarator
+convert_abstract_declarator(const tree_node_t& node)
+{
+	assert(node.value.id() == id_t::ABSTRACT_DECLARATOR);
+
+	return convert_alternative
+	<
+		abstract_declarator,
+		id_t::PTR_OPERATOR_SEQ,
+		id_t::DIRECT_ABSTRACT_DECLARATOR
+	>(node);
+}
+
 arrow_id_expression
 convert_arrow_id_expression(const tree_node_t& node)
 {
@@ -524,6 +537,14 @@ convert_destructor_name(const tree_node_t& node)
 	return destructor_name(identifier(""));
 }
 
+direct_abstract_declarator
+convert_direct_abstract_declarator(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::DIRECT_ABSTRACT_DECLARATOR);
+
+	return direct_abstract_declarator();
+}
+
 direct_declarator::array_part
 convert_direct_declarator_array_part(const tree_node_t& node)
 {
@@ -666,7 +687,16 @@ convert_exception_abstract_declarator(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::EXCEPTION_ABSTRACT_DECLARATOR);
 
-	return exception_abstract_declarator();
+	tree_node_iterator_t type_specifier_seq_it = node.children.begin();
+	tree_node_iterator_t abstract_declarator_it = node.children.end();
+	--abstract_declarator_it;
+
+	return exception_abstract_declarator
+	(
+		convert_node<type_specifier_seq>(*type_specifier_seq_it),
+		convert_next_space(type_specifier_seq_it),
+		convert_node<abstract_declarator>(*abstract_declarator_it)
+	);
 }
 
 exception_declaration
@@ -689,7 +719,16 @@ convert_exception_declarator(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::EXCEPTION_DECLARATOR);
 
-	return exception_declarator();
+	tree_node_iterator_t type_specifier_seq_it = node.children.begin();
+	tree_node_iterator_t declarator_it = node.children.end();
+	--declarator_it;
+
+	return exception_declarator
+	(
+		convert_node<type_specifier_seq>(*type_specifier_seq_it),
+		convert_next_space(type_specifier_seq_it),
+		convert_node<declarator>(*declarator_it)
+	);
 }
 
 expression_statement

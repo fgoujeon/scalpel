@@ -52,8 +52,6 @@ class handler: public composite_node
 
 		handler(handler&& o);
 
-		~handler();
-
 		const handler&
 		operator=(const handler& o);
 
@@ -63,7 +61,7 @@ class handler: public composite_node
 
 		boost::optional<space> post_catch_keyword_space_;
 		boost::optional<space> post_opening_bracket_space_;
-		exception_declaration* exception_declaration_;
+		exception_declaration exception_declaration_;
 		boost::optional<space> post_exception_declaration_space_;
 		boost::optional<space> post_closing_bracket_space_;
 		compound_statement compound_statement_;

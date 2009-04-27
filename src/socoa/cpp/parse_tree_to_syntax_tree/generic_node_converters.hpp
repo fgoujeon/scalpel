@@ -939,6 +939,24 @@ SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
 	type_specifier_seq,
 	sequence<syntax_nodes::type_specifier_seq>
 )
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	DIRECT_ABSTRACT_DECLARATOR,
+	direct_abstract_declarator,
+	direct_abstract_declarator
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	PTR_OPERATOR_SEQ,
+	ptr_operator_seq,
+	sequence<syntax_nodes::ptr_operator_seq>
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	ABSTRACT_DECLARATOR,
+	abstract_declarator,
+	abstract_declarator
+)
 
 template<class SyntaxNodeT>
 inline

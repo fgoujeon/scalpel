@@ -20,7 +20,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "handler.hpp"
 
-#include "exception_declaration.hpp"
 #include "common_nodes.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
@@ -37,7 +36,7 @@ handler::handler
 ):
 	post_catch_keyword_space_(post_catch_keyword_space_node),
 	post_opening_bracket_space_(post_opening_bracket_space_node),
-	exception_declaration_(new exception_declaration(exception_declaration_node)),
+	exception_declaration_(exception_declaration_node),
 	post_exception_declaration_space_(post_exception_declaration_space_node),
 	post_closing_bracket_space_(post_closing_bracket_space_node),
 	compound_statement_(compound_statement_node)
@@ -49,7 +48,7 @@ handler::handler(const handler& o):
 	composite_node(),
 	post_catch_keyword_space_(o.post_catch_keyword_space_),
 	post_opening_bracket_space_(o.post_opening_bracket_space_),
-	exception_declaration_(new exception_declaration(*o.exception_declaration_)),
+	exception_declaration_(o.exception_declaration_),
 	post_exception_declaration_space_(o.post_exception_declaration_space_),
 	post_closing_bracket_space_(o.post_closing_bracket_space_),
 	compound_statement_(o.compound_statement_)
@@ -61,7 +60,7 @@ handler::handler(handler&& o):
 	composite_node(),
 	post_catch_keyword_space_(std::move(o.post_catch_keyword_space_)),
 	post_opening_bracket_space_(std::move(o.post_opening_bracket_space_)),
-	exception_declaration_(o.exception_declaration_),
+	exception_declaration_(std::move(o.exception_declaration_)),
 	post_exception_declaration_space_(std::move(o.post_exception_declaration_space_)),
 	post_closing_bracket_space_(std::move(o.post_closing_bracket_space_)),
 	compound_statement_(std::move(o.compound_statement_))
@@ -69,18 +68,12 @@ handler::handler(handler&& o):
 	update_node_list();
 }
 
-handler::~handler()
-{
-	delete exception_declaration_;
-}
-
 const handler&
 handler::operator=(const handler& o)
 {
 	post_catch_keyword_space_ = o.post_catch_keyword_space_;
 	post_opening_bracket_space_ = o.post_opening_bracket_space_;
-	delete exception_declaration_;
-	exception_declaration_ = new exception_declaration(*o.exception_declaration_);
+	exception_declaration_ = o.exception_declaration_;
 	post_exception_declaration_space_ = o.post_exception_declaration_space_;
 	post_closing_bracket_space_ = o.post_closing_bracket_space_;
 	compound_statement_ = o.compound_statement_;
@@ -98,7 +91,7 @@ handler::update_node_list()
 	if(post_catch_keyword_space_) add(*post_catch_keyword_space_);
 	add(opening_bracket);
 	if(post_opening_bracket_space_) add(*post_opening_bracket_space_);
-	add(*exception_declaration_);
+	add(exception_declaration_);
 	if(post_exception_declaration_space_) add(*post_exception_declaration_space_);
 	add(closing_bracket);
 	if(post_closing_bracket_space_) add(*post_closing_bracket_space_);
