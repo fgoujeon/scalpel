@@ -30,6 +30,9 @@ namespace socoa { namespace cpp { namespace parse_tree_to_syntax_tree
 syntax_nodes::abstract_declarator
 convert_abstract_declarator(const tree_node_t& node);
 
+syntax_nodes::array_operator
+convert_array_operator(const tree_node_t& node);
+
 syntax_nodes::arrow_id_expression
 convert_arrow_id_expression(const tree_node_t& node);
 
@@ -122,6 +125,9 @@ convert_declarator_id(const tree_node_t& node);
 
 syntax_nodes::default_statement
 convert_default_statement(const tree_node_t& node);
+
+syntax_nodes::delete_array_operator
+convert_delete_array_operator(const tree_node_t& node);
 
 syntax_nodes::delete_expression
 convert_delete_expression(const tree_node_t& node);
@@ -282,8 +288,14 @@ convert_nested_name_specifier_next_part(const tree_node_t& node);
 syntax_nodes::nested_name_specifier
 convert_nested_name_specifier(const tree_node_t& node);
 
+syntax_nodes::new_array_operator
+convert_new_array_operator(const tree_node_t& node);
+
 syntax_nodes::new_expression
 convert_new_expression(const tree_node_t& node);
+
+syntax_nodes::operator_
+convert_operator(const tree_node_t& node);
 
 syntax_nodes::operator_function_id
 convert_operator_function_id(const tree_node_t& node);

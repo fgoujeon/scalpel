@@ -20,26 +20,55 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "operator_function_id.hpp"
 
+#include "common_nodes.hpp"
+
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
-operator_function_id::operator_function_id()
+operator_function_id::operator_function_id
+(
+	boost::optional<space>&& post_operator_keyword_space_node,
+	operator_&& operator_node
+):
+	post_operator_keyword_space_(post_operator_keyword_space_node),
+	operator__(operator_node)
 {
+	update_node_list();
 }
 
-operator_function_id::operator_function_id(const operator_function_id&):
-	composite_node()
+operator_function_id::operator_function_id(const operator_function_id& o):
+	composite_node(),
+	post_operator_keyword_space_(o.post_operator_keyword_space_),
+	operator__(o.operator__)
 {
+	update_node_list();
 }
 
-operator_function_id::operator_function_id(operator_function_id&&)
+operator_function_id::operator_function_id(operator_function_id&& o):
+	post_operator_keyword_space_(std::move(o.post_operator_keyword_space_)),
+	operator__(std::move(o.operator__))
 {
+	update_node_list();
 }
 
 const operator_function_id&
-operator_function_id::operator=(const operator_function_id&)
+operator_function_id::operator=(const operator_function_id& o)
 {
+	post_operator_keyword_space_ = o.post_operator_keyword_space_;
+	operator__ = o.operator__;
+
+	update_node_list();
+
 	return *this;
+}
+
+void
+operator_function_id::update_node_list()
+{
+	clear();
+	add(operator_keyword);
+	if(post_operator_keyword_space_) add(*post_operator_keyword_space_);
+	add(operator__);
 }
 
 }}} //namespace socoa::cpp::syntax_nodes

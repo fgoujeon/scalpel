@@ -963,7 +963,36 @@ SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
 	function_try_block,
 	function_try_block
 )
-
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	OPERATOR,
+	operator_,
+	operator
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	ARRAY_OPERATOR,
+	array_operator,
+	array_operator
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	NEW_ARRAY_OPERATOR,
+	new_array_operator,
+	new_array_operator
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	DELETE_ARRAY_OPERATOR,
+	delete_array_operator,
+	delete_array_operator
+)
+SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	SIMPLE_OPERATOR,
+	simple_operator,
+	string_enumeration<syntax_nodes::simple_operator>
+)
 
 template<class SyntaxNodeT>
 inline

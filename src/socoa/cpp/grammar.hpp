@@ -281,7 +281,11 @@ class grammar
             MEM_INITIALIZER_ID,
 
             OPERATOR_FUNCTION_ID,
-            OPERATOR_,
+            OPERATOR,
+			ARRAY_OPERATOR,
+			NEW_ARRAY_OPERATOR,
+			DELETE_ARRAY_OPERATOR,
+			SIMPLE_OPERATOR,
 
             TEMPLATE_DECLARATION,
             TEMPLATE_PARAMETER_LIST,
@@ -617,7 +621,11 @@ class grammar
 
         //1.11 - Overloading [gram.over]
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::OPERATOR_FUNCTION_ID>> operator_function_id;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::OPERATOR_>> operator_;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::OPERATOR>> operator_;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ARRAY_OPERATOR>> array_operator;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::NEW_ARRAY_OPERATOR>> new_array_operator;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DELETE_ARRAY_OPERATOR>> delete_array_operator;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::SIMPLE_OPERATOR>> simple_operator;
 
         //1.12 - Templates [gram.temp]
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_DECLARATION>> template_declaration;

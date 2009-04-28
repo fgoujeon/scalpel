@@ -46,6 +46,19 @@ convert_abstract_declarator(const tree_node_t& node)
 	>(node);
 }
 
+array_operator
+convert_array_operator(const tree_node_t& node)
+{
+	assert(node.value.id() == id_t::ARRAY_OPERATOR);
+
+	return convert_alternative
+	<
+		array_operator,
+		id_t::NEW_ARRAY_OPERATOR,
+		id_t::DELETE_ARRAY_OPERATOR
+	>(node);
+}
+
 arrow_id_expression
 convert_arrow_id_expression(const tree_node_t& node)
 {
@@ -89,7 +102,7 @@ convert_assignment_expression(const tree_node_t& node)
 		return assignment_expression
 		(
 			convert_optional<assignment_expression::first_part_seq>(first_part_seq_it, node),
-			convert_next_space(first_part_seq_it),
+			convert_next_space(node, first_part_seq_it),
 			convert_node<conditional_expression>(*conditional_expression_it)
 		);
 	}
@@ -98,7 +111,7 @@ convert_assignment_expression(const tree_node_t& node)
 		return assignment_expression
 		(
 			convert_optional<assignment_expression::first_part_seq>(first_part_seq_it, node),
-			convert_next_space(first_part_seq_it),
+			convert_next_space(node, first_part_seq_it),
 			convert_node<throw_expression>(*throw_expression_it)
 		);
 	}
@@ -120,10 +133,10 @@ convert_assignment_expression_condition(const tree_node_t& node)
 	return assignment_expression_condition
 	(
 		convert_node<type_specifier_seq>(*type_specifier_seq_it),
-		convert_next_space(type_specifier_seq_it),
+		convert_next_space(node, type_specifier_seq_it),
 		convert_node<declarator>(*declarator_it),
-		convert_next_space(declarator_it),
-		convert_previous_space(assignment_expression_it),
+		convert_next_space(node, declarator_it),
+		convert_previous_space(node, assignment_expression_it),
 		convert_node<assignment_expression>(*assignment_expression_it)
 	);
 }
@@ -139,7 +152,7 @@ convert_base_clause(const tree_node_t& node)
 	if(i != node.children.end())
 	{
 		base_specifier_list_node = convert_node<base_specifier_list>(*i);
-		space_node = convert_previous_space(i);
+		space_node = convert_previous_space(node, i);
 	}
 
     //unlike what grammar defines, base specifier may be missing
@@ -162,9 +175,9 @@ convert_base_specifier(const tree_node_t& node)
 	(
 		virtual_keyword_it != node.children.end(),
 		check_node_existence(node, "virtual", 0),
-		convert_next_space(virtual_keyword_it),
+		convert_next_space(node, virtual_keyword_it),
 		convert_optional<access_specifier>(access_specifier_node_it, node),
-		convert_next_space(access_specifier_node_it),
+		convert_next_space(node, access_specifier_node_it),
 		find_and_convert_node<boost::optional<nested_identifier_or_template_id>, id_t::NESTED_IDENTIFIER_OR_TEMPLATE_ID>(node)
 	);
 }
@@ -203,9 +216,9 @@ convert_bracketed_expression_list(const tree_node_t& node)
 
 	return bracketed_expression_list
 	(
-		convert_next_space(opening_bracket_it),
+		convert_next_space(node, opening_bracket_it),
 		convert_optional<expression_list>(expression_list_it, node),
-		convert_next_space(expression_list_it)
+		convert_next_space(node, expression_list_it)
 	);
 }
 
@@ -239,10 +252,10 @@ convert_case_statement(const tree_node_t& node)
 
 	return case_statement
 	(
-		convert_next_space(case_keyword_it),
+		convert_next_space(node, case_keyword_it),
 		convert_node<conditional_expression>(*conditional_expression_it),
-		convert_next_space(conditional_expression_it),
-		convert_next_space(colon_it),
+		convert_next_space(node, conditional_expression_it),
+		convert_next_space(node, colon_it),
 		find_and_convert_node<statement, id_t::STATEMENT>(node)
 	);
 }
@@ -294,13 +307,13 @@ convert_class_head(const tree_node_t& node)
     return class_head
     (
 		find_and_convert_node<class_key, id_t::CLASS_KEY>(node),
-		convert_previous_space(nested_name_specifier_it),
+		convert_previous_space(node, nested_name_specifier_it),
 		convert_optional<nested_name_specifier>(nested_name_specifier_it, node),
-		convert_previous_space(template_id_it),
+		convert_previous_space(node, template_id_it),
 		convert_optional<template_id>(template_id_it, node),
-		convert_previous_space(identifier_it),
+		convert_previous_space(node, identifier_it),
 		convert_optional<identifier>(identifier_it, node),
-		convert_previous_space(base_clause_it),
+		convert_previous_space(node, base_clause_it),
 		convert_optional<base_clause>(base_clause_it, node)
 	);
 }
@@ -326,10 +339,10 @@ convert_class_specifier(const tree_node_t& node)
     return class_specifier
     (
         find_and_convert_node<class_head, id_t::CLASS_HEAD>(node),
-		convert_next_space(class_head_it),
-		convert_next_space(opening_brace_it),
+		convert_next_space(node, class_head_it),
+		convert_next_space(node, opening_brace_it),
 		member_specification_node,
-		convert_next_space(member_specification_it)
+		convert_next_space(node, member_specification_it)
     );
 }
 
@@ -351,9 +364,9 @@ convert_compound_statement(const tree_node_t& node)
 
 	return compound_statement
 	(
-		convert_next_space(opening_brace_it),
+		convert_next_space(node, opening_brace_it),
 		convert_optional<statement_seq>(statement_seq_it, node),
-		convert_next_space(statement_seq_it)
+		convert_next_space(node, statement_seq_it)
 	);
 }
 
@@ -411,9 +424,9 @@ convert_conversion_function_id(const tree_node_t& node)
 
 	return conversion_function_id
 	(
-		convert_next_space(operator_keyword_it),
+		convert_next_space(node, operator_keyword_it),
 		convert_node<type_specifier_seq>(*type_specifier_seq_it),
-		convert_previous_space(ptr_operator_seq_it),
+		convert_previous_space(node, ptr_operator_seq_it),
 		convert_optional<ptr_operator_seq>(ptr_operator_seq_it, node)
 	);
 }
@@ -490,7 +503,7 @@ convert_declarator(const tree_node_t& node)
     return declarator
     (
 		convert_optional<ptr_operator_seq>(ptr_operator_seq_it, node),
-		convert_next_space(ptr_operator_seq_it),
+		convert_next_space(node, ptr_operator_seq_it),
 		find_and_convert_node<direct_declarator, id_t::DIRECT_DECLARATOR>(node)
 	);
 }
@@ -518,10 +531,18 @@ convert_default_statement(const tree_node_t& node)
 
 	return default_statement
 	(
-		convert_next_space(default_keyword_it),
-		convert_next_space(colon_it),
+		convert_next_space(node, default_keyword_it),
+		convert_next_space(node, colon_it),
 		find_and_convert_node<statement, id_t::STATEMENT>(node)
 	);
+}
+
+delete_array_operator
+convert_delete_array_operator(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::DELETE_ARRAY_OPERATOR);
+
+	return delete_array_operator();
 }
 
 delete_expression
@@ -541,7 +562,7 @@ convert_destructor_name(const tree_node_t& node)
 
 	return destructor_name
 	(
-		convert_previous_space(identifier_or_template_id_it),
+		convert_previous_space(node, identifier_or_template_id_it),
 		convert_node<identifier_or_template_id>(*identifier_or_template_id_it)
 	);
 }
@@ -573,10 +594,10 @@ convert_direct_declarator_function_part(const tree_node_t& node)
 
     return direct_declarator::function_part
     (
-		convert_next_space(opening_bracket_it),
+		convert_next_space(node, opening_bracket_it),
 		convert_optional<parameter_declaration_clause>(parameter_declaration_clause_it, node),
-		convert_next_space(parameter_declaration_clause_it),
-		convert_previous_space(cv_qualifier_seq_it),
+		convert_next_space(node, parameter_declaration_clause_it),
+		convert_previous_space(node, cv_qualifier_seq_it),
 		convert_optional<cv_qualifier_seq>(cv_qualifier_seq_it, node)
     );
 }
@@ -605,7 +626,7 @@ convert_direct_declarator(const tree_node_t& node)
     (
 		find_and_convert_node<boost::optional<declarator_id>, id_t::DECLARATOR_ID>(node),
 		find_and_convert_node<boost::optional<declarator>, id_t::DECLARATOR>(node),
-		convert_previous_space(next_part_seq_it),
+		convert_previous_space(node, next_part_seq_it),
 		convert_optional<sequence_node<direct_declarator::next_part>>(next_part_seq_it, node)
     );
 }
@@ -628,9 +649,9 @@ convert_dot_id_expression(const tree_node_t& node)
 
 	return dot_id_expression
 	(
-		convert_next_space(dot_it),
+		convert_next_space(node, dot_it),
 		template_keyword_it != node.children.end(),
-		convert_next_space(template_keyword_it),
+		convert_next_space(node, template_keyword_it),
 		find_and_convert_node<id_expression, id_t::ID_EXPRESSION>(node)
 	);
 }
@@ -686,7 +707,7 @@ convert_equal_initializer(const tree_node_t& node)
 
 	return equal_initializer
 	(
-		convert_previous_space(i),
+		convert_previous_space(node, i),
 		convert_node<initializer_clause>(*i)
 	);
 }
@@ -703,7 +724,7 @@ convert_exception_abstract_declarator(const tree_node_t& node)
 	return exception_abstract_declarator
 	(
 		convert_node<type_specifier_seq>(*type_specifier_seq_it),
-		convert_next_space(type_specifier_seq_it),
+		convert_next_space(node, type_specifier_seq_it),
 		convert_node<abstract_declarator>(*abstract_declarator_it)
 	);
 }
@@ -735,7 +756,7 @@ convert_exception_declarator(const tree_node_t& node)
 	return exception_declarator
 	(
 		convert_node<type_specifier_seq>(*type_specifier_seq_it),
-		convert_next_space(type_specifier_seq_it),
+		convert_next_space(node, type_specifier_seq_it),
 		convert_node<declarator>(*declarator_it)
 	);
 }
@@ -750,7 +771,7 @@ convert_expression_statement(const tree_node_t& node)
 	return expression_statement
 	(
 		convert_optional<expression>(expression_it, node),
-		convert_next_space(expression_it)
+		convert_next_space(node, expression_it)
 	);
 }
 
@@ -790,16 +811,16 @@ convert_for_statement(const tree_node_t& node)
 
 	return for_statement
 	(
-		convert_next_space(for_keyword_it),
-		convert_next_space(opening_bracket_it),
+		convert_next_space(node, for_keyword_it),
+		convert_next_space(node, opening_bracket_it),
 		convert_optional<for_init_statement>(for_init_statement_it, node),
-		convert_next_space(for_init_statement_it),
+		convert_next_space(node, for_init_statement_it),
 		convert_optional<condition>(condition_it, node),
-		convert_next_space(condition_it),
-		convert_next_space(semicolon_it),
+		convert_next_space(node, condition_it),
+		convert_next_space(node, semicolon_it),
 		convert_optional<expression>(expression_it, node),
-		convert_next_space(expression_it),
-		convert_next_space(closing_bracket_it),
+		convert_next_space(node, expression_it),
+		convert_next_space(node, closing_bracket_it),
 		find_and_convert_node<statement, id_t::STATEMENT>(node)
 	);
 }
@@ -823,11 +844,11 @@ convert_function_definition(const tree_node_t& node)
     return function_definition
     (
 		convert_optional<decl_specifier_seq>(decl_specifier_seq_it, node),
-		convert_next_space(decl_specifier_seq_it),
+		convert_next_space(node, decl_specifier_seq_it),
 		convert_node<declarator>(*declarator_it),
-		convert_next_space(declarator_it),
+		convert_next_space(node, declarator_it),
 		convert_optional<ctor_initializer>(ctor_initializer_it, node),
-		convert_next_space(ctor_initializer_it),
+		convert_next_space(node, ctor_initializer_it),
 		convert_optional<compound_statement>(compound_statement_it, node),
 		convert_optional<function_try_block>(function_try_block_it, node)
     );
@@ -844,11 +865,11 @@ convert_function_try_block(const tree_node_t& node)
 
 	return function_try_block
 	(
-		convert_next_space(try_keyword_it),
+		convert_next_space(node, try_keyword_it),
 		convert_optional<ctor_initializer>(ctor_initializer_it, node),
-		convert_next_space(ctor_initializer_it),
+		convert_next_space(node, ctor_initializer_it),
 		convert_node<compound_statement>(*compound_statement_it),
-		convert_next_space(compound_statement_it),
+		convert_next_space(node, compound_statement_it),
 		find_and_convert_node<handler_seq, id_t::HANDLER_SEQ>(node)
 	);
 }
@@ -863,9 +884,9 @@ convert_goto_statement(const tree_node_t& node)
 
 	return goto_statement
 	(
-		convert_next_space(goto_keyword_it),
+		convert_next_space(node, goto_keyword_it),
 		convert_node<identifier>(*identifier_it),
-		convert_next_space(identifier_it)
+		convert_next_space(node, identifier_it)
 	);
 }
 
@@ -882,11 +903,11 @@ convert_handler(const tree_node_t& node)
 
 	return handler
 	(
-		convert_next_space(catch_keyword_it),
-		convert_next_space(opening_bracket_it),
+		convert_next_space(node, catch_keyword_it),
+		convert_next_space(node, opening_bracket_it),
 		convert_node<exception_declaration>(*exception_declaration_it),
-		convert_next_space(exception_declaration_it),
-		convert_next_space(closing_bracket_it),
+		convert_next_space(node, exception_declaration_it),
+		convert_next_space(node, closing_bracket_it),
 		convert_node<compound_statement>(*compound_statement_it)
 	);
 }
@@ -946,15 +967,15 @@ convert_if_statement(const tree_node_t& node)
 
 	return if_statement
 	(
-		convert_next_space(if_keyword_it),
-		convert_next_space(opening_bracket_it),
+		convert_next_space(node, if_keyword_it),
+		convert_next_space(node, opening_bracket_it),
 		convert_node<condition>(*condition_it),
-		convert_next_space(condition_it),
-		convert_next_space(closing_bracket_it),
+		convert_next_space(node, condition_it),
+		convert_next_space(node, closing_bracket_it),
 		find_and_convert_node<statement, id_t::STATEMENT>(node),
-		convert_previous_space(else_keyword_it),
+		convert_previous_space(node, else_keyword_it),
 		convert_optional<statement>(else_statement_it, node),
-		convert_next_space(else_keyword_it)
+		convert_next_space(node, else_keyword_it)
 	);
 }
 
@@ -968,7 +989,7 @@ convert_init_declarator(const tree_node_t& node)
     return init_declarator
     (
 		find_and_convert_node<declarator, id_t::DECLARATOR>(node),
-		convert_previous_space(initializer_it),
+		convert_previous_space(node, initializer_it),
 		convert_optional<initializer>(initializer_it, node)
     );
 }
@@ -1142,9 +1163,9 @@ convert_member_declaration_member_declarator_list(const tree_node_t& node)
     return member_declaration_member_declarator_list
     (
         convert_optional<decl_specifier_seq>(decl_specifier_seq_it, node),
-		convert_next_space(decl_specifier_seq_it),
+		convert_next_space(node, decl_specifier_seq_it),
         convert_optional<member_declarator_list>(member_declarator_list_it, node),
-		convert_next_space(member_declarator_list_it)
+		convert_next_space(node, member_declarator_list_it)
     );
 }
 
@@ -1161,13 +1182,13 @@ convert_member_declaration_unqualified_id(const tree_node_t& node)
     return member_declaration_unqualified_id
     (
 		leading_double_colon_it != node.children.end(),
-		convert_next_space(leading_double_colon_it),
+		convert_next_space(node, leading_double_colon_it),
 		convert_node<nested_name_specifier>(*nested_name_specifier_it),
-		convert_next_space(nested_name_specifier_it),
+		convert_next_space(node, nested_name_specifier_it),
 		template_keyword_it != node.children.end(),
-		convert_next_space(template_keyword_it),
+		convert_next_space(node, template_keyword_it),
 		convert_node<unqualified_id>(*unqualified_id_it),
-		convert_next_space(unqualified_id_it)
+		convert_next_space(node, unqualified_id_it)
     );
 }
 
@@ -1217,7 +1238,7 @@ convert_member_specification_access_specifier(const tree_node_t& node)
     return member_specification_access_specifier
     (
         convert_node<access_specifier>(*access_specifier_it),
-		convert_next_space(access_specifier_it)
+		convert_next_space(node, access_specifier_it)
     );
 }
 
@@ -1282,10 +1303,18 @@ convert_nested_name_specifier(const tree_node_t& node)
     return nested_name_specifier
     (
         convert_node<identifier_or_template_id>(*identifier_or_template_id_it),
-		convert_next_space(identifier_or_template_id_it),
-		convert_previous_space(next_part_seq_it),
+		convert_next_space(node, identifier_or_template_id_it),
+		convert_previous_space(node, next_part_seq_it),
         convert_optional<nested_name_specifier::next_part_seq>(next_part_seq_it, node)
     );
+}
+
+new_array_operator
+convert_new_array_operator(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::NEW_ARRAY_OPERATOR);
+
+	return new_array_operator();
 }
 
 new_expression
@@ -1296,12 +1325,32 @@ convert_new_expression(const tree_node_t& node)
 	return new_expression();
 }
 
+operator_
+convert_operator(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::OPERATOR);
+
+	return convert_alternative
+	<
+		operator_,
+		id_t::ARRAY_OPERATOR,
+		id_t::SIMPLE_OPERATOR
+	>(node);
+}
+
 operator_function_id
 convert_operator_function_id(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::OPERATOR_FUNCTION_ID);
 
-	return operator_function_id();
+	tree_node_iterator_t operator_keyword_it = node.children.begin();
+	tree_node_iterator_t operator_it = find_node<id_t::OPERATOR>(node);
+
+	return operator_function_id
+	(
+		convert_next_space(node, operator_keyword_it),
+		convert_node<operator_>(*operator_it)
+	);
 }
 
 parameter_declaration
@@ -1322,7 +1371,7 @@ convert_parameter_declaration(const tree_node_t& node)
 			id_t::PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ4,
 			id_t::DECL_SPECIFIER_SEQ
 		>(node),
-		convert_previous_space(declarator_it),
+		convert_previous_space(node, declarator_it),
 		convert_optional<declarator>(declarator_it, node),
 		false
     );
@@ -1397,7 +1446,7 @@ convert_postfix_expression(const tree_node_t& node)
 	return postfix_expression
 	(
 		convert_node<postfix_expression::first_part>(*first_part_it),
-		convert_previous_space(last_part_it),
+		convert_previous_space(node, last_part_it),
 		convert_optional<postfix_expression::last_part_seq>(last_part_it, node)
 	);
 }
@@ -1436,16 +1485,16 @@ convert_ptr_operator(const tree_node_t& node)
 	tree_node_iterator_t nested_name_specifier_it = find_node<id_t::NESTED_NAME_SPECIFIER>(node);
 	tree_node_iterator_t cv_qualifier_seq_it = find_node<id_t::CV_QUALIFIER_SEQ>(node);
 
-    return ptr_operator
+	return ptr_operator
 	(
 		check_node_existence(node, "*") ? ptr_operator::ASTERISK : ptr_operator::AMPERSAND,
 		leading_double_colon_it != node.children.end(),
-		convert_next_space(leading_double_colon_it),
+		convert_next_space(node, leading_double_colon_it),
 		convert_optional<nested_name_specifier>(nested_name_specifier_it, node),
-		convert_next_space(nested_name_specifier_it),
-		convert_previous_space(cv_qualifier_seq_it),
+		convert_next_space(node, nested_name_specifier_it),
+		convert_previous_space(node, cv_qualifier_seq_it),
 		convert_optional<cv_qualifier_seq>(cv_qualifier_seq_it, node)
-    );
+	);
 }
 
 qualified_id
@@ -1486,11 +1535,11 @@ convert_qualified_nested_id(const tree_node_t& node)
     return qualified_nested_id
     (
 		double_colon_it != node.children.end(),
-		convert_next_space(double_colon_it),
+		convert_next_space(node, double_colon_it),
 		convert_node<nested_name_specifier>(*nested_name_specifier_it),
-		convert_next_space(nested_name_specifier_it),
+		convert_next_space(node, nested_name_specifier_it),
 		template_keyword_it != node.children.end(),
-		convert_next_space(template_keyword_it),
+		convert_next_space(node, template_keyword_it),
 		find_and_convert_node<unqualified_id, id_t::UNQUALIFIED_ID>(node)
     );
 }
@@ -1535,9 +1584,9 @@ convert_return_statement(const tree_node_t& node)
 
 	return return_statement
 	(
-		convert_next_space(return_keyword_it),
+		convert_next_space(node, return_keyword_it),
 		convert_optional<expression>(expression_it, node),
-		convert_next_space(expression_it)
+		convert_next_space(node, expression_it)
 	);
 }
 
@@ -1551,9 +1600,9 @@ convert_round_bracketed_expression(const tree_node_t& node)
 
 	return round_bracketed_expression
 	(
-		convert_next_space(opening_bracket_it),
+		convert_next_space(node, opening_bracket_it),
 		convert_node<expression>(*expression_it),
-		convert_next_space(expression_it)
+		convert_next_space(node, expression_it)
 	);
 }
 
@@ -1581,9 +1630,9 @@ convert_simple_declaration(const tree_node_t& node)
     return simple_declaration
     (
 		convert_optional<decl_specifier_seq>(decl_specifier_seq_it, node),
-		convert_next_space(decl_specifier_seq_it),
+		convert_next_space(node, decl_specifier_seq_it),
 		convert_optional<init_declarator_list>(init_declarator_list_it, node),
-		convert_next_space(init_declarator_list_it)
+		convert_next_space(node, init_declarator_list_it)
     );
 }
 
@@ -1639,9 +1688,9 @@ convert_square_bracketed_expression(const tree_node_t& node)
 
 	return square_bracketed_expression
 	(
-		convert_previous_space(i),
+		convert_previous_space(node, i),
 		convert_node<expression>(*i),
-		convert_next_space(i)
+		convert_next_space(node, i)
 	);
 }
 
@@ -1707,11 +1756,11 @@ convert_switch_statement(const tree_node_t& node)
 
 	return switch_statement
 	(
-		convert_next_space(switch_keyword_it),
-		convert_next_space(opening_bracket_it),
+		convert_next_space(node, switch_keyword_it),
+		convert_next_space(node, opening_bracket_it),
 		convert_node<condition>(*condition_it),
-		convert_next_space(condition_it),
-		convert_next_space(closing_bracket_it),
+		convert_next_space(node, condition_it),
+		convert_next_space(node, closing_bracket_it),
 		find_and_convert_node<statement, id_t::STATEMENT>(node)
 	);
 }
@@ -1771,7 +1820,7 @@ convert_throw_expression(const tree_node_t& node)
 
 	return throw_expression
 	(
-		convert_previous_space(assignment_expression_it),
+		convert_previous_space(node, assignment_expression_it),
 		convert_optional<assignment_expression>(assignment_expression_it, node)
 	);
 }
@@ -1793,7 +1842,7 @@ convert_translation_unit(const tree_node_t& node)
 	if(i != node.children.end())
 	{
 		declaration_seq_node = convert_node<declaration_seq>(*i);
-		post_declaration_seq_node = convert_next_space(i);
+		post_declaration_seq_node = convert_next_space(node, i);
 	}
 
 	return translation_unit
@@ -1815,9 +1864,9 @@ convert_try_block(const tree_node_t& node)
 
 	return try_block
 	(
-		convert_next_space(try_keyword_it),
+		convert_next_space(node, try_keyword_it),
 		convert_node<compound_statement>(*compound_statement_it),
-		convert_next_space(compound_statement_it),
+		convert_next_space(node, compound_statement_it),
 		convert_node<handler_seq>(*handler_seq_it)
 	);
 }
@@ -1899,7 +1948,7 @@ convert_unary_operator_unary_expression(const tree_node_t& node)
 	return unary_operator_unary_expression
 	(
 		convert_node<unary_operator>(*unary_operator_it),
-		convert_next_space(unary_operator_it),
+		convert_next_space(node, unary_operator_it),
 		convert_node<cast_expression>(*cast_expression_it)
 	);
 }
@@ -1955,14 +2004,14 @@ convert_using_directive(const tree_node_t& node)
 
     return using_directive
     (
-		convert_next_space(using_keyword_it),
-		convert_next_space(namespace_keyword_it),
+		convert_next_space(node, using_keyword_it),
+		convert_next_space(node, namespace_keyword_it),
 		leading_double_colon_it != node.children.end(),
-		convert_next_space(leading_double_colon_it),
+		convert_next_space(node, leading_double_colon_it),
 		convert_optional<nested_name_specifier>(nested_name_specifier_it, node),
-		convert_next_space(nested_name_specifier_it),
+		convert_next_space(node, nested_name_specifier_it),
 		convert_node<identifier>(*identifier_it),
-		convert_next_space(identifier_it)
+		convert_next_space(node, identifier_it)
     );
 }
 

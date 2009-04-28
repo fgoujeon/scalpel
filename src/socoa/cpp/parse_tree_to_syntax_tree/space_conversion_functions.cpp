@@ -27,23 +27,27 @@ namespace socoa { namespace cpp { namespace parse_tree_to_syntax_tree
 {
 
 boost::optional<syntax_nodes::space>
-convert_previous_space(tree_node_iterator_t i)
+convert_previous_space(const tree_node_t& parent_node, tree_node_iterator_t i)
 {
-	--i;
-	if(get_id(*i) == id_t::SPACE)
-		return convert_node<syntax_nodes::space>(*i);
-	else
-		return boost::optional<syntax_nodes::space>();
+	if(i != parent_node.children.end())
+	{
+		--i;
+		if(get_id(*i) == id_t::SPACE)
+			return convert_node<syntax_nodes::space>(*i);
+	}
+	return boost::optional<syntax_nodes::space>();
 }
 
 boost::optional<syntax_nodes::space>
-convert_next_space(tree_node_iterator_t i)
+convert_next_space(const tree_node_t& parent_node, tree_node_iterator_t i)
 {
-	++i;
-	if(get_id(*i) == id_t::SPACE)
-		return convert_node<syntax_nodes::space>(*i);
-	else
-		return boost::optional<syntax_nodes::space>();
+	if(i != parent_node.children.end())
+	{
+		++i;
+		if(get_id(*i) == id_t::SPACE)
+			return convert_node<syntax_nodes::space>(*i);
+	}
+	return boost::optional<syntax_nodes::space>();
 }
 
 }}} //namespace socoa::cpp::parse_tree_to_syntax_tree

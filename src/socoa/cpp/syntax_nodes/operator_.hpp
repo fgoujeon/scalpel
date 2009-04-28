@@ -18,45 +18,24 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_NODES_OPERATOR_FUNCTION_ID_HPP
-#define SOCOA_CPP_SYNTAX_NODES_OPERATOR_FUNCTION_ID_HPP
+#ifndef SOCOA_CPP_SYNTAX_NODES_OPERATOR_HPP
+#define SOCOA_CPP_SYNTAX_NODES_OPERATOR_HPP
 
-#include <boost/optional.hpp>
-#include "composite_node.hpp"
-#include "operator_.hpp"
-#include "space.hpp"
+#include "alternative_node.hpp"
+#include "array_operator.hpp"
+#include "simple_operator.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
-/**
-operator_function_id
-	= str_p("operator") >> !s >> operator_
+typedef
+	alternative_node
+	<
+		array_operator,
+		simple_operator
+	>
+	operator_
 ;
-*/
-class operator_function_id: public composite_node
-{
-    public:
-		operator_function_id
-		(
-			boost::optional<space>&& post_operator_keyword_space_node,
-			operator_&& operator_node
-		);
-
-		operator_function_id(const operator_function_id& o);
-
-		operator_function_id(operator_function_id&& o);
-
-		const operator_function_id&
-		operator=(const operator_function_id& o);
-
-    private:
-		void
-		update_node_list();
-
-		boost::optional<space> post_operator_keyword_space_;
-		operator_ operator__;
-};
 
 }}} //namespace socoa::cpp::syntax_nodes
 

@@ -1513,9 +1513,25 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	operator_
-		= str_p("new[]")
-		| "delete[]"
-		| "new"
+		= array_operator
+		| simple_operator
+	;
+
+	array_operator
+		= new_array_operator
+		| delete_array_operator
+	;
+
+	new_array_operator
+		= str_p("new") >> !s >> '[' >> !s >> ']'
+	;
+
+	delete_array_operator
+		= str_p("delete") >> !s >> '[' >> !s >> ']'
+	;
+
+	simple_operator
+		= str_p("new")
 		| "delete"
 		| ">>="
 		| "<<="
