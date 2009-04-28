@@ -7,7 +7,7 @@ class test : public super_test , virtual public virtual_base, protected virtual 
 		test ( const test & t ) ;
 
 		virtual
-		~ test( );
+		~ test ( ) ;
 
 		const test &
 		operator = ( const test& t );

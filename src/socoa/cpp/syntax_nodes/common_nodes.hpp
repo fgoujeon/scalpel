@@ -66,6 +66,7 @@ extern const leaf_node right_angle_bracket_and_equal;
 extern const leaf_node semicolon;
 extern const leaf_node single_quote;
 extern const leaf_node slash;
+extern const leaf_node tilde;
 
 //keywords
 extern const leaf_node break_keyword;

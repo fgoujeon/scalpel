@@ -20,24 +20,33 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "destructor_name.hpp"
 
+#include "common_nodes.hpp"
+
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
-destructor_name::destructor_name(identifier&& an_identifier):
-	identifier_(std::move(an_identifier))
+destructor_name::destructor_name
+(
+	boost::optional<space>&& post_tilde_space_node,
+	identifier_or_template_id&& identifier_or_template_id_node
+):
+	post_tilde_space_(post_tilde_space_node),
+	identifier_or_template_id_(std::move(identifier_or_template_id_node))
 {
 	update_node_list();
 }
 
 destructor_name::destructor_name(const destructor_name& o):
 	composite_node(),
-	identifier_(o.identifier_)
+	post_tilde_space_(o.post_tilde_space_),
+	identifier_or_template_id_(o.identifier_or_template_id_)
 {
 	update_node_list();
 }
 
 destructor_name::destructor_name(destructor_name&& o):
-	identifier_(std::move(o.identifier_))
+	post_tilde_space_(std::move(o.post_tilde_space_)),
+	identifier_or_template_id_(std::move(o.identifier_or_template_id_))
 {
 	update_node_list();
 }
@@ -45,7 +54,9 @@ destructor_name::destructor_name(destructor_name&& o):
 const destructor_name&
 destructor_name::operator=(const destructor_name& o)
 {
-	identifier_ = o.identifier_;
+	post_tilde_space_ = o.post_tilde_space_;
+	identifier_or_template_id_ = o.identifier_or_template_id_;
+
 	update_node_list();
 
 	return *this;
@@ -55,7 +66,9 @@ void
 destructor_name::update_node_list()
 {
 	clear();
-	add(identifier_);
+	add(tilde);
+	if(post_tilde_space_) add(*post_tilde_space_);
+	add(identifier_or_template_id_);
 }
 
 }}} //namespace socoa::cpp::syntax_nodes

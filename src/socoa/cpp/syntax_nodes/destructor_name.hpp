@@ -21,17 +21,27 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_NODES_DESTRUCTOR_NAME_HPP
 #define SOCOA_CPP_SYNTAX_NODES_DESTRUCTOR_NAME_HPP
 
+#include <boost/optional.hpp>
 #include "composite_node.hpp"
-#include "identifier.hpp"
+#include "identifier_or_template_id.hpp"
+#include "space.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
+/**
+destructor_name
+	= "~", identifier_or_template_id
+;
+*/
 class destructor_name: public composite_node
 {
 	public:
-		explicit
-		destructor_name(identifier&& an_identifier);
+		destructor_name
+		(
+			boost::optional<space>&& post_tilde_space_node,
+			identifier_or_template_id&& identifier_or_template_id_node
+		);
 
 		destructor_name(const destructor_name& o);
 
@@ -41,21 +51,22 @@ class destructor_name: public composite_node
 		operator=(const destructor_name& o);
 
 		inline
-		const identifier&
+		const identifier_or_template_id&
 		get_identifier() const;
 
 	private:
 		void
 		update_node_list();
 
-		identifier identifier_;
+		boost::optional<space> post_tilde_space_;
+		identifier_or_template_id identifier_or_template_id_;
 };
 
 inline
-const identifier&
+const identifier_or_template_id&
 destructor_name::get_identifier() const
 {
-	return identifier_;
+	return identifier_or_template_id_;
 }
 
 }}} //namespace socoa::cpp::syntax_nodes

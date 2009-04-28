@@ -527,7 +527,13 @@ convert_destructor_name(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::DESTRUCTOR_NAME);
 
-	return destructor_name(identifier(""));
+	tree_node_iterator_t identifier_or_template_id_it = find_node<id_t::IDENTIFIER_OR_TEMPLATE_ID>(node);
+
+	return destructor_name
+	(
+		convert_previous_space(identifier_or_template_id_it),
+		convert_node<identifier_or_template_id>(*identifier_or_template_id_it)
+	);
 }
 
 direct_abstract_declarator
@@ -1137,12 +1143,21 @@ convert_member_declaration_unqualified_id(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::MEMBER_DECLARATION_UNQUALIFIED_ID);
 
+	tree_node_iterator_t leading_double_colon_it = find_node(node, "::");
+	tree_node_iterator_t nested_name_specifier_it = find_node<id_t::NESTED_NAME_SPECIFIER>(node);
+	tree_node_iterator_t template_keyword_it = find_node(node, "template");
+	tree_node_iterator_t unqualified_id_it = find_node<id_t::UNQUALIFIED_ID>(node);
+
     return member_declaration_unqualified_id
     (
-        check_node_existence(node, "::", 0),
-        find_and_convert_node<nested_name_specifier, id_t::NESTED_NAME_SPECIFIER>(node),
-        check_node_existence(node, "template"),
-        find_and_convert_node<unqualified_id, id_t::UNQUALIFIED_ID>(node)
+		leading_double_colon_it != node.children.end(),
+		convert_next_space(leading_double_colon_it),
+		convert_node<nested_name_specifier>(*nested_name_specifier_it),
+		convert_next_space(nested_name_specifier_it),
+		template_keyword_it != node.children.end(),
+		convert_next_space(template_keyword_it),
+		convert_node<unqualified_id>(*unqualified_id_it),
+		convert_next_space(unqualified_id_it)
     );
 }
 
