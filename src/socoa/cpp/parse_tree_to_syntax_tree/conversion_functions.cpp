@@ -1182,9 +1182,12 @@ convert_member_specification_access_specifier(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::MEMBER_SPECIFICATION_ACCESS_SPECIFIER);
 
+	tree_node_iterator_t access_specifier_it = find_node<id_t::ACCESS_SPECIFIER>(node);
+
     return member_specification_access_specifier
     (
-        find_and_convert_node<access_specifier, id_t::ACCESS_SPECIFIER>(node)
+        convert_node<access_specifier>(*access_specifier_it),
+		convert_next_space(access_specifier_it)
     );
 }
 

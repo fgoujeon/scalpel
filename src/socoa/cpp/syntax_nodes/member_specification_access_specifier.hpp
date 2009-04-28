@@ -21,19 +21,27 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_NODES_MEMBER_SPECIFICATION_ACCESS_SPECIFIER_HPP
 #define SOCOA_CPP_SYNTAX_NODES_MEMBER_SPECIFICATION_ACCESS_SPECIFIER_HPP
 
+#include <boost/optional.hpp>
 #include "composite_node.hpp"
 #include "access_specifier.hpp"
+#include "space.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
+/**
+member_specification_access_specifier
+	= access_specifier >> !s >> ':'
+;
+*/
 class member_specification_access_specifier: public composite_node
 {
 	public:
 		explicit
 		member_specification_access_specifier
 		(
-			access_specifier&& a_access_specifier
+			access_specifier&& a_access_specifier,
+			boost::optional<space>&& post_access_specifier_node
 		);
 
 		member_specification_access_specifier(const member_specification_access_specifier& o);
@@ -52,6 +60,7 @@ class member_specification_access_specifier: public composite_node
 		update_node_list();
 
 		access_specifier access_specifier_;
+		boost::optional<space> post_access_specifier_;
 };
 
 inline

@@ -20,27 +20,33 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "member_specification_access_specifier.hpp"
 
+#include "common_nodes.hpp"
+
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
 member_specification_access_specifier::member_specification_access_specifier
 (
-    access_specifier&& a_access_specifier
+    access_specifier&& a_access_specifier,
+	boost::optional<space>&& post_access_specifier_node
 ):
-    access_specifier_(std::move(a_access_specifier))
+    access_specifier_(std::move(a_access_specifier)),
+	post_access_specifier_(post_access_specifier_node)
 {
 	update_node_list();
 }
 
 member_specification_access_specifier::member_specification_access_specifier(const member_specification_access_specifier& o):
 	composite_node(),
-    access_specifier_(o.access_specifier_)
+    access_specifier_(o.access_specifier_),
+	post_access_specifier_(o.post_access_specifier_)
 {
 	update_node_list();
 }
 
 member_specification_access_specifier::member_specification_access_specifier(member_specification_access_specifier&& o):
-    access_specifier_(std::move(o.access_specifier_))
+    access_specifier_(std::move(o.access_specifier_)),
+	post_access_specifier_(std::move(o.post_access_specifier_))
 {
 	update_node_list();
 }
@@ -49,6 +55,7 @@ const member_specification_access_specifier&
 member_specification_access_specifier::operator=(const member_specification_access_specifier& o)
 {
     access_specifier_ = o.access_specifier_;
+	post_access_specifier_ = o.post_access_specifier_;
 	update_node_list();
 
 	return *this;
@@ -59,6 +66,8 @@ member_specification_access_specifier::update_node_list()
 {
 	clear();
 	add(access_specifier_);
+	if(post_access_specifier_) add(*post_access_specifier_);
+	add(colon);
 }
 
 }}} //namespace socoa::cpp::syntax_nodes
