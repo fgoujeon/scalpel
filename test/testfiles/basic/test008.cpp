@@ -22,13 +22,14 @@ class test : public super_test , virtual public virtual_base, protected virtual 
 		int value_;
 };
 
-test::test(int i):
+test :: test(int i):
+	super_test(i) ,
 	value_(i)
 {
 }
 
-test::test(const test& t):
-	value_(t.value_)
+test::test ( const test& t ) :
+	value_ ( t . value_ )
 {
 }
 

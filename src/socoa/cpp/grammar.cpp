@@ -1499,7 +1499,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	mem_initializer
-		= mem_initializer_id >> !s >> '(' >> !s >> !expression_list >> !s >> ')'
+		= mem_initializer_id >> !s >> '(' >> !s >> !(expression_list >> !s) >> ')'
 	;
 
 	mem_initializer_id

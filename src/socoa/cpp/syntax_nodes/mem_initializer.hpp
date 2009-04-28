@@ -21,19 +21,31 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_NODES_MEM_INITIALIZER_HPP
 #define SOCOA_CPP_SYNTAX_NODES_MEM_INITIALIZER_HPP
 
+#include <boost/optional.hpp>
 #include "composite_node.hpp"
 #include "mem_initializer_id.hpp"
+#include "expression_list.hpp"
+#include "space.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
+/**
+mem_initializer
+	= mem_initializer_id >> !s >> '(' >> !s >> !(expression_list >> !s) >> ')'
+;
+*/
 class mem_initializer: public composite_node
 {
 	public:
 		explicit
 		mem_initializer
 		(
-			mem_initializer_id&& a_mem_initializer_id
+			mem_initializer_id&& mem_initializer_id_node,
+			boost::optional<space>&& post_mem_initializer_id_space_node,
+			boost::optional<space>&& post_opening_bracket_space_node,
+			boost::optional<expression_list>&& expression_list_node,
+			boost::optional<space>&& post_expression_list_space_node
 		);
 
 		mem_initializer(const mem_initializer& o);
@@ -52,7 +64,10 @@ class mem_initializer: public composite_node
 		update_node_list();
 
 		mem_initializer_id mem_initializer_id_;
-		//const std::shared_ptr<util::sequence<assignment_expression, util::extern_strings::comma>> expression_list_;
+		boost::optional<space> post_mem_initializer_id_space_;
+		boost::optional<space> post_opening_bracket_space_;
+		boost::optional<expression_list> expression_list_;
+		boost::optional<space> post_expression_list_space_;
 };
 
 inline
