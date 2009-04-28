@@ -1472,8 +1472,8 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 
 	base_specifier
 		= nested_identifier_or_template_id
-		| "virtual" >> !s >> !access_specifier >> !s >> nested_identifier_or_template_id
-		| access_specifier >> !s >> !str_p("virtual") >> !s >> nested_identifier_or_template_id
+		| "virtual" >> !s >> !(access_specifier >> !s) >> nested_identifier_or_template_id
+		| access_specifier >> !s >> !(str_p("virtual") >> !s) >> nested_identifier_or_template_id
 	;
 
 	access_specifier

@@ -80,6 +80,7 @@ const leaf_node template_keyword("template");
 const leaf_node throw_keyword("throw");
 const leaf_node try_keyword("try");
 const leaf_node using_keyword("using");
+const leaf_node virtual_keyword("virtual");
 
 }}} //namespace socoa::cpp::syntax_nodes
 

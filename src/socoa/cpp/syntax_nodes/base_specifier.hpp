@@ -37,6 +37,12 @@ base_specifier
 	| access_specifier, ["virtual"], ["::"], [nested_name_specifier], class_name
 ;
 \endverbatim
+
+	base_specifier
+		= nested_identifier_or_template_id
+		| "virtual" >> !s >> !access_specifier >> !s >> nested_identifier_or_template_id
+		| access_specifier >> !s >> !str_p("virtual") >> !s >> nested_identifier_or_template_id
+	;
 */
 class base_specifier: public composite_node
 {
@@ -44,7 +50,10 @@ class base_specifier: public composite_node
         base_specifier
         (
             bool virtual_keyword,
+			bool virtual_keyword_first,
+			boost::optional<space>&& post_virtual_keyword_space_node,
             boost::optional<access_specifier>&& an_access_specifier,
+			boost::optional<space>&& post_access_specifier_space_node,
             boost::optional<nested_identifier_or_template_id>&& a_nested_identifier_or_template_id
         );
 
@@ -72,7 +81,10 @@ class base_specifier: public composite_node
 		update_node_list();
 
         bool virtual_keyword_;
+        bool virtual_keyword_first_;
+		boost::optional<space> post_virtual_keyword_space_;
 		boost::optional<access_specifier> access_specifier_;
+		boost::optional<space> post_access_specifier_space_;
 		boost::optional<nested_identifier_or_template_id> nested_identifier_or_template_id_;
 };
 

@@ -155,25 +155,18 @@ convert_base_specifier(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::BASE_SPECIFIER);
 
-	tree_node_iterator_t access_specifier_node = find_child_node(node, id_t::ACCESS_SPECIFIER);
+	tree_node_iterator_t virtual_keyword_it = find_node(node, "virtual");
+	tree_node_iterator_t access_specifier_node_it = find_child_node(node, id_t::ACCESS_SPECIFIER);
 
-	if(access_specifier_node != node.children.end())
-		return base_specifier
-		(
-			check_node_existence(node, "virtual"),
-			convert_string_enumeration<access_specifier>
-			(
-				*access_specifier_node
-			),
-			find_and_convert_node<boost::optional<nested_identifier_or_template_id>, id_t::NESTED_IDENTIFIER_OR_TEMPLATE_ID>(node)
-		);
-	else
-		return base_specifier
-		(
-			check_node_existence(node, "virtual"),
-			boost::optional<access_specifier>(),
-			find_and_convert_node<boost::optional<nested_identifier_or_template_id>, id_t::NESTED_IDENTIFIER_OR_TEMPLATE_ID>(node)
-		);
+	return base_specifier
+	(
+		virtual_keyword_it != node.children.end(),
+		check_node_existence(node, "virtual", 0),
+		convert_next_space(virtual_keyword_it),
+		convert_optional<access_specifier>(access_specifier_node_it, node),
+		convert_next_space(access_specifier_node_it),
+		find_and_convert_node<boost::optional<nested_identifier_or_template_id>, id_t::NESTED_IDENTIFIER_OR_TEMPLATE_ID>(node)
+	);
 }
 
 block_declaration

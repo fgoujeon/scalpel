@@ -84,6 +84,7 @@ extern const leaf_node template_keyword;
 extern const leaf_node throw_keyword;
 extern const leaf_node try_keyword;
 extern const leaf_node using_keyword;
+extern const leaf_node virtual_keyword;
 
 }}} //namespace socoa::cpp::syntax_nodes
 

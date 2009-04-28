@@ -1,11 +1,43 @@
-Test::Test(int n)
-try:
-	number(n)
+class test : public super_test , virtual public virtual_base, protected virtual virtual_base2
 {
+	public:
+		explicit
+		test ( int i ) ;
 
-}
-catch(const std::exception& e)
+		test ( const test & t ) ;
+
+		virtual
+		~ test( );
+
+		const test &
+		operator = ( const test& t );
+
+	protected :
+		void
+		update();
+
+	private:
+		int value_;
+};
+
+test::test(int i):
+	value_(i)
 {
-	throw e;
+}
+
+test::test(const test& t):
+	value_(t.value_)
+{
+}
+
+const test&
+test::operator=(const test& t)
+{
+	value_ = t.value_;
+}
+
+void
+update()
+{
 }
 
