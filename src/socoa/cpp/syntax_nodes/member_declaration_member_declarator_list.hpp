@@ -29,13 +29,20 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
+/**
+member_declaration_member_declarator_list
+	= !(member_declaration_decl_specifier_seq >> !s) >> !(member_declarator_list >> !s) >> ch_p(';')
+;
+*/
 class member_declaration_member_declarator_list: public composite_node
 {
 	public:
 		member_declaration_member_declarator_list
 		(
-			boost::optional<decl_specifier_seq>&& a_decl_specifier_seq,
-			boost::optional<member_declarator_list>&& a_member_declarator_list
+			boost::optional<decl_specifier_seq>&& decl_specifier_seq_node,
+			boost::optional<space>&& post_decl_specifier_seq_space_node,
+			boost::optional<member_declarator_list>&& member_declarator_list_node,
+			boost::optional<space>&& post_member_declarator_list_space_node
 		);
 
 		member_declaration_member_declarator_list(const member_declaration_member_declarator_list& o);
@@ -58,7 +65,9 @@ class member_declaration_member_declarator_list: public composite_node
 		update_node_list();
 
 		boost::optional<decl_specifier_seq> decl_specifier_seq_;
+		boost::optional<space> post_decl_specifier_seq_space_;
 		boost::optional<member_declarator_list> member_declarator_list_;
+		boost::optional<space> post_member_declarator_list_space_;
 };
 
 inline

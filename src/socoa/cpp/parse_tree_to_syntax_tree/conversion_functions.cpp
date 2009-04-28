@@ -1120,10 +1120,15 @@ convert_member_declaration_member_declarator_list(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::MEMBER_DECLARATION_MEMBER_DECLARATOR_LIST);
 
+	tree_node_iterator_t decl_specifier_seq_it = find_node<id_t::MEMBER_DECLARATION_DECL_SPECIFIER_SEQ>(node);
+	tree_node_iterator_t member_declarator_list_it = find_node<id_t::MEMBER_DECLARATOR_LIST>(node);
+
     return member_declaration_member_declarator_list
     (
-        find_and_convert_node<boost::optional<decl_specifier_seq>, id_t::MEMBER_DECLARATION_DECL_SPECIFIER_SEQ>(node),
-        find_and_convert_node<boost::optional<member_declarator_list>, id_t::MEMBER_DECLARATOR_LIST>(node)
+        convert_optional<decl_specifier_seq>(decl_specifier_seq_it, node),
+		convert_next_space(decl_specifier_seq_it),
+        convert_optional<member_declarator_list>(member_declarator_list_it, node),
+		convert_next_space(member_declarator_list_it)
     );
 }
 

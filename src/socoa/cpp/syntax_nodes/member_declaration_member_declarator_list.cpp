@@ -20,31 +20,41 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "member_declaration_member_declarator_list.hpp"
 
+#include "common_nodes.hpp"
+
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
 member_declaration_member_declarator_list::member_declaration_member_declarator_list
 (
-    boost::optional<decl_specifier_seq>&& a_decl_specifier_seq,
-    boost::optional<member_declarator_list>&& a_member_declarator_list
+	boost::optional<decl_specifier_seq>&& decl_specifier_seq_node,
+	boost::optional<space>&& post_decl_specifier_seq_space_node,
+	boost::optional<member_declarator_list>&& member_declarator_list_node,
+	boost::optional<space>&& post_member_declarator_list_space_node
 ):
-    decl_specifier_seq_(a_decl_specifier_seq),
-    member_declarator_list_(a_member_declarator_list)
+	decl_specifier_seq_(decl_specifier_seq_node),
+	post_decl_specifier_seq_space_(post_decl_specifier_seq_space_node),
+	member_declarator_list_(member_declarator_list_node),
+	post_member_declarator_list_space_(post_member_declarator_list_space_node)
 {
 	update_node_list();
 }
 
 member_declaration_member_declarator_list::member_declaration_member_declarator_list(const member_declaration_member_declarator_list& o):
 	composite_node(),
-    decl_specifier_seq_(o.decl_specifier_seq_),
-    member_declarator_list_(o.member_declarator_list_)
+	decl_specifier_seq_(o.decl_specifier_seq_),
+	post_decl_specifier_seq_space_(o.post_decl_specifier_seq_space_),
+	member_declarator_list_(o.member_declarator_list_),
+	post_member_declarator_list_space_(o.post_member_declarator_list_space_)
 {
 	update_node_list();
 }
 
 member_declaration_member_declarator_list::member_declaration_member_declarator_list(member_declaration_member_declarator_list&& o):
-    decl_specifier_seq_(std::move(o.decl_specifier_seq_)),
-    member_declarator_list_(std::move(o.member_declarator_list_))
+	decl_specifier_seq_(std::move(o.decl_specifier_seq_)),
+	post_decl_specifier_seq_space_(std::move(o.post_decl_specifier_seq_space_)),
+	member_declarator_list_(std::move(o.member_declarator_list_)),
+	post_member_declarator_list_space_(std::move(o.post_member_declarator_list_space_))
 {
 	update_node_list();
 }
@@ -52,8 +62,10 @@ member_declaration_member_declarator_list::member_declaration_member_declarator_
 const member_declaration_member_declarator_list&
 member_declaration_member_declarator_list::operator=(const member_declaration_member_declarator_list& o)
 {
-    decl_specifier_seq_ = o.decl_specifier_seq_;
-    member_declarator_list_ = o.member_declarator_list_;
+	decl_specifier_seq_ = o.decl_specifier_seq_;
+	post_decl_specifier_seq_space_ = o.post_decl_specifier_seq_space_;
+	member_declarator_list_ = o.member_declarator_list_;
+	post_member_declarator_list_space_ = o.post_member_declarator_list_space_;
 	update_node_list();
 
 	return *this;
@@ -64,7 +76,10 @@ member_declaration_member_declarator_list::update_node_list()
 {
 	clear();
 	if(decl_specifier_seq_) add(*decl_specifier_seq_);
+	if(post_decl_specifier_seq_space_) add(*post_decl_specifier_seq_space_);
 	if(member_declarator_list_) add(*member_declarator_list_);
+	if(post_member_declarator_list_space_) add(*post_member_declarator_list_space_);
+	add(semicolon);
 }
 
 }}} //namespace socoa::cpp::syntax_nodes
