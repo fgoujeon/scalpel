@@ -12,6 +12,8 @@ class test : public super_test , virtual public virtual_base, protected virtual 
 		const test &
 		operator = ( const test& t );
 
+		operator int ( );
+
 	protected :
 		void
 		update();
@@ -34,6 +36,11 @@ const test&
 test::operator=(const test& t)
 {
 	value_ = t.value_;
+}
+
+test::operator int ()
+{
+	return value_;
 }
 
 void

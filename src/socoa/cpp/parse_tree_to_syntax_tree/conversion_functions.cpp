@@ -405,7 +405,17 @@ convert_conversion_function_id(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::CONVERSION_FUNCTION_ID);
 
-	return conversion_function_id();
+	tree_node_iterator_t operator_keyword_it = node.children.begin();
+	tree_node_iterator_t type_specifier_seq_it = find_node<id_t::TYPE_SPECIFIER_SEQ>(node);
+	tree_node_iterator_t ptr_operator_seq_it = find_node<id_t::PTR_OPERATOR_SEQ>(node);
+
+	return conversion_function_id
+	(
+		convert_next_space(operator_keyword_it),
+		convert_node<type_specifier_seq>(*type_specifier_seq_it),
+		convert_previous_space(ptr_operator_seq_it),
+		convert_optional<ptr_operator_seq>(ptr_operator_seq_it, node)
+	);
 }
 
 ctor_initializer

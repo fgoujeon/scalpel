@@ -275,8 +275,6 @@ class grammar
             ACCESS_SPECIFIER,
 
             CONVERSION_FUNCTION_ID,
-            CONVERSION_TYPE_ID,
-            CONVERSION_DECLARATOR,
             CTOR_INITIALIZER,
             MEM_INITIALIZER_LIST,
             MEM_INITIALIZER,
@@ -612,8 +610,6 @@ class grammar
 
         //1.10 - Special member functions [gram.special]
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CONVERSION_FUNCTION_ID>> conversion_function_id;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CONVERSION_TYPE_ID>> conversion_type_id;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CONVERSION_DECLARATOR>> conversion_declarator;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CTOR_INITIALIZER>> ctor_initializer;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MEM_INITIALIZER_LIST>> mem_initializer_list;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MEM_INITIALIZER>> mem_initializer;

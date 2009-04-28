@@ -1487,15 +1487,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 
 	//1.10 - Special member functions [gram.special]
 	conversion_function_id
-		= str_p("operator") >> !s >> conversion_type_id
-	;
-
-	conversion_type_id
-		= type_specifier_seq >> !s >> !conversion_declarator
-	;
-
-	conversion_declarator
-		= ptr_operator_seq
+		= str_p("operator") >> !s >> type_specifier_seq >> !(!s >> ptr_operator_seq)
 	;
 
 	ctor_initializer
