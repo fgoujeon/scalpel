@@ -18,32 +18,27 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SEMANTIC_GRAPH_HPP
-#define SOCOA_CPP_SEMANTIC_GRAPH_HPP
-
-#include "semantic_nodes/namespace_.hpp"
-#include "semantic_nodes/class_.hpp"
-#include "semantic_nodes/function.hpp"
-#include "syntax_tree.hpp"
+#include "semantic_graph.hpp"
 
 namespace socoa { namespace cpp
 {
 
-class semantic_graph
+semantic_graph::semantic_graph(syntax_tree&& tree):
+	syntax_tree_(tree)
 {
-	public:
-		semantic_graph(syntax_tree&& tree);
+}
 
-		semantic_graph(semantic_graph&& o);
+semantic_graph::semantic_graph(semantic_graph&& o):
+	syntax_tree_(std::move(o.syntax_tree_)),
+	root_node_(std::move(o.root_node_))
+{
+}
 
-		semantic_nodes::namespace_&
-		root_node();
-
-	private:
-		syntax_tree syntax_tree_;
-		semantic_nodes::namespace_ root_node_;
-};
+semantic_nodes::namespace_&
+semantic_graph::root_node()
+{
+	return root_node_;
+}
 
 }} //namespace socoa::cpp
 
-#endif

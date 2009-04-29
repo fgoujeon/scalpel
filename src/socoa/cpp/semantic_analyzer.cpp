@@ -35,13 +35,13 @@ semantic_analyzer::semantic_analyzer():
 }
 
 semantic_graph
-semantic_analyzer::operator()(const syntax_tree& tree)
+semantic_analyzer::operator()(syntax_tree&& tree)
 {
-	//create global namespace
-	semantic_graph global_namespace;
+	//create semantic graph
+	semantic_graph graph(std::move(tree));
 
 	//current scope = global namespace
-	scope_cursor_.initialize(global_namespace);
+	scope_cursor_.initialize(graph.root_node());
 
 	auto opt_declaration_seq_node = tree.declaration_seq_node();
 
@@ -59,7 +59,7 @@ semantic_analyzer::operator()(const syntax_tree& tree)
 		}
 	}
 
-	return global_namespace;
+	return graph;
 }
 
 void

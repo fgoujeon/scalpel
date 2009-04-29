@@ -1,8 +1,16 @@
-int main()
+namespace A
 {
-	test* a_test = new test(53);
-	test -> value(42);
-	delete test;
-
-	return 0;
+	int name;
+	namespace N
+	{
+		class name;
+		void f();
+	}
 }
+
+int name;
+
+void A::N::f()
+{
+}
+

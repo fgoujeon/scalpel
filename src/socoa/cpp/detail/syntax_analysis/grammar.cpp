@@ -1087,7 +1087,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	namespace_definition
-		= str_p("namespace") >> !s >> !identifier >> !s >> '{' >> !s >> !declaration_seq >> !s >> '}'
+		= str_p("namespace") >> !s >> !(identifier >> !s) >> '{' >> !s >> !(declaration_seq >> !s) >> '}'
 	;
 
 	namespace_alias_definition
@@ -1674,7 +1674,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	Convenience rules
 	*/
 	type_name
-		= type_name_p
+		= identifier & type_name_p
 	;
 
 	identifier_or_template_id

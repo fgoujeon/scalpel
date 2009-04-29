@@ -1271,10 +1271,19 @@ convert_namespace_definition(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::NAMESPACE_DEFINITION);
 
+	tree_node_iterator_t namespace_keyword_it = node.children.begin();
+	tree_node_iterator_t identifier_it = find_node<id_t::IDENTIFIER>(node);
+	tree_node_iterator_t opening_brace_it = find_node(node, "{");
+	tree_node_iterator_t declaration_seq_it = find_node<id_t::DECLARATION_SEQ>(node);
+
     return namespace_definition
     (
-        find_and_convert_node<boost::optional<identifier>, id_t::IDENTIFIER>(node),
-        find_and_convert_node<boost::optional<declaration_seq>, id_t::DECLARATION_SEQ>(node)
+		convert_next_space(node, namespace_keyword_it),
+        convert_optional<identifier>(identifier_it, node),
+		convert_next_space(node, identifier_it),
+		convert_next_space(node, opening_brace_it),
+        convert_optional<declaration_seq>(declaration_seq_it, node),
+		convert_next_space(node, declaration_seq_it)
     );
 }
 

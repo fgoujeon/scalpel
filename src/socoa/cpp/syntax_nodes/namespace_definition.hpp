@@ -32,14 +32,24 @@ namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
 class declaration;
+typedef sequence_node<declaration> declaration_seq;
 
+/**
+namespace_definition
+	= "namespace", [identifier], "{", [declaration_seq], "}"
+;
+*/
 class namespace_definition: public composite_node
 {
 	public:
 		namespace_definition
 		(
-			boost::optional<identifier>&& an_identifier,
-			boost::optional<sequence_node<declaration>>&& a_declaration_seq
+			boost::optional<space>&& post_namespace_keyword_space_node,
+			boost::optional<identifier>&& identifier_node,
+			boost::optional<space>&& post_identifier_space_node,
+			boost::optional<space>&& post_opening_brace_space_node,
+			boost::optional<declaration_seq>&& declaration_seq_node,
+			boost::optional<space>&& post_declaration_seq_space_node
 		);
 
 		namespace_definition(const namespace_definition& o);
@@ -61,8 +71,12 @@ class namespace_definition: public composite_node
 		void
 		update_node_list();
 
+		boost::optional<space> post_namespace_keyword_space_;
 		boost::optional<identifier> identifier_;
-		std::shared_ptr<sequence_node<declaration>> declaration_seq_;
+		boost::optional<space> post_identifier_space_;
+		boost::optional<space> post_opening_brace_space_;
+		std::unique_ptr<declaration_seq> declaration_seq_;
+		boost::optional<space> post_declaration_seq_space_;
 };
 
 inline

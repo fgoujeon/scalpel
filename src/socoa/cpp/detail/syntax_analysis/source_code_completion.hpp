@@ -37,7 +37,7 @@ namespace source_code_completion
     by closing enclosing ones (such as classes, namespaces, etc.).
     */
     inline
-    unsigned int
+	void
     complete(std::string& str)
     {
         /*
@@ -111,7 +111,6 @@ namespace source_code_completion
             };
         ***
         */
-		unsigned int scope_to_be_closed_count = 0;
         {
             //if last char is a semicolon,
             //we have to check whether the last for statement is correctly closed
@@ -154,7 +153,7 @@ namespace source_code_completion
             //count opening and closing brackets
             unsigned int opening_bracket_count = std::count(str.begin(), str.end(), '{');
             unsigned int closing_bracket_count = std::count(str.begin(), str.end(), '}');
-			scope_to_be_closed_count = opening_bracket_count - closing_bracket_count;
+			unsigned int scope_to_be_closed_count = opening_bracket_count - closing_bracket_count;
 
             //append closing brackets so there's as many as opening ones
             for(unsigned int i = 0; i < scope_to_be_closed_count; ++i)
@@ -162,8 +161,6 @@ namespace source_code_completion
                 str.append("};");
             }
         }
-
-		return scope_to_be_closed_count;
     }
 
     /**

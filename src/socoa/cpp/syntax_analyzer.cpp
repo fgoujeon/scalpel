@@ -33,6 +33,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 using namespace boost::spirit;
 using namespace socoa::cpp::syntax_nodes;
 using namespace socoa::util;
+using namespace socoa::cpp::detail::syntax_analysis;
 
 namespace socoa { namespace cpp
 {
@@ -105,113 +106,118 @@ syntax_analyzer::analyze(const std::string& input)
 std::ptrdiff_t
 syntax_analyzer::parse_type_name(const detail::syntax_analysis::scanner_t& scan)
 {
-	/*
-    unsigned int parsing_progress = scan.first - &*(currently_analyzed_partial_input_->begin());
-
-	//
-	//Get the name to be checked.
-	//
-	std::string name;
-	char ch = *scan;
-	while
-	(
-		!scan.at_end() &&
-		(
-			(ch >= 'a' && ch <= 'z') ||
-			(ch >= 'A' && ch <= 'Z') ||
-			(ch == '_') ||
-			(ch >= '0' && ch <= '9')
-		)
-	)
-	{
-		name += ch;
-		++scan;
-		ch = *scan;
-	}
-
-
-	//if we already checked that name at the same progress point...
-	if
-	(
-		highest_parsing_progress_ != 0 &&
-		highest_parsing_progress_ >= parsing_progress
-	)
-	{
-		//... just return the result we stored
-		std::map<unsigned int, bool>::const_iterator is_a_type_it = type_name_map_.find(parsing_progress);
-		assert(is_a_type_it != type_name_map_.end()); //assert that a result is found
-		if(is_a_type_it->second)
-			return name.size(); //successful match
-		else
-			return -1;
-	}
-	highest_parsing_progress_ = parsing_progress;
-
-	//if we're not already performing a semantic analysis (avoid recursive call)
-	if(!performing_semantic_analysis_)
-	{
-		raii_affector<bool, true, false> raii_aff(performing_semantic_analysis_);
-
-		//
-		//Create a new string from the beginning of the input to the current
-		//location of the scanner.
-		//
-		assert(currently_analyzed_partial_input_);
-		std::string partial_input(&*(currently_analyzed_partial_input_->begin()), scan.first);
-
-		std::cout << "\nTry to determine whether '" << name << "' is a type name...\n";
-		std::cout << "Fragment of input succesfully parsed:\n";
-		std::cout << "***\n" << partial_input << "\n***\n";
-
-		//
-		//Complete the scanned source code (partial_input) in order to have
-		//a syntactically correct input to analyze.
-		//
-		unsigned int closed_scope_count = source_code_completion::complete(partial_input);
-		std::cout << "Completed input:\n";
-		std::cout << "***\n" << partial_input << "\n***\n";
-
-		//
-		//Analyze the source code's syntax
-		//
-		std::cout << "Syntax analysis:\n";
-		syntax_tree syntax_nodes = analyze(partial_input);
-
-		//
-		//Analyze the source code's semantic
-		//
-		std::cout << "Semantic analysis:\n";
-		semantic_graph semantic_nodes = semantic_analyzer_(syntax_nodes);
-
-		//
-		//Get the scope from where to find the given type name.
-		//
-		semantic_nodes::scope* scope = &semantic_nodes;
-		for(unsigned int i = 0; i < closed_scope_count; ++i)
-		{
-			if(!scope->scopes().empty()) ///\todo should be an assert when scope tree construction implementation will be full
-				scope = &scope->scopes().back();
-			else
-				break;
-		}
-
-		//
-		//Check whether the name is really a type name.
-		//
-		const semantic_nodes::named_entity* const item = name_lookup::find_unqualified_name(*scope, name);
-		if(item && item->is_a_type())
-		{
-			std::cout << "'" << name << "' is a type name.\n";
-			type_name_map_.insert(std::make_pair<unsigned int, bool>(parsing_progress, true)); //store the result
-			return name.size(); //successful match
-		}
-		else
-		{
-			std::cout << "'" << name << "' isn't a type name.\n";
-			type_name_map_.insert(std::make_pair<unsigned int, bool>(parsing_progress, false)); //store the result
-		}
-    }
-*/
+//    unsigned int parsing_progress = scan.first - &*(currently_analyzed_partial_input_->begin());
+//
+//	//
+//	//Get the name to be checked.
+//	//
+//	std::string name;
+//	char ch = *scan;
+//	while
+//	(
+//		!scan.at_end() &&
+//		(
+//			(ch >= 'a' && ch <= 'z') ||
+//			(ch >= 'A' && ch <= 'Z') ||
+//			(ch == '_') ||
+//			(ch >= '0' && ch <= '9')
+//		)
+//	)
+//	{
+//		name += ch;
+//		++scan;
+//		ch = *scan;
+//	}
+//
+//
+//	//if we already checked that name at the same progress point...
+//	if
+//	(
+//		highest_parsing_progress_ != 0 &&
+//		highest_parsing_progress_ >= parsing_progress
+//	)
+//	{
+//		//... just return the result we stored
+//		std::map<unsigned int, bool>::const_iterator is_a_type_it = type_name_map_.find(parsing_progress);
+//		if(is_a_type_it == type_name_map_.end()) //assert that a result is found
+//		{
+//		//	print_type_name_map_();
+//		//	assert(false);
+//		}
+//		else
+//		{
+//			if(is_a_type_it->second)
+//				return name.size(); //successful match
+//			else
+//				return -1;
+//		}
+//	}
+//	highest_parsing_progress_ = parsing_progress;
+//
+//	//if we're not already performing a semantic analysis (avoid recursive call)
+//	if(!performing_semantic_analysis_)
+//	{
+//		raii_affector<bool, true, false> raii_aff(performing_semantic_analysis_);
+//
+//		//
+//		//Create a new string from the beginning of the input to the current
+//		//location of the scanner.
+//		//
+//		assert(currently_analyzed_partial_input_);
+//		std::string partial_input(&*(currently_analyzed_partial_input_->begin()), scan.first);
+//
+//		std::cout << "\nTry to determine whether '" << name << "' is a type name...\n";
+//		std::cout << "Fragment of input succesfully parsed:\n";
+//		std::cout << "***\n" << partial_input << "\n***\n";
+//
+//		//
+//		//Complete the scanned source code (partial_input) in order to have
+//		//a syntactically correct input to analyze.
+//		//
+//		source_code_completion::complete(partial_input);
+//		std::cout << "Completed input:\n";
+//		std::cout << "***\n" << partial_input << "\n***\n";
+//
+//		//
+//		//Analyze the source code's syntax
+//		//
+//		std::cout << "Syntax analysis:\n";
+//		syntax_tree syntax_nodes = analyze(partial_input);
+//
+//		//
+//		//Analyze the source code's semantic
+//		//
+//		std::cout << "Semantic analysis:\n";
+//		semantic_graph semantic_nodes = semantic_analyzer_(syntax_nodes);
+//
+//		//
+//		//Get the scope from where to find the given type name.
+//		//
+////		semantic_nodes::scope* scope = &semantic_nodes;
+////		for(unsigned int i = 0; i < closed_scope_count; ++i)
+////		{
+////			if(!scope->scopes().empty()) ///\todo should be an assert when scope tree construction implementation will be full
+////				scope = &scope->scopes().back();
+////			else
+////				break;
+////		}
+////
+////		//
+////		//Check whether the name is really a type name.
+////		//
+////		const semantic_nodes::named_entity* const item = name_lookup::find_unqualified_name(*scope, name);
+////		if(item && item->is_a_type())
+////		{
+////			std::cout << "'" << name << "' is a type name.\n";
+////			type_name_map_.insert(std::make_pair<unsigned int, bool>(parsing_progress, true)); //store the result
+////			return name.size(); //successful match
+////		}
+////		else
+////		{
+//			std::cout << "'" << name << "' isn't a type name.\n";
+//			type_name_map_.insert(std::make_pair<unsigned int, bool>(parsing_progress, false)); //store the result
+//		}
+//    }
 
     return -1;
 }
