@@ -360,6 +360,7 @@ semantic_analyzer::convert(const simple_declaration& item)
 				}
 				else if(auto an_elaborated_type_specifier_ptr = get<elaborated_type_specifier>(a_type_specifier_ptr))
 				{
+					/*
 					if(an_elaborated_type_specifier_ptr->get_class_key())
 					{
 						is_a_class_forward_declaration = true;
@@ -367,6 +368,7 @@ semantic_analyzer::convert(const simple_declaration& item)
 						assert(an_optional_identifier);
 						name = an_optional_identifier->get_value();
 					}
+					*/
 				}
 			}
 		}

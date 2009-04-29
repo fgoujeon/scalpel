@@ -993,6 +993,36 @@ SOCOA_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
 	simple_operator,
 	string_enumeration<syntax_nodes::simple_operator>
 )
+SOCOA_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	CLASS_TEMPLATE_ELABORATED_SPECIFIER,
+	class_template_elaborated_specifier,
+	class_template_elaborated_specifier
+)
+SOCOA_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	CLASS_ELABORATED_SPECIFIER,
+	class_elaborated_specifier,
+	class_elaborated_specifier
+)
+SOCOA_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	ENUM_ELABORATED_SPECIFIER,
+	enum_elaborated_specifier,
+	enum_elaborated_specifier
+)
+SOCOA_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	TYPENAME_TEMPLATE_ELABORATED_SPECIFIER,
+	typename_template_elaborated_specifier,
+	typename_template_elaborated_specifier
+)
+SOCOA_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	TYPENAME_ELABORATED_SPECIFIER,
+	typename_elaborated_specifier,
+	typename_elaborated_specifier
+)
 
 template<class SyntaxNodeT>
 inline

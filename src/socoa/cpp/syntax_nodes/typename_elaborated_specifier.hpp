@@ -18,30 +18,32 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_NODES_ELABORATED_TYPE_SPECIFIER_HPP
-#define SOCOA_CPP_SYNTAX_NODES_ELABORATED_TYPE_SPECIFIER_HPP
+#ifndef SOCOA_CPP_SYNTAX_NODES_TYPENAME_ELABORATED_SPECIFIER_HPP
+#define SOCOA_CPP_SYNTAX_NODES_TYPENAME_ELABORATED_SPECIFIER_HPP
 
-#include "alternative_node.hpp"
-#include "class_template_elaborated_specifier.hpp"
-#include "class_elaborated_specifier.hpp"
-#include "enum_elaborated_specifier.hpp"
-#include "typename_template_elaborated_specifier.hpp"
-#include "typename_elaborated_specifier.hpp"
+#include "composite_node.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
-typedef
-	alternative_node
-	<
-		class_template_elaborated_specifier,
-		class_elaborated_specifier,
-		enum_elaborated_specifier,
-		typename_template_elaborated_specifier,
+class typename_elaborated_specifier: public composite_node
+{
+	public:
 		typename_elaborated_specifier
-	>
-	elaborated_type_specifier
-;
+		(
+		);
+
+		typename_elaborated_specifier(const typename_elaborated_specifier& o);
+
+		typename_elaborated_specifier(typename_elaborated_specifier&& o);
+
+		const typename_elaborated_specifier&
+		operator=(const typename_elaborated_specifier& o);
+
+	private:
+		void
+		update_node_list();
+};
 
 }}} //namespace socoa::cpp::syntax_nodes
 

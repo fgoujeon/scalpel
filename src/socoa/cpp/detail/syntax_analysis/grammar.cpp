@@ -1067,11 +1067,31 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	elaborated_type_specifier
-		= class_key >> !s >> !(str_p("::") >> !s) >> !(nested_name_specifier >> !s) >> template_id //not in the standard, but seems to be required for parsing GCC's standard library
-		| class_key >> !s >> !(str_p("::") >> !s) >> !(nested_name_specifier >> !s) >> identifier
-		| str_p("enum") >> !s >> !(str_p("::") >> !s) >> !(nested_name_specifier >> !s) >> identifier
-		| str_p("typename") >> !s >> !(str_p("::") >> !s) >> nested_name_specifier >> !s >> !(str_p("template") >> !s) >> template_id
-		| str_p("typename") >> !s >> !(str_p("::") >> !s) >> nested_name_specifier >> !s >> identifier
+		= class_template_elaborated_specifier //not in the standard, but seems to be required for parsing GCC's standard library
+		| class_elaborated_specifier
+		| enum_elaborated_specifier
+		| typename_template_elaborated_specifier
+		| typename_elaborated_specifier
+	;
+
+	class_template_elaborated_specifier
+		= class_key >> !s >> !(str_p("::") >> !s) >> !(nested_name_specifier >> !s) >> template_id
+	;
+
+	class_elaborated_specifier
+		= class_key >> !s >> !(str_p("::") >> !s) >> !(nested_name_specifier >> !s) >> identifier
+	;
+
+	enum_elaborated_specifier
+		= str_p("enum") >> !s >> !(str_p("::") >> !s) >> !(nested_name_specifier >> !s) >> identifier
+	;
+
+	typename_template_elaborated_specifier
+		= str_p("typename") >> !s >> !(str_p("::") >> !s) >> nested_name_specifier >> !s >> !(str_p("template") >> !s) >> template_id
+	;
+
+	typename_elaborated_specifier
+		= str_p("typename") >> !s >> !(str_p("::") >> !s) >> nested_name_specifier >> !s >> identifier
 	;
 
 	enum_specifier

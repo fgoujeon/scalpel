@@ -203,6 +203,11 @@ class grammar
             BUILT_IN_TYPE_SPECIFIER,
             IDENTIFIER_OR_TEMPLATE_ID,
             ELABORATED_TYPE_SPECIFIER,
+			CLASS_TEMPLATE_ELABORATED_SPECIFIER,
+			CLASS_ELABORATED_SPECIFIER,
+			ENUM_ELABORATED_SPECIFIER,
+			TYPENAME_TEMPLATE_ELABORATED_SPECIFIER,
+			TYPENAME_ELABORATED_SPECIFIER,
             ENUM_SPECIFIER,
             ENUMERATOR_LIST,
             ENUMERATOR_DEFINITION,
@@ -538,6 +543,11 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::SIMPLE_TEMPLATE_TYPE_SPECIFIER>> simple_template_type_specifier;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::BUILT_IN_TYPE_SPECIFIER>> built_in_type_specifier;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ELABORATED_TYPE_SPECIFIER>> elaborated_type_specifier;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CLASS_TEMPLATE_ELABORATED_SPECIFIER>> class_template_elaborated_specifier;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CLASS_ELABORATED_SPECIFIER>> class_elaborated_specifier;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ENUM_ELABORATED_SPECIFIER>> enum_elaborated_specifier;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TYPENAME_TEMPLATE_ELABORATED_SPECIFIER>> typename_template_elaborated_specifier;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TYPENAME_ELABORATED_SPECIFIER>> typename_elaborated_specifier;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ENUM_SPECIFIER>> enum_specifier;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ENUMERATOR_LIST>> enumerator_list;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ENUMERATOR_DEFINITION>> enumerator_definition;

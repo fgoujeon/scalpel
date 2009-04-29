@@ -78,11 +78,17 @@ convert_cast_expression(const tree_node_t& node);
 syntax_nodes::character_literal
 convert_character_literal(const tree_node_t& node);
 
+syntax_nodes::class_elaborated_specifier
+convert_class_elaborated_specifier(const tree_node_t& node);
+
 syntax_nodes::class_head
 convert_class_head(const tree_node_t& node);
 
 syntax_nodes::class_specifier
 convert_class_specifier(const tree_node_t& node);
+
+syntax_nodes::class_template_elaborated_specifier
+convert_class_template_elaborated_specifier(const tree_node_t& node);
 
 syntax_nodes::classic_labeled_statement
 convert_classic_labeled_statement(const tree_node_t& node);
@@ -167,6 +173,9 @@ convert_elaborated_type_specifier(const tree_node_t& node);
 
 syntax_nodes::empty_initializer_list_initializer_clause
 convert_empty_initializer_list_initializer_clause(const tree_node_t& node);
+
+syntax_nodes::enum_elaborated_specifier
+convert_enum_elaborated_specifier(const tree_node_t& node);
 
 syntax_nodes::equal_initializer
 convert_equal_initializer(const tree_node_t& node);
@@ -411,8 +420,14 @@ convert_type_specifier(const tree_node_t& node);
 syntax_nodes::typeid_expression
 convert_typeid_expression(const tree_node_t& node);
 
+syntax_nodes::typename_elaborated_specifier
+convert_typename_elaborated_specifier(const tree_node_t& node);
+
 syntax_nodes::typename_expression
 convert_typename_expression(const tree_node_t& node);
+
+syntax_nodes::typename_template_elaborated_specifier
+convert_typename_template_elaborated_specifier(const tree_node_t& node);
 
 syntax_nodes::unary_expression
 convert_unary_expression(const tree_node_t& node);

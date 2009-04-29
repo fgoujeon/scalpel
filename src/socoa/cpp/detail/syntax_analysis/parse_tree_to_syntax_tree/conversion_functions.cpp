@@ -294,6 +294,28 @@ convert_character_literal(const tree_node_t& node)
 	);
 }
 
+class_elaborated_specifier
+convert_class_elaborated_specifier(const tree_node_t& node)
+{
+	assert(node.value.id() == id_t::CLASS_ELABORATED_SPECIFIER);
+
+	tree_node_iterator_t class_key_it = node.children.begin();
+	tree_node_iterator_t double_colon_it = find_node(node, "::");
+	tree_node_iterator_t nested_name_specifier_it = find_node<id_t::NESTED_NAME_SPECIFIER>(node);
+	tree_node_iterator_t identifier_it = find_node<id_t::IDENTIFIER>(node);
+
+	return class_elaborated_specifier
+	(
+		convert_node<class_key>(*class_key_it),
+		convert_next_space(node, class_key_it),
+		double_colon_it != node.children.end(),
+		convert_next_space(node, double_colon_it),
+		convert_optional<nested_name_specifier>(nested_name_specifier_it, node),
+		convert_next_space(node, nested_name_specifier_it),
+		convert_node<identifier>(*identifier_it)
+	);
+}
+
 class_head
 convert_class_head(const tree_node_t& node)
 {
@@ -344,6 +366,28 @@ convert_class_specifier(const tree_node_t& node)
 		member_specification_node,
 		convert_next_space(node, member_specification_it)
     );
+}
+
+class_template_elaborated_specifier
+convert_class_template_elaborated_specifier(const tree_node_t& node)
+{
+	assert(node.value.id() == id_t::CLASS_TEMPLATE_ELABORATED_SPECIFIER);
+
+	tree_node_iterator_t class_key_it = node.children.begin();
+	tree_node_iterator_t double_colon_it = find_node(node, "::");
+	tree_node_iterator_t nested_name_specifier_it = find_node<id_t::NESTED_NAME_SPECIFIER>(node);
+	tree_node_iterator_t template_id_it = find_node<id_t::TEMPLATE_ID>(node);
+
+	return class_template_elaborated_specifier
+	(
+		convert_node<class_key>(*class_key_it),
+		convert_next_space(node, class_key_it),
+		double_colon_it != node.children.end(),
+		convert_next_space(node, double_colon_it),
+		convert_optional<nested_name_specifier>(nested_name_specifier_it, node),
+		convert_next_space(node, nested_name_specifier_it),
+		convert_node<template_id>(*template_id_it)
+	);
 }
 
 classic_labeled_statement
@@ -680,17 +724,15 @@ convert_elaborated_type_specifier(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::ELABORATED_TYPE_SPECIFIER);
 
-	return elaborated_type_specifier
-	(
-		find_and_convert_node<boost::optional<class_key>, id_t::CLASS_KEY>(node),
-		find_and_convert_node<boost::optional<nested_name_specifier>, id_t::NESTED_NAME_SPECIFIER>(node),
-		find_and_convert_node<boost::optional<template_id>, id_t::TEMPLATE_ID>(node),
-		find_and_convert_node<boost::optional<identifier>, id_t::IDENTIFIER>(node),
-		check_node_existence(node, "::", 1),
-		check_node_existence(node, "enum", 0),
-		check_node_existence(node, "typename", 0),
-		check_node_existence(node, "template")
-	);
+	return convert_alternative
+	<
+		elaborated_type_specifier,
+		id_t::CLASS_TEMPLATE_ELABORATED_SPECIFIER,
+		id_t::CLASS_ELABORATED_SPECIFIER,
+		id_t::ENUM_ELABORATED_SPECIFIER,
+		id_t::TYPENAME_TEMPLATE_ELABORATED_SPECIFIER,
+		id_t::TYPENAME_ELABORATED_SPECIFIER
+	>(node);
 }
 
 empty_initializer_list_initializer_clause
@@ -699,6 +741,14 @@ convert_empty_initializer_list_initializer_clause(const tree_node_t& node)
     assert(node.value.id() == id_t::EMPTY_INITIALIZER_LIST_INITIALIZER_CLAUSE);
 
 	return empty_initializer_list_initializer_clause();
+}
+
+enum_elaborated_specifier
+convert_enum_elaborated_specifier(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::ENUM_ELABORATED_SPECIFIER);
+
+	return enum_elaborated_specifier();
 }
 
 equal_initializer
@@ -1932,12 +1982,28 @@ convert_typeid_expression(const tree_node_t& node)
 	return typeid_expression();
 }
 
+typename_elaborated_specifier
+convert_typename_elaborated_specifier(const tree_node_t& node)
+{
+	assert(node.value.id() == id_t::TYPENAME_ELABORATED_SPECIFIER);
+
+	return typename_elaborated_specifier();
+}
+
 typename_expression
 convert_typename_expression(const tree_node_t& node)
 {
 	assert(node.value.id() == id_t::TYPENAME_EXPRESSION);
 
 	return typename_expression();
+}
+
+typename_template_elaborated_specifier
+convert_typename_template_elaborated_specifier(const tree_node_t& node)
+{
+	assert(node.value.id() == id_t::TYPENAME_TEMPLATE_ELABORATED_SPECIFIER);
+
+	return typename_template_elaborated_specifier();
 }
 
 unary_expression

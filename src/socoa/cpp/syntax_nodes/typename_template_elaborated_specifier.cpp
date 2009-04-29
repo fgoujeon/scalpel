@@ -18,31 +18,43 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_NODES_ELABORATED_TYPE_SPECIFIER_HPP
-#define SOCOA_CPP_SYNTAX_NODES_ELABORATED_TYPE_SPECIFIER_HPP
-
-#include "alternative_node.hpp"
-#include "class_template_elaborated_specifier.hpp"
-#include "class_elaborated_specifier.hpp"
-#include "enum_elaborated_specifier.hpp"
 #include "typename_template_elaborated_specifier.hpp"
-#include "typename_elaborated_specifier.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
-typedef
-	alternative_node
-	<
-		class_template_elaborated_specifier,
-		class_elaborated_specifier,
-		enum_elaborated_specifier,
-		typename_template_elaborated_specifier,
-		typename_elaborated_specifier
-	>
-	elaborated_type_specifier
-;
+typename_template_elaborated_specifier::typename_template_elaborated_specifier
+(
+)
+{
+	update_node_list();
+}
+
+typename_template_elaborated_specifier::typename_template_elaborated_specifier(const typename_template_elaborated_specifier& o):
+	composite_node()
+{
+	update_node_list();
+}
+
+typename_template_elaborated_specifier::typename_template_elaborated_specifier(typename_template_elaborated_specifier&& o):
+	composite_node()
+{
+	update_node_list();
+}
+
+const typename_template_elaborated_specifier&
+typename_template_elaborated_specifier::operator=(const typename_template_elaborated_specifier& o)
+{
+	update_node_list();
+
+	return *this;
+}
+
+void
+typename_template_elaborated_specifier::update_node_list()
+{
+	clear();
+}
 
 }}} //namespace socoa::cpp::syntax_nodes
 
-#endif
