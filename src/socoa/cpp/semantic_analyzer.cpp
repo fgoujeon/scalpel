@@ -21,7 +21,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "semantic_analyzer.hpp"
 
 #include <iostream>
-#include "name_lookup.hpp"
+#include "detail/semantic_analysis/name_lookup.hpp"
 
 namespace socoa { namespace cpp
 {
@@ -168,11 +168,11 @@ semantic_analyzer::convert(const function_definition& item)
 
 					if(leading_double_colon)
 					{
-						enclosing_scope = name_lookup::find_scope(scope_cursor_.get_global_scope(), a_nested_name_specifier);
+						enclosing_scope = detail::semantic_analysis::name_lookup::find_scope(scope_cursor_.get_global_scope(), a_nested_name_specifier);
 					}
 					else
 					{
-						enclosing_scope = name_lookup::find_scope(scope_cursor_.get_current_scope(), a_nested_name_specifier);
+						enclosing_scope = detail::semantic_analysis::name_lookup::find_scope(scope_cursor_.get_current_scope(), a_nested_name_specifier);
 					}
 				}
 			}

@@ -18,8 +18,8 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SOURCE_CODE_COMPLETION_HPP
-#define SOCOA_CPP_SOURCE_CODE_COMPLETION_HPP
+#ifndef SOCOA_CPP_DETAIL_SYNTAX_ANALYSIS_SOURCE_CODE_COMPLETION_HPP
+#define SOCOA_CPP_DETAIL_SYNTAX_ANALYSIS_SOURCE_CODE_COMPLETION_HPP
 
 #include <string>
 

@@ -18,17 +18,17 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SCOPE_CURSOR_HPP
-#define SOCOA_CPP_SCOPE_CURSOR_HPP
+#ifndef SOCOA_CPP_DETAIL_SEMANTIC_ANALYSIS_SCOPE_CURSOR_HPP
+#define SOCOA_CPP_DETAIL_SEMANTIC_ANALYSIS_SCOPE_CURSOR_HPP
 
 #include <boost/noncopyable.hpp>
-#include "semantic_nodes/scope.hpp"
-#include "semantic_nodes/scope_visitor.hpp"
-#include "semantic_nodes/namespace_.hpp"
-#include "semantic_nodes/class_.hpp"
-#include "semantic_nodes/function.hpp"
+#include "../../semantic_nodes/scope.hpp"
+#include "../../semantic_nodes/scope_visitor.hpp"
+#include "../../semantic_nodes/namespace_.hpp"
+#include "../../semantic_nodes/class_.hpp"
+#include "../../semantic_nodes/function.hpp"
 
-namespace socoa { namespace cpp
+namespace socoa { namespace cpp { namespace detail { namespace semantic_analysis
 {
 
 class scope_cursor: public boost::noncopyable
@@ -147,6 +147,6 @@ class scope_cursor::variable_adder: public semantic_nodes::scope_visitor
 		semantic_nodes::variable v_;
 };
 
-}} //namespace socoa::cpp
+}}}} //namespace socoa::cpp::detail::semantic_analysis
 
 #endif

@@ -18,8 +18,8 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_PARSE_TREE_TO_SYNTAX_TREE_NODE_FINDER_HPP
-#define SOCOA_CPP_PARSE_TREE_TO_SYNTAX_TREE_NODE_FINDER_HPP
+#ifndef SOCOA_CPP_DETAIL_SYNTAX_ANALYSIS_PARSE_TREE_TO_SYNTAX_TREE_NODE_FINDER_HPP
+#define SOCOA_CPP_DETAIL_SYNTAX_ANALYSIS_PARSE_TREE_TO_SYNTAX_TREE_NODE_FINDER_HPP
 
 #include "typedefs.hpp"
 #include "basic_functions.hpp"

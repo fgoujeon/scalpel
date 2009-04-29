@@ -23,7 +23,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <algorithm>
 #include <functional>
 
-namespace socoa { namespace cpp { namespace name_lookup
+namespace socoa { namespace cpp { namespace detail { namespace semantic_analysis { namespace name_lookup
 {
 
 using namespace syntax_nodes;
@@ -201,5 +201,5 @@ find_scope
 	return found_scope;
 }
 
-}}} //namespace socoa::cpp::name_lookup
+}}}}} //namespace socoa::cpp::detail::semantic_analysis::name_lookup
 

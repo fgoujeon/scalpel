@@ -20,7 +20,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "scope_cursor.hpp"
 
-namespace socoa { namespace cpp
+namespace socoa { namespace cpp { namespace detail { namespace semantic_analysis
 {
 
 //
@@ -209,5 +209,5 @@ scope_cursor::variable_adder::visit(semantic_nodes::function& o)
 	o.add(v_);
 }
 
-}} //namespace socoa::cpp
+}}}} //namespace socoa::cpp::detail::semantic_analysis
 

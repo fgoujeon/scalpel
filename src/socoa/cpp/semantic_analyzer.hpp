@@ -24,8 +24,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <memory>
 #include "syntax_tree.hpp"
 #include "semantic_graph.hpp"
-#include "syntax_tree_to_any_conversion_helper.hpp"
-#include "scope_cursor.hpp"
+#include "detail/semantic_analysis/syntax_tree_to_any_conversion_helper.hpp"
+#include "detail/semantic_analysis/scope_cursor.hpp"
 
 namespace socoa { namespace cpp
 {
@@ -173,10 +173,10 @@ class semantic_analyzer
         void
         convert(const T& item);
 
-		friend class syntax_tree_to_any_conversion_helper<semantic_analyzer>;
+		friend class detail::semantic_analysis::syntax_tree_to_any_conversion_helper<semantic_analyzer>;
 
-		syntax_tree_to_any_conversion_helper<semantic_analyzer> conversion_helper_;
-		scope_cursor scope_cursor_;
+		detail::semantic_analysis::syntax_tree_to_any_conversion_helper<semantic_analyzer> conversion_helper_;
+		detail::semantic_analysis::scope_cursor scope_cursor_;
 };
 
 template<const std::vector<std::string>& StringList>

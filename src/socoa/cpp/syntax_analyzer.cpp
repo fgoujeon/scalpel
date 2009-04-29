@@ -27,8 +27,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "detail/syntax_analysis/parse_tree_to_syntax_tree/conversion_functions.hpp"
 #include "detail/syntax_analysis/parse_tree_to_syntax_tree/basic_functions.hpp"
 #include "detail/syntax_analysis/source_code_completion.hpp"
+#include "detail/semantic_analysis/name_lookup.hpp"
 #include "semantic_graph.hpp"
-#include "name_lookup.hpp"
 
 using namespace boost::spirit;
 using namespace socoa::cpp::syntax_nodes;

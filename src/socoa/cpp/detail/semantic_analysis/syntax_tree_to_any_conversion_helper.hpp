@@ -18,14 +18,14 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_TREE_TO_CONVERSION_HELPER_HPP
-#define SOCOA_CPP_SYNTAX_TREE_TO_CONVERSION_HELPER_HPP
+#ifndef SOCOA_CPP_DETAIL_SEMANTIC_ANALYSIS_SYNTAX_TREE_TO_CONVERSION_HELPER_HPP
+#define SOCOA_CPP_DETAIL_SEMANTIC_ANALYSIS_SYNTAX_TREE_TO_CONVERSION_HELPER_HPP
 
 #include <string>
 #include <boost/optional.hpp>
-#include "syntax_tree.hpp"
+#include "../../syntax_tree.hpp"
 
-namespace socoa { namespace cpp
+namespace socoa { namespace cpp { namespace detail { namespace semantic_analysis
 {
 
 template<class ConverterT>
@@ -187,6 +187,6 @@ syntax_tree_to_any_conversion_helper<ConverterT>::convert_any_node(const T& item
 	converter_.convert(item);
 }
 
-}} //namespace socoa::cpp
+}}}} //namespace socoa::cpp::detail::semantic_analysis
 
 #endif

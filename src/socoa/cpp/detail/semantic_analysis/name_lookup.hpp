@@ -18,14 +18,14 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_NAME_LOOKUP_HPP
-#define SOCOA_CPP_NAME_LOOKUP_HPP
+#ifndef SOCOA_CPP_DETAIL_SEMANTIC_ANALYSIS_NAME_LOOKUP_HPP
+#define SOCOA_CPP_DETAIL_SEMANTIC_ANALYSIS_NAME_LOOKUP_HPP
 
 #include <string>
-#include "syntax_tree.hpp"
-#include "semantic_graph.hpp"
+#include "../../syntax_tree.hpp"
+#include "../../semantic_graph.hpp"
 
-namespace socoa { namespace cpp { namespace name_lookup
+namespace socoa { namespace cpp { namespace detail { namespace semantic_analysis { namespace name_lookup
 {
 
 const semantic_nodes::named_entity*
@@ -38,6 +38,6 @@ find_scope
 	const syntax_nodes::nested_name_specifier& nested_name_specifier
 );
 
-}}} //namespace socoa::cpp::name_lookup
+}}}}} //namespace socoa::cpp::detail::semantic_analysis::name_lookup
 
 #endif
