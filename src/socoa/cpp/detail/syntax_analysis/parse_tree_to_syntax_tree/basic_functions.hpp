@@ -24,7 +24,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include "typedefs.hpp"
 
-namespace socoa { namespace cpp { namespace parse_tree_to_syntax_tree
+namespace socoa { namespace cpp { namespace detail { namespace syntax_analysis { namespace parse_tree_to_syntax_tree
 {
 
 inline
@@ -68,6 +68,6 @@ get_only_child_node(const tree_node_t& parent_node)
 	return *parent_node.children.begin();
 }
 
-}}} //namespace socoa::cpp
+}}}}} //namespace socoa::cpp::detail::syntax_analysis
 
 #endif

@@ -23,7 +23,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string>
 
-namespace socoa { namespace cpp
+namespace socoa { namespace cpp { namespace detail { namespace syntax_analysis
 {
 
 namespace source_code_completion
@@ -216,6 +216,6 @@ namespace source_code_completion
     }
 }
 
-}} //namespace socoa::cpp
+}}}} //namespace socoa::cpp::detail::syntax_analysis
 
 #endif

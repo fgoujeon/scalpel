@@ -21,10 +21,10 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_PARSE_TREE_TO_SYNTAX_TREE_CONVERT_FUNCTIONS_HPP
 #define SOCOA_CPP_PARSE_TREE_TO_SYNTAX_TREE_CONVERT_FUNCTIONS_HPP
 
-#include "../syntax_tree.hpp"
+#include "../../../syntax_tree.hpp"
 #include "typedefs.hpp"
 
-namespace socoa { namespace cpp { namespace parse_tree_to_syntax_tree
+namespace socoa { namespace cpp { namespace detail { namespace syntax_analysis { namespace parse_tree_to_syntax_tree
 {
 
 syntax_nodes::abstract_declarator
@@ -435,6 +435,6 @@ convert_using_directive(const tree_node_t& node);
 syntax_nodes::while_statement
 convert_while_statement(const tree_node_t& node);
 
-}}} //namespace socoa::cpp
+}}}}} //namespace socoa::cpp::detail::syntax_analysis
 
 #endif

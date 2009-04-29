@@ -21,8 +21,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "conversion_functions.hpp"
 
 #include <iostream>
+#include "../../../syntax_tree.hpp"
 #include "../grammar.hpp"
-#include "../syntax_tree.hpp"
 #include "basic_functions.hpp"
 #include "special_conversion_functions.hpp"
 #include "node_finder_and_converter.hpp"
@@ -30,7 +30,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 using namespace socoa::cpp::syntax_nodes;
 
-namespace socoa { namespace cpp { namespace parse_tree_to_syntax_tree
+namespace socoa { namespace cpp { namespace detail { namespace syntax_analysis { namespace parse_tree_to_syntax_tree
 {
 
 abstract_declarator
@@ -2034,5 +2034,5 @@ convert_while_statement(const tree_node_t& node)
 	return while_statement();
 }
 
-}}} //namespace socoa::cpp
+}}}}} //namespace socoa::cpp::detail::syntax_analysis
 

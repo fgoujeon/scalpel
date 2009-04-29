@@ -24,9 +24,9 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdexcept>
 #include <boost/spirit/tree/parse_tree.hpp>
 #include "../util/raii_affector.hpp"
-#include "parse_tree_to_syntax_tree/conversion_functions.hpp"
-#include "parse_tree_to_syntax_tree/basic_functions.hpp"
-#include "source_code_completion.hpp"
+#include "detail/syntax_analysis/parse_tree_to_syntax_tree/conversion_functions.hpp"
+#include "detail/syntax_analysis/parse_tree_to_syntax_tree/basic_functions.hpp"
+#include "detail/syntax_analysis/source_code_completion.hpp"
 #include "semantic_graph.hpp"
 #include "name_lookup.hpp"
 
@@ -43,7 +43,7 @@ syntax_analyzer::type_name_parser::type_name_parser(syntax_analyzer& a):
 }
 
 std::ptrdiff_t
-syntax_analyzer::type_name_parser::operator()(const scanner_t& scan) const
+syntax_analyzer::type_name_parser::operator()(const detail::syntax_analysis::scanner_t& scan) const
 {
     return syntax_analyzer_.parse_type_name(scan);
 }
@@ -89,9 +89,9 @@ syntax_analyzer::analyze(const std::string& input)
     }
 
     //convert spirit's parse tree to syntax tree and return the result
-	return parse_tree_to_syntax_tree::convert_translation_unit
+	return detail::syntax_analysis::parse_tree_to_syntax_tree::convert_translation_unit
 	(
-		parse_tree_to_syntax_tree::get_only_child_node
+		detail::syntax_analysis::parse_tree_to_syntax_tree::get_only_child_node
 		(
 			*info.trees.begin()
 		)
@@ -103,7 +103,7 @@ syntax_analyzer::analyze(const std::string& input)
  * represents a type or not.
  */
 std::ptrdiff_t
-syntax_analyzer::parse_type_name(const scanner_t& scan)
+syntax_analyzer::parse_type_name(const detail::syntax_analysis::scanner_t& scan)
 {
 	/*
     unsigned int parsing_progress = scan.first - &*(currently_analyzed_partial_input_->begin());

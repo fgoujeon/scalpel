@@ -24,6 +24,9 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/spirit/core.hpp>
 #include <boost/spirit/tree/parse_tree.hpp>
 
+namespace socoa { namespace cpp { namespace detail { namespace syntax_analysis
+{
+
 //scanner type of boost::spirit::pt_parse() function
 typedef
     boost::spirit::scanner
@@ -43,5 +46,7 @@ typedef
     >
     scanner_t
 ;
+
+}}}} //namespace socoa::cpp::detail::syntax_analysis
 
 #endif

@@ -22,10 +22,10 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_PARSE_TREE_TO_SYNTAX_TREE_SPACE_CONVERT_FUNCTIONS_HPP
 
 #include <boost/optional.hpp>
-#include "../syntax_nodes/space.hpp"
+#include "../../../syntax_nodes/space.hpp"
 #include "typedefs.hpp"
 
-namespace socoa { namespace cpp { namespace parse_tree_to_syntax_tree
+namespace socoa { namespace cpp { namespace detail { namespace syntax_analysis { namespace parse_tree_to_syntax_tree
 {
 
 /**
@@ -40,6 +40,6 @@ convert_previous_space(const tree_node_t& parent_node, tree_node_iterator_t i);
 boost::optional<syntax_nodes::space>
 convert_next_space(const tree_node_t& parent_node, tree_node_iterator_t i);
 
-}}} //namespace socoa::cpp::parse_tree_to_syntax_tree
+}}}}} //namespace socoa::cpp::detail::syntax_analysis::parse_tree_to_syntax_tree
 
 #endif

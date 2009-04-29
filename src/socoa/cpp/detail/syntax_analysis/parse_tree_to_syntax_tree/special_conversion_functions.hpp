@@ -23,11 +23,10 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string>
 #include <vector>
-#include "../../util/string_enumeration.hpp"
 #include "typedefs.hpp"
 #include "generic_node_converters.hpp"
 
-namespace socoa { namespace cpp { namespace parse_tree_to_syntax_tree
+namespace socoa { namespace cpp { namespace detail { namespace syntax_analysis { namespace parse_tree_to_syntax_tree
 {
 
 template<class T>
@@ -183,6 +182,6 @@ convert_simple_text(const tree_node_t&)
 	return syntax_nodes::simple_text_node<Text>();
 }
 
-}}} //namespace socoa::cpp::parse_tree_to_syntax_tree
+}}}}} //namespace socoa::cpp::detail::syntax_analysis::parse_tree_to_syntax_tree
 
 #endif

@@ -22,7 +22,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_SYNTAX_ANALYZER_HPP
 
 #include <map>
-#include "grammar.hpp"
+#include "detail/syntax_analysis/grammar.hpp"
 #include "syntax_tree.hpp"
 #include "semantic_analyzer.hpp"
 
@@ -39,13 +39,13 @@ source code and returns it.
 class syntax_analyzer
 {
     public:
-        class type_name_parser: public grammar::type_name_parser
+        class type_name_parser: public detail::syntax_analysis::grammar::type_name_parser
         {
             public:
                 type_name_parser(syntax_analyzer& a);
 
                 std::ptrdiff_t
-                operator()(const scanner_t& scan) const;
+                operator()(const detail::syntax_analysis::scanner_t& scan) const;
 
             private:
                 syntax_analyzer& syntax_analyzer_;
@@ -63,13 +63,13 @@ class syntax_analyzer
         analyze(const std::string& input);
 
         std::ptrdiff_t
-        parse_type_name(const scanner_t& scan);
+        parse_type_name(const detail::syntax_analysis::scanner_t& scan);
 
 		void
 		print_type_name_map_();
 
         type_name_parser type_name_parser_;
-        grammar grammar_;
+		detail::syntax_analysis::grammar grammar_;
         const std::string* input_;
         const std::string* currently_analyzed_partial_input_;
         unsigned int highest_parsing_progress_;

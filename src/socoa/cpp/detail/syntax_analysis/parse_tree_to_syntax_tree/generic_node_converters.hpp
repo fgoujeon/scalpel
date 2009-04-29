@@ -22,8 +22,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_PARSE_TREE_TO_SYNTAX_TREE_NODE_CONVERTERS_HPP
 
 #include <string>
+#include "../../../syntax_tree.hpp"
 #include "../grammar.hpp"
-#include "../syntax_tree.hpp"
 #include "conversion_functions.hpp"
 #include "special_conversion_functions_fwd.hpp"
 
@@ -55,7 +55,7 @@ struct node_converter_from_type<syntax_nodes::return_type>										\
 SOCOA_CPP_GENERATE_NODE_CONVERTER_FROM_ID_SPECIALIZATION(id, return_type, convert_function)\
 SOCOA_CPP_GENERATE_NODE_CONVERTER_FROM_TYPE_SPECIALIZATION(return_type, convert_function)
 
-namespace socoa { namespace cpp { namespace parse_tree_to_syntax_tree
+namespace socoa { namespace cpp { namespace detail { namespace syntax_analysis { namespace parse_tree_to_syntax_tree
 {
 
 /**
@@ -1002,7 +1002,7 @@ convert_node(const tree_node_t& node)
 	return node_converter_from_type<SyntaxNodeT>::convert(node);
 }
 
-}}} //namespace socoa::cpp::parse_tree_to_syntax_tree
+}}}}} //namespace socoa::cpp::detail::syntax_analysis::parse_tree_to_syntax_tree
 
 #undef SOCOA_CPP_GENERATE_NODE_CONVERTER_SPECIALIZATION
 #undef SOCOA_CPP_GENERATE_NODE_CONVERTER_FROM_ID_SPECIALIZATION

@@ -20,7 +20,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "basic_functions.hpp"
 
-namespace socoa { namespace cpp { namespace parse_tree_to_syntax_tree
+namespace socoa { namespace cpp { namespace detail { namespace syntax_analysis { namespace parse_tree_to_syntax_tree
 {
 
 tree_node_iterator_t
@@ -164,5 +164,5 @@ get_id(const tree_node_t& node)
     return -1;
 }
 
-}}} //namespace socoa::cpp::parse_tree_to_syntax_tree
+}}}}} //namespace socoa::cpp::detail::syntax_analysis::parse_tree_to_syntax_tree
 

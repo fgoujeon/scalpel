@@ -22,7 +22,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <boost/spirit/utility/chset.hpp>
 
-namespace socoa { namespace cpp
+namespace socoa { namespace cpp { namespace detail { namespace syntax_analysis
 {
 
 /*-----------------------------------------------*
@@ -641,8 +641,8 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	new_expression
-		= !str_p("::") >> !s >> str_p("new") >> !s >> !(new_placement >> !s) >> '(' >> !s >> type_id >> !s >> ')' >> !(!s >> new_initializer)
-		| !str_p("::") >> !s >> str_p("new") >> !s >> !(new_placement >> !s) >> new_type_id >> !(!s >> new_initializer)
+		= !(str_p("::") >> !s) >> str_p("new") >> !s >> !(new_placement >> !s) >> '(' >> !s >> type_id >> !s >> ')' >> !(!s >> new_initializer)
+		| !(str_p("::") >> !s) >> str_p("new") >> !s >> !(new_placement >> !s) >> new_type_id >> !(!s >> new_initializer)
 	;
 
 	new_placement
@@ -650,11 +650,11 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	new_type_id
-		= type_specifier_seq >> !s >> !new_declarator
+		= type_specifier_seq >> !(!s >> new_declarator)
 	;
 
 	new_declarator
-		= ptr_operator >> !s >> !new_declarator
+		= ptr_operator >> !(!s >> new_declarator)
 		| direct_new_declarator
 	;
 
@@ -663,7 +663,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	new_initializer
-		= '(' >> !s >> !expression_list >> !s >> ')'
+		= '(' >> !s >> !(expression_list >> !s) >> ')'
 	;
 
 	delete_expression
@@ -1732,4 +1732,4 @@ grammar::get_start_rule() const
 	return file;
 }
 
-}} //namespace socoa::cpp
+}}}} //namespace socoa::cpp::detail::syntax_analysis

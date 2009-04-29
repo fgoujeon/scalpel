@@ -26,7 +26,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/spirit/utility/functor_parser.hpp>
 #include "scanner.hpp"
 
-namespace socoa { namespace cpp
+namespace socoa { namespace cpp { namespace detail { namespace syntax_analysis
 {
 
 class grammar
@@ -681,6 +681,6 @@ class grammar
         configuration configuration_;
 };
 
-}} //namespace socoa::cpp
+}}}} //namespace socoa::cpp::detail::syntax_analysis
 
 #endif

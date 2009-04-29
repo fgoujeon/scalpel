@@ -27,7 +27,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "basic_functions.hpp"
 #include "node_finder.hpp"
 
-namespace socoa { namespace cpp { namespace parse_tree_to_syntax_tree
+namespace socoa { namespace cpp { namespace detail { namespace syntax_analysis { namespace parse_tree_to_syntax_tree
 {
 
 /**
@@ -79,6 +79,6 @@ find_and_convert_node(const tree_node_t& parent_node)
 	return node_finder_and_converter<SyntaxNodeT, Ids...>::convert(parent_node);
 }
 
-}}} //namespace socoa::cpp::parse_tree_to_syntax_tree
+}}}}} //namespace socoa::cpp::detail::syntax_analysis::parse_tree_to_syntax_tree
 
 #endif

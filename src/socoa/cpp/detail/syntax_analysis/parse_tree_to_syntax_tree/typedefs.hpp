@@ -25,7 +25,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/spirit/tree/parse_tree.hpp>
 #include "../grammar.hpp"
 
-namespace socoa { namespace cpp { namespace parse_tree_to_syntax_tree
+namespace socoa { namespace cpp { namespace detail { namespace syntax_analysis { namespace parse_tree_to_syntax_tree
 {
 
 typedef char const* iterator_t;
@@ -38,6 +38,6 @@ typedef tree_node_value_t::const_iterator_t tree_node_value_iterator_t;
 
 typedef grammar::parser_id id_t;
 
-}}} //namespace socoa::cpp::parse_tree_to_syntax_tree
+}}}}} //namespace socoa::cpp::detail::syntax_analysis::parse_tree_to_syntax_tree
 
 #endif
