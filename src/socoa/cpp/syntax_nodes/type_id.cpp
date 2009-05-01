@@ -25,19 +25,31 @@ namespace socoa { namespace cpp { namespace syntax_nodes
 
 type_id::type_id
 (
-)
+	type_specifier_seq&& type_specifier_seq_node,
+	boost::optional<space>&& pre_abstract_declarator_space_node,
+	boost::optional<abstract_declarator>&& abstract_declarator_node
+):
+	type_specifier_seq_(type_specifier_seq_node),
+	pre_abstract_declarator_space_(pre_abstract_declarator_space_node),
+	abstract_declarator_(abstract_declarator_node)
 {
 	update_node_list();
 }
 
 type_id::type_id(const type_id& o):
-	composite_node()
+	composite_node(),
+	type_specifier_seq_(o.type_specifier_seq_),
+	pre_abstract_declarator_space_(o.pre_abstract_declarator_space_),
+	abstract_declarator_(o.abstract_declarator_)
 {
 	update_node_list();
 }
 
 type_id::type_id(type_id&& o):
-	composite_node()
+	composite_node(),
+	type_specifier_seq_(std::move(o.type_specifier_seq_)),
+	pre_abstract_declarator_space_(std::move(o.pre_abstract_declarator_space_)),
+	abstract_declarator_(std::move(o.abstract_declarator_))
 {
 	update_node_list();
 }
@@ -45,6 +57,10 @@ type_id::type_id(type_id&& o):
 const type_id&
 type_id::operator=(const type_id& o)
 {
+	type_specifier_seq_ = o.type_specifier_seq_;
+	pre_abstract_declarator_space_ = o.pre_abstract_declarator_space_;
+	abstract_declarator_ = o.abstract_declarator_;
+
 	update_node_list();
 
 	return *this;
@@ -54,6 +70,9 @@ void
 type_id::update_node_list()
 {
 	clear();
+	add(type_specifier_seq_);
+	if(pre_abstract_declarator_space_) add(*pre_abstract_declarator_space_);
+	if(abstract_declarator_) add(*abstract_declarator_);
 }
 
 }}} //namespace socoa::cpp::syntax_nodes
