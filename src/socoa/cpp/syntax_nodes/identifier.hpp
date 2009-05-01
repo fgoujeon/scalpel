@@ -45,12 +45,12 @@ class identifier: public leaf_node
 
 		inline
 		const std::string
-		get_value() const;
+		value() const;
 };
 
 inline
 const std::string
-identifier::get_value() const
+identifier::value() const
 {
 	return raw_code();
 }

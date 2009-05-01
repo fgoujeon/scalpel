@@ -136,7 +136,7 @@ find_scope
 	//if the first part is a simple identifier
 	if(an_identifier)
 	{
-		const std::string& scope_name = an_identifier->get_value();
+		const std::string& scope_name = an_identifier->value();
 
 		//find the scope which has that identifier in the current scope and in the enclosing scopes
 		found_scope = recursive_ascent_find_scope(current_scope, scope_name);
@@ -161,7 +161,7 @@ find_scope
 
 					if(an_identifier)
 					{
-						const std::string& scope_name = an_identifier->get_value();
+						const std::string& scope_name = an_identifier->value();
 						found_scope = find_scope(*found_scope, scope_name);
 					}
 				}

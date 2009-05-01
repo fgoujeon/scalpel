@@ -81,7 +81,7 @@ semantic_analyzer::convert(const class_specifier& item)
 
 	if(id)
 	{
-		scope_cursor_.add_to_current_scope(class_(id->get_value()));
+		scope_cursor_.add_to_current_scope(class_(id->value()));
 	}
 }
 
@@ -153,7 +153,7 @@ semantic_analyzer::convert(const function_definition& item)
 				boost::optional<const identifier&> an_identifier = get<identifier>(an_unqualified_id);
 				if(an_identifier)
 				{
-					name = an_identifier->get_value();
+					name = an_identifier->value();
 				}
 
 				enclosing_scope = &scope_cursor_.get_current_scope();
@@ -192,7 +192,7 @@ semantic_analyzer::convert(const function_definition& item)
 					boost::optional<const identifier&> identifier_node = get<identifier>(&unqualified_id_node);
 					if(identifier_node)
 					{
-						name = identifier_node->get_value();
+						name = identifier_node->value();
 					}
 				}
 			}
@@ -298,7 +298,7 @@ semantic_analyzer::convert(const namespace_definition& item)
 	const boost::optional<const identifier&> an_identifier = item.get_identifier();
 	if(an_identifier)
 	{
-		namespace_name = an_identifier->get_value();
+		namespace_name = an_identifier->value();
 	}
 
 	//add the namespace to the current scope
@@ -410,7 +410,7 @@ semantic_analyzer::convert(const simple_declaration& item)
 					{
 						is_a_class_forward_declaration = true;
 						const identifier& identifier_node = opt_class_elaborated_specifier_node->identifier_node();
-						name = identifier_node.get_value();
+						name = identifier_node.value();
 					}
 				}
 			}
@@ -437,7 +437,7 @@ semantic_analyzer::convert(const simple_declaration& item)
 						if(boost::optional<const identifier&> an_identifier = get<identifier>(an_unqualified_id))
 						{
 							assert(name.empty());
-							name = an_identifier->get_value();
+							name = an_identifier->value();
 						}
 					}
 				}

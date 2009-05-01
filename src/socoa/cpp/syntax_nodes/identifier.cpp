@@ -29,19 +29,19 @@ identifier::identifier(std::string&& value):
 }
 
 identifier::identifier(const identifier& i):
-	leaf_node(i.get_value())
+	leaf_node(i.value())
 {
 }
 
 identifier::identifier(identifier&& i):
-	leaf_node(i.get_value())
+	leaf_node(i.value())
 {
 }
 
 const identifier&
 identifier::operator=(const identifier& i)
 {
-	raw_code(i.get_value());
+	raw_code(i.value());
 
 	return *this;
 }
@@ -49,7 +49,7 @@ identifier::operator=(const identifier& i)
 const identifier&
 identifier::operator=(identifier&& i)
 {
-	raw_code(i.get_value());
+	raw_code(i.value());
 
 	return *this;
 }
