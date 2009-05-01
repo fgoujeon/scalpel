@@ -35,7 +35,7 @@ class statement;
 /**
 \verbatim
 compound_statement
-	= "{", [sequence_node<statement>], "}"
+	= "{", [statement_seq], "}"
 ;
 \endverbatim
 */

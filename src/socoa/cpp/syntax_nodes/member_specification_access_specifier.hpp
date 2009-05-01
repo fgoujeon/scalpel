@@ -53,7 +53,7 @@ class member_specification_access_specifier: public composite_node
 
 		inline
 		const access_specifier&
-	   	get_access_specifier() const;
+	   	access_specifier_node() const;
 
 	private:
 		void
@@ -65,7 +65,7 @@ class member_specification_access_specifier: public composite_node
 
 inline
 const access_specifier&
-member_specification_access_specifier::get_access_specifier() const
+member_specification_access_specifier::access_specifier_node() const
 {
 	return access_specifier_;
 }

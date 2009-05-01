@@ -130,7 +130,7 @@ find_scope
 	scope* found_scope = 0;
 
 	//get the first part of the nested-name-specifier
-	const identifier_or_template_id& an_identifier_or_template_id = a_nested_name_specifier.get_identifier_or_template_id();
+	const identifier_or_template_id& an_identifier_or_template_id = a_nested_name_specifier.identifier_or_template_id_node();
 	boost::optional<const identifier&> an_identifier = get<identifier>(&an_identifier_or_template_id);
 
 	//if the first part is a simple identifier
@@ -146,7 +146,7 @@ find_scope
 	if(found_scope)
 	{
 		//is there other parts?
-		auto next_part_seq = a_nested_name_specifier.get_next_part_seq();
+		auto next_part_seq = a_nested_name_specifier.next_part_seq_node();
 		if(next_part_seq)
 		{
 			//for each part...
@@ -156,7 +156,7 @@ find_scope
 				{
 					const nested_name_specifier::next_part& next_part = i->main_node();
 
-					const identifier_or_template_id& an_identifier_or_template_id = next_part.get_identifier_or_template_id();
+					const identifier_or_template_id& an_identifier_or_template_id = next_part.identifier_or_template_id_node();
 					boost::optional<const identifier&> an_identifier = get<identifier>(&an_identifier_or_template_id);
 
 					if(an_identifier)

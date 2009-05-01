@@ -45,7 +45,7 @@ class member_declaration_function_definition: public composite_node
 
 		inline
 		const function_definition&
-		get_function_definition() const;
+		function_definition_node() const;
 
 	private:
 		void
@@ -56,7 +56,7 @@ class member_declaration_function_definition: public composite_node
 
 inline
 const function_definition&
-member_declaration_function_definition::get_function_definition() const
+member_declaration_function_definition::function_definition_node() const
 {
 	return function_definition_;
 }

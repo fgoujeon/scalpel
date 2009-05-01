@@ -73,23 +73,23 @@ class class_head: public composite_node
 
         inline
         const class_key&
-        get_class_key() const;
+        class_key_node() const;
 
         inline
         const boost::optional<const nested_name_specifier&>
-        get_nested_name_specifier() const;
+        nested_name_specifier_node() const;
 
         inline
         const boost::optional<const template_id&>
-        get_template_id() const;
+        template_id_node() const;
 
         inline
         const boost::optional<const identifier&>
-        get_identifier() const;
+        identifier_node() const;
 
         inline
         const boost::optional<const base_clause&>
-        get_base_clause() const;
+        base_clause_node() const;
 
     private:
 		void
@@ -108,35 +108,35 @@ class class_head: public composite_node
 
 inline
 const class_key&
-class_head::get_class_key() const
+class_head::class_key_node() const
 {
     return class_key_;
 }
 
 inline
 const boost::optional<const nested_name_specifier&>
-class_head::get_nested_name_specifier() const
+class_head::nested_name_specifier_node() const
 {
 	return boost::optional<const nested_name_specifier&>(nested_name_specifier_);
 }
 
 inline
 const boost::optional<const template_id&>
-class_head::get_template_id() const
+class_head::template_id_node() const
 {
 	return boost::optional<const template_id&>(template_id_);
 }
 
 inline
 const boost::optional<const identifier&>
-class_head::get_identifier() const
+class_head::identifier_node() const
 {
 	return boost::optional<const identifier&>(identifier_);
 }
 
 inline
 const boost::optional<const base_clause&>
-class_head::get_base_clause() const
+class_head::base_clause_node() const
 {
 	return boost::optional<const base_clause&>(base_clause_);
 }

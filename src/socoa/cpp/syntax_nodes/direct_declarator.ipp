@@ -26,21 +26,21 @@ namespace socoa { namespace cpp { namespace syntax_nodes
 
 inline
 const boost::optional<const declarator_id&>
-direct_declarator::get_declarator_id() const
+direct_declarator::declarator_id_node() const
 {
 	return boost::optional<const declarator_id&>(declarator_id_);
 }
 
 inline
 const boost::optional<const declarator&>
-direct_declarator::get_declarator() const
+direct_declarator::declarator_node() const
 {
 	return boost::optional<const declarator&>(declarator_);
 }
 
 inline
 const boost::optional<const direct_declarator::next_part_seq&>
-direct_declarator::get_next_part_seq() const
+direct_declarator::next_part_seq_node() const
 {
 	return boost::optional<const direct_declarator::next_part_seq&>(next_part_seq_);
 }
@@ -48,14 +48,14 @@ direct_declarator::get_next_part_seq() const
 
 inline
 const boost::optional<const parameter_declaration_clause&>
-direct_declarator::function_part::get_parameter_declaration_clause() const
+direct_declarator::function_part::parameter_declaration_clause_node() const
 {
     return boost::optional<const parameter_declaration_clause&>(parameter_declaration_clause_);
 }
 
 inline
 const boost::optional<const cv_qualifier_seq&>
-direct_declarator::function_part::get_cv_qualifier_seq() const
+direct_declarator::function_part::cv_qualifier_seq_node() const
 {
 	return boost::optional<const cv_qualifier_seq&>(*cv_qualifier_seq_);
 }

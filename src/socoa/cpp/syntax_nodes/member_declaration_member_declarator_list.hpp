@@ -54,11 +54,11 @@ class member_declaration_member_declarator_list: public composite_node
 
 		inline
 		const boost::optional<const decl_specifier_seq&>
-		get_decl_specifier_seq() const;
+		decl_specifier_seq_node() const;
 
 		inline
 		const boost::optional<const member_declarator_list&>
-		get_member_declarator_list() const;
+		member_declarator_list_node() const;
 
 	private:
 		void
@@ -72,14 +72,14 @@ class member_declaration_member_declarator_list: public composite_node
 
 inline
 const boost::optional<const decl_specifier_seq&>
-member_declaration_member_declarator_list::get_decl_specifier_seq() const
+member_declaration_member_declarator_list::decl_specifier_seq_node() const
 {
 	return boost::optional<const decl_specifier_seq&>(decl_specifier_seq_);
 }
 
 inline
 const boost::optional<const member_declarator_list&>
-member_declaration_member_declarator_list::get_member_declarator_list() const
+member_declaration_member_declarator_list::member_declarator_list_node() const
 {
 	return boost::optional<const member_declarator_list&>(member_declarator_list_);
 }

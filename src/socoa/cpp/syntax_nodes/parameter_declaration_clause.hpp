@@ -47,7 +47,7 @@ class parameter_declaration_clause: public composite_node
 
 		inline
 		const boost::optional<const parameter_declaration_list&>
-		get_parameter_declaration_list() const;
+		parameter_declaration_list_node() const;
 
 		inline
 		bool
@@ -68,7 +68,7 @@ class parameter_declaration_clause: public composite_node
 
 inline
 const boost::optional<const parameter_declaration_list&>
-parameter_declaration_clause::get_parameter_declaration_list() const
+parameter_declaration_clause::parameter_declaration_list_node() const
 {
 	return boost::optional<const parameter_declaration_list&>(parameter_declaration_list_);
 }

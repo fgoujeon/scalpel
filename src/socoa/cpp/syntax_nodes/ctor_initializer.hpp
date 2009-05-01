@@ -54,7 +54,7 @@ class ctor_initializer: public composite_node
 
         inline
         const mem_initializer_list&
-        get_mem_initializer_list() const;
+        mem_initializer_list_node() const;
 
     private:
 		void
@@ -66,7 +66,7 @@ class ctor_initializer: public composite_node
 
 inline
 const mem_initializer_list&
-ctor_initializer::get_mem_initializer_list() const
+ctor_initializer::mem_initializer_list_node() const
 {
     return mem_initializer_list_;
 }

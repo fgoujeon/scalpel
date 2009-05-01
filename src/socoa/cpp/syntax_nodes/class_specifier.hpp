@@ -60,11 +60,11 @@ class class_specifier: public composite_node
 
         inline
         const class_head&
-        get_class_head() const;
+        class_head_node() const;
 
         inline
         const boost::optional<const member_specification&>
-        get_member_specification() const;
+        member_specification_node() const;
 
     private:
 		void
@@ -79,14 +79,14 @@ class class_specifier: public composite_node
 
 inline
 const class_head&
-class_specifier::get_class_head() const
+class_specifier::class_head_node() const
 {
     return class_head_;
 }
 
 inline
 const boost::optional<const member_specification&>
-class_specifier::get_member_specification() const
+class_specifier::member_specification_node() const
 {
 	if(member_specification_)
 		return boost::optional<const member_specification&>(*member_specification_);

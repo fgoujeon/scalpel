@@ -42,7 +42,7 @@ class qualified_template_id: public composite_node
 
 		inline
 		const template_id&
-		get_template_id() const;
+		template_id_node() const;
 
 	private:
 		void
@@ -53,7 +53,7 @@ class qualified_template_id: public composite_node
 
 inline
 const template_id&
-qualified_template_id::get_template_id() const
+qualified_template_id::template_id_node() const
 {
 	return template_id_;
 }

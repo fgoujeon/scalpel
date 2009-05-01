@@ -46,7 +46,7 @@ class member_declarator_declarator: public composite_node
 
 		inline
 		const declarator&
-		get_declarator() const;
+		declarator_node() const;
 
 		inline
 		bool
@@ -62,7 +62,7 @@ class member_declarator_declarator: public composite_node
 
 inline
 const declarator&
-member_declarator_declarator::get_declarator() const
+member_declarator_declarator::declarator_node() const
 {
 	return declarator_;
 }

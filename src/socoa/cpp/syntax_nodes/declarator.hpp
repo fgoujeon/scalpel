@@ -57,11 +57,11 @@ class declarator: public composite_node
 
         inline
         const boost::optional<const ptr_operator_seq&>
-        get_ptr_operator_seq() const;
+        ptr_operator_seq_node() const;
 
         inline
         const direct_declarator&
-        get_direct_declarator() const;
+        direct_declarator_node() const;
 
     private:
 		void
@@ -74,14 +74,14 @@ class declarator: public composite_node
 
 inline
 const boost::optional<const ptr_operator_seq&>
-declarator::get_ptr_operator_seq() const
+declarator::ptr_operator_seq_node() const
 {
 	return boost::optional<const ptr_operator_seq&>(ptr_operator_seq_);
 }
 
 inline
 const direct_declarator&
-declarator::get_direct_declarator() const
+declarator::direct_declarator_node() const
 {
     return *direct_declarator_;
 }

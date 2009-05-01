@@ -52,7 +52,7 @@ class destructor_name: public composite_node
 
 		inline
 		const identifier_or_template_id&
-		get_identifier() const;
+		identifier_node() const;
 
 	private:
 		void
@@ -64,7 +64,7 @@ class destructor_name: public composite_node
 
 inline
 const identifier_or_template_id&
-destructor_name::get_identifier() const
+destructor_name::identifier_node() const
 {
 	return identifier_or_template_id_;
 }

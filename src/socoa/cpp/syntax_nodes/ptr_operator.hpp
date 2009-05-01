@@ -76,11 +76,11 @@ class ptr_operator: public composite_node
 
 		inline
 		const boost::optional<const nested_name_specifier&>
-		get_nested_name_specifier() const;
+		nested_name_specifier_node() const;
 
 		inline
 		const boost::optional<const cv_qualifier_seq&>
-		get_cv_qualifier_seq() const;
+		cv_qualifier_seq_node() const;
 
 	private:
 		void
@@ -111,14 +111,14 @@ ptr_operator::has_leading_double_colon() const
 
 inline
 const boost::optional<const nested_name_specifier&>
-ptr_operator::get_nested_name_specifier() const
+ptr_operator::nested_name_specifier_node() const
 {
 	return boost::optional<const nested_name_specifier&>(nested_name_specifier_);
 }
 
 inline
 const boost::optional<const cv_qualifier_seq&>
-ptr_operator::get_cv_qualifier_seq() const
+ptr_operator::cv_qualifier_seq_node() const
 {
 	return boost::optional<const cv_qualifier_seq&>(cv_qualifier_seq_);
 }

@@ -57,7 +57,7 @@ class mem_initializer: public composite_node
 
 		inline
 		const mem_initializer_id&
-		get_mem_initializer_id() const;
+		mem_initializer_id_node() const;
 
 	private:
 		void
@@ -72,7 +72,7 @@ class mem_initializer: public composite_node
 
 inline
 const mem_initializer_id&
-mem_initializer::get_mem_initializer_id() const
+mem_initializer::mem_initializer_id_node() const
 {
 	return mem_initializer_id_;
 }

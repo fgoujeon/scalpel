@@ -56,7 +56,7 @@ class init_declarator: public composite_node
 
 		inline
 		const declarator&
-		get_declarator() const;
+		declarator_node() const;
 
 	private:
 		void
@@ -69,7 +69,7 @@ class init_declarator: public composite_node
 
 inline
 const declarator&
-init_declarator::get_declarator() const
+init_declarator::declarator_node() const
 {
 	return declarator_;
 }

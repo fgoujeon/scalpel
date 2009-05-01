@@ -70,11 +70,11 @@ class base_specifier: public composite_node
 
         inline
         const boost::optional<const access_specifier&>
-        get_access_specifier() const;
+        access_specifier_node() const;
 
         inline
         const boost::optional<const nested_identifier_or_template_id&>
-        get_nested_identifier_or_template_id() const;
+        nested_identifier_or_template_id_node() const;
 
     private:
 		void
@@ -97,14 +97,14 @@ base_specifier::has_virtual_keyword() const
 
 inline
 const boost::optional<const access_specifier&>
-base_specifier::get_access_specifier() const
+base_specifier::access_specifier_node() const
 {
 	return boost::optional<const access_specifier&>(access_specifier_);
 }
 
 inline
 const boost::optional<const nested_identifier_or_template_id&>
-base_specifier::get_nested_identifier_or_template_id() const
+base_specifier::nested_identifier_or_template_id_node() const
 {
 	return boost::optional<const nested_identifier_or_template_id&>(nested_identifier_or_template_id_);
 }

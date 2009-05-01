@@ -67,7 +67,7 @@ class function_definition: public composite_node
 
 		inline
 		const boost::optional<const decl_specifier_seq&>
-		get_decl_specifier_seq() const;
+		decl_specifier_seq_node() const;
 
 		inline
 		const boost::optional<const space&>
@@ -75,7 +75,7 @@ class function_definition: public composite_node
 
 		inline
 		const declarator&
-		get_declarator() const;
+		declarator_node() const;
 
 		inline
 		const boost::optional<const space&>
@@ -83,7 +83,7 @@ class function_definition: public composite_node
 
 		inline
 		const boost::optional<const ctor_initializer&>
-		get_ctor_initializer() const;
+		ctor_initializer_node() const;
 
     private:
 		void
@@ -101,7 +101,7 @@ class function_definition: public composite_node
 
 inline
 const boost::optional<const decl_specifier_seq&>
-function_definition::get_decl_specifier_seq() const
+function_definition::decl_specifier_seq_node() const
 {
 	if(decl_specifier_seq_)
 		return boost::optional<const decl_specifier_seq&>(*decl_specifier_seq_);
@@ -118,7 +118,7 @@ function_definition::post_decl_specifier_seq_space_node() const
 
 inline
 const declarator&
-function_definition::get_declarator() const
+function_definition::declarator_node() const
 {
 	return *declarator_;
 }
@@ -132,7 +132,7 @@ function_definition::post_declarator_space_node() const
 
 inline
 const boost::optional<const ctor_initializer&>
-function_definition::get_ctor_initializer() const
+function_definition::ctor_initializer_node() const
 {
 	return boost::optional<const ctor_initializer&>(*ctor_initializer_);
 }

@@ -63,7 +63,7 @@ class member_declaration_unqualified_id: public composite_node
 
 		inline
 		const nested_name_specifier&
-		get_nested_name_specifier() const;
+		nested_name_specifier_node() const;
 
 		inline
 		bool
@@ -71,7 +71,7 @@ class member_declaration_unqualified_id: public composite_node
 
 		inline
 		const unqualified_id&
-		get_unqualified_id() const;
+		unqualified_id_node() const;
 
 	private:
 		void
@@ -96,7 +96,7 @@ member_declaration_unqualified_id::has_leading_double_colon() const
 
 inline
 const nested_name_specifier&
-member_declaration_unqualified_id::get_nested_name_specifier() const
+member_declaration_unqualified_id::nested_name_specifier_node() const
 {
 	return nested_name_specifier_;
 }
@@ -110,7 +110,7 @@ member_declaration_unqualified_id::has_template_keyword() const
 
 inline
 const unqualified_id&
-member_declaration_unqualified_id::get_unqualified_id() const
+member_declaration_unqualified_id::unqualified_id_node() const
 {
 	return unqualified_id_;
 }

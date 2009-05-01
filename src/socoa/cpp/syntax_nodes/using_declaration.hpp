@@ -57,11 +57,11 @@ class using_declaration: public composite_node
 
 		inline
 		const boost::optional<const nested_name_specifier&>
-		get_nested_name_specifier() const;
+		nested_name_specifier_node() const;
 
 		inline
 		const boost::optional<const unqualified_id&>
-		get_unqualified_id() const;
+		unqualified_id_node() const;
 
 	private:
 		void
@@ -89,14 +89,14 @@ using_declaration::has_leading_double_colon() const
 
 inline
 const boost::optional<const nested_name_specifier&>
-using_declaration::get_nested_name_specifier() const
+using_declaration::nested_name_specifier_node() const
 {
 	return boost::optional<const nested_name_specifier&>(nested_name_specifier_);
 }
 
 inline
 const boost::optional<const unqualified_id&>
-using_declaration::get_unqualified_id() const
+using_declaration::unqualified_id_node() const
 {
 	return unqualified_id_;
 }

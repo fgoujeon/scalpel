@@ -61,11 +61,11 @@ class namespace_definition: public composite_node
 
 		inline
 		const boost::optional<const identifier&>
-	   	get_identifier() const;
+	   	identifier_node() const;
 
 		inline
 		const boost::optional<const sequence_node<declaration>&>
-		get_declaration_seq() const;
+		declaration_seq_node() const;
 
 	private:
 		void
@@ -81,14 +81,14 @@ class namespace_definition: public composite_node
 
 inline
 const boost::optional<const identifier&>
-namespace_definition::get_identifier() const
+namespace_definition::identifier_node() const
 {
 	return boost::optional<const identifier&>(identifier_);
 }
 
 inline
 const boost::optional<const sequence_node<declaration>&>
-namespace_definition::get_declaration_seq() const
+namespace_definition::declaration_seq_node() const
 {
 	if(declaration_seq_)
 		return boost::optional<const sequence_node<declaration>&>(*declaration_seq_);

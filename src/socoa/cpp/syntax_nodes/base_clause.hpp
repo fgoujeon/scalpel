@@ -57,7 +57,7 @@ class base_clause: public composite_node
 
         inline
         const base_specifier_list&
-        get_base_specifier_list() const;
+        base_specifier_list_node() const;
 
     private:
 		void
@@ -76,7 +76,7 @@ base_clause::space_node() const
 
 inline
 const base_specifier_list&
-base_clause::get_base_specifier_list() const
+base_clause::base_specifier_list_node() const
 {
     return base_specifier_list_;
 }

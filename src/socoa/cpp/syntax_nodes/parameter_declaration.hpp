@@ -60,11 +60,11 @@ class parameter_declaration: public composite_node
 
 		inline
 		const decl_specifier_seq&
-		get_decl_specifier_seq() const;
+		decl_specifier_seq_node() const;
 
 		inline
 		const boost::optional<const declarator&>
-		get_declarator() const;
+		declarator_node() const;
 
 		inline
 		bool
@@ -82,14 +82,14 @@ class parameter_declaration: public composite_node
 
 inline
 const decl_specifier_seq&
-parameter_declaration::get_decl_specifier_seq() const
+parameter_declaration::decl_specifier_seq_node() const
 {
 	return decl_specifier_seq_;
 }
 
 inline
 const boost::optional<const declarator&>
-parameter_declaration::get_declarator() const
+parameter_declaration::declarator_node() const
 {
 	return boost::optional<const declarator&>(declarator_);
 }

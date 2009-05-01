@@ -61,11 +61,11 @@ class template_id: public composite_node
 
 		inline
 		const identifier&
-		get_identifier() const;
+		identifier_node() const;
 
 		inline
 		const boost::optional<const sequence_node<template_argument, comma>&>
-		get_template_argument_list() const;
+		template_argument_list_node() const;
 
 	private:
 		void
@@ -80,14 +80,14 @@ class template_id: public composite_node
 
 inline
 const identifier&
-template_id::get_identifier() const
+template_id::identifier_node() const
 {
 	return identifier_;
 }
 
 inline
 const boost::optional<const sequence_node<template_argument, comma>&>
-template_id::get_template_argument_list() const
+template_id::template_argument_list_node() const
 {
 	if(template_argument_list_)
 		return boost::optional<const sequence_node<template_argument, comma>&>(*template_argument_list_);

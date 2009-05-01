@@ -52,7 +52,7 @@ class template_declaration: public composite_node
 
 		inline
 		const declaration&
-		get_declaration() const;
+		declaration_node() const;
 
 	private:
 		void
@@ -72,7 +72,7 @@ template_declaration::has_export_keyword() const
 
 inline
 const declaration&
-template_declaration::get_declaration() const
+template_declaration::declaration_node() const
 {
 	return *declaration_;
 }

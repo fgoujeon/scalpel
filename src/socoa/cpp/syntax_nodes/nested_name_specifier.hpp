@@ -53,11 +53,11 @@ class nested_name_specifier: public composite_node
 
 		inline
 		const identifier_or_template_id&
-		get_identifier_or_template_id() const;
+		identifier_or_template_id_node() const;
 
 		inline
 		const boost::optional<const next_part_seq&>
-		get_next_part_seq() const;
+		next_part_seq_node() const;
 
 	private:
 		void
@@ -91,7 +91,7 @@ class nested_name_specifier::next_part: public composite_node
 
 		inline
 		const identifier_or_template_id&
-		get_identifier_or_template_id() const;
+		identifier_or_template_id_node() const;
 
 	private:
 		void
@@ -110,21 +110,21 @@ nested_name_specifier::next_part::has_template_keyword() const
 
 inline
 const identifier_or_template_id&
-nested_name_specifier::next_part::get_identifier_or_template_id() const
+nested_name_specifier::next_part::identifier_or_template_id_node() const
 {
 	return identifier_or_template_id_;
 }
 
 inline
 const identifier_or_template_id&
-nested_name_specifier::get_identifier_or_template_id() const
+nested_name_specifier::identifier_or_template_id_node() const
 {
 	return identifier_or_template_id_;
 }
 
 inline
 const boost::optional<const nested_name_specifier::next_part_seq&>
-nested_name_specifier::get_next_part_seq() const
+nested_name_specifier::next_part_seq_node() const
 {
 	return boost::optional<const nested_name_specifier::next_part_seq&>(next_part_seq_);
 }

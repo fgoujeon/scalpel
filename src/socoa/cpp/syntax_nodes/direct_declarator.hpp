@@ -82,15 +82,15 @@ class direct_declarator: public composite_node
 
         inline
         const boost::optional<const declarator_id&>
-        get_declarator_id() const;
+        declarator_id_node() const;
 
         inline
         const boost::optional<const declarator&>
-        get_declarator() const;
+        declarator_node() const;
 
         inline
 		const boost::optional<const next_part_seq&>
-        get_next_part_seq() const;
+        next_part_seq_node() const;
 
     private:
 		void
@@ -130,11 +130,11 @@ class direct_declarator::function_part: public composite_node
 
 		inline
 		const boost::optional<const parameter_declaration_clause&>
-		get_parameter_declaration_clause() const;
+		parameter_declaration_clause_node() const;
 
 		inline
 		const boost::optional<const cv_qualifier_seq&>
-		get_cv_qualifier_seq() const;
+		cv_qualifier_seq_node() const;
 
 	private:
 		void

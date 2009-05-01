@@ -52,11 +52,11 @@ class nested_identifier_or_template_id: public composite_node
 
 		inline
 		const boost::optional<const nested_name_specifier&>
-		get_nested_name_specifier() const;
+		nested_name_specifier_node() const;
 
 		inline
 		const identifier_or_template_id&
-		get_identifier_or_template_id() const;
+		identifier_or_template_id_node() const;
 
 	private:
 		void
@@ -76,14 +76,14 @@ nested_identifier_or_template_id::has_leading_double_colon() const
 
 inline
 const boost::optional<const nested_name_specifier&>
-nested_identifier_or_template_id::get_nested_name_specifier() const
+nested_identifier_or_template_id::nested_name_specifier_node() const
 {
 	return boost::optional<const nested_name_specifier&>(nested_name_specifier_);
 }
 
 inline
 const identifier_or_template_id&
-nested_identifier_or_template_id::get_identifier_or_template_id() const
+nested_identifier_or_template_id::identifier_or_template_id_node() const
 {
 	return identifier_or_template_id_;
 }

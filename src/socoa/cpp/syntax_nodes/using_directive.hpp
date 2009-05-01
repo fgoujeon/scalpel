@@ -65,11 +65,11 @@ class using_directive: public composite_node
 
 		inline
 		const boost::optional<const nested_name_specifier&>
-		get_nested_name_specifier() const;
+		nested_name_specifier_node() const;
 
 		inline
 		const identifier&
-	   	get_identifier() const;
+	   	identifier_node() const;
 
 	private:
 		void
@@ -94,14 +94,14 @@ using_directive::has_leading_double_colon() const
 
 inline
 const boost::optional<const nested_name_specifier&>
-using_directive::get_nested_name_specifier() const
+using_directive::nested_name_specifier_node() const
 {
 	return boost::optional<const nested_name_specifier&>(nested_name_specifier_);
 }
 
 inline
 const identifier&
-using_directive::get_identifier() const
+using_directive::identifier_node() const
 {
 	return identifier_;
 }

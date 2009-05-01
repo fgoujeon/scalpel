@@ -77,7 +77,7 @@ semantic_analyzer::convert(const class_head&)
 void
 semantic_analyzer::convert(const class_specifier& item)
 {
-	boost::optional<const identifier&> id = item.get_class_head().get_identifier();
+	boost::optional<const identifier&> id = item.class_head_node().identifier_node();
 
 	if(id)
 	{
@@ -139,7 +139,7 @@ semantic_analyzer::convert(const function_definition& item)
 	std::string name;
 	scope* enclosing_scope = 0;
 
-	const boost::optional<const declarator_id&> a_declarator_id = item.get_declarator().get_direct_declarator().get_declarator_id();
+	const boost::optional<const declarator_id&> a_declarator_id = item.declarator_node().direct_declarator_node().declarator_id_node();
 	if(a_declarator_id)
 	{
 		boost::optional<const id_expression&> an_id_expression = get<id_expression>(a_declarator_id);
@@ -177,7 +177,7 @@ semantic_analyzer::convert(const function_definition& item)
 					std::cout << "qualified_nested_id\n";
 
 					bool leading_double_colon = a_qualified_nested_id->has_leading_double_colon();
-					const nested_name_specifier& a_nested_name_specifier = a_qualified_nested_id->get_nested_name_specifier();
+					const nested_name_specifier& a_nested_name_specifier = a_qualified_nested_id->nested_name_specifier_node();
 
 					if(leading_double_colon)
 					{
@@ -188,7 +188,7 @@ semantic_analyzer::convert(const function_definition& item)
 						enclosing_scope = name_lookup::find_scope(scope_cursor_.get_current_scope(), a_nested_name_specifier);
 					}
 
-					const unqualified_id& unqualified_id_node = a_qualified_nested_id->get_unqualified_id();
+					const unqualified_id& unqualified_id_node = a_qualified_nested_id->unqualified_id_node();
 					boost::optional<const identifier&> identifier_node = get<identifier>(&unqualified_id_node);
 					if(identifier_node)
 					{
@@ -295,7 +295,7 @@ semantic_analyzer::convert(const namespace_definition& item)
 {
 	//get the namespace name
 	std::string namespace_name;
-	const boost::optional<const identifier&> an_identifier = item.get_identifier();
+	const boost::optional<const identifier&> an_identifier = item.identifier_node();
 	if(an_identifier)
 	{
 		namespace_name = an_identifier->value();
@@ -306,7 +306,7 @@ semantic_analyzer::convert(const namespace_definition& item)
 
 	//add the declarations of the namespace definition in the namespace semantic node
 	scope_cursor_.enter_last_added_scope(); //we have to enter even if there's no declaration
-	const boost::optional<const declaration_seq&> a_declaration_seq = item.get_declaration_seq();
+	const boost::optional<const declaration_seq&> a_declaration_seq = item.declaration_seq_node();
 	if(a_declaration_seq)
 	{
 		convert(*a_declaration_seq);
@@ -377,8 +377,8 @@ semantic_analyzer::convert(const simple_declaration& item)
 	bool is_a_class_forward_declaration = false;
 	bool is_a_function_declaration = false;
 
-	const boost::optional<const decl_specifier_seq&> an_optional_decl_specifier_seq = item.get_decl_specifier_seq();
-	const boost::optional<const init_declarator_list&> an_optional_init_declarator_list = item.get_init_declarator_list();
+	const boost::optional<const decl_specifier_seq&> an_optional_decl_specifier_seq = item.decl_specifier_seq_node();
+	const boost::optional<const init_declarator_list&> an_optional_init_declarator_list = item.init_declarator_list_node();
 
 	if(an_optional_decl_specifier_seq)
 	{
@@ -422,11 +422,11 @@ semantic_analyzer::convert(const simple_declaration& item)
 		const init_declarator_list& an_init_declarator_list = *an_optional_init_declarator_list;
 		for(auto i = an_init_declarator_list.begin(); i != an_init_declarator_list.end(); ++i)
 		{
-			const declarator& a_declarator = i->main_node().get_declarator();
-			const direct_declarator& a_direct_declarator = a_declarator.get_direct_declarator();
+			const declarator& a_declarator = i->main_node().declarator_node();
+			const direct_declarator& a_direct_declarator = a_declarator.direct_declarator_node();
 
 			//get the item name
-			const boost::optional<const declarator_id&> an_optional_declarator_id = a_direct_declarator.get_declarator_id();
+			const boost::optional<const declarator_id&> an_optional_declarator_id = a_direct_declarator.declarator_id_node();
 			if(an_optional_declarator_id)
 			{
 				const declarator_id& a_declarator_id = *an_optional_declarator_id;
@@ -444,7 +444,7 @@ semantic_analyzer::convert(const simple_declaration& item)
 			}
 
 			//determine the appropriate semantic graph node
-			auto a_direct_declarator_next_part_seq = a_direct_declarator.get_next_part_seq();
+			auto a_direct_declarator_next_part_seq = a_direct_declarator.next_part_seq_node();
 			if(a_direct_declarator_next_part_seq)
 			{
 				for(auto j = a_direct_declarator_next_part_seq->begin(); j != a_direct_declarator_next_part_seq->end(); ++j)

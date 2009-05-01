@@ -33,7 +33,7 @@ namespace socoa { namespace cpp { namespace syntax_nodes
 /**
 \verbatim
 conversion_function_id
-	= "operator" >> !s >> type_specifier_seq >> !(!s >> ptr_operator_seq)
+	= "operator", type_specifier_seq, [ptr_operator_seq]
 ;
 \endverbatim
 */

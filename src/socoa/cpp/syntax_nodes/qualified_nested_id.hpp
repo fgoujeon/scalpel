@@ -63,7 +63,7 @@ class qualified_nested_id: public composite_node
 
 		inline
 		const nested_name_specifier&
-		get_nested_name_specifier() const;
+		nested_name_specifier_node() const;
 
 		inline
 		bool
@@ -71,7 +71,7 @@ class qualified_nested_id: public composite_node
 
 		inline
 		const unqualified_id&
-		get_unqualified_id() const;
+		unqualified_id_node() const;
 
 	private:
 		void
@@ -95,7 +95,7 @@ qualified_nested_id::has_leading_double_colon() const
 
 inline
 const nested_name_specifier&
-qualified_nested_id::get_nested_name_specifier() const
+qualified_nested_id::nested_name_specifier_node() const
 {
 	return nested_name_specifier_;
 }
@@ -109,7 +109,7 @@ qualified_nested_id::has_template_keyword() const
 
 inline
 const unqualified_id&
-qualified_nested_id::get_unqualified_id() const
+qualified_nested_id::unqualified_id_node() const
 {
 	return unqualified_id_;
 }

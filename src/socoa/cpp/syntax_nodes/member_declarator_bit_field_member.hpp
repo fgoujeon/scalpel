@@ -46,7 +46,7 @@ class member_declarator_bit_field_member: public composite_node
 
 		inline
 		const boost::optional<const identifier&>
-		get_identifier() const;
+		identifier_node() const;
 
 	private:
 		void
@@ -57,7 +57,7 @@ class member_declarator_bit_field_member: public composite_node
 
 inline
 const boost::optional<const identifier&>
-member_declarator_bit_field_member::get_identifier() const
+member_declarator_bit_field_member::identifier_node() const
 {
 	return boost::optional<const identifier&>(identifier_);
 }

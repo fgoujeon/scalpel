@@ -52,11 +52,11 @@ class simple_template_type_specifier: public composite_node
 
 		inline
 		const nested_name_specifier&
-		get_nested_name_specifier() const;
+		nested_name_specifier_node() const;
 
 		inline
 		const template_id&
-		get_template_id() const;
+		template_id_node() const;
 
 	private:
 		void
@@ -76,14 +76,14 @@ simple_template_type_specifier::has_leading_double_colon() const
 
 inline
 const nested_name_specifier&
-simple_template_type_specifier::get_nested_name_specifier() const
+simple_template_type_specifier::nested_name_specifier_node() const
 {
 	return nested_name_specifier_;
 }
 
 inline
 const template_id&
-simple_template_type_specifier::get_template_id() const
+simple_template_type_specifier::template_id_node() const
 {
 	return template_id_;
 }

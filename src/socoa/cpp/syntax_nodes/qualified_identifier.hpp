@@ -45,7 +45,7 @@ class qualified_identifier: public composite_node
 
 		inline
 		const identifier&
-	   	get_identifier() const;
+	   	identifier_node() const;
 
 	private:
 		void
@@ -56,7 +56,7 @@ class qualified_identifier: public composite_node
 
 inline
 const identifier&
-qualified_identifier::get_identifier() const
+qualified_identifier::identifier_node() const
 {
 	return identifier_;
 }
