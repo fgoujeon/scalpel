@@ -33,18 +33,28 @@ namespace socoa { namespace cpp { namespace syntax_nodes
 
 class template_argument;
 
+/**
+template_id
+	= type_name >> !s >> '<' >> !s >> !(template_argument_list >> !s) >> '>'
+;
+*/
 class template_id: public composite_node
 {
 	public:
 		template_id
 		(
-			identifier&& an_identifier,
-			boost::optional<sequence_node<template_argument, comma>>&& a_template_argument_list
+			identifier&& identifier_node,
+			boost::optional<space>&& post_type_name_space_node,
+			boost::optional<space>&& post_opening_angle_bracket_space_node,
+			boost::optional<sequence_node<template_argument, comma>>&& template_argument_list_node,
+			boost::optional<space>&& post_template_argument_list_space_node
 		);
 
 		template_id(const template_id& o);
 
 		template_id(template_id&& o);
+
+		~template_id();
 
 		const template_id&
 		operator=(const template_id& o);
@@ -62,7 +72,10 @@ class template_id: public composite_node
 		update_node_list();
 
 		identifier identifier_;
-		std::shared_ptr<sequence_node<template_argument, comma>> template_argument_list_;
+		boost::optional<space> post_type_name_space_;
+		boost::optional<space> post_opening_angle_bracket_space_;
+		sequence_node<template_argument, comma>* template_argument_list_;
+		boost::optional<space> post_template_argument_list_space_;
 };
 
 inline

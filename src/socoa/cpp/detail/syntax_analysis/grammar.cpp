@@ -1694,7 +1694,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	Convenience rules
 	*/
 	type_name
-		= identifier & type_name_p
+		= token_node_d[identifier & type_name_p]
 	;
 
 	identifier_or_template_id

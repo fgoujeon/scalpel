@@ -1866,10 +1866,17 @@ convert_template_id(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::TEMPLATE_ID);
 
+	tree_node_iterator_t type_name_it = node.children.begin();
+	tree_node_iterator_t opening_angle_bracket_it = find_node(node, "<");
+	tree_node_iterator_t template_argument_list_it = find_node<id_t::TEMPLATE_ARGUMENT_LIST>(node);
+
     return template_id
     (
-        find_and_convert_node<identifier, id_t::TYPE_NAME>(node),
-        find_and_convert_node<template_argument_list, id_t::TEMPLATE_ARGUMENT_LIST>(node)
+        convert_node<identifier>(*type_name_it),
+		convert_next_space(node, type_name_it),
+		convert_next_space(node, opening_angle_bracket_it),
+        convert_optional<template_argument_list>(template_argument_list_it, node),
+		convert_next_space(node, template_argument_list_it)
     );
 }
 
