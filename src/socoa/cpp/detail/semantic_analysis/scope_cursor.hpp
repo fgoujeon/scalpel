@@ -22,6 +22,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #define SOCOA_CPP_DETAIL_SEMANTIC_ANALYSIS_SCOPE_CURSOR_HPP
 
 #include <boost/noncopyable.hpp>
+#include <vector>
 #include "../../semantic_nodes/scope.hpp"
 #include "../../semantic_nodes/scope_visitor.hpp"
 #include "../../semantic_nodes/namespace_.hpp"
@@ -69,10 +70,14 @@ class scope_cursor: public boost::noncopyable
 		void
 		leave_scope();
 
+		const std::vector<semantic_nodes::scope*>&
+		lastly_leaved_scopes() const;
+
 	private:
 		semantic_nodes::scope* global_scope_;
 		semantic_nodes::scope* current_scope_;
 		semantic_nodes::scope* last_added_scope_;
+		std::vector<semantic_nodes::scope*> lastly_leaved_scopes_;
 };
 
 class scope_cursor::namespace_adder: public semantic_nodes::scope_visitor

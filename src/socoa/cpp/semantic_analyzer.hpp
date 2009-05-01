@@ -39,7 +39,7 @@ class semantic_analyzer
 		semantic_analyzer();
 
 		semantic_graph
-		operator()(syntax_tree&& tree);
+		operator()(const syntax_tree& tree);
 
 	private:
         void

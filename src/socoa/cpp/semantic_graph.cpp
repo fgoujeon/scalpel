@@ -20,16 +20,17 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "semantic_graph.hpp"
 
+#include <iostream>
+
 namespace socoa { namespace cpp
 {
 
-semantic_graph::semantic_graph(syntax_tree&& tree):
-	syntax_tree_(tree)
+semantic_graph::semantic_graph():
+	root_node_(new semantic_nodes::namespace_())
 {
 }
 
 semantic_graph::semantic_graph(semantic_graph&& o):
-	syntax_tree_(std::move(o.syntax_tree_)),
 	root_node_(std::move(o.root_node_))
 {
 }
@@ -37,7 +38,35 @@ semantic_graph::semantic_graph(semantic_graph&& o):
 semantic_nodes::namespace_&
 semantic_graph::root_node()
 {
-	return root_node_;
+	return *root_node_;
+}
+
+semantic_graph::scope_const_iterator_range
+semantic_graph::lastly_closed_scope_iterator() const
+{
+	scope_const_iterator first = lastly_closed_scopes_.begin();
+	scope_const_iterator last = lastly_closed_scopes_.end();
+
+	scope_const_indirect_iterator const_indirect_first(first), const_indirect_last(last);
+
+	return scope_const_iterator_range(const_indirect_first, const_indirect_last);
+}
+
+semantic_graph::scope_const_reverse_iterator_range
+semantic_graph::lastly_closed_scope_reverse_iterator() const
+{
+	scope_const_reverse_iterator first = lastly_closed_scopes_.rbegin();
+	scope_const_reverse_iterator last = lastly_closed_scopes_.rend();
+
+	scope_const_reverse_indirect_iterator const_reverse_indirect_first(first), const_reverse_indirect_last(last);
+
+	return scope_const_reverse_iterator_range(const_reverse_indirect_first, const_reverse_indirect_last);
+}
+
+void
+semantic_graph::lastly_closed_scopes(const scopes_t& scopes)
+{
+	lastly_closed_scopes_ = scopes;
 }
 
 }} //namespace socoa::cpp

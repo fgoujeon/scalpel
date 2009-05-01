@@ -35,10 +35,10 @@ semantic_analyzer::semantic_analyzer():
 }
 
 semantic_graph
-semantic_analyzer::operator()(syntax_tree&& tree)
+semantic_analyzer::operator()(const syntax_tree& tree)
 {
 	//create semantic graph
-	semantic_graph graph(std::move(tree));
+	semantic_graph graph;
 
 	//current scope = global namespace
 	scope_cursor_.initialize(graph.root_node());
@@ -58,6 +58,12 @@ semantic_analyzer::operator()(syntax_tree&& tree)
 			convert(i->main_node());
 		}
 	}
+
+	auto lastly_leaved_scopes = scope_cursor_.lastly_leaved_scopes();
+	lastly_leaved_scopes.push_back(&graph.root_node());
+	graph.lastly_closed_scopes(lastly_leaved_scopes);
+
+	graph.lastly_closed_scope_iterator().back().has_enclosing_scope();
 
 	return graph;
 }
@@ -262,21 +268,25 @@ semantic_analyzer::convert(const member_specification_access_specifier&)
 void
 semantic_analyzer::convert(const namespace_definition& item)
 {
+	//get the namespace name
 	std::string namespace_name;
 	const boost::optional<const identifier&> an_identifier = item.get_identifier();
 	if(an_identifier)
 	{
 		namespace_name = an_identifier->get_value();
 	}
+
+	//add the namespace to the current scope
 	scope_cursor_.add_to_current_scope(namespace_(namespace_name));
 
+	//add the declarations of the namespace definition in the namespace semantic node
+	scope_cursor_.enter_last_added_scope(); //we have to enter even if there's no declaration
 	const boost::optional<const declaration_seq&> a_declaration_seq = item.get_declaration_seq();
 	if(a_declaration_seq)
 	{
-		scope_cursor_.enter_last_added_scope();
 		convert(*a_declaration_seq);
-		scope_cursor_.leave_scope();
 	}
+	scope_cursor_.leave_scope();
 }
 
 void

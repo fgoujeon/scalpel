@@ -39,6 +39,7 @@ scope_cursor::initialize(semantic_nodes::scope& a_scope)
 {
 	global_scope_ = &a_scope;
 	current_scope_ = &a_scope;
+	lastly_leaved_scopes_.clear();
 }
 
 semantic_nodes::scope&
@@ -94,7 +95,14 @@ void
 scope_cursor::leave_scope()
 {
 	assert(current_scope_->has_enclosing_scope());
+	lastly_leaved_scopes_.push_back(current_scope_);
 	current_scope_ = &current_scope_->enclosing_scope();
+}
+
+const std::vector<semantic_nodes::scope*>&
+scope_cursor::lastly_leaved_scopes() const
+{
+	return lastly_leaved_scopes_;
 }
 
 
