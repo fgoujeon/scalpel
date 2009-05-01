@@ -47,6 +47,7 @@ find_unqualified_name(const scope& current_scope, const std::string& name, bool 
     1. Current scope
     */
     {
+		std::cout << "Try to find " << name << " in scope " << current_scope.name() << "\n";
 		scope::named_entity_const_iterator_range members = current_scope.named_entities();
 		scope::named_entity_const_indirect_iterator member_it = std::find_if
         (

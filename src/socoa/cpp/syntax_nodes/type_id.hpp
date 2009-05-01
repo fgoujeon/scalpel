@@ -28,14 +28,21 @@ namespace socoa { namespace cpp { namespace syntax_nodes
 
 class type_id: public composite_node
 {
-    public:
-		type_id();
+	public:
+		type_id
+		(
+		);
 
 		type_id(const type_id& o);
 
 		type_id(type_id&& o);
 
-    private:
+		const type_id&
+		operator=(const type_id& o);
+
+	private:
+		void
+		update_node_list();
 };
 
 }}} //namespace socoa::cpp::syntax_nodes

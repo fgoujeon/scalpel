@@ -34,7 +34,7 @@ typedef
 	alternative_node
 	<
 //		assignment_expression,
-//		type_id,
+		type_id,
 		id_expression
 	>
 	template_argument_t
@@ -43,6 +43,7 @@ typedef
 class template_argument: public template_argument_t
 {
 	public:
+		template_argument(type_id&& o): template_argument_t(o){}
 		template_argument(id_expression&& o): template_argument_t(o){}
 
 		template_argument(const template_argument& o): template_argument_t(static_cast<const template_argument_t&>(o)){}

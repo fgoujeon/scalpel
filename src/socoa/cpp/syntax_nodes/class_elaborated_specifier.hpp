@@ -57,6 +57,10 @@ class class_elaborated_specifier: public composite_node
 		const class_elaborated_specifier&
 		operator=(const class_elaborated_specifier& o);
 
+		inline
+		const identifier&
+		identifier_node() const;
+
 	private:
 		void
 		update_node_list();
@@ -69,6 +73,13 @@ class class_elaborated_specifier: public composite_node
 		boost::optional<space> post_nested_name_specifier_space_;
 		identifier identifier_;
 };
+
+inline
+const identifier&
+class_elaborated_specifier::identifier_node() const
+{
+	return identifier_;
+}
 
 }}} //namespace socoa::cpp::syntax_nodes
 

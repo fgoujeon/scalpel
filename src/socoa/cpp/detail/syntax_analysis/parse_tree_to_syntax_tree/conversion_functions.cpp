@@ -1844,7 +1844,7 @@ convert_template_argument(const tree_node_t& node)
 	<
 		template_argument,
 		//id_t::TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION,
-		//id_t::TYPE_ID,
+		id_t::TYPE_ID,
 		id_t::ID_EXPRESSION
 	>(node);
 }
@@ -1939,6 +1939,14 @@ convert_try_block(const tree_node_t& node)
 		convert_next_space(node, compound_statement_it),
 		convert_node<handler_seq>(*handler_seq_it)
 	);
+}
+
+type_id
+convert_type_id(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::TYPE_ID);
+
+	return type_id();
 }
 
 type_id_sizeof_expression

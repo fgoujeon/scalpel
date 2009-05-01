@@ -395,15 +395,23 @@ semantic_analyzer::convert(const simple_declaration& item)
 				}
 				else if(auto an_elaborated_type_specifier_ptr = get<elaborated_type_specifier>(a_type_specifier_ptr))
 				{
-					/*
-					if(an_elaborated_type_specifier_ptr->get_class_key())
+					//const class_template_elaborated_specifier* = get<>;
+					//const enum_elaborated_specifier* ;
+					//const typename_template_elaborated_specifier* ;
+					//const typename_elaborated_specifier* ;
+
+					if
+					(
+						auto opt_class_elaborated_specifier_node = get<class_elaborated_specifier>
+						(
+							an_elaborated_type_specifier_ptr
+						)
+					)
 					{
 						is_a_class_forward_declaration = true;
-						auto an_optional_identifier = an_elaborated_type_specifier_ptr->get_identifier();
-						assert(an_optional_identifier);
-						name = an_optional_identifier->get_value();
+						const identifier& identifier_node = opt_class_elaborated_specifier_node->identifier_node();
+						name = identifier_node.get_value();
 					}
-					*/
 				}
 			}
 		}

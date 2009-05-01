@@ -23,17 +23,37 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
-type_id::type_id()
+type_id::type_id
+(
+)
 {
+	update_node_list();
 }
 
-type_id::type_id(const type_id&):
+type_id::type_id(const type_id& o):
 	composite_node()
 {
+	update_node_list();
 }
 
-type_id::type_id(type_id&&)
+type_id::type_id(type_id&& o):
+	composite_node()
 {
+	update_node_list();
+}
+
+const type_id&
+type_id::operator=(const type_id& o)
+{
+	update_node_list();
+
+	return *this;
+}
+
+void
+type_id::update_node_list()
+{
+	clear();
 }
 
 }}} //namespace socoa::cpp::syntax_nodes
