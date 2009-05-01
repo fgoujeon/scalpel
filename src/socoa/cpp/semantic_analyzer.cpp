@@ -28,6 +28,7 @@ namespace socoa { namespace cpp
 
 using namespace syntax_nodes;
 using namespace semantic_nodes;
+using namespace detail::semantic_analysis;
 
 semantic_analyzer::semantic_analyzer():
 	conversion_helper_(*this)
@@ -132,9 +133,12 @@ semantic_analyzer::convert(const elaborated_type_specifier&)
 void
 semantic_analyzer::convert(const function_definition& item)
 {
+	//
 	//get the name and the enclosing scope of the function
+	//
 	std::string name;
 	scope* enclosing_scope = 0;
+
 	const boost::optional<const declarator_id&> a_declarator_id = item.get_declarator().get_direct_declarator().get_declarator_id();
 	if(a_declarator_id)
 	{
@@ -156,6 +160,7 @@ semantic_analyzer::convert(const function_definition& item)
 			}
 			else if(a_qualified_id)
 			{
+				std::cout << "qualified_id\n";
 			//	const qualified_identifier* const a_qualified_identifier =
 			//		boost::get<qualified_identifier>(a_qualified_id)
 			//	;
@@ -169,16 +174,25 @@ semantic_analyzer::convert(const function_definition& item)
 
 				if(a_qualified_nested_id)
 				{
+					std::cout << "qualified_nested_id\n";
+
 					bool leading_double_colon = a_qualified_nested_id->has_leading_double_colon();
 					const nested_name_specifier& a_nested_name_specifier = a_qualified_nested_id->get_nested_name_specifier();
 
 					if(leading_double_colon)
 					{
-						enclosing_scope = detail::semantic_analysis::name_lookup::find_scope(scope_cursor_.get_global_scope(), a_nested_name_specifier);
+						enclosing_scope = name_lookup::find_scope(scope_cursor_.get_global_scope(), a_nested_name_specifier);
 					}
 					else
 					{
-						enclosing_scope = detail::semantic_analysis::name_lookup::find_scope(scope_cursor_.get_current_scope(), a_nested_name_specifier);
+						enclosing_scope = name_lookup::find_scope(scope_cursor_.get_current_scope(), a_nested_name_specifier);
+					}
+
+					const unqualified_id& unqualified_id_node = a_qualified_nested_id->get_unqualified_id();
+					boost::optional<const identifier&> identifier_node = get<identifier>(&unqualified_id_node);
+					if(identifier_node)
+					{
+						name = identifier_node->get_value();
 					}
 				}
 			}
@@ -186,32 +200,43 @@ semantic_analyzer::convert(const function_definition& item)
 			{
 				assert(false);
 			}
-
-
 		}
 	}
 
-	//check whether the function has already been declared
-	bool already_declared = false;
+	//get the corresponding function semantic node (it exists if the function has been declared)
+	scope* function_scope = 0;
 	if(!name.empty() && enclosing_scope)
 	{
-		auto entities = enclosing_scope->named_entities();
-		for(auto i = entities.begin(); i != entities.end(); ++i)
+		auto scopes = enclosing_scope->scopes();
+		for(auto i = scopes.begin(); i != scopes.end(); ++i)
 		{
-			const named_entity& entity = *i;
-			///\todo check function signature
-			if(entity.name() == name)
+			scope& scope = *i;
+
+			///\todo check the function's signature
+			if(scope.name() == name)
 			{
-				already_declared = true;
+				function_scope = &scope;
 				break;
 			}
 		}
 	}
 
 	//if the function hasn't been declared, this definition serves as a declaration
-	if(!already_declared && enclosing_scope && !name.empty())
+	if(!function_scope && enclosing_scope && !name.empty())
 	{
 		scope_cursor_.add_to_current_scope(function(name));
+		function_scope = &scope_cursor_.get_current_scope().scopes().back();
+	}
+
+	//enter and leave the function body
+	if(function_scope)
+	{
+		scope_cursor_.enter_scope(*function_scope);
+		scope_cursor_.leave_scope();
+	}
+	else
+	{
+		std::cout << "function name: " << name << "\n";
 	}
 }
 

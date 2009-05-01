@@ -65,6 +65,9 @@ class scope_cursor: public boost::noncopyable
 		add_to_current_scope(semantic_nodes::variable&& o);
 
 		void
+		enter_scope(semantic_nodes::scope& a_scope);
+
+		void
 		enter_last_added_scope();
 
 		void

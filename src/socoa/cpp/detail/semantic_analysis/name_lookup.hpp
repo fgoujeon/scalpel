@@ -38,6 +38,20 @@ find_scope
 	const syntax_nodes::nested_name_specifier& nested_name_specifier
 );
 
+semantic_nodes::scope*
+recursive_ascent_find_scope
+(
+	semantic_nodes::scope& start_scope,
+	const std::string& scope_name
+);
+
+semantic_nodes::scope*
+find_scope
+(
+	semantic_nodes::scope& parent_scope,
+	const std::string& scope_name
+);
+
 }}}}} //namespace socoa::cpp::detail::semantic_analysis::name_lookup
 
 #endif

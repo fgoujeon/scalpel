@@ -20,6 +20,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "scope_cursor.hpp"
 
+#include <iostream>
+
 namespace socoa { namespace cpp { namespace detail { namespace semantic_analysis
 {
 
@@ -85,16 +87,24 @@ scope_cursor::add_to_current_scope(semantic_nodes::variable&& o)
 }
 
 void
+scope_cursor::enter_scope(semantic_nodes::scope& a_scope)
+{
+	std::cout << "Entering " << a_scope.name() << "\n";
+	current_scope_ = &a_scope;
+}
+
+void
 scope_cursor::enter_last_added_scope()
 {
 	assert(!current_scope_->scopes().empty());
-	current_scope_ = &current_scope_->scopes().back();
+	enter_scope(current_scope_->scopes().back());
 }
 
 void
 scope_cursor::leave_scope()
 {
 	assert(current_scope_->has_enclosing_scope());
+	std::cout << "Leaving " << current_scope_->name() << "\n";
 	lastly_leaved_scopes_.push_back(current_scope_);
 	current_scope_ = &current_scope_->enclosing_scope();
 }

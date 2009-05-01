@@ -22,6 +22,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <algorithm>
 #include <functional>
+#include <iostream>
 
 namespace socoa { namespace cpp { namespace detail { namespace semantic_analysis { namespace name_lookup
 {
@@ -122,83 +123,108 @@ find_scope
 	const nested_name_specifier& a_nested_name_specifier
 )
 {
+	std::cout << "find_scope()\n";
+	std::cout << "nested_name_specifier = " << a_nested_name_specifier.raw_code() << "\n";
+
 	scope* found_scope = 0;
 
+	//get the first part of the nested-name-specifier
 	const identifier_or_template_id& an_identifier_or_template_id = a_nested_name_specifier.get_identifier_or_template_id();
 	boost::optional<const identifier&> an_identifier = get<identifier>(&an_identifier_or_template_id);
 
+	//if the first part is a simple identifier
 	if(an_identifier)
 	{
 		const std::string& scope_name = an_identifier->get_value();
 
-		//find the scope which has that name
-		auto scopes = current_scope.scopes();
-		auto scope_it = std::find_if
-        (
-            scopes.begin(),
-            scopes.end(),
-			std::bind
-			(
-				std::equal_to<std::string>(),
-				std::cref(scope_name),
-				std::bind
-				(
-					&scope::name,
-					std::placeholders::_1
-				)
-			)
-        );
-
-		if(scope_it == scopes.end())
-			return 0;
-
-		found_scope = &*scope_it;
+		//find the scope which has that identifier in the current scope and in the enclosing scopes
+		found_scope = recursive_ascent_find_scope(current_scope, scope_name);
 	}
 
+	//if the first part scope has been found, go on with the next parts
 	if(found_scope)
 	{
+		//is there other parts?
 		auto next_part_seq = a_nested_name_specifier.get_next_part_seq();
 		if(next_part_seq)
 		{
+			//for each part...
 			for(auto i = next_part_seq->begin(); i != next_part_seq->end(); ++i)
 			{
-				const nested_name_specifier::next_part& next_part = i->main_node();
-
-				const identifier_or_template_id& an_identifier_or_template_id = next_part.get_identifier_or_template_id();
-				boost::optional<const identifier&> an_identifier = get<identifier>(&an_identifier_or_template_id);
-
-				if(an_identifier)
+				if(found_scope)
 				{
-					const std::string& scope_name = an_identifier->get_value();
+					const nested_name_specifier::next_part& next_part = i->main_node();
 
-					//find the scope which has that name
-					auto scopes = current_scope.scopes();
-					auto scope_it = std::find_if
-					(
-						scopes.begin(),
-						scopes.end(),
-						std::bind
-						(
-							std::equal_to<std::string>(),
-							std::cref(scope_name),
-							std::bind
-							(
-								&scope::name,
-								std::placeholders::_1
-							)
-						)
-					);
+					const identifier_or_template_id& an_identifier_or_template_id = next_part.get_identifier_or_template_id();
+					boost::optional<const identifier&> an_identifier = get<identifier>(&an_identifier_or_template_id);
 
-					if(scope_it == scopes.end())
-						return 0;
-
-					found_scope = &*scope_it;
+					if(an_identifier)
+					{
+						const std::string& scope_name = an_identifier->get_value();
+						found_scope = find_scope(*found_scope, scope_name);
+					}
 				}
+				else
+					break;
 			}
 		}
 	}
 
 	return found_scope;
+}
+
+semantic_nodes::scope*
+recursive_ascent_find_scope
+(
+	scope& start_scope,
+	const std::string& scope_name
+)
+{
+	scope* found_scope = 0;
+	scope* current_scope = &start_scope;
+
+	while((found_scope = find_scope(*current_scope, scope_name)) == 0 && current_scope->has_enclosing_scope())
+	{
+		current_scope = &current_scope->enclosing_scope();
+	}
+
+	return found_scope;
+}
+
+semantic_nodes::scope*
+find_scope
+(
+	scope& parent_scope,
+	const std::string& scope_name
+)
+{
+	auto scopes = parent_scope.scopes();
+	auto scope_it = std::find_if
+	(
+		scopes.begin(),
+		scopes.end(),
+		std::bind
+		(
+			std::equal_to<std::string>(),
+			std::cref(scope_name),
+			std::bind
+			(
+				&scope::name,
+				std::placeholders::_1
+			)
+		)
+	);
+
+	if(scope_it != scopes.end())
+	{
+		std::cout << scope_name << " found in " << parent_scope.name() << "\n";
+		return &*scope_it;
+	}
+	else
+	{
+		std::cout << scope_name << " not found in " << parent_scope.name() << "\n";
+		return 0;
+	}
 }
 
 }}}}} //namespace socoa::cpp::detail::semantic_analysis::name_lookup
