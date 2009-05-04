@@ -18,21 +18,22 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_NODES_STATEMENT_HPP
-#define SOCOA_CPP_SYNTAX_NODES_STATEMENT_HPP
+#ifndef SOCOA_CPP_SYNTAX_NODES_STATEMENT_FWD_HPP
+#define SOCOA_CPP_SYNTAX_NODES_STATEMENT_FWD_HPP
 
 #include "alternative_node.hpp"
-#include "labeled_statement.hpp"
-#include "expression_statement.hpp"
-#include "compound_statement.hpp"
-#include "selection_statement.hpp"
-#include "iteration_statement.hpp"
+#include "block_declaration_fwd.hpp"
+#include "iteration_statement_fwd.hpp"
 #include "jump_statement.hpp"
-#include "block_declaration.hpp"
-#include "try_block.hpp"
+#include "labeled_statement_fwd.hpp"
+#include "selection_statement_fwd.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
+
+class expression_statement;
+class compound_statement;
+class try_block;
 
 typedef
 	alternative_node

@@ -26,11 +26,10 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "composite_node.hpp"
 #include "sequence_node.hpp"
 #include "space.hpp"
+#include "statement_fwd.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
-
-class statement;
 
 /**
 \verbatim

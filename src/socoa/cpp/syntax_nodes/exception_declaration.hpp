@@ -39,22 +39,8 @@ typedef
 		type_specifier_seq,
 		simple_text_node<util::extern_strings::ellipsis>
 	>
-	exception_declaration_t
+	exception_declaration
 ;
-
-struct exception_declaration: public exception_declaration_t
-{
-	exception_declaration(exception_declarator&& o): exception_declaration_t(o){};
-	exception_declaration(exception_abstract_declarator&& o): exception_declaration_t(o){};
-	exception_declaration(type_specifier_seq&& o): exception_declaration_t(o){};
-	exception_declaration(simple_text_node<util::extern_strings::ellipsis>&& o): exception_declaration_t(o){};
-
-	exception_declaration(const exception_declaration& o): exception_declaration_t(static_cast<const exception_declaration_t&>(o)){};
-
-	exception_declaration(exception_declaration&& o): exception_declaration_t(std::move(static_cast<exception_declaration_t&&>(o))){};
-
-	using exception_declaration_t::operator=;
-};
 
 }}} //namespace socoa::cpp::syntax_nodes
 
