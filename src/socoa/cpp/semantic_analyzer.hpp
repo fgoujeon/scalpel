@@ -24,7 +24,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <memory>
 #include "syntax_tree.hpp"
 #include "semantic_graph.hpp"
-#include "detail/semantic_analysis/syntax_tree_to_any_conversion_helper.hpp"
 #include "detail/semantic_analysis/scope_cursor.hpp"
 
 namespace socoa { namespace cpp
@@ -36,163 +35,212 @@ namespace socoa { namespace cpp
 class semantic_analyzer
 {
     public:
+		class alternative_visitor
+		{
+			public:
+				alternative_visitor(semantic_analyzer& analyzer);
+
+				template<class T>
+				inline
+				void
+				operator()(const T& syntax_node) const;
+
+			private:
+				semantic_analyzer& analyzer_;
+		};
+
 		semantic_analyzer();
 
 		semantic_graph
 		operator()(const syntax_tree& tree);
 
 	private:
-        void
-		convert(const syntax_nodes::class_head& item);
-
-        void
-		convert(const syntax_nodes::class_specifier& item);
-
-        void
-		convert(const syntax_nodes::compound_statement& item);
-
-        void
-		convert(const syntax_nodes::conversion_function_id& item);
-
-        void
-		convert(const syntax_nodes::ctor_initializer& item);
-
-        void
-		convert(const syntax_nodes::cv_qualifier& item);
-
-        void
-		convert(const syntax_nodes::declarator& item);
-
-        void
-		convert(const syntax_nodes::destructor_name& item);
-
-        void
-		convert(const syntax_nodes::direct_declarator& item);
-
-        void
-		convert(const syntax_nodes::direct_declarator::array_part& item);
-
-        void
-		convert(const syntax_nodes::direct_declarator::function_part& item);
-
-        void
-		convert(const syntax_nodes::elaborated_type_specifier& item);
-
-        void
-		convert(const syntax_nodes::function_definition& item);
-
-        void
-		convert(const syntax_nodes::identifier& item);
-
-        void
-		convert(const syntax_nodes::init_declarator& item);
-
-        void
-		convert(const syntax_nodes::mem_initializer& item);
-
-        void
-		convert(const syntax_nodes::member_declaration_function_definition& item);
-
-        void
-		convert(const syntax_nodes::member_declaration_member_declarator_list& item);
-
-        void
-		convert(const syntax_nodes::member_declaration_unqualified_id& item);
-
-        void
-		convert(const syntax_nodes::member_declarator_bit_field_member& item);
-
-        void
-		convert(const syntax_nodes::member_declarator_declarator& item);
-
-        void
-		convert(const syntax_nodes::member_specification& item);
-
-        void
-		convert(const syntax_nodes::member_specification_access_specifier& item);
-
-        void
-		convert(const syntax_nodes::namespace_definition& item);
-
-        void
-		convert(const syntax_nodes::nested_identifier_or_template_id& item);
-
-        void
-		convert(const syntax_nodes::nested_name_specifier& item);
-
-        void
-		convert(const syntax_nodes::nested_name_specifier::next_part& item);
-
-        void
-		convert(const syntax_nodes::operator_function_id& item);
-
-        void
-		convert(const syntax_nodes::parameter_declaration& item);
-
-        void
-		convert(const syntax_nodes::parameter_declaration_clause& item);
-
-        void
-		convert(const syntax_nodes::ptr_operator& item);
-
-        void
-		convert(const syntax_nodes::qualified_identifier& item);
-
-        void
-		convert(const syntax_nodes::qualified_nested_id& item);
-
-        void
-		convert(const syntax_nodes::qualified_operator_function_id& item);
-
-        void
-		convert(const syntax_nodes::qualified_template_id& item);
-
-        void
-		convert(const syntax_nodes::simple_declaration& item);
-
-        void
-		convert(const syntax_nodes::simple_template_type_specifier& item);
-
-        void
-		convert(const syntax_nodes::template_declaration& item);
-
-        void
-		convert(const syntax_nodes::template_id& item);
-
-        void
-		convert(const syntax_nodes::using_declaration& item);
-
-        void
-		convert(const syntax_nodes::using_directive& item);
-
-		template<const std::vector<std::string>& StringList>
+		template<class... NodesT>
+		inline
 		void
-		convert(const util::string_enumeration<StringList>& a_string_enumeration);
+		analyze(const syntax_nodes::alternative_node<NodesT...>& node);
+
+		template<class... NodesT>
+		inline
+		void
+		analyze_alternative(const syntax_nodes::alternative_node<NodesT...>& node);
+
+		template<class T, const syntax_nodes::leaf_node& SeparatorNode>
+		inline
+		void
+		analyze(const syntax_nodes::sequence_node<T, SeparatorNode>& seq);
+
+		template<class T, const syntax_nodes::leaf_node& SeparatorNode>
+		void
+		analyze_sequence(const syntax_nodes::sequence_node<T, SeparatorNode>& seq);
 
         void
-        convert_separator(const std::string& separator);
+		analyze(const syntax_nodes::class_head& syntax_node);
 
-        template<class T>
         void
-        convert(const T& item);
+		analyze(const syntax_nodes::class_specifier& syntax_node);
 
-		friend class detail::semantic_analysis::syntax_tree_to_any_conversion_helper<semantic_analyzer>;
+        void
+		analyze(const syntax_nodes::compound_statement& syntax_node);
 
-		detail::semantic_analysis::syntax_tree_to_any_conversion_helper<semantic_analyzer> conversion_helper_;
+        void
+		analyze(const syntax_nodes::conversion_function_id& syntax_node);
+
+        void
+		analyze(const syntax_nodes::ctor_initializer& syntax_node);
+
+        void
+		analyze(const syntax_nodes::cv_qualifier& syntax_node);
+
+        void
+		analyze(const syntax_nodes::declaration& syntax_node);
+
+        void
+		analyze(const syntax_nodes::declarator& syntax_node);
+
+        void
+		analyze(const syntax_nodes::destructor_name& syntax_node);
+
+        void
+		analyze(const syntax_nodes::direct_declarator& syntax_node);
+
+        void
+		analyze(const syntax_nodes::direct_declarator::array_part& syntax_node);
+
+        void
+		analyze(const syntax_nodes::direct_declarator::function_part& syntax_node);
+
+        void
+		analyze(const syntax_nodes::elaborated_type_specifier& syntax_node);
+
+        void
+		analyze(const syntax_nodes::function_definition& syntax_node);
+
+        void
+		analyze(const syntax_nodes::identifier& syntax_node);
+
+        void
+		analyze(const syntax_nodes::init_declarator& syntax_node);
+
+        void
+		analyze(const syntax_nodes::mem_initializer& syntax_node);
+
+        void
+		analyze(const syntax_nodes::member_declaration_function_definition& syntax_node);
+
+        void
+		analyze(const syntax_nodes::member_declaration_member_declarator_list& syntax_node);
+
+        void
+		analyze(const syntax_nodes::member_declaration_unqualified_id& syntax_node);
+
+        void
+		analyze(const syntax_nodes::member_declarator_bit_field_member& syntax_node);
+
+        void
+		analyze(const syntax_nodes::member_declarator_declarator& syntax_node);
+
+        void
+		analyze(const syntax_nodes::member_specification& syntax_node);
+
+        void
+		analyze(const syntax_nodes::member_specification_access_specifier& syntax_node);
+
+        void
+		analyze(const syntax_nodes::namespace_definition& syntax_node);
+
+        void
+		analyze(const syntax_nodes::nested_identifier_or_template_id& syntax_node);
+
+        void
+		analyze(const syntax_nodes::nested_name_specifier& syntax_node);
+
+        void
+		analyze(const syntax_nodes::nested_name_specifier::next_part& syntax_node);
+
+        void
+		analyze(const syntax_nodes::operator_function_id& syntax_node);
+
+        void
+		analyze(const syntax_nodes::parameter_declaration& syntax_node);
+
+        void
+		analyze(const syntax_nodes::parameter_declaration_clause& syntax_node);
+
+        void
+		analyze(const syntax_nodes::ptr_operator& syntax_node);
+
+        void
+		analyze(const syntax_nodes::qualified_identifier& syntax_node);
+
+        void
+		analyze(const syntax_nodes::qualified_nested_id& syntax_node);
+
+        void
+		analyze(const syntax_nodes::qualified_operator_function_id& syntax_node);
+
+        void
+		analyze(const syntax_nodes::qualified_template_id& syntax_node);
+
+        void
+		analyze(const syntax_nodes::simple_declaration& syntax_node);
+
+        void
+		analyze(const syntax_nodes::simple_template_type_specifier& syntax_node);
+
+        void
+		analyze(const syntax_nodes::template_declaration& syntax_node);
+
+        void
+		analyze(const syntax_nodes::template_id& syntax_node);
+
+        void
+		analyze(const syntax_nodes::using_declaration& syntax_node);
+
+        void
+		analyze(const syntax_nodes::using_directive& syntax_node);
+
 		detail::semantic_analysis::scope_cursor scope_cursor_;
+		alternative_visitor alternative_visitor_;
 };
 
-template<const std::vector<std::string>& StringList>
+template<class T>
+inline
 void
-semantic_analyzer::convert(const util::string_enumeration<StringList>&)
+semantic_analyzer::alternative_visitor::operator()(const T& syntax_node) const
 {
+	analyzer_.analyze(syntax_node);
 }
 
-template<class T>
+template<class... NodesT>
 void
-semantic_analyzer::convert(const T& item)
+semantic_analyzer::analyze(const syntax_nodes::alternative_node<NodesT...>& node)
 {
-	conversion_helper_.convert(item);
+	analyze_alternative(node);
+}
+
+template<class... NodesT>
+void
+semantic_analyzer::analyze_alternative(const syntax_nodes::alternative_node<NodesT...>& node)
+{
+	syntax_nodes::apply_visitor(alternative_visitor_, node);
+}
+
+template<class T, const syntax_nodes::leaf_node& SeparatorNode>
+void
+semantic_analyzer::analyze(const syntax_nodes::sequence_node<T, SeparatorNode>& seq)
+{
+	analyze_sequence(seq);
+}
+
+template<class T, const syntax_nodes::leaf_node& SeparatorNode>
+void
+semantic_analyzer::analyze_sequence(const syntax_nodes::sequence_node<T, SeparatorNode>& seq)
+{
+    for(auto i = seq.begin(); i != seq.end(); ++i)
+    {
+        analyze(i->main_node());
+    }
 }
 
 }} //namespace socoa::cpp

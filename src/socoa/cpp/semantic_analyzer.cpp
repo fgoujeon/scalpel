@@ -30,8 +30,13 @@ using namespace syntax_nodes;
 using namespace semantic_entities;
 using namespace detail::semantic_analysis;
 
+semantic_analyzer::alternative_visitor::alternative_visitor(semantic_analyzer& analyzer):
+	analyzer_(analyzer)
+{
+}
+
 semantic_analyzer::semantic_analyzer():
-	conversion_helper_(*this)
+	alternative_visitor_(*this)
 {
 }
 
@@ -56,7 +61,8 @@ semantic_analyzer::operator()(const syntax_tree& tree)
 			++i
 		)
 		{
-			convert(i->main_node());
+			const syntax_nodes::declaration_t& declaration_node = i->main_node();
+			analyze_alternative(declaration_node);
 		}
 	}
 
@@ -70,14 +76,14 @@ semantic_analyzer::operator()(const syntax_tree& tree)
 }
 
 void
-semantic_analyzer::convert(const class_head&)
+semantic_analyzer::analyze(const class_head&)
 {
 }
 
 void
-semantic_analyzer::convert(const class_specifier& item)
+semantic_analyzer::analyze(const class_specifier& syntax_node)
 {
-	boost::optional<const identifier&> id = item.class_head_node().identifier_node();
+	boost::optional<const identifier&> id = syntax_node.class_head_node().identifier_node();
 
 	if(id)
 	{
@@ -86,58 +92,65 @@ semantic_analyzer::convert(const class_specifier& item)
 }
 
 void
-semantic_analyzer::convert(const compound_statement& item)
+semantic_analyzer::analyze(const compound_statement& syntax_node)
 {
 
 }
 
 void
-semantic_analyzer::convert(const conversion_function_id&)
+semantic_analyzer::analyze(const conversion_function_id&)
 {
 }
 
 void
-semantic_analyzer::convert(const ctor_initializer&)
+semantic_analyzer::analyze(const ctor_initializer&)
 {
 }
 
 void
-semantic_analyzer::convert(const cv_qualifier&)
+semantic_analyzer::analyze(const cv_qualifier&)
 {
 }
 
 void
-semantic_analyzer::convert(const declarator&)
+semantic_analyzer::analyze(const declaration& syntax_node)
+{
+	const declaration_t& node = syntax_node;
+	analyze_alternative(node);
+}
+
+void
+semantic_analyzer::analyze(const declarator&)
 {
 }
 
 void
-semantic_analyzer::convert(const destructor_name&)
+semantic_analyzer::analyze(const destructor_name&)
 {
 }
 
 void
-semantic_analyzer::convert(const direct_declarator&)
+semantic_analyzer::analyze(const direct_declarator&)
 {
 }
 
 void
-semantic_analyzer::convert(const direct_declarator::array_part&)
+semantic_analyzer::analyze(const direct_declarator::array_part&)
 {
 }
 
 void
-semantic_analyzer::convert(const direct_declarator::function_part&)
+semantic_analyzer::analyze(const direct_declarator::function_part&)
 {
 }
 
 void
-semantic_analyzer::convert(const elaborated_type_specifier&)
+semantic_analyzer::analyze(const elaborated_type_specifier&)
 {
 }
 
 void
-semantic_analyzer::convert(const function_definition& item)
+semantic_analyzer::analyze(const function_definition& syntax_node)
 {
 	//
 	//get the name and the enclosing scope of the function
@@ -145,7 +158,7 @@ semantic_analyzer::convert(const function_definition& item)
 	std::string name;
 	scope* enclosing_scope = 0;
 
-	const boost::optional<const declarator_id&> a_declarator_id = item.declarator_node().direct_declarator_node().declarator_id_node();
+	const boost::optional<const declarator_id&> a_declarator_id = syntax_node.declarator_node().direct_declarator_node().declarator_id_node();
 	if(a_declarator_id)
 	{
 		boost::optional<const id_expression&> an_id_expression = get<id_expression>(a_declarator_id);
@@ -239,8 +252,8 @@ semantic_analyzer::convert(const function_definition& item)
 	{
 		scope_cursor_.enter_scope(*function_scope);
 
-		auto opt_compound_statement = item.compound_statement_node();
-		if(opt_compound_statement) convert(*opt_compound_statement);
+		auto opt_compound_statement = syntax_node.compound_statement_node();
+		if(opt_compound_statement) analyze(*opt_compound_statement);
 
 		scope_cursor_.leave_scope();
 	}
@@ -251,61 +264,61 @@ semantic_analyzer::convert(const function_definition& item)
 }
 
 void
-semantic_analyzer::convert(const identifier&)
+semantic_analyzer::analyze(const identifier&)
 {
 }
 
 void
-semantic_analyzer::convert(const init_declarator&)
+semantic_analyzer::analyze(const init_declarator&)
 {
 }
 
 void
-semantic_analyzer::convert(const mem_initializer&)
+semantic_analyzer::analyze(const mem_initializer&)
 {
 }
 
 void
-semantic_analyzer::convert(const member_declaration_function_definition&)
+semantic_analyzer::analyze(const member_declaration_function_definition&)
 {
 }
 
 void
-semantic_analyzer::convert(const member_declaration_member_declarator_list&)
+semantic_analyzer::analyze(const member_declaration_member_declarator_list&)
 {
 }
 
 void
-semantic_analyzer::convert(const member_declaration_unqualified_id&)
+semantic_analyzer::analyze(const member_declaration_unqualified_id&)
 {
 }
 
 void
-semantic_analyzer::convert(const member_declarator_bit_field_member&)
+semantic_analyzer::analyze(const member_declarator_bit_field_member&)
 {
 }
 
 void
-semantic_analyzer::convert(const member_declarator_declarator&)
+semantic_analyzer::analyze(const member_declarator_declarator&)
 {
 }
 
 void
-semantic_analyzer::convert(const member_specification&)
+semantic_analyzer::analyze(const member_specification&)
 {
 }
 
 void
-semantic_analyzer::convert(const member_specification_access_specifier&)
+semantic_analyzer::analyze(const member_specification_access_specifier&)
 {
 }
 
 void
-semantic_analyzer::convert(const namespace_definition& item)
+semantic_analyzer::analyze(const namespace_definition& syntax_node)
 {
 	//get the namespace name
 	std::string namespace_name;
-	const boost::optional<const identifier&> an_identifier = item.identifier_node();
+	const boost::optional<const identifier&> an_identifier = syntax_node.identifier_node();
 	if(an_identifier)
 	{
 		namespace_name = an_identifier->value();
@@ -316,79 +329,79 @@ semantic_analyzer::convert(const namespace_definition& item)
 
 	//add the declarations of the namespace definition in the namespace semantic node
 	scope_cursor_.enter_last_added_scope(); //we have to enter even if there's no declaration
-	const boost::optional<const declaration_seq&> a_declaration_seq = item.declaration_seq_node();
+	const boost::optional<const declaration_seq&> a_declaration_seq = syntax_node.declaration_seq_node();
 	if(a_declaration_seq)
 	{
-		convert(*a_declaration_seq);
+		analyze_sequence(*a_declaration_seq);
 	}
 	scope_cursor_.leave_scope();
 }
 
 void
-semantic_analyzer::convert(const nested_identifier_or_template_id&)
+semantic_analyzer::analyze(const nested_identifier_or_template_id&)
 {
 }
 
 void
-semantic_analyzer::convert(const nested_name_specifier&)
+semantic_analyzer::analyze(const nested_name_specifier&)
 {
 }
 
 void
-semantic_analyzer::convert(const nested_name_specifier::next_part&)
+semantic_analyzer::analyze(const nested_name_specifier::next_part&)
 {
 }
 
 void
-semantic_analyzer::convert(const operator_function_id&)
+semantic_analyzer::analyze(const operator_function_id&)
 {
 }
 
 void
-semantic_analyzer::convert(const parameter_declaration&)
+semantic_analyzer::analyze(const parameter_declaration&)
 {
 }
 
 void
-semantic_analyzer::convert(const parameter_declaration_clause&)
+semantic_analyzer::analyze(const parameter_declaration_clause&)
 {
 }
 
 void
-semantic_analyzer::convert(const ptr_operator&)
+semantic_analyzer::analyze(const ptr_operator&)
 {
 }
 
 void
-semantic_analyzer::convert(const qualified_identifier&)
+semantic_analyzer::analyze(const qualified_identifier&)
 {
 }
 
 void
-semantic_analyzer::convert(const qualified_nested_id&)
+semantic_analyzer::analyze(const qualified_nested_id&)
 {
 }
 
 void
-semantic_analyzer::convert(const qualified_operator_function_id&)
+semantic_analyzer::analyze(const qualified_operator_function_id&)
 {
 }
 
 void
-semantic_analyzer::convert(const qualified_template_id&)
+semantic_analyzer::analyze(const qualified_template_id&)
 {
 }
 
 void
-semantic_analyzer::convert(const simple_declaration& item)
+semantic_analyzer::analyze(const simple_declaration& syntax_node)
 {
 	std::string name;
 	bool is_a_class_declaration = false;
 	bool is_a_class_forward_declaration = false;
 	bool is_a_function_declaration = false;
 
-	const boost::optional<const decl_specifier_seq&> an_optional_decl_specifier_seq = item.decl_specifier_seq_node();
-	const boost::optional<const init_declarator_list&> an_optional_init_declarator_list = item.init_declarator_list_node();
+	const boost::optional<const decl_specifier_seq&> an_optional_decl_specifier_seq = syntax_node.decl_specifier_seq_node();
+	const boost::optional<const init_declarator_list&> an_optional_init_declarator_list = syntax_node.init_declarator_list_node();
 
 	if(an_optional_decl_specifier_seq)
 	{
@@ -435,7 +448,7 @@ semantic_analyzer::convert(const simple_declaration& item)
 			const declarator& a_declarator = i->main_node().declarator_node();
 			const direct_declarator& a_direct_declarator = a_declarator.direct_declarator_node();
 
-			//get the item name
+			//get the syntax_node name
 			const boost::optional<const declarator_id&> an_optional_declarator_id = a_direct_declarator.declarator_id_node();
 			if(an_optional_declarator_id)
 			{
@@ -463,7 +476,7 @@ semantic_analyzer::convert(const simple_declaration& item)
 
 					if(get<direct_declarator::function_part>(&next_part))
 					{
-						//item is a function declaration!
+						//syntax_node is a function declaration!
 						is_a_function_declaration = true;
 
 						if(!name.empty())
@@ -481,39 +494,34 @@ semantic_analyzer::convert(const simple_declaration& item)
 	}
 	else if(!is_a_function_declaration && !is_a_class_forward_declaration)
 	{
-		//item is a variable declaration!
+		//syntax_node is a variable declaration!
 		if(!name.empty())
 			scope_cursor_.add_to_current_scope(variable(name));
 	}
 }
 
 void
-semantic_analyzer::convert(const simple_template_type_specifier&)
+semantic_analyzer::analyze(const simple_template_type_specifier&)
 {
 }
 
 void
-semantic_analyzer::convert(const template_declaration&)
+semantic_analyzer::analyze(const template_declaration&)
 {
 }
 
 void
-semantic_analyzer::convert(const template_id&)
+semantic_analyzer::analyze(const template_id&)
 {
 }
 
 void
-semantic_analyzer::convert(const using_declaration&)
+semantic_analyzer::analyze(const using_declaration&)
 {
 }
 
 void
-semantic_analyzer::convert(const using_directive&)
-{
-}
-
-void
-semantic_analyzer::convert_separator(const std::string&)
+semantic_analyzer::analyze(const using_directive&)
 {
 }
 
