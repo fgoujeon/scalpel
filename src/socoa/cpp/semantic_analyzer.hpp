@@ -93,9 +93,6 @@ class semantic_analyzer
 		analyze(const syntax_nodes::cv_qualifier& syntax_node);
 
         void
-		analyze(const syntax_nodes::declaration& syntax_node);
-
-        void
 		analyze(const syntax_nodes::declarator& syntax_node);
 
         void

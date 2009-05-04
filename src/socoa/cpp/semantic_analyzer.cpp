@@ -61,8 +61,7 @@ semantic_analyzer::operator()(const syntax_tree& tree)
 			++i
 		)
 		{
-			const syntax_nodes::declaration_t& declaration_node = i->main_node();
-			analyze_alternative(declaration_node);
+			analyze_alternative(i->main_node());
 		}
 	}
 
@@ -110,13 +109,6 @@ semantic_analyzer::analyze(const ctor_initializer&)
 void
 semantic_analyzer::analyze(const cv_qualifier&)
 {
-}
-
-void
-semantic_analyzer::analyze(const declaration& syntax_node)
-{
-	const declaration_t& node = syntax_node;
-	analyze_alternative(node);
 }
 
 void

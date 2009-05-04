@@ -18,21 +18,19 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_NODES_DECLARATION_HPP
-#define SOCOA_CPP_SYNTAX_NODES_DECLARATION_HPP
+#ifndef SOCOA_CPP_SYNTAX_NODES_DECLARATION_FWD_HPP
+#define SOCOA_CPP_SYNTAX_NODES_DECLARATION_FWD_HPP
 
 #include "alternative_node.hpp"
 #include "composite_node.hpp"
-#include "block_declaration.hpp"
-#include "function_definition.hpp"
-#include "template_declaration.hpp"
-//#include "explicit_instantiation.hpp"
-//#include "explicit_specialization.hpp"
-//#include "linkage_specification.hpp"
-#include "namespace_definition.hpp"
+#include "block_declaration_fwd.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
+
+class function_definition;
+class template_declaration;
+class namespace_definition;
 
 typedef
 	alternative_node

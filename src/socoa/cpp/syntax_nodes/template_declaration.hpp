@@ -23,11 +23,10 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <memory>
 #include "composite_node.hpp"
+#include "declaration_fwd.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
-
-class declaration;
 
 class template_declaration: public composite_node
 {

@@ -27,11 +27,11 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "composite_node.hpp"
 #include "identifier.hpp"
 #include "sequence_node.hpp"
+#include "declaration_fwd.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
-class declaration;
 typedef sequence_node<declaration> declaration_seq;
 
 /**

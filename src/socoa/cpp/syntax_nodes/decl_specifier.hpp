@@ -38,22 +38,8 @@ typedef
 		function_specifier,
 		storage_class_specifier
 	>
-	decl_specifier_t
+	decl_specifier
 ;
-
-class decl_specifier: public decl_specifier_t
-{
-	public:
-		decl_specifier(type_specifier&& o): decl_specifier_t(o){}
-		decl_specifier(function_specifier&& o): decl_specifier_t(o){}
-		decl_specifier(storage_class_specifier&& o): decl_specifier_t(o){}
-
-		decl_specifier(const decl_specifier& o): decl_specifier_t(static_cast<const decl_specifier_t&>(o)){}
-
-		decl_specifier(decl_specifier&& o): decl_specifier_t(std::move(static_cast<decl_specifier_t&&>(o))){}
-
-		using decl_specifier_t::operator=;
-};
 
 }}} //namespace socoa::cpp::syntax_nodes
 
