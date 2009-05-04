@@ -25,20 +25,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "while_statement.hpp"
 #include "do_while_statement.hpp"
 #include "for_statement.hpp"
-
-namespace socoa { namespace cpp { namespace syntax_nodes
-{
-
-typedef
-	alternative_node
-	<
-		while_statement,
-		do_while_statement,
-		for_statement
-	>
-	iteration_statement
-;
-
-}}} //namespace socoa::cpp::syntax_nodes
+#include "iteration_statement_fwd.hpp"
 
 #endif

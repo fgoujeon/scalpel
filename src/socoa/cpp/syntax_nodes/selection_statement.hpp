@@ -24,19 +24,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "alternative_node.hpp"
 #include "if_statement.hpp"
 #include "switch_statement.hpp"
-
-namespace socoa { namespace cpp { namespace syntax_nodes
-{
-
-typedef
-	alternative_node
-	<
-		if_statement,
-		switch_statement
-	>
-	selection_statement
-;
-
-}}} //namespace socoa::cpp::syntax_nodes
+#include "selection_statement_fwd.hpp"
 
 #endif

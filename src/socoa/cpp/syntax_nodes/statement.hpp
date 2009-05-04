@@ -30,25 +30,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "jump_statement.hpp"
 #include "block_declaration.hpp"
 #include "try_block.hpp"
-
-namespace socoa { namespace cpp { namespace syntax_nodes
-{
-
-typedef
-	alternative_node
-	<
-		labeled_statement,
-		expression_statement,
-		compound_statement,
-		selection_statement,
-		iteration_statement,
-		jump_statement,
-		block_declaration,
-		try_block
-	>
-	statement
-;
-
-}}} //namespace socoa::cpp::syntax_nodes
+#include "statement_fwd.hpp"
 
 #endif

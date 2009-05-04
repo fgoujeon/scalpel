@@ -30,24 +30,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 //#include "explicit_specialization.hpp"
 //#include "linkage_specification.hpp"
 #include "namespace_definition.hpp"
-
-namespace socoa { namespace cpp { namespace syntax_nodes
-{
-
-typedef
-	alternative_node
-	<
-		block_declaration,
-		function_definition,
-		template_declaration,
-		//explicit_instantiation,
-		//explicit_specialization,
-		//linkage_specification,
-		namespace_definition
-	>
-	declaration
-;
-
-}}} //namespace socoa::cpp::syntax_nodes
+#include "declaration_fwd.hpp"
 
 #endif

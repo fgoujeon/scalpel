@@ -25,20 +25,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "case_statement.hpp"
 #include "default_statement.hpp"
 #include "classic_labeled_statement.hpp"
-
-namespace socoa { namespace cpp { namespace syntax_nodes
-{
-
-typedef
-	alternative_node
-	<
-		case_statement,
-		default_statement,
-		classic_labeled_statement
-	>
-	labeled_statement
-;
-
-}}} //namespace socoa::cpp::syntax_nodes
+#include "labeled_statement_fwd.hpp"
 
 #endif

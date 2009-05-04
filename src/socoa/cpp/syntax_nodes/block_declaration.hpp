@@ -27,22 +27,6 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 //#include "namespace_alias_definition.hpp"
 #include "using_declaration.hpp"
 #include "using_directive.hpp"
-
-namespace socoa { namespace cpp { namespace syntax_nodes
-{
-
-typedef
-	alternative_node
-	<
-		simple_declaration,
-//		asm_definition,
-//		namespace_alias_definition,
-		using_declaration,
-		using_directive
-	>
-	block_declaration
-;
-
-}}} //namespace socoa::cpp::syntax_nodes
+#include "block_declaration_fwd.hpp"
 
 #endif
