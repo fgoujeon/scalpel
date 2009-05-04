@@ -40,6 +40,7 @@ add_library(
 	SHARED
 	${sources}
 )
+include_directories(src/)
 
 #Boost
 include(FindBoost)

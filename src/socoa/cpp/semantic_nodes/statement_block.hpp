@@ -18,16 +18,14 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SEMANTIC_GRAPH_FUNCTION_HPP
-#define SOCOA_CPP_SEMANTIC_GRAPH_FUNCTION_HPP
+#ifndef SOCOA_CPP_SEMANTIC_GRAPH_STATEMENT_BLOCK_HPP
+#define SOCOA_CPP_SEMANTIC_GRAPH_STATEMENT_BLOCK_HPP
 
 #include <string>
 #include <list>
-#include <boost/noncopyable.hpp>
 #include "scope.hpp"
 #include "scope_impl.hpp"
 #include "named_entity.hpp"
-#include "statement_block.hpp"
 #include "variable.hpp"
 
 namespace socoa { namespace cpp { namespace semantic_nodes
@@ -37,27 +35,29 @@ class namespace_;
 class class_;
 
 /**
-Represents a C++ function.
+Represents a C++ statement block.
 */
-class function:
-	public scope,
-	public named_entity,
-	public boost::noncopyable
+class statement_block:
+	public scope
 {
     public:
-        explicit
-        function(const std::string& name);
+        statement_block();
 
-		function(function&& f);
+		statement_block(const statement_block&) = delete;
 
-		const function&
-		operator=(function&& f);
+		statement_block(statement_block&& o);
+
+		const statement_block&
+		operator=(const statement_block& o) = delete;
+
+		const statement_block&
+		operator=(statement_block&& o);
 
 		void
 		accept(scope_visitor& v);
 
         /**
-        @return the name of the function
+        @return an empty string
         */
         const std::string&
         name() const;
@@ -69,37 +69,37 @@ class function:
         is_a_type() const;
 
         /**
-        @return false, because a function cannot be the global namespace...
+        @return false, because a statement block cannot be the global namespace...
         */
         bool
         is_global() const;
 
         /**
-        @return true if the function has an enclosing scope
+        @return true if the statement block has an enclosing scope
         */
         bool
         has_enclosing_scope() const;
 
         /**
-        @return the enclosing scope of the function
+        @return the enclosing scope of the statement block
         */
 		scope&
         enclosing_scope();
 
         /**
-        @return the enclosing scope of the function
+        @return the enclosing scope of the statement block
         */
         const scope&
         enclosing_scope() const;
 
         /**
-        Sets the enclosing scope of the function.
+        Sets the enclosing scope of the statement block.
         */
         void
-        enclosing_scope(class_& enclosing_scope);
+        enclosing_scope(function& enclosing_scope);
 
         void
-        enclosing_scope(namespace_& enclosing_scope);
+        enclosing_scope(statement_block& enclosing_scope);
 
 		scope_iterator_range
         scopes();
@@ -121,7 +121,6 @@ class function:
 
     private:
 		scope_impl scope_impl_;
-        std::string name_;
 		std::list<statement_block> statement_blocks_;
 		std::list<variable> variables_;
 };

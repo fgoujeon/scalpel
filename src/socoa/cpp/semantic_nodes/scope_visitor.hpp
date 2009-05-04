@@ -27,6 +27,7 @@ namespace socoa { namespace cpp { namespace semantic_nodes
 class namespace_;
 class class_;
 class function;
+class statement_block;
 
 struct scope_visitor
 {
@@ -44,6 +45,10 @@ struct scope_visitor
 	virtual
 	void
 	visit(function&) = 0;
+
+	virtual
+	void
+	visit(statement_block&) = 0;
 };
 
 }}} //namespace socoa::cpp::semantic_nodes

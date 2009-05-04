@@ -80,6 +80,13 @@ scope_cursor::add_to_current_scope(semantic_nodes::function&& o)
 }
 
 void
+scope_cursor::add_to_current_scope(semantic_nodes::statement_block&& o)
+{
+	statement_block_adder v(o);
+	current_scope_->accept(v);
+}
+
+void
 scope_cursor::add_to_current_scope(semantic_nodes::variable&& o)
 {
 	variable_adder v(o);
@@ -120,15 +127,15 @@ scope_cursor::lastly_leaved_scopes() const
 //scope_cursor::namespace_adder
 //
 
-scope_cursor::namespace_adder::namespace_adder(semantic_nodes::namespace_&& n):
-	n_(std::move(n))
+scope_cursor::namespace_adder::namespace_adder(semantic_nodes::namespace_&& o):
+	o_(std::move(o))
 {
 }
 
 void
-scope_cursor::namespace_adder::visit(semantic_nodes::namespace_& o)
+scope_cursor::namespace_adder::visit(semantic_nodes::namespace_& scope)
 {
-	o.add(n_);
+	scope.add(o_);
 }
 
 void
@@ -143,30 +150,42 @@ scope_cursor::namespace_adder::visit(semantic_nodes::function&)
 	assert(false);
 }
 
+void
+scope_cursor::namespace_adder::visit(semantic_nodes::statement_block&)
+{
+	assert(false);
+}
+
 
 //
 //scope_cursor::class_adder
 //
 
-scope_cursor::class_adder::class_adder(semantic_nodes::class_&& c):
-	c_(std::move(c))
+scope_cursor::class_adder::class_adder(semantic_nodes::class_&& o):
+	o_(std::move(o))
 {
 }
 
 void
-scope_cursor::class_adder::visit(semantic_nodes::namespace_& o)
+scope_cursor::class_adder::visit(semantic_nodes::namespace_& scope)
 {
-	o.add(c_);
+	scope.add(o_);
 }
 
 void
-scope_cursor::class_adder::visit(semantic_nodes::class_& o)
+scope_cursor::class_adder::visit(semantic_nodes::class_& scope)
 {
-	o.add(c_);
+	scope.add(o_);
 }
 
 void
 scope_cursor::class_adder::visit(semantic_nodes::function&)
+{
+	assert(false);
+}
+
+void
+scope_cursor::class_adder::visit(semantic_nodes::statement_block&)
 {
 	assert(false);
 }
@@ -176,21 +195,21 @@ scope_cursor::class_adder::visit(semantic_nodes::function&)
 //scope_cursor::function_adder
 //
 
-scope_cursor::function_adder::function_adder(semantic_nodes::function&& f):
-	f_(std::move(f))
+scope_cursor::function_adder::function_adder(semantic_nodes::function&& o):
+	o_(std::move(o))
 {
 }
 
 void
-scope_cursor::function_adder::visit(semantic_nodes::namespace_& o)
+scope_cursor::function_adder::visit(semantic_nodes::namespace_& scope)
 {
-	o.add(f_);
+	scope.add(o_);
 }
 
 void
-scope_cursor::function_adder::visit(semantic_nodes::class_& o)
+scope_cursor::function_adder::visit(semantic_nodes::class_& scope)
 {
-	o.add(f_);
+	scope.add(o_);
 }
 
 void
@@ -199,32 +218,78 @@ scope_cursor::function_adder::visit(semantic_nodes::function&)
 	assert(false);
 }
 
+void
+scope_cursor::function_adder::visit(semantic_nodes::statement_block&)
+{
+	assert(false);
+}
+
+
+//
+//scope_cursor::statement_block_adder
+//
+
+scope_cursor::statement_block_adder::statement_block_adder(semantic_nodes::statement_block&& o):
+	o_(std::move(o))
+{
+}
+
+void
+scope_cursor::statement_block_adder::visit(semantic_nodes::namespace_&)
+{
+	assert(false);
+}
+
+void
+scope_cursor::statement_block_adder::visit(semantic_nodes::class_&)
+{
+	assert(false);
+}
+
+void
+scope_cursor::statement_block_adder::visit(semantic_nodes::function& scope)
+{
+	scope.add(o_);
+}
+
+void
+scope_cursor::statement_block_adder::visit(semantic_nodes::statement_block& scope)
+{
+	scope.add(o_);
+}
+
 
 //
 //scope_cursor::variable_adder
 //
 
-scope_cursor::variable_adder::variable_adder(semantic_nodes::variable&& v):
-	v_(std::move(v))
+scope_cursor::variable_adder::variable_adder(semantic_nodes::variable&& o):
+	o_(std::move(o))
 {
 }
 
 void
-scope_cursor::variable_adder::visit(semantic_nodes::namespace_& o)
+scope_cursor::variable_adder::visit(semantic_nodes::namespace_& scope)
 {
-	o.add(v_);
+	scope.add(o_);
 }
 
 void
-scope_cursor::variable_adder::visit(semantic_nodes::class_& o)
+scope_cursor::variable_adder::visit(semantic_nodes::class_& scope)
 {
-	o.add(v_);
+	scope.add(o_);
 }
 
 void
-scope_cursor::variable_adder::visit(semantic_nodes::function& o)
+scope_cursor::variable_adder::visit(semantic_nodes::function& scope)
 {
-	o.add(v_);
+	scope.add(o_);
+}
+
+void
+scope_cursor::variable_adder::visit(semantic_nodes::statement_block& scope)
+{
+	scope.add(o_);
 }
 
 }}}} //namespace socoa::cpp::detail::semantic_analysis

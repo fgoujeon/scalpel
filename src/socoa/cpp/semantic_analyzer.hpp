@@ -49,6 +49,9 @@ class semantic_analyzer
 		convert(const syntax_nodes::class_specifier& item);
 
         void
+		convert(const syntax_nodes::compound_statement& item);
+
+        void
 		convert(const syntax_nodes::conversion_function_id& item);
 
         void

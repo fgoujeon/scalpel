@@ -85,6 +85,10 @@ class function_definition: public composite_node
 		const boost::optional<const ctor_initializer&>
 		ctor_initializer_node() const;
 
+		inline
+		const boost::optional<const compound_statement&>
+		compound_statement_node() const;
+
     private:
 		void
 		update_node_list();
@@ -134,7 +138,14 @@ inline
 const boost::optional<const ctor_initializer&>
 function_definition::ctor_initializer_node() const
 {
-	return boost::optional<const ctor_initializer&>(*ctor_initializer_);
+	return boost::optional<const ctor_initializer&>(ctor_initializer_);
+}
+
+inline
+const boost::optional<const compound_statement&>
+function_definition::compound_statement_node() const
+{
+	return boost::optional<const compound_statement&>(compound_statement_);
 }
 
 }}} //namespace socoa::cpp::syntax_nodes

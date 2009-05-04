@@ -23,11 +23,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <boost/noncopyable.hpp>
 #include <vector>
-#include "../../semantic_nodes/scope.hpp"
-#include "../../semantic_nodes/scope_visitor.hpp"
-#include "../../semantic_nodes/namespace_.hpp"
-#include "../../semantic_nodes/class_.hpp"
-#include "../../semantic_nodes/function.hpp"
+#include "../../semantic_graph.hpp"
 
 namespace socoa { namespace cpp { namespace detail { namespace semantic_analysis
 {
@@ -38,6 +34,7 @@ class scope_cursor: public boost::noncopyable
 		class namespace_adder;
 		class class_adder;
 		class function_adder;
+		class statement_block_adder;
 		class variable_adder;
 
 	public:
@@ -60,6 +57,9 @@ class scope_cursor: public boost::noncopyable
 
 		void
 		add_to_current_scope(semantic_nodes::function&& o);
+
+		void
+		add_to_current_scope(semantic_nodes::statement_block&& o);
 
 		void
 		add_to_current_scope(semantic_nodes::variable&& o);
@@ -86,73 +86,106 @@ class scope_cursor: public boost::noncopyable
 class scope_cursor::namespace_adder: public semantic_nodes::scope_visitor
 {
 	public:
-		namespace_adder(semantic_nodes::namespace_&& n);
+		namespace_adder(semantic_nodes::namespace_&& o);
 
 		void
-		visit(semantic_nodes::namespace_& o);
+		visit(semantic_nodes::namespace_& scope);
 
 		void
-		visit(semantic_nodes::class_& o);
+		visit(semantic_nodes::class_& scope);
 
 		void
-		visit(semantic_nodes::function& o);
+		visit(semantic_nodes::function& scope);
+
+		void
+		visit(semantic_nodes::statement_block& scope);
 
 	private:
-		semantic_nodes::namespace_ n_;
+		semantic_nodes::namespace_ o_;
 };
 
 class scope_cursor::class_adder: public semantic_nodes::scope_visitor
 {
 	public:
-		class_adder(semantic_nodes::class_&& c);
+		class_adder(semantic_nodes::class_&& o);
 
 		void
-		visit(semantic_nodes::namespace_& o);
+		visit(semantic_nodes::namespace_& scope);
 
 		void
-		visit(semantic_nodes::class_& o);
+		visit(semantic_nodes::class_& scope);
 
 		void
-		visit(semantic_nodes::function& o);
+		visit(semantic_nodes::function& scope);
+
+		void
+		visit(semantic_nodes::statement_block& scope);
 
 	private:
-		semantic_nodes::class_ c_;
+		semantic_nodes::class_ o_;
 };
 
 class scope_cursor::function_adder: public semantic_nodes::scope_visitor
 {
 	public:
-		function_adder(semantic_nodes::function&& f);
+		function_adder(semantic_nodes::function&& o);
 
 		void
-		visit(semantic_nodes::namespace_& o);
+		visit(semantic_nodes::namespace_& scope);
 
 		void
-		visit(semantic_nodes::class_& o);
+		visit(semantic_nodes::class_& scope);
 
 		void
-		visit(semantic_nodes::function& o);
+		visit(semantic_nodes::function& scope);
+
+		void
+		visit(semantic_nodes::statement_block& scope);
 
 	private:
-		semantic_nodes::function f_;
+		semantic_nodes::function o_;
+};
+
+class scope_cursor::statement_block_adder: public semantic_nodes::scope_visitor
+{
+	public:
+		statement_block_adder(semantic_nodes::statement_block&& o);
+
+		void
+		visit(semantic_nodes::namespace_& scope);
+
+		void
+		visit(semantic_nodes::class_& scope);
+
+		void
+		visit(semantic_nodes::function& scope);
+
+		void
+		visit(semantic_nodes::statement_block& scope);
+
+	private:
+		semantic_nodes::statement_block o_;
 };
 
 class scope_cursor::variable_adder: public semantic_nodes::scope_visitor
 {
 	public:
-		variable_adder(semantic_nodes::variable&& v);
+		variable_adder(semantic_nodes::variable&& o);
 
 		void
-		visit(semantic_nodes::namespace_& o);
+		visit(semantic_nodes::namespace_& scope);
 
 		void
-		visit(semantic_nodes::class_& o);
+		visit(semantic_nodes::class_& scope);
 
 		void
-		visit(semantic_nodes::function& o);
+		visit(semantic_nodes::function& scope);
+
+		void
+		visit(semantic_nodes::statement_block& scope);
 
 	private:
-		semantic_nodes::variable v_;
+		semantic_nodes::variable o_;
 };
 
 }}}} //namespace socoa::cpp::detail::semantic_analysis

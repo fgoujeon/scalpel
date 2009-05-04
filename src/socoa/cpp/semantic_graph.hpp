@@ -24,9 +24,11 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <memory>
 #include <boost/iterator/indirect_iterator.hpp>
 #include <boost/range/iterator_range.hpp>
-#include "semantic_nodes/namespace_.hpp"
 #include "semantic_nodes/class_.hpp"
 #include "semantic_nodes/function.hpp"
+#include "semantic_nodes/namespace_.hpp"
+#include "semantic_nodes/statement_block.hpp"
+#include "semantic_nodes/variable.hpp"
 #include "syntax_tree.hpp"
 
 namespace socoa { namespace cpp

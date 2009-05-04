@@ -86,6 +86,12 @@ semantic_analyzer::convert(const class_specifier& item)
 }
 
 void
+semantic_analyzer::convert(const compound_statement& item)
+{
+
+}
+
+void
 semantic_analyzer::convert(const conversion_function_id&)
 {
 }
@@ -232,6 +238,10 @@ semantic_analyzer::convert(const function_definition& item)
 	if(function_scope)
 	{
 		scope_cursor_.enter_scope(*function_scope);
+
+		auto opt_compound_statement = item.compound_statement_node();
+		if(opt_compound_statement) convert(*opt_compound_statement);
+
 		scope_cursor_.leave_scope();
 	}
 	else

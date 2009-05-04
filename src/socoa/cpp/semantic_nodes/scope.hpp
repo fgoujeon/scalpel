@@ -76,7 +76,7 @@ struct scope
 	named_entities() const = 0;
 
 	/**
-	@return true if the object has a enclosing scope scope
+	@return true if the object has an enclosing scope scope
 	*/
 	virtual
 	bool

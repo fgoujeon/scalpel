@@ -18,117 +18,115 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "function.hpp"
+#include "statement_block.hpp"
 
 #include <iostream>
 #include <cassert>
+#include <socoa/util/extern_strings.hpp>
 #include "namespace_.hpp"
 #include "class_.hpp"
 
 namespace socoa { namespace cpp { namespace semantic_nodes
 {
 
-function::function(const std::string& name):
-    name_(name)
+statement_block::statement_block()
 {
-	std::cout << "New function " << name << "\n";
+	std::cout << "New statement block\n";
 }
 
-function::function(function&& f):
-	scope_impl_(std::move(f.scope_impl_)),
-	name_(std::move(f.name_))
+statement_block::statement_block(statement_block&& o):
+	scope_impl_(std::move(o.scope_impl_))
 {
 }
 
-const function&
-function::operator=(function&& f)
+const statement_block&
+statement_block::operator=(statement_block&& o)
 {
-	scope_impl_ = std::move(f.scope_impl_);
-	name_ = std::move(f.name_);
+	scope_impl_ = std::move(o.scope_impl_);
 
 	return *this;
 }
 
 void
-function::accept(scope_visitor& v)
+statement_block::accept(scope_visitor& v)
 {
 	v.visit(*this);
 }
 
 const std::string&
-function::name() const
+statement_block::name() const
 {
-    return name_;
+    return util::extern_strings::empty;
 }
 
 bool
-function::is_a_type() const
-{
-    return false;
-}
-
-bool
-function::is_global() const
+statement_block::is_a_type() const
 {
     return false;
 }
 
 bool
-function::has_enclosing_scope() const
+statement_block::is_global() const
+{
+    return false;
+}
+
+bool
+statement_block::has_enclosing_scope() const
 {
     return scope_impl_.has_enclosing_scope();
 }
 
 scope&
-function::enclosing_scope()
+statement_block::enclosing_scope()
 {
     return scope_impl_.enclosing_scope();
 }
 
 const scope&
-function::enclosing_scope() const
+statement_block::enclosing_scope() const
 {
     return scope_impl_.enclosing_scope();
 }
 
 void
-function::enclosing_scope(class_& enclosing_scope)
+statement_block::enclosing_scope(function& enclosing_scope)
 {
     scope_impl_.enclosing_scope(enclosing_scope);
 }
 
 void
-function::enclosing_scope(namespace_& enclosing_scope)
+statement_block::enclosing_scope(statement_block& enclosing_scope)
 {
     scope_impl_.enclosing_scope(enclosing_scope);
 }
 
 scope::scope_iterator_range
-function::scopes()
+statement_block::scopes()
 {
 	return scope_impl_.scopes();
 }
 
 scope::scope_const_iterator_range
-function::scopes() const
+statement_block::scopes() const
 {
 	return scope_impl_.scopes();
 }
 
 scope::named_entity_iterator_range
-function::named_entities()
+statement_block::named_entities()
 {
 	return scope_impl_.named_entities();
 }
 
 scope::named_entity_const_iterator_range
-function::named_entities() const
+statement_block::named_entities() const
 {
 	return scope_impl_.named_entities();
 }
 
 void
-function::add(statement_block&& o)
+statement_block::add(statement_block&& o)
 {
 	statement_blocks_.push_back(std::move(o));
 
@@ -140,7 +138,7 @@ function::add(statement_block&& o)
 }
 
 void
-function::add(variable&& v)
+statement_block::add(variable&& v)
 {
 	variables_.push_back(std::move(v));
 }
