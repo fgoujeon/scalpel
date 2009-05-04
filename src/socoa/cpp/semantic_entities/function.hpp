@@ -18,106 +18,88 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SEMANTIC_GRAPH_CLASS_HPP
-#define SOCOA_CPP_SEMANTIC_GRAPH_CLASS_HPP
+#ifndef SOCOA_CPP_SEMANTIC_ENTITIES_FUNCTION_HPP
+#define SOCOA_CPP_SEMANTIC_ENTITIES_FUNCTION_HPP
 
 #include <string>
 #include <list>
-#include <boost/variant.hpp>
 #include <boost/noncopyable.hpp>
 #include "scope.hpp"
 #include "scope_impl.hpp"
 #include "named_entity.hpp"
-#include "function.hpp"
+#include "statement_block.hpp"
 #include "variable.hpp"
 
-namespace socoa { namespace cpp { namespace semantic_nodes
+namespace socoa { namespace cpp { namespace semantic_entities
 {
 
 class namespace_;
+class class_;
 
 /**
-Represents a C++ class.
+Represents a C++ function.
 */
-class class_:
+class function:
 	public scope,
 	public named_entity,
 	public boost::noncopyable
 {
     public:
-		class member_t;
-
-        /**
-        Creates a class.
-        @param name the class' name
-        */
         explicit
-        class_(const std::string& name);
+        function(const std::string& name);
 
-		/**
-		 * Move constructor.
-		 */
-		class_(class_&& c);
+		function(function&& f);
 
-		/*
-		 * Move assignment operator.
-		 */
-		const class_&
-		operator=(class_&& c);
+		const function&
+		operator=(function&& f);
 
 		void
 		accept(scope_visitor& v);
 
         /**
-        @return the name of the class
+        @return the name of the function
         */
         const std::string&
         name() const;
 
         /**
-        @return true
+        @return false
         */
         bool
         is_a_type() const;
 
         /**
-        @return false, because a class cannot be the global namespace...
+        @return false, because a function cannot be the global namespace...
         */
         bool
         is_global() const;
 
         /**
-        @return true if the class has a enclosing scope scope
+        @return true if the function has an enclosing scope
         */
         bool
         has_enclosing_scope() const;
 
         /**
-        @return the enclosing scope of the class
+        @return the enclosing scope of the function
         */
 		scope&
         enclosing_scope();
 
         /**
-        @return the enclosing scope of the class
+        @return the enclosing scope of the function
         */
         const scope&
         enclosing_scope() const;
 
         /**
-        Sets the enclosing scope of the class.
+        Sets the enclosing scope of the function.
         */
         void
         enclosing_scope(class_& enclosing_scope);
 
         void
         enclosing_scope(namespace_& enclosing_scope);
-
-        /**
-        @return the class' member list (i.e. the list of classes, functions, etc.)
-        */
-        const std::list<member_t>&
-        members() const;
 
 		scope_iterator_range
         scopes();
@@ -131,45 +113,19 @@ class class_:
 		named_entity_const_iterator_range
 		named_entities() const;
 
-        /**
-        Adds a nested class.
-        */
-        void
-        add(class_&& nested_class);
-
-        void
-        add(function&& member);
+		void
+		add(statement_block&& o);
 
 		void
-		add(variable&& member);
+		add(variable&& v);
 
     private:
 		scope_impl scope_impl_;
         std::string name_;
-		std::list<class_> classes_;
-		std::list<function> functions_;
+		std::list<statement_block> statement_blocks_;
 		std::list<variable> variables_;
-        std::list<member_t> members_;
 };
 
-typedef
-	boost::variant
-	<
-		class_*,
-		function*,
-		variable*
-	>
-	class_member_t
-;
-
-class class_::member_t: public class_member_t
-{
-	public:
-		member_t(class_* o): class_member_t(o){}
-		member_t(function* o): class_member_t(o){}
-		member_t(variable* o): class_member_t(o){}
-};
-
-}}} //namespace socoa::cpp::semantic_nodes
+}}} //namespace socoa::cpp::semantic_entities
 
 #endif

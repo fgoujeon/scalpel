@@ -41,31 +41,31 @@ class scope_cursor: public boost::noncopyable
 		scope_cursor();
 
 		void
-		initialize(semantic_nodes::scope& a_scope);
+		initialize(semantic_entities::scope& a_scope);
 
-		semantic_nodes::scope&
+		semantic_entities::scope&
 		get_global_scope();
 
-		semantic_nodes::scope&
+		semantic_entities::scope&
 		get_current_scope();
 
 		void
-		add_to_current_scope(semantic_nodes::namespace_&& o);
+		add_to_current_scope(semantic_entities::namespace_&& o);
 
 		void
-		add_to_current_scope(semantic_nodes::class_&& o);
+		add_to_current_scope(semantic_entities::class_&& o);
 
 		void
-		add_to_current_scope(semantic_nodes::function&& o);
+		add_to_current_scope(semantic_entities::function&& o);
 
 		void
-		add_to_current_scope(semantic_nodes::statement_block&& o);
+		add_to_current_scope(semantic_entities::statement_block&& o);
 
 		void
-		add_to_current_scope(semantic_nodes::variable&& o);
+		add_to_current_scope(semantic_entities::variable&& o);
 
 		void
-		enter_scope(semantic_nodes::scope& a_scope);
+		enter_scope(semantic_entities::scope& a_scope);
 
 		void
 		enter_last_added_scope();
@@ -73,119 +73,119 @@ class scope_cursor: public boost::noncopyable
 		void
 		leave_scope();
 
-		const std::vector<semantic_nodes::scope*>&
+		const std::vector<semantic_entities::scope*>&
 		lastly_leaved_scopes() const;
 
 	private:
-		semantic_nodes::scope* global_scope_;
-		semantic_nodes::scope* current_scope_;
-		semantic_nodes::scope* last_added_scope_;
-		std::vector<semantic_nodes::scope*> lastly_leaved_scopes_;
+		semantic_entities::scope* global_scope_;
+		semantic_entities::scope* current_scope_;
+		semantic_entities::scope* last_added_scope_;
+		std::vector<semantic_entities::scope*> lastly_leaved_scopes_;
 };
 
-class scope_cursor::namespace_adder: public semantic_nodes::scope_visitor
+class scope_cursor::namespace_adder: public semantic_entities::scope_visitor
 {
 	public:
-		namespace_adder(semantic_nodes::namespace_&& o);
+		namespace_adder(semantic_entities::namespace_&& o);
 
 		void
-		visit(semantic_nodes::namespace_& scope);
+		visit(semantic_entities::namespace_& scope);
 
 		void
-		visit(semantic_nodes::class_& scope);
+		visit(semantic_entities::class_& scope);
 
 		void
-		visit(semantic_nodes::function& scope);
+		visit(semantic_entities::function& scope);
 
 		void
-		visit(semantic_nodes::statement_block& scope);
+		visit(semantic_entities::statement_block& scope);
 
 	private:
-		semantic_nodes::namespace_ o_;
+		semantic_entities::namespace_ o_;
 };
 
-class scope_cursor::class_adder: public semantic_nodes::scope_visitor
+class scope_cursor::class_adder: public semantic_entities::scope_visitor
 {
 	public:
-		class_adder(semantic_nodes::class_&& o);
+		class_adder(semantic_entities::class_&& o);
 
 		void
-		visit(semantic_nodes::namespace_& scope);
+		visit(semantic_entities::namespace_& scope);
 
 		void
-		visit(semantic_nodes::class_& scope);
+		visit(semantic_entities::class_& scope);
 
 		void
-		visit(semantic_nodes::function& scope);
+		visit(semantic_entities::function& scope);
 
 		void
-		visit(semantic_nodes::statement_block& scope);
+		visit(semantic_entities::statement_block& scope);
 
 	private:
-		semantic_nodes::class_ o_;
+		semantic_entities::class_ o_;
 };
 
-class scope_cursor::function_adder: public semantic_nodes::scope_visitor
+class scope_cursor::function_adder: public semantic_entities::scope_visitor
 {
 	public:
-		function_adder(semantic_nodes::function&& o);
+		function_adder(semantic_entities::function&& o);
 
 		void
-		visit(semantic_nodes::namespace_& scope);
+		visit(semantic_entities::namespace_& scope);
 
 		void
-		visit(semantic_nodes::class_& scope);
+		visit(semantic_entities::class_& scope);
 
 		void
-		visit(semantic_nodes::function& scope);
+		visit(semantic_entities::function& scope);
 
 		void
-		visit(semantic_nodes::statement_block& scope);
+		visit(semantic_entities::statement_block& scope);
 
 	private:
-		semantic_nodes::function o_;
+		semantic_entities::function o_;
 };
 
-class scope_cursor::statement_block_adder: public semantic_nodes::scope_visitor
+class scope_cursor::statement_block_adder: public semantic_entities::scope_visitor
 {
 	public:
-		statement_block_adder(semantic_nodes::statement_block&& o);
+		statement_block_adder(semantic_entities::statement_block&& o);
 
 		void
-		visit(semantic_nodes::namespace_& scope);
+		visit(semantic_entities::namespace_& scope);
 
 		void
-		visit(semantic_nodes::class_& scope);
+		visit(semantic_entities::class_& scope);
 
 		void
-		visit(semantic_nodes::function& scope);
+		visit(semantic_entities::function& scope);
 
 		void
-		visit(semantic_nodes::statement_block& scope);
+		visit(semantic_entities::statement_block& scope);
 
 	private:
-		semantic_nodes::statement_block o_;
+		semantic_entities::statement_block o_;
 };
 
-class scope_cursor::variable_adder: public semantic_nodes::scope_visitor
+class scope_cursor::variable_adder: public semantic_entities::scope_visitor
 {
 	public:
-		variable_adder(semantic_nodes::variable&& o);
+		variable_adder(semantic_entities::variable&& o);
 
 		void
-		visit(semantic_nodes::namespace_& scope);
+		visit(semantic_entities::namespace_& scope);
 
 		void
-		visit(semantic_nodes::class_& scope);
+		visit(semantic_entities::class_& scope);
 
 		void
-		visit(semantic_nodes::function& scope);
+		visit(semantic_entities::function& scope);
 
 		void
-		visit(semantic_nodes::statement_block& scope);
+		visit(semantic_entities::statement_block& scope);
 
 	private:
-		semantic_nodes::variable o_;
+		semantic_entities::variable o_;
 };
 
 }}}} //namespace socoa::cpp::detail::semantic_analysis

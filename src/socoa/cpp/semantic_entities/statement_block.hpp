@@ -18,8 +18,8 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SEMANTIC_GRAPH_STATEMENT_BLOCK_HPP
-#define SOCOA_CPP_SEMANTIC_GRAPH_STATEMENT_BLOCK_HPP
+#ifndef SOCOA_CPP_SEMANTIC_ENTITIES_STATEMENT_BLOCK_HPP
+#define SOCOA_CPP_SEMANTIC_ENTITIES_STATEMENT_BLOCK_HPP
 
 #include <string>
 #include <list>
@@ -28,7 +28,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "named_entity.hpp"
 #include "variable.hpp"
 
-namespace socoa { namespace cpp { namespace semantic_nodes
+namespace socoa { namespace cpp { namespace semantic_entities
 {
 
 class namespace_;
@@ -125,6 +125,6 @@ class statement_block:
 		std::list<variable> variables_;
 };
 
-}}} //namespace socoa::cpp::semantic_nodes
+}}} //namespace socoa::cpp::semantic_entities
 
 #endif

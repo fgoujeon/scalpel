@@ -18,39 +18,31 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SEMANTIC_GRAPH_SCOPE_VISITOR_HPP
-#define SOCOA_CPP_SEMANTIC_GRAPH_SCOPE_VISITOR_HPP
+#ifndef SOCOA_CPP_SEMANTIC_ENTITIES_NAMED_ENTITY_HPP
+#define SOCOA_CPP_SEMANTIC_ENTITIES_NAMED_ENTITY_HPP
 
-namespace socoa { namespace cpp { namespace semantic_nodes
+#include <string>
+
+namespace socoa { namespace cpp { namespace semantic_entities
 {
 
-class namespace_;
-class class_;
-class function;
-class statement_block;
-
-struct scope_visitor
+struct named_entity
 {
 	virtual
-	~scope_visitor(){}
+	~named_entity(){}
+
+	/**
+	@return the name of the item
+	*/
+	virtual
+	const std::string&
+	name() const = 0;
 
 	virtual
-	void
-	visit(namespace_&) = 0;
-
-	virtual
-	void
-	visit(class_&) = 0;
-
-	virtual
-	void
-	visit(function&) = 0;
-
-	virtual
-	void
-	visit(statement_block&) = 0;
+	bool
+	is_a_type() const = 0;
 };
 
-}}} //namespace socoa::cpp::semantic_nodes
+}}} //namespace socoa::cpp::semantic_entities
 
 #endif

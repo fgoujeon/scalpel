@@ -18,15 +18,15 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SEMANTIC_GRAPH_SCOPE_IMPL_HPP
-#define SOCOA_CPP_SEMANTIC_GRAPH_SCOPE_IMPL_HPP
+#ifndef SOCOA_CPP_SEMANTIC_ENTITIES_SCOPE_IMPL_HPP
+#define SOCOA_CPP_SEMANTIC_ENTITIES_SCOPE_IMPL_HPP
 
 #include <list>
 #include "scope.hpp"
 #include "named_entity.hpp"
 #include "scope_visitor.hpp"
 
-namespace socoa { namespace cpp { namespace semantic_nodes
+namespace socoa { namespace cpp { namespace semantic_entities
 {
 
 class scope_impl: public boost::noncopyable
@@ -75,6 +75,6 @@ class scope_impl: public boost::noncopyable
 		scope::named_entities_t named_entities_;
 };
 
-}}} //namespace socoa::cpp::semantic_nodes
+}}} //namespace socoa::cpp::semantic_entities
 
 #endif

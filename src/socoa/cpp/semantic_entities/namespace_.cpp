@@ -18,130 +18,143 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "class_.hpp"
+#include "namespace_.hpp"
 
 #include <iostream>
 #include <cassert>
-#include "namespace_.hpp"
 
-namespace socoa { namespace cpp { namespace semantic_nodes
+namespace socoa { namespace cpp { namespace semantic_entities
 {
 
-class_::class_(const std::string& name):
+namespace_::namespace_()
+{
+}
+
+namespace_::namespace_(const std::string& name):
     name_(name)
 {
-	std::cout << "New class " << name << "\n";
+	std::cout << "New namespace " << name << "\n";
 }
 
-class_::class_(class_&& c):
-	scope_impl_(std::move(c.scope_impl_)),
-	name_(std::move(c.name_)),
-	classes_(std::move(c.classes_)),
-	functions_(std::move(c.functions_)),
-	members_(std::move(c.members_))
+namespace_::namespace_(namespace_&& n):
+	scope_impl_(std::move(n.scope_impl_)),
+	name_(std::move(n.name_)),
+	namespaces_(std::move(n.namespaces_)),
+	classes_(std::move(n.classes_)),
+	functions_(std::move(n.functions_)),
+    members_(std::move(n.members_))
 {
 }
 
-const class_&
-class_::operator=(class_&& c)
+const namespace_&
+namespace_::operator=(namespace_&& n)
 {
-	scope_impl_ = std::move(c.scope_impl_);
-	name_ = std::move(c.name_);
-	classes_ = std::move(c.classes_);
-	functions_ = std::move(c.functions_);
-	members_ = std::move(c.members_);
+	scope_impl_ = std::move(n.scope_impl_);
+	name_ = std::move(n.name_);
+	namespaces_ = std::move(n.namespaces_);
+	classes_ = std::move(n.classes_);
+	functions_ = std::move(n.functions_);
+    members_ = std::move(n.members_);
 
 	return *this;
 }
 
 void
-class_::accept(scope_visitor& v)
+namespace_::accept(scope_visitor& v)
 {
 	v.visit(*this);
 }
 
 const std::string&
-class_::name() const
+namespace_::name() const
 {
     return name_;
 }
 
 bool
-class_::is_a_type() const
-{
-    return true;
-}
-
-bool
-class_::is_global() const
+namespace_::is_a_type() const
 {
     return false;
 }
 
 bool
-class_::has_enclosing_scope() const
+namespace_::is_global() const
+{
+    return !has_enclosing_scope();
+}
+
+bool
+namespace_::has_enclosing_scope() const
 {
     return scope_impl_.has_enclosing_scope();
 }
 
 scope&
-class_::enclosing_scope()
+namespace_::enclosing_scope()
 {
     return scope_impl_.enclosing_scope();
 }
 
 const scope&
-class_::enclosing_scope() const
+namespace_::enclosing_scope() const
 {
     return scope_impl_.enclosing_scope();
 }
 
 void
-class_::enclosing_scope(class_& enclosing_scope)
+namespace_::enclosing_scope(namespace_& enclosing_scope)
 {
-    scope_impl_.enclosing_scope(enclosing_scope);
+	return scope_impl_.enclosing_scope(enclosing_scope);
 }
 
-void
-class_::enclosing_scope(namespace_& enclosing_scope)
-{
-    scope_impl_.enclosing_scope(enclosing_scope);
-}
-
-const std::list<class_::member_t>&
-class_::members() const
+const std::list<namespace_::member_t>&
+namespace_::members() const
 {
     return members_;
 }
 
 scope::scope_iterator_range
-class_::scopes()
+namespace_::scopes()
 {
 	return scope_impl_.scopes();
 }
 
 scope::scope_const_iterator_range
-class_::scopes() const
+namespace_::scopes() const
 {
 	return scope_impl_.scopes();
 }
 
 scope::named_entity_iterator_range
-class_::named_entities()
+namespace_::named_entities()
 {
 	return scope_impl_.named_entities();
 }
 
 scope::named_entity_const_iterator_range
-class_::named_entities() const
+namespace_::named_entities() const
 {
 	return scope_impl_.named_entities();
 }
 
 void
-class_::add(class_&& nested_class)
+namespace_::add(namespace_&& member)
 {
-	classes_.push_back(std::move(nested_class));
+    namespaces_.push_back(std::move(member));
+
+	namespace_& member_ref = namespaces_.back();
+
+	member_ref.enclosing_scope(*this);
+
+	members_.push_back(&member_ref);
+	scope_impl_.add_to_scopes(member_ref);
+	scope_impl_.add_to_named_entities(member_ref);
+}
+
+void
+namespace_::add(class_&& member)
+{
+    classes_.push_back(std::move(member));
 
 	class_& member_ref = classes_.back();
 
@@ -153,7 +166,7 @@ class_::add(class_&& nested_class)
 }
 
 void
-class_::add(function&& member)
+namespace_::add(function&& member)
 {
     functions_.push_back(std::move(member));
 
@@ -167,7 +180,7 @@ class_::add(function&& member)
 }
 
 void
-class_::add(variable&& member)
+namespace_::add(variable&& member)
 {
     variables_.push_back(std::move(member));
 
@@ -179,4 +192,4 @@ class_::add(variable&& member)
 	scope_impl_.add_to_named_entities(member_ref);
 }
 
-}}} //namespace socoa::cpp::semantic_nodes
+}}} //namespace socoa::cpp::semantic_entities

@@ -20,7 +20,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "scope_impl.hpp"
 
-namespace socoa { namespace cpp { namespace semantic_nodes
+namespace socoa { namespace cpp { namespace semantic_entities
 {
 
 scope_impl::scope_impl():
@@ -128,5 +128,5 @@ scope_impl::enclosing_scope(scope& enclosing_scope)
     enclosing_scope_ = &enclosing_scope;
 }
 
-}}} //namespace socoa::cpp::semantic_nodes
+}}} //namespace socoa::cpp::semantic_entities
 

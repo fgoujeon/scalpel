@@ -18,8 +18,8 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SEMANTIC_GRAPH_SCOPE_HPP
-#define SOCOA_CPP_SEMANTIC_GRAPH_SCOPE_HPP
+#ifndef SOCOA_CPP_SEMANTIC_ENTITIES_SCOPE_HPP
+#define SOCOA_CPP_SEMANTIC_ENTITIES_SCOPE_HPP
 
 #include <list>
 #include <boost/iterator/indirect_iterator.hpp>
@@ -27,7 +27,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "named_entity.hpp"
 #include "scope_visitor.hpp"
 
-namespace socoa { namespace cpp { namespace semantic_nodes
+namespace socoa { namespace cpp { namespace semantic_entities
 {
 
 struct scope
@@ -97,6 +97,6 @@ struct scope
 	enclosing_scope() = 0;
 };
 
-}}} //namespace socoa::cpp::semantic_nodes
+}}} //namespace socoa::cpp::semantic_entities
 
 #endif

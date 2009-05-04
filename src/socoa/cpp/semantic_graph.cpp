@@ -26,7 +26,7 @@ namespace socoa { namespace cpp
 {
 
 semantic_graph::semantic_graph():
-	root_node_(new semantic_nodes::namespace_())
+	root_node_(new semantic_entities::namespace_())
 {
 }
 
@@ -35,7 +35,7 @@ semantic_graph::semantic_graph(semantic_graph&& o):
 {
 }
 
-semantic_nodes::namespace_&
+semantic_entities::namespace_&
 semantic_graph::root_node()
 {
 	return *root_node_;

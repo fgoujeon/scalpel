@@ -26,7 +26,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "namespace_.hpp"
 #include "class_.hpp"
 
-namespace socoa { namespace cpp { namespace semantic_nodes
+namespace socoa { namespace cpp { namespace semantic_entities
 {
 
 statement_block::statement_block()
@@ -143,4 +143,4 @@ statement_block::add(variable&& v)
 	variables_.push_back(std::move(v));
 }
 
-}}} //namespace socoa::cpp::semantic_nodes
+}}} //namespace socoa::cpp::semantic_entities

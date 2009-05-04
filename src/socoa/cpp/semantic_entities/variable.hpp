@@ -18,15 +18,15 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SEMANTIC_GRAPH_VARIABLE_HPP
-#define SOCOA_CPP_SEMANTIC_GRAPH_VARIABLE_HPP
+#ifndef SOCOA_CPP_SEMANTIC_ENTITIES_VARIABLE_HPP
+#define SOCOA_CPP_SEMANTIC_ENTITIES_VARIABLE_HPP
 
 #include <string>
 #include <boost/noncopyable.hpp>
 #include "scope.hpp"
 #include "named_entity.hpp"
 
-namespace socoa { namespace cpp { namespace semantic_nodes
+namespace socoa { namespace cpp { namespace semantic_entities
 {
 
 /**
@@ -58,6 +58,6 @@ class variable:
 		std::string name_;
 };
 
-}}} //namespace socoa::cpp::semantic_nodes
+}}} //namespace socoa::cpp::semantic_entities
 
 #endif

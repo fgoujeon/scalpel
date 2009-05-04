@@ -22,7 +22,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <iostream>
 
-namespace socoa { namespace cpp { namespace semantic_nodes
+namespace socoa { namespace cpp { namespace semantic_entities
 {
 
 variable::variable(std::string&& name):
@@ -66,5 +66,5 @@ variable::is_a_type() const
 	return false;
 }
 
-}}} //namespace socoa::cpp::semantic_nodes
+}}} //namespace socoa::cpp::semantic_entities
 

@@ -27,7 +27,7 @@ namespace socoa { namespace cpp
 {
 
 using namespace syntax_nodes;
-using namespace semantic_nodes;
+using namespace semantic_entities;
 using namespace detail::semantic_analysis;
 
 semantic_analyzer::semantic_analyzer():

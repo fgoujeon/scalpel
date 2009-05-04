@@ -28,27 +28,27 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace detail { namespace semantic_analysis { namespace name_lookup
 {
 
-const semantic_nodes::named_entity*
-find_unqualified_name(const semantic_nodes::scope& current_scope, const std::string& name);
+const semantic_entities::named_entity*
+find_unqualified_name(const semantic_entities::scope& current_scope, const std::string& name);
 
-semantic_nodes::scope*
+semantic_entities::scope*
 find_scope
 (
-	semantic_nodes::scope& current_scope,
+	semantic_entities::scope& current_scope,
 	const syntax_nodes::nested_name_specifier& nested_name_specifier
 );
 
-semantic_nodes::scope*
+semantic_entities::scope*
 recursive_ascent_find_scope
 (
-	semantic_nodes::scope& start_scope,
+	semantic_entities::scope& start_scope,
 	const std::string& scope_name
 );
 
-semantic_nodes::scope*
+semantic_entities::scope*
 find_scope
 (
-	semantic_nodes::scope& parent_scope,
+	semantic_entities::scope& parent_scope,
 	const std::string& scope_name
 );
 
