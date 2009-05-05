@@ -18,25 +18,43 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_NODES_NEW_EXPRESSION_HPP
-#define SOCOA_CPP_SYNTAX_NODES_NEW_EXPRESSION_HPP
-
-#include "alternative_node.hpp"
-#include "type_id_new_expression.hpp"
-#include "new_type_id_new_expression.hpp"
+#include "new_placement.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
-typedef
-	alternative_node
-	<
-		type_id_new_expression,
-		new_type_id_new_expression
-	>
-	new_expression
-;
+new_placement::new_placement
+(
+)
+{
+	update_node_list();
+}
+
+new_placement::new_placement(const new_placement& o):
+	composite_node()
+{
+	update_node_list();
+}
+
+new_placement::new_placement(new_placement&& o):
+	composite_node()
+{
+	update_node_list();
+}
+
+const new_placement&
+new_placement::operator=(const new_placement& o)
+{
+	update_node_list();
+
+	return *this;
+}
+
+void
+new_placement::update_node_list()
+{
+	clear();
+}
 
 }}} //namespace socoa::cpp::syntax_nodes
 
-#endif

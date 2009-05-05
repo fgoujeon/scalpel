@@ -303,6 +303,18 @@ convert_new_array_operator(const tree_node_t& node);
 syntax_nodes::new_expression
 convert_new_expression(const tree_node_t& node);
 
+syntax_nodes::new_placement
+convert_new_placement(const tree_node_t& node);
+
+syntax_nodes::new_initializer
+convert_new_initializer(const tree_node_t& node);
+
+syntax_nodes::new_type_id
+convert_new_type_id(const tree_node_t& node);
+
+syntax_nodes::new_type_id_new_expression
+convert_new_type_id_new_expression(const tree_node_t& node);
+
 syntax_nodes::operator_
 convert_operator(const tree_node_t& node);
 
@@ -410,6 +422,9 @@ convert_try_block(const tree_node_t& node);
 
 syntax_nodes::type_id
 convert_type_id(const tree_node_t& node);
+
+syntax_nodes::type_id_new_expression
+convert_type_id_new_expression(const tree_node_t& node);
 
 syntax_nodes::type_id_sizeof_expression
 convert_type_id_sizeof_expression(const tree_node_t& node);

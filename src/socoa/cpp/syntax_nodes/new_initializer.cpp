@@ -18,32 +18,32 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "new_expression.hpp"
+#include "new_initializer.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
-new_expression::new_expression
+new_initializer::new_initializer
 (
 )
 {
 	update_node_list();
 }
 
-new_expression::new_expression(const new_expression& o):
+new_initializer::new_initializer(const new_initializer& o):
 	composite_node()
 {
 	update_node_list();
 }
 
-new_expression::new_expression(new_expression&& o):
+new_initializer::new_initializer(new_initializer&& o):
 	composite_node()
 {
 	update_node_list();
 }
 
-const new_expression&
-new_expression::operator=(const new_expression& o)
+const new_initializer&
+new_initializer::operator=(const new_initializer& o)
 {
 	update_node_list();
 
@@ -51,7 +51,7 @@ new_expression::operator=(const new_expression& o)
 }
 
 void
-new_expression::update_node_list()
+new_initializer::update_node_list()
 {
 	clear();
 }
