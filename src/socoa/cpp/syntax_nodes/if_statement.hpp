@@ -60,6 +60,13 @@ class if_statement: public composite_node
 		const if_statement&
 		operator=(const if_statement& o);
 
+		inline
+		const statement&
+		statement_node() const;
+
+		const boost::optional<const statement&>
+		else_statement_node() const;
+
 	private:
 		void
 		update_node_list();
@@ -74,6 +81,12 @@ class if_statement: public composite_node
 		std::unique_ptr<statement> else_statement_;
 		boost::optional<space> post_else_keyword_space_;
 };
+
+const statement&
+if_statement::statement_node() const
+{
+	return *statement_;
+}
 
 }}} //namespace socoa::cpp::syntax_nodes
 

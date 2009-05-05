@@ -104,6 +104,15 @@ if_statement::operator=(const if_statement& o)
 	return *this;
 }
 
+const boost::optional<const statement&>
+if_statement::else_statement_node() const
+{
+	if(else_statement_)
+		return boost::optional<const statement&>(*else_statement_);
+	else
+		return boost::optional<const statement&>();
+}
+
 void
 if_statement::update_node_list()
 {

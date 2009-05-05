@@ -193,8 +193,9 @@ semantic_analyzer::analyze(const expression_statement& syntax_node)
 }
 
 void
-semantic_analyzer::analyze(const for_statement&)
+semantic_analyzer::analyze(const for_statement& syntax_node)
 {
+	analyze(syntax_node.statement_node());
 }
 
 void
@@ -324,6 +325,11 @@ semantic_analyzer::analyze(const identifier&)
 void
 semantic_analyzer::analyze(const if_statement& syntax_node)
 {
+	analyze(syntax_node.statement_node());
+
+	auto opt_else_statement_node = syntax_node.else_statement_node();
+	if(opt_else_statement_node)
+		analyze(*opt_else_statement_node);
 }
 
 void

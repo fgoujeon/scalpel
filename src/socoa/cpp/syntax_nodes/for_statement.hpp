@@ -64,6 +64,10 @@ class for_statement: public composite_node
 		const for_statement&
 		operator=(const for_statement& o);
 
+		inline
+		const statement&
+		statement_node() const;
+
 	private:
 		void
 		update_node_list();
@@ -80,6 +84,12 @@ class for_statement: public composite_node
 		boost::optional<space> post_closing_bracket_space_;
 		std::unique_ptr<statement> statement_;
 };
+
+const statement&
+for_statement::statement_node() const
+{
+	return *statement_;
+}
 
 }}} //namespace socoa::cpp::syntax_nodes
 
