@@ -25,6 +25,13 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace semantic_entities
 {
 
+variable::variable(const std::string& name):
+	enclosing_scope_(0),
+	name_(name)
+{
+	std::cout << "New variable " << name << "\n";
+}
+
 variable::variable(std::string&& name):
 	enclosing_scope_(0),
 	name_(std::move(name))

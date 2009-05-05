@@ -143,6 +143,12 @@ void
 function::add(variable&& v)
 {
 	variables_.push_back(std::move(v));
+
+	variable& member_ref = variables_.back();
+
+	member_ref.enclosing_scope(*this);
+
+	scope_impl_.add_to_named_entities(member_ref);
 }
 
 }}} //namespace socoa::cpp::semantic_entities

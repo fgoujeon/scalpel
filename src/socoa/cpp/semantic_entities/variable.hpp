@@ -37,6 +37,8 @@ class variable:
 	public boost::noncopyable
 {
 	public:
+		variable(const std::string& name);
+
 		variable(std::string&& name);
 
 		variable(variable&& v);

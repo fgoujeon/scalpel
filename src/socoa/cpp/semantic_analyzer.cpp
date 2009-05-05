@@ -464,7 +464,8 @@ semantic_analyzer::analyze(const return_statement&)
 void
 semantic_analyzer::analyze(const simple_declaration& syntax_node)
 {
-	std::string name;
+	std::vector<std::string> names;
+	std::string class_name;
 	bool is_a_class_declaration = false;
 	bool is_a_class_forward_declaration = false;
 	bool is_a_function_declaration = false;
@@ -502,7 +503,7 @@ semantic_analyzer::analyze(const simple_declaration& syntax_node)
 					{
 						is_a_class_forward_declaration = true;
 						const identifier& identifier_node = opt_class_elaborated_specifier_node->identifier_node();
-						name = identifier_node.value();
+						class_name = identifier_node.value();
 					}
 				}
 			}
@@ -528,8 +529,7 @@ semantic_analyzer::analyze(const simple_declaration& syntax_node)
 					{
 						if(boost::optional<const identifier&> an_identifier = get<identifier>(an_unqualified_id))
 						{
-							assert(name.empty());
-							name = an_identifier->value();
+							names.push_back(an_identifier->value());
 						}
 					}
 				}
@@ -545,11 +545,7 @@ semantic_analyzer::analyze(const simple_declaration& syntax_node)
 
 					if(get<direct_declarator::function_part>(&next_part))
 					{
-						//syntax_node is a function declaration!
 						is_a_function_declaration = true;
-
-						if(!name.empty())
-							scope_cursor_.add_to_current_scope(function(name));
 					}
 				}
 			}
@@ -558,14 +554,23 @@ semantic_analyzer::analyze(const simple_declaration& syntax_node)
 
 	if(is_a_class_declaration || is_a_class_forward_declaration)
 	{
-		if(!name.empty())
-			scope_cursor_.add_to_current_scope(class_(name));
+		if(!class_name.empty())
+			scope_cursor_.add_to_current_scope(class_(class_name));
 	}
-	else if(!is_a_function_declaration && !is_a_class_forward_declaration)
+	else if(is_a_function_declaration)
 	{
-		//syntax_node is a variable declaration!
-		if(!name.empty())
+		assert(names.size() == 1);
+		scope_cursor_.add_to_current_scope(function(names.front()));
+	}
+	else if(!is_a_function_declaration && !is_a_class_forward_declaration) //variable declaration
+	{
+		//there can be several names, like in:
+		//int i1, i2;
+		for(auto i = names.begin(); i != names.end(); ++i) //for each name
+		{
+			const std::string& name = *i;
 			scope_cursor_.add_to_current_scope(variable(name));
+		}
 	}
 }
 
