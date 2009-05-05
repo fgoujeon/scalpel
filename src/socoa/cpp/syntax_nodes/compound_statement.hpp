@@ -52,17 +52,33 @@ class compound_statement: public composite_node
 
 		compound_statement(compound_statement&& o);
 
+		~compound_statement();
+
 		const compound_statement&
 		operator=(const compound_statement& o);
+
+		inline
+		const boost::optional<sequence_node<statement>&>
+		statement_seq_node() const;
 
 	private:
 		void
 		update_node_list();
 
 		boost::optional<space> post_opening_brace_space_;
-		std::shared_ptr<sequence_node<statement>> statement_seq_;
+		sequence_node<statement>* statement_seq_;
 		boost::optional<space> post_statement_seq_space_;
 };
+
+inline
+const boost::optional<sequence_node<statement>&>
+compound_statement::statement_seq_node() const
+{
+	if(statement_seq_)
+		return boost::optional<sequence_node<statement>&>(*statement_seq_);
+	else
+		return boost::optional<sequence_node<statement>&>();
+}
 
 }}} //namespace socoa::cpp::syntax_nodes
 

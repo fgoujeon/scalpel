@@ -75,6 +75,16 @@ semantic_analyzer::operator()(const syntax_tree& tree)
 }
 
 void
+semantic_analyzer::analyze(const break_statement&)
+{
+}
+
+void
+semantic_analyzer::analyze(const case_statement&)
+{
+}
+
+void
 semantic_analyzer::analyze(const class_head&)
 {
 }
@@ -91,9 +101,35 @@ semantic_analyzer::analyze(const class_specifier& syntax_node)
 }
 
 void
-semantic_analyzer::analyze(const compound_statement& syntax_node)
+semantic_analyzer::analyze(const classic_labeled_statement&)
 {
+}
 
+void
+semantic_analyzer::analyze(const compound_statement& syntax_node, const bool create_statement_block)
+{
+	if(create_statement_block)
+	{
+		statement_block s;
+		scope_cursor_.add_to_current_scope(s);
+		scope_cursor_.enter_last_added_scope();
+	}
+
+	auto opt_statement_seq_node = syntax_node.statement_seq_node();
+	if(opt_statement_seq_node)
+	{
+		analyze(*opt_statement_seq_node);
+	}
+
+	if(create_statement_block)
+	{
+		scope_cursor_.leave_scope();
+	}
+}
+
+void
+semantic_analyzer::analyze(const continue_statement&)
+{
 }
 
 void
@@ -113,6 +149,11 @@ semantic_analyzer::analyze(const cv_qualifier&)
 
 void
 semantic_analyzer::analyze(const declarator&)
+{
+}
+
+void
+semantic_analyzer::analyze(const default_statement&)
 {
 }
 
@@ -137,7 +178,22 @@ semantic_analyzer::analyze(const direct_declarator::function_part&)
 }
 
 void
+semantic_analyzer::analyze(const do_while_statement&)
+{
+}
+
+void
 semantic_analyzer::analyze(const elaborated_type_specifier&)
+{
+}
+
+void
+semantic_analyzer::analyze(const expression_statement& syntax_node)
+{
+}
+
+void
+semantic_analyzer::analyze(const for_statement&)
 {
 }
 
@@ -245,7 +301,7 @@ semantic_analyzer::analyze(const function_definition& syntax_node)
 		scope_cursor_.enter_scope(*function_scope);
 
 		auto opt_compound_statement = syntax_node.compound_statement_node();
-		if(opt_compound_statement) analyze(*opt_compound_statement);
+		if(opt_compound_statement) analyze(*opt_compound_statement, false);
 
 		scope_cursor_.leave_scope();
 	}
@@ -256,7 +312,17 @@ semantic_analyzer::analyze(const function_definition& syntax_node)
 }
 
 void
+semantic_analyzer::analyze(const goto_statement&)
+{
+}
+
+void
 semantic_analyzer::analyze(const identifier&)
+{
+}
+
+void
+semantic_analyzer::analyze(const if_statement& syntax_node)
 {
 }
 
@@ -385,6 +451,11 @@ semantic_analyzer::analyze(const qualified_template_id&)
 }
 
 void
+semantic_analyzer::analyze(const return_statement&)
+{
+}
+
+void
 semantic_analyzer::analyze(const simple_declaration& syntax_node)
 {
 	std::string name;
@@ -498,6 +569,11 @@ semantic_analyzer::analyze(const simple_template_type_specifier&)
 }
 
 void
+semantic_analyzer::analyze(const switch_statement& syntax_node)
+{
+}
+
+void
 semantic_analyzer::analyze(const template_declaration&)
 {
 }
@@ -508,12 +584,22 @@ semantic_analyzer::analyze(const template_id&)
 }
 
 void
+semantic_analyzer::analyze(const try_block& syntax_node)
+{
+}
+
+void
 semantic_analyzer::analyze(const using_declaration&)
 {
 }
 
 void
 semantic_analyzer::analyze(const using_directive&)
+{
+}
+
+void
+semantic_analyzer::analyze(const while_statement&)
 {
 }
 

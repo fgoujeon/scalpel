@@ -36,7 +36,9 @@ compound_statement::compound_statement
 	post_statement_seq_space_(post_statement_seq_space)
 {
 	if(statement_seq_node)
-		statement_seq_ = std::make_shared<statement_seq>(*statement_seq_node);
+		statement_seq_ = new statement_seq(*statement_seq_node);
+	else
+		statement_seq_ = 0;
 
 	update_node_list();
 }
@@ -44,26 +46,39 @@ compound_statement::compound_statement
 compound_statement::compound_statement(const compound_statement& o):
 	composite_node(),
 	post_opening_brace_space_(o.post_opening_brace_space_),
-	statement_seq_(o.statement_seq_),
 	post_statement_seq_space_(o.post_statement_seq_space_)
 {
+	if(o.statement_seq_)
+		statement_seq_ = new statement_seq(*o.statement_seq_);
+	else
+		statement_seq_ = 0;
+
 	update_node_list();
 }
 
 compound_statement::compound_statement(compound_statement&& o):
 	composite_node(),
 	post_opening_brace_space_(std::move(o.post_opening_brace_space_)),
-	statement_seq_(std::move(o.statement_seq_)),
+	statement_seq_(o.statement_seq_),
 	post_statement_seq_space_(std::move(o.post_statement_seq_space_))
 {
 	update_node_list();
+}
+
+compound_statement::~compound_statement()
+{
+	delete statement_seq_;
 }
 
 const compound_statement&
 compound_statement::operator=(const compound_statement& o)
 {
 	post_opening_brace_space_ = o.post_opening_brace_space_;
-	statement_seq_ = o.statement_seq_;
+	delete statement_seq_;
+	if(o.statement_seq_)
+		statement_seq_ = new statement_seq(*o.statement_seq_);
+	else
+		statement_seq_ = 0;
 	post_statement_seq_space_ = o.post_statement_seq_space_;
 
 	update_node_list();

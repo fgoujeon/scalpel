@@ -75,16 +75,28 @@ class semantic_analyzer
 		analyze_sequence(const syntax_nodes::sequence_node<T, SeparatorNode>& seq);
 
         void
+		analyze(const syntax_nodes::break_statement& syntax_node);
+
+        void
+		analyze(const syntax_nodes::case_statement& syntax_node);
+
+        void
 		analyze(const syntax_nodes::class_head& syntax_node);
 
         void
 		analyze(const syntax_nodes::class_specifier& syntax_node);
 
         void
-		analyze(const syntax_nodes::compound_statement& syntax_node);
+		analyze(const syntax_nodes::classic_labeled_statement& syntax_node);
+
+        void
+		analyze(const syntax_nodes::compound_statement& syntax_node, const bool create_statement_block = true);
 
         void
 		analyze(const syntax_nodes::conversion_function_id& syntax_node);
+
+        void
+		analyze(const syntax_nodes::continue_statement& syntax_node);
 
         void
 		analyze(const syntax_nodes::ctor_initializer& syntax_node);
@@ -94,6 +106,9 @@ class semantic_analyzer
 
         void
 		analyze(const syntax_nodes::declarator& syntax_node);
+
+        void
+		analyze(const syntax_nodes::default_statement& syntax_node);
 
         void
 		analyze(const syntax_nodes::destructor_name& syntax_node);
@@ -108,13 +123,28 @@ class semantic_analyzer
 		analyze(const syntax_nodes::direct_declarator::function_part& syntax_node);
 
         void
+		analyze(const syntax_nodes::do_while_statement& syntax_node);
+
+        void
 		analyze(const syntax_nodes::elaborated_type_specifier& syntax_node);
+
+        void
+		analyze(const syntax_nodes::expression_statement& syntax_node);
+
+        void
+		analyze(const syntax_nodes::for_statement& syntax_node);
 
         void
 		analyze(const syntax_nodes::function_definition& syntax_node);
 
         void
+		analyze(const syntax_nodes::goto_statement& syntax_node);
+
+        void
 		analyze(const syntax_nodes::identifier& syntax_node);
+
+        void
+		analyze(const syntax_nodes::if_statement& syntax_node);
 
         void
 		analyze(const syntax_nodes::init_declarator& syntax_node);
@@ -180,10 +210,16 @@ class semantic_analyzer
 		analyze(const syntax_nodes::qualified_template_id& syntax_node);
 
         void
+		analyze(const syntax_nodes::return_statement& syntax_node);
+
+        void
 		analyze(const syntax_nodes::simple_declaration& syntax_node);
 
         void
 		analyze(const syntax_nodes::simple_template_type_specifier& syntax_node);
+
+        void
+		analyze(const syntax_nodes::switch_statement& syntax_node);
 
         void
 		analyze(const syntax_nodes::template_declaration& syntax_node);
@@ -192,10 +228,16 @@ class semantic_analyzer
 		analyze(const syntax_nodes::template_id& syntax_node);
 
         void
+		analyze(const syntax_nodes::try_block& syntax_node);
+
+        void
 		analyze(const syntax_nodes::using_declaration& syntax_node);
 
         void
 		analyze(const syntax_nodes::using_directive& syntax_node);
+
+        void
+		analyze(const syntax_nodes::while_statement& syntax_node);
 
 		detail::semantic_analysis::scope_cursor scope_cursor_;
 		alternative_visitor alternative_visitor_;
