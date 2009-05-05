@@ -1,3 +1,8 @@
+struct Test
+{
+	Test(int n);
+};
+
 Test::Test(int n)
 try :
 	number(n)

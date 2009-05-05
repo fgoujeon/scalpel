@@ -55,6 +55,10 @@ class handler: public composite_node
 		const handler&
 		operator=(const handler& o);
 
+		inline
+		const compound_statement&
+		compound_statement_node() const;
+
 	private:
 		void
 		update_node_list();
@@ -66,6 +70,13 @@ class handler: public composite_node
 		boost::optional<space> post_closing_bracket_space_;
 		compound_statement compound_statement_;
 };
+
+inline
+const compound_statement&
+handler::compound_statement_node() const
+{
+	return compound_statement_;
+}
 
 }}} //namespace socoa::cpp::syntax_nodes
 

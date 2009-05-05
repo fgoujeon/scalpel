@@ -141,6 +141,9 @@ class semantic_analyzer
 		analyze(const syntax_nodes::goto_statement& syntax_node);
 
         void
+		analyze(const syntax_nodes::handler& syntax_node);
+
+        void
 		analyze(const syntax_nodes::identifier& syntax_node);
 
         void

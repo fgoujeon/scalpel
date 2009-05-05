@@ -52,6 +52,14 @@ class try_block: public composite_node
 		const try_block&
 		operator=(const try_block& o);
 
+		inline
+		const compound_statement&
+		compound_statement_node() const;
+
+		inline
+		const handler_seq&
+		handler_seq_node() const;
+
 	private:
 		void
 		update_node_list();
@@ -61,6 +69,20 @@ class try_block: public composite_node
 		boost::optional<space> post_compound_statement_space_;
 		handler_seq handler_seq_;
 };
+
+inline
+const compound_statement&
+try_block::compound_statement_node() const
+{
+	return compound_statement_;
+}
+
+inline
+const handler_seq&
+try_block::handler_seq_node() const
+{
+	return handler_seq_;
+}
 
 }}} //namespace socoa::cpp::syntax_nodes
 

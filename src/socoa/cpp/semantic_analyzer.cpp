@@ -97,6 +97,8 @@ semantic_analyzer::analyze(const class_specifier& syntax_node)
 	if(id)
 	{
 		scope_cursor_.add_to_current_scope(class_(id->value()));
+		scope_cursor_.enter_last_added_scope();
+		scope_cursor_.leave_scope();
 	}
 }
 
@@ -188,7 +190,7 @@ semantic_analyzer::analyze(const elaborated_type_specifier&)
 }
 
 void
-semantic_analyzer::analyze(const expression_statement& syntax_node)
+semantic_analyzer::analyze(const expression_statement&)
 {
 }
 
@@ -315,6 +317,12 @@ semantic_analyzer::analyze(const function_definition& syntax_node)
 void
 semantic_analyzer::analyze(const goto_statement&)
 {
+}
+
+void
+semantic_analyzer::analyze(const handler& syntax_node)
+{
+	analyze(syntax_node.compound_statement_node());
 }
 
 void
@@ -482,9 +490,10 @@ semantic_analyzer::analyze(const simple_declaration& syntax_node)
 
 			if(auto a_type_specifier_ptr = get<type_specifier>(&a_decl_specifier))
 			{
-				if(get<class_specifier>(a_type_specifier_ptr))
+				if(auto opt_class_specifier_node = get<class_specifier>(a_type_specifier_ptr))
 				{
 					is_a_class_declaration = true;
+					analyze(*opt_class_specifier_node);
 				}
 				else if(auto an_elaborated_type_specifier_ptr = get<elaborated_type_specifier>(a_type_specifier_ptr))
 				{
@@ -552,7 +561,11 @@ semantic_analyzer::analyze(const simple_declaration& syntax_node)
 		}
 	}
 
-	if(is_a_class_declaration || is_a_class_forward_declaration)
+	if(is_a_class_declaration)
+	{
+		//analysis is already done
+	}
+	else if(is_a_class_forward_declaration)
 	{
 		if(!class_name.empty())
 			scope_cursor_.add_to_current_scope(class_(class_name));
@@ -580,7 +593,7 @@ semantic_analyzer::analyze(const simple_template_type_specifier&)
 }
 
 void
-semantic_analyzer::analyze(const switch_statement& syntax_node)
+semantic_analyzer::analyze(const switch_statement&)
 {
 }
 
@@ -597,6 +610,8 @@ semantic_analyzer::analyze(const template_id&)
 void
 semantic_analyzer::analyze(const try_block& syntax_node)
 {
+	analyze(syntax_node.compound_statement_node());
+	analyze(syntax_node.handler_seq_node());
 }
 
 void

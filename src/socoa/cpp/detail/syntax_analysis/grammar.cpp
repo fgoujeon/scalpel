@@ -1643,11 +1643,11 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 
 	//1.13 - Exception handling [gram.except]
 	try_block
-		= str_p("try") >> !s >> compound_statement >> !s >> handler_seq
+		= str_p("try") >> !s >> compound_statement >> !(!s >> handler_seq) //handler_seq is made optional to facilitate the source code completion done during the syntax analysis
 	;
 
 	function_try_block
-		= str_p("try") >> !s >> !(ctor_initializer >> !s) >> compound_statement >> !s >> handler_seq
+		= str_p("try") >> !s >> !(ctor_initializer >> !s) >> compound_statement >> !(!s >> handler_seq) //handler_seq is made optional to facilitate the source code completion done during the syntax analysis
 	;
 
 	handler_seq
