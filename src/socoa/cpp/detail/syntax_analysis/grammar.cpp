@@ -662,7 +662,8 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	new_declarator
-		= ptr_operator >> !(!s >> new_declarator)
+		= ptr_operator_seq >> !s >> direct_new_declarator
+		| ptr_operator_seq
 		| direct_new_declarator
 	;
 

@@ -18,44 +18,31 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_NODES_NEW_TYPE_ID_HPP
-#define SOCOA_CPP_SYNTAX_NODES_NEW_TYPE_ID_HPP
+#ifndef SOCOA_CPP_SYNTAX_NODES_NEW_DECLARATOR_HPP
+#define SOCOA_CPP_SYNTAX_NODES_NEW_DECLARATOR_HPP
 
-#include <boost/optional.hpp>
 #include "composite_node.hpp"
-#include "space.hpp"
-#include "new_declarator.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
-/**
-new_type_id
-	= type_specifier_seq >> !(!s >> new_declarator)
-;
-*/
-class new_type_id: public composite_node
+class new_declarator: public composite_node
 {
 	public:
-		new_type_id
+		new_declarator
 		(
-			boost::optional<space>&& pre_new_declarator_space_node,
-			boost::optional<new_declarator>&& new_declarator_node
 		);
 
-		new_type_id(const new_type_id& o);
+		new_declarator(const new_declarator& o);
 
-		new_type_id(new_type_id&& o);
+		new_declarator(new_declarator&& o);
 
-		const new_type_id&
-		operator=(const new_type_id& o);
+		const new_declarator&
+		operator=(const new_declarator& o);
 
 	private:
 		void
 		update_node_list();
-
-		boost::optional<space> pre_new_declarator_space_;
-		boost::optional<new_declarator> new_declarator_;
 };
 
 }}} //namespace socoa::cpp::syntax_nodes

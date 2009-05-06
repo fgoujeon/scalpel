@@ -18,55 +18,42 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "new_type_id.hpp"
+#include "direct_new_declarator.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
-new_type_id::new_type_id
+direct_new_declarator::direct_new_declarator
 (
-	boost::optional<space>&& pre_new_declarator_space_node,
-	boost::optional<new_declarator>&& new_declarator_node
-):
-	pre_new_declarator_space_(pre_new_declarator_space_node),
-	new_declarator_(new_declarator_node)
+)
 {
 	update_node_list();
 }
 
-new_type_id::new_type_id(const new_type_id& o):
-	composite_node(),
-	pre_new_declarator_space_(o.pre_new_declarator_space_),
-	new_declarator_(o.new_declarator_)
+direct_new_declarator::direct_new_declarator(const direct_new_declarator& o):
+	composite_node()
 {
 	update_node_list();
 }
 
-new_type_id::new_type_id(new_type_id&& o):
-	composite_node(),
-	pre_new_declarator_space_(std::move(o.pre_new_declarator_space_)),
-	new_declarator_(std::move(o.new_declarator_))
+direct_new_declarator::direct_new_declarator(direct_new_declarator&& o):
+	composite_node()
 {
 	update_node_list();
 }
 
-const new_type_id&
-new_type_id::operator=(const new_type_id& o)
+const direct_new_declarator&
+direct_new_declarator::operator=(const direct_new_declarator& o)
 {
-	pre_new_declarator_space_ = o.pre_new_declarator_space_;
-	new_declarator_ = o.new_declarator_;
-
 	update_node_list();
 
 	return *this;
 }
 
 void
-new_type_id::update_node_list()
+direct_new_declarator::update_node_list()
 {
 	clear();
-	if(pre_new_declarator_space_) add(*pre_new_declarator_space_);
-	if(new_declarator_) add(*new_declarator_);
 }
 
 }}} //namespace socoa::cpp::syntax_nodes

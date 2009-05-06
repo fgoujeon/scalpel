@@ -1392,6 +1392,14 @@ convert_new_array_operator(const tree_node_t& node)
 	return new_array_operator();
 }
 
+new_declarator
+convert_new_declarator(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::NEW_DECLARATOR);
+
+	return new_declarator();
+}
+
 new_expression
 convert_new_expression(const tree_node_t& node)
 {
@@ -1434,7 +1442,14 @@ convert_new_type_id(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::NEW_TYPE_ID);
 
-	return new_type_id();
+	tree_node_iterator_t new_declarator_it = find_node<id_t::NEW_DECLARATOR>(node);
+
+	return new_type_id
+	(
+	//	type_specifier_seq(),
+		convert_previous_space(node, new_declarator_it),
+		convert_optional<new_declarator>(new_declarator_it, node)
+	);
 }
 
 new_type_id_new_expression
