@@ -20,6 +20,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "new_type_id_new_expression.hpp"
 
+#include "new_initializer.hpp"
 #include "common_nodes.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
@@ -42,9 +43,12 @@ new_type_id_new_expression::new_type_id_new_expression
 	new_placement_(new_placement_node),
 	post_new_placement_space_(post_new_placement_space_node),
 	new_type_id_(new_type_id_node),
-	pre_new_initializer_space_(pre_new_initializer_space_node),
-	new_initializer_(new_initializer_node)
+	pre_new_initializer_space_(pre_new_initializer_space_node)
 {
+	if(new_initializer_node)
+		new_initializer_ = std::move(std::unique_ptr<new_initializer>(new new_initializer(std::move(*new_initializer_node))));
+	else
+		new_initializer_ = 0;
 	update_node_list();
 }
 
@@ -56,9 +60,12 @@ new_type_id_new_expression::new_type_id_new_expression(const new_type_id_new_exp
 	new_placement_(o.new_placement_),
 	post_new_placement_space_(o.post_new_placement_space_),
 	new_type_id_(o.new_type_id_),
-	pre_new_initializer_space_(o.pre_new_initializer_space_),
-	new_initializer_(o.new_initializer_)
+	pre_new_initializer_space_(o.pre_new_initializer_space_)
 {
+	if(o.new_initializer_)
+		new_initializer_ = std::move(std::unique_ptr<new_initializer>(new new_initializer(std::move(*o.new_initializer_))));
+	else
+		new_initializer_ = 0;
 	update_node_list();
 }
 
@@ -86,7 +93,10 @@ new_type_id_new_expression::operator=(const new_type_id_new_expression& o)
 	post_new_placement_space_ = o.post_new_placement_space_;
 	new_type_id_ = o.new_type_id_;
 	pre_new_initializer_space_ = o.pre_new_initializer_space_;
-	new_initializer_ = o.new_initializer_;
+	if(o.new_initializer_)
+		new_initializer_ = std::move(std::unique_ptr<new_initializer>(new new_initializer(std::move(*o.new_initializer_))));
+	else
+		new_initializer_ = 0;
 
 	update_node_list();
 

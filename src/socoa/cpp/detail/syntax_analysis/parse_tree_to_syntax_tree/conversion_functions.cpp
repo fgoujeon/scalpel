@@ -1418,7 +1418,15 @@ convert_new_initializer(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::NEW_INITIALIZER);
 
-	return new_initializer();
+	tree_node_iterator_t opening_bracket_it = node.children.begin();
+	tree_node_iterator_t expression_list_it = find_node<id_t::EXPRESSION_LIST>(node);
+
+	return new_initializer
+	(
+		convert_next_space(node, opening_bracket_it),
+		convert_optional<expression_list>(expression_list_it, node),
+		convert_next_space(node, expression_list_it)
+	);
 }
 
 new_type_id

@@ -21,15 +21,17 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SOCOA_CPP_SYNTAX_NODES_NEW_TYPE_ID_NEW_EXPRESSION_HPP
 #define SOCOA_CPP_SYNTAX_NODES_NEW_TYPE_ID_NEW_EXPRESSION_HPP
 
+#include <memory>
 #include <boost/optional.hpp>
 #include "composite_node.hpp"
 #include "space.hpp"
 #include "new_placement.hpp"
 #include "new_type_id.hpp"
-#include "new_initializer.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
+
+class new_initializer;
 
 /**
 new_type_id_new_expression
@@ -69,7 +71,7 @@ class new_type_id_new_expression: public composite_node
 		boost::optional<space> post_new_placement_space_;
 		new_type_id new_type_id_;
 		boost::optional<space> pre_new_initializer_space_;
-		boost::optional<new_initializer> new_initializer_;
+		std::unique_ptr<new_initializer> new_initializer_;
 };
 
 }}} //namespace socoa::cpp::syntax_nodes
