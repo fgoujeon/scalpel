@@ -136,6 +136,8 @@ class grammar
             DIRECT_NEW_DECLARATOR,
             NEW_INITIALIZER,
             DELETE_EXPRESSION,
+			SIMPLE_DELETE_EXPRESSION,
+			ARRAY_DELETE_EXPRESSION,
             CAST_EXPRESSION,
             PM_EXPRESSION,
             MULTIPLICATIVE_EXPRESSION,
@@ -464,6 +466,8 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DIRECT_NEW_DECLARATOR>> direct_new_declarator;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::NEW_INITIALIZER>> new_initializer;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DELETE_EXPRESSION>> delete_expression;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::SIMPLE_DELETE_EXPRESSION>> simple_delete_expression;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ARRAY_DELETE_EXPRESSION>> array_delete_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CAST_EXPRESSION>> cast_expression;
         boost::spirit::rule<scanner_t> pm_ptr_expression;
         boost::spirit::rule<scanner_t> pm_ref_expression;

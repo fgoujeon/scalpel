@@ -18,32 +18,32 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "delete_expression.hpp"
+#include "array_delete_expression.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
-delete_expression::delete_expression
+array_delete_expression::array_delete_expression
 (
 )
 {
 	update_node_list();
 }
 
-delete_expression::delete_expression(const delete_expression& o):
+array_delete_expression::array_delete_expression(const array_delete_expression& o):
 	composite_node()
 {
 	update_node_list();
 }
 
-delete_expression::delete_expression(delete_expression&& o):
+array_delete_expression::array_delete_expression(array_delete_expression&& o):
 	composite_node()
 {
 	update_node_list();
 }
 
-const delete_expression&
-delete_expression::operator=(const delete_expression& o)
+const array_delete_expression&
+array_delete_expression::operator=(const array_delete_expression& o)
 {
 	update_node_list();
 
@@ -51,7 +51,7 @@ delete_expression::operator=(const delete_expression& o)
 }
 
 void
-delete_expression::update_node_list()
+array_delete_expression::update_node_list()
 {
 	clear();
 }

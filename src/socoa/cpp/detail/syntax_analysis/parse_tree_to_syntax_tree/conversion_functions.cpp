@@ -46,6 +46,14 @@ convert_abstract_declarator(const tree_node_t& node)
 	>(node);
 }
 
+array_delete_expression
+convert_array_delete_expression(const tree_node_t& node)
+{
+	assert(node.value.id() == id_t::ARRAY_DELETE_EXPRESSION);
+
+	return array_delete_expression();
+}
+
 array_operator
 convert_array_operator(const tree_node_t& node)
 {
@@ -606,7 +614,12 @@ convert_delete_expression(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::DELETE_EXPRESSION);
 
-	return delete_expression();
+	return convert_alternative
+	<
+		delete_expression,
+		id_t::SIMPLE_DELETE_EXPRESSION,
+		id_t::ARRAY_DELETE_EXPRESSION
+	>(node);
 }
 
 destructor_name
@@ -1803,6 +1816,23 @@ convert_simple_declaration(const tree_node_t& node)
 		convert_optional<init_declarator_list>(init_declarator_list_it, node),
 		convert_next_space(node, init_declarator_list_it)
     );
+}
+
+simple_delete_expression
+convert_simple_delete_expression(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::SIMPLE_DELETE_EXPRESSION);
+
+	tree_node_iterator_t double_colon_it = find_node(node, "::");
+	tree_node_iterator_t delete_keyword_it = find_node(node, "delete");
+
+	return simple_delete_expression
+	(
+		double_colon_it != node.children.end(),
+		convert_next_space(node, double_colon_it),
+		convert_next_space(node, delete_keyword_it),
+		find_and_convert_node<cast_expression, id_t::CAST_EXPRESSION>(node)
+	);
 }
 
 simple_template_type_specifier

@@ -1071,7 +1071,18 @@ SOCOA_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
 	enum_specifier,
 	enum_specifier
 )
-
+SOCOA_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	SIMPLE_DELETE_EXPRESSION,
+	simple_delete_expression,
+	simple_delete_expression
+)
+SOCOA_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	ARRAY_DELETE_EXPRESSION,
+	array_delete_expression,
+	array_delete_expression
+)
 
 template<class SyntaxNodeT>
 inline

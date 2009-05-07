@@ -30,6 +30,9 @@ namespace socoa { namespace cpp { namespace detail { namespace syntax_analysis {
 syntax_nodes::abstract_declarator
 convert_abstract_declarator(const tree_node_t& node);
 
+syntax_nodes::array_delete_expression
+convert_array_delete_expression(const tree_node_t& node);
+
 syntax_nodes::array_operator
 convert_array_operator(const tree_node_t& node);
 
@@ -377,6 +380,9 @@ convert_selection_statement(const tree_node_t& node);
 
 syntax_nodes::simple_declaration
 convert_simple_declaration(const tree_node_t& node);
+
+syntax_nodes::simple_delete_expression
+convert_simple_delete_expression(const tree_node_t& node);
 
 syntax_nodes::simple_template_type_specifier
 convert_simple_template_type_specifier(const tree_node_t& node);

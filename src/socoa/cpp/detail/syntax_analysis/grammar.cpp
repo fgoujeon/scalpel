@@ -676,8 +676,16 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	delete_expression
+		= simple_delete_expression
+		| array_delete_expression
+	;
+
+	simple_delete_expression
+		= !(str_p("::") >> !s) >> "delete" >> !s >> cast_expression
+	;
+
+	array_delete_expression
 		= !(str_p("::") >> !s) >> "delete" >> !s >> '[' >> !s >> ']' >> !s >> cast_expression
-		| !(str_p("::") >> !s) >> "delete" >> !s >> cast_expression
 	;
 
 	cast_expression

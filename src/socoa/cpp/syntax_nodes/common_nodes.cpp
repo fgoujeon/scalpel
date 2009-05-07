@@ -71,6 +71,7 @@ const leaf_node case_keyword("case");
 const leaf_node catch_keyword("catch");
 const leaf_node continue_keyword("continue");
 const leaf_node default_keyword("default");
+const leaf_node delete_keyword("delete");
 const leaf_node else_keyword("else");
 const leaf_node for_keyword("for");
 const leaf_node goto_keyword("goto");
