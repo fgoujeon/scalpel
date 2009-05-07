@@ -29,6 +29,7 @@ new_type_id::new_type_id
 	boost::optional<space>&& pre_new_declarator_space_node,
 	boost::optional<new_declarator>&& new_declarator_node
 ):
+	type_specifier_seq_(type_specifier_seq_node),
 	pre_new_declarator_space_(pre_new_declarator_space_node),
 	new_declarator_(new_declarator_node)
 {
@@ -37,6 +38,7 @@ new_type_id::new_type_id
 
 new_type_id::new_type_id(const new_type_id& o):
 	composite_node(),
+	type_specifier_seq_(o.type_specifier_seq_),
 	pre_new_declarator_space_(o.pre_new_declarator_space_),
 	new_declarator_(o.new_declarator_)
 {
@@ -45,6 +47,7 @@ new_type_id::new_type_id(const new_type_id& o):
 
 new_type_id::new_type_id(new_type_id&& o):
 	composite_node(),
+	type_specifier_seq_(std::move(o.type_specifier_seq_)),
 	pre_new_declarator_space_(std::move(o.pre_new_declarator_space_)),
 	new_declarator_(std::move(o.new_declarator_))
 {
@@ -54,6 +57,7 @@ new_type_id::new_type_id(new_type_id&& o):
 const new_type_id&
 new_type_id::operator=(const new_type_id& o)
 {
+	type_specifier_seq_ = o.type_specifier_seq_;
 	pre_new_declarator_space_ = o.pre_new_declarator_space_;
 	new_declarator_ = o.new_declarator_;
 
@@ -66,6 +70,7 @@ void
 new_type_id::update_node_list()
 {
 	clear();
+	add(type_specifier_seq_);
 	if(pre_new_declarator_space_) add(*pre_new_declarator_space_);
 	if(new_declarator_) add(*new_declarator_);
 }

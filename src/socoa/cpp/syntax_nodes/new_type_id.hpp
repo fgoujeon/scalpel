@@ -56,7 +56,7 @@ class new_type_id: public composite_node
 		void
 		update_node_list();
 
-		//type_specifier_seq type_specifier_seq_;
+		type_specifier_seq type_specifier_seq_;
 		boost::optional<space> pre_new_declarator_space_;
 		boost::optional<new_declarator> new_declarator_;
 };
