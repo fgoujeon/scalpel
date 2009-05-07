@@ -166,7 +166,7 @@ convert_alternative(const tree_node_t& node)
 
 template<class T>
 boost::optional<T>
-convert_optional(const tree_node_iterator_t& it, const tree_node_t& parent_node)
+convert_optional(const tree_node_t& parent_node, const tree_node_iterator_t& it)
 {
 	if(it != parent_node.children.end())
 		return convert_node<T>(*it);
