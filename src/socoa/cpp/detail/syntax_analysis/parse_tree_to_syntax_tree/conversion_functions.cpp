@@ -223,6 +223,22 @@ convert_boolean_literal(const tree_node_t& node)
 	return boolean_literal();
 }
 
+bracketed_declarator
+convert_bracketed_declarator(const tree_node_t& node)
+{
+	assert(node.value.id() == id_t::BRACKETED_DECLARATOR);
+
+	tree_node_iterator_t opening_bracket_it = node.children.begin();
+	tree_node_iterator_t declarator_it = find_node<id_t::DECLARATOR>(node);
+
+	return bracketed_declarator
+	(
+		convert_next_space(node, opening_bracket_it),
+		convert_node<declarator>(*declarator_it),
+		convert_next_space(node, declarator_it)
+	);
+}
+
 bracketed_expression_list
 convert_bracketed_expression_list(const tree_node_t& node)
 {
@@ -652,6 +668,19 @@ convert_direct_declarator_array_part(const tree_node_t& node)
     return direct_declarator::array_part();
 }
 
+direct_declarator::first_part
+convert_direct_declarator_first_part(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::DIRECT_DECLARATOR_FIRST_PART);
+
+	return convert_alternative
+	<
+		direct_declarator::first_part,
+		id_t::BRACKETED_DECLARATOR,
+		id_t::DECLARATOR_ID
+	>(node);
+}
+
 direct_declarator::function_part
 convert_direct_declarator_function_part(const tree_node_t& node)
 {
@@ -671,14 +700,14 @@ convert_direct_declarator_function_part(const tree_node_t& node)
     );
 }
 
-direct_declarator::next_part
-convert_direct_declarator_next_part(const tree_node_t& node)
+direct_declarator::last_part
+convert_direct_declarator_last_part(const tree_node_t& node)
 {
-    assert(node.value.id() == id_t::DIRECT_DECLARATOR_NEXT_PART);
+    assert(node.value.id() == id_t::DIRECT_DECLARATOR_LAST_PART);
 
 	return convert_alternative
 	<
-		direct_declarator::next_part,
+		direct_declarator::last_part,
 		id_t::DIRECT_DECLARATOR_FUNCTION_PART,
 		id_t::DIRECT_DECLARATOR_ARRAY_PART
 	>(node);
@@ -689,14 +718,13 @@ convert_direct_declarator(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::DIRECT_DECLARATOR);
 
-	tree_node_iterator_t next_part_seq_it = find_node<id_t::DIRECT_DECLARATOR_NEXT_PART_SEQ>(node);
+	tree_node_iterator_t last_part_seq_it = find_node<id_t::DIRECT_DECLARATOR_LAST_PART_SEQ>(node);
 
     return direct_declarator
     (
-		find_and_convert_node<boost::optional<declarator_id>, id_t::DECLARATOR_ID>(node),
-		find_and_convert_node<boost::optional<declarator>, id_t::DECLARATOR>(node),
-		convert_previous_space(node, next_part_seq_it),
-		convert_optional<sequence_node<direct_declarator::next_part>>(node, next_part_seq_it)
+		find_and_convert_node<direct_declarator::first_part, id_t::DIRECT_DECLARATOR_FIRST_PART>(node),
+		convert_previous_space(node, last_part_seq_it),
+		convert_optional<sequence_node<direct_declarator::last_part>>(node, last_part_seq_it)
     );
 }
 
@@ -1385,12 +1413,12 @@ convert_nested_identifier_or_template_id(const tree_node_t& node)
     );
 }
 
-nested_name_specifier::next_part
-convert_nested_name_specifier_next_part(const tree_node_t& node)
+nested_name_specifier::last_part
+convert_nested_name_specifier_last_part(const tree_node_t& node)
 {
-    assert(node.value.id() == id_t::NESTED_NAME_SPECIFIER_NEXT_PART);
+    assert(node.value.id() == id_t::NESTED_NAME_SPECIFIER_LAST_PART);
 
-    return nested_name_specifier::next_part
+    return nested_name_specifier::last_part
     (
 		check_node_existence(node, "template", 0),
 		find_and_convert_node<identifier_or_template_id, id_t::IDENTIFIER_OR_TEMPLATE_ID>(node)
@@ -1403,14 +1431,14 @@ convert_nested_name_specifier(const tree_node_t& node)
     assert(node.value.id() == id_t::NESTED_NAME_SPECIFIER);
 
 	tree_node_iterator_t identifier_or_template_id_it = find_node<id_t::IDENTIFIER_OR_TEMPLATE_ID>(node);
-	tree_node_iterator_t next_part_seq_it = find_node<id_t::NESTED_NAME_SPECIFIER_NEXT_PART_SEQ>(node);
+	tree_node_iterator_t last_part_seq_it = find_node<id_t::NESTED_NAME_SPECIFIER_LAST_PART_SEQ>(node);
 
     return nested_name_specifier
     (
         convert_node<identifier_or_template_id>(*identifier_or_template_id_it),
 		convert_next_space(node, identifier_or_template_id_it),
-		convert_previous_space(node, next_part_seq_it),
-        convert_optional<nested_name_specifier::next_part_seq>(node, next_part_seq_it)
+		convert_previous_space(node, last_part_seq_it),
+        convert_optional<nested_name_specifier::last_part_seq>(node, last_part_seq_it)
     );
 }
 

@@ -467,12 +467,12 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		;
 	*/
 	nested_name_specifier
-		= identifier_or_template_id >> !s >> "::" >> !(!s >> nested_name_specifier_next_part_seq)
+		= identifier_or_template_id >> !s >> "::" >> !(!s >> nested_name_specifier_last_part_seq)
 	;
-	nested_name_specifier_next_part_seq
-		= nested_name_specifier_next_part % !s
+	nested_name_specifier_last_part_seq
+		= nested_name_specifier_last_part % !s
 	;
-	nested_name_specifier_next_part
+	nested_name_specifier_last_part
 		= !(str_p("template") >> !s) >> identifier_or_template_id >> !s >> "::"
 	;
 
@@ -1251,17 +1251,19 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		;
 	*/
 	direct_declarator
-		=
-		(
-			declarator_id
-			| '(' >> !s >> declarator >> !s >> ')'
-		)
-		>> !(!s >> direct_declarator_next_part_seq)
+		= direct_declarator_first_part >> !(!s >> direct_declarator_last_part_seq)
 	;
-	direct_declarator_next_part_seq
-		= direct_declarator_next_part % !s
+	direct_declarator_first_part
+		= bracketed_declarator
+		| declarator_id
 	;
-	direct_declarator_next_part
+	bracketed_declarator
+		= '(' >> !s >> declarator >> !s >> ')'
+	;
+	direct_declarator_last_part_seq
+		= direct_declarator_last_part % !s
+	;
+	direct_declarator_last_part
 		= direct_declarator_function_part
 		| direct_declarator_array_part
 	;

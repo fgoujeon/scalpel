@@ -32,16 +32,16 @@ namespace socoa { namespace cpp { namespace syntax_nodes
 class nested_name_specifier: public composite_node
 {
 	public:
-		class next_part;
+		class last_part;
 
-		typedef sequence_node<next_part> next_part_seq;
+		typedef sequence_node<last_part> last_part_seq;
 
 		nested_name_specifier
 		(
 			identifier_or_template_id&& an_identifier_or_template_id,
 			boost::optional<space>&& post_identifier_or_template_id_space_node,
-			boost::optional<space>&& pre_next_part_seq_space_node,
-			boost::optional<next_part_seq>&& a_next_part_seq
+			boost::optional<space>&& pre_last_part_seq_space_node,
+			boost::optional<last_part_seq>&& a_last_part_seq
 		);
 
 		nested_name_specifier(const nested_name_specifier& o);
@@ -56,8 +56,8 @@ class nested_name_specifier: public composite_node
 		identifier_or_template_id_node() const;
 
 		inline
-		const boost::optional<const next_part_seq&>
-		next_part_seq_node() const;
+		const boost::optional<const last_part_seq&>
+		last_part_seq_node() const;
 
 	private:
 		void
@@ -65,25 +65,25 @@ class nested_name_specifier: public composite_node
 
 		identifier_or_template_id identifier_or_template_id_;
 		boost::optional<space> post_identifier_or_template_id_space_;
-		boost::optional<space> pre_next_part_seq_space_;
-		boost::optional<next_part_seq> next_part_seq_;
+		boost::optional<space> pre_last_part_seq_space_;
+		boost::optional<last_part_seq> last_part_seq_;
 };
 
-class nested_name_specifier::next_part: public composite_node
+class nested_name_specifier::last_part: public composite_node
 {
 	public:
-		next_part
+		last_part
 		(
 			bool template_keyword,
 			identifier_or_template_id&& an_identifier_or_template_id
 		);
 
-		next_part(const next_part& o);
+		last_part(const last_part& o);
 
-		next_part(next_part&& o);
+		last_part(last_part&& o);
 
-		const next_part&
-		operator=(const next_part& o);
+		const last_part&
+		operator=(const last_part& o);
 
 		inline
 		bool
@@ -103,14 +103,14 @@ class nested_name_specifier::next_part: public composite_node
 
 inline
 bool
-nested_name_specifier::next_part::has_template_keyword() const
+nested_name_specifier::last_part::has_template_keyword() const
 {
 	return template_keyword_;
 }
 
 inline
 const identifier_or_template_id&
-nested_name_specifier::next_part::identifier_or_template_id_node() const
+nested_name_specifier::last_part::identifier_or_template_id_node() const
 {
 	return identifier_or_template_id_;
 }
@@ -123,10 +123,10 @@ nested_name_specifier::identifier_or_template_id_node() const
 }
 
 inline
-const boost::optional<const nested_name_specifier::next_part_seq&>
-nested_name_specifier::next_part_seq_node() const
+const boost::optional<const nested_name_specifier::last_part_seq&>
+nested_name_specifier::last_part_seq_node() const
 {
-	return boost::optional<const nested_name_specifier::next_part_seq&>(next_part_seq_);
+	return boost::optional<const nested_name_specifier::last_part_seq&>(last_part_seq_);
 }
 
 }}} //namespace socoa::cpp::syntax_nodes

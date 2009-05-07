@@ -27,13 +27,13 @@ nested_name_specifier::nested_name_specifier
 (
 	identifier_or_template_id&& an_identifier_or_template_id,
 	boost::optional<space>&& post_identifier_or_template_id_space_node,
-	boost::optional<space>&& pre_next_part_seq_space_node,
-	boost::optional<next_part_seq>&& a_next_part_seq
+	boost::optional<space>&& pre_last_part_seq_space_node,
+	boost::optional<last_part_seq>&& a_last_part_seq
 ):
 	identifier_or_template_id_(std::move(an_identifier_or_template_id)),
 	post_identifier_or_template_id_space_(post_identifier_or_template_id_space_node),
-	pre_next_part_seq_space_(pre_next_part_seq_space_node),
-	next_part_seq_(std::move(a_next_part_seq))
+	pre_last_part_seq_space_(pre_last_part_seq_space_node),
+	last_part_seq_(std::move(a_last_part_seq))
 {
 	update_node_list();
 }
@@ -42,8 +42,8 @@ nested_name_specifier::nested_name_specifier(const nested_name_specifier& o):
 	composite_node(),
 	identifier_or_template_id_(o.identifier_or_template_id_),
 	post_identifier_or_template_id_space_(o.post_identifier_or_template_id_space_),
-	pre_next_part_seq_space_(o.pre_next_part_seq_space_),
-	next_part_seq_(o.next_part_seq_)
+	pre_last_part_seq_space_(o.pre_last_part_seq_space_),
+	last_part_seq_(o.last_part_seq_)
 {
 	update_node_list();
 }
@@ -51,8 +51,8 @@ nested_name_specifier::nested_name_specifier(const nested_name_specifier& o):
 nested_name_specifier::nested_name_specifier(nested_name_specifier&& o):
 	identifier_or_template_id_(std::move(o.identifier_or_template_id_)),
 	post_identifier_or_template_id_space_(std::move(o.post_identifier_or_template_id_space_)),
-	pre_next_part_seq_space_(std::move(o.pre_next_part_seq_space_)),
-	next_part_seq_(std::move(o.next_part_seq_))
+	pre_last_part_seq_space_(std::move(o.pre_last_part_seq_space_)),
+	last_part_seq_(std::move(o.last_part_seq_))
 {
 	update_node_list();
 }
@@ -62,8 +62,8 @@ nested_name_specifier::operator=(const nested_name_specifier& o)
 {
 	identifier_or_template_id_ = o.identifier_or_template_id_;
 	post_identifier_or_template_id_space_ = o.post_identifier_or_template_id_space_;
-	pre_next_part_seq_space_ = o.pre_next_part_seq_space_;
-	next_part_seq_ = o.next_part_seq_;
+	pre_last_part_seq_space_ = o.pre_last_part_seq_space_;
+	last_part_seq_ = o.last_part_seq_;
 
 	update_node_list();
 
@@ -77,12 +77,12 @@ nested_name_specifier::update_node_list()
 	add(identifier_or_template_id_);
 	if(post_identifier_or_template_id_space_) add(*post_identifier_or_template_id_space_);
 	add(double_colon);
-	if(pre_next_part_seq_space_) add(*pre_next_part_seq_space_);
-	if(next_part_seq_) add(*next_part_seq_);
+	if(pre_last_part_seq_space_) add(*pre_last_part_seq_space_);
+	if(last_part_seq_) add(*last_part_seq_);
 }
 
 
-nested_name_specifier::next_part::next_part
+nested_name_specifier::last_part::last_part
 (
 	bool template_keyword,
 	identifier_or_template_id&& an_identifier_or_template_id
@@ -93,7 +93,7 @@ nested_name_specifier::next_part::next_part
 	update_node_list();
 }
 
-nested_name_specifier::next_part::next_part(const next_part& o):
+nested_name_specifier::last_part::last_part(const last_part& o):
 	composite_node(),
 	template_keyword_(o.template_keyword_),
 	identifier_or_template_id_(o.identifier_or_template_id_)
@@ -101,15 +101,15 @@ nested_name_specifier::next_part::next_part(const next_part& o):
 	update_node_list();
 }
 
-nested_name_specifier::next_part::next_part(next_part&& o):
+nested_name_specifier::last_part::last_part(last_part&& o):
 	template_keyword_(std::move(o.template_keyword_)),
 	identifier_or_template_id_(std::move(o.identifier_or_template_id_))
 {
 	update_node_list();
 }
 
-const nested_name_specifier::next_part&
-nested_name_specifier::next_part::operator=(const next_part& o)
+const nested_name_specifier::last_part&
+nested_name_specifier::last_part::operator=(const last_part& o)
 {
 	template_keyword_ = o.template_keyword_;
 	identifier_or_template_id_ = o.identifier_or_template_id_;
@@ -119,7 +119,7 @@ nested_name_specifier::next_part::operator=(const next_part& o)
 }
 
 void
-nested_name_specifier::next_part::update_node_list()
+nested_name_specifier::last_part::update_node_list()
 {
 	clear();
 	add(identifier_or_template_id_);

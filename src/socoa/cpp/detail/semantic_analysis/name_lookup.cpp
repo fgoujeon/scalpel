@@ -146,17 +146,17 @@ find_scope
 	if(found_scope)
 	{
 		//is there other parts?
-		auto next_part_seq = a_nested_name_specifier.next_part_seq_node();
-		if(next_part_seq)
+		auto last_part_seq = a_nested_name_specifier.last_part_seq_node();
+		if(last_part_seq)
 		{
 			//for each part...
-			for(auto i = next_part_seq->begin(); i != next_part_seq->end(); ++i)
+			for(auto i = last_part_seq->begin(); i != last_part_seq->end(); ++i)
 			{
 				if(found_scope)
 				{
-					const nested_name_specifier::next_part& next_part = i->main_node();
+					const nested_name_specifier::last_part& last_part = i->main_node();
 
-					const identifier_or_template_id& an_identifier_or_template_id = next_part.identifier_or_template_id_node();
+					const identifier_or_template_id& an_identifier_or_template_id = last_part.identifier_or_template_id_node();
 					boost::optional<const identifier&> an_identifier = get<identifier>(&an_identifier_or_template_id);
 
 					if(an_identifier)

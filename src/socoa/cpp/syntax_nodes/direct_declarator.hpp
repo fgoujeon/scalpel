@@ -29,6 +29,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "cv_qualifier_seq.hpp"
 #include "space.hpp"
 #include "common_nodes.hpp"
+#include "bracketed_declarator.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
@@ -36,18 +37,29 @@ namespace socoa { namespace cpp { namespace syntax_nodes
 /**
 \verbatim
 direct_declarator
-	=
-	(
-		declarator_id
-		| "(", declarator, ")"
-	),
-	{
-		direct_declarator::function_part
-		| direct_declarator::array_part
-	}
+	= direct_declarator::first_part, [direct_declarator_last_part_seq]
 ;
+
+direct_declarator::first_part
+	= bracketed_declarator
+	| declarator_id
+;
+
+direct_declarator::last_part_seq
+	= {direct_declarator_last_part}
+;
+
+direct_declarator::last_part
+	= direct_declarator::function_part
+	| direct_declarator::array_part
+;
+
+direct_declarator::function_part
+	= '(' >> !s >> !(parameter_declaration_clause >> !s) >> ')' >> !(!s >> cv_qualifier_seq) >> !(!s >> exception_specification)
+;
+
 direct_declarator::array_part
-	= "[", [constant_expression], "]"
+	= '[' >> !s >> !(conditional_expression >> !s) >> ']'
 ;
 \endverbatim
 */
@@ -60,46 +72,52 @@ class direct_declarator: public composite_node
 		typedef
 			alternative_node
 			<
+				bracketed_declarator,
+				declarator_id
+			>
+			first_part
+		;
+
+		typedef
+			alternative_node
+			<
 				array_part,
 				function_part
 			>
-			next_part
+			last_part
 		;
 
-		typedef sequence_node<next_part> next_part_seq;
+		typedef sequence_node<last_part> last_part_seq;
 
         direct_declarator
         (
-            boost::optional<declarator_id>&& a_declarator_id,
-            boost::optional<declarator>&& a_declarator,
-			boost::optional<space>&& pre_next_part_seq_space_node,
-			boost::optional<sequence_node<next_part>>&& a_next_part_seq
+			first_part&& first_part_node,
+			boost::optional<space>&& pre_last_part_seq_space_node,
+			boost::optional<sequence_node<last_part>>&& a_last_part_seq
         );
 
         direct_declarator(const direct_declarator& o);
 
         direct_declarator(direct_declarator&& o);
 
-        inline
-        const boost::optional<const declarator_id&>
-        declarator_id_node() const;
+		const direct_declarator&
+		operator=(const direct_declarator& o);
+
+		inline
+		const first_part&
+		first_part_node() const;
 
         inline
-        const boost::optional<const declarator&>
-        declarator_node() const;
-
-        inline
-		const boost::optional<const next_part_seq&>
-        next_part_seq_node() const;
+		const boost::optional<const last_part_seq&>
+        last_part_seq_node() const;
 
     private:
 		void
 		update_node_list();
 
-        boost::optional<declarator_id> declarator_id_;
-        boost::optional<declarator> declarator_;
-		boost::optional<space> pre_next_part_seq_space_;
-		boost::optional<next_part_seq> next_part_seq_;
+		first_part first_part_;
+		boost::optional<space> pre_last_part_seq_space_;
+		boost::optional<last_part_seq> last_part_seq_;
 };
 
 /**

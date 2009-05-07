@@ -63,6 +63,9 @@ convert_block_declaration(const tree_node_t& node);
 syntax_nodes::boolean_literal
 convert_boolean_literal(const tree_node_t& node);
 
+syntax_nodes::bracketed_declarator
+convert_bracketed_declarator(const tree_node_t& node);
+
 syntax_nodes::bracketed_expression_list
 convert_bracketed_expression_list(const tree_node_t& node);
 
@@ -150,11 +153,14 @@ convert_direct_abstract_declarator(const tree_node_t& node);
 syntax_nodes::direct_declarator::array_part
 convert_direct_declarator_array_part(const tree_node_t& node);
 
+syntax_nodes::direct_declarator::first_part
+convert_direct_declarator_first_part(const tree_node_t& node);
+
 syntax_nodes::direct_declarator::function_part
 convert_direct_declarator_function_part(const tree_node_t& node);
 
-syntax_nodes::direct_declarator::next_part
-convert_direct_declarator_next_part(const tree_node_t& node);
+syntax_nodes::direct_declarator::last_part
+convert_direct_declarator_last_part(const tree_node_t& node);
 
 syntax_nodes::direct_declarator
 convert_direct_declarator(const tree_node_t& node);
@@ -297,8 +303,8 @@ convert_namespace_definition(const tree_node_t& node);
 syntax_nodes::nested_identifier_or_template_id
 convert_nested_identifier_or_template_id(const tree_node_t& node);
 
-syntax_nodes::nested_name_specifier::next_part
-convert_nested_name_specifier_next_part(const tree_node_t& node);
+syntax_nodes::nested_name_specifier::last_part
+convert_nested_name_specifier_last_part(const tree_node_t& node);
 
 syntax_nodes::nested_name_specifier
 convert_nested_name_specifier(const tree_node_t& node);

@@ -25,24 +25,17 @@ namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
 inline
-const boost::optional<const declarator_id&>
-direct_declarator::declarator_id_node() const
+const direct_declarator::first_part&
+direct_declarator::first_part_node() const
 {
-	return boost::optional<const declarator_id&>(declarator_id_);
+	return first_part_;
 }
 
 inline
-const boost::optional<const declarator&>
-direct_declarator::declarator_node() const
+const boost::optional<const direct_declarator::last_part_seq&>
+direct_declarator::last_part_seq_node() const
 {
-	return boost::optional<const declarator&>(declarator_);
-}
-
-inline
-const boost::optional<const direct_declarator::next_part_seq&>
-direct_declarator::next_part_seq_node() const
-{
-	return boost::optional<const direct_declarator::next_part_seq&>(next_part_seq_);
+	return boost::optional<const direct_declarator::last_part_seq&>(last_part_seq_);
 }
 
 

@@ -186,7 +186,7 @@ class semantic_analyzer
 		analyze(const syntax_nodes::nested_name_specifier& syntax_node);
 
         void
-		analyze(const syntax_nodes::nested_name_specifier::next_part& syntax_node);
+		analyze(const syntax_nodes::nested_name_specifier::last_part& syntax_node);
 
         void
 		analyze(const syntax_nodes::operator_function_id& syntax_node);

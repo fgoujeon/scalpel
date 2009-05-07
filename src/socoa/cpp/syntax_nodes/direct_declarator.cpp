@@ -25,46 +25,49 @@ namespace socoa { namespace cpp { namespace syntax_nodes
 
 direct_declarator::direct_declarator
 (
-    boost::optional<declarator_id>&& a_declarator_id,
-    boost::optional<declarator>&& a_declarator,
-	boost::optional<space>&& pre_next_part_seq_space_node,
-    boost::optional<sequence_node<next_part>>&& a_next_part_seq
+	first_part&& first_part_node,
+	boost::optional<space>&& pre_last_part_seq_space_node,
+    boost::optional<sequence_node<last_part>>&& a_last_part_seq
 ):
-    declarator_id_(a_declarator_id),
-    declarator_(a_declarator),
-	pre_next_part_seq_space_(pre_next_part_seq_space_node),
-    next_part_seq_(std::move(a_next_part_seq))
+	first_part_(first_part_node),
+	pre_last_part_seq_space_(pre_last_part_seq_space_node),
+    last_part_seq_(std::move(a_last_part_seq))
 {
 	update_node_list();
 }
 
 direct_declarator::direct_declarator(const direct_declarator& o):
 	composite_node(),
-    declarator_id_(o.declarator_id_),
-    declarator_(o.declarator_),
-	pre_next_part_seq_space_(o.pre_next_part_seq_space_),
-    next_part_seq_(o.next_part_seq_)
+	first_part_(o.first_part_),
+	pre_last_part_seq_space_(o.pre_last_part_seq_space_),
+    last_part_seq_(o.last_part_seq_)
 {
 	update_node_list();
 }
 
 direct_declarator::direct_declarator(direct_declarator&& o):
-    declarator_id_(std::move(o.declarator_id_)),
-    declarator_(std::move(o.declarator_)),
-	pre_next_part_seq_space_(std::move(o.pre_next_part_seq_space_)),
-    next_part_seq_(std::move(o.next_part_seq_))
+	first_part_(std::move(o.first_part_)),
+	pre_last_part_seq_space_(std::move(o.pre_last_part_seq_space_)),
+    last_part_seq_(std::move(o.last_part_seq_))
 {
 	update_node_list();
+}
+
+const direct_declarator&
+direct_declarator::operator=(const direct_declarator& o)
+{
+	direct_declarator copy(o);
+	std::swap(copy, *this);
+	return *this;
 }
 
 void
 direct_declarator::update_node_list()
 {
 	clear();
-	if(declarator_id_) add(*declarator_id_);
-	if(declarator_) add(*declarator_);
-	if(pre_next_part_seq_space_) add(*pre_next_part_seq_space_);
-	if(next_part_seq_) add(*next_part_seq_);
+	add(first_part_);
+	if(pre_last_part_seq_space_) add(*pre_last_part_seq_space_);
+	if(last_part_seq_) add(*last_part_seq_);
 }
 
 
