@@ -25,6 +25,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "composite_node.hpp"
 #include "space.hpp"
 #include "new_declarator.hpp"
+#include "type_specifier_seq.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
@@ -39,6 +40,7 @@ class new_type_id: public composite_node
 	public:
 		new_type_id
 		(
+			type_specifier_seq&& type_specifier_seq_node,
 			boost::optional<space>&& pre_new_declarator_space_node,
 			boost::optional<new_declarator>&& new_declarator_node
 		);
@@ -54,6 +56,7 @@ class new_type_id: public composite_node
 		void
 		update_node_list();
 
+		//type_specifier_seq type_specifier_seq_;
 		boost::optional<space> pre_new_declarator_space_;
 		boost::optional<new_declarator> new_declarator_;
 };

@@ -751,6 +751,14 @@ convert_enum_elaborated_specifier(const tree_node_t& node)
 	return enum_elaborated_specifier();
 }
 
+enum_specifier
+convert_enum_specifier(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::ENUM_SPECIFIER);
+
+	return enum_specifier();
+}
+
 equal_initializer
 convert_equal_initializer(const tree_node_t& node)
 {
@@ -1442,11 +1450,12 @@ convert_new_type_id(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::NEW_TYPE_ID);
 
+	tree_node_iterator_t type_specifier_seq_it = node.children.begin();
 	tree_node_iterator_t new_declarator_it = find_node<id_t::NEW_DECLARATOR>(node);
 
 	return new_type_id
 	(
-	//	type_specifier_seq(),
+		convert_node<type_specifier_seq>(*type_specifier_seq_it),
 		convert_previous_space(node, new_declarator_it),
 		convert_optional<new_declarator>(new_declarator_it, node)
 	);
@@ -2102,10 +2111,10 @@ convert_type_specifier(const tree_node_t& node)
 		type_specifier,
 		id_t::SIMPLE_TYPE_SPECIFIER,
 		id_t::CLASS_SPECIFIER,
-		//id_t::ENUM_SPECIFIER,
+		id_t::ENUM_SPECIFIER,
 		id_t::ELABORATED_TYPE_SPECIFIER,
-		id_t::CV_QUALIFIER
-		//id_t::TYPEOF_EXPRESSION
+		id_t::CV_QUALIFIER,
+		id_t::TYPEOF_EXPRESSION
 	>(node);
 }
 
@@ -2115,6 +2124,14 @@ convert_typeid_expression(const tree_node_t& node)
 	assert(node.value.id() == id_t::TYPEID_EXPRESSION);
 
 	return typeid_expression();
+}
+
+typeof_expression
+convert_typeof_expression(const tree_node_t& node)
+{
+	assert(node.value.id() == id_t::TYPEOF_EXPRESSION);
+
+	return typeof_expression();
 }
 
 typename_elaborated_specifier

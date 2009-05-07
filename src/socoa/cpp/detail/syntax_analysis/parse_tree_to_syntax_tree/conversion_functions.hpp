@@ -177,6 +177,9 @@ convert_empty_initializer_list_initializer_clause(const tree_node_t& node);
 syntax_nodes::enum_elaborated_specifier
 convert_enum_elaborated_specifier(const tree_node_t& node);
 
+syntax_nodes::enum_specifier
+convert_enum_specifier(const tree_node_t& node);
+
 syntax_nodes::equal_initializer
 convert_equal_initializer(const tree_node_t& node);
 
@@ -440,6 +443,9 @@ convert_type_specifier(const tree_node_t& node);
 
 syntax_nodes::typeid_expression
 convert_typeid_expression(const tree_node_t& node);
+
+syntax_nodes::typeof_expression
+convert_typeof_expression(const tree_node_t& node);
 
 syntax_nodes::typename_elaborated_specifier
 convert_typename_elaborated_specifier(const tree_node_t& node);

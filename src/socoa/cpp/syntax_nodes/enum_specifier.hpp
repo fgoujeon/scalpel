@@ -18,31 +18,32 @@ You should have received a copy of the GNU General Public License
 along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOCOA_CPP_SYNTAX_NODES_TYPE_SPECIFIER_HPP
-#define SOCOA_CPP_SYNTAX_NODES_TYPE_SPECIFIER_HPP
+#ifndef SOCOA_CPP_SYNTAX_NODES_ENUM_SPECIFIER_HPP
+#define SOCOA_CPP_SYNTAX_NODES_ENUM_SPECIFIER_HPP
 
-#include "simple_type_specifier.hpp"
-#include "class_specifier.hpp"
-#include "enum_specifier.hpp"
-#include "elaborated_type_specifier.hpp"
-#include "cv_qualifier.hpp"
-#include "typeof_expression.hpp"
+#include "composite_node.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
-typedef
-	alternative_node
-	<
-		simple_type_specifier,
-		class_specifier,
-		enum_specifier,
-		elaborated_type_specifier,
-		cv_qualifier,
-		typeof_expression
-	>
-	type_specifier
-;
+class enum_specifier: public composite_node
+{
+	public:
+		enum_specifier
+		(
+		);
+
+		enum_specifier(const enum_specifier& o);
+
+		enum_specifier(enum_specifier&& o);
+
+		const enum_specifier&
+		operator=(const enum_specifier& o);
+
+	private:
+		void
+		update_node_list();
+};
 
 }}} //namespace socoa::cpp::syntax_nodes
 
