@@ -25,6 +25,7 @@ namespace socoa { namespace cpp { namespace syntax_nodes
 
 //symbols
 const leaf_node ampersand("&");
+const leaf_node arrow("->");
 const leaf_node arrow_and_asterisk("->*");
 const leaf_node asterisk("*");
 const leaf_node capital_l("L");

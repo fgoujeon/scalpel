@@ -29,6 +29,7 @@ namespace socoa { namespace cpp { namespace syntax_nodes
 
 //symbols
 extern const leaf_node ampersand;
+extern const leaf_node arrow;
 extern const leaf_node arrow_and_asterisk;
 extern const leaf_node asterisk;
 extern const leaf_node capital_l;

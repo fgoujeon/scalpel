@@ -64,7 +64,16 @@ convert_arrow_id_expression(const tree_node_t& node)
 {
 	assert(node.value.id() == id_t::ARROW_ID_EXPRESSION);
 
-	return arrow_id_expression();
+	tree_node_iterator_t arrow_it = node.children.begin();
+	tree_node_iterator_t template_keyword_it = find_node(node, "template");
+
+	return arrow_id_expression
+	(
+		convert_next_space(node, arrow_it),
+		template_keyword_it != node.children.end(),
+		convert_next_space(node, template_keyword_it),
+		find_and_convert_node<id_expression, id_t::ID_EXPRESSION>(node)
+	);
 }
 
 arrow_pseudo_destructor_name
