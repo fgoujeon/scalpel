@@ -29,9 +29,8 @@ namespace socoa { namespace cpp { namespace syntax_nodes
 class boolean_literal: public composite_node
 {
 	public:
-		boolean_literal
-		(
-		);
+		explicit
+		boolean_literal(bool value);
 
 		boolean_literal(const boolean_literal& o);
 
@@ -43,6 +42,8 @@ class boolean_literal: public composite_node
 	private:
 		void
 		update_node_list();
+
+		bool value_;
 };
 
 }}} //namespace socoa::cpp::syntax_nodes

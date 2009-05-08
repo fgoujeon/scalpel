@@ -364,8 +364,11 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	boolean_literal
-		= str_p("false")
-		| "true"
+		= token_node_d
+		[
+			str_p("false")
+			| "true"
+		]
 	;
 
 	//1.3 - Basic concepts [gram.basic]

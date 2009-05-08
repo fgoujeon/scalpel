@@ -11,5 +11,8 @@ int main()
 	i3 = i1 << 2;
 
 	int i4 = (i1 - i2) / i3;
+
+	bool b = true;
+	b = false ;
 }
 

@@ -220,7 +220,10 @@ convert_boolean_literal(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::BOOLEAN_LITERAL);
 
-	return boolean_literal();
+	return boolean_literal
+	(
+		get_only_child_value(node) == "true"
+	);
 }
 
 bracketed_declarator
@@ -883,8 +886,6 @@ convert_exception_specification(const tree_node_t& node)
 	tree_node_iterator_t throw_keyword_it = node.children.begin();
 	tree_node_iterator_t opening_bracket_it = find_node(node, "(");
 	tree_node_iterator_t type_id_list_it = find_node<id_t::TYPE_ID_LIST>(node);
-
-	std::cout << node.children.size() << "\n";
 
 	return exception_specification
 	(

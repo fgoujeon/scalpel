@@ -20,24 +20,27 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "boolean_literal.hpp"
 
+#include "common_nodes.hpp"
+
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
-boolean_literal::boolean_literal
-(
-)
+boolean_literal::boolean_literal(bool value):
+	value_(value)
 {
 	update_node_list();
 }
 
 boolean_literal::boolean_literal(const boolean_literal& o):
-	composite_node()
+	composite_node(),
+	value_(o.value_)
 {
 	update_node_list();
 }
 
 boolean_literal::boolean_literal(boolean_literal&& o):
-	composite_node()
+	composite_node(),
+	value_(o.value_)
 {
 	update_node_list();
 }
@@ -45,6 +48,8 @@ boolean_literal::boolean_literal(boolean_literal&& o):
 const boolean_literal&
 boolean_literal::operator=(const boolean_literal& o)
 {
+	value_ = o.value_;
+
 	update_node_list();
 
 	return *this;
@@ -54,6 +59,10 @@ void
 boolean_literal::update_node_list()
 {
 	clear();
+	if(value_)
+		add(true_keyword);
+	else
+		add(false_keyword);
 }
 
 }}} //namespace socoa::cpp::syntax_nodes
