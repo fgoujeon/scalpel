@@ -4,5 +4,8 @@ int main()
 	test -> value(42);
 	delete test;
 
+	test another_test ( 12 ) ;
+	another_test . value ( 34 ) ;
+
 	return 0;
 }

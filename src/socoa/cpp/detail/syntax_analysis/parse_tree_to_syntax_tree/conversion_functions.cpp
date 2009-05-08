@@ -263,7 +263,15 @@ convert_bracketed_initializer(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::BRACKETED_INITIALIZER);
 
-	return bracketed_initializer();
+	tree_node_iterator_t opening_bracket_it = node.children.begin();
+	tree_node_iterator_t expression_list_it = find_node<id_t::EXPRESSION_LIST>(node);
+
+	return bracketed_initializer
+	(
+		convert_next_space(node, opening_bracket_it),
+		convert_node<expression_list>(*expression_list_it),
+		convert_next_space(node, expression_list_it)
+	);
 }
 
 break_statement

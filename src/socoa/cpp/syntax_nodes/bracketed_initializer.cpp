@@ -20,24 +20,38 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "bracketed_initializer.hpp"
 
+#include "common_nodes.hpp"
+
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
 bracketed_initializer::bracketed_initializer
 (
-)
+	boost::optional<space>&& post_opening_bracket_space_node,
+	expression_list&& expression_list_node,
+	boost::optional<space>&& post_expression_list_space_node
+):
+	post_opening_bracket_space_(post_opening_bracket_space_node),
+	expression_list_(expression_list_node),
+	post_expression_list_space_(post_expression_list_space_node)
 {
 	update_node_list();
 }
 
 bracketed_initializer::bracketed_initializer(const bracketed_initializer& o):
-	composite_node()
+	composite_node(),
+	post_opening_bracket_space_(o.post_opening_bracket_space_),
+	expression_list_(o.expression_list_),
+	post_expression_list_space_(o.post_expression_list_space_)
 {
 	update_node_list();
 }
 
 bracketed_initializer::bracketed_initializer(bracketed_initializer&& o):
-	composite_node()
+	composite_node(),
+	post_opening_bracket_space_(std::move(o.post_opening_bracket_space_)),
+	expression_list_(std::move(o.expression_list_)),
+	post_expression_list_space_(std::move(o.post_expression_list_space_))
 {
 	update_node_list();
 }
@@ -45,6 +59,10 @@ bracketed_initializer::bracketed_initializer(bracketed_initializer&& o):
 const bracketed_initializer&
 bracketed_initializer::operator=(const bracketed_initializer& o)
 {
+	post_opening_bracket_space_ = o.post_opening_bracket_space_;
+	expression_list_ = o.expression_list_;
+	post_expression_list_space_ = o.post_expression_list_space_;
+
 	update_node_list();
 
 	return *this;
@@ -54,6 +72,11 @@ void
 bracketed_initializer::update_node_list()
 {
 	clear();
+	add(global_nodes::opening_bracket);
+	if(post_opening_bracket_space_) add(*post_opening_bracket_space_);
+	add(expression_list_);
+	if(post_expression_list_space_) add(*post_expression_list_space_);
+	add(global_nodes::closing_bracket);
 }
 
 }}} //namespace socoa::cpp::syntax_nodes
