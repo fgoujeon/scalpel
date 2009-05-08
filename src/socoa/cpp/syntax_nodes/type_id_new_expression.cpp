@@ -107,17 +107,17 @@ void
 type_id_new_expression::update_node_list()
 {
 	clear();
-	if(leading_double_colon_) add(double_colon);
+	if(leading_double_colon_) add(global_nodes::double_colon);
 	if(post_double_colon_space_) add(*post_double_colon_space_);
-	add(new_keyword);
+	add(global_nodes::new_keyword);
 	if(post_new_keyword_space_) add(*post_new_keyword_space_);
 	if(new_placement_) add(*new_placement_);
 	if(post_new_placement_space_) add(*post_new_placement_space_);
-	add(opening_bracket);
+	add(global_nodes::opening_bracket);
 	if(post_opening_bracket_space_) add(*post_opening_bracket_space_);
 	add(type_id_);
 	if(post_type_id_space_) add(*post_type_id_space_);
-	add(closing_bracket);
+	add(global_nodes::closing_bracket);
 	if(pre_new_initializer_space_) add(*pre_new_initializer_space_);
 	if(new_initializer_) add(*new_initializer_);
 }

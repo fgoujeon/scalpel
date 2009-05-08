@@ -46,7 +46,7 @@ class template_id: public composite_node
 			identifier&& identifier_node,
 			boost::optional<space>&& post_type_name_space_node,
 			boost::optional<space>&& post_opening_angle_bracket_space_node,
-			boost::optional<sequence_node<template_argument, comma>>&& template_argument_list_node,
+			boost::optional<sequence_node<template_argument, global_nodes::comma>>&& template_argument_list_node,
 			boost::optional<space>&& post_template_argument_list_space_node
 		);
 
@@ -64,7 +64,7 @@ class template_id: public composite_node
 		identifier_node() const;
 
 		inline
-		const boost::optional<const sequence_node<template_argument, comma>&>
+		const boost::optional<const sequence_node<template_argument, global_nodes::comma>&>
 		template_argument_list_node() const;
 
 	private:
@@ -74,7 +74,7 @@ class template_id: public composite_node
 		identifier identifier_;
 		boost::optional<space> post_type_name_space_;
 		boost::optional<space> post_opening_angle_bracket_space_;
-		sequence_node<template_argument, comma>* template_argument_list_;
+		sequence_node<template_argument, global_nodes::comma>* template_argument_list_;
 		boost::optional<space> post_template_argument_list_space_;
 };
 
@@ -86,13 +86,13 @@ template_id::identifier_node() const
 }
 
 inline
-const boost::optional<const sequence_node<template_argument, comma>&>
+const boost::optional<const sequence_node<template_argument, global_nodes::comma>&>
 template_id::template_argument_list_node() const
 {
 	if(template_argument_list_)
-		return boost::optional<const sequence_node<template_argument, comma>&>(*template_argument_list_);
+		return boost::optional<const sequence_node<template_argument, global_nodes::comma>&>(*template_argument_list_);
 	else
-		return boost::optional<const sequence_node<template_argument, comma>&>();
+		return boost::optional<const sequence_node<template_argument, global_nodes::comma>&>();
 }
 
 }}} //namespace socoa::cpp::syntax_nodes

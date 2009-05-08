@@ -73,9 +73,9 @@ void
 default_statement::update_node_list()
 {
 	clear();
-	add(default_keyword);
+	add(global_nodes::default_keyword);
 	if(post_default_keyword_space_) add(*post_default_keyword_space_);
-	add(colon);
+	add(global_nodes::colon);
 	if(post_colon_space_) add(*post_colon_space_);
 	add(*statement_);
 }

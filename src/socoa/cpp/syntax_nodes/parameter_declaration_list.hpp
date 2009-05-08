@@ -29,7 +29,7 @@ namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
 typedef
-	sequence_node<parameter_declaration, comma>
+	sequence_node<parameter_declaration, global_nodes::comma>
    	parameter_declaration_list
 ;
 

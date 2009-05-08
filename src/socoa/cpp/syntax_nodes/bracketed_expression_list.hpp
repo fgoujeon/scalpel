@@ -30,7 +30,7 @@ namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
 class assignment_expression;
-typedef sequence_node<assignment_expression, comma> expression_list;
+typedef sequence_node<assignment_expression, global_nodes::comma> expression_list;
 
 /**
 \verbatim

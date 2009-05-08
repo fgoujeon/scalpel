@@ -83,11 +83,11 @@ round_bracketed_expression::update_node_list()
 
 	assert(expression_);
 
-	add(opening_bracket);
+	add(global_nodes::opening_bracket);
 	if(post_opening_bracket_space_) add(*post_opening_bracket_space_);
 	add(*expression_);
 	if(post_expression_space_) add(*post_expression_space_);
-	add(closing_bracket);
+	add(global_nodes::closing_bracket);
 }
 
 }}} //namespace socoa::cpp::syntax_nodes

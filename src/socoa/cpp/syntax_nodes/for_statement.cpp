@@ -112,19 +112,19 @@ void
 for_statement::update_node_list()
 {
 	clear();
-	add(for_keyword);
+	add(global_nodes::for_keyword);
 	if(post_for_keyword_space_) add(*post_for_keyword_space_);
-	add(opening_bracket);
+	add(global_nodes::opening_bracket);
 	if(post_opening_bracket_space_) add(*post_opening_bracket_space_);
 	if(for_init_statement_) add(*for_init_statement_);
 	if(post_for_init_statement_space_) add(*post_for_init_statement_space_);
 	if(condition_) add(*condition_);
 	if(post_condition_space_) add(*post_condition_space_);
-	add(semicolon);
+	add(global_nodes::semicolon);
 	if(post_semicolon_space_) add(*post_semicolon_space_);
 	if(expression_) add(*expression_);
 	if(post_expression_space_) add(*post_expression_space_);
-	add(closing_bracket);
+	add(global_nodes::closing_bracket);
 	if(post_closing_bracket_space_) add(*post_closing_bracket_space_);
 	add(*statement_);
 }

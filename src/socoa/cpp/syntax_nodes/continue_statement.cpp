@@ -63,9 +63,9 @@ continue_statement::update_node_list()
 {
 	clear();
 
-	add(continue_keyword);
+	add(global_nodes::continue_keyword);
 	if(space_) add(*space_);
-	add(semicolon);
+	add(global_nodes::semicolon);
 }
 
 }}} //namespace socoa::cpp::syntax_nodes

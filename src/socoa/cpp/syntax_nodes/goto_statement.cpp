@@ -72,7 +72,7 @@ void
 goto_statement::update_node_list()
 {
 	clear();
-	add(goto_keyword);
+	add(global_nodes::goto_keyword);
 	if(post_goto_space_) add(*post_goto_space_);
 	add(identifier_);
 	if(post_identifier_space_) add(*post_identifier_space_);

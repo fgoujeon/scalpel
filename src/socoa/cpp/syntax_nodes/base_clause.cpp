@@ -66,7 +66,7 @@ void
 base_clause::update_node_list()
 {
 	clear();
-	add(colon);
+	add(global_nodes::colon);
 	if(space_) add(*space_);
 	add(base_specifier_list_);
 }

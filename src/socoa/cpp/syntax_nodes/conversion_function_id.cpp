@@ -76,7 +76,7 @@ void
 conversion_function_id::update_node_list()
 {
 	clear();
-	add(operator_keyword);
+	add(global_nodes::operator_keyword);
 	if(post_operator_keyword_space_) add(*post_operator_keyword_space_);
 	add(type_specifier_seq_);
 	if(pre_ptr_operator_seq_space_) add(*pre_ptr_operator_seq_space_);

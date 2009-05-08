@@ -24,7 +24,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include "leaf_node.hpp"
 
-namespace socoa { namespace cpp { namespace syntax_nodes
+namespace socoa { namespace cpp { namespace syntax_nodes { namespace global_nodes
 {
 
 //symbols
@@ -93,6 +93,6 @@ extern const leaf_node try_keyword;
 extern const leaf_node using_keyword;
 extern const leaf_node virtual_keyword;
 
-}}} //namespace socoa::cpp::syntax_nodes
+}}}} //namespace socoa::cpp::syntax_nodes::global_nodes
 
 #endif

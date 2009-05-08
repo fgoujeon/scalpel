@@ -72,11 +72,11 @@ void
 bracketed_declarator::update_node_list()
 {
 	clear();
-	add(opening_bracket);
+	add(global_nodes::opening_bracket);
 	if(post_opening_bracket_space_) add(*post_opening_bracket_space_);
 	add(declarator_);
 	if(post_declarator_space_) add(*post_declarator_space_);
-	add(closing_bracket);
+	add(global_nodes::closing_bracket);
 }
 
 }}} //namespace socoa::cpp::syntax_nodes

@@ -60,9 +60,9 @@ boolean_literal::update_node_list()
 {
 	clear();
 	if(value_)
-		add(true_keyword);
+		add(global_nodes::true_keyword);
 	else
-		add(false_keyword);
+		add(global_nodes::false_keyword);
 }
 
 }}} //namespace socoa::cpp::syntax_nodes

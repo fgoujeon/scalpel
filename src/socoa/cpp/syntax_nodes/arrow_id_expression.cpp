@@ -77,9 +77,9 @@ void
 arrow_id_expression::update_node_list()
 {
 	clear();
-	add(arrow);
+	add(global_nodes::arrow);
 	if(post_arrow_space_) add(*post_arrow_space_);
-	if(template_keyword_) add(template_keyword);
+	if(template_keyword_) add(global_nodes::template_keyword);
 	if(post_template_keyword_space_) add(*post_template_keyword_space_);
 	add(id_expression_);
 }

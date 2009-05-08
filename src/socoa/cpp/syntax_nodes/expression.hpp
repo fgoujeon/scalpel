@@ -28,7 +28,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
-typedef sequence_node<assignment_expression, comma> expression;
+typedef sequence_node<assignment_expression, global_nodes::comma> expression;
 
 }}} //namespace socoa::cpp::syntax_nodes
 

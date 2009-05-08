@@ -77,9 +77,9 @@ void
 dot_id_expression::update_node_list()
 {
 	clear();
-	add(dot);
+	add(global_nodes::dot);
 	if(post_dot_space_) add(*post_dot_space_);
-	if(template_keyword_) add(template_keyword);
+	if(template_keyword_) add(global_nodes::template_keyword);
 	if(post_template_keyword_space_) add(*post_template_keyword_space_);
 	add(id_expression_);
 }

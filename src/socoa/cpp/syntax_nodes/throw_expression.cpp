@@ -73,7 +73,7 @@ void
 throw_expression::update_node_list()
 {
 	clear();
-	add(throw_keyword);
+	add(global_nodes::throw_keyword);
 	if(pre_assignment_expression_space_) add(*pre_assignment_expression_space_);
 	if(assignment_expression_) add(*assignment_expression_);
 }

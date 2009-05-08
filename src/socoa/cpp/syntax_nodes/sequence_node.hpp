@@ -30,7 +30,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
-template<class T, const leaf_node& SeparatorNode = empty>
+template<class T, const leaf_node& SeparatorNode = global_nodes::empty>
 class sequence_node: public composite_node
 {
     public:
@@ -87,7 +87,7 @@ class sequence_node: public composite_node
 		seq_t seq_;
 };
 
-template<class T, const leaf_node& SeparatorNode = empty>
+template<class T, const leaf_node& SeparatorNode = global_nodes::empty>
 class sequence_node<T, SeparatorNode>::item
 {
 	public:

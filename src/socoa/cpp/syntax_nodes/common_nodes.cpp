@@ -20,7 +20,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "common_nodes.hpp"
 
-namespace socoa { namespace cpp { namespace syntax_nodes
+namespace socoa { namespace cpp { namespace syntax_nodes { namespace global_nodes
 {
 
 //symbols
@@ -89,5 +89,5 @@ const leaf_node try_keyword("try");
 const leaf_node using_keyword("using");
 const leaf_node virtual_keyword("virtual");
 
-}}} //namespace socoa::cpp::syntax_nodes
+}}}} //namespace socoa::cpp::syntax_nodes::global_nodes
 

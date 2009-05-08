@@ -77,13 +77,13 @@ void
 exception_specification::update_node_list()
 {
 	clear();
-	add(throw_keyword);
+	add(global_nodes::throw_keyword);
 	if(post_throw_keyword_space_) add(*post_throw_keyword_space_);
-	add(opening_bracket);
+	add(global_nodes::opening_bracket);
 	if(post_opening_bracket_space_) add(*post_opening_bracket_space_);
 	if(type_id_list_) add(*type_id_list_);
 	if(post_type_id_list_space_) add(*post_type_id_list_space_);
-	add(closing_bracket);
+	add(global_nodes::closing_bracket);
 }
 
 }}} //namespace socoa::cpp::syntax_nodes

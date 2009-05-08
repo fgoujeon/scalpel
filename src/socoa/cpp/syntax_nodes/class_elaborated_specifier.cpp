@@ -20,6 +20,8 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "class_elaborated_specifier.hpp"
 
+#include "common_nodes.hpp"
+
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
 
@@ -92,7 +94,7 @@ class_elaborated_specifier::update_node_list()
 	clear();
 	add(class_key_);
 	if(post_class_key_space_) add(*post_class_key_space_);
-	if(double_colon_) add(double_colon);
+	if(double_colon_) add(global_nodes::double_colon);
 	if(post_double_colon_space_) add(*post_double_colon_space_);
 	if(nested_name_specifier_) add(*nested_name_specifier_);
 	if(post_nested_name_specifier_space_) add(*post_nested_name_specifier_space_);

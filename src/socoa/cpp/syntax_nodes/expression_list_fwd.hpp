@@ -29,7 +29,7 @@ namespace socoa { namespace cpp { namespace syntax_nodes
 class assignment_expression;
 
 typedef
-	sequence_node<assignment_expression, comma>
+	sequence_node<assignment_expression, global_nodes::comma>
 	expression_list
 ;
 

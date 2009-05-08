@@ -107,9 +107,9 @@ void
 new_type_id_new_expression::update_node_list()
 {
 	clear();
-	if(leading_double_colon_) add(double_colon);
+	if(leading_double_colon_) add(global_nodes::double_colon);
 	if(post_double_colon_space_) add(*post_double_colon_space_);
-	add(new_keyword);
+	add(global_nodes::new_keyword);
 	if(post_new_keyword_space_) add(*post_new_keyword_space_);
 	if(new_placement_) add(*new_placement_);
 	if(post_new_placement_space_) add(*post_new_placement_space_);

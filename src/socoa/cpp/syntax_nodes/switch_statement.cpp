@@ -88,13 +88,13 @@ void
 switch_statement::update_node_list()
 {
 	clear();
-	add(switch_keyword);
+	add(global_nodes::switch_keyword);
 	if(post_switch_keyword_space_) add(*post_switch_keyword_space_);
-	add(opening_bracket);
+	add(global_nodes::opening_bracket);
 	if(post_opening_bracket_space_) add(*post_opening_bracket_space_);
 	add(condition_);
 	if(post_condition_space_) add(*post_condition_space_);
-	add(closing_bracket);
+	add(global_nodes::closing_bracket);
 	if(post_closing_bracket_space_) add(*post_closing_bracket_space_);
 	add(*statement_);
 }

@@ -85,7 +85,7 @@ void
 function_try_block::update_node_list()
 {
 	clear();
-	add(try_keyword);
+	add(global_nodes::try_keyword);
 	if(post_try_keyword_space_) add(*post_try_keyword_space_);
 	if(ctor_initializer_) add(*ctor_initializer_);
 	if(post_ctor_initializer_space_) add(*post_ctor_initializer_space_);

@@ -91,17 +91,17 @@ void
 ptr_operator::update_node_list()
 {
 	clear();
-	if(leading_double_colon_) add(double_colon);
+	if(leading_double_colon_) add(global_nodes::double_colon);
 	if(post_leading_double_colon_space_) add(*post_leading_double_colon_space_);
 	if(nested_name_specifier_) add(*nested_name_specifier_);
 	if(post_nested_name_specifier_space_) add(*post_nested_name_specifier_space_);
 	switch(type_)
 	{
 		case ASTERISK:
-			add(asterisk);
+			add(global_nodes::asterisk);
 			break;
 		case AMPERSAND:
-			add(ampersand);
+			add(global_nodes::ampersand);
 			break;
 	}
 	if(pre_cv_qualifier_seq_space_) add(*pre_cv_qualifier_seq_space_);

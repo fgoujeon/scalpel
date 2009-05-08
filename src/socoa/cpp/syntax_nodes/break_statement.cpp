@@ -63,9 +63,9 @@ break_statement::update_node_list()
 {
 	clear();
 
-	add(break_keyword);
+	add(global_nodes::break_keyword);
 	if(space_) add(*space_);
-	add(semicolon);
+	add(global_nodes::semicolon);
 }
 
 }}} //namespace socoa::cpp::syntax_nodes

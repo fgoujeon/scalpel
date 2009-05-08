@@ -79,11 +79,11 @@ void
 square_bracketed_expression::update_node_list()
 {
 	clear();
-	add(opening_square_bracket);
+	add(global_nodes::opening_square_bracket);
 	if(pre_expression_space_) add(*pre_expression_space_);
 	add(*expression_);
 	if(post_expression_space_) add(*post_expression_space_);
-	add(closing_square_bracket);
+	add(global_nodes::closing_square_bracket);
 }
 
 }}} //namespace socoa::cpp::syntax_nodes

@@ -66,7 +66,7 @@ void
 destructor_name::update_node_list()
 {
 	clear();
-	add(tilde);
+	add(global_nodes::tilde);
 	if(post_tilde_space_) add(*post_tilde_space_);
 	add(identifier_or_template_id_);
 }

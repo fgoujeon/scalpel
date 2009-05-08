@@ -68,10 +68,10 @@ string_literal::update_node_list()
 {
 	clear();
 
-	if(wide_) add(capital_l);
-	add(double_quote);
+	if(wide_) add(global_nodes::capital_l);
+	add(global_nodes::double_quote);
 	add(value_);
-	add(double_quote);
+	add(global_nodes::double_quote);
 }
 
 }}} //namespace socoa::cpp::syntax_nodes

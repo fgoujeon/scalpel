@@ -66,7 +66,7 @@ void
 operator_function_id::update_node_list()
 {
 	clear();
-	add(operator_keyword);
+	add(global_nodes::operator_keyword);
 	if(post_operator_keyword_space_) add(*post_operator_keyword_space_);
 	add(operator__);
 }

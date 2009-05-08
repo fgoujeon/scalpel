@@ -45,7 +45,7 @@ convert_sequence(const tree_node_t& node)
 {
 	ContainerT seq;
 
-	if(ContainerT::separator_node.raw_code() == syntax_nodes::empty.raw_code())
+	if(ContainerT::separator_node.raw_code() == syntax_nodes::global_nodes::empty.raw_code())
 	{
 		boost::optional<syntax_nodes::space> space_node;
 		for(tree_node_iterator_t i = node.children.begin(); i != node.children.end(); ++i) //for each child node
