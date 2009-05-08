@@ -1,9 +1,10 @@
-unsigned long long max() throw()
+unsigned long max(int a, int b) throw()
 {
-	return __LONG_LONG_MAX__ * 2ULL + 1;
+	if(a > b) return a;
+	else return b;
 }
 
-unsigned long max() throw()
+void function(int i) throw ( std::exception, CustomExceptionType    )
 {
-	return __LONG_MAX__ * 2UL + 1;
+	do_something(i);
 }

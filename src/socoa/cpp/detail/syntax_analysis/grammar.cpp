@@ -604,8 +604,8 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 
 	pseudo_destructor_name
 		= nested_identifier_or_template_id >> !s >> str_p("::") >> !s >> '~' >> !s >> identifier_or_template_id
-		| !str_p("::") >> !s >> nested_name_specifier >> !s >> str_p("template") >> !s >> template_id >> !s >> str_p("::") >> !s >> '~' >> !s >> identifier_or_template_id
-		| !str_p("::") >> !s >> !(nested_name_specifier >> !s) >> '~' >> !s >> identifier_or_template_id
+		| !(str_p("::") >> !s) >> nested_name_specifier >> !s >> str_p("template") >> !s >> template_id >> !s >> str_p("::") >> !s >> '~' >> !s >> identifier_or_template_id
+		| !(str_p("::") >> !s) >> !(nested_name_specifier >> !s) >> '~' >> !s >> identifier_or_template_id
 	;
 
 	unary_expression
@@ -668,7 +668,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	direct_new_declarator
-		= '[' >> !s >> expression >> !s >> ']' >> !s >> !('[' >> !s >> conditional_expression >> !s >> ']')
+		= '[' >> !s >> expression >> !s >> ']' >> !(!s >> '[' >> !s >> conditional_expression >> !s >> ']')
 	;
 
 	new_initializer
@@ -1149,7 +1149,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	linkage_specification
-		= "extern" >> !s >> string_literal >> !s >> ch_p('{') >> !s >> !declaration_seq >> !s >> ch_p('}')
+		= "extern" >> !s >> string_literal >> !s >> ch_p('{') >> !s >> !(declaration_seq >> !s) >> ch_p('}')
 		| "extern" >> !s >> string_literal >> !s >> declaration
 	;
 
@@ -1198,7 +1198,6 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 
 		direct_declarator
 			= (declarator_id | '(' >> declarator >> ')') >> direct_declarator_rest
-
 		;
 		direct_declarator_rest
 			= '(' >> parameter_declaration_clause >> ')' >> !cv_qualifier_seq >> !exception_specification >> direct_declarator_rest
@@ -1319,20 +1318,37 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 			| !direct_abstract_declarator >> '[' >> !conditional_expression >> ']'
 			| '(' >> abstract_declarator >> ')'
 		;
+
+		***
+
+		direct_abstract_declarator
+			= !direct_abstract_declarator >> direct_abstract_declarator_rest
+			| '(' >> abstract_declarator >> ')'
+		;
+		direct_abstract_declarator_rest
+			= '(' >> parameter_declaration_clause >> ')' >> !cv_qualifier_seq >> !exception_specification
+			| '[' >> !conditional_expression >> ']'
+		;
+
+		***
+
+		direct_abstract_declarator
+			= '(' >> abstract_declarator >> ')' >> !direct_abstract_declarator_rest
+			| +direct_abstract_declarator_rest
+		;
+		direct_abstract_declarator_rest
+			= '(' >> parameter_declaration_clause >> ')' >> !cv_qualifier_seq >> !exception_specification
+			| '[' >> !conditional_expression >> ']'
+		;
+
+		We have direct_abstract_declarator_rest == direct_declarator_last_part
 	*/
 	direct_abstract_declarator
-		=
-		!(
-			'(' >> !s >> abstract_declarator >> !s >> ')'
-		)
-		>>
-		*(
-			!s >>
-			(
-				'(' >> !s >> !(parameter_declaration_clause >> !s) >> ')' >> !s >> !cv_qualifier_seq >> !s >> !exception_specification
-				| '[' >> !s >> !conditional_expression >> !s >> ']'
-			)
-		)
+		= bracketed_abstract_declarator
+		| direct_declarator_last_part_seq
+	;
+	bracketed_abstract_declarator
+		= '(' >> !s >> abstract_declarator >> !s >> ')' >> !(!s >> direct_declarator_last_part)
 	;
 
 	parameter_declaration_clause
@@ -1627,11 +1643,11 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	type_parameter
-		= str_p("class") >> !s >> !identifier >> !s >> '=' >> !s >> type_id
-		| str_p("class") >> !s >> !identifier
-		| str_p("typename") >> !s >> !identifier >> !s >> '=' >> !s >> type_id
-		| str_p("typename") >> !s >> !identifier
-		| str_p("template") >> !s >> '<' >> !s >> template_parameter_list >> !s >> '>' >> !s >> str_p("class") >> !s >> !identifier >> !s >> '=' >> !s >> id_expression
+		= str_p("class") >> !(!s >> identifier) >> !s >> '=' >> !s >> type_id
+		| str_p("class") >> !(!s >> identifier)
+		| str_p("typename") >> !(!s >> identifier) >> !s >> '=' >> !s >> type_id
+		| str_p("typename") >> !(!s >> identifier)
+		| str_p("template") >> !s >> '<' >> !s >> template_parameter_list >> !s >> '>' >> !s >> str_p("class") >> !(!s >> identifier) >> !s >> '=' >> !s >> id_expression
 		| str_p("template") >> !s >> '<' >> !s >> template_parameter_list >> !s >> '>' >> !s >> str_p("class") >> !(!s >> identifier)
 	;
 
@@ -1653,7 +1669,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	explicit_instantiation
-		= !str_p("extern") >> !s >> str_p("template") >> !s >> declaration
+		= !(str_p("extern") >> !s) >> str_p("template") >> !s >> declaration
 	;
 
 	explicit_specialization
@@ -1701,7 +1717,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	exception_specification
-		= str_p("throw") >> !s >> '(' >> !s >> !type_id_list >> !s >> ')'
+		= str_p("throw") >> !s >> '(' >> !s >> !(type_id_list >> !s) >> ')'
 	;
 
 	type_id_list

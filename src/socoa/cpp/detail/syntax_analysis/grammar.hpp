@@ -242,6 +242,7 @@ class grammar
             TYPE_SPECIFIER_SEQ,
             ABSTRACT_DECLARATOR,
             DIRECT_ABSTRACT_DECLARATOR,
+			BRACKETED_ABSTRACT_DECLARATOR,
             PARAMETER_DECLARATION_CLAUSE,
             PARAMETER_DECLARATION_LIST,
             PARAMETER_DECLARATION,
@@ -589,6 +590,7 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TYPE_SPECIFIER_SEQ>> type_specifier_seq;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ABSTRACT_DECLARATOR>> abstract_declarator;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DIRECT_ABSTRACT_DECLARATOR>> direct_abstract_declarator;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::BRACKETED_ABSTRACT_DECLARATOR>> bracketed_abstract_declarator;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PARAMETER_DECLARATION_CLAUSE>> parameter_declaration_clause;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PARAMETER_DECLARATION_LIST>> parameter_declaration_list;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PARAMETER_DECLARATION>> parameter_declaration;

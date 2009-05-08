@@ -689,6 +689,7 @@ convert_direct_declarator_function_part(const tree_node_t& node)
 	tree_node_iterator_t opening_bracket_it = node.children.begin();
 	tree_node_iterator_t parameter_declaration_clause_it = find_node<id_t::PARAMETER_DECLARATION_CLAUSE>(node);
 	tree_node_iterator_t cv_qualifier_seq_it = find_node<id_t::CV_QUALIFIER_SEQ>(node);
+	tree_node_iterator_t exception_specification_it = find_node<id_t::EXCEPTION_SPECIFICATION>(node);
 
     return direct_declarator::function_part
     (
@@ -696,7 +697,9 @@ convert_direct_declarator_function_part(const tree_node_t& node)
 		convert_optional<parameter_declaration_clause>(node, parameter_declaration_clause_it),
 		convert_next_space(node, parameter_declaration_clause_it),
 		convert_previous_space(node, cv_qualifier_seq_it),
-		convert_optional<cv_qualifier_seq>(node, cv_qualifier_seq_it)
+		convert_optional<cv_qualifier_seq>(node, cv_qualifier_seq_it),
+		convert_previous_space(node, exception_specification_it),
+		convert_optional<exception_specification>(node, exception_specification_it)
     );
 }
 
@@ -869,6 +872,26 @@ convert_exception_declarator(const tree_node_t& node)
 		convert_node<type_specifier_seq>(*type_specifier_seq_it),
 		convert_next_space(node, type_specifier_seq_it),
 		convert_node<declarator>(*declarator_it)
+	);
+}
+
+exception_specification
+convert_exception_specification(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::EXCEPTION_SPECIFICATION);
+
+	tree_node_iterator_t throw_keyword_it = node.children.begin();
+	tree_node_iterator_t opening_bracket_it = find_node(node, "(");
+	tree_node_iterator_t type_id_list_it = find_node<id_t::TYPE_ID_LIST>(node);
+
+	std::cout << node.children.size() << "\n";
+
+	return exception_specification
+	(
+		convert_next_space(node, throw_keyword_it),
+		convert_next_space(node, opening_bracket_it),
+		convert_optional<type_id_list>(node, type_id_list_it),
+		convert_next_space(node, type_id_list_it)
 	);
 }
 

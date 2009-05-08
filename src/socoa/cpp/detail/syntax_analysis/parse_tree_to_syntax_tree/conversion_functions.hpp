@@ -201,6 +201,9 @@ convert_exception_declaration(const tree_node_t& node);
 syntax_nodes::exception_declarator
 convert_exception_declarator(const tree_node_t& node);
 
+syntax_nodes::exception_specification
+convert_exception_specification(const tree_node_t& node);
+
 syntax_nodes::expression_statement
 convert_expression_statement(const tree_node_t& node);
 

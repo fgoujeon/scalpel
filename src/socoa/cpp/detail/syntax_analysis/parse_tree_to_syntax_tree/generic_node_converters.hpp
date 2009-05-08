@@ -1095,6 +1095,13 @@ SOCOA_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
 	direct_declarator::first_part,
 	direct_declarator_first_part
 )
+SOCOA_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	EXCEPTION_SPECIFICATION,
+	exception_specification,
+	exception_specification
+)
+
 
 template<class SyntaxNodeT>
 inline

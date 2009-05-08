@@ -56,6 +56,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "syntax_nodes/elaborated_type_specifier.hpp"
 #include "syntax_nodes/enum_elaborated_specifier.hpp"
 #include "syntax_nodes/exception_declaration.hpp"
+#include "syntax_nodes/exception_specification.hpp"
 #include "syntax_nodes/expression.hpp"
 #include "syntax_nodes/expression_statement.hpp"
 #include "syntax_nodes/expressions.hpp"

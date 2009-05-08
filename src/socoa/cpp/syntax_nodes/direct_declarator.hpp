@@ -30,6 +30,7 @@ along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
 #include "space.hpp"
 #include "common_nodes.hpp"
 #include "bracketed_declarator.hpp"
+#include "exception_specification.hpp"
 
 namespace socoa { namespace cpp { namespace syntax_nodes
 {
@@ -52,10 +53,6 @@ direct_declarator::last_part_seq
 direct_declarator::last_part
 	= direct_declarator::function_part
 	| direct_declarator::array_part
-;
-
-direct_declarator::function_part
-	= '(' >> !s >> !(parameter_declaration_clause >> !s) >> ')' >> !(!s >> cv_qualifier_seq) >> !(!s >> exception_specification)
 ;
 
 direct_declarator::array_part
@@ -123,7 +120,7 @@ class direct_declarator: public composite_node
 /**
 \verbatim
 direct_declarator::function_part
-	= "(", [s1], parameter_declaration_clause, [s2], ")", [[s3], cv_qualifier_seq], [[s4], exception_specification]
+	= "(", [parameter_declaration_clause], ")", [cv_qualifier_seq], [exception_specification]
 ;
 \endverbatim
 */
@@ -136,7 +133,9 @@ class direct_declarator::function_part: public composite_node
 			boost::optional<parameter_declaration_clause>&& a_parameter_declaration_clause,
 			boost::optional<space>&& post_parameter_declaration_clause_space_node,
 			boost::optional<space>&& cv_qualifier_seq_space_node,
-			boost::optional<cv_qualifier_seq>&& a_cv_qualifier_seq
+			boost::optional<cv_qualifier_seq>&& a_cv_qualifier_seq,
+			boost::optional<space>&& pre_exception_specification_space_node,
+			boost::optional<exception_specification>&& exception_specification_node
 		);
 
 		function_part(const function_part& o);
@@ -163,6 +162,8 @@ class direct_declarator::function_part: public composite_node
 		boost::optional<space> post_parameter_declaration_clause_space_;
 		boost::optional<space> cv_qualifier_seq_space_;
 		boost::optional<cv_qualifier_seq> cv_qualifier_seq_;
+		boost::optional<space> pre_exception_specification_space_;
+		boost::optional<exception_specification> exception_specification_;
 };
 
 class direct_declarator::array_part: public composite_node

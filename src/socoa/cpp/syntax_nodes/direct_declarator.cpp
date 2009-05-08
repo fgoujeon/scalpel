@@ -77,13 +77,17 @@ direct_declarator::function_part::function_part
 	boost::optional<parameter_declaration_clause>&& a_parameter_declaration_clause,
 	boost::optional<space>&& post_parameter_declaration_clause_space_node,
 	boost::optional<space>&& cv_qualifier_seq_space_node,
-	boost::optional<cv_qualifier_seq>&& a_cv_qualifier_seq
+	boost::optional<cv_qualifier_seq>&& a_cv_qualifier_seq,
+	boost::optional<space>&& pre_exception_specification_space_node,
+	boost::optional<exception_specification>&& exception_specification_node
 ):
 	post_opening_bracket_space_(post_opening_bracket_space_node),
     parameter_declaration_clause_(std::move(a_parameter_declaration_clause)),
 	post_parameter_declaration_clause_space_(post_parameter_declaration_clause_space_node),
 	cv_qualifier_seq_space_(cv_qualifier_seq_space_node),
-    cv_qualifier_seq_(a_cv_qualifier_seq)
+    cv_qualifier_seq_(a_cv_qualifier_seq),
+	pre_exception_specification_space_(pre_exception_specification_space_node),
+	exception_specification_(exception_specification_node)
 {
 	update_node_list();
 }
@@ -94,7 +98,9 @@ direct_declarator::function_part::function_part(const function_part& o):
     parameter_declaration_clause_(o.parameter_declaration_clause_),
 	post_parameter_declaration_clause_space_(o.post_parameter_declaration_clause_space_),
 	cv_qualifier_seq_space_(o.cv_qualifier_seq_space_),
-    cv_qualifier_seq_(o.cv_qualifier_seq_)
+    cv_qualifier_seq_(o.cv_qualifier_seq_),
+	pre_exception_specification_space_(o.pre_exception_specification_space_),
+	exception_specification_(o.exception_specification_)
 {
 	update_node_list();
 }
@@ -105,7 +111,9 @@ direct_declarator::function_part::function_part(function_part&& o):
     parameter_declaration_clause_(std::move(o.parameter_declaration_clause_)),
 	post_parameter_declaration_clause_space_(o.post_parameter_declaration_clause_space_),
 	cv_qualifier_seq_space_(o.cv_qualifier_seq_space_),
-    cv_qualifier_seq_(std::move(o.cv_qualifier_seq_))
+    cv_qualifier_seq_(std::move(o.cv_qualifier_seq_)),
+	pre_exception_specification_space_(std::move(o.pre_exception_specification_space_)),
+	exception_specification_(std::move(o.exception_specification_))
 {
 	update_node_list();
 }
@@ -118,6 +126,8 @@ direct_declarator::function_part::operator=(const function_part& o)
 	post_parameter_declaration_clause_space_ = o.post_parameter_declaration_clause_space_;
 	cv_qualifier_seq_space_ = o.cv_qualifier_seq_space_;
     cv_qualifier_seq_ = o.cv_qualifier_seq_;
+	pre_exception_specification_space_ = o.pre_exception_specification_space_;
+	exception_specification_ = o.exception_specification_;
 
 	update_node_list();
 
@@ -136,6 +146,8 @@ direct_declarator::function_part::update_node_list()
 	add(closing_bracket);
 	if(cv_qualifier_seq_space_) add(*cv_qualifier_seq_space_);
 	if(cv_qualifier_seq_) add(*cv_qualifier_seq_);
+	if(pre_exception_specification_space_) add(*pre_exception_specification_space_);
+	if(exception_specification_) add(*exception_specification_);
 }
 
 }}} //namespace socoa::cpp::syntax_nodes
