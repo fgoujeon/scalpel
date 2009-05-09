@@ -12,9 +12,9 @@ CMakeCache.txt
 CMakeFiles/
 Makefile
 bin/
-doc/socoa/doxygen.sh
-doc/socoa/html/
-doc/socoa/latex/
+doc/scalpel/doxygen.sh
+doc/scalpel/html/
+doc/scalpel/latex/
 lib/
 tags
 test/result

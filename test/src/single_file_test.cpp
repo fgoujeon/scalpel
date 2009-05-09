@@ -1,21 +1,21 @@
 /*
-Socoa - Source Code Analysis Library
+Scalpel - Source Code Analysis, Libre and PortablE Library
 Copyright © 2008, 2009  Florian Goujeon
 
-This file is part of Socoa.
+This file is part of Scalpel.
 
-Socoa is free software: you can redistribute it and/or modify
+Scalpel is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-Socoa is distributed in the hope that it will be useful,
+Scalpel is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with Socoa.  If not, see <http://www.gnu.org/licenses/>.
+along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <iostream>
@@ -59,7 +59,7 @@ single_file_test::parse_files(const std::string& test_directory)
 
 		//analyze file
 		std::cout << "Analyzing " << file_name_oss.str() << "...\n";
-        socoa::cpp::syntax_tree tree = m_syntax_analyzer(buffer.str()); //throws an exception if parsing fails
+        scalpel::cpp::syntax_tree tree = m_syntax_analyzer(buffer.str()); //throws an exception if parsing fails
 
 		//check syntax analysis results
 		if(buffer.str() != tree.raw_code())
