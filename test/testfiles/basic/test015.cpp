@@ -1,7 +1,5 @@
-char *restrict c;
-
-template<typename T>
-T*__restrict__
-foo()
+int main()
 {
+	int* ptr = new int [ 3 ] ;
+	delete [ ] ptr ;
 }
