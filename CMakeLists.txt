@@ -18,18 +18,45 @@
 
 cmake_minimum_required(VERSION 2.6)
 
-#project
+#Project
 project(Scalpel)
 set(LIBRARY_OUTPUT_PATH lib/${CMAKE_BUILD_TYPE})
 
-#gcc settings
+#GCC settings
 if(CMAKE_COMPILER_IS_GNUCXX)
 	add_definitions(-std=c++0x -W -Wall)
-else(CMAKE_COMPILER_IS_GNUCXX)
-	message(STATUS "Your compiler doesn't support C++0x")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
-#library
+#Check for required C++0x partial support
+include(CheckCXXSourceCompiles)
+set(CMAKE_REQUIRED_FLAGS "-std=c++0x")
+check_cxx_source_compiles(
+	"
+	//check for variadic template support
+	template<class... Ts>
+	struct test;
+
+	int main()
+	{
+		//check for auto-typed variable support
+		auto number = 42;
+
+		return 0;
+	}
+	"
+	cxx0x_test
+)
+if(${cxx0x_test})
+else(${cxx0x_test})
+	message(
+		FATAL_ERROR
+		"Your compiler doesn't support the C++Ox features required to build Scalpel.\n"
+		"Please use one of the following compilers (non-exhaustive list):\n"
+		"\t- g++ 4.4 or later"
+	)
+endif(${cxx0x_test})
+
+#Library
 file(
 	GLOB_RECURSE sources
 	src/*.cpp
@@ -51,7 +78,7 @@ find_package(
 link_directories(${Boost_LIBRARY_DIRS})
 include_directories(${Boost_INCLUDE_DIRS})
 
-#link
+#Linking
 target_link_libraries(
 	scalpel
 	${Boost_LIBRARIES}
