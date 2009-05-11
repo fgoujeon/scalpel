@@ -18,19 +18,32 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_CLASIC_LABELED_STATEMENT_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_CLASIC_LABELED_STATEMENT_HPP
+#ifndef SCALPEL_CPP_SYNTAX_NODES_CLASSIC_LABELED_STATEMENT_HPP
+#define SCALPEL_CPP_SYNTAX_NODES_CLASSIC_LABELED_STATEMENT_HPP
 
+#include <boost/optional.hpp>
 #include "composite_node.hpp"
+#include "space.hpp"
+#include "identifier.hpp"
+#include "statement_fwd.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
+/**
+classic_labeled_statement
+	= identifier, ':', statement
+;
+*/
 class classic_labeled_statement: public composite_node
 {
 	public:
 		classic_labeled_statement
 		(
+			identifier&& identifier_node,
+			boost::optional<space>&& post_identifier_space_node,
+			boost::optional<space>&& post_colon_space_node,
+			statement&& statement_node
 		);
 
 		classic_labeled_statement(const classic_labeled_statement& o);
@@ -43,6 +56,11 @@ class classic_labeled_statement: public composite_node
 	private:
 		void
 		update_node_list();
+
+		identifier identifier_;
+		boost::optional<space> post_identifier_space_;
+		boost::optional<space> post_colon_space_;
+		std::unique_ptr<statement> statement_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

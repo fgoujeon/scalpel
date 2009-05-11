@@ -452,7 +452,18 @@ convert_classic_labeled_statement(const tree_node_t& node)
 {
 	assert(node.value.id() == id_t::CLASSIC_LABELED_STATEMENT);
 
-	return classic_labeled_statement();
+	tree_node_iterator_t identifier_it = node.children.begin();
+	tree_node_iterator_t colon_it = find_node(node, ":");
+	tree_node_iterator_t statement_it = node.children.end();
+	--statement_it;
+
+	return classic_labeled_statement
+	(
+		convert_node<identifier>(*identifier_it),
+		convert_previous_space(node, colon_it),
+		convert_next_space(node, colon_it),
+		convert_node<statement>(*statement_it)
+	);
 }
 
 compound_statement
