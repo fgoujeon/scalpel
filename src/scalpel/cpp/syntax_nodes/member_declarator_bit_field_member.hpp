@@ -21,20 +21,29 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_MEMBER_DECLARATOR_BIT_FIELD_MEMBER_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_MEMBER_DECLARATOR_BIT_FIELD_MEMBER_HPP
 
-#include <memory>
 #include <boost/optional.hpp>
 #include "composite_node.hpp"
 #include "identifier.hpp"
+#include "space.hpp"
+#include "conditional_expression.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
+/**
+member_declarator_bit_field_member
+	= !(identifier >> !s) >> ':' >> !s >> conditional_expression
+;
+*/
 class member_declarator_bit_field_member: public composite_node
 {
 	public:
 		member_declarator_bit_field_member
 		(
-			boost::optional<identifier>&& an_identifier
+			boost::optional<identifier>&& identifier_node,
+			boost::optional<space>&& post_identifier_space_node,
+			boost::optional<space>&& post_colon_space_node,
+			conditional_expression&& conditional_expression_node
 		);
 
 		member_declarator_bit_field_member(const member_declarator_bit_field_member& o);
@@ -53,6 +62,9 @@ class member_declarator_bit_field_member: public composite_node
 		update_node_list();
 
 		boost::optional<identifier> identifier_;
+		boost::optional<space> post_identifier_space_;
+		boost::optional<space> post_colon_space_;
+		conditional_expression conditional_expression_;
 };
 
 inline
