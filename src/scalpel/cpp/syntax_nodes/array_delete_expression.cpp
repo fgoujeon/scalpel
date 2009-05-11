@@ -39,7 +39,7 @@ array_delete_expression::array_delete_expression
 	post_double_colon_space_(post_double_colon_space_node),
 	post_delete_keyword_space_(post_delete_keyword_space_node),
 	post_opening_bracket_space_(post_opening_bracket_space_node),
-	post_closing_bracket_space_(post_delete_keyword_space_node),
+	post_closing_bracket_space_(post_closing_bracket_space_node),
 	cast_expression_(new cast_expression(cast_expression_node))
 {
 	update_node_list();
@@ -51,7 +51,7 @@ array_delete_expression::array_delete_expression(const array_delete_expression& 
 	post_double_colon_space_(o.post_double_colon_space_),
 	post_delete_keyword_space_(o.post_delete_keyword_space_),
 	post_opening_bracket_space_(o.post_opening_bracket_space_),
-	post_closing_bracket_space_(o.post_delete_keyword_space_),
+	post_closing_bracket_space_(o.post_closing_bracket_space_),
 	cast_expression_(new cast_expression(*o.cast_expression_))
 {
 	update_node_list();
@@ -63,7 +63,7 @@ array_delete_expression::array_delete_expression(array_delete_expression&& o):
 	post_double_colon_space_(std::move(o.post_double_colon_space_)),
 	post_delete_keyword_space_(std::move(o.post_delete_keyword_space_)),
 	post_opening_bracket_space_(std::move(o.post_opening_bracket_space_)),
-	post_closing_bracket_space_(std::move(o.post_delete_keyword_space_)),
+	post_closing_bracket_space_(std::move(o.post_closing_bracket_space_)),
 	cast_expression_(std::move(o.cast_expression_))
 {
 	update_node_list();
@@ -88,7 +88,7 @@ array_delete_expression::update_node_list()
 	add(global_nodes::opening_square_bracket);
 	if(post_opening_bracket_space_) add(*post_opening_bracket_space_);
 	add(global_nodes::closing_square_bracket);
-	if(post_closing_bracket_space_) add(*post_delete_keyword_space_);
+	if(post_closing_bracket_space_) add(*post_closing_bracket_space_);
 	add(*cast_expression_);
 }
 

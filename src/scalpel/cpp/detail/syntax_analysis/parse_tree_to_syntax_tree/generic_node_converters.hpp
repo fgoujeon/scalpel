@@ -1101,6 +1101,12 @@ SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
 	exception_specification,
 	exception_specification
 )
+SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
+(
+	DIRECT_NEW_DECLARATOR,
+	direct_new_declarator,
+	direct_new_declarator
+)
 
 
 template<class SyntaxNodeT>

@@ -165,6 +165,9 @@ convert_direct_declarator_last_part(const tree_node_t& node);
 syntax_nodes::direct_declarator
 convert_direct_declarator(const tree_node_t& node);
 
+syntax_nodes::direct_new_declarator
+convert_direct_new_declarator(const tree_node_t& node);
+
 syntax_nodes::do_while_statement
 convert_do_while_statement(const tree_node_t& node);
 

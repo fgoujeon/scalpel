@@ -755,6 +755,28 @@ convert_direct_declarator(const tree_node_t& node)
     );
 }
 
+direct_new_declarator
+convert_direct_new_declarator(const tree_node_t& node)
+{
+    assert(node.value.id() == id_t::DIRECT_NEW_DECLARATOR);
+
+	tree_node_iterator_t first_opening_bracket_it = node.children.begin();
+	tree_node_iterator_t expression_node_it = find_node<id_t::EXPRESSION>(node);
+	tree_node_iterator_t first_closing_bracket_it = find_node(node, "]");
+	tree_node_iterator_t conditional_expression_it = find_node<id_t::CONDITIONAL_EXPRESSION>(node);
+
+	return direct_new_declarator
+	(
+		convert_next_space(node, first_opening_bracket_it),
+		convert_node<expression>(*expression_node_it),
+		convert_next_space(node, expression_node_it),
+		convert_next_space(node, first_closing_bracket_it),
+		convert_previous_space(node, conditional_expression_it),
+		convert_optional<conditional_expression>(node, conditional_expression_it),
+		convert_next_space(node, conditional_expression_it)
+	);
+}
+
 do_while_statement
 convert_do_while_statement(const tree_node_t& node)
 {
@@ -1506,7 +1528,15 @@ convert_new_declarator(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::NEW_DECLARATOR);
 
-	return new_declarator();
+	tree_node_iterator_t ptr_operator_seq_it = find_node<id_t::PTR_OPERATOR_SEQ>(node);
+	tree_node_iterator_t direct_new_declarator_it = find_node<id_t::DIRECT_NEW_DECLARATOR>(node);
+
+	return new_declarator
+	(
+		convert_optional<ptr_operator_seq>(node, ptr_operator_seq_it),
+		convert_next_space(node, ptr_operator_seq_it),
+		convert_optional<direct_new_declarator>(node, direct_new_declarator_it)
+	);
 }
 
 new_expression

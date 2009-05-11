@@ -53,6 +53,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "syntax_nodes/declarator_id.hpp"
 #include "syntax_nodes/destructor_name.hpp"
 #include "syntax_nodes/direct_declarator.hpp"
+#include "syntax_nodes/direct_new_declarator.hpp"
 #include "syntax_nodes/elaborated_type_specifier.hpp"
 #include "syntax_nodes/enum_elaborated_specifier.hpp"
 #include "syntax_nodes/exception_declaration.hpp"

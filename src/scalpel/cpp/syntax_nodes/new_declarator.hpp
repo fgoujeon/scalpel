@@ -21,21 +21,39 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_NEW_DECLARATOR_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_NEW_DECLARATOR_HPP
 
+#include <memory>
+#include <boost/optional.hpp>
 #include "composite_node.hpp"
+#include "space.hpp"
+#include "ptr_operator_seq.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
+class direct_new_declarator;
+
+/**
+new_declarator
+	= ptr_operator_seq, direct_new_declarator
+	| ptr_operator_seq
+	| direct_new_declarator
+;
+*/
 class new_declarator: public composite_node
 {
 	public:
 		new_declarator
 		(
+			boost::optional<ptr_operator_seq>&& ptr_operator_seq_node,
+			boost::optional<space>&& space_node,
+			boost::optional<direct_new_declarator>&& direct_new_declarator_node
 		);
 
 		new_declarator(const new_declarator& o);
 
 		new_declarator(new_declarator&& o);
+
+		~new_declarator();
 
 		const new_declarator&
 		operator=(const new_declarator& o);
@@ -43,6 +61,10 @@ class new_declarator: public composite_node
 	private:
 		void
 		update_node_list();
+
+		boost::optional<ptr_operator_seq> ptr_operator_seq_;
+		boost::optional<space> space_;
+		direct_new_declarator* direct_new_declarator_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

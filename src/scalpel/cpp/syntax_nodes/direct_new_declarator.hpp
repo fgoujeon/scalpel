@@ -21,16 +21,32 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_DIRECT_NEW_DECLARATOR_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_DIRECT_NEW_DECLARATOR_HPP
 
+#include <boost/optional.hpp>
 #include "composite_node.hpp"
+#include "space.hpp"
+#include "expression.hpp"
+#include "conditional_expression.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
+/**
+direct_new_declarator
+	= '[' >> !s >> expression >> !s >> ']' >> !(!s >> '[' >> !s >> conditional_expression >> !s >> ']')
+;
+*/
 class direct_new_declarator: public composite_node
 {
 	public:
 		direct_new_declarator
 		(
+			boost::optional<space>&& post_first_opening_bracket_space_node,
+			expression&& expression_node,
+			boost::optional<space>&& post_expression_space_node,
+			boost::optional<space>&& post_first_closing_bracket_space_node,
+			boost::optional<space>&& post_second_opening_bracket_space_node,
+			boost::optional<conditional_expression>&& conditional_expression_node,
+			boost::optional<space>&& post_conditional_expression_space_node
 		);
 
 		direct_new_declarator(const direct_new_declarator& o);
@@ -43,6 +59,14 @@ class direct_new_declarator: public composite_node
 	private:
 		void
 		update_node_list();
+
+		boost::optional<space> post_first_opening_bracket_space_;
+		expression expression_;
+		boost::optional<space> post_expression_space_;
+		boost::optional<space> post_first_closing_bracket_space_;
+		boost::optional<space> post_second_opening_bracket_space_;
+		boost::optional<conditional_expression> conditional_expression_;
+		boost::optional<space> post_conditional_expression_space_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes
