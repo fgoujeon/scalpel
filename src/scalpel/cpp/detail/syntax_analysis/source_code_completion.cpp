@@ -73,7 +73,7 @@ complete(std::string& str)
 		/*
 		Search last declaration.
 		*/
-		std::string::size_type last_declaration_index = str.find_last_of(";{}");
+		std::string::size_type last_declaration_index = str.find_last_of(";{");
 		/*
 		std::string::size_type last_declaration_index = std::string::npos;
 		std::string::size_type search_from = std::string::npos;

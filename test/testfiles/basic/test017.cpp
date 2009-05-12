@@ -6,6 +6,6 @@ int main()
 		foo();
 		bar();
 		--i;
-	} while ( i >= 0 ) ;
+	} while  ( i >= 0 )   ;
 }
 

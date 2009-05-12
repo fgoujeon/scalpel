@@ -72,6 +72,7 @@ const leaf_node catch_keyword("catch");
 const leaf_node continue_keyword("continue");
 const leaf_node default_keyword("default");
 const leaf_node delete_keyword("delete");
+const leaf_node do_keyword("do");
 const leaf_node else_keyword("else");
 const leaf_node false_keyword("false");
 const leaf_node for_keyword("for");
@@ -88,6 +89,7 @@ const leaf_node true_keyword("true");
 const leaf_node try_keyword("try");
 const leaf_node using_keyword("using");
 const leaf_node virtual_keyword("virtual");
+const leaf_node while_keyword("while");
 
 }}}} //namespace scalpel::cpp::syntax_nodes::global_nodes
 

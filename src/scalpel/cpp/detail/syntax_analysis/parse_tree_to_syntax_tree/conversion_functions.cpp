@@ -793,7 +793,24 @@ convert_do_while_statement(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::DO_WHILE_STATEMENT);
 
-	return do_while_statement();
+	tree_node_iterator_t do_keyword_it = node.children.begin();
+	tree_node_iterator_t statement_it = find_node<id_t::STATEMENT>(node);
+	tree_node_iterator_t while_keyword_it = find_node(node, "while");
+	tree_node_iterator_t opening_bracket_it = find_node(node, "(");
+	tree_node_iterator_t expression_it = find_node<id_t::EXPRESSION>(node);
+	tree_node_iterator_t closing_bracket_it = find_node(node, ")");
+
+	return do_while_statement
+	(
+		convert_next_space(node, do_keyword_it),
+		convert_node<statement>(*statement_it),
+		convert_next_space(node, statement_it),
+		convert_next_space(node, while_keyword_it),
+		convert_next_space(node, opening_bracket_it),
+		convert_node<expression>(*expression_it),
+		convert_next_space(node, expression_it),
+		convert_next_space(node, closing_bracket_it)
+	);
 }
 
 dot_id_expression

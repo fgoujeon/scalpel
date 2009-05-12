@@ -76,6 +76,7 @@ extern const leaf_node catch_keyword;
 extern const leaf_node continue_keyword;
 extern const leaf_node default_keyword;
 extern const leaf_node delete_keyword;
+extern const leaf_node do_keyword;
 extern const leaf_node else_keyword;
 extern const leaf_node false_keyword;
 extern const leaf_node for_keyword;
@@ -92,6 +93,7 @@ extern const leaf_node true_keyword;
 extern const leaf_node try_keyword;
 extern const leaf_node using_keyword;
 extern const leaf_node virtual_keyword;
+extern const leaf_node while_keyword;
 
 }}}} //namespace scalpel::cpp::syntax_nodes::global_nodes
 
