@@ -180,7 +180,7 @@ semantic_analyzer::analyze(const direct_declarator::function_part&)
 }
 
 void
-semantic_analyzer::analyze(const do_while_statement&)
+semantic_analyzer::analyze(const do_while_statement& syntax_node)
 {
 }
 
