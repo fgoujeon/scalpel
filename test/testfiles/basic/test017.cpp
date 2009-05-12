@@ -7,5 +7,11 @@ int main()
 		bar();
 		--i;
 	} while  ( i >= 0 )   ;
+
+	bool loop_condition = true;
+	while( loop_condition  )
+	{
+		function( & loop_condition);
+	}
 }
 
