@@ -73,6 +73,7 @@ extern const leaf_node tilde;
 extern const leaf_node break_keyword;
 extern const leaf_node case_keyword;
 extern const leaf_node catch_keyword;
+extern const leaf_node const_cast_keyword;
 extern const leaf_node continue_keyword;
 extern const leaf_node default_keyword;
 extern const leaf_node delete_keyword;

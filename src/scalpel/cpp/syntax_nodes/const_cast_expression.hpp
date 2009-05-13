@@ -18,32 +18,19 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_CONST_CAST_EXPRESION_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_CONST_CAST_EXPRESION_HPP
+#ifndef SCALPEL_CPP_SYNTAX_NODES_CONST_CAST_EXPRESSION_HPP
+#define SCALPEL_CPP_SYNTAX_NODES_CONST_CAST_EXPRESSION_HPP
 
-#include "composite_node.hpp"
+#include "templates/cast_expression.hpp"
+#include "common_nodes.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class const_cast_expression: public composite_node
-{
-	public:
-		const_cast_expression
-		(
-		);
-
-		const_cast_expression(const const_cast_expression& o);
-
-		const_cast_expression(const_cast_expression&& o);
-
-		const const_cast_expression&
-		operator=(const const_cast_expression& o);
-
-	private:
-		void
-		update_node_list();
-};
+typedef
+	templates::cast_expression<global_nodes::const_cast_keyword>
+	const_cast_expression
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
