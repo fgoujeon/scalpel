@@ -20,6 +20,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "assignment_expression.hpp"
 
+#include "expressions.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
@@ -82,40 +84,42 @@ assignment_expression::first_part::first_part
 	boost::optional<space>&& space_node,
 	assignment_operator&& assignment_operator_node
 ):
-	logical_or_expression_(logical_or_expression_node),
+	logical_or_expression_(new logical_or_expression(logical_or_expression_node)),
 	space_(space_node),
 	assignment_operator_(assignment_operator_node)
 {
 	update_node_list();
 }
 
-assignment_expression::first_part::first_part(const assignment_expression::first_part::first_part& o):
+assignment_expression::first_part::first_part(const assignment_expression::first_part& o):
 	composite_node(),
-	logical_or_expression_(o.logical_or_expression_),
+	logical_or_expression_(new logical_or_expression(*o.logical_or_expression_)),
 	space_(o.space_),
 	assignment_operator_(o.assignment_operator_)
 {
 	update_node_list();
 }
 
-assignment_expression::first_part::first_part(assignment_expression::first_part::first_part&& o):
+assignment_expression::first_part::first_part(assignment_expression::first_part&& o):
 	composite_node(),
-	logical_or_expression_(std::move(o.logical_or_expression_)),
+	logical_or_expression_(o.logical_or_expression_),
 	space_(std::move(o.space_)),
 	assignment_operator_(std::move(o.assignment_operator_))
 {
+	o.logical_or_expression_ = 0;
 	update_node_list();
 }
 
-const assignment_expression::first_part::first_part&
-assignment_expression::first_part::operator=(const assignment_expression::first_part::first_part& o)
+assignment_expression::first_part::~first_part()
 {
-	logical_or_expression_ = o.logical_or_expression_;
-	space_ = o.space_;
-	assignment_operator_ = o.assignment_operator_;
+	delete logical_or_expression_;
+}
 
-	update_node_list();
-
+const assignment_expression::first_part&
+assignment_expression::first_part::operator=(const assignment_expression::first_part& o)
+{
+	assignment_expression::first_part copy(o);
+	std::swap(copy, *this);
 	return *this;
 }
 
@@ -124,7 +128,7 @@ assignment_expression::first_part::update_node_list()
 {
 	clear();
 
-	add(logical_or_expression_);
+	add(*logical_or_expression_);
 	if(space_) add(*space_);
 	add(assignment_operator_);
 }

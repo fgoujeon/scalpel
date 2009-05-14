@@ -21,8 +21,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_CONDITIONAL_EXPRESSION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_CONDITIONAL_EXPRESSION_HPP
 
+#include <memory>
 #include "composite_node.hpp"
-#include "expressions.hpp"
+#include "expressions_fwd.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -46,6 +47,8 @@ class conditional_expression: public composite_node
 
 		conditional_expression(conditional_expression&& o);
 
+		~conditional_expression();
+
 		const conditional_expression&
 		operator=(const conditional_expression& o);
 
@@ -53,7 +56,7 @@ class conditional_expression: public composite_node
 		void
 		update_node_list();
 
-		logical_or_expression logical_or_expression_;
+		logical_or_expression* logical_or_expression_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

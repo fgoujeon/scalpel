@@ -18,32 +18,19 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_REINTERPRET_CAST_EXPRESION_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_REINTERPRET_CAST_EXPRESION_HPP
+#ifndef SCALPEL_CPP_SYNTAX_NODES_REINTERPRET_CAST_EXPRESSION_HPP
+#define SCALPEL_CPP_SYNTAX_NODES_REINTERPRET_CAST_EXPRESSION_HPP
 
-#include "composite_node.hpp"
+#include "templates/cast_expression.hpp"
+#include "common_nodes.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class reinterpret_cast_expression: public composite_node
-{
-	public:
-		reinterpret_cast_expression
-		(
-		);
-
-		reinterpret_cast_expression(const reinterpret_cast_expression& o);
-
-		reinterpret_cast_expression(reinterpret_cast_expression&& o);
-
-		const reinterpret_cast_expression&
-		operator=(const reinterpret_cast_expression& o);
-
-	private:
-		void
-		update_node_list();
-};
+typedef
+	templates::cast_expression<global_nodes::reinterpret_cast_keyword>
+	reinterpret_cast_expression
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

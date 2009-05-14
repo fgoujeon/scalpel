@@ -1,11 +1,22 @@
+class base{};
+class derived: public base{};
+
 int main()
 {
+	int i;
 	const int ci;
 	int* pi;
-	const int* cpi;
-	double d;
+	double d = 9.6;
 
 	pi = const_cast<int*>(&ci);
+	i = static_cast<int>(d);
+
+	base* b = new derived();
+	if(derived* d = dynamic_cast<derived*>(b))
+	{
+	}
+
+	i = reinterpret_cast<int>(b);
 
 	return 0;
 }

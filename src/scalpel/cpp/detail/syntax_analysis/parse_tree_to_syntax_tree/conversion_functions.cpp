@@ -850,17 +850,9 @@ convert_dot_id_expression(const tree_node_t& node)
 dot_pseudo_destructor_name
 convert_dot_pseudo_destructor_name(const tree_node_t& node)
 {
-	assert(node.value.id() == id_t::DOT_PSEUDO_DESTRUCTOR_NAME);
+    assert(node.value.id() == id_t::DOT_PSEUDO_DESTRUCTOR_NAME);
 
 	return dot_pseudo_destructor_name();
-}
-
-dynamic_cast_expression
-convert_dynamic_cast_expression(const tree_node_t& node)
-{
-	assert(node.value.id() == id_t::DYNAMIC_CAST_EXPRESSION);
-
-	return dynamic_cast_expression();
 }
 
 elaborated_type_specifier
@@ -1902,14 +1894,6 @@ convert_qualified_template_id(const tree_node_t& node)
     );
 }
 
-reinterpret_cast_expression
-convert_reinterpret_cast_expression(const tree_node_t& node)
-{
-	assert(node.value.id() == id_t::REINTERPRET_CAST_EXPRESSION);
-
-	return reinterpret_cast_expression();
-}
-
 return_statement
 convert_return_statement(const tree_node_t& node)
 {
@@ -2064,14 +2048,6 @@ convert_statement(const tree_node_t& node)
 		id_t::BLOCK_DECLARATION,
 		id_t::TRY_BLOCK
 	>(node);
-}
-
-static_cast_expression
-convert_static_cast_expression(const tree_node_t& node)
-{
-	assert(node.value.id() == id_t::STATIC_CAST_EXPRESSION);
-
-	return static_cast_expression();
 }
 
 string_literal

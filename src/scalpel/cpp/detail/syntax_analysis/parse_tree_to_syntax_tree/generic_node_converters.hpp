@@ -769,25 +769,25 @@ SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
 (
 	DYNAMIC_CAST_EXPRESSION,
 	dynamic_cast_expression,
-	dynamic_cast_expression
+	cast_expression_template<syntax_nodes::dynamic_cast_expression>
 )
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
 (
 	STATIC_CAST_EXPRESSION,
 	static_cast_expression,
-	static_cast_expression
+	cast_expression_template<syntax_nodes::static_cast_expression>
 )
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
 (
 	REINTERPRET_CAST_EXPRESSION,
 	reinterpret_cast_expression,
-	reinterpret_cast_expression
+	cast_expression_template<syntax_nodes::reinterpret_cast_expression>
 )
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
 (
 	CONST_CAST_EXPRESSION,
 	const_cast_expression,
-	const_cast_expression
+	cast_expression_template<syntax_nodes::const_cast_expression>
 )
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
 (

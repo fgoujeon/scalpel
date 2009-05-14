@@ -46,7 +46,7 @@ cast_expression<CastKeywordNode>::cast_expression
 	post_type_id_space_(post_type_id_space_node),
 	post_right_angle_bracket_space_(post_right_angle_bracket_space_node),
 	post_opening_round_bracket_space_(post_opening_round_bracket_space_node),
-	//expression_(expression_node),
+	expression_(expression_node),
 	post_expression_space_(post_expression_space_node)
 {
 	update_node_list();
@@ -61,7 +61,7 @@ cast_expression<CastKeywordNode>::cast_expression(const cast_expression& o):
 	post_type_id_space_(o.post_type_id_space_),
 	post_right_angle_bracket_space_(o.post_right_angle_bracket_space_),
 	post_opening_round_bracket_space_(o.post_opening_round_bracket_space_),
-	//expression_(o.expression_),
+	expression_(o.expression_),
 	post_expression_space_(o.post_expression_space_)
 {
 	update_node_list();
@@ -76,7 +76,7 @@ cast_expression<CastKeywordNode>::cast_expression(cast_expression&& o):
 	post_type_id_space_(std::move(o.post_type_id_space_)),
 	post_right_angle_bracket_space_(std::move(o.post_right_angle_bracket_space_)),
 	post_opening_round_bracket_space_(std::move(o.post_opening_round_bracket_space_)),
-	//expression_(std::move(o.expression_)),
+	expression_(std::move(o.expression_)),
 	post_expression_space_(std::move(o.post_expression_space_))
 {
 	update_node_list();
@@ -106,7 +106,7 @@ cast_expression<CastKeywordNode>::update_node_list()
 	if(post_right_angle_bracket_space_) add(*post_right_angle_bracket_space_);
 	add(global_nodes::opening_bracket);
 	if(post_opening_round_bracket_space_) add(*post_opening_round_bracket_space_);
-	//add(expression_);
+	add(expression_);
 	if(post_expression_space_) add(*post_expression_space_);
 	add(global_nodes::closing_bracket);
 }

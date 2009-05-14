@@ -25,6 +25,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <vector>
 #include "typedefs.hpp"
 #include "generic_node_converters.hpp"
+#include "node_finder.hpp"
+#include "space_conversion_functions.hpp"
 
 namespace scalpel { namespace cpp { namespace detail { namespace syntax_analysis { namespace parse_tree_to_syntax_tree
 {
@@ -38,6 +40,7 @@ convert_string_enumeration(const tree_node_t& node)
 		get_only_child_value(node)
 	);
 }
+
 
 template<class ContainerT>
 ContainerT
@@ -119,6 +122,7 @@ convert_sequence(const tree_node_t& node)
 	return seq;
 }
 
+
 template<class SyntaxNodeT, int... Ids>
 struct alternative_node_converter;
 
@@ -180,6 +184,31 @@ syntax_nodes::simple_text_node<Text>
 convert_simple_text(const tree_node_t&)
 {
 	return syntax_nodes::simple_text_node<Text>();
+}
+
+
+template<class CastExpressionT>
+CastExpressionT
+convert_cast_expression_template(const tree_node_t& node)
+{
+	tree_node_iterator_t cast_keyword_it = node.children.begin();
+	tree_node_iterator_t left_angle_bracket_it = find_node(node, "<");
+	tree_node_iterator_t type_id_it = find_node<id_t::TYPE_ID>(node);
+	tree_node_iterator_t right_angle_bracket_it = find_node(node, ">");
+	tree_node_iterator_t opening_round_bracket_it = find_node(node, "(");
+	tree_node_iterator_t expression_it = find_node<id_t::EXPRESSION>(node);
+
+	return CastExpressionT
+	(
+		convert_next_space(node, cast_keyword_it),
+		convert_next_space(node, left_angle_bracket_it),
+		convert_node<syntax_nodes::type_id>(*type_id_it),
+		convert_next_space(node, type_id_it),
+		convert_next_space(node, right_angle_bracket_it),
+		convert_next_space(node, opening_round_bracket_it),
+		convert_node<syntax_nodes::expression>(*expression_it),
+		convert_next_space(node, expression_it)
+	);
 }
 
 }}}}} //namespace scalpel::cpp::detail::syntax_analysis::parse_tree_to_syntax_tree

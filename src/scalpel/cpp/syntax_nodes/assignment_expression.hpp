@@ -26,7 +26,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "sequence_node.hpp"
 #include "assignment_operator.hpp"
 #include "conditional_expression.hpp"
-#include "expressions.hpp"
+#include "expressions_fwd.hpp"
 #include "throw_expression.hpp"
 #include "space.hpp"
 
@@ -95,6 +95,8 @@ class assignment_expression::first_part: public composite_node
 
 		first_part(first_part&& o);
 
+		~first_part();
+
 		const first_part&
 		operator=(const first_part& o);
 
@@ -106,7 +108,7 @@ class assignment_expression::first_part: public composite_node
 		void
 		update_node_list();
 
-        logical_or_expression logical_or_expression_;
+		logical_or_expression* logical_or_expression_;
 		boost::optional<space> space_;
         assignment_operator assignment_operator_;
 };

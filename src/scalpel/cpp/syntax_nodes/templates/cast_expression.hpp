@@ -24,7 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/optional.hpp>
 #include "../composite_node.hpp"
 #include "../type_id.hpp"
-//#include "../expression.hpp"
+#include "../expression.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes { namespace templates
 {
@@ -67,7 +67,7 @@ class cast_expression: public composite_node
 		boost::optional<space> post_type_id_space_;
 		boost::optional<space> post_right_angle_bracket_space_;
 		boost::optional<space> post_opening_round_bracket_space_;
-		//expression expression_;
+		expression expression_;
 		boost::optional<space> post_expression_space_;
 };
 

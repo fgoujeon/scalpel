@@ -20,6 +20,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "conditional_expression.hpp"
 
+#include "expressions.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
@@ -27,32 +29,36 @@ conditional_expression::conditional_expression
 (
 	logical_or_expression&& logical_or_expression_node
 ):
-	logical_or_expression_(logical_or_expression_node)
+	logical_or_expression_(new logical_or_expression(logical_or_expression_node))
 {
 	update_node_list();
 }
 
 conditional_expression::conditional_expression(const conditional_expression& o):
 	composite_node(),
-	logical_or_expression_(o.logical_or_expression_)
+	logical_or_expression_(new logical_or_expression(*o.logical_or_expression_))
 {
 	update_node_list();
 }
 
 conditional_expression::conditional_expression(conditional_expression&& o):
 	composite_node(),
-	logical_or_expression_(std::move(o.logical_or_expression_))
+	logical_or_expression_(o.logical_or_expression_)
 {
+	o.logical_or_expression_ = 0;
 	update_node_list();
+}
+
+conditional_expression::~conditional_expression()
+{
+	delete logical_or_expression_;
 }
 
 const conditional_expression&
 conditional_expression::operator=(const conditional_expression& o)
 {
-	logical_or_expression_ = o.logical_or_expression_;
-
-	update_node_list();
-
+	conditional_expression copy(o);
+	std::swap(copy, *this);
 	return *this;
 }
 
@@ -60,8 +66,7 @@ void
 conditional_expression::update_node_list()
 {
 	clear();
-
-	add(logical_or_expression_);
+	add(*logical_or_expression_);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
