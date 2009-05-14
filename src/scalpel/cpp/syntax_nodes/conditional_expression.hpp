@@ -22,11 +22,16 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_CONDITIONAL_EXPRESSION_HPP
 
 #include <memory>
+#include <boost/optional.hpp>
 #include "composite_node.hpp"
 #include "expressions_fwd.hpp"
+#include "expression_fwd.hpp"
+#include "space.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
+
+class assignment_expression;
 
 /**
 \verbatim
@@ -40,7 +45,13 @@ class conditional_expression: public composite_node
 	public:
 		conditional_expression
 		(
-			logical_or_expression&& logical_or_expression_node
+			logical_or_expression&& logical_or_expression_node,
+			boost::optional<space>&& pre_question_mark_space_node,
+			boost::optional<space>&& post_question_mark_space_node,
+			boost::optional<expression>&& expression_node,
+			boost::optional<space>&& post_expression_space_node,
+			boost::optional<space>&& post_colon_space_node,
+			boost::optional<assignment_expression>&& assignment_expression_node
 		);
 
 		conditional_expression(const conditional_expression& o);
@@ -57,6 +68,12 @@ class conditional_expression: public composite_node
 		update_node_list();
 
 		logical_or_expression* logical_or_expression_;
+		boost::optional<space> pre_question_mark_space_;
+		boost::optional<space> post_question_mark_space_;
+		std::unique_ptr<expression> expression_;
+		boost::optional<space> post_expression_space_;
+		boost::optional<space> post_colon_space_;
+		std::unique_ptr<assignment_expression> assignment_expression_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

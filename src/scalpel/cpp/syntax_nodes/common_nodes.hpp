@@ -62,6 +62,7 @@ extern const leaf_node opening_square_bracket;
 extern const leaf_node percent;
 extern const leaf_node pipe;
 extern const leaf_node plus;
+extern const leaf_node question_mark;
 extern const leaf_node right_angle_bracket;
 extern const leaf_node right_angle_bracket_and_equal;
 extern const leaf_node semicolon;

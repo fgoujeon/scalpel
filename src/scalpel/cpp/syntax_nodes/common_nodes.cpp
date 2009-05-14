@@ -58,6 +58,7 @@ const leaf_node opening_square_bracket("[");
 const leaf_node percent("%");
 const leaf_node pipe("|");
 const leaf_node plus("+");
+const leaf_node question_mark("?");
 const leaf_node right_angle_bracket(">");
 const leaf_node right_angle_bracket_and_equal(">=");
 const leaf_node semicolon(";");
