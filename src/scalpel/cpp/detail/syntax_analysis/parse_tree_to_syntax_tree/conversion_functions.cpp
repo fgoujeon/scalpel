@@ -1985,21 +1985,6 @@ convert_space(const tree_node_t& node)
 	return space(get_only_child_value(node));
 }
 
-square_bracketed_expression
-convert_square_bracketed_expression(const tree_node_t& node)
-{
-	assert(node.value.id() == id_t::SQUARE_BRACKETED_EXPRESSION);
-
-	tree_node_iterator_t i = find_node<id_t::EXPRESSION>(node);
-
-	return square_bracketed_expression
-	(
-		convert_previous_space(node, i),
-		convert_node<expression>(*i),
-		convert_next_space(node, i)
-	);
-}
-
 statement
 convert_statement(const tree_node_t& node)
 {

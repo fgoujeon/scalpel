@@ -192,6 +192,18 @@ convert_round_bracketed_node(const tree_node_t& node)
 }
 
 template<class SyntaxNodeT>
+typename syntax_nodes::square_bracketed_node<SyntaxNodeT>::type
+convert_square_bracketed_node(const tree_node_t& node)
+{
+	return convert_bracketed_node
+	<
+		syntax_nodes::global_nodes::opening_square_bracket,
+		SyntaxNodeT,
+		syntax_nodes::global_nodes::closing_square_bracket
+	>(node.children.begin());
+}
+
+template<class SyntaxNodeT>
 typename syntax_nodes::angle_bracketed_node<SyntaxNodeT>::type
 convert_angle_bracketed_node(const tree_node_t& node)
 {
@@ -219,6 +231,18 @@ convert_round_bracketed_node(tree_node_iterator_t it)
 		syntax_nodes::global_nodes::opening_bracket,
 		SyntaxNodeT,
 		syntax_nodes::global_nodes::closing_bracket
+	>(it);
+}
+
+template<class SyntaxNodeT>
+typename syntax_nodes::square_bracketed_node<SyntaxNodeT>::type
+convert_square_bracketed_node(tree_node_iterator_t it)
+{
+	return convert_bracketed_node
+	<
+		syntax_nodes::global_nodes::opening_square_bracket,
+		SyntaxNodeT,
+		syntax_nodes::global_nodes::closing_square_bracket
 	>(it);
 }
 

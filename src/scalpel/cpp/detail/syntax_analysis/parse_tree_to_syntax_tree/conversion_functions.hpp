@@ -402,9 +402,6 @@ convert_simple_type_specifier_postfix_expression(const tree_node_t& node);
 syntax_nodes::space
 convert_space(const tree_node_t& node);
 
-syntax_nodes::square_bracketed_expression
-convert_square_bracketed_expression(const tree_node_t& node);
-
 syntax_nodes::statement
 convert_statement(const tree_node_t& node);
 

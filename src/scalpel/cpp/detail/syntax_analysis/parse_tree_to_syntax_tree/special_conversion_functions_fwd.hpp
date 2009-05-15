@@ -60,6 +60,10 @@ typename syntax_nodes::round_bracketed_node<SyntaxNodeT>::type
 convert_round_bracketed_node(const tree_node_t& node);
 
 template<class SyntaxNodeT>
+typename syntax_nodes::square_bracketed_node<SyntaxNodeT>::type
+convert_square_bracketed_node(const tree_node_t& node);
+
+template<class SyntaxNodeT>
 typename syntax_nodes::angle_bracketed_node<SyntaxNodeT>::type
 convert_angle_bracketed_node(const tree_node_t& node);
 
@@ -70,6 +74,10 @@ convert_bracketed_node(const tree_node_t& node);
 template<class SyntaxNodeT>
 typename syntax_nodes::round_bracketed_node<SyntaxNodeT>::type
 convert_round_bracketed_node(tree_node_iterator_t it);
+
+template<class SyntaxNodeT>
+typename syntax_nodes::square_bracketed_node<SyntaxNodeT>::type
+convert_square_bracketed_node(tree_node_iterator_t it);
 
 template<class SyntaxNodeT>
 typename syntax_nodes::angle_bracketed_node<SyntaxNodeT>::type

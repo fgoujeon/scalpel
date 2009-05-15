@@ -51,29 +51,6 @@ struct node_converter_from_type<syntax_nodes::return_type>	\
 	}														\
 };
 
-#define SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_BRACKETED_NODE_CONVERTER_SPECIALIZATION(id, opening_bracket, main_node_type, closing_bracket)\
-template<class T>											\
-struct node_converter_from_id<T, grammar::parser_id::id>	\
-{															\
-	static													\
-	syntax_nodes::bracketed_node							\
-	<														\
-		syntax_nodes::global_nodes::opening_bracket,		\
-		syntax_nodes::main_node_type,						\
-		syntax_nodes::global_nodes::closing_bracket			\
-	>														\
-	convert(const tree_node_t& node)						\
-	{														\
-		return convert_bracketed_node						\
-		<													\
-			syntax_nodes::global_nodes::opening_bracket,	\
-			syntax_nodes::main_node_type,					\
-			syntax_nodes::global_nodes::closing_bracket		\
-		>													\
-		(node);												\
-	}														\
-};
-
 #define SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION(id, return_type, convert_function)\
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_FROM_ID_SPECIALIZATION(id, return_type, convert_function)\
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_FROM_TYPE_SPECIALIZATION(return_type, convert_function)
@@ -833,8 +810,8 @@ SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
 (
 	SQUARE_BRACKETED_EXPRESSION,
-	square_bracketed_expression,
-	square_bracketed_expression
+	square_bracketed_node<syntax_nodes::expression>::type,
+	square_bracketed_node<syntax_nodes::expression>
 )
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
 (
@@ -914,12 +891,11 @@ SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
 	simple_text_node<util::extern_strings::this_>,
 	simple_text<util::extern_strings::this_>
 )
-SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_BRACKETED_NODE_CONVERTER_SPECIALIZATION
+SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
 (
 	ROUND_BRACKETED_EXPRESSION,
-	opening_bracket,
-	expression,
-	closing_bracket
+	round_bracketed_node<syntax_nodes::expression>::type,
+	round_bracketed_node<syntax_nodes::expression>
 )
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
 (

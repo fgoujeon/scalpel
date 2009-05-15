@@ -34,7 +34,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "const_cast_expression.hpp"
 #include "typeid_expression.hpp"
 #include "type_id_typeid_expression.hpp"
-#include "square_bracketed_expression.hpp"
 #include "bracketed_expression_list.hpp"
 #include "dot_id_expression.hpp"
 #include "arrow_id_expression.hpp"
@@ -75,7 +74,7 @@ class postfix_expression: public composite_node
 		typedef
 			alternative_node
 			<
-				square_bracketed_expression,
+				square_bracketed_node<expression>::type,
 				bracketed_expression_list,
 				dot_id_expression,
 				arrow_id_expression,
