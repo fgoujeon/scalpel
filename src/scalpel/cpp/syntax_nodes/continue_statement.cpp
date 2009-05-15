@@ -63,9 +63,9 @@ continue_statement::update_node_list()
 {
 	clear();
 
-	add(global_nodes::continue_keyword);
+	add(common_nodes::continue_keyword);
 	if(space_) add(*space_);
-	add(global_nodes::semicolon);
+	add(common_nodes::semicolon);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

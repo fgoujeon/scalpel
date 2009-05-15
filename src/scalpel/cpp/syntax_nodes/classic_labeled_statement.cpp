@@ -75,7 +75,7 @@ classic_labeled_statement::update_node_list()
 	clear();
 	add(identifier_);
 	if(post_identifier_space_) add(*post_identifier_space_);
-	add(global_nodes::colon);
+	add(common_nodes::colon);
 	if(post_colon_space_) add(*post_colon_space_);
 	add(*statement_);
 }

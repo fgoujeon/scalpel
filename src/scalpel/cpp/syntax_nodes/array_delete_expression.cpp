@@ -81,13 +81,13 @@ void
 array_delete_expression::update_node_list()
 {
 	clear();
-	if(leading_double_colon_) add(global_nodes::double_colon);
+	if(leading_double_colon_) add(common_nodes::double_colon);
 	if(post_double_colon_space_) add(*post_double_colon_space_);
-	add(global_nodes::delete_keyword);
+	add(common_nodes::delete_keyword);
 	if(post_delete_keyword_space_) add(*post_delete_keyword_space_);
-	add(global_nodes::opening_square_bracket);
+	add(common_nodes::opening_square_bracket);
 	if(post_opening_bracket_space_) add(*post_opening_bracket_space_);
-	add(global_nodes::closing_square_bracket);
+	add(common_nodes::closing_square_bracket);
 	if(post_closing_bracket_space_) add(*post_closing_bracket_space_);
 	add(*cast_expression_);
 }

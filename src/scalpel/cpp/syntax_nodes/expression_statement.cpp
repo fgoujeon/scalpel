@@ -70,7 +70,7 @@ expression_statement::update_node_list()
 
 	if(expression_) add(*expression_);
 	if(post_expression_space_) add(*post_expression_space_);
-	add(global_nodes::semicolon);
+	add(common_nodes::semicolon);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

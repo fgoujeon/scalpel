@@ -97,11 +97,11 @@ template_id::update_node_list()
 	clear();
 	add(identifier_);
 	if(post_type_name_space_) add(*post_type_name_space_);
-	add(global_nodes::left_angle_bracket);
+	add(common_nodes::left_angle_bracket);
 	if(post_opening_angle_bracket_space_) add(*post_opening_angle_bracket_space_);
 	if(template_argument_list_) add(*template_argument_list_);
 	if(post_template_argument_list_space_) add(*post_template_argument_list_space_);
-	add(global_nodes::right_angle_bracket);
+	add(common_nodes::right_angle_bracket);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

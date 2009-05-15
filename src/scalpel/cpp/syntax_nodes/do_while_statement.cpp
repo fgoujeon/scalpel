@@ -88,19 +88,19 @@ void
 do_while_statement::update_node_list()
 {
 	clear();
-	add(global_nodes::do_keyword);
+	add(common_nodes::do_keyword);
 	if(post_do_keyword_space_) add(*post_do_keyword_space_);
 	add(*statement_);
 	if(post_statement_space_) add(*post_statement_space_);
-	add(global_nodes::while_keyword);
+	add(common_nodes::while_keyword);
 	if(post_while_keyword_space_) add(*post_while_keyword_space_);
-	add(global_nodes::opening_bracket);
+	add(common_nodes::opening_round_bracket);
 	if(post_opening_bracket_space_) add(*post_opening_bracket_space_);
 	add(expression_);
 	if(post_expression_space_) add(*post_expression_space_);
-	add(global_nodes::closing_bracket);
+	add(common_nodes::closing_round_bracket);
 	if(post_closing_bracket_space_) add(*post_closing_bracket_space_);
-	add(global_nodes::semicolon);
+	add(common_nodes::semicolon);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

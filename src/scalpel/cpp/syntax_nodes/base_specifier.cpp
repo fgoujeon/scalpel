@@ -87,14 +87,14 @@ base_specifier::update_node_list()
 	clear();
 	if(virtual_keyword_first_)
 	{
-		if(virtual_keyword_) add(global_nodes::virtual_keyword);
+		if(virtual_keyword_) add(common_nodes::virtual_keyword);
 		if(post_virtual_keyword_space_) add(*post_virtual_keyword_space_);
 	}
 	if(access_specifier_) add(*access_specifier_);
 	if(post_access_specifier_space_) add(*post_access_specifier_space_);
 	if(!virtual_keyword_first_)
 	{
-		if(virtual_keyword_) add(global_nodes::virtual_keyword);
+		if(virtual_keyword_) add(common_nodes::virtual_keyword);
 		if(post_virtual_keyword_space_) add(*post_virtual_keyword_space_);
 	}
 	if(nested_identifier_or_template_id_) add(*nested_identifier_or_template_id_);

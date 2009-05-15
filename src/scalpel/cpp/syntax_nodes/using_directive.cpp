@@ -96,17 +96,17 @@ void
 using_directive::update_node_list()
 {
 	clear();
-	add(global_nodes::using_keyword);
+	add(common_nodes::using_keyword);
 	if(post_using_keyword_space_) add(*post_using_keyword_space_);
-	add(global_nodes::namespace_keyword);
+	add(common_nodes::namespace_keyword);
 	if(post_namespace_keyword_space_) add(*post_namespace_keyword_space_);
-	if(leading_double_colon_) add(global_nodes::double_colon);
+	if(leading_double_colon_) add(common_nodes::double_colon);
 	if(post_leading_double_colon_space_) add(*post_leading_double_colon_space_);
 	if(nested_name_specifier_) add(*nested_name_specifier_);
 	if(post_nested_name_specifier_space_) add(*post_nested_name_specifier_space_);
 	add(identifier_);
 	if(post_identifier_space_) add(*post_identifier_space_);
-	add(global_nodes::semicolon);
+	add(common_nodes::semicolon);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

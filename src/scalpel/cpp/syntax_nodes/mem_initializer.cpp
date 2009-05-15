@@ -83,11 +83,11 @@ mem_initializer::update_node_list()
 	clear();
 	add(mem_initializer_id_);
 	if(post_mem_initializer_id_space_) add(*post_mem_initializer_id_space_);
-	add(global_nodes::opening_bracket);
+	add(common_nodes::opening_round_bracket);
 	if(post_opening_bracket_space_) add(*post_opening_bracket_space_);
 	if(expression_list_) add(*expression_list_);
 	if(post_expression_list_space_) add(*post_expression_list_space_);
-	add(global_nodes::closing_bracket);
+	add(common_nodes::closing_round_bracket);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

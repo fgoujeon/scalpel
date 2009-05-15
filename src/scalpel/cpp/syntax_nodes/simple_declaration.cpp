@@ -80,7 +80,7 @@ simple_declaration::update_node_list()
 	if(post_decl_specifier_seq_space_) add(*post_decl_specifier_seq_space_);
 	if(init_declarator_list_) add(*init_declarator_list_);
 	if(post_init_declarator_list_space_) add(*post_init_declarator_list_space_);
-	add(global_nodes::semicolon);
+	add(common_nodes::semicolon);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

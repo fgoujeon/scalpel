@@ -77,7 +77,7 @@ void
 try_block::update_node_list()
 {
 	clear();
-	add(global_nodes::try_keyword);
+	add(common_nodes::try_keyword);
 	if(post_try_keyword_space_) add(*post_try_keyword_space_);
 	add(compound_statement_);
 	if(post_compound_statement_space_) add(*post_compound_statement_space_);

@@ -78,7 +78,7 @@ member_declarator_bit_field_member::update_node_list()
 	clear();
 	if(identifier_) add(*identifier_);
 	if(post_identifier_space_) add(*post_identifier_space_);
-	add(global_nodes::colon);
+	add(common_nodes::colon);
 	if(post_colon_space_) add(*post_colon_space_);
 	add(conditional_expression_);
 }

@@ -37,7 +37,7 @@ typedef
 	<
 		simple_text_node<util::extern_strings::this_>,
 		literal,
-		bracketed_node<global_nodes::opening_bracket, expression, global_nodes::closing_bracket>,
+		bracketed_node<common_nodes::opening_round_bracket, expression, common_nodes::closing_round_bracket>,
 		id_expression
 	>
 	primary_expression

@@ -76,7 +76,7 @@ nested_name_specifier::update_node_list()
 	clear();
 	add(identifier_or_template_id_);
 	if(post_identifier_or_template_id_space_) add(*post_identifier_or_template_id_space_);
-	add(global_nodes::double_colon);
+	add(common_nodes::double_colon);
 	if(pre_last_part_seq_space_) add(*pre_last_part_seq_space_);
 	if(last_part_seq_) add(*last_part_seq_);
 }
@@ -123,7 +123,7 @@ nested_name_specifier::last_part::update_node_list()
 {
 	clear();
 	add(identifier_or_template_id_);
-	add(global_nodes::double_colon);
+	add(common_nodes::double_colon);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

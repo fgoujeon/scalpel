@@ -65,9 +65,9 @@ struct round_bracketed_node
 {
 	typedef bracketed_node
 	<
-		global_nodes::opening_bracket,
+		common_nodes::opening_round_bracket,
 		SyntaxNodeT,
-		global_nodes::closing_bracket
+		common_nodes::closing_round_bracket
 	> type;
 };
 
@@ -76,9 +76,9 @@ struct square_bracketed_node
 {
 	typedef bracketed_node
 	<
-		global_nodes::opening_square_bracket,
+		common_nodes::opening_square_bracket,
 		SyntaxNodeT,
-		global_nodes::closing_square_bracket
+		common_nodes::closing_square_bracket
 	> type;
 };
 
@@ -87,9 +87,9 @@ struct angle_bracketed_node
 {
 	typedef bracketed_node
 	<
-		global_nodes::left_angle_bracket,
+		common_nodes::left_angle_bracket,
 		SyntaxNodeT,
-		global_nodes::right_angle_bracket
+		common_nodes::right_angle_bracket
 	> type;
 };
 
@@ -98,9 +98,9 @@ struct curly_bracketed_node
 {
 	typedef bracketed_node
 	<
-		global_nodes::opening_brace,
+		common_nodes::opening_brace,
 		SyntaxNodeT,
-		global_nodes::closing_brace
+		common_nodes::closing_brace
 	> type;
 };
 

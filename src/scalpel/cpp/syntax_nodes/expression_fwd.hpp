@@ -29,7 +29,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 class assignment_expression;
 
-typedef sequence_node<assignment_expression, global_nodes::comma> expression;
+typedef sequence_node<assignment_expression, common_nodes::comma> expression;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

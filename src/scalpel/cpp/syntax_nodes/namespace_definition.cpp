@@ -96,15 +96,15 @@ void
 namespace_definition::update_node_list()
 {
 	clear();
-	add(global_nodes::namespace_keyword);
+	add(common_nodes::namespace_keyword);
 	if(post_namespace_keyword_space_) add(*post_namespace_keyword_space_);
 	if(identifier_) add(*identifier_);
 	if(post_identifier_space_) add(*post_identifier_space_);
-	add(global_nodes::opening_brace);
+	add(common_nodes::opening_brace);
 	if(post_opening_brace_space_) add(*post_opening_brace_space_);
 	if(declaration_seq_) add(*declaration_seq_);
 	if(post_declaration_seq_space_) add(*post_declaration_seq_space_);
-	add(global_nodes::closing_brace);
+	add(common_nodes::closing_brace);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

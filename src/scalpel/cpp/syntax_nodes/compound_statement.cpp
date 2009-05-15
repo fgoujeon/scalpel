@@ -91,11 +91,11 @@ compound_statement::update_node_list()
 {
 	clear();
 
-	add(global_nodes::opening_brace);
+	add(common_nodes::opening_brace);
 	if(post_opening_brace_space_) add(*post_opening_brace_space_);
 	if(statement_seq_) add(*statement_seq_);
 	if(post_statement_seq_space_) add(*post_statement_seq_space_);
-	add(global_nodes::closing_brace);
+	add(common_nodes::closing_brace);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

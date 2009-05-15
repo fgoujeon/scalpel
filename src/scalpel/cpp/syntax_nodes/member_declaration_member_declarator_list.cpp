@@ -79,7 +79,7 @@ member_declaration_member_declarator_list::update_node_list()
 	if(post_decl_specifier_seq_space_) add(*post_decl_specifier_seq_space_);
 	if(member_declarator_list_) add(*member_declarator_list_);
 	if(post_member_declarator_list_space_) add(*post_member_declarator_list_space_);
-	add(global_nodes::semicolon);
+	add(common_nodes::semicolon);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

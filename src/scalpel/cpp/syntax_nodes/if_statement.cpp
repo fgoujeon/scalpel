@@ -117,17 +117,17 @@ void
 if_statement::update_node_list()
 {
 	clear();
-	add(global_nodes::if_keyword);
+	add(common_nodes::if_keyword);
 	if(post_if_keyword_space_) add(*post_if_keyword_space_);
-	add(global_nodes::opening_bracket);
+	add(common_nodes::opening_round_bracket);
 	if(post_opening_bracket_space_) add(*post_opening_bracket_space_);
 	add(condition_);
 	if(post_condition_space_) add(*post_condition_space_);
-	add(global_nodes::closing_bracket);
+	add(common_nodes::closing_round_bracket);
 	if(post_closing_bracket_space_) add(*post_closing_bracket_space_);
 	add(*statement_);
 	if(pre_else_keyword_space_) add(*pre_else_keyword_space_);
-	if(else_statement_) add(global_nodes::else_keyword);
+	if(else_statement_) add(common_nodes::else_keyword);
 	if(post_else_keyword_space_) add(*post_else_keyword_space_);
 	if(else_statement_) add(*else_statement_);
 }

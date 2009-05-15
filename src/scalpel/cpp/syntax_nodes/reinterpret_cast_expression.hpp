@@ -28,7 +28,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 typedef
-	templates::cast_expression<global_nodes::reinterpret_cast_keyword>
+	templates::cast_expression<common_nodes::reinterpret_cast_keyword>
 	reinterpret_cast_expression
 ;
 

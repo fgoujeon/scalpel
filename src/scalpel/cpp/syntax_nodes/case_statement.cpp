@@ -83,10 +83,10 @@ void
 case_statement::update_node_list()
 {
 	clear();
-	add(global_nodes::case_keyword);
+	add(common_nodes::case_keyword);
 	if(post_case_keyword_space_) add(*post_case_keyword_space_);
 	add(conditional_expression_);
-	add(global_nodes::colon);
+	add(common_nodes::colon);
 	if(post_colon_space_) add(*post_colon_space_);
 	add(*statement_);
 }

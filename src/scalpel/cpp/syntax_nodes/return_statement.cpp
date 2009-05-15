@@ -70,11 +70,11 @@ void
 return_statement::update_node_list()
 {
 	clear();
-	add(global_nodes::return_keyword);
+	add(common_nodes::return_keyword);
 	if(post_return_space_) add(*post_return_space_);
 	if(expression_) add(*expression_);
 	if(post_expression_space_) add(*post_expression_space_);
-	add(global_nodes::semicolon);
+	add(common_nodes::semicolon);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

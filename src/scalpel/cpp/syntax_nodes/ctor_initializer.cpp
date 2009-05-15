@@ -65,7 +65,7 @@ void
 ctor_initializer::update_node_list()
 {
 	clear();
-	add(global_nodes::colon);
+	add(common_nodes::colon);
 	if(space_) add(*space_);
 	add(mem_initializer_list_);
 }

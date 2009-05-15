@@ -24,7 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include "leaf_node.hpp"
 
-namespace scalpel { namespace cpp { namespace syntax_nodes { namespace global_nodes
+namespace scalpel { namespace cpp { namespace syntax_nodes { namespace common_nodes
 {
 
 //symbols
@@ -35,7 +35,7 @@ extern const leaf_node asterisk;
 extern const leaf_node capital_l;
 extern const leaf_node circumflex;
 extern const leaf_node closing_brace;
-extern const leaf_node closing_bracket;
+extern const leaf_node closing_round_bracket;
 extern const leaf_node closing_square_bracket;
 extern const leaf_node colon;
 extern const leaf_node comma;
@@ -55,7 +55,7 @@ extern const leaf_node left_angle_bracket;
 extern const leaf_node left_angle_bracket_and_equal;
 extern const leaf_node minus;
 extern const leaf_node opening_brace;
-extern const leaf_node opening_bracket;
+extern const leaf_node opening_round_bracket;
 extern const leaf_node opening_square_bracket;
 extern const leaf_node percent;
 extern const leaf_node pipe;
@@ -98,6 +98,6 @@ extern const leaf_node using_keyword;
 extern const leaf_node virtual_keyword;
 extern const leaf_node while_keyword;
 
-}}}} //namespace scalpel::cpp::syntax_nodes::global_nodes
+}}}} //namespace scalpel::cpp::syntax_nodes::common_nodes
 
 #endif

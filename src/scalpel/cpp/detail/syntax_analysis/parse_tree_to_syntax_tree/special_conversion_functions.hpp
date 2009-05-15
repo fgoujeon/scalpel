@@ -48,7 +48,7 @@ convert_sequence(const tree_node_t& node)
 {
 	ContainerT seq;
 
-	if(ContainerT::separator_node.raw_code() == syntax_nodes::global_nodes::empty.raw_code())
+	if(ContainerT::separator_node.raw_code() == syntax_nodes::common_nodes::empty.raw_code())
 	{
 		boost::optional<syntax_nodes::space> space_node;
 		for(tree_node_iterator_t i = node.children.begin(); i != node.children.end(); ++i) //for each child node
@@ -185,9 +185,9 @@ convert_round_bracketed_node(const tree_node_t& node)
 {
 	return convert_bracketed_node
 	<
-		syntax_nodes::global_nodes::opening_bracket,
+		syntax_nodes::common_nodes::opening_round_bracket,
 		SyntaxNodeT,
-		syntax_nodes::global_nodes::closing_bracket
+		syntax_nodes::common_nodes::closing_round_bracket
 	>(node.children.begin());
 }
 
@@ -197,9 +197,9 @@ convert_square_bracketed_node(const tree_node_t& node)
 {
 	return convert_bracketed_node
 	<
-		syntax_nodes::global_nodes::opening_square_bracket,
+		syntax_nodes::common_nodes::opening_square_bracket,
 		SyntaxNodeT,
-		syntax_nodes::global_nodes::closing_square_bracket
+		syntax_nodes::common_nodes::closing_square_bracket
 	>(node.children.begin());
 }
 
@@ -209,9 +209,9 @@ convert_angle_bracketed_node(const tree_node_t& node)
 {
 	return convert_bracketed_node
 	<
-		syntax_nodes::global_nodes::left_angle_bracket,
+		syntax_nodes::common_nodes::left_angle_bracket,
 		SyntaxNodeT,
-		syntax_nodes::global_nodes::right_angle_bracket
+		syntax_nodes::common_nodes::right_angle_bracket
 	>(node.children.begin());
 }
 
@@ -228,9 +228,9 @@ convert_round_bracketed_node(tree_node_iterator_t it)
 {
 	return convert_bracketed_node
 	<
-		syntax_nodes::global_nodes::opening_bracket,
+		syntax_nodes::common_nodes::opening_round_bracket,
 		SyntaxNodeT,
-		syntax_nodes::global_nodes::closing_bracket
+		syntax_nodes::common_nodes::closing_round_bracket
 	>(it);
 }
 
@@ -240,9 +240,9 @@ convert_square_bracketed_node(tree_node_iterator_t it)
 {
 	return convert_bracketed_node
 	<
-		syntax_nodes::global_nodes::opening_square_bracket,
+		syntax_nodes::common_nodes::opening_square_bracket,
 		SyntaxNodeT,
-		syntax_nodes::global_nodes::closing_square_bracket
+		syntax_nodes::common_nodes::closing_square_bracket
 	>(it);
 }
 
@@ -252,9 +252,9 @@ convert_angle_bracketed_node(tree_node_iterator_t it)
 {
 	return convert_bracketed_node
 	<
-		syntax_nodes::global_nodes::left_angle_bracket,
+		syntax_nodes::common_nodes::left_angle_bracket,
 		SyntaxNodeT,
-		syntax_nodes::global_nodes::right_angle_bracket
+		syntax_nodes::common_nodes::right_angle_bracket
 	>(it);
 }
 

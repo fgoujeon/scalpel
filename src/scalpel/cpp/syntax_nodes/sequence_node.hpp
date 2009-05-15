@@ -30,7 +30,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-template<class T, const leaf_node& SeparatorNode = global_nodes::empty>
+template<class T, const leaf_node& SeparatorNode = common_nodes::empty>
 class sequence_node: public composite_node
 {
     public:
@@ -87,7 +87,7 @@ class sequence_node: public composite_node
 		seq_t seq_;
 };
 
-template<class T, const leaf_node& SeparatorNode = global_nodes::empty>
+template<class T, const leaf_node& SeparatorNode = common_nodes::empty>
 class sequence_node<T, SeparatorNode>::item
 {
 	public:

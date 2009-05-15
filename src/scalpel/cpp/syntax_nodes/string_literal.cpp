@@ -68,10 +68,10 @@ string_literal::update_node_list()
 {
 	clear();
 
-	if(wide_) add(global_nodes::capital_l);
-	add(global_nodes::double_quote);
+	if(wide_) add(common_nodes::capital_l);
+	add(common_nodes::double_quote);
 	add(value_);
-	add(global_nodes::double_quote);
+	add(common_nodes::double_quote);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

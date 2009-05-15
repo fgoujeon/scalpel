@@ -87,13 +87,13 @@ void
 handler::update_node_list()
 {
 	clear();
-	add(global_nodes::catch_keyword);
+	add(common_nodes::catch_keyword);
 	if(post_catch_keyword_space_) add(*post_catch_keyword_space_);
-	add(global_nodes::opening_bracket);
+	add(common_nodes::opening_round_bracket);
 	if(post_opening_bracket_space_) add(*post_opening_bracket_space_);
 	add(exception_declaration_);
 	if(post_exception_declaration_space_) add(*post_exception_declaration_space_);
-	add(global_nodes::closing_bracket);
+	add(common_nodes::closing_round_bracket);
 	if(post_closing_bracket_space_) add(*post_closing_bracket_space_);
 	add(compound_statement_);
 }

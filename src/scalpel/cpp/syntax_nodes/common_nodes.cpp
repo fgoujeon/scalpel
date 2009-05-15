@@ -20,7 +20,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "common_nodes.hpp"
 
-namespace scalpel { namespace cpp { namespace syntax_nodes { namespace global_nodes
+namespace scalpel { namespace cpp { namespace syntax_nodes { namespace common_nodes
 {
 
 //symbols
@@ -31,7 +31,7 @@ const leaf_node asterisk("*");
 const leaf_node capital_l("L");
 const leaf_node circumflex("^");
 const leaf_node closing_brace("}");
-const leaf_node closing_bracket(")");
+const leaf_node closing_round_bracket(")");
 const leaf_node closing_square_bracket("]");
 const leaf_node colon(":");
 const leaf_node comma(",");
@@ -51,7 +51,7 @@ const leaf_node left_angle_bracket("<");
 const leaf_node left_angle_bracket_and_equal("<=");
 const leaf_node minus("-");
 const leaf_node opening_brace("{");
-const leaf_node opening_bracket("(");
+const leaf_node opening_round_bracket("(");
 const leaf_node opening_square_bracket("[");
 const leaf_node percent("%");
 const leaf_node pipe("|");
@@ -94,5 +94,5 @@ const leaf_node using_keyword("using");
 const leaf_node virtual_keyword("virtual");
 const leaf_node while_keyword("while");
 
-}}}} //namespace scalpel::cpp::syntax_nodes::global_nodes
+}}}} //namespace scalpel::cpp::syntax_nodes::common_nodes
 

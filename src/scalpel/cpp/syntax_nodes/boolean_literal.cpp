@@ -60,9 +60,9 @@ boolean_literal::update_node_list()
 {
 	clear();
 	if(value_)
-		add(global_nodes::true_keyword);
+		add(common_nodes::true_keyword);
 	else
-		add(global_nodes::false_keyword);
+		add(common_nodes::false_keyword);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

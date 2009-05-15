@@ -87,11 +87,11 @@ class_specifier::update_node_list()
 	clear();
     add(class_head_);
 	if(post_class_head_space_) add(*post_class_head_space_);
-	add(global_nodes::opening_brace);
+	add(common_nodes::opening_brace);
 	if(post_opening_brace_space_) add(*post_opening_brace_space_);
     if(member_specification_) add(*member_specification_);
 	if(post_member_specification_space_) add(*post_member_specification_space_);
-	add(global_nodes::closing_brace);
+	add(common_nodes::closing_brace);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

@@ -67,7 +67,7 @@ member_specification_access_specifier::update_node_list()
 	clear();
 	add(access_specifier_);
 	if(post_access_specifier_) add(*post_access_specifier_);
-	add(global_nodes::colon);
+	add(common_nodes::colon);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

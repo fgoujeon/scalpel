@@ -67,7 +67,7 @@ void
 equal_initializer::update_node_list()
 {
 	clear();
-	add(global_nodes::equal);
+	add(common_nodes::equal);
 	if(space_) add(*space_);
 	add(initializer_clause_);
 }

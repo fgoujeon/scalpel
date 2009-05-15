@@ -93,11 +93,11 @@ void
 member_declaration_unqualified_id::update_node_list()
 {
 	clear();
-	if(leading_double_colon_) add(global_nodes::double_colon);
+	if(leading_double_colon_) add(common_nodes::double_colon);
 	if(post_double_colon_space_) add(*post_double_colon_space_);
 	add(nested_name_specifier_);
 	if(post_nested_name_specifier_space_) add(*post_nested_name_specifier_space_);
-	if(template_keyword_) add(global_nodes::template_keyword);
+	if(template_keyword_) add(common_nodes::template_keyword);
 	if(post_template_keyword_space_) add(*post_template_keyword_space_);
 	add(unqualified_id_);
 	if(post_unqualified_id_space_) add(*post_unqualified_id_space_);

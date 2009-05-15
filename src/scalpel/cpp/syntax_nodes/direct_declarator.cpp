@@ -139,11 +139,11 @@ direct_declarator::function_part::update_node_list()
 {
 	clear();
 
-	add(global_nodes::opening_bracket);
+	add(common_nodes::opening_round_bracket);
 	if(post_opening_bracket_space_) add(*post_opening_bracket_space_);
 	if(parameter_declaration_clause_) add(*parameter_declaration_clause_);
 	if(post_parameter_declaration_clause_space_) add(*post_parameter_declaration_clause_space_);
-	add(global_nodes::closing_bracket);
+	add(common_nodes::closing_round_bracket);
 	if(cv_qualifier_seq_space_) add(*cv_qualifier_seq_space_);
 	if(cv_qualifier_seq_) add(*cv_qualifier_seq_);
 	if(pre_exception_specification_space_) add(*pre_exception_specification_space_);

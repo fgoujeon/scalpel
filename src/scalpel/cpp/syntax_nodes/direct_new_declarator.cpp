@@ -84,19 +84,19 @@ void
 direct_new_declarator::update_node_list()
 {
 	clear();
-	add(global_nodes::opening_square_bracket);
+	add(common_nodes::opening_square_bracket);
 	if(post_first_opening_bracket_space_) add(*post_first_opening_bracket_space_);
 	add(expression_);
 	if(post_expression_space_) add(*post_expression_space_);
-	add(global_nodes::closing_square_bracket);
+	add(common_nodes::closing_square_bracket);
 	if(conditional_expression_)
 	{
 		if(post_first_closing_bracket_space_) add(*post_first_closing_bracket_space_);
-		add(global_nodes::opening_square_bracket);
+		add(common_nodes::opening_square_bracket);
 		if(post_second_opening_bracket_space_) add(*post_second_opening_bracket_space_);
 		add(*conditional_expression_);
 		if(post_conditional_expression_space_) add(*post_conditional_expression_space_);
-		add(global_nodes::closing_square_bracket);
+		add(common_nodes::closing_square_bracket);
 	}
 }
 

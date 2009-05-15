@@ -99,11 +99,11 @@ conditional_expression::update_node_list()
 	if(expression_)
 	{
 		if(pre_question_mark_space_) add(*pre_question_mark_space_);
-		add(global_nodes::question_mark);
+		add(common_nodes::question_mark);
 		if(post_question_mark_space_) add(*post_question_mark_space_);
 		add(*expression_);
 		if(post_expression_space_) add(*post_expression_space_);
-		add(global_nodes::colon);
+		add(common_nodes::colon);
 		if(post_colon_space_) add(*post_colon_space_);
 		add(*assignment_expression_);
 	}

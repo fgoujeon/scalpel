@@ -72,11 +72,11 @@ void
 bracketed_declarator::update_node_list()
 {
 	clear();
-	add(global_nodes::opening_bracket);
+	add(common_nodes::opening_round_bracket);
 	if(post_opening_bracket_space_) add(*post_opening_bracket_space_);
 	add(declarator_);
 	if(post_declarator_space_) add(*post_declarator_space_);
-	add(global_nodes::closing_bracket);
+	add(common_nodes::closing_round_bracket);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
