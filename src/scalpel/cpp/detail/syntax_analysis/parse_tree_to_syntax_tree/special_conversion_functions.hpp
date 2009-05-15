@@ -179,6 +179,37 @@ convert_optional(const tree_node_t& parent_node, const tree_node_iterator_t& it)
 }
 
 
+template<const syntax_nodes::leaf_node& OpeningBracketNode, class SyntaxNodeT, const syntax_nodes::leaf_node& ClosingBracketNode>
+syntax_nodes::bracketed_node<OpeningBracketNode, SyntaxNodeT, ClosingBracketNode>
+convert_bracketed_node(const tree_node_t& node)
+{
+	tree_node_iterator_t it = node.children.begin();
+
+	boost::optional<syntax_nodes::space> post_opening_bracket_space_node;
+	++it;
+	if(it->value.id() == id_t::SPACE)
+	{
+		post_opening_bracket_space_node = convert_node<syntax_nodes::space>(*it);
+		++it;
+	}
+
+	SyntaxNodeT main_node = convert_node<SyntaxNodeT>(*it);
+
+	boost::optional<syntax_nodes::space> post_main_space_node;
+	++it;
+	if(it->value.id() == id_t::SPACE)
+	{
+		post_main_space_node = convert_node<syntax_nodes::space>(*it);
+	}
+
+	return syntax_nodes::bracketed_node<OpeningBracketNode, SyntaxNodeT, ClosingBracketNode>
+	(
+		post_opening_bracket_space_node,
+		main_node,
+		post_main_space_node
+	);
+}
+
 template<const std::string&& Text>
 syntax_nodes::simple_text_node<Text>
 convert_simple_text(const tree_node_t&)

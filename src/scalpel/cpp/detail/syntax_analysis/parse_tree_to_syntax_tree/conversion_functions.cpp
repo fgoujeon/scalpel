@@ -1920,22 +1920,6 @@ convert_return_statement(const tree_node_t& node)
 	);
 }
 
-round_bracketed_expression
-convert_round_bracketed_expression(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::ROUND_BRACKETED_EXPRESSION);
-
-	tree_node_iterator_t opening_bracket_it = node.children.begin();
-	tree_node_iterator_t expression_it = find_node<id_t::EXPRESSION>(node);
-
-	return round_bracketed_expression
-	(
-		convert_next_space(node, opening_bracket_it),
-		convert_node<expression>(*expression_it),
-		convert_next_space(node, expression_it)
-	);
-}
-
 selection_statement
 convert_selection_statement(const tree_node_t& node)
 {

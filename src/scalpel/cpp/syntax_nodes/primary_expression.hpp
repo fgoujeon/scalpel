@@ -23,9 +23,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "alternative_node.hpp"
 #include "simple_text_node.hpp"
+#include "bracketed_node.hpp"
+#include "common_nodes.hpp"
 #include "literal.hpp"
-#include "round_bracketed_expression.hpp"
 #include "id_expression.hpp"
+#include "expression_fwd.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -35,7 +37,7 @@ typedef
 	<
 		simple_text_node<util::extern_strings::this_>,
 		literal,
-		round_bracketed_expression,
+		bracketed_node<global_nodes::opening_bracket, expression, global_nodes::closing_bracket>,
 		id_expression
 	>
 	primary_expression
