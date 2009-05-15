@@ -23,6 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <boost/optional.hpp>
 #include "../composite_node.hpp"
+#include "../bracketed_node.hpp"
 #include "../type_id.hpp"
 #include "../expression.hpp"
 
@@ -41,13 +42,9 @@ class cast_expression: public composite_node
 		cast_expression
 		(
 			boost::optional<space>&& post_cast_keyword_space_node,
-			boost::optional<space>&& post_left_angle_bracket_space_node,
-			type_id&& type_id_node,
-			boost::optional<space>&& post_type_id_space_node,
+			angle_bracketed_node<type_id>::type&& bracketed_type_id_node,
 			boost::optional<space>&& post_right_angle_bracket_space_node,
-			boost::optional<space>&& post_opening_round_bracket_space_node,
-			expression&& expression_node,
-			boost::optional<space>&& post_expression_space_node
+			round_bracketed_node<expression>::type&& bracketed_expression_node
 		);
 
 		cast_expression(const cast_expression& o);
@@ -62,13 +59,9 @@ class cast_expression: public composite_node
 		update_node_list();
 
 		boost::optional<space> post_cast_keyword_space_;
-		boost::optional<space> post_left_angle_bracket_space_;
-		type_id type_id_;
-		boost::optional<space> post_type_id_space_;
+		angle_bracketed_node<type_id>::type bracketed_type_id_;
 		boost::optional<space> post_right_angle_bracket_space_;
-		boost::optional<space> post_opening_round_bracket_space_;
-		expression expression_;
-		boost::optional<space> post_expression_space_;
+		round_bracketed_node<expression>::type bracketed_expression_;
 };
 
 }}}} //namespace scalpel::cpp::syntax_nodes::templates

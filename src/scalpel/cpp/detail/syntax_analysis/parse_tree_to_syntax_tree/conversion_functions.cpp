@@ -516,31 +516,6 @@ convert_conditional_expression(const tree_node_t& node)
 	);
 }
 
-const_cast_expression
-convert_const_cast_expression(const tree_node_t& node)
-{
-	assert(node.value.id() == id_t::CONST_CAST_EXPRESSION);
-
-	tree_node_iterator_t cast_keyword_it = node.children.begin();
-	tree_node_iterator_t left_angle_bracket_it = find_node(node, "<");
-	tree_node_iterator_t type_id_it = find_node<id_t::TYPE_ID>(node);
-	tree_node_iterator_t right_angle_bracket_it = find_node(node, ">");
-	tree_node_iterator_t opening_round_bracket_it = find_node(node, "(");
-	tree_node_iterator_t expression_it = find_node<id_t::EXPRESSION>(node);
-
-	return const_cast_expression
-	(
-		convert_next_space(node, cast_keyword_it),
-		convert_next_space(node, left_angle_bracket_it),
-		convert_node<type_id>(*type_id_it),
-		convert_next_space(node, type_id_it),
-		convert_next_space(node, right_angle_bracket_it),
-		convert_next_space(node, opening_round_bracket_it),
-		convert_node<expression>(*expression_it),
-		convert_next_space(node, expression_it)
-	);
-}
-
 continue_statement
 convert_continue_statement(const tree_node_t& node)
 {

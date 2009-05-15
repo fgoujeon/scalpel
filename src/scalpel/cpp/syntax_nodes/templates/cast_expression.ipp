@@ -32,22 +32,14 @@ template<const leaf_node& CastKeywordNode>
 cast_expression<CastKeywordNode>::cast_expression
 (
 	boost::optional<space>&& post_cast_keyword_space_node,
-	boost::optional<space>&& post_left_angle_bracket_space_node,
-	type_id&& type_id_node,
-	boost::optional<space>&& post_type_id_space_node,
+	angle_bracketed_node<type_id>::type&& bracketed_type_id_node,
 	boost::optional<space>&& post_right_angle_bracket_space_node,
-	boost::optional<space>&& post_opening_round_bracket_space_node,
-	expression&& expression_node,
-	boost::optional<space>&& post_expression_space_node
+	round_bracketed_node<expression>::type&& bracketed_expression_node
 ):
 	post_cast_keyword_space_(post_cast_keyword_space_node),
-	post_left_angle_bracket_space_(post_left_angle_bracket_space_node),
-	type_id_(type_id_node),
-	post_type_id_space_(post_type_id_space_node),
+	bracketed_type_id_(bracketed_type_id_node),
 	post_right_angle_bracket_space_(post_right_angle_bracket_space_node),
-	post_opening_round_bracket_space_(post_opening_round_bracket_space_node),
-	expression_(expression_node),
-	post_expression_space_(post_expression_space_node)
+	bracketed_expression_(bracketed_expression_node)
 {
 	update_node_list();
 }
@@ -56,13 +48,9 @@ template<const leaf_node& CastKeywordNode>
 cast_expression<CastKeywordNode>::cast_expression(const cast_expression& o):
 	composite_node(),
 	post_cast_keyword_space_(o.post_cast_keyword_space_),
-	post_left_angle_bracket_space_(o.post_left_angle_bracket_space_),
-	type_id_(o.type_id_),
-	post_type_id_space_(o.post_type_id_space_),
+	bracketed_type_id_(o.bracketed_type_id_),
 	post_right_angle_bracket_space_(o.post_right_angle_bracket_space_),
-	post_opening_round_bracket_space_(o.post_opening_round_bracket_space_),
-	expression_(o.expression_),
-	post_expression_space_(o.post_expression_space_)
+	bracketed_expression_(o.bracketed_expression_)
 {
 	update_node_list();
 }
@@ -71,13 +59,9 @@ template<const leaf_node& CastKeywordNode>
 cast_expression<CastKeywordNode>::cast_expression(cast_expression&& o):
 	composite_node(),
 	post_cast_keyword_space_(std::move(o.post_cast_keyword_space_)),
-	post_left_angle_bracket_space_(std::move(o.post_left_angle_bracket_space_)),
-	type_id_(std::move(o.type_id_)),
-	post_type_id_space_(std::move(o.post_type_id_space_)),
+	bracketed_type_id_(std::move(o.bracketed_type_id_)),
 	post_right_angle_bracket_space_(std::move(o.post_right_angle_bracket_space_)),
-	post_opening_round_bracket_space_(std::move(o.post_opening_round_bracket_space_)),
-	expression_(std::move(o.expression_)),
-	post_expression_space_(std::move(o.post_expression_space_))
+	bracketed_expression_(std::move(o.bracketed_expression_))
 {
 	update_node_list();
 }
@@ -98,17 +82,9 @@ cast_expression<CastKeywordNode>::update_node_list()
 	clear();
 	add(CastKeywordNode);
 	if(post_cast_keyword_space_) add(*post_cast_keyword_space_);
-	add(global_nodes::left_angle_bracket);
-	if(post_left_angle_bracket_space_) add(*post_left_angle_bracket_space_);
-	add(type_id_);
-	if(post_type_id_space_) add(*post_type_id_space_);
-	add(global_nodes::right_angle_bracket);
+	add(bracketed_type_id_);
 	if(post_right_angle_bracket_space_) add(*post_right_angle_bracket_space_);
-	add(global_nodes::opening_bracket);
-	if(post_opening_round_bracket_space_) add(*post_opening_round_bracket_space_);
-	add(expression_);
-	if(post_expression_space_) add(*post_expression_space_);
-	add(global_nodes::closing_bracket);
+	add(bracketed_expression_);
 }
 
 }}}} //namespace scalpel::cpp::syntax_nodes::templates

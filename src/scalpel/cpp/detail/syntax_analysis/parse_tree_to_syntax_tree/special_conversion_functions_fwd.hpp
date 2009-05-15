@@ -23,6 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string>
 #include <vector>
+#include <scalpel/cpp/syntax_tree.hpp>
 #include "typedefs.hpp"
 #include "generic_node_converters.hpp"
 
@@ -53,9 +54,31 @@ template<class T>
 boost::optional<T>
 convert_optional(const tree_node_t& parent_node, const tree_node_iterator_t& it);
 
+
+template<class SyntaxNodeT>
+typename syntax_nodes::round_bracketed_node<SyntaxNodeT>::type
+convert_round_bracketed_node(const tree_node_t& node);
+
+template<class SyntaxNodeT>
+typename syntax_nodes::angle_bracketed_node<SyntaxNodeT>::type
+convert_angle_bracketed_node(const tree_node_t& node);
+
 template<const syntax_nodes::leaf_node& OpeningBracketNode, class SyntaxNodeT, const syntax_nodes::leaf_node& ClosingBracketNode>
 syntax_nodes::bracketed_node<OpeningBracketNode, SyntaxNodeT, ClosingBracketNode>
 convert_bracketed_node(const tree_node_t& node);
+
+template<class SyntaxNodeT>
+typename syntax_nodes::round_bracketed_node<SyntaxNodeT>::type
+convert_round_bracketed_node(tree_node_iterator_t it);
+
+template<class SyntaxNodeT>
+typename syntax_nodes::angle_bracketed_node<SyntaxNodeT>::type
+convert_angle_bracketed_node(tree_node_iterator_t it);
+
+template<const syntax_nodes::leaf_node& OpeningBracketNode, class SyntaxNodeT, const syntax_nodes::leaf_node& ClosingBracketNode>
+syntax_nodes::bracketed_node<OpeningBracketNode, SyntaxNodeT, ClosingBracketNode>
+convert_bracketed_node(tree_node_iterator_t it);
+
 
 template<const std::string&& Text>
 syntax_nodes::simple_text_node<Text>

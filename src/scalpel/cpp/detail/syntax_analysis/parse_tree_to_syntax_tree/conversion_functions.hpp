@@ -108,9 +108,6 @@ convert_condition(const tree_node_t& node);
 syntax_nodes::conditional_expression
 convert_conditional_expression(const tree_node_t& node);
 
-syntax_nodes::const_cast_expression
-convert_const_cast_expression(const tree_node_t& node);
-
 syntax_nodes::continue_statement
 convert_continue_statement(const tree_node_t& node);
 

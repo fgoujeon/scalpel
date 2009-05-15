@@ -179,12 +179,65 @@ convert_optional(const tree_node_t& parent_node, const tree_node_iterator_t& it)
 }
 
 
+template<class SyntaxNodeT>
+typename syntax_nodes::round_bracketed_node<SyntaxNodeT>::type
+convert_round_bracketed_node(const tree_node_t& node)
+{
+	return convert_bracketed_node
+	<
+		syntax_nodes::global_nodes::opening_bracket,
+		SyntaxNodeT,
+		syntax_nodes::global_nodes::closing_bracket
+	>(node.children.begin());
+}
+
+template<class SyntaxNodeT>
+typename syntax_nodes::angle_bracketed_node<SyntaxNodeT>::type
+convert_angle_bracketed_node(const tree_node_t& node)
+{
+	return convert_bracketed_node
+	<
+		syntax_nodes::global_nodes::left_angle_bracket,
+		SyntaxNodeT,
+		syntax_nodes::global_nodes::right_angle_bracket
+	>(node.children.begin());
+}
+
 template<const syntax_nodes::leaf_node& OpeningBracketNode, class SyntaxNodeT, const syntax_nodes::leaf_node& ClosingBracketNode>
 syntax_nodes::bracketed_node<OpeningBracketNode, SyntaxNodeT, ClosingBracketNode>
 convert_bracketed_node(const tree_node_t& node)
 {
-	tree_node_iterator_t it = node.children.begin();
+	return convert_bracketed_node<OpeningBracketNode, SyntaxNodeT, ClosingBracketNode>(node.children.begin());
+}
 
+template<class SyntaxNodeT>
+typename syntax_nodes::round_bracketed_node<SyntaxNodeT>::type
+convert_round_bracketed_node(tree_node_iterator_t it)
+{
+	return convert_bracketed_node
+	<
+		syntax_nodes::global_nodes::opening_bracket,
+		SyntaxNodeT,
+		syntax_nodes::global_nodes::closing_bracket
+	>(it);
+}
+
+template<class SyntaxNodeT>
+typename syntax_nodes::angle_bracketed_node<SyntaxNodeT>::type
+convert_angle_bracketed_node(tree_node_iterator_t it)
+{
+	return convert_bracketed_node
+	<
+		syntax_nodes::global_nodes::left_angle_bracket,
+		SyntaxNodeT,
+		syntax_nodes::global_nodes::right_angle_bracket
+	>(it);
+}
+
+template<const syntax_nodes::leaf_node& OpeningBracketNode, class SyntaxNodeT, const syntax_nodes::leaf_node& ClosingBracketNode>
+syntax_nodes::bracketed_node<OpeningBracketNode, SyntaxNodeT, ClosingBracketNode>
+convert_bracketed_node(tree_node_iterator_t it)
+{
 	boost::optional<syntax_nodes::space> post_opening_bracket_space_node;
 	++it;
 	if(it->value.id() == id_t::SPACE)
@@ -210,6 +263,7 @@ convert_bracketed_node(const tree_node_t& node)
 	);
 }
 
+
 template<const std::string&& Text>
 syntax_nodes::simple_text_node<Text>
 convert_simple_text(const tree_node_t&)
@@ -224,21 +278,15 @@ convert_cast_expression_template(const tree_node_t& node)
 {
 	tree_node_iterator_t cast_keyword_it = node.children.begin();
 	tree_node_iterator_t left_angle_bracket_it = find_node(node, "<");
-	tree_node_iterator_t type_id_it = find_node<id_t::TYPE_ID>(node);
 	tree_node_iterator_t right_angle_bracket_it = find_node(node, ">");
 	tree_node_iterator_t opening_round_bracket_it = find_node(node, "(");
-	tree_node_iterator_t expression_it = find_node<id_t::EXPRESSION>(node);
 
 	return CastExpressionT
 	(
 		convert_next_space(node, cast_keyword_it),
-		convert_next_space(node, left_angle_bracket_it),
-		convert_node<syntax_nodes::type_id>(*type_id_it),
-		convert_next_space(node, type_id_it),
+		convert_angle_bracketed_node<syntax_nodes::type_id>(left_angle_bracket_it),
 		convert_next_space(node, right_angle_bracket_it),
-		convert_next_space(node, opening_round_bracket_it),
-		convert_node<syntax_nodes::expression>(*expression_it),
-		convert_next_space(node, expression_it)
+		convert_round_bracketed_node<syntax_nodes::expression>(opening_round_bracket_it)
 	);
 }
 

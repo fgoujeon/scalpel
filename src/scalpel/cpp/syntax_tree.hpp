@@ -30,6 +30,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "syntax_nodes/base_specifier_list.hpp"
 #include "syntax_nodes/block_declaration.hpp"
 #include "syntax_nodes/boolean_literal.hpp"
+#include "syntax_nodes/bracketed_node.hpp"
 #include "syntax_nodes/break_statement.hpp"
 #include "syntax_nodes/built_in_type_specifier.hpp"
 #include "syntax_nodes/cast_expression.hpp"

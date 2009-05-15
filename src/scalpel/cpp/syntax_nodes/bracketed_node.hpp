@@ -24,6 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/optional.hpp>
 #include "composite_node.hpp"
 #include "space.hpp"
+#include "common_nodes.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -57,6 +58,50 @@ class bracketed_node: public composite_node
 		boost::optional<space> post_opening_bracket_space_;
 		SyntaxNodeT main_;
 		boost::optional<space> post_main_space_;
+};
+
+template<class SyntaxNodeT>
+struct round_bracketed_node
+{
+	typedef bracketed_node
+	<
+		global_nodes::opening_bracket,
+		SyntaxNodeT,
+		global_nodes::closing_bracket
+	> type;
+};
+
+template<class SyntaxNodeT>
+struct square_bracketed_node
+{
+	typedef bracketed_node
+	<
+		global_nodes::opening_square_bracket,
+		SyntaxNodeT,
+		global_nodes::closing_square_bracket
+	> type;
+};
+
+template<class SyntaxNodeT>
+struct angle_bracketed_node
+{
+	typedef bracketed_node
+	<
+		global_nodes::left_angle_bracket,
+		SyntaxNodeT,
+		global_nodes::right_angle_bracket
+	> type;
+};
+
+template<class SyntaxNodeT>
+struct curly_bracketed_node
+{
+	typedef bracketed_node
+	<
+		global_nodes::opening_brace,
+		SyntaxNodeT,
+		global_nodes::closing_brace
+	> type;
 };
 
 
