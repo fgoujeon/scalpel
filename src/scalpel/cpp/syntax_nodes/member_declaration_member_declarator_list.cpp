@@ -27,10 +27,10 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 member_declaration_member_declarator_list::member_declaration_member_declarator_list
 (
-	boost::optional<decl_specifier_seq>&& decl_specifier_seq_node,
-	boost::optional<space>&& post_decl_specifier_seq_space_node,
-	boost::optional<member_declarator_list>&& member_declarator_list_node,
-	boost::optional<space>&& post_member_declarator_list_space_node
+	optional_node<decl_specifier_seq>&& decl_specifier_seq_node,
+	optional_node<space>&& post_decl_specifier_seq_space_node,
+	optional_node<member_declarator_list>&& member_declarator_list_node,
+	optional_node<space>&& post_member_declarator_list_space_node
 ):
 	decl_specifier_seq_(decl_specifier_seq_node),
 	post_decl_specifier_seq_space_(post_decl_specifier_seq_space_node),

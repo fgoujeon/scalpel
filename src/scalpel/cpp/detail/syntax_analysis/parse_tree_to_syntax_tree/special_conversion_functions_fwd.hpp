@@ -51,7 +51,7 @@ SyntaxNodeT
 convert_alternative(const tree_node_t& node);
 
 template<class T>
-boost::optional<T>
+syntax_nodes::optional_node<T>
 convert_optional(const tree_node_t& parent_node, const tree_node_iterator_t& it);
 
 

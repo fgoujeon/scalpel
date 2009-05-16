@@ -26,10 +26,10 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 assignment_expression_condition::assignment_expression_condition
 (
 	type_specifier_seq&& type_specifier_seq_node,
-	boost::optional<space>&& post_type_specifier_seq_space_node,
+	optional_node<space>&& post_type_specifier_seq_space_node,
 	declarator&& declarator_node,
-	boost::optional<space>&& post_declarator_space_node,
-	boost::optional<space>&& post_equal_space_node,
+	optional_node<space>&& post_declarator_space_node,
+	optional_node<space>&& post_equal_space_node,
 	assignment_expression&& assignment_expression_node
 ):
 	type_specifier_seq_(type_specifier_seq_node),

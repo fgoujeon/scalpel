@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_PARSE_TREE_TO_SYNTAX_TREE_NODE_FINDER_AND_CONVERTER_HPP
 #define SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_PARSE_TREE_TO_SYNTAX_TREE_NODE_FINDER_AND_CONVERTER_HPP
 
-#include <boost/optional.hpp>
+#include <scalpel/cpp/syntax_nodes/optional_node.hpp>
 #include "../grammar.hpp"
 #include "typedefs.hpp"
 #include "basic_functions.hpp"
@@ -51,10 +51,10 @@ struct node_finder_and_converter
 };
 
 template<class SyntaxNodeT, grammar::parser_id... Ids>
-struct node_finder_and_converter<boost::optional<SyntaxNodeT>, Ids...>
+struct node_finder_and_converter<syntax_nodes::optional_node<SyntaxNodeT>, Ids...>
 {
 	static
-	boost::optional<SyntaxNodeT>
+	syntax_nodes::optional_node<SyntaxNodeT>
 	convert(const tree_node_t& parent_node)
 	{
 		tree_node_iterator_t child_node = find_node<Ids...>(parent_node);
@@ -64,7 +64,7 @@ struct node_finder_and_converter<boost::optional<SyntaxNodeT>, Ids...>
 				*child_node
 			);
 		else
-			return boost::optional<SyntaxNodeT>();
+			return syntax_nodes::optional_node<SyntaxNodeT>();
 	}
 };
 

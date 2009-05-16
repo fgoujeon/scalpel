@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_EXCEPTION_DECLARATOR_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_EXCEPTION_DECLARATOR_HPP
 
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "type_specifier_seq.hpp"
 #include "space.hpp"
@@ -41,7 +41,7 @@ class exception_declarator: public composite_node
 		exception_declarator
 		(
 			type_specifier_seq&& type_specifier_seq_node,
-			boost::optional<space>&& post_type_specifier_seq_space_node,
+			optional_node<space>&& post_type_specifier_seq_space_node,
 			declarator&& declarator_node
 		);
 
@@ -57,7 +57,7 @@ class exception_declarator: public composite_node
 		update_node_list();
 
 		type_specifier_seq type_specifier_seq_;
-		boost::optional<space> post_type_specifier_seq_space_;
+		optional_node<space> post_type_specifier_seq_space_;
 		declarator declarator_;
 };
 

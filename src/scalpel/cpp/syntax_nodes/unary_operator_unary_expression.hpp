@@ -22,7 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_UNARY_OPERATOR_UNARY_EXPRESSION_HPP
 
 #include <memory>
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "unary_operator.hpp"
 #include "space.hpp"
@@ -45,7 +45,7 @@ class unary_operator_unary_expression: public composite_node
 		unary_operator_unary_expression
 		(
 			unary_operator&& unary_operator_node,
-			boost::optional<space>&& space_node,
+			optional_node<space>&& space_node,
 			cast_expression&& cast_expression_node
 		);
 
@@ -61,7 +61,7 @@ class unary_operator_unary_expression: public composite_node
 		update_node_list();
 
 		unary_operator unary_operator_;
-		boost::optional<space> space_;
+		optional_node<space> space_;
 		std::unique_ptr<cast_expression> cast_expression_;
 };
 

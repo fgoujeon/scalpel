@@ -28,11 +28,11 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 qualified_nested_id::qualified_nested_id
 (
     bool leading_double_colon,
-	boost::optional<space>&& post_double_colon_space_node,
+	optional_node<space>&& post_double_colon_space_node,
     nested_name_specifier&& a_nested_name_specifier,
-	boost::optional<space>&& post_nested_name_specifier_space_node,
+	optional_node<space>&& post_nested_name_specifier_space_node,
     bool template_keyword,
-	boost::optional<space>&& post_template_keyword_space_node,
+	optional_node<space>&& post_template_keyword_space_node,
     unqualified_id&& an_unqualified_id
 ):
     leading_double_colon_(leading_double_colon),

@@ -27,14 +27,14 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 do_while_statement::do_while_statement
 (
-	boost::optional<space>&& post_do_keyword_space_node,
+	optional_node<space>&& post_do_keyword_space_node,
 	statement&& statement_node,
-	boost::optional<space>&& post_statement_space_node,
-	boost::optional<space>&& post_while_keyword_space_node,
-	boost::optional<space>&& post_opening_bracket_space_node,
+	optional_node<space>&& post_statement_space_node,
+	optional_node<space>&& post_while_keyword_space_node,
+	optional_node<space>&& post_opening_bracket_space_node,
 	expression&& expression_node,
-	boost::optional<space>&& post_expression_space_node,
-	boost::optional<space>&& post_closing_bracket_space_node
+	optional_node<space>&& post_expression_space_node,
+	optional_node<space>&& post_closing_bracket_space_node
 ):
 	post_do_keyword_space_(post_do_keyword_space_node),
 	statement_(new statement(statement_node)),

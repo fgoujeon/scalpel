@@ -27,9 +27,9 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 dot_id_expression::dot_id_expression
 (
-	boost::optional<space>&& post_dot_space_node,
+	optional_node<space>&& post_dot_space_node,
 	bool template_keyword,
-	boost::optional<space>&& post_template_keyword_space_node,
+	optional_node<space>&& post_template_keyword_space_node,
 	id_expression&& id_expression_node
 ):
 	post_dot_space_(post_dot_space_node),

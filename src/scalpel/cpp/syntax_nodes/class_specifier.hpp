@@ -22,7 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_CLASS_SPECIFIER_HPP
 
 #include <memory>
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "class_head.hpp"
 
@@ -45,15 +45,17 @@ class class_specifier: public composite_node
         class_specifier
         (
             class_head&& class_head_node,
-			boost::optional<space>&& post_class_head_space_node,
-			boost::optional<space>&& post_opening_brace_space_node,
-            boost::optional<member_specification>&& member_specification_node,
-			boost::optional<space>&& post_member_specification_space_node
+			optional_node<space>&& post_class_head_space_node,
+			optional_node<space>&& post_opening_brace_space_node,
+            optional_node<member_specification>&& member_specification_node,
+			optional_node<space>&& post_member_specification_space_node
         );
 
         class_specifier(const class_specifier& o);
 
         class_specifier(class_specifier&& o);
+
+        ~class_specifier();
 
         const class_specifier&
 		operator=(const class_specifier& o);
@@ -63,7 +65,7 @@ class class_specifier: public composite_node
         class_head_node() const;
 
         inline
-        const boost::optional<const member_specification&>
+        const optional_node<member_specification>&
         member_specification_node() const;
 
     private:
@@ -71,10 +73,10 @@ class class_specifier: public composite_node
 		update_node_list();
 
 		class_head class_head_;
-		boost::optional<space> post_class_head_space_;
-		boost::optional<space> post_opening_brace_space_;
-		std::shared_ptr<member_specification> member_specification_;
-		boost::optional<space> post_member_specification_space_;
+		optional_node<space> post_class_head_space_;
+		optional_node<space> post_opening_brace_space_;
+		optional_node<member_specification>* member_specification_;
+		optional_node<space> post_member_specification_space_;
 };
 
 inline
@@ -85,13 +87,10 @@ class_specifier::class_head_node() const
 }
 
 inline
-const boost::optional<const member_specification&>
+const optional_node<member_specification>&
 class_specifier::member_specification_node() const
 {
-	if(member_specification_)
-		return boost::optional<const member_specification&>(*member_specification_);
-	else
-		return boost::optional<const member_specification&>();
+	return *member_specification_;
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

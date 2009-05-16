@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_BRACKETED_EXPRESSION_LIST_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_BRACKETED_EXPRESSION_LIST_HPP
 
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "sequence_node.hpp"
 #include "space.hpp"
@@ -44,9 +44,9 @@ class bracketed_expression_list: public composite_node
 	public:
 		bracketed_expression_list
 		(
-			boost::optional<space>&& post_opening_bracket_space_node,
-			boost::optional<expression_list>&& expression_list_node,
-			boost::optional<space>&& post_expression_list_space_node
+			optional_node<space>&& post_opening_bracket_space_node,
+			optional_node<expression_list>&& expression_list_node,
+			optional_node<space>&& post_expression_list_space_node
 		);
 
 		bracketed_expression_list(const bracketed_expression_list& o);
@@ -62,9 +62,9 @@ class bracketed_expression_list: public composite_node
 		void
 		update_node_list();
 
-		boost::optional<space> post_opening_bracket_space_;
+		optional_node<space> post_opening_bracket_space_;
 		expression_list* expression_list_;
-		boost::optional<space> post_expression_list_space_;
+		optional_node<space> post_expression_list_space_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

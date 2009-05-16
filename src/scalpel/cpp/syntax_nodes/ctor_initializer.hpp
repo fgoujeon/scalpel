@@ -41,7 +41,7 @@ class ctor_initializer: public composite_node
     public:
         ctor_initializer
 		(
-			boost::optional<space>&& space_node,
+			optional_node<space>&& space_node,
 			mem_initializer_list&& a_mem_initializer_list
 		);
 
@@ -60,7 +60,7 @@ class ctor_initializer: public composite_node
 		void
 		update_node_list();
 
-		boost::optional<space> space_;
+		optional_node<space> space_;
         mem_initializer_list mem_initializer_list_;
 };
 

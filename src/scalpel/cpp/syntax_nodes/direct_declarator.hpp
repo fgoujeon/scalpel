@@ -89,8 +89,8 @@ class direct_declarator: public composite_node
         direct_declarator
         (
 			first_part&& first_part_node,
-			boost::optional<space>&& pre_last_part_seq_space_node,
-			boost::optional<sequence_node<last_part>>&& a_last_part_seq
+			optional_node<space>&& pre_last_part_seq_space_node,
+			optional_node<sequence_node<last_part>>&& a_last_part_seq
         );
 
         direct_declarator(const direct_declarator& o);
@@ -105,7 +105,7 @@ class direct_declarator: public composite_node
 		first_part_node() const;
 
         inline
-		const boost::optional<const last_part_seq&>
+		const optional_node<last_part_seq>&
         last_part_seq_node() const;
 
     private:
@@ -113,8 +113,8 @@ class direct_declarator: public composite_node
 		update_node_list();
 
 		first_part first_part_;
-		boost::optional<space> pre_last_part_seq_space_;
-		boost::optional<last_part_seq> last_part_seq_;
+		optional_node<space> pre_last_part_seq_space_;
+		optional_node<last_part_seq> last_part_seq_;
 };
 
 /**
@@ -129,13 +129,13 @@ class direct_declarator::function_part: public composite_node
 	public:
 		function_part
 		(
-			boost::optional<space>&& post_opening_bracket_space_node,
-			boost::optional<parameter_declaration_clause>&& a_parameter_declaration_clause,
-			boost::optional<space>&& post_parameter_declaration_clause_space_node,
-			boost::optional<space>&& cv_qualifier_seq_space_node,
-			boost::optional<cv_qualifier_seq>&& a_cv_qualifier_seq,
-			boost::optional<space>&& pre_exception_specification_space_node,
-			boost::optional<exception_specification>&& exception_specification_node
+			optional_node<space>&& post_opening_bracket_space_node,
+			optional_node<parameter_declaration_clause>&& a_parameter_declaration_clause,
+			optional_node<space>&& post_parameter_declaration_clause_space_node,
+			optional_node<space>&& cv_qualifier_seq_space_node,
+			optional_node<cv_qualifier_seq>&& a_cv_qualifier_seq,
+			optional_node<space>&& pre_exception_specification_space_node,
+			optional_node<exception_specification>&& exception_specification_node
 		);
 
 		function_part(const function_part& o);
@@ -146,24 +146,24 @@ class direct_declarator::function_part: public composite_node
 		operator=(const function_part& o);
 
 		inline
-		const boost::optional<const parameter_declaration_clause&>
+		const optional_node<parameter_declaration_clause>&
 		parameter_declaration_clause_node() const;
 
 		inline
-		const boost::optional<const cv_qualifier_seq&>
+		const optional_node<cv_qualifier_seq>&
 		cv_qualifier_seq_node() const;
 
 	private:
 		void
 		update_node_list();
 
-		boost::optional<space> post_opening_bracket_space_;
-		boost::optional<parameter_declaration_clause> parameter_declaration_clause_;
-		boost::optional<space> post_parameter_declaration_clause_space_;
-		boost::optional<space> cv_qualifier_seq_space_;
-		boost::optional<cv_qualifier_seq> cv_qualifier_seq_;
-		boost::optional<space> pre_exception_specification_space_;
-		boost::optional<exception_specification> exception_specification_;
+		optional_node<space> post_opening_bracket_space_;
+		optional_node<parameter_declaration_clause> parameter_declaration_clause_;
+		optional_node<space> post_parameter_declaration_clause_space_;
+		optional_node<space> cv_qualifier_seq_space_;
+		optional_node<cv_qualifier_seq> cv_qualifier_seq_;
+		optional_node<space> pre_exception_specification_space_;
+		optional_node<exception_specification> exception_specification_;
 };
 
 class direct_declarator::array_part: public composite_node

@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_PARAMETER_DECLARATION_CLAUSE_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_PARAMETER_DECLARATION_CLAUSE_HPP
 
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "parameter_declaration_list.hpp"
 
@@ -33,7 +33,7 @@ class parameter_declaration_clause: public composite_node
 	public:
 		parameter_declaration_clause
 		(
-			boost::optional<parameter_declaration_list>&& a_parameter_declaration_list,
+			optional_node<parameter_declaration_list>&& a_parameter_declaration_list,
 			bool trailing_comma,
 			bool ellipsis
 		);
@@ -46,7 +46,7 @@ class parameter_declaration_clause: public composite_node
 		operator=(const parameter_declaration_clause& o);
 
 		inline
-		const boost::optional<const parameter_declaration_list&>
+		const optional_node<parameter_declaration_list>&
 		parameter_declaration_list_node() const;
 
 		inline
@@ -61,16 +61,16 @@ class parameter_declaration_clause: public composite_node
 		void
 		update_node_list();
 
-		boost::optional<parameter_declaration_list> parameter_declaration_list_;
+		optional_node<parameter_declaration_list> parameter_declaration_list_;
 		bool trailing_comma_;
 		bool ellipsis_;
 };
 
 inline
-const boost::optional<const parameter_declaration_list&>
+const optional_node<parameter_declaration_list>&
 parameter_declaration_clause::parameter_declaration_list_node() const
 {
-	return boost::optional<const parameter_declaration_list&>(parameter_declaration_list_);
+	return parameter_declaration_list_;
 }
 
 inline

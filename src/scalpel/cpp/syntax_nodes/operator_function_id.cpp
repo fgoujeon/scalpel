@@ -27,7 +27,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 operator_function_id::operator_function_id
 (
-	boost::optional<space>&& post_operator_keyword_space_node,
+	optional_node<space>&& post_operator_keyword_space_node,
 	operator_&& operator_node
 ):
 	post_operator_keyword_space_(post_operator_keyword_space_node),

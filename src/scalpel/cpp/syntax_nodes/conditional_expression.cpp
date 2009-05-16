@@ -29,12 +29,12 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 conditional_expression::conditional_expression
 (
 	logical_or_expression&& logical_or_expression_node,
-	boost::optional<space>&& pre_question_mark_space_node,
-	boost::optional<space>&& post_question_mark_space_node,
-	boost::optional<expression>&& expression_node,
-	boost::optional<space>&& post_expression_space_node,
-	boost::optional<space>&& post_colon_space_node,
-	boost::optional<assignment_expression>&& assignment_expression_node
+	optional_node<space>&& pre_question_mark_space_node,
+	optional_node<space>&& post_question_mark_space_node,
+	optional_node<expression>&& expression_node,
+	optional_node<space>&& post_expression_space_node,
+	optional_node<space>&& post_colon_space_node,
+	optional_node<assignment_expression>&& assignment_expression_node
 ):
 	logical_or_expression_(new logical_or_expression(logical_or_expression_node)),
 	pre_question_mark_space_(pre_question_mark_space_node),

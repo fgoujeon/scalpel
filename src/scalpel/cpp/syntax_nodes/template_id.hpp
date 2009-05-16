@@ -22,7 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_TEMPLATE_ID_HPP
 
 #include <memory>
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "../../util/extern_strings.hpp"
 #include "composite_node.hpp"
 #include "sequence_node.hpp"
@@ -44,10 +44,10 @@ class template_id: public composite_node
 		template_id
 		(
 			identifier&& identifier_node,
-			boost::optional<space>&& post_type_name_space_node,
-			boost::optional<space>&& post_opening_angle_bracket_space_node,
-			boost::optional<sequence_node<template_argument, common_nodes::comma>>&& template_argument_list_node,
-			boost::optional<space>&& post_template_argument_list_space_node
+			optional_node<space>&& post_type_name_space_node,
+			optional_node<space>&& post_opening_angle_bracket_space_node,
+			optional_node<sequence_node<template_argument, common_nodes::comma>>&& template_argument_list_node,
+			optional_node<space>&& post_template_argument_list_space_node
 		);
 
 		template_id(const template_id& o);
@@ -64,7 +64,7 @@ class template_id: public composite_node
 		identifier_node() const;
 
 		inline
-		const boost::optional<const sequence_node<template_argument, common_nodes::comma>&>
+		const optional_node<sequence_node<template_argument, common_nodes::comma>>&
 		template_argument_list_node() const;
 
 	private:
@@ -72,10 +72,10 @@ class template_id: public composite_node
 		update_node_list();
 
 		identifier identifier_;
-		boost::optional<space> post_type_name_space_;
-		boost::optional<space> post_opening_angle_bracket_space_;
-		sequence_node<template_argument, common_nodes::comma>* template_argument_list_;
-		boost::optional<space> post_template_argument_list_space_;
+		optional_node<space> post_type_name_space_;
+		optional_node<space> post_opening_angle_bracket_space_;
+		optional_node<sequence_node<template_argument, common_nodes::comma>>* template_argument_list_;
+		optional_node<space> post_template_argument_list_space_;
 };
 
 inline
@@ -86,13 +86,10 @@ template_id::identifier_node() const
 }
 
 inline
-const boost::optional<const sequence_node<template_argument, common_nodes::comma>&>
+const optional_node<sequence_node<template_argument, common_nodes::comma>>&
 template_id::template_argument_list_node() const
 {
-	if(template_argument_list_)
-		return boost::optional<const sequence_node<template_argument, common_nodes::comma>&>(*template_argument_list_);
-	else
-		return boost::optional<const sequence_node<template_argument, common_nodes::comma>&>();
+	return *template_argument_list_;
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

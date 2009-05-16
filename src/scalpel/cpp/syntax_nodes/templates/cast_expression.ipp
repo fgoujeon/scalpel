@@ -31,9 +31,9 @@ namespace scalpel { namespace cpp { namespace syntax_nodes { namespace templates
 template<const leaf_node& CastKeywordNode>
 cast_expression<CastKeywordNode>::cast_expression
 (
-	boost::optional<space>&& post_cast_keyword_space_node,
+	optional_node<space>&& post_cast_keyword_space_node,
 	angle_bracketed_node<type_id>::type&& bracketed_type_id_node,
-	boost::optional<space>&& post_right_angle_bracket_space_node,
+	optional_node<space>&& post_right_angle_bracket_space_node,
 	round_bracketed_node<expression>::type&& bracketed_expression_node
 ):
 	post_cast_keyword_space_(post_cast_keyword_space_node),

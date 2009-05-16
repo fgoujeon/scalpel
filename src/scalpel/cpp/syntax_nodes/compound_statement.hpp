@@ -22,7 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_COMPOUND_STATEMENT_HPP
 
 #include <memory>
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "sequence_node.hpp"
 #include "space.hpp"
@@ -43,9 +43,9 @@ class compound_statement: public composite_node
 	public:
 		compound_statement
 		(
-			boost::optional<space>&& post_opening_brace_space,
-			boost::optional<sequence_node<statement>>&& statement_seq_node,
-			boost::optional<space>&& post_statement_seq_space
+			optional_node<space>&& post_opening_brace_space,
+			optional_node<sequence_node<statement>>&& statement_seq_node,
+			optional_node<space>&& post_statement_seq_space
 		);
 
 		compound_statement(const compound_statement& o);
@@ -58,26 +58,23 @@ class compound_statement: public composite_node
 		operator=(const compound_statement& o);
 
 		inline
-		const boost::optional<sequence_node<statement>&>
+		const optional_node<sequence_node<statement>>&
 		statement_seq_node() const;
 
 	private:
 		void
 		update_node_list();
 
-		boost::optional<space> post_opening_brace_space_;
-		sequence_node<statement>* statement_seq_;
-		boost::optional<space> post_statement_seq_space_;
+		optional_node<space> post_opening_brace_space_;
+		optional_node<sequence_node<statement>>* statement_seq_;
+		optional_node<space> post_statement_seq_space_;
 };
 
 inline
-const boost::optional<sequence_node<statement>&>
+const optional_node<sequence_node<statement>>&
 compound_statement::statement_seq_node() const
 {
-	if(statement_seq_)
-		return boost::optional<sequence_node<statement>&>(*statement_seq_);
-	else
-		return boost::optional<sequence_node<statement>&>();
+	return *statement_seq_;
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

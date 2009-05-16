@@ -23,7 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <memory>
 #include <string>
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "identifier.hpp"
 #include "sequence_node.hpp"
@@ -44,12 +44,12 @@ class namespace_definition: public composite_node
 	public:
 		namespace_definition
 		(
-			boost::optional<space>&& post_namespace_keyword_space_node,
-			boost::optional<identifier>&& identifier_node,
-			boost::optional<space>&& post_identifier_space_node,
-			boost::optional<space>&& post_opening_brace_space_node,
-			boost::optional<declaration_seq>&& declaration_seq_node,
-			boost::optional<space>&& post_declaration_seq_space_node
+			optional_node<space>&& post_namespace_keyword_space_node,
+			optional_node<identifier>&& identifier_node,
+			optional_node<space>&& post_identifier_space_node,
+			optional_node<space>&& post_opening_brace_space_node,
+			optional_node<declaration_seq>&& declaration_seq_node,
+			optional_node<space>&& post_declaration_seq_space_node
 		);
 
 		namespace_definition(const namespace_definition& o);
@@ -60,40 +60,37 @@ class namespace_definition: public composite_node
 		operator=(const namespace_definition& o);
 
 		inline
-		const boost::optional<const identifier&>
+		const optional_node<identifier>&
 	   	identifier_node() const;
 
 		inline
-		const boost::optional<const sequence_node<declaration>&>
+		const optional_node<sequence_node<declaration>>&
 		declaration_seq_node() const;
 
 	private:
 		void
 		update_node_list();
 
-		boost::optional<space> post_namespace_keyword_space_;
-		boost::optional<identifier> identifier_;
-		boost::optional<space> post_identifier_space_;
-		boost::optional<space> post_opening_brace_space_;
-		std::unique_ptr<declaration_seq> declaration_seq_;
-		boost::optional<space> post_declaration_seq_space_;
+		optional_node<space> post_namespace_keyword_space_;
+		optional_node<identifier> identifier_;
+		optional_node<space> post_identifier_space_;
+		optional_node<space> post_opening_brace_space_;
+		std::unique_ptr<optional_node<declaration_seq>> declaration_seq_;
+		optional_node<space> post_declaration_seq_space_;
 };
 
 inline
-const boost::optional<const identifier&>
+const optional_node<identifier>&
 namespace_definition::identifier_node() const
 {
-	return boost::optional<const identifier&>(identifier_);
+	return identifier_;
 }
 
 inline
-const boost::optional<const sequence_node<declaration>&>
+const optional_node<sequence_node<declaration>>&
 namespace_definition::declaration_seq_node() const
 {
-	if(declaration_seq_)
-		return boost::optional<const sequence_node<declaration>&>(*declaration_seq_);
-	else
-		return boost::optional<const sequence_node<declaration>&>();
+	return *declaration_seq_;
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

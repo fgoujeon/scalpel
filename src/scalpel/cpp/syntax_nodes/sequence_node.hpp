@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_SEQUENCE_NODE_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_SEQUENCE_NODE_HPP
 
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "../../util/extern_strings.hpp"
 #include "composite_node.hpp"
 #include "common_nodes.hpp"
@@ -93,8 +93,8 @@ class sequence_node<T, SeparatorNode>::item
 	public:
 		item
 		(
-			boost::optional<space>&& pre_separator_space,
-			boost::optional<space>&& post_separator_space,
+			optional_node<space>&& pre_separator_space,
+			optional_node<space>&& post_separator_space,
 			T&& main_node
 		);
 
@@ -103,18 +103,18 @@ class sequence_node<T, SeparatorNode>::item
 		const item&
 		operator=(const item& i);
 
-		const boost::optional<const space&>
+		const optional_node<space>&
 		pre_separator_space_node() const;
 
-		const boost::optional<const space&>
+		const optional_node<space>&
 		post_separator_space_node() const;
 
 		const T&
 		main_node() const;
 
 	private:
-		boost::optional<space> pre_separator_space_;
-		boost::optional<space> post_separator_space_;
+		optional_node<space> pre_separator_space_;
+		optional_node<space> post_separator_space_;
 		T main_node_;
 };
 
@@ -191,8 +191,8 @@ sequence_node<T, SeparatorNode>::separator_node = SeparatorNode;
 template<class T, const leaf_node& SeparatorNode>
 sequence_node<T, SeparatorNode>::item::item
 (
-	boost::optional<space>&& pre_separator_space,
-	boost::optional<space>&& post_separator_space,
+	optional_node<space>&& pre_separator_space,
+	optional_node<space>&& post_separator_space,
 	T&& main_node
 ):
 	pre_separator_space_(pre_separator_space),
@@ -210,17 +210,17 @@ sequence_node<T, SeparatorNode>::item::item(const item& i):
 }
 
 template<class T, const leaf_node& SeparatorNode>
-const boost::optional<const space&>
+const optional_node<space>&
 sequence_node<T, SeparatorNode>::item::pre_separator_space_node() const
 {
-	return boost::optional<const space&>(pre_separator_space_);
+	return pre_separator_space_;
 }
 
 template<class T, const leaf_node& SeparatorNode>
-const boost::optional<const space&>
+const optional_node<space>&
 sequence_node<T, SeparatorNode>::item::post_separator_space_node() const
 {
-	return boost::optional<const space&>(post_separator_space_);
+	return post_separator_space_;
 }
 
 template<class T, const leaf_node& SeparatorNode>

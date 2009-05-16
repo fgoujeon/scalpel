@@ -29,10 +29,10 @@ base_specifier::base_specifier
 (
     bool virtual_keyword,
     bool virtual_keyword_first,
-	boost::optional<space>&& post_virtual_keyword_space_node,
-    boost::optional<access_specifier>&& an_access_specifier,
-	boost::optional<space>&& post_access_specifier_space_node,
-    boost::optional<nested_identifier_or_template_id>&& a_nested_identifier_or_template_id
+	optional_node<space>&& post_virtual_keyword_space_node,
+    optional_node<access_specifier>&& an_access_specifier,
+	optional_node<space>&& post_access_specifier_space_node,
+    optional_node<nested_identifier_or_template_id>&& a_nested_identifier_or_template_id
 ):
     virtual_keyword_(virtual_keyword),
     virtual_keyword_first_(virtual_keyword_first),

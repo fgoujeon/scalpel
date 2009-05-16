@@ -22,7 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_NEW_TYPE_ID_NEW_EXPRESSION_HPP
 
 #include <memory>
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "space.hpp"
 #include "new_placement.hpp"
@@ -44,13 +44,13 @@ class new_type_id_new_expression: public composite_node
 		new_type_id_new_expression
 		(
 			bool leading_double_colon,
-			boost::optional<space>&& post_double_colon_space_node,
-			boost::optional<space>&& post_new_keyword_space_node,
-			boost::optional<new_placement>&& new_placement_node,
-			boost::optional<space>&& post_new_placement_space_node,
+			optional_node<space>&& post_double_colon_space_node,
+			optional_node<space>&& post_new_keyword_space_node,
+			optional_node<new_placement>&& new_placement_node,
+			optional_node<space>&& post_new_placement_space_node,
 			new_type_id&& new_type_id_node,
-			boost::optional<space>&& pre_new_initializer_space_node,
-			boost::optional<new_initializer>&& new_initializer_node
+			optional_node<space>&& pre_new_initializer_space_node,
+			optional_node<new_initializer>&& new_initializer_node
 		);
 
 		new_type_id_new_expression(const new_type_id_new_expression& o);
@@ -65,12 +65,12 @@ class new_type_id_new_expression: public composite_node
 		update_node_list();
 
 		bool leading_double_colon_;
-		boost::optional<space> post_double_colon_space_;
-		boost::optional<space> post_new_keyword_space_;
-		boost::optional<new_placement> new_placement_;
-		boost::optional<space> post_new_placement_space_;
+		optional_node<space> post_double_colon_space_;
+		optional_node<space> post_new_keyword_space_;
+		optional_node<new_placement> new_placement_;
+		optional_node<space> post_new_placement_space_;
 		new_type_id new_type_id_;
-		boost::optional<space> pre_new_initializer_space_;
+		optional_node<space> pre_new_initializer_space_;
 		std::unique_ptr<new_initializer> new_initializer_;
 };
 

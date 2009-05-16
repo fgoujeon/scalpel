@@ -22,7 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_CONDITIONAL_EXPRESSION_HPP
 
 #include <memory>
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "expressions_fwd.hpp"
 #include "expression_fwd.hpp"
@@ -46,12 +46,12 @@ class conditional_expression: public composite_node
 		conditional_expression
 		(
 			logical_or_expression&& logical_or_expression_node,
-			boost::optional<space>&& pre_question_mark_space_node,
-			boost::optional<space>&& post_question_mark_space_node,
-			boost::optional<expression>&& expression_node,
-			boost::optional<space>&& post_expression_space_node,
-			boost::optional<space>&& post_colon_space_node,
-			boost::optional<assignment_expression>&& assignment_expression_node
+			optional_node<space>&& pre_question_mark_space_node,
+			optional_node<space>&& post_question_mark_space_node,
+			optional_node<expression>&& expression_node,
+			optional_node<space>&& post_expression_space_node,
+			optional_node<space>&& post_colon_space_node,
+			optional_node<assignment_expression>&& assignment_expression_node
 		);
 
 		conditional_expression(const conditional_expression& o);
@@ -68,11 +68,11 @@ class conditional_expression: public composite_node
 		update_node_list();
 
 		logical_or_expression* logical_or_expression_;
-		boost::optional<space> pre_question_mark_space_;
-		boost::optional<space> post_question_mark_space_;
+		optional_node<space> pre_question_mark_space_;
+		optional_node<space> post_question_mark_space_;
 		std::unique_ptr<expression> expression_;
-		boost::optional<space> post_expression_space_;
-		boost::optional<space> post_colon_space_;
+		optional_node<space> post_expression_space_;
+		optional_node<space> post_colon_space_;
 		std::unique_ptr<assignment_expression> assignment_expression_;
 };
 

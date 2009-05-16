@@ -27,10 +27,10 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 exception_specification::exception_specification
 (
-	boost::optional<space>&& post_throw_keyword_space_node,
-	boost::optional<space>&& post_opening_bracket_space_node,
-	boost::optional<type_id_list>&& type_id_list_node,
-	boost::optional<space>&& post_type_id_list_space_node
+	optional_node<space>&& post_throw_keyword_space_node,
+	optional_node<space>&& post_opening_bracket_space_node,
+	optional_node<type_id_list>&& type_id_list_node,
+	optional_node<space>&& post_type_id_list_space_node
 ):
 	post_throw_keyword_space_(post_throw_keyword_space_node),
 	post_opening_bracket_space_(post_opening_bracket_space_node),

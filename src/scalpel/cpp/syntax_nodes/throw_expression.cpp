@@ -28,8 +28,8 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 throw_expression::throw_expression
 (
-	boost::optional<space>&& pre_assignment_expression_space_node,
-	boost::optional<assignment_expression>&& assignment_expression_node
+	optional_node<space>&& pre_assignment_expression_space_node,
+	optional_node<assignment_expression>&& assignment_expression_node
 ):
 	pre_assignment_expression_space_(pre_assignment_expression_space_node)
 {

@@ -27,7 +27,7 @@ using_declaration::using_declaration
 (
     bool typename_keyword,
     bool leading_double_colon,
-    boost::optional<nested_name_specifier>&& a_nested_name_specifier,
+    optional_node<nested_name_specifier>&& a_nested_name_specifier,
     unqualified_id&& an_unqualified_id
 ):
     typename_keyword_(typename_keyword),

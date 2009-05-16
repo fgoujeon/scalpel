@@ -25,9 +25,9 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 return_statement::return_statement
 (
-	boost::optional<space>&& post_return_space_node,
-	boost::optional<expression>&& expression_node,
-	boost::optional<space>&& post_expression_space_node
+	optional_node<space>&& post_return_space_node,
+	optional_node<expression>&& expression_node,
+	optional_node<space>&& post_expression_space_node
 ):
 	post_return_space_(post_return_space_node),
 	expression_(expression_node),

@@ -28,7 +28,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 member_specification_access_specifier::member_specification_access_specifier
 (
     access_specifier&& a_access_specifier,
-	boost::optional<space>&& post_access_specifier_node
+	optional_node<space>&& post_access_specifier_node
 ):
     access_specifier_(std::move(a_access_specifier)),
 	post_access_specifier_(post_access_specifier_node)

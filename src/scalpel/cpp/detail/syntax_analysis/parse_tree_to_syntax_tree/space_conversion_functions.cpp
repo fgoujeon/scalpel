@@ -26,7 +26,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace detail { namespace syntax_analysis { namespace parse_tree_to_syntax_tree
 {
 
-boost::optional<syntax_nodes::space>
+syntax_nodes::optional_node<syntax_nodes::space>
 convert_previous_space(const tree_node_t& parent_node, tree_node_iterator_t i)
 {
 	if(i != parent_node.children.end())
@@ -35,10 +35,10 @@ convert_previous_space(const tree_node_t& parent_node, tree_node_iterator_t i)
 		if(get_id(*i) == id_t::SPACE)
 			return convert_node<syntax_nodes::space>(*i);
 	}
-	return boost::optional<syntax_nodes::space>();
+	return syntax_nodes::optional_node<syntax_nodes::space>();
 }
 
-boost::optional<syntax_nodes::space>
+syntax_nodes::optional_node<syntax_nodes::space>
 convert_next_space(const tree_node_t& parent_node, tree_node_iterator_t i)
 {
 	if(i != parent_node.children.end())
@@ -47,7 +47,7 @@ convert_next_space(const tree_node_t& parent_node, tree_node_iterator_t i)
 		if(get_id(*i) == id_t::SPACE)
 			return convert_node<syntax_nodes::space>(*i);
 	}
-	return boost::optional<syntax_nodes::space>();
+	return syntax_nodes::optional_node<syntax_nodes::space>();
 }
 
 }}}}} //namespace scalpel::cpp::detail::syntax_analysis::parse_tree_to_syntax_tree

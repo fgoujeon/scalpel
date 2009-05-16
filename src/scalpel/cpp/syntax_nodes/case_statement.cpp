@@ -28,10 +28,10 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 case_statement::case_statement
 (
-	boost::optional<space>&& post_case_keyword_space_node,
+	optional_node<space>&& post_case_keyword_space_node,
 	conditional_expression&& conditional_expression_node,
-	boost::optional<space>&& post_conditional_expression_space_node,
-	boost::optional<space>&& post_colon_space_node,
+	optional_node<space>&& post_conditional_expression_space_node,
+	optional_node<space>&& post_colon_space_node,
 	statement&& statement_node
 ):
 	post_case_keyword_space_(post_case_keyword_space_node),

@@ -29,13 +29,13 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 new_type_id_new_expression::new_type_id_new_expression
 (
 	bool leading_double_colon,
-	boost::optional<space>&& post_double_colon_space_node,
-	boost::optional<space>&& post_new_keyword_space_node,
-	boost::optional<new_placement>&& new_placement_node,
-	boost::optional<space>&& post_new_placement_space_node,
+	optional_node<space>&& post_double_colon_space_node,
+	optional_node<space>&& post_new_keyword_space_node,
+	optional_node<new_placement>&& new_placement_node,
+	optional_node<space>&& post_new_placement_space_node,
 	new_type_id&& new_type_id_node,
-	boost::optional<space>&& pre_new_initializer_space_node,
-	boost::optional<new_initializer>&& new_initializer_node
+	optional_node<space>&& pre_new_initializer_space_node,
+	optional_node<new_initializer>&& new_initializer_node
 ):
 	leading_double_colon_(leading_double_colon),
 	post_double_colon_space_(post_double_colon_space_node),

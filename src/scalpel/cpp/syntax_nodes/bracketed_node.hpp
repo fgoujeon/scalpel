@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_BRACKETED_NODE_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_BRACKETED_NODE_HPP
 
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "space.hpp"
 #include "common_nodes.hpp"
@@ -36,9 +36,9 @@ class bracketed_node: public composite_node
 		explicit
         bracketed_node
 		(
-			boost::optional<space>&& post_opening_bracket_space_node,
+			optional_node<space>&& post_opening_bracket_space_node,
 			SyntaxNodeT&& main_node,
-			boost::optional<space>&& post_main_space_node
+			optional_node<space>&& post_main_space_node
 		);
 
         bracketed_node(const bracketed_node& o);
@@ -55,9 +55,9 @@ class bracketed_node: public composite_node
 		void
 		update_node_list();
 
-		boost::optional<space> post_opening_bracket_space_;
+		optional_node<space> post_opening_bracket_space_;
 		SyntaxNodeT main_;
-		boost::optional<space> post_main_space_;
+		optional_node<space> post_main_space_;
 };
 
 template<class SyntaxNodeT>
@@ -108,9 +108,9 @@ struct curly_bracketed_node
 template<const leaf_node& OpeningBracketNode, class SyntaxNodeT, const leaf_node& ClosingBracketNode>
 bracketed_node<OpeningBracketNode, SyntaxNodeT, ClosingBracketNode>::bracketed_node
 (
-	boost::optional<space>&& post_opening_bracket_space_node,
+	optional_node<space>&& post_opening_bracket_space_node,
 	SyntaxNodeT&& main_node,
-	boost::optional<space>&& post_main_space_node
+	optional_node<space>&& post_main_space_node
 ):
 	post_opening_bracket_space_(std::move(post_opening_bracket_space_node)),
 	main_(std::move(main_node)),

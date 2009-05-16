@@ -26,8 +26,8 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 postfix_expression::postfix_expression
 (
 	first_part&& first_part_node,
-	boost::optional<space>&& space_node,
-	boost::optional<last_part_seq>&& last_part_seq_node
+	optional_node<space>&& space_node,
+	optional_node<last_part_seq>&& last_part_seq_node
 ):
 	first_part_(first_part_node),
 	space_(space_node),

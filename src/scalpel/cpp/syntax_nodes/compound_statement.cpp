@@ -28,31 +28,23 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 compound_statement::compound_statement
 (
-	boost::optional<space>&& post_opening_brace_space,
-	boost::optional<statement_seq>&& statement_seq_node,
-	boost::optional<space>&& post_statement_seq_space
+	optional_node<space>&& post_opening_brace_space,
+	optional_node<statement_seq>&& statement_seq_node,
+	optional_node<space>&& post_statement_seq_space
 ):
 	post_opening_brace_space_(post_opening_brace_space),
+	statement_seq_(new optional_node<statement_seq>(statement_seq_node)),
 	post_statement_seq_space_(post_statement_seq_space)
 {
-	if(statement_seq_node)
-		statement_seq_ = new statement_seq(*statement_seq_node);
-	else
-		statement_seq_ = 0;
-
 	update_node_list();
 }
 
 compound_statement::compound_statement(const compound_statement& o):
 	composite_node(),
 	post_opening_brace_space_(o.post_opening_brace_space_),
+	statement_seq_(new optional_node<statement_seq>(*o.statement_seq_)),
 	post_statement_seq_space_(o.post_statement_seq_space_)
 {
-	if(o.statement_seq_)
-		statement_seq_ = new statement_seq(*o.statement_seq_);
-	else
-		statement_seq_ = 0;
-
 	update_node_list();
 }
 
@@ -62,6 +54,7 @@ compound_statement::compound_statement(compound_statement&& o):
 	statement_seq_(o.statement_seq_),
 	post_statement_seq_space_(std::move(o.post_statement_seq_space_))
 {
+	o.statement_seq_ = new optional_node<statement_seq>();
 	update_node_list();
 }
 
@@ -73,16 +66,8 @@ compound_statement::~compound_statement()
 const compound_statement&
 compound_statement::operator=(const compound_statement& o)
 {
-	post_opening_brace_space_ = o.post_opening_brace_space_;
-	delete statement_seq_;
-	if(o.statement_seq_)
-		statement_seq_ = new statement_seq(*o.statement_seq_);
-	else
-		statement_seq_ = 0;
-	post_statement_seq_space_ = o.post_statement_seq_space_;
-
-	update_node_list();
-
+	compound_statement copy(o);
+	std::swap(copy, *this);
 	return *this;
 }
 
@@ -90,10 +75,9 @@ void
 compound_statement::update_node_list()
 {
 	clear();
-
 	add(common_nodes::opening_brace);
 	if(post_opening_brace_space_) add(*post_opening_brace_space_);
-	if(statement_seq_) add(*statement_seq_);
+	if(*statement_seq_) add(**statement_seq_);
 	if(post_statement_seq_space_) add(*post_statement_seq_space_);
 	add(common_nodes::closing_brace);
 }

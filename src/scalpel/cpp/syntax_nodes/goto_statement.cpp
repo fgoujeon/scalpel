@@ -27,9 +27,9 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 goto_statement::goto_statement
 (
-	boost::optional<space>&& post_goto_space_node,
+	optional_node<space>&& post_goto_space_node,
 	identifier&& identifier_node,
-	boost::optional<space>&& post_identifier_space_node
+	optional_node<space>&& post_identifier_space_node
 ):
 	post_goto_space_(post_goto_space_node),
 	identifier_(identifier_node),

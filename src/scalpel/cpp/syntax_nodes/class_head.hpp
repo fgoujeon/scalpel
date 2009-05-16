@@ -22,7 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_CLASS_HEAD_HPP
 
 #include <memory>
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "class_key.hpp"
 #include "nested_name_specifier.hpp"
@@ -54,14 +54,14 @@ class class_head: public composite_node
         class_head
         (
             class_key&& class_key_node,
-            boost::optional<space>&& pre_nested_name_specifier_space_node,
-            boost::optional<nested_name_specifier>&& nested_name_specifier_node,
-            boost::optional<space>&& pre_template_id_space_node,
-            boost::optional<template_id>&& template_id_node,
-            boost::optional<space>&& pre_identifier_space_node,
-            boost::optional<identifier>&& identifier_node,
-            boost::optional<space>&& pre_base_clause_space_node,
-            boost::optional<base_clause>&& base_clause_node
+            optional_node<space>&& pre_nested_name_specifier_space_node,
+            optional_node<nested_name_specifier>&& nested_name_specifier_node,
+            optional_node<space>&& pre_template_id_space_node,
+            optional_node<template_id>&& template_id_node,
+            optional_node<space>&& pre_identifier_space_node,
+            optional_node<identifier>&& identifier_node,
+            optional_node<space>&& pre_base_clause_space_node,
+            optional_node<base_clause>&& base_clause_node
         );
 
 		class_head(const class_head& o);
@@ -76,19 +76,19 @@ class class_head: public composite_node
         class_key_node() const;
 
         inline
-        const boost::optional<const nested_name_specifier&>
+        const optional_node<nested_name_specifier>&
         nested_name_specifier_node() const;
 
         inline
-        const boost::optional<const template_id&>
+        const optional_node<template_id>&
         template_id_node() const;
 
         inline
-        const boost::optional<const identifier&>
+        const optional_node<identifier>&
         identifier_node() const;
 
         inline
-        const boost::optional<const base_clause&>
+        const optional_node<base_clause>&
         base_clause_node() const;
 
     private:
@@ -96,14 +96,14 @@ class class_head: public composite_node
 		update_node_list();
 
 		class_key class_key_;
-		boost::optional<space> pre_nested_name_specifier_space_;
-		boost::optional<nested_name_specifier> nested_name_specifier_;
-		boost::optional<space> pre_template_id_space_;
-		boost::optional<template_id> template_id_;
-		boost::optional<space> pre_identifier_space_;
-		boost::optional<identifier> identifier_;
-		boost::optional<space> pre_base_clause_space_;
-		boost::optional<base_clause> base_clause_;
+		optional_node<space> pre_nested_name_specifier_space_;
+		optional_node<nested_name_specifier> nested_name_specifier_;
+		optional_node<space> pre_template_id_space_;
+		optional_node<template_id> template_id_;
+		optional_node<space> pre_identifier_space_;
+		optional_node<identifier> identifier_;
+		optional_node<space> pre_base_clause_space_;
+		optional_node<base_clause> base_clause_;
 };
 
 inline
@@ -114,31 +114,31 @@ class_head::class_key_node() const
 }
 
 inline
-const boost::optional<const nested_name_specifier&>
+const optional_node<nested_name_specifier>&
 class_head::nested_name_specifier_node() const
 {
-	return boost::optional<const nested_name_specifier&>(nested_name_specifier_);
+	return nested_name_specifier_;
 }
 
 inline
-const boost::optional<const template_id&>
+const optional_node<template_id>&
 class_head::template_id_node() const
 {
-	return boost::optional<const template_id&>(template_id_);
+	return template_id_;
 }
 
 inline
-const boost::optional<const identifier&>
+const optional_node<identifier>&
 class_head::identifier_node() const
 {
-	return boost::optional<const identifier&>(identifier_);
+	return identifier_;
 }
 
 inline
-const boost::optional<const base_clause&>
+const optional_node<base_clause>&
 class_head::base_clause_node() const
 {
-	return boost::optional<const base_clause&>(base_clause_);
+	return base_clause_;
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

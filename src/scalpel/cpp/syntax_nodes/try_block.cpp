@@ -27,9 +27,9 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 try_block::try_block
 (
-	boost::optional<space>&& post_try_keyword_space_node,
+	optional_node<space>&& post_try_keyword_space_node,
 	compound_statement&& compound_statement_node,
-	boost::optional<space>&& post_compound_statement_space_node,
+	optional_node<space>&& post_compound_statement_space_node,
 	handler_seq&& handler_seq_node
 ):
 	post_try_keyword_space_(post_try_keyword_space_node),

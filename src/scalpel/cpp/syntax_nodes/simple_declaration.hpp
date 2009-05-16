@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_SIMPLE_DECLARATION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_SIMPLE_DECLARATION_HPP
 
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "init_declarator_list.hpp"
 #include "decl_specifier_seq.hpp"
@@ -42,10 +42,10 @@ class simple_declaration: public composite_node
 	public:
 		simple_declaration
 		(
-			boost::optional<decl_specifier_seq>&& a_decl_specifier_seq,
-			boost::optional<space>&& post_decl_specifier_seq_space_node,
-			boost::optional<init_declarator_list>&& an_init_declarator_list,
-			boost::optional<space>&& post_init_declarator_list_space_node
+			optional_node<decl_specifier_seq>&& a_decl_specifier_seq,
+			optional_node<space>&& post_decl_specifier_seq_space_node,
+			optional_node<init_declarator_list>&& an_init_declarator_list,
+			optional_node<space>&& post_init_declarator_list_space_node
 		);
 
 		simple_declaration(const simple_declaration& o);
@@ -56,35 +56,35 @@ class simple_declaration: public composite_node
 		operator=(const simple_declaration& o);
 
 		inline
-		const boost::optional<const decl_specifier_seq&>
+		const optional_node<decl_specifier_seq>&
 		decl_specifier_seq_node() const;
 
 		inline
-		const boost::optional<const init_declarator_list&>
+		const optional_node<init_declarator_list>&
 		init_declarator_list_node() const;
 
 	private:
 		void
 		update_node_list();
 
-		boost::optional<decl_specifier_seq> decl_specifier_seq_;
-		boost::optional<space> post_decl_specifier_seq_space_;
-		boost::optional<init_declarator_list> init_declarator_list_;
-		boost::optional<space> post_init_declarator_list_space_;
+		optional_node<decl_specifier_seq> decl_specifier_seq_;
+		optional_node<space> post_decl_specifier_seq_space_;
+		optional_node<init_declarator_list> init_declarator_list_;
+		optional_node<space> post_init_declarator_list_space_;
 };
 
 inline
-const boost::optional<const decl_specifier_seq&>
+const optional_node<decl_specifier_seq>&
 simple_declaration::decl_specifier_seq_node() const
 {
-	return boost::optional<const decl_specifier_seq&>(decl_specifier_seq_);
+	return decl_specifier_seq_;
 }
 
 inline
-const boost::optional<const init_declarator_list&>
+const optional_node<init_declarator_list>&
 simple_declaration::init_declarator_list_node() const
 {
-	return boost::optional<const init_declarator_list&>(init_declarator_list_);
+	return init_declarator_list_;
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

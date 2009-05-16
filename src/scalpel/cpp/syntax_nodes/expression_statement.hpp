@@ -40,8 +40,8 @@ class expression_statement: public composite_node
 	public:
 		expression_statement
 		(
-			boost::optional<expression>&& expression_node,
-			boost::optional<space>&& post_expression_space_node
+			optional_node<expression>&& expression_node,
+			optional_node<space>&& post_expression_space_node
 		);
 
 		expression_statement(const expression_statement& o);
@@ -55,8 +55,8 @@ class expression_statement: public composite_node
 		void
 		update_node_list();
 
-		boost::optional<expression> expression_;
-		boost::optional<space> post_expression_space_;
+		optional_node<expression> expression_;
+		optional_node<space> post_expression_space_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

@@ -32,25 +32,25 @@ direct_declarator::first_part_node() const
 }
 
 inline
-const boost::optional<const direct_declarator::last_part_seq&>
+const optional_node<direct_declarator::last_part_seq>&
 direct_declarator::last_part_seq_node() const
 {
-	return boost::optional<const direct_declarator::last_part_seq&>(last_part_seq_);
+	return last_part_seq_;
 }
 
 
 inline
-const boost::optional<const parameter_declaration_clause&>
+const optional_node<parameter_declaration_clause>&
 direct_declarator::function_part::parameter_declaration_clause_node() const
 {
-    return boost::optional<const parameter_declaration_clause&>(parameter_declaration_clause_);
+    return parameter_declaration_clause_;
 }
 
 inline
-const boost::optional<const cv_qualifier_seq&>
+const optional_node<cv_qualifier_seq>&
 direct_declarator::function_part::cv_qualifier_seq_node() const
 {
-	return boost::optional<const cv_qualifier_seq&>(*cv_qualifier_seq_);
+	return cv_qualifier_seq_;
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

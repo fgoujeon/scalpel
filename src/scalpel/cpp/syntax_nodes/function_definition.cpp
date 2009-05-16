@@ -27,18 +27,18 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 function_definition::function_definition
 (
-	boost::optional<decl_specifier_seq>&& a_decl_specifier_seq,
-	boost::optional<space>&& post_decl_specifier_seq_space,
+	optional_node<decl_specifier_seq>&& a_decl_specifier_seq,
+	optional_node<space>&& post_decl_specifier_seq_space,
 	declarator&& a_declarator,
-	boost::optional<space>&& post_declarator_space,
-	boost::optional<ctor_initializer>&& a_ctor_initializer,
-	boost::optional<space>&& post_ctor_initializer_space,
-	boost::optional<compound_statement>&& compound_statement_node,
-	boost::optional<function_try_block>&& function_try_block_node
+	optional_node<space>&& post_declarator_space,
+	optional_node<ctor_initializer>&& a_ctor_initializer,
+	optional_node<space>&& post_ctor_initializer_space,
+	optional_node<compound_statement>&& compound_statement_node,
+	optional_node<function_try_block>&& function_try_block_node
 ):
     decl_specifier_seq_(a_decl_specifier_seq),
 	post_decl_specifier_seq_space_(post_decl_specifier_seq_space),
-    declarator_(std::make_shared<declarator>(std::move(a_declarator))),
+    declarator_(new declarator(std::move(a_declarator))),
 	post_declarator_space_(post_declarator_space),
     ctor_initializer_(a_ctor_initializer),
 	post_ctor_initializer_space_(post_ctor_initializer_space),
@@ -52,7 +52,7 @@ function_definition::function_definition(const function_definition& o):
 	composite_node(),
     decl_specifier_seq_(o.decl_specifier_seq_),
 	post_decl_specifier_seq_space_(o.post_decl_specifier_seq_space_),
-    declarator_(o.declarator_),
+    declarator_(new declarator(*o.declarator_)),
 	post_declarator_space_(o.post_declarator_space_),
     ctor_initializer_(o.ctor_initializer_),
 	post_ctor_initializer_space_(o.post_ctor_initializer_space_),
@@ -78,17 +78,8 @@ function_definition::function_definition(function_definition&& o):
 const function_definition&
 function_definition::operator=(const function_definition& o)
 {
-    decl_specifier_seq_ = o.decl_specifier_seq_;
-	post_decl_specifier_seq_space_ = o.post_decl_specifier_seq_space_;
-    declarator_ = o.declarator_;
-	post_declarator_space_ = o.post_declarator_space_;
-    ctor_initializer_ = o.ctor_initializer_;
-	post_ctor_initializer_space_ = o.post_ctor_initializer_space_;
-    compound_statement_ = o.compound_statement_;
-	function_try_block_ = o.function_try_block_;
-
-	update_node_list();
-
+	function_definition copy(o);
+	std::swap(copy, *this);
 	return *this;
 }
 

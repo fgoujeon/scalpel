@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_MEM_INITIALIZER_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_MEM_INITIALIZER_HPP
 
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "mem_initializer_id.hpp"
 #include "expression_list.hpp"
@@ -42,10 +42,10 @@ class mem_initializer: public composite_node
 		mem_initializer
 		(
 			mem_initializer_id&& mem_initializer_id_node,
-			boost::optional<space>&& post_mem_initializer_id_space_node,
-			boost::optional<space>&& post_opening_bracket_space_node,
-			boost::optional<expression_list>&& expression_list_node,
-			boost::optional<space>&& post_expression_list_space_node
+			optional_node<space>&& post_mem_initializer_id_space_node,
+			optional_node<space>&& post_opening_bracket_space_node,
+			optional_node<expression_list>&& expression_list_node,
+			optional_node<space>&& post_expression_list_space_node
 		);
 
 		mem_initializer(const mem_initializer& o);
@@ -64,10 +64,10 @@ class mem_initializer: public composite_node
 		update_node_list();
 
 		mem_initializer_id mem_initializer_id_;
-		boost::optional<space> post_mem_initializer_id_space_;
-		boost::optional<space> post_opening_bracket_space_;
-		boost::optional<expression_list> expression_list_;
-		boost::optional<space> post_expression_list_space_;
+		optional_node<space> post_mem_initializer_id_space_;
+		optional_node<space> post_opening_bracket_space_;
+		optional_node<expression_list> expression_list_;
+		optional_node<space> post_expression_list_space_;
 };
 
 inline

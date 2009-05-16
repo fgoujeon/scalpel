@@ -27,16 +27,16 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 for_statement::for_statement
 (
-	boost::optional<space>&& post_for_keyword_space_node,
-	boost::optional<space>&& post_opening_bracket_space_node,
-	boost::optional<for_init_statement>&& for_init_statement_node,
-	boost::optional<space>&& post_for_init_statement_space_node,
-	boost::optional<condition>&& condition_node,
-	boost::optional<space>&& post_condition_space_node,
-	boost::optional<space>&& post_semicolon_space_node,
-	boost::optional<expression>&& expression_node,
-	boost::optional<space>&& post_expression_space_node,
-	boost::optional<space>&& post_closing_bracket_space_node,
+	optional_node<space>&& post_for_keyword_space_node,
+	optional_node<space>&& post_opening_bracket_space_node,
+	optional_node<for_init_statement>&& for_init_statement_node,
+	optional_node<space>&& post_for_init_statement_space_node,
+	optional_node<condition>&& condition_node,
+	optional_node<space>&& post_condition_space_node,
+	optional_node<space>&& post_semicolon_space_node,
+	optional_node<expression>&& expression_node,
+	optional_node<space>&& post_expression_space_node,
+	optional_node<space>&& post_closing_bracket_space_node,
 	statement&& statement_node
 ):
 	post_for_keyword_space_(post_for_keyword_space_node),

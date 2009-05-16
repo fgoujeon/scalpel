@@ -26,7 +26,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 nested_identifier_or_template_id::nested_identifier_or_template_id
 (
     bool leading_double_colon,
-    boost::optional<nested_name_specifier>&& a_nested_name_specifier,
+    optional_node<nested_name_specifier>&& a_nested_name_specifier,
     identifier_or_template_id&& an_identifier_or_template_id
 ):
     leading_double_colon_(leading_double_colon),

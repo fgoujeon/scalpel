@@ -29,8 +29,8 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 classic_labeled_statement::classic_labeled_statement
 (
 	identifier&& identifier_node,
-	boost::optional<space>&& post_identifier_space_node,
-	boost::optional<space>&& post_colon_space_node,
+	optional_node<space>&& post_identifier_space_node,
+	optional_node<space>&& post_colon_space_node,
 	statement&& statement_node
 ):
 	identifier_(identifier_node),

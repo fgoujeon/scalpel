@@ -27,9 +27,9 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 new_declarator::new_declarator
 (
-	boost::optional<ptr_operator_seq>&& ptr_operator_seq_node,
-	boost::optional<space>&& space_node,
-	boost::optional<direct_new_declarator>&& direct_new_declarator_node
+	optional_node<ptr_operator_seq>&& ptr_operator_seq_node,
+	optional_node<space>&& space_node,
+	optional_node<direct_new_declarator>&& direct_new_declarator_node
 ):
 	ptr_operator_seq_(ptr_operator_seq_node),
 	space_(space_node)

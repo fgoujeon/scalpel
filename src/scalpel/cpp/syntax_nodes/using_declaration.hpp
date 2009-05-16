@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_USING_DECLARATION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_USING_DECLARATION_HPP
 
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "nested_name_specifier.hpp"
 #include "unqualified_id.hpp"
@@ -36,7 +36,7 @@ class using_declaration: public composite_node
 		(
 			bool typename_keyword,
 			bool leading_double_colon,
-			boost::optional<nested_name_specifier>&& a_nested_name_specifier,
+			optional_node<nested_name_specifier>&& a_nested_name_specifier,
 			unqualified_id&& an_unqualified_id
 		);
 
@@ -56,11 +56,11 @@ class using_declaration: public composite_node
 		has_leading_double_colon() const;
 
 		inline
-		const boost::optional<const nested_name_specifier&>
+		const optional_node<nested_name_specifier>&
 		nested_name_specifier_node() const;
 
 		inline
-		const boost::optional<const unqualified_id&>
+		const unqualified_id&
 		unqualified_id_node() const;
 
 	private:
@@ -69,7 +69,7 @@ class using_declaration: public composite_node
 
 		bool typename_keyword_;
 		bool leading_double_colon_;
-		boost::optional<nested_name_specifier> nested_name_specifier_;
+		optional_node<nested_name_specifier> nested_name_specifier_;
 		unqualified_id unqualified_id_;
 };
 
@@ -88,14 +88,14 @@ using_declaration::has_leading_double_colon() const
 }
 
 inline
-const boost::optional<const nested_name_specifier&>
+const optional_node<nested_name_specifier>&
 using_declaration::nested_name_specifier_node() const
 {
-	return boost::optional<const nested_name_specifier&>(nested_name_specifier_);
+	return nested_name_specifier_;
 }
 
 inline
-const boost::optional<const unqualified_id&>
+const unqualified_id&
 using_declaration::unqualified_id_node() const
 {
 	return unqualified_id_;

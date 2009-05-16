@@ -28,11 +28,11 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 switch_statement::switch_statement
 (
-	boost::optional<space>&& post_switch_keyword_space_node,
-	boost::optional<space>&& post_opening_bracket_space_node,
+	optional_node<space>&& post_switch_keyword_space_node,
+	optional_node<space>&& post_opening_bracket_space_node,
 	condition&& condition_node,
-	boost::optional<space>&& post_condition_space_node,
-	boost::optional<space>&& post_closing_bracket_space_node,
+	optional_node<space>&& post_condition_space_node,
+	optional_node<space>&& post_closing_bracket_space_node,
 	statement&& statement_node
 ):
 	post_switch_keyword_space_(post_switch_keyword_space_node),

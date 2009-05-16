@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_EXCEPTION_SPECIFICATION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_EXCEPTION_SPECIFICATION_HPP
 
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "space.hpp"
 #include "type_id_list.hpp"
@@ -39,10 +39,10 @@ class exception_specification: public composite_node
 	public:
 		exception_specification
 		(
-			boost::optional<space>&& post_throw_keyword_space_node,
-			boost::optional<space>&& post_opening_bracket_space_node,
-			boost::optional<type_id_list>&& type_id_list_node,
-			boost::optional<space>&& post_type_id_list_space_node
+			optional_node<space>&& post_throw_keyword_space_node,
+			optional_node<space>&& post_opening_bracket_space_node,
+			optional_node<type_id_list>&& type_id_list_node,
+			optional_node<space>&& post_type_id_list_space_node
 		);
 
 		exception_specification(const exception_specification& o);
@@ -56,10 +56,10 @@ class exception_specification: public composite_node
 		void
 		update_node_list();
 
-		boost::optional<space> post_throw_keyword_space_;
-		boost::optional<space> post_opening_bracket_space_;
-		boost::optional<type_id_list> type_id_list_;
-		boost::optional<space> post_type_id_list_space_;
+		optional_node<space> post_throw_keyword_space_;
+		optional_node<space> post_opening_bracket_space_;
+		optional_node<type_id_list> type_id_list_;
+		optional_node<space> post_type_id_list_space_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

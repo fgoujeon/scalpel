@@ -27,7 +27,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 equal_initializer::equal_initializer
 (
-	boost::optional<space>&& space_node,
+	optional_node<space>&& space_node,
 	initializer_clause&& initializer_clause_node
 ):
 	space_(space_node),

@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_EQUAL_INITIALIZER_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_EQUAL_INITIALIZER_HPP
 
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "space.hpp"
 #include "initializer_clause.hpp"
@@ -41,7 +41,7 @@ class equal_initializer: public composite_node
 	public:
 		equal_initializer
 		(
-			boost::optional<space>&& space_node,
+			optional_node<space>&& space_node,
 			initializer_clause&& initializer_clause_node
 		);
 
@@ -56,7 +56,7 @@ class equal_initializer: public composite_node
 		void
 		update_node_list();
 
-		boost::optional<space> space_;
+		optional_node<space> space_;
 		initializer_clause initializer_clause_;
 };
 

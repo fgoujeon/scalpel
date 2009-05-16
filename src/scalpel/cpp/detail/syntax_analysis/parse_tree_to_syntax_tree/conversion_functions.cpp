@@ -113,7 +113,7 @@ convert_assignment_expression_first_part(const tree_node_t& node)
 	return assignment_expression::first_part
 	(
 		find_and_convert_node<logical_or_expression, id_t::LOGICAL_OR_EXPRESSION>(node),
-		find_and_convert_node<boost::optional<space>, id_t::SPACE>(node),
+		find_and_convert_node<syntax_nodes::optional_node<space>, id_t::SPACE>(node),
 		find_and_convert_node<assignment_operator, id_t::ASSIGNMENT_OPERATOR>(node)
 	);
 }
@@ -177,8 +177,8 @@ convert_base_clause(const tree_node_t& node)
     assert(node.value.id() == id_t::BASE_CLAUSE);
 
 	tree_node_iterator_t i = find_node<id_t::BASE_SPECIFIER_LIST>(node);
-	boost::optional<base_specifier_list> base_specifier_list_node;
-	boost::optional<space> space_node;
+	optional_node<base_specifier_list> base_specifier_list_node;
+	optional_node<space> space_node;
 	if(i != node.children.end())
 	{
 		base_specifier_list_node = convert_node<base_specifier_list>(*i);
@@ -208,7 +208,7 @@ convert_base_specifier(const tree_node_t& node)
 		convert_next_space(node, virtual_keyword_it),
 		convert_optional<access_specifier>(node, access_specifier_node_it),
 		convert_next_space(node, access_specifier_node_it),
-		find_and_convert_node<boost::optional<nested_identifier_or_template_id>, id_t::NESTED_IDENTIFIER_OR_TEMPLATE_ID>(node)
+		find_and_convert_node<optional_node<nested_identifier_or_template_id>, id_t::NESTED_IDENTIFIER_OR_TEMPLATE_ID>(node)
 	);
 }
 
@@ -294,7 +294,7 @@ convert_break_statement(const tree_node_t& node)
 
 	return break_statement
 	(
-		find_and_convert_node<boost::optional<space>, id_t::SPACE>(node)
+		find_and_convert_node<optional_node<space>, id_t::SPACE>(node)
 	);
 }
 
@@ -402,7 +402,7 @@ convert_class_specifier(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::CLASS_SPECIFIER);
 
-	boost::optional<member_specification> member_specification_node;
+	optional_node<member_specification> member_specification_node;
 
 	tree_node_iterator_t class_head_it = node.children.begin();
 
@@ -512,7 +512,7 @@ convert_conditional_expression(const tree_node_t& node)
 		convert_optional<expression>(node, expression_it),
 		convert_next_space(node, expression_it),
 		convert_next_space(node, colon_it),
-		find_and_convert_node<boost::optional<assignment_expression>, id_t::ASSIGNMENT_EXPRESSION>(node)
+		find_and_convert_node<optional_node<assignment_expression>, id_t::ASSIGNMENT_EXPRESSION>(node)
 	);
 }
 
@@ -523,7 +523,7 @@ convert_continue_statement(const tree_node_t& node)
 
 	return continue_statement
 	(
-		find_and_convert_node<boost::optional<space>, id_t::SPACE>(node)
+		find_and_convert_node<optional_node<space>, id_t::SPACE>(node)
 	);
 }
 
@@ -1503,7 +1503,7 @@ convert_nested_identifier_or_template_id(const tree_node_t& node)
     return nested_identifier_or_template_id
     (
         check_node_existence(node, "::", 0),
-        find_and_convert_node<boost::optional<nested_name_specifier>, id_t::NESTED_NAME_SPECIFIER>(node),
+        find_and_convert_node<optional_node<nested_name_specifier>, id_t::NESTED_NAME_SPECIFIER>(node),
         find_and_convert_node<identifier_or_template_id, id_t::IDENTIFIER_OR_TEMPLATE_ID>(node)
     );
 }
@@ -2120,9 +2120,9 @@ convert_translation_unit(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::TRANSLATION_UNIT);
 
-	boost::optional<space> first_space_node;
-	boost::optional<declaration_seq> declaration_seq_node;
-	boost::optional<space> post_declaration_seq_node;
+	optional_node<space> first_space_node;
+	optional_node<declaration_seq> declaration_seq_node;
+	optional_node<space> post_declaration_seq_node;
 
 	tree_node_iterator_t i = node.children.begin();
 	if(i->value.id() == id_t::SPACE)
@@ -2347,7 +2347,7 @@ convert_using_declaration(const tree_node_t& node)
     (
         check_node_existence(node, "typename", 1),
         check_node_existence(node, "::"),
-        find_and_convert_node<boost::optional<nested_name_specifier>, id_t::NESTED_NAME_SPECIFIER>(node),
+        find_and_convert_node<optional_node<nested_name_specifier>, id_t::NESTED_NAME_SPECIFIER>(node),
         find_and_convert_node<unqualified_id, id_t::UNQUALIFIED_ID>(node)
     );
 }

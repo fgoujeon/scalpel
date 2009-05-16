@@ -22,7 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_PTR_OPERATOR_HPP
 
 #include <memory>
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "nested_name_specifier.hpp"
 #include "cv_qualifier_seq.hpp"
@@ -52,11 +52,11 @@ class ptr_operator: public composite_node
 		(
 			type a_type,
 			bool leading_double_colon,
-			boost::optional<space>&& post_leading_double_colon_space_node,
-			boost::optional<nested_name_specifier>&& nested_name_specifier_node,
-			boost::optional<space>&& post_nested_name_specifier_space_node,
-			boost::optional<space>&& pre_cv_qualifier_seq_space_node,
-			boost::optional<cv_qualifier_seq>&& cv_qualifier_seq_node
+			optional_node<space>&& post_leading_double_colon_space_node,
+			optional_node<nested_name_specifier>&& nested_name_specifier_node,
+			optional_node<space>&& post_nested_name_specifier_space_node,
+			optional_node<space>&& pre_cv_qualifier_seq_space_node,
+			optional_node<cv_qualifier_seq>&& cv_qualifier_seq_node
 		);
 
 		ptr_operator(const ptr_operator& o);
@@ -75,11 +75,11 @@ class ptr_operator: public composite_node
 		has_leading_double_colon() const;
 
 		inline
-		const boost::optional<const nested_name_specifier&>
+		const optional_node<nested_name_specifier>&
 		nested_name_specifier_node() const;
 
 		inline
-		const boost::optional<const cv_qualifier_seq&>
+		const optional_node<cv_qualifier_seq>&
 		cv_qualifier_seq_node() const;
 
 	private:
@@ -88,11 +88,11 @@ class ptr_operator: public composite_node
 
 		type type_;
 		bool leading_double_colon_;
-		boost::optional<space> post_leading_double_colon_space_;
-		boost::optional<nested_name_specifier> nested_name_specifier_;
-		boost::optional<space> post_nested_name_specifier_space_;
-		boost::optional<space> pre_cv_qualifier_seq_space_;
-		boost::optional<cv_qualifier_seq> cv_qualifier_seq_;
+		optional_node<space> post_leading_double_colon_space_;
+		optional_node<nested_name_specifier> nested_name_specifier_;
+		optional_node<space> post_nested_name_specifier_space_;
+		optional_node<space> pre_cv_qualifier_seq_space_;
+		optional_node<cv_qualifier_seq> cv_qualifier_seq_;
 };
 
 inline
@@ -110,17 +110,17 @@ ptr_operator::has_leading_double_colon() const
 }
 
 inline
-const boost::optional<const nested_name_specifier&>
+const optional_node<nested_name_specifier>&
 ptr_operator::nested_name_specifier_node() const
 {
-	return boost::optional<const nested_name_specifier&>(nested_name_specifier_);
+	return nested_name_specifier_;
 }
 
 inline
-const boost::optional<const cv_qualifier_seq&>
+const optional_node<cv_qualifier_seq>&
 ptr_operator::cv_qualifier_seq_node() const
 {
-	return boost::optional<const cv_qualifier_seq&>(cv_qualifier_seq_);
+	return cv_qualifier_seq_;
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

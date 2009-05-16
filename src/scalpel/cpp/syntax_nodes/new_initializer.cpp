@@ -28,9 +28,9 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 new_initializer::new_initializer
 (
-	boost::optional<space>&& post_opening_bracket_space_node,
-	boost::optional<expression_list>&& expression_list_node,
-	boost::optional<space>&& post_expression_list_space_node
+	optional_node<space>&& post_opening_bracket_space_node,
+	optional_node<expression_list>&& expression_list_node,
+	optional_node<space>&& post_expression_list_space_node
 ):
 	post_opening_bracket_space_(post_opening_bracket_space_node),
 	post_expression_list_space_(post_expression_list_space_node)

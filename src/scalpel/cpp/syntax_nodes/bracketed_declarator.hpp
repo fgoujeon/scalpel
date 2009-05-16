@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_BRACKETED_DECLARATOR_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_BRACKETED_DECLARATOR_HPP
 
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "space.hpp"
 #include "declarator.hpp"
@@ -39,9 +39,9 @@ class bracketed_declarator: public composite_node
 	public:
 		bracketed_declarator
 		(
-			boost::optional<space>&& post_opening_bracket_space_node,
+			optional_node<space>&& post_opening_bracket_space_node,
 			declarator&& declarator_node,
-			boost::optional<space>&& post_declarator_space_node
+			optional_node<space>&& post_declarator_space_node
 		);
 
 		bracketed_declarator(const bracketed_declarator& o);
@@ -55,9 +55,9 @@ class bracketed_declarator: public composite_node
 		void
 		update_node_list();
 
-		boost::optional<space> post_opening_bracket_space_;
+		optional_node<space> post_opening_bracket_space_;
 		declarator declarator_;
-		boost::optional<space> post_declarator_space_;
+		optional_node<space> post_declarator_space_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

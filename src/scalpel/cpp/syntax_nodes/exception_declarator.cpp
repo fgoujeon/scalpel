@@ -26,7 +26,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 exception_declarator::exception_declarator
 (
 	type_specifier_seq&& type_specifier_seq_node,
-	boost::optional<space>&& post_type_specifier_seq_space_node,
+	optional_node<space>&& post_type_specifier_seq_space_node,
 	declarator&& declarator_node
 ):
 	type_specifier_seq_(type_specifier_seq_node),

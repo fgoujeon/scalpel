@@ -27,8 +27,8 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 assignment_expression::assignment_expression
 (
-	boost::optional<first_part_seq>&& first_part_seq_node,
-	boost::optional<space>&& space_node,
+	optional_node<first_part_seq>&& first_part_seq_node,
+	optional_node<space>&& space_node,
 	conditional_or_throw_expression&& conditional_or_throw_expression_node
 ):
 	first_part_seq_(first_part_seq_node),
@@ -81,7 +81,7 @@ assignment_expression::update_node_list()
 assignment_expression::first_part::first_part
 (
 	logical_or_expression&& logical_or_expression_node,
-	boost::optional<space>&& space_node,
+	optional_node<space>&& space_node,
 	assignment_operator&& assignment_operator_node
 ):
 	logical_or_expression_(new logical_or_expression(logical_or_expression_node)),

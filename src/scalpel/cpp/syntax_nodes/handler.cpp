@@ -27,11 +27,11 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 handler::handler
 (
-	boost::optional<space>&& post_catch_keyword_space_node,
-	boost::optional<space>&& post_opening_bracket_space_node,
+	optional_node<space>&& post_catch_keyword_space_node,
+	optional_node<space>&& post_opening_bracket_space_node,
 	exception_declaration&& exception_declaration_node,
-	boost::optional<space>&& post_exception_declaration_space_node,
-	boost::optional<space>&& post_closing_bracket_space_node,
+	optional_node<space>&& post_exception_declaration_space_node,
+	optional_node<space>&& post_closing_bracket_space_node,
 	compound_statement&& compound_statement_node
 ):
 	post_catch_keyword_space_(post_catch_keyword_space_node),

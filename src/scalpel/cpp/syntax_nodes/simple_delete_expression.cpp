@@ -29,8 +29,8 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 simple_delete_expression::simple_delete_expression
 (
 	bool leading_double_colon,
-	boost::optional<space>&& post_double_colon_space_node,
-	boost::optional<space>&& post_delete_keyword_space_node,
+	optional_node<space>&& post_double_colon_space_node,
+	optional_node<space>&& post_delete_keyword_space_node,
 	cast_expression&& cast_expression_node
 ):
 	leading_double_colon_(leading_double_colon),

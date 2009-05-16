@@ -27,7 +27,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 destructor_name::destructor_name
 (
-	boost::optional<space>&& post_tilde_space_node,
+	optional_node<space>&& post_tilde_space_node,
 	identifier_or_template_id&& identifier_or_template_id_node
 ):
 	post_tilde_space_(post_tilde_space_node),

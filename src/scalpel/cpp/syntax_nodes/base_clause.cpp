@@ -27,7 +27,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 base_clause::base_clause
 (
-	boost::optional<space>&& space_node,
+	optional_node<space>&& space_node,
 	base_specifier_list&& a_base_specifier_list
 ):
 	space_(space_node),

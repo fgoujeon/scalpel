@@ -93,6 +93,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "syntax_nodes/nested_identifier_or_template_id.hpp"
 #include "syntax_nodes/nested_name_specifier.hpp"
 #include "syntax_nodes/operator_function_id.hpp"
+#include "syntax_nodes/optional_node.hpp"
 #include "syntax_nodes/parameter_declaration.hpp"
 #include "syntax_nodes/parameter_declaration_clause.hpp"
 #include "syntax_nodes/postfix_expression.hpp"

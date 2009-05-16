@@ -28,11 +28,11 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 class_elaborated_specifier::class_elaborated_specifier
 (
 	class_key&& class_key_node,
-	boost::optional<space>&& post_class_key_space_node,
+	optional_node<space>&& post_class_key_space_node,
 	bool double_colon,
-	boost::optional<space>&& post_double_colon_space_node,
-	boost::optional<nested_name_specifier>&& nested_name_specifier_node,
-	boost::optional<space>&& post_nested_name_specifier_space_node,
+	optional_node<space>&& post_double_colon_space_node,
+	optional_node<nested_name_specifier>&& nested_name_specifier_node,
+	optional_node<space>&& post_nested_name_specifier_space_node,
 	identifier&& identifier_node
 ):
 	class_key_(class_key_node),

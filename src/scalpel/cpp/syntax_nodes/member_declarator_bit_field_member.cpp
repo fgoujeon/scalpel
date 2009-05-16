@@ -27,9 +27,9 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 member_declarator_bit_field_member::member_declarator_bit_field_member
 (
-    boost::optional<identifier>&& identifier_node,
-	boost::optional<space>&& post_identifier_space_node,
-	boost::optional<space>&& post_colon_space_node,
+    optional_node<identifier>&& identifier_node,
+	optional_node<space>&& post_identifier_space_node,
+	optional_node<space>&& post_colon_space_node,
 	conditional_expression&& conditional_expression_node
 ):
     identifier_(identifier_node),

@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_USING_DIRECTIVE_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_USING_DIRECTIVE_HPP
 
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "identifier.hpp"
 #include "nested_name_specifier.hpp"
@@ -42,14 +42,14 @@ class using_directive: public composite_node
 	public:
 		using_directive
 		(
-			boost::optional<space>&& post_using_keyword_space_node,
-			boost::optional<space>&& post_namespace_keyword_space_node,
+			optional_node<space>&& post_using_keyword_space_node,
+			optional_node<space>&& post_namespace_keyword_space_node,
 			bool leading_double_colon,
-			boost::optional<space>&& post_leading_double_colon_space_node,
-			boost::optional<nested_name_specifier>&& nested_name_specifier_node,
-			boost::optional<space>&& post_nested_name_specifier_space_node,
+			optional_node<space>&& post_leading_double_colon_space_node,
+			optional_node<nested_name_specifier>&& nested_name_specifier_node,
+			optional_node<space>&& post_nested_name_specifier_space_node,
 			identifier&& identifier_node,
-			boost::optional<space>&& post_identifier_space_node
+			optional_node<space>&& post_identifier_space_node
 		);
 
 		using_directive(const using_directive& o);
@@ -64,7 +64,7 @@ class using_directive: public composite_node
 		has_leading_double_colon() const;
 
 		inline
-		const boost::optional<const nested_name_specifier&>
+		const optional_node<nested_name_specifier>&
 		nested_name_specifier_node() const;
 
 		inline
@@ -75,14 +75,14 @@ class using_directive: public composite_node
 		void
 		update_node_list();
 
-		boost::optional<space> post_using_keyword_space_;
-		boost::optional<space> post_namespace_keyword_space_;
+		optional_node<space> post_using_keyword_space_;
+		optional_node<space> post_namespace_keyword_space_;
 		bool leading_double_colon_;
-		boost::optional<space> post_leading_double_colon_space_;
-		boost::optional<nested_name_specifier> nested_name_specifier_;
-		boost::optional<space> post_nested_name_specifier_space_;
+		optional_node<space> post_leading_double_colon_space_;
+		optional_node<nested_name_specifier> nested_name_specifier_;
+		optional_node<space> post_nested_name_specifier_space_;
 		identifier identifier_;
-		boost::optional<space> post_identifier_space_;
+		optional_node<space> post_identifier_space_;
 };
 
 inline
@@ -93,10 +93,10 @@ using_directive::has_leading_double_colon() const
 }
 
 inline
-const boost::optional<const nested_name_specifier&>
+const optional_node<nested_name_specifier>&
 using_directive::nested_name_specifier_node() const
 {
-	return boost::optional<const nested_name_specifier&>(nested_name_specifier_);
+	return nested_name_specifier_;
 }
 
 inline

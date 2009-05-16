@@ -27,8 +27,8 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 declarator::declarator
 (
-	boost::optional<ptr_operator_seq>&& ptr_operator_seq,
-	boost::optional<space>&& post_ptr_operator_seq_space_node,
+	optional_node<ptr_operator_seq>&& ptr_operator_seq,
+	optional_node<space>&& post_ptr_operator_seq_space_node,
     direct_declarator&& a_direct_declarator
 ):
     ptr_operator_seq_(std::move(ptr_operator_seq)),

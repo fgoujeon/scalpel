@@ -26,8 +26,8 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 init_declarator::init_declarator
 (
 	declarator&& a_declarator,
-	boost::optional<space>&& space_node,
-	boost::optional<initializer>&& initializer_node
+	optional_node<space>&& space_node,
+	optional_node<initializer>&& initializer_node
 ):
 	declarator_(std::move(a_declarator)),
 	space_(space_node),

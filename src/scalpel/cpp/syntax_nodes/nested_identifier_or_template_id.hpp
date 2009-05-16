@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_NESTED_IDENTIFIER_OR_TEMPLATE_ID_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_NESTED_IDENTIFIER_OR_TEMPLATE_ID_HPP
 
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "nested_name_specifier.hpp"
 #include "identifier_or_template_id.hpp"
@@ -35,7 +35,7 @@ class nested_identifier_or_template_id: public composite_node
 		nested_identifier_or_template_id
 		(
 			bool leading_double_colon,
-			boost::optional<nested_name_specifier>&& a_nested_name_specifier,
+			optional_node<nested_name_specifier>&& a_nested_name_specifier,
 			identifier_or_template_id&& an_identifier_or_template_id
 		);
 
@@ -51,7 +51,7 @@ class nested_identifier_or_template_id: public composite_node
 		has_leading_double_colon() const;
 
 		inline
-		const boost::optional<const nested_name_specifier&>
+		const optional_node<nested_name_specifier>&
 		nested_name_specifier_node() const;
 
 		inline
@@ -63,7 +63,7 @@ class nested_identifier_or_template_id: public composite_node
 		update_node_list();
 
 		bool leading_double_colon_;
-		boost::optional<nested_name_specifier> nested_name_specifier_;
+		optional_node<nested_name_specifier> nested_name_specifier_;
 		identifier_or_template_id identifier_or_template_id_;
 };
 
@@ -75,10 +75,10 @@ nested_identifier_or_template_id::has_leading_double_colon() const
 }
 
 inline
-const boost::optional<const nested_name_specifier&>
+const optional_node<nested_name_specifier>&
 nested_identifier_or_template_id::nested_name_specifier_node() const
 {
-	return boost::optional<const nested_name_specifier&>(nested_name_specifier_);
+	return nested_name_specifier_;
 }
 
 inline

@@ -29,11 +29,11 @@ ptr_operator::ptr_operator
 (
 	type a_type,
 	bool leading_double_colon,
-	boost::optional<space>&& post_leading_double_colon_space_node,
-	boost::optional<nested_name_specifier>&& nested_name_specifier_node,
-	boost::optional<space>&& post_nested_name_specifier_space_node,
-	boost::optional<space>&& pre_cv_qualifier_seq_space_node,
-	boost::optional<cv_qualifier_seq>&& cv_qualifier_seq_node
+	optional_node<space>&& post_leading_double_colon_space_node,
+	optional_node<nested_name_specifier>&& nested_name_specifier_node,
+	optional_node<space>&& post_nested_name_specifier_space_node,
+	optional_node<space>&& pre_cv_qualifier_seq_space_node,
+	optional_node<cv_qualifier_seq>&& cv_qualifier_seq_node
 ):
 	type_(a_type),
 	leading_double_colon_(leading_double_colon),

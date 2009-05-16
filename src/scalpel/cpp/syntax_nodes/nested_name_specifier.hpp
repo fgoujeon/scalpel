@@ -39,9 +39,9 @@ class nested_name_specifier: public composite_node
 		nested_name_specifier
 		(
 			identifier_or_template_id&& an_identifier_or_template_id,
-			boost::optional<space>&& post_identifier_or_template_id_space_node,
-			boost::optional<space>&& pre_last_part_seq_space_node,
-			boost::optional<last_part_seq>&& a_last_part_seq
+			optional_node<space>&& post_identifier_or_template_id_space_node,
+			optional_node<space>&& pre_last_part_seq_space_node,
+			optional_node<last_part_seq>&& a_last_part_seq
 		);
 
 		nested_name_specifier(const nested_name_specifier& o);
@@ -56,7 +56,7 @@ class nested_name_specifier: public composite_node
 		identifier_or_template_id_node() const;
 
 		inline
-		const boost::optional<const last_part_seq&>
+		const optional_node<last_part_seq>&
 		last_part_seq_node() const;
 
 	private:
@@ -64,9 +64,9 @@ class nested_name_specifier: public composite_node
 		update_node_list();
 
 		identifier_or_template_id identifier_or_template_id_;
-		boost::optional<space> post_identifier_or_template_id_space_;
-		boost::optional<space> pre_last_part_seq_space_;
-		boost::optional<last_part_seq> last_part_seq_;
+		optional_node<space> post_identifier_or_template_id_space_;
+		optional_node<space> pre_last_part_seq_space_;
+		optional_node<last_part_seq> last_part_seq_;
 };
 
 class nested_name_specifier::last_part: public composite_node
@@ -123,10 +123,10 @@ nested_name_specifier::identifier_or_template_id_node() const
 }
 
 inline
-const boost::optional<const nested_name_specifier::last_part_seq&>
+const optional_node<nested_name_specifier::last_part_seq>&
 nested_name_specifier::last_part_seq_node() const
 {
-	return boost::optional<const nested_name_specifier::last_part_seq&>(last_part_seq_);
+	return last_part_seq_;
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

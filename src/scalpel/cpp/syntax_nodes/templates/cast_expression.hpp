@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_TEMPLATES_CAST_EXPRESSION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_TEMPLATES_CAST_EXPRESSION_HPP
 
-#include <boost/optional.hpp>
+#include "../optional_node.hpp"
 #include "../composite_node.hpp"
 #include "../bracketed_node.hpp"
 #include "../type_id.hpp"
@@ -41,9 +41,9 @@ class cast_expression: public composite_node
 	public:
 		cast_expression
 		(
-			boost::optional<space>&& post_cast_keyword_space_node,
+			optional_node<space>&& post_cast_keyword_space_node,
 			angle_bracketed_node<type_id>::type&& bracketed_type_id_node,
-			boost::optional<space>&& post_right_angle_bracket_space_node,
+			optional_node<space>&& post_right_angle_bracket_space_node,
 			round_bracketed_node<expression>::type&& bracketed_expression_node
 		);
 
@@ -58,9 +58,9 @@ class cast_expression: public composite_node
 		void
 		update_node_list();
 
-		boost::optional<space> post_cast_keyword_space_;
+		optional_node<space> post_cast_keyword_space_;
 		angle_bracketed_node<type_id>::type bracketed_type_id_;
-		boost::optional<space> post_right_angle_bracket_space_;
+		optional_node<space> post_right_angle_bracket_space_;
 		round_bracketed_node<expression>::type bracketed_expression_;
 };
 

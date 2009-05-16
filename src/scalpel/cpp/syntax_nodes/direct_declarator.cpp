@@ -26,8 +26,8 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 direct_declarator::direct_declarator
 (
 	first_part&& first_part_node,
-	boost::optional<space>&& pre_last_part_seq_space_node,
-    boost::optional<sequence_node<last_part>>&& a_last_part_seq
+	optional_node<space>&& pre_last_part_seq_space_node,
+    optional_node<sequence_node<last_part>>&& a_last_part_seq
 ):
 	first_part_(first_part_node),
 	pre_last_part_seq_space_(pre_last_part_seq_space_node),
@@ -73,13 +73,13 @@ direct_declarator::update_node_list()
 
 direct_declarator::function_part::function_part
 (
-	boost::optional<space>&& post_opening_bracket_space_node,
-	boost::optional<parameter_declaration_clause>&& a_parameter_declaration_clause,
-	boost::optional<space>&& post_parameter_declaration_clause_space_node,
-	boost::optional<space>&& cv_qualifier_seq_space_node,
-	boost::optional<cv_qualifier_seq>&& a_cv_qualifier_seq,
-	boost::optional<space>&& pre_exception_specification_space_node,
-	boost::optional<exception_specification>&& exception_specification_node
+	optional_node<space>&& post_opening_bracket_space_node,
+	optional_node<parameter_declaration_clause>&& a_parameter_declaration_clause,
+	optional_node<space>&& post_parameter_declaration_clause_space_node,
+	optional_node<space>&& cv_qualifier_seq_space_node,
+	optional_node<cv_qualifier_seq>&& a_cv_qualifier_seq,
+	optional_node<space>&& pre_exception_specification_space_node,
+	optional_node<exception_specification>&& exception_specification_node
 ):
 	post_opening_bracket_space_(post_opening_bracket_space_node),
     parameter_declaration_clause_(std::move(a_parameter_declaration_clause)),

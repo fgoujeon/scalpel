@@ -28,11 +28,11 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 while_statement::while_statement
 (
-	boost::optional<space>&& post_while_keyword_space_node,
-	boost::optional<space>&& post_opening_bracket_space_node,
+	optional_node<space>&& post_while_keyword_space_node,
+	optional_node<space>&& post_opening_bracket_space_node,
 	condition&& condition_node,
-	boost::optional<space>&& post_condition_space_node,
-	boost::optional<space>&& post_closing_bracket_space_node,
+	optional_node<space>&& post_condition_space_node,
+	optional_node<space>&& post_closing_bracket_space_node,
 	statement&& statement_node
 ):
 	post_while_keyword_space_(post_while_keyword_space_node),

@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_FUNCTION_TRY_BLOCK_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_FUNCTION_TRY_BLOCK_HPP
 
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "space.hpp"
 #include "ctor_initializer.hpp"
@@ -41,11 +41,11 @@ class function_try_block: public composite_node
 	public:
 		function_try_block
 		(
-			boost::optional<space>&& post_try_keyword_space_node,
-			boost::optional<ctor_initializer>&& ctor_initializer_node,
-			boost::optional<space>&& post_ctor_initializer_space_node,
+			optional_node<space>&& post_try_keyword_space_node,
+			optional_node<ctor_initializer>&& ctor_initializer_node,
+			optional_node<space>&& post_ctor_initializer_space_node,
 			compound_statement&& compound_statement_node,
-			boost::optional<space>&& post_compound_statement_space_node,
+			optional_node<space>&& post_compound_statement_space_node,
 			handler_seq&& handler_seq_node
 		);
 
@@ -60,11 +60,11 @@ class function_try_block: public composite_node
 		void
 		update_node_list();
 
-		boost::optional<space> post_try_keyword_space_;
-		boost::optional<ctor_initializer> ctor_initializer_;
-		boost::optional<space> post_ctor_initializer_space_;
+		optional_node<space> post_try_keyword_space_;
+		optional_node<ctor_initializer> ctor_initializer_;
+		optional_node<space> post_ctor_initializer_space_;
 		compound_statement compound_statement_;
-		boost::optional<space> post_compound_statement_space_;
+		optional_node<space> post_compound_statement_space_;
 		handler_seq handler_seq_;
 };
 

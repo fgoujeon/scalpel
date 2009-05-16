@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_BASE_SPECIFIER_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_BASE_SPECIFIER_HPP
 
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "access_specifier.hpp"
 #include "nested_identifier_or_template_id.hpp"
@@ -51,10 +51,10 @@ class base_specifier: public composite_node
         (
             bool virtual_keyword,
 			bool virtual_keyword_first,
-			boost::optional<space>&& post_virtual_keyword_space_node,
-            boost::optional<access_specifier>&& an_access_specifier,
-			boost::optional<space>&& post_access_specifier_space_node,
-            boost::optional<nested_identifier_or_template_id>&& a_nested_identifier_or_template_id
+			optional_node<space>&& post_virtual_keyword_space_node,
+            optional_node<access_specifier>&& an_access_specifier,
+			optional_node<space>&& post_access_specifier_space_node,
+            optional_node<nested_identifier_or_template_id>&& a_nested_identifier_or_template_id
         );
 
 		base_specifier(const base_specifier& o);
@@ -69,11 +69,11 @@ class base_specifier: public composite_node
         has_virtual_keyword() const;
 
         inline
-        const boost::optional<const access_specifier&>
+        const optional_node<access_specifier>&
         access_specifier_node() const;
 
         inline
-        const boost::optional<const nested_identifier_or_template_id&>
+        const optional_node<nested_identifier_or_template_id>&
         nested_identifier_or_template_id_node() const;
 
     private:
@@ -82,10 +82,10 @@ class base_specifier: public composite_node
 
         bool virtual_keyword_;
         bool virtual_keyword_first_;
-		boost::optional<space> post_virtual_keyword_space_;
-		boost::optional<access_specifier> access_specifier_;
-		boost::optional<space> post_access_specifier_space_;
-		boost::optional<nested_identifier_or_template_id> nested_identifier_or_template_id_;
+		optional_node<space> post_virtual_keyword_space_;
+		optional_node<access_specifier> access_specifier_;
+		optional_node<space> post_access_specifier_space_;
+		optional_node<nested_identifier_or_template_id> nested_identifier_or_template_id_;
 };
 
 inline
@@ -96,17 +96,17 @@ base_specifier::has_virtual_keyword() const
 }
 
 inline
-const boost::optional<const access_specifier&>
+const optional_node<access_specifier>&
 base_specifier::access_specifier_node() const
 {
-	return boost::optional<const access_specifier&>(access_specifier_);
+	return access_specifier_;
 }
 
 inline
-const boost::optional<const nested_identifier_or_template_id&>
+const optional_node<nested_identifier_or_template_id>&
 base_specifier::nested_identifier_or_template_id_node() const
 {
-	return boost::optional<const nested_identifier_or_template_id&>(nested_identifier_or_template_id_);
+	return nested_identifier_or_template_id_;
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

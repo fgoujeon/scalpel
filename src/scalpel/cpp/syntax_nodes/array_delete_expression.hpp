@@ -18,11 +18,11 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_ARRAY_DELETE_EXPRESION_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_ARRAY_DELETE_EXPRESION_HPP
+#ifndef SCALPEL_CPP_SYNTAX_NODES_ARRAY_DELETE_EXPRESSION_HPP
+#define SCALPEL_CPP_SYNTAX_NODES_ARRAY_DELETE_EXPRESSION_HPP
 
 #include <memory>
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "space.hpp"
 
@@ -33,7 +33,7 @@ class cast_expression;
 
 /**
 array_delete_expression
-	= !(str_p("::") >> !s) >> "delete" >> !s >> '[' >> !s >> ']' >> !s >> cast_expression
+	= ["::"], "delete", "[", "]", cast_expression
 ;
 */
 class array_delete_expression: public composite_node
@@ -42,10 +42,10 @@ class array_delete_expression: public composite_node
 		array_delete_expression
 		(
 			bool leading_double_colon,
-			boost::optional<space>&& post_double_colon_space_node,
-			boost::optional<space>&& post_delete_keyword_space_node,
-			boost::optional<space>&& post_opening_bracket_space_node,
-			boost::optional<space>&& post_closing_bracket_space_node,
+			optional_node<space>&& post_double_colon_space_node,
+			optional_node<space>&& post_delete_keyword_space_node,
+			optional_node<space>&& post_opening_bracket_space_node,
+			optional_node<space>&& post_closing_bracket_space_node,
 			cast_expression&& cast_expression_node
 		);
 
@@ -61,10 +61,10 @@ class array_delete_expression: public composite_node
 		update_node_list();
 
 		bool leading_double_colon_;
-		boost::optional<space> post_double_colon_space_;
-		boost::optional<space> post_delete_keyword_space_;
-		boost::optional<space> post_opening_bracket_space_;
-		boost::optional<space> post_closing_bracket_space_;
+		optional_node<space> post_double_colon_space_;
+		optional_node<space> post_delete_keyword_space_;
+		optional_node<space> post_opening_bracket_space_;
+		optional_node<space> post_closing_bracket_space_;
 		std::unique_ptr<cast_expression> cast_expression_;
 };
 

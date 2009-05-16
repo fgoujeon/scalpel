@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_INIT_DECLARATOR_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_INIT_DECLARATOR_HPP
 
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "declarator.hpp"
 #include "space.hpp"
@@ -43,8 +43,8 @@ class init_declarator: public composite_node
 		init_declarator
 		(
 			declarator&& a_declarator,
-			boost::optional<space>&& space_node,
-			boost::optional<initializer>&& initializer_node
+			optional_node<space>&& space_node,
+			optional_node<initializer>&& initializer_node
 		);
 
 		init_declarator(const init_declarator& o);
@@ -63,8 +63,8 @@ class init_declarator: public composite_node
 		update_node_list();
 
 		declarator declarator_;
-		boost::optional<space> space_;
-		boost::optional<initializer> initializer_;
+		optional_node<space> space_;
+		optional_node<initializer> initializer_;
 };
 
 inline

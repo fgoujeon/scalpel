@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_CONTINUE_STATEMENT_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_CONTINUE_STATEMENT_HPP
 
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "space.hpp"
 
@@ -40,7 +40,7 @@ class continue_statement: public composite_node
 	public:
 		continue_statement
 		(
-			boost::optional<space>&& space_node
+			optional_node<space>&& space_node
 		);
 
 		continue_statement(const continue_statement& o);
@@ -54,7 +54,7 @@ class continue_statement: public composite_node
 		void
 		update_node_list();
 
-		boost::optional<space> space_;
+		optional_node<space> space_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

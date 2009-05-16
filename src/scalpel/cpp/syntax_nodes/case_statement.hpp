@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_CASE_STATEMENT_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_CASE_STATEMENT_HPP
 
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "space.hpp"
 #include "conditional_expression.hpp"
@@ -42,10 +42,10 @@ class case_statement: public composite_node
 	public:
 		case_statement
 		(
-			boost::optional<space>&& post_case_keyword_space_node,
+			optional_node<space>&& post_case_keyword_space_node,
 			conditional_expression&& conditional_expression_node,
-			boost::optional<space>&& post_conditional_expression_space_node,
-			boost::optional<space>&& post_colon_space_node,
+			optional_node<space>&& post_conditional_expression_space_node,
+			optional_node<space>&& post_colon_space_node,
 			statement&& statement_node
 		);
 
@@ -60,10 +60,10 @@ class case_statement: public composite_node
 		void
 		update_node_list();
 
-		boost::optional<space> post_case_keyword_space_;
+		optional_node<space> post_case_keyword_space_;
 		conditional_expression conditional_expression_;
-		boost::optional<space> post_conditional_expression_space_;
-		boost::optional<space> post_colon_space_;
+		optional_node<space> post_conditional_expression_space_;
+		optional_node<space> post_colon_space_;
 		std::unique_ptr<statement> statement_;
 };
 

@@ -22,7 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_FUNCTION_DEFINITION_HPP
 
 #include <memory>
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "decl_specifier_seq.hpp"
 #include "ctor_initializer.hpp"
@@ -48,14 +48,14 @@ class function_definition: public composite_node
 	public:
         function_definition
         (
-            boost::optional<decl_specifier_seq>&& a_decl_specifier_seq,
-			boost::optional<space>&& post_decl_specifier_seq_space,
+            optional_node<decl_specifier_seq>&& a_decl_specifier_seq,
+			optional_node<space>&& post_decl_specifier_seq_space,
             declarator&& a_declarator,
-			boost::optional<space>&& post_declarator_space,
-            boost::optional<ctor_initializer>&& a_ctor_initializer,
-			boost::optional<space>&& post_ctor_initializer_space,
-            boost::optional<compound_statement>&& compound_statement_node,
-			boost::optional<function_try_block>&& function_try_block_node
+			optional_node<space>&& post_declarator_space,
+            optional_node<ctor_initializer>&& a_ctor_initializer,
+			optional_node<space>&& post_ctor_initializer_space,
+            optional_node<compound_statement>&& compound_statement_node,
+			optional_node<function_try_block>&& function_try_block_node
         );
 
 		function_definition(const function_definition& o);
@@ -66,11 +66,11 @@ class function_definition: public composite_node
 		operator=(const function_definition& o);
 
 		inline
-		const boost::optional<const decl_specifier_seq&>
+		const optional_node<decl_specifier_seq>&
 		decl_specifier_seq_node() const;
 
 		inline
-		const boost::optional<const space&>
+		const optional_node<space>&
 		post_decl_specifier_seq_space_node() const;
 
 		inline
@@ -78,46 +78,43 @@ class function_definition: public composite_node
 		declarator_node() const;
 
 		inline
-		const boost::optional<const space&>
+		const optional_node<space>&
 		post_declarator_space_node() const;
 
 		inline
-		const boost::optional<const ctor_initializer&>
+		const optional_node<ctor_initializer>&
 		ctor_initializer_node() const;
 
 		inline
-		const boost::optional<const compound_statement&>
+		const optional_node<compound_statement>&
 		compound_statement_node() const;
 
     private:
 		void
 		update_node_list();
 
-		boost::optional<decl_specifier_seq> decl_specifier_seq_;
-		boost::optional<space> post_decl_specifier_seq_space_;
-		std::shared_ptr<declarator> declarator_;
-		boost::optional<space> post_declarator_space_;
-		boost::optional<ctor_initializer> ctor_initializer_;
-		boost::optional<space> post_ctor_initializer_space_;
-		boost::optional<compound_statement> compound_statement_;
-		boost::optional<function_try_block> function_try_block_;
+		optional_node<decl_specifier_seq> decl_specifier_seq_;
+		optional_node<space> post_decl_specifier_seq_space_;
+		std::unique_ptr<declarator> declarator_;
+		optional_node<space> post_declarator_space_;
+		optional_node<ctor_initializer> ctor_initializer_;
+		optional_node<space> post_ctor_initializer_space_;
+		optional_node<compound_statement> compound_statement_;
+		optional_node<function_try_block> function_try_block_;
 };
 
 inline
-const boost::optional<const decl_specifier_seq&>
+const optional_node<decl_specifier_seq>&
 function_definition::decl_specifier_seq_node() const
 {
-	if(decl_specifier_seq_)
-		return boost::optional<const decl_specifier_seq&>(*decl_specifier_seq_);
-	else
-		return boost::optional<const decl_specifier_seq&>();
+	return decl_specifier_seq_;
 }
 
 inline
-const boost::optional<const space&>
+const optional_node<space>&
 function_definition::post_decl_specifier_seq_space_node() const
 {
-	return boost::optional<const space&>(post_decl_specifier_seq_space_);
+	return post_decl_specifier_seq_space_;
 }
 
 inline
@@ -128,24 +125,24 @@ function_definition::declarator_node() const
 }
 
 inline
-const boost::optional<const space&>
+const optional_node<space>&
 function_definition::post_declarator_space_node() const
 {
-	return boost::optional<const space&>(post_declarator_space_);
+	return post_declarator_space_;
 }
 
 inline
-const boost::optional<const ctor_initializer&>
+const optional_node<ctor_initializer>&
 function_definition::ctor_initializer_node() const
 {
-	return boost::optional<const ctor_initializer&>(ctor_initializer_);
+	return ctor_initializer_;
 }
 
 inline
-const boost::optional<const compound_statement&>
+const optional_node<compound_statement>&
 function_definition::compound_statement_node() const
 {
-	return boost::optional<const compound_statement&>(compound_statement_);
+	return compound_statement_;
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

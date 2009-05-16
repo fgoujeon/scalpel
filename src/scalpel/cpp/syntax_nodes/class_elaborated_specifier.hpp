@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_CLASS_ELABORATED_SPECIFIER_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_CLASS_ELABORATED_SPECIFIER_HPP
 
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "class_key.hpp"
 #include "space.hpp"
@@ -42,11 +42,11 @@ class class_elaborated_specifier: public composite_node
 		class_elaborated_specifier
 		(
 			class_key&& class_key_node,
-			boost::optional<space>&& post_class_key_space_node,
+			optional_node<space>&& post_class_key_space_node,
 			bool double_colon,
-			boost::optional<space>&& post_double_colon_space_node,
-			boost::optional<nested_name_specifier>&& nested_name_specifier_node,
-			boost::optional<space>&& post_nested_name_specifier_space_node,
+			optional_node<space>&& post_double_colon_space_node,
+			optional_node<nested_name_specifier>&& nested_name_specifier_node,
+			optional_node<space>&& post_nested_name_specifier_space_node,
 			identifier&& identifier_node
 		);
 
@@ -66,11 +66,11 @@ class class_elaborated_specifier: public composite_node
 		update_node_list();
 
 		class_key class_key_;
-		boost::optional<space> post_class_key_space_;
+		optional_node<space> post_class_key_space_;
 		bool double_colon_;
-		boost::optional<space> post_double_colon_space_;
-		boost::optional<nested_name_specifier> nested_name_specifier_;
-		boost::optional<space> post_nested_name_specifier_space_;
+		optional_node<space> post_double_colon_space_;
+		optional_node<nested_name_specifier> nested_name_specifier_;
+		optional_node<space> post_nested_name_specifier_space_;
 		identifier identifier_;
 };
 

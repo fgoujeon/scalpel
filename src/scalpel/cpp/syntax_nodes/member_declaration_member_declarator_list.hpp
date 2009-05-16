@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_MEMBER_DECLARATION_MEMBER_DECLARATOR_LIST_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_MEMBER_DECLARATION_MEMBER_DECLARATOR_LIST_HPP
 
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "member_declarator_list.hpp"
 #include "decl_specifier_seq.hpp"
@@ -39,10 +39,10 @@ class member_declaration_member_declarator_list: public composite_node
 	public:
 		member_declaration_member_declarator_list
 		(
-			boost::optional<decl_specifier_seq>&& decl_specifier_seq_node,
-			boost::optional<space>&& post_decl_specifier_seq_space_node,
-			boost::optional<member_declarator_list>&& member_declarator_list_node,
-			boost::optional<space>&& post_member_declarator_list_space_node
+			optional_node<decl_specifier_seq>&& decl_specifier_seq_node,
+			optional_node<space>&& post_decl_specifier_seq_space_node,
+			optional_node<member_declarator_list>&& member_declarator_list_node,
+			optional_node<space>&& post_member_declarator_list_space_node
 		);
 
 		member_declaration_member_declarator_list(const member_declaration_member_declarator_list& o);
@@ -53,35 +53,35 @@ class member_declaration_member_declarator_list: public composite_node
 		operator=(const member_declaration_member_declarator_list& o);
 
 		inline
-		const boost::optional<const decl_specifier_seq&>
+		const optional_node<decl_specifier_seq>&
 		decl_specifier_seq_node() const;
 
 		inline
-		const boost::optional<const member_declarator_list&>
+		const optional_node<member_declarator_list>&
 		member_declarator_list_node() const;
 
 	private:
 		void
 		update_node_list();
 
-		boost::optional<decl_specifier_seq> decl_specifier_seq_;
-		boost::optional<space> post_decl_specifier_seq_space_;
-		boost::optional<member_declarator_list> member_declarator_list_;
-		boost::optional<space> post_member_declarator_list_space_;
+		optional_node<decl_specifier_seq> decl_specifier_seq_;
+		optional_node<space> post_decl_specifier_seq_space_;
+		optional_node<member_declarator_list> member_declarator_list_;
+		optional_node<space> post_member_declarator_list_space_;
 };
 
 inline
-const boost::optional<const decl_specifier_seq&>
+const optional_node<decl_specifier_seq>&
 member_declaration_member_declarator_list::decl_specifier_seq_node() const
 {
-	return boost::optional<const decl_specifier_seq&>(decl_specifier_seq_);
+	return decl_specifier_seq_;
 }
 
 inline
-const boost::optional<const member_declarator_list&>
+const optional_node<member_declarator_list>&
 member_declaration_member_declarator_list::member_declarator_list_node() const
 {
-	return boost::optional<const member_declarator_list&>(member_declarator_list_);
+	return member_declarator_list_;
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

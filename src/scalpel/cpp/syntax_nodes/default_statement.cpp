@@ -28,8 +28,8 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 default_statement::default_statement
 (
-	boost::optional<space>&& post_default_keyword_space_node,
-	boost::optional<space>&& post_colon_space_node,
+	optional_node<space>&& post_default_keyword_space_node,
+	optional_node<space>&& post_colon_space_node,
 	statement&& statement_node
 ):
 	post_default_keyword_space_(post_default_keyword_space_node),

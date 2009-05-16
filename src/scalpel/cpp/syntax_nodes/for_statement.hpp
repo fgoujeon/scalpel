@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_FOR_STATEMENT_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_FOR_STATEMENT_HPP
 
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "space.hpp"
 #include "expression.hpp"
@@ -44,16 +44,16 @@ class for_statement: public composite_node
 	public:
 		for_statement
 		(
-			boost::optional<space>&& post_for_keyword_space_node,
-			boost::optional<space>&& post_opening_bracket_space_node,
-			boost::optional<for_init_statement>&& for_init_statement_node,
-			boost::optional<space>&& post_for_init_statement_space_node,
-			boost::optional<condition>&& condition_node,
-			boost::optional<space>&& post_condition_space_node,
-			boost::optional<space>&& post_semicolon_space_node,
-			boost::optional<expression>&& expression_node,
-			boost::optional<space>&& post_expression_space_node,
-			boost::optional<space>&& post_closing_bracket_space_node,
+			optional_node<space>&& post_for_keyword_space_node,
+			optional_node<space>&& post_opening_bracket_space_node,
+			optional_node<for_init_statement>&& for_init_statement_node,
+			optional_node<space>&& post_for_init_statement_space_node,
+			optional_node<condition>&& condition_node,
+			optional_node<space>&& post_condition_space_node,
+			optional_node<space>&& post_semicolon_space_node,
+			optional_node<expression>&& expression_node,
+			optional_node<space>&& post_expression_space_node,
+			optional_node<space>&& post_closing_bracket_space_node,
 			statement&& statement_node
 		);
 
@@ -72,16 +72,16 @@ class for_statement: public composite_node
 		void
 		update_node_list();
 
-		boost::optional<space> post_for_keyword_space_;
-		boost::optional<space> post_opening_bracket_space_;
-		boost::optional<for_init_statement> for_init_statement_;
-		boost::optional<space> post_for_init_statement_space_;
-		boost::optional<condition> condition_;
-		boost::optional<space> post_condition_space_;
-		boost::optional<space> post_semicolon_space_;
-		boost::optional<expression> expression_;
-		boost::optional<space> post_expression_space_;
-		boost::optional<space> post_closing_bracket_space_;
+		optional_node<space> post_for_keyword_space_;
+		optional_node<space> post_opening_bracket_space_;
+		optional_node<for_init_statement> for_init_statement_;
+		optional_node<space> post_for_init_statement_space_;
+		optional_node<condition> condition_;
+		optional_node<space> post_condition_space_;
+		optional_node<space> post_semicolon_space_;
+		optional_node<expression> expression_;
+		optional_node<space> post_expression_space_;
+		optional_node<space> post_closing_bracket_space_;
 		std::unique_ptr<statement> statement_;
 };
 

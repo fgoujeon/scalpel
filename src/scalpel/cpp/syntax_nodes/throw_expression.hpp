@@ -22,7 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_THROW_EXPRESSION_HPP
 
 #include <memory>
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "space.hpp"
 
@@ -41,8 +41,8 @@ class throw_expression: public composite_node
 	public:
 		throw_expression
 		(
-			boost::optional<space>&& pre_assignment_expression_space_node,
-			boost::optional<assignment_expression>&& assignment_expression_node
+			optional_node<space>&& pre_assignment_expression_space_node,
+			optional_node<assignment_expression>&& assignment_expression_node
 		);
 
 		throw_expression(const throw_expression& o);
@@ -56,7 +56,7 @@ class throw_expression: public composite_node
 		void
 		update_node_list();
 
-		boost::optional<space> pre_assignment_expression_space_;
+		optional_node<space> pre_assignment_expression_space_;
 		std::unique_ptr<assignment_expression> assignment_expression_;
 };
 

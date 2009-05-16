@@ -28,10 +28,10 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 mem_initializer::mem_initializer
 (
 	mem_initializer_id&& mem_initializer_id_node,
-	boost::optional<space>&& post_mem_initializer_id_space_node,
-	boost::optional<space>&& post_opening_bracket_space_node,
-	boost::optional<expression_list>&& expression_list_node,
-	boost::optional<space>&& post_expression_list_space_node
+	optional_node<space>&& post_mem_initializer_id_space_node,
+	optional_node<space>&& post_opening_bracket_space_node,
+	optional_node<expression_list>&& expression_list_node,
+	optional_node<space>&& post_expression_list_space_node
 ):
 	mem_initializer_id_(mem_initializer_id_node),
 	post_mem_initializer_id_space_(post_mem_initializer_id_space_node),

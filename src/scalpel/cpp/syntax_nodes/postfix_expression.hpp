@@ -91,8 +91,8 @@ class postfix_expression: public composite_node
 		postfix_expression
 		(
 			first_part&& first_part_node,
-			boost::optional<space>&& space_node,
-			boost::optional<last_part_seq>&& last_part_seq_node
+			optional_node<space>&& space_node,
+			optional_node<last_part_seq>&& last_part_seq_node
 		);
 
 		postfix_expression(const postfix_expression& o);
@@ -107,8 +107,8 @@ class postfix_expression: public composite_node
 		update_node_list();
 
 		first_part first_part_;
-		boost::optional<space> space_;
-		boost::optional<last_part_seq> last_part_seq_;
+		optional_node<space> space_;
+		optional_node<last_part_seq> last_part_seq_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_SWITCH_STATEMENT_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_SWITCH_STATEMENT_HPP
 
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "space.hpp"
 #include "condition.hpp"
@@ -42,11 +42,11 @@ class switch_statement: public composite_node
 	public:
 		switch_statement
 		(
-			boost::optional<space>&& post_switch_keyword_space_node,
-			boost::optional<space>&& post_opening_bracket_space_node,
+			optional_node<space>&& post_switch_keyword_space_node,
+			optional_node<space>&& post_opening_bracket_space_node,
 			condition&& condition_node,
-			boost::optional<space>&& post_condition_space_node,
-			boost::optional<space>&& post_closing_bracket_space_node,
+			optional_node<space>&& post_condition_space_node,
+			optional_node<space>&& post_closing_bracket_space_node,
 			statement&& statement_node
 		);
 
@@ -61,11 +61,11 @@ class switch_statement: public composite_node
 		void
 		update_node_list();
 
-		boost::optional<space> post_switch_keyword_space_;
-		boost::optional<space> post_opening_bracket_space_;
+		optional_node<space> post_switch_keyword_space_;
+		optional_node<space> post_opening_bracket_space_;
 		condition condition_;
-		boost::optional<space> post_condition_space_;
-		boost::optional<space> post_closing_bracket_space_;
+		optional_node<space> post_condition_space_;
+		optional_node<space> post_closing_bracket_space_;
 		std::unique_ptr<statement> statement_;
 };
 

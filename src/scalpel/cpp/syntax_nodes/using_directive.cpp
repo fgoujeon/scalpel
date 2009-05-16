@@ -27,14 +27,14 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 using_directive::using_directive
 (
-	boost::optional<space>&& post_using_keyword_space_node,
-	boost::optional<space>&& post_namespace_keyword_space_node,
+	optional_node<space>&& post_using_keyword_space_node,
+	optional_node<space>&& post_namespace_keyword_space_node,
 	bool leading_double_colon,
-	boost::optional<space>&& post_leading_double_colon_space_node,
-	boost::optional<nested_name_specifier>&& nested_name_specifier_node,
-	boost::optional<space>&& post_nested_name_specifier_space_node,
+	optional_node<space>&& post_leading_double_colon_space_node,
+	optional_node<nested_name_specifier>&& nested_name_specifier_node,
+	optional_node<space>&& post_nested_name_specifier_space_node,
 	identifier&& identifier_node,
-	boost::optional<space>&& post_identifier_space_node
+	optional_node<space>&& post_identifier_space_node
 ):
 	post_using_keyword_space_(post_using_keyword_space_node),
 	post_namespace_keyword_space_(post_namespace_keyword_space_node),

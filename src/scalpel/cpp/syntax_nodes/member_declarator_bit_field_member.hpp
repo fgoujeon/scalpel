@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_MEMBER_DECLARATOR_BIT_FIELD_MEMBER_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_MEMBER_DECLARATOR_BIT_FIELD_MEMBER_HPP
 
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "identifier.hpp"
 #include "space.hpp"
@@ -40,9 +40,9 @@ class member_declarator_bit_field_member: public composite_node
 	public:
 		member_declarator_bit_field_member
 		(
-			boost::optional<identifier>&& identifier_node,
-			boost::optional<space>&& post_identifier_space_node,
-			boost::optional<space>&& post_colon_space_node,
+			optional_node<identifier>&& identifier_node,
+			optional_node<space>&& post_identifier_space_node,
+			optional_node<space>&& post_colon_space_node,
 			conditional_expression&& conditional_expression_node
 		);
 
@@ -54,24 +54,24 @@ class member_declarator_bit_field_member: public composite_node
 		operator=(const member_declarator_bit_field_member& o);
 
 		inline
-		const boost::optional<const identifier&>
+		const optional_node<identifier>&
 		identifier_node() const;
 
 	private:
 		void
 		update_node_list();
 
-		boost::optional<identifier> identifier_;
-		boost::optional<space> post_identifier_space_;
-		boost::optional<space> post_colon_space_;
+		optional_node<identifier> identifier_;
+		optional_node<space> post_identifier_space_;
+		optional_node<space> post_colon_space_;
 		conditional_expression conditional_expression_;
 };
 
 inline
-const boost::optional<const identifier&>
+const optional_node<identifier>&
 member_declarator_bit_field_member::identifier_node() const
 {
-	return boost::optional<const identifier&>(identifier_);
+	return identifier_;
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

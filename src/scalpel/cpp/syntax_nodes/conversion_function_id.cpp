@@ -27,10 +27,10 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 conversion_function_id::conversion_function_id
 (
-	boost::optional<space>&& post_operator_keyword_space_node,
+	optional_node<space>&& post_operator_keyword_space_node,
 	type_specifier_seq&& type_specifier_seq_node,
-	boost::optional<space>&& pre_ptr_operator_seq_space_node,
-	boost::optional<ptr_operator_seq>&& ptr_operator_seq_node
+	optional_node<space>&& pre_ptr_operator_seq_space_node,
+	optional_node<ptr_operator_seq>&& ptr_operator_seq_node
 ):
 	post_operator_keyword_space_(post_operator_keyword_space_node),
 	type_specifier_seq_(type_specifier_seq_node),

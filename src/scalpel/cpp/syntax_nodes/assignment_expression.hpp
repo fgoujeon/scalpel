@@ -60,8 +60,8 @@ class assignment_expression: public composite_node
 
         assignment_expression
         (
-			boost::optional<first_part_seq>&& first_part_seq_node,
-			boost::optional<space>&& space_node,
+			optional_node<first_part_seq>&& first_part_seq_node,
+			optional_node<space>&& space_node,
 			conditional_or_throw_expression&& conditional_or_throw_expression_node
         );
 
@@ -76,8 +76,8 @@ class assignment_expression: public composite_node
 		void
 		update_node_list();
 
-		boost::optional<first_part_seq> first_part_seq_;
-		boost::optional<space> space_;
+		optional_node<first_part_seq> first_part_seq_;
+		optional_node<space> space_;
 		conditional_or_throw_expression conditional_or_throw_expression_;
 };
 
@@ -87,7 +87,7 @@ class assignment_expression::first_part: public composite_node
         first_part
         (
 			logical_or_expression&& logical_or_expression_node,
-			boost::optional<space>&& space_node,
+			optional_node<space>&& space_node,
             assignment_operator&& assignment_operator_node
         );
 
@@ -109,7 +109,7 @@ class assignment_expression::first_part: public composite_node
 		update_node_list();
 
 		logical_or_expression* logical_or_expression_;
-		boost::optional<space> space_;
+		optional_node<space> space_;
         assignment_operator assignment_operator_;
 };
 

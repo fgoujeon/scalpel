@@ -25,9 +25,9 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 translation_unit::translation_unit
 (
-	boost::optional<space>&& first_space_node,
-	boost::optional<declaration_seq>&& declaration_seq_node,
-	boost::optional<space>&& post_declaration_seq_node
+	optional_node<space>&& first_space_node,
+	optional_node<declaration_seq>&& declaration_seq_node,
+	optional_node<space>&& post_declaration_seq_node
 ):
 	first_space_(first_space_node),
 	declaration_seq_(declaration_seq_node),

@@ -26,8 +26,8 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 parameter_declaration::parameter_declaration
 (
 	decl_specifier_seq&& a_decl_specifier_seq,
-	boost::optional<space>&& pre_declarator_space_node,
-	boost::optional<declarator>&& a_declarator,
+	optional_node<space>&& pre_declarator_space_node,
+	optional_node<declarator>&& a_declarator,
 	bool equal
 ):
 	decl_specifier_seq_(a_decl_specifier_seq),

@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_HANDLER_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_HANDLER_HPP
 
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "compound_statement.hpp"
 #include "space.hpp"
@@ -40,11 +40,11 @@ class handler: public composite_node
 	public:
 		handler
 		(
-			boost::optional<space>&& post_catch_keyword_space_node,
-			boost::optional<space>&& post_opening_bracket_space_node,
+			optional_node<space>&& post_catch_keyword_space_node,
+			optional_node<space>&& post_opening_bracket_space_node,
 			exception_declaration&& exception_declaration_node,
-			boost::optional<space>&& post_exception_declaration_space_node,
-			boost::optional<space>&& post_closing_bracket_space_node,
+			optional_node<space>&& post_exception_declaration_space_node,
+			optional_node<space>&& post_closing_bracket_space_node,
 			compound_statement&& compound_statement_node
 		);
 
@@ -63,11 +63,11 @@ class handler: public composite_node
 		void
 		update_node_list();
 
-		boost::optional<space> post_catch_keyword_space_;
-		boost::optional<space> post_opening_bracket_space_;
+		optional_node<space> post_catch_keyword_space_;
+		optional_node<space> post_opening_bracket_space_;
 		exception_declaration exception_declaration_;
-		boost::optional<space> post_exception_declaration_space_;
-		boost::optional<space> post_closing_bracket_space_;
+		optional_node<space> post_exception_declaration_space_;
+		optional_node<space> post_closing_bracket_space_;
 		compound_statement compound_statement_;
 };
 

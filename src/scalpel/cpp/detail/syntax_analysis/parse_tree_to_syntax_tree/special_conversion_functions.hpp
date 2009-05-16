@@ -50,7 +50,7 @@ convert_sequence(const tree_node_t& node)
 
 	if(ContainerT::separator_node.raw_code() == syntax_nodes::common_nodes::empty.raw_code())
 	{
-		boost::optional<syntax_nodes::space> space_node;
+		syntax_nodes::optional_node<syntax_nodes::space> space_node;
 		for(tree_node_iterator_t i = node.children.begin(); i != node.children.end(); ++i) //for each child node
 		{
 			const tree_node_t& child_node = *i;
@@ -65,20 +65,20 @@ convert_sequence(const tree_node_t& node)
 				typename ContainerT::item item
 				(
 					space_node,
-					boost::optional<syntax_nodes::space>(),
+					syntax_nodes::optional_node<syntax_nodes::space>(),
 					convert_node<typename ContainerT::type>(child_node)
 				);
 				seq.push_back(item);
 
 				//clear space node
-				space_node = boost::optional<syntax_nodes::space>();
+				space_node = syntax_nodes::optional_node<syntax_nodes::space>();
 			}
 		}
 	}
 	else
 	{
-		boost::optional<syntax_nodes::space> pre_separator_space;
-		boost::optional<syntax_nodes::space> post_separator_space;
+		syntax_nodes::optional_node<syntax_nodes::space> pre_separator_space;
+		syntax_nodes::optional_node<syntax_nodes::space> post_separator_space;
 		bool will_read_post_separator_space = false;
 		for(tree_node_iterator_t i = node.children.begin(); i != node.children.end(); ++i) //for each child node
 		{
@@ -112,8 +112,8 @@ convert_sequence(const tree_node_t& node)
 				);
 				seq.push_back(item);
 
-				pre_separator_space = boost::optional<syntax_nodes::space>();
-				post_separator_space = boost::optional<syntax_nodes::space>();
+				pre_separator_space = syntax_nodes::optional_node<syntax_nodes::space>();
+				post_separator_space = syntax_nodes::optional_node<syntax_nodes::space>();
 				will_read_post_separator_space = false;
 			}
 		}
@@ -169,13 +169,13 @@ convert_alternative(const tree_node_t& node)
 
 
 template<class T>
-boost::optional<T>
+syntax_nodes::optional_node<T>
 convert_optional(const tree_node_t& parent_node, const tree_node_iterator_t& it)
 {
 	if(it != parent_node.children.end())
 		return convert_node<T>(*it);
 	else
-		return boost::optional<T>();
+		return syntax_nodes::optional_node<T>();
 }
 
 
@@ -262,7 +262,7 @@ template<const syntax_nodes::leaf_node& OpeningBracketNode, class SyntaxNodeT, c
 syntax_nodes::bracketed_node<OpeningBracketNode, SyntaxNodeT, ClosingBracketNode>
 convert_bracketed_node(tree_node_iterator_t it)
 {
-	boost::optional<syntax_nodes::space> post_opening_bracket_space_node;
+	syntax_nodes::optional_node<syntax_nodes::space> post_opening_bracket_space_node;
 	++it;
 	if(it->value.id() == id_t::SPACE)
 	{
@@ -272,7 +272,7 @@ convert_bracketed_node(tree_node_iterator_t it)
 
 	SyntaxNodeT main_node = convert_node<SyntaxNodeT>(*it);
 
-	boost::optional<syntax_nodes::space> post_main_space_node;
+	syntax_nodes::optional_node<syntax_nodes::space> post_main_space_node;
 	++it;
 	if(it->value.id() == id_t::SPACE)
 	{

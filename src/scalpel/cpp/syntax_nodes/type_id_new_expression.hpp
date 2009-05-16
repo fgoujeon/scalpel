@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_TYPE_ID_NEW_EXPRESION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_TYPE_ID_NEW_EXPRESION_HPP
 
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "space.hpp"
 #include "new_placement.hpp"
@@ -42,15 +42,15 @@ class type_id_new_expression: public composite_node
 		type_id_new_expression
 		(
 			bool leading_double_colon,
-			boost::optional<space>&& post_double_colon_space_node,
-			boost::optional<space>&& post_new_keyword_space_node,
-			boost::optional<new_placement>&& new_placement_node,
-			boost::optional<space>&& post_new_placement_space_node,
-			boost::optional<space>&& post_opening_bracket_space_node,
+			optional_node<space>&& post_double_colon_space_node,
+			optional_node<space>&& post_new_keyword_space_node,
+			optional_node<new_placement>&& new_placement_node,
+			optional_node<space>&& post_new_placement_space_node,
+			optional_node<space>&& post_opening_bracket_space_node,
 			type_id&& type_id_node,
-			boost::optional<space>&& post_type_id_space_node,
-			boost::optional<space>&& pre_new_initializer_space_node,
-			boost::optional<new_initializer>&& new_initializer_node
+			optional_node<space>&& post_type_id_space_node,
+			optional_node<space>&& pre_new_initializer_space_node,
+			optional_node<new_initializer>&& new_initializer_node
 		);
 
 		type_id_new_expression(const type_id_new_expression& o);
@@ -65,15 +65,15 @@ class type_id_new_expression: public composite_node
 		update_node_list();
 
 		bool leading_double_colon_;
-		boost::optional<space> post_double_colon_space_;
-		boost::optional<space> post_new_keyword_space_;
-		boost::optional<new_placement> new_placement_;
-		boost::optional<space> post_new_placement_space_;
-		boost::optional<space> post_opening_bracket_space_;
+		optional_node<space> post_double_colon_space_;
+		optional_node<space> post_new_keyword_space_;
+		optional_node<new_placement> new_placement_;
+		optional_node<space> post_new_placement_space_;
+		optional_node<space> post_opening_bracket_space_;
 		type_id type_id_;
-		boost::optional<space> post_type_id_space_;
-		boost::optional<space> pre_new_initializer_space_;
-		boost::optional<new_initializer> new_initializer_;
+		optional_node<space> post_type_id_space_;
+		optional_node<space> pre_new_initializer_space_;
+		optional_node<new_initializer> new_initializer_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

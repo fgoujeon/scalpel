@@ -23,6 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <algorithm>
 #include <functional>
 #include <iostream>
+#include <boost/optional.hpp>
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace name_lookup
 {

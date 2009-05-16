@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_TYPE_ID_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_TYPE_ID_HPP
 
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "type_specifier_seq.hpp"
 #include "space.hpp"
@@ -41,8 +41,8 @@ class type_id: public composite_node
 		type_id
 		(
 			type_specifier_seq&& type_specifier_seq_node,
-			boost::optional<space>&& pre_abstract_declarator_space_node,
-			boost::optional<abstract_declarator>&& abstract_declarator_node
+			optional_node<space>&& pre_abstract_declarator_space_node,
+			optional_node<abstract_declarator>&& abstract_declarator_node
 		);
 
 		type_id(const type_id& o);
@@ -57,8 +57,8 @@ class type_id: public composite_node
 		update_node_list();
 
 		type_specifier_seq type_specifier_seq_;
-		boost::optional<space> pre_abstract_declarator_space_;
-		boost::optional<abstract_declarator> abstract_declarator_;
+		optional_node<space> pre_abstract_declarator_space_;
+		optional_node<abstract_declarator> abstract_declarator_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

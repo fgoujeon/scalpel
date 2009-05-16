@@ -26,8 +26,8 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 new_type_id::new_type_id
 (
 	type_specifier_seq&& type_specifier_seq_node,
-	boost::optional<space>&& pre_new_declarator_space_node,
-	boost::optional<new_declarator>&& new_declarator_node
+	optional_node<space>&& pre_new_declarator_space_node,
+	optional_node<new_declarator>&& new_declarator_node
 ):
 	type_specifier_seq_(type_specifier_seq_node),
 	pre_new_declarator_space_(pre_new_declarator_space_node),

@@ -26,14 +26,14 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 class_head::class_head
 (
 	class_key&& class_key_node,
-	boost::optional<space>&& pre_nested_name_specifier_space_node,
-	boost::optional<nested_name_specifier>&& nested_name_specifier_node,
-	boost::optional<space>&& pre_template_id_space_node,
-	boost::optional<template_id>&& template_id_node,
-	boost::optional<space>&& pre_identifier_space_node,
-	boost::optional<identifier>&& identifier_node,
-	boost::optional<space>&& pre_base_clause_space_node,
-	boost::optional<base_clause>&& base_clause_node
+	optional_node<space>&& pre_nested_name_specifier_space_node,
+	optional_node<nested_name_specifier>&& nested_name_specifier_node,
+	optional_node<space>&& pre_template_id_space_node,
+	optional_node<template_id>&& template_id_node,
+	optional_node<space>&& pre_identifier_space_node,
+	optional_node<identifier>&& identifier_node,
+	optional_node<space>&& pre_base_clause_space_node,
+	optional_node<base_clause>&& base_clause_node
 ):
 	class_key_(class_key_node),
 	pre_nested_name_specifier_space_(pre_nested_name_specifier_space_node),

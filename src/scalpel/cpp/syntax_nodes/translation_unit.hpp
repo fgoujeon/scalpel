@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_TRANSLATION_UNIT_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_TRANSLATION_UNIT_HPP
 
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "space.hpp"
 #include "declaration_seq.hpp"
@@ -41,9 +41,9 @@ class translation_unit: public composite_node
 	public:
 		translation_unit
 		(
-			boost::optional<space>&& first_space_node,
-			boost::optional<declaration_seq>&& declaration_seq_node,
-			boost::optional<space>&& post_declaration_seq_node
+			optional_node<space>&& first_space_node,
+			optional_node<declaration_seq>&& declaration_seq_node,
+			optional_node<space>&& post_declaration_seq_node
 		);
 
 		translation_unit(const translation_unit& o);
@@ -54,23 +54,23 @@ class translation_unit: public composite_node
 		operator=(const translation_unit& o);
 
 		inline
-		const boost::optional<const declaration_seq&>
+		const optional_node<declaration_seq>&
 		declaration_seq_node() const;
 
 	private:
 		void
 		update_node_list();
 
-		boost::optional<space> first_space_;
-		boost::optional<declaration_seq> declaration_seq_;
-		boost::optional<space> post_declaration_seq_;
+		optional_node<space> first_space_;
+		optional_node<declaration_seq> declaration_seq_;
+		optional_node<space> post_declaration_seq_;
 };
 
 inline
-const boost::optional<const declaration_seq&>
+const optional_node<declaration_seq>&
 translation_unit::declaration_seq_node() const
 {
-	return boost::optional<const declaration_seq&>(declaration_seq_);
+	return declaration_seq_;
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

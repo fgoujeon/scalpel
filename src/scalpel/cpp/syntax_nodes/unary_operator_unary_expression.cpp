@@ -28,7 +28,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 unary_operator_unary_expression::unary_operator_unary_expression
 (
 	unary_operator&& unary_operator_node,
-	boost::optional<space>&& space_node,
+	optional_node<space>&& space_node,
 	cast_expression&& cast_expression_node
 ):
 	unary_operator_(unary_operator_node),

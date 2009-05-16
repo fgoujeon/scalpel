@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_BASE_CLAUSE_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_BASE_CLAUSE_HPP
 
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "base_specifier_list.hpp"
 
@@ -40,7 +40,7 @@ class base_clause: public composite_node
     public:
         base_clause
 		(
-			boost::optional<space>&& space_node,
+			optional_node<space>&& space_node,
 			base_specifier_list&& a_base_specifier_list
 		);
 
@@ -52,7 +52,7 @@ class base_clause: public composite_node
 		operator=(const base_clause& o);
 
 		inline
-		const boost::optional<const space&>
+		const optional_node<space>&
 		space_node() const;
 
         inline
@@ -63,15 +63,15 @@ class base_clause: public composite_node
 		void
 		update_node_list();
 
-		boost::optional<space> space_;
+		optional_node<space> space_;
 		base_specifier_list base_specifier_list_;
 };
 
 inline
-const boost::optional<const space&>
+const optional_node<space>&
 base_clause::space_node() const
 {
-	return boost::optional<const space&>(space_);
+	return space_;
 }
 
 inline

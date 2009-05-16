@@ -27,7 +27,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 continue_statement::continue_statement
 (
-	boost::optional<space>&& space_node
+	optional_node<space>&& space_node
 ):
 	space_(space_node)
 {

@@ -27,13 +27,13 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 direct_new_declarator::direct_new_declarator
 (
-	boost::optional<space>&& post_first_opening_bracket_space_node,
+	optional_node<space>&& post_first_opening_bracket_space_node,
 	expression&& expression_node,
-	boost::optional<space>&& post_expression_space_node,
-	boost::optional<space>&& post_first_closing_bracket_space_node,
-	boost::optional<space>&& post_second_opening_bracket_space_node,
-	boost::optional<conditional_expression>&& conditional_expression_node,
-	boost::optional<space>&& post_conditional_expression_space_node
+	optional_node<space>&& post_expression_space_node,
+	optional_node<space>&& post_first_closing_bracket_space_node,
+	optional_node<space>&& post_second_opening_bracket_space_node,
+	optional_node<conditional_expression>&& conditional_expression_node,
+	optional_node<space>&& post_conditional_expression_space_node
 ):
 	post_first_opening_bracket_space_(post_first_opening_bracket_space_node),
 	expression_(expression_node),

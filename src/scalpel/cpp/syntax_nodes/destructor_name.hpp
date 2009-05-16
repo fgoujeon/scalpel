@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_DESTRUCTOR_NAME_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_DESTRUCTOR_NAME_HPP
 
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "identifier_or_template_id.hpp"
 #include "space.hpp"
@@ -39,7 +39,7 @@ class destructor_name: public composite_node
 	public:
 		destructor_name
 		(
-			boost::optional<space>&& post_tilde_space_node,
+			optional_node<space>&& post_tilde_space_node,
 			identifier_or_template_id&& identifier_or_template_id_node
 		);
 
@@ -58,7 +58,7 @@ class destructor_name: public composite_node
 		void
 		update_node_list();
 
-		boost::optional<space> post_tilde_space_;
+		optional_node<space> post_tilde_space_;
 		identifier_or_template_id identifier_or_template_id_;
 };
 

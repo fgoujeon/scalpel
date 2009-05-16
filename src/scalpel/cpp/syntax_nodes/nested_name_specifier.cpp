@@ -26,9 +26,9 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 nested_name_specifier::nested_name_specifier
 (
 	identifier_or_template_id&& an_identifier_or_template_id,
-	boost::optional<space>&& post_identifier_or_template_id_space_node,
-	boost::optional<space>&& pre_last_part_seq_space_node,
-	boost::optional<last_part_seq>&& a_last_part_seq
+	optional_node<space>&& post_identifier_or_template_id_space_node,
+	optional_node<space>&& pre_last_part_seq_space_node,
+	optional_node<last_part_seq>&& a_last_part_seq
 ):
 	identifier_or_template_id_(std::move(an_identifier_or_template_id)),
 	post_identifier_or_template_id_space_(post_identifier_or_template_id_space_node),

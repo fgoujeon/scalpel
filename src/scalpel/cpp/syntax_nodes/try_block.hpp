@@ -39,9 +39,9 @@ class try_block: public composite_node
 	public:
 		try_block
 		(
-			boost::optional<space>&& post_try_keyword_space_node,
+			optional_node<space>&& post_try_keyword_space_node,
 			compound_statement&& compound_statement_node,
-			boost::optional<space>&& post_compound_statement_space_node,
+			optional_node<space>&& post_compound_statement_space_node,
 			handler_seq&& handler_seq_node
 		);
 
@@ -64,9 +64,9 @@ class try_block: public composite_node
 		void
 		update_node_list();
 
-		boost::optional<space> post_try_keyword_space_;
+		optional_node<space> post_try_keyword_space_;
 		compound_statement compound_statement_;
-		boost::optional<space> post_compound_statement_space_;
+		optional_node<space> post_compound_statement_space_;
 		handler_seq handler_seq_;
 };
 

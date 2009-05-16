@@ -27,9 +27,9 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 bracketed_declarator::bracketed_declarator
 (
-	boost::optional<space>&& post_opening_bracket_space_node,
+	optional_node<space>&& post_opening_bracket_space_node,
 	declarator&& declarator_node,
-	boost::optional<space>&& post_declarator_space_node
+	optional_node<space>&& post_declarator_space_node
 ):
 	post_opening_bracket_space_(post_opening_bracket_space_node),
 	declarator_(declarator_node),

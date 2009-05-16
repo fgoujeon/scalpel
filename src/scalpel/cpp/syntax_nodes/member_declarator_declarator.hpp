@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_MEMBER_DECLARATOR_DECLARATOR_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_MEMBER_DECLARATOR_DECLARATOR_HPP
 
-#include <boost/optional.hpp>
+#include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "declarator.hpp"
 

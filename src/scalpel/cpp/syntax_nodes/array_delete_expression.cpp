@@ -29,10 +29,10 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 array_delete_expression::array_delete_expression
 (
 	bool leading_double_colon,
-	boost::optional<space>&& post_double_colon_space_node,
-	boost::optional<space>&& post_delete_keyword_space_node,
-	boost::optional<space>&& post_opening_bracket_space_node,
-	boost::optional<space>&& post_closing_bracket_space_node,
+	optional_node<space>&& post_double_colon_space_node,
+	optional_node<space>&& post_delete_keyword_space_node,
+	optional_node<space>&& post_opening_bracket_space_node,
+	optional_node<space>&& post_closing_bracket_space_node,
 	cast_expression&& cast_expression_node
 ):
 	leading_double_colon_(leading_double_colon),

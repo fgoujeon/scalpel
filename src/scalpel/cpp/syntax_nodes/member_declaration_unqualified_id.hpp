@@ -41,13 +41,13 @@ class member_declaration_unqualified_id: public composite_node
 		member_declaration_unqualified_id
 		(
 			bool leading_double_colon,
-			boost::optional<space>&& post_double_colon_space_node,
+			optional_node<space>&& post_double_colon_space_node,
 			nested_name_specifier&& nested_name_specifier_node,
-			boost::optional<space>&& post_nested_name_specifier_space_node,
+			optional_node<space>&& post_nested_name_specifier_space_node,
 			bool template_keyword,
-			boost::optional<space>&& post_template_keyword_space_node,
+			optional_node<space>&& post_template_keyword_space_node,
 			unqualified_id&& unqualified_id_node,
-			boost::optional<space>&& post_unqualified_id_space_node
+			optional_node<space>&& post_unqualified_id_space_node
 		);
 
 		member_declaration_unqualified_id(const member_declaration_unqualified_id& o);
@@ -78,13 +78,13 @@ class member_declaration_unqualified_id: public composite_node
 		update_node_list();
 
 		bool leading_double_colon_;
-		boost::optional<space> post_double_colon_space_;
+		optional_node<space> post_double_colon_space_;
 		nested_name_specifier nested_name_specifier_;
-		boost::optional<space> post_nested_name_specifier_space_;
+		optional_node<space> post_nested_name_specifier_space_;
 		bool template_keyword_;
-		boost::optional<space> post_template_keyword_space_;
+		optional_node<space> post_template_keyword_space_;
 		unqualified_id unqualified_id_;
-		boost::optional<space> post_unqualified_id_space_;
+		optional_node<space> post_unqualified_id_space_;
 };
 
 inline

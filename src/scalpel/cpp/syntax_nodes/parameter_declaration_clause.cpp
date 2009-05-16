@@ -25,7 +25,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 parameter_declaration_clause::parameter_declaration_clause
 (
-	boost::optional<parameter_declaration_list>&& a_parameter_declaration_list,
+	optional_node<parameter_declaration_list>&& a_parameter_declaration_list,
 	bool trailing_comma,
 	bool ellipsis
 ):
