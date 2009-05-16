@@ -70,6 +70,11 @@ Calls the convert_* function corresponding to the given syntax node type.
 template<class T>
 struct node_converter_from_type;
 
+template<class SyntaxNodeT>
+inline
+SyntaxNodeT
+convert_node(const tree_node_t& node);
+
 //specialization for sequences
 template<class T>
 struct node_converter_from_type
@@ -79,6 +84,18 @@ struct node_converter_from_type
 	convert(const tree_node_t& node)
 	{
 		return convert_sequence<T>(node);
+	}
+};
+
+//specialization for optional nodes
+template<class T>
+struct node_converter_from_type<syntax_nodes::optional_node<T>>
+{
+	static
+	T
+	convert(const tree_node_t& node)
+	{
+		return convert_node<T>(node);
 	}
 };
 
@@ -816,8 +833,8 @@ SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
 (
 	BRACKETED_EXPRESSION_LIST,
-	bracketed_expression_list,
-	bracketed_expression_list
+	round_bracketed_node<syntax_nodes::optional_node<syntax_nodes::expression_list>>::type,
+	round_bracketed_node<syntax_nodes::optional_node<syntax_nodes::expression_list>>
 )
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
 (

@@ -255,22 +255,6 @@ convert_bracketed_declarator(const tree_node_t& node)
 	);
 }
 
-bracketed_expression_list
-convert_bracketed_expression_list(const tree_node_t& node)
-{
-	assert(node.value.id() == id_t::BRACKETED_EXPRESSION_LIST);
-
-	tree_node_iterator_t opening_bracket_it = node.children.begin();
-	tree_node_iterator_t expression_list_it = find_node<id_t::EXPRESSION_LIST>(node);
-
-	return bracketed_expression_list
-	(
-		convert_next_space(node, opening_bracket_it),
-		convert_optional<expression_list>(node, expression_list_it),
-		convert_next_space(node, expression_list_it)
-	);
-}
-
 bracketed_initializer
 convert_bracketed_initializer(const tree_node_t& node)
 {

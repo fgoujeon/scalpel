@@ -34,12 +34,12 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "const_cast_expression.hpp"
 #include "typeid_expression.hpp"
 #include "type_id_typeid_expression.hpp"
-#include "bracketed_expression_list.hpp"
 #include "dot_id_expression.hpp"
 #include "arrow_id_expression.hpp"
 #include "dot_pseudo_destructor_name.hpp"
 #include "arrow_pseudo_destructor_name.hpp"
 #include "simple_text_node.hpp"
+#include "expression_list.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -75,7 +75,7 @@ class postfix_expression: public composite_node
 			alternative_node
 			<
 				square_bracketed_node<expression>::type,
-				bracketed_expression_list,
+				round_bracketed_node<optional_node<expression_list>>::type,
 				dot_id_expression,
 				arrow_id_expression,
 				dot_pseudo_destructor_name,
