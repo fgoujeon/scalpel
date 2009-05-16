@@ -86,7 +86,7 @@ class postfix_expression: public composite_node
 			last_part
 		;
 
-		typedef sequence_node<last_part> last_part_seq;
+		typedef list_node<last_part> last_part_seq;
 
 		postfix_expression
 		(

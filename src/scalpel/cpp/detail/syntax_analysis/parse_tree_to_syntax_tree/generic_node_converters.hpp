@@ -83,7 +83,7 @@ struct node_converter_from_type
 	T
 	convert(const tree_node_t& node)
 	{
-		return convert_sequence<T>(node);
+		return convert_list_node<T>(node);
 	}
 };
 
@@ -325,7 +325,7 @@ SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
 (
 	EXPRESSION,
 	expression,
-	sequence<syntax_nodes::expression>
+	list_node<syntax_nodes::expression>
 )
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
 (
@@ -954,7 +954,7 @@ SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
 (
 	TYPE_SPECIFIER_SEQ,
 	type_specifier_seq,
-	sequence<syntax_nodes::type_specifier_seq>
+	list_node<syntax_nodes::type_specifier_seq>
 )
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
 (
@@ -966,7 +966,7 @@ SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
 (
 	PTR_OPERATOR_SEQ,
 	ptr_operator_seq,
-	sequence<syntax_nodes::ptr_operator_seq>
+	list_node<syntax_nodes::ptr_operator_seq>
 )
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
 (

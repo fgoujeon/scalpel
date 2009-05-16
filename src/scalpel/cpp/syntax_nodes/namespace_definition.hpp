@@ -26,13 +26,13 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "identifier.hpp"
-#include "sequence_node.hpp"
+#include "list_node.hpp"
 #include "declaration_fwd.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-typedef sequence_node<declaration> declaration_seq;
+typedef list_node<declaration> declaration_seq;
 
 /**
 namespace_definition
@@ -64,7 +64,7 @@ class namespace_definition: public composite_node
 	   	identifier_node() const;
 
 		inline
-		const optional_node<sequence_node<declaration>>&
+		const optional_node<list_node<declaration>>&
 		declaration_seq_node() const;
 
 	private:
@@ -87,7 +87,7 @@ namespace_definition::identifier_node() const
 }
 
 inline
-const optional_node<sequence_node<declaration>>&
+const optional_node<list_node<declaration>>&
 namespace_definition::declaration_seq_node() const
 {
 	return *declaration_seq_;

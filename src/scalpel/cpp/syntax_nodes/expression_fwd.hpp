@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_EXPRESSION_FWD_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_EXPRESSION_FWD_HPP
 
-#include "sequence_node.hpp"
+#include "list_node.hpp"
 #include "common_nodes.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
@@ -29,7 +29,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 class assignment_expression;
 
-typedef sequence_node<assignment_expression, common_nodes::comma> expression;
+typedef list_node<assignment_expression, common_nodes::comma> expression;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

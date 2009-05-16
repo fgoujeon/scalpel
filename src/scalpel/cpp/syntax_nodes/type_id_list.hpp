@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_TYPE_ID_LIST_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_TYPE_ID_LIST_HPP
 
-#include "sequence_node.hpp"
+#include "list_node.hpp"
 #include "type_id.hpp"
 #include "common_nodes.hpp"
 
@@ -29,7 +29,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 typedef
-	sequence_node<type_id, common_nodes::comma>
+	list_node<type_id, common_nodes::comma>
 	type_id_list
 ;
 

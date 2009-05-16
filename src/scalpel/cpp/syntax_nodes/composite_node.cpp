@@ -50,6 +50,12 @@ composite_node::add(const node& a_node)
 }
 
 void
+composite_node::push_front(const node& n)
+{
+	nodes_.push_front(&n);
+}
+
+void
 composite_node::clear()
 {
 	nodes_.clear();

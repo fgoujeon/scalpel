@@ -34,7 +34,7 @@ class nested_name_specifier: public composite_node
 	public:
 		class last_part;
 
-		typedef sequence_node<last_part> last_part_seq;
+		typedef list_node<last_part> last_part_seq;
 
 		nested_name_specifier
 		(

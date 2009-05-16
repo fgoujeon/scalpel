@@ -22,14 +22,14 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_BASE_SPECIFIER_LIST_HPP
 
 #include "../../util/extern_strings.hpp"
-#include "sequence_node.hpp"
+#include "list_node.hpp"
 #include "base_specifier.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 typedef
-	sequence_node<base_specifier, common_nodes::comma>
+	list_node<base_specifier, common_nodes::comma>
 	base_specifier_list
 ;
 

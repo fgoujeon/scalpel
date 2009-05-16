@@ -22,14 +22,14 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_PARAMETER_DECLARATION_LIST_HPP
 
 #include "../../util/extern_strings.hpp"
-#include "sequence_node.hpp"
+#include "list_node.hpp"
 #include "parameter_declaration.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 typedef
-	sequence_node<parameter_declaration, common_nodes::comma>
+	list_node<parameter_declaration, common_nodes::comma>
    	parameter_declaration_list
 ;
 

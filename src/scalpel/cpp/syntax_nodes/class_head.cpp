@@ -43,7 +43,7 @@ class_head::class_head
 	pre_identifier_space_(pre_identifier_space_node),
 	identifier_(identifier_node),
 	pre_base_clause_space_(pre_base_clause_space_node),
-	base_clause_(base_clause_node)
+	base_clause_(std::move(base_clause_node))
 {
 	update_node_list();
 }

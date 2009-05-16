@@ -27,6 +27,7 @@ namespace extern_strings
 {
     const std::string ampersand("&");
     const std::string circumflex("^");
+    const std::string colon(":");
     const std::string comma(",");
     const std::string double_ampersand("&&");
     const std::string double_minus("--");

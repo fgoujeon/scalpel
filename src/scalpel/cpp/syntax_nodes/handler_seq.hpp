@@ -21,14 +21,14 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_HANDLER_SEQ_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_HANDLER_SEQ_HPP
 
-#include "sequence_node.hpp"
+#include "list_node.hpp"
 #include "handler.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 typedef
-	sequence_node<handler>
+	list_node<handler>
 	handler_seq
 ;
 

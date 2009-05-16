@@ -24,7 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <memory>
 #include "optional_node.hpp"
 #include "composite_node.hpp"
-#include "sequence_node.hpp"
+#include "list_node.hpp"
 #include "space.hpp"
 #include "statement_fwd.hpp"
 
@@ -44,7 +44,7 @@ class compound_statement: public composite_node
 		compound_statement
 		(
 			optional_node<space>&& post_opening_brace_space,
-			optional_node<sequence_node<statement>>&& statement_seq_node,
+			optional_node<list_node<statement>>&& statement_seq_node,
 			optional_node<space>&& post_statement_seq_space
 		);
 
@@ -58,7 +58,7 @@ class compound_statement: public composite_node
 		operator=(const compound_statement& o);
 
 		inline
-		const optional_node<sequence_node<statement>>&
+		const optional_node<list_node<statement>>&
 		statement_seq_node() const;
 
 	private:
@@ -66,12 +66,12 @@ class compound_statement: public composite_node
 		update_node_list();
 
 		optional_node<space> post_opening_brace_space_;
-		optional_node<sequence_node<statement>>* statement_seq_;
+		optional_node<list_node<statement>>* statement_seq_;
 		optional_node<space> post_statement_seq_space_;
 };
 
 inline
-const optional_node<sequence_node<statement>>&
+const optional_node<list_node<statement>>&
 compound_statement::statement_seq_node() const
 {
 	return *statement_seq_;

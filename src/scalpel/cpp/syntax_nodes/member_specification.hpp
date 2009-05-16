@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_MEMBER_SPECIFICATION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_MEMBER_SPECIFICATION_HPP
 
-#include "sequence_node.hpp"
+#include "list_node.hpp"
 #include "alternative_node.hpp"
 #include "member_declaration.hpp"
 #include "member_specification_access_specifier.hpp"
@@ -39,7 +39,7 @@ typedef
 ;
 
 typedef
-	sequence_node<member_specification_part>
+	list_node<member_specification_part>
 	member_specification_t
 ;
 

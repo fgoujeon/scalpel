@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_EXPRESSION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_EXPRESSION_HPP
 
-#include "sequence_node.hpp"
+#include "list_node.hpp"
 #include "common_nodes.hpp"
 #include "assignment_expression.hpp"
 #include "expression_fwd.hpp"

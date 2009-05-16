@@ -22,14 +22,14 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_MEM_INITIALIZER_LIST_HPP
 
 #include "../../util/extern_strings.hpp"
-#include "sequence_node.hpp"
+#include "list_node.hpp"
 #include "mem_initializer.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 typedef
-    sequence_node<mem_initializer, common_nodes::comma>
+    list_node<mem_initializer, common_nodes::comma>
     mem_initializer_list
 ;
 

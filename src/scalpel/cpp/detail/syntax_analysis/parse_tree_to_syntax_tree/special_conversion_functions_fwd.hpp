@@ -43,7 +43,7 @@ be of the same type.
 */
 template<class ContainerT>
 ContainerT
-convert_sequence(const tree_node_t& node);
+convert_list_node(const tree_node_t& node);
 
 template<class SyntaxNodeT, int... Ids>
 inline

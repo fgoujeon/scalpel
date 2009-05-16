@@ -30,6 +30,7 @@ namespace extern_strings
 {
     extern const std::string ampersand;
     extern const std::string circumflex;
+    extern const std::string colon;
     extern const std::string comma;
     extern const std::string double_ampersand;
     extern const std::string double_minus;

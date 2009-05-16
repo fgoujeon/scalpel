@@ -44,7 +44,7 @@ convert_string_enumeration(const tree_node_t& node)
 
 template<class ContainerT>
 ContainerT
-convert_sequence(const tree_node_t& node)
+convert_list_node(const tree_node_t& node)
 {
 	ContainerT seq;
 

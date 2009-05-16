@@ -21,14 +21,14 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_CV_QUALIFIER_SEQ_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_CV_QUALIFIER_SEQ_HPP
 
-#include "sequence_node.hpp"
+#include "list_node.hpp"
 #include "cv_qualifier.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 typedef
-	sequence_node<cv_qualifier>
+	list_node<cv_qualifier>
    	cv_qualifier_seq
 ;
 

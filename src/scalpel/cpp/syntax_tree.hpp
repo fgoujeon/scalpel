@@ -107,7 +107,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "syntax_nodes/qualified_template_id.hpp"
 #include "syntax_nodes/return_statement.hpp"
 #include "syntax_nodes/selection_statement.hpp"
-#include "syntax_nodes/sequence_node.hpp"
+#include "syntax_nodes/list_node.hpp"
 #include "syntax_nodes/simple_declaration.hpp"
 #include "syntax_nodes/simple_template_type_specifier.hpp"
 #include "syntax_nodes/simple_type_specifier.hpp"

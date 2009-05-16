@@ -68,11 +68,11 @@ class semantic_analyzer
 		template<class T, const syntax_nodes::leaf_node& SeparatorNode>
 		inline
 		void
-		analyze(const syntax_nodes::sequence_node<T, SeparatorNode>& seq);
+		analyze(const syntax_nodes::list_node<T, SeparatorNode>& seq);
 
 		template<class T, const syntax_nodes::leaf_node& SeparatorNode>
 		void
-		analyze_sequence(const syntax_nodes::sequence_node<T, SeparatorNode>& seq);
+		analyze_sequence(const syntax_nodes::list_node<T, SeparatorNode>& seq);
 
         void
 		analyze(const syntax_nodes::break_statement& syntax_node);
@@ -270,14 +270,14 @@ semantic_analyzer::analyze_alternative(const syntax_nodes::alternative_node<Node
 
 template<class T, const syntax_nodes::leaf_node& SeparatorNode>
 void
-semantic_analyzer::analyze(const syntax_nodes::sequence_node<T, SeparatorNode>& seq)
+semantic_analyzer::analyze(const syntax_nodes::list_node<T, SeparatorNode>& seq)
 {
 	analyze_sequence(seq);
 }
 
 template<class T, const syntax_nodes::leaf_node& SeparatorNode>
 void
-semantic_analyzer::analyze_sequence(const syntax_nodes::sequence_node<T, SeparatorNode>& seq)
+semantic_analyzer::analyze_sequence(const syntax_nodes::list_node<T, SeparatorNode>& seq)
 {
     for(auto i = seq.begin(); i != seq.end(); ++i)
     {

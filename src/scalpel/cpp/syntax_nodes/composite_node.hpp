@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_COMPOSITE_NODE_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_COMPOSITE_NODE_HPP
 
-#include <vector>
+#include <list>
 #include <string>
 #include "node.hpp"
 
@@ -31,7 +31,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 class composite_node: public node
 {
 	public:
-		typedef std::vector<const node*> nodes_t;
+		typedef std::list<const node*> nodes_t;
 
 		composite_node();
 
@@ -51,6 +51,9 @@ class composite_node: public node
 	protected:
 		void
 		add(const node& a_node);
+
+		void
+		push_front(const node& n);
 
 		void
 		clear();

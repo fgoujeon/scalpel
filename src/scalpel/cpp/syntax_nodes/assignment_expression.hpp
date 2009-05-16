@@ -23,7 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "composite_node.hpp"
 #include "alternative_node.hpp"
-#include "sequence_node.hpp"
+#include "list_node.hpp"
 #include "assignment_operator.hpp"
 #include "conditional_expression.hpp"
 #include "expressions_fwd.hpp"
@@ -51,7 +51,7 @@ class assignment_expression: public composite_node
     public:
 		class first_part;
 
-		typedef sequence_node<first_part> first_part_seq;
+		typedef list_node<first_part> first_part_seq;
 
 		typedef
 			alternative_node<conditional_expression, throw_expression>

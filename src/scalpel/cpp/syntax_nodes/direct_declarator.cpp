@@ -27,7 +27,7 @@ direct_declarator::direct_declarator
 (
 	first_part&& first_part_node,
 	optional_node<space>&& pre_last_part_seq_space_node,
-    optional_node<sequence_node<last_part>>&& a_last_part_seq
+    optional_node<list_node<last_part>>&& a_last_part_seq
 ):
 	first_part_(first_part_node),
 	pre_last_part_seq_space_(pre_last_part_seq_space_node),

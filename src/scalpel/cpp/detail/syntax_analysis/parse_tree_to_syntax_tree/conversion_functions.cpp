@@ -21,6 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "conversion_functions.hpp"
 
 #include <iostream>
+#include <scalpel/util/extern_strings.hpp>
 #include "../../../syntax_tree.hpp"
 #include "../grammar.hpp"
 #include "basic_functions.hpp"
@@ -188,6 +189,7 @@ convert_base_clause(const tree_node_t& node)
     //unlike what grammar defines, base specifier may be missing
     return base_clause
     (
+		simple_text_node<util::extern_strings::colon>(),
 		space_node,
 		base_specifier_list_node ? *base_specifier_list_node : base_specifier_list()
     );
@@ -748,7 +750,7 @@ convert_direct_declarator(const tree_node_t& node)
     (
 		find_and_convert_node<direct_declarator::first_part, id_t::DIRECT_DECLARATOR_FIRST_PART>(node),
 		convert_previous_space(node, last_part_seq_it),
-		convert_optional<sequence_node<direct_declarator::last_part>>(node, last_part_seq_it)
+		convert_optional<list_node<direct_declarator::last_part>>(node, last_part_seq_it)
     );
 }
 

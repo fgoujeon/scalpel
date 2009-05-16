@@ -25,7 +25,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "optional_node.hpp"
 #include "../../util/extern_strings.hpp"
 #include "composite_node.hpp"
-#include "sequence_node.hpp"
+#include "list_node.hpp"
 #include "identifier.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
@@ -46,7 +46,7 @@ class template_id: public composite_node
 			identifier&& identifier_node,
 			optional_node<space>&& post_type_name_space_node,
 			optional_node<space>&& post_opening_angle_bracket_space_node,
-			optional_node<sequence_node<template_argument, common_nodes::comma>>&& template_argument_list_node,
+			optional_node<list_node<template_argument, common_nodes::comma>>&& template_argument_list_node,
 			optional_node<space>&& post_template_argument_list_space_node
 		);
 
@@ -64,7 +64,7 @@ class template_id: public composite_node
 		identifier_node() const;
 
 		inline
-		const optional_node<sequence_node<template_argument, common_nodes::comma>>&
+		const optional_node<list_node<template_argument, common_nodes::comma>>&
 		template_argument_list_node() const;
 
 	private:
@@ -74,7 +74,7 @@ class template_id: public composite_node
 		identifier identifier_;
 		optional_node<space> post_type_name_space_;
 		optional_node<space> post_opening_angle_bracket_space_;
-		optional_node<sequence_node<template_argument, common_nodes::comma>>* template_argument_list_;
+		optional_node<list_node<template_argument, common_nodes::comma>>* template_argument_list_;
 		optional_node<space> post_template_argument_list_space_;
 };
 
@@ -86,7 +86,7 @@ template_id::identifier_node() const
 }
 
 inline
-const optional_node<sequence_node<template_argument, common_nodes::comma>>&
+const optional_node<list_node<template_argument, common_nodes::comma>>&
 template_id::template_argument_list_node() const
 {
 	return *template_argument_list_;

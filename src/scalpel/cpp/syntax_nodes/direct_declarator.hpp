@@ -84,13 +84,13 @@ class direct_declarator: public composite_node
 			last_part
 		;
 
-		typedef sequence_node<last_part> last_part_seq;
+		typedef list_node<last_part> last_part_seq;
 
         direct_declarator
         (
 			first_part&& first_part_node,
 			optional_node<space>&& pre_last_part_seq_space_node,
-			optional_node<sequence_node<last_part>>&& a_last_part_seq
+			optional_node<list_node<last_part>>&& a_last_part_seq
         );
 
         direct_declarator(const direct_declarator& o);

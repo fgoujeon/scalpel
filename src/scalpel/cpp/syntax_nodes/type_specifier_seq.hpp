@@ -21,13 +21,13 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_TYPE_SPECIFIER_SEQ_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_TYPE_SPECIFIER_SEQ_HPP
 
-#include "sequence_node.hpp"
+#include "list_node.hpp"
 #include "type_specifier.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-typedef sequence_node<type_specifier> type_specifier_seq;
+typedef list_node<type_specifier> type_specifier_seq;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

@@ -22,14 +22,14 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_TEMPLATE_ARGUMENT_LIST_HPP
 
 #include "../../util/extern_strings.hpp"
-#include "sequence_node.hpp"
+#include "list_node.hpp"
 #include "template_argument.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 typedef
-	sequence_node<template_argument, common_nodes::comma>
+	list_node<template_argument, common_nodes::comma>
 	template_argument_list
 ;
 
