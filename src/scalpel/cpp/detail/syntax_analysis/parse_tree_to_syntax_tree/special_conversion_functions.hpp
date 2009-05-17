@@ -46,7 +46,7 @@ template<class ContainerT>
 ContainerT
 convert_list_node(const tree_node_t& node)
 {
-	ContainerT seq;
+	ContainerT list;
 
 	if(ContainerT::separator_node.raw_code() == syntax_nodes::common_nodes::empty.raw_code())
 	{
@@ -68,7 +68,7 @@ convert_list_node(const tree_node_t& node)
 					syntax_nodes::optional_node<syntax_nodes::space>(),
 					convert_node<typename ContainerT::type>(child_node)
 				);
-				seq.push_back(item);
+				list.push_back(item);
 
 				//clear space node
 				space_node = syntax_nodes::optional_node<syntax_nodes::space>();
@@ -110,7 +110,7 @@ convert_list_node(const tree_node_t& node)
 					post_separator_space,
 					convert_node<typename ContainerT::type>(child_node)
 				);
-				seq.push_back(item);
+				list.push_back(item);
 
 				pre_separator_space = syntax_nodes::optional_node<syntax_nodes::space>();
 				post_separator_space = syntax_nodes::optional_node<syntax_nodes::space>();
@@ -119,7 +119,7 @@ convert_list_node(const tree_node_t& node)
 		}
 	}
 
-	return seq;
+	return list;
 }
 
 

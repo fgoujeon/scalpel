@@ -27,7 +27,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-template<class... TailT>
+template<class... NodesT>
 class sequence_node;
 
 template<>
@@ -63,6 +63,8 @@ class sequence_node<HeadT, TailT...>: public sequence_node<TailT...>
 	public:
 		sequence_node(HeadT&& head_node, TailT&&... tail_nodes);
 
+		sequence_node(HeadT&& head_node, sequence_node<TailT...>&& tail_sequence_node);
+
 		sequence_node(const sequence_node& o);
 
 		sequence_node(sequence_node&& o);
@@ -81,6 +83,14 @@ class sequence_node<HeadT, TailT...>: public sequence_node<TailT...>
 template<class HeadT, class... TailT>
 sequence_node<HeadT, TailT...>::sequence_node(HeadT&& head_node, TailT&&... tail_nodes):
 	tail_t(tail_nodes...),
+	node_(head_node)
+{
+	push_front(node_);
+}
+
+template<class HeadT, class... TailT>
+sequence_node<HeadT, TailT...>::sequence_node(HeadT&& head_node, sequence_node<TailT...>&& tail_sequence_node):
+	tail_t(tail_sequence_node),
 	node_(head_node)
 {
 	push_front(node_);

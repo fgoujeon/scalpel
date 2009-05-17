@@ -25,7 +25,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <vector>
 #include <scalpel/cpp/syntax_tree.hpp>
 #include "typedefs.hpp"
-#include "generic_node_converters.hpp"
 
 namespace scalpel { namespace cpp { namespace detail { namespace syntax_analysis { namespace parse_tree_to_syntax_tree
 {

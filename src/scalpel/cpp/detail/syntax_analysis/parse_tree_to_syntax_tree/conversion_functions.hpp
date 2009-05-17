@@ -51,9 +51,6 @@ convert_assignment_expression(const tree_node_t& node);
 syntax_nodes::assignment_expression_condition
 convert_assignment_expression_condition(const tree_node_t& node);
 
-syntax_nodes::base_clause
-convert_base_clause(const tree_node_t& node);
-
 syntax_nodes::base_specifier
 convert_base_specifier(const tree_node_t& node);
 

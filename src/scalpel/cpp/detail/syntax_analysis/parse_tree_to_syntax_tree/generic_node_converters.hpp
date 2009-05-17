@@ -25,6 +25,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "../../../syntax_tree.hpp"
 #include "../grammar.hpp"
 #include "conversion_functions.hpp"
+#include "sequence_node_converter_fwd.hpp"
 #include "special_conversion_functions_fwd.hpp"
 
 #define SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_FROM_ID_SPECIALIZATION(id, return_type, convert_function)\
@@ -55,6 +56,9 @@ struct node_converter_from_type<syntax_nodes::return_type>	\
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_FROM_ID_SPECIALIZATION(id, return_type, convert_function)\
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_FROM_TYPE_SPECIALIZATION(return_type, convert_function)
 
+#define SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_SEQUENCE_NODE_CONVERTER_SPECIALIZATION(id, return_type)\
+SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_FROM_ID_SPECIALIZATION(id, return_type, node<syntax_nodes::return_type>)
+
 namespace scalpel { namespace cpp { namespace detail { namespace syntax_analysis { namespace parse_tree_to_syntax_tree
 {
 
@@ -75,7 +79,7 @@ inline
 SyntaxNodeT
 convert_node(const tree_node_t& node);
 
-//specialization for sequences
+//specialization for list nodes
 template<class T>
 struct node_converter_from_type
 {
@@ -84,6 +88,18 @@ struct node_converter_from_type
 	convert(const tree_node_t& node)
 	{
 		return convert_list_node<T>(node);
+	}
+};
+
+//specialization for sequence nodes
+template<class... NodesT>
+struct node_converter_from_type<syntax_nodes::sequence_node<NodesT...>>
+{
+	static
+	syntax_nodes::sequence_node<NodesT...>
+	convert(const tree_node_t& node)
+	{
+		return convert_sequence_node<syntax_nodes::sequence_node<NodesT...>>(node);
 	}
 };
 
@@ -96,6 +112,18 @@ struct node_converter_from_type<syntax_nodes::optional_node<T>>
 	convert(const tree_node_t& node)
 	{
 		return convert_node<T>(node);
+	}
+};
+
+//specialization for simple text nodes
+template<const std::string& Text>
+struct node_converter_from_type<syntax_nodes::simple_text_node<Text>>
+{
+	static
+	syntax_nodes::simple_text_node<Text>
+	convert(const tree_node_t& node)
+	{
+		return convert_simple_text<Text>(node);
 	}
 };
 
@@ -131,10 +159,9 @@ SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
 	assignment_expression::first_part,
 	assignment_expression_first_part
 )
-SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_SPECIALIZATION
+SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_SEQUENCE_NODE_CONVERTER_SPECIALIZATION
 (
 	BASE_CLAUSE,
-	base_clause,
 	base_clause
 )
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_GENERATE_NODE_CONVERTER_FROM_TYPE_SPECIALIZATION

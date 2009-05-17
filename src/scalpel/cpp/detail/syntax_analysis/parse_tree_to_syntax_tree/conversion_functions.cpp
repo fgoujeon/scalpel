@@ -28,6 +28,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "special_conversion_functions.hpp"
 #include "node_finder_and_converter.hpp"
 #include "space_conversion_functions.hpp"
+#include "sequence_node_converter.hpp"
 
 using namespace scalpel::cpp::syntax_nodes;
 
@@ -170,29 +171,6 @@ convert_assignment_expression_condition(const tree_node_t& node)
 		convert_previous_space(node, assignment_expression_it),
 		convert_node<assignment_expression>(*assignment_expression_it)
 	);
-}
-
-base_clause
-convert_base_clause(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::BASE_CLAUSE);
-
-	tree_node_iterator_t i = find_node<id_t::BASE_SPECIFIER_LIST>(node);
-	optional_node<base_specifier_list> base_specifier_list_node;
-	optional_node<space> space_node;
-	if(i != node.children.end())
-	{
-		base_specifier_list_node = convert_node<base_specifier_list>(*i);
-		space_node = convert_previous_space(node, i);
-	}
-
-    //unlike what grammar defines, base specifier may be missing
-    return base_clause
-    (
-		simple_text_node<util::extern_strings::colon>(),
-		space_node,
-		base_specifier_list_node ? *base_specifier_list_node : base_specifier_list()
-    );
 }
 
 base_specifier
