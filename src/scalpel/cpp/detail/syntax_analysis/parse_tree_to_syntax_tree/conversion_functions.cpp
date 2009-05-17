@@ -251,17 +251,6 @@ convert_bracketed_initializer(const tree_node_t& node)
 	);
 }
 
-break_statement
-convert_break_statement(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::BREAK_STATEMENT);
-
-	return break_statement
-	(
-		find_and_convert_node<optional_node<space>, id_t::SPACE>(node)
-	);
-}
-
 case_statement
 convert_case_statement(const tree_node_t& node)
 {

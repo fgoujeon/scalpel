@@ -21,8 +21,10 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_BREAK_STATEMENT_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_BREAK_STATEMENT_HPP
 
+#include <scalpel/util/extern_strings.hpp>
+#include "sequence_node.hpp"
 #include "optional_node.hpp"
-#include "composite_node.hpp"
+#include "simple_text_node.hpp"
 #include "space.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
@@ -35,27 +37,15 @@ break_statement
 ;
 \endverbatim
 */
-class break_statement: public composite_node
-{
-	public:
-		break_statement
-		(
-			optional_node<space>&& space_node
-		);
-
-		break_statement(const break_statement& o);
-
-		break_statement(break_statement&& o);
-
-		const break_statement&
-		operator=(const break_statement& o);
-
-	private:
-		void
-		update_node_list();
-
-		optional_node<space> space_;
-};
+typedef
+	sequence_node
+	<
+		simple_text_node<util::extern_strings::break_>,
+		optional_node<space>,
+		simple_text_node<util::extern_strings::semicolon>
+	>
+	break_statement
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

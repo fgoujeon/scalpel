@@ -25,20 +25,80 @@ namespace scalpel { namespace util
 
 namespace extern_strings
 {
-    const std::string ampersand("&");
-    const std::string circumflex("^");
-    const std::string colon(":");
-    const std::string comma(",");
-    const std::string double_ampersand("&&");
-    const std::string double_minus("--");
-    const std::string double_pipe("||");
-    const std::string double_plus("++");
-    const std::string empty("");
-    const std::string ellipsis("...");
-    const std::string pipe("|");
-    const std::string space(" ");
+	//symbols
+	const std::string ampersand("&");
+	const std::string arrow("->");
+	const std::string arrow_and_asterisk("->*");
+	const std::string asterisk("*");
+	const std::string capital_l("L");
+	const std::string circumflex("^");
+	const std::string closing_brace("}");
+	const std::string closing_round_bracket(")");
+	const std::string closing_square_bracket("]");
+	const std::string colon(":");
+	const std::string comma(",");
+	const std::string dot(".");
+	const std::string dot_and_asterisk(".*");
+	const std::string double_ampersand("&&");
+	const std::string double_colon("::");
+	const std::string double_equal("==");
+	const std::string double_left_angle_bracket("<<");
+	const std::string double_minus("--");
+	const std::string double_pipe("||");
+	const std::string double_plus("++");
+	const std::string double_quote("\"");
+	const std::string double_right_angle_bracket(">>");
+	const std::string ellipsis("...");
+	const std::string empty("");
+	const std::string equal("=");
+	const std::string inequal("!=");
+	const std::string left_angle_bracket("<");
+	const std::string left_angle_bracket_and_equal("<=");
+	const std::string minus("-");
+	const std::string opening_brace("{");
+	const std::string opening_round_bracket("(");
+	const std::string opening_square_bracket("[");
+	const std::string percent("%");
+	const std::string pipe("|");
+	const std::string plus("+");
+	const std::string question_mark("?");
+	const std::string right_angle_bracket(">");
+	const std::string right_angle_bracket_and_equal(">=");
+	const std::string semicolon(";");
+	const std::string single_quote("'");
+	const std::string slash("/");
+	const std::string tilde("~");
 
+	//keywords
+	const std::string break_("break");
+	const std::string case_("case");
+	const std::string catch_("catch");
+	const std::string const_cast_("const_cast");
+	const std::string continue_("continue");
+	const std::string default_("default");
+	const std::string delete_("delete");
+	const std::string do_("do");
+	const std::string dynamic_cast_("dynamic_cast");
+	const std::string else_("else");
+	const std::string false_("false");
+	const std::string for_("for");
+	const std::string goto_("goto");
+	const std::string if_("if");
+	const std::string namespace_("namespace");
+	const std::string new_("new");
+	const std::string operator_("operator");
+	const std::string reinterpret_cast_("reinterpret_cast");
+	const std::string return_("return");
+	const std::string static_cast_("static_cast");
+	const std::string switch_("switch");
+	const std::string template_("template");
 	const std::string this_("this");
+	const std::string throw_("throw");
+	const std::string true_("true");
+	const std::string try_("try");
+	const std::string using_("using");
+	const std::string virtual_("virtual");
+	const std::string while_("while");
 }
 
 }} //namespace scalpel::util

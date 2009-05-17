@@ -48,6 +48,12 @@ class sequence_node<>: public composite_node
 		{
 		}
 
+		const sequence_node&
+		operator=(const sequence_node&)
+		{
+			return *this;
+		}
+
 		virtual
 		~sequence_node()
 		{
@@ -68,6 +74,9 @@ class sequence_node<HeadT, TailT...>: public sequence_node<TailT...>
 		sequence_node(const sequence_node& o);
 
 		sequence_node(sequence_node&& o);
+
+		const sequence_node&
+		operator=(const sequence_node& o);
 
 	protected:
 		const tail_t&
@@ -110,6 +119,15 @@ sequence_node<HeadT, TailT...>::sequence_node(sequence_node<HeadT, TailT...>&& o
 	node_(std::move(o.node_))
 {
 	push_front(node_);
+}
+
+template<class HeadT, class... TailT>
+const sequence_node<HeadT, TailT...>&
+sequence_node<HeadT, TailT...>::operator=(const sequence_node& o)
+{
+	tail_t::operator=(o.tail());
+	node_ = o.node_;
+	return *this;
 }
 
 template<class HeadT, class... TailT>
