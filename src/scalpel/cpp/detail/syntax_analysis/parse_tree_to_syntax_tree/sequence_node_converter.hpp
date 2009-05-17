@@ -65,6 +65,33 @@ struct sequence_node_converter<HeadNodeT, TailNodesT...>
 	}
 };
 
+template<class HeadNodeT, class... TailNodesT>
+struct sequence_node_converter<syntax_nodes::optional_node<HeadNodeT>, TailNodesT...>
+{
+	static
+	syntax_nodes::sequence_node<syntax_nodes::optional_node<HeadNodeT>, TailNodesT...>
+	convert(const tree_node_t& node, tree_node_iterator_t it)
+	{
+		assert(it != node.children.end());
+
+		syntax_nodes::optional_node<HeadNodeT> head_node;
+		if(check_id<HeadNodeT>(it->value.id()))
+		{
+			head_node = convert_node<HeadNodeT>(*it);
+
+			if(it != node.children.end())
+				++it;
+		}
+
+		return syntax_nodes::sequence_node<syntax_nodes::optional_node<HeadNodeT>, TailNodesT...>
+		(
+			head_node,
+			sequence_node_converter<TailNodesT...>::convert(node, it)
+		);
+	}
+};
+
+
 
 template<class SequenceNodeT>
 struct aaa;
