@@ -21,9 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_BRACKETED_DECLARATOR_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_BRACKETED_DECLARATOR_HPP
 
-#include "optional_node.hpp"
-#include "composite_node.hpp"
-#include "space.hpp"
+#include "common.hpp"
 #include "declarator.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
@@ -34,31 +32,17 @@ bracketed_declarator
 	= '(' >> !s >> declarator >> !s >> ')'
 ;
 */
-class bracketed_declarator: public composite_node
-{
-	public:
-		bracketed_declarator
-		(
-			optional_node<space>&& post_opening_bracket_space_node,
-			declarator&& declarator_node,
-			optional_node<space>&& post_declarator_space_node
-		);
-
-		bracketed_declarator(const bracketed_declarator& o);
-
-		bracketed_declarator(bracketed_declarator&& o);
-
-		const bracketed_declarator&
-		operator=(const bracketed_declarator& o);
-
-	private:
-		void
-		update_node_list();
-
-		optional_node<space> post_opening_bracket_space_;
-		declarator declarator_;
-		optional_node<space> post_declarator_space_;
-};
+typedef
+	sequence_node
+	<
+		simple_text_node<str::opening_round_bracket>,
+		optional_node<space>,
+		declarator,
+		optional_node<space>,
+		simple_text_node<str::closing_round_bracket>
+	>
+	bracketed_declarator
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

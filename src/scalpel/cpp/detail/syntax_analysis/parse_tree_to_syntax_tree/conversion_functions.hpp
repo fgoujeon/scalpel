@@ -57,12 +57,6 @@ convert_block_declaration(const tree_node_t& node);
 syntax_nodes::boolean_literal
 convert_boolean_literal(const tree_node_t& node);
 
-syntax_nodes::bracketed_declarator
-convert_bracketed_declarator(const tree_node_t& node);
-
-syntax_nodes::bracketed_initializer
-convert_bracketed_initializer(const tree_node_t& node);
-
 syntax_nodes::cast_expression
 convert_cast_expression(const tree_node_t& node);
 

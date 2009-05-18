@@ -21,9 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_BRACKETED_INITIALIZER_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_BRACKETED_INITIALIZER_HPP
 
-#include "optional_node.hpp"
-#include "composite_node.hpp"
-#include "space.hpp"
+#include "common.hpp"
 #include "expression_list.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
@@ -31,34 +29,20 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 /**
 bracketed_initializer
-	= ch_p('(') >> !s >> expression_list >> !s >> ')'
+	= "(", expression_list, ")"
 ;
 */
-class bracketed_initializer: public composite_node
-{
-	public:
-		bracketed_initializer
-		(
-			optional_node<space>&& post_opening_bracket_space_node,
-			expression_list&& expression_list_node,
-			optional_node<space>&& post_expression_list_space_node
-		);
-
-		bracketed_initializer(const bracketed_initializer& o);
-
-		bracketed_initializer(bracketed_initializer&& o);
-
-		const bracketed_initializer&
-		operator=(const bracketed_initializer& o);
-
-	private:
-		void
-		update_node_list();
-
-		optional_node<space> post_opening_bracket_space_;
-		expression_list expression_list_;
-		optional_node<space> post_expression_list_space_;
-};
+typedef
+	sequence_node
+	<
+		simple_text_node<str::opening_round_bracket>,
+		optional_node<space>,
+		expression_list,
+		optional_node<space>,
+		simple_text_node<str::closing_round_bracket>
+	>
+	bracketed_initializer
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

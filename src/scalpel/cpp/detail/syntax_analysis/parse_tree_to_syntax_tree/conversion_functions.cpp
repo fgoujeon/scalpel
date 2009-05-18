@@ -198,38 +198,6 @@ convert_boolean_literal(const tree_node_t& node)
 	);
 }
 
-bracketed_declarator
-convert_bracketed_declarator(const tree_node_t& node)
-{
-	assert(node.value.id() == id_t::BRACKETED_DECLARATOR);
-
-	tree_node_iterator_t opening_bracket_it = node.children.begin();
-	tree_node_iterator_t declarator_it = find_node<id_t::DECLARATOR>(node);
-
-	return bracketed_declarator
-	(
-		convert_next_space(node, opening_bracket_it),
-		convert_node<declarator>(*declarator_it),
-		convert_next_space(node, declarator_it)
-	);
-}
-
-bracketed_initializer
-convert_bracketed_initializer(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::BRACKETED_INITIALIZER);
-
-	tree_node_iterator_t opening_bracket_it = node.children.begin();
-	tree_node_iterator_t expression_list_it = find_node<id_t::EXPRESSION_LIST>(node);
-
-	return bracketed_initializer
-	(
-		convert_next_space(node, opening_bracket_it),
-		convert_node<expression_list>(*expression_list_it),
-		convert_next_space(node, expression_list_it)
-	);
-}
-
 cast_expression
 convert_cast_expression(const tree_node_t& node)
 {
