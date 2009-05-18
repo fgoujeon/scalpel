@@ -18,36 +18,18 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_ARRAY_DELETE_EXPRESSION_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_ARRAY_DELETE_EXPRESSION_HPP
+#ifndef SCALPEL_CPP_SYNTAX_NODES_STRINGS_HPP
+#define SCALPEL_CPP_SYNTAX_NODES_STRINGS_HPP
 
-#include "special_nodes.hpp"
-#include "cast_expression_fwd.hpp"
-#include "wrappers/cast_expression.hpp"
+#include <scalpel/util/extern_strings.hpp>
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-/**
-array_delete_expression
-	= ["::"], "delete", "[", "]", cast_expression
-;
-*/
-typedef
-	sequence_node
-	<
-		//optional_node<simple_text_node<str::double_colon>>,
-		optional_node<space>,
-		simple_text_node<str::delete_>,
-		optional_node<space>,
-		simple_text_node<str::opening_square_bracket>,
-		optional_node<space>,
-		simple_text_node<str::closing_square_bracket>,
-		optional_node<space>,
-		incomplete_node<cast_expression, wrappers::cast_expression>
-	>
-	array_delete_expression
-;
+namespace str
+{
+	using namespace util::extern_strings;
+}
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
