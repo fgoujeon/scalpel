@@ -21,9 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_CASE_STATEMENT_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_CASE_STATEMENT_HPP
 
-#include "optional_node.hpp"
-#include "composite_node.hpp"
-#include "space.hpp"
+#include "common.hpp"
+#include "wrappers.hpp"
 #include "conditional_expression.hpp"
 #include "statement_fwd.hpp"
 
@@ -37,34 +36,57 @@ case_statement
 ;
 \endverbatim
 */
-class case_statement: public composite_node
+typedef
+	sequence_node
+	<
+		simple_text_node<str::case_>,
+		optional_node<space>,
+		conditional_expression,
+		optional_node<space>,
+		simple_text_node<str::colon>,
+		optional_node<space>,
+		incomplete_node<statement, wrappers::statement>
+	>
+	case_statement_t
+;
+
+struct case_statement: public case_statement_t
 {
-	public:
-		case_statement
-		(
-			optional_node<space>&& post_case_keyword_space_node,
-			conditional_expression&& conditional_expression_node,
-			optional_node<space>&& post_conditional_expression_space_node,
-			optional_node<space>&& post_colon_space_node,
-			statement&& statement_node
-		);
+	typedef case_statement_t type;
 
-		case_statement(const case_statement& o);
+	case_statement
+	(
+		simple_text_node<str::case_> o1,
+		optional_node<space> o2,
+		conditional_expression o3,
+		optional_node<space> o4,
+		simple_text_node<str::colon> o5,
+		optional_node<space> o6,
+		incomplete_node<statement, wrappers::statement> o7
+	):
+		case_statement_t(o1, o2, o3, o4, o5, o6, o7)
+	{
+	}
 
-		case_statement(case_statement&& o);
+	case_statement
+	(
+		case_statement_t&& o
+	):
+		case_statement_t(std::move(o))
+	{
+	}
 
-		const case_statement&
-		operator=(const case_statement& o);
+	case_statement(const case_statement& o):
+		case_statement_t(o)
+	{
+	}
 
-	private:
-		void
-		update_node_list();
+	case_statement(case_statement&& o):
+		case_statement_t(o)
+	{
+	}
 
-		optional_node<space> post_case_keyword_space_;
-		conditional_expression conditional_expression_;
-		optional_node<space> post_conditional_expression_space_;
-		optional_node<space> post_colon_space_;
-		std::unique_ptr<statement> statement_;
+	using case_statement_t::operator=;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

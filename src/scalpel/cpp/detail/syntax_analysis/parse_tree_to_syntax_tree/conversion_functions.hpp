@@ -63,9 +63,6 @@ convert_bracketed_declarator(const tree_node_t& node);
 syntax_nodes::bracketed_initializer
 convert_bracketed_initializer(const tree_node_t& node);
 
-syntax_nodes::case_statement
-convert_case_statement(const tree_node_t& node);
-
 syntax_nodes::cast_expression
 convert_cast_expression(const tree_node_t& node);
 

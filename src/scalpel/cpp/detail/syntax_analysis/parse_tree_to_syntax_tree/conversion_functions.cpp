@@ -230,25 +230,6 @@ convert_bracketed_initializer(const tree_node_t& node)
 	);
 }
 
-case_statement
-convert_case_statement(const tree_node_t& node)
-{
-	assert(node.value.id() == id_t::CASE_STATEMENT);
-
-	tree_node_iterator_t case_keyword_it = node.children.begin();
-	tree_node_iterator_t conditional_expression_it = find_node<id_t::CONDITIONAL_EXPRESSION>(node);
-	tree_node_iterator_t colon_it = find_node(node, ":");
-
-	return case_statement
-	(
-		convert_next_space(node, case_keyword_it),
-		convert_node<conditional_expression>(*conditional_expression_it),
-		convert_next_space(node, conditional_expression_it),
-		convert_next_space(node, colon_it),
-		find_and_convert_node<statement, id_t::STATEMENT>(node)
-	);
-}
-
 cast_expression
 convert_cast_expression(const tree_node_t& node)
 {

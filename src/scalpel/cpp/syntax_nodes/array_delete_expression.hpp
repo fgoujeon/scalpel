@@ -21,9 +21,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_ARRAY_DELETE_EXPRESSION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_ARRAY_DELETE_EXPRESSION_HPP
 
-#include "special_nodes.hpp"
+#include "common.hpp"
 #include "cast_expression_fwd.hpp"
-#include "wrappers/cast_expression.hpp"
+#include "wrappers.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {

@@ -108,6 +108,17 @@ struct aaa<syntax_nodes::sequence_node<NodesT...>>
 };
 
 template<class SequenceNodeT>
+struct aaa
+{
+	static
+	SequenceNodeT
+	convert(const tree_node_t& node, tree_node_iterator_t it)
+	{
+		return aaa<typename SequenceNodeT::type>::convert(node, it);
+	}
+};
+
+template<class SequenceNodeT>
 SequenceNodeT
 convert_sequence_node(const tree_node_t& node)
 {
