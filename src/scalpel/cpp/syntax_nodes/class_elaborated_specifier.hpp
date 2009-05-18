@@ -21,10 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_CLASS_ELABORATED_SPECIFIER_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_CLASS_ELABORATED_SPECIFIER_HPP
 
-#include "optional_node.hpp"
-#include "composite_node.hpp"
+#include "common.hpp"
 #include "class_key.hpp"
-#include "space.hpp"
 #include "nested_name_specifier.hpp"
 #include "identifier.hpp"
 
@@ -36,50 +34,59 @@ class_elaborated_specifier
 	= class_key, ["::"], [nested_name_specifier], identifier
 ;
 */
-class class_elaborated_specifier: public composite_node
+typedef
+	sequence_node
+	<
+		class_key,
+		optional_node<space>,
+		//optional_node<simple_text_node<str::double_colon>>,
+		optional_node<space>,
+		optional_node<nested_name_specifier>,
+		optional_node<space>,
+		identifier
+	>
+	class_elaborated_specifier_t
+;
+
+struct class_elaborated_specifier: public class_elaborated_specifier_t
 {
-	public:
-		class_elaborated_specifier
-		(
-			class_key&& class_key_node,
-			optional_node<space>&& post_class_key_space_node,
-			bool double_colon,
-			optional_node<space>&& post_double_colon_space_node,
-			optional_node<nested_name_specifier>&& nested_name_specifier_node,
-			optional_node<space>&& post_nested_name_specifier_space_node,
-			identifier&& identifier_node
-		);
+	typedef class_elaborated_specifier_t type;
 
-		class_elaborated_specifier(const class_elaborated_specifier& o);
+	class_elaborated_specifier
+	(
+		class_key&& o1,
+		optional_node<space>&& o2,
+		//optional_node<simple_text_node<str::double_colon>> o3,
+		optional_node<space>&& o4,
+		optional_node<nested_name_specifier>&& o5,
+		optional_node<space>&& o6,
+		identifier&& o7
+	):
+		type(o1, o2, /*o3,*/ o4, o5, o6, o7)
+	{
+	}
 
-		class_elaborated_specifier(class_elaborated_specifier&& o);
+	class_elaborated_specifier(type&& o): type(o)
+	{
+	}
 
-		const class_elaborated_specifier&
-		operator=(const class_elaborated_specifier& o);
+	class_elaborated_specifier(const class_elaborated_specifier& o): type(o)
+	{
+	}
 
-		inline
-		const identifier&
-		identifier_node() const;
+	class_elaborated_specifier(class_elaborated_specifier&& o): type(o)
+	{
+	}
 
-	private:
-		void
-		update_node_list();
+	using type::operator=;
 
-		class_key class_key_;
-		optional_node<space> post_class_key_space_;
-		bool double_colon_;
-		optional_node<space> post_double_colon_space_;
-		optional_node<nested_name_specifier> nested_name_specifier_;
-		optional_node<space> post_nested_name_specifier_space_;
-		identifier identifier_;
+	const identifier&
+	identifier_node() const
+	{
+		const type& self = *this;
+		return get<5>(self);
+	}
 };
-
-inline
-const identifier&
-class_elaborated_specifier::identifier_node() const
-{
-	return identifier_;
-}
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

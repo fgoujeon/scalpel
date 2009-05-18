@@ -30,6 +30,11 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 template<class... NodesT>
 class sequence_node;
 
+template<unsigned int I, class SequenceNodeT>
+struct sequence_node_type_getter;
+
+
+
 template<>
 class sequence_node<>: public composite_node
 {
@@ -53,18 +58,21 @@ class sequence_node<>: public composite_node
 		{
 			return *this;
 		}
-
-		virtual
-		~sequence_node()
-		{
-		}
 };
 
 template<class HeadT, class... TailT>
 class sequence_node<HeadT, TailT...>: public sequence_node<TailT...>
 {
-	private:
+	protected:
+		typedef HeadT head_t;
 		typedef sequence_node<TailT...> tail_t;
+
+		template<unsigned int I, class SequenceNodeT>
+		friend struct sequence_node_type_getter;
+
+		template<unsigned int I, class SequenceNodeT>
+		friend const typename sequence_node_type_getter<I, SequenceNodeT>::head_t&
+		get(const SequenceNodeT& sequence);
 
 	public:
 		sequence_node(HeadT&& head_node, TailT&&... tail_nodes);
@@ -79,6 +87,12 @@ class sequence_node<HeadT, TailT...>: public sequence_node<TailT...>
 		operator=(const sequence_node& o);
 
 	protected:
+		const HeadT&
+		head() const;
+
+		HeadT&
+		head();
+
 		const tail_t&
 		tail() const;
 
@@ -131,6 +145,20 @@ sequence_node<HeadT, TailT...>::operator=(const sequence_node& o)
 }
 
 template<class HeadT, class... TailT>
+const HeadT&
+sequence_node<HeadT, TailT...>::head() const
+{
+	return node_;
+}
+
+template<class HeadT, class... TailT>
+HeadT&
+sequence_node<HeadT, TailT...>::head()
+{
+	return node_;
+}
+
+template<class HeadT, class... TailT>
 const typename sequence_node<HeadT, TailT...>::tail_t&
 sequence_node<HeadT, TailT...>::tail() const
 {
@@ -142,6 +170,34 @@ typename sequence_node<HeadT, TailT...>::tail_t&
 sequence_node<HeadT, TailT...>::tail()
 {
 	return *this;
+}
+
+
+
+template<class SequenceNodeT>
+struct sequence_node_type_getter<0, SequenceNodeT>
+{
+	typedef SequenceNodeT type;
+	typedef typename SequenceNodeT::head_t head_t;
+	typedef typename SequenceNodeT::tail_t tail_t;
+};
+
+template<unsigned int I, class SequenceNodeT>
+struct sequence_node_type_getter
+{
+	typedef typename sequence_node_type_getter<I - 1, SequenceNodeT>::tail_t type;
+	typedef typename type::head_t head_t;
+	typedef typename type::tail_t tail_t;
+};
+
+
+
+template<unsigned int I, class SequenceNodeT>
+const typename sequence_node_type_getter<I, SequenceNodeT>::head_t&
+get(const SequenceNodeT& sequence)
+{
+	const typename sequence_node_type_getter<I, SequenceNodeT>::type& seq = sequence;
+	return seq.head();
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
