@@ -43,6 +43,9 @@ class incomplete_node: public composite_node
 		const incomplete_node&
 		operator=(incomplete_node&& o);
 
+		const T&
+		node() const;
+
 	private:
 		void
 		update_node_list();
@@ -88,6 +91,13 @@ incomplete_node<T, WrapperT>::operator=(incomplete_node&& o)
 	wrapper_ = std::move(o.wrapper_);
 	update_node_list();
 	return *this;
+}
+
+template<class T, class WrapperT>
+const T&
+incomplete_node<T, WrapperT>::node() const
+{
+	return wrapper_.node();
 }
 
 template<class T, class WrapperT>

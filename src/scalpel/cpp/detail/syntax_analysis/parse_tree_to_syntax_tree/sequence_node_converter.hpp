@@ -65,6 +65,7 @@ struct sequence_node_converter<HeadNodeT, TailNodesT...>
 	}
 };
 
+//specialization for optional nodes
 template<class HeadNodeT, class... TailNodesT>
 struct sequence_node_converter<syntax_nodes::optional_node<HeadNodeT>, TailNodesT...>
 {
@@ -90,6 +91,51 @@ struct sequence_node_converter<syntax_nodes::optional_node<HeadNodeT>, TailNodes
 		);
 	}
 };
+
+//specialization for incomplete optional nodes
+template<class WrapperT, class HeadNodeT, class... TailNodesT>
+struct sequence_node_converter<syntax_nodes::incomplete_node<syntax_nodes::optional_node<HeadNodeT>, WrapperT>, TailNodesT...>
+{
+	typedef
+		syntax_nodes::incomplete_node
+		<
+			syntax_nodes::optional_node<HeadNodeT>,
+			WrapperT
+		>
+		node_t
+	;
+	typedef
+		syntax_nodes::sequence_node
+		<
+			node_t,
+			TailNodesT...
+		>
+		sequence_t
+	;
+
+	static
+	sequence_t
+	convert(const tree_node_t& node, tree_node_iterator_t it)
+	{
+		assert(it != node.children.end());
+
+		syntax_nodes::optional_node<HeadNodeT> head_node;
+		if(check_id<HeadNodeT>(it->value.id()))
+		{
+			head_node = convert_node<HeadNodeT>(*it);
+
+			if(it != node.children.end())
+				++it;
+		}
+
+		return sequence_t
+		(
+			head_node,
+			sequence_node_converter<TailNodesT...>::convert(node, it)
+		);
+	}
+};
+
 
 
 

@@ -256,34 +256,6 @@ convert_class_head(const tree_node_t& node)
 	);
 }
 
-class_specifier
-convert_class_specifier(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::CLASS_SPECIFIER);
-
-	optional_node<member_specification> member_specification_node;
-
-	tree_node_iterator_t class_head_it = node.children.begin();
-
-	tree_node_iterator_t opening_brace_it = class_head_it;
-	++opening_brace_it;
-	if(opening_brace_it->value.id() == id_t::SPACE)
-		++opening_brace_it;
-
-	tree_node_iterator_t member_specification_it = find_node<id_t::MEMBER_SPECIFICATION>(node);
-	if(member_specification_it != node.children.end())
-		member_specification_node = convert_node<member_specification>(*member_specification_it);
-
-    return class_specifier
-    (
-        find_and_convert_node<class_head, id_t::CLASS_HEAD>(node),
-		convert_next_space(node, class_head_it),
-		convert_next_space(node, opening_brace_it),
-		member_specification_node,
-		convert_next_space(node, member_specification_it)
-    );
-}
-
 class_template_elaborated_specifier
 convert_class_template_elaborated_specifier(const tree_node_t& node)
 {

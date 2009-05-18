@@ -66,9 +66,6 @@ convert_character_literal(const tree_node_t& node);
 syntax_nodes::class_head
 convert_class_head(const tree_node_t& node);
 
-syntax_nodes::class_specifier
-convert_class_specifier(const tree_node_t& node);
-
 syntax_nodes::class_template_elaborated_specifier
 convert_class_template_elaborated_specifier(const tree_node_t& node);
 

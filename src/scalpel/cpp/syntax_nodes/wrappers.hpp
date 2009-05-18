@@ -50,17 +50,29 @@ class node_type: public syntax_nodes::composite_node	\
 														\
 		~node_type();									\
 														\
+		const syntax_nodes::node_type&					\
+		node() const;									\
+														\
 	private:											\
 		syntax_nodes::node_type* node_;					\
 };
 
-namespace scalpel { namespace cpp { namespace syntax_nodes { namespace wrappers
+namespace scalpel { namespace cpp { namespace syntax_nodes {
+
+class member_specification;
+typedef
+	optional_node<member_specification>
+	optional_member_specification
+;
+
+namespace wrappers
 {
+	SCALPEL_CPP_SYNTAX_NODES_WRAPPER_SPECIFIER(cast_expression)
+	SCALPEL_CPP_SYNTAX_NODES_WRAPPER_SPECIFIER(statement)
+	SCALPEL_CPP_SYNTAX_NODES_WRAPPER_SPECIFIER(optional_member_specification)
+}
 
-SCALPEL_CPP_SYNTAX_NODES_WRAPPER_SPECIFIER(cast_expression)
-SCALPEL_CPP_SYNTAX_NODES_WRAPPER_SPECIFIER(statement)
-
-}}}} //namespace scalpel::cpp::syntax_nodes::wrappers
+}}} //namespace scalpel::cpp::syntax_nodes
 
 #undef SCALPEL_CPP_SYNTAX_NODES_WRAPPER_CLASS_SPECIFIER
 

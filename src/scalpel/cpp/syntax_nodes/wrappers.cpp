@@ -22,6 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "cast_expression.hpp"
 #include "statement.hpp"
+#include "member_specification.hpp"
 
 #define SCALPEL_CPP_SYNTAX_NODES_WRAPPER_DEFINITION(node_type)	\
 node_type::node_type											\
@@ -64,6 +65,12 @@ node_type::operator=(const node_type& o)						\
 node_type::~node_type()											\
 {																\
 	delete node_;												\
+}																\
+																\
+const syntax_nodes::node_type&									\
+node_type::node() const											\
+{																\
+	return *node_;												\
 }
 
 namespace scalpel { namespace cpp { namespace syntax_nodes { namespace wrappers
@@ -71,6 +78,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes { namespace wrappers
 
 SCALPEL_CPP_SYNTAX_NODES_WRAPPER_DEFINITION(cast_expression)
 SCALPEL_CPP_SYNTAX_NODES_WRAPPER_DEFINITION(statement)
+SCALPEL_CPP_SYNTAX_NODES_WRAPPER_DEFINITION(optional_member_specification)
 
 }}}} //namespace scalpel::cpp::syntax_nodes::wrappers
 

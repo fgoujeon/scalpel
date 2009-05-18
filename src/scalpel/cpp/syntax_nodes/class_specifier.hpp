@@ -21,15 +21,13 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_CLASS_SPECIFIER_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_CLASS_SPECIFIER_HPP
 
-#include <memory>
-#include "optional_node.hpp"
-#include "composite_node.hpp"
+#include "common.hpp"
+#include "wrappers.hpp"
 #include "class_head.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-//use of forward declarations and pointers to avoid cyclic dependency
 class member_specification;
 
 /**
@@ -39,59 +37,58 @@ class_specifier
 ;
 \endverbatim
 */
-class class_specifier: public composite_node
+typedef
+	sequence_node
+	<
+		class_head,
+		optional_node<space>,
+		simple_text_node<str::opening_brace>,
+		optional_node<space>,
+		incomplete_node<optional_node<member_specification>, wrappers::optional_member_specification>,
+		optional_node<space>,
+		simple_text_node<str::closing_brace>
+	>
+	class_specifier_t
+;
+
+struct class_specifier: public class_specifier_t
 {
-    public:
-        class_specifier
-        (
-            class_head&& class_head_node,
-			optional_node<space>&& post_class_head_space_node,
-			optional_node<space>&& post_opening_brace_space_node,
-            optional_node<member_specification>&& member_specification_node,
-			optional_node<space>&& post_member_specification_space_node
-        );
+	typedef class_specifier_t type;
 
-        class_specifier(const class_specifier& o);
+	class_specifier
+	(
+		class_head&& o1,
+		optional_node<space>&& o2,
+		simple_text_node<str::opening_brace>&& o3,
+		optional_node<space>&& o4,
+		incomplete_node<optional_node<member_specification>, wrappers::optional_member_specification>&& o5,
+		optional_node<space>&& o6,
+		simple_text_node<str::closing_brace>&& o7
+	):
+		type(o1, o2, o3, o4, o5, o6, o7)
+	{
+	}
 
-        class_specifier(class_specifier&& o);
+	class_specifier(type&& o): type(o){}
 
-        ~class_specifier();
+	class_specifier(const class_specifier& o): type(o){}
 
-        const class_specifier&
-		operator=(const class_specifier& o);
+	class_specifier(class_specifier&& o): type(o){}
 
-        inline
-        const class_head&
-        class_head_node() const;
+	using type::operator=;
 
-        inline
-        const optional_node<member_specification>&
-        member_specification_node() const;
+	const class_head&
+	class_head_node() const
+	{
+		return get<0>(static_cast<const type&>(*this));
+	}
 
-    private:
-		void
-		update_node_list();
-
-		class_head class_head_;
-		optional_node<space> post_class_head_space_;
-		optional_node<space> post_opening_brace_space_;
-		optional_node<member_specification>* member_specification_;
-		optional_node<space> post_member_specification_space_;
+	const optional_node<member_specification>&
+	member_specification_node() const
+	{
+		return get<4>(static_cast<const type&>(*this)).node();
+	}
 };
-
-inline
-const class_head&
-class_specifier::class_head_node() const
-{
-    return class_head_;
-}
-
-inline
-const optional_node<member_specification>&
-class_specifier::member_specification_node() const
-{
-	return *member_specification_;
-}
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
