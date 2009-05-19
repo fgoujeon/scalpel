@@ -22,9 +22,41 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_ITERATION_STATEMENT_HPP
 
 #include "alternative_node.hpp"
-#include "while_statement.hpp"
-#include "do_while_statement.hpp"
-#include "for_statement.hpp"
-#include "iteration_statement_fwd.hpp"
+
+namespace scalpel { namespace cpp { namespace syntax_nodes
+{
+
+class while_statement;
+class do_while_statement;
+class for_statement;
+
+class iteration_statement_impl;
+
+class iteration_statement: public composite_node
+{
+	public:
+		explicit
+		iteration_statement(while_statement&& o);
+
+		explicit
+		iteration_statement(do_while_statement&& o);
+
+		explicit
+		iteration_statement(for_statement&& o);
+
+		iteration_statement(const iteration_statement& o);
+
+		iteration_statement(iteration_statement&& o);
+
+		~iteration_statement();
+
+		const iteration_statement&
+		operator=(const iteration_statement& o);
+
+	private:
+		iteration_statement_impl* impl_;
+};
+
+}}} //namespace scalpel::cpp::syntax_nodes
 
 #endif

@@ -25,7 +25,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "composite_node.hpp"
 #include "space.hpp"
 #include "identifier.hpp"
-#include "statement_fwd.hpp"
+#include "statement.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {

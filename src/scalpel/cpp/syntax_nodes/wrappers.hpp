@@ -23,7 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "composite_node.hpp"
 #include "cast_expression_fwd.hpp"
-#include "statement_fwd.hpp"
+#include "statement.hpp"
 
 #define SCALPEL_CPP_SYNTAX_NODES_WRAPPER_SPECIFIER(node_type)\
 class node_type: public syntax_nodes::composite_node	\

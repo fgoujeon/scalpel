@@ -18,40 +18,30 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_SELECTION_STATEMENT_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_SELECTION_STATEMENT_HPP
-
-#include "composite_node.hpp"
+#include "selection_statement_impl.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class selection_statement_impl;
-class switch_statement;
-class if_statement;
-
-class selection_statement: public composite_node
+selection_statement_impl::selection_statement_impl(if_statement&& o):
+	selection_statement_t(std::move(o))
 {
-	public:
-		explicit
-		selection_statement(if_statement&& o);
+}
 
-		explicit
-		selection_statement(switch_statement&& o);
+selection_statement_impl::selection_statement_impl(switch_statement&& o):
+	selection_statement_t(std::move(o))
+{
+}
 
-		selection_statement(const selection_statement& o);
+selection_statement_impl::selection_statement_impl(const selection_statement_impl& o):
+	selection_statement_t(static_cast<const selection_statement_t&>(o))
+{
+}
 
-		selection_statement(selection_statement&& o);
-
-		~selection_statement();
-
-		const selection_statement&
-		operator=(const selection_statement& o);
-
-	private:
-		selection_statement_impl* impl_;
-};
+selection_statement_impl::selection_statement_impl(selection_statement_impl&& o):
+	selection_statement_t(static_cast<selection_statement_t&&>(o))
+{
+}
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
-#endif

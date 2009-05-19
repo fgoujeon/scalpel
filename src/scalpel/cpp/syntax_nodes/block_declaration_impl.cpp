@@ -18,30 +18,35 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_BLOCK_DECLARATION_FWD_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_BLOCK_DECLARATION_FWD_HPP
-
-#include "alternative_node.hpp"
+#include "block_declaration_impl.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class simple_declaration;
-class using_declaration;
-class using_directive;
+block_declaration_impl::block_declaration_impl(simple_declaration&& o):
+	block_declaration_t(std::move(o))
+{
+}
 
-typedef
-	alternative_node
-	<
-		simple_declaration,
-//		asm_definition,
-//		namespace_alias_definition,
-		using_declaration,
-		using_directive
-	>
-	block_declaration
-;
+block_declaration_impl::block_declaration_impl(using_declaration&& o):
+	block_declaration_t(std::move(o))
+{
+}
+
+block_declaration_impl::block_declaration_impl(using_directive&& o):
+	block_declaration_t(std::move(o))
+{
+}
+
+block_declaration_impl::block_declaration_impl(const block_declaration_impl& o):
+	block_declaration_t(static_cast<const block_declaration_t&>(o))
+{
+}
+
+block_declaration_impl::block_declaration_impl(block_declaration_impl&& o):
+	block_declaration_t(static_cast<block_declaration_t&&>(o))
+{
+}
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
-#endif

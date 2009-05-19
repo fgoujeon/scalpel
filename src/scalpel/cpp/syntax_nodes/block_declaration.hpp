@@ -21,12 +21,41 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_BLOCK_DECLARATION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_BLOCK_DECLARATION_HPP
 
-#include "alternative_node.hpp"
-#include "simple_declaration.hpp"
-//#include "asm_definition.hpp"
-//#include "namespace_alias_definition.hpp"
-#include "using_declaration.hpp"
-#include "using_directive.hpp"
-#include "block_declaration_fwd.hpp"
+#include "composite_node.hpp"
+
+namespace scalpel { namespace cpp { namespace syntax_nodes
+{
+
+class block_declaration_impl;
+class simple_declaration;
+class using_declaration;
+class using_directive;
+
+class block_declaration: public composite_node
+{
+	public:
+		explicit
+		block_declaration(simple_declaration&& o);
+
+		explicit
+		block_declaration(using_declaration&& o);
+
+		explicit
+		block_declaration(using_directive&& o);
+
+		block_declaration(const block_declaration& o);
+
+		block_declaration(block_declaration&& o);
+
+		~block_declaration();
+
+		const block_declaration&
+		operator=(const block_declaration& o);
+
+	private:
+		block_declaration_impl* impl_;
+};
+
+}}} //namespace scalpel::cpp::syntax_nodes
 
 #endif

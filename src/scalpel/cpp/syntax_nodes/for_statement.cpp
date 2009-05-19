@@ -20,8 +20,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "for_statement.hpp"
 
-#include "statement.hpp"
-
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
@@ -49,7 +47,7 @@ for_statement::for_statement
 	expression_(expression_node),
 	post_expression_space_(post_expression_space_node),
 	post_closing_bracket_space_(post_closing_bracket_space_node),
-	statement_(new statement(statement_node))
+	statement_(statement_node)
 {
 	update_node_list();
 }
@@ -66,7 +64,7 @@ for_statement::for_statement(const for_statement& o):
 	expression_(o.expression_),
 	post_expression_space_(o.post_expression_space_),
 	post_closing_bracket_space_(o.post_closing_bracket_space_),
-	statement_(new statement(*o.statement_))
+	statement_(o.statement_)
 {
 	update_node_list();
 }
@@ -101,7 +99,7 @@ for_statement::operator=(const for_statement& o)
 	expression_ = o.expression_;
 	post_expression_space_ = o.post_expression_space_;
 	post_closing_bracket_space_ = o.post_closing_bracket_space_;
-	statement_ = std::move(std::unique_ptr<statement>(new statement(*o.statement_)));
+	statement_ = o.statement_;
 
 	update_node_list();
 
@@ -126,7 +124,7 @@ for_statement::update_node_list()
 	if(post_expression_space_) add(*post_expression_space_);
 	add(common_nodes::closing_round_bracket);
 	if(post_closing_bracket_space_) add(*post_closing_bracket_space_);
-	add(*statement_);
+	add(statement_);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

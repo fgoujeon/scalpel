@@ -21,15 +21,62 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_STATEMENT_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_STATEMENT_HPP
 
-#include "alternative_node.hpp"
-#include "labeled_statement.hpp"
-#include "expression_statement.hpp"
-#include "compound_statement.hpp"
-#include "selection_statement.hpp"
-#include "iteration_statement.hpp"
+#include "composite_node.hpp"
 #include "jump_statement.hpp"
-#include "block_declaration.hpp"
-#include "try_block.hpp"
-#include "statement_fwd.hpp"
+
+namespace scalpel { namespace cpp { namespace syntax_nodes
+{
+
+class labeled_statement;
+class expression_statement;
+class compound_statement;
+class try_block;
+class iteration_statement;
+class selection_statement;
+class block_declaration;
+
+class statement_impl;
+
+class statement: public composite_node
+{
+	public:
+		explicit
+		statement(labeled_statement&& o);
+
+		explicit
+		statement(expression_statement&& o);
+
+		explicit
+		statement(compound_statement&& o);
+
+		explicit
+		statement(selection_statement&& o);
+
+		explicit
+		statement(iteration_statement&& o);
+
+		explicit
+		statement(jump_statement&& o);
+
+		explicit
+		statement(block_declaration&& o);
+
+		explicit
+		statement(try_block&& o);
+
+		statement(const statement& o);
+
+		statement(statement&& o);
+
+		~statement();
+
+		const statement&
+		operator=(const statement& o);
+
+	private:
+		statement_impl* impl_;
+};
+
+}}} //namespace scalpel::cpp::syntax_nodes
 
 #endif

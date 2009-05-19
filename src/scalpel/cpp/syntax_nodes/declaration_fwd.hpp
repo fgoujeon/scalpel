@@ -23,7 +23,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "alternative_node.hpp"
 #include "composite_node.hpp"
-#include "block_declaration_fwd.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -31,6 +30,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 class function_definition;
 class template_declaration;
 class namespace_definition;
+class block_declaration;
 
 typedef
 	alternative_node

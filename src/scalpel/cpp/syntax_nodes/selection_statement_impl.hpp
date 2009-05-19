@@ -18,38 +18,36 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_SELECTION_STATEMENT_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_SELECTION_STATEMENT_HPP
+#ifndef SCALPEL_CPP_SYNTAX_NODES_SELECTION_STATEMENT_IMPL_HPP
+#define SCALPEL_CPP_SYNTAX_NODES_SELECTION_STATEMENT_IMPL_HPP
 
-#include "composite_node.hpp"
+#include "alternative_node.hpp"
+#include "if_statement.hpp"
+#include "switch_statement.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class selection_statement_impl;
-class switch_statement;
-class if_statement;
+typedef
+	alternative_node
+	<
+		if_statement,
+		switch_statement
+	>
+	selection_statement_t
+;
 
-class selection_statement: public composite_node
+struct selection_statement_impl: public selection_statement_t
 {
-	public:
-		explicit
-		selection_statement(if_statement&& o);
+	explicit
+	selection_statement_impl(if_statement&& o);
 
-		explicit
-		selection_statement(switch_statement&& o);
+	explicit
+	selection_statement_impl(switch_statement&& o);
 
-		selection_statement(const selection_statement& o);
+	selection_statement_impl(const selection_statement_impl& o);
 
-		selection_statement(selection_statement&& o);
-
-		~selection_statement();
-
-		const selection_statement&
-		operator=(const selection_statement& o);
-
-	private:
-		selection_statement_impl* impl_;
+	selection_statement_impl(selection_statement_impl&& o);
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

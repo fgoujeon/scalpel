@@ -22,9 +22,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_CASE_STATEMENT_HPP
 
 #include "common.hpp"
-#include "wrappers.hpp"
 #include "conditional_expression.hpp"
-#include "statement_fwd.hpp"
+#include "statement.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -45,7 +44,7 @@ typedef
 		optional_node<space>,
 		simple_text_node<str::colon>,
 		optional_node<space>,
-		incomplete_node<statement, wrappers::statement>
+		statement
 	>
 	case_statement_t
 ;
@@ -56,13 +55,13 @@ struct case_statement: public case_statement_t
 
 	case_statement
 	(
-		simple_text_node<str::case_> o1,
-		optional_node<space> o2,
-		conditional_expression o3,
-		optional_node<space> o4,
-		simple_text_node<str::colon> o5,
-		optional_node<space> o6,
-		incomplete_node<statement, wrappers::statement> o7
+		simple_text_node<str::case_>&& o1,
+		optional_node<space>&& o2,
+		conditional_expression&& o3,
+		optional_node<space>&& o4,
+		simple_text_node<str::colon>&& o5,
+		optional_node<space>&& o6,
+		statement&& o7
 	):
 		case_statement_t(o1, o2, o3, o4, o5, o6, o7)
 	{

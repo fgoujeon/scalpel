@@ -18,38 +18,41 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_SELECTION_STATEMENT_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_SELECTION_STATEMENT_HPP
+#ifndef SCALPEL_CPP_SYNTAX_NODES_LABELED_STATEMENT_IMPL_HPP
+#define SCALPEL_CPP_SYNTAX_NODES_LABELED_STATEMENT_IMPL_HPP
 
-#include "composite_node.hpp"
+#include "alternative_node.hpp"
+#include "case_statement.hpp"
+#include "default_statement.hpp"
+#include "classic_labeled_statement.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class selection_statement_impl;
-class switch_statement;
-class if_statement;
+typedef
+	alternative_node
+	<
+		case_statement,
+		default_statement,
+		classic_labeled_statement
+	>
+	labeled_statement_t
+;
 
-class selection_statement: public composite_node
+struct labeled_statement_impl: public labeled_statement_t
 {
-	public:
-		explicit
-		selection_statement(if_statement&& o);
+	explicit
+	labeled_statement_impl(case_statement&& o);
 
-		explicit
-		selection_statement(switch_statement&& o);
+	explicit
+	labeled_statement_impl(default_statement&& o);
 
-		selection_statement(const selection_statement& o);
+	explicit
+	labeled_statement_impl(classic_labeled_statement&& o);
 
-		selection_statement(selection_statement&& o);
+	labeled_statement_impl(const labeled_statement_impl& o);
 
-		~selection_statement();
-
-		const selection_statement&
-		operator=(const selection_statement& o);
-
-	private:
-		selection_statement_impl* impl_;
+	labeled_statement_impl(labeled_statement_impl&& o);
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

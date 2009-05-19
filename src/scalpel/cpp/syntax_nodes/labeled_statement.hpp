@@ -21,10 +21,42 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_LABELED_STATEMENT_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_LABELED_STATEMENT_HPP
 
-#include "alternative_node.hpp"
-#include "case_statement.hpp"
-#include "default_statement.hpp"
-#include "classic_labeled_statement.hpp"
-#include "labeled_statement_fwd.hpp"
+#include "composite_node.hpp"
+
+namespace scalpel { namespace cpp { namespace syntax_nodes
+{
+
+class labeled_statement_impl;
+
+class case_statement;
+class default_statement;
+class classic_labeled_statement;
+
+class labeled_statement: public composite_node
+{
+	public:
+		explicit
+		labeled_statement(case_statement&& o);
+
+		explicit
+		labeled_statement(default_statement&& o);
+
+		explicit
+		labeled_statement(classic_labeled_statement&& o);
+
+		labeled_statement(const labeled_statement& o);
+
+		labeled_statement(labeled_statement&& o);
+
+		~labeled_statement();
+
+		const labeled_statement&
+		operator=(const labeled_statement& o);
+
+	private:
+		labeled_statement_impl* impl_;
+};
+
+}}} //namespace scalpel::cpp::syntax_nodes
 
 #endif

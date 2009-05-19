@@ -25,7 +25,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "composite_node.hpp"
 #include "space.hpp"
 #include "condition.hpp"
-#include "statement_fwd.hpp"
+#include "statement.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -66,7 +66,7 @@ class switch_statement: public composite_node
 		condition condition_;
 		optional_node<space> post_condition_space_;
 		optional_node<space> post_closing_bracket_space_;
-		std::unique_ptr<statement> statement_;
+		statement statement_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

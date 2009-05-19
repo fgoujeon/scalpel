@@ -18,17 +18,15 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_ITERATION_STATEMENT_FWD_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_ITERATION_STATEMENT_FWD_HPP
+#ifndef SCALPEL_CPP_SYNTAX_NODES_ITERATION_STATEMENT_IMPL_HPP
+#define SCALPEL_CPP_SYNTAX_NODES_ITERATION_STATEMENT_IMPL_HPP
 
-#include "alternative_node.hpp"
+#include "while_statement.hpp"
+#include "do_while_statement.hpp"
+#include "for_statement.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
-
-class while_statement;
-class do_while_statement;
-class for_statement;
 
 typedef
 	alternative_node
@@ -37,8 +35,24 @@ typedef
 		do_while_statement,
 		for_statement
 	>
-	iteration_statement
+	iteration_statement_t
 ;
+
+struct iteration_statement_impl: public iteration_statement_t
+{
+	explicit
+	iteration_statement_impl(while_statement&& o);
+
+	explicit
+	iteration_statement_impl(do_while_statement&& o);
+
+	explicit
+	iteration_statement_impl(for_statement&& o);
+
+	iteration_statement_impl(const iteration_statement_impl& o);
+
+	iteration_statement_impl(iteration_statement_impl&& o);
+};
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

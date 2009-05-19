@@ -18,25 +18,48 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_SELECTION_STATEMENT_FWD_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_SELECTION_STATEMENT_FWD_HPP
+#ifndef SCALPEL_CPP_SYNTAX_NODES_BLOCK_DECLARATION_IMPL_HPP
+#define SCALPEL_CPP_SYNTAX_NODES_BLOCK_DECLARATION_IMPL_HPP
 
 #include "alternative_node.hpp"
+#include "simple_declaration.hpp"
+//#include "asm_definition.hpp"
+//#include "namespace_alias_definition.hpp"
+#include "using_declaration.hpp"
+#include "using_directive.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class if_statement;
-class switch_statement;
-
 typedef
 	alternative_node
 	<
-		if_statement,
-		switch_statement
+		simple_declaration,
+//		asm_definition,
+//		namespace_alias_definition,
+		using_declaration,
+		using_directive
 	>
-	selection_statement
+	block_declaration_t
 ;
+
+struct block_declaration_impl: public block_declaration_t
+{
+	explicit
+	block_declaration_impl(simple_declaration&& o);
+
+	explicit
+	block_declaration_impl(using_declaration&& o);
+
+	explicit
+	block_declaration_impl(using_directive&& o);
+
+	block_declaration_impl(const block_declaration_impl& o);
+
+	block_declaration_impl(block_declaration_impl&& o);
+
+	using block_declaration_t::operator=;
+};
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

@@ -18,38 +18,35 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_STATEMENT_FWD_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_STATEMENT_FWD_HPP
-
-#include "alternative_node.hpp"
-#include "block_declaration_fwd.hpp"
-#include "iteration_statement_fwd.hpp"
-#include "jump_statement.hpp"
-#include "labeled_statement_fwd.hpp"
-#include "selection_statement_fwd.hpp"
+#include "labeled_statement_impl.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class expression_statement;
-class compound_statement;
-class try_block;
+labeled_statement_impl::labeled_statement_impl(case_statement&& o):
+	labeled_statement_t(std::move(o))
+{
+}
 
-typedef
-	alternative_node
-	<
-		labeled_statement,
-		expression_statement,
-		compound_statement,
-		selection_statement,
-		iteration_statement,
-		jump_statement,
-		block_declaration,
-		try_block
-	>
-	statement
-;
+labeled_statement_impl::labeled_statement_impl(default_statement&& o):
+	labeled_statement_t(std::move(o))
+{
+}
+
+labeled_statement_impl::labeled_statement_impl(classic_labeled_statement&& o):
+	labeled_statement_t(std::move(o))
+{
+}
+
+labeled_statement_impl::labeled_statement_impl(const labeled_statement_impl& o):
+	labeled_statement_t(static_cast<const labeled_statement_t&>(o))
+{
+}
+
+labeled_statement_impl::labeled_statement_impl(labeled_statement_impl&& o):
+	labeled_statement_t(static_cast<labeled_statement_t&&>(o))
+{
+}
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
-#endif

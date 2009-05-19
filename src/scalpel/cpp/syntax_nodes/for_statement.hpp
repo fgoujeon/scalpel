@@ -27,7 +27,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "expression.hpp"
 #include "for_init_statement.hpp"
 #include "condition.hpp"
-#include "statement_fwd.hpp"
+#include "statement.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -82,13 +82,13 @@ class for_statement: public composite_node
 		optional_node<expression> expression_;
 		optional_node<space> post_expression_space_;
 		optional_node<space> post_closing_bracket_space_;
-		std::unique_ptr<statement> statement_;
+		statement statement_;
 };
 
 const statement&
 for_statement::statement_node() const
 {
-	return *statement_;
+	return statement_;
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

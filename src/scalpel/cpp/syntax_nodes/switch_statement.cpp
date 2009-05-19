@@ -20,7 +20,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "switch_statement.hpp"
 
-#include "statement.hpp"
 #include "common_nodes.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
@@ -40,7 +39,7 @@ switch_statement::switch_statement
 	condition_(condition_node),
 	post_condition_space_(post_condition_space_node),
 	post_closing_bracket_space_(post_closing_bracket_space_node),
-	statement_(new statement(statement_node))
+	statement_(statement_node)
 {
 	update_node_list();
 }
@@ -52,7 +51,7 @@ switch_statement::switch_statement(const switch_statement& o):
 	condition_(o.condition_),
 	post_condition_space_(o.post_condition_space_),
 	post_closing_bracket_space_(o.post_closing_bracket_space_),
-	statement_(new statement(*o.statement_))
+	statement_(o.statement_)
 {
 	update_node_list();
 }
@@ -77,7 +76,7 @@ switch_statement::operator=(const switch_statement& o)
 	condition_ = o.condition_;
 	post_condition_space_ = o.post_condition_space_;
 	post_closing_bracket_space_ = o.post_closing_bracket_space_;
-	statement_ = std::move(std::unique_ptr<statement>(new statement(*o.statement_)));
+	statement_ = o.statement_;
 
 	update_node_list();
 
@@ -96,7 +95,7 @@ switch_statement::update_node_list()
 	if(post_condition_space_) add(*post_condition_space_);
 	add(common_nodes::closing_round_bracket);
 	if(post_closing_bracket_space_) add(*post_closing_bracket_space_);
-	add(*statement_);
+	add(statement_);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
