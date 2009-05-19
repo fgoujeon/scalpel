@@ -22,13 +22,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_CLASS_SPECIFIER_HPP
 
 #include "common.hpp"
-#include "wrappers.hpp"
 #include "class_head.hpp"
+#include "member_specification.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
-
-class member_specification;
 
 /**
 \verbatim
@@ -44,7 +42,7 @@ typedef
 		optional_node<space>,
 		simple_text_node<str::opening_brace>,
 		optional_node<space>,
-		incomplete_node<optional_node<member_specification>, wrappers::optional_member_specification>,
+		optional_node<member_specification>,
 		optional_node<space>,
 		simple_text_node<str::closing_brace>
 	>
@@ -61,7 +59,7 @@ struct class_specifier: public class_specifier_t
 		optional_node<space>&& o2,
 		simple_text_node<str::opening_brace>&& o3,
 		optional_node<space>&& o4,
-		incomplete_node<optional_node<member_specification>, wrappers::optional_member_specification>&& o5,
+		optional_node<member_specification>&& o5,
 		optional_node<space>&& o6,
 		simple_text_node<str::closing_brace>&& o7
 	):
@@ -86,7 +84,7 @@ struct class_specifier: public class_specifier_t
 	const optional_node<member_specification>&
 	member_specification_node() const
 	{
-		return get<4>(static_cast<const type&>(*this)).node();
+		return get<4>(static_cast<const type&>(*this));
 	}
 };
 

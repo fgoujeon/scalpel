@@ -18,33 +18,36 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_MEMBER_SPECIFICATION_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_MEMBER_SPECIFICATION_HPP
+#ifndef SCALPEL_CPP_SYNTAX_NODES_MEMBER_SPECIFICATION_PART_IMPL_HPP
+#define SCALPEL_CPP_SYNTAX_NODES_MEMBER_SPECIFICATION_PART_IMPL_HPP
 
-#include "list_node.hpp"
 #include "alternative_node.hpp"
-#include "member_specification_part.hpp"
+#include "member_declaration.hpp"
+#include "member_specification_access_specifier.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 typedef
-	list_node<member_specification_part>
-	member_specification_t
+	alternative_node
+	<
+		member_declaration,
+		member_specification_access_specifier
+	>
+	member_specification_part_t
 ;
 
-class member_specification: public member_specification_t
+struct member_specification_part_impl: public member_specification_part_t
 {
-	public:
-        member_specification(){};
+	explicit
+	member_specification_part_impl(member_declaration&& o);
 
-        member_specification(const member_specification& s): member_specification_t(static_cast<const member_specification_t&>(s)){};
+	explicit
+	member_specification_part_impl(member_specification_access_specifier&& o);
 
-        member_specification(member_specification&& s): member_specification_t(static_cast<member_specification_t&&>(s)){};
+	member_specification_part_impl(const member_specification_part_impl& o);
 
-		static
-		const leaf_node&
-		separator_node;
+	member_specification_part_impl(member_specification_part_impl&& o);
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes
