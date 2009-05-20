@@ -39,7 +39,7 @@ typedef
 	<
 		class_key,
 		optional_node<space>,
-		//optional_node<simple_text_node<str::double_colon>>,
+		optional_node<simple_text_node<str::double_colon>>,
 		optional_node<space>,
 		optional_node<nested_name_specifier>,
 		optional_node<space>,
@@ -51,18 +51,29 @@ typedef
 struct class_elaborated_specifier: public class_elaborated_specifier_t
 {
 	typedef class_elaborated_specifier_t type;
+	typedef type::head_node_t head_node_t;
+	typedef type::tail_sequence_node_t tail_sequence_node_t;
 
 	class_elaborated_specifier
 	(
 		class_key&& o1,
 		optional_node<space>&& o2,
-		//optional_node<simple_text_node<str::double_colon>> o3,
+		optional_node<simple_text_node<str::double_colon>> o3,
 		optional_node<space>&& o4,
 		optional_node<nested_name_specifier>&& o5,
 		optional_node<space>&& o6,
 		identifier&& o7
 	):
-		type(o1, o2, /*o3,*/ o4, o5, o6, o7)
+		type(o1, o2, o3, o4, o5, o6, o7)
+	{
+	}
+
+	class_elaborated_specifier
+	(
+		head_node_t&& head,
+		tail_sequence_node_t&& tail
+	):
+		type(head, tail)
 	{
 	}
 
@@ -84,7 +95,7 @@ struct class_elaborated_specifier: public class_elaborated_specifier_t
 	identifier_node() const
 	{
 		const type& self = *this;
-		return get<5>(self);
+		return get<6>(self);
 	}
 };
 

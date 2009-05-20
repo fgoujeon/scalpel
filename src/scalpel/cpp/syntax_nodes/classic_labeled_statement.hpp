@@ -48,6 +48,8 @@ typedef
 struct classic_labeled_statement: public classic_labeled_statement_t
 {
 	typedef classic_labeled_statement_t type;
+	typedef classic_labeled_statement_t::head_node_t head_node_t;
+	typedef classic_labeled_statement_t::tail_sequence_node_t tail_sequence_node_t;
 
 	classic_labeled_statement
 	(
@@ -58,6 +60,15 @@ struct classic_labeled_statement: public classic_labeled_statement_t
 		statement&& o5
 	):
 		classic_labeled_statement_t(o1, o2, o3, o4, o5)
+	{
+	}
+
+	classic_labeled_statement
+	(
+		head_node_t&& head,
+		tail_sequence_node_t&& tail
+	):
+		type(head, tail)
 	{
 	}
 

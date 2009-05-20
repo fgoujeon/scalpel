@@ -55,7 +55,8 @@ typedef
 
 struct conditional_expression_impl: public conditional_expression_t
 {
-	typedef conditional_expression_t type;
+	typedef logical_or_expression head_node_t;
+	typedef conditional_expression_t::tail_sequence_node_t tail_sequence_node_t;
 
 	conditional_expression_impl
 	(
@@ -70,6 +71,15 @@ struct conditional_expression_impl: public conditional_expression_t
 		optional_node<assignment_expression>&& o9
 	):
 		conditional_expression_t(o1, o2, o3, o4, o5, o6, o7, o8, o9)
+	{
+	}
+
+	conditional_expression_impl
+	(
+		head_node_t&& n,
+		tail_sequence_node_t&& seq
+	):
+		conditional_expression_t(n, seq)
 	{
 	}
 
@@ -89,6 +99,54 @@ struct conditional_expression_impl: public conditional_expression_t
 	}
 
 	using conditional_expression_t::operator=;
+};
+
+struct conditional_expression_tail_sequence_node: public conditional_expression_impl::tail_sequence_node_t
+{
+	typedef conditional_expression_impl::tail_sequence_node_t type;
+	typedef conditional_expression_t::tail_sequence_node_t::head_node_t head_node_t;
+	typedef conditional_expression_t::tail_sequence_node_t::tail_sequence_node_t tail_sequence_node_t;
+
+	conditional_expression_tail_sequence_node
+	(
+		optional_node<space>&& o2,
+		optional_node<simple_text_node<str::question_mark>> o3,
+		optional_node<space>&& o4,
+		optional_node<expression>&& o5,
+		optional_node<space>&& o6,
+		optional_node<simple_text_node<str::colon>> o7,
+		optional_node<space>&& o8,
+		optional_node<assignment_expression>&& o9
+	):
+		type(o2, o3, o4, o5, o6, o7, o8, o9)
+	{
+	}
+
+	conditional_expression_tail_sequence_node
+	(
+		head_node_t&& n,
+		tail_sequence_node_t&& seq
+	):
+		type(n, seq)
+	{
+	}
+
+	conditional_expression_tail_sequence_node(const conditional_expression_tail_sequence_node& o):
+		type(static_cast<const type&>(o))
+	{
+	}
+
+	conditional_expression_tail_sequence_node(conditional_expression_tail_sequence_node&& o):
+		type(static_cast<type&&>(o))
+	{
+	}
+
+	conditional_expression_tail_sequence_node(const type& o):
+		type(o)
+	{
+	}
+
+	using type::operator=;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

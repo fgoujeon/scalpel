@@ -22,8 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_PARSE_TREE_TO_SYNTAX_TREE_SEQUENCE_NODE_CONVERTER_HPP
 
 #include <string>
-#include <iostream>
-#include <scalpel/cpp/syntax_nodes/sequence_node.hpp>
+#include <scalpel/cpp/syntax_nodes/simple_text_node.hpp>
 #include "generic_node_converters.hpp"
 
 namespace scalpel { namespace cpp { namespace detail { namespace syntax_analysis { namespace parse_tree_to_syntax_tree
@@ -60,98 +59,92 @@ check_node(const tree_node_t& node)
 
 
 
-template<class... NodesT>
-struct sequence_node_converter;
-
-template<>
-struct sequence_node_converter<>
+/**
+ * Converts a node of a sequence node
+ */
+template<class NodeT>
+struct sequence_node_node_converter
 {
 	static
-	syntax_nodes::sequence_node<>
-	convert(const tree_node_t&, tree_node_iterator_t)
-	{
-		return syntax_nodes::sequence_node<>();
-	}
-};
-
-template<class HeadNodeT, class... TailNodesT>
-struct sequence_node_converter<HeadNodeT, TailNodesT...>
-{
-	static
-	syntax_nodes::sequence_node<HeadNodeT, TailNodesT...>
-	convert(const tree_node_t& node, tree_node_iterator_t it)
+	NodeT
+	convert(const tree_node_t& node, tree_node_iterator_t& it)
 	{
 		assert(it != node.children.end());
 
-		HeadNodeT head_node = convert_node<HeadNodeT>(*it);
+		NodeT syntax_node = convert_node<NodeT>(*it);
 
 		if(it != node.children.end())
 			++it;
 
-		return syntax_nodes::sequence_node<HeadNodeT, TailNodesT...>
-		(
-			head_node,
-			sequence_node_converter<TailNodesT...>::convert(node, it)
-		);
+		return syntax_node;
 	}
 };
 
 //specialization for optional nodes
-template<class HeadNodeT, class... TailNodesT>
-struct sequence_node_converter<syntax_nodes::optional_node<HeadNodeT>, TailNodesT...>
+template<class NodeT>
+struct sequence_node_node_converter<syntax_nodes::optional_node<NodeT>>
 {
 	static
-	syntax_nodes::sequence_node<syntax_nodes::optional_node<HeadNodeT>, TailNodesT...>
-	convert(const tree_node_t& node, tree_node_iterator_t it)
+	syntax_nodes::optional_node<NodeT>
+	convert(const tree_node_t& node, tree_node_iterator_t& it)
 	{
-		syntax_nodes::optional_node<HeadNodeT> head_node;
-		if(it != node.children.end() && check_node<HeadNodeT>(*it))
+		syntax_nodes::optional_node<NodeT> syntax_node;
+		if(it != node.children.end() && check_node<NodeT>(*it))
 		{
-			head_node = convert_node<HeadNodeT>(*it);
+			syntax_node = convert_node<NodeT>(*it);
 			++it;
 		}
 
-		return syntax_nodes::sequence_node<syntax_nodes::optional_node<HeadNodeT>, TailNodesT...>
-		(
-			head_node,
-			sequence_node_converter<TailNodesT...>::convert(node, it)
-		);
+		return syntax_node;
 	}
 };
 
 
 
-
-template<class SequenceNodeT>
-struct aaa;
-
-template<class... NodesT>
-struct aaa<syntax_nodes::sequence_node<NodesT...>>
+/**
+ * Converts a parse tree node to a syntax sequence node.
+ */
+//The only purpose of HeadNodeT is to allow the writing of a specialization
+//for the ending tail sequence which isn't tied to any particular
+//implementation of the SequenceNode Concept.
+template<class SequenceNodeT, typename HeadNodeT>
+struct sequence_node_converter
 {
-	static
-	syntax_nodes::sequence_node<NodesT...>
-	convert(const tree_node_t& node, tree_node_iterator_t it)
-	{
-		return sequence_node_converter<NodesT...>::convert(node, it);
-	}
-};
+	typedef typename SequenceNodeT::head_node_t head_node_t;
+	typedef typename SequenceNodeT::tail_sequence_node_t tail_sequence_node_t;
 
-template<class SequenceNodeT>
-struct aaa
-{
 	static
 	SequenceNodeT
 	convert(const tree_node_t& node, tree_node_iterator_t it)
 	{
-		return aaa<typename SequenceNodeT::type>::convert(node, it);
+		head_node_t syntax_node = sequence_node_node_converter<head_node_t>::convert(node, it);
+		return SequenceNodeT
+		(
+			syntax_node,
+			sequence_node_converter<tail_sequence_node_t, typename tail_sequence_node_t::head_node_t>::convert(node, it)
+		);
 	}
 };
+
+//specialization for the ending tail sequence
+template<class SequenceNodeT>
+struct sequence_node_converter<SequenceNodeT, void>
+{
+	static
+	SequenceNodeT
+	convert(const tree_node_t&, tree_node_iterator_t)
+	{
+		return SequenceNodeT();
+	}
+};
+
+
 
 template<class SequenceNodeT>
 SequenceNodeT
 convert_sequence_node(const tree_node_t& node)
 {
-	return aaa<SequenceNodeT>::convert(node, node.children.begin());
+	return sequence_node_converter<SequenceNodeT, typename SequenceNodeT::head_node_t>::convert(node, node.children.begin());
 }
 
 }}}}} //namespace scalpel::cpp::detail::syntax_analysis::parse_tree_to_syntax_tree

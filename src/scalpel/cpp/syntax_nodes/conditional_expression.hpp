@@ -29,6 +29,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 class conditional_expression_impl;
+class conditional_expression_tail_sequence_node;
 class assignment_expression;
 
 /**
@@ -41,7 +42,8 @@ conditional_expression
 class conditional_expression: public composite_node
 {
 	public:
-		typedef conditional_expression_impl type;
+		typedef logical_or_expression head_node_t;
+		typedef conditional_expression_tail_sequence_node tail_sequence_node_t;
 
 		conditional_expression
 		(
@@ -54,6 +56,12 @@ class conditional_expression: public composite_node
 			optional_node<simple_text_node<str::colon>> o7,
 			optional_node<space>&& o8,
 			optional_node<assignment_expression>&& o9
+		);
+
+		conditional_expression
+		(
+			head_node_t&& head,
+			tail_sequence_node_t&& tail
 		);
 
 		conditional_expression(const conditional_expression& o);

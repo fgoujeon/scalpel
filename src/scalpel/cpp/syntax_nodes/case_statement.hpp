@@ -52,6 +52,8 @@ typedef
 struct case_statement: public case_statement_t
 {
 	typedef case_statement_t type;
+	typedef case_statement_t::head_node_t head_node_t;
+	typedef case_statement_t::tail_sequence_node_t tail_sequence_node_t;
 
 	case_statement
 	(
@@ -64,6 +66,15 @@ struct case_statement: public case_statement_t
 		statement&& o7
 	):
 		case_statement_t(o1, o2, o3, o4, o5, o6, o7)
+	{
+	}
+
+	case_statement
+	(
+		head_node_t&& head,
+		tail_sequence_node_t&& tail
+	):
+		case_statement_t(head, tail)
 	{
 	}
 

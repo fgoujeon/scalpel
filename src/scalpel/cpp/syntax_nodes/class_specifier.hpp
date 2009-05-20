@@ -52,6 +52,8 @@ typedef
 struct class_specifier: public class_specifier_t
 {
 	typedef class_specifier_t type;
+	typedef type::head_node_t head_node_t;
+	typedef type::tail_sequence_node_t tail_sequence_node_t;
 
 	class_specifier
 	(
@@ -64,6 +66,15 @@ struct class_specifier: public class_specifier_t
 		simple_text_node<str::closing_brace>&& o7
 	):
 		type(o1, o2, o3, o4, o5, o6, o7)
+	{
+	}
+
+	class_specifier
+	(
+		head_node_t&& n,
+		tail_sequence_node_t&& seq
+	):
+		type(n, seq)
 	{
 	}
 

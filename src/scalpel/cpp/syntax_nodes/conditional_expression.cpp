@@ -44,6 +44,15 @@ conditional_expression::conditional_expression
 	add(*impl_);
 }
 
+conditional_expression::conditional_expression
+(
+	head_node_t&& head,
+	tail_sequence_node_t&& tail
+):
+	impl_(new conditional_expression_impl(head, tail))
+{
+}
+
 conditional_expression::conditional_expression(const conditional_expression& o):
 	composite_node(),
 	impl_

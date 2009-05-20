@@ -22,6 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_PARSE_TREE_TO_SYNTAX_TREE_NODE_CONVERTERS_HPP
 
 #include <string>
+#include <iostream>
 #include "../../../syntax_tree.hpp"
 #include "../grammar.hpp"
 #include "conversion_functions.hpp"
