@@ -21,9 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_CLASSIC_LABELED_STATEMENT_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_CLASSIC_LABELED_STATEMENT_HPP
 
-#include "optional_node.hpp"
-#include "composite_node.hpp"
-#include "space.hpp"
+#include "common.hpp"
 #include "identifier.hpp"
 #include "statement.hpp"
 
@@ -35,32 +33,59 @@ classic_labeled_statement
 	= identifier, ':', statement
 ;
 */
-class classic_labeled_statement: public composite_node
+typedef
+	sequence_node
+	<
+		identifier,
+		optional_node<space>,
+		simple_text_node<str::colon>,
+		optional_node<space>,
+		statement
+	>
+	classic_labeled_statement_t
+;
+
+struct classic_labeled_statement: public classic_labeled_statement_t
 {
-	public:
-		classic_labeled_statement
-		(
-			identifier&& identifier_node,
-			optional_node<space>&& post_identifier_space_node,
-			optional_node<space>&& post_colon_space_node,
-			statement&& statement_node
-		);
+	typedef classic_labeled_statement_t type;
 
-		classic_labeled_statement(const classic_labeled_statement& o);
+	classic_labeled_statement
+	(
+		identifier&& o1,
+		optional_node<space>&& o2,
+		simple_text_node<str::colon>&& o3,
+		optional_node<space>&& o4,
+		statement&& o5
+	):
+		classic_labeled_statement_t(o1, o2, o3, o4, o5)
+	{
+	}
 
-		classic_labeled_statement(classic_labeled_statement&& o);
+	classic_labeled_statement
+	(
+		const classic_labeled_statement& o
+	):
+		classic_labeled_statement_t(o)
+	{
+	}
 
-		const classic_labeled_statement&
-		operator=(const classic_labeled_statement& o);
+	classic_labeled_statement
+	(
+		classic_labeled_statement&& o
+	):
+		classic_labeled_statement_t(o)
+	{
+	}
 
-	private:
-		void
-		update_node_list();
+	classic_labeled_statement
+	(
+		const classic_labeled_statement_t& o
+	):
+		classic_labeled_statement_t(o)
+	{
+	}
 
-		identifier identifier_;
-		optional_node<space> post_identifier_space_;
-		optional_node<space> post_colon_space_;
-		std::unique_ptr<statement> statement_;
+	using classic_labeled_statement_t::operator=;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

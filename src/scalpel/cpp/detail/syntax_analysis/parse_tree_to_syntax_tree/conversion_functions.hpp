@@ -69,9 +69,6 @@ convert_class_head(const tree_node_t& node);
 syntax_nodes::class_template_elaborated_specifier
 convert_class_template_elaborated_specifier(const tree_node_t& node);
 
-syntax_nodes::classic_labeled_statement
-convert_classic_labeled_statement(const tree_node_t& node);
-
 syntax_nodes::compound_statement
 convert_compound_statement(const tree_node_t& node);
 
