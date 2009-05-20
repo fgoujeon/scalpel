@@ -18,13 +18,36 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_CAST_EXPRESSION_FWD_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_CAST_EXPRESSION_FWD_HPP
+#ifndef SCALPEL_CPP_SYNTAX_NODES_CAST_EXPRESSION_IMPL_HPP
+#define SCALPEL_CPP_SYNTAX_NODES_CAST_EXPRESSION_IMPL_HPP
+
+#include "composite_node.hpp"
+#include "unary_expression.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class cast_expression;
+class cast_expression_impl: public composite_node
+{
+	public:
+		cast_expression_impl
+		(
+			unary_expression&& unary_expression_node
+		);
+
+		cast_expression_impl(const cast_expression_impl& o);
+
+		cast_expression_impl(cast_expression_impl&& o);
+
+		const cast_expression_impl&
+		operator=(const cast_expression_impl& o);
+
+	private:
+		void
+		update_node_list();
+
+		unary_expression unary_expression_;
+};
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

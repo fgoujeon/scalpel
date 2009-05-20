@@ -22,7 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_WRAPPERS_HPP
 
 #include "composite_node.hpp"
-#include "cast_expression_fwd.hpp"
+#include "cast_expression.hpp"
 #include "statement.hpp"
 
 #define SCALPEL_CPP_SYNTAX_NODES_WRAPPER_SPECIFIER(node_type)\

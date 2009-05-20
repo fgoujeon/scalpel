@@ -78,9 +78,6 @@ convert_compound_statement(const tree_node_t& node);
 syntax_nodes::condition
 convert_condition(const tree_node_t& node);
 
-syntax_nodes::conditional_expression
-convert_conditional_expression(const tree_node_t& node);
-
 syntax_nodes::continue_statement
 convert_continue_statement(const tree_node_t& node);
 

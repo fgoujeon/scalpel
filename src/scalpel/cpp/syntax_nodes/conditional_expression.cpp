@@ -20,6 +20,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "conditional_expression.hpp"
 
+#include "conditional_expression_impl.hpp"
 #include "expressions.hpp"
 #include "common_nodes.hpp"
 
@@ -28,85 +29,61 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 conditional_expression::conditional_expression
 (
-	logical_or_expression&& logical_or_expression_node,
-	optional_node<space>&& pre_question_mark_space_node,
-	optional_node<space>&& post_question_mark_space_node,
-	optional_node<expression>&& expression_node,
-	optional_node<space>&& post_expression_space_node,
-	optional_node<space>&& post_colon_space_node,
-	optional_node<assignment_expression>&& assignment_expression_node
+	logical_or_expression&& o1,
+	optional_node<space>&& o2,
+	optional_node<simple_text_node<str::question_mark>> o3,
+	optional_node<space>&& o4,
+	optional_node<expression>&& o5,
+	optional_node<space>&& o6,
+	optional_node<simple_text_node<str::colon>> o7,
+	optional_node<space>&& o8,
+	optional_node<assignment_expression>&& o9
 ):
-	logical_or_expression_(new logical_or_expression(logical_or_expression_node)),
-	pre_question_mark_space_(pre_question_mark_space_node),
-	post_question_mark_space_(post_question_mark_space_node),
-	post_expression_space_(post_expression_space_node),
-	post_colon_space_(post_colon_space_node)
+	impl_(new conditional_expression_impl(o1, o2, o3, o4, o5, o6, o7, o8, o9))
 {
-	if(expression_node)
-		expression_ = std::move(std::unique_ptr<expression>(new expression(*expression_node)));
-	if(assignment_expression_node)
-		assignment_expression_ = std::move(std::unique_ptr<assignment_expression>(new assignment_expression(*assignment_expression_node)));
-	update_node_list();
+	add(*impl_);
 }
 
 conditional_expression::conditional_expression(const conditional_expression& o):
 	composite_node(),
-	logical_or_expression_(new logical_or_expression(*o.logical_or_expression_)),
-	pre_question_mark_space_(o.pre_question_mark_space_),
-	post_question_mark_space_(o.post_question_mark_space_),
-	post_expression_space_(o.post_expression_space_),
-	post_colon_space_(o.post_colon_space_)
+	impl_
+	(
+		new conditional_expression_impl(*o.impl_)
+	)
 {
-	if(o.expression_)
-		expression_ = std::move(std::unique_ptr<expression>(new expression(*o.expression_)));
-	if(o.assignment_expression_)
-		assignment_expression_ = std::move(std::unique_ptr<assignment_expression>(new assignment_expression(*o.assignment_expression_)));
-	update_node_list();
+	add(*impl_);
 }
 
 conditional_expression::conditional_expression(conditional_expression&& o):
 	composite_node(),
-	logical_or_expression_(o.logical_or_expression_),
-	pre_question_mark_space_(std::move(o.pre_question_mark_space_)),
-	post_question_mark_space_(std::move(o.post_question_mark_space_)),
-	expression_(std::move(o.expression_)),
-	post_expression_space_(std::move(o.post_expression_space_)),
-	post_colon_space_(std::move(o.post_colon_space_)),
-	assignment_expression_(std::move(o.assignment_expression_))
+	impl_
+	(
+		new conditional_expression_impl(std::move(*o.impl_))
+	)
 {
-	o.logical_or_expression_ = 0;
-	update_node_list();
+	add(*impl_);
+}
+
+conditional_expression::conditional_expression(const conditional_expression_impl& o):
+	composite_node(),
+	impl_
+	(
+		new conditional_expression_impl(o)
+	)
+{
+	add(*impl_);
 }
 
 conditional_expression::~conditional_expression()
 {
-	delete logical_or_expression_;
+	delete impl_;
 }
 
 const conditional_expression&
 conditional_expression::operator=(const conditional_expression& o)
 {
-	conditional_expression copy(o);
-	std::swap(copy, *this);
+	*impl_ = *o.impl_;
 	return *this;
-}
-
-void
-conditional_expression::update_node_list()
-{
-	clear();
-	add(*logical_or_expression_);
-	if(expression_)
-	{
-		if(pre_question_mark_space_) add(*pre_question_mark_space_);
-		add(common_nodes::question_mark);
-		if(post_question_mark_space_) add(*post_question_mark_space_);
-		add(*expression_);
-		if(post_expression_space_) add(*post_expression_space_);
-		add(common_nodes::colon);
-		if(post_colon_space_) add(*post_colon_space_);
-		add(*assignment_expression_);
-	}
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

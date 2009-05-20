@@ -29,6 +29,37 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace detail { namespace syntax_analysis { namespace parse_tree_to_syntax_tree
 {
 
+template<class NodeT>
+struct node_checker
+{
+	static
+	bool
+	check(const tree_node_t& node)
+	{
+		return check_id<NodeT>(node.value.id());
+	}
+};
+
+template<const std::string& Text>
+struct node_checker<syntax_nodes::simple_text_node<Text>>
+{
+	static
+	bool
+	check(const tree_node_t& node)
+	{
+		return get_value(node) == Text;
+	}
+};
+
+template<class NodeT>
+bool
+check_node(const tree_node_t& node)
+{
+	return node_checker<NodeT>::check(node);
+}
+
+
+
 template<class... NodesT>
 struct sequence_node_converter;
 
@@ -73,62 +104,14 @@ struct sequence_node_converter<syntax_nodes::optional_node<HeadNodeT>, TailNodes
 	syntax_nodes::sequence_node<syntax_nodes::optional_node<HeadNodeT>, TailNodesT...>
 	convert(const tree_node_t& node, tree_node_iterator_t it)
 	{
-		assert(it != node.children.end());
-
 		syntax_nodes::optional_node<HeadNodeT> head_node;
-		if(check_id<HeadNodeT>(it->value.id()))
+		if(it != node.children.end() && check_node<HeadNodeT>(*it))
 		{
 			head_node = convert_node<HeadNodeT>(*it);
-
-			if(it != node.children.end())
-				++it;
+			++it;
 		}
 
 		return syntax_nodes::sequence_node<syntax_nodes::optional_node<HeadNodeT>, TailNodesT...>
-		(
-			head_node,
-			sequence_node_converter<TailNodesT...>::convert(node, it)
-		);
-	}
-};
-
-//specialization for incomplete optional nodes
-template<class WrapperT, class HeadNodeT, class... TailNodesT>
-struct sequence_node_converter<syntax_nodes::incomplete_node<syntax_nodes::optional_node<HeadNodeT>, WrapperT>, TailNodesT...>
-{
-	typedef
-		syntax_nodes::incomplete_node
-		<
-			syntax_nodes::optional_node<HeadNodeT>,
-			WrapperT
-		>
-		node_t
-	;
-	typedef
-		syntax_nodes::sequence_node
-		<
-			node_t,
-			TailNodesT...
-		>
-		sequence_t
-	;
-
-	static
-	sequence_t
-	convert(const tree_node_t& node, tree_node_iterator_t it)
-	{
-		assert(it != node.children.end());
-
-		syntax_nodes::optional_node<HeadNodeT> head_node;
-		if(check_id<HeadNodeT>(it->value.id()))
-		{
-			head_node = convert_node<HeadNodeT>(*it);
-
-			if(it != node.children.end())
-				++it;
-		}
-
-		return sequence_t
 		(
 			head_node,
 			sequence_node_converter<TailNodesT...>::convert(node, it)

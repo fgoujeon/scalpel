@@ -25,7 +25,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "list_node.hpp"
 #include "optional_node.hpp"
 #include "simple_text_node.hpp"
-#include "incomplete_node.hpp"
 #include "strings.hpp"
 
 #endif

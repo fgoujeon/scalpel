@@ -22,8 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_ARRAY_DELETE_EXPRESSION_HPP
 
 #include "common.hpp"
-#include "cast_expression_fwd.hpp"
-#include "wrappers.hpp"
+#include "cast_expression.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -44,7 +43,7 @@ typedef
 		optional_node<space>,
 		simple_text_node<str::closing_square_bracket>,
 		optional_node<space>,
-		incomplete_node<cast_expression, wrappers::cast_expression>
+		cast_expression
 	>
 	array_delete_expression
 ;

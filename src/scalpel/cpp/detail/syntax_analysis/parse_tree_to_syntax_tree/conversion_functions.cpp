@@ -326,27 +326,6 @@ convert_condition(const tree_node_t& node)
 	>(node);
 }
 
-conditional_expression
-convert_conditional_expression(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::CONDITIONAL_EXPRESSION);
-
-	tree_node_iterator_t question_mark_it = find_node(node, "?");
-	tree_node_iterator_t expression_it = find_node<id_t::EXPRESSION>(node);
-	tree_node_iterator_t colon_it = find_node(node, ":");
-
-	return conditional_expression
-	(
-		find_and_convert_node<logical_or_expression, id_t::LOGICAL_OR_EXPRESSION>(node),
-		convert_previous_space(node, question_mark_it),
-		convert_next_space(node, question_mark_it),
-		convert_optional<expression>(node, expression_it),
-		convert_next_space(node, expression_it),
-		convert_next_space(node, colon_it),
-		find_and_convert_node<optional_node<assignment_expression>, id_t::ASSIGNMENT_EXPRESSION>(node)
-	);
-}
-
 continue_statement
 convert_continue_statement(const tree_node_t& node)
 {

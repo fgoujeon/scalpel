@@ -140,6 +140,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "syntax_nodes/while_statement.hpp"
 #include "syntax_nodes/if_statement.hpp"
 #include "syntax_nodes/switch_statement.hpp"
+#include "syntax_nodes/conditional_expression_impl.hpp"
 
 namespace scalpel { namespace cpp
 {

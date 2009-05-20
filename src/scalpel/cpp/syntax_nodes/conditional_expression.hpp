@@ -21,16 +21,14 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_CONDITIONAL_EXPRESSION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_CONDITIONAL_EXPRESSION_HPP
 
-#include <memory>
-#include "optional_node.hpp"
-#include "composite_node.hpp"
+#include "common.hpp"
 #include "expressions_fwd.hpp"
 #include "expression_fwd.hpp"
-#include "space.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
+class conditional_expression_impl;
 class assignment_expression;
 
 /**
@@ -43,20 +41,26 @@ conditional_expression
 class conditional_expression: public composite_node
 {
 	public:
+		typedef conditional_expression_impl type;
+
 		conditional_expression
 		(
-			logical_or_expression&& logical_or_expression_node,
-			optional_node<space>&& pre_question_mark_space_node,
-			optional_node<space>&& post_question_mark_space_node,
-			optional_node<expression>&& expression_node,
-			optional_node<space>&& post_expression_space_node,
-			optional_node<space>&& post_colon_space_node,
-			optional_node<assignment_expression>&& assignment_expression_node
+			logical_or_expression&& o1,
+			optional_node<space>&& o2,
+			optional_node<simple_text_node<str::question_mark>> o3,
+			optional_node<space>&& o4,
+			optional_node<expression>&& o5,
+			optional_node<space>&& o6,
+			optional_node<simple_text_node<str::colon>> o7,
+			optional_node<space>&& o8,
+			optional_node<assignment_expression>&& o9
 		);
 
 		conditional_expression(const conditional_expression& o);
 
 		conditional_expression(conditional_expression&& o);
+
+		conditional_expression(const conditional_expression_impl& o);
 
 		~conditional_expression();
 
@@ -64,16 +68,7 @@ class conditional_expression: public composite_node
 		operator=(const conditional_expression& o);
 
 	private:
-		void
-		update_node_list();
-
-		logical_or_expression* logical_or_expression_;
-		optional_node<space> pre_question_mark_space_;
-		optional_node<space> post_question_mark_space_;
-		std::unique_ptr<expression> expression_;
-		optional_node<space> post_expression_space_;
-		optional_node<space> post_colon_space_;
-		std::unique_ptr<assignment_expression> assignment_expression_;
+		conditional_expression_impl* impl_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

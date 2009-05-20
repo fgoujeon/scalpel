@@ -138,18 +138,6 @@ struct node_converter_from_type<syntax_nodes::optional_node<T>>
 	}
 };
 
-//specialization for incomplete nodes
-template<class T, class Allocator>
-struct node_converter_from_type<syntax_nodes::incomplete_node<T, Allocator>>
-{
-	static
-	T
-	convert(const tree_node_t& node)
-	{
-		return convert_node<T>(node);
-	}
-};
-
 //specialization for simple text nodes
 template<const std::string& Text>
 struct node_converter_from_type<syntax_nodes::simple_text_node<Text>>
@@ -267,10 +255,9 @@ SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_NODE_CONVERTER_SPECIALIZATION
 	condition,
 	condition
 )
-SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_NODE_CONVERTER_SPECIALIZATION
+SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_SEQUENCE_NODE_CONVERTER_SPECIALIZATION
 (
 	CONDITIONAL_EXPRESSION,
-	conditional_expression,
 	conditional_expression
 )
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_NODE_CONVERTER_SPECIALIZATION

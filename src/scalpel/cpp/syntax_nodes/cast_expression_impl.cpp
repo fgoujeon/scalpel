@@ -18,38 +18,51 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_CAST_EXPRESSION_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_CAST_EXPRESSION_HPP
-
-#include "composite_node.hpp"
+#include "cast_expression_impl.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class cast_expression_impl;
-class unary_expression;
-
-class cast_expression: public composite_node
+cast_expression_impl::cast_expression_impl
+(
+	unary_expression&& unary_expression_node
+):
+	unary_expression_(std::move(unary_expression_node))
 {
-	public:
-		cast_expression
-		(
-			unary_expression&& unary_expression_node
-		);
+	update_node_list();
+}
 
-		cast_expression(const cast_expression& o);
+cast_expression_impl::cast_expression_impl(const cast_expression_impl& o):
+	composite_node(),
+	unary_expression_(o.unary_expression_)
+{
+	update_node_list();
+}
 
-		cast_expression(cast_expression&& o);
+cast_expression_impl::cast_expression_impl(cast_expression_impl&& o):
+	composite_node(),
+	unary_expression_(std::move(o.unary_expression_))
+{
+	update_node_list();
+}
 
-		~cast_expression();
+const cast_expression_impl&
+cast_expression_impl::operator=(const cast_expression_impl& o)
+{
+	unary_expression_ = o.unary_expression_;
 
-		const cast_expression&
-		operator=(const cast_expression& o);
+	update_node_list();
 
-	private:
-		cast_expression_impl* impl_;
-};
+	return *this;
+}
+
+void
+cast_expression_impl::update_node_list()
+{
+	clear();
+
+	add(unary_expression_);
+}
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
-#endif
