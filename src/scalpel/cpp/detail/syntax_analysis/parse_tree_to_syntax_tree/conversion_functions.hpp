@@ -27,9 +27,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace detail { namespace syntax_analysis { namespace parse_tree_to_syntax_tree
 {
 
-syntax_nodes::arrow_id_expression
-convert_arrow_id_expression(const tree_node_t& node);
-
 syntax_nodes::arrow_pseudo_destructor_name
 convert_arrow_pseudo_destructor_name(const tree_node_t& node);
 
