@@ -86,10 +86,6 @@ template<const std::string&& Text>
 syntax_nodes::simple_text_node<Text>
 convert_simple_text(const tree_node_t&);
 
-template<class CastExpressionT>
-CastExpressionT
-convert_cast_expression_template(const tree_node_t& node);
-
 }}}}} //namespace scalpel::cpp::detail::syntax_analysis::parse_tree_to_syntax_tree
 
 #endif

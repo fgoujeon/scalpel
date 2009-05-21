@@ -21,9 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_WHILE_STATEMENT_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_WHILE_STATEMENT_HPP
 
-#include "optional_node.hpp"
-#include "composite_node.hpp"
-#include "space.hpp"
+#include "common.hpp"
 #include "condition.hpp"
 #include "statement.hpp"
 
@@ -35,36 +33,62 @@ while_statement
 	= str_p("while") >> !s >> '(' >> !s >> condition >> !s >> ')' >> !s >> statement
 ;
 */
-class while_statement: public composite_node
+typedef
+	sequence_node
+	<
+		simple_text_node<str::while_>,
+		optional_node<space>,
+		simple_text_node<str::opening_round_bracket>,
+		optional_node<space>,
+		condition,
+		optional_node<space>,
+		simple_text_node<str::closing_round_bracket>,
+		optional_node<space>,
+		statement
+	>
+	while_statement_t
+;
+
+struct while_statement: public while_statement_t
 {
-	public:
-		while_statement
-		(
-			optional_node<space>&& post_while_keyword_space_node,
-			optional_node<space>&& post_opening_bracket_space_node,
-			condition&& condition_node,
-			optional_node<space>&& post_condition_space_node,
-			optional_node<space>&& post_closing_bracket_space_node,
-			statement&& statement_node
-		);
+	typedef while_statement_t type;
+	typedef type::head_node_t head_node_t;
+	typedef type::tail_sequence_node_t tail_sequence_node_t;
 
-		while_statement(const while_statement& o);
+	while_statement
+	(
+		simple_text_node<str::while_>&& o1,
+		optional_node<space>&& o2,
+		simple_text_node<str::opening_round_bracket>&& o3,
+		optional_node<space>&& o4,
+		condition&& o5,
+		optional_node<space>&& o6,
+		simple_text_node<str::closing_round_bracket>&& o7,
+		optional_node<space>&& o8,
+		statement&& o9
+	):
+		type(o1, o2, o3, o4, o5, o6, o7, o8, o9)
+	{
+	}
 
-		while_statement(while_statement&& o);
+	while_statement
+	(
+		head_node_t&& head,
+		tail_sequence_node_t&& tail
+	):
+		type(head, tail)
+	{
+	}
 
-		const while_statement&
-		operator=(const while_statement& o);
+	while_statement(const while_statement& o):
+		type(o)
+	{
+	}
 
-	private:
-		void
-		update_node_list();
-
-		optional_node<space> post_while_keyword_space_;
-		optional_node<space> post_opening_bracket_space_;
-		condition condition_;
-		optional_node<space> post_condition_space_;
-		optional_node<space> post_closing_bracket_space_;
-		std::unique_ptr<statement> statement_;
+	while_statement(while_statement&& o):
+		type(o)
+	{
+	}
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

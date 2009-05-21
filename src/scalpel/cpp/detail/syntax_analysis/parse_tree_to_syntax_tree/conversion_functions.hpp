@@ -324,9 +324,6 @@ convert_using_declaration(const tree_node_t& node);
 syntax_nodes::using_directive
 convert_using_directive(const tree_node_t& node);
 
-syntax_nodes::while_statement
-convert_while_statement(const tree_node_t& node);
-
 }}}}} //namespace scalpel::cpp::detail::syntax_analysis
 
 #endif

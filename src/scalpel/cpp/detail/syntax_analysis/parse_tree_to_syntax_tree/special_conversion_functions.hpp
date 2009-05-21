@@ -251,25 +251,6 @@ convert_simple_text(const tree_node_t&)
 	return syntax_nodes::simple_text_node<Text>();
 }
 
-
-template<class CastExpressionT>
-CastExpressionT
-convert_cast_expression_template(const tree_node_t& node)
-{
-	tree_node_iterator_t cast_keyword_it = node.children.begin();
-	tree_node_iterator_t left_angle_bracket_it = find_node(node, "<");
-	tree_node_iterator_t right_angle_bracket_it = find_node(node, ">");
-	tree_node_iterator_t opening_round_bracket_it = find_node(node, "(");
-
-	return CastExpressionT
-	(
-		convert_next_space(node, cast_keyword_it),
-		convert_angle_bracketed_node<syntax_nodes::type_id>(left_angle_bracket_it),
-		convert_next_space(node, right_angle_bracket_it),
-		convert_round_bracketed_node<syntax_nodes::expression>(opening_round_bracket_it)
-	);
-}
-
 }}}}} //namespace scalpel::cpp::detail::syntax_analysis::parse_tree_to_syntax_tree
 
 #endif

@@ -1550,28 +1550,5 @@ convert_using_directive(const tree_node_t& node)
     );
 }
 
-while_statement
-convert_while_statement(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::WHILE_STATEMENT);
-
-	tree_node_iterator_t while_keyword_it = node.children.begin();
-	tree_node_iterator_t opening_bracket_it = find_node(node, "(");
-	tree_node_iterator_t condition_it = find_node<id_t::CONDITION>(node);
-	tree_node_iterator_t closing_bracket_it = find_node(node, ")");
-	tree_node_iterator_t statement_it = node.children.end();
-	--statement_it;
-
-	return while_statement
-	(
-		convert_next_space(node, while_keyword_it),
-		convert_next_space(node, opening_bracket_it),
-		convert_node<condition>(*condition_it),
-		convert_next_space(node, condition_it),
-		convert_next_space(node, closing_bracket_it),
-		convert_node<statement>(*statement_it)
-	);
-}
-
 }}}}} //namespace scalpel::cpp::detail::syntax_analysis
 
