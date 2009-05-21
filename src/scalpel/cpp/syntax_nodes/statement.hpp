@@ -36,32 +36,28 @@ class selection_statement;
 class block_declaration;
 
 class statement_impl;
+class statement_tail;
 
 class statement: public composite_node
 {
 	public:
-		explicit
+		typedef labeled_statement head_node_t;
+		typedef statement_tail tail_alternative_node_t;
+
 		statement(labeled_statement&& o);
 
-		explicit
 		statement(expression_statement&& o);
 
-		explicit
 		statement(compound_statement&& o);
 
-		explicit
 		statement(selection_statement&& o);
 
-		explicit
 		statement(iteration_statement&& o);
 
-		explicit
 		statement(jump_statement&& o);
 
-		explicit
 		statement(block_declaration&& o);
 
-		explicit
 		statement(try_block&& o);
 
 		statement(const statement& o);

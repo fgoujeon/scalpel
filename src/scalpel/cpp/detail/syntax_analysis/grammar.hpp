@@ -87,7 +87,6 @@ class grammar
             TRANSLATION_UNIT,
 
             PRIMARY_EXPRESSION,
-			THIS_KEYWORD,
 			ROUND_BRACKETED_EXPRESSION,
             ID_EXPRESSION,
             UNQUALIFIED_ID,
@@ -118,8 +117,6 @@ class grammar
 			ARROW_ID_EXPRESSION,
 			DOT_PSEUDO_DESTRUCTOR_NAME,
 			ARROW_PSEUDO_DESTRUCTOR_NAME,
-			DOUBLE_PLUS,
-			DOUBLE_MINUS,
             EXPRESSION_LIST,
             PSEUDO_DESTRUCTOR_NAME,
             UNARY_EXPRESSION,
@@ -316,7 +313,6 @@ class grammar
             EXCEPTION_DECLARATION,
 			EXCEPTION_DECLARATOR,
 			EXCEPTION_ABSTRACT_DECLARATOR,
-			ELLIPSIS,
             THROW_EXPRESSION,
             EXCEPTION_SPECIFICATION,
             TYPE_ID_LIST,
@@ -420,7 +416,6 @@ class grammar
 
         //1.4 - Expressions [gram.expr]
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PRIMARY_EXPRESSION>> primary_expression;
-		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::THIS_KEYWORD>> this_keyword;
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ROUND_BRACKETED_EXPRESSION>> round_bracketed_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ID_EXPRESSION>> id_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::UNQUALIFIED_ID>> unqualified_id;
@@ -451,8 +446,6 @@ class grammar
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ARROW_ID_EXPRESSION>> arrow_id_expression;
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DOT_PSEUDO_DESTRUCTOR_NAME>> dot_pseudo_destructor_name;
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ARROW_PSEUDO_DESTRUCTOR_NAME>> arrow_pseudo_destructor_name;
-		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DOUBLE_PLUS>> double_plus;
-		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DOUBLE_MINUS>> double_minus;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EXPRESSION_LIST>> expression_list;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PSEUDO_DESTRUCTOR_NAME>> pseudo_destructor_name;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::UNARY_EXPRESSION>> unary_expression;
@@ -670,7 +663,6 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EXCEPTION_DECLARATION>> exception_declaration;
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EXCEPTION_DECLARATOR>> exception_declarator;
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EXCEPTION_ABSTRACT_DECLARATOR>> exception_abstract_declarator;
-		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ELLIPSIS>> ellipsis;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::THROW_EXPRESSION>> throw_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EXCEPTION_SPECIFICATION>> exception_specification;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TYPE_ID_LIST>> type_id_list;

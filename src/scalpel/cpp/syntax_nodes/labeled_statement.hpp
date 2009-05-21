@@ -27,6 +27,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 class labeled_statement_impl;
+class labeled_statement_tail;
 
 class case_statement;
 class default_statement;
@@ -35,13 +36,13 @@ class classic_labeled_statement;
 class labeled_statement: public composite_node
 {
 	public:
-		explicit
+		typedef case_statement head_node_t;
+		typedef labeled_statement_tail tail_alternative_node_t;
+
 		labeled_statement(case_statement&& o);
 
-		explicit
 		labeled_statement(default_statement&& o);
 
-		explicit
 		labeled_statement(classic_labeled_statement&& o);
 
 		labeled_statement(const labeled_statement& o);

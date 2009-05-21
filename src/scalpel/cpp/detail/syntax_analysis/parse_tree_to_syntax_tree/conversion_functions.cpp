@@ -29,37 +29,12 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "node_finder_and_converter.hpp"
 #include "space_conversion_functions.hpp"
 #include "sequence_node_converter.hpp"
+#include "alternative_node_converter.hpp"
 
 using namespace scalpel::cpp::syntax_nodes;
 
 namespace scalpel { namespace cpp { namespace detail { namespace syntax_analysis { namespace parse_tree_to_syntax_tree
 {
-
-abstract_declarator
-convert_abstract_declarator(const tree_node_t& node)
-{
-	assert(node.value.id() == id_t::ABSTRACT_DECLARATOR);
-
-	return convert_alternative
-	<
-		abstract_declarator,
-		id_t::PTR_OPERATOR_SEQ,
-		id_t::DIRECT_ABSTRACT_DECLARATOR
-	>(node);
-}
-
-array_operator
-convert_array_operator(const tree_node_t& node)
-{
-	assert(node.value.id() == id_t::ARRAY_OPERATOR);
-
-	return convert_alternative
-	<
-		array_operator,
-		id_t::NEW_ARRAY_OPERATOR,
-		id_t::DELETE_ARRAY_OPERATOR
-	>(node);
-}
 
 arrow_id_expression
 convert_arrow_id_expression(const tree_node_t& node)
@@ -171,22 +146,6 @@ convert_base_specifier(const tree_node_t& node)
 	);
 }
 
-block_declaration
-convert_block_declaration(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::BLOCK_DECLARATION);
-
-	return convert_alternative
-	<
-		block_declaration,
-		//id_t::ASM_DEFINITION,
-		id_t::SIMPLE_DECLARATION,
-		//id_t::NAMESPACE_ALIAS_DEFINITION,
-		id_t::USING_DECLARATION,
-		id_t::USING_DIRECTIVE
-	>(node);
-}
-
 boolean_literal
 convert_boolean_literal(const tree_node_t& node)
 {
@@ -294,19 +253,6 @@ convert_compound_statement(const tree_node_t& node)
 	);
 }
 
-condition
-convert_condition(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::CONDITION);
-
-	return convert_alternative
-	<
-		condition,
-		id_t::EXPRESSION,
-		id_t::ASSIGNMENT_EXPRESSION_CONDITION
-	>(node);
-}
-
 continue_statement
 convert_continue_statement(const tree_node_t& node)
 {
@@ -369,38 +315,6 @@ convert_cv_qualifier(const tree_node_t& node)
 	}
 }
 
-decl_specifier
-convert_decl_specifier(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::DECL_SPECIFIER);
-
-	return convert_alternative
-	<
-		decl_specifier,
-		id_t::STORAGE_CLASS_SPECIFIER,
-		id_t::TYPE_SPECIFIER,
-		id_t::FUNCTION_SPECIFIER
-	>(node);
-}
-
-declaration
-convert_declaration(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::DECLARATION);
-
-	return convert_alternative
-	<
-		declaration,
-		id_t::BLOCK_DECLARATION,
-		id_t::FUNCTION_DEFINITION,
-		id_t::TEMPLATE_DECLARATION,
-//            id_t::EXPLICIT_INSTANTIATION,
-//            id_t::EXPLICIT_SPECIALIZATION,
-//            id_t::LINKAGE_SPECIFICATION,
-		id_t::NAMESPACE_DEFINITION
-	>(node);
-}
-
 declarator
 convert_declarator(const tree_node_t& node)
 {
@@ -414,19 +328,6 @@ convert_declarator(const tree_node_t& node)
 		convert_next_space(node, ptr_operator_seq_it),
 		find_and_convert_node<direct_declarator, id_t::DIRECT_DECLARATOR>(node)
 	);
-}
-
-declarator_id
-convert_declarator_id(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::DECLARATOR_ID);
-
-	return convert_alternative
-	<
-		declarator_id,
-		id_t::ID_EXPRESSION,
-		id_t::NESTED_IDENTIFIER_OR_TEMPLATE_ID
-	>(node);
 }
 
 default_statement
@@ -451,19 +352,6 @@ convert_delete_array_operator(const tree_node_t& node)
     assert(node.value.id() == id_t::DELETE_ARRAY_OPERATOR);
 
 	return delete_array_operator();
-}
-
-delete_expression
-convert_delete_expression(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::DELETE_EXPRESSION);
-
-	return convert_alternative
-	<
-		delete_expression,
-		id_t::SIMPLE_DELETE_EXPRESSION,
-		id_t::ARRAY_DELETE_EXPRESSION
-	>(node);
 }
 
 destructor_name
@@ -496,19 +384,6 @@ convert_direct_declarator_array_part(const tree_node_t& node)
     return direct_declarator::array_part();
 }
 
-direct_declarator::first_part
-convert_direct_declarator_first_part(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::DIRECT_DECLARATOR_FIRST_PART);
-
-	return convert_alternative
-	<
-		direct_declarator::first_part,
-		id_t::BRACKETED_DECLARATOR,
-		id_t::DECLARATOR_ID
-	>(node);
-}
-
 direct_declarator::function_part
 convert_direct_declarator_function_part(const tree_node_t& node)
 {
@@ -529,19 +404,6 @@ convert_direct_declarator_function_part(const tree_node_t& node)
 		convert_previous_space(node, exception_specification_it),
 		convert_optional<exception_specification>(node, exception_specification_it)
     );
-}
-
-direct_declarator::last_part
-convert_direct_declarator_last_part(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::DIRECT_DECLARATOR_LAST_PART);
-
-	return convert_alternative
-	<
-		direct_declarator::last_part,
-		id_t::DIRECT_DECLARATOR_FUNCTION_PART,
-		id_t::DIRECT_DECLARATOR_ARRAY_PART
-	>(node);
 }
 
 direct_declarator
@@ -631,22 +493,6 @@ convert_dot_pseudo_destructor_name(const tree_node_t& node)
 	return dot_pseudo_destructor_name();
 }
 
-elaborated_type_specifier
-convert_elaborated_type_specifier(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::ELABORATED_TYPE_SPECIFIER);
-
-	return convert_alternative
-	<
-		elaborated_type_specifier,
-		id_t::CLASS_TEMPLATE_ELABORATED_SPECIFIER,
-		id_t::CLASS_ELABORATED_SPECIFIER,
-		id_t::ENUM_ELABORATED_SPECIFIER,
-		id_t::TYPENAME_TEMPLATE_ELABORATED_SPECIFIER,
-		id_t::TYPENAME_ELABORATED_SPECIFIER
-	>(node);
-}
-
 empty_initializer_list_initializer_clause
 convert_empty_initializer_list_initializer_clause(const tree_node_t& node)
 {
@@ -700,21 +546,6 @@ convert_exception_abstract_declarator(const tree_node_t& node)
 		convert_next_space(node, type_specifier_seq_it),
 		convert_node<abstract_declarator>(*abstract_declarator_it)
 	);
-}
-
-exception_declaration
-convert_exception_declaration(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::EXCEPTION_DECLARATION);
-
-	return convert_alternative
-	<
-		exception_declaration,
-		id_t::EXCEPTION_DECLARATOR,
-		id_t::EXCEPTION_ABSTRACT_DECLARATOR,
-		id_t::TYPE_SPECIFIER_SEQ,
-		id_t::ELLIPSIS
-	>(node);
 }
 
 exception_declarator
@@ -772,19 +603,6 @@ convert_floating_literal(const tree_node_t& node)
     assert(node.value.id() == id_t::FLOATING_LITERAL);
 
 	return floating_literal(get_only_child_value(node));
-}
-
-for_init_statement
-convert_for_init_statement(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::FOR_INIT_STATEMENT);
-
-	return convert_alternative
-	<
-		for_init_statement,
-		id_t::EXPRESSION_STATEMENT,
-		id_t::SIMPLE_DECLARATION
-	>(node);
 }
 
 for_statement
@@ -908,19 +726,6 @@ convert_handler(const tree_node_t& node)
 	);
 }
 
-id_expression
-convert_id_expression(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::ID_EXPRESSION);
-
-	return convert_alternative
-	<
-		id_expression,
-		id_t::UNQUALIFIED_ID,
-	   	id_t::QUALIFIED_ID
-	>(node);
-}
-
 identifier
 convert_identifier(const tree_node_t& node)
 {
@@ -931,19 +736,6 @@ convert_identifier(const tree_node_t& node)
     );
 
     return identifier(get_only_child_value(node));
-}
-
-identifier_or_template_id
-convert_identifier_or_template_id(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::IDENTIFIER_OR_TEMPLATE_ID);
-
-	return convert_alternative
-	<
-		identifier_or_template_id,
-		id_t::IDENTIFIER,
-		id_t::TEMPLATE_ID
-	>(node);
 }
 
 if_statement
@@ -990,33 +782,6 @@ convert_init_declarator(const tree_node_t& node)
     );
 }
 
-initializer
-convert_initializer(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::INITIALIZER);
-
-	return convert_alternative
-	<
-		initializer,
-		id_t::EQUAL_INITIALIZER,
-		id_t::BRACKETED_INITIALIZER
-	>(node);
-}
-
-initializer_clause
-convert_initializer_clause(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::INITIALIZER_CLAUSE);
-
-	return convert_alternative
-	<
-		initializer_clause,
-		id_t::ASSIGNMENT_EXPRESSION,
-		id_t::INITIALIZER_LIST_INITIALIZER_CLAUSE,
-		id_t::EMPTY_INITIALIZER_LIST_INITIALIZER_CLAUSE
-	>(node);
-}
-
 initializer_list_initializer_clause
 convert_initializer_list_initializer_clause(const tree_node_t& node)
 {
@@ -1038,65 +803,6 @@ convert_integer_literal(const tree_node_t& node)
 	);
 }
 
-iteration_statement
-convert_iteration_statement(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::ITERATION_STATEMENT);
-
-	return convert_alternative
-	<
-		iteration_statement,
-		id_t::WHILE_STATEMENT,
-		id_t::DO_WHILE_STATEMENT,
-		id_t::FOR_STATEMENT
-	>(node);
-}
-
-jump_statement
-convert_jump_statement(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::JUMP_STATEMENT);
-
-	return convert_alternative
-	<
-		jump_statement,
-		id_t::BREAK_STATEMENT,
-		id_t::CONTINUE_STATEMENT,
-		id_t::RETURN_STATEMENT,
-		id_t::GOTO_STATEMENT
-	>(node);
-}
-
-labeled_statement
-convert_labeled_statement(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::LABELED_STATEMENT);
-
-	return convert_alternative
-	<
-		labeled_statement,
-		id_t::CASE_STATEMENT,
-		id_t::DEFAULT_STATEMENT,
-		id_t::CLASSIC_LABELED_STATEMENT
-	>(node);
-}
-
-literal
-convert_literal(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::LITERAL);
-
-	return convert_alternative
-	<
-		literal,
-		id_t::BOOLEAN_LITERAL,
-		id_t::CHARACTER_LITERAL,
-		id_t::INTEGER_LITERAL,
-		id_t::FLOATING_LITERAL,
-		id_t::STRING_LITERAL
-	>(node);
-}
-
 mem_initializer
 convert_mem_initializer(const tree_node_t& node)
 {
@@ -1114,35 +820,6 @@ convert_mem_initializer(const tree_node_t& node)
 		convert_optional<expression_list>(node, expression_list_it),
 		convert_next_space(node, expression_list_it)
     );
-}
-
-mem_initializer_id
-convert_mem_initializer_id(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::MEM_INITIALIZER_ID);
-
-	return convert_alternative
-	<
-		mem_initializer_id,
-		id_t::NESTED_IDENTIFIER_OR_TEMPLATE_ID,
-		id_t::IDENTIFIER
-	>(node);
-}
-
-member_declaration
-convert_member_declaration(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::MEMBER_DECLARATION);
-
-	return convert_alternative
-	<
-		member_declaration,
-		id_t::MEMBER_DECLARATION_MEMBER_DECLARATOR_LIST,
-		id_t::MEMBER_DECLARATION_UNQUALIFIED_ID,
-		id_t::MEMBER_DECLARATION_FUNCTION_DEFINITION,
-		id_t::USING_DECLARATION,
-		id_t::TEMPLATE_DECLARATION
-	>(node);
 }
 
 member_declaration_function_definition
@@ -1196,19 +873,6 @@ convert_member_declaration_unqualified_id(const tree_node_t& node)
     );
 }
 
-member_declarator
-convert_member_declarator(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::MEMBER_DECLARATOR);
-
-	return convert_alternative
-	<
-		member_declarator,
-		id_t::MEMBER_DECLARATOR_DECLARATOR,
-		id_t::MEMBER_DECLARATOR_BIT_FIELD_MEMBER
-	>(node);
-}
-
 member_declarator_bit_field_member
 convert_member_declarator_bit_field_member(const tree_node_t& node)
 {
@@ -1250,19 +914,6 @@ convert_member_specification_access_specifier(const tree_node_t& node)
         convert_node<access_specifier>(*access_specifier_it),
 		convert_next_space(node, access_specifier_it)
     );
-}
-
-member_specification_part
-convert_member_specification_part(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::MEMBER_SPECIFICATION_PART);
-
-    return convert_alternative
-	<
-		member_specification_part,
-		id_t::MEMBER_DECLARATION,
-		id_t::MEMBER_SPECIFICATION_ACCESS_SPECIFIER
-	>(node);
 }
 
 namespace_definition
@@ -1352,19 +1003,6 @@ convert_new_declarator(const tree_node_t& node)
 	);
 }
 
-new_expression
-convert_new_expression(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::NEW_EXPRESSION);
-
-	return convert_alternative
-	<
-		new_expression,
-		id_t::NEW_TYPE_ID_NEW_EXPRESSION,
-		id_t::TYPE_ID_NEW_EXPRESSION
-	>(node);
-}
-
 new_placement
 convert_new_placement(const tree_node_t& node)
 {
@@ -1429,19 +1067,6 @@ convert_new_type_id_new_expression(const tree_node_t& node)
 	);
 }
 
-operator_
-convert_operator(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::OPERATOR);
-
-	return convert_alternative
-	<
-		operator_,
-		id_t::ARRAY_OPERATOR,
-		id_t::SIMPLE_OPERATOR
-	>(node);
-}
-
 operator_function_id
 convert_operator_function_id(const tree_node_t& node)
 {
@@ -1499,46 +1124,6 @@ convert_parameter_declaration_clause(const tree_node_t& node)
     );
 }
 
-postfix_expression::first_part
-convert_postfix_expression_first_part(const tree_node_t& node)
-{
-	assert(node.value.id() == id_t::POSTFIX_EXPRESSION_FIRST_PART);
-
-	return convert_alternative
-	<
-		postfix_expression::first_part,
-		id_t::PRIMARY_EXPRESSION,
-		id_t::SIMPLE_TYPE_SPECIFIER_POSTFIX_EXPRESSION,
-		id_t::TYPENAME_EXPRESSION,
-		id_t::TEMPLATE_TYPENAME_EXPRESSION,
-		id_t::DYNAMIC_CAST_EXPRESSION,
-		id_t::STATIC_CAST_EXPRESSION,
-		id_t::REINTERPRET_CAST_EXPRESSION,
-		id_t::CONST_CAST_EXPRESSION,
-		id_t::TYPEID_EXPRESSION,
-		id_t::TYPE_ID_TYPEID_EXPRESSION
-	>(node);
-}
-
-postfix_expression::last_part
-convert_postfix_expression_last_part(const tree_node_t& node)
-{
-	assert(node.value.id() == id_t::POSTFIX_EXPRESSION_LAST_PART);
-
-	return convert_alternative
-	<
-		postfix_expression::last_part,
-		id_t::SQUARE_BRACKETED_EXPRESSION,
-		id_t::BRACKETED_EXPRESSION_LIST,
-		id_t::DOT_ID_EXPRESSION,
-		id_t::ARROW_ID_EXPRESSION,
-		id_t::DOT_PSEUDO_DESTRUCTOR_NAME,
-		id_t::ARROW_PSEUDO_DESTRUCTOR_NAME,
-		id_t::DOUBLE_MINUS,
-		id_t::DOUBLE_PLUS
-	>(node);
-}
-
 postfix_expression
 convert_postfix_expression(const tree_node_t& node)
 {
@@ -1553,21 +1138,6 @@ convert_postfix_expression(const tree_node_t& node)
 		convert_previous_space(node, last_part_it),
 		convert_optional<postfix_expression::last_part_seq>(node, last_part_it)
 	);
-}
-
-primary_expression
-convert_primary_expression(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::PRIMARY_EXPRESSION);
-
-	return convert_alternative
-	<
-		primary_expression,
-		id_t::THIS_KEYWORD,
-		id_t::LITERAL,
-		id_t::ROUND_BRACKETED_EXPRESSION,
-		id_t::ID_EXPRESSION
-	>(node);
 }
 
 ptr_operator
@@ -1599,21 +1169,6 @@ convert_ptr_operator(const tree_node_t& node)
 		convert_previous_space(node, cv_qualifier_seq_it),
 		convert_optional<cv_qualifier_seq>(node, cv_qualifier_seq_it)
 	);
-}
-
-qualified_id
-convert_qualified_id(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::QUALIFIED_ID);
-
-	return convert_alternative
-	<
-		qualified_id,
-		id_t::QUALIFIED_NESTED_ID,
-		id_t::QUALIFIED_OPERATOR_FUNCTION_ID,
-		id_t::QUALIFIED_TEMPLATE_ID,
-		id_t::QUALIFIED_IDENTIFIER
-	>(node);
 }
 
 qualified_identifier
@@ -1686,19 +1241,6 @@ convert_return_statement(const tree_node_t& node)
 	);
 }
 
-selection_statement
-convert_selection_statement(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::SELECTION_STATEMENT);
-
-	return convert_alternative
-	<
-		selection_statement,
-		id_t::IF_STATEMENT,
-		id_t::SWITCH_STATEMENT
-	>(node);
-}
-
 simple_declaration
 convert_simple_declaration(const tree_node_t& node)
 {
@@ -1746,20 +1288,6 @@ convert_simple_template_type_specifier(const tree_node_t& node)
 	);
 }
 
-simple_type_specifier
-convert_simple_type_specifier(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::SIMPLE_TYPE_SPECIFIER);
-
-	return convert_alternative
-	<
-		simple_type_specifier,
-		id_t::NESTED_IDENTIFIER_OR_TEMPLATE_ID,
-		id_t::SIMPLE_TEMPLATE_TYPE_SPECIFIER,
-		id_t::BUILT_IN_TYPE_SPECIFIER
-	>(node);
-}
-
 simple_type_specifier_postfix_expression
 convert_simple_type_specifier_postfix_expression(const tree_node_t& node)
 {
@@ -1774,25 +1302,6 @@ convert_space(const tree_node_t& node)
     assert(node.value.id() == id_t::SPACE);
 
 	return space(get_only_child_value(node));
-}
-
-statement
-convert_statement(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::STATEMENT);
-
-	return convert_alternative
-	<
-		statement,
-		id_t::LABELED_STATEMENT,
-		id_t::EXPRESSION_STATEMENT,
-		id_t::COMPOUND_STATEMENT,
-		id_t::SELECTION_STATEMENT,
-		id_t::ITERATION_STATEMENT,
-		id_t::JUMP_STATEMENT,
-		id_t::BLOCK_DECLARATION,
-		id_t::TRY_BLOCK
-	>(node);
 }
 
 string_literal
@@ -1837,20 +1346,6 @@ convert_switch_statement(const tree_node_t& node)
 		convert_next_space(node, closing_bracket_it),
 		find_and_convert_node<statement, id_t::STATEMENT>(node)
 	);
-}
-
-template_argument
-convert_template_argument(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::TEMPLATE_ARGUMENT);
-
-	return convert_alternative
-	<
-		template_argument,
-		//id_t::TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION,
-		id_t::TYPE_ID,
-		id_t::ID_EXPRESSION
-	>(node);
 }
 
 template_declaration
@@ -2015,23 +1510,6 @@ convert_type_id_typeid_expression(const tree_node_t& node)
 	return type_id_typeid_expression();
 }
 
-type_specifier
-convert_type_specifier(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::TYPE_SPECIFIER);
-
-	return convert_alternative
-	<
-		type_specifier,
-		id_t::SIMPLE_TYPE_SPECIFIER,
-		id_t::CLASS_SPECIFIER,
-		id_t::ENUM_SPECIFIER,
-		id_t::ELABORATED_TYPE_SPECIFIER,
-		id_t::CV_QUALIFIER,
-		id_t::TYPEOF_EXPRESSION
-	>(node);
-}
-
 typeid_expression
 convert_typeid_expression(const tree_node_t& node)
 {
@@ -2072,23 +1550,6 @@ convert_typename_template_elaborated_specifier(const tree_node_t& node)
 	return typename_template_elaborated_specifier();
 }
 
-unary_expression
-convert_unary_expression(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::UNARY_EXPRESSION);
-
-	return convert_alternative
-	<
-		unary_expression,
-		id_t::UNARY_OPERATOR_UNARY_EXPRESSION,
-		id_t::TYPE_ID_SIZEOF_EXPRESSION,
-		id_t::UNARY_SIZEOF_EXPRESSION,
-		id_t::POSTFIX_EXPRESSION,
-		id_t::NEW_EXPRESSION,
-		id_t::DELETE_EXPRESSION
-	>(node);
-}
-
 unary_operator_unary_expression
 convert_unary_operator_unary_expression(const tree_node_t& node)
 {
@@ -2111,22 +1572,6 @@ convert_unary_sizeof_expression(const tree_node_t& node)
     assert(node.value.id() == id_t::UNARY_SIZEOF_EXPRESSION);
 
 	return unary_sizeof_expression();
-}
-
-unqualified_id
-convert_unqualified_id(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::UNQUALIFIED_ID);
-
-	return convert_alternative
-	<
-		unqualified_id,
-		id_t::OPERATOR_FUNCTION_ID,
-		id_t::CONVERSION_FUNCTION_ID,
-		id_t::DESTRUCTOR_NAME,
-		id_t::TEMPLATE_ID,
-		id_t::IDENTIFIER
-	>(node);
 }
 
 using_declaration

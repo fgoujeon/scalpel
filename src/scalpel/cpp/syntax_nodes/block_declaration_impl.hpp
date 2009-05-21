@@ -45,6 +45,9 @@ typedef
 
 struct block_declaration_impl: public block_declaration_t
 {
+	typedef simple_declaration head_node_t;
+	typedef block_declaration_t::tail_alternative_node_t tail_alternative_node_t;
+
 	explicit
 	block_declaration_impl(simple_declaration&& o);
 
@@ -59,6 +62,37 @@ struct block_declaration_impl: public block_declaration_t
 	block_declaration_impl(block_declaration_impl&& o);
 
 	using block_declaration_t::operator=;
+};
+
+struct block_declaration_tail: public block_declaration_t::tail_alternative_node_t
+{
+	typedef block_declaration_t::tail_alternative_node_t type;
+	typedef type::head_node_t head_node_t;
+	typedef type::tail_alternative_node_t tail_alternative_node_t;
+
+	explicit
+	block_declaration_tail(using_declaration&& o):
+		type(o)
+	{
+	}
+
+	explicit
+	block_declaration_tail(using_directive&& o):
+		type(o)
+	{
+	}
+
+	block_declaration_tail(const block_declaration_tail& o):
+		type(static_cast<const type&>(o))
+	{
+	}
+
+	block_declaration_tail(block_declaration_tail&& o):
+		type(static_cast<type&&>(o))
+	{
+	}
+
+	using type::operator=;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

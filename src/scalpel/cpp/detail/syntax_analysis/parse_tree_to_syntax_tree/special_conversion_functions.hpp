@@ -123,50 +123,6 @@ convert_list_node(const tree_node_t& node)
 }
 
 
-template<class SyntaxNodeT, int... Ids>
-struct alternative_node_converter;
-
-template<class SyntaxNodeT>
-struct alternative_node_converter<SyntaxNodeT>
-{
-	static
-	SyntaxNodeT
-	convert(const tree_node_t&)
-	{
-		assert(false);
-	}
-};
-
-template<class SyntaxNodeT, int Id, int... Ids>
-struct alternative_node_converter<SyntaxNodeT, Id, Ids...>
-{
-	static
-	SyntaxNodeT
-	convert(const tree_node_t& node)
-	{
-		const int node_id = get_id(node);
-		if(node_id == Id)
-		{
-			return SyntaxNodeT(node_converter_from_id<SyntaxNodeT, Id>::convert(node));
-		}
-		else
-		{
-			return alternative_node_converter<SyntaxNodeT, Ids...>::convert(node);
-		}
-	}
-};
-
-template<class SyntaxNodeT, int... Ids>
-inline
-SyntaxNodeT
-convert_alternative(const tree_node_t& node)
-{
-	return alternative_node_converter<SyntaxNodeT, Ids...>::convert
-	(
-		get_only_child_node(node)
-	);
-}
-
 
 template<class T>
 syntax_nodes::optional_node<T>

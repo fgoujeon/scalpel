@@ -39,16 +39,40 @@ typedef
 
 struct member_specification_part_impl: public member_specification_part_t
 {
-	explicit
+	typedef member_specification_part_t::head_node_t head_node_t;
+	typedef member_specification_part_t::tail_alternative_node_t tail_alternative_node_t;
+
 	member_specification_part_impl(member_declaration&& o);
 
-	explicit
 	member_specification_part_impl(member_specification_access_specifier&& o);
 
 	member_specification_part_impl(const member_specification_part_impl& o);
 
 	member_specification_part_impl(member_specification_part_impl&& o);
 };
+
+struct member_specification_part_tail: public member_specification_part_t::tail_alternative_node_t
+{
+	typedef member_specification_part_t::tail_alternative_node_t type;
+	typedef type::head_node_t head_node_t;
+	typedef type::tail_alternative_node_t tail_alternative_node_t;
+
+	member_specification_part_tail(member_specification_access_specifier&& o):
+		type(o)
+	{
+	}
+
+	member_specification_part_tail(const member_specification_part_tail& o):
+		type(static_cast<const type&>(o))
+	{
+	}
+
+	member_specification_part_tail(member_specification_part_tail&& o):
+		type(static_cast<type&&>(o))
+	{
+	}
+};
+
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

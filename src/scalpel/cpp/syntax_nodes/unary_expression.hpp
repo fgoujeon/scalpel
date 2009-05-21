@@ -47,37 +47,31 @@ typedef
 
 struct unary_expression: public unary_expression_t
 {
-	explicit
 	unary_expression(unary_operator_unary_expression&& o):
 		unary_expression_t(std::move(o))
 	{
 	}
 
-	explicit
 	unary_expression(type_id_sizeof_expression&& o):
 		unary_expression_t(std::move(o))
 	{
 	}
 
-	explicit
 	unary_expression(unary_sizeof_expression&& o):
 		unary_expression_t(std::move(o))
 	{
 	}
 
-	explicit
 	unary_expression(postfix_expression&& o):
 		unary_expression_t(std::move(o))
 	{
 	}
 
-	explicit
 	unary_expression(new_expression&& o):
 		unary_expression_t(std::move(o))
 	{
 	}
 
-	explicit
 	unary_expression(delete_expression&& o):
 		unary_expression_t(std::move(o))
 	{

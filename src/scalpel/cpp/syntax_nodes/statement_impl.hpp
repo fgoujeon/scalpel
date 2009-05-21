@@ -51,33 +51,81 @@ typedef
 
 struct statement_impl: public statement_t
 {
-	explicit
+	typedef statement_t type;
+	typedef type::head_node_t head_node_t;
+	typedef type::tail_alternative_node_t tail_alternative_node_t;
+
 	statement_impl(labeled_statement&& o);
 
-	explicit
 	statement_impl(expression_statement&& o);
 
-	explicit
 	statement_impl(compound_statement&& o);
 
-	explicit
 	statement_impl(selection_statement&& o);
 
-	explicit
 	statement_impl(iteration_statement&& o);
 
-	explicit
 	statement_impl(jump_statement&& o);
 
-	explicit
 	statement_impl(block_declaration&& o);
 
-	explicit
 	statement_impl(try_block&& o);
 
 	statement_impl(const statement_impl& o);
 
 	statement_impl(statement_impl&& o);
+};
+
+struct statement_tail: public statement_t::tail_alternative_node_t
+{
+	typedef statement_t::tail_alternative_node_t type;
+	typedef type::head_node_t head_node_t;
+	typedef type::tail_alternative_node_t tail_alternative_node_t;
+
+	statement_tail(expression_statement&& o):
+		type(o)
+	{
+	}
+
+	statement_tail(compound_statement&& o):
+		type(o)
+	{
+	}
+
+	statement_tail(selection_statement&& o):
+		type(o)
+	{
+	}
+
+	statement_tail(iteration_statement&& o):
+		type(o)
+	{
+	}
+
+	statement_tail(jump_statement&& o):
+		type(o)
+	{
+	}
+
+	statement_tail(block_declaration&& o):
+		type(o)
+	{
+	}
+
+	statement_tail(try_block&& o):
+		type(o)
+	{
+	}
+
+	statement_tail(const statement_tail& o):
+		type(static_cast<const type&>(o))
+	{
+	}
+
+	statement_tail(statement_tail&& o):
+		type(static_cast<type&&>(o))
+	{
+	}
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

@@ -41,18 +41,45 @@ typedef
 
 struct labeled_statement_impl: public labeled_statement_t
 {
-	explicit
+	typedef labeled_statement_t::head_node_t head_node_t;
+	typedef labeled_statement_t::tail_alternative_node_t tail_alternative_node_t;
+
 	labeled_statement_impl(case_statement&& o);
 
-	explicit
 	labeled_statement_impl(default_statement&& o);
 
-	explicit
 	labeled_statement_impl(classic_labeled_statement&& o);
 
 	labeled_statement_impl(const labeled_statement_impl& o);
 
 	labeled_statement_impl(labeled_statement_impl&& o);
+};
+
+struct labeled_statement_tail: public labeled_statement_t::tail_alternative_node_t
+{
+	typedef labeled_statement_t::tail_alternative_node_t type;
+	typedef type::head_node_t head_node_t;
+	typedef type::tail_alternative_node_t tail_alternative_node_t;
+
+	labeled_statement_tail(default_statement&& o):
+		type(o)
+	{
+	}
+
+	labeled_statement_tail(classic_labeled_statement&& o):
+		type(o)
+	{
+	}
+
+	labeled_statement_tail(const labeled_statement_tail& o):
+		type(static_cast<const type&>(o))
+	{
+	}
+
+	labeled_statement_tail(labeled_statement_tail&& o):
+		type(static_cast<type&&>(o))
+	{
+	}
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

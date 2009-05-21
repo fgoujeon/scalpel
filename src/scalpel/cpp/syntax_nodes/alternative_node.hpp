@@ -30,10 +30,13 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 template<class... NodesT>
 class alternative_node;
 
-
 template<>
 class alternative_node<>: public composite_node
 {
+	public:
+		typedef void head_node_t;
+		typedef void tail_alternative_node_t;
+
 	protected:
 		alternative_node():
 		   	initialized_(false)
@@ -59,9 +62,6 @@ class alternative_node<>: public composite_node
 			return *this;
 		}
 
-		virtual
-		~alternative_node(){}
-
 		bool
 		initialized() const
 		{
@@ -85,10 +85,13 @@ class alternative_node<>: public composite_node
 		bool initialized_;
 };
 
-
 template<class NodeT, class... NodesT>
 class alternative_node<NodeT, NodesT...>: public alternative_node<NodesT...>
 {
+	public:
+		typedef NodeT head_node_t;
+		typedef alternative_node<NodesT...> tail_alternative_node_t;
+
 	protected:
 		/**
 		 * Default constructor which does nothing (useful for internal use).
@@ -120,8 +123,6 @@ class alternative_node<NodeT, NodesT...>: public alternative_node<NodesT...>
 
 		const alternative_node<NodeT, NodesT...>&
 		operator=(const alternative_node<NodeT, NodesT...>& n);
-
-		~alternative_node(){};
 
 	protected:
 		void
@@ -233,6 +234,7 @@ alternative_node<NodeT, NodesT...>::set_node(const NodeT& node)
 }
 
 
+
 template<class ReturnNodeT, class AlternativeNodeT>
 boost::optional<const ReturnNodeT&>
 get(const AlternativeNodeT* node)
@@ -252,6 +254,7 @@ get(boost::optional<const AlternativeNodeT&> node)
 	node->get_node(return_node);
 	return return_node;
 }
+
 
 
 template<class AlternativeVisitorT, class AlternativeNodeT, class... NodesT>

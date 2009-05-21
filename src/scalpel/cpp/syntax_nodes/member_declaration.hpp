@@ -45,19 +45,14 @@ typedef
 
 struct member_declaration: public member_declaration_t
 {
-	explicit
 	member_declaration(member_declaration_function_definition&& o);
 
-	explicit
 	member_declaration(member_declaration_member_declarator_list&& o);
 
-	explicit
 	member_declaration(member_declaration_unqualified_id&& o);
 
-	explicit
 	member_declaration(using_declaration&& o);
 
-	explicit
 	member_declaration(template_declaration&& o);
 
 	member_declaration(const member_declaration& o);

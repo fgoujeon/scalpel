@@ -39,15 +39,38 @@ typedef
 
 struct selection_statement_impl: public selection_statement_t
 {
-	explicit
+	typedef selection_statement_t::head_node_t head_node_t;
+	typedef selection_statement_t::tail_alternative_node_t tail_alternative_node_t;
+
 	selection_statement_impl(if_statement&& o);
 
-	explicit
 	selection_statement_impl(switch_statement&& o);
 
 	selection_statement_impl(const selection_statement_impl& o);
 
 	selection_statement_impl(selection_statement_impl&& o);
+};
+
+struct selection_statement_tail: public selection_statement_t::tail_alternative_node_t
+{
+	typedef selection_statement_t::tail_alternative_node_t type;
+	typedef type::head_node_t head_node_t;
+	typedef type::tail_alternative_node_t tail_alternative_node_t;
+
+	selection_statement_tail(switch_statement&& o):
+		type(o)
+	{
+	}
+
+	selection_statement_tail(const selection_statement_tail& o):
+		type(static_cast<const type&>(o))
+	{
+	}
+
+	selection_statement_tail(selection_statement_tail&& o):
+		type(static_cast<type&&>(o))
+	{
+	}
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

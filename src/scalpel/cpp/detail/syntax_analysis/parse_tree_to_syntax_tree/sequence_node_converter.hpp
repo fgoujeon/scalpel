@@ -24,40 +24,10 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <scalpel/cpp/syntax_nodes/simple_text_node.hpp>
 #include "generic_node_converters.hpp"
+#include "node_checker.hpp"
 
 namespace scalpel { namespace cpp { namespace detail { namespace syntax_analysis { namespace parse_tree_to_syntax_tree
 {
-
-template<class NodeT>
-struct node_checker
-{
-	static
-	bool
-	check(const tree_node_t& node)
-	{
-		return check_id<NodeT>(node.value.id());
-	}
-};
-
-template<const std::string& Text>
-struct node_checker<syntax_nodes::simple_text_node<Text>>
-{
-	static
-	bool
-	check(const tree_node_t& node)
-	{
-		return get_value(node) == Text;
-	}
-};
-
-template<class NodeT>
-bool
-check_node(const tree_node_t& node)
-{
-	return node_checker<NodeT>::check(node);
-}
-
-
 
 /**
  * Converts a node of a sequence node

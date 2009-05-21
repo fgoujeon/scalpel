@@ -378,14 +378,10 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 
 	//1.4 - Expressions [gram.expr]
 	primary_expression
-		= this_keyword
+		= str_p("this")
 		| literal
 		| round_bracketed_expression
 		| id_expression
-	;
-
-	this_keyword
-		= str_p("this")
 	;
 
 	round_bracketed_expression
@@ -529,8 +525,8 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		| arrow_id_expression
 		| dot_pseudo_destructor_name
 		| arrow_pseudo_destructor_name
-		| double_plus
-		| double_minus
+		| "++"
+		| "--"
 	;
 
 	simple_type_specifier_postfix_expression
@@ -591,14 +587,6 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 
 	arrow_pseudo_destructor_name
 		= "->" >> !s >> pseudo_destructor_name
-	;
-
-	double_plus
-		= str_p("++")
-	;
-
-	double_minus
-		= str_p("--")
 	;
 
 	expression_list
@@ -1700,7 +1688,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		= exception_declarator
 		| exception_abstract_declarator
 		| type_specifier_seq
-		| ellipsis
+		| str_p("...")
 	;
 
 	exception_declarator
@@ -1709,10 +1697,6 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 
 	exception_abstract_declarator
 		= type_specifier_seq >> !s >> abstract_declarator
-	;
-
-	ellipsis
-		= str_p("...")
 	;
 
 	throw_expression

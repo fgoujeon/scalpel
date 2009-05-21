@@ -27,16 +27,18 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 class member_specification_part_impl;
+class member_specification_part_tail;
 class member_declaration;
 class member_specification_access_specifier;
 
 class member_specification_part: public composite_node
 {
 	public:
-		explicit
+		typedef member_declaration head_node_t;
+		typedef member_specification_part_tail tail_alternative_node_t;
+
 		member_specification_part(member_declaration&& o);
 
-		explicit
 		member_specification_part(member_specification_access_specifier&& o);
 
 		member_specification_part(const member_specification_part& o);

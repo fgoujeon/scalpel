@@ -27,16 +27,18 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 class selection_statement_impl;
+class selection_statement_tail;
 class switch_statement;
 class if_statement;
 
 class selection_statement: public composite_node
 {
 	public:
-		explicit
+		typedef if_statement head_node_t;
+		typedef selection_statement_tail tail_alternative_node_t;
+
 		selection_statement(if_statement&& o);
 
-		explicit
 		selection_statement(switch_statement&& o);
 
 		selection_statement(const selection_statement& o);

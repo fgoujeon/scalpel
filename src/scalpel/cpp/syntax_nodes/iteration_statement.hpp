@@ -31,17 +31,18 @@ class do_while_statement;
 class for_statement;
 
 class iteration_statement_impl;
+class iteration_statement_tail;
 
 class iteration_statement: public composite_node
 {
 	public:
-		explicit
+		typedef while_statement head_node_t;
+		typedef iteration_statement_tail tail_alternative_node_t;
+
 		iteration_statement(while_statement&& o);
 
-		explicit
 		iteration_statement(do_while_statement&& o);
 
-		explicit
 		iteration_statement(for_statement&& o);
 
 		iteration_statement(const iteration_statement& o);

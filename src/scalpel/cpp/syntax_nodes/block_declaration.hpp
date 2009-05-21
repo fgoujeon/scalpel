@@ -27,6 +27,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 class block_declaration_impl;
+class block_declaration_tail;
 class simple_declaration;
 class using_declaration;
 class using_directive;
@@ -34,13 +35,13 @@ class using_directive;
 class block_declaration: public composite_node
 {
 	public:
-		explicit
+		typedef simple_declaration head_node_t;
+		typedef block_declaration_tail tail_alternative_node_t;
+
 		block_declaration(simple_declaration&& o);
 
-		explicit
 		block_declaration(using_declaration&& o);
 
-		explicit
 		block_declaration(using_directive&& o);
 
 		block_declaration(const block_declaration& o);
