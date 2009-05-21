@@ -21,6 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_LABELED_STATEMENT_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_LABELED_STATEMENT_HPP
 
+#include <boost/optional.hpp>
 #include "composite_node.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
@@ -53,6 +54,15 @@ class labeled_statement: public composite_node
 
 		const labeled_statement&
 		operator=(const labeled_statement& o);
+
+		void
+		get(boost::optional<const case_statement&>& node) const;
+
+		void
+		get(boost::optional<const default_statement&>& node) const;
+
+		void
+		get(boost::optional<const classic_labeled_statement&>& node) const;
 
 	private:
 		labeled_statement_impl* impl_;

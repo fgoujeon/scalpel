@@ -62,6 +62,7 @@ struct block_declaration_impl: public block_declaration_t
 	block_declaration_impl(block_declaration_impl&& o);
 
 	using block_declaration_t::operator=;
+	using block_declaration_t::get;
 };
 
 struct block_declaration_tail: public block_declaration_t::tail_alternative_node_t
@@ -93,6 +94,7 @@ struct block_declaration_tail: public block_declaration_t::tail_alternative_node
 	}
 
 	using type::operator=;
+	using type::get;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

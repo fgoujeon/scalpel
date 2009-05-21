@@ -74,6 +74,8 @@ struct statement_impl: public statement_t
 	statement_impl(const statement_impl& o);
 
 	statement_impl(statement_impl&& o);
+
+	using type::get;
 };
 
 struct statement_tail: public statement_t::tail_alternative_node_t
@@ -126,6 +128,8 @@ struct statement_tail: public statement_t::tail_alternative_node_t
 		type(static_cast<type&&>(o))
 	{
 	}
+
+	using type::get;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

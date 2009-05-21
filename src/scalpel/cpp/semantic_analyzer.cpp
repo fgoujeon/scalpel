@@ -61,7 +61,7 @@ semantic_analyzer::operator()(const syntax_tree& tree)
 			++i
 		)
 		{
-			//analyze_alternative(i->main_node());
+			analyze_alternative(i->main_node());
 		}
 	}
 
@@ -120,7 +120,7 @@ semantic_analyzer::analyze(const compound_statement& syntax_node, const bool cre
 	auto opt_statement_seq_node = syntax_node.statement_seq_node();
 	if(opt_statement_seq_node)
 	{
-		//analyze(*opt_statement_seq_node);
+		analyze(*opt_statement_seq_node);
 	}
 
 	if(create_statement_block)
@@ -182,7 +182,7 @@ semantic_analyzer::analyze(const direct_declarator::function_part&)
 void
 semantic_analyzer::analyze(const do_while_statement& syntax_node)
 {
-	//analyze(syntax_node.statement_node());
+	analyze(syntax_node.statement_node());
 }
 
 void
@@ -198,7 +198,7 @@ semantic_analyzer::analyze(const expression_statement&)
 void
 semantic_analyzer::analyze(const for_statement& syntax_node)
 {
-	//analyze(syntax_node.statement_node());
+	analyze(syntax_node.statement_node());
 }
 
 void
@@ -324,9 +324,7 @@ semantic_analyzer::analyze(const goto_statement&)
 void
 semantic_analyzer::analyze(const handler& syntax_node)
 {
-	/*
 	analyze(syntax_node.compound_statement_node());
-	*/
 }
 
 void
@@ -337,13 +335,11 @@ semantic_analyzer::analyze(const identifier&)
 void
 semantic_analyzer::analyze(const if_statement& syntax_node)
 {
-	/*
 	analyze(syntax_node.statement_node());
 
 	auto opt_else_statement_node = syntax_node.else_statement_node();
 	if(opt_else_statement_node)
 		analyze(*opt_else_statement_node);
-		*/
 }
 
 void
@@ -410,7 +406,7 @@ semantic_analyzer::analyze(const namespace_definition& syntax_node)
 	const optional_node<declaration_seq>& a_declaration_seq = syntax_node.declaration_seq_node();
 	if(a_declaration_seq)
 	{
-		//analyze_sequence(*a_declaration_seq);
+		analyze_sequence(*a_declaration_seq);
 	}
 	scope_cursor_.leave_scope();
 }
@@ -619,10 +615,8 @@ semantic_analyzer::analyze(const template_id&)
 void
 semantic_analyzer::analyze(const try_block& syntax_node)
 {
-	/*
 	analyze(syntax_node.compound_statement_node());
 	analyze(syntax_node.handler_seq_node());
-	*/
 }
 
 void

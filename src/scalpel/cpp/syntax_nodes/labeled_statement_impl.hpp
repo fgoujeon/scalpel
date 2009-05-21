@@ -41,8 +41,9 @@ typedef
 
 struct labeled_statement_impl: public labeled_statement_t
 {
-	typedef labeled_statement_t::head_node_t head_node_t;
-	typedef labeled_statement_t::tail_alternative_node_t tail_alternative_node_t;
+	typedef labeled_statement_t type;
+	typedef type::head_node_t head_node_t;
+	typedef type::tail_alternative_node_t tail_alternative_node_t;
 
 	labeled_statement_impl(case_statement&& o);
 
@@ -53,6 +54,8 @@ struct labeled_statement_impl: public labeled_statement_t
 	labeled_statement_impl(const labeled_statement_impl& o);
 
 	labeled_statement_impl(labeled_statement_impl&& o);
+
+	using type::get;
 };
 
 struct labeled_statement_tail: public labeled_statement_t::tail_alternative_node_t
@@ -80,6 +83,8 @@ struct labeled_statement_tail: public labeled_statement_t::tail_alternative_node
 		type(static_cast<type&&>(o))
 	{
 	}
+
+	using type::get;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

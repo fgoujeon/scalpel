@@ -54,6 +54,15 @@ class iteration_statement: public composite_node
 		const iteration_statement&
 		operator=(const iteration_statement& o);
 
+		void
+		get(boost::optional<const while_statement&>& node) const;
+
+		void
+		get(boost::optional<const do_while_statement&>& node) const;
+
+		void
+		get(boost::optional<const for_statement&>& node) const;
+
 	private:
 		iteration_statement_impl* impl_;
 };

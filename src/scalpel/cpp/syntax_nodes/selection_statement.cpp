@@ -63,5 +63,17 @@ selection_statement::operator=(const selection_statement& o)
 	return *this;
 }
 
+void
+selection_statement::get(boost::optional<const if_statement&>& node) const
+{
+	impl_->get(node);
+}
+
+void
+selection_statement::get(boost::optional<const switch_statement&>& node) const
+{
+	impl_->get(node);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 

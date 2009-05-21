@@ -69,5 +69,23 @@ iteration_statement::operator=(const iteration_statement& o)
 	return *this;
 }
 
+void
+iteration_statement::get(boost::optional<const while_statement&>& node) const
+{
+	impl_->get(node);
+}
+
+void
+iteration_statement::get(boost::optional<const do_while_statement&>& node) const
+{
+	impl_->get(node);
+}
+
+void
+iteration_statement::get(boost::optional<const for_statement&>& node) const
+{
+	impl_->get(node);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 

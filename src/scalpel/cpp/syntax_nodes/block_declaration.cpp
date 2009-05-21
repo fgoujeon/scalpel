@@ -69,5 +69,23 @@ block_declaration::operator=(const block_declaration& o)
 	return *this;
 }
 
+void
+block_declaration::get(boost::optional<const simple_declaration&>& node) const
+{
+	impl_->get(node);
+}
+
+void
+block_declaration::get(boost::optional<const using_declaration&>& node) const
+{
+	impl_->get(node);
+}
+
+void
+block_declaration::get(boost::optional<const using_directive&>& node) const
+{
+	impl_->get(node);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 

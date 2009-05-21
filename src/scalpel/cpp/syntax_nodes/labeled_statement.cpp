@@ -69,5 +69,23 @@ labeled_statement::operator=(const labeled_statement& o)
 	return *this;
 }
 
+void
+labeled_statement::get(boost::optional<const case_statement&>& node) const
+{
+	impl_->get(node);
+}
+
+void
+labeled_statement::get(boost::optional<const default_statement&>& node) const
+{
+	impl_->get(node);
+}
+
+void
+labeled_statement::get(boost::optional<const classic_labeled_statement&>& node) const
+{
+	impl_->get(node);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 

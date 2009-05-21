@@ -70,7 +70,7 @@ class alternative_node<>: public composite_node
 
 	protected:
 		void
-		get_node() const{}
+		get() const{}
 
 		void
 		set_node(){}
@@ -99,12 +99,12 @@ class alternative_node<NodeT, NodesT...>: public alternative_node<NodesT...>
 		alternative_node();
 
 	public:
-		/*
+		/**
 		 * Copy constructor.
 		 */
 		alternative_node(const alternative_node<NodeT, NodesT...>& n);
 
-		/*
+		/**
 		 * Copy constructor.
 		 */
 		alternative_node(alternative_node<NodeT, NodesT...>& n);
@@ -114,7 +114,7 @@ class alternative_node<NodeT, NodesT...>: public alternative_node<NodesT...>
 		 */
 		alternative_node(alternative_node<NodeT, NodesT...>&& n);
 
-		/*
+		/**
 		 * Constructor. Must be placed after move constructor, otherwise
 		 * this constructor will be chosen for move construction.
 		 */
@@ -126,9 +126,9 @@ class alternative_node<NodeT, NodesT...>: public alternative_node<NodesT...>
 
 	protected:
 		void
-		get_node(boost::optional<const NodeT&>&) const;
+		get(boost::optional<const NodeT&>&) const;
 
-		using alternative_node<NodesT...>::get_node;
+		using alternative_node<NodesT...>::get;
 
 		void
 		set_node(const NodeT&);
@@ -219,7 +219,7 @@ alternative_node<NodeT, NodesT...>::operator=(const alternative_node<NodeT, Node
 
 template<class NodeT, class... NodesT>
 void
-alternative_node<NodeT, NodesT...>::get_node(boost::optional<const NodeT&>& node) const
+alternative_node<NodeT, NodesT...>::get(boost::optional<const NodeT&>& node) const
 {
 	node = node_;
 }
@@ -239,9 +239,8 @@ template<class ReturnNodeT, class AlternativeNodeT>
 boost::optional<const ReturnNodeT&>
 get(const AlternativeNodeT* node)
 {
-	assert(node->initialized());
 	boost::optional<const ReturnNodeT&> return_node;
-	node->get_node(return_node);
+	node->get(return_node);
 	return return_node;
 }
 
@@ -249,54 +248,63 @@ template<class ReturnNodeT, class AlternativeNodeT>
 boost::optional<const ReturnNodeT&>
 get(boost::optional<const AlternativeNodeT&> node)
 {
-	assert(node->initialized());
 	boost::optional<const ReturnNodeT&> return_node;
-	node->get_node(return_node);
+	node->get(return_node);
 	return return_node;
 }
 
 
 
-template<class AlternativeVisitorT, class AlternativeNodeT, class... NodesT>
-class private_visitor;
+template<class AlternativeVisitorT, class T, class AlternativeNodeT, typename HeadNodeT>
+struct private_visitor
+{
+	typedef typename AlternativeNodeT::head_node_t head_node_t;
+	typedef typename AlternativeNodeT::tail_alternative_node_t tail_alternative_node_t;
+
+	static
+	void
+	visit(const AlternativeVisitorT& alt_visitor, const T& alt_node)
+	{
+		boost::optional<const head_node_t&> node = get<head_node_t>(&alt_node);
+		if(node)
+		{
+			alt_visitor(*node);
+		}
+		else
+		{
+			private_visitor
+			<
+				AlternativeVisitorT,
+				T,
+				tail_alternative_node_t,
+				typename tail_alternative_node_t::head_node_t
+			>::visit(alt_visitor, alt_node);
+		}
+	}
+};
+
+template<class AlternativeVisitorT, class T, class AlternativeNodeT>
+struct private_visitor<AlternativeVisitorT, T, AlternativeNodeT, void>
+{
+	static
+	void
+	visit(const AlternativeVisitorT&, const T&)
+	{
+		//does nothing
+	}
+};
 
 template<class AlternativeVisitorT, class AlternativeNodeT>
-class private_visitor<AlternativeVisitorT, AlternativeNodeT>
-{
-	public:
-		static
-		void
-		visit(const AlternativeVisitorT&, const AlternativeNodeT&)
-		{
-			//does nothing
-		}
-};
-
-template<class AlternativeVisitorT, class AlternativeNodeT, class NodeT, class... NodesT>
-class private_visitor<AlternativeVisitorT, AlternativeNodeT, NodeT, NodesT...>
-{
-	public:
-		static
-		void
-		visit(const AlternativeVisitorT& alt_visitor, const AlternativeNodeT& alt_node)
-		{
-			boost::optional<const NodeT&> node = get<NodeT>(&alt_node);
-			if(node)
-			{
-				alt_visitor(*node);
-			}
-			else
-			{
-				private_visitor<AlternativeVisitorT, AlternativeNodeT, NodesT...>::visit(alt_visitor, alt_node);
-			}
-		}
-};
-
-template<class AlternativeVisitorT, class... NodesT>
 void
-apply_visitor(const AlternativeVisitorT& alt_visitor, const alternative_node<NodesT...>& node)
+apply_visitor(const AlternativeVisitorT& alt_visitor, const AlternativeNodeT& node)
 {
-	private_visitor<AlternativeVisitorT, alternative_node<NodesT...>, NodesT...>::visit(alt_visitor, node);
+	private_visitor
+	<
+		AlternativeVisitorT,
+		AlternativeNodeT,
+		AlternativeNodeT,
+		typename AlternativeNodeT::head_node_t
+	>::visit(alt_visitor, node);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

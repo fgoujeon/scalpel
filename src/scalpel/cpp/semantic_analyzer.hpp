@@ -55,15 +55,15 @@ class semantic_analyzer
 		operator()(const syntax_tree& tree);
 
 	private:
-		template<class... NodesT>
+		template<class NodeT>
 		inline
 		void
-		analyze(const syntax_nodes::alternative_node<NodesT...>& node);
+		analyze(const NodeT& node);
 
-		template<class... NodesT>
+		template<class NodeT>
 		inline
 		void
-		analyze_alternative(const syntax_nodes::alternative_node<NodesT...>& node);
+		analyze_alternative(const NodeT& node);
 
 		template<class T, const syntax_nodes::leaf_node& SeparatorNode>
 		inline
@@ -254,16 +254,16 @@ semantic_analyzer::alternative_visitor::operator()(const T& syntax_node) const
 	analyzer_.analyze(syntax_node);
 }
 
-template<class... NodesT>
+template<class NodeT>
 void
-semantic_analyzer::analyze(const syntax_nodes::alternative_node<NodesT...>& node)
+semantic_analyzer::analyze(const NodeT& node)
 {
 	analyze_alternative(node);
 }
 
-template<class... NodesT>
+template<class NodeT>
 void
-semantic_analyzer::analyze_alternative(const syntax_nodes::alternative_node<NodesT...>& node)
+semantic_analyzer::analyze_alternative(const NodeT& node)
 {
 	syntax_nodes::apply_visitor(alternative_visitor_, node);
 }

@@ -69,6 +69,30 @@ class statement: public composite_node
 		const statement&
 		operator=(const statement& o);
 
+		void
+		get(boost::optional<const labeled_statement&>& node) const;
+
+		void
+		get(boost::optional<const expression_statement&>& node) const;
+
+		void
+		get(boost::optional<const compound_statement&>& node) const;
+
+		void
+		get(boost::optional<const selection_statement&>& node) const;
+
+		void
+		get(boost::optional<const iteration_statement&>& node) const;
+
+		void
+		get(boost::optional<const jump_statement&>& node) const;
+
+		void
+		get(boost::optional<const block_declaration&>& node) const;
+
+		void
+		get(boost::optional<const try_block&>& node) const;
+
 	private:
 		statement_impl* impl_;
 };

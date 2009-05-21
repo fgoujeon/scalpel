@@ -97,5 +97,53 @@ statement::operator=(const statement& o)
 	return *this;
 }
 
+void
+statement::get(boost::optional<const labeled_statement&>& node) const
+{
+	impl_->get(node);
+}
+
+void
+statement::get(boost::optional<const expression_statement&>& node) const
+{
+	impl_->get(node);
+}
+
+void
+statement::get(boost::optional<const compound_statement&>& node) const
+{
+	impl_->get(node);
+}
+
+void
+statement::get(boost::optional<const selection_statement&>& node) const
+{
+	impl_->get(node);
+}
+
+void
+statement::get(boost::optional<const iteration_statement&>& node) const
+{
+	impl_->get(node);
+}
+
+void
+statement::get(boost::optional<const jump_statement&>& node) const
+{
+	impl_->get(node);
+}
+
+void
+statement::get(boost::optional<const block_declaration&>& node) const
+{
+	impl_->get(node);
+}
+
+void
+statement::get(boost::optional<const try_block&>& node) const
+{
+	impl_->get(node);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 

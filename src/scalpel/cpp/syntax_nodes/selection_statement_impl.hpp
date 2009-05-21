@@ -39,8 +39,9 @@ typedef
 
 struct selection_statement_impl: public selection_statement_t
 {
-	typedef selection_statement_t::head_node_t head_node_t;
-	typedef selection_statement_t::tail_alternative_node_t tail_alternative_node_t;
+	typedef selection_statement_t type;
+	typedef type::head_node_t head_node_t;
+	typedef type::tail_alternative_node_t tail_alternative_node_t;
 
 	selection_statement_impl(if_statement&& o);
 
@@ -49,6 +50,8 @@ struct selection_statement_impl: public selection_statement_t
 	selection_statement_impl(const selection_statement_impl& o);
 
 	selection_statement_impl(selection_statement_impl&& o);
+
+	using type::get;
 };
 
 struct selection_statement_tail: public selection_statement_t::tail_alternative_node_t
@@ -71,6 +74,8 @@ struct selection_statement_tail: public selection_statement_t::tail_alternative_
 		type(static_cast<type&&>(o))
 	{
 	}
+
+	using type::get;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

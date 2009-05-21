@@ -40,8 +40,9 @@ typedef
 
 struct iteration_statement_impl: public iteration_statement_t
 {
-	typedef iteration_statement_t::head_node_t head_node_t;
-	typedef iteration_statement_t::tail_alternative_node_t tail_alternative_node_t;
+	typedef iteration_statement_t type;
+	typedef type::head_node_t head_node_t;
+	typedef type::tail_alternative_node_t tail_alternative_node_t;
 
 	iteration_statement_impl(while_statement&& o);
 
@@ -52,6 +53,8 @@ struct iteration_statement_impl: public iteration_statement_t
 	iteration_statement_impl(const iteration_statement_impl& o);
 
 	iteration_statement_impl(iteration_statement_impl&& o);
+
+	using type::get;
 };
 
 struct iteration_statement_tail: public iteration_statement_t::tail_alternative_node_t
@@ -79,6 +82,8 @@ struct iteration_statement_tail: public iteration_statement_t::tail_alternative_
 		type(static_cast<type&&>(o))
 	{
 	}
+
+	using type::get;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes
