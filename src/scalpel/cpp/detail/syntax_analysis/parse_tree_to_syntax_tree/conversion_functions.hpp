@@ -57,15 +57,6 @@ convert_class_head(const tree_node_t& node);
 syntax_nodes::class_template_elaborated_specifier
 convert_class_template_elaborated_specifier(const tree_node_t& node);
 
-syntax_nodes::compound_statement
-convert_compound_statement(const tree_node_t& node);
-
-syntax_nodes::continue_statement
-convert_continue_statement(const tree_node_t& node);
-
-syntax_nodes::conversion_function_id
-convert_conversion_function_id(const tree_node_t& node);
-
 syntax_nodes::ctor_initializer
 convert_ctor_initializer(const tree_node_t& node);
 

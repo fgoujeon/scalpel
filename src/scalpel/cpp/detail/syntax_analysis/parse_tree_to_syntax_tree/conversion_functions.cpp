@@ -220,51 +220,6 @@ convert_class_template_elaborated_specifier(const tree_node_t& node)
 	);
 }
 
-compound_statement
-convert_compound_statement(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::COMPOUND_STATEMENT);
-
-	tree_node_iterator_t opening_brace_it = node.children.begin();
-	tree_node_iterator_t statement_seq_it = find_node<id_t::STATEMENT_SEQ>(node);
-
-	return compound_statement
-	(
-		convert_next_space(node, opening_brace_it),
-		convert_optional<statement_seq>(node, statement_seq_it),
-		convert_next_space(node, statement_seq_it)
-	);
-}
-
-continue_statement
-convert_continue_statement(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::CONTINUE_STATEMENT);
-
-	return continue_statement
-	(
-		find_and_convert_node<optional_node<space>, id_t::SPACE>(node)
-	);
-}
-
-conversion_function_id
-convert_conversion_function_id(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::CONVERSION_FUNCTION_ID);
-
-	tree_node_iterator_t operator_keyword_it = node.children.begin();
-	tree_node_iterator_t type_specifier_seq_it = find_node<id_t::TYPE_SPECIFIER_SEQ>(node);
-	tree_node_iterator_t ptr_operator_seq_it = find_node<id_t::PTR_OPERATOR_SEQ>(node);
-
-	return conversion_function_id
-	(
-		convert_next_space(node, operator_keyword_it),
-		convert_node<type_specifier_seq>(*type_specifier_seq_it),
-		convert_previous_space(node, ptr_operator_seq_it),
-		convert_optional<ptr_operator_seq>(node, ptr_operator_seq_it)
-	);
-}
-
 ctor_initializer
 convert_ctor_initializer(const tree_node_t& node)
 {

@@ -37,33 +37,17 @@ conversion_function_id
 ;
 \endverbatim
 */
-class conversion_function_id: public composite_node
-{
-    public:
-		conversion_function_id
-		(
-			optional_node<space>&& post_operator_keyword_space_node,
-			type_specifier_seq&& type_specifier_seq_node,
-			optional_node<space>&& pre_ptr_operator_seq_space_node,
-			optional_node<ptr_operator_seq>&& ptr_operator_seq_node
-		);
-
-		conversion_function_id(const conversion_function_id& o);
-
-		conversion_function_id(conversion_function_id&& o);
-
-		const conversion_function_id&
-		operator=(const conversion_function_id& o);
-
-    private:
-		void
-		update_node_list();
-
-		optional_node<space> post_operator_keyword_space_;
-		type_specifier_seq type_specifier_seq_;
-		optional_node<space> pre_ptr_operator_seq_space_;
-		optional_node<ptr_operator_seq> ptr_operator_seq_;
-};
+typedef
+	sequence_node
+	<
+		simple_text_node<str::operator_>,
+		optional_node<space>,
+		type_specifier_seq,
+		optional_node<space>,
+		optional_node<ptr_operator_seq>
+	>
+	conversion_function_id
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

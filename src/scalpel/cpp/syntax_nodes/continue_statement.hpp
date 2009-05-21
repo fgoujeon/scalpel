@@ -21,9 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_CONTINUE_STATEMENT_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_CONTINUE_STATEMENT_HPP
 
-#include "optional_node.hpp"
-#include "composite_node.hpp"
-#include "space.hpp"
+#include "common.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -35,27 +33,15 @@ continue_statement
 ;
 \endverbatim
 */
-class continue_statement: public composite_node
-{
-	public:
-		continue_statement
-		(
-			optional_node<space>&& space_node
-		);
-
-		continue_statement(const continue_statement& o);
-
-		continue_statement(continue_statement&& o);
-
-		const continue_statement&
-		operator=(const continue_statement& o);
-
-	private:
-		void
-		update_node_list();
-
-		optional_node<space> space_;
-};
+typedef
+	sequence_node
+	<
+		simple_text_node<str::continue_>,
+		optional_node<space>,
+		simple_text_node<str::semicolon>
+	>
+	continue_statement
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
