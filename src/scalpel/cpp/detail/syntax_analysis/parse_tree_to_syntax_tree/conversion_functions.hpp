@@ -30,12 +30,6 @@ namespace scalpel { namespace cpp { namespace detail { namespace syntax_analysis
 syntax_nodes::arrow_pseudo_destructor_name
 convert_arrow_pseudo_destructor_name(const tree_node_t& node);
 
-syntax_nodes::assignment_expression::first_part
-convert_assignment_expression_first_part(const tree_node_t& node);
-
-syntax_nodes::assignment_expression
-convert_assignment_expression(const tree_node_t& node);
-
 syntax_nodes::assignment_expression_condition
 convert_assignment_expression_condition(const tree_node_t& node);
 

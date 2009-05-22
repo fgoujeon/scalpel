@@ -21,14 +21,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_ASSIGNMENT_EXPRESSION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_ASSIGNMENT_EXPRESSION_HPP
 
-#include "composite_node.hpp"
-#include "alternative_node.hpp"
-#include "list_node.hpp"
+#include "common.hpp"
 #include "assignment_operator.hpp"
 #include "conditional_expression.hpp"
-#include "expressions_fwd.hpp"
+#include "expressions.hpp"
 #include "throw_expression.hpp"
-#include "space.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -36,7 +33,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 /**
 \verbatim
 assignment_expression
-	= [assignment_expression_first_part_seq], (conditional_expression | throw_expression)
+	= [assignment_expression_first_part_seq], assignment_expression_last_part
 ;
 assignment_expression::first_part_seq
 	= {assignment_expression::first_part}
@@ -44,81 +41,90 @@ assignment_expression::first_part_seq
 assignment_expression::first_part
 	= logical_or_expression, assignment_operator
 ;
+assignment_expression_last_part
+	= conditional_expression
+	| throw_expression
+;
 \endverbatim
 */
-class assignment_expression: public composite_node
+typedef
+	sequence_node
+	<
+		logical_or_expression,
+		optional_node<space>,
+		assignment_operator
+	>
+	assignment_expression_first_part
+;
+
+typedef
+	list_node
+	<
+		assignment_expression_first_part
+	>
+	assignment_expression_first_part_seq
+;
+
+typedef
+	alternative_node
+	<
+		conditional_expression,
+		throw_expression
+	>
+	assignment_expression_last_part
+;
+
+typedef
+	sequence_node
+	<
+		optional_node<assignment_expression_first_part_seq>,
+		optional_node<space>,
+		assignment_expression_last_part
+	>
+	assignment_expression_t
+;
+
+struct assignment_expression: public assignment_expression_t
 {
-    public:
-		class first_part;
+	typedef assignment_expression_t type;
+	typedef type::head_node_t head_node_t;
+	typedef type::tail_sequence_node_t tail_sequence_node_t;
 
-		typedef list_node<first_part> first_part_seq;
+	typedef assignment_expression_first_part first_part;
+	typedef assignment_expression_first_part_seq first_part_seq;
+	typedef assignment_expression_last_part last_part;
 
-		typedef
-			alternative_node<conditional_expression, throw_expression>
-			conditional_or_throw_expression
-		;
+	assignment_expression
+	(
+		optional_node<assignment_expression_first_part_seq>&& o1,
+		optional_node<space>&& o2,
+		assignment_expression_last_part&& o3
+	):
+		type(o1, o2, o3)
+	{
+	}
 
-        assignment_expression
-        (
-			optional_node<first_part_seq>&& first_part_seq_node,
-			optional_node<space>&& space_node,
-			conditional_or_throw_expression&& conditional_or_throw_expression_node
-        );
+	assignment_expression
+	(
+		head_node_t&& head,
+		tail_sequence_node_t&& tail
+	):
+		type(head, tail)
+	{
+	}
 
-		assignment_expression(const assignment_expression& o);
+	assignment_expression(const assignment_expression& o):
+		type(o)
+	{
+	}
 
-		assignment_expression(assignment_expression&& o);
+	assignment_expression(assignment_expression&& o):
+		type(o)
+	{
+	}
 
-		const assignment_expression&
-		operator=(const assignment_expression& o);
-
-    private:
-		void
-		update_node_list();
-
-		optional_node<first_part_seq> first_part_seq_;
-		optional_node<space> space_;
-		conditional_or_throw_expression conditional_or_throw_expression_;
+	using type::operator=;
 };
-
-class assignment_expression::first_part: public composite_node
-{
-	public:
-        first_part
-        (
-			logical_or_expression&& logical_or_expression_node,
-			optional_node<space>&& space_node,
-            assignment_operator&& assignment_operator_node
-        );
-
-		first_part(const first_part& o);
-
-		first_part(first_part&& o);
-
-		~first_part();
-
-		const first_part&
-		operator=(const first_part& o);
-
-        inline
-        const assignment_operator&
-        assignment_operator_node() const;
-
-	private:
-		void
-		update_node_list();
-
-		logical_or_expression* logical_or_expression_;
-		optional_node<space> space_;
-        assignment_operator assignment_operator_;
-};
-
-inline
-const assignment_operator&
-assignment_expression::first_part::assignment_operator_node() const
-{
-    return assignment_operator_;
-}
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

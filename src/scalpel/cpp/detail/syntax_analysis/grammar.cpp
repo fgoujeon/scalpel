@@ -821,7 +821,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		;
 	*/
 	assignment_expression
-		= !(assignment_expression_first_part_seq >> !s) >> (conditional_expression | throw_expression)
+		= !(assignment_expression_first_part_seq >> !s) >> assignment_expression_last_part
 	;
 	assignment_expression_first_part_seq
 		= assignment_expression_first_part % !s
@@ -829,6 +829,11 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	assignment_expression_first_part
 		= logical_or_expression >> !s >> assignment_operator
 	;
+	assignment_expression_last_part
+		= conditional_expression
+		| throw_expression
+	;
+
 	template_argument_assignment_expression
 		= template_argument_logical_or_expression >> !s >> assignment_operator >> !s >> template_argument_assignment_expression
 		| template_argument_conditional_expression

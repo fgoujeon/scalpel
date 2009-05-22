@@ -22,7 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_CONDITIONAL_EXPRESSION_HPP
 
 #include "common.hpp"
-#include "expressions_fwd.hpp"
+#include "expressions.hpp"
 #include "expression_fwd.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes

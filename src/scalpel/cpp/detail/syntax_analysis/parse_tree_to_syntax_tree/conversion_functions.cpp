@@ -44,52 +44,6 @@ convert_arrow_pseudo_destructor_name(const tree_node_t& node)
 	return arrow_pseudo_destructor_name();
 }
 
-assignment_expression::first_part
-convert_assignment_expression_first_part(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::ASSIGNMENT_EXPRESSION_FIRST_PART);
-
-	return assignment_expression::first_part
-	(
-		find_and_convert_node<logical_or_expression, id_t::LOGICAL_OR_EXPRESSION>(node),
-		find_and_convert_node<syntax_nodes::optional_node<space>, id_t::SPACE>(node),
-		find_and_convert_node<assignment_operator, id_t::ASSIGNMENT_OPERATOR>(node)
-	);
-}
-
-assignment_expression
-convert_assignment_expression(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::ASSIGNMENT_EXPRESSION);
-
-	tree_node_iterator_t first_part_seq_it = find_node<id_t::ASSIGNMENT_EXPRESSION_FIRST_PART_SEQ>(node);
-	tree_node_iterator_t conditional_expression_it = find_node<id_t::CONDITIONAL_EXPRESSION>(node);
-	tree_node_iterator_t throw_expression_it = find_node<id_t::THROW_EXPRESSION>(node);
-
-	if(conditional_expression_it != node.children.end())
-	{
-		return assignment_expression
-		(
-			convert_optional<assignment_expression::first_part_seq>(node, first_part_seq_it),
-			convert_next_space(node, first_part_seq_it),
-			convert_node<conditional_expression>(*conditional_expression_it)
-		);
-	}
-	else if(throw_expression_it != node.children.end())
-	{
-		return assignment_expression
-		(
-			convert_optional<assignment_expression::first_part_seq>(node, first_part_seq_it),
-			convert_next_space(node, first_part_seq_it),
-			convert_node<throw_expression>(*throw_expression_it)
-		);
-	}
-	else
-	{
-		assert(false);
-	}
-}
-
 assignment_expression_condition
 convert_assignment_expression_condition(const tree_node_t& node)
 {

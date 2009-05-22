@@ -24,6 +24,31 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "list_node.hpp"
 #include "common_nodes.hpp"
 #include "cast_expression.hpp"
-#include "expressions_fwd.hpp"
+
+namespace scalpel { namespace cpp { namespace syntax_nodes
+{
+
+typedef list_node<cast_expression, common_nodes::arrow_and_asterisk> pm_ptr_expression;
+typedef list_node<pm_ptr_expression, common_nodes::dot_and_asterisk> pm_ref_expression;
+typedef list_node<pm_ref_expression, common_nodes::percent> modulo_expression;
+typedef list_node<modulo_expression, common_nodes::slash> divisive_expression;
+typedef list_node<divisive_expression, common_nodes::asterisk> multiplicative_expression;
+typedef list_node<multiplicative_expression, common_nodes::minus> subtractive_expression;
+typedef list_node<subtractive_expression, common_nodes::plus> additive_expression;
+typedef list_node<additive_expression, common_nodes::double_left_angle_bracket> left_shift_expression;
+typedef list_node<left_shift_expression, common_nodes::double_right_angle_bracket> right_shift_expression;
+typedef list_node<right_shift_expression, common_nodes::left_angle_bracket_and_equal> less_than_or_equal_to_expression;
+typedef list_node<less_than_or_equal_to_expression, common_nodes::left_angle_bracket> less_than_expression;
+typedef list_node<less_than_expression, common_nodes::right_angle_bracket_and_equal> greater_than_or_equal_to_expression;
+typedef list_node<greater_than_or_equal_to_expression, common_nodes::right_angle_bracket> greater_than_expression;
+typedef list_node<greater_than_expression, common_nodes::inequal> inequality_expression;
+typedef list_node<inequality_expression, common_nodes::double_equal> equality_expression;
+typedef list_node<equality_expression, common_nodes::ampersand> and_expression;
+typedef list_node<and_expression, common_nodes::circumflex> exclusive_or_expression;
+typedef list_node<exclusive_or_expression, common_nodes::pipe> inclusive_or_expression;
+typedef list_node<inclusive_or_expression, common_nodes::double_ampersand> logical_and_expression;
+typedef list_node<logical_and_expression, common_nodes::double_pipe> logical_or_expression;
+
+}}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
