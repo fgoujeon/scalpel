@@ -18,18 +18,18 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_BRACKETED_INITIALIZER_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_BRACKETED_INITIALIZER_HPP
+#ifndef SCALPEL_CPP_SYNTAX_NODES_ROUND_BRACKETED_EXPRESSION_HPP
+#define SCALPEL_CPP_SYNTAX_NODES_ROUND_BRACKETED_EXPRESSION_HPP
 
 #include "common.hpp"
-#include "expression_list.hpp"
+#include "expression.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 /**
-bracketed_initializer
-	= "(", expression_list, ")"
+round_bracketed_expression
+	= '(' >> !s >> expression >> !s >> ')'
 ;
 */
 typedef
@@ -37,11 +37,11 @@ typedef
 	<
 		simple_text_node<str::opening_round_bracket>,
 		optional_node<space>,
-		expression_list,
+		expression,
 		optional_node<space>,
 		simple_text_node<str::closing_round_bracket>
 	>
-	bracketed_initializer
+	round_bracketed_expression
 ;
 
 }}} //namespace scalpel::cpp::syntax_nodes

@@ -112,12 +112,11 @@ class grammar
 			POSTFIX_EXPRESSION_LAST_PART_SEQ,
 			POSTFIX_EXPRESSION_LAST_PART,
 			SQUARE_BRACKETED_EXPRESSION,
-			BRACKETED_EXPRESSION_LIST,
+			BRACKETED_EXPRESSION,
 			DOT_ID_EXPRESSION,
 			ARROW_ID_EXPRESSION,
 			DOT_PSEUDO_DESTRUCTOR_NAME,
 			ARROW_PSEUDO_DESTRUCTOR_NAME,
-            EXPRESSION_LIST,
             PSEUDO_DESTRUCTOR_NAME,
             UNARY_EXPRESSION,
 			UNARY_OPERATOR_UNARY_EXPRESSION,
@@ -254,7 +253,6 @@ class grammar
             FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ3,
             INITIALIZER,
 			EQUAL_INITIALIZER,
-			BRACKETED_INITIALIZER,
             INITIALIZER_CLAUSE,
 			INITIALIZER_LIST_INITIALIZER_CLAUSE,
 			EMPTY_INITIALIZER_LIST_INITIALIZER_CLAUSE,
@@ -442,12 +440,11 @@ class grammar
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::POSTFIX_EXPRESSION_LAST_PART_SEQ>> postfix_expression_last_part_seq;
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::POSTFIX_EXPRESSION_LAST_PART>> postfix_expression_last_part;
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::SQUARE_BRACKETED_EXPRESSION>> square_bracketed_expression;
-		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::BRACKETED_EXPRESSION_LIST>> bracketed_expression_list;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::BRACKETED_EXPRESSION>> bracketed_expression;
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DOT_ID_EXPRESSION>> dot_id_expression;
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ARROW_ID_EXPRESSION>> arrow_id_expression;
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DOT_PSEUDO_DESTRUCTOR_NAME>> dot_pseudo_destructor_name;
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ARROW_PSEUDO_DESTRUCTOR_NAME>> arrow_pseudo_destructor_name;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EXPRESSION_LIST>> expression_list;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PSEUDO_DESTRUCTOR_NAME>> pseudo_destructor_name;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::UNARY_EXPRESSION>> unary_expression;
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::UNARY_OPERATOR_UNARY_EXPRESSION>> unary_operator_unary_expression;
@@ -599,7 +596,6 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ3>> function_definition_decl_specifier_seq3;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::INITIALIZER>> initializer;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EQUAL_INITIALIZER>> equal_initializer;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::BRACKETED_INITIALIZER>> bracketed_initializer;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::INITIALIZER_CLAUSE>> initializer_clause;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::INITIALIZER_LIST_INITIALIZER_CLAUSE>> initializer_list_initializer_clause;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EMPTY_INITIALIZER_LIST_INITIALIZER_CLAUSE>> empty_initializer_list_initializer_clause;

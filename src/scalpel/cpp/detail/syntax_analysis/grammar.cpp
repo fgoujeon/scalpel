@@ -480,10 +480,10 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		postfix_expression
 			= primary_expression
 			| postfix_expression >> '[' >> expression >> ']'
-			| postfix_expression >> '(' >> !expression_list >> ')'
-			| simple_type_specifier >> '(' >> !expression_list >> ')'
-			| str_p("typename") >> !str_p("::") >> nested_name_specifier >> identifier >> '(' >> !expression_list >> ')'
-			| str_p("typename") >> !str_p("::") >> nested_name_specifier >> !str_p("template") >> template_id >> '(' >> !expression_list >> ')'
+			| postfix_expression >> '(' >> !expression >> ')'
+			| simple_type_specifier >> '(' >> !expression >> ')'
+			| str_p("typename") >> !str_p("::") >> nested_name_specifier >> identifier >> '(' >> !expression >> ')'
+			| str_p("typename") >> !str_p("::") >> nested_name_specifier >> !str_p("template") >> template_id >> '(' >> !expression >> ')'
 			| postfix_expression >> '.' >> !str_p("template") >> id_expression
 			| postfix_expression >> "->" >> !str_p("template") >> id_expression
 			| postfix_expression >> '.' >> pseudo_destructor_name
@@ -520,7 +520,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 	postfix_expression_last_part
 		= square_bracketed_expression
-		| bracketed_expression_list
+		| bracketed_expression
 		| dot_id_expression
 		| arrow_id_expression
 		| dot_pseudo_destructor_name
@@ -530,15 +530,15 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	simple_type_specifier_postfix_expression
-		= simple_type_specifier >> !s >> '(' >> !s >> !(expression_list >> !s) >> ')'
+		= simple_type_specifier >> !s >> '(' >> !s >> !(expression >> !s) >> ')'
 	;
 
 	typename_expression
-		= str_p("typename") >> !s >> !(str_p("::") >> !s) >> nested_name_specifier >> !s >> identifier >> !s >> '(' >> !s >> !(expression_list >> !s) >> ')'
+		= str_p("typename") >> !s >> !(str_p("::") >> !s) >> nested_name_specifier >> !s >> identifier >> !s >> '(' >> !s >> !(expression >> !s) >> ')'
 	;
 
 	template_typename_expression
-		= str_p("typename") >> !s >> !(str_p("::") >> !s) >> nested_name_specifier >> !s >> !(str_p("template") >> !s) >> template_id >> !s >> '(' >> !s >> !(expression_list >> !s) >> ')'
+		= str_p("typename") >> !s >> !(str_p("::") >> !s) >> nested_name_specifier >> !s >> !(str_p("template") >> !s) >> template_id >> !s >> '(' >> !s >> !(expression >> !s) >> ')'
 	;
 
 	dynamic_cast_expression
@@ -569,8 +569,8 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		= '[' >> !s >> expression >> !s >> ']'
 	;
 
-	bracketed_expression_list
-		= '(' >> !s >> !(expression_list >> !s) >> ')'
+	bracketed_expression
+		= '(' >> !s >> !(expression >> !s) >> ')'
 	;
 
 	dot_id_expression
@@ -587,10 +587,6 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 
 	arrow_pseudo_destructor_name
 		= "->" >> !s >> pseudo_destructor_name
-	;
-
-	expression_list
-		= assignment_expression % (!s >> ',' >> !s)
 	;
 
 	pseudo_destructor_name
@@ -645,7 +641,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	new_placement
-		= '(' >> !s >> expression_list >> !s >> ')'
+		= '(' >> !s >> expression >> !s >> ')'
 	;
 
 	new_type_id
@@ -663,7 +659,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	new_initializer
-		= '(' >> !s >> !(expression_list >> !s) >> ')'
+		= '(' >> !s >> !(expression >> !s) >> ')'
 	;
 
 	delete_expression
@@ -1403,15 +1399,11 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 
 	initializer
 		= equal_initializer
-		| bracketed_initializer
+		| round_bracketed_expression
 	;
 
 	equal_initializer
 		= ch_p('=') >> !s >> initializer_clause
-	;
-
-	bracketed_initializer
-		= ch_p('(') >> !s >> expression_list >> !s >> ')'
 	;
 
 	initializer_clause
@@ -1550,7 +1542,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	mem_initializer
-		= mem_initializer_id >> !s >> '(' >> !s >> !(expression_list >> !s) >> ')'
+		= mem_initializer_id >> !s >> '(' >> !s >> !(expression >> !s) >> ')'
 	;
 
 	mem_initializer_id

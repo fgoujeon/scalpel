@@ -23,7 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "alternative_node.hpp"
 #include "equal_initializer.hpp"
-#include "bracketed_initializer.hpp"
+#include "round_bracketed_expression.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -32,7 +32,7 @@ typedef
 	alternative_node
 	<
 		equal_initializer,
-		bracketed_initializer
+		round_bracketed_expression
 	>
 	initializer
 ;

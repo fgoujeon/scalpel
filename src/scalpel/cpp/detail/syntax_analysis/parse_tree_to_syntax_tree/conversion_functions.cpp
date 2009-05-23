@@ -702,15 +702,15 @@ convert_mem_initializer(const tree_node_t& node)
 
 	tree_node_iterator_t mem_initializer_id_it = node.children.begin();
 	tree_node_iterator_t opening_bracket_it = find_node(node, "(");
-	tree_node_iterator_t expression_list_it = find_node<id_t::EXPRESSION_LIST>(node);
+	tree_node_iterator_t expression_it = find_node<id_t::EXPRESSION>(node);
 
     return mem_initializer
     (
 		convert_node<mem_initializer_id>(*mem_initializer_id_it),
 		convert_next_space(node, mem_initializer_id_it),
 		convert_next_space(node, opening_bracket_it),
-		convert_optional<expression_list>(node, expression_list_it),
-		convert_next_space(node, expression_list_it)
+		convert_optional<expression>(node, expression_it),
+		convert_next_space(node, expression_it)
     );
 }
 
@@ -909,13 +909,13 @@ convert_new_initializer(const tree_node_t& node)
     assert(node.value.id() == id_t::NEW_INITIALIZER);
 
 	tree_node_iterator_t opening_bracket_it = node.children.begin();
-	tree_node_iterator_t expression_list_it = find_node<id_t::EXPRESSION_LIST>(node);
+	tree_node_iterator_t expression_it = find_node<id_t::EXPRESSION>(node);
 
 	return new_initializer
 	(
 		convert_next_space(node, opening_bracket_it),
-		convert_optional<expression_list>(node, expression_list_it),
-		convert_next_space(node, expression_list_it)
+		convert_optional<expression>(node, expression_it),
+		convert_next_space(node, expression_it)
 	);
 }
 
