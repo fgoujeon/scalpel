@@ -849,12 +849,6 @@ SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_ALTERNATIVE_NODE_CONVERTER_SPECIALIZATION
 )
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_NODE_CONVERTER_SPECIALIZATION
 (
-	SQUARE_BRACKETED_EXPRESSION,
-	square_bracketed_node<syntax_nodes::expression>::type,
-	square_bracketed_node<syntax_nodes::expression>
-)
-SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_NODE_CONVERTER_SPECIALIZATION
-(
 	BRACKETED_EXPRESSION_LIST,
 	round_bracketed_node<syntax_nodes::optional_node<syntax_nodes::expression_list>>::type,
 	round_bracketed_node<syntax_nodes::optional_node<syntax_nodes::expression_list>>
@@ -1121,6 +1115,11 @@ SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_ID_CHECKER_SPECIALIZATION
 (
 	STATEMENT_SEQ,
 	statement_seq
+)
+SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_SEQUENCE_NODE_CONVERTER_SPECIALIZATION
+(
+	SQUARE_BRACKETED_EXPRESSION,
+	square_bracketed_expression
 )
 
 template<class SyntaxNodeT>

@@ -40,6 +40,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "arrow_pseudo_destructor_name.hpp"
 #include "simple_text_node.hpp"
 #include "expression_list.hpp"
+#include "square_bracketed_expression.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -74,7 +75,7 @@ class postfix_expression: public composite_node
 		typedef
 			alternative_node
 			<
-				square_bracketed_node<expression>::type,
+				square_bracketed_expression,
 				round_bracketed_node<optional_node<expression_list>>::type,
 				dot_id_expression,
 				arrow_id_expression,
