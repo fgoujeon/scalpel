@@ -23,7 +23,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "alternative_node.hpp"
 #include "simple_text_node.hpp"
-#include "bracketed_node.hpp"
 #include "common_nodes.hpp"
 #include "literal.hpp"
 #include "id_expression.hpp"

@@ -42,13 +42,14 @@ convert_string_enumeration(const tree_node_t& node)
 }
 
 
+
 template<class ContainerT>
 ContainerT
 convert_list_node(const tree_node_t& node)
 {
 	ContainerT list;
 
-	if(ContainerT::separator_node.raw_code() == syntax_nodes::common_nodes::empty.raw_code())
+	if(ContainerT::separator_node.raw_code() == syntax_nodes::common_nodes::empty.raw_code()) //if the list separator is empty
 	{
 		syntax_nodes::optional_node<syntax_nodes::space> space_node;
 		for(tree_node_iterator_t i = node.children.begin(); i != node.children.end(); ++i) //for each child node
@@ -134,114 +135,6 @@ convert_optional(const tree_node_t& parent_node, const tree_node_iterator_t& it)
 		return syntax_nodes::optional_node<T>();
 }
 
-
-template<class SyntaxNodeT>
-typename syntax_nodes::round_bracketed_node<SyntaxNodeT>::type
-convert_round_bracketed_node(const tree_node_t& node)
-{
-	return convert_bracketed_node
-	<
-		syntax_nodes::common_nodes::opening_round_bracket,
-		SyntaxNodeT,
-		syntax_nodes::common_nodes::closing_round_bracket
-	>(node.children.begin());
-}
-
-template<class SyntaxNodeT>
-typename syntax_nodes::square_bracketed_node<SyntaxNodeT>::type
-convert_square_bracketed_node(const tree_node_t& node)
-{
-	return convert_bracketed_node
-	<
-		syntax_nodes::common_nodes::opening_square_bracket,
-		SyntaxNodeT,
-		syntax_nodes::common_nodes::closing_square_bracket
-	>(node.children.begin());
-}
-
-template<class SyntaxNodeT>
-typename syntax_nodes::angle_bracketed_node<SyntaxNodeT>::type
-convert_angle_bracketed_node(const tree_node_t& node)
-{
-	return convert_bracketed_node
-	<
-		syntax_nodes::common_nodes::left_angle_bracket,
-		SyntaxNodeT,
-		syntax_nodes::common_nodes::right_angle_bracket
-	>(node.children.begin());
-}
-
-template<const syntax_nodes::leaf_node& OpeningBracketNode, class SyntaxNodeT, const syntax_nodes::leaf_node& ClosingBracketNode>
-syntax_nodes::bracketed_node<OpeningBracketNode, SyntaxNodeT, ClosingBracketNode>
-convert_bracketed_node(const tree_node_t& node)
-{
-	return convert_bracketed_node<OpeningBracketNode, SyntaxNodeT, ClosingBracketNode>(node.children.begin());
-}
-
-template<class SyntaxNodeT>
-typename syntax_nodes::round_bracketed_node<SyntaxNodeT>::type
-convert_round_bracketed_node(tree_node_iterator_t it)
-{
-	return convert_bracketed_node
-	<
-		syntax_nodes::common_nodes::opening_round_bracket,
-		SyntaxNodeT,
-		syntax_nodes::common_nodes::closing_round_bracket
-	>(it);
-}
-
-template<class SyntaxNodeT>
-typename syntax_nodes::square_bracketed_node<SyntaxNodeT>::type
-convert_square_bracketed_node(tree_node_iterator_t it)
-{
-	return convert_bracketed_node
-	<
-		syntax_nodes::common_nodes::opening_square_bracket,
-		SyntaxNodeT,
-		syntax_nodes::common_nodes::closing_square_bracket
-	>(it);
-}
-
-template<class SyntaxNodeT>
-typename syntax_nodes::angle_bracketed_node<SyntaxNodeT>::type
-convert_angle_bracketed_node(tree_node_iterator_t it)
-{
-	return convert_bracketed_node
-	<
-		syntax_nodes::common_nodes::left_angle_bracket,
-		SyntaxNodeT,
-		syntax_nodes::common_nodes::right_angle_bracket
-	>(it);
-}
-
-template<const syntax_nodes::leaf_node& OpeningBracketNode, class SyntaxNodeT, const syntax_nodes::leaf_node& ClosingBracketNode>
-syntax_nodes::bracketed_node<OpeningBracketNode, SyntaxNodeT, ClosingBracketNode>
-convert_bracketed_node(tree_node_iterator_t it)
-{
-	syntax_nodes::optional_node<syntax_nodes::space> post_opening_bracket_space_node;
-	++it;
-	if(it->value.id() == id_t::SPACE)
-	{
-		post_opening_bracket_space_node = convert_node<syntax_nodes::space>(*it);
-		++it;
-	}
-
-	SyntaxNodeT main_node = convert_node<SyntaxNodeT>(*it);
-
-	syntax_nodes::optional_node<syntax_nodes::space> post_main_space_node;
-	++it;
-	if(it->value.id() == id_t::SPACE)
-	{
-		post_main_space_node = convert_node<syntax_nodes::space>(*it);
-	}
-
-	return syntax_nodes::bracketed_node<OpeningBracketNode, SyntaxNodeT, ClosingBracketNode>
-	(
-		post_opening_bracket_space_node,
-		main_node,
-		post_main_space_node
-	);
-}
 
 
 template<const std::string&& Text>
