@@ -177,25 +177,6 @@ convert_ctor_initializer(const tree_node_t& node)
     );
 }
 
-cv_qualifier
-convert_cv_qualifier(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::CV_QUALIFIER);
-
-    const tree_node_t& child_node = *node.children.begin();
-    const boost::spirit::parser_id child_id = child_node.value.id();
-    if(child_id == id_t::RESTRICT_KEYWORD)
-	{
-		const std::string child_value = get_only_child_value(child_node);
-        return cv_qualifier(child_value);
-	}
-    else
-	{
-		const std::string value = get_only_child_value(node);
-		return cv_qualifier(value);
-	}
-}
-
 declarator
 convert_declarator(const tree_node_t& node)
 {

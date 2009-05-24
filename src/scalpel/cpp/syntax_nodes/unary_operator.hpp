@@ -21,13 +21,25 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_UNARY_OPERATOR_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_UNARY_OPERATOR_HPP
 
-#include "string_enumeration_node.hpp"
+#include "common.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-extern const std::vector<std::string> unary_operator_string_list;
-typedef string_enumeration_node<unary_operator_string_list> unary_operator;
+typedef
+	alternative_node
+	<
+		simple_text_node<str::double_plus>,
+		simple_text_node<str::double_minus>,
+		simple_text_node<str::asterisk>,
+		simple_text_node<str::ampersand>,
+		simple_text_node<str::plus>,
+		simple_text_node<str::minus>,
+		simple_text_node<str::exclamation>,
+		simple_text_node<str::tilde>
+	>
+	unary_operator
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

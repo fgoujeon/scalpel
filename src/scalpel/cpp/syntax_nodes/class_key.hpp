@@ -21,13 +21,20 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_CLASS_KEY_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_CLASS_KEY_HPP
 
-#include "string_enumeration_node.hpp"
+#include "common.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-extern const std::vector<std::string> class_key_string_list;
-typedef string_enumeration_node<class_key_string_list> class_key;
+typedef
+	alternative_node
+	<
+		simple_text_node<str::class_>,
+		simple_text_node<str::struct_>,
+		simple_text_node<str::union_>
+	>
+	class_key
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

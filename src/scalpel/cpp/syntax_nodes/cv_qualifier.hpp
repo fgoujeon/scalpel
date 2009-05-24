@@ -21,13 +21,22 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_CV_QUALIFIER_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_CV_QUALIFIER_HPP
 
-#include "string_enumeration_node.hpp"
+#include "common.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-extern const std::vector<std::string> cv_qualifier_string_list;
-typedef string_enumeration_node<cv_qualifier_string_list> cv_qualifier;
+typedef
+	alternative_node
+	<
+		simple_text_node<str::const_>,
+		simple_text_node<str::volatile_>,
+		simple_text_node<str::restrict_>,
+		simple_text_node<str::__restrict_>,
+		simple_text_node<str::__restrict___>
+	>
+	cv_qualifier
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

@@ -130,7 +130,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "syntax_nodes/statement_impl.hpp"
 #include "syntax_nodes/statement_seq.hpp"
 #include "syntax_nodes/storage_class_specifier.hpp"
-#include "syntax_nodes/string_enumeration_node.hpp"
 #include "syntax_nodes/string_literal.hpp"
 #include "syntax_nodes/switch_statement.hpp"
 #include "syntax_nodes/template_argument.hpp"

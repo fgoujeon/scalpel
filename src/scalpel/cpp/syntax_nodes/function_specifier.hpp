@@ -21,13 +21,20 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_FUNCTION_SPECIFIER_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_FUNCTION_SPECIFIER_HPP
 
-#include "string_enumeration_node.hpp"
+#include "common.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-extern const std::vector<std::string> function_specifier_string_list;
-typedef string_enumeration_node<function_specifier_string_list> function_specifier;
+typedef
+	alternative_node
+	<
+		simple_text_node<str::inline_>,
+		simple_text_node<str::virtual_>,
+		simple_text_node<str::explicit_>
+	>
+	function_specifier
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

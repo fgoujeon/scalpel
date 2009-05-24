@@ -31,18 +31,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace detail { namespace syntax_analysis { namespace parse_tree_to_syntax_tree
 {
 
-template<class T>
-T
-convert_string_enumeration(const tree_node_t& node)
-{
-	return T
-	(
-		get_only_child_value(node)
-	);
-}
-
-
-
 template<class ContainerT>
 ContainerT
 convert_list_node(const tree_node_t& node)

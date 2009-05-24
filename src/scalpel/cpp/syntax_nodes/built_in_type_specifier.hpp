@@ -21,14 +21,26 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_BUILT_IN_TYPE_SPECIFIER_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_BUILT_IN_TYPE_SPECIFIER_HPP
 
-#include "string_enumeration_node.hpp"
+#include "common.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-extern const std::vector<std::string> built_in_type_specifier_string_list;
 typedef
-	string_enumeration_node<built_in_type_specifier_string_list>
+	alternative_node
+	<
+		simple_text_node<str::char_>,
+		simple_text_node<str::wchar_t_>,
+		simple_text_node<str::bool_>,
+		simple_text_node<str::short_>,
+		simple_text_node<str::int_>,
+		simple_text_node<str::long_>,
+		simple_text_node<str::signed_>,
+		simple_text_node<str::unsigned_>,
+		simple_text_node<str::float_>,
+		simple_text_node<str::double_>,
+		simple_text_node<str::void_>
+	>
 	built_in_type_specifier
 ;
 
