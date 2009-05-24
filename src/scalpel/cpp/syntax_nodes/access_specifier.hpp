@@ -21,13 +21,20 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_ACCESS_SPECIFIER_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_ACCESS_SPECIFIER_HPP
 
-#include "string_enumeration_node.hpp"
+#include "common.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-extern const std::vector<std::string> access_specifier_string_list;
-typedef string_enumeration_node<access_specifier_string_list> access_specifier;
+typedef
+	alternative_node
+	<
+		simple_text_node<str::public_>,
+		simple_text_node<str::protected_>,
+		simple_text_node<str::private_>
+	>
+	access_specifier
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

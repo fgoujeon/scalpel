@@ -21,13 +21,28 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_ASSIGNMENT_OPERATOR_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_ASSIGNMENT_OPERATOR_HPP
 
-#include "string_enumeration_node.hpp"
+#include "common.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-extern const std::vector<std::string> assignment_operator_string_list;
-typedef string_enumeration_node<assignment_operator_string_list> assignment_operator;
+typedef
+	alternative_node
+	<
+		simple_text_node<str::equal>,
+		simple_text_node<str::asterisk_equal>,
+		simple_text_node<str::slash_equal>,
+		simple_text_node<str::percent_equal>,
+		simple_text_node<str::plus_equal>,
+		simple_text_node<str::minus_equal>,
+		simple_text_node<str::double_right_angle_bracket_equal>,
+		simple_text_node<str::double_left_angle_bracket_equal>,
+		simple_text_node<str::ampersand_equal>,
+		simple_text_node<str::circumflex_equal>,
+		simple_text_node<str::comma_equal>
+	>
+	assignment_operator
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

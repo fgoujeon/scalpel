@@ -36,9 +36,6 @@ convert_assignment_expression_condition(const tree_node_t& node);
 syntax_nodes::base_specifier
 convert_base_specifier(const tree_node_t& node);
 
-syntax_nodes::boolean_literal
-convert_boolean_literal(const tree_node_t& node);
-
 syntax_nodes::cast_expression
 convert_cast_expression(const tree_node_t& node);
 

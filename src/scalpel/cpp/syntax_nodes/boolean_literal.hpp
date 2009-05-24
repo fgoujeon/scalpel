@@ -21,30 +21,19 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_BOOLEAN_LITERAL_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_BOOLEAN_LITERAL_HPP
 
-#include "composite_node.hpp"
+#include "common.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class boolean_literal: public composite_node
-{
-	public:
-		explicit
-		boolean_literal(bool value);
-
-		boolean_literal(const boolean_literal& o);
-
-		boolean_literal(boolean_literal&& o);
-
-		const boolean_literal&
-		operator=(const boolean_literal& o);
-
-	private:
-		void
-		update_node_list();
-
-		bool value_;
-};
+typedef
+	alternative_node
+	<
+		simple_text_node<str::false_>,
+		simple_text_node<str::true_>
+	>
+	boolean_literal
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

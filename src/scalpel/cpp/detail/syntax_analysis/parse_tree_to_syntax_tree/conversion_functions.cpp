@@ -83,17 +83,6 @@ convert_base_specifier(const tree_node_t& node)
 	);
 }
 
-boolean_literal
-convert_boolean_literal(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::BOOLEAN_LITERAL);
-
-	return boolean_literal
-	(
-		get_only_child_value(node) == "true"
-	);
-}
-
 cast_expression
 convert_cast_expression(const tree_node_t& node)
 {
