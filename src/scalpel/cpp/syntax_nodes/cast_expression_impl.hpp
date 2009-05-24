@@ -27,26 +27,48 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class cast_expression_impl: public composite_node
+typedef
+	sequence_node
+	<
+		unary_expression
+	>
+	cast_expression_t
+;
+
+struct cast_expression_impl: public cast_expression_t
 {
-	public:
-		cast_expression_impl
-		(
-			unary_expression&& unary_expression_node
-		);
+	typedef cast_expression_t type;
+	typedef type::head_node_t head_node_t;
+	typedef type::tail_sequence_node_t tail_sequence_node_t;
 
-		cast_expression_impl(const cast_expression_impl& o);
+	cast_expression_impl
+	(
+		unary_expression&& unary_expression_node
+	):
+		type(unary_expression_node)
+	{
+	}
 
-		cast_expression_impl(cast_expression_impl&& o);
+	cast_expression_impl
+	(
+		head_node_t&& head,
+		tail_sequence_node_t&& tail
+	):
+		type(head, tail)
+	{
+	}
 
-		const cast_expression_impl&
-		operator=(const cast_expression_impl& o);
+	cast_expression_impl(const cast_expression_impl& o):
+		type(o)
+	{
+	}
 
-	private:
-		void
-		update_node_list();
+	cast_expression_impl(cast_expression_impl&& o):
+		type(o)
+	{
+	}
 
-		unary_expression unary_expression_;
+	using type::operator=;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

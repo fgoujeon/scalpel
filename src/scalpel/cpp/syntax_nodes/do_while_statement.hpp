@@ -21,10 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_DO_WHILE_STATEMENT_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_DO_WHILE_STATEMENT_HPP
 
-#include <memory>
-#include "optional_node.hpp"
-#include "composite_node.hpp"
-#include "space.hpp"
+#include "common.hpp"
 #include "statement.hpp"
 #include "expression.hpp"
 
@@ -36,52 +33,65 @@ do_while_statement
 	= str_p("do") >> !s >> statement >> !s >> "while" >> !s >> '(' >> !s >> expression >> !s >> ')' >> !s >> ch_p(';')
 ;
 */
-class do_while_statement: public composite_node
+typedef
+	sequence_node
+	<
+		simple_text_node<str::do_>,
+		optional_node<space>,
+		statement,
+		optional_node<space>,
+		simple_text_node<str::while_>,
+		optional_node<space>,
+		simple_text_node<str::opening_round_bracket>,
+		optional_node<space>,
+		expression,
+		optional_node<space>,
+		simple_text_node<str::closing_round_bracket>,
+		optional_node<space>,
+		simple_text_node<str::semicolon>
+	>
+	do_while_statement_t
+;
+
+struct do_while_statement: public do_while_statement_t
 {
-	public:
-		do_while_statement
-		(
-			optional_node<space>&& post_do_keyword_space_node,
-			statement&& statement_node,
-			optional_node<space>&& post_statement_space_node,
-			optional_node<space>&& post_while_keyword_space_node,
-			optional_node<space>&& post_opening_bracket_space_node,
-			expression&& expression_node,
-			optional_node<space>&& post_expression_space_node,
-			optional_node<space>&& post_closing_bracket_space_node
-		);
+	typedef do_while_statement_t type;
+	typedef type::head_node_t head_node_t;
+	typedef type::tail_sequence_node_t tail_sequence_node_t;
 
-		do_while_statement(const do_while_statement& o);
+	do_while_statement
+	(
+		head_node_t&& head,
+		tail_sequence_node_t&& tail
+	):
+		type(head, tail)
+	{
+	}
 
-		do_while_statement(do_while_statement&& o);
+	do_while_statement
+	(
+		const do_while_statement& o
+	):
+		type(o)
+	{
+	}
 
-		const do_while_statement&
-		operator=(const do_while_statement& o);
+	do_while_statement
+	(
+		do_while_statement&& o
+	):
+		type(o)
+	{
+	}
 
-		inline
-		const statement&
-		statement_node() const;
+	using type::operator=;
 
-	private:
-		void
-		update_node_list();
-
-		optional_node<space> post_do_keyword_space_;
-		std::unique_ptr<statement> statement_;
-		optional_node<space> post_statement_space_;
-		optional_node<space> post_while_keyword_space_;
-		optional_node<space> post_opening_bracket_space_;
-		expression expression_;
-		optional_node<space> post_expression_space_;
-		optional_node<space> post_closing_bracket_space_;
+	const statement&
+	statement_node() const
+	{
+		return get<2, type>(*this);
+	}
 };
-
-inline
-const statement&
-do_while_statement::statement_node() const
-{
-	return *statement_;
-}
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

@@ -37,31 +37,17 @@ default_statement
 ;
 \endverbatim
 */
-class default_statement: public composite_node
-{
-	public:
-		default_statement
-		(
-			optional_node<space>&& post_default_keyword_space_node,
-			optional_node<space>&& post_colon_space_node,
-			statement&& statement_node
-		);
-
-		default_statement(const default_statement& o);
-
-		default_statement(default_statement&& o);
-
-		const default_statement&
-		operator=(const default_statement& o);
-
-	private:
-		void
-		update_node_list();
-
-		optional_node<space> post_default_keyword_space_;
-		optional_node<space> post_colon_space_;
-		std::unique_ptr<statement> statement_;
-};
+typedef
+	sequence_node
+	<
+		simple_text_node<str::default_>,
+		optional_node<space>,
+		simple_text_node<str::colon>,
+		optional_node<space>,
+		statement
+	>
+	default_statement
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

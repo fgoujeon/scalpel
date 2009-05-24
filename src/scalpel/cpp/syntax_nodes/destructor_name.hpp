@@ -34,40 +34,15 @@ destructor_name
 	= "~", identifier_or_template_id
 ;
 */
-class destructor_name: public composite_node
-{
-	public:
-		destructor_name
-		(
-			optional_node<space>&& post_tilde_space_node,
-			identifier_or_template_id&& identifier_or_template_id_node
-		);
-
-		destructor_name(const destructor_name& o);
-
-		destructor_name(destructor_name&& o);
-
-		const destructor_name&
-		operator=(const destructor_name& o);
-
-		inline
-		const identifier_or_template_id&
-		identifier_node() const;
-
-	private:
-		void
-		update_node_list();
-
-		optional_node<space> post_tilde_space_;
-		identifier_or_template_id identifier_or_template_id_;
-};
-
-inline
-const identifier_or_template_id&
-destructor_name::identifier_node() const
-{
-	return identifier_or_template_id_;
-}
+typedef
+	sequence_node
+	<
+		simple_text_node<str::tilde>,
+		optional_node<space>,
+		identifier_or_template_id
+	>
+	destructor_name
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

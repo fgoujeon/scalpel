@@ -22,12 +22,12 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_ITERATION_STATEMENT_HPP
 
 #include "alternative_node.hpp"
+#include "do_while_statement.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 class while_statement;
-class do_while_statement;
 class for_statement;
 
 class iteration_statement_impl;

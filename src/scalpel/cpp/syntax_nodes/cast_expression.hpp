@@ -22,6 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_CAST_EXPRESSION_HPP
 
 #include "composite_node.hpp"
+#include "sequence_node.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -32,9 +33,18 @@ class unary_expression;
 class cast_expression: public composite_node
 {
 	public:
+		typedef unary_expression head_node_t;
+		typedef sequence_node<> tail_sequence_node_t;
+
 		cast_expression
 		(
 			unary_expression&& unary_expression_node
+		);
+
+		cast_expression
+		(
+			head_node_t&& head,
+			tail_sequence_node_t&& tail
 		);
 
 		cast_expression(const cast_expression& o);

@@ -23,6 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <boost/optional.hpp>
 #include "composite_node.hpp"
+#include "default_statement.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -31,7 +32,6 @@ class labeled_statement_impl;
 class labeled_statement_tail;
 
 class case_statement;
-class default_statement;
 class classic_labeled_statement;
 
 class labeled_statement: public composite_node

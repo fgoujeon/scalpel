@@ -21,13 +21,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_CTOR_INITIALIZER_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_CTOR_INITIALIZER_HPP
 
-#include "composite_node.hpp"
+#include "common.hpp"
 #include "mem_initializer_list.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
-
-class mem_initializer;
 
 /**
 \verbatim
@@ -36,40 +34,15 @@ ctor_initializer
 ;
 \endverbatim
 */
-class ctor_initializer: public composite_node
-{
-    public:
-        ctor_initializer
-		(
-			optional_node<space>&& space_node,
-			mem_initializer_list&& a_mem_initializer_list
-		);
-
-        ctor_initializer(const ctor_initializer& o);
-
-        ctor_initializer(ctor_initializer&& o);
-
-		const ctor_initializer&
-        operator=(const ctor_initializer& o);
-
-        inline
-        const mem_initializer_list&
-        mem_initializer_list_node() const;
-
-    private:
-		void
-		update_node_list();
-
-		optional_node<space> space_;
-        mem_initializer_list mem_initializer_list_;
-};
-
-inline
-const mem_initializer_list&
-ctor_initializer::mem_initializer_list_node() const
-{
-    return mem_initializer_list_;
-}
+typedef
+	sequence_node
+	<
+		simple_text_node<str::colon>,
+		optional_node<space>,
+		mem_initializer_list
+	>
+	ctor_initializer
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

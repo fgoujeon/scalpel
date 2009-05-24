@@ -34,6 +34,22 @@ cast_expression::cast_expression
 	add(*impl_);
 }
 
+cast_expression::cast_expression
+(
+	head_node_t&& head,
+	tail_sequence_node_t&& tail
+):
+	impl_
+	(
+		new cast_expression_impl
+		(
+			std::move(head),
+			std::move(tail)
+		)
+	)
+{
+}
+
 cast_expression::cast_expression(const cast_expression& o):
 	composite_node(),
 	impl_(new cast_expression_impl(*o.impl_))

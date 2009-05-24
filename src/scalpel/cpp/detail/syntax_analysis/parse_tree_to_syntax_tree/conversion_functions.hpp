@@ -36,9 +36,6 @@ convert_assignment_expression_condition(const tree_node_t& node);
 syntax_nodes::base_specifier
 convert_base_specifier(const tree_node_t& node);
 
-syntax_nodes::cast_expression
-convert_cast_expression(const tree_node_t& node);
-
 syntax_nodes::character_literal
 convert_character_literal(const tree_node_t& node);
 
@@ -48,23 +45,14 @@ convert_class_head(const tree_node_t& node);
 syntax_nodes::class_template_elaborated_specifier
 convert_class_template_elaborated_specifier(const tree_node_t& node);
 
-syntax_nodes::ctor_initializer
-convert_ctor_initializer(const tree_node_t& node);
-
 syntax_nodes::cv_qualifier
 convert_cv_qualifier(const tree_node_t& node);
 
 syntax_nodes::declarator
 convert_declarator(const tree_node_t& node);
 
-syntax_nodes::default_statement
-convert_default_statement(const tree_node_t& node);
-
 syntax_nodes::delete_array_operator
 convert_delete_array_operator(const tree_node_t& node);
-
-syntax_nodes::destructor_name
-convert_destructor_name(const tree_node_t& node);
 
 syntax_nodes::direct_abstract_declarator
 convert_direct_abstract_declarator(const tree_node_t& node);
@@ -80,9 +68,6 @@ convert_direct_declarator(const tree_node_t& node);
 
 syntax_nodes::direct_new_declarator
 convert_direct_new_declarator(const tree_node_t& node);
-
-syntax_nodes::do_while_statement
-convert_do_while_statement(const tree_node_t& node);
 
 syntax_nodes::dot_id_expression
 convert_dot_id_expression(const tree_node_t& node);
