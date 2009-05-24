@@ -112,7 +112,7 @@ class grammar
 			POSTFIX_EXPRESSION_LAST_PART_SEQ,
 			POSTFIX_EXPRESSION_LAST_PART,
 			SQUARE_BRACKETED_EXPRESSION,
-			BRACKETED_EXPRESSION,
+			ROUND_BRACKETED_OPTIONAL_EXPRESSION,
 			DOT_ID_EXPRESSION,
 			ARROW_ID_EXPRESSION,
 			DOT_PSEUDO_DESTRUCTOR_NAME,
@@ -440,7 +440,7 @@ class grammar
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::POSTFIX_EXPRESSION_LAST_PART_SEQ>> postfix_expression_last_part_seq;
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::POSTFIX_EXPRESSION_LAST_PART>> postfix_expression_last_part;
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::SQUARE_BRACKETED_EXPRESSION>> square_bracketed_expression;
-		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::BRACKETED_EXPRESSION>> bracketed_expression;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ROUND_BRACKETED_OPTIONAL_EXPRESSION>> round_bracketed_optional_expression;
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DOT_ID_EXPRESSION>> dot_id_expression;
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ARROW_ID_EXPRESSION>> arrow_id_expression;
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DOT_PSEUDO_DESTRUCTOR_NAME>> dot_pseudo_destructor_name;

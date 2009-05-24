@@ -520,7 +520,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 	postfix_expression_last_part
 		= square_bracketed_expression
-		| bracketed_expression
+		| round_bracketed_optional_expression
 		| dot_id_expression
 		| arrow_id_expression
 		| dot_pseudo_destructor_name
@@ -569,7 +569,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		= '[' >> !s >> expression >> !s >> ']'
 	;
 
-	bracketed_expression
+	round_bracketed_optional_expression
 		= '(' >> !s >> !(expression >> !s) >> ')'
 	;
 

@@ -39,8 +39,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "dot_pseudo_destructor_name.hpp"
 #include "arrow_pseudo_destructor_name.hpp"
 #include "simple_text_node.hpp"
-#include "expression_list.hpp"
+#include "expression.hpp"
 #include "square_bracketed_expression.hpp"
+#include "round_bracketed_optional_expression.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -76,7 +77,7 @@ class postfix_expression: public composite_node
 			alternative_node
 			<
 				square_bracketed_expression,
-				round_bracketed_node<optional_node<expression_list>>::type,
+				round_bracketed_optional_expression,
 				dot_id_expression,
 				arrow_id_expression,
 				dot_pseudo_destructor_name,
