@@ -57,15 +57,6 @@ convert_delete_array_operator(const tree_node_t& node);
 syntax_nodes::direct_abstract_declarator
 convert_direct_abstract_declarator(const tree_node_t& node);
 
-syntax_nodes::direct_declarator::array_part
-convert_direct_declarator_array_part(const tree_node_t& node);
-
-syntax_nodes::direct_declarator::function_part
-convert_direct_declarator_function_part(const tree_node_t& node);
-
-syntax_nodes::direct_declarator
-convert_direct_declarator(const tree_node_t& node);
-
 syntax_nodes::direct_new_declarator
 convert_direct_new_declarator(const tree_node_t& node);
 

@@ -21,21 +21,19 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_DIRECT_DECLARATOR_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_DIRECT_DECLARATOR_HPP
 
-#include <boost/range/iterator_range.hpp>
-#include "composite_node.hpp"
+#include "common.hpp"
 #include "declarator_id.hpp"
 #include "declarator.hpp"
 #include "parameter_declaration_clause.hpp"
 #include "cv_qualifier_seq.hpp"
-#include "space.hpp"
-#include "common_nodes.hpp"
 #include "bracketed_declarator.hpp"
 #include "exception_specification.hpp"
+#include "conditional_expression.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-/**
+/*
 \verbatim
 direct_declarator
 	= direct_declarator::first_part, [direct_declarator_last_part_seq]
@@ -60,129 +58,121 @@ direct_declarator::array_part
 ;
 \endverbatim
 */
-class direct_declarator: public composite_node
-{
-    public:
-		class function_part;
-		class array_part;
 
-		typedef
-			alternative_node
-			<
-				bracketed_declarator,
-				declarator_id
-			>
-			first_part
-		;
-
-		typedef
-			alternative_node
-			<
-				array_part,
-				function_part
-			>
-			last_part
-		;
-
-		typedef list_node<last_part> last_part_seq;
-
-        direct_declarator
-        (
-			first_part&& first_part_node,
-			optional_node<space>&& pre_last_part_seq_space_node,
-			optional_node<list_node<last_part>>&& a_last_part_seq
-        );
-
-        direct_declarator(const direct_declarator& o);
-
-        direct_declarator(direct_declarator&& o);
-
-		const direct_declarator&
-		operator=(const direct_declarator& o);
-
-		inline
-		const first_part&
-		first_part_node() const;
-
-        inline
-		const optional_node<last_part_seq>&
-        last_part_seq_node() const;
-
-    private:
-		void
-		update_node_list();
-
-		first_part first_part_;
-		optional_node<space> pre_last_part_seq_space_;
-		optional_node<last_part_seq> last_part_seq_;
-};
-
-/**
-\verbatim
-direct_declarator::function_part
-	= "(", [parameter_declaration_clause], ")", [cv_qualifier_seq], [exception_specification]
+typedef
+	sequence_node
+	<
+		simple_text_node<str::opening_round_bracket>,
+		optional_node<space>,
+		optional_node<parameter_declaration_clause>,
+		optional_node<space>,
+		simple_text_node<str::closing_round_bracket>,
+		optional_node<space>,
+		optional_node<cv_qualifier_seq>,
+		optional_node<space>,
+		optional_node<exception_specification>
+	>
+	direct_declarator_function_part
 ;
-\endverbatim
-*/
-class direct_declarator::function_part: public composite_node
+
+typedef
+	sequence_node
+	<
+		simple_text_node<str::opening_square_bracket>,
+		optional_node<space>,
+		optional_node<conditional_expression>,
+		optional_node<space>,
+		simple_text_node<str::closing_square_bracket>
+	>
+	direct_declarator_array_part
+;
+
+typedef
+	alternative_node
+	<
+		bracketed_declarator,
+		declarator_id
+	>
+	direct_declarator_first_part
+;
+
+typedef
+	alternative_node
+	<
+		direct_declarator_function_part,
+		direct_declarator_array_part
+	>
+	direct_declarator_last_part
+;
+
+typedef
+	list_node
+	<
+		direct_declarator_last_part
+	>
+	direct_declarator_last_part_seq
+;
+
+typedef
+	sequence_node
+	<
+		direct_declarator_first_part,
+		optional_node<space>,
+		optional_node<direct_declarator_last_part_seq>
+	>
+	direct_declarator_t
+;
+
+struct direct_declarator: public direct_declarator_t
 {
-	public:
-		function_part
-		(
-			optional_node<space>&& post_opening_bracket_space_node,
-			optional_node<parameter_declaration_clause>&& a_parameter_declaration_clause,
-			optional_node<space>&& post_parameter_declaration_clause_space_node,
-			optional_node<space>&& cv_qualifier_seq_space_node,
-			optional_node<cv_qualifier_seq>&& a_cv_qualifier_seq,
-			optional_node<space>&& pre_exception_specification_space_node,
-			optional_node<exception_specification>&& exception_specification_node
-		);
+	typedef direct_declarator_t type;
+	typedef type::head_node_t head_node_t;
+	typedef type::tail_sequence_node_t tail_sequence_node_t;
 
-		function_part(const function_part& o);
+	typedef direct_declarator_function_part function_part;
+	typedef direct_declarator_array_part array_part;
+	typedef direct_declarator_first_part first_part;
+	typedef direct_declarator_last_part last_part;
+	typedef direct_declarator_last_part_seq last_part_seq;
 
-		function_part(function_part&& o);
+	direct_declarator
+	(
+		head_node_t&& head,
+		tail_sequence_node_t&& tail
+	):
+		type(head, tail)
+	{
+	}
 
-		const function_part&
-		operator=(const function_part& o);
+	direct_declarator
+	(
+		const direct_declarator& o
+	):
+		type(o)
+	{
+	}
 
-		inline
-		const optional_node<parameter_declaration_clause>&
-		parameter_declaration_clause_node() const;
+	direct_declarator
+	(
+		direct_declarator&& o
+	):
+		type(o)
+	{
+	}
 
-		inline
-		const optional_node<cv_qualifier_seq>&
-		cv_qualifier_seq_node() const;
+	const first_part&
+	first_part_node() const
+	{
+		return get<0>(*this);
+	}
 
-	private:
-		void
-		update_node_list();
-
-		optional_node<space> post_opening_bracket_space_;
-		optional_node<parameter_declaration_clause> parameter_declaration_clause_;
-		optional_node<space> post_parameter_declaration_clause_space_;
-		optional_node<space> cv_qualifier_seq_space_;
-		optional_node<cv_qualifier_seq> cv_qualifier_seq_;
-		optional_node<space> pre_exception_specification_space_;
-		optional_node<exception_specification> exception_specification_;
-};
-
-class direct_declarator::array_part: public composite_node
-{
-	public:
-		array_part(){}
-
-		array_part(const array_part&): composite_node(){};
-
-		array_part(array_part&&){}
-
-		const array_part&
-		operator=(const array_part&){return *this;};
-
-	private:
+	const optional_node<last_part_seq>&
+	last_part_seq_node() const
+	{
+		return get<2>(*this);
+	}
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes
-
-#include "direct_declarator.ipp"
 
 #endif
