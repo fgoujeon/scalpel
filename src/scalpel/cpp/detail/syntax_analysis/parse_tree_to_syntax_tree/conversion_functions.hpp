@@ -48,9 +48,6 @@ convert_class_template_elaborated_specifier(const tree_node_t& node);
 syntax_nodes::cv_qualifier
 convert_cv_qualifier(const tree_node_t& node);
 
-syntax_nodes::declarator
-convert_declarator(const tree_node_t& node);
-
 syntax_nodes::delete_array_operator
 convert_delete_array_operator(const tree_node_t& node);
 

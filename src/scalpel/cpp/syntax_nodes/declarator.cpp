@@ -20,59 +20,66 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "declarator.hpp"
 
-#include "direct_declarator.hpp"
+#include "declarator_impl.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 declarator::declarator
 (
-	optional_node<ptr_operator_seq>&& ptr_operator_seq,
-	optional_node<space>&& post_ptr_operator_seq_space_node,
-    direct_declarator&& a_direct_declarator
+	optional_node<ptr_operator_seq>&& o1,
+	optional_node<space>&& o2,
+    direct_declarator&& o3
 ):
-    ptr_operator_seq_(std::move(ptr_operator_seq)),
-	post_ptr_operator_seq_space_node_(post_ptr_operator_seq_space_node),
-    direct_declarator_(std::make_shared<direct_declarator>(std::move(a_direct_declarator)))
+	impl_(new declarator_impl(o1, o2, o3))
 {
-	update_node_list();
+	add(*impl_);
+}
+
+declarator::declarator
+(
+	head_node_t&& head,
+	tail_sequence_node_t&& tail
+):
+	impl_(new declarator_impl(head, tail))
+{
 }
 
 declarator::declarator(const declarator& o):
 	composite_node(),
-    ptr_operator_seq_(o.ptr_operator_seq_),
-	post_ptr_operator_seq_space_node_(o.post_ptr_operator_seq_space_node_),
-    direct_declarator_(o.direct_declarator_)
+	impl_(new declarator_impl(*o.impl_))
 {
-	update_node_list();
+	add(*impl_);
 }
 
 declarator::declarator(declarator&& o):
-    ptr_operator_seq_(std::move(o.ptr_operator_seq_)),
-	post_ptr_operator_seq_space_node_(std::move(o.post_ptr_operator_seq_space_node_)),
-    direct_declarator_(std::move(o.direct_declarator_))
+	composite_node(),
+	impl_(o.impl_)
 {
-	update_node_list();
+	assert(o.impl_);
+	o.impl_ = 0;
+	add(*impl_);
+}
+
+declarator::~declarator()
+{
+	delete impl_;
 }
 
 const declarator&
 declarator::operator=(const declarator& o)
 {
-    ptr_operator_seq_ = o.ptr_operator_seq_;
-	post_ptr_operator_seq_space_node_ = o.post_ptr_operator_seq_space_node_;
-    direct_declarator_ = o.direct_declarator_;
-	update_node_list();
-
+	assert(impl_);
+	assert(o.impl_);
+	*impl_ = *o.impl_;
 	return *this;
 }
 
-void
-declarator::update_node_list()
+const direct_declarator&
+declarator::direct_declarator_node() const
 {
-	clear();
-	if(ptr_operator_seq_) add(*ptr_operator_seq_);
-	if(post_ptr_operator_seq_space_node_) add(*post_ptr_operator_seq_space_node_);
-	add(*direct_declarator_);
+	assert(impl_);
+	return impl_->direct_declarator_node();
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

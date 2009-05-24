@@ -21,15 +21,19 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_DECLARATOR_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_DECLARATOR_HPP
 
-#include <memory>
-#include <vector>
 #include "composite_node.hpp"
-#include "ptr_operator_seq.hpp"
+#include "list_node.hpp"
+#include "space.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
+class declarator_impl;
+class declarator_tail;
+
 class direct_declarator;
+class ptr_operator;
+typedef list_node<ptr_operator> ptr_operator_seq;
 
 /**
 \verbatim
@@ -41,6 +45,9 @@ declarator
 class declarator: public composite_node
 {
 	public:
+		typedef optional_node<ptr_operator_seq> head_node_t;
+		typedef declarator_tail tail_sequence_node_t;
+
         declarator
         (
             optional_node<ptr_operator_seq>&& ptr_operator_seq,
@@ -48,43 +55,27 @@ class declarator: public composite_node
             direct_declarator&& a_direct_declarator
         );
 
+        declarator
+        (
+            head_node_t&& head,
+			tail_sequence_node_t&& tail
+        );
+
 		declarator(const declarator& o);
 
 		declarator(declarator&& o);
 
+		~declarator();
+
 		const declarator&
 		operator=(const declarator& o);
 
-        inline
-        const optional_node<ptr_operator_seq>&
-        ptr_operator_seq_node() const;
-
-        inline
-        const direct_declarator&
-        direct_declarator_node() const;
+		const direct_declarator&
+		direct_declarator_node() const;
 
     private:
-		void
-		update_node_list();
-
-		optional_node<ptr_operator_seq> ptr_operator_seq_;
-		optional_node<space> post_ptr_operator_seq_space_node_;
-		std::shared_ptr<direct_declarator> direct_declarator_;
+		declarator_impl* impl_;
 };
-
-inline
-const optional_node<ptr_operator_seq>&
-declarator::ptr_operator_seq_node() const
-{
-	return ptr_operator_seq_;
-}
-
-inline
-const direct_declarator&
-declarator::direct_declarator_node() const
-{
-    return *direct_declarator_;
-}
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

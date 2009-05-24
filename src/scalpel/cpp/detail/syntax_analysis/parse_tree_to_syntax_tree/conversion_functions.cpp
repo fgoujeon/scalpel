@@ -152,21 +152,6 @@ convert_class_template_elaborated_specifier(const tree_node_t& node)
 	);
 }
 
-declarator
-convert_declarator(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::DECLARATOR);
-
-	tree_node_iterator_t ptr_operator_seq_it = find_node<id_t::PTR_OPERATOR_SEQ>(node);
-
-    return declarator
-    (
-		convert_optional<ptr_operator_seq>(node, ptr_operator_seq_it),
-		convert_next_space(node, ptr_operator_seq_it),
-		find_and_convert_node<direct_declarator, id_t::DIRECT_DECLARATOR>(node)
-	);
-}
-
 delete_array_operator
 convert_delete_array_operator(const tree_node_t& node)
 {
