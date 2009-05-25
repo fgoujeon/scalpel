@@ -124,7 +124,6 @@ class alternative_node<NodeT, NodesT...>: public alternative_node<NodesT...>
 		const alternative_node<NodeT, NodesT...>&
 		operator=(const alternative_node<NodeT, NodesT...>& n);
 
-	protected:
 		void
 		get(boost::optional<const NodeT&>&) const;
 
@@ -134,18 +133,6 @@ class alternative_node<NodeT, NodesT...>: public alternative_node<NodesT...>
 		set_node(const NodeT&);
 
 		using alternative_node<NodesT...>::set_node;
-
-
-
-		template<class ReturnNodeT, class AlternativeNodeT>
-		friend
-		boost::optional<const ReturnNodeT&>
-		get(const AlternativeNodeT* node);
-
-		template<class ReturnNodeT, class AlternativeNodeT>
-		friend
-		boost::optional<const ReturnNodeT&>
-		get(boost::optional<const AlternativeNodeT&> node);
 
 	private:
 		boost::optional<NodeT> node_;

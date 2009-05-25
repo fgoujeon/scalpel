@@ -20,7 +20,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "cast_expression.hpp"
 
-#include "cast_expression_impl.hpp"
+#include "unary_expression.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -29,7 +29,7 @@ cast_expression::cast_expression
 (
 	unary_expression&& unary_expression_node
 ):
-	impl_(new cast_expression_impl(std::move(unary_expression_node)))
+	impl_(new type(std::move(unary_expression_node)))
 {
 	add(*impl_);
 }
@@ -41,25 +41,26 @@ cast_expression::cast_expression
 ):
 	impl_
 	(
-		new cast_expression_impl
+		new type
 		(
 			std::move(head),
 			std::move(tail)
 		)
 	)
 {
+	add(*impl_);
 }
 
 cast_expression::cast_expression(const cast_expression& o):
 	composite_node(),
-	impl_(new cast_expression_impl(*o.impl_))
+	impl_(new type(*o.impl_))
 {
 	add(*impl_);
 }
 
 cast_expression::cast_expression(cast_expression&& o):
 	composite_node(),
-	impl_(new cast_expression_impl(std::move(*o.impl_)))
+	impl_(new type(std::move(*o.impl_)))
 {
 	add(*impl_);
 }

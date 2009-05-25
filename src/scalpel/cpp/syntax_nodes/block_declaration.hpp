@@ -22,22 +22,44 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_BLOCK_DECLARATION_HPP
 
 #include <boost/optional.hpp>
-#include "composite_node.hpp"
+#include "common.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class block_declaration_impl;
-class block_declaration_tail;
 class simple_declaration;
 class using_declaration;
 class using_directive;
 
+typedef
+	alternative_node
+	<
+		simple_declaration,
+//		asm_definition,
+//		namespace_alias_definition,
+		using_declaration,
+		using_directive
+	>
+	block_declaration_t
+;
+
+typedef
+	alternative_node
+	<
+//		asm_definition,
+//		namespace_alias_definition,
+		using_declaration,
+		using_directive
+	>
+	block_declaration_tail_t
+;
+
 class block_declaration: public composite_node
 {
 	public:
+		typedef block_declaration_t type;
 		typedef simple_declaration head_node_t;
-		typedef block_declaration_tail tail_alternative_node_t;
+		typedef block_declaration_tail_t tail_alternative_node_t;
 
 		block_declaration(simple_declaration&& o);
 
@@ -64,7 +86,7 @@ class block_declaration: public composite_node
 		get(boost::optional<const using_directive&>& node) const;
 
 	private:
-		block_declaration_impl* impl_;
+		type* impl_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

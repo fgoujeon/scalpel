@@ -20,39 +20,41 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "iteration_statement.hpp"
 
-#include "iteration_statement_impl.hpp"
+#include "while_statement.hpp"
+#include "do_while_statement.hpp"
+#include "for_statement.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 iteration_statement::iteration_statement(while_statement&& o):
-	impl_(new iteration_statement_impl(std::move(o)))
+	impl_(new type(std::move(o)))
 {
 	add(*impl_);
 }
 
 iteration_statement::iteration_statement(do_while_statement&& o):
-	impl_(new iteration_statement_impl(std::move(o)))
+	impl_(new type(std::move(o)))
 {
 	add(*impl_);
 }
 
 iteration_statement::iteration_statement(for_statement&& o):
-	impl_(new iteration_statement_impl(std::move(o)))
+	impl_(new type(std::move(o)))
 {
 	add(*impl_);
 }
 
 iteration_statement::iteration_statement(const iteration_statement& o):
 	composite_node(),
-	impl_(new iteration_statement_impl(*o.impl_))
+	impl_(new type(*o.impl_))
 {
 	add(*impl_);
 }
 
 iteration_statement::iteration_statement(iteration_statement&& o):
 	composite_node(),
-	impl_(new iteration_statement_impl(*o.impl_))
+	impl_(new type(*o.impl_))
 {
 	add(*impl_);
 }

@@ -20,7 +20,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "declarator.hpp"
 
-#include "declarator_impl.hpp"
+#include "ptr_operator_seq.hpp"
+#include "direct_declarator.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -31,7 +32,7 @@ declarator::declarator
 	optional_node<space>&& o2,
     direct_declarator&& o3
 ):
-	impl_(new declarator_impl(o1, o2, o3))
+	impl_(new declarator_t(o1, o2, o3))
 {
 	add(*impl_);
 }
@@ -41,13 +42,13 @@ declarator::declarator
 	head_node_t&& head,
 	tail_sequence_node_t&& tail
 ):
-	impl_(new declarator_impl(head, tail))
+	impl_(new declarator_t(head, tail))
 {
 }
 
 declarator::declarator(const declarator& o):
 	composite_node(),
-	impl_(new declarator_impl(*o.impl_))
+	impl_(new declarator_t(*o.impl_))
 {
 	add(*impl_);
 }
@@ -79,7 +80,7 @@ const direct_declarator&
 declarator::direct_declarator_node() const
 {
 	assert(impl_);
-	return impl_->direct_declarator_node();
+	return get<2>(*impl_);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

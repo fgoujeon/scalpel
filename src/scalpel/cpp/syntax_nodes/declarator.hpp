@@ -21,19 +21,35 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_DECLARATOR_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_DECLARATOR_HPP
 
-#include "composite_node.hpp"
+#include "common.hpp"
 #include "list_node.hpp"
 #include "space.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class declarator_impl;
-class declarator_tail;
-
 class direct_declarator;
 class ptr_operator;
 typedef list_node<ptr_operator> ptr_operator_seq;
+
+typedef
+	sequence_node
+	<
+		optional_node<ptr_operator_seq>,
+		optional_node<space>,
+		direct_declarator
+	>
+	declarator_t
+;
+
+typedef
+	sequence_node
+	<
+		optional_node<space>,
+		direct_declarator
+	>
+	declarator_tail_t
+;
 
 /**
 \verbatim
@@ -45,8 +61,9 @@ declarator
 class declarator: public composite_node
 {
 	public:
+		typedef declarator_t type;
 		typedef optional_node<ptr_operator_seq> head_node_t;
-		typedef declarator_tail tail_sequence_node_t;
+		typedef declarator_tail_t tail_sequence_node_t;
 
         declarator
         (
@@ -74,7 +91,7 @@ class declarator: public composite_node
 		direct_declarator_node() const;
 
     private:
-		declarator_impl* impl_;
+		declarator_t* impl_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

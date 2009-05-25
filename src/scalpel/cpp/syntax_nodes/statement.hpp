@@ -35,14 +35,41 @@ class iteration_statement;
 class selection_statement;
 class block_declaration;
 
-class statement_impl;
-class statement_tail;
+typedef
+	alternative_node
+	<
+		labeled_statement,
+		expression_statement,
+		compound_statement,
+		selection_statement,
+		iteration_statement,
+		jump_statement,
+		block_declaration,
+		try_block
+	>
+	statement_t
+;
+
+typedef
+	alternative_node
+	<
+		expression_statement,
+		compound_statement,
+		selection_statement,
+		iteration_statement,
+		jump_statement,
+		block_declaration,
+		try_block
+	>
+	statement_tail_t
+;
 
 class statement: public composite_node
 {
 	public:
+		typedef statement_t type;
 		typedef labeled_statement head_node_t;
-		typedef statement_tail tail_alternative_node_t;
+		typedef statement_tail_t tail_alternative_node_t;
 
 		statement(labeled_statement&& o);
 
@@ -94,7 +121,7 @@ class statement: public composite_node
 		get(boost::optional<const try_block&>& node) const;
 
 	private:
-		statement_impl* impl_;
+		type* impl_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

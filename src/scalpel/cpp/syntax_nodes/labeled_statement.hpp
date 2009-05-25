@@ -28,17 +28,34 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class labeled_statement_impl;
-class labeled_statement_tail;
-
 class case_statement;
 class classic_labeled_statement;
+
+typedef
+	alternative_node
+	<
+		case_statement,
+		default_statement,
+		classic_labeled_statement
+	>
+	labeled_statement_t
+;
+
+typedef
+	alternative_node
+	<
+		default_statement,
+		classic_labeled_statement
+	>
+	labeled_statement_tail_t
+;
 
 class labeled_statement: public composite_node
 {
 	public:
+		typedef labeled_statement_t type;
 		typedef case_statement head_node_t;
-		typedef labeled_statement_tail tail_alternative_node_t;
+		typedef labeled_statement_tail_t tail_alternative_node_t;
 
 		labeled_statement(case_statement&& o);
 
@@ -65,7 +82,7 @@ class labeled_statement: public composite_node
 		get(boost::optional<const classic_labeled_statement&>& node) const;
 
 	private:
-		labeled_statement_impl* impl_;
+		type* impl_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

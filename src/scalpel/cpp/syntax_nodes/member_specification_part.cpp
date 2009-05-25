@@ -20,33 +20,34 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "member_specification_part.hpp"
 
-#include "member_specification_part_impl.hpp"
+#include "member_declaration.hpp"
+#include "member_specification_access_specifier.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 member_specification_part::member_specification_part(member_declaration&& o):
-	impl_(new member_specification_part_impl(std::move(o)))
+	impl_(new type(std::move(o)))
 {
 	add(*impl_);
 }
 
 member_specification_part::member_specification_part(member_specification_access_specifier&& o):
-	impl_(new member_specification_part_impl(std::move(o)))
+	impl_(new type(std::move(o)))
 {
 	add(*impl_);
 }
 
 member_specification_part::member_specification_part(const member_specification_part& o):
 	composite_node(),
-	impl_(new member_specification_part_impl(*o.impl_))
+	impl_(new type(*o.impl_))
 {
 	add(*impl_);
 }
 
 member_specification_part::member_specification_part(member_specification_part&& o):
 	composite_node(),
-	impl_(new member_specification_part_impl(std::move(*o.impl_)))
+	impl_(new type(std::move(*o.impl_)))
 {
 	add(*impl_);
 }

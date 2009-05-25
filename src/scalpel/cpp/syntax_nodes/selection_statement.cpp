@@ -20,33 +20,34 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "selection_statement.hpp"
 
-#include "selection_statement_impl.hpp"
+#include "if_statement.hpp"
+#include "switch_statement.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 selection_statement::selection_statement(if_statement&& o):
-	impl_(new selection_statement_impl(std::move(o)))
+	impl_(new type(std::move(o)))
 {
 	add(*impl_);
 }
 
 selection_statement::selection_statement(switch_statement&& o):
-	impl_(new selection_statement_impl(std::move(o)))
+	impl_(new type(std::move(o)))
 {
 	add(*impl_);
 }
 
 selection_statement::selection_statement(const selection_statement& o):
 	composite_node(),
-	impl_(new selection_statement_impl(*o.impl_))
+	impl_(new type(*o.impl_))
 {
 	add(*impl_);
 }
 
 selection_statement::selection_statement(selection_statement&& o):
 	composite_node(),
-	impl_(new selection_statement_impl(*o.impl_))
+	impl_(new type(*o.impl_))
 {
 	add(*impl_);
 }

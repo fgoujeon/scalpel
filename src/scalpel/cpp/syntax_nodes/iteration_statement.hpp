@@ -30,14 +30,31 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 class while_statement;
 class for_statement;
 
-class iteration_statement_impl;
-class iteration_statement_tail;
+typedef
+	alternative_node
+	<
+		while_statement,
+		do_while_statement,
+		for_statement
+	>
+	iteration_statement_t
+;
+
+typedef
+	alternative_node
+	<
+		do_while_statement,
+		for_statement
+	>
+	iteration_statement_tail_t
+;
 
 class iteration_statement: public composite_node
 {
 	public:
+		typedef iteration_statement_t type;
 		typedef while_statement head_node_t;
-		typedef iteration_statement_tail tail_alternative_node_t;
+		typedef iteration_statement_tail_t tail_alternative_node_t;
 
 		iteration_statement(while_statement&& o);
 
@@ -64,7 +81,7 @@ class iteration_statement: public composite_node
 		get(boost::optional<const for_statement&>& node) const;
 
 	private:
-		iteration_statement_impl* impl_;
+		type* impl_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

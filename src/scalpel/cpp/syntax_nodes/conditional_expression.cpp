@@ -20,9 +20,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "conditional_expression.hpp"
 
-#include "conditional_expression_impl.hpp"
 #include "expressions.hpp"
-#include "common_nodes.hpp"
+#include "expression.hpp"
+#include "assignment_expression.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -39,7 +39,7 @@ conditional_expression::conditional_expression
 	optional_node<space>&& o8,
 	optional_node<assignment_expression>&& o9
 ):
-	impl_(new conditional_expression_impl(o1, o2, o3, o4, o5, o6, o7, o8, o9))
+	impl_(new type(o1, o2, o3, o4, o5, o6, o7, o8, o9))
 {
 	add(*impl_);
 }
@@ -49,7 +49,7 @@ conditional_expression::conditional_expression
 	head_node_t&& head,
 	tail_sequence_node_t&& tail
 ):
-	impl_(new conditional_expression_impl(head, tail))
+	impl_(new type(head, tail))
 {
 }
 
@@ -57,7 +57,7 @@ conditional_expression::conditional_expression(const conditional_expression& o):
 	composite_node(),
 	impl_
 	(
-		new conditional_expression_impl(*o.impl_)
+		new type(*o.impl_)
 	)
 {
 	add(*impl_);
@@ -65,19 +65,17 @@ conditional_expression::conditional_expression(const conditional_expression& o):
 
 conditional_expression::conditional_expression(conditional_expression&& o):
 	composite_node(),
-	impl_
-	(
-		new conditional_expression_impl(std::move(*o.impl_))
-	)
+	impl_(o.impl_)
 {
+	o.impl_ = 0;
 	add(*impl_);
 }
 
-conditional_expression::conditional_expression(const conditional_expression_impl& o):
+conditional_expression::conditional_expression(const type& o):
 	composite_node(),
 	impl_
 	(
-		new conditional_expression_impl(o)
+		new type(o)
 	)
 {
 	add(*impl_);

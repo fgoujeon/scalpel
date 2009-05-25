@@ -21,21 +21,37 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_MEMBER_SPECIFICATION_PART_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_MEMBER_SPECIFICATION_PART_HPP
 
-#include "composite_node.hpp"
+#include "common.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class member_specification_part_impl;
-class member_specification_part_tail;
 class member_declaration;
 class member_specification_access_specifier;
+
+typedef
+	alternative_node
+	<
+		member_declaration,
+		member_specification_access_specifier
+	>
+	member_specification_part_t
+;
+
+typedef
+	alternative_node
+	<
+		member_specification_access_specifier
+	>
+	member_specification_part_tail_t
+;
 
 class member_specification_part: public composite_node
 {
 	public:
+		typedef member_specification_part_t type;
 		typedef member_declaration head_node_t;
-		typedef member_specification_part_tail tail_alternative_node_t;
+		typedef member_specification_part_tail_t tail_alternative_node_t;
 
 		member_specification_part(member_declaration&& o);
 
@@ -51,7 +67,7 @@ class member_specification_part: public composite_node
 		operator=(const member_specification_part& o);
 
 	private:
-		member_specification_part_impl* impl_;
+		type* impl_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

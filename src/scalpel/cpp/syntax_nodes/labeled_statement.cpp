@@ -20,39 +20,41 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "labeled_statement.hpp"
 
-#include "labeled_statement_impl.hpp"
+#include "case_statement.hpp"
+#include "default_statement.hpp"
+#include "classic_labeled_statement.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 labeled_statement::labeled_statement(case_statement&& o):
-	impl_(new labeled_statement_impl(std::move(o)))
+	impl_(new type(std::move(o)))
 {
 	add(*impl_);
 }
 
 labeled_statement::labeled_statement(default_statement&& o):
-	impl_(new labeled_statement_impl(std::move(o)))
+	impl_(new type(std::move(o)))
 {
 	add(*impl_);
 }
 
 labeled_statement::labeled_statement(classic_labeled_statement&& o):
-	impl_(new labeled_statement_impl(std::move(o)))
+	impl_(new type(std::move(o)))
 {
 	add(*impl_);
 }
 
 labeled_statement::labeled_statement(const labeled_statement& o):
 	composite_node(),
-	impl_(new labeled_statement_impl(*o.impl_))
+	impl_(new type(*o.impl_))
 {
 	add(*impl_);
 }
 
 labeled_statement::labeled_statement(labeled_statement&& o):
 	composite_node(),
-	impl_(new labeled_statement_impl(*o.impl_))
+	impl_(new type(*o.impl_))
 {
 	add(*impl_);
 }

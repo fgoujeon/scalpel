@@ -28,9 +28,45 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class conditional_expression_impl;
-class conditional_expression_tail_sequence_node;
 class assignment_expression;
+
+/**
+\verbatim
+conditional_expression
+	= logical_or_expression, ["?", expression, ":", assignment_expression]
+;
+\endverbatim
+*/
+typedef
+	sequence_node
+	<
+		logical_or_expression,
+		optional_node<space>,
+		optional_node<simple_text_node<str::question_mark>>,
+		optional_node<space>,
+		optional_node<expression>,
+		optional_node<space>,
+		optional_node<simple_text_node<str::colon>>,
+		optional_node<space>,
+		optional_node<assignment_expression>
+	>
+	conditional_expression_t
+;
+
+typedef
+	sequence_node
+	<
+		optional_node<space>,
+		optional_node<simple_text_node<str::question_mark>>,
+		optional_node<space>,
+		optional_node<expression>,
+		optional_node<space>,
+		optional_node<simple_text_node<str::colon>>,
+		optional_node<space>,
+		optional_node<assignment_expression>
+	>
+	conditional_expression_tail_t
+;
 
 /**
 \verbatim
@@ -42,8 +78,9 @@ conditional_expression
 class conditional_expression: public composite_node
 {
 	public:
+		typedef conditional_expression_t type;
 		typedef logical_or_expression head_node_t;
-		typedef conditional_expression_tail_sequence_node tail_sequence_node_t;
+		typedef conditional_expression_tail_t tail_sequence_node_t;
 
 		conditional_expression
 		(
@@ -68,7 +105,7 @@ class conditional_expression: public composite_node
 
 		conditional_expression(conditional_expression&& o);
 
-		conditional_expression(const conditional_expression_impl& o);
+		conditional_expression(const type& o);
 
 		~conditional_expression();
 
@@ -76,7 +113,7 @@ class conditional_expression: public composite_node
 		operator=(const conditional_expression& o);
 
 	private:
-		conditional_expression_impl* impl_;
+		type* impl_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

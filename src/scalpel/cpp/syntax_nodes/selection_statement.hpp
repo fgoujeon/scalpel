@@ -22,22 +22,37 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_SELECTION_STATEMENT_HPP
 
 #include <boost/optional.hpp>
-#include "composite_node.hpp"
+#include "common.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class selection_statement_impl;
-class selection_statement_tail;
-
 class if_statement;
 class switch_statement;
+
+typedef
+	alternative_node
+	<
+		if_statement,
+		switch_statement
+	>
+	selection_statement_t
+;
+
+typedef
+	alternative_node
+	<
+		switch_statement
+	>
+	selection_statement_tail_t
+;
 
 class selection_statement: public composite_node
 {
 	public:
+		typedef selection_statement_t type;
 		typedef if_statement head_node_t;
-		typedef selection_statement_tail tail_alternative_node_t;
+		typedef selection_statement_tail_t tail_alternative_node_t;
 
 		selection_statement(if_statement&& o);
 
@@ -59,7 +74,7 @@ class selection_statement: public composite_node
 		get(boost::optional<const switch_statement&>& node) const;
 
 	private:
-		selection_statement_impl* impl_;
+		type* impl_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes
