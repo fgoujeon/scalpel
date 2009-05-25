@@ -149,28 +149,6 @@ convert_direct_abstract_declarator(const tree_node_t& node)
 	return direct_abstract_declarator();
 }
 
-direct_new_declarator
-convert_direct_new_declarator(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::DIRECT_NEW_DECLARATOR);
-
-	tree_node_iterator_t first_opening_bracket_it = node.children.begin();
-	tree_node_iterator_t expression_node_it = find_node<id_t::EXPRESSION>(node);
-	tree_node_iterator_t first_closing_bracket_it = find_node(node, "]");
-	tree_node_iterator_t conditional_expression_it = find_node<id_t::CONDITIONAL_EXPRESSION>(node);
-
-	return direct_new_declarator
-	(
-		convert_next_space(node, first_opening_bracket_it),
-		convert_node<expression>(*expression_node_it),
-		convert_next_space(node, expression_node_it),
-		convert_next_space(node, first_closing_bracket_it),
-		convert_previous_space(node, conditional_expression_it),
-		convert_optional<conditional_expression>(node, conditional_expression_it),
-		convert_next_space(node, conditional_expression_it)
-	);
-}
-
 dot_id_expression
 convert_dot_id_expression(const tree_node_t& node)
 {
@@ -292,35 +270,6 @@ convert_floating_literal(const tree_node_t& node)
     assert(node.value.id() == id_t::FLOATING_LITERAL);
 
 	return floating_literal(get_only_child_value(node));
-}
-
-for_statement
-convert_for_statement(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::FOR_STATEMENT);
-
-	tree_node_iterator_t for_keyword_it = node.children.begin();
-	tree_node_iterator_t opening_bracket_it = find_node(node, "(");
-	tree_node_iterator_t for_init_statement_it = find_node<id_t::FOR_INIT_STATEMENT>(node);
-	tree_node_iterator_t condition_it = find_node<id_t::CONDITION>(node);
-	tree_node_iterator_t semicolon_it = find_node(node, ";");
-	tree_node_iterator_t expression_it = find_node<id_t::EXPRESSION>(node);
-	tree_node_iterator_t closing_bracket_it = find_node(node, ")");
-
-	return for_statement
-	(
-		convert_next_space(node, for_keyword_it),
-		convert_next_space(node, opening_bracket_it),
-		convert_optional<for_init_statement>(node, for_init_statement_it),
-		convert_next_space(node, for_init_statement_it),
-		convert_optional<condition>(node, condition_it),
-		convert_next_space(node, condition_it),
-		convert_next_space(node, semicolon_it),
-		convert_optional<expression>(node, expression_it),
-		convert_next_space(node, expression_it),
-		convert_next_space(node, closing_bracket_it),
-		find_and_convert_node<statement, id_t::STATEMENT>(node)
-	);
 }
 
 function_definition

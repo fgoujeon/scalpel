@@ -35,38 +35,82 @@ direct_new_declarator
 	= '[' >> !s >> expression >> !s >> ']' >> !(!s >> '[' >> !s >> conditional_expression >> !s >> ']')
 ;
 */
-class direct_new_declarator: public composite_node
+typedef
+	sequence_node
+	<
+		simple_text_node<str::opening_square_bracket>,
+		optional_node<space>,
+		expression,
+		optional_node<space>,
+		simple_text_node<str::closing_square_bracket>,
+		optional_node<space>,
+		optional_node<simple_text_node<str::opening_square_bracket>>,
+		optional_node<space>,
+		optional_node<conditional_expression>,
+		optional_node<space>,
+		optional_node<simple_text_node<str::closing_square_bracket>>
+	>
+	direct_new_declarator_t
+;
+
+class direct_new_declarator: public direct_new_declarator_t
 {
 	public:
+		typedef direct_new_declarator_t type;
+		typedef type::head_node_t head_node_t;
+		typedef type::tail_sequence_node_t tail_sequence_node_t;
+
 		direct_new_declarator
 		(
-			optional_node<space>&& post_first_opening_bracket_space_node,
-			expression&& expression_node,
-			optional_node<space>&& post_expression_space_node,
-			optional_node<space>&& post_first_closing_bracket_space_node,
-			optional_node<space>&& post_second_opening_bracket_space_node,
-			optional_node<conditional_expression>&& conditional_expression_node,
-			optional_node<space>&& post_conditional_expression_space_node
-		);
+			simple_text_node<str::opening_square_bracket>&& o1,
+			optional_node<space>&& o2,
+			expression&& o3,
+			optional_node<space>&& o4,
+			simple_text_node<str::closing_square_bracket>&& o5,
+			optional_node<space>&& o6,
+			optional_node<simple_text_node<str::opening_square_bracket>>&& o7,
+			optional_node<space>&& o8,
+			optional_node<conditional_expression>&& o9,
+			optional_node<space>&& o10,
+			optional_node<simple_text_node<str::closing_square_bracket>>&& o11
+		):
+			type
+			(
+				o1,
+				o2,
+				o3,
+				o4,
+				o5,
+				o6,
+				o7,
+				o8,
+				o9,
+				o10,
+				o11
+			)
+		{
+		}
 
-		direct_new_declarator(const direct_new_declarator& o);
+		direct_new_declarator
+		(
+			head_node_t&& head,
+			tail_sequence_node_t&& tail
+		):
+			type(head, tail)
+		{
+		}
 
-		direct_new_declarator(direct_new_declarator&& o);
+		direct_new_declarator(const direct_new_declarator& o):
+			type(o)
+		{
+		}
 
-		const direct_new_declarator&
-		operator=(const direct_new_declarator& o);
+		direct_new_declarator(direct_new_declarator&& o):
+			type(o)
+		{
+		}
 
-	private:
-		void
-		update_node_list();
-
-		optional_node<space> post_first_opening_bracket_space_;
-		expression expression_;
-		optional_node<space> post_expression_space_;
-		optional_node<space> post_first_closing_bracket_space_;
-		optional_node<space> post_second_opening_bracket_space_;
-		optional_node<conditional_expression> conditional_expression_;
-		optional_node<space> post_conditional_expression_space_;
+		using type::operator=;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

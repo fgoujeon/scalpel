@@ -51,9 +51,6 @@ convert_delete_array_operator(const tree_node_t& node);
 syntax_nodes::direct_abstract_declarator
 convert_direct_abstract_declarator(const tree_node_t& node);
 
-syntax_nodes::direct_new_declarator
-convert_direct_new_declarator(const tree_node_t& node);
-
 syntax_nodes::dot_id_expression
 convert_dot_id_expression(const tree_node_t& node);
 
@@ -86,9 +83,6 @@ convert_expression_statement(const tree_node_t& node);
 
 syntax_nodes::floating_literal
 convert_floating_literal(const tree_node_t& node);
-
-syntax_nodes::for_statement
-convert_for_statement(const tree_node_t& node);
 
 syntax_nodes::function_definition
 convert_function_definition(const tree_node_t& node);
