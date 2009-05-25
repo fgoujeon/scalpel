@@ -32,82 +32,25 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 /**
 \verbatim
 base_specifier
-	= ["::"], [nested_name_specifier], class_name
-	| "virtual", [access_specifier], ["::"], [nested_name_specifier], class_name
-	| access_specifier, ["virtual"], ["::"], [nested_name_specifier], class_name
+	= nested_identifier_or_template_id
+	| "virtual" >> !s >> !access_specifier >> !s >> nested_identifier_or_template_id
+	| access_specifier >> !s >> !str_p("virtual") >> !s >> nested_identifier_or_template_id
 ;
 \endverbatim
-
-	base_specifier
-		= nested_identifier_or_template_id
-		| "virtual" >> !s >> !access_specifier >> !s >> nested_identifier_or_template_id
-		| access_specifier >> !s >> !str_p("virtual") >> !s >> nested_identifier_or_template_id
-	;
 */
-class base_specifier: public composite_node
-{
-    public:
-        base_specifier
-        (
-            bool virtual_keyword,
-			bool virtual_keyword_first,
-			optional_node<space>&& post_virtual_keyword_space_node,
-            optional_node<access_specifier>&& an_access_specifier,
-			optional_node<space>&& post_access_specifier_space_node,
-            optional_node<nested_identifier_or_template_id>&& a_nested_identifier_or_template_id
-        );
-
-		base_specifier(const base_specifier& o);
-
-		base_specifier(base_specifier&& o);
-
-		const base_specifier&
-		operator=(const base_specifier& o);
-
-        inline
-        bool
-        has_virtual_keyword() const;
-
-        inline
-        const optional_node<access_specifier>&
-        access_specifier_node() const;
-
-        inline
-        const optional_node<nested_identifier_or_template_id>&
-        nested_identifier_or_template_id_node() const;
-
-    private:
-		void
-		update_node_list();
-
-        bool virtual_keyword_;
-        bool virtual_keyword_first_;
-		optional_node<space> post_virtual_keyword_space_;
-		optional_node<access_specifier> access_specifier_;
-		optional_node<space> post_access_specifier_space_;
-		optional_node<nested_identifier_or_template_id> nested_identifier_or_template_id_;
-};
-
-inline
-bool
-base_specifier::has_virtual_keyword() const
-{
-    return virtual_keyword_;
-}
-
-inline
-const optional_node<access_specifier>&
-base_specifier::access_specifier_node() const
-{
-	return access_specifier_;
-}
-
-inline
-const optional_node<nested_identifier_or_template_id>&
-base_specifier::nested_identifier_or_template_id_node() const
-{
-	return nested_identifier_or_template_id_;
-}
+typedef
+	sequence_node
+	<
+		optional_node<simple_text_node<str::virtual_>>,
+		optional_node<space>,
+		optional_node<access_specifier>,
+		optional_node<space>,
+		optional_node<simple_text_node<str::virtual_>>,
+		optional_node<space>,
+		nested_identifier_or_template_id
+	>
+	base_specifier
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

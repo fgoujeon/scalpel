@@ -33,9 +33,6 @@ convert_arrow_pseudo_destructor_name(const tree_node_t& node);
 syntax_nodes::assignment_expression_condition
 convert_assignment_expression_condition(const tree_node_t& node);
 
-syntax_nodes::base_specifier
-convert_base_specifier(const tree_node_t& node);
-
 syntax_nodes::character_literal
 convert_character_literal(const tree_node_t& node);
 
@@ -74,9 +71,6 @@ convert_enum_elaborated_specifier(const tree_node_t& node);
 
 syntax_nodes::enum_specifier
 convert_enum_specifier(const tree_node_t& node);
-
-syntax_nodes::equal_initializer
-convert_equal_initializer(const tree_node_t& node);
 
 syntax_nodes::exception_abstract_declarator
 convert_exception_abstract_declarator(const tree_node_t& node);

@@ -28,13 +28,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-/**
-\verbatim
-case_statement
-	= str_p("case") >> !s >> conditional_expression >> !s >> ':' >> !s >> statement
-;
-\endverbatim
-*/
 typedef
 	sequence_node
 	<
@@ -49,6 +42,13 @@ typedef
 	case_statement_t
 ;
 
+/**
+\verbatim
+case_statement
+	= str_p("case") >> !s >> conditional_expression >> !s >> ':' >> !s >> statement
+;
+\endverbatim
+*/
 struct case_statement: public case_statement_t
 {
 	typedef case_statement_t type;

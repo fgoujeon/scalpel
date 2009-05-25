@@ -21,9 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_EQUAL_INITIALIZER_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_EQUAL_INITIALIZER_HPP
 
-#include "optional_node.hpp"
-#include "composite_node.hpp"
-#include "space.hpp"
+#include "common.hpp"
 #include "initializer_clause.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
@@ -36,29 +34,15 @@ equal_initializer
 ;
 \endverbatim
 */
-class equal_initializer: public composite_node
-{
-	public:
-		equal_initializer
-		(
-			optional_node<space>&& space_node,
-			initializer_clause&& initializer_clause_node
-		);
-
-		equal_initializer(const equal_initializer& o);
-
-		equal_initializer(equal_initializer&& o);
-
-		const equal_initializer&
-		operator=(const equal_initializer& o);
-
-	private:
-		void
-		update_node_list();
-
-		optional_node<space> space_;
-		initializer_clause initializer_clause_;
-};
+typedef
+	sequence_node
+	<
+		simple_text_node<str::equal>,
+		optional_node<space>,
+		initializer_clause
+	>
+	equal_initializer
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

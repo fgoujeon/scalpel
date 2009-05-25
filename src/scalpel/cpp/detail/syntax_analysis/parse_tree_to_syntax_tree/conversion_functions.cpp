@@ -64,25 +64,6 @@ convert_assignment_expression_condition(const tree_node_t& node)
 	);
 }
 
-base_specifier
-convert_base_specifier(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::BASE_SPECIFIER);
-
-	tree_node_iterator_t virtual_keyword_it = find_node(node, "virtual");
-	tree_node_iterator_t access_specifier_node_it = find_child_node(node, id_t::ACCESS_SPECIFIER);
-
-	return base_specifier
-	(
-		virtual_keyword_it != node.children.end(),
-		check_node_existence(node, "virtual", 0),
-		convert_next_space(node, virtual_keyword_it),
-		convert_optional<access_specifier>(node, access_specifier_node_it),
-		convert_next_space(node, access_specifier_node_it),
-		find_and_convert_node<optional_node<nested_identifier_or_template_id>, id_t::NESTED_IDENTIFIER_OR_TEMPLATE_ID>(node)
-	);
-}
-
 character_literal
 convert_character_literal(const tree_node_t& node)
 {
@@ -237,20 +218,6 @@ convert_enum_specifier(const tree_node_t& node)
     assert(node.value.id() == id_t::ENUM_SPECIFIER);
 
 	return enum_specifier();
-}
-
-equal_initializer
-convert_equal_initializer(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::EQUAL_INITIALIZER);
-
-	tree_node_iterator_t i = find_node<id_t::INITIALIZER_CLAUSE>(node);
-
-	return equal_initializer
-	(
-		convert_previous_space(node, i),
-		convert_node<initializer_clause>(*i)
-	);
 }
 
 exception_abstract_declarator
