@@ -21,9 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_DOT_ID_EXPRESSION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_DOT_ID_EXPRESSION_HPP
 
-#include "optional_node.hpp"
-#include "composite_node.hpp"
-#include "space.hpp"
+#include "common.hpp"
 #include "id_expression.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
@@ -36,33 +34,17 @@ dot_id_expression
 ;
 \endverbatim
 */
-class dot_id_expression: public composite_node
-{
-	public:
-		dot_id_expression
-		(
-			optional_node<space>&& post_dot_space_node,
-			bool template_keyword,
-			optional_node<space>&& post_template_keyword_space_node,
-			id_expression&& id_expression_node
-		);
-
-		dot_id_expression(const dot_id_expression& o);
-
-		dot_id_expression(dot_id_expression&& o);
-
-		const dot_id_expression&
-		operator=(const dot_id_expression& o);
-
-	private:
-		void
-		update_node_list();
-
-		optional_node<space> post_dot_space_;
-		bool template_keyword_;
-		optional_node<space> post_template_keyword_space_;
-		id_expression id_expression_;
-};
+typedef
+	sequence_node
+	<
+		simple_text_node<str::dot>,
+		optional_node<space>,
+		optional_node<simple_text_node<str::template_>>,
+		optional_node<space>,
+		id_expression
+	>
+	dot_id_expression
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

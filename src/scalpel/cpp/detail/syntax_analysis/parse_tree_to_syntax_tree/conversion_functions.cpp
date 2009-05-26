@@ -149,23 +149,6 @@ convert_direct_abstract_declarator(const tree_node_t& node)
 	return direct_abstract_declarator();
 }
 
-dot_id_expression
-convert_dot_id_expression(const tree_node_t& node)
-{
-	assert(node.value.id() == id_t::DOT_ID_EXPRESSION);
-
-	tree_node_iterator_t dot_it = node.children.begin();
-	tree_node_iterator_t template_keyword_it = find_node(node, "template");
-
-	return dot_id_expression
-	(
-		convert_next_space(node, dot_it),
-		template_keyword_it != node.children.end(),
-		convert_next_space(node, template_keyword_it),
-		find_and_convert_node<id_expression, id_t::ID_EXPRESSION>(node)
-	);
-}
-
 dot_pseudo_destructor_name
 convert_dot_pseudo_destructor_name(const tree_node_t& node)
 {

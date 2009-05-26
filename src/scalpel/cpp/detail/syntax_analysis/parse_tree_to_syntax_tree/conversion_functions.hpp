@@ -51,9 +51,6 @@ convert_delete_array_operator(const tree_node_t& node);
 syntax_nodes::direct_abstract_declarator
 convert_direct_abstract_declarator(const tree_node_t& node);
 
-syntax_nodes::dot_id_expression
-convert_dot_id_expression(const tree_node_t& node);
-
 syntax_nodes::dot_pseudo_destructor_name
 convert_dot_pseudo_destructor_name(const tree_node_t& node);
 
