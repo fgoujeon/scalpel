@@ -261,9 +261,6 @@ convert_unary_sizeof_expression(const tree_node_t& node);
 syntax_nodes::using_declaration
 convert_using_declaration(const tree_node_t& node);
 
-syntax_nodes::using_directive
-convert_using_directive(const tree_node_t& node);
-
 }}}}} //namespace scalpel::cpp::detail::syntax_analysis
 
 #endif

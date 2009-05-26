@@ -1143,29 +1143,5 @@ convert_using_declaration(const tree_node_t& node)
     );
 }
 
-using_directive
-convert_using_directive(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::USING_DIRECTIVE);
-
-	tree_node_iterator_t using_keyword_it = node.children.begin();
-	tree_node_iterator_t namespace_keyword_it = find_node(node, "namespace");
-	tree_node_iterator_t leading_double_colon_it = find_node(node, "::");
-	tree_node_iterator_t nested_name_specifier_it = find_node<id_t::NESTED_NAME_SPECIFIER>(node);
-	tree_node_iterator_t identifier_it = find_node<id_t::IDENTIFIER>(node);
-
-    return using_directive
-    (
-		convert_next_space(node, using_keyword_it),
-		convert_next_space(node, namespace_keyword_it),
-		leading_double_colon_it != node.children.end(),
-		convert_next_space(node, leading_double_colon_it),
-		convert_optional<nested_name_specifier>(node, nested_name_specifier_it),
-		convert_next_space(node, nested_name_specifier_it),
-		convert_node<identifier>(*identifier_it),
-		convert_next_space(node, identifier_it)
-    );
-}
-
 }}}}} //namespace scalpel::cpp::detail::syntax_analysis
 

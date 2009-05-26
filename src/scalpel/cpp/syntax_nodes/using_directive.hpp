@@ -21,11 +21,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_USING_DIRECTIVE_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_USING_DIRECTIVE_HPP
 
-#include "optional_node.hpp"
-#include "composite_node.hpp"
+#include "common.hpp"
 #include "identifier.hpp"
 #include "nested_name_specifier.hpp"
-#include "space.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -37,20 +35,47 @@ using_directive
 ;
 \endverbatim
 */
+typedef
+	sequence_node
+	<
+		simple_text_node<str::using_>,
+		optional_node<space>,
+		simple_text_node<str::namespace_>,
+		optional_node<space>,
+		optional_node<simple_text_node<str::double_colon>>,
+		optional_node<space>,
+		optional_node<nested_name_specifier>,
+		optional_node<space>,
+		identifier,
+		optional_node<space>,
+		simple_text_node<str::semicolon>
+	>
+	using_directive_t
+;
+
 class using_directive: public composite_node
 {
 	public:
+		typedef using_directive_t type;
+		typedef using_directive_t::head_node_t head_node_t;
+		typedef using_directive_t::tail_sequence_node_t tail_sequence_node_t;
+
 		using_directive
 		(
-			optional_node<space>&& post_using_keyword_space_node,
-			optional_node<space>&& post_namespace_keyword_space_node,
-			bool leading_double_colon,
-			optional_node<space>&& post_leading_double_colon_space_node,
-			optional_node<nested_name_specifier>&& nested_name_specifier_node,
-			optional_node<space>&& post_nested_name_specifier_space_node,
-			identifier&& identifier_node,
-			optional_node<space>&& post_identifier_space_node
+			simple_text_node<str::using_>&& o0,
+			optional_node<space>&& o1,
+			simple_text_node<str::namespace_>&& o2,
+			optional_node<space>&& o3,
+			optional_node<simple_text_node<str::double_colon>>&& o4,
+			optional_node<space>&& o5,
+			optional_node<nested_name_specifier>&& o6,
+			optional_node<space>&& o7,
+			identifier&& o8,
+			optional_node<space>&& o9,
+			simple_text_node<str::semicolon>&& o10
 		);
+
+		using_directive(head_node_t&& head, tail_sequence_node_t&& tail);
 
 		using_directive(const using_directive& o);
 
@@ -59,52 +84,18 @@ class using_directive: public composite_node
 		const using_directive&
 		operator=(const using_directive& o);
 
-		inline
 		bool
-		has_leading_double_colon() const;
+		double_colon_node() const;
 
-		inline
 		const optional_node<nested_name_specifier>&
 		nested_name_specifier_node() const;
 
-		inline
 		const identifier&
 	   	identifier_node() const;
 
 	private:
-		void
-		update_node_list();
-
-		optional_node<space> post_using_keyword_space_;
-		optional_node<space> post_namespace_keyword_space_;
-		bool leading_double_colon_;
-		optional_node<space> post_leading_double_colon_space_;
-		optional_node<nested_name_specifier> nested_name_specifier_;
-		optional_node<space> post_nested_name_specifier_space_;
-		identifier identifier_;
-		optional_node<space> post_identifier_space_;
+		std::unique_ptr<type> impl_;
 };
-
-inline
-bool
-using_directive::has_leading_double_colon() const
-{
-	return leading_double_colon_;
-}
-
-inline
-const optional_node<nested_name_specifier>&
-using_directive::nested_name_specifier_node() const
-{
-	return nested_name_specifier_;
-}
-
-inline
-const identifier&
-using_directive::identifier_node() const
-{
-	return identifier_;
-}
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

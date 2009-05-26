@@ -27,86 +27,77 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 using_directive::using_directive
 (
-	optional_node<space>&& post_using_keyword_space_node,
-	optional_node<space>&& post_namespace_keyword_space_node,
-	bool leading_double_colon,
-	optional_node<space>&& post_leading_double_colon_space_node,
-	optional_node<nested_name_specifier>&& nested_name_specifier_node,
-	optional_node<space>&& post_nested_name_specifier_space_node,
-	identifier&& identifier_node,
-	optional_node<space>&& post_identifier_space_node
+	simple_text_node<str::using_>&& o0,
+	optional_node<space>&& o1,
+	simple_text_node<str::namespace_>&& o2,
+	optional_node<space>&& o3,
+	optional_node<simple_text_node<str::double_colon>>&& o4,
+	optional_node<space>&& o5,
+	optional_node<nested_name_specifier>&& o6,
+	optional_node<space>&& o7,
+	identifier&& o8,
+	optional_node<space>&& o9,
+	simple_text_node<str::semicolon>&& o10
 ):
-	post_using_keyword_space_(post_using_keyword_space_node),
-	post_namespace_keyword_space_(post_namespace_keyword_space_node),
-	leading_double_colon_(leading_double_colon),
-	post_leading_double_colon_space_(post_leading_double_colon_space_node),
-	nested_name_specifier_(nested_name_specifier_node),
-	post_nested_name_specifier_space_(post_nested_name_specifier_space_node),
-	identifier_(identifier_node),
-	post_identifier_space_(post_identifier_space_node)
+	impl_
+	(
+		new type
+		(
+			o0,
+			o1,
+			o2,
+			o3,
+			o4,
+			o5,
+			o6,
+			o7,
+			o8,
+			o9,
+			o10
+		)
+	)
 {
-	update_node_list();
+}
+
+using_directive::using_directive(head_node_t&& head, tail_sequence_node_t&& tail):
+	impl_(new type(head, tail))
+{
 }
 
 using_directive::using_directive(const using_directive& o):
 	composite_node(),
-	post_using_keyword_space_(o.post_using_keyword_space_),
-	post_namespace_keyword_space_(o.post_namespace_keyword_space_),
-	leading_double_colon_(o.leading_double_colon_),
-	post_leading_double_colon_space_(o.post_leading_double_colon_space_),
-	nested_name_specifier_(o.nested_name_specifier_),
-	post_nested_name_specifier_space_(o.post_nested_name_specifier_space_),
-	identifier_(o.identifier_),
-	post_identifier_space_(o.post_identifier_space_)
+	impl_(new type(*o.impl_))
 {
-	update_node_list();
 }
 
 using_directive::using_directive(using_directive&& o):
-	post_using_keyword_space_(std::move(o.post_using_keyword_space_)),
-	post_namespace_keyword_space_(std::move(o.post_namespace_keyword_space_)),
-	leading_double_colon_(std::move(o.leading_double_colon_)),
-	post_leading_double_colon_space_(std::move(o.post_leading_double_colon_space_)),
-	nested_name_specifier_(std::move(o.nested_name_specifier_)),
-	post_nested_name_specifier_space_(std::move(o.post_nested_name_specifier_space_)),
-	identifier_(std::move(o.identifier_)),
-	post_identifier_space_(std::move(o.post_identifier_space_))
+	impl_(std::move(o.impl_))
 {
-	update_node_list();
 }
 
 const using_directive&
 using_directive::operator=(const using_directive& o)
 {
-	post_using_keyword_space_ = o.post_using_keyword_space_;
-	post_namespace_keyword_space_ = o.post_namespace_keyword_space_;
-	leading_double_colon_ = o.leading_double_colon_;
-	post_leading_double_colon_space_ = o.post_leading_double_colon_space_;
-	nested_name_specifier_ = o.nested_name_specifier_;
-	post_nested_name_specifier_space_ = o.post_nested_name_specifier_space_;
-	identifier_ = o.identifier_;
-	post_identifier_space_ = o.post_identifier_space_;
-
-	update_node_list();
-
+	*impl_ = *o.impl_;
 	return *this;
 }
 
-void
-using_directive::update_node_list()
+bool
+using_directive::double_colon_node() const
 {
-	clear();
-	add(common_nodes::using_keyword);
-	if(post_using_keyword_space_) add(*post_using_keyword_space_);
-	add(common_nodes::namespace_keyword);
-	if(post_namespace_keyword_space_) add(*post_namespace_keyword_space_);
-	if(leading_double_colon_) add(common_nodes::double_colon);
-	if(post_leading_double_colon_space_) add(*post_leading_double_colon_space_);
-	if(nested_name_specifier_) add(*nested_name_specifier_);
-	if(post_nested_name_specifier_space_) add(*post_nested_name_specifier_space_);
-	add(identifier_);
-	if(post_identifier_space_) add(*post_identifier_space_);
-	add(common_nodes::semicolon);
+	return get<4>(*impl_);
+}
+
+const optional_node<nested_name_specifier>&
+using_directive::nested_name_specifier_node() const
+{
+	return get<6>(*impl_);
+}
+
+const identifier&
+using_directive::identifier_node() const
+{
+	return get<8>(*impl_);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

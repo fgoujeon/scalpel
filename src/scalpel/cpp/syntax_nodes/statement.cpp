@@ -89,20 +89,19 @@ statement::statement(const statement& o):
 
 statement::statement(statement&& o):
 	composite_node(),
-	impl_(new type(*o.impl_))
+	impl_(std::move(o.impl_))
 {
 	add(*impl_);
 }
 
 statement::~statement()
 {
-	delete impl_;
 }
 
 const statement&
 statement::operator=(const statement& o)
 {
-	impl_ = new type(*o.impl_);
+	impl_ = std::move(std::unique_ptr<type>(new type(*o.impl_)));
 	return *this;
 }
 

@@ -21,7 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_STATEMENT_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_STATEMENT_HPP
 
-#include "composite_node.hpp"
+#include <memory>
+#include "common.hpp"
 #include "jump_statement.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
@@ -121,7 +122,7 @@ class statement: public composite_node
 		get(boost::optional<const try_block&>& node) const;
 
 	private:
-		type* impl_;
+		std::unique_ptr<type> impl_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes
