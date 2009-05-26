@@ -21,18 +21,45 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_NAMESPACE_DEFINITION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_NAMESPACE_DEFINITION_HPP
 
-#include <memory>
-#include <string>
-#include "optional_node.hpp"
-#include "composite_node.hpp"
+#include "common.hpp"
 #include "identifier.hpp"
-#include "list_node.hpp"
 #include "declaration_fwd.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 typedef list_node<declaration> declaration_seq;
+
+typedef
+	sequence_node
+	<
+		simple_text_node<str::namespace_>,
+		optional_node<space>,
+		optional_node<identifier>,
+		optional_node<space>,
+		simple_text_node<str::opening_brace>,
+		optional_node<space>,
+		optional_node<declaration_seq>,
+		optional_node<space>,
+		simple_text_node<str::closing_brace>
+	>
+	namespace_definition_t
+;
+
+typedef
+	sequence_node
+	<
+		optional_node<space>,
+		optional_node<identifier>,
+		optional_node<space>,
+		simple_text_node<str::opening_brace>,
+		optional_node<space>,
+		optional_node<declaration_seq>,
+		optional_node<space>,
+		simple_text_node<str::closing_brace>
+	>
+	namespace_definition_tail_t
+;
 
 /**
 namespace_definition
@@ -42,56 +69,43 @@ namespace_definition
 class namespace_definition: public composite_node
 {
 	public:
+		typedef namespace_definition_t type;
+		typedef simple_text_node<str::namespace_> head_node_t;
+		typedef namespace_definition_tail_t tail_sequence_node_t;
+
 		namespace_definition
 		(
-			optional_node<space>&& post_namespace_keyword_space_node,
-			optional_node<identifier>&& identifier_node,
-			optional_node<space>&& post_identifier_space_node,
-			optional_node<space>&& post_opening_brace_space_node,
-			optional_node<declaration_seq>&& declaration_seq_node,
-			optional_node<space>&& post_declaration_seq_space_node
+			simple_text_node<str::namespace_>&& o0,
+			optional_node<space>&& o1,
+			optional_node<identifier>&& o2,
+			optional_node<space>&& o3,
+			simple_text_node<str::opening_brace>&& o4,
+			optional_node<space>&& o5,
+			optional_node<declaration_seq>&& o6,
+			optional_node<space>&& o7,
+			simple_text_node<str::closing_brace>&& o8
 		);
+
+		namespace_definition(head_node_t&& head, tail_sequence_node_t&& tail);
 
 		namespace_definition(const namespace_definition& o);
 
 		namespace_definition(namespace_definition&& o);
 
+		~namespace_definition();
+
 		const namespace_definition&
 		operator=(const namespace_definition& o);
 
-		inline
 		const optional_node<identifier>&
 	   	identifier_node() const;
 
-		inline
 		const optional_node<list_node<declaration>>&
 		declaration_seq_node() const;
 
 	private:
-		void
-		update_node_list();
-
-		optional_node<space> post_namespace_keyword_space_;
-		optional_node<identifier> identifier_;
-		optional_node<space> post_identifier_space_;
-		optional_node<space> post_opening_brace_space_;
-		std::unique_ptr<optional_node<declaration_seq>> declaration_seq_;
-		optional_node<space> post_declaration_seq_space_;
+		namespace_definition_t* impl_;
 };
-
-inline
-const optional_node<identifier>&
-namespace_definition::identifier_node() const
-{
-	return identifier_;
-}
-
-inline
-const optional_node<list_node<declaration>>&
-namespace_definition::declaration_seq_node() const
-{
-	return *declaration_seq_;
-}
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

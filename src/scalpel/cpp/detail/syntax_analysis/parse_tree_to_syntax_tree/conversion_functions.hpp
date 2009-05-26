@@ -126,9 +126,6 @@ convert_member_declarator_declarator(const tree_node_t& node);
 syntax_nodes::member_specification_access_specifier
 convert_member_specification_access_specifier(const tree_node_t& node);
 
-syntax_nodes::namespace_definition
-convert_namespace_definition(const tree_node_t& node);
-
 syntax_nodes::nested_identifier_or_template_id
 convert_nested_identifier_or_template_id(const tree_node_t& node);
 

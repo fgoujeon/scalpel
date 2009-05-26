@@ -28,67 +28,76 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 namespace_definition::namespace_definition
 (
-	optional_node<space>&& post_namespace_keyword_space_node,
-	optional_node<identifier>&& identifier_node,
-	optional_node<space>&& post_identifier_space_node,
-	optional_node<space>&& post_opening_brace_space_node,
-	optional_node<declaration_seq>&& declaration_seq_node,
-	optional_node<space>&& post_declaration_seq_space_node
+	simple_text_node<str::namespace_>&& o0,
+	optional_node<space>&& o1,
+	optional_node<identifier>&& o2,
+	optional_node<space>&& o3,
+	simple_text_node<str::opening_brace>&& o4,
+	optional_node<space>&& o5,
+	optional_node<declaration_seq>&& o6,
+	optional_node<space>&& o7,
+	simple_text_node<str::closing_brace>&& o8
 ):
-	post_namespace_keyword_space_(post_namespace_keyword_space_node),
-	identifier_(identifier_node),
-	post_identifier_space_(post_identifier_space_node),
-	post_opening_brace_space_(post_opening_brace_space_node),
-	declaration_seq_(new optional_node<declaration_seq>(declaration_seq_node)),
-	post_declaration_seq_space_(post_declaration_seq_space_node)
+	impl_
+	(
+		new type
+		(
+			o0,
+			o1,
+			o2,
+			o3,
+			o4,
+			o5,
+			o6,
+			o7,
+			o8
+		)
+	)
 {
-	update_node_list();
+	add(*impl_);
+}
+
+namespace_definition::namespace_definition(head_node_t&& head, tail_sequence_node_t&& tail):
+	impl_(new type(head, tail))
+{
+	add(*impl_);
 }
 
 namespace_definition::namespace_definition(const namespace_definition& o):
 	composite_node(),
-	post_namespace_keyword_space_(o.post_namespace_keyword_space_),
-	identifier_(o.identifier_),
-	post_identifier_space_(o.post_identifier_space_),
-	post_opening_brace_space_(o.post_opening_brace_space_),
-	declaration_seq_(new optional_node<declaration_seq>(*o.declaration_seq_)),
-	post_declaration_seq_space_(o.post_declaration_seq_space_)
+	impl_(new type(*o.impl_))
 {
-	update_node_list();
+	add(*impl_);
 }
 
 namespace_definition::namespace_definition(namespace_definition&& o):
-	post_namespace_keyword_space_(std::move(o.post_namespace_keyword_space_)),
-	identifier_(std::move(o.identifier_)),
-	post_identifier_space_(std::move(o.post_identifier_space_)),
-	post_opening_brace_space_(std::move(o.post_opening_brace_space_)),
-	declaration_seq_(std::move(o.declaration_seq_)),
-	post_declaration_seq_space_(std::move(o.post_declaration_seq_space_))
+	impl_(o.impl_)
 {
-	update_node_list();
+	o.impl_ = 0;
+}
+
+namespace_definition::~namespace_definition()
+{
+	delete impl_;
 }
 
 const namespace_definition&
 namespace_definition::operator=(const namespace_definition& o)
 {
-	namespace_definition copy(o);
-	std::swap(copy, *this);
+	*impl_ = *o.impl_;
 	return *this;
 }
 
-void
-namespace_definition::update_node_list()
+const optional_node<identifier>&
+namespace_definition::identifier_node() const
 {
-	clear();
-	add(common_nodes::namespace_keyword);
-	if(post_namespace_keyword_space_) add(*post_namespace_keyword_space_);
-	if(identifier_) add(*identifier_);
-	if(post_identifier_space_) add(*post_identifier_space_);
-	add(common_nodes::opening_brace);
-	if(post_opening_brace_space_) add(*post_opening_brace_space_);
-	if(*declaration_seq_) add(**declaration_seq_);
-	if(post_declaration_seq_space_) add(*post_declaration_seq_space_);
-	add(common_nodes::closing_brace);
+	return get<2>(*impl_);
+}
+
+const optional_node<list_node<declaration>>&
+namespace_definition::declaration_seq_node() const
+{
+	return get<6>(*impl_);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

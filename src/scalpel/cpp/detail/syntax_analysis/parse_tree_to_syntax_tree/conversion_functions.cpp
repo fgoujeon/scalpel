@@ -509,27 +509,6 @@ convert_member_specification_access_specifier(const tree_node_t& node)
     );
 }
 
-namespace_definition
-convert_namespace_definition(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::NAMESPACE_DEFINITION);
-
-	tree_node_iterator_t namespace_keyword_it = node.children.begin();
-	tree_node_iterator_t identifier_it = find_node<id_t::IDENTIFIER>(node);
-	tree_node_iterator_t opening_brace_it = find_node(node, "{");
-	tree_node_iterator_t declaration_seq_it = find_node<id_t::DECLARATION_SEQ>(node);
-
-    return namespace_definition
-    (
-		convert_next_space(node, namespace_keyword_it),
-        convert_optional<identifier>(node, identifier_it),
-		convert_next_space(node, identifier_it),
-		convert_next_space(node, opening_brace_it),
-        convert_optional<declaration_seq>(node, declaration_seq_it),
-		convert_next_space(node, declaration_seq_it)
-    );
-}
-
 nested_identifier_or_template_id
 convert_nested_identifier_or_template_id(const tree_node_t& node)
 {
