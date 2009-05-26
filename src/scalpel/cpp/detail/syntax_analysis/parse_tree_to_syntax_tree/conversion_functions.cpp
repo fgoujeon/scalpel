@@ -326,22 +326,6 @@ convert_function_try_block(const tree_node_t& node)
 	);
 }
 
-goto_statement
-convert_goto_statement(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::GOTO_STATEMENT);
-
-	tree_node_iterator_t goto_keyword_it = node.children.begin();
-	tree_node_iterator_t identifier_it = find_node<id_t::IDENTIFIER>(node);
-
-	return goto_statement
-	(
-		convert_next_space(node, goto_keyword_it),
-		convert_node<identifier>(*identifier_it),
-		convert_next_space(node, identifier_it)
-	);
-}
-
 handler
 convert_handler(const tree_node_t& node)
 {
@@ -374,35 +358,6 @@ convert_identifier(const tree_node_t& node)
     );
 
     return identifier(get_only_child_value(node));
-}
-
-if_statement
-convert_if_statement(const tree_node_t& node)
-{
-	assert(node.value.id() == id_t::IF_STATEMENT);
-
-	tree_node_iterator_t if_keyword_it = node.children.begin();
-	tree_node_iterator_t opening_bracket_it = find_node(node, "(");
-	tree_node_iterator_t condition_it = find_node<id_t::CONDITION>(node);
-	tree_node_iterator_t closing_bracket_it = find_node(node, ")");
-	tree_node_iterator_t else_keyword_it = find_node(node, "else");
-	tree_node_iterator_t else_statement_it = node.children.end();
-
-	if(else_keyword_it != node.children.end())
-		--else_statement_it;
-
-	return if_statement
-	(
-		convert_next_space(node, if_keyword_it),
-		convert_next_space(node, opening_bracket_it),
-		convert_node<condition>(*condition_it),
-		convert_next_space(node, condition_it),
-		convert_next_space(node, closing_bracket_it),
-		find_and_convert_node<statement, id_t::STATEMENT>(node),
-		convert_previous_space(node, else_keyword_it),
-		convert_optional<statement>(node, else_statement_it),
-		convert_next_space(node, else_keyword_it)
-	);
 }
 
 init_declarator

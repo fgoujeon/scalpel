@@ -21,9 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_GOTO_STATEMENT_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_GOTO_STATEMENT_HPP
 
-#include "optional_node.hpp"
-#include "composite_node.hpp"
-#include "space.hpp"
+#include "common.hpp"
 #include "identifier.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
@@ -36,31 +34,17 @@ goto_statement
 ;
 \endverbatim
 */
-class goto_statement: public composite_node
-{
-	public:
-		goto_statement
-		(
-			optional_node<space>&& post_goto_space_node,
-			identifier&& identifier_node,
-			optional_node<space>&& post_identifier_space_node
-		);
-
-		goto_statement(const goto_statement& o);
-
-		goto_statement(goto_statement&& o);
-
-		const goto_statement&
-		operator=(const goto_statement& o);
-
-	private:
-		void
-		update_node_list();
-
-		optional_node<space> post_goto_space_;
-		identifier identifier_;
-		optional_node<space> post_identifier_space_;
-};
+typedef
+	sequence_node
+	<
+		simple_text_node<str::goto_>,
+		optional_node<space>,
+		identifier,
+		optional_node<space>,
+		simple_text_node<str::semicolon>
+	>
+	goto_statement
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

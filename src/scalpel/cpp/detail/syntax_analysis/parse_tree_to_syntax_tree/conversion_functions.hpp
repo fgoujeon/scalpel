@@ -90,17 +90,11 @@ convert_function_definition(const tree_node_t& node);
 syntax_nodes::function_try_block
 convert_function_try_block(const tree_node_t& node);
 
-syntax_nodes::goto_statement
-convert_goto_statement(const tree_node_t& node);
-
 syntax_nodes::handler
 convert_handler(const tree_node_t& node);
 
 syntax_nodes::identifier
 convert_identifier(const tree_node_t& node);
-
-syntax_nodes::if_statement
-convert_if_statement(const tree_node_t& node);
 
 syntax_nodes::init_declarator
 convert_init_declarator(const tree_node_t& node);
