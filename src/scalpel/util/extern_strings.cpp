@@ -133,6 +133,7 @@ namespace extern_strings
 	const std::string throw_("throw");
 	const std::string true_("true");
 	const std::string try_("try");
+	const std::string typename_("typename");
 	const std::string union_("union");
 	const std::string unsigned_("unsigned");
 	const std::string using_("using");

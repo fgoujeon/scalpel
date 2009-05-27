@@ -41,63 +41,64 @@ using_directive::using_directive
 ):
 	impl_
 	(
-		new type
-		(
-			o0,
-			o1,
-			o2,
-			o3,
-			o4,
-			o5,
-			o6,
-			o7,
-			o8,
-			o9,
-			o10
-		)
+		o0,
+		o1,
+		o2,
+		o3,
+		o4,
+		o5,
+		o6,
+		o7,
+		o8,
+		o9,
+		o10
 	)
 {
+	add(impl_);
 }
 
 using_directive::using_directive(head_node_t&& head, tail_sequence_node_t&& tail):
-	impl_(new type(head, tail))
+	impl_(head, tail)
 {
+	add(impl_);
 }
 
 using_directive::using_directive(const using_directive& o):
 	composite_node(),
-	impl_(new type(*o.impl_))
+	impl_(o.impl_)
 {
+	add(impl_);
 }
 
 using_directive::using_directive(using_directive&& o):
 	impl_(std::move(o.impl_))
 {
+	add(impl_);
 }
 
 const using_directive&
 using_directive::operator=(const using_directive& o)
 {
-	*impl_ = *o.impl_;
+	impl_ = o.impl_;
 	return *this;
 }
 
 bool
 using_directive::double_colon_node() const
 {
-	return get<4>(*impl_);
+	return get<4>(impl_);
 }
 
 const optional_node<nested_name_specifier>&
 using_directive::nested_name_specifier_node() const
 {
-	return get<6>(*impl_);
+	return get<6>(impl_);
 }
 
 const identifier&
 using_directive::identifier_node() const
 {
-	return get<8>(*impl_);
+	return get<8>(impl_);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

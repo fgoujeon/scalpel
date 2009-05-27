@@ -25,56 +25,50 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 using_declaration::using_declaration
 (
-    bool typename_keyword,
-    bool leading_double_colon,
-    optional_node<nested_name_specifier>&& a_nested_name_specifier,
-    unqualified_id&& an_unqualified_id
+	simple_text_node<str::using_>&& o0,
+	optional_node<space>&& o1,
+	optional_node<simple_text_node<str::typename_>>&& o2,
+	optional_node<space>&& o3,
+	optional_node<simple_text_node<str::double_colon>>&& o4,
+	optional_node<space>&& o5,
+	optional_node<nested_name_specifier>&& o6,
+	optional_node<space>&& o7,
+	unqualified_id&& o8,
+	optional_node<space>&& o9,
+	simple_text_node<str::semicolon>&& o10
 ):
-    typename_keyword_(typename_keyword),
-    leading_double_colon_(leading_double_colon),
-    nested_name_specifier_(a_nested_name_specifier),
-    unqualified_id_(an_unqualified_id)
+	impl_(o0, o1, o2, o3, o4, o5, o6, o7, o8, o9, o10)
 {
-	update_node_list();
+	add(impl_);
+}
+
+using_declaration::using_declaration
+(
+	head_node_t&& head,
+	tail_sequence_node_t&& tail
+):
+	impl_(head, tail)
+{
+	add(impl_);
 }
 
 using_declaration::using_declaration(const using_declaration& o):
-	composite_node(),
-    typename_keyword_(o.typename_keyword_),
-    leading_double_colon_(o.leading_double_colon_),
-    nested_name_specifier_(o.nested_name_specifier_),
-    unqualified_id_(o.unqualified_id_)
+	impl_(o.impl_)
 {
-	update_node_list();
+	add(impl_);
 }
 
 using_declaration::using_declaration(using_declaration&& o):
-    typename_keyword_(std::move(o.typename_keyword_)),
-    leading_double_colon_(std::move(o.leading_double_colon_)),
-    nested_name_specifier_(std::move(o.nested_name_specifier_)),
-    unqualified_id_(std::move(o.unqualified_id_))
+	impl_(std::move(o.impl_))
 {
-	update_node_list();
+	add(impl_);
 }
 
 const using_declaration&
 using_declaration::operator=(const using_declaration& o)
 {
-    typename_keyword_ = o.typename_keyword_;
-    leading_double_colon_ = o.leading_double_colon_;
-    nested_name_specifier_ = o.nested_name_specifier_;
-    unqualified_id_ = o.unqualified_id_;
-	update_node_list();
-
+	impl_ = o.impl_;
 	return *this;
-}
-
-void
-using_declaration::update_node_list()
-{
-	clear();
-	if(nested_name_specifier_) add(*nested_name_specifier_);
-	add(unqualified_id_);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

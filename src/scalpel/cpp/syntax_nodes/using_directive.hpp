@@ -94,7 +94,7 @@ class using_directive: public composite_node
 	   	identifier_node() const;
 
 	private:
-		std::unique_ptr<type> impl_;
+		type impl_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

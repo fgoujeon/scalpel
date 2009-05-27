@@ -1129,19 +1129,5 @@ convert_unary_sizeof_expression(const tree_node_t& node)
 	return unary_sizeof_expression();
 }
 
-using_declaration
-convert_using_declaration(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::USING_DECLARATION);
-
-    return using_declaration
-    (
-        check_node_existence(node, "typename", 1),
-        check_node_existence(node, "::"),
-        find_and_convert_node<optional_node<nested_name_specifier>, id_t::NESTED_NAME_SPECIFIER>(node),
-        find_and_convert_node<unqualified_id, id_t::UNQUALIFIED_ID>(node)
-    );
-}
-
 }}}}} //namespace scalpel::cpp::detail::syntax_analysis
 
