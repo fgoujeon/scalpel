@@ -117,9 +117,6 @@ convert_new_array_operator(const tree_node_t& node);
 syntax_nodes::new_placement
 convert_new_placement(const tree_node_t& node);
 
-syntax_nodes::new_initializer
-convert_new_initializer(const tree_node_t& node);
-
 syntax_nodes::new_type_id
 convert_new_type_id(const tree_node_t& node);
 

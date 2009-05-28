@@ -428,22 +428,6 @@ convert_new_placement(const tree_node_t& node)
 	return new_placement();
 }
 
-new_initializer
-convert_new_initializer(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::NEW_INITIALIZER);
-
-	tree_node_iterator_t opening_bracket_it = node.children.begin();
-	tree_node_iterator_t expression_it = find_node<id_t::EXPRESSION>(node);
-
-	return new_initializer
-	(
-		convert_next_space(node, opening_bracket_it),
-		convert_optional<expression>(node, expression_it),
-		convert_next_space(node, expression_it)
-	);
-}
-
 new_type_id
 convert_new_type_id(const tree_node_t& node)
 {

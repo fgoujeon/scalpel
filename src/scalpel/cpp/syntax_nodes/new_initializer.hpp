@@ -21,11 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_NEW_INITIALIZER_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_NEW_INITIALIZER_HPP
 
-#include <memory>
-#include "optional_node.hpp"
-#include "composite_node.hpp"
-#include "space.hpp"
-#include "expression_list_fwd.hpp"
+#include "common.hpp"
+#include "round_bracketed_optional_expression.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -35,33 +32,10 @@ new_initializer
 	= '(' >> !s >> !(expression_list >> !s) >> ')'
 ;
 */
-class new_initializer: public composite_node
-{
-	public:
-		new_initializer
-		(
-			optional_node<space>&& post_opening_bracket_space_node,
-			optional_node<expression_list>&& expression_list_node,
-			optional_node<space>&& post_expression_list_space_node
-		);
-
-		new_initializer(const new_initializer& o);
-
-		new_initializer(new_initializer&& o);
-
-		~new_initializer();
-
-		const new_initializer&
-		operator=(const new_initializer& o);
-
-	private:
-		void
-		update_node_list();
-
-		optional_node<space> post_opening_bracket_space_;
-		expression_list* expression_list_;
-		optional_node<space> post_expression_list_space_;
-};
+typedef
+	round_bracketed_optional_expression
+	new_initializer
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

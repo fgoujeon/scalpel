@@ -27,11 +27,10 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "space.hpp"
 #include "new_placement.hpp"
 #include "new_type_id.hpp"
+#include "new_initializer.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
-
-class new_initializer;
 
 /**
 new_type_id_new_expression
