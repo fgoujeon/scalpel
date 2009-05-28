@@ -428,22 +428,6 @@ convert_new_placement(const tree_node_t& node)
 	return new_placement();
 }
 
-new_type_id
-convert_new_type_id(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::NEW_TYPE_ID);
-
-	tree_node_iterator_t type_specifier_seq_it = node.children.begin();
-	tree_node_iterator_t new_declarator_it = find_node<id_t::NEW_DECLARATOR>(node);
-
-	return new_type_id
-	(
-		convert_node<type_specifier_seq>(*type_specifier_seq_it),
-		convert_previous_space(node, new_declarator_it),
-		convert_optional<new_declarator>(node, new_declarator_it)
-	);
-}
-
 new_type_id_new_expression
 convert_new_type_id_new_expression(const tree_node_t& node)
 {

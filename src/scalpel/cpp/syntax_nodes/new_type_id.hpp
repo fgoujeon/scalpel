@@ -35,31 +35,15 @@ new_type_id
 	= type_specifier_seq >> !(!s >> new_declarator)
 ;
 */
-class new_type_id: public composite_node
-{
-	public:
-		new_type_id
-		(
-			type_specifier_seq&& type_specifier_seq_node,
-			optional_node<space>&& pre_new_declarator_space_node,
-			optional_node<new_declarator>&& new_declarator_node
-		);
-
-		new_type_id(const new_type_id& o);
-
-		new_type_id(new_type_id&& o);
-
-		const new_type_id&
-		operator=(const new_type_id& o);
-
-	private:
-		void
-		update_node_list();
-
-		type_specifier_seq type_specifier_seq_;
-		optional_node<space> pre_new_declarator_space_;
-		optional_node<new_declarator> new_declarator_;
-};
+typedef
+	sequence_node
+	<
+		type_specifier_seq,
+		optional_node<space>,
+		optional_node<new_declarator>
+	>
+	new_type_id
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
