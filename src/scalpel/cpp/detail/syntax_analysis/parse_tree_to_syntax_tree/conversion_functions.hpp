@@ -198,9 +198,6 @@ convert_try_block(const tree_node_t& node);
 syntax_nodes::type_id
 convert_type_id(const tree_node_t& node);
 
-syntax_nodes::type_id_new_expression
-convert_type_id_new_expression(const tree_node_t& node);
-
 syntax_nodes::type_id_sizeof_expression
 convert_type_id_sizeof_expression(const tree_node_t& node);
 
