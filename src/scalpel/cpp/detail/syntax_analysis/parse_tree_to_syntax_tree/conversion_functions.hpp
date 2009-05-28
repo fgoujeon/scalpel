@@ -123,9 +123,6 @@ convert_new_type_id_new_expression(const tree_node_t& node);
 syntax_nodes::parameter_declaration
 convert_parameter_declaration(const tree_node_t& node);
 
-syntax_nodes::parameter_declaration_clause
-convert_parameter_declaration_clause(const tree_node_t& node);
-
 syntax_nodes::postfix_expression
 convert_postfix_expression(const tree_node_t& node);
 

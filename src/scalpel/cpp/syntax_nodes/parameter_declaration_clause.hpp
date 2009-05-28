@@ -21,71 +21,31 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_PARAMETER_DECLARATION_CLAUSE_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_PARAMETER_DECLARATION_CLAUSE_HPP
 
-#include "optional_node.hpp"
-#include "composite_node.hpp"
+#include "common.hpp"
 #include "parameter_declaration_list.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class parameter_declaration_clause: public composite_node
-{
-	public:
-		parameter_declaration_clause
-		(
-			optional_node<parameter_declaration_list>&& a_parameter_declaration_list,
-			bool trailing_comma,
-			bool ellipsis
-		);
-
-		parameter_declaration_clause(const parameter_declaration_clause& o);
-
-		parameter_declaration_clause(parameter_declaration_clause&& o);
-
-		const parameter_declaration_clause&
-		operator=(const parameter_declaration_clause& o);
-
-		inline
-		const optional_node<parameter_declaration_list>&
-		parameter_declaration_list_node() const;
-
-		inline
-		bool
-		has_trailing_comma() const;
-
-		inline
-		bool
-		has_ellipsis() const;
-
-	private:
-		void
-		update_node_list();
-
-		optional_node<parameter_declaration_list> parameter_declaration_list_;
-		bool trailing_comma_;
-		bool ellipsis_;
-};
-
-inline
-const optional_node<parameter_declaration_list>&
-parameter_declaration_clause::parameter_declaration_list_node() const
-{
-	return parameter_declaration_list_;
-}
-
-inline
-bool
-parameter_declaration_clause::has_trailing_comma() const
-{
-	return trailing_comma_;
-}
-
-inline
-bool
-parameter_declaration_clause::has_ellipsis() const
-{
-	return ellipsis_;
-}
+/**
+parameter_declaration_clause
+	= parameter_declaration_list >> !s >> ',' >> !s >> "..."
+	| parameter_declaration_list >> !s >> str_p("...")
+	| parameter_declaration_list
+	| str_p("...")
+;
+*/
+typedef
+	sequence_node
+	<
+		optional_node<parameter_declaration_list>,
+		optional_node<space>,
+		optional_node<simple_text_node<str::comma>>,
+		optional_node<space>,
+		optional_node<simple_text_node<str::ellipsis>>
+	>
+	parameter_declaration_clause
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

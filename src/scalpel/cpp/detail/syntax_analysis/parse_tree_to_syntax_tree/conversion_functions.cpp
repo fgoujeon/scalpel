@@ -476,24 +476,6 @@ convert_parameter_declaration(const tree_node_t& node)
     );
 }
 
-parameter_declaration_clause
-convert_parameter_declaration_clause(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::PARAMETER_DECLARATION_CLAUSE);
-
-    bool trailing_comma = check_node_existence(node, ",", 1);
-    bool ellipsis = check_node_existence(node, "...");
-
-    if(trailing_comma) assert(ellipsis);
-
-    return parameter_declaration_clause
-    (
-		find_and_convert_node<parameter_declaration_list, id_t::PARAMETER_DECLARATION_LIST>(node),
-		trailing_comma,
-		ellipsis
-    );
-}
-
 postfix_expression
 convert_postfix_expression(const tree_node_t& node)
 {
