@@ -34,33 +34,19 @@ exception_specification
 	= "throw", "(", [type_id_list], ")"
 ;
 */
-class exception_specification: public composite_node
-{
-	public:
-		exception_specification
-		(
-			optional_node<space>&& post_throw_keyword_space_node,
-			optional_node<space>&& post_opening_bracket_space_node,
-			optional_node<type_id_list>&& type_id_list_node,
-			optional_node<space>&& post_type_id_list_space_node
-		);
-
-		exception_specification(const exception_specification& o);
-
-		exception_specification(exception_specification&& o);
-
-		const exception_specification&
-		operator=(const exception_specification& o);
-
-	private:
-		void
-		update_node_list();
-
-		optional_node<space> post_throw_keyword_space_;
-		optional_node<space> post_opening_bracket_space_;
-		optional_node<type_id_list> type_id_list_;
-		optional_node<space> post_type_id_list_space_;
-};
+typedef
+	sequence_node
+	<
+		simple_text_node<str::throw_>,
+		optional_node<space>,
+		simple_text_node<str::opening_round_bracket>,
+		optional_node<space>,
+		optional_node<type_id_list>,
+		optional_node<space>,
+		simple_text_node<str::closing_round_bracket>
+	>
+	exception_specification
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

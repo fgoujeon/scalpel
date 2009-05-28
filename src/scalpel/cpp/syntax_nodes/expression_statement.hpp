@@ -21,9 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_EXPRESSION_STATEMENT_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_EXPRESSION_STATEMENT_HPP
 
-#include "composite_node.hpp"
+#include "common.hpp"
 #include "expression.hpp"
-#include "space.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -35,13 +34,34 @@ expression_statement
 ;
 \endverbatim
 */
+typedef
+	sequence_node
+	<
+		optional_node<expression>,
+		optional_node<space>,
+		simple_text_node<str::semicolon>
+	>
+	expression_statement_t
+;
+
 class expression_statement: public composite_node
 {
 	public:
+		typedef expression_statement_t type;
+		typedef type::head_node_t head_node_t;
+		typedef type::tail_sequence_node_t tail_sequence_node_t;
+
 		expression_statement
 		(
-			optional_node<expression>&& expression_node,
-			optional_node<space>&& post_expression_space_node
+			optional_node<expression>&& o0,
+			optional_node<space>&& o1,
+			simple_text_node<str::semicolon>&& o2
+		);
+
+		expression_statement
+		(
+			head_node_t&& head,
+			tail_sequence_node_t&& tail
 		);
 
 		expression_statement(const expression_statement& o);
@@ -52,11 +72,7 @@ class expression_statement: public composite_node
 		operator=(const expression_statement& o);
 
 	private:
-		void
-		update_node_list();
-
-		optional_node<expression> expression_;
-		optional_node<space> post_expression_space_;
+		type impl_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

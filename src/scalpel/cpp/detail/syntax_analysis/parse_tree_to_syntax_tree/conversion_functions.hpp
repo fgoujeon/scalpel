@@ -66,18 +66,6 @@ convert_enum_elaborated_specifier(const tree_node_t& node);
 syntax_nodes::enum_specifier
 convert_enum_specifier(const tree_node_t& node);
 
-syntax_nodes::exception_abstract_declarator
-convert_exception_abstract_declarator(const tree_node_t& node);
-
-syntax_nodes::exception_declarator
-convert_exception_declarator(const tree_node_t& node);
-
-syntax_nodes::exception_specification
-convert_exception_specification(const tree_node_t& node);
-
-syntax_nodes::expression_statement
-convert_expression_statement(const tree_node_t& node);
-
 syntax_nodes::floating_literal
 convert_floating_literal(const tree_node_t& node);
 

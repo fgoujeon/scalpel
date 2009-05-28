@@ -21,10 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_EXCEPTION_DECLARATOR_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_EXCEPTION_DECLARATOR_HPP
 
-#include "optional_node.hpp"
-#include "composite_node.hpp"
+#include "common.hpp"
 #include "type_specifier_seq.hpp"
-#include "space.hpp"
 #include "declarator.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
@@ -35,31 +33,15 @@ exception_declarator
 	= type_specifier_seq >> !s >> declarator
 ;
 */
-class exception_declarator: public composite_node
-{
-	public:
-		exception_declarator
-		(
-			type_specifier_seq&& type_specifier_seq_node,
-			optional_node<space>&& post_type_specifier_seq_space_node,
-			declarator&& declarator_node
-		);
-
-		exception_declarator(const exception_declarator& o);
-
-		exception_declarator(exception_declarator&& o);
-
-		const exception_declarator&
-		operator=(const exception_declarator& o);
-
-	private:
-		void
-		update_node_list();
-
-		type_specifier_seq type_specifier_seq_;
-		optional_node<space> post_type_specifier_seq_space_;
-		declarator declarator_;
-};
+typedef
+	sequence_node
+	<
+		type_specifier_seq,
+		optional_node<space>,
+		declarator
+	>
+	exception_declarator
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

@@ -27,50 +27,44 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 expression_statement::expression_statement
 (
-	optional_node<expression>&& expression_node,
-	optional_node<space>&& post_expression_space_node
+	optional_node<expression>&& o0,
+	optional_node<space>&& o1,
+	simple_text_node<str::semicolon>&& o2
 ):
-	expression_(expression_node),
-	post_expression_space_(post_expression_space_node)
+	impl_(o0, o1, o2)
 {
-	update_node_list();
+	add(impl_);
+}
+
+expression_statement::expression_statement
+(
+	head_node_t&& head,
+	tail_sequence_node_t&& tail
+):
+	impl_(head, tail)
+{
+	add(impl_);
 }
 
 expression_statement::expression_statement(const expression_statement& o):
 	composite_node(),
-	expression_(o.expression_),
-	post_expression_space_(o.post_expression_space_)
+	impl_(o.impl_)
 {
-	update_node_list();
+	add(impl_);
 }
 
 expression_statement::expression_statement(expression_statement&& o):
 	composite_node(),
-	expression_(std::move(o.expression_)),
-	post_expression_space_(std::move(o.post_expression_space_))
+	impl_(std::move(o.impl_))
 {
-	update_node_list();
+	add(impl_);
 }
 
 const expression_statement&
 expression_statement::operator=(const expression_statement& o)
 {
-	expression_ = o.expression_;
-	post_expression_space_ = o.post_expression_space_;
-
-	update_node_list();
-
+	impl_ = o.impl_;
 	return *this;
-}
-
-void
-expression_statement::update_node_list()
-{
-	clear();
-
-	if(expression_) add(*expression_);
-	if(post_expression_space_) add(*post_expression_space_);
-	add(common_nodes::semicolon);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

@@ -35,31 +35,15 @@ exception_abstract_declarator
 	= type_specifier_seq >> !s >> abstract_declarator
 ;
 */
-class exception_abstract_declarator: public composite_node
-{
-	public:
-		exception_abstract_declarator
-		(
-			type_specifier_seq&& type_specifier_seq_node,
-			optional_node<space>&& post_type_specifier_seq_space_node,
-			abstract_declarator&& abstract_declarator_node
-		);
-
-		exception_abstract_declarator(const exception_abstract_declarator& o);
-
-		exception_abstract_declarator(exception_abstract_declarator&& o);
-
-		const exception_abstract_declarator&
-		operator=(const exception_abstract_declarator& o);
-
-	private:
-		void
-		update_node_list();
-
-		type_specifier_seq type_specifier_seq_;
-		optional_node<space> post_type_specifier_seq_space_;
-		abstract_declarator abstract_declarator_;
-};
+typedef
+	sequence_node
+	<
+		type_specifier_seq,
+		optional_node<space>,
+		abstract_declarator
+	>
+	exception_abstract_declarator
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
