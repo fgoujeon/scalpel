@@ -21,10 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_INIT_DECLARATOR_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_INIT_DECLARATOR_HPP
 
-#include "optional_node.hpp"
-#include "composite_node.hpp"
+#include "common.hpp"
 #include "declarator.hpp"
-#include "space.hpp"
 #include "initializer.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
@@ -37,14 +35,34 @@ init_declarator
 ;
 \endverbatim
 */
+typedef
+	sequence_node
+	<
+		declarator,
+		optional_node<space>,
+		optional_node<initializer>
+	>
+	init_declarator_t
+;
+
 class init_declarator: public composite_node
 {
 	public:
+		typedef init_declarator_t type;
+		typedef type::head_node_t head_node_t;
+		typedef type::tail_sequence_node_t tail_sequence_node_t;
+
 		init_declarator
 		(
-			declarator&& a_declarator,
-			optional_node<space>&& space_node,
-			optional_node<initializer>&& initializer_node
+			declarator&& o0,
+			optional_node<space>&& o1,
+			optional_node<initializer>&& o2
+		);
+
+		init_declarator
+		(
+			head_node_t&& head,
+			tail_sequence_node_t&& tail
 		);
 
 		init_declarator(const init_declarator& o);
@@ -59,19 +77,13 @@ class init_declarator: public composite_node
 		declarator_node() const;
 
 	private:
-		void
-		update_node_list();
-
-		declarator declarator_;
-		optional_node<space> space_;
-		optional_node<initializer> initializer_;
+		type impl_;
 };
 
-inline
 const declarator&
 init_declarator::declarator_node() const
 {
-	return declarator_;
+	return get<0>(impl_);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

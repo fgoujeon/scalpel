@@ -78,9 +78,6 @@ convert_function_try_block(const tree_node_t& node);
 syntax_nodes::identifier
 convert_identifier(const tree_node_t& node);
 
-syntax_nodes::init_declarator
-convert_init_declarator(const tree_node_t& node);
-
 syntax_nodes::initializer_list_initializer_clause
 convert_initializer_list_initializer_clause(const tree_node_t& node);
 

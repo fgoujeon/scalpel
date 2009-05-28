@@ -25,54 +25,44 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 init_declarator::init_declarator
 (
-	declarator&& a_declarator,
-	optional_node<space>&& space_node,
-	optional_node<initializer>&& initializer_node
+	declarator&& o0,
+	optional_node<space>&& o1,
+	optional_node<initializer>&& o2
 ):
-	declarator_(std::move(a_declarator)),
-	space_(space_node),
-	initializer_(initializer_node)
+	impl_(o0, o1, o2)
 {
-	update_node_list();
+	add(impl_);
+}
+
+init_declarator::init_declarator
+(
+	head_node_t&& head,
+	tail_sequence_node_t&& tail
+):
+	impl_(head, tail)
+{
+	add(impl_);
 }
 
 init_declarator::init_declarator(const init_declarator& o):
 	composite_node(),
-	declarator_(o.declarator_),
-	space_(o.space_),
-	initializer_(o.initializer_)
+	impl_(o.impl_)
 {
-	update_node_list();
+	add(impl_);
 }
 
 init_declarator::init_declarator(init_declarator&& o):
 	composite_node(),
-	declarator_(std::move(o.declarator_)),
-	space_(std::move(o.space_)),
-	initializer_(std::move(o.initializer_))
+	impl_(o.impl_)
 {
-	update_node_list();
+	add(impl_);
 }
 
 const init_declarator&
 init_declarator::operator=(const init_declarator& o)
 {
-	declarator_ = o.declarator_;
-	space_ = o.space_;
-	initializer_ = o.initializer_;
-
-	update_node_list();
-
+	impl_ = o.impl_;
 	return *this;
-}
-
-void
-init_declarator::update_node_list()
-{
-	clear();
-	add(declarator_);
-	if(space_) add(*space_);
-	if(initializer_) add(*initializer_);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

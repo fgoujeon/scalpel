@@ -255,21 +255,6 @@ convert_identifier(const tree_node_t& node)
     return identifier(get_only_child_value(node));
 }
 
-init_declarator
-convert_init_declarator(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::INIT_DECLARATOR);
-
-	tree_node_iterator_t initializer_it = find_node<id_t::INITIALIZER>(node);
-
-    return init_declarator
-    (
-		find_and_convert_node<declarator, id_t::DECLARATOR>(node),
-		convert_previous_space(node, initializer_it),
-		convert_optional<initializer>(node, initializer_it)
-    );
-}
-
 initializer_list_initializer_clause
 convert_initializer_list_initializer_clause(const tree_node_t& node)
 {
