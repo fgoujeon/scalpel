@@ -53,12 +53,14 @@ using_declaration::using_declaration
 }
 
 using_declaration::using_declaration(const using_declaration& o):
+	composite_node(),
 	impl_(o.impl_)
 {
 	add(impl_);
 }
 
 using_declaration::using_declaration(using_declaration&& o):
+	composite_node(),
 	impl_(std::move(o.impl_))
 {
 	add(impl_);

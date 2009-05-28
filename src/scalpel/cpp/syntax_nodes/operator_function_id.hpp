@@ -21,10 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_OPERATOR_FUNCTION_ID_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_OPERATOR_FUNCTION_ID_HPP
 
-#include "optional_node.hpp"
-#include "composite_node.hpp"
+#include "common.hpp"
 #include "operator_.hpp"
-#include "space.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -34,29 +32,15 @@ operator_function_id
 	= str_p("operator") >> !s >> operator_
 ;
 */
-class operator_function_id: public composite_node
-{
-    public:
-		operator_function_id
-		(
-			optional_node<space>&& post_operator_keyword_space_node,
-			operator_&& operator_node
-		);
-
-		operator_function_id(const operator_function_id& o);
-
-		operator_function_id(operator_function_id&& o);
-
-		const operator_function_id&
-		operator=(const operator_function_id& o);
-
-    private:
-		void
-		update_node_list();
-
-		optional_node<space> post_operator_keyword_space_;
-		operator_ operator__;
-};
+typedef
+	sequence_node
+	<
+		simple_text_node<str::operator_>,
+		optional_node<space>,
+		operator_
+	>
+	operator_function_id
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

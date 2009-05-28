@@ -24,7 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
-
+/*
 operator_function_id::operator_function_id
 (
 	optional_node<space>&& post_operator_keyword_space_node,
@@ -70,6 +70,6 @@ operator_function_id::update_node_list()
 	if(post_operator_keyword_space_) add(*post_operator_keyword_space_);
 	add(operator__);
 }
-
+*/
 }}} //namespace scalpel::cpp::syntax_nodes
 

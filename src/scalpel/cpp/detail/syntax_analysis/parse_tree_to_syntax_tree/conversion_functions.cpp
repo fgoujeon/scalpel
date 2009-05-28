@@ -452,21 +452,6 @@ convert_new_type_id_new_expression(const tree_node_t& node)
 	);
 }
 
-operator_function_id
-convert_operator_function_id(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::OPERATOR_FUNCTION_ID);
-
-	tree_node_iterator_t operator_keyword_it = node.children.begin();
-	tree_node_iterator_t operator_it = find_node<id_t::OPERATOR>(node);
-
-	return operator_function_id
-	(
-		convert_next_space(node, operator_keyword_it),
-		convert_node<operator_>(*operator_it)
-	);
-}
-
 parameter_declaration
 convert_parameter_declaration(const tree_node_t& node)
 {
