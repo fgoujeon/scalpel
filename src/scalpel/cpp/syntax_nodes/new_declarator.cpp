@@ -27,63 +27,48 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 new_declarator::new_declarator
 (
-	optional_node<ptr_operator_seq>&& ptr_operator_seq_node,
-	optional_node<space>&& space_node,
-	optional_node<direct_new_declarator>&& direct_new_declarator_node
+	optional_node<ptr_operator_seq>&& o0,
+	optional_node<space>&& o1,
+	optional_node<direct_new_declarator>&& o2
 ):
-	ptr_operator_seq_(ptr_operator_seq_node),
-	space_(space_node)
+	impl_(new type(o0, o1, o2))
 {
-	if(direct_new_declarator_node)
-		direct_new_declarator_ = new direct_new_declarator(*direct_new_declarator_node);
-	else
-		direct_new_declarator_ = 0;
-	update_node_list();
+	add(*impl_);
+}
+
+new_declarator::new_declarator
+(
+	head_node_t&& head,
+	tail_sequence_node_t&& tail
+):
+	impl_(new type(head, tail))
+{
+	add(*impl_);
 }
 
 new_declarator::new_declarator(const new_declarator& o):
 	composite_node(),
-	ptr_operator_seq_(o.ptr_operator_seq_),
-	space_(o.space_)
+	impl_(new type(*o.impl_))
 {
-	if(o.direct_new_declarator_)
-		direct_new_declarator_ = new direct_new_declarator(*o.direct_new_declarator_);
-	else
-		direct_new_declarator_ = 0;
-	update_node_list();
+	add(*impl_);
 }
 
 new_declarator::new_declarator(new_declarator&& o):
 	composite_node(),
-	ptr_operator_seq_(std::move(o.ptr_operator_seq_)),
-	space_(std::move(o.space_)),
-	direct_new_declarator_(o.direct_new_declarator_)
+	impl_(std::move(o.impl_))
 {
-	o.direct_new_declarator_ = 0;
-	update_node_list();
+	add(*impl_);
 }
 
 new_declarator::~new_declarator()
 {
-	delete direct_new_declarator_;
 }
 
 const new_declarator&
 new_declarator::operator=(const new_declarator& o)
 {
-	new_declarator copy(o);
-	delete direct_new_declarator_;
-	std::swap(copy, *this);
+	*impl_ = *o.impl_;
 	return *this;
-}
-
-void
-new_declarator::update_node_list()
-{
-	clear();
-	if(ptr_operator_seq_) add(*ptr_operator_seq_);
-	if(space_) add(*space_);
-	if(direct_new_declarator_) add(*direct_new_declarator_);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

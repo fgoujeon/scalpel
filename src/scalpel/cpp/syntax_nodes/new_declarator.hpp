@@ -39,14 +39,34 @@ new_declarator
 	| direct_new_declarator
 ;
 */
+typedef
+	sequence_node
+	<
+		optional_node<ptr_operator_seq>,
+		optional_node<space>,
+		optional_node<direct_new_declarator>
+	>
+	new_declarator_t
+;
+
 class new_declarator: public composite_node
 {
 	public:
+		typedef new_declarator_t type;
+		typedef type::head_node_t head_node_t;
+		typedef type::tail_sequence_node_t tail_sequence_node_t;
+
 		new_declarator
 		(
 			optional_node<ptr_operator_seq>&& ptr_operator_seq_node,
 			optional_node<space>&& space_node,
 			optional_node<direct_new_declarator>&& direct_new_declarator_node
+		);
+
+		new_declarator
+		(
+			head_node_t&& head,
+			tail_sequence_node_t&& tail
 		);
 
 		new_declarator(const new_declarator& o);
@@ -59,12 +79,7 @@ class new_declarator: public composite_node
 		operator=(const new_declarator& o);
 
 	private:
-		void
-		update_node_list();
-
-		optional_node<ptr_operator_seq> ptr_operator_seq_;
-		optional_node<space> space_;
-		direct_new_declarator* direct_new_declarator_;
+		std::unique_ptr<type> impl_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

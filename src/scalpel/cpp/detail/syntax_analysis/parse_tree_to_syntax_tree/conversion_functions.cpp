@@ -420,22 +420,6 @@ convert_new_array_operator(const tree_node_t& node)
 	return new_array_operator();
 }
 
-new_declarator
-convert_new_declarator(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::NEW_DECLARATOR);
-
-	tree_node_iterator_t ptr_operator_seq_it = find_node<id_t::PTR_OPERATOR_SEQ>(node);
-	tree_node_iterator_t direct_new_declarator_it = find_node<id_t::DIRECT_NEW_DECLARATOR>(node);
-
-	return new_declarator
-	(
-		convert_optional<ptr_operator_seq>(node, ptr_operator_seq_it),
-		convert_next_space(node, ptr_operator_seq_it),
-		convert_optional<direct_new_declarator>(node, direct_new_declarator_it)
-	);
-}
-
 new_placement
 convert_new_placement(const tree_node_t& node)
 {

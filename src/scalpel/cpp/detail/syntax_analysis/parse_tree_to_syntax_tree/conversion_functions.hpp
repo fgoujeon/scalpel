@@ -114,9 +114,6 @@ convert_nested_name_specifier(const tree_node_t& node);
 syntax_nodes::new_array_operator
 convert_new_array_operator(const tree_node_t& node);
 
-syntax_nodes::new_declarator
-convert_new_declarator(const tree_node_t& node);
-
 syntax_nodes::new_placement
 convert_new_placement(const tree_node_t& node);
 
