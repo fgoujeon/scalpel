@@ -75,9 +75,6 @@ convert_function_definition(const tree_node_t& node);
 syntax_nodes::function_try_block
 convert_function_try_block(const tree_node_t& node);
 
-syntax_nodes::handler
-convert_handler(const tree_node_t& node);
-
 syntax_nodes::identifier
 convert_identifier(const tree_node_t& node);
 

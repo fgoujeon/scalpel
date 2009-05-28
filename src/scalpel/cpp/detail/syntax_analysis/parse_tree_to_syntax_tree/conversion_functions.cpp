@@ -243,28 +243,6 @@ convert_function_try_block(const tree_node_t& node)
 	);
 }
 
-handler
-convert_handler(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::HANDLER);
-
-	tree_node_iterator_t catch_keyword_it = node.children.begin();
-	tree_node_iterator_t opening_bracket_it = find_node(node, "(");
-	tree_node_iterator_t exception_declaration_it = find_node<id_t::EXCEPTION_DECLARATION>(node);
-	tree_node_iterator_t closing_bracket_it = find_node(node, ")");
-	tree_node_iterator_t compound_statement_it = find_node<id_t::COMPOUND_STATEMENT>(node);
-
-	return handler
-	(
-		convert_next_space(node, catch_keyword_it),
-		convert_next_space(node, opening_bracket_it),
-		convert_node<exception_declaration>(*exception_declaration_it),
-		convert_next_space(node, exception_declaration_it),
-		convert_next_space(node, closing_bracket_it),
-		convert_node<compound_statement>(*compound_statement_it)
-	);
-}
-
 identifier
 convert_identifier(const tree_node_t& node)
 {

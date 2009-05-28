@@ -20,82 +20,55 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "handler.hpp"
 
-#include "common_nodes.hpp"
-
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 handler::handler
 (
-	optional_node<space>&& post_catch_keyword_space_node,
-	optional_node<space>&& post_opening_bracket_space_node,
-	exception_declaration&& exception_declaration_node,
-	optional_node<space>&& post_exception_declaration_space_node,
-	optional_node<space>&& post_closing_bracket_space_node,
-	compound_statement&& compound_statement_node
+	simple_text_node<str::catch_>&& o0,
+	optional_node<space>&& o1,
+	simple_text_node<str::opening_round_bracket>&& o2,
+	optional_node<space>&& o3,
+	exception_declaration&& o4,
+	optional_node<space>&& o5,
+	simple_text_node<str::closing_round_bracket>&& o6,
+	optional_node<space>&& o7,
+	compound_statement&& o8
 ):
-	post_catch_keyword_space_(post_catch_keyword_space_node),
-	post_opening_bracket_space_(post_opening_bracket_space_node),
-	exception_declaration_(exception_declaration_node),
-	post_exception_declaration_space_(post_exception_declaration_space_node),
-	post_closing_bracket_space_(post_closing_bracket_space_node),
-	compound_statement_(compound_statement_node)
+	impl_(o0, o1, o2, o3, o4, o5, o6, o7, o8)
 {
-	update_node_list();
+	add(impl_);
+}
+
+handler::handler
+(
+	head_node_t&& head,
+	tail_sequence_node_t&& tail
+):
+	impl_(head, tail)
+{
+	add(impl_);
 }
 
 handler::handler(const handler& o):
 	composite_node(),
-	post_catch_keyword_space_(o.post_catch_keyword_space_),
-	post_opening_bracket_space_(o.post_opening_bracket_space_),
-	exception_declaration_(o.exception_declaration_),
-	post_exception_declaration_space_(o.post_exception_declaration_space_),
-	post_closing_bracket_space_(o.post_closing_bracket_space_),
-	compound_statement_(o.compound_statement_)
+	impl_(o.impl_)
 {
-	update_node_list();
+	add(impl_);
 }
 
 handler::handler(handler&& o):
 	composite_node(),
-	post_catch_keyword_space_(std::move(o.post_catch_keyword_space_)),
-	post_opening_bracket_space_(std::move(o.post_opening_bracket_space_)),
-	exception_declaration_(std::move(o.exception_declaration_)),
-	post_exception_declaration_space_(std::move(o.post_exception_declaration_space_)),
-	post_closing_bracket_space_(std::move(o.post_closing_bracket_space_)),
-	compound_statement_(std::move(o.compound_statement_))
+	impl_(o.impl_)
 {
-	update_node_list();
+	add(impl_);
 }
 
 const handler&
 handler::operator=(const handler& o)
 {
-	post_catch_keyword_space_ = o.post_catch_keyword_space_;
-	post_opening_bracket_space_ = o.post_opening_bracket_space_;
-	exception_declaration_ = o.exception_declaration_;
-	post_exception_declaration_space_ = o.post_exception_declaration_space_;
-	post_closing_bracket_space_ = o.post_closing_bracket_space_;
-	compound_statement_ = o.compound_statement_;
-
-	update_node_list();
-
+	impl_ = o.impl_;
 	return *this;
-}
-
-void
-handler::update_node_list()
-{
-	clear();
-	add(common_nodes::catch_keyword);
-	if(post_catch_keyword_space_) add(*post_catch_keyword_space_);
-	add(common_nodes::opening_round_bracket);
-	if(post_opening_bracket_space_) add(*post_opening_bracket_space_);
-	add(exception_declaration_);
-	if(post_exception_declaration_space_) add(*post_exception_declaration_space_);
-	add(common_nodes::closing_round_bracket);
-	if(post_closing_bracket_space_) add(*post_closing_bracket_space_);
-	add(compound_statement_);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

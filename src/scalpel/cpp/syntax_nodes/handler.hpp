@@ -35,17 +35,46 @@ handler
 	= str_p("catch") >> !s >> '(' >> !s >> exception_declaration >> !s >> ')' >> !s >> compound_statement
 ;
 */
+typedef
+	sequence_node
+	<
+		simple_text_node<str::catch_>,
+		optional_node<space>,
+		simple_text_node<str::opening_round_bracket>,
+		optional_node<space>,
+		exception_declaration,
+		optional_node<space>,
+		simple_text_node<str::closing_round_bracket>,
+		optional_node<space>,
+		compound_statement
+	>
+	handler_t
+;
+
 class handler: public composite_node
 {
 	public:
+		typedef handler_t type;
+		typedef handler_t::head_node_t head_node_t;
+		typedef handler_t::tail_sequence_node_t tail_sequence_node_t;
+
 		handler
 		(
-			optional_node<space>&& post_catch_keyword_space_node,
-			optional_node<space>&& post_opening_bracket_space_node,
-			exception_declaration&& exception_declaration_node,
-			optional_node<space>&& post_exception_declaration_space_node,
-			optional_node<space>&& post_closing_bracket_space_node,
-			compound_statement&& compound_statement_node
+			simple_text_node<str::catch_>&& o0,
+			optional_node<space>&& o1,
+			simple_text_node<str::opening_round_bracket>&& o2,
+			optional_node<space>&& o3,
+			exception_declaration&& o4,
+			optional_node<space>&& o5,
+			simple_text_node<str::closing_round_bracket>&& o6,
+			optional_node<space>&& o7,
+			compound_statement&& o8
+		);
+
+		handler
+		(
+			head_node_t&& head,
+			tail_sequence_node_t&& tail
 		);
 
 		handler(const handler& o);
@@ -60,22 +89,13 @@ class handler: public composite_node
 		compound_statement_node() const;
 
 	private:
-		void
-		update_node_list();
-
-		optional_node<space> post_catch_keyword_space_;
-		optional_node<space> post_opening_bracket_space_;
-		exception_declaration exception_declaration_;
-		optional_node<space> post_exception_declaration_space_;
-		optional_node<space> post_closing_bracket_space_;
-		compound_statement compound_statement_;
+		type impl_;
 };
 
-inline
 const compound_statement&
 handler::compound_statement_node() const
 {
-	return compound_statement_;
+	return get<8>(impl_);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
