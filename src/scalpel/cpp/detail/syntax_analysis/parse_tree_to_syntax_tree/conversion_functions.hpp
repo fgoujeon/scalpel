@@ -84,9 +84,6 @@ convert_initializer_list_initializer_clause(const tree_node_t& node);
 syntax_nodes::integer_literal
 convert_integer_literal(const tree_node_t& node);
 
-syntax_nodes::mem_initializer
-convert_mem_initializer(const tree_node_t& node);
-
 syntax_nodes::member_declaration_function_definition
 convert_member_declaration_function_definition(const tree_node_t& node);
 

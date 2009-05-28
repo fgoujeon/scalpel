@@ -21,11 +21,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_MEM_INITIALIZER_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_MEM_INITIALIZER_HPP
 
-#include "optional_node.hpp"
-#include "composite_node.hpp"
+#include "common.hpp"
 #include "mem_initializer_id.hpp"
 #include "expression_list.hpp"
-#include "space.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -35,6 +33,20 @@ mem_initializer
 	= mem_initializer_id >> !s >> '(' >> !s >> !(expression_list >> !s) >> ')'
 ;
 */
+typedef
+	sequence_node
+	<
+		mem_initializer_id,
+		optional_node<space>,
+		simple_text_node<str::opening_round_bracket>,
+		optional_node<space>,
+		optional_node<expression_list>,
+		optional_node<space>,
+		simple_text_node<str::closing_round_bracket>
+	>
+	mem_initializer
+;
+/*
 class mem_initializer: public composite_node
 {
 	public:
@@ -76,7 +88,7 @@ mem_initializer::mem_initializer_id_node() const
 {
 	return mem_initializer_id_;
 }
-
+*/
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif

@@ -276,25 +276,6 @@ convert_integer_literal(const tree_node_t& node)
 	);
 }
 
-mem_initializer
-convert_mem_initializer(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::MEM_INITIALIZER);
-
-	tree_node_iterator_t mem_initializer_id_it = node.children.begin();
-	tree_node_iterator_t opening_bracket_it = find_node(node, "(");
-	tree_node_iterator_t expression_it = find_node<id_t::EXPRESSION>(node);
-
-    return mem_initializer
-    (
-		convert_node<mem_initializer_id>(*mem_initializer_id_it),
-		convert_next_space(node, mem_initializer_id_it),
-		convert_next_space(node, opening_bracket_it),
-		convert_optional<expression>(node, expression_it),
-		convert_next_space(node, expression_it)
-    );
-}
-
 member_declaration_function_definition
 convert_member_declaration_function_definition(const tree_node_t& node)
 {

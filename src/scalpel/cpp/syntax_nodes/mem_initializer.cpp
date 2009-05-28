@@ -24,7 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
-
+/*
 mem_initializer::mem_initializer
 (
 	mem_initializer_id&& mem_initializer_id_node,
@@ -89,5 +89,5 @@ mem_initializer::update_node_list()
 	if(post_expression_list_space_) add(*post_expression_list_space_);
 	add(common_nodes::closing_round_bracket);
 }
-
+*/
 }}} //namespace scalpel::cpp::syntax_nodes
