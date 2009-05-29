@@ -21,45 +21,26 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_MEMBER_DECLARATION_FUNCTION_DEFINITION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_MEMBER_DECLARATION_FUNCTION_DEFINITION_HPP
 
-#include "composite_node.hpp"
+#include "common.hpp"
 #include "function_definition.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class member_declaration_function_definition: public composite_node
-{
-	public:
-		explicit
-		member_declaration_function_definition
-		(
-			function_definition&& a_function_definition
-		);
-
-		member_declaration_function_definition(const member_declaration_function_definition& o);
-
-		member_declaration_function_definition(member_declaration_function_definition&& o);
-
-		const member_declaration_function_definition&
-		operator=(const member_declaration_function_definition& o);
-
-		inline
-		const function_definition&
-		function_definition_node() const;
-
-	private:
-		void
-		update_node_list();
-
-		function_definition function_definition_;
-};
-
-inline
-const function_definition&
-member_declaration_function_definition::function_definition_node() const
-{
-	return function_definition_;
-}
+/**
+member_declaration_function_definition
+	= function_definition >> !(!s >> ch_p(';'))
+;
+*/
+typedef
+	sequence_node
+	<
+		function_definition,
+		optional_node<space>,
+		optional_node<simple_text_node<str::semicolon>>
+	>
+	member_declaration_function_definition
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

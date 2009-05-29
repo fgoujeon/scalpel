@@ -276,17 +276,6 @@ convert_integer_literal(const tree_node_t& node)
 	);
 }
 
-member_declaration_function_definition
-convert_member_declaration_function_definition(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::MEMBER_DECLARATION_FUNCTION_DEFINITION);
-
-    return member_declaration_function_definition
-    (
-        find_and_convert_node<function_definition, id_t::FUNCTION_DEFINITION>(node)
-    );
-}
-
 member_declaration_member_declarator_list
 convert_member_declaration_member_declarator_list(const tree_node_t& node)
 {
