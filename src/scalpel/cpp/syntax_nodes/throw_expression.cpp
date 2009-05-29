@@ -28,54 +28,63 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 throw_expression::throw_expression
 (
-	optional_node<space>&& pre_assignment_expression_space_node,
-	optional_node<assignment_expression>&& assignment_expression_node
+	simple_text_node<str::throw_>&& o0,
+	optional_node<space>&& o1,
+	optional_node<assignment_expression>&& o2
 ):
-	pre_assignment_expression_space_(pre_assignment_expression_space_node)
+	impl_
+	(
+		new type
+		(
+			o0,
+			o1,
+			o2
+		)
+	)
 {
-	if(assignment_expression_node)
-		assignment_expression_ = std::move(std::unique_ptr<assignment_expression>(new assignment_expression(*assignment_expression_node)));
+	add(*impl_);
+}
 
-	update_node_list();
+throw_expression::throw_expression
+(
+	head_node_t&& head,
+	tail_sequence_node_t&& tail
+):
+	impl_
+	(
+		new type
+		(
+			head,
+			tail
+		)
+	)
+{
+	add(*impl_);
 }
 
 throw_expression::throw_expression(const throw_expression& o):
 	composite_node(),
-	pre_assignment_expression_space_(o.pre_assignment_expression_space_)
+	impl_(new type(*o.impl_))
 {
-	if(o.assignment_expression_)
-		assignment_expression_ = std::move(std::unique_ptr<assignment_expression>(new assignment_expression(*o.assignment_expression_)));
-
-	update_node_list();
+	add(*impl_);
 }
 
 throw_expression::throw_expression(throw_expression&& o):
 	composite_node(),
-	pre_assignment_expression_space_(std::move(o.pre_assignment_expression_space_)),
-	assignment_expression_(std::move(o.assignment_expression_))
+	impl_(std::move(o.impl_))
 {
-	update_node_list();
+	add(*impl_);
+}
+
+throw_expression::~throw_expression()
+{
 }
 
 const throw_expression&
 throw_expression::operator=(const throw_expression& o)
 {
-	pre_assignment_expression_space_ = o.pre_assignment_expression_space_;
-	if(o.assignment_expression_)
-		assignment_expression_ = std::move(std::unique_ptr<assignment_expression>(new assignment_expression(*o.assignment_expression_)));
-
-	update_node_list();
-
+	*impl_ = *o.impl_;
 	return *this;
-}
-
-void
-throw_expression::update_node_list()
-{
-	clear();
-	add(common_nodes::throw_keyword);
-	if(pre_assignment_expression_space_) add(*pre_assignment_expression_space_);
-	if(assignment_expression_) add(*assignment_expression_);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
