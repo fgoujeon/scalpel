@@ -21,19 +21,45 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_QUALIFIED_IDENTIFIER_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_QUALIFIED_IDENTIFIER_HPP
 
-#include "composite_node.hpp"
+#include "common.hpp"
 #include "identifier.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
+/**
+qualified_identifier
+	= str_p("::") >> !s >> identifier
+;
+*/
+typedef
+	sequence_node
+	<
+		simple_text_node<str::double_colon>,
+		optional_node<space>,
+		identifier
+	>
+	qualified_identifier_t
+;
+
 class qualified_identifier: public composite_node
 {
 	public:
-		explicit
+		typedef qualified_identifier_t type;
+		typedef type::head_node_t head_node_t;
+		typedef type::tail_sequence_node_t tail_sequence_node_t;
+
 		qualified_identifier
 		(
-			identifier&& an_identifier
+			simple_text_node<str::double_colon>&& o0,
+			optional_node<space>&& o1,
+			identifier&& o2
+		);
+
+		qualified_identifier
+		(
+			head_node_t&& head,
+			tail_sequence_node_t&& tail
 		);
 
 		qualified_identifier(const qualified_identifier& o);
@@ -48,17 +74,13 @@ class qualified_identifier: public composite_node
 	   	identifier_node() const;
 
 	private:
-		void
-		update_node_list();
-
-		identifier identifier_;
+		type impl_;
 };
 
-inline
 const identifier&
 qualified_identifier::identifier_node() const
 {
-	return identifier_;
+	return get<2>(impl_);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

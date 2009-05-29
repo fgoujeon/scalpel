@@ -25,40 +25,44 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 qualified_identifier::qualified_identifier
 (
-    identifier&& an_identifier
+	simple_text_node<str::double_colon>&& o0,
+	optional_node<space>&& o1,
+	identifier&& o2
 ):
-    identifier_(std::move(an_identifier))
+	impl_(o0, o1, o2)
 {
-	update_node_list();
+	add(impl_);
+}
+
+qualified_identifier::qualified_identifier
+(
+	head_node_t&& head,
+	tail_sequence_node_t&& tail
+):
+	impl_(head, tail)
+{
+	add(impl_);
 }
 
 qualified_identifier::qualified_identifier(const qualified_identifier& o):
 	composite_node(),
-    identifier_(o.identifier_)
+    impl_(o.impl_)
 {
-	update_node_list();
+	add(impl_);
 }
 
 qualified_identifier::qualified_identifier(qualified_identifier&& o):
-    identifier_(std::move(o.identifier_))
+	composite_node(),
+    impl_(std::move(o.impl_))
 {
-	update_node_list();
+	add(impl_);
 }
 
 const qualified_identifier&
 qualified_identifier::operator=(const qualified_identifier& o)
 {
-    identifier_ = o.identifier_;
-	update_node_list();
-
+	impl_ = o.impl_;
 	return *this;
-}
-
-void
-qualified_identifier::update_node_list()
-{
-	clear();
-	add(identifier_);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

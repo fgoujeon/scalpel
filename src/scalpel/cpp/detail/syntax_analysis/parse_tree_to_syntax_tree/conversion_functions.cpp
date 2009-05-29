@@ -507,17 +507,6 @@ convert_ptr_operator(const tree_node_t& node)
 	);
 }
 
-qualified_identifier
-convert_qualified_identifier(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::QUALIFIED_IDENTIFIER);
-
-    return qualified_identifier
-    (
-        find_and_convert_node<identifier, id_t::IDENTIFIER>(node)
-    );
-}
-
 qualified_operator_function_id
 convert_qualified_operator_function_id(const tree_node_t& node)
 {

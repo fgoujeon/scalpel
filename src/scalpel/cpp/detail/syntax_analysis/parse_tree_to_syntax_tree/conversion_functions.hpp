@@ -126,9 +126,6 @@ convert_parameter_declaration(const tree_node_t& node);
 syntax_nodes::ptr_operator
 convert_ptr_operator(const tree_node_t& node);
 
-syntax_nodes::qualified_identifier
-convert_qualified_identifier(const tree_node_t& node);
-
 syntax_nodes::qualified_operator_function_id
 convert_qualified_operator_function_id(const tree_node_t& node);
 
