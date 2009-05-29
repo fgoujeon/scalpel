@@ -687,22 +687,6 @@ convert_try_block(const tree_node_t& node)
 	);
 }
 
-type_id
-convert_type_id(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::TYPE_ID);
-
-	tree_node_iterator_t type_specifier_seq_it = node.children.begin();
-	tree_node_iterator_t abstract_declarator_it = find_node<id_t::ABSTRACT_DECLARATOR>(node);
-
-	return type_id
-	(
-		convert_node<type_specifier_seq>(*type_specifier_seq_it),
-		convert_previous_space(node, abstract_declarator_it),
-		convert_optional<abstract_declarator>(node, abstract_declarator_it)
-	);
-}
-
 type_id_sizeof_expression
 convert_type_id_sizeof_expression(const tree_node_t& node)
 {
