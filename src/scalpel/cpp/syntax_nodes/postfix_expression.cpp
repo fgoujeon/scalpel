@@ -25,54 +25,44 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 postfix_expression::postfix_expression
 (
-	first_part&& first_part_node,
-	optional_node<space>&& space_node,
-	optional_node<last_part_seq>&& last_part_seq_node
+	first_part&& o0,
+	optional_node<space>&& o1,
+	optional_node<last_part_seq>&& o2
 ):
-	first_part_(first_part_node),
-	space_(space_node),
-	last_part_seq_(last_part_seq_node)
+	impl_(o0, o1, o2)
 {
-	update_node_list();
+	add(impl_);
+}
+
+postfix_expression::postfix_expression
+(
+	head_node_t&& head,
+	tail_sequence_node_t&& tail
+):
+	impl_(head, tail)
+{
+	add(impl_);
 }
 
 postfix_expression::postfix_expression(const postfix_expression& o):
 	composite_node(),
-	first_part_(o.first_part_),
-	space_(o.space_),
-	last_part_seq_(o.last_part_seq_)
+	impl_(o.impl_)
 {
-	update_node_list();
+	add(impl_);
 }
 
 postfix_expression::postfix_expression(postfix_expression&& o):
 	composite_node(),
-	first_part_(std::move(o.first_part_)),
-	space_(std::move(o.space_)),
-	last_part_seq_(std::move(o.last_part_seq_))
+	impl_(o.impl_)
 {
-	update_node_list();
+	add(impl_);
 }
 
 const postfix_expression&
 postfix_expression::operator=(const postfix_expression& o)
 {
-	first_part_ = o.first_part_;
-	space_ = o.space_;
-	last_part_seq_ = o.last_part_seq_;
-
-	update_node_list();
-
+	impl_ = o.impl_;
 	return *this;
-}
-
-void
-postfix_expression::update_node_list()
-{
-	clear();
-	add(first_part_);
-	if(space_) add(*space_);
-	if(last_part_seq_) add(*last_part_seq_);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

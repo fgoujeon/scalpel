@@ -476,22 +476,6 @@ convert_parameter_declaration(const tree_node_t& node)
     );
 }
 
-postfix_expression
-convert_postfix_expression(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::POSTFIX_EXPRESSION);
-
-	tree_node_iterator_t first_part_it = node.children.begin();
-	tree_node_iterator_t last_part_it = find_node<id_t::POSTFIX_EXPRESSION_LAST_PART_SEQ>(node);
-
-	return postfix_expression
-	(
-		convert_node<postfix_expression::first_part>(*first_part_it),
-		convert_previous_space(node, last_part_it),
-		convert_optional<postfix_expression::last_part_seq>(node, last_part_it)
-	);
-}
-
 ptr_operator
 convert_ptr_operator(const tree_node_t& node)
 {

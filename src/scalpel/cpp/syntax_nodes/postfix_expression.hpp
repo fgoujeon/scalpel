@@ -53,48 +53,75 @@ postfix_expression
 ;
 \endverbatim
 */
+typedef
+	alternative_node
+	<
+		primary_expression,
+		simple_type_specifier_postfix_expression,
+		typename_expression,
+		template_typename_expression,
+		dynamic_cast_expression,
+		static_cast_expression,
+		reinterpret_cast_expression,
+		const_cast_expression,
+		typeid_expression,
+		type_id_typeid_expression
+	>
+	postfix_expression_first_part
+;
+
+typedef
+	alternative_node
+	<
+		square_bracketed_expression,
+		round_bracketed_optional_expression,
+		dot_id_expression,
+		arrow_id_expression,
+		dot_pseudo_destructor_name,
+		arrow_pseudo_destructor_name,
+		simple_text_node<util::extern_strings::double_plus>,
+		simple_text_node<util::extern_strings::double_minus>
+	>
+	postfix_expression_last_part
+;
+
+typedef
+	list_node<postfix_expression_last_part>
+	postfix_expression_last_part_seq
+;
+
+typedef
+	sequence_node
+	<
+		postfix_expression_first_part,
+		optional_node<space>,
+		optional_node<postfix_expression_last_part_seq>
+	>
+	postfix_expression_t
+;
+
 class postfix_expression: public composite_node
 {
 	public:
-		typedef
-			alternative_node
-			<
-				primary_expression,
-				simple_type_specifier_postfix_expression,
-				typename_expression,
-				template_typename_expression,
-				dynamic_cast_expression,
-				static_cast_expression,
-				reinterpret_cast_expression,
-				const_cast_expression,
-				typeid_expression,
-				type_id_typeid_expression
-			>
-			first_part
-		;
+		typedef postfix_expression_first_part first_part;
+		typedef postfix_expression_last_part last_part;
+		typedef postfix_expression_last_part_seq last_part_seq;
 
-		typedef
-			alternative_node
-			<
-				square_bracketed_expression,
-				round_bracketed_optional_expression,
-				dot_id_expression,
-				arrow_id_expression,
-				dot_pseudo_destructor_name,
-				arrow_pseudo_destructor_name,
-				simple_text_node<util::extern_strings::double_plus>,
-				simple_text_node<util::extern_strings::double_minus>
-			>
-			last_part
-		;
-
-		typedef list_node<last_part> last_part_seq;
+		typedef postfix_expression_t type;
+		typedef type::head_node_t head_node_t;
+		typedef type::tail_sequence_node_t tail_sequence_node_t;
 
 		postfix_expression
 		(
-			first_part&& first_part_node,
-			optional_node<space>&& space_node,
-			optional_node<last_part_seq>&& last_part_seq_node
+			first_part&& o0,
+			optional_node<space>&& o1,
+			optional_node<last_part_seq>&& o2
+		);
+
+		postfix_expression
+		(
+			head_node_t&& head,
+			tail_sequence_node_t&& tail
 		);
 
 		postfix_expression(const postfix_expression& o);
@@ -105,12 +132,7 @@ class postfix_expression: public composite_node
 		operator=(const postfix_expression& o);
 
 	private:
-		void
-		update_node_list();
-
-		first_part first_part_;
-		optional_node<space> space_;
-		optional_node<last_part_seq> last_part_seq_;
+		type impl_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes
