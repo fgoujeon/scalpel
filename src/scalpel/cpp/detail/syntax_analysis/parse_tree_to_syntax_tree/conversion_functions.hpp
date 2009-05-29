@@ -54,9 +54,6 @@ convert_direct_abstract_declarator(const tree_node_t& node);
 syntax_nodes::dot_pseudo_destructor_name
 convert_dot_pseudo_destructor_name(const tree_node_t& node);
 
-syntax_nodes::dynamic_cast_expression
-convert_dynamic_cast_expression(const tree_node_t& node);
-
 syntax_nodes::empty_initializer_list_initializer_clause
 convert_empty_initializer_list_initializer_clause(const tree_node_t& node);
 
@@ -132,12 +129,6 @@ convert_qualified_operator_function_id(const tree_node_t& node);
 syntax_nodes::qualified_template_id
 convert_qualified_template_id(const tree_node_t& node);
 
-syntax_nodes::reinterpret_cast_expression
-convert_reinterpret_cast_expression(const tree_node_t& node);
-
-syntax_nodes::return_statement
-convert_return_statement(const tree_node_t& node);
-
 syntax_nodes::simple_declaration
 convert_simple_declaration(const tree_node_t& node);
 
@@ -152,9 +143,6 @@ convert_simple_type_specifier_postfix_expression(const tree_node_t& node);
 
 syntax_nodes::space
 convert_space(const tree_node_t& node);
-
-syntax_nodes::static_cast_expression
-convert_static_cast_expression(const tree_node_t& node);
 
 syntax_nodes::string_literal
 convert_string_literal(const tree_node_t& node);

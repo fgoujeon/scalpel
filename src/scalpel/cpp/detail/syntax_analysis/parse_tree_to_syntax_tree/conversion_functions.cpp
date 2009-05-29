@@ -529,22 +529,6 @@ convert_qualified_template_id(const tree_node_t& node)
     );
 }
 
-return_statement
-convert_return_statement(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::RETURN_STATEMENT);
-
-	tree_node_iterator_t return_keyword_it = node.children.begin();
-	tree_node_iterator_t expression_it = find_node<id_t::EXPRESSION>(node);
-
-	return return_statement
-	(
-		convert_next_space(node, return_keyword_it),
-		convert_optional<expression>(node, expression_it),
-		convert_next_space(node, expression_it)
-	);
-}
-
 simple_declaration
 convert_simple_declaration(const tree_node_t& node)
 {

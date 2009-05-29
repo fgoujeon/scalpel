@@ -21,9 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_RETURN_STATEMENT_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_RETURN_STATEMENT_HPP
 
-#include "optional_node.hpp"
-#include "composite_node.hpp"
-#include "space.hpp"
+#include "common.hpp"
 #include "expression.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
@@ -36,31 +34,17 @@ return_statement
 ;
 \endverbatim
 */
-class return_statement: public composite_node
-{
-	public:
-		return_statement
-		(
-			optional_node<space>&& post_return_space_node,
-			optional_node<expression>&& expression_node,
-			optional_node<space>&& post_expression_space_node
-		);
-
-		return_statement(const return_statement& o);
-
-		return_statement(return_statement&& o);
-
-		const return_statement&
-		operator=(const return_statement& o);
-
-	private:
-		void
-		update_node_list();
-
-		optional_node<space> post_return_space_;
-		optional_node<expression> expression_;
-		optional_node<space> post_expression_space_;
-};
+typedef
+	sequence_node
+	<
+		simple_text_node<str::return_>,
+		optional_node<space>,
+		optional_node<expression>,
+		optional_node<space>,
+		simple_text_node<str::semicolon>
+	>
+	return_statement
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
