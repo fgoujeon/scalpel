@@ -132,9 +132,6 @@ convert_qualified_template_id(const tree_node_t& node);
 syntax_nodes::simple_declaration
 convert_simple_declaration(const tree_node_t& node);
 
-syntax_nodes::simple_delete_expression
-convert_simple_delete_expression(const tree_node_t& node);
-
 syntax_nodes::simple_template_type_specifier
 convert_simple_template_type_specifier(const tree_node_t& node);
 
