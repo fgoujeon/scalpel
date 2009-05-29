@@ -293,23 +293,6 @@ convert_member_declaration_member_declarator_list(const tree_node_t& node)
     );
 }
 
-member_declarator_bit_field_member
-convert_member_declarator_bit_field_member(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::MEMBER_DECLARATOR_BIT_FIELD_MEMBER);
-
-	tree_node_iterator_t identifier_it = find_node<id_t::IDENTIFIER>(node);
-	tree_node_iterator_t colon_it = find_node(node, ":");
-
-    return member_declarator_bit_field_member
-    (
-		convert_optional<identifier>(node, identifier_it),
-		convert_next_space(node, identifier_it),
-		convert_next_space(node, colon_it),
-        find_and_convert_node<conditional_expression, id_t::CONDITIONAL_EXPRESSION>(node)
-    );
-}
-
 member_declarator_declarator
 convert_member_declarator_declarator(const tree_node_t& node)
 {
