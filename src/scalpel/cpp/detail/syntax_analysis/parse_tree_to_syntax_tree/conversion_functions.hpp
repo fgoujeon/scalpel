@@ -84,9 +84,6 @@ convert_integer_literal(const tree_node_t& node);
 syntax_nodes::member_declaration_member_declarator_list
 convert_member_declaration_member_declarator_list(const tree_node_t& node);
 
-syntax_nodes::member_declaration_unqualified_id
-convert_member_declaration_unqualified_id(const tree_node_t& node);
-
 syntax_nodes::member_declarator_bit_field_member
 convert_member_declarator_bit_field_member(const tree_node_t& node);
 

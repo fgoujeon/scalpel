@@ -293,29 +293,6 @@ convert_member_declaration_member_declarator_list(const tree_node_t& node)
     );
 }
 
-member_declaration_unqualified_id
-convert_member_declaration_unqualified_id(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::MEMBER_DECLARATION_UNQUALIFIED_ID);
-
-	tree_node_iterator_t leading_double_colon_it = find_node(node, "::");
-	tree_node_iterator_t nested_name_specifier_it = find_node<id_t::NESTED_NAME_SPECIFIER>(node);
-	tree_node_iterator_t template_keyword_it = find_node(node, "template");
-	tree_node_iterator_t unqualified_id_it = find_node<id_t::UNQUALIFIED_ID>(node);
-
-    return member_declaration_unqualified_id
-    (
-		leading_double_colon_it != node.children.end(),
-		convert_next_space(node, leading_double_colon_it),
-		convert_node<nested_name_specifier>(*nested_name_specifier_it),
-		convert_next_space(node, nested_name_specifier_it),
-		template_keyword_it != node.children.end(),
-		convert_next_space(node, template_keyword_it),
-		convert_node<unqualified_id>(*unqualified_id_it),
-		convert_next_space(node, unqualified_id_it)
-    );
-}
-
 member_declarator_bit_field_member
 convert_member_declarator_bit_field_member(const tree_node_t& node)
 {
