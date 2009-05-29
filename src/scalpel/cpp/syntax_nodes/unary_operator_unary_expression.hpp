@@ -21,16 +21,12 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_UNARY_OPERATOR_UNARY_EXPRESSION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_UNARY_OPERATOR_UNARY_EXPRESSION_HPP
 
-#include <memory>
-#include "optional_node.hpp"
-#include "composite_node.hpp"
+#include "common.hpp"
 #include "unary_operator.hpp"
-#include "space.hpp"
+#include "cast_expression.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
-
-class cast_expression;
 
 /**
 \verbatim
@@ -39,31 +35,15 @@ unary_operator_unary_expression
 ;
 \endverbatim
 */
-class unary_operator_unary_expression: public composite_node
-{
-	public:
-		unary_operator_unary_expression
-		(
-			unary_operator&& unary_operator_node,
-			optional_node<space>&& space_node,
-			cast_expression&& cast_expression_node
-		);
-
-		unary_operator_unary_expression(const unary_operator_unary_expression& o);
-
-		unary_operator_unary_expression(unary_operator_unary_expression&& o);
-
-		const unary_operator_unary_expression&
-		operator=(const unary_operator_unary_expression& o);
-
-	private:
-		void
-		update_node_list();
-
-		unary_operator unary_operator_;
-		optional_node<space> space_;
-		std::unique_ptr<cast_expression> cast_expression_;
-};
+typedef
+	sequence_node
+	<
+		unary_operator,
+		optional_node<space>,
+		cast_expression
+	>
+	unary_operator_unary_expression
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

@@ -180,9 +180,6 @@ convert_typename_expression(const tree_node_t& node);
 syntax_nodes::typename_template_elaborated_specifier
 convert_typename_template_elaborated_specifier(const tree_node_t& node);
 
-syntax_nodes::unary_operator_unary_expression
-convert_unary_operator_unary_expression(const tree_node_t& node);
-
 syntax_nodes::unary_sizeof_expression
 convert_unary_sizeof_expression(const tree_node_t& node);
 
