@@ -144,9 +144,6 @@ convert_space(const tree_node_t& node);
 syntax_nodes::string_literal
 convert_string_literal(const tree_node_t& node);
 
-syntax_nodes::switch_statement
-convert_switch_statement(const tree_node_t& node);
-
 syntax_nodes::template_declaration
 convert_template_declaration(const tree_node_t& node);
 

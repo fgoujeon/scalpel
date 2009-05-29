@@ -37,17 +37,46 @@ switch_statement
 ;
 \endverbatim
 */
+typedef
+	sequence_node
+	<
+		simple_text_node<str::switch_>,
+		optional_node<space>,
+		simple_text_node<str::opening_round_bracket>,
+		optional_node<space>,
+		condition,
+		optional_node<space>,
+		simple_text_node<str::closing_round_bracket>,
+		optional_node<space>,
+		statement
+	>
+	switch_statement_t
+;
+
 class switch_statement: public composite_node
 {
 	public:
+		typedef switch_statement_t type;
+		typedef type::head_node_t head_node_t;
+		typedef type::tail_sequence_node_t tail_sequence_node_t;
+
 		switch_statement
 		(
-			optional_node<space>&& post_switch_keyword_space_node,
-			optional_node<space>&& post_opening_bracket_space_node,
-			condition&& condition_node,
-			optional_node<space>&& post_condition_space_node,
-			optional_node<space>&& post_closing_bracket_space_node,
-			statement&& statement_node
+			simple_text_node<str::switch_>&& o0,
+			optional_node<space>&& o1,
+			simple_text_node<str::opening_round_bracket>&& o2,
+			optional_node<space>&& o3,
+			condition&& o4,
+			optional_node<space>&& o5,
+			simple_text_node<str::closing_round_bracket>&& o6,
+			optional_node<space>&& o7,
+			statement&& o8
+		);
+
+		switch_statement
+		(
+			head_node_t&& head,
+			tail_sequence_node_t&& tail
 		);
 
 		switch_statement(const switch_statement& o);
@@ -58,15 +87,7 @@ class switch_statement: public composite_node
 		operator=(const switch_statement& o);
 
 	private:
-		void
-		update_node_list();
-
-		optional_node<space> post_switch_keyword_space_;
-		optional_node<space> post_opening_bracket_space_;
-		condition condition_;
-		optional_node<space> post_condition_space_;
-		optional_node<space> post_closing_bracket_space_;
-		statement statement_;
+		type impl_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

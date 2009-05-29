@@ -598,27 +598,6 @@ convert_string_literal(const tree_node_t& node)
 	);
 }
 
-switch_statement
-convert_switch_statement(const tree_node_t& node)
-{
-	assert(node.value.id() == id_t::SWITCH_STATEMENT);
-
-	tree_node_iterator_t switch_keyword_it = node.children.begin();
-	tree_node_iterator_t opening_bracket_it = find_node(node, "(");
-	tree_node_iterator_t condition_it = find_node<id_t::CONDITION>(node);
-	tree_node_iterator_t closing_bracket_it = find_node(node, ")");
-
-	return switch_statement
-	(
-		convert_next_space(node, switch_keyword_it),
-		convert_next_space(node, opening_bracket_it),
-		convert_node<condition>(*condition_it),
-		convert_next_space(node, condition_it),
-		convert_next_space(node, closing_bracket_it),
-		find_and_convert_node<statement, id_t::STATEMENT>(node)
-	);
-}
-
 template_declaration
 convert_template_declaration(const tree_node_t& node)
 {

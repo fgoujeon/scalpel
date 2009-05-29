@@ -20,82 +20,55 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "switch_statement.hpp"
 
-#include "common_nodes.hpp"
-
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 switch_statement::switch_statement
 (
-	optional_node<space>&& post_switch_keyword_space_node,
-	optional_node<space>&& post_opening_bracket_space_node,
-	condition&& condition_node,
-	optional_node<space>&& post_condition_space_node,
-	optional_node<space>&& post_closing_bracket_space_node,
-	statement&& statement_node
+	simple_text_node<str::switch_>&& o0,
+	optional_node<space>&& o1,
+	simple_text_node<str::opening_round_bracket>&& o2,
+	optional_node<space>&& o3,
+	condition&& o4,
+	optional_node<space>&& o5,
+	simple_text_node<str::closing_round_bracket>&& o6,
+	optional_node<space>&& o7,
+	statement&& o8
 ):
-	post_switch_keyword_space_(post_switch_keyword_space_node),
-	post_opening_bracket_space_(post_opening_bracket_space_node),
-	condition_(condition_node),
-	post_condition_space_(post_condition_space_node),
-	post_closing_bracket_space_(post_closing_bracket_space_node),
-	statement_(statement_node)
+	impl_(o0, o1, o2, o3, o4, o5, o6, o7, o8)
 {
-	update_node_list();
+	add(impl_);
+}
+
+switch_statement::switch_statement
+(
+	head_node_t&& head,
+	tail_sequence_node_t&& tail
+):
+	impl_(head, tail)
+{
+	add(impl_);
 }
 
 switch_statement::switch_statement(const switch_statement& o):
 	composite_node(),
-	post_switch_keyword_space_(o.post_switch_keyword_space_),
-	post_opening_bracket_space_(o.post_opening_bracket_space_),
-	condition_(o.condition_),
-	post_condition_space_(o.post_condition_space_),
-	post_closing_bracket_space_(o.post_closing_bracket_space_),
-	statement_(o.statement_)
+	impl_(o.impl_)
 {
-	update_node_list();
+	add(impl_);
 }
 
 switch_statement::switch_statement(switch_statement&& o):
 	composite_node(),
-	post_switch_keyword_space_(std::move(o.post_switch_keyword_space_)),
-	post_opening_bracket_space_(std::move(o.post_opening_bracket_space_)),
-	condition_(std::move(o.condition_)),
-	post_condition_space_(std::move(o.post_condition_space_)),
-	post_closing_bracket_space_(std::move(o.post_closing_bracket_space_)),
-	statement_(std::move(o.statement_))
+	impl_(o.impl_)
 {
-	update_node_list();
+	add(impl_);
 }
 
 const switch_statement&
 switch_statement::operator=(const switch_statement& o)
 {
-	post_switch_keyword_space_ = o.post_switch_keyword_space_;
-	post_opening_bracket_space_ = o.post_opening_bracket_space_;
-	condition_ = o.condition_;
-	post_condition_space_ = o.post_condition_space_;
-	post_closing_bracket_space_ = o.post_closing_bracket_space_;
-	statement_ = o.statement_;
-
-	update_node_list();
-
+	impl_ = o.impl_;
 	return *this;
-}
-
-void
-switch_statement::update_node_list()
-{
-	clear();
-	add(common_nodes::switch_keyword);
-	if(post_switch_keyword_space_) add(*post_switch_keyword_space_);
-	add(common_nodes::opening_round_bracket);
-	if(post_opening_bracket_space_) add(*post_opening_bracket_space_);
-	add(condition_);
-	if(post_condition_space_) add(*post_condition_space_);
-	add(common_nodes::closing_round_bracket);
-	if(post_closing_bracket_space_) add(*post_closing_bracket_space_);
-	add(statement_);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
