@@ -248,7 +248,7 @@ semantic_analyzer::analyze(const function_definition& syntax_node)
 				{
 					std::cout << "qualified_nested_id\n";
 
-					bool leading_double_colon = a_qualified_nested_id->has_leading_double_colon();
+					bool leading_double_colon = a_qualified_nested_id->double_colon();
 					const nested_name_specifier& a_nested_name_specifier = a_qualified_nested_id->nested_name_specifier_node();
 
 					if(leading_double_colon)

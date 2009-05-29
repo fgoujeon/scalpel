@@ -518,27 +518,6 @@ convert_qualified_identifier(const tree_node_t& node)
     );
 }
 
-qualified_nested_id
-convert_qualified_nested_id(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::QUALIFIED_NESTED_ID);
-
-	tree_node_iterator_t double_colon_it = find_node(node, "::");
-	tree_node_iterator_t nested_name_specifier_it = find_node<id_t::NESTED_NAME_SPECIFIER>(node);
-	tree_node_iterator_t template_keyword_it = find_node(node, "template");
-
-    return qualified_nested_id
-    (
-		double_colon_it != node.children.end(),
-		convert_next_space(node, double_colon_it),
-		convert_node<nested_name_specifier>(*nested_name_specifier_it),
-		convert_next_space(node, nested_name_specifier_it),
-		template_keyword_it != node.children.end(),
-		convert_next_space(node, template_keyword_it),
-		find_and_convert_node<unqualified_id, id_t::UNQUALIFIED_ID>(node)
-    );
-}
-
 qualified_operator_function_id
 convert_qualified_operator_function_id(const tree_node_t& node)
 {

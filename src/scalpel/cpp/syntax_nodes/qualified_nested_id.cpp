@@ -27,77 +27,48 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 qualified_nested_id::qualified_nested_id
 (
-    bool leading_double_colon,
-	optional_node<space>&& post_double_colon_space_node,
-    nested_name_specifier&& a_nested_name_specifier,
-	optional_node<space>&& post_nested_name_specifier_space_node,
-    bool template_keyword,
-	optional_node<space>&& post_template_keyword_space_node,
-    unqualified_id&& an_unqualified_id
+	optional_node<simple_text_node<str::double_colon>>&& o0,
+	optional_node<space>&& o1,
+	nested_name_specifier&& o2,
+	optional_node<space>&& o3,
+	optional_node<simple_text_node<str::template_>>&& o4,
+	optional_node<space>&& o5,
+	unqualified_id&& o6
 ):
-    leading_double_colon_(leading_double_colon),
-	post_double_colon_space_(post_double_colon_space_node),
-    nested_name_specifier_(std::move(a_nested_name_specifier)),
-	post_nested_name_specifier_space_(post_nested_name_specifier_space_node),
-    template_keyword_(template_keyword),
-	post_template_keyword_space_(post_template_keyword_space_node),
-    unqualified_id_(std::move(an_unqualified_id))
+	impl_(o0, o1, o2, o3, o4, o5, o6)
 {
-	update_node_list();
+	add(impl_);
+}
+
+qualified_nested_id::qualified_nested_id
+(
+	head_node_t&& head,
+	tail_sequence_node_t&& tail
+):
+	impl_(head, tail)
+{
+	add(impl_);
 }
 
 qualified_nested_id::qualified_nested_id(const qualified_nested_id& o):
 	composite_node(),
-    leading_double_colon_(o.leading_double_colon_),
-	post_double_colon_space_(o.post_double_colon_space_),
-    nested_name_specifier_(o.nested_name_specifier_),
-	post_nested_name_specifier_space_(o.post_nested_name_specifier_space_),
-    template_keyword_(o.template_keyword_),
-	post_template_keyword_space_(o.post_template_keyword_space_),
-    unqualified_id_(o.unqualified_id_)
+	impl_(o.impl_)
 {
-	update_node_list();
+	add(impl_);
 }
 
 qualified_nested_id::qualified_nested_id(qualified_nested_id&& o):
-    leading_double_colon_(std::move(o.leading_double_colon_)),
-	post_double_colon_space_(std::move(o.post_double_colon_space_)),
-    nested_name_specifier_(std::move(o.nested_name_specifier_)),
-	post_nested_name_specifier_space_(std::move(o.post_nested_name_specifier_space_)),
-    template_keyword_(std::move(o.template_keyword_)),
-	post_template_keyword_space_(std::move(o.post_template_keyword_space_)),
-    unqualified_id_(std::move(o.unqualified_id_))
+	composite_node(),
+	impl_(o.impl_)
 {
-	update_node_list();
+	add(impl_);
 }
 
 const qualified_nested_id&
 qualified_nested_id::operator=(const qualified_nested_id& o)
 {
-    leading_double_colon_ = o.leading_double_colon_;
-	post_double_colon_space_ = o.post_double_colon_space_;
-    nested_name_specifier_ = o.nested_name_specifier_;
-	post_nested_name_specifier_space_ = o.post_nested_name_specifier_space_;
-    template_keyword_ = o.template_keyword_;
-	post_template_keyword_space_ = o.post_template_keyword_space_;
-    unqualified_id_ = o.unqualified_id_;
-
-	update_node_list();
-
+	impl_ = o.impl_;
 	return *this;
-}
-
-void
-qualified_nested_id::update_node_list()
-{
-	clear();
-	if(leading_double_colon_) add(common_nodes::double_colon);
-	if(post_double_colon_space_) add(*post_double_colon_space_);
-	add(nested_name_specifier_);
-	if(post_nested_name_specifier_space_) add(*post_nested_name_specifier_space_);
-	if(template_keyword_) add(common_nodes::template_keyword);
-	if(post_template_keyword_space_) add(*post_template_keyword_space_);
-	add(unqualified_id_);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
