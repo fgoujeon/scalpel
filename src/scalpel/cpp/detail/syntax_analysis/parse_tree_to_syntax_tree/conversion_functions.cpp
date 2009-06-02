@@ -557,34 +557,6 @@ convert_template_typename_expression(const tree_node_t& node)
 	return template_typename_expression();
 }
 
-translation_unit
-convert_translation_unit(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::TRANSLATION_UNIT);
-
-	optional_node<space> first_space_node;
-	optional_node<declaration_seq> declaration_seq_node;
-	optional_node<space> post_declaration_seq_node;
-
-	tree_node_iterator_t i = node.children.begin();
-	if(i->value.id() == id_t::SPACE)
-		first_space_node = convert_node<space>(*i);
-
-	i = find_node<id_t::DECLARATION_SEQ>(node);
-	if(i != node.children.end())
-	{
-		declaration_seq_node = convert_node<declaration_seq>(*i);
-		post_declaration_seq_node = convert_next_space(node, i);
-	}
-
-	return translation_unit
-	(
-		first_space_node,
-		declaration_seq_node,
-		post_declaration_seq_node
-	);
-}
-
 try_block
 convert_try_block(const tree_node_t& node)
 {

@@ -21,9 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_TRANSLATION_UNIT_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_TRANSLATION_UNIT_HPP
 
-#include "optional_node.hpp"
-#include "composite_node.hpp"
-#include "space.hpp"
+#include "common.hpp"
 #include "declaration_seq.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
@@ -36,14 +34,34 @@ translation_unit
 ;
 \endverbatim
 */
+typedef
+	sequence_node
+	<
+		optional_node<space>,
+		optional_node<declaration_seq>,
+		optional_node<space>
+	>
+	translation_unit_t
+;
+
 class translation_unit: public composite_node
 {
 	public:
+		typedef translation_unit_t type;
+		typedef type::head_node_t head_node_t;
+		typedef type::tail_sequence_node_t tail_sequence_node_t;
+
 		translation_unit
 		(
-			optional_node<space>&& first_space_node,
-			optional_node<declaration_seq>&& declaration_seq_node,
-			optional_node<space>&& post_declaration_seq_node
+			optional_node<space>&& o0,
+			optional_node<declaration_seq>&& o1,
+			optional_node<space>&& o2
+		);
+
+		translation_unit
+		(
+			head_node_t&& head,
+			tail_sequence_node_t&& tail
 		);
 
 		translation_unit(const translation_unit& o);
@@ -58,19 +76,13 @@ class translation_unit: public composite_node
 		declaration_seq_node() const;
 
 	private:
-		void
-		update_node_list();
-
-		optional_node<space> first_space_;
-		optional_node<declaration_seq> declaration_seq_;
-		optional_node<space> post_declaration_seq_;
+		type impl_;
 };
 
-inline
 const optional_node<declaration_seq>&
 translation_unit::declaration_seq_node() const
 {
-	return declaration_seq_;
+	return get<1>(impl_);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

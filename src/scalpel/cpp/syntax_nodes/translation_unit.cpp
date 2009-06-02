@@ -25,54 +25,44 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 translation_unit::translation_unit
 (
-	optional_node<space>&& first_space_node,
-	optional_node<declaration_seq>&& declaration_seq_node,
-	optional_node<space>&& post_declaration_seq_node
+	optional_node<space>&& o0,
+	optional_node<declaration_seq>&& o1,
+	optional_node<space>&& o2
 ):
-	first_space_(first_space_node),
-	declaration_seq_(declaration_seq_node),
-	post_declaration_seq_(post_declaration_seq_node)
+	impl_(o0, o1, o2)
 {
-	update_node_list();
+	add(impl_);
+}
+
+translation_unit::translation_unit
+(
+	head_node_t&& head,
+	tail_sequence_node_t&& tail
+):
+	impl_(head, tail)
+{
+	add(impl_);
 }
 
 translation_unit::translation_unit(const translation_unit& o):
 	composite_node(),
-	first_space_(o.first_space_),
-	declaration_seq_(o.declaration_seq_),
-	post_declaration_seq_(o.post_declaration_seq_)
+	impl_(o.impl_)
 {
-	update_node_list();
+	add(impl_);
 }
 
 translation_unit::translation_unit(translation_unit&& o):
 	composite_node(),
-	first_space_(std::move(o.first_space_)),
-	declaration_seq_(std::move(o.declaration_seq_)),
-	post_declaration_seq_(std::move(o.post_declaration_seq_))
+	impl_(std::move(o.impl_))
 {
-	update_node_list();
+	add(impl_);
 }
 
 const translation_unit&
 translation_unit::operator=(const translation_unit& o)
 {
-	first_space_ = o.first_space_;
-	declaration_seq_ = o.declaration_seq_;
-	post_declaration_seq_ = o.post_declaration_seq_;
-
-	update_node_list();
-
+	impl_ = o.impl_;
 	return *this;
-}
-
-void
-translation_unit::update_node_list()
-{
-	clear();
-	if(first_space_) add(*first_space_);
-	if(declaration_seq_) add(*declaration_seq_);
-	if(post_declaration_seq_) add(*post_declaration_seq_);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

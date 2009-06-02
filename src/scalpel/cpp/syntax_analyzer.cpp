@@ -25,7 +25,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/spirit/tree/parse_tree.hpp>
 #include "../util/raii_affector.hpp"
 #include "detail/syntax_analysis/parse_tree_to_syntax_tree/conversion_functions.hpp"
+#include "detail/syntax_analysis/parse_tree_to_syntax_tree/generic_node_converters.hpp"
 #include "detail/syntax_analysis/parse_tree_to_syntax_tree/basic_functions.hpp"
+#include "detail/syntax_analysis/parse_tree_to_syntax_tree/sequence_node_converter.hpp"
 #include "detail/syntax_analysis/source_code_completion.hpp"
 #include "detail/semantic_analysis/name_lookup.hpp"
 #include "semantic_graph.hpp"
@@ -91,7 +93,7 @@ syntax_analyzer::analyze(const std::string& input)
     }
 
     //convert spirit's parse tree to syntax tree and return the result
-	return parse_tree_to_syntax_tree::convert_translation_unit
+	return parse_tree_to_syntax_tree::convert_node<syntax_nodes::translation_unit>
 	(
 		parse_tree_to_syntax_tree::get_only_child_node
 		(
