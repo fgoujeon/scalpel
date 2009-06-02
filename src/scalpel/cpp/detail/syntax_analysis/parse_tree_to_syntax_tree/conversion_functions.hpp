@@ -93,12 +93,6 @@ convert_member_specification_access_specifier(const tree_node_t& node);
 syntax_nodes::nested_identifier_or_template_id
 convert_nested_identifier_or_template_id(const tree_node_t& node);
 
-syntax_nodes::nested_name_specifier::last_part
-convert_nested_name_specifier_last_part(const tree_node_t& node);
-
-syntax_nodes::nested_name_specifier
-convert_nested_name_specifier(const tree_node_t& node);
-
 syntax_nodes::new_array_operator
 convert_new_array_operator(const tree_node_t& node);
 

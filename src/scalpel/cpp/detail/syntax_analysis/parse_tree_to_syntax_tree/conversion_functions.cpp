@@ -332,35 +332,6 @@ convert_nested_identifier_or_template_id(const tree_node_t& node)
     );
 }
 
-nested_name_specifier::last_part
-convert_nested_name_specifier_last_part(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::NESTED_NAME_SPECIFIER_LAST_PART);
-
-    return nested_name_specifier::last_part
-    (
-		check_node_existence(node, "template", 0),
-		find_and_convert_node<identifier_or_template_id, id_t::IDENTIFIER_OR_TEMPLATE_ID>(node)
-    );
-}
-
-nested_name_specifier
-convert_nested_name_specifier(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::NESTED_NAME_SPECIFIER);
-
-	tree_node_iterator_t identifier_or_template_id_it = find_node<id_t::IDENTIFIER_OR_TEMPLATE_ID>(node);
-	tree_node_iterator_t last_part_seq_it = find_node<id_t::NESTED_NAME_SPECIFIER_LAST_PART_SEQ>(node);
-
-    return nested_name_specifier
-    (
-        convert_node<identifier_or_template_id>(*identifier_or_template_id_it),
-		convert_next_space(node, identifier_or_template_id_it),
-		convert_previous_space(node, last_part_seq_it),
-        convert_optional<nested_name_specifier::last_part_seq>(node, last_part_seq_it)
-    );
-}
-
 new_array_operator
 convert_new_array_operator(const tree_node_t& node)
 {

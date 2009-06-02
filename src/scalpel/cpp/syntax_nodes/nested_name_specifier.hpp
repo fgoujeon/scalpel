@@ -21,27 +21,77 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_NESTED_NAME_SPECIFIER_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_NESTED_NAME_SPECIFIER_HPP
 
-#include <vector>
-#include <boost/range/iterator_range.hpp>
-#include "composite_node.hpp"
+#include "common.hpp"
 #include "identifier_or_template_id.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
+typedef
+	sequence_node
+	<
+		optional_node<simple_text_node<str::template_>>,
+		optional_node<space>,
+		identifier_or_template_id,
+		optional_node<space>,
+		simple_text_node<str::double_colon>
+	>
+	nested_name_specifier_last_part_t
+;
+class nested_name_specifier_last_part;
+
+typedef
+	list_node<nested_name_specifier_last_part>
+	nested_name_specifier_last_part_seq
+;
+
+typedef
+	sequence_node
+	<
+		identifier_or_template_id,
+		optional_node<space>,
+		simple_text_node<str::double_colon>,
+		optional_node<space>,
+		optional_node<nested_name_specifier_last_part_seq>
+	>
+	nested_name_specifier_t
+;
+
+/**
+nested_name_specifier
+	= identifier_or_template_id >> !s >> "::" >> !(!s >> nested_name_specifier_last_part_seq)
+;
+nested_name_specifier_last_part_seq
+	= nested_name_specifier_last_part % !s
+;
+nested_name_specifier_last_part
+	= !(str_p("template") >> !s) >> identifier_or_template_id >> !s >> "::"
+;
+*/
+
 class nested_name_specifier: public composite_node
 {
 	public:
-		class last_part;
+		typedef nested_name_specifier_t type;
+		typedef type::head_node_t head_node_t;
+		typedef type::tail_sequence_node_t tail_sequence_node_t;
 
-		typedef list_node<last_part> last_part_seq;
+		typedef nested_name_specifier_last_part last_part;
+		typedef nested_name_specifier_last_part_seq last_part_seq;
 
 		nested_name_specifier
 		(
-			identifier_or_template_id&& an_identifier_or_template_id,
-			optional_node<space>&& post_identifier_or_template_id_space_node,
-			optional_node<space>&& pre_last_part_seq_space_node,
-			optional_node<last_part_seq>&& a_last_part_seq
+			identifier_or_template_id&& o0,
+			optional_node<space>&& o1,
+			simple_text_node<str::double_colon>&& o2,
+			optional_node<space>&& o3,
+			optional_node<nested_name_specifier_last_part_seq>&& o4
+		);
+
+		nested_name_specifier
+		(
+			head_node_t&& head,
+			tail_sequence_node_t&& tail
 		);
 
 		nested_name_specifier(const nested_name_specifier& o);
@@ -60,73 +110,64 @@ class nested_name_specifier: public composite_node
 		last_part_seq_node() const;
 
 	private:
-		void
-		update_node_list();
-
-		identifier_or_template_id identifier_or_template_id_;
-		optional_node<space> post_identifier_or_template_id_space_;
-		optional_node<space> pre_last_part_seq_space_;
-		optional_node<last_part_seq> last_part_seq_;
+		type impl_;
 };
 
-class nested_name_specifier::last_part: public composite_node
+const identifier_or_template_id&
+nested_name_specifier::identifier_or_template_id_node() const
+{
+	return get<0>(impl_);
+}
+
+const optional_node<nested_name_specifier::last_part_seq>&
+nested_name_specifier::last_part_seq_node() const
+{
+	return get<4>(impl_);
+}
+
+
+
+class nested_name_specifier_last_part: public composite_node
 {
 	public:
-		last_part
+		typedef nested_name_specifier_last_part_t type;
+		typedef type::head_node_t head_node_t;
+		typedef type::tail_sequence_node_t tail_sequence_node_t;
+
+		nested_name_specifier_last_part
 		(
-			bool template_keyword,
-			identifier_or_template_id&& an_identifier_or_template_id
+			optional_node<simple_text_node<str::template_>>&& o0,
+			optional_node<space>&& o1,
+			identifier_or_template_id&& o2,
+			optional_node<space>&& o3,
+			simple_text_node<str::double_colon>&& o4
 		);
 
-		last_part(const last_part& o);
+		nested_name_specifier_last_part
+		(
+			head_node_t&& head,
+			tail_sequence_node_t&& tail
+		);
 
-		last_part(last_part&& o);
+		nested_name_specifier_last_part(const nested_name_specifier_last_part& o);
 
-		const last_part&
-		operator=(const last_part& o);
+		nested_name_specifier_last_part(nested_name_specifier_last_part&& o);
 
-		inline
-		bool
-		has_template_keyword() const;
+		const nested_name_specifier_last_part&
+		operator=(const nested_name_specifier_last_part& o);
 
 		inline
 		const identifier_or_template_id&
 		identifier_or_template_id_node() const;
 
 	private:
-		void
-		update_node_list();
-
-		bool template_keyword_;
-		identifier_or_template_id identifier_or_template_id_;
+		type impl_;
 };
 
-inline
-bool
-nested_name_specifier::last_part::has_template_keyword() const
-{
-	return template_keyword_;
-}
-
-inline
 const identifier_or_template_id&
-nested_name_specifier::last_part::identifier_or_template_id_node() const
+nested_name_specifier_last_part::identifier_or_template_id_node() const
 {
-	return identifier_or_template_id_;
-}
-
-inline
-const identifier_or_template_id&
-nested_name_specifier::identifier_or_template_id_node() const
-{
-	return identifier_or_template_id_;
-}
-
-inline
-const optional_node<nested_name_specifier::last_part_seq>&
-nested_name_specifier::last_part_seq_node() const
-{
-	return last_part_seq_;
+	return get<2>(impl_);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

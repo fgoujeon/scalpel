@@ -25,105 +25,92 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 nested_name_specifier::nested_name_specifier
 (
-	identifier_or_template_id&& an_identifier_or_template_id,
-	optional_node<space>&& post_identifier_or_template_id_space_node,
-	optional_node<space>&& pre_last_part_seq_space_node,
-	optional_node<last_part_seq>&& a_last_part_seq
+	identifier_or_template_id&& o0,
+	optional_node<space>&& o1,
+	simple_text_node<str::double_colon>&& o2,
+	optional_node<space>&& o3,
+	optional_node<nested_name_specifier_last_part_seq>&& o4
 ):
-	identifier_or_template_id_(std::move(an_identifier_or_template_id)),
-	post_identifier_or_template_id_space_(post_identifier_or_template_id_space_node),
-	pre_last_part_seq_space_(pre_last_part_seq_space_node),
-	last_part_seq_(std::move(a_last_part_seq))
+	impl_(o0, o1, o2, o3, o4)
 {
-	update_node_list();
+	add(impl_);
+}
+
+nested_name_specifier::nested_name_specifier
+(
+	head_node_t&& head,
+	tail_sequence_node_t&& tail
+):
+	impl_(head, tail)
+{
+	add(impl_);
 }
 
 nested_name_specifier::nested_name_specifier(const nested_name_specifier& o):
 	composite_node(),
-	identifier_or_template_id_(o.identifier_or_template_id_),
-	post_identifier_or_template_id_space_(o.post_identifier_or_template_id_space_),
-	pre_last_part_seq_space_(o.pre_last_part_seq_space_),
-	last_part_seq_(o.last_part_seq_)
+	impl_(o.impl_)
 {
-	update_node_list();
+	add(impl_);
 }
 
 nested_name_specifier::nested_name_specifier(nested_name_specifier&& o):
-	identifier_or_template_id_(std::move(o.identifier_or_template_id_)),
-	post_identifier_or_template_id_space_(std::move(o.post_identifier_or_template_id_space_)),
-	pre_last_part_seq_space_(std::move(o.pre_last_part_seq_space_)),
-	last_part_seq_(std::move(o.last_part_seq_))
+	composite_node(),
+	impl_(std::move(o.impl_))
 {
-	update_node_list();
+	add(impl_);
 }
 
 const nested_name_specifier&
 nested_name_specifier::operator=(const nested_name_specifier& o)
 {
-	identifier_or_template_id_ = o.identifier_or_template_id_;
-	post_identifier_or_template_id_space_ = o.post_identifier_or_template_id_space_;
-	pre_last_part_seq_space_ = o.pre_last_part_seq_space_;
-	last_part_seq_ = o.last_part_seq_;
-
-	update_node_list();
-
+	impl_ = o.impl_;
 	return *this;
 }
 
-void
-nested_name_specifier::update_node_list()
-{
-	clear();
-	add(identifier_or_template_id_);
-	if(post_identifier_or_template_id_space_) add(*post_identifier_or_template_id_space_);
-	add(common_nodes::double_colon);
-	if(pre_last_part_seq_space_) add(*pre_last_part_seq_space_);
-	if(last_part_seq_) add(*last_part_seq_);
-}
 
 
-nested_name_specifier::last_part::last_part
+nested_name_specifier_last_part::nested_name_specifier_last_part
 (
-	bool template_keyword,
-	identifier_or_template_id&& an_identifier_or_template_id
+	optional_node<simple_text_node<str::template_>>&& o0,
+	optional_node<space>&& o1,
+	identifier_or_template_id&& o2,
+	optional_node<space>&& o3,
+	simple_text_node<str::double_colon>&& o4
 ):
-	template_keyword_(template_keyword),
-	identifier_or_template_id_(an_identifier_or_template_id)
+	impl_(o0, o1, o2, o3, o4)
 {
-	update_node_list();
+	add(impl_);
 }
 
-nested_name_specifier::last_part::last_part(const last_part& o):
+nested_name_specifier_last_part::nested_name_specifier_last_part
+(
+	head_node_t&& head,
+	tail_sequence_node_t&& tail
+):
+	impl_(head, tail)
+{
+	add(impl_);
+}
+
+nested_name_specifier_last_part::nested_name_specifier_last_part(const nested_name_specifier_last_part& o):
 	composite_node(),
-	template_keyword_(o.template_keyword_),
-	identifier_or_template_id_(o.identifier_or_template_id_)
+	impl_(o.impl_)
 {
-	update_node_list();
+	add(impl_);
 }
 
-nested_name_specifier::last_part::last_part(last_part&& o):
-	template_keyword_(std::move(o.template_keyword_)),
-	identifier_or_template_id_(std::move(o.identifier_or_template_id_))
+nested_name_specifier_last_part::nested_name_specifier_last_part(nested_name_specifier_last_part&& o):
+	composite_node(),
+	impl_(std::move(o.impl_))
 {
-	update_node_list();
+	add(impl_);
 }
 
-const nested_name_specifier::last_part&
-nested_name_specifier::last_part::operator=(const last_part& o)
+const nested_name_specifier_last_part&
+nested_name_specifier_last_part::operator=(const nested_name_specifier_last_part& o)
 {
-	template_keyword_ = o.template_keyword_;
-	identifier_or_template_id_ = o.identifier_or_template_id_;
-	update_node_list();
-
+	impl_ = o.impl_;
 	return *this;
-}
-
-void
-nested_name_specifier::last_part::update_node_list()
-{
-	clear();
-	add(identifier_or_template_id_);
-	add(common_nodes::double_colon);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
