@@ -31,6 +31,8 @@ class simple_text_node: public leaf_node
 {
 	public:
 		simple_text_node();
+
+		static const std::string& text;
 };
 
 template<const std::string& Text>
@@ -38,6 +40,9 @@ simple_text_node<Text>::simple_text_node():
 	leaf_node(Text)
 {
 }
+
+template<const std::string& Text>
+const std::string& simple_text_node<Text>::text = Text;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

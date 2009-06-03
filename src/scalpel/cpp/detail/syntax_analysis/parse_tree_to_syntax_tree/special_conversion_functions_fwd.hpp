@@ -42,11 +42,11 @@ convert_list_node(const tree_node_t& node);
 
 template<class T>
 syntax_nodes::optional_node<T>
-convert_optional(const tree_node_t& parent_node, const tree_node_iterator_t& it);
+convert_optional_node(const tree_node_t& parent_node, const tree_node_iterator_t& it);
 
-template<const std::string&& Text>
-syntax_nodes::simple_text_node<Text>
-convert_simple_text(const tree_node_t&);
+template<class T>
+T
+convert_simple_text_node(const tree_node_t&);
 
 }}}}} //namespace scalpel::cpp::detail::syntax_analysis::parse_tree_to_syntax_tree
 

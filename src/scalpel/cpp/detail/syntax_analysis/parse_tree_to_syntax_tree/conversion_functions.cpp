@@ -101,13 +101,13 @@ convert_class_head(const tree_node_t& node)
     (
 		find_and_convert_node<class_key, id_t::CLASS_KEY>(node),
 		convert_previous_space(node, nested_name_specifier_it),
-		convert_optional<nested_name_specifier>(node, nested_name_specifier_it),
+		convert_optional_node<nested_name_specifier>(node, nested_name_specifier_it),
 		convert_previous_space(node, template_id_it),
-		convert_optional<template_id>(node, template_id_it),
+		convert_optional_node<template_id>(node, template_id_it),
 		convert_previous_space(node, identifier_it),
-		convert_optional<identifier>(node, identifier_it),
+		convert_optional_node<identifier>(node, identifier_it),
 		convert_previous_space(node, base_clause_it),
-		convert_optional<base_clause>(node, base_clause_it)
+		convert_optional_node<base_clause>(node, base_clause_it)
 	);
 }
 
@@ -127,7 +127,7 @@ convert_class_template_elaborated_specifier(const tree_node_t& node)
 		convert_next_space(node, class_key_it),
 		double_colon_it != node.children.end(),
 		convert_next_space(node, double_colon_it),
-		convert_optional<nested_name_specifier>(node, nested_name_specifier_it),
+		convert_optional_node<nested_name_specifier>(node, nested_name_specifier_it),
 		convert_next_space(node, nested_name_specifier_it),
 		convert_node<template_id>(*template_id_it)
 	);
@@ -207,14 +207,14 @@ convert_function_definition(const tree_node_t& node)
 
     return function_definition
     (
-		convert_optional<decl_specifier_seq>(node, decl_specifier_seq_it),
+		convert_optional_node<decl_specifier_seq>(node, decl_specifier_seq_it),
 		convert_next_space(node, decl_specifier_seq_it),
 		convert_node<declarator>(*declarator_it),
 		convert_next_space(node, declarator_it),
-		convert_optional<ctor_initializer>(node, ctor_initializer_it),
+		convert_optional_node<ctor_initializer>(node, ctor_initializer_it),
 		convert_next_space(node, ctor_initializer_it),
-		convert_optional<compound_statement>(node, compound_statement_it),
-		convert_optional<function_try_block>(node, function_try_block_it)
+		convert_optional_node<compound_statement>(node, compound_statement_it),
+		convert_optional_node<function_try_block>(node, function_try_block_it)
     );
 }
 
@@ -235,7 +235,7 @@ convert_function_try_block(const tree_node_t& node)
 	return function_try_block
 	(
 		convert_next_space(node, try_keyword_it),
-		convert_optional<ctor_initializer>(node, ctor_initializer_it),
+		convert_optional_node<ctor_initializer>(node, ctor_initializer_it),
 		convert_next_space(node, ctor_initializer_it),
 		convert_node<compound_statement>(*compound_statement_it),
 		convert_next_space(node, compound_statement_it),
@@ -286,9 +286,9 @@ convert_member_declaration_member_declarator_list(const tree_node_t& node)
 
     return member_declaration_member_declarator_list
     (
-        convert_optional<decl_specifier_seq>(node, decl_specifier_seq_it),
+        convert_optional_node<decl_specifier_seq>(node, decl_specifier_seq_it),
 		convert_next_space(node, decl_specifier_seq_it),
-        convert_optional<member_declarator_list>(node, member_declarator_list_it),
+        convert_optional_node<member_declarator_list>(node, member_declarator_list_it),
 		convert_next_space(node, member_declarator_list_it)
     );
 }
@@ -364,11 +364,11 @@ convert_new_type_id_new_expression(const tree_node_t& node)
 		leading_double_colon_it != node.children.end(),
 		convert_next_space(node, leading_double_colon_it),
 		convert_next_space(node, new_keyword_it),
-		convert_optional<new_placement>(node, new_placement_it),
+		convert_optional_node<new_placement>(node, new_placement_it),
 		convert_next_space(node, new_placement_it),
 		convert_node<new_type_id>(*new_type_id_it),
 		convert_previous_space(node, new_initializer_it),
-		convert_optional<new_initializer>(node, new_initializer_it)
+		convert_optional_node<new_initializer>(node, new_initializer_it)
 	);
 }
 
@@ -391,7 +391,7 @@ convert_parameter_declaration(const tree_node_t& node)
 			id_t::DECL_SPECIFIER_SEQ
 		>(node),
 		convert_previous_space(node, declarator_it),
-		convert_optional<declarator>(node, declarator_it),
+		convert_optional_node<declarator>(node, declarator_it),
 		false
     );
 }
@@ -420,10 +420,10 @@ convert_ptr_operator(const tree_node_t& node)
 		check_node_existence(node, "*") ? ptr_operator::ASTERISK : ptr_operator::AMPERSAND,
 		leading_double_colon_it != node.children.end(),
 		convert_next_space(node, leading_double_colon_it),
-		convert_optional<nested_name_specifier>(node, nested_name_specifier_it),
+		convert_optional_node<nested_name_specifier>(node, nested_name_specifier_it),
 		convert_next_space(node, nested_name_specifier_it),
 		convert_previous_space(node, cv_qualifier_seq_it),
-		convert_optional<cv_qualifier_seq>(node, cv_qualifier_seq_it)
+		convert_optional_node<cv_qualifier_seq>(node, cv_qualifier_seq_it)
 	);
 }
 
@@ -459,9 +459,9 @@ convert_simple_declaration(const tree_node_t& node)
 
     return simple_declaration
     (
-		convert_optional<decl_specifier_seq>(node, decl_specifier_seq_it),
+		convert_optional_node<decl_specifier_seq>(node, decl_specifier_seq_it),
 		convert_next_space(node, decl_specifier_seq_it),
-		convert_optional<init_declarator_list>(node, init_declarator_list_it),
+		convert_optional_node<init_declarator_list>(node, init_declarator_list_it),
 		convert_next_space(node, init_declarator_list_it)
     );
 }
@@ -544,7 +544,7 @@ convert_template_id(const tree_node_t& node)
         convert_node<identifier>(*type_name_it),
 		convert_next_space(node, type_name_it),
 		convert_next_space(node, opening_angle_bracket_it),
-        convert_optional<template_argument_list>(node, template_argument_list_it),
+        convert_optional_node<template_argument_list>(node, template_argument_list_it),
 		convert_next_space(node, template_argument_list_it)
     );
 }

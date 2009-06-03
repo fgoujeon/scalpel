@@ -115,7 +115,7 @@ convert_list_node(const tree_node_t& node)
 
 template<class T>
 syntax_nodes::optional_node<T>
-convert_optional(const tree_node_t& parent_node, const tree_node_iterator_t& it)
+convert_optional_node(const tree_node_t& parent_node, const tree_node_iterator_t& it)
 {
 	if(it != parent_node.children.end())
 		return convert_node<T>(*it);
@@ -125,11 +125,25 @@ convert_optional(const tree_node_t& parent_node, const tree_node_iterator_t& it)
 
 
 
-template<const std::string&& Text>
-syntax_nodes::simple_text_node<Text>
-convert_simple_text(const tree_node_t&)
+template<class T>
+struct simple_text_node_converter;
+
+template<const std::string& Text>
+struct simple_text_node_converter<syntax_nodes::simple_text_node<Text>>
 {
-	return syntax_nodes::simple_text_node<Text>();
+	static
+	syntax_nodes::simple_text_node<Text>
+	convert()
+	{
+		return syntax_nodes::simple_text_node<Text>();
+	}
+};
+
+template<class T>
+T
+convert_simple_text_node(const tree_node_t&)
+{
+	return simple_text_node_converter<T>::convert();
 }
 
 }}}}} //namespace scalpel::cpp::detail::syntax_analysis::parse_tree_to_syntax_tree
