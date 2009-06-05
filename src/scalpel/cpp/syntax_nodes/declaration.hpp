@@ -31,7 +31,7 @@ class block_declaration;
 class function_definition;
 class template_declaration;
 //class explicit_instantiation;
-//class explicit_specialization;
+class explicit_specialization;
 //class linkage_specification;
 class namespace_definition;
 
@@ -42,7 +42,7 @@ typedef
 		function_definition,
 		template_declaration,
 		//explicit_instantiation,
-		//explicit_specialization,
+		explicit_specialization,
 		//linkage_specification,
 		namespace_definition
 	>
@@ -55,7 +55,7 @@ typedef
 		function_definition,
 		template_declaration,
 		//explicit_instantiation,
-		//explicit_specialization,
+		explicit_specialization,
 		//linkage_specification,
 		namespace_definition
 	>
@@ -79,7 +79,7 @@ class declaration: public composite_node
 
 		//declaration(explicit_instantiation&& o);
 
-		//declaration(explicit_specialization&& o);
+		declaration(explicit_specialization&& o);
 
 		//declaration(linkage_specification&& o);
 
@@ -102,6 +102,9 @@ class declaration: public composite_node
 
 		void
 		get(boost::optional<const template_declaration&>& o) const;
+
+		void
+		get(boost::optional<const explicit_specialization&>& o) const;
 
 		void
 		get(boost::optional<const namespace_definition&>& o) const;

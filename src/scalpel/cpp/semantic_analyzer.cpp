@@ -191,6 +191,11 @@ semantic_analyzer::analyze(const elaborated_type_specifier&)
 }
 
 void
+semantic_analyzer::analyze(const explicit_specialization&)
+{
+}
+
+void
 semantic_analyzer::analyze(const expression_statement&)
 {
 }
@@ -406,7 +411,7 @@ semantic_analyzer::analyze(const namespace_definition& syntax_node)
 	const optional_node<declaration_seq>& a_declaration_seq = syntax_node.declaration_seq_node();
 	if(a_declaration_seq)
 	{
-		analyze_sequence(*a_declaration_seq);
+		analyze_list(*a_declaration_seq);
 	}
 	scope_cursor_.leave_scope();
 }
