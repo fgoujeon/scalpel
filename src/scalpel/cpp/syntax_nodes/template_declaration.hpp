@@ -21,21 +21,62 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_TEMPLATE_DECLARATION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_TEMPLATE_DECLARATION_HPP
 
-#include <memory>
-#include "composite_node.hpp"
-#include "declaration_fwd.hpp"
+#include "common.hpp"
+#include "template_parameter_list.hpp"
+#include "declaration.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
+/**
+template_declaration
+	= !(str_p("export") >> !s) >> str_p("template") >> !s >> '<' >> !s >> template_parameter_list >> !s >> '>' >> !s >> declaration
+;
+*/
+typedef
+	sequence_node
+	<
+		optional_node<simple_text_node<str::export_>>,
+		optional_node<space>,
+		simple_text_node<str::template_>,
+		optional_node<space>,
+		simple_text_node<str::left_angle_bracket>,
+		optional_node<space>,
+		template_parameter_list,
+		optional_node<space>,
+		simple_text_node<str::right_angle_bracket>,
+		optional_node<space>,
+		declaration
+	>
+	template_declaration_t
+;
+
 class template_declaration: public composite_node
 {
 	public:
+		typedef template_declaration_t type;
+		typedef type::head_node_t head_node_t;
+		typedef type::tail_sequence_node_t tail_sequence_node_t;
+
 		template_declaration
 		(
-			bool export_keyword,
-			//template_parameter_list m_template_parameter_list;
-			declaration&& a_declaration
+			optional_node<simple_text_node<str::export_>>&& o0,
+			optional_node<space>&& o1,
+			simple_text_node<str::template_>&& o2,
+			optional_node<space>&& o3,
+			simple_text_node<str::left_angle_bracket>&& o4,
+			optional_node<space>&& o5,
+			template_parameter_list&& o6,
+			optional_node<space>&& o7,
+			simple_text_node<str::right_angle_bracket>&& o8,
+			optional_node<space>&& o9,
+			declaration&& o10
+		);
+
+		template_declaration
+		(
+			head_node_t&& head,
+			tail_sequence_node_t&& tail
 		);
 
 		template_declaration(const template_declaration& o);
@@ -45,36 +86,9 @@ class template_declaration: public composite_node
 		const template_declaration&
 		operator=(const template_declaration& o);
 
-		inline
-		bool
-		has_export_keyword() const;
-
-		inline
-		const declaration&
-		declaration_node() const;
-
 	private:
-		void
-		update_node_list();
-
-		bool export_keyword_;
-		//template_parameter_list m_template_parameter_list;
-		std::shared_ptr<declaration> declaration_;
+		type impl_;
 };
-
-inline
-bool
-template_declaration::has_export_keyword() const
-{
-	return export_keyword_;
-}
-
-inline
-const declaration&
-template_declaration::declaration_node() const
-{
-	return *declaration_;
-}
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

@@ -299,6 +299,9 @@ class grammar
             TEMPLATE_PARAMETER_LIST,
             TEMPLATE_PARAMETER,
             TYPE_PARAMETER,
+			CLASS_TYPE_PARAMETER,
+			TYPENAME_TYPE_PARAMETER,
+			TEMPLATE_TYPE_PARAMETER,
             TEMPLATE_ID,
             TEMPLATE_ARGUMENT_LIST,
             TEMPLATE_ARGUMENT,
@@ -647,6 +650,9 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_PARAMETER_LIST>> template_parameter_list;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_PARAMETER>> template_parameter;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TYPE_PARAMETER>> type_parameter;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CLASS_TYPE_PARAMETER>> class_type_parameter;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TYPENAME_TYPE_PARAMETER>> typename_type_parameter;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_TYPE_PARAMETER>> template_type_parameter;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ID>> template_id;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_LIST>> template_argument_list;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT>> template_argument;

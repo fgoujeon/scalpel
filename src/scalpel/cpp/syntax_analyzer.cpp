@@ -132,7 +132,7 @@ syntax_analyzer::parse_type_name(const scanner_t& scan)
 		ch = *scan;
 	}
 
-
+/*
 	//if we already checked that name at the same progress point...
 	if
 	(
@@ -223,6 +223,9 @@ syntax_analyzer::parse_type_name(const scanner_t& scan)
     }
 
     return -1;
+	*/
+
+	return name.size(); //successful match
 }
 
 void

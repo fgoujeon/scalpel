@@ -102,6 +102,7 @@ namespace extern_strings
 	const std::string dynamic_cast_("dynamic_cast");
 	const std::string else_("else");
 	const std::string explicit_("explicit");
+	const std::string export_("export");
 	const std::string extern_("extern");
 	const std::string false_("false");
 	const std::string float_("float");

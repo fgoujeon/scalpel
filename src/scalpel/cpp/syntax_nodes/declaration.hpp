@@ -21,15 +21,95 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_DECLARATION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_DECLARATION_HPP
 
-#include "alternative_node.hpp"
-#include "composite_node.hpp"
-#include "block_declaration.hpp"
-#include "function_definition.hpp"
-#include "template_declaration.hpp"
-//#include "explicit_instantiation.hpp"
-//#include "explicit_specialization.hpp"
-//#include "linkage_specification.hpp"
-#include "namespace_definition.hpp"
-#include "declaration_fwd.hpp"
+#include <memory>
+#include "common.hpp"
+
+namespace scalpel { namespace cpp { namespace syntax_nodes
+{
+
+class block_declaration;
+class function_definition;
+class template_declaration;
+//class explicit_instantiation;
+//class explicit_specialization;
+//class linkage_specification;
+class namespace_definition;
+
+typedef
+	alternative_node
+	<
+		block_declaration,
+		function_definition,
+		template_declaration,
+		//explicit_instantiation,
+		//explicit_specialization,
+		//linkage_specification,
+		namespace_definition
+	>
+	declaration_t
+;
+
+typedef
+	alternative_node
+	<
+		function_definition,
+		template_declaration,
+		//explicit_instantiation,
+		//explicit_specialization,
+		//linkage_specification,
+		namespace_definition
+	>
+	declaration_tail_t
+;
+
+class declaration: public composite_node
+{
+	public:
+		typedef declaration_t type;
+		//typedef type::head_node_t head_node_t;
+		//typedef type::tail_alternative_node_t tail_alternative_node_t;
+		typedef block_declaration head_node_t;
+		typedef declaration_tail_t tail_alternative_node_t;
+
+		declaration(block_declaration&& o);
+
+		declaration(function_definition&& o);
+
+		declaration(template_declaration&& o);
+
+		//declaration(explicit_instantiation&& o);
+
+		//declaration(explicit_specialization&& o);
+
+		//declaration(linkage_specification&& o);
+
+		declaration(namespace_definition&& o);
+
+		declaration(const declaration& o);
+
+		declaration(declaration&& o);
+
+		~declaration();
+
+		const declaration&
+		operator=(const declaration& o);
+
+		void
+		get(boost::optional<const block_declaration&>& o) const;
+
+		void
+		get(boost::optional<const function_definition&>& o) const;
+
+		void
+		get(boost::optional<const template_declaration&>& o) const;
+
+		void
+		get(boost::optional<const namespace_definition&>& o) const;
+
+	private:
+		std::unique_ptr<type> impl_;
+};
+
+}}} //namespace scalpel::cpp::syntax_nodes
 
 #endif

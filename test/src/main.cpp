@@ -36,7 +36,8 @@ init_unit_test()
     const std::vector<std::string> directories
     {
         "basic",
-        "name_lookup"
+        "name_lookup",
+        "template"
     };
 
     boost::unit_test::callback1<std::string> tm = std::bind(&single_file_test::parse_files, &t, std::placeholders::_1);

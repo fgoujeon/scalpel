@@ -27,67 +27,70 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 template_id::template_id
 (
-	identifier&& identifier_node,
-	optional_node<space>&& post_type_name_space_node,
-	optional_node<space>&& post_opening_angle_bracket_space_node,
-	optional_node<template_argument_list>&& template_argument_list_node,
-	optional_node<space>&& post_template_argument_list_space_node
+	identifier&& o0,
+	optional_node<space>&& o1,
+	simple_text_node<str::left_angle_bracket>&& o2,
+	optional_node<space>&& o3,
+	optional_node<template_argument_list>&& o4,
+	optional_node<space>&& o5,
+	simple_text_node<str::right_angle_bracket>&& o6
 ):
-	identifier_(identifier_node),
-	post_type_name_space_(post_type_name_space_node),
-	post_opening_angle_bracket_space_(post_opening_angle_bracket_space_node),
-	template_argument_list_(new optional_node<template_argument_list>(template_argument_list_node)),
-	post_template_argument_list_space_(post_template_argument_list_space_node)
+	impl_
+	(
+		new type
+		(
+			o0,
+			o1,
+			o2,
+			o3,
+			o4,
+			o5,
+			o6
+		)
+	)
 {
-	update_node_list();
+	add(*impl_);
+}
+
+template_id::template_id
+(
+	head_node_t&& head,
+	tail_sequence_node_t&& tail
+):
+	impl_
+	(
+		new type
+		(
+			head,
+			tail
+		)
+	)
+{
+	add(*impl_);
 }
 
 template_id::template_id(const template_id& o):
 	composite_node(),
-	identifier_(o.identifier_),
-	post_type_name_space_(o.post_type_name_space_),
-	post_opening_angle_bracket_space_(o.post_opening_angle_bracket_space_),
-	template_argument_list_(new optional_node<template_argument_list>(*o.template_argument_list_)),
-	post_template_argument_list_space_(o.post_template_argument_list_space_)
+	impl_(new type(*o.impl_))
 {
-	update_node_list();
+	add(*impl_);
 }
 
 template_id::template_id(template_id&& o):
-	identifier_(std::move(o.identifier_)),
-	post_type_name_space_(std::move(o.post_type_name_space_)),
-	post_opening_angle_bracket_space_(std::move(o.post_opening_angle_bracket_space_)),
-	template_argument_list_(o.template_argument_list_),
-	post_template_argument_list_space_(std::move(o.post_template_argument_list_space_))
+	impl_(std::move(o.impl_))
 {
-	o.template_argument_list_ = new optional_node<template_argument_list>();
-	update_node_list();
+	add(*impl_);
 }
 
 template_id::~template_id()
 {
-	delete template_argument_list_;
 }
 
 const template_id&
 template_id::operator=(const template_id& o)
 {
-	template_id copy(o);
-	std::swap(copy, *this);
+	*impl_ = *o.impl_;
 	return *this;
-}
-
-void
-template_id::update_node_list()
-{
-	clear();
-	add(identifier_);
-	if(post_type_name_space_) add(*post_type_name_space_);
-	add(common_nodes::left_angle_bracket);
-	if(post_opening_angle_bracket_space_) add(*post_opening_angle_bracket_space_);
-	if(*template_argument_list_) add(**template_argument_list_);
-	if(post_template_argument_list_space_) add(*post_template_argument_list_space_);
-	add(common_nodes::right_angle_bracket);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

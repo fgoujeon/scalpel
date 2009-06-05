@@ -22,16 +22,29 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_TEMPLATE_ID_HPP
 
 #include <memory>
-#include "optional_node.hpp"
-#include "../../util/extern_strings.hpp"
-#include "composite_node.hpp"
-#include "list_node.hpp"
+#include "common.hpp"
+#include "common_nodes.hpp"
 #include "identifier.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 class template_argument;
+typedef list_node<template_argument, common_nodes::comma> template_argument_list;
+
+typedef
+	sequence_node
+	<
+		identifier,
+		optional_node<space>,
+		simple_text_node<str::left_angle_bracket>,
+		optional_node<space>,
+		optional_node<template_argument_list>,
+		optional_node<space>,
+		simple_text_node<str::right_angle_bracket>
+	>
+	template_id_t
+;
 
 /**
 template_id
@@ -41,13 +54,25 @@ template_id
 class template_id: public composite_node
 {
 	public:
+		typedef template_id_t type;
+		typedef type::head_node_t head_node_t;
+		typedef type::tail_sequence_node_t tail_sequence_node_t;
+
 		template_id
 		(
-			identifier&& identifier_node,
-			optional_node<space>&& post_type_name_space_node,
-			optional_node<space>&& post_opening_angle_bracket_space_node,
-			optional_node<list_node<template_argument, common_nodes::comma>>&& template_argument_list_node,
-			optional_node<space>&& post_template_argument_list_space_node
+			identifier&& o0,
+			optional_node<space>&& o1,
+			simple_text_node<str::left_angle_bracket>&& o2,
+			optional_node<space>&& o3,
+			optional_node<template_argument_list>&& o4,
+			optional_node<space>&& o5,
+			simple_text_node<str::right_angle_bracket>&& o6
+		);
+
+		template_id
+		(
+			head_node_t&& head,
+			tail_sequence_node_t&& tail
 		);
 
 		template_id(const template_id& o);
@@ -59,6 +84,7 @@ class template_id: public composite_node
 		const template_id&
 		operator=(const template_id& o);
 
+		/*
 		inline
 		const identifier&
 		identifier_node() const;
@@ -66,31 +92,11 @@ class template_id: public composite_node
 		inline
 		const optional_node<list_node<template_argument, common_nodes::comma>>&
 		template_argument_list_node() const;
+		*/
 
 	private:
-		void
-		update_node_list();
-
-		identifier identifier_;
-		optional_node<space> post_type_name_space_;
-		optional_node<space> post_opening_angle_bracket_space_;
-		optional_node<list_node<template_argument, common_nodes::comma>>* template_argument_list_;
-		optional_node<space> post_template_argument_list_space_;
+		std::unique_ptr<type> impl_;
 };
-
-inline
-const identifier&
-template_id::identifier_node() const
-{
-	return identifier_;
-}
-
-inline
-const optional_node<list_node<template_argument, common_nodes::comma>>&
-template_id::template_argument_list_node() const
-{
-	return *template_argument_list_;
-}
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

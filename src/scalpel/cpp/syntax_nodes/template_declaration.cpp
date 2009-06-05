@@ -20,53 +20,56 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "template_declaration.hpp"
 
-#include "declaration.hpp"
-
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 template_declaration::template_declaration
 (
-    bool export_keyword,
-    //template_parameter_list m_template_parameter_list;
-    declaration&& a_declaration
+	optional_node<simple_text_node<str::export_>>&& o0,
+	optional_node<space>&& o1,
+	simple_text_node<str::template_>&& o2,
+	optional_node<space>&& o3,
+	simple_text_node<str::left_angle_bracket>&& o4,
+	optional_node<space>&& o5,
+	template_parameter_list&& o6,
+	optional_node<space>&& o7,
+	simple_text_node<str::right_angle_bracket>&& o8,
+	optional_node<space>&& o9,
+	declaration&& o10
 ):
-    export_keyword_(export_keyword),
-    declaration_(std::make_shared<declaration>(std::move(a_declaration)))
+	impl_(o0, o1, o2, o3, o4, o5, o6, o7, o8, o9, o10)
 {
-	update_node_list();
+	add(impl_);
+}
+
+template_declaration::template_declaration
+(
+	head_node_t&& head,
+	tail_sequence_node_t&& tail
+):
+	impl_(head, tail)
+{
+	add(impl_);
 }
 
 template_declaration::template_declaration(const template_declaration& o):
-	composite_node(),
-    export_keyword_(o.export_keyword_),
-    declaration_(o.declaration_)
+	impl_(o.impl_)
 {
-	update_node_list();
+	add(impl_);
 }
 
 template_declaration::template_declaration(template_declaration&& o):
-    export_keyword_(std::move(o.export_keyword_)),
-    declaration_(std::move(o.declaration_))
+	impl_(o.impl_)
 {
-	update_node_list();
+	add(impl_);
 }
 
 const template_declaration&
 template_declaration::operator=(const template_declaration& o)
 {
-    export_keyword_ = o.export_keyword_;
-    declaration_ = o.declaration_;
-	update_node_list();
-
+	impl_ = o.impl_;
 	return *this;
 }
 
-void
-template_declaration::update_node_list()
-{
-	clear();
-	add(*declaration_);
-}
-
 }}} //namespace scalpel::cpp::syntax_nodes
+

@@ -1,5 +1,5 @@
 /*
-Scalpel - Source Code Analysis, Libre and PortablE Library
+Scalpel _ Source Code Analysis, Libre and PortablE Library
 Copyright © 2008, 2009  Florian Goujeon
 
 This file is part of Scalpel.
@@ -18,32 +18,23 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_DECLARATION_FWD_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_DECLARATION_FWD_HPP
+#ifndef SCALPEL_CPP_SYNTAX_NODES_TEMPLATE_PARAMETER_LIST_HPP
+#define SCALPEL_CPP_SYNTAX_NODES_TEMPLATE_PARAMETER_LIST_HPP
 
-#include "alternative_node.hpp"
-#include "composite_node.hpp"
+#include "common.hpp"
+#include "common_nodes.hpp"
+#include "template_parameter.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class function_definition;
-class template_declaration;
-class namespace_definition;
-class block_declaration;
-
 typedef
-	alternative_node
+	list_node
 	<
-		block_declaration,
-		function_definition,
-		template_declaration,
-		//explicit_instantiation,
-		//explicit_specialization,
-		//linkage_specification,
-		namespace_definition
+		template_parameter,
+		common_nodes::comma
 	>
-	declaration
+	template_parameter_list
 ;
 
 }}} //namespace scalpel::cpp::syntax_nodes

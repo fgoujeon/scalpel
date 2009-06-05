@@ -23,7 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "common.hpp"
 #include "identifier.hpp"
-#include "declaration_fwd.hpp"
+#include "declaration.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {

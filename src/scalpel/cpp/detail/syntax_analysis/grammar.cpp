@@ -1631,12 +1631,21 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	type_parameter
-		= str_p("class") >> !(!s >> identifier) >> !s >> '=' >> !s >> type_id
-		| str_p("class") >> !(!s >> identifier)
-		| str_p("typename") >> !(!s >> identifier) >> !s >> '=' >> !s >> type_id
-		| str_p("typename") >> !(!s >> identifier)
-		| str_p("template") >> !s >> '<' >> !s >> template_parameter_list >> !s >> '>' >> !s >> str_p("class") >> !(!s >> identifier) >> !s >> '=' >> !s >> id_expression
-		| str_p("template") >> !s >> '<' >> !s >> template_parameter_list >> !s >> '>' >> !s >> str_p("class") >> !(!s >> identifier)
+		= class_type_parameter
+		| typename_type_parameter
+		| template_type_parameter
+	;
+
+	class_type_parameter
+		= str_p("class") >> !(!s >> identifier) >> !(!s >> '=' >> !s >> type_id)
+	;
+
+	typename_type_parameter
+		= str_p("typename") >> !(!s >> identifier) >> !(!s >> '=' >> !s >> type_id)
+	;
+
+	template_type_parameter
+		= str_p("template") >> !s >> '<' >> !s >> template_parameter_list >> !s >> '>' >> !s >> str_p("class") >> !(!s >> identifier) >> !(!s >> '=' >> !s >> id_expression)
 	;
 
 	template_id
