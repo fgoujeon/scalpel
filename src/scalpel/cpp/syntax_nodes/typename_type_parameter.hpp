@@ -18,23 +18,33 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_TYPE_PARAMETER
-#define SCALPEL_CPP_SYNTAX_NODES_TYPE_PARAMETER
+#ifndef SCALPEL_CPP_SYNTAX_NODES_TYPENAME_TYPE_PARAMETER
+#define SCALPEL_CPP_SYNTAX_NODES_TYPENAME_TYPE_PARAMETER
 
 #include "common.hpp"
-#include "class_type_parameter.hpp"
-#include "typename_type_parameter.hpp"
+#include "identifier.hpp"
+#include "type_id.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
+/**
+typename_type_parameter
+	= str_p("typename") >> !(!s >> identifier) >> !(!s >> '=' >> !s >> type_id)
+;
+*/
 typedef
-	alternative_node
+	sequence_node
 	<
-		class_type_parameter,
-		typename_type_parameter
+		simple_text_node<str::typename_>,
+		optional_node<space>,
+		optional_node<identifier>,
+		optional_node<space>,
+		optional_node<simple_text_node<str::equal>>,
+		optional_node<space>,
+		optional_node<type_id>
 	>
-	type_parameter
+	typename_type_parameter
 ;
 
 }}} //namespace scalpel::cpp::syntax_nodes
