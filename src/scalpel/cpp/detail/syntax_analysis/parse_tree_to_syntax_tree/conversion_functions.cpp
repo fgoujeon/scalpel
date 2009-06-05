@@ -372,30 +372,6 @@ convert_new_type_id_new_expression(const tree_node_t& node)
 	);
 }
 
-parameter_declaration
-convert_parameter_declaration(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::PARAMETER_DECLARATION);
-
-	tree_node_iterator_t declarator_it = find_node<id_t::DECLARATOR>(node);
-
-    return parameter_declaration
-    (
-		find_and_convert_node
-		<
-			decl_specifier_seq,
-			id_t::PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ1,
-			id_t::PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ2,
-			id_t::PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ3,
-			id_t::PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ4,
-			id_t::DECL_SPECIFIER_SEQ
-		>(node),
-		convert_previous_space(node, declarator_it),
-		convert_optional_node<declarator>(node, declarator_it),
-		false
-    );
-}
-
 ptr_operator
 convert_ptr_operator(const tree_node_t& node)
 {

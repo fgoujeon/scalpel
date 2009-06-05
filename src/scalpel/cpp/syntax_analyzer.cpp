@@ -109,7 +109,7 @@ syntax_analyzer::analyze(const std::string& input)
 std::ptrdiff_t
 syntax_analyzer::parse_type_name(const scanner_t& scan)
 {
-    unsigned int parsing_progress = scan.first - &*(currently_analyzed_partial_input_->begin());
+    //unsigned int parsing_progress = scan.first - &*(currently_analyzed_partial_input_->begin());
 
 	//
 	//Get the name to be checked.

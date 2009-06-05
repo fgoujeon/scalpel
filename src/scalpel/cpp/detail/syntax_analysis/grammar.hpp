@@ -243,10 +243,6 @@ class grammar
             PARAMETER_DECLARATION_CLAUSE,
             PARAMETER_DECLARATION_LIST,
             PARAMETER_DECLARATION,
-            PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ1,
-            PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ2,
-            PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ3,
-            PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ4,
             FUNCTION_DEFINITION,
             FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ1,
             FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ2,
@@ -589,10 +585,10 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PARAMETER_DECLARATION_CLAUSE>> parameter_declaration_clause;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PARAMETER_DECLARATION_LIST>> parameter_declaration_list;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PARAMETER_DECLARATION>> parameter_declaration;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ1>> parameter_declaration_decl_specifier_seq1;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ2>> parameter_declaration_decl_specifier_seq2;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ3>> parameter_declaration_decl_specifier_seq3;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PARAMETER_DECLARATION_DECL_SPECIFIER_SEQ4>> parameter_declaration_decl_specifier_seq4;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DECL_SPECIFIER_SEQ>> parameter_declaration_decl_specifier_seq1;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DECL_SPECIFIER_SEQ>> parameter_declaration_decl_specifier_seq2;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DECL_SPECIFIER_SEQ>> parameter_declaration_decl_specifier_seq3;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DECL_SPECIFIER_SEQ>> parameter_declaration_decl_specifier_seq4;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::FUNCTION_DEFINITION>> function_definition;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ1>> function_definition_decl_specifier_seq1;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ2>> function_definition_decl_specifier_seq2;

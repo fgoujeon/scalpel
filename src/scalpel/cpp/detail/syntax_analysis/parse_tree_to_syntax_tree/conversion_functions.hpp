@@ -102,9 +102,6 @@ convert_new_placement(const tree_node_t& node);
 syntax_nodes::new_type_id_new_expression
 convert_new_type_id_new_expression(const tree_node_t& node);
 
-syntax_nodes::parameter_declaration
-convert_parameter_declaration(const tree_node_t& node);
-
 syntax_nodes::ptr_operator
 convert_ptr_operator(const tree_node_t& node);
 

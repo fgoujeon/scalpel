@@ -21,10 +21,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_PARAMETER_DECLARATION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_PARAMETER_DECLARATION_HPP
 
-#include "optional_node.hpp"
-#include "composite_node.hpp"
+#include "common.hpp"
 #include "declarator.hpp"
+#include "abstract_declarator.hpp"
 #include "decl_specifier_seq.hpp"
+#include "assignment_expression.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -40,66 +41,20 @@ parameter_declaration
 ;
 \endverbatim
 */
-class parameter_declaration: public composite_node
-{
-	public:
-		parameter_declaration
-		(
-			decl_specifier_seq&& a_decl_specifier_seq,
-			optional_node<space>&& pre_declarator_space_node,
-			optional_node<declarator>&& a_declarator,
-			bool equal
-		);
-
-		parameter_declaration(const parameter_declaration& o);
-
-		parameter_declaration(parameter_declaration&& o);
-
-		const parameter_declaration&
-		operator=(const parameter_declaration& o);
-
-		inline
-		const decl_specifier_seq&
-		decl_specifier_seq_node() const;
-
-		inline
-		const optional_node<declarator>&
-		declarator_node() const;
-
-		inline
-		bool
-		has_equal() const;
-
-	private:
-		void
-		update_node_list();
-
-		decl_specifier_seq decl_specifier_seq_;
-		optional_node<space> pre_declarator_space_node_; //before declarator or before abstract_declarator
-		optional_node<declarator> declarator_;
-		bool equal_;
-};
-
-inline
-const decl_specifier_seq&
-parameter_declaration::decl_specifier_seq_node() const
-{
-	return decl_specifier_seq_;
-}
-
-inline
-const optional_node<declarator>&
-parameter_declaration::declarator_node() const
-{
-	return declarator_;
-}
-
-inline
-bool
-parameter_declaration::has_equal() const
-{
-	return equal_;
-}
+typedef
+	sequence_node
+	<
+		decl_specifier_seq,
+		optional_node<space>,
+		optional_node<declarator>,
+		optional_node<abstract_declarator>,
+		optional_node<space>,
+		optional_node<simple_text_node<str::equal>>,
+		optional_node<space>,
+		optional_node<assignment_expression>
+	>
+	parameter_declaration
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
