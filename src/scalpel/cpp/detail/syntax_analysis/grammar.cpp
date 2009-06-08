@@ -716,47 +716,51 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 	//a shift expression used as a template argument must be placed between brackets if it contains any '>' characters
 	template_argument_right_shift_expression
-		= '(' >> !s >> (left_shift_expression % (!s >> ">>" >> !s)) >> !s >> ')'
+		= round_bracketed_right_shift_expression
 		| left_shift_expression
+	;
+	round_bracketed_right_shift_expression
+		= '(' >> !s >> right_shift_expression >> !s >> ')'
 	;
 
 	less_than_or_equal_to_expression
 		= right_shift_expression % (!s >> "<=" >> !s)
 	;
-	template_less_than_or_equal_to_expression
-		= template_argument_right_shift_expression
+	template_argument_less_than_or_equal_to_expression
+		= template_argument_right_shift_expression % (!s >> "<=" >> !s)
 	;
 
 	less_than_expression
 		= less_than_or_equal_to_expression % (!s >> '<' >> !s)
 	;
-	template_less_than_expression
-		= template_less_than_or_equal_to_expression
+	template_argument_less_than_expression
+		= template_argument_less_than_or_equal_to_expression % (!s >> '<' >> !s)
 	;
 
 	greater_than_or_equal_to_expression
 		= less_than_expression % (!s >> ">=" >> !s)
 	;
-	//a shift expression used as a template argument must be placed between brackets if it contains any '>' characters
-	template_greater_than_or_equal_to_expression
-		= '(' >> !s >> (less_than_expression % (!s >> ">=" >> !s)) >> !s >> ')'
-		| template_less_than_expression
+	template_argument_greater_than_or_equal_to_expression
+		= template_argument_less_than_expression % (!s >> ">=" >> !s)
 	;
 
 	greater_than_expression
 		= greater_than_or_equal_to_expression % (!s >> '>' >> !s)
 	;
 	//a shift expression used as a template argument must be placed between brackets if it contains any '>' characters
-	template_greater_than_expression
-		= '(' >> !s >> (greater_than_or_equal_to_expression % (!s >> '>' >> !s)) >> !s >> ')'
-		| template_greater_than_or_equal_to_expression
+	template_argument_greater_than_expression
+		= round_bracketed_greater_than_expression
+		| template_argument_greater_than_or_equal_to_expression
+	;
+	round_bracketed_greater_than_expression
+		= '(' >> !s >> greater_than_expression >> !s >> ')'
 	;
 
 	inequality_expression
 		= greater_than_expression % (!s >> "!=" >> !s)
 	;
 	template_argument_inequality_expression
-		= template_greater_than_expression % (!s >> "!=" >> !s)
+		= template_argument_greater_than_expression % (!s >> "!=" >> !s)
 	;
 
 	equality_expression
@@ -831,8 +835,16 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	template_argument_assignment_expression
-		= template_argument_logical_or_expression >> !s >> assignment_operator >> !s >> template_argument_assignment_expression
-		| template_argument_conditional_expression
+		= !(template_argument_assignment_expression_first_part_seq >> !s) >> template_argument_assignment_expression_last_part
+	;
+	template_argument_assignment_expression_first_part_seq
+		= template_argument_assignment_expression_first_part % !s
+	;
+	template_argument_assignment_expression_first_part
+		= template_argument_logical_or_expression >> !s >> assignment_operator
+	;
+	template_argument_assignment_expression_last_part
+		= template_argument_conditional_expression
 		| throw_expression
 	;
 

@@ -135,13 +135,28 @@ class grammar
 			SIMPLE_DELETE_EXPRESSION,
 			ARRAY_DELETE_EXPRESSION,
             CAST_EXPRESSION,
-            PM_EXPRESSION,
+			PM_PTR_EXPRESSION,
+			PM_REF_EXPRESSION,
+			MODULO_EXPRESSION,
+			DIVISIVE_EXPRESSION,
             MULTIPLICATIVE_EXPRESSION,
+			SUBTRACTIVE_EXPRESSION,
             ADDITIVE_EXPRESSION,
-            SHIFT_EXPRESSION,
-            TEMPLATE_ARGUMENT_SHIFT_EXPRESSION,
-            RELATIONAL_EXPRESSION,
-            TEMPLATE_ARGUMENT_RELATIONAL_EXPRESSION,
+			LEFT_SHIFT_EXPRESSION,
+			RIGHT_SHIFT_EXPRESSION,
+			TEMPLATE_ARGUMENT_RIGHT_SHIFT_EXPRESSION,
+			ROUND_BRACKETED_RIGHT_SHIFT_EXPRESSION,
+			LESS_THAN_OR_EQUAL_TO_EXPRESSION,
+			TEMPLATE_ARGUMENT_LESS_THAN_OR_EQUAL_TO_EXPRESSION,
+			LESS_THAN_EXPRESSION,
+			TEMPLATE_ARGUMENT_LESS_THAN_EXPRESSION,
+			GREATER_THAN_OR_EQUAL_TO_EXPRESSION,
+			TEMPLATE_ARGUMENT_GREATER_THAN_OR_EQUAL_TO_EXPRESSION,
+			GREATER_THAN_EXPRESSION,
+			TEMPLATE_ARGUMENT_GREATER_THAN_EXPRESSION,
+			ROUND_BRACKETED_GREATER_THAN_EXPRESSION,
+			INEQUALITY_EXPRESSION,
+			TEMPLATE_ARGUMENT_INEQUALITY_EXPRESSION,
             EQUALITY_EXPRESSION,
             TEMPLATE_ARGUMENT_EQUALITY_EXPRESSION,
             AND_EXPRESSION,
@@ -161,6 +176,9 @@ class grammar
             ASSIGNMENT_EXPRESSION_FIRST_PART,
 			ASSIGNMENT_EXPRESSION_LAST_PART,
             TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION,
+			TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION_FIRST_PART_SEQ,
+			TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION_FIRST_PART,
+			TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION_LAST_PART,
             ASSIGNMENT_OPERATOR,
             EXPRESSION,
 
@@ -462,26 +480,28 @@ class grammar
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::SIMPLE_DELETE_EXPRESSION>> simple_delete_expression;
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ARRAY_DELETE_EXPRESSION>> array_delete_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CAST_EXPRESSION>> cast_expression;
-        boost::spirit::rule<scanner_t> pm_ptr_expression;
-        boost::spirit::rule<scanner_t> pm_ref_expression;
-        boost::spirit::rule<scanner_t> modulo_expression;
-        boost::spirit::rule<scanner_t> divisive_expression;
-        boost::spirit::rule<scanner_t> multiplicative_expression;
-        boost::spirit::rule<scanner_t> subtractive_expression;
-        boost::spirit::rule<scanner_t> additive_expression;
-        boost::spirit::rule<scanner_t> left_shift_expression;
-        boost::spirit::rule<scanner_t> right_shift_expression;
-        boost::spirit::rule<scanner_t> template_argument_right_shift_expression;
-        boost::spirit::rule<scanner_t> less_than_or_equal_to_expression;
-        boost::spirit::rule<scanner_t> template_less_than_or_equal_to_expression;
-        boost::spirit::rule<scanner_t> less_than_expression;
-        boost::spirit::rule<scanner_t> template_less_than_expression;
-        boost::spirit::rule<scanner_t> greater_than_or_equal_to_expression;
-        boost::spirit::rule<scanner_t> template_greater_than_or_equal_to_expression;
-        boost::spirit::rule<scanner_t> greater_than_expression;
-        boost::spirit::rule<scanner_t> template_greater_than_expression;
-        boost::spirit::rule<scanner_t> inequality_expression;
-        boost::spirit::rule<scanner_t> template_argument_inequality_expression;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PM_PTR_EXPRESSION>> pm_ptr_expression;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PM_REF_EXPRESSION>> pm_ref_expression;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MODULO_EXPRESSION>> modulo_expression;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DIVISIVE_EXPRESSION>> divisive_expression;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MULTIPLICATIVE_EXPRESSION>> multiplicative_expression;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::SUBTRACTIVE_EXPRESSION>> subtractive_expression;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ADDITIVE_EXPRESSION>> additive_expression;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::LEFT_SHIFT_EXPRESSION>> left_shift_expression;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::RIGHT_SHIFT_EXPRESSION>> right_shift_expression;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_RIGHT_SHIFT_EXPRESSION>> template_argument_right_shift_expression;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ROUND_BRACKETED_RIGHT_SHIFT_EXPRESSION>> round_bracketed_right_shift_expression;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::LESS_THAN_OR_EQUAL_TO_EXPRESSION>> less_than_or_equal_to_expression;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_LESS_THAN_OR_EQUAL_TO_EXPRESSION>> template_argument_less_than_or_equal_to_expression;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::LESS_THAN_EXPRESSION>> less_than_expression;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_LESS_THAN_EXPRESSION>> template_argument_less_than_expression;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::GREATER_THAN_OR_EQUAL_TO_EXPRESSION>> greater_than_or_equal_to_expression;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_GREATER_THAN_OR_EQUAL_TO_EXPRESSION>> template_argument_greater_than_or_equal_to_expression;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::GREATER_THAN_EXPRESSION>> greater_than_expression;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_GREATER_THAN_EXPRESSION>> template_argument_greater_than_expression;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ROUND_BRACKETED_GREATER_THAN_EXPRESSION>> round_bracketed_greater_than_expression;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::INEQUALITY_EXPRESSION>> inequality_expression;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_INEQUALITY_EXPRESSION>> template_argument_inequality_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EQUALITY_EXPRESSION>> equality_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_EQUALITY_EXPRESSION>> template_argument_equality_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::AND_EXPRESSION>> and_expression;
@@ -501,6 +521,9 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ASSIGNMENT_EXPRESSION_FIRST_PART>> assignment_expression_first_part;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ASSIGNMENT_EXPRESSION_LAST_PART>> assignment_expression_last_part;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION>> template_argument_assignment_expression;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION_FIRST_PART_SEQ>> template_argument_assignment_expression_first_part_seq;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION_FIRST_PART>> template_argument_assignment_expression_first_part;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION_LAST_PART>> template_argument_assignment_expression_last_part;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ASSIGNMENT_OPERATOR>> assignment_operator;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EXPRESSION>> expression;
 
