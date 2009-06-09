@@ -1128,7 +1128,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	namespace_definition
-		= str_p("namespace") >> !s >> !(identifier >> !s) >> '{' >> !s >> !(declaration_seq >> !s) >> '}'
+		= str_p("namespace") >> !s >> !(identifier >> !s) >> !(attribute_expression >> !s) >> '{' >> !s >> !(declaration_seq >> !s) >> '}'
 	;
 
 	namespace_alias_definition
@@ -1770,6 +1770,23 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 			= str_p("__restrict__")
 			| "__restrict"
 			| "restrict"
+		;
+	}
+
+	if(configuration_.enable_attribute_support)
+	{
+		attribute_expression
+			= token_node_d
+			[
+				str_p("__attribute__") >> !s >> '(' >> !s >> '(' >> !s >> attribute_content >> !s >> ')' >> !s >> ')'
+			]
+		;
+		attribute_content
+			= bracketed_attribute_content
+			| *(anychar_p - ')')
+		;
+		bracketed_attribute_content
+			= *(anychar_p - '(') >> '(' >> attribute_content >> ')'
 		;
 	}
 }

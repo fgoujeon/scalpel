@@ -32,6 +32,8 @@ namespace_definition::namespace_definition
 	optional_node<space>&& o1,
 	optional_node<identifier>&& o2,
 	optional_node<space>&& o3,
+	optional_node<leaf_node>&& o3b,
+	optional_node<space>&& o3c,
 	simple_text_node<str::opening_brace>&& o4,
 	optional_node<space>&& o5,
 	optional_node<declaration_seq>&& o6,
@@ -46,6 +48,8 @@ namespace_definition::namespace_definition
 			o1,
 			o2,
 			o3,
+			o3b,
+			o3c,
 			o4,
 			o5,
 			o6,
@@ -97,7 +101,7 @@ namespace_definition::identifier_node() const
 const optional_node<list_node<declaration>>&
 namespace_definition::declaration_seq_node() const
 {
-	return get<6>(*impl_);
+	return get<8>(*impl_);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

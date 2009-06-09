@@ -57,17 +57,27 @@ single_file_test::parse_files(const std::string& test_directory)
 		//close file
         file.close();
 
-		//analyze file
 		std::cout << "Analyzing " << file_name_oss.str() << "...\n";
-        scalpel::cpp::syntax_tree tree = m_syntax_analyzer(buffer.str()); //throws an exception if parsing fails
+
+		//preprocessing
+		std::vector<std::string> include_paths =
+		{
+			"/usr/include/c++/4.4.0",
+			"/usr/include/c++/4.4.0/i686-pc-linux-gnu",
+			"/usr/include/c++/4.4.0/parallel"
+		};
+		std::string preprocessed_code = m_preprocessor(buffer.str(), include_paths);
+
+		//syntax analysis
+        scalpel::cpp::syntax_tree tree = m_syntax_analyzer(preprocessed_code); //throws an exception if parsing fails
 
 		//check syntax analysis results
-		if(buffer.str() != tree.raw_code())
+		if(preprocessed_code != tree.raw_code())
 		{
 			std::cout << "Analysis error!\n";
 			std::cout << "Original content of " << file_name_oss.str() << ":\n";
 			std::cout << "***\n";
-			std::cout << buffer.str();
+			std::cout << preprocessed_code;
 			std::cout << "\n***\n";
 			std::cout << "Analysis results:\n";
 			std::cout << "***\n";

@@ -1,6 +1,7 @@
-template<bool B>
+template<typename T>
 struct foo{};
 
-const bool a = true, b = true;
+template<typename T>
+struct bar{};
 
-foo < a && b > c;
+foo<bar<int>> f;

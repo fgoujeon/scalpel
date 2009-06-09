@@ -22,6 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_PREPROCESSOR_HPP
 
 #include <string>
+#include <vector>
 
 namespace scalpel { namespace cpp
 {
@@ -29,7 +30,11 @@ namespace scalpel { namespace cpp
 class preprocessor
 {
     public:
-        std::string operator()(const std::string& filename);
+		std::string operator()
+		(
+			const std::string& input,
+			const std::vector<std::string>& include_paths
+		);
 };
 
 }} //namespace scalpel::cpp

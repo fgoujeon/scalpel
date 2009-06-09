@@ -21,6 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SINGLE_FILE_TEST_HPP
 #define SINGLE_FILE_TEST_HPP
 
+#include <scalpel/cpp/preprocessor.hpp>
 #include <scalpel/cpp/syntax_analyzer.hpp>
 
 class single_file_test
@@ -30,6 +31,7 @@ class single_file_test
         parse_files(const std::string& test_directory);
 
     private:
+        scalpel::cpp::preprocessor m_preprocessor;
         scalpel::cpp::syntax_analyzer m_syntax_analyzer;
 };
 

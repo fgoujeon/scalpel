@@ -36,12 +36,14 @@ class grammar
         {
             configuration():
                 enable_typeof_support(true),
-                enable_restrict_support(true)
+                enable_restrict_support(true),
+				enable_attribute_support(true)
             {
             }
 
             bool enable_typeof_support;
             bool enable_restrict_support;
+			bool enable_attribute_support;
         };
 
         enum parser_id
@@ -705,6 +707,9 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TYPEOF_EXPRESSION>> typeof_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TYPEOF_KEYWORD>> typeof_keyword;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::RESTRICT_KEYWORD>> restrict_keyword;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::SPACE>> attribute_expression;
+		boost::spirit::rule<scanner_t> attribute_content;
+		boost::spirit::rule<scanner_t> bracketed_attribute_content;
 
 
         /*
