@@ -107,6 +107,7 @@ namespace extern_strings
 	const std::string false_("false");
 	const std::string float_("float");
 	const std::string for_("for");
+	const std::string friend_("friend");
 	const std::string goto_("goto");
 	const std::string if_("if");
 	const std::string inline_("inline");
@@ -134,6 +135,7 @@ namespace extern_strings
 	const std::string throw_("throw");
 	const std::string true_("true");
 	const std::string try_("try");
+	const std::string typedef_("typedef");
 	const std::string typename_("typename");
 	const std::string union_("union");
 	const std::string unsigned_("unsigned");

@@ -38,8 +38,8 @@ init_unit_test()
         "basic",
         "name_lookup",
         "template",
-        "gcc"/*,
-        "standard_library"*/
+        "gcc",
+        "standard_library"
     };
 
     boost::unit_test::callback1<std::string> tm = std::bind(&single_file_test::parse_files, &t, std::placeholders::_1);

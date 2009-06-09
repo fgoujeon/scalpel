@@ -70,7 +70,9 @@ typedef
 		optional_node<space>,
 		optional_node<cv_qualifier_seq>,
 		optional_node<space>,
-		optional_node<exception_specification>
+		optional_node<exception_specification>,
+		optional_node<space>,
+		optional_node<leaf_node>
 	>
 	direct_declarator_function_part
 ;

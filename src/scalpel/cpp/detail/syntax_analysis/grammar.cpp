@@ -1271,7 +1271,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		| direct_declarator_array_part
 	;
 	direct_declarator_function_part
-		= '(' >> !s >> !(parameter_declaration_clause >> !s) >> ')' >> !(!s >> cv_qualifier_seq) >> !(!s >> exception_specification)
+		= '(' >> !s >> !(parameter_declaration_clause >> !s) >> ')' >> !(!s >> cv_qualifier_seq) >> !(!s >> exception_specification) >> !(!s >> attribute_expression)
 	;
 	direct_declarator_array_part
 		= '[' >> !s >> !(conditional_expression >> !s) >> ']'
@@ -1783,10 +1783,10 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		;
 		attribute_content
 			= bracketed_attribute_content
-			| *(anychar_p - ')')
+			| *(anychar_p - (')' >> !s >> ')'))
 		;
 		bracketed_attribute_content
-			= *(anychar_p - '(') >> '(' >> attribute_content >> ')'
+			= *(anychar_p - (ch_p('(') | ')')) >> '(' >> attribute_content >> ')'
 		;
 	}
 }

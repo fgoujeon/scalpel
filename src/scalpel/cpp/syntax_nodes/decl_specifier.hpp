@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_DECL_SPECIFIER_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_DECL_SPECIFIER_HPP
 
-#include "alternative_node.hpp"
+#include "common.hpp"
 #include "type_specifier.hpp"
 #include "function_specifier.hpp"
 #include "storage_class_specifier.hpp"
@@ -34,7 +34,9 @@ typedef
 	<
 		type_specifier,
 		function_specifier,
-		storage_class_specifier
+		storage_class_specifier,
+		simple_text_node<str::friend_>,
+		simple_text_node<str::typedef_>
 	>
 	decl_specifier
 ;
