@@ -676,8 +676,11 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	cast_expression
-		= unary_expression //this alternative must be tried first
-		| cast_expression_first_part_seq >> !s >> unary_expression
+		= longest_d
+		[
+			unary_expression //this alternative must be tried first
+			| cast_expression_first_part_seq >> !s >> unary_expression
+		]
 	;
 	cast_expression_first_part_seq
 		= cast_expression_first_part % !s
