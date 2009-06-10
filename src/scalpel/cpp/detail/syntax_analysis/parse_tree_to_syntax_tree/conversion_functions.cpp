@@ -141,14 +141,6 @@ convert_delete_array_operator(const tree_node_t& node)
 	return delete_array_operator();
 }
 
-direct_abstract_declarator
-convert_direct_abstract_declarator(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::DIRECT_ABSTRACT_DECLARATOR);
-
-	return direct_abstract_declarator();
-}
-
 dot_pseudo_destructor_name
 convert_dot_pseudo_destructor_name(const tree_node_t& node)
 {

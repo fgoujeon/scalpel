@@ -21,17 +21,38 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_DIRECT_ABSTRACT_DECLARATOR_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_DIRECT_ABSTRACT_DECLARATOR_HPP
 
-#include "composite_node.hpp"
+#include "common.hpp"
+#include "direct_declarator.hpp"
+#include "bracketed_abstract_declarator.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
+/**
+direct_abstract_declarator
+	= bracketed_abstract_declarator
+	| direct_declarator_last_part_seq
+;
+*/
+typedef
+	alternative_node
+	<
+		bracketed_abstract_declarator,
+		direct_declarator_last_part_seq
+	>
+	direct_abstract_declarator_t
+;
+
 class direct_abstract_declarator: public composite_node
 {
 	public:
-		direct_abstract_declarator
-		(
-		);
+		typedef direct_abstract_declarator_t type;
+		typedef type::head_node_t head_node_t;
+		typedef type::tail_alternative_node_t tail_alternative_node_t;
+
+		direct_abstract_declarator(const bracketed_abstract_declarator& o);
+
+		direct_abstract_declarator(const direct_declarator_last_part_seq& o);
 
 		direct_abstract_declarator(const direct_abstract_declarator& o);
 
@@ -41,8 +62,7 @@ class direct_abstract_declarator: public composite_node
 		operator=(const direct_abstract_declarator& o);
 
 	private:
-		void
-		update_node_list();
+		type impl_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

@@ -18,43 +18,35 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "direct_abstract_declarator.hpp"
+#ifndef SCALPEL_CPP_SYNTAX_NODES_BRACKETED_ABSTRACT_DECLARATOR_HPP
+#define SCALPEL_CPP_SYNTAX_NODES_BRACKETED_ABSTRACT_DECLARATOR_HPP
+
+#include "common.hpp"
+#include "abstract_declarator.hpp"
+#include "direct_declarator.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-direct_abstract_declarator::direct_abstract_declarator(const bracketed_abstract_declarator& o):
-	impl_(o)
-{
-	add(impl_);
-}
-
-direct_abstract_declarator::direct_abstract_declarator(const direct_declarator_last_part_seq& o):
-	impl_(o)
-{
-	add(impl_);
-}
-
-direct_abstract_declarator::direct_abstract_declarator(const direct_abstract_declarator& o):
-	composite_node(),
-	impl_(o.impl_)
-{
-	add(impl_);
-}
-
-direct_abstract_declarator::direct_abstract_declarator(direct_abstract_declarator&& o):
-	composite_node(),
-	impl_(o.impl_)
-{
-	add(impl_);
-}
-
-const direct_abstract_declarator&
-direct_abstract_declarator::operator=(const direct_abstract_declarator& o)
-{
-	impl_ = o.impl_;
-	return *this;
-}
+/**
+bracketed_abstract_declarator
+	= '(' >> !s >> abstract_declarator >> !s >> ')' >> !(!s >> direct_declarator_last_part)
+;
+*/
+typedef
+	sequence_node
+	<
+		simple_text_node<str::opening_round_bracket>,
+		optional_node<space>,
+		abstract_declarator,
+		optional_node<space>,
+		simple_text_node<str::closing_round_bracket>,
+		optional_node<space>,
+		direct_declarator_last_part
+	>
+	bracketed_abstract_declarator
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
+#endif

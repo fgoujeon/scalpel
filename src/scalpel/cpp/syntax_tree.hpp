@@ -56,6 +56,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "syntax_nodes/declarator_id.hpp"
 #include "syntax_nodes/default_statement.hpp"
 #include "syntax_nodes/destructor_name.hpp"
+#include "syntax_nodes/direct_abstract_declarator.hpp"
 #include "syntax_nodes/direct_declarator.hpp"
 #include "syntax_nodes/direct_new_declarator.hpp"
 #include "syntax_nodes/do_while_statement.hpp"

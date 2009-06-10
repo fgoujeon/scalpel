@@ -21,12 +21,14 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_ABSTRACT_DECLARATOR_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_ABSTRACT_DECLARATOR_HPP
 
-#include "alternative_node.hpp"
+#include <memory>
+#include "common.hpp"
 #include "ptr_operator_seq.hpp"
-#include "direct_abstract_declarator.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
+
+class direct_abstract_declarator;
 
 typedef
 	alternative_node
@@ -34,8 +36,40 @@ typedef
 		ptr_operator_seq,
 		direct_abstract_declarator
 	>
-	abstract_declarator
+	abstract_declarator_t
 ;
+
+typedef
+	alternative_node
+	<
+		direct_abstract_declarator
+	>
+	abstract_declarator_tail_t
+;
+
+class abstract_declarator: public composite_node
+{
+	public:
+		typedef abstract_declarator_t type;
+		typedef ptr_operator_seq head_node_t;
+		typedef abstract_declarator_tail_t tail_alternative_node_t;
+
+		abstract_declarator(ptr_operator_seq&& o);
+
+		abstract_declarator(direct_abstract_declarator&& o);
+
+		abstract_declarator(const abstract_declarator& o);
+
+		abstract_declarator(abstract_declarator&& o);
+
+		~abstract_declarator();
+
+		const abstract_declarator&
+		operator=(const abstract_declarator& o);
+
+	private:
+		std::unique_ptr<type> impl_;
+};
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
