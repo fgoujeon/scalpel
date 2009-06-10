@@ -89,6 +89,7 @@ namespace extern_strings
 	//keywords
 	extern const std::string __restrict_;
 	extern const std::string __restrict___;
+	extern const std::string asm_;
 	extern const std::string bool_;
 	extern const std::string break_;
 	extern const std::string case_;

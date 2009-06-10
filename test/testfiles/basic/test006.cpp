@@ -15,5 +15,9 @@ int main()
 
 	bool b = true;
 	b = false ;
+
+	char c = 'c';
+	char* str = "";
+	char* str2 = "abèéozprzjbdpefra.hàyqgx'.kankuc,\r\n\t\",c";
 }
 

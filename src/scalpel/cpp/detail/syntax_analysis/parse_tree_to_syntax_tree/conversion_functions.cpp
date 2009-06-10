@@ -461,11 +461,15 @@ convert_string_literal(const tree_node_t& node)
 	}
 
 	++i; //iterate to string value
+	std::string value = get_value(*i);
+
+	//if we iterated to closing double quote, the value is empty
+	if(value == "\"") value = "";
 
 	return string_literal
 	(
 		wide,
-		get_value(*i)
+		value
 	);
 }
 

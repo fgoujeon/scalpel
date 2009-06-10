@@ -47,6 +47,13 @@ typedef
 	abstract_declarator_tail_t
 ;
 
+
+/**
+abstract_declarator
+	= ptr_operator_seq
+	| direct_abstract_declarator
+;
+*/
 class abstract_declarator: public composite_node
 {
 	public:

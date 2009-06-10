@@ -26,6 +26,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <scalpel/cpp/syntax_nodes/simple_text_node.hpp>
 #include "generic_node_converters.hpp"
 #include "node_checker.hpp"
+#include "basic_functions.hpp"
 
 namespace scalpel { namespace cpp { namespace detail { namespace syntax_analysis { namespace parse_tree_to_syntax_tree
 {
@@ -59,9 +60,12 @@ struct alternative_node_converter<T, AlternativeNodeT, void>
 {
 	static
 	T
-	convert(const tree_node_t&)
+	convert(const tree_node_t& node)
 	{
-		throw std::runtime_error("alternative_node_converter error");
+		std::ostringstream error_message;
+		error_message << "alternative_node_converter error : unexpected parser id = ";
+	   	error_message << get_id(node);
+		throw std::runtime_error(error_message.str());
 	}
 };
 

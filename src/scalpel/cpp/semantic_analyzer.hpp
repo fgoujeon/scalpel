@@ -75,6 +75,9 @@ class semantic_analyzer
 		analyze_list(const syntax_nodes::list_node<T, SeparatorNode>& seq);
 
         void
+		analyze(const syntax_nodes::asm_definition& syntax_node);
+
+        void
 		analyze(const syntax_nodes::break_statement& syntax_node);
 
         void

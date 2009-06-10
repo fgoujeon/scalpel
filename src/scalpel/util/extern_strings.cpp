@@ -86,6 +86,7 @@ namespace extern_strings
 	//keywords
 	const std::string __restrict_("__restrict");
 	const std::string __restrict___("__restrict__");
+	const std::string asm_("asm");
 	const std::string bool_("bool");
 	const std::string break_("break");
 	const std::string case_("case");

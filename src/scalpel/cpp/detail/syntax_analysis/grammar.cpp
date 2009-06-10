@@ -65,37 +65,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	source_character_set
 		= no_node_d
 		[
-			chset_p("a-zA-Z0-9")
-			| '_'
-			| '{'
-			| '}'
-			| '['
-			| ']'
-			| '#'
-			| '('
-			| ')'
-			| '<'
-			| '>'
-			| '%'
-			| ':'
-			| ';'
-			| '.'
-			| '?'
-			| '*'
-			| '+'
-			| '-'
-			| '/'
-			| '^'
-			| '&'
-			| '|'
-			| '~'
-			| '!'
-			| '='
-			| ','
-			| '\\'
-			| '"'
-			| '\''
-			| ' '  //space
+			anychar_p
 			| '\t' //horizontal tab
 			| '\v' //vertical tab
 			| '\f' //form feed

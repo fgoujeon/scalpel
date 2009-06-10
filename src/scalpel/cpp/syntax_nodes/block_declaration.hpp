@@ -23,6 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <boost/optional.hpp>
 #include "common.hpp"
+#include "asm_definition.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -35,7 +36,7 @@ typedef
 	alternative_node
 	<
 		simple_declaration,
-//		asm_definition,
+		asm_definition,
 //		namespace_alias_definition,
 		using_declaration,
 		using_directive
@@ -46,7 +47,7 @@ typedef
 typedef
 	alternative_node
 	<
-//		asm_definition,
+		asm_definition,
 //		namespace_alias_definition,
 		using_declaration,
 		using_directive
@@ -54,6 +55,15 @@ typedef
 	block_declaration_tail_t
 ;
 
+/**
+block_declaration
+	= asm_definition
+	| simple_declaration
+	| namespace_alias_definition
+	| using_declaration
+	| using_directive
+;
+*/
 class block_declaration: public composite_node
 {
 	public:
@@ -62,6 +72,8 @@ class block_declaration: public composite_node
 		typedef block_declaration_tail_t tail_alternative_node_t;
 
 		block_declaration(simple_declaration&& o);
+
+		block_declaration(asm_definition&& o);
 
 		block_declaration(using_declaration&& o);
 
@@ -78,6 +90,9 @@ class block_declaration: public composite_node
 
 		void
 		get(boost::optional<const simple_declaration&>& node) const;
+
+		void
+		get(boost::optional<const asm_definition&>& node) const;
 
 		void
 		get(boost::optional<const using_declaration&>& node) const;

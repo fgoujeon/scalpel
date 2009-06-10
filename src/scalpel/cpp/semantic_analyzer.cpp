@@ -75,6 +75,11 @@ semantic_analyzer::operator()(const syntax_tree& tree)
 }
 
 void
+semantic_analyzer::analyze(const asm_definition&)
+{
+}
+
+void
 semantic_analyzer::analyze(const break_statement&)
 {
 }
