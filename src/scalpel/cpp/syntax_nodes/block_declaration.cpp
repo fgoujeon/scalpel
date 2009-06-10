@@ -22,7 +22,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "alternative_node.hpp"
 #include "simple_declaration.hpp"
-//#include "namespace_alias_definition.hpp"
 #include "using_declaration.hpp"
 #include "using_directive.hpp"
 
@@ -36,6 +35,12 @@ block_declaration::block_declaration(simple_declaration&& o):
 }
 
 block_declaration::block_declaration(asm_definition&& o):
+	impl_(new type(std::move(o)))
+{
+	add(*impl_);
+}
+
+block_declaration::block_declaration(namespace_alias_definition&& o):
 	impl_(new type(std::move(o)))
 {
 	add(*impl_);
@@ -87,6 +92,12 @@ block_declaration::get(boost::optional<const simple_declaration&>& node) const
 
 void
 block_declaration::get(boost::optional<const asm_definition&>& node) const
+{
+	impl_->get(node);
+}
+
+void
+block_declaration::get(boost::optional<const namespace_alias_definition&>& node) const
 {
 	impl_->get(node);
 }

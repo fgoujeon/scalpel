@@ -1,3 +1,5 @@
+using namespace std;
+
 namespace A
 {
 	int name;
@@ -7,6 +9,8 @@ namespace A
 		void f();
 	}
 }
+
+namespace B = A::N;
 
 int name;
 

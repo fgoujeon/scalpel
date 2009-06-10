@@ -183,6 +183,9 @@ class semantic_analyzer
 		analyze(const syntax_nodes::member_specification_access_specifier& syntax_node);
 
         void
+		analyze(const syntax_nodes::namespace_alias_definition& syntax_node);
+
+        void
 		analyze(const syntax_nodes::namespace_definition& syntax_node);
 
         void

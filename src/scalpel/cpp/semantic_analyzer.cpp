@@ -398,6 +398,11 @@ semantic_analyzer::analyze(const member_specification_access_specifier&)
 }
 
 void
+semantic_analyzer::analyze(const namespace_alias_definition&)
+{
+}
+
+void
 semantic_analyzer::analyze(const namespace_definition& syntax_node)
 {
 	//get the namespace name
