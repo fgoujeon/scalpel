@@ -215,7 +215,6 @@ class grammar
             DECLARATION,
             BLOCK_DECLARATION,
             SIMPLE_DECLARATION,
-            SIMPLE_DECLARATION_DECL_SPECIFIER_SEQ,
             DECL_SPECIFIER,
             DECL_SPECIFIER_SEQ,
             STORAGE_CLASS_SPECIFIER,
@@ -564,7 +563,7 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DECLARATION>> declaration;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::BLOCK_DECLARATION>> block_declaration;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::SIMPLE_DECLARATION>> simple_declaration;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::SIMPLE_DECLARATION_DECL_SPECIFIER_SEQ>> simple_declaration_decl_specifier_seq;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DECL_SPECIFIER_SEQ>> simple_declaration_decl_specifier_seq;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DECL_SPECIFIER>> decl_specifier;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DECL_SPECIFIER_SEQ>> decl_specifier_seq;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::STORAGE_CLASS_SPECIFIER>> storage_class_specifier;

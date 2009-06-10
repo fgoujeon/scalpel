@@ -20,67 +20,51 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "simple_declaration.hpp"
 
-#include "common_nodes.hpp"
-
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 simple_declaration::simple_declaration
 (
-    optional_node<decl_specifier_seq>&& a_decl_specifier_seq,
-	optional_node<space>&& post_decl_specifier_seq_space_node,
-    optional_node<init_declarator_list>&& an_init_declarator_list,
-	optional_node<space>&& post_init_declarator_list_space_node
+	optional_node<decl_specifier_seq>&& o0,
+	optional_node<space>&& o1,
+	optional_node<init_declarator_list>&& o2,
+	optional_node<space>&& o3,
+	simple_text_node<str::semicolon>&& o4
 ):
-    decl_specifier_seq_(a_decl_specifier_seq),
-	post_decl_specifier_seq_space_(post_decl_specifier_seq_space_node),
-    init_declarator_list_(an_init_declarator_list),
-	post_init_declarator_list_space_(post_init_declarator_list_space_node)
+	impl_(o0, o1, o2, o3, o4)
 {
-	update_node_list();
+	add(impl_);
+}
+
+simple_declaration::simple_declaration
+(
+	head_node_t&& head,
+	tail_sequence_node_t&& tail
+):
+	impl_(head, tail)
+{
+	add(impl_);
 }
 
 simple_declaration::simple_declaration(const simple_declaration& o):
 	composite_node(),
-    decl_specifier_seq_(o.decl_specifier_seq_),
-	post_decl_specifier_seq_space_(o.post_decl_specifier_seq_space_),
-    init_declarator_list_(o.init_declarator_list_),
-	post_init_declarator_list_space_(o.post_init_declarator_list_space_)
+	impl_(o.impl_)
 {
-	update_node_list();
+	add(impl_);
 }
 
 simple_declaration::simple_declaration(simple_declaration&& o):
-    decl_specifier_seq_(std::move(o.decl_specifier_seq_)),
-	post_decl_specifier_seq_space_(std::move(o.post_decl_specifier_seq_space_)),
-    init_declarator_list_(std::move(o.init_declarator_list_)),
-	post_init_declarator_list_space_(std::move(o.post_init_declarator_list_space_))
+	composite_node(),
+	impl_(std::move(o.impl_))
 {
-	update_node_list();
+	add(impl_);
 }
 
 const simple_declaration&
 simple_declaration::operator=(const simple_declaration& o)
 {
-    decl_specifier_seq_ = o.decl_specifier_seq_;
-	post_decl_specifier_seq_space_ = o.post_decl_specifier_seq_space_;
-    init_declarator_list_ = o.init_declarator_list_;
-	post_init_declarator_list_space_ = o.post_init_declarator_list_space_;
-
-	update_node_list();
-
+	impl_ = o.impl_;
 	return *this;
-}
-
-void
-simple_declaration::update_node_list()
-{
-	clear();
-	if(decl_specifier_seq_) add(*decl_specifier_seq_);
-	if(post_decl_specifier_seq_space_) add(*post_decl_specifier_seq_space_);
-	if(init_declarator_list_) add(*init_declarator_list_);
-	if(post_init_declarator_list_space_) add(*post_init_declarator_list_space_);
-	add(common_nodes::semicolon);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

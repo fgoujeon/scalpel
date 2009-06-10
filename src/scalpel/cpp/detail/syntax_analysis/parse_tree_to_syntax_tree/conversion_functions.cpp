@@ -425,23 +425,6 @@ convert_qualified_template_id(const tree_node_t& node)
     );
 }
 
-simple_declaration
-convert_simple_declaration(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::SIMPLE_DECLARATION);
-
-	tree_node_iterator_t decl_specifier_seq_it = find_node<id_t::SIMPLE_DECLARATION_DECL_SPECIFIER_SEQ>(node);
-	tree_node_iterator_t init_declarator_list_it = find_node<id_t::INIT_DECLARATOR_LIST>(node);
-
-    return simple_declaration
-    (
-		convert_optional_node<decl_specifier_seq>(node, decl_specifier_seq_it),
-		convert_next_space(node, decl_specifier_seq_it),
-		convert_optional_node<init_declarator_list>(node, init_declarator_list_it),
-		convert_next_space(node, init_declarator_list_it)
-    );
-}
-
 simple_template_type_specifier
 convert_simple_template_type_specifier(const tree_node_t& node)
 {

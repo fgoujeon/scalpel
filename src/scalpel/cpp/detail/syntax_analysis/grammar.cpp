@@ -676,8 +676,8 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	cast_expression
-		= unary_expression
-		| !(cast_expression_first_part_seq >> !s) >> unary_expression
+		= unary_expression //this alternative must be tried first
+		| cast_expression_first_part_seq >> !s >> unary_expression
 	;
 	cast_expression_first_part_seq
 		= cast_expression_first_part % !s
@@ -1029,7 +1029,6 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 
 	In order to solve this issue, we have to create an extra rule which specifies a tail parser.
 	*/
-	///@todo semantic disambiguation between decl_specifier and init_declarator_list
 	simple_declaration
 		= !(simple_declaration_decl_specifier_seq >> !s) >> !(init_declarator_list >> !s) >> ch_p(';')
 	;

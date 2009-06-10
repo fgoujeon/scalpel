@@ -21,14 +21,24 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_SIMPLE_DECLARATION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_SIMPLE_DECLARATION_HPP
 
-#include "optional_node.hpp"
-#include "composite_node.hpp"
-#include "init_declarator_list.hpp"
+#include "common.hpp"
 #include "decl_specifier_seq.hpp"
-#include "space.hpp"
+#include "init_declarator_list.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
+
+typedef
+	sequence_node
+	<
+		optional_node<decl_specifier_seq>,
+		optional_node<space>,
+		optional_node<init_declarator_list>,
+		optional_node<space>,
+		simple_text_node<str::semicolon>
+	>
+	simple_declaration_t
+;
 
 /**
 \verbatim
@@ -40,12 +50,23 @@ simple_declaration
 class simple_declaration: public composite_node
 {
 	public:
+		typedef simple_declaration_t type;
+		typedef type::head_node_t head_node_t;
+		typedef type::tail_sequence_node_t tail_sequence_node_t;
+
 		simple_declaration
 		(
-			optional_node<decl_specifier_seq>&& a_decl_specifier_seq,
-			optional_node<space>&& post_decl_specifier_seq_space_node,
-			optional_node<init_declarator_list>&& an_init_declarator_list,
-			optional_node<space>&& post_init_declarator_list_space_node
+			optional_node<decl_specifier_seq>&& o0,
+			optional_node<space>&& o1,
+			optional_node<init_declarator_list>&& o2,
+			optional_node<space>&& o3,
+			simple_text_node<str::semicolon>&& o4
+		);
+
+		simple_declaration
+		(
+			head_node_t&& head,
+			tail_sequence_node_t&& tail
 		);
 
 		simple_declaration(const simple_declaration& o);
@@ -64,27 +85,21 @@ class simple_declaration: public composite_node
 		init_declarator_list_node() const;
 
 	private:
-		void
-		update_node_list();
-
-		optional_node<decl_specifier_seq> decl_specifier_seq_;
-		optional_node<space> post_decl_specifier_seq_space_;
-		optional_node<init_declarator_list> init_declarator_list_;
-		optional_node<space> post_init_declarator_list_space_;
+		type impl_;
 };
 
 inline
 const optional_node<decl_specifier_seq>&
 simple_declaration::decl_specifier_seq_node() const
 {
-	return decl_specifier_seq_;
+	return get<0>(impl_);
 }
 
 inline
 const optional_node<init_declarator_list>&
 simple_declaration::init_declarator_list_node() const
 {
-	return init_declarator_list_;
+	return get<2>(impl_);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
