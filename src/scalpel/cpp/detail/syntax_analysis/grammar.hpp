@@ -137,6 +137,8 @@ class grammar
 			SIMPLE_DELETE_EXPRESSION,
 			ARRAY_DELETE_EXPRESSION,
             CAST_EXPRESSION,
+			CAST_EXPRESSION_FIRST_PART_SEQ,
+			CAST_EXPRESSION_FIRST_PART,
 			PM_PTR_EXPRESSION,
 			PM_REF_EXPRESSION,
 			MODULO_EXPRESSION,
@@ -482,6 +484,8 @@ class grammar
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::SIMPLE_DELETE_EXPRESSION>> simple_delete_expression;
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ARRAY_DELETE_EXPRESSION>> array_delete_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CAST_EXPRESSION>> cast_expression;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CAST_EXPRESSION_FIRST_PART_SEQ>> cast_expression_first_part_seq;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CAST_EXPRESSION_FIRST_PART>> cast_expression_first_part;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PM_PTR_EXPRESSION>> pm_ptr_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PM_REF_EXPRESSION>> pm_ref_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MODULO_EXPRESSION>> modulo_expression;

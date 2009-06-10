@@ -21,8 +21,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_CAST_EXPRESSION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_CAST_EXPRESSION_HPP
 
-#include "composite_node.hpp"
-#include "sequence_node.hpp"
+#include <memory>
+#include "common.hpp"
+#include "type_id.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -32,6 +33,28 @@ class unary_expression;
 typedef
 	sequence_node
 	<
+		simple_text_node<str::opening_round_bracket>,
+		optional_node<space>,
+		type_id,
+		optional_node<space>,
+		simple_text_node<str::closing_round_bracket>
+	>
+	cast_expression_first_part
+;
+
+typedef
+	list_node
+	<
+		cast_expression_first_part
+	>
+	cast_expression_first_part_seq
+;
+
+typedef
+	sequence_node
+	<
+		optional_node<cast_expression_first_part_seq>,
+		optional_node<space>,
 		unary_expression
 	>
 	cast_expression_t
@@ -40,20 +63,40 @@ typedef
 typedef
 	sequence_node
 	<
+		optional_node<space>,
+		unary_expression
 	>
 	cast_expression_tail_t
 ;
 
+
+/**
+cast_expression
+	= unary_expression
+	| !(cast_expression_first_part_seq >> !s) >> unary_expression
+;
+cast_expression_first_part_seq
+	= cast_expression_first_part % !s
+;
+cast_expression_first_part
+	= '(' >> !s >> type_id >> !s >> ')'
+;
+*/
 class cast_expression: public composite_node
 {
 	public:
 		typedef cast_expression_t type;
-		typedef unary_expression head_node_t;
-		typedef sequence_node<> tail_sequence_node_t;
+		typedef optional_node<cast_expression_first_part_seq> head_node_t;
+		typedef cast_expression_tail_t tail_sequence_node_t;
+
+		typedef cast_expression_first_part first_part;
+		typedef cast_expression_first_part_seq first_part_seq;
 
 		cast_expression
 		(
-			unary_expression&& unary_expression_node
+			optional_node<cast_expression_first_part_seq>&& o0,
+			optional_node<space>&& o1,
+			unary_expression&& o2
 		);
 
 		cast_expression
@@ -72,7 +115,7 @@ class cast_expression: public composite_node
 		operator=(const cast_expression& o);
 
 	private:
-		cast_expression_t* impl_;
+		std::unique_ptr<type> impl_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

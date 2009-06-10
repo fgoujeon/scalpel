@@ -18,6 +18,8 @@ int main()
 
 	i = reinterpret_cast<int>(b);
 
+	i = (int)d;
+
 	return 0;
 }
 

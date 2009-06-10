@@ -71,23 +71,32 @@ single_file_test::parse_files(const std::string& test_directory)
 		std::string preprocessed_code = m_preprocessor(buffer.str(), include_paths);
 
 		//syntax analysis
-        scalpel::cpp::syntax_tree tree = m_syntax_analyzer(preprocessed_code); //throws an exception if parsing fails
-
-		//check syntax analysis results
-		if(preprocessed_code != tree.raw_code())
+		try
 		{
-			std::cout << "Analysis error!\n";
-			std::cout << "Original content of " << file_name_oss.str() << ":\n";
-			std::cout << "***\n";
-			std::cout << preprocessed_code;
-			std::cout << "\n***\n";
-			std::cout << "Analysis results:\n";
-			std::cout << "***\n";
-			std::cout << tree.raw_code();
-			std::cout << "\n***\n\n";
+			scalpel::cpp::syntax_tree tree = m_syntax_analyzer(preprocessed_code); //throws an exception if parsing fails
 
+			//check syntax analysis results
+			if(preprocessed_code != tree.raw_code())
+			{
+				std::cout << "Analysis error!\n";
+				std::cout << "Original content of " << file_name_oss.str() << ":\n";
+				std::cout << "***\n";
+				std::cout << preprocessed_code;
+				std::cout << "\n***\n";
+				std::cout << "Analysis results:\n";
+				std::cout << "***\n";
+				std::cout << tree.raw_code();
+				std::cout << "\n***\n\n";
+
+				throw "Analysis error!";
+			}
+		}
+		catch(const std::exception& e)
+		{
+			std::cout << e.what() << std::endl;
 			throw "Analysis error!";
 		}
+
     }
 }
 

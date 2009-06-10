@@ -27,9 +27,19 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 cast_expression::cast_expression
 (
-	unary_expression&& unary_expression_node
+	optional_node<cast_expression_first_part_seq>&& o0,
+	optional_node<space>&& o1,
+	unary_expression&& o2
 ):
-	impl_(new type(std::move(unary_expression_node)))
+	impl_
+	(
+		new type
+		(
+			std::move(o0),
+			std::move(o1),
+			std::move(o2)
+		)
+	)
 {
 	add(*impl_);
 }
@@ -60,14 +70,13 @@ cast_expression::cast_expression(const cast_expression& o):
 
 cast_expression::cast_expression(cast_expression&& o):
 	composite_node(),
-	impl_(new type(std::move(*o.impl_)))
+	impl_(std::move(o.impl_))
 {
 	add(*impl_);
 }
 
 cast_expression::~cast_expression()
 {
-	delete impl_;
 }
 
 const cast_expression&

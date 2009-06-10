@@ -676,7 +676,14 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	cast_expression
-		= *('(' >> !s >> type_id >> !s >> ')' >> !s) >> unary_expression
+		= unary_expression
+		| !(cast_expression_first_part_seq >> !s) >> unary_expression
+	;
+	cast_expression_first_part_seq
+		= cast_expression_first_part % !s
+	;
+	cast_expression_first_part
+		= '(' >> !s >> type_id >> !s >> ')'
 	;
 
 	pm_ptr_expression
@@ -1367,11 +1374,11 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	parameter_declaration
-		= parameter_declaration_decl_specifier_seq1 >> !s >> declarator >> !s >> '=' >> !s >> assignment_expression
+		= decl_specifier_seq >> !s >> '=' >> !s >> assignment_expression
+		| parameter_declaration_decl_specifier_seq1 >> !s >> declarator >> !s >> '=' >> !s >> assignment_expression
 		| parameter_declaration_decl_specifier_seq2 >> !s >> declarator
 		| parameter_declaration_decl_specifier_seq3 >> !s >> abstract_declarator >> !s >> '=' >> !s >> assignment_expression
 		| parameter_declaration_decl_specifier_seq4 >> !(!s >> abstract_declarator)
-		| decl_specifier_seq >> !s >> '=' >> !s >> assignment_expression
 	;
 	parameter_declaration_decl_specifier_seq1
 		= (decl_specifier - (declarator >> !s >> '=' >> !s >> assignment_expression)) % !s
