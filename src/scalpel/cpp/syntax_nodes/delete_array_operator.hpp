@@ -18,32 +18,30 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_DELETE_ARAY_OPERATOR_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_DELETE_ARAY_OPERATOR_HPP
+#ifndef SCALPEL_CPP_SYNTAX_NODES_DELETE_ARRAY_OPERATOR_HPP
+#define SCALPEL_CPP_SYNTAX_NODES_DELETE_ARRAY_OPERATOR_HPP
 
 #include "composite_node.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class delete_array_operator: public composite_node
-{
-	public:
-		delete_array_operator
-		(
-		);
-
-		delete_array_operator(const delete_array_operator& o);
-
-		delete_array_operator(delete_array_operator&& o);
-
-		const delete_array_operator&
-		operator=(const delete_array_operator& o);
-
-	private:
-		void
-		update_node_list();
-};
+/**
+delete_array_operator
+	= str_p("delete") >> !s >> '[' >> !s >> ']'
+;
+*/
+typedef
+	sequence_node
+	<
+		simple_text_node<str::delete_>,
+		optional_node<space>,
+		simple_text_node<str::opening_square_bracket>,
+		optional_node<space>,
+		simple_text_node<str::closing_square_bracket>
+	>
+	delete_array_operator
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

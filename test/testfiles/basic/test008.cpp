@@ -14,6 +14,12 @@ class test : public super_test , virtual public virtual_base, protected virtual 
 
 		operator int ( );
 
+		void*
+		operator new [ ] (unsigned int, void * ){}
+
+		void
+		operator delete [ ] (void * ){}
+
 		int
 		value() const;
 

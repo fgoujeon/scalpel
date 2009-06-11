@@ -133,14 +133,6 @@ convert_class_template_elaborated_specifier(const tree_node_t& node)
 	);
 }
 
-delete_array_operator
-convert_delete_array_operator(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::DELETE_ARRAY_OPERATOR);
-
-	return delete_array_operator();
-}
-
 dot_pseudo_destructor_name
 convert_dot_pseudo_destructor_name(const tree_node_t& node)
 {
@@ -302,14 +294,6 @@ convert_nested_identifier_or_template_id(const tree_node_t& node)
         find_and_convert_node<optional_node<nested_name_specifier>, id_t::NESTED_NAME_SPECIFIER>(node),
         find_and_convert_node<identifier_or_template_id, id_t::IDENTIFIER_OR_TEMPLATE_ID>(node)
     );
-}
-
-new_array_operator
-convert_new_array_operator(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::NEW_ARRAY_OPERATOR);
-
-	return new_array_operator();
 }
 
 new_placement

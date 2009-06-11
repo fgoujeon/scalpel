@@ -42,12 +42,6 @@ convert_class_head(const tree_node_t& node);
 syntax_nodes::class_template_elaborated_specifier
 convert_class_template_elaborated_specifier(const tree_node_t& node);
 
-syntax_nodes::cv_qualifier
-convert_cv_qualifier(const tree_node_t& node);
-
-syntax_nodes::delete_array_operator
-convert_delete_array_operator(const tree_node_t& node);
-
 syntax_nodes::direct_abstract_declarator
 convert_direct_abstract_declarator(const tree_node_t& node);
 
@@ -86,9 +80,6 @@ convert_member_specification_access_specifier(const tree_node_t& node);
 
 syntax_nodes::nested_identifier_or_template_id
 convert_nested_identifier_or_template_id(const tree_node_t& node);
-
-syntax_nodes::new_array_operator
-convert_new_array_operator(const tree_node_t& node);
 
 syntax_nodes::new_placement
 convert_new_placement(const tree_node_t& node);

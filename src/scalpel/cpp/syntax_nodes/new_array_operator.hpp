@@ -18,32 +18,30 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_NEW_ARAY_OPERATOR_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_NEW_ARAY_OPERATOR_HPP
+#ifndef SCALPEL_CPP_SYNTAX_NODES_NEW_ARRAY_OPERATOR_HPP
+#define SCALPEL_CPP_SYNTAX_NODES_NEW_ARRAY_OPERATOR_HPP
 
-#include "composite_node.hpp"
+#include "common.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class new_array_operator: public composite_node
-{
-	public:
-		new_array_operator
-		(
-		);
-
-		new_array_operator(const new_array_operator& o);
-
-		new_array_operator(new_array_operator&& o);
-
-		const new_array_operator&
-		operator=(const new_array_operator& o);
-
-	private:
-		void
-		update_node_list();
-};
+/**
+new_array_operator
+	= str_p("new") >> !s >> '[' >> !s >> ']'
+;
+*/
+typedef
+	sequence_node
+	<
+		simple_text_node<str::new_>,
+		optional_node<space>,
+		simple_text_node<str::opening_square_bracket>,
+		optional_node<space>,
+		simple_text_node<str::closing_square_bracket>
+	>
+	new_array_operator
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
