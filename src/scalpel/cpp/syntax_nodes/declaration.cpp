@@ -25,7 +25,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "template_declaration.hpp"
 //#include "explicit_instantiation.hpp"
 #include "explicit_specialization.hpp"
-//#include "linkage_specification.hpp"
+#include "linkage_specification.hpp"
 #include "namespace_definition.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
@@ -57,7 +57,11 @@ declaration::declaration(explicit_specialization&& o):
 	add(*impl_);
 }
 
-//declaration::declaration(linkage_specification&& o)
+declaration::declaration(linkage_specification&& o):
+	impl_(new type(o))
+{
+	add(*impl_);
+}
 
 declaration::declaration(namespace_definition&& o):
 	impl_(new type(o))
@@ -110,6 +114,12 @@ declaration::get(boost::optional<const template_declaration&>& o) const
 
 void
 declaration::get(boost::optional<const explicit_specialization&>& o) const
+{
+	impl_->get(o);
+}
+
+void
+declaration::get(boost::optional<const linkage_specification&>& o) const
 {
 	impl_->get(o);
 }

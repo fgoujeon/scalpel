@@ -85,6 +85,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "syntax_nodes/jump_statement.hpp"
 #include "syntax_nodes/labeled_statement.hpp"
 #include "syntax_nodes/leaf_node.hpp"
+#include "syntax_nodes/linkage_specification.hpp"
 #include "syntax_nodes/list_node.hpp"
 #include "syntax_nodes/mem_initializer.hpp"
 #include "syntax_nodes/mem_initializer_id.hpp"

@@ -1132,8 +1132,16 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	linkage_specification
+		= declaration_seq_linkage_specification
+		| declaration_linkage_specification
+	;
+
+	declaration_seq_linkage_specification
 		= "extern" >> !s >> string_literal >> !s >> ch_p('{') >> !s >> !(declaration_seq >> !s) >> ch_p('}')
-		| "extern" >> !s >> string_literal >> !s >> declaration
+	;
+
+	declaration_linkage_specification
+		= "extern" >> !s >> string_literal >> !s >> declaration
 	;
 
 	//1.7 - Declarators [gram.dcl.decl]

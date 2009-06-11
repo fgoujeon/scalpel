@@ -358,6 +358,11 @@ semantic_analyzer::analyze(const init_declarator&)
 }
 
 void
+semantic_analyzer::analyze(const linkage_specification&)
+{
+}
+
+void
 semantic_analyzer::analyze(const mem_initializer&)
 {
 }

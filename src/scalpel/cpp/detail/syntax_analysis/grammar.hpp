@@ -240,6 +240,8 @@ class grammar
             USING_DIRECTIVE,
             ASM_DEFINITION,
             LINKAGE_SPECIFICATION,
+			DECLARATION_SEQ_LINKAGE_SPECIFICATION,
+			DECLARATION_LINKAGE_SPECIFICATION,
 
             INIT_DECLARATOR_LIST,
             INIT_DECLARATOR,
@@ -588,6 +590,8 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::USING_DIRECTIVE>> using_directive;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ASM_DEFINITION>> asm_definition;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::LINKAGE_SPECIFICATION>> linkage_specification;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DECLARATION_SEQ_LINKAGE_SPECIFICATION>> declaration_seq_linkage_specification;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DECLARATION_LINKAGE_SPECIFICATION>> declaration_linkage_specification;
 
         //1.7 - Declarators [gram.dcl.decl]
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::INIT_DECLARATOR_LIST>> init_declarator_list;

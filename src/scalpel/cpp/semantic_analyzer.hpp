@@ -159,6 +159,9 @@ class semantic_analyzer
 		analyze(const syntax_nodes::init_declarator& syntax_node);
 
         void
+		analyze(const syntax_nodes::linkage_specification& syntax_node);
+
+        void
 		analyze(const syntax_nodes::mem_initializer& syntax_node);
 
         void
