@@ -475,14 +475,6 @@ convert_typeid_expression(const tree_node_t& node)
 	return typeid_expression();
 }
 
-typename_expression
-convert_typename_expression(const tree_node_t& node)
-{
-	assert(node.value.id() == id_t::TYPENAME_EXPRESSION);
-
-	return typename_expression();
-}
-
 typename_template_elaborated_specifier
 convert_typename_template_elaborated_specifier(const tree_node_t& node)
 {
