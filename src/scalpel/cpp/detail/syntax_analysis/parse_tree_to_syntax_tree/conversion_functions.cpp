@@ -283,19 +283,6 @@ convert_member_specification_access_specifier(const tree_node_t& node)
     );
 }
 
-nested_identifier_or_template_id
-convert_nested_identifier_or_template_id(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::NESTED_IDENTIFIER_OR_TEMPLATE_ID);
-
-    return nested_identifier_or_template_id
-    (
-        check_node_existence(node, "::", 0),
-        find_and_convert_node<optional_node<nested_name_specifier>, id_t::NESTED_NAME_SPECIFIER>(node),
-        find_and_convert_node<identifier_or_template_id, id_t::IDENTIFIER_OR_TEMPLATE_ID>(node)
-    );
-}
-
 new_placement
 convert_new_placement(const tree_node_t& node)
 {

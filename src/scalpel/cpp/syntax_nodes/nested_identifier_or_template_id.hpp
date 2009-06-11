@@ -21,72 +21,29 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_NESTED_IDENTIFIER_OR_TEMPLATE_ID_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_NESTED_IDENTIFIER_OR_TEMPLATE_ID_HPP
 
-#include "optional_node.hpp"
-#include "composite_node.hpp"
+#include "common.hpp"
 #include "nested_name_specifier.hpp"
 #include "identifier_or_template_id.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class nested_identifier_or_template_id: public composite_node
-{
-	public:
-		nested_identifier_or_template_id
-		(
-			bool leading_double_colon,
-			optional_node<nested_name_specifier>&& a_nested_name_specifier,
-			identifier_or_template_id&& an_identifier_or_template_id
-		);
-
-		nested_identifier_or_template_id(const nested_identifier_or_template_id& o);
-
-		nested_identifier_or_template_id(nested_identifier_or_template_id&& o);
-
-		const nested_identifier_or_template_id&
-		operator=(const nested_identifier_or_template_id& o);
-
-		inline
-		bool
-		has_leading_double_colon() const;
-
-		inline
-		const optional_node<nested_name_specifier>&
-		nested_name_specifier_node() const;
-
-		inline
-		const identifier_or_template_id&
-		identifier_or_template_id_node() const;
-
-	private:
-		void
-		update_node_list();
-
-		bool leading_double_colon_;
-		optional_node<nested_name_specifier> nested_name_specifier_;
-		identifier_or_template_id identifier_or_template_id_;
-};
-
-inline
-bool
-nested_identifier_or_template_id::has_leading_double_colon() const
-{
-	return leading_double_colon_;
-}
-
-inline
-const optional_node<nested_name_specifier>&
-nested_identifier_or_template_id::nested_name_specifier_node() const
-{
-	return nested_name_specifier_;
-}
-
-inline
-const identifier_or_template_id&
-nested_identifier_or_template_id::identifier_or_template_id_node() const
-{
-	return identifier_or_template_id_;
-}
+/**
+nested_identifier_or_template_id
+	= !(str_p("::") >> !s) >> !(nested_name_specifier >> !s) >> identifier_or_template_id
+;
+*/
+typedef
+	sequence_node
+	<
+		optional_node<simple_text_node<str::double_colon>>,
+		optional_node<space>,
+		optional_node<nested_name_specifier>,
+		optional_node<space>,
+		identifier_or_template_id
+	>
+	nested_identifier_or_template_id
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
