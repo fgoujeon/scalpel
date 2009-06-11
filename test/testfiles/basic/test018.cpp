@@ -20,6 +20,8 @@ int main()
 
 	i = (int)d;
 
+	i = int(d);
+
 	b2 base = (base)i;
 
 	return 0;

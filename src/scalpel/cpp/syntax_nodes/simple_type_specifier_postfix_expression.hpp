@@ -21,29 +21,31 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_SIMPLE_TYPE_SPECIFIER_POSTFIX_EXPRESION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_SIMPLE_TYPE_SPECIFIER_POSTFIX_EXPRESION_HPP
 
-#include "composite_node.hpp"
+#include "common.hpp"
+#include "simple_type_specifier.hpp"
+#include "expression.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class simple_type_specifier_postfix_expression: public composite_node
-{
-	public:
-		simple_type_specifier_postfix_expression
-		(
-		);
-
-		simple_type_specifier_postfix_expression(const simple_type_specifier_postfix_expression& o);
-
-		simple_type_specifier_postfix_expression(simple_type_specifier_postfix_expression&& o);
-
-		const simple_type_specifier_postfix_expression&
-		operator=(const simple_type_specifier_postfix_expression& o);
-
-	private:
-		void
-		update_node_list();
-};
+/**
+simple_type_specifier_postfix_expression
+	= simple_type_specifier >> !s >> '(' >> !s >> !(expression >> !s) >> ')'
+;
+*/
+typedef
+	sequence_node
+	<
+		simple_type_specifier,
+		optional_node<space>,
+		simple_text_node<str::opening_round_bracket>,
+		optional_node<space>,
+		optional_node<expression>,
+		optional_node<space>,
+		simple_text_node<str::closing_round_bracket>
+	>
+	simple_type_specifier_postfix_expression
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

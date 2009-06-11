@@ -410,14 +410,6 @@ convert_simple_template_type_specifier(const tree_node_t& node)
 	);
 }
 
-simple_type_specifier_postfix_expression
-convert_simple_type_specifier_postfix_expression(const tree_node_t& node)
-{
-	assert(node.value.id() == id_t::SIMPLE_TYPE_SPECIFIER_POSTFIX_EXPRESSION);
-
-	return simple_type_specifier_postfix_expression();
-}
-
 space
 convert_space(const tree_node_t& node)
 {
