@@ -338,17 +338,6 @@ convert_ptr_operator(const tree_node_t& node)
 	);
 }
 
-qualified_operator_function_id
-convert_qualified_operator_function_id(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::QUALIFIED_OPERATOR_FUNCTION_ID);
-
-    return qualified_operator_function_id
-    (
-        //find_and_convert_node<operator_function_id, id_t::OPERATOR_FUNCTION_ID>(node)
-    );
-}
-
 qualified_template_id
 convert_qualified_template_id(const tree_node_t& node)
 {

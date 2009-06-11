@@ -12,5 +12,8 @@ int main()
     
     test* f = new(place) test(); 
 
+	test* test2 = static_cast<test*>(:: operator new (  32 ));
+	::operator delete (test2);
+
 	return 0;
 }

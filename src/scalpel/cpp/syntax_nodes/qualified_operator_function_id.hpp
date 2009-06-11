@@ -21,24 +21,26 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_QUALIFIED_OPERATOR_FUNCTION_ID_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_QUALIFIED_OPERATOR_FUNCTION_ID_HPP
 
-#include "composite_node.hpp"
+#include "common.hpp"
+#include "operator_function_id.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class qualified_operator_function_id: public composite_node
-{
-    public:
-		qualified_operator_function_id();
-
-		qualified_operator_function_id(const qualified_operator_function_id& o);
-
-		qualified_operator_function_id(qualified_operator_function_id&& o);
-
-		const qualified_operator_function_id&
-		operator=(const qualified_operator_function_id& o);
-
-};
+/**
+qualified_operator_function_id
+	= str_p("::") >> !s >> operator_function_id
+;
+*/
+typedef
+	sequence_node
+	<
+		simple_text_node<str::double_colon>,
+		optional_node<space>,
+		operator_function_id
+	>
+	qualified_operator_function_id
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
