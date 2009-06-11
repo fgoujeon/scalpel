@@ -81,9 +81,6 @@ convert_integer_literal(const tree_node_t& node);
 syntax_nodes::member_declaration_member_declarator_list
 convert_member_declaration_member_declarator_list(const tree_node_t& node);
 
-syntax_nodes::member_declarator_declarator
-convert_member_declarator_declarator(const tree_node_t& node);
-
 syntax_nodes::member_specification_access_specifier
 convert_member_specification_access_specifier(const tree_node_t& node);
 

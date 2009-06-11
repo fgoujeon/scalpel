@@ -277,18 +277,6 @@ convert_member_declaration_member_declarator_list(const tree_node_t& node)
     );
 }
 
-member_declarator_declarator
-convert_member_declarator_declarator(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::MEMBER_DECLARATOR_DECLARATOR);
-
-    return member_declarator_declarator
-    (
-        find_and_convert_node<declarator, id_t::DECLARATOR>(node),
-        check_node_existence(node, id_t::PURE_SPECIFIER, 1)
-    );
-}
-
 member_specification_access_specifier
 convert_member_specification_access_specifier(const tree_node_t& node)
 {

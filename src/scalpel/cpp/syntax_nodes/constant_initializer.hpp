@@ -18,45 +18,28 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_MEMBER_DECLARATOR_DECLARATOR_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_MEMBER_DECLARATOR_DECLARATOR_HPP
+#ifndef SCALPEL_CPP_SYNTAX_NODES_CONSTANT_INITIALIZER_HPP
+#define SCALPEL_CPP_SYNTAX_NODES_CONSTANT_INITIALIZER_HPP
 
 #include "common.hpp"
-#include "pure_specifier.hpp"
-#include "constant_initializer.hpp"
-#include "declarator.hpp"
+#include "conditional_expression.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 /**
-member_declarator_declarator_last_part
-	= pure_specifier
-	| constant_initializer
-;
-*/
-typedef
-	alternative_node
-	<
-		pure_specifier,
-		constant_initializer
-	>
-	member_declarator_declarator_last_part
-;
-
-/**
-member_declarator_declarator
-	= declarator >> !(!s >> member_declarator_declarator_last_part)
+constant_initializer
+	= '=' >> !s >> conditional_expression
 ;
 */
 typedef
 	sequence_node
 	<
-		declarator,
+		simple_text_node<str::equal>,
 		optional_node<space>,
-		optional_node<member_declarator_declarator_last_part>
+		conditional_expression
 	>
-	member_declarator_declarator
+	constant_initializer
 ;
 
 }}} //namespace scalpel::cpp::syntax_nodes

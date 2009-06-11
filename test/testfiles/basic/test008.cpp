@@ -14,12 +14,20 @@ class test : public super_test , virtual public virtual_base, protected virtual 
 
 		operator int ( );
 
+		int
+		value() const;
+
+		virtual
+		void
+		pure_virtual() = 0 ;
+
 	protected :
 		void
 		update();
 
 	private:
 		int value_;
+		static const bool b_ = true ;
 };
 
 test :: test(int i):
@@ -40,6 +48,12 @@ test::operator=(const test& t)
 }
 
 test::operator int ()
+{
+	return value_;
+}
+
+int
+test::value () const
 {
 	return value_;
 }

@@ -291,6 +291,7 @@ class grammar
             MEMBER_DECLARATOR_LIST,
             MEMBER_DECLARATOR,
             MEMBER_DECLARATOR_DECLARATOR,
+			MEMBER_DECLARATOR_DECLARATOR_LAST_PART,
             MEMBER_DECLARATOR_BIT_FIELD_MEMBER,
             PURE_SPECIFIER,
             CONSTANT_INITIALIZER,
@@ -647,6 +648,7 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MEMBER_DECLARATOR_LIST>> member_declarator_list;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MEMBER_DECLARATOR>> member_declarator;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MEMBER_DECLARATOR_DECLARATOR>> member_declarator_declarator;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MEMBER_DECLARATOR_DECLARATOR_LAST_PART>> member_declarator_declarator_last_part;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MEMBER_DECLARATOR_BIT_FIELD_MEMBER>> member_declarator_bit_field_member;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PURE_SPECIFIER>> pure_specifier;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CONSTANT_INITIALIZER>> constant_initializer;

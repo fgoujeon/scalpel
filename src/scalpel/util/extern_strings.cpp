@@ -82,6 +82,7 @@ namespace extern_strings
 	const std::string slash_equal("/=");
 	const std::string square_brackets("[]");
 	const std::string tilde("~");
+	const std::string zero("0");
 
 	//keywords
 	const std::string __restrict_("__restrict");

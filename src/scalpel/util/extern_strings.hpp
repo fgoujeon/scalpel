@@ -85,6 +85,7 @@ namespace extern_strings
 	extern const std::string slash_equal;
 	extern const std::string square_brackets;
 	extern const std::string tilde;
+	extern const std::string zero;
 
 	//keywords
 	extern const std::string __restrict_;

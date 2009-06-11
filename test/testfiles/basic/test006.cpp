@@ -1,3 +1,5 @@
+static const bool b = true  ;
+
 int main()
 {
 	int i1, i2;
