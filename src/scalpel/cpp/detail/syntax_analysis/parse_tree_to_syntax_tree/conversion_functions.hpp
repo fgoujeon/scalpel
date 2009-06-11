@@ -123,9 +123,6 @@ convert_template_typename_expression(const tree_node_t& node);
 syntax_nodes::try_block
 convert_try_block(const tree_node_t& node);
 
-syntax_nodes::type_id_sizeof_expression
-convert_type_id_sizeof_expression(const tree_node_t& node);
-
 syntax_nodes::type_id_typeid_expression
 convert_type_id_typeid_expression(const tree_node_t& node);
 
@@ -140,9 +137,6 @@ convert_typename_expression(const tree_node_t& node);
 
 syntax_nodes::typename_template_elaborated_specifier
 convert_typename_template_elaborated_specifier(const tree_node_t& node);
-
-syntax_nodes::unary_sizeof_expression
-convert_unary_sizeof_expression(const tree_node_t& node);
 
 }}}}} //namespace scalpel::cpp::detail::syntax_analysis
 

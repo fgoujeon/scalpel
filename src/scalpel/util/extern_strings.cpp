@@ -129,6 +129,7 @@ namespace extern_strings
 	const std::string return_("return");
 	const std::string short_("short");
 	const std::string signed_("signed");
+	const std::string sizeof_("sizeof");
 	const std::string static_("static");
 	const std::string static_cast_("static_cast");
 	const std::string struct_("struct");

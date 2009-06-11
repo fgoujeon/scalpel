@@ -640,6 +640,16 @@ semantic_analyzer::analyze(const try_block& syntax_node)
 }
 
 void
+semantic_analyzer::analyze(const type_id_sizeof_expression&)
+{
+}
+
+void
+semantic_analyzer::analyze(const unary_sizeof_expression&)
+{
+}
+
+void
 semantic_analyzer::analyze(const using_declaration&)
 {
 }

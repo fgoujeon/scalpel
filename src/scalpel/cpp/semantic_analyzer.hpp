@@ -246,6 +246,12 @@ class semantic_analyzer
 		analyze(const syntax_nodes::try_block& syntax_node);
 
         void
+		analyze(const syntax_nodes::type_id_sizeof_expression& syntax_node);
+
+        void
+		analyze(const syntax_nodes::unary_sizeof_expression& syntax_node);
+
+        void
 		analyze(const syntax_nodes::using_declaration& syntax_node);
 
         void

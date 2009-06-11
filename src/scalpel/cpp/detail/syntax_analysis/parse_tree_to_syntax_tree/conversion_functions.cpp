@@ -483,14 +483,6 @@ convert_try_block(const tree_node_t& node)
 	);
 }
 
-type_id_sizeof_expression
-convert_type_id_sizeof_expression(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::TYPE_ID_SIZEOF_EXPRESSION);
-
-	return type_id_sizeof_expression();
-}
-
 type_id_typeid_expression
 convert_type_id_typeid_expression(const tree_node_t& node)
 {
@@ -529,14 +521,6 @@ convert_typename_template_elaborated_specifier(const tree_node_t& node)
 	assert(node.value.id() == id_t::TYPENAME_TEMPLATE_ELABORATED_SPECIFIER);
 
 	return typename_template_elaborated_specifier();
-}
-
-unary_sizeof_expression
-convert_unary_sizeof_expression(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::UNARY_SIZEOF_EXPRESSION);
-
-	return unary_sizeof_expression();
 }
 
 }}}}} //namespace scalpel::cpp::detail::syntax_analysis

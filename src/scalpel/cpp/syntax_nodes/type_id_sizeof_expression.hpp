@@ -21,29 +21,30 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_TYPE_ID_SIZEOF_EXPRESSION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_TYPE_ID_SIZEOF_EXPRESSION_HPP
 
-#include "composite_node.hpp"
+#include "common.hpp"
+#include "type_id.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class type_id_sizeof_expression: public composite_node
-{
-	public:
-		type_id_sizeof_expression
-		(
-		);
-
-		type_id_sizeof_expression(const type_id_sizeof_expression& o);
-
-		type_id_sizeof_expression(type_id_sizeof_expression&& o);
-
-		const type_id_sizeof_expression&
-		operator=(const type_id_sizeof_expression& o);
-
-	private:
-		void
-		update_node_list();
-};
+/**
+type_id_sizeof_expression
+	= str_p("sizeof") >> !s >> '(' >> !s >> type_id >> !s >> ')'
+;
+*/
+typedef
+	sequence_node
+	<
+		simple_text_node<str::sizeof_>,
+		optional_node<space>,
+		simple_text_node<str::opening_round_bracket>,
+		optional_node<space>,
+		type_id,
+		optional_node<space>,
+		simple_text_node<str::closing_round_bracket>
+	>
+	type_id_sizeof_expression
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
