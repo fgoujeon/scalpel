@@ -22,7 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_TYPE_ID_NEW_EXPRESSION_HPP
 
 #include "common.hpp"
-#include "new_placement.hpp"
+#include "round_bracketed_expression.hpp"
 #include "type_id.hpp"
 #include "new_initializer.hpp"
 
@@ -31,7 +31,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 /**
 type_id_new_expression
-	= !(str_p("::") >> !s) >> str_p("new") >> !s >> !(new_placement >> !s) >> '(' >> !s >> type_id >> !s >> ')' >> !(!s >> new_initializer)
+	= !(str_p("::") >> !s) >> str_p("new") >> !s >> !(round_bracketed_expression >> !s) >> '(' >> !s >> type_id >> !s >> ')' >> !(!s >> new_initializer)
 ;
 */
 typedef
@@ -41,7 +41,7 @@ typedef
 		optional_node<space>,
 		simple_text_node<str::new_>,
 		optional_node<space>,
-		optional_node<new_placement>,
+		optional_node<round_bracketed_expression>,
 		optional_node<space>,
 		simple_text_node<str::opening_round_bracket>,
 		optional_node<space>,

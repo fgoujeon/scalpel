@@ -128,7 +128,6 @@ class grammar
             NEW_EXPRESSION,
 			TYPE_ID_NEW_EXPRESSION,
 			NEW_TYPE_ID_NEW_EXPRESSION,
-            NEW_PLACEMENT,
             NEW_TYPE_ID,
             NEW_DECLARATOR,
             DIRECT_NEW_DECLARATOR,
@@ -477,7 +476,6 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::NEW_EXPRESSION>> new_expression;
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TYPE_ID_NEW_EXPRESSION>> type_id_new_expression;
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::NEW_TYPE_ID_NEW_EXPRESSION>> new_type_id_new_expression;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::NEW_PLACEMENT>> new_placement;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::NEW_TYPE_ID>> new_type_id;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::NEW_DECLARATOR>> new_declarator;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DIRECT_NEW_DECLARATOR>> direct_new_declarator;

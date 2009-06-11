@@ -25,7 +25,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "optional_node.hpp"
 #include "composite_node.hpp"
 #include "space.hpp"
-#include "new_placement.hpp"
+#include "round_bracketed_expression.hpp"
 #include "new_type_id.hpp"
 #include "new_initializer.hpp"
 
@@ -34,7 +34,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 /**
 new_type_id_new_expression
-	= !(str_p("::") >> !s) >> str_p("new") >> !s >> !(new_placement >> !s) >> new_type_id >> !(!s >> new_initializer)
+	= !(str_p("::") >> !s) >> str_p("new") >> !s >> !(round_bracketed_expression >> !s) >> new_type_id >> !(!s >> new_initializer)
 ;
 */
 class new_type_id_new_expression: public composite_node
@@ -45,8 +45,8 @@ class new_type_id_new_expression: public composite_node
 			bool leading_double_colon,
 			optional_node<space>&& post_double_colon_space_node,
 			optional_node<space>&& post_new_keyword_space_node,
-			optional_node<new_placement>&& new_placement_node,
-			optional_node<space>&& post_new_placement_space_node,
+			optional_node<round_bracketed_expression>&& round_bracketed_expression_node,
+			optional_node<space>&& post_round_bracketed_expression_space_node,
 			new_type_id&& new_type_id_node,
 			optional_node<space>&& pre_new_initializer_space_node,
 			optional_node<new_initializer>&& new_initializer_node
@@ -66,8 +66,8 @@ class new_type_id_new_expression: public composite_node
 		bool leading_double_colon_;
 		optional_node<space> post_double_colon_space_;
 		optional_node<space> post_new_keyword_space_;
-		optional_node<new_placement> new_placement_;
-		optional_node<space> post_new_placement_space_;
+		optional_node<round_bracketed_expression> round_bracketed_expression_;
+		optional_node<space> post_round_bracketed_expression_space_;
 		new_type_id new_type_id_;
 		optional_node<space> pre_new_initializer_space_;
 		std::unique_ptr<new_initializer> new_initializer_;

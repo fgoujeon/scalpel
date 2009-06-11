@@ -603,15 +603,11 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	type_id_new_expression
-		= !(str_p("::") >> !s) >> str_p("new") >> !s >> !(new_placement >> !s) >> '(' >> !s >> type_id >> !s >> ')' >> !(!s >> new_initializer)
+		= !(str_p("::") >> !s) >> str_p("new") >> !s >> !(round_bracketed_expression >> !s) >> '(' >> !s >> type_id >> !s >> ')' >> !(!s >> new_initializer)
 	;
 
 	new_type_id_new_expression
-		= !(str_p("::") >> !s) >> str_p("new") >> !s >> !(new_placement >> !s) >> new_type_id >> !(!s >> new_initializer)
-	;
-
-	new_placement
-		= '(' >> !s >> expression >> !s >> ')'
+		= !(str_p("::") >> !s) >> str_p("new") >> !s >> !(round_bracketed_expression >> !s) >> new_type_id >> !(!s >> new_initializer)
 	;
 
 	new_type_id

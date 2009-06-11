@@ -78,9 +78,6 @@ convert_member_declaration_member_declarator_list(const tree_node_t& node);
 syntax_nodes::member_specification_access_specifier
 convert_member_specification_access_specifier(const tree_node_t& node);
 
-syntax_nodes::new_placement
-convert_new_placement(const tree_node_t& node);
-
 syntax_nodes::new_type_id_new_expression
 convert_new_type_id_new_expression(const tree_node_t& node);
 

@@ -31,8 +31,8 @@ new_type_id_new_expression::new_type_id_new_expression
 	bool leading_double_colon,
 	optional_node<space>&& post_double_colon_space_node,
 	optional_node<space>&& post_new_keyword_space_node,
-	optional_node<new_placement>&& new_placement_node,
-	optional_node<space>&& post_new_placement_space_node,
+	optional_node<round_bracketed_expression>&& round_bracketed_expression_node,
+	optional_node<space>&& post_round_bracketed_expression_space_node,
 	new_type_id&& new_type_id_node,
 	optional_node<space>&& pre_new_initializer_space_node,
 	optional_node<new_initializer>&& new_initializer_node
@@ -40,8 +40,8 @@ new_type_id_new_expression::new_type_id_new_expression
 	leading_double_colon_(leading_double_colon),
 	post_double_colon_space_(post_double_colon_space_node),
 	post_new_keyword_space_(post_new_keyword_space_node),
-	new_placement_(new_placement_node),
-	post_new_placement_space_(post_new_placement_space_node),
+	round_bracketed_expression_(round_bracketed_expression_node),
+	post_round_bracketed_expression_space_(post_round_bracketed_expression_space_node),
 	new_type_id_(new_type_id_node),
 	pre_new_initializer_space_(pre_new_initializer_space_node)
 {
@@ -57,8 +57,8 @@ new_type_id_new_expression::new_type_id_new_expression(const new_type_id_new_exp
 	leading_double_colon_(o.leading_double_colon_),
 	post_double_colon_space_(o.post_double_colon_space_),
 	post_new_keyword_space_(o.post_new_keyword_space_),
-	new_placement_(o.new_placement_),
-	post_new_placement_space_(o.post_new_placement_space_),
+	round_bracketed_expression_(o.round_bracketed_expression_),
+	post_round_bracketed_expression_space_(o.post_round_bracketed_expression_space_),
 	new_type_id_(o.new_type_id_),
 	pre_new_initializer_space_(o.pre_new_initializer_space_)
 {
@@ -74,8 +74,8 @@ new_type_id_new_expression::new_type_id_new_expression(new_type_id_new_expressio
 	leading_double_colon_(o.leading_double_colon_),
 	post_double_colon_space_(std::move(o.post_double_colon_space_)),
 	post_new_keyword_space_(std::move(o.post_new_keyword_space_)),
-	new_placement_(std::move(o.new_placement_)),
-	post_new_placement_space_(std::move(o.post_new_placement_space_)),
+	round_bracketed_expression_(std::move(o.round_bracketed_expression_)),
+	post_round_bracketed_expression_space_(std::move(o.post_round_bracketed_expression_space_)),
 	new_type_id_(std::move(o.new_type_id_)),
 	pre_new_initializer_space_(std::move(o.pre_new_initializer_space_)),
 	new_initializer_(std::move(o.new_initializer_))
@@ -89,8 +89,8 @@ new_type_id_new_expression::operator=(const new_type_id_new_expression& o)
 	leading_double_colon_ = o.leading_double_colon_;
 	post_double_colon_space_ = o.post_double_colon_space_;
 	post_new_keyword_space_ = o.post_new_keyword_space_;
-	new_placement_ = o.new_placement_;
-	post_new_placement_space_ = o.post_new_placement_space_;
+	round_bracketed_expression_ = o.round_bracketed_expression_;
+	post_round_bracketed_expression_space_ = o.post_round_bracketed_expression_space_;
 	new_type_id_ = o.new_type_id_;
 	pre_new_initializer_space_ = o.pre_new_initializer_space_;
 	if(o.new_initializer_)
@@ -111,8 +111,8 @@ new_type_id_new_expression::update_node_list()
 	if(post_double_colon_space_) add(*post_double_colon_space_);
 	add(common_nodes::new_keyword);
 	if(post_new_keyword_space_) add(*post_new_keyword_space_);
-	if(new_placement_) add(*new_placement_);
-	if(post_new_placement_space_) add(*post_new_placement_space_);
+	if(round_bracketed_expression_) add(*round_bracketed_expression_);
+	if(post_round_bracketed_expression_space_) add(*post_round_bracketed_expression_space_);
 	add(new_type_id_);
 	if(pre_new_initializer_space_) add(*pre_new_initializer_space_);
 	if(new_initializer_) add(*new_initializer_);

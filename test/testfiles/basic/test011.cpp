@@ -7,5 +7,10 @@ int main()
 	test another_test ( 12 ) ;
 	another_test . value ( 34 ) ;
 
+    char memory[sizeof(test)]; 
+    void* place = memory;   
+    
+    test* f = new(place) test(); 
+
 	return 0;
 }
