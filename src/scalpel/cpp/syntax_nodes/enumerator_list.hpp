@@ -18,43 +18,29 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "enum_specifier.hpp"
+#ifndef SCALPEL_CPP_SYNTAX_NODES_ENUMERATOR_LIST_HPP
+#define SCALPEL_CPP_SYNTAX_NODES_ENUMERATOR_LIST_HPP
+
+#include "common.hpp"
+#include "enumerator_definition.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-enum_specifier::enum_specifier
-(
-)
-{
-	update_node_list();
-}
-
-enum_specifier::enum_specifier(const enum_specifier& o):
-	composite_node()
-{
-	update_node_list();
-}
-
-enum_specifier::enum_specifier(enum_specifier&& o):
-	composite_node()
-{
-	update_node_list();
-}
-
-const enum_specifier&
-enum_specifier::operator=(const enum_specifier& o)
-{
-	update_node_list();
-
-	return *this;
-}
-
-void
-enum_specifier::update_node_list()
-{
-	clear();
-}
+/**
+enumerator_list
+	= enumerator_definition % (!s >> ',' >> !s)
+;
+*/
+typedef
+	list_node
+	<
+		enumerator_definition,
+		common_nodes::comma
+	>
+	enumerator_list
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
+#endif

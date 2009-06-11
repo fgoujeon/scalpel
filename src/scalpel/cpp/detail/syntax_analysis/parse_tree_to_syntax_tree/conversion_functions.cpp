@@ -165,14 +165,6 @@ convert_enum_elaborated_specifier(const tree_node_t& node)
 	return enum_elaborated_specifier();
 }
 
-enum_specifier
-convert_enum_specifier(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::ENUM_SPECIFIER);
-
-	return enum_specifier();
-}
-
 floating_literal
 convert_floating_literal(const tree_node_t& node)
 {

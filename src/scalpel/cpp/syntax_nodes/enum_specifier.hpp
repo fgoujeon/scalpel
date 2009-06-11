@@ -21,29 +21,33 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_ENUM_SPECIFIER_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_ENUM_SPECIFIER_HPP
 
-#include "composite_node.hpp"
+#include "common.hpp"
+#include "identifier.hpp"
+#include "enumerator_list.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class enum_specifier: public composite_node
-{
-	public:
-		enum_specifier
-		(
-		);
-
-		enum_specifier(const enum_specifier& o);
-
-		enum_specifier(enum_specifier&& o);
-
-		const enum_specifier&
-		operator=(const enum_specifier& o);
-
-	private:
-		void
-		update_node_list();
-};
+/**
+enum_specifier
+	= str_p("enum") >> !s >> !(identifier >> !s) >> ch_p('{') >> !s >> !(enumerator_list >> !s) >> ch_p('}')
+;
+*/
+typedef
+	sequence_node
+	<
+		simple_text_node<str::enum_>,
+		optional_node<space>,
+		optional_node<identifier>,
+		optional_node<space>,
+		simple_text_node<str::opening_brace>,
+		optional_node<space>,
+		optional_node<enumerator_list>,
+		optional_node<space>,
+		simple_text_node<str::closing_brace>
+	>
+	enum_specifier
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

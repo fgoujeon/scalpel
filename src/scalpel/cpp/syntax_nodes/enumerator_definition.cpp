@@ -18,45 +18,73 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "abstract_declarator.hpp"
+#include "enumerator_definition.hpp"
 
-#include "direct_abstract_declarator.hpp"
+#include "conditional_expression.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-abstract_declarator::abstract_declarator(ptr_operator_seq&& o):
-	impl_(new type(o))
+enumerator_definition::enumerator_definition
+(
+	identifier&& o0,
+	optional_node<space>&& o1,
+	optional_node<simple_text_node<str::equal>>&& o2,
+	optional_node<space>&& o3,
+	optional_node<conditional_expression>&& o4
+):
+	impl_
+	(
+		new type
+		(
+			o0,
+			o1,
+			o2,
+			o3,
+			o4
+		)
+	)
 {
 	add(*impl_);
 }
 
-abstract_declarator::abstract_declarator(direct_abstract_declarator&& o):
-	impl_(new type(o))
+enumerator_definition::enumerator_definition
+(
+	head_node_t&& head,
+	tail_sequence_node_t&& tail
+):
+	impl_
+	(
+		new type
+		(
+			head,
+			tail
+		)
+	)
 {
 	add(*impl_);
 }
 
-abstract_declarator::abstract_declarator(const abstract_declarator& o):
+enumerator_definition::enumerator_definition(const enumerator_definition& o):
 	composite_node(),
 	impl_(new type(*o.impl_))
 {
 	add(*impl_);
 }
 
-abstract_declarator::abstract_declarator(abstract_declarator&& o):
+enumerator_definition::enumerator_definition(enumerator_definition&& o):
 	composite_node(),
 	impl_(std::move(o.impl_))
 {
 	add(*impl_);
 }
 
-abstract_declarator::~abstract_declarator()
+enumerator_definition::~enumerator_definition()
 {
 }
 
-const abstract_declarator&
-abstract_declarator::operator=(const abstract_declarator& o)
+const enumerator_definition&
+enumerator_definition::operator=(const enumerator_definition& o)
 {
 	*impl_ = *o.impl_;
 	return *this;

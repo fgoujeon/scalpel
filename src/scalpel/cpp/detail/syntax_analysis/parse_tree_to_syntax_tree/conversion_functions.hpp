@@ -60,9 +60,6 @@ convert_empty_initializer_list_initializer_clause(const tree_node_t& node);
 syntax_nodes::enum_elaborated_specifier
 convert_enum_elaborated_specifier(const tree_node_t& node);
 
-syntax_nodes::enum_specifier
-convert_enum_specifier(const tree_node_t& node);
-
 syntax_nodes::floating_literal
 convert_floating_literal(const tree_node_t& node);
 
