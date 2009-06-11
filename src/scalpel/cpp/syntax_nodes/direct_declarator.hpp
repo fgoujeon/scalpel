@@ -141,26 +141,17 @@ struct direct_declarator: public direct_declarator_t
 	(
 		head_node_t&& head,
 		tail_sequence_node_t&& tail
-	):
-		type(head, tail)
-	{
-	}
+	);
 
 	direct_declarator
 	(
 		const direct_declarator& o
-	):
-		type(o)
-	{
-	}
+	);
 
 	direct_declarator
 	(
 		direct_declarator&& o
-	):
-		type(o)
-	{
-	}
+	);
 
 	const first_part&
 	first_part_node() const

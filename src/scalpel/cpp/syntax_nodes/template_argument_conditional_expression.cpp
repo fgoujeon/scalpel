@@ -20,8 +20,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "template_argument_conditional_expression.hpp"
 
-#include "expressions.hpp"
-#include "expression.hpp"
 #include "template_argument_assignment_expression.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes

@@ -21,6 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_DIRECT_ABSTRACT_DECLARATOR_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_DIRECT_ABSTRACT_DECLARATOR_HPP
 
+#include <memory>
 #include "common.hpp"
 #include "direct_declarator.hpp"
 #include "bracketed_abstract_declarator.hpp"
@@ -58,11 +59,13 @@ class direct_abstract_declarator: public composite_node
 
 		direct_abstract_declarator(direct_abstract_declarator&& o);
 
+		~direct_abstract_declarator();
+
 		const direct_abstract_declarator&
 		operator=(const direct_abstract_declarator& o);
 
 	private:
-		type impl_;
+		std::unique_ptr<type> impl_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

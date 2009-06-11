@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "conditional_expression.hpp"
+#include "conditional_expression_fwd.hpp"
 
 #include "expressions.hpp"
 #include "expression.hpp"

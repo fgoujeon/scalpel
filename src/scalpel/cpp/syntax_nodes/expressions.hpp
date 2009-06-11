@@ -206,8 +206,24 @@ typedef
 		logical_and_expression,
 		common_nodes::double_pipe
 	>
-	logical_or_expression
+	logical_or_expression_t
 ;
+struct logical_or_expression: public logical_or_expression_t
+{
+	logical_or_expression()
+	{
+	}
+
+	logical_or_expression(const logical_or_expression& o):
+		logical_or_expression_t(o)
+	{
+	}
+
+	logical_or_expression(logical_or_expression&& o):
+		logical_or_expression_t(o)
+	{
+	}
+};
 
 
 

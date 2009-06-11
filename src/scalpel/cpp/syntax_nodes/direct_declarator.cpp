@@ -18,19 +18,35 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_EXPRESSION_FWD_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_EXPRESSION_FWD_HPP
-
-#include "list_node.hpp"
-#include "common_nodes.hpp"
+#include "direct_declarator.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class assignment_expression;
+direct_declarator::direct_declarator
+(
+	head_node_t&& head,
+	tail_sequence_node_t&& tail
+):
+	type(head, tail)
+{
+}
 
-typedef list_node<assignment_expression, common_nodes::comma> expression;
+direct_declarator::direct_declarator
+(
+	const direct_declarator& o
+):
+	type(o)
+{
+}
+
+direct_declarator::direct_declarator
+(
+	direct_declarator&& o
+):
+	type(o)
+{
+}
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
-#endif

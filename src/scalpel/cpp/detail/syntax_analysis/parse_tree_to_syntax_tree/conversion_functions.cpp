@@ -491,14 +491,6 @@ convert_typeid_expression(const tree_node_t& node)
 	return typeid_expression();
 }
 
-typeof_expression
-convert_typeof_expression(const tree_node_t& node)
-{
-	assert(node.value.id() == id_t::TYPEOF_EXPRESSION);
-
-	return typeof_expression();
-}
-
 typename_expression
 convert_typename_expression(const tree_node_t& node)
 {

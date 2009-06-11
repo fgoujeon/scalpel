@@ -24,6 +24,32 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "list_node.hpp"
 #include "common_nodes.hpp"
 #include "assignment_expression.hpp"
-#include "expression_fwd.hpp"
+
+namespace scalpel { namespace cpp { namespace syntax_nodes
+{
+
+typedef
+	list_node<assignment_expression, common_nodes::comma>
+	expression_t
+;
+
+struct expression: public expression_t
+{
+	expression()
+	{
+	}
+
+	expression(const expression& s):
+		expression_t(s)
+	{
+	}
+
+	expression(expression&& s):
+		expression_t(s)
+	{
+	}
+};
+
+}}} //namespace scalpel::cpp::syntax_nodes
 
 #endif

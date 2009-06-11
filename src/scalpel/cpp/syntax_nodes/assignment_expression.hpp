@@ -21,10 +21,10 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_ASSIGNMENT_EXPRESSION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_ASSIGNMENT_EXPRESSION_HPP
 
+#include <memory>
 #include "common.hpp"
 #include "assignment_operator.hpp"
-#include "conditional_expression.hpp"
-#include "expressions.hpp"
+#include "conditional_expression_fwd.hpp"
 #include "throw_expression.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
@@ -47,83 +47,109 @@ assignment_expression_last_part
 ;
 \endverbatim
 */
-typedef
-	sequence_node
-	<
-		logical_or_expression,
-		optional_node<space>,
-		assignment_operator
-	>
-	assignment_expression_first_part
-;
-
-typedef
-	list_node
-	<
-		assignment_expression_first_part
-	>
-	assignment_expression_first_part_seq
-;
-
-typedef
-	alternative_node
-	<
-		conditional_expression,
-		throw_expression
-	>
-	assignment_expression_last_part
-;
-
-typedef
-	sequence_node
-	<
-		optional_node<assignment_expression_first_part_seq>,
-		optional_node<space>,
-		assignment_expression_last_part
-	>
-	assignment_expression_t
-;
-
-struct assignment_expression: public assignment_expression_t
+struct assignment_expression: public composite_node
 {
-	typedef assignment_expression_t type;
-	typedef type::head_node_t head_node_t;
-	typedef type::tail_sequence_node_t tail_sequence_node_t;
+	public:
+		class first_part;
 
-	typedef assignment_expression_first_part first_part;
-	typedef assignment_expression_first_part_seq first_part_seq;
-	typedef assignment_expression_last_part last_part;
+		typedef
+			list_node<first_part>
+			first_part_seq
+		;
 
-	assignment_expression
-	(
-		optional_node<assignment_expression_first_part_seq>&& o1,
-		optional_node<space>&& o2,
-		assignment_expression_last_part&& o3
-	):
-		type(o1, o2, o3)
-	{
-	}
+		typedef
+			alternative_node
+			<
+				conditional_expression,
+				throw_expression
+			>
+			last_part
+		;
 
-	assignment_expression
-	(
-		head_node_t&& head,
-		tail_sequence_node_t&& tail
-	):
-		type(head, tail)
-	{
-	}
+		typedef
+			sequence_node
+			<
+				optional_node<first_part_seq>,
+				optional_node<space>,
+				last_part
+			>
+			type
+		;
+		typedef type::head_node_t head_node_t;
+		typedef type::tail_sequence_node_t tail_sequence_node_t;
 
-	assignment_expression(const assignment_expression& o):
-		type(o)
-	{
-	}
+		assignment_expression
+		(
+			optional_node<first_part_seq>&& o1,
+			optional_node<space>&& o2,
+			last_part&& o3
+		);
 
-	assignment_expression(assignment_expression&& o):
-		type(o)
-	{
-	}
+		assignment_expression
+		(
+			head_node_t&& head,
+			tail_sequence_node_t&& tail
+		);
 
-	using type::operator=;
+		assignment_expression(const assignment_expression& o);
+
+		assignment_expression(assignment_expression&& o);
+
+		~assignment_expression();
+
+		const assignment_expression&
+		operator=(const assignment_expression& o);
+
+	private:
+		std::unique_ptr<type> impl_;
+};
+
+class assignment_expression::first_part: public composite_node
+{
+	public:
+		typedef
+			sequence_node
+			<
+				logical_or_expression,
+				optional_node<space>,
+				assignment_operator
+			>
+			type
+		;
+		typedef logical_or_expression head_node_t;
+		typedef
+			sequence_node
+			<
+				optional_node<space>,
+				assignment_operator
+			>
+			tail_sequence_node_t
+		;
+
+		first_part
+		(
+			logical_or_expression&& o0,
+			optional_node<space>&& o1,
+			assignment_operator&& o2
+		);
+
+		first_part
+		(
+			head_node_t&& head,
+			tail_sequence_node_t&& tail
+		);
+
+		first_part(const first_part& o);
+
+		first_part(first_part&& o);
+
+		~first_part();
+
+		const first_part&
+		operator=(const first_part& o);
+
+	private:
+		std::unique_ptr<type> impl_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

@@ -24,35 +24,39 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 direct_abstract_declarator::direct_abstract_declarator(const bracketed_abstract_declarator& o):
-	impl_(o)
+	impl_(new type(o))
 {
-	add(impl_);
+	add(*impl_);
 }
 
 direct_abstract_declarator::direct_abstract_declarator(const direct_declarator_last_part_seq& o):
-	impl_(o)
+	impl_(new type(o))
 {
-	add(impl_);
+	add(*impl_);
 }
 
 direct_abstract_declarator::direct_abstract_declarator(const direct_abstract_declarator& o):
 	composite_node(),
-	impl_(o.impl_)
+	impl_(new type(*o.impl_))
 {
-	add(impl_);
+	add(*impl_);
 }
 
 direct_abstract_declarator::direct_abstract_declarator(direct_abstract_declarator&& o):
 	composite_node(),
-	impl_(o.impl_)
+	impl_(std::move(o.impl_))
 {
-	add(impl_);
+	add(*impl_);
+}
+
+direct_abstract_declarator::~direct_abstract_declarator()
+{
 }
 
 const direct_abstract_declarator&
 direct_abstract_declarator::operator=(const direct_abstract_declarator& o)
 {
-	impl_ = o.impl_;
+	*impl_ = *o.impl_;
 	return *this;
 }
 

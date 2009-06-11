@@ -21,6 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "member_declaration_member_declarator_list.hpp"
 
 #include "common_nodes.hpp"
+#include "expressions.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {

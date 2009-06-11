@@ -87,6 +87,8 @@ namespace extern_strings
 	//keywords
 	const std::string __restrict_("__restrict");
 	const std::string __restrict___("__restrict__");
+	const std::string __typeof_("__typeof");
+	const std::string __typeof___("__typeof__");
 	const std::string asm_("asm");
 	const std::string bool_("bool");
 	const std::string break_("break");
@@ -141,6 +143,7 @@ namespace extern_strings
 	const std::string try_("try");
 	const std::string typedef_("typedef");
 	const std::string typename_("typename");
+	const std::string typeof_("typeof");
 	const std::string union_("union");
 	const std::string unsigned_("unsigned");
 	const std::string using_("using");

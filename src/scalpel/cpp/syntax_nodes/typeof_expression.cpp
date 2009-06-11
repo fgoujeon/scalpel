@@ -22,7 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
-
+/*
 typeof_expression::typeof_expression
 (
 )
@@ -55,6 +55,6 @@ typeof_expression::update_node_list()
 {
 	clear();
 }
-
+*/
 }}} //namespace scalpel::cpp::syntax_nodes
 

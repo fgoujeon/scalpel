@@ -90,6 +90,8 @@ namespace extern_strings
 	//keywords
 	extern const std::string __restrict_;
 	extern const std::string __restrict___;
+	extern const std::string __typeof_;
+	extern const std::string __typeof___;
 	extern const std::string asm_;
 	extern const std::string bool_;
 	extern const std::string break_;
@@ -144,6 +146,7 @@ namespace extern_strings
 	extern const std::string try_;
 	extern const std::string typedef_;
 	extern const std::string typename_;
+	extern const std::string typeof_;
 	extern const std::string union_;
 	extern const std::string unsigned_;
 	extern const std::string using_;
