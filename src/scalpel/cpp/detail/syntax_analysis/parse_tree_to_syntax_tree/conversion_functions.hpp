@@ -138,9 +138,6 @@ convert_typeid_expression(const tree_node_t& node);
 syntax_nodes::typeof_expression
 convert_typeof_expression(const tree_node_t& node);
 
-syntax_nodes::typename_elaborated_specifier
-convert_typename_elaborated_specifier(const tree_node_t& node);
-
 syntax_nodes::typename_expression
 convert_typename_expression(const tree_node_t& node);
 

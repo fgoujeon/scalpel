@@ -21,29 +21,31 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_TYPENAME_ELABORATED_SPECIFIER_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_TYPENAME_ELABORATED_SPECIFIER_HPP
 
-#include "composite_node.hpp"
+#include "common.hpp"
+#include "nested_name_specifier.hpp"
+#include "identifier.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class typename_elaborated_specifier: public composite_node
-{
-	public:
-		typename_elaborated_specifier
-		(
-		);
-
-		typename_elaborated_specifier(const typename_elaborated_specifier& o);
-
-		typename_elaborated_specifier(typename_elaborated_specifier&& o);
-
-		const typename_elaborated_specifier&
-		operator=(const typename_elaborated_specifier& o);
-
-	private:
-		void
-		update_node_list();
-};
+/**
+typename_elaborated_specifier
+	= str_p("typename") >> !s >> !(str_p("::") >> !s) >> nested_name_specifier >> !s >> identifier
+;
+*/
+typedef
+	sequence_node
+	<
+		simple_text_node<str::typename_>,
+		optional_node<space>,
+		optional_node<simple_text_node<str::double_colon>>,
+		optional_node<space>,
+		nested_name_specifier,
+		optional_node<space>,
+		identifier
+	>
+	typename_elaborated_specifier
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

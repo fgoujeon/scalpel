@@ -527,14 +527,6 @@ convert_typeof_expression(const tree_node_t& node)
 	return typeof_expression();
 }
 
-typename_elaborated_specifier
-convert_typename_elaborated_specifier(const tree_node_t& node)
-{
-	assert(node.value.id() == id_t::TYPENAME_ELABORATED_SPECIFIER);
-
-	return typename_elaborated_specifier();
-}
-
 typename_expression
 convert_typename_expression(const tree_node_t& node)
 {
