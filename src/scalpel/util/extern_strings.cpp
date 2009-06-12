@@ -40,7 +40,6 @@ namespace extern_strings
 	const std::string closing_square_bracket("]");
 	const std::string colon(":");
 	const std::string comma(",");
-	const std::string comma_equal(",=");
 	const std::string dot(".");
 	const std::string dot_asterisk(".*");
 	const std::string double_ampersand("&&");

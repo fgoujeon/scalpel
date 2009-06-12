@@ -43,7 +43,6 @@ namespace extern_strings
 	extern const std::string closing_square_bracket;
 	extern const std::string colon;
 	extern const std::string comma;
-	extern const std::string comma_equal;
 	extern const std::string dot;
 	extern const std::string dot_asterisk;
 	extern const std::string double_ampersand;

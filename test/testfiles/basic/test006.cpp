@@ -17,6 +17,8 @@ int main()
 
 	bool b = true;
 	b = false ;
+	bool b2 = false;
+	b2 |= b;
 
 	char c = 'c';
 	char* str = "";

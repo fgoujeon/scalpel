@@ -39,7 +39,7 @@ typedef
 		simple_text_node<str::double_left_angle_bracket_equal>,
 		simple_text_node<str::ampersand_equal>,
 		simple_text_node<str::circumflex_equal>,
-		simple_text_node<str::comma_equal>
+		simple_text_node<str::pipe_equal>
 	>
 	assignment_operator
 ;
