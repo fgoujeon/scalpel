@@ -27,6 +27,8 @@ a_class< T >  :: get_t ( ) const
 
 class simple_class;
 
+template class a_class<simple_class>;
+
 int
 main()
 {

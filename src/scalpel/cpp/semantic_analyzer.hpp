@@ -132,6 +132,9 @@ class semantic_analyzer
 		analyze(const syntax_nodes::elaborated_type_specifier& syntax_node);
 
         void
+		analyze(const syntax_nodes::explicit_instantiation& syntax_node);
+
+        void
 		analyze(const syntax_nodes::explicit_specialization& syntax_node);
 
         void

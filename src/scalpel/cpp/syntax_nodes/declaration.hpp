@@ -30,7 +30,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 class block_declaration;
 class function_definition;
 class template_declaration;
-//class explicit_instantiation;
+class explicit_instantiation;
 class explicit_specialization;
 class linkage_specification;
 class namespace_definition;
@@ -41,7 +41,7 @@ typedef
 		block_declaration,
 		function_definition,
 		template_declaration,
-		//explicit_instantiation,
+		explicit_instantiation,
 		explicit_specialization,
 		linkage_specification,
 		namespace_definition
@@ -54,7 +54,7 @@ typedef
 	<
 		function_definition,
 		template_declaration,
-		//explicit_instantiation,
+		explicit_instantiation,
 		explicit_specialization,
 		linkage_specification,
 		namespace_definition
@@ -77,7 +77,7 @@ class declaration: public composite_node
 
 		declaration(template_declaration&& o);
 
-		//declaration(explicit_instantiation&& o);
+		declaration(explicit_instantiation&& o);
 
 		declaration(explicit_specialization&& o);
 
@@ -102,6 +102,9 @@ class declaration: public composite_node
 
 		void
 		get(boost::optional<const template_declaration&>& o) const;
+
+		void
+		get(boost::optional<const explicit_instantiation&>& o) const;
 
 		void
 		get(boost::optional<const explicit_specialization&>& o) const;

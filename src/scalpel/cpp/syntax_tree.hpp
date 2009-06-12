@@ -64,6 +64,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "syntax_nodes/enum_elaborated_specifier.hpp"
 #include "syntax_nodes/exception_declaration.hpp"
 #include "syntax_nodes/exception_specification.hpp"
+#include "syntax_nodes/explicit_instantiation.hpp"
 #include "syntax_nodes/explicit_specialization.hpp"
 #include "syntax_nodes/expression.hpp"
 #include "syntax_nodes/expression_statement.hpp"

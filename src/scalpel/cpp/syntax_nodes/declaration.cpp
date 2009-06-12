@@ -23,7 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "block_declaration.hpp"
 #include "function_definition.hpp"
 #include "template_declaration.hpp"
-//#include "explicit_instantiation.hpp"
+#include "explicit_instantiation.hpp"
 #include "explicit_specialization.hpp"
 #include "linkage_specification.hpp"
 #include "namespace_definition.hpp"
@@ -49,7 +49,11 @@ declaration::declaration(template_declaration&& o):
 	add(*impl_);
 }
 
-//declaration::declaration(explicit_instantiation&& o)
+declaration::declaration(explicit_instantiation&& o):
+	impl_(new type(o))
+{
+	add(*impl_);
+}
 
 declaration::declaration(explicit_specialization&& o):
 	impl_(new type(o))
@@ -108,6 +112,12 @@ declaration::get(boost::optional<const function_definition&>& o) const
 
 void
 declaration::get(boost::optional<const template_declaration&>& o) const
+{
+	impl_->get(o);
+}
+
+void
+declaration::get(boost::optional<const explicit_instantiation&>& o) const
 {
 	impl_->get(o);
 }

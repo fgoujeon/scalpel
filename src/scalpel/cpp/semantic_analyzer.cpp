@@ -196,6 +196,11 @@ semantic_analyzer::analyze(const elaborated_type_specifier&)
 }
 
 void
+semantic_analyzer::analyze(const explicit_instantiation&)
+{
+}
+
+void
 semantic_analyzer::analyze(const explicit_specialization&)
 {
 }
