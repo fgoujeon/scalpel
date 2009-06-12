@@ -85,6 +85,8 @@ namespace extern_strings
 	const std::string zero("0");
 
 	//keywords
+	const std::string __imag___("__imag__");
+	const std::string __real___("__real__");
 	const std::string __restrict_("__restrict");
 	const std::string __restrict___("__restrict__");
 	const std::string __typeof_("__typeof");

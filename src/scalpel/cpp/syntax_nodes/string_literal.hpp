@@ -34,28 +34,25 @@ string_literal
 ;
 \endverbatim
 */
-class string_literal: public composite_node
+struct string_literal: public leaf_node
 {
-	public:
-		string_literal
-		(
-			bool wide,
-			std::string&& value
-		);
+	string_literal
+	(
+		std::string&& value
+	):
+		leaf_node(value)
+	{
+	}
 
-		string_literal(const string_literal& o);
+	string_literal(const string_literal& o):
+		leaf_node(o)
+	{
+	}
 
-		string_literal(string_literal&& o);
-
-		const string_literal&
-		operator=(const string_literal& o);
-
-	private:
-		void
-		update_node_list();
-
-		bool wide_;
-		leaf_node value_;
+	string_literal(string_literal&& o):
+		leaf_node(o)
+	{
+	}
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

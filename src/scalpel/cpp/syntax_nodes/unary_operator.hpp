@@ -36,7 +36,9 @@ typedef
 		simple_text_node<str::plus>,
 		simple_text_node<str::minus>,
 		simple_text_node<str::exclamation>,
-		simple_text_node<str::tilde>
+		simple_text_node<str::tilde>,
+		simple_text_node<str::__real___>,
+		simple_text_node<str::__imag___>
 	>
 	unary_operator
 ;

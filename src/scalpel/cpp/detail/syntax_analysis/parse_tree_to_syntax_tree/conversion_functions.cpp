@@ -375,25 +375,9 @@ convert_string_literal(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::STRING_LITERAL);
 
-	bool wide = false;
-
-	tree_node_iterator_t i = node.children.begin();
-	if(get_value(*i) == "L")
-	{
-		wide = true;
-		++i;
-	}
-
-	++i; //iterate to string value
-	std::string value = get_value(*i);
-
-	//if we iterated to closing double quote, the value is empty
-	if(value == "\"") value = "";
-
 	return string_literal
 	(
-		wide,
-		value
+		get_only_child_value(node)
 	);
 }
 

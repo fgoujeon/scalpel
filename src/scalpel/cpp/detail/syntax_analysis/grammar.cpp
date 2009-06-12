@@ -320,7 +320,10 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	string_literal
-		= !ch_p('L') >> '"' >> !token_node_d[s_char_sequence] >> '"'
+		= token_node_d[single_string_literal % !s]
+	;
+	single_string_literal
+		= !ch_p('L') >> '"' >> !s_char_sequence >> '"'
 	;
 
 	s_char_sequence
@@ -586,16 +589,34 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 		= str_p("sizeof") >> !s >> unary_expression
 	;
 
-	unary_operator
-		= str_p("++")
-		| "--"
-		| '*'
-		| '&'
-		| '+'
-		| '-'
-		| '!'
-		| '~'
-	;
+	if(configuration_.enable_real_imag_support)
+	{
+		unary_operator
+			= str_p("++")
+			| "--"
+			| '*'
+			| '&'
+			| '+'
+			| '-'
+			| '!'
+			| '~'
+			| "__real__"
+			| "__imag__"
+		;
+	}
+	else
+	{
+		unary_operator
+			= str_p("++")
+			| "--"
+			| '*'
+			| '&'
+			| '+'
+			| '-'
+			| '!'
+			| '~'
+		;
+	}
 
 	new_expression
 		= type_id_new_expression

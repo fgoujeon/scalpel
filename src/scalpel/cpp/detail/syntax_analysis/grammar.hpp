@@ -37,13 +37,15 @@ class grammar
             configuration():
                 enable_typeof_support(true),
                 enable_restrict_support(true),
-				enable_attribute_support(true)
+				enable_attribute_support(true),
+				enable_real_imag_support(true)
             {
             }
 
             bool enable_typeof_support;
             bool enable_restrict_support;
 			bool enable_attribute_support;
+			bool enable_real_imag_support;
         };
 
         enum parser_id
@@ -182,7 +184,7 @@ class grammar
 			TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION_FIRST_PART_SEQ,
 			TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION_FIRST_PART,
 			TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION_LAST_PART,
-            ASSIGNMENT_OPERATOR,
+            ASSIGNMENT_OPERATOR = 131,
             EXPRESSION,
 
             STATEMENT,
@@ -428,6 +430,7 @@ class grammar
         boost::spirit::rule<scanner_t> digit_sequence;
         boost::spirit::rule<scanner_t> floating_suffix;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::STRING_LITERAL>> string_literal;
+        boost::spirit::rule<scanner_t> single_string_literal;
         boost::spirit::rule<scanner_t> s_char_sequence;
         boost::spirit::rule<scanner_t> s_char;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::BOOLEAN_LITERAL>> boolean_literal;
