@@ -1,31 +1,31 @@
-//#include <algorithm>
+//#include <algorithm> //OK
 //#include <bitset>
 //#include <complex>
-//#include <deque>
-//#include <exception>
+//#include <deque> //OK
+//#include <exception> //OK
 //#include <fstream>
-//#include <functional>
+//#include <functional> //OK
 //#include <iomanip>
 //#include <ios>
-//#include <iosfwd>
+//#include <iosfwd> //OK
 //#include <istream>
 //#include <iterator>
-//#include <limits>
-//#include <list>
+//#include <limits> //OK
+//#include <list> //OK
 //#include <locale>
-//#include <map>
-//#include <memory>
-//#include <new>
-//#include <numeric>
+//#include <map> //OK
+//#include <memory> //OK
+//#include <new> //OK
+//#include <numeric> //OK
 //#include <ostream>
 //#include <queue>
-//#include <set>
+//#include <set> //OK
 //#include <sstream>
-//#include <stack>
+//#include <stack> //OK
 //#include <stdexcept>
 //#include <streambuf>
 //#include <string>
-//#include <typeinfo>
-//#include <utility>
+//#include <typeinfo> //OK
+//#include <utility> //OK
 //#include <valarray>
 //#include <vector>

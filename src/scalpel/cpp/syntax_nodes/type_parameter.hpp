@@ -24,6 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "common.hpp"
 #include "class_type_parameter.hpp"
 #include "typename_type_parameter.hpp"
+#include "template_type_parameter.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -32,7 +33,8 @@ typedef
 	alternative_node
 	<
 		class_type_parameter,
-		typename_type_parameter
+		typename_type_parameter,
+		template_type_parameter
 	>
 	type_parameter
 ;

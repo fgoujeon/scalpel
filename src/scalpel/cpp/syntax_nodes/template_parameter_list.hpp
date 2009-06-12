@@ -34,8 +34,25 @@ typedef
 		template_parameter,
 		common_nodes::comma
 	>
-	template_parameter_list
+	template_parameter_list_t
 ;
+
+struct template_parameter_list: public template_parameter_list_t
+{
+	template_parameter_list()
+	{
+	}
+
+	template_parameter_list(const template_parameter_list& o):
+		template_parameter_list_t(o)
+	{
+	}
+
+	template_parameter_list(template_parameter_list&& o):
+		template_parameter_list_t(o)
+	{
+	}
+};
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

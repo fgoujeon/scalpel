@@ -134,6 +134,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "syntax_nodes/template_argument_list.hpp"
 #include "syntax_nodes/template_declaration.hpp"
 #include "syntax_nodes/template_id.hpp"
+#include "syntax_nodes/template_type_parameter.hpp"
 #include "syntax_nodes/translation_unit.hpp"
 #include "syntax_nodes/try_block.hpp"
 #include "syntax_nodes/type_id.hpp"

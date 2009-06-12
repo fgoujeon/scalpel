@@ -1039,8 +1039,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	storage_class_specifier
-		= str_p("auto")
-		| str_p("register")
+		= str_p("register")
 		| str_p("static")
 		| str_p("extern")
 		| str_p("mutable")
