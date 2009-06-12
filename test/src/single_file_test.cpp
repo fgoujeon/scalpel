@@ -66,7 +66,8 @@ single_file_test::parse_files(const std::string& test_directory)
 			"/usr/include/c++/4.4.0",
 			"/usr/include/c++/4.4.0/i686-pc-linux-gnu",
 			"/usr/include/c++/4.4.0/parallel",
-			"/usr/include/linux"
+			"/usr/include/linux",
+			"/usr/lib/gcc/i686-pc-linux-gnu/4.4.0/include"
 		};
 		std::string preprocessed_code = m_preprocessor(buffer.str(), include_paths);
 

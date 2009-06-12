@@ -30,7 +30,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 /**
 enum_specifier
-	= str_p("enum") >> !s >> !(identifier >> !s) >> ch_p('{') >> !s >> !(enumerator_list >> !s) >> ch_p('}')
+	= str_p("enum") >> !s >> !(identifier >> !s) >> ch_p('{') >> !s >> !(enumerator_list >> !s) >> !(ch_p(',') >> !s) >> ch_p('}')
 ;
 */
 typedef
@@ -43,6 +43,8 @@ typedef
 		simple_text_node<str::opening_brace>,
 		optional_node<space>,
 		optional_node<enumerator_list>,
+		optional_node<space>,
+		optional_node<simple_text_node<str::comma>>,
 		optional_node<space>,
 		simple_text_node<str::closing_brace>
 	>

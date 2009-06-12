@@ -1091,7 +1091,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	enum_specifier
-		= str_p("enum") >> !s >> !(identifier >> !s) >> ch_p('{') >> !s >> !(enumerator_list >> !s) >> ch_p('}')
+		= str_p("enum") >> !s >> !(identifier >> !s) >> ch_p('{') >> !s >> !(enumerator_list >> !s) >> !(ch_p(',') >> !s) >> ch_p('}')
 	;
 
 	enumerator_list
@@ -1648,7 +1648,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	;
 
 	template_id
-		= type_name >> !s >> '<' >> !s >> !(template_argument_list >> !s) >> '>'
+		= identifier >> !s >> '<' >> !s >> !(template_argument_list >> !s) >> '>'
 	;
 
 	template_argument_list
