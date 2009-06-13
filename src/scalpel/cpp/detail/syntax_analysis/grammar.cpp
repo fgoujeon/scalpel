@@ -1297,7 +1297,7 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	cv_qualifier
 		= str_p("const")
 		| "volatile"
-		| restrict_keyword
+		| token_node_d[restrict_keyword]
 	;
 
 	declarator_id

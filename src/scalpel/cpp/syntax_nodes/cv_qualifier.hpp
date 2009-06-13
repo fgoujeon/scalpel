@@ -32,8 +32,8 @@ typedef
 		simple_text_node<str::const_>,
 		simple_text_node<str::volatile_>,
 		simple_text_node<str::restrict_>,
-		simple_text_node<str::__restrict_>,
-		simple_text_node<str::__restrict___>
+		simple_text_node<str::__restrict___>,
+		simple_text_node<str::__restrict_>
 	>
 	cv_qualifier
 ;
