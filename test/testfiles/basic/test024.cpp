@@ -4,6 +4,6 @@ int i = sizeof
 ) ;
 
 bool b;
-int i2 = sizeof b;
+int i2 = sizeof  b ;
 
 
