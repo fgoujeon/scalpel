@@ -25,36 +25,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace detail { namespace syntax_analysis
 {
 
-/*-----------------------------------------------*
- *	class internal_type_name_functor_parser	*
- *-----------------------------------------------*/
-
-grammar::internal_type_name_functor_parser::internal_type_name_functor_parser
-(
-	type_name_parser& a_type_name_parser
-):
-	type_name_parser_(a_type_name_parser)
-{
-}
-
-std::ptrdiff_t
-grammar::internal_type_name_functor_parser::operator()
-(
-	const scanner_t& scan,
-	internal_type_name_functor_parser::result_t&
-) const
-{
-	return type_name_parser_(scan);
-}
-
-
-/*------------------------------*
- *		class grammar		 *
- *------------------------------*/
-
-grammar::grammar(type_name_parser& a_type_name_parser):
-	internal_type_name_parser_(a_type_name_parser),
-	type_name_p(internal_type_name_parser_)
+grammar::grammar()
 {
 	using namespace boost::spirit;
 
@@ -1690,11 +1661,11 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 
 	//1.13 - Exception handling [gram.except]
 	try_block
-		= str_p("try") >> !s >> compound_statement >> !(!s >> handler_seq) //handler_seq is made optional to facilitate the source code completion done during the syntax analysis
+		= str_p("try") >> !s >> compound_statement >> !s >> handler_seq
 	;
 
 	function_try_block
-		= str_p("try") >> !s >> !(ctor_initializer >> !s) >> compound_statement >> !(!s >> handler_seq) //handler_seq is made optional to facilitate the source code completion done during the syntax analysis
+		= str_p("try") >> !s >> !(ctor_initializer >> !s) >> compound_statement >> !s >> handler_seq
 	;
 
 	handler_seq
@@ -1736,10 +1707,6 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	/*
 	Convenience rules
 	*/
-	type_name
-		= token_node_d[identifier & type_name_p]
-	;
-
 	identifier_or_template_id
 		= template_id
 		| identifier
