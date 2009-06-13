@@ -141,14 +141,6 @@ convert_dot_pseudo_destructor_name(const tree_node_t& node)
 	return dot_pseudo_destructor_name();
 }
 
-empty_initializer_list_initializer_clause
-convert_empty_initializer_list_initializer_clause(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::EMPTY_INITIALIZER_LIST_INITIALIZER_CLAUSE);
-
-	return empty_initializer_list_initializer_clause();
-}
-
 enum_elaborated_specifier
 convert_enum_elaborated_specifier(const tree_node_t& node)
 {
@@ -229,16 +221,6 @@ convert_identifier(const tree_node_t& node)
     );
 
     return identifier(get_only_child_value(node));
-}
-
-initializer_list_initializer_clause
-convert_initializer_list_initializer_clause(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::INITIALIZER_LIST_INITIALIZER_CLAUSE);
-
-	return initializer_list_initializer_clause
-	(
-	);
 }
 
 integer_literal

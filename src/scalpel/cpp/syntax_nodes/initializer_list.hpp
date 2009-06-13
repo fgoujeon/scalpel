@@ -18,31 +18,39 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_EMPTY_INITIALIZER_LIST_INITIALIZER_CLAUSE_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_EMPTY_INITIALIZER_LIST_INITIALIZER_CLAUSE_HPP
+#ifndef SCALPEL_CPP_SYNTAX_NODES_INITIALIZER_LIST_HPP
+#define SCALPEL_CPP_SYNTAX_NODES_INITIALIZER_LIST_HPP
 
-#include "composite_node.hpp"
+#include "common.hpp"
+#include "initializer_clause.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class empty_initializer_list_initializer_clause: public composite_node
+typedef
+	list_node
+	<
+		initializer_clause,
+		common_nodes::comma
+	>
+	initializer_list_t
+;
+
+struct initializer_list: public initializer_list_t
 {
-	public:
-		empty_initializer_list_initializer_clause
-		(
-		);
+	initializer_list()
+	{
+	}
 
-		empty_initializer_list_initializer_clause(const empty_initializer_list_initializer_clause& o);
+	initializer_list(const initializer_list& o):
+		initializer_list_t(o)
+	{
+	}
 
-		empty_initializer_list_initializer_clause(empty_initializer_list_initializer_clause&& o);
-
-		const empty_initializer_list_initializer_clause&
-		operator=(const empty_initializer_list_initializer_clause& o);
-
-	private:
-		void
-		update_node_list();
+	initializer_list(initializer_list&& o):
+		initializer_list_t(o)
+	{
+	}
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

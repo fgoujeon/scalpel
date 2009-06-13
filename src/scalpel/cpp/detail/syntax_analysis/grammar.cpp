@@ -1424,15 +1424,11 @@ grammar::grammar(type_name_parser& a_type_name_parser):
 	initializer_clause
 		= assignment_expression
 		| initializer_list_initializer_clause
-		| empty_initializer_list_initializer_clause
 	;
 
 	initializer_list_initializer_clause
 		= ch_p('{') >> !s >> initializer_list >> !s >> !(ch_p(',') >> !s) >> ch_p('}')
-	;
-
-	empty_initializer_list_initializer_clause
-		= ch_p('{') >> !s >> ch_p('}')
+		| ch_p('{') >> !s >> ch_p('}')
 	;
 
 	initializer_list

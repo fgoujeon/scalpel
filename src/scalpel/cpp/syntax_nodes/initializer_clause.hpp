@@ -24,7 +24,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "alternative_node.hpp"
 #include "assignment_expression.hpp"
 #include "initializer_list_initializer_clause.hpp"
-#include "empty_initializer_list_initializer_clause.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -33,8 +32,7 @@ typedef
 	alternative_node
 	<
 		assignment_expression,
-		initializer_list_initializer_clause,
-		empty_initializer_list_initializer_clause
+		initializer_list_initializer_clause
 	>
 	initializer_clause
 ;

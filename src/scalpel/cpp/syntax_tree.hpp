@@ -81,6 +81,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "syntax_nodes/identifier_or_template_id.hpp"
 #include "syntax_nodes/if_statement.hpp"
 #include "syntax_nodes/init_declarator.hpp"
+#include "syntax_nodes/initializer_list.hpp"
+#include "syntax_nodes/initializer_list_initializer_clause.hpp"
 #include "syntax_nodes/integer_literal.hpp"
 #include "syntax_nodes/iteration_statement.hpp"
 #include "syntax_nodes/jump_statement.hpp"

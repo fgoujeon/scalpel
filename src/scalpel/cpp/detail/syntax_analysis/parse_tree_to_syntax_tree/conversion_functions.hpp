@@ -48,9 +48,6 @@ convert_direct_abstract_declarator(const tree_node_t& node);
 syntax_nodes::dot_pseudo_destructor_name
 convert_dot_pseudo_destructor_name(const tree_node_t& node);
 
-syntax_nodes::empty_initializer_list_initializer_clause
-convert_empty_initializer_list_initializer_clause(const tree_node_t& node);
-
 syntax_nodes::enum_elaborated_specifier
 convert_enum_elaborated_specifier(const tree_node_t& node);
 
@@ -65,9 +62,6 @@ convert_function_try_block(const tree_node_t& node);
 
 syntax_nodes::identifier
 convert_identifier(const tree_node_t& node);
-
-syntax_nodes::initializer_list_initializer_clause
-convert_initializer_list_initializer_clause(const tree_node_t& node);
 
 syntax_nodes::integer_literal
 convert_integer_literal(const tree_node_t& node);

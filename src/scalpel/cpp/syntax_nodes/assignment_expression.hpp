@@ -47,7 +47,7 @@ assignment_expression_last_part
 ;
 \endverbatim
 */
-struct assignment_expression: public composite_node
+class assignment_expression: public composite_node
 {
 	public:
 		class first_part;
