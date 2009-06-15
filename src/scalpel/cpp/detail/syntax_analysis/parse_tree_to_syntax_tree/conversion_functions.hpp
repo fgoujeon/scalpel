@@ -54,9 +54,6 @@ convert_enum_elaborated_specifier(const tree_node_t& node);
 syntax_nodes::floating_literal
 convert_floating_literal(const tree_node_t& node);
 
-syntax_nodes::function_definition
-convert_function_definition(const tree_node_t& node);
-
 syntax_nodes::function_try_block
 convert_function_try_block(const tree_node_t& node);
 

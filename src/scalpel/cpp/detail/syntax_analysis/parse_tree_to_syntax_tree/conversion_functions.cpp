@@ -157,35 +157,6 @@ convert_floating_literal(const tree_node_t& node)
 	return floating_literal(get_only_child_value(node));
 }
 
-function_definition
-convert_function_definition(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::FUNCTION_DEFINITION);
-
-	tree_node_iterator_t decl_specifier_seq_it = find_node
-	<
-		id_t::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ1,
-		id_t::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ2,
-		id_t::FUNCTION_DEFINITION_DECL_SPECIFIER_SEQ3
-	>(node);
-	tree_node_iterator_t declarator_it = find_node<id_t::DECLARATOR>(node);
-	tree_node_iterator_t ctor_initializer_it = find_node<id_t::CTOR_INITIALIZER>(node);
-	tree_node_iterator_t compound_statement_it = find_node<id_t::COMPOUND_STATEMENT>(node);
-	tree_node_iterator_t function_try_block_it = find_node<id_t::FUNCTION_TRY_BLOCK>(node);
-
-    return function_definition
-    (
-		convert_optional_node<decl_specifier_seq>(node, decl_specifier_seq_it),
-		convert_next_space(node, decl_specifier_seq_it),
-		convert_node<declarator>(*declarator_it),
-		convert_next_space(node, declarator_it),
-		convert_optional_node<ctor_initializer>(node, ctor_initializer_it),
-		convert_next_space(node, ctor_initializer_it),
-		convert_optional_node<compound_statement>(node, compound_statement_it),
-		convert_optional_node<function_try_block>(node, function_try_block_it)
-    );
-}
-
 function_try_block
 convert_function_try_block(const tree_node_t& node)
 {

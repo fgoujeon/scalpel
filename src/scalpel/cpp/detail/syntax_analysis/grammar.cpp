@@ -1377,9 +1377,15 @@ grammar::grammar()
 		;
 	*/
 	function_definition
+		= simple_function_definition
+		| try_block_function_definition
+	;
+	simple_function_definition
 		= !(function_definition_decl_specifier_seq1 >> !s) >> declarator >> !s >> ctor_initializer >> !s >> compound_statement
 		| !(function_definition_decl_specifier_seq2 >> !s) >> declarator >> !s >> compound_statement
-		| !(function_definition_decl_specifier_seq3 >> !s) >> declarator >> !s >> function_try_block
+	;
+	try_block_function_definition
+		= !(function_definition_decl_specifier_seq3 >> !s) >> declarator >> !s >> function_try_block
 	;
 	function_definition_decl_specifier_seq1
 		= (decl_specifier - (declarator >> !s >> ctor_initializer >> !s >> compound_statement)) % !s

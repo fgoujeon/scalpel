@@ -225,7 +225,7 @@ semantic_analyzer::analyze(const function_definition& syntax_node)
 	std::string name;
 	scope* enclosing_scope = 0;
 
-	const direct_declarator::first_part& first_part_node = syntax_node.declarator_node().direct_declarator_node().first_part_node();
+	const direct_declarator::first_part& first_part_node = get_declarator(syntax_node).direct_declarator_node().first_part_node();
 	boost::optional<const declarator_id&> a_declarator_id = get<declarator_id>(&first_part_node);
 	if(a_declarator_id)
 	{
@@ -320,8 +320,11 @@ semantic_analyzer::analyze(const function_definition& syntax_node)
 	{
 		scope_cursor_.enter_scope(*function_scope);
 
-		auto opt_compound_statement = syntax_node.compound_statement_node();
-		if(opt_compound_statement) analyze(*opt_compound_statement, false);
+		if(auto opt_simple_function_definition = get<simple_function_definition>(&syntax_node))
+		{
+			auto compound_statement_node = get_compound_statement(*opt_simple_function_definition);
+			analyze(compound_statement_node, false);
+		}
 
 		scope_cursor_.leave_scope();
 	}
