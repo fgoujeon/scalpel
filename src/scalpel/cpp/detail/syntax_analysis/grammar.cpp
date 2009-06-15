@@ -341,8 +341,16 @@ grammar::grammar()
 		= operator_function_id
 		| conversion_function_id
 		| destructor_name
-		| (template_id - (template_id >> !s >> identifier)) // "a < b || c > d" is not a template-id, but a boolean expression!
+		| (template_id - fake_template_id) // "a < b || c > d" is not a template-id, but a boolean expression!
 		| identifier
+	;
+	fake_template_id
+		= template_id >> !s >>
+		(
+			str_p("this")
+			| literal
+			| id_expression
+		)
 	;
 
 	qualified_id
@@ -836,13 +844,13 @@ grammar::grammar()
 
 	//1.5 - Statements [gram.stmt.stmt]
 	statement
-		= labeled_statement
+		= block_declaration
+		| labeled_statement
 		| expression_statement
 		| compound_statement
 		| selection_statement
 		| iteration_statement
 		| jump_statement
-		| block_declaration
 		| try_block
 	;
 

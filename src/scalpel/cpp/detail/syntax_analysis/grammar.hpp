@@ -420,6 +420,7 @@ class grammar
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ROUND_BRACKETED_EXPRESSION>> round_bracketed_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ID_EXPRESSION>> id_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::UNQUALIFIED_ID>> unqualified_id;
+        boost::spirit::rule<scanner_t> fake_template_id;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::QUALIFIED_ID>> qualified_id;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::QUALIFIED_NESTED_ID>> qualified_nested_id;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::QUALIFIED_OPERATOR_FUNCTION_ID>> qualified_operator_function_id;

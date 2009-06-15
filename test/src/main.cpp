@@ -38,6 +38,7 @@ init_unit_test()
         "basic",
         "name_lookup",
         "template",
+        "ambiguous_cases",
         "gcc",
         "standard_library"
     };
