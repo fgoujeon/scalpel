@@ -341,7 +341,7 @@ grammar::grammar()
 		= operator_function_id
 		| conversion_function_id
 		| destructor_name
-		| template_id
+		| (template_id - (template_id >> !s >> identifier)) // "a < b || c > d" is not a template-id, but a boolean expression!
 		| identifier
 	;
 
