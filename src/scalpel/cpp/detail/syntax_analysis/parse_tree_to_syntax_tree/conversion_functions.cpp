@@ -98,20 +98,6 @@ convert_integer_literal(const tree_node_t& node)
 	);
 }
 
-member_specification_access_specifier
-convert_member_specification_access_specifier(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::MEMBER_SPECIFICATION_ACCESS_SPECIFIER);
-
-	tree_node_iterator_t access_specifier_it = find_node<id_t::ACCESS_SPECIFIER>(node);
-
-    return member_specification_access_specifier
-    (
-        convert_node<access_specifier>(*access_specifier_it),
-		convert_next_space(node, access_specifier_it)
-    );
-}
-
 new_type_id_new_expression
 convert_new_type_id_new_expression(const tree_node_t& node)
 {

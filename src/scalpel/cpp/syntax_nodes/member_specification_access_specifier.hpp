@@ -21,10 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_MEMBER_SPECIFICATION_ACCESS_SPECIFIER_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_MEMBER_SPECIFICATION_ACCESS_SPECIFIER_HPP
 
-#include "optional_node.hpp"
-#include "composite_node.hpp"
+#include "common.hpp"
 #include "access_specifier.hpp"
-#include "space.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -34,41 +32,37 @@ member_specification_access_specifier
 	= access_specifier >> !s >> ':'
 ;
 */
-class member_specification_access_specifier: public composite_node
+typedef
+	sequence_node
+	<
+		access_specifier,
+		optional_node<space>,
+		simple_text_node<str::colon>
+	>
+	member_specification_access_specifier_t
+;
+
+struct member_specification_access_specifier: public member_specification_access_specifier_t
 {
-	public:
-		explicit
-		member_specification_access_specifier
-		(
-			access_specifier&& a_access_specifier,
-			optional_node<space>&& post_access_specifier_node
-		);
+	member_specification_access_specifier
+	(
+		access_specifier&& o0,
+		optional_node<space>&& o1,
+		simple_text_node<str::colon>&& o2
+	):
+		member_specification_access_specifier_t(o0, o1, o2)
+	{
+	}
 
-		member_specification_access_specifier(const member_specification_access_specifier& o);
-
-		member_specification_access_specifier(member_specification_access_specifier&& o);
-
-		const member_specification_access_specifier&
-		operator=(const member_specification_access_specifier& o);
-
-		inline
-		const access_specifier&
-	   	access_specifier_node() const;
-
-	private:
-		void
-		update_node_list();
-
-		access_specifier access_specifier_;
-		optional_node<space> post_access_specifier_;
+	member_specification_access_specifier
+	(
+		head_node_t&& head,
+		tail_sequence_node_t&& tail
+	):
+		member_specification_access_specifier_t(head, tail)
+	{
+	}
 };
-
-inline
-const access_specifier&
-member_specification_access_specifier::access_specifier_node() const
-{
-	return access_specifier_;
-}
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
