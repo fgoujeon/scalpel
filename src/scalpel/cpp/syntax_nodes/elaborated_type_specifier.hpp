@@ -22,7 +22,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_ELABORATED_TYPE_SPECIFIER_HPP
 
 #include "alternative_node.hpp"
-#include "class_template_elaborated_specifier.hpp"
 #include "class_elaborated_specifier.hpp"
 #include "enum_elaborated_specifier.hpp"
 #include "typename_template_elaborated_specifier.hpp"
@@ -34,7 +33,6 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 typedef
 	alternative_node
 	<
-		class_template_elaborated_specifier,
 		class_elaborated_specifier,
 		enum_elaborated_specifier,
 		typename_template_elaborated_specifier,

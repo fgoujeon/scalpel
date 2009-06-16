@@ -1062,19 +1062,14 @@ grammar::grammar()
 	;
 
 	elaborated_type_specifier
-		= class_template_elaborated_specifier //not in the standard, but seems to be required for parsing GCC's standard library
-		| class_elaborated_specifier
+		= class_elaborated_specifier
 		| enum_elaborated_specifier
 		| typename_template_elaborated_specifier
 		| typename_elaborated_specifier
 	;
 
-	class_template_elaborated_specifier
-		= class_key >> !s >> !(str_p("::") >> !s) >> !(nested_name_specifier >> !s) >> template_id
-	;
-
 	class_elaborated_specifier
-		= class_key >> !s >> !(str_p("::") >> !s) >> !(nested_name_specifier >> !s) >> identifier
+		= class_key >> !s >> !(str_p("::") >> !s) >> !(nested_name_specifier >> !s) >> identifier_or_template_id
 	;
 
 	enum_elaborated_specifier

@@ -39,7 +39,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "syntax_nodes/class_head.hpp"
 #include "syntax_nodes/class_key.hpp"
 #include "syntax_nodes/class_specifier.hpp"
-#include "syntax_nodes/class_template_elaborated_specifier.hpp"
 #include "syntax_nodes/classic_labeled_statement.hpp"
 #include "syntax_nodes/common_nodes.hpp"
 #include "syntax_nodes/compound_statement.hpp"

@@ -30,9 +30,6 @@ namespace scalpel { namespace cpp { namespace detail { namespace syntax_analysis
 syntax_nodes::character_literal
 convert_character_literal(const tree_node_t& node);
 
-syntax_nodes::class_template_elaborated_specifier
-convert_class_template_elaborated_specifier(const tree_node_t& node);
-
 syntax_nodes::direct_abstract_declarator
 convert_direct_abstract_declarator(const tree_node_t& node);
 

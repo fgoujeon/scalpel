@@ -200,7 +200,6 @@ class grammar
 			SWITCH_STATEMENT,
             CONDITION,
 			ASSIGNMENT_EXPRESSION_CONDITION,
-			ASSIGNMENT_EXPRESSION_CONDITION_TYPE_SPECIFIER_SEQ,
             ITERATION_STATEMENT,
 			WHILE_STATEMENT,
 			DO_WHILE_STATEMENT,
@@ -226,7 +225,6 @@ class grammar
             BUILT_IN_TYPE_SPECIFIER,
             IDENTIFIER_OR_TEMPLATE_ID,
             ELABORATED_TYPE_SPECIFIER,
-			CLASS_TEMPLATE_ELABORATED_SPECIFIER,
 			CLASS_ELABORATED_SPECIFIER,
 			ENUM_ELABORATED_SPECIFIER,
 			TYPENAME_TEMPLATE_ELABORATED_SPECIFIER,
@@ -554,7 +552,6 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::SIMPLE_TEMPLATE_TYPE_SPECIFIER>> simple_template_type_specifier;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::BUILT_IN_TYPE_SPECIFIER>> built_in_type_specifier;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ELABORATED_TYPE_SPECIFIER>> elaborated_type_specifier;
-		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CLASS_TEMPLATE_ELABORATED_SPECIFIER>> class_template_elaborated_specifier;
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CLASS_ELABORATED_SPECIFIER>> class_elaborated_specifier;
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ENUM_ELABORATED_SPECIFIER>> enum_elaborated_specifier;
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TYPENAME_TEMPLATE_ELABORATED_SPECIFIER>> typename_template_elaborated_specifier;

@@ -545,8 +545,11 @@ semantic_analyzer::analyze(const simple_declaration& syntax_node)
 					)
 					{
 						is_a_class_forward_declaration = true;
-						const identifier& identifier_node = opt_class_elaborated_specifier_node->identifier_node();
-						class_name = identifier_node.value();
+						const identifier_or_template_id& identifier_or_template_id_node = opt_class_elaborated_specifier_node->identifier_or_template_id_node();
+						if(auto identifier_node = get<identifier>(&identifier_or_template_id_node))
+						{
+							class_name = identifier_node->value();
+						}
 					}
 				}
 			}

@@ -43,7 +43,7 @@ typedef
 		optional_node<space>,
 		optional_node<nested_name_specifier>,
 		optional_node<space>,
-		identifier
+		identifier_or_template_id
 	>
 	class_elaborated_specifier_t
 ;
@@ -62,7 +62,7 @@ struct class_elaborated_specifier: public class_elaborated_specifier_t
 		optional_node<space>&& o4,
 		optional_node<nested_name_specifier>&& o5,
 		optional_node<space>&& o6,
-		identifier&& o7
+		identifier_or_template_id&& o7
 	):
 		type(o1, o2, o3, o4, o5, o6, o7)
 	{
@@ -89,10 +89,8 @@ struct class_elaborated_specifier: public class_elaborated_specifier_t
 	{
 	}
 
-	using type::operator=;
-
-	const identifier&
-	identifier_node() const
+	const identifier_or_template_id&
+	identifier_or_template_id_node() const
 	{
 		const type& self = *this;
 		return get<6>(self);
