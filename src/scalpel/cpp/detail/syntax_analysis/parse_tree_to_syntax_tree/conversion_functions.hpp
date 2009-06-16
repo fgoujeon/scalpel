@@ -60,9 +60,6 @@ convert_ptr_operator(const tree_node_t& node);
 syntax_nodes::qualified_template_id
 convert_qualified_template_id(const tree_node_t& node);
 
-syntax_nodes::simple_template_type_specifier
-convert_simple_template_type_specifier(const tree_node_t& node);
-
 syntax_nodes::space
 convert_space(const tree_node_t& node);
 

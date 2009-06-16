@@ -21,72 +21,31 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_SIMPLE_TEMPLATE_TYPE_SPECIFIER_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_SIMPLE_TEMPLATE_TYPE_SPECIFIER_HPP
 
-#include <memory>
-#include "composite_node.hpp"
+#include "common.hpp"
 #include "nested_name_specifier.hpp"
 #include "template_id.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class simple_template_type_specifier: public composite_node
-{
-	public:
-		simple_template_type_specifier
-		(
-			bool leading_double_colon,
-			nested_name_specifier&& a_nested_name_specifier,
-			template_id&& a_template_id
-		);
-
-		simple_template_type_specifier(const simple_template_type_specifier& o);
-
-		simple_template_type_specifier(simple_template_type_specifier&& o);
-
-		const simple_template_type_specifier&
-		operator=(const simple_template_type_specifier& o);
-
-		inline
-		bool
-		has_leading_double_colon() const;
-
-		inline
-		const nested_name_specifier&
-		nested_name_specifier_node() const;
-
-		inline
-		const template_id&
-		template_id_node() const;
-
-	private:
-		void
-		update_node_list();
-
-		bool leading_double_colon_;
-		nested_name_specifier nested_name_specifier_;
-		template_id template_id_;
-};
-
-inline
-bool
-simple_template_type_specifier::has_leading_double_colon() const
-{
-	return leading_double_colon_;
-}
-
-inline
-const nested_name_specifier&
-simple_template_type_specifier::nested_name_specifier_node() const
-{
-	return nested_name_specifier_;
-}
-
-inline
-const template_id&
-simple_template_type_specifier::template_id_node() const
-{
-	return template_id_;
-}
+/**
+simple_template_type_specifier
+	= !(str_p("::") >> !s) >> nested_name_specifier >> !s >> "template" >> !s >> template_id
+;
+*/
+typedef
+	sequence_node
+	<
+		optional_node<simple_text_node<str::double_colon>>,
+		optional_node<space>,
+		nested_name_specifier,
+		optional_node<space>,
+		simple_text_node<str::template_>,
+		optional_node<space>,
+		template_id
+	>
+	simple_template_type_specifier
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

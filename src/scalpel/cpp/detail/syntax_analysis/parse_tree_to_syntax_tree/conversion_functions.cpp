@@ -195,19 +195,6 @@ convert_qualified_template_id(const tree_node_t& node)
     );
 }
 
-simple_template_type_specifier
-convert_simple_template_type_specifier(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::SIMPLE_TEMPLATE_TYPE_SPECIFIER);
-
-    return simple_template_type_specifier
-	(
-		check_node_existence(node, "::", 0),
-		find_and_convert_node<nested_name_specifier, id_t::NESTED_NAME_SPECIFIER>(node),
-		find_and_convert_node<template_id, id_t::TEMPLATE_ID>(node)
-	);
-}
-
 space
 convert_space(const tree_node_t& node)
 {
