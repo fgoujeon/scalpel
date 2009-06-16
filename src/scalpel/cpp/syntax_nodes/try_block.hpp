@@ -21,8 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_TRY_BLOCK_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_TRY_BLOCK_HPP
 
-#include "composite_node.hpp"
-#include "space.hpp"
+#include "common.hpp"
 #include "compound_statement.hpp"
 #include "handler_seq.hpp"
 
@@ -34,54 +33,50 @@ try_block
 	= "try", compound_statement, handler_seq
 ;
 */
-class try_block: public composite_node
+typedef
+	sequence_node
+	<
+		simple_text_node<str::try_>,
+		optional_node<space>,
+		compound_statement,
+		optional_node<space>,
+		handler_seq
+	>
+	try_block_t
+;
+
+struct try_block: public try_block_t
 {
-	public:
-		try_block
-		(
-			optional_node<space>&& post_try_keyword_space_node,
-			compound_statement&& compound_statement_node,
-			optional_node<space>&& post_compound_statement_space_node,
-			handler_seq&& handler_seq_node
-		);
+	try_block
+	(
+		simple_text_node<str::try_>&& o0,
+		optional_node<space>&& o1,
+		compound_statement&& o2,
+		optional_node<space>&& o3,
+		handler_seq&& o4
+	):
+		try_block_t(o0, o1, o2, o3, o4)
+	{
+	}
 
-		try_block(const try_block& o);
-
-		try_block(try_block&& o);
-
-		const try_block&
-		operator=(const try_block& o);
-
-		inline
-		const compound_statement&
-		compound_statement_node() const;
-
-		inline
-		const handler_seq&
-		handler_seq_node() const;
-
-	private:
-		void
-		update_node_list();
-
-		optional_node<space> post_try_keyword_space_;
-		compound_statement compound_statement_;
-		optional_node<space> post_compound_statement_space_;
-		handler_seq handler_seq_;
+	try_block(head_node_t&& head, tail_sequence_node_t&& tail):
+		try_block_t(head, tail)
+	{
+	}
 };
 
 inline
 const compound_statement&
-try_block::compound_statement_node() const
+get_compound_statement(const try_block& o)
 {
-	return compound_statement_;
+	return get<2>(o);
 }
 
 inline
 const handler_seq&
-try_block::handler_seq_node() const
+get_handler_seq(const try_block& o)
 {
-	return handler_seq_;
+	return get<4>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

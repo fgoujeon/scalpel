@@ -90,9 +90,6 @@ convert_string_literal(const tree_node_t& node);
 syntax_nodes::template_typename_expression
 convert_template_typename_expression(const tree_node_t& node);
 
-syntax_nodes::try_block
-convert_try_block(const tree_node_t& node);
-
 syntax_nodes::type_id_typeid_expression
 convert_type_id_typeid_expression(const tree_node_t& node);
 

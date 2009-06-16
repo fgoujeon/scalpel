@@ -643,8 +643,8 @@ semantic_analyzer::analyze(const template_id&)
 void
 semantic_analyzer::analyze(const try_block& syntax_node)
 {
-	analyze(syntax_node.compound_statement_node());
-	analyze(syntax_node.handler_seq_node());
+	analyze(get_compound_statement(syntax_node));
+	analyze(get_handler_seq(syntax_node));
 }
 
 void

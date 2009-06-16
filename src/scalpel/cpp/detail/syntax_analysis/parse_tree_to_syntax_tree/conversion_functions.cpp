@@ -342,28 +342,6 @@ convert_template_typename_expression(const tree_node_t& node)
 	return template_typename_expression();
 }
 
-try_block
-convert_try_block(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::TRY_BLOCK);
-
-	tree_node_iterator_t try_keyword_it = node.children.begin();
-	tree_node_iterator_t compound_statement_it = find_node<id_t::COMPOUND_STATEMENT>(node);
-	tree_node_iterator_t handler_seq_it = find_node<id_t::HANDLER_SEQ>(node);
-
-	handler_seq handler_seq_node;
-	if(handler_seq_it != node.children.end())
-		handler_seq_node = convert_node<handler_seq>(*handler_seq_it);
-
-	return try_block
-	(
-		convert_next_space(node, try_keyword_it),
-		convert_node<compound_statement>(*compound_statement_it),
-		convert_next_space(node, compound_statement_it),
-		handler_seq_node
-	);
-}
-
 type_id_typeid_expression
 convert_type_id_typeid_expression(const tree_node_t& node)
 {
