@@ -98,30 +98,6 @@ convert_integer_literal(const tree_node_t& node)
 	);
 }
 
-new_type_id_new_expression
-convert_new_type_id_new_expression(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::NEW_TYPE_ID_NEW_EXPRESSION);
-
-	tree_node_iterator_t leading_double_colon_it = find_node(node, "::");
-	tree_node_iterator_t new_keyword_it = find_node(node, "new");
-	tree_node_iterator_t round_bracketed_expression_it = find_node<id_t::ROUND_BRACKETED_EXPRESSION>(node);
-	tree_node_iterator_t new_type_id_it = find_node<id_t::NEW_TYPE_ID>(node);
-	tree_node_iterator_t new_initializer_it = find_node<id_t::NEW_INITIALIZER>(node);
-
-	return new_type_id_new_expression
-	(
-		leading_double_colon_it != node.children.end(),
-		convert_next_space(node, leading_double_colon_it),
-		convert_next_space(node, new_keyword_it),
-		convert_optional_node<round_bracketed_expression>(node, round_bracketed_expression_it),
-		convert_next_space(node, round_bracketed_expression_it),
-		convert_node<new_type_id>(*new_type_id_it),
-		convert_previous_space(node, new_initializer_it),
-		convert_optional_node<new_initializer>(node, new_initializer_it)
-	);
-}
-
 ptr_operator
 convert_ptr_operator(const tree_node_t& node)
 {

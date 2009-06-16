@@ -45,9 +45,6 @@ convert_identifier(const tree_node_t& node);
 syntax_nodes::integer_literal
 convert_integer_literal(const tree_node_t& node);
 
-syntax_nodes::new_type_id_new_expression
-convert_new_type_id_new_expression(const tree_node_t& node);
-
 syntax_nodes::ptr_operator
 convert_ptr_operator(const tree_node_t& node);
 

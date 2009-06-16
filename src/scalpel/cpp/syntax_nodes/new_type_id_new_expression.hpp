@@ -21,10 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_NEW_TYPE_ID_NEW_EXPRESSION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_NEW_TYPE_ID_NEW_EXPRESSION_HPP
 
-#include <memory>
-#include "optional_node.hpp"
-#include "composite_node.hpp"
-#include "space.hpp"
+#include "common.hpp"
 #include "round_bracketed_expression.hpp"
 #include "new_type_id.hpp"
 #include "new_initializer.hpp"
@@ -34,44 +31,24 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 /**
 new_type_id_new_expression
-	= !(str_p("::") >> !s) >> str_p("new") >> !s >> !(round_bracketed_expression >> !s) >> new_type_id >> !(!s >> new_initializer)
+	= ["::"], "new", [round_bracketed_expression], new_type_id, [new_initializer]
 ;
 */
-class new_type_id_new_expression: public composite_node
-{
-	public:
-		new_type_id_new_expression
-		(
-			bool leading_double_colon,
-			optional_node<space>&& post_double_colon_space_node,
-			optional_node<space>&& post_new_keyword_space_node,
-			optional_node<round_bracketed_expression>&& round_bracketed_expression_node,
-			optional_node<space>&& post_round_bracketed_expression_space_node,
-			new_type_id&& new_type_id_node,
-			optional_node<space>&& pre_new_initializer_space_node,
-			optional_node<new_initializer>&& new_initializer_node
-		);
-
-		new_type_id_new_expression(const new_type_id_new_expression& o);
-
-		new_type_id_new_expression(new_type_id_new_expression&& o);
-
-		const new_type_id_new_expression&
-		operator=(const new_type_id_new_expression& o);
-
-	private:
-		void
-		update_node_list();
-
-		bool leading_double_colon_;
-		optional_node<space> post_double_colon_space_;
-		optional_node<space> post_new_keyword_space_;
-		optional_node<round_bracketed_expression> round_bracketed_expression_;
-		optional_node<space> post_round_bracketed_expression_space_;
-		new_type_id new_type_id_;
-		optional_node<space> pre_new_initializer_space_;
-		std::unique_ptr<new_initializer> new_initializer_;
-};
+typedef
+	sequence_node
+	<
+		optional_node<simple_text_node<str::double_colon>>,
+		optional_node<space>,
+		simple_text_node<str::new_>,
+		optional_node<space>,
+		optional_node<round_bracketed_expression>,
+		optional_node<space>,
+		new_type_id,
+		optional_node<space>,
+		optional_node<new_initializer>
+	>
+	new_type_id_new_expression
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

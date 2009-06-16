@@ -603,11 +603,11 @@ grammar::grammar()
 	;
 
 	type_id_new_expression
-		= !(str_p("::") >> !s) >> str_p("new") >> !s >> !(round_bracketed_expression >> !s) >> '(' >> !s >> type_id >> !s >> ')' >> !(!s >> new_initializer)
+		= !(str_p("::") >> !s) >> str_p("new") >> !s >> !(round_bracketed_expression >> !s) >> '(' >> !s >> type_id >> !s >> ')' >> !(!s >> round_bracketed_optional_expression)
 	;
 
 	new_type_id_new_expression
-		= !(str_p("::") >> !s) >> str_p("new") >> !s >> !(round_bracketed_expression >> !s) >> new_type_id >> !(!s >> new_initializer)
+		= !(str_p("::") >> !s) >> str_p("new") >> !s >> !(round_bracketed_expression >> !s) >> new_type_id >> !(!s >> round_bracketed_optional_expression)
 	;
 
 	new_type_id
@@ -622,10 +622,6 @@ grammar::grammar()
 
 	direct_new_declarator
 		= '[' >> !s >> expression >> !s >> ']' >> !(!s >> '[' >> !s >> conditional_expression >> !s >> ']')
-	;
-
-	new_initializer
-		= '(' >> !s >> !(expression >> !s) >> ')'
 	;
 
 	delete_expression

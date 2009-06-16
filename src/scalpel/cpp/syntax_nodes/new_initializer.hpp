@@ -29,7 +29,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 /**
 new_initializer
-	= '(' >> !s >> !(expression_list >> !s) >> ')'
+	= '(' >> !s >> !(expression >> !s) >> ')'
 ;
 */
 typedef
