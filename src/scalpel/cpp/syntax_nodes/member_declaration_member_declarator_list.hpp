@@ -34,55 +34,17 @@ member_declaration_member_declarator_list
 	= !(member_declaration_decl_specifier_seq >> !s) >> !(member_declarator_list >> !s) >> ch_p(';')
 ;
 */
-class member_declaration_member_declarator_list: public composite_node
-{
-	public:
-		member_declaration_member_declarator_list
-		(
-			optional_node<decl_specifier_seq>&& decl_specifier_seq_node,
-			optional_node<space>&& post_decl_specifier_seq_space_node,
-			optional_node<member_declarator_list>&& member_declarator_list_node,
-			optional_node<space>&& post_member_declarator_list_space_node
-		);
-
-		member_declaration_member_declarator_list(const member_declaration_member_declarator_list& o);
-
-		member_declaration_member_declarator_list(member_declaration_member_declarator_list&& o);
-
-		const member_declaration_member_declarator_list&
-		operator=(const member_declaration_member_declarator_list& o);
-
-		inline
-		const optional_node<decl_specifier_seq>&
-		decl_specifier_seq_node() const;
-
-		inline
-		const optional_node<member_declarator_list>&
-		member_declarator_list_node() const;
-
-	private:
-		void
-		update_node_list();
-
-		optional_node<decl_specifier_seq> decl_specifier_seq_;
-		optional_node<space> post_decl_specifier_seq_space_;
-		optional_node<member_declarator_list> member_declarator_list_;
-		optional_node<space> post_member_declarator_list_space_;
-};
-
-inline
-const optional_node<decl_specifier_seq>&
-member_declaration_member_declarator_list::decl_specifier_seq_node() const
-{
-	return decl_specifier_seq_;
-}
-
-inline
-const optional_node<member_declarator_list>&
-member_declaration_member_declarator_list::member_declarator_list_node() const
-{
-	return member_declarator_list_;
-}
+typedef
+	sequence_node
+	<
+		optional_node<decl_specifier_seq>,
+		optional_node<space>,
+		optional_node<member_declarator_list>,
+		optional_node<space>,
+		simple_text_node<str::semicolon>
+	>
+	member_declaration_member_declarator_list
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

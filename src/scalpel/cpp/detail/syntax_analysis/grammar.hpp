@@ -285,7 +285,6 @@ class grammar
             MEMBER_DECLARATION_MEMBER_DECLARATOR_LIST,
             MEMBER_DECLARATION_UNQUALIFIED_ID,
             MEMBER_DECLARATION_FUNCTION_DEFINITION,
-            MEMBER_DECLARATION_DECL_SPECIFIER_SEQ,
             MEMBER_DECLARATOR_LIST,
             MEMBER_DECLARATOR,
             MEMBER_DECLARATOR_DECLARATOR,
@@ -621,7 +620,7 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MEMBER_DECLARATION_MEMBER_DECLARATOR_LIST>> member_declaration_member_declarator_list;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MEMBER_DECLARATION_UNQUALIFIED_ID>> member_declaration_unqualified_id;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MEMBER_DECLARATION_FUNCTION_DEFINITION>> member_declaration_function_definition;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MEMBER_DECLARATION_DECL_SPECIFIER_SEQ>> member_declaration_decl_specifier_seq;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DECL_SPECIFIER_SEQ>> member_declaration_decl_specifier_seq;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MEMBER_DECLARATOR_LIST>> member_declarator_list;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MEMBER_DECLARATOR>> member_declarator;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MEMBER_DECLARATOR_DECLARATOR>> member_declarator_declarator;

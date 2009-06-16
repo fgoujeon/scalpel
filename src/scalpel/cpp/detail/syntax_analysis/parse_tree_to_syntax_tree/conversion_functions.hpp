@@ -45,9 +45,6 @@ convert_identifier(const tree_node_t& node);
 syntax_nodes::integer_literal
 convert_integer_literal(const tree_node_t& node);
 
-syntax_nodes::member_declaration_member_declarator_list
-convert_member_declaration_member_declarator_list(const tree_node_t& node);
-
 syntax_nodes::member_specification_access_specifier
 convert_member_specification_access_specifier(const tree_node_t& node);
 

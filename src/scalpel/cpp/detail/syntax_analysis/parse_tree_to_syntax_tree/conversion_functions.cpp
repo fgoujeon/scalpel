@@ -98,23 +98,6 @@ convert_integer_literal(const tree_node_t& node)
 	);
 }
 
-member_declaration_member_declarator_list
-convert_member_declaration_member_declarator_list(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::MEMBER_DECLARATION_MEMBER_DECLARATOR_LIST);
-
-	tree_node_iterator_t decl_specifier_seq_it = find_node<id_t::MEMBER_DECLARATION_DECL_SPECIFIER_SEQ>(node);
-	tree_node_iterator_t member_declarator_list_it = find_node<id_t::MEMBER_DECLARATOR_LIST>(node);
-
-    return member_declaration_member_declarator_list
-    (
-        convert_optional_node<decl_specifier_seq>(node, decl_specifier_seq_it),
-		convert_next_space(node, decl_specifier_seq_it),
-        convert_optional_node<member_declarator_list>(node, member_declarator_list_it),
-		convert_next_space(node, member_declarator_list_it)
-    );
-}
-
 member_specification_access_specifier
 convert_member_specification_access_specifier(const tree_node_t& node)
 {
