@@ -36,14 +36,6 @@ using namespace scalpel::cpp::syntax_nodes;
 namespace scalpel { namespace cpp { namespace detail { namespace syntax_analysis { namespace parse_tree_to_syntax_tree
 {
 
-arrow_pseudo_destructor_name
-convert_arrow_pseudo_destructor_name(const tree_node_t& node)
-{
-	assert(node.value.id() == id_t::ARROW_PSEUDO_DESTRUCTOR_NAME);
-
-	return arrow_pseudo_destructor_name();
-}
-
 assignment_expression_condition
 convert_assignment_expression_condition(const tree_node_t& node)
 {
@@ -107,14 +99,6 @@ convert_class_template_elaborated_specifier(const tree_node_t& node)
 		convert_next_space(node, nested_name_specifier_it),
 		convert_node<template_id>(*template_id_it)
 	);
-}
-
-dot_pseudo_destructor_name
-convert_dot_pseudo_destructor_name(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::DOT_PSEUDO_DESTRUCTOR_NAME);
-
-	return dot_pseudo_destructor_name();
 }
 
 enum_elaborated_specifier

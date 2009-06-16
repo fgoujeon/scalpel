@@ -27,9 +27,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace detail { namespace syntax_analysis { namespace parse_tree_to_syntax_tree
 {
 
-syntax_nodes::arrow_pseudo_destructor_name
-convert_arrow_pseudo_destructor_name(const tree_node_t& node);
-
 syntax_nodes::assignment_expression_condition
 convert_assignment_expression_condition(const tree_node_t& node);
 
@@ -41,9 +38,6 @@ convert_class_template_elaborated_specifier(const tree_node_t& node);
 
 syntax_nodes::direct_abstract_declarator
 convert_direct_abstract_declarator(const tree_node_t& node);
-
-syntax_nodes::dot_pseudo_destructor_name
-convert_dot_pseudo_destructor_name(const tree_node_t& node);
 
 syntax_nodes::enum_elaborated_specifier
 convert_enum_elaborated_specifier(const tree_node_t& node);

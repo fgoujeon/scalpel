@@ -21,29 +21,26 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_DOT_PSEUDO_DESTRUCTOR_NAME_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_DOT_PSEUDO_DESTRUCTOR_NAME_HPP
 
-#include "composite_node.hpp"
+#include "common.hpp"
+//#include "pseudo_destructor_name.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class dot_pseudo_destructor_name: public composite_node
-{
-	public:
-		dot_pseudo_destructor_name
-		(
-		);
-
-		dot_pseudo_destructor_name(const dot_pseudo_destructor_name& o);
-
-		dot_pseudo_destructor_name(dot_pseudo_destructor_name&& o);
-
-		const dot_pseudo_destructor_name&
-		operator=(const dot_pseudo_destructor_name& o);
-
-	private:
-		void
-		update_node_list();
-};
+/**
+dot_pseudo_destructor_name
+	= "." >> !s >> pseudo_destructor_name
+;
+*/
+typedef
+	sequence_node
+	<
+		simple_text_node<str::dot>,
+		optional_node<space>/*,
+		pseudo_destructor_name*/
+	>
+	dot_pseudo_destructor_name
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

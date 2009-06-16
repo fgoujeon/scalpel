@@ -18,32 +18,29 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_AROW_PSEUDO_DESTRUCTOR_NAME_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_AROW_PSEUDO_DESTRUCTOR_NAME_HPP
+#ifndef SCALPEL_CPP_SYNTAX_NODES_ARROW_PSEUDO_DESTRUCTOR_NAME_HPP
+#define SCALPEL_CPP_SYNTAX_NODES_ARROW_PSEUDO_DESTRUCTOR_NAME_HPP
 
-#include "composite_node.hpp"
+#include "common.hpp"
+//#include "pseudo_destructor_name.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class arrow_pseudo_destructor_name: public composite_node
-{
-	public:
-		arrow_pseudo_destructor_name
-		(
-		);
-
-		arrow_pseudo_destructor_name(const arrow_pseudo_destructor_name& o);
-
-		arrow_pseudo_destructor_name(arrow_pseudo_destructor_name&& o);
-
-		const arrow_pseudo_destructor_name&
-		operator=(const arrow_pseudo_destructor_name& o);
-
-	private:
-		void
-		update_node_list();
-};
+/**
+arrow_pseudo_destructor_name
+	= "->" >> !s >> pseudo_destructor_name
+;
+*/
+typedef
+	sequence_node
+	<
+		simple_text_node<str::arrow>,
+		optional_node<space>/*,
+		pseudo_destructor_name*/
+	>
+	arrow_pseudo_destructor_name
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
