@@ -36,26 +36,6 @@ using namespace scalpel::cpp::syntax_nodes;
 namespace scalpel { namespace cpp { namespace detail { namespace syntax_analysis { namespace parse_tree_to_syntax_tree
 {
 
-assignment_expression_condition
-convert_assignment_expression_condition(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::ASSIGNMENT_EXPRESSION_CONDITION);
-
-	tree_node_iterator_t type_specifier_seq_it = find_node<id_t::TYPE_SPECIFIER_SEQ>(node);
-	tree_node_iterator_t declarator_it = find_node<id_t::DECLARATOR>(node);
-	tree_node_iterator_t assignment_expression_it = find_node<id_t::ASSIGNMENT_EXPRESSION>(node);
-
-	return assignment_expression_condition
-	(
-		convert_node<type_specifier_seq>(*type_specifier_seq_it),
-		convert_next_space(node, type_specifier_seq_it),
-		convert_node<declarator>(*declarator_it),
-		convert_next_space(node, declarator_it),
-		convert_previous_space(node, assignment_expression_it),
-		convert_node<assignment_expression>(*assignment_expression_it)
-	);
-}
-
 character_literal
 convert_character_literal(const tree_node_t& node)
 {

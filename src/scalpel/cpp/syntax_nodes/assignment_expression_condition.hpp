@@ -21,9 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_ASSIGNMENT_EXPRESSION_CONDITION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_ASSIGNMENT_EXPRESSION_CONDITION_HPP
 
-#include "composite_node.hpp"
+#include "common.hpp"
 #include "type_specifier_seq.hpp"
-#include "space.hpp"
 #include "declarator.hpp"
 #include "assignment_expression.hpp"
 
@@ -37,37 +36,19 @@ assignment_expression_condition
 ;
 \endverbatim
 */
-class assignment_expression_condition: public composite_node
-{
-	public:
-		assignment_expression_condition
-		(
-			type_specifier_seq&& type_specifier_seq_node,
-			optional_node<space>&& post_type_specifier_seq_space_node,
-			declarator&& declarator_node,
-			optional_node<space>&& post_declarator_space_node,
-			optional_node<space>&& post_equal_space_node,
-			assignment_expression&& assignment_expression_node
-		);
-
-		assignment_expression_condition(const assignment_expression_condition& o);
-
-		assignment_expression_condition(assignment_expression_condition&& o);
-
-		const assignment_expression_condition&
-		operator=(const assignment_expression_condition& o);
-
-	private:
-		void
-		update_node_list();
-
-		type_specifier_seq type_specifier_seq_;
-		optional_node<space> post_type_specifier_seq_space_;
-		declarator declarator_;
-		optional_node<space> post_declarator_space_;
-		optional_node<space> post_equal_space_;
-		assignment_expression assignment_expression_;
-};
+typedef
+	sequence_node
+	<
+		type_specifier_seq,
+		optional_node<space>,
+		declarator,
+		optional_node<space>,
+		simple_text_node<str::equal>,
+		optional_node<space>,
+		assignment_expression
+	>
+	assignment_expression_condition
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

@@ -27,9 +27,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace detail { namespace syntax_analysis { namespace parse_tree_to_syntax_tree
 {
 
-syntax_nodes::assignment_expression_condition
-convert_assignment_expression_condition(const tree_node_t& node);
-
 syntax_nodes::character_literal
 convert_character_literal(const tree_node_t& node);
 
