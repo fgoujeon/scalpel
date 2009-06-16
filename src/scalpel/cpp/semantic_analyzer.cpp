@@ -97,13 +97,17 @@ semantic_analyzer::analyze(const class_head&)
 void
 semantic_analyzer::analyze(const class_specifier& syntax_node)
 {
-	const optional_node<identifier>& id = syntax_node.class_head_node().identifier_node();
-
-	if(id)
+	const optional_node<identifier_or_template_id>& opt_id_or_templ = get_identifier_or_template_id(syntax_node.class_head_node());
+	if(opt_id_or_templ)
 	{
-		scope_cursor_.add_to_current_scope(class_(id->value()));
-		scope_cursor_.enter_last_added_scope();
-		scope_cursor_.leave_scope();
+		const boost::optional<const identifier&> id = get<identifier>(&*opt_id_or_templ);
+
+		if(id)
+		{
+			scope_cursor_.add_to_current_scope(class_(id->value()));
+			scope_cursor_.enter_last_added_scope();
+			scope_cursor_.leave_scope();
+		}
 	}
 }
 

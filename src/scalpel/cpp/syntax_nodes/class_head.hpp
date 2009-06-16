@@ -36,109 +36,30 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 /**
 \verbatim
 class_head
-	= class_key, [nested_name_specifier], template_id, [base_clause]
-	| class_key, nested_name_specifier, identifier, [base_clause]
-	| class_key, [identifier], [base_clause]
+	= class_key >> !(!s >> nested_name_specifier) >> !s >> identifier_or_template_id >> !(!s >> base_clause)
+	| class_key >> !(!s >> base_clause)
 ;
-
-	class_head
-		= class_key >> !(!s >> nested_name_specifier) >> !s >> template_id >> !(!s >> base_clause)
-		| class_key >> !s >> nested_name_specifier >> !s >> identifier >> !(!s >> base_clause)
-		| class_key >> !(!s >> identifier) >> !(!s >> base_clause)
-	;
 \endverbatim
 */
-class class_head: public composite_node
-{
-    public:
-        class_head
-        (
-            class_key&& class_key_node,
-            optional_node<space>&& pre_nested_name_specifier_space_node,
-            optional_node<nested_name_specifier>&& nested_name_specifier_node,
-            optional_node<space>&& pre_template_id_space_node,
-            optional_node<template_id>&& template_id_node,
-            optional_node<space>&& pre_identifier_space_node,
-            optional_node<identifier>&& identifier_node,
-            optional_node<space>&& pre_base_clause_space_node,
-            optional_node<base_clause>&& base_clause_node
-        );
-
-		class_head(const class_head& o);
-
-		class_head(class_head&& o);
-
-		const class_head&
-		operator=(const class_head& o);
-
-        inline
-        const class_key&
-        class_key_node() const;
-
-        inline
-        const optional_node<nested_name_specifier>&
-        nested_name_specifier_node() const;
-
-        inline
-        const optional_node<template_id>&
-        template_id_node() const;
-
-        inline
-        const optional_node<identifier>&
-        identifier_node() const;
-
-        inline
-        const optional_node<base_clause>&
-        base_clause_node() const;
-
-    private:
-		void
-		update_node_list();
-
-		class_key class_key_;
-		optional_node<space> pre_nested_name_specifier_space_;
-		optional_node<nested_name_specifier> nested_name_specifier_;
-		optional_node<space> pre_template_id_space_;
-		optional_node<template_id> template_id_;
-		optional_node<space> pre_identifier_space_;
-		optional_node<identifier> identifier_;
-		optional_node<space> pre_base_clause_space_;
-		optional_node<base_clause> base_clause_;
-};
+typedef
+	sequence_node
+	<
+		class_key,
+		optional_node<space>,
+		optional_node<nested_name_specifier>,
+		optional_node<space>,
+		optional_node<identifier_or_template_id>,
+		optional_node<space>,
+		optional_node<base_clause>
+	>
+	class_head
+;
 
 inline
-const class_key&
-class_head::class_key_node() const
+const optional_node<identifier_or_template_id>&
+get_identifier_or_template_id(const class_head& o)
 {
-    return class_key_;
-}
-
-inline
-const optional_node<nested_name_specifier>&
-class_head::nested_name_specifier_node() const
-{
-	return nested_name_specifier_;
-}
-
-inline
-const optional_node<template_id>&
-class_head::template_id_node() const
-{
-	return template_id_;
-}
-
-inline
-const optional_node<identifier>&
-class_head::identifier_node() const
-{
-	return identifier_;
-}
-
-inline
-const optional_node<base_clause>&
-class_head::base_clause_node() const
-{
-	return base_clause_;
+	return get<4>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

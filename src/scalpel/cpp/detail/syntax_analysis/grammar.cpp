@@ -1426,9 +1426,8 @@ grammar::grammar()
 	;
 
 	class_head
-		= class_key >> !(!s >> nested_name_specifier) >> !s >> template_id >> !(!s >> base_clause)
-		| class_key >> !s >> nested_name_specifier >> !s >> identifier >> !(!s >> base_clause)
-		| class_key >> !(!s >> identifier) >> !(!s >> base_clause)
+		= class_key >> !(!s >> nested_name_specifier) >> !s >> identifier_or_template_id >> !(!s >> base_clause)
+		| class_key >> !(!s >> base_clause)
 	;
 
 	class_key

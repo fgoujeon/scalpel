@@ -87,30 +87,6 @@ convert_character_literal(const tree_node_t& node)
 	);
 }
 
-class_head
-convert_class_head(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::CLASS_HEAD);
-
-	tree_node_iterator_t nested_name_specifier_it = find_node<id_t::NESTED_NAME_SPECIFIER>(node);
-	tree_node_iterator_t template_id_it = find_node<id_t::TEMPLATE_ID>(node);
-	tree_node_iterator_t identifier_it = find_node<id_t::IDENTIFIER>(node);
-	tree_node_iterator_t base_clause_it = find_node<id_t::BASE_CLAUSE>(node);
-
-    return class_head
-    (
-		find_and_convert_node<class_key, id_t::CLASS_KEY>(node),
-		convert_previous_space(node, nested_name_specifier_it),
-		convert_optional_node<nested_name_specifier>(node, nested_name_specifier_it),
-		convert_previous_space(node, template_id_it),
-		convert_optional_node<template_id>(node, template_id_it),
-		convert_previous_space(node, identifier_it),
-		convert_optional_node<identifier>(node, identifier_it),
-		convert_previous_space(node, base_clause_it),
-		convert_optional_node<base_clause>(node, base_clause_it)
-	);
-}
-
 class_template_elaborated_specifier
 convert_class_template_elaborated_specifier(const tree_node_t& node)
 {
