@@ -157,31 +157,6 @@ convert_floating_literal(const tree_node_t& node)
 	return floating_literal(get_only_child_value(node));
 }
 
-function_try_block
-convert_function_try_block(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::FUNCTION_TRY_BLOCK);
-
-	tree_node_iterator_t try_keyword_it = node.children.begin();
-	tree_node_iterator_t ctor_initializer_it = find_node<id_t::CTOR_INITIALIZER>(node);
-	tree_node_iterator_t compound_statement_it = find_node<id_t::COMPOUND_STATEMENT>(node);
-	tree_node_iterator_t handler_seq_it = find_node<id_t::HANDLER_SEQ>(node);
-
-	handler_seq handler_seq_node;
-	if(handler_seq_it != node.children.end())
-		handler_seq_node = convert_node<handler_seq>(*handler_seq_it);
-
-	return function_try_block
-	(
-		convert_next_space(node, try_keyword_it),
-		convert_optional_node<ctor_initializer>(node, ctor_initializer_it),
-		convert_next_space(node, ctor_initializer_it),
-		convert_node<compound_statement>(*compound_statement_it),
-		convert_next_space(node, compound_statement_it),
-		handler_seq_node
-	);
-}
-
 identifier
 convert_identifier(const tree_node_t& node)
 {
