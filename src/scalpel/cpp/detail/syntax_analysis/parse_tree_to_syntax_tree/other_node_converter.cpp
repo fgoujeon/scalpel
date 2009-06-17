@@ -107,14 +107,6 @@ convert_string_literal(const tree_node_t& node)
 	);
 }
 
-type_id_typeid_expression
-convert_type_id_typeid_expression(const tree_node_t& node)
-{
-	assert(node.value.id() == id_t::TYPE_ID_TYPEID_EXPRESSION);
-
-	return type_id_typeid_expression();
-}
-
 typeid_expression
 convert_typeid_expression(const tree_node_t& node)
 {

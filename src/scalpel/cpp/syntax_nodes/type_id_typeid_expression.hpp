@@ -18,32 +18,33 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_TYPE_ID_TYPEID_EXPRESION_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_TYPE_ID_TYPEID_EXPRESION_HPP
+#ifndef SCALPEL_CPP_SYNTAX_NODES_TYPE_ID_TYPEID_EXPRESSION_HPP
+#define SCALPEL_CPP_SYNTAX_NODES_TYPE_ID_TYPEID_EXPRESSION_HPP
 
-#include "composite_node.hpp"
+#include "common.hpp"
+#include "type_id.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class type_id_typeid_expression: public composite_node
-{
-	public:
-		type_id_typeid_expression
-		(
-		);
-
-		type_id_typeid_expression(const type_id_typeid_expression& o);
-
-		type_id_typeid_expression(type_id_typeid_expression&& o);
-
-		const type_id_typeid_expression&
-		operator=(const type_id_typeid_expression& o);
-
-	private:
-		void
-		update_node_list();
-};
+/**
+type_id_typeid_expression
+	= str_p("typeid") >> !s >> '(' >> !s >> type_id >> !s >> ')'
+;
+*/
+typedef
+	sequence_node
+	<
+		simple_text_node<str::typeid_>,
+		optional_node<space>,
+		simple_text_node<str::opening_round_bracket>,
+		optional_node<space>,
+		type_id,
+		optional_node<space>,
+		simple_text_node<str::closing_round_bracket>
+	>
+	type_id_typeid_expression
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

@@ -143,6 +143,7 @@ namespace extern_strings
 	const std::string true_("true");
 	const std::string try_("try");
 	const std::string typedef_("typedef");
+	const std::string typeid_("typeid");
 	const std::string typename_("typename");
 	const std::string typeof_("typeof");
 	const std::string union_("union");
