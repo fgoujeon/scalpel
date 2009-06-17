@@ -26,7 +26,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "../grammar.hpp"
 #include "basic_functions.hpp"
 #include "special_conversion_functions.hpp"
-#include "node_finder_and_converter.hpp"
 #include "sequence_node_converter.hpp"
 #include "alternative_node_converter.hpp"
 
@@ -95,17 +94,6 @@ convert_integer_literal(const tree_node_t& node)
 	(
 		get_value(get_only_child_node(node))
 	);
-}
-
-qualified_template_id
-convert_qualified_template_id(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::QUALIFIED_TEMPLATE_ID);
-
-    return qualified_template_id
-    (
-        find_and_convert_node<template_id, id_t::TEMPLATE_ID>(node)
-    );
 }
 
 space

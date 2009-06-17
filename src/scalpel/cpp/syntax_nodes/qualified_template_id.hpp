@@ -27,36 +27,20 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class qualified_template_id: public composite_node
-{
-	public:
-		explicit
-		qualified_template_id(template_id&& a_template_id);
-
-		qualified_template_id(const qualified_template_id& o);
-
-		qualified_template_id(qualified_template_id&& o);
-
-		const qualified_template_id&
-		operator=(const qualified_template_id& o);
-
-		inline
-		const template_id&
-		template_id_node() const;
-
-	private:
-		void
-		update_node_list();
-
-		template_id template_id_;
-};
-
-inline
-const template_id&
-qualified_template_id::template_id_node() const
-{
-	return template_id_;
-}
+/**
+qualified_template_id
+	= str_p("::") >> !s >> template_id
+;
+*/
+typedef
+	sequence_node
+	<
+		simple_text_node<str::double_colon>,
+		optional_node<space>,
+		template_id
+	>
+	qualified_template_id
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

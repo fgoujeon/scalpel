@@ -31,24 +31,6 @@ inline
 const tree_node_t&
 get_only_child_node(const tree_node_t& parent_node);
 
-tree_node_iterator_t
-find_child_node(const tree_node_t& parent_node, const id_t child_id);
-
-bool
-check_node_existence(const tree_node_t& parent_node, const std::string& value, unsigned int position);
-
-bool
-check_node_existence(const tree_node_t& parent_node, const std::string& value);
-
-bool
-check_node_existence(const tree_node_t& parent_node, const grammar::parser_id id, unsigned int position);
-
-bool
-check_node_existence(const tree_node_t& parent_node, const grammar::parser_id id);
-
-tree_node_iterator_t
-find_node(const tree_node_t& parent_node, const std::string& value);
-
 std::string
 get_value(const tree_node_t& node);
 
