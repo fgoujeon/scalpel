@@ -48,9 +48,6 @@ convert_space(const tree_node_t& node);
 syntax_nodes::string_literal
 convert_string_literal(const tree_node_t& node);
 
-syntax_nodes::typeid_expression
-convert_typeid_expression(const tree_node_t& node);
-
 syntax_nodes::typename_template_elaborated_specifier
 convert_typename_template_elaborated_specifier(const tree_node_t& node);
 

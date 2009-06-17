@@ -26,24 +26,24 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class typeid_expression: public composite_node
-{
-	public:
-		typeid_expression
-		(
-		);
-
-		typeid_expression(const typeid_expression& o);
-
-		typeid_expression(typeid_expression&& o);
-
-		const typeid_expression&
-		operator=(const typeid_expression& o);
-
-	private:
-		void
-		update_node_list();
-};
+/**
+typeid_expression
+	= str_p("typeid") >> !s >> '(' >> !s >> expression >> !s >> ')'
+;
+*/
+typedef
+	sequence_node
+	<
+		simple_text_node<str::typeid_>,
+		optional_node<space>,
+		simple_text_node<str::opening_round_bracket>,
+		optional_node<space>,
+		expression,
+		optional_node<space>,
+		simple_text_node<str::closing_round_bracket>
+	>
+	typeid_expression
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
