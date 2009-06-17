@@ -24,12 +24,12 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "common.hpp"
 #include "list_node.hpp"
 #include "space.hpp"
+#include "ptr_operator.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 class direct_declarator;
-class ptr_operator;
 typedef list_node<ptr_operator> ptr_operator_seq;
 
 typedef

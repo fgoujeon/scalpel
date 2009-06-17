@@ -98,37 +98,6 @@ convert_integer_literal(const tree_node_t& node)
 	);
 }
 
-ptr_operator
-convert_ptr_operator(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::PTR_OPERATOR);
-
-    #ifndef NDEBUG
-    bool asterisk = check_node_existence(node, "*");
-    bool ampersand = check_node_existence(node, "&", 0);
-    assert
-    (
-        (asterisk && !ampersand) ||
-        (!asterisk && ampersand)
-    );
-    #endif
-
-	tree_node_iterator_t leading_double_colon_it = find_node(node, "::");
-	tree_node_iterator_t nested_name_specifier_it = find_node<id_t::NESTED_NAME_SPECIFIER>(node);
-	tree_node_iterator_t cv_qualifier_seq_it = find_node<id_t::CV_QUALIFIER_SEQ>(node);
-
-	return ptr_operator
-	(
-		check_node_existence(node, "*") ? ptr_operator::ASTERISK : ptr_operator::AMPERSAND,
-		leading_double_colon_it != node.children.end(),
-		convert_next_space(node, leading_double_colon_it),
-		convert_optional_node<nested_name_specifier>(node, nested_name_specifier_it),
-		convert_next_space(node, nested_name_specifier_it),
-		convert_previous_space(node, cv_qualifier_seq_it),
-		convert_optional_node<cv_qualifier_seq>(node, cv_qualifier_seq_it)
-	);
-}
-
 qualified_template_id
 convert_qualified_template_id(const tree_node_t& node)
 {

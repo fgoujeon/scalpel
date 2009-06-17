@@ -1255,9 +1255,17 @@ grammar::grammar()
 	;
 
 	ptr_operator
+		= ptr_ptr_operator
+		| ref_ptr_operator
+	;
+
+	ptr_ptr_operator
 		= ch_p('*') >> !(!s >> cv_qualifier_seq)
-		| ch_p('&')
 		| !(str_p("::") >> !s) >> nested_name_specifier >> !s >> '*' >> !(!s >> cv_qualifier_seq)
+	;
+
+	ref_ptr_operator
+		= ch_p('&')
 	;
 
 	cv_qualifier_seq

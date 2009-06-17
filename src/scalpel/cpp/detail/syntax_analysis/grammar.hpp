@@ -253,7 +253,9 @@ class grammar
             DIRECT_DECLARATOR_ARRAY_PART,
             PTR_OPERATOR_SEQ,
             PTR_OPERATOR,
-            CV_QUALIFIER_SEQ,
+			PTR_PTR_OPERATOR,
+			REF_PTR_OPERATOR,
+			CV_QUALIFIER_SEQ,
             CV_QUALIFIER,
             DECLARATOR_ID,
             TYPE_ID,
@@ -579,6 +581,8 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DIRECT_DECLARATOR_ARRAY_PART>> direct_declarator_array_part;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PTR_OPERATOR_SEQ>> ptr_operator_seq;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PTR_OPERATOR>> ptr_operator;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PTR_PTR_OPERATOR>> ptr_ptr_operator;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::REF_PTR_OPERATOR>> ref_ptr_operator;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CV_QUALIFIER_SEQ>> cv_qualifier_seq;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CV_QUALIFIER>> cv_qualifier;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DECLARATOR_ID>> declarator_id;

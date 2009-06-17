@@ -18,31 +18,25 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_PTR_OPERATOR_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_PTR_OPERATOR_HPP
+#ifndef SCALPEL_CPP_SYNTAX_NODES_REF_PTR_OPERATOR_HPP
+#define SCALPEL_CPP_SYNTAX_NODES_REF_PTR_OPERATOR_HPP
 
 #include "common.hpp"
-#include "ptr_ptr_operator.hpp"
-#include "ref_ptr_operator.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 /**
-\verbatim
-ptr_operator
-	= ptr_ptr_operator
-	| ref_ptr_operator
+ref_ptr_operator
+	= ch_p('&')
 ;
-\endverbatim
 */
 typedef
-	alternative_node
+	sequence_node
 	<
-		ptr_ptr_operator,
-		ref_ptr_operator
+		simple_text_node<str::ampersand>
 	>
-	ptr_operator
+	ref_ptr_operator
 ;
 
 }}} //namespace scalpel::cpp::syntax_nodes

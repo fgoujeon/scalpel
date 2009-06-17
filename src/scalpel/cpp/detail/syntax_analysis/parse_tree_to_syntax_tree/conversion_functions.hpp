@@ -45,9 +45,6 @@ convert_identifier(const tree_node_t& node);
 syntax_nodes::integer_literal
 convert_integer_literal(const tree_node_t& node);
 
-syntax_nodes::ptr_operator
-convert_ptr_operator(const tree_node_t& node);
-
 syntax_nodes::qualified_template_id
 convert_qualified_template_id(const tree_node_t& node);
 
