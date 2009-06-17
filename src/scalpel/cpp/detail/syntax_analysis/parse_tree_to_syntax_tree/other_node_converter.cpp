@@ -57,14 +57,6 @@ convert_character_literal(const tree_node_t& node)
 	);
 }
 
-enum_elaborated_specifier
-convert_enum_elaborated_specifier(const tree_node_t& node)
-{
-    assert(node.value.id() == id_t::ENUM_ELABORATED_SPECIFIER);
-
-	return enum_elaborated_specifier();
-}
-
 floating_literal
 convert_floating_literal(const tree_node_t& node)
 {

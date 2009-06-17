@@ -26,24 +26,24 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class enum_elaborated_specifier: public composite_node
-{
-	public:
-		enum_elaborated_specifier
-		(
-		);
-
-		enum_elaborated_specifier(const enum_elaborated_specifier& o);
-
-		enum_elaborated_specifier(enum_elaborated_specifier&& o);
-
-		const enum_elaborated_specifier&
-		operator=(const enum_elaborated_specifier& o);
-
-	private:
-		void
-		update_node_list();
-};
+/**
+enum_elaborated_specifier
+	= str_p("enum") >> !s >> !(str_p("::") >> !s) >> !(nested_name_specifier >> !s) >> identifier
+;
+*/
+typedef
+	sequence_node
+	<
+		simple_text_node<str::enum_>,
+		optional_node<space>,
+		optional_node<simple_text_node<str::double_colon>>,
+		optional_node<space>,
+		optional_node<nested_name_specifier>,
+		optional_node<space>,
+		identifier
+	>
+	enum_elaborated_specifier
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

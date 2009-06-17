@@ -1,3 +1,5 @@
+enum days;
+
 enum
 {
 	ONE,
@@ -9,7 +11,7 @@ enum
 {
 };
 
-enum
+enum days
 {
 	MONDAY,
 	THUESDAY,
