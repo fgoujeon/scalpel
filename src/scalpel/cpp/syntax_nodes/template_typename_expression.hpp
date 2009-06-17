@@ -26,24 +26,32 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class template_typename_expression: public composite_node
-{
-	public:
-		template_typename_expression
-		(
-		);
-
-		template_typename_expression(const template_typename_expression& o);
-
-		template_typename_expression(template_typename_expression&& o);
-
-		const template_typename_expression&
-		operator=(const template_typename_expression& o);
-
-	private:
-		void
-		update_node_list();
-};
+/**
+template_typename_expression
+	= "typename", ["::"], nested_name_specifier, ["template"], template_id, '(', [expression], ')'
+;
+*/
+typedef
+	sequence_node
+	<
+		simple_text_node<str::typename_>,
+		optional_node<space>,
+		optional_node<simple_text_node<str::double_colon>>,
+		optional_node<space>,
+		nested_name_specifier,
+		optional_node<space>,
+		optional_node<simple_text_node<str::template_>>,
+		optional_node<space>,
+		template_id,
+		optional_node<space>,
+		simple_text_node<str::opening_round_bracket>,
+		optional_node<space>,
+		optional_node<expression>,
+		optional_node<space>,
+		simple_text_node<str::closing_round_bracket>
+	>
+	template_typename_expression
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
