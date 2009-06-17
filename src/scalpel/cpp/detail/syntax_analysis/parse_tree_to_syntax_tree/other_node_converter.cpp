@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "conversion_functions.hpp"
+#include "other_node_converter.hpp"
 
 #include <iostream>
 #include <scalpel/util/extern_strings.hpp>
@@ -27,7 +27,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "basic_functions.hpp"
 #include "special_conversion_functions.hpp"
 #include "node_finder_and_converter.hpp"
-#include "space_conversion_functions.hpp"
 #include "sequence_node_converter.hpp"
 #include "alternative_node_converter.hpp"
 

@@ -23,7 +23,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string>
 #include <scalpel/cpp/syntax_nodes/simple_text_node.hpp>
-#include "generic_node_converters.hpp"
+#include "syntax_node_type_to_parser_id_map.hpp"
+#include "basic_functions.hpp"
 
 namespace scalpel { namespace cpp { namespace detail { namespace syntax_analysis { namespace parse_tree_to_syntax_tree
 {
@@ -36,7 +37,7 @@ struct node_checker
 	bool
 	check(const tree_node_t& node)
 	{
-		return check_id<NodeT>(node.value.id());
+		return syntax_node_type_to_parser_id_map<NodeT>::parser_id() == node.value.id();
 	}
 };
 
