@@ -37,7 +37,7 @@ ctor_initializer
 typedef
 	sequence_node
 	<
-		simple_text_node<str::colon>,
+		predefined_text_node<str::colon>,
 		optional_node<space>,
 		mem_initializer_list
 	>

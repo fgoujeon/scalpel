@@ -34,7 +34,7 @@ ref_ptr_operator
 typedef
 	sequence_node
 	<
-		simple_text_node<str::ampersand>
+		predefined_text_node<str::ampersand>
 	>
 	ref_ptr_operator
 ;

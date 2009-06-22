@@ -39,7 +39,7 @@ typedef
 	<
 		optional_node<expression>,
 		optional_node<space>,
-		simple_text_node<str::semicolon>
+		predefined_text_node<str::semicolon>
 	>
 	expression_statement_t
 ;
@@ -55,7 +55,7 @@ class expression_statement: public composite_node
 		(
 			optional_node<expression>&& o0,
 			optional_node<space>&& o1,
-			simple_text_node<str::semicolon>&& o2
+			predefined_text_node<str::semicolon>&& o2
 		);
 
 		expression_statement

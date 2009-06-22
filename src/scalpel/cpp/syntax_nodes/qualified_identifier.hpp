@@ -35,7 +35,7 @@ qualified_identifier
 typedef
 	sequence_node
 	<
-		simple_text_node<str::double_colon>,
+		predefined_text_node<str::double_colon>,
 		optional_node<space>,
 		identifier
 	>
@@ -51,7 +51,7 @@ class qualified_identifier: public composite_node
 
 		qualified_identifier
 		(
-			simple_text_node<str::double_colon>&& o0,
+			predefined_text_node<str::double_colon>&& o0,
 			optional_node<space>&& o1,
 			identifier&& o2
 		);

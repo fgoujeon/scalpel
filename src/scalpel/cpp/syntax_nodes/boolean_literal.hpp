@@ -29,8 +29,8 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 typedef
 	alternative_node
 	<
-		simple_text_node<str::false_>,
-		simple_text_node<str::true_>
+		predefined_text_node<str::false_>,
+		predefined_text_node<str::true_>
 	>
 	boolean_literal
 ;

@@ -30,9 +30,9 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 typedef
 	sequence_node
 	<
-		optional_node<simple_text_node<str::extern_>>,
+		optional_node<predefined_text_node<str::extern_>>,
 		optional_node<space>,
-		simple_text_node<str::template_>,
+		predefined_text_node<str::template_>,
 		optional_node<space>,
 		declaration
 	>
@@ -53,9 +53,9 @@ class explicit_instantiation: public composite_node
 
 		explicit_instantiation
 		(
-			optional_node<simple_text_node<str::extern_>>&& o0,
+			optional_node<predefined_text_node<str::extern_>>&& o0,
 			optional_node<space>&& o1,
-			simple_text_node<str::template_>&& o2,
+			predefined_text_node<str::template_>&& o2,
 			optional_node<space>&& o3,
 			declaration&& o4
 		);

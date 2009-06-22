@@ -37,7 +37,7 @@ equal_initializer
 typedef
 	sequence_node
 	<
-		simple_text_node<str::equal>,
+		predefined_text_node<str::equal>,
 		optional_node<space>,
 		initializer_clause
 	>

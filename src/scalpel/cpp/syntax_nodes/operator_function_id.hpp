@@ -35,7 +35,7 @@ operator_function_id
 typedef
 	sequence_node
 	<
-		simple_text_node<str::operator_>,
+		predefined_text_node<str::operator_>,
 		optional_node<space>,
 		operator_
 	>

@@ -38,17 +38,17 @@ direct_new_declarator
 typedef
 	sequence_node
 	<
-		simple_text_node<str::opening_square_bracket>,
+		predefined_text_node<str::opening_square_bracket>,
 		optional_node<space>,
 		expression,
 		optional_node<space>,
-		simple_text_node<str::closing_square_bracket>,
+		predefined_text_node<str::closing_square_bracket>,
 		optional_node<space>,
-		optional_node<simple_text_node<str::opening_square_bracket>>,
+		optional_node<predefined_text_node<str::opening_square_bracket>>,
 		optional_node<space>,
 		optional_node<conditional_expression>,
 		optional_node<space>,
-		optional_node<simple_text_node<str::closing_square_bracket>>
+		optional_node<predefined_text_node<str::closing_square_bracket>>
 	>
 	direct_new_declarator_t
 ;
@@ -62,17 +62,17 @@ class direct_new_declarator: public direct_new_declarator_t
 
 		direct_new_declarator
 		(
-			simple_text_node<str::opening_square_bracket>&& o1,
+			predefined_text_node<str::opening_square_bracket>&& o1,
 			optional_node<space>&& o2,
 			expression&& o3,
 			optional_node<space>&& o4,
-			simple_text_node<str::closing_square_bracket>&& o5,
+			predefined_text_node<str::closing_square_bracket>&& o5,
 			optional_node<space>&& o6,
-			optional_node<simple_text_node<str::opening_square_bracket>>&& o7,
+			optional_node<predefined_text_node<str::opening_square_bracket>>&& o7,
 			optional_node<space>&& o8,
 			optional_node<conditional_expression>&& o9,
 			optional_node<space>&& o10,
-			optional_node<simple_text_node<str::closing_square_bracket>>&& o11
+			optional_node<predefined_text_node<str::closing_square_bracket>>&& o11
 		):
 			type
 			(

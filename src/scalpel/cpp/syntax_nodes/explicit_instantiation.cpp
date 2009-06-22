@@ -25,9 +25,9 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 explicit_instantiation::explicit_instantiation
 (
-	optional_node<simple_text_node<str::extern_>>&& o0,
+	optional_node<predefined_text_node<str::extern_>>&& o0,
 	optional_node<space>&& o1,
-	simple_text_node<str::template_>&& o2,
+	predefined_text_node<str::template_>&& o2,
 	optional_node<space>&& o3,
 	declaration&& o4
 ):

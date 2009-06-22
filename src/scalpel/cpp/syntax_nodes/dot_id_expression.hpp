@@ -37,9 +37,9 @@ dot_id_expression
 typedef
 	sequence_node
 	<
-		simple_text_node<str::dot>,
+		predefined_text_node<str::dot>,
 		optional_node<space>,
-		optional_node<simple_text_node<str::template_>>,
+		optional_node<predefined_text_node<str::template_>>,
 		optional_node<space>,
 		id_expression
 	>

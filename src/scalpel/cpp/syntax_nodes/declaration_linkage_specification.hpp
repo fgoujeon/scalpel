@@ -36,7 +36,7 @@ declaration_linkage_specification
 typedef
 	sequence_node
 	<
-		simple_text_node<str::extern_>,
+		predefined_text_node<str::extern_>,
 		optional_node<space>,
 		string_literal,
 		optional_node<space>,

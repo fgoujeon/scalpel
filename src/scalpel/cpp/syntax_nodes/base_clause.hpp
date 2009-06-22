@@ -24,7 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <scalpel/util/extern_strings.hpp>
 #include "optional_node.hpp"
 #include "composite_node.hpp"
-#include "simple_text_node.hpp"
+#include "predefined_text_node.hpp"
 #include "sequence_node.hpp"
 #include "base_specifier_list.hpp"
 
@@ -41,7 +41,7 @@ base_clause
 typedef
 	sequence_node
 	<
-		simple_text_node<util::extern_strings::colon>,
+		predefined_text_node<util::extern_strings::colon>,
 		optional_node<space>,
 		base_specifier_list
 	>

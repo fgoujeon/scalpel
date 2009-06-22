@@ -40,11 +40,11 @@ typedef
 	<
 		class_head,
 		optional_node<space>,
-		simple_text_node<str::opening_brace>,
+		predefined_text_node<str::opening_brace>,
 		optional_node<space>,
 		optional_node<member_specification>,
 		optional_node<space>,
-		simple_text_node<str::closing_brace>
+		predefined_text_node<str::closing_brace>
 	>
 	class_specifier_t
 ;
@@ -59,11 +59,11 @@ struct class_specifier: public class_specifier_t
 	(
 		class_head&& o1,
 		optional_node<space>&& o2,
-		simple_text_node<str::opening_brace>&& o3,
+		predefined_text_node<str::opening_brace>&& o3,
 		optional_node<space>&& o4,
 		optional_node<member_specification>&& o5,
 		optional_node<space>&& o6,
-		simple_text_node<str::closing_brace>&& o7
+		predefined_text_node<str::closing_brace>&& o7
 	):
 		type(o1, o2, o3, o4, o5, o6, o7)
 	{

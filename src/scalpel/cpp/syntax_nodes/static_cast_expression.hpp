@@ -31,19 +31,19 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 typedef
 	sequence_node
 	<
-		simple_text_node<str::static_cast_>,
+		predefined_text_node<str::static_cast_>,
 		optional_node<space>,
-		simple_text_node<str::left_angle_bracket>,
+		predefined_text_node<str::left_angle_bracket>,
 		optional_node<space>,
 		type_id,
 		optional_node<space>,
-		simple_text_node<str::right_angle_bracket>,
+		predefined_text_node<str::right_angle_bracket>,
 		optional_node<space>,
-		simple_text_node<str::opening_round_bracket>,
+		predefined_text_node<str::opening_round_bracket>,
 		optional_node<space>,
 		expression,
 		optional_node<space>,
-		simple_text_node<str::closing_round_bracket>
+		predefined_text_node<str::closing_round_bracket>
 	>
 	static_cast_expression
 ;

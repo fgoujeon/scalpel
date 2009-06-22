@@ -38,7 +38,7 @@ typedef
 	<
 		optional_node<identifier>,
 		optional_node<space>,
-		simple_text_node<str::colon>,
+		predefined_text_node<str::colon>,
 		optional_node<space>,
 		conditional_expression
 	>

@@ -38,17 +38,17 @@ using_directive
 typedef
 	sequence_node
 	<
-		simple_text_node<str::using_>,
+		predefined_text_node<str::using_>,
 		optional_node<space>,
-		simple_text_node<str::namespace_>,
+		predefined_text_node<str::namespace_>,
 		optional_node<space>,
-		optional_node<simple_text_node<str::double_colon>>,
+		optional_node<predefined_text_node<str::double_colon>>,
 		optional_node<space>,
 		optional_node<nested_name_specifier>,
 		optional_node<space>,
 		identifier,
 		optional_node<space>,
-		simple_text_node<str::semicolon>
+		predefined_text_node<str::semicolon>
 	>
 	using_directive_t
 ;
@@ -62,17 +62,17 @@ class using_directive: public composite_node
 
 		using_directive
 		(
-			simple_text_node<str::using_>&& o0,
+			predefined_text_node<str::using_>&& o0,
 			optional_node<space>&& o1,
-			simple_text_node<str::namespace_>&& o2,
+			predefined_text_node<str::namespace_>&& o2,
 			optional_node<space>&& o3,
-			optional_node<simple_text_node<str::double_colon>>&& o4,
+			optional_node<predefined_text_node<str::double_colon>>&& o4,
 			optional_node<space>&& o5,
 			optional_node<nested_name_specifier>&& o6,
 			optional_node<space>&& o7,
 			identifier&& o8,
 			optional_node<space>&& o9,
-			simple_text_node<str::semicolon>&& o10
+			predefined_text_node<str::semicolon>&& o10
 		);
 
 		using_directive(head_node_t&& head, tail_sequence_node_t&& tail);

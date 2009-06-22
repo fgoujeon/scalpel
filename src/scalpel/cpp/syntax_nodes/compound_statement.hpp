@@ -37,11 +37,11 @@ compound_statement
 typedef
 	sequence_node
 	<
-		simple_text_node<str::opening_brace>,
+		predefined_text_node<str::opening_brace>,
 		optional_node<space>,
 		optional_node<statement_seq>,
 		optional_node<space>,
-		simple_text_node<str::closing_brace>
+		predefined_text_node<str::closing_brace>
 	>
 	compound_statement_t
 ;
@@ -54,11 +54,11 @@ struct compound_statement: public compound_statement_t
 
 	compound_statement
 	(
-		simple_text_node<str::opening_brace>&& o1,
+		predefined_text_node<str::opening_brace>&& o1,
 		optional_node<space>&& o2,
 		optional_node<statement_seq>&& o3,
 		optional_node<space>&& o4,
-		simple_text_node<str::closing_brace>&& o5
+		predefined_text_node<str::closing_brace>&& o5
 	):
 		type(o1, o2, o3, o4, o5)
 	{

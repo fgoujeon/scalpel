@@ -36,15 +36,15 @@ namespace_alias_definition
 typedef
 	sequence_node
 	<
-		simple_text_node<str::namespace_>,
+		predefined_text_node<str::namespace_>,
 		optional_node<space>,
 		identifier,
 		optional_node<space>,
-		simple_text_node<str::equal>,
+		predefined_text_node<str::equal>,
 		optional_node<space>,
 		qualified_namespace_specifier,
 		optional_node<space>,
-		simple_text_node<str::semicolon>
+		predefined_text_node<str::semicolon>
 	>
 	namespace_alias_definition
 ;

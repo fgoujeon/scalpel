@@ -35,8 +35,8 @@ typedef
 		type_specifier,
 		function_specifier,
 		storage_class_specifier,
-		simple_text_node<str::friend_>,
-		simple_text_node<str::typedef_>
+		predefined_text_node<str::friend_>,
+		predefined_text_node<str::typedef_>
 	>
 	decl_specifier
 ;

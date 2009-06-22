@@ -34,11 +34,11 @@ new_array_operator
 typedef
 	sequence_node
 	<
-		simple_text_node<str::new_>,
+		predefined_text_node<str::new_>,
 		optional_node<space>,
-		simple_text_node<str::opening_square_bracket>,
+		predefined_text_node<str::opening_square_bracket>,
 		optional_node<space>,
-		simple_text_node<str::closing_square_bracket>
+		predefined_text_node<str::closing_square_bracket>
 	>
 	new_array_operator
 ;

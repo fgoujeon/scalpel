@@ -36,11 +36,11 @@ typename_type_parameter
 typedef
 	sequence_node
 	<
-		simple_text_node<str::typename_>,
+		predefined_text_node<str::typename_>,
 		optional_node<space>,
 		optional_node<identifier>,
 		optional_node<space>,
-		optional_node<simple_text_node<str::equal>>,
+		optional_node<predefined_text_node<str::equal>>,
 		optional_node<space>,
 		optional_node<type_id>
 	>

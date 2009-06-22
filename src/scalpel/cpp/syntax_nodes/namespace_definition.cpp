@@ -28,17 +28,17 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 namespace_definition::namespace_definition
 (
-	simple_text_node<str::namespace_>&& o0,
+	predefined_text_node<str::namespace_>&& o0,
 	optional_node<space>&& o1,
 	optional_node<identifier>&& o2,
 	optional_node<space>&& o3,
 	optional_node<leaf_node>&& o3b,
 	optional_node<space>&& o3c,
-	simple_text_node<str::opening_brace>&& o4,
+	predefined_text_node<str::opening_brace>&& o4,
 	optional_node<space>&& o5,
 	optional_node<declaration_seq>&& o6,
 	optional_node<space>&& o7,
-	simple_text_node<str::closing_brace>&& o8
+	predefined_text_node<str::closing_brace>&& o8
 ):
 	impl_
 	(

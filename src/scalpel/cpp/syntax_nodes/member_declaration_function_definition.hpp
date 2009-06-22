@@ -37,7 +37,7 @@ typedef
 	<
 		function_definition,
 		optional_node<space>,
-		optional_node<simple_text_node<str::semicolon>>
+		optional_node<predefined_text_node<str::semicolon>>
 	>
 	member_declaration_function_definition
 ;

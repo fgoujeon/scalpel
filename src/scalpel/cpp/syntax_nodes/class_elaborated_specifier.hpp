@@ -39,7 +39,7 @@ typedef
 	<
 		class_key,
 		optional_node<space>,
-		optional_node<simple_text_node<str::double_colon>>,
+		optional_node<predefined_text_node<str::double_colon>>,
 		optional_node<space>,
 		optional_node<nested_name_specifier>,
 		optional_node<space>,
@@ -58,7 +58,7 @@ struct class_elaborated_specifier: public class_elaborated_specifier_t
 	(
 		class_key&& o1,
 		optional_node<space>&& o2,
-		optional_node<simple_text_node<str::double_colon>> o3,
+		optional_node<predefined_text_node<str::double_colon>> o3,
 		optional_node<space>&& o4,
 		optional_node<nested_name_specifier>&& o5,
 		optional_node<space>&& o6,

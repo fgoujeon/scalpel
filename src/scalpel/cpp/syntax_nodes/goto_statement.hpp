@@ -37,11 +37,11 @@ goto_statement
 typedef
 	sequence_node
 	<
-		simple_text_node<str::goto_>,
+		predefined_text_node<str::goto_>,
 		optional_node<space>,
 		identifier,
 		optional_node<space>,
-		simple_text_node<str::semicolon>
+		predefined_text_node<str::semicolon>
 	>
 	goto_statement
 ;

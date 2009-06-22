@@ -32,7 +32,7 @@ class unary_expression;
 typedef
 	sequence_node
 	<
-		simple_text_node<str::sizeof_>,
+		predefined_text_node<str::sizeof_>,
 		optional_node<space>,
 		unary_expression
 	>
@@ -57,12 +57,12 @@ class unary_sizeof_expression: public composite_node
 {
 	public:
 		typedef unary_sizeof_expression_t type;
-		typedef simple_text_node<str::sizeof_> head_node_t;
+		typedef predefined_text_node<str::sizeof_> head_node_t;
 		typedef unary_sizeof_expression_tail_t tail_sequence_node_t;
 
 		unary_sizeof_expression
 		(
-			simple_text_node<str::sizeof_>&& o0,
+			predefined_text_node<str::sizeof_>&& o0,
 			optional_node<space>&& o1,
 			unary_expression&& o2
 		);

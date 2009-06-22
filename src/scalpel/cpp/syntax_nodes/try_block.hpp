@@ -36,7 +36,7 @@ try_block
 typedef
 	sequence_node
 	<
-		simple_text_node<str::try_>,
+		predefined_text_node<str::try_>,
 		optional_node<space>,
 		compound_statement,
 		optional_node<space>,
@@ -49,7 +49,7 @@ struct try_block: public try_block_t
 {
 	try_block
 	(
-		simple_text_node<str::try_>&& o0,
+		predefined_text_node<str::try_>&& o0,
 		optional_node<space>&& o1,
 		compound_statement&& o2,
 		optional_node<space>&& o3,

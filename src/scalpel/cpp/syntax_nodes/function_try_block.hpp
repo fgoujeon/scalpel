@@ -37,7 +37,7 @@ function_try_block
 typedef
 	sequence_node
 	<
-		simple_text_node<str::try_>,
+		predefined_text_node<str::try_>,
 		optional_node<space>,
 		optional_node<ctor_initializer>,
 		optional_node<space>,

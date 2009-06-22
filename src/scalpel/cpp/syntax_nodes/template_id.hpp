@@ -37,11 +37,11 @@ typedef
 	<
 		identifier,
 		optional_node<space>,
-		simple_text_node<str::left_angle_bracket>,
+		predefined_text_node<str::left_angle_bracket>,
 		optional_node<space>,
 		optional_node<template_argument_list>,
 		optional_node<space>,
-		simple_text_node<str::right_angle_bracket>
+		predefined_text_node<str::right_angle_bracket>
 	>
 	template_id_t
 ;
@@ -62,11 +62,11 @@ class template_id: public composite_node
 		(
 			identifier&& o0,
 			optional_node<space>&& o1,
-			simple_text_node<str::left_angle_bracket>&& o2,
+			predefined_text_node<str::left_angle_bracket>&& o2,
 			optional_node<space>&& o3,
 			optional_node<template_argument_list>&& o4,
 			optional_node<space>&& o5,
-			simple_text_node<str::right_angle_bracket>&& o6
+			predefined_text_node<str::right_angle_bracket>&& o6
 		);
 
 		template_id

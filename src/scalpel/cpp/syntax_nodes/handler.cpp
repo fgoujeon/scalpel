@@ -25,13 +25,13 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 handler::handler
 (
-	simple_text_node<str::catch_>&& o0,
+	predefined_text_node<str::catch_>&& o0,
 	optional_node<space>&& o1,
-	simple_text_node<str::opening_round_bracket>&& o2,
+	predefined_text_node<str::opening_round_bracket>&& o2,
 	optional_node<space>&& o3,
 	exception_declaration&& o4,
 	optional_node<space>&& o5,
-	simple_text_node<str::closing_round_bracket>&& o6,
+	predefined_text_node<str::closing_round_bracket>&& o6,
 	optional_node<space>&& o7,
 	compound_statement&& o8
 ):

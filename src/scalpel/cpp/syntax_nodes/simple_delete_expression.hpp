@@ -35,9 +35,9 @@ simple_delete_expression
 typedef
 	sequence_node
 	<
-		optional_node<simple_text_node<str::double_colon>>,
+		optional_node<predefined_text_node<str::double_colon>>,
 		optional_node<space>,
-		simple_text_node<str::delete_>,
+		predefined_text_node<str::delete_>,
 		optional_node<space>,
 		cast_expression
 	>

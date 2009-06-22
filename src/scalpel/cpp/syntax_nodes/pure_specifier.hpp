@@ -34,9 +34,9 @@ pure_specifier
 typedef
 	sequence_node
 	<
-		simple_text_node<str::equal>,
+		predefined_text_node<str::equal>,
 		optional_node<space>,
-		simple_text_node<str::zero>
+		predefined_text_node<str::zero>
 	>
 	pure_specifier
 ;

@@ -29,7 +29,7 @@ simple_declaration::simple_declaration
 	optional_node<space>&& o1,
 	optional_node<init_declarator_list>&& o2,
 	optional_node<space>&& o3,
-	simple_text_node<str::semicolon>&& o4
+	predefined_text_node<str::semicolon>&& o4
 ):
 	impl_(o0, o1, o2, o3, o4)
 {

@@ -36,11 +36,11 @@ bracketed_abstract_declarator
 typedef
 	sequence_node
 	<
-		simple_text_node<str::opening_round_bracket>,
+		predefined_text_node<str::opening_round_bracket>,
 		optional_node<space>,
 		abstract_declarator,
 		optional_node<space>,
-		simple_text_node<str::closing_round_bracket>,
+		predefined_text_node<str::closing_round_bracket>,
 		optional_node<space>,
 		direct_declarator_last_part
 	>

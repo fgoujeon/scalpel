@@ -42,11 +42,11 @@ typedef
 	<
 		logical_or_expression,
 		optional_node<space>,
-		optional_node<simple_text_node<str::question_mark>>,
+		optional_node<predefined_text_node<str::question_mark>>,
 		optional_node<space>,
 		optional_node<expression>,
 		optional_node<space>,
-		optional_node<simple_text_node<str::colon>>,
+		optional_node<predefined_text_node<str::colon>>,
 		optional_node<space>,
 		optional_node<assignment_expression>
 	>
@@ -57,11 +57,11 @@ typedef
 	sequence_node
 	<
 		optional_node<space>,
-		optional_node<simple_text_node<str::question_mark>>,
+		optional_node<predefined_text_node<str::question_mark>>,
 		optional_node<space>,
 		optional_node<expression>,
 		optional_node<space>,
-		optional_node<simple_text_node<str::colon>>,
+		optional_node<predefined_text_node<str::colon>>,
 		optional_node<space>,
 		optional_node<assignment_expression>
 	>
@@ -86,11 +86,11 @@ class conditional_expression: public composite_node
 		(
 			logical_or_expression&& o1,
 			optional_node<space>&& o2,
-			optional_node<simple_text_node<str::question_mark>> o3,
+			optional_node<predefined_text_node<str::question_mark>> o3,
 			optional_node<space>&& o4,
 			optional_node<expression>&& o5,
 			optional_node<space>&& o6,
-			optional_node<simple_text_node<str::colon>> o7,
+			optional_node<predefined_text_node<str::colon>> o7,
 			optional_node<space>&& o8,
 			optional_node<assignment_expression>&& o9
 		);

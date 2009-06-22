@@ -40,9 +40,9 @@ typedef
 	<
 		optional_node<parameter_declaration_list>,
 		optional_node<space>,
-		optional_node<simple_text_node<str::comma>>,
+		optional_node<predefined_text_node<str::comma>>,
 		optional_node<space>,
-		optional_node<simple_text_node<str::ellipsis>>
+		optional_node<predefined_text_node<str::ellipsis>>
 	>
 	parameter_declaration_clause
 ;

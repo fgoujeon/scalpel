@@ -29,7 +29,7 @@ enumerator_definition::enumerator_definition
 (
 	identifier&& o0,
 	optional_node<space>&& o1,
-	optional_node<simple_text_node<str::equal>>&& o2,
+	optional_node<predefined_text_node<str::equal>>&& o2,
 	optional_node<space>&& o3,
 	optional_node<conditional_expression>&& o4
 ):

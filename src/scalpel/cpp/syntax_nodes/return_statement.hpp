@@ -37,11 +37,11 @@ return_statement
 typedef
 	sequence_node
 	<
-		simple_text_node<str::return_>,
+		predefined_text_node<str::return_>,
 		optional_node<space>,
 		optional_node<expression>,
 		optional_node<space>,
-		simple_text_node<str::semicolon>
+		predefined_text_node<str::semicolon>
 	>
 	return_statement
 ;

@@ -32,7 +32,7 @@ class assignment_expression;
 typedef
 	sequence_node
 	<
-		simple_text_node<str::throw_>,
+		predefined_text_node<str::throw_>,
 		optional_node<space>,
 		optional_node<assignment_expression>
 	>
@@ -53,7 +53,7 @@ class throw_expression: public composite_node
 
 		throw_expression
 		(
-			simple_text_node<str::throw_>&& o0,
+			predefined_text_node<str::throw_>&& o0,
 			optional_node<space>&& o1,
 			optional_node<assignment_expression>&& o2
 		);

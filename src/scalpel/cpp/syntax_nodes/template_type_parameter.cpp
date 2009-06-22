@@ -27,19 +27,19 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 template_type_parameter::template_type_parameter
 (
-	simple_text_node<str::template_>&& o0,
+	predefined_text_node<str::template_>&& o0,
 	optional_node<space>&& o1,
-	simple_text_node<str::left_angle_bracket>&& o2,
+	predefined_text_node<str::left_angle_bracket>&& o2,
 	optional_node<space>&& o3,
 	template_parameter_list&& o4,
 	optional_node<space>&& o5,
-	simple_text_node<str::right_angle_bracket>&& o6,
+	predefined_text_node<str::right_angle_bracket>&& o6,
 	optional_node<space>&& o7,
-	simple_text_node<str::class_>&& o8,
+	predefined_text_node<str::class_>&& o8,
 	optional_node<space>&& o9,
 	optional_node<identifier>&& o10,
 	optional_node<space>&& o11,
-	optional_node<simple_text_node<str::equal>>&& o12,
+	optional_node<predefined_text_node<str::equal>>&& o12,
 	optional_node<space>&& o13,
 	optional_node<id_expression>&& o14
 ):

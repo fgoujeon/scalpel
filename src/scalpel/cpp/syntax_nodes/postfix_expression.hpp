@@ -38,7 +38,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "arrow_id_expression.hpp"
 #include "dot_pseudo_destructor_name.hpp"
 #include "arrow_pseudo_destructor_name.hpp"
-#include "simple_text_node.hpp"
+#include "predefined_text_node.hpp"
 #include "expression.hpp"
 #include "square_bracketed_expression.hpp"
 #include "round_bracketed_optional_expression.hpp"
@@ -79,8 +79,8 @@ typedef
 		arrow_id_expression,
 		dot_pseudo_destructor_name,
 		arrow_pseudo_destructor_name,
-		simple_text_node<util::extern_strings::double_plus>,
-		simple_text_node<util::extern_strings::double_minus>
+		predefined_text_node<util::extern_strings::double_plus>,
+		predefined_text_node<util::extern_strings::double_minus>
 	>
 	postfix_expression_last_part
 ;

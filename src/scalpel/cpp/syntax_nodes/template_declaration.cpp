@@ -25,15 +25,15 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 template_declaration::template_declaration
 (
-	optional_node<simple_text_node<str::export_>>&& o0,
+	optional_node<predefined_text_node<str::export_>>&& o0,
 	optional_node<space>&& o1,
-	simple_text_node<str::template_>&& o2,
+	predefined_text_node<str::template_>&& o2,
 	optional_node<space>&& o3,
-	simple_text_node<str::left_angle_bracket>&& o4,
+	predefined_text_node<str::left_angle_bracket>&& o4,
 	optional_node<space>&& o5,
 	template_parameter_list&& o6,
 	optional_node<space>&& o7,
-	simple_text_node<str::right_angle_bracket>&& o8,
+	predefined_text_node<str::right_angle_bracket>&& o8,
 	optional_node<space>&& o9,
 	declaration&& o10
 ):

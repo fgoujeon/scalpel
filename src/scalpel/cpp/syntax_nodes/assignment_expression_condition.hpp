@@ -43,7 +43,7 @@ typedef
 		optional_node<space>,
 		declarator,
 		optional_node<space>,
-		simple_text_node<str::equal>,
+		predefined_text_node<str::equal>,
 		optional_node<space>,
 		assignment_expression
 	>

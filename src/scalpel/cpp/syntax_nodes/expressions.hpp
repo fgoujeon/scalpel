@@ -231,11 +231,11 @@ struct logical_or_expression: public logical_or_expression_t
 typedef
 	sequence_node
 	<
-		simple_text_node<str::opening_round_bracket>,
+		predefined_text_node<str::opening_round_bracket>,
 		optional_node<space>,
 		right_shift_expression,
 		optional_node<space>,
-		simple_text_node<str::closing_round_bracket>
+		predefined_text_node<str::closing_round_bracket>
 	>
 	round_bracketed_right_shift_expression
 ;
@@ -243,11 +243,11 @@ typedef
 typedef
 	sequence_node
 	<
-		simple_text_node<str::opening_round_bracket>,
+		predefined_text_node<str::opening_round_bracket>,
 		optional_node<space>,
 		greater_than_expression,
 		optional_node<space>,
-		simple_text_node<str::closing_round_bracket>
+		predefined_text_node<str::closing_round_bracket>
 	>
 	round_bracketed_greater_than_expression
 ;

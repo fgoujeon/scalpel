@@ -36,9 +36,9 @@ continue_statement
 typedef
 	sequence_node
 	<
-		simple_text_node<str::continue_>,
+		predefined_text_node<str::continue_>,
 		optional_node<space>,
-		simple_text_node<str::semicolon>
+		predefined_text_node<str::semicolon>
 	>
 	continue_statement
 ;

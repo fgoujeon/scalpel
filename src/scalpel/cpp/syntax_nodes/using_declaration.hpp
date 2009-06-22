@@ -37,17 +37,17 @@ using_declaration
 typedef
 	sequence_node
 	<
-		simple_text_node<str::using_>,
+		predefined_text_node<str::using_>,
 		optional_node<space>,
-		optional_node<simple_text_node<str::typename_>>,
+		optional_node<predefined_text_node<str::typename_>>,
 		optional_node<space>,
-		optional_node<simple_text_node<str::double_colon>>,
+		optional_node<predefined_text_node<str::double_colon>>,
 		optional_node<space>,
 		optional_node<nested_name_specifier>,
 		optional_node<space>,
 		unqualified_id,
 		optional_node<space>,
-		simple_text_node<str::semicolon>
+		predefined_text_node<str::semicolon>
 	>
 	using_declaration_t
 ;
@@ -61,17 +61,17 @@ class using_declaration: public composite_node
 
 		using_declaration
 		(
-			simple_text_node<str::using_>&& o0,
+			predefined_text_node<str::using_>&& o0,
 			optional_node<space>&& o1,
-			optional_node<simple_text_node<str::typename_>>&& o2,
+			optional_node<predefined_text_node<str::typename_>>&& o2,
 			optional_node<space>&& o3,
-			optional_node<simple_text_node<str::double_colon>>&& o4,
+			optional_node<predefined_text_node<str::double_colon>>&& o4,
 			optional_node<space>&& o5,
 			optional_node<nested_name_specifier>&& o6,
 			optional_node<space>&& o7,
 			unqualified_id&& o8,
 			optional_node<space>&& o9,
-			simple_text_node<str::semicolon>&& o10
+			predefined_text_node<str::semicolon>&& o10
 		);
 
 		using_declaration(head_node_t&& head, tail_sequence_node_t&& tail);

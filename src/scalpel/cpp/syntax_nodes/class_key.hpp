@@ -29,9 +29,9 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 typedef
 	alternative_node
 	<
-		simple_text_node<str::class_>,
-		simple_text_node<str::struct_>,
-		simple_text_node<str::union_>
+		predefined_text_node<str::class_>,
+		predefined_text_node<str::struct_>,
+		predefined_text_node<str::union_>
 	>
 	class_key
 ;

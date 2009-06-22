@@ -40,19 +40,19 @@ for_statement
 typedef
 	sequence_node
 	<
-		simple_text_node<str::for_>,
+		predefined_text_node<str::for_>,
 		optional_node<space>,
-		simple_text_node<str::opening_round_bracket>,
+		predefined_text_node<str::opening_round_bracket>,
 		optional_node<space>,
 		for_init_statement,
 		optional_node<space>,
 		optional_node<condition>,
 		optional_node<space>,
-		simple_text_node<str::semicolon>,
+		predefined_text_node<str::semicolon>,
 		optional_node<space>,
 		optional_node<expression>,
 		optional_node<space>,
-		simple_text_node<str::closing_round_bracket>,
+		predefined_text_node<str::closing_round_bracket>,
 		optional_node<space>,
 		statement
 	>
@@ -68,19 +68,19 @@ class for_statement: public for_statement_t
 
 		for_statement
 		(
-			simple_text_node<str::for_>&& o0,
+			predefined_text_node<str::for_>&& o0,
 			optional_node<space>&& o1,
-			simple_text_node<str::opening_round_bracket>&& o2,
+			predefined_text_node<str::opening_round_bracket>&& o2,
 			optional_node<space>&& o3,
 			for_init_statement&& o4,
 			optional_node<space>&& o5,
 			optional_node<condition>&& o6,
 			optional_node<space>&& o7,
-			simple_text_node<str::semicolon>&& o8,
+			predefined_text_node<str::semicolon>&& o8,
 			optional_node<space>&& o9,
 			optional_node<expression>&& o10,
 			optional_node<space>&& o11,
-			simple_text_node<str::closing_round_bracket>&& o12,
+			predefined_text_node<str::closing_round_bracket>&& o12,
 			optional_node<space>&& o13,
 			statement&& o14
 		):

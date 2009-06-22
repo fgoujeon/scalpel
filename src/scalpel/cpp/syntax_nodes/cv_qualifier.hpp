@@ -29,11 +29,11 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 typedef
 	alternative_node
 	<
-		simple_text_node<str::const_>,
-		simple_text_node<str::volatile_>,
-		simple_text_node<str::restrict_>,
-		simple_text_node<str::__restrict___>,
-		simple_text_node<str::__restrict_>
+		predefined_text_node<str::const_>,
+		predefined_text_node<str::volatile_>,
+		predefined_text_node<str::restrict_>,
+		predefined_text_node<str::__restrict___>,
+		predefined_text_node<str::__restrict_>
 	>
 	cv_qualifier
 ;

@@ -35,7 +35,7 @@ typedef
 	<
 		identifier,
 		optional_node<space>,
-		optional_node<simple_text_node<str::equal>>,
+		optional_node<predefined_text_node<str::equal>>,
 		optional_node<space>,
 		optional_node<conditional_expression>
 	>
@@ -46,7 +46,7 @@ typedef
 	sequence_node
 	<
 		optional_node<space>,
-		optional_node<simple_text_node<str::equal>>,
+		optional_node<predefined_text_node<str::equal>>,
 		optional_node<space>,
 		optional_node<conditional_expression>
 	>
@@ -69,7 +69,7 @@ class enumerator_definition: public composite_node
 		(
 			identifier&& o0,
 			optional_node<space>&& o1,
-			optional_node<simple_text_node<str::equal>>&& o2,
+			optional_node<predefined_text_node<str::equal>>&& o2,
 			optional_node<space>&& o3,
 			optional_node<conditional_expression>&& o4
 		);

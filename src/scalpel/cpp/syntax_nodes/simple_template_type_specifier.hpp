@@ -36,11 +36,11 @@ simple_template_type_specifier
 typedef
 	sequence_node
 	<
-		optional_node<simple_text_node<str::double_colon>>,
+		optional_node<predefined_text_node<str::double_colon>>,
 		optional_node<space>,
 		nested_name_specifier,
 		optional_node<space>,
-		simple_text_node<str::template_>,
+		predefined_text_node<str::template_>,
 		optional_node<space>,
 		template_id
 	>

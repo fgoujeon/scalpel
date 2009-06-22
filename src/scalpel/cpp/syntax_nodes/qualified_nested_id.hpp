@@ -38,11 +38,11 @@ qualified_nested_id
 typedef
 	sequence_node
 	<
-		optional_node<simple_text_node<str::double_colon>>,
+		optional_node<predefined_text_node<str::double_colon>>,
 		optional_node<space>,
 		nested_name_specifier,
 		optional_node<space>,
-		optional_node<simple_text_node<str::template_>>,
+		optional_node<predefined_text_node<str::template_>>,
 		optional_node<space>,
 		unqualified_id
 	>
@@ -58,11 +58,11 @@ class qualified_nested_id: public composite_node
 
 		qualified_nested_id
 		(
-			optional_node<simple_text_node<str::double_colon>>&& o0,
+			optional_node<predefined_text_node<str::double_colon>>&& o0,
 			optional_node<space>&& o1,
 			nested_name_specifier&& o2,
 			optional_node<space>&& o3,
-			optional_node<simple_text_node<str::template_>>&& o4,
+			optional_node<predefined_text_node<str::template_>>&& o4,
 			optional_node<space>&& o5,
 			unqualified_id&& o6
 		);

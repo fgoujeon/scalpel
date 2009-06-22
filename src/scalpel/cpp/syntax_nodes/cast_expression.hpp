@@ -33,11 +33,11 @@ class unary_expression;
 typedef
 	sequence_node
 	<
-		simple_text_node<str::opening_round_bracket>,
+		predefined_text_node<str::opening_round_bracket>,
 		optional_node<space>,
 		type_id,
 		optional_node<space>,
-		simple_text_node<str::closing_round_bracket>
+		predefined_text_node<str::closing_round_bracket>
 	>
 	cast_expression_first_part
 ;

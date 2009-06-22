@@ -31,11 +31,11 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 typedef
 	sequence_node
 	<
-		simple_text_node<str::case_>,
+		predefined_text_node<str::case_>,
 		optional_node<space>,
 		conditional_expression,
 		optional_node<space>,
-		simple_text_node<str::colon>,
+		predefined_text_node<str::colon>,
 		optional_node<space>,
 		statement
 	>
@@ -57,11 +57,11 @@ struct case_statement: public case_statement_t
 
 	case_statement
 	(
-		simple_text_node<str::case_>&& o1,
+		predefined_text_node<str::case_>&& o1,
 		optional_node<space>&& o2,
 		conditional_expression&& o3,
 		optional_node<space>&& o4,
-		simple_text_node<str::colon>&& o5,
+		predefined_text_node<str::colon>&& o5,
 		optional_node<space>&& o6,
 		statement&& o7
 	):

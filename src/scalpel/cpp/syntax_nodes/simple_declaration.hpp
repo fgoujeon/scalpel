@@ -35,7 +35,7 @@ typedef
 		optional_node<space>,
 		optional_node<init_declarator_list>,
 		optional_node<space>,
-		simple_text_node<str::semicolon>
+		predefined_text_node<str::semicolon>
 	>
 	simple_declaration_t
 ;
@@ -60,7 +60,7 @@ class simple_declaration: public composite_node
 			optional_node<space>&& o1,
 			optional_node<init_declarator_list>&& o2,
 			optional_node<space>&& o3,
-			simple_text_node<str::semicolon>&& o4
+			predefined_text_node<str::semicolon>&& o4
 		);
 
 		simple_declaration

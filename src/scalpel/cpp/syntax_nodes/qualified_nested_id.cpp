@@ -27,11 +27,11 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 qualified_nested_id::qualified_nested_id
 (
-	optional_node<simple_text_node<str::double_colon>>&& o0,
+	optional_node<predefined_text_node<str::double_colon>>&& o0,
 	optional_node<space>&& o1,
 	nested_name_specifier&& o2,
 	optional_node<space>&& o3,
-	optional_node<simple_text_node<str::template_>>&& o4,
+	optional_node<predefined_text_node<str::template_>>&& o4,
 	optional_node<space>&& o5,
 	unqualified_id&& o6
 ):

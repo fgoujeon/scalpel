@@ -30,11 +30,11 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 typedef
 	sequence_node
 	<
-		optional_node<simple_text_node<str::template_>>,
+		optional_node<predefined_text_node<str::template_>>,
 		optional_node<space>,
 		identifier_or_template_id,
 		optional_node<space>,
-		simple_text_node<str::double_colon>
+		predefined_text_node<str::double_colon>
 	>
 	nested_name_specifier_last_part_t
 ;
@@ -50,7 +50,7 @@ typedef
 	<
 		identifier_or_template_id,
 		optional_node<space>,
-		simple_text_node<str::double_colon>,
+		predefined_text_node<str::double_colon>,
 		optional_node<space>,
 		optional_node<nested_name_specifier_last_part_seq>
 	>
@@ -83,7 +83,7 @@ class nested_name_specifier: public composite_node
 		(
 			identifier_or_template_id&& o0,
 			optional_node<space>&& o1,
-			simple_text_node<str::double_colon>&& o2,
+			predefined_text_node<str::double_colon>&& o2,
 			optional_node<space>&& o3,
 			optional_node<nested_name_specifier_last_part_seq>&& o4
 		);
@@ -136,11 +136,11 @@ class nested_name_specifier_last_part: public composite_node
 
 		nested_name_specifier_last_part
 		(
-			optional_node<simple_text_node<str::template_>>&& o0,
+			optional_node<predefined_text_node<str::template_>>&& o0,
 			optional_node<space>&& o1,
 			identifier_or_template_id&& o2,
 			optional_node<space>&& o3,
-			simple_text_node<str::double_colon>&& o4
+			predefined_text_node<str::double_colon>&& o4
 		);
 
 		nested_name_specifier_last_part

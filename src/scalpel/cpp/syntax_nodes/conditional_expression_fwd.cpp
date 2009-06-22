@@ -31,11 +31,11 @@ conditional_expression::conditional_expression
 (
 	logical_or_expression&& o1,
 	optional_node<space>&& o2,
-	optional_node<simple_text_node<str::question_mark>> o3,
+	optional_node<predefined_text_node<str::question_mark>> o3,
 	optional_node<space>&& o4,
 	optional_node<expression>&& o5,
 	optional_node<space>&& o6,
-	optional_node<simple_text_node<str::colon>> o7,
+	optional_node<predefined_text_node<str::colon>> o7,
 	optional_node<space>&& o8,
 	optional_node<assignment_expression>&& o9
 ):

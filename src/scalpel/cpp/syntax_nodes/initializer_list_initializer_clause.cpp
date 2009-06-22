@@ -27,13 +27,13 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 initializer_list_initializer_clause::initializer_list_initializer_clause
 (
-	simple_text_node<str::opening_brace>&& o0,
+	predefined_text_node<str::opening_brace>&& o0,
 	optional_node<space>&& o1,
 	optional_node<initializer_list>&& o2,
 	optional_node<space>&& o3,
-	optional_node<simple_text_node<str::comma>>&& o4,
+	optional_node<predefined_text_node<str::comma>>&& o4,
 	optional_node<space>&& o5,
-	simple_text_node<str::closing_brace>&& o6
+	predefined_text_node<str::closing_brace>&& o6
 ):
 	impl_(new type(o0, o1, o2, o3, o4, o5, o6))
 {

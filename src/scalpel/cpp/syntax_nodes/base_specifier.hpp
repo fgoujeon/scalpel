@@ -41,11 +41,11 @@ base_specifier
 typedef
 	sequence_node
 	<
-		optional_node<simple_text_node<str::virtual_>>,
+		optional_node<predefined_text_node<str::virtual_>>,
 		optional_node<space>,
 		optional_node<access_specifier>,
 		optional_node<space>,
-		optional_node<simple_text_node<str::virtual_>>,
+		optional_node<predefined_text_node<str::virtual_>>,
 		optional_node<space>,
 		nested_identifier_or_template_id
 	>

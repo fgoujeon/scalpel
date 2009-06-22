@@ -37,7 +37,7 @@ typedef
 	<
 		access_specifier,
 		optional_node<space>,
-		simple_text_node<str::colon>
+		predefined_text_node<str::colon>
 	>
 	member_specification_access_specifier_t
 ;
@@ -48,7 +48,7 @@ struct member_specification_access_specifier: public member_specification_access
 	(
 		access_specifier&& o0,
 		optional_node<space>&& o1,
-		simple_text_node<str::colon>&& o2
+		predefined_text_node<str::colon>&& o2
 	):
 		member_specification_access_specifier_t(o0, o1, o2)
 	{

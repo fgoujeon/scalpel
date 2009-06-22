@@ -29,17 +29,17 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 typedef
 	alternative_node
 	<
-		simple_text_node<str::char_>,
-		simple_text_node<str::wchar_t_>,
-		simple_text_node<str::bool_>,
-		simple_text_node<str::short_>,
-		simple_text_node<str::int_>,
-		simple_text_node<str::long_>,
-		simple_text_node<str::signed_>,
-		simple_text_node<str::unsigned_>,
-		simple_text_node<str::float_>,
-		simple_text_node<str::double_>,
-		simple_text_node<str::void_>
+		predefined_text_node<str::char_>,
+		predefined_text_node<str::wchar_t_>,
+		predefined_text_node<str::bool_>,
+		predefined_text_node<str::short_>,
+		predefined_text_node<str::int_>,
+		predefined_text_node<str::long_>,
+		predefined_text_node<str::signed_>,
+		predefined_text_node<str::unsigned_>,
+		predefined_text_node<str::float_>,
+		predefined_text_node<str::double_>,
+		predefined_text_node<str::void_>
 	>
 	built_in_type_specifier
 ;

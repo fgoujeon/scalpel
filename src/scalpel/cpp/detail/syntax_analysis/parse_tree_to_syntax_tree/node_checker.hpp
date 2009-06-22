@@ -22,7 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_PARSE_TREE_TO_SYNTAX_TREE_NODE_CHECKER_HPP
 
 #include <string>
-#include <scalpel/cpp/syntax_nodes/simple_text_node.hpp>
+#include <scalpel/cpp/syntax_nodes/predefined_text_node.hpp>
 #include "syntax_node_type_to_parser_id_map.hpp"
 #include "basic_functions.hpp"
 
@@ -43,7 +43,7 @@ struct node_checker
 
 //check from value for simple text nodes (since they don't have an id)
 template<const std::string& Text>
-struct node_checker<syntax_nodes::simple_text_node<Text>>
+struct node_checker<syntax_nodes::predefined_text_node<Text>>
 {
 	static
 	bool

@@ -29,10 +29,10 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 typedef
 	alternative_node
 	<
-		simple_text_node<str::register_>,
-		simple_text_node<str::static_>,
-		simple_text_node<str::extern_>,
-		simple_text_node<str::mutable_>
+		predefined_text_node<str::register_>,
+		predefined_text_node<str::static_>,
+		predefined_text_node<str::extern_>,
+		predefined_text_node<str::mutable_>
 	>
 	storage_class_specifier
 ;

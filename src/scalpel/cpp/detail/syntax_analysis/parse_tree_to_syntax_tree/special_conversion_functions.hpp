@@ -124,24 +124,24 @@ convert_optional_node(const tree_node_t& parent_node, const tree_node_iterator_t
 
 
 template<class T>
-struct simple_text_node_converter;
+struct predefined_text_node_converter;
 
 template<const std::string& Text>
-struct simple_text_node_converter<syntax_nodes::simple_text_node<Text>>
+struct predefined_text_node_converter<syntax_nodes::predefined_text_node<Text>>
 {
 	static
-	syntax_nodes::simple_text_node<Text>
+	syntax_nodes::predefined_text_node<Text>
 	convert()
 	{
-		return syntax_nodes::simple_text_node<Text>();
+		return syntax_nodes::predefined_text_node<Text>();
 	}
 };
 
 template<class T>
 T
-convert_simple_text_node(const tree_node_t&)
+convert_predefined_text_node(const tree_node_t&)
 {
-	return simple_text_node_converter<T>::convert();
+	return predefined_text_node_converter<T>::convert();
 }
 
 }}}}} //namespace scalpel::cpp::detail::syntax_analysis::parse_tree_to_syntax_tree

@@ -40,13 +40,13 @@ switch_statement
 typedef
 	sequence_node
 	<
-		simple_text_node<str::switch_>,
+		predefined_text_node<str::switch_>,
 		optional_node<space>,
-		simple_text_node<str::opening_round_bracket>,
+		predefined_text_node<str::opening_round_bracket>,
 		optional_node<space>,
 		condition,
 		optional_node<space>,
-		simple_text_node<str::closing_round_bracket>,
+		predefined_text_node<str::closing_round_bracket>,
 		optional_node<space>,
 		statement
 	>
@@ -62,13 +62,13 @@ class switch_statement: public composite_node
 
 		switch_statement
 		(
-			simple_text_node<str::switch_>&& o0,
+			predefined_text_node<str::switch_>&& o0,
 			optional_node<space>&& o1,
-			simple_text_node<str::opening_round_bracket>&& o2,
+			predefined_text_node<str::opening_round_bracket>&& o2,
 			optional_node<space>&& o3,
 			condition&& o4,
 			optional_node<space>&& o5,
-			simple_text_node<str::closing_round_bracket>&& o6,
+			predefined_text_node<str::closing_round_bracket>&& o6,
 			optional_node<space>&& o7,
 			statement&& o8
 		);

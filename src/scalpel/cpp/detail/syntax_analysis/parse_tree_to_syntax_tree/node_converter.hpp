@@ -130,16 +130,16 @@ struct is_optional_node<syntax_nodes::optional_node<T>>
 
 
 /*
- * simple_text_node type traits
+ * predefined_text_node type traits
  */
 template<class T>
-struct is_simple_text_node
+struct is_predefined_text_node
 {
 	static const bool value = false;
 };
 
 template<const std::string& Text>
-struct is_simple_text_node<syntax_nodes::simple_text_node<Text>>
+struct is_predefined_text_node<syntax_nodes::predefined_text_node<Text>>
 {
 	static const bool value = true;
 };
@@ -199,13 +199,13 @@ convert_node(const tree_node_t& node, typename boost::enable_if<is_optional_node
 	return convert_optional_node<SyntaxNodeT>(node);
 }
 
-//overload for simple_text nodes
+//overload for predefined_text nodes
 template<class SyntaxNodeT>
 inline
 SyntaxNodeT
-convert_node(const tree_node_t& node, typename boost::enable_if<is_simple_text_node<SyntaxNodeT>>::type* = 0)
+convert_node(const tree_node_t& node, typename boost::enable_if<is_predefined_text_node<SyntaxNodeT>>::type* = 0)
 {
-	return convert_simple_text_node<SyntaxNodeT>(node);
+	return convert_predefined_text_node<SyntaxNodeT>(node);
 }
 
 //overloads for other nodes
@@ -222,7 +222,7 @@ convert_node																					\
 	typename boost::disable_if<is_alternative_node<SyntaxNodeT>>::type* = 0,					\
 	typename boost::disable_if<is_list_node<SyntaxNodeT>>::type* = 0,							\
 	typename boost::disable_if<is_optional_node<SyntaxNodeT>>::type* = 0,						\
-	typename boost::disable_if<is_simple_text_node<SyntaxNodeT>>::type* = 0						\
+	typename boost::disable_if<is_predefined_text_node<SyntaxNodeT>>::type* = 0						\
 )																								\
 {																								\
 	return convert_##node_type(node);															\
@@ -235,7 +235,6 @@ SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_PARSE_TREE_TO_SYNTAX_TREE_CONVERT_NODE(identi
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_PARSE_TREE_TO_SYNTAX_TREE_CONVERT_NODE(integer_literal)
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_PARSE_TREE_TO_SYNTAX_TREE_CONVERT_NODE(space)
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_PARSE_TREE_TO_SYNTAX_TREE_CONVERT_NODE(string_literal)
-SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_PARSE_TREE_TO_SYNTAX_TREE_CONVERT_NODE(typename_template_elaborated_specifier)
 
 #undef SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_PARSE_TREE_TO_SYNTAX_TREE_CONVERT_NODE
 

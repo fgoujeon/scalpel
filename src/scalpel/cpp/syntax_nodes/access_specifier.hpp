@@ -29,9 +29,9 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 typedef
 	alternative_node
 	<
-		simple_text_node<str::public_>,
-		simple_text_node<str::protected_>,
-		simple_text_node<str::private_>
+		predefined_text_node<str::public_>,
+		predefined_text_node<str::protected_>,
+		predefined_text_node<str::private_>
 	>
 	access_specifier
 ;

@@ -30,11 +30,11 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 typedef
 	sequence_node
 	<
-		simple_text_node<str::template_>,
+		predefined_text_node<str::template_>,
 		optional_node<space>,
-		simple_text_node<str::left_angle_bracket>,
+		predefined_text_node<str::left_angle_bracket>,
 		optional_node<space>,
-		simple_text_node<str::right_angle_bracket>,
+		predefined_text_node<str::right_angle_bracket>,
 		optional_node<space>,
 		declaration
 	>
@@ -55,11 +55,11 @@ class explicit_specialization: public composite_node
 
 		explicit_specialization
 		(
-			simple_text_node<str::template_>&& o0,
+			predefined_text_node<str::template_>&& o0,
 			optional_node<space>&& o1,
-			simple_text_node<str::left_angle_bracket>&& o2,
+			predefined_text_node<str::left_angle_bracket>&& o2,
 			optional_node<space>&& o3,
-			simple_text_node<str::right_angle_bracket>&& o4,
+			predefined_text_node<str::right_angle_bracket>&& o4,
 			optional_node<space>&& o5,
 			declaration&& o6
 		);

@@ -38,7 +38,7 @@ typedef
 	<
 		identifier,
 		optional_node<space>,
-		simple_text_node<str::colon>,
+		predefined_text_node<str::colon>,
 		optional_node<space>,
 		statement
 	>
@@ -55,7 +55,7 @@ struct classic_labeled_statement: public classic_labeled_statement_t
 	(
 		identifier&& o1,
 		optional_node<space>&& o2,
-		simple_text_node<str::colon>&& o3,
+		predefined_text_node<str::colon>&& o3,
 		optional_node<space>&& o4,
 		statement&& o5
 	):

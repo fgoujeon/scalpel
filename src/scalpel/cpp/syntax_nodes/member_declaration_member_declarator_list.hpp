@@ -41,7 +41,7 @@ typedef
 		optional_node<space>,
 		optional_node<member_declarator_list>,
 		optional_node<space>,
-		simple_text_node<str::semicolon>
+		predefined_text_node<str::semicolon>
 	>
 	member_declaration_member_declarator_list
 ;

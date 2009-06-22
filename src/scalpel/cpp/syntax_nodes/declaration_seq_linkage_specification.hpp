@@ -36,15 +36,15 @@ declaration_seq_linkage_specification
 typedef
 	sequence_node
 	<
-		simple_text_node<str::extern_>,
+		predefined_text_node<str::extern_>,
 		optional_node<space>,
 		string_literal,
 		optional_node<space>,
-		simple_text_node<str::opening_brace>,
+		predefined_text_node<str::opening_brace>,
 		optional_node<space>,
 		optional_node<declaration_seq>,
 		optional_node<space>,
-		simple_text_node<str::closing_brace>
+		predefined_text_node<str::closing_brace>
 	>
 	declaration_seq_linkage_specification
 ;

@@ -34,9 +34,9 @@ enum_elaborated_specifier
 typedef
 	sequence_node
 	<
-		simple_text_node<str::enum_>,
+		predefined_text_node<str::enum_>,
 		optional_node<space>,
-		optional_node<simple_text_node<str::double_colon>>,
+		optional_node<predefined_text_node<str::double_colon>>,
 		optional_node<space>,
 		optional_node<nested_name_specifier>,
 		optional_node<space>,

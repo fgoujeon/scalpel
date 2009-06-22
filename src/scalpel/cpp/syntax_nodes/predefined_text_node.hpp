@@ -18,8 +18,8 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_SIMPLE_TEXT_NODE_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_SIMPLE_TEXT_NODE_HPP
+#ifndef SCALPEL_CPP_SYNTAX_NODES_PREDEFINED_TEXT_NODE_HPP
+#define SCALPEL_CPP_SYNTAX_NODES_PREDEFINED_TEXT_NODE_HPP
 
 #include "leaf_node.hpp"
 
@@ -27,22 +27,22 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 template<const std::string& Text>
-class simple_text_node: public leaf_node
+class predefined_text_node: public leaf_node
 {
 	public:
-		simple_text_node();
+		predefined_text_node();
 
 		static const std::string& text;
 };
 
 template<const std::string& Text>
-simple_text_node<Text>::simple_text_node():
+predefined_text_node<Text>::predefined_text_node():
 	leaf_node(Text)
 {
 }
 
 template<const std::string& Text>
-const std::string& simple_text_node<Text>::text = Text;
+const std::string& predefined_text_node<Text>::text = Text;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

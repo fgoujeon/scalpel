@@ -29,7 +29,7 @@ expression_statement::expression_statement
 (
 	optional_node<expression>&& o0,
 	optional_node<space>&& o1,
-	simple_text_node<str::semicolon>&& o2
+	predefined_text_node<str::semicolon>&& o2
 ):
 	impl_(o0, o1, o2)
 {

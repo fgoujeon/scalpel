@@ -46,7 +46,7 @@ convert_optional_node(const tree_node_t& parent_node, const tree_node_iterator_t
 
 template<class T>
 T
-convert_simple_text_node(const tree_node_t&);
+convert_predefined_text_node(const tree_node_t&);
 
 }}}}} //namespace scalpel::cpp::detail::syntax_analysis::parse_tree_to_syntax_tree
 

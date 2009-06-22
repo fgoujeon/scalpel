@@ -35,11 +35,11 @@ square_bracketed_expression
 typedef
 	sequence_node
 	<
-		simple_text_node<str::opening_square_bracket>,
+		predefined_text_node<str::opening_square_bracket>,
 		optional_node<space>,
 		expression,
 		optional_node<space>,
-		simple_text_node<str::closing_square_bracket>
+		predefined_text_node<str::closing_square_bracket>
 	>
 	square_bracketed_expression
 ;

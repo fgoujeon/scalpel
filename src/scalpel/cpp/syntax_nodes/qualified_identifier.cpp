@@ -25,7 +25,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 qualified_identifier::qualified_identifier
 (
-	simple_text_node<str::double_colon>&& o0,
+	predefined_text_node<str::double_colon>&& o0,
 	optional_node<space>&& o1,
 	identifier&& o2
 ):

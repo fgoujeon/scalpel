@@ -37,7 +37,7 @@ destructor_name
 typedef
 	sequence_node
 	<
-		simple_text_node<str::tilde>,
+		predefined_text_node<str::tilde>,
 		optional_node<space>,
 		identifier_or_template_id
 	>

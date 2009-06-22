@@ -23,7 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../../util/extern_strings.hpp"
 #include "alternative_node.hpp"
-#include "simple_text_node.hpp"
+#include "predefined_text_node.hpp"
 #include "exception_declarator.hpp"
 #include "exception_abstract_declarator.hpp"
 #include "type_specifier_seq.hpp"
@@ -37,7 +37,7 @@ typedef
 		exception_declarator,
 		exception_abstract_declarator,
 		type_specifier_seq,
-		simple_text_node<util::extern_strings::ellipsis>
+		predefined_text_node<util::extern_strings::ellipsis>
 	>
 	exception_declaration
 ;

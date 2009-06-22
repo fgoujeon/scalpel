@@ -62,11 +62,11 @@ direct_declarator::array_part
 typedef
 	sequence_node
 	<
-		simple_text_node<str::opening_round_bracket>,
+		predefined_text_node<str::opening_round_bracket>,
 		optional_node<space>,
 		optional_node<parameter_declaration_clause>,
 		optional_node<space>,
-		simple_text_node<str::closing_round_bracket>,
+		predefined_text_node<str::closing_round_bracket>,
 		optional_node<space>,
 		optional_node<cv_qualifier_seq>,
 		optional_node<space>,
@@ -80,11 +80,11 @@ typedef
 typedef
 	sequence_node
 	<
-		simple_text_node<str::opening_square_bracket>,
+		predefined_text_node<str::opening_square_bracket>,
 		optional_node<space>,
 		optional_node<conditional_expression>,
 		optional_node<space>,
-		simple_text_node<str::closing_square_bracket>
+		predefined_text_node<str::closing_square_bracket>
 	>
 	direct_declarator_array_part
 ;

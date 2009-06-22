@@ -24,7 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <scalpel/util/extern_strings.hpp>
 #include "sequence_node.hpp"
 #include "optional_node.hpp"
-#include "simple_text_node.hpp"
+#include "predefined_text_node.hpp"
 #include "space.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
@@ -40,9 +40,9 @@ break_statement
 typedef
 	sequence_node
 	<
-		simple_text_node<util::extern_strings::break_>,
+		predefined_text_node<util::extern_strings::break_>,
 		optional_node<space>,
-		simple_text_node<util::extern_strings::semicolon>
+		predefined_text_node<util::extern_strings::semicolon>
 	>
 	break_statement
 ;

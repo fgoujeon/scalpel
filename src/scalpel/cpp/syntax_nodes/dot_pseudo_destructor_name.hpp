@@ -35,7 +35,7 @@ dot_pseudo_destructor_name
 typedef
 	sequence_node
 	<
-		simple_text_node<str::dot>,
+		predefined_text_node<str::dot>,
 		optional_node<space>/*,
 		pseudo_destructor_name*/
 	>

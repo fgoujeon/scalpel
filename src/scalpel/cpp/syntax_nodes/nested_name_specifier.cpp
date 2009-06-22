@@ -27,7 +27,7 @@ nested_name_specifier::nested_name_specifier
 (
 	identifier_or_template_id&& o0,
 	optional_node<space>&& o1,
-	simple_text_node<str::double_colon>&& o2,
+	predefined_text_node<str::double_colon>&& o2,
 	optional_node<space>&& o3,
 	optional_node<nested_name_specifier_last_part_seq>&& o4
 ):
@@ -71,11 +71,11 @@ nested_name_specifier::operator=(const nested_name_specifier& o)
 
 nested_name_specifier_last_part::nested_name_specifier_last_part
 (
-	optional_node<simple_text_node<str::template_>>&& o0,
+	optional_node<predefined_text_node<str::template_>>&& o0,
 	optional_node<space>&& o1,
 	identifier_or_template_id&& o2,
 	optional_node<space>&& o3,
-	simple_text_node<str::double_colon>&& o4
+	predefined_text_node<str::double_colon>&& o4
 ):
 	impl_(o0, o1, o2, o3, o4)
 {

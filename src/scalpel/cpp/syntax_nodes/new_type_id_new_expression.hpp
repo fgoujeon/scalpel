@@ -37,9 +37,9 @@ new_type_id_new_expression
 typedef
 	sequence_node
 	<
-		optional_node<simple_text_node<str::double_colon>>,
+		optional_node<predefined_text_node<str::double_colon>>,
 		optional_node<space>,
-		simple_text_node<str::new_>,
+		predefined_text_node<str::new_>,
 		optional_node<space>,
 		optional_node<round_bracketed_expression>,
 		optional_node<space>,

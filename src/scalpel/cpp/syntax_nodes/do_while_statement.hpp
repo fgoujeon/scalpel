@@ -36,19 +36,19 @@ do_while_statement
 typedef
 	sequence_node
 	<
-		simple_text_node<str::do_>,
+		predefined_text_node<str::do_>,
 		optional_node<space>,
 		statement,
 		optional_node<space>,
-		simple_text_node<str::while_>,
+		predefined_text_node<str::while_>,
 		optional_node<space>,
-		simple_text_node<str::opening_round_bracket>,
+		predefined_text_node<str::opening_round_bracket>,
 		optional_node<space>,
 		expression,
 		optional_node<space>,
-		simple_text_node<str::closing_round_bracket>,
+		predefined_text_node<str::closing_round_bracket>,
 		optional_node<space>,
-		simple_text_node<str::semicolon>
+		predefined_text_node<str::semicolon>
 	>
 	do_while_statement_t
 ;

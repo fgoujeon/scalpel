@@ -37,9 +37,9 @@ typeof_keyword
 typedef
 	alternative_node
 	<
-		simple_text_node<str::__typeof___>,
-		simple_text_node<str::__typeof_>,
-		simple_text_node<str::typeof_>
+		predefined_text_node<str::__typeof___>,
+		predefined_text_node<str::__typeof_>,
+		predefined_text_node<str::typeof_>
 	>
 	typeof_keyword
 ;
@@ -54,11 +54,11 @@ typedef
 	<
 		typeof_keyword,
 		optional_node<space>,
-		simple_text_node<str::opening_round_bracket>,
+		predefined_text_node<str::opening_round_bracket>,
 		optional_node<space>,
 		expression,
 		optional_node<space>,
-		simple_text_node<str::closing_round_bracket>
+		predefined_text_node<str::closing_round_bracket>
 	>
 	typeof_expression
 ;

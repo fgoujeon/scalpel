@@ -36,7 +36,7 @@ qualified_namespace_specifier
 typedef
 	sequence_node
 	<
-		optional_node<simple_text_node<str::double_colon>>,
+		optional_node<predefined_text_node<str::double_colon>>,
 		optional_node<space>,
 		optional_node<nested_name_specifier>,
 		optional_node<space>,

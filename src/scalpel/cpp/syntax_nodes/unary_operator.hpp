@@ -29,16 +29,16 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 typedef
 	alternative_node
 	<
-		simple_text_node<str::double_plus>,
-		simple_text_node<str::double_minus>,
-		simple_text_node<str::asterisk>,
-		simple_text_node<str::ampersand>,
-		simple_text_node<str::plus>,
-		simple_text_node<str::minus>,
-		simple_text_node<str::exclamation>,
-		simple_text_node<str::tilde>,
-		simple_text_node<str::__real___>,
-		simple_text_node<str::__imag___>
+		predefined_text_node<str::double_plus>,
+		predefined_text_node<str::double_minus>,
+		predefined_text_node<str::asterisk>,
+		predefined_text_node<str::ampersand>,
+		predefined_text_node<str::plus>,
+		predefined_text_node<str::minus>,
+		predefined_text_node<str::exclamation>,
+		predefined_text_node<str::tilde>,
+		predefined_text_node<str::__real___>,
+		predefined_text_node<str::__imag___>
 	>
 	unary_operator
 ;

@@ -27,7 +27,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 unary_sizeof_expression::unary_sizeof_expression
 (
-	simple_text_node<str::sizeof_>&& o0,
+	predefined_text_node<str::sizeof_>&& o0,
 	optional_node<space>&& o1,
 	unary_expression&& o2
 ):

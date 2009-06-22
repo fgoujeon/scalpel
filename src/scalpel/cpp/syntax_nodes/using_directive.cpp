@@ -27,17 +27,17 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 using_directive::using_directive
 (
-	simple_text_node<str::using_>&& o0,
+	predefined_text_node<str::using_>&& o0,
 	optional_node<space>&& o1,
-	simple_text_node<str::namespace_>&& o2,
+	predefined_text_node<str::namespace_>&& o2,
 	optional_node<space>&& o3,
-	optional_node<simple_text_node<str::double_colon>>&& o4,
+	optional_node<predefined_text_node<str::double_colon>>&& o4,
 	optional_node<space>&& o5,
 	optional_node<nested_name_specifier>&& o6,
 	optional_node<space>&& o7,
 	identifier&& o8,
 	optional_node<space>&& o9,
-	simple_text_node<str::semicolon>&& o10
+	predefined_text_node<str::semicolon>&& o10
 ):
 	impl_
 	(

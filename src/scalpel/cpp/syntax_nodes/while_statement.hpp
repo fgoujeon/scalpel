@@ -36,13 +36,13 @@ while_statement
 typedef
 	sequence_node
 	<
-		simple_text_node<str::while_>,
+		predefined_text_node<str::while_>,
 		optional_node<space>,
-		simple_text_node<str::opening_round_bracket>,
+		predefined_text_node<str::opening_round_bracket>,
 		optional_node<space>,
 		condition,
 		optional_node<space>,
-		simple_text_node<str::closing_round_bracket>,
+		predefined_text_node<str::closing_round_bracket>,
 		optional_node<space>,
 		statement
 	>
@@ -57,13 +57,13 @@ struct while_statement: public while_statement_t
 
 	while_statement
 	(
-		simple_text_node<str::while_>&& o1,
+		predefined_text_node<str::while_>&& o1,
 		optional_node<space>&& o2,
-		simple_text_node<str::opening_round_bracket>&& o3,
+		predefined_text_node<str::opening_round_bracket>&& o3,
 		optional_node<space>&& o4,
 		condition&& o5,
 		optional_node<space>&& o6,
-		simple_text_node<str::closing_round_bracket>&& o7,
+		predefined_text_node<str::closing_round_bracket>&& o7,
 		optional_node<space>&& o8,
 		statement&& o9
 	):

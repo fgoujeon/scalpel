@@ -35,7 +35,7 @@ qualified_operator_function_id
 typedef
 	sequence_node
 	<
-		simple_text_node<str::double_colon>,
+		predefined_text_node<str::double_colon>,
 		optional_node<space>,
 		operator_function_id
 	>

@@ -28,7 +28,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 throw_expression::throw_expression
 (
-	simple_text_node<str::throw_>&& o0,
+	predefined_text_node<str::throw_>&& o0,
 	optional_node<space>&& o1,
 	optional_node<assignment_expression>&& o2
 ):

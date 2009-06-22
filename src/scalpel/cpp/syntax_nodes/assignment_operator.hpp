@@ -29,17 +29,17 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 typedef
 	alternative_node
 	<
-		simple_text_node<str::equal>,
-		simple_text_node<str::asterisk_equal>,
-		simple_text_node<str::slash_equal>,
-		simple_text_node<str::percent_equal>,
-		simple_text_node<str::plus_equal>,
-		simple_text_node<str::minus_equal>,
-		simple_text_node<str::double_right_angle_bracket_equal>,
-		simple_text_node<str::double_left_angle_bracket_equal>,
-		simple_text_node<str::ampersand_equal>,
-		simple_text_node<str::circumflex_equal>,
-		simple_text_node<str::pipe_equal>
+		predefined_text_node<str::equal>,
+		predefined_text_node<str::asterisk_equal>,
+		predefined_text_node<str::slash_equal>,
+		predefined_text_node<str::percent_equal>,
+		predefined_text_node<str::plus_equal>,
+		predefined_text_node<str::minus_equal>,
+		predefined_text_node<str::double_right_angle_bracket_equal>,
+		predefined_text_node<str::double_left_angle_bracket_equal>,
+		predefined_text_node<str::ampersand_equal>,
+		predefined_text_node<str::circumflex_equal>,
+		predefined_text_node<str::pipe_equal>
 	>
 	assignment_operator
 ;

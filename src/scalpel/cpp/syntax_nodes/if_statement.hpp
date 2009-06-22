@@ -38,17 +38,17 @@ if_statement
 typedef
 	sequence_node
 	<
-		simple_text_node<str::if_>,
+		predefined_text_node<str::if_>,
 		optional_node<space>,
-		simple_text_node<str::opening_round_bracket>,
+		predefined_text_node<str::opening_round_bracket>,
 		optional_node<space>,
 		condition,
 		optional_node<space>,
-		simple_text_node<str::closing_round_bracket>,
+		predefined_text_node<str::closing_round_bracket>,
 		optional_node<space>,
 		statement,
 		optional_node<space>,
-		optional_node<simple_text_node<str::else_>>,
+		optional_node<predefined_text_node<str::else_>>,
 		optional_node<space>,
 		optional_node<statement>
 	>
@@ -64,17 +64,17 @@ class if_statement: public if_statement_t
 
 		if_statement
 		(
-			simple_text_node<str::if_>&& o0,
+			predefined_text_node<str::if_>&& o0,
 			optional_node<space>&& o1,
-			simple_text_node<str::opening_round_bracket>&& o2,
+			predefined_text_node<str::opening_round_bracket>&& o2,
 			optional_node<space>&& o3,
 			condition&& o4,
 			optional_node<space>&& o5,
-			simple_text_node<str::closing_round_bracket>&& o6,
+			predefined_text_node<str::closing_round_bracket>&& o6,
 			optional_node<space>&& o7,
 			statement&& o8,
 			optional_node<space>&& o9,
-			optional_node<simple_text_node<str::else_>>&& o10,
+			optional_node<predefined_text_node<str::else_>>&& o10,
 			optional_node<space>&& o11,
 			optional_node<statement>&& o12
 		):

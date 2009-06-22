@@ -36,17 +36,17 @@ enum_specifier
 typedef
 	sequence_node
 	<
-		simple_text_node<str::enum_>,
+		predefined_text_node<str::enum_>,
 		optional_node<space>,
 		optional_node<identifier>,
 		optional_node<space>,
-		simple_text_node<str::opening_brace>,
+		predefined_text_node<str::opening_brace>,
 		optional_node<space>,
 		optional_node<enumerator_list>,
 		optional_node<space>,
-		optional_node<simple_text_node<str::comma>>,
+		optional_node<predefined_text_node<str::comma>>,
 		optional_node<space>,
-		simple_text_node<str::closing_brace>
+		predefined_text_node<str::closing_brace>
 	>
 	enum_specifier
 ;

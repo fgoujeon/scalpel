@@ -33,17 +33,17 @@ typedef list_node<declaration> declaration_seq;
 typedef
 	sequence_node
 	<
-		simple_text_node<str::namespace_>,
+		predefined_text_node<str::namespace_>,
 		optional_node<space>,
 		optional_node<identifier>,
 		optional_node<space>,
 		optional_node<leaf_node>,
 		optional_node<space>,
-		simple_text_node<str::opening_brace>,
+		predefined_text_node<str::opening_brace>,
 		optional_node<space>,
 		optional_node<declaration_seq>,
 		optional_node<space>,
-		simple_text_node<str::closing_brace>
+		predefined_text_node<str::closing_brace>
 	>
 	namespace_definition_t
 ;
@@ -56,11 +56,11 @@ typedef
 		optional_node<space>,
 		optional_node<leaf_node>,
 		optional_node<space>,
-		simple_text_node<str::opening_brace>,
+		predefined_text_node<str::opening_brace>,
 		optional_node<space>,
 		optional_node<declaration_seq>,
 		optional_node<space>,
-		simple_text_node<str::closing_brace>
+		predefined_text_node<str::closing_brace>
 	>
 	namespace_definition_tail_t
 ;
@@ -74,22 +74,22 @@ class namespace_definition: public composite_node
 {
 	public:
 		typedef namespace_definition_t type;
-		typedef simple_text_node<str::namespace_> head_node_t;
+		typedef predefined_text_node<str::namespace_> head_node_t;
 		typedef namespace_definition_tail_t tail_sequence_node_t;
 
 		namespace_definition
 		(
-			simple_text_node<str::namespace_>&& o0,
+			predefined_text_node<str::namespace_>&& o0,
 			optional_node<space>&& o1,
 			optional_node<identifier>&& o2,
 			optional_node<space>&& o3,
 			optional_node<leaf_node>&& o3b,
 			optional_node<space>&& o3c,
-			simple_text_node<str::opening_brace>&& o4,
+			predefined_text_node<str::opening_brace>&& o4,
 			optional_node<space>&& o5,
 			optional_node<declaration_seq>&& o6,
 			optional_node<space>&& o7,
-			simple_text_node<str::closing_brace>&& o8
+			predefined_text_node<str::closing_brace>&& o8
 		);
 
 		namespace_definition(head_node_t&& head, tail_sequence_node_t&& tail);
