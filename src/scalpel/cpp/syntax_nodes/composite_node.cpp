@@ -32,13 +32,13 @@ composite_node::~composite_node()
 }
 
 const std::string
-composite_node::raw_code() const
+composite_node::value() const
 {
 	std::string code;
 	for(nodes_t::const_iterator i = nodes_.begin(); i != nodes_.end(); ++i)
 	{
 		const node& child_node = **i;
-		code += child_node.raw_code();
+		code += child_node.value();
 	}
 	return code;
 }

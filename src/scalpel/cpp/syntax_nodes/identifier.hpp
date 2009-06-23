@@ -42,18 +42,7 @@ class identifier: public leaf_node
 
 		const identifier&
 		operator=(identifier&& i);
-
-		inline
-		const std::string
-		value() const;
 };
-
-inline
-const std::string
-identifier::value() const
-{
-	return raw_code();
-}
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

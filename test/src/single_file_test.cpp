@@ -77,7 +77,7 @@ single_file_test::parse_files(const std::string& test_directory)
 			scalpel::cpp::syntax_tree tree = m_syntax_analyzer(preprocessed_code); //throws an exception if parsing fails
 
 			//check syntax analysis results
-			if(preprocessed_code != tree.raw_code())
+			if(preprocessed_code != tree.value())
 			{
 				std::cout << "Analysis error!\n";
 				std::cout << "Original content of " << file_name_oss.str() << ":\n";
@@ -86,7 +86,7 @@ single_file_test::parse_files(const std::string& test_directory)
 				std::cout << "\n***\n";
 				std::cout << "Analysis results:\n";
 				std::cout << "***\n";
-				std::cout << tree.raw_code();
+				std::cout << tree.value();
 				std::cout << "\n***\n\n";
 
 				throw "Analysis error!";

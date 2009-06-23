@@ -33,7 +33,7 @@ struct node
 
 	virtual
 	const std::string
-	raw_code() const = 0;
+	value() const = 0;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

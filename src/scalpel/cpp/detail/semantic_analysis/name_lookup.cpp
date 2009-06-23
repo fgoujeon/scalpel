@@ -126,7 +126,7 @@ find_scope
 )
 {
 	std::cout << "find_scope()\n";
-	std::cout << "nested_name_specifier = " << a_nested_name_specifier.raw_code() << "\n";
+	std::cout << "nested_name_specifier = " << a_nested_name_specifier.value() << "\n";
 
 	scope* found_scope = 0;
 

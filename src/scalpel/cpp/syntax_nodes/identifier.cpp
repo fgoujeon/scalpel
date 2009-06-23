@@ -41,7 +41,7 @@ identifier::identifier(identifier&& i):
 const identifier&
 identifier::operator=(const identifier& i)
 {
-	raw_code(i.value());
+	value(i.value());
 
 	return *this;
 }
@@ -49,7 +49,7 @@ identifier::operator=(const identifier& i)
 const identifier&
 identifier::operator=(identifier&& i)
 {
-	raw_code(i.value());
+	value(i.value());
 
 	return *this;
 }

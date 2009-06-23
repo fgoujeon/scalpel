@@ -31,10 +31,10 @@ class leaf_node: public node
 {
 	public:
 		explicit
-		leaf_node(const std::string& raw_code);
+		leaf_node(const std::string& value);
 
 		explicit
-		leaf_node(std::string&& raw_code);
+		leaf_node(std::string&& value);
 
 		leaf_node(const leaf_node& n);
 
@@ -44,16 +44,16 @@ class leaf_node: public node
 		~leaf_node();
 
 		const std::string
-		raw_code() const;
+		value() const;
 
 		void
-		raw_code(const std::string& code);
+		value(const std::string& code);
 
 		void
-		raw_code(std::string&& code);
+		value(std::string&& code);
 
 	private:
-		std::string raw_code_;
+		std::string value_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

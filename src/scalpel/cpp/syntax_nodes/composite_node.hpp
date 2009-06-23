@@ -46,7 +46,7 @@ class composite_node: public node
 		~composite_node();
 
 		const std::string
-		raw_code() const;
+		value() const;
 
 	protected:
 		void

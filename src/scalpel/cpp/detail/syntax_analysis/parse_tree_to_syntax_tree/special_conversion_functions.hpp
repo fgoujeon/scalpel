@@ -35,7 +35,7 @@ convert_list_node(const tree_node_t& node)
 {
 	ContainerT list;
 
-	if(ContainerT::separator_node.raw_code() == syntax_nodes::common_nodes::empty.raw_code()) //if the list separator is empty
+	if(ContainerT::separator_node.value() == syntax_nodes::common_nodes::empty.value()) //if the list separator is empty
 	{
 		syntax_nodes::optional_node<syntax_nodes::space> space_node;
 		for(tree_node_iterator_t i = node.children.begin(); i != node.children.end(); ++i) //for each child node
@@ -72,7 +72,7 @@ convert_list_node(const tree_node_t& node)
 			const tree_node_t& child_node = *i;
 			const std::string child_value = get_value(child_node);
 
-			if(child_value == ContainerT::separator_node.raw_code()) //if the node is a separator
+			if(child_value == ContainerT::separator_node.value()) //if the node is a separator
 			{
 				will_read_post_separator_space = true;
 			}
