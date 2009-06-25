@@ -47,6 +47,12 @@ leaf_node::~leaf_node()
 {
 }
 
+const node::children_t&
+leaf_node::children() const
+{
+	return children_;
+}
+
 const std::string
 leaf_node::value() const
 {

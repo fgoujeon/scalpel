@@ -43,6 +43,9 @@ class leaf_node: public node
 		virtual
 		~leaf_node();
 
+		const children_t&
+		children() const;
+
 		const std::string
 		value() const;
 
@@ -53,6 +56,7 @@ class leaf_node: public node
 		value(std::string&& code);
 
 	private:
+		children_t children_;
 		std::string value_;
 };
 

@@ -31,11 +31,17 @@ composite_node::~composite_node()
 {
 }
 
+const node::children_t&
+composite_node::children() const
+{
+	return children_;
+}
+
 const std::string
 composite_node::value() const
 {
 	std::string code;
-	for(nodes_t::const_iterator i = nodes_.begin(); i != nodes_.end(); ++i)
+	for(children_t::const_iterator i = children_.begin(); i != children_.end(); ++i)
 	{
 		const node& child_node = **i;
 		code += child_node.value();
@@ -46,19 +52,19 @@ composite_node::value() const
 void
 composite_node::add(const node& a_node)
 {
-	nodes_.push_back(&a_node);
+	children_.push_back(&a_node);
 }
 
 void
 composite_node::push_front(const node& n)
 {
-	nodes_.push_front(&n);
+	children_.push_front(&n);
 }
 
 void
 composite_node::clear()
 {
-	nodes_.clear();
+	children_.clear();
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

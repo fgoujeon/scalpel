@@ -19,17 +19,17 @@
 cmake_minimum_required(VERSION 2.6)
 
 #project
-project(Scalpel.Test)
+project(Scalpel.Demo)
 set(EXECUTABLE_OUTPUT_PATH bin/${CMAKE_BUILD_TYPE})
 
 #executable
 file(
-	GLOB_RECURSE sources
-	src/*.cpp
-	src/*.h
+	GLOB_RECURSE
+	sources
+	src/*
 )
 add_executable(
-	test
+	demo
 	${sources}
 )
 
@@ -40,6 +40,6 @@ include_directories(
 
 #link
 target_link_libraries(
-	test
+	demo
 	scalpel
 )

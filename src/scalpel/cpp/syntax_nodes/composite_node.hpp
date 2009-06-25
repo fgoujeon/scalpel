@@ -31,8 +31,6 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 class composite_node: public node
 {
 	public:
-		typedef std::list<const node*> nodes_t;
-
 		composite_node();
 
 		composite_node(const composite_node&) = delete;
@@ -44,6 +42,9 @@ class composite_node: public node
 
 		virtual
 		~composite_node();
+
+		const children_t&
+		children() const;
 
 		const std::string
 		value() const;
@@ -59,7 +60,7 @@ class composite_node: public node
 		clear();
 
 	private:
-		nodes_t nodes_;
+		children_t children_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

@@ -22,14 +22,21 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_NODE_HPP
 
 #include <string>
+#include <list>
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 struct node
 {
+	typedef std::list<const node*> children_t;
+
 	virtual
 	~node(){};
+
+	virtual
+	const children_t&
+	children() const = 0;
 
 	virtual
 	const std::string
