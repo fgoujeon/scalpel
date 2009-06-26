@@ -43,7 +43,7 @@ class composite_node: public node
 		virtual
 		~composite_node();
 
-		const children_t&
+		child_const_iterator_range
 		children() const;
 
 		const std::string

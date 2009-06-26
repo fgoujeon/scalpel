@@ -28,27 +28,21 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 abstract_declarator::abstract_declarator(ptr_operator_seq&& o):
 	impl_(new type(o))
 {
-	add(*impl_);
 }
 
 abstract_declarator::abstract_declarator(direct_abstract_declarator&& o):
 	impl_(new type(o))
 {
-	add(*impl_);
 }
 
 abstract_declarator::abstract_declarator(const abstract_declarator& o):
-	composite_node(),
 	impl_(new type(*o.impl_))
 {
-	add(*impl_);
 }
 
 abstract_declarator::abstract_declarator(abstract_declarator&& o):
-	composite_node(),
 	impl_(std::move(o.impl_))
 {
-	add(*impl_);
 }
 
 abstract_declarator::~abstract_declarator()
@@ -60,6 +54,18 @@ abstract_declarator::operator=(const abstract_declarator& o)
 {
 	*impl_ = *o.impl_;
 	return *this;
+}
+
+const std::string
+abstract_declarator::value() const
+{
+	return impl_->value();
+}
+
+node::child_const_iterator_range
+abstract_declarator::children() const
+{
+	return impl_->children();
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

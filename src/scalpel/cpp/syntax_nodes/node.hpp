@@ -23,6 +23,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string>
 #include <list>
+#include <boost/iterator/indirect_iterator.hpp>
+#include <boost/range/iterator_range.hpp>
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -30,12 +32,15 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 struct node
 {
 	typedef std::list<const node*> children_t;
+	typedef children_t::const_iterator child_const_iterator;
+	typedef boost::indirect_iterator<child_const_iterator, const node&> child_const_indirect_iterator;
+	typedef boost::iterator_range<child_const_indirect_iterator> child_const_iterator_range;
 
 	virtual
 	~node(){};
 
 	virtual
-	const children_t&
+	child_const_iterator_range
 	children() const = 0;
 
 	virtual

@@ -278,7 +278,7 @@ get_alive_node_count(const scalpel::cpp::syntax_nodes::node& node)
 	unsigned int count = 0;
 	for(auto i = node.children().begin(); i != node.children().end(); ++i)
 	{
-		const scalpel::cpp::syntax_nodes::node& child_node = **i;
+		const scalpel::cpp::syntax_nodes::node& child_node = *i;
 		if(is_alive(child_node))
 			++count;
 	}
@@ -308,7 +308,7 @@ print_node(const scalpel::cpp::syntax_nodes::node& node, const bool abstract = f
 					{
 						for(auto i = node.children().begin(); i != node.children().end(); ++i)
 						{
-							const scalpel::cpp::syntax_nodes::node& child_node = **i;
+							const scalpel::cpp::syntax_nodes::node& child_node = *i;
 							print_node(child_node, abstract, indent_level);
 						}
 						break;
@@ -317,7 +317,7 @@ print_node(const scalpel::cpp::syntax_nodes::node& node, const bool abstract = f
 					std::cout << indent(indent_level) << "[" << get_node_type(node) << " begin]\n";
 					for(auto i = node.children().begin(); i != node.children().end(); ++i)
 					{
-						const scalpel::cpp::syntax_nodes::node& child_node = **i;
+						const scalpel::cpp::syntax_nodes::node& child_node = *i;
 						print_node(child_node, abstract, indent_level + 1);
 					}
 					std::cout << indent(indent_level) << "[" << get_node_type(node) << " end]\n";

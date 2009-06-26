@@ -30,36 +30,31 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 class direct_abstract_declarator;
 
-typedef
-	alternative_node
-	<
-		ptr_operator_seq,
-		direct_abstract_declarator
-	>
-	abstract_declarator_t
-;
-
-typedef
-	alternative_node
-	<
-		direct_abstract_declarator
-	>
-	abstract_declarator_tail_t
-;
-
-
 /**
 abstract_declarator
 	= ptr_operator_seq
 	| direct_abstract_declarator
 ;
 */
-class abstract_declarator: public composite_node
+class abstract_declarator: public node
 {
 	public:
-		typedef abstract_declarator_t type;
+		typedef
+			alternative_node
+			<
+				ptr_operator_seq,
+				direct_abstract_declarator
+			>
+			type
+		;
 		typedef ptr_operator_seq head_node_t;
-		typedef abstract_declarator_tail_t tail_alternative_node_t;
+		typedef
+			alternative_node
+			<
+				direct_abstract_declarator
+			>
+			tail_alternative_node_t
+		;
 
 		abstract_declarator(ptr_operator_seq&& o);
 
@@ -73,6 +68,12 @@ class abstract_declarator: public composite_node
 
 		const abstract_declarator&
 		operator=(const abstract_declarator& o);
+
+		const std::string
+		value() const;
+
+		child_const_iterator_range
+		children() const;
 
 	private:
 		std::unique_ptr<type> impl_;

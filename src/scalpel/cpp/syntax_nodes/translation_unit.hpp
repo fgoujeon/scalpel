@@ -41,48 +41,14 @@ typedef
 		optional_node<declaration_seq>,
 		optional_node<space>
 	>
-	translation_unit_t
+	translation_unit
 ;
 
-class translation_unit: public composite_node
-{
-	public:
-		typedef translation_unit_t type;
-		typedef type::head_node_t head_node_t;
-		typedef type::tail_sequence_node_t tail_sequence_node_t;
-
-		translation_unit
-		(
-			optional_node<space>&& o0,
-			optional_node<declaration_seq>&& o1,
-			optional_node<space>&& o2
-		);
-
-		translation_unit
-		(
-			head_node_t&& head,
-			tail_sequence_node_t&& tail
-		);
-
-		translation_unit(const translation_unit& o);
-
-		translation_unit(translation_unit&& o);
-
-		const translation_unit&
-		operator=(const translation_unit& o);
-
-		inline
-		const optional_node<declaration_seq>&
-		declaration_seq_node() const;
-
-	private:
-		type impl_;
-};
-
+inline
 const optional_node<declaration_seq>&
-translation_unit::declaration_seq_node() const
+get_declaration_seq_node(const translation_unit& o)
 {
-	return get<1>(impl_);
+	return get<1>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

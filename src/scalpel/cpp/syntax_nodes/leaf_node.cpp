@@ -47,7 +47,7 @@ leaf_node::~leaf_node()
 {
 }
 
-const node::children_t&
+node::child_const_iterator_range
 leaf_node::children() const
 {
 	return children_;

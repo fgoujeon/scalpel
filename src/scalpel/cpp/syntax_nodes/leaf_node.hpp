@@ -43,7 +43,7 @@ class leaf_node: public node
 		virtual
 		~leaf_node();
 
-		const children_t&
+		child_const_iterator_range
 		children() const;
 
 		const std::string

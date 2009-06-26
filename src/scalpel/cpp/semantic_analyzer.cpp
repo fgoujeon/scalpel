@@ -49,7 +49,7 @@ semantic_analyzer::operator()(const syntax_tree& tree)
 	//current scope = global namespace
 	scope_cursor_.initialize(graph.root_node());
 
-	auto opt_declaration_seq_node = tree.declaration_seq_node();
+	auto opt_declaration_seq_node = get_declaration_seq_node(tree);
 
 	if(opt_declaration_seq_node)
 	{
