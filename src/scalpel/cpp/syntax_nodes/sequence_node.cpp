@@ -18,78 +18,52 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "declarator.hpp"
-
-#include "ptr_operator_seq.hpp"
-#include "direct_declarator.hpp"
+#include "sequence_node.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-declarator::declarator
-(
-	optional_node<ptr_operator_seq>&& o1,
-	optional_node<space>&& o2,
-    direct_declarator&& o3
-):
-	impl_(new type(o1, o2, o3))
+sequence_node<>::sequence_node()
 {
 }
 
-declarator::declarator
-(
-	head_node_t&& head,
-	tail_sequence_node_t&& tail
-):
-	impl_(new type(head, tail))
+sequence_node<>::sequence_node(const sequence_node&)
 {
 }
 
-declarator::declarator(const declarator& o):
-	impl_(new type(*o.impl_))
+sequence_node<>::sequence_node(sequence_node&&)
 {
 }
 
-declarator::declarator(declarator&& o):
-	impl_(std::move(o.impl_))
+const sequence_node<>&
+sequence_node<>::operator=(const sequence_node&)
 {
-}
-
-declarator::~declarator()
-{
-}
-
-const declarator&
-declarator::operator=(const declarator& o)
-{
-	*impl_ = *o.impl_;
 	return *this;
 }
 
 node::child_const_iterator_range
-declarator::children() const
+sequence_node<>::children() const
 {
-	return impl_->children();
+	return children_;
+}
+
+void
+sequence_node<>::push_front(const node& n)
+{
+	children_.push_front(&n);
 }
 
 const std::string
-declarator::value() const
+sequence_node<>::value() const
 {
-	return impl_->value();
-}
-
-const declarator::tail_sequence_node_t&
-declarator::tail() const
-{
-	return impl_->tail();
-}
-
-
-
-const direct_declarator&
-get_direct_declarator(const declarator& o)
-{
-	return get<2>(o);
+	std::string code;
+	for(children_t::const_iterator i = children_.begin(); i != children_.end(); ++i)
+	{
+		const node& child_node = **i;
+		code += child_node.value();
+	}
+	return code;
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
+

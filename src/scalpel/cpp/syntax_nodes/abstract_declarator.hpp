@@ -69,11 +69,11 @@ class abstract_declarator: public node
 		const abstract_declarator&
 		operator=(const abstract_declarator& o);
 
-		const std::string
-		value() const;
-
 		child_const_iterator_range
 		children() const;
+
+		const std::string
+		value() const;
 
 	private:
 		std::unique_ptr<type> impl_;

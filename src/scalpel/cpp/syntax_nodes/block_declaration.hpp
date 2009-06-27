@@ -107,7 +107,7 @@ class block_declaration: public composite_node
 		get(boost::optional<const using_directive&>& node) const;
 
 	private:
-		type* impl_;
+		std::unique_ptr<type> impl_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

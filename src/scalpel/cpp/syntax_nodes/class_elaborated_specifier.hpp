@@ -88,14 +88,14 @@ struct class_elaborated_specifier: public class_elaborated_specifier_t
 	class_elaborated_specifier(class_elaborated_specifier&& o): type(o)
 	{
 	}
-
-	const identifier_or_template_id&
-	identifier_or_template_id_node() const
-	{
-		const type& self = *this;
-		return get<6>(self);
-	}
 };
+
+inline
+const identifier_or_template_id&
+get_identifier_or_template_id(const class_elaborated_specifier& o)
+{
+	return get<6>(o);
+}
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

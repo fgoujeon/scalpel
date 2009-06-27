@@ -35,41 +35,35 @@ class explicit_specialization;
 class linkage_specification;
 class namespace_definition;
 
-typedef
-	alternative_node
-	<
-		block_declaration,
-		function_definition,
-		template_declaration,
-		explicit_instantiation,
-		explicit_specialization,
-		linkage_specification,
-		namespace_definition
-	>
-	declaration_t
-;
-
-typedef
-	alternative_node
-	<
-		function_definition,
-		template_declaration,
-		explicit_instantiation,
-		explicit_specialization,
-		linkage_specification,
-		namespace_definition
-	>
-	declaration_tail_t
-;
-
-class declaration: public composite_node
+class declaration: public node
 {
 	public:
-		typedef declaration_t type;
-		//typedef type::head_node_t head_node_t;
-		//typedef type::tail_alternative_node_t tail_alternative_node_t;
+		typedef
+			alternative_node
+			<
+				block_declaration,
+				function_definition,
+				template_declaration,
+				explicit_instantiation,
+				explicit_specialization,
+				linkage_specification,
+				namespace_definition
+			>
+			type
+		;
 		typedef block_declaration head_node_t;
-		typedef declaration_tail_t tail_alternative_node_t;
+		typedef
+			alternative_node
+			<
+				function_definition,
+				template_declaration,
+				explicit_instantiation,
+				explicit_specialization,
+				linkage_specification,
+				namespace_definition
+			>
+			tail_alternative_node_t
+		;
 
 		declaration(block_declaration&& o);
 
@@ -114,6 +108,12 @@ class declaration: public composite_node
 
 		void
 		get(boost::optional<const namespace_definition&>& o) const;
+
+		child_const_iterator_range
+		children() const;
+
+		const std::string
+		value() const;
 
 	private:
 		std::unique_ptr<type> impl_;

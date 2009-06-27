@@ -67,14 +67,13 @@ block_declaration::block_declaration(const block_declaration& o):
 
 block_declaration::block_declaration(block_declaration&& o):
 	composite_node(),
-	impl_(new type(*o.impl_))
+	impl_(std::move(o.impl_))
 {
 	add(*impl_);
 }
 
 block_declaration::~block_declaration()
 {
-	delete impl_;
 }
 
 const block_declaration&

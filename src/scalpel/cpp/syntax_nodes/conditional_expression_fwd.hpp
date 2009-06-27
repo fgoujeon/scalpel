@@ -37,50 +37,39 @@ conditional_expression
 ;
 \endverbatim
 */
-typedef
-	sequence_node
-	<
-		logical_or_expression,
-		optional_node<space>,
-		optional_node<predefined_text_node<str::question_mark>>,
-		optional_node<space>,
-		optional_node<expression>,
-		optional_node<space>,
-		optional_node<predefined_text_node<str::colon>>,
-		optional_node<space>,
-		optional_node<assignment_expression>
-	>
-	conditional_expression_t
-;
-
-typedef
-	sequence_node
-	<
-		optional_node<space>,
-		optional_node<predefined_text_node<str::question_mark>>,
-		optional_node<space>,
-		optional_node<expression>,
-		optional_node<space>,
-		optional_node<predefined_text_node<str::colon>>,
-		optional_node<space>,
-		optional_node<assignment_expression>
-	>
-	conditional_expression_tail_t
-;
-
-/**
-\verbatim
-conditional_expression
-	= logical_or_expression, ["?", expression, ":", assignment_expression]
-;
-\endverbatim
-*/
-class conditional_expression: public composite_node
+class conditional_expression: public node
 {
 	public:
-		typedef conditional_expression_t type;
+		typedef
+			sequence_node
+			<
+				logical_or_expression,
+				optional_node<space>,
+				optional_node<predefined_text_node<str::question_mark>>,
+				optional_node<space>,
+				optional_node<expression>,
+				optional_node<space>,
+				optional_node<predefined_text_node<str::colon>>,
+				optional_node<space>,
+				optional_node<assignment_expression>
+			>
+			type
+		;
 		typedef logical_or_expression head_node_t;
-		typedef conditional_expression_tail_t tail_sequence_node_t;
+		typedef
+			sequence_node
+			<
+				optional_node<space>,
+				optional_node<predefined_text_node<str::question_mark>>,
+				optional_node<space>,
+				optional_node<expression>,
+				optional_node<space>,
+				optional_node<predefined_text_node<str::colon>>,
+				optional_node<space>,
+				optional_node<assignment_expression>
+			>
+			tail_sequence_node_t
+		;
 
 		conditional_expression
 		(
@@ -105,15 +94,19 @@ class conditional_expression: public composite_node
 
 		conditional_expression(conditional_expression&& o);
 
-		conditional_expression(const type& o);
-
 		~conditional_expression();
 
 		const conditional_expression&
 		operator=(const conditional_expression& o);
 
+		child_const_iterator_range
+		children() const;
+
+		const std::string
+		value() const;
+
 	private:
-		type* impl_;
+		std::unique_ptr<type> impl_;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

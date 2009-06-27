@@ -34,57 +34,46 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 declaration::declaration(block_declaration&& o):
 	impl_(new type(o))
 {
-	add(*impl_);
 }
 
 declaration::declaration(function_definition&& o):
 	impl_(new type(o))
 {
-	add(*impl_);
 }
 
 declaration::declaration(template_declaration&& o):
 	impl_(new type(o))
 {
-	add(*impl_);
 }
 
 declaration::declaration(explicit_instantiation&& o):
 	impl_(new type(o))
 {
-	add(*impl_);
 }
 
 declaration::declaration(explicit_specialization&& o):
 	impl_(new type(o))
 {
-	add(*impl_);
 }
 
 declaration::declaration(linkage_specification&& o):
 	impl_(new type(o))
 {
-	add(*impl_);
 }
 
 declaration::declaration(namespace_definition&& o):
 	impl_(new type(o))
 {
-	add(*impl_);
 }
 
 declaration::declaration(const declaration& o):
-	composite_node(),
 	impl_(new type(*o.impl_))
 {
-	add(*impl_);
 }
 
 declaration::declaration(declaration&& o):
-	composite_node(),
 	impl_(std::move(o.impl_))
 {
-	add(*impl_);
 }
 
 declaration::~declaration()
@@ -138,6 +127,18 @@ void
 declaration::get(boost::optional<const namespace_definition&>& o) const
 {
 	impl_->get(o);
+}
+
+node::child_const_iterator_range
+declaration::children() const
+{
+	return impl_->children();
+}
+
+const std::string
+declaration::value() const
+{
+	return impl_->value();
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

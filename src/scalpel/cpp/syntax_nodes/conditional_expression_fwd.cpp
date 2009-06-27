@@ -41,7 +41,6 @@ conditional_expression::conditional_expression
 ):
 	impl_(new type(o1, o2, o3, o4, o5, o6, o7, o8, o9))
 {
-	add(*impl_);
 }
 
 conditional_expression::conditional_expression
@@ -54,36 +53,17 @@ conditional_expression::conditional_expression
 }
 
 conditional_expression::conditional_expression(const conditional_expression& o):
-	composite_node(),
-	impl_
-	(
-		new type(*o.impl_)
-	)
+	impl_(new type(*o.impl_))
 {
-	add(*impl_);
 }
 
 conditional_expression::conditional_expression(conditional_expression&& o):
-	composite_node(),
-	impl_(o.impl_)
+	impl_(std::move(o.impl_))
 {
-	o.impl_ = 0;
-	add(*impl_);
-}
-
-conditional_expression::conditional_expression(const type& o):
-	composite_node(),
-	impl_
-	(
-		new type(o)
-	)
-{
-	add(*impl_);
 }
 
 conditional_expression::~conditional_expression()
 {
-	delete impl_;
 }
 
 const conditional_expression&
@@ -91,6 +71,18 @@ conditional_expression::operator=(const conditional_expression& o)
 {
 	*impl_ = *o.impl_;
 	return *this;
+}
+
+node::child_const_iterator_range
+conditional_expression::children() const
+{
+	return impl_->children();
+}
+
+const std::string
+conditional_expression::value() const
+{
+	return impl_->value();
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

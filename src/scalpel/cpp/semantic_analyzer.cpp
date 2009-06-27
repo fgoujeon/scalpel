@@ -229,7 +229,7 @@ semantic_analyzer::analyze(const function_definition& syntax_node)
 	std::string name;
 	scope* enclosing_scope = 0;
 
-	const direct_declarator::first_part& first_part_node = get_declarator(syntax_node).direct_declarator_node().first_part_node();
+	const direct_declarator::first_part& first_part_node = get_direct_declarator(get_declarator(syntax_node)).first_part_node();
 	boost::optional<const declarator_id&> a_declarator_id = get<declarator_id>(&first_part_node);
 	if(a_declarator_id)
 	{
@@ -545,7 +545,7 @@ semantic_analyzer::analyze(const simple_declaration& syntax_node)
 					)
 					{
 						is_a_class_forward_declaration = true;
-						const identifier_or_template_id& identifier_or_template_id_node = opt_class_elaborated_specifier_node->identifier_or_template_id_node();
+						const identifier_or_template_id& identifier_or_template_id_node = get_identifier_or_template_id(*opt_class_elaborated_specifier_node);
 						if(auto identifier_node = get<identifier>(&identifier_or_template_id_node))
 						{
 							class_name = identifier_node->value();
@@ -562,7 +562,7 @@ semantic_analyzer::analyze(const simple_declaration& syntax_node)
 		for(auto i = an_init_declarator_list.begin(); i != an_init_declarator_list.end(); ++i)
 		{
 			const declarator& a_declarator = i->main_node().declarator_node();
-			const direct_declarator& a_direct_declarator = a_declarator.direct_declarator_node();
+			const direct_declarator& a_direct_declarator = get_direct_declarator(a_declarator);
 
 			//get the syntax_node name
 			const direct_declarator::first_part& first_part_node = a_direct_declarator.first_part_node();

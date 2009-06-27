@@ -31,50 +31,51 @@ template<class... NodesT>
 class sequence_node;
 
 template<unsigned int I, class SequenceNodeT>
-struct sequence_node_type_getter;
+struct tail_sequence_node_getter;
 
 
 
 template<>
-class sequence_node<>: public composite_node
+class sequence_node<>: public node
 {
 	public:
 		typedef void head_node_t;
 		typedef void tail_sequence_node_t;
 
-		sequence_node()
-		{
-		}
+		sequence_node();
 
-		sequence_node(const sequence_node&):
-			composite_node()
-		{
-		}
+		sequence_node(const sequence_node&);
 
-		sequence_node(sequence_node&&):
-			composite_node()
-		{
-		}
+		sequence_node(sequence_node&&);
 
 		const sequence_node&
-		operator=(const sequence_node&)
-		{
-			return *this;
-		}
+		operator=(const sequence_node&);
+
+		child_const_iterator_range
+		children() const;
+
+		void
+		push_front(const node& n);
+
+		const std::string
+		value() const;
+
+	private:
+		children_t children_;
 };
 
 template<class HeadT, class... TailT>
-class sequence_node<HeadT, TailT...>: public sequence_node<TailT...>
+class sequence_node<HeadT, TailT...>: public node
 {
 	public:
 		typedef HeadT head_node_t;
 		typedef sequence_node<TailT...> tail_sequence_node_t;
 
 		template<unsigned int I, class SequenceNodeT>
-		friend struct sequence_node_type_getter;
+		friend struct tail_sequence_node_getter;
 
 		template<unsigned int I, class SequenceNodeT>
-		friend const typename sequence_node_type_getter<I, SequenceNodeT>::head_node_t&
+		friend const typename tail_sequence_node_getter<I, SequenceNodeT>::head_node_t&
 		get(const SequenceNodeT& sequence);
 
 		sequence_node(HeadT&& head_node, TailT&&... tail_nodes);
@@ -88,118 +89,144 @@ class sequence_node<HeadT, TailT...>: public sequence_node<TailT...>
 		const sequence_node&
 		operator=(const sequence_node& o);
 
-	protected:
-		const HeadT&
-		head() const;
+		node::child_const_iterator_range
+		children() const;
 
-		HeadT&
-		head();
+		void
+		push_front(const node& n);
+
+		const std::string
+		value() const;
+
+		const head_node_t&
+		head() const;
 
 		const tail_sequence_node_t&
 		tail() const;
 
-		tail_sequence_node_t&
-		tail();
-
 	private:
-		HeadT node_;
+		head_node_t head_;
+		tail_sequence_node_t tail_;
 };
 
 template<class HeadT, class... TailT>
 sequence_node<HeadT, TailT...>::sequence_node(HeadT&& head_node, TailT&&... tail_nodes):
-	tail_sequence_node_t(tail_nodes...),
-	node_(head_node)
+	head_(head_node),
+	tail_(tail_nodes...)
 {
-	push_front(node_);
+	push_front(head_);
 }
 
 template<class HeadT, class... TailT>
 sequence_node<HeadT, TailT...>::sequence_node(HeadT&& head_node, sequence_node<TailT...>&& tail_sequence_node):
-	tail_sequence_node_t(tail_sequence_node),
-	node_(head_node)
+	head_(head_node),
+	tail_(tail_sequence_node)
 {
-	push_front(node_);
+	push_front(head_);
 }
 
 template<class HeadT, class... TailT>
 sequence_node<HeadT, TailT...>::sequence_node(const sequence_node<HeadT, TailT...>& o):
-	tail_sequence_node_t(o.tail()),
-	node_(o.node_)
+	head_(o.head_),
+	tail_(o.tail_)
 {
-	push_front(node_);
+	push_front(head_);
 }
 
 template<class HeadT, class... TailT>
 sequence_node<HeadT, TailT...>::sequence_node(sequence_node<HeadT, TailT...>&& o):
-	tail_sequence_node_t(std::move(o.tail())),
-	node_(std::move(o.node_))
+	head_(std::move(o.head_)),
+	tail_(std::move(o.tail_))
 {
-	push_front(node_);
+	push_front(head_);
 }
 
 template<class HeadT, class... TailT>
 const sequence_node<HeadT, TailT...>&
 sequence_node<HeadT, TailT...>::operator=(const sequence_node& o)
 {
-	tail_sequence_node_t::operator=(o.tail());
-	node_ = o.node_;
+	head_ = o.head_;
+	tail_ = o.tail_;
 	return *this;
+}
+
+template<class HeadT, class... TailT>
+node::child_const_iterator_range
+sequence_node<HeadT, TailT...>::children() const
+{
+	return tail_.children();
+}
+
+template<class HeadT, class... TailT>
+void
+sequence_node<HeadT, TailT...>::push_front(const node& n)
+{
+	tail_.push_front(n);
+}
+
+template<class HeadT, class... TailT>
+const std::string
+sequence_node<HeadT, TailT...>::value() const
+{
+	return tail_.value();
 }
 
 template<class HeadT, class... TailT>
 const HeadT&
 sequence_node<HeadT, TailT...>::head() const
 {
-	return node_;
-}
-
-template<class HeadT, class... TailT>
-HeadT&
-sequence_node<HeadT, TailT...>::head()
-{
-	return node_;
+	return head_;
 }
 
 template<class HeadT, class... TailT>
 const typename sequence_node<HeadT, TailT...>::tail_sequence_node_t&
 sequence_node<HeadT, TailT...>::tail() const
 {
-	return *this;
-}
-
-template<class HeadT, class... TailT>
-typename sequence_node<HeadT, TailT...>::tail_sequence_node_t&
-sequence_node<HeadT, TailT...>::tail()
-{
-	return *this;
+	return tail_;
 }
 
 
 
 template<class SequenceNodeT>
-struct sequence_node_type_getter<0, SequenceNodeT>
+struct tail_sequence_node_getter<0, SequenceNodeT>
 {
 	typedef SequenceNodeT type;
 	typedef typename SequenceNodeT::head_node_t head_node_t;
 	typedef typename SequenceNodeT::tail_sequence_node_t tail_sequence_node_t;
+
+	static
+	const type&
+	get_tail(const SequenceNodeT& sequence)
+	{
+		return sequence;
+	}
 };
 
 template<unsigned int I, class SequenceNodeT>
-struct sequence_node_type_getter
+struct tail_sequence_node_getter
 {
-	typedef typename sequence_node_type_getter<I - 1, SequenceNodeT>::tail_sequence_node_t type;
+	typedef typename tail_sequence_node_getter<I - 1, SequenceNodeT>::tail_sequence_node_t type;
 	typedef typename type::head_node_t head_node_t;
 	typedef typename type::tail_sequence_node_t tail_sequence_node_t;
+
+	static
+	const type&
+	get_tail(const SequenceNodeT& sequence)
+	{
+		return tail_sequence_node_getter<I - 1, SequenceNodeT>::get_tail(sequence).tail();
+	}
 };
 
 
 
 template<unsigned int I, class SequenceNodeT>
-const typename sequence_node_type_getter<I, SequenceNodeT>::head_node_t&
+const typename tail_sequence_node_getter<I, SequenceNodeT>::head_node_t&
 get(const SequenceNodeT& sequence)
 {
-	const typename sequence_node_type_getter<I, SequenceNodeT>::type& seq = sequence;
-	return seq.head();
+	//get the tail sequence node whose head node type is the return type
+	const typename tail_sequence_node_getter<I, SequenceNodeT>::type& tail = tail_sequence_node_getter<I, SequenceNodeT>::get_tail(sequence);
+
+	return tail.head();
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
