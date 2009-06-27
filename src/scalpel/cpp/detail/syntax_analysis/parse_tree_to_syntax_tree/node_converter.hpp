@@ -25,6 +25,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <iostream>
 #include <boost/utility/enable_if.hpp>
 #include "../../../syntax_tree.hpp"
+#include "../../../syntax_nodes/util/node_type_traits.hpp"
 #include "../grammar.hpp"
 #include "sequence_node_converter_fwd.hpp"
 #include "alternative_node_converter_fwd.hpp"
@@ -34,121 +35,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace detail { namespace syntax_analysis { namespace parse_tree_to_syntax_tree
 {
 
-/*
- * Utility types for type traits
- */
-typedef char yes_type;
-
-struct no_type
-{
-	char padding[8];
-};
-
-
-
-/*
- * sequence_node type traits
- */
-namespace sequence_node
-{
-	template<class T>
-	static yes_type
-	check_sig(typename T::tail_sequence_node_t*);
-
-	template<class T>
-	static no_type
-	check_sig(...);
-}
-
-template<class T>
-struct is_sequence_node
-{
-	static const bool value = sizeof(sequence_node::check_sig<T>(0)) == sizeof(yes_type);
-};
-
-
-
-/*
- * alternative_node type traits
- */
-namespace alternative_node
-{
-	template<class T>
-	static yes_type
-	check_sig(typename T::tail_alternative_node_t*);
-
-	template<class T>
-	static no_type
-	check_sig(...);
-}
-
-template<class T>
-struct is_alternative_node
-{
-	static const bool value = sizeof(alternative_node::check_sig<T>(0)) == sizeof(yes_type);
-};
-
-
-
-/*
- * list_node type traits
- */
-namespace list_node
-{
-	template<class T>
-	static yes_type
-	check_sig(typename T::item*);
-
-	template<class T>
-	static no_type
-	check_sig(...);
-}
-
-template<class T>
-struct is_list_node
-{
-	static const bool value = sizeof(list_node::check_sig<T>(0)) == sizeof(yes_type);
-};
-
-
-
-/*
- * optional_node type traits
- */
-template<class T>
-struct is_optional_node
-{
-	static const bool value = false;
-};
-
-template<class T>
-struct is_optional_node<syntax_nodes::optional_node<T>>
-{
-	static const bool value = true;
-};
-
-
-
-/*
- * predefined_text_node type traits
- */
-template<class T>
-struct is_predefined_text_node
-{
-	static const bool value = false;
-};
-
-template<const std::string& Text>
-struct is_predefined_text_node<syntax_nodes::predefined_text_node<Text>>
-{
-	static const bool value = true;
-};
-
-
-
-/*
- * trait for other types
- */
 template<class T, class U>
 struct is_same_type
 {
@@ -185,7 +71,7 @@ convert_node(const tree_node_t& node, typename SyntaxNodeT::tail_alternative_nod
 template<class SyntaxNodeT>
 inline
 SyntaxNodeT
-convert_node(const tree_node_t& node, typename boost::enable_if<is_list_node<SyntaxNodeT>>::type* = 0)
+convert_node(const tree_node_t& node, typename boost::enable_if<syntax_nodes::util::is_list_node<SyntaxNodeT>>::type* = 0)
 {
 	return convert_list_node<SyntaxNodeT>(node);
 }
@@ -194,7 +80,7 @@ convert_node(const tree_node_t& node, typename boost::enable_if<is_list_node<Syn
 template<class SyntaxNodeT>
 inline
 SyntaxNodeT
-convert_node(const tree_node_t& node, typename boost::enable_if<is_optional_node<SyntaxNodeT>>::type* = 0)
+convert_node(const tree_node_t& node, typename boost::enable_if<syntax_nodes::util::is_optional_node<SyntaxNodeT>>::type* = 0)
 {
 	return convert_optional_node<SyntaxNodeT>(node);
 }
@@ -203,7 +89,7 @@ convert_node(const tree_node_t& node, typename boost::enable_if<is_optional_node
 template<class SyntaxNodeT>
 inline
 SyntaxNodeT
-convert_node(const tree_node_t& node, typename boost::enable_if<is_predefined_text_node<SyntaxNodeT>>::type* = 0)
+convert_node(const tree_node_t& node, typename boost::enable_if<syntax_nodes::util::is_predefined_text_node<SyntaxNodeT>>::type* = 0)
 {
 	return convert_predefined_text_node<SyntaxNodeT>(node);
 }
@@ -218,11 +104,11 @@ convert_node																					\
 (																								\
 	const tree_node_t& node,																	\
 	typename boost::enable_if<is_same_type<SyntaxNodeT, syntax_nodes::node_type>>::type* = 0,	\
-	typename boost::disable_if<is_sequence_node<SyntaxNodeT>>::type* = 0,						\
-	typename boost::disable_if<is_alternative_node<SyntaxNodeT>>::type* = 0,					\
-	typename boost::disable_if<is_list_node<SyntaxNodeT>>::type* = 0,							\
-	typename boost::disable_if<is_optional_node<SyntaxNodeT>>::type* = 0,						\
-	typename boost::disable_if<is_predefined_text_node<SyntaxNodeT>>::type* = 0						\
+	typename boost::disable_if<syntax_nodes::util::is_sequence_node<SyntaxNodeT>>::type* = 0,		 	\
+	typename boost::disable_if<syntax_nodes::util::is_alternative_node<SyntaxNodeT>>::type* = 0,	 	\
+	typename boost::disable_if<syntax_nodes::util::is_list_node<SyntaxNodeT>>::type* = 0,			 	\
+	typename boost::disable_if<syntax_nodes::util::is_optional_node<SyntaxNodeT>>::type* = 0,		 	\
+	typename boost::disable_if<syntax_nodes::util::is_predefined_text_node<SyntaxNodeT>>::type* = 0	\
 )																								\
 {																								\
 	return convert_##node_type(node);															\
