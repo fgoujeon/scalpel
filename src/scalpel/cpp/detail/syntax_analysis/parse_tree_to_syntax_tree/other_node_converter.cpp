@@ -39,22 +39,7 @@ convert_character_literal(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::CHARACTER_LITERAL);
 
-	bool wide = false;
-
-	tree_node_iterator_t i = node.children.begin();
-	if(get_value(*i) == "L")
-	{
-		wide = true;
-		++i;
-	}
-
-	++i; //iterate to string value
-
-	return character_literal
-	(
-		wide,
-		get_value(*i)
-	);
+	return character_literal(get_only_child_value(node));
 }
 
 floating_literal
@@ -82,10 +67,7 @@ convert_integer_literal(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::INTEGER_LITERAL);
 
-	return integer_literal
-	(
-		get_value(get_only_child_node(node))
-	);
+	return integer_literal(get_value(get_only_child_node(node)));
 }
 
 space
@@ -101,10 +83,7 @@ convert_string_literal(const tree_node_t& node)
 {
     assert(node.value.id() == id_t::STRING_LITERAL);
 
-	return string_literal
-	(
-		get_only_child_value(node)
-	);
+	return string_literal(get_only_child_value(node));
 }
 
 }}}}} //namespace scalpel::cpp::detail::syntax_analysis

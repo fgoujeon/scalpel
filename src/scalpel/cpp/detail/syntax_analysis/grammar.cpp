@@ -220,7 +220,7 @@ grammar::grammar()
 	;
 
 	character_literal
-		= !ch_p('L') >> '\'' >> token_node_d[c_char_sequence] >> '\''
+		= token_node_d[!ch_p('L') >> '\'' >> c_char_sequence >> '\'']
 	;
 
 	c_char_sequence

@@ -18,37 +18,14 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_CHARACTER_LITERAL_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_CHARACTER_LITERAL_HPP
+#ifndef SCALPEL_CPP_SYNTAX_NODES_UTIL_VALUE_GETTER_HPP
+#define SCALPEL_CPP_SYNTAX_NODES_UTIL_VALUE_GETTER_HPP
 
-#include "composite_node.hpp"
-#include "leaf_node.hpp"
-
-namespace scalpel { namespace cpp { namespace syntax_nodes
+namespace scalpel { namespace cpp { namespace syntax_nodes { namespace util
 {
 
-class character_literal: public leaf_node
-{
-	public:
-		character_literal
-		(
-			std::string&& value
-		):
-			leaf_node(value)
-		{
-		}
 
-		character_literal(const character_literal& o):
-			leaf_node(o)
-		{
-		}
 
-		character_literal(character_literal&& o):
-			leaf_node(o)
-		{
-		}
-};
-
-}}} //namespace scalpel::cpp::syntax_nodes
+}}}} //namespace scalpel::cpp::syntax_nodes::util
 
 #endif
