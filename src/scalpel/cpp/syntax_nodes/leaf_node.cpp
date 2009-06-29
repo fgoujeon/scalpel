@@ -50,7 +50,12 @@ leaf_node::~leaf_node()
 node::child_const_iterator_range
 leaf_node::children() const
 {
-	return children_;
+	child_const_iterator first = children_.begin();
+	child_const_iterator last = children_.end();
+
+	child_const_indirect_iterator const_indirect_first(first), const_indirect_last(last);
+
+	return child_const_iterator_range(const_indirect_first, const_indirect_last);
 }
 
 const std::string

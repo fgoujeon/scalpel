@@ -23,12 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <iostream>
 #include <stdexcept>
 #include <boost/spirit/tree/parse_tree.hpp>
-#include "detail/syntax_analysis/parse_tree_to_syntax_tree/node_converter.hpp"
-#include "detail/syntax_analysis/parse_tree_to_syntax_tree/sequence_node_converter.hpp"
-#include "detail/syntax_analysis/parse_tree_to_syntax_tree/alternative_node_converter.hpp"
-#include "detail/syntax_analysis/parse_tree_to_syntax_tree/special_conversion_functions.hpp"
-#include "detail/syntax_analysis/parse_tree_to_syntax_tree/other_node_converter.hpp"
-#include "detail/syntax_analysis/parse_tree_to_syntax_tree/basic_functions.hpp"
+#include "detail/syntax_analysis/parse_tree_to_syntax_tree.hpp"
 
 using namespace scalpel::cpp::detail::syntax_analysis;
 

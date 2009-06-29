@@ -37,9 +37,6 @@ get_value(const tree_node_t& node);
 std::string
 get_only_child_value(const tree_node_t& node);
 
-int
-get_id(const tree_node_t& node);
-
 
 
 inline
@@ -49,6 +46,9 @@ get_only_child_node(const tree_node_t& parent_node)
 	assert(parent_node.children.size() == 1);
 	return *parent_node.children.begin();
 }
+
+std::ostream&
+operator<<(std::ostream& o, const boost::spirit::parser_id& id);
 
 }}}}} //namespace scalpel::cpp::detail::syntax_analysis
 

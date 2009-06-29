@@ -52,20 +52,20 @@ get_value(const tree_node_t& node)
     return value_oss.str();
 }
 
-int
-get_id(const tree_node_t& node)
+std::ostream&
+operator<<(std::ostream& o, const boost::spirit::parser_id& id)
 {
-    boost::spirit::parser_id id = node.value.id();
-
-    for(unsigned int i = 0; i < 400; ++i)
+    for(int i = 0; i < 400; ++i)
     {
         if(id == i)
         {
-            return i;
+            o << i;
+			return o;
         }
     }
 
-    return -1;
+	o << "[unknown]";
+    return o;
 }
 
 }}}}} //namespace scalpel::cpp::detail::syntax_analysis::parse_tree_to_syntax_tree

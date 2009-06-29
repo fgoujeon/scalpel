@@ -23,30 +23,17 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../../../syntax_tree.hpp"
 #include "typedefs.hpp"
+#include "basic_functions.hpp"
 
 namespace scalpel { namespace cpp { namespace detail { namespace syntax_analysis { namespace parse_tree_to_syntax_tree
 {
 
-syntax_nodes::character_literal
-convert_character_literal(const tree_node_t& node);
-
-syntax_nodes::direct_abstract_declarator
-convert_direct_abstract_declarator(const tree_node_t& node);
-
-syntax_nodes::floating_literal
-convert_floating_literal(const tree_node_t& node);
-
-syntax_nodes::identifier
-convert_identifier(const tree_node_t& node);
-
-syntax_nodes::integer_literal
-convert_integer_literal(const tree_node_t& node);
-
-syntax_nodes::space
-convert_space(const tree_node_t& node);
-
-syntax_nodes::string_literal
-convert_string_literal(const tree_node_t& node);
+template<class SyntaxNodeT>
+SyntaxNodeT
+convert_leaf_node(const tree_node_t& node)
+{
+	return SyntaxNodeT(get_only_child_value(node));
+}
 
 }}}}} //namespace scalpel::cpp::detail::syntax_analysis
 

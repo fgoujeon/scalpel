@@ -37,7 +37,7 @@ struct no_type
 
 
 /*
- * sequence_node type traits
+ * sequence_node type trait
  */
 namespace sequence_node_check
 {
@@ -61,7 +61,7 @@ struct is_sequence_node
 
 
 /*
- * alternative_node type traits
+ * alternative_node type trait
  */
 namespace alternative_node_check
 {
@@ -85,7 +85,7 @@ struct is_alternative_node
 
 
 /*
- * list_node type traits
+ * list_node type trait
  */
 namespace list_node_check
 {
@@ -109,7 +109,7 @@ struct is_list_node
 
 
 /*
- * optional_node type traits
+ * optional_node type trait
  */
 template<class T>
 struct is_optional_node
@@ -126,7 +126,7 @@ struct is_optional_node<syntax_nodes::optional_node<T>>
 
 
 /*
- * predefined_text_node type traits
+ * predefined_text_node type trait
  */
 template<class T>
 struct is_predefined_text_node
@@ -138,6 +138,23 @@ template<const std::string& Text>
 struct is_predefined_text_node<syntax_nodes::predefined_text_node<Text>>
 {
 	static const bool value = true;
+};
+
+
+
+/*
+ * leaf_node type trait
+ */
+template<class T>
+struct is_leaf_node
+{
+	static const bool value =
+		!is_sequence_node<T>::value &&
+		!is_alternative_node<T>::value &&
+		!is_list_node<T>::value &&
+		!is_optional_node<T>::value &&
+		!is_predefined_text_node<T>::value
+	;
 };
 
 }}}} //namespace scalpel::cpp::syntax_nodes::util

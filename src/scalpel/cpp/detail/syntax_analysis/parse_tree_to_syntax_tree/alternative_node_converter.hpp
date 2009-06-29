@@ -64,7 +64,7 @@ struct alternative_node_converter<T, AlternativeNodeT, void>
 	{
 		std::ostringstream error_message;
 		error_message << "alternative_node_converter error : unexpected parser id = ";
-	   	error_message << get_id(node);
+	   	error_message << node.value.id();
 		throw std::runtime_error(error_message.str());
 	}
 };
