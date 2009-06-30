@@ -18,32 +18,6 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "conditional_expression_fwd.hpp"
-
-#include "expressions.hpp"
-#include "expression.hpp"
-#include "assignment_expression.hpp"
-
-#include "detail/macros/sequence_node_pimpl_definition.hpp"
-
-namespace scalpel { namespace cpp { namespace syntax_nodes
-{
-
-SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
-(
-	conditional_expression,
-	(logical_or_expression)
-	(optional_node<space>)
-	(optional_node<predefined_text_node<str::question_mark>>)
-	(optional_node<space>)
-	(optional_node<expression>)
-	(optional_node<space>)
-	(optional_node<predefined_text_node<str::colon>>)
-	(optional_node<space>)
-	(optional_node<assignment_expression>)
-)
-
-}}} //namespace scalpel::cpp::syntax_nodes
-
-#include "detail/macros/sequence_node_pimpl_definition_undef.hpp"
+#undef SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION_CONSTRUCTOR_PARAMETER
+#undef SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 

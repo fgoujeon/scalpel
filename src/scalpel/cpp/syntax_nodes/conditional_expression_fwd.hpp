@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_CONDITIONAL_EXPRESSION_FWD_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_CONDITIONAL_EXPRESSION_FWD_HPP
 
-#include "common.hpp"
+#include "detail/macros/sequence_node_pimpl_declaration.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -37,78 +37,22 @@ conditional_expression
 ;
 \endverbatim
 */
-class conditional_expression: public node
-{
-	public:
-		typedef
-			sequence_node
-			<
-				logical_or_expression,
-				optional_node<space>,
-				optional_node<predefined_text_node<str::question_mark>>,
-				optional_node<space>,
-				optional_node<expression>,
-				optional_node<space>,
-				optional_node<predefined_text_node<str::colon>>,
-				optional_node<space>,
-				optional_node<assignment_expression>
-			>
-			type
-		;
-		typedef logical_or_expression head_node_t;
-		typedef
-			sequence_node
-			<
-				optional_node<space>,
-				optional_node<predefined_text_node<str::question_mark>>,
-				optional_node<space>,
-				optional_node<expression>,
-				optional_node<space>,
-				optional_node<predefined_text_node<str::colon>>,
-				optional_node<space>,
-				optional_node<assignment_expression>
-			>
-			tail_sequence_node_t
-		;
-
-		conditional_expression
-		(
-			logical_or_expression&& o1,
-			optional_node<space>&& o2,
-			optional_node<predefined_text_node<str::question_mark>> o3,
-			optional_node<space>&& o4,
-			optional_node<expression>&& o5,
-			optional_node<space>&& o6,
-			optional_node<predefined_text_node<str::colon>> o7,
-			optional_node<space>&& o8,
-			optional_node<assignment_expression>&& o9
-		);
-
-		conditional_expression
-		(
-			head_node_t&& head,
-			tail_sequence_node_t&& tail
-		);
-
-		conditional_expression(const conditional_expression& o);
-
-		conditional_expression(conditional_expression&& o);
-
-		~conditional_expression();
-
-		const conditional_expression&
-		operator=(const conditional_expression& o);
-
-		child_const_iterator_range
-		children() const;
-
-		const std::string
-		value() const;
-
-	private:
-		std::unique_ptr<type> impl_;
-};
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	conditional_expression,
+	(logical_or_expression)
+	(optional_node<space>)
+	(optional_node<predefined_text_node<str::question_mark>>)
+	(optional_node<space>)
+	(optional_node<expression>)
+	(optional_node<space>)
+	(optional_node<predefined_text_node<str::colon>>)
+	(optional_node<space>)
+	(optional_node<assignment_expression>)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif
