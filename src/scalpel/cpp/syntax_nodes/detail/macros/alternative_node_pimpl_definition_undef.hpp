@@ -18,32 +18,7 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_ABSTRACT_DECLARATOR_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_ABSTRACT_DECLARATOR_HPP
+#undef SCALPEL_ALTERNATIVE_NODE_PIMPL_DEFINITION_CONSTRUCTOR
+#undef SCALPEL_ALTERNATIVE_NODE_PIMPL_DEFINITION_GET_FUNCTION
+#undef SCALPEL_ALTERNATIVE_NODE_PIMPL_DEFINITION
 
-#include "ptr_operator_seq.hpp"
-#include "detail/macros/alternative_node_pimpl_declaration.hpp"
-
-namespace scalpel { namespace cpp { namespace syntax_nodes
-{
-
-class direct_abstract_declarator;
-
-/**
-abstract_declarator
-	= ptr_operator_seq
-	| direct_abstract_declarator
-;
-*/
-SCALPEL_ALTERNATIVE_NODE_PIMPL_DECLARATION
-(
-	abstract_declarator,
-	(ptr_operator_seq)
-	(direct_abstract_declarator)
-)
-
-}}} //namespace scalpel::cpp::syntax_nodes
-
-#include "detail/macros/alternative_node_pimpl_declaration_undef.hpp"
-
-#endif

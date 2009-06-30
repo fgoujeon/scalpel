@@ -21,52 +21,19 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "abstract_declarator.hpp"
 
 #include "direct_abstract_declarator.hpp"
+#include "detail/macros/alternative_node_pimpl_definition.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-abstract_declarator::abstract_declarator(ptr_operator_seq&& o):
-	impl_(new type(o))
-{
-}
-
-abstract_declarator::abstract_declarator(direct_abstract_declarator&& o):
-	impl_(new type(o))
-{
-}
-
-abstract_declarator::abstract_declarator(const abstract_declarator& o):
-	impl_(new type(*o.impl_))
-{
-}
-
-abstract_declarator::abstract_declarator(abstract_declarator&& o):
-	impl_(std::move(o.impl_))
-{
-}
-
-abstract_declarator::~abstract_declarator()
-{
-}
-
-const abstract_declarator&
-abstract_declarator::operator=(const abstract_declarator& o)
-{
-	*impl_ = *o.impl_;
-	return *this;
-}
-
-const std::string
-abstract_declarator::value() const
-{
-	return impl_->value();
-}
-
-node::child_const_iterator_range
-abstract_declarator::children() const
-{
-	return impl_->children();
-}
+SCALPEL_ALTERNATIVE_NODE_PIMPL_DEFINITION
+(
+	abstract_declarator,
+	(ptr_operator_seq)
+	(direct_abstract_declarator)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/alternative_node_pimpl_definition_undef.hpp"
 
