@@ -21,8 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_SELECTION_STATEMENT_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_SELECTION_STATEMENT_HPP
 
-#include <boost/optional.hpp>
-#include "common.hpp"
+#include "detail/macros/alternative_node_pimpl_declaration.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -30,53 +29,15 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 class if_statement;
 class switch_statement;
 
-typedef
-	alternative_node
-	<
-		if_statement,
-		switch_statement
-	>
-	selection_statement_t
-;
-
-typedef
-	alternative_node
-	<
-		switch_statement
-	>
-	selection_statement_tail_t
-;
-
-class selection_statement: public composite_node
-{
-	public:
-		typedef selection_statement_t type;
-		typedef if_statement head_node_t;
-		typedef selection_statement_tail_t tail_alternative_node_t;
-
-		selection_statement(if_statement&& o);
-
-		selection_statement(switch_statement&& o);
-
-		selection_statement(const selection_statement& o);
-
-		selection_statement(selection_statement&& o);
-
-		~selection_statement();
-
-		const selection_statement&
-		operator=(const selection_statement& o);
-
-		void
-		get(boost::optional<const if_statement&>& node) const;
-
-		void
-		get(boost::optional<const switch_statement&>& node) const;
-
-	private:
-		type* impl_;
-};
+SCALPEL_ALTERNATIVE_NODE_PIMPL_DECLARATION
+(
+	selection_statement,
+	(if_statement)
+	(switch_statement)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/alternative_node_pimpl_declaration_undef.hpp"
 
 #endif

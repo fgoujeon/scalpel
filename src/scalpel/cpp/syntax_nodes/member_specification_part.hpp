@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_MEMBER_SPECIFICATION_PART_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_MEMBER_SPECIFICATION_PART_HPP
 
-#include "common.hpp"
+#include "detail/macros/alternative_node_pimpl_declaration.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -29,47 +29,15 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 class member_declaration;
 class member_specification_access_specifier;
 
-typedef
-	alternative_node
-	<
-		member_declaration,
-		member_specification_access_specifier
-	>
-	member_specification_part_t
-;
-
-typedef
-	alternative_node
-	<
-		member_specification_access_specifier
-	>
-	member_specification_part_tail_t
-;
-
-class member_specification_part: public composite_node
-{
-	public:
-		typedef member_specification_part_t type;
-		typedef member_declaration head_node_t;
-		typedef member_specification_part_tail_t tail_alternative_node_t;
-
-		member_specification_part(member_declaration&& o);
-
-		member_specification_part(member_specification_access_specifier&& o);
-
-		member_specification_part(const member_specification_part& o);
-
-		member_specification_part(member_specification_part&& o);
-
-		~member_specification_part();
-
-		const member_specification_part&
-		operator=(const member_specification_part& o);
-
-	private:
-		type* impl_;
-};
+SCALPEL_ALTERNATIVE_NODE_PIMPL_DECLARATION
+(
+	member_specification_part,
+	(member_declaration)
+	(member_specification_access_specifier)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/alternative_node_pimpl_declaration_undef.hpp"
 
 #endif

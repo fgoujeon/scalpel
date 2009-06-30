@@ -21,7 +21,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_UNARY_EXPRESSION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_UNARY_EXPRESSION_HPP
 
-#include "alternative_node.hpp"
 #include "unary_operator_unary_expression.hpp"
 #include "type_id_sizeof_expression.hpp"
 #include "unary_sizeof_expression.hpp"
@@ -29,67 +28,24 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "new_expression.hpp"
 #include "delete_expression.hpp"
 
+#include "detail/macros/alternative_node_pimpl_declaration.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-typedef
-	alternative_node
-	<
-		unary_operator_unary_expression,
-		type_id_sizeof_expression,
-		unary_sizeof_expression,
-		postfix_expression,
-		new_expression,
-		delete_expression
-	>
-	unary_expression_t
-;
-
-struct unary_expression: public unary_expression_t
-{
-	unary_expression(unary_operator_unary_expression&& o):
-		unary_expression_t(std::move(o))
-	{
-	}
-
-	unary_expression(type_id_sizeof_expression&& o):
-		unary_expression_t(std::move(o))
-	{
-	}
-
-	unary_expression(unary_sizeof_expression&& o):
-		unary_expression_t(std::move(o))
-	{
-	}
-
-	unary_expression(postfix_expression&& o):
-		unary_expression_t(std::move(o))
-	{
-	}
-
-	unary_expression(new_expression&& o):
-		unary_expression_t(std::move(o))
-	{
-	}
-
-	unary_expression(delete_expression&& o):
-		unary_expression_t(std::move(o))
-	{
-	}
-
-	unary_expression(const unary_expression& o):
-		unary_expression_t(static_cast<const unary_expression_t&>(o))
-	{
-	}
-
-	unary_expression(unary_expression&& o):
-		unary_expression_t(static_cast<unary_expression_t&&>(o))
-	{
-	}
-
-	using unary_expression_t::operator=;
-};
+SCALPEL_ALTERNATIVE_NODE_PIMPL_DECLARATION
+(
+	unary_expression,
+	(unary_operator_unary_expression)
+	(type_id_sizeof_expression)
+	(unary_sizeof_expression)
+	(postfix_expression)
+	(new_expression)
+	(delete_expression)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/alternative_node_pimpl_declaration_undef.hpp"
 
 #endif

@@ -21,53 +21,23 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_DIRECT_ABSTRACT_DECLARATOR_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_DIRECT_ABSTRACT_DECLARATOR_HPP
 
-#include <memory>
-#include "common.hpp"
 #include "direct_declarator.hpp"
 #include "bracketed_abstract_declarator.hpp"
+
+#include "detail/macros/alternative_node_pimpl_declaration.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-/**
-direct_abstract_declarator
-	= bracketed_abstract_declarator
-	| direct_declarator_last_part_seq
-;
-*/
-typedef
-	alternative_node
-	<
-		bracketed_abstract_declarator,
-		direct_declarator_last_part_seq
-	>
-	direct_abstract_declarator_t
-;
-
-class direct_abstract_declarator: public composite_node
-{
-	public:
-		typedef direct_abstract_declarator_t type;
-		typedef type::head_node_t head_node_t;
-		typedef type::tail_alternative_node_t tail_alternative_node_t;
-
-		direct_abstract_declarator(const bracketed_abstract_declarator& o);
-
-		direct_abstract_declarator(const direct_declarator_last_part_seq& o);
-
-		direct_abstract_declarator(const direct_abstract_declarator& o);
-
-		direct_abstract_declarator(direct_abstract_declarator&& o);
-
-		~direct_abstract_declarator();
-
-		const direct_abstract_declarator&
-		operator=(const direct_abstract_declarator& o);
-
-	private:
-		std::unique_ptr<type> impl_;
-};
+SCALPEL_ALTERNATIVE_NODE_PIMPL_DECLARATION
+(
+	direct_abstract_declarator,
+	(bracketed_abstract_declarator)
+	(direct_declarator_last_part_seq)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/alternative_node_pimpl_declaration_undef.hpp"
 
 #endif

@@ -27,31 +27,21 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "type_id.hpp"
 #include "id_expression.hpp"
 
+#include "detail/macros/alternative_node_pimpl_declaration.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-typedef
-	alternative_node
-	<
-		template_argument_assignment_expression,
-		type_id,
-		id_expression
-	>
-	template_argument_t
-;
-
-class template_argument: public template_argument_t
-{
-	public:
-		template_argument(template_argument_assignment_expression&& o): template_argument_t(o){}
-		template_argument(type_id&& o): template_argument_t(o){}
-		template_argument(id_expression&& o): template_argument_t(o){}
-
-		template_argument(const template_argument& o): template_argument_t(static_cast<const template_argument_t&>(o)){}
-
-		template_argument(template_argument&& o): template_argument_t(static_cast<template_argument_t&&>(o)){}
-};
+SCALPEL_ALTERNATIVE_NODE_PIMPL_DECLARATION
+(
+	template_argument,
+	(template_argument_assignment_expression)
+	(type_id)
+	(id_expression)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/alternative_node_pimpl_declaration_undef.hpp"
 
 #endif

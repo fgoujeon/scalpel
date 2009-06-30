@@ -24,65 +24,23 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "alternative_node.hpp"
 #include "do_while_statement.hpp"
 
+#include "detail/macros/alternative_node_pimpl_declaration.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 class while_statement;
 class for_statement;
 
-typedef
-	alternative_node
-	<
-		while_statement,
-		do_while_statement,
-		for_statement
-	>
-	iteration_statement_t
-;
+SCALPEL_ALTERNATIVE_NODE_PIMPL_DECLARATION
+(
+	iteration_statement,
+	(while_statement)
+	(do_while_statement)
+	(for_statement)
+)
 
-typedef
-	alternative_node
-	<
-		do_while_statement,
-		for_statement
-	>
-	iteration_statement_tail_t
-;
-
-class iteration_statement: public composite_node
-{
-	public:
-		typedef iteration_statement_t type;
-		typedef while_statement head_node_t;
-		typedef iteration_statement_tail_t tail_alternative_node_t;
-
-		iteration_statement(while_statement&& o);
-
-		iteration_statement(do_while_statement&& o);
-
-		iteration_statement(for_statement&& o);
-
-		iteration_statement(const iteration_statement& o);
-
-		iteration_statement(iteration_statement&& o);
-
-		~iteration_statement();
-
-		const iteration_statement&
-		operator=(const iteration_statement& o);
-
-		void
-		get(boost::optional<const while_statement&>& node) const;
-
-		void
-		get(boost::optional<const do_while_statement&>& node) const;
-
-		void
-		get(boost::optional<const for_statement&>& node) const;
-
-	private:
-		type* impl_;
-};
+#include "detail/macros/alternative_node_pimpl_declaration_undef.hpp"
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

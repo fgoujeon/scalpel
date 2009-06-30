@@ -29,129 +29,25 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "block_declaration.hpp"
 #include "try_block.hpp"
 
+#include "detail/macros/alternative_node_pimpl_definition.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-statement::statement(labeled_statement&& o):
-	impl_(new type(std::move(o)))
-{
-	add(*impl_);
-}
-
-statement::statement(expression_statement&& o):
-	impl_(new type(std::move(o)))
-{
-	add(*impl_);
-}
-
-statement::statement(compound_statement&& o):
-	impl_(new type(std::move(o)))
-{
-	add(*impl_);
-}
-
-statement::statement(selection_statement&& o):
-	impl_(new type(std::move(o)))
-{
-	add(*impl_);
-}
-
-statement::statement(iteration_statement&& o):
-	impl_(new type(std::move(o)))
-{
-	add(*impl_);
-}
-
-statement::statement(jump_statement&& o):
-	impl_(new type(std::move(o)))
-{
-	add(*impl_);
-}
-
-statement::statement(block_declaration&& o):
-	impl_(new type(std::move(o)))
-{
-	add(*impl_);
-}
-
-statement::statement(try_block&& o):
-	impl_(new type(std::move(o)))
-{
-	add(*impl_);
-}
-
-statement::statement(const statement& o):
-	composite_node(),
-	impl_(new type(*o.impl_))
-{
-	add(*impl_);
-}
-
-statement::statement(statement&& o):
-	composite_node(),
-	impl_(std::move(o.impl_))
-{
-	add(*impl_);
-}
-
-statement::~statement()
-{
-}
-
-const statement&
-statement::operator=(const statement& o)
-{
-	impl_ = std::move(std::unique_ptr<type>(new type(*o.impl_)));
-	return *this;
-}
-
-void
-statement::get(boost::optional<const labeled_statement&>& node) const
-{
-	impl_->get(node);
-}
-
-void
-statement::get(boost::optional<const expression_statement&>& node) const
-{
-	impl_->get(node);
-}
-
-void
-statement::get(boost::optional<const compound_statement&>& node) const
-{
-	impl_->get(node);
-}
-
-void
-statement::get(boost::optional<const selection_statement&>& node) const
-{
-	impl_->get(node);
-}
-
-void
-statement::get(boost::optional<const iteration_statement&>& node) const
-{
-	impl_->get(node);
-}
-
-void
-statement::get(boost::optional<const jump_statement&>& node) const
-{
-	impl_->get(node);
-}
-
-void
-statement::get(boost::optional<const block_declaration&>& node) const
-{
-	impl_->get(node);
-}
-
-void
-statement::get(boost::optional<const try_block&>& node) const
-{
-	impl_->get(node);
-}
+SCALPEL_ALTERNATIVE_NODE_PIMPL_DEFINITION
+(
+	statement,
+	(labeled_statement)
+	(expression_statement)
+	(compound_statement)
+	(selection_statement)
+	(iteration_statement)
+	(jump_statement)
+	(block_declaration)
+	(try_block)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/alternative_node_pimpl_definition_undef.hpp"
 

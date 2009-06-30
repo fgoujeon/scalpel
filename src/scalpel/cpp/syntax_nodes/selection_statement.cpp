@@ -23,58 +23,19 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "if_statement.hpp"
 #include "switch_statement.hpp"
 
+#include "detail/macros/alternative_node_pimpl_definition.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-selection_statement::selection_statement(if_statement&& o):
-	impl_(new type(std::move(o)))
-{
-	add(*impl_);
-}
-
-selection_statement::selection_statement(switch_statement&& o):
-	impl_(new type(std::move(o)))
-{
-	add(*impl_);
-}
-
-selection_statement::selection_statement(const selection_statement& o):
-	composite_node(),
-	impl_(new type(*o.impl_))
-{
-	add(*impl_);
-}
-
-selection_statement::selection_statement(selection_statement&& o):
-	composite_node(),
-	impl_(new type(*o.impl_))
-{
-	add(*impl_);
-}
-
-selection_statement::~selection_statement()
-{
-	delete impl_;
-}
-
-const selection_statement&
-selection_statement::operator=(const selection_statement& o)
-{
-	*impl_ = *o.impl_;
-	return *this;
-}
-
-void
-selection_statement::get(boost::optional<const if_statement&>& node) const
-{
-	impl_->get(node);
-}
-
-void
-selection_statement::get(boost::optional<const switch_statement&>& node) const
-{
-	impl_->get(node);
-}
+SCALPEL_ALTERNATIVE_NODE_PIMPL_DEFINITION
+(
+	selection_statement,
+	(if_statement)
+	(switch_statement)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/alternative_node_pimpl_definition_undef.hpp"
 

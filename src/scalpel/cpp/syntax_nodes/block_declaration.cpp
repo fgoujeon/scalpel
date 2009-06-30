@@ -20,98 +20,26 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "block_declaration.hpp"
 
-#include "alternative_node.hpp"
 #include "simple_declaration.hpp"
 #include "using_declaration.hpp"
 #include "using_directive.hpp"
 
+#include "detail/macros/alternative_node_pimpl_definition.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-block_declaration::block_declaration(simple_declaration&& o):
-	impl_(new type(std::move(o)))
-{
-	add(*impl_);
-}
+SCALPEL_ALTERNATIVE_NODE_PIMPL_DEFINITION
+(
+	block_declaration,
+	(simple_declaration)
+	(asm_definition)
+	(namespace_alias_definition)
+	(using_declaration)
+	(using_directive)
+)
 
-block_declaration::block_declaration(asm_definition&& o):
-	impl_(new type(std::move(o)))
-{
-	add(*impl_);
-}
-
-block_declaration::block_declaration(namespace_alias_definition&& o):
-	impl_(new type(std::move(o)))
-{
-	add(*impl_);
-}
-
-block_declaration::block_declaration(using_declaration&& o):
-	impl_(new type(std::move(o)))
-{
-	add(*impl_);
-}
-
-block_declaration::block_declaration(using_directive&& o):
-	impl_(new type(std::move(o)))
-{
-	add(*impl_);
-}
-
-block_declaration::block_declaration(const block_declaration& o):
-	composite_node(),
-	impl_(new type(*o.impl_))
-{
-	add(*impl_);
-}
-
-block_declaration::block_declaration(block_declaration&& o):
-	composite_node(),
-	impl_(std::move(o.impl_))
-{
-	add(*impl_);
-}
-
-block_declaration::~block_declaration()
-{
-}
-
-const block_declaration&
-block_declaration::operator=(const block_declaration& o)
-{
-	*impl_ = *o.impl_;
-	return *this;
-}
-
-void
-block_declaration::get(boost::optional<const simple_declaration&>& node) const
-{
-	impl_->get(node);
-}
-
-void
-block_declaration::get(boost::optional<const asm_definition&>& node) const
-{
-	impl_->get(node);
-}
-
-void
-block_declaration::get(boost::optional<const namespace_alias_definition&>& node) const
-{
-	impl_->get(node);
-}
-
-void
-block_declaration::get(boost::optional<const using_declaration&>& node) const
-{
-	impl_->get(node);
-}
-
-void
-block_declaration::get(boost::optional<const using_directive&>& node) const
-{
-	impl_->get(node);
-}
+#include "detail/macros/alternative_node_pimpl_definition_undef.hpp"
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

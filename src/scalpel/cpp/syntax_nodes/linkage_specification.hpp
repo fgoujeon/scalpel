@@ -25,6 +25,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "declaration_linkage_specification.hpp"
 #include "declaration_seq_linkage_specification.hpp"
 
+#include "detail/macros/alternative_node_pimpl_declaration.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
@@ -34,37 +36,15 @@ linkage_specification
 	| declaration_linkage_specification
 ;
 */
-typedef
-	alternative_node
-	<
-		declaration_seq_linkage_specification,
-		declaration_linkage_specification
-	>
-	linkage_specification_t
-;
-
-class linkage_specification: public composite_node
-{
-	public:
-		typedef linkage_specification_t type;
-		typedef type::head_node_t head_node_t;
-		typedef type::tail_alternative_node_t tail_alternative_node_t;
-
-		linkage_specification(declaration_linkage_specification&& o);
-
-		linkage_specification(declaration_seq_linkage_specification&& o);
-
-		linkage_specification(const linkage_specification& o);
-
-		linkage_specification(linkage_specification&& o);
-
-		const linkage_specification&
-		operator=(const linkage_specification& o);
-
-	private:
-		type impl_;
-};
+SCALPEL_ALTERNATIVE_NODE_PIMPL_DECLARATION
+(
+	linkage_specification,
+	(declaration_seq_linkage_specification)
+	(declaration_linkage_specification)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/alternative_node_pimpl_declaration_undef.hpp"
 
 #endif

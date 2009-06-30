@@ -1,5 +1,5 @@
 /*
-Scalpel - Source Code Analysis, Libre and PortablE Library
+Scalpel _ Source Code Analysis, Libre and PortablE Library
 Copyright © 2008, 2009  Florian Goujeon
 
 This file is part of Scalpel.
@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "member_declaration.hpp"
+#include "template_argument.hpp"
 
 #include "detail/macros/alternative_node_pimpl_definition.hpp"
 
@@ -27,12 +27,10 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 SCALPEL_ALTERNATIVE_NODE_PIMPL_DEFINITION
 (
-	member_declaration,
-	(member_declaration_function_definition)
-	(member_declaration_member_declarator_list)
-	(member_declaration_unqualified_id)
-	(using_declaration)
-	(template_declaration)
+	template_argument,
+	(template_argument_assignment_expression)
+	(type_id)
+	(id_expression)
 )
 
 }}} //namespace scalpel::cpp::syntax_nodes

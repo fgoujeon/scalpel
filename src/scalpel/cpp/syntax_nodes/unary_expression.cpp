@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "member_declaration.hpp"
+#include "unary_expression.hpp"
 
 #include "detail/macros/alternative_node_pimpl_definition.hpp"
 
@@ -27,12 +27,13 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 SCALPEL_ALTERNATIVE_NODE_PIMPL_DEFINITION
 (
-	member_declaration,
-	(member_declaration_function_definition)
-	(member_declaration_member_declarator_list)
-	(member_declaration_unqualified_id)
-	(using_declaration)
-	(template_declaration)
+	unary_expression,
+	(unary_operator_unary_expression)
+	(type_id_sizeof_expression)
+	(unary_sizeof_expression)
+	(postfix_expression)
+	(new_expression)
+	(delete_expression)
 )
 
 }}} //namespace scalpel::cpp::syntax_nodes

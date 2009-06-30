@@ -22,6 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_ABSTRACT_DECLARATOR_HPP
 
 #include "ptr_operator_seq.hpp"
+
 #include "detail/macros/alternative_node_pimpl_declaration.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes

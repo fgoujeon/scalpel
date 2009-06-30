@@ -21,8 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_DECLARATION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_DECLARATION_HPP
 
-#include <memory>
-#include "common.hpp"
+#include "detail/macros/alternative_node_pimpl_declaration.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -35,90 +34,20 @@ class explicit_specialization;
 class linkage_specification;
 class namespace_definition;
 
-class declaration: public node
-{
-	public:
-		typedef
-			alternative_node
-			<
-				block_declaration,
-				function_definition,
-				template_declaration,
-				explicit_instantiation,
-				explicit_specialization,
-				linkage_specification,
-				namespace_definition
-			>
-			type
-		;
-		typedef block_declaration head_node_t;
-		typedef
-			alternative_node
-			<
-				function_definition,
-				template_declaration,
-				explicit_instantiation,
-				explicit_specialization,
-				linkage_specification,
-				namespace_definition
-			>
-			tail_alternative_node_t
-		;
-
-		declaration(block_declaration&& o);
-
-		declaration(function_definition&& o);
-
-		declaration(template_declaration&& o);
-
-		declaration(explicit_instantiation&& o);
-
-		declaration(explicit_specialization&& o);
-
-		declaration(linkage_specification&& o);
-
-		declaration(namespace_definition&& o);
-
-		declaration(const declaration& o);
-
-		declaration(declaration&& o);
-
-		~declaration();
-
-		const declaration&
-		operator=(const declaration& o);
-
-		void
-		get(boost::optional<const block_declaration&>& o) const;
-
-		void
-		get(boost::optional<const function_definition&>& o) const;
-
-		void
-		get(boost::optional<const template_declaration&>& o) const;
-
-		void
-		get(boost::optional<const explicit_instantiation&>& o) const;
-
-		void
-		get(boost::optional<const explicit_specialization&>& o) const;
-
-		void
-		get(boost::optional<const linkage_specification&>& o) const;
-
-		void
-		get(boost::optional<const namespace_definition&>& o) const;
-
-		child_const_iterator_range
-		children() const;
-
-		const std::string
-		value() const;
-
-	private:
-		std::unique_ptr<type> impl_;
-};
+SCALPEL_ALTERNATIVE_NODE_PIMPL_DECLARATION
+(
+	declaration,
+	(block_declaration)
+	(function_definition)
+	(template_declaration)
+	(explicit_instantiation)
+	(explicit_specialization)
+	(linkage_specification)
+	(namespace_definition)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/alternative_node_pimpl_declaration_undef.hpp"
 
 #endif

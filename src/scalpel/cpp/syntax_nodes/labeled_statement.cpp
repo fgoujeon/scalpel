@@ -24,70 +24,20 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "default_statement.hpp"
 #include "classic_labeled_statement.hpp"
 
+#include "detail/macros/alternative_node_pimpl_definition.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-labeled_statement::labeled_statement(case_statement&& o):
-	impl_(new type(std::move(o)))
-{
-	add(*impl_);
-}
-
-labeled_statement::labeled_statement(default_statement&& o):
-	impl_(new type(std::move(o)))
-{
-	add(*impl_);
-}
-
-labeled_statement::labeled_statement(classic_labeled_statement&& o):
-	impl_(new type(std::move(o)))
-{
-	add(*impl_);
-}
-
-labeled_statement::labeled_statement(const labeled_statement& o):
-	composite_node(),
-	impl_(new type(*o.impl_))
-{
-	add(*impl_);
-}
-
-labeled_statement::labeled_statement(labeled_statement&& o):
-	composite_node(),
-	impl_(new type(*o.impl_))
-{
-	add(*impl_);
-}
-
-labeled_statement::~labeled_statement()
-{
-	delete impl_;
-}
-
-const labeled_statement&
-labeled_statement::operator=(const labeled_statement& o)
-{
-	*impl_ = *o.impl_;
-	return *this;
-}
-
-void
-labeled_statement::get(boost::optional<const case_statement&>& node) const
-{
-	impl_->get(node);
-}
-
-void
-labeled_statement::get(boost::optional<const default_statement&>& node) const
-{
-	impl_->get(node);
-}
-
-void
-labeled_statement::get(boost::optional<const classic_labeled_statement&>& node) const
-{
-	impl_->get(node);
-}
+SCALPEL_ALTERNATIVE_NODE_PIMPL_DEFINITION
+(
+	labeled_statement,
+	(case_statement)
+	(default_statement)
+	(classic_labeled_statement)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/alternative_node_pimpl_definition_undef.hpp"
 

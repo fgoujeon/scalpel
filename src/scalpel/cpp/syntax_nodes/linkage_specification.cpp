@@ -20,41 +20,19 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "linkage_specification.hpp"
 
+#include "detail/macros/alternative_node_pimpl_definition.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-linkage_specification::linkage_specification(declaration_linkage_specification&& o):
-	impl_(o)
-{
-	add(impl_);
-}
-
-linkage_specification::linkage_specification(declaration_seq_linkage_specification&& o):
-	impl_(o)
-{
-	add(impl_);
-}
-
-linkage_specification::linkage_specification(const linkage_specification& o):
-	composite_node(),
-	impl_(o.impl_)
-{
-	add(impl_);
-}
-
-linkage_specification::linkage_specification(linkage_specification&& o):
-	composite_node(),
-	impl_(std::move(o.impl_))
-{
-	add(impl_);
-}
-
-const linkage_specification&
-linkage_specification::operator=(const linkage_specification& o)
-{
-	impl_ = o.impl_;
-	return *this;
-}
+SCALPEL_ALTERNATIVE_NODE_PIMPL_DEFINITION
+(
+	linkage_specification,
+	(declaration_seq_linkage_specification)
+	(declaration_linkage_specification)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/alternative_node_pimpl_definition_undef.hpp"
 

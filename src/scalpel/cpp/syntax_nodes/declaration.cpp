@@ -28,118 +28,24 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "linkage_specification.hpp"
 #include "namespace_definition.hpp"
 
+#include "detail/macros/alternative_node_pimpl_definition.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-declaration::declaration(block_declaration&& o):
-	impl_(new type(o))
-{
-}
-
-declaration::declaration(function_definition&& o):
-	impl_(new type(o))
-{
-}
-
-declaration::declaration(template_declaration&& o):
-	impl_(new type(o))
-{
-}
-
-declaration::declaration(explicit_instantiation&& o):
-	impl_(new type(o))
-{
-}
-
-declaration::declaration(explicit_specialization&& o):
-	impl_(new type(o))
-{
-}
-
-declaration::declaration(linkage_specification&& o):
-	impl_(new type(o))
-{
-}
-
-declaration::declaration(namespace_definition&& o):
-	impl_(new type(o))
-{
-}
-
-declaration::declaration(const declaration& o):
-	impl_(new type(*o.impl_))
-{
-}
-
-declaration::declaration(declaration&& o):
-	impl_(std::move(o.impl_))
-{
-}
-
-declaration::~declaration()
-{
-}
-
-const declaration&
-declaration::operator=(const declaration& o)
-{
-	*impl_ = *o.impl_;
-	return *this;
-}
-
-void
-declaration::get(boost::optional<const head_node_t&>& o) const
-{
-	impl_->get(o);
-}
-
-void
-declaration::get(boost::optional<const function_definition&>& o) const
-{
-	impl_->get(o);
-}
-
-void
-declaration::get(boost::optional<const template_declaration&>& o) const
-{
-	impl_->get(o);
-}
-
-void
-declaration::get(boost::optional<const explicit_instantiation&>& o) const
-{
-	impl_->get(o);
-}
-
-void
-declaration::get(boost::optional<const explicit_specialization&>& o) const
-{
-	impl_->get(o);
-}
-
-void
-declaration::get(boost::optional<const linkage_specification&>& o) const
-{
-	impl_->get(o);
-}
-
-void
-declaration::get(boost::optional<const namespace_definition&>& o) const
-{
-	impl_->get(o);
-}
-
-node::child_const_iterator_range
-declaration::children() const
-{
-	return impl_->children();
-}
-
-const std::string
-declaration::value() const
-{
-	return impl_->value();
-}
+SCALPEL_ALTERNATIVE_NODE_PIMPL_DEFINITION
+(
+	declaration,
+	(block_declaration)
+	(function_definition)
+	(template_declaration)
+	(explicit_instantiation)
+	(explicit_specialization)
+	(linkage_specification)
+	(namespace_definition)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/alternative_node_pimpl_definition_undef.hpp"
 

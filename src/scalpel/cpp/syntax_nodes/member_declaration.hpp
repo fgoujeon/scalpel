@@ -21,45 +21,29 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_MEMBER_DECLARATION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_MEMBER_DECLARATION_HPP
 
-#include "alternative_node.hpp"
 #include "member_declaration_function_definition.hpp"
 #include "member_declaration_member_declarator_list.hpp"
 #include "member_declaration_unqualified_id.hpp"
 #include "using_declaration.hpp"
 #include "template_declaration.hpp"
 
+#include "detail/macros/alternative_node_pimpl_declaration.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-typedef
-	alternative_node
-	<
-		member_declaration_function_definition,
-		member_declaration_member_declarator_list,
-		member_declaration_unqualified_id,
-		using_declaration,
-		template_declaration
-	>
-	member_declaration_t
-;
-
-struct member_declaration: public member_declaration_t
-{
-	member_declaration(member_declaration_function_definition&& o);
-
-	member_declaration(member_declaration_member_declarator_list&& o);
-
-	member_declaration(member_declaration_unqualified_id&& o);
-
-	member_declaration(using_declaration&& o);
-
-	member_declaration(template_declaration&& o);
-
-	member_declaration(const member_declaration& o);
-
-	member_declaration(member_declaration&& o);
-};
+SCALPEL_ALTERNATIVE_NODE_PIMPL_DECLARATION
+(
+	member_declaration,
+	(member_declaration_function_definition)
+	(member_declaration_member_declarator_list)
+	(member_declaration_unqualified_id)
+	(using_declaration)
+	(template_declaration)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/alternative_node_pimpl_declaration_undef.hpp"
 
 #endif

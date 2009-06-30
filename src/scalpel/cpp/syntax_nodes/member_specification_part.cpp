@@ -23,46 +23,19 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "member_declaration.hpp"
 #include "member_specification_access_specifier.hpp"
 
+#include "detail/macros/alternative_node_pimpl_definition.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-member_specification_part::member_specification_part(member_declaration&& o):
-	impl_(new type(std::move(o)))
-{
-	add(*impl_);
-}
-
-member_specification_part::member_specification_part(member_specification_access_specifier&& o):
-	impl_(new type(std::move(o)))
-{
-	add(*impl_);
-}
-
-member_specification_part::member_specification_part(const member_specification_part& o):
-	composite_node(),
-	impl_(new type(*o.impl_))
-{
-	add(*impl_);
-}
-
-member_specification_part::member_specification_part(member_specification_part&& o):
-	composite_node(),
-	impl_(new type(std::move(*o.impl_)))
-{
-	add(*impl_);
-}
-
-member_specification_part::~member_specification_part()
-{
-	delete impl_;
-}
-
-const member_specification_part&
-member_specification_part::operator=(const member_specification_part& o)
-{
-	*impl_ = *o.impl_;
-	return *this;
-}
+SCALPEL_ALTERNATIVE_NODE_PIMPL_DEFINITION
+(
+	member_specification_part,
+	(member_declaration)
+	(member_specification_access_specifier)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/alternative_node_pimpl_definition_undef.hpp"
 
