@@ -25,22 +25,10 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "conditional_expression.hpp"
 #include "statement.hpp"
 
+#include "detail/macros/sequence_node_pimpl_declaration.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
-
-typedef
-	sequence_node
-	<
-		predefined_text_node<str::case_>,
-		optional_node<space>,
-		conditional_expression,
-		optional_node<space>,
-		predefined_text_node<str::colon>,
-		optional_node<space>,
-		statement
-	>
-	case_statement_t
-;
 
 /**
 \verbatim
@@ -49,56 +37,20 @@ case_statement
 ;
 \endverbatim
 */
-struct case_statement: public case_statement_t
-{
-	typedef case_statement_t type;
-	typedef case_statement_t::head_node_t head_node_t;
-	typedef case_statement_t::tail_sequence_node_t tail_sequence_node_t;
-
-	case_statement
-	(
-		predefined_text_node<str::case_>&& o1,
-		optional_node<space>&& o2,
-		conditional_expression&& o3,
-		optional_node<space>&& o4,
-		predefined_text_node<str::colon>&& o5,
-		optional_node<space>&& o6,
-		statement&& o7
-	):
-		case_statement_t(o1, o2, o3, o4, o5, o6, o7)
-	{
-	}
-
-	case_statement
-	(
-		head_node_t&& head,
-		tail_sequence_node_t&& tail
-	):
-		case_statement_t(head, tail)
-	{
-	}
-
-	case_statement
-	(
-		case_statement_t&& o
-	):
-		case_statement_t(std::move(o))
-	{
-	}
-
-	case_statement(const case_statement& o):
-		case_statement_t(o)
-	{
-	}
-
-	case_statement(case_statement&& o):
-		case_statement_t(o)
-	{
-	}
-
-	using case_statement_t::operator=;
-};
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	case_statement,
+	(predefined_text_node<str::case_>)
+	(optional_node<space>)
+	(conditional_expression)
+	(optional_node<space>)
+	(predefined_text_node<str::colon>)
+	(optional_node<space>)
+	(statement)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif

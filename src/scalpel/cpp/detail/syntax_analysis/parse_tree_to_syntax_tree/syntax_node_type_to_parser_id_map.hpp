@@ -55,17 +55,17 @@ SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_ID_TYPE_PAIR
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_ID_TYPE_PAIR
 (
 	ASSIGNMENT_EXPRESSION_FIRST_PART,
-	assignment_expression::first_part
+	assignment_expression_first_part
 )
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_ID_TYPE_PAIR
 (
 	ASSIGNMENT_EXPRESSION_FIRST_PART_SEQ,
-	assignment_expression::first_part_seq
+	assignment_expression_first_part_seq
 )
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_ID_TYPE_PAIR
 (
 	ASSIGNMENT_EXPRESSION_LAST_PART,
-	assignment_expression::last_part
+	assignment_expression_last_part
 )
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_ID_TYPE_PAIR
 (

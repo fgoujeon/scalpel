@@ -27,6 +27,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "conditional_expression_fwd.hpp"
 #include "throw_expression.hpp"
 
+#include "detail/macros/sequence_node_pimpl_declaration.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
@@ -47,111 +49,39 @@ assignment_expression_last_part
 ;
 \endverbatim
 */
-class assignment_expression: public composite_node
-{
-	public:
-		class first_part;
 
-		typedef
-			list_node<first_part>
-			first_part_seq
-		;
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	assignment_expression_first_part,
+	(logical_or_expression)
+	(optional_node<space>)
+	(assignment_operator)
+)
 
-		typedef
-			alternative_node
-			<
-				conditional_expression,
-				throw_expression
-			>
-			last_part
-		;
+typedef
+	list_node<assignment_expression_first_part>
+	assignment_expression_first_part_seq
+;
 
-		typedef
-			sequence_node
-			<
-				optional_node<first_part_seq>,
-				optional_node<space>,
-				last_part
-			>
-			type
-		;
-		typedef type::head_node_t head_node_t;
-		typedef type::tail_sequence_node_t tail_sequence_node_t;
+typedef
+	alternative_node
+	<
+		conditional_expression,
+		throw_expression
+	>
+	assignment_expression_last_part
+;
 
-		assignment_expression
-		(
-			optional_node<first_part_seq>&& o1,
-			optional_node<space>&& o2,
-			last_part&& o3
-		);
-
-		assignment_expression
-		(
-			head_node_t&& head,
-			tail_sequence_node_t&& tail
-		);
-
-		assignment_expression(const assignment_expression& o);
-
-		assignment_expression(assignment_expression&& o);
-
-		~assignment_expression();
-
-		const assignment_expression&
-		operator=(const assignment_expression& o);
-
-	private:
-		std::unique_ptr<type> impl_;
-};
-
-class assignment_expression::first_part: public composite_node
-{
-	public:
-		typedef
-			sequence_node
-			<
-				logical_or_expression,
-				optional_node<space>,
-				assignment_operator
-			>
-			type
-		;
-		typedef logical_or_expression head_node_t;
-		typedef
-			sequence_node
-			<
-				optional_node<space>,
-				assignment_operator
-			>
-			tail_sequence_node_t
-		;
-
-		first_part
-		(
-			logical_or_expression&& o0,
-			optional_node<space>&& o1,
-			assignment_operator&& o2
-		);
-
-		first_part
-		(
-			head_node_t&& head,
-			tail_sequence_node_t&& tail
-		);
-
-		first_part(const first_part& o);
-
-		first_part(first_part&& o);
-
-		~first_part();
-
-		const first_part&
-		operator=(const first_part& o);
-
-	private:
-		std::unique_ptr<type> impl_;
-};
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	assignment_expression,
+	(optional_node<assignment_expression_first_part_seq>)
+	(optional_node<space>)
+	(assignment_expression_last_part)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif

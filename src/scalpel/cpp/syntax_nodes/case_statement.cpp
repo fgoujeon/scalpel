@@ -18,10 +18,7 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "assignment_expression.hpp"
-
-#include "expressions.hpp"
-#include "conditional_expression.hpp"
+#include "case_statement.hpp"
 
 #include "detail/macros/sequence_node_pimpl_definition.hpp"
 
@@ -30,18 +27,14 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
-	assignment_expression,
-	(optional_node<assignment_expression_first_part_seq>)
+	case_statement,
+	(predefined_text_node<str::case_>)
 	(optional_node<space>)
-	(assignment_expression_last_part)
-)
-
-SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
-(
-	assignment_expression_first_part,
-	(logical_or_expression)
+	(conditional_expression)
 	(optional_node<space>)
-	(assignment_operator)
+	(predefined_text_node<str::colon>)
+	(optional_node<space>)
+	(statement)
 )
 
 }}} //namespace scalpel::cpp::syntax_nodes
