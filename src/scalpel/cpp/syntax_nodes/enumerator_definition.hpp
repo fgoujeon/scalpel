@@ -25,74 +25,30 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "common.hpp"
 #include "identifier.hpp"
 
+#include "detail/macros/sequence_node_pimpl_declaration.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 class conditional_expression;
-
-typedef
-	sequence_node
-	<
-		identifier,
-		optional_node<space>,
-		optional_node<predefined_text_node<str::equal>>,
-		optional_node<space>,
-		optional_node<conditional_expression>
-	>
-	enumerator_definition_t
-;
-
-typedef
-	sequence_node
-	<
-		optional_node<space>,
-		optional_node<predefined_text_node<str::equal>>,
-		optional_node<space>,
-		optional_node<conditional_expression>
-	>
-	enumerator_definition_tail_t
-;
 
 /**
 enumerator_definition
 	= identifier >> !s >> !('=' >> !s >> conditional_expression)
 ;
 */
-class enumerator_definition: public composite_node
-{
-	public:
-		typedef enumerator_definition_t type;
-		typedef identifier head_node_t;
-		typedef enumerator_definition_tail_t tail_sequence_node_t;
-
-		enumerator_definition
-		(
-			identifier&& o0,
-			optional_node<space>&& o1,
-			optional_node<predefined_text_node<str::equal>>&& o2,
-			optional_node<space>&& o3,
-			optional_node<conditional_expression>&& o4
-		);
-
-		enumerator_definition
-		(
-			head_node_t&& head,
-			tail_sequence_node_t&& tail
-		);
-
-		enumerator_definition(const enumerator_definition& o);
-
-		enumerator_definition(enumerator_definition&& o);
-
-		~enumerator_definition();
-
-		const enumerator_definition&
-		operator=(const enumerator_definition& o);
-
-	private:
-		std::unique_ptr<type> impl_;
-};
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	enumerator_definition,
+	(identifier)
+	(optional_node<space>)
+	(optional_node<predefined_text_node<str::equal>>)
+	(optional_node<space>)
+	(optional_node<conditional_expression>)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif
