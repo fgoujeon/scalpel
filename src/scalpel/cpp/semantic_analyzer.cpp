@@ -179,12 +179,12 @@ semantic_analyzer::analyze(const direct_declarator&)
 }
 
 void
-semantic_analyzer::analyze(const direct_declarator::array_part&)
+semantic_analyzer::analyze(const direct_declarator_array_part&)
 {
 }
 
 void
-semantic_analyzer::analyze(const direct_declarator::function_part&)
+semantic_analyzer::analyze(const direct_declarator_function_part&)
 {
 }
 
@@ -229,7 +229,7 @@ semantic_analyzer::analyze(const function_definition& syntax_node)
 	std::string name;
 	scope* enclosing_scope = 0;
 
-	const direct_declarator::first_part& first_part_node = get_direct_declarator(get_declarator(syntax_node)).first_part_node();
+	const direct_declarator_first_part& first_part_node = get_first_part(get_direct_declarator(get_declarator(syntax_node)));
 	boost::optional<const declarator_id&> a_declarator_id = get<declarator_id>(&first_part_node);
 	if(a_declarator_id)
 	{
@@ -565,7 +565,7 @@ semantic_analyzer::analyze(const simple_declaration& syntax_node)
 			const direct_declarator& a_direct_declarator = get_direct_declarator(a_declarator);
 
 			//get the syntax_node name
-			const direct_declarator::first_part& first_part_node = a_direct_declarator.first_part_node();
+			const direct_declarator_first_part& first_part_node = get_first_part(a_direct_declarator);
 			const boost::optional<const declarator_id&> opt_declarator_id = get<declarator_id>(&first_part_node);
 			if(opt_declarator_id)
 			{
@@ -583,14 +583,14 @@ semantic_analyzer::analyze(const simple_declaration& syntax_node)
 			}
 
 			//determine the appropriate semantic graph node
-			auto a_direct_declarator_last_part_seq = a_direct_declarator.last_part_seq_node();
+			auto a_direct_declarator_last_part_seq = get_last_part_seq(a_direct_declarator);
 			if(a_direct_declarator_last_part_seq)
 			{
 				for(auto j = a_direct_declarator_last_part_seq->begin(); j != a_direct_declarator_last_part_seq->end(); ++j)
 				{
-					const direct_declarator::last_part& last_part = j->main_node();
+					const direct_declarator_last_part& last_part = j->main_node();
 
-					if(get<direct_declarator::function_part>(&last_part))
+					if(get<direct_declarator_function_part>(&last_part))
 					{
 						is_a_function_declaration = true;
 					}

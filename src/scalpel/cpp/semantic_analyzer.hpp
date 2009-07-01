@@ -120,10 +120,10 @@ class semantic_analyzer
 		analyze(const syntax_nodes::direct_declarator& syntax_node);
 
         void
-		analyze(const syntax_nodes::direct_declarator::array_part& syntax_node);
+		analyze(const syntax_nodes::direct_declarator_array_part& syntax_node);
 
         void
-		analyze(const syntax_nodes::direct_declarator::function_part& syntax_node);
+		analyze(const syntax_nodes::direct_declarator_function_part& syntax_node);
 
         void
 		analyze(const syntax_nodes::do_while_statement& syntax_node);

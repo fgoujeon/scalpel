@@ -30,6 +30,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "exception_specification.hpp"
 #include "conditional_expression.hpp"
 
+#include "detail/macros/sequence_node_pimpl_declaration.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
@@ -115,57 +117,30 @@ typedef
 	direct_declarator_last_part_seq
 ;
 
-typedef
-	sequence_node
-	<
-		direct_declarator_first_part,
-		optional_node<space>,
-		optional_node<direct_declarator_last_part_seq>
-	>
-	direct_declarator_t
-;
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	direct_declarator,
+	(direct_declarator_first_part)
+	(optional_node<space>)
+	(optional_node<direct_declarator_last_part_seq>)
+)
 
-struct direct_declarator: public direct_declarator_t
+inline
+const direct_declarator_first_part&
+get_first_part(const direct_declarator& o)
 {
-	typedef direct_declarator_t type;
-	typedef type::head_node_t head_node_t;
-	typedef type::tail_sequence_node_t tail_sequence_node_t;
+	return get<0>(o);
+}
 
-	typedef direct_declarator_function_part function_part;
-	typedef direct_declarator_array_part array_part;
-	typedef direct_declarator_first_part first_part;
-	typedef direct_declarator_last_part last_part;
-	typedef direct_declarator_last_part_seq last_part_seq;
-
-	direct_declarator
-	(
-		head_node_t&& head,
-		tail_sequence_node_t&& tail
-	);
-
-	direct_declarator
-	(
-		const direct_declarator& o
-	);
-
-	direct_declarator
-	(
-		direct_declarator&& o
-	);
-
-	const first_part&
-	first_part_node() const
-	{
-		return get<0>(*this);
-	}
-
-	const optional_node<last_part_seq>&
-	last_part_seq_node() const
-	{
-		return get<2>(*this);
-	}
-};
+inline
+const optional_node<direct_declarator_last_part_seq>&
+get_last_part_seq(const direct_declarator& o)
+{
+	return get<2>(o);
+}
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif

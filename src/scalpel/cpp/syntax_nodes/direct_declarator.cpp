@@ -20,33 +20,20 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "direct_declarator.hpp"
 
+#include "detail/macros/sequence_node_pimpl_definition.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-direct_declarator::direct_declarator
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
-	head_node_t&& head,
-	tail_sequence_node_t&& tail
-):
-	type(head, tail)
-{
-}
-
-direct_declarator::direct_declarator
-(
-	const direct_declarator& o
-):
-	type(o)
-{
-}
-
-direct_declarator::direct_declarator
-(
-	direct_declarator&& o
-):
-	type(o)
-{
-}
+	direct_declarator,
+	(direct_declarator_first_part)
+	(optional_node<space>)
+	(optional_node<direct_declarator_last_part_seq>)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/sequence_node_pimpl_definition_undef.hpp"
 

@@ -205,27 +205,27 @@ SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_ID_TYPE_PAIR
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_ID_TYPE_PAIR
 (
 	DIRECT_DECLARATOR_ARRAY_PART,
-	direct_declarator::array_part
+	direct_declarator_array_part
 )
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_ID_TYPE_PAIR
 (
 	DIRECT_DECLARATOR_FUNCTION_PART,
-	direct_declarator::function_part
+	direct_declarator_function_part
 )
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_ID_TYPE_PAIR
 (
 	DIRECT_DECLARATOR_FIRST_PART,
-	direct_declarator::first_part
+	direct_declarator_first_part
 )
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_ID_TYPE_PAIR
 (
 	DIRECT_DECLARATOR_LAST_PART,
-	direct_declarator::last_part
+	direct_declarator_last_part
 )
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_ID_TYPE_PAIR
 (
 	DIRECT_DECLARATOR_LAST_PART_SEQ,
-	direct_declarator::last_part_seq
+	direct_declarator_last_part_seq
 )
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_ID_TYPE_PAIR
 (
