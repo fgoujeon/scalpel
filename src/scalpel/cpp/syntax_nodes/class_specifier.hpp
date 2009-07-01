@@ -83,21 +83,21 @@ struct class_specifier: public class_specifier_t
 	class_specifier(const class_specifier& o): type(o){}
 
 	class_specifier(class_specifier&& o): type(o){}
-
-	using type::operator=;
-
-	const class_head&
-	class_head_node() const
-	{
-		return get<0>(static_cast<const type&>(*this));
-	}
-
-	const optional_node<member_specification>&
-	member_specification_node() const
-	{
-		return get<4>(static_cast<const type&>(*this));
-	}
 };
+
+inline
+const class_head&
+get_class_head(const class_specifier& o)
+{
+	return get<0>(o);
+}
+
+inline
+const optional_node<member_specification>&
+get_member_specification(const class_specifier& o)
+{
+	return get<4>(o);
+}
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

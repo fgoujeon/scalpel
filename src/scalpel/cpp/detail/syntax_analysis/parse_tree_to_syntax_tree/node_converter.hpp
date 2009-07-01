@@ -41,7 +41,6 @@ template<class SyntaxNodeT>
 void
 assert_node_id(const tree_node_t& node)
 {
-#ifndef NDEBUG
 	boost::spirit::parser_id checked_id = node.value.id();
 	boost::spirit::parser_id correct_id = syntax_node_type_to_parser_id_map<SyntaxNodeT>::parser_id();
 
@@ -50,7 +49,6 @@ assert_node_id(const tree_node_t& node)
 		std::cout << "Error: parser id is " << checked_id << ", but " << correct_id << " was expected.\n";
 		assert(false);
 	}
-#endif
 }
 
 
@@ -65,7 +63,9 @@ convert_node
 	typename SyntaxNodeT::tail_sequence_node_t* = 0
 )
 {
+#ifndef NDEBUG
 	assert_node_id<SyntaxNodeT>(node);
+#endif
 	return convert_sequence_node<SyntaxNodeT>(node);
 }
 
@@ -79,7 +79,9 @@ convert_node
 	typename SyntaxNodeT::tail_alternative_node_t* = 0
 )
 {
+#ifndef NDEBUG
 	assert_node_id<SyntaxNodeT>(node);
+#endif
 	return convert_alternative_node<SyntaxNodeT>(node);
 }
 
@@ -93,7 +95,9 @@ convert_node
 	typename boost::enable_if<syntax_nodes::util::is_list_node<SyntaxNodeT>>::type* = 0
 )
 {
+#ifndef NDEBUG
 	assert_node_id<SyntaxNodeT>(node);
+#endif
 	return convert_list_node<SyntaxNodeT>(node);
 }
 
@@ -107,7 +111,9 @@ convert_node
 	typename boost::enable_if<syntax_nodes::util::is_optional_node<SyntaxNodeT>>::type* = 0
 )
 {
+#ifndef NDEBUG
 	assert_node_id<SyntaxNodeT>(node);
+#endif
 	return convert_optional_node<SyntaxNodeT>(node);
 }
 
