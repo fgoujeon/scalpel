@@ -18,24 +18,14 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_CLASS_ELABORATED_SPECIFIER_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_CLASS_ELABORATED_SPECIFIER_HPP
+#include "class_elaborated_specifier.hpp"
 
-#include "class_key.hpp"
-#include "nested_name_specifier.hpp"
-#include "identifier.hpp"
-
-#include "detail/macros/sequence_node_pimpl_declaration.hpp"
+#include "detail/macros/sequence_node_pimpl_definition.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-/**
-class_elaborated_specifier
-	= class_key, ["::"], [nested_name_specifier], identifier
-;
-*/
-SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
 	class_elaborated_specifier,
 	(class_key)
@@ -47,15 +37,7 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 	(identifier_or_template_id)
 )
 
-inline
-const identifier_or_template_id&
-get_identifier_or_template_id(const class_elaborated_specifier& o)
-{
-	return get<6>(o);
-}
-
 }}} //namespace scalpel::cpp::syntax_nodes
 
-#include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
+#include "detail/macros/sequence_node_pimpl_definition_undef.hpp"
 
-#endif

@@ -88,6 +88,18 @@ sequence_node_type::operator=(const sequence_node_type& o)                      
 	return *this;                                                                        \
 }                                                                                        \
                                                                                          \
+const sequence_node_type::head_node_t&                                                   \
+sequence_node_type::head() const                                                         \
+{                                                                                        \
+	return impl_->head();                                                                \
+}                                                                                        \
+																				         \
+const sequence_node_type::tail_sequence_node_t&                                          \
+sequence_node_type::tail() const                                                         \
+{                                                                                        \
+	return impl_->tail();                                                                \
+}                                                                                        \
+                                                                                         \
 node::child_const_iterator_range                                                         \
 sequence_node_type::children() const                                                     \
 {                                                                                        \

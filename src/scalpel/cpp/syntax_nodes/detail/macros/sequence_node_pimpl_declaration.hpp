@@ -74,6 +74,12 @@ class sequence_node_type: public node                                           
 		const sequence_node_type&                                                      \
 		operator=(const sequence_node_type& o);                                        \
                                                                                        \
+		const head_node_t&                                                             \
+		head() const;                                                                  \
+                                                                                       \
+		const tail_sequence_node_t&                                                    \
+		tail() const;                                                                  \
+                                                                                       \
 		child_const_iterator_range                                                     \
 		children() const;                                                              \
                                                                                        \
