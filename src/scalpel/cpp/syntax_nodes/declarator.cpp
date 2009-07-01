@@ -23,68 +23,18 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "ptr_operator_seq.hpp"
 #include "direct_declarator.hpp"
 
+#include "detail/macros/sequence_node_pimpl_definition.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-declarator::declarator
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
-	optional_node<ptr_operator_seq>&& o1,
-	optional_node<space>&& o2,
-    direct_declarator&& o3
-):
-	impl_(new type(o1, o2, o3))
-{
-}
-
-declarator::declarator
-(
-	head_node_t&& head,
-	tail_sequence_node_t&& tail
-):
-	impl_(new type(head, tail))
-{
-}
-
-declarator::declarator(const declarator& o):
-	impl_(new type(*o.impl_))
-{
-}
-
-declarator::declarator(declarator&& o):
-	impl_(std::move(o.impl_))
-{
-}
-
-declarator::~declarator()
-{
-}
-
-const declarator&
-declarator::operator=(const declarator& o)
-{
-	*impl_ = *o.impl_;
-	return *this;
-}
-
-node::child_const_iterator_range
-declarator::children() const
-{
-	return impl_->children();
-}
-
-const std::string
-declarator::value() const
-{
-	return impl_->value();
-}
-
-const declarator::tail_sequence_node_t&
-declarator::tail() const
-{
-	return impl_->tail();
-}
-
-
+	declarator,
+	(optional_node<ptr_operator_seq>)
+	(optional_node<space>)
+	(direct_declarator)
+)
 
 const direct_declarator&
 get_direct_declarator(const declarator& o)
@@ -93,3 +43,5 @@ get_direct_declarator(const declarator& o)
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/sequence_node_pimpl_definition_undef.hpp"
