@@ -20,52 +20,22 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "explicit_instantiation.hpp"
 
+#include "detail/macros/sequence_node_pimpl_definition.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-explicit_instantiation::explicit_instantiation
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
-	optional_node<predefined_text_node<str::extern_>>&& o0,
-	optional_node<space>&& o1,
-	predefined_text_node<str::template_>&& o2,
-	optional_node<space>&& o3,
-	declaration&& o4
-):
-	impl_(o0, o1, o2, o3, o4)
-{
-	add(impl_);
-}
-
-explicit_instantiation::explicit_instantiation
-(
-	head_node_t&& head,
-	tail_sequence_node_t&& tail
-):
-	impl_(head, tail)
-{
-	add(impl_);
-}
-
-explicit_instantiation::explicit_instantiation(const explicit_instantiation& o):
-	composite_node(),
-	impl_(o.impl_)
-{
-	add(impl_);
-}
-
-explicit_instantiation::explicit_instantiation(explicit_instantiation&& o):
-	composite_node(),
-	impl_(std::move(o.impl_))
-{
-	add(impl_);
-}
-
-const explicit_instantiation&
-explicit_instantiation::operator=(const explicit_instantiation& o)
-{
-	impl_ = o.impl_;
-	return *this;
-}
+	explicit_instantiation,
+	(optional_node<predefined_text_node<str::extern_>>)
+	(optional_node<space>)
+	(predefined_text_node<str::template_>)
+	(optional_node<space>)
+	(declaration)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/sequence_node_pimpl_definition_undef.hpp"
 

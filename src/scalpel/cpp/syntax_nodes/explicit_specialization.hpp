@@ -24,63 +24,30 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "common.hpp"
 #include "declaration.hpp"
 
+#include "detail/macros/sequence_node_pimpl_declaration.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
-
-typedef
-	sequence_node
-	<
-		predefined_text_node<str::template_>,
-		optional_node<space>,
-		predefined_text_node<str::left_angle_bracket>,
-		optional_node<space>,
-		predefined_text_node<str::right_angle_bracket>,
-		optional_node<space>,
-		declaration
-	>
-	explicit_specialization_t
-;
 
 /**
 explicit_specialization
 	= str_p("template") >> !s >> '<' >> !s >> '>' >> !s >> declaration
 ;
 */
-class explicit_specialization: public composite_node
-{
-	public:
-		typedef explicit_specialization_t type;
-		typedef type::head_node_t head_node_t;
-		typedef type::tail_sequence_node_t tail_sequence_node_t;
-
-		explicit_specialization
-		(
-			predefined_text_node<str::template_>&& o0,
-			optional_node<space>&& o1,
-			predefined_text_node<str::left_angle_bracket>&& o2,
-			optional_node<space>&& o3,
-			predefined_text_node<str::right_angle_bracket>&& o4,
-			optional_node<space>&& o5,
-			declaration&& o6
-		);
-
-		explicit_specialization
-		(
-			head_node_t&& head,
-			tail_sequence_node_t&& tail
-		);
-
-		explicit_specialization(const explicit_specialization& o);
-
-		explicit_specialization(explicit_specialization&& o);
-
-		const explicit_specialization&
-		operator=(const explicit_specialization& o);
-
-	private:
-		type impl_;
-};
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	explicit_specialization,
+	(predefined_text_node<str::template_>)
+	(optional_node<space>)
+	(predefined_text_node<str::left_angle_bracket>)
+	(optional_node<space>)
+	(predefined_text_node<str::right_angle_bracket>)
+	(optional_node<space>)
+	(declaration)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif

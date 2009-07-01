@@ -24,59 +24,28 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "common.hpp"
 #include "declaration.hpp"
 
+#include "detail/macros/sequence_node_pimpl_declaration.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
-
-typedef
-	sequence_node
-	<
-		optional_node<predefined_text_node<str::extern_>>,
-		optional_node<space>,
-		predefined_text_node<str::template_>,
-		optional_node<space>,
-		declaration
-	>
-	explicit_instantiation_t
-;
 
 /**
 explicit_instantiation
 	= !(str_p("extern") >> !s) >> str_p("template") >> !s >> declaration
 ;
 */
-class explicit_instantiation: public composite_node
-{
-	public:
-		typedef explicit_instantiation_t type;
-		typedef type::head_node_t head_node_t;
-		typedef type::tail_sequence_node_t tail_sequence_node_t;
-
-		explicit_instantiation
-		(
-			optional_node<predefined_text_node<str::extern_>>&& o0,
-			optional_node<space>&& o1,
-			predefined_text_node<str::template_>&& o2,
-			optional_node<space>&& o3,
-			declaration&& o4
-		);
-
-		explicit_instantiation
-		(
-			head_node_t&& head,
-			tail_sequence_node_t&& tail
-		);
-
-		explicit_instantiation(const explicit_instantiation& o);
-
-		explicit_instantiation(explicit_instantiation&& o);
-
-		const explicit_instantiation&
-		operator=(const explicit_instantiation& o);
-
-	private:
-		type impl_;
-};
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	explicit_instantiation,
+	(optional_node<predefined_text_node<str::extern_>>)
+	(optional_node<space>)
+	(predefined_text_node<str::template_>)
+	(optional_node<space>)
+	(declaration)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif
