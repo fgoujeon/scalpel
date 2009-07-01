@@ -18,44 +18,32 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_HANDLER_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_HANDLER_HPP
+#include "if_statement.hpp"
 
-#include "common.hpp"
-#include "compound_statement.hpp"
-#include "exception_declaration.hpp"
+#include "detail/macros/sequence_node_pimpl_definition.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-/**
-handler
-	= str_p("catch") >> !s >> '(' >> !s >> exception_declaration >> !s >> ')' >> !s >> compound_statement
-;
-*/
-typedef
-	sequence_node
-	<
-		predefined_text_node<str::catch_>,
-		optional_node<space>,
-		predefined_text_node<str::opening_round_bracket>,
-		optional_node<space>,
-		exception_declaration,
-		optional_node<space>,
-		predefined_text_node<str::closing_round_bracket>,
-		optional_node<space>,
-		compound_statement
-	>
-	handler
-;
-
-inline
-const compound_statement&
-get_compound_statement(const handler& o)
-{
-	return get<8>(o);
-}
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
+(
+	if_statement,
+	(predefined_text_node<str::if_>)
+	(optional_node<space>)
+	(predefined_text_node<str::opening_round_bracket>)
+	(optional_node<space>)
+	(condition)
+	(optional_node<space>)
+	(predefined_text_node<str::closing_round_bracket>)
+	(optional_node<space>)
+	(statement)
+	(optional_node<space>)
+	(optional_node<predefined_text_node<str::else_>>)
+	(optional_node<space>)
+	(optional_node<statement>)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
-#endif
+#include "detail/macros/sequence_node_pimpl_definition_undef.hpp"
+

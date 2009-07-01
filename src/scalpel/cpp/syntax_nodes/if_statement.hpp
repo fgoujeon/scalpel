@@ -21,9 +21,10 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_IF_STATEMENT_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_IF_STATEMENT_HPP
 
-#include "common.hpp"
 #include "condition.hpp"
 #include "statement.hpp"
+
+#include "detail/macros/sequence_node_pimpl_declaration.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -35,85 +36,40 @@ if_statement
 ;
 \endverbatim
 */
-typedef
-	sequence_node
-	<
-		predefined_text_node<str::if_>,
-		optional_node<space>,
-		predefined_text_node<str::opening_round_bracket>,
-		optional_node<space>,
-		condition,
-		optional_node<space>,
-		predefined_text_node<str::closing_round_bracket>,
-		optional_node<space>,
-		statement,
-		optional_node<space>,
-		optional_node<predefined_text_node<str::else_>>,
-		optional_node<space>,
-		optional_node<statement>
-	>
-	if_statement_t
-;
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	if_statement,
+	(predefined_text_node<str::if_>)
+	(optional_node<space>)
+	(predefined_text_node<str::opening_round_bracket>)
+	(optional_node<space>)
+	(condition)
+	(optional_node<space>)
+	(predefined_text_node<str::closing_round_bracket>)
+	(optional_node<space>)
+	(statement)
+	(optional_node<space>)
+	(optional_node<predefined_text_node<str::else_>>)
+	(optional_node<space>)
+	(optional_node<statement>)
+)
 
-class if_statement: public if_statement_t
+inline
+const statement&
+get_statement(const if_statement& o)
 {
-	public:
-		typedef if_statement_t type;
-		typedef type::head_node_t head_node_t;
-		typedef type::tail_sequence_node_t tail_sequence_node_t;
+	return get<8>(o);
+}
 
-		if_statement
-		(
-			predefined_text_node<str::if_>&& o0,
-			optional_node<space>&& o1,
-			predefined_text_node<str::opening_round_bracket>&& o2,
-			optional_node<space>&& o3,
-			condition&& o4,
-			optional_node<space>&& o5,
-			predefined_text_node<str::closing_round_bracket>&& o6,
-			optional_node<space>&& o7,
-			statement&& o8,
-			optional_node<space>&& o9,
-			optional_node<predefined_text_node<str::else_>>&& o10,
-			optional_node<space>&& o11,
-			optional_node<statement>&& o12
-		):
-			type(o0, o1, o2, o3, o4, o5, o6, o7, o8, o9, o10, o11, o12)
-		{
-		}
-
-		if_statement
-		(
-			head_node_t&& head,
-			tail_sequence_node_t&& tail
-		):
-			type(head, tail)
-		{
-		}
-
-		if_statement(const if_statement& o):
-			type(o)
-		{
-		}
-
-		if_statement(if_statement&& o):
-			type(o)
-		{
-		}
-
-		const statement&
-		statement_node() const
-		{
-			return get<8>(*this);
-		}
-
-		const optional_node<statement>&
-		else_statement_node() const
-		{
-			return get<12>(*this);
-		}
-};
+inline
+const optional_node<statement>&
+get_else_statement(const if_statement& o)
+{
+	return get<12>(o);
+}
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif

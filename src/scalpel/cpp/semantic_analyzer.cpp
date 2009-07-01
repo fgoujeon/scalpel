@@ -346,7 +346,7 @@ semantic_analyzer::analyze(const goto_statement&)
 void
 semantic_analyzer::analyze(const handler& syntax_node)
 {
-	analyze(syntax_node.compound_statement_node());
+	analyze(get_compound_statement(syntax_node));
 }
 
 void
@@ -357,9 +357,9 @@ semantic_analyzer::analyze(const identifier&)
 void
 semantic_analyzer::analyze(const if_statement& syntax_node)
 {
-	analyze(syntax_node.statement_node());
+	analyze(get_statement(syntax_node));
 
-	auto opt_else_statement_node = syntax_node.else_statement_node();
+	auto opt_else_statement_node = get_else_statement(syntax_node);
 	if(opt_else_statement_node)
 		analyze(*opt_else_statement_node);
 }
