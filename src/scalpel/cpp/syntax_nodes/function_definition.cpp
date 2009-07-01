@@ -20,53 +20,17 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "function_definition.hpp"
 
+#include "detail/macros/alternative_node_pimpl_definition.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-function_definition::function_definition(simple_function_definition&& o):
-	impl_(o)
-{
-	add(impl_);
-}
-
-function_definition::function_definition(try_block_function_definition&& o):
-	impl_(o)
-{
-	add(impl_);
-}
-
-function_definition::function_definition(const function_definition& o):
-	impl_(o.impl_)
-{
-	add(impl_);
-}
-
-function_definition::function_definition(function_definition&& o):
-	impl_(o.impl_)
-{
-	add(impl_);
-}
-
-const function_definition&
-function_definition::operator=(const function_definition& o)
-{
-	impl_ = o.impl_;
-	return *this;
-}
-
-void
-function_definition::get(boost::optional<const simple_function_definition&>& o) const
-{
-	impl_.get(o);
-}
-
-void
-function_definition::get(boost::optional<const try_block_function_definition&>& o) const
-{
-	impl_.get(o);
-}
-
-
+SCALPEL_ALTERNATIVE_NODE_PIMPL_DEFINITION
+(
+	function_definition,
+	(simple_function_definition)
+	(try_block_function_definition)
+)
 
 const declarator&
 get_declarator(const function_definition& o)
@@ -83,4 +47,6 @@ get_declarator(const function_definition& o)
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/alternative_node_pimpl_definition_undef.hpp"
 

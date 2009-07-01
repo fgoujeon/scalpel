@@ -25,6 +25,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "simple_function_definition.hpp"
 #include "try_block_function_definition.hpp"
 
+#include "detail/macros/alternative_node_pimpl_declaration.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
@@ -36,53 +38,18 @@ function_definition
 ;
 \endverbatim
 */
-class function_definition: public composite_node
-{
-	public:
-		typedef
-			alternative_node
-			<
-				simple_function_definition,
-				try_block_function_definition
-			>
-			type
-		;
-		typedef
-			simple_function_definition
-			head_node_t
-		;
-		typedef
-			alternative_node
-			<
-				try_block_function_definition
-			>
-			tail_alternative_node_t
-		;
-
-		function_definition(simple_function_definition&& o);
-
-		function_definition(try_block_function_definition&& o);
-
-		function_definition(const function_definition& o);
-
-		function_definition(function_definition&& o);
-
-		const function_definition&
-		operator=(const function_definition& o);
-
-		void
-		get(boost::optional<const simple_function_definition&>& o) const;
-
-		void
-		get(boost::optional<const try_block_function_definition&>& o) const;
-
-	private:
-		type impl_;
-};
+SCALPEL_ALTERNATIVE_NODE_PIMPL_DECLARATION
+(
+	function_definition,
+	(simple_function_definition)
+	(try_block_function_definition)
+)
 
 const declarator&
 get_declarator(const function_definition& o);
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/alternative_node_pimpl_declaration_undef.hpp"
 
 #endif
