@@ -24,6 +24,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "common.hpp"
 #include "statement_seq.hpp"
 
+#include "detail/macros/sequence_node_pimpl_declaration.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
@@ -34,64 +36,25 @@ compound_statement
 ;
 \endverbatim
 */
-typedef
-	sequence_node
-	<
-		predefined_text_node<str::opening_brace>,
-		optional_node<space>,
-		optional_node<statement_seq>,
-		optional_node<space>,
-		predefined_text_node<str::closing_brace>
-	>
-	compound_statement_t
-;
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	compound_statement,
+	(predefined_text_node<str::opening_brace>)
+	(optional_node<space>)
+	(optional_node<statement_seq>)
+	(optional_node<space>)
+	(predefined_text_node<str::closing_brace>)
+)
 
-struct compound_statement: public compound_statement_t
+inline
+const optional_node<statement_seq>&
+get_statement_seq(const compound_statement& o)
 {
-	typedef compound_statement_t type;
-	typedef type::head_node_t head_node_t;
-	typedef type::tail_sequence_node_t tail_sequence_node_t;
-
-	compound_statement
-	(
-		predefined_text_node<str::opening_brace>&& o1,
-		optional_node<space>&& o2,
-		optional_node<statement_seq>&& o3,
-		optional_node<space>&& o4,
-		predefined_text_node<str::closing_brace>&& o5
-	):
-		type(o1, o2, o3, o4, o5)
-	{
-	}
-
-	compound_statement
-	(
-		head_node_t&& head,
-		tail_sequence_node_t&& tail
-	):
-		type(head, tail)
-	{
-	}
-
-	compound_statement(const compound_statement& o):
-		type(o)
-	{
-	}
-
-	compound_statement(compound_statement&& o):
-		type(o)
-	{
-	}
-
-	using type::operator=;
-
-	const optional_node<statement_seq>&
-	statement_seq_node() const
-	{
-		return get<2, type>(*this);
-	}
-};
+	return get<2>(o);
+}
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif

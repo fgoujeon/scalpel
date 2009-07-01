@@ -18,43 +18,24 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_SWITCH_STATEMENT_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_SWITCH_STATEMENT_HPP
+#include "compound_statement.hpp"
 
-#include "optional_node.hpp"
-#include "composite_node.hpp"
-#include "space.hpp"
-#include "condition.hpp"
-#include "statement.hpp"
-
-#include "detail/macros/sequence_node_pimpl_declaration.hpp"
+#include "detail/macros/sequence_node_pimpl_definition.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-/**
-\verbatim
-switch_statement
-	= "switch", "(", condition, ")", statement
-;
-\endverbatim
-*/
-SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
-	switch_statement,
-	(predefined_text_node<str::switch_>)
+	compound_statement,
+	(predefined_text_node<str::opening_brace>)
 	(optional_node<space>)
-	(predefined_text_node<str::opening_round_bracket>)
+	(optional_node<statement_seq>)
 	(optional_node<space>)
-	(condition)
-	(optional_node<space>)
-	(predefined_text_node<str::closing_round_bracket>)
-	(optional_node<space>)
-	(statement)
+	(predefined_text_node<str::closing_brace>)
 )
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
-#include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
+#include "detail/macros/sequence_node_pimpl_definition_undef.hpp"
 
-#endif

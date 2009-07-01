@@ -20,56 +20,26 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "switch_statement.hpp"
 
+#include "detail/macros/sequence_node_pimpl_definition.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-switch_statement::switch_statement
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
-	predefined_text_node<str::switch_>&& o0,
-	optional_node<space>&& o1,
-	predefined_text_node<str::opening_round_bracket>&& o2,
-	optional_node<space>&& o3,
-	condition&& o4,
-	optional_node<space>&& o5,
-	predefined_text_node<str::closing_round_bracket>&& o6,
-	optional_node<space>&& o7,
-	statement&& o8
-):
-	impl_(o0, o1, o2, o3, o4, o5, o6, o7, o8)
-{
-	add(impl_);
-}
-
-switch_statement::switch_statement
-(
-	head_node_t&& head,
-	tail_sequence_node_t&& tail
-):
-	impl_(head, tail)
-{
-	add(impl_);
-}
-
-switch_statement::switch_statement(const switch_statement& o):
-	composite_node(),
-	impl_(o.impl_)
-{
-	add(impl_);
-}
-
-switch_statement::switch_statement(switch_statement&& o):
-	composite_node(),
-	impl_(o.impl_)
-{
-	add(impl_);
-}
-
-const switch_statement&
-switch_statement::operator=(const switch_statement& o)
-{
-	impl_ = o.impl_;
-	return *this;
-}
+	switch_statement,
+	(predefined_text_node<str::switch_>)
+	(optional_node<space>)
+	(predefined_text_node<str::opening_round_bracket>)
+	(optional_node<space>)
+	(condition)
+	(optional_node<space>)
+	(predefined_text_node<str::closing_round_bracket>)
+	(optional_node<space>)
+	(statement)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/sequence_node_pimpl_definition_undef.hpp"
 

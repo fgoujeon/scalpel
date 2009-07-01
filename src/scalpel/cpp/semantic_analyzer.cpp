@@ -126,7 +126,7 @@ semantic_analyzer::analyze(const compound_statement& syntax_node, const bool cre
 		scope_cursor_.enter_last_added_scope();
 	}
 
-	auto opt_statement_seq_node = syntax_node.statement_seq_node();
+	auto opt_statement_seq_node = get_statement_seq(syntax_node);
 	if(opt_statement_seq_node)
 	{
 		analyze(*opt_statement_seq_node);
