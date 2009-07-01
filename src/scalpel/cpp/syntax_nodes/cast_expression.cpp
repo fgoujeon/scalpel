@@ -22,75 +22,20 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "unary_expression.hpp"
 
+#include "detail/macros/sequence_node_pimpl_definition.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-cast_expression::cast_expression
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
-	optional_node<first_part_seq>&& o0,
-	optional_node<space>&& o1,
-	unary_expression&& o2
-):
-	impl_
-	(
-		new type
-		(
-			std::move(o0),
-			std::move(o1),
-			std::move(o2)
-		)
-	)
-{
-}
-
-cast_expression::cast_expression
-(
-	head_node_t&& head,
-	tail_sequence_node_t&& tail
-):
-	impl_
-	(
-		new type
-		(
-			std::move(head),
-			std::move(tail)
-		)
-	)
-{
-}
-
-cast_expression::cast_expression(const cast_expression& o):
-	impl_(new type(*o.impl_))
-{
-}
-
-cast_expression::cast_expression(cast_expression&& o):
-	impl_(std::move(o.impl_))
-{
-}
-
-cast_expression::~cast_expression()
-{
-}
-
-const cast_expression&
-cast_expression::operator=(const cast_expression& o)
-{
-	*impl_ = *o.impl_;
-	return *this;
-}
-
-const std::string
-cast_expression::value() const
-{
-	return impl_->value();
-}
-
-node::child_const_iterator_range
-cast_expression::children() const
-{
-	return impl_->children();
-}
+	cast_expression,
+	(optional_node<cast_expression_first_part_seq>)
+	(optional_node<space>)
+	(unary_expression)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/sequence_node_pimpl_definition_undef.hpp"
 

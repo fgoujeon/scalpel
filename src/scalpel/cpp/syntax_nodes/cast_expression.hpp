@@ -21,9 +21,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_CAST_EXPRESSION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_CAST_EXPRESSION_HPP
 
-#include <memory>
-#include "common.hpp"
 #include "type_id.hpp"
+
+#include "detail/macros/sequence_node_pimpl_declaration.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -32,8 +32,7 @@ class unary_expression;
 
 /**
 cast_expression
-	= unary_expression
-	| !(cast_expression_first_part_seq >> !s) >> unary_expression
+	= !(cast_expression_first_part_seq >> !s) >> unary_expression
 ;
 cast_expression_first_part_seq
 	= cast_expression_first_part % !s
@@ -42,80 +41,37 @@ cast_expression_first_part
 	= '(' >> !s >> type_id >> !s >> ')'
 ;
 */
-class cast_expression: public node
-{
-	public:
-		typedef
-			sequence_node
-			<
-				predefined_text_node<str::opening_round_bracket>,
-				optional_node<space>,
-				type_id,
-				optional_node<space>,
-				predefined_text_node<str::closing_round_bracket>
-			>
-			first_part
-		;
 
-		typedef
-			list_node
-			<
-				first_part
-			>
-			first_part_seq
-		;
+typedef
+	sequence_node
+	<
+		predefined_text_node<str::opening_round_bracket>,
+		optional_node<space>,
+		type_id,
+		optional_node<space>,
+		predefined_text_node<str::closing_round_bracket>
+	>
+	cast_expression_first_part
+;
 
-		typedef
-			sequence_node
-			<
-				optional_node<first_part_seq>,
-				optional_node<space>,
-				unary_expression
-			>
-			type
-		;
-		typedef optional_node<first_part_seq> head_node_t;
-		typedef
-			sequence_node
-			<
-				optional_node<space>,
-				unary_expression
-			>
-			tail_sequence_node_t;
-		;
+typedef
+	list_node
+	<
+		cast_expression_first_part
+	>
+	cast_expression_first_part_seq
+;
 
-		cast_expression
-		(
-			optional_node<first_part_seq>&& o0,
-			optional_node<space>&& o1,
-			unary_expression&& o2
-		);
-
-		cast_expression
-		(
-			head_node_t&& head,
-			tail_sequence_node_t&& tail
-		);
-
-		cast_expression(const cast_expression& o);
-
-		cast_expression(cast_expression&& o);
-
-		~cast_expression();
-
-		const cast_expression&
-		operator=(const cast_expression& o);
-
-		const std::string
-		value() const;
-
-		child_const_iterator_range
-		children() const;
-
-	private:
-		std::unique_ptr<type> impl_;
-};
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	cast_expression,
+	(optional_node<cast_expression_first_part_seq>)
+	(optional_node<space>)
+	(unary_expression)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif
