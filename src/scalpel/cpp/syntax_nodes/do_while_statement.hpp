@@ -50,48 +50,15 @@ typedef
 		optional_node<space>,
 		predefined_text_node<str::semicolon>
 	>
-	do_while_statement_t
+	do_while_statement
 ;
 
-struct do_while_statement: public do_while_statement_t
+inline
+const statement&
+get_statement(const do_while_statement& o)
 {
-	typedef do_while_statement_t type;
-	typedef type::head_node_t head_node_t;
-	typedef type::tail_sequence_node_t tail_sequence_node_t;
-
-	do_while_statement
-	(
-		head_node_t&& head,
-		tail_sequence_node_t&& tail
-	):
-		type(head, tail)
-	{
-	}
-
-	do_while_statement
-	(
-		const do_while_statement& o
-	):
-		type(o)
-	{
-	}
-
-	do_while_statement
-	(
-		do_while_statement&& o
-	):
-		type(o)
-	{
-	}
-
-	using type::operator=;
-
-	const statement&
-	statement_node() const
-	{
-		return get<2, type>(*this);
-	}
-};
+	return get<2>(o);
+}
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

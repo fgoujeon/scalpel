@@ -191,7 +191,7 @@ semantic_analyzer::analyze(const direct_declarator_function_part&)
 void
 semantic_analyzer::analyze(const do_while_statement& syntax_node)
 {
-	analyze(syntax_node.statement_node());
+	analyze(get_statement(syntax_node));
 }
 
 void

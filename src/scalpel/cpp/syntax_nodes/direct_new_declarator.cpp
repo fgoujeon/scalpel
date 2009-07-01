@@ -18,23 +18,14 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_DIRECT_NEW_DECLARATOR_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_DIRECT_NEW_DECLARATOR_HPP
+#include "direct_new_declarator.hpp"
 
-#include "expression.hpp"
-#include "conditional_expression.hpp"
-
-#include "detail/macros/sequence_node_pimpl_declaration.hpp"
+#include "detail/macros/sequence_node_pimpl_definition.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-/**
-direct_new_declarator
-	= '[' >> !s >> expression >> !s >> ']' >> !(!s >> '[' >> !s >> conditional_expression >> !s >> ']')
-;
-*/
-SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
 	direct_new_declarator,
 	(predefined_text_node<str::opening_square_bracket>)
@@ -52,6 +43,5 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
-#include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
+#include "detail/macros/sequence_node_pimpl_definition_undef.hpp"
 
-#endif
