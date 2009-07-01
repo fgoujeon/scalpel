@@ -217,7 +217,7 @@ semantic_analyzer::analyze(const expression_statement&)
 void
 semantic_analyzer::analyze(const for_statement& syntax_node)
 {
-	analyze(syntax_node.statement_node());
+	analyze(get_statement(syntax_node));
 }
 
 void

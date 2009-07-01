@@ -18,34 +18,34 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_EXPRESSION_STATEMENT_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_EXPRESSION_STATEMENT_HPP
+#include "for_statement.hpp"
 
-#include "common.hpp"
-#include "expression.hpp"
-
-#include "detail/macros/sequence_node_pimpl_declaration.hpp"
+#include "detail/macros/sequence_node_pimpl_definition.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-/**
-\verbatim
-expression_statement
-	= [expression], ";"
-;
-\endverbatim
-*/
-SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
-	expression_statement,
-	(optional_node<expression>)
+	for_statement,
+	(predefined_text_node<str::for_>)
+	(optional_node<space>)
+	(predefined_text_node<str::opening_round_bracket>)
+	(optional_node<space>)
+	(for_init_statement)
+	(optional_node<space>)
+	(optional_node<condition>)
 	(optional_node<space>)
 	(predefined_text_node<str::semicolon>)
+	(optional_node<space>)
+	(optional_node<expression>)
+	(optional_node<space>)
+	(predefined_text_node<str::closing_round_bracket>)
+	(optional_node<space>)
+	(statement)
 )
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
-#include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
+#include "detail/macros/sequence_node_pimpl_definition_undef.hpp"
 
-#endif
