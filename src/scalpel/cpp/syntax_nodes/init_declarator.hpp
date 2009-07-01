@@ -42,48 +42,14 @@ typedef
 		optional_node<space>,
 		optional_node<initializer>
 	>
-	init_declarator_t
+	init_declarator
 ;
 
-class init_declarator: public composite_node
-{
-	public:
-		typedef init_declarator_t type;
-		typedef type::head_node_t head_node_t;
-		typedef type::tail_sequence_node_t tail_sequence_node_t;
-
-		init_declarator
-		(
-			declarator&& o0,
-			optional_node<space>&& o1,
-			optional_node<initializer>&& o2
-		);
-
-		init_declarator
-		(
-			head_node_t&& head,
-			tail_sequence_node_t&& tail
-		);
-
-		init_declarator(const init_declarator& o);
-
-		init_declarator(init_declarator&& o);
-
-		const init_declarator&
-		operator=(const init_declarator& o);
-
-		inline
-		const declarator&
-		declarator_node() const;
-
-	private:
-		type impl_;
-};
-
+inline
 const declarator&
-init_declarator::declarator_node() const
+get_declarator(const init_declarator& o)
 {
-	return get<0>(impl_);
+	return get<0>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

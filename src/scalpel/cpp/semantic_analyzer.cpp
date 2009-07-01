@@ -561,7 +561,7 @@ semantic_analyzer::analyze(const simple_declaration& syntax_node)
 		const init_declarator_list& an_init_declarator_list = *an_optional_init_declarator_list;
 		for(auto i = an_init_declarator_list.begin(); i != an_init_declarator_list.end(); ++i)
 		{
-			const declarator& a_declarator = i->main_node().declarator_node();
+			const declarator& a_declarator = get_declarator(i->main_node());
 			const direct_declarator& a_direct_declarator = get_direct_declarator(a_declarator);
 
 			//get the syntax_node name
