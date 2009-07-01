@@ -424,7 +424,7 @@ semantic_analyzer::analyze(const namespace_definition& syntax_node)
 {
 	//get the namespace name
 	std::string namespace_name;
-	const optional_node<identifier>& an_identifier = syntax_node.identifier_node();
+	const optional_node<identifier>& an_identifier = get_identifier(syntax_node);
 	if(an_identifier)
 	{
 		namespace_name = an_identifier->value();
@@ -435,7 +435,7 @@ semantic_analyzer::analyze(const namespace_definition& syntax_node)
 
 	//add the declarations of the namespace definition in the namespace semantic node
 	scope_cursor_.enter_last_added_scope(); //we have to enter even if there's no declaration
-	const optional_node<declaration_seq>& a_declaration_seq = syntax_node.declaration_seq_node();
+	const optional_node<declaration_seq>& a_declaration_seq = get_declaration_seq(syntax_node);
 	if(a_declaration_seq)
 	{
 		analyze_list(*a_declaration_seq);

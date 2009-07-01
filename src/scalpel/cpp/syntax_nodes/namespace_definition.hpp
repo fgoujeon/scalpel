@@ -21,98 +21,51 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_NAMESPACE_DEFINITION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_NAMESPACE_DEFINITION_HPP
 
-#include "common.hpp"
 #include "identifier.hpp"
-#include "declaration.hpp"
+#include "declaration_seq.hpp"
+
+#include "detail/macros/sequence_node_pimpl_declaration.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
-
-typedef list_node<declaration> declaration_seq;
-
-typedef
-	sequence_node
-	<
-		predefined_text_node<str::namespace_>,
-		optional_node<space>,
-		optional_node<identifier>,
-		optional_node<space>,
-		optional_node<leaf_node>,
-		optional_node<space>,
-		predefined_text_node<str::opening_brace>,
-		optional_node<space>,
-		optional_node<declaration_seq>,
-		optional_node<space>,
-		predefined_text_node<str::closing_brace>
-	>
-	namespace_definition_t
-;
-
-typedef
-	sequence_node
-	<
-		optional_node<space>,
-		optional_node<identifier>,
-		optional_node<space>,
-		optional_node<leaf_node>,
-		optional_node<space>,
-		predefined_text_node<str::opening_brace>,
-		optional_node<space>,
-		optional_node<declaration_seq>,
-		optional_node<space>,
-		predefined_text_node<str::closing_brace>
-	>
-	namespace_definition_tail_t
-;
 
 /**
 namespace_definition
 	= "namespace", [identifier], "{", [declaration_seq], "}"
 ;
 */
-class namespace_definition: public composite_node
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	namespace_definition,
+	(predefined_text_node<str::namespace_>)
+	(optional_node<space>)
+	(optional_node<identifier>)
+	(optional_node<space>)
+	(optional_node<leaf_node>)
+	(optional_node<space>)
+	(predefined_text_node<str::opening_brace>)
+	(optional_node<space>)
+	(optional_node<declaration_seq>)
+	(optional_node<space>)
+	(predefined_text_node<str::closing_brace>)
+)
+
+inline
+const optional_node<identifier>&
+get_identifier(const namespace_definition& o)
 {
-	public:
-		typedef namespace_definition_t type;
-		typedef predefined_text_node<str::namespace_> head_node_t;
-		typedef namespace_definition_tail_t tail_sequence_node_t;
+	return get<2>(o);
+}
 
-		namespace_definition
-		(
-			predefined_text_node<str::namespace_>&& o0,
-			optional_node<space>&& o1,
-			optional_node<identifier>&& o2,
-			optional_node<space>&& o3,
-			optional_node<leaf_node>&& o3b,
-			optional_node<space>&& o3c,
-			predefined_text_node<str::opening_brace>&& o4,
-			optional_node<space>&& o5,
-			optional_node<declaration_seq>&& o6,
-			optional_node<space>&& o7,
-			predefined_text_node<str::closing_brace>&& o8
-		);
-
-		namespace_definition(head_node_t&& head, tail_sequence_node_t&& tail);
-
-		namespace_definition(const namespace_definition& o);
-
-		namespace_definition(namespace_definition&& o);
-
-		~namespace_definition();
-
-		const namespace_definition&
-		operator=(const namespace_definition& o);
-
-		const optional_node<identifier>&
-	   	identifier_node() const;
-
-		const optional_node<list_node<declaration>>&
-		declaration_seq_node() const;
-
-	private:
-		namespace_definition_t* impl_;
-};
+inline
+const optional_node<list_node<declaration>>&
+get_declaration_seq(const namespace_definition& o)
+{
+	return get<8>(o);
+}
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/sequence_node_pimpl_declaration.hpp"
 
 #endif

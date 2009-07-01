@@ -24,6 +24,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "common.hpp"
 #include "access_specifier.hpp"
 
+#include "detail/macros/sequence_node_pimpl_declaration.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
@@ -32,38 +34,16 @@ member_specification_access_specifier
 	= access_specifier >> !s >> ':'
 ;
 */
-typedef
-	sequence_node
-	<
-		access_specifier,
-		optional_node<space>,
-		predefined_text_node<str::colon>
-	>
-	member_specification_access_specifier_t
-;
-
-struct member_specification_access_specifier: public member_specification_access_specifier_t
-{
-	member_specification_access_specifier
-	(
-		access_specifier&& o0,
-		optional_node<space>&& o1,
-		predefined_text_node<str::colon>&& o2
-	):
-		member_specification_access_specifier_t(o0, o1, o2)
-	{
-	}
-
-	member_specification_access_specifier
-	(
-		head_node_t&& head,
-		tail_sequence_node_t&& tail
-	):
-		member_specification_access_specifier_t(head, tail)
-	{
-	}
-};
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	member_specification_access_specifier,
+	(access_specifier)
+	(optional_node<space>)
+	(predefined_text_node<str::colon>)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif
