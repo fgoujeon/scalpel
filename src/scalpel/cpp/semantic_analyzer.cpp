@@ -267,8 +267,8 @@ semantic_analyzer::analyze(const function_definition& syntax_node)
 				{
 					std::cout << "qualified_nested_id\n";
 
-					bool leading_double_colon = a_qualified_nested_id->double_colon();
-					const nested_name_specifier& a_nested_name_specifier = a_qualified_nested_id->nested_name_specifier_node();
+					bool leading_double_colon = has_double_colon(*a_qualified_nested_id);
+					const nested_name_specifier& a_nested_name_specifier = get_nested_name_specifier(*a_qualified_nested_id);
 
 					if(leading_double_colon)
 					{
@@ -279,7 +279,7 @@ semantic_analyzer::analyze(const function_definition& syntax_node)
 						enclosing_scope = name_lookup::find_scope(scope_cursor_.get_current_scope(), a_nested_name_specifier);
 					}
 
-					const unqualified_id& unqualified_id_node = a_qualified_nested_id->unqualified_id_node();
+					const unqualified_id& unqualified_id_node = get_unqualified_id(*a_qualified_nested_id);
 					boost::optional<const identifier&> identifier_node = get<identifier>(&unqualified_id_node);
 					if(identifier_node)
 					{
@@ -512,8 +512,8 @@ semantic_analyzer::analyze(const simple_declaration& syntax_node)
 	bool is_a_class_forward_declaration = false;
 	bool is_a_function_declaration = false;
 
-	const optional_node<decl_specifier_seq>& an_optional_decl_specifier_seq = syntax_node.decl_specifier_seq_node();
-	const optional_node<init_declarator_list>& an_optional_init_declarator_list = syntax_node.init_declarator_list_node();
+	const optional_node<decl_specifier_seq>& an_optional_decl_specifier_seq = get_decl_specifier_seq(syntax_node);
+	const optional_node<init_declarator_list>& an_optional_init_declarator_list = get_init_declarator_list(syntax_node);
 
 	if(an_optional_decl_specifier_seq)
 	{

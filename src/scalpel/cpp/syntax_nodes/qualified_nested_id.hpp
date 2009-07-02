@@ -46,86 +46,35 @@ typedef
 		optional_node<space>,
 		unqualified_id
 	>
-	qualified_nested_id_t
+	qualified_nested_id
 ;
-
-class qualified_nested_id: public composite_node
-{
-	public:
-		typedef qualified_nested_id_t type;
-		typedef type::head_node_t head_node_t;
-		typedef type::tail_sequence_node_t tail_sequence_node_t;
-
-		qualified_nested_id
-		(
-			optional_node<predefined_text_node<str::double_colon>>&& o0,
-			optional_node<space>&& o1,
-			nested_name_specifier&& o2,
-			optional_node<space>&& o3,
-			optional_node<predefined_text_node<str::template_>>&& o4,
-			optional_node<space>&& o5,
-			unqualified_id&& o6
-		);
-
-		qualified_nested_id
-		(
-			head_node_t&& head,
-			tail_sequence_node_t&& tail
-		);
-
-		qualified_nested_id(const qualified_nested_id& o);
-
-		qualified_nested_id(qualified_nested_id&& o);
-
-		const qualified_nested_id&
-		operator=(const qualified_nested_id& o);
-
-		inline
-		bool
-		double_colon() const;
-
-		inline
-		const nested_name_specifier&
-		nested_name_specifier_node() const;
-
-		inline
-		bool
-		template_keyword() const;
-
-		inline
-		const unqualified_id&
-		unqualified_id_node() const;
-
-	private:
-		type impl_;
-};
 
 inline
 bool
-qualified_nested_id::double_colon() const
+has_double_colon(const qualified_nested_id& o)
 {
-	return get<0>(impl_);
+	return get<0>(o);
 }
 
 inline
 const nested_name_specifier&
-qualified_nested_id::nested_name_specifier_node() const
+get_nested_name_specifier(const qualified_nested_id& o)
 {
-	return get<2>(impl_);
+	return get<2>(o);
 }
 
 inline
 bool
-qualified_nested_id::template_keyword() const
+has_template_keyword(const qualified_nested_id& o)
 {
-	return get<4>(impl_);
+	return get<4>(o);
 }
 
 inline
 const unqualified_id&
-qualified_nested_id::unqualified_id_node() const
+get_unqualified_id(const qualified_nested_id& o)
 {
-	return get<6>(impl_);
+	return get<6>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
