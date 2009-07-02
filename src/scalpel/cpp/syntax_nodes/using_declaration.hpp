@@ -49,43 +49,8 @@ typedef
 		optional_node<space>,
 		predefined_text_node<str::semicolon>
 	>
-	using_declaration_t
+	using_declaration
 ;
-
-class using_declaration: public composite_node
-{
-	public:
-		typedef using_declaration_t type;
-		typedef type::head_node_t head_node_t;
-		typedef type::tail_sequence_node_t tail_sequence_node_t;
-
-		using_declaration
-		(
-			predefined_text_node<str::using_>&& o0,
-			optional_node<space>&& o1,
-			optional_node<predefined_text_node<str::typename_>>&& o2,
-			optional_node<space>&& o3,
-			optional_node<predefined_text_node<str::double_colon>>&& o4,
-			optional_node<space>&& o5,
-			optional_node<nested_name_specifier>&& o6,
-			optional_node<space>&& o7,
-			unqualified_id&& o8,
-			optional_node<space>&& o9,
-			predefined_text_node<str::semicolon>&& o10
-		);
-
-		using_declaration(head_node_t&& head, tail_sequence_node_t&& tail);
-
-		using_declaration(const using_declaration& o);
-
-		using_declaration(using_declaration&& o);
-
-		const using_declaration&
-		operator=(const using_declaration& o);
-
-	private:
-		type impl_;
-};
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

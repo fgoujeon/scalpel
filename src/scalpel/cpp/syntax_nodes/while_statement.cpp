@@ -18,23 +18,14 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_WHILE_STATEMENT_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_WHILE_STATEMENT_HPP
+#include "while_statement.hpp"
 
-#include "condition.hpp"
-#include "statement.hpp"
-
-#include "detail/macros/sequence_node_pimpl_declaration.hpp"
+#include "detail/macros/sequence_node_pimpl_definition.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-/**
-while_statement
-	= str_p("while") >> !s >> '(' >> !s >> condition >> !s >> ')' >> !s >> statement
-;
-*/
-SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
 	while_statement,
 	(predefined_text_node<str::while_>)
@@ -50,6 +41,5 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
-#include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
+#include "detail/macros/sequence_node_pimpl_definition_undef.hpp"
 
-#endif

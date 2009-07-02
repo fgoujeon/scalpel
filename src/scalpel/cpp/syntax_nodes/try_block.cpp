@@ -18,38 +18,24 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_WHILE_STATEMENT_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_WHILE_STATEMENT_HPP
+#include "try_block.hpp"
 
-#include "condition.hpp"
-#include "statement.hpp"
-
-#include "detail/macros/sequence_node_pimpl_declaration.hpp"
+#include "detail/macros/sequence_node_pimpl_definition.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-/**
-while_statement
-	= str_p("while") >> !s >> '(' >> !s >> condition >> !s >> ')' >> !s >> statement
-;
-*/
-SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
-	while_statement,
-	(predefined_text_node<str::while_>)
+	try_block,
+	(predefined_text_node<str::try_>)
 	(optional_node<space>)
-	(predefined_text_node<str::opening_round_bracket>)
+	(compound_statement)
 	(optional_node<space>)
-	(condition)
-	(optional_node<space>)
-	(predefined_text_node<str::closing_round_bracket>)
-	(optional_node<space>)
-	(statement)
+	(handler_seq)
 )
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
-#include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
+#include "detail/macros/sequence_node_pimpl_definition_undef.hpp"
 
-#endif

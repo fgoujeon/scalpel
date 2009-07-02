@@ -25,6 +25,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "compound_statement.hpp"
 #include "handler_seq.hpp"
 
+#include "detail/macros/sequence_node_pimpl_declaration.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
@@ -33,37 +35,15 @@ try_block
 	= "try", compound_statement, handler_seq
 ;
 */
-typedef
-	sequence_node
-	<
-		predefined_text_node<str::try_>,
-		optional_node<space>,
-		compound_statement,
-		optional_node<space>,
-		handler_seq
-	>
-	try_block_t
-;
-
-struct try_block: public try_block_t
-{
-	try_block
-	(
-		predefined_text_node<str::try_>&& o0,
-		optional_node<space>&& o1,
-		compound_statement&& o2,
-		optional_node<space>&& o3,
-		handler_seq&& o4
-	):
-		try_block_t(o0, o1, o2, o3, o4)
-	{
-	}
-
-	try_block(head_node_t&& head, tail_sequence_node_t&& tail):
-		try_block_t(head, tail)
-	{
-	}
-};
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	try_block,
+	(predefined_text_node<str::try_>)
+	(optional_node<space>)
+	(compound_statement)
+	(optional_node<space>)
+	(handler_seq)
+)
 
 inline
 const compound_statement&
@@ -80,5 +60,7 @@ get_handler_seq(const try_block& o)
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif

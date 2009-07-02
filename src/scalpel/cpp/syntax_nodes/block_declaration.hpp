@@ -23,6 +23,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "asm_definition.hpp"
 #include "namespace_alias_definition.hpp"
+#include "using_directive.hpp"
+#include "using_declaration.hpp"
 
 #include "detail/macros/alternative_node_pimpl_declaration.hpp"
 
@@ -30,8 +32,6 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 class simple_declaration;
-class using_declaration;
-class using_directive;
 
 SCALPEL_ALTERNATIVE_NODE_PIMPL_DECLARATION
 (
