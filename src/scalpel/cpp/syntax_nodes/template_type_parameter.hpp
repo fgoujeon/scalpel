@@ -26,104 +26,40 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "identifier.hpp"
 #include "id_expression.hpp"
 
+#include "detail/macros/sequence_node_pimpl_declaration.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 class template_parameter_list;
-
-typedef
-	sequence_node
-	<
-		predefined_text_node<str::template_>,
-		optional_node<space>,
-		predefined_text_node<str::left_angle_bracket>,
-		optional_node<space>,
-		template_parameter_list,
-		optional_node<space>,
-		predefined_text_node<str::right_angle_bracket>,
-		optional_node<space>,
-		predefined_text_node<str::class_>,
-		optional_node<space>,
-		optional_node<identifier>,
-		optional_node<space>,
-		optional_node<predefined_text_node<str::equal>>,
-		optional_node<space>,
-		optional_node<id_expression>
-	>
-	template_type_parameter_t
-;
-
-typedef
-	sequence_node
-	<
-		optional_node<space>,
-		predefined_text_node<str::left_angle_bracket>,
-		optional_node<space>,
-		template_parameter_list,
-		optional_node<space>,
-		predefined_text_node<str::right_angle_bracket>,
-		optional_node<space>,
-		predefined_text_node<str::class_>,
-		optional_node<space>,
-		optional_node<identifier>,
-		optional_node<space>,
-		optional_node<predefined_text_node<str::equal>>,
-		optional_node<space>,
-		optional_node<id_expression>
-	>
-	template_type_parameter_tail_t
-;
 
 /**
 template_type_parameter
 	= "template" >> !s >> '<' >> !s >> template_parameter_list >> !s >> '>' >> !s >> "class" >> !(!s >> identifier) >> !(!s >> '=' >> !s >> id_expression)
 ;
 */
-class template_type_parameter: public composite_node
-{
-	public:
-		typedef template_type_parameter_t type;
-		typedef predefined_text_node<str::template_> head_node_t;
-		typedef template_type_parameter_tail_t tail_sequence_node_t;
-
-		template_type_parameter
-		(
-			predefined_text_node<str::template_>&& o0,
-			optional_node<space>&& o1,
-			predefined_text_node<str::left_angle_bracket>&& o2,
-			optional_node<space>&& o3,
-			template_parameter_list&& o4,
-			optional_node<space>&& o5,
-			predefined_text_node<str::right_angle_bracket>&& o6,
-			optional_node<space>&& o7,
-			predefined_text_node<str::class_>&& o8,
-			optional_node<space>&& o9,
-			optional_node<identifier>&& o10,
-			optional_node<space>&& o11,
-			optional_node<predefined_text_node<str::equal>>&& o12,
-			optional_node<space>&& o13,
-			optional_node<id_expression>&& o14
-		);
-
-		template_type_parameter
-		(
-			head_node_t&& head,
-			tail_sequence_node_t&& tail
-		);
-
-		template_type_parameter(const template_type_parameter& o);
-
-		template_type_parameter(template_type_parameter&& o);
-
-		~template_type_parameter();
-
-		const template_type_parameter&
-		operator=(const template_type_parameter& o);
-
-	private:
-		std::unique_ptr<type> impl_;
-};
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	template_type_parameter,
+	(predefined_text_node<str::template_>)
+	(optional_node<space>)
+	(predefined_text_node<str::left_angle_bracket>)
+	(optional_node<space>)
+	(template_parameter_list)
+	(optional_node<space>)
+	(predefined_text_node<str::right_angle_bracket>)
+	(optional_node<space>)
+	(predefined_text_node<str::class_>)
+	(optional_node<space>)
+	(optional_node<identifier>)
+	(optional_node<space>)
+	(optional_node<predefined_text_node<str::equal>>)
+	(optional_node<space>)
+	(optional_node<id_expression>)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif
