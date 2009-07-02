@@ -22,6 +22,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_ALTERNATIVE_NODE_HPP
 
 #include <boost/optional.hpp>
+#include <boost/type_traits/is_same.hpp>
+#include <boost/type_traits/remove_reference.hpp>
+#include <boost/utility/enable_if.hpp>
 #include "composite_node.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
@@ -37,21 +40,16 @@ class alternative_node<>: public composite_node
 		typedef void head_node_t;
 		typedef void tail_alternative_node_t;
 
-	protected:
-		alternative_node():
-		   	initialized_(false)
+		alternative_node()
 		{
 		}
 
-	public:
 		alternative_node(const alternative_node<>&):
-			composite_node(),
-			initialized_(false)
+			composite_node()
 		{
 		}
 
-		alternative_node(alternative_node<>&&):
-			initialized_(false)
+		alternative_node(alternative_node<>&&)
 		{
 		}
 
@@ -62,10 +60,10 @@ class alternative_node<>: public composite_node
 			return *this;
 		}
 
-		bool
-		initialized() const
+		void
+		add(const node& n)
 		{
-			return initialized_;
+			composite_node::add(n);
 		}
 
 	protected:
@@ -74,68 +72,113 @@ class alternative_node<>: public composite_node
 
 		void
 		set_node(){}
-
-		void
-		initialized(bool b)
-		{
-			initialized_ = b;
-		}
-
-	private:
-		bool initialized_;
 };
 
 template<class NodeT, class... NodesT>
-class alternative_node<NodeT, NodesT...>: public alternative_node<NodesT...>
+class alternative_node<NodeT, NodesT...>: public node
 {
 	public:
+		typedef alternative_node<NodeT, NodesT...> type;
 		typedef NodeT head_node_t;
 		typedef alternative_node<NodesT...> tail_alternative_node_t;
 
-	protected:
 		/**
 		 * Default constructor which does nothing (useful for internal use).
 		 */
 		alternative_node();
 
-	public:
 		/**
-		 * Copy constructor.
+		 * Constructor.
 		 */
-		alternative_node(const alternative_node<NodeT, NodesT...>& n);
+		alternative_node(const NodeT& n);
+
+		/**
+		 * Constructor.
+		 */
+		alternative_node(NodeT& n);
+
+		/**
+		 * Constructor.
+		 */
+		alternative_node(NodeT&& n);
+
+		/**
+		 * Constructor.
+		 */
+		template<class NodeT2>
+		alternative_node
+		(
+			const NodeT2& n,
+			typename boost::disable_if
+			<
+				boost::is_same
+				<
+					typename boost::remove_reference<NodeT2>::type,
+					type
+				>
+			>::type* = 0 //avoid conflict with copy and move constructors
+		);
+
+		/**
+		 * Constructor.
+		 */
+		template<class NodeT2>
+		alternative_node
+		(
+			NodeT2&& n,
+			typename boost::disable_if
+			<
+				boost::is_same
+				<
+					typename boost::remove_reference<NodeT2>::type,
+					type
+				>
+			>::type* = 0 //avoid conflict with copy and move constructors
+		);
 
 		/**
 		 * Copy constructor.
 		 */
-		alternative_node(alternative_node<NodeT, NodesT...>& n);
+		alternative_node(const type& n);
 
 		/**
 		 * Move constructor.
 		 */
-		alternative_node(alternative_node<NodeT, NodesT...>&& n);
+		alternative_node(type&& n);
 
-		/**
-		 * Constructor. Must be placed after move constructor, otherwise
-		 * this constructor will be chosen for move construction.
-		 */
-		template<class NodeT2>
-		alternative_node(NodeT2&&);
+		const type&
+		operator=(const type& n);
 
-		const alternative_node<NodeT, NodesT...>&
-		operator=(const alternative_node<NodeT, NodesT...>& n);
+		child_const_iterator_range
+		children() const;
 
+		void
+		add(const node& n);
+
+		const std::string
+		value() const;
+
+		//same type
 		void
 		get(boost::optional<const NodeT&>&) const;
 
-		using alternative_node<NodesT...>::get;
+		//different types
+		template<class NodeT2>
+		void
+		get(boost::optional<const NodeT2&>&) const;
 
+		//same type
 		void
 		set_node(const NodeT&);
 
-		using alternative_node<NodesT...>::set_node;
+		//different types
+		template<class NodeT2>
+		void
+		set_node(const NodeT2&);
 
 	private:
-		boost::optional<NodeT> node_;
+		boost::optional<head_node_t> head_;
+		tail_alternative_node_t tail_;
 };
 
 template<class NodeT, class... NodesT>
@@ -145,79 +188,149 @@ alternative_node<NodeT, NodesT...>::alternative_node()
 }
 
 template<class NodeT, class... NodesT>
-alternative_node<NodeT, NodesT...>::alternative_node(const alternative_node<NodeT, NodesT...>& n):
-	alternative_node<NodesT...>(static_cast<const alternative_node<NodesT...>&>(n)),
-	node_(n.node_)
+alternative_node<NodeT, NodesT...>::alternative_node(const NodeT& n):
+	head_(n)
 {
-	if(node_)
-	{
-		add(*node_);
-		alternative_node<>::initialized(true);
-	}
+	if(head_) add(*head_);
 }
 
 template<class NodeT, class... NodesT>
-alternative_node<NodeT, NodesT...>::alternative_node(alternative_node<NodeT, NodesT...>& n):
-	alternative_node<NodesT...>(static_cast<alternative_node<NodesT...>&>(n)),
-	node_(n.node_)
+alternative_node<NodeT, NodesT...>::alternative_node(NodeT& n):
+	head_(n)
 {
-	if(node_)
+	if(head_) add(*head_);
+}
+
+template<class NodeT, class... NodesT>
+alternative_node<NodeT, NodesT...>::alternative_node(NodeT&& n):
+	head_(std::move(n))
+{
+	if(head_) add(*head_);
+}
+
+template<class NodeT, class... NodesT>
+template<class NodeT2>
+alternative_node<NodeT, NodesT...>::alternative_node
+(
+	const NodeT2& n,
+	typename boost::disable_if
+	<
+		boost::is_same
+		<
+			typename boost::remove_reference<NodeT2>::type,
+			type
+		>
+	>::type*
+):
+	tail_(n)
+{
+}
+
+template<class NodeT, class... NodesT>
+template<class NodeT2>
+alternative_node<NodeT, NodesT...>::alternative_node
+(
+	NodeT2&& n,
+	typename boost::disable_if
+	<
+		boost::is_same
+		<
+			typename boost::remove_reference<NodeT2>::type,
+			type
+		>
+	>::type*
+):
+	tail_(std::move(n))
+{
+}
+
+template<class NodeT, class... NodesT>
+alternative_node<NodeT, NodesT...>::alternative_node(const alternative_node<NodeT, NodesT...>& n):
+	head_(n.head_),
+	tail_(n.tail_)
+{
+	if(head_)
 	{
-		add(*node_);
-		alternative_node<>::initialized(true);
+		tail_.add(*head_);
 	}
 }
 
 template<class NodeT, class... NodesT>
 alternative_node<NodeT, NodesT...>::alternative_node(alternative_node<NodeT, NodesT...>&& n):
-	alternative_node<NodesT...>(static_cast<alternative_node<NodesT...>&&>(n)),
-	node_(n.node_)
+	head_(std::move(n.head_)),
+	tail_(std::move(n.tail_))
 {
-	if(node_)
+	if(head_)
 	{
-		add(*node_);
-		alternative_node<>::initialized(true);
+		tail_.add(*head_);
 	}
-}
-
-template<class NodeT, class... NodesT>
-template<class NodeT2>
-alternative_node<NodeT, NodesT...>::alternative_node(NodeT2&& node):
-	alternative_node<NodesT...>()
-{
-	set_node(node);
 }
 
 template<class NodeT, class... NodesT>
 const alternative_node<NodeT, NodesT...>&
 alternative_node<NodeT, NodesT...>::operator=(const alternative_node<NodeT, NodesT...>& n)
 {
-	alternative_node<NodesT...>::operator=(static_cast<const alternative_node<NodesT...>&>(n));
-
-	node_ = n.node_;
-	if(node_)
+	head_ = n.head_;
+	if(head_)
 	{
-		add(*node_);
-		alternative_node<>::initialized(true);
+		tail_.add(*head_);
 	}
 
+	tail_ = n.tail_;
+
 	return *this;
+}
+
+template<class NodeT, class... NodesT>
+node::child_const_iterator_range
+alternative_node<NodeT, NodesT...>::children() const
+{
+	return tail_.children();
+}
+
+template<class NodeT, class... NodesT>
+void
+alternative_node<NodeT, NodesT...>::add(const node& n)
+{
+	tail_.add(n);
+}
+
+template<class NodeT, class... NodesT>
+const std::string
+alternative_node<NodeT, NodesT...>::value() const
+{
+	return tail_.value();
 }
 
 template<class NodeT, class... NodesT>
 void
 alternative_node<NodeT, NodesT...>::get(boost::optional<const NodeT&>& node) const
 {
-	node = node_;
+	node = head_;
+}
+
+template<class NodeT, class... NodesT>
+template<class NodeT2>
+void
+alternative_node<NodeT, NodesT...>::get(boost::optional<const NodeT2&>& node) const
+{
+	tail_.get(node);
 }
 
 template<class NodeT, class... NodesT>
 void
 alternative_node<NodeT, NodesT...>::set_node(const NodeT& node)
 {
-	node_ = node;
-	if(node_) add(*node_);
-	alternative_node<>::initialized(true);
+	head_ = node;
+	if(head_) add(*head_);
+}
+
+template<class NodeT, class... NodesT>
+template<class NodeT2>
+void
+alternative_node<NodeT, NodesT...>::set_node(const NodeT2& node)
+{
+	tail_.set_node(node);
 }
 
 
