@@ -22,54 +22,20 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "direct_new_declarator.hpp"
 
+#include "detail/macros/sequence_node_pimpl_definition.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-new_declarator::new_declarator
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
-	optional_node<ptr_operator_seq>&& o0,
-	optional_node<space>&& o1,
-	optional_node<direct_new_declarator>&& o2
-):
-	impl_(new type(o0, o1, o2))
-{
-	add(*impl_);
-}
-
-new_declarator::new_declarator
-(
-	head_node_t&& head,
-	tail_sequence_node_t&& tail
-):
-	impl_(new type(head, tail))
-{
-	add(*impl_);
-}
-
-new_declarator::new_declarator(const new_declarator& o):
-	composite_node(),
-	impl_(new type(*o.impl_))
-{
-	add(*impl_);
-}
-
-new_declarator::new_declarator(new_declarator&& o):
-	composite_node(),
-	impl_(std::move(o.impl_))
-{
-	add(*impl_);
-}
-
-new_declarator::~new_declarator()
-{
-}
-
-const new_declarator&
-new_declarator::operator=(const new_declarator& o)
-{
-	*impl_ = *o.impl_;
-	return *this;
-}
+	new_declarator,
+	(optional_node<ptr_operator_seq>)
+	(optional_node<space>)
+	(optional_node<direct_new_declarator>)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/sequence_node_pimpl_definition_undef.hpp"
 

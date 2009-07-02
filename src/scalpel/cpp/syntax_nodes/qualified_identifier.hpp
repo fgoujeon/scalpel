@@ -39,48 +39,14 @@ typedef
 		optional_node<space>,
 		identifier
 	>
-	qualified_identifier_t
+	qualified_identifier
 ;
 
-class qualified_identifier: public composite_node
-{
-	public:
-		typedef qualified_identifier_t type;
-		typedef type::head_node_t head_node_t;
-		typedef type::tail_sequence_node_t tail_sequence_node_t;
-
-		qualified_identifier
-		(
-			predefined_text_node<str::double_colon>&& o0,
-			optional_node<space>&& o1,
-			identifier&& o2
-		);
-
-		qualified_identifier
-		(
-			head_node_t&& head,
-			tail_sequence_node_t&& tail
-		);
-
-		qualified_identifier(const qualified_identifier& o);
-
-		qualified_identifier(qualified_identifier&& o);
-
-		const qualified_identifier&
-		operator=(const qualified_identifier& o);
-
-		inline
-		const identifier&
-	   	identifier_node() const;
-
-	private:
-		type impl_;
-};
-
+inline
 const identifier&
-qualified_identifier::identifier_node() const
+get_identifier(const qualified_identifier& o)
 {
-	return get<2>(impl_);
+	return get<2>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

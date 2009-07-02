@@ -36,9 +36,17 @@ typedef
 		optional_node<space>,
 		predefined_text_node<str::double_colon>
 	>
-	nested_name_specifier_last_part_t
+	nested_name_specifier_last_part
 ;
-class nested_name_specifier_last_part;
+
+inline
+const identifier_or_template_id&
+get_identifier_or_template_id(const nested_name_specifier_last_part& o)
+{
+	return get<2>(o);
+}
+
+
 
 typedef
 	list_node<nested_name_specifier_last_part>
@@ -69,105 +77,52 @@ nested_name_specifier_last_part
 ;
 */
 
-class nested_name_specifier: public composite_node
+struct nested_name_specifier: public nested_name_specifier_t
 {
-	public:
-		typedef nested_name_specifier_t type;
-		typedef type::head_node_t head_node_t;
-		typedef type::tail_sequence_node_t tail_sequence_node_t;
+	nested_name_specifier
+	(
+		identifier_or_template_id&& o0,
+		optional_node<space>&& o1,
+		predefined_text_node<str::double_colon>&& o2,
+		optional_node<space>&& o3,
+		optional_node<nested_name_specifier_last_part_seq>&& o4
+	):
+		nested_name_specifier_t(o0, o1, o2, o3, o4)
+	{
+	}
 
-		typedef nested_name_specifier_last_part last_part;
-		typedef nested_name_specifier_last_part_seq last_part_seq;
+	nested_name_specifier
+	(
+		head_node_t&& head,
+		tail_sequence_node_t&& tail
+	):
+		nested_name_specifier_t(head, tail)
+	{
+	}
 
-		nested_name_specifier
-		(
-			identifier_or_template_id&& o0,
-			optional_node<space>&& o1,
-			predefined_text_node<str::double_colon>&& o2,
-			optional_node<space>&& o3,
-			optional_node<nested_name_specifier_last_part_seq>&& o4
-		);
+	nested_name_specifier(const nested_name_specifier& o):
+		nested_name_specifier_t(o)
+	{
+	}
 
-		nested_name_specifier
-		(
-			head_node_t&& head,
-			tail_sequence_node_t&& tail
-		);
-
-		nested_name_specifier(const nested_name_specifier& o);
-
-		nested_name_specifier(nested_name_specifier&& o);
-
-		const nested_name_specifier&
-		operator=(const nested_name_specifier& o);
-
-		inline
-		const identifier_or_template_id&
-		identifier_or_template_id_node() const;
-
-		inline
-		const optional_node<last_part_seq>&
-		last_part_seq_node() const;
-
-	private:
-		type impl_;
+	nested_name_specifier(nested_name_specifier&& o):
+		nested_name_specifier_t(o)
+	{
+	}
 };
 
+inline
 const identifier_or_template_id&
-nested_name_specifier::identifier_or_template_id_node() const
+get_identifier_or_template_id(const nested_name_specifier& o)
 {
-	return get<0>(impl_);
+	return get<0>(o);
 }
 
-const optional_node<nested_name_specifier::last_part_seq>&
-nested_name_specifier::last_part_seq_node() const
+inline
+const optional_node<nested_name_specifier_last_part_seq>&
+get_last_part_seq(const nested_name_specifier& o)
 {
-	return get<4>(impl_);
-}
-
-
-
-class nested_name_specifier_last_part: public composite_node
-{
-	public:
-		typedef nested_name_specifier_last_part_t type;
-		typedef type::head_node_t head_node_t;
-		typedef type::tail_sequence_node_t tail_sequence_node_t;
-
-		nested_name_specifier_last_part
-		(
-			optional_node<predefined_text_node<str::template_>>&& o0,
-			optional_node<space>&& o1,
-			identifier_or_template_id&& o2,
-			optional_node<space>&& o3,
-			predefined_text_node<str::double_colon>&& o4
-		);
-
-		nested_name_specifier_last_part
-		(
-			head_node_t&& head,
-			tail_sequence_node_t&& tail
-		);
-
-		nested_name_specifier_last_part(const nested_name_specifier_last_part& o);
-
-		nested_name_specifier_last_part(nested_name_specifier_last_part&& o);
-
-		const nested_name_specifier_last_part&
-		operator=(const nested_name_specifier_last_part& o);
-
-		inline
-		const identifier_or_template_id&
-		identifier_or_template_id_node() const;
-
-	private:
-		type impl_;
-};
-
-const identifier_or_template_id&
-nested_name_specifier_last_part::identifier_or_template_id_node() const
-{
-	return get<2>(impl_);
+	return get<4>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

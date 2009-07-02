@@ -100,39 +100,36 @@ typedef
 	postfix_expression_t
 ;
 
-class postfix_expression: public composite_node
+struct postfix_expression: public postfix_expression_t
 {
-	public:
-		typedef postfix_expression_first_part first_part;
-		typedef postfix_expression_last_part last_part;
-		typedef postfix_expression_last_part_seq last_part_seq;
+	postfix_expression
+	(
+		postfix_expression_first_part&& o0,
+		optional_node<space>&& o1,
+		optional_node<postfix_expression_last_part_seq>&& o2
+	):
+		postfix_expression_t(o0, o1, o2)
+	{
+	}
 
-		typedef postfix_expression_t type;
-		typedef type::head_node_t head_node_t;
-		typedef type::tail_sequence_node_t tail_sequence_node_t;
+	postfix_expression
+	(
+		head_node_t&& head,
+		tail_sequence_node_t&& tail
+	):
+		postfix_expression_t(head, tail)
+	{
+	}
 
-		postfix_expression
-		(
-			first_part&& o0,
-			optional_node<space>&& o1,
-			optional_node<last_part_seq>&& o2
-		);
+	postfix_expression(const postfix_expression& o):
+		postfix_expression_t(o)
+	{
+	}
 
-		postfix_expression
-		(
-			head_node_t&& head,
-			tail_sequence_node_t&& tail
-		);
-
-		postfix_expression(const postfix_expression& o);
-
-		postfix_expression(postfix_expression&& o);
-
-		const postfix_expression&
-		operator=(const postfix_expression& o);
-
-	private:
-		type impl_;
+	postfix_expression(postfix_expression&& o):
+		postfix_expression_t(o)
+	{
+	}
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

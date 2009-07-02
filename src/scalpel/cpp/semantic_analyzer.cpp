@@ -454,7 +454,7 @@ semantic_analyzer::analyze(const nested_name_specifier&)
 }
 
 void
-semantic_analyzer::analyze(const nested_name_specifier::last_part&)
+semantic_analyzer::analyze(const nested_name_specifier_last_part&)
 {
 }
 
