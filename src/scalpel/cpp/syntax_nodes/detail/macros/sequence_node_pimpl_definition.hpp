@@ -98,17 +98,5 @@ const sequence_node_type::tail_sequence_node_t&                                 
 sequence_node_type::tail() const                                                         \
 {                                                                                        \
 	return impl_->tail();                                                                \
-}                                                                                        \
-                                                                                         \
-node::child_const_iterator_range                                                         \
-sequence_node_type::children() const                                                     \
-{                                                                                        \
-	return impl_->children();                                                            \
-}                                                                                        \
-                                                                                         \
-const std::string                                                                        \
-sequence_node_type::value() const                                                        \
-{                                                                                        \
-	return impl_->value();                                                               \
 }
 

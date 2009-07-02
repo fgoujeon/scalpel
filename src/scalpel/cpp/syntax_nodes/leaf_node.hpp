@@ -22,12 +22,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_LEAF_NODE_HPP
 
 #include <string>
-#include "node.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class leaf_node: public node
+class leaf_node
 {
 	public:
 		leaf_node();
@@ -42,13 +41,7 @@ class leaf_node: public node
 
 		leaf_node(leaf_node&& n);
 
-		virtual
-		~leaf_node();
-
-		child_const_iterator_range
-		children() const;
-
-		const std::string
+		const std::string&
 		value() const;
 
 		void
@@ -58,7 +51,6 @@ class leaf_node: public node
 		value(std::string&& code);
 
 	private:
-		children_t children_;
 		std::string value_;
 };
 

@@ -21,10 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_EXCEPTION_ABSTRACT_DECLARATOR_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_EXCEPTION_ABSTRACT_DECLARATOR_HPP
 
-#include "optional_node.hpp"
-#include "composite_node.hpp"
+#include "common.hpp"
 #include "type_specifier_seq.hpp"
-#include "space.hpp"
 #include "abstract_declarator.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes

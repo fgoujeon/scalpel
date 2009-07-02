@@ -21,10 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_DEFAULT_STATEMENT_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_DEFAULT_STATEMENT_HPP
 
-#include <memory>
-#include "optional_node.hpp"
-#include "composite_node.hpp"
-#include "space.hpp"
+#include "common.hpp"
 #include "statement.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes

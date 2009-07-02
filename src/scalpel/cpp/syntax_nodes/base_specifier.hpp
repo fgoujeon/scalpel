@@ -21,8 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_BASE_SPECIFIER_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_BASE_SPECIFIER_HPP
 
-#include "optional_node.hpp"
-#include "composite_node.hpp"
+#include "common.hpp"
 #include "access_specifier.hpp"
 #include "nested_identifier_or_template_id.hpp"
 

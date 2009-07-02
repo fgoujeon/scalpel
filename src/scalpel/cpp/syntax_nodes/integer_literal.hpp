@@ -21,32 +21,28 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_INTEGER_LITERAL_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_INTEGER_LITERAL_HPP
 
-#include "composite_node.hpp"
+#include <string>
 #include "leaf_node.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-class integer_literal: public composite_node
+struct integer_literal: public leaf_node
 {
-	public:
-		integer_literal
-		(
-			std::string&& value
-		);
+	integer_literal(std::string&& value):
+		leaf_node(value)
+	{
+	}
 
-		integer_literal(const integer_literal& o);
+	integer_literal(const integer_literal& o):
+		leaf_node(o)
+	{
+	}
 
-		integer_literal(integer_literal&& o);
-
-		const integer_literal&
-		operator=(const integer_literal& o);
-
-	private:
-		void
-		update_node_list();
-
-		leaf_node value_;
+	integer_literal(integer_literal&& o):
+		leaf_node(o)
+	{
+	}
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

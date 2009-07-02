@@ -27,8 +27,7 @@ alternative_node<>::alternative_node()
 {
 }
 
-alternative_node<>::alternative_node(const alternative_node<>&):
-	composite_node()
+alternative_node<>::alternative_node(const alternative_node<>&)
 {
 }
 
@@ -39,14 +38,7 @@ alternative_node<>::alternative_node(alternative_node<>&&)
 const alternative_node<>&
 alternative_node<>::operator=(const alternative_node<>&)
 {
-	clear();
 	return *this;
-}
-
-void
-alternative_node<>::add(const node& n)
-{
-	composite_node::add(n);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

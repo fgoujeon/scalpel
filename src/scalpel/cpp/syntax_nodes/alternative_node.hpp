@@ -25,7 +25,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/utility/enable_if.hpp>
-#include "composite_node.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -34,7 +33,7 @@ template<class... NodesT>
 class alternative_node;
 
 template<>
-class alternative_node<>: public composite_node
+class alternative_node<>
 {
 	public:
 		typedef void head_node_t;
@@ -48,13 +47,10 @@ class alternative_node<>: public composite_node
 
 		const alternative_node&
 		operator=(const alternative_node<>&);
-
-		void
-		add(const node& n);
 };
 
 template<class NodeT, class... NodesT>
-class alternative_node<NodeT, NodesT...>: public node
+class alternative_node<NodeT, NodesT...>
 {
 	public:
 		typedef alternative_node<NodeT, NodesT...> type;
@@ -131,15 +127,6 @@ class alternative_node<NodeT, NodesT...>: public node
 		const tail_alternative_node_t&
 		tail() const;
 
-		child_const_iterator_range
-		children() const;
-
-		void
-		add(const node& n);
-
-		const std::string
-		value() const;
-
 		//same type
 		void
 		get(boost::optional<const NodeT&>&) const;
@@ -173,21 +160,18 @@ template<class NodeT, class... NodesT>
 alternative_node<NodeT, NodesT...>::alternative_node(const NodeT& n):
 	head_(n)
 {
-	if(head_) add(*head_);
 }
 
 template<class NodeT, class... NodesT>
 alternative_node<NodeT, NodesT...>::alternative_node(NodeT& n):
 	head_(n)
 {
-	if(head_) add(*head_);
 }
 
 template<class NodeT, class... NodesT>
 alternative_node<NodeT, NodesT...>::alternative_node(NodeT&& n):
 	head_(std::move(n))
 {
-	if(head_) add(*head_);
 }
 
 template<class NodeT, class... NodesT>
@@ -231,10 +215,6 @@ alternative_node<NodeT, NodesT...>::alternative_node(const alternative_node<Node
 	head_(n.head_),
 	tail_(n.tail_)
 {
-	if(head_)
-	{
-		tail_.add(*head_);
-	}
 }
 
 template<class NodeT, class... NodesT>
@@ -242,24 +222,14 @@ alternative_node<NodeT, NodesT...>::alternative_node(alternative_node<NodeT, Nod
 	head_(std::move(n.head_)),
 	tail_(std::move(n.tail_))
 {
-	if(head_)
-	{
-		tail_.add(*head_);
-	}
 }
 
 template<class NodeT, class... NodesT>
 const alternative_node<NodeT, NodesT...>&
 alternative_node<NodeT, NodesT...>::operator=(const alternative_node<NodeT, NodesT...>& n)
 {
-	head_ = n.head_;
-	if(head_)
-	{
-		tail_.add(*head_);
-	}
-
-	tail_ = n.tail_;
-
+	type copy(n);
+	std::swap(copy, *this);
 	return *this;
 }
 
@@ -268,27 +238,6 @@ const typename alternative_node<NodeT, NodesT...>::tail_alternative_node_t&
 alternative_node<NodeT, NodesT...>::tail() const
 {
 	return tail_;
-}
-
-template<class NodeT, class... NodesT>
-node::child_const_iterator_range
-alternative_node<NodeT, NodesT...>::children() const
-{
-	return tail_.children();
-}
-
-template<class NodeT, class... NodesT>
-void
-alternative_node<NodeT, NodesT...>::add(const node& n)
-{
-	tail_.add(n);
-}
-
-template<class NodeT, class... NodesT>
-const std::string
-alternative_node<NodeT, NodesT...>::value() const
-{
-	return tail_.value();
 }
 
 template<class NodeT, class... NodesT>
@@ -311,7 +260,6 @@ void
 alternative_node<NodeT, NodesT...>::set(const NodeT& node)
 {
 	head_ = node;
-	if(head_) add(*head_);
 }
 
 template<class NodeT, class... NodesT>

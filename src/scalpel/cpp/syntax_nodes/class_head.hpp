@@ -21,9 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_CLASS_HEAD_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_CLASS_HEAD_HPP
 
-#include <memory>
-#include "optional_node.hpp"
-#include "composite_node.hpp"
+#include "common.hpp"
 #include "class_key.hpp"
 #include "nested_name_specifier.hpp"
 #include "template_id.hpp"

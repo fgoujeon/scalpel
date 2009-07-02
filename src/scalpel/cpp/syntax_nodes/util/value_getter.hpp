@@ -181,7 +181,7 @@ get_value
 	typename boost::enable_if<syntax_nodes::util::is_predefined_text_node<SyntaxNodeT>>::type* = 0
 )
 {
-	return node.value();
+	return node.text();
 }
 
 //overload for leaf nodes

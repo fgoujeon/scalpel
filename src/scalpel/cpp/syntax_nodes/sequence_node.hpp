@@ -22,7 +22,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_SEQUENCE_NODE_HPP
 
 #include <string>
-#include "node.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -36,7 +35,7 @@ struct tail_sequence_node_getter;
 
 
 template<>
-class sequence_node<>: public node
+class sequence_node<>
 {
 	public:
 		typedef void head_node_t;
@@ -50,33 +49,14 @@ class sequence_node<>: public node
 
 		const sequence_node&
 		operator=(const sequence_node&);
-
-		child_const_iterator_range
-		children() const;
-
-		void
-		push_front(const node& n);
-
-		const std::string
-		value() const;
-
-	private:
-		children_t children_;
 };
 
 template<class HeadT, class... TailT>
-class sequence_node<HeadT, TailT...>: public node
+class sequence_node<HeadT, TailT...>
 {
 	public:
 		typedef HeadT head_node_t;
 		typedef sequence_node<TailT...> tail_sequence_node_t;
-
-		template<unsigned int I, class SequenceNodeT>
-		friend struct tail_sequence_node_getter;
-
-		template<unsigned int I, class SequenceNodeT>
-		friend const typename tail_sequence_node_getter<I, SequenceNodeT>::head_node_t&
-		get(const SequenceNodeT& sequence);
 
 		sequence_node(HeadT&& head_node, TailT&&... tail_nodes);
 
@@ -88,15 +68,6 @@ class sequence_node<HeadT, TailT...>: public node
 
 		const sequence_node&
 		operator=(const sequence_node& o);
-
-		node::child_const_iterator_range
-		children() const;
-
-		void
-		push_front(const node& n);
-
-		const std::string
-		value() const;
 
 		const head_node_t&
 		head() const;
@@ -114,7 +85,6 @@ sequence_node<HeadT, TailT...>::sequence_node(HeadT&& head_node, TailT&&... tail
 	head_(head_node),
 	tail_(tail_nodes...)
 {
-	push_front(head_);
 }
 
 template<class HeadT, class... TailT>
@@ -122,7 +92,6 @@ sequence_node<HeadT, TailT...>::sequence_node(HeadT&& head_node, sequence_node<T
 	head_(head_node),
 	tail_(tail_sequence_node)
 {
-	push_front(head_);
 }
 
 template<class HeadT, class... TailT>
@@ -130,7 +99,6 @@ sequence_node<HeadT, TailT...>::sequence_node(const sequence_node<HeadT, TailT..
 	head_(o.head_),
 	tail_(o.tail_)
 {
-	push_front(head_);
 }
 
 template<class HeadT, class... TailT>
@@ -138,7 +106,6 @@ sequence_node<HeadT, TailT...>::sequence_node(sequence_node<HeadT, TailT...>&& o
 	head_(std::move(o.head_)),
 	tail_(std::move(o.tail_))
 {
-	push_front(head_);
 }
 
 template<class HeadT, class... TailT>
@@ -148,27 +115,6 @@ sequence_node<HeadT, TailT...>::operator=(const sequence_node& o)
 	head_ = o.head_;
 	tail_ = o.tail_;
 	return *this;
-}
-
-template<class HeadT, class... TailT>
-node::child_const_iterator_range
-sequence_node<HeadT, TailT...>::children() const
-{
-	return tail_.children();
-}
-
-template<class HeadT, class... TailT>
-void
-sequence_node<HeadT, TailT...>::push_front(const node& n)
-{
-	tail_.push_front(n);
-}
-
-template<class HeadT, class... TailT>
-const std::string
-sequence_node<HeadT, TailT...>::value() const
-{
-	return tail_.value();
 }
 
 template<class HeadT, class... TailT>

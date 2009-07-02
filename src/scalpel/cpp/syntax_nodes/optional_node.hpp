@@ -22,13 +22,12 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_OPTIONAL_NODE_HPP
 
 #include <memory>
-#include "composite_node.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 template<class T>
-class optional_node: public composite_node
+class optional_node
 {
     public:
         optional_node();
@@ -60,9 +59,6 @@ class optional_node: public composite_node
 		operator bool() const;
 
 	private:
-		void
-		update_node_list();
-
 		std::unique_ptr<T> node_;
 };
 
@@ -78,20 +74,16 @@ optional_node<T>::optional_node(T&& node):
 }
 
 template<class T>
-optional_node<T>::optional_node(const optional_node& o):
-	composite_node()
+optional_node<T>::optional_node(const optional_node& o)
 {
 	if(o.node_)
 		node_ = std::move(std::unique_ptr<T>(new T(*o.node_)));
-	update_node_list();
 }
 
 template<class T>
 optional_node<T>::optional_node(optional_node&& o):
-	composite_node(),
 	node_(std::move(o.node_))
 {
-	update_node_list();
 }
 
 template<class T>
@@ -108,7 +100,6 @@ const optional_node<T>&
 optional_node<T>::operator=(optional_node&& o)
 {
 	node_ = std::move(o.node_);
-	update_node_list();
 	return *this;
 }
 
@@ -150,15 +141,6 @@ template<class T>
 optional_node<T>::operator bool() const
 {
 	return node_;
-}
-
-template<class T>
-void
-optional_node<T>::update_node_list()
-{
-	clear();
-	if(node_)
-		add(*node_);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

@@ -41,29 +41,5 @@ sequence_node<>::operator=(const sequence_node&)
 	return *this;
 }
 
-node::child_const_iterator_range
-sequence_node<>::children() const
-{
-	return children_;
-}
-
-void
-sequence_node<>::push_front(const node& n)
-{
-	children_.push_front(&n);
-}
-
-const std::string
-sequence_node<>::value() const
-{
-	std::string code;
-	for(children_t::const_iterator i = children_.begin(); i != children_.end(); ++i)
-	{
-		const node& child_node = **i;
-		code += child_node.value();
-	}
-	return code;
-}
-
 }}} //namespace scalpel::cpp::syntax_nodes
 

@@ -69,18 +69,6 @@ alternative_node_type::tail() const                                             
 	return impl_->tail();                                                           \
 }                                                                                   \
                                                                                     \
-const std::string                                                                   \
-alternative_node_type::value() const                                                \
-{                                                                                   \
-	return impl_->value();                                                          \
-}                                                                                   \
-                                                                                    \
-node::child_const_iterator_range                                                    \
-alternative_node_type::children() const                                             \
-{                                                                                   \
-	return impl_->children();                                                       \
-}                                                                                   \
-                                                                                    \
 BOOST_PP_SEQ_FOR_EACH                                                               \
 (                                                                                   \
 	SCALPEL_ALTERNATIVE_NODE_PIMPL_DEFINITION_GET_FUNCTION,                         \

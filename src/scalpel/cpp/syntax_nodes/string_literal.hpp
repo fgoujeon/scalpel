@@ -21,7 +21,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_STRING_LITERAL_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_STRING_LITERAL_HPP
 
-#include "composite_node.hpp"
 #include "leaf_node.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes

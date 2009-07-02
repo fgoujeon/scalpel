@@ -24,7 +24,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <vector>
 #include "optional_node.hpp"
 #include "../../util/extern_strings.hpp"
-#include "composite_node.hpp"
 #include "common_nodes.hpp"
 #include "space.hpp"
 
@@ -32,7 +31,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 template<class T, const leaf_node& SeparatorNode = common_nodes::empty>
-class list_node: public composite_node
+class list_node
 {
     public:
 		class item;
@@ -75,16 +74,11 @@ class list_node: public composite_node
 		push_back(item&& t)
 		{
 			items_.push_back(std::move(t));
-			update_node_list(); ///\todo why add() doesn't work?
-//			add(items_.back());
 		}
 
 		static const leaf_node& separator_node;
 
 	private:
-		void
-		update_node_list();
-
 		items_t items_;
 };
 
@@ -95,17 +89,14 @@ list_node<T, SeparatorNode>::list_node()
 
 template<class T, const leaf_node& SeparatorNode>
 list_node<T, SeparatorNode>::list_node(const list_node& s):
-	composite_node(),
 	items_(s.items_)
 {
-	update_node_list();
 }
 
 template<class T, const leaf_node& SeparatorNode>
 list_node<T, SeparatorNode>::list_node(list_node&& s):
 	items_(std::move(s.items_))
 {
-	update_node_list();
 }
 
 template<class T, const leaf_node& SeparatorNode>
@@ -113,8 +104,6 @@ const list_node<T, SeparatorNode>&
 list_node<T, SeparatorNode>::operator=(const list_node& s)
 {
 	items_ = s.items_;
-	update_node_list();
-
 	return *this;
 }
 
@@ -123,33 +112,7 @@ const list_node<T, SeparatorNode>&
 list_node<T, SeparatorNode>::operator=(list_node&& s)
 {
 	items_ = std::move(s.items_);
-	update_node_list();
-
 	return *this;
-}
-
-template<class T, const leaf_node& SeparatorNode>
-void
-list_node<T, SeparatorNode>::update_node_list()
-{
-	clear();
-
-	bool first_item = true;
-	for(auto i = items_.begin(); i != items_.end(); ++i)
-	{
-		if(first_item)
-		{
-			add(i->main_node());
-			first_item = false;
-		}
-		else
-		{
-			if(i->pre_separator_space_node()) add(*i->pre_separator_space_node());
-			add(SeparatorNode);
-			if(i->post_separator_space_node()) add(*i->post_separator_space_node());
-			add(i->main_node());
-		}
-	}
 }
 
 template<class T, const leaf_node& SeparatorNode>

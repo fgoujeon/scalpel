@@ -21,9 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_EXCEPTION_SPECIFICATION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_EXCEPTION_SPECIFICATION_HPP
 
-#include "optional_node.hpp"
-#include "composite_node.hpp"
-#include "space.hpp"
+#include "common.hpp"
 #include "type_id_list.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes

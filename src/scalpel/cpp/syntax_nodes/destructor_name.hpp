@@ -21,10 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_DESTRUCTOR_NAME_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_DESTRUCTOR_NAME_HPP
 
-#include "optional_node.hpp"
-#include "composite_node.hpp"
+#include "common.hpp"
 #include "identifier_or_template_id.hpp"
-#include "space.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {

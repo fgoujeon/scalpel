@@ -21,11 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_BASE_CLAUSE_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_BASE_CLAUSE_HPP
 
-#include <scalpel/util/extern_strings.hpp>
-#include "optional_node.hpp"
-#include "composite_node.hpp"
-#include "predefined_text_node.hpp"
-#include "sequence_node.hpp"
+#include "common.hpp"
 #include "base_specifier_list.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes

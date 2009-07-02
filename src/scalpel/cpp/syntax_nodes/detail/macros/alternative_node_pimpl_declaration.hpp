@@ -31,7 +31,7 @@ void                                           \
 get(boost::optional<const type&>& node) const; \
 
 #define SCALPEL_ALTERNATIVE_NODE_PIMPL_DECLARATION(alternative_node_type, type_seq) \
-class alternative_node_type: public node                                            \
+class alternative_node_type                                                         \
 {                                                                                   \
 	public:                                                                         \
 		typedef                                                                     \
@@ -66,14 +66,8 @@ class alternative_node_type: public node                                        
 		const alternative_node_type&                                                \
 		operator=(const alternative_node_type& o);                                  \
                                                                                     \
-		child_const_iterator_range                                                  \
-		children() const;                                                           \
-                                                                                    \
 		const tail_alternative_node_t&                                              \
 		tail() const;                                                               \
-                                                                                    \
-		const std::string                                                           \
-		value() const;                                                              \
                                                                                     \
 		BOOST_PP_SEQ_FOR_EACH                                                       \
 		(                                                                           \

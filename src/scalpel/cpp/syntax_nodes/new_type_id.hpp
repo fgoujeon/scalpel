@@ -21,9 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_NEW_TYPE_ID_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_NEW_TYPE_ID_HPP
 
-#include "optional_node.hpp"
-#include "composite_node.hpp"
-#include "space.hpp"
+#include "common.hpp"
 #include "new_declarator.hpp"
 #include "type_specifier_seq.hpp"
 

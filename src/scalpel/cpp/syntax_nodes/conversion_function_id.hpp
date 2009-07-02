@@ -21,10 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_CONVERSION_FUNCTION_ID_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_CONVERSION_FUNCTION_ID_HPP
 
-#include "optional_node.hpp"
-#include "composite_node.hpp"
+#include "common.hpp"
 #include "type_specifier_seq.hpp"
-#include "space.hpp"
 #include "ptr_operator_seq.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes

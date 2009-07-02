@@ -27,7 +27,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 (node_type&& o##n)
 
 #define SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION(sequence_node_type, type_seq)          \
-class sequence_node_type: public node                                                  \
+class sequence_node_type                                                               \
 {                                                                                      \
 	public:                                                                            \
 		typedef                                                                        \
@@ -79,12 +79,6 @@ class sequence_node_type: public node                                           
                                                                                        \
 		const tail_sequence_node_t&                                                    \
 		tail() const;                                                                  \
-                                                                                       \
-		child_const_iterator_range                                                     \
-		children() const;                                                              \
-                                                                                       \
-		const std::string                                                              \
-		value() const;                                                                 \
                                                                                        \
 	private:                                                                           \
 		std::unique_ptr<type> impl_;                                                   \
