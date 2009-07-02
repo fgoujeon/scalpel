@@ -27,6 +27,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "expressions.hpp"
 #include "throw_expression.hpp"
 
+#include "detail/macros/sequence_node_pimpl_declaration.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
@@ -74,58 +76,16 @@ typedef
 	template_argument_assignment_expression_last_part
 ;
 
-typedef
-	sequence_node
-	<
-		optional_node<template_argument_assignment_expression_first_part_seq>,
-		optional_node<space>,
-		template_argument_assignment_expression_last_part
-	>
-	template_argument_assignment_expression_t
-;
-
-struct template_argument_assignment_expression: public template_argument_assignment_expression_t
-{
-	typedef template_argument_assignment_expression_t type;
-	typedef type::head_node_t head_node_t;
-	typedef type::tail_sequence_node_t tail_sequence_node_t;
-
-	typedef template_argument_assignment_expression_first_part first_part;
-	typedef template_argument_assignment_expression_first_part_seq first_part_seq;
-	typedef template_argument_assignment_expression_last_part last_part;
-
-	template_argument_assignment_expression
-	(
-		optional_node<template_argument_assignment_expression_first_part_seq>&& o1,
-		optional_node<space>&& o2,
-		template_argument_assignment_expression_last_part&& o3
-	):
-		type(o1, o2, o3)
-	{
-	}
-
-	template_argument_assignment_expression
-	(
-		head_node_t&& head,
-		tail_sequence_node_t&& tail
-	):
-		type(head, tail)
-	{
-	}
-
-	template_argument_assignment_expression(const template_argument_assignment_expression& o):
-		type(o)
-	{
-	}
-
-	template_argument_assignment_expression(template_argument_assignment_expression&& o):
-		type(o)
-	{
-	}
-
-	using type::operator=;
-};
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	template_argument_assignment_expression,
+	(optional_node<template_argument_assignment_expression_first_part_seq>)
+	(optional_node<space>)
+	(template_argument_assignment_expression_last_part)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif

@@ -75,17 +75,17 @@ SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_ID_TYPE_PAIR
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_ID_TYPE_PAIR
 (
 	TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION_FIRST_PART,
-	template_argument_assignment_expression::first_part
+	template_argument_assignment_expression_first_part
 )
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_ID_TYPE_PAIR
 (
 	TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION_FIRST_PART_SEQ,
-	template_argument_assignment_expression::first_part_seq
+	template_argument_assignment_expression_first_part_seq
 )
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_ID_TYPE_PAIR
 (
 	TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION_LAST_PART,
-	template_argument_assignment_expression::last_part
+	template_argument_assignment_expression_last_part
 )
 SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_ID_TYPE_PAIR
 (

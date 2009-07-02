@@ -20,58 +20,28 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "template_declaration.hpp"
 
+#include "detail/macros/sequence_node_pimpl_definition.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-template_declaration::template_declaration
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
-	optional_node<predefined_text_node<str::export_>>&& o0,
-	optional_node<space>&& o1,
-	predefined_text_node<str::template_>&& o2,
-	optional_node<space>&& o3,
-	predefined_text_node<str::left_angle_bracket>&& o4,
-	optional_node<space>&& o5,
-	template_parameter_list&& o6,
-	optional_node<space>&& o7,
-	predefined_text_node<str::right_angle_bracket>&& o8,
-	optional_node<space>&& o9,
-	declaration&& o10
-):
-	impl_(o0, o1, o2, o3, o4, o5, o6, o7, o8, o9, o10)
-{
-	add(impl_);
-}
-
-template_declaration::template_declaration
-(
-	head_node_t&& head,
-	tail_sequence_node_t&& tail
-):
-	impl_(head, tail)
-{
-	add(impl_);
-}
-
-template_declaration::template_declaration(const template_declaration& o):
-	composite_node(),
-	impl_(o.impl_)
-{
-	add(impl_);
-}
-
-template_declaration::template_declaration(template_declaration&& o):
-	composite_node(),
-	impl_(o.impl_)
-{
-	add(impl_);
-}
-
-const template_declaration&
-template_declaration::operator=(const template_declaration& o)
-{
-	impl_ = o.impl_;
-	return *this;
-}
+	template_declaration,
+	(optional_node<predefined_text_node<str::export_>>)
+	(optional_node<space>)
+	(predefined_text_node<str::template_>)
+	(optional_node<space>)
+	(predefined_text_node<str::left_angle_bracket>)
+	(optional_node<space>)
+	(template_parameter_list)
+	(optional_node<space>)
+	(predefined_text_node<str::right_angle_bracket>)
+	(optional_node<space>)
+	(declaration)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/sequence_node_pimpl_definition_undef.hpp"
 

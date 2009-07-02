@@ -18,40 +18,22 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_TEMPLATE_DECLARATION_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_TEMPLATE_DECLARATION_HPP
+#include "template_argument_assignment_expression.hpp"
 
-#include "template_parameter_list.hpp"
-#include "declaration.hpp"
-
-#include "detail/macros/sequence_node_pimpl_declaration.hpp"
+#include "detail/macros/sequence_node_pimpl_definition.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-/**
-template_declaration
-	= !(str_p("export") >> !s) >> str_p("template") >> !s >> '<' >> !s >> template_parameter_list >> !s >> '>' >> !s >> declaration
-;
-*/
-SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
-	template_declaration,
-	(optional_node<predefined_text_node<str::export_>>)
+	template_argument_assignment_expression,
+	(optional_node<template_argument_assignment_expression_first_part_seq>)
 	(optional_node<space>)
-	(predefined_text_node<str::template_>)
-	(optional_node<space>)
-	(predefined_text_node<str::left_angle_bracket>)
-	(optional_node<space>)
-	(template_parameter_list)
-	(optional_node<space>)
-	(predefined_text_node<str::right_angle_bracket>)
-	(optional_node<space>)
-	(declaration)
+	(template_argument_assignment_expression_last_part)
 )
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
-#include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
+#include "detail/macros/sequence_node_pimpl_definition_undef.hpp"
 
-#endif
