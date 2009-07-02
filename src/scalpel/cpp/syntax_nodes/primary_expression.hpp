@@ -34,7 +34,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 typedef
 	alternative_node
 	<
-		predefined_text_node<util::extern_strings::this_>,
+		predefined_text_node<str::this_>,
 		literal,
 		round_bracketed_expression,
 		id_expression

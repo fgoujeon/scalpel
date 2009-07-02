@@ -40,38 +40,17 @@ class alternative_node<>: public composite_node
 		typedef void head_node_t;
 		typedef void tail_alternative_node_t;
 
-		alternative_node()
-		{
-		}
+		alternative_node();
 
-		alternative_node(const alternative_node<>&):
-			composite_node()
-		{
-		}
+		alternative_node(const alternative_node<>&);
 
-		alternative_node(alternative_node<>&&)
-		{
-		}
+		alternative_node(alternative_node<>&&);
 
 		const alternative_node&
-		operator=(const alternative_node<>&)
-		{
-			clear();
-			return *this;
-		}
+		operator=(const alternative_node<>&);
 
 		void
-		add(const node& n)
-		{
-			composite_node::add(n);
-		}
-
-	protected:
-		void
-		get() const{}
-
-		void
-		set_node(){}
+		add(const node& n);
 };
 
 template<class NodeT, class... NodesT>
@@ -149,6 +128,9 @@ class alternative_node<NodeT, NodesT...>: public node
 		const type&
 		operator=(const type& n);
 
+		const tail_alternative_node_t&
+		tail() const;
+
 		child_const_iterator_range
 		children() const;
 
@@ -169,12 +151,12 @@ class alternative_node<NodeT, NodesT...>: public node
 
 		//same type
 		void
-		set_node(const NodeT&);
+		set(const NodeT&);
 
 		//different types
 		template<class NodeT2>
 		void
-		set_node(const NodeT2&);
+		set(const NodeT2&);
 
 	private:
 		boost::optional<head_node_t> head_;
@@ -282,6 +264,13 @@ alternative_node<NodeT, NodesT...>::operator=(const alternative_node<NodeT, Node
 }
 
 template<class NodeT, class... NodesT>
+const typename alternative_node<NodeT, NodesT...>::tail_alternative_node_t&
+alternative_node<NodeT, NodesT...>::tail() const
+{
+	return tail_;
+}
+
+template<class NodeT, class... NodesT>
 node::child_const_iterator_range
 alternative_node<NodeT, NodesT...>::children() const
 {
@@ -319,7 +308,7 @@ alternative_node<NodeT, NodesT...>::get(boost::optional<const NodeT2&>& node) co
 
 template<class NodeT, class... NodesT>
 void
-alternative_node<NodeT, NodesT...>::set_node(const NodeT& node)
+alternative_node<NodeT, NodesT...>::set(const NodeT& node)
 {
 	head_ = node;
 	if(head_) add(*head_);
@@ -328,9 +317,9 @@ alternative_node<NodeT, NodesT...>::set_node(const NodeT& node)
 template<class NodeT, class... NodesT>
 template<class NodeT2>
 void
-alternative_node<NodeT, NodesT...>::set_node(const NodeT2& node)
+alternative_node<NodeT, NodesT...>::set(const NodeT2& node)
 {
-	tail_.set_node(node);
+	tail_.set(node);
 }
 
 

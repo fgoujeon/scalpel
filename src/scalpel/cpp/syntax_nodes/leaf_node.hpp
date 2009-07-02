@@ -30,6 +30,8 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 class leaf_node: public node
 {
 	public:
+		leaf_node();
+
 		explicit
 		leaf_node(const std::string& value);
 

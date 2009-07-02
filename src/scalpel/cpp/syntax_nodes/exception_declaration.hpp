@@ -37,7 +37,7 @@ typedef
 		exception_declarator,
 		exception_abstract_declarator,
 		type_specifier_seq,
-		predefined_text_node<util::extern_strings::ellipsis>
+		predefined_text_node<str::ellipsis>
 	>
 	exception_declaration
 ;

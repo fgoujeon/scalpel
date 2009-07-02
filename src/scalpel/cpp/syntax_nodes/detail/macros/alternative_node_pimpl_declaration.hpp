@@ -69,8 +69,11 @@ class alternative_node_type: public node                                        
 		child_const_iterator_range                                                  \
 		children() const;                                                           \
                                                                                     \
-		const std::string                                                  \
-		value() const;                                                           \
+		const tail_alternative_node_t&                                              \
+		tail() const;                                                               \
+                                                                                    \
+		const std::string                                                           \
+		value() const;                                                              \
                                                                                     \
 		BOOST_PP_SEQ_FOR_EACH                                                       \
 		(                                                                           \

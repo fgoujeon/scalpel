@@ -28,7 +28,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 namespace str
 {
-	using namespace util::extern_strings;
+	using namespace scalpel::util::extern_strings;
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

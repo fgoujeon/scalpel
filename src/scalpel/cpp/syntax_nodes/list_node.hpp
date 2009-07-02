@@ -37,9 +37,9 @@ class list_node: public composite_node
     public:
 		class item;
 
-		typedef std::vector<item> list_t;
+		typedef std::vector<item> items_t;
 		typedef T type;
-		typedef typename list_t::const_iterator const_iterator;
+		typedef typename items_t::const_iterator const_iterator;
 
         list_node();
 
@@ -56,27 +56,27 @@ class list_node: public composite_node
 		bool
 		empty() const
 		{
-			return list_.empty();
+			return items_.empty();
 		}
 
 		const_iterator
 		begin() const
 		{
-			return list_.begin();
+			return items_.begin();
 		}
 
 		const_iterator
 		end() const
 		{
-			return list_.end();
+			return items_.end();
 		}
 
 		void
 		push_back(item&& t)
 		{
-			list_.push_back(std::move(t));
+			items_.push_back(std::move(t));
 			update_node_list(); ///\todo why add() doesn't work?
-//			add(list_.back());
+//			add(items_.back());
 		}
 
 		static const leaf_node& separator_node;
@@ -85,8 +85,78 @@ class list_node: public composite_node
 		void
 		update_node_list();
 
-		list_t list_;
+		items_t items_;
 };
+
+template<class T, const leaf_node& SeparatorNode>
+list_node<T, SeparatorNode>::list_node()
+{
+}
+
+template<class T, const leaf_node& SeparatorNode>
+list_node<T, SeparatorNode>::list_node(const list_node& s):
+	composite_node(),
+	items_(s.items_)
+{
+	update_node_list();
+}
+
+template<class T, const leaf_node& SeparatorNode>
+list_node<T, SeparatorNode>::list_node(list_node&& s):
+	items_(std::move(s.items_))
+{
+	update_node_list();
+}
+
+template<class T, const leaf_node& SeparatorNode>
+const list_node<T, SeparatorNode>&
+list_node<T, SeparatorNode>::operator=(const list_node& s)
+{
+	items_ = s.items_;
+	update_node_list();
+
+	return *this;
+}
+
+template<class T, const leaf_node& SeparatorNode>
+const list_node<T, SeparatorNode>&
+list_node<T, SeparatorNode>::operator=(list_node&& s)
+{
+	items_ = std::move(s.items_);
+	update_node_list();
+
+	return *this;
+}
+
+template<class T, const leaf_node& SeparatorNode>
+void
+list_node<T, SeparatorNode>::update_node_list()
+{
+	clear();
+
+	bool first_item = true;
+	for(auto i = items_.begin(); i != items_.end(); ++i)
+	{
+		if(first_item)
+		{
+			add(i->main_node());
+			first_item = false;
+		}
+		else
+		{
+			if(i->pre_separator_space_node()) add(*i->pre_separator_space_node());
+			add(SeparatorNode);
+			if(i->post_separator_space_node()) add(*i->post_separator_space_node());
+			add(i->main_node());
+		}
+	}
+}
+
+template<class T, const leaf_node& SeparatorNode>
+const leaf_node&
+list_node<T, SeparatorNode>::separator_node = SeparatorNode;
+
+
 
 template<class T, const leaf_node& SeparatorNode = common_nodes::empty>
 class list_node<T, SeparatorNode>::item
@@ -118,76 +188,6 @@ class list_node<T, SeparatorNode>::item
 		optional_node<space> post_separator_space_;
 		T main_node_;
 };
-
-
-template<class T, const leaf_node& SeparatorNode>
-list_node<T, SeparatorNode>::list_node()
-{
-}
-
-template<class T, const leaf_node& SeparatorNode>
-list_node<T, SeparatorNode>::list_node(const list_node& s):
-	composite_node(),
-	list_(s.list_)
-{
-	update_node_list();
-}
-
-template<class T, const leaf_node& SeparatorNode>
-list_node<T, SeparatorNode>::list_node(list_node&& s):
-	list_(std::move(s.list_))
-{
-	update_node_list();
-}
-
-template<class T, const leaf_node& SeparatorNode>
-const list_node<T, SeparatorNode>&
-list_node<T, SeparatorNode>::operator=(const list_node& s)
-{
-	list_ = s.list_;
-	update_node_list();
-
-	return *this;
-}
-
-template<class T, const leaf_node& SeparatorNode>
-const list_node<T, SeparatorNode>&
-list_node<T, SeparatorNode>::operator=(list_node&& s)
-{
-	list_ = std::move(s.list_);
-	update_node_list();
-
-	return *this;
-}
-
-template<class T, const leaf_node& SeparatorNode>
-void
-list_node<T, SeparatorNode>::update_node_list()
-{
-	clear();
-
-	bool first_item = true;
-	for(auto i = list_.begin(); i != list_.end(); ++i)
-	{
-		if(first_item)
-		{
-			add(i->main_node());
-			first_item = false;
-		}
-		else
-		{
-			if(i->pre_separator_space_node()) add(*i->pre_separator_space_node());
-			add(SeparatorNode);
-			if(i->post_separator_space_node()) add(*i->post_separator_space_node());
-			add(i->main_node());
-		}
-	}
-}
-
-template<class T, const leaf_node& SeparatorNode>
-const leaf_node&
-list_node<T, SeparatorNode>::separator_node = SeparatorNode;
-
 
 template<class T, const leaf_node& SeparatorNode>
 list_node<T, SeparatorNode>::item::item

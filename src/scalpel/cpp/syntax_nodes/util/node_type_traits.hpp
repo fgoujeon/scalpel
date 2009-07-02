@@ -21,6 +21,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_UTIL_NODE_TYPE_TRAITS_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_UTIL_NODE_TYPE_TRAITS_HPP
 
+#include "../optional_node.hpp"
+#include "../predefined_text_node.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes { namespace util
 {
 

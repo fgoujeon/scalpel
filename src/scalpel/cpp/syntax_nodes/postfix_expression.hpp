@@ -79,8 +79,8 @@ typedef
 		arrow_id_expression,
 		dot_pseudo_destructor_name,
 		arrow_pseudo_destructor_name,
-		predefined_text_node<util::extern_strings::double_plus>,
-		predefined_text_node<util::extern_strings::double_minus>
+		predefined_text_node<str::double_plus>,
+		predefined_text_node<str::double_minus>
 	>
 	postfix_expression_last_part
 ;

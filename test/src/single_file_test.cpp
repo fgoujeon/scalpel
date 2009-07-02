@@ -23,11 +23,13 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <iomanip>
 #include <stdexcept>
 #include <fstream>
+#include <scalpel/cpp/syntax_nodes/util/value_getter.hpp>
 
 #include "single_file_test.hpp"
 
 using namespace boost::spirit;
 using namespace std;
+using scalpel::cpp::syntax_nodes::util::get_value;
 
 void
 single_file_test::parse_files(const std::string& test_directory)
@@ -77,7 +79,7 @@ single_file_test::parse_files(const std::string& test_directory)
 			scalpel::cpp::syntax_tree tree = m_syntax_analyzer(preprocessed_code); //throws an exception if parsing fails
 
 			//check syntax analysis results
-			if(preprocessed_code != tree.value())
+			if(preprocessed_code != get_value(tree))
 			{
 				std::cout << "Analysis error!\n";
 				std::cout << "Original content of " << file_name_oss.str() << ":\n";
@@ -86,7 +88,7 @@ single_file_test::parse_files(const std::string& test_directory)
 				std::cout << "\n***\n";
 				std::cout << "Analysis results:\n";
 				std::cout << "***\n";
-				std::cout << tree.value();
+				std::cout << get_value(tree);
 				std::cout << "\n***\n\n";
 
 				throw "Analysis error!";

@@ -18,36 +18,36 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_BASE_CLAUSE_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_BASE_CLAUSE_HPP
-
-#include <scalpel/util/extern_strings.hpp>
-#include "optional_node.hpp"
-#include "composite_node.hpp"
-#include "predefined_text_node.hpp"
-#include "sequence_node.hpp"
-#include "base_specifier_list.hpp"
+#include "alternative_node.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-/**
-\verbatim
-base_clause
-	= ":", base_specifier_list
-;
-\endverbatim
-*/
-typedef
-	sequence_node
-	<
-		predefined_text_node<str::colon>,
-		optional_node<space>,
-		base_specifier_list
-	>
-	base_clause
-;
+alternative_node<>::alternative_node()
+{
+}
+
+alternative_node<>::alternative_node(const alternative_node<>&):
+	composite_node()
+{
+}
+
+alternative_node<>::alternative_node(alternative_node<>&&)
+{
+}
+
+const alternative_node<>&
+alternative_node<>::operator=(const alternative_node<>&)
+{
+	clear();
+	return *this;
+}
+
+void
+alternative_node<>::add(const node& n)
+{
+	composite_node::add(n);
+}
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
-#endif

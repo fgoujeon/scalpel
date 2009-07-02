@@ -63,6 +63,12 @@ alternative_node_type::operator=(const alternative_node_type& o)                
 	return *this;                                                                   \
 }                                                                                   \
                                                                                     \
+const alternative_node_type::tail_alternative_node_t&                               \
+alternative_node_type::tail() const                                                 \
+{                                                                                   \
+	return impl_->tail();                                                           \
+}                                                                                   \
+                                                                                    \
 const std::string                                                                   \
 alternative_node_type::value() const                                                \
 {                                                                                   \

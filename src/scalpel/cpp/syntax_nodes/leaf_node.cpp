@@ -23,6 +23,10 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
+leaf_node::leaf_node()
+{
+}
+
 leaf_node::leaf_node(const std::string& value):
 	value_(value)
 {
