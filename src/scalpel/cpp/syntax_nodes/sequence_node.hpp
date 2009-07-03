@@ -40,15 +40,6 @@ class sequence_node<>
 	public:
 		typedef void head_node_t;
 		typedef void tail_sequence_node_t;
-
-		sequence_node();
-
-		sequence_node(const sequence_node&);
-
-		sequence_node(sequence_node&&);
-
-		const sequence_node&
-		operator=(const sequence_node&);
 };
 
 template<class HeadT, class... TailT>

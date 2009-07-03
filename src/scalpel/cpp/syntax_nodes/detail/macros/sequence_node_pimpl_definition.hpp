@@ -25,7 +25,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 (node_type&& o##n)
 
 #define SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION_TYPE_CONSTRUCTION_ARGUMENT(r, x, n, node_type) \
-(o##n)
+(std::move(o##n))
 
 #define SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION(sequence_node_type, type_seq)             \
 sequence_node_type::sequence_node_type                                                   \
@@ -63,7 +63,7 @@ sequence_node_type::sequence_node_type                                          
 	head_node_t&& head,                                                                  \
 	tail_sequence_node_t&& tail                                                          \
 ):                                                                                       \
-	impl_(new type(head, tail))                                                          \
+	impl_(new type(std::move(head), std::move(tail)))                                    \
 {                                                                                        \
 }                                                                                        \
                                                                                          \

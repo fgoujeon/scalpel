@@ -23,7 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #define SCALPEL_ALTERNATIVE_NODE_PIMPL_DEFINITION_CONSTRUCTOR(r, alternative_node_type, node_type) \
 alternative_node_type::alternative_node_type(node_type&& o): \
-	impl_(new type(o)) \
+	impl_(new type(std::move(o))) \
 { \
 }
 

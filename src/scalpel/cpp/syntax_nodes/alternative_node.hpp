@@ -38,15 +38,6 @@ class alternative_node<>
 	public:
 		typedef void head_node_t;
 		typedef void tail_alternative_node_t;
-
-		alternative_node();
-
-		alternative_node(const alternative_node<>&);
-
-		alternative_node(alternative_node<>&&);
-
-		const alternative_node&
-		operator=(const alternative_node<>&);
 };
 
 template<class NodeT, class... NodesT>
