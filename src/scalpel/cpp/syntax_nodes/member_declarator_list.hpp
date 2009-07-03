@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_MEMBER_DECLARATOR_LIST_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_MEMBER_DECLARATOR_LIST_HPP
 
-#include "../../util/extern_strings.hpp"
+#include "../../utility/extern_strings.hpp"
 #include "list_node.hpp"
 #include "member_declarator.hpp"
 

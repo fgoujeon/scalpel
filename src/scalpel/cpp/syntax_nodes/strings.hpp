@@ -21,14 +21,14 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_STRINGS_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_STRINGS_HPP
 
-#include <scalpel/util/extern_strings.hpp>
+#include <scalpel/utility/extern_strings.hpp>
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 namespace str
 {
-	using namespace scalpel::util::extern_strings;
+	using namespace scalpel::utility::extern_strings;
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

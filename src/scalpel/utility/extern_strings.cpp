@@ -20,7 +20,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "extern_strings.hpp"
 
-namespace scalpel { namespace util
+namespace scalpel { namespace utility
 {
 
 namespace extern_strings
@@ -156,4 +156,4 @@ namespace extern_strings
 	const std::string while_("while");
 }
 
-}} //namespace scalpel::util
+}} //namespace scalpel::utility

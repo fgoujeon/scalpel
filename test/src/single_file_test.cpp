@@ -23,13 +23,13 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <iomanip>
 #include <stdexcept>
 #include <fstream>
-#include <scalpel/cpp/syntax_nodes/util/value_getter.hpp>
+#include <scalpel/cpp/syntax_nodes/utility/value_getter.hpp>
 
 #include "single_file_test.hpp"
 
 using namespace boost::spirit;
 using namespace std;
-using scalpel::cpp::syntax_nodes::util::get_value;
+using scalpel::cpp::syntax_nodes::utility::get_value;
 
 void
 single_file_test::parse_files(const std::string& test_directory)

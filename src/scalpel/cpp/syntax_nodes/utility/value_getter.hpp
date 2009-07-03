@@ -26,7 +26,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "node_type_traits.hpp"
 #include "../alternative_node.hpp"
 
-namespace scalpel { namespace cpp { namespace syntax_nodes { namespace util
+namespace scalpel { namespace cpp { namespace syntax_nodes { namespace utility
 {
 
 //overload for sequence nodes
@@ -35,7 +35,7 @@ const std::string
 get_value
 (
 	const SyntaxNodeT& node,
-	typename boost::enable_if<syntax_nodes::util::is_sequence_node<SyntaxNodeT>>::type* = 0,
+	typename boost::enable_if<syntax_nodes::utility::is_sequence_node<SyntaxNodeT>>::type* = 0,
 	typename boost::disable_if<boost::is_same<typename SyntaxNodeT::head_node_t, void>>::type* = 0
 );
 
@@ -45,7 +45,7 @@ const std::string
 get_value
 (
 	const SyntaxNodeT& node,
-	typename boost::enable_if<syntax_nodes::util::is_alternative_node<SyntaxNodeT>>::type* = 0,
+	typename boost::enable_if<syntax_nodes::utility::is_alternative_node<SyntaxNodeT>>::type* = 0,
 	typename boost::disable_if<boost::is_same<typename SyntaxNodeT::head_node_t, void>>::type* = 0
 );
 
@@ -55,7 +55,7 @@ const std::string
 get_value
 (
 	const SyntaxNodeT& node,
-	typename boost::enable_if<syntax_nodes::util::is_list_node<SyntaxNodeT>>::type* = 0
+	typename boost::enable_if<syntax_nodes::utility::is_list_node<SyntaxNodeT>>::type* = 0
 );
 
 //overload for optional nodes
@@ -64,7 +64,7 @@ const std::string
 get_value
 (
 	const SyntaxNodeT& node,
-	typename boost::enable_if<syntax_nodes::util::is_optional_node<SyntaxNodeT>>::type* = 0
+	typename boost::enable_if<syntax_nodes::utility::is_optional_node<SyntaxNodeT>>::type* = 0
 );
 
 //overload for predefined_text nodes
@@ -73,7 +73,7 @@ const std::string
 get_value
 (
 	const SyntaxNodeT& node,
-	typename boost::enable_if<syntax_nodes::util::is_predefined_text_node<SyntaxNodeT>>::type* = 0
+	typename boost::enable_if<syntax_nodes::utility::is_predefined_text_node<SyntaxNodeT>>::type* = 0
 );
 
 //overload for leaf nodes
@@ -82,7 +82,7 @@ const std::string
 get_value
 (
 	const SyntaxNodeT& node,
-	typename boost::enable_if<syntax_nodes::util::is_leaf_node<SyntaxNodeT>>::type* = 0
+	typename boost::enable_if<syntax_nodes::utility::is_leaf_node<SyntaxNodeT>>::type* = 0
 );
 
 //overload for empty nodes (sequence and alternative tail nodes)
@@ -102,7 +102,7 @@ const std::string
 get_value
 (
 	const SyntaxNodeT& node,
-	typename boost::enable_if<syntax_nodes::util::is_sequence_node<SyntaxNodeT>>::type* = 0,
+	typename boost::enable_if<syntax_nodes::utility::is_sequence_node<SyntaxNodeT>>::type* = 0,
 	typename boost::disable_if<boost::is_same<typename SyntaxNodeT::head_node_t, void>>::type* = 0
 )
 {
@@ -115,7 +115,7 @@ const std::string
 get_value
 (
 	const SyntaxNodeT& node,
-	typename boost::enable_if<syntax_nodes::util::is_alternative_node<SyntaxNodeT>>::type* = 0,
+	typename boost::enable_if<syntax_nodes::utility::is_alternative_node<SyntaxNodeT>>::type* = 0,
 	typename boost::disable_if<boost::is_same<typename SyntaxNodeT::head_node_t, void>>::type* = 0
 )
 {
@@ -136,7 +136,7 @@ const std::string
 get_value
 (
 	const SyntaxNodeT& node,
-	typename boost::enable_if<syntax_nodes::util::is_list_node<SyntaxNodeT>>::type* = 0
+	typename boost::enable_if<syntax_nodes::utility::is_list_node<SyntaxNodeT>>::type* = 0
 )
 {
 	std::string value;
@@ -163,7 +163,7 @@ const std::string
 get_value
 (
 	const SyntaxNodeT& node,
-	typename boost::enable_if<syntax_nodes::util::is_optional_node<SyntaxNodeT>>::type* = 0
+	typename boost::enable_if<syntax_nodes::utility::is_optional_node<SyntaxNodeT>>::type* = 0
 )
 {
 	if(node)
@@ -178,7 +178,7 @@ const std::string
 get_value
 (
 	const SyntaxNodeT& node,
-	typename boost::enable_if<syntax_nodes::util::is_predefined_text_node<SyntaxNodeT>>::type* = 0
+	typename boost::enable_if<syntax_nodes::utility::is_predefined_text_node<SyntaxNodeT>>::type* = 0
 )
 {
 	return node.text();
@@ -190,7 +190,7 @@ const std::string
 get_value
 (
 	const SyntaxNodeT& node,
-	typename boost::enable_if<syntax_nodes::util::is_leaf_node<SyntaxNodeT>>::type* = 0
+	typename boost::enable_if<syntax_nodes::utility::is_leaf_node<SyntaxNodeT>>::type* = 0
 )
 {
 	return node.value();
@@ -208,6 +208,6 @@ get_value
 	return "";
 }
 
-}}}} //namespace scalpel::cpp::syntax_nodes::util
+}}}} //namespace scalpel::cpp::syntax_nodes::utility
 
 #endif

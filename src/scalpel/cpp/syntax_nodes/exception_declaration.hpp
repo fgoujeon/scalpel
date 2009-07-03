@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_EXCEPTION_DECLARATION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_EXCEPTION_DECLARATION_HPP
 
-#include "../../util/extern_strings.hpp"
+#include "../../utility/extern_strings.hpp"
 #include "alternative_node.hpp"
 #include "predefined_text_node.hpp"
 #include "exception_declarator.hpp"

@@ -23,7 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <vector>
 #include "optional_node.hpp"
-#include "../../util/extern_strings.hpp"
+#include "../../utility/extern_strings.hpp"
 #include "common_nodes.hpp"
 #include "space.hpp"
 

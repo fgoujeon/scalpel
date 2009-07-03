@@ -23,7 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string>
 
-namespace scalpel { namespace util
+namespace scalpel { namespace utility
 {
 
 namespace extern_strings
@@ -159,6 +159,6 @@ namespace extern_strings
 	extern const std::string while_;
 }
 
-}} //namespace scalpel::util
+}} //namespace scalpel::utility
 
 #endif

@@ -25,7 +25,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <iostream>
 #include <boost/utility/enable_if.hpp>
 #include "../../../syntax_tree.hpp"
-#include "../../../syntax_nodes/util/node_type_traits.hpp"
+#include "../../../syntax_nodes/utility/node_type_traits.hpp"
 #include "../grammar.hpp"
 #include "sequence_node_converter_fwd.hpp"
 #include "alternative_node_converter_fwd.hpp"
@@ -92,7 +92,7 @@ SyntaxNodeT
 convert_node
 (
 	const tree_node_t& node,
-	typename boost::enable_if<syntax_nodes::util::is_list_node<SyntaxNodeT>>::type* = 0
+	typename boost::enable_if<syntax_nodes::utility::is_list_node<SyntaxNodeT>>::type* = 0
 )
 {
 #ifndef NDEBUG
@@ -108,7 +108,7 @@ SyntaxNodeT
 convert_node
 (
 	const tree_node_t& node,
-	typename boost::enable_if<syntax_nodes::util::is_optional_node<SyntaxNodeT>>::type* = 0
+	typename boost::enable_if<syntax_nodes::utility::is_optional_node<SyntaxNodeT>>::type* = 0
 )
 {
 #ifndef NDEBUG
@@ -124,7 +124,7 @@ SyntaxNodeT
 convert_node
 (
 	const tree_node_t& node,
-	typename boost::enable_if<syntax_nodes::util::is_predefined_text_node<SyntaxNodeT>>::type* = 0
+	typename boost::enable_if<syntax_nodes::utility::is_predefined_text_node<SyntaxNodeT>>::type* = 0
 )
 {
 	return convert_predefined_text_node<SyntaxNodeT>(node);
@@ -137,7 +137,7 @@ SyntaxNodeT
 convert_node
 (
 	const tree_node_t& node,
-	typename boost::enable_if<syntax_nodes::util::is_leaf_node<SyntaxNodeT>>::type* = 0
+	typename boost::enable_if<syntax_nodes::utility::is_leaf_node<SyntaxNodeT>>::type* = 0
 )
 {
 	return convert_leaf_node<SyntaxNodeT>(node);

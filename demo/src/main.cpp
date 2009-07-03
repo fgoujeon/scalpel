@@ -24,12 +24,12 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <scalpel/cpp/preprocessor.hpp>
 #include <scalpel/cpp/syntax_analyzer.hpp>
-#include <scalpel/cpp/syntax_nodes/util/node_type_traits.hpp>
-#include <scalpel/cpp/syntax_nodes/util/value_getter.hpp>
+#include <scalpel/cpp/syntax_nodes/utility/node_type_traits.hpp>
+#include <scalpel/cpp/syntax_nodes/utility/value_getter.hpp>
 
 using namespace scalpel::cpp;
 using namespace scalpel::cpp::syntax_nodes;
-using namespace scalpel::cpp::syntax_nodes::util;
+using namespace scalpel::cpp::syntax_nodes::utility;
 
 std::string
 indent(unsigned int level)
@@ -388,7 +388,7 @@ print
 	const SyntaxNodeT& node,
 	const unsigned int indent_level = 0,
 	bool print_type = true,
-	typename boost::enable_if<syntax_nodes::util::is_sequence_node<SyntaxNodeT>>::type* = 0,
+	typename boost::enable_if<syntax_nodes::utility::is_sequence_node<SyntaxNodeT>>::type* = 0,
 	typename boost::disable_if<boost::is_same<typename SyntaxNodeT::head_node_t, void>>::type* = 0
 );
 
@@ -400,7 +400,7 @@ print
 	const SyntaxNodeT& node,
 	const unsigned int indent_level = 0,
 	bool print_type = true,
-	typename boost::enable_if<syntax_nodes::util::is_alternative_node<SyntaxNodeT>>::type* = 0,
+	typename boost::enable_if<syntax_nodes::utility::is_alternative_node<SyntaxNodeT>>::type* = 0,
 	typename boost::disable_if<boost::is_same<typename SyntaxNodeT::head_node_t, void>>::type* = 0
 );
 
@@ -411,7 +411,7 @@ print
 (
 	const SyntaxNodeT& node,
 	const unsigned int indent_level = 0,
-	typename boost::enable_if<syntax_nodes::util::is_list_node<SyntaxNodeT>>::type* = 0
+	typename boost::enable_if<syntax_nodes::utility::is_list_node<SyntaxNodeT>>::type* = 0
 );
 
 //overload for optional nodes
@@ -421,7 +421,7 @@ print
 (
 	const SyntaxNodeT& node,
 	const unsigned int indent_level = 0,
-	typename boost::enable_if<syntax_nodes::util::is_optional_node<SyntaxNodeT>>::type* = 0
+	typename boost::enable_if<syntax_nodes::utility::is_optional_node<SyntaxNodeT>>::type* = 0
 );
 
 //overload for predefined_text nodes
@@ -431,7 +431,7 @@ print
 (
 	const SyntaxNodeT& node,
 	const unsigned int indent_level = 0,
-	typename boost::enable_if<syntax_nodes::util::is_predefined_text_node<SyntaxNodeT>>::type* = 0
+	typename boost::enable_if<syntax_nodes::utility::is_predefined_text_node<SyntaxNodeT>>::type* = 0
 );
 
 //overload for leaf nodes
@@ -441,7 +441,7 @@ print
 (
 	const SyntaxNodeT& node,
 	const unsigned int indent_level = 0,
-	typename boost::enable_if<syntax_nodes::util::is_leaf_node<SyntaxNodeT>>::type* = 0
+	typename boost::enable_if<syntax_nodes::utility::is_leaf_node<SyntaxNodeT>>::type* = 0
 );
 
 //overload for empty nodes (sequence and alternative tail nodes)
@@ -465,7 +465,7 @@ print
 	const SyntaxNodeT& node,
 	const unsigned int indent_level,
 	bool print_type,
-	typename boost::enable_if<syntax_nodes::util::is_sequence_node<SyntaxNodeT>>::type* = 0,
+	typename boost::enable_if<syntax_nodes::utility::is_sequence_node<SyntaxNodeT>>::type* = 0,
 	typename boost::disable_if<boost::is_same<typename SyntaxNodeT::head_node_t, void>>::type* = 0
 )
 {
@@ -491,7 +491,7 @@ print
 	const SyntaxNodeT& node,
 	const unsigned int indent_level,
 	bool print_type,
-	typename boost::enable_if<syntax_nodes::util::is_alternative_node<SyntaxNodeT>>::type* = 0,
+	typename boost::enable_if<syntax_nodes::utility::is_alternative_node<SyntaxNodeT>>::type* = 0,
 	typename boost::disable_if<boost::is_same<typename SyntaxNodeT::head_node_t, void>>::type* = 0
 )
 {
@@ -521,7 +521,7 @@ print
 (
 	const SyntaxNodeT& node,
 	const unsigned int indent_level,
-	typename boost::enable_if<syntax_nodes::util::is_list_node<SyntaxNodeT>>::type* = 0
+	typename boost::enable_if<syntax_nodes::utility::is_list_node<SyntaxNodeT>>::type* = 0
 )
 {
 	std::cout << indent(indent_level) << "[" << get_type<SyntaxNodeT>() << "]\n";
@@ -549,7 +549,7 @@ print
 (
 	const SyntaxNodeT& node,
 	const unsigned int indent_level,
-	typename boost::enable_if<syntax_nodes::util::is_optional_node<SyntaxNodeT>>::type* = 0
+	typename boost::enable_if<syntax_nodes::utility::is_optional_node<SyntaxNodeT>>::type* = 0
 )
 {
 	if(node) print(*node, indent_level);
@@ -562,7 +562,7 @@ print
 (
 	const SyntaxNodeT& node,
 	const unsigned int indent_level,
-	typename boost::enable_if<syntax_nodes::util::is_predefined_text_node<SyntaxNodeT>>::type* = 0
+	typename boost::enable_if<syntax_nodes::utility::is_predefined_text_node<SyntaxNodeT>>::type* = 0
 )
 {
 	std::cout << indent(indent_level) << "[predefined_text_node/] ";
@@ -577,7 +577,7 @@ print
 (
 	const SyntaxNodeT& node,
 	const unsigned int indent_level,
-	typename boost::enable_if<syntax_nodes::util::is_leaf_node<SyntaxNodeT>>::type* = 0
+	typename boost::enable_if<syntax_nodes::utility::is_leaf_node<SyntaxNodeT>>::type* = 0
 )
 {
 	std::cout << indent(indent_level) << "[leaf_node/] ";

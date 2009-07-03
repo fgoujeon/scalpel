@@ -24,7 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "../optional_node.hpp"
 #include "../predefined_text_node.hpp"
 
-namespace scalpel { namespace cpp { namespace syntax_nodes { namespace util
+namespace scalpel { namespace cpp { namespace syntax_nodes { namespace utility
 {
 
 /*
@@ -160,6 +160,6 @@ struct is_leaf_node
 	;
 };
 
-}}}} //namespace scalpel::cpp::syntax_nodes::util
+}}}} //namespace scalpel::cpp::syntax_nodes::utility
 
 #endif

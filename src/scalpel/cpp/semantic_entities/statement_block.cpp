@@ -22,7 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <iostream>
 #include <cassert>
-#include <scalpel/util/extern_strings.hpp>
+#include <scalpel/utility/extern_strings.hpp>
 #include "namespace_.hpp"
 #include "class_.hpp"
 
@@ -56,7 +56,7 @@ statement_block::accept(scope_visitor& v)
 const std::string&
 statement_block::name() const
 {
-    return util::extern_strings::empty;
+    return utility::extern_strings::empty;
 }
 
 bool
