@@ -24,6 +24,12 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <scalpel/cpp/preprocessor.hpp>
 #include <scalpel/cpp/syntax_analyzer.hpp>
+#include <scalpel/cpp/syntax_nodes/util/node_type_traits.hpp>
+#include <scalpel/cpp/syntax_nodes/util/value_getter.hpp>
+
+using namespace scalpel::cpp;
+using namespace scalpel::cpp::syntax_nodes;
+using namespace scalpel::cpp::syntax_nodes::util;
 
 std::string
 indent(unsigned int level)
@@ -58,277 +64,551 @@ printable_node_value(const std::string& value)
 	return new_value;
 }
 
-#define AAA(type)\
-	if(dynamic_cast<const type*>(&node)) return #type;\
-	if(dynamic_cast<const optional_node<type>*>(&node)) return "optional " #type;
 
-std::string
-get_node_type(const scalpel::cpp::syntax_nodes::node& node)
+
+template<class T>
+struct type_getter
 {
-	using namespace scalpel::cpp::syntax_nodes;
+	static
+	const std::string
+	get()
+	{
+		return "";
+	}
+};
 
-	AAA(abstract_declarator)
-	AAA(access_specifier)
-	AAA(array_delete_expression)
-	AAA(array_operator)
-	AAA(arrow_id_expression)
-	AAA(arrow_pseudo_destructor_name)
-	AAA(asm_definition)
-	AAA(assignment_expression)
-	AAA(assignment_expression_condition)
-	AAA(assignment_operator)
-	AAA(base_clause)
-	AAA(base_specifier)
-	AAA(base_specifier_list)
-	AAA(block_declaration)
-	AAA(boolean_literal)
-	AAA(bracketed_abstract_declarator)
-	AAA(bracketed_declarator)
-	AAA(break_statement)
-	AAA(built_in_type_specifier)
-	AAA(case_statement)
-	AAA(cast_expression)
-	AAA(character_literal)
-	AAA(class_elaborated_specifier)
-	AAA(class_head)
-	AAA(class_key)
-	AAA(class_specifier)
-	AAA(class_type_parameter)
-	AAA(classic_labeled_statement)
-	AAA(compound_statement)
-	AAA(condition)
-	AAA(conditional_expression)
-	AAA(const_cast_expression)
-	AAA(constant_initializer)
-	AAA(continue_statement)
-	AAA(conversion_function_id)
-	AAA(ctor_initializer)
-	AAA(cv_qualifier)
-	AAA(cv_qualifier_seq)
-	AAA(decl_specifier)
-	AAA(decl_specifier_seq)
-	AAA(declaration)
-	AAA(declaration_linkage_specification)
-	AAA(declaration_seq)
-	AAA(declaration_seq_linkage_specification)
-	AAA(declarator)
-	AAA(declarator_id)
-	AAA(default_statement)
-	AAA(delete_array_operator)
-	AAA(delete_expression)
-	AAA(destructor_name)
-	AAA(direct_abstract_declarator)
-	AAA(direct_declarator)
-	AAA(direct_new_declarator)
-	AAA(do_while_statement)
-	AAA(dot_id_expression)
-	AAA(dot_pseudo_destructor_name)
-	AAA(dynamic_cast_expression)
-	AAA(elaborated_type_specifier)
-	AAA(enum_elaborated_specifier)
-	AAA(enum_specifier)
-	AAA(enumerator_definition)
-	AAA(enumerator_list)
-	AAA(equal_initializer)
-	AAA(exception_abstract_declarator)
-	AAA(exception_declaration)
-	AAA(exception_declarator)
-	AAA(exception_specification)
-	AAA(explicit_instantiation)
-	AAA(explicit_specialization)
-	AAA(expression)
-	AAA(expression_statement)
-	AAA(floating_literal)
-	AAA(for_init_statement)
-	AAA(for_statement)
-	AAA(function_definition)
-	AAA(function_specifier)
-	AAA(function_try_block)
-	AAA(goto_statement)
-	AAA(handler)
-	AAA(handler_seq)
-	AAA(id_expression)
-	AAA(identifier)
-	AAA(identifier_or_template_id)
-	AAA(if_statement)
-	AAA(init_declarator)
-	AAA(init_declarator_list)
-	AAA(initializer)
-	AAA(initializer_clause)
-	AAA(initializer_list)
-	AAA(initializer_list_initializer_clause)
-	AAA(integer_literal)
-	AAA(iteration_statement)
-	AAA(jump_statement)
-	AAA(labeled_statement)
-	AAA(linkage_specification)
-	AAA(literal)
-	AAA(mem_initializer)
-	AAA(mem_initializer_id)
-	AAA(mem_initializer_list)
-	AAA(member_declaration)
-	AAA(member_declaration_function_definition)
-	AAA(member_declaration_member_declarator_list)
-	AAA(member_declaration_unqualified_id)
-	AAA(member_declarator)
-	AAA(member_declarator_bit_field_member)
-	AAA(member_declarator_declarator)
-	AAA(member_declarator_list)
-	AAA(member_specification)
-	AAA(member_specification_access_specifier)
-	AAA(member_specification_part)
-	AAA(namespace_alias_definition)
-	AAA(namespace_definition)
-	AAA(nested_identifier_or_template_id)
-	AAA(nested_name_specifier)
-	AAA(new_array_operator)
-	AAA(new_declarator)
-	AAA(new_expression)
-	AAA(new_initializer)
-	AAA(new_type_id)
-	AAA(new_type_id_new_expression)
-	AAA(operator_)
-	AAA(operator_function_id)
-	AAA(parameter_declaration)
-	AAA(parameter_declaration_clause)
-	AAA(parameter_declaration_list)
-	AAA(postfix_expression)
-	AAA(primary_expression)
-	AAA(ptr_operator)
-	AAA(ptr_operator_seq)
-	AAA(ptr_ptr_operator)
-	AAA(pure_specifier)
-	AAA(qualified_id)
-	AAA(qualified_identifier)
-	AAA(qualified_namespace_specifier)
-	AAA(qualified_nested_id)
-	AAA(qualified_operator_function_id)
-	AAA(qualified_template_id)
-	AAA(ref_ptr_operator)
-	AAA(reinterpret_cast_expression)
-	AAA(return_statement)
-	AAA(round_bracketed_expression)
-	AAA(round_bracketed_optional_expression)
-	AAA(selection_statement)
-	AAA(simple_declaration)
-	AAA(simple_delete_expression)
-	AAA(simple_function_definition)
-	AAA(simple_operator)
-	AAA(simple_template_type_specifier)
-	AAA(simple_type_specifier)
-	AAA(simple_type_specifier_postfix_expression)
-	AAA(square_bracketed_expression)
-	AAA(statement)
-	AAA(statement_seq)
-	AAA(static_cast_expression)
-	AAA(storage_class_specifier)
-	AAA(string_literal)
-	AAA(switch_statement)
-	AAA(template_argument)
-	AAA(template_argument_assignment_expression)
-	AAA(template_argument_conditional_expression)
-	AAA(template_argument_list)
-	AAA(template_declaration)
-	AAA(template_id)
-	AAA(template_parameter)
-	AAA(template_parameter_list)
-	AAA(template_type_parameter)
-	AAA(template_typename_expression)
-	AAA(throw_expression)
-	AAA(translation_unit)
-	AAA(try_block)
-	AAA(try_block_function_definition)
-	AAA(type_id)
-	AAA(type_id_list)
-	AAA(type_id_new_expression)
-	AAA(type_id_sizeof_expression)
-	AAA(type_id_typeid_expression)
-	AAA(type_parameter)
-	AAA(type_specifier)
-	AAA(type_specifier_seq)
-	AAA(typeid_expression)
-	AAA(typename_elaborated_specifier)
-	AAA(typename_expression)
-	AAA(typename_template_elaborated_specifier)
-	AAA(typename_type_parameter)
-	AAA(typeof_expression)
-	AAA(unary_expression)
-	AAA(unary_operator)
-	AAA(unary_operator_unary_expression)
-	AAA(unary_sizeof_expression)
-	AAA(unqualified_id)
-	AAA(using_declaration)
-	AAA(using_directive)
-	AAA(while_statement)
+#define GET_TYPE_SPECIALIZATION(node_type)\
+template<> \
+struct type_getter<node_type> \
+{ \
+	static \
+	const std::string \
+	get() \
+	{ \
+		return #node_type; \
+	} \
+}; \
+ \
+template<> \
+struct type_getter<optional_node<node_type>> \
+{ \
+	static \
+	const std::string \
+	get() \
+	{ \
+		return "optional " #node_type; \
+	} \
+};
 
-	AAA(leaf_node)
+GET_TYPE_SPECIALIZATION(abstract_declarator)
+GET_TYPE_SPECIALIZATION(access_specifier)
+GET_TYPE_SPECIALIZATION(additive_expression)
+GET_TYPE_SPECIALIZATION(and_expression)
+GET_TYPE_SPECIALIZATION(array_delete_expression)
+GET_TYPE_SPECIALIZATION(array_operator)
+GET_TYPE_SPECIALIZATION(arrow_id_expression)
+GET_TYPE_SPECIALIZATION(arrow_pseudo_destructor_name)
+GET_TYPE_SPECIALIZATION(asm_definition)
+GET_TYPE_SPECIALIZATION(assignment_expression)
+GET_TYPE_SPECIALIZATION(assignment_expression_condition)
+GET_TYPE_SPECIALIZATION(assignment_expression_first_part)
+GET_TYPE_SPECIALIZATION(assignment_expression_first_part_seq)
+GET_TYPE_SPECIALIZATION(assignment_expression_last_part)
+GET_TYPE_SPECIALIZATION(assignment_operator)
+GET_TYPE_SPECIALIZATION(base_clause)
+GET_TYPE_SPECIALIZATION(base_specifier)
+GET_TYPE_SPECIALIZATION(base_specifier_list)
+GET_TYPE_SPECIALIZATION(block_declaration)
+GET_TYPE_SPECIALIZATION(boolean_literal)
+GET_TYPE_SPECIALIZATION(bracketed_abstract_declarator)
+GET_TYPE_SPECIALIZATION(bracketed_declarator)
+GET_TYPE_SPECIALIZATION(break_statement)
+GET_TYPE_SPECIALIZATION(built_in_type_specifier)
+GET_TYPE_SPECIALIZATION(case_statement)
+GET_TYPE_SPECIALIZATION(cast_expression)
+GET_TYPE_SPECIALIZATION(cast_expression_first_part)
+GET_TYPE_SPECIALIZATION(cast_expression_first_part_seq)
+GET_TYPE_SPECIALIZATION(character_literal)
+GET_TYPE_SPECIALIZATION(class_elaborated_specifier)
+GET_TYPE_SPECIALIZATION(class_head)
+GET_TYPE_SPECIALIZATION(class_key)
+GET_TYPE_SPECIALIZATION(class_specifier)
+GET_TYPE_SPECIALIZATION(class_type_parameter)
+GET_TYPE_SPECIALIZATION(classic_labeled_statement)
+GET_TYPE_SPECIALIZATION(compound_statement)
+GET_TYPE_SPECIALIZATION(condition)
+GET_TYPE_SPECIALIZATION(conditional_expression)
+GET_TYPE_SPECIALIZATION(const_cast_expression)
+GET_TYPE_SPECIALIZATION(constant_initializer)
+GET_TYPE_SPECIALIZATION(continue_statement)
+GET_TYPE_SPECIALIZATION(conversion_function_id)
+GET_TYPE_SPECIALIZATION(ctor_initializer)
+GET_TYPE_SPECIALIZATION(cv_qualifier)
+GET_TYPE_SPECIALIZATION(cv_qualifier_seq)
+GET_TYPE_SPECIALIZATION(decl_specifier)
+GET_TYPE_SPECIALIZATION(decl_specifier_seq)
+GET_TYPE_SPECIALIZATION(declaration)
+GET_TYPE_SPECIALIZATION(declaration_linkage_specification)
+GET_TYPE_SPECIALIZATION(declaration_seq)
+GET_TYPE_SPECIALIZATION(declaration_seq_linkage_specification)
+GET_TYPE_SPECIALIZATION(declarator)
+GET_TYPE_SPECIALIZATION(declarator_id)
+GET_TYPE_SPECIALIZATION(default_statement)
+GET_TYPE_SPECIALIZATION(delete_array_operator)
+GET_TYPE_SPECIALIZATION(delete_expression)
+GET_TYPE_SPECIALIZATION(destructor_name)
+GET_TYPE_SPECIALIZATION(direct_abstract_declarator)
+GET_TYPE_SPECIALIZATION(direct_declarator)
+GET_TYPE_SPECIALIZATION(direct_declarator_array_part)
+GET_TYPE_SPECIALIZATION(direct_declarator_first_part)
+GET_TYPE_SPECIALIZATION(direct_declarator_function_part)
+GET_TYPE_SPECIALIZATION(direct_declarator_last_part)
+GET_TYPE_SPECIALIZATION(direct_declarator_last_part_seq)
+GET_TYPE_SPECIALIZATION(direct_new_declarator)
+GET_TYPE_SPECIALIZATION(divisive_expression)
+GET_TYPE_SPECIALIZATION(do_while_statement)
+GET_TYPE_SPECIALIZATION(dot_id_expression)
+GET_TYPE_SPECIALIZATION(dot_pseudo_destructor_name)
+GET_TYPE_SPECIALIZATION(dynamic_cast_expression)
+GET_TYPE_SPECIALIZATION(elaborated_type_specifier)
+GET_TYPE_SPECIALIZATION(enum_elaborated_specifier)
+GET_TYPE_SPECIALIZATION(enum_specifier)
+GET_TYPE_SPECIALIZATION(enumerator_definition)
+GET_TYPE_SPECIALIZATION(enumerator_list)
+GET_TYPE_SPECIALIZATION(equal_initializer)
+GET_TYPE_SPECIALIZATION(equality_expression)
+GET_TYPE_SPECIALIZATION(exception_abstract_declarator)
+GET_TYPE_SPECIALIZATION(exception_declaration)
+GET_TYPE_SPECIALIZATION(exception_declarator)
+GET_TYPE_SPECIALIZATION(exception_specification)
+GET_TYPE_SPECIALIZATION(exclusive_or_expression)
+GET_TYPE_SPECIALIZATION(explicit_instantiation)
+GET_TYPE_SPECIALIZATION(explicit_specialization)
+GET_TYPE_SPECIALIZATION(expression)
+GET_TYPE_SPECIALIZATION(expression_statement)
+GET_TYPE_SPECIALIZATION(floating_literal)
+GET_TYPE_SPECIALIZATION(for_init_statement)
+GET_TYPE_SPECIALIZATION(for_statement)
+GET_TYPE_SPECIALIZATION(function_definition)
+GET_TYPE_SPECIALIZATION(function_specifier)
+GET_TYPE_SPECIALIZATION(function_try_block)
+GET_TYPE_SPECIALIZATION(goto_statement)
+GET_TYPE_SPECIALIZATION(greater_than_expression)
+GET_TYPE_SPECIALIZATION(greater_than_or_equal_to_expression)
+GET_TYPE_SPECIALIZATION(handler)
+GET_TYPE_SPECIALIZATION(handler_seq)
+GET_TYPE_SPECIALIZATION(id_expression)
+GET_TYPE_SPECIALIZATION(identifier)
+GET_TYPE_SPECIALIZATION(identifier_or_template_id)
+GET_TYPE_SPECIALIZATION(if_statement)
+GET_TYPE_SPECIALIZATION(inclusive_or_expression)
+GET_TYPE_SPECIALIZATION(inequality_expression)
+GET_TYPE_SPECIALIZATION(init_declarator)
+GET_TYPE_SPECIALIZATION(init_declarator_list)
+GET_TYPE_SPECIALIZATION(initializer)
+GET_TYPE_SPECIALIZATION(initializer_clause)
+GET_TYPE_SPECIALIZATION(initializer_list)
+GET_TYPE_SPECIALIZATION(initializer_list_initializer_clause)
+GET_TYPE_SPECIALIZATION(integer_literal)
+GET_TYPE_SPECIALIZATION(iteration_statement)
+GET_TYPE_SPECIALIZATION(jump_statement)
+GET_TYPE_SPECIALIZATION(labeled_statement)
+GET_TYPE_SPECIALIZATION(left_shift_expression)
+GET_TYPE_SPECIALIZATION(less_than_expression)
+GET_TYPE_SPECIALIZATION(less_than_or_equal_to_expression)
+GET_TYPE_SPECIALIZATION(linkage_specification)
+GET_TYPE_SPECIALIZATION(literal)
+GET_TYPE_SPECIALIZATION(logical_and_expression)
+GET_TYPE_SPECIALIZATION(logical_or_expression)
+GET_TYPE_SPECIALIZATION(mem_initializer)
+GET_TYPE_SPECIALIZATION(mem_initializer_id)
+GET_TYPE_SPECIALIZATION(mem_initializer_list)
+GET_TYPE_SPECIALIZATION(member_declaration)
+GET_TYPE_SPECIALIZATION(member_declaration_function_definition)
+GET_TYPE_SPECIALIZATION(member_declaration_member_declarator_list)
+GET_TYPE_SPECIALIZATION(member_declaration_unqualified_id)
+GET_TYPE_SPECIALIZATION(member_declarator)
+GET_TYPE_SPECIALIZATION(member_declarator_bit_field_member)
+GET_TYPE_SPECIALIZATION(member_declarator_declarator)
+GET_TYPE_SPECIALIZATION(member_declarator_declarator_last_part)
+GET_TYPE_SPECIALIZATION(member_declarator_list)
+GET_TYPE_SPECIALIZATION(member_specification)
+GET_TYPE_SPECIALIZATION(member_specification_access_specifier)
+GET_TYPE_SPECIALIZATION(member_specification_part)
+GET_TYPE_SPECIALIZATION(modulo_expression)
+GET_TYPE_SPECIALIZATION(multiplicative_expression)
+GET_TYPE_SPECIALIZATION(namespace_alias_definition)
+GET_TYPE_SPECIALIZATION(namespace_definition)
+GET_TYPE_SPECIALIZATION(nested_identifier_or_template_id)
+GET_TYPE_SPECIALIZATION(nested_name_specifier)
+GET_TYPE_SPECIALIZATION(nested_name_specifier_last_part)
+GET_TYPE_SPECIALIZATION(nested_name_specifier_last_part_seq)
+GET_TYPE_SPECIALIZATION(new_array_operator)
+GET_TYPE_SPECIALIZATION(new_declarator)
+GET_TYPE_SPECIALIZATION(new_expression)
+GET_TYPE_SPECIALIZATION(new_type_id)
+GET_TYPE_SPECIALIZATION(new_type_id_new_expression)
+GET_TYPE_SPECIALIZATION(operator_)
+GET_TYPE_SPECIALIZATION(operator_function_id)
+GET_TYPE_SPECIALIZATION(parameter_declaration)
+GET_TYPE_SPECIALIZATION(parameter_declaration_clause)
+GET_TYPE_SPECIALIZATION(parameter_declaration_list)
+GET_TYPE_SPECIALIZATION(pm_ptr_expression)
+GET_TYPE_SPECIALIZATION(pm_ref_expression)
+GET_TYPE_SPECIALIZATION(postfix_expression)
+GET_TYPE_SPECIALIZATION(postfix_expression_first_part)
+GET_TYPE_SPECIALIZATION(postfix_expression_last_part)
+GET_TYPE_SPECIALIZATION(postfix_expression_last_part_seq)
+GET_TYPE_SPECIALIZATION(primary_expression)
+GET_TYPE_SPECIALIZATION(ptr_operator)
+GET_TYPE_SPECIALIZATION(ptr_operator_seq)
+GET_TYPE_SPECIALIZATION(ptr_ptr_operator)
+GET_TYPE_SPECIALIZATION(pure_specifier)
+GET_TYPE_SPECIALIZATION(qualified_id)
+GET_TYPE_SPECIALIZATION(qualified_identifier)
+GET_TYPE_SPECIALIZATION(qualified_namespace_specifier)
+GET_TYPE_SPECIALIZATION(qualified_nested_id)
+GET_TYPE_SPECIALIZATION(qualified_operator_function_id)
+GET_TYPE_SPECIALIZATION(qualified_template_id)
+GET_TYPE_SPECIALIZATION(ref_ptr_operator)
+GET_TYPE_SPECIALIZATION(reinterpret_cast_expression)
+GET_TYPE_SPECIALIZATION(return_statement)
+GET_TYPE_SPECIALIZATION(right_shift_expression)
+GET_TYPE_SPECIALIZATION(round_bracketed_expression)
+GET_TYPE_SPECIALIZATION(round_bracketed_greater_than_expression)
+GET_TYPE_SPECIALIZATION(round_bracketed_optional_expression)
+GET_TYPE_SPECIALIZATION(round_bracketed_right_shift_expression)
+GET_TYPE_SPECIALIZATION(selection_statement)
+GET_TYPE_SPECIALIZATION(simple_declaration)
+GET_TYPE_SPECIALIZATION(simple_delete_expression)
+GET_TYPE_SPECIALIZATION(simple_function_definition)
+GET_TYPE_SPECIALIZATION(simple_operator)
+GET_TYPE_SPECIALIZATION(simple_template_type_specifier)
+GET_TYPE_SPECIALIZATION(simple_type_specifier)
+GET_TYPE_SPECIALIZATION(simple_type_specifier_postfix_expression)
+GET_TYPE_SPECIALIZATION(space)
+GET_TYPE_SPECIALIZATION(square_bracketed_expression)
+GET_TYPE_SPECIALIZATION(statement)
+GET_TYPE_SPECIALIZATION(statement_seq)
+GET_TYPE_SPECIALIZATION(static_cast_expression)
+GET_TYPE_SPECIALIZATION(storage_class_specifier)
+GET_TYPE_SPECIALIZATION(string_literal)
+GET_TYPE_SPECIALIZATION(subtractive_expression)
+GET_TYPE_SPECIALIZATION(switch_statement)
+GET_TYPE_SPECIALIZATION(template_argument)
+GET_TYPE_SPECIALIZATION(template_argument_and_expression)
+GET_TYPE_SPECIALIZATION(template_argument_assignment_expression)
+GET_TYPE_SPECIALIZATION(template_argument_assignment_expression_first_part)
+GET_TYPE_SPECIALIZATION(template_argument_assignment_expression_first_part_seq)
+GET_TYPE_SPECIALIZATION(template_argument_assignment_expression_last_part)
+GET_TYPE_SPECIALIZATION(template_argument_conditional_expression)
+GET_TYPE_SPECIALIZATION(template_argument_equality_expression)
+GET_TYPE_SPECIALIZATION(template_argument_exclusive_or_expression)
+GET_TYPE_SPECIALIZATION(template_argument_greater_than_expression)
+GET_TYPE_SPECIALIZATION(template_argument_greater_than_or_equal_to_expression)
+GET_TYPE_SPECIALIZATION(template_argument_inclusive_or_expression)
+GET_TYPE_SPECIALIZATION(template_argument_inequality_expression)
+GET_TYPE_SPECIALIZATION(template_argument_less_than_expression)
+GET_TYPE_SPECIALIZATION(template_argument_less_than_or_equal_to_expression)
+GET_TYPE_SPECIALIZATION(template_argument_list)
+GET_TYPE_SPECIALIZATION(template_argument_logical_and_expression)
+GET_TYPE_SPECIALIZATION(template_argument_logical_or_expression)
+GET_TYPE_SPECIALIZATION(template_argument_right_shift_expression)
+GET_TYPE_SPECIALIZATION(template_declaration)
+GET_TYPE_SPECIALIZATION(template_id)
+GET_TYPE_SPECIALIZATION(template_parameter)
+GET_TYPE_SPECIALIZATION(template_parameter_list)
+GET_TYPE_SPECIALIZATION(template_type_parameter)
+GET_TYPE_SPECIALIZATION(template_typename_expression)
+GET_TYPE_SPECIALIZATION(throw_expression)
+GET_TYPE_SPECIALIZATION(translation_unit)
+GET_TYPE_SPECIALIZATION(try_block)
+GET_TYPE_SPECIALIZATION(try_block_function_definition)
+GET_TYPE_SPECIALIZATION(type_id)
+GET_TYPE_SPECIALIZATION(type_id_list)
+GET_TYPE_SPECIALIZATION(type_id_new_expression)
+GET_TYPE_SPECIALIZATION(type_id_sizeof_expression)
+GET_TYPE_SPECIALIZATION(type_id_typeid_expression)
+GET_TYPE_SPECIALIZATION(type_parameter)
+GET_TYPE_SPECIALIZATION(type_specifier)
+GET_TYPE_SPECIALIZATION(type_specifier_seq)
+GET_TYPE_SPECIALIZATION(typeid_expression)
+GET_TYPE_SPECIALIZATION(typename_elaborated_specifier)
+GET_TYPE_SPECIALIZATION(typename_expression)
+GET_TYPE_SPECIALIZATION(typename_template_elaborated_specifier)
+GET_TYPE_SPECIALIZATION(typename_type_parameter)
+GET_TYPE_SPECIALIZATION(typeof_expression)
+GET_TYPE_SPECIALIZATION(typeof_keyword)
+GET_TYPE_SPECIALIZATION(unary_expression)
+GET_TYPE_SPECIALIZATION(unary_operator)
+GET_TYPE_SPECIALIZATION(unary_operator_unary_expression)
+GET_TYPE_SPECIALIZATION(unary_sizeof_expression)
+GET_TYPE_SPECIALIZATION(unqualified_id)
+GET_TYPE_SPECIALIZATION(using_declaration)
+GET_TYPE_SPECIALIZATION(using_directive)
+GET_TYPE_SPECIALIZATION(while_statement)
 
-	return "???";
+template<class T>
+const std::string
+get_type()
+{
+	return type_getter<T>::get();
 }
 
+
+
+template<class T>
 bool
-is_alive(const scalpel::cpp::syntax_nodes::node& node)
+is_alive(const T& node)
 {
-	return node.value() != "";
+	return get_value(node) != "";
 }
 
+template<class T>
 unsigned int
-get_alive_node_count(const scalpel::cpp::syntax_nodes::node& node)
+get_alive_node_count(const T& node)
 {
 	unsigned int count = 0;
 	for(auto i = node.children().begin(); i != node.children().end(); ++i)
 	{
-		const scalpel::cpp::syntax_nodes::node& child_node = *i;
+		const T& child_node = *i;
 		if(is_alive(child_node))
 			++count;
 	}
 	return count;
 }
 
+
+
+//overload for sequence nodes
+template<class SyntaxNodeT>
 void
-print_node(const scalpel::cpp::syntax_nodes::node& node, const bool abstract = false, const unsigned int indent_level = 0)
+print
+(
+	const SyntaxNodeT& node,
+	const unsigned int indent_level = 0,
+	bool print_type = true,
+	typename boost::enable_if<syntax_nodes::util::is_sequence_node<SyntaxNodeT>>::type* = 0,
+	typename boost::disable_if<boost::is_same<typename SyntaxNodeT::head_node_t, void>>::type* = 0
+);
+
+//overload for alternative nodes
+template<class SyntaxNodeT>
+void
+print
+(
+	const SyntaxNodeT& node,
+	const unsigned int indent_level = 0,
+	bool print_type = true,
+	typename boost::enable_if<syntax_nodes::util::is_alternative_node<SyntaxNodeT>>::type* = 0,
+	typename boost::disable_if<boost::is_same<typename SyntaxNodeT::head_node_t, void>>::type* = 0
+);
+
+//overload for list nodes
+template<class SyntaxNodeT>
+void
+print
+(
+	const SyntaxNodeT& node,
+	const unsigned int indent_level = 0,
+	typename boost::enable_if<syntax_nodes::util::is_list_node<SyntaxNodeT>>::type* = 0
+);
+
+//overload for optional nodes
+template<class SyntaxNodeT>
+void
+print
+(
+	const SyntaxNodeT& node,
+	const unsigned int indent_level = 0,
+	typename boost::enable_if<syntax_nodes::util::is_optional_node<SyntaxNodeT>>::type* = 0
+);
+
+//overload for predefined_text nodes
+template<class SyntaxNodeT>
+void
+print
+(
+	const SyntaxNodeT& node,
+	const unsigned int indent_level = 0,
+	typename boost::enable_if<syntax_nodes::util::is_predefined_text_node<SyntaxNodeT>>::type* = 0
+);
+
+//overload for leaf nodes
+template<class SyntaxNodeT>
+void
+print
+(
+	const SyntaxNodeT& node,
+	const unsigned int indent_level = 0,
+	typename boost::enable_if<syntax_nodes::util::is_leaf_node<SyntaxNodeT>>::type* = 0
+);
+
+//overload for empty nodes (sequence and alternative tail nodes)
+template<class SyntaxNodeT>
+void
+print
+(
+	const SyntaxNodeT&,
+	const unsigned int indent_level = 0,
+	bool print_type = true,
+	typename boost::enable_if<boost::is_same<typename SyntaxNodeT::head_node_t, void>>::type* = 0
+);
+
+
+
+//overload for sequence nodes
+template<class SyntaxNodeT>
+void
+print
+(
+	const SyntaxNodeT& node,
+	const unsigned int indent_level,
+	bool print_type,
+	typename boost::enable_if<syntax_nodes::util::is_sequence_node<SyntaxNodeT>>::type* = 0,
+	typename boost::disable_if<boost::is_same<typename SyntaxNodeT::head_node_t, void>>::type* = 0
+)
 {
-	if(is_alive(node))
+	if(print_type)
 	{
-		if(node.children().empty())
-		{
-			std::cout << indent(indent_level) << "[" << get_node_type(node) << "] ";
-			std::cout << printable_node_value(node.value());
-			std::cout << "\n";
-		}
-		else
-		{
-			unsigned int alive_node_count = get_alive_node_count(node);
-			switch(alive_node_count)
-			{
-				case 0:
-					break;
-				case 1:
-					if(abstract)
-					{
-						for(auto i = node.children().begin(); i != node.children().end(); ++i)
-						{
-							const scalpel::cpp::syntax_nodes::node& child_node = *i;
-							print_node(child_node, abstract, indent_level);
-						}
-						break;
-					}
-				default:
-					std::cout << indent(indent_level) << "[" << get_node_type(node) << " begin]\n";
-					for(auto i = node.children().begin(); i != node.children().end(); ++i)
-					{
-						const scalpel::cpp::syntax_nodes::node& child_node = *i;
-						print_node(child_node, abstract, indent_level + 1);
-					}
-					std::cout << indent(indent_level) << "[" << get_node_type(node) << " end]\n";
-			}
-		}
+		std::cout << indent(indent_level) << "[" << get_type<SyntaxNodeT>() << "]\n";
+		print(node.head(), indent_level + 1);
+		print(node.tail(), indent_level + 1, false);
+		std::cout << indent(indent_level) << "[/" << get_type<SyntaxNodeT>() << "]\n";
+	}
+	else
+	{
+		print(node.head(), indent_level);
+		print(node.tail(), indent_level, false);
 	}
 }
+
+//overload for alternative nodes
+template<class SyntaxNodeT>
+void
+print
+(
+	const SyntaxNodeT& node,
+	const unsigned int indent_level,
+	bool print_type,
+	typename boost::enable_if<syntax_nodes::util::is_alternative_node<SyntaxNodeT>>::type* = 0,
+	typename boost::disable_if<boost::is_same<typename SyntaxNodeT::head_node_t, void>>::type* = 0
+)
+{
+	auto opt_node = get<typename SyntaxNodeT::head_node_t>(&node);
+	if(print_type)
+	{
+		std::cout << indent(indent_level) << "[" << get_type<SyntaxNodeT>() << "]\n";
+		if(opt_node)
+			print(*opt_node, indent_level + 1);
+		else
+			print(node.tail(), indent_level + 1, false);
+		std::cout << indent(indent_level) << "[/" << get_type<SyntaxNodeT>() << "]\n";
+	}
+	else
+	{
+		if(opt_node)
+			print(*opt_node, indent_level);
+		else
+			print(node.tail(), indent_level, false);
+	}
+}
+
+//overload for list nodes
+template<class SyntaxNodeT>
+void
+print
+(
+	const SyntaxNodeT& node,
+	const unsigned int indent_level,
+	typename boost::enable_if<syntax_nodes::util::is_list_node<SyntaxNodeT>>::type* = 0
+)
+{
+	std::cout << indent(indent_level) << "[" << get_type<SyntaxNodeT>() << "]\n";
+	bool first = true;
+	for(auto i = node.begin(); i != node.end(); ++i) //for each node of the list
+	{
+		const typename SyntaxNodeT::item& item = *i;
+
+		if(!first)
+		{
+			print(item.pre_separator_space_node(), indent_level + 1);
+			print(SyntaxNodeT::separator_node, indent_level + 1);
+			print(item.post_separator_space_node(), indent_level + 1);
+		}
+		print(item.main_node(), indent_level + 1);
+		first = false;
+	}
+	std::cout << indent(indent_level) << "[/" << get_type<SyntaxNodeT>() << "]\n";
+}
+
+//overload for optional nodes
+template<class SyntaxNodeT>
+void
+print
+(
+	const SyntaxNodeT& node,
+	const unsigned int indent_level,
+	typename boost::enable_if<syntax_nodes::util::is_optional_node<SyntaxNodeT>>::type* = 0
+)
+{
+	if(node) print(*node, indent_level);
+}
+
+//overload for predefined_text nodes
+template<class SyntaxNodeT>
+void
+print
+(
+	const SyntaxNodeT& node,
+	const unsigned int indent_level,
+	typename boost::enable_if<syntax_nodes::util::is_predefined_text_node<SyntaxNodeT>>::type* = 0
+)
+{
+	std::cout << indent(indent_level) << "[predefined_text_node/] ";
+	std::cout << node.text();
+	std::cout << "\n";
+}
+
+//overload for leaf nodes
+template<class SyntaxNodeT>
+void
+print
+(
+	const SyntaxNodeT& node,
+	const unsigned int indent_level,
+	typename boost::enable_if<syntax_nodes::util::is_leaf_node<SyntaxNodeT>>::type* = 0
+)
+{
+	std::cout << indent(indent_level) << "[leaf_node/] ";
+	std::cout << printable_node_value(node.value());
+	std::cout << "\n";
+}
+
+//overload for empty nodes (sequence and alternative tail nodes)
+template<class SyntaxNodeT>
+void
+print
+(
+	const SyntaxNodeT&,
+	const unsigned int,
+	bool,
+	typename boost::enable_if<boost::is_same<typename SyntaxNodeT::head_node_t, void>>::type* = 0
+)
+{
+}
+
+
 
 int
 main(int argc, char** argv)
 {
+	if(argc != 2)
+	{
+		std::cout << "Usage:\n";
+		std::cout << "\t" << argv[0] << " source_file_to_be_analyzed\n";
+	}
+
 	scalpel::cpp::preprocessor preprocessor;
 	scalpel::cpp::syntax_analyzer syntax_analyzer;
 
@@ -368,7 +648,7 @@ main(int argc, char** argv)
 
 	//print abstract syntax tree
 	std::cout << "Abstract syntax tree:\n";
-	print_node(tree, true);
+	print(tree/*, true*/);
 
 	return 0;
 }
