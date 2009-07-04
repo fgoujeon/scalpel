@@ -23,7 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_same.hpp>
-#include "node_type_traits.hpp"
+#include "type_traits.hpp"
 #include "../alternative_node.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes { namespace utility

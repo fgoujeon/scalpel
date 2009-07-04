@@ -25,7 +25,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <iostream>
 #include <boost/utility/enable_if.hpp>
 #include "../../../syntax_tree.hpp"
-#include "../../../syntax_nodes/utility/node_type_traits.hpp"
+#include "../../../syntax_nodes/utility/type_traits.hpp"
 #include "../grammar.hpp"
 #include "sequence_node_converter_fwd.hpp"
 #include "alternative_node_converter_fwd.hpp"

@@ -24,7 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <scalpel/cpp/preprocessor.hpp>
 #include <scalpel/cpp/syntax_analyzer.hpp>
-#include <scalpel/cpp/syntax_nodes/utility/node_type_traits.hpp>
+#include <scalpel/cpp/syntax_nodes/utility/type_traits.hpp>
 #include <scalpel/cpp/syntax_nodes/utility/value_getter.hpp>
 
 using namespace scalpel::cpp;
