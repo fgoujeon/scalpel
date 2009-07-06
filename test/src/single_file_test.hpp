@@ -31,8 +31,9 @@ class single_file_test
         parse_files(const std::string& test_directory);
 
     private:
-        scalpel::cpp::preprocessor m_preprocessor;
-        scalpel::cpp::syntax_analyzer m_syntax_analyzer;
+        scalpel::cpp::preprocessor preprocessor_;
+        scalpel::cpp::syntax_analyzer syntax_analyzer_;
+        scalpel::cpp::semantic_analyzer semantic_analyzer_;
 };
 
 #endif

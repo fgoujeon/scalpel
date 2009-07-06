@@ -47,7 +47,7 @@ semantic_analyzer::operator()(const syntax_tree& tree)
 	semantic_graph graph;
 
 	//current scope = global namespace
-	scope_cursor_.initialize(graph.root_node());
+	scope_cursor_.initialize(graph);
 
 	auto opt_declaration_seq_node = get_declaration_seq_node(tree);
 
@@ -64,12 +64,6 @@ semantic_analyzer::operator()(const syntax_tree& tree)
 			analyze_alternative(i->main_node());
 		}
 	}
-
-	auto lastly_leaved_scopes = scope_cursor_.lastly_leaved_scopes();
-	lastly_leaved_scopes.push_back(&graph.root_node());
-	graph.lastly_closed_scopes(lastly_leaved_scopes);
-
-	graph.lastly_closed_scope_iterator().back().has_enclosing_scope();
 
 	return graph;
 }

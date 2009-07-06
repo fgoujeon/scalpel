@@ -71,35 +71,29 @@ single_file_test::parse_files(const std::string& test_directory)
 			"/usr/include/linux",
 			"/usr/lib/gcc/i686-pc-linux-gnu/4.4.0/include"
 		};
-		std::string preprocessed_code = m_preprocessor(buffer.str(), include_paths);
+		std::string preprocessed_code = preprocessor_(buffer.str(), include_paths);
 
 		//syntax analysis
-		try
-		{
-			scalpel::cpp::syntax_tree tree = m_syntax_analyzer(preprocessed_code); //throws an exception if parsing fails
+		scalpel::cpp::syntax_tree tree = syntax_analyzer_(preprocessed_code); //throws an exception if parsing fails
 
-			//check syntax analysis results
-			if(preprocessed_code != get_value(tree))
-			{
-				std::cout << "Analysis error!\n";
-				std::cout << "Original content of " << file_name_oss.str() << ":\n";
-				std::cout << "***\n";
-				std::cout << preprocessed_code;
-				std::cout << "\n***\n";
-				std::cout << "Analysis results:\n";
-				std::cout << "***\n";
-				std::cout << get_value(tree);
-				std::cout << "\n***\n\n";
-
-				throw "Analysis error!";
-			}
-		}
-		catch(const std::exception& e)
+		//check syntax analysis results
+		if(preprocessed_code != get_value(tree))
 		{
-			std::cout << e.what() << std::endl;
+			std::cout << "Analysis error!\n";
+			std::cout << "Original content of " << file_name_oss.str() << ":\n";
+			std::cout << "***\n";
+			std::cout << preprocessed_code;
+			std::cout << "\n***\n";
+			std::cout << "Analysis results:\n";
+			std::cout << "***\n";
+			std::cout << get_value(tree);
+			std::cout << "\n***\n\n";
+
 			throw "Analysis error!";
 		}
 
+		//semantic analysis
+		scalpel::cpp::semantic_graph graph = semantic_analyzer_(tree);
     }
 }
 

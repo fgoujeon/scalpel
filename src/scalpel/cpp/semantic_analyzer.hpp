@@ -22,6 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ANALYZER_HPP
 
 #include <memory>
+#include <stack>
 #include "syntax_tree.hpp"
 #include "semantic_graph.hpp"
 #include "detail/semantic_analysis/scope_cursor.hpp"
@@ -264,6 +265,7 @@ class semantic_analyzer
 		analyze(const syntax_nodes::while_statement& syntax_node);
 
 		detail::semantic_analysis::scope_cursor scope_cursor_;
+		std::stack<semantic_entities::scope> scope_stack_;
 		alternative_visitor alternative_visitor_;
 };
 

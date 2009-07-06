@@ -73,14 +73,10 @@ class scope_cursor: public boost::noncopyable
 		void
 		leave_scope();
 
-		const std::vector<semantic_entities::scope*>&
-		lastly_leaved_scopes() const;
-
 	private:
 		semantic_entities::scope* global_scope_;
 		semantic_entities::scope* current_scope_;
 		semantic_entities::scope* last_added_scope_;
-		std::vector<semantic_entities::scope*> lastly_leaved_scopes_;
 };
 
 class scope_cursor::namespace_adder: public semantic_entities::scope_visitor
