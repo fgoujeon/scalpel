@@ -54,8 +54,14 @@ printable_node_value(const std::string& value)
 			case '\t':
 				new_value += "\\t";
 				break;
-			case ' ':
-				new_value += "\\s";
+			case '<':
+				new_value += "&lt;";
+				break;
+			case '>':
+				new_value += "&gt;";
+				break;
+			case '&':
+				new_value += "&amp;";
 				break;
 			default:
 				new_value += value.at(i);
@@ -471,10 +477,10 @@ print
 {
 	if(print_type)
 	{
-		std::cout << indent(indent_level) << "[" << get_type<SyntaxNodeT>() << "]\n";
+		std::cout << indent(indent_level) << "<" << get_type<SyntaxNodeT>() << ">\n";
 		print(node.head(), indent_level + 1);
 		print(node.tail(), indent_level + 1, false);
-		std::cout << indent(indent_level) << "[/" << get_type<SyntaxNodeT>() << "]\n";
+		std::cout << indent(indent_level) << "</" << get_type<SyntaxNodeT>() << ">\n";
 	}
 	else
 	{
@@ -498,12 +504,12 @@ print
 	auto opt_node = get<typename SyntaxNodeT::head_node_t>(&node);
 	if(print_type)
 	{
-		std::cout << indent(indent_level) << "[" << get_type<SyntaxNodeT>() << "]\n";
+		std::cout << indent(indent_level) << "<" << get_type<SyntaxNodeT>() << ">\n";
 		if(opt_node)
 			print(*opt_node, indent_level + 1);
 		else
 			print(node.tail(), indent_level + 1, false);
-		std::cout << indent(indent_level) << "[/" << get_type<SyntaxNodeT>() << "]\n";
+		std::cout << indent(indent_level) << "</" << get_type<SyntaxNodeT>() << ">\n";
 	}
 	else
 	{
@@ -524,7 +530,7 @@ print
 	typename boost::enable_if<syntax_nodes::utility::is_list_node<SyntaxNodeT>>::type* = 0
 )
 {
-	std::cout << indent(indent_level) << "[" << get_type<SyntaxNodeT>() << "]\n";
+	std::cout << indent(indent_level) << "<" << get_type<SyntaxNodeT>() << ">\n";
 	bool first = true;
 	for(auto i = node.begin(); i != node.end(); ++i) //for each node of the list
 	{
@@ -539,7 +545,7 @@ print
 		print(item.main_node(), indent_level + 1);
 		first = false;
 	}
-	std::cout << indent(indent_level) << "[/" << get_type<SyntaxNodeT>() << "]\n";
+	std::cout << indent(indent_level) << "</" << get_type<SyntaxNodeT>() << ">\n";
 }
 
 //overload for optional nodes
@@ -565,8 +571,9 @@ print
 	typename boost::enable_if<syntax_nodes::utility::is_predefined_text_node<SyntaxNodeT>>::type* = 0
 )
 {
-	std::cout << indent(indent_level) << "[predefined_text_node/] ";
+	std::cout << indent(indent_level) << "<predefined_text_node>";
 	std::cout << node.text();
+	std::cout << "</predefined_text_node>";
 	std::cout << "\n";
 }
 
@@ -580,8 +587,9 @@ print
 	typename boost::enable_if<syntax_nodes::utility::is_leaf_node<SyntaxNodeT>>::type* = 0
 )
 {
-	std::cout << indent(indent_level) << "[leaf_node/] ";
+	std::cout << indent(indent_level) << "<leaf_node>";
 	std::cout << printable_node_value(node.value());
+	std::cout << "</leaf_node>";
 	std::cout << "\n";
 }
 
