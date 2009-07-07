@@ -74,27 +74,6 @@ struct scope
 	virtual
 	named_entity_const_iterator_range
 	named_entities() const = 0;
-
-	/**
-	@return true if the object has an enclosing scope scope
-	*/
-	virtual
-	bool
-	has_enclosing_scope() const = 0;
-
-	/**
-	@return the enclosing scope of the object
-	*/
-	virtual
-	const scope&
-	enclosing_scope() const = 0;
-
-	/**
-	@return the enclosing scope of the object
-	*/
-	virtual
-	scope&
-	enclosing_scope() = 0;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

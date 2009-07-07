@@ -88,27 +88,6 @@ class namespace_:
         bool
         is_global() const;
 
-		bool
-		has_enclosing_scope() const;
-
-        /**
-        @return the enclosing scope of the namespace
-        */
-		scope&
-        enclosing_scope();
-
-        /**
-        @return the enclosing scope of the namespace
-        */
-		const scope&
-        enclosing_scope() const;
-
-        /**
-        Sets the enclosing scope of the namespace.
-        */
-        void
-        enclosing_scope(namespace_& enclosing_scope);
-
         /**
         @return the namespace's member list (i.e. the list of namespaces, classes, functions, etc.)
         */

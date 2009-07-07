@@ -71,36 +71,6 @@ statement_block::is_global() const
     return false;
 }
 
-bool
-statement_block::has_enclosing_scope() const
-{
-    return scope_impl_.has_enclosing_scope();
-}
-
-scope&
-statement_block::enclosing_scope()
-{
-    return scope_impl_.enclosing_scope();
-}
-
-const scope&
-statement_block::enclosing_scope() const
-{
-    return scope_impl_.enclosing_scope();
-}
-
-void
-statement_block::enclosing_scope(function& enclosing_scope)
-{
-    scope_impl_.enclosing_scope(enclosing_scope);
-}
-
-void
-statement_block::enclosing_scope(statement_block& enclosing_scope)
-{
-    scope_impl_.enclosing_scope(enclosing_scope);
-}
-
 scope::scope_iterator_range
 statement_block::scopes()
 {
@@ -131,8 +101,6 @@ statement_block::add(statement_block&& o)
 	statement_blocks_.push_back(std::move(o));
 
 	statement_block& member_ref = statement_blocks_.back();
-
-	member_ref.enclosing_scope(*this);
 
 	scope_impl_.add_to_scopes(member_ref);
 }

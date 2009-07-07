@@ -46,9 +46,6 @@ class variable:
 		const variable&
 		operator=(variable&& v);
 
-		void
-		enclosing_scope(scope& s);
-
 		const std::string&
 		name() const;
 
@@ -56,7 +53,6 @@ class variable:
 		is_a_type() const;
 
 	private:
-		scope* enclosing_scope_;
 		std::string name_;
 };
 

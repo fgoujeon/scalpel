@@ -77,36 +77,6 @@ namespace_::is_a_type() const
     return false;
 }
 
-bool
-namespace_::is_global() const
-{
-    return !has_enclosing_scope();
-}
-
-bool
-namespace_::has_enclosing_scope() const
-{
-    return scope_impl_.has_enclosing_scope();
-}
-
-scope&
-namespace_::enclosing_scope()
-{
-    return scope_impl_.enclosing_scope();
-}
-
-const scope&
-namespace_::enclosing_scope() const
-{
-    return scope_impl_.enclosing_scope();
-}
-
-void
-namespace_::enclosing_scope(namespace_& enclosing_scope)
-{
-	return scope_impl_.enclosing_scope(enclosing_scope);
-}
-
 const std::list<namespace_::member_t>&
 namespace_::members() const
 {
@@ -144,8 +114,6 @@ namespace_::add(namespace_&& member)
 
 	namespace_& member_ref = namespaces_.back();
 
-	member_ref.enclosing_scope(*this);
-
 	members_.push_back(&member_ref);
 	scope_impl_.add_to_scopes(member_ref);
 	scope_impl_.add_to_named_entities(member_ref);
@@ -157,8 +125,6 @@ namespace_::add(class_&& member)
     classes_.push_back(std::move(member));
 
 	class_& member_ref = classes_.back();
-
-	member_ref.enclosing_scope(*this);
 
 	members_.push_back(&member_ref);
 	scope_impl_.add_to_scopes(member_ref);
@@ -172,8 +138,6 @@ namespace_::add(function&& member)
 
 	function& member_ref = functions_.back();
 
-	member_ref.enclosing_scope(*this);
-
 	members_.push_back(&member_ref);
 	scope_impl_.add_to_scopes(member_ref);
 	scope_impl_.add_to_named_entities(member_ref);
@@ -185,8 +149,6 @@ namespace_::add(variable&& member)
     variables_.push_back(std::move(member));
 
 	variable& member_ref = variables_.back();
-
-	member_ref.enclosing_scope(*this);
 
 	members_.push_back(&member_ref);
 	scope_impl_.add_to_named_entities(member_ref);

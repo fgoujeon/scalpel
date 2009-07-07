@@ -21,9 +21,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_SCOPE_CURSOR_HPP
 #define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_SCOPE_CURSOR_HPP
 
-#include <boost/noncopyable.hpp>
 #include <vector>
-#include "../../semantic_graph.hpp"
+#include <boost/noncopyable.hpp>
+#include <boost/iterator/indirect_iterator.hpp>
+#include <boost/range/iterator_range.hpp>
+#include <scalpel/cpp/semantic_graph.hpp>
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
 {
@@ -38,16 +40,38 @@ class scope_cursor: public boost::noncopyable
 		class variable_adder;
 
 	public:
+		typedef std::vector<semantic_entities::scope*> scopes_t;
+
+		typedef scopes_t::const_iterator scope_const_iterator;
+		typedef boost::indirect_iterator<scope_const_iterator, const semantic_entities::scope&> scope_const_indirect_iterator;
+		typedef boost::iterator_range<scope_const_indirect_iterator> scope_const_iterator_range;
+
+		typedef scopes_t::iterator scope_iterator;
+		typedef boost::indirect_iterator<scope_iterator, semantic_entities::scope&> scope_indirect_iterator;
+		typedef boost::iterator_range<scope_indirect_iterator> scope_iterator_range;
+
 		scope_cursor();
 
 		void
-		initialize(semantic_entities::scope& a_scope);
+		initialize(semantic_entities::scope& global_scope);
+
+		scope_const_iterator_range
+		scope_stack() const;
+
+		scope_iterator_range
+		scope_stack();
+
+		scope_const_iterator_range
+		global_scope_stack() const;
+
+		scope_iterator_range
+		global_scope_stack();
 
 		semantic_entities::scope&
-		get_global_scope();
+		global_scope();
 
 		semantic_entities::scope&
-		get_current_scope();
+		current_scope();
 
 		void
 		add_to_current_scope(semantic_entities::namespace_&& o);
@@ -74,9 +98,7 @@ class scope_cursor: public boost::noncopyable
 		leave_scope();
 
 	private:
-		semantic_entities::scope* global_scope_;
-		semantic_entities::scope* current_scope_;
-		semantic_entities::scope* last_added_scope_;
+		scopes_t scope_stack_;
 };
 
 class scope_cursor::namespace_adder: public semantic_entities::scope_visitor

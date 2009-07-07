@@ -29,89 +29,121 @@ namespace scalpel { namespace cpp { namespace detail { namespace semantic_analys
 //scope_cursor
 //
 
-scope_cursor::scope_cursor():
-	global_scope_(0),
-	current_scope_(0),
-	last_added_scope_(0)
+scope_cursor::scope_cursor()
 {
 }
 
 void
-scope_cursor::initialize(semantic_entities::scope& a_scope)
+scope_cursor::initialize(semantic_entities::scope& global_scope)
 {
-	global_scope_ = &a_scope;
-	current_scope_ = &a_scope;
+	scope_stack_.clear();
+	scope_stack_.push_back(&global_scope);
+}
+
+scope_cursor::scope_const_iterator_range
+scope_cursor::scope_stack() const
+{
+	return scope_stack_;
+}
+
+scope_cursor::scope_iterator_range
+scope_cursor::scope_stack()
+{
+	return scope_stack_;
+}
+
+scope_cursor::scope_const_iterator_range
+scope_cursor::global_scope_stack() const
+{
+	scope_const_iterator first = scope_stack_.begin();
+	scope_const_iterator last = scope_stack_.begin(); //we only want the first item
+	++last;
+
+	scope_const_indirect_iterator const_indirect_first(first), const_indirect_last(last);
+
+	return scope_const_iterator_range(const_indirect_first, const_indirect_last);
+}
+
+scope_cursor::scope_iterator_range
+scope_cursor::global_scope_stack()
+{
+	scope_iterator first = scope_stack_.begin();
+	scope_iterator last = scope_stack_.begin(); //we only want the first item
+	++last;
+
+	scope_indirect_iterator indirect_first(first), indirect_last(last);
+
+	return scope_iterator_range(indirect_first, indirect_last);
 }
 
 semantic_entities::scope&
-scope_cursor::get_global_scope()
+scope_cursor::global_scope()
 {
-	assert(global_scope_);
-	return *global_scope_;
+	assert(!scope_stack_.empty());
+	return *scope_stack_.front();
 }
 
 semantic_entities::scope&
-scope_cursor::get_current_scope()
+scope_cursor::current_scope()
 {
-	assert(current_scope_);
-	return *current_scope_;
+	assert(!scope_stack_.empty());
+	return *scope_stack_.back();
 }
 
 void
 scope_cursor::add_to_current_scope(semantic_entities::namespace_&& o)
 {
 	namespace_adder v(o);
-	current_scope_->accept(v);
+	current_scope().accept(v);
 }
 
 void
 scope_cursor::add_to_current_scope(semantic_entities::class_&& o)
 {
 	class_adder v(o);
-	current_scope_->accept(v);
+	current_scope().accept(v);
 }
 
 void
 scope_cursor::add_to_current_scope(semantic_entities::function&& o)
 {
 	function_adder v(o);
-	current_scope_->accept(v);
+	current_scope().accept(v);
 }
 
 void
 scope_cursor::add_to_current_scope(semantic_entities::statement_block&& o)
 {
 	statement_block_adder v(o);
-	current_scope_->accept(v);
+	current_scope().accept(v);
 }
 
 void
 scope_cursor::add_to_current_scope(semantic_entities::variable&& o)
 {
 	variable_adder v(o);
-	current_scope_->accept(v);
+	current_scope().accept(v);
 }
 
 void
 scope_cursor::enter_scope(semantic_entities::scope& a_scope)
 {
 	std::cout << "Entering " << a_scope.name() << "\n";
-	current_scope_ = &a_scope;
+	scope_stack_.push_back(&a_scope);
 }
 
 void
 scope_cursor::enter_last_added_scope()
 {
-	assert(!current_scope_->scopes().empty());
-	enter_scope(current_scope_->scopes().back());
+	assert(!current_scope().scopes().empty());
+	enter_scope(current_scope().scopes().back());
 }
 
 void
 scope_cursor::leave_scope()
 {
-	assert(current_scope_->has_enclosing_scope());
-	std::cout << "Leaving " << current_scope_->name() << "\n";
-	current_scope_ = &current_scope_->enclosing_scope();
+	std::cout << "Leaving " << current_scope().name() << "\n";
+	scope_stack_.pop_back();
 }
 
 

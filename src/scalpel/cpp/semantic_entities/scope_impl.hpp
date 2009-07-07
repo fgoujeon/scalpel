@@ -57,20 +57,7 @@ class scope_impl: public boost::noncopyable
 		void
 		add_to_named_entities(named_entity& n);
 
-		bool
-		has_enclosing_scope() const;
-
-		const scope&
-		enclosing_scope() const;
-
-		scope&
-		enclosing_scope();
-
-		void
-		enclosing_scope(scope& enclosing_scope);
-
 	private:
-		scope* enclosing_scope_;
 		scope::scopes_t scopes_;
 		scope::named_entities_t named_entities_;
 };

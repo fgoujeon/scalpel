@@ -74,33 +74,6 @@ class function:
         bool
         is_global() const;
 
-        /**
-        @return true if the function has an enclosing scope
-        */
-        bool
-        has_enclosing_scope() const;
-
-        /**
-        @return the enclosing scope of the function
-        */
-		scope&
-        enclosing_scope();
-
-        /**
-        @return the enclosing scope of the function
-        */
-        const scope&
-        enclosing_scope() const;
-
-        /**
-        Sets the enclosing scope of the function.
-        */
-        void
-        enclosing_scope(class_& enclosing_scope);
-
-        void
-        enclosing_scope(namespace_& enclosing_scope);
-
 		scope_iterator_range
         scopes();
 

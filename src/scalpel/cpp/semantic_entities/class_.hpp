@@ -87,33 +87,6 @@ class class_:
         is_global() const;
 
         /**
-        @return true if the class has a enclosing scope scope
-        */
-        bool
-        has_enclosing_scope() const;
-
-        /**
-        @return the enclosing scope of the class
-        */
-		scope&
-        enclosing_scope();
-
-        /**
-        @return the enclosing scope of the class
-        */
-        const scope&
-        enclosing_scope() const;
-
-        /**
-        Sets the enclosing scope of the class.
-        */
-        void
-        enclosing_scope(class_& enclosing_scope);
-
-        void
-        enclosing_scope(namespace_& enclosing_scope);
-
-        /**
         @return the class' member list (i.e. the list of classes, functions, etc.)
         */
         const std::list<member_t>&

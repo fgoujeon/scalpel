@@ -23,24 +23,19 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-scope_impl::scope_impl():
-	enclosing_scope_(0)
+scope_impl::scope_impl()
 {
 }
 
 scope_impl::scope_impl(scope_impl&& s):
-	enclosing_scope_(0),
 	scopes_(std::move(s.scopes_)),
 	named_entities_(std::move(s.named_entities_))
 {
-	assert(s.enclosing_scope_ == 0);
 }
 
 const scope_impl&
 scope_impl::operator=(scope_impl&& s)
 {
-	assert(s.enclosing_scope_ == 0);
-
 	scopes_ = std::move(s.scopes_);
 	named_entities_ = std::move(s.named_entities_);
 
@@ -50,23 +45,13 @@ scope_impl::operator=(scope_impl&& s)
 scope::scope_iterator_range
 scope_impl::scopes()
 {
-	scope::scope_iterator first = scopes_.begin();
-	scope::scope_iterator last = scopes_.end();
-
-	scope::scope_indirect_iterator indirect_first(first), indirect_last(last);
-
-	return scope::scope_iterator_range(indirect_first, indirect_last);
+	return scopes_;
 }
 
 scope::scope_const_iterator_range
 scope_impl::scopes() const
 {
-	scope::scope_const_iterator first = scopes_.begin();
-	scope::scope_const_iterator last = scopes_.end();
-
-	scope::scope_const_indirect_iterator const_indirect_first(first), const_indirect_last(last);
-
-	return scope::scope_const_iterator_range(const_indirect_first, const_indirect_last);
+	return scopes_;
 }
 
 void
@@ -78,54 +63,19 @@ scope_impl::add_to_scopes(scope& s)
 scope::named_entity_iterator_range
 scope_impl::named_entities()
 {
-	scope::named_entity_iterator first = named_entities_.begin();
-	scope::named_entity_iterator last = named_entities_.end();
-
-	scope::named_entity_indirect_iterator indirect_first(first), indirect_last(last);
-
-	return scope::named_entity_iterator_range(indirect_first, indirect_last);
+	return named_entities_;
 }
 
 scope::named_entity_const_iterator_range
 scope_impl::named_entities() const
 {
-	scope::named_entity_const_iterator first = named_entities_.begin();
-	scope::named_entity_const_iterator last = named_entities_.end();
-
-	scope::named_entity_const_indirect_iterator const_indirect_first(first), const_indirect_last(last);
-
-	return scope::named_entity_const_iterator_range(const_indirect_first, const_indirect_last);
+	return named_entities_;
 }
 
 void
 scope_impl::add_to_named_entities(named_entity& n)
 {
 	named_entities_.push_back(&n);
-}
-
-bool
-scope_impl::has_enclosing_scope() const
-{
-	return enclosing_scope_;
-}
-
-const scope&
-scope_impl::enclosing_scope() const
-{
-	return *enclosing_scope_;
-}
-
-scope&
-scope_impl::enclosing_scope()
-{
-	return *enclosing_scope_;
-}
-
-void
-scope_impl::enclosing_scope(scope& enclosing_scope)
-{
-    assert(!enclosing_scope_); //assert that member doesn't have any enclosing scope yet
-    enclosing_scope_ = &enclosing_scope;
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

@@ -73,36 +73,6 @@ function::is_global() const
     return false;
 }
 
-bool
-function::has_enclosing_scope() const
-{
-    return scope_impl_.has_enclosing_scope();
-}
-
-scope&
-function::enclosing_scope()
-{
-    return scope_impl_.enclosing_scope();
-}
-
-const scope&
-function::enclosing_scope() const
-{
-    return scope_impl_.enclosing_scope();
-}
-
-void
-function::enclosing_scope(class_& enclosing_scope)
-{
-    scope_impl_.enclosing_scope(enclosing_scope);
-}
-
-void
-function::enclosing_scope(namespace_& enclosing_scope)
-{
-    scope_impl_.enclosing_scope(enclosing_scope);
-}
-
 scope::scope_iterator_range
 function::scopes()
 {
@@ -134,8 +104,6 @@ function::add(statement_block&& o)
 
 	statement_block& member_ref = statement_blocks_.back();
 
-	member_ref.enclosing_scope(*this);
-
 	scope_impl_.add_to_scopes(member_ref);
 }
 
@@ -145,8 +113,6 @@ function::add(variable&& v)
 	variables_.push_back(std::move(v));
 
 	variable& member_ref = variables_.back();
-
-	member_ref.enclosing_scope(*this);
 
 	scope_impl_.add_to_named_entities(member_ref);
 }

@@ -26,39 +26,28 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 variable::variable(const std::string& name):
-	enclosing_scope_(0),
 	name_(name)
 {
 	std::cout << "New variable " << name << "\n";
 }
 
 variable::variable(std::string&& name):
-	enclosing_scope_(0),
 	name_(std::move(name))
 {
 	std::cout << "New variable " << name << "\n";
 }
 
 variable::variable(variable&& v):
-	enclosing_scope_(0),
 	name_(std::move(v.name_))
 {
-	assert(v.enclosing_scope_ == 0);
 }
 
 const variable&
 variable::operator=(variable&& v)
 {
-	assert(v.enclosing_scope_ == 0);
 	name_ = std::move(v.name_);
 
 	return *this;
-}
-
-void
-variable::enclosing_scope(scope& s)
-{
-	enclosing_scope_ = &s;
 }
 
 const std::string&

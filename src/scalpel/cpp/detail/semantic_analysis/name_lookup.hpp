@@ -22,26 +22,34 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_NAME_LOOKUP_HPP
 
 #include <string>
+#include <list>
 #include "../../syntax_tree.hpp"
 #include "../../semantic_graph.hpp"
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace name_lookup
 {
 
+template<class RangeT>
 const semantic_entities::named_entity*
-find_unqualified_name(const semantic_entities::scope& current_scope, const std::string& name);
+find_unqualified_name
+(
+	RangeT scope_stack,
+	const std::string& name
+);
 
+template<class RangeT>
 semantic_entities::scope*
 find_scope
 (
-	semantic_entities::scope& current_scope,
+	RangeT scope_stack,
 	const syntax_nodes::nested_name_specifier& nested_name_specifier
 );
 
+template<class RangeT>
 semantic_entities::scope*
 recursive_ascent_find_scope
 (
-	semantic_entities::scope& start_scope,
+	RangeT scope_stack,
 	const std::string& scope_name
 );
 
@@ -53,5 +61,7 @@ find_scope
 );
 
 }}}}} //namespace scalpel::cpp::detail::semantic_analysis::name_lookup
+
+#include "name_lookup.ipp"
 
 #endif

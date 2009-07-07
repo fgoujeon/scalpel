@@ -241,7 +241,7 @@ semantic_analyzer::analyze(const function_definition& syntax_node)
 					name = an_identifier->value();
 				}
 
-				enclosing_scope = &scope_cursor_.get_current_scope();
+				enclosing_scope = &scope_cursor_.current_scope();
 			}
 			else if(a_qualified_id)
 			{
@@ -266,11 +266,11 @@ semantic_analyzer::analyze(const function_definition& syntax_node)
 
 					if(leading_double_colon)
 					{
-						enclosing_scope = name_lookup::find_scope(scope_cursor_.get_global_scope(), a_nested_name_specifier);
+						enclosing_scope = name_lookup::find_scope(scope_cursor_.global_scope_stack(), a_nested_name_specifier);
 					}
 					else
 					{
-						enclosing_scope = name_lookup::find_scope(scope_cursor_.get_current_scope(), a_nested_name_specifier);
+						enclosing_scope = name_lookup::find_scope(scope_cursor_.scope_stack(), a_nested_name_specifier);
 					}
 
 					const unqualified_id& unqualified_id_node = get_unqualified_id(*a_qualified_nested_id);
@@ -310,7 +310,7 @@ semantic_analyzer::analyze(const function_definition& syntax_node)
 	if(!function_scope && enclosing_scope && !name.empty())
 	{
 		scope_cursor_.add_to_current_scope(function(name));
-		function_scope = &scope_cursor_.get_current_scope().scopes().back();
+		function_scope = &scope_cursor_.current_scope().scopes().back();
 	}
 
 	//enter and leave the function body

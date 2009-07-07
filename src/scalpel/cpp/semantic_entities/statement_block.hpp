@@ -74,33 +74,6 @@ class statement_block:
         bool
         is_global() const;
 
-        /**
-        @return true if the statement block has an enclosing scope
-        */
-        bool
-        has_enclosing_scope() const;
-
-        /**
-        @return the enclosing scope of the statement block
-        */
-		scope&
-        enclosing_scope();
-
-        /**
-        @return the enclosing scope of the statement block
-        */
-        const scope&
-        enclosing_scope() const;
-
-        /**
-        Sets the enclosing scope of the statement block.
-        */
-        void
-        enclosing_scope(function& enclosing_scope);
-
-        void
-        enclosing_scope(statement_block& enclosing_scope);
-
 		scope_iterator_range
         scopes();
 
