@@ -44,7 +44,26 @@ class namespace_:
 	public boost::noncopyable
 {
     public:
-		class member_t;
+		typedef std::list<named_entity*> entities_t;
+		typedef entities_t::const_iterator entity_const_iterator;
+		typedef boost::indirect_iterator<entity_const_iterator, const named_entity*> entity_const_indirect_iterator;
+		typedef boost::iterator_range<entity_const_indirect_iterator> entity_const_iterator_range;
+
+		typedef std::list<namespace_> namespaces_t;
+		typedef namespaces_t::const_iterator namespace_const_iterator;
+		typedef boost::iterator_range<namespace_const_iterator> namespace_const_iterator_range;
+
+		typedef std::list<class_> classes_t;
+		typedef classes_t::const_iterator class_const_iterator;
+		typedef boost::iterator_range<class_const_iterator> class_const_iterator_range;
+
+		typedef std::list<function> functions_t;
+		typedef functions_t::const_iterator function_const_iterator;
+		typedef boost::iterator_range<function_const_iterator> function_const_iterator_range;
+
+		typedef std::list<variable> variables_t;
+		typedef variables_t::const_iterator variable_const_iterator;
+		typedef boost::iterator_range<variable_const_iterator> variable_const_iterator_range;
 
         /**
         Creates an anonymous namespace. Equivalent to namespace_("").
@@ -88,12 +107,6 @@ class namespace_:
         bool
         is_global() const;
 
-        /**
-        @return the namespace's member list (i.e. the list of namespaces, classes, functions, etc.)
-        */
-        const std::list<member_t>&
-        members() const;
-
 		scope_iterator_range
         scopes();
 
@@ -105,6 +118,18 @@ class namespace_:
 
 		named_entity_const_iterator_range
 		named_entities() const;
+
+		namespace_const_iterator_range
+		namespaces() const;
+
+		class_const_iterator_range
+		classes() const;
+
+		function_const_iterator_range
+		functions() const;
+
+		variable_const_iterator_range
+		variables() const;
 
         void
         add(namespace_&& member);
@@ -121,31 +146,10 @@ class namespace_:
     private:
 		scope_impl scope_impl_;
         std::string name_;
-        std::list<namespace_> namespaces_;
-        std::list<class_> classes_;
-        std::list<function> functions_;
-        std::list<variable> variables_;
-        std::list<member_t> members_;
-};
-
-typedef
-	boost::variant
-	<
-		namespace_*,
-		class_*,
-		function*,
-		variable*
-	>
-	namespace_member_t
-;
-
-class namespace_::member_t: public namespace_member_t
-{
-	public:
-		member_t(namespace_* o): namespace_member_t(o){}
-		member_t(class_* o): namespace_member_t(o){}
-		member_t(function* o): namespace_member_t(o){}
-		member_t(variable* o): namespace_member_t(o){}
+        namespaces_t namespaces_;
+        classes_t classes_;
+        functions_t functions_;
+        variables_t variables_;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

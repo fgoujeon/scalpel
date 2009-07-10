@@ -45,7 +45,17 @@ class class_:
 	public boost::noncopyable
 {
     public:
-		class member_t;
+		typedef std::list<class_> classes_t;
+		typedef classes_t::const_iterator class_const_iterator;
+		typedef boost::iterator_range<class_const_iterator> class_const_iterator_range;
+
+		typedef std::list<function> functions_t;
+		typedef functions_t::const_iterator function_const_iterator;
+		typedef boost::iterator_range<function_const_iterator> function_const_iterator_range;
+
+		typedef std::list<variable> variables_t;
+		typedef variables_t::const_iterator variable_const_iterator;
+		typedef boost::iterator_range<variable_const_iterator> variable_const_iterator_range;
 
         /**
         Creates a class.
@@ -86,12 +96,6 @@ class class_:
         bool
         is_global() const;
 
-        /**
-        @return the class' member list (i.e. the list of classes, functions, etc.)
-        */
-        const std::list<member_t>&
-        members() const;
-
 		scope_iterator_range
         scopes();
 
@@ -103,6 +107,15 @@ class class_:
 
 		named_entity_const_iterator_range
 		named_entities() const;
+
+		class_const_iterator_range
+		classes() const;
+
+		function_const_iterator_range
+		functions() const;
+
+		variable_const_iterator_range
+		variables() const;
 
         /**
         Adds a nested class.
@@ -119,28 +132,9 @@ class class_:
     private:
 		scope_impl scope_impl_;
         std::string name_;
-		std::list<class_> classes_;
-		std::list<function> functions_;
-		std::list<variable> variables_;
-        std::list<member_t> members_;
-};
-
-typedef
-	boost::variant
-	<
-		class_*,
-		function*,
-		variable*
-	>
-	class_member_t
-;
-
-class class_::member_t: public class_member_t
-{
-	public:
-		member_t(class_* o): class_member_t(o){}
-		member_t(function* o): class_member_t(o){}
-		member_t(variable* o): class_member_t(o){}
+		classes_t classes_;
+		functions_t functions_;
+		variables_t variables_;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

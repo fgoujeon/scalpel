@@ -37,8 +37,7 @@ class_::class_(class_&& c):
 	scope_impl_(std::move(c.scope_impl_)),
 	name_(std::move(c.name_)),
 	classes_(std::move(c.classes_)),
-	functions_(std::move(c.functions_)),
-	members_(std::move(c.members_))
+	functions_(std::move(c.functions_))
 {
 }
 
@@ -49,7 +48,6 @@ class_::operator=(class_&& c)
 	name_ = std::move(c.name_);
 	classes_ = std::move(c.classes_);
 	functions_ = std::move(c.functions_);
-	members_ = std::move(c.members_);
 
 	return *this;
 }
@@ -78,12 +76,6 @@ class_::is_global() const
     return false;
 }
 
-const std::list<class_::member_t>&
-class_::members() const
-{
-    return members_;
-}
-
 scope::scope_iterator_range
 class_::scopes()
 {
@@ -108,6 +100,24 @@ class_::named_entities() const
 	return scope_impl_.named_entities();
 }
 
+class_::class_const_iterator_range
+class_::classes() const
+{
+	return classes_;
+}
+
+class_::function_const_iterator_range
+class_::functions() const
+{
+	return functions_;
+}
+
+class_::variable_const_iterator_range
+class_::variables() const
+{
+	return variables_;
+}
+
 void
 class_::add(class_&& nested_class)
 {
@@ -115,7 +125,6 @@ class_::add(class_&& nested_class)
 
 	class_& member_ref = classes_.back();
 
-	members_.push_back(&member_ref);
 	scope_impl_.add_to_scopes(member_ref);
 	scope_impl_.add_to_named_entities(member_ref);
 }
@@ -127,7 +136,6 @@ class_::add(function&& member)
 
 	function& member_ref = functions_.back();
 
-	members_.push_back(&member_ref);
 	scope_impl_.add_to_scopes(member_ref);
 	scope_impl_.add_to_named_entities(member_ref);
 }
@@ -139,7 +147,6 @@ class_::add(variable&& member)
 
 	variable& member_ref = variables_.back();
 
-	members_.push_back(&member_ref);
 	scope_impl_.add_to_named_entities(member_ref);
 }
 

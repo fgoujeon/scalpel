@@ -41,8 +41,7 @@ namespace_::namespace_(namespace_&& n):
 	name_(std::move(n.name_)),
 	namespaces_(std::move(n.namespaces_)),
 	classes_(std::move(n.classes_)),
-	functions_(std::move(n.functions_)),
-    members_(std::move(n.members_))
+	functions_(std::move(n.functions_))
 {
 }
 
@@ -54,7 +53,6 @@ namespace_::operator=(namespace_&& n)
 	namespaces_ = std::move(n.namespaces_);
 	classes_ = std::move(n.classes_);
 	functions_ = std::move(n.functions_);
-    members_ = std::move(n.members_);
 
 	return *this;
 }
@@ -75,12 +73,6 @@ bool
 namespace_::is_a_type() const
 {
     return false;
-}
-
-const std::list<namespace_::member_t>&
-namespace_::members() const
-{
-    return members_;
 }
 
 scope::scope_iterator_range
@@ -107,6 +99,30 @@ namespace_::named_entities() const
 	return scope_impl_.named_entities();
 }
 
+namespace_::namespace_const_iterator_range
+namespace_::namespaces() const
+{
+	return namespaces_;
+}
+
+namespace_::class_const_iterator_range
+namespace_::classes() const
+{
+	return classes_;
+}
+
+namespace_::function_const_iterator_range
+namespace_::functions() const
+{
+	return functions_;
+}
+
+namespace_::variable_const_iterator_range
+namespace_::variables() const
+{
+	return variables_;
+}
+
 void
 namespace_::add(namespace_&& member)
 {
@@ -114,7 +130,6 @@ namespace_::add(namespace_&& member)
 
 	namespace_& member_ref = namespaces_.back();
 
-	members_.push_back(&member_ref);
 	scope_impl_.add_to_scopes(member_ref);
 	scope_impl_.add_to_named_entities(member_ref);
 }
@@ -126,7 +141,6 @@ namespace_::add(class_&& member)
 
 	class_& member_ref = classes_.back();
 
-	members_.push_back(&member_ref);
 	scope_impl_.add_to_scopes(member_ref);
 	scope_impl_.add_to_named_entities(member_ref);
 }
@@ -138,7 +152,6 @@ namespace_::add(function&& member)
 
 	function& member_ref = functions_.back();
 
-	members_.push_back(&member_ref);
 	scope_impl_.add_to_scopes(member_ref);
 	scope_impl_.add_to_named_entities(member_ref);
 }
@@ -150,7 +163,6 @@ namespace_::add(variable&& member)
 
 	variable& member_ref = variables_.back();
 
-	members_.push_back(&member_ref);
 	scope_impl_.add_to_named_entities(member_ref);
 }
 
