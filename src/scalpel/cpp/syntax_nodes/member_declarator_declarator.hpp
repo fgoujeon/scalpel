@@ -59,6 +59,13 @@ typedef
 	member_declarator_declarator
 ;
 
+inline
+const declarator&
+get_declarator(const member_declarator_declarator& o)
+{
+	return get<0>(o);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif

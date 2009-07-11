@@ -91,18 +91,7 @@ semantic_analyzer::analyze(const class_head&)
 void
 semantic_analyzer::analyze(const class_specifier& syntax_node)
 {
-	const optional_node<identifier_or_template_id>& opt_id_or_templ = get_identifier_or_template_id(get_class_head(syntax_node));
-	if(opt_id_or_templ)
-	{
-		const boost::optional<const identifier&> id = get<identifier>(&*opt_id_or_templ);
-
-		if(id)
-		{
-			scope_cursor_.add_to_current_scope(class_(id->value()));
-			scope_cursor_.enter_last_added_scope();
-			scope_cursor_.leave_scope();
-		}
-	}
+	scope_cursor_.add_to_current_scope(create_class(syntax_node));
 }
 
 void
@@ -288,7 +277,7 @@ semantic_analyzer::analyze(const function_definition& syntax_node)
 		}
 	}
 
-	//get the corresponding function semantic node (it exists if the function has been declared)
+	//get the corresponding function semantic node (must exist if the function has already been declared)
 	scope* function_scope = 0;
 	if(!name.empty() && enclosing_scope)
 	{
@@ -671,6 +660,196 @@ semantic_analyzer::analyze(const using_directive&)
 void
 semantic_analyzer::analyze(const while_statement&)
 {
+}
+
+class_
+semantic_analyzer::create_class(const class_specifier& syntax_node)
+{
+	//get the name of the class
+	std::string class_name;
+	const optional_node<identifier_or_template_id>& opt_id_or_templ = get_identifier_or_template_id(get_class_head(syntax_node));
+	if(opt_id_or_templ)
+	{
+		const boost::optional<const identifier&> id = get<identifier>(&*opt_id_or_templ);
+
+		if(id)
+		{
+			class_name = id->value();
+		}
+	}
+
+	//create the class
+	assert(class_name != "");
+	class_ new_class(class_name);
+	scope_cursor_.enter_scope(new_class);
+
+	//get the members of the class
+	auto opt_member_specification = get_member_specification(syntax_node);
+	if(opt_member_specification)
+	{
+		auto member_specification_node = *opt_member_specification;
+		for(auto i = member_specification_node.begin(); i != member_specification_node.end(); ++i) //for each part
+		{
+			auto part = i->main_node();
+
+			if(auto opt_member_declaration_node = get<member_declaration>(&part))
+			{
+				if(auto opt_member_declaration_function_definition_node = get<member_declaration_function_definition>(opt_member_declaration_node))
+				{
+					auto function_definition_node = get_function_definition(*opt_member_declaration_function_definition_node);
+					//analyze(function_definition_node);
+				}
+				else if(auto opt_member_declaration_member_declarator_list_node = get<member_declaration_member_declarator_list>(opt_member_declaration_node))
+				{
+					if(auto opt_member_declarator_list = get_member_declarator_list(*opt_member_declaration_member_declarator_list_node))
+					{
+						for(auto i = opt_member_declarator_list->begin(); i != opt_member_declarator_list->end(); ++i)
+						{
+							auto member_declarator_node = i->main_node();
+
+							if(auto opt_member_declarator_declarator_node = get<member_declarator_declarator>(&member_declarator_node))
+							{
+								auto declarator_node = get_declarator(*opt_member_declarator_declarator_node);
+								auto direct_declarator_node = get_direct_declarator(declarator_node);
+								auto direct_declarator_first_part_node = get_first_part(direct_declarator_node);
+
+								std::string name;
+								bool is_a_function_declaration = false;
+
+								if(auto opt_bracketed_declarator_node = get<bracketed_declarator>(&direct_declarator_first_part_node))
+								{
+									//todo
+								}
+								else if(auto opt_declarator_id_node = get<declarator_id>(&direct_declarator_first_part_node))
+								{
+									if(auto opt_id_expression_node = get<id_expression>(opt_declarator_id_node))
+									{
+										if(auto opt_unqualified_id_node = get<unqualified_id>(opt_id_expression_node))
+										{
+											if(auto opt_operator_function_id_node = get<operator_function_id>(opt_unqualified_id_node))
+											{
+												//todo
+											}
+											else if(auto opt_conversion_function_id_node = get<conversion_function_id>(opt_unqualified_id_node))
+											{
+												//todo
+											}
+											else if(auto opt_destructor_name_node = get<destructor_name>(opt_unqualified_id_node))
+											{
+												//todo
+											}
+											else if(auto opt_template_id_node = get<template_id>(opt_unqualified_id_node))
+											{
+												//todo
+											}
+											else if(auto opt_identifier_node = get<identifier>(opt_unqualified_id_node))
+											{
+												name = opt_identifier_node->value();
+											}
+											else
+											{
+												assert(false);
+											}
+										}
+										else if(auto opt_qualified_id_node = get<qualified_id>(opt_id_expression_node))
+										{
+											//todo
+										}
+										else
+										{
+											assert(false);
+										}
+									}
+									else if(auto opt_nested_identifier_or_template_id_node = get<nested_identifier_or_template_id>(opt_declarator_id_node))
+									{
+										//todo
+									}
+									else
+									{
+										assert(false);
+									}
+								}
+								else
+								{
+									assert(false);
+								}
+
+								if(auto opt_last_part_seq_node = get_last_part_seq(direct_declarator_node))
+								{
+									auto last_part_seq_node = *opt_last_part_seq_node;
+									for
+									(
+										auto i = last_part_seq_node.begin();
+										i != last_part_seq_node.end();
+										++i
+									)
+									{
+										auto last_part_node = i->main_node();
+
+										if(auto opt_function_part_node = get<direct_declarator_function_part>(&last_part_node))
+										{
+											is_a_function_declaration = true;
+										}
+										else if(auto opt_array_part_node = get<direct_declarator_array_part>(&last_part_node))
+										{
+											//todo
+										}
+										else
+										{
+											assert(false);
+										}
+									}
+								}
+
+								if(name != "")
+								{
+									if(is_a_function_declaration)
+									{
+										new_class.add(function(name));
+									}
+									else
+									{
+										new_class.add(variable(name));
+									}
+								}
+							}
+							else if(auto opt_member_declarator_bit_field_member_node = get<member_declarator_bit_field_member>(&member_declarator_node))
+							{
+							}
+							else
+							{
+								assert(false);
+							}
+						}
+					}
+				}
+				else if(auto opt_member_declaration_unqualified_id_node = get<member_declaration_unqualified_id>(opt_member_declaration_node))
+				{
+				}
+				else if(auto opt_using_declaration_node = get<using_declaration>(opt_member_declaration_node))
+				{
+				}
+				else if(auto opt_template_declaration_node = get<template_declaration>(opt_member_declaration_node))
+				{
+				}
+				else
+				{
+					assert(false);
+				}
+			}
+			else if(auto opt_member_specification_access_specifier_node = get<member_specification_access_specifier>(&part))
+			{
+			}
+			else
+			{
+				assert(false);
+			}
+		}
+	}
+
+	scope_cursor_.leave_scope();
+
+	return new_class;
 }
 
 }} //namespace scalpel::cpp

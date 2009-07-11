@@ -45,6 +45,13 @@ typedef
 	member_declaration_member_declarator_list
 ;
 
+inline
+optional_node<member_declarator_list>
+get_member_declarator_list(const member_declaration_member_declarator_list& o)
+{
+	return get<2>(o);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif

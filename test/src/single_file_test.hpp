@@ -23,6 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <scalpel/cpp/preprocessor.hpp>
 #include <scalpel/cpp/syntax_analyzer.hpp>
+#include <scalpel/cpp/semantic_analyzer.hpp>
 
 class single_file_test
 {

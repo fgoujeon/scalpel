@@ -24,6 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <scalpel/cpp/preprocessor.hpp>
 #include <scalpel/cpp/syntax_analyzer.hpp>
+#include <scalpel/cpp/semantic_analyzer.hpp>
 #include "syntax_tree_print_functions.hpp"
 #include "semantic_graph_print_functions.hpp"
 
@@ -75,8 +76,8 @@ main(int argc, char** argv)
 	scalpel::cpp::syntax_tree tree = syntax_analyzer(preprocessed_code);
 
 	//print syntax tree
-	//std::cout << "Syntax tree:\n";
-	//print(tree);
+	std::cout << "Syntax tree:\n";
+	print(tree);
 
 	//semantic analysis
 	scalpel::cpp::semantic_graph graph = semantic_analyzer(tree);

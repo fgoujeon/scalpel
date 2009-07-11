@@ -263,6 +263,9 @@ class semantic_analyzer
         void
 		analyze(const syntax_nodes::while_statement& syntax_node);
 
+		semantic_entities::class_
+		create_class(const syntax_nodes::class_specifier& syntax_node);
+
 		detail::semantic_analysis::scope_cursor scope_cursor_;
 		alternative_visitor alternative_visitor_;
 };

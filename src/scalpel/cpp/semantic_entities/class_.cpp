@@ -37,7 +37,8 @@ class_::class_(class_&& c):
 	scope_impl_(std::move(c.scope_impl_)),
 	name_(std::move(c.name_)),
 	classes_(std::move(c.classes_)),
-	functions_(std::move(c.functions_))
+	functions_(std::move(c.functions_)),
+	variables_(std::move(c.variables_))
 {
 }
 
@@ -48,6 +49,7 @@ class_::operator=(class_&& c)
 	name_ = std::move(c.name_);
 	classes_ = std::move(c.classes_);
 	functions_ = std::move(c.functions_);
+	variables_ = std::move(c.variables_);
 
 	return *this;
 }

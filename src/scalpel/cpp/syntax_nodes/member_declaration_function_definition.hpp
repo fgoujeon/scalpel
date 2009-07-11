@@ -42,6 +42,13 @@ typedef
 	member_declaration_function_definition
 ;
 
+inline
+const function_definition&
+get_function_definition(const member_declaration_function_definition& o)
+{
+	return get<0>(o);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
