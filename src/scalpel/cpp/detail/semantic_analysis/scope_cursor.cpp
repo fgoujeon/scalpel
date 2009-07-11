@@ -199,7 +199,7 @@ scope_cursor::class_adder::visit(semantic_entities::namespace_& scope)
 void
 scope_cursor::class_adder::visit(semantic_entities::class_& scope)
 {
-	scope.add(o_);
+	//scope.add(o_);
 }
 
 void
@@ -233,7 +233,7 @@ scope_cursor::function_adder::visit(semantic_entities::namespace_& scope)
 void
 scope_cursor::function_adder::visit(semantic_entities::class_& scope)
 {
-	scope.add(o_);
+	//scope.add(o_);
 }
 
 void
@@ -301,7 +301,7 @@ scope_cursor::variable_adder::visit(semantic_entities::namespace_& scope)
 void
 scope_cursor::variable_adder::visit(semantic_entities::class_& scope)
 {
-	scope.add(o_);
+	//scope.add(o_);
 }
 
 void

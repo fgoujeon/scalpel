@@ -121,33 +121,33 @@ class_::variables() const
 }
 
 void
-class_::add(class_&& nested_class)
+class_::add(member<class_>&& nested_class)
 {
 	classes_.push_back(std::move(nested_class));
 
-	class_& member_ref = classes_.back();
+	class_& member_ref = classes_.back().entity();
 
 	scope_impl_.add_to_scopes(member_ref);
 	scope_impl_.add_to_named_entities(member_ref);
 }
 
 void
-class_::add(function&& member)
+class_::add(member<function>&& member)
 {
     functions_.push_back(std::move(member));
 
-	function& member_ref = functions_.back();
+	function& member_ref = functions_.back().entity();
 
 	scope_impl_.add_to_scopes(member_ref);
 	scope_impl_.add_to_named_entities(member_ref);
 }
 
 void
-class_::add(variable&& member)
+class_::add(member<variable>&& member)
 {
     variables_.push_back(std::move(member));
 
-	variable& member_ref = variables_.back();
+	variable& member_ref = variables_.back().entity();
 
 	scope_impl_.add_to_named_entities(member_ref);
 }

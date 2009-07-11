@@ -25,6 +25,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <sstream>
 #include <scalpel/cpp/semantic_graph.hpp>
+#include "basic_print_functions.hpp"
 
 namespace semantic_graph_print_functions
 {
@@ -43,22 +44,59 @@ void
 print
 (
 	const class_& c,
-	const unsigned int indent_level
+	const unsigned int indent_level,
+	const std::string& access = ""
 );
 
 void
 print
 (
 	const function& f,
-	const unsigned int indent_level
+	const unsigned int indent_level,
+	const std::string& access = ""
 );
 
 void
 print
 (
 	const variable& v,
+	const unsigned int indent_level,
+	const std::string& access = ""
+);
+
+template<class EntityT>
+void
+print
+(
+	const class_::member<EntityT>& m,
 	const unsigned int indent_level
 );
+
+
+
+template<class EntityT>
+void
+print
+(
+	const class_::member<EntityT>& m,
+	const unsigned int indent_level
+)
+{
+	std::string access;
+	switch(m.access())
+	{
+		case class_::access::PUBLIC:
+			access = "public";
+			break;
+		case class_::access::PROTECTED:
+			access = "protected";
+			break;
+		case class_::access::PRIVATE:
+			access = "private";
+			break;
+	}
+	print(m.entity(), indent_level + 1, access);
+}
 
 } //namespace semantic_graph_print_functions
 

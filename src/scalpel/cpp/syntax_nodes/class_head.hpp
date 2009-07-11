@@ -54,6 +54,13 @@ typedef
 ;
 
 inline
+const class_key&
+get_class_key(const class_head& o)
+{
+	return get<0>(o);
+}
+
+inline
 const optional_node<identifier_or_template_id>&
 get_identifier_or_template_id(const class_head& o)
 {

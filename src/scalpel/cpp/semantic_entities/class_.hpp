@@ -45,17 +45,27 @@ class class_:
 	public boost::noncopyable
 {
     public:
-		typedef std::list<class_> classes_t;
+		template<class EntityT>
+		class member;
+
+		typedef std::list<member<class_>> classes_t;
 		typedef classes_t::const_iterator class_const_iterator;
 		typedef boost::iterator_range<class_const_iterator> class_const_iterator_range;
 
-		typedef std::list<function> functions_t;
+		typedef std::list<member<function>> functions_t;
 		typedef functions_t::const_iterator function_const_iterator;
 		typedef boost::iterator_range<function_const_iterator> function_const_iterator_range;
 
-		typedef std::list<variable> variables_t;
+		typedef std::list<member<variable>> variables_t;
 		typedef variables_t::const_iterator variable_const_iterator;
 		typedef boost::iterator_range<variable_const_iterator> variable_const_iterator_range;
+
+		enum access
+		{
+			PUBLIC,
+			PROTECTED,
+			PRIVATE
+		};
 
         /**
         Creates a class.
@@ -121,13 +131,13 @@ class class_:
         Adds a nested class.
         */
         void
-        add(class_&& nested_class);
+        add(member<class_>&& nested_class);
 
         void
-        add(function&& member);
+        add(member<function>&& member);
 
 		void
-		add(variable&& member);
+		add(member<variable>&& member);
 
     private:
 		scope_impl scope_impl_;
@@ -136,6 +146,72 @@ class class_:
 		functions_t functions_;
 		variables_t variables_;
 };
+
+template<class EntityT>
+class class_::member
+{
+	public:
+		member(EntityT&& entity, class_::access a);
+
+		member(const member& o);
+
+		member(member&& o);
+
+		const EntityT&
+		entity() const;
+
+		EntityT&
+		entity();
+
+		class_::access
+		access() const;
+
+	private:
+		EntityT entity_;
+		class_::access access_;
+};
+
+template<class EntityT>
+class_::member<EntityT>::member(EntityT&& entity, class_::access a):
+	entity_(std::move(entity)),
+	access_(a)
+{
+}
+
+template<class EntityT>
+class_::member<EntityT>::member(const member<EntityT>& o):
+	entity_(o.entity_),
+	access_(o.access_)
+{
+}
+
+template<class EntityT>
+class_::member<EntityT>::member(member<EntityT>&& o):
+	entity_(std::move(o.entity_)),
+	access_(o.access_)
+{
+}
+
+template<class EntityT>
+const EntityT&
+class_::member<EntityT>::entity() const
+{
+	return entity_;
+}
+
+template<class EntityT>
+EntityT&
+class_::member<EntityT>::entity()
+{
+	return entity_;
+}
+
+template<class EntityT>
+class_::access
+class_::member<EntityT>::access() const
+{
+	return access_;
+}
 
 }}} //namespace scalpel::cpp::semantic_entities
 

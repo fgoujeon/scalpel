@@ -20,8 +20,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "semantic_graph_print_functions.hpp"
 
-#include "basic_print_functions.hpp"
-
 namespace semantic_graph_print_functions
 {
 
@@ -58,11 +56,14 @@ void
 print
 (
 	const class_& c,
-	const unsigned int indent_level
+	const unsigned int indent_level,
+	const std::string& access
 )
 {
 	std::cout << indent(indent_level) << "<class";
 	std::cout << " name=\"" << c.name() << "\"";
+	if(access != "")
+		std::cout << " access=\"" << access << "\"";
 	std::cout << ">\n";
 
 	for(auto i = c.classes().begin(); i != c.classes().end(); ++i)
@@ -81,11 +82,14 @@ void
 print
 (
 	const function& f,
-	const unsigned int indent_level
+	const unsigned int indent_level,
+	const std::string& access
 )
 {
 	std::cout << indent(indent_level) << "<function";
 	std::cout << " name=\"" << f.name() << "\"";
+	if(access != "")
+		std::cout << " access=\"" << access << "\"";
 	std::cout << ">\n";
 
 	std::cout << indent(indent_level) << "</function>\n";
@@ -95,11 +99,14 @@ void
 print
 (
 	const variable& v,
-	const unsigned int indent_level
+	const unsigned int indent_level,
+	const std::string& access
 )
 {
 	std::cout << indent(indent_level) << "<variable";
 	std::cout << " name=\"" << v.name() << "\"";
+	if(access != "")
+		std::cout << " access=\"" << access << "\"";
 	std::cout << "/>\n";
 }
 

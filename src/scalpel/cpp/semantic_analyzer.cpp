@@ -678,6 +678,15 @@ semantic_analyzer::create_class(const class_specifier& syntax_node)
 		}
 	}
 
+	//default current_access
+	auto class_head_node = get_class_head(syntax_node);
+	auto class_key_node = get_class_key(class_head_node);
+	class_::access current_access = class_::access::PUBLIC;
+	if(get<predefined_text_node<str::class_>>(&class_key_node)) //if the syntax node represents a class (neither struct nor union)...
+	{
+		current_access = class_::access::PRIVATE; //... the default access is private
+	}
+
 	//create the class
 	assert(class_name != "");
 	class_ new_class(class_name);
@@ -805,11 +814,11 @@ semantic_analyzer::create_class(const class_specifier& syntax_node)
 								{
 									if(is_a_function_declaration)
 									{
-										new_class.add(function(name));
+										new_class.add(class_::member<function>(function(name), current_access));
 									}
 									else
 									{
-										new_class.add(variable(name));
+										new_class.add(class_::member<variable>(variable(name), current_access));
 									}
 								}
 							}
@@ -839,6 +848,24 @@ semantic_analyzer::create_class(const class_specifier& syntax_node)
 			}
 			else if(auto opt_member_specification_access_specifier_node = get<member_specification_access_specifier>(&part))
 			{
+				auto access_specifier_node = get_access_specifier(*opt_member_specification_access_specifier_node);
+
+				if(get<predefined_text_node<str::public_>>(&access_specifier_node))
+				{
+					current_access = class_::access::PUBLIC;
+				}
+				else if(get<predefined_text_node<str::protected_>>(&access_specifier_node))
+				{
+					current_access = class_::access::PROTECTED;
+				}
+				else if(get<predefined_text_node<str::private_>>(&access_specifier_node))
+				{
+					current_access = class_::access::PRIVATE;
+				}
+				else
+				{
+					assert(false);
+				}
 			}
 			else
 			{
