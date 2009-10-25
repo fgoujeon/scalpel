@@ -23,6 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string>
 #include <stdexcept>
+#include <sstream>
 #include <scalpel/cpp/syntax_nodes/predefined_text_node.hpp>
 #include "node_converter.hpp"
 #include "node_checker.hpp"
