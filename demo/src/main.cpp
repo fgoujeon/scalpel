@@ -44,7 +44,7 @@ main(int argc, char** argv)
 	std::string filename = argv[1];
 
 	//open file
-	std::ifstream file(filename);
+	std::ifstream file(filename.c_str());
 	if(!file)
 	{
 		std::cout << filename << " doesn't exits.";

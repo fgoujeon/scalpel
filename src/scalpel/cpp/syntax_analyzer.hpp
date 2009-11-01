@@ -47,3 +47,4 @@ class syntax_analyzer
 }} //namespace scalpel::cpp
 
 #endif
+
