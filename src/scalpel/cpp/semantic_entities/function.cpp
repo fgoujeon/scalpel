@@ -28,15 +28,18 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-function::function(const std::string& name):
-    name_(name)
+function::function(const std::string& name, std::unique_ptr<type> return_type):
+    name_(name),
+	return_type_(std::move(return_type))
 {
 	std::cout << "New function " << name << "\n";
 }
 
 function::function(function&& f):
 	scope_impl_(std::move(f.scope_impl_)),
-	name_(std::move(f.name_))
+	name_(std::move(f.name_)),
+	statement_block_(std::move(f.statement_block_)),
+	return_type_(std::move(f.return_type_))
 {
 }
 
@@ -97,24 +100,10 @@ function::named_entities() const
 	return scope_impl_.named_entities();
 }
 
-void
-function::add(statement_block&& o)
+const type&
+function::return_type() const
 {
-	statement_blocks_.push_back(std::move(o));
-
-	statement_block& member_ref = statement_blocks_.back();
-
-	scope_impl_.add_to_scopes(member_ref);
-}
-
-void
-function::add(variable&& v)
-{
-	variables_.push_back(std::move(v));
-
-	variable& member_ref = variables_.back();
-
-	scope_impl_.add_to_named_entities(member_ref);
+	return *return_type_;
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

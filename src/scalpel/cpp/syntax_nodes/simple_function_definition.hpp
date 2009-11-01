@@ -52,6 +52,13 @@ typedef
 ;
 
 inline
+const optional_node<decl_specifier_seq>&
+get_decl_specifier_seq(const simple_function_definition& o)
+{
+	return get<0>(o);
+}
+
+inline
 const compound_statement&
 get_compound_statement(const simple_function_definition& o)
 {

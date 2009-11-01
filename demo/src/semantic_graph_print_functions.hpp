@@ -36,6 +36,13 @@ using namespace scalpel::cpp::semantic_entities;
 void
 print
 (
+	const type& n,
+	const unsigned int indent_level
+);
+
+void
+print
+(
 	const namespace_& n,
 	const unsigned int indent_level = 0
 );

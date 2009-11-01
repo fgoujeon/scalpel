@@ -26,6 +26,56 @@ namespace semantic_graph_print_functions
 void
 print
 (
+	const type& n,
+	const unsigned int indent_level
+)
+{
+	if(const built_in_type* t = dynamic_cast<const built_in_type*>(&n))
+	{
+		std::cout << indent(indent_level);
+		switch(t->get_type())
+		{
+			case built_in_type::type_enum::CHAR:
+				std::cout << "char";
+				break;
+			case built_in_type::type_enum::WCHAR_T:
+				std::cout << "wchar_t";
+				break;
+			case built_in_type::type_enum::BOOL:
+				std::cout << "bool";
+				break;
+			case built_in_type::type_enum::SHORT:
+				std::cout << "short";
+				break;
+			case built_in_type::type_enum::INT:
+				std::cout << "int";
+				break;
+			case built_in_type::type_enum::LONG:
+				std::cout << "long";
+				break;
+			case built_in_type::type_enum::SIGNED:
+				std::cout << "signed";
+				break;
+			case built_in_type::type_enum::UNSIGNED:
+				std::cout << "unsigned";
+				break;
+			case built_in_type::type_enum::FLOAT:
+				std::cout << "float";
+				break;
+			case built_in_type::type_enum::DOUBLE:
+				std::cout << "double";
+				break;
+			case built_in_type::type_enum::VOID:
+				std::cout << "void";
+				break;
+		}
+		std::cout << '\n';
+	}
+}
+
+void
+print
+(
 	const namespace_& n,
 	const unsigned int indent_level
 )
@@ -91,6 +141,10 @@ print
 	if(access != "")
 		std::cout << " access=\"" << access << "\"";
 	std::cout << ">\n";
+
+	std::cout << indent(indent_level + 1) << "<return_type>\n";
+	print(f.return_type(), indent_level + 2);
+	std::cout << indent(indent_level + 1) << "</return_type>\n";
 
 	std::cout << indent(indent_level) << "</function>\n";
 }

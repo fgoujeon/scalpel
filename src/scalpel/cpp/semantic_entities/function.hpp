@@ -23,7 +23,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string>
 #include <list>
+#include <memory>
 #include <boost/noncopyable.hpp>
+#include "type.hpp"
 #include "scope.hpp"
 #include "scope_impl.hpp"
 #include "named_entity.hpp"
@@ -45,9 +47,11 @@ class function:
 	public boost::noncopyable
 {
     public:
-        explicit
-        function(const std::string& name);
+		class parameter;
 
+        function(const std::string& name, std::unique_ptr<type> return_type);
+
+		//move constructor
 		function(function&& f);
 
 		const function&
@@ -86,17 +90,27 @@ class function:
 		named_entity_const_iterator_range
 		named_entities() const;
 
-		void
-		add(statement_block&& o);
-
-		void
-		add(variable&& v);
+		const type&
+		return_type() const;
 
     private:
 		scope_impl scope_impl_;
         std::string name_;
-		std::list<statement_block> statement_blocks_;
-		std::list<variable> variables_;
+		statement_block statement_block_;
+		std::unique_ptr<type> return_type_;
+};
+
+class function::parameter
+{
+	public:
+		parameter(const std::string& name, std::unique_ptr<type> t);
+
+		const std::string&
+		name() const;
+
+	private:
+		std::string name_;
+		std::unique_ptr<type> type_;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

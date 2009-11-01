@@ -277,6 +277,109 @@ semantic_analyzer::analyze(const function_definition& syntax_node)
 		}
 	}
 
+	//get the function's return type
+	std::unique_ptr<type> return_type;
+	auto opt_decl_specifier_seq_node = get_decl_specifier_seq(syntax_node);
+	if(opt_decl_specifier_seq_node)
+	{
+		const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
+		for
+		(
+			auto i = decl_specifier_seq_node.begin();
+			i < decl_specifier_seq_node.end();
+			++i
+		)
+		{
+			const decl_specifier& decl_specifier_node = i->main_node();
+
+			auto opt_type_specifier_node = get<type_specifier>(&decl_specifier_node);
+			auto opt_function_specifier_node = get<function_specifier>(&decl_specifier_node);
+			auto opt_storage_class_specifier_node = get<storage_class_specifier>(&decl_specifier_node);
+			//predefined_text_node<str::friend_>
+			//predefined_text_node<str::typedef_>
+
+			if(opt_type_specifier_node)
+			{
+				auto type_specifier_node = *opt_type_specifier_node;
+				//simple_type_specifier
+				//class_specifier
+				//enum_specifier
+				//elaborated_type_specifier
+				//cv_qualifier
+				//typeof_expression
+
+				if(auto opt_simple_type_specifier_node = get<simple_type_specifier>(&type_specifier_node))
+				{
+					auto simple_type_specifier_node = *opt_simple_type_specifier_node;
+					//nested_identifier_or_template_id,
+					//simple_template_type_specifier,
+					//built_in_type_specifier
+
+					if(auto opt_built_in_type_specifier_node = get<built_in_type_specifier>(&simple_type_specifier_node))
+					{
+						auto built_in_type_specifier_node = *opt_built_in_type_specifier_node;
+						//predefined_text_node<str::char_>,
+						//predefined_text_node<str::wchar_t_>,
+						//predefined_text_node<str::bool_>,
+						//predefined_text_node<str::short_>,
+						//predefined_text_node<str::int_>,
+						//predefined_text_node<str::long_>,
+						//predefined_text_node<str::signed_>,
+						//predefined_text_node<str::unsigned_>,
+						//predefined_text_node<str::float_>,
+						//predefined_text_node<str::double_>,
+						//predefined_text_node<str::void_>
+
+						if(get<predefined_text_node<str::char_>>(&built_in_type_specifier_node))
+						{
+							return_type = std::move(std::unique_ptr<built_in_type>(new built_in_type(built_in_type::CHAR)));
+						}
+						else if(get<predefined_text_node<str::wchar_t_>>(&built_in_type_specifier_node))
+						{
+							return_type = std::move(std::unique_ptr<built_in_type>(new built_in_type(built_in_type::WCHAR_T)));
+						}
+						else if(get<predefined_text_node<str::bool_>>(&built_in_type_specifier_node))
+						{
+							return_type = std::move(std::unique_ptr<built_in_type>(new built_in_type(built_in_type::BOOL)));
+						}
+						else if(get<predefined_text_node<str::short_>>(&built_in_type_specifier_node))
+						{
+							return_type = std::move(std::unique_ptr<built_in_type>(new built_in_type(built_in_type::SHORT)));
+						}
+						else if(get<predefined_text_node<str::int_>>(&built_in_type_specifier_node))
+						{
+							return_type = std::move(std::unique_ptr<built_in_type>(new built_in_type(built_in_type::INT)));
+						}
+						else if(get<predefined_text_node<str::long_>>(&built_in_type_specifier_node))
+						{
+							return_type = std::move(std::unique_ptr<built_in_type>(new built_in_type(built_in_type::LONG)));
+						}
+						else if(get<predefined_text_node<str::signed_>>(&built_in_type_specifier_node))
+						{
+							return_type = std::move(std::unique_ptr<built_in_type>(new built_in_type(built_in_type::SIGNED)));
+						}
+						else if(get<predefined_text_node<str::unsigned_>>(&built_in_type_specifier_node))
+						{
+							return_type = std::move(std::unique_ptr<built_in_type>(new built_in_type(built_in_type::UNSIGNED)));
+						}
+						else if(get<predefined_text_node<str::float_>>(&built_in_type_specifier_node))
+						{
+							return_type = std::move(std::unique_ptr<built_in_type>(new built_in_type(built_in_type::FLOAT)));
+						}
+						else if(get<predefined_text_node<str::double_>>(&built_in_type_specifier_node))
+						{
+							return_type = std::move(std::unique_ptr<built_in_type>(new built_in_type(built_in_type::DOUBLE)));
+						}
+						else if(get<predefined_text_node<str::void_>>(&built_in_type_specifier_node))
+						{
+							return_type = std::move(std::unique_ptr<built_in_type>(new built_in_type(built_in_type::VOID)));
+						}
+					}
+				}
+			}
+		}
+	}
+
 	//get the corresponding function semantic node (must exist if the function has already been declared)
 	scope* function_scope = 0;
 	if(!name.empty() && enclosing_scope)
@@ -298,7 +401,7 @@ semantic_analyzer::analyze(const function_definition& syntax_node)
 	//if the function hasn't been declared, this definition serves as a declaration
 	if(!function_scope && enclosing_scope && !name.empty())
 	{
-		scope_cursor_.add_to_current_scope(function(name));
+		scope_cursor_.add_to_current_scope(function(name, std::move(return_type)));
 		function_scope = &scope_cursor_.current_scope().scopes().back();
 	}
 
@@ -595,7 +698,7 @@ semantic_analyzer::analyze(const simple_declaration& syntax_node)
 	{
 		if(names.size() == 1)
 		{
-			scope_cursor_.add_to_current_scope(function(names.front()));
+			//scope_cursor_.add_to_current_scope(function(names.front()));
 		}
 	}
 	else if(!is_a_function_declaration && !is_a_class_forward_declaration) //variable declaration
@@ -814,7 +917,7 @@ semantic_analyzer::create_class(const class_specifier& syntax_node)
 								{
 									if(is_a_function_declaration)
 									{
-										new_class.add(class_::member<function>(function(name), current_access));
+										//new_class.add(class_::member<function>(function(name), current_access));
 									}
 									else
 									{

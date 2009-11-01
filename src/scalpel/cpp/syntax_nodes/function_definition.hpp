@@ -45,6 +45,9 @@ SCALPEL_ALTERNATIVE_NODE_PIMPL_DECLARATION
 	(try_block_function_definition)
 )
 
+const optional_node<decl_specifier_seq>&
+get_decl_specifier_seq(const function_definition& o);
+
 const declarator&
 get_declarator(const function_definition& o);
 

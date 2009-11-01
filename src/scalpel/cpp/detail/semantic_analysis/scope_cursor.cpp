@@ -271,9 +271,9 @@ scope_cursor::statement_block_adder::visit(semantic_entities::class_&)
 }
 
 void
-scope_cursor::statement_block_adder::visit(semantic_entities::function& scope)
+scope_cursor::statement_block_adder::visit(semantic_entities::function&)
 {
-	scope.add(o_);
+	assert(false);
 }
 
 void
@@ -305,9 +305,9 @@ scope_cursor::variable_adder::visit(semantic_entities::class_& scope)
 }
 
 void
-scope_cursor::variable_adder::visit(semantic_entities::function& scope)
+scope_cursor::variable_adder::visit(semantic_entities::function&)
 {
-	scope.add(o_);
+	assert(false);
 }
 
 void

@@ -18,22 +18,15 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_GRAPH_HPP
-#define SCALPEL_CPP_SEMANTIC_GRAPH_HPP
+#include "built_in_type.hpp"
 
-#include "semantic_entities/built_in_type.hpp"
-#include "semantic_entities/class_.hpp"
-#include "semantic_entities/function.hpp"
-#include "semantic_entities/namespace_.hpp"
-#include "semantic_entities/statement_block.hpp"
-#include "semantic_entities/type.hpp"
-#include "semantic_entities/variable.hpp"
-
-namespace scalpel { namespace cpp
+namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-typedef semantic_entities::namespace_ semantic_graph;
+built_in_type::built_in_type(type_enum t):
+	type_(t)
+{
+}
 
-}} //namespace scalpel::cpp
+}}} //namespace scalpel::cpp::semantic_entities
 
-#endif
