@@ -18,24 +18,28 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_GRAPH_HPP
-#define SCALPEL_CPP_SEMANTIC_GRAPH_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_DECORATOR_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_DECORATOR_HPP
 
-#include "semantic_entities/built_in_type.hpp"
-#include "semantic_entities/class_.hpp"
-#include "semantic_entities/const_.hpp"
-#include "semantic_entities/function.hpp"
-#include "semantic_entities/namespace_.hpp"
-#include "semantic_entities/statement_block.hpp"
-#include "semantic_entities/type.hpp"
-#include "semantic_entities/type_decorator.hpp"
-#include "semantic_entities/variable.hpp"
+#include "type.hpp"
 
-namespace scalpel { namespace cpp
+namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-typedef semantic_entities::namespace_ semantic_graph;
+/**
+Represents a C++ type.
+*/
+struct type_decorator:
+	public type
+{
+	virtual
+	~type_decorator(){};
 
-}} //namespace scalpel::cpp
+	virtual
+	const type&
+	decorated_type() const = 0;
+};
+
+}}} //namespace scalpel::cpp::semantic_entities
 
 #endif

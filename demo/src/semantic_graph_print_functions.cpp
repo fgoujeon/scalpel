@@ -69,8 +69,14 @@ print
 				std::cout << "void";
 				break;
 		}
-		std::cout << '\n';
 	}
+	else if(const const_* t = dynamic_cast<const const_*>(&n))
+	{
+		std::cout << indent(indent_level) << "<const>\n";
+		print(t->decorated_type(), indent_level + 1);
+		std::cout << indent(indent_level) << "</const>";
+	}
+	std::cout << '\n';
 }
 
 void

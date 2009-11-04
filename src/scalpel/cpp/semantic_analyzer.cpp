@@ -928,6 +928,8 @@ std::unique_ptr<type>
 semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node)
 {
 	std::unique_ptr<type> return_type;
+	bool const_qualified = false; //useful for "const int" (where prefered form would have been "int const")
+	bool volatile_qualified = false; //ditto
 
 	for
 	(
@@ -1021,6 +1023,29 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 						return_type = std::move(std::unique_ptr<built_in_type>(new built_in_type(built_in_type::VOID)));
 					}
 				}
+			}
+			else if(auto opt_cv_qualifier_node = get<cv_qualifier>(&type_specifier_node))
+			{
+				auto cv_qualifier_node = *opt_cv_qualifier_node;
+				//predefined_text_node<str::const_>
+				//predefined_text_node<str::volatile_>
+				//predefined_text_node<str::restrict_>
+				//predefined_text_node<str::__restrict___>
+				//predefined_text_node<str::__restrict_>
+
+				if(get<predefined_text_node<str::const_>>(&cv_qualifier_node))
+				{
+					const_qualified = true;
+				}
+			}
+		}
+
+		if(return_type)
+		{
+			if(const_qualified)
+			{
+				return_type = std::move(std::unique_ptr<const_>(new const_(std::move(return_type))));
+				const_qualified = false;
 			}
 		}
 	}
