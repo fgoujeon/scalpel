@@ -266,6 +266,9 @@ class semantic_analyzer
 		semantic_entities::class_
 		create_class(const syntax_nodes::class_specifier& syntax_node);
 
+		std::unique_ptr<semantic_entities::type>
+		create_type(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node);
+
 		detail::semantic_analysis::scope_cursor scope_cursor_;
 		alternative_visitor alternative_visitor_;
 };

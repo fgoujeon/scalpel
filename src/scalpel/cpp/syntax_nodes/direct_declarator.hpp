@@ -79,6 +79,14 @@ typedef
 	direct_declarator_function_part
 ;
 
+inline
+const optional_node<parameter_declaration_clause>&
+get_parameter_declaration_clause(const direct_declarator_function_part& o)
+{
+	return get<2>(o);
+}
+
+
 typedef
 	sequence_node
 	<

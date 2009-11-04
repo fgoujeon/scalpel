@@ -47,6 +47,13 @@ typedef
 	parameter_declaration_clause
 ;
 
+inline
+const optional_node<parameter_declaration_list>&
+get_parameter_declaration_list(const parameter_declaration_clause& o)
+{
+	return get<0>(o);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif

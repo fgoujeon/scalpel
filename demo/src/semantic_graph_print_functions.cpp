@@ -146,7 +146,29 @@ print
 	print(f.return_type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</return_type>\n";
 
+	std::cout << indent(indent_level + 1) << "<parameters>\n";
+	const std::list<function::parameter>& parameters = f.parameters();
+	for(auto i = parameters.begin(); i != parameters.end(); ++i)
+	{
+		print(*i, indent_level + 2);
+	}
+	std::cout << indent(indent_level + 1) << "</parameters>\n";
+
 	std::cout << indent(indent_level) << "</function>\n";
+}
+
+void
+print
+(
+	const function::parameter& p,
+	const unsigned int indent_level
+)
+{
+	std::cout << indent(indent_level) << "<parameter>\n";
+	std::cout << indent(indent_level + 1) << "<type>\n";
+	print(p.get_type(), indent_level + 2);
+	std::cout << indent(indent_level + 1) << "</type>\n";
+	std::cout << indent(indent_level) << "</parameter>\n";
 }
 
 void

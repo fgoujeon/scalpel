@@ -66,6 +66,13 @@ print
 void
 print
 (
+	const function::parameter& p,
+	const unsigned int indent_level
+);
+
+void
+print
+(
 	const variable& v,
 	const unsigned int indent_level,
 	const std::string& access = ""

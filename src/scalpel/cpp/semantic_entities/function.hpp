@@ -49,7 +49,7 @@ class function:
     public:
 		class parameter;
 
-        function(const std::string& name, std::unique_ptr<type> return_type);
+        function(const std::string& name, std::unique_ptr<type> return_type, std::list<parameter>&& parameters);
 
 		//move constructor
 		function(function&& f);
@@ -93,24 +93,38 @@ class function:
 		const type&
 		return_type() const;
 
+		const std::list<parameter>&
+		parameters() const;
+
     private:
 		scope_impl scope_impl_;
         std::string name_;
 		statement_block statement_block_;
 		std::unique_ptr<type> return_type_;
+		std::list<parameter> parameters_;
 };
 
 class function::parameter
 {
 	public:
-		parameter(const std::string& name, std::unique_ptr<type> t);
+		parameter(std::unique_ptr<type> t, const std::string& name);
+
+		parameter(const parameter&) = delete;
+
+		parameter(parameter&& o);
+
+		const parameter&
+		operator=(const parameter&) = delete;
+
+		const type&
+		get_type() const;
 
 		const std::string&
 		name() const;
 
 	private:
-		std::string name_;
 		std::unique_ptr<type> type_;
+		std::string name_;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

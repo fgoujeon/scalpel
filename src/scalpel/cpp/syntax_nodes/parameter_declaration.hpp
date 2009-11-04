@@ -56,6 +56,13 @@ typedef
 	parameter_declaration
 ;
 
+inline
+const decl_specifier_seq&
+get_decl_specifier_seq(const parameter_declaration& o)
+{
+	return get<0>(o);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
