@@ -50,6 +50,9 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 	(direct_declarator)
 )
 
+const optional_node<ptr_operator_seq>&
+get_ptr_operator_seq(const declarator& o);
+
 const direct_declarator&
 get_direct_declarator(const declarator& o);
 

@@ -63,6 +63,20 @@ get_decl_specifier_seq(const parameter_declaration& o)
 	return get<0>(o);
 }
 
+inline
+const optional_node<declarator>&
+get_declarator(const parameter_declaration& o)
+{
+	return get<2>(o);
+}
+
+inline
+const optional_node<abstract_declarator>&
+get_abstract_declarator(const parameter_declaration& o)
+{
+	return get<3>(o);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif

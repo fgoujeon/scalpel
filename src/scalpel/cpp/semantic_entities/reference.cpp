@@ -18,36 +18,21 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "declarator.hpp"
+#include "reference.hpp"
 
-#include "ptr_operator_seq.hpp"
-#include "direct_declarator.hpp"
-
-#include "detail/macros/sequence_node_pimpl_definition.hpp"
-
-namespace scalpel { namespace cpp { namespace syntax_nodes
+namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
-(
-	declarator,
-	(optional_node<ptr_operator_seq>)
-	(optional_node<space>)
-	(direct_declarator)
-)
-
-const optional_node<ptr_operator_seq>&
-get_ptr_operator_seq(const declarator& o)
+reference::reference(std::unique_ptr<type> decorated_type):
+	decorated_type_(std::move(decorated_type))
 {
-	return get<0>(o);
 }
 
-const direct_declarator&
-get_direct_declarator(const declarator& o)
+const type&
+reference::decorated_type() const
 {
-	return get<2>(o);
+	return *decorated_type_;
 }
 
-}}} //namespace scalpel::cpp::syntax_nodes
+}}} //namespace scalpel::cpp::semantic_entities
 
-#include "detail/macros/sequence_node_pimpl_definition_undef.hpp"

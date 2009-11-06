@@ -76,6 +76,18 @@ print
 		print(t->decorated_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</const>";
 	}
+	else if(const pointer* t = dynamic_cast<const pointer*>(&n))
+	{
+		std::cout << indent(indent_level) << "<pointer>\n";
+		print(t->decorated_type(), indent_level + 1);
+		std::cout << indent(indent_level) << "</pointer>";
+	}
+	else if(const reference* t = dynamic_cast<const reference*>(&n))
+	{
+		std::cout << indent(indent_level) << "<reference>\n";
+		print(t->decorated_type(), indent_level + 1);
+		std::cout << indent(indent_level) << "</reference>";
+	}
 	std::cout << '\n';
 }
 

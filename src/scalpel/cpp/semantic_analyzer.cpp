@@ -204,9 +204,9 @@ semantic_analyzer::analyze(const for_statement& syntax_node)
 }
 
 void
-semantic_analyzer::analyze(const function_definition& syntax_node)
+semantic_analyzer::analyze(const function_definition& function_definition_node)
 {
-	auto direct_declarator_node = get_direct_declarator(get_declarator(syntax_node));
+	auto direct_declarator_node = get_direct_declarator(get_declarator(function_definition_node));
 
 	//
 	//get the name and the enclosing scope of the function
@@ -283,9 +283,9 @@ semantic_analyzer::analyze(const function_definition& syntax_node)
 	//get the function's return type
 	//
 	std::unique_ptr<type> return_type;
-	if(auto opt_decl_specifier_seq_node = get_decl_specifier_seq(syntax_node))
+	if(auto opt_decl_specifier_seq_node = get_decl_specifier_seq(function_definition_node))
 	{
-		return_type = std::move(create_type(*opt_decl_specifier_seq_node));
+		return_type = std::move(create_type(*opt_decl_specifier_seq_node, get_declarator(function_definition_node)));
 	}
 
 	//
@@ -314,7 +314,20 @@ semantic_analyzer::analyze(const function_definition& syntax_node)
 						{
 							auto parameter_declaration_node = j->main_node();
 							auto decl_specifier_seq_node = get_decl_specifier_seq(parameter_declaration_node);
-							parameters.push_back(std::move(function::parameter(std::move(create_type(decl_specifier_seq_node)), "aaa")));
+							if(auto opt_declarator_node = get_declarator(parameter_declaration_node))
+							{
+								parameters.push_back
+								(
+									std::move
+									(
+										function::parameter
+										(
+											std::move(create_type(decl_specifier_seq_node, *opt_declarator_node)),
+											"aaa"
+										)
+									)
+								);
+							}
 						}
 					}
 				}
@@ -352,7 +365,7 @@ semantic_analyzer::analyze(const function_definition& syntax_node)
 	{
 		scope_cursor_.enter_scope(*function_scope);
 
-		if(auto opt_simple_function_definition = get<simple_function_definition>(&syntax_node))
+		if(auto opt_simple_function_definition = get<simple_function_definition>(&function_definition_node))
 		{
 			auto compound_statement_node = get_compound_statement(*opt_simple_function_definition);
 			analyze(compound_statement_node, false);
@@ -925,7 +938,7 @@ semantic_analyzer::create_class(const class_specifier& syntax_node)
 }
 
 std::unique_ptr<type>
-semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node)
+semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node, const declarator& declarator_node)
 {
 	std::unique_ptr<type> return_type;
 	bool const_qualified = false; //useful for "const int" (where prefered form would have been "int const")
@@ -1046,6 +1059,23 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 			{
 				return_type = std::move(std::unique_ptr<const_>(new const_(std::move(return_type))));
 				const_qualified = false;
+			}
+		}
+	}
+
+	if(auto opt_ptr_operator_seq_node = get_ptr_operator_seq(declarator_node))
+	{
+		auto ptr_operator_seq_node = *opt_ptr_operator_seq_node;
+		for(auto i = ptr_operator_seq_node.begin(); i != ptr_operator_seq_node.end(); ++i)
+		{
+			auto ptr_operator_node = i->main_node();
+			if(auto ptr_ptr_operator_node = get<ptr_ptr_operator>(&ptr_operator_node))
+			{
+				return_type = std::move(std::unique_ptr<pointer>(new pointer(std::move(return_type))));
+			}
+			else if(auto ref_ptr_operator_node = get<ref_ptr_operator>(&ptr_operator_node))
+			{
+				return_type = std::move(std::unique_ptr<reference>(new reference(std::move(return_type))));
 			}
 		}
 	}

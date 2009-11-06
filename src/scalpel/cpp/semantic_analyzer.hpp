@@ -267,7 +267,11 @@ class semantic_analyzer
 		create_class(const syntax_nodes::class_specifier& syntax_node);
 
 		std::unique_ptr<semantic_entities::type>
-		create_type(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node);
+		create_type
+		(
+			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
+			const syntax_nodes::declarator& declarator_node
+		);
 
 		detail::semantic_analysis::scope_cursor scope_cursor_;
 		alternative_visitor alternative_visitor_;
