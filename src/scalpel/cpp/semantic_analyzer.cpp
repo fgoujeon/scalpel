@@ -1166,6 +1166,25 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 		}
 	}
 
+	auto direct_declarator_node = get_direct_declarator(declarator_node);
+	if(auto opt_last_part_seq_node = get_last_part_seq(direct_declarator_node))
+	{
+		auto last_part_seq_node = *opt_last_part_seq_node;
+		for
+		(
+			auto i = last_part_seq_node.begin();
+			i != last_part_seq_node.end();
+			++i
+		)
+		{
+			auto last_part_node = i->main_node();
+			if(auto array_part = get<direct_declarator_array_part>(&last_part_node))
+			{
+				return_type = std::move(std::unique_ptr<array>(new array(0, std::move(return_type))));
+			}
+		}
+	}
+
 	return return_type;
 }
 

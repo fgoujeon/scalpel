@@ -21,6 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_GRAPH_HPP
 #define SCALPEL_CPP_SEMANTIC_GRAPH_HPP
 
+#include "semantic_entities/array.hpp"
 #include "semantic_entities/built_in_type.hpp"
 #include "semantic_entities/class_.hpp"
 #include "semantic_entities/const_.hpp"

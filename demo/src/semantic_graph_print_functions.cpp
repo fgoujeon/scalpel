@@ -94,6 +94,12 @@ print
 		print(t->decorated_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</reference>";
 	}
+	else if(const array* t = dynamic_cast<const array*>(&n))
+	{
+		std::cout << indent(indent_level) << "<array size=\"" << t->size() << "\">\n";
+		print(t->decorated_type(), indent_level + 1);
+		std::cout << indent(indent_level) << "</array>";
+	}
 	std::cout << '\n';
 }
 
