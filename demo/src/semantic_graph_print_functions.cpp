@@ -76,6 +76,12 @@ print
 		print(t->decorated_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</const>";
 	}
+	else if(const volatile_* t = dynamic_cast<const volatile_*>(&n))
+	{
+		std::cout << indent(indent_level) << "<volatile>\n";
+		print(t->decorated_type(), indent_level + 1);
+		std::cout << indent(indent_level) << "</volatile>";
+	}
 	else if(const pointer* t = dynamic_cast<const pointer*>(&n))
 	{
 		std::cout << indent(indent_level) << "<pointer>\n";

@@ -48,6 +48,14 @@ typedef
 	ptr_ptr_operator
 ;
 
+inline
+const optional_node<cv_qualifier_seq>&
+get_cv_qualifier_seq(const ptr_ptr_operator& o)
+{
+	return get<6>(o);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

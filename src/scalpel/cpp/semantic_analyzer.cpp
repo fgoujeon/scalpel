@@ -1082,9 +1082,34 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 		for(auto i = ptr_operator_seq_node.begin(); i != ptr_operator_seq_node.end(); ++i)
 		{
 			auto ptr_operator_node = i->main_node();
-			if(auto ptr_ptr_operator_node = get<ptr_ptr_operator>(&ptr_operator_node))
+			if(auto opt_ptr_ptr_operator_node = get<ptr_ptr_operator>(&ptr_operator_node))
 			{
+				auto ptr_ptr_operator_node = *opt_ptr_ptr_operator_node;
+
 				return_type = std::move(std::unique_ptr<pointer>(new pointer(std::move(return_type))));
+
+				if(auto opt_cv_qualifier_seq_node = get_cv_qualifier_seq(ptr_ptr_operator_node))
+				{
+					auto cv_qualifier_seq_node = *opt_cv_qualifier_seq_node;
+					for
+					(
+						auto i = cv_qualifier_seq_node.begin();
+						i != cv_qualifier_seq_node.end();
+						++i
+					)
+					{
+						auto cv_qualifier_node = i->main_node();
+
+						if(get<predefined_text_node<str::const_>>(&cv_qualifier_node))
+						{
+							return_type = std::move(std::unique_ptr<const_>(new const_(std::move(return_type))));
+						}
+						else if(get<predefined_text_node<str::volatile_>>(&cv_qualifier_node))
+						{
+							return_type = std::move(std::unique_ptr<volatile_>(new volatile_(std::move(return_type))));
+						}
+					}
+				}
 			}
 			else if(auto ref_ptr_operator_node = get<ref_ptr_operator>(&ptr_operator_node))
 			{
