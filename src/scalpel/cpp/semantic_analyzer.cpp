@@ -316,14 +316,38 @@ semantic_analyzer::analyze(const function_definition& function_definition_node)
 							auto decl_specifier_seq_node = get_decl_specifier_seq(parameter_declaration_node);
 							if(auto opt_declarator_node = get_declarator(parameter_declaration_node))
 							{
+								auto declarator_node = *opt_declarator_node;
+
+								//get parameter name
+								std::string name;
+								auto direct_declarator_node = get_direct_declarator(declarator_node);
+								auto first_part_node = get_first_part(direct_declarator_node);
+								if(auto opt_declarator_id_node = get<declarator_id>(&first_part_node))
+								{
+									auto declarator_id_node = *opt_declarator_id_node;
+									if(auto opt_id_expression_node = get<id_expression>(&declarator_id_node))
+									{
+										auto id_expression_node = *opt_id_expression_node;
+										if(auto opt_unqualified_id_node = get<unqualified_id>(&id_expression_node))
+										{
+											auto unqualified_id_node = *opt_unqualified_id_node;
+											if(auto opt_identifier_node = get<identifier>(&unqualified_id_node))
+											{
+												auto identifier_node = *opt_identifier_node;
+												name = identifier_node.value();
+											}
+										}
+									}
+								}
+
 								parameters.push_back
 								(
 									std::move
 									(
 										function::parameter
 										(
-											std::move(create_type(decl_specifier_seq_node, *opt_declarator_node)),
-											"aaa"
+											std::move(create_type(decl_specifier_seq_node, declarator_node)),
+											name
 										)
 									)
 								);
@@ -979,17 +1003,6 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 				if(auto opt_built_in_type_specifier_node = get<built_in_type_specifier>(&simple_type_specifier_node))
 				{
 					auto built_in_type_specifier_node = *opt_built_in_type_specifier_node;
-					//predefined_text_node<str::char_>,
-					//predefined_text_node<str::wchar_t_>,
-					//predefined_text_node<str::bool_>,
-					//predefined_text_node<str::short_>,
-					//predefined_text_node<str::int_>,
-					//predefined_text_node<str::long_>,
-					//predefined_text_node<str::signed_>,
-					//predefined_text_node<str::unsigned_>,
-					//predefined_text_node<str::float_>,
-					//predefined_text_node<str::double_>,
-					//predefined_text_node<str::void_>
 
 					if(get<predefined_text_node<str::char_>>(&built_in_type_specifier_node))
 					{

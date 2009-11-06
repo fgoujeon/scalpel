@@ -182,7 +182,10 @@ print
 	const unsigned int indent_level
 )
 {
-	std::cout << indent(indent_level) << "<parameter>\n";
+	std::cout << indent(indent_level) << "<parameter";
+	if(!p.name().empty())
+		std::cout << " name=\"" << p.name() << "\"";
+	std::cout << ">\n";
 	std::cout << indent(indent_level + 1) << "<type>\n";
 	print(p.get_type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</type>\n";
