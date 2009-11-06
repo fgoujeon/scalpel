@@ -210,7 +210,11 @@ print
 	std::cout << " name=\"" << v.name() << "\"";
 	if(access != "")
 		std::cout << " access=\"" << access << "\"";
-	std::cout << "/>\n";
+	std::cout << ">\n";
+	std::cout << indent(indent_level + 1) << "<type>\n";
+	print(v.get_type(), indent_level + 2);
+	std::cout << indent(indent_level + 1) << "</type>\n";
+	std::cout << indent(indent_level) << "</variable>\n";
 }
 
 } //namespace semantic_graph_print_functions

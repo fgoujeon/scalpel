@@ -22,7 +22,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_VARIABLE_HPP
 
 #include <string>
+#include <memory>
 #include <boost/noncopyable.hpp>
+#include "type.hpp"
 #include "scope.hpp"
 #include "named_entity.hpp"
 
@@ -37,14 +39,17 @@ class variable:
 	public boost::noncopyable
 {
 	public:
-		variable(const std::string& name);
+		variable(std::unique_ptr<type> t, const std::string& name);
 
-		variable(std::string&& name);
+		variable(std::unique_ptr<type> t, std::string&& name);
 
 		variable(variable&& v);
 
 		const variable&
 		operator=(variable&& v);
+
+		const type&
+		get_type() const;
 
 		const std::string&
 		name() const;
@@ -53,6 +58,7 @@ class variable:
 		is_a_type() const;
 
 	private:
+		std::unique_ptr<type> type_;
 		std::string name_;
 };
 

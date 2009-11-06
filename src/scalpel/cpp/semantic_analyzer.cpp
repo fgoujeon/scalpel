@@ -215,21 +215,21 @@ semantic_analyzer::analyze(const function_definition& function_definition_node)
 	scope* enclosing_scope = 0;
 
 	const direct_declarator_first_part& first_part_node = get_first_part(direct_declarator_node);
-	boost::optional<const declarator_id&> a_declarator_id = get<declarator_id>(&first_part_node);
-	if(a_declarator_id)
+	boost::optional<const declarator_id&> direct_node_id = get<declarator_id>(&first_part_node);
+	if(direct_node_id)
 	{
-		boost::optional<const id_expression&> an_id_expression = get<id_expression>(a_declarator_id);
-		if(an_id_expression)
+		boost::optional<const id_expression&> id_expression_node = get<id_expression>(direct_node_id);
+		if(id_expression_node)
 		{
-			boost::optional<const unqualified_id&> an_unqualified_id = get<unqualified_id>(an_id_expression);
-			boost::optional<const qualified_id&> a_qualified_id = get<qualified_id>(an_id_expression);
+			boost::optional<const unqualified_id&> unqualified_id_node = get<unqualified_id>(id_expression_node);
+			boost::optional<const qualified_id&> a_qualified_id = get<qualified_id>(id_expression_node);
 
-			if(an_unqualified_id)
+			if(unqualified_id_node)
 			{
-				boost::optional<const identifier&> an_identifier = get<identifier>(an_unqualified_id);
-				if(an_identifier)
+				boost::optional<const identifier&> identifier_node = get<identifier>(unqualified_id_node);
+				if(identifier_node)
 				{
-					name = an_identifier->value();
+					name = identifier_node->value();
 				}
 
 				enclosing_scope = &scope_cursor_.current_scope();
@@ -387,6 +387,7 @@ semantic_analyzer::analyze(const function_definition& function_definition_node)
 	//enter and leave the function body
 	if(function_scope)
 	{
+		/*
 		scope_cursor_.enter_scope(*function_scope);
 
 		if(auto opt_simple_function_definition = get<simple_function_definition>(&function_definition_node))
@@ -396,6 +397,7 @@ semantic_analyzer::analyze(const function_definition& function_definition_node)
 		}
 
 		scope_cursor_.leave_scope();
+		*/
 	}
 	else
 	{
@@ -489,10 +491,10 @@ semantic_analyzer::analyze(const namespace_definition& syntax_node)
 {
 	//get the namespace name
 	std::string namespace_name;
-	const optional_node<identifier>& an_identifier = get_identifier(syntax_node);
-	if(an_identifier)
+	const optional_node<identifier>& identifier_node = get_identifier(syntax_node);
+	if(identifier_node)
 	{
-		namespace_name = an_identifier->value();
+		namespace_name = identifier_node->value();
 	}
 
 	//add the namespace to the current scope
@@ -569,7 +571,7 @@ semantic_analyzer::analyze(const return_statement&)
 }
 
 void
-semantic_analyzer::analyze(const simple_declaration& syntax_node)
+semantic_analyzer::analyze(const simple_declaration& simple_declaration_node)
 {
 	std::vector<std::string> names;
 	std::string class_name;
@@ -577,13 +579,13 @@ semantic_analyzer::analyze(const simple_declaration& syntax_node)
 	bool is_a_class_forward_declaration = false;
 	bool is_a_function_declaration = false;
 
-	const optional_node<decl_specifier_seq>& an_optional_decl_specifier_seq = get_decl_specifier_seq(syntax_node);
-	const optional_node<init_declarator_list>& an_optional_init_declarator_list = get_init_declarator_list(syntax_node);
+	const optional_node<decl_specifier_seq>& opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node);
+	const optional_node<init_declarator_list>& an_optional_init_declarator_list = get_init_declarator_list(simple_declaration_node);
 
-	if(an_optional_decl_specifier_seq)
+	if(opt_decl_specifier_seq_node)
 	{
-		const decl_specifier_seq& a_decl_specifier_seq = *an_optional_decl_specifier_seq;
-		for(auto i = a_decl_specifier_seq.begin(); i != a_decl_specifier_seq.end(); ++i)
+		const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
+		for(auto i = decl_specifier_seq_node.begin(); i != decl_specifier_seq_node.end(); ++i)
 		{
 			const decl_specifier& a_decl_specifier = i->main_node();
 
@@ -626,32 +628,32 @@ semantic_analyzer::analyze(const simple_declaration& syntax_node)
 		const init_declarator_list& an_init_declarator_list = *an_optional_init_declarator_list;
 		for(auto i = an_init_declarator_list.begin(); i != an_init_declarator_list.end(); ++i)
 		{
-			const declarator& a_declarator = get_declarator(i->main_node());
-			const direct_declarator& a_direct_declarator = get_direct_declarator(a_declarator);
+			const declarator& direct_node = get_declarator(i->main_node());
+			const direct_declarator& direct_declarator_node = get_direct_declarator(direct_node);
 
-			//get the syntax_node name
-			const direct_declarator_first_part& first_part_node = get_first_part(a_direct_declarator);
-			const boost::optional<const declarator_id&> opt_declarator_id = get<declarator_id>(&first_part_node);
-			if(opt_declarator_id)
+			//get the simple_declaration_node name
+			const direct_declarator_first_part& first_part_node = get_first_part(direct_declarator_node);
+			const boost::optional<const declarator_id&> opt_declarator_id_node = get<declarator_id>(&first_part_node);
+			if(opt_declarator_id_node)
 			{
-				const declarator_id& a_declarator_id = *opt_declarator_id;
-				if(boost::optional<const id_expression&> an_id_expression = get<id_expression>(&a_declarator_id))
+				const declarator_id& direct_node_id = *opt_declarator_id_node;
+				if(boost::optional<const id_expression&> id_expression_node = get<id_expression>(&direct_node_id))
 				{
-					if(boost::optional<const unqualified_id&> an_unqualified_id = get<unqualified_id>(an_id_expression))
+					if(boost::optional<const unqualified_id&> unqualified_id_node = get<unqualified_id>(id_expression_node))
 					{
-						if(boost::optional<const identifier&> an_identifier = get<identifier>(an_unqualified_id))
+						if(boost::optional<const identifier&> identifier_node = get<identifier>(unqualified_id_node))
 						{
-							names.push_back(an_identifier->value());
+							names.push_back(identifier_node->value());
 						}
 					}
 				}
 			}
 
 			//determine the appropriate semantic graph node
-			auto a_direct_declarator_last_part_seq = get_last_part_seq(a_direct_declarator);
-			if(a_direct_declarator_last_part_seq)
+			auto direct_declarator_node_last_part_seq = get_last_part_seq(direct_declarator_node);
+			if(direct_declarator_node_last_part_seq)
 			{
-				for(auto j = a_direct_declarator_last_part_seq->begin(); j != a_direct_declarator_last_part_seq->end(); ++j)
+				for(auto j = direct_declarator_node_last_part_seq->begin(); j != direct_declarator_node_last_part_seq->end(); ++j)
 				{
 					const direct_declarator_last_part& last_part = j->main_node();
 
@@ -682,12 +684,49 @@ semantic_analyzer::analyze(const simple_declaration& syntax_node)
 	}
 	else if(!is_a_function_declaration && !is_a_class_forward_declaration) //variable declaration
 	{
-		//there can be several names, like in:
-		//int i1, i2;
-		for(auto i = names.begin(); i != names.end(); ++i) //for each name
+		assert(opt_decl_specifier_seq_node);
+		const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
+
+		auto opt_init_declarator_list_node = get_init_declarator_list(simple_declaration_node);
+		assert(opt_init_declarator_list_node);
+		auto init_declarator_list_node = *opt_init_declarator_list_node;
+		//for each variable
+		for
+		(
+			auto i = init_declarator_list_node.begin();
+			i != init_declarator_list_node.end();
+			++i
+		)
 		{
-			const std::string& name = *i;
-			scope_cursor_.add_to_current_scope(variable(name));
+			auto init_declarator_node = i->main_node();
+			auto declarator_node = get_declarator(init_declarator_node);
+
+			auto direct_declarator_node = get_direct_declarator(declarator_node);
+
+			//get the simple_declaration_node name
+			auto first_part_node = get_first_part(direct_declarator_node);
+			auto opt_declarator_id_node = get<declarator_id>(&first_part_node);
+			if(opt_declarator_id_node)
+			{
+				auto declarator_id_node = *opt_declarator_id_node;
+				if(auto id_expression_node = get<id_expression>(&declarator_id_node))
+				{
+					if(auto unqualified_id_node = get<unqualified_id>(id_expression_node))
+					{
+						if(auto identifier_node = get<identifier>(unqualified_id_node))
+						{
+							scope_cursor_.add_to_current_scope
+							(
+								variable
+								(
+									std::move(create_type(decl_specifier_seq_node, declarator_node)),
+									identifier_node->value()
+								)
+							);
+						}
+					}
+				}
+			}
 		}
 	}
 }
@@ -900,7 +939,7 @@ semantic_analyzer::create_class(const class_specifier& syntax_node)
 									}
 									else
 									{
-										new_class.add(class_::member<variable>(variable(name), current_access));
+										//new_class.add(class_::member<variable>(variable(name), current_access));
 									}
 								}
 							}
@@ -1063,6 +1102,10 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 				{
 					const_qualified = true;
 				}
+				else if(get<predefined_text_node<str::volatile_>>(&cv_qualifier_node))
+				{
+					volatile_qualified = true;
+				}
 			}
 		}
 
@@ -1072,6 +1115,11 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 			{
 				return_type = std::move(std::unique_ptr<const_>(new const_(std::move(return_type))));
 				const_qualified = false;
+			}
+			else if(volatile_qualified)
+			{
+				return_type = std::move(std::unique_ptr<volatile_>(new volatile_(std::move(return_type))));
+				volatile_qualified = false;
 			}
 		}
 	}

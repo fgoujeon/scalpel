@@ -25,19 +25,22 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-variable::variable(const std::string& name):
+variable::variable(std::unique_ptr<type> t, const std::string& name):
+	type_(std::move(t)),
 	name_(name)
 {
 	std::cout << "New variable " << name << "\n";
 }
 
-variable::variable(std::string&& name):
+variable::variable(std::unique_ptr<type> t, std::string&& name):
+	type_(std::move(t)),
 	name_(std::move(name))
 {
 	std::cout << "New variable " << name << "\n";
 }
 
 variable::variable(variable&& v):
+	type_(std::move(v.type_)),
 	name_(std::move(v.name_))
 {
 }
@@ -48,6 +51,12 @@ variable::operator=(variable&& v)
 	name_ = std::move(v.name_);
 
 	return *this;
+}
+
+const type&
+variable::get_type() const
+{
+	return *type_;
 }
 
 const std::string&
