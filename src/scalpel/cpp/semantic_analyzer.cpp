@@ -917,11 +917,9 @@ semantic_analyzer::create_function(const decl_specifier_seq& decl_specifier_seq_
 	auto direct_declarator_node = get_direct_declarator(declarator_node);
 
 	//
-	//get the name and the enclosing scope of the function
+	//get the name of the function
 	//
 	std::string name;
-	scope* enclosing_scope = 0;
-
 	auto first_part_node = get_first_part(direct_declarator_node);
 	auto opt_declarator_id_node = get<declarator_id>(&first_part_node);
 	if(opt_declarator_id_node)
@@ -940,15 +938,13 @@ semantic_analyzer::create_function(const decl_specifier_seq& decl_specifier_seq_
 					name = opt_identifier_node->value();
 				}
 
-				enclosing_scope = &scope_cursor_.current_scope();
 			}
 			else if(opt_qualified_id_node)
 			{
-				std::cout << "qualified_id\n";
 			//	const qualified_identifier* const a_qualified_identifier =
 			//		boost::get<qualified_identifier>(opt_qualified_id_node)
 			//	;
-				boost::optional<const qualified_nested_id&> a_qualified_nested_id = get<qualified_nested_id>(opt_qualified_id_node);
+				auto opt_qualified_nested_id_node = get<qualified_nested_id>(opt_qualified_id_node);
 			//	const qualified_operator_function_id* const a_qualified_operator_function_id =
 			//	   	boost::get<qualified_operator_function_id>(opt_qualified_id_node)
 			//	;
@@ -956,27 +952,13 @@ semantic_analyzer::create_function(const decl_specifier_seq& decl_specifier_seq_
 			//	   	boost::get<qualified_template_id>(opt_qualified_id_node)
 			//	;
 
-				if(a_qualified_nested_id)
+				if(opt_qualified_nested_id_node)
 				{
-					std::cout << "qualified_nested_id\n";
-
-					bool leading_double_colon = has_double_colon(*a_qualified_nested_id);
-					const nested_name_specifier& a_nested_name_specifier = get_nested_name_specifier(*a_qualified_nested_id);
-
-					if(leading_double_colon)
+					auto unqualified_id_node = get_unqualified_id(*opt_qualified_nested_id_node);
+					auto opt_identifier_node = get<identifier>(&unqualified_id_node);
+					if(opt_identifier_node)
 					{
-						enclosing_scope = name_lookup::find_scope(scope_cursor_.global_scope_stack(), a_nested_name_specifier);
-					}
-					else
-					{
-						enclosing_scope = name_lookup::find_scope(scope_cursor_.scope_stack(), a_nested_name_specifier);
-					}
-
-					const unqualified_id& opt_unqualified_id_node = get_unqualified_id(*a_qualified_nested_id);
-					boost::optional<const identifier&> identifier_node = get<identifier>(&opt_unqualified_id_node);
-					if(identifier_node)
-					{
-						name = identifier_node->value();
+						name = opt_identifier_node->value();
 					}
 				}
 			}
