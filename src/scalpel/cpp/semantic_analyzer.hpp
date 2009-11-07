@@ -266,6 +266,13 @@ class semantic_analyzer
 		semantic_entities::class_
 		create_class(const syntax_nodes::class_specifier& syntax_node);
 
+		semantic_entities::function
+		create_function
+		(
+			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
+			const syntax_nodes::declarator& declarator_node
+		);
+
 		std::unique_ptr<semantic_entities::type>
 		create_type
 		(

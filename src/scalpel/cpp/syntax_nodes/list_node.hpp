@@ -58,6 +58,12 @@ class list_node
 			return items_.empty();
 		}
 
+		typename items_t::size_type
+		size() const
+		{
+			return items_.size();
+		}
+
 		const_iterator
 		begin() const
 		{
@@ -68,6 +74,12 @@ class list_node
 		end() const
 		{
 			return items_.end();
+		}
+
+		const item&
+		front() const
+		{
+			return items_.front();
 		}
 
 		void

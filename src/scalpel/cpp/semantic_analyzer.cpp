@@ -209,9 +209,8 @@ semantic_analyzer::analyze(const function_definition& function_definition_node)
 	auto direct_declarator_node = get_direct_declarator(get_declarator(function_definition_node));
 
 	//
-	//get the name and the enclosing scope of the function
+	//get the enclosing scope of the function
 	//
-	std::string name;
 	scope* enclosing_scope = 0;
 
 	const direct_declarator_first_part& first_part_node = get_first_part(direct_declarator_node);
@@ -226,17 +225,10 @@ semantic_analyzer::analyze(const function_definition& function_definition_node)
 
 			if(unqualified_id_node)
 			{
-				boost::optional<const identifier&> identifier_node = get<identifier>(unqualified_id_node);
-				if(identifier_node)
-				{
-					name = identifier_node->value();
-				}
-
 				enclosing_scope = &scope_cursor_.current_scope();
 			}
 			else if(a_qualified_id)
 			{
-				std::cout << "qualified_id\n";
 			//	const qualified_identifier* const a_qualified_identifier =
 			//		boost::get<qualified_identifier>(a_qualified_id)
 			//	;
@@ -250,8 +242,6 @@ semantic_analyzer::analyze(const function_definition& function_definition_node)
 
 				if(a_qualified_nested_id)
 				{
-					std::cout << "qualified_nested_id\n";
-
 					bool leading_double_colon = has_double_colon(*a_qualified_nested_id);
 					const nested_name_specifier& a_nested_name_specifier = get_nested_name_specifier(*a_qualified_nested_id);
 
@@ -263,13 +253,6 @@ semantic_analyzer::analyze(const function_definition& function_definition_node)
 					{
 						enclosing_scope = name_lookup::find_scope(scope_cursor_.scope_stack(), a_nested_name_specifier);
 					}
-
-					const unqualified_id& unqualified_id_node = get_unqualified_id(*a_qualified_nested_id);
-					boost::optional<const identifier&> identifier_node = get<identifier>(&unqualified_id_node);
-					if(identifier_node)
-					{
-						name = identifier_node->value();
-					}
 				}
 			}
 			else
@@ -279,129 +262,53 @@ semantic_analyzer::analyze(const function_definition& function_definition_node)
 		}
 	}
 
-	//
-	//get the function's return type
-	//
-	std::unique_ptr<type> return_type;
 	if(auto opt_decl_specifier_seq_node = get_decl_specifier_seq(function_definition_node))
 	{
-		return_type = std::move(create_type(*opt_decl_specifier_seq_node, get_declarator(function_definition_node)));
-	}
+		//create a function object
+		auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
+		auto declarator_node = get_declarator(function_definition_node);
+		function new_function = create_function(decl_specifier_seq_node, declarator_node);
 
-	//
-	//get the function's parameter list
-	//
-	std::list<function::parameter> parameters;
-	if(auto opt_last_part_seq_node = get_last_part_seq(direct_declarator_node))
-	{
-		auto last_part_seq_node = *opt_last_part_seq_node;
-		for(auto i = last_part_seq_node.begin(); i != last_part_seq_node.end(); ++i)
+		//find the corresponding function semantic node (must exist if the function has already been declared)
+		scope* function_scope = 0;
+		if(enclosing_scope)
 		{
-			auto last_part_node = i->main_node();
-			if(auto opt_function_part_node = get<direct_declarator_function_part>(&last_part_node))
+			auto scopes = enclosing_scope->scopes();
+			for(auto i = scopes.begin(); i != scopes.end(); ++i)
 			{
-				if(auto opt_parameter_declaration_clause_node = get_parameter_declaration_clause(*opt_function_part_node))
+				scope& scope = *i;
+
+				///\todo check the function's signature
+				if(scope.name() == new_function.name())
 				{
-					if(auto opt_parameter_declaration_list_node = get_parameter_declaration_list(*opt_parameter_declaration_clause_node))
-					{
-						auto parameter_declaration_list_node = *opt_parameter_declaration_list_node;
-						for
-						(
-							auto j = parameter_declaration_list_node.begin();
-							j != parameter_declaration_list_node.end();
-							++j
-						)
-						{
-							auto parameter_declaration_node = j->main_node();
-							auto decl_specifier_seq_node = get_decl_specifier_seq(parameter_declaration_node);
-							if(auto opt_declarator_node = get_declarator(parameter_declaration_node))
-							{
-								auto declarator_node = *opt_declarator_node;
-
-								//get parameter name
-								std::string name;
-								auto direct_declarator_node = get_direct_declarator(declarator_node);
-								auto first_part_node = get_first_part(direct_declarator_node);
-								if(auto opt_declarator_id_node = get<declarator_id>(&first_part_node))
-								{
-									auto declarator_id_node = *opt_declarator_id_node;
-									if(auto opt_id_expression_node = get<id_expression>(&declarator_id_node))
-									{
-										auto id_expression_node = *opt_id_expression_node;
-										if(auto opt_unqualified_id_node = get<unqualified_id>(&id_expression_node))
-										{
-											auto unqualified_id_node = *opt_unqualified_id_node;
-											if(auto opt_identifier_node = get<identifier>(&unqualified_id_node))
-											{
-												auto identifier_node = *opt_identifier_node;
-												name = identifier_node.value();
-											}
-										}
-									}
-								}
-
-								parameters.push_back
-								(
-									std::move
-									(
-										function::parameter
-										(
-											std::move(create_type(decl_specifier_seq_node, declarator_node)),
-											name
-										)
-									)
-								);
-							}
-						}
-					}
+					function_scope = &scope;
+					break;
 				}
 			}
 		}
-	}
 
-	//get the corresponding function semantic node (must exist if the function has already been declared)
-	scope* function_scope = 0;
-	if(!name.empty() && enclosing_scope)
-	{
-		auto scopes = enclosing_scope->scopes();
-		for(auto i = scopes.begin(); i != scopes.end(); ++i)
+		//if the function hasn't been declared, this definition serves as a declaration
+		if(!function_scope)
 		{
-			scope& scope = *i;
+			scope_cursor_.add_to_current_scope(new_function);
+			function_scope = &scope_cursor_.current_scope().scopes().back();
+		}
 
-			///\todo check the function's signature
-			if(scope.name() == name)
+		//enter and leave the function body
+		if(function_scope)
+		{
+			/*
+			scope_cursor_.enter_scope(*function_scope);
+
+			if(auto opt_simple_function_definition = get<simple_function_definition>(&function_definition_node))
 			{
-				function_scope = &scope;
-				break;
+				auto compound_statement_node = get_compound_statement(*opt_simple_function_definition);
+				analyze(compound_statement_node, false);
 			}
+
+			scope_cursor_.leave_scope();
+			*/
 		}
-	}
-
-	//if the function hasn't been declared, this definition serves as a declaration
-	if(!function_scope && enclosing_scope && !name.empty())
-	{
-		scope_cursor_.add_to_current_scope(function(name, std::move(return_type), std::move(parameters)));
-		function_scope = &scope_cursor_.current_scope().scopes().back();
-	}
-
-	//enter and leave the function body
-	if(function_scope)
-	{
-		/*
-		scope_cursor_.enter_scope(*function_scope);
-
-		if(auto opt_simple_function_definition = get<simple_function_definition>(&function_definition_node))
-		{
-			auto compound_statement_node = get_compound_statement(*opt_simple_function_definition);
-			analyze(compound_statement_node, false);
-		}
-
-		scope_cursor_.leave_scope();
-		*/
-	}
-	else
-	{
-		std::cout << "function name: " << name << "\n";
 	}
 }
 
@@ -580,7 +487,7 @@ semantic_analyzer::analyze(const simple_declaration& simple_declaration_node)
 	bool is_a_function_declaration = false;
 
 	const optional_node<decl_specifier_seq>& opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node);
-	const optional_node<init_declarator_list>& an_optional_init_declarator_list = get_init_declarator_list(simple_declaration_node);
+	const optional_node<init_declarator_list>& opt_init_declarator_list_node = get_init_declarator_list(simple_declaration_node);
 
 	if(opt_decl_specifier_seq_node)
 	{
@@ -623,9 +530,9 @@ semantic_analyzer::analyze(const simple_declaration& simple_declaration_node)
 		}
 	}
 
-	if(an_optional_init_declarator_list)
+	if(opt_init_declarator_list_node)
 	{
-		const init_declarator_list& an_init_declarator_list = *an_optional_init_declarator_list;
+		const init_declarator_list& an_init_declarator_list = *opt_init_declarator_list_node;
 		for(auto i = an_init_declarator_list.begin(); i != an_init_declarator_list.end(); ++i)
 		{
 			const declarator& direct_node = get_declarator(i->main_node());
@@ -677,10 +584,14 @@ semantic_analyzer::analyze(const simple_declaration& simple_declaration_node)
 	}
 	else if(is_a_function_declaration)
 	{
-		if(names.size() == 1)
-		{
-			//scope_cursor_.add_to_current_scope(function(names.front()));
-		}
+		assert(opt_decl_specifier_seq_node);
+		assert(opt_init_declarator_list_node);
+		auto init_declarator_list_node = *opt_init_declarator_list_node;
+		assert(init_declarator_list_node.size() == 1);
+
+		auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
+		auto declarator_node = get_declarator(init_declarator_list_node.front().main_node());
+		scope_cursor_.add_to_current_scope(create_function(decl_specifier_seq_node, declarator_node));
 	}
 	else if(!is_a_function_declaration && !is_a_class_forward_declaration) //variable declaration
 	{
@@ -998,6 +909,161 @@ semantic_analyzer::create_class(const class_specifier& syntax_node)
 	scope_cursor_.leave_scope();
 
 	return new_class;
+}
+
+function
+semantic_analyzer::create_function(const decl_specifier_seq& decl_specifier_seq_node, const declarator& declarator_node)
+{
+	auto direct_declarator_node = get_direct_declarator(declarator_node);
+
+	//
+	//get the name and the enclosing scope of the function
+	//
+	std::string name;
+	scope* enclosing_scope = 0;
+
+	auto first_part_node = get_first_part(direct_declarator_node);
+	auto opt_declarator_id_node = get<declarator_id>(&first_part_node);
+	if(opt_declarator_id_node)
+	{
+		auto opt_id_expression_node = get<id_expression>(opt_declarator_id_node);
+		if(opt_id_expression_node)
+		{
+			auto opt_unqualified_id_node = get<unqualified_id>(opt_id_expression_node);
+			auto opt_qualified_id_node = get<qualified_id>(opt_id_expression_node);
+
+			if(opt_unqualified_id_node)
+			{
+				auto opt_identifier_node = get<identifier>(opt_unqualified_id_node);
+				if(opt_identifier_node)
+				{
+					name = opt_identifier_node->value();
+				}
+
+				enclosing_scope = &scope_cursor_.current_scope();
+			}
+			else if(opt_qualified_id_node)
+			{
+				std::cout << "qualified_id\n";
+			//	const qualified_identifier* const a_qualified_identifier =
+			//		boost::get<qualified_identifier>(opt_qualified_id_node)
+			//	;
+				boost::optional<const qualified_nested_id&> a_qualified_nested_id = get<qualified_nested_id>(opt_qualified_id_node);
+			//	const qualified_operator_function_id* const a_qualified_operator_function_id =
+			//	   	boost::get<qualified_operator_function_id>(opt_qualified_id_node)
+			//	;
+			//	const qualified_template_id* const a_qualified_template_id =
+			//	   	boost::get<qualified_template_id>(opt_qualified_id_node)
+			//	;
+
+				if(a_qualified_nested_id)
+				{
+					std::cout << "qualified_nested_id\n";
+
+					bool leading_double_colon = has_double_colon(*a_qualified_nested_id);
+					const nested_name_specifier& a_nested_name_specifier = get_nested_name_specifier(*a_qualified_nested_id);
+
+					if(leading_double_colon)
+					{
+						enclosing_scope = name_lookup::find_scope(scope_cursor_.global_scope_stack(), a_nested_name_specifier);
+					}
+					else
+					{
+						enclosing_scope = name_lookup::find_scope(scope_cursor_.scope_stack(), a_nested_name_specifier);
+					}
+
+					const unqualified_id& opt_unqualified_id_node = get_unqualified_id(*a_qualified_nested_id);
+					boost::optional<const identifier&> identifier_node = get<identifier>(&opt_unqualified_id_node);
+					if(identifier_node)
+					{
+						name = identifier_node->value();
+					}
+				}
+			}
+			else
+			{
+				assert(false);
+			}
+		}
+	}
+
+	//
+	//get the function's return type
+	//
+	std::unique_ptr<type> return_type = std::move(create_type(decl_specifier_seq_node, declarator_node));
+
+	//
+	//get the function's parameter list
+	//
+	std::list<function::parameter> parameters;
+	if(auto opt_last_part_seq_node = get_last_part_seq(direct_declarator_node))
+	{
+		auto last_part_seq_node = *opt_last_part_seq_node;
+		for(auto i = last_part_seq_node.begin(); i != last_part_seq_node.end(); ++i)
+		{
+			auto last_part_node = i->main_node();
+			if(auto opt_function_part_node = get<direct_declarator_function_part>(&last_part_node))
+			{
+				if(auto opt_parameter_declaration_clause_node = get_parameter_declaration_clause(*opt_function_part_node))
+				{
+					if(auto opt_parameter_declaration_list_node = get_parameter_declaration_list(*opt_parameter_declaration_clause_node))
+					{
+						auto parameter_declaration_list_node = *opt_parameter_declaration_list_node;
+						for
+						(
+							auto j = parameter_declaration_list_node.begin();
+							j != parameter_declaration_list_node.end();
+							++j
+						)
+						{
+							auto parameter_declaration_node = j->main_node();
+							auto decl_specifier_seq_node = get_decl_specifier_seq(parameter_declaration_node);
+							if(auto opt_declarator_node = get_declarator(parameter_declaration_node))
+							{
+								auto declarator_node = *opt_declarator_node;
+
+								//get parameter name
+								std::string name;
+								auto direct_declarator_node = get_direct_declarator(declarator_node);
+								auto first_part_node = get_first_part(direct_declarator_node);
+								if(auto opt_declarator_id_node = get<declarator_id>(&first_part_node))
+								{
+									auto declarator_id_node = *opt_declarator_id_node;
+									if(auto opt_id_expression_node = get<id_expression>(&declarator_id_node))
+									{
+										auto id_expression_node = *opt_id_expression_node;
+										if(auto opt_unqualified_id_node = get<unqualified_id>(&id_expression_node))
+										{
+											auto unqualified_id_node = *opt_unqualified_id_node;
+											if(auto opt_identifier_node = get<identifier>(&unqualified_id_node))
+											{
+												auto identifier_node = *opt_identifier_node;
+												name = identifier_node.value();
+											}
+										}
+									}
+								}
+
+								parameters.push_back
+								(
+									std::move
+									(
+										function::parameter
+										(
+											std::move(create_type(decl_specifier_seq_node, declarator_node)),
+											name
+										)
+									)
+								);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return function(name, std::move(return_type), std::move(parameters));
 }
 
 std::unique_ptr<type>
