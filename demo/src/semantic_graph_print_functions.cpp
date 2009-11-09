@@ -149,6 +149,9 @@ print
 	for(auto i = c.classes().begin(); i != c.classes().end(); ++i)
 		print(*i, indent_level + 1);
 
+	for(auto i = c.constructors().begin(); i != c.constructors().end(); ++i)
+		print(*i, indent_level + 1);
+
 	for(auto i = c.functions().begin(); i != c.functions().end(); ++i)
 		print(*i, indent_level + 1);
 
@@ -156,6 +159,50 @@ print
 		print(*i, indent_level + 1);
 
 	std::cout << indent(indent_level) << "</class>\n";
+}
+
+void
+print
+(
+	const class_::access& a
+)
+{
+	std::cout << " access=\"";
+	switch(a)
+	{
+		case class_::access::PUBLIC:
+			std::cout << "public";
+			break;
+		case class_::access::PROTECTED:
+			std::cout << "protected";
+			break;
+		case class_::access::PRIVATE:
+			std::cout << "private";
+			break;
+	}
+	std::cout << "\"";
+}
+
+void
+print
+(
+	const class_::constructor& c,
+	const unsigned int indent_level
+)
+{
+	std::cout << indent(indent_level) << "<constructor";
+	print(c.access());
+	std::cout << ">\n";
+
+	std::cout << indent(indent_level + 1) << "<parameters>\n";
+	const class_::constructor::parameters_t& parameters = c.parameters();
+	for(auto i = parameters.begin(); i != parameters.end(); ++i)
+	{
+		print(*i, indent_level + 2);
+	}
+	std::cout << indent(indent_level + 1) << "</parameters>\n";
+
+	std::cout << indent(indent_level) << "</constructor>\n";
 }
 
 void

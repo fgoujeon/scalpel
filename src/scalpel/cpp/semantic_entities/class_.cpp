@@ -23,6 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <iostream>
 #include <cassert>
 #include "namespace_.hpp"
+#include "built_in_type.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -37,6 +38,7 @@ class_::class_(class_&& c):
 	scope_impl_(std::move(c.scope_impl_)),
 	name_(std::move(c.name_)),
 	classes_(std::move(c.classes_)),
+	constructors_(std::move(c.constructors_)),
 	functions_(std::move(c.functions_)),
 	variables_(std::move(c.variables_))
 {
@@ -48,6 +50,7 @@ class_::operator=(class_&& c)
 	scope_impl_ = std::move(c.scope_impl_);
 	name_ = std::move(c.name_);
 	classes_ = std::move(c.classes_);
+	constructors_ = std::move(c.constructors_);
 	functions_ = std::move(c.functions_);
 	variables_ = std::move(c.variables_);
 
@@ -108,6 +111,12 @@ class_::classes() const
 	return classes_;
 }
 
+class_::constructor_const_iterator_range
+class_::constructors() const
+{
+	return constructors_;
+}
+
 class_::function_const_iterator_range
 class_::functions() const
 {
@@ -132,6 +141,12 @@ class_::add(member<class_>&& nested_class)
 }
 
 void
+class_::add(constructor&& member)
+{
+    constructors_.push_back(std::move(member));
+}
+
+void
 class_::add(member<function>&& member)
 {
     functions_.push_back(std::move(member));
@@ -150,6 +165,32 @@ class_::add(member<variable>&& member)
 	variable& member_ref = variables_.back().entity();
 
 	scope_impl_.add_to_named_entities(member_ref);
+}
+
+
+
+class_::constructor::constructor(parameters_t&& parameters, class_::access access):
+	impl_("_", std::unique_ptr<type>(new built_in_type(built_in_type::VOID)), std::move(parameters)),
+	access_(access)
+{
+}
+
+class_::constructor::constructor(constructor&& o):
+	impl_(std::move(o.impl_)),
+	access_(o.access_)
+{
+}
+
+const class_::constructor::parameters_t&
+class_::constructor::parameters() const
+{
+	return impl_.parameters();
+}
+
+class_::access
+class_::constructor::access() const
+{
+	return access_;
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

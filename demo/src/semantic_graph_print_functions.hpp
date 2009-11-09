@@ -58,6 +58,19 @@ print
 void
 print
 (
+	const class_::access& a
+);
+
+void
+print
+(
+	const class_::constructor& c,
+	const unsigned int indent_level
+);
+
+void
+print
+(
 	const function& f,
 	const unsigned int indent_level,
 	const std::string& access = ""
@@ -109,7 +122,7 @@ print
 			access = "private";
 			break;
 	}
-	print(m.entity(), indent_level + 1, access);
+	print(m.entity(), indent_level, access);
 }
 
 } //namespace semantic_graph_print_functions

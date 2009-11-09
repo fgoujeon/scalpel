@@ -727,9 +727,8 @@ semantic_analyzer::create_class(const class_specifier& syntax_node)
 				{
 					auto opt_decl_specifier_seq_node = get_decl_specifier_seq(*opt_member_declaration_member_declarator_list_node);
 					auto opt_member_declarator_list_node = get_member_declarator_list(*opt_member_declaration_member_declarator_list_node);
-					if(opt_decl_specifier_seq_node && opt_member_declarator_list_node)
+					if(opt_member_declarator_list_node)
 					{
-						auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
 						auto member_declarator_list_node = *opt_member_declarator_list_node;
 						for
 						(
@@ -743,13 +742,21 @@ semantic_analyzer::create_class(const class_specifier& syntax_node)
 							{
 								auto member_declarator_declarator_node = *opt_member_declarator_declarator_node;
 								auto declarator_node = get_declarator(member_declarator_declarator_node);
-								if(is_function_declaration(declarator_node))
+								if(opt_decl_specifier_seq_node)
 								{
-									new_class.add(class_::member<function>(create_function(decl_specifier_seq_node, declarator_node), current_access));
+									auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
+									if(is_function_declaration(declarator_node))
+									{
+										new_class.add(class_::member<function>(create_function(decl_specifier_seq_node, declarator_node), current_access));
+									}
+									else
+									{
+										new_class.add(class_::member<variable>(create_variable(decl_specifier_seq_node, declarator_node), current_access));
+									}
 								}
 								else
 								{
-									new_class.add(class_::member<variable>(create_variable(decl_specifier_seq_node, declarator_node), current_access));
+									new_class.add(class_::constructor(std::move(create_parameters(declarator_node)), current_access));
 								}
 							}
 						}
@@ -805,12 +812,11 @@ semantic_analyzer::create_class(const class_specifier& syntax_node)
 function
 semantic_analyzer::create_function(const decl_specifier_seq& decl_specifier_seq_node, const declarator& declarator_node)
 {
-	auto direct_declarator_node = get_direct_declarator(declarator_node);
-
 	//
 	//get the name of the function
 	//
 	std::string name;
+	auto direct_declarator_node = get_direct_declarator(declarator_node);
 	auto first_part_node = get_first_part(direct_declarator_node);
 	auto opt_declarator_id_node = get<declarator_id>(&first_part_node);
 	if(opt_declarator_id_node)
@@ -868,7 +874,17 @@ semantic_analyzer::create_function(const decl_specifier_seq& decl_specifier_seq_
 	//
 	//get the function's parameter list
 	//
+	std::list<function::parameter> parameters = create_parameters(declarator_node);
+
+	return function(name, std::move(return_type), std::move(parameters));
+}
+
+function::parameters_t
+semantic_analyzer::create_parameters(const declarator& declarator_node)
+{
 	std::list<function::parameter> parameters;
+
+	auto direct_declarator_node = get_direct_declarator(declarator_node);
 	if(auto opt_last_part_seq_node = get_last_part_seq(direct_declarator_node))
 	{
 		auto last_part_seq_node = *opt_last_part_seq_node;
@@ -936,7 +952,7 @@ semantic_analyzer::create_function(const decl_specifier_seq& decl_specifier_seq_
 		}
 	}
 
-	return function(name, std::move(return_type), std::move(parameters));
+	return parameters;
 }
 
 std::unique_ptr<type>

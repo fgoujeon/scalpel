@@ -49,6 +49,8 @@ class function:
     public:
 		class parameter;
 
+		typedef std::list<parameter> parameters_t;
+
         function(const std::string& name, std::unique_ptr<type> return_type, std::list<parameter>&& parameters);
 
 		//move constructor
@@ -93,7 +95,7 @@ class function:
 		const type&
 		return_type() const;
 
-		const std::list<parameter>&
+		const parameters_t&
 		parameters() const;
 
     private:

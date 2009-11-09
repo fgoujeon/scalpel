@@ -45,12 +45,18 @@ class class_:
 	public boost::noncopyable
 {
     public:
+		class constructor;
+
 		template<class EntityT>
 		class member;
 
 		typedef std::list<member<class_>> classes_t;
 		typedef classes_t::const_iterator class_const_iterator;
 		typedef boost::iterator_range<class_const_iterator> class_const_iterator_range;
+
+		typedef std::list<constructor> constructors_t;
+		typedef constructors_t::const_iterator constructor_const_iterator;
+		typedef boost::iterator_range<constructor_const_iterator> constructor_const_iterator_range;
 
 		typedef std::list<member<function>> functions_t;
 		typedef functions_t::const_iterator function_const_iterator;
@@ -121,6 +127,9 @@ class class_:
 		class_const_iterator_range
 		classes() const;
 
+		constructor_const_iterator_range
+		constructors() const;
+
 		function_const_iterator_range
 		functions() const;
 
@@ -134,6 +143,9 @@ class class_:
         add(member<class_>&& nested_class);
 
         void
+        add(constructor&& member);
+
+        void
         add(member<function>&& member);
 
 		void
@@ -143,8 +155,30 @@ class class_:
 		scope_impl scope_impl_;
         std::string name_;
 		classes_t classes_;
+		constructors_t constructors_;
 		functions_t functions_;
 		variables_t variables_;
+};
+
+class class_::constructor
+{
+	public:
+		typedef function::parameters_t parameters_t;
+		typedef function::parameter parameter;
+
+		constructor(parameters_t&& parameters, class_::access access);
+
+		constructor(constructor&& o);
+
+		const parameters_t&
+		parameters() const;
+
+		class_::access
+		access() const;
+
+	private:
+		function impl_;
+		class_::access access_;
 };
 
 template<class EntityT>

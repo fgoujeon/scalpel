@@ -276,6 +276,9 @@ class semantic_analyzer
 			const syntax_nodes::declarator& declarator_node
 		);
 
+		semantic_entities::function::parameters_t
+		create_parameters(const syntax_nodes::declarator& declarator_node);
+
 		std::unique_ptr<semantic_entities::type>
 		create_type
 		(
