@@ -535,16 +535,16 @@ semantic_analyzer::analyze(const simple_declaration& simple_declaration_node)
 		const init_declarator_list& an_init_declarator_list = *opt_init_declarator_list_node;
 		for(auto i = an_init_declarator_list.begin(); i != an_init_declarator_list.end(); ++i)
 		{
-			const declarator& direct_node = get_declarator(i->main_node());
-			const direct_declarator& direct_declarator_node = get_direct_declarator(direct_node);
+			const declarator& declarator_node = get_declarator(i->main_node());
+			const direct_declarator& direct_declarator_node = get_direct_declarator(declarator_node);
 
 			//get the simple_declaration_node name
 			const direct_declarator_first_part& first_part_node = get_first_part(direct_declarator_node);
 			const boost::optional<const declarator_id&> opt_declarator_id_node = get<declarator_id>(&first_part_node);
 			if(opt_declarator_id_node)
 			{
-				const declarator_id& direct_node_id = *opt_declarator_id_node;
-				if(boost::optional<const id_expression&> id_expression_node = get<id_expression>(&direct_node_id))
+				const declarator_id& declarator_id_node = *opt_declarator_id_node;
+				if(boost::optional<const id_expression&> id_expression_node = get<id_expression>(&declarator_id_node))
 				{
 					if(boost::optional<const unqualified_id&> unqualified_id_node = get<unqualified_id>(id_expression_node))
 					{
@@ -556,20 +556,8 @@ semantic_analyzer::analyze(const simple_declaration& simple_declaration_node)
 				}
 			}
 
-			//determine the appropriate semantic graph node
-			auto direct_declarator_node_last_part_seq = get_last_part_seq(direct_declarator_node);
-			if(direct_declarator_node_last_part_seq)
-			{
-				for(auto j = direct_declarator_node_last_part_seq->begin(); j != direct_declarator_node_last_part_seq->end(); ++j)
-				{
-					const direct_declarator_last_part& last_part = j->main_node();
-
-					if(get<direct_declarator_function_part>(&last_part))
-					{
-						is_a_function_declaration = true;
-					}
-				}
-			}
+			if(!is_a_function_declaration)
+				is_a_function_declaration = is_function_declaration(declarator_node);
 		}
 	}
 
@@ -694,6 +682,27 @@ semantic_analyzer::analyze(const while_statement&)
 {
 }
 
+bool
+semantic_analyzer::is_function_declaration(const declarator& declarator_node)
+{
+	auto direct_declarator_node = get_direct_declarator(declarator_node);
+	auto direct_declarator_node_last_part_seq = get_last_part_seq(direct_declarator_node);
+	if(direct_declarator_node_last_part_seq)
+	{
+		for(auto j = direct_declarator_node_last_part_seq->begin(); j != direct_declarator_node_last_part_seq->end(); ++j)
+		{
+			const direct_declarator_last_part& last_part = j->main_node();
+
+			if(get<direct_declarator_function_part>(&last_part))
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 class_
 semantic_analyzer::create_class(const class_specifier& syntax_node)
 {
@@ -742,124 +751,28 @@ semantic_analyzer::create_class(const class_specifier& syntax_node)
 				}
 				else if(auto opt_member_declaration_member_declarator_list_node = get<member_declaration_member_declarator_list>(opt_member_declaration_node))
 				{
-					if(auto opt_member_declarator_list = get_member_declarator_list(*opt_member_declaration_member_declarator_list_node))
+					auto opt_decl_specifier_seq_node = get_decl_specifier_seq(*opt_member_declaration_member_declarator_list_node);
+					auto opt_member_declarator_list_node = get_member_declarator_list(*opt_member_declaration_member_declarator_list_node);
+					if(opt_decl_specifier_seq_node && opt_member_declarator_list_node)
 					{
-						for(auto i = opt_member_declarator_list->begin(); i != opt_member_declarator_list->end(); ++i)
+						auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
+						auto member_declarator_list_node = *opt_member_declarator_list_node;
+						for
+						(
+							auto j = member_declarator_list_node.begin();
+							j != member_declarator_list_node.end();
+							++j
+						)
 						{
-							auto member_declarator_node = i->main_node();
-
+							auto member_declarator_node = j->main_node();
 							if(auto opt_member_declarator_declarator_node = get<member_declarator_declarator>(&member_declarator_node))
 							{
-								auto declarator_node = get_declarator(*opt_member_declarator_declarator_node);
-								auto direct_declarator_node = get_direct_declarator(declarator_node);
-								auto direct_declarator_first_part_node = get_first_part(direct_declarator_node);
-
-								std::string name;
-								bool is_a_function_declaration = false;
-
-								if(auto opt_bracketed_declarator_node = get<bracketed_declarator>(&direct_declarator_first_part_node))
+								auto member_declarator_declarator_node = *opt_member_declarator_declarator_node;
+								auto declarator_node = get_declarator(member_declarator_declarator_node);
+								if(is_function_declaration(declarator_node))
 								{
-									//todo
+									new_class.add(class_::member<function>(create_function(decl_specifier_seq_node, declarator_node), current_access));
 								}
-								else if(auto opt_declarator_id_node = get<declarator_id>(&direct_declarator_first_part_node))
-								{
-									if(auto opt_id_expression_node = get<id_expression>(opt_declarator_id_node))
-									{
-										if(auto opt_unqualified_id_node = get<unqualified_id>(opt_id_expression_node))
-										{
-											if(auto opt_operator_function_id_node = get<operator_function_id>(opt_unqualified_id_node))
-											{
-												//todo
-											}
-											else if(auto opt_conversion_function_id_node = get<conversion_function_id>(opt_unqualified_id_node))
-											{
-												//todo
-											}
-											else if(auto opt_destructor_name_node = get<destructor_name>(opt_unqualified_id_node))
-											{
-												//todo
-											}
-											else if(auto opt_template_id_node = get<template_id>(opt_unqualified_id_node))
-											{
-												//todo
-											}
-											else if(auto opt_identifier_node = get<identifier>(opt_unqualified_id_node))
-											{
-												name = opt_identifier_node->value();
-											}
-											else
-											{
-												assert(false);
-											}
-										}
-										else if(auto opt_qualified_id_node = get<qualified_id>(opt_id_expression_node))
-										{
-											//todo
-										}
-										else
-										{
-											assert(false);
-										}
-									}
-									else if(auto opt_nested_identifier_or_template_id_node = get<nested_identifier_or_template_id>(opt_declarator_id_node))
-									{
-										//todo
-									}
-									else
-									{
-										assert(false);
-									}
-								}
-								else
-								{
-									assert(false);
-								}
-
-								if(auto opt_last_part_seq_node = get_last_part_seq(direct_declarator_node))
-								{
-									auto last_part_seq_node = *opt_last_part_seq_node;
-									for
-									(
-										auto i = last_part_seq_node.begin();
-										i != last_part_seq_node.end();
-										++i
-									)
-									{
-										auto last_part_node = i->main_node();
-
-										if(auto opt_function_part_node = get<direct_declarator_function_part>(&last_part_node))
-										{
-											is_a_function_declaration = true;
-										}
-										else if(auto opt_array_part_node = get<direct_declarator_array_part>(&last_part_node))
-										{
-											//todo
-										}
-										else
-										{
-											assert(false);
-										}
-									}
-								}
-
-								if(name != "")
-								{
-									if(is_a_function_declaration)
-									{
-										//new_class.add(class_::member<function>(function(name), current_access));
-									}
-									else
-									{
-										//new_class.add(class_::member<variable>(variable(name), current_access));
-									}
-								}
-							}
-							else if(auto opt_member_declarator_bit_field_member_node = get<member_declarator_bit_field_member>(&member_declarator_node))
-							{
-							}
-							else
-							{
-								assert(false);
 							}
 						}
 					}

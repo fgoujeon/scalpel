@@ -263,6 +263,9 @@ class semantic_analyzer
         void
 		analyze(const syntax_nodes::while_statement& syntax_node);
 
+		bool
+		is_function_declaration(const syntax_nodes::declarator& declarator_node);
+
 		semantic_entities::class_
 		create_class(const syntax_nodes::class_specifier& syntax_node);
 

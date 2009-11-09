@@ -46,7 +46,14 @@ typedef
 ;
 
 inline
-optional_node<member_declarator_list>
+const optional_node<decl_specifier_seq>&
+get_decl_specifier_seq(const member_declaration_member_declarator_list& o)
+{
+	return get<0>(o);
+}
+
+inline
+const optional_node<member_declarator_list>&
 get_member_declarator_list(const member_declaration_member_declarator_list& o)
 {
 	return get<2>(o);
