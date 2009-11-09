@@ -589,43 +589,17 @@ semantic_analyzer::analyze(const simple_declaration& simple_declaration_node)
 		auto opt_init_declarator_list_node = get_init_declarator_list(simple_declaration_node);
 		assert(opt_init_declarator_list_node);
 		auto init_declarator_list_node = *opt_init_declarator_list_node;
+
+		std::list<variable> variables = create_variables(decl_specifier_seq_node, init_declarator_list_node);
 		//for each variable
 		for
 		(
-			auto i = init_declarator_list_node.begin();
-			i != init_declarator_list_node.end();
+			auto i = variables.begin();
+			i != variables.end();
 			++i
 		)
 		{
-			auto init_declarator_node = i->main_node();
-			auto declarator_node = get_declarator(init_declarator_node);
-
-			auto direct_declarator_node = get_direct_declarator(declarator_node);
-
-			//get the simple_declaration_node name
-			auto first_part_node = get_first_part(direct_declarator_node);
-			auto opt_declarator_id_node = get<declarator_id>(&first_part_node);
-			if(opt_declarator_id_node)
-			{
-				auto declarator_id_node = *opt_declarator_id_node;
-				if(auto id_expression_node = get<id_expression>(&declarator_id_node))
-				{
-					if(auto unqualified_id_node = get<unqualified_id>(id_expression_node))
-					{
-						if(auto identifier_node = get<identifier>(unqualified_id_node))
-						{
-							scope_cursor_.add_to_current_scope
-							(
-								variable
-								(
-									std::move(create_type(decl_specifier_seq_node, declarator_node)),
-									identifier_node->value()
-								)
-							);
-						}
-					}
-				}
-			}
+			scope_cursor_.add_to_current_scope(*i);
 		}
 	}
 }
@@ -772,6 +746,10 @@ semantic_analyzer::create_class(const class_specifier& syntax_node)
 								if(is_function_declaration(declarator_node))
 								{
 									new_class.add(class_::member<function>(create_function(decl_specifier_seq_node, declarator_node), current_access));
+								}
+								else
+								{
+									new_class.add(class_::member<variable>(create_variable(decl_specifier_seq_node, declarator_node), current_access));
 								}
 							}
 						}
@@ -1147,6 +1125,71 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 	}
 
 	return return_type;
+}
+
+std::list<variable>
+semantic_analyzer::create_variables
+(
+	const decl_specifier_seq& decl_specifier_seq_node,
+	const init_declarator_list& init_declarator_list_node
+)
+{
+	std::list<variable> variables;
+
+	//for each variable
+	for
+	(
+		auto i = init_declarator_list_node.begin();
+		i != init_declarator_list_node.end();
+		++i
+	)
+	{
+		auto init_declarator_node = i->main_node();
+		auto declarator_node = get_declarator(init_declarator_node);
+		variables.push_back
+		(
+			create_variable
+			(
+				decl_specifier_seq_node,
+				declarator_node
+			)
+		);
+	}
+
+	return variables;
+}
+
+variable
+semantic_analyzer::create_variable
+(
+	const decl_specifier_seq& decl_specifier_seq_node,
+	const declarator& declarator_node
+)
+{
+	auto direct_declarator_node = get_direct_declarator(declarator_node);
+
+	auto first_part_node = get_first_part(direct_declarator_node);
+	auto opt_declarator_id_node = get<declarator_id>(&first_part_node);
+	if(opt_declarator_id_node)
+	{
+		auto declarator_id_node = *opt_declarator_id_node;
+		if(auto id_expression_node = get<id_expression>(&declarator_id_node))
+		{
+			if(auto unqualified_id_node = get<unqualified_id>(id_expression_node))
+			{
+				if(auto identifier_node = get<identifier>(unqualified_id_node))
+				{
+					return variable
+					(
+						std::move(create_type(decl_specifier_seq_node, declarator_node)),
+						identifier_node->value()
+					);
+				}
+			}
+		}
+	}
+
+	return variable(std::unique_ptr<type>(std::move(new built_in_type(built_in_type::VOID))), "UNKNOWN");
 }
 
 }} //namespace scalpel::cpp
