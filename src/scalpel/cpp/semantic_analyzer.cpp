@@ -994,7 +994,24 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 				//simple_template_type_specifier,
 				//built_in_type_specifier
 
-				if(auto opt_built_in_type_specifier_node = get<built_in_type_specifier>(&simple_type_specifier_node))
+				if(auto opt_nested_identifier_or_template_id_node = get<nested_identifier_or_template_id>(&simple_type_specifier_node))
+				{
+					auto nested_identifier_or_template_id_node = *opt_nested_identifier_or_template_id_node;
+					auto identifier_or_template_id_node = get_identifier_or_template_id(nested_identifier_or_template_id_node);
+					if(auto opt_identifier_node = get<identifier>(&identifier_or_template_id_node))
+					{
+						auto identifier_node = *opt_identifier_node;
+						if(auto name = name_lookup::find_unqualified_name(scope_cursor_.scope_stack(), identifier_node.value()))
+						{
+							std::cout << "found " << name->name() << " at " << name << std::endl;
+							if(auto found_class = dynamic_cast<const class_*>(name))
+							{
+								std::cout << "found class " << found_class->name() << " at " << found_class << std::endl;
+							}
+						}
+					}
+				}
+				else if(auto opt_built_in_type_specifier_node = get<built_in_type_specifier>(&simple_type_specifier_node))
 				{
 					auto built_in_type_specifier_node = *opt_built_in_type_specifier_node;
 

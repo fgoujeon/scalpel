@@ -28,6 +28,17 @@ const semantic_entities::named_entity*
 find_unqualified_name
 (
 	RangeT scope_stack,
+	const std::string& name,
+	bool recursive
+);
+
+
+
+template<class RangeT>
+const semantic_entities::named_entity*
+find_unqualified_name
+(
+	RangeT scope_stack,
 	const std::string& name
 )
 {
@@ -81,6 +92,7 @@ find_unqualified_name
     /*
     2. Enclosing scopes (recursive call)
     */
+	/*
     {
         if
         (
@@ -98,6 +110,7 @@ find_unqualified_name
             }
         }
     }
+	*/
 
 
 //    /*

@@ -25,6 +25,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <list>
 #include <boost/variant.hpp>
 #include <boost/noncopyable.hpp>
+#include "type.hpp"
 #include "scope.hpp"
 #include "scope_impl.hpp"
 #include "named_entity.hpp"
@@ -42,6 +43,7 @@ Represents a C++ class.
 class class_:
 	public scope,
 	public named_entity,
+	public type,
 	public boost::noncopyable
 {
     public:
@@ -84,6 +86,11 @@ class class_:
 		 * Move constructor.
 		 */
 		class_(class_&& c);
+
+		/**
+		 * Destructor
+		 */
+		~class_();
 
 		/*
 		 * Move assignment operator.

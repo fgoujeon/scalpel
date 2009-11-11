@@ -31,7 +31,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 class_::class_(const std::string& name):
     name_(name)
 {
-	std::cout << "New class " << name << "\n";
+	std::cout << "New class " << name << " at " << this << "\n";
 }
 
 class_::class_(class_&& c):
@@ -42,6 +42,12 @@ class_::class_(class_&& c):
 	functions_(std::move(c.functions_)),
 	variables_(std::move(c.variables_))
 {
+	std::cout << "Class " << name_ << " moved from " << &c << " to " << this << "\n";
+}
+
+class_::~class_()
+{
+	std::cout << "Class " << name_ << " at " << this << " deleted\n";
 }
 
 const class_&

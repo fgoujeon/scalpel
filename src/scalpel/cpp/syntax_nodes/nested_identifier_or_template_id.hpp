@@ -45,6 +45,13 @@ typedef
 	nested_identifier_or_template_id
 ;
 
+inline
+identifier_or_template_id
+get_identifier_or_template_id(const nested_identifier_or_template_id& o)
+{
+	return get<4>(o);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
