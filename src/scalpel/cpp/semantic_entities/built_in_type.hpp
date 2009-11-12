@@ -49,6 +49,19 @@ class built_in_type: public type
 
 		built_in_type(type_enum t);
 
+		//
+		//disable copy and move
+		//
+		built_in_type(const built_in_type&) = delete;
+
+		built_in_type(built_in_type&&) = delete;
+
+		const built_in_type&
+		operator=(const built_in_type&) = delete;
+
+		const built_in_type&
+		operator=(built_in_type&&) = delete;
+
 	public:
 		bool
 		operator==(const built_in_type& o) const;

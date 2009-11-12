@@ -87,11 +87,6 @@ class class_:
 		 */
 		class_(class_&& c);
 
-		/**
-		 * Destructor
-		 */
-		~class_();
-
 		/*
 		 * Move assignment operator.
 		 */

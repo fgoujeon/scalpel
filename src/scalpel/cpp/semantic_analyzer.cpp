@@ -44,10 +44,10 @@ semantic_graph
 semantic_analyzer::operator()(const syntax_tree& tree)
 {
 	//create semantic graph
-	semantic_graph graph;
+	namespace_ global_namespace;
 
 	//current scope = global namespace
-	scope_cursor_.initialize(graph);
+	scope_cursor_.initialize(global_namespace);
 
 	auto opt_declaration_seq_node = get_declaration_seq_node(tree);
 
@@ -65,7 +65,7 @@ semantic_analyzer::operator()(const syntax_tree& tree)
 		}
 	}
 
-	return graph;
+	return semantic_graph(std::move(global_namespace), std::move(custom_types_));
 }
 
 void
@@ -599,7 +599,7 @@ semantic_analyzer::analyze(const simple_declaration& simple_declaration_node)
 			++i
 		)
 		{
-			scope_cursor_.add_to_current_scope(*i);
+			scope_cursor_.add_to_current_scope(std::move(*i));
 		}
 	}
 }
@@ -1089,24 +1089,21 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 			}
 		}
 
-		/*
 		if(return_type)
 		{
 			if(const_qualified)
 			{
-				return_type = std::move(std::unique_ptr<const_>(new const_(std::move(return_type))));
+				return_type = &add_custom_type(std::move(std::unique_ptr<const_>(new const_(*return_type))));
 				const_qualified = false;
 			}
 			else if(volatile_qualified)
 			{
-				return_type = std::move(std::unique_ptr<volatile_>(new volatile_(std::move(return_type))));
+				return_type = &add_custom_type(std::move(std::unique_ptr<volatile_>(new volatile_(*return_type))));
 				volatile_qualified = false;
 			}
 		}
-		*/
 	}
 
-	/*
 	if(auto opt_ptr_operator_seq_node = get_ptr_operator_seq(declarator_node))
 	{
 		auto ptr_operator_seq_node = *opt_ptr_operator_seq_node;
@@ -1117,7 +1114,7 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 			{
 				auto ptr_ptr_operator_node = *opt_ptr_ptr_operator_node;
 
-				return_type = std::move(std::unique_ptr<pointer>(new pointer(std::move(return_type))));
+				return_type = &add_custom_type(std::move(std::unique_ptr<pointer>(new pointer(*return_type))));
 
 				if(auto opt_cv_qualifier_seq_node = get_cv_qualifier_seq(ptr_ptr_operator_node))
 				{
@@ -1133,18 +1130,18 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 
 						if(get<predefined_text_node<str::const_>>(&cv_qualifier_node))
 						{
-							return_type = std::move(std::unique_ptr<const_>(new const_(std::move(return_type))));
+							return_type = &add_custom_type(std::move(std::unique_ptr<const_>(new const_(*return_type))));
 						}
 						else if(get<predefined_text_node<str::volatile_>>(&cv_qualifier_node))
 						{
-							return_type = std::move(std::unique_ptr<volatile_>(new volatile_(std::move(return_type))));
+							return_type = &add_custom_type(std::move(std::unique_ptr<volatile_>(new volatile_(*return_type))));
 						}
 					}
 				}
 			}
 			else if(auto ref_ptr_operator_node = get<ref_ptr_operator>(&ptr_operator_node))
 			{
-				return_type = std::move(std::unique_ptr<reference>(new reference(std::move(return_type))));
+				return_type = &add_custom_type(std::move(std::unique_ptr<reference>(new reference(*return_type))));
 			}
 		}
 	}
@@ -1163,11 +1160,10 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 			auto last_part_node = i->main_node();
 			if(auto array_part = get<direct_declarator_array_part>(&last_part_node))
 			{
-				return_type = std::move(std::unique_ptr<array>(new array(0, std::move(return_type))));
+				return_type = &add_custom_type(std::move(std::unique_ptr<array>(new array(0, *return_type))));
 			}
 		}
 	}
-	*/
 
 	if(!return_type)
 	{
@@ -1230,7 +1226,7 @@ semantic_analyzer::create_variable
 				{
 					return variable
 					(
-						std::move(create_type(decl_specifier_seq_node, declarator_node)),
+						create_type(decl_specifier_seq_node, declarator_node),
 						identifier_node->value()
 					);
 				}

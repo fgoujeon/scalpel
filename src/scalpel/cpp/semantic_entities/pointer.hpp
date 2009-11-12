@@ -35,13 +35,13 @@ class pointer:
 	public type_decorator
 {
 	public:
-		pointer(std::unique_ptr<type> decorated_type);
+		pointer(const type& decorated_type);
 
 		const type&
 		decorated_type() const;
 
 	private:
-		std::unique_ptr<type> decorated_type_;
+		const type& decorated_type_;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

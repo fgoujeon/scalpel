@@ -35,7 +35,7 @@ class array:
 	public type_decorator
 {
 	public:
-		array(const unsigned int size, std::unique_ptr<type> decorated_type);
+		array(const unsigned int size, const type& decorated_type);
 
 		unsigned int
 		size() const;
@@ -45,7 +45,7 @@ class array:
 
 	private:
 		unsigned int size_;
-		std::unique_ptr<type> decorated_type_;
+		const type& decorated_type_;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

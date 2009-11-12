@@ -39,6 +39,12 @@ variable::variable(const type& t, std::string&& name):
 	std::cout << "New variable " << name << "\n";
 }
 
+variable::variable(const variable& v):
+	type_(v.type_),
+	name_(v.name_)
+{
+}
+
 variable::variable(variable&& v):
 	type_(v.type_),
 	name_(std::move(v.name_))

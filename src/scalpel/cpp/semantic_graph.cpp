@@ -18,21 +18,34 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "reference.hpp"
+#include "semantic_graph.hpp"
 
-namespace scalpel { namespace cpp { namespace semantic_entities
+namespace scalpel { namespace cpp
 {
 
-reference::reference(const type& decorated_type):
-	decorated_type_(decorated_type)
+semantic_graph::semantic_graph(semantic_entities::namespace_&& global_namespace, type_pool_t&& type_pool):
+	global_namespace_(std::move(global_namespace)),
+	type_pool_(std::move(type_pool))
 {
 }
 
-const type&
-reference::decorated_type() const
+semantic_graph::semantic_graph(semantic_graph&& o):
+	global_namespace_(std::move(o.global_namespace_)),
+	type_pool_(std::move(o.type_pool_))
 {
-	return decorated_type_;
 }
 
-}}} //namespace scalpel::cpp::semantic_entities
+const semantic_entities::namespace_&
+semantic_graph::global_namespace() const
+{
+	return global_namespace_;
+}
+
+semantic_graph::type_pool_const_iterator_range
+semantic_graph::type_pool() const
+{
+	return type_pool_;
+}
+
+}} //namespace scalpel::cpp
 

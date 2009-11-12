@@ -23,15 +23,15 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-const_::const_(std::unique_ptr<type> decorated_type):
-	decorated_type_(std::move(decorated_type))
+const_::const_(const type& decorated_type):
+	decorated_type_(decorated_type)
 {
 }
 
 const type&
 const_::decorated_type() const
 {
-	return *decorated_type_;
+	return decorated_type_;
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

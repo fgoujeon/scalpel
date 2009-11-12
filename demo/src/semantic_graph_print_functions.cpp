@@ -20,77 +20,114 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "semantic_graph_print_functions.hpp"
 
+#include <vector>
+#include <sstream>
+
 namespace semantic_graph_print_functions
 {
 
 void
 print
 (
-	const type& n,
+	const semantic_graph& g
+)
+{
+	std::cout << "<semantic_graph>\n";
+	print(g.global_namespace(), 1);
+	print(g.type_pool(), 1);
+	std::cout << "</semantic_graph>\n";
+}
+
+void
+print
+(
+	const semantic_graph::type_pool_const_iterator_range& p,
 	const unsigned int indent_level
 )
 {
-	if(const built_in_type* t = dynamic_cast<const built_in_type*>(&n))
+	std::cout << indent(indent_level) << "<type_pool>\n";
+
+	//built in types
+	std::vector<std::pair<const built_in_type&, const char*>> built_in_types_table =
 	{
-		std::cout << indent(indent_level);
-		if(*t == built_in_type::char_)
-			std::cout << "char";
-		else if(*t == built_in_type::wchar_t_)
-			std::cout << "wchar_t";
-		else if(*t == built_in_type::bool_)
-			std::cout << "bool";
-		else if(*t == built_in_type::short_)
-			std::cout << "short";
-		else if(*t == built_in_type::int_)
-			std::cout << "int";
-		else if(*t == built_in_type::long_)
-			std::cout << "long";
-		else if(*t == built_in_type::signed_)
-			std::cout << "signed";
-		else if(*t == built_in_type::unsigned_)
-			std::cout << "unsigned";
-		else if(*t == built_in_type::float_)
-			std::cout << "float";
-		else if(*t == built_in_type::double_)
-			std::cout << "double";
-		else if(*t == built_in_type::void_)
-			std::cout << "void";
+		{built_in_type::char_, "char"},
+		{built_in_type::wchar_t_, "wchar_t"},
+		{built_in_type::bool_, "bool"},
+		{built_in_type::short_, "short"},
+		{built_in_type::int_, "int"},
+		{built_in_type::long_, "long"},
+		{built_in_type::signed_, "signed"},
+		{built_in_type::unsigned_, "unsigned"},
+		{built_in_type::float_, "float"},
+		{built_in_type::double_, "double"},
+		{built_in_type::void_, "void"}
+	};
+
+	std::cout << indent(indent_level + 1) << "<!-- built-in types -->\n";
+	for(auto i = built_in_types_table.begin(); i != built_in_types_table.end(); ++i)
+	{
+		auto pair = *i;
+		const type& t = pair.first;
+		const char* type_str = pair.second;
+
+		std::cout << indent(indent_level + 1) << "<type id=\"" << &t << "\">";
+		std::cout << type_str;
+		std::cout << "</type>\n";
 	}
-	else if(const const_* t = dynamic_cast<const const_*>(&n))
+
+	//decorated types
+	std::cout << indent(indent_level + 1) << "<!-- decorated types -->\n";
+	for(auto i = p.begin(); i != p.end(); ++i)
 	{
-		std::cout << indent(indent_level) << "<const>\n";
-		print(t->decorated_type(), indent_level + 1);
-		std::cout << indent(indent_level) << "</const>";
+		const type& t = *i;
+		std::cout << indent(indent_level + 1) << "<type id=\"" << &t << "\">";
+		print(t);
+		std::cout << "</type>\n";
+	}
+
+	std::cout << indent(indent_level) << "</type_pool>\n";
+}
+
+void
+print(const type& n)
+{
+	if(const const_* t = dynamic_cast<const const_*>(&n))
+	{
+		std::cout << "<const type_id=\"" << &t->decorated_type() << "\"/>";
 	}
 	else if(const volatile_* t = dynamic_cast<const volatile_*>(&n))
 	{
-		std::cout << indent(indent_level) << "<volatile>\n";
-		print(t->decorated_type(), indent_level + 1);
-		std::cout << indent(indent_level) << "</volatile>";
+		std::cout << "<volatile type_id=\"" << &t->decorated_type() << "\"/>";
 	}
 	else if(const pointer* t = dynamic_cast<const pointer*>(&n))
 	{
-		std::cout << indent(indent_level) << "<pointer>\n";
-		print(t->decorated_type(), indent_level + 1);
-		std::cout << indent(indent_level) << "</pointer>";
+		std::cout << "<pointer type_id=\"" << &t->decorated_type() << "\"/>";
 	}
 	else if(const reference* t = dynamic_cast<const reference*>(&n))
 	{
-		std::cout << indent(indent_level) << "<reference>\n";
-		print(t->decorated_type(), indent_level + 1);
-		std::cout << indent(indent_level) << "</reference>";
+		std::cout << "<reference type_id=\"" << &t->decorated_type() << "\"/>";
 	}
 	else if(const array* t = dynamic_cast<const array*>(&n))
 	{
-		std::cout << indent(indent_level) << "<array size=\"" << t->size() << "\">\n";
-		print(t->decorated_type(), indent_level + 1);
-		std::cout << indent(indent_level) << "</array>";
+		std::cout << "<array size=\"" << t->size() << "\" type_id=\"" << &t->decorated_type() << "\"/>";
 	}
 	else if(const class_* t = dynamic_cast<const class_*>(&n))
 	{
-		std::cout << indent(indent_level) << "<class id=\"" << t << "\"/>";
+		std::cout << "<class id=\"" << t << "\"/>";
 	}
-	std::cout << '\n';
+}
+
+void
+print_type_id(const type& t)
+{
+	if(const class_* ptr = dynamic_cast<const class_*>(&t))
+	{
+		std::cout << ptr;
+	}
+	else
+	{
+		std::cout << &t;
+	}
 }
 
 void
@@ -206,13 +243,10 @@ print
 {
 	std::cout << indent(indent_level) << "<function";
 	std::cout << " name=\"" << f.name() << "\"";
+	std::cout << " return_type_id=\"" << &f.return_type() << "\"";
 	if(access != "")
 		std::cout << " access=\"" << access << "\"";
 	std::cout << ">\n";
-
-	std::cout << indent(indent_level + 1) << "<return_type>\n";
-	print(f.return_type(), indent_level + 2);
-	std::cout << indent(indent_level + 1) << "</return_type>\n";
 
 	std::cout << indent(indent_level + 1) << "<parameters>\n";
 	const std::list<function::parameter>& parameters = f.parameters();
@@ -235,11 +269,8 @@ print
 	std::cout << indent(indent_level) << "<parameter";
 	if(!p.name().empty())
 		std::cout << " name=\"" << p.name() << "\"";
-	std::cout << ">\n";
-	std::cout << indent(indent_level + 1) << "<type>\n";
-	print(p.get_type(), indent_level + 2);
-	std::cout << indent(indent_level + 1) << "</type>\n";
-	std::cout << indent(indent_level) << "</parameter>\n";
+	std::cout << " type_id=\"" << &p.get_type() << "\"";
+	std::cout << "/>\n";
 }
 
 void
@@ -252,13 +283,12 @@ print
 {
 	std::cout << indent(indent_level) << "<variable";
 	std::cout << " name=\"" << v.name() << "\"";
+	std::cout << " type_id=\"";
+	print_type_id(v.get_type());
+	std::cout << "\"";
 	if(access != "")
 		std::cout << " access=\"" << access << "\"";
-	std::cout << ">\n";
-	std::cout << indent(indent_level + 1) << "<type>\n";
-	print(v.get_type(), indent_level + 2);
-	std::cout << indent(indent_level + 1) << "</type>\n";
-	std::cout << indent(indent_level) << "</variable>\n";
+	std::cout << "/>\n";
 }
 
 } //namespace semantic_graph_print_functions

@@ -41,7 +41,8 @@ namespace_::namespace_(namespace_&& n):
 	name_(std::move(n.name_)),
 	namespaces_(std::move(n.namespaces_)),
 	classes_(std::move(n.classes_)),
-	functions_(std::move(n.functions_))
+	functions_(std::move(n.functions_)),
+	variables_(std::move(n.variables_))
 {
 }
 
@@ -53,6 +54,7 @@ namespace_::operator=(namespace_&& n)
 	namespaces_ = std::move(n.namespaces_);
 	classes_ = std::move(n.classes_);
 	functions_ = std::move(n.functions_);
+	variables_ = std::move(n.variables_);
 
 	return *this;
 }

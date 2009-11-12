@@ -34,17 +34,26 @@ using namespace scalpel::cpp;
 using namespace scalpel::cpp::semantic_entities;
 
 void
+print(const semantic_graph& g);
+
+void
 print
 (
-	const type& n,
+	const semantic_graph::type_pool_const_iterator_range& p,
 	const unsigned int indent_level
 );
+
+void
+print(const type& t);
+
+void
+print_type_id(const type& t);
 
 void
 print
 (
 	const namespace_& n,
-	const unsigned int indent_level = 0
+	const unsigned int indent_level
 );
 
 void

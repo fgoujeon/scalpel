@@ -38,7 +38,28 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp
 {
 
-typedef semantic_entities::namespace_ semantic_graph;
+class semantic_graph
+{
+	public:
+		typedef std::list<std::unique_ptr<semantic_entities::type>> type_pool_t;
+		typedef type_pool_t::const_iterator type_pool_const_iterator;
+		typedef boost::indirect_iterator<type_pool_const_iterator, const semantic_entities::type&> type_pool_const_indirect_iterator;
+		typedef boost::iterator_range<type_pool_const_indirect_iterator> type_pool_const_iterator_range;
+
+		semantic_graph(semantic_entities::namespace_&& global_namespace, type_pool_t&& type_pool);
+
+		semantic_graph(semantic_graph&& o);
+
+		const semantic_entities::namespace_&
+		global_namespace() const;
+
+		type_pool_const_iterator_range
+		type_pool() const;
+
+	private:
+		semantic_entities::namespace_ global_namespace_;
+		type_pool_t type_pool_;
+};
 
 }} //namespace scalpel::cpp
 

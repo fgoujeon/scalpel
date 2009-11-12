@@ -23,9 +23,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-array::array(const unsigned int size, std::unique_ptr<type> decorated_type):
+array::array(const unsigned int size, const type& decorated_type):
 	size_(size),
-	decorated_type_(std::move(decorated_type))
+	decorated_type_(decorated_type)
 {
 }
 
@@ -38,7 +38,7 @@ array::size() const
 const type&
 array::decorated_type() const
 {
-	return *decorated_type_;
+	return decorated_type_;
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

@@ -43,6 +43,8 @@ class variable:
 
 		variable(const type& t, std::string&& name);
 
+		variable(const variable& v);
+
 		variable(variable&& v);
 
 		const variable&
