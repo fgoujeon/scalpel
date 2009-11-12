@@ -92,7 +92,6 @@ find_unqualified_name
     /*
     2. Enclosing scopes (recursive call)
     */
-	/*
     {
         if
         (
@@ -100,17 +99,20 @@ find_unqualified_name
             scope_stack.size() >= 2 //is there at least an enclosing scope?
         )
         {
-			RangeT enclosing_scope_stack = scope_stack;
-			enclosing_scope_stack.pop_back();
+			auto last_but_one_it = scope_stack.end();
+			--last_but_one_it;
+			RangeT enclosing_scope_stack(scope_stack.begin(), last_but_one_it);
 
-            const semantic_entities::named_entity* found_symbol = find_unqualified_name(enclosing_scope_stack, name, true);
-            if(found_symbol)
-            {
-                return found_symbol;
-            }
+			if(!enclosing_scope_stack.empty())
+			{
+				const semantic_entities::named_entity* found_symbol = find_unqualified_name(enclosing_scope_stack, name, true);
+				if(found_symbol)
+				{
+					return found_symbol;
+				}
+			}
         }
     }
-	*/
 
 
 //    /*

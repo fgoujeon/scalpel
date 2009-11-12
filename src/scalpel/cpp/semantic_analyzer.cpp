@@ -1008,12 +1008,10 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 					if(auto opt_identifier_node = get<identifier>(&identifier_or_template_id_node))
 					{
 						auto identifier_node = *opt_identifier_node;
-						if(auto name = name_lookup::find_unqualified_name(scope_cursor_.scope_stack(), identifier_node.value()))
+						if(auto found_name = name_lookup::find_unqualified_name(scope_cursor_.scope_stack(), identifier_node.value()))
 						{
-							std::cout << "found " << name->name() << " at " << name << std::endl;
-							if(auto found_class = dynamic_cast<const class_*>(name))
+							if(auto found_class = dynamic_cast<const class_*>(found_name))
 							{
-								std::cout << "found class " << found_class->name() << " at " << found_class << std::endl;
 								return_type = found_class;
 							}
 						}
