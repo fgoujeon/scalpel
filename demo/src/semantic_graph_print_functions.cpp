@@ -32,9 +32,7 @@ print
 	const semantic_graph& g
 )
 {
-	std::cout << "<semantic_graph>\n";
-	print(g.global_namespace(), 1);
-	std::cout << "</semantic_graph>\n";
+	print(g.global_namespace(), 0);
 }
 
 void
