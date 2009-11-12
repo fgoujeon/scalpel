@@ -39,9 +39,9 @@ class variable:
 	public boost::noncopyable
 {
 	public:
-		variable(std::unique_ptr<type> t, const std::string& name);
+		variable(const type& t, const std::string& name);
 
-		variable(std::unique_ptr<type> t, std::string&& name);
+		variable(const type& t, std::string&& name);
 
 		variable(variable&& v);
 
@@ -58,7 +58,7 @@ class variable:
 		is_a_type() const;
 
 	private:
-		std::unique_ptr<type> type_;
+		const type& type_;
 		std::string name_;
 };
 

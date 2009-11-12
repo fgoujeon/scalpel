@@ -31,7 +31,7 @@ Represents a C++ built in type.
 */
 class built_in_type: public type
 {
-	public:
+	private:
 		enum type_enum
 		{
 			CHAR,
@@ -49,20 +49,25 @@ class built_in_type: public type
 
 		built_in_type(type_enum t);
 
-		inline
-		type_enum
-		get_type() const;
+	public:
+		bool
+		operator==(const built_in_type& o) const;
+
+		static const built_in_type char_;
+		static const built_in_type wchar_t_;
+		static const built_in_type bool_;
+		static const built_in_type short_;
+		static const built_in_type int_;
+		static const built_in_type long_;
+		static const built_in_type signed_;
+		static const built_in_type unsigned_;
+		static const built_in_type float_;
+		static const built_in_type double_;
+		static const built_in_type void_;
 
 	private:
 		type_enum type_;
 };
-
-inline
-built_in_type::type_enum
-built_in_type::get_type() const
-{
-	return type_;
-}
 
 }}} //namespace scalpel::cpp::semantic_entities
 

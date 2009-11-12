@@ -266,6 +266,9 @@ class semantic_analyzer
 		bool
 		is_function_declaration(const syntax_nodes::declarator& declarator_node);
 
+		const semantic_entities::type&
+		add_custom_type(std::unique_ptr<semantic_entities::type> t);
+
 		semantic_entities::class_
 		create_class(const syntax_nodes::class_specifier& syntax_node);
 
@@ -279,7 +282,7 @@ class semantic_analyzer
 		semantic_entities::function::parameters_t
 		create_parameters(const syntax_nodes::declarator& declarator_node);
 
-		std::unique_ptr<semantic_entities::type>
+		const semantic_entities::type&
 		create_type
 		(
 			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
@@ -302,6 +305,7 @@ class semantic_analyzer
 
 		detail::semantic_analysis::scope_cursor scope_cursor_;
 		alternative_visitor alternative_visitor_;
+		std::list<std::unique_ptr<semantic_entities::type>> custom_types_;
 };
 
 template<class T>

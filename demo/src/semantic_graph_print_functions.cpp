@@ -33,42 +33,28 @@ print
 	if(const built_in_type* t = dynamic_cast<const built_in_type*>(&n))
 	{
 		std::cout << indent(indent_level);
-		switch(t->get_type())
-		{
-			case built_in_type::type_enum::CHAR:
-				std::cout << "char";
-				break;
-			case built_in_type::type_enum::WCHAR_T:
-				std::cout << "wchar_t";
-				break;
-			case built_in_type::type_enum::BOOL:
-				std::cout << "bool";
-				break;
-			case built_in_type::type_enum::SHORT:
-				std::cout << "short";
-				break;
-			case built_in_type::type_enum::INT:
-				std::cout << "int";
-				break;
-			case built_in_type::type_enum::LONG:
-				std::cout << "long";
-				break;
-			case built_in_type::type_enum::SIGNED:
-				std::cout << "signed";
-				break;
-			case built_in_type::type_enum::UNSIGNED:
-				std::cout << "unsigned";
-				break;
-			case built_in_type::type_enum::FLOAT:
-				std::cout << "float";
-				break;
-			case built_in_type::type_enum::DOUBLE:
-				std::cout << "double";
-				break;
-			case built_in_type::type_enum::VOID:
-				std::cout << "void";
-				break;
-		}
+		if(*t == built_in_type::char_)
+			std::cout << "char";
+		else if(*t == built_in_type::wchar_t_)
+			std::cout << "wchar_t";
+		else if(*t == built_in_type::bool_)
+			std::cout << "bool";
+		else if(*t == built_in_type::short_)
+			std::cout << "short";
+		else if(*t == built_in_type::int_)
+			std::cout << "int";
+		else if(*t == built_in_type::long_)
+			std::cout << "long";
+		else if(*t == built_in_type::signed_)
+			std::cout << "signed";
+		else if(*t == built_in_type::unsigned_)
+			std::cout << "unsigned";
+		else if(*t == built_in_type::float_)
+			std::cout << "float";
+		else if(*t == built_in_type::double_)
+			std::cout << "double";
+		else if(*t == built_in_type::void_)
+			std::cout << "void";
 	}
 	else if(const const_* t = dynamic_cast<const const_*>(&n))
 	{
@@ -99,6 +85,10 @@ print
 		std::cout << indent(indent_level) << "<array size=\"" << t->size() << "\">\n";
 		print(t->decorated_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</array>";
+	}
+	else if(const class_* t = dynamic_cast<const class_*>(&n))
+	{
+		std::cout << indent(indent_level) << "<class id=\"" << t << "\"/>";
 	}
 	std::cout << '\n';
 }
@@ -142,6 +132,7 @@ print
 {
 	std::cout << indent(indent_level) << "<class";
 	std::cout << " name=\"" << c.name() << "\"";
+	std::cout << " id=\"" << &c << "\"";
 	if(access != "")
 		std::cout << " access=\"" << access << "\"";
 	std::cout << ">\n";

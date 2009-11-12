@@ -28,9 +28,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-function::function(const std::string& name, std::unique_ptr<type> return_type, std::list<parameter>&& parameters):
+function::function(const std::string& name, const type& return_type, std::list<parameter>&& parameters):
     name_(name),
-	return_type_(std::move(return_type)),
+	return_type_(return_type),
 	parameters_(std::move(parameters))
 {
 	std::cout << "New function " << name << "\n";
@@ -40,7 +40,7 @@ function::function(function&& f):
 	scope_impl_(std::move(f.scope_impl_)),
 	name_(std::move(f.name_)),
 	statement_block_(std::move(f.statement_block_)),
-	return_type_(std::move(f.return_type_)),
+	return_type_(f.return_type_),
 	parameters_(std::move(f.parameters_))
 {
 }
@@ -105,7 +105,7 @@ function::named_entities() const
 const type&
 function::return_type() const
 {
-	return *return_type_;
+	return return_type_;
 }
 
 const std::list<function::parameter>&
@@ -116,14 +116,14 @@ function::parameters() const
 
 
 
-function::parameter::parameter(std::unique_ptr<type> t, const std::string& name):
-	type_(std::move(t)),
+function::parameter::parameter(const type& t, const std::string& name):
+	type_(t),
 	name_(name)
 {
 }
 
 function::parameter::parameter(parameter&& o):
-	type_(std::move(o.type_)),
+	type_(o.type_),
 	name_(std::move(o.name_))
 {
 }
@@ -131,7 +131,7 @@ function::parameter::parameter(parameter&& o):
 const type&
 function::parameter::get_type() const
 {
-	return *type_;
+	return type_;
 }
 
 const std::string&

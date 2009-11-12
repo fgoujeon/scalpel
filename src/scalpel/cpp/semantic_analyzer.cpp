@@ -677,6 +677,13 @@ semantic_analyzer::is_function_declaration(const declarator& declarator_node)
 	return false;
 }
 
+const type&
+semantic_analyzer::add_custom_type(std::unique_ptr<type> t)
+{
+	custom_types_.push_back(std::move(t));
+	return *custom_types_.back();
+}
+
 class_
 semantic_analyzer::create_class(const class_specifier& syntax_node)
 {
@@ -869,14 +876,14 @@ semantic_analyzer::create_function(const decl_specifier_seq& decl_specifier_seq_
 	//
 	//get the function's return type
 	//
-	std::unique_ptr<type> return_type = std::move(create_type(decl_specifier_seq_node, declarator_node));
+	const type& return_type = create_type(decl_specifier_seq_node, declarator_node);
 
 	//
 	//get the function's parameter list
 	//
 	std::list<function::parameter> parameters = create_parameters(declarator_node);
 
-	return function(name, std::move(return_type), std::move(parameters));
+	return function(name, return_type, std::move(parameters));
 }
 
 function::parameters_t
@@ -955,10 +962,10 @@ semantic_analyzer::create_parameters(const declarator& declarator_node)
 	return parameters;
 }
 
-std::unique_ptr<type>
+const type&
 semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node, const declarator& declarator_node)
 {
-	std::unique_ptr<type> return_type;
+	const type* return_type = 0;
 	bool const_qualified = false; //useful for "const int" (where prefered form would have been "int const")
 	bool volatile_qualified = false; //ditto
 
@@ -1007,6 +1014,7 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 							if(auto found_class = dynamic_cast<const class_*>(name))
 							{
 								std::cout << "found class " << found_class->name() << " at " << found_class << std::endl;
+								return_type = found_class;
 							}
 						}
 					}
@@ -1017,47 +1025,47 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 
 					if(get<predefined_text_node<str::char_>>(&built_in_type_specifier_node))
 					{
-						return_type = std::move(std::unique_ptr<built_in_type>(new built_in_type(built_in_type::CHAR)));
+						return_type = &built_in_type::char_;
 					}
 					else if(get<predefined_text_node<str::wchar_t_>>(&built_in_type_specifier_node))
 					{
-						return_type = std::move(std::unique_ptr<built_in_type>(new built_in_type(built_in_type::WCHAR_T)));
+						return_type = &built_in_type::wchar_t_;
 					}
 					else if(get<predefined_text_node<str::bool_>>(&built_in_type_specifier_node))
 					{
-						return_type = std::move(std::unique_ptr<built_in_type>(new built_in_type(built_in_type::BOOL)));
+						return_type = &built_in_type::bool_;
 					}
 					else if(get<predefined_text_node<str::short_>>(&built_in_type_specifier_node))
 					{
-						return_type = std::move(std::unique_ptr<built_in_type>(new built_in_type(built_in_type::SHORT)));
+						return_type = &built_in_type::short_;
 					}
 					else if(get<predefined_text_node<str::int_>>(&built_in_type_specifier_node))
 					{
-						return_type = std::move(std::unique_ptr<built_in_type>(new built_in_type(built_in_type::INT)));
+						return_type = &built_in_type::int_;
 					}
 					else if(get<predefined_text_node<str::long_>>(&built_in_type_specifier_node))
 					{
-						return_type = std::move(std::unique_ptr<built_in_type>(new built_in_type(built_in_type::LONG)));
+						return_type = &built_in_type::long_;
 					}
 					else if(get<predefined_text_node<str::signed_>>(&built_in_type_specifier_node))
 					{
-						return_type = std::move(std::unique_ptr<built_in_type>(new built_in_type(built_in_type::SIGNED)));
+						return_type = &built_in_type::signed_;
 					}
 					else if(get<predefined_text_node<str::unsigned_>>(&built_in_type_specifier_node))
 					{
-						return_type = std::move(std::unique_ptr<built_in_type>(new built_in_type(built_in_type::UNSIGNED)));
+						return_type = &built_in_type::unsigned_;
 					}
 					else if(get<predefined_text_node<str::float_>>(&built_in_type_specifier_node))
 					{
-						return_type = std::move(std::unique_ptr<built_in_type>(new built_in_type(built_in_type::FLOAT)));
+						return_type = &built_in_type::float_;
 					}
 					else if(get<predefined_text_node<str::double_>>(&built_in_type_specifier_node))
 					{
-						return_type = std::move(std::unique_ptr<built_in_type>(new built_in_type(built_in_type::DOUBLE)));
+						return_type = &built_in_type::double_;
 					}
 					else if(get<predefined_text_node<str::void_>>(&built_in_type_specifier_node))
 					{
-						return_type = std::move(std::unique_ptr<built_in_type>(new built_in_type(built_in_type::VOID)));
+						return_type = &built_in_type::void_;
 					}
 				}
 			}
@@ -1081,6 +1089,7 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 			}
 		}
 
+		/*
 		if(return_type)
 		{
 			if(const_qualified)
@@ -1094,8 +1103,10 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 				volatile_qualified = false;
 			}
 		}
+		*/
 	}
 
+	/*
 	if(auto opt_ptr_operator_seq_node = get_ptr_operator_seq(declarator_node))
 	{
 		auto ptr_operator_seq_node = *opt_ptr_operator_seq_node;
@@ -1156,8 +1167,13 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 			}
 		}
 	}
+	*/
 
-	return return_type;
+	if(!return_type)
+	{
+		throw "Type not found";
+	}
+	return *return_type;
 }
 
 std::list<variable>
@@ -1222,7 +1238,7 @@ semantic_analyzer::create_variable
 		}
 	}
 
-	return variable(std::unique_ptr<type>(std::move(new built_in_type(built_in_type::VOID))), "UNKNOWN");
+	return variable(built_in_type::void_, "UNKNOWN");
 }
 
 }} //namespace scalpel::cpp

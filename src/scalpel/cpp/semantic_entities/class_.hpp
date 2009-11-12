@@ -185,6 +185,7 @@ class class_::constructor
 
 	private:
 		function impl_;
+		parameters_t parameters_;
 		class_::access access_;
 };
 

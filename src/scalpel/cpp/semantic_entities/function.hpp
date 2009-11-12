@@ -51,7 +51,7 @@ class function:
 
 		typedef std::list<parameter> parameters_t;
 
-        function(const std::string& name, std::unique_ptr<type> return_type, std::list<parameter>&& parameters);
+        function(const std::string& name, const type& return_type, std::list<parameter>&& parameters);
 
 		//move constructor
 		function(function&& f);
@@ -102,14 +102,14 @@ class function:
 		scope_impl scope_impl_;
         std::string name_;
 		statement_block statement_block_;
-		std::unique_ptr<type> return_type_;
+		const type& return_type_;
 		std::list<parameter> parameters_;
 };
 
 class function::parameter
 {
 	public:
-		parameter(std::unique_ptr<type> t, const std::string& name);
+		parameter(const type& t, const std::string& name);
 
 		parameter(const parameter&) = delete;
 
@@ -125,7 +125,7 @@ class function::parameter
 		name() const;
 
 	private:
-		std::unique_ptr<type> type_;
+		const type& type_;
 		std::string name_;
 };
 

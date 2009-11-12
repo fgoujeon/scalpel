@@ -176,7 +176,7 @@ class_::add(member<variable>&& member)
 
 
 class_::constructor::constructor(parameters_t&& parameters, class_::access access):
-	impl_("_", std::unique_ptr<type>(new built_in_type(built_in_type::VOID)), std::move(parameters)),
+	impl_("_", built_in_type::void_, std::move(parameters)),
 	access_(access)
 {
 }
