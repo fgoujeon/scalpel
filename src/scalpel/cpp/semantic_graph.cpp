@@ -41,11 +41,5 @@ semantic_graph::global_namespace() const
 	return global_namespace_;
 }
 
-semantic_graph::type_pool_const_iterator_range
-semantic_graph::type_pool() const
-{
-	return type_pool_;
-}
-
 }} //namespace scalpel::cpp
 

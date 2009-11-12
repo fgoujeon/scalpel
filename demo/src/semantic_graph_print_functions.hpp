@@ -39,15 +39,15 @@ print(const semantic_graph& g);
 void
 print
 (
-	const semantic_graph::type_pool_const_iterator_range& p,
+	const type& n,
 	const unsigned int indent_level
 );
 
 void
-print(const type& t);
-
-void
-print_type_id(const type& t);
+print
+(
+	const built_in_type&
+);
 
 void
 print

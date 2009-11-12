@@ -34,20 +34,64 @@ print
 {
 	std::cout << "<semantic_graph>\n";
 	print(g.global_namespace(), 1);
-	print(g.type_pool(), 1);
 	std::cout << "</semantic_graph>\n";
 }
 
 void
 print
 (
-	const semantic_graph::type_pool_const_iterator_range& p,
+	const type& n,
 	const unsigned int indent_level
 )
 {
-	std::cout << indent(indent_level) << "<type_pool>\n";
+	if(const built_in_type* t = dynamic_cast<const built_in_type*>(&n))
+	{
+		std::cout << indent(indent_level);
+		print(*t);
+		std::cout << '\n';
+	}
+	else if(const const_* t = dynamic_cast<const const_*>(&n))
+	{
+		std::cout << indent(indent_level) << "<const>\n";
+		print(t->decorated_type(), indent_level + 1);
+		std::cout << indent(indent_level) << "</const>\n";
+	}
+	else if(const volatile_* t = dynamic_cast<const volatile_*>(&n))
+	{
+		std::cout << indent(indent_level) << "<volatile>\n";
+		print(t->decorated_type(), indent_level + 1);
+		std::cout << indent(indent_level) << "</volatile>\n";
+	}
+	else if(const pointer* t = dynamic_cast<const pointer*>(&n))
+	{
+		std::cout << indent(indent_level) << "<pointer>\n";
+		print(t->decorated_type(), indent_level + 1);
+		std::cout << indent(indent_level) << "</pointer>\n";
+	}
+	else if(const reference* t = dynamic_cast<const reference*>(&n))
+	{
+		std::cout << indent(indent_level) << "<reference>\n";
+		print(t->decorated_type(), indent_level + 1);
+		std::cout << indent(indent_level) << "</reference>\n";
+	}
+	else if(const array* t = dynamic_cast<const array*>(&n))
+	{
+		std::cout << indent(indent_level) << "<array size=\"" << t->size() << "\">\n";
+		print(t->decorated_type(), indent_level + 1);
+		std::cout << indent(indent_level) << "</array>\n";
+	}
+	else if(const class_* t = dynamic_cast<const class_*>(&n))
+	{
+		std::cout << indent(indent_level) << "<class id=\"" << t << "\"/>\n";
+	}
+}
 
-	//built in types
+void
+print
+(
+	const built_in_type& built_in_t
+)
+{
 	std::vector<std::pair<const built_in_type&, const char*>> built_in_types_table =
 	{
 		{built_in_type::char_, "char"},
@@ -63,70 +107,17 @@ print
 		{built_in_type::void_, "void"}
 	};
 
-	std::cout << indent(indent_level + 1) << "<!-- built-in types -->\n";
 	for(auto i = built_in_types_table.begin(); i != built_in_types_table.end(); ++i)
 	{
 		auto pair = *i;
-		const type& t = pair.first;
+		const built_in_type& t = pair.first;
 		const char* type_str = pair.second;
 
-		std::cout << indent(indent_level + 1) << "<type id=\"" << &t << "\">";
-		std::cout << type_str;
-		std::cout << "</type>\n";
-	}
-
-	//decorated types
-	std::cout << indent(indent_level + 1) << "<!-- decorated types -->\n";
-	for(auto i = p.begin(); i != p.end(); ++i)
-	{
-		const type& t = *i;
-		std::cout << indent(indent_level + 1) << "<type id=\"" << &t << "\">";
-		print(t);
-		std::cout << "</type>\n";
-	}
-
-	std::cout << indent(indent_level) << "</type_pool>\n";
-}
-
-void
-print(const type& n)
-{
-	if(const const_* t = dynamic_cast<const const_*>(&n))
-	{
-		std::cout << "<const type_id=\"" << &t->decorated_type() << "\"/>";
-	}
-	else if(const volatile_* t = dynamic_cast<const volatile_*>(&n))
-	{
-		std::cout << "<volatile type_id=\"" << &t->decorated_type() << "\"/>";
-	}
-	else if(const pointer* t = dynamic_cast<const pointer*>(&n))
-	{
-		std::cout << "<pointer type_id=\"" << &t->decorated_type() << "\"/>";
-	}
-	else if(const reference* t = dynamic_cast<const reference*>(&n))
-	{
-		std::cout << "<reference type_id=\"" << &t->decorated_type() << "\"/>";
-	}
-	else if(const array* t = dynamic_cast<const array*>(&n))
-	{
-		std::cout << "<array size=\"" << t->size() << "\" type_id=\"" << &t->decorated_type() << "\"/>";
-	}
-	else if(const class_* t = dynamic_cast<const class_*>(&n))
-	{
-		std::cout << "<class id=\"" << t << "\"/>";
-	}
-}
-
-void
-print_type_id(const type& t)
-{
-	if(const class_* ptr = dynamic_cast<const class_*>(&t))
-	{
-		std::cout << ptr;
-	}
-	else
-	{
-		std::cout << &t;
+		if(t == built_in_t)
+		{
+			std::cout << type_str;
+			break;
+		}
 	}
 }
 
@@ -243,10 +234,13 @@ print
 {
 	std::cout << indent(indent_level) << "<function";
 	std::cout << " name=\"" << f.name() << "\"";
-	std::cout << " return_type_id=\"" << &f.return_type() << "\"";
 	if(access != "")
 		std::cout << " access=\"" << access << "\"";
 	std::cout << ">\n";
+
+	std::cout << indent(indent_level + 1) << "<return_type>\n";
+	print(f.return_type(), indent_level + 2);
+	std::cout << indent(indent_level + 1) << "</return_type>\n";
 
 	std::cout << indent(indent_level + 1) << "<parameters>\n";
 	const std::list<function::parameter>& parameters = f.parameters();
@@ -269,8 +263,11 @@ print
 	std::cout << indent(indent_level) << "<parameter";
 	if(!p.name().empty())
 		std::cout << " name=\"" << p.name() << "\"";
-	std::cout << " type_id=\"" << &p.get_type() << "\"";
-	std::cout << "/>\n";
+	std::cout << ">\n";
+	std::cout << indent(indent_level + 1) << "<type>\n";
+	print(p.get_type(), indent_level + 2);
+	std::cout << indent(indent_level + 1) << "</type>\n";
+	std::cout << indent(indent_level) << "</parameter>\n";
 }
 
 void
@@ -283,12 +280,13 @@ print
 {
 	std::cout << indent(indent_level) << "<variable";
 	std::cout << " name=\"" << v.name() << "\"";
-	std::cout << " type_id=\"";
-	print_type_id(v.get_type());
-	std::cout << "\"";
 	if(access != "")
 		std::cout << " access=\"" << access << "\"";
-	std::cout << "/>\n";
+	std::cout << ">\n";
+	std::cout << indent(indent_level + 1) << "<type>\n";
+	print(v.get_type(), indent_level + 2);
+	std::cout << indent(indent_level + 1) << "</type>\n";
+	std::cout << indent(indent_level) << "</variable>\n";
 }
 
 } //namespace semantic_graph_print_functions
