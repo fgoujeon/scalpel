@@ -1217,11 +1217,11 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 			!char_type &&
 			!double_type &&
 			!float_type &&
-			//!int_type &&
+			//int_type &&
 			!long_long_type &&
 			long_type &&
 			!short_type &&
-			//!signed_type &&
+			//signed_type &&
 			!unsigned_type &&
 			!void_type &&
 			!wchar_t_type
@@ -1235,11 +1235,11 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 			!char_type &&
 			!double_type &&
 			!float_type &&
-			//!int_type &&
+			//int_type &&
 			long_long_type &&
-			!long_type &&
+			//long_type &&
 			!short_type &&
-			//!signed_type &&
+			//signed_type &&
 			!unsigned_type &&
 			!void_type &&
 			!wchar_t_type
@@ -1289,11 +1289,12 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 			!char_type &&
 			!double_type &&
 			!float_type &&
+			//!int_type &&
 			!long_long_type &&
 			!long_type &&
 			!short_type &&
 			!signed_type &&
-			(unsigned_type || int_type) &&
+			unsigned_type &&
 			!void_type &&
 			!wchar_t_type
 		)
