@@ -21,6 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "semantic_analyzer.hpp"
 
 #include <iostream>
+#include <stdexcept>
 #include "detail/semantic_analysis/name_lookup.hpp"
 
 namespace scalpel { namespace cpp
@@ -966,6 +967,18 @@ const type&
 semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node, const declarator& declarator_node)
 {
 	const type* return_type = 0;
+	bool bool_type = false;
+	bool char_type = false;
+	bool double_type = false;
+	bool float_type = false;
+	bool int_type = false;
+	bool long_long_type = false;
+	bool long_type = false;
+	bool short_type = false;
+	bool signed_type = false;
+	bool unsigned_type = false;
+	bool void_type = false;
+	bool wchar_t_type = false;
 	bool const_qualified = false; //useful for "const int" (where prefered form would have been "int const")
 	bool volatile_qualified = false; //ditto
 
@@ -997,9 +1010,7 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 			if(auto opt_simple_type_specifier_node = get<simple_type_specifier>(&type_specifier_node))
 			{
 				auto simple_type_specifier_node = *opt_simple_type_specifier_node;
-				//nested_identifier_or_template_id,
 				//simple_template_type_specifier,
-				//built_in_type_specifier
 
 				if(auto opt_nested_identifier_or_template_id_node = get<nested_identifier_or_template_id>(&simple_type_specifier_node))
 				{
@@ -1023,47 +1034,50 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 
 					if(get<predefined_text_node<str::char_>>(&built_in_type_specifier_node))
 					{
-						return_type = &built_in_type::char_;
+						char_type = true;
 					}
 					else if(get<predefined_text_node<str::wchar_t_>>(&built_in_type_specifier_node))
 					{
-						return_type = &built_in_type::wchar_t_;
+						wchar_t_type = true;
 					}
 					else if(get<predefined_text_node<str::bool_>>(&built_in_type_specifier_node))
 					{
-						return_type = &built_in_type::bool_;
+						bool_type = true;
 					}
 					else if(get<predefined_text_node<str::short_>>(&built_in_type_specifier_node))
 					{
-						return_type = &built_in_type::short_;
+						short_type = true;
 					}
 					else if(get<predefined_text_node<str::int_>>(&built_in_type_specifier_node))
 					{
-						return_type = &built_in_type::int_;
+						int_type = true;
 					}
 					else if(get<predefined_text_node<str::long_>>(&built_in_type_specifier_node))
 					{
-						return_type = &built_in_type::long_;
+						if(!long_type)
+							long_type = true;
+						else
+							long_long_type = true;
 					}
 					else if(get<predefined_text_node<str::signed_>>(&built_in_type_specifier_node))
 					{
-						return_type = &built_in_type::signed_;
+						signed_type = true;
 					}
 					else if(get<predefined_text_node<str::unsigned_>>(&built_in_type_specifier_node))
 					{
-						return_type = &built_in_type::unsigned_;
+						unsigned_type = true;
 					}
 					else if(get<predefined_text_node<str::float_>>(&built_in_type_specifier_node))
 					{
-						return_type = &built_in_type::float_;
+						float_type = true;
 					}
 					else if(get<predefined_text_node<str::double_>>(&built_in_type_specifier_node))
 					{
-						return_type = &built_in_type::double_;
+						double_type = true;
 					}
 					else if(get<predefined_text_node<str::void_>>(&built_in_type_specifier_node))
 					{
-						return_type = &built_in_type::void_;
+						void_type = true;
 					}
 				}
 			}
@@ -1086,19 +1100,308 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 				}
 			}
 		}
+	}
 
-		if(return_type)
+	if(!return_type)
+	{
+		if
+		(
+			bool_type &&
+			!char_type &&
+			!double_type &&
+			!float_type &&
+			!int_type &&
+			!long_long_type &&
+			!long_type &&
+			!short_type &&
+			!signed_type &&
+			!unsigned_type &&
+			!void_type &&
+			!wchar_t_type
+		)
 		{
-			if(const_qualified)
-			{
-				return_type = &add_custom_type(std::move(std::unique_ptr<const_>(new const_(*return_type))));
-				const_qualified = false;
-			}
-			else if(volatile_qualified)
-			{
-				return_type = &add_custom_type(std::move(std::unique_ptr<volatile_>(new volatile_(*return_type))));
-				volatile_qualified = false;
-			}
+			return_type = &built_in_type::bool_;
+		}
+		else if
+		(
+			!bool_type &&
+			char_type &&
+			!double_type &&
+			!float_type &&
+			!int_type &&
+			!long_long_type &&
+			!long_type &&
+			!short_type &&
+			!signed_type &&
+			!unsigned_type &&
+			!void_type &&
+			!wchar_t_type
+		)
+		{
+			return_type = &built_in_type::char_;
+		}
+		else if
+		(
+			!bool_type &&
+			!char_type &&
+			double_type &&
+			!float_type &&
+			!int_type &&
+			!long_long_type &&
+			!long_type &&
+			!short_type &&
+			!signed_type &&
+			!unsigned_type &&
+			!void_type &&
+			!wchar_t_type
+		)
+		{
+			return_type = &built_in_type::double_;
+		}
+		else if
+		(
+			!bool_type &&
+			!char_type &&
+			!double_type &&
+			float_type &&
+			!int_type &&
+			!long_long_type &&
+			!long_type &&
+			!short_type &&
+			!signed_type &&
+			!unsigned_type &&
+			!void_type &&
+			!wchar_t_type
+		)
+		{
+			return_type = &built_in_type::float_;
+		}
+		else if
+		(
+			!bool_type &&
+			!char_type &&
+			!double_type &&
+			!float_type &&
+			(signed_type || int_type) &&
+			!long_long_type &&
+			!long_type &&
+			!short_type &&
+			!unsigned_type &&
+			!void_type &&
+			!wchar_t_type
+		)
+		{
+			return_type = &built_in_type::int_;
+		}
+		else if
+		(
+			!bool_type &&
+			!char_type &&
+			double_type &&
+			!float_type &&
+			!int_type &&
+			!long_long_type &&
+			long_type &&
+			!short_type &&
+			!signed_type &&
+			!unsigned_type &&
+			!void_type &&
+			!wchar_t_type
+		)
+		{
+			return_type = &built_in_type::long_double;
+		}
+		else if
+		(
+			!bool_type &&
+			!char_type &&
+			!double_type &&
+			!float_type &&
+			//!int_type &&
+			!long_long_type &&
+			long_type &&
+			!short_type &&
+			//!signed_type &&
+			!unsigned_type &&
+			!void_type &&
+			!wchar_t_type
+		)
+		{
+			return_type = &built_in_type::long_int;
+		}
+		else if
+		(
+			!bool_type &&
+			!char_type &&
+			!double_type &&
+			!float_type &&
+			//!int_type &&
+			long_long_type &&
+			!long_type &&
+			!short_type &&
+			//!signed_type &&
+			!unsigned_type &&
+			!void_type &&
+			!wchar_t_type
+		)
+		{
+			return_type = &built_in_type::long_long_int;
+		}
+		else if
+		(
+			!bool_type &&
+			!char_type &&
+			!double_type &&
+			!float_type &&
+			//!int_type &&
+			!long_long_type &&
+			!long_type &&
+			short_type &&
+			//!signed_type &&
+			!unsigned_type &&
+			!void_type &&
+			!wchar_t_type
+		)
+		{
+			return_type = &built_in_type::short_int;
+		}
+		else if
+		(
+			!bool_type &&
+			char_type &&
+			!double_type &&
+			!float_type &&
+			!int_type &&
+			!long_long_type &&
+			!long_type &&
+			!short_type &&
+			!signed_type &&
+			unsigned_type &&
+			!void_type &&
+			!wchar_t_type
+		)
+		{
+			return_type = &built_in_type::unsigned_char;
+		}
+		else if
+		(
+			!bool_type &&
+			!char_type &&
+			!double_type &&
+			!float_type &&
+			!long_long_type &&
+			!long_type &&
+			!short_type &&
+			!signed_type &&
+			(unsigned_type || int_type) &&
+			!void_type &&
+			!wchar_t_type
+		)
+		{
+			return_type = &built_in_type::unsigned_int;
+		}
+		else if
+		(
+			!bool_type &&
+			!char_type &&
+			!double_type &&
+			!float_type &&
+			//!int_type &&
+			!long_long_type &&
+			long_type &&
+			!short_type &&
+			!signed_type &&
+			unsigned_type &&
+			!void_type &&
+			!wchar_t_type
+		)
+		{
+			return_type = &built_in_type::unsigned_long_int;
+		}
+		else if
+		(
+			!bool_type &&
+			!char_type &&
+			!double_type &&
+			!float_type &&
+			//!int_type &&
+			long_long_type &&
+			//!long_type &&
+			!short_type &&
+			!signed_type &&
+			unsigned_type &&
+			!void_type &&
+			!wchar_t_type
+		)
+		{
+			return_type = &built_in_type::unsigned_long_long_int;
+		}
+		else if
+		(
+			!bool_type &&
+			!char_type &&
+			!double_type &&
+			!float_type &&
+			//!int_type &&
+			!long_long_type &&
+			!long_type &&
+			short_type &&
+			!signed_type &&
+			unsigned_type &&
+			!void_type &&
+			!wchar_t_type
+		)
+		{
+			return_type = &built_in_type::unsigned_short_int;
+		}
+		else if
+		(
+			!bool_type &&
+			!char_type &&
+			!double_type &&
+			!float_type &&
+			!int_type &&
+			!long_long_type &&
+			!long_type &&
+			!short_type &&
+			!signed_type &&
+			!unsigned_type &&
+			void_type &&
+			!wchar_t_type
+		)
+		{
+			return_type = &built_in_type::void_;
+		}
+		else if
+		(
+			!bool_type &&
+			!char_type &&
+			!double_type &&
+			!float_type &&
+			!int_type &&
+			!long_long_type &&
+			!long_type &&
+			!short_type &&
+			!signed_type &&
+			!unsigned_type &&
+			!void_type &&
+			wchar_t_type
+		)
+		{
+			return_type = &built_in_type::wchar_t_;
+		}
+		else
+		{
+			throw std::runtime_error("Semantic analysis error: incorrect type");
+		}
+
+		if(const_qualified)
+		{
+			return_type = &add_custom_type(std::move(std::unique_ptr<const_>(new const_(*return_type))));
+		}
+		else if(volatile_qualified)
+		{
+			return_type = &add_custom_type(std::move(std::unique_ptr<volatile_>(new volatile_(*return_type))));
 		}
 	}
 
@@ -1165,7 +1468,7 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 
 	if(!return_type)
 	{
-		throw "Type not found";
+		throw std::runtime_error("Semantic analysis error: type not found");
 	}
 	return *return_type;
 }

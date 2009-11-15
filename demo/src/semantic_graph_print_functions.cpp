@@ -92,17 +92,22 @@ print
 {
 	std::vector<std::pair<const built_in_type&, const char*>> built_in_types_table =
 	{
-		{built_in_type::char_, "char"},
-		{built_in_type::wchar_t_, "wchar_t"},
 		{built_in_type::bool_, "bool"},
-		{built_in_type::short_, "short"},
-		{built_in_type::int_, "int"},
-		{built_in_type::long_, "long"},
-		{built_in_type::signed_, "signed"},
-		{built_in_type::unsigned_, "unsigned"},
-		{built_in_type::float_, "float"},
+		{built_in_type::char_, "char"},
 		{built_in_type::double_, "double"},
-		{built_in_type::void_, "void"}
+		{built_in_type::float_, "float"},
+		{built_in_type::int_, "int"},
+		{built_in_type::long_double, "long double"},
+		{built_in_type::long_int, "long int"},
+		{built_in_type::long_long_int, "long long int"},
+		{built_in_type::short_int, "short int"},
+		{built_in_type::unsigned_char, "unsigned char"},
+		{built_in_type::unsigned_int, "unsigned int"},
+		{built_in_type::unsigned_long_int, "unsigned long int"},
+		{built_in_type::unsigned_long_long_int, "unsigned long long int"},
+		{built_in_type::unsigned_short_int, "unsigned short int"},
+		{built_in_type::void_, "void"},
+		{built_in_type::wchar_t_, "wchar_t"}
 	};
 
 	for(auto i = built_in_types_table.begin(); i != built_in_types_table.end(); ++i)

@@ -34,17 +34,22 @@ class built_in_type: public type
 	private:
 		enum type_enum
 		{
-			CHAR,
-			WCHAR_T,
 			BOOL,
-			SHORT,
-			INT,
-			LONG,
-			SIGNED,
-			UNSIGNED,
-			FLOAT,
+			CHAR,
 			DOUBLE,
-			VOID
+			FLOAT,
+			INT,
+			LONG_DOUBLE,
+			LONG_INT,
+			LONG_LONG_INT,
+			SHORT_INT,
+			UNSIGNED_CHAR,
+			UNSIGNED_INT,
+			UNSIGNED_LONG_INT,
+			UNSIGNED_LONG_LONG_INT,
+			UNSIGNED_SHORT_INT,
+			VOID,
+			WCHAR_T
 		};
 
 		built_in_type(type_enum t);
@@ -66,17 +71,22 @@ class built_in_type: public type
 		bool
 		operator==(const built_in_type& o) const;
 
-		static const built_in_type char_;
-		static const built_in_type wchar_t_;
 		static const built_in_type bool_;
-		static const built_in_type short_;
-		static const built_in_type int_;
-		static const built_in_type long_;
-		static const built_in_type signed_;
-		static const built_in_type unsigned_;
-		static const built_in_type float_;
+		static const built_in_type char_;
 		static const built_in_type double_;
+		static const built_in_type float_;
+		static const built_in_type int_;
+		static const built_in_type long_double;
+		static const built_in_type long_int;
+		static const built_in_type long_long_int;
+		static const built_in_type short_int;
+		static const built_in_type unsigned_char;
+		static const built_in_type unsigned_int;
+		static const built_in_type unsigned_long_int;
+		static const built_in_type unsigned_long_long_int;
+		static const built_in_type unsigned_short_int;
 		static const built_in_type void_;
+		static const built_in_type wchar_t_;
 
 	private:
 		type_enum type_;
