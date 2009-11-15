@@ -35,7 +35,6 @@ unsigned long int long unsigned_long_long_int2;
 long int long unsigned unsigned_long_long_int3;
 unsigned short int unsigned_short_int;
 short int unsigned unsigned_short_int2;
-int unsigned short unsigned_short_int2;
-void void_;
+int unsigned short unsigned_short_int3;
 wchar_t wchar_t_;
 
