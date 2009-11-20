@@ -28,6 +28,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 
 namespace_::namespace_()
 {
+	std::cout << "New anonymous namespace\n";
 }
 
 namespace_::namespace_(const std::string& name):

@@ -73,6 +73,9 @@ class scope_cursor: public boost::noncopyable
 		semantic_entities::scope&
 		current_scope();
 
+		semantic_entities::class_&
+		last_added_class();
+
 		void
 		add_to_current_scope(semantic_entities::namespace_&& o);
 

@@ -21,6 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "scope_cursor.hpp"
 
 #include <iostream>
+#include <stdexcept>
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
 {
@@ -88,6 +89,21 @@ scope_cursor::current_scope()
 {
 	assert(!scope_stack_.empty());
 	return *scope_stack_.back();
+}
+
+semantic_entities::class_&
+scope_cursor::last_added_class()
+{
+	assert(!current_scope().scopes().empty());
+	semantic_entities::scope& s = current_scope().scopes().back();
+	if(semantic_entities::class_* c = dynamic_cast<semantic_entities::class_*>(&s))
+	{
+		return *c;
+	}
+	else
+	{
+		throw std::runtime_error("last added scope is not a class");
+	}
 }
 
 void

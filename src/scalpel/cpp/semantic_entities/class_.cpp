@@ -31,6 +31,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 class_::class_(const std::string& name):
     name_(name)
 {
+	std::cout << "New class " << name << '\n';
 }
 
 class_::class_(class_&& c):

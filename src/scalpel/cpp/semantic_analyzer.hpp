@@ -272,6 +272,9 @@ class semantic_analyzer
 		semantic_entities::class_
 		create_class(const syntax_nodes::class_specifier& syntax_node);
 
+		void
+		fill_class(semantic_entities::class_& c, const syntax_nodes::class_specifier& syntax_node);
+
 		semantic_entities::function
 		create_function
 		(

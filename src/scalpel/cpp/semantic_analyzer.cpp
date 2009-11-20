@@ -90,9 +90,13 @@ semantic_analyzer::analyze(const class_head&)
 }
 
 void
-semantic_analyzer::analyze(const class_specifier& syntax_node)
+semantic_analyzer::analyze(const class_specifier& class_specifier_node)
 {
-	scope_cursor_.add_to_current_scope(create_class(syntax_node));
+	scope_cursor_.add_to_current_scope(create_class(class_specifier_node));
+	class_& c = scope_cursor_.last_added_class();
+	scope_cursor_.enter_scope(c);
+	fill_class(c, class_specifier_node);
+	scope_cursor_.leave_scope();
 }
 
 void
@@ -701,8 +705,16 @@ semantic_analyzer::create_class(const class_specifier& syntax_node)
 		}
 	}
 
+	//create the class
+	assert(class_name != "");
+	return class_(class_name);
+}
+
+void
+semantic_analyzer::fill_class(class_& c, const class_specifier& class_specifier_node)
+{
 	//default current_access
-	auto class_head_node = get_class_head(syntax_node);
+	auto class_head_node = get_class_head(class_specifier_node);
 	auto class_key_node = get_class_key(class_head_node);
 	class_::access current_access = class_::access::PUBLIC;
 	if(get<predefined_text_node<str::class_>>(&class_key_node)) //if the syntax node represents a class (neither struct nor union)...
@@ -710,13 +722,8 @@ semantic_analyzer::create_class(const class_specifier& syntax_node)
 		current_access = class_::access::PRIVATE; //... the default access is private
 	}
 
-	//create the class
-	assert(class_name != "");
-	class_ new_class(class_name);
-	scope_cursor_.enter_scope(new_class);
-
 	//get the members of the class
-	auto opt_member_specification = get_member_specification(syntax_node);
+	auto opt_member_specification = get_member_specification(class_specifier_node);
 	if(opt_member_specification)
 	{
 		auto member_specification_node = *opt_member_specification;
@@ -755,16 +762,16 @@ semantic_analyzer::create_class(const class_specifier& syntax_node)
 									auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
 									if(is_function_declaration(declarator_node))
 									{
-										new_class.add(class_::member<function>(create_function(decl_specifier_seq_node, declarator_node), current_access));
+										c.add(class_::member<function>(create_function(decl_specifier_seq_node, declarator_node), current_access));
 									}
 									else
 									{
-										new_class.add(class_::member<variable>(create_variable(decl_specifier_seq_node, declarator_node), current_access));
+										c.add(class_::member<variable>(create_variable(decl_specifier_seq_node, declarator_node), current_access));
 									}
 								}
 								else
 								{
-									new_class.add(class_::constructor(std::move(create_parameters(declarator_node)), current_access));
+									c.add(class_::constructor(std::move(create_parameters(declarator_node)), current_access));
 								}
 							}
 						}
@@ -811,10 +818,6 @@ semantic_analyzer::create_class(const class_specifier& syntax_node)
 			}
 		}
 	}
-
-	scope_cursor_.leave_scope();
-
-	return new_class;
 }
 
 function
@@ -1025,6 +1028,10 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 							{
 								return_type = found_class;
 							}
+						}
+						else
+						{
+							throw std::runtime_error((identifier_node.value() + " not found").c_str());
 						}
 					}
 				}
