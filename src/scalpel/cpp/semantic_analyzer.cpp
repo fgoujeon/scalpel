@@ -1402,7 +1402,10 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 		{
 			throw std::runtime_error("Semantic analysis error: incorrect type");
 		}
+	}
 
+	if(return_type)
+	{
 		if(const_qualified)
 		{
 			return_type = &add_custom_type(std::move(std::unique_ptr<const_>(new const_(*return_type))));
