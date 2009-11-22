@@ -28,10 +28,17 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-function::function(const std::string& name, const type& return_type, std::list<parameter>&& parameters):
+function::function
+(
+	const std::string& name,
+	const type& return_type,
+	std::list<parameter>&& parameters,
+	bool is_static_specified
+):
     name_(name),
-	return_type_(return_type),
-	parameters_(std::move(parameters))
+	return_type_(&return_type),
+	parameters_(std::move(parameters)),
+	static_specified_(is_static_specified)
 {
 	std::cout << "New function " << name << "\n";
 }
@@ -41,7 +48,8 @@ function::function(function&& f):
 	name_(std::move(f.name_)),
 	statement_block_(std::move(f.statement_block_)),
 	return_type_(f.return_type_),
-	parameters_(std::move(f.parameters_))
+	parameters_(std::move(f.parameters_)),
+	static_specified_(f.static_specified_)
 {
 }
 
@@ -50,6 +58,10 @@ function::operator=(function&& f)
 {
 	scope_impl_ = std::move(f.scope_impl_);
 	name_ = std::move(f.name_);
+	statement_block_ = std::move(f.statement_block_);
+	return_type_ = f.return_type_;
+	parameters_ = std::move(f.parameters_);
+	static_specified_ = f.static_specified_;
 
 	return *this;
 }
@@ -105,13 +117,19 @@ function::named_entities() const
 const type&
 function::return_type() const
 {
-	return return_type_;
+	return *return_type_;
 }
 
 const std::list<function::parameter>&
 function::parameters() const
 {
 	return parameters_;
+}
+
+bool
+function::static_specified() const
+{
+	return static_specified_;
 }
 
 

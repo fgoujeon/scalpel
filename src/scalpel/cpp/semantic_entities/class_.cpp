@@ -227,7 +227,7 @@ class_::constructor::constructor
 	const bool is_inline_specified,
 	const bool is_explicit_specified
 ):
-	impl_("_", built_in_type::void_, std::move(parameters)),
+	impl_("_", built_in_type::void_, std::move(parameters), false),
 	access_(access),
 	inline_specified_(is_inline_specified),
 	explicit_specified_(is_explicit_specified)

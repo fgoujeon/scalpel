@@ -865,7 +865,13 @@ semantic_analyzer::create_function(const decl_specifier_seq& decl_specifier_seq_
 	//get the function's parameter list
 	std::list<function::parameter> parameters = create_parameters(declarator_node);
 
-	return function(name, return_type, std::move(parameters));
+	return function
+	(
+		name,
+		return_type,
+		std::move(parameters),
+		has_static_specifier(decl_specifier_seq_node)
+	);
 }
 
 function::parameters_t

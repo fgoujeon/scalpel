@@ -206,6 +206,8 @@ print
 	std::cout << indent(indent_level) << "<function";
 	std::cout << " name=\"" << f.entity().name() << "\"";
 	print(f.access());
+	if(f.entity().static_specified())
+		std::cout << " static=\"true\"";
 	if(f.const_qualified())
 		std::cout << " const=\"true\"";
 	if(f.volatile_qualified())
@@ -290,6 +292,8 @@ print
 {
 	std::cout << indent(indent_level) << "<function";
 	std::cout << " name=\"" << f.name() << "\"";
+	if(f.static_specified())
+		std::cout << " static=\"true\"";
 	std::cout << ">\n";
 
 	std::cout << indent(indent_level + 1) << "<return_type>\n";

@@ -51,7 +51,13 @@ class function:
 
 		typedef std::list<parameter> parameters_t;
 
-        function(const std::string& name, const type& return_type, std::list<parameter>&& parameters);
+        function
+		(
+			const std::string& name,
+			const type& return_type,
+			std::list<parameter>&& parameters,
+			bool is_static_specified
+		);
 
 		//move constructor
 		function(function&& f);
@@ -98,12 +104,16 @@ class function:
 		const parameters_t&
 		parameters() const;
 
+		bool
+		static_specified() const;
+
     private:
 		scope_impl scope_impl_;
         std::string name_;
 		statement_block statement_block_;
-		const type& return_type_;
+		const type* return_type_;
 		std::list<parameter> parameters_;
+		bool static_specified_;
 };
 
 class function::parameter
