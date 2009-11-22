@@ -139,5 +139,20 @@ is_function_declaration(const declarator& declarator_node)
 	return false;
 }
 
+bool
+is_pure_specified(const syntax_nodes::member_declarator_declarator& member_declarator_declarator_node)
+{
+	if(auto opt_last_part_node = get_last_part(member_declarator_declarator_node))
+	{
+		auto last_part_node = *opt_last_part_node;
+		if(get<pure_specifier>(&last_part_node))
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 }}}} //namespace scalpel::cpp::detail::semantic_analysis
 

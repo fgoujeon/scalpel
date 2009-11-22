@@ -66,6 +66,13 @@ get_declarator(const member_declarator_declarator& o)
 	return get<0>(o);
 }
 
+inline
+const optional_node<member_declarator_declarator_last_part>&
+get_last_part(const member_declarator_declarator& o)
+{
+	return get<2>(o);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif

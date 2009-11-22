@@ -798,7 +798,8 @@ semantic_analyzer::fill_class(class_& c, const class_specifier& class_specifier_
 													is_qualified<str::const_>(declarator_node),
 													is_qualified<str::volatile_>(declarator_node),
 													is_specified<str::inline_>(decl_specifier_seq_node),
-													is_specified<str::virtual_>(decl_specifier_seq_node)
+													is_specified<str::virtual_>(decl_specifier_seq_node),
+													is_pure_specified(member_declarator_declarator_node)
 												)
 											);
 										}

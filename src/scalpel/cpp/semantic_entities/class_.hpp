@@ -314,7 +314,8 @@ class class_::member<function>
 			bool is_const_qualified,
 			bool is_volatile_qualified,
 			bool is_inline_specified,
-			bool is_virtual_specified
+			bool is_virtual_specified,
+			bool is_pure_specified
 		);
 
 		member(member&& o);
@@ -340,6 +341,9 @@ class class_::member<function>
 		bool
 		virtual_specified() const;
 
+		bool
+		pure_specified() const;
+
 	private:
 		function entity_;
 		class_::access access_;
@@ -347,6 +351,7 @@ class class_::member<function>
 		bool volatile_qualified_;
 		bool inline_specified_;
 		bool virtual_specified_;
+		bool pure_specified_;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

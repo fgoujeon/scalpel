@@ -214,6 +214,8 @@ print
 		std::cout << " inline=\"true\"";
 	if(f.virtual_specified())
 		std::cout << " virtual=\"true\"";
+	if(f.pure_specified())
+		std::cout << " pure=\"true\"";
 	std::cout << ">\n";
 
 	std::cout << indent(indent_level + 1) << "<return_type>\n";

@@ -44,6 +44,9 @@ get_function_name(const syntax_nodes::declarator& declarator_node);
 bool
 is_function_declaration(const syntax_nodes::declarator& declarator_node);
 
+bool
+is_pure_specified(const syntax_nodes::member_declarator_declarator& member_declarator_declarator_node);
+
 
 
 template<const std::string& Qualifier>

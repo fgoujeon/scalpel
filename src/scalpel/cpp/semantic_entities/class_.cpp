@@ -275,14 +275,16 @@ class_::member<function>::member
 	bool is_const_qualified,
 	bool is_volatile_qualified,
 	bool is_inline_specified,
-	bool is_virtual_specified
+	bool is_virtual_specified,
+	bool is_pure_specified
 ):
 	entity_(std::move(entity)),
 	access_(a),
 	const_qualified_(is_const_qualified),
 	volatile_qualified_(is_volatile_qualified),
 	inline_specified_(is_inline_specified),
-	virtual_specified_(is_virtual_specified)
+	virtual_specified_(is_virtual_specified),
+	pure_specified_(is_pure_specified)
 {
 }
 
@@ -292,7 +294,8 @@ class_::member<function>::member(member<function>&& o):
 	const_qualified_(o.const_qualified_),
 	volatile_qualified_(o.volatile_qualified_),
 	inline_specified_(o.inline_specified_),
-	virtual_specified_(o.virtual_specified_)
+	virtual_specified_(o.virtual_specified_),
+	pure_specified_(o.pure_specified_)
 {
 }
 
@@ -336,6 +339,12 @@ bool
 class_::member<function>::virtual_specified() const
 {
 	return virtual_specified_;
+}
+
+bool
+class_::member<function>::pure_specified() const
+{
+	return pure_specified_;
 }
 
 }}} //namespace scalpel::cpp::semantic_entities
