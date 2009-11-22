@@ -28,6 +28,13 @@ namespace scalpel { namespace cpp { namespace detail { namespace semantic_analys
 {
 
 //
+//class related
+//
+
+semantic_entities::class_::access
+get_access(const syntax_nodes::access_specifier access_specifier_node);
+
+//
 //function related
 //
 

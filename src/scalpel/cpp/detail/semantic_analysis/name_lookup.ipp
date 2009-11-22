@@ -24,7 +24,7 @@ namespace scalpel { namespace cpp { namespace detail { namespace semantic_analys
 {
 
 template<class RangeT>
-const semantic_entities::named_entity*
+semantic_entities::named_entity*
 find_unqualified_name
 (
 	RangeT scope_stack,
@@ -35,7 +35,7 @@ find_unqualified_name
 
 
 template<class RangeT>
-const semantic_entities::named_entity*
+semantic_entities::named_entity*
 find_unqualified_name
 (
 	RangeT scope_stack,
@@ -48,7 +48,7 @@ find_unqualified_name
 
 
 template<class RangeT>
-const semantic_entities::named_entity*
+semantic_entities::named_entity*
 find_unqualified_name
 (
 	RangeT scope_stack,
@@ -58,7 +58,7 @@ find_unqualified_name
 {
 	using namespace semantic_entities;
 
-	const scope& current_scope = scope_stack.back();
+	scope& current_scope = scope_stack.back();
 
     /*
     1. Current scope
@@ -105,7 +105,7 @@ find_unqualified_name
 
 			if(!enclosing_scope_stack.empty())
 			{
-				const semantic_entities::named_entity* found_symbol = find_unqualified_name(enclosing_scope_stack, name, true);
+				semantic_entities::named_entity* found_symbol = find_unqualified_name(enclosing_scope_stack, name, true);
 				if(found_symbol)
 				{
 					return found_symbol;

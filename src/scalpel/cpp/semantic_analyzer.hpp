@@ -289,6 +289,12 @@ class semantic_analyzer
 			const syntax_nodes::declarator& declarator_node
 		);
 
+		semantic_entities::class_&
+		find_class
+		(
+			const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node
+		);
+
 		std::list<semantic_entities::variable>
 		create_variables
 		(

@@ -47,14 +47,19 @@ class class_:
 	public boost::noncopyable
 {
     public:
+		class base_class;
 		class constructor;
 
 		template<class EntityT>
 		class member;
 
-		typedef std::list<member<class_>> classes_t;
-		typedef classes_t::const_iterator class_const_iterator;
-		typedef boost::iterator_range<class_const_iterator> class_const_iterator_range;
+		typedef std::list<base_class> base_classes_t;
+		typedef base_classes_t::const_iterator base_class_const_iterator;
+		typedef boost::iterator_range<base_class_const_iterator> base_class_const_iterator_range;
+
+		typedef std::list<member<class_>> nested_classes_t;
+		typedef nested_classes_t::const_iterator nested_class_const_iterator;
+		typedef boost::iterator_range<nested_class_const_iterator> nested_class_const_iterator_range;
 
 		typedef std::list<constructor> constructors_t;
 		typedef constructors_t::const_iterator constructor_const_iterator;
@@ -87,7 +92,7 @@ class class_:
 		 */
 		class_(class_&& c);
 
-		/*
+		/**
 		 * Move assignment operator.
 		 */
 		const class_&
@@ -126,8 +131,11 @@ class class_:
 		named_entity_const_iterator_range
 		named_entities() const;
 
-		class_const_iterator_range
-		classes() const;
+		base_class_const_iterator_range
+		base_classes() const;
+
+		nested_class_const_iterator_range
+		nested_classes() const;
 
 		constructor_const_iterator_range
 		constructors() const;
@@ -137,6 +145,9 @@ class class_:
 
 		variable_const_iterator_range
 		variables() const;
+
+        void
+        add(base_class&& c);
 
         /**
         Adds a nested class.
@@ -156,10 +167,38 @@ class class_:
     private:
 		scope_impl scope_impl_;
         std::string name_;
-		classes_t classes_;
+		base_classes_t base_classes_;
+		nested_classes_t nested_classes_;
 		constructors_t constructors_;
 		functions_t functions_;
 		variables_t variables_;
+};
+
+class class_::base_class
+{
+	public:
+		base_class
+		(
+			class_& base,
+			class_::access access,
+			const bool is_virtual_specified
+		);
+
+		base_class(base_class&& o);
+
+		const class_&
+		base() const;
+
+		class_::access
+		access() const;
+
+		bool
+		virtual_specified() const;
+
+	private:
+		class_& base_;
+		class_::access access_;
+		bool virtual_specified_;
 };
 
 class class_::constructor

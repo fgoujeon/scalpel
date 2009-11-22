@@ -37,7 +37,7 @@ class_::class_(const std::string& name):
 class_::class_(class_&& c):
 	scope_impl_(std::move(c.scope_impl_)),
 	name_(std::move(c.name_)),
-	classes_(std::move(c.classes_)),
+	nested_classes_(std::move(c.nested_classes_)),
 	constructors_(std::move(c.constructors_)),
 	functions_(std::move(c.functions_)),
 	variables_(std::move(c.variables_))
@@ -49,7 +49,7 @@ class_::operator=(class_&& c)
 {
 	scope_impl_ = std::move(c.scope_impl_);
 	name_ = std::move(c.name_);
-	classes_ = std::move(c.classes_);
+	nested_classes_ = std::move(c.nested_classes_);
 	constructors_ = std::move(c.constructors_);
 	functions_ = std::move(c.functions_);
 	variables_ = std::move(c.variables_);
@@ -105,10 +105,16 @@ class_::named_entities() const
 	return scope_impl_.named_entities();
 }
 
-class_::class_const_iterator_range
-class_::classes() const
+class_::base_class_const_iterator_range
+class_::base_classes() const
 {
-	return classes_;
+	return base_classes_;
+}
+
+class_::nested_class_const_iterator_range
+class_::nested_classes() const
+{
+	return nested_classes_;
 }
 
 class_::constructor_const_iterator_range
@@ -130,11 +136,17 @@ class_::variables() const
 }
 
 void
+class_::add(base_class&& c)
+{
+	base_classes_.push_back(std::move(c));
+}
+
+void
 class_::add(member<class_>&& nested_class)
 {
-	classes_.push_back(std::move(nested_class));
+	nested_classes_.push_back(std::move(nested_class));
 
-	class_& member_ref = classes_.back().entity();
+	class_& member_ref = nested_classes_.back().entity();
 
 	scope_impl_.add_to_scopes(member_ref);
 	scope_impl_.add_to_named_entities(member_ref);
@@ -165,6 +177,45 @@ class_::add(member<variable>&& member)
 	variable& member_ref = variables_.back().entity();
 
 	scope_impl_.add_to_named_entities(member_ref);
+}
+
+
+
+class_::base_class::base_class
+(
+	class_& base,
+	class_::access access,
+	const bool is_virtual_specified
+):
+	base_(base),
+	access_(access),
+	virtual_specified_(is_virtual_specified)
+{
+}
+
+class_::base_class::base_class(base_class&& o):
+	base_(o.base_),
+	access_(o.access_),
+	virtual_specified_(o.virtual_specified_)
+{
+}
+
+const class_&
+class_::base_class::base() const
+{
+	return base_;
+}
+
+class_::access
+class_::base_class::access() const
+{
+	return access_;
+}
+
+bool
+class_::base_class::virtual_specified() const
+{
+	return virtual_specified_;
 }
 
 

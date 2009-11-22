@@ -29,6 +29,39 @@ namespace scalpel { namespace cpp { namespace detail { namespace semantic_analys
 using namespace syntax_nodes;
 using namespace semantic_entities;
 
+//
+//class related
+//
+
+class_::access
+get_access(const syntax_nodes::access_specifier access_specifier_node)
+{
+	if(get<predefined_text_node<str::public_>>(&access_specifier_node))
+	{
+		return class_::access::PUBLIC;
+	}
+	else if(get<predefined_text_node<str::protected_>>(&access_specifier_node))
+	{
+		return class_::access::PROTECTED;
+	}
+	else if(get<predefined_text_node<str::private_>>(&access_specifier_node))
+	{
+		return class_::access::PRIVATE;
+	}
+	else
+	{
+		assert(false);
+	}
+
+	return class_::access::PRIVATE;
+}
+
+
+
+//
+//function related
+//
+
 const std::string&
 get_function_name(const declarator& declarator_node)
 {

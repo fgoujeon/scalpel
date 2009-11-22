@@ -168,7 +168,19 @@ print
 		std::cout << " access=\"" << access << "\"";
 	std::cout << ">\n";
 
-	for(auto i = c.classes().begin(); i != c.classes().end(); ++i)
+	for(auto i = c.base_classes().begin(); i != c.base_classes().end(); ++i)
+	{
+		const class_::base_class& base = *i;
+
+		std::cout << indent(indent_level + 1) << "<base_class";
+		std::cout << " id=\"" << &base.base() << "\"";
+		print(base.access());
+		if(base.virtual_specified())
+			std::cout << " virtual=\"true\"";
+		std::cout << "/>\n";
+	}
+
+	for(auto i = c.nested_classes().begin(); i != c.nested_classes().end(); ++i)
 		print(*i, indent_level + 1);
 
 	for(auto i = c.constructors().begin(); i != c.constructors().end(); ++i)

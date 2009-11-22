@@ -51,6 +51,27 @@ typedef
 	base_specifier
 ;
 
+inline
+bool
+has_virtual_keyword(const base_specifier& o)
+{
+	return get<0>(o) || get<4>(o);
+}
+
+inline
+const optional_node<access_specifier>&
+get_access_specifier(const base_specifier& o)
+{
+	return get<2>(o);
+}
+
+inline
+const nested_identifier_or_template_id&
+get_nested_identifier_or_template_id(const base_specifier& o)
+{
+	return get<6>(o);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif

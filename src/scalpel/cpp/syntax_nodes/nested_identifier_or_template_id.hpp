@@ -46,7 +46,21 @@ typedef
 ;
 
 inline
-identifier_or_template_id
+bool
+has_leading_double_colon(const nested_identifier_or_template_id& o)
+{
+	return get<0>(o);
+}
+
+inline
+const optional_node<nested_name_specifier>&
+get_nested_name_specifier(const nested_identifier_or_template_id& o)
+{
+	return get<2>(o);
+}
+
+inline
+const identifier_or_template_id&
 get_identifier_or_template_id(const nested_identifier_or_template_id& o)
 {
 	return get<4>(o);

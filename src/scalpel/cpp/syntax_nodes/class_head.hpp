@@ -67,6 +67,13 @@ get_identifier_or_template_id(const class_head& o)
 	return get<4>(o);
 }
 
+inline
+const optional_node<base_clause>&
+get_base_clause(const class_head& o)
+{
+	return get<6>(o);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif

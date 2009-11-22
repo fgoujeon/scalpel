@@ -693,13 +693,45 @@ semantic_analyzer::create_class(const class_specifier& syntax_node)
 void
 semantic_analyzer::fill_class(class_& c, const class_specifier& class_specifier_node)
 {
-	//default current_access
 	auto class_head_node = get_class_head(class_specifier_node);
-	auto class_key_node = get_class_key(class_head_node);
-	class_::access current_access = class_::access::PUBLIC;
-	if(get<predefined_text_node<str::class_>>(&class_key_node)) //if the syntax node represents a class (neither struct nor union)...
+
+	//get base classes
+	if(auto opt_base_clause_node = get_base_clause(class_head_node))
 	{
-		current_access = class_::access::PRIVATE; //... the default access is private
+		auto base_specifier_list_node = get_base_specifier_list(*opt_base_clause_node);
+		for
+		(
+			auto i = base_specifier_list_node.begin();
+			i != base_specifier_list_node.end();
+			++i
+		)
+		{
+			auto base_specifier_node = i->main_node();
+
+			//is it virtual inheritance?
+			bool is_virtual = has_virtual_keyword(base_specifier_node);
+
+			//get base class access
+			class_::access access = class_::access::PRIVATE; //if nothing is specified, access is private
+			if(auto opt_access_specifier_node = get_access_specifier(base_specifier_node))
+			{
+				access = get_access(*opt_access_specifier_node);
+			}
+
+			//get base class
+			auto nested_identifier_or_template_id_node = get_nested_identifier_or_template_id(base_specifier_node);
+			class_& base = find_class(nested_identifier_or_template_id_node);
+
+			c.add(class_::base_class(base, access, is_virtual));
+		}
+	}
+
+	//default current_access
+	auto class_key_node = get_class_key(class_head_node);
+	class_::access current_access = class_::access::PUBLIC; //the default current_access is public...
+	if(get<predefined_text_node<str::class_>>(&class_key_node)) //... unless the syntax node represents a class (neither a struct nor a union)
+	{
+		current_access = class_::access::PRIVATE;
 	}
 
 	//get the members of the class
@@ -810,23 +842,7 @@ semantic_analyzer::fill_class(class_& c, const class_specifier& class_specifier_
 			else if(auto opt_member_specification_access_specifier_node = get<member_specification_access_specifier>(&part))
 			{
 				auto access_specifier_node = get_access_specifier(*opt_member_specification_access_specifier_node);
-
-				if(get<predefined_text_node<str::public_>>(&access_specifier_node))
-				{
-					current_access = class_::access::PUBLIC;
-				}
-				else if(get<predefined_text_node<str::protected_>>(&access_specifier_node))
-				{
-					current_access = class_::access::PROTECTED;
-				}
-				else if(get<predefined_text_node<str::private_>>(&access_specifier_node))
-				{
-					current_access = class_::access::PRIVATE;
-				}
-				else
-				{
-					assert(false);
-				}
+				current_access = get_access(access_specifier_node);
 			}
 			else
 			{
@@ -1442,6 +1458,35 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 		throw std::runtime_error("Semantic analysis error: type not found");
 	}
 	return *return_type;
+}
+
+semantic_entities::class_&
+semantic_analyzer::find_class
+(
+	const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node
+)
+{
+	auto identifier_or_template_id_node = get_identifier_or_template_id(nested_identifier_or_template_id_node);
+	if(auto opt_identifier_node = get<identifier>(&identifier_or_template_id_node))
+	{
+		auto identifier_node = *opt_identifier_node;
+		if(auto found_name = name_lookup::find_unqualified_name(scope_cursor_.scope_stack(), identifier_node.value()))
+		{
+			if(class_* found_class = dynamic_cast<class_*>(found_name))
+			{
+				return *found_class;
+			}
+		}
+	}
+	else if(auto template_id_node = get<template_id>(&identifier_or_template_id_node))
+	{
+	}
+	else
+	{
+		assert(false);
+	}
+
+	throw std::runtime_error("Type not found");
 }
 
 std::list<variable>

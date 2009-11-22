@@ -30,7 +30,7 @@ namespace scalpel { namespace cpp { namespace detail { namespace semantic_analys
 {
 
 template<class RangeT>
-const semantic_entities::named_entity*
+semantic_entities::named_entity*
 find_unqualified_name
 (
 	RangeT scope_stack,
