@@ -24,7 +24,7 @@ namespace scalpel { namespace cpp { namespace detail { namespace semantic_analys
 {
 
 template<class RangeT>
-semantic_entities::named_entity*
+semantic_entities::named_entity&
 find_name
 (
 	RangeT scope_stack,
@@ -40,12 +40,12 @@ find_name
 	if(opt_nested_name_specifier_node)
 	{
 		auto nested_name_specifier_node = *opt_nested_name_specifier_node;
-		scope* found_scope = find_scope(scope_stack, nested_name_specifier_node);
+		scope& found_scope = find_scope(scope_stack, nested_name_specifier_node);
 
 		if(auto opt_identifier_node = get<identifier>(&identifier_or_template_id_node))
 		{
 			auto identifier_node = *opt_identifier_node;
-			return find_name(*found_scope, identifier_node.value());
+			return *find_name(found_scope, identifier_node.value());
 		}
 		else if(auto template_id_node = get<template_id>(&identifier_or_template_id_node))
 		{
@@ -60,7 +60,7 @@ find_name
 		if(auto opt_identifier_node = get<identifier>(&identifier_or_template_id_node))
 		{
 			auto identifier_node = *opt_identifier_node;
-			return find_unqualified_name(scope_stack, identifier_node.value());
+			return find_name(scope_stack, identifier_node.value());
 		}
 		else if(auto template_id_node = get<template_id>(&identifier_or_template_id_node))
 		{
@@ -77,25 +77,25 @@ find_name
 
 
 template<class RangeT>
-semantic_entities::named_entity*
-find_unqualified_name
+semantic_entities::named_entity&
+find_name
 (
 	RangeT scope_stack,
 	const std::string& name
 )
 {
-    return find_unqualified_name(scope_stack, name, true);
+    return *find_name(scope_stack, name, true);
 }
 
 
 
 template<class RangeT>
 semantic_entities::named_entity*
-find_unqualified_name
+find_name
 (
 	RangeT scope_stack,
 	const std::string& name,
-	bool recursive
+	bool recursive_ascent
 )
 {
 	using namespace semantic_entities;
@@ -111,33 +111,31 @@ find_unqualified_name
 	}
 
     /*
-    2. Enclosing scopes (recursive call)
+    2. Enclosing scopes (recursive ascent call)
     */
-    {
-        if
-        (
-            recursive &&
-            scope_stack.size() >= 2 //is there at least an enclosing scope?
-        )
-        {
-			auto last_but_one_it = scope_stack.end();
-			--last_but_one_it;
-			RangeT enclosing_scope_stack(scope_stack.begin(), last_but_one_it);
+	if
+	(
+		recursive_ascent &&
+		scope_stack.size() >= 2 //is there at least an enclosing scope?
+	)
+	{
+		auto last_but_one_it = scope_stack.end();
+		--last_but_one_it;
+		RangeT enclosing_scope_stack(scope_stack.begin(), last_but_one_it);
 
-			if(!enclosing_scope_stack.empty())
+		if(!enclosing_scope_stack.empty())
+		{
+			semantic_entities::named_entity* found_name = find_name(enclosing_scope_stack, name, true);
+			if(found_name)
 			{
-				semantic_entities::named_entity* found_symbol = find_unqualified_name(enclosing_scope_stack, name, true);
-				if(found_symbol)
-				{
-					return found_symbol;
-				}
+				return found_name;
 			}
-        }
-    }
+		}
+	}
 
 
 //    /*
-//    3. Base classes (non-recursive)
+//    3. Base classes (non-recursive_ascent)
 //    */
 //    {
 //        const std::list<base_specifier>& base_specifiers = current_scope->get_base_specifiers();
@@ -150,7 +148,7 @@ find_unqualified_name
 //        {
 //            const base_specifier& base_spec = *i;
 //            const std::shared_ptr<class_> base_class = base_spec.get_class();
-//            const std::shared_ptr<semantic_entities::named_entity> found_symbol = find_unqualified_name(base_class, name, false);
+//            const std::shared_ptr<semantic_entities::named_entity> found_symbol = find_name(base_class, name, false);
 //            if(found_symbol)
 //            {
 //                return found_symbol;
@@ -165,7 +163,7 @@ find_unqualified_name
 
 
 template<class RangeT>
-semantic_entities::scope*
+semantic_entities::scope&
 find_scope
 (
 	RangeT scope_stack,
@@ -174,9 +172,6 @@ find_scope
 {
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
-
-	std::cout << "find_scope()\n";
-	//std::cout << "nested_name_specifier = " << a_nested_name_specifier.value() << "\n";
 
 	scope* found_scope = 0;
 
@@ -190,7 +185,7 @@ find_scope
 		const std::string& scope_name = an_identifier->value();
 
 		//find the scope which has that identifier in the current scope and in the enclosing scopes
-		found_scope = recursive_ascent_find_scope(scope_stack, scope_name);
+		found_scope = &find_scope(scope_stack, scope_name);
 	}
 
 	//if the first part scope has been found, go on with the next parts
@@ -222,24 +217,20 @@ find_scope
 		}
 	}
 
-	return found_scope;
+	return *found_scope;
 }
 
 
 
 template<class RangeT>
-semantic_entities::scope*
-recursive_ascent_find_scope
+semantic_entities::scope&
+find_scope
 (
 	RangeT scope_stack,
 	const std::string& scope_name
 )
 {
 	using namespace semantic_entities;
-
-	std::cout << "Try to find scope " << scope_name << "\n";
-
-	scope* found_scope = 0;
 
 	if(!scope_stack.empty())
 	{
@@ -248,11 +239,14 @@ recursive_ascent_find_scope
 		{
 			--it;
 			scope& current_scope = *it;
-			found_scope = find_scope(current_scope, scope_name);
+			if(scope* found_scope = find_scope(current_scope, scope_name))
+			{
+				return *found_scope;
+			}
 		}
 	}
 
-	return found_scope;
+	throw std::runtime_error("Scope " + scope_name + " not found");
 }
 
 }}}}} //namespace scalpel::cpp::detail::semantic_analysis::name_lookup

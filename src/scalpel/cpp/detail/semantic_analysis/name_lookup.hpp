@@ -34,11 +34,31 @@ namespace scalpel { namespace cpp { namespace detail { namespace semantic_analys
 Find qualified name following standard C++ name-lookup rules.
 */
 template<class RangeT>
-semantic_entities::named_entity*
+semantic_entities::named_entity&
 find_name
 (
 	RangeT scope_stack,
 	const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node
+);
+
+/**
+Find unqualified name following standard C++ name-lookup rules.
+*/
+template<class RangeT>
+semantic_entities::named_entity&
+find_name
+(
+	RangeT scope_stack,
+	const std::string& name
+);
+
+template<class RangeT>
+semantic_entities::named_entity*
+find_name
+(
+	RangeT scope_stack,
+	const std::string& name,
+	bool recursive_ascent
 );
 
 /**
@@ -51,43 +71,35 @@ find_name
 	const std::string& name
 );
 
+/**
+Find nested scope following standard C++ name-lookup rules.
+*/
 template<class RangeT>
-semantic_entities::named_entity*
-find_unqualified_name
-(
-	RangeT scope_stack,
-	const std::string& name
-);
-
-template<class RangeT>
-semantic_entities::scope*
+semantic_entities::scope&
 find_scope
 (
 	RangeT scope_stack,
 	const syntax_nodes::nested_name_specifier& nested_name_specifier
 );
 
+/**
+Find scope following standard C++ name-lookup rules.
+*/
+template<class RangeT>
+semantic_entities::scope&
+find_scope
+(
+	RangeT scope_stack,
+	const std::string& scope_name
+);
+
+/**
+Find scope in the given parent scope, not recursively.
+*/
 semantic_entities::scope*
 find_scope
 (
 	semantic_entities::scope& parent_scope,
-	const std::string& scope_name
-);
-
-template<class RangeT>
-semantic_entities::named_entity*
-find_unqualified_name
-(
-	RangeT scope_stack,
-	const std::string& name,
-	bool recursive
-);
-
-template<class RangeT>
-semantic_entities::scope*
-recursive_ascent_find_scope
-(
-	RangeT scope_stack,
 	const std::string& scope_name
 );
 

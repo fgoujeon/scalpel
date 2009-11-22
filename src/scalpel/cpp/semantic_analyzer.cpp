@@ -253,11 +253,11 @@ semantic_analyzer::analyze(const function_definition& function_definition_node)
 
 					if(leading_double_colon)
 					{
-						enclosing_scope = name_lookup::find_scope(scope_cursor_.global_scope_stack(), a_nested_name_specifier);
+						enclosing_scope = &name_lookup::find_scope(scope_cursor_.global_scope_stack(), a_nested_name_specifier);
 					}
 					else
 					{
-						enclosing_scope = name_lookup::find_scope(scope_cursor_.scope_stack(), a_nested_name_specifier);
+						enclosing_scope = &name_lookup::find_scope(scope_cursor_.scope_stack(), a_nested_name_specifier);
 					}
 				}
 			}
@@ -995,21 +995,10 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 				if(auto opt_nested_identifier_or_template_id_node = get<nested_identifier_or_template_id>(&simple_type_specifier_node))
 				{
 					auto nested_identifier_or_template_id_node = *opt_nested_identifier_or_template_id_node;
-					auto identifier_or_template_id_node = get_identifier_or_template_id(nested_identifier_or_template_id_node);
-					if(auto opt_identifier_node = get<identifier>(&identifier_or_template_id_node))
+					named_entity& found_name = name_lookup::find_name(scope_cursor_.scope_stack(), nested_identifier_or_template_id_node);
+					if(auto found_class = dynamic_cast<const class_*>(&found_name))
 					{
-						auto identifier_node = *opt_identifier_node;
-						if(auto found_name = name_lookup::find_unqualified_name(scope_cursor_.scope_stack(), identifier_node.value()))
-						{
-							if(auto found_class = dynamic_cast<const class_*>(found_name))
-							{
-								return_type = found_class;
-							}
-						}
-						else
-						{
-							throw std::runtime_error((identifier_node.value() + " not found").c_str());
-						}
+						return_type = found_class;
 					}
 				}
 				else if(auto opt_built_in_type_specifier_node = get<built_in_type_specifier>(&simple_type_specifier_node))
@@ -1467,12 +1456,11 @@ semantic_analyzer::find_class
 	const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node
 )
 {
-	if(named_entity* found_name = name_lookup::find_name(scope_cursor_.scope_stack(), nested_identifier_or_template_id_node))
+	named_entity& found_name = name_lookup::find_name(scope_cursor_.scope_stack(), nested_identifier_or_template_id_node);
+
+	if(class_* found_class = dynamic_cast<class_*>(&found_name))
 	{
-		if(class_* found_class = dynamic_cast<class_*>(found_name))
-		{
-			return *found_class;
-		}
+		return *found_class;
 	}
 
 	throw std::runtime_error("Type not found");
