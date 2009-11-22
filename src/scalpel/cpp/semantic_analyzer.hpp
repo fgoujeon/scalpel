@@ -263,12 +263,6 @@ class semantic_analyzer
         void
 		analyze(const syntax_nodes::while_statement& syntax_node);
 
-		bool
-		is_constructor_declaration(const syntax_nodes::declarator& declarator_node);
-
-		bool
-		is_function_declaration(const syntax_nodes::declarator& declarator_node);
-
 		const semantic_entities::type&
 		add_custom_type(std::unique_ptr<semantic_entities::type> t);
 
@@ -284,17 +278,6 @@ class semantic_analyzer
 			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
 			const syntax_nodes::declarator& declarator_node
 		);
-
-		const std::string&
-		get_function_name(const syntax_nodes::declarator& declarator_node);
-
-		template<const std::string& Qualifier>
-		bool
-		is_qualified(const syntax_nodes::declarator& declarator_node);
-
-		template<const std::string& Specifier>
-		bool
-		is_specified(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node);
 
 		semantic_entities::function::parameters_t
 		create_parameters(const syntax_nodes::declarator& declarator_node);
@@ -362,67 +345,6 @@ semantic_analyzer::analyze_list(const syntax_nodes::list_node<T, SeparatorNode>&
     {
         analyze(i->main_node());
     }
-}
-
-template<const std::string& Qualifier>
-bool
-semantic_analyzer::is_qualified(const syntax_nodes::declarator& declarator_node)
-{
-	using namespace syntax_nodes;
-
-	auto direct_declarator_node = get_direct_declarator(declarator_node);
-	if(auto opt_last_part_seq_node = get_last_part_seq(direct_declarator_node))
-	{
-		auto last_part_seq_node = *opt_last_part_seq_node;
-		for(auto i = last_part_seq_node.begin(); i != last_part_seq_node.end(); ++i)
-		{
-			auto last_part_node = i->main_node();
-			if(auto opt_function_part_node = get<direct_declarator_function_part>(&last_part_node))
-			{
-				auto function_part_node = *opt_function_part_node;
-				if(auto opt_cv_qualifier_seq_node = get_cv_qualifier_seq(function_part_node))
-				{
-					auto cv_qualifier_seq_node = *opt_cv_qualifier_seq_node;
-					for(auto j = cv_qualifier_seq_node.begin(); j != cv_qualifier_seq_node.end(); ++j)
-					{
-						auto cv_qualifier_node = j->main_node();
-						if(get<predefined_text_node<Qualifier>>(&cv_qualifier_node))
-						{
-							return true;
-						}
-					}
-				}
-			}
-		}
-	}
-
-	return false;
-}
-
-template<const std::string& Specifier>
-bool
-semantic_analyzer::is_specified(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node)
-{
-	using namespace syntax_nodes;
-
-	for
-	(
-		auto i = decl_specifier_seq_node.begin();
-		i < decl_specifier_seq_node.end();
-		++i
-	)
-	{
-		const decl_specifier& decl_specifier_node = i->main_node();
-
-		if(auto opt_function_specifier_node = get<function_specifier>(&decl_specifier_node))
-		{
-			auto function_specifier_node = *opt_function_specifier_node;
-			if(get<predefined_text_node<Specifier>>(&function_specifier_node))
-				return true;
-		}
-	}
-
-	return false;
 }
 
 }} //namespace scalpel::cpp

@@ -23,6 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <iostream>
 #include <stdexcept>
 #include "detail/semantic_analysis/name_lookup.hpp"
+#include "detail/semantic_analysis/basic_functions.hpp"
 
 namespace scalpel { namespace cpp
 {
@@ -661,27 +662,6 @@ semantic_analyzer::analyze(const while_statement&)
 {
 }
 
-bool
-semantic_analyzer::is_function_declaration(const declarator& declarator_node)
-{
-	auto direct_declarator_node = get_direct_declarator(declarator_node);
-	auto direct_declarator_node_last_part_seq = get_last_part_seq(direct_declarator_node);
-	if(direct_declarator_node_last_part_seq)
-	{
-		for(auto j = direct_declarator_node_last_part_seq->begin(); j != direct_declarator_node_last_part_seq->end(); ++j)
-		{
-			const direct_declarator_last_part& last_part = j->main_node();
-
-			if(get<direct_declarator_function_part>(&last_part))
-			{
-				return true;
-			}
-		}
-	}
-
-	return false;
-}
-
 const type&
 semantic_analyzer::add_custom_type(std::unique_ptr<type> t)
 {
@@ -869,62 +849,6 @@ semantic_analyzer::create_function(const decl_specifier_seq& decl_specifier_seq_
 	std::list<function::parameter> parameters = create_parameters(declarator_node);
 
 	return function(name, return_type, std::move(parameters));
-}
-
-const std::string&
-semantic_analyzer::get_function_name(const syntax_nodes::declarator& declarator_node)
-{
-	auto direct_declarator_node = get_direct_declarator(declarator_node);
-	auto first_part_node = get_first_part(direct_declarator_node);
-	auto opt_declarator_id_node = get<declarator_id>(&first_part_node);
-	if(opt_declarator_id_node)
-	{
-		auto opt_id_expression_node = get<id_expression>(opt_declarator_id_node);
-		if(opt_id_expression_node)
-		{
-			auto opt_unqualified_id_node = get<unqualified_id>(opt_id_expression_node);
-			auto opt_qualified_id_node = get<qualified_id>(opt_id_expression_node);
-
-			if(opt_unqualified_id_node)
-			{
-				auto opt_identifier_node = get<identifier>(opt_unqualified_id_node);
-				if(opt_identifier_node)
-				{
-					return opt_identifier_node->value();
-				}
-
-			}
-			else if(opt_qualified_id_node)
-			{
-			//	const qualified_identifier* const a_qualified_identifier =
-			//		boost::get<qualified_identifier>(opt_qualified_id_node)
-			//	;
-				auto opt_qualified_nested_id_node = get<qualified_nested_id>(opt_qualified_id_node);
-			//	const qualified_operator_function_id* const a_qualified_operator_function_id =
-			//	   	boost::get<qualified_operator_function_id>(opt_qualified_id_node)
-			//	;
-			//	const qualified_template_id* const a_qualified_template_id =
-			//	   	boost::get<qualified_template_id>(opt_qualified_id_node)
-			//	;
-
-				if(opt_qualified_nested_id_node)
-				{
-					auto unqualified_id_node = get_unqualified_id(*opt_qualified_nested_id_node);
-					auto opt_identifier_node = get<identifier>(&unqualified_id_node);
-					if(opt_identifier_node)
-					{
-						return opt_identifier_node->value();
-					}
-				}
-			}
-			else
-			{
-				assert(false);
-			}
-		}
-	}
-
-	throw std::runtime_error("Cannot find the function's name");
 }
 
 function::parameters_t
