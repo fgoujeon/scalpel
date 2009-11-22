@@ -183,6 +183,30 @@ print
 	std::cout << indent(indent_level) << "</class>\n";
 }
 
+template<>
+void
+print
+(
+	const class_::member<function>& m,
+	const unsigned int indent_level
+)
+{
+	std::string access;
+	switch(m.access())
+	{
+		case class_::access::PUBLIC:
+			access = "public";
+			break;
+		case class_::access::PROTECTED:
+			access = "protected";
+			break;
+		case class_::access::PRIVATE:
+			access = "private";
+			break;
+	}
+	print(m.entity(), indent_level, access, m.const_qualified(), m.volatile_qualified());
+}
+
 void
 print
 (
@@ -232,13 +256,19 @@ print
 (
 	const function& f,
 	const unsigned int indent_level,
-	const std::string& access
+	const std::string& access,
+	const bool const_qualified,
+	const bool volatile_qualified
 )
 {
 	std::cout << indent(indent_level) << "<function";
 	std::cout << " name=\"" << f.name() << "\"";
 	if(access != "")
 		std::cout << " access=\"" << access << "\"";
+	if(const_qualified)
+		std::cout << " const=\"true\"";
+	if(volatile_qualified)
+		std::cout << " volatile=\"true\"";
 	std::cout << ">\n";
 
 	std::cout << indent(indent_level + 1) << "<return_type>\n";

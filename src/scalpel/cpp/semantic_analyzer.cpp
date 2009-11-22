@@ -762,7 +762,16 @@ semantic_analyzer::fill_class(class_& c, const class_specifier& class_specifier_
 									auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
 									if(is_function_declaration(declarator_node))
 									{
-										c.add(class_::member<function>(create_function(decl_specifier_seq_node, declarator_node), current_access));
+										c.add
+										(
+											class_::member<function>
+											(
+												create_function(decl_specifier_seq_node, declarator_node),
+												current_access,
+												is_const_qualified(declarator_node),
+												is_volatile_qualified(declarator_node)
+											)
+										);
 									}
 									else
 									{
@@ -888,6 +897,70 @@ semantic_analyzer::create_function(const decl_specifier_seq& decl_specifier_seq_
 	std::list<function::parameter> parameters = create_parameters(declarator_node);
 
 	return function(name, return_type, std::move(parameters));
+}
+
+bool
+semantic_analyzer::is_const_qualified(const syntax_nodes::declarator& declarator_node)
+{
+	auto direct_declarator_node = get_direct_declarator(declarator_node);
+	if(auto opt_last_part_seq_node = get_last_part_seq(direct_declarator_node))
+	{
+		auto last_part_seq_node = *opt_last_part_seq_node;
+		for(auto i = last_part_seq_node.begin(); i != last_part_seq_node.end(); ++i)
+		{
+			auto last_part_node = i->main_node();
+			if(auto opt_function_part_node = get<direct_declarator_function_part>(&last_part_node))
+			{
+				auto function_part_node = *opt_function_part_node;
+				if(auto opt_cv_qualifier_seq_node = get_cv_qualifier_seq(function_part_node))
+				{
+					auto cv_qualifier_seq_node = *opt_cv_qualifier_seq_node;
+					for(auto j = cv_qualifier_seq_node.begin(); j != cv_qualifier_seq_node.end(); ++j)
+					{
+						auto cv_qualifier_node = j->main_node();
+						if(get<predefined_text_node<str::const_>>(&cv_qualifier_node))
+						{
+							return true;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return false;
+}
+
+bool
+semantic_analyzer::is_volatile_qualified(const syntax_nodes::declarator& declarator_node)
+{
+	auto direct_declarator_node = get_direct_declarator(declarator_node);
+	if(auto opt_last_part_seq_node = get_last_part_seq(direct_declarator_node))
+	{
+		auto last_part_seq_node = *opt_last_part_seq_node;
+		for(auto i = last_part_seq_node.begin(); i != last_part_seq_node.end(); ++i)
+		{
+			auto last_part_node = i->main_node();
+			if(auto opt_function_part_node = get<direct_declarator_function_part>(&last_part_node))
+			{
+				auto function_part_node = *opt_function_part_node;
+				if(auto opt_cv_qualifier_seq_node = get_cv_qualifier_seq(function_part_node))
+				{
+					auto cv_qualifier_seq_node = *opt_cv_qualifier_seq_node;
+					for(auto j = cv_qualifier_seq_node.begin(); j != cv_qualifier_seq_node.end(); ++j)
+					{
+						auto cv_qualifier_node = j->main_node();
+						if(get<predefined_text_node<str::volatile_>>(&cv_qualifier_node))
+						{
+							return true;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return false;
 }
 
 function::parameters_t

@@ -86,6 +86,13 @@ get_parameter_declaration_clause(const direct_declarator_function_part& o)
 	return get<2>(o);
 }
 
+inline
+const optional_node<cv_qualifier_seq>&
+get_cv_qualifier_seq(const direct_declarator_function_part& o)
+{
+	return get<6>(o);
+}
+
 
 typedef
 	sequence_node

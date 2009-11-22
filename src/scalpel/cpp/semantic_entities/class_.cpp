@@ -193,4 +193,53 @@ class_::constructor::access() const
 	return access_;
 }
 
+
+
+class_::member<function>::member(function&& entity, class_::access a, bool is_const_qualified, bool is_volatile_qualified):
+	entity_(std::move(entity)),
+	access_(a),
+	const_qualified_(is_const_qualified),
+	volatile_qualified_(is_volatile_qualified)
+{
+}
+
+class_::member<function>::member(member<function>&& o):
+	entity_(std::move(o.entity_)),
+	access_(o.access_),
+	const_qualified_(o.const_qualified_),
+	volatile_qualified_(o.volatile_qualified_)
+{
+}
+
+const function&
+class_::member<function>::entity() const
+{
+	return entity_;
+}
+
+function&
+class_::member<function>::entity()
+{
+	return entity_;
+}
+
+class_::access
+class_::member<function>::access() const
+{
+	return access_;
+}
+
+bool
+class_::member<function>::const_qualified() const
+{
+	return const_qualified_;
+}
+
+bool
+class_::member<function>::volatile_qualified() const
+{
+	return volatile_qualified_;
+}
+
 }}} //namespace scalpel::cpp::semantic_entities
+

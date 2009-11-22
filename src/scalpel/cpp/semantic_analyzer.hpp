@@ -282,6 +282,12 @@ class semantic_analyzer
 			const syntax_nodes::declarator& declarator_node
 		);
 
+		bool
+		is_const_qualified(const syntax_nodes::declarator& declarator_node);
+
+		bool
+		is_volatile_qualified(const syntax_nodes::declarator& declarator_node);
+
 		semantic_entities::function::parameters_t
 		create_parameters(const syntax_nodes::declarator& declarator_node);
 

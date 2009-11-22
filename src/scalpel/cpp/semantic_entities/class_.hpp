@@ -250,6 +250,36 @@ class_::member<EntityT>::access() const
 	return access_;
 }
 
+template<>
+class class_::member<function>
+{
+	public:
+		member(function&& entity, class_::access a, bool is_const_qualified, bool is_volatile_qualified);
+
+		member(member&& o);
+
+		const function&
+		entity() const;
+
+		function&
+		entity();
+
+		class_::access
+		access() const;
+
+		bool
+		const_qualified() const;
+
+		bool
+		volatile_qualified() const;
+
+	private:
+		function entity_;
+		class_::access access_;
+		bool const_qualified_;
+		bool volatile_qualified_;
+};
+
 }}} //namespace scalpel::cpp::semantic_entities
 
 #endif
