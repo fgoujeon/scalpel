@@ -1467,24 +1467,12 @@ semantic_analyzer::find_class
 	const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node
 )
 {
-	auto identifier_or_template_id_node = get_identifier_or_template_id(nested_identifier_or_template_id_node);
-	if(auto opt_identifier_node = get<identifier>(&identifier_or_template_id_node))
+	if(named_entity* found_name = name_lookup::find_name(scope_cursor_.scope_stack(), nested_identifier_or_template_id_node))
 	{
-		auto identifier_node = *opt_identifier_node;
-		if(auto found_name = name_lookup::find_unqualified_name(scope_cursor_.scope_stack(), identifier_node.value()))
+		if(class_* found_class = dynamic_cast<class_*>(found_name))
 		{
-			if(class_* found_class = dynamic_cast<class_*>(found_name))
-			{
-				return *found_class;
-			}
+			return *found_class;
 		}
-	}
-	else if(auto template_id_node = get<template_id>(&identifier_or_template_id_node))
-	{
-	}
-	else
-	{
-		assert(false);
 	}
 
 	throw std::runtime_error("Type not found");

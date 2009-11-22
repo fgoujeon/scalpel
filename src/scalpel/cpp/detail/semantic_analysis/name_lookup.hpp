@@ -23,11 +23,33 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string>
 #include <list>
+#include <stdexcept>
 #include "../../syntax_tree.hpp"
 #include "../../semantic_graph.hpp"
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace name_lookup
 {
+
+/**
+Find qualified name following standard C++ name-lookup rules.
+*/
+template<class RangeT>
+semantic_entities::named_entity*
+find_name
+(
+	RangeT scope_stack,
+	const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node
+);
+
+/**
+Find unqualified name in the given scope, not recursively.
+*/
+semantic_entities::named_entity*
+find_name
+(
+	semantic_entities::scope& current_scope,
+	const std::string& name
+);
 
 template<class RangeT>
 semantic_entities::named_entity*
@@ -45,18 +67,27 @@ find_scope
 	const syntax_nodes::nested_name_specifier& nested_name_specifier
 );
 
+semantic_entities::scope*
+find_scope
+(
+	semantic_entities::scope& parent_scope,
+	const std::string& scope_name
+);
+
+template<class RangeT>
+semantic_entities::named_entity*
+find_unqualified_name
+(
+	RangeT scope_stack,
+	const std::string& name,
+	bool recursive
+);
+
 template<class RangeT>
 semantic_entities::scope*
 recursive_ascent_find_scope
 (
 	RangeT scope_stack,
-	const std::string& scope_name
-);
-
-semantic_entities::scope*
-find_scope
-(
-	semantic_entities::scope& parent_scope,
 	const std::string& scope_name
 );
 

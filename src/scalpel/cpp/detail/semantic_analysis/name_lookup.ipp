@@ -25,12 +25,54 @@ namespace scalpel { namespace cpp { namespace detail { namespace semantic_analys
 
 template<class RangeT>
 semantic_entities::named_entity*
-find_unqualified_name
+find_name
 (
 	RangeT scope_stack,
-	const std::string& name,
-	bool recursive
-);
+	const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node
+)
+{
+	using namespace syntax_nodes;
+	using namespace semantic_entities;
+
+	auto opt_nested_name_specifier_node = get_nested_name_specifier(nested_identifier_or_template_id_node);
+	auto identifier_or_template_id_node = get_identifier_or_template_id(nested_identifier_or_template_id_node);
+
+	if(opt_nested_name_specifier_node)
+	{
+		auto nested_name_specifier_node = *opt_nested_name_specifier_node;
+		scope* found_scope = find_scope(scope_stack, nested_name_specifier_node);
+
+		if(auto opt_identifier_node = get<identifier>(&identifier_or_template_id_node))
+		{
+			auto identifier_node = *opt_identifier_node;
+			return find_name(*found_scope, identifier_node.value());
+		}
+		else if(auto template_id_node = get<template_id>(&identifier_or_template_id_node))
+		{
+		}
+		else
+		{
+			assert(false);
+		}
+	}
+	else
+	{
+		if(auto opt_identifier_node = get<identifier>(&identifier_or_template_id_node))
+		{
+			auto identifier_node = *opt_identifier_node;
+			return find_unqualified_name(scope_stack, identifier_node.value());
+		}
+		else if(auto template_id_node = get<template_id>(&identifier_or_template_id_node))
+		{
+		}
+		else
+		{
+			assert(false);
+		}
+	}
+
+	throw std::runtime_error("Type not found");
+}
 
 
 
@@ -63,31 +105,10 @@ find_unqualified_name
     /*
     1. Current scope
     */
-    {
-		std::cout << "Try to find " << name << " in scope " << current_scope.name() << "\n";
-		auto members = current_scope.named_entities();
-		auto member_it = std::find_if
-        (
-            members.begin(),
-            members.end(),
-			std::bind
-			(
-				std::equal_to<std::string>(),
-				std::cref(name),
-				std::bind
-				(
-					&named_entity::name,
-					std::placeholders::_1
-				)
-			)
-        );
-
-        if(member_it != members.end()) //if a name has been found
-        {
-            return &*member_it;
-        }
-    }
-
+	if(named_entity* found_name = find_name(current_scope, name))
+	{
+		return found_name;
+	}
 
     /*
     2. Enclosing scopes (recursive call)
@@ -216,17 +237,19 @@ recursive_ascent_find_scope
 {
 	using namespace semantic_entities;
 
+	std::cout << "Try to find scope " << scope_name << "\n";
+
 	scope* found_scope = 0;
 
 	if(!scope_stack.empty())
 	{
-		auto i = scope_stack.end();
-		do
+		auto it = scope_stack.end();
+		for(auto i = scope_stack.size(); i > 0; --i)
 		{
-			--i;
-			scope& current_scope = *i;
+			--it;
+			scope& current_scope = *it;
 			found_scope = find_scope(current_scope, scope_name);
-		} while(i != scope_stack.begin() && found_scope != 0);
+		}
 	}
 
 	return found_scope;

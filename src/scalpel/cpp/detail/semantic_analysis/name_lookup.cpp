@@ -30,6 +30,42 @@ namespace scalpel { namespace cpp { namespace detail { namespace semantic_analys
 using namespace syntax_nodes;
 using namespace semantic_entities;
 
+semantic_entities::named_entity*
+find_name
+(
+	semantic_entities::scope& current_scope,
+	const std::string& name
+)
+{
+	using namespace semantic_entities;
+
+	auto members = current_scope.named_entities();
+	auto member_it = std::find_if
+	(
+		members.begin(),
+		members.end(),
+		std::bind
+		(
+			std::equal_to<std::string>(),
+			std::cref(name),
+			std::bind
+			(
+				&named_entity::name,
+				std::placeholders::_1
+			)
+		)
+	);
+
+	if(member_it != members.end()) //if a name has been found
+	{
+		return &*member_it;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
 semantic_entities::scope*
 find_scope
 (
