@@ -762,18 +762,34 @@ semantic_analyzer::fill_class(class_& c, const class_specifier& class_specifier_
 									auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
 									if(is_function_declaration(declarator_node))
 									{
-										c.add
-										(
-											class_::member<function>
+										if(c.name() == get_function_name(declarator_node)) //constructor?
+										{
+											c.add
 											(
-												create_function(decl_specifier_seq_node, declarator_node),
-												current_access,
-												is_qualified<str::const_>(declarator_node),
-												is_qualified<str::volatile_>(declarator_node),
-												is_specified<str::inline_>(decl_specifier_seq_node),
-												is_specified<str::virtual_>(decl_specifier_seq_node)
-											)
-										);
+												class_::constructor
+												(
+													std::move(create_parameters(declarator_node)),
+													current_access,
+													is_specified<str::inline_>(decl_specifier_seq_node),
+													is_specified<str::explicit_>(decl_specifier_seq_node)
+												)
+											);
+										}
+										else
+										{
+											c.add
+											(
+												class_::member<function>
+												(
+													create_function(decl_specifier_seq_node, declarator_node),
+													current_access,
+													is_qualified<str::const_>(declarator_node),
+													is_qualified<str::volatile_>(declarator_node),
+													is_specified<str::inline_>(decl_specifier_seq_node),
+													is_specified<str::virtual_>(decl_specifier_seq_node)
+												)
+											);
+										}
 									}
 									else
 									{
@@ -782,7 +798,16 @@ semantic_analyzer::fill_class(class_& c, const class_specifier& class_specifier_
 								}
 								else
 								{
-									c.add(class_::constructor(std::move(create_parameters(declarator_node)), current_access));
+									c.add
+									(
+										class_::constructor
+										(
+											std::move(create_parameters(declarator_node)),
+											current_access,
+											false,
+											false
+										)
+									);
 								}
 							}
 						}
@@ -834,10 +859,21 @@ semantic_analyzer::fill_class(class_& c, const class_specifier& class_specifier_
 function
 semantic_analyzer::create_function(const decl_specifier_seq& decl_specifier_seq_node, const declarator& declarator_node)
 {
-	//
 	//get the name of the function
-	//
-	std::string name;
+	const std::string& name = get_function_name(declarator_node);
+
+	//get the function's return type
+	const type& return_type = create_type(decl_specifier_seq_node, declarator_node);
+
+	//get the function's parameter list
+	std::list<function::parameter> parameters = create_parameters(declarator_node);
+
+	return function(name, return_type, std::move(parameters));
+}
+
+const std::string&
+semantic_analyzer::get_function_name(const syntax_nodes::declarator& declarator_node)
+{
 	auto direct_declarator_node = get_direct_declarator(declarator_node);
 	auto first_part_node = get_first_part(direct_declarator_node);
 	auto opt_declarator_id_node = get<declarator_id>(&first_part_node);
@@ -854,7 +890,7 @@ semantic_analyzer::create_function(const decl_specifier_seq& decl_specifier_seq_
 				auto opt_identifier_node = get<identifier>(opt_unqualified_id_node);
 				if(opt_identifier_node)
 				{
-					name = opt_identifier_node->value();
+					return opt_identifier_node->value();
 				}
 
 			}
@@ -877,7 +913,7 @@ semantic_analyzer::create_function(const decl_specifier_seq& decl_specifier_seq_
 					auto opt_identifier_node = get<identifier>(&unqualified_id_node);
 					if(opt_identifier_node)
 					{
-						name = opt_identifier_node->value();
+						return opt_identifier_node->value();
 					}
 				}
 			}
@@ -888,17 +924,7 @@ semantic_analyzer::create_function(const decl_specifier_seq& decl_specifier_seq_
 		}
 	}
 
-	//
-	//get the function's return type
-	//
-	const type& return_type = create_type(decl_specifier_seq_node, declarator_node);
-
-	//
-	//get the function's parameter list
-	//
-	std::list<function::parameter> parameters = create_parameters(declarator_node);
-
-	return function(name, return_type, std::move(parameters));
+	throw std::runtime_error("Cannot find the function's name");
 }
 
 function::parameters_t

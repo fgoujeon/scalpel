@@ -169,15 +169,25 @@ class_::add(member<variable>&& member)
 
 
 
-class_::constructor::constructor(parameters_t&& parameters, class_::access access):
+class_::constructor::constructor
+(
+	parameters_t&& parameters,
+	class_::access access,
+	const bool is_inline_specified,
+	const bool is_explicit_specified
+):
 	impl_("_", built_in_type::void_, std::move(parameters)),
-	access_(access)
+	access_(access),
+	inline_specified_(is_inline_specified),
+	explicit_specified_(is_explicit_specified)
 {
 }
 
 class_::constructor::constructor(constructor&& o):
 	impl_(std::move(o.impl_)),
-	access_(o.access_)
+	access_(o.access_),
+	inline_specified_(o.inline_specified_),
+	explicit_specified_(o.explicit_specified_)
 {
 }
 
@@ -191,6 +201,18 @@ class_::access
 class_::constructor::access() const
 {
 	return access_;
+}
+
+bool
+class_::constructor::inline_specified() const
+{
+	return inline_specified_;
+}
+
+bool
+class_::constructor::explicit_specified() const
+{
+	return explicit_specified_;
 }
 
 

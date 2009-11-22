@@ -250,6 +250,10 @@ print
 {
 	std::cout << indent(indent_level) << "<constructor";
 	print(c.access());
+	if(c.inline_specified())
+		std::cout << " inline=\"true\"";
+	if(c.explicit_specified())
+		std::cout << " explicit=\"true\"";
 	std::cout << ">\n";
 
 	std::cout << indent(indent_level + 1) << "<parameters>\n";

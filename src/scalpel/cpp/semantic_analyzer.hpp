@@ -264,6 +264,9 @@ class semantic_analyzer
 		analyze(const syntax_nodes::while_statement& syntax_node);
 
 		bool
+		is_constructor_declaration(const syntax_nodes::declarator& declarator_node);
+
+		bool
 		is_function_declaration(const syntax_nodes::declarator& declarator_node);
 
 		const semantic_entities::type&
@@ -281,6 +284,9 @@ class semantic_analyzer
 			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
 			const syntax_nodes::declarator& declarator_node
 		);
+
+		const std::string&
+		get_function_name(const syntax_nodes::declarator& declarator_node);
 
 		template<const std::string& Qualifier>
 		bool

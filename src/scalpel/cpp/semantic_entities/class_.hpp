@@ -168,7 +168,13 @@ class class_::constructor
 		typedef function::parameters_t parameters_t;
 		typedef function::parameter parameter;
 
-		constructor(parameters_t&& parameters, class_::access access);
+		constructor
+		(
+			parameters_t&& parameters,
+			class_::access access,
+			const bool is_inline_specified,
+			const bool is_explicit_specified
+		);
 
 		constructor(constructor&& o);
 
@@ -178,10 +184,18 @@ class class_::constructor
 		class_::access
 		access() const;
 
+		bool
+		inline_specified() const;
+
+		bool
+		explicit_specified() const;
+
 	private:
 		function impl_;
 		parameters_t parameters_;
 		class_::access access_;
+		bool inline_specified_;
+		bool explicit_specified_;
 };
 
 template<class EntityT>
