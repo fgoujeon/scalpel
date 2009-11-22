@@ -336,6 +336,8 @@ print
 	std::cout << " name=\"" << v.name() << "\"";
 	if(access != "")
 		std::cout << " access=\"" << access << "\"";
+	if(v.static_specified())
+		std::cout << " static=\"true\"";
 	std::cout << ">\n";
 	std::cout << indent(indent_level + 1) << "<type>\n";
 	print(v.get_type(), indent_level + 2);

@@ -59,9 +59,9 @@ is_qualified(const syntax_nodes::declarator& declarator_node)
 	return false;
 }
 
-template<const std::string& Specifier>
+template<class SpecifierNodeT, const std::string& Specifier>
 bool
-is_specified(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node)
+has_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node)
 {
 	using namespace syntax_nodes;
 
@@ -74,10 +74,10 @@ is_specified(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node)
 	{
 		const decl_specifier& decl_specifier_node = i->main_node();
 
-		if(auto opt_function_specifier_node = get<function_specifier>(&decl_specifier_node))
+		if(auto opt_specifier_node = get<SpecifierNodeT>(&decl_specifier_node))
 		{
-			auto function_specifier_node = *opt_function_specifier_node;
-			if(get<predefined_text_node<Specifier>>(&function_specifier_node))
+			auto specifier_node = *opt_specifier_node;
+			if(get<predefined_text_node<Specifier>>(&specifier_node))
 				return true;
 		}
 	}

@@ -25,36 +25,34 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-variable::variable(const type& t, const std::string& name):
-	type_(t),
-	name_(name)
-{
-	std::cout << "New variable " << name << "\n";
-}
-
-variable::variable(const type& t, std::string&& name):
-	type_(t),
-	name_(std::move(name))
+variable::variable(const type& t, const std::string& name, bool is_static_specified):
+	type_(&t),
+	name_(name),
+	static_specified_(is_static_specified)
 {
 	std::cout << "New variable " << name << "\n";
 }
 
 variable::variable(const variable& v):
 	type_(v.type_),
-	name_(v.name_)
+	name_(v.name_),
+	static_specified_(v.static_specified_)
 {
 }
 
 variable::variable(variable&& v):
 	type_(v.type_),
-	name_(std::move(v.name_))
+	name_(std::move(v.name_)),
+	static_specified_(v.static_specified_)
 {
 }
 
 const variable&
 variable::operator=(variable&& v)
 {
+	type_ = v.type_;
 	name_ = std::move(v.name_);
+	static_specified_ = v.static_specified_;
 
 	return *this;
 }
@@ -62,13 +60,19 @@ variable::operator=(variable&& v)
 const type&
 variable::get_type() const
 {
-	return type_;
+	return *type_;
 }
 
 const std::string&
 variable::name() const
 {
 	return name_;
+}
+
+bool
+variable::static_specified() const
+{
+	return static_specified_;
 }
 
 bool

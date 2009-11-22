@@ -35,13 +35,10 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 Represents a C++ variable.
 */
 class variable:
-	public named_entity,
-	public boost::noncopyable
+	public named_entity
 {
 	public:
-		variable(const type& t, const std::string& name);
-
-		variable(const type& t, std::string&& name);
+		variable(const type& t, const std::string& name, bool is_static_specified);
 
 		variable(const variable& v);
 
@@ -57,11 +54,15 @@ class variable:
 		name() const;
 
 		bool
+		static_specified() const;
+
+		bool
 		is_a_type() const;
 
 	private:
-		const type& type_;
+		const type* type_;
 		std::string name_;
+		bool static_specified_;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

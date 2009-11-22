@@ -782,8 +782,8 @@ semantic_analyzer::fill_class(class_& c, const class_specifier& class_specifier_
 												(
 													std::move(create_parameters(declarator_node)),
 													current_access,
-													is_specified<str::inline_>(decl_specifier_seq_node),
-													is_specified<str::explicit_>(decl_specifier_seq_node)
+													has_inline_specifier(decl_specifier_seq_node),
+													has_explicit_specifier(decl_specifier_seq_node)
 												)
 											);
 										}
@@ -797,9 +797,9 @@ semantic_analyzer::fill_class(class_& c, const class_specifier& class_specifier_
 													current_access,
 													is_qualified<str::const_>(declarator_node),
 													is_qualified<str::volatile_>(declarator_node),
-													is_specified<str::inline_>(decl_specifier_seq_node),
-													is_specified<str::virtual_>(decl_specifier_seq_node),
-													is_pure_specified(member_declarator_declarator_node)
+													has_inline_specifier(decl_specifier_seq_node),
+													has_virtual_specifier(decl_specifier_seq_node),
+													has_pure_specifier(member_declarator_declarator_node)
 												)
 											);
 										}
@@ -1521,14 +1521,15 @@ semantic_analyzer::create_variable
 					return variable
 					(
 						create_type(decl_specifier_seq_node, declarator_node),
-						identifier_node->value()
+						std::move(identifier_node->value()),
+						has_static_specifier(decl_specifier_seq_node)
 					);
 				}
 			}
 		}
 	}
 
-	return variable(built_in_type::void_, "UNKNOWN");
+	throw std::runtime_error("Cannot create variable");
 }
 
 }} //namespace scalpel::cpp

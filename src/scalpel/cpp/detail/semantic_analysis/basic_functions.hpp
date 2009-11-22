@@ -34,6 +34,8 @@ namespace scalpel { namespace cpp { namespace detail { namespace semantic_analys
 semantic_entities::class_::access
 get_access(const syntax_nodes::access_specifier access_specifier_node);
 
+
+
 //
 //function related
 //
@@ -45,17 +47,55 @@ bool
 is_function_declaration(const syntax_nodes::declarator& declarator_node);
 
 bool
-is_pure_specified(const syntax_nodes::member_declarator_declarator& member_declarator_declarator_node);
+has_pure_specifier(const syntax_nodes::member_declarator_declarator& member_declarator_declarator_node);
 
 
+
+//
+//qualifier related
+//
 
 template<const std::string& Qualifier>
 bool
 is_qualified(const syntax_nodes::declarator& declarator_node);
 
-template<const std::string& Specifier>
+
+
+//
+//specifier related
+//
+
+template<class SpecifierNodeT, const std::string& Specifier>
 bool
-is_specified(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node);
+has_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node);
+
+inline
+bool
+has_inline_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node)
+{
+	return has_specifier<syntax_nodes::function_specifier, utility::extern_strings::inline_>(decl_specifier_seq_node);
+}
+
+inline
+bool
+has_virtual_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node)
+{
+	return has_specifier<syntax_nodes::function_specifier, utility::extern_strings::virtual_>(decl_specifier_seq_node);
+}
+
+inline
+bool
+has_explicit_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node)
+{
+	return has_specifier<syntax_nodes::function_specifier, utility::extern_strings::explicit_>(decl_specifier_seq_node);
+}
+
+inline
+bool
+has_static_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node)
+{
+	return has_specifier<syntax_nodes::storage_class_specifier, utility::extern_strings::static_>(decl_specifier_seq_node);
+}
 
 }}}} //namespace scalpel::cpp::detail::semantic_analysis
 

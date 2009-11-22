@@ -140,7 +140,7 @@ is_function_declaration(const declarator& declarator_node)
 }
 
 bool
-is_pure_specified(const syntax_nodes::member_declarator_declarator& member_declarator_declarator_node)
+has_pure_specifier(const syntax_nodes::member_declarator_declarator& member_declarator_declarator_node)
 {
 	if(auto opt_last_part_node = get_last_part(member_declarator_declarator_node))
 	{
