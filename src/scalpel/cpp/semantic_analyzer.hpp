@@ -288,6 +288,12 @@ class semantic_analyzer
 		bool
 		is_volatile_qualified(const syntax_nodes::declarator& declarator_node);
 
+		bool
+		is_inline_specified(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node);
+
+		bool
+		is_virtual_specified(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node);
+
 		semantic_entities::function::parameters_t
 		create_parameters(const syntax_nodes::declarator& declarator_node);
 

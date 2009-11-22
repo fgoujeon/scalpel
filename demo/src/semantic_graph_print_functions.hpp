@@ -81,10 +81,7 @@ void
 print
 (
 	const function& f,
-	const unsigned int indent_level,
-	const std::string& access = "",
-	const bool const_qualified = false,
-	const bool volatile_qualified = false
+	const unsigned int indent_level
 );
 
 void

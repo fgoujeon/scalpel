@@ -254,7 +254,15 @@ template<>
 class class_::member<function>
 {
 	public:
-		member(function&& entity, class_::access a, bool is_const_qualified, bool is_volatile_qualified);
+		member
+		(
+			function&& entity,
+			class_::access a,
+			bool is_const_qualified,
+			bool is_volatile_qualified,
+			bool is_inline_specified,
+			bool is_virtual_specified
+		);
 
 		member(member&& o);
 
@@ -273,11 +281,19 @@ class class_::member<function>
 		bool
 		volatile_qualified() const;
 
+		bool
+		inline_specified() const;
+
+		bool
+		virtual_specified() const;
+
 	private:
 		function entity_;
 		class_::access access_;
 		bool const_qualified_;
 		bool volatile_qualified_;
+		bool inline_specified_;
+		bool virtual_specified_;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

@@ -187,24 +187,36 @@ template<>
 void
 print
 (
-	const class_::member<function>& m,
+	const class_::member<function>& f,
 	const unsigned int indent_level
 )
 {
-	std::string access;
-	switch(m.access())
+	std::cout << indent(indent_level) << "<function";
+	std::cout << " name=\"" << f.entity().name() << "\"";
+	print(f.access());
+	if(f.const_qualified())
+		std::cout << " const=\"true\"";
+	if(f.volatile_qualified())
+		std::cout << " volatile=\"true\"";
+	if(f.inline_specified())
+		std::cout << " inline=\"true\"";
+	if(f.virtual_specified())
+		std::cout << " virtual=\"true\"";
+	std::cout << ">\n";
+
+	std::cout << indent(indent_level + 1) << "<return_type>\n";
+	print(f.entity().return_type(), indent_level + 2);
+	std::cout << indent(indent_level + 1) << "</return_type>\n";
+
+	std::cout << indent(indent_level + 1) << "<parameters>\n";
+	const std::list<function::parameter>& parameters = f.entity().parameters();
+	for(auto i = parameters.begin(); i != parameters.end(); ++i)
 	{
-		case class_::access::PUBLIC:
-			access = "public";
-			break;
-		case class_::access::PROTECTED:
-			access = "protected";
-			break;
-		case class_::access::PRIVATE:
-			access = "private";
-			break;
+		print(*i, indent_level + 2);
 	}
-	print(m.entity(), indent_level, access, m.const_qualified(), m.volatile_qualified());
+	std::cout << indent(indent_level + 1) << "</parameters>\n";
+
+	std::cout << indent(indent_level) << "</function>\n";
 }
 
 void
@@ -255,20 +267,11 @@ void
 print
 (
 	const function& f,
-	const unsigned int indent_level,
-	const std::string& access,
-	const bool const_qualified,
-	const bool volatile_qualified
+	const unsigned int indent_level
 )
 {
 	std::cout << indent(indent_level) << "<function";
 	std::cout << " name=\"" << f.name() << "\"";
-	if(access != "")
-		std::cout << " access=\"" << access << "\"";
-	if(const_qualified)
-		std::cout << " const=\"true\"";
-	if(volatile_qualified)
-		std::cout << " volatile=\"true\"";
 	std::cout << ">\n";
 
 	std::cout << indent(indent_level + 1) << "<return_type>\n";

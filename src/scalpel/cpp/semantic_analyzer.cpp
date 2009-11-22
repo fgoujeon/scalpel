@@ -769,7 +769,9 @@ semantic_analyzer::fill_class(class_& c, const class_specifier& class_specifier_
 												create_function(decl_specifier_seq_node, declarator_node),
 												current_access,
 												is_const_qualified(declarator_node),
-												is_volatile_qualified(declarator_node)
+												is_volatile_qualified(declarator_node),
+												is_inline_specified(decl_specifier_seq_node),
+												is_virtual_specified(decl_specifier_seq_node)
 											)
 										);
 									}
@@ -963,6 +965,52 @@ semantic_analyzer::is_volatile_qualified(const syntax_nodes::declarator& declara
 	return false;
 }
 
+bool
+semantic_analyzer::is_inline_specified(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node)
+{
+	for
+	(
+		auto i = decl_specifier_seq_node.begin();
+		i < decl_specifier_seq_node.end();
+		++i
+	)
+	{
+		const decl_specifier& decl_specifier_node = i->main_node();
+
+		if(auto opt_function_specifier_node = get<function_specifier>(&decl_specifier_node))
+		{
+			auto function_specifier_node = *opt_function_specifier_node;
+			if(get<predefined_text_node<str::inline_>>(&function_specifier_node))
+				return true;
+		}
+	}
+
+	return false;
+}
+
+bool
+semantic_analyzer::is_virtual_specified(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node)
+{
+	for
+	(
+		auto i = decl_specifier_seq_node.begin();
+		i < decl_specifier_seq_node.end();
+		++i
+	)
+	{
+		const decl_specifier& decl_specifier_node = i->main_node();
+
+		if(auto opt_function_specifier_node = get<function_specifier>(&decl_specifier_node))
+		{
+			auto function_specifier_node = *opt_function_specifier_node;
+			if(get<predefined_text_node<str::virtual_>>(&function_specifier_node))
+				return true;
+		}
+	}
+
+	return false;
+}
+
 function::parameters_t
 semantic_analyzer::create_parameters(const declarator& declarator_node)
 {
@@ -1067,13 +1115,12 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 	{
 		const decl_specifier& decl_specifier_node = i->main_node();
 
-		auto opt_type_specifier_node = get<type_specifier>(&decl_specifier_node);
-		auto opt_function_specifier_node = get<function_specifier>(&decl_specifier_node);
-		auto opt_storage_class_specifier_node = get<storage_class_specifier>(&decl_specifier_node);
+		//auto opt_function_specifier_node = get<function_specifier>(&decl_specifier_node);
+		//auto opt_storage_class_specifier_node = get<storage_class_specifier>(&decl_specifier_node);
 		//predefined_text_node<str::friend_>
 		//predefined_text_node<str::typedef_>
 
-		if(opt_type_specifier_node)
+		if(auto opt_type_specifier_node = get<type_specifier>(&decl_specifier_node))
 		{
 			auto type_specifier_node = *opt_type_specifier_node;
 			//simple_type_specifier
