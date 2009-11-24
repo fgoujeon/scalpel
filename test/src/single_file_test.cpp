@@ -93,7 +93,7 @@ single_file_test::parse_files(const std::string& test_directory)
 		}
 
 		//semantic analysis
-		scalpel::cpp::semantic_graph graph = semantic_analyzer_(tree);
+		//scalpel::cpp::semantic_graph graph = semantic_analyzer_(tree);
     }
 }
 

@@ -29,7 +29,8 @@ endif(CMAKE_COMPILER_IS_GNUCXX)
 
 #Check for required C++0x partial support
 include(CheckCXXSourceCompiles)
-set(CMAKE_REQUIRED_FLAGS "-std=c++0x")
+#set(CMAKE_REQUIRED_FLAGS "-std=c++0x")
+set(CMAKE_REQUIRED_FLAGS "-v")
 check_cxx_source_compiles(
 	"
 	//check for variadic template support
