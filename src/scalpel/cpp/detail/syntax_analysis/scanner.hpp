@@ -29,22 +29,22 @@ namespace scalpel { namespace cpp { namespace detail { namespace syntax_analysis
 
 //scanner type of boost::spirit::pt_parse() function
 typedef
-    boost::spirit::scanner
-    <
-        const char*,
-        boost::spirit::scanner_policies
-        <
+	boost::spirit::scanner
+	<
+		const char*,
+		boost::spirit::scanner_policies
+		<
 			boost::spirit::iteration_policy,
-            boost::spirit::pt_match_policy
-            <
-                const char*,
-                boost::spirit::node_val_data_factory<boost::spirit::nil_t>,
-                boost::spirit::nil_t
-            >,
-            boost::spirit::action_policy
-        >
-    >
-    scanner_t
+			boost::spirit::pt_match_policy
+			<
+				const char*,
+				boost::spirit::node_val_data_factory<boost::spirit::nil_t>,
+				boost::spirit::nil_t
+			>,
+			boost::spirit::action_policy
+		>
+	>
+	scanner_t
 ;
 
 }}}} //namespace scalpel::cpp::detail::syntax_analysis

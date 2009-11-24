@@ -73,7 +73,7 @@ include_directories(src/)
 include(FindBoost)
 find_package(
 	Boost 1.36.0
-	REQUIRED system filesystem thread wave
+	REQUIRED wave
 )
 link_directories(${Boost_LIBRARY_DIRS})
 include_directories(${Boost_INCLUDE_DIRS})
