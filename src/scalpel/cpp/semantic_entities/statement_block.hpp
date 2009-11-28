@@ -22,7 +22,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_STATEMENT_BLOCK_HPP
 
 #include <string>
-#include <list>
+#include <vector>
+#include <memory>
 #include "scope.hpp"
 #include "scope_impl.hpp"
 #include "named_entity.hpp"
@@ -87,15 +88,15 @@ class statement_block:
 		named_entities() const;
 
 		void
-		add(statement_block&& o);
+		add(std::shared_ptr<statement_block> o);
 
 		void
-		add(variable&& v);
+		add(std::shared_ptr<variable> o);
 
     private:
 		scope_impl scope_impl_;
-		std::list<statement_block> statement_blocks_;
-		std::list<variable> variables_;
+		std::vector<std::shared_ptr<statement_block>> statement_blocks_;
+		std::vector<std::shared_ptr<variable>> variables_;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

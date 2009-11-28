@@ -22,6 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <iostream>
 #include <stdexcept>
+#include <scalpel/utility/null_deleter.hpp>
 #include "detail/semantic_analysis/name_lookup.hpp"
 #include "detail/semantic_analysis/basic_functions.hpp"
 
@@ -42,11 +43,11 @@ semantic_analyzer::semantic_analyzer():
 {
 }
 
-semantic_graph
+std::shared_ptr<semantic_graph>
 semantic_analyzer::operator()(const syntax_tree& tree)
 {
 	//create semantic graph
-	namespace_ global_namespace;
+	std::shared_ptr<namespace_> global_namespace = std::make_shared<namespace_>();
 
 	//current scope = global namespace
 	scope_cursor_.initialize(global_namespace);
@@ -67,7 +68,7 @@ semantic_analyzer::operator()(const syntax_tree& tree)
 		}
 	}
 
-	return semantic_graph(std::move(global_namespace), std::move(custom_types_));
+	return global_namespace;
 }
 
 void
@@ -93,10 +94,10 @@ semantic_analyzer::analyze(const class_head&)
 void
 semantic_analyzer::analyze(const class_specifier& class_specifier_node)
 {
-	scope_cursor_.add_to_current_scope(create_class(class_specifier_node));
-	class_& c = scope_cursor_.last_added_class();
-	scope_cursor_.enter_scope(c);
-	fill_class(c, class_specifier_node);
+	std::shared_ptr<class_> new_class = create_class(class_specifier_node);
+	scope_cursor_.add_to_current_scope(new_class);
+	scope_cursor_.enter_scope(new_class);
+	fill_class(*new_class, class_specifier_node);
 	scope_cursor_.leave_scope();
 }
 
@@ -110,7 +111,7 @@ semantic_analyzer::analyze(const compound_statement& syntax_node, const bool cre
 {
 	if(create_statement_block)
 	{
-		statement_block s;
+		std::shared_ptr<statement_block> s = std::make_shared<statement_block>();
 		scope_cursor_.add_to_current_scope(s);
 		scope_cursor_.enter_last_added_scope();
 	}
@@ -217,7 +218,7 @@ semantic_analyzer::analyze(const function_definition& function_definition_node)
 	//
 	//get the enclosing scope of the function
 	//
-	scope* enclosing_scope = 0;
+	std::shared_ptr<scope> enclosing_scope;
 
 	const direct_declarator_first_part& first_part_node = get_first_part(direct_declarator_node);
 	boost::optional<const declarator_id&> direct_node_id = get<declarator_id>(&first_part_node);
@@ -231,7 +232,7 @@ semantic_analyzer::analyze(const function_definition& function_definition_node)
 
 			if(unqualified_id_node)
 			{
-				enclosing_scope = &scope_cursor_.current_scope();
+				enclosing_scope = scope_cursor_.current_scope();
 			}
 			else if(a_qualified_id)
 			{
@@ -253,11 +254,11 @@ semantic_analyzer::analyze(const function_definition& function_definition_node)
 
 					if(leading_double_colon)
 					{
-						enclosing_scope = &name_lookup::find_scope(scope_cursor_.global_scope_stack(), a_nested_name_specifier);
+						enclosing_scope = name_lookup::find_scope(scope_cursor_.global_scope_stack(), a_nested_name_specifier);
 					}
 					else
 					{
-						enclosing_scope = &name_lookup::find_scope(scope_cursor_.scope_stack(), a_nested_name_specifier);
+						enclosing_scope = name_lookup::find_scope(scope_cursor_.scope_stack(), a_nested_name_specifier);
 					}
 				}
 			}
@@ -273,21 +274,21 @@ semantic_analyzer::analyze(const function_definition& function_definition_node)
 		//create a function object
 		auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
 		auto declarator_node = get_declarator(function_definition_node);
-		function new_function = create_function(decl_specifier_seq_node, declarator_node);
+		std::shared_ptr<function> new_function = create_function(decl_specifier_seq_node, declarator_node);
 
 		//find the corresponding function semantic node (must exist if the function has already been declared)
-		scope* function_scope = 0;
+		std::shared_ptr<scope> function_scope;
 		if(enclosing_scope)
 		{
 			auto scopes = enclosing_scope->scopes();
 			for(auto i = scopes.begin(); i != scopes.end(); ++i)
 			{
-				scope& scope = *i;
+				std::shared_ptr<scope> scope = *i;
 
 				///\todo check the function's signature
-				if(scope.name() == new_function.name())
+				if(scope->name() == new_function->name())
 				{
-					function_scope = &scope;
+					function_scope = scope;
 					break;
 				}
 			}
@@ -297,7 +298,7 @@ semantic_analyzer::analyze(const function_definition& function_definition_node)
 		if(!function_scope)
 		{
 			scope_cursor_.add_to_current_scope(new_function);
-			function_scope = &scope_cursor_.current_scope().scopes().back();
+			function_scope = scope_cursor_.current_scope()->scopes().back();
 		}
 
 		//enter and leave the function body
@@ -411,7 +412,7 @@ semantic_analyzer::analyze(const namespace_definition& syntax_node)
 	}
 
 	//add the namespace to the current scope
-	scope_cursor_.add_to_current_scope(namespace_(namespace_name));
+	scope_cursor_.add_to_current_scope(std::make_shared<namespace_>(namespace_name));
 
 	//add the declarations of the namespace definition in the namespace semantic node
 	scope_cursor_.enter_last_added_scope(); //we have to enter even if there's no declaration
@@ -574,7 +575,7 @@ semantic_analyzer::analyze(const simple_declaration& simple_declaration_node)
 	else if(is_a_class_forward_declaration)
 	{
 		if(!class_name.empty())
-			scope_cursor_.add_to_current_scope(class_(class_name));
+			scope_cursor_.add_to_current_scope(std::make_shared<class_>(class_name));
 	}
 	else if(is_a_function_declaration)
 	{
@@ -596,7 +597,7 @@ semantic_analyzer::analyze(const simple_declaration& simple_declaration_node)
 		assert(opt_init_declarator_list_node);
 		auto init_declarator_list_node = *opt_init_declarator_list_node;
 
-		std::list<variable> variables = create_variables(decl_specifier_seq_node, init_declarator_list_node);
+		std::vector<std::shared_ptr<variable>> variables = create_variables(decl_specifier_seq_node, init_declarator_list_node);
 		//for each variable
 		for
 		(
@@ -605,7 +606,7 @@ semantic_analyzer::analyze(const simple_declaration& simple_declaration_node)
 			++i
 		)
 		{
-			scope_cursor_.add_to_current_scope(std::move(*i));
+			scope_cursor_.add_to_current_scope(*i);
 		}
 	}
 }
@@ -662,14 +663,7 @@ semantic_analyzer::analyze(const while_statement&)
 {
 }
 
-const type&
-semantic_analyzer::add_custom_type(std::unique_ptr<type> t)
-{
-	custom_types_.push_back(std::move(t));
-	return *custom_types_.back();
-}
-
-class_
+std::shared_ptr<class_>
 semantic_analyzer::create_class(const class_specifier& syntax_node)
 {
 	//get the name of the class
@@ -687,7 +681,7 @@ semantic_analyzer::create_class(const class_specifier& syntax_node)
 
 	//create the class
 	assert(class_name != "");
-	return class_(class_name);
+	return std::make_shared<class_>(class_name);
 }
 
 void
@@ -720,9 +714,9 @@ semantic_analyzer::fill_class(class_& c, const class_specifier& class_specifier_
 
 			//get base class
 			auto nested_identifier_or_template_id_node = get_nested_identifier_or_template_id(base_specifier_node);
-			class_& base = find_class(nested_identifier_or_template_id_node);
+			std::shared_ptr<class_> base = find_class(nested_identifier_or_template_id_node);
 
-			c.add(class_::base_class(base, access, is_virtual));
+			c.add(std::make_shared<class_::base_class>(base, access, is_virtual));
 		}
 	}
 
@@ -778,7 +772,7 @@ semantic_analyzer::fill_class(class_& c, const class_specifier& class_specifier_
 										{
 											c.add
 											(
-												class_::constructor
+												std::make_shared<class_::constructor>
 												(
 													std::move(create_parameters(declarator_node)),
 													current_access,
@@ -791,7 +785,7 @@ semantic_analyzer::fill_class(class_& c, const class_specifier& class_specifier_
 										{
 											c.add
 											(
-												class_::member<function>
+												std::make_shared<class_::member<function>>
 												(
 													create_function(decl_specifier_seq_node, declarator_node),
 													current_access,
@@ -806,14 +800,14 @@ semantic_analyzer::fill_class(class_& c, const class_specifier& class_specifier_
 									}
 									else
 									{
-										c.add(class_::member<variable>(create_variable(decl_specifier_seq_node, declarator_node), current_access));
+										c.add(std::make_shared<class_::member<variable>>(create_variable(decl_specifier_seq_node, declarator_node), current_access));
 									}
 								}
 								else
 								{
 									c.add
 									(
-										class_::constructor
+										std::make_shared<class_::constructor>
 										(
 											std::move(create_parameters(declarator_node)),
 											current_access,
@@ -853,19 +847,19 @@ semantic_analyzer::fill_class(class_& c, const class_specifier& class_specifier_
 	}
 }
 
-function
+std::shared_ptr<semantic_entities::function>
 semantic_analyzer::create_function(const decl_specifier_seq& decl_specifier_seq_node, const declarator& declarator_node)
 {
 	//get the name of the function
 	const std::string& name = get_function_name(declarator_node);
 
 	//get the function's return type
-	const type& return_type = create_type(decl_specifier_seq_node, declarator_node);
+	std::shared_ptr<const type> return_type = create_type(decl_specifier_seq_node, declarator_node);
 
 	//get the function's parameter list
 	std::list<function::parameter> parameters = create_parameters(declarator_node);
 
-	return function
+	return std::make_shared<function>
 	(
 		name,
 		return_type,
@@ -934,7 +928,7 @@ semantic_analyzer::create_parameters(const declarator& declarator_node)
 									(
 										function::parameter
 										(
-											std::move(create_type(decl_specifier_seq_node, declarator_node)),
+											create_type(decl_specifier_seq_node, declarator_node),
 											name
 										)
 									)
@@ -950,10 +944,10 @@ semantic_analyzer::create_parameters(const declarator& declarator_node)
 	return parameters;
 }
 
-const type&
+std::shared_ptr<const type>
 semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node, const declarator& declarator_node)
 {
-	const type* return_type = 0;
+	std::shared_ptr<const type> return_type;
 	bool bool_type = false;
 	bool char_type = false;
 	bool double_type = false;
@@ -1001,8 +995,8 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 				if(auto opt_nested_identifier_or_template_id_node = get<nested_identifier_or_template_id>(&simple_type_specifier_node))
 				{
 					auto nested_identifier_or_template_id_node = *opt_nested_identifier_or_template_id_node;
-					named_entity& found_name = name_lookup::find_name(scope_cursor_.scope_stack(), nested_identifier_or_template_id_node);
-					if(auto found_class = dynamic_cast<const class_*>(&found_name))
+					std::shared_ptr<named_entity> found_name = name_lookup::find_name(scope_cursor_.scope_stack(), nested_identifier_or_template_id_node);
+					if(auto found_class = std::dynamic_pointer_cast<class_>(found_name))
 					{
 						return_type = found_class;
 					}
@@ -1099,7 +1093,7 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 			!wchar_t_type
 		)
 		{
-			return_type = &built_in_type::bool_;
+			return_type = std::shared_ptr<const built_in_type>(&built_in_type::bool_, scalpel::utility::null_deleter());
 		}
 		else if
 		(
@@ -1117,7 +1111,7 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 			!wchar_t_type
 		)
 		{
-			return_type = &built_in_type::char_;
+			return_type = std::shared_ptr<const built_in_type>(&built_in_type::char_, scalpel::utility::null_deleter());
 		}
 		else if
 		(
@@ -1135,7 +1129,7 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 			!wchar_t_type
 		)
 		{
-			return_type = &built_in_type::double_;
+			return_type = std::shared_ptr<const built_in_type>(&built_in_type::double_, scalpel::utility::null_deleter());
 		}
 		else if
 		(
@@ -1153,7 +1147,7 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 			!wchar_t_type
 		)
 		{
-			return_type = &built_in_type::float_;
+			return_type = std::shared_ptr<const built_in_type>(&built_in_type::float_, scalpel::utility::null_deleter());
 		}
 		else if
 		(
@@ -1170,7 +1164,7 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 			!wchar_t_type
 		)
 		{
-			return_type = &built_in_type::int_;
+			return_type = std::shared_ptr<const built_in_type>(&built_in_type::int_, scalpel::utility::null_deleter());
 		}
 		else if
 		(
@@ -1188,7 +1182,7 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 			!wchar_t_type
 		)
 		{
-			return_type = &built_in_type::long_double;
+			return_type = std::shared_ptr<const built_in_type>(&built_in_type::long_double, scalpel::utility::null_deleter());
 		}
 		else if
 		(
@@ -1206,7 +1200,7 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 			!wchar_t_type
 		)
 		{
-			return_type = &built_in_type::long_int;
+			return_type = std::shared_ptr<const built_in_type>(&built_in_type::long_int, scalpel::utility::null_deleter());
 		}
 		else if
 		(
@@ -1224,7 +1218,7 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 			!wchar_t_type
 		)
 		{
-			return_type = &built_in_type::long_long_int;
+			return_type = std::shared_ptr<const built_in_type>(&built_in_type::long_long_int, scalpel::utility::null_deleter());
 		}
 		else if
 		(
@@ -1242,7 +1236,7 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 			!wchar_t_type
 		)
 		{
-			return_type = &built_in_type::short_int;
+			return_type = std::shared_ptr<const built_in_type>(&built_in_type::short_int, scalpel::utility::null_deleter());
 		}
 		else if
 		(
@@ -1260,7 +1254,7 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 			!wchar_t_type
 		)
 		{
-			return_type = &built_in_type::unsigned_char;
+			return_type = std::shared_ptr<const built_in_type>(&built_in_type::unsigned_char, scalpel::utility::null_deleter());
 		}
 		else if
 		(
@@ -1278,7 +1272,7 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 			!wchar_t_type
 		)
 		{
-			return_type = &built_in_type::unsigned_int;
+			return_type = std::shared_ptr<const built_in_type>(&built_in_type::unsigned_int, scalpel::utility::null_deleter());
 		}
 		else if
 		(
@@ -1296,7 +1290,7 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 			!wchar_t_type
 		)
 		{
-			return_type = &built_in_type::unsigned_long_int;
+			return_type = std::shared_ptr<const built_in_type>(&built_in_type::unsigned_long_int, scalpel::utility::null_deleter());
 		}
 		else if
 		(
@@ -1314,7 +1308,7 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 			!wchar_t_type
 		)
 		{
-			return_type = &built_in_type::unsigned_long_long_int;
+			return_type = std::shared_ptr<const built_in_type>(&built_in_type::unsigned_long_long_int, scalpel::utility::null_deleter());
 		}
 		else if
 		(
@@ -1332,7 +1326,7 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 			!wchar_t_type
 		)
 		{
-			return_type = &built_in_type::unsigned_short_int;
+			return_type = std::shared_ptr<const built_in_type>(&built_in_type::unsigned_short_int, scalpel::utility::null_deleter());
 		}
 		else if
 		(
@@ -1350,7 +1344,7 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 			!wchar_t_type
 		)
 		{
-			return_type = &built_in_type::void_;
+			return_type = std::shared_ptr<const built_in_type>(&built_in_type::void_, scalpel::utility::null_deleter());
 		}
 		else if
 		(
@@ -1368,7 +1362,7 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 			wchar_t_type
 		)
 		{
-			return_type = &built_in_type::wchar_t_;
+			return_type = std::shared_ptr<const built_in_type>(&built_in_type::wchar_t_, scalpel::utility::null_deleter());
 		}
 		else
 		{
@@ -1380,11 +1374,11 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 	{
 		if(const_qualified)
 		{
-			return_type = &add_custom_type(std::move(std::unique_ptr<const_>(new const_(*return_type))));
+			return_type = std::make_shared<const_>(return_type);
 		}
 		else if(volatile_qualified)
 		{
-			return_type = &add_custom_type(std::move(std::unique_ptr<volatile_>(new volatile_(*return_type))));
+			return_type = std::make_shared<volatile_>(return_type);
 		}
 	}
 
@@ -1398,7 +1392,7 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 			{
 				auto ptr_ptr_operator_node = *opt_ptr_ptr_operator_node;
 
-				return_type = &add_custom_type(std::move(std::unique_ptr<pointer>(new pointer(*return_type))));
+				return_type = std::make_shared<pointer>(return_type);
 
 				if(auto opt_cv_qualifier_seq_node = get_cv_qualifier_seq(ptr_ptr_operator_node))
 				{
@@ -1414,18 +1408,18 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 
 						if(get<predefined_text_node<str::const_>>(&cv_qualifier_node))
 						{
-							return_type = &add_custom_type(std::move(std::unique_ptr<const_>(new const_(*return_type))));
+							return_type = std::make_shared<const_>(return_type);
 						}
 						else if(get<predefined_text_node<str::volatile_>>(&cv_qualifier_node))
 						{
-							return_type = &add_custom_type(std::move(std::unique_ptr<volatile_>(new volatile_(*return_type))));
+							return_type = std::make_shared<volatile_>(return_type);
 						}
 					}
 				}
 			}
 			else if(auto ref_ptr_operator_node = get<ref_ptr_operator>(&ptr_operator_node))
 			{
-				return_type = &add_custom_type(std::move(std::unique_ptr<reference>(new reference(*return_type))));
+				return_type = std::make_shared<reference>(return_type);
 			}
 		}
 	}
@@ -1444,7 +1438,7 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 			auto last_part_node = i->main_node();
 			if(auto array_part = get<direct_declarator_array_part>(&last_part_node))
 			{
-				return_type = &add_custom_type(std::move(std::unique_ptr<array>(new array(0, *return_type))));
+				return_type = std::make_shared<array>(0, return_type);
 			}
 		}
 	}
@@ -1453,33 +1447,33 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 	{
 		throw std::runtime_error("Semantic analysis error: type not found");
 	}
-	return *return_type;
+	return return_type;
 }
 
-semantic_entities::class_&
+std::shared_ptr<semantic_entities::class_>
 semantic_analyzer::find_class
 (
 	const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node
 )
 {
-	named_entity& found_name = name_lookup::find_name(scope_cursor_.scope_stack(), nested_identifier_or_template_id_node);
+	std::shared_ptr<named_entity> found_name = name_lookup::find_name(scope_cursor_.scope_stack(), nested_identifier_or_template_id_node);
 
-	if(class_* found_class = dynamic_cast<class_*>(&found_name))
+	if(std::shared_ptr<class_> found_class = std::dynamic_pointer_cast<class_>(found_name))
 	{
-		return *found_class;
+		return found_class;
 	}
 
 	throw std::runtime_error("Type not found");
 }
 
-std::list<variable>
+std::vector<std::shared_ptr<variable>>
 semantic_analyzer::create_variables
 (
 	const decl_specifier_seq& decl_specifier_seq_node,
 	const init_declarator_list& init_declarator_list_node
 )
 {
-	std::list<variable> variables;
+	std::vector<std::shared_ptr<variable>> variables;
 
 	//for each variable
 	for
@@ -1504,7 +1498,7 @@ semantic_analyzer::create_variables
 	return variables;
 }
 
-variable
+std::shared_ptr<variable>
 semantic_analyzer::create_variable
 (
 	const decl_specifier_seq& decl_specifier_seq_node,
@@ -1524,7 +1518,7 @@ semantic_analyzer::create_variable
 			{
 				if(auto identifier_node = get<identifier>(unqualified_id_node))
 				{
-					return variable
+					return std::make_shared<variable>
 					(
 						create_type(decl_specifier_seq_node, declarator_node),
 						std::move(identifier_node->value()),

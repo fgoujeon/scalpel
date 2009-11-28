@@ -35,17 +35,17 @@ class array:
 	public type_decorator
 {
 	public:
-		array(const unsigned int size, const type& decorated_type);
+		array(const unsigned int size, std::shared_ptr<const type> decorated_type);
 
 		unsigned int
 		size() const;
 
-		const type&
+		std::shared_ptr<const type>
 		decorated_type() const;
 
 	private:
 		unsigned int size_;
-		const type& decorated_type_;
+		std::shared_ptr<const type> decorated_type_;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

@@ -29,15 +29,6 @@ namespace semantic_graph_print_functions
 void
 print
 (
-	const semantic_graph& g
-)
-{
-	print(g.global_namespace(), 0);
-}
-
-void
-print
-(
 	const type& n,
 	const unsigned int indent_level
 )
@@ -51,31 +42,31 @@ print
 	else if(const const_* t = dynamic_cast<const const_*>(&n))
 	{
 		std::cout << indent(indent_level) << "<const>\n";
-		print(t->decorated_type(), indent_level + 1);
+		print(*t->decorated_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</const>\n";
 	}
 	else if(const volatile_* t = dynamic_cast<const volatile_*>(&n))
 	{
 		std::cout << indent(indent_level) << "<volatile>\n";
-		print(t->decorated_type(), indent_level + 1);
+		print(*t->decorated_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</volatile>\n";
 	}
 	else if(const pointer* t = dynamic_cast<const pointer*>(&n))
 	{
 		std::cout << indent(indent_level) << "<pointer>\n";
-		print(t->decorated_type(), indent_level + 1);
+		print(*t->decorated_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</pointer>\n";
 	}
 	else if(const reference* t = dynamic_cast<const reference*>(&n))
 	{
 		std::cout << indent(indent_level) << "<reference>\n";
-		print(t->decorated_type(), indent_level + 1);
+		print(*t->decorated_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</reference>\n";
 	}
 	else if(const array* t = dynamic_cast<const array*>(&n))
 	{
 		std::cout << indent(indent_level) << "<array size=\"" << t->size() << "\">\n";
-		print(t->decorated_type(), indent_level + 1);
+		print(*t->decorated_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</array>\n";
 	}
 	else if(const class_* t = dynamic_cast<const class_*>(&n))
@@ -139,16 +130,16 @@ print
 	std::cout << ">\n";
 
 	for(auto i = n.namespaces().begin(); i != n.namespaces().end(); ++i)
-		print(*i, indent_level + 1);
+		print(**i, indent_level + 1);
 
 	for(auto i = n.classes().begin(); i != n.classes().end(); ++i)
-		print(*i, indent_level + 1);
+		print(**i, indent_level + 1);
 
 	for(auto i = n.functions().begin(); i != n.functions().end(); ++i)
-		print(*i, indent_level + 1);
+		print(**i, indent_level + 1);
 
 	for(auto i = n.variables().begin(); i != n.variables().end(); ++i)
-		print(*i, indent_level + 1);
+		print(**i, indent_level + 1);
 
 	std::cout << indent(indent_level) << "</namespace>\n";
 }
@@ -170,10 +161,10 @@ print
 
 	for(auto i = c.base_classes().begin(); i != c.base_classes().end(); ++i)
 	{
-		const class_::base_class& base = *i;
+		const class_::base_class& base = **i;
 
 		std::cout << indent(indent_level + 1) << "<base_class";
-		std::cout << " id=\"" << &base.base() << "\"";
+		std::cout << " id=\"" << base.base().get() << "\"";
 		print(base.access());
 		if(base.virtual_specified())
 			std::cout << " virtual=\"true\"";
@@ -181,16 +172,16 @@ print
 	}
 
 	for(auto i = c.nested_classes().begin(); i != c.nested_classes().end(); ++i)
-		print(*i, indent_level + 1);
+		print(**i, indent_level + 1);
 
 	for(auto i = c.constructors().begin(); i != c.constructors().end(); ++i)
-		print(*i, indent_level + 1);
+		print(**i, indent_level + 1);
 
 	for(auto i = c.functions().begin(); i != c.functions().end(); ++i)
-		print(*i, indent_level + 1);
+		print(**i, indent_level + 1);
 
 	for(auto i = c.variables().begin(); i != c.variables().end(); ++i)
-		print(*i, indent_level + 1);
+		print(**i, indent_level + 1);
 
 	std::cout << indent(indent_level) << "</class>\n";
 }
@@ -204,9 +195,9 @@ print
 )
 {
 	std::cout << indent(indent_level) << "<function";
-	std::cout << " name=\"" << f.entity().name() << "\"";
+	std::cout << " name=\"" << f.entity()->name() << "\"";
 	print(f.access());
-	if(f.entity().static_specified())
+	if(f.entity()->static_specified())
 		std::cout << " static=\"true\"";
 	if(f.const_qualified())
 		std::cout << " const=\"true\"";
@@ -221,11 +212,11 @@ print
 	std::cout << ">\n";
 
 	std::cout << indent(indent_level + 1) << "<return_type>\n";
-	print(f.entity().return_type(), indent_level + 2);
+	print(*f.entity()->return_type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</return_type>\n";
 
 	std::cout << indent(indent_level + 1) << "<parameters>\n";
-	const std::list<function::parameter>& parameters = f.entity().parameters();
+	const std::list<function::parameter>& parameters = f.entity()->parameters();
 	for(auto i = parameters.begin(); i != parameters.end(); ++i)
 	{
 		print(*i, indent_level + 2);
@@ -297,7 +288,7 @@ print
 	std::cout << ">\n";
 
 	std::cout << indent(indent_level + 1) << "<return_type>\n";
-	print(f.return_type(), indent_level + 2);
+	print(*f.return_type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</return_type>\n";
 
 	std::cout << indent(indent_level + 1) << "<parameters>\n";
@@ -323,7 +314,7 @@ print
 		std::cout << " name=\"" << p.name() << "\"";
 	std::cout << ">\n";
 	std::cout << indent(indent_level + 1) << "<type>\n";
-	print(p.get_type(), indent_level + 2);
+	print(*p.get_type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</type>\n";
 	std::cout << indent(indent_level) << "</parameter>\n";
 }
@@ -344,7 +335,7 @@ print
 		std::cout << " static=\"true\"";
 	std::cout << ">\n";
 	std::cout << indent(indent_level + 1) << "<type>\n";
-	print(v.get_type(), indent_level + 2);
+	print(*v.get_type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</type>\n";
 	std::cout << indent(indent_level) << "</variable>\n";
 }

@@ -31,12 +31,12 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 function::function
 (
 	const std::string& name,
-	const type& return_type,
+	std::shared_ptr<const type> return_type,
 	std::list<parameter>&& parameters,
 	bool is_static_specified
 ):
     name_(name),
-	return_type_(&return_type),
+	return_type_(return_type),
 	parameters_(std::move(parameters)),
 	static_specified_(is_static_specified)
 {
@@ -114,10 +114,10 @@ function::named_entities() const
 	return scope_impl_.named_entities();
 }
 
-const type&
+std::shared_ptr<const type>
 function::return_type() const
 {
-	return *return_type_;
+	return return_type_;
 }
 
 const std::list<function::parameter>&
@@ -134,7 +134,7 @@ function::static_specified() const
 
 
 
-function::parameter::parameter(const type& t, const std::string& name):
+function::parameter::parameter(std::shared_ptr<const type> t, const std::string& name):
 	type_(t),
 	name_(name)
 {
@@ -146,7 +146,7 @@ function::parameter::parameter(parameter&& o):
 {
 }
 
-const type&
+std::shared_ptr<const type>
 function::parameter::get_type() const
 {
 	return type_;

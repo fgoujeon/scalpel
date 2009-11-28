@@ -55,9 +55,9 @@ scope_impl::scopes() const
 }
 
 void
-scope_impl::add_to_scopes(scope& s)
+scope_impl::add_to_scopes(std::shared_ptr<scope> s)
 {
-	scopes_.push_back(&s);
+	scopes_.push_back(s);
 }
 
 scope::named_entity_iterator_range
@@ -73,9 +73,9 @@ scope_impl::named_entities() const
 }
 
 void
-scope_impl::add_to_named_entities(named_entity& n)
+scope_impl::add_to_named_entities(std::shared_ptr<named_entity> n)
 {
-	named_entities_.push_back(&n);
+	named_entities_.push_back(n);
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

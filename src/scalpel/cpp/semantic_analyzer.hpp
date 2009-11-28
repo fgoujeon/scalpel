@@ -51,7 +51,7 @@ class semantic_analyzer
 
 		semantic_analyzer();
 
-		semantic_graph
+		std::shared_ptr<semantic_graph>
 		operator()(const syntax_tree& tree);
 
 	private:
@@ -263,16 +263,13 @@ class semantic_analyzer
         void
 		analyze(const syntax_nodes::while_statement& syntax_node);
 
-		const semantic_entities::type&
-		add_custom_type(std::unique_ptr<semantic_entities::type> t);
-
-		semantic_entities::class_
+		std::shared_ptr<semantic_entities::class_>
 		create_class(const syntax_nodes::class_specifier& syntax_node);
 
 		void
 		fill_class(semantic_entities::class_& c, const syntax_nodes::class_specifier& syntax_node);
 
-		semantic_entities::function
+		std::shared_ptr<semantic_entities::function>
 		create_function
 		(
 			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
@@ -282,27 +279,27 @@ class semantic_analyzer
 		semantic_entities::function::parameters_t
 		create_parameters(const syntax_nodes::declarator& declarator_node);
 
-		const semantic_entities::type&
+		std::shared_ptr<const semantic_entities::type>
 		create_type
 		(
 			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
 			const syntax_nodes::declarator& declarator_node
 		);
 
-		semantic_entities::class_&
+		std::shared_ptr<semantic_entities::class_>
 		find_class
 		(
 			const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node
 		);
 
-		std::list<semantic_entities::variable>
+		std::vector<std::shared_ptr<semantic_entities::variable>>
 		create_variables
 		(
 			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
 			const syntax_nodes::init_declarator_list& init_declarator_list_node
 		);
 
-		semantic_entities::variable
+		std::shared_ptr<semantic_entities::variable>
 		create_variable
 		(
 			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
@@ -311,7 +308,6 @@ class semantic_analyzer
 
 		detail::semantic_analysis::scope_cursor scope_cursor_;
 		alternative_visitor alternative_visitor_;
-		std::list<std::unique_ptr<semantic_entities::type>> custom_types_;
 };
 
 template<class T>

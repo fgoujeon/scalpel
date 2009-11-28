@@ -24,7 +24,7 @@ namespace scalpel { namespace cpp { namespace detail { namespace semantic_analys
 {
 
 template<class RangeT>
-semantic_entities::named_entity&
+std::shared_ptr<semantic_entities::named_entity>
 find_name
 (
 	RangeT scope_stack,
@@ -40,12 +40,12 @@ find_name
 	if(opt_nested_name_specifier_node)
 	{
 		auto nested_name_specifier_node = *opt_nested_name_specifier_node;
-		scope& found_scope = find_scope(scope_stack, nested_name_specifier_node);
+		std::shared_ptr<scope> found_scope = find_scope(scope_stack, nested_name_specifier_node);
 
 		if(auto opt_identifier_node = get<identifier>(&identifier_or_template_id_node))
 		{
 			auto identifier_node = *opt_identifier_node;
-			return *find_name(found_scope, identifier_node.value());
+			return find_name(*found_scope, identifier_node.value());
 		}
 		else if(auto template_id_node = get<template_id>(&identifier_or_template_id_node))
 		{
@@ -77,20 +77,20 @@ find_name
 
 
 template<class RangeT>
-semantic_entities::named_entity&
+std::shared_ptr<semantic_entities::named_entity>
 find_name
 (
 	RangeT scope_stack,
 	const std::string& name
 )
 {
-    return *find_name(scope_stack, name, true);
+    return find_name(scope_stack, name, true);
 }
 
 
 
 template<class RangeT>
-semantic_entities::named_entity*
+std::shared_ptr<semantic_entities::named_entity>
 find_name
 (
 	RangeT scope_stack,
@@ -100,12 +100,12 @@ find_name
 {
 	using namespace semantic_entities;
 
-	scope& current_scope = scope_stack.back();
+	std::shared_ptr<scope> current_scope = scope_stack.back();
 
     /*
     1. Current scope
     */
-	if(named_entity* found_name = find_name(current_scope, name))
+	if(std::shared_ptr<named_entity> found_name = find_name(*current_scope, name))
 	{
 		return found_name;
 	}
@@ -125,7 +125,7 @@ find_name
 
 		if(!enclosing_scope_stack.empty())
 		{
-			semantic_entities::named_entity* found_name = find_name(enclosing_scope_stack, name, true);
+			std::shared_ptr<semantic_entities::named_entity> found_name = find_name(enclosing_scope_stack, name, true);
 			if(found_name)
 			{
 				return found_name;
@@ -157,13 +157,13 @@ find_name
 //    }
 
 	//no name has been found, we return a null pointer
-    return 0;
+	return std::shared_ptr<semantic_entities::named_entity>();
 }
 
 
 
 template<class RangeT>
-semantic_entities::scope&
+std::shared_ptr<semantic_entities::scope>
 find_scope
 (
 	RangeT scope_stack,
@@ -173,7 +173,7 @@ find_scope
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
 
-	scope* found_scope = 0;
+	std::shared_ptr<scope> found_scope;
 
 	//get the first part of the nested-name-specifier
 	const identifier_or_template_id& an_identifier_or_template_id = get_identifier_or_template_id(a_nested_name_specifier);
@@ -185,7 +185,7 @@ find_scope
 		const std::string& scope_name = an_identifier->value();
 
 		//find the scope which has that identifier in the current scope and in the enclosing scopes
-		found_scope = &find_scope(scope_stack, scope_name);
+		found_scope = find_scope(scope_stack, scope_name);
 	}
 
 	//if the first part scope has been found, go on with the next parts
@@ -217,13 +217,13 @@ find_scope
 		}
 	}
 
-	return *found_scope;
+	return found_scope;
 }
 
 
 
 template<class RangeT>
-semantic_entities::scope&
+std::shared_ptr<semantic_entities::scope>
 find_scope
 (
 	RangeT scope_stack,
@@ -238,10 +238,10 @@ find_scope
 		for(auto i = scope_stack.size(); i > 0; --i)
 		{
 			--it;
-			scope& current_scope = *it;
-			if(scope* found_scope = find_scope(current_scope, scope_name))
+			std::shared_ptr<scope> current_scope = *it;
+			if(std::shared_ptr<scope> found_scope = find_scope(*current_scope, scope_name))
 			{
-				return *found_scope;
+				return found_scope;
 			}
 		}
 	}

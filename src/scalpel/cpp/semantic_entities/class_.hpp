@@ -23,6 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string>
 #include <list>
+#include <vector>
 #include <boost/variant.hpp>
 #include <boost/noncopyable.hpp>
 #include "type.hpp"
@@ -53,23 +54,23 @@ class class_:
 		template<class EntityT>
 		class member;
 
-		typedef std::list<base_class> base_classes_t;
+		typedef std::vector<std::shared_ptr<base_class>> base_classes_t;
 		typedef base_classes_t::const_iterator base_class_const_iterator;
 		typedef boost::iterator_range<base_class_const_iterator> base_class_const_iterator_range;
 
-		typedef std::list<member<class_>> nested_classes_t;
+		typedef std::vector<std::shared_ptr<member<class_>>> nested_classes_t;
 		typedef nested_classes_t::const_iterator nested_class_const_iterator;
 		typedef boost::iterator_range<nested_class_const_iterator> nested_class_const_iterator_range;
 
-		typedef std::list<constructor> constructors_t;
+		typedef std::vector<std::shared_ptr<constructor>> constructors_t;
 		typedef constructors_t::const_iterator constructor_const_iterator;
 		typedef boost::iterator_range<constructor_const_iterator> constructor_const_iterator_range;
 
-		typedef std::list<member<function>> functions_t;
+		typedef std::vector<std::shared_ptr<member<function>>> functions_t;
 		typedef functions_t::const_iterator function_const_iterator;
 		typedef boost::iterator_range<function_const_iterator> function_const_iterator_range;
 
-		typedef std::list<member<variable>> variables_t;
+		typedef std::vector<std::shared_ptr<member<variable>>> variables_t;
 		typedef variables_t::const_iterator variable_const_iterator;
 		typedef boost::iterator_range<variable_const_iterator> variable_const_iterator_range;
 
@@ -147,22 +148,22 @@ class class_:
 		variables() const;
 
         void
-        add(base_class&& c);
+        add(std::shared_ptr<base_class> c);
 
         /**
         Adds a nested class.
         */
         void
-        add(member<class_>&& nested_class);
+        add(std::shared_ptr<member<class_>> nested_class);
 
         void
-        add(constructor&& member);
+        add(std::shared_ptr<constructor> member);
 
         void
-        add(member<function>&& member);
+        add(std::shared_ptr<member<function>> member);
 
 		void
-		add(member<variable>&& member);
+		add(std::shared_ptr<member<variable>> member);
 
     private:
 		scope_impl scope_impl_;
@@ -179,14 +180,14 @@ class class_::base_class
 	public:
 		base_class
 		(
-			class_& base,
+			std::shared_ptr<class_> base,
 			class_::access access,
 			const bool is_virtual_specified
 		);
 
 		base_class(base_class&& o);
 
-		const class_&
+		std::shared_ptr<const class_>
 		base() const;
 
 		class_::access
@@ -196,7 +197,7 @@ class class_::base_class
 		virtual_specified() const;
 
 	private:
-		class_& base_;
+		std::shared_ptr<class_> base_;
 		class_::access access_;
 		bool virtual_specified_;
 };
@@ -241,28 +242,28 @@ template<class EntityT>
 class class_::member
 {
 	public:
-		member(EntityT&& entity, class_::access a);
+		member(std::shared_ptr<EntityT> entity, class_::access a);
 
 		member(const member& o);
 
 		member(member&& o);
 
-		const EntityT&
+		std::shared_ptr<const EntityT>
 		entity() const;
 
-		EntityT&
+		std::shared_ptr<EntityT>
 		entity();
 
 		class_::access
 		access() const;
 
 	private:
-		EntityT entity_;
+		std::shared_ptr<EntityT> entity_;
 		class_::access access_;
 };
 
 template<class EntityT>
-class_::member<EntityT>::member(EntityT&& entity, class_::access a):
+class_::member<EntityT>::member(std::shared_ptr<EntityT> entity, class_::access a):
 	entity_(std::move(entity)),
 	access_(a)
 {
@@ -283,14 +284,14 @@ class_::member<EntityT>::member(member<EntityT>&& o):
 }
 
 template<class EntityT>
-const EntityT&
+std::shared_ptr<const EntityT>
 class_::member<EntityT>::entity() const
 {
 	return entity_;
 }
 
 template<class EntityT>
-EntityT&
+std::shared_ptr<EntityT>
 class_::member<EntityT>::entity()
 {
 	return entity_;
@@ -309,7 +310,7 @@ class class_::member<function>
 	public:
 		member
 		(
-			function&& entity,
+			std::shared_ptr<function> entity,
 			class_::access a,
 			bool is_const_qualified,
 			bool is_volatile_qualified,
@@ -320,10 +321,10 @@ class class_::member<function>
 
 		member(member&& o);
 
-		const function&
+		std::shared_ptr<const function>
 		entity() const;
 
-		function&
+		std::shared_ptr<function>
 		entity();
 
 		class_::access
@@ -345,7 +346,7 @@ class class_::member<function>
 		pure_specified() const;
 
 	private:
-		function entity_;
+		std::shared_ptr<function> entity_;
 		class_::access access_;
 		bool const_qualified_;
 		bool volatile_qualified_;

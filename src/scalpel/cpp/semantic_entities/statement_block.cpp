@@ -96,19 +96,16 @@ statement_block::named_entities() const
 }
 
 void
-statement_block::add(statement_block&& o)
+statement_block::add(std::shared_ptr<statement_block> o)
 {
-	statement_blocks_.push_back(std::move(o));
-
-	statement_block& member_ref = statement_blocks_.back();
-
-	scope_impl_.add_to_scopes(member_ref);
+	statement_blocks_.push_back(o);
+	scope_impl_.add_to_scopes(o);
 }
 
 void
-statement_block::add(variable&& v)
+statement_block::add(std::shared_ptr<variable> o)
 {
-	variables_.push_back(std::move(v));
+	variables_.push_back(o);
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

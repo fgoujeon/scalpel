@@ -23,6 +23,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string>
 #include <list>
+#include <vector>
+#include <memory>
 #include <boost/variant.hpp>
 #include <boost/noncopyable.hpp>
 #include "scope.hpp"
@@ -49,19 +51,19 @@ class namespace_:
 		typedef boost::indirect_iterator<entity_const_iterator, const named_entity*> entity_const_indirect_iterator;
 		typedef boost::iterator_range<entity_const_indirect_iterator> entity_const_iterator_range;
 
-		typedef std::list<namespace_> namespaces_t;
+		typedef std::vector<std::shared_ptr<namespace_>> namespaces_t;
 		typedef namespaces_t::const_iterator namespace_const_iterator;
 		typedef boost::iterator_range<namespace_const_iterator> namespace_const_iterator_range;
 
-		typedef std::list<class_> classes_t;
+		typedef std::vector<std::shared_ptr<class_>> classes_t;
 		typedef classes_t::const_iterator class_const_iterator;
 		typedef boost::iterator_range<class_const_iterator> class_const_iterator_range;
 
-		typedef std::list<function> functions_t;
+		typedef std::vector<std::shared_ptr<function>> functions_t;
 		typedef functions_t::const_iterator function_const_iterator;
 		typedef boost::iterator_range<function_const_iterator> function_const_iterator_range;
 
-		typedef std::list<variable> variables_t;
+		typedef std::vector<std::shared_ptr<variable>> variables_t;
 		typedef variables_t::const_iterator variable_const_iterator;
 		typedef boost::iterator_range<variable_const_iterator> variable_const_iterator_range;
 
@@ -132,16 +134,16 @@ class namespace_:
 		variables() const;
 
         void
-        add(namespace_&& member);
+        add(std::shared_ptr<namespace_> member);
 
         void
-        add(class_&& member);
+        add(std::shared_ptr<class_>&& member);
 
         void
-        add(function&& member);
+        add(std::shared_ptr<function>&& member);
 
         void
-        add(variable&& member);
+        add(std::shared_ptr<variable>&& member);
 
     private:
 		scope_impl scope_impl_;

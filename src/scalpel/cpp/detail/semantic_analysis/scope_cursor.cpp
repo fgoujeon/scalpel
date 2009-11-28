@@ -35,10 +35,10 @@ scope_cursor::scope_cursor()
 }
 
 void
-scope_cursor::initialize(semantic_entities::scope& global_scope)
+scope_cursor::initialize(std::shared_ptr<semantic_entities::scope> global_scope)
 {
 	scope_stack_.clear();
-	scope_stack_.push_back(&global_scope);
+	scope_stack_.push_back(global_scope);
 }
 
 scope_cursor::scope_const_iterator_range
@@ -68,97 +68,76 @@ scope_cursor::global_scope_stack() const
 scope_cursor::scope_iterator_range
 scope_cursor::global_scope_stack()
 {
-	scope_iterator first = scope_stack_.begin();
-	scope_iterator last = scope_stack_.begin(); //we only want the first item
-	++last;
-
-	scope_indirect_iterator indirect_first(first), indirect_last(last);
-
-	return scope_iterator_range(indirect_first, indirect_last);
+	return scope_stack_;
 }
 
-semantic_entities::scope&
+std::shared_ptr<semantic_entities::scope>
 scope_cursor::global_scope()
 {
 	assert(!scope_stack_.empty());
-	return *scope_stack_.front();
+	return scope_stack_.front();
 }
 
-semantic_entities::scope&
+std::shared_ptr<semantic_entities::scope>
 scope_cursor::current_scope()
 {
 	assert(!scope_stack_.empty());
-	return *scope_stack_.back();
-}
-
-semantic_entities::class_&
-scope_cursor::last_added_class()
-{
-	assert(!current_scope().scopes().empty());
-	semantic_entities::scope& s = current_scope().scopes().back();
-	if(semantic_entities::class_* c = dynamic_cast<semantic_entities::class_*>(&s))
-	{
-		return *c;
-	}
-	else
-	{
-		throw std::runtime_error("last added scope is not a class");
-	}
+	return scope_stack_.back();
 }
 
 void
-scope_cursor::add_to_current_scope(semantic_entities::namespace_&& o)
+scope_cursor::add_to_current_scope(std::shared_ptr<semantic_entities::namespace_> o)
 {
 	namespace_adder v(o);
-	current_scope().accept(v);
+	current_scope()->accept(v);
 }
 
 void
-scope_cursor::add_to_current_scope(semantic_entities::class_&& o)
+scope_cursor::add_to_current_scope(std::shared_ptr<semantic_entities::class_> o)
 {
 	class_adder v(o);
-	current_scope().accept(v);
+	current_scope()->accept(v);
 }
 
 void
-scope_cursor::add_to_current_scope(semantic_entities::function&& o)
+scope_cursor::add_to_current_scope(std::shared_ptr<semantic_entities::function> o)
 {
 	function_adder v(o);
-	current_scope().accept(v);
+	current_scope()->accept(v);
 }
 
 void
-scope_cursor::add_to_current_scope(semantic_entities::statement_block&& o)
+scope_cursor::add_to_current_scope(std::shared_ptr<semantic_entities::statement_block> o)
 {
 	statement_block_adder v(o);
-	current_scope().accept(v);
+	current_scope()->accept(v);
 }
 
 void
-scope_cursor::add_to_current_scope(semantic_entities::variable&& o)
+scope_cursor::add_to_current_scope(std::shared_ptr<semantic_entities::variable> o)
 {
 	variable_adder v(o);
-	current_scope().accept(v);
+	current_scope()->accept(v);
 }
 
 void
-scope_cursor::enter_scope(semantic_entities::scope& a_scope)
+scope_cursor::enter_scope(std::shared_ptr<semantic_entities::scope> a_scope)
 {
-	std::cout << "Entering " << a_scope.name() << "\n";
-	scope_stack_.push_back(&a_scope);
+	std::cout << "Entering " << a_scope->name() << "\n";
+	scope_stack_.push_back(a_scope);
 }
 
 void
 scope_cursor::enter_last_added_scope()
 {
-	assert(!current_scope().scopes().empty());
-	enter_scope(current_scope().scopes().back());
+	assert(!current_scope()->scopes().empty());
+	enter_scope(current_scope()->scopes().back());
 }
 
 void
 scope_cursor::leave_scope()
 {
-	std::cout << "Leaving " << current_scope().name() << "\n";
+	std::cout << "Leaving " << current_scope()->name() << "\n";
 	scope_stack_.pop_back();
 }
 
@@ -167,8 +146,8 @@ scope_cursor::leave_scope()
 //scope_cursor::namespace_adder
 //
 
-scope_cursor::namespace_adder::namespace_adder(semantic_entities::namespace_&& o):
-	o_(std::move(o))
+scope_cursor::namespace_adder::namespace_adder(std::shared_ptr<semantic_entities::namespace_> o):
+	o_(o)
 {
 }
 
@@ -201,7 +180,7 @@ scope_cursor::namespace_adder::visit(semantic_entities::statement_block&)
 //scope_cursor::class_adder
 //
 
-scope_cursor::class_adder::class_adder(semantic_entities::class_&& o):
+scope_cursor::class_adder::class_adder(std::shared_ptr<semantic_entities::class_> o):
 	o_(std::move(o))
 {
 }
@@ -235,8 +214,8 @@ scope_cursor::class_adder::visit(semantic_entities::statement_block&)
 //scope_cursor::function_adder
 //
 
-scope_cursor::function_adder::function_adder(semantic_entities::function&& o):
-	o_(std::move(o))
+scope_cursor::function_adder::function_adder(std::shared_ptr<semantic_entities::function> o):
+	o_(o)
 {
 }
 
@@ -269,8 +248,8 @@ scope_cursor::function_adder::visit(semantic_entities::statement_block&)
 //scope_cursor::statement_block_adder
 //
 
-scope_cursor::statement_block_adder::statement_block_adder(semantic_entities::statement_block&& o):
-	o_(std::move(o))
+scope_cursor::statement_block_adder::statement_block_adder(std::shared_ptr<semantic_entities::statement_block> o):
+	o_(o)
 {
 }
 
@@ -303,8 +282,8 @@ scope_cursor::statement_block_adder::visit(semantic_entities::statement_block& s
 //scope_cursor::variable_adder
 //
 
-scope_cursor::variable_adder::variable_adder(semantic_entities::variable&& o):
-	o_(std::move(o))
+scope_cursor::variable_adder::variable_adder(std::shared_ptr<semantic_entities::variable> o):
+	o_(o)
 {
 }
 

@@ -21,7 +21,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "class_.hpp"
 
 #include <iostream>
+#include <memory>
 #include <cassert>
+#include <scalpel/utility/null_deleter.hpp>
 #include "namespace_.hpp"
 #include "built_in_type.hpp"
 
@@ -136,54 +138,60 @@ class_::variables() const
 }
 
 void
-class_::add(base_class&& c)
+class_::add(std::shared_ptr<base_class> c)
 {
-	base_classes_.push_back(std::move(c));
+	base_classes_.push_back(c);
 }
 
 void
-class_::add(member<class_>&& nested_class)
+class_::add(std::shared_ptr<member<class_>> nested_class)
 {
-	nested_classes_.push_back(std::move(nested_class));
+	nested_classes_.push_back(nested_class);
 
-	class_& member_ref = nested_classes_.back().entity();
+	/*
+	member<class_>& member_ref = *nested_class.get();
 
 	scope_impl_.add_to_scopes(member_ref);
 	scope_impl_.add_to_named_entities(member_ref);
+	*/
 }
 
 void
-class_::add(constructor&& member)
+class_::add(std::shared_ptr<constructor> member)
 {
-    constructors_.push_back(std::move(member));
+    constructors_.push_back(member);
 }
 
 void
-class_::add(member<function>&& member)
+class_::add(std::shared_ptr<member<function>> member)
 {
-    functions_.push_back(std::move(member));
+    functions_.push_back(member);
 
-	function& member_ref = functions_.back().entity();
+	/*
+	function& member_ref = *member.get();
 
 	scope_impl_.add_to_scopes(member_ref);
 	scope_impl_.add_to_named_entities(member_ref);
+	*/
 }
 
 void
-class_::add(member<variable>&& member)
+class_::add(std::shared_ptr<member<variable>> member)
 {
-    variables_.push_back(std::move(member));
+    variables_.push_back(member);
 
-	variable& member_ref = variables_.back().entity();
+	/*
+	variable& member_ref = *member.get();
 
 	scope_impl_.add_to_named_entities(member_ref);
+	*/
 }
 
 
 
 class_::base_class::base_class
 (
-	class_& base,
+	std::shared_ptr<class_> base,
 	class_::access access,
 	const bool is_virtual_specified
 ):
@@ -200,7 +208,7 @@ class_::base_class::base_class(base_class&& o):
 {
 }
 
-const class_&
+std::shared_ptr<const class_>
 class_::base_class::base() const
 {
 	return base_;
@@ -227,7 +235,13 @@ class_::constructor::constructor
 	const bool is_inline_specified,
 	const bool is_explicit_specified
 ):
-	impl_("_", built_in_type::void_, std::move(parameters), false),
+	impl_
+	(
+		"_",
+		std::shared_ptr<const built_in_type>(&built_in_type::void_, scalpel::utility::null_deleter()),
+		std::move(parameters),
+		false
+	),
 	access_(access),
 	inline_specified_(is_inline_specified),
 	explicit_specified_(is_explicit_specified)
@@ -270,7 +284,7 @@ class_::constructor::explicit_specified() const
 
 class_::member<function>::member
 (
-	function&& entity,
+	std::shared_ptr<function> entity,
 	class_::access a,
 	bool is_const_qualified,
 	bool is_volatile_qualified,
@@ -278,7 +292,7 @@ class_::member<function>::member
 	bool is_virtual_specified,
 	bool is_pure_specified
 ):
-	entity_(std::move(entity)),
+	entity_(entity),
 	access_(a),
 	const_qualified_(is_const_qualified),
 	volatile_qualified_(is_volatile_qualified),
@@ -289,7 +303,7 @@ class_::member<function>::member
 }
 
 class_::member<function>::member(member<function>&& o):
-	entity_(std::move(o.entity_)),
+	entity_(o.entity_),
 	access_(o.access_),
 	const_qualified_(o.const_qualified_),
 	volatile_qualified_(o.volatile_qualified_),
@@ -299,13 +313,13 @@ class_::member<function>::member(member<function>&& o):
 {
 }
 
-const function&
+std::shared_ptr<const function>
 class_::member<function>::entity() const
 {
 	return entity_;
 }
 
-function&
+std::shared_ptr<function>
 class_::member<function>::entity()
 {
 	return entity_;

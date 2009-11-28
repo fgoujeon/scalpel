@@ -33,22 +33,22 @@ namespace scalpel { namespace cpp
 syntax_tree
 syntax_analyzer::operator()(const std::string& input)
 {
-    //parse the input with the C++ grammar
-    boost::spirit::tree_parse_info<> info = boost::spirit::pt_parse
-    (
-        input.c_str(),
-        grammar_.get_start_rule()
-    );
+	//parse the input with the C++ grammar
+	boost::spirit::tree_parse_info<> info = boost::spirit::pt_parse
+	(
+		input.c_str(),
+		grammar_.get_start_rule()
+	);
 
-    //throw an exception if parsing fails
-    if(!info.full)
-    {
-        std::ostringstream failure_message;
-        failure_message << "Parsing stopped at:\n***\n" << info.stop << "\n***";
-        throw std::runtime_error(failure_message.str().c_str());
-    }
+	//throw an exception if parsing fails
+	if(!info.full)
+	{
+		std::ostringstream failure_message;
+		failure_message << "Parsing stopped at:\n***\n" << info.stop << "\n***";
+		throw std::runtime_error(failure_message.str().c_str());
+	}
 
-    //convert spirit's parse tree to syntax tree and return the result
+	//convert spirit's parse tree to syntax tree and return the result
 	return parse_tree_to_syntax_tree::convert_node<syntax_nodes::translation_unit>
 	(
 		parse_tree_to_syntax_tree::get_only_child_node
@@ -59,3 +59,4 @@ syntax_analyzer::operator()(const std::string& input)
 }
 
 }} //namespace scalpel::cpp
+

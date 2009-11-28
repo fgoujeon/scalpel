@@ -18,8 +18,8 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_UTIL_EXTERN_STRINGS_HPP
-#define SCALPEL_UTIL_EXTERN_STRINGS_HPP
+#ifndef SCALPEL_UTILITY_EXTERN_STRINGS_HPP
+#define SCALPEL_UTILITY_EXTERN_STRINGS_HPP
 
 #include <string>
 
@@ -162,3 +162,4 @@ namespace extern_strings
 }} //namespace scalpel::utility
 
 #endif
+

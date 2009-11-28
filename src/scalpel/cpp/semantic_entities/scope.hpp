@@ -21,7 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_SCOPE_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_SCOPE_HPP
 
-#include <list>
+#include <vector>
+#include <memory>
 #include <boost/iterator/indirect_iterator.hpp>
 #include <boost/range/iterator_range.hpp>
 #include "named_entity.hpp"
@@ -32,21 +33,17 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 
 struct scope
 {
-	typedef std::list<scope*> scopes_t;
+	typedef std::vector<std::shared_ptr<scope>> scopes_t;
 	typedef scopes_t::const_iterator scope_const_iterator;
-	typedef boost::indirect_iterator<scope_const_iterator, const scope&> scope_const_indirect_iterator;
-	typedef boost::iterator_range<scope_const_indirect_iterator> scope_const_iterator_range;
+	typedef boost::iterator_range<scope_const_iterator> scope_const_iterator_range;
 	typedef scopes_t::iterator scope_iterator;
-	typedef boost::indirect_iterator<scope_iterator, scope&> scope_indirect_iterator;
-	typedef boost::iterator_range<scope_indirect_iterator> scope_iterator_range;
+	typedef boost::iterator_range<scope_iterator> scope_iterator_range;
 
-	typedef std::list<named_entity*> named_entities_t;
+	typedef std::vector<std::shared_ptr<named_entity>> named_entities_t;
 	typedef named_entities_t::const_iterator named_entity_const_iterator;
-	typedef boost::indirect_iterator<named_entity_const_iterator, const named_entity&> named_entity_const_indirect_iterator;
-	typedef boost::iterator_range<named_entity_const_indirect_iterator> named_entity_const_iterator_range;
+	typedef boost::iterator_range<named_entity_const_iterator> named_entity_const_iterator_range;
 	typedef named_entities_t::iterator named_entity_iterator;
-	typedef boost::indirect_iterator<named_entity_iterator, named_entity&> named_entity_indirect_iterator;
-	typedef boost::iterator_range<named_entity_indirect_iterator> named_entity_iterator_range;
+	typedef boost::iterator_range<named_entity_iterator> named_entity_iterator_range;
 
 	virtual
 	~scope(){}

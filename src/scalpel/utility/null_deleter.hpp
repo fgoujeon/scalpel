@@ -18,28 +18,21 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "semantic_graph.hpp"
+#ifndef SCALPEL_UTILITY_NULL_DELETER_HPP
+#define SCALPEL_UTILITY_NULL_DELETER_HPP
 
-namespace scalpel { namespace cpp
+namespace scalpel { namespace utility
 {
 
-semantic_graph::semantic_graph(semantic_entities::namespace_&& global_namespace, type_pool_t&& type_pool):
-	global_namespace_(std::move(global_namespace)),
-	type_pool_(std::move(type_pool))
+class null_deleter
 {
-}
+	public:
+		void
+		operator()(void const*) const
+		{
+		}
+};
 
-semantic_graph::semantic_graph(semantic_graph&& o):
-	global_namespace_(std::move(o.global_namespace_)),
-	type_pool_(std::move(o.type_pool_))
-{
-}
+}} //namespace scalpel::utility
 
-const semantic_entities::namespace_&
-semantic_graph::global_namespace() const
-{
-	return global_namespace_;
-}
-
-}} //namespace scalpel::cpp
-
+#endif

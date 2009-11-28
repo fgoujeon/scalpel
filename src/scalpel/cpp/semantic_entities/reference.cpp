@@ -23,12 +23,12 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-reference::reference(const type& decorated_type):
+reference::reference(std::shared_ptr<const type> decorated_type):
 	decorated_type_(decorated_type)
 {
 }
 
-const type&
+std::shared_ptr<const type>
 reference::decorated_type() const
 {
 	return decorated_type_;

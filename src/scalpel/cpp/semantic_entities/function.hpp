@@ -54,7 +54,7 @@ class function:
         function
 		(
 			const std::string& name,
-			const type& return_type,
+			std::shared_ptr<const type> return_type,
 			std::list<parameter>&& parameters,
 			bool is_static_specified
 		);
@@ -98,7 +98,7 @@ class function:
 		named_entity_const_iterator_range
 		named_entities() const;
 
-		const type&
+		std::shared_ptr<const type>
 		return_type() const;
 
 		const parameters_t&
@@ -111,7 +111,7 @@ class function:
 		scope_impl scope_impl_;
         std::string name_;
 		statement_block statement_block_;
-		const type* return_type_;
+		std::shared_ptr<const type> return_type_;
 		std::list<parameter> parameters_;
 		bool static_specified_;
 };
@@ -119,7 +119,7 @@ class function:
 class function::parameter
 {
 	public:
-		parameter(const type& t, const std::string& name);
+		parameter(std::shared_ptr<const type> t, const std::string& name);
 
 		parameter(const parameter&) = delete;
 
@@ -128,14 +128,14 @@ class function::parameter
 		const parameter&
 		operator=(const parameter&) = delete;
 
-		const type&
+		std::shared_ptr<const type>
 		get_type() const;
 
 		const std::string&
 		name() const;
 
 	private:
-		const type& type_;
+		std::shared_ptr<const type> type_;
 		std::string name_;
 };
 

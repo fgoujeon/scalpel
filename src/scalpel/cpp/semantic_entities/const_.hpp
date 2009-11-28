@@ -35,13 +35,13 @@ class const_:
 	public type_decorator
 {
 	public:
-		const_(const type& decorated_type);
+		const_(std::shared_ptr<const type> decorated_type);
 
-		const type&
+		std::shared_ptr<const type>
 		decorated_type() const;
 
 	private:
-		const type& decorated_type_;
+		std::shared_ptr<const type> decorated_type_;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

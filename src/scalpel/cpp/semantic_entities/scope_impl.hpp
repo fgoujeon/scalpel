@@ -46,7 +46,7 @@ class scope_impl: public boost::noncopyable
 		scopes() const;
 
 		void
-		add_to_scopes(scope& s);
+		add_to_scopes(std::shared_ptr<scope> s);
 
 		scope::named_entity_iterator_range
 		named_entities();
@@ -55,7 +55,7 @@ class scope_impl: public boost::noncopyable
 		named_entities() const;
 
 		void
-		add_to_named_entities(named_entity& n);
+		add_to_named_entities(std::shared_ptr<named_entity> n);
 
 	private:
 		scope::scopes_t scopes_;

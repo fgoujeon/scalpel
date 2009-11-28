@@ -25,8 +25,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-variable::variable(const type& t, const std::string& name, bool is_static_specified):
-	type_(&t),
+variable::variable(std::shared_ptr<const type> t, const std::string& name, bool is_static_specified):
+	type_(t),
 	name_(name),
 	static_specified_(is_static_specified)
 {
@@ -57,10 +57,10 @@ variable::operator=(variable&& v)
 	return *this;
 }
 
-const type&
+std::shared_ptr<const type>
 variable::get_type() const
 {
-	return *type_;
+	return type_;
 }
 
 const std::string&

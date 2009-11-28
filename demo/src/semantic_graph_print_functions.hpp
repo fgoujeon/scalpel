@@ -34,9 +34,6 @@ using namespace scalpel::cpp;
 using namespace scalpel::cpp::semantic_entities;
 
 void
-print(const semantic_graph& g);
-
-void
 print
 (
 	const type& n,
@@ -53,7 +50,7 @@ void
 print
 (
 	const namespace_& n,
-	const unsigned int indent_level
+	const unsigned int indent_level = 0
 );
 
 void
@@ -130,7 +127,7 @@ print
 			access = "private";
 			break;
 	}
-	print(m.entity(), indent_level, access);
+	print(*m.entity(), indent_level, access);
 }
 
 template<>
