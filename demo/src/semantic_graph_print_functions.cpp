@@ -35,9 +35,9 @@ print
 {
 	if(const built_in_type* t = dynamic_cast<const built_in_type*>(&n))
 	{
-		std::cout << indent(indent_level);
+		std::cout << indent(indent_level) << "<built_in_type type=\"";
 		print(*t);
-		std::cout << '\n';
+	   	std::cout << "\"/>\n";
 	}
 	else if(const const_* t = dynamic_cast<const const_*>(&n))
 	{
