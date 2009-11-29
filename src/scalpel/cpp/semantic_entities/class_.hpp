@@ -50,6 +50,7 @@ class class_:
     public:
 		class base_class;
 		class constructor;
+		class destructor;
 
 		template<class EntityT>
 		class member;
@@ -141,6 +142,12 @@ class class_:
 		constructor_const_iterator_range
 		constructors() const;
 
+		std::shared_ptr<const destructor>
+		get_destructor() const;
+
+		void
+		set_destructor(std::shared_ptr<destructor> d);
+
 		function_const_iterator_range
 		functions() const;
 
@@ -171,6 +178,7 @@ class class_:
 		base_classes_t base_classes_;
 		nested_classes_t nested_classes_;
 		constructors_t constructors_;
+		std::shared_ptr<destructor> destructor_;
 		functions_t functions_;
 		variables_t variables_;
 };
@@ -236,6 +244,55 @@ class class_::constructor
 		class_::access access_;
 		bool inline_specified_;
 		bool explicit_specified_;
+};
+
+class class_::destructor
+{
+	private:
+		//give class_ access to the private constructor
+		friend class class_;
+
+		destructor
+		(
+			class_::access access,
+			const bool is_inline_specified,
+			const bool is_virtual_specified,
+			const bool is_pure_specified,
+			const bool is_implicitly_declared
+		);
+
+	public:
+		destructor
+		(
+			class_::access access,
+			const bool is_inline_specified,
+			const bool is_virtual_specified,
+			const bool is_pure_specified
+		);
+
+		destructor(destructor&& o);
+
+		class_::access
+		access() const;
+
+		bool
+		inline_specified() const;
+
+		bool
+		virtual_specified() const;
+
+		bool
+		pure_specified() const;
+
+		bool
+		implicitly_declared() const;
+
+	private:
+		class_::access access_;
+		bool inline_specified_;
+		bool virtual_specified_;
+		bool pure_specified_;
+		bool implicitly_declared_;
 };
 
 template<class EntityT>

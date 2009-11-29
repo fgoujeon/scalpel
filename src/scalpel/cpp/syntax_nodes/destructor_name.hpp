@@ -42,6 +42,13 @@ typedef
 	destructor_name
 ;
 
+inline
+const identifier_or_template_id&
+get_identifier_or_template_id(const destructor_name& o)
+{
+	return get<2>(o);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif

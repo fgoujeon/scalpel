@@ -47,6 +47,9 @@ bool
 is_function_declaration(const syntax_nodes::declarator& declarator_node);
 
 bool
+is_destructor_declaration(const syntax_nodes::declarator& declarator_node);
+
+bool
 has_pure_specifier(const syntax_nodes::member_declarator_declarator& member_declarator_declarator_node);
 
 

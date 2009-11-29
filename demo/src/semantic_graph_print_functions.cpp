@@ -177,6 +177,8 @@ print
 	for(auto i = c.constructors().begin(); i != c.constructors().end(); ++i)
 		print(**i, indent_level + 1);
 
+	print(*c.get_destructor(), indent_level + 1);
+
 	for(auto i = c.functions().begin(); i != c.functions().end(); ++i)
 		print(**i, indent_level + 1);
 
@@ -272,6 +274,28 @@ print
 	std::cout << indent(indent_level + 1) << "</parameters>\n";
 
 	std::cout << indent(indent_level) << "</constructor>\n";
+}
+
+void
+print
+(
+	const class_::destructor& d,
+	const unsigned int indent_level
+)
+{
+	std::cout << indent(indent_level) << "<destructor";
+	print(d.access());
+	if(d.inline_specified())
+		std::cout << " inline=\"true\"";
+	if(d.virtual_specified())
+		std::cout << " virtual=\"true\"";
+	if(d.pure_specified())
+		std::cout << " pure=\"true\"";
+	if(d.implicitly_declared())
+		std::cout << " implicitly_declared=\"true\"";
+	std::cout << ">\n";
+
+	std::cout << indent(indent_level) << "</destructor>\n";
 }
 
 void

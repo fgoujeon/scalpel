@@ -77,6 +77,13 @@ print
 void
 print
 (
+	const class_::destructor& d,
+	const unsigned int indent_level
+);
+
+void
+print
+(
 	const function& f,
 	const unsigned int indent_level
 );

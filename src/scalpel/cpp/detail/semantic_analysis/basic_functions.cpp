@@ -78,12 +78,19 @@ get_function_name(const declarator& declarator_node)
 
 			if(opt_unqualified_id_node)
 			{
-				auto opt_identifier_node = get<identifier>(opt_unqualified_id_node);
-				if(opt_identifier_node)
+				if(auto opt_identifier_node = get<identifier>(opt_unqualified_id_node))
 				{
 					return opt_identifier_node->value();
 				}
-
+				else if(auto opt_destructor_name_node = get<destructor_name>(opt_unqualified_id_node))
+				{
+					auto destructor_name_node = *opt_destructor_name_node;
+					auto identifier_or_template_id = get_identifier_or_template_id(destructor_name_node);
+					if(auto opt_identifier_node = get<identifier>(&identifier_or_template_id))
+					{
+						return opt_identifier_node->value();
+					}
+				}
 			}
 			else if(opt_qualified_id_node)
 			{
@@ -132,6 +139,30 @@ is_function_declaration(const declarator& declarator_node)
 			if(get<direct_declarator_function_part>(&last_part))
 			{
 				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+bool
+is_destructor_declaration(const syntax_nodes::declarator& declarator_node)
+{
+	auto direct_declarator_node = get_direct_declarator(declarator_node);
+	auto first_part_node = get_first_part(direct_declarator_node);
+	auto opt_declarator_id_node = get<declarator_id>(&first_part_node);
+	if(opt_declarator_id_node)
+	{
+		auto opt_id_expression_node = get<id_expression>(opt_declarator_id_node);
+		if(opt_id_expression_node)
+		{
+			auto opt_unqualified_id_node = get<unqualified_id>(opt_id_expression_node);
+			auto opt_qualified_id_node = get<qualified_id>(opt_id_expression_node);
+
+			if(opt_unqualified_id_node)
+			{
+				return get<destructor_name>(opt_unqualified_id_node);
 			}
 		}
 	}

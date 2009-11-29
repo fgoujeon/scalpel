@@ -31,7 +31,8 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 class_::class_(const std::string& name):
-    name_(name)
+    name_(name),
+	destructor_(new destructor(access::PUBLIC, true, false, false, true)) //implicitly declared destructor
 {
 	std::cout << "New class " << name << '\n';
 }
@@ -41,6 +42,7 @@ class_::class_(class_&& c):
 	name_(std::move(c.name_)),
 	nested_classes_(std::move(c.nested_classes_)),
 	constructors_(std::move(c.constructors_)),
+	destructor_(std::move(c.destructor_)),
 	functions_(std::move(c.functions_)),
 	variables_(std::move(c.variables_))
 {
@@ -53,6 +55,7 @@ class_::operator=(class_&& c)
 	name_ = std::move(c.name_);
 	nested_classes_ = std::move(c.nested_classes_);
 	constructors_ = std::move(c.constructors_);
+	destructor_ = std::move(c.destructor_);
 	functions_ = std::move(c.functions_);
 	variables_ = std::move(c.variables_);
 
@@ -123,6 +126,18 @@ class_::constructor_const_iterator_range
 class_::constructors() const
 {
 	return constructors_;
+}
+
+std::shared_ptr<const class_::destructor>
+class_::get_destructor() const
+{
+	return destructor_;
+}
+
+void
+class_::set_destructor(std::shared_ptr<destructor> d)
+{
+	destructor_ = d;
 }
 
 class_::function_const_iterator_range
@@ -278,6 +293,78 @@ bool
 class_::constructor::explicit_specified() const
 {
 	return explicit_specified_;
+}
+
+
+
+class_::destructor::destructor
+(
+	class_::access access,
+	const bool is_inline_specified,
+	const bool is_virtual_specified,
+	const bool is_pure_specified,
+	const bool is_implicitly_declared
+):
+	access_(access),
+	inline_specified_(is_inline_specified),
+	virtual_specified_(is_virtual_specified),
+	pure_specified_(is_pure_specified),
+	implicitly_declared_(is_implicitly_declared)
+{
+}
+
+class_::destructor::destructor
+(
+	class_::access access,
+	const bool is_inline_specified,
+	const bool is_virtual_specified,
+	const bool is_pure_specified
+):
+	access_(access),
+	inline_specified_(is_inline_specified),
+	virtual_specified_(is_virtual_specified),
+	pure_specified_(is_pure_specified),
+	implicitly_declared_(false)
+{
+}
+
+class_::destructor::destructor(destructor&& o):
+	access_(o.access_),
+	inline_specified_(o.inline_specified_),
+	virtual_specified_(o.virtual_specified_),
+	pure_specified_(o.pure_specified_),
+	implicitly_declared_(o.implicitly_declared_)
+{
+}
+
+class_::access
+class_::destructor::access() const
+{
+	return access_;
+}
+
+bool
+class_::destructor::inline_specified() const
+{
+	return inline_specified_;
+}
+
+bool
+class_::destructor::virtual_specified() const
+{
+	return virtual_specified_;
+}
+
+bool
+class_::destructor::pure_specified() const
+{
+	return pure_specified_;
+}
+
+bool
+class_::destructor::implicitly_declared() const
+{
+	return implicitly_declared_;
 }
 
 

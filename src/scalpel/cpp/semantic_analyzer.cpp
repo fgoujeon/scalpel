@@ -768,18 +768,34 @@ semantic_analyzer::fill_class(class_& c, const class_specifier& class_specifier_
 									auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
 									if(is_function_declaration(declarator_node))
 									{
-										if(c.name() == get_function_name(declarator_node)) //constructor?
+										if(c.name() == get_function_name(declarator_node)) //constructor/destructor?
 										{
-											c.add
-											(
-												std::make_shared<class_::constructor>
+											if(!is_destructor_declaration(declarator_node)) //constructor
+											{
+												c.add
 												(
-													std::move(create_parameters(declarator_node)),
-													current_access,
-													has_inline_specifier(decl_specifier_seq_node),
-													has_explicit_specifier(decl_specifier_seq_node)
-												)
-											);
+													std::make_shared<class_::constructor>
+													(
+														std::move(create_parameters(declarator_node)),
+														current_access,
+														has_inline_specifier(decl_specifier_seq_node),
+														has_explicit_specifier(decl_specifier_seq_node)
+													)
+												);
+											}
+											else //destructor
+											{
+												c.set_destructor
+												(
+													std::make_shared<class_::destructor>
+													(
+														current_access,
+														has_inline_specifier(decl_specifier_seq_node),
+														has_virtual_specifier(decl_specifier_seq_node),
+														has_pure_specifier(member_declarator_declarator_node)
+													)
+												);
+											}
 										}
 										else
 										{
@@ -805,16 +821,32 @@ semantic_analyzer::fill_class(class_& c, const class_specifier& class_specifier_
 								}
 								else
 								{
-									c.add
-									(
-										std::make_shared<class_::constructor>
+									if(!is_destructor_declaration(declarator_node))
+									{
+										c.add
 										(
-											std::move(create_parameters(declarator_node)),
-											current_access,
-											false,
-											false
-										)
-									);
+											std::make_shared<class_::constructor>
+											(
+												std::move(create_parameters(declarator_node)),
+												current_access,
+												false,
+												false
+											)
+										);
+									}
+									else
+									{
+										c.set_destructor
+										(
+											std::make_shared<class_::destructor>
+											(
+												current_access,
+												false,
+												false,
+												false
+											)
+										);
+									}
 								}
 							}
 						}
