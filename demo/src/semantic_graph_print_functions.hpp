@@ -86,7 +86,8 @@ void
 print
 (
 	const operator_function& f,
-	const unsigned int indent_level
+	const unsigned int indent_level,
+	const std::string& access = ""
 );
 
 void

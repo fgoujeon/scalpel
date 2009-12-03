@@ -146,6 +146,12 @@ class_::functions() const
 	return functions_;
 }
 
+class_::operator_function_const_iterator_range
+class_::operator_functions() const
+{
+	return operator_functions_;
+}
+
 class_::variable_const_iterator_range
 class_::variables() const
 {
@@ -191,15 +197,23 @@ class_::add(std::shared_ptr<member<function>> member)
 }
 
 void
+class_::add(std::shared_ptr<member<operator_function>> member)
+{
+    operator_functions_.push_back(member);
+
+	/*
+	operator_function& member_ref = *member.get();
+
+	scope_impl_.add_to_scopes(member_ref);
+	scope_impl_.add_to_named_entities(member_ref);
+	*/
+}
+
+void
 class_::add(std::shared_ptr<member<variable>> member)
 {
     variables_.push_back(member);
-
-	/*
-	variable& member_ref = *member.get();
-
-	scope_impl_.add_to_named_entities(member_ref);
-	*/
+	//scope_impl_.add_to_named_entities(member);
 }
 
 

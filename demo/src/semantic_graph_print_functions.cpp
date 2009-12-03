@@ -185,6 +185,9 @@ print
 	for(auto i = c.functions().begin(); i != c.functions().end(); ++i)
 		print(**i, indent_level + 1);
 
+	for(auto i = c.operator_functions().begin(); i != c.operator_functions().end(); ++i)
+		print(**i, indent_level + 1);
+
 	for(auto i = c.variables().begin(); i != c.variables().end(); ++i)
 		print(**i, indent_level + 1);
 
@@ -311,11 +314,14 @@ void
 print
 (
 	const operator_function& f,
-	const unsigned int indent_level
+	const unsigned int indent_level,
+	const std::string& access
 )
 {
 	std::cout << indent(indent_level) << "<operator_function";
 	print_attribute(f.get_operator());
+	if(access != "")
+		std::cout << " access=\"" << access << "\"";
 	if(f.static_specified())
 		std::cout << " static=\"true\"";
 	std::cout << ">\n";

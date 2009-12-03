@@ -46,63 +46,6 @@ semantic_analyzer::operator()(const syntax_tree& tree)
 	if(opt_declaration_seq_node)
 		analyze(*opt_declaration_seq_node, global_namespace);
 
-	/*
-	if(opt_declaration_seq_node)
-	{
-		auto declaration_seq_node = *opt_declaration_seq_node;
-		for
-		(
-			auto i = declaration_seq_node.begin();
-			i != declaration_seq_node.end();
-			++i
-		)
-		{
-			auto declaration_node = i->main_node();
-
-			if(auto opt_block_declaration_node = get<block_declaration>(&declaration_node))
-			{
-				auto block_declaration_node = *opt_block_declaration_node;
-
-				if(auto opt_simple_declaration_node = get<simple_declaration>(&block_declaration_node))
-				{
-					analyze(*opt_simple_declaration_node, global_namespace);
-				}
-				else if(auto opt_asm_definition_node = get<asm_definition>(&block_declaration_node))
-				{
-				}
-				else if(auto opt_namespace_alias_definition_node = get<namespace_alias_definition>(&block_declaration_node))
-				{
-				}
-				else if(auto opt_using_declaration_node = get<using_declaration>(&block_declaration_node))
-				{
-				}
-				else if(auto opt_using_directive_node = get<using_directive>(&block_declaration_node))
-				{
-				}
-			}
-			else if(auto opt_function_definition_node = get<function_definition>(&declaration_node))
-			{
-			}
-			else if(auto opt_template_declaration_node = get<template_declaration>(&declaration_node))
-			{
-			}
-			else if(auto opt_explicit_instantiation_node = get<explicit_instantiation>(&declaration_node))
-			{
-			}
-			else if(auto opt_explicit_specialization_node = get<explicit_specialization>(&declaration_node))
-			{
-			}
-			else if(auto opt_linkage_specification_node = get<linkage_specification>(&declaration_node))
-			{
-			}
-			else if(auto opt_namespace_definition_node = get<namespace_definition>(&declaration_node))
-			{
-				analyze(*opt_namespace_definition_node, global_namespace);
-			}
-		}
-	}
-	*/
-
 	return global_namespace;
 }
 
@@ -211,7 +154,23 @@ semantic_analyzer::fill_class(class_& c, const class_specifier& class_specifier_
 									auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
 									if(is_function_declaration(declarator_node))
 									{
-										if(c.name() == get_function_name(declarator_node)) //constructor/destructor?
+										if(is_operator_function_declaration(declarator_node))
+										{
+											c.add
+											(
+												std::make_shared<class_::member<operator_function>>
+												(
+													create_operator_function(decl_specifier_seq_node, declarator_node),
+													current_access/*,
+													is_qualified<str::const_>(declarator_node),
+													is_qualified<str::volatile_>(declarator_node),
+													has_inline_specifier(decl_specifier_seq_node),
+													has_virtual_specifier(decl_specifier_seq_node),
+													has_pure_specifier(member_declarator_declarator_node)*/
+												)
+											);
+										}
+										else if(c.name() == get_function_name(declarator_node)) //constructor/destructor?
 										{
 											if(!is_destructor_declaration(declarator_node)) //constructor
 											{

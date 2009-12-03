@@ -31,6 +31,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "scope_impl.hpp"
 #include "named_entity.hpp"
 #include "function.hpp"
+#include "operator_function.hpp"
 #include "variable.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
@@ -70,6 +71,10 @@ class class_:
 		typedef std::vector<std::shared_ptr<member<function>>> functions_t;
 		typedef functions_t::const_iterator function_const_iterator;
 		typedef boost::iterator_range<function_const_iterator> function_const_iterator_range;
+
+		typedef std::vector<std::shared_ptr<member<operator_function>>> operator_functions_t;
+		typedef operator_functions_t::const_iterator operator_function_const_iterator;
+		typedef boost::iterator_range<operator_function_const_iterator> operator_function_const_iterator_range;
 
 		typedef std::vector<std::shared_ptr<member<variable>>> variables_t;
 		typedef variables_t::const_iterator variable_const_iterator;
@@ -151,6 +156,9 @@ class class_:
 		function_const_iterator_range
 		functions() const;
 
+		operator_function_const_iterator_range
+		operator_functions() const;
+
 		variable_const_iterator_range
 		variables() const;
 
@@ -169,6 +177,9 @@ class class_:
         void
         add(std::shared_ptr<member<function>> member);
 
+        void
+        add(std::shared_ptr<member<operator_function>> member);
+
 		void
 		add(std::shared_ptr<member<variable>> member);
 
@@ -180,6 +191,7 @@ class class_:
 		constructors_t constructors_;
 		std::shared_ptr<destructor> destructor_;
 		functions_t functions_;
+		operator_functions_t operator_functions_;
 		variables_t variables_;
 };
 
