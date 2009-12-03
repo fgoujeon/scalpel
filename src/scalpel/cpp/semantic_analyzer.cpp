@@ -492,6 +492,7 @@ semantic_analyzer::analyze(const simple_declaration& simple_declaration_node)
 	bool is_a_class_declaration = false;
 	bool is_a_class_forward_declaration = false;
 	bool is_a_function_declaration = false;
+	bool is_an_operator_function_declaration = false;
 
 	const optional_node<decl_specifier_seq>& opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node);
 	const optional_node<init_declarator_list>& opt_init_declarator_list_node = get_init_declarator_list(simple_declaration_node);
@@ -564,7 +565,13 @@ semantic_analyzer::analyze(const simple_declaration& simple_declaration_node)
 			}
 
 			if(!is_a_function_declaration)
+			{
 				is_a_function_declaration = is_function_declaration(declarator_node);
+				if(is_a_function_declaration)
+				{
+					is_an_operator_function_declaration = is_operator_function_declaration(declarator_node);
+				}
+			}
 		}
 	}
 
@@ -577,6 +584,17 @@ semantic_analyzer::analyze(const simple_declaration& simple_declaration_node)
 		if(!class_name.empty())
 			scope_cursor_.add_to_current_scope(std::make_shared<class_>(class_name));
 	}
+	else if(is_an_operator_function_declaration)
+	{
+		assert(opt_decl_specifier_seq_node);
+		assert(opt_init_declarator_list_node);
+		auto init_declarator_list_node = *opt_init_declarator_list_node;
+		assert(init_declarator_list_node.size() == 1);
+
+		auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
+		auto declarator_node = get_declarator(init_declarator_list_node.front().main_node());
+		create_operator_function(decl_specifier_seq_node, declarator_node);
+	}
 	else if(is_a_function_declaration)
 	{
 		assert(opt_decl_specifier_seq_node);
@@ -588,7 +606,7 @@ semantic_analyzer::analyze(const simple_declaration& simple_declaration_node)
 		auto declarator_node = get_declarator(init_declarator_list_node.front().main_node());
 		scope_cursor_.add_to_current_scope(create_function(decl_specifier_seq_node, declarator_node));
 	}
-	else if(!is_a_function_declaration && !is_a_class_forward_declaration) //variable declaration
+	else //variable declaration
 	{
 		assert(opt_decl_specifier_seq_node);
 		const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
@@ -894,6 +912,25 @@ semantic_analyzer::create_function(const decl_specifier_seq& decl_specifier_seq_
 	return std::make_shared<function>
 	(
 		name,
+		return_type,
+		std::move(parameters),
+		has_static_specifier(decl_specifier_seq_node)
+	);
+}
+
+std::shared_ptr<semantic_entities::operator_function>
+semantic_analyzer::create_operator_function(const decl_specifier_seq& decl_specifier_seq_node, const declarator& declarator_node)
+{
+
+	//get the function's return type
+	std::shared_ptr<const type> return_type = create_type(decl_specifier_seq_node, declarator_node);
+
+	//get the function's parameter list
+	std::list<function::parameter> parameters = create_parameters(declarator_node);
+
+	return std::make_shared<operator_function>
+	(
+		semantic_entities::operator_::EQUALITY,
 		return_type,
 		std::move(parameters),
 		has_static_specifier(decl_specifier_seq_node)

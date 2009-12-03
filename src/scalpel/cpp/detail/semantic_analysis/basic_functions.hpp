@@ -47,6 +47,9 @@ bool
 is_function_declaration(const syntax_nodes::declarator& declarator_node);
 
 bool
+is_operator_function_declaration(const syntax_nodes::declarator& declarator_node);
+
+bool
 is_destructor_declaration(const syntax_nodes::declarator& declarator_node);
 
 bool

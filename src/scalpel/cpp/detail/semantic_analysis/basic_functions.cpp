@@ -147,6 +147,31 @@ is_function_declaration(const declarator& declarator_node)
 }
 
 bool
+is_operator_function_declaration(const declarator& declarator_node)
+{
+	auto direct_declarator_node = get_direct_declarator(declarator_node);
+	auto direct_declarator_node_first_part_node = get_first_part(direct_declarator_node);
+	if(auto opt_declarator_id_node = get<declarator_id>(&direct_declarator_node_first_part_node))
+	{
+		auto declarator_id_node = *opt_declarator_id_node;
+		if(auto opt_id_expression_node = get<id_expression>(&declarator_id_node))
+		{
+			auto id_expression_node = *opt_id_expression_node;
+			if(auto opt_unqualified_id_node = get<unqualified_id>(&id_expression_node))
+			{
+				auto unqualified_id_node = *opt_unqualified_id_node;
+				if(get<operator_function_id>(&unqualified_id_node))
+				{
+					return true;
+				}
+			}
+		}
+	}
+
+	return false;
+}
+
+bool
 is_destructor_declaration(const syntax_nodes::declarator& declarator_node)
 {
 	auto direct_declarator_node = get_direct_declarator(declarator_node);
