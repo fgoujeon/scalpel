@@ -61,6 +61,12 @@ operator_function::operator=(operator_function&& f)
 	return *this;
 }
 
+operator_
+operator_function::get_operator() const
+{
+	return op_;
+}
+
 std::shared_ptr<const type>
 operator_function::return_type() const
 {

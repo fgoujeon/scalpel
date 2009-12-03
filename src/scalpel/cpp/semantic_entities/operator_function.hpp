@@ -54,6 +54,9 @@ class operator_function
 		const operator_function&
 		operator=(operator_function&& f);
 
+		operator_
+		get_operator() const;
+
 		std::shared_ptr<const type>
 		return_type() const;
 

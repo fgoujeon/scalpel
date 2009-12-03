@@ -32,6 +32,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "named_entity.hpp"
 #include "class_.hpp"
 #include "function.hpp"
+#include "operator_function.hpp"
 #include "variable.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
@@ -62,6 +63,10 @@ class namespace_:
 		typedef std::vector<std::shared_ptr<function>> functions_t;
 		typedef functions_t::const_iterator function_const_iterator;
 		typedef boost::iterator_range<function_const_iterator> function_const_iterator_range;
+
+		typedef std::vector<std::shared_ptr<operator_function>> operator_functions_t;
+		typedef operator_functions_t::const_iterator operator_function_const_iterator;
+		typedef boost::iterator_range<operator_function_const_iterator> operator_function_const_iterator_range;
 
 		typedef std::vector<std::shared_ptr<variable>> variables_t;
 		typedef variables_t::const_iterator variable_const_iterator;
@@ -130,6 +135,9 @@ class namespace_:
 		function_const_iterator_range
 		functions() const;
 
+		operator_function_const_iterator_range
+		operator_functions() const;
+
 		variable_const_iterator_range
 		variables() const;
 
@@ -137,13 +145,16 @@ class namespace_:
         add(std::shared_ptr<namespace_> member);
 
         void
-        add(std::shared_ptr<class_>&& member);
+        add(std::shared_ptr<class_> member);
 
         void
-        add(std::shared_ptr<function>&& member);
+        add(std::shared_ptr<function> member);
 
         void
-        add(std::shared_ptr<variable>&& member);
+        add(std::shared_ptr<operator_function> member);
+
+        void
+        add(std::shared_ptr<variable> member);
 
     private:
 		scope_impl scope_impl_;
@@ -151,6 +162,7 @@ class namespace_:
         namespaces_t namespaces_;
         classes_t classes_;
         functions_t functions_;
+        operator_functions_t operator_functions_;
         variables_t variables_;
 };
 

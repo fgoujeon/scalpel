@@ -64,12 +64,6 @@ print
 void
 print
 (
-	const class_::access& a
-);
-
-void
-print
-(
 	const class_::constructor& c,
 	const unsigned int indent_level
 );
@@ -91,6 +85,13 @@ print
 void
 print
 (
+	const operator_function& f,
+	const unsigned int indent_level
+);
+
+void
+print
+(
 	const function::parameter& p,
 	const unsigned int indent_level
 );
@@ -102,6 +103,12 @@ print
 	const unsigned int indent_level,
 	const std::string& access = ""
 );
+
+void
+print_attribute(const class_::access& a);
+
+void
+print_attribute(const semantic_entities::operator_ op);
 
 template<class EntityT>
 void

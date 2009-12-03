@@ -138,6 +138,9 @@ print
 	for(auto i = n.functions().begin(); i != n.functions().end(); ++i)
 		print(**i, indent_level + 1);
 
+	for(auto i = n.operator_functions().begin(); i != n.operator_functions().end(); ++i)
+		print(**i, indent_level + 1);
+
 	for(auto i = n.variables().begin(); i != n.variables().end(); ++i)
 		print(**i, indent_level + 1);
 
@@ -165,7 +168,7 @@ print
 
 		std::cout << indent(indent_level + 1) << "<base_class";
 		std::cout << " id=\"" << base.base().get() << "\"";
-		print(base.access());
+		print_attribute(base.access());
 		if(base.virtual_specified())
 			std::cout << " virtual=\"true\"";
 		std::cout << "/>\n";
@@ -198,7 +201,7 @@ print
 {
 	std::cout << indent(indent_level) << "<function";
 	std::cout << " name=\"" << f.entity()->name() << "\"";
-	print(f.access());
+	print_attribute(f.access());
 	if(f.entity()->static_specified())
 		std::cout << " static=\"true\"";
 	if(f.const_qualified())
@@ -231,34 +234,12 @@ print
 void
 print
 (
-	const class_::access& a
-)
-{
-	std::cout << " access=\"";
-	switch(a)
-	{
-		case class_::access::PUBLIC:
-			std::cout << "public";
-			break;
-		case class_::access::PROTECTED:
-			std::cout << "protected";
-			break;
-		case class_::access::PRIVATE:
-			std::cout << "private";
-			break;
-	}
-	std::cout << "\"";
-}
-
-void
-print
-(
 	const class_::constructor& c,
 	const unsigned int indent_level
 )
 {
 	std::cout << indent(indent_level) << "<constructor";
-	print(c.access());
+	print_attribute(c.access());
 	if(c.inline_specified())
 		std::cout << " inline=\"true\"";
 	if(c.explicit_specified())
@@ -284,7 +265,7 @@ print
 )
 {
 	std::cout << indent(indent_level) << "<destructor";
-	print(d.access());
+	print_attribute(d.access());
 	if(d.inline_specified())
 		std::cout << " inline=\"true\"";
 	if(d.virtual_specified())
@@ -329,6 +310,34 @@ print
 void
 print
 (
+	const operator_function& f,
+	const unsigned int indent_level
+)
+{
+	std::cout << indent(indent_level) << "<operator_function";
+	print_attribute(f.get_operator());
+	if(f.static_specified())
+		std::cout << " static=\"true\"";
+	std::cout << ">\n";
+
+	std::cout << indent(indent_level + 1) << "<return_type>\n";
+	print(*f.return_type(), indent_level + 2);
+	std::cout << indent(indent_level + 1) << "</return_type>\n";
+
+	std::cout << indent(indent_level + 1) << "<parameters>\n";
+	const std::list<operator_function::parameter>& parameters = f.parameters();
+	for(auto i = parameters.begin(); i != parameters.end(); ++i)
+	{
+		print(*i, indent_level + 2);
+	}
+	std::cout << indent(indent_level + 1) << "</parameters>\n";
+
+	std::cout << indent(indent_level) << "</operator_function>\n";
+}
+
+void
+print
+(
 	const function::parameter& p,
 	const unsigned int indent_level
 )
@@ -362,6 +371,155 @@ print
 	print(*v.get_type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</type>\n";
 	std::cout << indent(indent_level) << "</variable>\n";
+}
+
+void
+print_attribute(const class_::access& a)
+{
+	std::cout << " access=\"";
+	switch(a)
+	{
+		case class_::access::PUBLIC:
+			std::cout << "public";
+			break;
+		case class_::access::PROTECTED:
+			std::cout << "protected";
+			break;
+		case class_::access::PRIVATE:
+			std::cout << "private";
+			break;
+	}
+	std::cout << "\"";
+}
+
+void
+print_attribute(const semantic_entities::operator_ op)
+{
+	std::cout << " operator=\"";
+	switch(op)
+	{
+		case semantic_entities::operator_::NEW:
+			std::cout << "new";
+			break;
+		case semantic_entities::operator_::DELETE:
+			std::cout << "delete";
+			break;
+		case semantic_entities::operator_::DOUBLE_RIGHT_ANGLE_BRACKET_EQUAL:
+			std::cout << ">>=";
+			break;
+		case semantic_entities::operator_::DOUBLE_LEFT_ANGLE_BRACKET_EQUAL:
+			std::cout << "<<=";
+			break;
+		case semantic_entities::operator_::ARROW_ASTERISK:
+			std::cout << "->*";
+			break;
+		case semantic_entities::operator_::PLUS_EQUAL:
+			std::cout << "+=";
+			break;
+		case semantic_entities::operator_::MINUS_EQUAL:
+			std::cout << "-=";
+			break;
+		case semantic_entities::operator_::ASTERISK_EQUAL:
+			std::cout << "*=";
+			break;
+		case semantic_entities::operator_::SLASH_EQUAL:
+			std::cout << "/=";
+			break;
+		case semantic_entities::operator_::PERCENT_EQUAL:
+			std::cout << "%=";
+			break;
+		case semantic_entities::operator_::CIRCUMFLEX_EQUAL:
+			std::cout << "^=";
+			break;
+		case semantic_entities::operator_::AMPERSAND_EQUAL:
+			std::cout << "&=";
+			break;
+		case semantic_entities::operator_::PIPE_EQUAL:
+			std::cout << "|=";
+			break;
+		case semantic_entities::operator_::DOUBLE_LEFT_ANGLE_BRACKET:
+			std::cout << "<<";
+			break;
+		case semantic_entities::operator_::DOUBLE_RIGHT_ANGLE_BRACKET:
+			std::cout << ">>";
+			break;
+		case semantic_entities::operator_::DOUBLE_EQUAL:
+			std::cout << "==";
+			break;
+		case semantic_entities::operator_::EXCLAMATION_EQUAL:
+			std::cout << "!=";
+			break;
+		case semantic_entities::operator_::LEFT_ANGLE_BRACKET_EQUAL:
+			std::cout << "<=";
+			break;
+		case semantic_entities::operator_::RIGHT_ANGLE_BRACKET_EQUAL:
+			std::cout << ">=";
+			break;
+		case semantic_entities::operator_::DOUBLE_AMPERSAND:
+			std::cout << "&&";
+			break;
+		case semantic_entities::operator_::DOUBLE_PIPE:
+			std::cout << "||";
+			break;
+		case semantic_entities::operator_::DOUBLE_PLUS:
+			std::cout << "++";
+			break;
+		case semantic_entities::operator_::DOUBLE_MINUS:
+			std::cout << "--";
+			break;
+		case semantic_entities::operator_::ARROW:
+			std::cout << "->";
+			break;
+		case semantic_entities::operator_::ROUND_BRACKETS:
+			std::cout << "()";
+			break;
+		case semantic_entities::operator_::SQUARE_BRACKETS:
+			std::cout << "[]";
+			break;
+		case semantic_entities::operator_::COMMA:
+			std::cout << ",";
+			break;
+		case semantic_entities::operator_::PLUS:
+			std::cout << "+";
+			break;
+		case semantic_entities::operator_::MINUS:
+			std::cout << "-";
+			break;
+		case semantic_entities::operator_::ASTERISK:
+			std::cout << "*";
+			break;
+		case semantic_entities::operator_::SLASH:
+			std::cout << "/";
+			break;
+		case semantic_entities::operator_::PERCENT:
+			std::cout << "%";
+			break;
+		case semantic_entities::operator_::CIRCUMFLEX:
+			std::cout << "^";
+			break;
+		case semantic_entities::operator_::AMPERSAND:
+			std::cout << "&";
+			break;
+		case semantic_entities::operator_::PIPE:
+			std::cout << "|";
+			break;
+		case semantic_entities::operator_::TILDE:
+			std::cout << "~";
+			break;
+		case semantic_entities::operator_::EXCLAMATION:
+			std::cout << "!";
+			break;
+		case semantic_entities::operator_::EQUAL:
+			std::cout << "=";
+			break;
+		case semantic_entities::operator_::LEFT_ANGLE_BRACKET:
+			std::cout << "<";
+			break;
+		case semantic_entities::operator_::RIGHT_ANGLE_BRACKET:
+			std::cout << ">";
+			break;
+	}
+	std::cout << "\"";
 }
 
 } //namespace semantic_graph_print_functions

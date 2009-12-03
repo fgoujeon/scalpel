@@ -32,13 +32,6 @@ namespace scalpel { namespace cpp { namespace detail { namespace semantic_analys
 
 class scope_cursor: public boost::noncopyable
 {
-	private:
-		class namespace_adder;
-		class class_adder;
-		class function_adder;
-		class statement_block_adder;
-		class variable_adder;
-
 	public:
 		typedef std::vector<std::shared_ptr<semantic_entities::scope>> scopes_t;
 
@@ -73,21 +66,6 @@ class scope_cursor: public boost::noncopyable
 		current_scope();
 
 		void
-		add_to_current_scope(std::shared_ptr<semantic_entities::namespace_> o);
-
-		void
-		add_to_current_scope(std::shared_ptr<semantic_entities::class_> o);
-
-		void
-		add_to_current_scope(std::shared_ptr<semantic_entities::function> o);
-
-		void
-		add_to_current_scope(std::shared_ptr<semantic_entities::statement_block> o);
-
-		void
-		add_to_current_scope(std::shared_ptr<semantic_entities::variable> o);
-
-		void
 		enter_scope(std::shared_ptr<semantic_entities::scope> a_scope);
 
 		void
@@ -98,111 +76,6 @@ class scope_cursor: public boost::noncopyable
 
 	private:
 		scopes_t scope_stack_;
-};
-
-class scope_cursor::namespace_adder: public semantic_entities::scope_visitor
-{
-	public:
-		namespace_adder(std::shared_ptr<semantic_entities::namespace_> o);
-
-		void
-		visit(semantic_entities::namespace_& scope);
-
-		void
-		visit(semantic_entities::class_& scope);
-
-		void
-		visit(semantic_entities::function& scope);
-
-		void
-		visit(semantic_entities::statement_block& scope);
-
-	private:
-		std::shared_ptr<semantic_entities::namespace_> o_;
-};
-
-class scope_cursor::class_adder: public semantic_entities::scope_visitor
-{
-	public:
-		class_adder(std::shared_ptr<semantic_entities::class_> o);
-
-		void
-		visit(semantic_entities::namespace_& scope);
-
-		void
-		visit(semantic_entities::class_& scope);
-
-		void
-		visit(semantic_entities::function& scope);
-
-		void
-		visit(semantic_entities::statement_block& scope);
-
-	private:
-		std::shared_ptr<semantic_entities::class_> o_;
-};
-
-class scope_cursor::function_adder: public semantic_entities::scope_visitor
-{
-	public:
-		function_adder(std::shared_ptr<semantic_entities::function> o);
-
-		void
-		visit(semantic_entities::namespace_& scope);
-
-		void
-		visit(semantic_entities::class_& scope);
-
-		void
-		visit(semantic_entities::function& scope);
-
-		void
-		visit(semantic_entities::statement_block& scope);
-
-	private:
-		std::shared_ptr<semantic_entities::function> o_;
-};
-
-class scope_cursor::statement_block_adder: public semantic_entities::scope_visitor
-{
-	public:
-		statement_block_adder(std::shared_ptr<semantic_entities::statement_block> o);
-
-		void
-		visit(semantic_entities::namespace_& scope);
-
-		void
-		visit(semantic_entities::class_& scope);
-
-		void
-		visit(semantic_entities::function& scope);
-
-		void
-		visit(semantic_entities::statement_block& scope);
-
-	private:
-		std::shared_ptr<semantic_entities::statement_block> o_;
-};
-
-class scope_cursor::variable_adder: public semantic_entities::scope_visitor
-{
-	public:
-		variable_adder(std::shared_ptr<semantic_entities::variable> o);
-
-		void
-		visit(semantic_entities::namespace_& scope);
-
-		void
-		visit(semantic_entities::class_& scope);
-
-		void
-		visit(semantic_entities::function& scope);
-
-		void
-		visit(semantic_entities::statement_block& scope);
-
-	private:
-		std::shared_ptr<semantic_entities::variable> o_;
 };
 
 }}}} //namespace scalpel::cpp::detail::semantic_analysis

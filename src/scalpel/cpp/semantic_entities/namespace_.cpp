@@ -43,6 +43,7 @@ namespace_::namespace_(namespace_&& n):
 	namespaces_(std::move(n.namespaces_)),
 	classes_(std::move(n.classes_)),
 	functions_(std::move(n.functions_)),
+	operator_functions_(std::move(n.operator_functions_)),
 	variables_(std::move(n.variables_))
 {
 }
@@ -55,6 +56,7 @@ namespace_::operator=(namespace_&& n)
 	namespaces_ = std::move(n.namespaces_);
 	classes_ = std::move(n.classes_);
 	functions_ = std::move(n.functions_);
+	operator_functions_ = std::move(n.operator_functions_);
 	variables_ = std::move(n.variables_);
 
 	return *this;
@@ -120,6 +122,12 @@ namespace_::functions() const
 	return functions_;
 }
 
+namespace_::operator_function_const_iterator_range
+namespace_::operator_functions() const
+{
+	return operator_functions_;
+}
+
 namespace_::variable_const_iterator_range
 namespace_::variables() const
 {
@@ -135,7 +143,7 @@ namespace_::add(std::shared_ptr<namespace_> member)
 }
 
 void
-namespace_::add(std::shared_ptr<class_>&& member)
+namespace_::add(std::shared_ptr<class_> member)
 {
     classes_.push_back(member);
 	scope_impl_.add_to_scopes(member);
@@ -143,7 +151,7 @@ namespace_::add(std::shared_ptr<class_>&& member)
 }
 
 void
-namespace_::add(std::shared_ptr<function>&& member)
+namespace_::add(std::shared_ptr<function> member)
 {
     functions_.push_back(member);
 	scope_impl_.add_to_scopes(member);
@@ -151,7 +159,14 @@ namespace_::add(std::shared_ptr<function>&& member)
 }
 
 void
-namespace_::add(std::shared_ptr<variable>&& member)
+namespace_::add(std::shared_ptr<operator_function> member)
+{
+    operator_functions_.push_back(member);
+	//scope_impl_.add_to_named_entities(member);
+}
+
+void
+namespace_::add(std::shared_ptr<variable> member)
 {
     variables_.push_back(member);
 	scope_impl_.add_to_named_entities(member);
