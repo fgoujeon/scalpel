@@ -44,32 +44,24 @@ function::function
 }
 
 function::function(function&& f):
-	scope_impl_(std::move(f.scope_impl_)),
 	name_(std::move(f.name_)),
-	statement_block_(std::move(f.statement_block_)),
-	return_type_(f.return_type_),
+	return_type_(std::move(f.return_type_)),
 	parameters_(std::move(f.parameters_)),
-	static_specified_(f.static_specified_)
+	static_specified_(f.static_specified_),
+	statement_block_(std::move(f.statement_block_))
 {
 }
 
 const function&
 function::operator=(function&& f)
 {
-	scope_impl_ = std::move(f.scope_impl_);
 	name_ = std::move(f.name_);
-	statement_block_ = std::move(f.statement_block_);
-	return_type_ = f.return_type_;
+	return_type_ = std::move(f.return_type_);
 	parameters_ = std::move(f.parameters_);
 	static_specified_ = f.static_specified_;
+	statement_block_ = std::move(f.statement_block_);
 
 	return *this;
-}
-
-void
-function::accept(scope_visitor& v)
-{
-	v.visit(*this);
 }
 
 const std::string&
@@ -82,36 +74,6 @@ bool
 function::is_a_type() const
 {
     return false;
-}
-
-bool
-function::is_global() const
-{
-    return false;
-}
-
-scope::scope_iterator_range
-function::scopes()
-{
-	return scope_impl_.scopes();
-}
-
-scope::scope_const_iterator_range
-function::scopes() const
-{
-	return scope_impl_.scopes();
-}
-
-scope::named_entity_iterator_range
-function::named_entities()
-{
-	return scope_impl_.named_entities();
-}
-
-scope::named_entity_const_iterator_range
-function::named_entities() const
-{
-	return scope_impl_.named_entities();
 }
 
 std::shared_ptr<const type>
@@ -141,7 +103,7 @@ function::parameter::parameter(std::shared_ptr<const type> t, const std::string&
 }
 
 function::parameter::parameter(parameter&& o):
-	type_(o.type_),
+	type_(std::move(o.type_)),
 	name_(std::move(o.name_))
 {
 }

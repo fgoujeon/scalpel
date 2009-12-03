@@ -26,8 +26,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <memory>
 #include <boost/noncopyable.hpp>
 #include "type.hpp"
-#include "scope.hpp"
-#include "scope_impl.hpp"
 #include "named_entity.hpp"
 #include "statement_block.hpp"
 #include "variable.hpp"
@@ -35,14 +33,10 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-class namespace_;
-class class_;
-
 /**
 Represents a C++ function.
 */
 class function:
-	public scope,
 	public named_entity,
 	public boost::noncopyable
 {
@@ -65,9 +59,6 @@ class function:
 		const function&
 		operator=(function&& f);
 
-		void
-		accept(scope_visitor& v);
-
         /**
         @return the name of the function
         */
@@ -80,24 +71,6 @@ class function:
         bool
         is_a_type() const;
 
-        /**
-        @return false, because a function cannot be the global namespace...
-        */
-        bool
-        is_global() const;
-
-		scope_iterator_range
-        scopes();
-
-		scope_const_iterator_range
-        scopes() const;
-
-		named_entity_iterator_range
-		named_entities();
-
-		named_entity_const_iterator_range
-		named_entities() const;
-
 		std::shared_ptr<const type>
 		return_type() const;
 
@@ -108,12 +81,11 @@ class function:
 		static_specified() const;
 
     private:
-		scope_impl scope_impl_;
         std::string name_;
-		statement_block statement_block_;
 		std::shared_ptr<const type> return_type_;
 		std::list<parameter> parameters_;
 		bool static_specified_;
+		statement_block statement_block_;
 };
 
 class function::parameter

@@ -284,20 +284,11 @@ semantic_analyzer::fill_class(class_& c, const class_specifier& class_specifier_
 std::shared_ptr<semantic_entities::function>
 semantic_analyzer::create_function(const decl_specifier_seq& decl_specifier_seq_node, const declarator& declarator_node)
 {
-	//get the name of the function
-	const std::string& name = get_function_name(declarator_node);
-
-	//get the function's return type
-	std::shared_ptr<const type> return_type = create_type(decl_specifier_seq_node, declarator_node);
-
-	//get the function's parameter list
-	std::list<function::parameter> parameters = create_parameters(declarator_node);
-
 	return std::make_shared<function>
 	(
-		name,
-		return_type,
-		std::move(parameters),
+		get_function_name(declarator_node),
+		create_type(decl_specifier_seq_node, declarator_node),
+		create_parameters(declarator_node),
 		has_static_specifier(decl_specifier_seq_node)
 	);
 }
@@ -551,7 +542,7 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 				{
 					auto nested_identifier_or_template_id_node = *opt_nested_identifier_or_template_id_node;
 					std::shared_ptr<named_entity> found_name = name_lookup::find_name(scope_cursor_.scope_stack(), nested_identifier_or_template_id_node);
-					if(auto found_class = std::dynamic_pointer_cast<class_>(found_name))
+					if(auto found_class = std::dynamic_pointer_cast<const class_>(found_name))
 					{
 						return_type = found_class;
 					}
