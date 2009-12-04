@@ -311,6 +311,10 @@ print
 {
 	std::cout << indent(indent_level) << "<conversion_function";
 	std::cout << attribute(f.access());
+	if(f.const_qualified())
+		std::cout << " const=\"true\"";
+	if(f.volatile_qualified())
+		std::cout << " volatile=\"true\"";
 	if(f.inline_specified())
 		std::cout << " inline=\"true\"";
 	if(f.virtual_specified())

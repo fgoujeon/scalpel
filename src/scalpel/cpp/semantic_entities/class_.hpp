@@ -408,6 +408,8 @@ class class_::conversion_function
 		(
 			std::shared_ptr<const type> t,
 			class_::access access,
+			const bool is_const_qualified,
+			const bool is_volatile_qualified,
 			const bool is_inline_specified,
 			const bool is_virtual_specified,
 			const bool is_pure_specified
@@ -422,6 +424,12 @@ class class_::conversion_function
 		access() const;
 
 		bool
+		const_qualified() const;
+
+		bool
+		volatile_qualified() const;
+
+		bool
 		inline_specified() const;
 
 		bool
@@ -433,6 +441,8 @@ class class_::conversion_function
 	private:
 		std::shared_ptr<const type> type_;
 		class_::access access_;
+		bool const_qualified_;
+		bool volatile_qualified_;
 		bool inline_specified_;
 		bool virtual_specified_;
 		bool pure_specified_;

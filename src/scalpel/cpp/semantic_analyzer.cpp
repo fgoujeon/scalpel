@@ -154,7 +154,7 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 									auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
 									if(is_function_declaration(declarator_node))
 									{
-										if(is_operator_function_declaration(declarator_node))
+										if(is_operator_function_declaration(declarator_node)) //operator function
 										{
 											c->add
 											(
@@ -170,7 +170,7 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 												)
 											);
 										}
-										else if(is_conversion_function_declaration(declarator_node))
+										else if(is_conversion_function_declaration(declarator_node)) //conversion function
 										{
 											c->add
 											(
@@ -178,13 +178,15 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 												(
 													get_conversion_function_type(declarator_node),
 													current_access,
+													is_qualified<str::const_>(declarator_node),
+													is_qualified<str::volatile_>(declarator_node),
 													has_inline_specifier(decl_specifier_seq_node),
 													has_virtual_specifier(decl_specifier_seq_node),
 													has_pure_specifier(member_declarator_declarator_node)
 												)
 											);
 										}
-										else if(c->name() == get_function_name(declarator_node)) //constructor/destructor?
+										else if(c->name() == get_function_name(declarator_node)) //constructor or destructor
 										{
 											if(!is_destructor_declaration(declarator_node)) //constructor
 											{
@@ -213,7 +215,7 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 												);
 											}
 										}
-										else
+										else //simple function
 										{
 											c->add
 											(
@@ -230,7 +232,7 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 											);
 										}
 									}
-									else
+									else //variable
 									{
 										c->add
 										(
@@ -244,7 +246,7 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 								}
 								else
 								{
-									if(is_conversion_function_declaration(declarator_node))
+									if(is_conversion_function_declaration(declarator_node)) //conversion function
 									{
 										c->add
 										(
@@ -252,13 +254,15 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 											(
 												get_conversion_function_type(declarator_node),
 												current_access,
+												is_qualified<str::const_>(declarator_node),
+												is_qualified<str::volatile_>(declarator_node),
 												false,
 												false,
 												false
 											)
 										);
 									}
-									else if(c->name() == get_function_name(declarator_node)) //constructor/destructor?
+									else if(c->name() == get_function_name(declarator_node)) //constructor or destructor
 									{
 										if(!is_destructor_declaration(declarator_node)) //constructor
 										{
@@ -781,7 +785,96 @@ semantic_analyzer::get_conversion_function_type
 	const syntax_nodes::declarator& declarator_node
 )
 {
-	return std::shared_ptr<const built_in_type>(&built_in_type::int_, scalpel::utility::null_deleter());
+	std::shared_ptr<const type> return_type;
+	bool bool_type = false;
+	bool char_type = false;
+	bool double_type = false;
+	bool float_type = false;
+	bool int_type = false;
+	bool long_long_type = false;
+	bool long_type = false;
+	bool short_type = false;
+	bool signed_type = false;
+	bool unsigned_type = false;
+	bool void_type = false;
+	bool wchar_t_type = false;
+	bool const_qualified = false;
+	bool volatile_qualified = false;
+
+	auto direct_declarator_node = get_direct_declarator(declarator_node);
+	auto direct_declarator_node_first_part_node = get_first_part(direct_declarator_node);
+	auto opt_declarator_id_node = get<declarator_id>(&direct_declarator_node_first_part_node);
+	assert(opt_declarator_id_node);
+	auto declarator_id_node = *opt_declarator_id_node;
+	auto opt_id_expression_node = get<id_expression>(&declarator_id_node);
+	assert(opt_id_expression_node);
+	auto id_expression_node = *opt_id_expression_node;
+	auto opt_unqualified_id_node = get<unqualified_id>(&id_expression_node);
+	assert(opt_unqualified_id_node);
+	auto unqualified_id_node = *opt_unqualified_id_node;
+	auto opt_conversion_function_id_node = get<conversion_function_id>(&unqualified_id_node);
+	assert(opt_conversion_function_id_node);
+	auto conversion_function_id_node = *opt_conversion_function_id_node;
+
+	auto type_specifier_seq_node = get_type_specifier_seq(conversion_function_id_node);
+	for(auto i = type_specifier_seq_node.begin(); i != type_specifier_seq_node.end(); ++i)
+	{
+		auto type_specifier_node = i->main_node();
+		get_type_info
+		(
+			type_specifier_node,
+			return_type,
+			bool_type,
+			char_type,
+			double_type,
+			float_type,
+			int_type,
+			long_long_type,
+			long_type,
+			short_type,
+			signed_type,
+			unsigned_type,
+			void_type,
+			wchar_t_type,
+			const_qualified,
+			volatile_qualified
+		);
+	}
+
+	if(!return_type)
+	{
+		return_type = get_built_in_type
+		(
+			bool_type,
+			char_type,
+			double_type,
+			float_type,
+			int_type,
+			long_long_type,
+			long_type,
+			short_type,
+			signed_type,
+			unsigned_type,
+			void_type,
+			wchar_t_type
+		);
+	}
+
+	assert(return_type);
+
+	return_type = decorate_type(return_type, const_qualified, volatile_qualified);
+
+	if(auto opt_ptr_operator_seq_node = get_ptr_operator_seq(conversion_function_id_node))
+	{
+		auto ptr_operator_seq_node = *opt_ptr_operator_seq_node;
+		return_type = decorate_type(return_type, ptr_operator_seq_node);
+	}
+
+	if(!return_type)
+	{
+		throw std::runtime_error("Semantic analysis error: type not found");
+	}
+	return return_type;
 }
 
 std::shared_ptr<const semantic_entities::type>

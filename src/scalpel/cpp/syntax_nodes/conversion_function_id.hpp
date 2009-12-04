@@ -47,6 +47,20 @@ typedef
 	conversion_function_id
 ;
 
+inline
+const type_specifier_seq&
+get_type_specifier_seq(const conversion_function_id& o)
+{
+	return get<2>(o);
+}
+
+inline
+const optional_node<ptr_operator_seq>&
+get_ptr_operator_seq(const conversion_function_id& o)
+{
+	return get<4>(o);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
