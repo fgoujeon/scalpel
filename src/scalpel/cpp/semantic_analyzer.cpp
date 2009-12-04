@@ -580,8 +580,8 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 	bool unsigned_type = false;
 	bool void_type = false;
 	bool wchar_t_type = false;
-	bool const_qualified = false; //useful for "const int" (where prefered form would have been "int const")
-	bool volatile_qualified = false; //ditto
+	bool const_qualified = false;
+	bool volatile_qualified = false;
 
 	for
 	(
@@ -600,448 +600,55 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 		if(auto opt_type_specifier_node = get<type_specifier>(&decl_specifier_node))
 		{
 			auto type_specifier_node = *opt_type_specifier_node;
-			//simple_type_specifier
-			//class_specifier
-			//enum_specifier
-			//elaborated_type_specifier
-			//cv_qualifier
-			//typeof_expression
-
-			if(auto opt_simple_type_specifier_node = get<simple_type_specifier>(&type_specifier_node))
-			{
-				auto simple_type_specifier_node = *opt_simple_type_specifier_node;
-				//simple_template_type_specifier,
-
-				if(auto opt_nested_identifier_or_template_id_node = get<nested_identifier_or_template_id>(&simple_type_specifier_node))
-				{
-					auto nested_identifier_or_template_id_node = *opt_nested_identifier_or_template_id_node;
-					std::shared_ptr<named_entity> found_name = name_lookup::find_name(scope_cursor_.scope_stack(), nested_identifier_or_template_id_node);
-					if(auto found_class = std::dynamic_pointer_cast<const class_>(found_name))
-					{
-						return_type = found_class;
-					}
-				}
-				else if(auto opt_built_in_type_specifier_node = get<built_in_type_specifier>(&simple_type_specifier_node))
-				{
-					auto built_in_type_specifier_node = *opt_built_in_type_specifier_node;
-
-					if(get<predefined_text_node<str::char_>>(&built_in_type_specifier_node))
-					{
-						char_type = true;
-					}
-					else if(get<predefined_text_node<str::wchar_t_>>(&built_in_type_specifier_node))
-					{
-						wchar_t_type = true;
-					}
-					else if(get<predefined_text_node<str::bool_>>(&built_in_type_specifier_node))
-					{
-						bool_type = true;
-					}
-					else if(get<predefined_text_node<str::short_>>(&built_in_type_specifier_node))
-					{
-						short_type = true;
-					}
-					else if(get<predefined_text_node<str::int_>>(&built_in_type_specifier_node))
-					{
-						int_type = true;
-					}
-					else if(get<predefined_text_node<str::long_>>(&built_in_type_specifier_node))
-					{
-						if(!long_type)
-							long_type = true;
-						else
-							long_long_type = true;
-					}
-					else if(get<predefined_text_node<str::signed_>>(&built_in_type_specifier_node))
-					{
-						signed_type = true;
-					}
-					else if(get<predefined_text_node<str::unsigned_>>(&built_in_type_specifier_node))
-					{
-						unsigned_type = true;
-					}
-					else if(get<predefined_text_node<str::float_>>(&built_in_type_specifier_node))
-					{
-						float_type = true;
-					}
-					else if(get<predefined_text_node<str::double_>>(&built_in_type_specifier_node))
-					{
-						double_type = true;
-					}
-					else if(get<predefined_text_node<str::void_>>(&built_in_type_specifier_node))
-					{
-						void_type = true;
-					}
-				}
-			}
-			else if(auto opt_cv_qualifier_node = get<cv_qualifier>(&type_specifier_node))
-			{
-				auto cv_qualifier_node = *opt_cv_qualifier_node;
-				//predefined_text_node<str::const_>
-				//predefined_text_node<str::volatile_>
-				//predefined_text_node<str::restrict_>
-				//predefined_text_node<str::__restrict___>
-				//predefined_text_node<str::__restrict_>
-
-				if(get<predefined_text_node<str::const_>>(&cv_qualifier_node))
-				{
-					const_qualified = true;
-				}
-				else if(get<predefined_text_node<str::volatile_>>(&cv_qualifier_node))
-				{
-					volatile_qualified = true;
-				}
-			}
+			get_type_info
+			(
+				type_specifier_node,
+				return_type,
+				bool_type,
+				char_type,
+				double_type,
+				float_type,
+				int_type,
+				long_long_type,
+				long_type,
+				short_type,
+				signed_type,
+				unsigned_type,
+				void_type,
+				wchar_t_type,
+				const_qualified,
+				volatile_qualified
+			);
 		}
 	}
 
 	if(!return_type)
 	{
-		if
+		return_type = get_built_in_type
 		(
-			bool_type &&
-			!char_type &&
-			!double_type &&
-			!float_type &&
-			!int_type &&
-			!long_long_type &&
-			!long_type &&
-			!short_type &&
-			!signed_type &&
-			!unsigned_type &&
-			!void_type &&
-			!wchar_t_type
-		)
-		{
-			return_type = std::shared_ptr<const built_in_type>(&built_in_type::bool_, scalpel::utility::null_deleter());
-		}
-		else if
-		(
-			!bool_type &&
-			char_type &&
-			!double_type &&
-			!float_type &&
-			!int_type &&
-			!long_long_type &&
-			!long_type &&
-			!short_type &&
-			!signed_type &&
-			!unsigned_type &&
-			!void_type &&
-			!wchar_t_type
-		)
-		{
-			return_type = std::shared_ptr<const built_in_type>(&built_in_type::char_, scalpel::utility::null_deleter());
-		}
-		else if
-		(
-			!bool_type &&
-			!char_type &&
-			double_type &&
-			!float_type &&
-			!int_type &&
-			!long_long_type &&
-			!long_type &&
-			!short_type &&
-			!signed_type &&
-			!unsigned_type &&
-			!void_type &&
-			!wchar_t_type
-		)
-		{
-			return_type = std::shared_ptr<const built_in_type>(&built_in_type::double_, scalpel::utility::null_deleter());
-		}
-		else if
-		(
-			!bool_type &&
-			!char_type &&
-			!double_type &&
-			float_type &&
-			!int_type &&
-			!long_long_type &&
-			!long_type &&
-			!short_type &&
-			!signed_type &&
-			!unsigned_type &&
-			!void_type &&
-			!wchar_t_type
-		)
-		{
-			return_type = std::shared_ptr<const built_in_type>(&built_in_type::float_, scalpel::utility::null_deleter());
-		}
-		else if
-		(
-			!bool_type &&
-			!char_type &&
-			!double_type &&
-			!float_type &&
-			(signed_type || int_type) &&
-			!long_long_type &&
-			!long_type &&
-			!short_type &&
-			!unsigned_type &&
-			!void_type &&
-			!wchar_t_type
-		)
-		{
-			return_type = std::shared_ptr<const built_in_type>(&built_in_type::int_, scalpel::utility::null_deleter());
-		}
-		else if
-		(
-			!bool_type &&
-			!char_type &&
-			double_type &&
-			!float_type &&
-			!int_type &&
-			!long_long_type &&
-			long_type &&
-			!short_type &&
-			!signed_type &&
-			!unsigned_type &&
-			!void_type &&
-			!wchar_t_type
-		)
-		{
-			return_type = std::shared_ptr<const built_in_type>(&built_in_type::long_double, scalpel::utility::null_deleter());
-		}
-		else if
-		(
-			!bool_type &&
-			!char_type &&
-			!double_type &&
-			!float_type &&
-			//int_type &&
-			!long_long_type &&
-			long_type &&
-			!short_type &&
-			//signed_type &&
-			!unsigned_type &&
-			!void_type &&
-			!wchar_t_type
-		)
-		{
-			return_type = std::shared_ptr<const built_in_type>(&built_in_type::long_int, scalpel::utility::null_deleter());
-		}
-		else if
-		(
-			!bool_type &&
-			!char_type &&
-			!double_type &&
-			!float_type &&
-			//int_type &&
-			long_long_type &&
-			//long_type &&
-			!short_type &&
-			//signed_type &&
-			!unsigned_type &&
-			!void_type &&
-			!wchar_t_type
-		)
-		{
-			return_type = std::shared_ptr<const built_in_type>(&built_in_type::long_long_int, scalpel::utility::null_deleter());
-		}
-		else if
-		(
-			!bool_type &&
-			!char_type &&
-			!double_type &&
-			!float_type &&
-			//!int_type &&
-			!long_long_type &&
-			!long_type &&
-			short_type &&
-			//!signed_type &&
-			!unsigned_type &&
-			!void_type &&
-			!wchar_t_type
-		)
-		{
-			return_type = std::shared_ptr<const built_in_type>(&built_in_type::short_int, scalpel::utility::null_deleter());
-		}
-		else if
-		(
-			!bool_type &&
-			char_type &&
-			!double_type &&
-			!float_type &&
-			!int_type &&
-			!long_long_type &&
-			!long_type &&
-			!short_type &&
-			!signed_type &&
-			unsigned_type &&
-			!void_type &&
-			!wchar_t_type
-		)
-		{
-			return_type = std::shared_ptr<const built_in_type>(&built_in_type::unsigned_char, scalpel::utility::null_deleter());
-		}
-		else if
-		(
-			!bool_type &&
-			!char_type &&
-			!double_type &&
-			!float_type &&
-			//!int_type &&
-			!long_long_type &&
-			!long_type &&
-			!short_type &&
-			!signed_type &&
-			unsigned_type &&
-			!void_type &&
-			!wchar_t_type
-		)
-		{
-			return_type = std::shared_ptr<const built_in_type>(&built_in_type::unsigned_int, scalpel::utility::null_deleter());
-		}
-		else if
-		(
-			!bool_type &&
-			!char_type &&
-			!double_type &&
-			!float_type &&
-			//!int_type &&
-			!long_long_type &&
-			long_type &&
-			!short_type &&
-			!signed_type &&
-			unsigned_type &&
-			!void_type &&
-			!wchar_t_type
-		)
-		{
-			return_type = std::shared_ptr<const built_in_type>(&built_in_type::unsigned_long_int, scalpel::utility::null_deleter());
-		}
-		else if
-		(
-			!bool_type &&
-			!char_type &&
-			!double_type &&
-			!float_type &&
-			//!int_type &&
-			long_long_type &&
-			//!long_type &&
-			!short_type &&
-			!signed_type &&
-			unsigned_type &&
-			!void_type &&
-			!wchar_t_type
-		)
-		{
-			return_type = std::shared_ptr<const built_in_type>(&built_in_type::unsigned_long_long_int, scalpel::utility::null_deleter());
-		}
-		else if
-		(
-			!bool_type &&
-			!char_type &&
-			!double_type &&
-			!float_type &&
-			//!int_type &&
-			!long_long_type &&
-			!long_type &&
-			short_type &&
-			!signed_type &&
-			unsigned_type &&
-			!void_type &&
-			!wchar_t_type
-		)
-		{
-			return_type = std::shared_ptr<const built_in_type>(&built_in_type::unsigned_short_int, scalpel::utility::null_deleter());
-		}
-		else if
-		(
-			!bool_type &&
-			!char_type &&
-			!double_type &&
-			!float_type &&
-			!int_type &&
-			!long_long_type &&
-			!long_type &&
-			!short_type &&
-			!signed_type &&
-			!unsigned_type &&
-			void_type &&
-			!wchar_t_type
-		)
-		{
-			return_type = std::shared_ptr<const built_in_type>(&built_in_type::void_, scalpel::utility::null_deleter());
-		}
-		else if
-		(
-			!bool_type &&
-			!char_type &&
-			!double_type &&
-			!float_type &&
-			!int_type &&
-			!long_long_type &&
-			!long_type &&
-			!short_type &&
-			!signed_type &&
-			!unsigned_type &&
-			!void_type &&
+			bool_type,
+			char_type,
+			double_type,
+			float_type,
+			int_type,
+			long_long_type,
+			long_type,
+			short_type,
+			signed_type,
+			unsigned_type,
+			void_type,
 			wchar_t_type
-		)
-		{
-			return_type = std::shared_ptr<const built_in_type>(&built_in_type::wchar_t_, scalpel::utility::null_deleter());
-		}
-		else
-		{
-			throw std::runtime_error("Semantic analysis error: incorrect type");
-		}
+		);
 	}
 
-	if(return_type)
-	{
-		if(const_qualified)
-		{
-			return_type = std::make_shared<const_>(return_type);
-		}
-		else if(volatile_qualified)
-		{
-			return_type = std::make_shared<volatile_>(return_type);
-		}
-	}
+	assert(return_type);
+
+	return_type = decorate_type(return_type, const_qualified, volatile_qualified);
 
 	if(auto opt_ptr_operator_seq_node = get_ptr_operator_seq(declarator_node))
 	{
 		auto ptr_operator_seq_node = *opt_ptr_operator_seq_node;
-		for(auto i = ptr_operator_seq_node.begin(); i != ptr_operator_seq_node.end(); ++i)
-		{
-			auto ptr_operator_node = i->main_node();
-			if(auto opt_ptr_ptr_operator_node = get<ptr_ptr_operator>(&ptr_operator_node))
-			{
-				auto ptr_ptr_operator_node = *opt_ptr_ptr_operator_node;
-
-				return_type = std::make_shared<pointer>(return_type);
-
-				if(auto opt_cv_qualifier_seq_node = get_cv_qualifier_seq(ptr_ptr_operator_node))
-				{
-					auto cv_qualifier_seq_node = *opt_cv_qualifier_seq_node;
-					for
-					(
-						auto i = cv_qualifier_seq_node.begin();
-						i != cv_qualifier_seq_node.end();
-						++i
-					)
-					{
-						auto cv_qualifier_node = i->main_node();
-
-						if(get<predefined_text_node<str::const_>>(&cv_qualifier_node))
-						{
-							return_type = std::make_shared<const_>(return_type);
-						}
-						else if(get<predefined_text_node<str::volatile_>>(&cv_qualifier_node))
-						{
-							return_type = std::make_shared<volatile_>(return_type);
-						}
-					}
-				}
-			}
-			else if(auto ref_ptr_operator_node = get<ref_ptr_operator>(&ptr_operator_node))
-			{
-				return_type = std::make_shared<reference>(return_type);
-			}
-		}
+		return_type = decorate_type(return_type, ptr_operator_seq_node);
 	}
 
 	auto direct_declarator_node = get_direct_declarator(declarator_node);
@@ -1090,8 +697,8 @@ semantic_analyzer::create_type
 	bool unsigned_type = false;
 	bool void_type = false;
 	bool wchar_t_type = false;
-	bool const_qualified = false; //useful for "const int" (where prefered form would have been "int const")
-	bool volatile_qualified = false; //ditto
+	bool const_qualified = false;
+	bool volatile_qualified = false;
 
 	for
 	(
@@ -1110,448 +717,55 @@ semantic_analyzer::create_type
 		if(auto opt_type_specifier_node = get<type_specifier>(&decl_specifier_node))
 		{
 			auto type_specifier_node = *opt_type_specifier_node;
-			//simple_type_specifier
-			//class_specifier
-			//enum_specifier
-			//elaborated_type_specifier
-			//cv_qualifier
-			//typeof_expression
-
-			if(auto opt_simple_type_specifier_node = get<simple_type_specifier>(&type_specifier_node))
-			{
-				auto simple_type_specifier_node = *opt_simple_type_specifier_node;
-				//simple_template_type_specifier,
-
-				if(auto opt_nested_identifier_or_template_id_node = get<nested_identifier_or_template_id>(&simple_type_specifier_node))
-				{
-					auto nested_identifier_or_template_id_node = *opt_nested_identifier_or_template_id_node;
-					std::shared_ptr<named_entity> found_name = name_lookup::find_name(scope_cursor_.scope_stack(), nested_identifier_or_template_id_node);
-					if(auto found_class = std::dynamic_pointer_cast<const class_>(found_name))
-					{
-						return_type = found_class;
-					}
-				}
-				else if(auto opt_built_in_type_specifier_node = get<built_in_type_specifier>(&simple_type_specifier_node))
-				{
-					auto built_in_type_specifier_node = *opt_built_in_type_specifier_node;
-
-					if(get<predefined_text_node<str::char_>>(&built_in_type_specifier_node))
-					{
-						char_type = true;
-					}
-					else if(get<predefined_text_node<str::wchar_t_>>(&built_in_type_specifier_node))
-					{
-						wchar_t_type = true;
-					}
-					else if(get<predefined_text_node<str::bool_>>(&built_in_type_specifier_node))
-					{
-						bool_type = true;
-					}
-					else if(get<predefined_text_node<str::short_>>(&built_in_type_specifier_node))
-					{
-						short_type = true;
-					}
-					else if(get<predefined_text_node<str::int_>>(&built_in_type_specifier_node))
-					{
-						int_type = true;
-					}
-					else if(get<predefined_text_node<str::long_>>(&built_in_type_specifier_node))
-					{
-						if(!long_type)
-							long_type = true;
-						else
-							long_long_type = true;
-					}
-					else if(get<predefined_text_node<str::signed_>>(&built_in_type_specifier_node))
-					{
-						signed_type = true;
-					}
-					else if(get<predefined_text_node<str::unsigned_>>(&built_in_type_specifier_node))
-					{
-						unsigned_type = true;
-					}
-					else if(get<predefined_text_node<str::float_>>(&built_in_type_specifier_node))
-					{
-						float_type = true;
-					}
-					else if(get<predefined_text_node<str::double_>>(&built_in_type_specifier_node))
-					{
-						double_type = true;
-					}
-					else if(get<predefined_text_node<str::void_>>(&built_in_type_specifier_node))
-					{
-						void_type = true;
-					}
-				}
-			}
-			else if(auto opt_cv_qualifier_node = get<cv_qualifier>(&type_specifier_node))
-			{
-				auto cv_qualifier_node = *opt_cv_qualifier_node;
-				//predefined_text_node<str::const_>
-				//predefined_text_node<str::volatile_>
-				//predefined_text_node<str::restrict_>
-				//predefined_text_node<str::__restrict___>
-				//predefined_text_node<str::__restrict_>
-
-				if(get<predefined_text_node<str::const_>>(&cv_qualifier_node))
-				{
-					const_qualified = true;
-				}
-				else if(get<predefined_text_node<str::volatile_>>(&cv_qualifier_node))
-				{
-					volatile_qualified = true;
-				}
-			}
+			get_type_info
+			(
+				type_specifier_node,
+				return_type,
+				bool_type,
+				char_type,
+				double_type,
+				float_type,
+				int_type,
+				long_long_type,
+				long_type,
+				short_type,
+				signed_type,
+				unsigned_type,
+				void_type,
+				wchar_t_type,
+				const_qualified,
+				volatile_qualified
+			);
 		}
 	}
 
 	if(!return_type)
 	{
-		if
+		return_type = get_built_in_type
 		(
-			bool_type &&
-			!char_type &&
-			!double_type &&
-			!float_type &&
-			!int_type &&
-			!long_long_type &&
-			!long_type &&
-			!short_type &&
-			!signed_type &&
-			!unsigned_type &&
-			!void_type &&
-			!wchar_t_type
-		)
-		{
-			return_type = std::shared_ptr<const built_in_type>(&built_in_type::bool_, scalpel::utility::null_deleter());
-		}
-		else if
-		(
-			!bool_type &&
-			char_type &&
-			!double_type &&
-			!float_type &&
-			!int_type &&
-			!long_long_type &&
-			!long_type &&
-			!short_type &&
-			!signed_type &&
-			!unsigned_type &&
-			!void_type &&
-			!wchar_t_type
-		)
-		{
-			return_type = std::shared_ptr<const built_in_type>(&built_in_type::char_, scalpel::utility::null_deleter());
-		}
-		else if
-		(
-			!bool_type &&
-			!char_type &&
-			double_type &&
-			!float_type &&
-			!int_type &&
-			!long_long_type &&
-			!long_type &&
-			!short_type &&
-			!signed_type &&
-			!unsigned_type &&
-			!void_type &&
-			!wchar_t_type
-		)
-		{
-			return_type = std::shared_ptr<const built_in_type>(&built_in_type::double_, scalpel::utility::null_deleter());
-		}
-		else if
-		(
-			!bool_type &&
-			!char_type &&
-			!double_type &&
-			float_type &&
-			!int_type &&
-			!long_long_type &&
-			!long_type &&
-			!short_type &&
-			!signed_type &&
-			!unsigned_type &&
-			!void_type &&
-			!wchar_t_type
-		)
-		{
-			return_type = std::shared_ptr<const built_in_type>(&built_in_type::float_, scalpel::utility::null_deleter());
-		}
-		else if
-		(
-			!bool_type &&
-			!char_type &&
-			!double_type &&
-			!float_type &&
-			(signed_type || int_type) &&
-			!long_long_type &&
-			!long_type &&
-			!short_type &&
-			!unsigned_type &&
-			!void_type &&
-			!wchar_t_type
-		)
-		{
-			return_type = std::shared_ptr<const built_in_type>(&built_in_type::int_, scalpel::utility::null_deleter());
-		}
-		else if
-		(
-			!bool_type &&
-			!char_type &&
-			double_type &&
-			!float_type &&
-			!int_type &&
-			!long_long_type &&
-			long_type &&
-			!short_type &&
-			!signed_type &&
-			!unsigned_type &&
-			!void_type &&
-			!wchar_t_type
-		)
-		{
-			return_type = std::shared_ptr<const built_in_type>(&built_in_type::long_double, scalpel::utility::null_deleter());
-		}
-		else if
-		(
-			!bool_type &&
-			!char_type &&
-			!double_type &&
-			!float_type &&
-			//int_type &&
-			!long_long_type &&
-			long_type &&
-			!short_type &&
-			//signed_type &&
-			!unsigned_type &&
-			!void_type &&
-			!wchar_t_type
-		)
-		{
-			return_type = std::shared_ptr<const built_in_type>(&built_in_type::long_int, scalpel::utility::null_deleter());
-		}
-		else if
-		(
-			!bool_type &&
-			!char_type &&
-			!double_type &&
-			!float_type &&
-			//int_type &&
-			long_long_type &&
-			//long_type &&
-			!short_type &&
-			//signed_type &&
-			!unsigned_type &&
-			!void_type &&
-			!wchar_t_type
-		)
-		{
-			return_type = std::shared_ptr<const built_in_type>(&built_in_type::long_long_int, scalpel::utility::null_deleter());
-		}
-		else if
-		(
-			!bool_type &&
-			!char_type &&
-			!double_type &&
-			!float_type &&
-			//!int_type &&
-			!long_long_type &&
-			!long_type &&
-			short_type &&
-			//!signed_type &&
-			!unsigned_type &&
-			!void_type &&
-			!wchar_t_type
-		)
-		{
-			return_type = std::shared_ptr<const built_in_type>(&built_in_type::short_int, scalpel::utility::null_deleter());
-		}
-		else if
-		(
-			!bool_type &&
-			char_type &&
-			!double_type &&
-			!float_type &&
-			!int_type &&
-			!long_long_type &&
-			!long_type &&
-			!short_type &&
-			!signed_type &&
-			unsigned_type &&
-			!void_type &&
-			!wchar_t_type
-		)
-		{
-			return_type = std::shared_ptr<const built_in_type>(&built_in_type::unsigned_char, scalpel::utility::null_deleter());
-		}
-		else if
-		(
-			!bool_type &&
-			!char_type &&
-			!double_type &&
-			!float_type &&
-			//!int_type &&
-			!long_long_type &&
-			!long_type &&
-			!short_type &&
-			!signed_type &&
-			unsigned_type &&
-			!void_type &&
-			!wchar_t_type
-		)
-		{
-			return_type = std::shared_ptr<const built_in_type>(&built_in_type::unsigned_int, scalpel::utility::null_deleter());
-		}
-		else if
-		(
-			!bool_type &&
-			!char_type &&
-			!double_type &&
-			!float_type &&
-			//!int_type &&
-			!long_long_type &&
-			long_type &&
-			!short_type &&
-			!signed_type &&
-			unsigned_type &&
-			!void_type &&
-			!wchar_t_type
-		)
-		{
-			return_type = std::shared_ptr<const built_in_type>(&built_in_type::unsigned_long_int, scalpel::utility::null_deleter());
-		}
-		else if
-		(
-			!bool_type &&
-			!char_type &&
-			!double_type &&
-			!float_type &&
-			//!int_type &&
-			long_long_type &&
-			//!long_type &&
-			!short_type &&
-			!signed_type &&
-			unsigned_type &&
-			!void_type &&
-			!wchar_t_type
-		)
-		{
-			return_type = std::shared_ptr<const built_in_type>(&built_in_type::unsigned_long_long_int, scalpel::utility::null_deleter());
-		}
-		else if
-		(
-			!bool_type &&
-			!char_type &&
-			!double_type &&
-			!float_type &&
-			//!int_type &&
-			!long_long_type &&
-			!long_type &&
-			short_type &&
-			!signed_type &&
-			unsigned_type &&
-			!void_type &&
-			!wchar_t_type
-		)
-		{
-			return_type = std::shared_ptr<const built_in_type>(&built_in_type::unsigned_short_int, scalpel::utility::null_deleter());
-		}
-		else if
-		(
-			!bool_type &&
-			!char_type &&
-			!double_type &&
-			!float_type &&
-			!int_type &&
-			!long_long_type &&
-			!long_type &&
-			!short_type &&
-			!signed_type &&
-			!unsigned_type &&
-			void_type &&
-			!wchar_t_type
-		)
-		{
-			return_type = std::shared_ptr<const built_in_type>(&built_in_type::void_, scalpel::utility::null_deleter());
-		}
-		else if
-		(
-			!bool_type &&
-			!char_type &&
-			!double_type &&
-			!float_type &&
-			!int_type &&
-			!long_long_type &&
-			!long_type &&
-			!short_type &&
-			!signed_type &&
-			!unsigned_type &&
-			!void_type &&
+			bool_type,
+			char_type,
+			double_type,
+			float_type,
+			int_type,
+			long_long_type,
+			long_type,
+			short_type,
+			signed_type,
+			unsigned_type,
+			void_type,
 			wchar_t_type
-		)
-		{
-			return_type = std::shared_ptr<const built_in_type>(&built_in_type::wchar_t_, scalpel::utility::null_deleter());
-		}
-		else
-		{
-			throw std::runtime_error("Semantic analysis error: incorrect type");
-		}
+		);
 	}
 
-	if(return_type)
-	{
-		if(const_qualified)
-		{
-			return_type = std::make_shared<const_>(return_type);
-		}
-		else if(volatile_qualified)
-		{
-			return_type = std::make_shared<volatile_>(return_type);
-		}
-	}
+	assert(return_type);
+
+	return_type = decorate_type(return_type, const_qualified, volatile_qualified);
 
 	if(auto opt_ptr_operator_seq_node = get<ptr_operator_seq>(&abstract_declarator_node))
 	{
 		auto ptr_operator_seq_node = *opt_ptr_operator_seq_node;
-		for(auto i = ptr_operator_seq_node.begin(); i != ptr_operator_seq_node.end(); ++i)
-		{
-			auto ptr_operator_node = i->main_node();
-			if(auto opt_ptr_ptr_operator_node = get<ptr_ptr_operator>(&ptr_operator_node))
-			{
-				auto ptr_ptr_operator_node = *opt_ptr_ptr_operator_node;
-
-				return_type = std::make_shared<pointer>(return_type);
-
-				if(auto opt_cv_qualifier_seq_node = get_cv_qualifier_seq(ptr_ptr_operator_node))
-				{
-					auto cv_qualifier_seq_node = *opt_cv_qualifier_seq_node;
-					for
-					(
-						auto i = cv_qualifier_seq_node.begin();
-						i != cv_qualifier_seq_node.end();
-						++i
-					)
-					{
-						auto cv_qualifier_node = i->main_node();
-
-						if(get<predefined_text_node<str::const_>>(&cv_qualifier_node))
-						{
-							return_type = std::make_shared<const_>(return_type);
-						}
-						else if(get<predefined_text_node<str::volatile_>>(&cv_qualifier_node))
-						{
-							return_type = std::make_shared<volatile_>(return_type);
-						}
-					}
-				}
-			}
-			else if(auto ref_ptr_operator_node = get<ref_ptr_operator>(&ptr_operator_node))
-			{
-				return_type = std::make_shared<reference>(return_type);
-			}
-		}
+		return_type = decorate_type(return_type, ptr_operator_seq_node);
 	}
 
 	if(!return_type)
@@ -1568,6 +782,493 @@ semantic_analyzer::get_conversion_function_type
 )
 {
 	return std::shared_ptr<const built_in_type>(&built_in_type::int_, scalpel::utility::null_deleter());
+}
+
+std::shared_ptr<const semantic_entities::type>
+semantic_analyzer::decorate_type
+(
+	std::shared_ptr<const semantic_entities::type> return_type,
+	const bool const_qualified,
+	const bool volatile_qualified
+)
+{
+	if(const_qualified)
+		return_type = std::make_shared<const_>(return_type);
+	if(volatile_qualified)
+		return_type = std::make_shared<volatile_>(return_type);
+
+	return return_type;
+}
+
+std::shared_ptr<const semantic_entities::type>
+semantic_analyzer::decorate_type
+(
+	std::shared_ptr<const semantic_entities::type> return_type,
+	const syntax_nodes::ptr_operator_seq& ptr_operator_seq_node
+)
+{
+	for(auto i = ptr_operator_seq_node.begin(); i != ptr_operator_seq_node.end(); ++i)
+	{
+		auto ptr_operator_node = i->main_node();
+		if(auto opt_ptr_ptr_operator_node = get<ptr_ptr_operator>(&ptr_operator_node))
+		{
+			auto ptr_ptr_operator_node = *opt_ptr_ptr_operator_node;
+
+			return_type = std::make_shared<pointer>(return_type);
+
+			if(auto opt_cv_qualifier_seq_node = get_cv_qualifier_seq(ptr_ptr_operator_node))
+			{
+				auto cv_qualifier_seq_node = *opt_cv_qualifier_seq_node;
+				for
+				(
+					auto i = cv_qualifier_seq_node.begin();
+					i != cv_qualifier_seq_node.end();
+					++i
+				)
+				{
+					auto cv_qualifier_node = i->main_node();
+
+					if(get<predefined_text_node<str::const_>>(&cv_qualifier_node))
+					{
+						return_type = std::make_shared<const_>(return_type);
+					}
+					else if(get<predefined_text_node<str::volatile_>>(&cv_qualifier_node))
+					{
+						return_type = std::make_shared<volatile_>(return_type);
+					}
+				}
+			}
+		}
+		else if(auto ref_ptr_operator_node = get<ref_ptr_operator>(&ptr_operator_node))
+		{
+			return_type = std::make_shared<reference>(return_type);
+		}
+	}
+
+	return return_type;
+}
+
+void
+semantic_analyzer::get_type_info
+(
+	const syntax_nodes::type_specifier& type_specifier_node,
+	std::shared_ptr<const semantic_entities::type>& t,
+	bool& bool_type,
+	bool& char_type,
+	bool& double_type,
+	bool& float_type,
+	bool& int_type,
+	bool& long_long_type,
+	bool& long_type,
+	bool& short_type,
+	bool& signed_type,
+	bool& unsigned_type,
+	bool& void_type,
+	bool& wchar_t_type,
+	bool& const_qualified,
+	bool& volatile_qualified
+)
+{
+	//simple_type_specifier
+	//class_specifier
+	//enum_specifier
+	//elaborated_type_specifier
+	//cv_qualifier
+	//typeof_expression
+
+	if(auto opt_simple_type_specifier_node = get<simple_type_specifier>(&type_specifier_node))
+	{
+		auto simple_type_specifier_node = *opt_simple_type_specifier_node;
+		//simple_template_type_specifier,
+
+		if(auto opt_nested_identifier_or_template_id_node = get<nested_identifier_or_template_id>(&simple_type_specifier_node))
+		{
+			auto nested_identifier_or_template_id_node = *opt_nested_identifier_or_template_id_node;
+			std::shared_ptr<named_entity> found_name = name_lookup::find_name(scope_cursor_.scope_stack(), nested_identifier_or_template_id_node);
+			if(auto found_class = std::dynamic_pointer_cast<const class_>(found_name))
+			{
+				t = found_class;
+			}
+		}
+		else if(auto opt_built_in_type_specifier_node = get<built_in_type_specifier>(&simple_type_specifier_node))
+		{
+			auto built_in_type_specifier_node = *opt_built_in_type_specifier_node;
+
+			if(get<predefined_text_node<str::char_>>(&built_in_type_specifier_node))
+			{
+				char_type = true;
+			}
+			else if(get<predefined_text_node<str::wchar_t_>>(&built_in_type_specifier_node))
+			{
+				wchar_t_type = true;
+			}
+			else if(get<predefined_text_node<str::bool_>>(&built_in_type_specifier_node))
+			{
+				bool_type = true;
+			}
+			else if(get<predefined_text_node<str::short_>>(&built_in_type_specifier_node))
+			{
+				short_type = true;
+			}
+			else if(get<predefined_text_node<str::int_>>(&built_in_type_specifier_node))
+			{
+				int_type = true;
+			}
+			else if(get<predefined_text_node<str::long_>>(&built_in_type_specifier_node))
+			{
+				if(!long_type)
+					long_type = true;
+				else
+					long_long_type = true;
+			}
+			else if(get<predefined_text_node<str::signed_>>(&built_in_type_specifier_node))
+			{
+				signed_type = true;
+			}
+			else if(get<predefined_text_node<str::unsigned_>>(&built_in_type_specifier_node))
+			{
+				unsigned_type = true;
+			}
+			else if(get<predefined_text_node<str::float_>>(&built_in_type_specifier_node))
+			{
+				float_type = true;
+			}
+			else if(get<predefined_text_node<str::double_>>(&built_in_type_specifier_node))
+			{
+				double_type = true;
+			}
+			else if(get<predefined_text_node<str::void_>>(&built_in_type_specifier_node))
+			{
+				void_type = true;
+			}
+		}
+	}
+	else if(auto opt_cv_qualifier_node = get<cv_qualifier>(&type_specifier_node))
+	{
+		auto cv_qualifier_node = *opt_cv_qualifier_node;
+		//predefined_text_node<str::const_>
+		//predefined_text_node<str::volatile_>
+		//predefined_text_node<str::restrict_>
+		//predefined_text_node<str::__restrict___>
+		//predefined_text_node<str::__restrict_>
+
+		if(get<predefined_text_node<str::const_>>(&cv_qualifier_node))
+		{
+			const_qualified = true;
+		}
+		else if(get<predefined_text_node<str::volatile_>>(&cv_qualifier_node))
+		{
+			volatile_qualified = true;
+		}
+	}
+}
+
+std::shared_ptr<const semantic_entities::built_in_type>
+semantic_analyzer::get_built_in_type
+(
+	const bool bool_type,
+	const bool char_type,
+	const bool double_type,
+	const bool float_type,
+	const bool int_type,
+	const bool long_long_type,
+	const bool long_type,
+	const bool short_type,
+	const bool signed_type,
+	const bool unsigned_type,
+	const bool void_type,
+	const bool wchar_t_type
+)
+{
+	if
+	(
+		bool_type &&
+		!char_type &&
+		!double_type &&
+		!float_type &&
+		!int_type &&
+		!long_long_type &&
+		!long_type &&
+		!short_type &&
+		!signed_type &&
+		!unsigned_type &&
+		!void_type &&
+		!wchar_t_type
+	)
+	{
+		return std::shared_ptr<const built_in_type>(&built_in_type::bool_, scalpel::utility::null_deleter());
+	}
+	else if
+	(
+		!bool_type &&
+		char_type &&
+		!double_type &&
+		!float_type &&
+		!int_type &&
+		!long_long_type &&
+		!long_type &&
+		!short_type &&
+		!signed_type &&
+		!unsigned_type &&
+		!void_type &&
+		!wchar_t_type
+	)
+	{
+		return std::shared_ptr<const built_in_type>(&built_in_type::char_, scalpel::utility::null_deleter());
+	}
+	else if
+	(
+		!bool_type &&
+		!char_type &&
+		double_type &&
+		!float_type &&
+		!int_type &&
+		!long_long_type &&
+		!long_type &&
+		!short_type &&
+		!signed_type &&
+		!unsigned_type &&
+		!void_type &&
+		!wchar_t_type
+	)
+	{
+		return std::shared_ptr<const built_in_type>(&built_in_type::double_, scalpel::utility::null_deleter());
+	}
+	else if
+	(
+		!bool_type &&
+		!char_type &&
+		!double_type &&
+		float_type &&
+		!int_type &&
+		!long_long_type &&
+		!long_type &&
+		!short_type &&
+		!signed_type &&
+		!unsigned_type &&
+		!void_type &&
+		!wchar_t_type
+	)
+	{
+		return std::shared_ptr<const built_in_type>(&built_in_type::float_, scalpel::utility::null_deleter());
+	}
+	else if
+	(
+		!bool_type &&
+		!char_type &&
+		!double_type &&
+		!float_type &&
+		(signed_type || int_type) &&
+		!long_long_type &&
+		!long_type &&
+		!short_type &&
+		!unsigned_type &&
+		!void_type &&
+		!wchar_t_type
+	)
+	{
+		return std::shared_ptr<const built_in_type>(&built_in_type::int_, scalpel::utility::null_deleter());
+	}
+	else if
+	(
+		!bool_type &&
+		!char_type &&
+		double_type &&
+		!float_type &&
+		!int_type &&
+		!long_long_type &&
+		long_type &&
+		!short_type &&
+		!signed_type &&
+		!unsigned_type &&
+		!void_type &&
+		!wchar_t_type
+	)
+	{
+		return std::shared_ptr<const built_in_type>(&built_in_type::long_double, scalpel::utility::null_deleter());
+	}
+	else if
+	(
+		!bool_type &&
+		!char_type &&
+		!double_type &&
+		!float_type &&
+		//int_type &&
+		!long_long_type &&
+		long_type &&
+		!short_type &&
+		//signed_type &&
+		!unsigned_type &&
+		!void_type &&
+		!wchar_t_type
+	)
+	{
+		return std::shared_ptr<const built_in_type>(&built_in_type::long_int, scalpel::utility::null_deleter());
+	}
+	else if
+	(
+		!bool_type &&
+		!char_type &&
+		!double_type &&
+		!float_type &&
+		//int_type &&
+		long_long_type &&
+		//long_type &&
+		!short_type &&
+		//signed_type &&
+		!unsigned_type &&
+		!void_type &&
+		!wchar_t_type
+	)
+	{
+		return std::shared_ptr<const built_in_type>(&built_in_type::long_long_int, scalpel::utility::null_deleter());
+	}
+	else if
+	(
+		!bool_type &&
+		!char_type &&
+		!double_type &&
+		!float_type &&
+		//!int_type &&
+		!long_long_type &&
+		!long_type &&
+		short_type &&
+		//!signed_type &&
+		!unsigned_type &&
+		!void_type &&
+		!wchar_t_type
+	)
+	{
+		return std::shared_ptr<const built_in_type>(&built_in_type::short_int, scalpel::utility::null_deleter());
+	}
+	else if
+	(
+		!bool_type &&
+		char_type &&
+		!double_type &&
+		!float_type &&
+		!int_type &&
+		!long_long_type &&
+		!long_type &&
+		!short_type &&
+		!signed_type &&
+		unsigned_type &&
+		!void_type &&
+		!wchar_t_type
+	)
+	{
+		return std::shared_ptr<const built_in_type>(&built_in_type::unsigned_char, scalpel::utility::null_deleter());
+	}
+	else if
+	(
+		!bool_type &&
+		!char_type &&
+		!double_type &&
+		!float_type &&
+		//!int_type &&
+		!long_long_type &&
+		!long_type &&
+		!short_type &&
+		!signed_type &&
+		unsigned_type &&
+		!void_type &&
+		!wchar_t_type
+	)
+	{
+		return std::shared_ptr<const built_in_type>(&built_in_type::unsigned_int, scalpel::utility::null_deleter());
+	}
+	else if
+	(
+		!bool_type &&
+		!char_type &&
+		!double_type &&
+		!float_type &&
+		//!int_type &&
+		!long_long_type &&
+		long_type &&
+		!short_type &&
+		!signed_type &&
+		unsigned_type &&
+		!void_type &&
+		!wchar_t_type
+	)
+	{
+		return std::shared_ptr<const built_in_type>(&built_in_type::unsigned_long_int, scalpel::utility::null_deleter());
+	}
+	else if
+	(
+		!bool_type &&
+		!char_type &&
+		!double_type &&
+		!float_type &&
+		//!int_type &&
+		long_long_type &&
+		//!long_type &&
+		!short_type &&
+		!signed_type &&
+		unsigned_type &&
+		!void_type &&
+		!wchar_t_type
+	)
+	{
+		return std::shared_ptr<const built_in_type>(&built_in_type::unsigned_long_long_int, scalpel::utility::null_deleter());
+	}
+	else if
+	(
+		!bool_type &&
+		!char_type &&
+		!double_type &&
+		!float_type &&
+		//!int_type &&
+		!long_long_type &&
+		!long_type &&
+		short_type &&
+		!signed_type &&
+		unsigned_type &&
+		!void_type &&
+		!wchar_t_type
+	)
+	{
+		return std::shared_ptr<const built_in_type>(&built_in_type::unsigned_short_int, scalpel::utility::null_deleter());
+	}
+	else if
+	(
+		!bool_type &&
+		!char_type &&
+		!double_type &&
+		!float_type &&
+		!int_type &&
+		!long_long_type &&
+		!long_type &&
+		!short_type &&
+		!signed_type &&
+		!unsigned_type &&
+		void_type &&
+		!wchar_t_type
+	)
+	{
+		return std::shared_ptr<const built_in_type>(&built_in_type::void_, scalpel::utility::null_deleter());
+	}
+	else if
+	(
+		!bool_type &&
+		!char_type &&
+		!double_type &&
+		!float_type &&
+		!int_type &&
+		!long_long_type &&
+		!long_type &&
+		!short_type &&
+		!signed_type &&
+		!unsigned_type &&
+		!void_type &&
+		wchar_t_type
+	)
+	{
+		return std::shared_ptr<const built_in_type>(&built_in_type::wchar_t_, scalpel::utility::null_deleter());
+	}
+
+	throw std::runtime_error("Semantic analysis error: incorrect type");
 }
 
 std::shared_ptr<semantic_entities::class_>

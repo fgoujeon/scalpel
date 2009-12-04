@@ -358,6 +358,59 @@ class semantic_analyzer
 			const syntax_nodes::declarator& declarator_node
 		);
 
+		std::shared_ptr<const semantic_entities::type>
+		decorate_type
+		(
+			std::shared_ptr<const semantic_entities::type> return_type,
+			const bool const_qualified,
+			const bool volatile_qualified
+		);
+
+		std::shared_ptr<const semantic_entities::type>
+		decorate_type
+		(
+			std::shared_ptr<const semantic_entities::type> return_type,
+			const syntax_nodes::ptr_operator_seq& ptr_operator_seq_node
+		);
+
+		void
+		get_type_info
+		(
+			const syntax_nodes::type_specifier& type_specifier_node,
+			std::shared_ptr<const semantic_entities::type>& t,
+			bool& bool_type,
+			bool& char_type,
+			bool& double_type,
+			bool& float_type,
+			bool& int_type,
+			bool& long_long_type,
+			bool& long_type,
+			bool& short_type,
+			bool& signed_type,
+			bool& unsigned_type,
+			bool& void_type,
+			bool& wchar_t_type,
+			bool& const_qualified,
+			bool& volatile_qualified
+		);
+
+		std::shared_ptr<const semantic_entities::built_in_type>
+		get_built_in_type
+		(
+			const bool bool_type,
+			const bool char_type,
+			const bool double_type,
+			const bool float_type,
+			const bool int_type,
+			const bool long_long_type,
+			const bool long_type,
+			const bool short_type,
+			const bool signed_type,
+			const bool unsigned_type,
+			const bool void_type,
+			const bool wchar_t_type
+		);
+
 		std::shared_ptr<semantic_entities::class_>
 		find_class
 		(
