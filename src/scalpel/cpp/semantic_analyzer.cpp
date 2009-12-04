@@ -558,6 +558,20 @@ semantic_analyzer::create_parameters(const declarator& declarator_node)
 									)
 								);
 							}
+							else
+							{
+								parameters.push_back
+								(
+									std::move
+									(
+										function::parameter
+										(
+											create_type(decl_specifier_seq_node),
+											""
+										)
+									)
+								);
+							}
 						}
 					}
 				}
@@ -571,83 +585,7 @@ semantic_analyzer::create_parameters(const declarator& declarator_node)
 std::shared_ptr<const type>
 semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node, const declarator& declarator_node)
 {
-	std::shared_ptr<const type> return_type;
-	bool bool_type = false;
-	bool char_type = false;
-	bool double_type = false;
-	bool float_type = false;
-	bool int_type = false;
-	bool long_long_type = false;
-	bool long_type = false;
-	bool short_type = false;
-	bool signed_type = false;
-	bool unsigned_type = false;
-	bool void_type = false;
-	bool wchar_t_type = false;
-	bool const_qualified = false;
-	bool volatile_qualified = false;
-
-	for
-	(
-		auto i = decl_specifier_seq_node.begin();
-		i < decl_specifier_seq_node.end();
-		++i
-	)
-	{
-		const decl_specifier& decl_specifier_node = i->main_node();
-
-		//auto opt_function_specifier_node = get<function_specifier>(&decl_specifier_node);
-		//auto opt_storage_class_specifier_node = get<storage_class_specifier>(&decl_specifier_node);
-		//predefined_text_node<str::friend_>
-		//predefined_text_node<str::typedef_>
-
-		if(auto opt_type_specifier_node = get<type_specifier>(&decl_specifier_node))
-		{
-			auto type_specifier_node = *opt_type_specifier_node;
-			get_type_info
-			(
-				type_specifier_node,
-				return_type,
-				bool_type,
-				char_type,
-				double_type,
-				float_type,
-				int_type,
-				long_long_type,
-				long_type,
-				short_type,
-				signed_type,
-				unsigned_type,
-				void_type,
-				wchar_t_type,
-				const_qualified,
-				volatile_qualified
-			);
-		}
-	}
-
-	if(!return_type)
-	{
-		return_type = get_built_in_type
-		(
-			bool_type,
-			char_type,
-			double_type,
-			float_type,
-			int_type,
-			long_long_type,
-			long_type,
-			short_type,
-			signed_type,
-			unsigned_type,
-			void_type,
-			wchar_t_type
-		);
-	}
-
-	assert(return_type);
-
-	return_type = decorate_type(return_type, const_qualified, volatile_qualified);
+	std::shared_ptr<const type> return_type = create_type(decl_specifier_seq_node);
 
 	if(auto opt_ptr_operator_seq_node = get_ptr_operator_seq(declarator_node))
 	{
@@ -686,6 +624,27 @@ semantic_analyzer::create_type
 (
 	const decl_specifier_seq& decl_specifier_seq_node,
 	const abstract_declarator& abstract_declarator_node
+)
+{
+	std::shared_ptr<const type> return_type = create_type(decl_specifier_seq_node);
+
+	if(auto opt_ptr_operator_seq_node = get<ptr_operator_seq>(&abstract_declarator_node))
+	{
+		auto ptr_operator_seq_node = *opt_ptr_operator_seq_node;
+		return_type = decorate_type(return_type, ptr_operator_seq_node);
+	}
+
+	if(!return_type)
+	{
+		throw std::runtime_error("Semantic analysis error: type not found");
+	}
+	return return_type;
+}
+
+std::shared_ptr<const type>
+semantic_analyzer::create_type
+(
+	const decl_specifier_seq& decl_specifier_seq_node
 )
 {
 	std::shared_ptr<const type> return_type;
@@ -766,16 +725,6 @@ semantic_analyzer::create_type
 
 	return_type = decorate_type(return_type, const_qualified, volatile_qualified);
 
-	if(auto opt_ptr_operator_seq_node = get<ptr_operator_seq>(&abstract_declarator_node))
-	{
-		auto ptr_operator_seq_node = *opt_ptr_operator_seq_node;
-		return_type = decorate_type(return_type, ptr_operator_seq_node);
-	}
-
-	if(!return_type)
-	{
-		throw std::runtime_error("Semantic analysis error: type not found");
-	}
 	return return_type;
 }
 
