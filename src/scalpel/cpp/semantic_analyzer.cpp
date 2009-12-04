@@ -71,7 +71,7 @@ semantic_analyzer::create_class(const class_specifier& syntax_node)
 }
 
 void
-semantic_analyzer::fill_class(class_& c, const class_specifier& class_specifier_node)
+semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& class_specifier_node)
 {
 	auto class_head_node = get_class_head(class_specifier_node);
 
@@ -102,13 +102,13 @@ semantic_analyzer::fill_class(class_& c, const class_specifier& class_specifier_
 			auto nested_identifier_or_template_id_node = get_nested_identifier_or_template_id(base_specifier_node);
 			std::shared_ptr<class_> base = find_class(nested_identifier_or_template_id_node);
 
-			c.add(std::make_shared<class_::base_class>(base, access, is_virtual));
+			c->add(std::make_shared<class_::base_class>(base, access, is_virtual));
 		}
 	}
 
 	//default current_access
 	auto class_key_node = get_class_key(class_head_node);
-	class_::access current_access = class_::access::PUBLIC; //the default current_access is public...
+	class_::access current_access = class_::access::PUBLIC; //the default current_access is public->..
 	if(get<predefined_text_node<str::class_>>(&class_key_node)) //... unless the syntax node represents a class (neither a struct nor a union)
 	{
 		current_access = class_::access::PRIVATE;
@@ -128,7 +128,7 @@ semantic_analyzer::fill_class(class_& c, const class_specifier& class_specifier_
 				if(auto opt_member_declaration_function_definition_node = get<member_declaration_function_definition>(opt_member_declaration_node))
 				{
 					auto function_definition_node = get_function_definition(*opt_member_declaration_function_definition_node);
-					//analyze(function_definition_node);
+					//analyze(function_definition_node, c);
 				}
 				else if(auto opt_member_declaration_member_declarator_list_node = get<member_declaration_member_declarator_list>(opt_member_declaration_node))
 				{
@@ -156,25 +156,25 @@ semantic_analyzer::fill_class(class_& c, const class_specifier& class_specifier_
 									{
 										if(is_operator_function_declaration(declarator_node))
 										{
-											c.add
+											c->add
 											(
-												std::make_shared<class_::member<operator_function>>
+												std::make_shared<class_::member_operator_function>
 												(
 													create_operator_function(decl_specifier_seq_node, declarator_node),
-													current_access/*,
+													current_access,
 													is_qualified<str::const_>(declarator_node),
 													is_qualified<str::volatile_>(declarator_node),
 													has_inline_specifier(decl_specifier_seq_node),
 													has_virtual_specifier(decl_specifier_seq_node),
-													has_pure_specifier(member_declarator_declarator_node)*/
+													has_pure_specifier(member_declarator_declarator_node)
 												)
 											);
 										}
-										else if(c.name() == get_function_name(declarator_node)) //constructor/destructor?
+										else if(c->name() == get_function_name(declarator_node)) //constructor/destructor?
 										{
 											if(!is_destructor_declaration(declarator_node)) //constructor
 											{
-												c.add
+												c->add
 												(
 													std::make_shared<class_::constructor>
 													(
@@ -187,7 +187,7 @@ semantic_analyzer::fill_class(class_& c, const class_specifier& class_specifier_
 											}
 											else //destructor
 											{
-												c.set_destructor
+												c->set_destructor
 												(
 													std::make_shared<class_::destructor>
 													(
@@ -201,9 +201,9 @@ semantic_analyzer::fill_class(class_& c, const class_specifier& class_specifier_
 										}
 										else
 										{
-											c.add
+											c->add
 											(
-												std::make_shared<class_::member<function>>
+												std::make_shared<class_::member_function>
 												(
 													create_function(decl_specifier_seq_node, declarator_node),
 													current_access,
@@ -218,14 +218,21 @@ semantic_analyzer::fill_class(class_& c, const class_specifier& class_specifier_
 									}
 									else
 									{
-										c.add(std::make_shared<class_::member<variable>>(create_variable(decl_specifier_seq_node, declarator_node), current_access));
+										c->add
+										(
+											std::make_shared<class_::member_variable>
+											(
+												create_variable(decl_specifier_seq_node, declarator_node),
+												current_access
+											)
+										);
 									}
 								}
 								else
 								{
 									if(!is_destructor_declaration(declarator_node))
 									{
-										c.add
+										c->add
 										(
 											std::make_shared<class_::constructor>
 											(
@@ -238,7 +245,7 @@ semantic_analyzer::fill_class(class_& c, const class_specifier& class_specifier_
 									}
 									else
 									{
-										c.set_destructor
+										c->set_destructor
 										(
 											std::make_shared<class_::destructor>
 											(
@@ -314,9 +321,11 @@ semantic_analyzer::create_operator_function(const decl_specifier_seq& decl_speci
 	assert(opt_operator_function_id_node);
 	auto operator_function_id_node = *opt_operator_function_id_node;
 	auto operator_node = get_operator(operator_function_id_node);
+
 	if(auto opt_simple_operator_node = get<simple_operator>(&operator_node))
 	{
 		auto simple_operator_node = *opt_simple_operator_node;
+
 		if(get<predefined_text_node<str::new_>>(&simple_operator_node))
 			op = semantic_entities::operator_::NEW;
 		else if(get<predefined_text_node<str::delete_>>(&simple_operator_node))
@@ -397,6 +406,23 @@ semantic_analyzer::create_operator_function(const decl_specifier_seq& decl_speci
 			op = semantic_entities::operator_::LEFT_ANGLE_BRACKET;
 		else if(get<predefined_text_node<str::right_angle_bracket>>(&simple_operator_node))
 			op = semantic_entities::operator_::RIGHT_ANGLE_BRACKET;
+		else
+			assert(false);
+	}
+	else if(auto opt_array_operator_node = get<array_operator>(&operator_node))
+	{
+		auto array_operator_node = *opt_array_operator_node;
+
+		if(get<new_array_operator>(&array_operator_node))
+			op = semantic_entities::operator_::NEW_ARRAY;
+		else if(get<delete_array_operator>(&array_operator_node))
+			op = semantic_entities::operator_::DELETE_ARRAY;
+		else
+			assert(false);
+	}
+	else
+	{
+		assert(false);
 	}
 
 	//get the function's return type

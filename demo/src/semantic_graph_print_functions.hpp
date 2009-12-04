@@ -58,7 +58,7 @@ print
 (
 	const class_& c,
 	const unsigned int indent_level,
-	const std::string& access = ""
+	const std::string& extra_attributes = ""
 );
 
 void
@@ -79,7 +79,8 @@ void
 print
 (
 	const function& f,
-	const unsigned int indent_level
+	const unsigned int indent_level,
+	const std::string& extra_attributes = ""
 );
 
 void
@@ -87,7 +88,7 @@ print
 (
 	const operator_function& f,
 	const unsigned int indent_level,
-	const std::string& access = ""
+	const std::string& extra_attributes = ""
 );
 
 void
@@ -102,14 +103,14 @@ print
 (
 	const variable& v,
 	const unsigned int indent_level,
-	const std::string& access = ""
+	const std::string& extra_attributes = ""
 );
 
-void
-print_attribute(const class_::access& a);
+std::string
+attribute(const class_::access& a);
 
-void
-print_attribute(const semantic_entities::operator_ op);
+std::string
+attribute(const semantic_entities::operator_ op);
 
 template<class EntityT>
 void
@@ -129,29 +130,37 @@ print
 	const unsigned int indent_level
 )
 {
-	std::string access;
-	switch(m.access())
-	{
-		case class_::access::PUBLIC:
-			access = "public";
-			break;
-		case class_::access::PROTECTED:
-			access = "protected";
-			break;
-		case class_::access::PRIVATE:
-			access = "private";
-			break;
-	}
-	print(*m.entity(), indent_level, access);
+	std::ostringstream extra_oss;
+	extra_oss << attribute(m.access());
+	print(*m.entity(), indent_level, extra_oss.str());
 }
 
-template<>
+template<class EntityT>
 void
 print
 (
-	const class_::member<function>& m,
+	const class_::function_member<EntityT>& f,
 	const unsigned int indent_level
-);
+)
+{
+	std::ostringstream extra_oss;
+
+	extra_oss << attribute(f.access());
+	if(f.entity()->static_specified())
+		extra_oss << " static=\"true\"";
+	if(f.const_qualified())
+		extra_oss << " const=\"true\"";
+	if(f.volatile_qualified())
+		extra_oss << " volatile=\"true\"";
+	if(f.inline_specified())
+		extra_oss << " inline=\"true\"";
+	if(f.virtual_specified())
+		extra_oss << " virtual=\"true\"";
+	if(f.pure_specified())
+		extra_oss << " pure=\"true\"";
+
+	print(*f.entity(), indent_level, extra_oss.str());
+}
 
 } //namespace semantic_graph_print_functions
 

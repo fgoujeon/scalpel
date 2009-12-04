@@ -152,14 +152,13 @@ print
 (
 	const class_& c,
 	const unsigned int indent_level,
-	const std::string& access
+	const std::string& extra_attributes
 )
 {
 	std::cout << indent(indent_level) << "<class";
 	std::cout << " name=\"" << c.name() << "\"";
 	std::cout << " id=\"" << &c << "\"";
-	if(access != "")
-		std::cout << " access=\"" << access << "\"";
+	std::cout << extra_attributes;
 	std::cout << ">\n";
 
 	for(auto i = c.base_classes().begin(); i != c.base_classes().end(); ++i)
@@ -168,7 +167,7 @@ print
 
 		std::cout << indent(indent_level + 1) << "<base_class";
 		std::cout << " id=\"" << base.base().get() << "\"";
-		print_attribute(base.access());
+		std::cout << attribute(base.access());
 		if(base.virtual_specified())
 			std::cout << " virtual=\"true\"";
 		std::cout << "/>\n";
@@ -194,46 +193,6 @@ print
 	std::cout << indent(indent_level) << "</class>\n";
 }
 
-template<>
-void
-print
-(
-	const class_::member<function>& f,
-	const unsigned int indent_level
-)
-{
-	std::cout << indent(indent_level) << "<function";
-	std::cout << " name=\"" << f.entity()->name() << "\"";
-	print_attribute(f.access());
-	if(f.entity()->static_specified())
-		std::cout << " static=\"true\"";
-	if(f.const_qualified())
-		std::cout << " const=\"true\"";
-	if(f.volatile_qualified())
-		std::cout << " volatile=\"true\"";
-	if(f.inline_specified())
-		std::cout << " inline=\"true\"";
-	if(f.virtual_specified())
-		std::cout << " virtual=\"true\"";
-	if(f.pure_specified())
-		std::cout << " pure=\"true\"";
-	std::cout << ">\n";
-
-	std::cout << indent(indent_level + 1) << "<return_type>\n";
-	print(*f.entity()->return_type(), indent_level + 2);
-	std::cout << indent(indent_level + 1) << "</return_type>\n";
-
-	std::cout << indent(indent_level + 1) << "<parameters>\n";
-	const std::list<function::parameter>& parameters = f.entity()->parameters();
-	for(auto i = parameters.begin(); i != parameters.end(); ++i)
-	{
-		print(*i, indent_level + 2);
-	}
-	std::cout << indent(indent_level + 1) << "</parameters>\n";
-
-	std::cout << indent(indent_level) << "</function>\n";
-}
-
 void
 print
 (
@@ -242,7 +201,7 @@ print
 )
 {
 	std::cout << indent(indent_level) << "<constructor";
-	print_attribute(c.access());
+	std::cout << attribute(c.access());
 	if(c.inline_specified())
 		std::cout << " inline=\"true\"";
 	if(c.explicit_specified())
@@ -268,7 +227,7 @@ print
 )
 {
 	std::cout << indent(indent_level) << "<destructor";
-	print_attribute(d.access());
+	std::cout << attribute(d.access());
 	if(d.inline_specified())
 		std::cout << " inline=\"true\"";
 	if(d.virtual_specified())
@@ -286,13 +245,13 @@ void
 print
 (
 	const function& f,
-	const unsigned int indent_level
+	const unsigned int indent_level,
+	const std::string& extra_attributes
 )
 {
 	std::cout << indent(indent_level) << "<function";
 	std::cout << " name=\"" << f.name() << "\"";
-	if(f.static_specified())
-		std::cout << " static=\"true\"";
+	std::cout << extra_attributes;
 	std::cout << ">\n";
 
 	std::cout << indent(indent_level + 1) << "<return_type>\n";
@@ -315,13 +274,12 @@ print
 (
 	const operator_function& f,
 	const unsigned int indent_level,
-	const std::string& access
+	const std::string& extra_attributes
 )
 {
 	std::cout << indent(indent_level) << "<operator_function";
-	print_attribute(f.get_operator());
-	if(access != "")
-		std::cout << " access=\"" << access << "\"";
+	std::cout << attribute(f.get_operator());
+	std::cout << extra_attributes;
 	if(f.static_specified())
 		std::cout << " static=\"true\"";
 	std::cout << ">\n";
@@ -363,13 +321,12 @@ print
 (
 	const variable& v,
 	const unsigned int indent_level,
-	const std::string& access
+	const std::string& extra_attributes
 )
 {
 	std::cout << indent(indent_level) << "<variable";
 	std::cout << " name=\"" << v.name() << "\"";
-	if(access != "")
-		std::cout << " access=\"" << access << "\"";
+	std::cout << extra_attributes;
 	if(v.static_specified())
 		std::cout << " static=\"true\"";
 	std::cout << ">\n";
@@ -379,153 +336,167 @@ print
 	std::cout << indent(indent_level) << "</variable>\n";
 }
 
-void
-print_attribute(const class_::access& a)
+std::string
+attribute(const class_::access& a)
 {
-	std::cout << " access=\"";
+	std::ostringstream oss;
+
+	oss << " access=\"";
 	switch(a)
 	{
 		case class_::access::PUBLIC:
-			std::cout << "public";
+			oss << "public";
 			break;
 		case class_::access::PROTECTED:
-			std::cout << "protected";
+			oss << "protected";
 			break;
 		case class_::access::PRIVATE:
-			std::cout << "private";
+			oss << "private";
 			break;
 	}
-	std::cout << "\"";
+	oss << "\"";
+
+	return oss.str();
 }
 
-void
-print_attribute(const semantic_entities::operator_ op)
+std::string
+attribute(const semantic_entities::operator_ op)
 {
-	std::cout << " operator=\"";
+	std::ostringstream oss;
+
+	oss << " operator=\"";
 	switch(op)
 	{
 		case semantic_entities::operator_::NEW:
-			std::cout << "new";
+			oss << "new";
+			break;
+		case semantic_entities::operator_::NEW_ARRAY:
+			oss << "new[]";
 			break;
 		case semantic_entities::operator_::DELETE:
-			std::cout << "delete";
+			oss << "delete";
+			break;
+		case semantic_entities::operator_::DELETE_ARRAY:
+			oss << "delete[]";
 			break;
 		case semantic_entities::operator_::DOUBLE_RIGHT_ANGLE_BRACKET_EQUAL:
-			std::cout << ">>=";
+			oss << ">>=";
 			break;
 		case semantic_entities::operator_::DOUBLE_LEFT_ANGLE_BRACKET_EQUAL:
-			std::cout << "<<=";
+			oss << "<<=";
 			break;
 		case semantic_entities::operator_::ARROW_ASTERISK:
-			std::cout << "->*";
+			oss << "->*";
 			break;
 		case semantic_entities::operator_::PLUS_EQUAL:
-			std::cout << "+=";
+			oss << "+=";
 			break;
 		case semantic_entities::operator_::MINUS_EQUAL:
-			std::cout << "-=";
+			oss << "-=";
 			break;
 		case semantic_entities::operator_::ASTERISK_EQUAL:
-			std::cout << "*=";
+			oss << "*=";
 			break;
 		case semantic_entities::operator_::SLASH_EQUAL:
-			std::cout << "/=";
+			oss << "/=";
 			break;
 		case semantic_entities::operator_::PERCENT_EQUAL:
-			std::cout << "%=";
+			oss << "%=";
 			break;
 		case semantic_entities::operator_::CIRCUMFLEX_EQUAL:
-			std::cout << "^=";
+			oss << "^=";
 			break;
 		case semantic_entities::operator_::AMPERSAND_EQUAL:
-			std::cout << "&=";
+			oss << "&=";
 			break;
 		case semantic_entities::operator_::PIPE_EQUAL:
-			std::cout << "|=";
+			oss << "|=";
 			break;
 		case semantic_entities::operator_::DOUBLE_LEFT_ANGLE_BRACKET:
-			std::cout << "<<";
+			oss << "<<";
 			break;
 		case semantic_entities::operator_::DOUBLE_RIGHT_ANGLE_BRACKET:
-			std::cout << ">>";
+			oss << ">>";
 			break;
 		case semantic_entities::operator_::DOUBLE_EQUAL:
-			std::cout << "==";
+			oss << "==";
 			break;
 		case semantic_entities::operator_::EXCLAMATION_EQUAL:
-			std::cout << "!=";
+			oss << "!=";
 			break;
 		case semantic_entities::operator_::LEFT_ANGLE_BRACKET_EQUAL:
-			std::cout << "<=";
+			oss << "<=";
 			break;
 		case semantic_entities::operator_::RIGHT_ANGLE_BRACKET_EQUAL:
-			std::cout << ">=";
+			oss << ">=";
 			break;
 		case semantic_entities::operator_::DOUBLE_AMPERSAND:
-			std::cout << "&&";
+			oss << "&&";
 			break;
 		case semantic_entities::operator_::DOUBLE_PIPE:
-			std::cout << "||";
+			oss << "||";
 			break;
 		case semantic_entities::operator_::DOUBLE_PLUS:
-			std::cout << "++";
+			oss << "++";
 			break;
 		case semantic_entities::operator_::DOUBLE_MINUS:
-			std::cout << "--";
+			oss << "--";
 			break;
 		case semantic_entities::operator_::ARROW:
-			std::cout << "->";
+			oss << "->";
 			break;
 		case semantic_entities::operator_::ROUND_BRACKETS:
-			std::cout << "()";
+			oss << "()";
 			break;
 		case semantic_entities::operator_::SQUARE_BRACKETS:
-			std::cout << "[]";
+			oss << "[]";
 			break;
 		case semantic_entities::operator_::COMMA:
-			std::cout << ",";
+			oss << ",";
 			break;
 		case semantic_entities::operator_::PLUS:
-			std::cout << "+";
+			oss << "+";
 			break;
 		case semantic_entities::operator_::MINUS:
-			std::cout << "-";
+			oss << "-";
 			break;
 		case semantic_entities::operator_::ASTERISK:
-			std::cout << "*";
+			oss << "*";
 			break;
 		case semantic_entities::operator_::SLASH:
-			std::cout << "/";
+			oss << "/";
 			break;
 		case semantic_entities::operator_::PERCENT:
-			std::cout << "%";
+			oss << "%";
 			break;
 		case semantic_entities::operator_::CIRCUMFLEX:
-			std::cout << "^";
+			oss << "^";
 			break;
 		case semantic_entities::operator_::AMPERSAND:
-			std::cout << "&";
+			oss << "&";
 			break;
 		case semantic_entities::operator_::PIPE:
-			std::cout << "|";
+			oss << "|";
 			break;
 		case semantic_entities::operator_::TILDE:
-			std::cout << "~";
+			oss << "~";
 			break;
 		case semantic_entities::operator_::EXCLAMATION:
-			std::cout << "!";
+			oss << "!";
 			break;
 		case semantic_entities::operator_::EQUAL:
-			std::cout << "=";
+			oss << "=";
 			break;
 		case semantic_entities::operator_::LEFT_ANGLE_BRACKET:
-			std::cout << "<";
+			oss << "<";
 			break;
 		case semantic_entities::operator_::RIGHT_ANGLE_BRACKET:
-			std::cout << ">";
+			oss << ">";
 			break;
 	}
-	std::cout << "\"";
+	oss << "\"";
+
+	return oss.str();
 }
 
 } //namespace semantic_graph_print_functions

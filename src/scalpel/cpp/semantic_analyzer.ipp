@@ -109,7 +109,7 @@ semantic_analyzer::analyze(const syntax_nodes::class_specifier& class_specifier_
 	std::shared_ptr<class_> new_class = create_class(class_specifier_node);
 	parent_entity->add(new_class);
 	scope_cursor_.enter_scope(new_class);
-	fill_class(*new_class, class_specifier_node);
+	fill_class(new_class, class_specifier_node);
 	scope_cursor_.leave_scope();
 }
 

@@ -184,7 +184,7 @@ class_::add(std::shared_ptr<constructor> member)
 }
 
 void
-class_::add(std::shared_ptr<member<function>> member)
+class_::add(std::shared_ptr<member_function> member)
 {
     functions_.push_back(member);
 
@@ -197,7 +197,7 @@ class_::add(std::shared_ptr<member<function>> member)
 }
 
 void
-class_::add(std::shared_ptr<member<operator_function>> member)
+class_::add(std::shared_ptr<member_operator_function> member)
 {
     operator_functions_.push_back(member);
 
@@ -210,7 +210,7 @@ class_::add(std::shared_ptr<member<operator_function>> member)
 }
 
 void
-class_::add(std::shared_ptr<member<variable>> member)
+class_::add(std::shared_ptr<member_variable> member)
 {
     variables_.push_back(member);
 	//scope_impl_.add_to_named_entities(member);
@@ -383,84 +383,6 @@ class_::destructor::implicitly_declared() const
 
 
 
-class_::member<function>::member
-(
-	std::shared_ptr<function> entity,
-	class_::access a,
-	bool is_const_qualified,
-	bool is_volatile_qualified,
-	bool is_inline_specified,
-	bool is_virtual_specified,
-	bool is_pure_specified
-):
-	entity_(entity),
-	access_(a),
-	const_qualified_(is_const_qualified),
-	volatile_qualified_(is_volatile_qualified),
-	inline_specified_(is_inline_specified),
-	virtual_specified_(is_virtual_specified),
-	pure_specified_(is_pure_specified)
-{
-}
-
-class_::member<function>::member(member<function>&& o):
-	entity_(o.entity_),
-	access_(o.access_),
-	const_qualified_(o.const_qualified_),
-	volatile_qualified_(o.volatile_qualified_),
-	inline_specified_(o.inline_specified_),
-	virtual_specified_(o.virtual_specified_),
-	pure_specified_(o.pure_specified_)
-{
-}
-
-std::shared_ptr<const function>
-class_::member<function>::entity() const
-{
-	return entity_;
-}
-
-std::shared_ptr<function>
-class_::member<function>::entity()
-{
-	return entity_;
-}
-
-class_::access
-class_::member<function>::access() const
-{
-	return access_;
-}
-
-bool
-class_::member<function>::const_qualified() const
-{
-	return const_qualified_;
-}
-
-bool
-class_::member<function>::volatile_qualified() const
-{
-	return volatile_qualified_;
-}
-
-bool
-class_::member<function>::inline_specified() const
-{
-	return inline_specified_;
-}
-
-bool
-class_::member<function>::virtual_specified() const
-{
-	return virtual_specified_;
-}
-
-bool
-class_::member<function>::pure_specified() const
-{
-	return pure_specified_;
-}
 
 }}} //namespace scalpel::cpp::semantic_entities
 

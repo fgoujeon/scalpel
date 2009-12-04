@@ -319,7 +319,7 @@ class semantic_analyzer
 		create_class(const syntax_nodes::class_specifier& syntax_node);
 
 		void
-		fill_class(semantic_entities::class_& c, const syntax_nodes::class_specifier& syntax_node);
+		fill_class(std::shared_ptr<semantic_entities::class_> c, const syntax_nodes::class_specifier& syntax_node);
 
 		std::shared_ptr<semantic_entities::function>
 		create_function

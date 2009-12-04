@@ -27,7 +27,9 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 enum operator_
 {
 	NEW,
+	NEW_ARRAY,
 	DELETE,
+	DELETE_ARRAY,
 	DOUBLE_RIGHT_ANGLE_BRACKET_EQUAL,
 	DOUBLE_LEFT_ANGLE_BRACKET_EQUAL,
 	ARROW_ASTERISK,
