@@ -187,6 +187,9 @@ print
 	for(auto i = c.operator_functions().begin(); i != c.operator_functions().end(); ++i)
 		print(**i, indent_level + 1);
 
+	for(auto i = c.conversion_functions().begin(); i != c.conversion_functions().end(); ++i)
+		print(**i, indent_level + 1);
+
 	for(auto i = c.variables().begin(); i != c.variables().end(); ++i)
 		print(**i, indent_level + 1);
 
@@ -297,6 +300,30 @@ print
 	std::cout << indent(indent_level + 1) << "</parameters>\n";
 
 	std::cout << indent(indent_level) << "</operator_function>\n";
+}
+
+void
+print
+(
+	const class_::conversion_function& f,
+	const unsigned int indent_level
+)
+{
+	std::cout << indent(indent_level) << "<conversion_function";
+	std::cout << attribute(f.access());
+	if(f.inline_specified())
+		std::cout << " inline=\"true\"";
+	if(f.virtual_specified())
+		std::cout << " virtual=\"true\"";
+	if(f.pure_specified())
+		std::cout << " pure=\"true\"";
+	std::cout << ">\n";
+
+	std::cout << indent(indent_level + 1) << "<return_type>\n";
+	print(*f.get_type(), indent_level + 2);
+	std::cout << indent(indent_level + 1) << "</return_type>\n";
+
+	std::cout << indent(indent_level) << "</conversion_function>\n";
 }
 
 void

@@ -44,6 +44,8 @@ class_::class_(class_&& c):
 	constructors_(std::move(c.constructors_)),
 	destructor_(std::move(c.destructor_)),
 	functions_(std::move(c.functions_)),
+	operator_functions_(std::move(c.operator_functions_)),
+	conversion_functions_(std::move(c.conversion_functions_)),
 	variables_(std::move(c.variables_))
 {
 }
@@ -57,6 +59,8 @@ class_::operator=(class_&& c)
 	constructors_ = std::move(c.constructors_);
 	destructor_ = std::move(c.destructor_);
 	functions_ = std::move(c.functions_);
+	operator_functions_ = std::move(c.operator_functions_);
+	conversion_functions_ = std::move(c.conversion_functions_);
 	variables_ = std::move(c.variables_);
 
 	return *this;
@@ -152,6 +156,12 @@ class_::operator_functions() const
 	return operator_functions_;
 }
 
+class_::conversion_function_const_iterator_range
+class_::conversion_functions() const
+{
+	return conversion_functions_;
+}
+
 class_::variable_const_iterator_range
 class_::variables() const
 {
@@ -189,9 +199,6 @@ class_::add(std::shared_ptr<member_function> member)
     functions_.push_back(member);
 
 	/*
-	function& member_ref = *member.get();
-
-	scope_impl_.add_to_scopes(member_ref);
 	scope_impl_.add_to_named_entities(member_ref);
 	*/
 }
@@ -200,13 +207,14 @@ void
 class_::add(std::shared_ptr<member_operator_function> member)
 {
     operator_functions_.push_back(member);
+	//scope_impl_.add_to_named_entities(member);
+}
 
-	/*
-	operator_function& member_ref = *member.get();
-
-	scope_impl_.add_to_scopes(member_ref);
-	scope_impl_.add_to_named_entities(member_ref);
-	*/
+void
+class_::add(std::shared_ptr<conversion_function> member)
+{
+    conversion_functions_.push_back(member);
+	//scope_impl_.add_to_named_entities(member);
 }
 
 void
@@ -383,6 +391,60 @@ class_::destructor::implicitly_declared() const
 
 
 
+class_::conversion_function::conversion_function
+(
+	std::shared_ptr<const type> t,
+	class_::access access,
+	const bool is_inline_specified,
+	const bool is_virtual_specified,
+	const bool is_pure_specified
+):
+	type_(t),
+	access_(access),
+	inline_specified_(is_inline_specified),
+	virtual_specified_(is_virtual_specified),
+	pure_specified_(is_pure_specified)
+{
+}
+
+class_::conversion_function::conversion_function(conversion_function&& o):
+	type_(std::move(o.type_)),
+	access_(o.access_),
+	inline_specified_(o.inline_specified_),
+	virtual_specified_(o.virtual_specified_),
+	pure_specified_(o.pure_specified_)
+{
+}
+
+std::shared_ptr<const type>
+class_::conversion_function::get_type() const
+{
+	return type_;
+}
+
+class_::access
+class_::conversion_function::access() const
+{
+	return access_;
+}
+
+bool
+class_::conversion_function::inline_specified() const
+{
+	return inline_specified_;
+}
+
+bool
+class_::conversion_function::virtual_specified() const
+{
+	return virtual_specified_;
+}
+
+bool
+class_::conversion_function::pure_specified() const
+{
+	return pure_specified_;
+}
 
 }}} //namespace scalpel::cpp::semantic_entities
 

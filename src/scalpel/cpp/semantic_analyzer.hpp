@@ -345,6 +345,12 @@ class semantic_analyzer
 			const syntax_nodes::declarator& declarator_node
 		);
 
+		std::shared_ptr<const semantic_entities::type>
+		get_conversion_function_type
+		(
+			const syntax_nodes::declarator& declarator_node
+		);
+
 		std::shared_ptr<semantic_entities::class_>
 		find_class
 		(

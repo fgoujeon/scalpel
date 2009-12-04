@@ -94,6 +94,13 @@ print
 void
 print
 (
+	const class_::conversion_function& f,
+	const unsigned int indent_level
+);
+
+void
+print
+(
 	const function::parameter& p,
 	const unsigned int indent_level
 );

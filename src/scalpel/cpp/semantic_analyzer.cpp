@@ -170,6 +170,20 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 												)
 											);
 										}
+										else if(is_conversion_function_declaration(declarator_node))
+										{
+											c->add
+											(
+												std::make_shared<class_::conversion_function>
+												(
+													get_conversion_function_type(declarator_node),
+													current_access,
+													has_inline_specifier(decl_specifier_seq_node),
+													has_virtual_specifier(decl_specifier_seq_node),
+													has_pure_specifier(member_declarator_declarator_node)
+												)
+											);
+										}
 										else if(c->name() == get_function_name(declarator_node)) //constructor/destructor?
 										{
 											if(!is_destructor_declaration(declarator_node)) //constructor
@@ -230,31 +244,48 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 								}
 								else
 								{
-									if(!is_destructor_declaration(declarator_node))
+									if(is_conversion_function_declaration(declarator_node))
 									{
 										c->add
 										(
-											std::make_shared<class_::constructor>
+											std::make_shared<class_::conversion_function>
 											(
-												std::move(create_parameters(declarator_node)),
+												get_conversion_function_type(declarator_node),
 												current_access,
+												false,
 												false,
 												false
 											)
 										);
 									}
-									else
+									else if(c->name() == get_function_name(declarator_node)) //constructor/destructor?
 									{
-										c->set_destructor
-										(
-											std::make_shared<class_::destructor>
+										if(!is_destructor_declaration(declarator_node)) //constructor
+										{
+											c->add
 											(
-												current_access,
-												false,
-												false,
-												false
-											)
-										);
+												std::make_shared<class_::constructor>
+												(
+													std::move(create_parameters(declarator_node)),
+													current_access,
+													false,
+													false
+												)
+											);
+										}
+										else //destructor
+										{
+											c->set_destructor
+											(
+												std::make_shared<class_::destructor>
+												(
+													current_access,
+													false,
+													false,
+													false
+												)
+											);
+										}
 									}
 								}
 							}
@@ -1021,6 +1052,15 @@ semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node
 		throw std::runtime_error("Semantic analysis error: type not found");
 	}
 	return return_type;
+}
+
+std::shared_ptr<const semantic_entities::type>
+semantic_analyzer::get_conversion_function_type
+(
+	const syntax_nodes::declarator& declarator_node
+)
+{
+	return std::shared_ptr<const built_in_type>(&built_in_type::int_, scalpel::utility::null_deleter());
 }
 
 std::shared_ptr<semantic_entities::class_>

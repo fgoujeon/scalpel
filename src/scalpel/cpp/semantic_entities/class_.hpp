@@ -58,6 +58,7 @@ class class_:
 		class base_class;
 		class constructor;
 		class destructor;
+		class conversion_function;
 		typedef member<class_> nested_class;
 		typedef function_member<function> member_function;
 		typedef function_member<operator_function> member_operator_function;
@@ -82,6 +83,10 @@ class class_:
 		typedef std::vector<std::shared_ptr<member_operator_function>> operator_functions_t;
 		typedef operator_functions_t::const_iterator operator_function_const_iterator;
 		typedef boost::iterator_range<operator_function_const_iterator> operator_function_const_iterator_range;
+
+		typedef std::vector<std::shared_ptr<conversion_function>> conversion_functions_t;
+		typedef conversion_functions_t::const_iterator conversion_function_const_iterator;
+		typedef boost::iterator_range<conversion_function_const_iterator> conversion_function_const_iterator_range;
 
 		typedef std::vector<std::shared_ptr<member_variable>> variables_t;
 		typedef variables_t::const_iterator variable_const_iterator;
@@ -166,6 +171,9 @@ class class_:
 		operator_function_const_iterator_range
 		operator_functions() const;
 
+		conversion_function_const_iterator_range
+		conversion_functions() const;
+
 		variable_const_iterator_range
 		variables() const;
 
@@ -187,6 +195,9 @@ class class_:
         void
         add(std::shared_ptr<member_operator_function> member);
 
+        void
+        add(std::shared_ptr<conversion_function> member);
+
 		void
 		add(std::shared_ptr<member_variable> member);
 
@@ -199,6 +210,7 @@ class class_:
 		std::shared_ptr<destructor> destructor_;
 		functions_t functions_;
 		operator_functions_t operator_functions_;
+		conversion_functions_t conversion_functions_;
 		variables_t variables_;
 };
 
@@ -387,6 +399,43 @@ class class_::destructor
 		bool virtual_specified_;
 		bool pure_specified_;
 		bool implicitly_declared_;
+};
+
+class class_::conversion_function
+{
+	public:
+		conversion_function
+		(
+			std::shared_ptr<const type> t,
+			class_::access access,
+			const bool is_inline_specified,
+			const bool is_virtual_specified,
+			const bool is_pure_specified
+		);
+
+		conversion_function(conversion_function&& o);
+
+		std::shared_ptr<const type>
+		get_type() const;
+
+		class_::access
+		access() const;
+
+		bool
+		inline_specified() const;
+
+		bool
+		virtual_specified() const;
+
+		bool
+		pure_specified() const;
+
+	private:
+		std::shared_ptr<const type> type_;
+		class_::access access_;
+		bool inline_specified_;
+		bool virtual_specified_;
+		bool pure_specified_;
 };
 
 
