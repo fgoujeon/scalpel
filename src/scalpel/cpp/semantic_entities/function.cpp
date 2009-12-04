@@ -100,6 +100,7 @@ function::parameter::parameter(std::shared_ptr<const type> t, const std::string&
 	type_(t),
 	name_(name)
 {
+	std::cout << "New parameter " << name << "\n";
 }
 
 function::parameter::parameter(parameter&& o):

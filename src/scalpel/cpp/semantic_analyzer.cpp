@@ -468,12 +468,13 @@ semantic_analyzer::create_parameters(const declarator& declarator_node)
 						{
 							auto parameter_declaration_node = j->main_node();
 							auto decl_specifier_seq_node = get_decl_specifier_seq(parameter_declaration_node);
+
+							//get parameter name (can be unnamed)
+							std::string name;
 							if(auto opt_declarator_node = get_declarator(parameter_declaration_node))
 							{
 								auto declarator_node = *opt_declarator_node;
 
-								//get parameter name
-								std::string name;
 								auto direct_declarator_node = get_direct_declarator(declarator_node);
 								auto first_part_node = get_first_part(direct_declarator_node);
 								if(auto opt_declarator_id_node = get<declarator_id>(&first_part_node))
@@ -493,19 +494,19 @@ semantic_analyzer::create_parameters(const declarator& declarator_node)
 										}
 									}
 								}
-
-								parameters.push_back
-								(
-									std::move
-									(
-										function::parameter
-										(
-											create_type(decl_specifier_seq_node, declarator_node),
-											name
-										)
-									)
-								);
 							}
+
+							parameters.push_back
+							(
+								std::move
+								(
+									function::parameter
+									(
+										create_type(decl_specifier_seq_node, declarator_node),
+										name
+									)
+								)
+							);
 						}
 					}
 				}
