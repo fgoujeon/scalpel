@@ -272,15 +272,6 @@ get(const AlternativeNodeT* node)
 	return return_node;
 }
 
-template<class ReturnNodeT, class AlternativeNodeT>
-boost::optional<const ReturnNodeT&>
-get(boost::optional<const AlternativeNodeT&> node)
-{
-	boost::optional<const ReturnNodeT&> return_node;
-	node->get(return_node);
-	return return_node;
-}
-
 
 
 template<class AlternativeVisitorT, class T, class AlternativeNodeT, typename HeadNodeT>

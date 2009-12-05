@@ -250,52 +250,45 @@ semantic_analyzer::analyze(const syntax_nodes::function_definition& function_def
 	using namespace semantic_entities;
 	using namespace detail::semantic_analysis;
 
-	auto direct_declarator_node = get_direct_declarator(get_declarator(function_definition_node));
 
 	//
 	//get the enclosing scope of the function
 	//
 	std::shared_ptr<scope> enclosing_scope;
 
-	const direct_declarator_first_part& first_part_node = get_first_part(direct_declarator_node);
-	boost::optional<const declarator_id&> direct_node_id = get<declarator_id>(&first_part_node);
-	if(direct_node_id)
+	auto direct_declarator_node = get_direct_declarator(get_declarator(function_definition_node));
+	auto first_part_node = get_first_part(direct_declarator_node);
+	auto opt_declarator_id_node = get<declarator_id>(&first_part_node);
+	if(opt_declarator_id_node)
 	{
-		boost::optional<const id_expression&> id_expression_node = get<id_expression>(direct_node_id);
-		if(id_expression_node)
+		auto declarator_id_node = *opt_declarator_id_node;
+		if(auto opt_id_expression_node = get<id_expression>(&declarator_id_node))
 		{
-			boost::optional<const unqualified_id&> unqualified_id_node = get<unqualified_id>(id_expression_node);
-			boost::optional<const qualified_id&> a_qualified_id = get<qualified_id>(id_expression_node);
+			auto id_expression_node = *opt_id_expression_node;
 
-			if(unqualified_id_node)
+			if(auto opt_unqualified_id_node = get<unqualified_id>(&id_expression_node))
 			{
 				enclosing_scope = scope_cursor_.current_scope();
 			}
-			else if(a_qualified_id)
+			else if(auto opt_qualified_id_node = get<qualified_id>(&id_expression_node))
 			{
-			//	const qualified_identifier* const a_qualified_identifier =
-			//		boost::get<qualified_identifier>(a_qualified_id)
-			//	;
-				boost::optional<const qualified_nested_id&> a_qualified_nested_id = get<qualified_nested_id>(a_qualified_id);
-			//	const qualified_operator_function_id* const a_qualified_operator_function_id =
-			//	   	boost::get<qualified_operator_function_id>(a_qualified_id)
-			//	;
-			//	const qualified_template_id* const a_qualified_template_id =
-			//	   	boost::get<qualified_template_id>(a_qualified_id)
-			//	;
+				auto qualified_id_node = *opt_qualified_id_node;
+				//get<qualified_identifier>(a_qualified_id)
+				//get<qualified_operator_function_id>(a_qualified_id)
+				//get<qualified_template_id>(a_qualified_id)
 
-				if(a_qualified_nested_id)
+				if(auto opt_qualified_nested_id_node = get<qualified_nested_id>(&qualified_id_node))
 				{
-					bool leading_double_colon = has_double_colon(*a_qualified_nested_id);
-					const nested_name_specifier& a_nested_name_specifier = get_nested_name_specifier(*a_qualified_nested_id);
+					bool leading_double_colon = has_double_colon(*opt_qualified_nested_id_node);
+					auto nested_name_specifier_node = get_nested_name_specifier(*opt_qualified_nested_id_node);
 
 					if(leading_double_colon)
 					{
-						enclosing_scope = name_lookup::find_scope(scope_cursor_.global_scope_stack(), a_nested_name_specifier);
+						enclosing_scope = name_lookup::find_scope(scope_cursor_.global_scope_stack(), nested_name_specifier_node);
 					}
 					else
 					{
-						enclosing_scope = name_lookup::find_scope(scope_cursor_.scope_stack(), a_nested_name_specifier);
+						enclosing_scope = name_lookup::find_scope(scope_cursor_.scope_stack(), nested_name_specifier_node);
 					}
 				}
 			}
@@ -336,22 +329,6 @@ semantic_analyzer::analyze(const syntax_nodes::function_definition& function_def
 		{
 			parent_entity->add(new_function);
 			function_scope = scope_cursor_.current_scope()->scopes().back();
-		}
-
-		//enter and leave the function body
-		if(function_scope)
-		{
-			/*
-			scope_cursor_.enter_scope(*function_scope);
-
-			if(auto opt_simple_function_definition = get<simple_function_definition>(&function_definition_node))
-			{
-				auto compound_statement_node = get_compound_statement(*opt_simple_function_definition);
-				analyze(compound_statement_node, false);
-			}
-
-			scope_cursor_.leave_scope();
-			*/
 		}
 	}
 }
@@ -582,15 +559,17 @@ semantic_analyzer::analyze(const syntax_nodes::simple_declaration& simple_declar
 		{
 			const decl_specifier& a_decl_specifier = i->main_node();
 
-			if(auto a_type_specifier_ptr = get<type_specifier>(&a_decl_specifier))
+			if(auto opt_type_specifier_ptr_node = get<type_specifier>(&a_decl_specifier))
 			{
-				if(auto opt_class_specifier_node = get<class_specifier>(a_type_specifier_ptr))
+				auto type_specifier_ptr_node = *opt_type_specifier_ptr_node;
+				if(auto opt_class_specifier_node = get<class_specifier>(&type_specifier_ptr_node))
 				{
 					is_a_class_declaration = true;
 					analyze(*opt_class_specifier_node, parent_entity);
 				}
-				else if(auto an_elaborated_type_specifier_ptr = get<elaborated_type_specifier>(a_type_specifier_ptr))
+				else if(auto opt_elaborated_type_specifier_ptr_node = get<elaborated_type_specifier>(&type_specifier_ptr_node))
 				{
+					auto elaborated_type_specifier_ptr_node = *opt_elaborated_type_specifier_ptr_node;
 					//const class_template_elaborated_specifier* = get<>;
 					//const enum_elaborated_specifier* ;
 					//const typename_template_elaborated_specifier* ;
@@ -600,7 +579,7 @@ semantic_analyzer::analyze(const syntax_nodes::simple_declaration& simple_declar
 					(
 						auto opt_class_elaborated_specifier_node = get<class_elaborated_specifier>
 						(
-							an_elaborated_type_specifier_ptr
+							&elaborated_type_specifier_ptr_node
 						)
 					)
 					{
@@ -618,25 +597,26 @@ semantic_analyzer::analyze(const syntax_nodes::simple_declaration& simple_declar
 
 	if(opt_init_declarator_list_node)
 	{
-		const init_declarator_list& an_init_declarator_list = *opt_init_declarator_list_node;
-		for(auto i = an_init_declarator_list.begin(); i != an_init_declarator_list.end(); ++i)
+		auto init_declarator_list_node = *opt_init_declarator_list_node;
+		for(auto i = init_declarator_list_node.begin(); i != init_declarator_list_node.end(); ++i)
 		{
-			const declarator& declarator_node = get_declarator(i->main_node());
-			const direct_declarator& direct_declarator_node = get_direct_declarator(declarator_node);
+			auto declarator_node = get_declarator(i->main_node());
+			auto direct_declarator_node = get_direct_declarator(declarator_node);
 
 			//get the simple_declaration_node name
-			const direct_declarator_first_part& first_part_node = get_first_part(direct_declarator_node);
-			const boost::optional<const declarator_id&> opt_declarator_id_node = get<declarator_id>(&first_part_node);
-			if(opt_declarator_id_node)
+			auto first_part_node = get_first_part(direct_declarator_node);
+			if(auto opt_declarator_id_node = get<declarator_id>(&first_part_node))
 			{
-				const declarator_id& declarator_id_node = *opt_declarator_id_node;
-				if(boost::optional<const id_expression&> id_expression_node = get<id_expression>(&declarator_id_node))
+				auto declarator_id_node = *opt_declarator_id_node;
+				if(auto opt_id_expression_node = get<id_expression>(&declarator_id_node))
 				{
-					if(boost::optional<const unqualified_id&> unqualified_id_node = get<unqualified_id>(id_expression_node))
+					auto id_expression_node = *opt_id_expression_node;
+					if(auto opt_unqualified_id_node = get<unqualified_id>(&id_expression_node))
 					{
-						if(boost::optional<const identifier&> identifier_node = get<identifier>(unqualified_id_node))
+						auto unqualified_id_node = *opt_unqualified_id_node;
+						if(auto opt_identifier_node = get<identifier>(&unqualified_id_node))
 						{
-							names.push_back(identifier_node->value());
+							names.push_back(opt_identifier_node->value());
 						}
 					}
 				}

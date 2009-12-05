@@ -125,12 +125,12 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 
 			if(auto opt_member_declaration_node = get<member_declaration>(&part))
 			{
-				if(auto opt_member_declaration_function_definition_node = get<member_declaration_function_definition>(opt_member_declaration_node))
+				if(auto opt_member_declaration_function_definition_node = get<member_declaration_function_definition>(&*opt_member_declaration_node))
 				{
 					auto function_definition_node = get_function_definition(*opt_member_declaration_function_definition_node);
 					//analyze(function_definition_node, c);
 				}
-				else if(auto opt_member_declaration_member_declarator_list_node = get<member_declaration_member_declarator_list>(opt_member_declaration_node))
+				else if(auto opt_member_declaration_member_declarator_list_node = get<member_declaration_member_declarator_list>(&*opt_member_declaration_node))
 				{
 					auto opt_decl_specifier_seq_node = get_decl_specifier_seq(*opt_member_declaration_member_declarator_list_node);
 					auto opt_member_declarator_list_node = get_member_declarator_list(*opt_member_declaration_member_declarator_list_node);
@@ -296,13 +296,13 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 						}
 					}
 				}
-				else if(auto opt_member_declaration_unqualified_id_node = get<member_declaration_unqualified_id>(opt_member_declaration_node))
+				else if(auto opt_member_declaration_unqualified_id_node = get<member_declaration_unqualified_id>(&*opt_member_declaration_node))
 				{
 				}
-				else if(auto opt_using_declaration_node = get<using_declaration>(opt_member_declaration_node))
+				else if(auto opt_using_declaration_node = get<using_declaration>(&*opt_member_declaration_node))
 				{
 				}
-				else if(auto opt_template_declaration_node = get<template_declaration>(opt_member_declaration_node))
+				else if(auto opt_template_declaration_node = get<template_declaration>(&*opt_member_declaration_node))
 				{
 				}
 				else
@@ -1377,9 +1377,9 @@ semantic_analyzer::create_variable
 		auto declarator_id_node = *opt_declarator_id_node;
 		if(auto id_expression_node = get<id_expression>(&declarator_id_node))
 		{
-			if(auto unqualified_id_node = get<unqualified_id>(id_expression_node))
+			if(auto unqualified_id_node = get<unqualified_id>(&*id_expression_node))
 			{
-				if(auto identifier_node = get<identifier>(unqualified_id_node))
+				if(auto identifier_node = get<identifier>(&*unqualified_id_node))
 				{
 					return std::make_shared<variable>
 					(
