@@ -123,25 +123,6 @@ template<class EntityT>
 void
 semantic_analyzer::analyze(const syntax_nodes::compound_statement& syntax_node, std::shared_ptr<EntityT> parent_entity)
 {
-	/*
-	if(create_statement_block)
-	{
-		std::shared_ptr<statement_block> s = std::make_shared<statement_block>();
-		scope_cursor_.add_to_current_scope(s);
-		scope_cursor_.enter_last_added_scope();
-	}
-
-	auto opt_statement_seq_node = get_statement_seq(syntax_node);
-	if(opt_statement_seq_node)
-	{
-		analyze(*opt_statement_seq_node);
-	}
-
-	if(create_statement_block)
-	{
-		scope_cursor_.leave_scope();
-	}
-	*/
 }
 
 template<class EntityT>
@@ -208,7 +189,6 @@ template<class EntityT>
 void
 semantic_analyzer::analyze(const syntax_nodes::do_while_statement& syntax_node, std::shared_ptr<EntityT> parent_entity)
 {
-	//analyze(get_statement(syntax_node));
 }
 
 template<class EntityT>
@@ -239,7 +219,6 @@ template<class EntityT>
 void
 semantic_analyzer::analyze(const syntax_nodes::for_statement& syntax_node, std::shared_ptr<EntityT> parent_entity)
 {
-	//analyze(get_statement(syntax_node));
 }
 
 template<class EntityT>
@@ -250,11 +229,10 @@ semantic_analyzer::analyze(const syntax_nodes::function_definition& function_def
 	using namespace semantic_entities;
 	using namespace detail::semantic_analysis;
 
-
 	//
 	//get the enclosing scope of the function
 	//
-	std::shared_ptr<scope> enclosing_scope;
+	std::shared_ptr<named_scope> enclosing_scope;
 
 	auto direct_declarator_node = get_direct_declarator(get_declarator(function_definition_node));
 	auto first_part_node = get_first_part(direct_declarator_node);
@@ -308,18 +286,18 @@ semantic_analyzer::analyze(const syntax_nodes::function_definition& function_def
 		std::shared_ptr<function> new_function = create_function(decl_specifier_seq_node, declarator_node);
 
 		//find the corresponding function semantic node (must exist if the function has already been declared)
-		std::shared_ptr<scope> function_scope;
+		std::shared_ptr<named_scope> function_scope;
 		if(enclosing_scope)
 		{
-			auto scopes = enclosing_scope->scopes();
+			auto scopes = enclosing_scope->named_scopes();
 			for(auto i = scopes.begin(); i != scopes.end(); ++i)
 			{
-				std::shared_ptr<scope> scope = *i;
+				std::shared_ptr<named_scope> named_scope = *i;
 
 				///\todo check the function's signature
-				if(scope->name() == new_function->name())
+				if(named_scope->name() == new_function->name())
 				{
-					function_scope = scope;
+					function_scope = named_scope;
 					break;
 				}
 			}
@@ -343,7 +321,6 @@ template<class EntityT>
 void
 semantic_analyzer::analyze(const syntax_nodes::handler& syntax_node, std::shared_ptr<EntityT> parent_entity)
 {
-	//analyze(get_compound_statement(syntax_node));
 }
 
 template<class EntityT>
@@ -356,13 +333,6 @@ template<class EntityT>
 void
 semantic_analyzer::analyze(const syntax_nodes::if_statement& syntax_node, std::shared_ptr<EntityT> parent_entity)
 {
-	/*
-	analyze(get_statement(syntax_node));
-
-	auto opt_else_statement_node = get_else_statement(syntax_node);
-	if(opt_else_statement_node)
-		analyze(*opt_else_statement_node);
-		*/
 }
 
 template<class EntityT>
@@ -715,10 +685,6 @@ template<class EntityT>
 void
 semantic_analyzer::analyze(const syntax_nodes::try_block& syntax_node, std::shared_ptr<EntityT> parent_entity)
 {
-	/*
-	analyze(get_compound_statement(syntax_node));
-	analyze(get_handler_seq(syntax_node));
-	*/
 }
 
 template<class EntityT>

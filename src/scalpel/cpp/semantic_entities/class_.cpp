@@ -38,7 +38,7 @@ class_::class_(const std::string& name):
 }
 
 class_::class_(class_&& c):
-	scope_impl_(std::move(c.scope_impl_)),
+	named_scope_impl_(std::move(c.named_scope_impl_)),
 	name_(std::move(c.name_)),
 	nested_classes_(std::move(c.nested_classes_)),
 	constructors_(std::move(c.constructors_)),
@@ -53,7 +53,7 @@ class_::class_(class_&& c):
 const class_&
 class_::operator=(class_&& c)
 {
-	scope_impl_ = std::move(c.scope_impl_);
+	named_scope_impl_ = std::move(c.named_scope_impl_);
 	name_ = std::move(c.name_);
 	nested_classes_ = std::move(c.nested_classes_);
 	constructors_ = std::move(c.constructors_);
@@ -84,28 +84,28 @@ class_::is_global() const
     return false;
 }
 
-scope::scope_iterator_range
-class_::scopes()
+named_scope::named_scope_iterator_range
+class_::named_scopes()
 {
-	return scope_impl_.scopes();
+	return named_scope_impl_.named_scopes();
 }
 
-scope::scope_const_iterator_range
-class_::scopes() const
+named_scope::named_scope_const_iterator_range
+class_::named_scopes() const
 {
-	return scope_impl_.scopes();
+	return named_scope_impl_.named_scopes();
 }
 
-scope::named_entity_iterator_range
+named_scope::named_entity_iterator_range
 class_::named_entities()
 {
-	return scope_impl_.named_entities();
+	return named_scope_impl_.named_entities();
 }
 
-scope::named_entity_const_iterator_range
+named_scope::named_entity_const_iterator_range
 class_::named_entities() const
 {
-	return scope_impl_.named_entities();
+	return named_scope_impl_.named_entities();
 }
 
 class_::base_class_const_iterator_range
@@ -172,8 +172,8 @@ void
 class_::add(std::shared_ptr<nested_class> member)
 {
 	nested_classes_.push_back(member);
-	scope_impl_.add_to_scopes(member);
-	scope_impl_.add_to_named_entities(member);
+	named_scope_impl_.add_to_named_scopes(member);
+	named_scope_impl_.add_to_named_entities(member);
 }
 
 void
@@ -188,7 +188,7 @@ class_::add(std::shared_ptr<member_function> member)
     functions_.push_back(member);
 
 	/*
-	scope_impl_.add_to_named_entities(member_ref);
+	named_scope_impl_.add_to_named_entities(member_ref);
 	*/
 }
 
@@ -196,21 +196,21 @@ void
 class_::add(std::shared_ptr<member_operator_function> member)
 {
     operator_functions_.push_back(member);
-	//scope_impl_.add_to_named_entities(member);
+	//named_scope_impl_.add_to_named_entities(member);
 }
 
 void
 class_::add(std::shared_ptr<conversion_function> member)
 {
     conversion_functions_.push_back(member);
-	//scope_impl_.add_to_named_entities(member);
+	//named_scope_impl_.add_to_named_entities(member);
 }
 
 void
 class_::add(std::shared_ptr<member_variable> member)
 {
     variables_.push_back(member);
-	//scope_impl_.add_to_named_entities(member);
+	//named_scope_impl_.add_to_named_entities(member);
 }
 
 

@@ -18,62 +18,62 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "scope_impl.hpp"
+#include "named_scope_impl.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-scope_impl::scope_impl()
+named_scope_impl::named_scope_impl()
 {
 }
 
-scope_impl::scope_impl(scope_impl&& s):
-	scopes_(std::move(s.scopes_)),
+named_scope_impl::named_scope_impl(named_scope_impl&& s):
+	named_scopes_(std::move(s.named_scopes_)),
 	named_entities_(std::move(s.named_entities_))
 {
 }
 
-const scope_impl&
-scope_impl::operator=(scope_impl&& s)
+const named_scope_impl&
+named_scope_impl::operator=(named_scope_impl&& s)
 {
-	scopes_ = std::move(s.scopes_);
+	named_scopes_ = std::move(s.named_scopes_);
 	named_entities_ = std::move(s.named_entities_);
 
 	return *this;
 }
 
-scope::scope_iterator_range
-scope_impl::scopes()
+named_scope::named_scope_iterator_range
+named_scope_impl::named_scopes()
 {
-	return scopes_;
+	return named_scopes_;
 }
 
-scope::scope_const_iterator_range
-scope_impl::scopes() const
+named_scope::named_scope_const_iterator_range
+named_scope_impl::named_scopes() const
 {
-	return scopes_;
+	return named_scopes_;
 }
 
 void
-scope_impl::add_to_scopes(std::shared_ptr<scope> s)
+named_scope_impl::add_to_named_scopes(std::shared_ptr<named_scope> s)
 {
-	scopes_.push_back(s);
+	named_scopes_.push_back(s);
 }
 
-scope::named_entity_iterator_range
-scope_impl::named_entities()
+named_scope::named_entity_iterator_range
+named_scope_impl::named_entities()
 {
 	return named_entities_;
 }
 
-scope::named_entity_const_iterator_range
-scope_impl::named_entities() const
+named_scope::named_entity_const_iterator_range
+named_scope_impl::named_entities() const
 {
 	return named_entities_;
 }
 
 void
-scope_impl::add_to_named_entities(std::shared_ptr<named_entity> n)
+named_scope_impl::add_to_named_entities(std::shared_ptr<named_entity> n)
 {
 	named_entities_.push_back(n);
 }

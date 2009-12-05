@@ -58,3 +58,4 @@ statement_block::add(std::shared_ptr<variable> o)
 }
 
 }}} //namespace scalpel::cpp::semantic_entities
+

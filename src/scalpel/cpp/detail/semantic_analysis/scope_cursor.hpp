@@ -33,10 +33,10 @@ namespace scalpel { namespace cpp { namespace detail { namespace semantic_analys
 class scope_cursor: public boost::noncopyable
 {
 	public:
-		typedef std::vector<std::shared_ptr<semantic_entities::scope>> scopes_t;
+		typedef std::vector<std::shared_ptr<semantic_entities::named_scope>> scopes_t;
 
 		typedef scopes_t::const_iterator scope_const_iterator;
-		typedef boost::indirect_iterator<scope_const_iterator, const std::shared_ptr<semantic_entities::scope>> scope_const_indirect_iterator;
+		typedef boost::indirect_iterator<scope_const_iterator, const std::shared_ptr<semantic_entities::named_scope>> scope_const_indirect_iterator;
 		typedef boost::iterator_range<scope_const_indirect_iterator> scope_const_iterator_range;
 
 		typedef scopes_t::iterator scope_iterator;
@@ -45,7 +45,7 @@ class scope_cursor: public boost::noncopyable
 		scope_cursor();
 
 		void
-		initialize(std::shared_ptr<semantic_entities::scope> global_scope);
+		initialize(std::shared_ptr<semantic_entities::named_scope> global_scope);
 
 		scope_const_iterator_range
 		scope_stack() const;
@@ -59,14 +59,14 @@ class scope_cursor: public boost::noncopyable
 		scope_iterator_range
 		global_scope_stack();
 
-		std::shared_ptr<semantic_entities::scope>
+		std::shared_ptr<semantic_entities::named_scope>
 		global_scope();
 
-		std::shared_ptr<semantic_entities::scope>
+		std::shared_ptr<semantic_entities::named_scope>
 		current_scope();
 
 		void
-		enter_scope(std::shared_ptr<semantic_entities::scope> a_scope);
+		enter_scope(std::shared_ptr<semantic_entities::named_scope> a_scope);
 
 		void
 		enter_last_added_scope();

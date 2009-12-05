@@ -62,20 +62,20 @@ find_name
 );
 
 /**
-Find unqualified name in the given scope, not recursively.
+Find unqualified name in the given named_scope, not recursively.
 */
 std::shared_ptr<semantic_entities::named_entity>
 find_name
 (
-	semantic_entities::scope& current_scope,
+	semantic_entities::named_scope& current_scope,
 	const std::string& name
 );
 
 /**
-Find nested scope following standard C++ name-lookup rules.
+Find nested named_scope following standard C++ name-lookup rules.
 */
 template<class RangeT>
-std::shared_ptr<semantic_entities::scope>
+std::shared_ptr<semantic_entities::named_scope>
 find_scope
 (
 	RangeT scope_stack,
@@ -83,10 +83,10 @@ find_scope
 );
 
 /**
-Find scope following standard C++ name-lookup rules.
+Find named_scope following standard C++ name-lookup rules.
 */
 template<class RangeT>
-std::shared_ptr<semantic_entities::scope>
+std::shared_ptr<semantic_entities::named_scope>
 find_scope
 (
 	RangeT scope_stack,
@@ -94,12 +94,12 @@ find_scope
 );
 
 /**
-Find scope in the given parent scope, not recursively.
+Find named_scope in the given parent named_scope, not recursively.
 */
-std::shared_ptr<semantic_entities::scope>
+std::shared_ptr<semantic_entities::named_scope>
 find_scope
 (
-	semantic_entities::scope& parent_scope,
+	semantic_entities::named_scope& parent_scope,
 	const std::string& scope_name
 );
 

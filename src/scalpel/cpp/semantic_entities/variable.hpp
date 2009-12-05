@@ -25,7 +25,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <memory>
 #include <boost/noncopyable.hpp>
 #include "type.hpp"
-#include "scope.hpp"
+#include "named_scope.hpp"
 #include "named_entity.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities

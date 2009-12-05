@@ -22,43 +22,43 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_SCOPE_IMPL_HPP
 
 #include <list>
-#include "scope.hpp"
+#include "named_scope.hpp"
 #include "named_entity.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-class scope_impl: public boost::noncopyable
+class named_scope_impl: public boost::noncopyable
 {
 	public:
-		scope_impl();
+		named_scope_impl();
 
-		scope_impl(scope_impl&& s);
+		named_scope_impl(named_scope_impl&& s);
 
-		const scope_impl&
-		operator=(scope_impl&& s);
+		const named_scope_impl&
+		operator=(named_scope_impl&& s);
 
-		scope::scope_iterator_range
-		scopes();
+		named_scope::named_scope_iterator_range
+		named_scopes();
 
-		scope::scope_const_iterator_range
-		scopes() const;
+		named_scope::named_scope_const_iterator_range
+		named_scopes() const;
 
 		void
-		add_to_scopes(std::shared_ptr<scope> s);
+		add_to_named_scopes(std::shared_ptr<named_scope> s);
 
-		scope::named_entity_iterator_range
+		named_scope::named_entity_iterator_range
 		named_entities();
 
-		scope::named_entity_const_iterator_range
+		named_scope::named_entity_const_iterator_range
 		named_entities() const;
 
 		void
 		add_to_named_entities(std::shared_ptr<named_entity> n);
 
 	private:
-		scope::scopes_t scopes_;
-		scope::named_entities_t named_entities_;
+		named_scope::named_scopes_t named_scopes_;
+		named_scope::named_entities_t named_entities_;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

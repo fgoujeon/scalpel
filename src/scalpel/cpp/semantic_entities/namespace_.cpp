@@ -38,7 +38,7 @@ namespace_::namespace_(const std::string& name):
 }
 
 namespace_::namespace_(namespace_&& n):
-	scope_impl_(std::move(n.scope_impl_)),
+	named_scope_impl_(std::move(n.named_scope_impl_)),
 	name_(std::move(n.name_)),
 	namespaces_(std::move(n.namespaces_)),
 	classes_(std::move(n.classes_)),
@@ -51,7 +51,7 @@ namespace_::namespace_(namespace_&& n):
 const namespace_&
 namespace_::operator=(namespace_&& n)
 {
-	scope_impl_ = std::move(n.scope_impl_);
+	named_scope_impl_ = std::move(n.named_scope_impl_);
 	name_ = std::move(n.name_);
 	namespaces_ = std::move(n.namespaces_);
 	classes_ = std::move(n.classes_);
@@ -74,28 +74,28 @@ namespace_::is_a_type() const
     return false;
 }
 
-scope::scope_iterator_range
-namespace_::scopes()
+named_scope::named_scope_iterator_range
+namespace_::named_scopes()
 {
-	return scope_impl_.scopes();
+	return named_scope_impl_.named_scopes();
 }
 
-scope::scope_const_iterator_range
-namespace_::scopes() const
+named_scope::named_scope_const_iterator_range
+namespace_::named_scopes() const
 {
-	return scope_impl_.scopes();
+	return named_scope_impl_.named_scopes();
 }
 
-scope::named_entity_iterator_range
+named_scope::named_entity_iterator_range
 namespace_::named_entities()
 {
-	return scope_impl_.named_entities();
+	return named_scope_impl_.named_entities();
 }
 
-scope::named_entity_const_iterator_range
+named_scope::named_entity_const_iterator_range
 namespace_::named_entities() const
 {
-	return scope_impl_.named_entities();
+	return named_scope_impl_.named_entities();
 }
 
 namespace_::namespace_const_iterator_range
@@ -132,37 +132,37 @@ void
 namespace_::add(std::shared_ptr<namespace_> member)
 {
     namespaces_.push_back(member);
-	scope_impl_.add_to_scopes(member);
-	scope_impl_.add_to_named_entities(member);
+	named_scope_impl_.add_to_named_scopes(member);
+	named_scope_impl_.add_to_named_entities(member);
 }
 
 void
 namespace_::add(std::shared_ptr<class_> member)
 {
     classes_.push_back(member);
-	scope_impl_.add_to_scopes(member);
-	scope_impl_.add_to_named_entities(member);
+	named_scope_impl_.add_to_named_scopes(member);
+	named_scope_impl_.add_to_named_entities(member);
 }
 
 void
 namespace_::add(std::shared_ptr<function> member)
 {
     functions_.push_back(member);
-	scope_impl_.add_to_named_entities(member);
+	named_scope_impl_.add_to_named_entities(member);
 }
 
 void
 namespace_::add(std::shared_ptr<operator_function> member)
 {
     operator_functions_.push_back(member);
-	//scope_impl_.add_to_named_entities(member);
+	//named_scope_impl_.add_to_named_entities(member);
 }
 
 void
 namespace_::add(std::shared_ptr<variable> member)
 {
     variables_.push_back(member);
-	scope_impl_.add_to_named_entities(member);
+	named_scope_impl_.add_to_named_entities(member);
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

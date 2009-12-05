@@ -33,7 +33,7 @@ using namespace semantic_entities;
 std::shared_ptr<semantic_entities::named_entity>
 find_name
 (
-	semantic_entities::scope& current_scope,
+	semantic_entities::named_scope& current_scope,
 	const std::string& name
 )
 {
@@ -70,14 +70,14 @@ find_name
 	}
 }
 
-std::shared_ptr<semantic_entities::scope>
+std::shared_ptr<semantic_entities::named_scope>
 find_scope
 (
-	scope& parent_scope,
+	named_scope& parent_scope,
 	const std::string& scope_name
 )
 {
-	auto scopes = parent_scope.scopes();
+	auto scopes = parent_scope.named_scopes();
 	auto scope_it = std::find_if
 	(
 		scopes.begin(),
@@ -88,7 +88,7 @@ find_scope
 			std::cref(scope_name),
 			std::bind
 			(
-				&scope::name,
+				&named_scope::name,
 				std::placeholders::_1
 			)
 		)
@@ -102,7 +102,7 @@ find_scope
 	else
 	{
 		std::cout << scope_name << " not found in " << parent_scope.name() << "\n";
-		return std::shared_ptr<semantic_entities::scope>();
+		return std::shared_ptr<semantic_entities::named_scope>();
 	}
 }
 

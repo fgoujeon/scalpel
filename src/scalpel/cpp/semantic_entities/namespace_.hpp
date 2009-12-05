@@ -27,8 +27,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <memory>
 #include <boost/variant.hpp>
 #include <boost/noncopyable.hpp>
-#include "scope.hpp"
-#include "scope_impl.hpp"
+#include "named_scope.hpp"
+#include "named_scope_impl.hpp"
 #include "named_entity.hpp"
 #include "class_.hpp"
 #include "function.hpp"
@@ -42,7 +42,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 Represents a C++ namespace.
 */
 class namespace_:
-	public scope,
+	public named_scope,
 	public named_entity,
 	public boost::noncopyable
 {
@@ -111,11 +111,11 @@ class namespace_:
         bool
         is_global() const;
 
-		scope_iterator_range
-        scopes();
+		named_scope_iterator_range
+        named_scopes();
 
-		scope_const_iterator_range
-        scopes() const;
+		named_scope_const_iterator_range
+        named_scopes() const;
 
 		named_entity_iterator_range
 		named_entities();
@@ -154,7 +154,7 @@ class namespace_:
         add(std::shared_ptr<variable> member);
 
     private:
-		scope_impl scope_impl_;
+		named_scope_impl named_scope_impl_;
         std::string name_;
         namespaces_t namespaces_;
         classes_t classes_;
