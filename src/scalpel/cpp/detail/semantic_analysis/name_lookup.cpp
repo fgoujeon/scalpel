@@ -37,6 +37,8 @@ find_name
 	const std::string& name
 )
 {
+	std::cout << "Try to find " << name << " in " << current_scope.name() << "...\n";
+
 	using namespace semantic_entities;
 
 	auto members = current_scope.named_entities();
@@ -58,10 +60,12 @@ find_name
 
 	if(member_it != members.end()) //if a name has been found
 	{
+		std::cout << name << " found in " << current_scope.name() << "\n";
 		return *member_it;
 	}
 	else
 	{
+		std::cout << name << " not found in " << current_scope.name() << "\n";
 		return std::shared_ptr<semantic_entities::named_entity>();
 	}
 }

@@ -175,16 +175,11 @@ class_::add(std::shared_ptr<base_class> c)
 }
 
 void
-class_::add(std::shared_ptr<member<class_>> nested_class)
+class_::add(std::shared_ptr<nested_class> member)
 {
-	nested_classes_.push_back(nested_class);
-
-	/*
-	member<class_>& member_ref = *nested_class.get();
-
-	scope_impl_.add_to_scopes(member_ref);
-	scope_impl_.add_to_named_entities(member_ref);
-	*/
+	nested_classes_.push_back(member);
+	scope_impl_.add_to_scopes(member);
+	scope_impl_.add_to_named_entities(member);
 }
 
 void
@@ -261,6 +256,32 @@ bool
 class_::base_class::virtual_specified() const
 {
 	return virtual_specified_;
+}
+
+
+
+class_::member<class_>::member(std::shared_ptr<class_> c, class_::access a):
+	entity_(c),
+	access_(a)
+{
+}
+
+class_::member<class_>::member(const nested_class& o):
+	entity_(o.entity_),
+	access_(o.access_)
+{
+}
+
+class_::member<class_>::member(nested_class&& o):
+	entity_(std::move(o.entity_)),
+	access_(std::move(o.access_))
+{
+}
+
+class_::access
+class_::member<class_>::access() const
+{
+	return access_;
 }
 
 

@@ -312,7 +312,7 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 									std::shared_ptr<class_> new_class = create_class(class_specifier_node);
 									std::shared_ptr<class_::nested_class> new_nested_class = std::make_shared<class_::nested_class>(new_class, current_access);
 									c->add(new_nested_class);
-									scope_cursor_.enter_scope(new_class);
+									scope_cursor_.enter_scope(new_nested_class);
 									fill_class(new_class, class_specifier_node);
 									scope_cursor_.leave_scope();
 								}
@@ -955,9 +955,9 @@ semantic_analyzer::get_type_info
 		{
 			auto nested_identifier_or_template_id_node = *opt_nested_identifier_or_template_id_node;
 			std::shared_ptr<named_entity> found_name = name_lookup::find_name(scope_cursor_.scope_stack(), nested_identifier_or_template_id_node);
-			if(auto found_class = std::dynamic_pointer_cast<const class_>(found_name))
+			if(auto found_type = std::dynamic_pointer_cast<const type>(found_name))
 			{
-				t = found_class;
+				t = found_type;
 			}
 		}
 		else if(auto opt_built_in_type_specifier_node = get<built_in_type_specifier>(&simple_type_specifier_node))

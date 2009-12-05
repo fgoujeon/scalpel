@@ -56,10 +56,10 @@ class class_:
 		class function_member;
 
 		class base_class;
+		typedef member<class_> nested_class;
 		class constructor;
 		class destructor;
 		class conversion_function;
-		typedef member<class_> nested_class;
 		typedef function_member<function> member_function;
 		typedef function_member<operator_function> member_operator_function;
 		typedef member<variable> member_variable;
@@ -184,7 +184,7 @@ class class_:
         Adds a nested class.
         */
         void
-        add(std::shared_ptr<nested_class> nested_class);
+        add(std::shared_ptr<nested_class> member);
 
         void
         add(std::shared_ptr<constructor> member);
@@ -314,6 +314,75 @@ class class_::base_class
 		std::shared_ptr<class_> base_;
 		class_::access access_;
 		bool virtual_specified_;
+};
+
+template<>
+class class_::member<class_>:
+	public scope,
+	public named_entity,
+	public type
+{
+	public:
+		member(std::shared_ptr<class_> c, class_::access a);
+
+		member(const member& o);
+
+		member(member&& o);
+
+        const std::string&
+        name() const
+		{
+			return entity_->name();
+		}
+
+        bool
+        is_a_type() const
+		{
+			return true;
+		}
+
+		class_::scope_iterator_range
+        scopes()
+		{
+			return entity_->scopes();
+		}
+
+		class_::scope_const_iterator_range
+        scopes() const
+		{
+			return entity_->scopes();
+		}
+
+		class_::named_entity_iterator_range
+		named_entities()
+		{
+			return entity_->named_entities();
+		}
+
+		class_::named_entity_const_iterator_range
+		named_entities() const
+		{
+			return entity_->named_entities();
+		}
+
+		std::shared_ptr<const class_>
+		entity() const
+		{
+			return entity_;
+		}
+
+		std::shared_ptr<class_>
+		entity()
+		{
+			return entity_;
+		}
+
+		class_::access
+		access() const;
+
+	private:
+		std::shared_ptr<class_> entity_;
+		class_::access access_;
 };
 
 class class_::constructor

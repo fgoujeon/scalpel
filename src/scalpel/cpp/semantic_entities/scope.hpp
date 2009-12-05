@@ -49,10 +49,6 @@ struct scope
 	~scope(){}
 
 	virtual
-	void
-	accept(scope_visitor&) = 0;
-
-	virtual
 	const std::string&
 	name() const = 0;
 
