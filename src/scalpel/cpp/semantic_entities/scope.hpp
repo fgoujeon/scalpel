@@ -26,7 +26,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/iterator/indirect_iterator.hpp>
 #include <boost/range/iterator_range.hpp>
 #include "named_entity.hpp"
-#include "scope_visitor.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {

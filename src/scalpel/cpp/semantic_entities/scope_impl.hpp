@@ -24,7 +24,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <list>
 #include "scope.hpp"
 #include "named_entity.hpp"
-#include "scope_visitor.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {

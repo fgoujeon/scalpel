@@ -34,72 +34,21 @@ statement_block::statement_block()
 	std::cout << "New statement block\n";
 }
 
-statement_block::statement_block(statement_block&& o):
-	scope_impl_(std::move(o.scope_impl_))
+statement_block::statement_block(statement_block&& o)
 {
 }
 
 const statement_block&
 statement_block::operator=(statement_block&& o)
 {
-	scope_impl_ = std::move(o.scope_impl_);
 
 	return *this;
-}
-
-void
-statement_block::accept(scope_visitor& v)
-{
-	v.visit(*this);
-}
-
-const std::string&
-statement_block::name() const
-{
-    return utility::extern_strings::empty;
-}
-
-bool
-statement_block::is_a_type() const
-{
-    return false;
-}
-
-bool
-statement_block::is_global() const
-{
-    return false;
-}
-
-scope::scope_iterator_range
-statement_block::scopes()
-{
-	return scope_impl_.scopes();
-}
-
-scope::scope_const_iterator_range
-statement_block::scopes() const
-{
-	return scope_impl_.scopes();
-}
-
-scope::named_entity_iterator_range
-statement_block::named_entities()
-{
-	return scope_impl_.named_entities();
-}
-
-scope::named_entity_const_iterator_range
-statement_block::named_entities() const
-{
-	return scope_impl_.named_entities();
 }
 
 void
 statement_block::add(std::shared_ptr<statement_block> o)
 {
 	statement_blocks_.push_back(o);
-	scope_impl_.add_to_scopes(o);
 }
 
 void

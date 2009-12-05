@@ -24,9 +24,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 #include <memory>
-#include "scope.hpp"
-#include "scope_impl.hpp"
-#include "named_entity.hpp"
 #include "variable.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
@@ -38,8 +35,7 @@ class class_;
 /**
 Represents a C++ statement block.
 */
-class statement_block:
-	public scope
+class statement_block
 {
     public:
         statement_block();
@@ -55,46 +51,12 @@ class statement_block:
 		operator=(statement_block&& o);
 
 		void
-		accept(scope_visitor& v);
-
-        /**
-        @return an empty string
-        */
-        const std::string&
-        name() const;
-
-        /**
-        @return false
-        */
-        bool
-        is_a_type() const;
-
-        /**
-        @return false, because a statement block cannot be the global namespace...
-        */
-        bool
-        is_global() const;
-
-		scope_iterator_range
-        scopes();
-
-		scope_const_iterator_range
-        scopes() const;
-
-		named_entity_iterator_range
-		named_entities();
-
-		named_entity_const_iterator_range
-		named_entities() const;
-
-		void
 		add(std::shared_ptr<statement_block> o);
 
 		void
 		add(std::shared_ptr<variable> o);
 
     private:
-		scope_impl scope_impl_;
 		std::vector<std::shared_ptr<statement_block>> statement_blocks_;
 		std::vector<std::shared_ptr<variable>> variables_;
 };

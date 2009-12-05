@@ -95,9 +95,6 @@ class namespace_:
 		const namespace_&
 		operator=(namespace_&& n);
 
-		void
-		accept(scope_visitor& v);
-
         /**
         @return the name of the namespace
         Anonymous namespaces return an empty string.

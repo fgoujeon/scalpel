@@ -66,12 +66,6 @@ class_::operator=(class_&& c)
 	return *this;
 }
 
-void
-class_::accept(scope_visitor& v)
-{
-	v.visit(*this);
-}
-
 const std::string&
 class_::name() const
 {

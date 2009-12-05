@@ -117,9 +117,6 @@ class class_:
 		const class_&
 		operator=(class_&& c);
 
-		void
-		accept(scope_visitor& v);
-
         /**
         @return the name of the class
         */

@@ -62,12 +62,6 @@ namespace_::operator=(namespace_&& n)
 	return *this;
 }
 
-void
-namespace_::accept(scope_visitor& v)
-{
-	v.visit(*this);
-}
-
 const std::string&
 namespace_::name() const
 {
