@@ -1,4 +1,22 @@
-class test : public super_test , virtual public virtual_base, protected virtual virtual_base2
+namespace n
+{
+	namespace n2
+	{
+		class super_test
+		{
+		};
+	}
+}
+
+class virtual_base
+{
+};
+
+class virtual_base2
+{
+};
+
+class test : public n::n2::super_test, virtual virtual_base, protected virtual virtual_base2
 {
 	public:
 		explicit

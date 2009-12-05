@@ -1310,7 +1310,7 @@ semantic_analyzer::get_built_in_type
 		return std::shared_ptr<const built_in_type>(&built_in_type::wchar_t_, scalpel::utility::null_deleter());
 	}
 
-	throw std::runtime_error("Semantic analysis error: incorrect type");
+	throw std::runtime_error("Incorrect built-in type");
 }
 
 std::shared_ptr<semantic_entities::class_>

@@ -272,6 +272,7 @@ semantic_analyzer::analyze(const syntax_nodes::function_definition& function_def
 			}
 			else if(auto opt_qualified_id_node = get<qualified_id>(&id_expression_node))
 			{
+				return;
 				auto qualified_id_node = *opt_qualified_id_node;
 				//get<qualified_identifier>(a_qualified_id)
 				//get<qualified_operator_function_id>(a_qualified_id)
@@ -328,7 +329,6 @@ semantic_analyzer::analyze(const syntax_nodes::function_definition& function_def
 		if(!function_scope)
 		{
 			parent_entity->add(new_function);
-			function_scope = scope_cursor_.current_scope()->scopes().back();
 		}
 	}
 }
