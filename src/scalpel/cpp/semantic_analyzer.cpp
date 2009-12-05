@@ -92,7 +92,7 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 			bool is_virtual = has_virtual_keyword(base_specifier_node);
 
 			//get base class access
-			class_::access access = class_::access::PRIVATE; //if nothing is specified, access is private
+			class_::access access = class_::access::PRIVATE; //if nothing is specified, the access is private
 			if(auto opt_access_specifier_node = get_access_specifier(base_specifier_node))
 			{
 				access = get_access(*opt_access_specifier_node);
@@ -134,6 +134,7 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 				{
 					auto opt_decl_specifier_seq_node = get_decl_specifier_seq(*opt_member_declaration_member_declarator_list_node);
 					auto opt_member_declarator_list_node = get_member_declarator_list(*opt_member_declaration_member_declarator_list_node);
+
 					if(opt_member_declarator_list_node)
 					{
 						auto member_declarator_list_node = *opt_member_declarator_list_node;
@@ -294,6 +295,33 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 								}
 							}
 						}
+					}
+					else if(opt_decl_specifier_seq_node)
+					{
+						auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
+						for(auto j = decl_specifier_seq_node.begin(); j != decl_specifier_seq_node.end(); ++j)
+						{
+							auto decl_specifier_node = j->main_node();
+							if(auto opt_type_specifier_node = get<type_specifier>(&decl_specifier_node))
+							{
+								auto type_specifier_node = *opt_type_specifier_node;
+								if(auto opt_class_specifier_node = get<class_specifier>(&type_specifier_node))
+								{
+									auto class_specifier_node = *opt_class_specifier_node;
+
+									std::shared_ptr<class_> new_class = create_class(class_specifier_node);
+									std::shared_ptr<class_::nested_class> new_nested_class = std::make_shared<class_::nested_class>(new_class, current_access);
+									c->add(new_nested_class);
+									scope_cursor_.enter_scope(new_class);
+									fill_class(new_class, class_specifier_node);
+									scope_cursor_.leave_scope();
+								}
+							}
+						}
+					}
+					else
+					{
+						assert(false);
 					}
 				}
 				else if(auto opt_member_declaration_unqualified_id_node = get<member_declaration_unqualified_id>(&*opt_member_declaration_node))
