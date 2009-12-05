@@ -310,7 +310,13 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 									auto class_specifier_node = *opt_class_specifier_node;
 
 									std::shared_ptr<class_> new_class = create_class(class_specifier_node);
-									std::shared_ptr<class_::nested_class> new_nested_class = std::make_shared<class_::nested_class>(new_class, current_access);
+									std::shared_ptr<class_::nested_class> new_nested_class =
+										std::make_shared<class_::nested_class>
+										(
+											new_class,
+											current_access
+										)
+									;
 									c->add(new_nested_class);
 									scope_cursor_.enter_scope(new_nested_class);
 									fill_class(new_class, class_specifier_node);
@@ -1352,6 +1358,10 @@ semantic_analyzer::find_class
 	if(std::shared_ptr<class_> found_class = std::dynamic_pointer_cast<class_>(found_name))
 	{
 		return found_class;
+	}
+	else if(std::shared_ptr<class_::nested_class> found_class = std::dynamic_pointer_cast<class_::nested_class>(found_name))
+	{
+		return found_class->entity();
 	}
 
 	throw std::runtime_error("Type not found");
