@@ -61,6 +61,27 @@ has_pure_specifier(const syntax_nodes::member_declarator_declarator& member_decl
 
 
 //
+//simple-declaration related
+//
+
+bool
+is_class_declaration(const syntax_nodes::simple_declaration& simple_declaration_node);
+
+bool
+is_class_forward_declaration(const syntax_nodes::simple_declaration& simple_declaration_node);
+
+bool
+is_function_declaration(const syntax_nodes::simple_declaration& simple_declaration_node);
+
+bool
+is_operator_function_declaration(const syntax_nodes::simple_declaration& simple_declaration_node);
+
+bool
+is_variable_declaration(const syntax_nodes::simple_declaration& simple_declaration_node);
+
+
+
+//
 //qualifier related
 //
 
