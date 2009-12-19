@@ -21,9 +21,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_QUALIFIED_NESTED_ID_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_QUALIFIED_NESTED_ID_HPP
 
-#include "common.hpp"
 #include "nested_name_specifier.hpp"
 #include "unqualified_id.hpp"
+#include "common.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {

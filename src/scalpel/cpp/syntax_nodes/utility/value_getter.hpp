@@ -21,10 +21,10 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_UTIL_VALUE_GETTER_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_UTIL_VALUE_GETTER_HPP
 
+#include "../alternative_node.hpp"
+#include "type_traits.hpp"
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_same.hpp>
-#include "type_traits.hpp"
-#include "../alternative_node.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes { namespace utility
 {

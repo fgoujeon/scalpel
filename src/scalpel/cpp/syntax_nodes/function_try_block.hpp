@@ -21,10 +21,10 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_FUNCTION_TRY_BLOCK_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_FUNCTION_TRY_BLOCK_HPP
 
-#include "common.hpp"
 #include "ctor_initializer.hpp"
 #include "compound_statement.hpp"
 #include "handler_seq.hpp"
+#include "common.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {

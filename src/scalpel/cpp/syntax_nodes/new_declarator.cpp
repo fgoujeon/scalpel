@@ -19,7 +19,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "new_declarator.hpp"
-
 #include "direct_new_declarator.hpp"
 
 #include "detail/macros/sequence_node_pimpl_definition.hpp"

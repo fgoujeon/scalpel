@@ -18,15 +18,15 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <string>
-#include <scalpel/cpp/preprocessor.hpp>
-#include <scalpel/cpp/syntax_analyzer.hpp>
-#include <scalpel/cpp/semantic_analyzer.hpp>
 #include "syntax_tree_print_functions.hpp"
 #include "semantic_graph_print_functions.hpp"
+#include <scalpel/cpp/semantic_analyzer.hpp>
+#include <scalpel/cpp/syntax_analyzer.hpp>
+#include <scalpel/cpp/preprocessor.hpp>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <iostream>
 
 int
 main(int argc, char** argv)

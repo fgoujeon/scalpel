@@ -19,7 +19,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "template_type_parameter.hpp"
-
 #include "template_parameter_list.hpp"
 
 #include "detail/macros/sequence_node_pimpl_definition.hpp"

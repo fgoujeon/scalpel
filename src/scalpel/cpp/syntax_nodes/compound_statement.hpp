@@ -21,8 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_COMPOUND_STATEMENT_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_COMPOUND_STATEMENT_HPP
 
-#include "common.hpp"
 #include "statement_seq.hpp"
+#include "common.hpp"
 
 #include "detail/macros/sequence_node_pimpl_declaration.hpp"
 

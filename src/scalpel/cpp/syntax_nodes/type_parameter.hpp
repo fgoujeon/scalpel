@@ -21,10 +21,10 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_TYPE_PARAMETER
 #define SCALPEL_CPP_SYNTAX_NODES_TYPE_PARAMETER
 
-#include "common.hpp"
 #include "class_type_parameter.hpp"
 #include "typename_type_parameter.hpp"
 #include "template_type_parameter.hpp"
+#include "common.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {

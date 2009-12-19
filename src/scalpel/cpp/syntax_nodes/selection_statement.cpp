@@ -19,7 +19,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "selection_statement.hpp"
-
 #include "if_statement.hpp"
 #include "switch_statement.hpp"
 

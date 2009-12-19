@@ -21,8 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_PARSE_TREE_TO_SYNTAX_TREE_SYNTAX_NODE_TYPE_TO_PARSER_ID_MAP_HPP
 #define SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_PARSE_TREE_TO_SYNTAX_TREE_SYNTAX_NODE_TYPE_TO_PARSER_ID_MAP_HPP
 
-#include "../../../syntax_tree.hpp"
 #include "../grammar.hpp"
+#include "../../../syntax_tree.hpp"
 
 #define SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_ID_TYPE_PAIR(correct_id, node_type)\
 template<>														\

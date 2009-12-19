@@ -21,11 +21,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_DECLARATOR_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_DECLARATOR_HPP
 
-#include <memory>
-#include "common.hpp"
-#include "list_node.hpp"
 #include "space.hpp"
 #include "ptr_operator.hpp"
+#include "list_node.hpp"
+#include "common.hpp"
+#include <memory>
 
 #include "detail/macros/sequence_node_pimpl_declaration.hpp"
 

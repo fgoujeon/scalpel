@@ -21,7 +21,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_POSTFIX_EXPRESSION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_POSTFIX_EXPRESSION_HPP
 
-#include "common.hpp"
 #include "primary_expression.hpp"
 #include "simple_type_specifier_postfix_expression.hpp"
 #include "typename_expression.hpp"
@@ -40,6 +39,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "expression.hpp"
 #include "square_bracketed_expression.hpp"
 #include "round_bracketed_optional_expression.hpp"
+#include "common.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {

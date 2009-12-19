@@ -19,7 +19,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "operator_function.hpp"
-
 #include <iostream>
 
 namespace scalpel { namespace cpp { namespace semantic_entities

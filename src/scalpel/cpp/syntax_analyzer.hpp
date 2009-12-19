@@ -21,8 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_ANALYZER_HPP
 #define SCALPEL_CPP_SYNTAX_ANALYZER_HPP
 
-#include "detail/syntax_analysis/grammar.hpp"
 #include "syntax_tree.hpp"
+#include "detail/syntax_analysis/grammar.hpp"
 
 namespace scalpel { namespace cpp
 {

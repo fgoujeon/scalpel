@@ -21,9 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_EXPRESSIONS_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_EXPRESSIONS_HPP
 
-#include "list_node.hpp"
-#include "common_nodes.hpp"
 #include "cast_expression.hpp"
+#include "common.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {

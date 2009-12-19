@@ -21,11 +21,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_ELABORATED_TYPE_SPECIFIER_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_ELABORATED_TYPE_SPECIFIER_HPP
 
-#include "alternative_node.hpp"
 #include "class_elaborated_specifier.hpp"
 #include "enum_elaborated_specifier.hpp"
 #include "typename_template_elaborated_specifier.hpp"
 #include "typename_elaborated_specifier.hpp"
+#include "alternative_node.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {

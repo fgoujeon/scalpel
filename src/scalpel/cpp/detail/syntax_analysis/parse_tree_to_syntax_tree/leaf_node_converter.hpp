@@ -21,9 +21,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_PARSE_TREE_TO_SYNTAX_TREE_OTHER_NODE_CONVERTER_HPP
 #define SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_PARSE_TREE_TO_SYNTAX_TREE_OTHER_NODE_CONVERTER_HPP
 
-#include "../../../syntax_tree.hpp"
-#include "typedefs.hpp"
 #include "basic_functions.hpp"
+#include "typedefs.hpp"
+#include "../../../syntax_tree.hpp"
 
 namespace scalpel { namespace cpp { namespace detail { namespace syntax_analysis { namespace parse_tree_to_syntax_tree
 {

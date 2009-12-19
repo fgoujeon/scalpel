@@ -21,8 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_FLOATING_LITERAL_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_FLOATING_LITERAL_HPP
 
-#include <string>
 #include "leaf_node.hpp"
+#include <string>
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {

@@ -21,12 +21,12 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_LITERAL_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_LITERAL_HPP
 
-#include "alternative_node.hpp"
 #include "boolean_literal.hpp"
 #include "character_literal.hpp"
 #include "string_literal.hpp"
 #include "floating_literal.hpp"
 #include "integer_literal.hpp"
+#include "common.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {

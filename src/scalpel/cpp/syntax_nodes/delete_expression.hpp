@@ -21,9 +21,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_DELETE_EXPRESSION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_DELETE_EXPRESSION_HPP
 
-#include "alternative_node.hpp"
 #include "simple_delete_expression.hpp"
 #include "array_delete_expression.hpp"
+#include "alternative_node.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {

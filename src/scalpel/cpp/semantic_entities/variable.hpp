@@ -21,12 +21,12 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_VARIABLE_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_VARIABLE_HPP
 
-#include <string>
-#include <memory>
-#include <boost/noncopyable.hpp>
-#include "type.hpp"
 #include "named_scope.hpp"
 #include "named_entity.hpp"
+#include "type.hpp"
+#include <boost/noncopyable.hpp>
+#include <string>
+#include <memory>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {

@@ -21,9 +21,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_FOR_INIT_STATEMENT_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_FOR_INIT_STATEMENT_HPP
 
-#include "alternative_node.hpp"
 #include "expression_statement.hpp"
 #include "simple_declaration.hpp"
+#include "common.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {

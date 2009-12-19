@@ -21,9 +21,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_ENUMERATOR_DEFINITION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_ENUMERATOR_DEFINITION_HPP
 
-#include <memory>
-#include "common.hpp"
 #include "identifier.hpp"
+#include "common.hpp"
+#include <memory>
 
 #include "detail/macros/sequence_node_pimpl_declaration.hpp"
 

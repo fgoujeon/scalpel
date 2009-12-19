@@ -21,9 +21,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_SWITCH_STATEMENT_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_SWITCH_STATEMENT_HPP
 
-#include "common.hpp"
 #include "condition.hpp"
 #include "statement.hpp"
+#include "common.hpp"
 
 #include "detail/macros/sequence_node_pimpl_declaration.hpp"
 

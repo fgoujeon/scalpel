@@ -19,7 +19,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "member_specification_part.hpp"
-
 #include "member_declaration.hpp"
 #include "member_specification_access_specifier.hpp"
 

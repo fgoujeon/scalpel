@@ -19,12 +19,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "statement_block.hpp"
-
+#include "class_.hpp"
+#include "namespace_.hpp"
+#include <scalpel/utility/extern_strings.hpp>
 #include <iostream>
 #include <cassert>
-#include <scalpel/utility/extern_strings.hpp>
-#include "namespace_.hpp"
-#include "class_.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -34,13 +33,17 @@ statement_block::statement_block()
 	std::cout << "New statement block\n";
 }
 
-statement_block::statement_block(statement_block&& o)
+statement_block::statement_block(statement_block&& o):
+	statement_blocks_(o.statement_blocks_),
+	variables_(o.variables_)
 {
 }
 
 const statement_block&
 statement_block::operator=(statement_block&& o)
 {
+	statement_blocks_ = std::move(o.statement_blocks_);
+	variables_ = std::move(o.variables_);
 
 	return *this;
 }

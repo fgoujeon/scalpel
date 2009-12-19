@@ -19,7 +19,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "block_declaration.hpp"
-
 #include "simple_declaration.hpp"
 
 #include "detail/macros/alternative_node_pimpl_definition.hpp"

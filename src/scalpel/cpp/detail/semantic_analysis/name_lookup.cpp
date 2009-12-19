@@ -19,7 +19,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "name_lookup.hpp"
-
 #include <algorithm>
 #include <functional>
 #include <iostream>

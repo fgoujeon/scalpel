@@ -21,11 +21,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_NAME_LOOKUP_HPP
 #define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_NAME_LOOKUP_HPP
 
+#include "../../syntax_tree.hpp"
+#include "../../semantic_graph.hpp"
 #include <string>
 #include <list>
 #include <stdexcept>
-#include "../../syntax_tree.hpp"
-#include "../../semantic_graph.hpp"
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace name_lookup
 {

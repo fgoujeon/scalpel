@@ -21,11 +21,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ANALYZER_HPP
 #define SCALPEL_CPP_SEMANTIC_ANALYZER_HPP
 
-#include <memory>
 #include "syntax_tree.hpp"
 #include "semantic_graph.hpp"
 #include "detail/semantic_analysis/scope_cursor.hpp"
 #include "syntax_nodes/utility/type_traits.hpp"
+#include <memory>
 
 namespace scalpel { namespace cpp
 {

@@ -21,8 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_MEMBER_SPECIFICATION_ACCESS_SPECIFIER_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_MEMBER_SPECIFICATION_ACCESS_SPECIFIER_HPP
 
-#include "common.hpp"
 #include "access_specifier.hpp"
+#include "common.hpp"
 
 #include "detail/macros/sequence_node_pimpl_declaration.hpp"
 

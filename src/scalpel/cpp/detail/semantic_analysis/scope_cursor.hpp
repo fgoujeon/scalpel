@@ -21,11 +21,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_SCOPE_CURSOR_HPP
 #define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_SCOPE_CURSOR_HPP
 
-#include <vector>
+#include <scalpel/cpp/semantic_graph.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/iterator/indirect_iterator.hpp>
 #include <boost/range/iterator_range.hpp>
-#include <scalpel/cpp/semantic_graph.hpp>
+#include <vector>
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
 {

@@ -19,7 +19,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "declaration.hpp"
-
 #include "block_declaration.hpp"
 #include "function_definition.hpp"
 #include "template_declaration.hpp"

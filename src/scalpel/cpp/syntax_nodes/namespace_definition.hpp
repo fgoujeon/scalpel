@@ -21,8 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_NAMESPACE_DEFINITION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_NAMESPACE_DEFINITION_HPP
 
-#include "identifier.hpp"
 #include "declaration_seq.hpp"
+#include "identifier.hpp"
 
 #include "detail/macros/sequence_node_pimpl_declaration.hpp"
 

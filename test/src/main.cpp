@@ -20,11 +20,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #define BOOST_TEST_ALTERNATIVE_INIT_API
 
-#include <functional>
+#include "single_file_test.hpp"
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/parameterized_test.hpp>
 #include <boost/bind.hpp>
-#include "single_file_test.hpp"
+#include <functional>
 
 using namespace boost::unit_test;
 

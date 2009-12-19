@@ -21,11 +21,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SEMANTIC_GRAPH_PRINT_FUNCTIONS_HPP
 #define SEMANTIC_GRAPH_PRINT_FUNCTIONS_HPP
 
-#include <iostream>
+#include "basic_print_functions.hpp"
+#include <scalpel/cpp/semantic_graph.hpp>
 #include <string>
 #include <sstream>
-#include <scalpel/cpp/semantic_graph.hpp>
-#include "basic_print_functions.hpp"
+#include <iostream>
 
 namespace semantic_graph_print_functions
 {

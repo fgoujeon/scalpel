@@ -21,10 +21,10 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_PARSE_TREE_TO_SYNTAX_TREE_SEQUENCE_NODE_CONVERTER_HPP
 #define SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_PARSE_TREE_TO_SYNTAX_TREE_SEQUENCE_NODE_CONVERTER_HPP
 
-#include <string>
-#include <scalpel/cpp/syntax_nodes/predefined_text_node.hpp>
 #include "node_converter.hpp"
 #include "node_checker.hpp"
+#include <scalpel/cpp/syntax_nodes/predefined_text_node.hpp>
+#include <string>
 
 namespace scalpel { namespace cpp { namespace detail { namespace syntax_analysis { namespace parse_tree_to_syntax_tree
 {

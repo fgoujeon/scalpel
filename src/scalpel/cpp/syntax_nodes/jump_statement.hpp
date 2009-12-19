@@ -21,11 +21,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_JUMP_STATEMENT_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_JUMP_STATEMENT_HPP
 
-#include "alternative_node.hpp"
 #include "break_statement.hpp"
 #include "continue_statement.hpp"
 #include "return_statement.hpp"
 #include "goto_statement.hpp"
+#include "common.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {

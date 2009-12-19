@@ -19,13 +19,12 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "class_.hpp"
-
+#include "namespace_.hpp"
+#include "built_in_type.hpp"
+#include <scalpel/utility/null_deleter.hpp>
 #include <iostream>
 #include <memory>
 #include <cassert>
-#include <scalpel/utility/null_deleter.hpp>
-#include "namespace_.hpp"
-#include "built_in_type.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {

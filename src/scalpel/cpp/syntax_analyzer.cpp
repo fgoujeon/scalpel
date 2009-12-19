@@ -18,12 +18,15 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "syntax_analyzer.hpp"
+#ifndef BOOST_SPIRIT_USE_OLD_NAMESPACE
+#define BOOST_SPIRIT_USE_OLD_NAMESPACE
+#endif
 
+#include "syntax_analyzer.hpp"
+#include "detail/syntax_analysis/parse_tree_to_syntax_tree.hpp"
+#include <boost/spirit/include/classic_parse_tree.hpp>
 #include <iostream>
 #include <stdexcept>
-#include <boost/spirit/tree/parse_tree.hpp>
-#include "detail/syntax_analysis/parse_tree_to_syntax_tree.hpp"
 
 using namespace scalpel::cpp::detail::syntax_analysis;
 

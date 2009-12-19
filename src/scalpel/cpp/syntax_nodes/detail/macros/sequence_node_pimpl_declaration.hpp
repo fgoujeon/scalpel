@@ -18,10 +18,10 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <memory>
+#include "../../common.hpp"
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/seq.hpp>
-#include "../../common.hpp"
+#include <memory>
 
 #define SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION_CONSTRUCTOR_PARAMETER(r, x, n, node_type) \
 (node_type&& o##n)

@@ -21,10 +21,10 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_TEMPLATE_ARGUMENT_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_TEMPLATE_ARGUMENT_HPP
 
-#include "common.hpp"
 #include "template_argument_assignment_expression.hpp"
 #include "type_id.hpp"
 #include "id_expression.hpp"
+#include "common.hpp"
 
 #include "detail/macros/alternative_node_pimpl_declaration.hpp"
 

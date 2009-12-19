@@ -21,9 +21,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_TRY_BLOCK_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_TRY_BLOCK_HPP
 
-#include "common.hpp"
 #include "compound_statement.hpp"
 #include "handler_seq.hpp"
+#include "common.hpp"
 
 #include "detail/macros/sequence_node_pimpl_declaration.hpp"
 

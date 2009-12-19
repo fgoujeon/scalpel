@@ -19,11 +19,10 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "function.hpp"
-
+#include "class_.hpp"
+#include "namespace_.hpp"
 #include <iostream>
 #include <cassert>
-#include "namespace_.hpp"
-#include "class_.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {

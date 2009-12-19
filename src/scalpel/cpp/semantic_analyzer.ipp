@@ -518,6 +518,7 @@ semantic_analyzer::analyze(const syntax_nodes::simple_declaration& simple_declar
 	bool is_a_class_forward_declaration = false;
 	bool is_a_function_declaration = false;
 	bool is_an_operator_function_declaration = false;
+	bool is_a_variable_declaration = false;
 
 	const optional_node<decl_specifier_seq>& opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node);
 	const optional_node<init_declarator_list>& opt_init_declarator_list_node = get_init_declarator_list(simple_declaration_node);
@@ -634,7 +635,7 @@ semantic_analyzer::analyze(const syntax_nodes::simple_declaration& simple_declar
 		auto declarator_node = get_declarator(init_declarator_list_node.front().main_node());
 		parent_entity->add(create_function(decl_specifier_seq_node, declarator_node));
 	}
-	else //variable declaration
+	else if(is_a_variable_declaration)
 	{
 		assert(opt_decl_specifier_seq_node);
 		const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;

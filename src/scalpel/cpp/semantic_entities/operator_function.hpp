@@ -21,12 +21,12 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_OPERATOR_FUNCTION_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_OPERATOR_FUNCTION_HPP
 
-#include <list>
-#include <memory>
-#include "type.hpp"
-#include "function.hpp"
 #include "operator_.hpp"
 #include "statement_block.hpp"
+#include "function.hpp"
+#include "type.hpp"
+#include <list>
+#include <memory>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {

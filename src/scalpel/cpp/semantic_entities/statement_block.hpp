@@ -21,10 +21,10 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_STATEMENT_BLOCK_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_STATEMENT_BLOCK_HPP
 
+#include "variable.hpp"
 #include <string>
 #include <vector>
 #include <memory>
-#include "variable.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {

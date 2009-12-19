@@ -19,7 +19,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "statement.hpp"
-
 #include "labeled_statement.hpp"
 #include "expression_statement.hpp"
 #include "compound_statement.hpp"

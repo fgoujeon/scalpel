@@ -21,9 +21,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_CLASS_SPECIFIER_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_CLASS_SPECIFIER_HPP
 
-#include "common.hpp"
 #include "class_head.hpp"
 #include "member_specification.hpp"
+#include "common.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {

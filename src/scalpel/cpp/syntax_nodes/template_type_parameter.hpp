@@ -21,10 +21,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_TEMPLATE_TYPE_PARAMETER
 #define SCALPEL_CPP_SYNTAX_NODES_TEMPLATE_TYPE_PARAMETER
 
-#include <memory>
-#include "common.hpp"
 #include "identifier.hpp"
 #include "id_expression.hpp"
+#include "common.hpp"
 
 #include "detail/macros/sequence_node_pimpl_declaration.hpp"
 

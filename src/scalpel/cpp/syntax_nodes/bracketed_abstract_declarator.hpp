@@ -21,9 +21,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_BRACKETED_ABSTRACT_DECLARATOR_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_BRACKETED_ABSTRACT_DECLARATOR_HPP
 
-#include "common.hpp"
 #include "abstract_declarator.hpp"
 #include "direct_declarator.hpp"
+#include "common.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {

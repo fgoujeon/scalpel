@@ -18,14 +18,13 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "single_file_test.hpp"
+#include <scalpel/cpp/syntax_nodes/utility/value_getter.hpp>
 #include <iostream>
 #include <sstream>
 #include <iomanip>
 #include <stdexcept>
 #include <fstream>
-#include <scalpel/cpp/syntax_nodes/utility/value_getter.hpp>
-
-#include "single_file_test.hpp"
 
 using namespace boost::spirit;
 using namespace std;

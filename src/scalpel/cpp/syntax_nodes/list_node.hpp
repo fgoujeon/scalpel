@@ -21,11 +21,10 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_LIST_NODE_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_LIST_NODE_HPP
 
-#include <vector>
-#include "optional_node.hpp"
-#include "../../utility/extern_strings.hpp"
-#include "common_nodes.hpp"
 #include "space.hpp"
+#include "common_nodes.hpp"
+#include "optional_node.hpp"
+#include <vector>
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {

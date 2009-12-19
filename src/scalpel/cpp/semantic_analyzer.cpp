@@ -19,12 +19,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "semantic_analyzer.hpp"
-
-#include <iostream>
-#include <stdexcept>
-#include <scalpel/utility/null_deleter.hpp>
 #include "detail/semantic_analysis/name_lookup.hpp"
 #include "detail/semantic_analysis/basic_functions.hpp"
+#include <scalpel/utility/null_deleter.hpp>
+#include <iostream>
+#include <stdexcept>
 
 namespace scalpel { namespace cpp
 {

@@ -19,7 +19,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "cast_expression.hpp"
-
 #include "unary_expression.hpp"
 
 #include "detail/macros/sequence_node_pimpl_definition.hpp"

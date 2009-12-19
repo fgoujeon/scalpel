@@ -18,9 +18,12 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "grammar.hpp"
+#ifndef BOOST_SPIRIT_USE_OLD_NAMESPACE
+#define BOOST_SPIRIT_USE_OLD_NAMESPACE
+#endif
 
-#include <boost/spirit/utility/chset.hpp>
+#include "grammar.hpp"
+#include <boost/spirit/include/classic_chset.hpp>
 
 namespace scalpel { namespace cpp { namespace detail { namespace syntax_analysis
 {

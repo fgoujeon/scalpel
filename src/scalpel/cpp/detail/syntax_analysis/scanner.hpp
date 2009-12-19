@@ -21,8 +21,12 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_SCANNER_HPP
 #define SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_SCANNER_HPP
 
-#include <boost/spirit/core.hpp>
-#include <boost/spirit/tree/parse_tree.hpp>
+#ifndef BOOST_SPIRIT_USE_OLD_NAMESPACE
+#define BOOST_SPIRIT_USE_OLD_NAMESPACE
+#endif
+
+#include <boost/spirit/include/classic_core.hpp>
+#include <boost/spirit/include/classic_parse_tree.hpp>
 
 namespace scalpel { namespace cpp { namespace detail { namespace syntax_analysis
 {

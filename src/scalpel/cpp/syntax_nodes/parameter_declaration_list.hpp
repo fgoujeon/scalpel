@@ -21,9 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_PARAMETER_DECLARATION_LIST_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_PARAMETER_DECLARATION_LIST_HPP
 
-#include "../../utility/extern_strings.hpp"
-#include "list_node.hpp"
 #include "parameter_declaration.hpp"
+#include "common.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {

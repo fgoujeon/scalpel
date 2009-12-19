@@ -19,7 +19,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "assignment_expression.hpp"
-
 #include "expressions.hpp"
 #include "conditional_expression.hpp"
 

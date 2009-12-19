@@ -21,18 +21,18 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_PARSE_TREE_TO_SYNTAX_TREE_NODE_CONVERTER_HPP
 #define SCALPEL_CPP_DETAIL_SYNTAX_ANALYSIS_PARSE_TREE_TO_SYNTAX_TREE_NODE_CONVERTER_HPP
 
-#include <string>
-#include <iostream>
-#include <boost/utility/enable_if.hpp>
-#include "../../../syntax_tree.hpp"
-#include "../../../syntax_nodes/utility/type_traits.hpp"
-#include "../grammar.hpp"
 #include "sequence_node_converter_fwd.hpp"
 #include "alternative_node_converter_fwd.hpp"
 #include "leaf_node_converter.hpp"
 #include "special_conversion_functions_fwd.hpp"
 #include "syntax_node_type_to_parser_id_map.hpp"
 #include "basic_functions.hpp"
+#include "../grammar.hpp"
+#include "../../../syntax_tree.hpp"
+#include "../../../syntax_nodes/utility/type_traits.hpp"
+#include <boost/utility/enable_if.hpp>
+#include <string>
+#include <iostream>
 
 namespace scalpel { namespace cpp { namespace detail { namespace syntax_analysis { namespace parse_tree_to_syntax_tree
 {

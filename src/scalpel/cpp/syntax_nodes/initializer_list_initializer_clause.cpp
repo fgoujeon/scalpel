@@ -19,7 +19,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "initializer_list_initializer_clause.hpp"
-
 #include "initializer_list.hpp"
 
 #include "detail/macros/sequence_node_pimpl_definition.hpp"

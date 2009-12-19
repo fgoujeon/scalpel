@@ -19,7 +19,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "abstract_declarator.hpp"
-
 #include "direct_abstract_declarator.hpp"
 
 #include "detail/macros/alternative_node_pimpl_definition.hpp"

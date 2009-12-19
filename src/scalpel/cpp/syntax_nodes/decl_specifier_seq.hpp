@@ -21,8 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_DECL_SPECIFIER_SEQ_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_DECL_SPECIFIER_SEQ_HPP
 
-#include "list_node.hpp"
 #include "decl_specifier.hpp"
+#include "list_node.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {

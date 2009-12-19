@@ -21,13 +21,13 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SYNTAX_TREE_PRINT_FUNCTIONS_HPP
 #define SYNTAX_TREE_PRINT_FUNCTIONS_HPP
 
-#include <iostream>
-#include <string>
-#include <sstream>
+#include "basic_print_functions.hpp"
 #include <scalpel/cpp/syntax_tree.hpp>
 #include <scalpel/cpp/syntax_nodes/utility/type_traits.hpp>
 #include <scalpel/cpp/syntax_nodes/utility/value_getter.hpp>
-#include "basic_print_functions.hpp"
+#include <string>
+#include <sstream>
+#include <iostream>
 
 using namespace scalpel::cpp;
 using namespace scalpel::cpp::syntax_nodes;

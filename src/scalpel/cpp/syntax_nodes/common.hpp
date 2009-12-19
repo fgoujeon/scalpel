@@ -21,12 +21,12 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_COMMON_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_COMMON_HPP
 
-#include <memory>
 #include "sequence_node.hpp"
 #include "alternative_node.hpp"
 #include "list_node.hpp"
 #include "optional_node.hpp"
 #include "predefined_text_node.hpp"
 #include "strings.hpp"
+#include <memory>
 
 #endif

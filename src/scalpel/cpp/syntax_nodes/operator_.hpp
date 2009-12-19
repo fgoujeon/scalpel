@@ -21,9 +21,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_OPERATOR_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_OPERATOR_HPP
 
-#include "alternative_node.hpp"
 #include "array_operator.hpp"
 #include "simple_operator.hpp"
+#include "common.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {

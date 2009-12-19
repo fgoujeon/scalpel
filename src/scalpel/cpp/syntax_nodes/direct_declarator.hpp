@@ -21,7 +21,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_DIRECT_DECLARATOR_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_DIRECT_DECLARATOR_HPP
 
-#include "common.hpp"
 #include "declarator_id.hpp"
 #include "declarator.hpp"
 #include "parameter_declaration_clause.hpp"
@@ -29,6 +28,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "bracketed_declarator.hpp"
 #include "exception_specification.hpp"
 #include "conditional_expression.hpp"
+#include "common.hpp"
 
 #include "detail/macros/sequence_node_pimpl_declaration.hpp"
 

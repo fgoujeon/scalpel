@@ -21,9 +21,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_MEM_INITIALIZER_ID_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_MEM_INITIALIZER_ID_HPP
 
-#include "alternative_node.hpp"
 #include "nested_identifier_or_template_id.hpp"
 #include "identifier.hpp"
+#include "common.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {

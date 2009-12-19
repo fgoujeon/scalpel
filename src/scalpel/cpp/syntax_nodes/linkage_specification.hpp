@@ -21,9 +21,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_LINKAGE_SPECIFICATION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_LINKAGE_SPECIFICATION_HPP
 
-#include "common.hpp"
 #include "declaration_linkage_specification.hpp"
 #include "declaration_seq_linkage_specification.hpp"
+#include "common.hpp"
 
 #include "detail/macros/alternative_node_pimpl_declaration.hpp"
 

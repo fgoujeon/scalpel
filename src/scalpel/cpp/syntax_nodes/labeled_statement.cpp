@@ -19,7 +19,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "labeled_statement.hpp"
-
 #include "case_statement.hpp"
 #include "default_statement.hpp"
 #include "classic_labeled_statement.hpp"

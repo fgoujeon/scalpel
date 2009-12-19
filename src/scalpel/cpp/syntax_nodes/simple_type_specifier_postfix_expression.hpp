@@ -21,9 +21,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_SIMPLE_TYPE_SPECIFIER_POSTFIX_EXPRESION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_SIMPLE_TYPE_SPECIFIER_POSTFIX_EXPRESION_HPP
 
-#include "common.hpp"
 #include "simple_type_specifier.hpp"
 #include "expression.hpp"
+#include "common.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {

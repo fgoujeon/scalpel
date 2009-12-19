@@ -19,7 +19,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "declarator.hpp"
-
 #include "ptr_operator_seq.hpp"
 #include "direct_declarator.hpp"
 

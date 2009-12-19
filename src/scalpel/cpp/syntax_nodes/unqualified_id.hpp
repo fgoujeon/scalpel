@@ -21,12 +21,12 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_UNQUALIFIED_ID_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_UNQUALIFIED_ID_HPP
 
-#include "alternative_node.hpp"
 #include "operator_function_id.hpp"
 #include "conversion_function_id.hpp"
 #include "destructor_name.hpp"
 #include "template_id.hpp"
 #include "identifier.hpp"
+#include "common.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {

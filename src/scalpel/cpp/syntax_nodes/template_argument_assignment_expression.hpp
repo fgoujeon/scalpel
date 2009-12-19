@@ -21,11 +21,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION_HPP
 
-#include "common.hpp"
 #include "assignment_operator.hpp"
 #include "template_argument_conditional_expression.hpp"
 #include "expressions.hpp"
 #include "throw_expression.hpp"
+#include "common.hpp"
 
 #include "detail/macros/sequence_node_pimpl_declaration.hpp"
 

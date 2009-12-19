@@ -18,13 +18,12 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <fstream>
-#include <sstream>
-#include <boost/wave/cpp_context.hpp>
+#include "preprocessor.hpp"
 #include <boost/wave/cpplexer/cpp_lex_iterator.hpp>
 #include <boost/wave/cpplexer/cpp_lex_token.hpp>
-
-#include "preprocessor.hpp"
+#include <boost/wave/cpp_context.hpp>
+#include <fstream>
+#include <sstream>
 
 namespace scalpel { namespace cpp
 {

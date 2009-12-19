@@ -21,8 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_DECORATOR_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_DECORATOR_HPP
 
-#include <memory>
 #include "type.hpp"
+#include <memory>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {

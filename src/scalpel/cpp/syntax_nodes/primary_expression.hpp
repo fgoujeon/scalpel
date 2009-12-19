@@ -21,12 +21,10 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_PRIMARY_EXPRESSION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_PRIMARY_EXPRESSION_HPP
 
-#include "alternative_node.hpp"
-#include "predefined_text_node.hpp"
-#include "common_nodes.hpp"
 #include "literal.hpp"
 #include "id_expression.hpp"
 #include "round_bracketed_expression.hpp"
+#include "common.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {

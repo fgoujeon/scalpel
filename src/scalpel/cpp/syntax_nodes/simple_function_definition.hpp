@@ -21,11 +21,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_SIMPLE_FUNCTION_DEFINITION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_SIMPLE_FUNCTION_DEFINITION_HPP
 
-#include "common.hpp"
 #include "decl_specifier_seq.hpp"
 #include "ctor_initializer.hpp"
 #include "compound_statement.hpp"
 #include "declarator.hpp"
+#include "common.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {

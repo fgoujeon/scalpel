@@ -19,7 +19,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "template_argument_conditional_expression.hpp"
-
 #include "template_argument_assignment_expression.hpp"
 
 #include "detail/macros/sequence_node_pimpl_definition.hpp"
