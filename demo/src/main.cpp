@@ -23,6 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <scalpel/cpp/semantic_analyzer.hpp>
 #include <scalpel/cpp/syntax_analyzer.hpp>
 #include <scalpel/cpp/preprocessor.hpp>
+#include <boost/program_options.hpp>
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -31,60 +32,97 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 int
 main(int argc, char** argv)
 {
-	if(argc != 2)
+	std::vector<std::string> input_files;
+	std::vector<std::string> include_paths;
+	bool print_syntax_tree = true;
+	bool print_semantic_graph = true;
+
+	//get program options
 	{
-		std::cout << "Usage:\n";
-		std::cout << "\t" << argv[0] << " source_file_to_be_analyzed\n";
+		namespace po = boost::program_options;
+
+		po::options_description hidden_options("Hidden options");
+		hidden_options.add_options()
+			("input-file", po::value<std::vector<std::string>>(&input_files), "input file")
+		;
+
+		po::options_description visible_options("Allowed options");
+		visible_options.add_options()
+			("help,h", "produce help message")
+			("include-path,I", po::value<std::vector<std::string>>(&include_paths), "include path")
+			("no-syntax-tree", "don't print syntax tree")
+			("no-semantic-graph", "don't print semantic graph")
+		;
+
+		po::options_description all_options("Allowed options");
+		all_options.add(hidden_options).add(visible_options);
+
+		po::positional_options_description p;
+		p.add("input-file", -1);
+
+		po::variables_map vm;
+		po::store(po::command_line_parser(argc, argv).options(all_options).positional(p).run(), vm);
+		po::notify(vm);
+
+		if(vm.count("help") || input_files.empty())
+		{
+			std::cout << "Usage: " << argv[0] << " [options] input-files\n\n";
+			std::cout << visible_options << "\n";
+			return 0;
+		}
+
+		print_syntax_tree = !vm.count("no-syntax-tree");
+		print_semantic_graph = !vm.count("no-semantic-graph");
 	}
 
 	scalpel::cpp::preprocessor preprocessor;
 	scalpel::cpp::syntax_analyzer syntax_analyzer;
 	scalpel::cpp::semantic_analyzer semantic_analyzer;
 
-	std::string filename = argv[1];
-
-	//open file
-	std::ifstream file(filename.c_str());
-	if(!file)
+	for(auto i = input_files.begin(); i != input_files.end(); ++i) //for each input file
 	{
-		std::cout << filename << " doesn't exits.";
-		return 1;
+		const std::string& filename = *i;
+
+		//open file
+		std::ifstream file(filename.c_str());
+		if(!file)
+		{
+			std::cout << filename << " doesn't exits.";
+			return 1;
+		}
+
+		//read file
+		std::ostringstream buffer;
+		buffer << file.rdbuf();
+
+		//close file
+		file.close();
+
+		std::cout << "Analyzing " << filename << "...\n";
+
+		//preprocessing
+		std::string preprocessed_code = preprocessor(buffer.str(), include_paths);
+
+		//syntax analysis
+		scalpel::cpp::syntax_tree tree = syntax_analyzer(preprocessed_code);
+
+		//print syntax tree
+		if(print_syntax_tree)
+		{
+			std::cout << "Syntax tree:\n";
+			print(tree);
+		}
+
+		//semantic analysis
+		std::shared_ptr<scalpel::cpp::semantic_graph> graph = semantic_analyzer(tree);
+
+		//print semantic graph
+		if(print_semantic_graph)
+		{
+			std::cout << "Semantic graph:\n";
+			semantic_graph_print_functions::print(*graph);
+		}
 	}
-
-	//read file
-	std::ostringstream buffer;
-	buffer << file.rdbuf();
-
-	//close file
-	file.close();
-
-	std::cout << "Analyzing " << filename << "...\n";
-
-	//preprocessing
-	std::vector<std::string> include_paths =
-	{
-		"/usr/include",
-		"/usr/include/c++/4.4.0",
-		"/usr/include/c++/4.4.0/i686-pc-linux-gnu",
-		"/usr/include/c++/4.4.0/parallel",
-		"/usr/include/linux",
-		"/usr/lib/gcc/i686-pc-linux-gnu/4.4.0/include"
-	};
-	std::string preprocessed_code = preprocessor(buffer.str(), include_paths);
-
-	//syntax analysis
-	scalpel::cpp::syntax_tree tree = syntax_analyzer(preprocessed_code);
-
-	//print syntax tree
-	std::cout << "Syntax tree:\n";
-	print(tree);
-
-	//semantic analysis
-	std::shared_ptr<scalpel::cpp::semantic_graph> graph = semantic_analyzer(tree);
-
-	//print semantic graph
-	std::cout << "Semantic graph:\n";
-	semantic_graph_print_functions::print(*graph);
 
 	return 0;
 }
