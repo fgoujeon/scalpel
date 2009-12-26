@@ -128,12 +128,11 @@ bool
 is_function_declaration(const declarator& declarator_node)
 {
 	auto direct_declarator_node = get_direct_declarator(declarator_node);
-	auto direct_declarator_node_last_part_seq = get_last_part_seq(direct_declarator_node);
-	if(direct_declarator_node_last_part_seq)
+	if(auto direct_declarator_node_last_part_seq = get_last_part_seq(direct_declarator_node))
 	{
-		for(auto j = direct_declarator_node_last_part_seq->begin(); j != direct_declarator_node_last_part_seq->end(); ++j)
+		for(auto i = direct_declarator_node_last_part_seq->begin(); i != direct_declarator_node_last_part_seq->end(); ++i)
 		{
-			const direct_declarator_last_part& last_part = j->main_node();
+			const direct_declarator_last_part& last_part = i->main_node();
 
 			if(get<direct_declarator_function_part>(&last_part))
 			{
@@ -149,12 +148,46 @@ bool
 is_simple_function_declaration(const declarator& declarator_node)
 {
 	auto direct_declarator_node = get_direct_declarator(declarator_node);
-	auto direct_declarator_node_last_part_seq = get_last_part_seq(direct_declarator_node);
-	if(direct_declarator_node_last_part_seq)
+
+	auto direct_declarator_first_part_node = get_first_part(direct_declarator_node);
+	if(auto opt_declarator_id_node = get<declarator_id>(&direct_declarator_first_part_node))
 	{
-		for(auto j = direct_declarator_node_last_part_seq->begin(); j != direct_declarator_node_last_part_seq->end(); ++j)
+		auto declarator_id_node = *opt_declarator_id_node;
+		if(auto opt_id_expression_node = get<id_expression>(&declarator_id_node))
 		{
-			const direct_declarator_last_part& last_part = j->main_node();
+			auto id_expression_node = *opt_id_expression_node;
+			if(auto opt_unqualified_id_node = get<unqualified_id>(&id_expression_node))
+			{
+				auto unqualified_id_node = *opt_unqualified_id_node;
+				if(get<identifier>(&unqualified_id_node))
+				{
+					//the function does have a name
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	else
+	{
+		return false;
+	}
+
+	if(auto direct_declarator_node_last_part_seq = get_last_part_seq(direct_declarator_node))
+	{
+		for(auto i = direct_declarator_node_last_part_seq->begin(); i != direct_declarator_node_last_part_seq->end(); ++i)
+		{
+			const direct_declarator_last_part& last_part = i->main_node();
 
 			if(get<direct_declarator_function_part>(&last_part))
 			{

@@ -563,34 +563,6 @@ semantic_analyzer::analyze(const syntax_nodes::simple_declaration& simple_declar
 		const std::string& class_name = opt_identifier_node->value();
 		parent_entity->add(std::make_shared<class_>(class_name));
 	}
-	else if(is_operator_function_declaration(simple_declaration_node))
-	{
-		auto opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node);
-		auto opt_init_declarator_list_node = get_init_declarator_list(simple_declaration_node);
-		assert(opt_decl_specifier_seq_node);
-		assert(opt_init_declarator_list_node);
-
-		auto init_declarator_list_node = *opt_init_declarator_list_node;
-		assert(init_declarator_list_node.size() == 1);
-
-		auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
-		auto declarator_node = get_declarator(init_declarator_list_node.front().main_node());
-		parent_entity->add(create_operator_function(decl_specifier_seq_node, declarator_node));
-	}
-	else if(is_simple_function_declaration(simple_declaration_node))
-	{
-		auto opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node);
-		auto opt_init_declarator_list_node = get_init_declarator_list(simple_declaration_node);
-		assert(opt_decl_specifier_seq_node);
-		assert(opt_init_declarator_list_node);
-
-		auto init_declarator_list_node = *opt_init_declarator_list_node;
-		assert(init_declarator_list_node.size() == 1);
-
-		auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
-		auto declarator_node = get_declarator(init_declarator_list_node.front().main_node());
-		parent_entity->add(create_simple_function(decl_specifier_seq_node, declarator_node));
-	}
 	else if(is_variable_declaration(simple_declaration_node))
 	{
 		auto opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node);
@@ -613,6 +585,34 @@ semantic_analyzer::analyze(const syntax_nodes::simple_declaration& simple_declar
 		{
 			parent_entity->add(*i);
 		}
+	}
+	else if(is_simple_function_declaration(simple_declaration_node))
+	{
+		auto opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node);
+		auto opt_init_declarator_list_node = get_init_declarator_list(simple_declaration_node);
+		assert(opt_decl_specifier_seq_node);
+		assert(opt_init_declarator_list_node);
+
+		auto init_declarator_list_node = *opt_init_declarator_list_node;
+		assert(init_declarator_list_node.size() == 1);
+
+		auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
+		auto declarator_node = get_declarator(init_declarator_list_node.front().main_node());
+		parent_entity->add(create_simple_function(decl_specifier_seq_node, declarator_node));
+	}
+	else if(is_operator_function_declaration(simple_declaration_node))
+	{
+		auto opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node);
+		auto opt_init_declarator_list_node = get_init_declarator_list(simple_declaration_node);
+		assert(opt_decl_specifier_seq_node);
+		assert(opt_init_declarator_list_node);
+
+		auto init_declarator_list_node = *opt_init_declarator_list_node;
+		assert(init_declarator_list_node.size() == 1);
+
+		auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
+		auto declarator_node = get_declarator(init_declarator_list_node.front().main_node());
+		parent_entity->add(create_operator_function(decl_specifier_seq_node, declarator_node));
 	}
 }
 
