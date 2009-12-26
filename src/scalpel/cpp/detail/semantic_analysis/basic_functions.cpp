@@ -146,6 +146,27 @@ is_function_declaration(const declarator& declarator_node)
 }
 
 bool
+is_simple_function_declaration(const declarator& declarator_node)
+{
+	auto direct_declarator_node = get_direct_declarator(declarator_node);
+	auto direct_declarator_node_last_part_seq = get_last_part_seq(direct_declarator_node);
+	if(direct_declarator_node_last_part_seq)
+	{
+		for(auto j = direct_declarator_node_last_part_seq->begin(); j != direct_declarator_node_last_part_seq->end(); ++j)
+		{
+			const direct_declarator_last_part& last_part = j->main_node();
+
+			if(get<direct_declarator_function_part>(&last_part))
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+bool
 is_operator_function_declaration(const declarator& declarator_node)
 {
 	auto direct_declarator_node = get_direct_declarator(declarator_node);
@@ -319,6 +340,29 @@ is_function_declaration(const syntax_nodes::simple_declaration& simple_declarati
 		{
 			auto declarator_node = get_declarator(i->main_node());
 			if(is_function_declaration(declarator_node))
+				return true;
+		}
+	}
+
+	return false;
+}
+
+bool
+is_simple_function_declaration(const syntax_nodes::simple_declaration& simple_declaration_node)
+{
+	auto opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node);
+	auto opt_init_declarator_list_node = get_init_declarator_list(simple_declaration_node);
+
+	if(!opt_decl_specifier_seq_node)
+		return false;
+
+	if(opt_init_declarator_list_node)
+	{
+		auto init_declarator_list_node = *opt_init_declarator_list_node;
+		for(auto i = init_declarator_list_node.begin(); i != init_declarator_list_node.end(); ++i)
+		{
+			auto declarator_node = get_declarator(i->main_node());
+			if(is_simple_function_declaration(declarator_node))
 				return true;
 		}
 	}

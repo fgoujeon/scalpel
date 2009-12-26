@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "function.hpp"
+#include "simple_function.hpp"
 #include "class_.hpp"
 #include "namespace_.hpp"
 #include <iostream>
@@ -27,7 +27,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-function::function
+simple_function::simple_function
 (
 	const std::string& name,
 	std::shared_ptr<const type> return_type,
@@ -39,10 +39,19 @@ function::function
 	parameters_(std::move(parameters)),
 	static_specified_(is_static_specified)
 {
-	std::cout << "New function " << name << "\n";
+	std::cout << "New simple_function " << name << "\n";
 }
 
-function::function(function&& f):
+simple_function::simple_function(const simple_function& f):
+	name_(f.name_),
+	return_type_(f.return_type_),
+	parameters_(f.parameters_),
+	static_specified_(f.static_specified_),
+	statement_block_(f.statement_block_)
+{
+}
+
+simple_function::simple_function(simple_function&& f):
 	name_(std::move(f.name_)),
 	return_type_(std::move(f.return_type_)),
 	parameters_(std::move(f.parameters_)),
@@ -51,8 +60,20 @@ function::function(function&& f):
 {
 }
 
-const function&
-function::operator=(function&& f)
+const simple_function&
+simple_function::operator=(const simple_function& f)
+{
+	name_ = f.name_;
+	return_type_ = f.return_type_;
+	parameters_ = f.parameters_;
+	static_specified_ = f.static_specified_;
+	statement_block_ = f.statement_block_;
+
+	return *this;
+}
+
+const simple_function&
+simple_function::operator=(simple_function&& f)
 {
 	name_ = std::move(f.name_);
 	return_type_ = std::move(f.return_type_);
@@ -64,60 +85,85 @@ function::operator=(function&& f)
 }
 
 const std::string&
-function::name() const
+simple_function::name() const
 {
     return name_;
 }
 
 bool
-function::is_a_type() const
+simple_function::is_a_type() const
 {
     return false;
 }
 
 std::shared_ptr<const type>
-function::return_type() const
+simple_function::return_type() const
 {
 	return return_type_;
 }
 
-const std::list<function::parameter>&
-function::parameters() const
+const std::list<simple_function::parameter>&
+simple_function::parameters() const
 {
 	return parameters_;
 }
 
 bool
-function::static_specified() const
+simple_function::static_specified() const
 {
 	return static_specified_;
 }
 
 
 
-function::parameter::parameter(std::shared_ptr<const type> t, const std::string& name):
+simple_function::parameter::parameter(std::shared_ptr<const type> t, const std::string& name):
 	type_(t),
 	name_(name)
 {
 	std::cout << "New parameter " << name << "\n";
 }
 
-function::parameter::parameter(parameter&& o):
+simple_function::parameter::parameter(const parameter& o):
+	type_(o.type_),
+	name_(o.name_)
+{
+}
+
+simple_function::parameter::parameter(parameter&& o):
 	type_(std::move(o.type_)),
 	name_(std::move(o.name_))
 {
 }
 
+const simple_function::parameter&
+simple_function::parameter::operator=(const parameter& o)
+{
+	type_ = o.type_;
+	name_ = o.name_;
+
+	return *this;
+}
+
+const simple_function::parameter&
+simple_function::parameter::operator=(parameter&& o)
+{
+	type_ = o.type_;
+	name_ = std::move(o.name_);
+
+	return *this;
+}
+
 std::shared_ptr<const type>
-function::parameter::get_type() const
+simple_function::parameter::get_type() const
 {
 	return type_;
 }
 
 const std::string&
-function::parameter::name() const
+simple_function::parameter::name() const
 {
 	return name_;
 }
 
 }}} //namespace scalpel::cpp::semantic_entities
+

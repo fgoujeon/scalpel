@@ -33,10 +33,25 @@ statement_block::statement_block()
 	std::cout << "New statement block\n";
 }
 
+statement_block::statement_block(const statement_block& o):
+	statement_blocks_(o.statement_blocks_),
+	variables_(o.variables_)
+{
+}
+
 statement_block::statement_block(statement_block&& o):
 	statement_blocks_(o.statement_blocks_),
 	variables_(o.variables_)
 {
+}
+
+const statement_block&
+statement_block::operator=(const statement_block& o)
+{
+	statement_blocks_ = o.statement_blocks_;
+	variables_ = o.variables_;
+
+	return *this;
 }
 
 const statement_block&

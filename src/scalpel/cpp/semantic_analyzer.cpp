@@ -221,7 +221,7 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 											(
 												std::make_shared<class_::member_function>
 												(
-													create_function(decl_specifier_seq_node, declarator_node),
+													create_simple_function(decl_specifier_seq_node, declarator_node),
 													current_access,
 													is_qualified<str::const_>(declarator_node),
 													is_qualified<str::volatile_>(declarator_node),
@@ -356,10 +356,10 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 	}
 }
 
-std::shared_ptr<semantic_entities::function>
-semantic_analyzer::create_function(const decl_specifier_seq& decl_specifier_seq_node, const declarator& declarator_node)
+std::shared_ptr<semantic_entities::simple_function>
+semantic_analyzer::create_simple_function(const decl_specifier_seq& decl_specifier_seq_node, const declarator& declarator_node)
 {
-	return std::make_shared<function>
+	return std::make_shared<simple_function>
 	(
 		get_function_name(declarator_node),
 		create_type(decl_specifier_seq_node, declarator_node),
@@ -371,7 +371,9 @@ semantic_analyzer::create_function(const decl_specifier_seq& decl_specifier_seq_
 std::shared_ptr<semantic_entities::operator_function>
 semantic_analyzer::create_operator_function(const decl_specifier_seq& decl_specifier_seq_node, const declarator& declarator_node)
 {
+	//
 	//get the overloaded operator
+	//
 	semantic_entities::operator_ op = semantic_entities::operator_::AMPERSAND;
 
 	auto direct_declarator_node = get_direct_declarator(declarator_node);
@@ -493,25 +495,21 @@ semantic_analyzer::create_operator_function(const decl_specifier_seq& decl_speci
 		assert(false);
 	}
 
-	//get the function's return type
-	std::shared_ptr<const type> return_type = create_type(decl_specifier_seq_node, declarator_node);
 
-	//get the function's parameter list
-	std::list<function::parameter> parameters = create_parameters(declarator_node);
 
 	return std::make_shared<operator_function>
 	(
 		op,
-		return_type,
-		std::move(parameters),
+		create_type(decl_specifier_seq_node, declarator_node),
+		create_parameters(declarator_node),
 		has_static_specifier(decl_specifier_seq_node)
 	);
 }
 
-function::parameters_t
+simple_function::parameters_t
 semantic_analyzer::create_parameters(const declarator& declarator_node)
 {
-	std::list<function::parameter> parameters;
+	std::list<simple_function::parameter> parameters;
 
 	auto direct_declarator_node = get_direct_declarator(declarator_node);
 	if(auto opt_last_part_seq_node = get_last_part_seq(direct_declarator_node))
@@ -567,7 +565,7 @@ semantic_analyzer::create_parameters(const declarator& declarator_node)
 								(
 									std::move
 									(
-										function::parameter
+										simple_function::parameter
 										(
 											create_type(decl_specifier_seq_node, declarator_node),
 											name
@@ -583,7 +581,7 @@ semantic_analyzer::create_parameters(const declarator& declarator_node)
 								(
 									std::move
 									(
-										function::parameter
+										simple_function::parameter
 										(
 											create_type(decl_specifier_seq_node, abstract_declarator_node),
 											""
@@ -597,7 +595,7 @@ semantic_analyzer::create_parameters(const declarator& declarator_node)
 								(
 									std::move
 									(
-										function::parameter
+										simple_function::parameter
 										(
 											create_type(decl_specifier_seq_node),
 											""

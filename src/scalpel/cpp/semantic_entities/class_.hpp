@@ -23,7 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "variable.hpp"
 #include "operator_function.hpp"
-#include "function.hpp"
+#include "simple_function.hpp"
 #include "named_scope_impl.hpp"
 #include "named_scope.hpp"
 #include "named_entity.hpp"
@@ -59,7 +59,7 @@ class class_:
 		class constructor;
 		class destructor;
 		class conversion_function;
-		typedef function_member<function> member_function;
+		typedef function_member<simple_function> member_function;
 		typedef function_member<operator_function> member_operator_function;
 		typedef member<variable> member_variable;
 
@@ -384,8 +384,8 @@ class class_::member<class_>:
 class class_::constructor
 {
 	public:
-		typedef function::parameters_t parameters_t;
-		typedef function::parameter parameter;
+		typedef simple_function::parameters_t parameters_t;
+		typedef simple_function::parameter parameter;
 
 		constructor
 		(
@@ -410,7 +410,7 @@ class class_::constructor
 		explicit_specified() const;
 
 	private:
-		function impl_;
+		simple_function impl_;
 		parameters_t parameters_;
 		class_::access access_;
 		bool inline_specified_;

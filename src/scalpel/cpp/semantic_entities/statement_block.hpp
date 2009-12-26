@@ -40,12 +40,12 @@ class statement_block
     public:
         statement_block();
 
-		statement_block(const statement_block&) = delete;
+		statement_block(const statement_block& o);
 
 		statement_block(statement_block&& o);
 
 		const statement_block&
-		operator=(const statement_block& o) = delete;
+		operator=(const statement_block& o);
 
 		const statement_block&
 		operator=(statement_block&& o);

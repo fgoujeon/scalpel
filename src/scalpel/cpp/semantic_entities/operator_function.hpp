@@ -23,7 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "operator_.hpp"
 #include "statement_block.hpp"
-#include "function.hpp"
+#include "simple_function.hpp"
 #include "type.hpp"
 #include <list>
 #include <memory>
@@ -32,13 +32,13 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 /**
-Represents a C++ operator function.
+Represents a C++ operator simple_function.
 */
 class operator_function
 {
     public:
-		typedef function::parameter parameter;
-		typedef function::parameters_t parameters_t;
+		typedef simple_function::parameter parameter;
+		typedef simple_function::parameters_t parameters_t;
 
         operator_function
 		(

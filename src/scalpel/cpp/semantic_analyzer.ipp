@@ -283,7 +283,7 @@ semantic_analyzer::analyze(const syntax_nodes::function_definition& function_def
 		//create a function object
 		auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
 		auto declarator_node = get_declarator(function_definition_node);
-		std::shared_ptr<function> new_function = create_function(decl_specifier_seq_node, declarator_node);
+		std::shared_ptr<simple_function> new_function = create_simple_function(decl_specifier_seq_node, declarator_node);
 
 		//find the corresponding function semantic node (must exist if the function has already been declared)
 		std::shared_ptr<named_scope> function_scope;
@@ -577,7 +577,7 @@ semantic_analyzer::analyze(const syntax_nodes::simple_declaration& simple_declar
 		auto declarator_node = get_declarator(init_declarator_list_node.front().main_node());
 		parent_entity->add(create_operator_function(decl_specifier_seq_node, declarator_node));
 	}
-	else if(is_function_declaration(simple_declaration_node))
+	else if(is_simple_function_declaration(simple_declaration_node))
 	{
 		auto opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node);
 		auto opt_init_declarator_list_node = get_init_declarator_list(simple_declaration_node);
@@ -589,7 +589,7 @@ semantic_analyzer::analyze(const syntax_nodes::simple_declaration& simple_declar
 
 		auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
 		auto declarator_node = get_declarator(init_declarator_list_node.front().main_node());
-		parent_entity->add(create_function(decl_specifier_seq_node, declarator_node));
+		parent_entity->add(create_simple_function(decl_specifier_seq_node, declarator_node));
 	}
 	else if(is_variable_declaration(simple_declaration_node))
 	{

@@ -18,14 +18,13 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_FUNCTION_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_FUNCTION_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_SIMPLE_FUNCTION_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_SIMPLE_FUNCTION_HPP
 
 #include "variable.hpp"
 #include "statement_block.hpp"
 #include "named_entity.hpp"
 #include "type.hpp"
-#include <boost/noncopyable.hpp>
 #include <string>
 #include <list>
 #include <memory>
@@ -34,18 +33,17 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 /**
-Represents a C++ function.
+Represents a C++ non-special function (which is neither a constructor nor an
+operator function nor a conversion function).
 */
-class function:
-	public named_entity,
-	public boost::noncopyable
+class simple_function: public named_entity
 {
     public:
 		class parameter;
 
 		typedef std::list<parameter> parameters_t;
 
-        function
+        simple_function
 		(
 			const std::string& name,
 			std::shared_ptr<const type> return_type,
@@ -53,11 +51,17 @@ class function:
 			bool is_static_specified
 		);
 
-		//move constructor
-		function(function&& f);
+		//copy constructor
+		simple_function(const simple_function& f);
 
-		const function&
-		operator=(function&& f);
+		//move constructor
+		simple_function(simple_function&& f);
+
+		const simple_function&
+		operator=(const simple_function& f);
+
+		const simple_function&
+		operator=(simple_function&& f);
 
         /**
         @return the name of the function
@@ -88,17 +92,20 @@ class function:
 		statement_block statement_block_;
 };
 
-class function::parameter
+class simple_function::parameter
 {
 	public:
 		parameter(std::shared_ptr<const type> t, const std::string& name);
 
-		parameter(const parameter&) = delete;
+		parameter(const parameter& o);
 
 		parameter(parameter&& o);
 
 		const parameter&
-		operator=(const parameter&) = delete;
+		operator=(const parameter& o);
+
+		const parameter&
+		operator=(parameter&& o);
 
 		std::shared_ptr<const type>
 		get_type() const;
@@ -114,3 +121,4 @@ class function::parameter
 }}} //namespace scalpel::cpp::semantic_entities
 
 #endif
+

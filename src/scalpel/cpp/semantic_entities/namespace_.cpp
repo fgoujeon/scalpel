@@ -144,7 +144,7 @@ namespace_::add(std::shared_ptr<class_> member)
 }
 
 void
-namespace_::add(std::shared_ptr<function> member)
+namespace_::add(std::shared_ptr<simple_function> member)
 {
     functions_.push_back(member);
 	named_scope_impl_.add_to_named_entities(member);

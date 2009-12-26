@@ -23,7 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "variable.hpp"
 #include "operator_function.hpp"
-#include "function.hpp"
+#include "simple_function.hpp"
 #include "class_.hpp"
 #include "named_scope_impl.hpp"
 #include "named_scope.hpp"
@@ -59,7 +59,7 @@ class namespace_:
 		typedef classes_t::const_iterator class_const_iterator;
 		typedef boost::iterator_range<class_const_iterator> class_const_iterator_range;
 
-		typedef std::vector<std::shared_ptr<function>> functions_t;
+		typedef std::vector<std::shared_ptr<simple_function>> functions_t;
 		typedef functions_t::const_iterator function_const_iterator;
 		typedef boost::iterator_range<function_const_iterator> function_const_iterator_range;
 
@@ -144,7 +144,7 @@ class namespace_:
         add(std::shared_ptr<class_> member);
 
         void
-        add(std::shared_ptr<function> member);
+        add(std::shared_ptr<simple_function> member);
 
         void
         add(std::shared_ptr<operator_function> member);

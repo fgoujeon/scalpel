@@ -78,7 +78,7 @@ print
 void
 print
 (
-	const function& f,
+	const simple_function& f,
 	const unsigned int indent_level,
 	const std::string& extra_attributes = ""
 );
@@ -101,7 +101,7 @@ print
 void
 print
 (
-	const function::parameter& p,
+	const simple_function::parameter& p,
 	const unsigned int indent_level
 );
 

@@ -250,12 +250,12 @@ print
 void
 print
 (
-	const function& f,
+	const simple_function& f,
 	const unsigned int indent_level,
 	const std::string& extra_attributes
 )
 {
-	std::cout << indent(indent_level) << "<function";
+	std::cout << indent(indent_level) << "<simple_function";
 	std::cout << " name=\"" << f.name() << "\"";
 	std::cout << extra_attributes;
 	std::cout << ">\n";
@@ -265,14 +265,14 @@ print
 	std::cout << indent(indent_level + 1) << "</return_type>\n";
 
 	std::cout << indent(indent_level + 1) << "<parameters>\n";
-	const std::list<function::parameter>& parameters = f.parameters();
+	const std::list<simple_function::parameter>& parameters = f.parameters();
 	for(auto i = parameters.begin(); i != parameters.end(); ++i)
 	{
 		print(*i, indent_level + 2);
 	}
 	std::cout << indent(indent_level + 1) << "</parameters>\n";
 
-	std::cout << indent(indent_level) << "</function>\n";
+	std::cout << indent(indent_level) << "</simple_function>\n";
 }
 
 void
@@ -336,7 +336,7 @@ print
 void
 print
 (
-	const function::parameter& p,
+	const simple_function::parameter& p,
 	const unsigned int indent_level
 )
 {
