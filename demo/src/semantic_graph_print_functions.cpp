@@ -257,6 +257,8 @@ print
 {
 	std::cout << indent(indent_level) << "<simple_function";
 	std::cout << " name=\"" << f.name() << "\"";
+	if(!f.defined())
+		std::cout << " defined=\"false\"";
 	std::cout << extra_attributes;
 	std::cout << ">\n";
 

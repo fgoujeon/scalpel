@@ -84,4 +84,16 @@ operator_function::static_specified() const
 	return static_specified_;
 }
 
+bool
+operator_function::defined() const
+{
+	return defined_;
+}
+
+void
+operator_function::defined(bool d)
+{
+	defined_ = d;
+}
+
 }}} //namespace scalpel::cpp::semantic_entities

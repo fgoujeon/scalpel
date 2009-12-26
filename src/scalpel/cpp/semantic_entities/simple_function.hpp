@@ -84,11 +84,18 @@ class simple_function: public named_entity
 		bool
 		static_specified() const;
 
+		bool
+		defined() const;
+
+		void
+		defined(bool d);
+
     private:
         std::string name_;
 		std::shared_ptr<const type> return_type_;
 		std::list<parameter> parameters_;
 		bool static_specified_;
+		bool defined_;
 		statement_block statement_block_;
 };
 

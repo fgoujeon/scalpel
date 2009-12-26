@@ -19,8 +19,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "simple_function.hpp"
-#include "class_.hpp"
-#include "namespace_.hpp"
 #include <iostream>
 #include <cassert>
 
@@ -37,9 +35,10 @@ simple_function::simple_function
     name_(name),
 	return_type_(return_type),
 	parameters_(std::move(parameters)),
-	static_specified_(is_static_specified)
+	static_specified_(is_static_specified),
+	defined_(false)
 {
-	std::cout << "New simple_function " << name << "\n";
+	std::cout << "New simple function " << name << "\n";
 }
 
 simple_function::simple_function(const simple_function& f):
@@ -47,6 +46,7 @@ simple_function::simple_function(const simple_function& f):
 	return_type_(f.return_type_),
 	parameters_(f.parameters_),
 	static_specified_(f.static_specified_),
+	defined_(f.defined_),
 	statement_block_(f.statement_block_)
 {
 }
@@ -56,6 +56,7 @@ simple_function::simple_function(simple_function&& f):
 	return_type_(std::move(f.return_type_)),
 	parameters_(std::move(f.parameters_)),
 	static_specified_(f.static_specified_),
+	defined_(f.defined_),
 	statement_block_(std::move(f.statement_block_))
 {
 }
@@ -67,6 +68,7 @@ simple_function::operator=(const simple_function& f)
 	return_type_ = f.return_type_;
 	parameters_ = f.parameters_;
 	static_specified_ = f.static_specified_;
+	defined_ = f.defined_;
 	statement_block_ = f.statement_block_;
 
 	return *this;
@@ -79,6 +81,7 @@ simple_function::operator=(simple_function&& f)
 	return_type_ = std::move(f.return_type_);
 	parameters_ = std::move(f.parameters_);
 	static_specified_ = f.static_specified_;
+	defined_ = f.defined_;
 	statement_block_ = std::move(f.statement_block_);
 
 	return *this;
@@ -112,6 +115,18 @@ bool
 simple_function::static_specified() const
 {
 	return static_specified_;
+}
+
+bool
+simple_function::defined() const
+{
+	return defined_;
+}
+
+void
+simple_function::defined(bool d)
+{
+	defined_ = d;
 }
 
 

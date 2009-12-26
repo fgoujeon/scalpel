@@ -66,12 +66,19 @@ class operator_function
 		bool
 		static_specified() const;
 
+		bool
+		defined() const;
+
+		void
+		defined(bool d);
+
     private:
         operator_ op_;
 		statement_block statement_block_;
 		std::shared_ptr<const type> return_type_;
 		parameters_t parameters_;
 		bool static_specified_;
+		bool defined_;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

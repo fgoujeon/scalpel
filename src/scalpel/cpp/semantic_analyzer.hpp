@@ -321,6 +321,35 @@ class semantic_analyzer
 		void
 		fill_class(std::shared_ptr<semantic_entities::class_> c, const syntax_nodes::class_specifier& syntax_node);
 
+
+
+		//
+		//function definition functions
+		//
+
+		template<class FunctionT, class ParentEntityT>
+		void
+		define_function
+		(
+			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
+			const syntax_nodes::declarator& declarator_node,
+			std::shared_ptr<ParentEntityT> parent_entity
+		);
+
+
+
+		//
+		//function creation functions
+		//
+
+		template<class FunctionT>
+		std::shared_ptr<FunctionT>
+		create_function
+		(
+			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
+			const syntax_nodes::declarator& declarator_node
+		);
+
 		std::shared_ptr<semantic_entities::simple_function>
 		create_simple_function
 		(
@@ -337,6 +366,8 @@ class semantic_analyzer
 
 		semantic_entities::simple_function::parameters_t
 		create_parameters(const syntax_nodes::declarator& declarator_node);
+
+
 
 		std::shared_ptr<const semantic_entities::type>
 		create_type

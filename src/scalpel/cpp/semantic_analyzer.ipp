@@ -45,25 +45,25 @@ semantic_analyzer::alternative_visitor<ParentEntityT>::operator()(const T& synta
 
 
 
-template<class SyntaxNodeT, class EntityT>
+template<class SyntaxNodeT, class ParentEntityT>
 void
 semantic_analyzer::analyze
 (
 	const SyntaxNodeT& syntax_node,
-	std::shared_ptr<EntityT> parent_entity,
+	std::shared_ptr<ParentEntityT> parent_entity,
 	typename boost::enable_if<syntax_nodes::utility::is_alternative_node<SyntaxNodeT>>::type*
 )
 {
-	alternative_visitor<EntityT> visitor(*this, parent_entity);
+	alternative_visitor<ParentEntityT> visitor(*this, parent_entity);
 	syntax_nodes::apply_visitor(visitor, syntax_node);
 }
 
-template<class SyntaxNodeT, class EntityT>
+template<class SyntaxNodeT, class ParentEntityT>
 void
 semantic_analyzer::analyze
 (
 	const SyntaxNodeT& syntax_node,
-	std::shared_ptr<EntityT> parent_entity,
+	std::shared_ptr<ParentEntityT> parent_entity,
 	typename boost::enable_if<syntax_nodes::utility::is_list_node<SyntaxNodeT>>::type*
 )
 {
@@ -75,33 +75,33 @@ semantic_analyzer::analyze
 
 
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::asm_definition&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::asm_definition&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::break_statement&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::break_statement&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::case_statement&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::case_statement&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::class_head&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::class_head&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::class_specifier& class_specifier_node, std::shared_ptr<EntityT> parent_entity)
+semantic_analyzer::analyze(const syntax_nodes::class_specifier& class_specifier_node, std::shared_ptr<ParentEntityT> parent_entity)
 {
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
@@ -113,128 +113,131 @@ semantic_analyzer::analyze(const syntax_nodes::class_specifier& class_specifier_
 	scope_cursor_.leave_scope();
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::classic_labeled_statement&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::classic_labeled_statement&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::compound_statement& syntax_node, std::shared_ptr<EntityT> parent_entity)
+semantic_analyzer::analyze(const syntax_nodes::compound_statement& syntax_node, std::shared_ptr<ParentEntityT> parent_entity)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::continue_statement&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::continue_statement&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::conversion_function_id&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::conversion_function_id&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::ctor_initializer&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::ctor_initializer&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::cv_qualifier&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::cv_qualifier&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::declarator&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::declarator&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::default_statement&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::default_statement&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::destructor_name&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::destructor_name&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::direct_declarator&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::direct_declarator&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::direct_declarator_array_part&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::direct_declarator_array_part&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::direct_declarator_function_part&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::direct_declarator_function_part&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::do_while_statement& syntax_node, std::shared_ptr<EntityT> parent_entity)
+semantic_analyzer::analyze(const syntax_nodes::do_while_statement& syntax_node, std::shared_ptr<ParentEntityT> parent_entity)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::elaborated_type_specifier&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::elaborated_type_specifier&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::explicit_instantiation&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::explicit_instantiation&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::explicit_specialization&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::explicit_specialization&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::expression_statement&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::expression_statement&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::for_statement& syntax_node, std::shared_ptr<EntityT> parent_entity)
+semantic_analyzer::analyze(const syntax_nodes::for_statement& syntax_node, std::shared_ptr<ParentEntityT> parent_entity)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::function_definition& function_definition_node, std::shared_ptr<EntityT> parent_entity)
+semantic_analyzer::analyze(const syntax_nodes::function_definition& function_definition_node, std::shared_ptr<ParentEntityT> parent_entity)
 {
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
 	using namespace detail::semantic_analysis;
 
+	auto declarator_node = get_declarator(function_definition_node);
+
 	//
 	//get the enclosing scope of the function
 	//
+	/*
 	std::shared_ptr<named_scope> enclosing_scope;
 
-	auto direct_declarator_node = get_direct_declarator(get_declarator(function_definition_node));
+	auto direct_declarator_node = get_direct_declarator(declarator_node);
 	auto first_part_node = get_first_part(direct_declarator_node);
 	auto opt_declarator_id_node = get<declarator_id>(&first_part_node);
 	if(opt_declarator_id_node)
@@ -277,133 +280,115 @@ semantic_analyzer::analyze(const syntax_nodes::function_definition& function_def
 			}
 		}
 	}
+	*/
 
 	if(auto opt_decl_specifier_seq_node = get_decl_specifier_seq(function_definition_node))
 	{
-		//create a function object
 		auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
-		auto declarator_node = get_declarator(function_definition_node);
-		std::shared_ptr<simple_function> new_function = create_simple_function(decl_specifier_seq_node, declarator_node);
-
-		//find the corresponding function semantic node (must exist if the function has already been declared)
-		std::shared_ptr<named_scope> function_scope;
-		if(enclosing_scope)
+		if(is_simple_function_declaration(declarator_node))
 		{
-			auto scopes = enclosing_scope->named_scopes();
-			for(auto i = scopes.begin(); i != scopes.end(); ++i)
-			{
-				std::shared_ptr<named_scope> named_scope = *i;
-
-				///\todo check the function's signature
-				if(named_scope->name() == new_function->name())
-				{
-					function_scope = named_scope;
-					break;
-				}
-			}
+			define_function<simple_function>(decl_specifier_seq_node, declarator_node, parent_entity);
 		}
-
-		//if the function hasn't been declared, this definition serves as a declaration
-		if(!function_scope)
+		else if(is_operator_function_declaration(declarator_node))
 		{
-			parent_entity->add(new_function);
+			define_function<operator_function>(decl_specifier_seq_node, declarator_node, parent_entity);
 		}
 	}
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::goto_statement&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::goto_statement&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::handler& syntax_node, std::shared_ptr<EntityT> parent_entity)
+semantic_analyzer::analyze(const syntax_nodes::handler& syntax_node, std::shared_ptr<ParentEntityT> parent_entity)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::identifier&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::identifier&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::if_statement& syntax_node, std::shared_ptr<EntityT> parent_entity)
+semantic_analyzer::analyze(const syntax_nodes::if_statement& syntax_node, std::shared_ptr<ParentEntityT> parent_entity)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::init_declarator&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::init_declarator&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::linkage_specification&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::linkage_specification&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::mem_initializer&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::mem_initializer&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::member_declaration_function_definition&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::member_declaration_function_definition&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::member_declaration_member_declarator_list&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::member_declaration_member_declarator_list&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::member_declaration_unqualified_id&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::member_declaration_unqualified_id&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::member_declarator_bit_field_member&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::member_declarator_bit_field_member&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::member_declarator_declarator&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::member_declarator_declarator&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::member_specification&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::member_specification&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::member_specification_access_specifier&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::member_specification_access_specifier&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::namespace_alias_definition&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::namespace_alias_definition&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::namespace_definition& syntax_node, std::shared_ptr<EntityT> parent_entity)
+semantic_analyzer::analyze(const syntax_nodes::namespace_definition& syntax_node, std::shared_ptr<ParentEntityT> parent_entity)
 {
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
@@ -432,81 +417,81 @@ semantic_analyzer::analyze(const syntax_nodes::namespace_definition& syntax_node
 	scope_cursor_.leave_scope();
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::nested_identifier_or_template_id&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::nested_identifier_or_template_id&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::nested_name_specifier&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::nested_name_specifier&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::nested_name_specifier_last_part&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::nested_name_specifier_last_part&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::operator_function_id&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::operator_function_id&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::parameter_declaration&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::parameter_declaration&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::parameter_declaration_clause&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::parameter_declaration_clause&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::ptr_operator&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::ptr_operator&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::qualified_identifier&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::qualified_identifier&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::qualified_nested_id&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::qualified_nested_id&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::qualified_operator_function_id&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::qualified_operator_function_id&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::qualified_template_id&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::qualified_template_id&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::return_statement&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::return_statement&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::simple_declaration& simple_declaration_node, std::shared_ptr<EntityT> parent_entity)
+semantic_analyzer::analyze(const syntax_nodes::simple_declaration& simple_declaration_node, std::shared_ptr<ParentEntityT> parent_entity)
 {
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
@@ -616,64 +601,106 @@ semantic_analyzer::analyze(const syntax_nodes::simple_declaration& simple_declar
 	}
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::simple_template_type_specifier&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::simple_template_type_specifier&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::switch_statement&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::switch_statement&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::template_declaration&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::template_declaration&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::template_id&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::template_id&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::try_block& syntax_node, std::shared_ptr<EntityT> parent_entity)
+semantic_analyzer::analyze(const syntax_nodes::try_block& syntax_node, std::shared_ptr<ParentEntityT> parent_entity)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::type_id_sizeof_expression&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::type_id_sizeof_expression&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::unary_sizeof_expression&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::unary_sizeof_expression&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::using_declaration&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::using_declaration&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::using_directive&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::using_directive&, std::shared_ptr<ParentEntityT>)
 {
 }
 
-template<class EntityT>
+template<class ParentEntityT>
 void
-semantic_analyzer::analyze(const syntax_nodes::while_statement&, std::shared_ptr<EntityT>)
+semantic_analyzer::analyze(const syntax_nodes::while_statement&, std::shared_ptr<ParentEntityT>)
 {
+}
+
+template<class FunctionT, class ParentEntityT>
+void
+semantic_analyzer::define_function
+(
+	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
+	const syntax_nodes::declarator& declarator_node,
+	std::shared_ptr<ParentEntityT> parent_entity
+)
+{
+	//create a FunctionT object
+	std::shared_ptr<FunctionT> new_function = create_function<FunctionT>(decl_specifier_seq_node, declarator_node);
+
+	//find the corresponding function semantic entity (must exist if the function has already been declared)
+	std::shared_ptr<FunctionT> function_entity;
+	/*
+	if(enclosing_scope)
+	{
+		auto scopes = enclosing_scope->named_scopes();
+		for(auto i = scopes.begin(); i != scopes.end(); ++i)
+		{
+			std::shared_ptr<named_scope> named_scope = *i;
+
+			///\todo check the function's signature
+			if(named_scope->name() == new_function->name())
+			{
+				function_entity = named_scope;
+				break;
+			}
+		}
+	}
+	*/
+
+	//if the function hasn't been declared, this definition serves as a declaration
+	if(!function_entity)
+	{
+		function_entity = new_function;
+		parent_entity->add(new_function);
+	}
+
+	function_entity->defined(true);
 }
 
 }} //namespace scalpel::cpp

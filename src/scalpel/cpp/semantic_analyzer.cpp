@@ -356,6 +356,28 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 	}
 }
 
+template<>
+std::shared_ptr<semantic_entities::simple_function>
+semantic_analyzer::create_function
+(
+	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
+	const syntax_nodes::declarator& declarator_node
+)
+{
+	return create_simple_function(decl_specifier_seq_node, declarator_node);
+}
+
+template<>
+std::shared_ptr<semantic_entities::operator_function>
+semantic_analyzer::create_function
+(
+	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
+	const syntax_nodes::declarator& declarator_node
+)
+{
+	return create_operator_function(decl_specifier_seq_node, declarator_node);
+}
+
 std::shared_ptr<semantic_entities::simple_function>
 semantic_analyzer::create_simple_function(const decl_specifier_seq& decl_specifier_seq_node, const declarator& declarator_node)
 {
