@@ -52,11 +52,6 @@ BOOST_AUTO_TEST_CASE(ambiguous_cases_test_case)
 	t.parse_files("ambiguous_cases");
 }
 
-BOOST_AUTO_TEST_CASE(gcc_test_case)
-{
-	t.parse_files("gcc");
-}
-
 BOOST_AUTO_TEST_CASE(standard_library_test_case)
 {
 	t.parse_files("standard_library");

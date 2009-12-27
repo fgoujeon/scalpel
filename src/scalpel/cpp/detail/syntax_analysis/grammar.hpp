@@ -38,18 +38,6 @@ class grammar
     public:
         struct configuration
         {
-            configuration():
-                enable_typeof_support(true),
-                enable_restrict_support(true),
-				enable_attribute_support(true),
-				enable_real_imag_support(true)
-            {
-            }
-
-            bool enable_typeof_support;
-            bool enable_restrict_support;
-			bool enable_attribute_support;
-			bool enable_real_imag_support;
         };
 
         enum parser_id
@@ -346,11 +334,6 @@ class grammar
             SKIP_FUNCTION_BODIES_MODE_STATEMENT_SEQ_ITEM,
             SKIP_FUNCTION_BODIES_MODE_NON_SPECIAL_CHAR_SEQ,
             SKIP_FUNCTION_BODIES_MODE_NON_SPECIAL_CHAR,
-
-
-            TYPEOF_EXPRESSION,
-            TYPEOF_KEYWORD,
-            RESTRICT_KEYWORD
         };
 
         grammar();
@@ -689,17 +672,6 @@ class grammar
         */
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::IDENTIFIER_OR_TEMPLATE_ID>> identifier_or_template_id;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::NESTED_IDENTIFIER_OR_TEMPLATE_ID>> nested_identifier_or_template_id;
-
-
-        /*
-        Non-standard extensions
-        */
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TYPEOF_EXPRESSION>> typeof_expression;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TYPEOF_KEYWORD>> typeof_keyword;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::RESTRICT_KEYWORD>> restrict_keyword;
-		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::SPACE>> attribute_expression;
-		boost::spirit::rule<scanner_t> attribute_content;
-		boost::spirit::rule<scanner_t> bracketed_attribute_content;
 
 
         /*

@@ -20,6 +20,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "single_file_test.hpp"
 #include <scalpel/cpp/syntax_nodes/utility/value_getter.hpp>
+#include <memory>
 #include <iostream>
 #include <sstream>
 #include <iomanip>
@@ -64,10 +65,22 @@ single_file_test::parse_files(const std::string& test_directory)
 		std::string preprocessed_code = preprocessor_(buffer.str(), include_paths_, macro_definitions_);
 
 		//syntax analysis
-		scalpel::cpp::syntax_tree tree = syntax_analyzer_(preprocessed_code); //throws an exception if parsing fails
+		std::unique_ptr<scalpel::cpp::syntax_tree> tree;
+		try
+		{
+			tree = std::move(std::unique_ptr<scalpel::cpp::syntax_tree>(new scalpel::cpp::syntax_tree(syntax_analyzer_(preprocessed_code))));
+		}
+		catch(...)
+		{
+			std::cout << "Preprocessed code of " << file_name_oss.str() << ":\n";
+			std::cout << "***\n";
+			std::cout << preprocessed_code;
+			std::cout << "\n***\n";
+			throw;
+		}
 
 		//check syntax analysis results
-		if(preprocessed_code != get_value(tree))
+		if(preprocessed_code != get_value(*tree))
 		{
 			std::cout << "Analysis error!\n";
 			std::cout << "Original content of " << file_name_oss.str() << ":\n";
@@ -76,7 +89,7 @@ single_file_test::parse_files(const std::string& test_directory)
 			std::cout << "\n***\n";
 			std::cout << "Analysis results:\n";
 			std::cout << "***\n";
-			std::cout << get_value(tree);
+			std::cout << get_value(*tree);
 			std::cout << "\n***\n\n";
 
 			throw "Analysis error!";

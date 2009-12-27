@@ -41,8 +41,6 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 	(optional_node<space>)
 	(optional_node<identifier>)
 	(optional_node<space>)
-	(optional_node<leaf_node>)
-	(optional_node<space>)
 	(predefined_text_node<str::opening_brace>)
 	(optional_node<space>)
 	(optional_node<declaration_seq>)
@@ -58,10 +56,10 @@ get_identifier(const namespace_definition& o)
 }
 
 inline
-const optional_node<list_node<declaration>>&
+const optional_node<declaration_seq>&
 get_declaration_seq(const namespace_definition& o)
 {
-	return get<8>(o);
+	return get<6>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

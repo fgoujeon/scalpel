@@ -26,7 +26,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "enum_specifier.hpp"
 #include "elaborated_type_specifier.hpp"
 #include "cv_qualifier.hpp"
-#include "typeof_expression.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -38,8 +37,7 @@ typedef
 		class_specifier,
 		enum_specifier,
 		elaborated_type_specifier,
-		cv_qualifier,
-		typeof_expression
+		cv_qualifier
 	>
 	type_specifier
 ;

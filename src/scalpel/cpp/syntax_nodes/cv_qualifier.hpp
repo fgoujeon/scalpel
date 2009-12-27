@@ -30,10 +30,7 @@ typedef
 	alternative_node
 	<
 		predefined_text_node<str::const_>,
-		predefined_text_node<str::volatile_>,
-		predefined_text_node<str::restrict_>,
-		predefined_text_node<str::__restrict___>,
-		predefined_text_node<str::__restrict_>
+		predefined_text_node<str::volatile_>
 	>
 	cv_qualifier
 ;

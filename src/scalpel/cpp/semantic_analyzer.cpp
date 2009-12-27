@@ -969,7 +969,6 @@ semantic_analyzer::get_type_info
 	//enum_specifier
 	//elaborated_type_specifier
 	//cv_qualifier
-	//typeof_expression
 
 	if(auto opt_simple_type_specifier_node = get<simple_type_specifier>(&type_specifier_node))
 	{
@@ -1043,9 +1042,6 @@ semantic_analyzer::get_type_info
 		auto cv_qualifier_node = *opt_cv_qualifier_node;
 		//predefined_text_node<str::const_>
 		//predefined_text_node<str::volatile_>
-		//predefined_text_node<str::restrict_>
-		//predefined_text_node<str::__restrict___>
-		//predefined_text_node<str::__restrict_>
 
 		if(get<predefined_text_node<str::const_>>(&cv_qualifier_node))
 		{

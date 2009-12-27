@@ -68,7 +68,6 @@ grammar::grammar()
 			| "using"
 			| "unsigned"
 			| "union"
-			| typeof_keyword
 			| "typename"
 			| "typeid"
 			| "typedef"
@@ -85,7 +84,6 @@ grammar::grammar()
 			| "signed"
 			| "short"
 			| "return"
-			| restrict_keyword
 			| "reinterpret_cast"
 			| "register"
 			| "public"
@@ -571,34 +569,16 @@ grammar::grammar()
 		= str_p("sizeof") >> !s >> unary_expression
 	;
 
-	if(configuration_.enable_real_imag_support)
-	{
-		unary_operator
-			= str_p("++")
-			| "--"
-			| '*'
-			| '&'
-			| '+'
-			| '-'
-			| '!'
-			| '~'
-			| "__real__"
-			| "__imag__"
-		;
-	}
-	else
-	{
-		unary_operator
-			= str_p("++")
-			| "--"
-			| '*'
-			| '&'
-			| '+'
-			| '-'
-			| '!'
-			| '~'
-		;
-	}
+	unary_operator
+		= str_p("++")
+		| "--"
+		| '*'
+		| '&'
+		| '+'
+		| '-'
+		| '!'
+		| '~'
+	;
 
 	new_expression
 		= type_id_new_expression
@@ -1035,7 +1015,6 @@ grammar::grammar()
 		| enum_specifier
 		| elaborated_type_specifier
 		| cv_qualifier
-		| typeof_expression
 	;
 
 	simple_type_specifier
@@ -1096,7 +1075,7 @@ grammar::grammar()
 	;
 
 	namespace_definition
-		= str_p("namespace") >> !s >> !(identifier >> !s) >> !(attribute_expression >> !s) >> '{' >> !s >> !(declaration_seq >> !s) >> '}'
+		= str_p("namespace") >> !s >> !(identifier >> !s) >> '{' >> !s >> !(declaration_seq >> !s) >> '}'
 	;
 
 	namespace_alias_definition
@@ -1247,7 +1226,7 @@ grammar::grammar()
 		| direct_declarator_array_part
 	;
 	direct_declarator_function_part
-		= '(' >> !s >> !(parameter_declaration_clause >> !s) >> ')' >> !(!s >> cv_qualifier_seq) >> !(!s >> exception_specification) >> !(!s >> attribute_expression)
+		= '(' >> !s >> !(parameter_declaration_clause >> !s) >> ')' >> !(!s >> cv_qualifier_seq) >> !(!s >> exception_specification)
 	;
 	direct_declarator_array_part
 		= '[' >> !s >> !(conditional_expression >> !s) >> ']'
@@ -1278,7 +1257,6 @@ grammar::grammar()
 	cv_qualifier
 		= str_p("const")
 		| "volatile"
-		| token_node_d[restrict_keyword]
 	;
 
 	declarator_id
@@ -1730,50 +1708,6 @@ grammar::grammar()
 	nested_identifier_or_template_id
 		= !(str_p("::") >> !s) >> !(nested_name_specifier >> !s) >> identifier_or_template_id
 	;
-
-
-	/*
-	Extensions
-	These rules are not in the standard, but are required to parse some standard library implementations
-	*/
-	if(configuration_.enable_typeof_support)
-	{
-		typeof_expression
-			= typeof_keyword >> !s >> '(' >> !s >> expression >> !s >> ')'
-		;
-
-		typeof_keyword
-			= str_p("__typeof__")
-			| "__typeof"
-			| "typeof"
-		;
-	}
-
-	if(configuration_.enable_restrict_support)
-	{
-		restrict_keyword
-			= str_p("__restrict__")
-			| "__restrict"
-			| "restrict"
-		;
-	}
-
-	if(configuration_.enable_attribute_support)
-	{
-		attribute_expression
-			= token_node_d
-			[
-				str_p("__attribute__") >> !s >> '(' >> !s >> '(' >> !s >> attribute_content >> !s >> ')' >> !s >> ')'
-			]
-		;
-		attribute_content
-			= bracketed_attribute_content
-			| *(anychar_p - (')' >> !s >> ')'))
-		;
-		bracketed_attribute_content
-			= *(anychar_p - (ch_p('(') | ')')) >> '(' >> attribute_content >> ')'
-		;
-	}
 }
 
 const grammar::configuration&
