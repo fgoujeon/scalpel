@@ -47,7 +47,7 @@ syntax_analyzer::operator()(const std::string& input)
 	if(!info.full)
 	{
 		std::ostringstream failure_message;
-		failure_message << "Parsing stopped at:\n***\n" << info.stop << "\n***";
+		failure_message << "Parsing stopped at:\n***\n" << info.stop << "***\n";
 		throw std::runtime_error(failure_message.str().c_str());
 	}
 

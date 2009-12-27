@@ -61,16 +61,7 @@ single_file_test::parse_files(const std::string& test_directory)
 		std::cout << "Analyzing " << file_name_oss.str() << "...\n";
 
 		//preprocessing
-		std::vector<std::string> include_paths =
-		{
-			"/usr/include",
-			"/usr/include/c++/4.4.0",
-			"/usr/include/c++/4.4.0/i686-pc-linux-gnu",
-			"/usr/include/c++/4.4.0/parallel",
-			"/usr/include/linux",
-			"/usr/lib/gcc/i686-pc-linux-gnu/4.4.0/include"
-		};
-		std::string preprocessed_code = preprocessor_(buffer.str(), include_paths);
+		std::string preprocessed_code = preprocessor_(buffer.str(), include_paths_, macro_definitions_);
 
 		//syntax analysis
 		scalpel::cpp::syntax_tree tree = syntax_analyzer_(preprocessed_code); //throws an exception if parsing fails
@@ -94,5 +85,17 @@ single_file_test::parse_files(const std::string& test_directory)
 		//semantic analysis
 		//semantic_analyzer_(tree);
     }
+}
+
+void
+single_file_test::include_paths(const std::vector<std::string>& include_paths)
+{
+	include_paths_ = include_paths;
+}
+
+void
+single_file_test::macro_definitions(const std::vector<std::string>& macro_definitions)
+{
+	macro_definitions_ = macro_definitions;
 }
 

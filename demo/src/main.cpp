@@ -34,6 +34,7 @@ main(int argc, char** argv)
 {
 	std::vector<std::string> input_files;
 	std::vector<std::string> include_paths;
+	std::vector<std::string> macro_definitions;
 	bool print_syntax_tree = true;
 	bool print_semantic_graph = true;
 
@@ -46,10 +47,21 @@ main(int argc, char** argv)
 			("input-file", po::value<std::vector<std::string>>(&input_files), "input file")
 		;
 
-		po::options_description visible_options("Allowed options");
+		po::options_description visible_options("Visible options");
 		visible_options.add_options()
 			("help,h", "produce help message")
 			("include-path,I", po::value<std::vector<std::string>>(&include_paths), "include path")
+			(
+				"macro-definition,D",
+				po::value<std::vector<std::string>>(&macro_definitions),
+				"Macro definition. Possible formats:\n"
+				"\"MACRO\" define MACRO as 1\n"
+				"\"MACRO=\" define MACRO as nothing (empty)\n"
+				"\"MACRO=definition\" define MACRO as definition\n"
+				"\"MACRO(x)\" define MACRO(x) as 1\n"
+				"\"MACRO(x)=\" define MACRO(x) as nothing (empty)\n"
+				"\"MACRO(x)=definition\" define MACRO(x) as definition"
+			)
 			("no-syntax-tree", "don't print syntax tree")
 			("no-semantic-graph", "don't print semantic graph")
 		;
@@ -101,7 +113,7 @@ main(int argc, char** argv)
 		std::cout << "Analyzing " << filename << "...\n";
 
 		//preprocessing
-		std::string preprocessed_code = preprocessor(buffer.str(), include_paths);
+		std::string preprocessed_code = preprocessor(buffer.str(), include_paths, macro_definitions);
 
 		//syntax analysis
 		scalpel::cpp::syntax_tree tree = syntax_analyzer(preprocessed_code);

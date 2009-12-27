@@ -38,8 +38,18 @@ include_directories(
 	../src
 )
 
+#Boost
+include(FindBoost)
+find_package(
+	Boost 1.36.0
+	REQUIRED program_options
+)
+link_directories(${Boost_LIBRARY_DIRS})
+include_directories(${Boost_INCLUDE_DIRS})
+
 #link
 target_link_libraries(
 	test
 	scalpel
+	${Boost_LIBRARIES}
 )

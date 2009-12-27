@@ -31,7 +31,8 @@ namespace scalpel { namespace cpp
 std::string preprocessor::operator()
 (
 	const std::string& input,
-	const std::vector<std::string>& include_paths
+	const std::vector<std::string>& include_paths,
+	const std::vector<std::string>& macro_definitions
 )
 {
     using namespace boost::wave;
@@ -67,6 +68,10 @@ std::string preprocessor::operator()
 	for(auto i = include_paths.begin(); i != include_paths.end(); ++i)
 	{
 		ctx.add_sysinclude_path(i->c_str());
+	}
+	for(auto i = macro_definitions.begin(); i != macro_definitions.end(); ++i)
+	{
+		ctx.add_macro_definition(i->c_str(), true);
 	}
 
     // The input stream is preprocessed for you during iteration

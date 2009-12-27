@@ -33,7 +33,8 @@ class preprocessor
 		std::string operator()
 		(
 			const std::string& input,
-			const std::vector<std::string>& include_paths
+			const std::vector<std::string>& include_paths,
+			const std::vector<std::string>& macro_definitions
 		);
 };
 
