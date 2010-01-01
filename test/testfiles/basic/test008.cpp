@@ -52,6 +52,7 @@ class test : public n::n2::super_test, virtual virtual_base, protected virtual v
 	private:
 		int value_;
 		static const bool b_ = true ;
+		static const bool b2_ = 0 == 1;
 };
 
 test :: test(int i):

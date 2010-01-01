@@ -21,7 +21,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_MEMBER_DECLARATOR_DECLARATOR_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_MEMBER_DECLARATOR_DECLARATOR_HPP
 
-#include "pure_specifier.hpp"
 #include "constant_initializer.hpp"
 #include "declarator.hpp"
 #include "common.hpp"
@@ -30,23 +29,8 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 /**
-member_declarator_declarator_last_part
-	= pure_specifier
-	| constant_initializer
-;
-*/
-typedef
-	alternative_node
-	<
-		pure_specifier,
-		constant_initializer
-	>
-	member_declarator_declarator_last_part
-;
-
-/**
 member_declarator_declarator
-	= declarator >> !(!s >> member_declarator_declarator_last_part)
+	= declarator >> !(!s >> constant_initializer)
 ;
 */
 typedef
@@ -54,7 +38,7 @@ typedef
 	<
 		declarator,
 		optional_node<space>,
-		optional_node<member_declarator_declarator_last_part>
+		optional_node<constant_initializer>
 	>
 	member_declarator_declarator
 ;
@@ -67,7 +51,7 @@ get_declarator(const member_declarator_declarator& o)
 }
 
 inline
-const optional_node<member_declarator_declarator_last_part>&
+const optional_node<constant_initializer>&
 get_last_part(const member_declarator_declarator& o)
 {
 	return get<2>(o);

@@ -1459,18 +1459,10 @@ grammar::grammar()
 		| member_declarator_bit_field_member
 	;
 	member_declarator_declarator
-		= declarator >> !(!s >> member_declarator_declarator_last_part)
-	;
-	member_declarator_declarator_last_part
-		= pure_specifier
-		| constant_initializer
+		= declarator >> !(!s >> constant_initializer)
 	;
 	member_declarator_bit_field_member
 		= !(identifier >> !s) >> ':' >> !s >> conditional_expression
-	;
-
-	pure_specifier
-		= ch_p('=') >> !s >> '0'
 	;
 
 	constant_initializer
