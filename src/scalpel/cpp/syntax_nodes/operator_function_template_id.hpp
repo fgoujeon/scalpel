@@ -18,18 +18,29 @@ You should have received a copy of the GNU General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "template_id.hpp"
-#include "template_argument_list.hpp"
+#ifndef SCALPEL_CPP_SYNTAX_NODES_OPERATOR_FUNCTION_TEMPLATE_ID_HPP
+#define SCALPEL_CPP_SYNTAX_NODES_OPERATOR_FUNCTION_TEMPLATE_ID_HPP
 
-#include "detail/macros/sequence_node_pimpl_definition.hpp"
+#include "operator_function_id.hpp"
+#include "common.hpp"
+
+#include "detail/macros/sequence_node_pimpl_declaration.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
+class template_argument;
+typedef list_node<template_argument, common_nodes::comma> template_argument_list;
+
+/**
+operator_function_template_id
+	= operator_function_id >> !s >> '<' >> !s >> !(template_argument_list >> !s) >> '>'
+;
+*/
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
-	template_id,
-	(identifier)
+	operator_function_template_id,
+	(operator_function_id)
 	(optional_node<space>)
 	(predefined_text_node<str::left_angle_bracket>)
 	(optional_node<space>)
@@ -40,5 +51,6 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
-#include "detail/macros/sequence_node_pimpl_definition_undef.hpp"
+#include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
+#endif

@@ -1,10 +1,15 @@
-template<bool B>
-struct foo{};
+template <class _TypeT, class _Container>
+class stack;
 
-const bool a = true, b = true;
-const int i = 2, j = 3;
+template <class _TypeT, class _Container>
+inline bool operator==(const stack<_TypeT, _Container>&, const stack<_TypeT, _Container>&)
+{
+	return true;
+}
 
-foo < a && b > f1;
-foo < (i > j) > f2;
-foo < i < j > f3;
-foo < i < j && (i > j) > f4;
+template <class _TypeT, class _Container>
+class stack
+{
+	friend bool operator==<>(const stack&, const stack&);
+};
+

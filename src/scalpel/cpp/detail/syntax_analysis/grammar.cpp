@@ -1260,8 +1260,8 @@ grammar::grammar()
 	;
 
 	declarator_id
-		= id_expression
-		| nested_identifier_or_template_id
+		= nested_identifier_or_template_id
+		| id_expression
 	;
 
 	type_id
@@ -1627,8 +1627,17 @@ grammar::grammar()
 		= str_p("template") >> !s >> '<' >> !s >> template_parameter_list >> !s >> '>' >> !s >> str_p("class") >> !(!s >> identifier) >> !(!s >> '=' >> !s >> id_expression)
 	;
 
-	template_id
+	simple_template_id
 		= identifier >> !s >> '<' >> !s >> !(template_argument_list >> !s) >> '>'
+	;
+
+	operator_function_template_id
+		= operator_function_id >> !s >> '<' >> !s >> !(template_argument_list >> !s) >> '>'
+	;
+
+	template_id
+		= operator_function_template_id
+		| simple_template_id
 	;
 
 	template_argument_list
