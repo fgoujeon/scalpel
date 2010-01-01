@@ -186,7 +186,7 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 												)
 											);
 										}
-										else if(c->name() == get_function_name(declarator_node)) //constructor or destructor
+										else if(c->name() == get_name(declarator_node)) //constructor or destructor
 										{
 											if(!is_destructor_declaration(declarator_node)) //constructor
 											{
@@ -262,7 +262,7 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 											)
 										);
 									}
-									else if(c->name() == get_function_name(declarator_node)) //constructor or destructor
+									else if(c->name() == get_name(declarator_node)) //constructor or destructor
 									{
 										if(!is_destructor_declaration(declarator_node)) //constructor
 										{
@@ -383,7 +383,7 @@ semantic_analyzer::create_simple_function(const decl_specifier_seq& decl_specifi
 {
 	return std::make_shared<simple_function>
 	(
-		get_function_name(declarator_node),
+		get_name(declarator_node),
 		create_type(decl_specifier_seq_node, declarator_node),
 		create_parameters(declarator_node),
 		has_static_specifier(decl_specifier_seq_node)
@@ -561,28 +561,6 @@ semantic_analyzer::create_parameters(const declarator& declarator_node)
 							{
 								auto declarator_node = *opt_declarator_node;
 
-								//get parameter name
-								std::string name;
-								auto direct_declarator_node = get_direct_declarator(declarator_node);
-								auto first_part_node = get_first_part(direct_declarator_node);
-								if(auto opt_declarator_id_node = get<declarator_id>(&first_part_node))
-								{
-									auto declarator_id_node = *opt_declarator_id_node;
-									if(auto opt_id_expression_node = get<id_expression>(&declarator_id_node))
-									{
-										auto id_expression_node = *opt_id_expression_node;
-										if(auto opt_unqualified_id_node = get<unqualified_id>(&id_expression_node))
-										{
-											auto unqualified_id_node = *opt_unqualified_id_node;
-											if(auto opt_identifier_node = get<identifier>(&unqualified_id_node))
-											{
-												auto identifier_node = *opt_identifier_node;
-												name = identifier_node.value();
-											}
-										}
-									}
-								}
-
 								parameters.push_back
 								(
 									std::move
@@ -590,7 +568,7 @@ semantic_analyzer::create_parameters(const declarator& declarator_node)
 										simple_function::parameter
 										(
 											create_type(decl_specifier_seq_node, declarator_node),
-											name
+											get_name(declarator_node)
 										)
 									)
 								);
@@ -1421,31 +1399,12 @@ semantic_analyzer::create_variable
 	const declarator& declarator_node
 )
 {
-	auto direct_declarator_node = get_direct_declarator(declarator_node);
-
-	auto first_part_node = get_first_part(direct_declarator_node);
-	auto opt_declarator_id_node = get<declarator_id>(&first_part_node);
-	if(opt_declarator_id_node)
-	{
-		auto declarator_id_node = *opt_declarator_id_node;
-		if(auto id_expression_node = get<id_expression>(&declarator_id_node))
-		{
-			if(auto unqualified_id_node = get<unqualified_id>(&*id_expression_node))
-			{
-				if(auto identifier_node = get<identifier>(&*unqualified_id_node))
-				{
-					return std::make_shared<variable>
-					(
-						create_type(decl_specifier_seq_node, declarator_node),
-						std::move(identifier_node->value()),
-						has_static_specifier(decl_specifier_seq_node)
-					);
-				}
-			}
-		}
-	}
-
-	throw std::runtime_error("Cannot create variable");
+	return std::make_shared<variable>
+	(
+		create_type(decl_specifier_seq_node, declarator_node),
+		get_name(declarator_node),
+		has_static_specifier(decl_specifier_seq_node)
+	);
 }
 
 }} //namespace scalpel::cpp

@@ -40,9 +40,6 @@ get_access(const syntax_nodes::access_specifier access_specifier_node);
 //function related
 //
 
-const std::string&
-get_function_name(const syntax_nodes::declarator& declarator_node);
-
 bool
 is_function_declaration(const syntax_nodes::declarator& declarator_node);
 
@@ -133,8 +130,18 @@ has_static_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_
 	return has_specifier<syntax_nodes::storage_class_specifier, utility::extern_strings::static_>(decl_specifier_seq_node);
 }
 
+
+
+//
+//common
+//
+
+std::string
+get_name(const syntax_nodes::declarator& declarator_node);
+
 }}}} //namespace scalpel::cpp::detail::semantic_analysis
 
 #include "basic_functions.ipp"
 
 #endif
+
