@@ -50,6 +50,9 @@ class statement_block
 		const statement_block&
 		operator=(statement_block&& o);
 
+		bool
+		operator==(const statement_block& o) const;
+
 		void
 		add(std::shared_ptr<statement_block> o);
 

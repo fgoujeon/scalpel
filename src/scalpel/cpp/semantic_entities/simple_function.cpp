@@ -87,6 +87,30 @@ simple_function::operator=(simple_function&& f)
 	return *this;
 }
 
+bool
+simple_function::operator==(const simple_function& f) const
+{
+	return
+		name_ == f.name_ &&
+		return_type_ == f.return_type_ &&
+		parameters_ == f.parameters_ &&
+		static_specified_ == f.static_specified_ &&
+		defined_ == f.defined_ &&
+		statement_block_ == f.statement_block_
+	;
+}
+
+bool
+simple_function::has_same_signature(const simple_function& f) const
+{
+	return
+		name_ == f.name_ &&
+		return_type_ == f.return_type_ &&
+		parameters_ == f.parameters_ &&
+		static_specified_ == f.static_specified_
+	;
+}
+
 const std::string&
 simple_function::name() const
 {
@@ -166,6 +190,15 @@ simple_function::parameter::operator=(parameter&& o)
 	name_ = std::move(o.name_);
 
 	return *this;
+}
+
+bool
+simple_function::parameter::operator==(const parameter& o) const
+{
+	return
+		type_ == o.type_ &&
+		name_ == o.name_
+	;
 }
 
 std::shared_ptr<const type>

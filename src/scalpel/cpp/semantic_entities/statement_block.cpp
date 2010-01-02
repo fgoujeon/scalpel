@@ -63,6 +63,12 @@ statement_block::operator=(statement_block&& o)
 	return *this;
 }
 
+bool
+statement_block::operator==(const statement_block& o) const
+{
+	return true;
+}
+
 void
 statement_block::add(std::shared_ptr<statement_block> o)
 {

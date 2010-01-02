@@ -63,6 +63,12 @@ class simple_function: public named_entity
 		const simple_function&
 		operator=(simple_function&& f);
 
+		bool
+		operator==(const simple_function& f) const;
+
+		bool
+		has_same_signature(const simple_function& f) const;
+
         /**
         @return the name of the function
         */
@@ -113,6 +119,9 @@ class simple_function::parameter
 
 		const parameter&
 		operator=(parameter&& o);
+
+		bool
+		operator==(const parameter& o) const;
 
 		std::shared_ptr<const type>
 		get_type() const;

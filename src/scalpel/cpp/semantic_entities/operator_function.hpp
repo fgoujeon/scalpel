@@ -54,6 +54,12 @@ class operator_function
 		const operator_function&
 		operator=(operator_function&& f);
 
+		bool
+		operator==(const operator_function& f) const;
+
+		bool
+		has_same_signature(const operator_function& f) const;
+
 		operator_
 		get_operator() const;
 

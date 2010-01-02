@@ -23,6 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "detail/semantic_analysis/basic_functions.hpp"
 #include "detail/semantic_analysis/name_lookup.hpp"
+#include <sstream>
 
 namespace scalpel { namespace cpp
 {
@@ -282,14 +283,11 @@ semantic_analyzer::analyze(const syntax_nodes::function_definition& function_def
 	}
 	*/
 
-	std::cout << "test3\n";
 	if(auto opt_decl_specifier_seq_node = get_decl_specifier_seq(function_definition_node))
 	{
-		std::cout << "test4\n";
 		auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
 		if(is_simple_function_declaration(declarator_node))
 		{
-			std::cout << "test5\n";
 			define_function<simple_function>(decl_specifier_seq_node, declarator_node, parent_entity);
 		}
 		else if(is_operator_function_declaration(declarator_node))
@@ -673,36 +671,43 @@ semantic_analyzer::define_function
 	std::shared_ptr<ParentEntityT> parent_entity
 )
 {
-	std::cout << "test\n";
+	using namespace detail::semantic_analysis;
+
+	//get the function name
+	std::string function_name = get_name(declarator_node);
+
 	//create a FunctionT object
 	std::shared_ptr<FunctionT> new_function = create_function<FunctionT>(decl_specifier_seq_node, declarator_node);
 
 	//find the corresponding function semantic entity (must exist if the function has already been declared)
 	std::shared_ptr<FunctionT> function_entity;
-	/*
-	if(enclosing_scope)
+	std::shared_ptr<semantic_entities::named_entity> found_entity = name_lookup::find_name(scope_cursor_.scope_stack(), function_name);
+	std::shared_ptr<FunctionT> possible_function_entity;
+	if
+	(
+		found_entity &&
+		(possible_function_entity = std::dynamic_pointer_cast<FunctionT>(found_entity)) &&
+		possible_function_entity->has_same_signature(*new_function)
+	)
 	{
-		auto scopes = enclosing_scope->named_scopes();
-		for(auto i = scopes.begin(); i != scopes.end(); ++i)
-		{
-			std::shared_ptr<named_scope> named_scope = *i;
-
-			///\todo check the function's signature
-			if(named_scope->name() == new_function->name())
-			{
-				function_entity = named_scope;
-				break;
-			}
-		}
+		function_entity = possible_function_entity;
 	}
-	*/
 
 	//if the function hasn't been declared, this definition serves as a declaration
 	if(!function_entity)
 	{
-		std::cout << "test2\n";
 		function_entity = new_function;
 		parent_entity->add(new_function);
+	}
+
+	assert(function_entity);
+
+	//check whether the function is undefined
+	if(function_entity->defined())
+	{
+		std::ostringstream oss;
+		oss << "Redefinition of " << function_name;
+		throw std::runtime_error(oss.str().c_str());
 	}
 
 	function_entity->defined(true);

@@ -60,6 +60,29 @@ operator_function::operator=(operator_function&& f)
 	return *this;
 }
 
+bool
+operator_function::operator==(const operator_function& f) const
+{
+	return
+		op_ == f.op_ &&
+		statement_block_ == f.statement_block_ &&
+		return_type_ == f.return_type_ &&
+		parameters_ == f.parameters_ &&
+		static_specified_ == f.static_specified_
+	;
+}
+
+bool
+operator_function::has_same_signature(const operator_function& f) const
+{
+	return
+		op_ == f.op_ &&
+		return_type_ == f.return_type_ &&
+		parameters_ == f.parameters_ &&
+		static_specified_ == f.static_specified_
+	;
+}
+
 operator_
 operator_function::get_operator() const
 {

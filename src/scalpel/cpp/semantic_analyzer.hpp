@@ -328,7 +328,9 @@ class semantic_analyzer
 		//
 
 		/**
-		Define the given function. It may also create the function if any.
+		Define a function from the two syntax node parameters. It may also
+		create the function and add it to the given parent entity if it hasn't
+		been declared.
 		*/
 		template<class FunctionT, class ParentEntityT>
 		void
