@@ -52,7 +52,7 @@ get_declarator(const member_declarator_declarator& o)
 
 inline
 const optional_node<constant_initializer>&
-get_last_part(const member_declarator_declarator& o)
+get_constant_initializer(const member_declarator_declarator& o)
 {
 	return get<2>(o);
 }

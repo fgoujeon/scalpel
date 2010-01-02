@@ -182,15 +182,13 @@ is_destructor_declaration(const syntax_nodes::declarator& declarator_node)
 bool
 has_pure_specifier(const syntax_nodes::member_declarator_declarator& member_declarator_declarator_node)
 {
-	if(auto opt_last_part_node = get_last_part(member_declarator_declarator_node))
+	if(auto opt_constant_initializer_node = get_constant_initializer(member_declarator_declarator_node))
 	{
-		auto last_part_node = *opt_last_part_node;
-		/*
-		if(get<pure_specifier>(&last_part_node))
+		//auto constant_initializer_node = *opt_constant_initializer_node;
+		//if(get<pure_specifier>(&constant_initializer_node))
 		{
 			return true;
 		}
-		*/
 	}
 
 	return false;
