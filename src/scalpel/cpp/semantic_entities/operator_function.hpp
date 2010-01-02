@@ -60,6 +60,9 @@ class operator_function
 		bool
 		has_same_signature(const operator_function& f) const;
 
+		bool
+		has_same_parameters(const operator_function& f) const;
+
 		operator_
 		get_operator() const;
 

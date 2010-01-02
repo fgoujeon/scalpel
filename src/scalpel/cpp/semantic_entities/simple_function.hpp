@@ -69,6 +69,9 @@ class simple_function: public named_entity
 		bool
 		has_same_signature(const simple_function& f) const;
 
+		bool
+		has_same_parameters(const simple_function& f) const;
+
         /**
         @return the name of the function
         */

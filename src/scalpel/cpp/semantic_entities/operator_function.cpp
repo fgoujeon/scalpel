@@ -78,9 +78,31 @@ operator_function::has_same_signature(const operator_function& f) const
 	return
 		op_ == f.op_ &&
 		return_type_ == f.return_type_ &&
-		parameters_ == f.parameters_ &&
+		has_same_parameters(f) &&
 		static_specified_ == f.static_specified_
 	;
+}
+
+bool
+operator_function::has_same_parameters(const operator_function& f) const
+{
+	if(parameters_.size() != f.parameters_.size())
+		return false;
+
+	for
+	(
+		parameters_t::const_iterator i = parameters_.begin(), j = f.parameters_.begin();
+		i != parameters_.end();
+		++i, ++j
+	)
+	{
+		auto param = *i;
+		auto param2 = *j;
+		if(param.get_type() != param2.get_type())
+			return false;
+	}
+
+	return true;
 }
 
 operator_
