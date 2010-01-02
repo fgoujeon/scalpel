@@ -327,6 +327,9 @@ class semantic_analyzer
 		//function definition functions
 		//
 
+		/**
+		Define the given function. It may also create the function if any.
+		*/
 		template<class FunctionT, class ParentEntityT>
 		void
 		define_function

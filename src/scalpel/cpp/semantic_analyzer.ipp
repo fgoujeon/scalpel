@@ -282,11 +282,14 @@ semantic_analyzer::analyze(const syntax_nodes::function_definition& function_def
 	}
 	*/
 
+	std::cout << "test3\n";
 	if(auto opt_decl_specifier_seq_node = get_decl_specifier_seq(function_definition_node))
 	{
+		std::cout << "test4\n";
 		auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
 		if(is_simple_function_declaration(declarator_node))
 		{
+			std::cout << "test5\n";
 			define_function<simple_function>(decl_specifier_seq_node, declarator_node, parent_entity);
 		}
 		else if(is_operator_function_declaration(declarator_node))
@@ -670,6 +673,7 @@ semantic_analyzer::define_function
 	std::shared_ptr<ParentEntityT> parent_entity
 )
 {
+	std::cout << "test\n";
 	//create a FunctionT object
 	std::shared_ptr<FunctionT> new_function = create_function<FunctionT>(decl_specifier_seq_node, declarator_node);
 
@@ -696,6 +700,7 @@ semantic_analyzer::define_function
 	//if the function hasn't been declared, this definition serves as a declaration
 	if(!function_entity)
 	{
+		std::cout << "test2\n";
 		function_entity = new_function;
 		parent_entity->add(new_function);
 	}

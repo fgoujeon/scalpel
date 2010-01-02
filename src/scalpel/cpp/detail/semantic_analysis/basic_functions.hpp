@@ -139,6 +139,9 @@ has_static_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_
 std::string
 get_name(const syntax_nodes::declarator& declarator_node);
 
+bool
+has_name(const syntax_nodes::declarator& declarator_node);
+
 }}}} //namespace scalpel::cpp::detail::semantic_analysis
 
 #include "basic_functions.ipp"
