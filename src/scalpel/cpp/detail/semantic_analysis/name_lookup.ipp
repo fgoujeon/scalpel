@@ -20,12 +20,12 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <iostream>
 
-namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace name_lookup
+namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
 {
 
 template<class RangeT>
 std::shared_ptr<semantic_entities::named_entity>
-find_name
+name_lookup::find_name
 (
 	RangeT scope_stack,
 	const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node
@@ -78,7 +78,7 @@ find_name
 
 template<class RangeT>
 std::shared_ptr<semantic_entities::named_entity>
-find_name
+name_lookup::find_name
 (
 	RangeT scope_stack,
 	const std::string& name
@@ -91,7 +91,7 @@ find_name
 
 template<class RangeT>
 std::shared_ptr<semantic_entities::named_entity>
-find_name
+name_lookup::find_name
 (
 	RangeT scope_stack,
 	const std::string& name,
@@ -164,7 +164,7 @@ find_name
 
 template<class RangeT>
 std::shared_ptr<semantic_entities::named_scope>
-find_scope
+name_lookup::find_scope
 (
 	RangeT scope_stack,
 	const syntax_nodes::nested_name_specifier& a_nested_name_specifier
@@ -224,7 +224,7 @@ find_scope
 
 template<class RangeT>
 std::shared_ptr<semantic_entities::named_scope>
-find_scope
+name_lookup::find_scope
 (
 	RangeT scope_stack,
 	const std::string& scope_name
@@ -249,5 +249,5 @@ find_scope
 	throw std::runtime_error("Scope " + scope_name + " not found");
 }
 
-}}}}} //namespace scalpel::cpp::detail::semantic_analysis::name_lookup
+}}}} //namespace scalpel::cpp::detail::semantic_analysis
 

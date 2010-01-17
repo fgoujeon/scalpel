@@ -23,14 +23,14 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <functional>
 #include <iostream>
 
-namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace name_lookup
+namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
 {
 
 using namespace syntax_nodes;
 using namespace semantic_entities;
 
 std::shared_ptr<semantic_entities::named_entity>
-find_name
+name_lookup::find_name
 (
 	semantic_entities::named_scope& current_scope,
 	const std::string& name
@@ -70,7 +70,7 @@ find_name
 }
 
 std::shared_ptr<semantic_entities::named_scope>
-find_scope
+name_lookup::find_scope
 (
 	named_scope& parent_scope,
 	const std::string& scope_name
@@ -105,5 +105,5 @@ find_scope
 	}
 }
 
-}}}}} //namespace scalpel::cpp::detail::semantic_analysis::name_lookup
+}}}} //namespace scalpel::cpp::detail::semantic_analysis
 
