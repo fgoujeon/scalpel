@@ -24,8 +24,8 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 array::array(const unsigned int size, std::shared_ptr<const type> decorated_type):
-	size_(size),
-	decorated_type_(decorated_type)
+	type_decorator_impl(decorated_type),
+	size_(size)
 {
 }
 
@@ -33,12 +33,6 @@ unsigned int
 array::size() const
 {
 	return size_;
-}
-
-std::shared_ptr<const type>
-array::decorated_type() const
-{
-	return decorated_type_;
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

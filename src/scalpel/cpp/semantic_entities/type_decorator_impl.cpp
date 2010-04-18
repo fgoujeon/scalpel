@@ -18,27 +18,15 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_REFERENCE_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_REFERENCE_HPP
-
 #include "type_decorator_impl.hpp"
-#include "type.hpp"
-#include <memory>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-/**
-Represents the const qualifier.
-*/
-class reference: public type, private type_decorator_impl
+type_decorator_impl::type_decorator_impl(std::shared_ptr<const type> decorated_type):
+	decorated_type_(decorated_type)
 {
-	public:
-		reference(std::shared_ptr<const type> decorated_type);
-
-		using type_decorator_impl::decorated_type;
-};
+}
 
 }}} //namespace scalpel::cpp::semantic_entities
 
-#endif

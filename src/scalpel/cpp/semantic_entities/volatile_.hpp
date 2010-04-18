@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_VOLATILE_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_VOLATILE_HPP
 
-#include "type_decorator.hpp"
+#include "type_decorator_impl.hpp"
 #include "type.hpp"
 #include <memory>
 
@@ -31,17 +31,12 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 /**
 Represents the const qualifier.
 */
-class volatile_:
-	public type_decorator
+class volatile_: public type, private type_decorator_impl
 {
 	public:
 		volatile_(std::shared_ptr<const type> decorated_type);
 
-		std::shared_ptr<const type>
-		decorated_type() const;
-
-	private:
-		std::shared_ptr<const type> decorated_type_;
+		using type_decorator_impl::decorated_type;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

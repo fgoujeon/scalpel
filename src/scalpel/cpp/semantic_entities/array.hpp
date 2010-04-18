@@ -22,17 +22,13 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_ARRAY_HPP
 
 #include "type.hpp"
-#include "type_decorator.hpp"
+#include "type_decorator_impl.hpp"
 #include <memory>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-/**
-Represents the const qualifier.
-*/
-class array:
-	public type_decorator
+class array: public type, private type_decorator_impl
 {
 	public:
 		array(const unsigned int size, std::shared_ptr<const type> decorated_type);
@@ -40,12 +36,10 @@ class array:
 		unsigned int
 		size() const;
 
-		std::shared_ptr<const type>
-		decorated_type() const;
+		using type_decorator_impl::decorated_type;
 
 	private:
 		unsigned int size_;
-		std::shared_ptr<const type> decorated_type_;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

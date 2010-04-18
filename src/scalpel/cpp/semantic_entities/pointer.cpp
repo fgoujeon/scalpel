@@ -24,14 +24,8 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 pointer::pointer(std::shared_ptr<const type> decorated_type):
-	decorated_type_(decorated_type)
+	type_decorator_impl(decorated_type)
 {
-}
-
-std::shared_ptr<const type>
-pointer::decorated_type() const
-{
-	return decorated_type_;
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

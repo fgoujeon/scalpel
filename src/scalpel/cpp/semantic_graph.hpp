@@ -33,7 +33,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "semantic_entities/simple_function.hpp"
 #include "semantic_entities/statement_block.hpp"
 #include "semantic_entities/type.hpp"
-#include "semantic_entities/type_decorator.hpp"
 #include "semantic_entities/variable.hpp"
 #include "semantic_entities/volatile_.hpp"
 

@@ -18,8 +18,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_DECORATOR_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_DECORATOR_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_DECORATOR_IMPL_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_DECORATOR_IMPL_HPP
 
 #include "type.hpp"
 #include <memory>
@@ -27,20 +27,26 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-/**
-Represents a C++ type.
-*/
-struct type_decorator:
-	public type
+class type_decorator_impl
 {
-	virtual
-	~type_decorator(){};
+	public:
+		type_decorator_impl(std::shared_ptr<const type> decorated_type);
 
-	virtual
-	std::shared_ptr<const type>
-	decorated_type() const = 0;
+		inline
+		std::shared_ptr<const type>
+		decorated_type() const;
+
+	private:
+		std::shared_ptr<const type> decorated_type_;
 };
+
+std::shared_ptr<const type>
+type_decorator_impl::decorated_type() const
+{
+	return decorated_type_;
+}
 
 }}} //namespace scalpel::cpp::semantic_entities
 
 #endif
+
