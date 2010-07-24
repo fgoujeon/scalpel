@@ -21,8 +21,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_SEQUENCE_NODE_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_SEQUENCE_NODE_HPP
 
-#include <string>
-
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
@@ -49,13 +47,15 @@ class sequence_node<HeadT, TailT...>
 		typedef HeadT head_node_t;
 		typedef sequence_node<TailT...> tail_sequence_node_t;
 
-		sequence_node(HeadT&& head_node, TailT&&... tail_nodes);
+		sequence_node()
+		{
+		}
 
-		sequence_node(HeadT&& head_node, sequence_node<TailT...>&& tail_sequence_node);
+		sequence_node(const HeadT& head_node, const TailT&... tail_nodes);
+
+		sequence_node(HeadT& head_node, TailT&... tail_nodes);
 
 		sequence_node(const sequence_node& o);
-
-		sequence_node(sequence_node&& o);
 
 		const sequence_node&
 		operator=(const sequence_node& o);
@@ -72,16 +72,16 @@ class sequence_node<HeadT, TailT...>
 };
 
 template<class HeadT, class... TailT>
-sequence_node<HeadT, TailT...>::sequence_node(HeadT&& head_node, TailT&&... tail_nodes):
+sequence_node<HeadT, TailT...>::sequence_node(const HeadT& head_node, const TailT&... tail_nodes):
 	head_(head_node),
 	tail_(tail_nodes...)
 {
 }
 
 template<class HeadT, class... TailT>
-sequence_node<HeadT, TailT...>::sequence_node(HeadT&& head_node, sequence_node<TailT...>&& tail_sequence_node):
+sequence_node<HeadT, TailT...>::sequence_node(HeadT& head_node, TailT&... tail_nodes):
 	head_(head_node),
-	tail_(tail_sequence_node)
+	tail_(tail_nodes...)
 {
 }
 
@@ -89,13 +89,6 @@ template<class HeadT, class... TailT>
 sequence_node<HeadT, TailT...>::sequence_node(const sequence_node<HeadT, TailT...>& o):
 	head_(o.head_),
 	tail_(o.tail_)
-{
-}
-
-template<class HeadT, class... TailT>
-sequence_node<HeadT, TailT...>::sequence_node(sequence_node<HeadT, TailT...>&& o):
-	head_(std::move(o.head_)),
-	tail_(std::move(o.tail_))
 {
 }
 

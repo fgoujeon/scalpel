@@ -18,54 +18,24 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_CLASS_SPECIFIER_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_CLASS_SPECIFIER_HPP
+#include "nested_name_specifier.hpp"
 
-#include "class_head.hpp"
-#include "member_specification.hpp"
-#include "common.hpp"
-
-#include "detail/macros/sequence_node_pimpl_declaration.hpp"
+#include "detail/macros/sequence_node_pimpl_definition.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-/**
-\verbatim
-class_specifier
-	= class_head, "{", [member_specification], "}"
-;
-\endverbatim
-*/
-
-SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
-	class_specifier,
-	(class_head)
+	nested_name_specifier,
+	(identifier_or_template_id)
 	(optional_node<space>)
-	(predefined_text_node<str::opening_brace>)
+	(predefined_text_node<str::double_colon>)
 	(optional_node<space>)
-	(optional_node<member_specification>)
-	(optional_node<space>)
-	(predefined_text_node<str::closing_brace>)
+	(optional_node<nested_name_specifier_last_part_seq>)
 )
-
-inline
-const class_head&
-get_class_head(const class_specifier& o)
-{
-	return get<0>(o);
-}
-
-inline
-const optional_node<member_specification>&
-get_member_specification(const class_specifier& o)
-{
-	return get<4>(o);
-}
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
-#include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
+#include "detail/macros/sequence_node_pimpl_definition_undef.hpp"
 
-#endif

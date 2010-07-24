@@ -41,6 +41,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "round_bracketed_optional_expression.hpp"
 #include "common.hpp"
 
+#include "detail/macros/sequence_node_pimpl_declaration.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
@@ -88,48 +90,17 @@ typedef
 	postfix_expression_last_part_seq
 ;
 
-typedef
-	sequence_node
-	<
-		postfix_expression_first_part,
-		optional_node<space>,
-		optional_node<postfix_expression_last_part_seq>
-	>
-	postfix_expression_t
-;
-
-struct postfix_expression: public postfix_expression_t
-{
-	postfix_expression
-	(
-		postfix_expression_first_part&& o0,
-		optional_node<space>&& o1,
-		optional_node<postfix_expression_last_part_seq>&& o2
-	):
-		postfix_expression_t(o0, o1, o2)
-	{
-	}
-
-	postfix_expression
-	(
-		head_node_t&& head,
-		tail_sequence_node_t&& tail
-	):
-		postfix_expression_t(head, tail)
-	{
-	}
-
-	postfix_expression(const postfix_expression& o):
-		postfix_expression_t(o)
-	{
-	}
-
-	postfix_expression(postfix_expression&& o):
-		postfix_expression_t(o)
-	{
-	}
-};
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	postfix_expression,
+	(postfix_expression_first_part)
+	(optional_node<space>)
+	(optional_node<postfix_expression_last_part_seq>)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
+#include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
+
 #endif
+

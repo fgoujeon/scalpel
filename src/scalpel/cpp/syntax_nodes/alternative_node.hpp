@@ -23,7 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <boost/optional.hpp>
 #include <boost/type_traits/is_same.hpp>
-#include <boost/type_traits/remove_reference.hpp>
+#include <boost/type_traits/remove_const.hpp>
 #include <boost/utility/enable_if.hpp>
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
@@ -79,7 +79,7 @@ class alternative_node<NodeT, NodesT...>
 			<
 				boost::is_same
 				<
-					typename boost::remove_reference<NodeT2>::type,
+					typename boost::remove_const<NodeT2>::type,
 					type
 				>
 			>::type* = 0 //avoid conflict with copy and move constructors
@@ -96,7 +96,7 @@ class alternative_node<NodeT, NodesT...>
 			<
 				boost::is_same
 				<
-					typename boost::remove_reference<NodeT2>::type,
+					typename boost::remove_const<NodeT2>::type,
 					type
 				>
 			>::type* = 0 //avoid conflict with copy and move constructors
@@ -106,6 +106,11 @@ class alternative_node<NodeT, NodesT...>
 		 * Copy constructor.
 		 */
 		alternative_node(const type& n);
+
+		/**
+		 * Copy constructor.
+		 */
+		alternative_node(type& n);
 
 		/**
 		 * Move constructor.
@@ -174,7 +179,7 @@ alternative_node<NodeT, NodesT...>::alternative_node
 	<
 		boost::is_same
 		<
-			typename boost::remove_reference<NodeT2>::type,
+			typename boost::remove_const<NodeT2>::type,
 			type
 		>
 	>::type*
@@ -192,7 +197,7 @@ alternative_node<NodeT, NodesT...>::alternative_node
 	<
 		boost::is_same
 		<
-			typename boost::remove_reference<NodeT2>::type,
+			typename boost::remove_const<NodeT2>::type,
 			type
 		>
 	>::type*
@@ -203,6 +208,13 @@ alternative_node<NodeT, NodesT...>::alternative_node
 
 template<class NodeT, class... NodesT>
 alternative_node<NodeT, NodesT...>::alternative_node(const alternative_node<NodeT, NodesT...>& n):
+	head_(n.head_),
+	tail_(n.tail_)
+{
+}
+
+template<class NodeT, class... NodesT>
+alternative_node<NodeT, NodesT...>::alternative_node(alternative_node<NodeT, NodesT...>& n):
 	head_(n.head_),
 	tail_(n.tail_)
 {

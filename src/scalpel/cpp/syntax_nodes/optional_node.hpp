@@ -140,7 +140,7 @@ optional_node<T>::operator->()
 template<class T>
 optional_node<T>::operator bool() const
 {
-	return node_;
+	return node_.get() != 0;
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

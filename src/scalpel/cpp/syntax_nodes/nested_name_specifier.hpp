@@ -24,6 +24,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "identifier_or_template_id.hpp"
 #include "common.hpp"
 
+#include "detail/macros/sequence_node_pimpl_declaration.hpp"
+
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
@@ -53,18 +55,6 @@ typedef
 	nested_name_specifier_last_part_seq
 ;
 
-typedef
-	sequence_node
-	<
-		identifier_or_template_id,
-		optional_node<space>,
-		predefined_text_node<str::double_colon>,
-		optional_node<space>,
-		optional_node<nested_name_specifier_last_part_seq>
-	>
-	nested_name_specifier_t
-;
-
 /**
 nested_name_specifier
 	= identifier_or_template_id >> !s >> "::" >> !(!s >> nested_name_specifier_last_part_seq)
@@ -77,39 +67,15 @@ nested_name_specifier_last_part
 ;
 */
 
-struct nested_name_specifier: public nested_name_specifier_t
-{
-	nested_name_specifier
-	(
-		identifier_or_template_id&& o0,
-		optional_node<space>&& o1,
-		predefined_text_node<str::double_colon>&& o2,
-		optional_node<space>&& o3,
-		optional_node<nested_name_specifier_last_part_seq>&& o4
-	):
-		nested_name_specifier_t(o0, o1, o2, o3, o4)
-	{
-	}
-
-	nested_name_specifier
-	(
-		head_node_t&& head,
-		tail_sequence_node_t&& tail
-	):
-		nested_name_specifier_t(head, tail)
-	{
-	}
-
-	nested_name_specifier(const nested_name_specifier& o):
-		nested_name_specifier_t(o)
-	{
-	}
-
-	nested_name_specifier(nested_name_specifier&& o):
-		nested_name_specifier_t(o)
-	{
-	}
-};
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	nested_name_specifier,
+	(identifier_or_template_id)
+	(optional_node<space>)
+	(predefined_text_node<str::double_colon>)
+	(optional_node<space>)
+	(optional_node<nested_name_specifier_last_part_seq>)
+)
 
 inline
 const identifier_or_template_id&
@@ -126,5 +92,7 @@ get_last_part_seq(const nested_name_specifier& o)
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif

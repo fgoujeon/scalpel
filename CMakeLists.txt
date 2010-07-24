@@ -20,7 +20,7 @@ cmake_minimum_required(VERSION 2.6)
 
 #Project
 project(Scalpel)
-set(LIBRARY_OUTPUT_PATH lib/${CMAKE_BUILD_TYPE})
+set(LIBRARY_OUTPUT_PATH lib)
 
 #GCC settings
 if(CMAKE_COMPILER_IS_GNUCXX)

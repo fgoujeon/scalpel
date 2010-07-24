@@ -90,8 +90,8 @@ struct sequence_node_converter
 		head_node_t syntax_node = sequence_node_node_converter<head_node_t>::convert(node, it);
 		return SequenceNodeT
 		(
-			syntax_node,
-			sequence_node_converter<tail_sequence_node_t, typename tail_sequence_node_t::head_node_t>::convert(node, it)
+			/*syntax_node,
+			sequence_node_converter<tail_sequence_node_t, typename tail_sequence_node_t::head_node_t>::convert(node, it)*/
 		);
 	}
 };

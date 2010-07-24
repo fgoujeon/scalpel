@@ -20,7 +20,7 @@ cmake_minimum_required(VERSION 2.6)
 
 #project
 project(Scalpel.Test)
-set(EXECUTABLE_OUTPUT_PATH bin/${CMAKE_BUILD_TYPE})
+set(EXECUTABLE_OUTPUT_PATH bin)
 
 #executable
 file(

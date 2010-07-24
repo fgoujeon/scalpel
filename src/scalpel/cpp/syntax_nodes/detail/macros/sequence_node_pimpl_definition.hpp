@@ -58,15 +58,6 @@ sequence_node_type::sequence_node_type                                          
 {                                                                                        \
 }                                                                                        \
                                                                                          \
-sequence_node_type::sequence_node_type                                                   \
-(                                                                                        \
-	head_node_t&& head,                                                                  \
-	tail_sequence_node_t&& tail                                                          \
-):                                                                                       \
-	impl_(new type(std::move(head), std::move(tail)))                                    \
-{                                                                                        \
-}                                                                                        \
-                                                                                         \
 sequence_node_type::sequence_node_type(const sequence_node_type& o):                     \
 	impl_(new type(*o.impl_))                                                            \
 {                                                                                        \
