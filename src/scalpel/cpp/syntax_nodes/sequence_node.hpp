@@ -47,14 +47,24 @@ class sequence_node<HeadT, TailT...>
 		typedef HeadT head_node_t;
 		typedef sequence_node<TailT...> tail_sequence_node_t;
 
-		sequence_node()
-		{
-		}
-
+		/**
+		 * Constructor
+		 */
 		sequence_node(const HeadT& head_node, const TailT&... tail_nodes);
 
+		/**
+		 * Constructor
+		 */
 		sequence_node(HeadT& head_node, TailT&... tail_nodes);
 
+		/**
+		 * Constructor (mainly used by sequence_node_converter)
+		 */
+		sequence_node(const head_node_t& head_node, const tail_sequence_node_t& tail_sequence_node);
+
+		/**
+		 * Copy constructor
+		 */
 		sequence_node(const sequence_node& o);
 
 		const sequence_node&
@@ -82,6 +92,13 @@ template<class HeadT, class... TailT>
 sequence_node<HeadT, TailT...>::sequence_node(HeadT& head_node, TailT&... tail_nodes):
 	head_(head_node),
 	tail_(tail_nodes...)
+{
+}
+
+template<class HeadT, class... TailT>
+sequence_node<HeadT, TailT...>::sequence_node(const head_node_t& head_node, const tail_sequence_node_t& tail_sequence_node):
+	head_(head_node),
+	tail_(tail_sequence_node) //use copy constructor
 {
 }
 

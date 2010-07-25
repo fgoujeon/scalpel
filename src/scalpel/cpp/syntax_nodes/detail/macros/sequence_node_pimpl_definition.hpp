@@ -58,6 +58,15 @@ sequence_node_type::sequence_node_type                                          
 {                                                                                        \
 }                                                                                        \
                                                                                          \
+sequence_node_type::sequence_node_type                                                   \
+(                                                                                        \
+	const head_node_t& head,                                                             \
+	const tail_sequence_node_t& tail                                                     \
+):                                                                                       \
+	impl_(new type(head, tail))                                                          \
+{                                                                                        \
+}                                                                                        \
+                                                                                         \
 sequence_node_type::sequence_node_type(const sequence_node_type& o):                     \
 	impl_(new type(*o.impl_))                                                            \
 {                                                                                        \

@@ -51,11 +51,11 @@ convert_list_node(const tree_node_t& node)
 			{
 				typename ContainerT::item item
 				(
-					space_node,
+					std::move(space_node),
 					syntax_nodes::optional_node<syntax_nodes::space>(),
 					convert_node<typename ContainerT::type>(child_node)
 				);
-				list.push_back(item);
+				list.push_back(std::move(item));
 
 				//clear space node
 				space_node = syntax_nodes::optional_node<syntax_nodes::space>();
@@ -93,11 +93,11 @@ convert_list_node(const tree_node_t& node)
 			{
 				typename ContainerT::item item
 				(
-					pre_separator_space,
-					post_separator_space,
+					std::move(pre_separator_space),
+					std::move(post_separator_space),
 					convert_node<typename ContainerT::type>(child_node)
 				);
-				list.push_back(item);
+				list.push_back(std::move(item));
 
 				pre_separator_space = syntax_nodes::optional_node<syntax_nodes::space>();
 				post_separator_space = syntax_nodes::optional_node<syntax_nodes::space>();

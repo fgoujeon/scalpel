@@ -61,8 +61,8 @@ class sequence_node_type                                                        
                                                                                        \
 		sequence_node_type                                                             \
 		(                                                                              \
-			head_node_t&& head,                                                        \
-			tail_sequence_node_t&& tail                                                \
+			const head_node_t& head,                                                   \
+			const tail_sequence_node_t& tail                                           \
 		);                                                                             \
                                                                                        \
 		sequence_node_type(const sequence_node_type& o);                               \
