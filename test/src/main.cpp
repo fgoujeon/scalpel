@@ -18,53 +18,27 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "single_file_test.hpp"
+#define BOOST_TEST_ALTERNATIVE_INIT_API //don't use legacy API
+#define BOOST_FILESYSTEM_NO_DEPRECATED
+
+#include "syntax_analysis/single_file_tester.hpp"
+#include "get_recursive_file_list.hpp"
 #include <boost/program_options.hpp>
 #include <boost/test/included/unit_test.hpp>
+#include <boost/test/parameterized_test.hpp>
 #include <boost/bind.hpp>
 #include <iostream>
 
 using namespace boost::unit_test;
 
-single_file_test t;
+syntax_analysis::single_file_tester syntax_analysis_single_file_tester;
 
-
-
-BOOST_AUTO_TEST_SUITE(test_suite1)
-
-BOOST_AUTO_TEST_CASE(basic_test_case)
+bool
+init_unit_test()
 {
-	t.parse_files("basic");
-}
-
-BOOST_AUTO_TEST_CASE(name_lookup_test_case)
-{
-	t.parse_files("name_lookup");
-}
-
-BOOST_AUTO_TEST_CASE(template_test_case)
-{
-	t.parse_files("template");
-}
-
-BOOST_AUTO_TEST_CASE(ambiguous_cases_test_case)
-{
-	t.parse_files("ambiguous_cases");
-}
-
-BOOST_AUTO_TEST_CASE(standard_library_test_case)
-{
-	t.parse_files("standard_library");
-}
-
-BOOST_AUTO_TEST_SUITE_END()
-
-
-
-test_suite*
-init_unit_test_suite(int argc, char** argv)
-{
-    framework::master_test_suite().p_name.value = "Master test suite";
+	//
+	//Initialization
+	//
 
 	std::vector<std::string> include_paths;
 	std::vector<std::string> macro_definitions;
@@ -94,20 +68,33 @@ init_unit_test_suite(int argc, char** argv)
 		all_options.add(visible_options);
 
 		po::variables_map vm;
-		po::store(po::command_line_parser(argc, argv).options(all_options).run(), vm);
+		po::store(po::command_line_parser(framework::master_test_suite().argc, framework::master_test_suite().argv).options(all_options).run(), vm);
 		po::notify(vm);
 
 		if(vm.count("help"))
 		{
-			std::cout << "Usage: " << argv[0] << " [options]\n\n";
+			std::cout << "Usage: " << framework::master_test_suite().argv[0] << " [options]\n\n";
 			std::cout << visible_options << "\n";
 			return 0;
 		}
 	}
 
-	t.include_paths(include_paths);
-	t.macro_definitions(macro_definitions);
+	syntax_analysis_single_file_tester.include_paths(include_paths);
+	syntax_analysis_single_file_tester.macro_definitions(macro_definitions);
 
-    return 0;
+
+
+	//
+	//Syntax analysis test suite
+	//
+
+	//build test file list
+	std::vector<std::string> test_files = get_recursive_file_list("testfiles");
+
+	//add the syntax analysis test cases of all these files to the master test suite
+	boost::callback1<std::string> tm = boost::bind(&syntax_analysis::single_file_tester::parse_file, &syntax_analysis_single_file_tester, _1);
+    framework::master_test_suite().add(BOOST_PARAM_TEST_CASE(tm, test_files.begin(), test_files.end()));
+
+    return true;
 }
 
