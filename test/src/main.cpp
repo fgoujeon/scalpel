@@ -19,8 +19,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #define BOOST_TEST_ALTERNATIVE_INIT_API //don't use legacy API
-#define BOOST_FILESYSTEM_NO_DEPRECATED
 
+#include "name_lookup/test_case_1.hpp"
 #include "syntax_analysis/single_file_tester.hpp"
 #include "get_recursive_file_list.hpp"
 #include <boost/program_options.hpp>
@@ -91,9 +91,13 @@ init_unit_test()
 	//build test file list
 	std::vector<std::string> test_files = get_recursive_file_list("testfiles");
 
-	//add the syntax analysis test cases of all these files to the master test suite
+	//add the syntax analysis test cases (one per test file) to the master test suite
 	boost::callback1<std::string> tm = boost::bind(&syntax_analysis::single_file_tester::parse_file, &syntax_analysis_single_file_tester, _1);
     framework::master_test_suite().add(BOOST_PARAM_TEST_CASE(tm, test_files.begin(), test_files.end()));
+
+
+
+    framework::master_test_suite().add(BOOST_TEST_CASE(&name_lookup::test_case_1));
 
     return true;
 }
