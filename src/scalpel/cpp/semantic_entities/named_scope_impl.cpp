@@ -45,13 +45,13 @@ named_scope_impl::operator=(named_scope_impl&& s)
 named_scope::named_scope_iterator_range
 named_scope_impl::named_scopes()
 {
-	return named_scopes_;
+	return named_scopes_.pointers();
 }
 
 named_scope::named_scope_const_iterator_range
 named_scope_impl::named_scopes() const
 {
-	return named_scopes_;
+	return named_scopes_.pointers();
 }
 
 void
@@ -63,13 +63,13 @@ named_scope_impl::add_to_named_scopes(std::shared_ptr<named_scope> s)
 named_scope::named_entity_iterator_range
 named_scope_impl::named_entities()
 {
-	return named_entities_;
+	return named_entities_.pointers();
 }
 
 named_scope::named_entity_const_iterator_range
 named_scope_impl::named_entities() const
 {
-	return named_entities_;
+	return named_entities_.pointers();
 }
 
 void
