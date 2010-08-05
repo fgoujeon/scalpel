@@ -19,7 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "test_case_1.hpp"
-#include <scalpel/cpp/detail/semantic_analysis/name_lookup.hpp>
+#include <scalpel/cpp/detail/semantic_analysis/name_lookup2.hpp>
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <scalpel/utility/null_deleter.hpp>
 #include <boost/test/unit_test.hpp>
@@ -81,8 +81,9 @@ test_case_1()
 	//
 	//name lookup test
 	//
-	std::shared_ptr<scalpel::cpp::semantic_entities::named_entity> found_entity = scalpel::cpp::detail::semantic_analysis::name_lookup::find_name(scope_path, "find_me");
-	BOOST_CHECK_EQUAL(found_entity, namespace_find_me);
+	auto found_entities = scalpel::cpp::detail::semantic_analysis::name_lookup2::find_entities(scope_path, "find_me");
+	BOOST_CHECK_EQUAL(found_entities.size(), 1);
+	BOOST_CHECK_EQUAL(found_entities.front(), namespace_find_me);
 }
 
 } //namespace name_lookup
