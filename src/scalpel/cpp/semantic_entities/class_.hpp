@@ -59,17 +59,17 @@ class class_:
 		class constructor;
 		class destructor;
 		class conversion_function;
-		typedef function_member<simple_function> member_simple_function;
-		typedef function_member<operator_function> member_operator_function;
-		typedef member<variable> member_variable;
+		typedef function_member<semantic_entities::simple_function> simple_function;
+		typedef function_member<semantic_entities::operator_function> operator_function;
+		typedef member<semantic_entities::variable> variable;
 
 		typedef utility::shared_ptr_vector<base_class> base_classes_t;
 		typedef utility::shared_ptr_vector<nested_class> nested_classes_t;
 		typedef utility::shared_ptr_vector<constructor> constructors_t;
-		typedef utility::shared_ptr_vector<member_simple_function> simple_functions_t;
-		typedef utility::shared_ptr_vector<member_operator_function> operator_functions_t;
+		typedef utility::shared_ptr_vector<simple_function> simple_functions_t;
+		typedef utility::shared_ptr_vector<operator_function> operator_functions_t;
 		typedef utility::shared_ptr_vector<conversion_function> conversion_functions_t;
-		typedef utility::shared_ptr_vector<member_variable> variables_t;
+		typedef utility::shared_ptr_vector<variable> variables_t;
 
 		enum access
 		{
@@ -166,16 +166,16 @@ class class_:
         add(std::shared_ptr<constructor> member);
 
         void
-        add(std::shared_ptr<member_simple_function> member);
+        add(std::shared_ptr<simple_function> member);
 
         void
-        add(std::shared_ptr<member_operator_function> member);
+        add(std::shared_ptr<operator_function> member);
 
         void
         add(std::shared_ptr<conversion_function> member);
 
 		void
-		add(std::shared_ptr<member_variable> member);
+		add(std::shared_ptr<variable> member);
 
     private:
         std::string name_;
@@ -369,8 +369,8 @@ class class_::member<class_>:
 class class_::constructor
 {
 	public:
-		typedef simple_function::parameters_t parameters_t;
-		typedef simple_function::parameter parameter;
+		typedef semantic_entities::simple_function::parameters_t parameters_t;
+		typedef semantic_entities::simple_function::parameter parameter;
 
 		constructor
 		(
@@ -395,7 +395,7 @@ class class_::constructor
 		explicit_specified() const;
 
 	private:
-		simple_function impl_;
+		semantic_entities::simple_function impl_;
 		parameters_t parameters_;
 		class_::access access_;
 		bool inline_specified_;

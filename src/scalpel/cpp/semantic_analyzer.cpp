@@ -158,7 +158,7 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 										{
 											c->add
 											(
-												std::make_shared<class_::member_operator_function>
+												std::make_shared<class_::operator_function>
 												(
 													create_operator_function(decl_specifier_seq_node, declarator_node),
 													current_access,
@@ -219,7 +219,7 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 										{
 											c->add
 											(
-												std::make_shared<class_::member_simple_function>
+												std::make_shared<class_::simple_function>
 												(
 													create_simple_function(decl_specifier_seq_node, declarator_node),
 													current_access,
@@ -236,7 +236,7 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 									{
 										c->add
 										(
-											std::make_shared<class_::member_variable>
+											std::make_shared<class_::variable>
 											(
 												create_variable(decl_specifier_seq_node, declarator_node),
 												current_access

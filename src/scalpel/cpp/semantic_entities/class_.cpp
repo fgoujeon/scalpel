@@ -184,7 +184,7 @@ class_::add(std::shared_ptr<constructor> member)
 }
 
 void
-class_::add(std::shared_ptr<member_simple_function> member)
+class_::add(std::shared_ptr<simple_function> member)
 {
     simple_functions_.push_back(member);
 
@@ -194,7 +194,7 @@ class_::add(std::shared_ptr<member_simple_function> member)
 }
 
 void
-class_::add(std::shared_ptr<member_operator_function> member)
+class_::add(std::shared_ptr<operator_function> member)
 {
     operator_functions_.push_back(member);
 	//named_scope_impl_.add_to_named_entities(member);
@@ -208,7 +208,7 @@ class_::add(std::shared_ptr<conversion_function> member)
 }
 
 void
-class_::add(std::shared_ptr<member_variable> member)
+class_::add(std::shared_ptr<variable> member)
 {
     variables_.push_back(member);
 	//named_scope_impl_.add_to_named_entities(member);
