@@ -64,31 +64,31 @@ class class_:
 
 		typedef std::vector<std::shared_ptr<base_class>> base_classes_t;
 		typedef base_classes_t::const_iterator base_class_const_iterator;
-		typedef boost::iterator_range<base_class_const_iterator> base_class_const_iterator_range;
+		typedef boost::iterator_range<base_class_const_iterator> base_class_const_range;
 
 		typedef std::vector<std::shared_ptr<nested_class>> nested_classes_t;
 		typedef nested_classes_t::const_iterator nested_class_const_iterator;
-		typedef boost::iterator_range<nested_class_const_iterator> nested_class_const_iterator_range;
+		typedef boost::iterator_range<nested_class_const_iterator> nested_class_const_range;
 
 		typedef std::vector<std::shared_ptr<constructor>> constructors_t;
 		typedef constructors_t::const_iterator constructor_const_iterator;
-		typedef boost::iterator_range<constructor_const_iterator> constructor_const_iterator_range;
+		typedef boost::iterator_range<constructor_const_iterator> constructor_const_range;
 
 		typedef std::vector<std::shared_ptr<member_function>> functions_t;
 		typedef functions_t::const_iterator function_const_iterator;
-		typedef boost::iterator_range<function_const_iterator> function_const_iterator_range;
+		typedef boost::iterator_range<function_const_iterator> function_const_range;
 
 		typedef std::vector<std::shared_ptr<member_operator_function>> operator_functions_t;
 		typedef operator_functions_t::const_iterator operator_function_const_iterator;
-		typedef boost::iterator_range<operator_function_const_iterator> operator_function_const_iterator_range;
+		typedef boost::iterator_range<operator_function_const_iterator> operator_function_const_range;
 
 		typedef std::vector<std::shared_ptr<conversion_function>> conversion_functions_t;
 		typedef conversion_functions_t::const_iterator conversion_function_const_iterator;
-		typedef boost::iterator_range<conversion_function_const_iterator> conversion_function_const_iterator_range;
+		typedef boost::iterator_range<conversion_function_const_iterator> conversion_function_const_range;
 
 		typedef std::vector<std::shared_ptr<member_variable>> variables_t;
 		typedef variables_t::const_iterator variable_const_iterator;
-		typedef boost::iterator_range<variable_const_iterator> variable_const_iterator_range;
+		typedef boost::iterator_range<variable_const_iterator> variable_const_range;
 
 		enum access
 		{
@@ -136,22 +136,22 @@ class class_:
 		named_scope_iterator_range
         named_scopes();
 
-		named_scope_const_iterator_range
+		named_scope_const_range
         named_scopes() const;
 
 		named_entity_iterator_range
 		named_entities();
 
-		named_entity_const_iterator_range
+		named_entity_const_range
 		named_entities() const;
 
-		base_class_const_iterator_range
+		base_class_const_range
 		base_classes() const;
 
-		nested_class_const_iterator_range
+		nested_class_const_range
 		nested_classes() const;
 
-		constructor_const_iterator_range
+		constructor_const_range
 		constructors() const;
 
 		std::shared_ptr<const destructor>
@@ -160,16 +160,16 @@ class class_:
 		void
 		set_destructor(std::shared_ptr<destructor> d);
 
-		function_const_iterator_range
+		function_const_range
 		functions() const;
 
-		operator_function_const_iterator_range
+		operator_function_const_range
 		operator_functions() const;
 
-		conversion_function_const_iterator_range
+		conversion_function_const_range
 		conversion_functions() const;
 
-		variable_const_iterator_range
+		variable_const_range
 		variables() const;
 
         void
@@ -347,7 +347,7 @@ class class_::member<class_>:
 			return entity_->named_scopes();
 		}
 
-		class_::named_scope_const_iterator_range
+		class_::named_scope_const_range
         named_scopes() const
 		{
 			return entity_->named_scopes();
@@ -359,7 +359,7 @@ class class_::member<class_>:
 			return entity_->named_entities();
 		}
 
-		class_::named_entity_const_iterator_range
+		class_::named_entity_const_range
 		named_entities() const
 		{
 			return entity_->named_entities();

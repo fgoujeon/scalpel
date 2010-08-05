@@ -35,11 +35,11 @@ Refers to the scopes that can be browsed by the name lookup functions.
 struct named_scope
 {
 	typedef utility::shared_ptr_vector<named_scope> named_scopes_t;
-	typedef named_scopes_t::const_range named_scope_const_iterator_range;
+	typedef named_scopes_t::const_range named_scope_const_range;
 	typedef named_scopes_t::range named_scope_iterator_range;
 
 	typedef utility::shared_ptr_vector<named_entity> named_entities_t;
-	typedef named_entities_t::const_range named_entity_const_iterator_range;
+	typedef named_entities_t::const_range named_entity_const_range;
 	typedef named_entities_t::range named_entity_iterator_range;
 
 	virtual
@@ -54,7 +54,7 @@ struct named_scope
 	named_scopes() = 0;
 
 	virtual
-	named_scope_const_iterator_range
+	named_scope_const_range
 	named_scopes() const = 0;
 
 	virtual
@@ -62,7 +62,7 @@ struct named_scope
 	named_entities() = 0;
 
 	virtual
-	named_entity_const_iterator_range
+	named_entity_const_range
 	named_entities() const = 0;
 };
 

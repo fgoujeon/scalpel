@@ -48,7 +48,7 @@ named_scope_impl::named_scopes()
 	return named_scopes_.pointers();
 }
 
-named_scope::named_scope_const_iterator_range
+named_scope::named_scope_const_range
 named_scope_impl::named_scopes() const
 {
 	return named_scopes_.pointers();
@@ -66,7 +66,7 @@ named_scope_impl::named_entities()
 	return named_entities_.pointers();
 }
 
-named_scope::named_entity_const_iterator_range
+named_scope::named_entity_const_range
 named_scope_impl::named_entities() const
 {
 	return named_entities_.pointers();

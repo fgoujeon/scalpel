@@ -81,7 +81,7 @@ namespace_::named_scopes()
 	return named_scopes_.pointers();
 }
 
-named_scope::named_scope_const_iterator_range
+named_scope::named_scope_const_range
 namespace_::named_scopes() const
 {
 	return named_scopes_.pointers();
@@ -93,37 +93,37 @@ namespace_::named_entities()
 	return named_entities_.pointers();
 }
 
-named_scope::named_entity_const_iterator_range
+named_scope::named_entity_const_range
 namespace_::named_entities() const
 {
 	return named_entities_.pointers();
 }
 
-namespace_::namespace_const_iterator_range
+namespace_::namespace_const_range
 namespace_::namespaces() const
 {
 	return namespaces_;
 }
 
-namespace_::class_const_iterator_range
+namespace_::class_const_range
 namespace_::classes() const
 {
 	return classes_;
 }
 
-namespace_::function_const_iterator_range
+namespace_::function_const_range
 namespace_::functions() const
 {
 	return functions_;
 }
 
-namespace_::operator_function_const_iterator_range
+namespace_::operator_function_const_range
 namespace_::operator_functions() const
 {
 	return operator_functions_;
 }
 
-namespace_::variable_const_iterator_range
+namespace_::variable_const_range
 namespace_::variables() const
 {
 	return variables_;

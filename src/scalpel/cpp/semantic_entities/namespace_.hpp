@@ -47,23 +47,23 @@ class namespace_:
     public:
 		typedef std::vector<std::shared_ptr<namespace_>> namespaces_t;
 		typedef namespaces_t::const_iterator namespace_const_iterator;
-		typedef boost::iterator_range<namespace_const_iterator> namespace_const_iterator_range;
+		typedef boost::iterator_range<namespace_const_iterator> namespace_const_range;
 
 		typedef std::vector<std::shared_ptr<class_>> classes_t;
 		typedef classes_t::const_iterator class_const_iterator;
-		typedef boost::iterator_range<class_const_iterator> class_const_iterator_range;
+		typedef boost::iterator_range<class_const_iterator> class_const_range;
 
 		typedef std::vector<std::shared_ptr<simple_function>> functions_t;
 		typedef functions_t::const_iterator function_const_iterator;
-		typedef boost::iterator_range<function_const_iterator> function_const_iterator_range;
+		typedef boost::iterator_range<function_const_iterator> function_const_range;
 
 		typedef std::vector<std::shared_ptr<operator_function>> operator_functions_t;
 		typedef operator_functions_t::const_iterator operator_function_const_iterator;
-		typedef boost::iterator_range<operator_function_const_iterator> operator_function_const_iterator_range;
+		typedef boost::iterator_range<operator_function_const_iterator> operator_function_const_range;
 
 		typedef std::vector<std::shared_ptr<variable>> variables_t;
 		typedef variables_t::const_iterator variable_const_iterator;
-		typedef boost::iterator_range<variable_const_iterator> variable_const_iterator_range;
+		typedef boost::iterator_range<variable_const_iterator> variable_const_range;
 
         /**
         Creates an anonymous namespace. Equivalent to namespace_("").
@@ -107,28 +107,28 @@ class namespace_:
 		named_scope_iterator_range
         named_scopes();
 
-		named_scope_const_iterator_range
+		named_scope_const_range
         named_scopes() const;
 
 		named_entity_iterator_range
 		named_entities();
 
-		named_entity_const_iterator_range
+		named_entity_const_range
 		named_entities() const;
 
-		namespace_const_iterator_range
+		namespace_const_range
 		namespaces() const;
 
-		class_const_iterator_range
+		class_const_range
 		classes() const;
 
-		function_const_iterator_range
+		function_const_range
 		functions() const;
 
-		operator_function_const_iterator_range
+		operator_function_const_range
 		operator_functions() const;
 
-		variable_const_iterator_range
+		variable_const_range
 		variables() const;
 
         void

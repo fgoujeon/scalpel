@@ -91,7 +91,7 @@ class_::named_scopes()
 	return named_scopes_.pointers();
 }
 
-named_scope::named_scope_const_iterator_range
+named_scope::named_scope_const_range
 class_::named_scopes() const
 {
 	return named_scopes_.pointers();
@@ -103,25 +103,25 @@ class_::named_entities()
 	return named_entities_.pointers();
 }
 
-named_scope::named_entity_const_iterator_range
+named_scope::named_entity_const_range
 class_::named_entities() const
 {
 	return named_entities_.pointers();
 }
 
-class_::base_class_const_iterator_range
+class_::base_class_const_range
 class_::base_classes() const
 {
 	return base_classes_;
 }
 
-class_::nested_class_const_iterator_range
+class_::nested_class_const_range
 class_::nested_classes() const
 {
 	return nested_classes_;
 }
 
-class_::constructor_const_iterator_range
+class_::constructor_const_range
 class_::constructors() const
 {
 	return constructors_;
@@ -139,25 +139,25 @@ class_::set_destructor(std::shared_ptr<destructor> d)
 	destructor_ = d;
 }
 
-class_::function_const_iterator_range
+class_::function_const_range
 class_::functions() const
 {
 	return functions_;
 }
 
-class_::operator_function_const_iterator_range
+class_::operator_function_const_range
 class_::operator_functions() const
 {
 	return operator_functions_;
 }
 
-class_::conversion_function_const_iterator_range
+class_::conversion_function_const_range
 class_::conversion_functions() const
 {
 	return conversion_functions_;
 }
 
-class_::variable_const_iterator_range
+class_::variable_const_range
 class_::variables() const
 {
 	return variables_;
