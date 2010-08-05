@@ -27,6 +27,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "named_scope.hpp"
 #include "named_entity.hpp"
 #include "type.hpp"
+#include <scalpel/utility/shared_ptr_vector.hpp>
 #include <boost/noncopyable.hpp>
 #include <string>
 #include <list>
@@ -58,37 +59,17 @@ class class_:
 		class constructor;
 		class destructor;
 		class conversion_function;
-		typedef function_member<simple_function> member_function;
+		typedef function_member<simple_function> member_simple_function;
 		typedef function_member<operator_function> member_operator_function;
 		typedef member<variable> member_variable;
 
-		typedef std::vector<std::shared_ptr<base_class>> base_classes_t;
-		typedef base_classes_t::const_iterator base_class_const_iterator;
-		typedef boost::iterator_range<base_class_const_iterator> base_class_const_range;
-
-		typedef std::vector<std::shared_ptr<nested_class>> nested_classes_t;
-		typedef nested_classes_t::const_iterator nested_class_const_iterator;
-		typedef boost::iterator_range<nested_class_const_iterator> nested_class_const_range;
-
-		typedef std::vector<std::shared_ptr<constructor>> constructors_t;
-		typedef constructors_t::const_iterator constructor_const_iterator;
-		typedef boost::iterator_range<constructor_const_iterator> constructor_const_range;
-
-		typedef std::vector<std::shared_ptr<member_function>> functions_t;
-		typedef functions_t::const_iterator function_const_iterator;
-		typedef boost::iterator_range<function_const_iterator> function_const_range;
-
-		typedef std::vector<std::shared_ptr<member_operator_function>> operator_functions_t;
-		typedef operator_functions_t::const_iterator operator_function_const_iterator;
-		typedef boost::iterator_range<operator_function_const_iterator> operator_function_const_range;
-
-		typedef std::vector<std::shared_ptr<conversion_function>> conversion_functions_t;
-		typedef conversion_functions_t::const_iterator conversion_function_const_iterator;
-		typedef boost::iterator_range<conversion_function_const_iterator> conversion_function_const_range;
-
-		typedef std::vector<std::shared_ptr<member_variable>> variables_t;
-		typedef variables_t::const_iterator variable_const_iterator;
-		typedef boost::iterator_range<variable_const_iterator> variable_const_range;
+		typedef utility::shared_ptr_vector<base_class> base_classes_t;
+		typedef utility::shared_ptr_vector<nested_class> nested_classes_t;
+		typedef utility::shared_ptr_vector<constructor> constructors_t;
+		typedef utility::shared_ptr_vector<member_simple_function> simple_functions_t;
+		typedef utility::shared_ptr_vector<member_operator_function> operator_functions_t;
+		typedef utility::shared_ptr_vector<conversion_function> conversion_functions_t;
+		typedef utility::shared_ptr_vector<member_variable> variables_t;
 
 		enum access
 		{
@@ -145,13 +126,13 @@ class class_:
 		named_entity_const_range
 		named_entities() const;
 
-		base_class_const_range
+		base_classes_t::const_range
 		base_classes() const;
 
-		nested_class_const_range
+		nested_classes_t::const_range
 		nested_classes() const;
 
-		constructor_const_range
+		constructors_t::const_range
 		constructors() const;
 
 		std::shared_ptr<const destructor>
@@ -160,16 +141,16 @@ class class_:
 		void
 		set_destructor(std::shared_ptr<destructor> d);
 
-		function_const_range
+		simple_functions_t::const_range
 		functions() const;
 
-		operator_function_const_range
+		operator_functions_t::const_range
 		operator_functions() const;
 
-		conversion_function_const_range
+		conversion_functions_t::const_range
 		conversion_functions() const;
 
-		variable_const_range
+		variables_t::const_range
 		variables() const;
 
         void
@@ -185,7 +166,7 @@ class class_:
         add(std::shared_ptr<constructor> member);
 
         void
-        add(std::shared_ptr<member_function> member);
+        add(std::shared_ptr<member_simple_function> member);
 
         void
         add(std::shared_ptr<member_operator_function> member);
@@ -208,7 +189,7 @@ class class_:
 		nested_classes_t nested_classes_;
 		constructors_t constructors_;
 		std::shared_ptr<destructor> destructor_;
-		functions_t functions_;
+		simple_functions_t simple_functions_;
 		operator_functions_t operator_functions_;
 		conversion_functions_t conversion_functions_;
 		variables_t variables_;

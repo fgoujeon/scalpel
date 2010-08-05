@@ -219,7 +219,7 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 										{
 											c->add
 											(
-												std::make_shared<class_::member_function>
+												std::make_shared<class_::member_simple_function>
 												(
 													create_simple_function(decl_specifier_seq_node, declarator_node),
 													current_access,

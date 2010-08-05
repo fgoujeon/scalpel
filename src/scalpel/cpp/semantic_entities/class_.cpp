@@ -43,7 +43,7 @@ class_::class_(class_&& c):
 	nested_classes_(std::move(c.nested_classes_)),
 	constructors_(std::move(c.constructors_)),
 	destructor_(std::move(c.destructor_)),
-	functions_(std::move(c.functions_)),
+	simple_functions_(std::move(c.simple_functions_)),
 	operator_functions_(std::move(c.operator_functions_)),
 	conversion_functions_(std::move(c.conversion_functions_)),
 	variables_(std::move(c.variables_))
@@ -59,7 +59,7 @@ class_::operator=(class_&& c)
 	nested_classes_ = std::move(c.nested_classes_);
 	constructors_ = std::move(c.constructors_);
 	destructor_ = std::move(c.destructor_);
-	functions_ = std::move(c.functions_);
+	simple_functions_ = std::move(c.simple_functions_);
 	operator_functions_ = std::move(c.operator_functions_);
 	conversion_functions_ = std::move(c.conversion_functions_);
 	variables_ = std::move(c.variables_);
@@ -109,19 +109,19 @@ class_::named_entities() const
 	return named_entities_;
 }
 
-class_::base_class_const_range
+class_::base_classes_t::const_range
 class_::base_classes() const
 {
 	return base_classes_;
 }
 
-class_::nested_class_const_range
+class_::nested_classes_t::const_range
 class_::nested_classes() const
 {
 	return nested_classes_;
 }
 
-class_::constructor_const_range
+class_::constructors_t::const_range
 class_::constructors() const
 {
 	return constructors_;
@@ -139,25 +139,25 @@ class_::set_destructor(std::shared_ptr<destructor> d)
 	destructor_ = d;
 }
 
-class_::function_const_range
+class_::simple_functions_t::const_range
 class_::functions() const
 {
-	return functions_;
+	return simple_functions_;
 }
 
-class_::operator_function_const_range
+class_::operator_functions_t::const_range
 class_::operator_functions() const
 {
 	return operator_functions_;
 }
 
-class_::conversion_function_const_range
+class_::conversion_functions_t::const_range
 class_::conversion_functions() const
 {
 	return conversion_functions_;
 }
 
-class_::variable_const_range
+class_::variables_t::const_range
 class_::variables() const
 {
 	return variables_;
@@ -184,9 +184,9 @@ class_::add(std::shared_ptr<constructor> member)
 }
 
 void
-class_::add(std::shared_ptr<member_function> member)
+class_::add(std::shared_ptr<member_simple_function> member)
 {
-    functions_.push_back(member);
+    simple_functions_.push_back(member);
 
 	/*
 	named_scope_impl_.add_to_named_entities(member_ref);
