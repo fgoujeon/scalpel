@@ -58,10 +58,10 @@ shared_ptr_vector<T>::operator=(shared_ptr_vector&& o)
 }
 
 template<typename T>
-void
-shared_ptr_vector<T>::push_back(std::shared_ptr<T> t)
+bool
+shared_ptr_vector<T>::empty() const
 {
-	vector_.push_back(t);
+	return vector_.empty();
 }
 
 template<typename T>
@@ -76,6 +76,55 @@ shared_ptr_vector<T>::operator const_range() const
 	const_iterator begin(vector_.begin(), &constify);
 	const_iterator end(vector_.end(), &constify);
 	return const_range(begin, end);
+}
+
+template<typename T>
+std::shared_ptr<T>
+shared_ptr_vector<T>::front()
+{
+	return vector_.front();
+}
+
+template<typename T>
+std::shared_ptr<const T>
+shared_ptr_vector<T>::front() const
+{
+	return vector_.front();
+}
+
+template<typename T>
+std::shared_ptr<T>
+shared_ptr_vector<T>::back()
+{
+	return vector_.back();
+}
+
+template<typename T>
+std::shared_ptr<const T>
+shared_ptr_vector<T>::back() const
+{
+	return vector_.back();
+}
+
+template<typename T>
+void
+shared_ptr_vector<T>::push_back(std::shared_ptr<T> t)
+{
+	vector_.push_back(t);
+}
+
+template<typename T>
+void
+shared_ptr_vector<T>::pop_back()
+{
+	vector_.pop_back();
+}
+
+template<typename T>
+void
+shared_ptr_vector<T>::clear()
+{
+	vector_.clear();
 }
 
 template<typename T>

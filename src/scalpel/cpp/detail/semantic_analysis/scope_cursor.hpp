@@ -22,10 +22,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_SCOPE_CURSOR_HPP
 
 #include <scalpel/cpp/semantic_graph.hpp>
+#include <scalpel/utility/shared_ptr_vector.hpp>
 #include <boost/noncopyable.hpp>
-#include <boost/iterator/indirect_iterator.hpp>
-#include <boost/range/iterator_range.hpp>
-#include <vector>
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
 {
@@ -33,40 +31,35 @@ namespace scalpel { namespace cpp { namespace detail { namespace semantic_analys
 class scope_cursor: public boost::noncopyable
 {
 	public:
-		typedef std::vector<std::shared_ptr<semantic_entities::named_scope>> scopes_t;
-
-		typedef scopes_t::const_iterator scope_const_iterator;
-		typedef boost::indirect_iterator<scope_const_iterator, const std::shared_ptr<semantic_entities::named_scope>> scope_const_indirect_iterator;
-		typedef boost::iterator_range<scope_const_indirect_iterator> scope_const_iterator_range;
-
-		typedef scopes_t::iterator scope_iterator;
-		typedef boost::iterator_range<scope_iterator> scope_iterator_range;
+		typedef utility::shared_ptr_vector<semantic_entities::scope> scopes_t;
 
 		scope_cursor();
 
 		void
-		initialize(std::shared_ptr<semantic_entities::named_scope> global_scope);
+		initialize(std::shared_ptr<semantic_entities::scope> global_scope);
 
-		scope_const_iterator_range
+		scopes_t::const_range
 		scope_stack() const;
 
-		scope_iterator_range
+		scopes_t::range
 		scope_stack();
 
-		scope_const_iterator_range
+		/*
+		scopes_t::const_range
 		global_scope_stack() const;
 
-		scope_iterator_range
+		scopes_t::range
 		global_scope_stack();
+		*/
 
-		std::shared_ptr<semantic_entities::named_scope>
+		std::shared_ptr<semantic_entities::scope>
 		global_scope();
 
-		std::shared_ptr<semantic_entities::named_scope>
+		std::shared_ptr<semantic_entities::scope>
 		current_scope();
 
 		void
-		enter_scope(std::shared_ptr<semantic_entities::named_scope> a_scope);
+		enter_scope(std::shared_ptr<semantic_entities::scope> a_scope);
 
 		void
 		enter_last_added_scope();

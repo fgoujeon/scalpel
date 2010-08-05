@@ -34,24 +34,25 @@ scope_cursor::scope_cursor()
 }
 
 void
-scope_cursor::initialize(std::shared_ptr<semantic_entities::named_scope> global_scope)
+scope_cursor::initialize(std::shared_ptr<semantic_entities::scope> global_scope)
 {
 	scope_stack_.clear();
 	scope_stack_.push_back(global_scope);
 }
 
-scope_cursor::scope_const_iterator_range
+scope_cursor::scopes_t::const_range
 scope_cursor::scope_stack() const
 {
 	return scope_stack_;
 }
 
-scope_cursor::scope_iterator_range
+scope_cursor::scopes_t::range
 scope_cursor::scope_stack()
 {
 	return scope_stack_;
 }
 
+/*
 scope_cursor::scope_const_iterator_range
 scope_cursor::global_scope_stack() const
 {
@@ -69,15 +70,16 @@ scope_cursor::global_scope_stack()
 {
 	return scope_stack_;
 }
+*/
 
-std::shared_ptr<semantic_entities::named_scope>
+std::shared_ptr<semantic_entities::scope>
 scope_cursor::global_scope()
 {
 	assert(!scope_stack_.empty());
 	return scope_stack_.front();
 }
 
-std::shared_ptr<semantic_entities::named_scope>
+std::shared_ptr<semantic_entities::scope>
 scope_cursor::current_scope()
 {
 	assert(!scope_stack_.empty());
@@ -85,9 +87,8 @@ scope_cursor::current_scope()
 }
 
 void
-scope_cursor::enter_scope(std::shared_ptr<semantic_entities::named_scope> a_scope)
+scope_cursor::enter_scope(std::shared_ptr<semantic_entities::scope> a_scope)
 {
-	std::cout << "Entering " << a_scope->name() << "\n";
 	scope_stack_.push_back(a_scope);
 }
 
@@ -101,7 +102,6 @@ scope_cursor::enter_last_added_scope()
 void
 scope_cursor::leave_scope()
 {
-	std::cout << "Leaving " << current_scope()->name() << "\n";
 	scope_stack_.pop_back();
 }
 

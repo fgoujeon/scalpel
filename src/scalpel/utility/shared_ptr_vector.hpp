@@ -61,12 +61,33 @@ class shared_ptr_vector
 		const shared_ptr_vector&
 		operator=(shared_ptr_vector&& o);
 
-		void
-		push_back(std::shared_ptr<T> t);
+		bool
+		empty() const;
 
 		operator range();
 
 		operator const_range() const;
+
+		std::shared_ptr<T>
+		front();
+
+		std::shared_ptr<const T>
+		front() const;
+
+		std::shared_ptr<T>
+		back();
+
+		std::shared_ptr<const T>
+		back() const;
+
+		void
+		push_back(std::shared_ptr<T> t);
+
+		void
+		pop_back();
+
+		void
+		clear();
 
 	private:
 		static inline

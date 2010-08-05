@@ -62,7 +62,7 @@ class name_lookup
 		*/
 		template<class RangeT>
 		static
-		std::shared_ptr<semantic_entities::named_scope>
+		std::shared_ptr<semantic_entities::scope>
 		find_scope
 		(
 			RangeT scope_stack,
@@ -74,7 +74,7 @@ class name_lookup
 		*/
 		template<class RangeT>
 		static
-		std::shared_ptr<semantic_entities::named_scope>
+		std::shared_ptr<semantic_entities::scope>
 		find_scope
 		(
 			RangeT scope_stack,
@@ -99,7 +99,7 @@ class name_lookup
 		std::shared_ptr<semantic_entities::named_entity>
 		find_name
 		(
-			semantic_entities::named_scope& current_scope,
+			semantic_entities::scope& current_scope,
 			const std::string& name
 		);
 
@@ -107,10 +107,10 @@ class name_lookup
 		Find named_scope in the given parent named_scope, not recursively.
 		*/
 		static
-		std::shared_ptr<semantic_entities::named_scope>
+		std::shared_ptr<semantic_entities::scope>
 		find_scope
 		(
-			semantic_entities::named_scope& parent_scope,
+			semantic_entities::scope& parent_scope,
 			const std::string& scope_name
 		);
 };

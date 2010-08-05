@@ -21,9 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_NAMED_SCOPE_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_NAMED_SCOPE_HPP
 
-#include "named_entity.hpp"
 #include "scope.hpp"
-#include <scalpel/utility/shared_ptr_vector.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {

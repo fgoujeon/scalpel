@@ -32,12 +32,10 @@ using namespace semantic_entities;
 std::shared_ptr<semantic_entities::named_entity>
 name_lookup::find_name
 (
-	semantic_entities::named_scope& current_scope,
+	semantic_entities::scope& current_scope,
 	const std::string& name
 )
 {
-	std::cout << "Try to find " << name << " in " << current_scope.name() << "...\n";
-
 	using namespace semantic_entities;
 
 	auto members = current_scope.named_entities();
@@ -59,20 +57,18 @@ name_lookup::find_name
 
 	if(member_it != members.end()) //if a name has been found
 	{
-		std::cout << name << " found in " << current_scope.name() << "\n";
 		return *member_it;
 	}
 	else
 	{
-		std::cout << name << " not found in " << current_scope.name() << "\n";
 		return std::shared_ptr<semantic_entities::named_entity>();
 	}
 }
 
-std::shared_ptr<semantic_entities::named_scope>
+std::shared_ptr<semantic_entities::scope>
 name_lookup::find_scope
 (
-	named_scope& parent_scope,
+	scope& parent_scope,
 	const std::string& scope_name
 )
 {
@@ -95,12 +91,10 @@ name_lookup::find_scope
 
 	if(scope_it != scopes.end())
 	{
-		std::cout << scope_name << " found in " << parent_scope.name() << "\n";
 		return *scope_it;
 	}
 	else
 	{
-		std::cout << scope_name << " not found in " << parent_scope.name() << "\n";
 		return std::shared_ptr<semantic_entities::named_scope>();
 	}
 }
