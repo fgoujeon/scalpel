@@ -37,8 +37,9 @@ class_::class_(const std::string& name):
 }
 
 class_::class_(class_&& c):
-	named_scope_impl_(std::move(c.named_scope_impl_)),
 	name_(std::move(c.name_)),
+	named_scopes_(std::move(c.named_scopes_)),
+	named_entities_(std::move(c.named_entities_)),
 	nested_classes_(std::move(c.nested_classes_)),
 	constructors_(std::move(c.constructors_)),
 	destructor_(std::move(c.destructor_)),
@@ -52,8 +53,9 @@ class_::class_(class_&& c):
 const class_&
 class_::operator=(class_&& c)
 {
-	named_scope_impl_ = std::move(c.named_scope_impl_);
 	name_ = std::move(c.name_);
+	named_scopes_ = std::move(c.named_scopes_);
+	named_entities_ = std::move(c.named_entities_);
 	nested_classes_ = std::move(c.nested_classes_);
 	constructors_ = std::move(c.constructors_);
 	destructor_ = std::move(c.destructor_);
@@ -86,25 +88,25 @@ class_::is_global() const
 named_scope::named_scope_iterator_range
 class_::named_scopes()
 {
-	return named_scope_impl_.named_scopes();
+	return named_scopes_.pointers();
 }
 
 named_scope::named_scope_const_iterator_range
 class_::named_scopes() const
 {
-	return named_scope_impl_.named_scopes();
+	return named_scopes_.pointers();
 }
 
 named_scope::named_entity_iterator_range
 class_::named_entities()
 {
-	return named_scope_impl_.named_entities();
+	return named_entities_.pointers();
 }
 
 named_scope::named_entity_const_iterator_range
 class_::named_entities() const
 {
-	return named_scope_impl_.named_entities();
+	return named_entities_.pointers();
 }
 
 class_::base_class_const_iterator_range
@@ -171,8 +173,8 @@ void
 class_::add(std::shared_ptr<nested_class> member)
 {
 	nested_classes_.push_back(member);
-	named_scope_impl_.add_to_named_scopes(member);
-	named_scope_impl_.add_to_named_entities(member);
+	named_scopes_.push_back(member);
+	named_entities_.push_back(member);
 }
 
 void

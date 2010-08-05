@@ -24,7 +24,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "variable.hpp"
 #include "operator_function.hpp"
 #include "simple_function.hpp"
-#include "named_scope_impl.hpp"
 #include "named_scope.hpp"
 #include "named_entity.hpp"
 #include "type.hpp"
@@ -198,8 +197,13 @@ class class_:
 		add(std::shared_ptr<member_variable> member);
 
     private:
-		named_scope_impl named_scope_impl_;
         std::string name_;
+
+		//polymorphic containers
+		named_scopes_t named_scopes_;
+		named_entities_t named_entities_;
+
+		//containers
 		base_classes_t base_classes_;
 		nested_classes_t nested_classes_;
 		constructors_t constructors_;
