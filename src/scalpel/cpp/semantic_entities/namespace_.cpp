@@ -99,10 +99,10 @@ namespace_::named_entities() const
 	return named_entities_.pointers();
 }
 
-namespace_::namespace_const_range
+namespace_::namespaces_t::const_range
 namespace_::namespaces() const
 {
-	return namespaces_;
+	return namespaces_.pointers();
 }
 
 namespace_::class_const_range

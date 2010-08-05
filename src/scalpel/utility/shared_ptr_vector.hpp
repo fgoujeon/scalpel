@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_UTILITY_SHARED_PTR_VECTOR_HPP
 #define SCALPEL_UTILITY_SHARED_PTR_VECTOR_HPP
 
-#include <boost/iterator/indirect_iterator.hpp>
+#include <boost/iterator/transform_iterator.hpp>
 #include <boost/range/iterator_range.hpp>
 #include <vector>
 #include <memory>
@@ -40,13 +40,14 @@ class shared_ptr_vector
 		typedef std::vector<std::shared_ptr<T>> vector_t;
 
 		typedef typename vector_t::iterator iterator;
-		typedef typename vector_t::const_iterator const_iterator;
+		typedef typename vector_t::const_iterator raw_const_iterator;
 
-		typedef boost::indirect_iterator<const_iterator, std::shared_ptr<const T>> const_indirect_iterator;
+		typedef std::function<std::shared_ptr<const T> (std::shared_ptr<T>)> constify_function_t;
+		typedef boost::transform_iterator<constify_function_t, raw_const_iterator, std::shared_ptr<const T>> const_iterator;
 
 	public:
 		typedef boost::iterator_range<iterator> range;
-		typedef boost::iterator_range<const_indirect_iterator> const_range;
+		typedef boost::iterator_range<const_iterator> const_range;
 
 		shared_ptr_vector();
 
@@ -70,6 +71,10 @@ class shared_ptr_vector
 		pointers() const;
 
 	private:
+		static inline
+		std::shared_ptr<const T>
+		constify(std::shared_ptr<T> ptr);
+
 		vector_t vector_;
 };
 

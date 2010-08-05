@@ -45,9 +45,7 @@ class namespace_:
 	public boost::noncopyable
 {
     public:
-		typedef std::vector<std::shared_ptr<namespace_>> namespaces_t;
-		typedef namespaces_t::const_iterator namespace_const_iterator;
-		typedef boost::iterator_range<namespace_const_iterator> namespace_const_range;
+		typedef utility::shared_ptr_vector<namespace_> namespaces_t;
 
 		typedef std::vector<std::shared_ptr<class_>> classes_t;
 		typedef classes_t::const_iterator class_const_iterator;
@@ -116,7 +114,7 @@ class namespace_:
 		named_entity_const_range
 		named_entities() const;
 
-		namespace_const_range
+		namespaces_t::const_range
 		namespaces() const;
 
 		class_const_range

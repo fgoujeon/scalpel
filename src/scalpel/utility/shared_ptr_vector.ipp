@@ -75,7 +75,17 @@ template<typename T>
 typename shared_ptr_vector<T>::const_range
 shared_ptr_vector<T>::pointers() const
 {
-	return vector_;
+	const_iterator begin(vector_.begin(), &constify);
+	const_iterator end(vector_.end(), &constify);
+	return const_range(begin, end);
+}
+
+template<typename T>
+inline
+std::shared_ptr<const T>
+shared_ptr_vector<T>::constify(std::shared_ptr<T> ptr)
+{
+	return ptr;
 }
 
 }} //namespace scalpel::utility
