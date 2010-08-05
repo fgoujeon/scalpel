@@ -18,29 +18,43 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_NAMED_ENTITY_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_NAMED_ENTITY_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_SCOPE_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_SCOPE_HPP
 
-#include <string>
+#include <scalpel/utility/shared_ptr_vector.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-struct named_entity
+struct named_scope;
+struct named_entity;
+
+/**
+Refers to any scope.
+*/
+struct scope
 {
-	virtual
-	~named_entity(){}
-
-	/**
-	@return the name of the entity
-	*/
-	virtual
-	const std::string&
-	name() const = 0;
+	typedef utility::shared_ptr_vector<named_scope> named_scopes_t;
+	typedef utility::shared_ptr_vector<named_entity> named_entities_t;
 
 	virtual
-	bool
-	is_a_type() const = 0;
+	~scope(){}
+
+	virtual
+	named_scopes_t::range
+	named_scopes() = 0;
+
+	virtual
+	named_scopes_t::const_range
+	named_scopes() const = 0;
+
+	virtual
+	named_entities_t::range
+	named_entities() = 0;
+
+	virtual
+	named_entities_t::const_range
+	named_entities() const = 0;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

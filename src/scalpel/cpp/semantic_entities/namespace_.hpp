@@ -90,16 +90,16 @@ class namespace_:
         bool
         is_global() const;
 
-		named_scope_iterator_range
+		named_scopes_t::range
         named_scopes();
 
-		named_scope_const_range
+		named_scopes_t::const_range
         named_scopes() const;
 
-		named_entity_iterator_range
+		named_entities_t::range
 		named_entities();
 
-		named_entity_const_range
+		named_entities_t::const_range
 		named_entities() const;
 
 		namespaces_t::const_range

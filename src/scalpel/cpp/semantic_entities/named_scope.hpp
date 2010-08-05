@@ -22,48 +22,23 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_NAMED_SCOPE_HPP
 
 #include "named_entity.hpp"
+#include "scope.hpp"
 #include <scalpel/utility/shared_ptr_vector.hpp>
-#include <vector>
-#include <memory>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 /**
-Refers to the scopes that can be browsed by the name lookup functions.
+Refers to the named scopes.
 */
-struct named_scope
+struct named_scope: public scope
 {
-	typedef utility::shared_ptr_vector<named_scope> named_scopes_t;
-	typedef named_scopes_t::const_range named_scope_const_range;
-	typedef named_scopes_t::range named_scope_iterator_range;
-
-	typedef utility::shared_ptr_vector<named_entity> named_entities_t;
-	typedef named_entities_t::const_range named_entity_const_range;
-	typedef named_entities_t::range named_entity_iterator_range;
-
 	virtual
 	~named_scope(){}
 
 	virtual
 	const std::string&
 	name() const = 0;
-
-	virtual
-	named_scope_iterator_range
-	named_scopes() = 0;
-
-	virtual
-	named_scope_const_range
-	named_scopes() const = 0;
-
-	virtual
-	named_entity_iterator_range
-	named_entities() = 0;
-
-	virtual
-	named_entity_const_range
-	named_entities() const = 0;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

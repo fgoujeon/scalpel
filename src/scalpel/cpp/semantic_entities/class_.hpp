@@ -114,16 +114,16 @@ class class_:
         bool
         is_global() const;
 
-		named_scope_iterator_range
+		named_scopes_t::range
         named_scopes();
 
-		named_scope_const_range
+		named_scopes_t::const_range
         named_scopes() const;
 
-		named_entity_iterator_range
+		named_entities_t::range
 		named_entities();
 
-		named_entity_const_range
+		named_entities_t::const_range
 		named_entities() const;
 
 		base_classes_t::const_range
@@ -322,25 +322,25 @@ class class_::member<class_>:
 			return true;
 		}
 
-		class_::named_scope_iterator_range
+		class_::named_scopes_t::range
         named_scopes()
 		{
 			return entity_->named_scopes();
 		}
 
-		class_::named_scope_const_range
+		class_::named_scopes_t::const_range
         named_scopes() const
 		{
 			return entity_->named_scopes();
 		}
 
-		class_::named_entity_iterator_range
+		class_::named_entities_t::range
 		named_entities()
 		{
 			return entity_->named_entities();
 		}
 
-		class_::named_entity_const_range
+		class_::named_entities_t::const_range
 		named_entities() const
 		{
 			return entity_->named_entities();

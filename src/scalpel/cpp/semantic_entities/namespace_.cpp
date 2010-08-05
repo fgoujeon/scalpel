@@ -75,25 +75,25 @@ namespace_::is_a_type() const
     return false;
 }
 
-named_scope::named_scope_iterator_range
+named_scope::named_scopes_t::range
 namespace_::named_scopes()
 {
 	return named_scopes_;
 }
 
-named_scope::named_scope_const_range
+named_scope::named_scopes_t::const_range
 namespace_::named_scopes() const
 {
 	return named_scopes_;
 }
 
-named_scope::named_entity_iterator_range
+named_scope::named_entities_t::range
 namespace_::named_entities()
 {
 	return named_entities_;
 }
 
-named_scope::named_entity_const_range
+named_scope::named_entities_t::const_range
 namespace_::named_entities() const
 {
 	return named_entities_;
