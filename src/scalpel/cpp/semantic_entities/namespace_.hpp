@@ -25,7 +25,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "operator_function.hpp"
 #include "simple_function.hpp"
 #include "class_.hpp"
-#include "named_scope_impl.hpp"
 #include "named_scope.hpp"
 #include "named_entity.hpp"
 #include <boost/noncopyable.hpp>
@@ -46,11 +45,6 @@ class namespace_:
 	public boost::noncopyable
 {
     public:
-		typedef std::list<named_entity*> entities_t;
-		typedef entities_t::const_iterator entity_const_iterator;
-		typedef boost::indirect_iterator<entity_const_iterator, const named_entity*> entity_const_indirect_iterator;
-		typedef boost::iterator_range<entity_const_indirect_iterator> entity_const_iterator_range;
-
 		typedef std::vector<std::shared_ptr<namespace_>> namespaces_t;
 		typedef namespaces_t::const_iterator namespace_const_iterator;
 		typedef boost::iterator_range<namespace_const_iterator> namespace_const_iterator_range;
@@ -153,8 +147,13 @@ class namespace_:
         add(std::shared_ptr<variable> member);
 
     private:
-		named_scope_impl named_scope_impl_;
         std::string name_;
+
+		//polymorphic containers
+		named_scopes_t named_scopes_;
+		named_entities_t named_entities_;
+
+		//containers
         namespaces_t namespaces_;
         classes_t classes_;
         functions_t functions_;
