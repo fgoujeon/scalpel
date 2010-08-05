@@ -138,7 +138,7 @@ print
 	for(auto i = n.classes().begin(); i != n.classes().end(); ++i)
 		print(**i, indent_level + 1);
 
-	for(auto i = n.functions().begin(); i != n.functions().end(); ++i)
+	for(auto i = n.simple_functions().begin(); i != n.simple_functions().end(); ++i)
 		print(**i, indent_level + 1);
 
 	for(auto i = n.operator_functions().begin(); i != n.operator_functions().end(); ++i)

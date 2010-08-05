@@ -65,15 +65,13 @@ shared_ptr_vector<T>::push_back(std::shared_ptr<T> t)
 }
 
 template<typename T>
-typename shared_ptr_vector<T>::range
-shared_ptr_vector<T>::pointers()
+shared_ptr_vector<T>::operator range()
 {
 	return vector_;
 }
 
 template<typename T>
-typename shared_ptr_vector<T>::const_range
-shared_ptr_vector<T>::pointers() const
+shared_ptr_vector<T>::operator const_range() const
 {
 	const_iterator begin(vector_.begin(), &constify);
 	const_iterator end(vector_.end(), &constify);

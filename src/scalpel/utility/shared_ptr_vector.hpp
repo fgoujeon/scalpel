@@ -64,11 +64,9 @@ class shared_ptr_vector
 		void
 		push_back(std::shared_ptr<T> t);
 
-		range
-		pointers();
+		operator range();
 
-		const_range
-		pointers() const;
+		operator const_range() const;
 
 	private:
 		static inline

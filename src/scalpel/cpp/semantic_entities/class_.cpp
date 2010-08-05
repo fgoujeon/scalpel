@@ -88,25 +88,25 @@ class_::is_global() const
 named_scope::named_scope_iterator_range
 class_::named_scopes()
 {
-	return named_scopes_.pointers();
+	return named_scopes_;
 }
 
 named_scope::named_scope_const_range
 class_::named_scopes() const
 {
-	return named_scopes_.pointers();
+	return named_scopes_;
 }
 
 named_scope::named_entity_iterator_range
 class_::named_entities()
 {
-	return named_entities_.pointers();
+	return named_entities_;
 }
 
 named_scope::named_entity_const_range
 class_::named_entities() const
 {
-	return named_entities_.pointers();
+	return named_entities_;
 }
 
 class_::base_class_const_range

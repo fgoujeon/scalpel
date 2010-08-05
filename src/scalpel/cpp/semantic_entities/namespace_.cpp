@@ -42,7 +42,7 @@ namespace_::namespace_(namespace_&& n):
 	named_entities_(std::move(n.named_entities_)),
 	namespaces_(std::move(n.namespaces_)),
 	classes_(std::move(n.classes_)),
-	functions_(std::move(n.functions_)),
+	simple_functions_(std::move(n.simple_functions_)),
 	operator_functions_(std::move(n.operator_functions_)),
 	variables_(std::move(n.variables_))
 {
@@ -56,7 +56,7 @@ namespace_::operator=(namespace_&& n)
 	named_entities_ = std::move(n.named_entities_);
 	namespaces_ = std::move(n.namespaces_);
 	classes_ = std::move(n.classes_);
-	functions_ = std::move(n.functions_);
+	simple_functions_ = std::move(n.simple_functions_);
 	operator_functions_ = std::move(n.operator_functions_);
 	variables_ = std::move(n.variables_);
 
@@ -78,52 +78,52 @@ namespace_::is_a_type() const
 named_scope::named_scope_iterator_range
 namespace_::named_scopes()
 {
-	return named_scopes_.pointers();
+	return named_scopes_;
 }
 
 named_scope::named_scope_const_range
 namespace_::named_scopes() const
 {
-	return named_scopes_.pointers();
+	return named_scopes_;
 }
 
 named_scope::named_entity_iterator_range
 namespace_::named_entities()
 {
-	return named_entities_.pointers();
+	return named_entities_;
 }
 
 named_scope::named_entity_const_range
 namespace_::named_entities() const
 {
-	return named_entities_.pointers();
+	return named_entities_;
 }
 
 namespace_::namespaces_t::const_range
 namespace_::namespaces() const
 {
-	return namespaces_.pointers();
+	return namespaces_;
 }
 
-namespace_::class_const_range
+namespace_::classes_t::const_range
 namespace_::classes() const
 {
 	return classes_;
 }
 
-namespace_::function_const_range
-namespace_::functions() const
+namespace_::simple_functions_t::const_range
+namespace_::simple_functions() const
 {
-	return functions_;
+	return simple_functions_;
 }
 
-namespace_::operator_function_const_range
+namespace_::operator_functions_t::const_range
 namespace_::operator_functions() const
 {
 	return operator_functions_;
 }
 
-namespace_::variable_const_range
+namespace_::variables_t::const_range
 namespace_::variables() const
 {
 	return variables_;
@@ -148,7 +148,7 @@ namespace_::add(std::shared_ptr<class_> member)
 void
 namespace_::add(std::shared_ptr<simple_function> member)
 {
-    functions_.push_back(member);
+    simple_functions_.push_back(member);
 	named_entities_.push_back(member);
 }
 

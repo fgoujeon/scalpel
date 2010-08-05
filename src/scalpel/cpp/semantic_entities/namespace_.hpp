@@ -46,22 +46,10 @@ class namespace_:
 {
     public:
 		typedef utility::shared_ptr_vector<namespace_> namespaces_t;
-
-		typedef std::vector<std::shared_ptr<class_>> classes_t;
-		typedef classes_t::const_iterator class_const_iterator;
-		typedef boost::iterator_range<class_const_iterator> class_const_range;
-
-		typedef std::vector<std::shared_ptr<simple_function>> functions_t;
-		typedef functions_t::const_iterator function_const_iterator;
-		typedef boost::iterator_range<function_const_iterator> function_const_range;
-
-		typedef std::vector<std::shared_ptr<operator_function>> operator_functions_t;
-		typedef operator_functions_t::const_iterator operator_function_const_iterator;
-		typedef boost::iterator_range<operator_function_const_iterator> operator_function_const_range;
-
-		typedef std::vector<std::shared_ptr<variable>> variables_t;
-		typedef variables_t::const_iterator variable_const_iterator;
-		typedef boost::iterator_range<variable_const_iterator> variable_const_range;
+		typedef utility::shared_ptr_vector<class_> classes_t;
+		typedef utility::shared_ptr_vector<simple_function> simple_functions_t;
+		typedef utility::shared_ptr_vector<operator_function> operator_functions_t;
+		typedef utility::shared_ptr_vector<variable> variables_t;
 
         /**
         Creates an anonymous namespace. Equivalent to namespace_("").
@@ -117,16 +105,16 @@ class namespace_:
 		namespaces_t::const_range
 		namespaces() const;
 
-		class_const_range
+		classes_t::const_range
 		classes() const;
 
-		function_const_range
-		functions() const;
+		simple_functions_t::const_range
+		simple_functions() const;
 
-		operator_function_const_range
+		operator_functions_t::const_range
 		operator_functions() const;
 
-		variable_const_range
+		variables_t::const_range
 		variables() const;
 
         void
@@ -154,7 +142,7 @@ class namespace_:
 		//containers
         namespaces_t namespaces_;
         classes_t classes_;
-        functions_t functions_;
+        simple_functions_t simple_functions_;
         operator_functions_t operator_functions_;
         variables_t variables_;
 };
