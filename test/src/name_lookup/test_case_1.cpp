@@ -33,47 +33,59 @@ test_case_1()
 	//
 	//construction of the semantic graph of the following source code:
 	/*
-	int find_me;
-
 	namespace A
 	{
-		int find_me;
+		int i;
 
 		namespace B
 		{
 			void f();
 		}
+
+		namespace C
+		{
+		}
 	}
 
-	void A::N::f()
+	int i, j;
+
+	void A::B::f()
 	{
 		//look from here
 	}
 	*/
 	auto semantic_graph = std::make_shared<scalpel::cpp::semantic_graph>();
-	auto variable_find_me = std::make_shared<scalpel::cpp::semantic_entities::variable>
+	auto variable_a_i = std::make_shared<scalpel::cpp::semantic_entities::variable>
 	(
-		"find_me",
+		"i",
 		scalpel::cpp::semantic_entities::built_in_type_shared_ptrs::int_
 	);
 	auto namespace_a = std::make_shared<scalpel::cpp::semantic_entities::namespace_>("A");
-	auto variable_find_me2 = std::make_shared<scalpel::cpp::semantic_entities::variable>
+	auto variable_i = std::make_shared<scalpel::cpp::semantic_entities::variable>
 	(
-		"find_me",
+		"i",
 		scalpel::cpp::semantic_entities::built_in_type_shared_ptrs::int_
 	);
-	auto namespace_n = std::make_shared<scalpel::cpp::semantic_entities::namespace_>("N");
+	auto variable_j = std::make_shared<scalpel::cpp::semantic_entities::variable>
+	(
+		"j",
+		scalpel::cpp::semantic_entities::built_in_type_shared_ptrs::int_
+	);
+	auto namespace_b = std::make_shared<scalpel::cpp::semantic_entities::namespace_>("B");
 	auto function_f = std::make_shared<scalpel::cpp::semantic_entities::simple_function>
 	(
 		"f",
 		scalpel::cpp::semantic_entities::built_in_type_shared_ptrs::void_
 	);
+	auto namespace_c = std::make_shared<scalpel::cpp::semantic_entities::namespace_>("C");
 
 	semantic_graph->add(namespace_a);
-	semantic_graph->add(variable_find_me2);
-	namespace_a->add(variable_find_me);
-	namespace_a->add(namespace_n);
-	namespace_n->add(function_f);
+	namespace_a->add(variable_a_i);
+	namespace_a->add(namespace_b);
+	namespace_b->add(function_f);
+	namespace_a->add(namespace_c);
+	semantic_graph->add(variable_i);
+	semantic_graph->add(variable_j);
 
 
 
@@ -83,7 +95,7 @@ test_case_1()
 	scalpel::utility::shared_ptr_vector<scalpel::cpp::semantic_entities::scope> scope_path;
 	scope_path.push_back(semantic_graph);
 	scope_path.push_back(namespace_a);
-	scope_path.push_back(namespace_n);
+	scope_path.push_back(namespace_b);
 	scope_path.push_back(function_f);
 
 
@@ -91,9 +103,22 @@ test_case_1()
 	//
 	//name lookup test
 	//
-	auto found_entities = scalpel::cpp::detail::semantic_analysis::name_lookup2::find_entities(scope_path, "find_me");
-	BOOST_CHECK_EQUAL(found_entities.size(), 1);
-	BOOST_CHECK_EQUAL(found_entities.front(), variable_find_me);
+	{
+		auto found_entities = scalpel::cpp::detail::semantic_analysis::name_lookup2::find_entities(scope_path, "i");
+		BOOST_CHECK_EQUAL(found_entities.size(), 1);
+		BOOST_CHECK_EQUAL(found_entities.front(), variable_a_i);
+	}
+
+	{
+		auto found_entities = scalpel::cpp::detail::semantic_analysis::name_lookup2::find_entities(scope_path, "j");
+		BOOST_CHECK_EQUAL(found_entities.size(), 1);
+		BOOST_CHECK_EQUAL(found_entities.front(), variable_j);
+	}
+
+	{
+		auto found_scope = scalpel::cpp::detail::semantic_analysis::name_lookup2::find_scope(scope_path, "C");
+		BOOST_CHECK_EQUAL(found_scope, namespace_c);
+	}
 }
 
 } //namespace name_lookup

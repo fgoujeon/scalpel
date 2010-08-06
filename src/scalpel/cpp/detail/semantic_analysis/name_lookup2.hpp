@@ -34,7 +34,7 @@ class name_lookup2
 {
 	public:
 		/**
-		Find entities from an unqualified name
+		Find entities of the given name, from the given scope path (unqualified name lookup)
 		*/
 		static
 		utility::shared_ptr_vector<semantic_entities::named_entity>
@@ -51,6 +51,31 @@ class name_lookup2
 		static
 		utility::shared_ptr_vector<semantic_entities::named_entity>
 		find_entities
+		(
+			std::shared_ptr<semantic_entities::scope> current_scope,
+			const std::string& name
+		);
+
+	public:
+		/**
+		Find a scope of the given name, from the given scope path
+		@return a pointer to the found scope
+		*/
+		static
+		std::shared_ptr<semantic_entities::named_scope>
+		find_scope
+		(
+			utility::shared_ptr_vector<semantic_entities::scope>::range scope_path,
+			const std::string& name
+		);
+
+		/**
+		Find a scope of the given name, in the given scope
+		@return a pointer to the found scope or a null pointer
+		*/
+		static
+		std::shared_ptr<semantic_entities::named_scope>
+		find_scope
 		(
 			std::shared_ptr<semantic_entities::scope> current_scope,
 			const std::string& name
