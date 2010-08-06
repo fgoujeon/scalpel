@@ -1400,8 +1400,8 @@ semantic_analyzer::create_variable
 {
 	return std::make_shared<variable>
 	(
-		create_type(decl_specifier_seq_node, declarator_node),
 		get_name(declarator_node),
+		create_type(decl_specifier_seq_node, declarator_node),
 		has_static_specifier(decl_specifier_seq_node)
 	);
 }

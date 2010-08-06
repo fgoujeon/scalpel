@@ -48,8 +48,8 @@ class simple_function: public named_scope, public named_entity
 		(
 			const std::string& name,
 			std::shared_ptr<const type> return_type,
-			std::list<parameter>&& parameters,
-			bool is_static_specified
+			parameters_t&& parameters = parameters_t(),
+			bool is_static_specified = false
 		);
 
 		//copy constructor

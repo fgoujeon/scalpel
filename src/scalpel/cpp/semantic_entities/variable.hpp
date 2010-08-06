@@ -38,7 +38,12 @@ class variable:
 	public named_entity
 {
 	public:
-		variable(std::shared_ptr<const type> t, const std::string& name, bool is_static_specified);
+		variable
+		(
+			const std::string& name,
+			std::shared_ptr<const type> t,
+			bool is_static_specified = false
+		);
 
 		variable(const variable& v);
 
