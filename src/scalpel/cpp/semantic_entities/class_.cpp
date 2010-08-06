@@ -74,15 +74,15 @@ class_::name() const
 }
 
 bool
-class_::is_a_type() const
-{
-    return true;
-}
-
-bool
 class_::is_global() const
 {
     return false;
+}
+
+bool
+class_::considered_by_scope_find() const
+{
+	return true;
 }
 
 named_scope::named_scopes_t::range
@@ -188,30 +188,27 @@ class_::add(std::shared_ptr<simple_function> member)
 {
     simple_functions_.push_back(member);
 
-	/*
-	named_scope_impl_.add_to_named_entities(member_ref);
-	*/
+	//TODO this should be possible
+	//named_scopes_.push_back(member);
+	//named_entities_.push_back(member);
 }
 
 void
 class_::add(std::shared_ptr<operator_function> member)
 {
     operator_functions_.push_back(member);
-	//named_scope_impl_.add_to_named_entities(member);
 }
 
 void
 class_::add(std::shared_ptr<conversion_function> member)
 {
     conversion_functions_.push_back(member);
-	//named_scope_impl_.add_to_named_entities(member);
 }
 
 void
 class_::add(std::shared_ptr<variable> member)
 {
     variables_.push_back(member);
-	//named_scope_impl_.add_to_named_entities(member);
 }
 
 

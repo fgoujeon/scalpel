@@ -37,7 +37,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 Represents a C++ non-special function (which is neither a constructor nor an
 operator function nor a conversion function).
 */
-class simple_function: public named_scope, public named_entity
+class simple_function: public named_scope
 {
     public:
 		class parameter;
@@ -82,8 +82,8 @@ class simple_function: public named_scope, public named_entity
         /**
         @return false
         */
-        bool
-        is_a_type() const;
+		bool
+		considered_by_scope_find() const;
 
 		std::shared_ptr<const type>
 		return_type() const;

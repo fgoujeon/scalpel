@@ -75,17 +75,23 @@ name_lookup2::find_scope
 	const std::string& name
 )
 {
+	std::shared_ptr<semantic_entities::named_scope> found_scope;
+
 	std::reverse(scope_path.begin(), scope_path.end()); //TODO it would be faster if scope_path could provide a bidirectional iterator
 	for(auto i = scope_path.begin(); i != scope_path.end(); ++i) //from current to outermost scopes (until global namespace)
 	{
 		std::shared_ptr<semantic_entities::scope> current_scope = *i;
 
 		//find scope in current scope
-		std::shared_ptr<semantic_entities::named_scope> found_scope = find_scope(current_scope, name);
-		if(found_scope) return found_scope;
+		std::shared_ptr<semantic_entities::named_scope> maybe_found_scope = find_scope(current_scope, name);
+		if(maybe_found_scope)
+		{
+			found_scope = maybe_found_scope;
+			break;
+		}
 	}
 
-	throw std::runtime_error("No scope found");
+	return found_scope;
 }
 
 std::shared_ptr<semantic_entities::named_scope>
@@ -97,26 +103,14 @@ name_lookup2::find_scope
 {
 	std::shared_ptr<semantic_entities::named_scope> found_scope;
 
-	auto scopes = current_scope->named_scopes();
-	auto scope_it = std::find_if
-	(
-		scopes.begin(),
-		scopes.end(),
-		std::bind
-		(
-			std::equal_to<std::string>(),
-			std::cref(name),
-			std::bind
-			(
-				&semantic_entities::named_scope::name,
-				std::placeholders::_1
-			)
-		)
-	);
-
-	if(scope_it != scopes.end()) //if a name has been found
+	for(auto i = current_scope->named_scopes().begin(); i != current_scope->named_scopes().end(); ++i)
 	{
-		found_scope = *scope_it;
+		std::shared_ptr<semantic_entities::named_scope> current_entity = *i;
+		if(current_entity->considered_by_scope_find() && current_entity->name() == name)
+		{
+			found_scope = current_entity;
+			break;
+		}
 	}
 
 	return found_scope;

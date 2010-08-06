@@ -41,7 +41,6 @@ Represents a C++ namespace.
 */
 class namespace_:
 	public named_scope,
-	public named_entity,
 	public boost::noncopyable
 {
     public:
@@ -81,14 +80,17 @@ class namespace_:
         const std::string&
         name() const;
 
-        bool
-        is_a_type() const;
-
         /**
         @return true if the namespace is the global one, false otherwise
         */
         bool
         is_global() const;
+
+        /**
+        @return true
+        */
+		bool
+		considered_by_scope_find() const;
 
 		named_scopes_t::range
         named_scopes();

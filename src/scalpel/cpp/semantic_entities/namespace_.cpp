@@ -70,9 +70,9 @@ namespace_::name() const
 }
 
 bool
-namespace_::is_a_type() const
+namespace_::considered_by_scope_find() const
 {
-    return false;
+	return true;
 }
 
 named_scope::named_scopes_t::range
@@ -149,6 +149,7 @@ void
 namespace_::add(std::shared_ptr<simple_function> member)
 {
     simple_functions_.push_back(member);
+	named_scopes_.push_back(member);
 	named_entities_.push_back(member);
 }
 

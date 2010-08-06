@@ -43,7 +43,6 @@ Represents a C++ class.
 */
 class class_:
 	public named_scope,
-	public named_entity,
 	public type,
 	public boost::noncopyable
 {
@@ -103,16 +102,16 @@ class class_:
         name() const;
 
         /**
-        @return true
-        */
-        bool
-        is_a_type() const;
-
-        /**
         @return false, because a class cannot be the global namespace...
         */
         bool
         is_global() const;
+
+        /**
+        @return true
+        */
+		bool
+		considered_by_scope_find() const;
 
 		named_scopes_t::range
         named_scopes();
@@ -300,7 +299,6 @@ class class_::base_class
 template<>
 class class_::member<class_>:
 	public named_scope,
-	public named_entity,
 	public type
 {
 	public:
@@ -317,7 +315,7 @@ class class_::member<class_>:
 		}
 
         bool
-        is_a_type() const
+        considered_by_scope_find() const
 		{
 			return true;
 		}

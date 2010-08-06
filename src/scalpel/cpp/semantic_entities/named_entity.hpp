@@ -38,9 +38,11 @@ struct named_entity
 	const std::string&
 	name() const = 0;
 
+	/*
 	virtual
 	bool
 	is_a_type() const = 0;
+	*/
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

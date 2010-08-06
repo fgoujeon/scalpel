@@ -140,9 +140,9 @@ simple_function::name() const
 }
 
 bool
-simple_function::is_a_type() const
+simple_function::considered_by_scope_find() const
 {
-    return false;
+	return false;
 }
 
 std::shared_ptr<const type>

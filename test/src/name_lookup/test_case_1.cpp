@@ -42,6 +42,8 @@ test_case_1()
 			void f();
 		}
 
+		void g();
+
 		namespace C
 		{
 		}
@@ -77,12 +79,18 @@ test_case_1()
 		"f",
 		scalpel::cpp::semantic_entities::built_in_type_shared_ptrs::void_
 	);
+	auto function_g = std::make_shared<scalpel::cpp::semantic_entities::simple_function>
+	(
+		"g",
+		scalpel::cpp::semantic_entities::built_in_type_shared_ptrs::void_
+	);
 	auto namespace_c = std::make_shared<scalpel::cpp::semantic_entities::namespace_>("C");
 
 	semantic_graph->add(namespace_a);
 	namespace_a->add(variable_a_i);
 	namespace_a->add(namespace_b);
 	namespace_b->add(function_f);
+	namespace_a->add(function_g);
 	namespace_a->add(namespace_c);
 	semantic_graph->add(variable_i);
 	semantic_graph->add(variable_j);
@@ -118,6 +126,11 @@ test_case_1()
 	{
 		auto found_scope = scalpel::cpp::detail::semantic_analysis::name_lookup2::find_scope(scope_path, "C");
 		BOOST_CHECK_EQUAL(found_scope, namespace_c);
+	}
+
+	{
+		auto found_scope = scalpel::cpp::detail::semantic_analysis::name_lookup2::find_scope(scope_path, "g");
+		BOOST_CHECK(found_scope.get() == 0);
 	}
 }
 

@@ -59,7 +59,7 @@ class name_lookup2
 	public:
 		/**
 		Find a scope of the given name, from the given scope path
-		@return a pointer to the found scope
+		@return a pointer to the found scope or a null pointer
 		*/
 		static
 		std::shared_ptr<semantic_entities::named_scope>

@@ -22,6 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_NAMED_SCOPE_HPP
 
 #include "scope.hpp"
+#include "named_entity.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -29,14 +30,18 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 /**
 Refers to the named scopes.
 */
-struct named_scope: public scope
+struct named_scope: public scope, public named_entity
 {
 	virtual
 	~named_scope(){}
 
+	/**
+	Must the scope be considered by the name_lookup::find_scope() functions?
+	@return true for classes and namespaces, false otherwise
+	*/
 	virtual
-	const std::string&
-	name() const = 0;
+	bool
+	considered_by_scope_find() const = 0;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities
