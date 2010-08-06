@@ -27,6 +27,13 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
+//built_in_type objects are allocated on the stack and exist in one const
+//instance each. Now, the library uses almost exclusively heap allocated
+//objects, which are pointed to by std::shared_ptr objects.
+//
+//Each of the following types is a std::shared_ptr object that points to one of
+//the built_in_type objects. Since they point to stack allocated objects, they
+//logically use a null deleter.
 namespace built_in_type_shared_ptrs
 {
 	extern std::shared_ptr<const built_in_type> bool_;
