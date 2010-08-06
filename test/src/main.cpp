@@ -89,7 +89,7 @@ init_unit_test()
 	//
 
 	//build test file list
-	std::vector<std::string> test_files = get_recursive_file_list("testfiles");
+	std::vector<std::string> test_files = get_recursive_file_list("test/testfiles");
 
 	//add the syntax analysis test cases (one per test file) to the master test suite
 	boost::callback1<std::string> tm = boost::bind(&syntax_analysis::single_file_tester::parse_file, &syntax_analysis_single_file_tester, _1);
