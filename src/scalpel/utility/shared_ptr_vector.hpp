@@ -37,10 +37,10 @@ template<typename T>
 class shared_ptr_vector
 {
 	private:
-		typedef std::vector<std::shared_ptr<T>> vector_t;
+		typedef std::vector<std::shared_ptr<T>> raw_vector_t;
 
-		typedef typename vector_t::iterator iterator;
-		typedef typename vector_t::const_iterator raw_const_iterator;
+		typedef typename raw_vector_t::iterator iterator;
+		typedef typename raw_vector_t::const_iterator raw_const_iterator;
 
 		typedef std::function<std::shared_ptr<const T> (std::shared_ptr<T>)> constify_function_t;
 		typedef boost::transform_iterator<constify_function_t, raw_const_iterator, std::shared_ptr<const T>> const_iterator;
@@ -48,6 +48,8 @@ class shared_ptr_vector
 	public:
 		typedef boost::iterator_range<iterator> range;
 		typedef boost::iterator_range<const_iterator> const_range;
+
+		typedef typename raw_vector_t::size_type size_type;
 
 		shared_ptr_vector();
 
@@ -61,6 +63,11 @@ class shared_ptr_vector
 		const shared_ptr_vector&
 		operator=(shared_ptr_vector&& o);
 
+		inline
+		size_type
+		size() const;
+
+		inline
 		bool
 		empty() const;
 
@@ -68,33 +75,41 @@ class shared_ptr_vector
 
 		operator const_range() const;
 
+		inline
 		std::shared_ptr<T>
 		front();
 
+		inline
 		std::shared_ptr<const T>
 		front() const;
 
+		inline
 		std::shared_ptr<T>
 		back();
 
+		inline
 		std::shared_ptr<const T>
 		back() const;
 
+		inline
 		void
 		push_back(std::shared_ptr<T> t);
 
+		inline
 		void
 		pop_back();
 
+		inline
 		void
 		clear();
 
 	private:
-		static inline
+		static
+		inline
 		std::shared_ptr<const T>
 		constify(std::shared_ptr<T> ptr);
 
-		vector_t vector_;
+		raw_vector_t raw_vector_;
 };
 
 }} //namespace scalpel::utility

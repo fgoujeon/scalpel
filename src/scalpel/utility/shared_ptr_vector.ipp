@@ -31,13 +31,13 @@ shared_ptr_vector<T>::shared_ptr_vector()
 
 template<typename T>
 shared_ptr_vector<T>::shared_ptr_vector(const shared_ptr_vector& o):
-	vector_(o.vector_)
+	raw_vector_(o.raw_vector_)
 {
 }
 
 template<typename T>
 shared_ptr_vector<T>::shared_ptr_vector(shared_ptr_vector&& o):
-	vector_(std::move(o.vector_))
+	raw_vector_(std::move(o.raw_vector_))
 {
 }
 
@@ -45,7 +45,7 @@ template<typename T>
 const shared_ptr_vector<T>&
 shared_ptr_vector<T>::operator=(const shared_ptr_vector& o)
 {
-	vector_ = o.vector_;
+	raw_vector_ = o.raw_vector_;
 	return *this;
 }
 
@@ -53,28 +53,35 @@ template<typename T>
 const shared_ptr_vector<T>&
 shared_ptr_vector<T>::operator=(shared_ptr_vector&& o)
 {
-	vector_ = std::move(o.vector_);
+	raw_vector_ = std::move(o.raw_vector_);
 	return *this;
+}
+
+template<typename T>
+typename shared_ptr_vector<T>::size_type
+shared_ptr_vector<T>::size() const
+{
+	return raw_vector_.size();
 }
 
 template<typename T>
 bool
 shared_ptr_vector<T>::empty() const
 {
-	return vector_.empty();
+	return raw_vector_.empty();
 }
 
 template<typename T>
 shared_ptr_vector<T>::operator range()
 {
-	return vector_;
+	return raw_vector_;
 }
 
 template<typename T>
 shared_ptr_vector<T>::operator const_range() const
 {
-	const_iterator begin(vector_.begin(), &constify);
-	const_iterator end(vector_.end(), &constify);
+	const_iterator begin(raw_vector_.begin(), &constify);
+	const_iterator end(raw_vector_.end(), &constify);
 	return const_range(begin, end);
 }
 
@@ -82,53 +89,52 @@ template<typename T>
 std::shared_ptr<T>
 shared_ptr_vector<T>::front()
 {
-	return vector_.front();
+	return raw_vector_.front();
 }
 
 template<typename T>
 std::shared_ptr<const T>
 shared_ptr_vector<T>::front() const
 {
-	return vector_.front();
+	return raw_vector_.front();
 }
 
 template<typename T>
 std::shared_ptr<T>
 shared_ptr_vector<T>::back()
 {
-	return vector_.back();
+	return raw_vector_.back();
 }
 
 template<typename T>
 std::shared_ptr<const T>
 shared_ptr_vector<T>::back() const
 {
-	return vector_.back();
+	return raw_vector_.back();
 }
 
 template<typename T>
 void
 shared_ptr_vector<T>::push_back(std::shared_ptr<T> t)
 {
-	vector_.push_back(t);
+	raw_vector_.push_back(t);
 }
 
 template<typename T>
 void
 shared_ptr_vector<T>::pop_back()
 {
-	vector_.pop_back();
+	raw_vector_.pop_back();
 }
 
 template<typename T>
 void
 shared_ptr_vector<T>::clear()
 {
-	vector_.clear();
+	raw_vector_.clear();
 }
 
 template<typename T>
-inline
 std::shared_ptr<const T>
 shared_ptr_vector<T>::constify(std::shared_ptr<T> ptr)
 {

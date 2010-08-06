@@ -33,6 +33,8 @@ test_case_1()
 	//
 	//construction of the semantic graph of the following source code:
 	/*
+	namespace find_me{}
+
 	namespace A
 	{
 		namespace find_me{}
@@ -59,8 +61,10 @@ test_case_1()
 		false
 	);
 	auto namespace_find_me = std::make_shared<scalpel::cpp::semantic_entities::namespace_>("find_me");
+	auto namespace_find_me2 = std::make_shared<scalpel::cpp::semantic_entities::namespace_>("find_me");
 
 	semantic_graph->add(namespace_a);
+	semantic_graph->add(namespace_find_me2);
 	namespace_a->add(namespace_find_me);
 	namespace_a->add(namespace_n);
 	namespace_n->add(function_f);
@@ -70,7 +74,7 @@ test_case_1()
 	//
 	//scope path construction
 	//
-	std::vector<std::shared_ptr<scalpel::cpp::semantic_entities::scope>> scope_path;
+	scalpel::utility::shared_ptr_vector<scalpel::cpp::semantic_entities::scope> scope_path;
 	scope_path.push_back(semantic_graph);
 	scope_path.push_back(namespace_a);
 	scope_path.push_back(namespace_n);

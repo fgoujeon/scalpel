@@ -26,33 +26,34 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
 {
 
-std::vector<std::shared_ptr<semantic_entities::named_entity>>
+utility::shared_ptr_vector<semantic_entities::named_entity>
 name_lookup2::find_entities
 (
-	const std::vector<std::shared_ptr<semantic_entities::scope>>& scope_stack,
+	utility::shared_ptr_vector<semantic_entities::scope>::range scope_path,
 	const std::string& name
 )
 {
-	for(auto i = scope_stack.rbegin(); i != scope_stack.rend(); ++i) //from current to outermost scopes (until global namespace)
+	std::reverse(scope_path.begin(), scope_path.end()); //TODO it would be faster if scope_path could provide a bidirectional iterator
+	for(auto i = scope_path.begin(); i != scope_path.end(); ++i) //from current to outermost scopes (until global namespace)
 	{
 		std::shared_ptr<semantic_entities::scope> current_scope = *i;
 
 		//find entities in current scope
-		std::vector<std::shared_ptr<semantic_entities::named_entity>> found_entities = name_lookup2::find_entities(current_scope, name);
+		utility::shared_ptr_vector<semantic_entities::named_entity> found_entities = name_lookup2::find_entities(current_scope, name);
 		if(!found_entities.empty()) return found_entities;
 	}
 
 	throw std::runtime_error("No entity found");
 }
 
-std::vector<std::shared_ptr<semantic_entities::named_entity>>
+utility::shared_ptr_vector<semantic_entities::named_entity>
 name_lookup2::find_entities
 (
 	std::shared_ptr<semantic_entities::scope> current_scope,
 	const std::string& name
 )
 {
-	std::vector<std::shared_ptr<semantic_entities::named_entity>> found_entities;
+	utility::shared_ptr_vector<semantic_entities::named_entity> found_entities;
 
 	for(auto i = current_scope->named_entities().begin(); i != current_scope->named_entities().end(); ++i)
 	{

@@ -23,9 +23,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../../syntax_tree.hpp"
 #include "../../semantic_graph.hpp"
+#include <scalpel/utility/shared_ptr_vector.hpp>
+#include <memory>
 #include <string>
-#include <list>
-#include <stdexcept>
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
 {
@@ -37,10 +37,10 @@ class name_lookup2
 		Find entities from an unqualified name
 		*/
 		static
-		std::vector<std::shared_ptr<semantic_entities::named_entity>>
+		utility::shared_ptr_vector<semantic_entities::named_entity>
 		find_entities
 		(
-			const std::vector<std::shared_ptr<semantic_entities::scope>>& scope_stack,
+			utility::shared_ptr_vector<semantic_entities::scope>::range scope_path,
 			const std::string& name
 		);
 
@@ -49,7 +49,7 @@ class name_lookup2
 		Find entities of the given name, in the given scope
 		*/
 		static
-		std::vector<std::shared_ptr<semantic_entities::named_entity>>
+		utility::shared_ptr_vector<semantic_entities::named_entity>
 		find_entities
 		(
 			std::shared_ptr<semantic_entities::scope> current_scope,
