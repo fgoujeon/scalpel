@@ -175,6 +175,31 @@ simple_function::defined(bool d)
 	defined_ = d;
 }
 
+simple_function::named_scopes_t::range
+simple_function::named_scopes()
+{
+	return named_scopes_;
+}
+
+simple_function::named_scopes_t::const_range
+simple_function::named_scopes() const
+{
+	return named_scopes_;
+}
+
+simple_function::named_entities_t::range
+simple_function::named_entities()
+{
+	return named_entities_;
+}
+
+simple_function::named_entities_t::const_range
+simple_function::named_entities() const
+{
+	return named_entities_;
+}
+
+
 
 
 simple_function::parameter::parameter(std::shared_ptr<const type> t, const std::string& name):

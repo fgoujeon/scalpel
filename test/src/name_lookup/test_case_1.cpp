@@ -70,11 +70,11 @@ test_case_1()
 	//
 	//scope path construction
 	//
-	std::vector<std::shared_ptr<scalpel::cpp::semantic_entities::named_scope>> scope_path;
+	std::vector<std::shared_ptr<scalpel::cpp::semantic_entities::scope>> scope_path;
 	scope_path.push_back(semantic_graph);
 	scope_path.push_back(namespace_a);
 	scope_path.push_back(namespace_n);
-	//scope_path.push_back(function_f);
+	scope_path.push_back(function_f);
 
 
 

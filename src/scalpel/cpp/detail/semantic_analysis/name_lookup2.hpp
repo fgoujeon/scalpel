@@ -40,7 +40,7 @@ class name_lookup2
 		std::vector<std::shared_ptr<semantic_entities::named_entity>>
 		find_entities
 		(
-			const std::vector<std::shared_ptr<semantic_entities::named_scope>>& scope_stack,
+			const std::vector<std::shared_ptr<semantic_entities::scope>>& scope_stack,
 			const std::string& name
 		);
 
@@ -52,7 +52,7 @@ class name_lookup2
 		std::vector<std::shared_ptr<semantic_entities::named_entity>>
 		find_entities
 		(
-			std::shared_ptr<semantic_entities::named_scope> current_scope,
+			std::shared_ptr<semantic_entities::scope> current_scope,
 			const std::string& name
 		);
 };

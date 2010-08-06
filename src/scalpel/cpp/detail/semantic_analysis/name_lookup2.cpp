@@ -29,13 +29,13 @@ namespace scalpel { namespace cpp { namespace detail { namespace semantic_analys
 std::vector<std::shared_ptr<semantic_entities::named_entity>>
 name_lookup2::find_entities
 (
-	const std::vector<std::shared_ptr<semantic_entities::named_scope>>& scope_stack,
+	const std::vector<std::shared_ptr<semantic_entities::scope>>& scope_stack,
 	const std::string& name
 )
 {
 	for(auto i = scope_stack.rbegin(); i != scope_stack.rend(); ++i) //from current to outermost scopes (until global namespace)
 	{
-		std::shared_ptr<semantic_entities::named_scope> current_scope = *i;
+		std::shared_ptr<semantic_entities::scope> current_scope = *i;
 
 		//find entities in current scope
 		std::vector<std::shared_ptr<semantic_entities::named_entity>> found_entities = name_lookup2::find_entities(current_scope, name);
@@ -48,7 +48,7 @@ name_lookup2::find_entities
 std::vector<std::shared_ptr<semantic_entities::named_entity>>
 name_lookup2::find_entities
 (
-	std::shared_ptr<semantic_entities::named_scope> current_scope,
+	std::shared_ptr<semantic_entities::scope> current_scope,
 	const std::string& name
 )
 {
