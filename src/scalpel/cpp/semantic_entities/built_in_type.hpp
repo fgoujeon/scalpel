@@ -95,3 +95,4 @@ class built_in_type: public type
 }}} //namespace scalpel::cpp::semantic_entities
 
 #endif
+

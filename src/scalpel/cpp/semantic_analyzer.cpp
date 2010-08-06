@@ -21,7 +21,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "semantic_analyzer.hpp"
 #include "detail/semantic_analysis/name_lookup.hpp"
 #include "detail/semantic_analysis/basic_functions.hpp"
-#include <scalpel/utility/null_deleter.hpp>
 #include <iostream>
 #include <stdexcept>
 
@@ -1065,7 +1064,7 @@ semantic_analyzer::get_built_in_type
 		!wchar_t_type
 	)
 	{
-		return std::shared_ptr<const built_in_type>(&built_in_type::bool_, scalpel::utility::null_deleter());
+		return built_in_type_shared_ptrs::bool_;
 	}
 	else if
 	(
@@ -1083,7 +1082,7 @@ semantic_analyzer::get_built_in_type
 		!wchar_t_type
 	)
 	{
-		return std::shared_ptr<const built_in_type>(&built_in_type::char_, scalpel::utility::null_deleter());
+		return built_in_type_shared_ptrs::char_;
 	}
 	else if
 	(
@@ -1101,7 +1100,7 @@ semantic_analyzer::get_built_in_type
 		!wchar_t_type
 	)
 	{
-		return std::shared_ptr<const built_in_type>(&built_in_type::double_, scalpel::utility::null_deleter());
+		return built_in_type_shared_ptrs::double_;
 	}
 	else if
 	(
@@ -1119,7 +1118,7 @@ semantic_analyzer::get_built_in_type
 		!wchar_t_type
 	)
 	{
-		return std::shared_ptr<const built_in_type>(&built_in_type::float_, scalpel::utility::null_deleter());
+		return built_in_type_shared_ptrs::float_;
 	}
 	else if
 	(
@@ -1136,7 +1135,7 @@ semantic_analyzer::get_built_in_type
 		!wchar_t_type
 	)
 	{
-		return std::shared_ptr<const built_in_type>(&built_in_type::int_, scalpel::utility::null_deleter());
+		return built_in_type_shared_ptrs::int_;
 	}
 	else if
 	(
@@ -1154,7 +1153,7 @@ semantic_analyzer::get_built_in_type
 		!wchar_t_type
 	)
 	{
-		return std::shared_ptr<const built_in_type>(&built_in_type::long_double, scalpel::utility::null_deleter());
+		return built_in_type_shared_ptrs::long_double;
 	}
 	else if
 	(
@@ -1172,7 +1171,7 @@ semantic_analyzer::get_built_in_type
 		!wchar_t_type
 	)
 	{
-		return std::shared_ptr<const built_in_type>(&built_in_type::long_int, scalpel::utility::null_deleter());
+		return built_in_type_shared_ptrs::long_int;
 	}
 	else if
 	(
@@ -1190,7 +1189,7 @@ semantic_analyzer::get_built_in_type
 		!wchar_t_type
 	)
 	{
-		return std::shared_ptr<const built_in_type>(&built_in_type::long_long_int, scalpel::utility::null_deleter());
+		return built_in_type_shared_ptrs::long_long_int;
 	}
 	else if
 	(
@@ -1208,7 +1207,7 @@ semantic_analyzer::get_built_in_type
 		!wchar_t_type
 	)
 	{
-		return std::shared_ptr<const built_in_type>(&built_in_type::short_int, scalpel::utility::null_deleter());
+		return built_in_type_shared_ptrs::short_int;
 	}
 	else if
 	(
@@ -1226,7 +1225,7 @@ semantic_analyzer::get_built_in_type
 		!wchar_t_type
 	)
 	{
-		return std::shared_ptr<const built_in_type>(&built_in_type::unsigned_char, scalpel::utility::null_deleter());
+		return built_in_type_shared_ptrs::unsigned_char;
 	}
 	else if
 	(
@@ -1244,7 +1243,7 @@ semantic_analyzer::get_built_in_type
 		!wchar_t_type
 	)
 	{
-		return std::shared_ptr<const built_in_type>(&built_in_type::unsigned_int, scalpel::utility::null_deleter());
+		return built_in_type_shared_ptrs::unsigned_int;
 	}
 	else if
 	(
@@ -1262,7 +1261,7 @@ semantic_analyzer::get_built_in_type
 		!wchar_t_type
 	)
 	{
-		return std::shared_ptr<const built_in_type>(&built_in_type::unsigned_long_int, scalpel::utility::null_deleter());
+		return built_in_type_shared_ptrs::unsigned_long_int;
 	}
 	else if
 	(
@@ -1280,7 +1279,7 @@ semantic_analyzer::get_built_in_type
 		!wchar_t_type
 	)
 	{
-		return std::shared_ptr<const built_in_type>(&built_in_type::unsigned_long_long_int, scalpel::utility::null_deleter());
+		return built_in_type_shared_ptrs::unsigned_long_long_int;
 	}
 	else if
 	(
@@ -1298,7 +1297,7 @@ semantic_analyzer::get_built_in_type
 		!wchar_t_type
 	)
 	{
-		return std::shared_ptr<const built_in_type>(&built_in_type::unsigned_short_int, scalpel::utility::null_deleter());
+		return built_in_type_shared_ptrs::unsigned_short_int;
 	}
 	else if
 	(
@@ -1316,7 +1315,7 @@ semantic_analyzer::get_built_in_type
 		!wchar_t_type
 	)
 	{
-		return std::shared_ptr<const built_in_type>(&built_in_type::void_, scalpel::utility::null_deleter());
+		return built_in_type_shared_ptrs::void_;
 	}
 	else if
 	(
@@ -1334,7 +1333,7 @@ semantic_analyzer::get_built_in_type
 		wchar_t_type
 	)
 	{
-		return std::shared_ptr<const built_in_type>(&built_in_type::wchar_t_, scalpel::utility::null_deleter());
+		return built_in_type_shared_ptrs::wchar_t_;
 	}
 
 	throw std::runtime_error("Incorrect built-in type");

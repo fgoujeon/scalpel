@@ -56,7 +56,7 @@ test_case_1()
 	auto function_f = std::make_shared<scalpel::cpp::semantic_entities::simple_function>
 	(
 		"f",
-		std::shared_ptr<const scalpel::cpp::semantic_entities::built_in_type>(&scalpel::cpp::semantic_entities::built_in_type::void_, scalpel::utility::null_deleter()),
+		scalpel::cpp::semantic_entities::built_in_type_shared_ptrs::void_,
 		std::list<scalpel::cpp::semantic_entities::simple_function::parameter>(),
 		false
 	);
