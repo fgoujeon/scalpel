@@ -157,16 +157,13 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 										{
 											c->add
 											(
-												std::make_shared<class_::operator_function>
-												(
-													create_operator_function(decl_specifier_seq_node, declarator_node),
-													current_access,
-													is_qualified<str::const_>(declarator_node),
-													is_qualified<str::volatile_>(declarator_node),
-													has_inline_specifier(decl_specifier_seq_node),
-													has_virtual_specifier(decl_specifier_seq_node),
-													has_pure_specifier(member_declarator_declarator_node)
-												)
+												create_operator_function(decl_specifier_seq_node, declarator_node),
+												current_access,
+												is_qualified<str::const_>(declarator_node),
+												is_qualified<str::volatile_>(declarator_node),
+												has_inline_specifier(decl_specifier_seq_node),
+												has_virtual_specifier(decl_specifier_seq_node),
+												has_pure_specifier(member_declarator_declarator_node)
 											);
 										}
 										else if(is_conversion_function_declaration(declarator_node)) //conversion function
@@ -218,16 +215,13 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 										{
 											c->add
 											(
-												std::make_shared<class_::simple_function>
-												(
-													create_simple_function(decl_specifier_seq_node, declarator_node),
-													current_access,
-													is_qualified<str::const_>(declarator_node),
-													is_qualified<str::volatile_>(declarator_node),
-													has_inline_specifier(decl_specifier_seq_node),
-													has_virtual_specifier(decl_specifier_seq_node),
-													has_pure_specifier(member_declarator_declarator_node)
-												)
+												create_simple_function(decl_specifier_seq_node, declarator_node),
+												current_access,
+												is_qualified<str::const_>(declarator_node),
+												is_qualified<str::volatile_>(declarator_node),
+												has_inline_specifier(decl_specifier_seq_node),
+												has_virtual_specifier(decl_specifier_seq_node),
+												has_pure_specifier(member_declarator_declarator_node)
 											);
 										}
 									}
@@ -235,11 +229,8 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 									{
 										c->add
 										(
-											std::make_shared<class_::variable>
-											(
-												create_variable(decl_specifier_seq_node, declarator_node),
-												current_access
-											)
+											create_variable(decl_specifier_seq_node, declarator_node),
+											current_access
 										);
 									}
 								}
@@ -307,17 +298,14 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 								{
 									auto class_specifier_node = *opt_class_specifier_node;
 
-									std::shared_ptr<class_> new_class = create_class(class_specifier_node);
-									std::shared_ptr<class_::nested_class> new_nested_class =
-										std::make_shared<class_::nested_class>
-										(
-											new_class,
-											current_access
-										)
-									;
-									c->add(new_nested_class);
+									std::shared_ptr<class_> new_nested_class = create_class(class_specifier_node);
+									c->add
+									(
+										new_nested_class,
+										current_access
+									);
 									declarative_region_cursor_.enter_declarative_region(new_nested_class);
-									fill_class(new_class, class_specifier_node);
+									fill_class(new_nested_class, class_specifier_node);
 									declarative_region_cursor_.leave_current_declarative_region();
 								}
 							}
@@ -1350,10 +1338,6 @@ semantic_analyzer::find_class
 	if(std::shared_ptr<class_> found_class = std::dynamic_pointer_cast<class_>(found_name))
 	{
 		return found_class;
-	}
-	else if(std::shared_ptr<class_::nested_class> found_class = std::dynamic_pointer_cast<class_::nested_class>(found_name))
-	{
-		return found_class->entity();
 	}
 
 	throw std::runtime_error("Type not found");

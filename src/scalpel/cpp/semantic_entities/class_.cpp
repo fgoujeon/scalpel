@@ -170,7 +170,7 @@ class_::add(std::shared_ptr<base_class> c)
 }
 
 void
-class_::add(std::shared_ptr<nested_class> member)
+class_::add(std::shared_ptr<class_> member, access acc)
 {
 	nested_classes_.push_back(member);
 	named_entities_.push_back(member);
@@ -184,7 +184,16 @@ class_::add(std::shared_ptr<constructor> member)
 }
 
 void
-class_::add(std::shared_ptr<simple_function> member)
+class_::add
+(
+	std::shared_ptr<simple_function> member,
+	access acc,
+	bool const_qualified,
+	bool volatile_qualified,
+	bool inline_specified,
+	bool virtual_specified,
+	bool pure_specified
+)
 {
     simple_functions_.push_back(member);
 	named_entities_.push_back(member);
@@ -192,7 +201,16 @@ class_::add(std::shared_ptr<simple_function> member)
 }
 
 void
-class_::add(std::shared_ptr<operator_function> member)
+class_::add
+(
+	std::shared_ptr<operator_function> member,
+	access acc,
+	bool const_qualified,
+	bool volatile_qualified,
+	bool inline_specified,
+	bool virtual_specified,
+	bool pure_specified
+)
 {
     operator_functions_.push_back(member);
 }
@@ -204,39 +222,10 @@ class_::add(std::shared_ptr<conversion_function> member)
 }
 
 void
-class_::add(std::shared_ptr<variable> member)
+class_::add(std::shared_ptr<variable> member, access acc)
 {
     variables_.push_back(member);
-}
-
-
-
-class_::simple_function::simple_function
-(
-	std::shared_ptr<semantic_entities::simple_function> raw_simple_function,
-	class_::access a,
-	bool is_const_qualified,
-	bool is_volatile_qualified,
-	bool is_inline_specified,
-	bool is_virtual_specified,
-	bool is_pure_specified
-):
-	class_::function_member<semantic_entities::simple_function>
-	(
-		raw_simple_function,
-		a,
-		is_const_qualified,
-		is_volatile_qualified,
-		is_inline_specified,
-		is_virtual_specified,
-		is_pure_specified
-	)
-{
-}
-
-class_::simple_function::simple_function(simple_function&& o):
-	class_::function_member<semantic_entities::simple_function>(std::move(o))
-{
+	named_entities_.push_back(member);
 }
 
 
@@ -276,32 +265,6 @@ bool
 class_::base_class::virtual_specified() const
 {
 	return virtual_specified_;
-}
-
-
-
-class_::member<class_>::member(std::shared_ptr<class_> c, class_::access a):
-	entity_(c),
-	access_(a)
-{
-}
-
-class_::member<class_>::member(const nested_class& o):
-	entity_(o.entity_),
-	access_(o.access_)
-{
-}
-
-class_::member<class_>::member(nested_class&& o):
-	entity_(std::move(o.entity_)),
-	access_(std::move(o.access_))
-{
-}
-
-class_::access
-class_::member<class_>::access() const
-{
-	return access_;
 }
 
 

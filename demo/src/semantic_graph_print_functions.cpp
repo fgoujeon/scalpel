@@ -72,10 +72,6 @@ print
 	{
 		std::cout << indent(indent_level) << "<class id=\"" << t << "\"/>\n";
 	}
-	else if(const class_::nested_class* t = dynamic_cast<const class_::nested_class*>(&n))
-	{
-		std::cout << indent(indent_level) << "<class id=\"" << t->entity().get() << "\"/>\n";
-	}
 }
 
 void

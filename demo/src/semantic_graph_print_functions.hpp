@@ -119,16 +119,9 @@ attribute(const class_::access& a);
 std::string
 attribute(const semantic_entities::operator_ op);
 
-template<class EntityT>
-void
-print
-(
-	const class_::member<EntityT>& m,
-	const unsigned int indent_level
-);
 
 
-
+/*
 template<class EntityT>
 void
 print
@@ -141,7 +134,9 @@ print
 	extra_oss << attribute(m.access());
 	print(*m.entity(), indent_level, extra_oss.str());
 }
+*/
 
+/*
 template<class EntityT>
 void
 print
@@ -168,6 +163,7 @@ print
 
 	print(*f.entity(), indent_level, extra_oss.str());
 }
+*/
 
 } //namespace semantic_graph_print_functions
 

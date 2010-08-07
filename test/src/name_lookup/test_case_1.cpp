@@ -70,14 +70,10 @@ test_case_1()
 	*/
 	auto semantic_graph = std::make_shared<scalpel::cpp::semantic_graph>();
 	auto struct_b0 = std::make_shared<scalpel::cpp::semantic_entities::class_>("B0");
-	auto variable_b0_n = std::make_shared<scalpel::cpp::semantic_entities::class_::variable>
+	auto variable_b0_n = std::make_shared<scalpel::cpp::semantic_entities::variable>
 	(
-		std::make_shared<scalpel::cpp::semantic_entities::variable>
-		(
-			"n",
-			scalpel::cpp::semantic_entities::built_in_type_shared_ptrs::int_
-		),
-		scalpel::cpp::semantic_entities::class_::access::PUBLIC
+		"n",
+		scalpel::cpp::semantic_entities::built_in_type_shared_ptrs::int_
 	);
 	auto namespace_a = std::make_shared<scalpel::cpp::semantic_entities::namespace_>("A");
 	auto variable_a_i = std::make_shared<scalpel::cpp::semantic_entities::variable>
@@ -96,19 +92,10 @@ test_case_1()
 		scalpel::cpp::semantic_entities::built_in_type_shared_ptrs::int_
 	);
 	auto struct_a_b = std::make_shared<scalpel::cpp::semantic_entities::class_>("B");
-	auto function_a_b_f = std::make_shared<scalpel::cpp::semantic_entities::class_::simple_function>
+	auto function_a_b_f = std::make_shared<scalpel::cpp::semantic_entities::simple_function>
 	(
-		std::make_shared<scalpel::cpp::semantic_entities::simple_function>
-		(
-			"f",
-			scalpel::cpp::semantic_entities::built_in_type_shared_ptrs::void_
-		),
-		scalpel::cpp::semantic_entities::class_::access::PUBLIC,
-		false,
-		false,
-		false,
-		false,
-		false
+		"f",
+		scalpel::cpp::semantic_entities::built_in_type_shared_ptrs::void_
 	);
 	auto function_g = std::make_shared<scalpel::cpp::semantic_entities::simple_function>
 	(
@@ -119,10 +106,23 @@ test_case_1()
 
 	semantic_graph->add(namespace_a);
 	semantic_graph->add(struct_b0);
-	struct_b0->add(variable_b0_n);
+	struct_b0->add
+	(
+		variable_b0_n,
+		scalpel::cpp::semantic_entities::class_::access::PUBLIC
+	);
 	namespace_a->add(variable_a_i);
 	namespace_a->add(struct_a_b);
-	struct_a_b->add(function_a_b_f);
+	struct_a_b->add
+	(
+		function_a_b_f,
+		scalpel::cpp::semantic_entities::class_::access::PUBLIC,
+		false,
+		false,
+		false,
+		false,
+		false
+	);
 	namespace_a->add(function_g);
 	namespace_a->add(namespace_c);
 	semantic_graph->add(variable_i);
