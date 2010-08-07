@@ -184,7 +184,7 @@ print
 
 	print(*c.get_destructor(), indent_level + 1);
 
-	for(auto i = c.functions().begin(); i != c.functions().end(); ++i)
+	for(auto i = c.simple_functions().begin(); i != c.simple_functions().end(); ++i)
 		print(**i, indent_level + 1);
 
 	for(auto i = c.operator_functions().begin(); i != c.operator_functions().end(); ++i)

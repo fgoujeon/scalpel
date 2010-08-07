@@ -140,7 +140,7 @@ class_::set_destructor(std::shared_ptr<destructor> d)
 }
 
 class_::simple_functions_t::const_range
-class_::functions() const
+class_::simple_functions() const
 {
 	return simple_functions_;
 }
@@ -187,10 +187,8 @@ void
 class_::add(std::shared_ptr<simple_function> member)
 {
     simple_functions_.push_back(member);
-
-	//TODO this should be possible
-	//named_scopes_.push_back(member);
-	//named_entities_.push_back(member);
+	named_entities_.push_back(member);
+	named_declarative_regions_.push_back(member);
 }
 
 void
@@ -209,6 +207,36 @@ void
 class_::add(std::shared_ptr<variable> member)
 {
     variables_.push_back(member);
+}
+
+
+
+class_::simple_function::simple_function
+(
+	std::shared_ptr<semantic_entities::simple_function> raw_simple_function,
+	class_::access a,
+	bool is_const_qualified,
+	bool is_volatile_qualified,
+	bool is_inline_specified,
+	bool is_virtual_specified,
+	bool is_pure_specified
+):
+	class_::function_member<semantic_entities::simple_function>
+	(
+		raw_simple_function,
+		a,
+		is_const_qualified,
+		is_volatile_qualified,
+		is_inline_specified,
+		is_virtual_specified,
+		is_pure_specified
+	)
+{
+}
+
+class_::simple_function::simple_function(simple_function&& o):
+	class_::function_member<semantic_entities::simple_function>(std::move(o))
+{
 }
 
 

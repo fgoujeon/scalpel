@@ -58,7 +58,7 @@ class class_:
 		class constructor;
 		class destructor;
 		class conversion_function;
-		typedef function_member<semantic_entities::simple_function> simple_function;
+		class simple_function;
 		typedef function_member<semantic_entities::operator_function> operator_function;
 		typedef member<semantic_entities::variable> variable;
 
@@ -141,7 +141,7 @@ class class_:
 		set_destructor(std::shared_ptr<destructor> d);
 
 		simple_functions_t::const_range
-		functions() const;
+		simple_functions() const;
 
 		operator_functions_t::const_range
 		operator_functions() const;
@@ -267,6 +267,59 @@ class class_::function_member
 		bool inline_specified_;
 		bool virtual_specified_;
 		bool pure_specified_;
+};
+
+class class_::simple_function: public named_declarative_region, public class_::function_member<semantic_entities::simple_function>
+{
+	public:
+		simple_function
+		(
+			std::shared_ptr<semantic_entities::simple_function> raw_simple_function,
+			class_::access a,
+			bool is_const_qualified,
+			bool is_volatile_qualified,
+			bool is_inline_specified,
+			bool is_virtual_specified,
+			bool is_pure_specified
+		);
+
+		simple_function(simple_function&& o);
+
+		const std::string&
+		name() const
+		{
+			return entity()->name();
+		}
+
+		named_declarative_regions_t::range
+		named_declarative_regions()
+		{
+			return entity()->named_declarative_regions();
+		}
+
+		named_declarative_regions_t::const_range
+		named_declarative_regions() const
+		{
+			return entity()->named_declarative_regions();
+		}
+
+		named_entities_t::range
+		named_entities()
+		{
+			return entity()->named_entities();
+		}
+
+		named_entities_t::const_range
+		named_entities() const
+		{
+			return entity()->named_entities();
+		}
+
+		bool
+		is_open_to_outside() const
+		{
+			return entity()->is_open_to_outside();
+		}
 };
 
 class class_::base_class

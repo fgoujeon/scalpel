@@ -33,19 +33,27 @@ test_case_1()
 	//
 	//construction of the semantic graph of the following source code:
 	/*
+	 *
+	 *
+	struct B0
+	{
+		int n;
+	};
+
 	namespace A
 	{
 		int i;
 
-		namespace B
+		struct B: public B0
 		{
 			void f();
-		}
+		};
 
 		void g();
 
 		namespace C
 		{
+			int n;
 		}
 	}
 
@@ -54,15 +62,29 @@ test_case_1()
 	void A::B::f()
 	{
 		//look from here
+		i;
+		j;
+		C::n;
+		n;
 	}
 	*/
 	auto semantic_graph = std::make_shared<scalpel::cpp::semantic_graph>();
+	auto struct_b0 = std::make_shared<scalpel::cpp::semantic_entities::class_>("B0");
+	auto variable_b0_n = std::make_shared<scalpel::cpp::semantic_entities::class_::variable>
+	(
+		std::make_shared<scalpel::cpp::semantic_entities::variable>
+		(
+			"n",
+			scalpel::cpp::semantic_entities::built_in_type_shared_ptrs::int_
+		),
+		scalpel::cpp::semantic_entities::class_::access::PUBLIC
+	);
+	auto namespace_a = std::make_shared<scalpel::cpp::semantic_entities::namespace_>("A");
 	auto variable_a_i = std::make_shared<scalpel::cpp::semantic_entities::variable>
 	(
 		"i",
 		scalpel::cpp::semantic_entities::built_in_type_shared_ptrs::int_
 	);
-	auto namespace_a = std::make_shared<scalpel::cpp::semantic_entities::namespace_>("A");
 	auto variable_i = std::make_shared<scalpel::cpp::semantic_entities::variable>
 	(
 		"i",
@@ -73,11 +95,20 @@ test_case_1()
 		"j",
 		scalpel::cpp::semantic_entities::built_in_type_shared_ptrs::int_
 	);
-	auto namespace_b = std::make_shared<scalpel::cpp::semantic_entities::namespace_>("B");
-	auto function_f = std::make_shared<scalpel::cpp::semantic_entities::simple_function>
+	auto struct_a_b = std::make_shared<scalpel::cpp::semantic_entities::class_>("B");
+	auto function_a_b_f = std::make_shared<scalpel::cpp::semantic_entities::class_::simple_function>
 	(
-		"f",
-		scalpel::cpp::semantic_entities::built_in_type_shared_ptrs::void_
+		std::make_shared<scalpel::cpp::semantic_entities::simple_function>
+		(
+			"f",
+			scalpel::cpp::semantic_entities::built_in_type_shared_ptrs::void_
+		),
+		scalpel::cpp::semantic_entities::class_::access::PUBLIC,
+		false,
+		false,
+		false,
+		false,
+		false
 	);
 	auto function_g = std::make_shared<scalpel::cpp::semantic_entities::simple_function>
 	(
@@ -87,9 +118,11 @@ test_case_1()
 	auto namespace_c = std::make_shared<scalpel::cpp::semantic_entities::namespace_>("C");
 
 	semantic_graph->add(namespace_a);
+	semantic_graph->add(struct_b0);
+	struct_b0->add(variable_b0_n);
 	namespace_a->add(variable_a_i);
-	namespace_a->add(namespace_b);
-	namespace_b->add(function_f);
+	namespace_a->add(struct_a_b);
+	struct_a_b->add(function_a_b_f);
 	namespace_a->add(function_g);
 	namespace_a->add(namespace_c);
 	semantic_graph->add(variable_i);
@@ -103,8 +136,8 @@ test_case_1()
 	scalpel::utility::shared_ptr_vector<scalpel::cpp::semantic_entities::declarative_region> declarative_region_path;
 	declarative_region_path.push_back(semantic_graph);
 	declarative_region_path.push_back(namespace_a);
-	declarative_region_path.push_back(namespace_b);
-	declarative_region_path.push_back(function_f);
+	declarative_region_path.push_back(struct_a_b);
+	declarative_region_path.push_back(function_a_b_f);
 
 
 
