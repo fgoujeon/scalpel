@@ -175,6 +175,19 @@ class_::add(std::shared_ptr<class_> member, access acc)
 	nested_classes_.push_back(member);
 	named_entities_.push_back(member);
 	named_declarative_regions_.push_back(member);
+
+	switch(acc)
+	{
+		case PUBLIC:
+			public_members_.push_back(member);
+			break;
+		case PROTECTED:
+			protected_members_.push_back(member);
+			break;
+		case PRIVATE:
+			private_members_.push_back(member);
+			break;
+	}
 }
 
 void
@@ -197,6 +210,23 @@ class_::add
     simple_functions_.push_back(member);
 	named_entities_.push_back(member);
 	named_declarative_regions_.push_back(member);
+
+	switch(acc)
+	{
+		case PUBLIC:
+			public_members_.push_back(member);
+			break;
+		case PROTECTED:
+			protected_members_.push_back(member);
+			break;
+		case PRIVATE:
+			private_members_.push_back(member);
+			break;
+	}
+	if(const_qualified) const_member_functions_.push_back(member);
+	if(volatile_qualified) volatile_member_functions_.push_back(member);
+	if(virtual_specified) virtual_member_functions_.push_back(member);
+	if(pure_specified) pure_member_functions_.push_back(member);
 }
 
 void
@@ -211,6 +241,23 @@ class_::add
 )
 {
     operator_functions_.push_back(member);
+
+	switch(acc)
+	{
+		case PUBLIC:
+			public_members_.push_back(member);
+			break;
+		case PROTECTED:
+			protected_members_.push_back(member);
+			break;
+		case PRIVATE:
+			private_members_.push_back(member);
+			break;
+	}
+	if(const_qualified) const_member_functions_.push_back(member);
+	if(volatile_qualified) volatile_member_functions_.push_back(member);
+	if(virtual_specified) virtual_member_functions_.push_back(member);
+	if(pure_specified) pure_member_functions_.push_back(member);
 }
 
 void
@@ -224,6 +271,19 @@ class_::add(std::shared_ptr<variable> member, access acc)
 {
     variables_.push_back(member);
 	named_entities_.push_back(member);
+
+	switch(acc)
+	{
+		case PUBLIC:
+			public_members_.push_back(member);
+			break;
+		case PROTECTED:
+			protected_members_.push_back(member);
+			break;
+		case PRIVATE:
+			private_members_.push_back(member);
+			break;
+	}
 }
 
 

@@ -26,16 +26,18 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-struct named_declarative_region;
+struct entity;
 struct named_entity;
+struct named_declarative_region;
 
 /**
 Refers to any declarative region.
 */
 struct declarative_region
 {
-	typedef utility::shared_ptr_vector<named_declarative_region> named_declarative_regions_t;
+	typedef utility::shared_ptr_vector<entity> entities_t;
 	typedef utility::shared_ptr_vector<named_entity> named_entities_t;
+	typedef utility::shared_ptr_vector<named_declarative_region> named_declarative_regions_t;
 
 	virtual
 	~declarative_region(){}

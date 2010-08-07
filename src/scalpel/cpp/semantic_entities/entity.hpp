@@ -18,28 +18,19 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_NAMED_ENTITY_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_NAMED_ENTITY_HPP
-
-#include "entity.hpp"
-#include <string>
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_ENTITY_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_ENTITY_HPP
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-struct named_entity: public entity
+struct entity
 {
 	virtual
-	~named_entity(){}
-
-	/**
-	@return the name of the entity
-	*/
-	virtual
-	const std::string&
-	name() const = 0;
+	~entity(){}
 };
 
 }}} //namespace scalpel::cpp::semantic_entities
 
 #endif
+

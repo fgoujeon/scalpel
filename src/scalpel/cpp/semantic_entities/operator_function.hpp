@@ -25,6 +25,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "statement_block.hpp"
 #include "simple_function.hpp"
 #include "type.hpp"
+#include "entity.hpp"
 #include <list>
 #include <memory>
 
@@ -34,7 +35,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 /**
 Represents a C++ operator simple_function.
 */
-class operator_function
+class operator_function: public entity
 {
     public:
 		typedef simple_function::parameter parameter;

@@ -188,6 +188,13 @@ class class_:
 		//polymorphic containers
 		named_entities_t named_entities_;
 		named_declarative_regions_t named_declarative_regions_;
+		entities_t public_members_;
+		entities_t protected_members_;
+		entities_t private_members_;
+		entities_t const_member_functions_;
+		entities_t volatile_member_functions_;
+		entities_t virtual_member_functions_;
+		entities_t pure_member_functions_;
 
 		//containers
 		base_classes_t base_classes_;
