@@ -34,7 +34,7 @@ class name_lookup2
 {
 	public:
 		/**
-		Find entities of the given name, from the given scope path (unqualified name lookup)
+		Find entities of the given name, from the given declarative region path (unqualified name lookup)
 		*/
 		static
 		utility::shared_ptr_vector<semantic_entities::named_entity>
@@ -46,7 +46,7 @@ class name_lookup2
 
 	private:
 		/**
-		Find entities of the given name, in the given scope
+		Find entities of the given name, in the given declarative region
 		*/
 		static
 		utility::shared_ptr_vector<semantic_entities::named_entity>
@@ -58,24 +58,26 @@ class name_lookup2
 
 	public:
 		/**
-		Find a scope of the given name, from the given declarative region path
+		Find an open-to-outside declarative region of the given name, from the
+		given declarative region path
 		@return a pointer to the found declarative region or a null pointer
 		*/
 		static
 		std::shared_ptr<semantic_entities::named_declarative_region>
-		find_declarative_region
+		find_open_declarative_region
 		(
 			utility::shared_ptr_vector<semantic_entities::declarative_region>::range declarative_region_path,
 			const std::string& name
 		);
 
 		/**
-		Find a scope of the given name, in the given declarative region
+		Find an open-to-outside declarative region of the given name, in the
+		given declarative region
 		@return a pointer to the found declarative region or a null pointer
 		*/
 		static
 		std::shared_ptr<semantic_entities::named_declarative_region>
-		find_declarative_region
+		find_open_declarative_region
 		(
 			std::shared_ptr<semantic_entities::declarative_region> current_declarative_region,
 			const std::string& name

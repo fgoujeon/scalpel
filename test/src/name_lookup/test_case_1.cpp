@@ -124,12 +124,12 @@ test_case_1()
 	}
 
 	{
-		auto found_declarative_region = scalpel::cpp::detail::semantic_analysis::name_lookup2::find_declarative_region(declarative_region_path, "C");
+		auto found_declarative_region = scalpel::cpp::detail::semantic_analysis::name_lookup2::find_open_declarative_region(declarative_region_path, "C");
 		BOOST_CHECK_EQUAL(found_declarative_region, namespace_c);
 	}
 
 	{
-		auto found_declarative_region = scalpel::cpp::detail::semantic_analysis::name_lookup2::find_declarative_region(declarative_region_path, "g");
+		auto found_declarative_region = scalpel::cpp::detail::semantic_analysis::name_lookup2::find_open_declarative_region(declarative_region_path, "g");
 		BOOST_CHECK(found_declarative_region.get() == 0);
 	}
 }

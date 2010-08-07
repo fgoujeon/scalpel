@@ -69,7 +69,7 @@ name_lookup2::find_entities
 }
 
 std::shared_ptr<semantic_entities::named_declarative_region>
-name_lookup2::find_declarative_region
+name_lookup2::find_open_declarative_region
 (
 	utility::shared_ptr_vector<semantic_entities::declarative_region>::range declarative_region_path,
 	const std::string& name
@@ -85,7 +85,9 @@ name_lookup2::find_declarative_region
 		std::shared_ptr<semantic_entities::declarative_region> current_declarative_region = *i;
 
 		//find declarative region in current declarative region
-		std::shared_ptr<semantic_entities::named_declarative_region> maybe_found_declarative_region = find_declarative_region(current_declarative_region, name);
+		std::shared_ptr<semantic_entities::named_declarative_region> maybe_found_declarative_region =
+			find_open_declarative_region(current_declarative_region, name)
+		;
 		if(maybe_found_declarative_region)
 		{
 			found_declarative_region = maybe_found_declarative_region;
@@ -97,7 +99,7 @@ name_lookup2::find_declarative_region
 }
 
 std::shared_ptr<semantic_entities::named_declarative_region>
-name_lookup2::find_declarative_region
+name_lookup2::find_open_declarative_region
 (
 	std::shared_ptr<semantic_entities::declarative_region> current_declarative_region,
 	const std::string& name
@@ -105,7 +107,12 @@ name_lookup2::find_declarative_region
 {
 	std::shared_ptr<semantic_entities::named_declarative_region> found_declarative_region;
 
-	for(auto i = current_declarative_region->named_declarative_regions().begin(); i != current_declarative_region->named_declarative_regions().end(); ++i)
+	for
+	(
+		auto i = current_declarative_region->named_declarative_regions().begin();
+		i != current_declarative_region->named_declarative_regions().end();
+		++i
+	)
 	{
 		std::shared_ptr<semantic_entities::named_declarative_region> current_declarative_region = *i;
 		if(current_declarative_region->is_open_to_outside() && current_declarative_region->name() == name)
