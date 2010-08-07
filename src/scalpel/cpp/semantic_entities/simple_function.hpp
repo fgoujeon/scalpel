@@ -49,6 +49,7 @@ class simple_function: public named_declarative_region
 			const std::string& name,
 			std::shared_ptr<const type> return_type,
 			parameters_t&& parameters = parameters_t(),
+			bool is_inline_specified = false,
 			bool is_static_specified = false
 		);
 
@@ -92,6 +93,9 @@ class simple_function: public named_declarative_region
 		parameters() const;
 
 		bool
+		inline_specified() const;
+
+		bool
 		static_specified() const;
 
 		bool
@@ -116,6 +120,7 @@ class simple_function: public named_declarative_region
         std::string name_;
 		std::shared_ptr<const type> return_type_;
 		std::list<parameter> parameters_;
+		bool inline_specified_;
 		bool static_specified_;
 		bool defined_;
 

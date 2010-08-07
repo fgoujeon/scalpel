@@ -161,7 +161,6 @@ class class_:
 			access acc,
 			bool const_qualified,
 			bool volatile_qualified,
-			bool inline_specified,
 			bool virtual_specified,
 			bool pure_specified
 		);
@@ -173,7 +172,6 @@ class class_:
 			access acc,
 			bool const_qualified,
 			bool volatile_qualified,
-			bool inline_specified,
 			bool virtual_specified,
 			bool pure_specified
 		);
@@ -261,7 +259,6 @@ class class_::constructor
 		semantic_entities::simple_function impl_;
 		parameters_t parameters_;
 		class_::access access_;
-		bool inline_specified_;
 		bool explicit_specified_;
 };
 

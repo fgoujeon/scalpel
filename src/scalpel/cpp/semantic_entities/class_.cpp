@@ -190,7 +190,6 @@ class_::add
 	access acc,
 	bool const_qualified,
 	bool volatile_qualified,
-	bool inline_specified,
 	bool virtual_specified,
 	bool pure_specified
 )
@@ -207,7 +206,6 @@ class_::add
 	access acc,
 	bool const_qualified,
 	bool volatile_qualified,
-	bool inline_specified,
 	bool virtual_specified,
 	bool pure_specified
 )
@@ -281,10 +279,10 @@ class_::constructor::constructor
 		"_",
 		std::shared_ptr<const built_in_type>(&built_in_type::void_, scalpel::utility::null_deleter()),
 		std::move(parameters),
+		is_inline_specified,
 		false
 	),
 	access_(access),
-	inline_specified_(is_inline_specified),
 	explicit_specified_(is_explicit_specified)
 {
 }
@@ -292,7 +290,6 @@ class_::constructor::constructor
 class_::constructor::constructor(constructor&& o):
 	impl_(std::move(o.impl_)),
 	access_(o.access_),
-	inline_specified_(o.inline_specified_),
 	explicit_specified_(o.explicit_specified_)
 {
 }
@@ -312,7 +309,7 @@ class_::constructor::access() const
 bool
 class_::constructor::inline_specified() const
 {
-	return inline_specified_;
+	return impl_.inline_specified();
 }
 
 bool

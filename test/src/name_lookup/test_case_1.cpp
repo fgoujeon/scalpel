@@ -120,7 +120,6 @@ test_case_1()
 		false,
 		false,
 		false,
-		false,
 		false
 	);
 	namespace_a->add(function_g);

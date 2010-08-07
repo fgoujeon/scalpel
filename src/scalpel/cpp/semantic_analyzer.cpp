@@ -161,7 +161,6 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 												current_access,
 												is_qualified<str::const_>(declarator_node),
 												is_qualified<str::volatile_>(declarator_node),
-												has_inline_specifier(decl_specifier_seq_node),
 												has_virtual_specifier(decl_specifier_seq_node),
 												has_pure_specifier(member_declarator_declarator_node)
 											);
@@ -219,7 +218,6 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 												current_access,
 												is_qualified<str::const_>(declarator_node),
 												is_qualified<str::volatile_>(declarator_node),
-												has_inline_specifier(decl_specifier_seq_node),
 												has_virtual_specifier(decl_specifier_seq_node),
 												has_pure_specifier(member_declarator_declarator_node)
 											);
@@ -373,6 +371,7 @@ semantic_analyzer::create_simple_function(const decl_specifier_seq& decl_specifi
 		get_name(declarator_node),
 		create_type(decl_specifier_seq_node, declarator_node),
 		create_parameters(declarator_node),
+		has_inline_specifier(decl_specifier_seq_node),
 		has_static_specifier(decl_specifier_seq_node)
 	);
 }

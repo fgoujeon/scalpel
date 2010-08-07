@@ -30,11 +30,13 @@ simple_function::simple_function
 	const std::string& name,
 	std::shared_ptr<const type> return_type,
 	std::list<parameter>&& parameters,
+	bool is_inline_specified,
 	bool is_static_specified
 ):
     name_(name),
 	return_type_(return_type),
 	parameters_(std::move(parameters)),
+	inline_specified_(is_inline_specified),
 	static_specified_(is_static_specified),
 	defined_(false)
 {
@@ -45,6 +47,7 @@ simple_function::simple_function(const simple_function& f):
 	name_(f.name_),
 	return_type_(f.return_type_),
 	parameters_(f.parameters_),
+	inline_specified_(f.inline_specified_),
 	static_specified_(f.static_specified_),
 	defined_(f.defined_),
 	statement_block_(f.statement_block_)
@@ -55,6 +58,7 @@ simple_function::simple_function(simple_function&& f):
 	name_(std::move(f.name_)),
 	return_type_(std::move(f.return_type_)),
 	parameters_(std::move(f.parameters_)),
+	inline_specified_(f.inline_specified_),
 	static_specified_(f.static_specified_),
 	defined_(f.defined_),
 	statement_block_(std::move(f.statement_block_))
@@ -67,6 +71,7 @@ simple_function::operator=(const simple_function& f)
 	name_ = f.name_;
 	return_type_ = f.return_type_;
 	parameters_ = f.parameters_;
+	inline_specified_ = f.inline_specified_;
 	static_specified_ = f.static_specified_;
 	defined_ = f.defined_;
 	statement_block_ = f.statement_block_;
@@ -80,6 +85,7 @@ simple_function::operator=(simple_function&& f)
 	name_ = std::move(f.name_);
 	return_type_ = std::move(f.return_type_);
 	parameters_ = std::move(f.parameters_);
+	inline_specified_ = f.inline_specified_;
 	static_specified_ = f.static_specified_;
 	defined_ = f.defined_;
 	statement_block_ = std::move(f.statement_block_);
@@ -94,6 +100,7 @@ simple_function::operator==(const simple_function& f) const
 		name_ == f.name_ &&
 		return_type_ == f.return_type_ &&
 		parameters_ == f.parameters_ &&
+		inline_specified_ == f.inline_specified_ &&
 		static_specified_ == f.static_specified_ &&
 		defined_ == f.defined_ &&
 		statement_block_ == f.statement_block_
@@ -107,6 +114,7 @@ simple_function::has_same_signature(const simple_function& f) const
 		name_ == f.name_ &&
 		return_type_ == f.return_type_ &&
 		has_same_parameters(f) &&
+		inline_specified_ == f.inline_specified_ &&
 		static_specified_ == f.static_specified_
 	;
 }
@@ -155,6 +163,12 @@ const std::list<simple_function::parameter>&
 simple_function::parameters() const
 {
 	return parameters_;
+}
+
+bool
+simple_function::inline_specified() const
+{
+	return inline_specified_;
 }
 
 bool
