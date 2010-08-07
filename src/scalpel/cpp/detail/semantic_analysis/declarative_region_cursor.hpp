@@ -18,8 +18,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_SCOPE_CURSOR_HPP
-#define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_SCOPE_CURSOR_HPP
+#ifndef SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_DECLARATIVE_REGION_CURSOR_HPP
+#define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_DECLARATIVE_REGION_CURSOR_HPP
 
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <scalpel/utility/shared_ptr_vector.hpp>
@@ -28,47 +28,39 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
 {
 
-class scope_cursor: public boost::noncopyable
+class declarative_region_cursor: public boost::noncopyable
 {
 	public:
-		typedef utility::shared_ptr_vector<semantic_entities::scope> scopes_t;
+		typedef utility::shared_ptr_vector<semantic_entities::declarative_region> declarative_regions_t;
 
-		scope_cursor();
-
-		void
-		initialize(std::shared_ptr<semantic_entities::scope> global_scope);
-
-		scopes_t::const_range
-		scope_stack() const;
-
-		scopes_t::range
-		scope_stack();
-
-		/*
-		scopes_t::const_range
-		global_scope_stack() const;
-
-		scopes_t::range
-		global_scope_stack();
-		*/
-
-		std::shared_ptr<semantic_entities::scope>
-		global_scope();
-
-		std::shared_ptr<semantic_entities::scope>
-		current_scope();
+		declarative_region_cursor();
 
 		void
-		enter_scope(std::shared_ptr<semantic_entities::scope> a_scope);
+		initialize(std::shared_ptr<semantic_entities::declarative_region> global_declarative_region);
+
+		declarative_regions_t::range
+		declarative_region_path();
+
+		declarative_regions_t::const_range
+		declarative_region_path() const;
+
+		std::shared_ptr<semantic_entities::declarative_region>
+		global_declarative_region();
+
+		std::shared_ptr<semantic_entities::declarative_region>
+		current_declarative_region();
 
 		void
-		enter_last_added_scope();
+		enter_declarative_region(std::shared_ptr<semantic_entities::declarative_region> a_declarative_region);
 
 		void
-		leave_scope();
+		enter_last_added_declarative_region();
+
+		void
+		leave_current_declarative_region();
 
 	private:
-		scopes_t scope_stack_;
+		declarative_regions_t declarative_region_path_;
 };
 
 }}}} //namespace scalpel::cpp::detail::semantic_analysis

@@ -98,13 +98,13 @@ test_case_1()
 
 
 	//
-	//scope path construction
+	//declarative region path construction
 	//
-	scalpel::utility::shared_ptr_vector<scalpel::cpp::semantic_entities::scope> scope_path;
-	scope_path.push_back(semantic_graph);
-	scope_path.push_back(namespace_a);
-	scope_path.push_back(namespace_b);
-	scope_path.push_back(function_f);
+	scalpel::utility::shared_ptr_vector<scalpel::cpp::semantic_entities::declarative_region> declarative_region_path;
+	declarative_region_path.push_back(semantic_graph);
+	declarative_region_path.push_back(namespace_a);
+	declarative_region_path.push_back(namespace_b);
+	declarative_region_path.push_back(function_f);
 
 
 
@@ -112,25 +112,25 @@ test_case_1()
 	//name lookup test
 	//
 	{
-		auto found_entities = scalpel::cpp::detail::semantic_analysis::name_lookup2::find_entities(scope_path, "i");
+		auto found_entities = scalpel::cpp::detail::semantic_analysis::name_lookup2::find_entities(declarative_region_path, "i");
 		BOOST_CHECK_EQUAL(found_entities.size(), 1);
 		BOOST_CHECK_EQUAL(found_entities.front(), variable_a_i);
 	}
 
 	{
-		auto found_entities = scalpel::cpp::detail::semantic_analysis::name_lookup2::find_entities(scope_path, "j");
+		auto found_entities = scalpel::cpp::detail::semantic_analysis::name_lookup2::find_entities(declarative_region_path, "j");
 		BOOST_CHECK_EQUAL(found_entities.size(), 1);
 		BOOST_CHECK_EQUAL(found_entities.front(), variable_j);
 	}
 
 	{
-		auto found_scope = scalpel::cpp::detail::semantic_analysis::name_lookup2::find_scope(scope_path, "C");
-		BOOST_CHECK_EQUAL(found_scope, namespace_c);
+		auto found_declarative_region = scalpel::cpp::detail::semantic_analysis::name_lookup2::find_declarative_region(declarative_region_path, "C");
+		BOOST_CHECK_EQUAL(found_declarative_region, namespace_c);
 	}
 
 	{
-		auto found_scope = scalpel::cpp::detail::semantic_analysis::name_lookup2::find_scope(scope_path, "g");
-		BOOST_CHECK(found_scope.get() == 0);
+		auto found_declarative_region = scalpel::cpp::detail::semantic_analysis::name_lookup2::find_declarative_region(declarative_region_path, "g");
+		BOOST_CHECK(found_declarative_region.get() == 0);
 	}
 }
 

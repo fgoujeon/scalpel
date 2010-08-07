@@ -24,7 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "variable.hpp"
 #include "statement_block.hpp"
 #include "named_entity.hpp"
-#include "named_scope.hpp"
+#include "named_declarative_region.hpp"
 #include "type.hpp"
 #include <string>
 #include <list>
@@ -37,7 +37,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 Represents a C++ non-special function (which is neither a constructor nor an
 operator function nor a conversion function).
 */
-class simple_function: public named_scope
+class simple_function: public named_declarative_region
 {
     public:
 		class parameter;
@@ -83,7 +83,7 @@ class simple_function: public named_scope
         @return false
         */
 		bool
-		considered_by_scope_find() const;
+		is_open_to_outside() const;
 
 		std::shared_ptr<const type>
 		return_type() const;
@@ -100,11 +100,11 @@ class simple_function: public named_scope
 		void
 		defined(bool d);
 
-		named_scopes_t::range
-        named_scopes();
+		named_declarative_regions_t::range
+        named_declarative_regions();
 
-		named_scopes_t::const_range
-        named_scopes() const;
+		named_declarative_regions_t::const_range
+        named_declarative_regions() const;
 
 		named_entities_t::range
 		named_entities();
@@ -120,7 +120,7 @@ class simple_function: public named_scope
 		bool defined_;
 
 		//polymorphic containers
-		named_scopes_t named_scopes_;
+		named_declarative_regions_t named_declarative_regions_;
 		named_entities_t named_entities_;
 
 		statement_block statement_block_;

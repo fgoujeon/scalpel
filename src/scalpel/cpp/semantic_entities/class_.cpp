@@ -38,8 +38,8 @@ class_::class_(const std::string& name):
 
 class_::class_(class_&& c):
 	name_(std::move(c.name_)),
-	named_scopes_(std::move(c.named_scopes_)),
 	named_entities_(std::move(c.named_entities_)),
+	named_declarative_regions_(std::move(c.named_declarative_regions_)),
 	nested_classes_(std::move(c.nested_classes_)),
 	constructors_(std::move(c.constructors_)),
 	destructor_(std::move(c.destructor_)),
@@ -54,8 +54,8 @@ const class_&
 class_::operator=(class_&& c)
 {
 	name_ = std::move(c.name_);
-	named_scopes_ = std::move(c.named_scopes_);
 	named_entities_ = std::move(c.named_entities_);
+	named_declarative_regions_ = std::move(c.named_declarative_regions_);
 	nested_classes_ = std::move(c.nested_classes_);
 	constructors_ = std::move(c.constructors_);
 	destructor_ = std::move(c.destructor_);
@@ -80,33 +80,33 @@ class_::is_global() const
 }
 
 bool
-class_::considered_by_scope_find() const
+class_::is_open_to_outside() const
 {
 	return true;
 }
 
-named_scope::named_scopes_t::range
-class_::named_scopes()
-{
-	return named_scopes_;
-}
-
-named_scope::named_scopes_t::const_range
-class_::named_scopes() const
-{
-	return named_scopes_;
-}
-
-named_scope::named_entities_t::range
+class_::named_entities_t::range
 class_::named_entities()
 {
 	return named_entities_;
 }
 
-named_scope::named_entities_t::const_range
+class_::named_entities_t::const_range
 class_::named_entities() const
 {
 	return named_entities_;
+}
+
+class_::named_declarative_regions_t::range
+class_::named_declarative_regions()
+{
+	return named_declarative_regions_;
+}
+
+class_::named_declarative_regions_t::const_range
+class_::named_declarative_regions() const
+{
+	return named_declarative_regions_;
 }
 
 class_::base_classes_t::const_range
@@ -173,8 +173,8 @@ void
 class_::add(std::shared_ptr<nested_class> member)
 {
 	nested_classes_.push_back(member);
-	named_scopes_.push_back(member);
 	named_entities_.push_back(member);
+	named_declarative_regions_.push_back(member);
 }
 
 void

@@ -24,7 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "variable.hpp"
 #include "operator_function.hpp"
 #include "simple_function.hpp"
-#include "named_scope.hpp"
+#include "named_declarative_region.hpp"
 #include "named_entity.hpp"
 #include "type.hpp"
 #include <scalpel/utility/shared_ptr_vector.hpp>
@@ -42,7 +42,7 @@ class namespace_;
 Represents a C++ class.
 */
 class class_:
-	public named_scope,
+	public named_declarative_region,
 	public type,
 	public boost::noncopyable
 {
@@ -111,13 +111,13 @@ class class_:
         @return true
         */
 		bool
-		considered_by_scope_find() const;
+		is_open_to_outside() const;
 
-		named_scopes_t::range
-        named_scopes();
+		named_declarative_regions_t::range
+        named_declarative_regions();
 
-		named_scopes_t::const_range
-        named_scopes() const;
+		named_declarative_regions_t::const_range
+        named_declarative_regions() const;
 
 		named_entities_t::range
 		named_entities();
@@ -180,8 +180,8 @@ class class_:
         std::string name_;
 
 		//polymorphic containers
-		named_scopes_t named_scopes_;
 		named_entities_t named_entities_;
+		named_declarative_regions_t named_declarative_regions_;
 
 		//containers
 		base_classes_t base_classes_;
@@ -298,7 +298,7 @@ class class_::base_class
 
 template<>
 class class_::member<class_>:
-	public named_scope,
+	public named_declarative_region,
 	public type
 {
 	public:
@@ -315,21 +315,21 @@ class class_::member<class_>:
 		}
 
         bool
-        considered_by_scope_find() const
+        is_open_to_outside() const
 		{
 			return true;
 		}
 
-		class_::named_scopes_t::range
-        named_scopes()
+		class_::named_declarative_regions_t::range
+        named_declarative_regions()
 		{
-			return entity_->named_scopes();
+			return entity_->named_declarative_regions();
 		}
 
-		class_::named_scopes_t::const_range
-        named_scopes() const
+		class_::named_declarative_regions_t::const_range
+        named_declarative_regions() const
 		{
-			return entity_->named_scopes();
+			return entity_->named_declarative_regions();
 		}
 
 		class_::named_entities_t::range

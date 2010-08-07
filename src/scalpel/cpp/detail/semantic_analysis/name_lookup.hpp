@@ -41,7 +41,7 @@ class name_lookup
 		std::shared_ptr<semantic_entities::named_entity>
 		find_name
 		(
-			RangeT scope_stack,
+			RangeT declarative_region_stack,
 			const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node
 		);
 
@@ -53,32 +53,32 @@ class name_lookup
 		std::shared_ptr<semantic_entities::named_entity>
 		find_name
 		(
-			RangeT scope_stack,
+			RangeT declarative_region_stack,
 			const std::string& name
 		);
 
 		/**
-		Find nested scope following standard C++ name-lookup rules.
+		Find nested declarative_region following standard C++ name-lookup rules.
 		*/
 		template<class RangeT>
 		static
-		std::shared_ptr<semantic_entities::scope>
-		find_scope
+		std::shared_ptr<semantic_entities::declarative_region>
+		find_declarative_region
 		(
-			RangeT scope_stack,
+			RangeT declarative_region_stack,
 			const syntax_nodes::nested_name_specifier& nested_name_specifier
 		);
 
 		/**
-		Find scope following standard C++ name-lookup rules.
+		Find declarative_region following standard C++ name-lookup rules.
 		*/
 		template<class RangeT>
 		static
-		std::shared_ptr<semantic_entities::scope>
-		find_scope
+		std::shared_ptr<semantic_entities::declarative_region>
+		find_declarative_region
 		(
-			RangeT scope_stack,
-			const std::string& scope_name
+			RangeT declarative_region_stack,
+			const std::string& declarative_region_name
 		);
 
 	private:
@@ -87,31 +87,31 @@ class name_lookup
 		std::shared_ptr<semantic_entities::named_entity>
 		find_name
 		(
-			RangeT scope_stack,
+			RangeT declarative_region_stack,
 			const std::string& name,
 			bool recursive_ascent
 		);
 
 		/**
-		Find unqualified name in the given named_scope, not recursively.
+		Find unqualified name in the given named_declarative_region, not recursively.
 		*/
 		static
 		std::shared_ptr<semantic_entities::named_entity>
 		find_name
 		(
-			semantic_entities::scope& current_scope,
+			semantic_entities::declarative_region& current_declarative_region,
 			const std::string& name
 		);
 
 		/**
-		Find named_scope in the given parent named_scope, not recursively.
+		Find named_declarative_region in the given parent named_declarative_region, not recursively.
 		*/
 		static
-		std::shared_ptr<semantic_entities::scope>
-		find_scope
+		std::shared_ptr<semantic_entities::declarative_region>
+		find_declarative_region
 		(
-			semantic_entities::scope& parent_scope,
-			const std::string& scope_name
+			semantic_entities::declarative_region& parent_declarative_region,
+			const std::string& declarative_region_name
 		);
 };
 

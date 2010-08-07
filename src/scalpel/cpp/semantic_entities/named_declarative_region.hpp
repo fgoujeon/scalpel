@@ -18,10 +18,10 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_NAMED_SCOPE_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_NAMED_SCOPE_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_NAMED_DECLARATIVE_REGION_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_NAMED_DECLARATIVE_REGION_HPP
 
-#include "scope.hpp"
+#include "declarative_region.hpp"
 #include "named_entity.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
@@ -30,18 +30,18 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 /**
 Refers to the named scopes.
 */
-struct named_scope: public scope, public named_entity
+struct named_declarative_region: public declarative_region, public named_entity
 {
 	virtual
-	~named_scope(){}
+	~named_declarative_region(){}
 
 	/**
-	Must the scope be considered by the name_lookup::find_scope() functions?
+	Given a declarative region R, is "R::x" a correct expression?
 	@return true for classes and namespaces, false otherwise
 	*/
 	virtual
 	bool
-	considered_by_scope_find() const = 0;
+	is_open_to_outside() const = 0;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

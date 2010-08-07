@@ -32,13 +32,13 @@ using namespace semantic_entities;
 std::shared_ptr<semantic_entities::named_entity>
 name_lookup::find_name
 (
-	semantic_entities::scope& current_scope,
+	semantic_entities::declarative_region& current_declarative_region,
 	const std::string& name
 )
 {
 	using namespace semantic_entities;
 
-	auto members = current_scope.named_entities();
+	auto members = current_declarative_region.named_entities();
 	auto member_it = std::find_if
 	(
 		members.begin(),
@@ -65,37 +65,37 @@ name_lookup::find_name
 	}
 }
 
-std::shared_ptr<semantic_entities::scope>
-name_lookup::find_scope
+std::shared_ptr<semantic_entities::declarative_region>
+name_lookup::find_declarative_region
 (
-	scope& parent_scope,
-	const std::string& scope_name
+	declarative_region& parent_declarative_region,
+	const std::string& declarative_region_name
 )
 {
-	auto scopes = parent_scope.named_scopes();
-	auto scope_it = std::find_if
+	auto declarative_regions = parent_declarative_region.named_declarative_regions();
+	auto declarative_region_it = std::find_if
 	(
-		scopes.begin(),
-		scopes.end(),
+		declarative_regions.begin(),
+		declarative_regions.end(),
 		std::bind
 		(
 			std::equal_to<std::string>(),
-			std::cref(scope_name),
+			std::cref(declarative_region_name),
 			std::bind
 			(
-				&named_scope::name,
+				&named_declarative_region::name,
 				std::placeholders::_1
 			)
 		)
 	);
 
-	if(scope_it != scopes.end())
+	if(declarative_region_it != declarative_regions.end())
 	{
-		return *scope_it;
+		return *declarative_region_it;
 	}
 	else
 	{
-		return std::shared_ptr<semantic_entities::named_scope>();
+		return std::shared_ptr<semantic_entities::named_declarative_region>();
 	}
 }
 

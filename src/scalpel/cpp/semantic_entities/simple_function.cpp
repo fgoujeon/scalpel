@@ -140,7 +140,7 @@ simple_function::name() const
 }
 
 bool
-simple_function::considered_by_scope_find() const
+simple_function::is_open_to_outside() const
 {
 	return false;
 }
@@ -175,18 +175,6 @@ simple_function::defined(bool d)
 	defined_ = d;
 }
 
-simple_function::named_scopes_t::range
-simple_function::named_scopes()
-{
-	return named_scopes_;
-}
-
-simple_function::named_scopes_t::const_range
-simple_function::named_scopes() const
-{
-	return named_scopes_;
-}
-
 simple_function::named_entities_t::range
 simple_function::named_entities()
 {
@@ -199,6 +187,17 @@ simple_function::named_entities() const
 	return named_entities_;
 }
 
+simple_function::named_declarative_regions_t::range
+simple_function::named_declarative_regions()
+{
+	return named_declarative_regions_;
+}
+
+simple_function::named_declarative_regions_t::const_range
+simple_function::named_declarative_regions() const
+{
+	return named_declarative_regions_;
+}
 
 
 

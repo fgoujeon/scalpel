@@ -37,8 +37,8 @@ semantic_analyzer::operator()(const syntax_tree& tree)
 	//create semantic graph
 	std::shared_ptr<namespace_> global_namespace = std::make_shared<namespace_>();
 
-	//current scope = global namespace
-	scope_cursor_.initialize(global_namespace);
+	//current declarative_region = global namespace
+	declarative_region_cursor_.initialize(global_namespace);
 
 	auto opt_declaration_seq_node = get_declaration_seq_node(tree);
 	if(opt_declaration_seq_node)
@@ -316,9 +316,9 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 										)
 									;
 									c->add(new_nested_class);
-									scope_cursor_.enter_scope(new_nested_class);
+									declarative_region_cursor_.enter_declarative_region(new_nested_class);
 									fill_class(new_class, class_specifier_node);
-									scope_cursor_.leave_scope();
+									declarative_region_cursor_.leave_current_declarative_region();
 								}
 							}
 						}
@@ -955,7 +955,7 @@ semantic_analyzer::get_type_info
 		if(auto opt_nested_identifier_or_template_id_node = get<nested_identifier_or_template_id>(&simple_type_specifier_node))
 		{
 			auto nested_identifier_or_template_id_node = *opt_nested_identifier_or_template_id_node;
-			std::shared_ptr<named_entity> found_name = name_lookup::find_name(scope_cursor_.scope_stack(), nested_identifier_or_template_id_node);
+			std::shared_ptr<named_entity> found_name = name_lookup::find_name(declarative_region_cursor_.declarative_region_path(), nested_identifier_or_template_id_node);
 			if(auto found_type = std::dynamic_pointer_cast<const type>(found_name))
 			{
 				t = found_type;
@@ -1345,7 +1345,7 @@ semantic_analyzer::find_class
 	const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node
 )
 {
-	std::shared_ptr<named_entity> found_name = name_lookup::find_name(scope_cursor_.scope_stack(), nested_identifier_or_template_id_node);
+	std::shared_ptr<named_entity> found_name = name_lookup::find_name(declarative_region_cursor_.declarative_region_path(), nested_identifier_or_template_id_node);
 
 	if(std::shared_ptr<class_> found_class = std::dynamic_pointer_cast<class_>(found_name))
 	{

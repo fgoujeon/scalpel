@@ -18,35 +18,35 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_SCOPE_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_SCOPE_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_DECLARATIVE_REGION_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_DECLARATIVE_REGION_HPP
 
 #include <scalpel/utility/shared_ptr_vector.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-struct named_scope;
+struct named_declarative_region;
 struct named_entity;
 
 /**
-Refers to any scope.
+Refers to any declarative region.
 */
-struct scope
+struct declarative_region
 {
-	typedef utility::shared_ptr_vector<named_scope> named_scopes_t;
+	typedef utility::shared_ptr_vector<named_declarative_region> named_declarative_regions_t;
 	typedef utility::shared_ptr_vector<named_entity> named_entities_t;
 
 	virtual
-	~scope(){}
+	~declarative_region(){}
 
 	virtual
-	named_scopes_t::range
-	named_scopes() = 0;
+	named_declarative_regions_t::range
+	named_declarative_regions() = 0;
 
 	virtual
-	named_scopes_t::const_range
-	named_scopes() const = 0;
+	named_declarative_regions_t::const_range
+	named_declarative_regions() const = 0;
 
 	virtual
 	named_entities_t::range

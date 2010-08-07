@@ -38,8 +38,8 @@ namespace_::namespace_(const std::string& name):
 
 namespace_::namespace_(namespace_&& n):
 	name_(std::move(n.name_)),
-	named_scopes_(std::move(n.named_scopes_)),
 	named_entities_(std::move(n.named_entities_)),
+	named_declarative_regions_(std::move(n.named_declarative_regions_)),
 	namespaces_(std::move(n.namespaces_)),
 	classes_(std::move(n.classes_)),
 	simple_functions_(std::move(n.simple_functions_)),
@@ -52,8 +52,8 @@ const namespace_&
 namespace_::operator=(namespace_&& n)
 {
 	name_ = std::move(n.name_);
-	named_scopes_ = std::move(n.named_scopes_);
 	named_entities_ = std::move(n.named_entities_);
+	named_declarative_regions_ = std::move(n.named_declarative_regions_);
 	namespaces_ = std::move(n.namespaces_);
 	classes_ = std::move(n.classes_);
 	simple_functions_ = std::move(n.simple_functions_);
@@ -70,33 +70,33 @@ namespace_::name() const
 }
 
 bool
-namespace_::considered_by_scope_find() const
+namespace_::is_open_to_outside() const
 {
 	return true;
 }
 
-named_scope::named_scopes_t::range
-namespace_::named_scopes()
-{
-	return named_scopes_;
-}
-
-named_scope::named_scopes_t::const_range
-namespace_::named_scopes() const
-{
-	return named_scopes_;
-}
-
-named_scope::named_entities_t::range
+namespace_::named_entities_t::range
 namespace_::named_entities()
 {
 	return named_entities_;
 }
 
-named_scope::named_entities_t::const_range
+namespace_::named_entities_t::const_range
 namespace_::named_entities() const
 {
 	return named_entities_;
+}
+
+namespace_::named_declarative_regions_t::range
+namespace_::named_declarative_regions()
+{
+	return named_declarative_regions_;
+}
+
+namespace_::named_declarative_regions_t::const_range
+namespace_::named_declarative_regions() const
+{
+	return named_declarative_regions_;
 }
 
 namespace_::namespaces_t::const_range
@@ -133,7 +133,7 @@ void
 namespace_::add(std::shared_ptr<namespace_> member)
 {
     namespaces_.push_back(member);
-	named_scopes_.push_back(member);
+	named_declarative_regions_.push_back(member);
 	named_entities_.push_back(member);
 }
 
@@ -141,7 +141,7 @@ void
 namespace_::add(std::shared_ptr<class_> member)
 {
     classes_.push_back(member);
-	named_scopes_.push_back(member);
+	named_declarative_regions_.push_back(member);
 	named_entities_.push_back(member);
 }
 
@@ -149,7 +149,7 @@ void
 namespace_::add(std::shared_ptr<simple_function> member)
 {
     simple_functions_.push_back(member);
-	named_scopes_.push_back(member);
+	named_declarative_regions_.push_back(member);
 	named_entities_.push_back(member);
 }
 

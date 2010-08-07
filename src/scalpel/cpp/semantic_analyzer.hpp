@@ -23,7 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "syntax_tree.hpp"
 #include "semantic_graph.hpp"
-#include "detail/semantic_analysis/scope_cursor.hpp"
+#include "detail/semantic_analysis/declarative_region_cursor.hpp"
 #include "syntax_nodes/utility/type_traits.hpp"
 #include <memory>
 
@@ -473,7 +473,7 @@ class semantic_analyzer
 			const syntax_nodes::declarator& declarator_node
 		);
 
-		detail::semantic_analysis::scope_cursor scope_cursor_;
+		detail::semantic_analysis::declarative_region_cursor declarative_region_cursor_;
 };
 
 template<class ParentEntityT>

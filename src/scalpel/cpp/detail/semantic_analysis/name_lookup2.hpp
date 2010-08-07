@@ -40,7 +40,7 @@ class name_lookup2
 		utility::shared_ptr_vector<semantic_entities::named_entity>
 		find_entities
 		(
-			utility::shared_ptr_vector<semantic_entities::scope>::range scope_path,
+			utility::shared_ptr_vector<semantic_entities::declarative_region>::range declarative_region_path,
 			const std::string& name
 		);
 
@@ -52,32 +52,32 @@ class name_lookup2
 		utility::shared_ptr_vector<semantic_entities::named_entity>
 		find_entities
 		(
-			std::shared_ptr<semantic_entities::scope> current_scope,
+			std::shared_ptr<semantic_entities::declarative_region> current_declarative_region,
 			const std::string& name
 		);
 
 	public:
 		/**
-		Find a scope of the given name, from the given scope path
-		@return a pointer to the found scope or a null pointer
+		Find a scope of the given name, from the given declarative region path
+		@return a pointer to the found declarative region or a null pointer
 		*/
 		static
-		std::shared_ptr<semantic_entities::named_scope>
-		find_scope
+		std::shared_ptr<semantic_entities::named_declarative_region>
+		find_declarative_region
 		(
-			utility::shared_ptr_vector<semantic_entities::scope>::range scope_path,
+			utility::shared_ptr_vector<semantic_entities::declarative_region>::range declarative_region_path,
 			const std::string& name
 		);
 
 		/**
-		Find a scope of the given name, in the given scope
-		@return a pointer to the found scope or a null pointer
+		Find a scope of the given name, in the given declarative region
+		@return a pointer to the found declarative region or a null pointer
 		*/
 		static
-		std::shared_ptr<semantic_entities::named_scope>
-		find_scope
+		std::shared_ptr<semantic_entities::named_declarative_region>
+		find_declarative_region
 		(
-			std::shared_ptr<semantic_entities::scope> current_scope,
+			std::shared_ptr<semantic_entities::declarative_region> current_declarative_region,
 			const std::string& name
 		);
 };

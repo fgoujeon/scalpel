@@ -25,7 +25,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "operator_function.hpp"
 #include "simple_function.hpp"
 #include "class_.hpp"
-#include "named_scope.hpp"
+#include "named_declarative_region.hpp"
 #include "named_entity.hpp"
 #include <boost/noncopyable.hpp>
 #include <string>
@@ -40,7 +40,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 Represents a C++ namespace.
 */
 class namespace_:
-	public named_scope,
+	public named_declarative_region,
 	public boost::noncopyable
 {
     public:
@@ -90,13 +90,13 @@ class namespace_:
         @return true
         */
 		bool
-		considered_by_scope_find() const;
+		is_open_to_outside() const;
 
-		named_scopes_t::range
-        named_scopes();
+		named_declarative_regions_t::range
+        named_declarative_regions();
 
-		named_scopes_t::const_range
-        named_scopes() const;
+		named_declarative_regions_t::const_range
+        named_declarative_regions() const;
 
 		named_entities_t::range
 		named_entities();
@@ -138,8 +138,8 @@ class namespace_:
         std::string name_;
 
 		//polymorphic containers
-		named_scopes_t named_scopes_;
 		named_entities_t named_entities_;
+		named_declarative_regions_t named_declarative_regions_;
 
 		//containers
         namespaces_t namespaces_;

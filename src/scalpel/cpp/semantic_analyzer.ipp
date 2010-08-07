@@ -109,9 +109,9 @@ semantic_analyzer::analyze(const syntax_nodes::class_specifier& class_specifier_
 
 	std::shared_ptr<class_> new_class = create_class(class_specifier_node);
 	parent_entity->add(new_class);
-	scope_cursor_.enter_scope(new_class);
+	declarative_region_cursor_.enter_declarative_region(new_class);
 	fill_class(new_class, class_specifier_node);
-	scope_cursor_.leave_scope();
+	declarative_region_cursor_.leave_current_declarative_region();
 }
 
 template<class ParentEntityT>
@@ -233,10 +233,10 @@ semantic_analyzer::analyze(const syntax_nodes::function_definition& function_def
 	auto declarator_node = get_declarator(function_definition_node);
 
 	//
-	//get the enclosing scope of the function
+	//get the declarative region of the function
 	//
 	/*
-	std::shared_ptr<named_scope> enclosing_scope;
+	std::shared_ptr<named_declarative_region> enclosing_declarative_region;
 
 	auto direct_declarator_node = get_direct_declarator(declarator_node);
 	auto first_part_node = get_first_part(direct_declarator_node);
@@ -250,7 +250,7 @@ semantic_analyzer::analyze(const syntax_nodes::function_definition& function_def
 
 			if(auto opt_unqualified_id_node = get<unqualified_id>(&id_expression_node))
 			{
-				enclosing_scope = scope_cursor_.current_scope();
+				enclosing_declarative_region = declarative_region_cursor_.current_declarative_region();
 			}
 			else if(auto opt_qualified_id_node = get<qualified_id>(&id_expression_node))
 			{
@@ -267,11 +267,11 @@ semantic_analyzer::analyze(const syntax_nodes::function_definition& function_def
 
 					if(leading_double_colon)
 					{
-						enclosing_scope = name_lookup::find_scope(scope_cursor_.global_scope_stack(), nested_name_specifier_node);
+						enclosing_declarative_region = name_lookup::find_declarative_region(declarative_region_cursor_.global_declarative_region_path(), nested_name_specifier_node);
 					}
 					else
 					{
-						enclosing_scope = name_lookup::find_scope(scope_cursor_.scope_stack(), nested_name_specifier_node);
+						enclosing_declarative_region = name_lookup::find_declarative_region(declarative_region_cursor_.declarative_region_path(), nested_name_specifier_node);
 					}
 				}
 			}
@@ -405,17 +405,17 @@ semantic_analyzer::analyze(const syntax_nodes::namespace_definition& syntax_node
 	//create the namespace entity
 	std::shared_ptr<namespace_> new_namespace = std::make_shared<namespace_>(namespace_name);
 
-	//add the namespace to the current scope
+	//add the namespace to the current declarative region
 	parent_entity->add(new_namespace);
 
 	//add the declarations of the namespace definition in the namespace semantic node
-	scope_cursor_.enter_scope(new_namespace);
+	declarative_region_cursor_.enter_declarative_region(new_namespace);
 	const optional_node<declaration_seq>& a_declaration_seq = get_declaration_seq(syntax_node);
 	if(a_declaration_seq)
 	{
 		analyze(*a_declaration_seq, new_namespace);
 	}
-	scope_cursor_.leave_scope();
+	declarative_region_cursor_.leave_current_declarative_region();
 }
 
 template<class ParentEntityT>
@@ -681,7 +681,7 @@ semantic_analyzer::define_function
 
 	//find the corresponding function semantic entity (must exist if the function has already been declared)
 	std::shared_ptr<FunctionT> function_entity;
-	std::shared_ptr<semantic_entities::named_entity> found_entity = name_lookup::find_name(scope_cursor_.scope_stack(), function_name);
+	std::shared_ptr<semantic_entities::named_entity> found_entity = name_lookup::find_name(declarative_region_cursor_.declarative_region_path(), function_name);
 	std::shared_ptr<FunctionT> possible_function_entity;
 	if
 	(

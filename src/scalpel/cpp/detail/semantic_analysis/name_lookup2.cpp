@@ -29,18 +29,18 @@ namespace scalpel { namespace cpp { namespace detail { namespace semantic_analys
 utility::shared_ptr_vector<semantic_entities::named_entity>
 name_lookup2::find_entities
 (
-	utility::shared_ptr_vector<semantic_entities::scope>::range scope_path,
+	utility::shared_ptr_vector<semantic_entities::declarative_region>::range declarative_region_path,
 	const std::string& name
 )
 {
-	//find entities from current to outermost scopes (until global namespace)
-	std::reverse(scope_path.begin(), scope_path.end()); //TODO it would be faster if scope_path could provide a bidirectional iterator
-	for(auto i = scope_path.begin(); i != scope_path.end(); ++i)
+	//find entities from current to outermost declarative regions (until global namespace)
+	std::reverse(declarative_region_path.begin(), declarative_region_path.end()); //TODO it would be faster if declarative_region_path could provide a bidirectional iterator
+	for(auto i = declarative_region_path.begin(); i != declarative_region_path.end(); ++i)
 	{
-		std::shared_ptr<semantic_entities::scope> current_scope = *i;
+		std::shared_ptr<semantic_entities::declarative_region> current_declarative_region = *i;
 
-		//find entities in current scope
-		utility::shared_ptr_vector<semantic_entities::named_entity> found_entities = find_entities(current_scope, name);
+		//find entities in current declarative region
+		utility::shared_ptr_vector<semantic_entities::named_entity> found_entities = find_entities(current_declarative_region, name);
 		if(!found_entities.empty()) return found_entities;
 	}
 
@@ -50,13 +50,13 @@ name_lookup2::find_entities
 utility::shared_ptr_vector<semantic_entities::named_entity>
 name_lookup2::find_entities
 (
-	std::shared_ptr<semantic_entities::scope> current_scope,
+	std::shared_ptr<semantic_entities::declarative_region> current_declarative_region,
 	const std::string& name
 )
 {
 	utility::shared_ptr_vector<semantic_entities::named_entity> found_entities;
 
-	for(auto i = current_scope->named_entities().begin(); i != current_scope->named_entities().end(); ++i)
+	for(auto i = current_declarative_region->named_entities().begin(); i != current_declarative_region->named_entities().end(); ++i)
 	{
 		std::shared_ptr<semantic_entities::named_entity> current_entity = *i;
 		if(current_entity->name() == name)
@@ -68,52 +68,54 @@ name_lookup2::find_entities
 	return found_entities;
 }
 
-std::shared_ptr<semantic_entities::named_scope>
-name_lookup2::find_scope
+std::shared_ptr<semantic_entities::named_declarative_region>
+name_lookup2::find_declarative_region
 (
-	utility::shared_ptr_vector<semantic_entities::scope>::range scope_path,
+	utility::shared_ptr_vector<semantic_entities::declarative_region>::range declarative_region_path,
 	const std::string& name
 )
 {
-	std::shared_ptr<semantic_entities::named_scope> found_scope;
+	std::shared_ptr<semantic_entities::named_declarative_region> found_declarative_region;
 
-	std::reverse(scope_path.begin(), scope_path.end()); //TODO it would be faster if scope_path could provide a bidirectional iterator
-	for(auto i = scope_path.begin(); i != scope_path.end(); ++i) //from current to outermost scopes (until global namespace)
+	//find a declarative region from current to outermost declarative regions
+	//(until global namespace)
+	std::reverse(declarative_region_path.begin(), declarative_region_path.end()); //TODO it would be faster if declarative_region_path could provide a bidirectional iterator
+	for(auto i = declarative_region_path.begin(); i != declarative_region_path.end(); ++i) //from current to outermost declarative regions (until global namespace)
 	{
-		std::shared_ptr<semantic_entities::scope> current_scope = *i;
+		std::shared_ptr<semantic_entities::declarative_region> current_declarative_region = *i;
 
-		//find scope in current scope
-		std::shared_ptr<semantic_entities::named_scope> maybe_found_scope = find_scope(current_scope, name);
-		if(maybe_found_scope)
+		//find declarative region in current declarative region
+		std::shared_ptr<semantic_entities::named_declarative_region> maybe_found_declarative_region = find_declarative_region(current_declarative_region, name);
+		if(maybe_found_declarative_region)
 		{
-			found_scope = maybe_found_scope;
+			found_declarative_region = maybe_found_declarative_region;
 			break;
 		}
 	}
 
-	return found_scope;
+	return found_declarative_region;
 }
 
-std::shared_ptr<semantic_entities::named_scope>
-name_lookup2::find_scope
+std::shared_ptr<semantic_entities::named_declarative_region>
+name_lookup2::find_declarative_region
 (
-	std::shared_ptr<semantic_entities::scope> current_scope,
+	std::shared_ptr<semantic_entities::declarative_region> current_declarative_region,
 	const std::string& name
 )
 {
-	std::shared_ptr<semantic_entities::named_scope> found_scope;
+	std::shared_ptr<semantic_entities::named_declarative_region> found_declarative_region;
 
-	for(auto i = current_scope->named_scopes().begin(); i != current_scope->named_scopes().end(); ++i)
+	for(auto i = current_declarative_region->named_declarative_regions().begin(); i != current_declarative_region->named_declarative_regions().end(); ++i)
 	{
-		std::shared_ptr<semantic_entities::named_scope> current_entity = *i;
-		if(current_entity->considered_by_scope_find() && current_entity->name() == name)
+		std::shared_ptr<semantic_entities::named_declarative_region> current_declarative_region = *i;
+		if(current_declarative_region->is_open_to_outside() && current_declarative_region->name() == name)
 		{
-			found_scope = current_entity;
+			found_declarative_region = current_declarative_region;
 			break;
 		}
 	}
 
-	return found_scope;
+	return found_declarative_region;
 }
 
 }}}} //namespace scalpel::cpp::detail::semantic_analysis

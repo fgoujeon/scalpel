@@ -27,7 +27,7 @@ template<class RangeT>
 std::shared_ptr<semantic_entities::named_entity>
 name_lookup::find_name
 (
-	RangeT scope_stack,
+	RangeT declarative_region_stack,
 	const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node
 )
 {
@@ -40,12 +40,12 @@ name_lookup::find_name
 	if(opt_nested_name_specifier_node)
 	{
 		auto nested_name_specifier_node = *opt_nested_name_specifier_node;
-		std::shared_ptr<scope> found_scope = find_scope(scope_stack, nested_name_specifier_node);
+		std::shared_ptr<declarative_region> found_declarative_region = find_declarative_region(declarative_region_stack, nested_name_specifier_node);
 
 		if(auto opt_identifier_node = get<identifier>(&identifier_or_template_id_node))
 		{
 			auto identifier_node = *opt_identifier_node;
-			return find_name(*found_scope, identifier_node.value());
+			return find_name(*found_declarative_region, identifier_node.value());
 		}
 		else if(auto template_id_node = get<template_id>(&identifier_or_template_id_node))
 		{
@@ -60,7 +60,7 @@ name_lookup::find_name
 		if(auto opt_identifier_node = get<identifier>(&identifier_or_template_id_node))
 		{
 			auto identifier_node = *opt_identifier_node;
-			return find_name(scope_stack, identifier_node.value());
+			return find_name(declarative_region_stack, identifier_node.value());
 		}
 		else if(auto template_id_node = get<template_id>(&identifier_or_template_id_node))
 		{
@@ -80,11 +80,11 @@ template<class RangeT>
 std::shared_ptr<semantic_entities::named_entity>
 name_lookup::find_name
 (
-	RangeT scope_stack,
+	RangeT declarative_region_stack,
 	const std::string& name
 )
 {
-    return find_name(scope_stack, name, true);
+    return find_name(declarative_region_stack, name, true);
 }
 
 
@@ -93,39 +93,39 @@ template<class RangeT>
 std::shared_ptr<semantic_entities::named_entity>
 name_lookup::find_name
 (
-	RangeT scope_stack,
+	RangeT declarative_region_stack,
 	const std::string& name,
 	bool recursive_ascent
 )
 {
 	using namespace semantic_entities;
 
-	std::shared_ptr<scope> current_scope = scope_stack.back();
+	std::shared_ptr<declarative_region> current_declarative_region = declarative_region_stack.back();
 
     /*
-    1. Current named_scope
+    1. Current named_declarative_region
     */
-	if(std::shared_ptr<named_entity> found_name = find_name(*current_scope, name))
+	if(std::shared_ptr<named_entity> found_name = find_name(*current_declarative_region, name))
 	{
 		return found_name;
 	}
 
     /*
-    2. Enclosing scopes (recursive ascent call)
+    2. Enclosing declarative_regions (recursive ascent call)
     */
 	if
 	(
 		recursive_ascent &&
-		scope_stack.size() >= 2 //is there at least an enclosing named_scope?
+		declarative_region_stack.size() >= 2 //is there at least an enclosing named_declarative_region?
 	)
 	{
-		auto last_but_one_it = scope_stack.end();
+		auto last_but_one_it = declarative_region_stack.end();
 		--last_but_one_it;
-		RangeT enclosing_scope_stack(scope_stack.begin(), last_but_one_it);
+		RangeT enclosing_declarative_region_stack(declarative_region_stack.begin(), last_but_one_it);
 
-		if(!enclosing_scope_stack.empty())
+		if(!enclosing_declarative_region_stack.empty())
 		{
-			std::shared_ptr<semantic_entities::named_entity> found_name = find_name(enclosing_scope_stack, name, true);
+			std::shared_ptr<semantic_entities::named_entity> found_name = find_name(enclosing_declarative_region_stack, name, true);
 			if(found_name)
 			{
 				return found_name;
@@ -138,7 +138,7 @@ name_lookup::find_name
 //    3. Base classes (non-recursive_ascent)
 //    */
 //    {
-//        const std::list<base_specifier>& base_specifiers = current_scope->get_base_specifiers();
+//        const std::list<base_specifier>& base_specifiers = current_declarative_region->get_base_specifiers();
 //        for
 //        (
 //            std::list<base_specifier>::const_iterator i = base_specifiers.begin();
@@ -163,17 +163,17 @@ name_lookup::find_name
 
 
 template<class RangeT>
-std::shared_ptr<semantic_entities::scope>
-name_lookup::find_scope
+std::shared_ptr<semantic_entities::declarative_region>
+name_lookup::find_declarative_region
 (
-	RangeT scope_stack,
+	RangeT declarative_region_stack,
 	const syntax_nodes::nested_name_specifier& a_nested_name_specifier
 )
 {
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
 
-	std::shared_ptr<scope> found_scope;
+	std::shared_ptr<declarative_region> found_declarative_region;
 
 	//get the first part of the nested-name-specifier
 	const identifier_or_template_id& an_identifier_or_template_id = get_identifier_or_template_id(a_nested_name_specifier);
@@ -182,14 +182,14 @@ name_lookup::find_scope
 	//if the first part is a simple identifier
 	if(an_identifier)
 	{
-		const std::string& scope_name = an_identifier->value();
+		const std::string& declarative_region_name = an_identifier->value();
 
-		//find the named_scope which has that identifier in the current named_scope and in the enclosing scopes
-		found_scope = find_scope(scope_stack, scope_name);
+		//find the named_declarative_region which has that identifier in the current named_declarative_region and in the enclosing declarative_regions
+		found_declarative_region = find_declarative_region(declarative_region_stack, declarative_region_name);
 	}
 
-	//if the first part named_scope has been found, go on with the next parts
-	if(found_scope)
+	//if the first part named_declarative_region has been found, go on with the next parts
+	if(found_declarative_region)
 	{
 		//is there other parts?
 		auto last_part_seq = get_last_part_seq(a_nested_name_specifier);
@@ -198,7 +198,7 @@ name_lookup::find_scope
 			//for each part...
 			for(auto i = last_part_seq->begin(); i != last_part_seq->end(); ++i)
 			{
-				if(found_scope)
+				if(found_declarative_region)
 				{
 					const nested_name_specifier_last_part& last_part = i->main_node();
 
@@ -207,8 +207,8 @@ name_lookup::find_scope
 
 					if(an_identifier)
 					{
-						const std::string& scope_name = an_identifier->value();
-						found_scope = find_scope(*found_scope, scope_name);
+						const std::string& declarative_region_name = an_identifier->value();
+						found_declarative_region = find_declarative_region(*found_declarative_region, declarative_region_name);
 					}
 				}
 				else
@@ -217,36 +217,36 @@ name_lookup::find_scope
 		}
 	}
 
-	return found_scope;
+	return found_declarative_region;
 }
 
 
 
 template<class RangeT>
-std::shared_ptr<semantic_entities::scope>
-name_lookup::find_scope
+std::shared_ptr<semantic_entities::declarative_region>
+name_lookup::find_declarative_region
 (
-	RangeT scope_stack,
-	const std::string& scope_name
+	RangeT declarative_region_stack,
+	const std::string& declarative_region_name
 )
 {
 	using namespace semantic_entities;
 
-	if(!scope_stack.empty())
+	if(!declarative_region_stack.empty())
 	{
-		auto it = scope_stack.end();
-		for(auto i = scope_stack.size(); i > 0; --i)
+		auto it = declarative_region_stack.end();
+		for(auto i = declarative_region_stack.size(); i > 0; --i)
 		{
 			--it;
-			std::shared_ptr<scope> current_scope = *it;
-			if(std::shared_ptr<scope> found_scope = find_scope(*current_scope, scope_name))
+			std::shared_ptr<declarative_region> current_declarative_region = *it;
+			if(std::shared_ptr<declarative_region> found_declarative_region = find_declarative_region(*current_declarative_region, declarative_region_name))
 			{
-				return found_scope;
+				return found_declarative_region;
 			}
 		}
 	}
 
-	throw std::runtime_error("Scope " + scope_name + " not found");
+	throw std::runtime_error("Declarative region " + declarative_region_name + " not found");
 }
 
 }}}} //namespace scalpel::cpp::detail::semantic_analysis
