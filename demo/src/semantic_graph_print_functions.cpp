@@ -302,7 +302,7 @@ print
 	std::cout << ">\n";
 
 	std::cout << indent(indent_level + 1) << "<return_type>\n";
-	print(*f.get_type(), indent_level + 2);
+	print(*f.return_type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</return_type>\n";
 
 	std::cout << indent(indent_level) << "</conversion_function>\n";

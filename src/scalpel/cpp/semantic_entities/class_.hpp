@@ -279,20 +279,20 @@ class class_::conversion_function: public entity
 	public:
 		conversion_function
 		(
-			std::shared_ptr<const type> t,
+			std::shared_ptr<const type> return_type,
 			const bool is_inline_specified
 		);
 
 		conversion_function(conversion_function&& o);
 
 		std::shared_ptr<const type>
-		get_type() const;
+		return_type() const;
 
 		bool
 		inline_specified() const;
 
 	private:
-		std::shared_ptr<const type> type_;
+		std::shared_ptr<const type> return_type_;
 		bool inline_specified_;
 };
 

@@ -441,24 +441,24 @@ class_::destructor::inline_specified() const
 
 class_::conversion_function::conversion_function
 (
-	std::shared_ptr<const type> t,
+	std::shared_ptr<const type> return_type,
 	const bool is_inline_specified
 ):
-	type_(t),
+	return_type_(return_type),
 	inline_specified_(is_inline_specified)
 {
 }
 
 class_::conversion_function::conversion_function(conversion_function&& o):
-	type_(std::move(o.type_)),
+	return_type_(std::move(o.return_type_)),
 	inline_specified_(o.inline_specified_)
 {
 }
 
 std::shared_ptr<const type>
-class_::conversion_function::get_type() const
+class_::conversion_function::return_type() const
 {
-	return type_;
+	return return_type_;
 }
 
 bool
