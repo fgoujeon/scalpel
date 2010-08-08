@@ -49,7 +49,7 @@ struct declarative_region
 	named_entities() = 0;
 
 	virtual
-	named_entities_t::const_range
+	const named_entities_t&
 	named_entities() const = 0;
 
 	virtual
@@ -57,7 +57,7 @@ struct declarative_region
 	named_declarative_regions() = 0;
 
 	virtual
-	named_declarative_regions_t::const_range
+	const named_declarative_regions_t&
 	named_declarative_regions() const = 0;
 
 	virtual

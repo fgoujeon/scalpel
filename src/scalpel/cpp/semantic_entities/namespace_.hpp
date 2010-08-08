@@ -95,31 +95,31 @@ class namespace_:
 		named_entities_t::range
 		named_entities();
 
-		named_entities_t::const_range
+		const named_entities_t&
 		named_entities() const;
 
 		named_declarative_regions_t::range
         named_declarative_regions();
 
-		named_declarative_regions_t::const_range
+		const named_declarative_regions_t&
         named_declarative_regions() const;
 
 		classes_t::range
 		base_classes();
 
-		namespaces_t::const_range
+		const namespaces_t&
 		namespaces() const;
 
-		classes_t::const_range
+		const classes_t&
 		classes() const;
 
-		simple_functions_t::const_range
+		const simple_functions_t&
 		simple_functions() const;
 
-		operator_functions_t::const_range
+		const operator_functions_t&
 		operator_functions() const;
 
-		variables_t::const_range
+		const variables_t&
 		variables() const;
 
         void

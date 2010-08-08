@@ -99,7 +99,7 @@ class_::named_entities()
 	return named_entities_;
 }
 
-class_::named_entities_t::const_range
+const class_::named_entities_t&
 class_::named_entities() const
 {
 	return named_entities_;
@@ -111,7 +111,7 @@ class_::named_declarative_regions()
 	return named_declarative_regions_;
 }
 
-class_::named_declarative_regions_t::const_range
+const class_::named_declarative_regions_t&
 class_::named_declarative_regions() const
 {
 	return named_declarative_regions_;
@@ -123,19 +123,19 @@ class_::base_classes()
 	return base_classes_;
 }
 
-class_::classes_t::const_range
+const class_::classes_t&
 class_::base_classes() const
 {
 	return base_classes_;
 }
 
-class_::classes_t::const_range
+const class_::classes_t&
 class_::nested_classes() const
 {
 	return nested_classes_;
 }
 
-class_::constructors_t::const_range
+const class_::constructors_t&
 class_::constructors() const
 {
 	return constructors_;
@@ -147,25 +147,25 @@ class_::get_destructor() const
 	return destructor_;
 }
 
-class_::simple_functions_t::const_range
+const class_::simple_functions_t&
 class_::simple_functions() const
 {
 	return simple_functions_;
 }
 
-class_::operator_functions_t::const_range
+const class_::operator_functions_t&
 class_::operator_functions() const
 {
 	return operator_functions_;
 }
 
-class_::conversion_functions_t::const_range
+const class_::conversion_functions_t&
 class_::conversion_functions() const
 {
 	return conversion_functions_;
 }
 
-class_::variables_t::const_range
+const class_::variables_t&
 class_::variables() const
 {
 	return variables_;

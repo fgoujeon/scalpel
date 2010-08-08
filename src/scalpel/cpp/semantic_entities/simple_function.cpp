@@ -196,7 +196,7 @@ simple_function::named_entities()
 	return named_entities_;
 }
 
-simple_function::named_entities_t::const_range
+const simple_function::named_entities_t&
 simple_function::named_entities() const
 {
 	return named_entities_;
@@ -208,7 +208,7 @@ simple_function::named_declarative_regions()
 	return named_declarative_regions_;
 }
 
-simple_function::named_declarative_regions_t::const_range
+const simple_function::named_declarative_regions_t&
 simple_function::named_declarative_regions() const
 {
 	return named_declarative_regions_;

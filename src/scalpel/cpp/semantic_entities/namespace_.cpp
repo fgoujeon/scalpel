@@ -82,7 +82,7 @@ namespace_::named_entities()
 	return named_entities_;
 }
 
-namespace_::named_entities_t::const_range
+const namespace_::named_entities_t&
 namespace_::named_entities() const
 {
 	return named_entities_;
@@ -94,7 +94,7 @@ namespace_::named_declarative_regions()
 	return named_declarative_regions_;
 }
 
-namespace_::named_declarative_regions_t::const_range
+const namespace_::named_declarative_regions_t&
 namespace_::named_declarative_regions() const
 {
 	return named_declarative_regions_;
@@ -106,31 +106,31 @@ namespace_::base_classes()
 	return detail::empty_class_shared_ptr_vector_range;
 }
 
-namespace_::namespaces_t::const_range
+const namespace_::namespaces_t&
 namespace_::namespaces() const
 {
 	return namespaces_;
 }
 
-namespace_::classes_t::const_range
+const namespace_::classes_t&
 namespace_::classes() const
 {
 	return classes_;
 }
 
-namespace_::simple_functions_t::const_range
+const namespace_::simple_functions_t&
 namespace_::simple_functions() const
 {
 	return simple_functions_;
 }
 
-namespace_::operator_functions_t::const_range
+const namespace_::operator_functions_t&
 namespace_::operator_functions() const
 {
 	return operator_functions_;
 }
 
-namespace_::variables_t::const_range
+const namespace_::variables_t&
 namespace_::variables() const
 {
 	return variables_;

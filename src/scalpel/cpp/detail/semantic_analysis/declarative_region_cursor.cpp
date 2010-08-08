@@ -46,7 +46,7 @@ declarative_region_cursor::declarative_region_path()
 	return declarative_region_path_;
 }
 
-declarative_region_cursor::declarative_regions_t::const_range
+const declarative_region_cursor::declarative_regions_t&
 declarative_region_cursor::declarative_region_path() const
 {
 	return declarative_region_path_;

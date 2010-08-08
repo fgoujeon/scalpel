@@ -103,40 +103,40 @@ class class_:
 		named_entities_t::range
 		named_entities();
 
-		named_entities_t::const_range
+		const named_entities_t&
 		named_entities() const;
 
 		named_declarative_regions_t::range
         named_declarative_regions();
 
-		named_declarative_regions_t::const_range
+		const named_declarative_regions_t&
         named_declarative_regions() const;
 
 		classes_t::range
 		base_classes();
 
-		classes_t::const_range
+		const classes_t&
 		base_classes() const;
 
-		classes_t::const_range
+		const classes_t&
 		nested_classes() const;
 
-		constructors_t::const_range
+		const constructors_t&
 		constructors() const;
 
 		std::shared_ptr<const destructor>
 		get_destructor() const;
 
-		simple_functions_t::const_range
+		const simple_functions_t&
 		simple_functions() const;
 
-		operator_functions_t::const_range
+		const operator_functions_t&
 		operator_functions() const;
 
-		conversion_functions_t::const_range
+		const conversion_functions_t&
 		conversion_functions() const;
 
-		variables_t::const_range
+		const variables_t&
 		variables() const;
 
 		/**

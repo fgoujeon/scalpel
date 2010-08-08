@@ -26,7 +26,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities { namespace deta
 {
 
 utility::shared_ptr_vector<class_> empty_vector;
-utility::shared_ptr_vector<class_>::range empty_class_shared_ptr_vector_range(empty_vector.pointers());
+utility::shared_ptr_vector<class_>::range empty_class_shared_ptr_vector_range(empty_vector);
 
 }}}} //namespace scalpel::cpp::semantic_entities
 

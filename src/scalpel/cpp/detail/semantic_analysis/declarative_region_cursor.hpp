@@ -41,7 +41,7 @@ class declarative_region_cursor: public boost::noncopyable
 		declarative_regions_t::range
 		declarative_region_path();
 
-		declarative_regions_t::const_range
+		const declarative_regions_t&
 		declarative_region_path() const;
 
 		std::shared_ptr<semantic_entities::declarative_region>
