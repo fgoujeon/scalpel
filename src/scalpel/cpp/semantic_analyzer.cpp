@@ -202,11 +202,11 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 												(
 													std::make_shared<class_::destructor>
 													(
-														current_access,
-														has_inline_specifier(decl_specifier_seq_node),
-														has_virtual_specifier(decl_specifier_seq_node),
-														has_pure_specifier(member_declarator_declarator_node)
-													)
+														has_inline_specifier(decl_specifier_seq_node)
+													),
+													current_access,
+													has_virtual_specifier(decl_specifier_seq_node),
+													has_pure_specifier(member_declarator_declarator_node)
 												);
 											}
 										}
@@ -269,13 +269,10 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 										{
 											c->set_destructor
 											(
-												std::make_shared<class_::destructor>
-												(
-													current_access,
-													false,
-													false,
-													false
-												)
+												std::make_shared<class_::destructor>(false),
+												current_access,
+												false,
+												false
 											);
 										}
 									}

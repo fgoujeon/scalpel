@@ -125,9 +125,6 @@ class class_:
 		std::shared_ptr<const destructor>
 		get_destructor() const;
 
-		void
-		set_destructor(std::shared_ptr<destructor> d);
-
 		simple_functions_t::const_range
 		simple_functions() const;
 
@@ -159,6 +156,15 @@ class class_:
 
         void
         add(std::shared_ptr<constructor> member, const access acc);
+
+		void
+		set_destructor
+		(
+			std::shared_ptr<destructor> member,
+			const access acc,
+			const bool virtual_specified,
+			const bool pure_specified
+		);
 
         void
         add
@@ -243,57 +249,21 @@ class class_::constructor: public entity
 
 	private:
 		semantic_entities::simple_function impl_;
-		parameters_t parameters_;
 		bool explicit_specified_;
 };
 
-class class_::destructor
+class class_::destructor: public entity
 {
-	private:
-		//give class_ access to the private constructor
-		friend class class_;
-
-		destructor
-		(
-			class_::access access,
-			const bool is_inline_specified,
-			const bool is_virtual_specified,
-			const bool is_pure_specified,
-			const bool is_implicitly_declared
-		);
-
 	public:
-		destructor
-		(
-			class_::access access,
-			const bool is_inline_specified,
-			const bool is_virtual_specified,
-			const bool is_pure_specified
-		);
+		destructor(const bool is_inline_specified);
 
 		destructor(destructor&& o);
-
-		class_::access
-		access() const;
 
 		bool
 		inline_specified() const;
 
-		bool
-		virtual_specified() const;
-
-		bool
-		pure_specified() const;
-
-		bool
-		implicitly_declared() const;
-
 	private:
-		class_::access access_;
 		bool inline_specified_;
-		bool virtual_specified_;
-		bool pure_specified_;
-		bool implicitly_declared_;
 };
 
 class class_::conversion_function

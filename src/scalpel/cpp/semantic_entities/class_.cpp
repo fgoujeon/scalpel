@@ -30,10 +30,18 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 class_::class_(const std::string& name):
-    name_(name),
-	destructor_(new destructor(access::PUBLIC, true, false, false, true)) //implicitly declared destructor
+    name_(name)
 {
 	std::cout << "New class " << name << '\n';
+
+	//implicitly declared destructor
+	set_destructor
+	(
+		std::make_shared<destructor>(false),
+		access::PUBLIC,
+		false,
+		false
+	);
 }
 
 class_::class_(class_&& c):
@@ -133,12 +141,6 @@ class_::get_destructor() const
 	return destructor_;
 }
 
-void
-class_::set_destructor(std::shared_ptr<destructor> d)
-{
-	destructor_ = d;
-}
-
 class_::simple_functions_t::const_range
 class_::simple_functions() const
 {
@@ -226,6 +228,33 @@ class_::add(std::shared_ptr<constructor> member, const access acc)
 			private_members_.push_back(member);
 			break;
 	}
+}
+
+void
+class_::set_destructor
+(
+	std::shared_ptr<destructor> member,
+	const access acc,
+	const bool virtual_specified,
+	const bool pure_specified
+)
+{
+	destructor_ = member;
+
+	switch(acc)
+	{
+		case PUBLIC:
+			public_members_.push_back(member);
+			break;
+		case PROTECTED:
+			protected_members_.push_back(member);
+			break;
+		case PRIVATE:
+			private_members_.push_back(member);
+			break;
+	}
+	if(virtual_specified) virtual_member_functions_.push_back(member);
+	if(pure_specified) pure_member_functions_.push_back(member);
 }
 
 void
@@ -366,72 +395,21 @@ class_::constructor::explicit_specified() const
 
 class_::destructor::destructor
 (
-	class_::access access,
-	const bool is_inline_specified,
-	const bool is_virtual_specified,
-	const bool is_pure_specified,
-	const bool is_implicitly_declared
+	const bool is_inline_specified
 ):
-	access_(access),
-	inline_specified_(is_inline_specified),
-	virtual_specified_(is_virtual_specified),
-	pure_specified_(is_pure_specified),
-	implicitly_declared_(is_implicitly_declared)
-{
-}
-
-class_::destructor::destructor
-(
-	class_::access access,
-	const bool is_inline_specified,
-	const bool is_virtual_specified,
-	const bool is_pure_specified
-):
-	access_(access),
-	inline_specified_(is_inline_specified),
-	virtual_specified_(is_virtual_specified),
-	pure_specified_(is_pure_specified),
-	implicitly_declared_(false)
+	inline_specified_(is_inline_specified)
 {
 }
 
 class_::destructor::destructor(destructor&& o):
-	access_(o.access_),
-	inline_specified_(o.inline_specified_),
-	virtual_specified_(o.virtual_specified_),
-	pure_specified_(o.pure_specified_),
-	implicitly_declared_(o.implicitly_declared_)
+	inline_specified_(o.inline_specified_)
 {
-}
-
-class_::access
-class_::destructor::access() const
-{
-	return access_;
 }
 
 bool
 class_::destructor::inline_specified() const
 {
 	return inline_specified_;
-}
-
-bool
-class_::destructor::virtual_specified() const
-{
-	return virtual_specified_;
-}
-
-bool
-class_::destructor::pure_specified() const
-{
-	return pure_specified_;
-}
-
-bool
-class_::destructor::implicitly_declared() const
-{
-	return implicitly_declared_;
 }
 
 

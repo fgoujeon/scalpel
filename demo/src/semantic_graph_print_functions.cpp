@@ -222,15 +222,8 @@ print
 )
 {
 	std::cout << indent(indent_level) << "<destructor";
-	std::cout << attribute(d.access());
 	if(d.inline_specified())
 		std::cout << " inline=\"true\"";
-	if(d.virtual_specified())
-		std::cout << " virtual=\"true\"";
-	if(d.pure_specified())
-		std::cout << " pure=\"true\"";
-	if(d.implicitly_declared())
-		std::cout << " implicitly_declared=\"true\"";
 	std::cout << ">\n";
 
 	std::cout << indent(indent_level) << "</destructor>\n";
