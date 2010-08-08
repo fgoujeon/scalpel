@@ -210,9 +210,22 @@ class_::add(std::shared_ptr<class_> member, const access acc)
 }
 
 void
-class_::add(std::shared_ptr<constructor> member)
+class_::add(std::shared_ptr<constructor> member, const access acc)
 {
     constructors_.push_back(member);
+
+	switch(acc)
+	{
+		case PUBLIC:
+			public_members_.push_back(member);
+			break;
+		case PROTECTED:
+			protected_members_.push_back(member);
+			break;
+		case PRIVATE:
+			private_members_.push_back(member);
+			break;
+	}
 }
 
 void
@@ -310,7 +323,6 @@ class_::add(std::shared_ptr<variable> member, const access acc)
 class_::constructor::constructor
 (
 	parameters_t&& parameters,
-	class_::access access,
 	const bool is_inline_specified,
 	const bool is_explicit_specified
 ):
@@ -322,14 +334,12 @@ class_::constructor::constructor
 		is_inline_specified,
 		false
 	),
-	access_(access),
 	explicit_specified_(is_explicit_specified)
 {
 }
 
 class_::constructor::constructor(constructor&& o):
 	impl_(std::move(o.impl_)),
-	access_(o.access_),
 	explicit_specified_(o.explicit_specified_)
 {
 }
@@ -338,12 +348,6 @@ const class_::constructor::parameters_t&
 class_::constructor::parameters() const
 {
 	return impl_.parameters();
-}
-
-class_::access
-class_::constructor::access() const
-{
-	return access_;
 }
 
 bool

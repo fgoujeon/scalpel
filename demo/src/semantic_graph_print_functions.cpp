@@ -196,7 +196,7 @@ print
 )
 {
 	std::cout << indent(indent_level) << "<constructor";
-	std::cout << attribute(c.access());
+	//std::cout << attribute(c.access());
 	if(c.inline_specified())
 		std::cout << " inline=\"true\"";
 	if(c.explicit_specified())

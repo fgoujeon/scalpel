@@ -158,7 +158,7 @@ class class_:
         add(std::shared_ptr<class_> member, const access acc);
 
         void
-        add(std::shared_ptr<constructor> member);
+        add(std::shared_ptr<constructor> member, const access acc);
 
         void
         add
@@ -217,16 +217,15 @@ class class_:
 		variables_t variables_;
 };
 
-class class_::constructor
+class class_::constructor: public entity
 {
 	public:
-		typedef semantic_entities::simple_function::parameters_t parameters_t;
-		typedef semantic_entities::simple_function::parameter parameter;
+		typedef simple_function::parameter parameter;
+		typedef simple_function::parameters_t parameters_t;
 
 		constructor
 		(
 			parameters_t&& parameters,
-			class_::access access,
 			const bool is_inline_specified,
 			const bool is_explicit_specified
 		);
@@ -235,9 +234,6 @@ class class_::constructor
 
 		const parameters_t&
 		parameters() const;
-
-		class_::access
-		access() const;
 
 		bool
 		inline_specified() const;
@@ -248,7 +244,6 @@ class class_::constructor
 	private:
 		semantic_entities::simple_function impl_;
 		parameters_t parameters_;
-		class_::access access_;
 		bool explicit_specified_;
 };
 
