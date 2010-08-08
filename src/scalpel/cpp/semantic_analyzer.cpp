@@ -172,13 +172,13 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 												std::make_shared<class_::conversion_function>
 												(
 													get_conversion_function_type(declarator_node),
-													current_access,
-													is_qualified<str::const_>(declarator_node),
-													is_qualified<str::volatile_>(declarator_node),
-													has_inline_specifier(decl_specifier_seq_node),
-													has_virtual_specifier(decl_specifier_seq_node),
-													has_pure_specifier(member_declarator_declarator_node)
-												)
+													has_inline_specifier(decl_specifier_seq_node)
+												),
+												current_access,
+												is_qualified<str::const_>(declarator_node),
+												is_qualified<str::volatile_>(declarator_node),
+												has_virtual_specifier(decl_specifier_seq_node),
+												has_pure_specifier(member_declarator_declarator_node)
 											);
 										}
 										else if(c->name() == get_name(declarator_node)) //constructor or destructor
@@ -241,13 +241,13 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 											std::make_shared<class_::conversion_function>
 											(
 												get_conversion_function_type(declarator_node),
-												current_access,
-												is_qualified<str::const_>(declarator_node),
-												is_qualified<str::volatile_>(declarator_node),
-												false,
-												false,
 												false
-											)
+											),
+											current_access,
+											is_qualified<str::const_>(declarator_node),
+											is_qualified<str::volatile_>(declarator_node),
+											false,
+											false
 										);
 									}
 									else if(c->name() == get_name(declarator_node)) //constructor or destructor

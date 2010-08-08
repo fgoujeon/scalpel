@@ -189,7 +189,15 @@ class class_:
 		);
 
         void
-        add(std::shared_ptr<conversion_function> member);
+        add
+		(
+			std::shared_ptr<conversion_function> member,
+			const access acc,
+			const bool const_qualified,
+			const bool volatile_qualified,
+			const bool virtual_specified,
+			const bool pure_specified
+		);
 
 		void
 		add(std::shared_ptr<variable> member, const access acc);
@@ -266,18 +274,13 @@ class class_::destructor: public entity
 		bool inline_specified_;
 };
 
-class class_::conversion_function
+class class_::conversion_function: public entity
 {
 	public:
 		conversion_function
 		(
 			std::shared_ptr<const type> t,
-			class_::access access,
-			const bool is_const_qualified,
-			const bool is_volatile_qualified,
-			const bool is_inline_specified,
-			const bool is_virtual_specified,
-			const bool is_pure_specified
+			const bool is_inline_specified
 		);
 
 		conversion_function(conversion_function&& o);
@@ -285,32 +288,12 @@ class class_::conversion_function
 		std::shared_ptr<const type>
 		get_type() const;
 
-		class_::access
-		access() const;
-
-		bool
-		const_qualified() const;
-
-		bool
-		volatile_qualified() const;
-
 		bool
 		inline_specified() const;
 
-		bool
-		virtual_specified() const;
-
-		bool
-		pure_specified() const;
-
 	private:
 		std::shared_ptr<const type> type_;
-		class_::access access_;
-		bool const_qualified_;
-		bool volatile_qualified_;
 		bool inline_specified_;
-		bool virtual_specified_;
-		bool pure_specified_;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

@@ -322,9 +322,34 @@ class_::add
 }
 
 void
-class_::add(std::shared_ptr<conversion_function> member)
+class_::add
+(
+	std::shared_ptr<conversion_function> member,
+	const access acc,
+	const bool const_qualified,
+	const bool volatile_qualified,
+	const bool virtual_specified,
+	const bool pure_specified
+)
 {
     conversion_functions_.push_back(member);
+
+	switch(acc)
+	{
+		case PUBLIC:
+			public_members_.push_back(member);
+			break;
+		case PROTECTED:
+			protected_members_.push_back(member);
+			break;
+		case PRIVATE:
+			private_members_.push_back(member);
+			break;
+	}
+	if(const_qualified) const_member_functions_.push_back(member);
+	if(volatile_qualified) volatile_member_functions_.push_back(member);
+	if(virtual_specified) virtual_member_functions_.push_back(member);
+	if(pure_specified) pure_member_functions_.push_back(member);
 }
 
 void
@@ -417,31 +442,16 @@ class_::destructor::inline_specified() const
 class_::conversion_function::conversion_function
 (
 	std::shared_ptr<const type> t,
-	class_::access access,
-	const bool is_const_qualified,
-	const bool is_volatile_qualified,
-	const bool is_inline_specified,
-	const bool is_virtual_specified,
-	const bool is_pure_specified
+	const bool is_inline_specified
 ):
 	type_(t),
-	access_(access),
-	const_qualified_(is_const_qualified),
-	volatile_qualified_(is_volatile_qualified),
-	inline_specified_(is_inline_specified),
-	virtual_specified_(is_virtual_specified),
-	pure_specified_(is_pure_specified)
+	inline_specified_(is_inline_specified)
 {
 }
 
 class_::conversion_function::conversion_function(conversion_function&& o):
 	type_(std::move(o.type_)),
-	access_(o.access_),
-	const_qualified_(o.const_qualified_),
-	volatile_qualified_(o.volatile_qualified_),
-	inline_specified_(o.inline_specified_),
-	virtual_specified_(o.virtual_specified_),
-	pure_specified_(o.pure_specified_)
+	inline_specified_(o.inline_specified_)
 {
 }
 
@@ -451,40 +461,10 @@ class_::conversion_function::get_type() const
 	return type_;
 }
 
-class_::access
-class_::conversion_function::access() const
-{
-	return access_;
-}
-
-bool
-class_::conversion_function::const_qualified() const
-{
-	return const_qualified_;
-}
-
-bool
-class_::conversion_function::volatile_qualified() const
-{
-	return volatile_qualified_;
-}
-
 bool
 class_::conversion_function::inline_specified() const
 {
 	return inline_specified_;
-}
-
-bool
-class_::conversion_function::virtual_specified() const
-{
-	return virtual_specified_;
-}
-
-bool
-class_::conversion_function::pure_specified() const
-{
-	return pure_specified_;
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

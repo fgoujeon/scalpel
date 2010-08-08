@@ -297,17 +297,8 @@ print
 )
 {
 	std::cout << indent(indent_level) << "<conversion_function";
-	std::cout << attribute(f.access());
-	if(f.const_qualified())
-		std::cout << " const=\"true\"";
-	if(f.volatile_qualified())
-		std::cout << " volatile=\"true\"";
 	if(f.inline_specified())
 		std::cout << " inline=\"true\"";
-	if(f.virtual_specified())
-		std::cout << " virtual=\"true\"";
-	if(f.pure_specified())
-		std::cout << " pure=\"true\"";
 	std::cout << ">\n";
 
 	std::cout << indent(indent_level + 1) << "<return_type>\n";
