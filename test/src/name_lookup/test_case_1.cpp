@@ -21,7 +21,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "test_case_1.hpp"
 #include <scalpel/cpp/detail/semantic_analysis/name_lookup2.hpp>
 #include <scalpel/cpp/semantic_graph.hpp>
-#include <scalpel/utility/null_deleter.hpp>
 #include <boost/test/unit_test.hpp>
 
 namespace name_lookup
@@ -81,6 +80,23 @@ test_case_1()
 		"i",
 		scalpel::cpp::semantic_entities::built_in_type_shared_ptrs::int_
 	);
+	auto struct_a_b = std::make_shared<scalpel::cpp::semantic_entities::class_>("B");
+	auto function_a_b_f = std::make_shared<scalpel::cpp::semantic_entities::simple_function>
+	(
+		"f",
+		scalpel::cpp::semantic_entities::built_in_type_shared_ptrs::void_
+	);
+	auto function_a_g = std::make_shared<scalpel::cpp::semantic_entities::simple_function>
+	(
+		"g",
+		scalpel::cpp::semantic_entities::built_in_type_shared_ptrs::void_
+	);
+	auto namespace_a_c = std::make_shared<scalpel::cpp::semantic_entities::namespace_>("C");
+	auto variable_a_c_n = std::make_shared<scalpel::cpp::semantic_entities::variable>
+	(
+		"n",
+		scalpel::cpp::semantic_entities::built_in_type_shared_ptrs::int_
+	);
 	auto variable_i = std::make_shared<scalpel::cpp::semantic_entities::variable>
 	(
 		"i",
@@ -91,28 +107,22 @@ test_case_1()
 		"j",
 		scalpel::cpp::semantic_entities::built_in_type_shared_ptrs::int_
 	);
-	auto struct_a_b = std::make_shared<scalpel::cpp::semantic_entities::class_>("B");
-	auto function_a_b_f = std::make_shared<scalpel::cpp::semantic_entities::simple_function>
-	(
-		"f",
-		scalpel::cpp::semantic_entities::built_in_type_shared_ptrs::void_
-	);
-	auto function_g = std::make_shared<scalpel::cpp::semantic_entities::simple_function>
-	(
-		"g",
-		scalpel::cpp::semantic_entities::built_in_type_shared_ptrs::void_
-	);
-	auto namespace_c = std::make_shared<scalpel::cpp::semantic_entities::namespace_>("C");
 
-	semantic_graph->add(namespace_a);
 	semantic_graph->add(struct_b0);
 	struct_b0->add
 	(
 		variable_b0_n,
 		scalpel::cpp::semantic_entities::class_::access::PUBLIC
 	);
+	semantic_graph->add(namespace_a);
 	namespace_a->add(variable_a_i);
 	namespace_a->add(struct_a_b);
+	struct_a_b->add_base_class
+	(
+		struct_b0,
+		scalpel::cpp::semantic_entities::class_::access::PUBLIC,
+		false
+	);
 	struct_a_b->add
 	(
 		function_a_b_f,
@@ -122,8 +132,9 @@ test_case_1()
 		false,
 		false
 	);
-	namespace_a->add(function_g);
-	namespace_a->add(namespace_c);
+	namespace_a->add(function_a_g);
+	namespace_a->add(namespace_a_c);
+	namespace_a_c->add(variable_a_c_n);
 	semantic_graph->add(variable_i);
 	semantic_graph->add(variable_j);
 
@@ -156,8 +167,14 @@ test_case_1()
 	}
 
 	{
+		auto found_entities = scalpel::cpp::detail::semantic_analysis::name_lookup2::find_entities(declarative_region_path, "n");
+		BOOST_CHECK_EQUAL(found_entities.size(), 1);
+		BOOST_CHECK_EQUAL(found_entities.front(), variable_b0_n);
+	}
+
+	{
 		auto found_declarative_region = scalpel::cpp::detail::semantic_analysis::name_lookup2::find_open_declarative_region(declarative_region_path, "C");
-		BOOST_CHECK_EQUAL(found_declarative_region, namespace_c);
+		BOOST_CHECK_EQUAL(found_declarative_region, namespace_a_c);
 	}
 
 	{

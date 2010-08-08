@@ -104,17 +104,20 @@ class simple_function: public named_declarative_region
 		void
 		defined(bool d);
 
+		named_entities_t::range
+		named_entities();
+
+		named_entities_t::const_range
+		named_entities() const;
+
 		named_declarative_regions_t::range
         named_declarative_regions();
 
 		named_declarative_regions_t::const_range
         named_declarative_regions() const;
 
-		named_entities_t::range
-		named_entities();
-
-		named_entities_t::const_range
-		named_entities() const;
+		classes_t::range
+		base_classes();
 
     private:
         std::string name_;

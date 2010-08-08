@@ -51,7 +51,6 @@ class class_:
 		class destructor;
 		class conversion_function;
 
-		typedef utility::shared_ptr_vector<class_> classes_t;
 		typedef utility::shared_ptr_vector<constructor> constructors_t;
 		typedef utility::shared_ptr_vector<simple_function> simple_functions_t;
 		typedef utility::shared_ptr_vector<operator_function> operator_functions_t;
@@ -113,6 +112,9 @@ class class_:
 		named_declarative_regions_t::const_range
         named_declarative_regions() const;
 
+		classes_t::range
+		base_classes();
+
 		classes_t::const_range
 		base_classes() const;
 
@@ -144,59 +146,59 @@ class class_:
         add_base_class
 		(
 			std::shared_ptr<class_> base_class,
-			const access acc,
-			bool virtual_specified
+			const access acc = PUBLIC,
+			bool virtual_specified = false
 		);
 
         /**
         Adds a nested class.
         */
         void
-        add(std::shared_ptr<class_> member, const access acc);
+        add(std::shared_ptr<class_> member, const access acc = PUBLIC);
 
         void
-        add(std::shared_ptr<constructor> member, const access acc);
+        add(std::shared_ptr<constructor> member, const access acc = PUBLIC);
 
 		void
 		set_destructor
 		(
 			std::shared_ptr<destructor> member,
-			const access acc,
-			const bool virtual_specified,
-			const bool pure_specified
+			const access acc = PUBLIC,
+			const bool virtual_specified = false,
+			const bool pure_specified = false
 		);
 
         void
         add
 		(
 			std::shared_ptr<simple_function> member,
-			const access acc,
-			const bool const_qualified,
-			const bool volatile_qualified,
-			const bool virtual_specified,
-			const bool pure_specified
+			const access acc = PUBLIC,
+			const bool const_qualified = false,
+			const bool volatile_qualified = false,
+			const bool virtual_specified = false,
+			const bool pure_specified = false
 		);
 
         void
         add
 		(
 			std::shared_ptr<operator_function> member,
-			const access acc,
-			const bool const_qualified,
-			const bool volatile_qualified,
-			const bool virtual_specified,
-			const bool pure_specified
+			const access acc = PUBLIC,
+			const bool const_qualified = false,
+			const bool volatile_qualified = false,
+			const bool virtual_specified = false,
+			const bool pure_specified = false
 		);
 
         void
         add
 		(
 			std::shared_ptr<conversion_function> member,
-			const access acc,
-			const bool const_qualified,
-			const bool volatile_qualified,
-			const bool virtual_specified,
-			const bool pure_specified
+			const access acc = PUBLIC,
+			const bool const_qualified = false,
+			const bool volatile_qualified = false,
+			const bool virtual_specified = false,
+			const bool pure_specified = false
 		);
 
 		void

@@ -19,6 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "simple_function.hpp"
+#include "detail/empty_class_shared_ptr_vector.hpp"
 #include <iostream>
 #include <cassert>
 
@@ -213,6 +214,11 @@ simple_function::named_declarative_regions() const
 	return named_declarative_regions_;
 }
 
+simple_function::classes_t::range
+simple_function::base_classes()
+{
+	return detail::empty_class_shared_ptr_vector_range;
+}
 
 
 simple_function::parameter::parameter(std::shared_ptr<const type> t, const std::string& name):

@@ -39,16 +39,24 @@ name_lookup2::find_entities
 	{
 		std::shared_ptr<semantic_entities::declarative_region> current_declarative_region = *i;
 
-		//find entities in current declarative region
-		utility::shared_ptr_vector<semantic_entities::named_entity> found_entities = find_entities(current_declarative_region, name);
-		if(!found_entities.empty()) return found_entities;
+		//find entities in the current declarative region
+		{
+			utility::shared_ptr_vector<semantic_entities::named_entity> found_entities = find_entities_in_declarative_region(current_declarative_region, name);
+			if(!found_entities.empty()) return found_entities;
+		}
+
+		//find entities in the base classes of the current declarative region
+		{
+			utility::shared_ptr_vector<semantic_entities::named_entity> found_entities = find_entities_in_base_classes(current_declarative_region->base_classes(), name);
+			if(!found_entities.empty()) return found_entities;
+		}
 	}
 
 	throw std::runtime_error("No entity found");
 }
 
 utility::shared_ptr_vector<semantic_entities::named_entity>
-name_lookup2::find_entities
+name_lookup2::find_entities_in_declarative_region
 (
 	std::shared_ptr<semantic_entities::declarative_region> current_declarative_region,
 	const std::string& name
@@ -62,6 +70,54 @@ name_lookup2::find_entities
 		if(current_entity->name() == name)
 		{
 			found_entities.push_back(current_entity);
+		}
+	}
+
+	return found_entities;
+}
+
+utility::shared_ptr_vector<semantic_entities::named_entity>
+name_lookup2::find_entities_in_base_classes
+(
+	utility::shared_ptr_vector<semantic_entities::class_>::range base_classes,
+	const std::string& name
+)
+{
+	typedef utility::shared_ptr_vector<semantic_entities::named_entity> named_entities_t;
+
+	named_entities_t found_entities;
+	std::back_insert_iterator<named_entities_t> found_entities_back_insert_iterator(found_entities);
+
+	for(auto i = base_classes.begin(); i != base_classes.end(); ++i)
+	{
+		std::shared_ptr<semantic_entities::class_> current_class = *i;
+
+		//find entities in the current declarative region (i.e. current class)
+		named_entities_t current_class_found_entities = find_entities_in_declarative_region(current_class, name);
+
+		//entities found?
+		if(!current_class_found_entities.empty())
+		{
+			//add them to the list
+			std::copy
+			(
+				current_class_found_entities.begin(),
+				current_class_found_entities.end(),
+				found_entities_back_insert_iterator
+			);
+		}
+		else
+		{
+			//find entities in the current declarative region's base classes
+			named_entities_t current_class_base_classes_found_entities = find_entities_in_base_classes(current_class->base_classes(), name);
+
+			//add them to the list
+			std::copy
+			(
+				current_class_base_classes_found_entities.begin(),
+				current_class_base_classes_found_entities.end(),
+				found_entities_back_insert_iterator
+			);
 		}
 	}
 

@@ -74,15 +74,43 @@ shared_ptr_vector<T>::empty() const
 template<typename T>
 shared_ptr_vector<T>::operator range()
 {
-	return raw_vector_;
+	return pointers();
 }
 
 template<typename T>
 shared_ptr_vector<T>::operator const_range() const
 {
+	return pointers();
+}
+
+template<typename T>
+typename shared_ptr_vector<T>::range
+shared_ptr_vector<T>::pointers()
+{
+	return raw_vector_;
+}
+
+template<typename T>
+typename shared_ptr_vector<T>::const_range
+shared_ptr_vector<T>::pointers() const
+{
 	const_iterator begin(raw_vector_.begin(), &constify);
 	const_iterator end(raw_vector_.end(), &constify);
 	return const_range(begin, end);
+}
+
+template<typename T>
+typename shared_ptr_vector<T>::iterator
+shared_ptr_vector<T>::begin()
+{
+	return raw_vector_.begin();
+}
+
+template<typename T>
+typename shared_ptr_vector<T>::iterator
+shared_ptr_vector<T>::end()
+{
+	return raw_vector_.end();
 }
 
 template<typename T>

@@ -19,6 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "namespace_.hpp"
+#include "detail/empty_class_shared_ptr_vector.hpp"
 #include <iostream>
 #include <cassert>
 
@@ -97,6 +98,12 @@ namespace_::named_declarative_regions_t::const_range
 namespace_::named_declarative_regions() const
 {
 	return named_declarative_regions_;
+}
+
+namespace_::classes_t::range
+namespace_::base_classes()
+{
+	return detail::empty_class_shared_ptr_vector_range;
 }
 
 namespace_::namespaces_t::const_range

@@ -39,17 +39,20 @@ class shared_ptr_vector
 	private:
 		typedef std::vector<std::shared_ptr<T>> raw_vector_t;
 
-		typedef typename raw_vector_t::iterator iterator;
 		typedef typename raw_vector_t::const_iterator raw_const_iterator;
 
 		typedef std::function<std::shared_ptr<const T> (std::shared_ptr<T>)> constify_function_t;
-		typedef boost::transform_iterator<constify_function_t, raw_const_iterator, std::shared_ptr<const T>> const_iterator;
 
 	public:
+		typedef typename raw_vector_t::iterator iterator;
+		typedef boost::transform_iterator<constify_function_t, raw_const_iterator, std::shared_ptr<const T>> const_iterator;
+
 		typedef boost::iterator_range<iterator> range;
 		typedef boost::iterator_range<const_iterator> const_range;
 
 		typedef typename raw_vector_t::size_type size_type;
+		typedef typename raw_vector_t::value_type value_type;
+		typedef std::shared_ptr<T> const_reference;
 
 		shared_ptr_vector();
 
@@ -71,9 +74,29 @@ class shared_ptr_vector
 		bool
 		empty() const;
 
+		inline
 		operator range();
 
+		inline
 		operator const_range() const;
+
+		/**
+		Gives read/write access to the pointers (but no access to the container itself)
+		*/
+		inline
+		range
+		pointers();
+
+		const_range
+		pointers() const;
+
+		inline
+		iterator
+		begin();
+
+		inline
+		iterator
+		end();
 
 		inline
 		std::shared_ptr<T>

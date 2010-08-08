@@ -117,6 +117,12 @@ class_::named_declarative_regions() const
 	return named_declarative_regions_;
 }
 
+class_::classes_t::range
+class_::base_classes()
+{
+	return base_classes_;
+}
+
 class_::classes_t::const_range
 class_::base_classes() const
 {

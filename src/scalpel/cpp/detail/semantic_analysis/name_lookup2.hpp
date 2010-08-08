@@ -50,9 +50,20 @@ class name_lookup2
 		*/
 		static
 		utility::shared_ptr_vector<semantic_entities::named_entity>
-		find_entities
+		find_entities_in_declarative_region
 		(
 			std::shared_ptr<semantic_entities::declarative_region> current_declarative_region,
+			const std::string& name
+		);
+
+		/**
+		Find entities of the given name, in the given base classes
+		*/
+		static
+		utility::shared_ptr_vector<semantic_entities::named_entity>
+		find_entities_in_base_classes
+		(
+			utility::shared_ptr_vector<semantic_entities::class_>::range base_classes,
 			const std::string& name
 		);
 

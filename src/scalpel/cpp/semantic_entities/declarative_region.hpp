@@ -29,6 +29,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 struct entity;
 struct named_entity;
 struct named_declarative_region;
+struct class_;
 
 /**
 Refers to any declarative region.
@@ -38,9 +39,18 @@ struct declarative_region
 	typedef utility::shared_ptr_vector<entity> entities_t;
 	typedef utility::shared_ptr_vector<named_entity> named_entities_t;
 	typedef utility::shared_ptr_vector<named_declarative_region> named_declarative_regions_t;
+	typedef utility::shared_ptr_vector<class_> classes_t;
 
 	virtual
 	~declarative_region(){}
+
+	virtual
+	named_entities_t::range
+	named_entities() = 0;
+
+	virtual
+	named_entities_t::const_range
+	named_entities() const = 0;
 
 	virtual
 	named_declarative_regions_t::range
@@ -51,12 +61,8 @@ struct declarative_region
 	named_declarative_regions() const = 0;
 
 	virtual
-	named_entities_t::range
-	named_entities() = 0;
-
-	virtual
-	named_entities_t::const_range
-	named_entities() const = 0;
+	classes_t::range
+	base_classes() = 0;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities
