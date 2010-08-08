@@ -47,13 +47,11 @@ class class_:
 	public boost::noncopyable
 {
 	public:
-		class base_class;
 		class constructor;
 		class destructor;
 		class conversion_function;
 
-		typedef utility::shared_ptr_vector<base_class> base_classes_t;
-		typedef utility::shared_ptr_vector<class_> nested_classes_t;
+		typedef utility::shared_ptr_vector<class_> classes_t;
 		typedef utility::shared_ptr_vector<constructor> constructors_t;
 		typedef utility::shared_ptr_vector<simple_function> simple_functions_t;
 		typedef utility::shared_ptr_vector<operator_function> operator_functions_t;
@@ -103,22 +101,22 @@ class class_:
 		bool
 		is_open_to_outside() const;
 
-		named_declarative_regions_t::range
-        named_declarative_regions();
-
-		named_declarative_regions_t::const_range
-        named_declarative_regions() const;
-
 		named_entities_t::range
 		named_entities();
 
 		named_entities_t::const_range
 		named_entities() const;
 
-		base_classes_t::const_range
+		named_declarative_regions_t::range
+        named_declarative_regions();
+
+		named_declarative_regions_t::const_range
+        named_declarative_regions() const;
+
+		classes_t::const_range
 		base_classes() const;
 
-		nested_classes_t::const_range
+		classes_t::const_range
 		nested_classes() const;
 
 		constructors_t::const_range
@@ -142,14 +140,22 @@ class class_:
 		variables_t::const_range
 		variables() const;
 
+		/**
+		Adds a base class.
+		*/
         void
-        add(std::shared_ptr<base_class> c);
+        add_base_class
+		(
+			std::shared_ptr<class_> base_class,
+			const access acc,
+			bool virtual_specified
+		);
 
         /**
         Adds a nested class.
         */
         void
-        add(std::shared_ptr<class_> member, access acc);
+        add(std::shared_ptr<class_> member, const access acc);
 
         void
         add(std::shared_ptr<constructor> member);
@@ -158,29 +164,29 @@ class class_:
         add
 		(
 			std::shared_ptr<simple_function> member,
-			access acc,
-			bool const_qualified,
-			bool volatile_qualified,
-			bool virtual_specified,
-			bool pure_specified
+			const access acc,
+			const bool const_qualified,
+			const bool volatile_qualified,
+			const bool virtual_specified,
+			const bool pure_specified
 		);
 
         void
         add
 		(
 			std::shared_ptr<operator_function> member,
-			access acc,
-			bool const_qualified,
-			bool volatile_qualified,
-			bool virtual_specified,
-			bool pure_specified
+			const access acc,
+			const bool const_qualified,
+			const bool volatile_qualified,
+			const bool virtual_specified,
+			const bool pure_specified
 		);
 
         void
         add(std::shared_ptr<conversion_function> member);
 
 		void
-		add(std::shared_ptr<variable> member, access acc);
+		add(std::shared_ptr<variable> member, const access acc);
 
     private:
         std::string name_;
@@ -188,6 +194,10 @@ class class_:
 		//polymorphic containers
 		named_entities_t named_entities_;
 		named_declarative_regions_t named_declarative_regions_;
+		classes_t public_base_classes_;
+		classes_t protected_base_classes_;
+		classes_t private_base_classes_;
+		classes_t virtual_base_classes_;
 		entities_t public_members_;
 		entities_t protected_members_;
 		entities_t private_members_;
@@ -197,41 +207,14 @@ class class_:
 		entities_t pure_member_functions_;
 
 		//containers
-		base_classes_t base_classes_;
-		nested_classes_t nested_classes_;
+		classes_t base_classes_;
+		classes_t nested_classes_;
 		constructors_t constructors_;
 		std::shared_ptr<destructor> destructor_;
 		simple_functions_t simple_functions_;
 		operator_functions_t operator_functions_;
 		conversion_functions_t conversion_functions_;
 		variables_t variables_;
-};
-
-class class_::base_class
-{
-	public:
-		base_class
-		(
-			std::shared_ptr<class_> base,
-			class_::access access,
-			const bool is_virtual_specified
-		);
-
-		base_class(base_class&& o);
-
-		std::shared_ptr<const class_>
-		base() const;
-
-		class_::access
-		access() const;
-
-		bool
-		virtual_specified() const;
-
-	private:
-		std::shared_ptr<class_> base_;
-		class_::access access_;
-		bool virtual_specified_;
 };
 
 class class_::constructor

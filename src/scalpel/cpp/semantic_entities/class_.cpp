@@ -109,13 +109,13 @@ class_::named_declarative_regions() const
 	return named_declarative_regions_;
 }
 
-class_::base_classes_t::const_range
+class_::classes_t::const_range
 class_::base_classes() const
 {
 	return base_classes_;
 }
 
-class_::nested_classes_t::const_range
+class_::classes_t::const_range
 class_::nested_classes() const
 {
 	return nested_classes_;
@@ -164,13 +164,32 @@ class_::variables() const
 }
 
 void
-class_::add(std::shared_ptr<base_class> c)
+class_::add_base_class
+(
+	std::shared_ptr<class_> base_class,
+	const access acc,
+	bool virtual_specified
+)
 {
-	base_classes_.push_back(c);
+	base_classes_.push_back(base_class);
+
+	switch(acc)
+	{
+		case PUBLIC:
+			public_base_classes_.push_back(base_class);
+			break;
+		case PROTECTED:
+			protected_base_classes_.push_back(base_class);
+			break;
+		case PRIVATE:
+			private_base_classes_.push_back(base_class);
+			break;
+	}
+	if(virtual_specified) virtual_base_classes_.push_back(base_class);
 }
 
 void
-class_::add(std::shared_ptr<class_> member, access acc)
+class_::add(std::shared_ptr<class_> member, const access acc)
 {
 	nested_classes_.push_back(member);
 	named_entities_.push_back(member);
@@ -200,11 +219,11 @@ void
 class_::add
 (
 	std::shared_ptr<simple_function> member,
-	access acc,
-	bool const_qualified,
-	bool volatile_qualified,
-	bool virtual_specified,
-	bool pure_specified
+	const access acc,
+	const bool const_qualified,
+	const bool volatile_qualified,
+	const bool virtual_specified,
+	const bool pure_specified
 )
 {
     simple_functions_.push_back(member);
@@ -233,11 +252,11 @@ void
 class_::add
 (
 	std::shared_ptr<operator_function> member,
-	access acc,
-	bool const_qualified,
-	bool volatile_qualified,
-	bool virtual_specified,
-	bool pure_specified
+	const access acc,
+	const bool const_qualified,
+	const bool volatile_qualified,
+	const bool virtual_specified,
+	const bool pure_specified
 )
 {
     operator_functions_.push_back(member);
@@ -267,7 +286,7 @@ class_::add(std::shared_ptr<conversion_function> member)
 }
 
 void
-class_::add(std::shared_ptr<variable> member, access acc)
+class_::add(std::shared_ptr<variable> member, const access acc)
 {
     variables_.push_back(member);
 	named_entities_.push_back(member);
@@ -284,45 +303,6 @@ class_::add(std::shared_ptr<variable> member, access acc)
 			private_members_.push_back(member);
 			break;
 	}
-}
-
-
-
-class_::base_class::base_class
-(
-	std::shared_ptr<class_> base,
-	class_::access access,
-	const bool is_virtual_specified
-):
-	base_(base),
-	access_(access),
-	virtual_specified_(is_virtual_specified)
-{
-}
-
-class_::base_class::base_class(base_class&& o):
-	base_(o.base_),
-	access_(o.access_),
-	virtual_specified_(o.virtual_specified_)
-{
-}
-
-std::shared_ptr<const class_>
-class_::base_class::base() const
-{
-	return base_;
-}
-
-class_::access
-class_::base_class::access() const
-{
-	return access_;
-}
-
-bool
-class_::base_class::virtual_specified() const
-{
-	return virtual_specified_;
 }
 
 

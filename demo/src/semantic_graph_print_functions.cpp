@@ -160,17 +160,10 @@ print
 	std::cout << extra_attributes;
 	std::cout << ">\n";
 
+	std::cout << indent(indent_level + 1) << "<base_classes>";
 	for(auto i = c.base_classes().begin(); i != c.base_classes().end(); ++i)
-	{
-		const class_::base_class& base = **i;
-
-		std::cout << indent(indent_level + 1) << "<base_class";
-		std::cout << " id=\"" << base.base().get() << "\"";
-		std::cout << attribute(base.access());
-		if(base.virtual_specified())
-			std::cout << " virtual=\"true\"";
-		std::cout << "/>\n";
-	}
+		print(**i, indent_level + 2);
+	std::cout << indent(indent_level + 1) << "</base_classes>";
 
 	for(auto i = c.nested_classes().begin(); i != c.nested_classes().end(); ++i)
 		print(**i, indent_level + 1);

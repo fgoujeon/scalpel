@@ -98,9 +98,9 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 
 			//get base class
 			auto nested_identifier_or_template_id_node = get_nested_identifier_or_template_id(base_specifier_node);
-			std::shared_ptr<class_> base = find_class(nested_identifier_or_template_id_node);
+			std::shared_ptr<class_> base_class = find_class(nested_identifier_or_template_id_node);
 
-			c->add(std::make_shared<class_::base_class>(base, access, is_virtual));
+			c->add_base_class(base_class, access, is_virtual);
 		}
 	}
 
