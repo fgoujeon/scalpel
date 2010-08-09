@@ -19,7 +19,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "variable.hpp"
-#include <iostream>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -34,7 +33,6 @@ variable::variable
 	name_(name),
 	static_specified_(is_static_specified)
 {
-	std::cout << "New variable " << name << "\n";
 }
 
 variable::variable(const variable& v):

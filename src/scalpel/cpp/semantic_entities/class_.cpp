@@ -22,9 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "namespace_.hpp"
 #include "built_in_type.hpp"
 #include <scalpel/utility/null_deleter.hpp>
-#include <iostream>
 #include <memory>
-#include <cassert>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -32,8 +30,6 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 class_::class_(const std::string& name):
     name_(name)
 {
-	std::cout << "New class " << name << '\n';
-
 	//implicitly declared destructor
 	set_destructor
 	(

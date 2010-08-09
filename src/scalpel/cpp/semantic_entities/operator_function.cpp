@@ -19,7 +19,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "operator_function.hpp"
-#include <iostream>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -36,7 +35,6 @@ operator_function::operator_function
 	parameters_(std::move(parameters)),
 	static_specified_(is_static_specified)
 {
-	std::cout << "New operator function\n";
 }
 
 operator_function::operator_function(operator_function&& f):

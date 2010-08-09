@@ -20,21 +20,17 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "namespace_.hpp"
 #include "detail/empty_class_shared_ptr_vector.hpp"
-#include <iostream>
-#include <cassert>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 namespace_::namespace_()
 {
-	std::cout << "New anonymous namespace\n";
 }
 
 namespace_::namespace_(const std::string& name):
     name_(name)
 {
-	std::cout << "New namespace " << name << "\n";
 }
 
 namespace_::namespace_(namespace_&& n):

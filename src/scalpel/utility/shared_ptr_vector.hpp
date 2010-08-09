@@ -48,7 +48,7 @@ class shared_ptr_vector
 		typedef boost::transform_iterator<constify_function_t, raw_const_iterator, std::shared_ptr<const T>> const_iterator;
 
 		/**
-		Gives read/write access to the pointers (but no access to the container itself).
+		Gives read/write access to the pointed objects (but no access to the container itself).
 		The conversion to this type is implicit.
 		*/
 		typedef boost::iterator_range<iterator> range;

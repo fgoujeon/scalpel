@@ -30,7 +30,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <scalpel/utility/shared_ptr_vector.hpp>
 #include <boost/noncopyable.hpp>
 #include <string>
-#include <list>
 #include <vector>
 
 namespace scalpel { namespace cpp { namespace semantic_entities

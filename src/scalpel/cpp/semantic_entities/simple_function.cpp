@@ -20,8 +20,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "simple_function.hpp"
 #include "detail/empty_class_shared_ptr_vector.hpp"
-#include <iostream>
-#include <cassert>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -41,7 +39,6 @@ simple_function::simple_function
 	static_specified_(is_static_specified),
 	defined_(false)
 {
-	std::cout << "New simple function " << name << "\n";
 }
 
 simple_function::simple_function(const simple_function& f):
@@ -225,7 +222,6 @@ simple_function::parameter::parameter(std::shared_ptr<const type> t, const std::
 	type_(t),
 	name_(name)
 {
-	std::cout << "New parameter " << name << "\n";
 }
 
 simple_function::parameter::parameter(const parameter& o):

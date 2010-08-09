@@ -22,8 +22,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_STATEMENT_BLOCK_HPP
 
 #include "variable.hpp"
+#include <scalpel/utility/shared_ptr_vector.hpp>
 #include <string>
-#include <vector>
 #include <memory>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
@@ -38,6 +38,9 @@ Represents a C++ statement block.
 class statement_block
 {
     public:
+		typedef utility::shared_ptr_vector<statement_block> statement_blocks_t;
+		typedef utility::shared_ptr_vector<variable> variables_t;
+
         statement_block();
 
 		statement_block(const statement_block& o);
@@ -60,8 +63,8 @@ class statement_block
 		add(std::shared_ptr<variable> o);
 
     private:
-		std::vector<std::shared_ptr<statement_block>> statement_blocks_;
-		std::vector<std::shared_ptr<variable>> variables_;
+		statement_blocks_t statement_blocks_;
+		variables_t variables_;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities
