@@ -28,8 +28,8 @@ template<class EntityT>
 utility::shared_ptr_vector<EntityT>
 name_lookup2::find_entities
 (
-	std::vector<semantic_entities::declarative_region_variant> declarative_region_path,
-	const std::string& name
+	const std::string& name,
+	std::vector<semantic_entities::declarative_region_variant> declarative_region_path
 )
 {
 	utility::shared_ptr_vector<EntityT> found_entities;
@@ -46,7 +46,7 @@ name_lookup2::find_entities
 
 			//find entities in that namespace
 			found_entities =
-				find_entities_in_declarative_region<EntityT>(namespace_ptr, name)
+				find_entities_in_declarative_region<EntityT>(name, namespace_ptr)
 			;
 			if(!found_entities.empty()) break;
 		}
@@ -56,13 +56,13 @@ name_lookup2::find_entities
 
 			//find entities in the members of that class
 			found_entities =
-				find_entities_in_declarative_region<EntityT>(class_ptr, name)
+				find_entities_in_declarative_region<EntityT>(name, class_ptr)
 			;
 			if(!found_entities.empty()) break;
 
 			//find entities in the base classes of that class
 			found_entities =
-				find_entities_in_base_classes<EntityT>(class_ptr->base_classes(), name)
+				find_entities_in_base_classes<EntityT>(name, class_ptr->base_classes())
 			;
 			if(!found_entities.empty()) break;
 		}
@@ -75,8 +75,8 @@ template<class EntityT, class DeclarativeRegionT>
 utility::shared_ptr_vector<EntityT>
 name_lookup2::find_entities_in_declarative_region
 (
-	std::shared_ptr<DeclarativeRegionT> current_declarative_region,
-	const std::string& name
+	const std::string& name,
+	std::shared_ptr<DeclarativeRegionT> current_declarative_region
 )
 {
 	utility::shared_ptr_vector<EntityT> found_entities;
@@ -98,8 +98,8 @@ template<class EntityT>
 utility::shared_ptr_vector<EntityT>
 name_lookup2::find_entities_in_base_classes
 (
-	utility::shared_ptr_vector<semantic_entities::class_>::range base_classes,
-	const std::string& name
+	const std::string& name,
+	utility::shared_ptr_vector<semantic_entities::class_>::range base_classes
 )
 {
 	typedef utility::shared_ptr_vector<EntityT> entities_t;
@@ -112,7 +112,7 @@ name_lookup2::find_entities_in_base_classes
 		std::shared_ptr<semantic_entities::class_> current_class = *i;
 
 		//find entities in the current declarative region (i.e. current class)
-		entities_t current_class_found_entities = find_entities_in_declarative_region<EntityT>(current_class, name);
+		entities_t current_class_found_entities = find_entities_in_declarative_region<EntityT>(name, current_class);
 
 		//entities found?
 		if(!current_class_found_entities.empty())
@@ -128,7 +128,7 @@ name_lookup2::find_entities_in_base_classes
 		else
 		{
 			//find entities in the current declarative region's base classes
-			entities_t current_class_base_classes_found_entities = find_entities_in_base_classes<EntityT>(current_class->base_classes(), name);
+			entities_t current_class_base_classes_found_entities = find_entities_in_base_classes<EntityT>(name, current_class->base_classes());
 
 			//add them to the list
 			std::copy

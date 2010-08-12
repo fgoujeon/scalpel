@@ -117,7 +117,7 @@ class simple_function: public named_declarative_region
         named_declarative_regions() const;
 
 		std::shared_ptr<statement_block>
-		block();
+		body();
 
     private:
         std::string name_;
@@ -131,7 +131,7 @@ class simple_function: public named_declarative_region
 		named_declarative_regions_t named_declarative_regions_;
 		named_entities_t named_entities_;
 
-		std::shared_ptr<statement_block> statement_block_;
+		std::shared_ptr<statement_block> body_;
 };
 
 class simple_function::parameter

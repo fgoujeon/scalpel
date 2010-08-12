@@ -118,31 +118,42 @@ test_case_1()
 	declarative_region_path.push_back(semantic_graph);
 	declarative_region_path.push_back(namespace_a);
 	declarative_region_path.push_back(struct_a_b);
-	declarative_region_path.push_back(function_a_b_f->block());
+	declarative_region_path.push_back(function_a_b_f->body());
 
 
 	//
 	//name lookup test
 	//
 	{
-		auto found_entities = name_lookup2::find_entities<variable>(declarative_region_path, "i");
+		auto found_entities = name_lookup2::find_entities<variable>("i", declarative_region_path);
 		BOOST_CHECK_EQUAL(found_entities.size(), 1);
 		if(found_entities.size() == 1)
 			BOOST_CHECK_EQUAL(found_entities.front(), variable_a_i);
 	}
 
 	{
-		auto found_entities = name_lookup2::find_entities<variable>(declarative_region_path, "j");
+		auto found_entities = name_lookup2::find_entities<variable>("j", declarative_region_path);
 		BOOST_CHECK_EQUAL(found_entities.size(), 1);
 		if(found_entities.size() == 1)
 			BOOST_CHECK_EQUAL(found_entities.front(), variable_j);
 	}
 
 	{
-		auto found_entities = name_lookup2::find_entities<namespace_>(declarative_region_path, "C");
+		auto found_entities = name_lookup2::find_entities<namespace_>("C", declarative_region_path);
 		BOOST_CHECK_EQUAL(found_entities.size(), 1);
 		if(found_entities.size() == 1)
+		{
 			BOOST_CHECK_EQUAL(found_entities.front(), namespace_a_c);
+			if(found_entities.front() == namespace_a_c)
+			{
+				auto found_entities = name_lookup2::find_entities_in_declarative_region<variable>("n", namespace_a_c);
+				BOOST_CHECK_EQUAL(found_entities.size(), 1);
+				if(found_entities.size() == 1)
+				{
+					BOOST_CHECK_EQUAL(found_entities.front(), variable_a_c_n);
+				}
+			}
+		}
 	}
 }
 

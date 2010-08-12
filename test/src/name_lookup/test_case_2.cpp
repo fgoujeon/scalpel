@@ -118,14 +118,14 @@ test_case_2()
 	std::vector<declarative_region_variant> declarative_region_path;
 	declarative_region_path.push_back(semantic_graph);
 	declarative_region_path.push_back(struct_c);
-	declarative_region_path.push_back(function_g_test->block());
+	declarative_region_path.push_back(function_g_test->body());
 
 
 	//
 	//name lookup test
 	//
 	{
-		auto found_entities = name_lookup2::find_entities<simple_function>(declarative_region_path, "f");
+		auto found_entities = name_lookup2::find_entities<simple_function>("f", declarative_region_path);
 		BOOST_CHECK_EQUAL(found_entities.size(), 2);
 		if(found_entities.size() == 2)
 		{
@@ -135,14 +135,14 @@ test_case_2()
 	}
 
 	{
-		auto found_entities = name_lookup2::find_entities<simple_function>(declarative_region_path, "g");
+		auto found_entities = name_lookup2::find_entities<simple_function>("g", declarative_region_path);
 		BOOST_CHECK_EQUAL(found_entities.size(), 1);
 		if(found_entities.size() == 1)
 			BOOST_CHECK_EQUAL(found_entities.front(), function_c1_g);
 	}
 
 	{
-		auto found_entities = name_lookup2::find_entities<class_>(declarative_region_path, "inner");
+		auto found_entities = name_lookup2::find_entities<class_>("inner", declarative_region_path);
 		BOOST_CHECK_EQUAL(found_entities.size(), 1);
 		if(found_entities.size() == 1)
 			BOOST_CHECK_EQUAL(found_entities.front(), struct_c0_inner);

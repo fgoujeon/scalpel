@@ -37,7 +37,7 @@ simple_function::simple_function
 	inline_specified_(is_inline_specified),
 	static_specified_(is_static_specified),
 	defined_(false),
-	statement_block_(std::make_shared<statement_block>())
+	body_(std::make_shared<statement_block>())
 {
 }
 
@@ -48,7 +48,7 @@ simple_function::simple_function(simple_function&& f):
 	inline_specified_(f.inline_specified_),
 	static_specified_(f.static_specified_),
 	defined_(f.defined_),
-	statement_block_(f.statement_block_)
+	body_(f.body_)
 {
 }
 
@@ -61,7 +61,7 @@ simple_function::operator=(simple_function&& f)
 	inline_specified_ = f.inline_specified_;
 	static_specified_ = f.static_specified_;
 	defined_ = f.defined_;
-	statement_block_ = f.statement_block_;
+	body_ = f.body_;
 
 	return *this;
 }
@@ -76,7 +76,7 @@ simple_function::operator==(const simple_function& f) const
 		inline_specified_ == f.inline_specified_ &&
 		static_specified_ == f.static_specified_ &&
 		defined_ == f.defined_ &&
-		statement_block_ == f.statement_block_
+		body_ == f.body_
 	;
 }
 
@@ -187,9 +187,9 @@ simple_function::named_declarative_regions() const
 }
 
 std::shared_ptr<statement_block>
-simple_function::block()
+simple_function::body()
 {
-	return statement_block_;
+	return body_;
 }
 
 

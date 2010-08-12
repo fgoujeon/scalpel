@@ -21,8 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_NAME_LOOKUP2_HPP
 #define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_NAME_LOOKUP2_HPP
 
-#include "../../syntax_tree.hpp"
-#include "../../semantic_graph.hpp"
+#include <scalpel/cpp/semantic_graph.hpp>
 #include <scalpel/utility/shared_ptr_vector.hpp>
 #include <memory>
 #include <string>
@@ -41,11 +40,10 @@ class name_lookup2
 		utility::shared_ptr_vector<EntityT>
 		find_entities
 		(
-			std::vector<semantic_entities::declarative_region_variant> declarative_region_path,
-			const std::string& name
+			const std::string& name,
+			std::vector<semantic_entities::declarative_region_variant> declarative_region_path
 		);
 
-	private:
 		/**
 		Find entities of the given name, in the given declarative region only
 		*/
@@ -54,10 +52,11 @@ class name_lookup2
 		utility::shared_ptr_vector<EntityT>
 		find_entities_in_declarative_region
 		(
-			std::shared_ptr<DeclarativeRegionT> current_declarative_region,
-			const std::string& name
+			const std::string& name,
+			std::shared_ptr<DeclarativeRegionT> current_declarative_region
 		);
 
+	private:
 		/**
 		Find entities of the given name, in the given base classes
 		*/
@@ -66,8 +65,8 @@ class name_lookup2
 		utility::shared_ptr_vector<EntityT>
 		find_entities_in_base_classes
 		(
-			utility::shared_ptr_vector<semantic_entities::class_>::range base_classes,
-			const std::string& name
+			const std::string& name,
+			utility::shared_ptr_vector<semantic_entities::class_>::range base_classes
 		);
 
 	private:
