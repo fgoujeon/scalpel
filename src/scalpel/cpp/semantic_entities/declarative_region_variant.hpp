@@ -18,18 +18,28 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_DETAIL_EMPTY_CLASS_SHARED_PTR_VECTOR_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_DETAIL_EMPTY_CLASS_SHARED_PTR_VECTOR_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_DECLARATIVE_REGION_VARIANT_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_DECLARATIVE_REGION_VARIANT_HPP
 
-#include "../class_.hpp"
-#include <scalpel/utility/shared_ptr_vector.hpp>
+#include "namespace_.hpp"
+#include "class_.hpp"
+#include "statement_block.hpp"
+#include <boost/variant.hpp>
+#include <memory>
 
-namespace scalpel { namespace cpp { namespace semantic_entities { namespace detail
+namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-extern utility::shared_ptr_vector<class_>::range empty_class_shared_ptr_vector_range;
+typedef
+	boost::variant
+	<
+		std::shared_ptr<namespace_>,
+		std::shared_ptr<class_>,
+		std::shared_ptr<statement_block>
+	>
+	declarative_region_variant
+;
 
-}}}} //namespace scalpel::cpp::semantic_entities
+}}} //namespace scalpel::cpp::semantic_entities
 
 #endif
-

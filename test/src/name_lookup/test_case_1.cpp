@@ -29,21 +29,19 @@ namespace name_lookup
 void
 test_case_1()
 {
+	using namespace scalpel::cpp::semantic_entities;
+	using namespace scalpel::cpp::detail::semantic_analysis;
+
 	//
 	//construction of the semantic graph of the following source code:
 	/*
 	 *
 	 *
-	struct B0
-	{
-		int n;
-	};
-
 	namespace A
 	{
 		int i;
 
-		struct B: public B0
+		struct B
 		{
 			void f();
 		};
@@ -64,74 +62,47 @@ test_case_1()
 		i;
 		j;
 		C::n;
-		n;
 	}
 	*/
 	auto semantic_graph = std::make_shared<scalpel::cpp::semantic_graph>();
-	auto struct_b0 = std::make_shared<scalpel::cpp::semantic_entities::class_>("B0");
-	auto variable_b0_n = std::make_shared<scalpel::cpp::semantic_entities::variable>
-	(
-		"n",
-		scalpel::cpp::semantic_entities::built_in_type_shared_ptrs::int_
-	);
-	auto namespace_a = std::make_shared<scalpel::cpp::semantic_entities::namespace_>("A");
-	auto variable_a_i = std::make_shared<scalpel::cpp::semantic_entities::variable>
+	auto namespace_a = std::make_shared<namespace_>("A");
+	auto variable_a_i = std::make_shared<variable>
 	(
 		"i",
-		scalpel::cpp::semantic_entities::built_in_type_shared_ptrs::int_
+		built_in_type_shared_ptrs::int_
 	);
-	auto struct_a_b = std::make_shared<scalpel::cpp::semantic_entities::class_>("B");
-	auto function_a_b_f = std::make_shared<scalpel::cpp::semantic_entities::simple_function>
+	auto struct_a_b = std::make_shared<class_>("B");
+	auto function_a_b_f = std::make_shared<simple_function>
 	(
 		"f",
-		scalpel::cpp::semantic_entities::built_in_type_shared_ptrs::void_
+		built_in_type_shared_ptrs::void_
 	);
-	auto function_a_g = std::make_shared<scalpel::cpp::semantic_entities::simple_function>
+	auto function_a_g = std::make_shared<simple_function>
 	(
 		"g",
-		scalpel::cpp::semantic_entities::built_in_type_shared_ptrs::void_
+		built_in_type_shared_ptrs::void_
 	);
-	auto namespace_a_c = std::make_shared<scalpel::cpp::semantic_entities::namespace_>("C");
-	auto variable_a_c_n = std::make_shared<scalpel::cpp::semantic_entities::variable>
+	auto namespace_a_c = std::make_shared<namespace_>("C");
+	auto variable_a_c_n = std::make_shared<variable>
 	(
 		"n",
-		scalpel::cpp::semantic_entities::built_in_type_shared_ptrs::int_
+		built_in_type_shared_ptrs::int_
 	);
-	auto variable_i = std::make_shared<scalpel::cpp::semantic_entities::variable>
+	auto variable_i = std::make_shared<variable>
 	(
 		"i",
-		scalpel::cpp::semantic_entities::built_in_type_shared_ptrs::int_
+		built_in_type_shared_ptrs::int_
 	);
-	auto variable_j = std::make_shared<scalpel::cpp::semantic_entities::variable>
+	auto variable_j = std::make_shared<variable>
 	(
 		"j",
-		scalpel::cpp::semantic_entities::built_in_type_shared_ptrs::int_
+		built_in_type_shared_ptrs::int_
 	);
 
-	semantic_graph->add(struct_b0);
-	struct_b0->add
-	(
-		variable_b0_n,
-		scalpel::cpp::semantic_entities::class_::access::PUBLIC
-	);
 	semantic_graph->add(namespace_a);
 	namespace_a->add(variable_a_i);
 	namespace_a->add(struct_a_b);
-	struct_a_b->add_base_class
-	(
-		struct_b0,
-		scalpel::cpp::semantic_entities::class_::access::PUBLIC,
-		false
-	);
-	struct_a_b->add
-	(
-		function_a_b_f,
-		scalpel::cpp::semantic_entities::class_::access::PUBLIC,
-		false,
-		false,
-		false,
-		false
-	);
+	struct_a_b->add(function_a_b_f);
 	namespace_a->add(function_a_g);
 	namespace_a->add(namespace_a_c);
 	namespace_a_c->add(variable_a_c_n);
@@ -143,43 +114,29 @@ test_case_1()
 	//
 	//declarative region path construction
 	//
-	scalpel::utility::shared_ptr_vector<scalpel::cpp::semantic_entities::declarative_region> declarative_region_path;
+	std::vector<declarative_region_variant> declarative_region_path;
 	declarative_region_path.push_back(semantic_graph);
 	declarative_region_path.push_back(namespace_a);
 	declarative_region_path.push_back(struct_a_b);
-	declarative_region_path.push_back(function_a_b_f);
-
+	declarative_region_path.push_back(function_a_b_f->block());
 
 
 	//
 	//name lookup test
 	//
 	{
-		auto found_entities = scalpel::cpp::detail::semantic_analysis::name_lookup2::find_entities(declarative_region_path, "i");
-		BOOST_CHECK_EQUAL(found_entities.size(), 1);
-		BOOST_CHECK_EQUAL(found_entities.front(), variable_a_i);
+		auto found_entity = name_lookup2::find_entity<variable>(declarative_region_path, "i");
+		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
 	}
 
 	{
-		auto found_entities = scalpel::cpp::detail::semantic_analysis::name_lookup2::find_entities(declarative_region_path, "j");
-		BOOST_CHECK_EQUAL(found_entities.size(), 1);
-		BOOST_CHECK_EQUAL(found_entities.front(), variable_j);
+		auto found_entity = name_lookup2::find_entity<variable>(declarative_region_path, "j");
+		BOOST_CHECK_EQUAL(found_entity, variable_j);
 	}
 
 	{
-		auto found_entities = scalpel::cpp::detail::semantic_analysis::name_lookup2::find_entities(declarative_region_path, "n");
-		BOOST_CHECK_EQUAL(found_entities.size(), 1);
-		BOOST_CHECK_EQUAL(found_entities.front(), variable_b0_n);
-	}
-
-	{
-		auto found_declarative_region = scalpel::cpp::detail::semantic_analysis::name_lookup2::find_open_declarative_region(declarative_region_path, "C");
+		auto found_declarative_region = name_lookup2::find_entity<namespace_>(declarative_region_path, "C");
 		BOOST_CHECK_EQUAL(found_declarative_region, namespace_a_c);
-	}
-
-	{
-		auto found_declarative_region = scalpel::cpp::detail::semantic_analysis::name_lookup2::find_open_declarative_region(declarative_region_path, "g");
-		BOOST_CHECK(found_declarative_region.get() == 0);
 	}
 }
 

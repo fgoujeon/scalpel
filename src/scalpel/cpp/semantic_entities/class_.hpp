@@ -50,6 +50,7 @@ class class_:
 		class destructor;
 		class conversion_function;
 
+		typedef utility::shared_ptr_vector<class_> classes_t;
 		typedef utility::shared_ptr_vector<constructor> constructors_t;
 		typedef utility::shared_ptr_vector<simple_function> simple_functions_t;
 		typedef utility::shared_ptr_vector<operator_function> operator_functions_t;
@@ -117,8 +118,14 @@ class class_:
 		const classes_t&
 		base_classes() const;
 
+		classes_t::range
+		nested_classes();
+
 		const classes_t&
 		nested_classes() const;
+
+		constructors_t::range
+		constructors();
 
 		const constructors_t&
 		constructors() const;
@@ -126,14 +133,26 @@ class class_:
 		std::shared_ptr<const destructor>
 		get_destructor() const;
 
+		simple_functions_t::range
+		simple_functions();
+
 		const simple_functions_t&
 		simple_functions() const;
+
+		operator_functions_t::range
+		operator_functions();
 
 		const operator_functions_t&
 		operator_functions() const;
 
+		conversion_functions_t::range
+		conversion_functions();
+
 		const conversion_functions_t&
 		conversion_functions() const;
+
+		variables_t::range
+		variables();
 
 		const variables_t&
 		variables() const;

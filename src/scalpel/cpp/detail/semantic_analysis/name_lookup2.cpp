@@ -26,160 +26,35 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
 {
 
-utility::shared_ptr_vector<semantic_entities::named_entity>
-name_lookup2::find_entities
-(
-	utility::shared_ptr_vector<semantic_entities::declarative_region>::range declarative_region_path,
-	const std::string& name
-)
-{
-	//find entities from current to outermost declarative regions (until global namespace)
-	std::reverse(declarative_region_path.begin(), declarative_region_path.end()); //TODO it would be faster if declarative_region_path could provide a bidirectional iterator
-	for(auto i = declarative_region_path.begin(); i != declarative_region_path.end(); ++i)
-	{
-		std::shared_ptr<semantic_entities::declarative_region> current_declarative_region = *i;
+//
+//get_members() specializations
+//
 
-		//find entities in the current declarative region
-		{
-			utility::shared_ptr_vector<semantic_entities::named_entity> found_entities = find_entities_in_declarative_region(current_declarative_region, name);
-			if(!found_entities.empty()) return found_entities;
-		}
-
-		//find entities in the base classes of the current declarative region
-		{
-			utility::shared_ptr_vector<semantic_entities::named_entity> found_entities = find_entities_in_base_classes(current_declarative_region->base_classes(), name);
-			if(!found_entities.empty()) return found_entities;
-		}
-	}
-
-	throw std::runtime_error("No entity found");
+#define GENERATE_GET_MEMBERS_SPECIALIZATION(MEMBER_TYPE, PARENT_TYPE, PARENT_MEMBER_FUNCTION) \
+template<> \
+typename utility::shared_ptr_vector<semantic_entities::MEMBER_TYPE>::range \
+name_lookup2::get_members<semantic_entities::MEMBER_TYPE, semantic_entities::PARENT_TYPE>(std::shared_ptr<semantic_entities::PARENT_TYPE> parent) \
+{ \
+	return parent->PARENT_MEMBER_FUNCTION(); \
 }
 
-utility::shared_ptr_vector<semantic_entities::named_entity>
-name_lookup2::find_entities_in_declarative_region
-(
-	std::shared_ptr<semantic_entities::declarative_region> current_declarative_region,
-	const std::string& name
-)
-{
-	utility::shared_ptr_vector<semantic_entities::named_entity> found_entities;
-
-	for(auto i = current_declarative_region->named_entities().begin(); i != current_declarative_region->named_entities().end(); ++i)
-	{
-		std::shared_ptr<semantic_entities::named_entity> current_entity = *i;
-		if(current_entity->name() == name)
-		{
-			found_entities.push_back(current_entity);
-		}
-	}
-
-	return found_entities;
+#define GENERATE_GET_MEMBERS_SPECIALIZATION_EMPTY(MEMBER_TYPE, PARENT_TYPE) \
+template<> \
+typename utility::shared_ptr_vector<semantic_entities::MEMBER_TYPE>::range \
+name_lookup2::get_members<semantic_entities::MEMBER_TYPE, semantic_entities::PARENT_TYPE>(std::shared_ptr<semantic_entities::PARENT_TYPE>) \
+{ \
+	return utility::shared_ptr_vector<semantic_entities::MEMBER_TYPE>::range(); \
 }
 
-utility::shared_ptr_vector<semantic_entities::named_entity>
-name_lookup2::find_entities_in_base_classes
-(
-	utility::shared_ptr_vector<semantic_entities::class_>::range base_classes,
-	const std::string& name
-)
-{
-	typedef utility::shared_ptr_vector<semantic_entities::named_entity> named_entities_t;
+GENERATE_GET_MEMBERS_SPECIALIZATION(namespace_, namespace_, namespaces)
+GENERATE_GET_MEMBERS_SPECIALIZATION(class_, namespace_, classes)
+GENERATE_GET_MEMBERS_SPECIALIZATION(simple_function, namespace_, simple_functions)
+GENERATE_GET_MEMBERS_SPECIALIZATION(variable, namespace_, variables)
 
-	named_entities_t found_entities;
-	std::back_insert_iterator<named_entities_t> found_entities_back_insert_iterator(found_entities);
-
-	for(auto i = base_classes.begin(); i != base_classes.end(); ++i)
-	{
-		std::shared_ptr<semantic_entities::class_> current_class = *i;
-
-		//find entities in the current declarative region (i.e. current class)
-		named_entities_t current_class_found_entities = find_entities_in_declarative_region(current_class, name);
-
-		//entities found?
-		if(!current_class_found_entities.empty())
-		{
-			//add them to the list
-			std::copy
-			(
-				current_class_found_entities.begin(),
-				current_class_found_entities.end(),
-				found_entities_back_insert_iterator
-			);
-		}
-		else
-		{
-			//find entities in the current declarative region's base classes
-			named_entities_t current_class_base_classes_found_entities = find_entities_in_base_classes(current_class->base_classes(), name);
-
-			//add them to the list
-			std::copy
-			(
-				current_class_base_classes_found_entities.begin(),
-				current_class_base_classes_found_entities.end(),
-				found_entities_back_insert_iterator
-			);
-		}
-	}
-
-	return found_entities;
-}
-
-std::shared_ptr<semantic_entities::named_declarative_region>
-name_lookup2::find_open_declarative_region
-(
-	utility::shared_ptr_vector<semantic_entities::declarative_region>::range declarative_region_path,
-	const std::string& name
-)
-{
-	std::shared_ptr<semantic_entities::named_declarative_region> found_declarative_region;
-
-	//find a declarative region from current to outermost declarative regions
-	//(until global namespace)
-	std::reverse(declarative_region_path.begin(), declarative_region_path.end()); //TODO it would be faster if declarative_region_path could provide a bidirectional iterator
-	for(auto i = declarative_region_path.begin(); i != declarative_region_path.end(); ++i) //from current to outermost declarative regions (until global namespace)
-	{
-		std::shared_ptr<semantic_entities::declarative_region> current_declarative_region = *i;
-
-		//find declarative region in current declarative region
-		std::shared_ptr<semantic_entities::named_declarative_region> maybe_found_declarative_region =
-			find_open_declarative_region(current_declarative_region, name)
-		;
-		if(maybe_found_declarative_region)
-		{
-			found_declarative_region = maybe_found_declarative_region;
-			break;
-		}
-	}
-
-	return found_declarative_region;
-}
-
-std::shared_ptr<semantic_entities::named_declarative_region>
-name_lookup2::find_open_declarative_region
-(
-	std::shared_ptr<semantic_entities::declarative_region> current_declarative_region,
-	const std::string& name
-)
-{
-	std::shared_ptr<semantic_entities::named_declarative_region> found_declarative_region;
-
-	for
-	(
-		auto i = current_declarative_region->named_declarative_regions().begin();
-		i != current_declarative_region->named_declarative_regions().end();
-		++i
-	)
-	{
-		std::shared_ptr<semantic_entities::named_declarative_region> current_declarative_region = *i;
-		if(current_declarative_region->is_open_to_outside() && current_declarative_region->name() == name)
-		{
-			found_declarative_region = current_declarative_region;
-			break;
-		}
-	}
-
-	return found_declarative_region;
-}
+GENERATE_GET_MEMBERS_SPECIALIZATION_EMPTY(namespace_, class_)
+GENERATE_GET_MEMBERS_SPECIALIZATION(class_, class_, nested_classes)
+GENERATE_GET_MEMBERS_SPECIALIZATION(simple_function, class_, simple_functions)
+GENERATE_GET_MEMBERS_SPECIALIZATION(variable, class_, variables)
 
 }}}} //namespace scalpel::cpp::detail::semantic_analysis
 

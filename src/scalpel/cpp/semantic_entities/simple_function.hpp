@@ -54,13 +54,13 @@ class simple_function: public named_declarative_region
 		);
 
 		//copy constructor
-		simple_function(const simple_function& f);
+		simple_function(const simple_function& f) = delete;
 
 		//move constructor
 		simple_function(simple_function&& f);
 
 		const simple_function&
-		operator=(const simple_function& f);
+		operator=(const simple_function& f) = delete;
 
 		const simple_function&
 		operator=(simple_function&& f);
@@ -116,8 +116,8 @@ class simple_function: public named_declarative_region
 		const named_declarative_regions_t&
         named_declarative_regions() const;
 
-		classes_t::range
-		base_classes();
+		std::shared_ptr<statement_block>
+		block();
 
     private:
         std::string name_;
@@ -131,7 +131,7 @@ class simple_function: public named_declarative_region
 		named_declarative_regions_t named_declarative_regions_;
 		named_entities_t named_entities_;
 
-		statement_block statement_block_;
+		std::shared_ptr<statement_block> statement_block_;
 };
 
 class simple_function::parameter

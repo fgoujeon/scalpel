@@ -26,6 +26,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "semantic_entities/built_in_type_shared_ptrs.hpp"
 #include "semantic_entities/class_.hpp"
 #include "semantic_entities/const_.hpp"
+#include "semantic_entities/declarative_region_variant.hpp"
 #include "semantic_entities/namespace_.hpp"
 #include "semantic_entities/operator_.hpp"
 #include "semantic_entities/operator_function.hpp"

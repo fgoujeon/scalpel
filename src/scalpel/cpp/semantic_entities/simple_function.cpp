@@ -19,7 +19,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "simple_function.hpp"
-#include "detail/empty_class_shared_ptr_vector.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -37,18 +36,8 @@ simple_function::simple_function
 	parameters_(std::move(parameters)),
 	inline_specified_(is_inline_specified),
 	static_specified_(is_static_specified),
-	defined_(false)
-{
-}
-
-simple_function::simple_function(const simple_function& f):
-	name_(f.name_),
-	return_type_(f.return_type_),
-	parameters_(f.parameters_),
-	inline_specified_(f.inline_specified_),
-	static_specified_(f.static_specified_),
-	defined_(f.defined_),
-	statement_block_(f.statement_block_)
+	defined_(false),
+	statement_block_(std::make_shared<statement_block>())
 {
 }
 
@@ -59,22 +48,8 @@ simple_function::simple_function(simple_function&& f):
 	inline_specified_(f.inline_specified_),
 	static_specified_(f.static_specified_),
 	defined_(f.defined_),
-	statement_block_(std::move(f.statement_block_))
+	statement_block_(f.statement_block_)
 {
-}
-
-const simple_function&
-simple_function::operator=(const simple_function& f)
-{
-	name_ = f.name_;
-	return_type_ = f.return_type_;
-	parameters_ = f.parameters_;
-	inline_specified_ = f.inline_specified_;
-	static_specified_ = f.static_specified_;
-	defined_ = f.defined_;
-	statement_block_ = f.statement_block_;
-
-	return *this;
 }
 
 const simple_function&
@@ -86,7 +61,7 @@ simple_function::operator=(simple_function&& f)
 	inline_specified_ = f.inline_specified_;
 	static_specified_ = f.static_specified_;
 	defined_ = f.defined_;
-	statement_block_ = std::move(f.statement_block_);
+	statement_block_ = f.statement_block_;
 
 	return *this;
 }
@@ -211,10 +186,10 @@ simple_function::named_declarative_regions() const
 	return named_declarative_regions_;
 }
 
-simple_function::classes_t::range
-simple_function::base_classes()
+std::shared_ptr<statement_block>
+simple_function::block()
 {
-	return detail::empty_class_shared_ptr_vector_range;
+	return statement_block_;
 }
 
 

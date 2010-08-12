@@ -125,10 +125,22 @@ class_::base_classes() const
 	return base_classes_;
 }
 
+class_::classes_t::range
+class_::nested_classes()
+{
+	return nested_classes_;
+}
+
 const class_::classes_t&
 class_::nested_classes() const
 {
 	return nested_classes_;
+}
+
+class_::constructors_t::range
+class_::constructors()
+{
+	return constructors_;
 }
 
 const class_::constructors_t&
@@ -143,10 +155,22 @@ class_::get_destructor() const
 	return destructor_;
 }
 
+class_::simple_functions_t::range
+class_::simple_functions()
+{
+	return simple_functions_;
+}
+
 const class_::simple_functions_t&
 class_::simple_functions() const
 {
 	return simple_functions_;
+}
+
+class_::operator_functions_t::range
+class_::operator_functions()
+{
+	return operator_functions_;
 }
 
 const class_::operator_functions_t&
@@ -155,10 +179,22 @@ class_::operator_functions() const
 	return operator_functions_;
 }
 
+class_::conversion_functions_t::range
+class_::conversion_functions()
+{
+	return conversion_functions_;
+}
+
 const class_::conversion_functions_t&
 class_::conversion_functions() const
 {
 	return conversion_functions_;
+}
+
+class_::variables_t::range
+class_::variables()
+{
+	return variables_;
 }
 
 const class_::variables_t&

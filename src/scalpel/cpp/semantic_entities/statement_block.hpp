@@ -43,12 +43,12 @@ class statement_block
 
         statement_block();
 
-		statement_block(const statement_block& o);
+		statement_block(const statement_block& o) = delete;
 
 		statement_block(statement_block&& o);
 
 		const statement_block&
-		operator=(const statement_block& o);
+		operator=(const statement_block& o) = delete;
 
 		const statement_block&
 		operator=(statement_block&& o);

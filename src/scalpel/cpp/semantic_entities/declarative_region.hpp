@@ -39,7 +39,6 @@ struct declarative_region
 	typedef utility::shared_ptr_vector<entity> entities_t;
 	typedef utility::shared_ptr_vector<named_entity> named_entities_t;
 	typedef utility::shared_ptr_vector<named_declarative_region> named_declarative_regions_t;
-	typedef utility::shared_ptr_vector<class_> classes_t;
 
 	virtual
 	~declarative_region(){}
@@ -59,10 +58,6 @@ struct declarative_region
 	virtual
 	const named_declarative_regions_t&
 	named_declarative_regions() const = 0;
-
-	virtual
-	classes_t::range
-	base_classes() = 0;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

@@ -36,31 +36,34 @@ class name_lookup2
 		/**
 		Find entities of the given name, from the given declarative region path (unqualified name lookup)
 		*/
+		template<class EntityT>
 		static
-		utility::shared_ptr_vector<semantic_entities::named_entity>
+		utility::shared_ptr_vector<EntityT>
 		find_entities
 		(
-			utility::shared_ptr_vector<semantic_entities::declarative_region>::range declarative_region_path,
+			std::vector<semantic_entities::declarative_region_variant> declarative_region_path,
 			const std::string& name
 		);
 
 	private:
 		/**
-		Find entities of the given name, in the given declarative region
+		Find entities of the given name, in the given declarative region only
 		*/
+		template<class EntityT, class DeclarativeRegionT>
 		static
-		utility::shared_ptr_vector<semantic_entities::named_entity>
+		utility::shared_ptr_vector<EntityT>
 		find_entities_in_declarative_region
 		(
-			std::shared_ptr<semantic_entities::declarative_region> current_declarative_region,
+			std::shared_ptr<DeclarativeRegionT> current_declarative_region,
 			const std::string& name
 		);
 
 		/**
 		Find entities of the given name, in the given base classes
 		*/
+		template<class EntityT>
 		static
-		utility::shared_ptr_vector<semantic_entities::named_entity>
+		utility::shared_ptr_vector<EntityT>
 		find_entities_in_base_classes
 		(
 			utility::shared_ptr_vector<semantic_entities::class_>::range base_classes,
@@ -69,32 +72,52 @@ class name_lookup2
 
 	public:
 		/**
-		Find an open-to-outside declarative region of the given name, from the
-		given declarative region path
-		@return a pointer to the found declarative region or a null pointer
+		Find an entity of the given name, from the given declarative region path (unqualified name lookup)
 		*/
+		template<class EntityT>
 		static
-		std::shared_ptr<semantic_entities::named_declarative_region>
-		find_open_declarative_region
+		std::shared_ptr<EntityT>
+		find_entity
 		(
-			utility::shared_ptr_vector<semantic_entities::declarative_region>::range declarative_region_path,
+			std::vector<semantic_entities::declarative_region_variant> declarative_region_path,
+			const std::string& name
+		);
+
+	private:
+		/**
+		Find an entity of the given name, in the given declarative region only
+		*/
+		template<class EntityT, class DeclarativeRegionT>
+		static
+		std::shared_ptr<EntityT>
+		find_entity_in_declarative_region
+		(
+			std::shared_ptr<DeclarativeRegionT> current_declarative_region,
 			const std::string& name
 		);
 
 		/**
-		Find an open-to-outside declarative region of the given name, in the
-		given declarative region
-		@return a pointer to the found declarative region or a null pointer
+		Find an entity of the given name, in the given base classes
 		*/
+		template<class EntityT>
 		static
-		std::shared_ptr<semantic_entities::named_declarative_region>
-		find_open_declarative_region
+		std::shared_ptr<EntityT>
+		find_entity_in_base_classes
 		(
-			std::shared_ptr<semantic_entities::declarative_region> current_declarative_region,
+			utility::shared_ptr_vector<semantic_entities::class_>::range base_classes,
 			const std::string& name
 		);
+
+	private:
+		template<class MemberT, class ParentT>
+		static
+		typename utility::shared_ptr_vector<MemberT>::range
+		get_members(std::shared_ptr<ParentT> parent);
 };
 
 }}}} //namespace scalpel::cpp::detail::semantic_analysis
 
+#include "name_lookup2.ipp"
+
 #endif
+

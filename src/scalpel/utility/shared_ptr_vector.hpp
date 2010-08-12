@@ -59,12 +59,12 @@ class shared_ptr_vector
 
 		shared_ptr_vector();
 
-		shared_ptr_vector(const shared_ptr_vector& o);
+		shared_ptr_vector(const shared_ptr_vector& o) = delete;
 
 		shared_ptr_vector(shared_ptr_vector&& o);
 
 		const shared_ptr_vector&
-		operator=(const shared_ptr_vector& o);
+		operator=(const shared_ptr_vector& o) = delete;
 
 		const shared_ptr_vector&
 		operator=(shared_ptr_vector&& o);

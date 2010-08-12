@@ -104,20 +104,32 @@ class namespace_:
 		const named_declarative_regions_t&
         named_declarative_regions() const;
 
-		classes_t::range
-		base_classes();
+		namespaces_t::range
+		namespaces();
 
 		const namespaces_t&
 		namespaces() const;
 
+		classes_t::range
+		classes();
+
 		const classes_t&
 		classes() const;
+
+		simple_functions_t::range
+		simple_functions();
 
 		const simple_functions_t&
 		simple_functions() const;
 
+		operator_functions_t::range
+		operator_functions();
+
 		const operator_functions_t&
 		operator_functions() const;
+
+		variables_t::range
+		variables();
 
 		const variables_t&
 		variables() const;

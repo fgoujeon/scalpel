@@ -19,7 +19,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "namespace_.hpp"
-#include "detail/empty_class_shared_ptr_vector.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -96,10 +95,10 @@ namespace_::named_declarative_regions() const
 	return named_declarative_regions_;
 }
 
-namespace_::classes_t::range
-namespace_::base_classes()
+namespace_::namespaces_t::range
+namespace_::namespaces()
 {
-	return detail::empty_class_shared_ptr_vector_range;
+	return namespaces_;
 }
 
 const namespace_::namespaces_t&
@@ -108,10 +107,22 @@ namespace_::namespaces() const
 	return namespaces_;
 }
 
+namespace_::classes_t::range
+namespace_::classes()
+{
+	return classes_;
+}
+
 const namespace_::classes_t&
 namespace_::classes() const
 {
 	return classes_;
+}
+
+namespace_::simple_functions_t::range
+namespace_::simple_functions()
+{
+	return simple_functions_;
 }
 
 const namespace_::simple_functions_t&
@@ -120,10 +131,22 @@ namespace_::simple_functions() const
 	return simple_functions_;
 }
 
+namespace_::operator_functions_t::range
+namespace_::operator_functions()
+{
+	return operator_functions_;
+}
+
 const namespace_::operator_functions_t&
 namespace_::operator_functions() const
 {
 	return operator_functions_;
+}
+
+namespace_::variables_t::range
+namespace_::variables()
+{
+	return variables_;
 }
 
 const namespace_::variables_t&

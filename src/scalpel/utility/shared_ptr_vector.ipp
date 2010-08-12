@@ -29,11 +29,13 @@ shared_ptr_vector<T>::shared_ptr_vector()
 {
 }
 
+/*
 template<typename T>
 shared_ptr_vector<T>::shared_ptr_vector(const shared_ptr_vector& o):
 	raw_vector_(o.raw_vector_)
 {
 }
+*/
 
 template<typename T>
 shared_ptr_vector<T>::shared_ptr_vector(shared_ptr_vector&& o):
@@ -41,6 +43,7 @@ shared_ptr_vector<T>::shared_ptr_vector(shared_ptr_vector&& o):
 {
 }
 
+/*
 template<typename T>
 const shared_ptr_vector<T>&
 shared_ptr_vector<T>::operator=(const shared_ptr_vector& o)
@@ -48,6 +51,7 @@ shared_ptr_vector<T>::operator=(const shared_ptr_vector& o)
 	raw_vector_ = o.raw_vector_;
 	return *this;
 }
+*/
 
 template<typename T>
 const shared_ptr_vector<T>&
