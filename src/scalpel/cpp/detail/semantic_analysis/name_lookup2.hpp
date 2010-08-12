@@ -70,44 +70,6 @@ class name_lookup2
 			const std::string& name
 		);
 
-	public:
-		/**
-		Find an entity of the given name, from the given declarative region path (unqualified name lookup)
-		*/
-		template<class EntityT>
-		static
-		std::shared_ptr<EntityT>
-		find_entity
-		(
-			std::vector<semantic_entities::declarative_region_variant> declarative_region_path,
-			const std::string& name
-		);
-
-	private:
-		/**
-		Find an entity of the given name, in the given declarative region only
-		*/
-		template<class EntityT, class DeclarativeRegionT>
-		static
-		std::shared_ptr<EntityT>
-		find_entity_in_declarative_region
-		(
-			std::shared_ptr<DeclarativeRegionT> current_declarative_region,
-			const std::string& name
-		);
-
-		/**
-		Find an entity of the given name, in the given base classes
-		*/
-		template<class EntityT>
-		static
-		std::shared_ptr<EntityT>
-		find_entity_in_base_classes
-		(
-			utility::shared_ptr_vector<semantic_entities::class_>::range base_classes,
-			const std::string& name
-		);
-
 	private:
 		template<class MemberT, class ParentT>
 		static

@@ -125,18 +125,24 @@ test_case_1()
 	//name lookup test
 	//
 	{
-		auto found_entity = name_lookup2::find_entity<variable>(declarative_region_path, "i");
-		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
+		auto found_entities = name_lookup2::find_entities<variable>(declarative_region_path, "i");
+		BOOST_CHECK_EQUAL(found_entities.size(), 1);
+		if(found_entities.size() == 1)
+			BOOST_CHECK_EQUAL(found_entities.front(), variable_a_i);
 	}
 
 	{
-		auto found_entity = name_lookup2::find_entity<variable>(declarative_region_path, "j");
-		BOOST_CHECK_EQUAL(found_entity, variable_j);
+		auto found_entities = name_lookup2::find_entities<variable>(declarative_region_path, "j");
+		BOOST_CHECK_EQUAL(found_entities.size(), 1);
+		if(found_entities.size() == 1)
+			BOOST_CHECK_EQUAL(found_entities.front(), variable_j);
 	}
 
 	{
-		auto found_declarative_region = name_lookup2::find_entity<namespace_>(declarative_region_path, "C");
-		BOOST_CHECK_EQUAL(found_declarative_region, namespace_a_c);
+		auto found_entities = name_lookup2::find_entities<namespace_>(declarative_region_path, "C");
+		BOOST_CHECK_EQUAL(found_entities.size(), 1);
+		if(found_entities.size() == 1)
+			BOOST_CHECK_EQUAL(found_entities.front(), namespace_a_c);
 	}
 }
 

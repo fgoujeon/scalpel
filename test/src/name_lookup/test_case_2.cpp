@@ -135,13 +135,17 @@ test_case_2()
 	}
 
 	{
-		auto found_entity = name_lookup2::find_entity<simple_function>(declarative_region_path, "g");
-		BOOST_CHECK_EQUAL(found_entity, function_c1_g);
+		auto found_entities = name_lookup2::find_entities<simple_function>(declarative_region_path, "g");
+		BOOST_CHECK_EQUAL(found_entities.size(), 1);
+		if(found_entities.size() == 1)
+			BOOST_CHECK_EQUAL(found_entities.front(), function_c1_g);
 	}
 
 	{
-		auto found_declarative_region = name_lookup2::find_entity<class_>(declarative_region_path, "inner");
-		BOOST_CHECK_EQUAL(found_declarative_region, struct_c0_inner);
+		auto found_entities = name_lookup2::find_entities<class_>(declarative_region_path, "inner");
+		BOOST_CHECK_EQUAL(found_entities.size(), 1);
+		if(found_entities.size() == 1)
+			BOOST_CHECK_EQUAL(found_entities.front(), struct_c0_inner);
 	}
 }
 
