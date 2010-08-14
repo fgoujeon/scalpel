@@ -20,6 +20,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "test_case_2.hpp"
 #include <scalpel/cpp/detail/semantic_analysis/name_lookup2.hpp>
+#include <scalpel/cpp/syntax_tree.hpp>
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <boost/test/unit_test.hpp>
 
@@ -29,6 +30,7 @@ namespace name_lookup
 void
 test_case_2()
 {
+	using namespace scalpel::cpp::syntax_nodes;
 	using namespace scalpel::cpp::semantic_entities;
 	using namespace scalpel::cpp::detail::semantic_analysis;
 
@@ -125,7 +127,7 @@ test_case_2()
 	//name lookup test
 	//
 	{
-		auto found_entities = name_lookup2::find_entities<simple_function>("f", declarative_region_path);
+		auto found_entities = name_lookup2::find_entities<simple_function>(identifier("f"), declarative_region_path);
 		BOOST_CHECK_EQUAL(found_entities.size(), 2);
 		if(found_entities.size() == 2)
 		{
@@ -135,14 +137,14 @@ test_case_2()
 	}
 
 	{
-		auto found_entities = name_lookup2::find_entities<simple_function>("g", declarative_region_path);
+		auto found_entities = name_lookup2::find_entities<simple_function>(identifier("g"), declarative_region_path);
 		BOOST_CHECK_EQUAL(found_entities.size(), 1);
 		if(found_entities.size() == 1)
 			BOOST_CHECK_EQUAL(found_entities.front(), function_c1_g);
 	}
 
 	{
-		auto found_entities = name_lookup2::find_entities<class_>("inner", declarative_region_path);
+		auto found_entities = name_lookup2::find_entities<class_>(identifier("inner"), declarative_region_path);
 		BOOST_CHECK_EQUAL(found_entities.size(), 1);
 		if(found_entities.size() == 1)
 			BOOST_CHECK_EQUAL(found_entities.front(), struct_c0_inner);

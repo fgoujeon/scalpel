@@ -64,7 +64,7 @@ class name_lookup2
 
 	public:
 		/**
-		Find entities of the given name,
+		Find entities corresponding to the given identifier_or_template_id node,
 		from the given declarative region path (unqualified name lookup)
 		*/
 		template<class EntityT>
@@ -72,8 +72,35 @@ class name_lookup2
 		utility::shared_ptr_vector<EntityT>
 		find_entities
 		(
+			const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
+			std::vector<semantic_entities::declarative_region_variant>& declarative_region_path
+		);
+
+	private:
+		/**
+		Find entities corresponding to the given name,
+		from the given declarative region path (unqualified name lookup)
+		*/
+		template<class EntityT>
+		static
+		utility::shared_ptr_vector<EntityT>
+		find_entities_from_identifier
+		(
 			const std::string& name,
 			std::vector<semantic_entities::declarative_region_variant>& declarative_region_path
+		);
+
+		/**
+		Find entities corresponding to the given identifier_or_template_id node,
+		in the given declarative region only
+		*/
+		template<class EntityT, class DeclarativeRegionT>
+		static
+		utility::shared_ptr_vector<EntityT>
+		find_entities_in_declarative_region
+		(
+			const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
+			std::shared_ptr<DeclarativeRegionT> current_declarative_region
 		);
 
 		/**
@@ -82,13 +109,12 @@ class name_lookup2
 		template<class EntityT, class DeclarativeRegionT>
 		static
 		utility::shared_ptr_vector<EntityT>
-		find_entities_in_declarative_region
+		find_entities_from_identifier_in_declarative_region
 		(
 			const std::string& name,
 			std::shared_ptr<DeclarativeRegionT> current_declarative_region
 		);
 
-	private:
 		/**
 		Find entities of the given name, in the given base classes
 		*/

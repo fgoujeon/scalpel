@@ -42,15 +42,7 @@ name_lookup2::find_entities
 	if(!has_leading_double_colon && !opt_nested_name_specifier_node)
 	{
 		auto identifier_or_template_id_node = syntax_nodes::get_identifier_or_template_id(nested_identifier_or_template_id_node);
-		if(auto opt_identifier_node = syntax_nodes::get<syntax_nodes::identifier>(&identifier_or_template_id_node))
-		{
-			auto identifier_node = *opt_identifier_node;
-			return find_entities<EntityT>(identifier_node.value(), declarative_region_path);
-		}
-		else
-		{
-			throw std::runtime_error("Not implemented yet");
-		}
+		return find_entities<EntityT>(identifier_or_template_id_node, declarative_region_path);
 	}
 
 
@@ -68,22 +60,13 @@ name_lookup2::find_entities
 			auto nested_name_specifier_node = *opt_nested_name_specifier_node;
 
 			//find the first declarative region
-			std::shared_ptr<semantic_entities::namespace_> first_declarative_region;
 			auto identifier_or_template_id_node = get_identifier_or_template_id(nested_name_specifier_node);
-			if(auto opt_identifier_node = syntax_nodes::get<syntax_nodes::identifier>(&identifier_or_template_id_node))
+			auto first_declarative_regions = find_entities_in_declarative_region<semantic_entities::namespace_>(identifier_or_template_id_node, global_namespace);
+			if(first_declarative_regions.size() != 1)
 			{
-				auto identifier_node = *opt_identifier_node;
-				auto found_declarative_regions = find_entities_in_declarative_region<semantic_entities::namespace_>(identifier_node.value(), global_namespace);
-				if(found_declarative_regions.size() != 1)
-				{
-					throw std::runtime_error("more than one declarative regions found");
-				}
-				first_declarative_region = found_declarative_regions.front();
+				throw std::runtime_error("more than one declarative regions first");
 			}
-			else
-			{
-				throw std::runtime_error("Not implemented yet");
-			}
+			std::shared_ptr<semantic_entities::namespace_> first_declarative_region = first_declarative_regions.front();
 
 			//find the last declarative region
 			if(auto opt_last_part_seq_node = get_last_part_seq(nested_name_specifier_node))
@@ -112,19 +95,13 @@ name_lookup2::find_entities
 			auto nested_name_specifier_node = *opt_nested_name_specifier_node;
 
 			//find the first declarative region
-			std::shared_ptr<semantic_entities::namespace_> first_declarative_region;
 			auto identifier_or_template_id_node = get_identifier_or_template_id(nested_name_specifier_node);
-			if(auto opt_identifier_node = syntax_nodes::get<syntax_nodes::identifier>(&identifier_or_template_id_node))
+			auto first_declarative_regions = find_entities<semantic_entities::namespace_>(identifier_or_template_id_node, declarative_region_path);
+			if(first_declarative_regions.size() != 1)
 			{
-				auto identifier_node = *opt_identifier_node;
-				first_declarative_region =
-					find_entities<semantic_entities::namespace_>(identifier_node.value(), declarative_region_path).front()
-				;
+				throw std::runtime_error("more than one declarative regions first");
 			}
-			else
-			{
-				throw std::runtime_error("Not implemented yet");
-			}
+			std::shared_ptr<semantic_entities::namespace_> first_declarative_region = first_declarative_regions.front();
 
 			//find the last declarative region
 			if(auto opt_last_part_seq_node = get_last_part_seq(nested_name_specifier_node))
@@ -144,15 +121,7 @@ name_lookup2::find_entities
 
 	//find entities in the last declarative region
 	auto identifier_or_template_id_node = get_identifier_or_template_id(nested_identifier_or_template_id_node);
-	if(auto opt_identifier_node = syntax_nodes::get<syntax_nodes::identifier>(&identifier_or_template_id_node))
-	{
-		auto identifier_node = *opt_identifier_node;
-		return find_entities_in_declarative_region<EntityT>(identifier_node.value(), last_declarative_region);
-	}
-	else
-	{
-		throw std::runtime_error("Not implemented yet");
-	}
+	return find_entities_in_declarative_region<EntityT>(identifier_or_template_id_node, last_declarative_region);
 }
 
 template<class DeclarativeRegionT, class CurrentDeclarativeRegionT>
@@ -183,7 +152,7 @@ name_lookup2::find_declarative_region
 			if(auto opt_identifier_node = syntax_nodes::get<syntax_nodes::identifier>(&identifier_or_template_id_node))
 			{
 				auto identifier_node = *opt_identifier_node;
-				auto found_declarative_regions = find_entities_in_declarative_region<semantic_entities::namespace_>(identifier_node.value(), found_declarative_region);
+				auto found_declarative_regions = find_entities_from_identifier_in_declarative_region<semantic_entities::namespace_>(identifier_node.value(), found_declarative_region);
 				if(found_declarative_regions.size() != 1)
 				{
 					throw std::runtime_error("find_declarative_region() error");
@@ -204,6 +173,25 @@ template<class EntityT>
 utility::shared_ptr_vector<EntityT>
 name_lookup2::find_entities
 (
+	const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
+	std::vector<semantic_entities::declarative_region_variant>& declarative_region_path
+)
+{
+	if(auto opt_identifier_node = syntax_nodes::get<syntax_nodes::identifier>(&identifier_or_template_id))
+	{
+		auto identifier_node = *opt_identifier_node;
+		return find_entities_from_identifier<EntityT>(identifier_node.value(), declarative_region_path);
+	}
+	else
+	{
+		throw std::runtime_error("Not implemented yet");
+	}
+}
+
+template<class EntityT>
+utility::shared_ptr_vector<EntityT>
+name_lookup2::find_entities_from_identifier
+(
 	const std::string& name,
 	std::vector<semantic_entities::declarative_region_variant>& declarative_region_path
 )
@@ -222,7 +210,7 @@ name_lookup2::find_entities
 
 			//find entities in that namespace
 			found_entities =
-				find_entities_in_declarative_region<EntityT>(name, namespace_ptr)
+				find_entities_from_identifier_in_declarative_region<EntityT>(name, namespace_ptr)
 			;
 			if(!found_entities.empty()) break;
 		}
@@ -232,7 +220,7 @@ name_lookup2::find_entities
 
 			//find entities in the members of that class
 			found_entities =
-				find_entities_in_declarative_region<EntityT>(name, class_ptr)
+				find_entities_from_identifier_in_declarative_region<EntityT>(name, class_ptr)
 			;
 			if(!found_entities.empty()) break;
 
@@ -250,6 +238,25 @@ name_lookup2::find_entities
 template<class EntityT, class DeclarativeRegionT>
 utility::shared_ptr_vector<EntityT>
 name_lookup2::find_entities_in_declarative_region
+(
+	const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
+	std::shared_ptr<DeclarativeRegionT> current_declarative_region
+)
+{
+	if(auto opt_identifier_node = syntax_nodes::get<syntax_nodes::identifier>(&identifier_or_template_id))
+	{
+		auto identifier_node = *opt_identifier_node;
+		return find_entities_from_identifier_in_declarative_region<EntityT>(identifier_node.value(), current_declarative_region);
+	}
+	else
+	{
+		throw std::runtime_error("Not implemented yet");
+	}
+}
+
+template<class EntityT, class DeclarativeRegionT>
+utility::shared_ptr_vector<EntityT>
+name_lookup2::find_entities_from_identifier_in_declarative_region
 (
 	const std::string& name,
 	std::shared_ptr<DeclarativeRegionT> current_declarative_region
@@ -288,7 +295,7 @@ name_lookup2::find_entities_in_base_classes
 		std::shared_ptr<semantic_entities::class_> current_class = *i;
 
 		//find entities in the current declarative region (i.e. current class)
-		entities_t current_class_found_entities = find_entities_in_declarative_region<EntityT>(name, current_class);
+		entities_t current_class_found_entities = find_entities_from_identifier_in_declarative_region<EntityT>(name, current_class);
 
 		//entities found?
 		if(!current_class_found_entities.empty())

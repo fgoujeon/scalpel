@@ -129,14 +129,14 @@ test_case_1()
 	//name lookup test
 	//
 	{
-		auto found_entities = name_lookup2::find_entities<variable>("i", declarative_region_path);
+		auto found_entities = name_lookup2::find_entities<variable>(identifier("i"), declarative_region_path);
 		BOOST_CHECK_EQUAL(found_entities.size(), 1);
 		if(found_entities.size() == 1)
 			BOOST_CHECK_EQUAL(found_entities.front(), variable_a_i);
 	}
 
 	{
-		auto found_entities = name_lookup2::find_entities<variable>("j", declarative_region_path);
+		auto found_entities = name_lookup2::find_entities<variable>(identifier("j"), declarative_region_path);
 		BOOST_CHECK_EQUAL(found_entities.size(), 1);
 		if(found_entities.size() == 1)
 			BOOST_CHECK_EQUAL(found_entities.front(), variable_j);
