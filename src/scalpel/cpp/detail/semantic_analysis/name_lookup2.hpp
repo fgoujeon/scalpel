@@ -22,6 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_NAME_LOOKUP2_HPP
 
 #include <scalpel/cpp/semantic_graph.hpp>
+#include <scalpel/cpp/syntax_tree.hpp>
 #include <scalpel/utility/shared_ptr_vector.hpp>
 #include <memory>
 #include <string>
@@ -33,7 +34,38 @@ class name_lookup2
 {
 	public:
 		/**
-		Find entities of the given name, from the given declarative region path (unqualified name lookup)
+		Find entities corresponding to the given nested identifier
+		(or nested template-id),
+		from the given declarative region path (qualified name lookup)
+		*/
+		template<class EntityT>
+		static
+		utility::shared_ptr_vector<EntityT>
+		find_entities
+		(
+			const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node,
+			std::vector<semantic_entities::declarative_region_variant>& declarative_region_path
+		);
+
+	private:
+		/**
+		Find the declarative region corresponding to the given syntax node
+		(i.e. Z in the expression "X::Y::Z::"),
+		from the given declarative region
+		*/
+		template<class DeclarativeRegionT, class CurrentDeclarativeRegionT>
+		static
+		std::shared_ptr<DeclarativeRegionT>
+		find_declarative_region
+		(
+			const syntax_nodes::nested_name_specifier_last_part_seq& nested_name_specifier_last_part_seq_node,
+			std::shared_ptr<CurrentDeclarativeRegionT> current_declarative_region
+		);
+
+	public:
+		/**
+		Find entities of the given name,
+		from the given declarative region path (unqualified name lookup)
 		*/
 		template<class EntityT>
 		static
@@ -41,7 +73,7 @@ class name_lookup2
 		find_entities
 		(
 			const std::string& name,
-			std::vector<semantic_entities::declarative_region_variant> declarative_region_path
+			std::vector<semantic_entities::declarative_region_variant>& declarative_region_path
 		);
 
 		/**

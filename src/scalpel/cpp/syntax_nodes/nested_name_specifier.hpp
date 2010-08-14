@@ -42,6 +42,13 @@ typedef
 ;
 
 inline
+bool
+has_template_keyword(const nested_name_specifier_last_part& o)
+{
+	return get<0>(o);
+}
+
+inline
 const identifier_or_template_id&
 get_identifier_or_template_id(const nested_name_specifier_last_part& o)
 {

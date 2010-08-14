@@ -21,6 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "test_case_1.hpp"
 #include <scalpel/cpp/detail/semantic_analysis/name_lookup2.hpp>
 #include <scalpel/cpp/semantic_graph.hpp>
+#include <scalpel/cpp/syntax_tree.hpp>
 #include <boost/test/unit_test.hpp>
 
 namespace name_lookup
@@ -29,6 +30,7 @@ namespace name_lookup
 void
 test_case_1()
 {
+	using namespace scalpel::cpp::syntax_nodes;
 	using namespace scalpel::cpp::semantic_entities;
 	using namespace scalpel::cpp::detail::semantic_analysis;
 
@@ -62,6 +64,8 @@ test_case_1()
 		i;
 		j;
 		C::n;
+		::A::i;
+		::i;
 	}
 	*/
 	auto semantic_graph = std::make_shared<scalpel::cpp::semantic_graph>();
@@ -139,20 +143,67 @@ test_case_1()
 	}
 
 	{
-		auto found_entities = name_lookup2::find_entities<namespace_>("C", declarative_region_path);
+		nested_identifier_or_template_id variable_a_c_n_syntax_node
+		(
+			optional_node<predefined_text_node<str::double_colon>>(),
+			space(""),
+			nested_name_specifier
+			(
+				identifier("C"),
+				space(""),
+				predefined_text_node<str::double_colon>(),
+				space(""),
+				optional_node<nested_name_specifier_last_part_seq>()
+			),
+			space(""),
+			identifier("n")
+		);
+		auto found_entities = name_lookup2::find_entities<variable>(variable_a_c_n_syntax_node, declarative_region_path);
 		BOOST_CHECK_EQUAL(found_entities.size(), 1);
 		if(found_entities.size() == 1)
 		{
-			BOOST_CHECK_EQUAL(found_entities.front(), namespace_a_c);
-			if(found_entities.front() == namespace_a_c)
-			{
-				auto found_entities = name_lookup2::find_entities_in_declarative_region<variable>("n", namespace_a_c);
-				BOOST_CHECK_EQUAL(found_entities.size(), 1);
-				if(found_entities.size() == 1)
-				{
-					BOOST_CHECK_EQUAL(found_entities.front(), variable_a_c_n);
-				}
-			}
+			BOOST_CHECK_EQUAL(found_entities.front(), variable_a_c_n);
+		}
+	}
+
+	{
+		nested_identifier_or_template_id variable_a_i_syntax_node
+		(
+			predefined_text_node<str::double_colon>(),
+			space(""),
+			nested_name_specifier
+			(
+				identifier("A"),
+				space(""),
+				predefined_text_node<str::double_colon>(),
+				space(""),
+				optional_node<nested_name_specifier_last_part_seq>()
+			),
+			space(""),
+			identifier("i")
+		);
+		auto found_entities = name_lookup2::find_entities<variable>(variable_a_i_syntax_node, declarative_region_path);
+		BOOST_CHECK_EQUAL(found_entities.size(), 1);
+		if(found_entities.size() == 1)
+		{
+			BOOST_CHECK_EQUAL(found_entities.front(), variable_a_i);
+		}
+	}
+
+	{
+		nested_identifier_or_template_id variable_i_syntax_node
+		(
+			predefined_text_node<str::double_colon>(),
+			space(""),
+			optional_node<nested_name_specifier>(),
+			space(""),
+			identifier("i")
+		);
+		auto found_entities = name_lookup2::find_entities<variable>(variable_i_syntax_node, declarative_region_path);
+		BOOST_CHECK_EQUAL(found_entities.size(), 1);
+		if(found_entities.size() == 1)
+		{
+			BOOST_CHECK_EQUAL(found_entities.front(), variable_i);
 		}
 	}
 }
