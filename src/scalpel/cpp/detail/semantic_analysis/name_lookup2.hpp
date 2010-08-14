@@ -33,6 +33,21 @@ namespace scalpel { namespace cpp { namespace detail { namespace semantic_analys
 class name_lookup2
 {
 	public:
+		template<class EntityT, bool Multiple>
+		struct return_type;
+
+		template<class EntityT>
+		struct return_type<EntityT, false>
+		{
+			typedef std::shared_ptr<EntityT> type;
+		};
+
+		template<class EntityT>
+		struct return_type<EntityT, true>
+		{
+			typedef utility::shared_ptr_vector<EntityT> type;
+		};
+
 		/**
 		Find entities corresponding to the given nested identifier
 		(or nested template-id),
@@ -94,9 +109,9 @@ class name_lookup2
 		Find entities corresponding to the given identifier_or_template_id node,
 		in the given declarative region only
 		*/
-		template<class EntityT, class DeclarativeRegionT>
+		template<bool Multiple, class EntityT, class DeclarativeRegionT>
 		static
-		utility::shared_ptr_vector<EntityT>
+		typename return_type<EntityT, Multiple>::type
 		find_entities_in_declarative_region
 		(
 			const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
@@ -106,9 +121,9 @@ class name_lookup2
 		/**
 		Find entities of the given name, in the given declarative region only
 		*/
-		template<class EntityT, class DeclarativeRegionT>
+		template<bool Multiple, class EntityT, class DeclarativeRegionT>
 		static
-		utility::shared_ptr_vector<EntityT>
+		typename return_type<EntityT, Multiple>::type
 		find_entities_from_identifier_in_declarative_region
 		(
 			const std::string& name,
@@ -128,6 +143,18 @@ class name_lookup2
 		);
 
 	private:
+		//result.push_back(entity)
+		template<class EntityT>
+		static
+		void
+		add_to_result(utility::shared_ptr_vector<EntityT>& result, std::shared_ptr<EntityT>& entity);
+
+		//result = entity
+		template<class EntityT>
+		static
+		void
+		add_to_result(std::shared_ptr<EntityT>& result, std::shared_ptr<EntityT>& entity);
+
 		template<class MemberT, class ParentT>
 		static
 		typename utility::shared_ptr_vector<MemberT>::range

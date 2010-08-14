@@ -61,12 +61,13 @@ name_lookup2::find_entities
 
 			//find the first declarative region
 			auto identifier_or_template_id_node = get_identifier_or_template_id(nested_name_specifier_node);
-			auto first_declarative_regions = find_entities_in_declarative_region<semantic_entities::namespace_>(identifier_or_template_id_node, global_namespace);
-			if(first_declarative_regions.size() != 1)
+			std::shared_ptr<semantic_entities::namespace_> first_declarative_region =
+				find_entities_in_declarative_region<false, semantic_entities::namespace_>(identifier_or_template_id_node, global_namespace)
+			;
+			if(!first_declarative_region)
 			{
-				throw std::runtime_error("more than one declarative regions first");
+				throw std::runtime_error("no declarative region found");
 			}
-			std::shared_ptr<semantic_entities::namespace_> first_declarative_region = first_declarative_regions.front();
 
 			//find the last declarative region
 			if(auto opt_last_part_seq_node = get_last_part_seq(nested_name_specifier_node))
@@ -121,7 +122,7 @@ name_lookup2::find_entities
 
 	//find entities in the last declarative region
 	auto identifier_or_template_id_node = get_identifier_or_template_id(nested_identifier_or_template_id_node);
-	return find_entities_in_declarative_region<EntityT>(identifier_or_template_id_node, last_declarative_region);
+	return find_entities_in_declarative_region<true, EntityT>(identifier_or_template_id_node, last_declarative_region);
 }
 
 template<class DeclarativeRegionT, class CurrentDeclarativeRegionT>
@@ -152,17 +153,19 @@ name_lookup2::find_declarative_region
 			if(auto opt_identifier_node = syntax_nodes::get<syntax_nodes::identifier>(&identifier_or_template_id_node))
 			{
 				auto identifier_node = *opt_identifier_node;
-				auto found_declarative_regions = find_entities_from_identifier_in_declarative_region<semantic_entities::namespace_>(identifier_node.value(), found_declarative_region);
-				if(found_declarative_regions.size() != 1)
-				{
-					throw std::runtime_error("find_declarative_region() error");
-				}
-				found_declarative_region = found_declarative_regions.front();
+				found_declarative_region =
+					find_entities_from_identifier_in_declarative_region<false, semantic_entities::namespace_>(identifier_node.value(), found_declarative_region)
+				;
 			}
 			else
 			{
 				assert(false); //not implemented yet (template)
 			}
+		}
+
+		if(!found_declarative_region)
+		{
+			throw std::runtime_error("find_declarative_region() error");
 		}
 	}
 
@@ -210,7 +213,7 @@ name_lookup2::find_entities_from_identifier
 
 			//find entities in that namespace
 			found_entities =
-				find_entities_from_identifier_in_declarative_region<EntityT>(name, namespace_ptr)
+				find_entities_from_identifier_in_declarative_region<true, EntityT>(name, namespace_ptr)
 			;
 			if(!found_entities.empty()) break;
 		}
@@ -220,7 +223,7 @@ name_lookup2::find_entities_from_identifier
 
 			//find entities in the members of that class
 			found_entities =
-				find_entities_from_identifier_in_declarative_region<EntityT>(name, class_ptr)
+				find_entities_from_identifier_in_declarative_region<true, EntityT>(name, class_ptr)
 			;
 			if(!found_entities.empty()) break;
 
@@ -235,8 +238,8 @@ name_lookup2::find_entities_from_identifier
 	return found_entities;
 }
 
-template<class EntityT, class DeclarativeRegionT>
-utility::shared_ptr_vector<EntityT>
+template<bool Multiple, class EntityT, class DeclarativeRegionT>
+typename name_lookup2::return_type<EntityT, Multiple>::type
 name_lookup2::find_entities_in_declarative_region
 (
 	const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
@@ -246,7 +249,7 @@ name_lookup2::find_entities_in_declarative_region
 	if(auto opt_identifier_node = syntax_nodes::get<syntax_nodes::identifier>(&identifier_or_template_id))
 	{
 		auto identifier_node = *opt_identifier_node;
-		return find_entities_from_identifier_in_declarative_region<EntityT>(identifier_node.value(), current_declarative_region);
+		return find_entities_from_identifier_in_declarative_region<Multiple, EntityT>(identifier_node.value(), current_declarative_region);
 	}
 	else
 	{
@@ -254,15 +257,15 @@ name_lookup2::find_entities_in_declarative_region
 	}
 }
 
-template<class EntityT, class DeclarativeRegionT>
-utility::shared_ptr_vector<EntityT>
+template<bool Multiple, class EntityT, class DeclarativeRegionT>
+typename name_lookup2::return_type<EntityT, Multiple>::type
 name_lookup2::find_entities_from_identifier_in_declarative_region
 (
 	const std::string& name,
 	std::shared_ptr<DeclarativeRegionT> current_declarative_region
 )
 {
-	utility::shared_ptr_vector<EntityT> found_entities;
+	typename return_type<EntityT, Multiple>::type found_entities;
 
 	typename utility::shared_ptr_vector<EntityT>::range members = get_members<EntityT>(current_declarative_region);
 	for(auto i = members.begin(); i != members.end(); ++i)
@@ -270,7 +273,8 @@ name_lookup2::find_entities_from_identifier_in_declarative_region
 		std::shared_ptr<EntityT> current_entity = *i;
 		if(current_entity->name() == name)
 		{
-			found_entities.push_back(current_entity);
+			add_to_result(found_entities, current_entity);
+			if(!Multiple) break;
 		}
 	}
 
@@ -295,7 +299,7 @@ name_lookup2::find_entities_in_base_classes
 		std::shared_ptr<semantic_entities::class_> current_class = *i;
 
 		//find entities in the current declarative region (i.e. current class)
-		entities_t current_class_found_entities = find_entities_from_identifier_in_declarative_region<EntityT>(name, current_class);
+		entities_t current_class_found_entities = find_entities_from_identifier_in_declarative_region<true, EntityT>(name, current_class);
 
 		//entities found?
 		if(!current_class_found_entities.empty())
@@ -324,6 +328,20 @@ name_lookup2::find_entities_in_base_classes
 	}
 
 	return found_entities;
+}
+
+template<class EntityT>
+void
+name_lookup2::add_to_result(utility::shared_ptr_vector<EntityT>& result, std::shared_ptr<EntityT>& entity)
+{
+	result.push_back(entity);
+}
+
+template<class EntityT>
+void
+name_lookup2::add_to_result(std::shared_ptr<EntityT>& result, std::shared_ptr<EntityT>& entity)
+{
+	result = entity;
 }
 
 }}}} //namespace scalpel::cpp::detail::semantic_analysis
