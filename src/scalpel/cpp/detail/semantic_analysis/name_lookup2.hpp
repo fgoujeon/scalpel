@@ -33,21 +33,22 @@ namespace scalpel { namespace cpp { namespace detail { namespace semantic_analys
 class name_lookup2
 {
 	public:
-		template<class EntityT, bool Multiple>
+		template<bool Multiple, class EntityT>
 		struct return_type;
 
 		template<class EntityT>
-		struct return_type<EntityT, false>
+		struct return_type<false, EntityT>
 		{
 			typedef std::shared_ptr<EntityT> type;
 		};
 
 		template<class EntityT>
-		struct return_type<EntityT, true>
+		struct return_type<true, EntityT>
 		{
 			typedef utility::shared_ptr_vector<EntityT> type;
 		};
 
+	public:
 		/**
 		Find entities corresponding to the given nested identifier
 		(or nested template-id),
@@ -111,7 +112,7 @@ class name_lookup2
 		*/
 		template<bool Multiple, class EntityT, class DeclarativeRegionT>
 		static
-		typename return_type<EntityT, Multiple>::type
+		typename return_type<Multiple, EntityT>::type
 		find_entities_in_declarative_region
 		(
 			const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
@@ -123,7 +124,7 @@ class name_lookup2
 		*/
 		template<bool Multiple, class EntityT, class DeclarativeRegionT>
 		static
-		typename return_type<EntityT, Multiple>::type
+		typename return_type<Multiple, EntityT>::type
 		find_entities_from_identifier_in_declarative_region
 		(
 			const std::string& name,
@@ -133,9 +134,9 @@ class name_lookup2
 		/**
 		Find entities of the given name, in the given base classes
 		*/
-		template<class EntityT>
+		template<bool Multiple, class EntityT>
 		static
-		utility::shared_ptr_vector<EntityT>
+		typename return_type<Multiple, EntityT>::type
 		find_entities_in_base_classes
 		(
 			const std::string& name,
@@ -154,6 +155,31 @@ class name_lookup2
 		static
 		void
 		add_to_result(std::shared_ptr<EntityT>& result, std::shared_ptr<EntityT>& entity);
+
+
+
+		template<bool Multiple, class EntityT>
+		struct return_result;
+
+		//return the only one element of the vector
+		template<class EntityT>
+		struct return_result<false, EntityT>
+		{
+			static
+			typename return_type<false, EntityT>::type
+			result(utility::shared_ptr_vector<EntityT>& result);
+		};
+
+		//return result;
+		template<class EntityT>
+		struct return_result<true, EntityT>
+		{
+			static
+			utility::shared_ptr_vector<EntityT>&
+			result(utility::shared_ptr_vector<EntityT>& result);
+		};
+
+
 
 		template<class MemberT, class ParentT>
 		static

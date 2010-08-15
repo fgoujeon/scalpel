@@ -229,7 +229,7 @@ name_lookup2::find_entities_from_identifier
 
 			//find entities in the base classes of that class
 			found_entities =
-				find_entities_in_base_classes<EntityT>(name, class_ptr->base_classes())
+				find_entities_in_base_classes<true, EntityT>(name, class_ptr->base_classes())
 			;
 			if(!found_entities.empty()) break;
 		}
@@ -239,7 +239,7 @@ name_lookup2::find_entities_from_identifier
 }
 
 template<bool Multiple, class EntityT, class DeclarativeRegionT>
-typename name_lookup2::return_type<EntityT, Multiple>::type
+typename name_lookup2::return_type<Multiple, EntityT>::type
 name_lookup2::find_entities_in_declarative_region
 (
 	const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
@@ -258,14 +258,14 @@ name_lookup2::find_entities_in_declarative_region
 }
 
 template<bool Multiple, class EntityT, class DeclarativeRegionT>
-typename name_lookup2::return_type<EntityT, Multiple>::type
+typename name_lookup2::return_type<Multiple, EntityT>::type
 name_lookup2::find_entities_from_identifier_in_declarative_region
 (
 	const std::string& name,
 	std::shared_ptr<DeclarativeRegionT> current_declarative_region
 )
 {
-	typename return_type<EntityT, Multiple>::type found_entities;
+	typename return_type<Multiple, EntityT>::type found_entities;
 
 	typename utility::shared_ptr_vector<EntityT>::range members = get_members<EntityT>(current_declarative_region);
 	for(auto i = members.begin(); i != members.end(); ++i)
@@ -281,8 +281,8 @@ name_lookup2::find_entities_from_identifier_in_declarative_region
 	return found_entities;
 }
 
-template<class EntityT>
-utility::shared_ptr_vector<EntityT>
+template<bool Multiple, class EntityT>
+typename name_lookup2::return_type<Multiple, EntityT>::type
 name_lookup2::find_entities_in_base_classes
 (
 	const std::string& name,
@@ -299,7 +299,11 @@ name_lookup2::find_entities_in_base_classes
 		std::shared_ptr<semantic_entities::class_> current_class = *i;
 
 		//find entities in the current declarative region (i.e. current class)
-		entities_t current_class_found_entities = find_entities_from_identifier_in_declarative_region<true, EntityT>(name, current_class);
+		entities_t current_class_found_entities;
+		if(Multiple)
+			current_class_found_entities = find_entities_from_identifier_in_declarative_region<true, EntityT>(name, current_class);
+		else
+			current_class_found_entities.push_back(find_entities_from_identifier_in_declarative_region<false, EntityT>(name, current_class));
 
 		//entities found?
 		if(!current_class_found_entities.empty())
@@ -315,7 +319,7 @@ name_lookup2::find_entities_in_base_classes
 		else
 		{
 			//find entities in the current declarative region's base classes
-			entities_t current_class_base_classes_found_entities = find_entities_in_base_classes<EntityT>(name, current_class->base_classes());
+			entities_t current_class_base_classes_found_entities = find_entities_in_base_classes<Multiple, EntityT>(name, current_class->base_classes());
 
 			//add them to the list
 			std::copy
@@ -327,7 +331,9 @@ name_lookup2::find_entities_in_base_classes
 		}
 	}
 
-	return found_entities;
+	//If Multiple, return the full list.
+	//If not Multiple, return the only one element of the list.
+	return std::move(return_result<Multiple, EntityT>::result(found_entities));
 }
 
 template<class EntityT>
@@ -342,6 +348,31 @@ void
 name_lookup2::add_to_result(std::shared_ptr<EntityT>& result, std::shared_ptr<EntityT>& entity)
 {
 	result = entity;
+}
+
+template<class EntityT>
+typename name_lookup2::return_type<false, EntityT>::type
+name_lookup2::return_result<false, EntityT>::result(utility::shared_ptr_vector<EntityT>& result)
+{
+	if(result.empty())
+	{
+		return std::shared_ptr<EntityT>();
+	}
+	else if(result.size() == 1)
+	{
+		return result.front();
+	}
+	else
+	{
+		throw std::runtime_error("more than one entities found");
+	}
+}
+
+template<class EntityT>
+utility::shared_ptr_vector<EntityT>&
+name_lookup2::return_result<true, EntityT>::result(utility::shared_ptr_vector<EntityT>& result)
+{
+	return result;
 }
 
 }}}} //namespace scalpel::cpp::detail::semantic_analysis
