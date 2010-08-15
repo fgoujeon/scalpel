@@ -44,11 +44,11 @@ class namespace_:
 	public boost::noncopyable
 {
     public:
-		typedef utility::shared_ptr_vector<namespace_> namespaces_t;
-		typedef utility::shared_ptr_vector<class_> classes_t;
-		typedef utility::shared_ptr_vector<simple_function> simple_functions_t;
-		typedef utility::shared_ptr_vector<operator_function> operator_functions_t;
-		typedef utility::shared_ptr_vector<variable> variables_t;
+		typedef utility::vector<std::shared_ptr<namespace_>> namespaces_t;
+		typedef utility::vector<std::shared_ptr<class_>> classes_t;
+		typedef utility::vector<std::shared_ptr<simple_function>> simple_functions_t;
+		typedef utility::vector<std::shared_ptr<operator_function>> operator_functions_t;
+		typedef utility::vector<std::shared_ptr<variable>> variables_t;
 
         /**
         Creates an anonymous namespace. Equivalent to namespace_("").

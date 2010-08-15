@@ -22,7 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_DECLARATIVE_REGION_CURSOR_HPP
 
 #include <scalpel/cpp/semantic_graph.hpp>
-#include <scalpel/utility/shared_ptr_vector.hpp>
+#include <scalpel/utility/vector.hpp>
 #include <boost/noncopyable.hpp>
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
@@ -31,7 +31,7 @@ namespace scalpel { namespace cpp { namespace detail { namespace semantic_analys
 class declarative_region_cursor: public boost::noncopyable
 {
 	public:
-		typedef utility::shared_ptr_vector<semantic_entities::declarative_region> declarative_regions_t;
+		typedef utility::vector<std::shared_ptr<semantic_entities::declarative_region>> declarative_regions_t;
 
 		declarative_region_cursor();
 

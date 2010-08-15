@@ -18,19 +18,51 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_GET_MEMBERS_HPP
-#define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_GET_MEMBERS_HPP
+#ifndef SCALPEL_UTILITY_VECTOR_IPP
+#define SCALPEL_UTILITY_VECTOR_IPP
 
-#include <scalpel/utility/vector.hpp>
-
-namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
+namespace scalpel { namespace utility
 {
 
-template<class MemberT, class ParentT>
-typename utility::vector<std::shared_ptr<MemberT>>::range
-get_members(ParentT parent);
+template<typename T>
+vector<T>::vector()
+{
+}
 
-}}}} //namespace scalpel::cpp::detail::semantic_analysis
+template<typename T>
+vector<T>::vector(vector&& o):
+	raw_vector_(std::move(o.raw_vector_))
+{
+}
+
+template<typename T>
+const vector<T>&
+vector<T>::operator=(vector&& o)
+{
+	raw_vector_ = std::move(o.raw_vector_);
+	return *this;
+}
+
+template<typename T>
+vector<std::shared_ptr<T>>::vector()
+{
+}
+
+template<typename T>
+vector<std::shared_ptr<T>>::vector(vector&& o):
+	raw_vector_(std::move(o.raw_vector_))
+{
+}
+
+template<typename T>
+const vector<std::shared_ptr<T>>&
+vector<std::shared_ptr<T>>::operator=(vector&& o)
+{
+	raw_vector_ = std::move(o.raw_vector_);
+	return *this;
+}
+
+}} //namespace scalpel::utility
 
 #endif
 

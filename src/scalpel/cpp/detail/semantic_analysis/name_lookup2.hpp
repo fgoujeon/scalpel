@@ -26,7 +26,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <scalpel/cpp/syntax_tree.hpp>
 #include <scalpel/utility/variant.hpp>
-#include <scalpel/utility/shared_ptr_vector.hpp>
+#include <scalpel/utility/vector.hpp>
 #include <memory>
 #include <string>
 
@@ -54,7 +54,7 @@ class name_lookup2
 		template<class EntityT>
 		struct return_type<true, EntityT>
 		{
-			typedef utility::shared_ptr_vector<EntityT> type;
+			typedef utility::vector<std::shared_ptr<EntityT>> type;
 		};
 
 		template<class... EntitiesT>
@@ -155,7 +155,7 @@ class name_lookup2
 		find_entities_in_base_classes
 		(
 			const std::string& name,
-			utility::shared_ptr_vector<semantic_entities::class_>::range base_classes
+			utility::vector<std::shared_ptr<semantic_entities::class_>>::range base_classes
 		);
 
 	private:
@@ -171,14 +171,14 @@ class name_lookup2
 		inline
 		static
 		void
-		add_to_result(utility::shared_ptr_vector<EntityT>& result, std::shared_ptr<EntityT>& entity);
+		add_to_result(utility::vector<std::shared_ptr<EntityT>>& result, std::shared_ptr<EntityT>& entity);
 
 		//append entities to result
 		template<class EntityT>
 		inline
 		static
 		void
-		add_to_result(utility::shared_ptr_vector<EntityT>& result, utility::shared_ptr_vector<EntityT>& entities);
+		add_to_result(utility::vector<std::shared_ptr<EntityT>>& result, utility::vector<std::shared_ptr<EntityT>>& entities);
 
 
 
@@ -186,7 +186,7 @@ class name_lookup2
 		inline
 		static
 		bool
-		is_result_empty(utility::shared_ptr_vector<EntityT>& result);
+		is_result_empty(utility::vector<std::shared_ptr<EntityT>>& result);
 
 		template<class EntityT>
 		inline
@@ -205,7 +205,7 @@ class name_lookup2
 		{
 			static
 			typename return_type<false, EntityT>::type
-			result(utility::shared_ptr_vector<EntityT>& result);
+			result(utility::vector<std::shared_ptr<EntityT>>& result);
 		};
 
 		//return result;
@@ -213,8 +213,8 @@ class name_lookup2
 		struct return_result<true, EntityT>
 		{
 			static
-			utility::shared_ptr_vector<EntityT>&
-			result(utility::shared_ptr_vector<EntityT>& result);
+			utility::vector<std::shared_ptr<EntityT>>&
+			result(utility::vector<std::shared_ptr<EntityT>>& result);
 		};
 };
 

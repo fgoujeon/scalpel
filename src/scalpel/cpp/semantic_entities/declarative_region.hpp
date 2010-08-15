@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_DECLARATIVE_REGION_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_DECLARATIVE_REGION_HPP
 
-#include <scalpel/utility/shared_ptr_vector.hpp>
+#include <scalpel/utility/vector.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -36,9 +36,9 @@ Refers to any declarative region.
 */
 struct declarative_region
 {
-	typedef utility::shared_ptr_vector<entity> entities_t;
-	typedef utility::shared_ptr_vector<named_entity> named_entities_t;
-	typedef utility::shared_ptr_vector<named_declarative_region> named_declarative_regions_t;
+	typedef utility::vector<std::shared_ptr<entity>> entities_t;
+	typedef utility::vector<std::shared_ptr<named_entity>> named_entities_t;
+	typedef utility::vector<std::shared_ptr<named_declarative_region>> named_declarative_regions_t;
 
 	virtual
 	~declarative_region(){}
@@ -63,3 +63,4 @@ struct declarative_region
 }}} //namespace scalpel::cpp::semantic_entities
 
 #endif
+

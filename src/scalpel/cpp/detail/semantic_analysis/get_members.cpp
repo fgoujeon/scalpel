@@ -30,7 +30,7 @@ namespace scalpel { namespace cpp { namespace detail { namespace semantic_analys
 
 #define GENERATE_GET_MEMBERS_SPECIALIZATION(MEMBER_TYPE, PARENT_TYPE, PARENT_MEMBER_FUNCTION) \
 template<> \
-typename utility::shared_ptr_vector<semantic_entities::MEMBER_TYPE>::range \
+typename utility::vector<std::shared_ptr<semantic_entities::MEMBER_TYPE>>::range \
 get_members<semantic_entities::MEMBER_TYPE, std::shared_ptr<semantic_entities::PARENT_TYPE>>(std::shared_ptr<semantic_entities::PARENT_TYPE> parent) \
 { \
 	return parent->PARENT_MEMBER_FUNCTION(); \
@@ -38,10 +38,10 @@ get_members<semantic_entities::MEMBER_TYPE, std::shared_ptr<semantic_entities::P
 
 #define GENERATE_GET_MEMBERS_SPECIALIZATION_EMPTY(MEMBER_TYPE, PARENT_TYPE) \
 template<> \
-typename utility::shared_ptr_vector<semantic_entities::MEMBER_TYPE>::range \
+typename utility::vector<std::shared_ptr<semantic_entities::MEMBER_TYPE>>::range \
 get_members<semantic_entities::MEMBER_TYPE, std::shared_ptr<semantic_entities::PARENT_TYPE>>(std::shared_ptr<semantic_entities::PARENT_TYPE>) \
 { \
-	return utility::shared_ptr_vector<semantic_entities::MEMBER_TYPE>::range(); \
+	return utility::vector<std::shared_ptr<semantic_entities::MEMBER_TYPE>>::range(); \
 }
 
 GENERATE_GET_MEMBERS_SPECIALIZATION(namespace_, namespace_, namespaces)

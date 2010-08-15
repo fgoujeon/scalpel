@@ -292,10 +292,10 @@ typename name_lookup2::return_type<Multiple, EntityT>::type
 name_lookup2::find_entities_in_base_classes
 (
 	const std::string& name,
-	utility::shared_ptr_vector<semantic_entities::class_>::range base_classes
+	utility::vector<std::shared_ptr<semantic_entities::class_>>::range base_classes
 )
 {
-	typedef utility::shared_ptr_vector<EntityT> entities_t;
+	typedef utility::vector<std::shared_ptr<EntityT>> entities_t;
 
 	entities_t found_entities;
 
@@ -340,26 +340,26 @@ name_lookup2::add_to_result(std::shared_ptr<EntityT>& result, std::shared_ptr<En
 
 template<class EntityT>
 void
-name_lookup2::add_to_result(utility::shared_ptr_vector<EntityT>& result, std::shared_ptr<EntityT>& entity)
+name_lookup2::add_to_result(utility::vector<std::shared_ptr<EntityT>>& result, std::shared_ptr<EntityT>& entity)
 {
 	if(entity) result.push_back(entity);
 }
 
 template<class EntityT>
 void
-name_lookup2::add_to_result(utility::shared_ptr_vector<EntityT>& result, utility::shared_ptr_vector<EntityT>& entities)
+name_lookup2::add_to_result(utility::vector<std::shared_ptr<EntityT>>& result, utility::vector<std::shared_ptr<EntityT>>& entities)
 {
 	std::copy
 	(
 		entities.begin(),
 		entities.end(),
-		std::back_insert_iterator<utility::shared_ptr_vector<EntityT>>(result)
+		std::back_insert_iterator<utility::vector<std::shared_ptr<EntityT>>>(result)
 	);
 }
 
 template<class EntityT>
 bool
-name_lookup2::is_result_empty(utility::shared_ptr_vector<EntityT>& result)
+name_lookup2::is_result_empty(utility::vector<std::shared_ptr<EntityT>>& result)
 {
 	return result.empty();
 }
@@ -373,7 +373,7 @@ name_lookup2::is_result_empty(std::shared_ptr<EntityT>& result)
 
 template<class EntityT>
 typename name_lookup2::return_type<false, EntityT>::type
-name_lookup2::return_result<false, EntityT>::result(utility::shared_ptr_vector<EntityT>& result)
+name_lookup2::return_result<false, EntityT>::result(utility::vector<std::shared_ptr<EntityT>>& result)
 {
 	if(result.empty())
 	{
@@ -390,8 +390,8 @@ name_lookup2::return_result<false, EntityT>::result(utility::shared_ptr_vector<E
 }
 
 template<class EntityT>
-utility::shared_ptr_vector<EntityT>&
-name_lookup2::return_result<true, EntityT>::result(utility::shared_ptr_vector<EntityT>& result)
+utility::vector<std::shared_ptr<EntityT>>&
+name_lookup2::return_result<true, EntityT>::result(utility::vector<std::shared_ptr<EntityT>>& result)
 {
 	return result;
 }

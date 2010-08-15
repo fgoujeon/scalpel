@@ -27,7 +27,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "named_declarative_region.hpp"
 #include "named_entity.hpp"
 #include "type.hpp"
-#include <scalpel/utility/shared_ptr_vector.hpp>
+#include <scalpel/utility/vector.hpp>
 #include <boost/noncopyable.hpp>
 #include <string>
 #include <vector>
@@ -50,12 +50,12 @@ class class_:
 		class destructor;
 		class conversion_function;
 
-		typedef utility::shared_ptr_vector<class_> classes_t;
-		typedef utility::shared_ptr_vector<constructor> constructors_t;
-		typedef utility::shared_ptr_vector<simple_function> simple_functions_t;
-		typedef utility::shared_ptr_vector<operator_function> operator_functions_t;
-		typedef utility::shared_ptr_vector<conversion_function> conversion_functions_t;
-		typedef utility::shared_ptr_vector<variable> variables_t;
+		typedef utility::vector<std::shared_ptr<class_>> classes_t;
+		typedef utility::vector<std::shared_ptr<constructor>> constructors_t;
+		typedef utility::vector<std::shared_ptr<simple_function>> simple_functions_t;
+		typedef utility::vector<std::shared_ptr<operator_function>> operator_functions_t;
+		typedef utility::vector<std::shared_ptr<conversion_function>> conversion_functions_t;
+		typedef utility::vector<std::shared_ptr<variable>> variables_t;
 
 		enum access
 		{
