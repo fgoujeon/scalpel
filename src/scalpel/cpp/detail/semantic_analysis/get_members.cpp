@@ -18,10 +18,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "name_lookup2.hpp"
-#include <algorithm>
-#include <functional>
-#include <iostream>
+#include "get_members.hpp"
+#include <scalpel/cpp/semantic_graph.hpp>
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
 {
@@ -33,7 +31,7 @@ namespace scalpel { namespace cpp { namespace detail { namespace semantic_analys
 #define GENERATE_GET_MEMBERS_SPECIALIZATION(MEMBER_TYPE, PARENT_TYPE, PARENT_MEMBER_FUNCTION) \
 template<> \
 typename utility::shared_ptr_vector<semantic_entities::MEMBER_TYPE>::range \
-name_lookup2::get_members<semantic_entities::MEMBER_TYPE, semantic_entities::PARENT_TYPE>(std::shared_ptr<semantic_entities::PARENT_TYPE> parent) \
+get_members<semantic_entities::MEMBER_TYPE, std::shared_ptr<semantic_entities::PARENT_TYPE>>(std::shared_ptr<semantic_entities::PARENT_TYPE> parent) \
 { \
 	return parent->PARENT_MEMBER_FUNCTION(); \
 }
@@ -41,7 +39,7 @@ name_lookup2::get_members<semantic_entities::MEMBER_TYPE, semantic_entities::PAR
 #define GENERATE_GET_MEMBERS_SPECIALIZATION_EMPTY(MEMBER_TYPE, PARENT_TYPE) \
 template<> \
 typename utility::shared_ptr_vector<semantic_entities::MEMBER_TYPE>::range \
-name_lookup2::get_members<semantic_entities::MEMBER_TYPE, semantic_entities::PARENT_TYPE>(std::shared_ptr<semantic_entities::PARENT_TYPE>) \
+get_members<semantic_entities::MEMBER_TYPE, std::shared_ptr<semantic_entities::PARENT_TYPE>>(std::shared_ptr<semantic_entities::PARENT_TYPE>) \
 { \
 	return utility::shared_ptr_vector<semantic_entities::MEMBER_TYPE>::range(); \
 }

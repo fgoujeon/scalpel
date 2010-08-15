@@ -21,6 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_NAME_LOOKUP2_HPP
 #define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_NAME_LOOKUP2_HPP
 
+#include "get_members.hpp"
+#include "get_name.hpp"
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <scalpel/cpp/syntax_tree.hpp>
 #include <scalpel/utility/shared_ptr_vector.hpp>
@@ -116,7 +118,7 @@ class name_lookup2
 		find_entities_in_declarative_region
 		(
 			const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
-			std::shared_ptr<DeclarativeRegionT> current_declarative_region
+			DeclarativeRegionT& current_declarative_region
 		);
 
 		/**
@@ -128,7 +130,7 @@ class name_lookup2
 		find_entities_from_identifier_in_declarative_region
 		(
 			const std::string& name,
-			std::shared_ptr<DeclarativeRegionT> current_declarative_region
+			DeclarativeRegionT& current_declarative_region
 		);
 
 		/**
@@ -165,6 +167,8 @@ class name_lookup2
 		void
 		add_to_result(utility::shared_ptr_vector<EntityT>& result, utility::shared_ptr_vector<EntityT>& entities);
 
+
+
 		template<class EntityT>
 		inline
 		static
@@ -176,6 +180,7 @@ class name_lookup2
 		static
 		bool
 		is_result_empty(std::shared_ptr<EntityT>& result);
+
 
 
 		template<bool Multiple, class EntityT>
@@ -198,13 +203,6 @@ class name_lookup2
 			utility::shared_ptr_vector<EntityT>&
 			result(utility::shared_ptr_vector<EntityT>& result);
 		};
-
-
-
-		template<class MemberT, class ParentT>
-		static
-		typename utility::shared_ptr_vector<MemberT>::range
-		get_members(std::shared_ptr<ParentT> parent);
 };
 
 }}}} //namespace scalpel::cpp::detail::semantic_analysis

@@ -243,7 +243,7 @@ typename name_lookup2::return_type<Multiple, EntityT>::type
 name_lookup2::find_entities_in_declarative_region
 (
 	const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
-	std::shared_ptr<DeclarativeRegionT> current_declarative_region
+	DeclarativeRegionT& current_declarative_region
 )
 {
 	if(auto opt_identifier_node = syntax_nodes::get<syntax_nodes::identifier>(&identifier_or_template_id))
@@ -262,16 +262,16 @@ typename name_lookup2::return_type<Multiple, EntityT>::type
 name_lookup2::find_entities_from_identifier_in_declarative_region
 (
 	const std::string& name,
-	std::shared_ptr<DeclarativeRegionT> current_declarative_region
+	DeclarativeRegionT& current_declarative_region
 )
 {
 	typename return_type<Multiple, EntityT>::type found_entities;
 
-	typename utility::shared_ptr_vector<EntityT>::range members = get_members<EntityT>(current_declarative_region);
+	auto members = get_members<EntityT>(current_declarative_region);
 	for(auto i = members.begin(); i != members.end(); ++i)
 	{
-		std::shared_ptr<EntityT> current_entity = *i;
-		if(current_entity->name() == name)
+		auto current_entity = *i;
+		if(get_name(current_entity) == name)
 		{
 			add_to_result(found_entities, current_entity);
 			if(!Multiple) break;
