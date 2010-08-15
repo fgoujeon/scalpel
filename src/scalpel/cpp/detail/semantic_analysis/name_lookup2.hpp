@@ -54,9 +54,9 @@ class name_lookup2
 		(or nested template-id),
 		from the given declarative region path (qualified name lookup)
 		*/
-		template<class EntityT>
+		template<bool Multiple, class EntityT>
 		static
-		utility::shared_ptr_vector<EntityT>
+		typename return_type<Multiple, EntityT>::type
 		find_entities
 		(
 			const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node,

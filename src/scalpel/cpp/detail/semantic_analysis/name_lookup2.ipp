@@ -24,8 +24,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
 {
 
-template<class EntityT>
-utility::shared_ptr_vector<EntityT>
+template<bool Multiple, class EntityT>
+typename name_lookup2::return_type<Multiple, EntityT>::type
 name_lookup2::find_entities
 (
 	const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node,
@@ -42,7 +42,7 @@ name_lookup2::find_entities
 	if(!has_leading_double_colon && !opt_nested_name_specifier_node)
 	{
 		auto identifier_or_template_id_node = syntax_nodes::get_identifier_or_template_id(nested_identifier_or_template_id_node);
-		return find_entities<true, EntityT>(identifier_or_template_id_node, declarative_region_path);
+		return find_entities<Multiple, EntityT>(identifier_or_template_id_node, declarative_region_path);
 	}
 
 
@@ -122,7 +122,7 @@ name_lookup2::find_entities
 
 	//find entities in the last declarative region
 	auto identifier_or_template_id_node = get_identifier_or_template_id(nested_identifier_or_template_id_node);
-	return find_entities_in_declarative_region<true, EntityT>(identifier_or_template_id_node, last_declarative_region);
+	return find_entities_in_declarative_region<Multiple, EntityT>(identifier_or_template_id_node, last_declarative_region);
 }
 
 template<class DeclarativeRegionT, class CurrentDeclarativeRegionT>
