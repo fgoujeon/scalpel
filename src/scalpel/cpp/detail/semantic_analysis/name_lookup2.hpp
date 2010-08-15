@@ -83,9 +83,9 @@ class name_lookup2
 		Find entities corresponding to the given identifier_or_template_id node,
 		from the given declarative region path (unqualified name lookup)
 		*/
-		template<class EntityT>
+		template<bool Multiple, class EntityT>
 		static
-		utility::shared_ptr_vector<EntityT>
+		typename return_type<Multiple, EntityT>::type
 		find_entities
 		(
 			const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
@@ -97,9 +97,9 @@ class name_lookup2
 		Find entities corresponding to the given name,
 		from the given declarative region path (unqualified name lookup)
 		*/
-		template<class EntityT>
+		template<bool Multiple, class EntityT>
 		static
-		utility::shared_ptr_vector<EntityT>
+		typename return_type<Multiple, EntityT>::type
 		find_entities_from_identifier
 		(
 			const std::string& name,
@@ -144,18 +144,38 @@ class name_lookup2
 		);
 
 	private:
-		//result.push_back(entity)
-		template<class EntityT>
-		static
-		void
-		add_to_result(utility::shared_ptr_vector<EntityT>& result, std::shared_ptr<EntityT>& entity);
-
 		//result = entity
 		template<class EntityT>
+		inline
 		static
 		void
 		add_to_result(std::shared_ptr<EntityT>& result, std::shared_ptr<EntityT>& entity);
 
+		//add entity to result
+		template<class EntityT>
+		inline
+		static
+		void
+		add_to_result(utility::shared_ptr_vector<EntityT>& result, std::shared_ptr<EntityT>& entity);
+
+		//append entities to result
+		template<class EntityT>
+		inline
+		static
+		void
+		add_to_result(utility::shared_ptr_vector<EntityT>& result, utility::shared_ptr_vector<EntityT>& entities);
+
+		template<class EntityT>
+		inline
+		static
+		bool
+		is_result_empty(utility::shared_ptr_vector<EntityT>& result);
+
+		template<class EntityT>
+		inline
+		static
+		bool
+		is_result_empty(std::shared_ptr<EntityT>& result);
 
 
 		template<bool Multiple, class EntityT>

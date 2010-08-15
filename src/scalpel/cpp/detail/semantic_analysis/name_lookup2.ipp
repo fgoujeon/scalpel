@@ -42,7 +42,7 @@ name_lookup2::find_entities
 	if(!has_leading_double_colon && !opt_nested_name_specifier_node)
 	{
 		auto identifier_or_template_id_node = syntax_nodes::get_identifier_or_template_id(nested_identifier_or_template_id_node);
-		return find_entities<EntityT>(identifier_or_template_id_node, declarative_region_path);
+		return find_entities<true, EntityT>(identifier_or_template_id_node, declarative_region_path);
 	}
 
 
@@ -97,7 +97,7 @@ name_lookup2::find_entities
 
 			//find the first declarative region
 			auto identifier_or_template_id_node = get_identifier_or_template_id(nested_name_specifier_node);
-			auto first_declarative_regions = find_entities<semantic_entities::namespace_>(identifier_or_template_id_node, declarative_region_path);
+			auto first_declarative_regions = find_entities<true, semantic_entities::namespace_>(identifier_or_template_id_node, declarative_region_path);
 			if(first_declarative_regions.size() != 1)
 			{
 				throw std::runtime_error("more than one declarative regions first");
@@ -172,8 +172,8 @@ name_lookup2::find_declarative_region
 	return found_declarative_region;
 }
 
-template<class EntityT>
-utility::shared_ptr_vector<EntityT>
+template<bool Multiple, class EntityT>
+typename name_lookup2::return_type<Multiple, EntityT>::type
 name_lookup2::find_entities
 (
 	const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
@@ -183,7 +183,7 @@ name_lookup2::find_entities
 	if(auto opt_identifier_node = syntax_nodes::get<syntax_nodes::identifier>(&identifier_or_template_id))
 	{
 		auto identifier_node = *opt_identifier_node;
-		return find_entities_from_identifier<EntityT>(identifier_node.value(), declarative_region_path);
+		return find_entities_from_identifier<Multiple, EntityT>(identifier_node.value(), declarative_region_path);
 	}
 	else
 	{
@@ -191,15 +191,15 @@ name_lookup2::find_entities
 	}
 }
 
-template<class EntityT>
-utility::shared_ptr_vector<EntityT>
+template<bool Multiple, class EntityT>
+typename name_lookup2::return_type<Multiple, EntityT>::type
 name_lookup2::find_entities_from_identifier
 (
 	const std::string& name,
 	std::vector<semantic_entities::declarative_region_variant>& declarative_region_path
 )
 {
-	utility::shared_ptr_vector<EntityT> found_entities;
+	typename return_type<Multiple, EntityT>::type found_entities;
 
 	//find entities from current to outermost declarative regions
 	//(until global namespace)
@@ -213,9 +213,9 @@ name_lookup2::find_entities_from_identifier
 
 			//find entities in that namespace
 			found_entities =
-				find_entities_from_identifier_in_declarative_region<true, EntityT>(name, namespace_ptr)
+				find_entities_from_identifier_in_declarative_region<Multiple, EntityT>(name, namespace_ptr)
 			;
-			if(!found_entities.empty()) break;
+			if(!is_result_empty(found_entities)) break;
 		}
 		else if(auto opt_class_ptr = boost::get<std::shared_ptr<semantic_entities::class_>>(&current_declarative_region))
 		{
@@ -223,15 +223,15 @@ name_lookup2::find_entities_from_identifier
 
 			//find entities in the members of that class
 			found_entities =
-				find_entities_from_identifier_in_declarative_region<true, EntityT>(name, class_ptr)
+				find_entities_from_identifier_in_declarative_region<Multiple, EntityT>(name, class_ptr)
 			;
-			if(!found_entities.empty()) break;
+			if(!is_result_empty(found_entities)) break;
 
 			//find entities in the base classes of that class
 			found_entities =
-				find_entities_in_base_classes<true, EntityT>(name, class_ptr->base_classes())
+				find_entities_in_base_classes<Multiple, EntityT>(name, class_ptr->base_classes())
 			;
-			if(!found_entities.empty()) break;
+			if(!is_result_empty(found_entities)) break;
 		}
 	}
 
@@ -292,42 +292,31 @@ name_lookup2::find_entities_in_base_classes
 	typedef utility::shared_ptr_vector<EntityT> entities_t;
 
 	entities_t found_entities;
-	std::back_insert_iterator<entities_t> found_entities_back_insert_iterator(found_entities);
 
 	for(auto i = base_classes.begin(); i != base_classes.end(); ++i)
 	{
 		std::shared_ptr<semantic_entities::class_> current_class = *i;
 
 		//find entities in the current declarative region (i.e. current class)
-		entities_t current_class_found_entities;
-		if(Multiple)
-			current_class_found_entities = find_entities_from_identifier_in_declarative_region<true, EntityT>(name, current_class);
-		else
-			current_class_found_entities.push_back(find_entities_from_identifier_in_declarative_region<false, EntityT>(name, current_class));
+		typename name_lookup2::return_type<Multiple, EntityT>::type current_class_found_entities =
+			find_entities_from_identifier_in_declarative_region<Multiple, EntityT>(name, current_class)
+		;
 
 		//entities found?
-		if(!current_class_found_entities.empty())
+		if(!is_result_empty(current_class_found_entities))
 		{
 			//add them to the list
-			std::copy
-			(
-				current_class_found_entities.begin(),
-				current_class_found_entities.end(),
-				found_entities_back_insert_iterator
-			);
+			add_to_result(found_entities, current_class_found_entities);
 		}
 		else
 		{
 			//find entities in the current declarative region's base classes
-			entities_t current_class_base_classes_found_entities = find_entities_in_base_classes<Multiple, EntityT>(name, current_class->base_classes());
+			typename name_lookup2::return_type<Multiple, EntityT>::type current_class_base_classes_found_entities =
+				find_entities_in_base_classes<Multiple, EntityT>(name, current_class->base_classes())
+			;
 
 			//add them to the list
-			std::copy
-			(
-				current_class_base_classes_found_entities.begin(),
-				current_class_base_classes_found_entities.end(),
-				found_entities_back_insert_iterator
-			);
+			add_to_result(found_entities, current_class_base_classes_found_entities);
 		}
 	}
 
@@ -338,16 +327,42 @@ name_lookup2::find_entities_in_base_classes
 
 template<class EntityT>
 void
-name_lookup2::add_to_result(utility::shared_ptr_vector<EntityT>& result, std::shared_ptr<EntityT>& entity)
+name_lookup2::add_to_result(std::shared_ptr<EntityT>& result, std::shared_ptr<EntityT>& entity)
 {
-	result.push_back(entity);
+	result = entity;
 }
 
 template<class EntityT>
 void
-name_lookup2::add_to_result(std::shared_ptr<EntityT>& result, std::shared_ptr<EntityT>& entity)
+name_lookup2::add_to_result(utility::shared_ptr_vector<EntityT>& result, std::shared_ptr<EntityT>& entity)
 {
-	result = entity;
+	if(entity) result.push_back(entity);
+}
+
+template<class EntityT>
+void
+name_lookup2::add_to_result(utility::shared_ptr_vector<EntityT>& result, utility::shared_ptr_vector<EntityT>& entities)
+{
+	std::copy
+	(
+		entities.begin(),
+		entities.end(),
+		std::back_insert_iterator<utility::shared_ptr_vector<EntityT>>(result)
+	);
+}
+
+template<class EntityT>
+bool
+name_lookup2::is_result_empty(utility::shared_ptr_vector<EntityT>& result)
+{
+	return result.empty();
+}
+
+template<class EntityT>
+bool
+name_lookup2::is_result_empty(std::shared_ptr<EntityT>& result)
+{
+	return !result;
 }
 
 template<class EntityT>
