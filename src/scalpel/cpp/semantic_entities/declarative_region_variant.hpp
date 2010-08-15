@@ -24,14 +24,14 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "namespace_.hpp"
 #include "class_.hpp"
 #include "statement_block.hpp"
-#include <boost/variant.hpp>
+#include <scalpel/utility/variant.hpp>
 #include <memory>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 typedef
-	boost::variant
+	scalpel::utility::variant
 	<
 		std::shared_ptr<namespace_>,
 		std::shared_ptr<class_>,

@@ -25,6 +25,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "get_name.hpp"
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <scalpel/cpp/syntax_tree.hpp>
+#include <scalpel/utility/variant.hpp>
 #include <scalpel/utility/shared_ptr_vector.hpp>
 #include <memory>
 #include <string>
@@ -44,10 +45,22 @@ class name_lookup2
 			typedef std::shared_ptr<EntityT> type;
 		};
 
+		template<class... EntitiesT>
+		struct return_type<false, utility::variant<EntitiesT...>>
+		{
+			typedef utility::variant<EntitiesT...> type;
+		};
+
 		template<class EntityT>
 		struct return_type<true, EntityT>
 		{
 			typedef utility::shared_ptr_vector<EntityT> type;
+		};
+
+		template<class... EntitiesT>
+		struct return_type<true, utility::variant<EntitiesT...>>
+		{
+			typedef std::vector<utility::variant<EntitiesT...>> type;
 		};
 
 	public:

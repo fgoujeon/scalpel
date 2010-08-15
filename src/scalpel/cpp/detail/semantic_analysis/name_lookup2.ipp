@@ -53,7 +53,9 @@ name_lookup2::find_entities
 	if(has_leading_double_colon)
 	{
 		//the first declarative region is in the global namespace
-		std::shared_ptr<semantic_entities::namespace_> global_namespace = boost::get<std::shared_ptr<semantic_entities::namespace_>>(declarative_region_path.front());
+		std::shared_ptr<semantic_entities::namespace_> global_namespace =
+			*scalpel::utility::get<std::shared_ptr<semantic_entities::namespace_>>(&declarative_region_path.front())
+		;
 
 		if(opt_nested_name_specifier_node)
 		{
@@ -62,6 +64,10 @@ name_lookup2::find_entities
 			//find the first declarative region
 			auto identifier_or_template_id_node = get_identifier_or_template_id(nested_name_specifier_node);
 			std::shared_ptr<semantic_entities::namespace_> first_declarative_region =
+				//*scalpel::utility::get<std::shared_ptr<semantic_entities::namespace_>>
+				//(
+				//	&find_entities_in_declarative_region<false, semantic_entities::declarative_region_variant>(identifier_or_template_id_node, global_namespace)
+				//)
 				find_entities_in_declarative_region<false, semantic_entities::namespace_>(identifier_or_template_id_node, global_namespace)
 			;
 			if(!first_declarative_region)
@@ -207,7 +213,7 @@ name_lookup2::find_entities_from_identifier
 	{
 		semantic_entities::declarative_region_variant current_declarative_region = *i;
 
-		if(auto opt_namespace_ptr = boost::get<std::shared_ptr<semantic_entities::namespace_>>(&current_declarative_region))
+		if(auto opt_namespace_ptr = scalpel::utility::get<std::shared_ptr<semantic_entities::namespace_>>(&current_declarative_region))
 		{
 			std::shared_ptr<semantic_entities::namespace_> namespace_ptr = *opt_namespace_ptr;
 
@@ -217,7 +223,7 @@ name_lookup2::find_entities_from_identifier
 			;
 			if(!is_result_empty(found_entities)) break;
 		}
-		else if(auto opt_class_ptr = boost::get<std::shared_ptr<semantic_entities::class_>>(&current_declarative_region))
+		else if(auto opt_class_ptr = scalpel::utility::get<std::shared_ptr<semantic_entities::class_>>(&current_declarative_region))
 		{
 			std::shared_ptr<semantic_entities::class_> class_ptr = *opt_class_ptr;
 
