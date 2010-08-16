@@ -104,20 +104,20 @@ name_lookup2::find_entities
 
 			//find the first declarative region
 			auto identifier_or_template_id_node = get_identifier_or_template_id(nested_name_specifier_node);
-			auto first_declarative_regions = find_entities<true, semantic_entities::namespace_>(identifier_or_template_id_node, declarative_region_path);
-			if(first_declarative_regions.size() != 1)
+			auto first_declarative_region = find_entities<false, semantic_entities::namespace_>(identifier_or_template_id_node, declarative_region_path);
+			if(is_result_empty(first_declarative_region))
 			{
-				throw std::runtime_error("more than one declarative regions first");
+				throw std::runtime_error("no declarative region found");
 			}
-			std::shared_ptr<semantic_entities::namespace_> first_declarative_region = first_declarative_regions.front();
 
 			//find the last declarative region
 			if(auto opt_last_part_seq_node = get_last_part_seq(nested_name_specifier_node))
 			{
 				auto last_part_seq_node = *opt_last_part_seq_node;
-				last_declarative_region =
-					find_declarative_region<semantic_entities::namespace_>(last_part_seq_node, first_declarative_region)
+				semantic_entities::declarative_region_variant last_declarative_region_temp =
+					find_declarative_region<semantic_entities::declarative_region_variant>(last_part_seq_node, first_declarative_region)
 				;
+				last_declarative_region = *utility::get<std::shared_ptr<semantic_entities::namespace_>>(&last_declarative_region_temp);
 			}
 			else
 			{
