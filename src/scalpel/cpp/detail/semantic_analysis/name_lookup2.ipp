@@ -104,11 +104,14 @@ name_lookup2::find_entities
 
 			//find the first declarative region
 			auto identifier_or_template_id_node = get_identifier_or_template_id(nested_name_specifier_node);
-			auto first_declarative_region = find_entities<false, semantic_entities::namespace_>(identifier_or_template_id_node, declarative_region_path);
-			if(is_result_empty(first_declarative_region))
+			auto first_declarative_region_temp = find_entities<false, semantic_entities::declarative_region_variant>(identifier_or_template_id_node, declarative_region_path);
+			if(is_result_empty(first_declarative_region_temp))
 			{
 				throw std::runtime_error("no declarative region found");
 			}
+			std::shared_ptr<semantic_entities::namespace_> first_declarative_region =
+				*utility::get<std::shared_ptr<semantic_entities::namespace_>>(&first_declarative_region_temp)
+			;
 
 			//find the last declarative region
 			if(auto opt_last_part_seq_node = get_last_part_seq(nested_name_specifier_node))
@@ -300,9 +303,7 @@ name_lookup2::find_entities_in_base_classes
 	utility::vector<std::shared_ptr<semantic_entities::class_>>::range base_classes
 )
 {
-	typedef utility::vector<std::shared_ptr<EntityT>> entities_t;
-
-	entities_t found_entities;
+	typename return_type<true, EntityT>::type found_entities;
 
 	for(auto i = base_classes.begin(); i != base_classes.end(); ++i)
 	{
@@ -347,7 +348,7 @@ template<class T, class T2>
 void
 name_lookup2::add_to_result(utility::vector<T>& result, T2& entity)
 {
-	if(entity) result.push_back(entity);
+	if(!is_result_empty(entity)) result.push_back(entity);
 }
 
 template<class T, class T2>
@@ -385,11 +386,11 @@ name_lookup2::is_result_empty(utility::variant<EntitiesT...>& result)
 
 template<class EntityT>
 typename name_lookup2::return_type<false, EntityT>::type
-name_lookup2::return_result<false, EntityT>::result(utility::vector<std::shared_ptr<EntityT>>& result)
+name_lookup2::return_result<false, EntityT>::result(typename return_type<true, EntityT>::type& result)
 {
 	if(result.empty())
 	{
-		return std::shared_ptr<EntityT>();
+		return typename return_type<true, EntityT>::type::value_type(); //empty result
 	}
 	else if(result.size() == 1)
 	{

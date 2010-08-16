@@ -211,7 +211,7 @@ class name_lookup2
 		{
 			static
 			typename return_type<false, EntityT>::type
-			result(utility::vector<std::shared_ptr<EntityT>>& result);
+			result(typename return_type<true, EntityT>::type& result);
 		};
 
 		//return result;

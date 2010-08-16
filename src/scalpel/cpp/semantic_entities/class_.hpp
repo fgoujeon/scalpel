@@ -24,6 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "variable.hpp"
 #include "operator_function.hpp"
 #include "simple_function.hpp"
+#include "declarative_region_variant.hpp"
 #include "named_declarative_region.hpp"
 #include "named_entity.hpp"
 #include "type.hpp"
@@ -50,6 +51,7 @@ class class_:
 		class destructor;
 		class conversion_function;
 
+		typedef utility::vector<declarative_region_variant> declarative_region_variants_t;
 		typedef utility::vector<std::shared_ptr<class_>> classes_t;
 		typedef utility::vector<std::shared_ptr<constructor>> constructors_t;
 		typedef utility::vector<std::shared_ptr<simple_function>> simple_functions_t;
@@ -111,6 +113,9 @@ class class_:
 
 		const named_declarative_regions_t&
         named_declarative_regions() const;
+
+		const declarative_region_variants_t&
+		declarative_region_variants();
 
 		classes_t::range
 		base_classes();
@@ -228,6 +233,7 @@ class class_:
 		//polymorphic containers
 		named_entities_t named_entities_;
 		named_declarative_regions_t named_declarative_regions_;
+		declarative_region_variants_t declarative_region_variants_;
 		classes_t public_base_classes_;
 		classes_t protected_base_classes_;
 		classes_t private_base_classes_;

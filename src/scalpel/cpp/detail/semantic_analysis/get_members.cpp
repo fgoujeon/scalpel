@@ -48,12 +48,10 @@ get_members<semantic_entities::declarative_region_variant, semantic_entities::de
 	{
 		return (*opt_namespace)->declarative_region_variants();
 	}
-	/*
 	else if(auto opt_class = utility::get<std::shared_ptr<semantic_entities::class_>>(&parent))
 	{
 		return (*opt_class)->declarative_region_variants();
 	}
-	*/
 
 	throw "get_members() error";
 }
@@ -64,6 +62,7 @@ GENERATE_GET_MEMBERS_SPECIALIZATION(class_, namespace_, classes)
 GENERATE_GET_MEMBERS_SPECIALIZATION(simple_function, namespace_, simple_functions)
 GENERATE_GET_MEMBERS_SPECIALIZATION(variable, namespace_, variables)
 
+GENERATE_GET_MEMBERS_SPECIALIZATION(declarative_region_variant, class_, declarative_region_variants)
 GENERATE_GET_MEMBERS_SPECIALIZATION_EMPTY(namespace_, class_)
 GENERATE_GET_MEMBERS_SPECIALIZATION(class_, class_, nested_classes)
 GENERATE_GET_MEMBERS_SPECIALIZATION(simple_function, class_, simple_functions)

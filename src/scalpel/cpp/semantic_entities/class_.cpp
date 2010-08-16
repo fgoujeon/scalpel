@@ -113,6 +113,12 @@ class_::named_declarative_regions() const
 	return named_declarative_regions_;
 }
 
+const class_::declarative_region_variants_t&
+class_::declarative_region_variants()
+{
+	return declarative_region_variants_;
+}
+
 class_::classes_t::range
 class_::base_classes()
 {
@@ -234,6 +240,7 @@ class_::add(std::shared_ptr<class_> member, const access acc)
 	nested_classes_.push_back(member);
 	named_entities_.push_back(member);
 	named_declarative_regions_.push_back(member);
+	declarative_region_variants_.push_back(member);
 
 	switch(acc)
 	{
