@@ -40,6 +40,24 @@ get_members<semantic_entities::MEMBER_TYPE, std::shared_ptr<semantic_entities::P
 	return utility::vector<std::shared_ptr<semantic_entities::MEMBER_TYPE>>::range(); \
 }
 
+template<>
+typename get_members_type_traits<semantic_entities::declarative_region_variant>::return_type
+get_members<semantic_entities::declarative_region_variant, semantic_entities::declarative_region_variant>(semantic_entities::declarative_region_variant parent)
+{
+	if(auto opt_namespace = utility::get<std::shared_ptr<semantic_entities::namespace_>>(&parent))
+	{
+		return (*opt_namespace)->declarative_region_variants();
+	}
+	/*
+	else if(auto opt_class = utility::get<std::shared_ptr<semantic_entities::class_>>(&parent))
+	{
+		return (*opt_class)->declarative_region_variants();
+	}
+	*/
+
+	throw "get_members() error";
+}
+
 GENERATE_GET_MEMBERS_SPECIALIZATION(declarative_region_variant, namespace_, declarative_region_variants)
 GENERATE_GET_MEMBERS_SPECIALIZATION(namespace_, namespace_, namespaces)
 GENERATE_GET_MEMBERS_SPECIALIZATION(class_, namespace_, classes)

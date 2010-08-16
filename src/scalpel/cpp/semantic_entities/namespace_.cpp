@@ -95,7 +95,7 @@ namespace_::named_declarative_regions() const
 	return named_declarative_regions_;
 }
 
-namespace_::declarative_region_variants_t&
+const namespace_::declarative_region_variants_t&
 namespace_::declarative_region_variants()
 {
 	return declarative_region_variants_;

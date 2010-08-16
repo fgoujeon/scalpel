@@ -86,7 +86,7 @@ class name_lookup2
 		*/
 		template<class DeclarativeRegionT, class CurrentDeclarativeRegionT>
 		static
-		std::shared_ptr<DeclarativeRegionT>
+		typename return_type<false, DeclarativeRegionT>::type
 		find_declarative_region
 		(
 			const syntax_nodes::nested_name_specifier_last_part_seq& nested_name_specifier_last_part_seq_node,
@@ -193,6 +193,12 @@ class name_lookup2
 		static
 		bool
 		is_result_empty(std::shared_ptr<EntityT>& result);
+
+		template<class... EntitiesT>
+		inline
+		static
+		bool
+		is_result_empty(utility::variant<EntitiesT...>& result);
 
 
 

@@ -106,7 +106,7 @@ class namespace_:
 		const named_declarative_regions_t&
         named_declarative_regions() const;
 
-		declarative_region_variants_t&
+		const declarative_region_variants_t&
 		declarative_region_variants();
 
 		namespaces_t::range

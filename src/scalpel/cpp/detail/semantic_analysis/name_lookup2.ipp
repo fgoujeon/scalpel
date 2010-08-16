@@ -79,9 +79,10 @@ name_lookup2::find_entities
 			if(auto opt_last_part_seq_node = get_last_part_seq(nested_name_specifier_node))
 			{
 				auto last_part_seq_node = *opt_last_part_seq_node;
-				last_declarative_region =
-					find_declarative_region<semantic_entities::namespace_>(last_part_seq_node, first_declarative_region)
+				semantic_entities::declarative_region_variant last_declarative_region_temp =
+					find_declarative_region<semantic_entities::declarative_region_variant>(last_part_seq_node, first_declarative_region)
 				;
+				last_declarative_region = *utility::get<std::shared_ptr<semantic_entities::namespace_>>(&last_declarative_region_temp);
 			}
 			else
 			{
@@ -132,14 +133,14 @@ name_lookup2::find_entities
 }
 
 template<class DeclarativeRegionT, class CurrentDeclarativeRegionT>
-std::shared_ptr<DeclarativeRegionT>
+typename name_lookup2::return_type<false, DeclarativeRegionT>::type
 name_lookup2::find_declarative_region
 (
 	const syntax_nodes::nested_name_specifier_last_part_seq& nested_name_specifier_last_part_seq_node,
 	std::shared_ptr<CurrentDeclarativeRegionT> current_declarative_region
 )
 {
-	std::shared_ptr<DeclarativeRegionT> found_declarative_region = current_declarative_region;
+	typename name_lookup2::return_type<false, DeclarativeRegionT>::type found_declarative_region = current_declarative_region;
 
 	for
 	(
@@ -160,7 +161,11 @@ name_lookup2::find_declarative_region
 			{
 				auto identifier_node = *opt_identifier_node;
 				found_declarative_region =
-					find_entities_from_identifier_in_declarative_region<false, semantic_entities::namespace_>(identifier_node.value(), found_declarative_region)
+					find_entities_from_identifier_in_declarative_region<false, DeclarativeRegionT>
+					(
+						identifier_node.value(),
+						found_declarative_region
+					)
 				;
 			}
 			else
@@ -169,7 +174,7 @@ name_lookup2::find_declarative_region
 			}
 		}
 
-		if(!found_declarative_region)
+		if(is_result_empty(found_declarative_region))
 		{
 			throw std::runtime_error("find_declarative_region() error");
 		}
@@ -369,6 +374,13 @@ bool
 name_lookup2::is_result_empty(std::shared_ptr<EntityT>& result)
 {
 	return !result;
+}
+
+template<class... EntitiesT>
+bool
+name_lookup2::is_result_empty(utility::variant<EntitiesT...>& result)
+{
+	return result.empty();
 }
 
 template<class EntityT>

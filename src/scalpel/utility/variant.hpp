@@ -38,6 +38,12 @@ class variant<>
 	public:
 		typedef void head_t;
 		typedef void tail_t;
+
+		bool
+		empty() const
+		{
+			return true;
+		}
 };
 
 template<typename T, typename... Ts>
@@ -118,6 +124,10 @@ class variant<T, Ts...>
 
 		const variant&
 		operator=(const variant& o);
+
+		inline
+		bool
+		empty() const;
 
 		const tail_t&
 		tail() const;
@@ -233,6 +243,13 @@ variant<T, Ts...>::operator=(const variant<T, Ts...>& o)
 	head_ = o.head_;
 	tail_ = o.tail_;
 	return *this;
+}
+
+template<typename T, typename... Ts>
+bool
+variant<T, Ts...>::empty() const
+{
+	return !head_ && tail_.empty();
 }
 
 template<typename T, typename... Ts>
