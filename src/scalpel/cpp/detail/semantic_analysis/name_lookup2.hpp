@@ -25,6 +25,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "get_name.hpp"
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <scalpel/cpp/syntax_tree.hpp>
+#include <scalpel/utility/is_empty.hpp>
 #include <scalpel/utility/variant.hpp>
 #include <scalpel/utility/vector.hpp>
 #include <memory>
@@ -179,26 +180,6 @@ class name_lookup2
 		static
 		void
 		add_to_result(utility::vector<T>& result, utility::vector<T2>& entities);
-
-
-
-		template<class EntityT>
-		inline
-		static
-		bool
-		is_result_empty(utility::vector<std::shared_ptr<EntityT>>& result);
-
-		template<class EntityT>
-		inline
-		static
-		bool
-		is_result_empty(std::shared_ptr<EntityT>& result);
-
-		template<class... EntitiesT>
-		inline
-		static
-		bool
-		is_result_empty(utility::variant<EntitiesT...>& result);
 
 
 

@@ -105,7 +105,7 @@ name_lookup2::find_entities
 			//find the first declarative region
 			auto identifier_or_template_id_node = get_identifier_or_template_id(nested_name_specifier_node);
 			auto first_declarative_region_temp = find_entities<false, semantic_entities::declarative_region_variant>(identifier_or_template_id_node, declarative_region_path);
-			if(is_result_empty(first_declarative_region_temp))
+			if(utility::is_empty(first_declarative_region_temp))
 			{
 				throw std::runtime_error("no declarative region found");
 			}
@@ -177,7 +177,7 @@ name_lookup2::find_declarative_region
 			}
 		}
 
-		if(is_result_empty(found_declarative_region))
+		if(utility::is_empty(found_declarative_region))
 		{
 			throw std::runtime_error("find_declarative_region() error");
 		}
@@ -229,7 +229,7 @@ name_lookup2::find_entities_from_identifier
 			found_entities =
 				find_entities_from_identifier_in_declarative_region<Multiple, EntityT>(name, namespace_ptr)
 			;
-			if(!is_result_empty(found_entities)) break;
+			if(!utility::is_empty(found_entities)) break;
 		}
 		else if(auto opt_class_ptr = utility::get<std::shared_ptr<semantic_entities::class_>>(&current_declarative_region))
 		{
@@ -239,13 +239,13 @@ name_lookup2::find_entities_from_identifier
 			found_entities =
 				find_entities_from_identifier_in_declarative_region<Multiple, EntityT>(name, class_ptr)
 			;
-			if(!is_result_empty(found_entities)) break;
+			if(!utility::is_empty(found_entities)) break;
 
 			//find entities in the base classes of that class
 			found_entities =
 				find_entities_in_base_classes<Multiple, EntityT>(name, class_ptr->base_classes())
 			;
-			if(!is_result_empty(found_entities)) break;
+			if(!utility::is_empty(found_entities)) break;
 		}
 	}
 
@@ -315,7 +315,7 @@ name_lookup2::find_entities_in_base_classes
 		;
 
 		//entities found?
-		if(!is_result_empty(current_class_found_entities))
+		if(!utility::is_empty(current_class_found_entities))
 		{
 			//add them to the list
 			add_to_result(found_entities, current_class_found_entities);
@@ -348,7 +348,7 @@ template<class T, class T2>
 void
 name_lookup2::add_to_result(utility::vector<T>& result, T2& entity)
 {
-	if(!is_result_empty(entity)) result.push_back(entity);
+	if(!utility::is_empty(entity)) result.push_back(entity);
 }
 
 template<class T, class T2>
@@ -361,27 +361,6 @@ name_lookup2::add_to_result(utility::vector<T>& result, utility::vector<T2>& ent
 		entities.end(),
 		std::back_insert_iterator<utility::vector<T>>(result)
 	);
-}
-
-template<class EntityT>
-bool
-name_lookup2::is_result_empty(utility::vector<std::shared_ptr<EntityT>>& result)
-{
-	return result.empty();
-}
-
-template<class EntityT>
-bool
-name_lookup2::is_result_empty(std::shared_ptr<EntityT>& result)
-{
-	return !result;
-}
-
-template<class... EntitiesT>
-bool
-name_lookup2::is_result_empty(utility::variant<EntitiesT...>& result)
-{
-	return result.empty();
 }
 
 template<class EntityT>
