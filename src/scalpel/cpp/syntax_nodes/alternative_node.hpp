@@ -231,8 +231,8 @@ template<class NodeT, class... NodesT>
 const alternative_node<NodeT, NodesT...>&
 alternative_node<NodeT, NodesT...>::operator=(const alternative_node<NodeT, NodesT...>& n)
 {
-	type copy(n);
-	std::swap(copy, *this);
+	head_ = n.head_;
+	tail_ = n.tail_;
 	return *this;
 }
 
