@@ -24,7 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
 {
 
-#define GENERATE_GET_MEMBERS_SPECIALIZATION(MEMBER_TYPE, PARENT_TYPE, PARENT_MEMBER_FUNCTION) \
+#define GENERATE_SIMPLE_GET_MEMBERS_SPECIALIZATION(MEMBER_TYPE, PARENT_TYPE, PARENT_MEMBER_FUNCTION) \
 template<> \
 typename get_members_type_traits<semantic_entities::MEMBER_TYPE>::return_type \
 get_members<semantic_entities::MEMBER_TYPE, std::shared_ptr<semantic_entities::PARENT_TYPE>>(std::shared_ptr<semantic_entities::PARENT_TYPE> parent) \
@@ -32,41 +32,41 @@ get_members<semantic_entities::MEMBER_TYPE, std::shared_ptr<semantic_entities::P
 	return parent->PARENT_MEMBER_FUNCTION(); \
 }
 
-#define GENERATE_GET_MEMBERS_SPECIALIZATION_EMPTY(MEMBER_TYPE, PARENT_TYPE) \
+#define GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(MEMBER_TYPE, PARENT_TYPE) \
 template<> \
-typename utility::vector<std::shared_ptr<semantic_entities::MEMBER_TYPE>>::range \
+typename get_members_type_traits<semantic_entities::MEMBER_TYPE>::return_type \
 get_members<semantic_entities::MEMBER_TYPE, std::shared_ptr<semantic_entities::PARENT_TYPE>>(std::shared_ptr<semantic_entities::PARENT_TYPE>) \
 { \
-	return utility::vector<std::shared_ptr<semantic_entities::MEMBER_TYPE>>::range(); \
+	return get_members_type_traits<semantic_entities::MEMBER_TYPE>::return_type(); \
 }
 
-template<>
-typename get_members_type_traits<semantic_entities::declarative_region_variant>::return_type
-get_members<semantic_entities::declarative_region_variant, semantic_entities::declarative_region_variant>(semantic_entities::declarative_region_variant parent)
-{
-	if(auto opt_namespace = utility::get<std::shared_ptr<semantic_entities::namespace_>>(&parent))
-	{
-		return (*opt_namespace)->declarative_region_variants();
-	}
-	else if(auto opt_class = utility::get<std::shared_ptr<semantic_entities::class_>>(&parent))
-	{
-		return (*opt_class)->declarative_region_variants();
-	}
-
-	throw "get_members() error";
+#define GENERATE_DECLARATIVE_REGION_VARIANT_GET_MEMBERS_SPECIALIZATION(MEMBER_TYPE, PARENT_MEMBER_FUNCTION) \
+template<> \
+typename get_members_type_traits<semantic_entities::MEMBER_TYPE>::return_type \
+get_members<semantic_entities::MEMBER_TYPE, semantic_entities::declarative_region_variant>(semantic_entities::declarative_region_variant parent) \
+{ \
+	if(auto opt_namespace = utility::get<std::shared_ptr<semantic_entities::namespace_>>(&parent)) \
+		return (*opt_namespace)->PARENT_MEMBER_FUNCTION(); \
+	else if(auto opt_class = utility::get<std::shared_ptr<semantic_entities::class_>>(&parent)) \
+		return (*opt_class)->PARENT_MEMBER_FUNCTION(); \
+	throw "get_members() error"; \
 }
 
-GENERATE_GET_MEMBERS_SPECIALIZATION(declarative_region_variant, namespace_, declarative_region_variants)
-GENERATE_GET_MEMBERS_SPECIALIZATION(namespace_, namespace_, namespaces)
-GENERATE_GET_MEMBERS_SPECIALIZATION(class_, namespace_, classes)
-GENERATE_GET_MEMBERS_SPECIALIZATION(simple_function, namespace_, simple_functions)
-GENERATE_GET_MEMBERS_SPECIALIZATION(variable, namespace_, variables)
+GENERATE_SIMPLE_GET_MEMBERS_SPECIALIZATION(declarative_region_variant, namespace_, declarative_region_variants)
+GENERATE_SIMPLE_GET_MEMBERS_SPECIALIZATION(namespace_, namespace_, namespaces)
+GENERATE_SIMPLE_GET_MEMBERS_SPECIALIZATION(class_, namespace_, classes)
+GENERATE_SIMPLE_GET_MEMBERS_SPECIALIZATION(simple_function, namespace_, simple_functions)
+GENERATE_SIMPLE_GET_MEMBERS_SPECIALIZATION(variable, namespace_, variables)
 
-GENERATE_GET_MEMBERS_SPECIALIZATION(declarative_region_variant, class_, declarative_region_variants)
-GENERATE_GET_MEMBERS_SPECIALIZATION_EMPTY(namespace_, class_)
-GENERATE_GET_MEMBERS_SPECIALIZATION(class_, class_, nested_classes)
-GENERATE_GET_MEMBERS_SPECIALIZATION(simple_function, class_, simple_functions)
-GENERATE_GET_MEMBERS_SPECIALIZATION(variable, class_, variables)
+GENERATE_SIMPLE_GET_MEMBERS_SPECIALIZATION(declarative_region_variant, class_, declarative_region_variants)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(namespace_, class_)
+GENERATE_SIMPLE_GET_MEMBERS_SPECIALIZATION(class_, class_, nested_classes)
+GENERATE_SIMPLE_GET_MEMBERS_SPECIALIZATION(simple_function, class_, simple_functions)
+GENERATE_SIMPLE_GET_MEMBERS_SPECIALIZATION(variable, class_, variables)
+
+GENERATE_DECLARATIVE_REGION_VARIANT_GET_MEMBERS_SPECIALIZATION(declarative_region_variant, declarative_region_variants)
+GENERATE_DECLARATIVE_REGION_VARIANT_GET_MEMBERS_SPECIALIZATION(simple_function, simple_functions)
+GENERATE_DECLARATIVE_REGION_VARIANT_GET_MEMBERS_SPECIALIZATION(variable, variables)
 
 }}}} //namespace scalpel::cpp::detail::semantic_analysis
 

@@ -41,6 +41,7 @@ test_case_2()
 	{
 		struct inner
 		{
+			void f();
 		};
 
 		void f();
@@ -63,12 +64,23 @@ test_case_2()
 		{
 			//look from here
 			f();
+			g();
+			inner();
+			c1base::f();
+			::c0::f();
+			c0::inner::f();
 		}
 	};
 	*/
+
 	auto semantic_graph = std::make_shared<scalpel::cpp::semantic_graph>();
 	auto struct_c0 = std::make_shared<class_>("c0");
 	auto struct_c0_inner = std::make_shared<class_>("inner");
+	auto function_c0_inner_f = std::make_shared<simple_function>
+	(
+		"f",
+		built_in_type_shared_ptrs::void_
+	);
 	auto function_c0_f = std::make_shared<simple_function>
 	(
 		"f",
@@ -100,6 +112,7 @@ test_case_2()
 
 	semantic_graph->add(struct_c0);
 	struct_c0->add(struct_c0_inner);
+	struct_c0_inner->add(function_c0_inner_f);
 	struct_c0->add(function_c0_f);
 	semantic_graph->add(struct_c1base);
 	struct_c1base->add(function_c1base_f);
@@ -146,6 +159,85 @@ test_case_2()
 	{
 		auto found_entity = name_lookup2::find_entities<false, class_>(identifier("inner"), declarative_region_path);
 		BOOST_CHECK_EQUAL(found_entity, struct_c0_inner);
+	}
+
+	{
+		nested_identifier_or_template_id c1base_f_syntax_node
+		(
+			optional_node<predefined_text_node<str::double_colon>>(),
+			space(""),
+			nested_name_specifier
+			(
+				identifier("c1base"),
+				space(""),
+				predefined_text_node<str::double_colon>(),
+				space(""),
+				optional_node<nested_name_specifier_last_part_seq>()
+			),
+			space(""),
+			identifier("f")
+		);
+		auto found_entity = name_lookup2::find_entities<false, simple_function>(c1base_f_syntax_node, declarative_region_path);
+		BOOST_CHECK_EQUAL(found_entity, function_c1base_f);
+	}
+
+	{
+		nested_identifier_or_template_id global_c0_f_syntax_node
+		(
+			predefined_text_node<str::double_colon>(),
+			space(""),
+			nested_name_specifier
+			(
+				identifier("c0"),
+				space(""),
+				predefined_text_node<str::double_colon>(),
+				space(""),
+				optional_node<nested_name_specifier_last_part_seq>()
+			),
+			space(""),
+			identifier("f")
+		);
+		auto found_entity = name_lookup2::find_entities<false, simple_function>(global_c0_f_syntax_node, declarative_region_path);
+		BOOST_CHECK_EQUAL(found_entity, function_c0_f);
+	}
+
+	{
+		nested_name_specifier_last_part_seq nested_name_specifier_last_part_seq_node;
+		nested_name_specifier_last_part_seq_node.push_back
+		(
+			nested_name_specifier_last_part_seq::item
+			(
+				space(""),
+				space(""),
+				nested_name_specifier_last_part
+				(
+					optional_node<predefined_text_node<str::template_>>(),
+					optional_node<space>(),
+					identifier("inner"),
+					optional_node<space>(),
+					predefined_text_node<str::double_colon>()
+				)
+			)
+		);
+
+		nested_identifier_or_template_id c0_inner_f_syntax_node
+		(
+			predefined_text_node<str::double_colon>(),
+			space(""),
+			nested_name_specifier
+			(
+				identifier("c0"),
+				space(""),
+				predefined_text_node<str::double_colon>(),
+				space(""),
+				std::move(nested_name_specifier_last_part_seq_node)
+			),
+			space(""),
+			identifier("f")
+		);
+
+		auto found_entity = name_lookup2::find_entities<false, simple_function>(c0_inner_f_syntax_node, declarative_region_path);
+		BOOST_CHECK_EQUAL(found_entity, function_c0_inner_f);
 	}
 }
 

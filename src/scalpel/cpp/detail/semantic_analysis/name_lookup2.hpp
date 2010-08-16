@@ -91,7 +91,7 @@ class name_lookup2
 		find_declarative_region
 		(
 			const syntax_nodes::nested_name_specifier_last_part_seq& nested_name_specifier_last_part_seq_node,
-			std::shared_ptr<CurrentDeclarativeRegionT> current_declarative_region
+			CurrentDeclarativeRegionT current_declarative_region
 		);
 
 	public:
