@@ -60,7 +60,7 @@ class name_lookup2
 		template<class... EntitiesT>
 		struct return_type<true, utility::variant<EntitiesT...>>
 		{
-			typedef std::vector<utility::variant<EntitiesT...>> type;
+			typedef utility::vector<utility::variant<EntitiesT...>> type;
 		};
 
 	public:
@@ -160,25 +160,25 @@ class name_lookup2
 
 	private:
 		//result = entity
-		template<class EntityT>
+		template<class T, class T2>
 		inline
 		static
 		void
-		add_to_result(std::shared_ptr<EntityT>& result, std::shared_ptr<EntityT>& entity);
+		add_to_result(T& result, T2& entity);
 
 		//add entity to result
-		template<class EntityT>
+		template<class T, class T2>
 		inline
 		static
 		void
-		add_to_result(utility::vector<std::shared_ptr<EntityT>>& result, std::shared_ptr<EntityT>& entity);
+		add_to_result(utility::vector<T>& result, T2& entity);
 
 		//append entities to result
-		template<class EntityT>
+		template<class T, class T2>
 		inline
 		static
 		void
-		add_to_result(utility::vector<std::shared_ptr<EntityT>>& result, utility::vector<std::shared_ptr<EntityT>>& entities);
+		add_to_result(utility::vector<T>& result, utility::vector<T2>& entities);
 
 
 

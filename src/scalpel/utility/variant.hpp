@@ -29,24 +29,23 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace utility
 {
 
-template<class... NodesT>
+template<typename... Ts>
 class variant;
 
 template<>
 class variant<>
 {
 	public:
-		typedef void head_node_t;
-		typedef void tail_variant_t;
+		typedef void head_t;
+		typedef void tail_t;
 };
 
-template<class NodeT, class... NodesT>
-class variant<NodeT, NodesT...>
+template<typename T, typename... Ts>
+class variant<T, Ts...>
 {
 	public:
-		typedef variant<NodeT, NodesT...> type;
-		typedef NodeT head_node_t;
-		typedef variant<NodesT...> tail_variant_t;
+		typedef T head_t;
+		typedef variant<Ts...> tail_t;
 
 		/**
 		 * Default constructor which does nothing (useful for internal use).
@@ -56,31 +55,31 @@ class variant<NodeT, NodesT...>
 		/**
 		 * Constructor.
 		 */
-		variant(const NodeT& n);
+		variant(const T& o);
 
 		/**
 		 * Constructor.
 		 */
-		variant(NodeT& n);
+		variant(T& o);
 
 		/**
 		 * Constructor.
 		 */
-		variant(NodeT&& n);
+		variant(T&& o);
 
 		/**
 		 * Constructor.
 		 */
-		template<class NodeT2>
+		template<typename T2>
 		variant
 		(
-			const NodeT2& n,
+			const T2& o,
 			typename boost::disable_if
 			<
 				boost::is_same
 				<
-					typename boost::remove_const<NodeT2>::type,
-					type
+					typename boost::remove_const<T2>::type,
+					variant
 				>
 			>::type* = 0 //avoid conflict with copy and move constructors
 		);
@@ -88,16 +87,16 @@ class variant<NodeT, NodesT...>
 		/**
 		 * Constructor.
 		 */
-		template<class NodeT2>
+		template<typename T2>
 		variant
 		(
-			NodeT2&& n,
+			T2&& o,
 			typename boost::disable_if
 			<
 				boost::is_same
 				<
-					typename boost::remove_const<NodeT2>::type,
-					type
+					typename boost::remove_const<T2>::type,
+					variant
 				>
 			>::type* = 0 //avoid conflict with copy and move constructors
 		);
@@ -105,221 +104,221 @@ class variant<NodeT, NodesT...>
 		/**
 		 * Copy constructor.
 		 */
-		variant(const type& n);
+		variant(const variant& o);
 
 		/**
 		 * Copy constructor.
 		 */
-		variant(type& n);
+		variant(variant& o);
 
 		/**
 		 * Move constructor.
 		 */
-		variant(type&& n);
+		variant(variant&& o);
 
-		const type&
-		operator=(const type& n);
+		const variant&
+		operator=(const variant& o);
 
-		const tail_variant_t&
+		const tail_t&
 		tail() const;
 
 		//same type
 		void
-		get(boost::optional<const NodeT&>&) const;
+		get(boost::optional<const T&>&) const;
 
 		//different types
-		template<class NodeT2>
+		template<typename T2>
 		void
-		get(boost::optional<const NodeT2&>&) const;
+		get(boost::optional<const T2&>&) const;
 
 		//same type
 		void
-		set(const NodeT&);
+		set(const T&);
 
 		//different types
-		template<class NodeT2>
+		template<typename T2>
 		void
-		set(const NodeT2&);
+		set(const T2&);
 
 	private:
-		boost::optional<head_node_t> head_;
-		tail_variant_t tail_;
+		boost::optional<head_t> head_;
+		tail_t tail_;
 };
 
-template<class NodeT, class... NodesT>
-variant<NodeT, NodesT...>::variant()
+template<typename T, typename... Ts>
+variant<T, Ts...>::variant()
 {
 	//does nothing
 }
 
-template<class NodeT, class... NodesT>
-variant<NodeT, NodesT...>::variant(const NodeT& n):
-	head_(n)
+template<typename T, typename... Ts>
+variant<T, Ts...>::variant(const T& o):
+	head_(o)
 {
 }
 
-template<class NodeT, class... NodesT>
-variant<NodeT, NodesT...>::variant(NodeT& n):
-	head_(n)
+template<typename T, typename... Ts>
+variant<T, Ts...>::variant(T& o):
+	head_(o)
 {
 }
 
-template<class NodeT, class... NodesT>
-variant<NodeT, NodesT...>::variant(NodeT&& n):
-	head_(std::move(n))
+template<typename T, typename... Ts>
+variant<T, Ts...>::variant(T&& o):
+	head_(std::move(o))
 {
 }
 
-template<class NodeT, class... NodesT>
-template<class NodeT2>
-variant<NodeT, NodesT...>::variant
+template<typename T, typename... Ts>
+template<typename T2>
+variant<T, Ts...>::variant
 (
-	const NodeT2& n,
+	const T2& o,
 	typename boost::disable_if
 	<
 		boost::is_same
 		<
-			typename boost::remove_const<NodeT2>::type,
-			type
+			typename boost::remove_const<T2>::type,
+			variant
 		>
 	>::type*
 ):
-	tail_(n)
+	tail_(o)
 {
 }
 
-template<class NodeT, class... NodesT>
-template<class NodeT2>
-variant<NodeT, NodesT...>::variant
+template<typename T, typename... Ts>
+template<typename T2>
+variant<T, Ts...>::variant
 (
-	NodeT2&& n,
+	T2&& o,
 	typename boost::disable_if
 	<
 		boost::is_same
 		<
-			typename boost::remove_const<NodeT2>::type,
-			type
+			typename boost::remove_const<T2>::type,
+			variant
 		>
 	>::type*
 ):
-	tail_(std::move(n))
+	tail_(std::move(o))
 {
 }
 
-template<class NodeT, class... NodesT>
-variant<NodeT, NodesT...>::variant(const variant<NodeT, NodesT...>& n):
-	head_(n.head_),
-	tail_(n.tail_)
+template<typename T, typename... Ts>
+variant<T, Ts...>::variant(const variant<T, Ts...>& o):
+	head_(o.head_),
+	tail_(o.tail_)
 {
 }
 
-template<class NodeT, class... NodesT>
-variant<NodeT, NodesT...>::variant(variant<NodeT, NodesT...>& n):
-	head_(n.head_),
-	tail_(n.tail_)
+template<typename T, typename... Ts>
+variant<T, Ts...>::variant(variant<T, Ts...>& o):
+	head_(o.head_),
+	tail_(o.tail_)
 {
 }
 
-template<class NodeT, class... NodesT>
-variant<NodeT, NodesT...>::variant(variant<NodeT, NodesT...>&& n):
-	head_(std::move(n.head_)),
-	tail_(std::move(n.tail_))
+template<typename T, typename... Ts>
+variant<T, Ts...>::variant(variant<T, Ts...>&& o):
+	head_(std::move(o.head_)),
+	tail_(std::move(o.tail_))
 {
 }
 
-template<class NodeT, class... NodesT>
-const variant<NodeT, NodesT...>&
-variant<NodeT, NodesT...>::operator=(const variant<NodeT, NodesT...>& n)
+template<typename T, typename... Ts>
+const variant<T, Ts...>&
+variant<T, Ts...>::operator=(const variant<T, Ts...>& o)
 {
-	type copy(n);
-	std::swap(copy, *this);
+	head_ = o.head_;
+	tail_ = o.tail_;
 	return *this;
 }
 
-template<class NodeT, class... NodesT>
-const typename variant<NodeT, NodesT...>::tail_variant_t&
-variant<NodeT, NodesT...>::tail() const
+template<typename T, typename... Ts>
+const typename variant<T, Ts...>::tail_t&
+variant<T, Ts...>::tail() const
 {
 	return tail_;
 }
 
-template<class NodeT, class... NodesT>
+template<typename T, typename... Ts>
 void
-variant<NodeT, NodesT...>::get(boost::optional<const NodeT&>& node) const
+variant<T, Ts...>::get(boost::optional<const T&>& object) const
 {
-	node = head_;
+	object = head_;
 }
 
-template<class NodeT, class... NodesT>
-template<class NodeT2>
+template<typename T, typename... Ts>
+template<typename T2>
 void
-variant<NodeT, NodesT...>::get(boost::optional<const NodeT2&>& node) const
+variant<T, Ts...>::get(boost::optional<const T2&>& object) const
 {
-	tail_.get(node);
+	tail_.get(object);
 }
 
-template<class NodeT, class... NodesT>
+template<typename T, typename... Ts>
 void
-variant<NodeT, NodesT...>::set(const NodeT& node)
+variant<T, Ts...>::set(const T& object)
 {
-	head_ = node;
+	head_ = object;
 }
 
-template<class NodeT, class... NodesT>
-template<class NodeT2>
+template<typename T, typename... Ts>
+template<typename T2>
 void
-variant<NodeT, NodesT...>::set(const NodeT2& node)
+variant<T, Ts...>::set(const T2& object)
 {
-	tail_.set(node);
+	tail_.set(object);
 }
 
 
 
-template<class ReturnNodeT, class VariantT>
-boost::optional<const ReturnNodeT&>
-get(const VariantT* node)
+template<class ReturnT, class VariantT>
+boost::optional<const ReturnT&>
+get(const VariantT* var)
 {
-	boost::optional<const ReturnNodeT&> return_node;
-	node->get(return_node);
-	return return_node;
+	boost::optional<const ReturnT&> return_object;
+	var->get(return_object);
+	return return_object;
 }
 
 
 
-template<class VariantVisitorT, class T, class VariantT, typename HeadNodeT>
+template<class VariantVisitorT, class FullVariantT, class CurrentVariantT, typename HeadT>
 struct private_visitor
 {
-	typedef typename VariantT::head_node_t head_node_t;
-	typedef typename VariantT::tail_variant_t tail_variant_t;
+	typedef typename CurrentVariantT::head_t head_t;
+	typedef typename CurrentVariantT::tail_t tail_t;
 
 	static
 	void
-	visit(const VariantVisitorT& alt_visitor, const T& alt_node)
+	visit(const VariantVisitorT& variant_visitor, const FullVariantT& var)
 	{
-		boost::optional<const head_node_t&> node = get<head_node_t>(&alt_node);
-		if(node)
+		boost::optional<const head_t&> opt_object = get<head_t>(&var);
+		if(opt_object)
 		{
-			alt_visitor(*node);
+			variant_visitor(*opt_object);
 		}
 		else
 		{
 			private_visitor
 			<
 				VariantVisitorT,
-				T,
-				tail_variant_t,
-				typename tail_variant_t::head_node_t
-			>::visit(alt_visitor, alt_node);
+				FullVariantT,
+				tail_t,
+				typename tail_t::head_t
+			>::visit(variant_visitor, var);
 		}
 	}
 };
 
-template<class VariantVisitorT, class T, class VariantT>
-struct private_visitor<VariantVisitorT, T, VariantT, void>
+template<class VariantVisitorT, class FullVariantT, class CurrentVariantT>
+struct private_visitor<VariantVisitorT, FullVariantT, CurrentVariantT, void>
 {
 	static
 	void
-	visit(const VariantVisitorT&, const T&)
+	visit(const VariantVisitorT&, const FullVariantT&)
 	{
 		//does nothing
 	}
@@ -327,17 +326,18 @@ struct private_visitor<VariantVisitorT, T, VariantT, void>
 
 template<class VariantVisitorT, class VariantT>
 void
-apply_visitor(const VariantVisitorT& alt_visitor, const VariantT& node)
+apply_visitor(const VariantVisitorT& variant_visitor, const VariantT& var)
 {
 	private_visitor
 	<
 		VariantVisitorT,
 		VariantT,
 		VariantT,
-		typename VariantT::head_node_t
-	>::visit(alt_visitor, node);
+		typename VariantT::head_t
+	>::visit(variant_visitor, var);
 }
 
 }} //namespace scalpel::utility
 
 #endif
+

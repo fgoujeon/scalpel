@@ -54,7 +54,7 @@ name_lookup2::find_entities
 	{
 		//the first declarative region is in the global namespace
 		std::shared_ptr<semantic_entities::namespace_> global_namespace =
-			*scalpel::utility::get<std::shared_ptr<semantic_entities::namespace_>>(&declarative_region_path.front())
+			*utility::get<std::shared_ptr<semantic_entities::namespace_>>(&declarative_region_path.front())
 		;
 
 		if(opt_nested_name_specifier_node)
@@ -63,13 +63,13 @@ name_lookup2::find_entities
 
 			//find the first declarative region
 			auto identifier_or_template_id_node = get_identifier_or_template_id(nested_name_specifier_node);
-			std::shared_ptr<semantic_entities::namespace_> first_declarative_region =
-				//*scalpel::utility::get<std::shared_ptr<semantic_entities::namespace_>>
-				//(
-				//	&find_entities_in_declarative_region<false, semantic_entities::declarative_region_variant>(identifier_or_template_id_node, global_namespace)
-				//)
-				find_entities_in_declarative_region<false, semantic_entities::namespace_>(identifier_or_template_id_node, global_namespace)
+			semantic_entities::declarative_region_variant first_declarative_region_temp =
+				find_entities_in_declarative_region<false, semantic_entities::declarative_region_variant>(identifier_or_template_id_node, global_namespace)
 			;
+			std::shared_ptr<semantic_entities::namespace_> first_declarative_region =
+				*utility::get<std::shared_ptr<semantic_entities::namespace_>>(&first_declarative_region_temp)
+			;
+
 			if(!first_declarative_region)
 			{
 				throw std::runtime_error("no declarative region found");
@@ -213,7 +213,7 @@ name_lookup2::find_entities_from_identifier
 	{
 		semantic_entities::declarative_region_variant current_declarative_region = *i;
 
-		if(auto opt_namespace_ptr = scalpel::utility::get<std::shared_ptr<semantic_entities::namespace_>>(&current_declarative_region))
+		if(auto opt_namespace_ptr = utility::get<std::shared_ptr<semantic_entities::namespace_>>(&current_declarative_region))
 		{
 			std::shared_ptr<semantic_entities::namespace_> namespace_ptr = *opt_namespace_ptr;
 
@@ -223,7 +223,7 @@ name_lookup2::find_entities_from_identifier
 			;
 			if(!is_result_empty(found_entities)) break;
 		}
-		else if(auto opt_class_ptr = scalpel::utility::get<std::shared_ptr<semantic_entities::class_>>(&current_declarative_region))
+		else if(auto opt_class_ptr = utility::get<std::shared_ptr<semantic_entities::class_>>(&current_declarative_region))
 		{
 			std::shared_ptr<semantic_entities::class_> class_ptr = *opt_class_ptr;
 
@@ -273,7 +273,7 @@ name_lookup2::find_entities_from_identifier_in_declarative_region
 {
 	typename return_type<Multiple, EntityT>::type found_entities;
 
-	auto members = get_members<EntityT>(current_declarative_region);
+	typename get_members_type_traits<EntityT>::return_type members = get_members<EntityT>(current_declarative_region);
 	for(auto i = members.begin(); i != members.end(); ++i)
 	{
 		auto current_entity = *i;
@@ -331,29 +331,29 @@ name_lookup2::find_entities_in_base_classes
 	return std::move(return_result<Multiple, EntityT>::result(found_entities));
 }
 
-template<class EntityT>
+template<class T, class T2>
 void
-name_lookup2::add_to_result(std::shared_ptr<EntityT>& result, std::shared_ptr<EntityT>& entity)
+name_lookup2::add_to_result(T& result, T2& entity)
 {
 	result = entity;
 }
 
-template<class EntityT>
+template<class T, class T2>
 void
-name_lookup2::add_to_result(utility::vector<std::shared_ptr<EntityT>>& result, std::shared_ptr<EntityT>& entity)
+name_lookup2::add_to_result(utility::vector<T>& result, T2& entity)
 {
 	if(entity) result.push_back(entity);
 }
 
-template<class EntityT>
+template<class T, class T2>
 void
-name_lookup2::add_to_result(utility::vector<std::shared_ptr<EntityT>>& result, utility::vector<std::shared_ptr<EntityT>>& entities)
+name_lookup2::add_to_result(utility::vector<T>& result, utility::vector<T2>& entities)
 {
 	std::copy
 	(
 		entities.begin(),
 		entities.end(),
-		std::back_insert_iterator<utility::vector<std::shared_ptr<EntityT>>>(result)
+		std::back_insert_iterator<utility::vector<T>>(result)
 	);
 }
 

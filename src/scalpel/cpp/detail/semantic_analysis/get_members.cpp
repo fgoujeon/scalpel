@@ -24,13 +24,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
 {
 
-//
-//get_members() specializations
-//
-
 #define GENERATE_GET_MEMBERS_SPECIALIZATION(MEMBER_TYPE, PARENT_TYPE, PARENT_MEMBER_FUNCTION) \
 template<> \
-typename utility::vector<std::shared_ptr<semantic_entities::MEMBER_TYPE>>::range \
+typename get_members_type_traits<semantic_entities::MEMBER_TYPE>::return_type \
 get_members<semantic_entities::MEMBER_TYPE, std::shared_ptr<semantic_entities::PARENT_TYPE>>(std::shared_ptr<semantic_entities::PARENT_TYPE> parent) \
 { \
 	return parent->PARENT_MEMBER_FUNCTION(); \
@@ -44,6 +40,7 @@ get_members<semantic_entities::MEMBER_TYPE, std::shared_ptr<semantic_entities::P
 	return utility::vector<std::shared_ptr<semantic_entities::MEMBER_TYPE>>::range(); \
 }
 
+GENERATE_GET_MEMBERS_SPECIALIZATION(declarative_region_variant, namespace_, declarative_region_variants)
 GENERATE_GET_MEMBERS_SPECIALIZATION(namespace_, namespace_, namespaces)
 GENERATE_GET_MEMBERS_SPECIALIZATION(class_, namespace_, classes)
 GENERATE_GET_MEMBERS_SPECIALIZATION(simple_function, namespace_, simple_functions)

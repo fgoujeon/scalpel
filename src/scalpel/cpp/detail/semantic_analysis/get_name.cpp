@@ -24,7 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
 {
 
-#define GENERATE_GET_NAME_SPECIALIZATION(ENTITY_TYPE) \
+#define GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(ENTITY_TYPE) \
 template<> \
 const std::string& \
 get_name<std::shared_ptr<semantic_entities::ENTITY_TYPE>>(std::shared_ptr<semantic_entities::ENTITY_TYPE> entity) \
@@ -32,10 +32,28 @@ get_name<std::shared_ptr<semantic_entities::ENTITY_TYPE>>(std::shared_ptr<semant
 	return entity->name(); \
 }
 
-GENERATE_GET_NAME_SPECIALIZATION(namespace_)
-GENERATE_GET_NAME_SPECIALIZATION(class_)
-GENERATE_GET_NAME_SPECIALIZATION(simple_function)
-GENERATE_GET_NAME_SPECIALIZATION(variable)
+template<>
+const std::string&
+get_name<semantic_entities::declarative_region_variant>(semantic_entities::declarative_region_variant entity)
+{
+	if(auto opt_entity = utility::get<std::shared_ptr<semantic_entities::namespace_>>(&entity))
+	{
+		return (*opt_entity)->name();
+	}
+	else if(auto opt_entity = utility::get<std::shared_ptr<semantic_entities::class_>>(&entity))
+	{
+		return (*opt_entity)->name();
+	}
+	else
+	{
+		throw "get_name() error";
+	}
+}
+
+GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(namespace_)
+GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(class_)
+GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(simple_function)
+GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(variable)
 
 }}}} //namespace scalpel::cpp::detail::semantic_analysis
 

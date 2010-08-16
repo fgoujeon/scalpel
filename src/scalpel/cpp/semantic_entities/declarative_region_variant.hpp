@@ -21,14 +21,15 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_DECLARATIVE_REGION_VARIANT_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_DECLARATIVE_REGION_VARIANT_HPP
 
-#include "namespace_.hpp"
-#include "class_.hpp"
-#include "statement_block.hpp"
 #include <scalpel/utility/variant.hpp>
 #include <memory>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
+
+class namespace_;
+class class_;
+class statement_block;
 
 typedef
 	scalpel::utility::variant

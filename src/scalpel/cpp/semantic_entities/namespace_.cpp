@@ -95,6 +95,12 @@ namespace_::named_declarative_regions() const
 	return named_declarative_regions_;
 }
 
+namespace_::declarative_region_variants_t&
+namespace_::declarative_region_variants()
+{
+	return declarative_region_variants_;
+}
+
 namespace_::namespaces_t::range
 namespace_::namespaces()
 {
@@ -159,6 +165,7 @@ void
 namespace_::add(std::shared_ptr<namespace_> member)
 {
     namespaces_.push_back(member);
+	declarative_region_variants_.push_back(member);
 	named_declarative_regions_.push_back(member);
 	named_entities_.push_back(member);
 }
@@ -167,6 +174,7 @@ void
 namespace_::add(std::shared_ptr<class_> member)
 {
     classes_.push_back(member);
+	declarative_region_variants_.push_back(member);
 	named_declarative_regions_.push_back(member);
 	named_entities_.push_back(member);
 }
@@ -183,7 +191,6 @@ void
 namespace_::add(std::shared_ptr<operator_function> member)
 {
     operator_functions_.push_back(member);
-	//named_entities_.push_back(member);
 }
 
 void

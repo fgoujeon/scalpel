@@ -92,32 +92,32 @@ class vector
 			return raw_vector_.end();
 		}
 
-		std::shared_ptr<T>
+		T&
 		front()
 		{
 			return raw_vector_.front();
 		}
 
-		std::shared_ptr<const T>
+		const T&
 		front() const
 		{
 			return raw_vector_.front();
 		}
 
-		std::shared_ptr<T>
+		T&
 		back()
 		{
 			return raw_vector_.back();
 		}
 
-		std::shared_ptr<const T>
+		const T&
 		back() const
 		{
 			return raw_vector_.back();
 		}
 
 		void
-		push_back(std::shared_ptr<T> t)
+		push_back(const T& t)
 		{
 			raw_vector_.push_back(t);
 		}

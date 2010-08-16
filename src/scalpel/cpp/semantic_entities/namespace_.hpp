@@ -27,6 +27,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "class_.hpp"
 #include "named_declarative_region.hpp"
 #include "named_entity.hpp"
+#include "declarative_region_variant.hpp"
 #include <boost/noncopyable.hpp>
 #include <string>
 #include <list>
@@ -44,6 +45,7 @@ class namespace_:
 	public boost::noncopyable
 {
     public:
+		typedef utility::vector<declarative_region_variant> declarative_region_variants_t;
 		typedef utility::vector<std::shared_ptr<namespace_>> namespaces_t;
 		typedef utility::vector<std::shared_ptr<class_>> classes_t;
 		typedef utility::vector<std::shared_ptr<simple_function>> simple_functions_t;
@@ -104,6 +106,9 @@ class namespace_:
 		const named_declarative_regions_t&
         named_declarative_regions() const;
 
+		declarative_region_variants_t&
+		declarative_region_variants();
+
 		namespaces_t::range
 		namespaces();
 
@@ -155,6 +160,7 @@ class namespace_:
 		//polymorphic containers
 		named_entities_t named_entities_;
 		named_declarative_regions_t named_declarative_regions_;
+		declarative_region_variants_t declarative_region_variants_;
 
 		//containers
         namespaces_t namespaces_;
