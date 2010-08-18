@@ -42,6 +42,7 @@ class_::class_(const std::string& name):
 
 class_::class_(class_&& c):
 	name_(std::move(c.name_)),
+	declarative_region_(std::move(c.declarative_region_)),
 	named_entities_(std::move(c.named_entities_)),
 	named_declarative_regions_(std::move(c.named_declarative_regions_)),
 	nested_classes_(std::move(c.nested_classes_)),
@@ -58,6 +59,7 @@ const class_&
 class_::operator=(class_&& c)
 {
 	name_ = std::move(c.name_);
+	declarative_region_ = std::move(c.declarative_region_);
 	named_entities_ = std::move(c.named_entities_);
 	named_declarative_regions_ = std::move(c.named_declarative_regions_);
 	nested_classes_ = std::move(c.nested_classes_);
@@ -75,6 +77,27 @@ const std::string&
 class_::name() const
 {
     return name_;
+}
+
+bool
+class_::has_declarative_region() const
+{
+	return !declarative_region_.empty();
+}
+
+declarative_region_shared_ptr_variant
+class_::get_declarative_region()
+{
+	return to_shared_ptr_variant(declarative_region_);
+}
+
+void
+class_::set_declarative_region(const declarative_region_weak_ptr_variant& decl_region)
+{
+	if(declarative_region_.empty())
+		declarative_region_ = decl_region;
+	else
+		throw std::runtime_error("The declarative region is already set.");
 }
 
 bool
@@ -113,7 +136,7 @@ class_::named_declarative_regions() const
 	return named_declarative_regions_;
 }
 
-const class_::declarative_region_variants_t&
+const class_::declarative_region_shared_ptr_variants_t&
 class_::declarative_region_variants()
 {
 	return declarative_region_variants_;
@@ -237,6 +260,8 @@ class_::add_base_class
 void
 class_::add(std::shared_ptr<class_> member, const access acc)
 {
+	member->set_declarative_region(std::weak_ptr<class_>(shared_from_this()));
+
 	nested_classes_.push_back(member);
 	named_entities_.push_back(member);
 	named_declarative_regions_.push_back(member);
@@ -313,6 +338,8 @@ class_::add
 	const bool pure_specified
 )
 {
+	member->set_declarative_region(std::weak_ptr<class_>(shared_from_this()));
+
     simple_functions_.push_back(member);
 	named_entities_.push_back(member);
 	named_declarative_regions_.push_back(member);

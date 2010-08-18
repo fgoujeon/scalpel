@@ -18,8 +18,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_DECLARATIVE_REGION_VARIANT_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_DECLARATIVE_REGION_VARIANT_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_DECLARATIVE_REGION_VARIANTS_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_DECLARATIVE_REGION_VARIANTS_HPP
 
 #include <scalpel/utility/variant.hpp>
 #include <memory>
@@ -29,17 +29,36 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 
 class namespace_;
 class class_;
-class statement_block;
+class simple_function;
 
 typedef
 	scalpel::utility::variant
 	<
 		std::shared_ptr<namespace_>,
 		std::shared_ptr<class_>,
-		std::shared_ptr<statement_block>
+		std::shared_ptr<simple_function>
 	>
-	declarative_region_variant
+	declarative_region_shared_ptr_variant
 ;
+
+typedef
+	scalpel::utility::variant
+	<
+		std::weak_ptr<namespace_>,
+		std::weak_ptr<class_>,
+		std::weak_ptr<simple_function>
+	>
+	declarative_region_weak_ptr_variant
+;
+
+bool
+has_declarative_region(const declarative_region_shared_ptr_variant& var);
+
+declarative_region_shared_ptr_variant
+get_declarative_region(const declarative_region_shared_ptr_variant& var);
+
+declarative_region_shared_ptr_variant
+to_shared_ptr_variant(const declarative_region_weak_ptr_variant& var);
 
 }}} //namespace scalpel::cpp::semantic_entities
 

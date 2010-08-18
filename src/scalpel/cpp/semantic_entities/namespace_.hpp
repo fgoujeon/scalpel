@@ -27,7 +27,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "class_.hpp"
 #include "named_declarative_region.hpp"
 #include "named_entity.hpp"
-#include "declarative_region_variant.hpp"
+#include "declarative_region_variants.hpp"
 #include <boost/noncopyable.hpp>
 #include <string>
 #include <list>
@@ -42,10 +42,11 @@ Represents a C++ namespace.
 */
 class namespace_:
 	public named_declarative_region,
+	public std::enable_shared_from_this<namespace_>,
 	public boost::noncopyable
 {
     public:
-		typedef utility::vector<declarative_region_variant> declarative_region_variants_t;
+		typedef utility::vector<declarative_region_shared_ptr_variant> declarative_region_variants_t;
 		typedef utility::vector<std::shared_ptr<namespace_>> namespaces_t;
 		typedef utility::vector<std::shared_ptr<class_>> classes_t;
 		typedef utility::vector<std::shared_ptr<simple_function>> simple_functions_t;
@@ -81,6 +82,15 @@ class namespace_:
         */
         const std::string&
         name() const;
+
+		bool
+		has_declarative_region() const;
+
+		declarative_region_shared_ptr_variant
+		get_declarative_region();
+
+		void
+		set_declarative_region(const declarative_region_weak_ptr_variant& declarative_region);
 
         /**
         @return true if the namespace is the global one, false otherwise
@@ -156,6 +166,7 @@ class namespace_:
 
     private:
         std::string name_;
+		declarative_region_weak_ptr_variant declarative_region_;
 
 		//polymorphic containers
 		named_entities_t named_entities_;

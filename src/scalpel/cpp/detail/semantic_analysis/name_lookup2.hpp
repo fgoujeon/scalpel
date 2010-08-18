@@ -68,7 +68,7 @@ class name_lookup2
 		/**
 		Find entities corresponding to the given nested identifier
 		(or nested template-id),
-		from the given declarative region path (qualified name lookup)
+		from the given declarative region (qualified name lookup)
 		*/
 		template<bool Multiple, class EntityT>
 		static
@@ -76,14 +76,14 @@ class name_lookup2
 		find_entities
 		(
 			const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node,
-			std::vector<semantic_entities::declarative_region_variant>& declarative_region_path
+			const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
 		);
 
 	private:
 		/**
 		Find the declarative region corresponding to the given syntax node
 		(i.e. Z in the expression "X::Y::Z::"),
-		from the given declarative region
+		from the given declarative region (where X must be declared)
 		*/
 		template<class DeclarativeRegionT, class CurrentDeclarativeRegionT>
 		static
@@ -97,7 +97,7 @@ class name_lookup2
 	public:
 		/**
 		Find entities corresponding to the given identifier_or_template_id node,
-		from the given declarative region path (unqualified name lookup)
+		from the given declarative region (unqualified name lookup)
 		*/
 		template<bool Multiple, class EntityT>
 		static
@@ -105,13 +105,13 @@ class name_lookup2
 		find_entities
 		(
 			const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
-			std::vector<semantic_entities::declarative_region_variant>& declarative_region_path
+			const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
 		);
 
 	private:
 		/**
 		Find entities corresponding to the given name,
-		from the given declarative region path (unqualified name lookup)
+		from the given declarative region (unqualified name lookup)
 		*/
 		template<bool Multiple, class EntityT>
 		static
@@ -119,7 +119,7 @@ class name_lookup2
 		find_entities_from_identifier
 		(
 			const std::string& name,
-			std::vector<semantic_entities::declarative_region_variant>& declarative_region_path
+			semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 		);
 
 		/**

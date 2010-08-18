@@ -48,6 +48,7 @@ simple_function::simple_function(simple_function&& f):
 	inline_specified_(f.inline_specified_),
 	static_specified_(f.static_specified_),
 	defined_(f.defined_),
+	declarative_region_(std::move(f.declarative_region_)),
 	body_(f.body_)
 {
 }
@@ -61,23 +62,10 @@ simple_function::operator=(simple_function&& f)
 	inline_specified_ = f.inline_specified_;
 	static_specified_ = f.static_specified_;
 	defined_ = f.defined_;
+	declarative_region_ = std::move(f.declarative_region_);
 	body_ = f.body_;
 
 	return *this;
-}
-
-bool
-simple_function::operator==(const simple_function& f) const
-{
-	return
-		name_ == f.name_ &&
-		return_type_ == f.return_type_ &&
-		parameters_ == f.parameters_ &&
-		inline_specified_ == f.inline_specified_ &&
-		static_specified_ == f.static_specified_ &&
-		defined_ == f.defined_ &&
-		body_ == f.body_
-	;
 }
 
 bool
@@ -162,6 +150,27 @@ simple_function::defined(bool d)
 	defined_ = d;
 }
 
+bool
+simple_function::has_declarative_region() const
+{
+	return !declarative_region_.empty();
+}
+
+declarative_region_shared_ptr_variant
+simple_function::get_declarative_region()
+{
+	return to_shared_ptr_variant(declarative_region_);
+}
+
+void
+simple_function::set_declarative_region(const declarative_region_weak_ptr_variant& decl_region)
+{
+	if(declarative_region_.empty())
+		declarative_region_ = decl_region;
+	else
+		throw std::runtime_error("The declarative region is already set.");
+}
+
 simple_function::named_entities_t::range
 simple_function::named_entities()
 {
@@ -184,6 +193,12 @@ const simple_function::named_declarative_regions_t&
 simple_function::named_declarative_regions() const
 {
 	return named_declarative_regions_;
+}
+
+const simple_function::declarative_region_shared_ptr_variants_t&
+simple_function::declarative_region_variants()
+{
+	return declarative_region_variants_;
 }
 
 std::shared_ptr<statement_block>

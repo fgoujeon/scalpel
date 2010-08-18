@@ -24,7 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "variable.hpp"
 #include "operator_function.hpp"
 #include "simple_function.hpp"
-#include "declarative_region_variant.hpp"
+#include "declarative_region_variants.hpp"
 #include "named_declarative_region.hpp"
 #include "named_entity.hpp"
 #include "type.hpp"
@@ -44,14 +44,15 @@ Represents a C++ class.
 class class_:
 	public named_declarative_region,
 	public type,
-	public boost::noncopyable
+	public boost::noncopyable,
+	public std::enable_shared_from_this<class_>
 {
 	public:
 		class constructor;
 		class destructor;
 		class conversion_function;
 
-		typedef utility::vector<declarative_region_variant> declarative_region_variants_t;
+		typedef utility::vector<declarative_region_shared_ptr_variant> declarative_region_shared_ptr_variants_t;
 		typedef utility::vector<std::shared_ptr<class_>> classes_t;
 		typedef utility::vector<std::shared_ptr<constructor>> constructors_t;
 		typedef utility::vector<std::shared_ptr<simple_function>> simple_functions_t;
@@ -90,6 +91,15 @@ class class_:
         const std::string&
         name() const;
 
+		bool
+		has_declarative_region() const;
+
+		declarative_region_shared_ptr_variant
+		get_declarative_region();
+
+		void
+		set_declarative_region(const declarative_region_weak_ptr_variant& declarative_region);
+
         /**
         @return false, because a class cannot be the global namespace...
         */
@@ -114,7 +124,7 @@ class class_:
 		const named_declarative_regions_t&
         named_declarative_regions() const;
 
-		const declarative_region_variants_t&
+		const declarative_region_shared_ptr_variants_t&
 		declarative_region_variants();
 
 		classes_t::range
@@ -229,11 +239,12 @@ class class_:
 
     private:
         std::string name_;
+		declarative_region_weak_ptr_variant declarative_region_;
 
 		//polymorphic containers
 		named_entities_t named_entities_;
 		named_declarative_regions_t named_declarative_regions_;
-		declarative_region_variants_t declarative_region_variants_;
+		declarative_region_shared_ptr_variants_t declarative_region_variants_;
 		classes_t public_base_classes_;
 		classes_t protected_base_classes_;
 		classes_t private_base_classes_;

@@ -126,21 +126,11 @@ test_case_2()
 	struct_c->add(function_g_test);
 
 
-
-	//
-	//declarative region path construction
-	//
-	std::vector<declarative_region_variant> declarative_region_path;
-	declarative_region_path.push_back(semantic_graph);
-	declarative_region_path.push_back(struct_c);
-	declarative_region_path.push_back(function_g_test->body());
-
-
 	//
 	//name lookup test
 	//
 	{
-		auto found_entities = name_lookup2::find_entities<true, simple_function>(identifier("f"), declarative_region_path);
+		auto found_entities = name_lookup2::find_entities<true, simple_function>(identifier("f"), function_g_test);
 		BOOST_CHECK_EQUAL(found_entities.size(), 2);
 		if(found_entities.size() == 2)
 		{
@@ -150,14 +140,14 @@ test_case_2()
 	}
 
 	{
-		auto found_entities = name_lookup2::find_entities<true, simple_function>(identifier("g"), declarative_region_path);
+		auto found_entities = name_lookup2::find_entities<true, simple_function>(identifier("g"), function_g_test);
 		BOOST_CHECK_EQUAL(found_entities.size(), 1);
 		if(found_entities.size() == 1)
 			BOOST_CHECK_EQUAL(found_entities.front(), function_c1_g);
 	}
 
 	{
-		auto found_entity = name_lookup2::find_entities<false, class_>(identifier("inner"), declarative_region_path);
+		auto found_entity = name_lookup2::find_entities<false, class_>(identifier("inner"), function_g_test);
 		BOOST_CHECK_EQUAL(found_entity, struct_c0_inner);
 	}
 
@@ -177,7 +167,7 @@ test_case_2()
 			space(""),
 			identifier("f")
 		);
-		auto found_entity = name_lookup2::find_entities<false, simple_function>(c1base_f_syntax_node, declarative_region_path);
+		auto found_entity = name_lookup2::find_entities<false, simple_function>(c1base_f_syntax_node, function_g_test);
 		BOOST_CHECK_EQUAL(found_entity, function_c1base_f);
 	}
 
@@ -197,7 +187,7 @@ test_case_2()
 			space(""),
 			identifier("f")
 		);
-		auto found_entity = name_lookup2::find_entities<false, simple_function>(global_c0_f_syntax_node, declarative_region_path);
+		auto found_entity = name_lookup2::find_entities<false, simple_function>(global_c0_f_syntax_node, function_g_test);
 		BOOST_CHECK_EQUAL(found_entity, function_c0_f);
 	}
 
@@ -236,7 +226,7 @@ test_case_2()
 			identifier("f")
 		);
 
-		auto found_entity = name_lookup2::find_entities<false, simple_function>(c0_inner_f_syntax_node, declarative_region_path);
+		auto found_entity = name_lookup2::find_entities<false, simple_function>(c0_inner_f_syntax_node, function_g_test);
 		BOOST_CHECK_EQUAL(found_entity, function_c0_inner_f);
 	}
 }

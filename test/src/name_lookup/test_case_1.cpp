@@ -116,25 +116,15 @@ test_case_1()
 
 
 	//
-	//declarative region path construction
-	//
-	std::vector<declarative_region_variant> declarative_region_path;
-	declarative_region_path.push_back(semantic_graph);
-	declarative_region_path.push_back(namespace_a);
-	declarative_region_path.push_back(struct_a_b);
-	declarative_region_path.push_back(function_a_b_f->body());
-
-
-	//
 	//name lookup test
 	//
 	{
-		auto found_entity = name_lookup2::find_entities<false, variable>(identifier("i"), declarative_region_path);
+		auto found_entity = name_lookup2::find_entities<false, variable>(identifier("i"), function_a_b_f);
 		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
 	}
 
 	{
-		auto found_entity = name_lookup2::find_entities<false, variable>(identifier("j"), declarative_region_path);
+		auto found_entity = name_lookup2::find_entities<false, variable>(identifier("j"), function_a_b_f);
 		BOOST_CHECK_EQUAL(found_entity, variable_j);
 	}
 
@@ -154,7 +144,7 @@ test_case_1()
 			space(""),
 			identifier("n")
 		);
-		auto found_entity = name_lookup2::find_entities<false, variable>(variable_a_c_n_syntax_node, declarative_region_path);
+		auto found_entity = name_lookup2::find_entities<false, variable>(variable_a_c_n_syntax_node, function_a_b_f);
 		BOOST_CHECK_EQUAL(found_entity, variable_a_c_n);
 	}
 
@@ -174,7 +164,7 @@ test_case_1()
 			space(""),
 			identifier("i")
 		);
-		auto found_entity = name_lookup2::find_entities<false, variable>(variable_a_i_syntax_node, declarative_region_path);
+		auto found_entity = name_lookup2::find_entities<false, variable>(variable_a_i_syntax_node, function_a_b_f);
 		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
 	}
 
@@ -187,7 +177,7 @@ test_case_1()
 			space(""),
 			identifier("i")
 		);
-		auto found_entity = name_lookup2::find_entities<false, variable>(variable_i_syntax_node, declarative_region_path);
+		auto found_entity = name_lookup2::find_entities<false, variable>(variable_i_syntax_node, function_a_b_f);
 		BOOST_CHECK_EQUAL(found_entity, variable_i);
 	}
 }

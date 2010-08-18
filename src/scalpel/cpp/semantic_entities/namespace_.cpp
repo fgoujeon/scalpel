@@ -34,6 +34,7 @@ namespace_::namespace_(const std::string& name):
 
 namespace_::namespace_(namespace_&& n):
 	name_(std::move(n.name_)),
+	declarative_region_(std::move(n.declarative_region_)),
 	named_entities_(std::move(n.named_entities_)),
 	named_declarative_regions_(std::move(n.named_declarative_regions_)),
 	namespaces_(std::move(n.namespaces_)),
@@ -48,6 +49,7 @@ const namespace_&
 namespace_::operator=(namespace_&& n)
 {
 	name_ = std::move(n.name_);
+	declarative_region_ = std::move(n.declarative_region_);
 	named_entities_ = std::move(n.named_entities_);
 	named_declarative_regions_ = std::move(n.named_declarative_regions_);
 	namespaces_ = std::move(n.namespaces_);
@@ -63,6 +65,27 @@ const std::string&
 namespace_::name() const
 {
     return name_;
+}
+
+bool
+namespace_::has_declarative_region() const
+{
+	return !declarative_region_.empty();
+}
+
+declarative_region_shared_ptr_variant
+namespace_::get_declarative_region()
+{
+	return to_shared_ptr_variant(declarative_region_);
+}
+
+void
+namespace_::set_declarative_region(const declarative_region_weak_ptr_variant& decl_region)
+{
+	if(declarative_region_.empty())
+		declarative_region_ = decl_region;
+	else
+		throw std::runtime_error("The declarative region is already set.");
 }
 
 bool
@@ -164,6 +187,8 @@ namespace_::variables() const
 void
 namespace_::add(std::shared_ptr<namespace_> member)
 {
+	member->set_declarative_region(std::weak_ptr<namespace_>(shared_from_this()));
+
     namespaces_.push_back(member);
 	declarative_region_variants_.push_back(member);
 	named_declarative_regions_.push_back(member);
@@ -173,6 +198,8 @@ namespace_::add(std::shared_ptr<namespace_> member)
 void
 namespace_::add(std::shared_ptr<class_> member)
 {
+	member->set_declarative_region(std::weak_ptr<namespace_>(shared_from_this()));
+
     classes_.push_back(member);
 	declarative_region_variants_.push_back(member);
 	named_declarative_regions_.push_back(member);
@@ -182,6 +209,8 @@ namespace_::add(std::shared_ptr<class_> member)
 void
 namespace_::add(std::shared_ptr<simple_function> member)
 {
+	member->set_declarative_region(std::weak_ptr<namespace_>(shared_from_this()));
+
     simple_functions_.push_back(member);
 	named_declarative_regions_.push_back(member);
 	named_entities_.push_back(member);

@@ -34,7 +34,7 @@ get_name<std::shared_ptr<semantic_entities::ENTITY_TYPE>>(std::shared_ptr<semant
 
 template<>
 const std::string&
-get_name<semantic_entities::declarative_region_variant>(semantic_entities::declarative_region_variant entity)
+get_name<semantic_entities::declarative_region_shared_ptr_variant>(semantic_entities::declarative_region_shared_ptr_variant entity)
 {
 	if(auto opt_entity = utility::get<std::shared_ptr<semantic_entities::namespace_>>(&entity))
 	{

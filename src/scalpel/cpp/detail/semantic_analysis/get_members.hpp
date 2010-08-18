@@ -31,9 +31,9 @@ template<class EntityT>
 struct get_members_type_traits;
 
 template<>
-struct get_members_type_traits<semantic_entities::declarative_region_variant>
+struct get_members_type_traits<semantic_entities::declarative_region_shared_ptr_variant>
 {
-	typedef const utility::vector<semantic_entities::declarative_region_variant>& return_type;
+	typedef const utility::vector<semantic_entities::declarative_region_shared_ptr_variant>& return_type;
 };
 
 template<>

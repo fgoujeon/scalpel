@@ -29,7 +29,7 @@ typename name_lookup2::return_type<Multiple, EntityT>::type
 name_lookup2::find_entities
 (
 	const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node,
-	std::vector<semantic_entities::declarative_region_variant>& declarative_region_path
+	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
 )
 {
 	bool has_leading_double_colon = syntax_nodes::has_leading_double_colon(nested_identifier_or_template_id_node);
@@ -42,20 +42,22 @@ name_lookup2::find_entities
 	if(!has_leading_double_colon && !opt_nested_name_specifier_node)
 	{
 		auto identifier_or_template_id_node = syntax_nodes::get_identifier_or_template_id(nested_identifier_or_template_id_node);
-		return find_entities<Multiple, EntityT>(identifier_or_template_id_node, declarative_region_path);
+		return find_entities<Multiple, EntityT>(identifier_or_template_id_node, current_declarative_region);
 	}
 
 
 
 	//Get the last declarative region of the nested name specifier
 	//(i.e. Z in "[::]X::Y::Z::").
-	semantic_entities::declarative_region_variant last_declarative_region;
+	semantic_entities::declarative_region_shared_ptr_variant last_declarative_region;
 	if(has_leading_double_colon)
 	{
 		//the first declarative region is in the global namespace
-		std::shared_ptr<semantic_entities::namespace_> global_namespace =
-			*utility::get<std::shared_ptr<semantic_entities::namespace_>>(&declarative_region_path.front())
-		;
+		semantic_entities::declarative_region_shared_ptr_variant global_namespace = current_declarative_region;
+		while(has_declarative_region(global_namespace))
+		{
+			global_namespace = get_declarative_region(global_namespace);
+		}
 
 		if(opt_nested_name_specifier_node)
 		{
@@ -63,8 +65,8 @@ name_lookup2::find_entities
 
 			//find the first declarative region
 			auto identifier_or_template_id_node = get_identifier_or_template_id(nested_name_specifier_node);
-			semantic_entities::declarative_region_variant first_declarative_region =
-				find_entities_in_declarative_region<false, semantic_entities::declarative_region_variant>(identifier_or_template_id_node, global_namespace)
+			semantic_entities::declarative_region_shared_ptr_variant first_declarative_region =
+				find_entities_in_declarative_region<false, semantic_entities::declarative_region_shared_ptr_variant>(identifier_or_template_id_node, global_namespace)
 			;
 			if(utility::is_empty(first_declarative_region))
 			{
@@ -76,7 +78,7 @@ name_lookup2::find_entities
 			{
 				auto last_part_seq_node = *opt_last_part_seq_node;
 				last_declarative_region =
-					find_declarative_region<semantic_entities::declarative_region_variant>(last_part_seq_node, first_declarative_region)
+					find_declarative_region<semantic_entities::declarative_region_shared_ptr_variant>(last_part_seq_node, first_declarative_region)
 				;
 			}
 			else
@@ -99,8 +101,8 @@ name_lookup2::find_entities
 
 			//find the first declarative region
 			auto identifier_or_template_id_node = get_identifier_or_template_id(nested_name_specifier_node);
-			semantic_entities::declarative_region_variant first_declarative_region =
-				find_entities<false, semantic_entities::declarative_region_variant>(identifier_or_template_id_node, declarative_region_path)
+			semantic_entities::declarative_region_shared_ptr_variant first_declarative_region =
+				find_entities<false, semantic_entities::declarative_region_shared_ptr_variant>(identifier_or_template_id_node, current_declarative_region)
 			;
 			if(utility::is_empty(first_declarative_region))
 			{
@@ -111,8 +113,8 @@ name_lookup2::find_entities
 			if(auto opt_last_part_seq_node = get_last_part_seq(nested_name_specifier_node))
 			{
 				auto last_part_seq_node = *opt_last_part_seq_node;
-				semantic_entities::declarative_region_variant last_declarative_region =
-					find_declarative_region<semantic_entities::declarative_region_variant>(last_part_seq_node, first_declarative_region)
+				semantic_entities::declarative_region_shared_ptr_variant last_declarative_region =
+					find_declarative_region<semantic_entities::declarative_region_shared_ptr_variant>(last_part_seq_node, first_declarative_region)
 				;
 			}
 			else
@@ -184,13 +186,13 @@ typename name_lookup2::return_type<Multiple, EntityT>::type
 name_lookup2::find_entities
 (
 	const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
-	std::vector<semantic_entities::declarative_region_variant>& declarative_region_path
+	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
 )
 {
 	if(auto opt_identifier_node = syntax_nodes::get<syntax_nodes::identifier>(&identifier_or_template_id))
 	{
 		auto identifier_node = *opt_identifier_node;
-		return find_entities_from_identifier<Multiple, EntityT>(identifier_node.value(), declarative_region_path);
+		return find_entities_from_identifier<Multiple, EntityT>(identifier_node.value(), current_declarative_region);
 	}
 	else
 	{
@@ -203,36 +205,25 @@ typename name_lookup2::return_type<Multiple, EntityT>::type
 name_lookup2::find_entities_from_identifier
 (
 	const std::string& name,
-	std::vector<semantic_entities::declarative_region_variant>& declarative_region_path
+	semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 )
 {
 	typename return_type<Multiple, EntityT>::type found_entities;
 
 	//find entities from current to outermost declarative regions
 	//(until global namespace)
-	for(auto i = declarative_region_path.rbegin(); i != declarative_region_path.rend(); ++i)
+	while(true)
 	{
-		semantic_entities::declarative_region_variant current_declarative_region = *i;
+		//find entities in this declarative region
+		found_entities =
+			find_entities_from_identifier_in_declarative_region<Multiple, EntityT>(name, current_declarative_region)
+		;
+		if(!utility::is_empty(found_entities)) break;
 
-		if(auto opt_namespace_ptr = utility::get<std::shared_ptr<semantic_entities::namespace_>>(&current_declarative_region))
-		{
-			std::shared_ptr<semantic_entities::namespace_> namespace_ptr = *opt_namespace_ptr;
-
-			//find entities in that namespace
-			found_entities =
-				find_entities_from_identifier_in_declarative_region<Multiple, EntityT>(name, namespace_ptr)
-			;
-			if(!utility::is_empty(found_entities)) break;
-		}
-		else if(auto opt_class_ptr = utility::get<std::shared_ptr<semantic_entities::class_>>(&current_declarative_region))
+		//only for classes...
+		if(auto opt_class_ptr = utility::get<std::shared_ptr<semantic_entities::class_>>(&current_declarative_region))
 		{
 			std::shared_ptr<semantic_entities::class_> class_ptr = *opt_class_ptr;
-
-			//find entities in the members of that class
-			found_entities =
-				find_entities_from_identifier_in_declarative_region<Multiple, EntityT>(name, class_ptr)
-			;
-			if(!utility::is_empty(found_entities)) break;
 
 			//find entities in the base classes of that class
 			found_entities =
@@ -240,6 +231,9 @@ name_lookup2::find_entities_from_identifier
 			;
 			if(!utility::is_empty(found_entities)) break;
 		}
+
+		if(!has_declarative_region(current_declarative_region)) break;
+		current_declarative_region = get_declarative_region(current_declarative_region);
 	}
 
 	return found_entities;
