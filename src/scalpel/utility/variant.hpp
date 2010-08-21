@@ -25,6 +25,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/utility/enable_if.hpp>
+#include <stdexcept>
 
 namespace scalpel { namespace utility
 {
@@ -302,13 +303,24 @@ variant<T, Ts...>::set(const T2& object)
 
 
 
-template<class ReturnT, class VariantT>
+template<typename ReturnT, typename... Ts>
 boost::optional<const ReturnT&>
-get(const VariantT* var)
+get(const variant<Ts...>* var)
 {
 	boost::optional<const ReturnT&> return_object;
 	var->get(return_object);
 	return return_object;
+}
+
+template<typename ReturnT, typename... Ts>
+const ReturnT&
+get(const variant<Ts...>& var)
+{
+	boost::optional<const ReturnT&> return_object;
+	var.get(return_object);
+	if(!return_object)
+		throw std::runtime_error("variant: bad get");
+	return *return_object;
 }
 
 
