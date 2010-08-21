@@ -240,8 +240,19 @@ template<typename T, typename... Ts>
 const variant<T, Ts...>&
 variant<T, Ts...>::operator=(const variant<T, Ts...>& o)
 {
-	head_ = o.head_;
-	tail_ = o.tail_;
+	//exception safety: ensure the may-throw copy of the rhs variant's content
+	//occurs before the erasure of the lhs variant's content
+	if(!head_)
+	{
+		head_ = o.head_; //may throw
+		tail_ = o.tail_; //may throw
+	}
+	else
+	{
+		tail_ = o.tail_; //may throw
+		head_ = o.head_; //erase the lhs variant's content, may not throw
+	}
+
 	return *this;
 }
 
