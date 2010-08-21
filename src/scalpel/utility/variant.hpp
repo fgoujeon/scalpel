@@ -21,10 +21,10 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_UTILITY_VARIANT_HPP
 #define SCALPEL_UTILITY_VARIANT_HPP
 
-#include <boost/optional.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/utility/enable_if.hpp>
+#include <memory>
 #include <stdexcept>
 
 namespace scalpel { namespace utility
@@ -39,12 +39,6 @@ class variant<>
 	public:
 		typedef void head_t;
 		typedef void tail_t;
-
-		bool
-		empty() const
-		{
-			return true;
-		}
 };
 
 template<typename T, typename... Ts>
@@ -54,11 +48,16 @@ class variant<T, Ts...>
 		typedef T head_t;
 		typedef variant<Ts...> tail_t;
 
+		template<typename... T2s>
+		friend class variant;
+
+	private:
 		/**
 		 * Default constructor which does nothing (useful for internal use).
 		 */
 		variant();
 
+	public:
 		/**
 		 * Constructor.
 		 */
@@ -126,33 +125,32 @@ class variant<T, Ts...>
 		const variant&
 		operator=(const variant& o);
 
-		inline
-		bool
-		empty() const;
+		const variant&
+		operator=(const T&);
 
-		const tail_t&
-		tail() const;
+		//T2 is one of the tail's types
+		template<typename T2>
+		const variant&
+		operator=(const T2&);
 
-		//same type
 		void
-		get(boost::optional<const T&>&) const;
+		get(T*&);
 
-		//different types
+		void
+		get(const T*&) const;
+
+		//T2 is one of the tail's types
 		template<typename T2>
 		void
-		get(boost::optional<const T2&>&) const;
+		get(T2*&);
 
-		//same type
-		void
-		set(const T&);
-
-		//different types
+		//T2 is one of the tail's types
 		template<typename T2>
 		void
-		set(const T2&);
+		get(const T2*&) const;
 
 	private:
-		boost::optional<head_t> head_;
+		std::unique_ptr<head_t> head_;
 		tail_t tail_;
 };
 
@@ -164,19 +162,19 @@ variant<T, Ts...>::variant()
 
 template<typename T, typename... Ts>
 variant<T, Ts...>::variant(const T& o):
-	head_(o)
+	head_(new T(o))
 {
 }
 
 template<typename T, typename... Ts>
 variant<T, Ts...>::variant(T& o):
-	head_(o)
+	head_(new T(o))
 {
 }
 
 template<typename T, typename... Ts>
 variant<T, Ts...>::variant(T&& o):
-	head_(std::move(o))
+	head_(new T(o))
 {
 }
 
@@ -218,14 +216,14 @@ variant<T, Ts...>::variant
 
 template<typename T, typename... Ts>
 variant<T, Ts...>::variant(const variant<T, Ts...>& o):
-	head_(o.head_),
+	head_(std::unique_ptr<T>(new T(o.head_))),
 	tail_(o.tail_)
 {
 }
 
 template<typename T, typename... Ts>
 variant<T, Ts...>::variant(variant<T, Ts...>& o):
-	head_(o.head_),
+	head_(std::unique_ptr<T>(new T(o.head_))),
 	tail_(o.tail_)
 {
 }
@@ -245,79 +243,126 @@ variant<T, Ts...>::operator=(const variant<T, Ts...>& o)
 	//occurs before the erasure of the lhs variant's content
 	if(!head_)
 	{
-		head_ = o.head_; //may throw
-		tail_ = o.tail_; //may throw
+		if(o.head_)
+			head_ = std::unique_ptr<T>(new T(*o.head_));
+		else
+			head_.reset();
+
+		tail_ = o.tail_;
 	}
 	else
 	{
-		tail_ = o.tail_; //may throw
-		head_ = o.head_; //erase the lhs variant's content, may not throw
+		tail_ = o.tail_;
+
+		//erase the lhs variant's content
+		if(o.head_)
+			head_ = std::unique_ptr<T>(new T(*o.head_));
+		else
+			head_.reset();
 	}
 
 	return *this;
 }
 
 template<typename T, typename... Ts>
-bool
-variant<T, Ts...>::empty() const
+const variant<T, Ts...>&
+variant<T, Ts...>::operator=(const T& object)
 {
-	return !head_ && tail_.empty();
+	head_ = std::unique_ptr<T>(new T(object));
+	return *this;
 }
 
 template<typename T, typename... Ts>
-const typename variant<T, Ts...>::tail_t&
-variant<T, Ts...>::tail() const
+template<typename T2>
+const variant<T, Ts...>&
+variant<T, Ts...>::operator=(const T2& object)
 {
-	return tail_;
+	tail_ = object;
+	return *this;
 }
 
 template<typename T, typename... Ts>
 void
-variant<T, Ts...>::get(boost::optional<const T&>& object) const
+variant<T, Ts...>::get(T*& object)
 {
-	object = head_;
+	if(head_)
+		object = head_.get();
+	else
+		object = 0;
+}
+
+template<typename T, typename... Ts>
+void
+variant<T, Ts...>::get(const T*& object) const
+{
+	if(head_)
+		object = head_.get();
+	else
+		object = 0;
 }
 
 template<typename T, typename... Ts>
 template<typename T2>
 void
-variant<T, Ts...>::get(boost::optional<const T2&>& object) const
+variant<T, Ts...>::get(T2*& object)
 {
 	tail_.get(object);
 }
 
 template<typename T, typename... Ts>
-void
-variant<T, Ts...>::set(const T& object)
-{
-	head_ = object;
-}
-
-template<typename T, typename... Ts>
 template<typename T2>
 void
-variant<T, Ts...>::set(const T2& object)
+variant<T, Ts...>::get(const T2*& object) const
 {
-	tail_.set(object);
+	tail_.get(object);
 }
-
 
 
 template<typename ReturnT, typename... Ts>
-boost::optional<const ReturnT&>
+ReturnT*
+get(variant<Ts...>* var)
+{
+	ReturnT* return_object = 0;
+	var->get(return_object);
+
+	if(return_object)
+		return return_object;
+	else
+		return 0;
+}
+
+template<typename ReturnT, typename... Ts>
+const ReturnT*
 get(const variant<Ts...>* var)
 {
-	boost::optional<const ReturnT&> return_object;
+	const ReturnT* return_object = 0;
 	var->get(return_object);
-	return return_object;
+
+	if(return_object)
+		return return_object;
+	else
+		return 0;
+}
+
+template<typename ReturnT, typename... Ts>
+ReturnT&
+get(variant<Ts...>& var)
+{
+	ReturnT* return_object = 0;
+	var.get(return_object);
+
+	if(!return_object)
+		throw std::runtime_error("variant: bad get");
+	return *return_object;
 }
 
 template<typename ReturnT, typename... Ts>
 const ReturnT&
 get(const variant<Ts...>& var)
 {
-	boost::optional<const ReturnT&> return_object;
+	const ReturnT* return_object = 0;
 	var.get(return_object);
+
 	if(!return_object)
 		throw std::runtime_error("variant: bad get");
 	return *return_object;
@@ -367,7 +412,7 @@ class apply_visitor_impl
 		const FullVariantT& var
 	)
 	{
-		boost::optional<const head_t&> opt_object = get<head_t>(&var);
+		const head_t* opt_object = get<head_t>(&var);
 		if(opt_object)
 		{
 			return variant_visitor(*opt_object);
@@ -420,7 +465,7 @@ class apply_visitor_impl<void, VariantVisitorT, FullVariantT, CurrentVariantT, H
 		const FullVariantT& var
 	)
 	{
-		boost::optional<const head_t&> opt_object = get<head_t>(&var);
+		const head_t* opt_object = get<head_t>(&var);
 		if(opt_object)
 		{
 			variant_visitor(*opt_object);
