@@ -313,25 +313,58 @@ get(const VariantT* var)
 
 
 
-template<class VariantVisitorT, class FullVariantT, class CurrentVariantT, typename HeadT>
-struct private_visitor
+template<typename ResultTypeT>
+class static_visitor
 {
+	public:
+		typedef ResultTypeT result_type;
+};
+
+
+
+template<typename ResultTypeT, class VariantVisitorT, class FullVariantT, class CurrentVariantT, typename HeadT>
+class apply_visitor_impl
+{
+	template<typename ResultTypeT2, class VariantVisitorT2, class FullVariantT2, class CurrentVariantT2, typename HeadT2>
+	friend struct apply_visitor_impl;
+
+	template<class VariantVisitorT2, class VariantT2>
+	typename VariantVisitorT2::result_type
+	friend apply_visitor
+	(
+		VariantVisitorT2& variant_visitor,
+		const VariantT2& var,
+		typename boost::disable_if
+		<
+			boost::is_same
+			<
+				typename VariantVisitorT2::result_type,
+				void
+			>
+		>::type* = 0
+	);
+
 	typedef typename CurrentVariantT::head_t head_t;
 	typedef typename CurrentVariantT::tail_t tail_t;
 
 	static
-	void
-	visit(const VariantVisitorT& variant_visitor, const FullVariantT& var)
+	typename VariantVisitorT::result_type
+	visit
+	(
+		VariantVisitorT& variant_visitor,
+		const FullVariantT& var
+	)
 	{
 		boost::optional<const head_t&> opt_object = get<head_t>(&var);
 		if(opt_object)
 		{
-			variant_visitor(*opt_object);
+			return variant_visitor(*opt_object);
 		}
 		else
 		{
-			private_visitor
+			return apply_visitor_impl
 			<
+				typename VariantVisitorT::result_type,
 				VariantVisitorT,
 				FullVariantT,
 				tail_t,
@@ -341,23 +374,154 @@ struct private_visitor
 	}
 };
 
-template<class VariantVisitorT, class FullVariantT, class CurrentVariantT>
-struct private_visitor<VariantVisitorT, FullVariantT, CurrentVariantT, void>
+//specialization for no return visitors
+template<class VariantVisitorT, class FullVariantT, class CurrentVariantT, typename HeadT>
+class apply_visitor_impl<void, VariantVisitorT, FullVariantT, CurrentVariantT, HeadT>
 {
+	template<typename ResultTypeT2, class VariantVisitorT2, class FullVariantT2, class CurrentVariantT2, typename HeadT2>
+	friend struct apply_visitor_impl;
+
+	template<class VariantVisitorT2, class VariantT2>
+	void
+	friend apply_visitor
+	(
+		VariantVisitorT2& variant_visitor,
+		const VariantT2& var,
+		typename boost::enable_if
+		<
+			boost::is_same
+			<
+				typename VariantVisitorT2::result_type,
+				void
+			>
+		>::type* = 0
+	);
+
+	typedef typename CurrentVariantT::head_t head_t;
+	typedef typename CurrentVariantT::tail_t tail_t;
+
 	static
 	void
-	visit(const VariantVisitorT&, const FullVariantT&)
+	visit
+	(
+		VariantVisitorT& variant_visitor,
+		const FullVariantT& var
+	)
+	{
+		boost::optional<const head_t&> opt_object = get<head_t>(&var);
+		if(opt_object)
+		{
+			variant_visitor(*opt_object);
+		}
+		else
+		{
+			apply_visitor_impl
+			<
+				void,
+				VariantVisitorT,
+				FullVariantT,
+				tail_t,
+				typename tail_t::head_t
+			>::visit(variant_visitor, var);
+		}
+	}
+};
+
+//specialization for end tail recursion
+template<typename ResultTypeT, class VariantVisitorT, class FullVariantT, class CurrentVariantT>
+class apply_visitor_impl<ResultTypeT, VariantVisitorT, FullVariantT, CurrentVariantT, void>
+{
+	template<typename ResultTypeT2, class VariantVisitorT2, class FullVariantT2, class CurrentVariantT2, typename HeadT2>
+	friend struct apply_visitor_impl;
+
+	static
+	typename VariantVisitorT::result_type
+	visit
+	(
+		VariantVisitorT&,
+		const FullVariantT&,
+		typename boost::disable_if
+		<
+			boost::is_same
+			<
+				typename VariantVisitorT::result_type,
+				void
+			>
+		>::type* = 0
+	)
+	{
+		//this code will never be called
+		//it has been written for warning-free purpose
+		typename VariantVisitorT::result_type* return_value_ptr = 0;
+		return *return_value_ptr;
+	}
+};
+
+//specialization for end tail recursion and no return visitors
+template<class VariantVisitorT, class FullVariantT, class CurrentVariantT>
+class apply_visitor_impl<void, VariantVisitorT, FullVariantT, CurrentVariantT, void>
+{
+	template<typename ResultTypeT2, class VariantVisitorT2, class FullVariantT2, class CurrentVariantT2, typename HeadT2>
+	friend struct apply_visitor_impl;
+
+	static
+	void
+	visit
+	(
+		VariantVisitorT&,
+		const FullVariantT&
+	)
 	{
 		//does nothing
 	}
 };
 
 template<class VariantVisitorT, class VariantT>
-void
-apply_visitor(const VariantVisitorT& variant_visitor, const VariantT& var)
-{
-	private_visitor
+typename VariantVisitorT::result_type
+apply_visitor
+(
+	VariantVisitorT& variant_visitor,
+	const VariantT& var,
+	typename boost::disable_if
 	<
+		boost::is_same
+		<
+			typename VariantVisitorT::result_type,
+			void
+		>
+	>::type* = 0
+)
+{
+	return apply_visitor_impl
+	<
+		typename VariantVisitorT::result_type,
+		VariantVisitorT,
+		VariantT,
+		VariantT,
+		typename VariantT::head_t
+	>::visit(variant_visitor, var);
+}
+
+//overload for no return visitors
+template<class VariantVisitorT, class VariantT>
+void
+apply_visitor
+(
+	VariantVisitorT& variant_visitor,
+	const VariantT& var,
+	typename boost::enable_if
+	<
+		boost::is_same
+		<
+			typename VariantVisitorT::result_type,
+			void
+		>
+	>::type* = 0
+)
+{
+	apply_visitor_impl
+	<
+		void,
 		VariantVisitorT,
 		VariantT,
 		VariantT,
