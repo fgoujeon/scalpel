@@ -21,12 +21,12 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_NAME_LOOKUP2_IPP
 #define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_NAME_LOOKUP2_IPP
 
-namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
+namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace name_lookup2
 {
 
 template<bool Optional, bool Multiple, class EntityT>
-typename name_lookup2::return_type<Optional, Multiple, EntityT>::type
-name_lookup2::find_entities
+typename return_type<Optional, Multiple, EntityT>::type
+find_entities
 (
 	const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node,
 	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
@@ -47,17 +47,17 @@ name_lookup2::find_entities
 	//Get the last declarative region of the nested name specifier
 	//(i.e. Z in "[::]X::Y::Z::").
 	semantic_entities::declarative_region_shared_ptr_variant last_declarative_region =
-		find_declarative_region(nested_identifier_or_template_id_node, current_declarative_region)
+		impl::find_declarative_region(nested_identifier_or_template_id_node, current_declarative_region)
 	;
 
 	//find entities in the last declarative region
 	auto identifier_or_template_id_node = get_identifier_or_template_id(nested_identifier_or_template_id_node);
-	return find_entities_in_declarative_region<Optional, Multiple, EntityT>(identifier_or_template_id_node, last_declarative_region);
+	return impl::find_entities_in_declarative_region<Optional, Multiple, EntityT>(identifier_or_template_id_node, last_declarative_region);
 }
 
 template<bool Optional, bool Multiple, class EntityT>
-typename name_lookup2::return_type<Optional, Multiple, EntityT>::type
-name_lookup2::find_entities
+typename return_type<Optional, Multiple, EntityT>::type
+find_entities
 (
 	const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
 	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
@@ -66,7 +66,7 @@ name_lookup2::find_entities
 	if(auto opt_identifier_node = syntax_nodes::get<syntax_nodes::identifier>(&identifier_or_template_id))
 	{
 		auto identifier_node = *opt_identifier_node;
-		return find_entities_from_identifier<Optional, Multiple, EntityT>(identifier_node.value(), current_declarative_region);
+		return impl::find_entities_from_identifier<Optional, Multiple, EntityT>(identifier_node.value(), current_declarative_region);
 	}
 	else
 	{
@@ -74,9 +74,11 @@ name_lookup2::find_entities
 	}
 }
 
+
+
 template<bool Optional, bool Multiple, class EntityT>
-typename name_lookup2::return_type<Optional, Multiple, EntityT>::type
-name_lookup2::find_entities_from_identifier
+typename return_type<Optional, Multiple, EntityT>::type
+impl::find_entities_from_identifier
 (
 	const std::string& name,
 	semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
@@ -114,8 +116,8 @@ name_lookup2::find_entities_from_identifier
 }
 
 template<bool Optional, bool Multiple, class EntityT, class DeclarativeRegionT>
-typename name_lookup2::return_type<Optional, Multiple, EntityT>::type
-name_lookup2::find_entities_in_declarative_region
+typename return_type<Optional, Multiple, EntityT>::type
+impl::find_entities_in_declarative_region
 (
 	const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
 	DeclarativeRegionT& current_declarative_region
@@ -133,8 +135,8 @@ name_lookup2::find_entities_in_declarative_region
 }
 
 template<bool Optional, bool Multiple, class EntityT, class DeclarativeRegionT>
-typename name_lookup2::return_type<Optional, Multiple, EntityT>::type
-name_lookup2::find_entities_from_identifier_in_declarative_region
+typename return_type<Optional, Multiple, EntityT>::type
+impl::find_entities_from_identifier_in_declarative_region
 (
 	const std::string& name,
 	DeclarativeRegionT& current_declarative_region
@@ -157,8 +159,8 @@ name_lookup2::find_entities_from_identifier_in_declarative_region
 }
 
 template<bool Optional, bool Multiple, class EntityT>
-typename name_lookup2::return_type<Optional, Multiple, EntityT>::type
-name_lookup2::find_entities_in_base_classes
+typename return_type<Optional, Multiple, EntityT>::type
+impl::find_entities_in_base_classes
 (
 	const std::string& name,
 	utility::vector<std::shared_ptr<semantic_entities::class_>>::range base_classes
@@ -171,7 +173,7 @@ name_lookup2::find_entities_in_base_classes
 		std::shared_ptr<semantic_entities::class_> current_class = *i;
 
 		//find entities in the current declarative region (i.e. current class)
-		typename name_lookup2::return_type<Optional, Multiple, EntityT>::type current_class_found_entities =
+		typename return_type<Optional, Multiple, EntityT>::type current_class_found_entities =
 			find_entities_from_identifier_in_declarative_region<Optional, Multiple, EntityT>(name, current_class)
 		;
 
@@ -184,7 +186,7 @@ name_lookup2::find_entities_in_base_classes
 		else
 		{
 			//find entities in the current declarative region's base classes
-			typename name_lookup2::return_type<Optional, Multiple, EntityT>::type current_class_base_classes_found_entities =
+			typename return_type<Optional, Multiple, EntityT>::type current_class_base_classes_found_entities =
 				find_entities_in_base_classes<Optional, Multiple, EntityT>(name, current_class->base_classes())
 			;
 
@@ -202,28 +204,28 @@ name_lookup2::find_entities_in_base_classes
 
 template<class T, class T2>
 void
-name_lookup2::add_to_result(T& result, T2& entity)
+impl::add_to_result(T& result, T2& entity)
 {
 	result = entity;
 }
 
 template<class T, class T2>
 void
-name_lookup2::add_to_result(utility::vector<T>& result, T2& entity)
+impl::add_to_result(utility::vector<T>& result, T2& entity)
 {
 	if(!utility::is_empty(entity)) result.push_back(entity);
 }
 
 template<class T, class T2>
 void
-name_lookup2::add_to_result(utility::vector<T>& result, boost::optional<T2>& entity)
+impl::add_to_result(utility::vector<T>& result, boost::optional<T2>& entity)
 {
 	if(!utility::is_empty(entity)) result.push_back(*entity);
 }
 
 template<class T, class T2>
 void
-name_lookup2::add_to_result(utility::vector<T>& result, utility::vector<T2>& entities)
+impl::add_to_result(utility::vector<T>& result, utility::vector<T2>& entities)
 {
 	std::copy
 	(
@@ -236,8 +238,8 @@ name_lookup2::add_to_result(utility::vector<T>& result, utility::vector<T2>& ent
 
 
 template<class EntityT>
-typename name_lookup2::return_type<true, false, EntityT>::type
-name_lookup2::return_result<true, false, EntityT>::result(typename return_type<true, true, EntityT>::type& result)
+typename return_type<true, false, EntityT>::type
+impl::return_result<true, false, EntityT>::result(typename return_type<true, true, EntityT>::type& result)
 {
 	if(result.empty())
 	{
@@ -254,15 +256,15 @@ name_lookup2::return_result<true, false, EntityT>::result(typename return_type<t
 }
 
 template<class EntityT>
-typename name_lookup2::return_type<true, false, EntityT>::type
-name_lookup2::return_result<true, false, EntityT>::result(typename return_type<true, false, EntityT>::type& result)
+typename return_type<true, false, EntityT>::type
+impl::return_result<true, false, EntityT>::result(typename return_type<true, false, EntityT>::type& result)
 {
 	return result;
 }
 
 template<class EntityT>
-typename name_lookup2::return_type<false, false, EntityT>::type
-name_lookup2::return_result<false, false, EntityT>::result(typename return_type<false, true, EntityT>::type& result)
+typename return_type<false, false, EntityT>::type
+impl::return_result<false, false, EntityT>::result(typename return_type<false, true, EntityT>::type& result)
 {
 	if(result.empty())
 	{
@@ -279,23 +281,31 @@ name_lookup2::return_result<false, false, EntityT>::result(typename return_type<
 }
 
 template<class EntityT>
-typename name_lookup2::return_type<false, false, EntityT>::type
-name_lookup2::return_result<false, false, EntityT>::result(typename return_type<true, false, EntityT>::type& result)
+typename return_type<false, false, EntityT>::type
+impl::return_result<false, false, EntityT>::result(typename return_type<true, false, EntityT>::type& result)
 {
 	if(!result)
 		throw std::runtime_error("no entity found");
-	else
-		return *result;
+	return *result;
 }
 
-template<bool Optional, class EntityT>
+template<class EntityT>
 utility::vector<std::shared_ptr<EntityT>>&
-name_lookup2::return_result<Optional, true, EntityT>::result(utility::vector<std::shared_ptr<EntityT>>& result)
+impl::return_result<true, true, EntityT>::result(utility::vector<std::shared_ptr<EntityT>>& result)
 {
 	return result;
 }
 
-}}}} //namespace scalpel::cpp::detail::semantic_analysis
+template<class EntityT>
+utility::vector<std::shared_ptr<EntityT>>&
+impl::return_result<false, true, EntityT>::result(utility::vector<std::shared_ptr<EntityT>>& result)
+{
+	if(result.empty())
+		throw std::runtime_error("no entity found");
+	return result;
+}
+
+}}}}} //namespace scalpel::cpp::detail::semantic_analysis::name_lookup2
 
 #endif
 
