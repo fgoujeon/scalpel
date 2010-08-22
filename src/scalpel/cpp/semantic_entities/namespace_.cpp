@@ -70,19 +70,19 @@ namespace_::name() const
 bool
 namespace_::has_declarative_region() const
 {
-	return !declarative_region_.empty();
+	return declarative_region_;
 }
 
 declarative_region_shared_ptr_variant
 namespace_::get_declarative_region()
 {
-	return to_shared_ptr_variant(declarative_region_);
+	return to_shared_ptr_variant(*declarative_region_);
 }
 
 void
 namespace_::set_declarative_region(const declarative_region_weak_ptr_variant& decl_region)
 {
-	if(declarative_region_.empty())
+	if(!declarative_region_)
 		declarative_region_ = decl_region;
 	else
 		throw std::runtime_error("The declarative region is already set.");

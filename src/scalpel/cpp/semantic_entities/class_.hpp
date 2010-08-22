@@ -239,7 +239,7 @@ class class_:
 
     private:
         std::string name_;
-		declarative_region_weak_ptr_variant declarative_region_;
+		boost::optional<declarative_region_weak_ptr_variant> declarative_region_;
 
 		//polymorphic containers
 		named_entities_t named_entities_;

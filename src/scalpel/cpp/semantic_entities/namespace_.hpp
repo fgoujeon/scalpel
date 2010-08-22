@@ -29,6 +29,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "named_entity.hpp"
 #include "declarative_region_variants.hpp"
 #include <boost/noncopyable.hpp>
+#include <boost/optional.hpp>
 #include <string>
 #include <list>
 #include <vector>
@@ -166,7 +167,7 @@ class namespace_:
 
     private:
         std::string name_;
-		declarative_region_weak_ptr_variant declarative_region_;
+		boost::optional<declarative_region_weak_ptr_variant> declarative_region_;
 
 		//polymorphic containers
 		named_entities_t named_entities_;

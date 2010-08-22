@@ -22,7 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_UTILITY_IS_EMPTY_HPP
 
 #include "vector.hpp"
-#include "variant.hpp"
+#include <boost/optional.hpp>
 #include <memory>
 
 namespace scalpel { namespace utility
@@ -31,17 +31,17 @@ namespace scalpel { namespace utility
 template<class T>
 inline
 bool
-is_empty(vector<std::shared_ptr<T>>& container);
+is_empty(const vector<std::shared_ptr<T>>& container);
 
 template<class T>
 inline
 bool
-is_empty(std::shared_ptr<T>& container);
+is_empty(const std::shared_ptr<T>& container);
 
-template<class... Ts>
+template<class T>
 inline
 bool
-is_empty(variant<Ts...>& container);
+is_empty(const boost::optional<T>& container);
 
 }} //namespace scalpel::utility
 

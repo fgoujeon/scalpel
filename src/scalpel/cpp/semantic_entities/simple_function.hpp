@@ -27,6 +27,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "named_declarative_region.hpp"
 #include "declarative_region_variants.hpp"
 #include "type.hpp"
+#include <boost/optional.hpp>
 #include <string>
 #include <list>
 #include <memory>
@@ -139,7 +140,7 @@ class simple_function:
 		bool inline_specified_;
 		bool static_specified_;
 		bool defined_;
-		declarative_region_weak_ptr_variant declarative_region_;
+		boost::optional<declarative_region_weak_ptr_variant> declarative_region_;
 
 		//polymorphic containers
 		named_declarative_regions_t named_declarative_regions_;

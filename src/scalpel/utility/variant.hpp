@@ -216,14 +216,14 @@ variant<T, Ts...>::variant
 
 template<typename T, typename... Ts>
 variant<T, Ts...>::variant(const variant<T, Ts...>& o):
-	head_(std::unique_ptr<T>(new T(o.head_))),
+	head_(o.head_ ? std::unique_ptr<T>(new T(*o.head_)) : std::unique_ptr<T>()),
 	tail_(o.tail_)
 {
 }
 
 template<typename T, typename... Ts>
 variant<T, Ts...>::variant(variant<T, Ts...>& o):
-	head_(std::unique_ptr<T>(new T(o.head_))),
+	head_(o.head_ ? std::unique_ptr<T>(new T(*o.head_)) : std::unique_ptr<T>()),
 	tail_(o.tail_)
 {
 }

@@ -26,23 +26,23 @@ namespace scalpel { namespace utility
 
 template<class T>
 bool
-is_empty(vector<std::shared_ptr<T>>& container)
+is_empty(const vector<std::shared_ptr<T>>& container)
 {
 	return container.empty();
 }
 
 template<class T>
 bool
-is_empty(std::shared_ptr<T>& container)
+is_empty(const std::shared_ptr<T>& container)
 {
 	return !container;
 }
 
-template<class... Ts>
+template<class T>
 bool
-is_empty(variant<Ts...>& container)
+is_empty(const boost::optional<T>& container)
 {
-	return container.empty();
+	return !container;
 }
 
 }} //namespace scalpel::utility
