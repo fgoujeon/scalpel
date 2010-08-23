@@ -21,8 +21,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_VARIABLE_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_VARIABLE_HPP
 
-#include "named_declarative_region.hpp"
-#include "named_entity.hpp"
 #include "type.hpp"
 #include <boost/noncopyable.hpp>
 #include <string>
@@ -34,8 +32,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 /**
 Represents a C++ variable.
 */
-class variable:
-	public named_entity
+class variable
 {
 	public:
 		variable
@@ -60,9 +57,6 @@ class variable:
 
 		bool
 		static_specified() const;
-
-		bool
-		is_a_type() const;
 
 	private:
 		std::shared_ptr<const type> type_;

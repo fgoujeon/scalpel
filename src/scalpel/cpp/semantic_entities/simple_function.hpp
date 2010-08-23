@@ -23,8 +23,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "variable.hpp"
 #include "statement_block.hpp"
-#include "named_entity.hpp"
-#include "named_declarative_region.hpp"
 #include "declarative_region_variants.hpp"
 #include "type.hpp"
 #include <boost/optional.hpp>
@@ -40,7 +38,6 @@ Represents a C++ non-special function (which is neither a constructor nor an
 operator function nor a conversion function).
 */
 class simple_function:
-	public named_declarative_region,
 	public std::enable_shared_from_this<simple_function>
 {
     public:
@@ -86,10 +83,10 @@ class simple_function:
 		has_declarative_region() const;
 
 		declarative_region_shared_ptr_variant
-		get_declarative_region();
+		declarative_region();
 
 		void
-		set_declarative_region(const declarative_region_weak_ptr_variant& declarative_region);
+		declarative_region(const declarative_region_shared_ptr_variant& declarative_region);
 
         /**
         @return false
@@ -115,18 +112,6 @@ class simple_function:
 		void
 		defined(bool d);
 
-		named_entities_t::range
-		named_entities();
-
-		const named_entities_t&
-		named_entities() const;
-
-		named_declarative_regions_t::range
-        named_declarative_regions();
-
-		const named_declarative_regions_t&
-        named_declarative_regions() const;
-
 		const declarative_region_shared_ptr_variants_t&
 		declarative_region_variants();
 
@@ -142,9 +127,6 @@ class simple_function:
 		bool defined_;
 		boost::optional<declarative_region_weak_ptr_variant> declarative_region_;
 
-		//polymorphic containers
-		named_declarative_regions_t named_declarative_regions_;
-		named_entities_t named_entities_;
 		declarative_region_shared_ptr_variants_t declarative_region_variants_;
 
 		std::shared_ptr<statement_block> body_;

@@ -25,8 +25,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "operator_function.hpp"
 #include "simple_function.hpp"
 #include "class_.hpp"
-#include "named_declarative_region.hpp"
-#include "named_entity.hpp"
 #include "declarative_region_variants.hpp"
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
@@ -42,7 +40,6 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 Represents a C++ namespace.
 */
 class namespace_:
-	public named_declarative_region,
 	public std::enable_shared_from_this<namespace_>,
 	public boost::noncopyable
 {
@@ -88,34 +85,16 @@ class namespace_:
 		has_declarative_region() const;
 
 		declarative_region_shared_ptr_variant
-		get_declarative_region();
+		declarative_region();
 
 		void
-		set_declarative_region(const declarative_region_weak_ptr_variant& declarative_region);
-
-        /**
-        @return true if the namespace is the global one, false otherwise
-        */
-        bool
-        is_global() const;
+		declarative_region(const declarative_region_shared_ptr_variant& declarative_region);
 
         /**
         @return true
         */
 		bool
 		is_open_to_outside() const;
-
-		named_entities_t::range
-		named_entities();
-
-		const named_entities_t&
-		named_entities() const;
-
-		named_declarative_regions_t::range
-        named_declarative_regions();
-
-		const named_declarative_regions_t&
-        named_declarative_regions() const;
 
 		const declarative_region_variants_t&
 		declarative_region_variants();
@@ -170,8 +149,6 @@ class namespace_:
 		boost::optional<declarative_region_weak_ptr_variant> declarative_region_;
 
 		//polymorphic containers
-		named_entities_t named_entities_;
-		named_declarative_regions_t named_declarative_regions_;
 		declarative_region_variants_t declarative_region_variants_;
 
 		//containers

@@ -25,8 +25,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "operator_function.hpp"
 #include "simple_function.hpp"
 #include "declarative_region_variants.hpp"
-#include "named_declarative_region.hpp"
-#include "named_entity.hpp"
 #include "type.hpp"
 #include <scalpel/utility/vector.hpp>
 #include <boost/noncopyable.hpp>
@@ -42,7 +40,6 @@ class namespace_;
 Represents a C++ class.
 */
 class class_:
-	public named_declarative_region,
 	public type,
 	public boost::noncopyable,
 	public std::enable_shared_from_this<class_>
@@ -52,6 +49,21 @@ class class_:
 		class destructor;
 		class conversion_function;
 
+		typedef
+			utility::variant
+			<
+				std::shared_ptr<class_>,
+				std::shared_ptr<constructor>,
+				std::shared_ptr<destructor>,
+				std::shared_ptr<simple_function>,
+				std::shared_ptr<conversion_function>,
+				std::shared_ptr<operator_function>,
+				std::shared_ptr<variable>
+			>
+			member_t
+		;
+
+		typedef utility::vector<member_t> members_t;
 		typedef utility::vector<declarative_region_shared_ptr_variant> declarative_region_shared_ptr_variants_t;
 		typedef utility::vector<std::shared_ptr<class_>> classes_t;
 		typedef utility::vector<std::shared_ptr<constructor>> constructors_t;
@@ -95,34 +107,16 @@ class class_:
 		has_declarative_region() const;
 
 		declarative_region_shared_ptr_variant
-		get_declarative_region();
+		declarative_region();
 
 		void
-		set_declarative_region(const declarative_region_weak_ptr_variant& declarative_region);
-
-        /**
-        @return false, because a class cannot be the global namespace...
-        */
-        bool
-        is_global() const;
+		declarative_region(const declarative_region_shared_ptr_variant& declarative_region);
 
         /**
         @return true
         */
 		bool
 		is_open_to_outside() const;
-
-		named_entities_t::range
-		named_entities();
-
-		const named_entities_t&
-		named_entities() const;
-
-		named_declarative_regions_t::range
-        named_declarative_regions();
-
-		const named_declarative_regions_t&
-        named_declarative_regions() const;
 
 		const declarative_region_shared_ptr_variants_t&
 		declarative_region_variants();
@@ -242,20 +236,18 @@ class class_:
 		boost::optional<declarative_region_weak_ptr_variant> declarative_region_;
 
 		//polymorphic containers
-		named_entities_t named_entities_;
-		named_declarative_regions_t named_declarative_regions_;
 		declarative_region_shared_ptr_variants_t declarative_region_variants_;
 		classes_t public_base_classes_;
 		classes_t protected_base_classes_;
 		classes_t private_base_classes_;
 		classes_t virtual_base_classes_;
-		entities_t public_members_;
-		entities_t protected_members_;
-		entities_t private_members_;
-		entities_t const_member_functions_;
-		entities_t volatile_member_functions_;
-		entities_t virtual_member_functions_;
-		entities_t pure_member_functions_;
+		members_t public_members_;
+		members_t protected_members_;
+		members_t private_members_;
+		members_t const_member_functions_;
+		members_t volatile_member_functions_;
+		members_t virtual_member_functions_;
+		members_t pure_member_functions_;
 
 		//containers
 		classes_t base_classes_;
@@ -268,7 +260,7 @@ class class_:
 		variables_t variables_;
 };
 
-class class_::constructor: public entity
+class class_::constructor
 {
 	public:
 		typedef simple_function::parameter parameter;
@@ -297,7 +289,7 @@ class class_::constructor: public entity
 		bool explicit_specified_;
 };
 
-class class_::destructor: public entity
+class class_::destructor
 {
 	public:
 		destructor(const bool is_inline_specified);
@@ -311,7 +303,7 @@ class class_::destructor: public entity
 		bool inline_specified_;
 };
 
-class class_::conversion_function: public entity
+class class_::conversion_function
 {
 	public:
 		conversion_function

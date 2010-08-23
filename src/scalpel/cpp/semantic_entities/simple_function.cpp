@@ -157,42 +157,18 @@ simple_function::has_declarative_region() const
 }
 
 declarative_region_shared_ptr_variant
-simple_function::get_declarative_region()
+simple_function::declarative_region()
 {
 	return to_shared_ptr_variant(*declarative_region_);
 }
 
 void
-simple_function::set_declarative_region(const declarative_region_weak_ptr_variant& decl_region)
+simple_function::declarative_region(const declarative_region_shared_ptr_variant& decl_region)
 {
 	if(!declarative_region_)
-		declarative_region_ = decl_region;
+		declarative_region_ = to_weak_ptr_variant(decl_region);
 	else
 		throw std::runtime_error("The declarative region is already set.");
-}
-
-simple_function::named_entities_t::range
-simple_function::named_entities()
-{
-	return named_entities_;
-}
-
-const simple_function::named_entities_t&
-simple_function::named_entities() const
-{
-	return named_entities_;
-}
-
-simple_function::named_declarative_regions_t::range
-simple_function::named_declarative_regions()
-{
-	return named_declarative_regions_;
-}
-
-const simple_function::named_declarative_regions_t&
-simple_function::named_declarative_regions() const
-{
-	return named_declarative_regions_;
 }
 
 const simple_function::declarative_region_shared_ptr_variants_t&

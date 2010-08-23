@@ -43,11 +43,11 @@ declarative_region_shared_ptr_variant
 get_declarative_region(const declarative_region_shared_ptr_variant& var)
 {
 	if(auto opt_shared_ptr = utility::get<std::shared_ptr<namespace_>>(&var))
-		return (*opt_shared_ptr)->get_declarative_region();
+		return (*opt_shared_ptr)->declarative_region();
 	else if(auto opt_shared_ptr = utility::get<std::shared_ptr<class_>>(&var))
-		return (*opt_shared_ptr)->get_declarative_region();
+		return (*opt_shared_ptr)->declarative_region();
 	else if(auto opt_shared_ptr = utility::get<std::shared_ptr<simple_function>>(&var))
-		return (*opt_shared_ptr)->get_declarative_region();
+		return (*opt_shared_ptr)->declarative_region();
 	else
 		throw "";
 }
@@ -61,6 +61,19 @@ to_shared_ptr_variant(const declarative_region_weak_ptr_variant& var)
 		return std::shared_ptr<class_>(*opt_shared_ptr);
 	else if(auto opt_shared_ptr = utility::get<std::weak_ptr<simple_function>>(&var))
 		return std::shared_ptr<simple_function>(*opt_shared_ptr);
+
+	throw "";
+}
+
+declarative_region_weak_ptr_variant
+to_weak_ptr_variant(const declarative_region_shared_ptr_variant& var)
+{
+	if(auto opt_weak_ptr = utility::get<std::shared_ptr<namespace_>>(&var))
+		return std::weak_ptr<namespace_>(*opt_weak_ptr);
+	else if(auto opt_weak_ptr = utility::get<std::shared_ptr<class_>>(&var))
+		return std::weak_ptr<class_>(*opt_weak_ptr);
+	else if(auto opt_weak_ptr = utility::get<std::shared_ptr<simple_function>>(&var))
+		return std::weak_ptr<simple_function>(*opt_weak_ptr);
 
 	throw "";
 }

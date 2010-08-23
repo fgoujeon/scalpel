@@ -77,11 +77,5 @@ variable::static_specified() const
 	return static_specified_;
 }
 
-bool
-variable::is_a_type() const
-{
-	return false;
-}
-
 }}} //namespace scalpel::cpp::semantic_entities
 

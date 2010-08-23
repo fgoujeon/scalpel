@@ -35,8 +35,7 @@ namespace_::namespace_(const std::string& name):
 namespace_::namespace_(namespace_&& n):
 	name_(std::move(n.name_)),
 	declarative_region_(std::move(n.declarative_region_)),
-	named_entities_(std::move(n.named_entities_)),
-	named_declarative_regions_(std::move(n.named_declarative_regions_)),
+	declarative_region_variants_(std::move(n.declarative_region_variants_)),
 	namespaces_(std::move(n.namespaces_)),
 	classes_(std::move(n.classes_)),
 	simple_functions_(std::move(n.simple_functions_)),
@@ -50,8 +49,7 @@ namespace_::operator=(namespace_&& n)
 {
 	name_ = std::move(n.name_);
 	declarative_region_ = std::move(n.declarative_region_);
-	named_entities_ = std::move(n.named_entities_);
-	named_declarative_regions_ = std::move(n.named_declarative_regions_);
+	declarative_region_variants_ = std::move(n.declarative_region_variants_);
 	namespaces_ = std::move(n.namespaces_);
 	classes_ = std::move(n.classes_);
 	simple_functions_ = std::move(n.simple_functions_);
@@ -74,16 +72,16 @@ namespace_::has_declarative_region() const
 }
 
 declarative_region_shared_ptr_variant
-namespace_::get_declarative_region()
+namespace_::declarative_region()
 {
 	return to_shared_ptr_variant(*declarative_region_);
 }
 
 void
-namespace_::set_declarative_region(const declarative_region_weak_ptr_variant& decl_region)
+namespace_::declarative_region(const declarative_region_shared_ptr_variant& decl_region)
 {
 	if(!declarative_region_)
-		declarative_region_ = decl_region;
+		declarative_region_ = to_weak_ptr_variant(decl_region);
 	else
 		throw std::runtime_error("The declarative region is already set.");
 }
@@ -92,30 +90,6 @@ bool
 namespace_::is_open_to_outside() const
 {
 	return true;
-}
-
-namespace_::named_entities_t::range
-namespace_::named_entities()
-{
-	return named_entities_;
-}
-
-const namespace_::named_entities_t&
-namespace_::named_entities() const
-{
-	return named_entities_;
-}
-
-namespace_::named_declarative_regions_t::range
-namespace_::named_declarative_regions()
-{
-	return named_declarative_regions_;
-}
-
-const namespace_::named_declarative_regions_t&
-namespace_::named_declarative_regions() const
-{
-	return named_declarative_regions_;
 }
 
 const namespace_::declarative_region_variants_t&
@@ -187,33 +161,27 @@ namespace_::variables() const
 void
 namespace_::add(std::shared_ptr<namespace_> member)
 {
-	member->set_declarative_region(std::weak_ptr<namespace_>(shared_from_this()));
+	member->declarative_region(shared_from_this());
 
     namespaces_.push_back(member);
 	declarative_region_variants_.push_back(member);
-	named_declarative_regions_.push_back(member);
-	named_entities_.push_back(member);
 }
 
 void
 namespace_::add(std::shared_ptr<class_> member)
 {
-	member->set_declarative_region(std::weak_ptr<namespace_>(shared_from_this()));
+	member->declarative_region(shared_from_this());
 
     classes_.push_back(member);
 	declarative_region_variants_.push_back(member);
-	named_declarative_regions_.push_back(member);
-	named_entities_.push_back(member);
 }
 
 void
 namespace_::add(std::shared_ptr<simple_function> member)
 {
-	member->set_declarative_region(std::weak_ptr<namespace_>(shared_from_this()));
+	member->declarative_region(shared_from_this());
 
     simple_functions_.push_back(member);
-	named_declarative_regions_.push_back(member);
-	named_entities_.push_back(member);
 }
 
 void
@@ -226,7 +194,6 @@ void
 namespace_::add(std::shared_ptr<variable> member)
 {
     variables_.push_back(member);
-	named_entities_.push_back(member);
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

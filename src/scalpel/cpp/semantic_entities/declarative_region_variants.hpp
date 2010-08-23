@@ -60,6 +60,9 @@ get_declarative_region(const declarative_region_shared_ptr_variant& var);
 declarative_region_shared_ptr_variant
 to_shared_ptr_variant(const declarative_region_weak_ptr_variant& var);
 
+declarative_region_weak_ptr_variant
+to_weak_ptr_variant(const declarative_region_shared_ptr_variant& var);
+
 }}} //namespace scalpel::cpp::semantic_entities
 
 #endif
