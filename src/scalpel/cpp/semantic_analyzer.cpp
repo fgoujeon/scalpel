@@ -37,9 +37,6 @@ semantic_analyzer::operator()(const syntax_tree& tree)
 	//create semantic graph
 	std::shared_ptr<namespace_> global_namespace = std::make_shared<namespace_>();
 
-	//current declarative_region = global namespace
-	declarative_region_cursor_.initialize(global_namespace);
-
 	auto opt_declaration_seq_node = get_declaration_seq_node(tree);
 	if(opt_declaration_seq_node)
 		analyze(*opt_declaration_seq_node, global_namespace);
@@ -69,7 +66,11 @@ semantic_analyzer::create_class(const class_specifier& syntax_node)
 }
 
 void
-semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& class_specifier_node)
+semantic_analyzer::fill_class
+(
+	std::shared_ptr<class_> c,
+	const class_specifier& class_specifier_node
+)
 {
 	auto class_head_node = get_class_head(class_specifier_node);
 
@@ -98,7 +99,7 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 
 			//get base class
 			auto nested_identifier_or_template_id_node = get_nested_identifier_or_template_id(base_specifier_node);
-			std::shared_ptr<class_> base_class = find_class(nested_identifier_or_template_id_node);
+			std::shared_ptr<class_> base_class = name_lookup::find_entities<false, false, class_>(nested_identifier_or_template_id_node, c);
 
 			c->add_base_class(base_class, access, is_virtual);
 		}
@@ -157,7 +158,7 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 										{
 											c->add
 											(
-												create_operator_function(decl_specifier_seq_node, declarator_node),
+												create_operator_function(decl_specifier_seq_node, declarator_node, c),
 												current_access,
 												is_qualified<str::const_>(declarator_node),
 												is_qualified<str::volatile_>(declarator_node),
@@ -171,7 +172,7 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 											(
 												std::make_shared<class_::conversion_function>
 												(
-													get_conversion_function_type(declarator_node),
+													get_conversion_function_type(declarator_node, c),
 													has_inline_specifier(decl_specifier_seq_node)
 												),
 												current_access,
@@ -181,7 +182,7 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 												has_pure_specifier(member_declarator_declarator_node)
 											);
 										}
-										else if(c->name() == get_name(declarator_node)) //constructor or destructor
+										else if(c->name() == get_identifier(declarator_node).value()) //constructor or destructor
 										{
 											if(!is_destructor_declaration(declarator_node)) //constructor
 											{
@@ -189,7 +190,7 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 												(
 													std::make_shared<class_::constructor>
 													(
-														std::move(create_parameters(declarator_node)),
+														std::move(create_parameters(declarator_node, c)),
 														has_inline_specifier(decl_specifier_seq_node),
 														has_explicit_specifier(decl_specifier_seq_node)
 													),
@@ -214,7 +215,7 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 										{
 											c->add
 											(
-												create_simple_function(decl_specifier_seq_node, declarator_node),
+												create_simple_function(decl_specifier_seq_node, declarator_node, c),
 												current_access,
 												is_qualified<str::const_>(declarator_node),
 												is_qualified<str::volatile_>(declarator_node),
@@ -227,7 +228,7 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 									{
 										c->add
 										(
-											create_variable(decl_specifier_seq_node, declarator_node),
+											create_variable(decl_specifier_seq_node, declarator_node, c),
 											current_access
 										);
 									}
@@ -240,7 +241,7 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 										(
 											std::make_shared<class_::conversion_function>
 											(
-												get_conversion_function_type(declarator_node),
+												get_conversion_function_type(declarator_node, c),
 												false
 											),
 											current_access,
@@ -250,7 +251,7 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 											false
 										);
 									}
-									else if(c->name() == get_name(declarator_node)) //constructor or destructor
+									else if(c->name() == get_identifier(declarator_node).value()) //constructor or destructor
 									{
 										if(!is_destructor_declaration(declarator_node)) //constructor
 										{
@@ -258,7 +259,7 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 											(
 												std::make_shared<class_::constructor>
 												(
-													std::move(create_parameters(declarator_node)),
+													std::move(create_parameters(declarator_node, c)),
 													false,
 													false
 												),
@@ -299,9 +300,7 @@ semantic_analyzer::fill_class(std::shared_ptr<class_> c, const class_specifier& 
 										new_nested_class,
 										current_access
 									);
-									declarative_region_cursor_.enter_declarative_region(new_nested_class);
 									fill_class(new_nested_class, class_specifier_node);
-									declarative_region_cursor_.leave_current_declarative_region();
 								}
 							}
 						}
@@ -343,10 +342,11 @@ std::shared_ptr<semantic_entities::simple_function>
 semantic_analyzer::create_function
 (
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-	const syntax_nodes::declarator& declarator_node
+	const syntax_nodes::declarator& declarator_node,
+	declarative_region_shared_ptr_variant parent_entity
 )
 {
-	return create_simple_function(decl_specifier_seq_node, declarator_node);
+	return create_simple_function(decl_specifier_seq_node, declarator_node, parent_entity);
 }
 
 template<>
@@ -354,27 +354,38 @@ std::shared_ptr<semantic_entities::operator_function>
 semantic_analyzer::create_function
 (
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-	const syntax_nodes::declarator& declarator_node
+	const syntax_nodes::declarator& declarator_node,
+	declarative_region_shared_ptr_variant parent_entity
 )
 {
-	return create_operator_function(decl_specifier_seq_node, declarator_node);
+	return create_operator_function(decl_specifier_seq_node, declarator_node, parent_entity);
 }
 
 std::shared_ptr<semantic_entities::simple_function>
-semantic_analyzer::create_simple_function(const decl_specifier_seq& decl_specifier_seq_node, const declarator& declarator_node)
+semantic_analyzer::create_simple_function
+(
+	const decl_specifier_seq& decl_specifier_seq_node,
+	const declarator& declarator_node,
+	declarative_region_shared_ptr_variant parent_entity
+)
 {
 	return std::make_shared<simple_function>
 	(
-		get_name(declarator_node),
-		create_type(decl_specifier_seq_node, declarator_node),
-		create_parameters(declarator_node),
+		get_identifier(declarator_node).value(),
+		create_type(decl_specifier_seq_node, declarator_node, parent_entity),
+		create_parameters(declarator_node, parent_entity),
 		has_inline_specifier(decl_specifier_seq_node),
 		has_static_specifier(decl_specifier_seq_node)
 	);
 }
 
 std::shared_ptr<semantic_entities::operator_function>
-semantic_analyzer::create_operator_function(const decl_specifier_seq& decl_specifier_seq_node, const declarator& declarator_node)
+semantic_analyzer::create_operator_function
+(
+	const decl_specifier_seq& decl_specifier_seq_node,
+	const declarator& declarator_node,
+	declarative_region_shared_ptr_variant parent_entity
+)
 {
 	//
 	//get the overloaded operator
@@ -505,14 +516,18 @@ semantic_analyzer::create_operator_function(const decl_specifier_seq& decl_speci
 	return std::make_shared<operator_function>
 	(
 		op,
-		create_type(decl_specifier_seq_node, declarator_node),
-		create_parameters(declarator_node),
+		create_type(decl_specifier_seq_node, declarator_node, parent_entity),
+		create_parameters(declarator_node, parent_entity),
 		has_static_specifier(decl_specifier_seq_node)
 	);
 }
 
 simple_function::parameters_t
-semantic_analyzer::create_parameters(const declarator& declarator_node)
+semantic_analyzer::create_parameters
+(
+	const declarator& declarator_node,
+	declarative_region_shared_ptr_variant parent_entity
+)
 {
 	std::list<simple_function::parameter> parameters;
 
@@ -550,8 +565,8 @@ semantic_analyzer::create_parameters(const declarator& declarator_node)
 									(
 										simple_function::parameter
 										(
-											create_type(decl_specifier_seq_node, declarator_node),
-											get_name(declarator_node)
+											create_type(decl_specifier_seq_node, declarator_node, parent_entity),
+											get_identifier(declarator_node).value()
 										)
 									)
 								);
@@ -566,7 +581,7 @@ semantic_analyzer::create_parameters(const declarator& declarator_node)
 									(
 										simple_function::parameter
 										(
-											create_type(decl_specifier_seq_node, abstract_declarator_node),
+											create_type(decl_specifier_seq_node, abstract_declarator_node, parent_entity),
 											""
 										)
 									)
@@ -580,7 +595,7 @@ semantic_analyzer::create_parameters(const declarator& declarator_node)
 									(
 										simple_function::parameter
 										(
-											create_type(decl_specifier_seq_node),
+											create_type(decl_specifier_seq_node, parent_entity),
 											""
 										)
 									)
@@ -597,9 +612,14 @@ semantic_analyzer::create_parameters(const declarator& declarator_node)
 }
 
 std::shared_ptr<const type>
-semantic_analyzer::create_type(const decl_specifier_seq& decl_specifier_seq_node, const declarator& declarator_node)
+semantic_analyzer::create_type
+(
+	const decl_specifier_seq& decl_specifier_seq_node,
+	const declarator& declarator_node,
+	declarative_region_shared_ptr_variant parent_entity
+)
 {
-	std::shared_ptr<const type> return_type = create_type(decl_specifier_seq_node);
+	std::shared_ptr<const type> return_type = create_type(decl_specifier_seq_node, parent_entity);
 
 	if(auto opt_ptr_operator_seq_node = get_ptr_operator_seq(declarator_node))
 	{
@@ -637,10 +657,11 @@ std::shared_ptr<const type>
 semantic_analyzer::create_type
 (
 	const decl_specifier_seq& decl_specifier_seq_node,
-	const abstract_declarator& abstract_declarator_node
+	const abstract_declarator& abstract_declarator_node,
+	declarative_region_shared_ptr_variant parent_entity
 )
 {
-	std::shared_ptr<const type> return_type = create_type(decl_specifier_seq_node);
+	std::shared_ptr<const type> return_type = create_type(decl_specifier_seq_node, parent_entity);
 
 	if(auto opt_ptr_operator_seq_node = get<ptr_operator_seq>(&abstract_declarator_node))
 	{
@@ -658,7 +679,8 @@ semantic_analyzer::create_type
 std::shared_ptr<const type>
 semantic_analyzer::create_type
 (
-	const decl_specifier_seq& decl_specifier_seq_node
+	const decl_specifier_seq& decl_specifier_seq_node,
+	declarative_region_shared_ptr_variant parent_entity
 )
 {
 	std::shared_ptr<const type> return_type;
@@ -711,7 +733,8 @@ semantic_analyzer::create_type
 				void_type,
 				wchar_t_type,
 				const_qualified,
-				volatile_qualified
+				volatile_qualified,
+				parent_entity
 			);
 		}
 	}
@@ -745,7 +768,8 @@ semantic_analyzer::create_type
 std::shared_ptr<const semantic_entities::type>
 semantic_analyzer::get_conversion_function_type
 (
-	const syntax_nodes::declarator& declarator_node
+	const syntax_nodes::declarator& declarator_node,
+	declarative_region_shared_ptr_variant parent_entity
 )
 {
 	std::shared_ptr<const type> return_type;
@@ -800,7 +824,8 @@ semantic_analyzer::get_conversion_function_type
 			void_type,
 			wchar_t_type,
 			const_qualified,
-			volatile_qualified
+			volatile_qualified,
+			parent_entity
 		);
 	}
 
@@ -922,7 +947,8 @@ semantic_analyzer::get_type_info
 	bool& void_type,
 	bool& wchar_t_type,
 	bool& const_qualified,
-	bool& volatile_qualified
+	bool& volatile_qualified,
+	declarative_region_shared_ptr_variant parent_entity
 )
 {
 	//simple_type_specifier
@@ -939,11 +965,9 @@ semantic_analyzer::get_type_info
 		if(auto opt_nested_identifier_or_template_id_node = get<nested_identifier_or_template_id>(&simple_type_specifier_node))
 		{
 			auto nested_identifier_or_template_id_node = *opt_nested_identifier_or_template_id_node;
-			std::shared_ptr<named_entity> found_name = name_lookup::find_name(declarative_region_cursor_.declarative_region_path(), nested_identifier_or_template_id_node);
-			if(auto found_type = std::dynamic_pointer_cast<const type>(found_name))
-			{
-				t = found_type;
-			}
+			t =
+				name_lookup::find_entities<false, false, class_>(nested_identifier_or_template_id_node, parent_entity)
+			;
 		}
 		else if(auto opt_built_in_type_specifier_node = get<built_in_type_specifier>(&simple_type_specifier_node))
 		{
@@ -1323,27 +1347,12 @@ semantic_analyzer::get_built_in_type
 	throw std::runtime_error("Incorrect built-in type");
 }
 
-std::shared_ptr<semantic_entities::class_>
-semantic_analyzer::find_class
-(
-	const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node
-)
-{
-	std::shared_ptr<named_entity> found_name = name_lookup::find_name(declarative_region_cursor_.declarative_region_path(), nested_identifier_or_template_id_node);
-
-	if(std::shared_ptr<class_> found_class = std::dynamic_pointer_cast<class_>(found_name))
-	{
-		return found_class;
-	}
-
-	throw std::runtime_error("Type not found");
-}
-
 std::vector<std::shared_ptr<variable>>
 semantic_analyzer::create_variables
 (
 	const decl_specifier_seq& decl_specifier_seq_node,
-	const init_declarator_list& init_declarator_list_node
+	const init_declarator_list& init_declarator_list_node,
+	declarative_region_shared_ptr_variant parent_entity
 )
 {
 	std::vector<std::shared_ptr<variable>> variables;
@@ -1363,7 +1372,8 @@ semantic_analyzer::create_variables
 			create_variable
 			(
 				decl_specifier_seq_node,
-				declarator_node
+				declarator_node,
+				parent_entity
 			)
 		);
 	}
@@ -1375,13 +1385,14 @@ std::shared_ptr<variable>
 semantic_analyzer::create_variable
 (
 	const decl_specifier_seq& decl_specifier_seq_node,
-	const declarator& declarator_node
+	const declarator& declarator_node,
+	declarative_region_shared_ptr_variant parent_entity
 )
 {
 	return std::make_shared<variable>
 	(
-		get_name(declarator_node),
-		create_type(decl_specifier_seq_node, declarator_node),
+		get_identifier(declarator_node).value(),
+		create_type(decl_specifier_seq_node, declarator_node, parent_entity),
 		has_static_specifier(decl_specifier_seq_node)
 	);
 }

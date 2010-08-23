@@ -55,6 +55,12 @@ struct get_members_type_traits<semantic_entities::simple_function>
 };
 
 template<>
+struct get_members_type_traits<semantic_entities::operator_function>
+{
+	typedef utility::vector<std::shared_ptr<semantic_entities::operator_function>>::range return_type;
+};
+
+template<>
 struct get_members_type_traits<semantic_entities::statement_block>
 {
 	typedef utility::vector<std::shared_ptr<semantic_entities::statement_block>>::range return_type;

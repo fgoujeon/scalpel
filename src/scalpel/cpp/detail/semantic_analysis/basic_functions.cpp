@@ -86,7 +86,7 @@ is_simple_function_declaration(const declarator& declarator_node)
 {
 	auto direct_declarator_node = get_direct_declarator(declarator_node);
 
-	if(!has_name(declarator_node))
+	if(!has_identifier(declarator_node))
 		return false;
 
 	if(auto direct_declarator_node_last_part_seq = get_last_part_seq(direct_declarator_node))
@@ -375,8 +375,8 @@ is_variable_declaration(const syntax_nodes::simple_declaration& simple_declarati
 //common
 //
 
-std::string
-get_name(const declarator& declarator_node)
+syntax_nodes::identifier
+get_identifier(const declarator& declarator_node)
 {
 	auto direct_declarator_node = get_direct_declarator(declarator_node);
 	auto first_part_node = get_first_part(direct_declarator_node);
@@ -393,7 +393,7 @@ get_name(const declarator& declarator_node)
 			{
 				if(auto opt_identifier_node = get<identifier>(&*opt_unqualified_id_node))
 				{
-					return opt_identifier_node->value();
+					return *opt_identifier_node;
 				}
 				else if(auto opt_destructor_name_node = get<destructor_name>(&*opt_unqualified_id_node))
 				{
@@ -401,7 +401,7 @@ get_name(const declarator& declarator_node)
 					auto identifier_or_template_id = get_identifier_or_template_id(destructor_name_node);
 					if(auto opt_identifier_node = get<identifier>(&identifier_or_template_id))
 					{
-						return opt_identifier_node->value();
+						return *opt_identifier_node;
 					}
 				}
 			}
@@ -424,7 +424,7 @@ get_name(const declarator& declarator_node)
 					auto opt_identifier_node = get<identifier>(&unqualified_id_node);
 					if(opt_identifier_node)
 					{
-						return opt_identifier_node->value();
+						return *opt_identifier_node;
 					}
 				}
 			}
@@ -439,7 +439,7 @@ get_name(const declarator& declarator_node)
 			auto identifier_or_template_id_node = get_identifier_or_template_id(nested_identifier_or_template_id_node);
 			if(auto opt_identifier_node = get<identifier>(&identifier_or_template_id_node))
 			{
-				return opt_identifier_node->value();
+				return *opt_identifier_node;
 			}
 		}
 		else
@@ -452,7 +452,7 @@ get_name(const declarator& declarator_node)
 }
 
 bool
-has_name(const declarator& declarator_node)
+has_identifier(const declarator& declarator_node)
 {
 	auto direct_declarator_node = get_direct_declarator(declarator_node);
 	auto first_part_node = get_first_part(direct_declarator_node);

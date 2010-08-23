@@ -18,236 +18,321 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <iostream>
+#ifndef SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_NAME_LOOKUP_IPP
+#define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_NAME_LOOKUP_IPP
 
-namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
+namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace name_lookup
 {
 
-template<class RangeT>
-std::shared_ptr<semantic_entities::named_entity>
-name_lookup::find_name
+template<bool Optional, bool Multiple, class EntityT>
+typename return_type<Optional, Multiple, EntityT>::type
+find_entities
 (
-	RangeT declarative_region_stack,
-	const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node
+	const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node,
+	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
 )
 {
-	using namespace syntax_nodes;
-	using namespace semantic_entities;
-
-	auto opt_nested_name_specifier_node = get_nested_name_specifier(nested_identifier_or_template_id_node);
-	auto identifier_or_template_id_node = get_identifier_or_template_id(nested_identifier_or_template_id_node);
-
-	if(opt_nested_name_specifier_node)
+	//Check whether the given qualified name is really qualified.
+	//If not, perform a simple unqualified name lookup.
+	if
+	(
+		!has_leading_double_colon(nested_identifier_or_template_id_node) &&
+		!get_nested_name_specifier(nested_identifier_or_template_id_node)
+	)
 	{
-		auto nested_name_specifier_node = *opt_nested_name_specifier_node;
-		std::shared_ptr<declarative_region> found_declarative_region = find_declarative_region(declarative_region_stack, nested_name_specifier_node);
+		auto identifier_or_template_id_node = syntax_nodes::get_identifier_or_template_id(nested_identifier_or_template_id_node);
+		return find_entities<Optional, Multiple, EntityT>(identifier_or_template_id_node, current_declarative_region);
+	}
 
-		if(auto opt_identifier_node = get<identifier>(&identifier_or_template_id_node))
-		{
-			auto identifier_node = *opt_identifier_node;
-			return find_name(*found_declarative_region, identifier_node.value());
-		}
-		else if(auto template_id_node = get<template_id>(&identifier_or_template_id_node))
-		{
-		}
-		else
-		{
-			assert(false);
-		}
+	//Get the last declarative region of the nested name specifier
+	//(i.e. Z in "[::]X::Y::Z::").
+	semantic_entities::declarative_region_shared_ptr_variant last_declarative_region =
+		impl::find_declarative_region(nested_identifier_or_template_id_node, current_declarative_region)
+	;
+
+	//find entities in the last declarative region
+	auto identifier_or_template_id_node = get_identifier_or_template_id(nested_identifier_or_template_id_node);
+	return impl::find_entities_in_declarative_region<Optional, Multiple, EntityT>(identifier_or_template_id_node, last_declarative_region);
+}
+
+template<bool Optional, bool Multiple, class EntityT>
+typename return_type<Optional, Multiple, EntityT>::type
+find_entities
+(
+	const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
+	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
+)
+{
+	if(auto opt_identifier_node = syntax_nodes::get<syntax_nodes::identifier>(&identifier_or_template_id))
+	{
+		auto identifier_node = *opt_identifier_node;
+		return impl::find_entities_from_identifier<Optional, Multiple, EntityT>(identifier_node.value(), current_declarative_region);
 	}
 	else
 	{
-		if(auto opt_identifier_node = get<identifier>(&identifier_or_template_id_node))
+		throw std::runtime_error("Not implemented yet");
+	}
+}
+
+
+
+template<bool Optional, bool Multiple, class EntityT>
+typename return_type<Optional, Multiple, EntityT>::type
+impl::find_entities_from_identifier
+(
+	const std::string& name,
+	semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+)
+{
+	typename return_type<true, Multiple, EntityT>::type found_entities;
+
+	//find entities from current to outermost declarative regions
+	//(until global namespace)
+	while(true)
+	{
+		//find entities in this declarative region
+		found_entities =
+			find_entities_from_identifier_in_declarative_region<true, Multiple, EntityT>(name, current_declarative_region)
+		;
+		if(!utility::is_empty(found_entities)) break;
+
+		//only for classes...
+		if(auto opt_class_ptr = utility::get<std::shared_ptr<semantic_entities::class_>>(&current_declarative_region))
 		{
-			auto identifier_node = *opt_identifier_node;
-			return find_name(declarative_region_stack, identifier_node.value());
+			std::shared_ptr<semantic_entities::class_> class_ptr = *opt_class_ptr;
+
+			//find entities in the base classes of that class
+			found_entities =
+				find_entities_in_base_classes<true, Multiple, EntityT>(name, class_ptr->base_classes())
+			;
+			if(!utility::is_empty(found_entities)) break;
 		}
-		else if(auto template_id_node = get<template_id>(&identifier_or_template_id_node))
+
+		if(!has_declarative_region(current_declarative_region)) break;
+		current_declarative_region = get_declarative_region(current_declarative_region);
+	}
+
+	return std::move(return_result<Optional, Multiple, EntityT>::result(found_entities));
+}
+
+template<bool Optional, bool Multiple, class EntityT, class DeclarativeRegionT>
+typename return_type<Optional, Multiple, EntityT>::type
+impl::find_entities_in_declarative_region
+(
+	const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
+	DeclarativeRegionT& current_declarative_region
+)
+{
+	if(auto opt_identifier_node = syntax_nodes::get<syntax_nodes::identifier>(&identifier_or_template_id))
+	{
+		auto identifier_node = *opt_identifier_node;
+		return find_entities_from_identifier_in_declarative_region<Optional, Multiple, EntityT>(identifier_node.value(), current_declarative_region);
+	}
+	else
+	{
+		throw std::runtime_error("Not implemented yet");
+	}
+}
+
+template<bool Optional, bool Multiple, class EntityT, class DeclarativeRegionT>
+typename return_type<Optional, Multiple, EntityT>::type
+impl::find_entities_from_identifier_in_declarative_region
+(
+	const std::string& name,
+	DeclarativeRegionT& current_declarative_region
+)
+{
+	typename return_type<true, Multiple, EntityT>::type found_entities;
+
+	typename get_members_type_traits<EntityT>::return_type members = get_members<EntityT>(current_declarative_region);
+	for(auto i = members.begin(); i != members.end(); ++i)
+	{
+		auto current_entity = *i;
+		if(get_name(current_entity) == name)
 		{
+			add_to_result(found_entities, current_entity);
+			if(!Multiple) break;
+		}
+	}
+
+	return std::move(return_result<Optional, Multiple, EntityT>::result(found_entities));
+}
+
+template<bool Optional, bool Multiple, class EntityT>
+typename return_type<Optional, Multiple, EntityT>::type
+impl::find_entities_in_base_classes
+(
+	const std::string& name,
+	utility::vector<std::shared_ptr<semantic_entities::class_>>::range base_classes
+)
+{
+	typename return_type<Optional, true, EntityT>::type found_entities;
+
+	for(auto i = base_classes.begin(); i != base_classes.end(); ++i)
+	{
+		std::shared_ptr<semantic_entities::class_> current_class = *i;
+
+		//find entities in the current declarative region (i.e. current class)
+		typename return_type<Optional, Multiple, EntityT>::type current_class_found_entities =
+			find_entities_from_identifier_in_declarative_region<Optional, Multiple, EntityT>(name, current_class)
+		;
+
+		//entities found?
+		if(!utility::is_empty(current_class_found_entities))
+		{
+			//add them to the list
+			add_to_result(found_entities, current_class_found_entities);
 		}
 		else
 		{
-			assert(false);
+			//find entities in the current declarative region's base classes
+			typename return_type<Optional, Multiple, EntityT>::type current_class_base_classes_found_entities =
+				find_entities_in_base_classes<Optional, Multiple, EntityT>(name, current_class->base_classes())
+			;
+
+			//add them to the list
+			add_to_result(found_entities, current_class_base_classes_found_entities);
 		}
 	}
 
-	throw std::runtime_error("Type not found");
+	//If Multiple, return the full list.
+	//If not Multiple, return the only one element of the list.
+	return std::move(return_result<Optional, Multiple, EntityT>::result(found_entities));
 }
 
 
 
-template<class RangeT>
-std::shared_ptr<semantic_entities::named_entity>
-name_lookup::find_name
-(
-	RangeT declarative_region_stack,
-	const std::string& name
-)
+template<class T, class T2>
+void
+impl::add_to_result(T& result, T2& entity)
 {
-    return find_name(declarative_region_stack, name, true);
+	result = entity;
 }
 
-
-
-template<class RangeT>
-std::shared_ptr<semantic_entities::named_entity>
-name_lookup::find_name
-(
-	RangeT declarative_region_stack,
-	const std::string& name,
-	bool recursive_ascent
-)
+template<class T, class T2>
+void
+impl::add_to_result(utility::vector<T>& result, T2& entity)
 {
-	using namespace semantic_entities;
+	if(!utility::is_empty(entity)) result.push_back(entity);
+}
 
-	std::shared_ptr<declarative_region> current_declarative_region = declarative_region_stack.back();
+template<class T, class T2>
+void
+impl::add_to_result(utility::vector<T>& result, boost::optional<T2>& entity)
+{
+	if(!utility::is_empty(entity)) result.push_back(*entity);
+}
 
-    /*
-    1. Current named_declarative_region
-    */
-	if(std::shared_ptr<named_entity> found_name = find_name(*current_declarative_region, name))
-	{
-		return found_name;
-	}
-
-    /*
-    2. Enclosing declarative_regions (recursive ascent call)
-    */
-	if
+template<class T, class T2>
+void
+impl::add_to_result(utility::vector<T>& result, utility::vector<T2>& entities)
+{
+	std::copy
 	(
-		recursive_ascent &&
-		declarative_region_stack.size() >= 2 //is there at least an enclosing named_declarative_region?
-	)
-	{
-		auto last_but_one_it = declarative_region_stack.end();
-		--last_but_one_it;
-		RangeT enclosing_declarative_region_stack(declarative_region_stack.begin(), last_but_one_it);
-
-		if(!enclosing_declarative_region_stack.empty())
-		{
-			std::shared_ptr<semantic_entities::named_entity> found_name = find_name(enclosing_declarative_region_stack, name, true);
-			if(found_name)
-			{
-				return found_name;
-			}
-		}
-	}
-
-
-//    /*
-//    3. Base classes (non-recursive_ascent)
-//    */
-//    {
-//        const std::list<base_specifier>& base_specifiers = current_declarative_region->get_base_specifiers();
-//        for
-//        (
-//            std::list<base_specifier>::const_iterator i = base_specifiers.begin();
-//            i != base_specifiers.end();
-//            ++i
-//        ) //for each base specifier (== for each base class)
-//        {
-//            const base_specifier& base_spec = *i;
-//            const std::shared_ptr<class_> base_class = base_spec.get_class();
-//            const std::shared_ptr<semantic_entities::named_entity> found_symbol = find_name(base_class, name, false);
-//            if(found_symbol)
-//            {
-//                return found_symbol;
-//            }
-//        }
-//    }
-
-	//no name has been found, we return a null pointer
-	return std::shared_ptr<semantic_entities::named_entity>();
+		entities.begin(),
+		entities.end(),
+		std::back_insert_iterator<utility::vector<T>>(result)
+	);
 }
 
 
 
-template<class RangeT>
-std::shared_ptr<semantic_entities::declarative_region>
-name_lookup::find_declarative_region
-(
-	RangeT declarative_region_stack,
-	const syntax_nodes::nested_name_specifier& a_nested_name_specifier
-)
+template<class EntityT>
+typename return_type<true, false, EntityT>::type
+impl::return_result<true, false, EntityT>::result(typename return_type<true, true, EntityT>::type& result)
 {
-	using namespace syntax_nodes;
-	using namespace semantic_entities;
-
-	std::shared_ptr<declarative_region> found_declarative_region;
-
-	//get the first part of the nested-name-specifier
-	const identifier_or_template_id& an_identifier_or_template_id = get_identifier_or_template_id(a_nested_name_specifier);
-	boost::optional<const identifier&> an_identifier = get<identifier>(&an_identifier_or_template_id);
-
-	//if the first part is a simple identifier
-	if(an_identifier)
+	if(result.empty())
 	{
-		const std::string& declarative_region_name = an_identifier->value();
-
-		//find the named_declarative_region which has that identifier in the current named_declarative_region and in the enclosing declarative_regions
-		found_declarative_region = find_declarative_region(declarative_region_stack, declarative_region_name);
+		return typename return_type<true, false, EntityT>::type(); //empty result
 	}
-
-	//if the first part named_declarative_region has been found, go on with the next parts
-	if(found_declarative_region)
+	else if(result.size() == 1)
 	{
-		//is there other parts?
-		auto last_part_seq = get_last_part_seq(a_nested_name_specifier);
-		if(last_part_seq)
-		{
-			//for each part...
-			for(auto i = last_part_seq->begin(); i != last_part_seq->end(); ++i)
-			{
-				if(found_declarative_region)
-				{
-					const nested_name_specifier_last_part& last_part = i->main_node();
-
-					const identifier_or_template_id& an_identifier_or_template_id = get_identifier_or_template_id(last_part);
-					boost::optional<const identifier&> an_identifier = get<identifier>(&an_identifier_or_template_id);
-
-					if(an_identifier)
-					{
-						const std::string& declarative_region_name = an_identifier->value();
-						found_declarative_region = find_declarative_region(*found_declarative_region, declarative_region_name);
-					}
-				}
-				else
-					break;
-			}
-		}
+		return result.front();
 	}
-
-	return found_declarative_region;
+	else
+	{
+		throw std::runtime_error("more than one entities found");
+	}
 }
 
-
-
-template<class RangeT>
-std::shared_ptr<semantic_entities::declarative_region>
-name_lookup::find_declarative_region
-(
-	RangeT declarative_region_stack,
-	const std::string& declarative_region_name
-)
+template<class EntityT>
+typename return_type<true, false, EntityT>::type
+impl::return_result<true, false, EntityT>::result(typename return_type<true, false, EntityT>::type& result)
 {
-	using namespace semantic_entities;
-
-	if(!declarative_region_stack.empty())
-	{
-		auto it = declarative_region_stack.end();
-		for(auto i = declarative_region_stack.size(); i > 0; --i)
-		{
-			--it;
-			std::shared_ptr<declarative_region> current_declarative_region = *it;
-			if(std::shared_ptr<declarative_region> found_declarative_region = find_declarative_region(*current_declarative_region, declarative_region_name))
-			{
-				return found_declarative_region;
-			}
-		}
-	}
-
-	throw std::runtime_error("Declarative region " + declarative_region_name + " not found");
+	return result;
 }
 
-}}}} //namespace scalpel::cpp::detail::semantic_analysis
+template<class EntityT>
+typename return_type<false, false, EntityT>::type
+impl::return_result<false, false, EntityT>::result(typename return_type<false, true, EntityT>::type& result)
+{
+	if(result.empty())
+	{
+		throw std::runtime_error("no entity found");
+	}
+	else if(result.size() == 1)
+	{
+		return result.front();
+	}
+	else
+	{
+		throw std::runtime_error("more than one entities found");
+	}
+}
+
+template<class EntityT>
+typename return_type<false, false, EntityT>::type
+impl::return_result<false, false, EntityT>::result(typename return_type<true, false, EntityT>::type& result)
+{
+	if(!result)
+		throw std::runtime_error("no entity found");
+	return result;
+}
+
+template<class... EntitiesT>
+typename return_type<false, false, utility::variant<EntitiesT...>>::type
+impl::return_result<false, false, utility::variant<EntitiesT...>>::result(typename return_type<false, true, utility::variant<EntitiesT...>>::type& result)
+{
+	if(result.empty())
+	{
+		throw std::runtime_error("no entity found");
+	}
+	else if(result.size() == 1)
+	{
+		return result.front();
+	}
+	else
+	{
+		throw std::runtime_error("more than one entities found");
+	}
+}
+
+template<class... EntitiesT>
+typename return_type<false, false, utility::variant<EntitiesT...>>::type
+impl::return_result<false, false, utility::variant<EntitiesT...>>::result(typename return_type<true, false, utility::variant<EntitiesT...>>::type& result)
+{
+	if(!result)
+		throw std::runtime_error("no entity found");
+	return *result;
+}
+
+template<class EntityT>
+utility::vector<std::shared_ptr<EntityT>>&
+impl::return_result<true, true, EntityT>::result(utility::vector<std::shared_ptr<EntityT>>& result)
+{
+	return result;
+}
+
+template<class EntityT>
+utility::vector<std::shared_ptr<EntityT>>&
+impl::return_result<false, true, EntityT>::result(utility::vector<std::shared_ptr<EntityT>>& result)
+{
+	if(result.empty())
+		throw std::runtime_error("no entity found");
+	return result;
+}
+
+}}}}} //namespace scalpel::cpp::detail::semantic_analysis::name_lookup
+
+#endif
 

@@ -19,7 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "test_case_1.hpp"
-#include <scalpel/cpp/detail/semantic_analysis/name_lookup2.hpp>
+#include <scalpel/cpp/detail/semantic_analysis/name_lookup.hpp>
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <scalpel/cpp/syntax_tree.hpp>
 #include <boost/test/unit_test.hpp>
@@ -32,7 +32,7 @@ test_case_1()
 {
 	using namespace scalpel::cpp::syntax_nodes;
 	using namespace scalpel::cpp::semantic_entities;
-	using namespace scalpel::cpp::detail::semantic_analysis;
+	using namespace scalpel::cpp::detail::semantic_analysis::name_lookup;
 
 	//
 	//construction of the semantic graph of the following source code:
@@ -119,12 +119,12 @@ test_case_1()
 	//name lookup test
 	//
 	{
-		auto found_entity = name_lookup2::find_entities<true, false, variable>(identifier("i"), function_a_b_f);
+		auto found_entity = find_entities<true, false, variable>(identifier("i"), function_a_b_f);
 		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
 	}
 
 	{
-		auto found_entity = name_lookup2::find_entities<true, false, variable>(identifier("j"), function_a_b_f);
+		auto found_entity = find_entities<true, false, variable>(identifier("j"), function_a_b_f);
 		BOOST_CHECK_EQUAL(found_entity, variable_j);
 	}
 
@@ -144,7 +144,7 @@ test_case_1()
 			space(""),
 			identifier("n")
 		);
-		auto found_entity = name_lookup2::find_entities<true, false, variable>(variable_a_c_n_syntax_node, function_a_b_f);
+		auto found_entity = find_entities<true, false, variable>(variable_a_c_n_syntax_node, function_a_b_f);
 		BOOST_CHECK_EQUAL(found_entity, variable_a_c_n);
 	}
 
@@ -164,7 +164,7 @@ test_case_1()
 			space(""),
 			identifier("i")
 		);
-		auto found_entity = name_lookup2::find_entities<true, false, variable>(variable_a_i_syntax_node, function_a_b_f);
+		auto found_entity = find_entities<true, false, variable>(variable_a_i_syntax_node, function_a_b_f);
 		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
 	}
 
@@ -177,7 +177,7 @@ test_case_1()
 			space(""),
 			identifier("i")
 		);
-		auto found_entity = name_lookup2::find_entities<true, false, variable>(variable_i_syntax_node, function_a_b_f);
+		auto found_entity = find_entities<true, false, variable>(variable_i_syntax_node, function_a_b_f);
 		BOOST_CHECK_EQUAL(found_entity, variable_i);
 	}
 }

@@ -23,7 +23,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "syntax_tree.hpp"
 #include "semantic_graph.hpp"
-#include "detail/semantic_analysis/declarative_region_cursor.hpp"
 #include "syntax_nodes/utility/type_traits.hpp"
 #include <memory>
 
@@ -352,25 +351,32 @@ class semantic_analyzer
 		create_function
 		(
 			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-			const syntax_nodes::declarator& declarator_node
+			const syntax_nodes::declarator& declarator_node,
+			semantic_entities::declarative_region_shared_ptr_variant parent_entity
 		);
 
 		std::shared_ptr<semantic_entities::simple_function>
 		create_simple_function
 		(
 			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-			const syntax_nodes::declarator& declarator_node
+			const syntax_nodes::declarator& declarator_node,
+			semantic_entities::declarative_region_shared_ptr_variant parent_entity
 		);
 
 		std::shared_ptr<semantic_entities::operator_function>
 		create_operator_function
 		(
 			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-			const syntax_nodes::declarator& declarator_node
+			const syntax_nodes::declarator& declarator_node,
+			semantic_entities::declarative_region_shared_ptr_variant parent_entity
 		);
 
 		semantic_entities::simple_function::parameters_t
-		create_parameters(const syntax_nodes::declarator& declarator_node);
+		create_parameters
+		(
+			const syntax_nodes::declarator& declarator_node,
+			semantic_entities::declarative_region_shared_ptr_variant parent_entity
+		);
 
 
 
@@ -378,26 +384,30 @@ class semantic_analyzer
 		create_type
 		(
 			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-			const syntax_nodes::declarator& declarator_node
+			const syntax_nodes::declarator& declarator_node,
+			semantic_entities::declarative_region_shared_ptr_variant parent_entity
 		);
 
 		std::shared_ptr<const semantic_entities::type>
 		create_type
 		(
 			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-			const syntax_nodes::abstract_declarator& abstract_declarator_node
+			const syntax_nodes::abstract_declarator& abstract_declarator_node,
+			semantic_entities::declarative_region_shared_ptr_variant parent_entity
 		);
 
 		std::shared_ptr<const semantic_entities::type>
 		create_type
 		(
-			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node
+			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
+			semantic_entities::declarative_region_shared_ptr_variant parent_entity
 		);
 
 		std::shared_ptr<const semantic_entities::type>
 		get_conversion_function_type
 		(
-			const syntax_nodes::declarator& declarator_node
+			const syntax_nodes::declarator& declarator_node,
+			semantic_entities::declarative_region_shared_ptr_variant parent_entity
 		);
 
 		std::shared_ptr<const semantic_entities::type>
@@ -433,7 +443,8 @@ class semantic_analyzer
 			bool& void_type,
 			bool& wchar_t_type,
 			bool& const_qualified,
-			bool& volatile_qualified
+			bool& volatile_qualified,
+			semantic_entities::declarative_region_shared_ptr_variant parent_entity
 		);
 
 		std::shared_ptr<const semantic_entities::built_in_type>
@@ -453,27 +464,21 @@ class semantic_analyzer
 			const bool wchar_t_type
 		);
 
-		std::shared_ptr<semantic_entities::class_>
-		find_class
-		(
-			const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node
-		);
-
 		std::vector<std::shared_ptr<semantic_entities::variable>>
 		create_variables
 		(
 			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-			const syntax_nodes::init_declarator_list& init_declarator_list_node
+			const syntax_nodes::init_declarator_list& init_declarator_list_node,
+			semantic_entities::declarative_region_shared_ptr_variant parent_entity
 		);
 
 		std::shared_ptr<semantic_entities::variable>
 		create_variable
 		(
 			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-			const syntax_nodes::declarator& declarator_node
+			const syntax_nodes::declarator& declarator_node,
+			semantic_entities::declarative_region_shared_ptr_variant parent_entity
 		);
-
-		detail::semantic_analysis::declarative_region_cursor declarative_region_cursor_;
 };
 
 template<class ParentEntityT>

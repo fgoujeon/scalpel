@@ -109,9 +109,7 @@ semantic_analyzer::analyze(const syntax_nodes::class_specifier& class_specifier_
 
 	std::shared_ptr<class_> new_class = create_class(class_specifier_node);
 	parent_entity->add(new_class);
-	declarative_region_cursor_.enter_declarative_region(new_class);
 	fill_class(new_class, class_specifier_node);
-	declarative_region_cursor_.leave_current_declarative_region();
 }
 
 template<class ParentEntityT>
@@ -292,7 +290,7 @@ semantic_analyzer::analyze(const syntax_nodes::function_definition& function_def
 		}
 		else if(is_operator_function_declaration(declarator_node))
 		{
-			define_function<operator_function>(decl_specifier_seq_node, declarator_node, parent_entity);
+			//TODO define_function<operator_function>(decl_specifier_seq_node, declarator_node, parent_entity);
 		}
 	}
 }
@@ -409,13 +407,11 @@ semantic_analyzer::analyze(const syntax_nodes::namespace_definition& syntax_node
 	parent_entity->add(new_namespace);
 
 	//add the declarations of the namespace definition in the namespace semantic node
-	declarative_region_cursor_.enter_declarative_region(new_namespace);
 	const optional_node<declaration_seq>& a_declaration_seq = get_declaration_seq(syntax_node);
 	if(a_declaration_seq)
 	{
 		analyze(*a_declaration_seq, new_namespace);
 	}
-	declarative_region_cursor_.leave_current_declarative_region();
 }
 
 template<class ParentEntityT>
@@ -560,7 +556,7 @@ semantic_analyzer::analyze(const syntax_nodes::simple_declaration& simple_declar
 
 		auto init_declarator_list_node = *opt_init_declarator_list_node;
 
-		std::vector<std::shared_ptr<variable>> variables = create_variables(decl_specifier_seq_node, init_declarator_list_node);
+		std::vector<std::shared_ptr<variable>> variables = create_variables(decl_specifier_seq_node, init_declarator_list_node, parent_entity);
 		//for each variable
 		for
 		(
@@ -584,7 +580,7 @@ semantic_analyzer::analyze(const syntax_nodes::simple_declaration& simple_declar
 
 		auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
 		auto declarator_node = get_declarator(init_declarator_list_node.front().main_node());
-		parent_entity->add(create_simple_function(decl_specifier_seq_node, declarator_node));
+		parent_entity->add(create_simple_function(decl_specifier_seq_node, declarator_node, parent_entity));
 	}
 	else if(is_operator_function_declaration(simple_declaration_node))
 	{
@@ -598,7 +594,7 @@ semantic_analyzer::analyze(const syntax_nodes::simple_declaration& simple_declar
 
 		auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
 		auto declarator_node = get_declarator(init_declarator_list_node.front().main_node());
-		parent_entity->add(create_operator_function(decl_specifier_seq_node, declarator_node));
+		parent_entity->add(create_operator_function(decl_specifier_seq_node, declarator_node, parent_entity));
 	}
 }
 
@@ -674,23 +670,25 @@ semantic_analyzer::define_function
 	using namespace detail::semantic_analysis;
 
 	//get the function name
-	std::string function_name = get_name(declarator_node);
+	syntax_nodes::identifier function_name = get_identifier(declarator_node);
 
 	//create a FunctionT object
-	std::shared_ptr<FunctionT> new_function = create_function<FunctionT>(decl_specifier_seq_node, declarator_node);
+	std::shared_ptr<FunctionT> new_function = create_function<FunctionT>(decl_specifier_seq_node, declarator_node, parent_entity);
 
 	//find the corresponding function semantic entity (must exist if the function has already been declared)
 	std::shared_ptr<FunctionT> function_entity;
-	std::shared_ptr<semantic_entities::named_entity> found_entity = name_lookup::find_name(declarative_region_cursor_.declarative_region_path(), function_name);
-	std::shared_ptr<FunctionT> possible_function_entity;
-	if
-	(
-		found_entity &&
-		(possible_function_entity = std::dynamic_pointer_cast<FunctionT>(found_entity)) &&
-		possible_function_entity->has_same_signature(*new_function)
-	)
 	{
-		function_entity = possible_function_entity;
+		std::shared_ptr<FunctionT> found_function =
+			name_lookup::find_entities<true, false, FunctionT>(function_name, parent_entity)
+		;
+		if
+		(
+			found_function &&
+			found_function->has_same_signature(*new_function)
+		)
+		{
+			function_entity = found_function;
+		}
 	}
 
 	//if the function hasn't been declared, this definition serves as a declaration
@@ -706,7 +704,7 @@ semantic_analyzer::define_function
 	if(function_entity->defined())
 	{
 		std::ostringstream oss;
-		oss << "Redefinition of " << function_name;
+		oss << "Redefinition of " << function_name.value();
 		throw std::runtime_error(oss.str().c_str());
 	}
 
