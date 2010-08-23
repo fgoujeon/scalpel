@@ -35,7 +35,7 @@ namespace scalpel { namespace cpp
 class semantic_analyzer
 {
 	public:
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		class alternative_visitor;
 
 		std::shared_ptr<semantic_graph>
@@ -43,276 +43,276 @@ class semantic_analyzer
 
 	private:
 		//overload for alternative nodes
-		template<class SyntaxNodeT, class ParentEntityT>
+		template<class SyntaxNodeT, class DeclarativeRegionT>
 		void
 		analyze
 		(
 			const SyntaxNodeT& syntax_node,
-			std::shared_ptr<ParentEntityT> parent_entity,
+			std::shared_ptr<DeclarativeRegionT> current_declarative_region,
 			typename boost::enable_if<syntax_nodes::utility::is_alternative_node<SyntaxNodeT>>::type* = 0
 		);
 
 		//overload for list nodes
-		template<class SyntaxNodeT, class ParentEntityT>
+		template<class SyntaxNodeT, class DeclarativeRegionT>
 		void
 		analyze
 		(
 			const SyntaxNodeT& syntax_node,
-			std::shared_ptr<ParentEntityT> parent_entity,
+			std::shared_ptr<DeclarativeRegionT> current_declarative_region,
 			typename boost::enable_if<syntax_nodes::utility::is_list_node<SyntaxNodeT>>::type* = 0
 		);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::asm_definition& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::asm_definition& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::break_statement& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::break_statement& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::case_statement& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::case_statement& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::class_head& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::class_head& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::class_specifier& class_specifier_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::class_specifier& class_specifier_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::classic_labeled_statement& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::classic_labeled_statement& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::compound_statement& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::compound_statement& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::conversion_function_id& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::conversion_function_id& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::continue_statement& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::continue_statement& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::ctor_initializer& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::ctor_initializer& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::cv_qualifier& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::cv_qualifier& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::declarator& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::declarator& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::default_statement& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::default_statement& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::destructor_name& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::destructor_name& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::direct_declarator& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::direct_declarator& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::direct_declarator_array_part& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::direct_declarator_array_part& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::direct_declarator_function_part& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::direct_declarator_function_part& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::do_while_statement& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::do_while_statement& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::elaborated_type_specifier& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::elaborated_type_specifier& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::explicit_instantiation& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::explicit_instantiation& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::explicit_specialization& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::explicit_specialization& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::expression_statement& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::expression_statement& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::for_statement& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::for_statement& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::function_definition& function_definition_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::function_definition& function_definition_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::goto_statement& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::goto_statement& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::handler& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::handler& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::identifier& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::identifier& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::if_statement& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::if_statement& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::init_declarator& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::init_declarator& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::linkage_specification& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::linkage_specification& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::mem_initializer& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::mem_initializer& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::member_declaration_function_definition& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::member_declaration_function_definition& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::member_declaration_member_declarator_list& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::member_declaration_member_declarator_list& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::member_declaration_unqualified_id& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::member_declaration_unqualified_id& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::member_declarator_bit_field_member& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::member_declarator_bit_field_member& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::member_declarator_declarator& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::member_declarator_declarator& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::member_specification& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::member_specification& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::member_specification_access_specifier& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::member_specification_access_specifier& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::namespace_alias_definition& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::namespace_alias_definition& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::namespace_definition& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::namespace_definition& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::nested_identifier_or_template_id& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::nested_identifier_or_template_id& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::nested_name_specifier& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::nested_name_specifier& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::nested_name_specifier_last_part& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::nested_name_specifier_last_part& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::operator_function_id& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::operator_function_id& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::parameter_declaration& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::parameter_declaration& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::parameter_declaration_clause& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::parameter_declaration_clause& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::ptr_operator& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::ptr_operator& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::qualified_identifier& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::qualified_identifier& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::qualified_nested_id& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::qualified_nested_id& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::qualified_operator_function_id& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::qualified_operator_function_id& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::qualified_template_id& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::qualified_template_id& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::return_statement& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::return_statement& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::simple_declaration& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::simple_declaration& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::simple_template_type_specifier& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::simple_template_type_specifier& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::switch_statement& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::switch_statement& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::template_declaration& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::template_declaration& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::template_id& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::template_id& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::try_block& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::try_block& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::type_id_sizeof_expression& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::type_id_sizeof_expression& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::unary_sizeof_expression& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::unary_sizeof_expression& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::using_declaration& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::using_declaration& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::using_directive& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::using_directive& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::while_statement& syntax_node, std::shared_ptr<ParentEntityT> parent_entity);
+		analyze(const syntax_nodes::while_statement& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
 		std::shared_ptr<semantic_entities::class_>
 		create_class(const syntax_nodes::class_specifier& syntax_node);
@@ -328,16 +328,16 @@ class semantic_analyzer
 
 		/**
 		Define a function from the two syntax node parameters. It may also
-		create the function and add it to the given parent entity if it hasn't
-		been declared.
+		create the function and add it to the current declarative region if it
+		hasn't been declared yet.
 		*/
-		template<class FunctionT, class ParentEntityT>
+		template<class DeclarativeRegionT>
 		void
-		define_function
+		define_simple_function
 		(
 			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
 			const syntax_nodes::declarator& declarator_node,
-			std::shared_ptr<ParentEntityT> parent_entity
+			std::shared_ptr<DeclarativeRegionT> current_declarative_region
 		);
 
 
@@ -346,68 +346,70 @@ class semantic_analyzer
 		//function creation functions
 		//
 
-		template<class FunctionT>
-		std::shared_ptr<FunctionT>
-		create_function
-		(
-			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-			const syntax_nodes::declarator& declarator_node,
-			semantic_entities::declarative_region_shared_ptr_variant parent_entity
-		);
-
+		template<class DeclarativeRegionT>
 		std::shared_ptr<semantic_entities::simple_function>
 		create_simple_function
 		(
 			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
 			const syntax_nodes::declarator& declarator_node,
-			semantic_entities::declarative_region_shared_ptr_variant parent_entity
+			std::shared_ptr<DeclarativeRegionT> current_declarative_region
 		);
 
+		template<class DeclarativeRegionT>
 		std::shared_ptr<semantic_entities::operator_function>
 		create_operator_function
 		(
 			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
 			const syntax_nodes::declarator& declarator_node,
-			semantic_entities::declarative_region_shared_ptr_variant parent_entity
+			std::shared_ptr<DeclarativeRegionT> current_declarative_region
 		);
 
+		template<class DeclarativeRegionT>
 		semantic_entities::simple_function::parameters_t
 		create_parameters
 		(
 			const syntax_nodes::declarator& declarator_node,
-			semantic_entities::declarative_region_shared_ptr_variant parent_entity
+			std::shared_ptr<DeclarativeRegionT> current_declarative_region
 		);
 
 
 
+		//
+		//type creation functions
+		//
+
+		template<class DeclarativeRegionT>
 		std::shared_ptr<const semantic_entities::type>
 		create_type
 		(
 			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
 			const syntax_nodes::declarator& declarator_node,
-			semantic_entities::declarative_region_shared_ptr_variant parent_entity
+			std::shared_ptr<DeclarativeRegionT> current_declarative_region
 		);
 
+		template<class DeclarativeRegionT>
 		std::shared_ptr<const semantic_entities::type>
 		create_type
 		(
 			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
 			const syntax_nodes::abstract_declarator& abstract_declarator_node,
-			semantic_entities::declarative_region_shared_ptr_variant parent_entity
+			std::shared_ptr<DeclarativeRegionT> current_declarative_region
 		);
 
+		template<class DeclarativeRegionT>
 		std::shared_ptr<const semantic_entities::type>
 		create_type
 		(
 			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-			semantic_entities::declarative_region_shared_ptr_variant parent_entity
+			std::shared_ptr<DeclarativeRegionT> current_declarative_region
 		);
 
+		template<class DeclarativeRegionT>
 		std::shared_ptr<const semantic_entities::type>
 		get_conversion_function_type
 		(
 			const syntax_nodes::declarator& declarator_node,
-			semantic_entities::declarative_region_shared_ptr_variant parent_entity
+			std::shared_ptr<DeclarativeRegionT> current_declarative_region
 		);
 
 		std::shared_ptr<const semantic_entities::type>
@@ -425,6 +427,7 @@ class semantic_analyzer
 			const syntax_nodes::ptr_operator_seq& ptr_operator_seq_node
 		);
 
+		template<class DeclarativeRegionT>
 		void
 		get_type_info
 		(
@@ -444,7 +447,7 @@ class semantic_analyzer
 			bool& wchar_t_type,
 			bool& const_qualified,
 			bool& volatile_qualified,
-			semantic_entities::declarative_region_shared_ptr_variant parent_entity
+			std::shared_ptr<DeclarativeRegionT> current_declarative_region
 		);
 
 		std::shared_ptr<const semantic_entities::built_in_type>
@@ -464,28 +467,36 @@ class semantic_analyzer
 			const bool wchar_t_type
 		);
 
+
+
+		//
+		//variable creation functions
+		//
+
+		template<class DeclarativeRegionT>
 		std::vector<std::shared_ptr<semantic_entities::variable>>
 		create_variables
 		(
 			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
 			const syntax_nodes::init_declarator_list& init_declarator_list_node,
-			semantic_entities::declarative_region_shared_ptr_variant parent_entity
+			std::shared_ptr<DeclarativeRegionT> current_declarative_region
 		);
 
+		template<class DeclarativeRegionT>
 		std::shared_ptr<semantic_entities::variable>
 		create_variable
 		(
 			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
 			const syntax_nodes::declarator& declarator_node,
-			semantic_entities::declarative_region_shared_ptr_variant parent_entity
+			std::shared_ptr<DeclarativeRegionT> current_declarative_region
 		);
 };
 
-template<class ParentEntityT>
+template<class DeclarativeRegionT>
 class semantic_analyzer::alternative_visitor
 {
 	public:
-		alternative_visitor(semantic_analyzer& analyzer, std::shared_ptr<ParentEntityT> parent_entity);
+		alternative_visitor(semantic_analyzer& analyzer, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
 		template<class T>
 		inline
@@ -494,7 +505,7 @@ class semantic_analyzer::alternative_visitor
 
 	private:
 		semantic_analyzer& analyzer_;
-		std::shared_ptr<ParentEntityT> parent_entity_;
+		std::shared_ptr<DeclarativeRegionT> parent_entity_;
 };
 
 }} //namespace scalpel::cpp
