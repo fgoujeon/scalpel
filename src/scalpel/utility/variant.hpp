@@ -41,6 +41,18 @@ class variant<>
 	public:
 		typedef void head_t;
 		typedef void tail_t;
+
+		bool
+		operator==(const variant&) const
+		{
+			return false; //or whatever, won't be called
+		}
+
+		bool
+		operator<(const variant&) const
+		{
+			return false; //or whatever, won't be called
+		}
 };
 
 template<typename T, typename... Ts>
@@ -63,17 +75,17 @@ class variant<T, Ts...>
 		/**
 		 * Constructor.
 		 */
-		variant(const T& o);
+		variant(const T& rhs);
 
 		/**
 		 * Constructor.
 		 */
-		variant(T& o);
+		variant(T& rhs);
 
 		/**
 		 * Constructor.
 		 */
-		variant(T&& o);
+		variant(T&& rhs);
 
 		/**
 		 * Constructor.
@@ -81,7 +93,7 @@ class variant<T, Ts...>
 		template<typename T2>
 		variant
 		(
-			const T2& o,
+			const T2& rhs,
 			typename boost::disable_if
 			<
 				boost::is_same
@@ -98,7 +110,7 @@ class variant<T, Ts...>
 		template<typename T2>
 		variant
 		(
-			T2&& o,
+			T2&& rhs,
 			typename boost::disable_if
 			<
 				boost::is_same
@@ -112,20 +124,20 @@ class variant<T, Ts...>
 		/**
 		 * Copy constructor.
 		 */
-		variant(const variant& o);
+		variant(const variant& rhs);
 
 		/**
 		 * Copy constructor.
 		 */
-		variant(variant& o);
+		variant(variant& rhs);
 
 		/**
 		 * Move constructor.
 		 */
-		variant(variant&& o);
+		variant(variant&& rhs);
 
 		const variant&
-		operator=(const variant& o);
+		operator=(const variant& rhs);
 
 		const variant&
 		operator=(const T&);
@@ -134,6 +146,29 @@ class variant<T, Ts...>
 		template<typename T2>
 		const variant&
 		operator=(const T2&);
+
+		//Return true if *this and rhs contain the same type and
+		//content_this == content_rhs.
+		bool
+		operator==(const variant& rhs) const;
+
+		//this overload exists only to prohibit implicit conversion of the RHS
+		//to variant
+		template<typename U>
+		void
+		operator==(const U&) const = delete;
+
+		//Return true if *this and rhs contain the same type and
+		//content_this < content_rhs.
+		//Otherwise, return this_type_index < rhs_type_index.
+		bool
+		operator<(const variant& rhs) const;
+
+		//this overload exists only to prohibit implicit conversion of the RHS
+		//to variant
+		template<typename U>
+		void
+		operator<(const U&) const = delete;
 
 		void
 		get(T*&);
@@ -163,20 +198,20 @@ variant<T, Ts...>::variant()
 }
 
 template<typename T, typename... Ts>
-variant<T, Ts...>::variant(const T& o):
-	head_(new T(o))
+variant<T, Ts...>::variant(const T& rhs):
+	head_(new T(rhs))
 {
 }
 
 template<typename T, typename... Ts>
-variant<T, Ts...>::variant(T& o):
-	head_(new T(o))
+variant<T, Ts...>::variant(T& rhs):
+	head_(new T(rhs))
 {
 }
 
 template<typename T, typename... Ts>
-variant<T, Ts...>::variant(T&& o):
-	head_(new T(o))
+variant<T, Ts...>::variant(T&& rhs):
+	head_(new T(rhs))
 {
 }
 
@@ -184,7 +219,7 @@ template<typename T, typename... Ts>
 template<typename T2>
 variant<T, Ts...>::variant
 (
-	const T2& o,
+	const T2& rhs,
 	typename boost::disable_if
 	<
 		boost::is_same
@@ -194,7 +229,7 @@ variant<T, Ts...>::variant
 		>
 	>::type*
 ):
-	tail_(o)
+	tail_(rhs)
 {
 }
 
@@ -202,7 +237,7 @@ template<typename T, typename... Ts>
 template<typename T2>
 variant<T, Ts...>::variant
 (
-	T2&& o,
+	T2&& rhs,
 	typename boost::disable_if
 	<
 		boost::is_same
@@ -212,51 +247,51 @@ variant<T, Ts...>::variant
 		>
 	>::type*
 ):
-	tail_(std::move(o))
+	tail_(std::move(rhs))
 {
 }
 
 template<typename T, typename... Ts>
-variant<T, Ts...>::variant(const variant<T, Ts...>& o):
-	head_(o.head_ ? std::unique_ptr<T>(new T(*o.head_)) : std::unique_ptr<T>()),
-	tail_(o.tail_)
+variant<T, Ts...>::variant(const variant<T, Ts...>& rhs):
+	head_(rhs.head_ ? std::unique_ptr<T>(new T(*rhs.head_)) : std::unique_ptr<T>()),
+	tail_(rhs.tail_)
 {
 }
 
 template<typename T, typename... Ts>
-variant<T, Ts...>::variant(variant<T, Ts...>& o):
-	head_(o.head_ ? std::unique_ptr<T>(new T(*o.head_)) : std::unique_ptr<T>()),
-	tail_(o.tail_)
+variant<T, Ts...>::variant(variant<T, Ts...>& rhs):
+	head_(rhs.head_ ? std::unique_ptr<T>(new T(*rhs.head_)) : std::unique_ptr<T>()),
+	tail_(rhs.tail_)
 {
 }
 
 template<typename T, typename... Ts>
-variant<T, Ts...>::variant(variant<T, Ts...>&& o):
-	head_(std::move(o.head_)),
-	tail_(std::move(o.tail_))
+variant<T, Ts...>::variant(variant<T, Ts...>&& rhs):
+	head_(std::move(rhs.head_)),
+	tail_(std::move(rhs.tail_))
 {
 }
 
 template<typename T, typename... Ts>
 const variant<T, Ts...>&
-variant<T, Ts...>::operator=(const variant<T, Ts...>& o)
+variant<T, Ts...>::operator=(const variant<T, Ts...>& rhs)
 {
 	//exception safety: ensure the may-throw copy of the rhs variant's content
 	//occurs before the erasure of the lhs variant's content
 	if(!head_)
 	{
-		if(o.head_)
-			head_ = std::unique_ptr<T>(new T(*o.head_));
+		if(rhs.head_)
+			head_ = std::unique_ptr<T>(new T(*rhs.head_));
 
-		tail_ = o.tail_;
+		tail_ = rhs.tail_;
 	}
 	else
 	{
-		tail_ = o.tail_;
+		tail_ = rhs.tail_;
 
 		//erase the lhs variant's content
-		if(o.head_)
-			head_ = std::unique_ptr<T>(new T(*o.head_));
+		if(rhs.head_)
+			head_ = std::unique_ptr<T>(new T(*rhs.head_));
 		else
 			head_.reset();
 	}
@@ -279,6 +314,32 @@ variant<T, Ts...>::operator=(const T2& object)
 {
 	tail_ = object;
 	return *this;
+}
+
+template<typename T, typename... Ts>
+bool
+variant<T, Ts...>::operator==(const variant& rhs) const
+{
+	if(head_ && rhs.head_)
+		return *head_ == *rhs.head_;
+	else if(head_ || rhs.head_)
+		return false;
+	else
+		return tail_ == rhs.tail_;
+}
+
+template<typename T, typename... Ts>
+bool
+variant<T, Ts...>::operator<(const variant& rhs) const
+{
+	if(head_ && rhs.head_)
+		return *head_ < *rhs.head_;
+	else if(head_)
+		return true;
+	else if(rhs.head_)
+		return false;
+	else
+		return tail_ < rhs.tail_;
 }
 
 template<typename T, typename... Ts>

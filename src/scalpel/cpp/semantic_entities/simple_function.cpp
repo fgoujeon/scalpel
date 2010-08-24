@@ -157,7 +157,7 @@ simple_function::has_declarative_region() const
 }
 
 declarative_region_shared_ptr_variant
-simple_function::declarative_region()
+simple_function::declarative_region() const
 {
 	return to_shared_ptr_variant(*declarative_region_);
 }

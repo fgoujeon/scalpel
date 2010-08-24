@@ -30,71 +30,69 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace semantic_graph_print_functions
 {
 
+using namespace scalpel;
 using namespace scalpel::cpp;
 using namespace scalpel::cpp::semantic_entities;
 
 void
 print
 (
-	const type& n,
+	std::shared_ptr<const type> n,
 	const unsigned int indent_level
 );
 
 void
 print
 (
-	const built_in_type&
+	std::shared_ptr<const built_in_type>
 );
 
 void
 print
 (
-	const namespace_& n,
+	std::shared_ptr<const namespace_> n,
 	const unsigned int indent_level = 0
 );
 
 void
 print
 (
-	const class_& c,
-	const unsigned int indent_level,
-	const std::string& extra_attributes = ""
-);
-
-void
-print
-(
-	const class_::constructor& c,
+	std::shared_ptr<const class_> c,
 	const unsigned int indent_level
 );
 
 void
 print
 (
-	const class_::destructor& d,
+	std::shared_ptr<const class_::constructor> c,
 	const unsigned int indent_level
 );
 
 void
 print
 (
-	const simple_function& f,
-	const unsigned int indent_level,
-	const std::string& extra_attributes = ""
+	std::shared_ptr<const class_::destructor> d,
+	const unsigned int indent_level
 );
 
 void
 print
 (
-	const operator_function& f,
-	const unsigned int indent_level,
-	const std::string& extra_attributes = ""
+	std::shared_ptr<const simple_function> f,
+	const unsigned int indent_level
 );
 
 void
 print
 (
-	const class_::conversion_function& f,
+	std::shared_ptr<const operator_function> f,
+	const unsigned int indent_level
+);
+
+void
+print
+(
+	std::shared_ptr<const class_::conversion_function> f,
 	const unsigned int indent_level
 );
 
@@ -108,9 +106,8 @@ print
 void
 print
 (
-	const variable& v,
-	const unsigned int indent_level,
-	const std::string& extra_attributes = ""
+	std::shared_ptr<const variable> v,
+	const unsigned int indent_level
 );
 
 std::string
@@ -118,52 +115,6 @@ attribute(const class_::access& a);
 
 std::string
 attribute(const semantic_entities::operator_ op);
-
-
-
-/*
-template<class EntityT>
-void
-print
-(
-	const class_::member<EntityT>& m,
-	const unsigned int indent_level
-)
-{
-	std::ostringstream extra_oss;
-	extra_oss << attribute(m.access());
-	print(*m.entity(), indent_level, extra_oss.str());
-}
-*/
-
-/*
-template<class EntityT>
-void
-print
-(
-	const class_::function_member<EntityT>& f,
-	const unsigned int indent_level
-)
-{
-	std::ostringstream extra_oss;
-
-	extra_oss << attribute(f.access());
-	if(f.entity()->static_specified())
-		extra_oss << " static=\"true\"";
-	if(f.const_qualified())
-		extra_oss << " const=\"true\"";
-	if(f.volatile_qualified())
-		extra_oss << " volatile=\"true\"";
-	if(f.inline_specified())
-		extra_oss << " inline=\"true\"";
-	if(f.virtual_specified())
-		extra_oss << " virtual=\"true\"";
-	if(f.pure_specified())
-		extra_oss << " pure=\"true\"";
-
-	print(*f.entity(), indent_level, extra_oss.str());
-}
-*/
 
 } //namespace semantic_graph_print_functions
 

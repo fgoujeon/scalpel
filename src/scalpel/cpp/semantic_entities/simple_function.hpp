@@ -83,7 +83,7 @@ class simple_function:
 		has_declarative_region() const;
 
 		declarative_region_shared_ptr_variant
-		declarative_region();
+		declarative_region() const;
 
 		void
 		declarative_region(const declarative_region_shared_ptr_variant& declarative_region);

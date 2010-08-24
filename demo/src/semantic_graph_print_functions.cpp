@@ -19,6 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "semantic_graph_print_functions.hpp"
+#include <scalpel/utility/variant.hpp>
 #include <vector>
 #include <sstream>
 
@@ -28,47 +29,47 @@ namespace semantic_graph_print_functions
 void
 print
 (
-	const type& n,
+	std::shared_ptr<const type> n,
 	const unsigned int indent_level
 )
 {
-	if(const built_in_type* t = dynamic_cast<const built_in_type*>(&n))
+	if(std::shared_ptr<const built_in_type> t = std::dynamic_pointer_cast<const built_in_type>(n))
 	{
 		std::cout << indent(indent_level) << "<built_in_type type=\"";
-		print(*t);
+		print(t);
 	   	std::cout << "\"/>\n";
 	}
-	else if(const const_* t = dynamic_cast<const const_*>(&n))
+	else if(std::shared_ptr<const const_> t = std::dynamic_pointer_cast<const const_>(n))
 	{
 		std::cout << indent(indent_level) << "<const>\n";
-		print(*t->decorated_type(), indent_level + 1);
+		print(t->decorated_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</const>\n";
 	}
-	else if(const volatile_* t = dynamic_cast<const volatile_*>(&n))
+	else if(std::shared_ptr<const volatile_> t = std::dynamic_pointer_cast<const volatile_>(n))
 	{
 		std::cout << indent(indent_level) << "<volatile>\n";
-		print(*t->decorated_type(), indent_level + 1);
+		print(t->decorated_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</volatile>\n";
 	}
-	else if(const pointer* t = dynamic_cast<const pointer*>(&n))
+	else if(std::shared_ptr<const pointer> t = std::dynamic_pointer_cast<const pointer>(n))
 	{
 		std::cout << indent(indent_level) << "<pointer>\n";
-		print(*t->decorated_type(), indent_level + 1);
+		print(t->decorated_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</pointer>\n";
 	}
-	else if(const reference* t = dynamic_cast<const reference*>(&n))
+	else if(std::shared_ptr<const reference> t = std::dynamic_pointer_cast<const reference>(n))
 	{
 		std::cout << indent(indent_level) << "<reference>\n";
-		print(*t->decorated_type(), indent_level + 1);
+		print(t->decorated_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</reference>\n";
 	}
-	else if(const array* t = dynamic_cast<const array*>(&n))
+	else if(std::shared_ptr<const array> t = std::dynamic_pointer_cast<const array>(n))
 	{
 		std::cout << indent(indent_level) << "<array size=\"" << t->size() << "\">\n";
-		print(*t->decorated_type(), indent_level + 1);
+		print(t->decorated_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</array>\n";
 	}
-	else if(const class_* t = dynamic_cast<const class_*>(&n))
+	else if(std::shared_ptr<const class_> t = std::dynamic_pointer_cast<const class_>(n))
 	{
 		std::cout << indent(indent_level) << "<class id=\"" << t << "\"/>\n";
 	}
@@ -77,33 +78,33 @@ print
 void
 print
 (
-	const built_in_type& built_in_t
+	std::shared_ptr<const built_in_type> built_in_t
 )
 {
-	std::vector<std::pair<const built_in_type&, const char*>> built_in_types_table =
+	std::vector<std::pair<std::shared_ptr<const built_in_type>, const char*>> built_in_types_table =
 	{
-		{built_in_type::bool_, "bool"},
-		{built_in_type::char_, "char"},
-		{built_in_type::double_, "double"},
-		{built_in_type::float_, "float"},
-		{built_in_type::int_, "int"},
-		{built_in_type::long_double, "long double"},
-		{built_in_type::long_int, "long int"},
-		{built_in_type::long_long_int, "long long int"},
-		{built_in_type::short_int, "short int"},
-		{built_in_type::unsigned_char, "unsigned char"},
-		{built_in_type::unsigned_int, "unsigned int"},
-		{built_in_type::unsigned_long_int, "unsigned long int"},
-		{built_in_type::unsigned_long_long_int, "unsigned long long int"},
-		{built_in_type::unsigned_short_int, "unsigned short int"},
-		{built_in_type::void_, "void"},
-		{built_in_type::wchar_t_, "wchar_t"}
+		{built_in_type_shared_ptrs::bool_, "bool"},
+		{built_in_type_shared_ptrs::char_, "char"},
+		{built_in_type_shared_ptrs::double_, "double"},
+		{built_in_type_shared_ptrs::float_, "float"},
+		{built_in_type_shared_ptrs::int_, "int"},
+		{built_in_type_shared_ptrs::long_double, "long double"},
+		{built_in_type_shared_ptrs::long_int, "long int"},
+		{built_in_type_shared_ptrs::long_long_int, "long long int"},
+		{built_in_type_shared_ptrs::short_int, "short int"},
+		{built_in_type_shared_ptrs::unsigned_char, "unsigned char"},
+		{built_in_type_shared_ptrs::unsigned_int, "unsigned int"},
+		{built_in_type_shared_ptrs::unsigned_long_int, "unsigned long int"},
+		{built_in_type_shared_ptrs::unsigned_long_long_int, "unsigned long long int"},
+		{built_in_type_shared_ptrs::unsigned_short_int, "unsigned short int"},
+		{built_in_type_shared_ptrs::void_, "void"},
+		{built_in_type_shared_ptrs::wchar_t_, "wchar_t"}
 	};
 
 	for(auto i = built_in_types_table.begin(); i != built_in_types_table.end(); ++i)
 	{
 		auto pair = *i;
-		const built_in_type& t = pair.first;
+		std::shared_ptr<const built_in_type> t = pair.first;
 		const char* type_str = pair.second;
 
 		if(t == built_in_t)
@@ -117,31 +118,31 @@ print
 void
 print
 (
-	const namespace_& n,
+	std::shared_ptr<const namespace_> n,
 	const unsigned int indent_level
 )
 {
 	std::cout << indent(indent_level) << "<namespace";
-	if(n.name() != "")
+	if(n->name() != "")
 	{
-		std::cout << " name=\"" << n.name() << "\"";
+		std::cout << " name=\"" << n->name() << "\"";
 	}
 	std::cout << ">\n";
 
-	for(auto i = n.namespaces().begin(); i != n.namespaces().end(); ++i)
-		print(**i, indent_level + 1);
+	for(auto i = n->namespaces().begin(); i != n->namespaces().end(); ++i)
+		print(*i, indent_level + 1);
 
-	for(auto i = n.classes().begin(); i != n.classes().end(); ++i)
-		print(**i, indent_level + 1);
+	for(auto i = n->classes().begin(); i != n->classes().end(); ++i)
+		print(*i, indent_level + 1);
 
-	for(auto i = n.simple_functions().begin(); i != n.simple_functions().end(); ++i)
-		print(**i, indent_level + 1);
+	for(auto i = n->simple_functions().begin(); i != n->simple_functions().end(); ++i)
+		print(*i, indent_level + 1);
 
-	for(auto i = n.operator_functions().begin(); i != n.operator_functions().end(); ++i)
-		print(**i, indent_level + 1);
+	for(auto i = n->operator_functions().begin(); i != n->operator_functions().end(); ++i)
+		print(*i, indent_level + 1);
 
-	for(auto i = n.variables().begin(); i != n.variables().end(); ++i)
-		print(**i, indent_level + 1);
+	for(auto i = n->variables().begin(); i != n->variables().end(); ++i)
+		print(*i, indent_level + 1);
 
 	std::cout << indent(indent_level) << "</namespace>\n";
 }
@@ -149,41 +150,54 @@ print
 void
 print
 (
-	const class_& c,
-	const unsigned int indent_level,
-	const std::string& extra_attributes
+	std::shared_ptr<const class_> c,
+	const unsigned int indent_level
 )
 {
 	std::cout << indent(indent_level) << "<class";
-	std::cout << " name=\"" << c.name() << "\"";
-	std::cout << " id=\"" << &c << "\"";
-	std::cout << extra_attributes;
+	std::cout << " name=\"" << c->name() << "\"";
+	std::cout << " id=\"" << c << "\"";
+	//extra attributes if the class is a nested class
+	if(c->has_declarative_region())
+	{
+		declarative_region_shared_ptr_variant declarative_region = c->declarative_region();
+		if(auto opt_class = utility::get<std::shared_ptr<class_>>(&declarative_region))
+		{
+			std::shared_ptr<class_> declarative_region = *opt_class;
+
+			class_::access acc = declarative_region->member_access(c);
+			std::cout << attribute(acc);
+		}
+	}
 	std::cout << ">\n";
 
-	std::cout << indent(indent_level + 1) << "<base_classes>";
-	for(auto i = c.base_classes().begin(); i != c.base_classes().end(); ++i)
-		print(**i, indent_level + 2);
-	std::cout << indent(indent_level + 1) << "</base_classes>";
+	if(!c->base_classes().empty())
+	{
+		std::cout << indent(indent_level + 1) << "<base_classes>\n";
+		for(auto i = c->base_classes().begin(); i != c->base_classes().end(); ++i)
+			print(*i, indent_level + 2);
+		std::cout << indent(indent_level + 1) << "</base_classes>\n";
+	}
 
-	for(auto i = c.nested_classes().begin(); i != c.nested_classes().end(); ++i)
-		print(**i, indent_level + 1);
+	for(auto i = c->nested_classes().begin(); i != c->nested_classes().end(); ++i)
+		print(*i, indent_level + 1);
 
-	for(auto i = c.constructors().begin(); i != c.constructors().end(); ++i)
-		print(**i, indent_level + 1);
+	for(auto i = c->constructors().begin(); i != c->constructors().end(); ++i)
+		print(*i, indent_level + 1);
 
-	print(*c.get_destructor(), indent_level + 1);
+	print(c->get_destructor(), indent_level + 1);
 
-	for(auto i = c.simple_functions().begin(); i != c.simple_functions().end(); ++i)
-		print(**i, indent_level + 1);
+	for(auto i = c->simple_functions().begin(); i != c->simple_functions().end(); ++i)
+		print(*i, indent_level + 1);
 
-	for(auto i = c.operator_functions().begin(); i != c.operator_functions().end(); ++i)
-		print(**i, indent_level + 1);
+	for(auto i = c->operator_functions().begin(); i != c->operator_functions().end(); ++i)
+		print(*i, indent_level + 1);
 
-	for(auto i = c.conversion_functions().begin(); i != c.conversion_functions().end(); ++i)
-		print(**i, indent_level + 1);
+	for(auto i = c->conversion_functions().begin(); i != c->conversion_functions().end(); ++i)
+		print(*i, indent_level + 1);
 
-	for(auto i = c.variables().begin(); i != c.variables().end(); ++i)
-		print(**i, indent_level + 1);
+	for(auto i = c->variables().begin(); i != c->variables().end(); ++i)
+		print(*i, indent_level + 1);
 
 	std::cout << indent(indent_level) << "</class>\n";
 }
@@ -191,25 +205,36 @@ print
 void
 print
 (
-	const class_::constructor& c,
+	std::shared_ptr<const class_::constructor> c,
 	const unsigned int indent_level
 )
 {
 	std::cout << indent(indent_level) << "<constructor";
-	//std::cout << attribute(c.access());
-	if(c.inline_specified())
+	if(c->inline_specified())
 		std::cout << " inline=\"true\"";
-	if(c.explicit_specified())
+	if(c->explicit_specified())
 		std::cout << " explicit=\"true\"";
+	/*
+	if(c->has_declarative_region())
+	{
+		std::shared_ptr<class_> declarative_region = utility::get<std::shared_ptr<class_>>(c->declarative_region());
+
+		class_::access acc = declarative_region->member_access(c);
+		std::cout << " access=\"" << attribute(acc) << "\"";
+	}
+	*/
 	std::cout << ">\n";
 
-	std::cout << indent(indent_level + 1) << "<parameters>\n";
-	const class_::constructor::parameters_t& parameters = c.parameters();
-	for(auto i = parameters.begin(); i != parameters.end(); ++i)
+	const class_::constructor::parameters_t& parameters = c->parameters();
+	if(!parameters.empty())
 	{
-		print(*i, indent_level + 2);
+		std::cout << indent(indent_level + 1) << "<parameters>\n";
+		for(auto i = parameters.begin(); i != parameters.end(); ++i)
+		{
+			print(*i, indent_level + 2);
+		}
+		std::cout << indent(indent_level + 1) << "</parameters>\n";
 	}
-	std::cout << indent(indent_level + 1) << "</parameters>\n";
 
 	std::cout << indent(indent_level) << "</constructor>\n";
 }
@@ -217,12 +242,12 @@ print
 void
 print
 (
-	const class_::destructor& d,
+	std::shared_ptr<const class_::destructor> d,
 	const unsigned int indent_level
 )
 {
 	std::cout << indent(indent_level) << "<destructor";
-	if(d.inline_specified())
+	if(d->inline_specified())
 		std::cout << " inline=\"true\"";
 	std::cout << ">\n";
 
@@ -232,29 +257,53 @@ print
 void
 print
 (
-	const simple_function& f,
-	const unsigned int indent_level,
-	const std::string& extra_attributes
+	std::shared_ptr<const simple_function> entity,
+	const unsigned int indent_level
 )
 {
 	std::cout << indent(indent_level) << "<simple_function";
-	std::cout << " name=\"" << f.name() << "\"";
-	if(!f.defined())
+	std::cout << " name=\"" << entity->name() << "\"";
+	//extra attributes if the function is a class member function
+	if(entity->has_declarative_region())
+	{
+		declarative_region_shared_ptr_variant declarative_region = entity->declarative_region();
+		if(auto opt_class = utility::get<std::shared_ptr<class_>>(&declarative_region))
+		{
+			std::shared_ptr<class_> declarative_region = *opt_class;
+
+			class_::access acc = declarative_region->member_access(entity);
+			std::cout << attribute(acc);
+
+			if(declarative_region->is_const_member_function(entity))
+				std::cout << " const=\"true\"";
+			if(declarative_region->is_volatile_member_function(entity))
+				std::cout << " volatile=\"true\"";
+			if(declarative_region->is_virtual_member_function(entity))
+				std::cout << " virtual=\"true\"";
+			if(declarative_region->is_pure_member_function(entity))
+				std::cout << " pure=\"true\"";
+		}
+	}
+	if(entity->inline_specified())
+		std::cout << " inline=\"true\"";
+	if(!entity->defined())
 		std::cout << " defined=\"false\"";
-	std::cout << extra_attributes;
 	std::cout << ">\n";
 
 	std::cout << indent(indent_level + 1) << "<return_type>\n";
-	print(*f.return_type(), indent_level + 2);
+	print(entity->return_type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</return_type>\n";
 
-	std::cout << indent(indent_level + 1) << "<parameters>\n";
-	const std::list<simple_function::parameter>& parameters = f.parameters();
-	for(auto i = parameters.begin(); i != parameters.end(); ++i)
+	const std::list<simple_function::parameter>& parameters = entity->parameters();
+	if(!parameters.empty())
 	{
-		print(*i, indent_level + 2);
+		std::cout << indent(indent_level + 1) << "<parameters>\n";
+		for(auto i = parameters.begin(); i != parameters.end(); ++i)
+		{
+			print(*i, indent_level + 2);
+		}
+		std::cout << indent(indent_level + 1) << "</parameters>\n";
 	}
-	std::cout << indent(indent_level + 1) << "</parameters>\n";
 
 	std::cout << indent(indent_level) << "</simple_function>\n";
 }
@@ -262,29 +311,30 @@ print
 void
 print
 (
-	const operator_function& f,
-	const unsigned int indent_level,
-	const std::string& extra_attributes
+	std::shared_ptr<const operator_function> entity,
+	const unsigned int indent_level
 )
 {
 	std::cout << indent(indent_level) << "<operator_function";
-	std::cout << attribute(f.get_operator());
-	std::cout << extra_attributes;
-	if(f.static_specified())
+	std::cout << attribute(entity->get_operator());
+	if(entity->static_specified())
 		std::cout << " static=\"true\"";
 	std::cout << ">\n";
 
 	std::cout << indent(indent_level + 1) << "<return_type>\n";
-	print(*f.return_type(), indent_level + 2);
+	print(entity->return_type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</return_type>\n";
 
-	std::cout << indent(indent_level + 1) << "<parameters>\n";
-	const std::list<operator_function::parameter>& parameters = f.parameters();
-	for(auto i = parameters.begin(); i != parameters.end(); ++i)
+	const std::list<simple_function::parameter>& parameters = entity->parameters();
+	if(!parameters.empty())
 	{
-		print(*i, indent_level + 2);
+		std::cout << indent(indent_level + 1) << "<parameters>\n";
+		for(auto i = parameters.begin(); i != parameters.end(); ++i)
+		{
+			print(*i, indent_level + 2);
+		}
+		std::cout << indent(indent_level + 1) << "</parameters>\n";
 	}
-	std::cout << indent(indent_level + 1) << "</parameters>\n";
 
 	std::cout << indent(indent_level) << "</operator_function>\n";
 }
@@ -292,17 +342,17 @@ print
 void
 print
 (
-	const class_::conversion_function& f,
+	std::shared_ptr<const class_::conversion_function> entity,
 	const unsigned int indent_level
 )
 {
 	std::cout << indent(indent_level) << "<conversion_function";
-	if(f.inline_specified())
+	if(entity->inline_specified())
 		std::cout << " inline=\"true\"";
 	std::cout << ">\n";
 
 	std::cout << indent(indent_level + 1) << "<return_type>\n";
-	print(*f.return_type(), indent_level + 2);
+	print(entity->return_type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</return_type>\n";
 
 	std::cout << indent(indent_level) << "</conversion_function>\n";
@@ -320,7 +370,7 @@ print
 		std::cout << " name=\"" << p.name() << "\"";
 	std::cout << ">\n";
 	std::cout << indent(indent_level + 1) << "<type>\n";
-	print(*p.get_type(), indent_level + 2);
+	print(p.get_type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</type>\n";
 	std::cout << indent(indent_level) << "</parameter>\n";
 }
@@ -328,19 +378,17 @@ print
 void
 print
 (
-	const variable& v,
-	const unsigned int indent_level,
-	const std::string& extra_attributes
+	std::shared_ptr<const variable> v,
+	const unsigned int indent_level
 )
 {
 	std::cout << indent(indent_level) << "<variable";
-	std::cout << " name=\"" << v.name() << "\"";
-	std::cout << extra_attributes;
-	if(v.static_specified())
+	std::cout << " name=\"" << v->name() << "\"";
+	if(v->static_specified())
 		std::cout << " static=\"true\"";
 	std::cout << ">\n";
 	std::cout << indent(indent_level + 1) << "<type>\n";
-	print(*v.get_type(), indent_level + 2);
+	print(v->get_type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</type>\n";
 	std::cout << indent(indent_level) << "</variable>\n";
 }

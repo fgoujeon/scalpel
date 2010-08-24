@@ -30,6 +30,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/noncopyable.hpp>
 #include <string>
 #include <vector>
+#include <map>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -52,13 +53,13 @@ class class_:
 		typedef
 			utility::variant
 			<
-				std::shared_ptr<class_>,
-				std::shared_ptr<constructor>,
-				std::shared_ptr<destructor>,
-				std::shared_ptr<simple_function>,
-				std::shared_ptr<conversion_function>,
-				std::shared_ptr<operator_function>,
-				std::shared_ptr<variable>
+				std::shared_ptr<const class_>,
+				std::shared_ptr<const constructor>,
+				std::shared_ptr<const destructor>,
+				std::shared_ptr<const simple_function>,
+				std::shared_ptr<const conversion_function>,
+				std::shared_ptr<const operator_function>,
+				std::shared_ptr<const variable>
 			>
 			member_t
 		;
@@ -107,7 +108,7 @@ class class_:
 		has_declarative_region() const;
 
 		declarative_region_shared_ptr_variant
-		declarative_region();
+		declarative_region() const;
 
 		void
 		declarative_region(const declarative_region_shared_ptr_variant& declarative_region);
@@ -231,19 +232,31 @@ class class_:
 		void
 		add(std::shared_ptr<variable> member, const access acc);
 
+		//get the access of the given class member
+		access
+		member_access(const member_t& member) const;
+
+		bool
+		is_const_member_function(const member_t& member) const;
+
+		bool
+		is_volatile_member_function(const member_t& member) const;
+
+		bool
+		is_virtual_member_function(const member_t& member) const;
+
+		bool
+		is_pure_member_function(const member_t& member) const;
+
     private:
         std::string name_;
 		boost::optional<declarative_region_weak_ptr_variant> declarative_region_;
 
 		//polymorphic containers
 		declarative_region_shared_ptr_variants_t declarative_region_variants_;
-		classes_t public_base_classes_;
-		classes_t protected_base_classes_;
-		classes_t private_base_classes_;
+		std::map<const std::shared_ptr<class_>, access> base_class_access_;
 		classes_t virtual_base_classes_;
-		members_t public_members_;
-		members_t protected_members_;
-		members_t private_members_;
+		std::map<const member_t, access> member_access_;
 		members_t const_member_functions_;
 		members_t volatile_member_functions_;
 		members_t virtual_member_functions_;

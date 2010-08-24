@@ -82,7 +82,7 @@ class_::has_declarative_region() const
 }
 
 declarative_region_shared_ptr_variant
-class_::declarative_region()
+class_::declarative_region() const
 {
 	return to_shared_ptr_variant(*declarative_region_);
 }
@@ -208,18 +208,7 @@ class_::add_base_class
 {
 	base_classes_.push_back(base_class);
 
-	switch(acc)
-	{
-		case PUBLIC:
-			public_base_classes_.push_back(base_class);
-			break;
-		case PROTECTED:
-			protected_base_classes_.push_back(base_class);
-			break;
-		case PRIVATE:
-			private_base_classes_.push_back(base_class);
-			break;
-	}
+	base_class_access_[base_class] = acc;
 	if(virtual_specified) virtual_base_classes_.push_back(base_class);
 }
 
@@ -231,18 +220,7 @@ class_::add(std::shared_ptr<class_> member, const access acc)
 	nested_classes_.push_back(member);
 	declarative_region_variants_.push_back(member);
 
-	switch(acc)
-	{
-		case PUBLIC:
-			public_members_.push_back(member);
-			break;
-		case PROTECTED:
-			protected_members_.push_back(member);
-			break;
-		case PRIVATE:
-			private_members_.push_back(member);
-			break;
-	}
+	member_access_[std::shared_ptr<const class_>(member)] = acc;
 }
 
 void
@@ -250,18 +228,7 @@ class_::add(std::shared_ptr<constructor> member, const access acc)
 {
     constructors_.push_back(member);
 
-	switch(acc)
-	{
-		case PUBLIC:
-			public_members_.push_back(member);
-			break;
-		case PROTECTED:
-			protected_members_.push_back(member);
-			break;
-		case PRIVATE:
-			private_members_.push_back(member);
-			break;
-	}
+	member_access_[std::shared_ptr<const constructor>(member)] = acc;
 }
 
 void
@@ -275,20 +242,10 @@ class_::set_destructor
 {
 	destructor_ = member;
 
-	switch(acc)
-	{
-		case PUBLIC:
-			public_members_.push_back(member);
-			break;
-		case PROTECTED:
-			protected_members_.push_back(member);
-			break;
-		case PRIVATE:
-			private_members_.push_back(member);
-			break;
-	}
-	if(virtual_specified) virtual_member_functions_.push_back(member);
-	if(pure_specified) pure_member_functions_.push_back(member);
+	std::shared_ptr<const destructor> const_member(member);
+	member_access_[const_member] = acc;
+	if(virtual_specified) virtual_member_functions_.push_back(const_member);
+	if(pure_specified) pure_member_functions_.push_back(const_member);
 }
 
 void
@@ -306,22 +263,12 @@ class_::add
 
     simple_functions_.push_back(member);
 
-	switch(acc)
-	{
-		case PUBLIC:
-			public_members_.push_back(member);
-			break;
-		case PROTECTED:
-			protected_members_.push_back(member);
-			break;
-		case PRIVATE:
-			private_members_.push_back(member);
-			break;
-	}
-	if(const_qualified) const_member_functions_.push_back(member);
-	if(volatile_qualified) volatile_member_functions_.push_back(member);
-	if(virtual_specified) virtual_member_functions_.push_back(member);
-	if(pure_specified) pure_member_functions_.push_back(member);
+	std::shared_ptr<const simple_function> const_member(member);
+	member_access_[const_member] = acc;
+	if(const_qualified) const_member_functions_.push_back(const_member);
+	if(volatile_qualified) volatile_member_functions_.push_back(const_member);
+	if(virtual_specified) virtual_member_functions_.push_back(const_member);
+	if(pure_specified) pure_member_functions_.push_back(const_member);
 }
 
 void
@@ -337,22 +284,12 @@ class_::add
 {
     operator_functions_.push_back(member);
 
-	switch(acc)
-	{
-		case PUBLIC:
-			public_members_.push_back(member);
-			break;
-		case PROTECTED:
-			protected_members_.push_back(member);
-			break;
-		case PRIVATE:
-			private_members_.push_back(member);
-			break;
-	}
-	if(const_qualified) const_member_functions_.push_back(member);
-	if(volatile_qualified) volatile_member_functions_.push_back(member);
-	if(virtual_specified) virtual_member_functions_.push_back(member);
-	if(pure_specified) pure_member_functions_.push_back(member);
+	std::shared_ptr<const operator_function> const_member(member);
+	member_access_[const_member] = acc;
+	if(const_qualified) const_member_functions_.push_back(const_member);
+	if(volatile_qualified) volatile_member_functions_.push_back(const_member);
+	if(virtual_specified) virtual_member_functions_.push_back(const_member);
+	if(pure_specified) pure_member_functions_.push_back(const_member);
 }
 
 void
@@ -368,22 +305,12 @@ class_::add
 {
     conversion_functions_.push_back(member);
 
-	switch(acc)
-	{
-		case PUBLIC:
-			public_members_.push_back(member);
-			break;
-		case PROTECTED:
-			protected_members_.push_back(member);
-			break;
-		case PRIVATE:
-			private_members_.push_back(member);
-			break;
-	}
-	if(const_qualified) const_member_functions_.push_back(member);
-	if(volatile_qualified) volatile_member_functions_.push_back(member);
-	if(virtual_specified) virtual_member_functions_.push_back(member);
-	if(pure_specified) pure_member_functions_.push_back(member);
+	std::shared_ptr<const conversion_function> const_member(member);
+	member_access_[const_member] = acc;
+	if(const_qualified) const_member_functions_.push_back(const_member);
+	if(volatile_qualified) volatile_member_functions_.push_back(const_member);
+	if(virtual_specified) virtual_member_functions_.push_back(const_member);
+	if(pure_specified) pure_member_functions_.push_back(const_member);
 }
 
 void
@@ -391,18 +318,62 @@ class_::add(std::shared_ptr<variable> member, const access acc)
 {
     variables_.push_back(member);
 
-	switch(acc)
-	{
-		case PUBLIC:
-			public_members_.push_back(member);
-			break;
-		case PROTECTED:
-			protected_members_.push_back(member);
-			break;
-		case PRIVATE:
-			private_members_.push_back(member);
-			break;
-	}
+	std::shared_ptr<const variable> const_member(member);
+	member_access_[const_member] = acc;
+}
+
+class_::access
+class_::member_access(const member_t& member) const
+{
+	auto it = member_access_.find(member);
+	if(it != member_access_.end())
+		return it->second;
+	else
+		throw std::runtime_error("The given entity is not a member of that class.");
+}
+
+bool
+class_::is_const_member_function(const member_t& member) const
+{
+	return std::find
+	(
+		const_member_functions_.begin(),
+		const_member_functions_.end(),
+		member
+	) != const_member_functions_.end();
+}
+
+bool
+class_::is_volatile_member_function(const member_t& member) const
+{
+	return std::find
+	(
+		volatile_member_functions_.begin(),
+		volatile_member_functions_.end(),
+		member
+	) != volatile_member_functions_.end();
+}
+
+bool
+class_::is_virtual_member_function(const member_t& member) const
+{
+	return std::find
+	(
+		virtual_member_functions_.begin(),
+		virtual_member_functions_.end(),
+		member
+	) != virtual_member_functions_.end();
+}
+
+bool
+class_::is_pure_member_function(const member_t& member) const
+{
+	return std::find
+	(
+		pure_member_functions_.begin(),
+		pure_member_functions_.end(),
+		member
+	) != pure_member_functions_.end();
 }
 
 

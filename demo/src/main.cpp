@@ -126,13 +126,13 @@ main(int argc, char** argv)
 		}
 
 		//semantic analysis
-		std::shared_ptr<scalpel::cpp::semantic_graph> graph = semantic_analyzer(tree);
+		std::shared_ptr<const scalpel::cpp::semantic_graph> graph = semantic_analyzer(tree);
 
 		//print semantic graph
 		if(print_semantic_graph)
 		{
 			std::cout << "Semantic graph:\n";
-			semantic_graph_print_functions::print(*graph);
+			semantic_graph_print_functions::print(graph);
 		}
 	}
 
