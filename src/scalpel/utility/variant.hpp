@@ -26,6 +26,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/utility/enable_if.hpp>
 #include <memory>
 #include <stdexcept>
+#include <iostream>
+#include <cassert>
 
 namespace scalpel { namespace utility
 {
@@ -245,8 +247,6 @@ variant<T, Ts...>::operator=(const variant<T, Ts...>& o)
 	{
 		if(o.head_)
 			head_ = std::unique_ptr<T>(new T(*o.head_));
-		else
-			head_.reset();
 
 		tail_ = o.tail_;
 	}
@@ -509,8 +509,8 @@ class apply_visitor_impl<ResultTypeT, VariantVisitorT, FullVariantT, CurrentVari
 	{
 		//this code will never be called
 		//it has been written for warning-free purpose
-		typename VariantVisitorT::result_type* return_value_ptr = 0;
-		return *return_value_ptr;
+		assert(false);
+		throw "";
 	}
 };
 

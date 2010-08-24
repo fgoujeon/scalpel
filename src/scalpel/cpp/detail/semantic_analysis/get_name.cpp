@@ -36,18 +36,7 @@ template<>
 const std::string&
 get_name<semantic_entities::declarative_region_shared_ptr_variant>(semantic_entities::declarative_region_shared_ptr_variant entity)
 {
-	if(auto opt_entity = utility::get<std::shared_ptr<semantic_entities::namespace_>>(&entity))
-	{
-		return (*opt_entity)->name();
-	}
-	else if(auto opt_entity = utility::get<std::shared_ptr<semantic_entities::class_>>(&entity))
-	{
-		return (*opt_entity)->name();
-	}
-	else
-	{
-		throw "get_name() error";
-	}
+	return get_name(entity);
 }
 
 GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(namespace_)

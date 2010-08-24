@@ -20,6 +20,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "get_members.hpp"
 #include <scalpel/cpp/semantic_graph.hpp>
+#include <scalpel/utility/variant.hpp>
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
 {
@@ -45,13 +46,8 @@ template<> \
 typename get_members_type_traits<semantic_entities::MEMBER_TYPE>::return_type \
 get_members<semantic_entities::MEMBER_TYPE, semantic_entities::declarative_region_shared_ptr_variant>(semantic_entities::declarative_region_shared_ptr_variant parent) \
 { \
-	if(auto opt_shared_ptr = utility::get<std::shared_ptr<semantic_entities::namespace_>>(&parent)) \
-		return get_members<semantic_entities::MEMBER_TYPE>(*opt_shared_ptr); \
-	else if(auto opt_shared_ptr = utility::get<std::shared_ptr<semantic_entities::class_>>(&parent)) \
-		return get_members<semantic_entities::MEMBER_TYPE>(*opt_shared_ptr); \
-	else if(auto opt_shared_ptr = utility::get<std::shared_ptr<semantic_entities::simple_function>>(&parent)) \
-		return get_members<semantic_entities::MEMBER_TYPE>(*opt_shared_ptr); \
-	throw "get_members() error"; \
+	get_declarative_region_members_impl<semantic_entities::MEMBER_TYPE> impl; \
+	return utility::apply_visitor(impl, parent); \
 }
 
 GENERATE_SIMPLE_GET_MEMBERS_SPECIALIZATION(namespace_, declarative_region_shared_ptr_variant, declarative_region_variants)

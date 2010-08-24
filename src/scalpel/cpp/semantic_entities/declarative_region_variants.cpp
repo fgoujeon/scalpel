@@ -26,56 +26,97 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
+struct get_name_impl_struct: public utility::static_visitor<const std::string&>
+{
+	template<class T>
+	const std::string&
+	operator()(std::shared_ptr<T> t) const
+	{
+		return t->name();
+	}
+};
+get_name_impl_struct get_name_impl;
+
+const std::string&
+get_name(const declarative_region_shared_ptr_variant& var)
+{
+	return utility::apply_visitor(get_name_impl, var);
+}
+
+
+
+struct has_declarative_region_impl_struct: public utility::static_visitor<bool>
+{
+	template<class T>
+	bool
+	operator()(std::shared_ptr<T> t) const
+	{
+		return t->has_declarative_region();
+	}
+};
+has_declarative_region_impl_struct has_declarative_region_impl;
+
 bool
 has_declarative_region(const declarative_region_shared_ptr_variant& var)
 {
-	if(auto opt_shared_ptr = utility::get<std::shared_ptr<namespace_>>(&var))
-		return (*opt_shared_ptr)->has_declarative_region();
-	else if(auto opt_shared_ptr = utility::get<std::shared_ptr<class_>>(&var))
-		return (*opt_shared_ptr)->has_declarative_region();
-	else if(auto opt_shared_ptr = utility::get<std::shared_ptr<simple_function>>(&var))
-		return (*opt_shared_ptr)->has_declarative_region();
-	else
-		throw "";
+	return utility::apply_visitor(has_declarative_region_impl, var);
 }
+
+
+
+struct get_declarative_region_impl_struct: public utility::static_visitor<declarative_region_shared_ptr_variant>
+{
+	template<class T>
+	declarative_region_shared_ptr_variant
+	operator()(std::shared_ptr<T> t) const
+	{
+		return t->declarative_region();
+	}
+};
+get_declarative_region_impl_struct get_declarative_region_impl;
 
 declarative_region_shared_ptr_variant
 get_declarative_region(const declarative_region_shared_ptr_variant& var)
 {
-	if(auto opt_shared_ptr = utility::get<std::shared_ptr<namespace_>>(&var))
-		return (*opt_shared_ptr)->declarative_region();
-	else if(auto opt_shared_ptr = utility::get<std::shared_ptr<class_>>(&var))
-		return (*opt_shared_ptr)->declarative_region();
-	else if(auto opt_shared_ptr = utility::get<std::shared_ptr<simple_function>>(&var))
-		return (*opt_shared_ptr)->declarative_region();
-	else
-		throw "";
+	return utility::apply_visitor(get_declarative_region_impl, var);
 }
+
+
+
+struct to_shared_ptr_variant_impl_struct: public utility::static_visitor<declarative_region_shared_ptr_variant>
+{
+	template<class T>
+	declarative_region_shared_ptr_variant
+	operator()(std::weak_ptr<T> t) const
+	{
+		return std::shared_ptr<T>(t);
+	}
+};
+to_shared_ptr_variant_impl_struct to_shared_ptr_variant_impl;
 
 declarative_region_shared_ptr_variant
 to_shared_ptr_variant(const declarative_region_weak_ptr_variant& var)
 {
-	if(auto opt_shared_ptr = utility::get<std::weak_ptr<namespace_>>(&var))
-		return std::shared_ptr<namespace_>(*opt_shared_ptr);
-	else if(auto opt_shared_ptr = utility::get<std::weak_ptr<class_>>(&var))
-		return std::shared_ptr<class_>(*opt_shared_ptr);
-	else if(auto opt_shared_ptr = utility::get<std::weak_ptr<simple_function>>(&var))
-		return std::shared_ptr<simple_function>(*opt_shared_ptr);
-
-	throw "";
+	return utility::apply_visitor(to_shared_ptr_variant_impl, var);
 }
+
+
+
+struct to_weak_ptr_variant_impl_struct: public utility::static_visitor<declarative_region_weak_ptr_variant>
+{
+	template<class T>
+	declarative_region_weak_ptr_variant
+	operator()(std::shared_ptr<T> t) const
+	{
+		return std::weak_ptr<T>(t);
+	}
+};
+to_weak_ptr_variant_impl_struct to_weak_ptr_variant_impl;
 
 declarative_region_weak_ptr_variant
 to_weak_ptr_variant(const declarative_region_shared_ptr_variant& var)
 {
-	if(auto opt_weak_ptr = utility::get<std::shared_ptr<namespace_>>(&var))
-		return std::weak_ptr<namespace_>(*opt_weak_ptr);
-	else if(auto opt_weak_ptr = utility::get<std::shared_ptr<class_>>(&var))
-		return std::weak_ptr<class_>(*opt_weak_ptr);
-	else if(auto opt_weak_ptr = utility::get<std::shared_ptr<simple_function>>(&var))
-		return std::weak_ptr<simple_function>(*opt_weak_ptr);
-
-	throw "";
+	return utility::apply_visitor(to_weak_ptr_variant_impl, var);
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

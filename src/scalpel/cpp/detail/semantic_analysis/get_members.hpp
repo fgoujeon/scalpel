@@ -78,6 +78,18 @@ template<class MemberT, class ParentT>
 typename get_members_type_traits<MemberT>::return_type
 get_members(ParentT parent);
 
+//visitors for declarative_region_shared_ptr_variant parent
+template<class MemberT>
+struct get_declarative_region_members_impl: public utility::static_visitor<typename get_members_type_traits<MemberT>::return_type>
+{
+	template<class T>
+	typename get_members_type_traits<MemberT>::return_type
+	operator()(std::shared_ptr<T> t) const
+	{
+		return get_members<MemberT>(t);
+	}
+};
+
 }}}} //namespace scalpel::cpp::detail::semantic_analysis
 
 #endif

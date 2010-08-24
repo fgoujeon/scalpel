@@ -51,6 +51,9 @@ typedef
 	declarative_region_weak_ptr_variant
 ;
 
+const std::string&
+get_name(const declarative_region_shared_ptr_variant& var);
+
 bool
 has_declarative_region(const declarative_region_shared_ptr_variant& var);
 
