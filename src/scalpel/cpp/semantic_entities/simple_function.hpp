@@ -114,7 +114,7 @@ class simple_function:
 		defined(bool d);
 
 		const declarative_region_shared_ptr_variants_t&
-		declarative_region_variants();
+		declarative_regions();
 
 		std::shared_ptr<statement_block>
 		body();
@@ -128,7 +128,7 @@ class simple_function:
 		bool defined_;
 		declarative_region_member_impl declarative_region_member_impl_;
 
-		declarative_region_shared_ptr_variants_t declarative_region_variants_;
+		declarative_region_shared_ptr_variants_t declarative_regions_;
 
 		std::shared_ptr<statement_block> body_;
 };

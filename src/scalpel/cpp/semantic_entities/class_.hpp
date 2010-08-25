@@ -121,7 +121,7 @@ class class_:
 		is_open_to_outside() const;
 
 		const declarative_region_shared_ptr_variants_t&
-		declarative_region_variants();
+		declarative_regions();
 
 		classes_t::range
 		base_classes();
@@ -265,7 +265,7 @@ class class_:
 		declarative_region_member_impl declarative_region_member_impl_;
 
 		//polymorphic containers
-		declarative_region_shared_ptr_variants_t declarative_region_variants_;
+		declarative_region_shared_ptr_variants_t declarative_regions_;
 		std::map<std::shared_ptr<const class_>, access> base_class_access_;
 		classes_t virtual_base_classes_;
 		std::map<const member_t, access> member_access_;

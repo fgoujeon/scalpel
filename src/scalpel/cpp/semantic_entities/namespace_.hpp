@@ -45,7 +45,7 @@ class namespace_:
 	public boost::noncopyable
 {
     public:
-		typedef utility::vector<declarative_region_shared_ptr_variant> declarative_region_variants_t;
+		typedef utility::vector<declarative_region_shared_ptr_variant> declarative_regions_t;
 		typedef utility::vector<std::shared_ptr<namespace_>> namespaces_t;
 		typedef utility::vector<std::shared_ptr<class_>> classes_t;
 		typedef utility::vector<std::shared_ptr<simple_function>> simple_functions_t;
@@ -97,8 +97,8 @@ class namespace_:
 		bool
 		is_open_to_outside() const;
 
-		const declarative_region_variants_t&
-		declarative_region_variants();
+		const declarative_regions_t&
+		declarative_regions();
 
 		namespaces_t::range
 		namespaces();
@@ -150,7 +150,7 @@ class namespace_:
 		declarative_region_member_impl declarative_region_member_impl_;
 
 		//polymorphic containers
-		declarative_region_variants_t declarative_region_variants_;
+		declarative_regions_t declarative_regions_;
 
 		//containers
         namespaces_t namespaces_;

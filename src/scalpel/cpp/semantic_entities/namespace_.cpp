@@ -34,7 +34,7 @@ namespace_::namespace_(const std::string& name):
 
 namespace_::namespace_(namespace_&& rhs):
 	name_(std::move(rhs.name_)),
-	declarative_region_variants_(std::move(rhs.declarative_region_variants_)),
+	declarative_regions_(std::move(rhs.declarative_regions_)),
 	namespaces_(std::move(rhs.namespaces_)),
 	classes_(std::move(rhs.classes_)),
 	simple_functions_(std::move(rhs.simple_functions_)),
@@ -47,7 +47,7 @@ const namespace_&
 namespace_::operator=(namespace_&& rhs)
 {
 	name_ = std::move(rhs.name_);
-	declarative_region_variants_ = std::move(rhs.declarative_region_variants_);
+	declarative_regions_ = std::move(rhs.declarative_regions_);
 	namespaces_ = std::move(rhs.namespaces_);
 	classes_ = std::move(rhs.classes_);
 	simple_functions_ = std::move(rhs.simple_functions_);
@@ -87,10 +87,10 @@ namespace_::is_open_to_outside() const
 	return true;
 }
 
-const namespace_::declarative_region_variants_t&
-namespace_::declarative_region_variants()
+const namespace_::declarative_regions_t&
+namespace_::declarative_regions()
 {
-	return declarative_region_variants_;
+	return declarative_regions_;
 }
 
 namespace_::namespaces_t::range
@@ -158,7 +158,7 @@ namespace_::add(std::shared_ptr<namespace_> member)
 {
 	member->declarative_region(shared_from_this());
     namespaces_.push_back(member);
-	declarative_region_variants_.push_back(member);
+	declarative_regions_.push_back(member);
 }
 
 void
@@ -166,7 +166,7 @@ namespace_::add(std::shared_ptr<class_> member)
 {
 	member->declarative_region(shared_from_this());
     classes_.push_back(member);
-	declarative_region_variants_.push_back(member);
+	declarative_regions_.push_back(member);
 }
 
 void

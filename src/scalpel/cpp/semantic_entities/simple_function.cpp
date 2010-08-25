@@ -167,9 +167,9 @@ simple_function::declarative_region(const declarative_region_shared_ptr_variant&
 }
 
 const simple_function::declarative_region_shared_ptr_variants_t&
-simple_function::declarative_region_variants()
+simple_function::declarative_regions()
 {
-	return declarative_region_variants_;
+	return declarative_regions_;
 }
 
 std::shared_ptr<statement_block>

@@ -90,9 +90,9 @@ class_::is_open_to_outside() const
 }
 
 const class_::declarative_region_shared_ptr_variants_t&
-class_::declarative_region_variants()
+class_::declarative_regions()
 {
-	return declarative_region_variants_;
+	return declarative_regions_;
 }
 
 class_::classes_t::range
@@ -212,7 +212,7 @@ class_::add(std::shared_ptr<class_> member, const access acc)
 {
 	member->declarative_region(shared_from_this());
 	nested_classes_.push_back(member);
-	declarative_region_variants_.push_back(member);
+	declarative_regions_.push_back(member);
 
 	member_access_[std::shared_ptr<const class_>(member)] = acc;
 }
