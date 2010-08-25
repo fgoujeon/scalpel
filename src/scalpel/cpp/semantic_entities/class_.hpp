@@ -24,6 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "variable.hpp"
 #include "operator_function.hpp"
 #include "simple_function.hpp"
+#include "declarative_region_member_impl.hpp"
 #include "declarative_region_variants.hpp"
 #include "type.hpp"
 #include <scalpel/utility/vector.hpp>
@@ -90,13 +91,13 @@ class class_:
 		/**
 		 * Move constructor.
 		 */
-		class_(class_&& c);
+		class_(class_&& rhs);
 
 		/**
 		 * Move assignment operator.
 		 */
 		const class_&
-		operator=(class_&& c);
+		operator=(class_&& rhs);
 
         /**
         @return the name of the class
@@ -196,6 +197,10 @@ class class_:
 			const bool pure_specified = false
 		);
 
+		void
+		reset_destructor();
+
+	public:
         void
         add
 		(
@@ -232,6 +237,13 @@ class class_:
 		void
 		add(std::shared_ptr<variable> member, const access acc);
 
+		//get the access of the given base class
+		access
+		base_class_access(std::shared_ptr<const class_> base_class) const;
+
+		bool
+		is_virtual_base_class(std::shared_ptr<const class_> base_class) const;
+
 		//get the access of the given class member
 		access
 		member_access(const member_t& member) const;
@@ -250,11 +262,11 @@ class class_:
 
     private:
         std::string name_;
-		boost::optional<declarative_region_weak_ptr_variant> declarative_region_;
+		declarative_region_member_impl declarative_region_member_impl_;
 
 		//polymorphic containers
 		declarative_region_shared_ptr_variants_t declarative_region_variants_;
-		std::map<const std::shared_ptr<class_>, access> base_class_access_;
+		std::map<std::shared_ptr<const class_>, access> base_class_access_;
 		classes_t virtual_base_classes_;
 		std::map<const member_t, access> member_access_;
 		members_t const_member_functions_;
@@ -297,9 +309,19 @@ class class_::constructor
 		bool
 		explicit_specified() const;
 
+		bool
+		has_declarative_region() const;
+
+		declarative_region_shared_ptr_variant
+		declarative_region() const;
+
+		void
+		declarative_region(const declarative_region_shared_ptr_variant& declarative_region);
+
 	private:
 		semantic_entities::simple_function impl_;
 		bool explicit_specified_;
+		declarative_region_member_impl declarative_region_member_impl_;
 };
 
 class class_::destructor
@@ -312,8 +334,18 @@ class class_::destructor
 		bool
 		inline_specified() const;
 
+		bool
+		has_declarative_region() const;
+
+		declarative_region_shared_ptr_variant
+		declarative_region() const;
+
+		void
+		declarative_region(const declarative_region_shared_ptr_variant& declarative_region);
+
 	private:
 		bool inline_specified_;
+		declarative_region_member_impl declarative_region_member_impl_;
 };
 
 class class_::conversion_function
@@ -333,9 +365,19 @@ class class_::conversion_function
 		bool
 		inline_specified() const;
 
+		bool
+		has_declarative_region() const;
+
+		declarative_region_shared_ptr_variant
+		declarative_region() const;
+
+		void
+		declarative_region(const declarative_region_shared_ptr_variant& declarative_region);
+
 	private:
 		std::shared_ptr<const type> return_type_;
 		bool inline_specified_;
+		declarative_region_member_impl declarative_region_member_impl_;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

@@ -23,6 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "variable.hpp"
 #include "statement_block.hpp"
+#include "declarative_region_member_impl.hpp"
 #include "declarative_region_variants.hpp"
 #include "type.hpp"
 #include <boost/optional.hpp>
@@ -56,16 +57,16 @@ class simple_function:
 		);
 
 		//copy constructor
-		simple_function(const simple_function& f) = delete;
+		simple_function(const simple_function&) = delete;
 
 		//move constructor
-		simple_function(simple_function&& f);
+		simple_function(simple_function&& rhs);
 
 		const simple_function&
-		operator=(const simple_function& f) = delete;
+		operator=(const simple_function&) = delete;
 
 		const simple_function&
-		operator=(simple_function&& f);
+		operator=(simple_function&& rhs);
 
 		bool
 		has_same_signature(const simple_function& f) const;
@@ -125,7 +126,7 @@ class simple_function:
 		bool inline_specified_;
 		bool static_specified_;
 		bool defined_;
-		boost::optional<declarative_region_weak_ptr_variant> declarative_region_;
+		declarative_region_member_impl declarative_region_member_impl_;
 
 		declarative_region_shared_ptr_variants_t declarative_region_variants_;
 

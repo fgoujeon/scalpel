@@ -22,6 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_VARIABLE_HPP
 
 #include "type.hpp"
+#include "declarative_region_member_impl.hpp"
 #include <boost/noncopyable.hpp>
 #include <string>
 #include <memory>
@@ -58,10 +59,20 @@ class variable
 		bool
 		static_specified() const;
 
+		bool
+		has_declarative_region() const;
+
+		declarative_region_shared_ptr_variant
+		declarative_region() const;
+
+		void
+		declarative_region(const declarative_region_shared_ptr_variant& declarative_region);
+
 	private:
 		std::shared_ptr<const type> type_;
 		std::string name_;
 		bool static_specified_;
+		declarative_region_member_impl declarative_region_member_impl_;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

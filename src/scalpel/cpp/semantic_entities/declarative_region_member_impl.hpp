@@ -18,57 +18,18 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_OPERATOR_FUNCTION_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_OPERATOR_FUNCTION_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_DECLARATIVE_REGION_MEMBER_IMPL_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_DECLARATIVE_REGION_MEMBER_IMPL_HPP
 
-#include "operator_.hpp"
-#include "simple_function.hpp"
-#include <memory>
+#include "declarative_region_variants.hpp"
+#include <boost/optional.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-/**
-Represents a C++ operator simple_function.
-*/
-class operator_function
+class declarative_region_member_impl
 {
     public:
-		typedef simple_function::parameter parameter;
-		typedef simple_function::parameters_t parameters_t;
-
-        operator_function
-		(
-			const operator_ op,
-			std::shared_ptr<const type> return_type,
-			parameters_t&& parameters,
-			const bool is_inline_specified
-		);
-
-		//move constructor
-		operator_function(operator_function&& rhs);
-
-		const operator_function&
-		operator=(operator_function&& rhs);
-
-		operator_
-		get_operator() const;
-
-		std::shared_ptr<const type>
-		return_type() const;
-
-		const parameters_t&
-		parameters() const;
-
-		bool
-		inline_specified() const;
-
-		bool
-		defined() const;
-
-		void
-		defined(const bool d);
-
 		bool
 		has_declarative_region() const;
 
@@ -79,8 +40,7 @@ class operator_function
 		declarative_region(const declarative_region_shared_ptr_variant& declarative_region);
 
     private:
-		simple_function impl_;
-        operator_ op_;
+		boost::optional<declarative_region_weak_ptr_variant> declarative_region_;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

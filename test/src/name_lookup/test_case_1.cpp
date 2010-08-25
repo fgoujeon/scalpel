@@ -68,6 +68,10 @@ test_case_1()
 		::i;
 	}
 	*/
+
+	class_("B");
+
+	/*
 	auto semantic_graph = std::make_shared<scalpel::cpp::semantic_graph>();
 	auto namespace_a = std::make_shared<namespace_>("A");
 	auto variable_a_i = std::make_shared<variable>
@@ -180,6 +184,7 @@ test_case_1()
 		auto found_entity = find_entities<true, false, variable>(variable_i_syntax_node, function_a_b_f);
 		BOOST_CHECK_EQUAL(found_entity, variable_i);
 	}
+	*/
 }
 
 } //namespace name_lookup

@@ -25,6 +25,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "operator_function.hpp"
 #include "simple_function.hpp"
 #include "class_.hpp"
+#include "declarative_region_member_impl.hpp"
 #include "declarative_region_variants.hpp"
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
@@ -66,13 +67,13 @@ class namespace_:
 		/**
 		 * Move constructor.
 		 */
-		namespace_(namespace_&& n);
+		namespace_(namespace_&& rhs);
 
 		/**
 		 * Move assignment operator.
 		 */
 		const namespace_&
-		operator=(namespace_&& n);
+		operator=(namespace_&& rhs);
 
         /**
         @return the name of the namespace
@@ -85,7 +86,7 @@ class namespace_:
 		has_declarative_region() const;
 
 		declarative_region_shared_ptr_variant
-		declarative_region();
+		declarative_region() const;
 
 		void
 		declarative_region(const declarative_region_shared_ptr_variant& declarative_region);
@@ -146,7 +147,7 @@ class namespace_:
 
     private:
         std::string name_;
-		boost::optional<declarative_region_weak_ptr_variant> declarative_region_;
+		declarative_region_member_impl declarative_region_member_impl_;
 
 		//polymorphic containers
 		declarative_region_variants_t declarative_region_variants_;

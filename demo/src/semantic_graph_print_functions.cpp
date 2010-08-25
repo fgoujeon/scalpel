@@ -175,7 +175,13 @@ print
 	{
 		std::cout << indent(indent_level + 1) << "<base_classes>\n";
 		for(auto i = c->base_classes().begin(); i != c->base_classes().end(); ++i)
-			print(*i, indent_level + 2);
+			print_base_class
+			(
+				*i,
+				c->base_class_access(*i),
+				c->is_virtual_base_class(*i),
+				indent_level + 2
+			);
 		std::cout << indent(indent_level + 1) << "</base_classes>\n";
 	}
 
@@ -203,29 +209,44 @@ print
 }
 
 void
+print_base_class
+(
+	std::shared_ptr<const class_> c,
+	const class_::access acc,
+	const bool is_virtual,
+	const unsigned int indent_level
+)
+{
+	std::cout << indent(indent_level) << "<base_class";
+	std::cout << " id=\"" << c << "\"";
+	std::cout << attribute(acc);
+	if(is_virtual)
+		std::cout << " virtual=\"true\"";
+	std::cout << "/>\n";
+}
+
+void
 print
 (
-	std::shared_ptr<const class_::constructor> c,
+	std::shared_ptr<const class_::constructor> entity,
 	const unsigned int indent_level
 )
 {
 	std::cout << indent(indent_level) << "<constructor";
-	if(c->inline_specified())
-		std::cout << " inline=\"true\"";
-	if(c->explicit_specified())
-		std::cout << " explicit=\"true\"";
-	/*
-	if(c->has_declarative_region())
+	if(entity->has_declarative_region())
 	{
-		std::shared_ptr<class_> declarative_region = utility::get<std::shared_ptr<class_>>(c->declarative_region());
+		std::shared_ptr<class_> declarative_region = utility::get<std::shared_ptr<class_>>(entity->declarative_region());
 
-		class_::access acc = declarative_region->member_access(c);
-		std::cout << " access=\"" << attribute(acc) << "\"";
+		class_::access acc = declarative_region->member_access(entity);
+		std::cout << attribute(acc);
 	}
-	*/
+	if(entity->inline_specified())
+		std::cout << " inline=\"true\"";
+	if(entity->explicit_specified())
+		std::cout << " explicit=\"true\"";
 	std::cout << ">\n";
 
-	const class_::constructor::parameters_t& parameters = c->parameters();
+	const class_::constructor::parameters_t& parameters = entity->parameters();
 	if(!parameters.empty())
 	{
 		std::cout << indent(indent_level + 1) << "<parameters>\n";
@@ -242,12 +263,23 @@ print
 void
 print
 (
-	std::shared_ptr<const class_::destructor> d,
+	std::shared_ptr<const class_::destructor> entity,
 	const unsigned int indent_level
 )
 {
 	std::cout << indent(indent_level) << "<destructor";
-	if(d->inline_specified())
+	if(entity->has_declarative_region())
+	{
+		std::shared_ptr<class_> declarative_region = utility::get<std::shared_ptr<class_>>(entity->declarative_region());
+
+		class_::access acc = declarative_region->member_access(entity);
+		std::cout << attribute(acc);
+		if(declarative_region->is_virtual_member_function(entity))
+			std::cout << " virtual=\"true\"";
+		if(declarative_region->is_pure_member_function(entity))
+			std::cout << " pure=\"true\"";
+	}
+	if(entity->inline_specified())
 		std::cout << " inline=\"true\"";
 	std::cout << ">\n";
 
@@ -284,6 +316,8 @@ print
 				std::cout << " pure=\"true\"";
 		}
 	}
+	if(entity->static_specified())
+		std::cout << " static=\"true\"";
 	if(entity->inline_specified())
 		std::cout << " inline=\"true\"";
 	if(!entity->defined())
@@ -317,8 +351,29 @@ print
 {
 	std::cout << indent(indent_level) << "<operator_function";
 	std::cout << attribute(entity->get_operator());
-	if(entity->static_specified())
-		std::cout << " static=\"true\"";
+	//extra attributes if the function is a class member function
+	if(entity->has_declarative_region())
+	{
+		declarative_region_shared_ptr_variant declarative_region = entity->declarative_region();
+		if(auto opt_class = utility::get<std::shared_ptr<class_>>(&declarative_region))
+		{
+			std::shared_ptr<class_> declarative_region = *opt_class;
+
+			class_::access acc = declarative_region->member_access(entity);
+			std::cout << attribute(acc);
+
+			if(declarative_region->is_const_member_function(entity))
+				std::cout << " const=\"true\"";
+			if(declarative_region->is_volatile_member_function(entity))
+				std::cout << " volatile=\"true\"";
+			if(declarative_region->is_virtual_member_function(entity))
+				std::cout << " virtual=\"true\"";
+			if(declarative_region->is_pure_member_function(entity))
+				std::cout << " pure=\"true\"";
+		}
+	}
+	if(entity->inline_specified())
+		std::cout << " inline=\"true\"";
 	std::cout << ">\n";
 
 	std::cout << indent(indent_level + 1) << "<return_type>\n";
@@ -347,6 +402,17 @@ print
 )
 {
 	std::cout << indent(indent_level) << "<conversion_function";
+	if(entity->has_declarative_region())
+	{
+		std::shared_ptr<class_> declarative_region = utility::get<std::shared_ptr<class_>>(entity->declarative_region());
+
+		class_::access acc = declarative_region->member_access(entity);
+		std::cout << attribute(acc);
+		if(declarative_region->is_virtual_member_function(entity))
+			std::cout << " virtual=\"true\"";
+		if(declarative_region->is_pure_member_function(entity))
+			std::cout << " pure=\"true\"";
+	}
 	if(entity->inline_specified())
 		std::cout << " inline=\"true\"";
 	std::cout << ">\n";
@@ -378,17 +444,29 @@ print
 void
 print
 (
-	std::shared_ptr<const variable> v,
+	std::shared_ptr<const variable> entity,
 	const unsigned int indent_level
 )
 {
 	std::cout << indent(indent_level) << "<variable";
-	std::cout << " name=\"" << v->name() << "\"";
-	if(v->static_specified())
+	std::cout << " name=\"" << entity->name() << "\"";
+	//extra attributes if the function is a class member function
+	if(entity->has_declarative_region())
+	{
+		declarative_region_shared_ptr_variant declarative_region = entity->declarative_region();
+		if(auto opt_class = utility::get<std::shared_ptr<class_>>(&declarative_region))
+		{
+			std::shared_ptr<class_> declarative_region = *opt_class;
+
+			class_::access acc = declarative_region->member_access(entity);
+			std::cout << attribute(acc);
+		}
+	}
+	if(entity->static_specified())
 		std::cout << " static=\"true\"";
 	std::cout << ">\n";
 	std::cout << indent(indent_level + 1) << "<type>\n";
-	print(v->get_type(), indent_level + 2);
+	print(entity->get_type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</type>\n";
 	std::cout << indent(indent_level) << "</variable>\n";
 }

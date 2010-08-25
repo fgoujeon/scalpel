@@ -18,40 +18,33 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "statement_block.hpp"
+#include "declarative_region_member_impl.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-statement_block::statement_block()
+bool
+declarative_region_member_impl::has_declarative_region() const
 {
+	return declarative_region_;
 }
 
-statement_block::statement_block(statement_block&& o):
-	statement_blocks_(std::move(o.statement_blocks_)),
-	variables_(std::move(o.variables_))
+declarative_region_shared_ptr_variant
+declarative_region_member_impl::declarative_region() const
 {
-}
-
-const statement_block&
-statement_block::operator=(statement_block&& o)
-{
-	statement_blocks_ = std::move(o.statement_blocks_);
-	variables_ = std::move(o.variables_);
-
-	return *this;
+	if(declarative_region_)
+		return to_shared_ptr_variant(*declarative_region_);
+	else
+		throw std::runtime_error("The declarative region is not set.");
 }
 
 void
-statement_block::add(std::shared_ptr<statement_block> o)
+declarative_region_member_impl::declarative_region(const declarative_region_shared_ptr_variant& decl_region)
 {
-	statement_blocks_.push_back(o);
-}
-
-void
-statement_block::add(std::shared_ptr<variable> o)
-{
-	variables_.push_back(o);
+	if(!declarative_region_)
+		declarative_region_ = to_weak_ptr_variant(decl_region);
+	else
+		throw std::runtime_error("The declarative region is already set.");
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

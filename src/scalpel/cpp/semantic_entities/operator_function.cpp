@@ -28,79 +28,26 @@ operator_function::operator_function
 	const operator_ op,
 	std::shared_ptr<const type> return_type,
 	parameters_t&& parameters,
-	const bool is_static_specified
+	const bool is_inline_specified
 ):
-    op_(op),
-	return_type_(return_type),
-	parameters_(std::move(parameters)),
-	static_specified_(is_static_specified)
+	impl_("", return_type, std::move(parameters), is_inline_specified, false),
+    op_(op)
 {
 }
 
-operator_function::operator_function(operator_function&& f):
-    op_(f.op_),
-	statement_block_(std::move(f.statement_block_)),
-	return_type_(f.return_type_),
-	parameters_(std::move(f.parameters_)),
-	static_specified_(f.static_specified_)
+operator_function::operator_function(operator_function&& rhs):
+	impl_(std::move(rhs.impl_)),
+    op_(rhs.op_)
 {
 }
 
 const operator_function&
-operator_function::operator=(operator_function&& f)
+operator_function::operator=(operator_function&& rhs)
 {
-    op_ = f.op_;
-	statement_block_ = std::move(f.statement_block_);
-	return_type_ = f.return_type_;
-	parameters_ = std::move(f.parameters_);
-	static_specified_ = f.static_specified_;
+	impl_ = std::move(rhs.impl_);
+    op_ = rhs.op_;
 
 	return *this;
-}
-
-bool
-operator_function::operator==(const operator_function& f) const
-{
-	return
-		op_ == f.op_ &&
-		statement_block_ == f.statement_block_ &&
-		return_type_ == f.return_type_ &&
-		parameters_ == f.parameters_ &&
-		static_specified_ == f.static_specified_
-	;
-}
-
-bool
-operator_function::has_same_signature(const operator_function& f) const
-{
-	return
-		op_ == f.op_ &&
-		return_type_ == f.return_type_ &&
-		has_same_parameters(f) &&
-		static_specified_ == f.static_specified_
-	;
-}
-
-bool
-operator_function::has_same_parameters(const operator_function& f) const
-{
-	if(parameters_.size() != f.parameters_.size())
-		return false;
-
-	for
-	(
-		parameters_t::const_iterator i = parameters_.begin(), j = f.parameters_.begin();
-		i != parameters_.end();
-		++i, ++j
-	)
-	{
-		auto param = *i;
-		auto param2 = *j;
-		if(param.get_type() != param2.get_type())
-			return false;
-	}
-
-	return true;
 }
 
 operator_
@@ -112,31 +59,49 @@ operator_function::get_operator() const
 std::shared_ptr<const type>
 operator_function::return_type() const
 {
-	return return_type_;
+	return impl_.return_type();
 }
 
 const std::list<operator_function::parameter>&
 operator_function::parameters() const
 {
-	return parameters_;
+	return impl_.parameters();
 }
 
 bool
-operator_function::static_specified() const
+operator_function::inline_specified() const
 {
-	return static_specified_;
+	return impl_.inline_specified();
 }
 
 bool
 operator_function::defined() const
 {
-	return defined_;
+	return impl_.defined();
 }
 
 void
-operator_function::defined(bool d)
+operator_function::defined(const bool d)
 {
-	defined_ = d;
+	impl_.defined(d);
+}
+
+bool
+operator_function::has_declarative_region() const
+{
+	return impl_.has_declarative_region();
+}
+
+declarative_region_shared_ptr_variant
+operator_function::declarative_region() const
+{
+	return impl_.declarative_region();
+}
+
+void
+operator_function::declarative_region(const declarative_region_shared_ptr_variant& decl_region)
+{
+	impl_.declarative_region(decl_region);
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

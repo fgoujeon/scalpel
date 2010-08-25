@@ -872,7 +872,7 @@ semantic_analyzer::create_operator_function
 		op,
 		create_type(decl_specifier_seq_node, declarator_node, current_declarative_region),
 		create_parameters(declarator_node, current_declarative_region),
-		detail::semantic_analysis::has_static_specifier(decl_specifier_seq_node)
+		detail::semantic_analysis::has_inline_specifier(decl_specifier_seq_node)
 	);
 }
 

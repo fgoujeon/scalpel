@@ -32,29 +32,27 @@ namespace_::namespace_(const std::string& name):
 {
 }
 
-namespace_::namespace_(namespace_&& n):
-	name_(std::move(n.name_)),
-	declarative_region_(std::move(n.declarative_region_)),
-	declarative_region_variants_(std::move(n.declarative_region_variants_)),
-	namespaces_(std::move(n.namespaces_)),
-	classes_(std::move(n.classes_)),
-	simple_functions_(std::move(n.simple_functions_)),
-	operator_functions_(std::move(n.operator_functions_)),
-	variables_(std::move(n.variables_))
+namespace_::namespace_(namespace_&& rhs):
+	name_(std::move(rhs.name_)),
+	declarative_region_variants_(std::move(rhs.declarative_region_variants_)),
+	namespaces_(std::move(rhs.namespaces_)),
+	classes_(std::move(rhs.classes_)),
+	simple_functions_(std::move(rhs.simple_functions_)),
+	operator_functions_(std::move(rhs.operator_functions_)),
+	variables_(std::move(rhs.variables_))
 {
 }
 
 const namespace_&
-namespace_::operator=(namespace_&& n)
+namespace_::operator=(namespace_&& rhs)
 {
-	name_ = std::move(n.name_);
-	declarative_region_ = std::move(n.declarative_region_);
-	declarative_region_variants_ = std::move(n.declarative_region_variants_);
-	namespaces_ = std::move(n.namespaces_);
-	classes_ = std::move(n.classes_);
-	simple_functions_ = std::move(n.simple_functions_);
-	operator_functions_ = std::move(n.operator_functions_);
-	variables_ = std::move(n.variables_);
+	name_ = std::move(rhs.name_);
+	declarative_region_variants_ = std::move(rhs.declarative_region_variants_);
+	namespaces_ = std::move(rhs.namespaces_);
+	classes_ = std::move(rhs.classes_);
+	simple_functions_ = std::move(rhs.simple_functions_);
+	operator_functions_ = std::move(rhs.operator_functions_);
+	variables_ = std::move(rhs.variables_);
 
 	return *this;
 }
@@ -68,22 +66,19 @@ namespace_::name() const
 bool
 namespace_::has_declarative_region() const
 {
-	return declarative_region_;
+	return declarative_region_member_impl_.has_declarative_region();
 }
 
 declarative_region_shared_ptr_variant
-namespace_::declarative_region()
+namespace_::declarative_region() const
 {
-	return to_shared_ptr_variant(*declarative_region_);
+	return declarative_region_member_impl_.declarative_region();
 }
 
 void
 namespace_::declarative_region(const declarative_region_shared_ptr_variant& decl_region)
 {
-	if(!declarative_region_)
-		declarative_region_ = to_weak_ptr_variant(decl_region);
-	else
-		throw std::runtime_error("The declarative region is already set.");
+	declarative_region_member_impl_.declarative_region(decl_region);
 }
 
 bool
@@ -162,7 +157,6 @@ void
 namespace_::add(std::shared_ptr<namespace_> member)
 {
 	member->declarative_region(shared_from_this());
-
     namespaces_.push_back(member);
 	declarative_region_variants_.push_back(member);
 }
@@ -171,7 +165,6 @@ void
 namespace_::add(std::shared_ptr<class_> member)
 {
 	member->declarative_region(shared_from_this());
-
     classes_.push_back(member);
 	declarative_region_variants_.push_back(member);
 }
@@ -180,19 +173,20 @@ void
 namespace_::add(std::shared_ptr<simple_function> member)
 {
 	member->declarative_region(shared_from_this());
-
     simple_functions_.push_back(member);
 }
 
 void
 namespace_::add(std::shared_ptr<operator_function> member)
 {
+	member->declarative_region(shared_from_this());
     operator_functions_.push_back(member);
 }
 
 void
 namespace_::add(std::shared_ptr<variable> member)
 {
+	member->declarative_region(shared_from_this());
     variables_.push_back(member);
 }
 

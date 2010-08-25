@@ -30,41 +30,31 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 class_::class_(const std::string& name):
     name_(name)
 {
-	//implicitly declared destructor
-	set_destructor
-	(
-		std::make_shared<destructor>(false),
-		access::PUBLIC,
-		false,
-		false
-	);
 }
 
-class_::class_(class_&& c):
-	name_(std::move(c.name_)),
-	declarative_region_(std::move(c.declarative_region_)),
-	nested_classes_(std::move(c.nested_classes_)),
-	constructors_(std::move(c.constructors_)),
-	destructor_(std::move(c.destructor_)),
-	simple_functions_(std::move(c.simple_functions_)),
-	operator_functions_(std::move(c.operator_functions_)),
-	conversion_functions_(std::move(c.conversion_functions_)),
-	variables_(std::move(c.variables_))
+class_::class_(class_&& rhs):
+	name_(std::move(rhs.name_)),
+	nested_classes_(std::move(rhs.nested_classes_)),
+	constructors_(std::move(rhs.constructors_)),
+	destructor_(std::move(rhs.destructor_)),
+	simple_functions_(std::move(rhs.simple_functions_)),
+	operator_functions_(std::move(rhs.operator_functions_)),
+	conversion_functions_(std::move(rhs.conversion_functions_)),
+	variables_(std::move(rhs.variables_))
 {
 }
 
 const class_&
-class_::operator=(class_&& c)
+class_::operator=(class_&& rhs)
 {
-	name_ = std::move(c.name_);
-	declarative_region_ = std::move(c.declarative_region_);
-	nested_classes_ = std::move(c.nested_classes_);
-	constructors_ = std::move(c.constructors_);
-	destructor_ = std::move(c.destructor_);
-	simple_functions_ = std::move(c.simple_functions_);
-	operator_functions_ = std::move(c.operator_functions_);
-	conversion_functions_ = std::move(c.conversion_functions_);
-	variables_ = std::move(c.variables_);
+	name_ = std::move(rhs.name_);
+	nested_classes_ = std::move(rhs.nested_classes_);
+	constructors_ = std::move(rhs.constructors_);
+	destructor_ = std::move(rhs.destructor_);
+	simple_functions_ = std::move(rhs.simple_functions_);
+	operator_functions_ = std::move(rhs.operator_functions_);
+	conversion_functions_ = std::move(rhs.conversion_functions_);
+	variables_ = std::move(rhs.variables_);
 
 	return *this;
 }
@@ -78,22 +68,19 @@ class_::name() const
 bool
 class_::has_declarative_region() const
 {
-	return declarative_region_;
+	return declarative_region_member_impl_.has_declarative_region();
 }
 
 declarative_region_shared_ptr_variant
 class_::declarative_region() const
 {
-	return to_shared_ptr_variant(*declarative_region_);
+	return declarative_region_member_impl_.declarative_region();
 }
 
 void
 class_::declarative_region(const declarative_region_shared_ptr_variant& decl_region)
 {
-	if(!declarative_region_)
-		declarative_region_ = to_weak_ptr_variant(decl_region);
-	else
-		throw std::runtime_error("The declarative region of this entity is already set.");
+	declarative_region_member_impl_.declarative_region(decl_region);
 }
 
 bool
@@ -147,6 +134,14 @@ class_::constructors() const
 std::shared_ptr<const class_::destructor>
 class_::get_destructor() const
 {
+	if(!destructor_)
+	{
+		class_& mutable_this = const_cast<class_&>(*this);
+		mutable_this.reset_destructor();
+		//Since the implicitly declared destructor can't be set in class_'s
+		//constructor (shared_from_this() can't be called from it), it is set
+		//here.
+	}
 	return destructor_;
 }
 
@@ -216,7 +211,6 @@ void
 class_::add(std::shared_ptr<class_> member, const access acc)
 {
 	member->declarative_region(shared_from_this());
-
 	nested_classes_.push_back(member);
 	declarative_region_variants_.push_back(member);
 
@@ -226,6 +220,7 @@ class_::add(std::shared_ptr<class_> member, const access acc)
 void
 class_::add(std::shared_ptr<constructor> member, const access acc)
 {
+	member->declarative_region(shared_from_this());
     constructors_.push_back(member);
 
 	member_access_[std::shared_ptr<const constructor>(member)] = acc;
@@ -240,12 +235,25 @@ class_::set_destructor
 	const bool pure_specified
 )
 {
+	member->declarative_region(shared_from_this());
 	destructor_ = member;
 
 	std::shared_ptr<const destructor> const_member(member);
 	member_access_[const_member] = acc;
 	if(virtual_specified) virtual_member_functions_.push_back(const_member);
 	if(pure_specified) pure_member_functions_.push_back(const_member);
+}
+
+void
+class_::reset_destructor()
+{
+	set_destructor
+	(
+		std::make_shared<destructor>(false),
+		access::PUBLIC,
+		false,
+		false
+	);
 }
 
 void
@@ -260,7 +268,6 @@ class_::add
 )
 {
 	member->declarative_region(shared_from_this());
-
     simple_functions_.push_back(member);
 
 	std::shared_ptr<const simple_function> const_member(member);
@@ -282,6 +289,7 @@ class_::add
 	const bool pure_specified
 )
 {
+	member->declarative_region(shared_from_this());
     operator_functions_.push_back(member);
 
 	std::shared_ptr<const operator_function> const_member(member);
@@ -303,6 +311,7 @@ class_::add
 	const bool pure_specified
 )
 {
+	member->declarative_region(shared_from_this());
     conversion_functions_.push_back(member);
 
 	std::shared_ptr<const conversion_function> const_member(member);
@@ -316,10 +325,32 @@ class_::add
 void
 class_::add(std::shared_ptr<variable> member, const access acc)
 {
+	member->declarative_region(shared_from_this());
     variables_.push_back(member);
 
 	std::shared_ptr<const variable> const_member(member);
 	member_access_[const_member] = acc;
+}
+
+class_::access
+class_::base_class_access(std::shared_ptr<const class_> base_class) const
+{
+	auto it = base_class_access_.find(base_class);
+	if(it != base_class_access_.end())
+		return it->second;
+	else
+		throw std::runtime_error("The given entity is not a base class of that class.");
+}
+
+bool
+class_::is_virtual_base_class(std::shared_ptr<const class_> base_class) const
+{
+	return std::find
+	(
+		virtual_base_classes_.begin(),
+		virtual_base_classes_.end(),
+		base_class
+	) != virtual_base_classes_.end();
 }
 
 class_::access
@@ -420,6 +451,24 @@ class_::constructor::explicit_specified() const
 	return explicit_specified_;
 }
 
+bool
+class_::constructor::has_declarative_region() const
+{
+	return declarative_region_member_impl_.has_declarative_region();
+}
+
+declarative_region_shared_ptr_variant
+class_::constructor::declarative_region() const
+{
+	return declarative_region_member_impl_.declarative_region();
+}
+
+void
+class_::constructor::declarative_region(const declarative_region_shared_ptr_variant& decl_region)
+{
+	declarative_region_member_impl_.declarative_region(decl_region);
+}
+
 
 
 class_::destructor::destructor
@@ -439,6 +488,24 @@ bool
 class_::destructor::inline_specified() const
 {
 	return inline_specified_;
+}
+
+bool
+class_::destructor::has_declarative_region() const
+{
+	return declarative_region_member_impl_.has_declarative_region();
+}
+
+declarative_region_shared_ptr_variant
+class_::destructor::declarative_region() const
+{
+	return declarative_region_member_impl_.declarative_region();
+}
+
+void
+class_::destructor::declarative_region(const declarative_region_shared_ptr_variant& decl_region)
+{
+	declarative_region_member_impl_.declarative_region(decl_region);
 }
 
 
@@ -469,6 +536,24 @@ bool
 class_::conversion_function::inline_specified() const
 {
 	return inline_specified_;
+}
+
+bool
+class_::conversion_function::has_declarative_region() const
+{
+	return declarative_region_member_impl_.has_declarative_region();
+}
+
+declarative_region_shared_ptr_variant
+class_::conversion_function::declarative_region() const
+{
+	return declarative_region_member_impl_.declarative_region();
+}
+
+void
+class_::conversion_function::declarative_region(const declarative_region_shared_ptr_variant& decl_region)
+{
+	declarative_region_member_impl_.declarative_region(decl_region);
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

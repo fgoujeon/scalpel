@@ -62,6 +62,15 @@ print
 );
 
 void
+print_base_class
+(
+	std::shared_ptr<const class_> c,
+	const class_::access acc,
+	const bool is_virtual,
+	const unsigned int indent_level
+);
+
+void
 print
 (
 	std::shared_ptr<const class_::constructor> c,

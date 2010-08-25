@@ -41,29 +41,27 @@ simple_function::simple_function
 {
 }
 
-simple_function::simple_function(simple_function&& f):
-	name_(std::move(f.name_)),
-	return_type_(std::move(f.return_type_)),
-	parameters_(std::move(f.parameters_)),
-	inline_specified_(f.inline_specified_),
-	static_specified_(f.static_specified_),
-	defined_(f.defined_),
-	declarative_region_(std::move(f.declarative_region_)),
-	body_(f.body_)
+simple_function::simple_function(simple_function&& rhs):
+	name_(std::move(rhs.name_)),
+	return_type_(std::move(rhs.return_type_)),
+	parameters_(std::move(rhs.parameters_)),
+	inline_specified_(rhs.inline_specified_),
+	static_specified_(rhs.static_specified_),
+	defined_(rhs.defined_),
+	body_(rhs.body_)
 {
 }
 
 const simple_function&
-simple_function::operator=(simple_function&& f)
+simple_function::operator=(simple_function&& rhs)
 {
-	name_ = std::move(f.name_);
-	return_type_ = std::move(f.return_type_);
-	parameters_ = std::move(f.parameters_);
-	inline_specified_ = f.inline_specified_;
-	static_specified_ = f.static_specified_;
-	defined_ = f.defined_;
-	declarative_region_ = std::move(f.declarative_region_);
-	body_ = f.body_;
+	name_ = std::move(rhs.name_);
+	return_type_ = std::move(rhs.return_type_);
+	parameters_ = std::move(rhs.parameters_);
+	inline_specified_ = rhs.inline_specified_;
+	static_specified_ = rhs.static_specified_;
+	defined_ = rhs.defined_;
+	body_ = rhs.body_;
 
 	return *this;
 }
@@ -153,22 +151,19 @@ simple_function::defined(bool d)
 bool
 simple_function::has_declarative_region() const
 {
-	return declarative_region_;
+	return declarative_region_member_impl_.has_declarative_region();
 }
 
 declarative_region_shared_ptr_variant
 simple_function::declarative_region() const
 {
-	return to_shared_ptr_variant(*declarative_region_);
+	return declarative_region_member_impl_.declarative_region();
 }
 
 void
 simple_function::declarative_region(const declarative_region_shared_ptr_variant& decl_region)
 {
-	if(!declarative_region_)
-		declarative_region_ = to_weak_ptr_variant(decl_region);
-	else
-		throw std::runtime_error("The declarative region is already set.");
+	declarative_region_member_impl_.declarative_region(decl_region);
 }
 
 const simple_function::declarative_region_shared_ptr_variants_t&

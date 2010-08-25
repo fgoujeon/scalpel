@@ -77,5 +77,23 @@ variable::static_specified() const
 	return static_specified_;
 }
 
+bool
+variable::has_declarative_region() const
+{
+	return declarative_region_member_impl_.has_declarative_region();
+}
+
+declarative_region_shared_ptr_variant
+variable::declarative_region() const
+{
+	return declarative_region_member_impl_.declarative_region();
+}
+
+void
+variable::declarative_region(const declarative_region_shared_ptr_variant& decl_region)
+{
+	declarative_region_member_impl_.declarative_region(decl_region);
+}
+
 }}} //namespace scalpel::cpp::semantic_entities
 
