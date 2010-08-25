@@ -52,8 +52,8 @@ class simple_function:
 			const std::string& name,
 			std::shared_ptr<const type> return_type,
 			parameters_t&& parameters = parameters_t(),
-			bool is_inline_specified = false,
-			bool is_static_specified = false
+			bool is_is_inline = false,
+			bool is_is_static = false
 		);
 
 		//copy constructor
@@ -102,10 +102,10 @@ class simple_function:
 		parameters() const;
 
 		bool
-		inline_specified() const;
+		is_inline() const;
 
 		bool
-		static_specified() const;
+		is_static() const;
 
 		bool
 		defined() const;
@@ -123,8 +123,8 @@ class simple_function:
         std::string name_;
 		std::shared_ptr<const type> return_type_;
 		std::list<parameter> parameters_;
-		bool inline_specified_;
-		bool static_specified_;
+		bool is_inline_;
+		bool is_static_;
 		bool defined_;
 		declarative_region_member_impl declarative_region_member_impl_;
 

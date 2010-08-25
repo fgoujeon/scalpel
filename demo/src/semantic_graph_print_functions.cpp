@@ -240,9 +240,9 @@ print
 		class_::access acc = declarative_region->member_access(entity);
 		std::cout << attribute(acc);
 	}
-	if(entity->inline_specified())
+	if(entity->is_inline())
 		std::cout << " inline=\"true\"";
-	if(entity->explicit_specified())
+	if(entity->is_explicit())
 		std::cout << " explicit=\"true\"";
 	std::cout << ">\n";
 
@@ -279,7 +279,7 @@ print
 		if(declarative_region->is_pure_member_function(entity))
 			std::cout << " pure=\"true\"";
 	}
-	if(entity->inline_specified())
+	if(entity->is_inline())
 		std::cout << " inline=\"true\"";
 	std::cout << ">\n";
 
@@ -316,9 +316,9 @@ print
 				std::cout << " pure=\"true\"";
 		}
 	}
-	if(entity->static_specified())
+	if(entity->is_static())
 		std::cout << " static=\"true\"";
-	if(entity->inline_specified())
+	if(entity->is_inline())
 		std::cout << " inline=\"true\"";
 	if(!entity->defined())
 		std::cout << " defined=\"false\"";
@@ -372,7 +372,7 @@ print
 				std::cout << " pure=\"true\"";
 		}
 	}
-	if(entity->inline_specified())
+	if(entity->is_inline())
 		std::cout << " inline=\"true\"";
 	std::cout << ">\n";
 
@@ -413,7 +413,7 @@ print
 		if(declarative_region->is_pure_member_function(entity))
 			std::cout << " pure=\"true\"";
 	}
-	if(entity->inline_specified())
+	if(entity->is_inline())
 		std::cout << " inline=\"true\"";
 	std::cout << ">\n";
 
@@ -462,7 +462,7 @@ print
 			std::cout << attribute(acc);
 		}
 	}
-	if(entity->static_specified())
+	if(entity->is_static())
 		std::cout << " static=\"true\"";
 	std::cout << ">\n";
 	std::cout << indent(indent_level + 1) << "<type>\n";

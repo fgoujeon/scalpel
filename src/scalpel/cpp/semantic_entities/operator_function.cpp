@@ -28,9 +28,9 @@ operator_function::operator_function
 	const operator_ op,
 	std::shared_ptr<const type> return_type,
 	parameters_t&& parameters,
-	const bool is_inline_specified
+	const bool is_is_inline
 ):
-	impl_("", return_type, std::move(parameters), is_inline_specified, false),
+	impl_("", return_type, std::move(parameters), is_is_inline, false),
     op_(op)
 {
 }
@@ -69,9 +69,9 @@ operator_function::parameters() const
 }
 
 bool
-operator_function::inline_specified() const
+operator_function::is_inline() const
 {
-	return impl_.inline_specified();
+	return impl_.is_inline();
 }
 
 bool

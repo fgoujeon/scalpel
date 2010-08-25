@@ -40,7 +40,7 @@ class variable
 		(
 			const std::string& name,
 			std::shared_ptr<const type> t,
-			bool is_static_specified = false
+			bool is_is_static = false
 		);
 
 		variable(const variable& v);
@@ -57,7 +57,7 @@ class variable
 		name() const;
 
 		bool
-		static_specified() const;
+		is_static() const;
 
 		bool
 		has_declarative_region() const;
@@ -71,7 +71,7 @@ class variable
 	private:
 		std::shared_ptr<const type> type_;
 		std::string name_;
-		bool static_specified_;
+		bool is_static_;
 		declarative_region_member_impl declarative_region_member_impl_;
 };
 

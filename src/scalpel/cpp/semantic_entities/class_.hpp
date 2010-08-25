@@ -176,7 +176,7 @@ class class_:
 		(
 			std::shared_ptr<class_> base_class,
 			const access acc = PUBLIC,
-			bool virtual_specified = false
+			bool is_virtual = false
 		);
 
         /**
@@ -193,23 +193,22 @@ class class_:
 		(
 			std::shared_ptr<destructor> member,
 			const access acc = PUBLIC,
-			const bool virtual_specified = false,
-			const bool pure_specified = false
+			const bool is_virtual = false,
+			const bool is_pure = false
 		);
 
 		void
 		reset_destructor();
 
-	public:
         void
         add
 		(
 			std::shared_ptr<simple_function> member,
 			const access acc = PUBLIC,
-			const bool const_qualified = false,
-			const bool volatile_qualified = false,
-			const bool virtual_specified = false,
-			const bool pure_specified = false
+			const bool is_const = false,
+			const bool is_volatile = false,
+			const bool is_virtual = false,
+			const bool is_pure = false
 		);
 
         void
@@ -217,10 +216,10 @@ class class_:
 		(
 			std::shared_ptr<operator_function> member,
 			const access acc = PUBLIC,
-			const bool const_qualified = false,
-			const bool volatile_qualified = false,
-			const bool virtual_specified = false,
-			const bool pure_specified = false
+			const bool is_const = false,
+			const bool is_volatile = false,
+			const bool is_virtual = false,
+			const bool is_pure = false
 		);
 
         void
@@ -228,10 +227,10 @@ class class_:
 		(
 			std::shared_ptr<conversion_function> member,
 			const access acc = PUBLIC,
-			const bool const_qualified = false,
-			const bool volatile_qualified = false,
-			const bool virtual_specified = false,
-			const bool pure_specified = false
+			const bool is_const = false,
+			const bool is_volatile = false,
+			const bool is_virtual = false,
+			const bool is_pure = false
 		);
 
 		void
@@ -294,8 +293,8 @@ class class_::constructor
 		constructor
 		(
 			parameters_t&& parameters,
-			const bool is_inline_specified,
-			const bool is_explicit_specified
+			const bool is_is_inline,
+			const bool is_is_explicit
 		);
 
 		constructor(constructor&& o);
@@ -304,10 +303,10 @@ class class_::constructor
 		parameters() const;
 
 		bool
-		inline_specified() const;
+		is_inline() const;
 
 		bool
-		explicit_specified() const;
+		is_explicit() const;
 
 		bool
 		has_declarative_region() const;
@@ -320,19 +319,19 @@ class class_::constructor
 
 	private:
 		semantic_entities::simple_function impl_;
-		bool explicit_specified_;
+		bool is_explicit_;
 		declarative_region_member_impl declarative_region_member_impl_;
 };
 
 class class_::destructor
 {
 	public:
-		destructor(const bool is_inline_specified);
+		destructor(const bool is_is_inline);
 
 		destructor(destructor&& o);
 
 		bool
-		inline_specified() const;
+		is_inline() const;
 
 		bool
 		has_declarative_region() const;
@@ -344,7 +343,7 @@ class class_::destructor
 		declarative_region(const declarative_region_shared_ptr_variant& declarative_region);
 
 	private:
-		bool inline_specified_;
+		bool is_inline_;
 		declarative_region_member_impl declarative_region_member_impl_;
 };
 
@@ -354,7 +353,7 @@ class class_::conversion_function
 		conversion_function
 		(
 			std::shared_ptr<const type> return_type,
-			const bool is_inline_specified
+			const bool is_is_inline
 		);
 
 		conversion_function(conversion_function&& o);
@@ -363,7 +362,7 @@ class class_::conversion_function
 		return_type() const;
 
 		bool
-		inline_specified() const;
+		is_inline() const;
 
 		bool
 		has_declarative_region() const;
@@ -376,7 +375,7 @@ class class_::conversion_function
 
 	private:
 		std::shared_ptr<const type> return_type_;
-		bool inline_specified_;
+		bool is_inline_;
 		declarative_region_member_impl declarative_region_member_impl_;
 };
 

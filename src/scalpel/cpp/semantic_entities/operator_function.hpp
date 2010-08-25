@@ -42,7 +42,7 @@ class operator_function
 			const operator_ op,
 			std::shared_ptr<const type> return_type,
 			parameters_t&& parameters,
-			const bool is_inline_specified
+			const bool is_is_inline
 		);
 
 		//move constructor
@@ -61,7 +61,7 @@ class operator_function
 		parameters() const;
 
 		bool
-		inline_specified() const;
+		is_inline() const;
 
 		bool
 		defined() const;

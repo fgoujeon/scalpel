@@ -198,13 +198,13 @@ class_::add_base_class
 (
 	std::shared_ptr<class_> base_class,
 	const access acc,
-	bool virtual_specified
+	bool is_virtual
 )
 {
 	base_classes_.push_back(base_class);
 
 	base_class_access_[base_class] = acc;
-	if(virtual_specified) virtual_base_classes_.push_back(base_class);
+	if(is_virtual) virtual_base_classes_.push_back(base_class);
 }
 
 void
@@ -231,8 +231,8 @@ class_::set_destructor
 (
 	std::shared_ptr<destructor> member,
 	const access acc,
-	const bool virtual_specified,
-	const bool pure_specified
+	const bool is_virtual,
+	const bool is_pure
 )
 {
 	member->declarative_region(shared_from_this());
@@ -240,8 +240,8 @@ class_::set_destructor
 
 	std::shared_ptr<const destructor> const_member(member);
 	member_access_[const_member] = acc;
-	if(virtual_specified) virtual_member_functions_.push_back(const_member);
-	if(pure_specified) pure_member_functions_.push_back(const_member);
+	if(is_virtual) virtual_member_functions_.push_back(const_member);
+	if(is_pure) pure_member_functions_.push_back(const_member);
 }
 
 void
@@ -261,10 +261,10 @@ class_::add
 (
 	std::shared_ptr<simple_function> member,
 	const access acc,
-	const bool const_qualified,
-	const bool volatile_qualified,
-	const bool virtual_specified,
-	const bool pure_specified
+	const bool is_const,
+	const bool is_volatile,
+	const bool is_virtual,
+	const bool is_pure
 )
 {
 	member->declarative_region(shared_from_this());
@@ -272,10 +272,10 @@ class_::add
 
 	std::shared_ptr<const simple_function> const_member(member);
 	member_access_[const_member] = acc;
-	if(const_qualified) const_member_functions_.push_back(const_member);
-	if(volatile_qualified) volatile_member_functions_.push_back(const_member);
-	if(virtual_specified) virtual_member_functions_.push_back(const_member);
-	if(pure_specified) pure_member_functions_.push_back(const_member);
+	if(is_const) const_member_functions_.push_back(const_member);
+	if(is_volatile) volatile_member_functions_.push_back(const_member);
+	if(is_virtual) virtual_member_functions_.push_back(const_member);
+	if(is_pure) pure_member_functions_.push_back(const_member);
 }
 
 void
@@ -283,10 +283,10 @@ class_::add
 (
 	std::shared_ptr<operator_function> member,
 	const access acc,
-	const bool const_qualified,
-	const bool volatile_qualified,
-	const bool virtual_specified,
-	const bool pure_specified
+	const bool is_const,
+	const bool is_volatile,
+	const bool is_virtual,
+	const bool is_pure
 )
 {
 	member->declarative_region(shared_from_this());
@@ -294,10 +294,10 @@ class_::add
 
 	std::shared_ptr<const operator_function> const_member(member);
 	member_access_[const_member] = acc;
-	if(const_qualified) const_member_functions_.push_back(const_member);
-	if(volatile_qualified) volatile_member_functions_.push_back(const_member);
-	if(virtual_specified) virtual_member_functions_.push_back(const_member);
-	if(pure_specified) pure_member_functions_.push_back(const_member);
+	if(is_const) const_member_functions_.push_back(const_member);
+	if(is_volatile) volatile_member_functions_.push_back(const_member);
+	if(is_virtual) virtual_member_functions_.push_back(const_member);
+	if(is_pure) pure_member_functions_.push_back(const_member);
 }
 
 void
@@ -305,10 +305,10 @@ class_::add
 (
 	std::shared_ptr<conversion_function> member,
 	const access acc,
-	const bool const_qualified,
-	const bool volatile_qualified,
-	const bool virtual_specified,
-	const bool pure_specified
+	const bool is_const,
+	const bool is_volatile,
+	const bool is_virtual,
+	const bool is_pure
 )
 {
 	member->declarative_region(shared_from_this());
@@ -316,10 +316,10 @@ class_::add
 
 	std::shared_ptr<const conversion_function> const_member(member);
 	member_access_[const_member] = acc;
-	if(const_qualified) const_member_functions_.push_back(const_member);
-	if(volatile_qualified) volatile_member_functions_.push_back(const_member);
-	if(virtual_specified) virtual_member_functions_.push_back(const_member);
-	if(pure_specified) pure_member_functions_.push_back(const_member);
+	if(is_const) const_member_functions_.push_back(const_member);
+	if(is_volatile) volatile_member_functions_.push_back(const_member);
+	if(is_virtual) virtual_member_functions_.push_back(const_member);
+	if(is_pure) pure_member_functions_.push_back(const_member);
 }
 
 void
@@ -412,24 +412,24 @@ class_::is_pure_member_function(const member_t& member) const
 class_::constructor::constructor
 (
 	parameters_t&& parameters,
-	const bool is_inline_specified,
-	const bool is_explicit_specified
+	const bool is_is_inline,
+	const bool is_is_explicit
 ):
 	impl_
 	(
 		"_",
 		std::shared_ptr<const built_in_type>(&built_in_type::void_, scalpel::utility::null_deleter()),
 		std::move(parameters),
-		is_inline_specified,
+		is_is_inline,
 		false
 	),
-	explicit_specified_(is_explicit_specified)
+	is_explicit_(is_is_explicit)
 {
 }
 
 class_::constructor::constructor(constructor&& o):
 	impl_(std::move(o.impl_)),
-	explicit_specified_(o.explicit_specified_)
+	is_explicit_(o.is_explicit_)
 {
 }
 
@@ -440,15 +440,15 @@ class_::constructor::parameters() const
 }
 
 bool
-class_::constructor::inline_specified() const
+class_::constructor::is_inline() const
 {
-	return impl_.inline_specified();
+	return impl_.is_inline();
 }
 
 bool
-class_::constructor::explicit_specified() const
+class_::constructor::is_explicit() const
 {
-	return explicit_specified_;
+	return is_explicit_;
 }
 
 bool
@@ -473,21 +473,21 @@ class_::constructor::declarative_region(const declarative_region_shared_ptr_vari
 
 class_::destructor::destructor
 (
-	const bool is_inline_specified
+	const bool is_is_inline
 ):
-	inline_specified_(is_inline_specified)
+	is_inline_(is_is_inline)
 {
 }
 
 class_::destructor::destructor(destructor&& o):
-	inline_specified_(o.inline_specified_)
+	is_inline_(o.is_inline_)
 {
 }
 
 bool
-class_::destructor::inline_specified() const
+class_::destructor::is_inline() const
 {
-	return inline_specified_;
+	return is_inline_;
 }
 
 bool
@@ -513,16 +513,16 @@ class_::destructor::declarative_region(const declarative_region_shared_ptr_varia
 class_::conversion_function::conversion_function
 (
 	std::shared_ptr<const type> return_type,
-	const bool is_inline_specified
+	const bool is_is_inline
 ):
 	return_type_(return_type),
-	inline_specified_(is_inline_specified)
+	is_inline_(is_is_inline)
 {
 }
 
 class_::conversion_function::conversion_function(conversion_function&& o):
 	return_type_(std::move(o.return_type_)),
-	inline_specified_(o.inline_specified_)
+	is_inline_(o.is_inline_)
 {
 }
 
@@ -533,9 +533,9 @@ class_::conversion_function::return_type() const
 }
 
 bool
-class_::conversion_function::inline_specified() const
+class_::conversion_function::is_inline() const
 {
-	return inline_specified_;
+	return is_inline_;
 }
 
 bool

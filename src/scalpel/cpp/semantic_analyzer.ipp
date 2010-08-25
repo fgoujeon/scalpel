@@ -1054,8 +1054,8 @@ semantic_analyzer::create_type
 	bool unsigned_type = false;
 	bool void_type = false;
 	bool wchar_t_type = false;
-	bool const_qualified = false;
-	bool volatile_qualified = false;
+	bool is_const = false;
+	bool is_volatile = false;
 
 	for
 	(
@@ -1090,8 +1090,8 @@ semantic_analyzer::create_type
 				unsigned_type,
 				void_type,
 				wchar_t_type,
-				const_qualified,
-				volatile_qualified,
+				is_const,
+				is_volatile,
 				current_declarative_region
 			);
 		}
@@ -1118,7 +1118,7 @@ semantic_analyzer::create_type
 
 	assert(return_type);
 
-	return_type = decorate_type(return_type, const_qualified, volatile_qualified);
+	return_type = decorate_type(return_type, is_const, is_volatile);
 
 	return return_type;
 }
@@ -1144,8 +1144,8 @@ semantic_analyzer::get_conversion_function_type
 	bool unsigned_type = false;
 	bool void_type = false;
 	bool wchar_t_type = false;
-	bool const_qualified = false;
-	bool volatile_qualified = false;
+	bool is_const = false;
+	bool is_volatile = false;
 
 	auto direct_declarator_node = get_direct_declarator(declarator_node);
 	auto direct_declarator_node_first_part_node = get_first_part(direct_declarator_node);
@@ -1182,8 +1182,8 @@ semantic_analyzer::get_conversion_function_type
 			unsigned_type,
 			void_type,
 			wchar_t_type,
-			const_qualified,
-			volatile_qualified,
+			is_const,
+			is_volatile,
 			current_declarative_region
 		);
 	}
@@ -1209,7 +1209,7 @@ semantic_analyzer::get_conversion_function_type
 
 	assert(return_type);
 
-	return_type = decorate_type(return_type, const_qualified, volatile_qualified);
+	return_type = decorate_type(return_type, is_const, is_volatile);
 
 	if(auto opt_ptr_operator_seq_node = get_ptr_operator_seq(conversion_function_id_node))
 	{
@@ -1242,8 +1242,8 @@ semantic_analyzer::get_type_info
 	bool& unsigned_type,
 	bool& void_type,
 	bool& wchar_t_type,
-	bool& const_qualified,
-	bool& volatile_qualified,
+	bool& is_const,
+	bool& is_volatile,
 	std::shared_ptr<DeclarativeRegionT> current_declarative_region
 )
 {
@@ -1326,11 +1326,11 @@ semantic_analyzer::get_type_info
 
 		if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::const_>>(&cv_qualifier_node))
 		{
-			const_qualified = true;
+			is_const = true;
 		}
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::volatile_>>(&cv_qualifier_node))
 		{
-			volatile_qualified = true;
+			is_volatile = true;
 		}
 	}
 }

@@ -28,14 +28,14 @@ simple_function::simple_function
 	const std::string& name,
 	std::shared_ptr<const type> return_type,
 	std::list<parameter>&& parameters,
-	bool is_inline_specified,
-	bool is_static_specified
+	bool is_is_inline,
+	bool is_is_static
 ):
     name_(name),
 	return_type_(return_type),
 	parameters_(std::move(parameters)),
-	inline_specified_(is_inline_specified),
-	static_specified_(is_static_specified),
+	is_inline_(is_is_inline),
+	is_static_(is_is_static),
 	defined_(false),
 	body_(std::make_shared<statement_block>())
 {
@@ -45,8 +45,8 @@ simple_function::simple_function(simple_function&& rhs):
 	name_(std::move(rhs.name_)),
 	return_type_(std::move(rhs.return_type_)),
 	parameters_(std::move(rhs.parameters_)),
-	inline_specified_(rhs.inline_specified_),
-	static_specified_(rhs.static_specified_),
+	is_inline_(rhs.is_inline_),
+	is_static_(rhs.is_static_),
 	defined_(rhs.defined_),
 	body_(rhs.body_)
 {
@@ -58,8 +58,8 @@ simple_function::operator=(simple_function&& rhs)
 	name_ = std::move(rhs.name_);
 	return_type_ = std::move(rhs.return_type_);
 	parameters_ = std::move(rhs.parameters_);
-	inline_specified_ = rhs.inline_specified_;
-	static_specified_ = rhs.static_specified_;
+	is_inline_ = rhs.is_inline_;
+	is_static_ = rhs.is_static_;
 	defined_ = rhs.defined_;
 	body_ = rhs.body_;
 
@@ -73,8 +73,8 @@ simple_function::has_same_signature(const simple_function& f) const
 		name_ == f.name_ &&
 		return_type_ == f.return_type_ &&
 		has_same_parameters(f) &&
-		inline_specified_ == f.inline_specified_ &&
-		static_specified_ == f.static_specified_
+		is_inline_ == f.is_inline_ &&
+		is_static_ == f.is_static_
 	;
 }
 
@@ -125,15 +125,15 @@ simple_function::parameters() const
 }
 
 bool
-simple_function::inline_specified() const
+simple_function::is_inline() const
 {
-	return inline_specified_;
+	return is_inline_;
 }
 
 bool
-simple_function::static_specified() const
+simple_function::is_static() const
 {
-	return static_specified_;
+	return is_static_;
 }
 
 bool

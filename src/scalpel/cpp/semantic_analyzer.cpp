@@ -341,13 +341,13 @@ std::shared_ptr<const semantic_entities::type>
 semantic_analyzer::decorate_type
 (
 	std::shared_ptr<const semantic_entities::type> return_type,
-	const bool const_qualified,
-	const bool volatile_qualified
+	const bool is_const,
+	const bool is_volatile
 )
 {
-	if(const_qualified)
+	if(is_const)
 		return_type = std::make_shared<const_>(return_type);
-	if(volatile_qualified)
+	if(is_volatile)
 		return_type = std::make_shared<volatile_>(return_type);
 
 	return return_type;

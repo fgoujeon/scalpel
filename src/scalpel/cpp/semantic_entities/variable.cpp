@@ -27,25 +27,25 @@ variable::variable
 (
 	const std::string& name,
 	std::shared_ptr<const type> t,
-	bool is_static_specified
+	bool is_is_static
 ):
 	type_(t),
 	name_(name),
-	static_specified_(is_static_specified)
+	is_static_(is_is_static)
 {
 }
 
 variable::variable(const variable& v):
 	type_(v.type_),
 	name_(v.name_),
-	static_specified_(v.static_specified_)
+	is_static_(v.is_static_)
 {
 }
 
 variable::variable(variable&& v):
 	type_(v.type_),
 	name_(std::move(v.name_)),
-	static_specified_(v.static_specified_)
+	is_static_(v.is_static_)
 {
 }
 
@@ -54,7 +54,7 @@ variable::operator=(variable&& v)
 {
 	type_ = v.type_;
 	name_ = std::move(v.name_);
-	static_specified_ = v.static_specified_;
+	is_static_ = v.is_static_;
 
 	return *this;
 }
@@ -72,9 +72,9 @@ variable::name() const
 }
 
 bool
-variable::static_specified() const
+variable::is_static() const
 {
-	return static_specified_;
+	return is_static_;
 }
 
 bool
