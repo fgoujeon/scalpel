@@ -237,8 +237,8 @@ class class_:
 		add
 		(
 			std::shared_ptr<variable> member,
-			const access acc /*= PUBLIC*/,
-			const bool is_mutable /*= false*/
+			const access acc = PUBLIC,
+			const bool is_mutable = false
 		);
 
 		//get the access of the given base class
