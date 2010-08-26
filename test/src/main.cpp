@@ -20,6 +20,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #define BOOST_TEST_ALTERNATIVE_INIT_API //don't use legacy API
 
+#include "variant/exception_safety_test_case.hpp"
 #include "name_lookup/test_case_1.hpp"
 #include "name_lookup/test_case_2.hpp"
 #include "syntax_analysis/single_file_tester.hpp"
@@ -104,6 +105,14 @@ init_unit_test()
 
     framework::master_test_suite().add(BOOST_TEST_CASE(&name_lookup::test_case_1));
     framework::master_test_suite().add(BOOST_TEST_CASE(&name_lookup::test_case_2));
+
+
+
+	//
+	//Variant test suite
+	//
+
+    framework::master_test_suite().add(BOOST_TEST_CASE(&variant::exception_safety_test_case));
 
     return true;
 }
