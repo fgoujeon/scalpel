@@ -32,31 +32,15 @@ class_::class_(const std::string& name):
 {
 }
 
-class_::class_(class_&& rhs):
-	name_(std::move(rhs.name_)),
-	nested_classes_(std::move(rhs.nested_classes_)),
-	constructors_(std::move(rhs.constructors_)),
-	destructor_(std::move(rhs.destructor_)),
-	simple_functions_(std::move(rhs.simple_functions_)),
-	operator_functions_(std::move(rhs.operator_functions_)),
-	conversion_functions_(std::move(rhs.conversion_functions_)),
-	variables_(std::move(rhs.variables_))
+std::shared_ptr<class_>
+class_::make_shared(const std::string& name)
 {
-}
+	std::shared_ptr<class_> new_class(new class_(name));
 
-const class_&
-class_::operator=(class_&& rhs)
-{
-	name_ = std::move(rhs.name_);
-	nested_classes_ = std::move(rhs.nested_classes_);
-	constructors_ = std::move(rhs.constructors_);
-	destructor_ = std::move(rhs.destructor_);
-	simple_functions_ = std::move(rhs.simple_functions_);
-	operator_functions_ = std::move(rhs.operator_functions_);
-	conversion_functions_ = std::move(rhs.conversion_functions_);
-	variables_ = std::move(rhs.variables_);
+	//set default constructor
+	new_class->reset_destructor();
 
-	return *this;
+	return new_class;
 }
 
 const std::string&
@@ -134,14 +118,6 @@ class_::constructors() const
 std::shared_ptr<const class_::destructor>
 class_::get_destructor() const
 {
-	if(!destructor_)
-	{
-		class_& mutable_this = const_cast<class_&>(*this);
-		mutable_this.reset_destructor();
-		//Since the implicitly declared destructor can't be set in class_'s
-		//constructor (shared_from_this() can't be called from it), it is set
-		//here.
-	}
 	return destructor_;
 }
 

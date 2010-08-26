@@ -401,7 +401,7 @@ semantic_analyzer::analyze(const syntax_nodes::namespace_definition& syntax_node
 	}
 
 	//create the namespace entity
-	std::shared_ptr<namespace_> new_namespace = std::make_shared<namespace_>(namespace_name);
+	std::shared_ptr<namespace_> new_namespace = namespace_::make_shared(namespace_name);
 
 	//add the namespace to the current declarative region
 	current_declarative_region->add(new_namespace);
@@ -543,7 +543,7 @@ semantic_analyzer::analyze(const syntax_nodes::simple_declaration& simple_declar
 		assert(opt_identifier_node);
 
 		const std::string& class_name = opt_identifier_node->value();
-		current_declarative_region->add(std::make_shared<class_>(class_name));
+		current_declarative_region->add(class_::make_shared(class_name));
 	}
 	else if(is_variable_declaration(simple_declaration_node))
 	{

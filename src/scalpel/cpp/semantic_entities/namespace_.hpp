@@ -52,6 +52,7 @@ class namespace_:
 		typedef utility::vector<std::shared_ptr<operator_function>> operator_functions_t;
 		typedef utility::vector<std::shared_ptr<variable>> variables_t;
 
+	private:
         /**
         Creates an anonymous namespace. Equivalent to namespace_("").
         */
@@ -64,16 +65,21 @@ class namespace_:
         explicit
 		namespace_(const std::string& name);
 
-		/**
-		 * Move constructor.
-		 */
-		namespace_(namespace_&& rhs);
+	public:
+        /**
+        Creates an anonymous namespace. Equivalent to make_shared("").
+        */
+		static
+		std::shared_ptr<namespace_>
+		make_shared();
 
-		/**
-		 * Move assignment operator.
-		 */
-		const namespace_&
-		operator=(namespace_&& rhs);
+        /**
+        Creates a named namespace.
+        @param name the namespace's name
+        */
+		static
+		std::shared_ptr<namespace_>
+		make_shared(const std::string& name);
 
         /**
         @return the name of the namespace

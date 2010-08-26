@@ -35,7 +35,7 @@ std::shared_ptr<semantic_graph>
 semantic_analyzer::operator()(const syntax_tree& tree)
 {
 	//create semantic graph
-	std::shared_ptr<namespace_> global_namespace = std::make_shared<namespace_>();
+	std::shared_ptr<namespace_> global_namespace = namespace_::make_shared();
 
 	auto opt_declaration_seq_node = get_declaration_seq_node(tree);
 	if(opt_declaration_seq_node)
@@ -62,7 +62,7 @@ semantic_analyzer::create_class(const class_specifier& syntax_node)
 
 	//create the class
 	assert(class_name != "");
-	return std::make_shared<class_>(class_name);
+	return class_::make_shared(class_name);
 }
 
 void

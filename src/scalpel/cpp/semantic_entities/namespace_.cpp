@@ -32,29 +32,18 @@ namespace_::namespace_(const std::string& name):
 {
 }
 
-namespace_::namespace_(namespace_&& rhs):
-	name_(std::move(rhs.name_)),
-	declarative_regions_(std::move(rhs.declarative_regions_)),
-	namespaces_(std::move(rhs.namespaces_)),
-	classes_(std::move(rhs.classes_)),
-	simple_functions_(std::move(rhs.simple_functions_)),
-	operator_functions_(std::move(rhs.operator_functions_)),
-	variables_(std::move(rhs.variables_))
+std::shared_ptr<namespace_>
+namespace_::make_shared()
 {
+	namespace_* ptr = new namespace_();
+	return std::shared_ptr<namespace_>(ptr);
 }
 
-const namespace_&
-namespace_::operator=(namespace_&& rhs)
+std::shared_ptr<namespace_>
+namespace_::make_shared(const std::string& name)
 {
-	name_ = std::move(rhs.name_);
-	declarative_regions_ = std::move(rhs.declarative_regions_);
-	namespaces_ = std::move(rhs.namespaces_);
-	classes_ = std::move(rhs.classes_);
-	simple_functions_ = std::move(rhs.simple_functions_);
-	operator_functions_ = std::move(rhs.operator_functions_);
-	variables_ = std::move(rhs.variables_);
-
-	return *this;
+	namespace_* ptr = new namespace_(name);
+	return std::shared_ptr<namespace_>(ptr);
 }
 
 const std::string&

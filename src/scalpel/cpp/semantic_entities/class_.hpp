@@ -81,6 +81,7 @@ class class_:
 			PRIVATE
 		};
 
+	private:
         /**
         Creates a class.
         @param name the class' name
@@ -88,16 +89,14 @@ class class_:
         explicit
         class_(const std::string& name);
 
-		/**
-		 * Move constructor.
-		 */
-		class_(class_&& rhs);
-
-		/**
-		 * Move assignment operator.
-		 */
-		const class_&
-		operator=(class_&& rhs);
+	public:
+        /**
+        Creates a class.
+        @param name the class' name
+        */
+		static
+		std::shared_ptr<class_>
+		make_shared(const std::string& name);
 
         /**
         @return the name of the class
