@@ -234,7 +234,12 @@ class class_:
 		);
 
 		void
-		add(std::shared_ptr<variable> member, const access acc);
+		add
+		(
+			std::shared_ptr<variable> member,
+			const access acc /*= PUBLIC*/,
+			const bool is_mutable /*= false*/
+		);
 
 		//get the access of the given base class
 		access
@@ -259,6 +264,9 @@ class class_:
 		bool
 		is_pure_member_function(const member_t& member) const;
 
+		bool
+		is_mutable_member_variable(std::shared_ptr<const variable> member) const;
+
     private:
         std::string name_;
 		declarative_region_member_impl declarative_region_member_impl_;
@@ -272,6 +280,7 @@ class class_:
 		members_t volatile_member_functions_;
 		members_t virtual_member_functions_;
 		members_t pure_member_functions_;
+		std::vector<std::shared_ptr<const variable>> mutable_member_variables_;
 
 		//containers
 		classes_t base_classes_;

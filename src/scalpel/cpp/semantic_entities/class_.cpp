@@ -323,13 +323,19 @@ class_::add
 }
 
 void
-class_::add(std::shared_ptr<variable> member, const access acc)
+class_::add
+(
+	std::shared_ptr<variable> member,
+	const access acc,
+	const bool is_mutable
+)
 {
 	member->declarative_region(shared_from_this());
     variables_.push_back(member);
 
 	std::shared_ptr<const variable> const_member(member);
 	member_access_[const_member] = acc;
+	if(is_mutable) mutable_member_variables_.push_back(const_member);
 }
 
 class_::access
@@ -405,6 +411,17 @@ class_::is_pure_member_function(const member_t& member) const
 		pure_member_functions_.end(),
 		member
 	) != pure_member_functions_.end();
+}
+
+bool
+class_::is_mutable_member_variable(std::shared_ptr<const variable> member) const
+{
+	return std::find
+	(
+		mutable_member_variables_.begin(),
+		mutable_member_variables_.end(),
+		member
+	) != mutable_member_variables_.end();
 }
 
 

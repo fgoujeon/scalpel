@@ -460,6 +460,8 @@ print
 
 			class_::access acc = declarative_region->member_access(entity);
 			std::cout << attribute(acc);
+			if(declarative_region->is_mutable_member_variable(entity))
+				std::cout << " mutable=\"true\"";
 		}
 	}
 	if(entity->is_static())

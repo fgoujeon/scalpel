@@ -229,7 +229,8 @@ semantic_analyzer::fill_class
 										c->add
 										(
 											create_variable(decl_specifier_seq_node, declarator_node, c),
-											current_access
+											current_access,
+											has_mutable_specifier(decl_specifier_seq_node)
 										);
 									}
 								}

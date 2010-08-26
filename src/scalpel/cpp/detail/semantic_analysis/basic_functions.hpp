@@ -130,6 +130,13 @@ has_static_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_
 	return has_specifier<syntax_nodes::storage_class_specifier, utility::extern_strings::static_>(decl_specifier_seq_node);
 }
 
+inline
+bool
+has_mutable_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node)
+{
+	return has_specifier<syntax_nodes::storage_class_specifier, utility::extern_strings::mutable_>(decl_specifier_seq_node);
+}
+
 
 
 //
