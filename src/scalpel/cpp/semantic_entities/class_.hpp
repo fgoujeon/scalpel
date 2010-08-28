@@ -26,7 +26,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "simple_function.hpp"
 #include "declarative_region_member_impl.hpp"
 #include "declarative_region_variants.hpp"
-#include "type_variants.hpp"
+#include "type_variants_fwd.hpp"
 #include <scalpel/utility/vector.hpp>
 #include <boost/noncopyable.hpp>
 #include <string>
@@ -96,9 +96,6 @@ class class_:
 		static
 		std::shared_ptr<class_>
 		make_shared(const std::string& name);
-
-		bool
-		operator==(const class_& rhs) const;
 
         /**
         @return the name of the class
@@ -294,6 +291,14 @@ class class_:
 		variables_t variables_;
 };
 
+bool
+operator==(const class_& lhs, const class_& rhs);
+
+bool
+operator!=(const class_& lhs, const class_& rhs);
+
+
+
 class class_::constructor
 {
 	public:
@@ -308,6 +313,12 @@ class class_::constructor
 		);
 
 		constructor(constructor&& o);
+
+		bool
+		operator==(const constructor& rhs) const;
+
+		bool
+		operator!=(const constructor& rhs) const;
 
 		const parameters_t&
 		parameters() const;
@@ -333,6 +344,8 @@ class class_::constructor
 		declarative_region_member_impl declarative_region_member_impl_;
 };
 
+
+
 class class_::destructor
 {
 	public:
@@ -356,6 +369,14 @@ class class_::destructor
 		bool is_inline_;
 		declarative_region_member_impl declarative_region_member_impl_;
 };
+
+bool
+operator==(const class_::destructor& lhs, const class_::destructor& rhs);
+
+bool
+operator!=(const class_::destructor& lhs, const class_::destructor& rhs);
+
+
 
 class class_::conversion_function
 {
@@ -388,6 +409,12 @@ class class_::conversion_function
 		bool is_inline_;
 		declarative_region_member_impl declarative_region_member_impl_;
 };
+
+bool
+operator==(const class_::conversion_function& lhs, const class_::conversion_function& rhs);
+
+bool
+operator!=(const class_::conversion_function& lhs, const class_::conversion_function& rhs);
 
 }}} //namespace scalpel::cpp::semantic_entities
 

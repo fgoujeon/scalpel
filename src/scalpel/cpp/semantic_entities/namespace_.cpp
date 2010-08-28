@@ -19,6 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "namespace_.hpp"
+#include <scalpel/utility/are_pointed_objects_equal.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -177,6 +178,25 @@ namespace_::add(std::shared_ptr<variable> member)
 {
 	member->declarative_region(shared_from_this());
     variables_.push_back(member);
+}
+
+bool
+operator==(const namespace_& lhs, const namespace_& rhs)
+{
+	return
+		lhs.name() == rhs.name() &&
+		are_pointed_objects_equal(lhs.namespaces(), rhs.namespaces()) &&
+		are_pointed_objects_equal(lhs.classes(), rhs.classes()) &&
+		are_pointed_objects_equal(lhs.simple_functions(), rhs.simple_functions()) &&
+		are_pointed_objects_equal(lhs.operator_functions(), rhs.operator_functions()) &&
+		are_pointed_objects_equal(lhs.variables(), rhs.variables())
+	;
+}
+
+bool
+operator!=(const namespace_& lhs, const namespace_& rhs)
+{
+	return !operator==(lhs, rhs);
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

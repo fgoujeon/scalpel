@@ -19,6 +19,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "simple_function.hpp"
+#include "type_variants.hpp"
+#include <scalpel/utility/are_pointed_objects_equal.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -93,7 +95,7 @@ simple_function::has_same_parameters(const simple_function& f) const
 	{
 		auto param = *i;
 		auto param2 = *j;
-		if(!equals(param.type(), param2.type()))
+		if(!are_pointed_objects_equal(param.type(), param2.type()))
 			return false;
 	}
 
@@ -178,6 +180,33 @@ simple_function::body()
 	return body_;
 }
 
+std::shared_ptr<const statement_block>
+simple_function::body() const
+{
+	return body_;
+}
+
+bool
+operator==(const simple_function& lhs, const simple_function& rhs)
+{
+	return
+        lhs.name() == rhs.name() &&
+		lhs.is_inline() == rhs.is_inline() &&
+		lhs.is_static() == rhs.is_static() &&
+		lhs.defined() == rhs.defined() &&
+		*lhs.body() == *rhs.body() &&
+		utility::are_pointed_objects_equal(lhs.return_type(), rhs.return_type()) &&
+		lhs.parameters() == rhs.parameters()
+	;
+}
+
+bool
+operator!=(const simple_function& lhs, const simple_function& rhs)
+{
+	return !operator==(lhs, rhs);
+}
+
+
 
 simple_function::parameter::parameter(const type_shared_ptr_variant& t, const std::string& name):
 	type_(t),
@@ -215,15 +244,6 @@ simple_function::parameter::operator=(parameter&& o)
 	return *this;
 }
 
-bool
-simple_function::parameter::operator==(const parameter& o) const
-{
-	return
-		type_ == o.type_ &&
-		name_ == o.name_
-	;
-}
-
 const type_shared_ptr_variant&
 simple_function::parameter::type() const
 {
@@ -234,6 +254,21 @@ const std::string&
 simple_function::parameter::name() const
 {
 	return name_;
+}
+
+bool
+operator==(const simple_function::parameter& lhs, const simple_function::parameter& rhs)
+{
+	return
+		lhs.type() == rhs.type() &&
+		lhs.name() == rhs.name()
+	;
+}
+
+bool
+operator!=(const simple_function::parameter& lhs, const simple_function::parameter& rhs)
+{
+	return !operator==(lhs, rhs);
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

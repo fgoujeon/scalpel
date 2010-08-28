@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_REFERENCE_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_REFERENCE_HPP
 
-#include "type_variants.hpp"
+#include "type_variants_fwd.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -34,9 +34,6 @@ class reference
 	public:
 		reference(const type_shared_ptr_variant& decorated_type);
 
-		bool
-		operator==(const reference& rhs) const;
-
 		const type_shared_ptr_variant&
 		decorated_type() const
 		{
@@ -46,6 +43,12 @@ class reference
 	private:
 		type_shared_ptr_variant decorated_type_;
 };
+
+bool
+operator==(const reference& lhs, const reference& rhs);
+
+bool
+operator!=(const reference& lhs, const reference& rhs);
 
 }}} //namespace scalpel::cpp::semantic_entities
 

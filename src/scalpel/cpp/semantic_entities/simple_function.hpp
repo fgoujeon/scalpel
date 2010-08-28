@@ -25,7 +25,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "statement_block.hpp"
 #include "declarative_region_member_impl.hpp"
 #include "declarative_region_variants.hpp"
-#include "type_variants.hpp"
+#include "type_variants_fwd.hpp"
 #include <boost/optional.hpp>
 #include <string>
 #include <list>
@@ -119,6 +119,9 @@ class simple_function:
 		std::shared_ptr<statement_block>
 		body();
 
+		std::shared_ptr<const statement_block>
+		body() const;
+
     private:
         std::string name_;
 		type_shared_ptr_variant return_type_;
@@ -132,6 +135,14 @@ class simple_function:
 
 		std::shared_ptr<statement_block> body_;
 };
+
+bool
+operator==(const simple_function& lhs, const simple_function& rhs);
+
+bool
+operator!=(const simple_function& lhs, const simple_function& rhs);
+
+
 
 class simple_function::parameter
 {
@@ -148,9 +159,6 @@ class simple_function::parameter
 		const parameter&
 		operator=(parameter&& o);
 
-		bool
-		operator==(const parameter& o) const;
-
 		const type_shared_ptr_variant&
 		type() const;
 
@@ -161,6 +169,9 @@ class simple_function::parameter
 		type_shared_ptr_variant type_;
 		std::string name_;
 };
+
+bool
+operator==(const simple_function::parameter& lhs, const simple_function::parameter& rhs);
 
 }}} //namespace scalpel::cpp::semantic_entities
 

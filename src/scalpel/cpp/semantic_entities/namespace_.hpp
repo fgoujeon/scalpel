@@ -166,6 +166,12 @@ class namespace_:
         variables_t variables_;
 };
 
+bool
+operator==(const namespace_& lhs, const namespace_& rhs);
+
+bool
+operator!=(const namespace_& lhs, const namespace_& rhs);
+
 }}} //namespace scalpel::cpp::semantic_entities
 
 #endif

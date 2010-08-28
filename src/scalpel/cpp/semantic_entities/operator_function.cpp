@@ -50,6 +50,21 @@ operator_function::operator=(operator_function&& rhs)
 	return *this;
 }
 
+bool
+operator_function::operator==(const operator_function& rhs) const
+{
+	return
+		op_ == rhs.op_ &&
+		impl_ == rhs.impl_
+	;
+}
+
+bool
+operator_function::operator!=(const operator_function& rhs) const
+{
+	return !operator==(rhs);
+}
+
 operator_
 operator_function::get_operator() const
 {

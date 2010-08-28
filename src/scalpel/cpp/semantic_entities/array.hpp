@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_ARRAY_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_ARRAY_HPP
 
-#include "type_variants.hpp"
+#include "type_variants_fwd.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -37,9 +37,6 @@ class array
 			const unsigned int size,
 			const type_shared_ptr_variant& decorated_type
 		);
-
-		bool
-		operator==(const array& rhs) const;
 
 		unsigned int
 		size() const
@@ -57,6 +54,12 @@ class array
 		unsigned int size_;
 		type_shared_ptr_variant decorated_type_;
 };
+
+bool
+operator==(const array& lhs, const array& rhs);
+
+bool
+operator!=(const array& lhs, const array& rhs);
 
 }}} //namespace scalpel::cpp::semantic_entities
 

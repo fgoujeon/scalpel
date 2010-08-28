@@ -18,31 +18,37 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "pointer.hpp"
-#include "type_variants.hpp"
-#include <scalpel/utility/are_pointed_objects_equal.hpp>
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_VARIANTS_FWD_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_VARIANTS_FWD_HPP
+
+#include <scalpel/utility/variant.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-pointer::pointer(const type_shared_ptr_variant& decorated_type):
-	decorated_type_(decorated_type)
-{
-}
+class array;
+class built_in_type;
+class class_;
+class const_;
+class pointer;
+class reference;
+class volatile_;
 
-bool
-operator==(const pointer& lhs, const pointer& rhs)
-{
-	return
-		are_pointed_objects_equal(lhs.decorated_type(), rhs.decorated_type())
-	;
-}
-
-bool
-operator!=(const pointer& lhs, const pointer& rhs)
-{
-	return !operator==(lhs, rhs);
-}
+typedef
+	utility::variant
+	<
+		std::shared_ptr<const array>,
+		std::shared_ptr<const built_in_type>,
+		std::shared_ptr<const class_>,
+		std::shared_ptr<const const_>,
+		std::shared_ptr<const pointer>,
+		std::shared_ptr<const reference>,
+		std::shared_ptr<const volatile_>
+	>
+	type_shared_ptr_variant
+;
 
 }}} //namespace scalpel::cpp::semantic_entities
+
+#endif
 

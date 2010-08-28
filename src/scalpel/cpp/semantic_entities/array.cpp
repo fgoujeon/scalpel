@@ -19,6 +19,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "array.hpp"
+#include "type_variants.hpp"
+#include <scalpel/utility/are_pointed_objects_equal.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -34,12 +36,18 @@ array::array
 }
 
 bool
-array::operator==(const array& rhs) const
+operator==(const array& lhs, const array& rhs)
 {
 	return
-		size_ == rhs.size_ &&
-		equals(decorated_type_, rhs.decorated_type_)
+		lhs.size() == rhs.size() &&
+		are_pointed_objects_equal(lhs.decorated_type(), rhs.decorated_type())
 	;
+}
+
+bool
+operator!=(const array& lhs, const array& rhs)
+{
+	return !operator==(lhs, rhs);
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

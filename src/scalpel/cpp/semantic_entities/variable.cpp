@@ -19,6 +19,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "variable.hpp"
+#include "type_variants.hpp"
+#include <scalpel/utility/are_pointed_objects_equal.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -35,26 +37,26 @@ variable::variable
 {
 }
 
-variable::variable(const variable& v):
-	type_(v.type_),
-	name_(v.name_),
-	is_static_(v.is_static_)
+variable::variable(const variable& rhs):
+	type_(rhs.type_),
+	name_(rhs.name_),
+	is_static_(rhs.is_static_)
 {
 }
 
-variable::variable(variable&& v):
-	type_(v.type_),
-	name_(std::move(v.name_)),
-	is_static_(v.is_static_)
+variable::variable(variable&& rhs):
+	type_(rhs.type_),
+	name_(std::move(rhs.name_)),
+	is_static_(rhs.is_static_)
 {
 }
 
 const variable&
-variable::operator=(variable&& v)
+variable::operator=(variable&& rhs)
 {
-	type_ = v.type_;
-	name_ = std::move(v.name_);
-	is_static_ = v.is_static_;
+	type_ = rhs.type_;
+	name_ = std::move(rhs.name_);
+	is_static_ = rhs.is_static_;
 
 	return *this;
 }
@@ -93,6 +95,22 @@ void
 variable::declarative_region(const declarative_region_shared_ptr_variant& decl_region)
 {
 	declarative_region_member_impl_.declarative_region(decl_region);
+}
+
+bool
+operator==(const variable& lhs, const variable& rhs)
+{
+	return
+		lhs.name() == rhs.name() &&
+		lhs.is_static() == rhs.is_static() &&
+		are_pointed_objects_equal(lhs.type(), rhs.type())
+	;
+}
+
+bool
+operator!=(const variable& lhs, const variable& rhs)
+{
+	return !operator==(lhs, rhs);
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

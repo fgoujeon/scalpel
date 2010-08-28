@@ -21,37 +21,14 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_VARIANTS_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_VARIANTS_HPP
 
-#include <scalpel/utility/variant.hpp>
-
-namespace scalpel { namespace cpp { namespace semantic_entities
-{
-
-class array;
-class built_in_type;
-class class_;
-class const_;
-class pointer;
-class reference;
-class volatile_;
-
-typedef
-	utility::variant
-	<
-		std::shared_ptr<const array>,
-		std::shared_ptr<const built_in_type>,
-		std::shared_ptr<const class_>,
-		std::shared_ptr<const const_>,
-		std::shared_ptr<const pointer>,
-		std::shared_ptr<const reference>,
-		std::shared_ptr<const volatile_>
-	>
-	type_shared_ptr_variant
-;
-
-bool
-equals(const type_shared_ptr_variant& lhs, const type_shared_ptr_variant& rhs);
-
-}}} //namespace scalpel::cpp::semantic_entities
+#include "array.hpp"
+#include "built_in_type.hpp"
+#include "class_.hpp"
+#include "const_.hpp"
+#include "pointer.hpp"
+#include "reference.hpp"
+#include "volatile_.hpp"
+#include "type_variants.hpp"
 
 #endif
 

@@ -34,6 +34,12 @@ built_in_type::operator==(const built_in_type& o) const
 	return type_ == o.type_;
 }
 
+bool
+built_in_type::operator!=(const built_in_type& rhs) const
+{
+	return !operator==(rhs);
+}
+
 const built_in_type built_in_type::bool_(built_in_type::BOOL);
 const built_in_type built_in_type::char_(built_in_type::CHAR);
 const built_in_type built_in_type::double_(built_in_type::DOUBLE);

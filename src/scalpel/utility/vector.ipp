@@ -43,6 +43,8 @@ vector<T>::operator=(vector&& o)
 	return *this;
 }
 
+
+
 template<typename T>
 vector<std::shared_ptr<T>>::vector()
 {

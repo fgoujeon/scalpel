@@ -19,6 +19,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "volatile_.hpp"
+#include "type_variants.hpp"
+#include <scalpel/utility/are_pointed_objects_equal.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -29,9 +31,17 @@ volatile_::volatile_(const type_shared_ptr_variant& decorated_type):
 }
 
 bool
-volatile_::operator==(const volatile_& rhs) const
+operator==(const volatile_& lhs, const volatile_& rhs)
 {
-	return equals(decorated_type_, rhs.decorated_type_);
+	return
+		are_pointed_objects_equal(lhs.decorated_type(), rhs.decorated_type())
+	;
+}
+
+bool
+operator!=(const volatile_& lhs, const volatile_& rhs)
+{
+	return !operator==(lhs, rhs);
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

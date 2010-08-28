@@ -56,6 +56,12 @@ class vector
 		const vector&
 		operator=(vector&& o);
 
+		bool
+		operator==(const vector& rhs)
+		{
+			return raw_vector_ == rhs.raw_vector_;
+		}
+
 		size_type
 		size() const
 		{
@@ -140,7 +146,7 @@ class vector
 
 /**
 Specialization for shared_ptrs which propagates constness: the pointed objects
-of a const shared_prt_vector can't be modified.
+of a const vector can't be modified.
 */
 template<typename T>
 class vector<std::shared_ptr<T>>
@@ -177,6 +183,18 @@ class vector<std::shared_ptr<T>>
 
 		const vector&
 		operator=(vector&& o);
+
+		std::shared_ptr<T>
+		operator[](const typename raw_vector_t::size_type n)
+		{
+			return raw_vector_[n];
+		}
+
+		std::shared_ptr<const T>
+		operator[](const typename raw_vector_t::size_type n) const
+		{
+			return raw_vector_[n];
+		}
 
 		size_type
 		size() const

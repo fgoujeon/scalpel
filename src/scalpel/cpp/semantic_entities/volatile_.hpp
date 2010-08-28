@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_VOLATILE_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_VOLATILE_HPP
 
-#include "type_variants.hpp"
+#include "type_variants_fwd.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -34,9 +34,6 @@ class volatile_
 	public:
 		volatile_(const type_shared_ptr_variant& decorated_type);
 
-		bool
-		operator==(const volatile_& rhs) const;
-
 		const type_shared_ptr_variant&
 		decorated_type() const
 		{
@@ -46,6 +43,12 @@ class volatile_
 	private:
 		type_shared_ptr_variant decorated_type_;
 };
+
+bool
+operator==(const volatile_& lhs, const volatile_& rhs);
+
+bool
+operator!=(const volatile_& lhs, const volatile_& rhs);
 
 }}} //namespace scalpel::cpp::semantic_entities
 

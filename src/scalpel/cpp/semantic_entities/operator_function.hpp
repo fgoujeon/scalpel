@@ -51,6 +51,12 @@ class operator_function
 		const operator_function&
 		operator=(operator_function&& rhs);
 
+		bool
+		operator==(const operator_function& rhs) const;
+
+		bool
+		operator!=(const operator_function& rhs) const;
+
 		operator_
 		get_operator() const;
 

@@ -69,6 +69,9 @@ class built_in_type
 		bool
 		operator==(const built_in_type& o) const;
 
+		bool
+		operator!=(const built_in_type& o) const;
+
 		static const built_in_type bool_;
 		static const built_in_type char_;
 		static const built_in_type double_;

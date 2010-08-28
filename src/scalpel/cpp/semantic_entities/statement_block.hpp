@@ -53,6 +53,12 @@ class statement_block
 		const statement_block&
 		operator=(statement_block&& o);
 
+		const statement_blocks_t&
+		statement_blocks() const;
+
+		const variables_t&
+		variables() const;
+
 		void
 		add(std::shared_ptr<statement_block> o);
 
@@ -63,6 +69,12 @@ class statement_block
 		statement_blocks_t statement_blocks_;
 		variables_t variables_;
 };
+
+bool
+operator==(const statement_block& lhs, const statement_block& rhs);
+
+bool
+operator!=(const statement_block& lhs, const statement_block& rhs);
 
 }}} //namespace scalpel::cpp::semantic_entities
 
