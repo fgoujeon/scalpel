@@ -21,9 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_REFERENCE_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_REFERENCE_HPP
 
-#include "type_decorator_impl.hpp"
-#include "type.hpp"
-#include <memory>
+#include "type_variants.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -31,14 +29,25 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 /**
 Represents the const qualifier.
 */
-class reference: public type, private type_decorator_impl
+class reference
 {
 	public:
-		reference(std::shared_ptr<const type> decorated_type);
+		reference(const type_shared_ptr_variant& decorated_type);
 
-		using type_decorator_impl::decorated_type;
+		bool
+		operator==(const reference& rhs) const;
+
+		const type_shared_ptr_variant&
+		decorated_type() const
+		{
+			return decorated_type_;
+		}
+
+	private:
+		type_shared_ptr_variant decorated_type_;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities
 
 #endif
+

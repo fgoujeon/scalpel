@@ -35,9 +35,9 @@ using namespace scalpel::cpp;
 using namespace scalpel::cpp::semantic_entities;
 
 void
-print
+print_type
 (
-	std::shared_ptr<const type> n,
+	const semantic_entities::type_shared_ptr_variant& n,
 	const unsigned int indent_level
 );
 
@@ -48,7 +48,7 @@ print
 );
 
 void
-print
+print_namespace
 (
 	std::shared_ptr<const namespace_> n,
 	const unsigned int indent_level = 0

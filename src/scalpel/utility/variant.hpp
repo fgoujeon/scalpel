@@ -139,14 +139,6 @@ class variant<T, Ts...>
 		const variant&
 		operator=(const variant& rhs);
 
-		const variant&
-		operator=(const T&);
-
-		//T2 is one of the tail's types
-		template<typename T2>
-		const variant&
-		operator=(const T2&);
-
 		//Return true if *this and rhs contain the same type and
 		//content_this == content_rhs.
 		bool
@@ -296,23 +288,6 @@ variant<T, Ts...>::operator=(const variant<T, Ts...>& rhs)
 			head_.reset();
 	}
 
-	return *this;
-}
-
-template<typename T, typename... Ts>
-const variant<T, Ts...>&
-variant<T, Ts...>::operator=(const T& object)
-{
-	head_ = std::unique_ptr<T>(new T(object));
-	return *this;
-}
-
-template<typename T, typename... Ts>
-template<typename T2>
-const variant<T, Ts...>&
-variant<T, Ts...>::operator=(const T2& object)
-{
-	tail_ = object;
 	return *this;
 }
 

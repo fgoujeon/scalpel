@@ -379,7 +379,7 @@ class semantic_analyzer
 		//
 
 		template<class DeclarativeRegionT>
-		std::shared_ptr<const semantic_entities::type>
+		semantic_entities::type_shared_ptr_variant
 		create_type
 		(
 			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
@@ -388,7 +388,7 @@ class semantic_analyzer
 		);
 
 		template<class DeclarativeRegionT>
-		std::shared_ptr<const semantic_entities::type>
+		semantic_entities::type_shared_ptr_variant
 		create_type
 		(
 			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
@@ -397,7 +397,7 @@ class semantic_analyzer
 		);
 
 		template<class DeclarativeRegionT>
-		std::shared_ptr<const semantic_entities::type>
+		semantic_entities::type_shared_ptr_variant
 		create_type
 		(
 			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
@@ -405,25 +405,25 @@ class semantic_analyzer
 		);
 
 		template<class DeclarativeRegionT>
-		std::shared_ptr<const semantic_entities::type>
+		semantic_entities::type_shared_ptr_variant
 		get_conversion_function_type
 		(
 			const syntax_nodes::declarator& declarator_node,
 			std::shared_ptr<DeclarativeRegionT> current_declarative_region
 		);
 
-		std::shared_ptr<const semantic_entities::type>
+		semantic_entities::type_shared_ptr_variant
 		decorate_type
 		(
-			std::shared_ptr<const semantic_entities::type> return_type,
+			semantic_entities::type_shared_ptr_variant return_type,
 			const bool const_qualified,
 			const bool volatile_qualified
 		);
 
-		std::shared_ptr<const semantic_entities::type>
+		semantic_entities::type_shared_ptr_variant
 		decorate_type
 		(
-			std::shared_ptr<const semantic_entities::type> return_type,
+			semantic_entities::type_shared_ptr_variant return_type,
 			const syntax_nodes::ptr_operator_seq& ptr_operator_seq_node
 		);
 
@@ -432,7 +432,7 @@ class semantic_analyzer
 		get_type_info
 		(
 			const syntax_nodes::type_specifier& type_specifier_node,
-			std::shared_ptr<const semantic_entities::type>& t,
+			boost::optional<semantic_entities::type_shared_ptr_variant>& t,
 			bool& bool_type,
 			bool& char_type,
 			bool& double_type,

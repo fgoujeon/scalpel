@@ -40,7 +40,7 @@ class operator_function
         operator_function
 		(
 			const operator_ op,
-			std::shared_ptr<const type> return_type,
+			const type_shared_ptr_variant& return_type,
 			parameters_t&& parameters,
 			const bool is_is_inline
 		);
@@ -54,7 +54,7 @@ class operator_function
 		operator_
 		get_operator() const;
 
-		std::shared_ptr<const type>
+		const type_shared_ptr_variant&
 		return_type() const;
 
 		const parameters_t&

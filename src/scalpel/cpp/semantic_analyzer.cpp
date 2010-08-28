@@ -338,26 +338,26 @@ semantic_analyzer::fill_class
 	}
 }
 
-std::shared_ptr<const semantic_entities::type>
+semantic_entities::type_shared_ptr_variant
 semantic_analyzer::decorate_type
 (
-	std::shared_ptr<const semantic_entities::type> return_type,
+	semantic_entities::type_shared_ptr_variant return_type,
 	const bool is_const,
 	const bool is_volatile
 )
 {
 	if(is_const)
-		return_type = std::make_shared<const_>(return_type);
+		return_type = std::make_shared<const const_>(return_type);
 	if(is_volatile)
-		return_type = std::make_shared<volatile_>(return_type);
+		return_type = std::make_shared<const volatile_>(return_type);
 
 	return return_type;
 }
 
-std::shared_ptr<const semantic_entities::type>
+semantic_entities::type_shared_ptr_variant
 semantic_analyzer::decorate_type
 (
-	std::shared_ptr<const semantic_entities::type> return_type,
+	semantic_entities::type_shared_ptr_variant return_type,
 	const syntax_nodes::ptr_operator_seq& ptr_operator_seq_node
 )
 {
@@ -368,7 +368,7 @@ semantic_analyzer::decorate_type
 		{
 			auto ptr_ptr_operator_node = *opt_ptr_ptr_operator_node;
 
-			return_type = std::make_shared<pointer>(return_type);
+			return_type = std::make_shared<const pointer>(return_type);
 
 			if(auto opt_cv_qualifier_seq_node = get_cv_qualifier_seq(ptr_ptr_operator_node))
 			{
@@ -384,18 +384,18 @@ semantic_analyzer::decorate_type
 
 					if(get<predefined_text_node<str::const_>>(&cv_qualifier_node))
 					{
-						return_type = std::make_shared<const_>(return_type);
+						return_type = std::make_shared<const const_>(return_type);
 					}
 					else if(get<predefined_text_node<str::volatile_>>(&cv_qualifier_node))
 					{
-						return_type = std::make_shared<volatile_>(return_type);
+						return_type = std::make_shared<const volatile_>(return_type);
 					}
 				}
 			}
 		}
 		else if(auto ref_ptr_operator_node = get<ref_ptr_operator>(&ptr_operator_node))
 		{
-			return_type = std::make_shared<reference>(return_type);
+			return_type = std::make_shared<const reference>(return_type);
 		}
 	}
 

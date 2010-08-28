@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_VARIABLE_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_VARIABLE_HPP
 
-#include "type.hpp"
+#include "type_variants.hpp"
 #include "declarative_region_member_impl.hpp"
 #include <boost/noncopyable.hpp>
 #include <string>
@@ -39,7 +39,7 @@ class variable
 		variable
 		(
 			const std::string& name,
-			std::shared_ptr<const type> t,
+			const type_shared_ptr_variant& type,
 			bool is_is_static = false
 		);
 
@@ -50,8 +50,8 @@ class variable
 		const variable&
 		operator=(variable&& v);
 
-		std::shared_ptr<const type>
-		get_type() const;
+		const type_shared_ptr_variant&
+		type() const;
 
 		const std::string&
 		name() const;
@@ -69,7 +69,7 @@ class variable
 		declarative_region(const declarative_region_shared_ptr_variant& declarative_region);
 
 	private:
-		std::shared_ptr<const type> type_;
+		type_shared_ptr_variant type_;
 		std::string name_;
 		bool is_static_;
 		declarative_region_member_impl declarative_region_member_impl_;

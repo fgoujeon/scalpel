@@ -26,10 +26,10 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 variable::variable
 (
 	const std::string& name,
-	std::shared_ptr<const type> t,
+	const type_shared_ptr_variant& type,
 	bool is_is_static
 ):
-	type_(t),
+	type_(type),
 	name_(name),
 	is_static_(is_is_static)
 {
@@ -59,8 +59,8 @@ variable::operator=(variable&& v)
 	return *this;
 }
 
-std::shared_ptr<const type>
-variable::get_type() const
+const type_shared_ptr_variant&
+variable::type() const
 {
 	return type_;
 }

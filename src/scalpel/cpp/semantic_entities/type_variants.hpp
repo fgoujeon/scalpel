@@ -18,33 +18,38 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_DECORATOR_IMPL_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_DECORATOR_IMPL_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_VARIANTS_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_VARIANTS_HPP
 
-#include "type.hpp"
-#include <memory>
+#include <scalpel/utility/variant.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-class type_decorator_impl
-{
-	public:
-		type_decorator_impl(std::shared_ptr<const type> decorated_type);
+class array;
+class built_in_type;
+class class_;
+class const_;
+class pointer;
+class reference;
+class volatile_;
 
-		inline
-		std::shared_ptr<const type>
-		decorated_type() const;
+typedef
+	utility::variant
+	<
+		std::shared_ptr<const array>,
+		std::shared_ptr<const built_in_type>,
+		std::shared_ptr<const class_>,
+		std::shared_ptr<const const_>,
+		std::shared_ptr<const pointer>,
+		std::shared_ptr<const reference>,
+		std::shared_ptr<const volatile_>
+	>
+	type_shared_ptr_variant
+;
 
-	private:
-		std::shared_ptr<const type> decorated_type_;
-};
-
-std::shared_ptr<const type>
-type_decorator_impl::decorated_type() const
-{
-	return decorated_type_;
-}
+bool
+equals(const type_shared_ptr_variant& lhs, const type_shared_ptr_variant& rhs);
 
 }}} //namespace scalpel::cpp::semantic_entities
 

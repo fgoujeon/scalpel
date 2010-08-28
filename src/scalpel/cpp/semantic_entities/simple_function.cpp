@@ -26,7 +26,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 simple_function::simple_function
 (
 	const std::string& name,
-	std::shared_ptr<const type> return_type,
+	const type_shared_ptr_variant& return_type,
 	std::list<parameter>&& parameters,
 	bool is_is_inline,
 	bool is_is_static
@@ -93,7 +93,7 @@ simple_function::has_same_parameters(const simple_function& f) const
 	{
 		auto param = *i;
 		auto param2 = *j;
-		if(param.get_type() != param2.get_type())
+		if(!equals(param.type(), param2.type()))
 			return false;
 	}
 
@@ -112,7 +112,7 @@ simple_function::is_open_to_outside() const
 	return false;
 }
 
-std::shared_ptr<const type>
+const type_shared_ptr_variant&
 simple_function::return_type() const
 {
 	return return_type_;
@@ -179,7 +179,7 @@ simple_function::body()
 }
 
 
-simple_function::parameter::parameter(std::shared_ptr<const type> t, const std::string& name):
+simple_function::parameter::parameter(const type_shared_ptr_variant& t, const std::string& name):
 	type_(t),
 	name_(name)
 {
@@ -224,8 +224,8 @@ simple_function::parameter::operator==(const parameter& o) const
 	;
 }
 
-std::shared_ptr<const type>
-simple_function::parameter::get_type() const
+const type_shared_ptr_variant&
+simple_function::parameter::type() const
 {
 	return type_;
 }

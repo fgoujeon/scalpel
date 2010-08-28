@@ -967,7 +967,7 @@ semantic_analyzer::create_parameters
 }
 
 template<class DeclarativeRegionT>
-std::shared_ptr<const semantic_entities::type>
+semantic_entities::type_shared_ptr_variant
 semantic_analyzer::create_type
 (
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
@@ -975,14 +975,16 @@ semantic_analyzer::create_type
 	std::shared_ptr<DeclarativeRegionT> current_declarative_region
 )
 {
-	std::shared_ptr<const semantic_entities::type> return_type = create_type(decl_specifier_seq_node, current_declarative_region);
+	semantic_entities::type_shared_ptr_variant return_type = create_type(decl_specifier_seq_node, current_declarative_region);
 
+	//decorate type with hypothetical pointers and/or reference
 	if(auto opt_ptr_operator_seq_node = get_ptr_operator_seq(declarator_node))
 	{
 		auto ptr_operator_seq_node = *opt_ptr_operator_seq_node;
 		return_type = decorate_type(return_type, ptr_operator_seq_node);
 	}
 
+	//decorate type with hypothetical arrays
 	auto direct_declarator_node = get_direct_declarator(declarator_node);
 	if(auto opt_last_part_seq_node = get_last_part_seq(direct_declarator_node))
 	{
@@ -997,20 +999,16 @@ semantic_analyzer::create_type
 			auto last_part_node = i->main_node();
 			if(auto array_part = syntax_nodes::get<syntax_nodes::direct_declarator_array_part>(&last_part_node))
 			{
-				return_type = std::make_shared<semantic_entities::array>(0, return_type);
+				return_type = std::make_shared<const semantic_entities::array>(0, return_type);
 			}
 		}
 	}
 
-	if(!return_type)
-	{
-		throw std::runtime_error("Semantic analysis error: type not found");
-	}
 	return return_type;
 }
 
 template<class DeclarativeRegionT>
-std::shared_ptr<const semantic_entities::type>
+semantic_entities::type_shared_ptr_variant
 semantic_analyzer::create_type
 (
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
@@ -1018,7 +1016,7 @@ semantic_analyzer::create_type
 	std::shared_ptr<DeclarativeRegionT> current_declarative_region
 )
 {
-	std::shared_ptr<const semantic_entities::type> return_type = create_type(decl_specifier_seq_node, current_declarative_region);
+	semantic_entities::type_shared_ptr_variant return_type = create_type(decl_specifier_seq_node, current_declarative_region);
 
 	if(auto opt_ptr_operator_seq_node = syntax_nodes::get<syntax_nodes::ptr_operator_seq>(&abstract_declarator_node))
 	{
@@ -1026,22 +1024,18 @@ semantic_analyzer::create_type
 		return_type = decorate_type(return_type, ptr_operator_seq_node);
 	}
 
-	if(!return_type)
-	{
-		throw std::runtime_error("Semantic analysis error: type not found");
-	}
 	return return_type;
 }
 
 template<class DeclarativeRegionT>
-std::shared_ptr<const semantic_entities::type>
+semantic_entities::type_shared_ptr_variant
 semantic_analyzer::create_type
 (
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
 	std::shared_ptr<DeclarativeRegionT> current_declarative_region
 )
 {
-	std::shared_ptr<const semantic_entities::type> return_type;
+	boost::optional<semantic_entities::type_shared_ptr_variant> opt_return_type;
 	bool bool_type = false;
 	bool char_type = false;
 	bool double_type = false;
@@ -1077,7 +1071,7 @@ semantic_analyzer::create_type
 			get_type_info
 			(
 				type_specifier_node,
-				return_type,
+				opt_return_type,
 				bool_type,
 				char_type,
 				double_type,
@@ -1097,9 +1091,9 @@ semantic_analyzer::create_type
 		}
 	}
 
-	if(!return_type)
+	if(!opt_return_type)
 	{
-		return_type = get_built_in_type
+		opt_return_type = get_built_in_type
 		(
 			bool_type,
 			char_type,
@@ -1116,7 +1110,8 @@ semantic_analyzer::create_type
 		);
 	}
 
-	assert(return_type);
+	assert(opt_return_type);
+	semantic_entities::type_shared_ptr_variant return_type = *opt_return_type;
 
 	return_type = decorate_type(return_type, is_const, is_volatile);
 
@@ -1124,14 +1119,14 @@ semantic_analyzer::create_type
 }
 
 template<class DeclarativeRegionT>
-std::shared_ptr<const semantic_entities::type>
+semantic_entities::type_shared_ptr_variant
 semantic_analyzer::get_conversion_function_type
 (
 	const syntax_nodes::declarator& declarator_node,
 	std::shared_ptr<DeclarativeRegionT> current_declarative_region
 )
 {
-	std::shared_ptr<const semantic_entities::type> return_type;
+	boost::optional<semantic_entities::type_shared_ptr_variant> opt_return_type;
 	bool bool_type = false;
 	bool char_type = false;
 	bool double_type = false;
@@ -1169,7 +1164,7 @@ semantic_analyzer::get_conversion_function_type
 		get_type_info
 		(
 			type_specifier_node,
-			return_type,
+			opt_return_type,
 			bool_type,
 			char_type,
 			double_type,
@@ -1188,9 +1183,9 @@ semantic_analyzer::get_conversion_function_type
 		);
 	}
 
-	if(!return_type)
+	if(!opt_return_type)
 	{
-		return_type = get_built_in_type
+		opt_return_type = get_built_in_type
 		(
 			bool_type,
 			char_type,
@@ -1207,7 +1202,8 @@ semantic_analyzer::get_conversion_function_type
 		);
 	}
 
-	assert(return_type);
+	assert(opt_return_type);
+	semantic_entities::type_shared_ptr_variant return_type = *opt_return_type;
 
 	return_type = decorate_type(return_type, is_const, is_volatile);
 
@@ -1217,10 +1213,6 @@ semantic_analyzer::get_conversion_function_type
 		return_type = decorate_type(return_type, ptr_operator_seq_node);
 	}
 
-	if(!return_type)
-	{
-		throw std::runtime_error("Semantic analysis error: type not found");
-	}
 	return return_type;
 }
 
@@ -1229,7 +1221,7 @@ void
 semantic_analyzer::get_type_info
 (
 	const syntax_nodes::type_specifier& type_specifier_node,
-	std::shared_ptr<const semantic_entities::type>& t,
+	boost::optional<semantic_entities::type_shared_ptr_variant>& t,
 	bool& bool_type,
 	bool& char_type,
 	bool& double_type,
@@ -1262,7 +1254,10 @@ semantic_analyzer::get_type_info
 		{
 			auto nested_identifier_or_template_id_node = *opt_nested_identifier_or_template_id_node;
 			t =
-				detail::semantic_analysis::name_lookup::find_entities<false, false, semantic_entities::class_>(nested_identifier_or_template_id_node, current_declarative_region)
+				std::shared_ptr<const semantic_entities::class_>
+				(
+					detail::semantic_analysis::name_lookup::find_entities<false, false, semantic_entities::class_>(nested_identifier_or_template_id_node, current_declarative_region)
+				)
 			;
 		}
 		else if(auto opt_built_in_type_specifier_node = syntax_nodes::get<syntax_nodes::built_in_type_specifier>(&simple_type_specifier_node))

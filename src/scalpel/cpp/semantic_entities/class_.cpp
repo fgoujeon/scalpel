@@ -43,6 +43,15 @@ class_::make_shared(const std::string& name)
 	return new_class;
 }
 
+bool
+class_::operator==(const class_& rhs) const
+{
+	//TODO incomplete
+	return
+		name_ == rhs.name_
+	;
+}
+
 const std::string&
 class_::name() const
 {
@@ -505,7 +514,7 @@ class_::destructor::declarative_region(const declarative_region_shared_ptr_varia
 
 class_::conversion_function::conversion_function
 (
-	std::shared_ptr<const type> return_type,
+	const type_shared_ptr_variant& return_type,
 	const bool is_is_inline
 ):
 	return_type_(return_type),
@@ -519,7 +528,7 @@ class_::conversion_function::conversion_function(conversion_function&& o):
 {
 }
 
-std::shared_ptr<const type>
+const type_shared_ptr_variant&
 class_::conversion_function::return_type() const
 {
 	return return_type_;

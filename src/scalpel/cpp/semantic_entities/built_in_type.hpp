@@ -21,15 +21,13 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_BUILT_IN_TYPE_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_BUILT_IN_TYPE_HPP
 
-#include "type.hpp"
-
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 /**
 Represents a C++ built in type.
 */
-class built_in_type: public type
+class built_in_type
 {
 	private:
 		enum type_enum

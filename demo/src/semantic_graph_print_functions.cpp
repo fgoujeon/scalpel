@@ -27,51 +27,51 @@ namespace semantic_graph_print_functions
 {
 
 void
-print
+print_type
 (
-	std::shared_ptr<const type> n,
+	const semantic_entities::type_shared_ptr_variant& n,
 	const unsigned int indent_level
 )
 {
-	if(std::shared_ptr<const built_in_type> t = std::dynamic_pointer_cast<const built_in_type>(n))
+	if(auto opt_type_ptr = scalpel::utility::get<std::shared_ptr<const built_in_type>>(&n))
 	{
 		std::cout << indent(indent_level) << "<built_in_type type=\"";
-		print(t);
+		print(*opt_type_ptr);
 	   	std::cout << "\"/>\n";
 	}
-	else if(std::shared_ptr<const const_> t = std::dynamic_pointer_cast<const const_>(n))
+	else if(auto opt_type_ptr = scalpel::utility::get<std::shared_ptr<const const_>>(&n))
 	{
 		std::cout << indent(indent_level) << "<const>\n";
-		print(t->decorated_type(), indent_level + 1);
+		print_type((*opt_type_ptr)->decorated_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</const>\n";
 	}
-	else if(std::shared_ptr<const volatile_> t = std::dynamic_pointer_cast<const volatile_>(n))
+	else if(auto opt_type_ptr = scalpel::utility::get<std::shared_ptr<const volatile_>>(&n))
 	{
 		std::cout << indent(indent_level) << "<volatile>\n";
-		print(t->decorated_type(), indent_level + 1);
+		print_type((*opt_type_ptr)->decorated_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</volatile>\n";
 	}
-	else if(std::shared_ptr<const pointer> t = std::dynamic_pointer_cast<const pointer>(n))
+	else if(auto opt_type_ptr = scalpel::utility::get<std::shared_ptr<const pointer>>(&n))
 	{
 		std::cout << indent(indent_level) << "<pointer>\n";
-		print(t->decorated_type(), indent_level + 1);
+		print_type((*opt_type_ptr)->decorated_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</pointer>\n";
 	}
-	else if(std::shared_ptr<const reference> t = std::dynamic_pointer_cast<const reference>(n))
+	else if(auto opt_type_ptr = scalpel::utility::get<std::shared_ptr<const reference>>(&n))
 	{
 		std::cout << indent(indent_level) << "<reference>\n";
-		print(t->decorated_type(), indent_level + 1);
+		print_type((*opt_type_ptr)->decorated_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</reference>\n";
 	}
-	else if(std::shared_ptr<const array> t = std::dynamic_pointer_cast<const array>(n))
+	else if(auto opt_type_ptr = scalpel::utility::get<std::shared_ptr<const array>>(&n))
 	{
-		std::cout << indent(indent_level) << "<array size=\"" << t->size() << "\">\n";
-		print(t->decorated_type(), indent_level + 1);
+		std::cout << indent(indent_level) << "<array size=\"" << (*opt_type_ptr)->size() << "\">\n";
+		print_type((*opt_type_ptr)->decorated_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</array>\n";
 	}
-	else if(std::shared_ptr<const class_> t = std::dynamic_pointer_cast<const class_>(n))
+	else if(auto opt_type_ptr = scalpel::utility::get<std::shared_ptr<const class_>>(&n))
 	{
-		std::cout << indent(indent_level) << "<class id=\"" << t << "\"/>\n";
+		std::cout << indent(indent_level) << "<class id=\"" << *opt_type_ptr << "\"/>\n";
 	}
 }
 
@@ -116,7 +116,7 @@ print
 }
 
 void
-print
+print_namespace
 (
 	std::shared_ptr<const namespace_> n,
 	const unsigned int indent_level
@@ -130,7 +130,7 @@ print
 	std::cout << ">\n";
 
 	for(auto i = n->namespaces().begin(); i != n->namespaces().end(); ++i)
-		print(*i, indent_level + 1);
+		print_namespace(*i, indent_level + 1);
 
 	for(auto i = n->classes().begin(); i != n->classes().end(); ++i)
 		print(*i, indent_level + 1);
@@ -325,7 +325,7 @@ print
 	std::cout << ">\n";
 
 	std::cout << indent(indent_level + 1) << "<return_type>\n";
-	print(entity->return_type(), indent_level + 2);
+	print_type(entity->return_type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</return_type>\n";
 
 	const std::list<simple_function::parameter>& parameters = entity->parameters();
@@ -377,7 +377,7 @@ print
 	std::cout << ">\n";
 
 	std::cout << indent(indent_level + 1) << "<return_type>\n";
-	print(entity->return_type(), indent_level + 2);
+	print_type(entity->return_type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</return_type>\n";
 
 	const std::list<simple_function::parameter>& parameters = entity->parameters();
@@ -418,7 +418,7 @@ print
 	std::cout << ">\n";
 
 	std::cout << indent(indent_level + 1) << "<return_type>\n";
-	print(entity->return_type(), indent_level + 2);
+	print_type(entity->return_type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</return_type>\n";
 
 	std::cout << indent(indent_level) << "</conversion_function>\n";
@@ -436,7 +436,7 @@ print
 		std::cout << " name=\"" << p.name() << "\"";
 	std::cout << ">\n";
 	std::cout << indent(indent_level + 1) << "<type>\n";
-	print(p.get_type(), indent_level + 2);
+	print_type(p.type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</type>\n";
 	std::cout << indent(indent_level) << "</parameter>\n";
 }
@@ -468,7 +468,7 @@ print
 		std::cout << " static=\"true\"";
 	std::cout << ">\n";
 	std::cout << indent(indent_level + 1) << "<type>\n";
-	print(entity->get_type(), indent_level + 2);
+	print_type(entity->type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</type>\n";
 	std::cout << indent(indent_level) << "</variable>\n";
 }

@@ -26,7 +26,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "simple_function.hpp"
 #include "declarative_region_member_impl.hpp"
 #include "declarative_region_variants.hpp"
-#include "type.hpp"
+#include "type_variants.hpp"
 #include <scalpel/utility/vector.hpp>
 #include <boost/noncopyable.hpp>
 #include <string>
@@ -42,7 +42,6 @@ class namespace_;
 Represents a C++ class.
 */
 class class_:
-	public type,
 	public boost::noncopyable,
 	public std::enable_shared_from_this<class_>
 {
@@ -97,6 +96,9 @@ class class_:
 		static
 		std::shared_ptr<class_>
 		make_shared(const std::string& name);
+
+		bool
+		operator==(const class_& rhs) const;
 
         /**
         @return the name of the class
@@ -360,13 +362,13 @@ class class_::conversion_function
 	public:
 		conversion_function
 		(
-			std::shared_ptr<const type> return_type,
+			const type_shared_ptr_variant& return_type,
 			const bool is_is_inline
 		);
 
 		conversion_function(conversion_function&& o);
 
-		std::shared_ptr<const type>
+		const type_shared_ptr_variant&
 		return_type() const;
 
 		bool
@@ -382,7 +384,7 @@ class class_::conversion_function
 		declarative_region(const declarative_region_shared_ptr_variant& declarative_region);
 
 	private:
-		std::shared_ptr<const type> return_type_;
+		type_shared_ptr_variant return_type_;
 		bool is_inline_;
 		declarative_region_member_impl declarative_region_member_impl_;
 };

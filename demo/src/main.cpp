@@ -132,7 +132,7 @@ main(int argc, char** argv)
 		if(print_semantic_graph)
 		{
 			std::cout << "Semantic graph:\n";
-			semantic_graph_print_functions::print(graph);
+			semantic_graph_print_functions::print_namespace(graph);
 		}
 	}
 

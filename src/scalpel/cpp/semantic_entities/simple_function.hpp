@@ -25,7 +25,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "statement_block.hpp"
 #include "declarative_region_member_impl.hpp"
 #include "declarative_region_variants.hpp"
-#include "type.hpp"
+#include "type_variants.hpp"
 #include <boost/optional.hpp>
 #include <string>
 #include <list>
@@ -50,7 +50,7 @@ class simple_function:
         simple_function
 		(
 			const std::string& name,
-			std::shared_ptr<const type> return_type,
+			const type_shared_ptr_variant& return_type,
 			parameters_t&& parameters = parameters_t(),
 			bool is_is_inline = false,
 			bool is_is_static = false
@@ -95,7 +95,7 @@ class simple_function:
 		bool
 		is_open_to_outside() const;
 
-		std::shared_ptr<const type>
+		const type_shared_ptr_variant&
 		return_type() const;
 
 		const parameters_t&
@@ -121,7 +121,7 @@ class simple_function:
 
     private:
         std::string name_;
-		std::shared_ptr<const type> return_type_;
+		type_shared_ptr_variant return_type_;
 		std::list<parameter> parameters_;
 		bool is_inline_;
 		bool is_static_;
@@ -136,7 +136,7 @@ class simple_function:
 class simple_function::parameter
 {
 	public:
-		parameter(std::shared_ptr<const type> t, const std::string& name);
+		parameter(const type_shared_ptr_variant& t, const std::string& name);
 
 		parameter(const parameter& o);
 
@@ -151,14 +151,14 @@ class simple_function::parameter
 		bool
 		operator==(const parameter& o) const;
 
-		std::shared_ptr<const type>
-		get_type() const;
+		const type_shared_ptr_variant&
+		type() const;
 
 		const std::string&
 		name() const;
 
 	private:
-		std::shared_ptr<const type> type_;
+		type_shared_ptr_variant type_;
 		std::string name_;
 };
 
