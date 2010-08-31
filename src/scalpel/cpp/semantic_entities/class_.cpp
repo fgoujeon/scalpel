@@ -564,18 +564,21 @@ operator!=(const class_& lhs, const class_& rhs)
 class_::constructor::constructor
 (
 	parameters_t&& parameters,
-	const bool is_is_inline,
-	const bool is_is_explicit
+	const bool is_inline,
+	const bool is_explicit
 ):
 	impl_
 	(
-		"_",
-		built_in_type_shared_ptrs::void_,
-		std::move(parameters),
-		is_is_inline,
-		false
+		simple_function::make_shared
+		(
+			"_",
+			built_in_type_shared_ptrs::void_,
+			std::move(parameters),
+			is_inline,
+			false
+		)
 	),
-	is_explicit_(is_is_explicit)
+	is_explicit_(is_explicit)
 {
 }
 
@@ -590,7 +593,7 @@ class_::constructor::operator==(const constructor& rhs) const
 {
 	return
 		is_explicit_ == rhs.is_explicit_ &&
-		impl_ == rhs.impl_
+		*impl_ == *rhs.impl_
 	;
 }
 
@@ -603,13 +606,13 @@ class_::constructor::operator!=(const constructor& rhs) const
 const class_::constructor::parameters_t&
 class_::constructor::parameters() const
 {
-	return impl_.parameters();
+	return impl_->parameters();
 }
 
 bool
 class_::constructor::is_inline() const
 {
-	return impl_.is_inline();
+	return impl_->is_inline();
 }
 
 bool
@@ -640,9 +643,9 @@ class_::constructor::declarative_region(const declarative_region_shared_ptr_vari
 
 class_::destructor::destructor
 (
-	const bool is_is_inline
+	const bool is_inline
 ):
-	is_inline_(is_is_inline)
+	is_inline_(is_inline)
 {
 }
 
@@ -692,10 +695,10 @@ operator!=(const class_::destructor& lhs, const class_::destructor& rhs)
 class_::conversion_function::conversion_function
 (
 	const type_shared_ptr_variant& return_type,
-	const bool is_is_inline
+	const bool is_inline
 ):
 	return_type_(return_type),
-	is_inline_(is_is_inline)
+	is_inline_(is_inline)
 {
 }
 

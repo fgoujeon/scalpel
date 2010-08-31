@@ -38,6 +38,7 @@ Represents a C++ statement block.
 class statement_block
 {
     public:
+		typedef utility::vector<std::weak_ptr<namespace_>> weak_namespaces_t;
 		typedef utility::vector<std::shared_ptr<statement_block>> statement_blocks_t;
 		typedef utility::vector<std::shared_ptr<variable>> variables_t;
 
@@ -53,11 +54,32 @@ class statement_block
 		const statement_block&
 		operator=(statement_block&& o);
 
+		bool
+		has_declarative_region() const
+		{
+			return declarative_region_member_impl_.has_declarative_region();
+		}
+
+		declarative_region_shared_ptr_variant
+		declarative_region() const
+		{
+			return declarative_region_member_impl_.declarative_region();
+		}
+
+		void
+		declarative_region(const declarative_region_shared_ptr_variant& decl_region)
+		{
+			declarative_region_member_impl_.declarative_region(decl_region);
+		}
+
 		const statement_blocks_t&
 		statement_blocks() const;
 
 		const variables_t&
 		variables() const;
+
+		const weak_namespaces_t&
+		using_directive_namespaces() const;
 
 		void
 		add(std::shared_ptr<statement_block> o);
@@ -65,9 +87,16 @@ class statement_block
 		void
 		add(std::shared_ptr<variable> o);
 
+        void
+        add_using_directive_namespace(std::shared_ptr<namespace_> n);
+
     private:
+		declarative_region_member_impl declarative_region_member_impl_;
+
 		statement_blocks_t statement_blocks_;
 		variables_t variables_;
+
+        weak_namespaces_t using_directive_namespaces_;
 };
 
 bool

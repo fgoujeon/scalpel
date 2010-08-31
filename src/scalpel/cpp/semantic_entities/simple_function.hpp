@@ -47,26 +47,27 @@ class simple_function:
 		typedef utility::vector<declarative_region_shared_ptr_variant> declarative_region_shared_ptr_variants_t;
 		typedef std::list<parameter> parameters_t;
 
+	private:
         simple_function
 		(
 			const std::string& name,
 			const type_shared_ptr_variant& return_type,
-			parameters_t&& parameters = parameters_t(),
-			bool is_is_inline = false,
-			bool is_is_static = false
+			parameters_t&& parameters,
+			bool is_inline,
+			bool is_static
 		);
 
-		//copy constructor
-		simple_function(const simple_function&) = delete;
-
-		//move constructor
-		simple_function(simple_function&& rhs);
-
-		const simple_function&
-		operator=(const simple_function&) = delete;
-
-		const simple_function&
-		operator=(simple_function&& rhs);
+	public:
+		static
+		std::shared_ptr<simple_function>
+		make_shared
+		(
+			const std::string& name,
+			const type_shared_ptr_variant& return_type,
+			parameters_t&& parameters = parameters_t(),
+			bool is_inline = false,
+			bool is_static = false
+		);
 
 		bool
 		has_same_signature(const simple_function& f) const;
@@ -89,12 +90,6 @@ class simple_function:
 		void
 		declarative_region(const declarative_region_shared_ptr_variant& declarative_region);
 
-        /**
-        @return false
-        */
-		bool
-		is_open_to_outside() const;
-
 		const type_shared_ptr_variant&
 		return_type() const;
 
@@ -113,14 +108,14 @@ class simple_function:
 		void
 		defined(bool d);
 
-		const declarative_region_shared_ptr_variants_t&
-		declarative_regions();
-
 		std::shared_ptr<statement_block>
 		body();
 
 		std::shared_ptr<const statement_block>
 		body() const;
+
+		void
+		body(std::shared_ptr<statement_block> b);
 
     private:
         std::string name_;

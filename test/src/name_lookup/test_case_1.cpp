@@ -72,12 +72,12 @@ test_case_1()
 		built_in_type_shared_ptrs::int_
 	);
 	auto struct_a_b = class_::make_shared("B");
-	auto function_a_b_f = std::make_shared<simple_function>
+	auto function_a_b_f = simple_function::make_shared
 	(
 		"f",
 		built_in_type_shared_ptrs::void_
 	);
-	auto function_a_g = std::make_shared<simple_function>
+	auto function_a_g = simple_function::make_shared
 	(
 		"g",
 		built_in_type_shared_ptrs::void_

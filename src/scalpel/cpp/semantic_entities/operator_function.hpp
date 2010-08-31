@@ -45,12 +45,6 @@ class operator_function
 			const bool is_is_inline
 		);
 
-		//move constructor
-		operator_function(operator_function&& rhs);
-
-		const operator_function&
-		operator=(operator_function&& rhs);
-
 		bool
 		operator==(const operator_function& rhs) const;
 
@@ -85,7 +79,7 @@ class operator_function
 		declarative_region(const declarative_region_shared_ptr_variant& declarative_region);
 
     private:
-		simple_function impl_;
+		std::shared_ptr<simple_function> impl_;
         operator_ op_;
 };
 

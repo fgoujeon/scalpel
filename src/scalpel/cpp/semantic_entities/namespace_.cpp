@@ -138,9 +138,9 @@ namespace_::variables() const
 }
 
 const namespace_::weak_namespaces_t&
-namespace_::used_namespaces() const
+namespace_::using_directive_namespaces() const
 {
-	return used_namespaces_;
+	return using_directive_namespaces_;
 }
 
 void
@@ -181,9 +181,9 @@ namespace_::add_member(std::shared_ptr<variable> member)
 }
 
 void
-namespace_::add_used_namespace(std::shared_ptr<namespace_> n)
+namespace_::add_using_directive_namespace(std::shared_ptr<namespace_> n)
 {
-	used_namespaces_.push_back(n);
+	using_directive_namespaces_.push_back(n);
 }
 
 bool

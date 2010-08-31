@@ -30,24 +30,9 @@ operator_function::operator_function
 	parameters_t&& parameters,
 	const bool is_is_inline
 ):
-	impl_("", return_type, std::move(parameters), is_is_inline, false),
+	impl_(simple_function::make_shared("", return_type, std::move(parameters), is_is_inline, false)),
     op_(op)
 {
-}
-
-operator_function::operator_function(operator_function&& rhs):
-	impl_(std::move(rhs.impl_)),
-    op_(rhs.op_)
-{
-}
-
-const operator_function&
-operator_function::operator=(operator_function&& rhs)
-{
-	impl_ = std::move(rhs.impl_);
-    op_ = rhs.op_;
-
-	return *this;
 }
 
 bool
@@ -55,7 +40,7 @@ operator_function::operator==(const operator_function& rhs) const
 {
 	return
 		op_ == rhs.op_ &&
-		impl_ == rhs.impl_
+		*impl_ == *rhs.impl_
 	;
 }
 
@@ -74,49 +59,49 @@ operator_function::get_operator() const
 const type_shared_ptr_variant&
 operator_function::return_type() const
 {
-	return impl_.return_type();
+	return impl_->return_type();
 }
 
 const std::list<operator_function::parameter>&
 operator_function::parameters() const
 {
-	return impl_.parameters();
+	return impl_->parameters();
 }
 
 bool
 operator_function::is_inline() const
 {
-	return impl_.is_inline();
+	return impl_->is_inline();
 }
 
 bool
 operator_function::defined() const
 {
-	return impl_.defined();
+	return impl_->defined();
 }
 
 void
 operator_function::defined(const bool d)
 {
-	impl_.defined(d);
+	impl_->defined(d);
 }
 
 bool
 operator_function::has_declarative_region() const
 {
-	return impl_.has_declarative_region();
+	return impl_->has_declarative_region();
 }
 
 declarative_region_shared_ptr_variant
 operator_function::declarative_region() const
 {
-	return impl_.declarative_region();
+	return impl_->declarative_region();
 }
 
 void
 operator_function::declarative_region(const declarative_region_shared_ptr_variant& decl_region)
 {
-	impl_.declarative_region(decl_region);
+	impl_->declarative_region(decl_region);
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

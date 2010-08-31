@@ -30,13 +30,15 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 class namespace_;
 class class_;
 class simple_function;
+class statement_block;
 
 typedef
 	scalpel::utility::variant
 	<
 		std::shared_ptr<namespace_>,
 		std::shared_ptr<class_>,
-		std::shared_ptr<simple_function>
+		std::shared_ptr<simple_function>,
+		std::shared_ptr<statement_block>
 	>
 	declarative_region_shared_ptr_variant
 ;
@@ -46,7 +48,8 @@ typedef
 	<
 		std::weak_ptr<namespace_>,
 		std::weak_ptr<class_>,
-		std::weak_ptr<simple_function>
+		std::weak_ptr<simple_function>,
+		std::weak_ptr<statement_block>
 	>
 	declarative_region_weak_ptr_variant
 ;

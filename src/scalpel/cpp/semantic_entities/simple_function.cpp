@@ -30,42 +30,46 @@ simple_function::simple_function
 	const std::string& name,
 	const type_shared_ptr_variant& return_type,
 	std::list<parameter>&& parameters,
-	bool is_is_inline,
-	bool is_is_static
+	bool is_inline,
+	bool is_static
 ):
     name_(name),
 	return_type_(return_type),
 	parameters_(std::move(parameters)),
-	is_inline_(is_is_inline),
-	is_static_(is_is_static),
-	defined_(false),
-	body_(std::make_shared<statement_block>())
+	is_inline_(is_inline),
+	is_static_(is_static),
+	defined_(false)
 {
 }
 
-simple_function::simple_function(simple_function&& rhs):
-	name_(std::move(rhs.name_)),
-	return_type_(std::move(rhs.return_type_)),
-	parameters_(std::move(rhs.parameters_)),
-	is_inline_(rhs.is_inline_),
-	is_static_(rhs.is_static_),
-	defined_(rhs.defined_),
-	body_(rhs.body_)
+std::shared_ptr<simple_function>
+simple_function::make_shared
+(
+	const std::string& name,
+	const type_shared_ptr_variant& return_type,
+	parameters_t&& parameters,
+	bool is_inline,
+	bool is_static
+)
 {
-}
+	std::shared_ptr<simple_function> new_simple_function =
+		std::shared_ptr<simple_function>
+		(
+			new simple_function
+			(
+				name,
+				return_type,
+				std::move(parameters),
+				is_inline,
+				is_static
+			)
+		)
+	;
 
-const simple_function&
-simple_function::operator=(simple_function&& rhs)
-{
-	name_ = std::move(rhs.name_);
-	return_type_ = std::move(rhs.return_type_);
-	parameters_ = std::move(rhs.parameters_);
-	is_inline_ = rhs.is_inline_;
-	is_static_ = rhs.is_static_;
-	defined_ = rhs.defined_;
-	body_ = rhs.body_;
+	//set default body
+	new_simple_function->body(std::make_shared<statement_block>());
 
-	return *this;
+	return new_simple_function;
 }
 
 bool
@@ -106,12 +110,6 @@ const std::string&
 simple_function::name() const
 {
     return name_;
-}
-
-bool
-simple_function::is_open_to_outside() const
-{
-	return false;
 }
 
 const type_shared_ptr_variant&
@@ -168,12 +166,6 @@ simple_function::declarative_region(const declarative_region_shared_ptr_variant&
 	declarative_region_member_impl_.declarative_region(decl_region);
 }
 
-const simple_function::declarative_region_shared_ptr_variants_t&
-simple_function::declarative_regions()
-{
-	return declarative_regions_;
-}
-
 std::shared_ptr<statement_block>
 simple_function::body()
 {
@@ -184,6 +176,13 @@ std::shared_ptr<const statement_block>
 simple_function::body() const
 {
 	return body_;
+}
+
+void
+simple_function::body(std::shared_ptr<statement_block> b)
+{
+	body_ = b;
+	body_->declarative_region(shared_from_this());
 }
 
 bool

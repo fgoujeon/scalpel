@@ -304,8 +304,8 @@ class class_::constructor
 		constructor
 		(
 			parameters_t&& parameters,
-			const bool is_is_inline,
-			const bool is_is_explicit
+			const bool is_inline,
+			const bool is_explicit
 		);
 
 		constructor(constructor&& o);
@@ -335,7 +335,7 @@ class class_::constructor
 		declarative_region(const declarative_region_shared_ptr_variant& declarative_region);
 
 	private:
-		semantic_entities::simple_function impl_;
+		std::shared_ptr<semantic_entities::simple_function> impl_;
 		bool is_explicit_;
 		declarative_region_member_impl declarative_region_member_impl_;
 };
@@ -345,7 +345,7 @@ class class_::constructor
 class class_::destructor
 {
 	public:
-		destructor(const bool is_is_inline);
+		destructor(const bool is_inline);
 
 		destructor(destructor&& o);
 
@@ -380,7 +380,7 @@ class class_::conversion_function
 		conversion_function
 		(
 			const type_shared_ptr_variant& return_type,
-			const bool is_is_inline
+			const bool is_inline
 		);
 
 		conversion_function(conversion_function&& o);

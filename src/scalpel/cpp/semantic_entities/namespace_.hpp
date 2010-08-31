@@ -132,7 +132,7 @@ class namespace_:
 		variables() const;
 
 		const weak_namespaces_t&
-		used_namespaces() const;
+		using_directive_namespaces() const;
 
         void
         add_member(std::shared_ptr<namespace_> member);
@@ -150,7 +150,7 @@ class namespace_:
         add_member(std::shared_ptr<variable> member);
 
         void
-        add_used_namespace(std::shared_ptr<namespace_> n);
+        add_using_directive_namespace(std::shared_ptr<namespace_> n);
 
     private:
         std::string name_;
@@ -166,7 +166,7 @@ class namespace_:
         operator_functions_t operator_functions_;
         variables_t variables_;
 
-        weak_namespaces_t used_namespaces_; //using directives
+        weak_namespaces_t using_directive_namespaces_;
 };
 
 bool

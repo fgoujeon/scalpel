@@ -55,6 +55,12 @@ statement_block::variables() const
 	return variables_;
 }
 
+const statement_block::weak_namespaces_t&
+statement_block::using_directive_namespaces() const
+{
+	return using_directive_namespaces_;
+}
+
 void
 statement_block::add(std::shared_ptr<statement_block> o)
 {
@@ -65,6 +71,12 @@ void
 statement_block::add(std::shared_ptr<variable> o)
 {
 	variables_.push_back(o);
+}
+
+void
+statement_block::add_using_directive_namespace(std::shared_ptr<namespace_> n)
+{
+	using_directive_namespaces_.push_back(n);
 }
 
 bool

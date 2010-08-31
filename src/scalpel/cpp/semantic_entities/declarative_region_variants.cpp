@@ -22,6 +22,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "namespace_.hpp"
 #include "class_.hpp"
 #include "simple_function.hpp"
+#include "statement_block.hpp"
+#include <scalpel/utility/extern_strings.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -33,6 +35,12 @@ struct get_name_impl_struct: public utility::static_visitor<const std::string&>
 	operator()(std::shared_ptr<T> t) const
 	{
 		return t->name();
+	}
+
+	const std::string&
+	operator()(std::shared_ptr<statement_block>) const
+	{
+		return utility::extern_strings::empty;
 	}
 };
 get_name_impl_struct get_name_impl;

@@ -722,7 +722,7 @@ semantic_analyzer::create_simple_function
 	std::shared_ptr<DeclarativeRegionT> current_declarative_region
 )
 {
-	return std::make_shared<semantic_entities::simple_function>
+	return semantic_entities::simple_function::make_shared
 	(
 		detail::semantic_analysis::get_identifier(declarator_node).value(),
 		create_type(decl_specifier_seq_node, declarator_node, current_declarative_region),
