@@ -104,21 +104,18 @@ test_case_1()
 		built_in_type_shared_ptrs::int_
 	);
 
-	/*
-	semantic_graph->add(namespace_a);
-	namespace_a->add(variable_a_i);
-	namespace_a->add(struct_a_b);
-	struct_a_b->add(function_a_b_f);
-	namespace_a->add(function_a_g);
-	namespace_a->add(namespace_a_c);
-	namespace_a_c->add(variable_a_c_n);
-	semantic_graph->add(variable_i);
-	semantic_graph->add(variable_j);
-	*/
+	semantic_graph->add_member(namespace_a);
+	namespace_a->add_member(variable_a_i);
+	namespace_a->add_member(struct_a_b);
+	struct_a_b->add_member(function_a_b_f);
+	namespace_a->add_member(function_a_g);
+	namespace_a->add_member(namespace_a_c);
+	namespace_a_c->add_member(variable_a_c_n);
+	semantic_graph->add_member(variable_i);
+	semantic_graph->add_member(variable_j);
 
 
 
-	/*
 	//
 	//name lookup test
 	//
@@ -184,7 +181,6 @@ test_case_1()
 		auto found_entity = find_entities<true, false, variable>(variable_i_syntax_node, function_a_b_f);
 		BOOST_CHECK_EQUAL(found_entity, variable_i);
 	}
-	*/
 }
 
 } //namespace name_lookup

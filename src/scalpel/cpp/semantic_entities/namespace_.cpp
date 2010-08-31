@@ -144,7 +144,7 @@ namespace_::variables() const
 }
 
 void
-namespace_::add(std::shared_ptr<namespace_> member)
+namespace_::add_member(std::shared_ptr<namespace_> member)
 {
 	member->declarative_region(shared_from_this());
     namespaces_.push_back(member);
@@ -152,7 +152,7 @@ namespace_::add(std::shared_ptr<namespace_> member)
 }
 
 void
-namespace_::add(std::shared_ptr<class_> member)
+namespace_::add_member(std::shared_ptr<class_> member)
 {
 	member->declarative_region(shared_from_this());
     classes_.push_back(member);
@@ -160,21 +160,21 @@ namespace_::add(std::shared_ptr<class_> member)
 }
 
 void
-namespace_::add(std::shared_ptr<simple_function> member)
+namespace_::add_member(std::shared_ptr<simple_function> member)
 {
 	member->declarative_region(shared_from_this());
     simple_functions_.push_back(member);
 }
 
 void
-namespace_::add(std::shared_ptr<operator_function> member)
+namespace_::add_member(std::shared_ptr<operator_function> member)
 {
 	member->declarative_region(shared_from_this());
     operator_functions_.push_back(member);
 }
 
 void
-namespace_::add(std::shared_ptr<variable> member)
+namespace_::add_member(std::shared_ptr<variable> member)
 {
 	member->declarative_region(shared_from_this());
     variables_.push_back(member);

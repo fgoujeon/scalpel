@@ -156,7 +156,7 @@ semantic_analyzer::fill_class
 									{
 										if(is_operator_function_declaration(declarator_node)) //operator function
 										{
-											c->add
+											c->add_member
 											(
 												create_operator_function(decl_specifier_seq_node, declarator_node, c),
 												current_access,
@@ -168,7 +168,7 @@ semantic_analyzer::fill_class
 										}
 										else if(is_conversion_function_declaration(declarator_node)) //conversion function
 										{
-											c->add
+											c->add_member
 											(
 												std::make_shared<class_::conversion_function>
 												(
@@ -186,7 +186,7 @@ semantic_analyzer::fill_class
 										{
 											if(!is_destructor_declaration(declarator_node)) //constructor
 											{
-												c->add
+												c->add_member
 												(
 													std::make_shared<class_::constructor>
 													(
@@ -213,7 +213,7 @@ semantic_analyzer::fill_class
 										}
 										else //simple function
 										{
-											c->add
+											c->add_member
 											(
 												create_simple_function(decl_specifier_seq_node, declarator_node, c),
 												current_access,
@@ -226,7 +226,7 @@ semantic_analyzer::fill_class
 									}
 									else //variable
 									{
-										c->add
+										c->add_member
 										(
 											create_variable(decl_specifier_seq_node, declarator_node, c),
 											current_access,
@@ -238,7 +238,7 @@ semantic_analyzer::fill_class
 								{
 									if(is_conversion_function_declaration(declarator_node)) //conversion function
 									{
-										c->add
+										c->add_member
 										(
 											std::make_shared<class_::conversion_function>
 											(
@@ -256,7 +256,7 @@ semantic_analyzer::fill_class
 									{
 										if(!is_destructor_declaration(declarator_node)) //constructor
 										{
-											c->add
+											c->add_member
 											(
 												std::make_shared<class_::constructor>
 												(
@@ -296,7 +296,7 @@ semantic_analyzer::fill_class
 									auto class_specifier_node = *opt_class_specifier_node;
 
 									std::shared_ptr<class_> new_nested_class = create_class(class_specifier_node);
-									c->add
+									c->add_member
 									(
 										new_nested_class,
 										current_access

@@ -137,19 +137,19 @@ class namespace_:
 		variables() const;
 
         void
-        add(std::shared_ptr<namespace_> member);
+        add_member(std::shared_ptr<namespace_> member);
 
         void
-        add(std::shared_ptr<class_> member);
+        add_member(std::shared_ptr<class_> member);
 
         void
-        add(std::shared_ptr<simple_function> member);
+        add_member(std::shared_ptr<simple_function> member);
 
         void
-        add(std::shared_ptr<operator_function> member);
+        add_member(std::shared_ptr<operator_function> member);
 
         void
-        add(std::shared_ptr<variable> member);
+        add_member(std::shared_ptr<variable> member);
 
     private:
         std::string name_;

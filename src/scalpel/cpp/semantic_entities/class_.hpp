@@ -181,10 +181,10 @@ class class_:
         Adds a nested class.
         */
         void
-        add(std::shared_ptr<class_> member, const access acc = PUBLIC);
+        add_member(std::shared_ptr<class_> member, const access acc = PUBLIC);
 
         void
-        add(std::shared_ptr<constructor> member, const access acc = PUBLIC);
+        add_member(std::shared_ptr<constructor> member, const access acc = PUBLIC);
 
 		void
 		set_destructor
@@ -199,7 +199,7 @@ class class_:
 		reset_destructor();
 
         void
-        add
+        add_member
 		(
 			std::shared_ptr<simple_function> member,
 			const access acc = PUBLIC,
@@ -210,7 +210,7 @@ class class_:
 		);
 
         void
-        add
+        add_member
 		(
 			std::shared_ptr<operator_function> member,
 			const access acc = PUBLIC,
@@ -221,7 +221,7 @@ class class_:
 		);
 
         void
-        add
+        add_member
 		(
 			std::shared_ptr<conversion_function> member,
 			const access acc = PUBLIC,
@@ -232,7 +232,7 @@ class class_:
 		);
 
 		void
-		add
+		add_member
 		(
 			std::shared_ptr<variable> member,
 			const access acc = PUBLIC,

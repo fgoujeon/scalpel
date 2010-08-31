@@ -110,20 +110,20 @@ test_case_2()
 		built_in_type_shared_ptrs::void_
 	);
 
-	semantic_graph->add(struct_c0);
-	struct_c0->add(struct_c0_inner);
-	struct_c0_inner->add(function_c0_inner_f);
-	struct_c0->add(function_c0_f);
-	semantic_graph->add(struct_c1base);
-	struct_c1base->add(function_c1base_f);
-	struct_c1base->add(function_c1base_g);
-	semantic_graph->add(struct_c1);
+	semantic_graph->add_member(struct_c0);
+	struct_c0->add_member(struct_c0_inner);
+	struct_c0_inner->add_member(function_c0_inner_f);
+	struct_c0->add_member(function_c0_f);
+	semantic_graph->add_member(struct_c1base);
+	struct_c1base->add_member(function_c1base_f);
+	struct_c1base->add_member(function_c1base_g);
+	semantic_graph->add_member(struct_c1);
 	struct_c1->add_base_class(struct_c1base);
-	struct_c1->add(function_c1_g);
-	semantic_graph->add(struct_c);
+	struct_c1->add_member(function_c1_g);
+	semantic_graph->add_member(struct_c);
 	struct_c->add_base_class(struct_c0);
 	struct_c->add_base_class(struct_c1);
-	struct_c->add(function_g_test);
+	struct_c->add_member(function_g_test);
 
 
 	//

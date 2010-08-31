@@ -184,7 +184,7 @@ class_::add_base_class
 }
 
 void
-class_::add(std::shared_ptr<class_> member, const access acc)
+class_::add_member(std::shared_ptr<class_> member, const access acc)
 {
 	member->declarative_region(shared_from_this());
 	nested_classes_.push_back(member);
@@ -194,7 +194,7 @@ class_::add(std::shared_ptr<class_> member, const access acc)
 }
 
 void
-class_::add(std::shared_ptr<constructor> member, const access acc)
+class_::add_member(std::shared_ptr<constructor> member, const access acc)
 {
 	member->declarative_region(shared_from_this());
     constructors_.push_back(member);
@@ -233,7 +233,7 @@ class_::reset_destructor()
 }
 
 void
-class_::add
+class_::add_member
 (
 	std::shared_ptr<simple_function> member,
 	const access acc,
@@ -255,7 +255,7 @@ class_::add
 }
 
 void
-class_::add
+class_::add_member
 (
 	std::shared_ptr<operator_function> member,
 	const access acc,
@@ -277,7 +277,7 @@ class_::add
 }
 
 void
-class_::add
+class_::add_member
 (
 	std::shared_ptr<conversion_function> member,
 	const access acc,
@@ -299,7 +299,7 @@ class_::add
 }
 
 void
-class_::add
+class_::add_member
 (
 	std::shared_ptr<variable> member,
 	const access acc,

@@ -108,7 +108,7 @@ semantic_analyzer::analyze(const syntax_nodes::class_specifier& class_specifier_
 	using namespace semantic_entities;
 
 	std::shared_ptr<class_> new_class = create_class(class_specifier_node);
-	current_declarative_region->add(new_class);
+	current_declarative_region->add_member(new_class);
 	fill_class(new_class, class_specifier_node);
 }
 
@@ -403,10 +403,10 @@ semantic_analyzer::analyze(const syntax_nodes::namespace_definition& syntax_node
 	//create the namespace entity
 	std::shared_ptr<namespace_> new_namespace = namespace_::make_shared(namespace_name);
 
-	//add the namespace to the current declarative region
-	current_declarative_region->add(new_namespace);
+	//add_member the namespace to the current declarative region
+	current_declarative_region->add_member(new_namespace);
 
-	//add the declarations of the namespace definition in the namespace semantic node
+	//add_member the declarations of the namespace definition in the namespace semantic node
 	const optional_node<declaration_seq>& a_declaration_seq = get_declaration_seq(syntax_node);
 	if(a_declaration_seq)
 	{
@@ -543,7 +543,7 @@ semantic_analyzer::analyze(const syntax_nodes::simple_declaration& simple_declar
 		assert(opt_identifier_node);
 
 		const std::string& class_name = opt_identifier_node->value();
-		current_declarative_region->add(class_::make_shared(class_name));
+		current_declarative_region->add_member(class_::make_shared(class_name));
 	}
 	else if(is_variable_declaration(simple_declaration_node))
 	{
@@ -565,7 +565,7 @@ semantic_analyzer::analyze(const syntax_nodes::simple_declaration& simple_declar
 			++i
 		)
 		{
-			current_declarative_region->add(*i);
+			current_declarative_region->add_member(*i);
 		}
 	}
 	else if(is_simple_function_declaration(simple_declaration_node))
@@ -580,7 +580,7 @@ semantic_analyzer::analyze(const syntax_nodes::simple_declaration& simple_declar
 
 		auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
 		auto declarator_node = get_declarator(init_declarator_list_node.front().main_node());
-		current_declarative_region->add(create_simple_function(decl_specifier_seq_node, declarator_node, current_declarative_region));
+		current_declarative_region->add_member(create_simple_function(decl_specifier_seq_node, declarator_node, current_declarative_region));
 	}
 	else if(is_operator_function_declaration(simple_declaration_node))
 	{
@@ -594,7 +594,7 @@ semantic_analyzer::analyze(const syntax_nodes::simple_declaration& simple_declar
 
 		auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
 		auto declarator_node = get_declarator(init_declarator_list_node.front().main_node());
-		current_declarative_region->add(create_operator_function(decl_specifier_seq_node, declarator_node, current_declarative_region));
+		current_declarative_region->add_member(create_operator_function(decl_specifier_seq_node, declarator_node, current_declarative_region));
 	}
 }
 
@@ -697,7 +697,7 @@ semantic_analyzer::define_simple_function
 	if(!function_entity)
 	{
 		function_entity = new_function;
-		current_declarative_region->add(new_function);
+		current_declarative_region->add_member(new_function);
 	}
 
 	assert(function_entity);
