@@ -71,16 +71,10 @@ namespace_::declarative_region(const declarative_region_shared_ptr_variant& decl
 	declarative_region_member_impl_.declarative_region(decl_region);
 }
 
-bool
-namespace_::is_open_to_outside() const
+const namespace_::open_declarative_region_shared_ptr_variants_t&
+namespace_::open_declarative_regions()
 {
-	return true;
-}
-
-const namespace_::declarative_regions_t&
-namespace_::declarative_regions()
-{
-	return declarative_regions_;
+	return open_declarative_regions_;
 }
 
 namespace_::namespaces_t::range
@@ -143,12 +137,18 @@ namespace_::variables() const
 	return variables_;
 }
 
+const namespace_::weak_namespaces_t&
+namespace_::used_namespaces() const
+{
+	return used_namespaces_;
+}
+
 void
 namespace_::add_member(std::shared_ptr<namespace_> member)
 {
 	member->declarative_region(shared_from_this());
     namespaces_.push_back(member);
-	declarative_regions_.push_back(member);
+	open_declarative_regions_.push_back(member);
 }
 
 void
@@ -156,7 +156,7 @@ namespace_::add_member(std::shared_ptr<class_> member)
 {
 	member->declarative_region(shared_from_this());
     classes_.push_back(member);
-	declarative_regions_.push_back(member);
+	open_declarative_regions_.push_back(member);
 }
 
 void
@@ -178,6 +178,12 @@ namespace_::add_member(std::shared_ptr<variable> member)
 {
 	member->declarative_region(shared_from_this());
     variables_.push_back(member);
+}
+
+void
+namespace_::add_used_namespace(std::shared_ptr<namespace_> n)
+{
+	used_namespaces_.push_back(n);
 }
 
 bool

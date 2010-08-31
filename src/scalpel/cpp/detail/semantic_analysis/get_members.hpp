@@ -31,9 +31,9 @@ template<class EntityT>
 struct get_members_type_traits;
 
 template<>
-struct get_members_type_traits<semantic_entities::declarative_region_shared_ptr_variant>
+struct get_members_type_traits<semantic_entities::open_declarative_region_shared_ptr_variant>
 {
-	typedef const utility::vector<semantic_entities::declarative_region_shared_ptr_variant>& return_type;
+	typedef utility::vector<semantic_entities::open_declarative_region_shared_ptr_variant> return_type;
 };
 
 template<>
@@ -77,18 +77,6 @@ struct get_members_type_traits<semantic_entities::variable>
 template<class MemberT, class ParentT>
 typename get_members_type_traits<MemberT>::return_type
 get_members(ParentT parent);
-
-//visitors for declarative_region_shared_ptr_variant parent
-template<class MemberT>
-struct get_declarative_region_members_impl: public utility::static_visitor<typename get_members_type_traits<MemberT>::return_type>
-{
-	template<class T>
-	typename get_members_type_traits<MemberT>::return_type
-	operator()(std::shared_ptr<T> t) const
-	{
-		return get_members<MemberT>(t);
-	}
-};
 
 }}}} //namespace scalpel::cpp::detail::semantic_analysis
 

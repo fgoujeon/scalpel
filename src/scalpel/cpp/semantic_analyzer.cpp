@@ -99,7 +99,9 @@ semantic_analyzer::fill_class
 
 			//get base class
 			auto nested_identifier_or_template_id_node = get_nested_identifier_or_template_id(base_specifier_node);
-			std::shared_ptr<class_> base_class = name_lookup::find_entities<false, false, class_>(nested_identifier_or_template_id_node, c);
+			std::shared_ptr<class_> base_class =
+				name_lookup::find_entities<false, false, class_>(nested_identifier_or_template_id_node, c)
+			;
 
 			c->add_base_class(base_class, access, is_virtual);
 		}
@@ -107,7 +109,7 @@ semantic_analyzer::fill_class
 
 	//default current_access
 	auto class_key_node = get_class_key(class_head_node);
-	class_::access current_access = class_::access::PUBLIC; //the default current_access is public->..
+	class_::access current_access = class_::access::PUBLIC; //the default current_access is public...
 	if(get<predefined_text_node<str::class_>>(&class_key_node)) //... unless the syntax node represents a class (neither a struct nor a union)
 	{
 		current_access = class_::access::PRIVATE;

@@ -36,7 +36,14 @@ template<>
 const std::string&
 get_name<semantic_entities::declarative_region_shared_ptr_variant>(semantic_entities::declarative_region_shared_ptr_variant entity)
 {
-	return get_name(entity);
+	return semantic_entities::get_name(entity);
+}
+
+template<>
+const std::string&
+get_name<semantic_entities::open_declarative_region_shared_ptr_variant>(semantic_entities::open_declarative_region_shared_ptr_variant entity)
+{
+	return semantic_entities::get_name(entity);
 }
 
 GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(namespace_)

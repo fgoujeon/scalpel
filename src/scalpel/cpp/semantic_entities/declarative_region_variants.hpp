@@ -51,8 +51,21 @@ typedef
 	declarative_region_weak_ptr_variant
 ;
 
+//open declarative regions are those considered during a qualified name lookup
+typedef
+	scalpel::utility::variant
+	<
+		std::shared_ptr<namespace_>,
+		std::shared_ptr<class_>
+	>
+	open_declarative_region_shared_ptr_variant
+;
+
 const std::string&
 get_name(const declarative_region_shared_ptr_variant& var);
+
+const std::string&
+get_name(const open_declarative_region_shared_ptr_variant& var);
 
 bool
 has_declarative_region(const declarative_region_shared_ptr_variant& var);

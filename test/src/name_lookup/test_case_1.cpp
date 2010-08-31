@@ -61,11 +61,6 @@ test_case_1()
 	void A::B::f()
 	{
 		//look from here
-		i;
-		j;
-		C::n;
-		::A::i;
-		::i;
 	}
 	*/
 
@@ -119,16 +114,20 @@ test_case_1()
 	//
 	//name lookup test
 	//
+
+	//find i
 	{
-		auto found_entity = find_entities<true, false, variable>(identifier("i"), function_a_b_f);
+		auto found_entity = find_entities<false, false, variable>(identifier("i"), function_a_b_f);
 		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
 	}
 
+	//find j
 	{
-		auto found_entity = find_entities<true, false, variable>(identifier("j"), function_a_b_f);
+		auto found_entity = find_entities<false, false, variable>(identifier("j"), function_a_b_f);
 		BOOST_CHECK_EQUAL(found_entity, variable_j);
 	}
 
+	//find C::n
 	{
 		nested_identifier_or_template_id variable_a_c_n_syntax_node
 		(
@@ -145,10 +144,11 @@ test_case_1()
 			space(""),
 			identifier("n")
 		);
-		auto found_entity = find_entities<true, false, variable>(variable_a_c_n_syntax_node, function_a_b_f);
+		auto found_entity = find_entities<false, false, variable>(variable_a_c_n_syntax_node, function_a_b_f);
 		BOOST_CHECK_EQUAL(found_entity, variable_a_c_n);
 	}
 
+	//find ::A::i
 	{
 		nested_identifier_or_template_id variable_a_i_syntax_node
 		(
@@ -165,10 +165,11 @@ test_case_1()
 			space(""),
 			identifier("i")
 		);
-		auto found_entity = find_entities<true, false, variable>(variable_a_i_syntax_node, function_a_b_f);
+		auto found_entity = find_entities<false, false, variable>(variable_a_i_syntax_node, function_a_b_f);
 		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
 	}
 
+	//find ::i
 	{
 		nested_identifier_or_template_id variable_i_syntax_node
 		(
@@ -178,8 +179,29 @@ test_case_1()
 			space(""),
 			identifier("i")
 		);
-		auto found_entity = find_entities<true, false, variable>(variable_i_syntax_node, function_a_b_f);
+		auto found_entity = find_entities<false, false, variable>(variable_i_syntax_node, function_a_b_f);
 		BOOST_CHECK_EQUAL(found_entity, variable_i);
+	}
+
+	//find namespace A::C
+	{
+		nested_identifier_or_template_id a_c_syntax_node
+		(
+			optional_node<predefined_text_node<str::double_colon>>(),
+			space(""),
+			nested_name_specifier
+			(
+				identifier("A"),
+				space(""),
+				predefined_text_node<str::double_colon>(),
+				space(""),
+				optional_node<nested_name_specifier_last_part_seq>()
+			),
+			space(""),
+			identifier("C")
+		);
+		auto found_entity = find_entities<false, false, namespace_>(a_c_syntax_node, function_a_b_f);
+		BOOST_CHECK_EQUAL(found_entity, namespace_a_c);
 	}
 }
 

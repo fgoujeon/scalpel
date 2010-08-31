@@ -44,10 +44,14 @@ find_entities
 		return find_entities<Optional, Multiple, EntityT>(identifier_or_template_id_node, current_declarative_region);
 	}
 
-	//Get the last declarative region of the nested name specifier
+	//Find the last declarative region of the nested name specifier
 	//(i.e. Z in "[::]X::Y::Z::").
-	semantic_entities::declarative_region_shared_ptr_variant last_declarative_region =
-		impl::find_declarative_region(nested_identifier_or_template_id_node, current_declarative_region)
+	semantic_entities::open_declarative_region_shared_ptr_variant last_declarative_region =
+		impl::find_declarative_region<semantic_entities::open_declarative_region_shared_ptr_variant>
+		(
+			nested_identifier_or_template_id_node,
+			current_declarative_region
+		)
 	;
 
 	//find entities in the last declarative region
@@ -75,6 +79,131 @@ find_entities
 }
 
 
+
+template<class DeclarativeRegionT>
+typename return_type<false, false, DeclarativeRegionT>::type
+impl::find_declarative_region
+(
+	const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node,
+	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
+)
+{
+	auto opt_nested_name_specifier_node = get_nested_name_specifier(nested_identifier_or_template_id_node);
+
+	if(has_leading_double_colon(nested_identifier_or_template_id_node))
+	{
+		//the first declarative region is in the global namespace
+		semantic_entities::declarative_region_shared_ptr_variant outermost_declarative_region = current_declarative_region;
+		while(has_declarative_region(outermost_declarative_region))
+		{
+			outermost_declarative_region = get_declarative_region(outermost_declarative_region);
+		}
+		std::shared_ptr<semantic_entities::namespace_> global_namespace;
+		try
+		{
+			global_namespace =
+				utility::get<std::shared_ptr<semantic_entities::namespace_>>(outermost_declarative_region)
+			;
+		}
+		catch(...)
+		{
+			throw std::runtime_error("find_declarative_region error: the outermost declarative region isn't a namespace.");
+		}
+
+		if(opt_nested_name_specifier_node)
+		{
+			auto nested_name_specifier_node = *opt_nested_name_specifier_node;
+
+			//find the first declarative region
+			auto identifier_or_template_id_node = get_identifier_or_template_id(nested_name_specifier_node);
+			typename return_type<false, false, DeclarativeRegionT>::type first_declarative_region =
+				find_entities_in_declarative_region<false, false, DeclarativeRegionT>(identifier_or_template_id_node, global_namespace)
+			;
+
+			//find the last declarative region
+			return find_declarative_region<DeclarativeRegionT>(nested_name_specifier_node, first_declarative_region);
+		}
+		else
+		{
+			//both the first and last declarative regions ARE the global namespace
+			return global_namespace;
+		}
+	}
+	else
+	{
+		if(opt_nested_name_specifier_node)
+		{
+			auto nested_name_specifier_node = *opt_nested_name_specifier_node;
+
+			//find the first declarative region
+			auto identifier_or_template_id_node = get_identifier_or_template_id(nested_name_specifier_node);
+			typename return_type<false, false, DeclarativeRegionT>::type first_declarative_region =
+				find_entities<false, false, DeclarativeRegionT>(identifier_or_template_id_node, current_declarative_region)
+			;
+
+			//find the last declarative region
+			return find_declarative_region<DeclarativeRegionT>(nested_name_specifier_node, first_declarative_region);
+		}
+		else
+		{
+			assert(false); //case already handled
+		}
+	}
+}
+
+template<class DeclarativeRegionT>
+typename return_type<false, false, DeclarativeRegionT>::type
+impl::find_declarative_region
+(
+	const syntax_nodes::nested_name_specifier& nested_name_specifier_node,
+	const typename return_type<false, false, DeclarativeRegionT>::type& current_declarative_region
+)
+{
+	if(auto opt_last_part_seq_node = get_last_part_seq(nested_name_specifier_node))
+	{
+		auto last_part_seq_node = *opt_last_part_seq_node;
+
+		typename return_type<false, false, DeclarativeRegionT>::type found_declarative_region = current_declarative_region;
+		for
+		(
+			auto i = last_part_seq_node.begin();
+			i != last_part_seq_node.end();
+			++i
+		)
+		{
+			const syntax_nodes::nested_name_specifier_last_part& last_part_node = i->main_node();
+			if(has_template_keyword(last_part_node))
+			{
+				assert(false); //not implemented yet (template)
+			}
+			else
+			{
+				const syntax_nodes::identifier_or_template_id& identifier_or_template_id_node = get_identifier_or_template_id(last_part_node);
+				if(auto opt_identifier_node = syntax_nodes::get<syntax_nodes::identifier>(&identifier_or_template_id_node))
+				{
+					auto identifier_node = *opt_identifier_node;
+					found_declarative_region =
+						find_entities_from_identifier_in_declarative_region<false, false, DeclarativeRegionT>
+						(
+							identifier_node.value(),
+							found_declarative_region
+						)
+					;
+				}
+				else
+				{
+					assert(false); //not implemented yet (template)
+				}
+			}
+		}
+
+		return found_declarative_region;
+	}
+	else
+	{
+		return current_declarative_region;
+	}
+}
 
 template<bool Optional, bool Multiple, class EntityT>
 typename return_type<Optional, Multiple, EntityT>::type

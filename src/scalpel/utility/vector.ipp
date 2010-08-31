@@ -30,9 +30,23 @@ vector<T>::vector()
 }
 
 template<typename T>
+vector<T>::vector(const vector& o):
+	raw_vector_(o.raw_vector_)
+{
+}
+
+template<typename T>
 vector<T>::vector(vector&& o):
 	raw_vector_(std::move(o.raw_vector_))
 {
+}
+
+template<typename T>
+const vector<T>&
+vector<T>::operator=(const vector& o)
+{
+	raw_vector_ = o.raw_vector_;
+	return *this;
 }
 
 template<typename T>

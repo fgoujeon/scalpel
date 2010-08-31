@@ -1256,7 +1256,16 @@ semantic_analyzer::get_type_info
 			t =
 				std::shared_ptr<const semantic_entities::class_>
 				(
-					detail::semantic_analysis::name_lookup::find_entities<false, false, semantic_entities::class_>(nested_identifier_or_template_id_node, current_declarative_region)
+					detail::semantic_analysis::name_lookup::find_entities
+					<
+						false,
+						false,
+						semantic_entities::class_
+					>
+					(
+						nested_identifier_or_template_id_node,
+						current_declarative_region
+					)
 				)
 			;
 		}

@@ -147,7 +147,7 @@ test_case_2()
 	}
 
 	{
-		auto found_entity = find_entities<true, false, class_>(identifier("inner"), function_g_test);
+		auto found_entity = find_entities<false, false, class_>(identifier("inner"), function_g_test);
 		BOOST_CHECK_EQUAL(found_entity, struct_c0_inner);
 	}
 
@@ -167,7 +167,7 @@ test_case_2()
 			space(""),
 			identifier("f")
 		);
-		auto found_entity = find_entities<true, false, simple_function>(c1base_f_syntax_node, function_g_test);
+		auto found_entity = find_entities<false, false, simple_function>(c1base_f_syntax_node, function_g_test);
 		BOOST_CHECK_EQUAL(found_entity, function_c1base_f);
 	}
 
@@ -187,7 +187,7 @@ test_case_2()
 			space(""),
 			identifier("f")
 		);
-		auto found_entity = find_entities<true, false, simple_function>(global_c0_f_syntax_node, function_g_test);
+		auto found_entity = find_entities<false, false, simple_function>(global_c0_f_syntax_node, function_g_test);
 		BOOST_CHECK_EQUAL(found_entity, function_c0_f);
 	}
 
@@ -226,7 +226,7 @@ test_case_2()
 			identifier("f")
 		);
 
-		auto found_entity = find_entities<true, false, simple_function>(c0_inner_f_syntax_node, function_g_test);
+		auto found_entity = find_entities<false, false, simple_function>(c0_inner_f_syntax_node, function_g_test);
 		BOOST_CHECK_EQUAL(found_entity, function_c0_inner_f);
 	}
 }

@@ -65,7 +65,7 @@ class class_:
 		;
 
 		typedef utility::vector<member_t> members_t;
-		typedef utility::vector<declarative_region_shared_ptr_variant> declarative_region_shared_ptr_variants_t;
+		typedef utility::vector<open_declarative_region_shared_ptr_variant> open_declarative_region_shared_ptr_variants_t;
 		typedef utility::vector<std::shared_ptr<class_>> classes_t;
 		typedef utility::vector<std::shared_ptr<constructor>> constructors_t;
 		typedef utility::vector<std::shared_ptr<simple_function>> simple_functions_t;
@@ -112,14 +112,8 @@ class class_:
 		void
 		declarative_region(const declarative_region_shared_ptr_variant& declarative_region);
 
-        /**
-        @return true
-        */
-		bool
-		is_open_to_outside() const;
-
-		const declarative_region_shared_ptr_variants_t&
-		declarative_regions();
+		const open_declarative_region_shared_ptr_variants_t&
+		open_declarative_regions();
 
 		classes_t::range
 		base_classes();
@@ -270,7 +264,9 @@ class class_:
 		declarative_region_member_impl declarative_region_member_impl_;
 
 		//polymorphic containers
-		declarative_region_shared_ptr_variants_t declarative_regions_;
+		open_declarative_region_shared_ptr_variants_t open_declarative_regions_;
+
+		//member information
 		std::map<std::shared_ptr<const class_>, access> base_class_access_;
 		classes_t virtual_base_classes_;
 		std::map<const member_t, access> member_access_;
@@ -280,7 +276,7 @@ class class_:
 		members_t pure_member_functions_;
 		std::vector<std::shared_ptr<const variable>> mutable_member_variables_;
 
-		//containers
+		//members
 		classes_t base_classes_;
 		classes_t nested_classes_;
 		constructors_t constructors_;

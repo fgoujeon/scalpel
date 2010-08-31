@@ -46,12 +46,12 @@ class vector
 
 		vector();
 
-		vector(const vector& o) = delete;
+		vector(const vector& o);
 
 		vector(vector&& o);
 
 		const vector&
-		operator=(const vector& o) = delete;
+		operator=(const vector& o);
 
 		const vector&
 		operator=(vector&& o);

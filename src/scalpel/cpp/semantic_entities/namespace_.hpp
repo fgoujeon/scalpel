@@ -45,8 +45,9 @@ class namespace_:
 	public boost::noncopyable
 {
     public:
-		typedef utility::vector<declarative_region_shared_ptr_variant> declarative_regions_t;
+		typedef utility::vector<open_declarative_region_shared_ptr_variant> open_declarative_region_shared_ptr_variants_t;
 		typedef utility::vector<std::shared_ptr<namespace_>> namespaces_t;
+		typedef utility::vector<std::weak_ptr<namespace_>> weak_namespaces_t;
 		typedef utility::vector<std::shared_ptr<class_>> classes_t;
 		typedef utility::vector<std::shared_ptr<simple_function>> simple_functions_t;
 		typedef utility::vector<std::shared_ptr<operator_function>> operator_functions_t;
@@ -97,14 +98,8 @@ class namespace_:
 		void
 		declarative_region(const declarative_region_shared_ptr_variant& declarative_region);
 
-        /**
-        @return true
-        */
-		bool
-		is_open_to_outside() const;
-
-		const declarative_regions_t&
-		declarative_regions();
+		const open_declarative_region_shared_ptr_variants_t&
+		open_declarative_regions();
 
 		namespaces_t::range
 		namespaces();
@@ -136,6 +131,9 @@ class namespace_:
 		const variables_t&
 		variables() const;
 
+		const weak_namespaces_t&
+		used_namespaces() const;
+
         void
         add_member(std::shared_ptr<namespace_> member);
 
@@ -151,19 +149,24 @@ class namespace_:
         void
         add_member(std::shared_ptr<variable> member);
 
+        void
+        add_used_namespace(std::shared_ptr<namespace_> n);
+
     private:
         std::string name_;
 		declarative_region_member_impl declarative_region_member_impl_;
 
 		//polymorphic containers
-		declarative_regions_t declarative_regions_;
+		open_declarative_region_shared_ptr_variants_t open_declarative_regions_;
 
-		//containers
+		//members
         namespaces_t namespaces_;
         classes_t classes_;
         simple_functions_t simple_functions_;
         operator_functions_t operator_functions_;
         variables_t variables_;
+
+        weak_namespaces_t used_namespaces_; //using directives
 };
 
 bool

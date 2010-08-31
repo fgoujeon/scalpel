@@ -74,7 +74,7 @@ struct return_type<Optional, true, utility::variant<EntitiesT...>>
 /**
 Find entities corresponding to the given nested identifier
 (or nested template-id),
-from the given declarative region (qualified name lookup)
+from the given declarative region (qualified name lookup).
 */
 template<bool Optional, bool Multiple, class EntityT>
 typename return_type<Optional, Multiple, EntityT>::type
@@ -86,7 +86,7 @@ find_entities
 
 /**
 Find entities corresponding to the given identifier_or_template_id node,
-from the given declarative region (unqualified name lookup)
+from the given declarative region (unqualified name lookup).
 */
 template<bool Optional, bool Multiple, class EntityT>
 typename return_type<Optional, Multiple, EntityT>::type
@@ -122,10 +122,16 @@ class impl
 	Find the declarative region corresponding to the given
 	nested-identifier-or-template-id syntax node
 	(i.e. Z in the expression "X::Y::Z::"),
-	from the given declarative region
+	from the given declarative region.
+	DeclarativeRegionT determines both the return type and the type of the
+	intermediate declarative region(s) (X and Y in the example).
 	*/
+	//TODO nested_identifier_or_template_id provides too much information.
+	//A syntax node type containing an optional '::' and a nested-name-specifier
+	//would have been more appropriate.
+	template<class DeclarativeRegionT>
 	static
-	semantic_entities::declarative_region_shared_ptr_variant
+	typename return_type<false, false, DeclarativeRegionT>::type
 	find_declarative_region
 	(
 		const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node,
@@ -135,14 +141,17 @@ class impl
 	/**
 	Find the declarative region corresponding to the given nested-name-specifier
 	syntax node (i.e. Z in the expression "X::Y::Z::"),
-	from the given declarative region (where X must be declared)
+	from the given declarative region (where X must be declared).
+	DeclarativeRegionT determines both the return type and the type of the
+	intermediate declarative region(s) (X and Y in the example).
 	*/
+	template<class DeclarativeRegionT>
 	static
-	semantic_entities::declarative_region_shared_ptr_variant
+	typename return_type<false, false, DeclarativeRegionT>::type
 	find_declarative_region
 	(
 		const syntax_nodes::nested_name_specifier& nested_name_specifier_node,
-		const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
+		const typename return_type<false, false, DeclarativeRegionT>::type& current_declarative_region
 	);
 
 	/**

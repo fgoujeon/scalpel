@@ -43,6 +43,12 @@ get_name(const declarative_region_shared_ptr_variant& var)
 	return utility::apply_visitor(get_name_impl, var);
 }
 
+const std::string&
+get_name(const open_declarative_region_shared_ptr_variant& var)
+{
+	return utility::apply_visitor(get_name_impl, var);
+}
+
 
 
 struct has_declarative_region_impl_struct: public utility::static_visitor<bool>
