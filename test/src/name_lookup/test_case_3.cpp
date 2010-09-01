@@ -37,123 +37,94 @@ test_case_3()
 	//
 	//construction of the semantic graph of the following source code:
 	/*
-	int x;
-
-	namespace y
-	{
-		void f(float);
-		void h(int);
-	}
-
-	namespace z
-	{
-		void h(double);
-	}
-
 	namespace a
 	{
-		using namespace y;
-		void f(int);
-		void g(int);
 		int i;
+		namespace b
+		{
+			namespace c
+			{
+				int i;
+			}
+			using namespace a::b::c;
+			void f1()
+			{
+				i = 5; // OK, c::i visible in b and hides a::i
+			}
+		}
+		namespace d
+		{
+			void f2()
+			{
+				using namespace b::c;
+				i = 5; // ambiguous, b::c::i or a::i?
+			}
+		}
+		void f3()
+		{
+			i = 5; // uses a::i
+		}
 	}
-
-	namespace b
+	void f4()
 	{
-		using namespace z;
-		void f(char);
-		int i;
-	}
-
-	namespace ab
-	{
-		using namespace a;
-		using namespace b;
-		void g();
-	}
-
-	void test()
-	{
-		//look from here
+		i = 5; // ill-formed; neither i is visible
 	}
 	*/
 
+	//namespaces
 	auto semantic_graph = scalpel::cpp::semantic_graph::make_shared();
-	auto namespace_y = namespace_::make_shared("y");
-	auto namespace_z = namespace_::make_shared("z");
 	auto namespace_a = namespace_::make_shared("a");
 	auto namespace_b = namespace_::make_shared("b");
-	auto namespace_ab = namespace_::make_shared("ab");
-	auto function_y_f = simple_function::make_shared
+	auto namespace_c = namespace_::make_shared("c");
+	auto namespace_d = namespace_::make_shared("d");
+
+	//functions
+	auto function_a_b_f1 = simple_function::make_shared
 	(
-		"f",
+		"f1",
 		built_in_type_shared_ptrs::void_
 	);
-	auto function_y_h = simple_function::make_shared
+	auto function_a_d_f2 = simple_function::make_shared
 	(
-		"h",
+		"f2",
 		built_in_type_shared_ptrs::void_
 	);
-	auto function_z_h = simple_function::make_shared
+	auto function_a_f3 = simple_function::make_shared
 	(
-		"h",
+		"f3",
 		built_in_type_shared_ptrs::void_
 	);
-	auto function_a_f = simple_function::make_shared
+	auto function_f4 = simple_function::make_shared
 	(
-		"f",
+		"f4",
 		built_in_type_shared_ptrs::void_
 	);
-	auto function_a_g = simple_function::make_shared
-	(
-		"g",
-		built_in_type_shared_ptrs::void_
-	);
+
+	//variables
 	auto variable_a_i = std::make_shared<variable>
 	(
 		"i",
 		built_in_type_shared_ptrs::int_
 	);
-	auto function_b_f = simple_function::make_shared
-	(
-		"f",
-		built_in_type_shared_ptrs::void_
-	);
-	auto variable_b_i = std::make_shared<variable>
+	auto variable_a_b_c_i = std::make_shared<variable>
 	(
 		"i",
 		built_in_type_shared_ptrs::int_
 	);
-	auto function_ab_g = simple_function::make_shared
-	(
-		"g",
-		built_in_type_shared_ptrs::void_
-	);
-	auto function_test = simple_function::make_shared
-	(
-		"test",
-		built_in_type_shared_ptrs::void_
-	);
 
-	semantic_graph->add_member(namespace_y);
-	namespace_y->add_member(function_y_f);
-	namespace_y->add_member(function_y_h);
-	semantic_graph->add_member(namespace_z);
-	namespace_z->add_member(function_z_h);
+	//assembling
 	semantic_graph->add_member(namespace_a);
-	namespace_a->add_using_directive_namespace(namespace_y);
-	namespace_a->add_member(function_a_f);
-	namespace_a->add_member(function_a_g);
 	namespace_a->add_member(variable_a_i);
-	semantic_graph->add_member(namespace_b);
-	namespace_b->add_using_directive_namespace(namespace_z);
-	namespace_b->add_member(function_b_f);
-	namespace_b->add_member(variable_b_i);
-	semantic_graph->add_member(namespace_ab);
-	namespace_ab->add_using_directive_namespace(namespace_a);
-	namespace_ab->add_using_directive_namespace(namespace_b);
-	namespace_ab->add_member(function_ab_g);
-	semantic_graph->add_member(function_test);
+	namespace_a->add_member(namespace_b);
+	namespace_b->add_member(namespace_c);
+	namespace_c->add_member(variable_a_b_c_i);
+	namespace_b->add_using_directive_namespace(namespace_c);
+	namespace_b->add_member(function_a_b_f1);
+	namespace_a->add_member(namespace_d);
+	namespace_d->add_member(function_a_d_f2);
+	function_a_d_f2->body()->add_using_directive_namespace(namespace_c);
+	namespace_a->add_member(function_a_f3);
+	semantic_graph->add_member(function_f4);
 
 
 
@@ -161,51 +132,33 @@ test_case_3()
 	//name lookup test
 	//
 
-	//find ab::g
+	//look up i from a::b::f1(), must find a::b::c::i
 	{
-		nested_identifier_or_template_id ab_g_syntax_node
-		(
-			optional_node<predefined_text_node<str::double_colon>>(),
-			space(""),
-			nested_name_specifier
-			(
-				identifier("ab"),
-				space(""),
-				predefined_text_node<str::double_colon>(),
-				space(""),
-				optional_node<nested_name_specifier_last_part_seq>()
-			),
-			space(""),
-			identifier("g")
-		);
-		auto found_entity = find_entities<false, false, simple_function>(ab_g_syntax_node, function_test);
-		BOOST_CHECK_EQUAL(found_entity, function_ab_g);
+		auto found_entity = find_entities<false, false, variable>(identifier("i"), function_a_b_f1->body());
+		BOOST_CHECK_EQUAL(found_entity, variable_a_b_c_i);
 	}
 
-	//find ab::f
+	//look up i from a::d::f2(), must find a::i and a::b::c::i
 	{
-		nested_identifier_or_template_id ab_f_syntax_node
-		(
-			optional_node<predefined_text_node<str::double_colon>>(),
-			space(""),
-			nested_name_specifier
-			(
-				identifier("ab"),
-				space(""),
-				predefined_text_node<str::double_colon>(),
-				space(""),
-				optional_node<nested_name_specifier_last_part_seq>()
-			),
-			space(""),
-			identifier("f")
-		);
-		auto found_entities = find_entities<false, true, simple_function>(ab_f_syntax_node, function_test);
+		auto found_entities = find_entities<false, true, variable>(identifier("i"), function_a_d_f2->body());
 		BOOST_CHECK_EQUAL(found_entities.size(), 2);
 		if(found_entities.size() == 2)
 		{
-			BOOST_CHECK_EQUAL(found_entities.front(), function_a_f);
-			BOOST_CHECK_EQUAL(found_entities.back(), function_b_f);
+			BOOST_CHECK_EQUAL(found_entities.front(), variable_a_i);
+			BOOST_CHECK_EQUAL(found_entities.back(), variable_a_b_c_i);
 		}
+	}
+
+	//look up i from a::f3(), must find a::i
+	{
+		auto found_entity = find_entities<false, false, variable>(identifier("i"), function_a_f3->body());
+		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
+	}
+
+	//look up i from f4(), must find nothing
+	{
+		auto found_entity = find_entities<true, false, variable>(identifier("i"), function_f4->body());
+		BOOST_CHECK(!found_entity);
 	}
 }
 

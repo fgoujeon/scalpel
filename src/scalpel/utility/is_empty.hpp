@@ -31,7 +31,12 @@ namespace scalpel { namespace utility
 template<class T>
 inline
 bool
-is_empty(const vector<std::shared_ptr<T>>& container);
+is_empty(const std::vector<T>& container);
+
+template<class T>
+inline
+bool
+is_empty(const vector<T>& container);
 
 template<class T>
 inline

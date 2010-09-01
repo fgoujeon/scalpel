@@ -56,19 +56,25 @@ namespace_::name() const
 bool
 namespace_::has_declarative_region() const
 {
-	return declarative_region_member_impl_.has_declarative_region();
+	return !declarative_region_.expired();
 }
 
-declarative_region_shared_ptr_variant
+std::shared_ptr<namespace_>
+namespace_::declarative_region()
+{
+	return std::shared_ptr<namespace_>(declarative_region_);
+}
+
+std::shared_ptr<const namespace_>
 namespace_::declarative_region() const
 {
-	return declarative_region_member_impl_.declarative_region();
+	return std::shared_ptr<const namespace_>(declarative_region_);
 }
 
 void
-namespace_::declarative_region(const declarative_region_shared_ptr_variant& decl_region)
+namespace_::declarative_region(std::shared_ptr<namespace_> declarative_region)
 {
-	declarative_region_member_impl_.declarative_region(decl_region);
+	declarative_region_ = declarative_region;
 }
 
 const namespace_::open_declarative_region_shared_ptr_variants_t&

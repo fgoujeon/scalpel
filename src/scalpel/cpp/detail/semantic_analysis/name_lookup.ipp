@@ -21,6 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_NAME_LOOKUP_IPP
 #define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_NAME_LOOKUP_IPP
 
+#include <map>
+
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace name_lookup
 {
 
@@ -56,7 +58,7 @@ find_entities
 
 	//find entities in the last declarative region
 	auto identifier_or_template_id_node = get_identifier_or_template_id(nested_identifier_or_template_id_node);
-	return impl::find_entities_in_declarative_region<Optional, Multiple, EntityT>(identifier_or_template_id_node, last_declarative_region);
+	return impl::find_local_entities<Optional, Multiple, EntityT>(identifier_or_template_id_node, last_declarative_region);
 }
 
 template<bool Optional, bool Multiple, class EntityT>
@@ -117,7 +119,7 @@ impl::find_declarative_region
 			//find the first declarative region
 			auto identifier_or_template_id_node = get_identifier_or_template_id(nested_name_specifier_node);
 			typename return_type<false, false, DeclarativeRegionT>::type first_declarative_region =
-				find_entities_in_declarative_region<false, false, DeclarativeRegionT>(identifier_or_template_id_node, global_namespace)
+				find_local_entities<false, false, DeclarativeRegionT>(identifier_or_template_id_node, global_namespace)
 			;
 
 			//find the last declarative region
@@ -183,7 +185,7 @@ impl::find_declarative_region
 				{
 					auto identifier_node = *opt_identifier_node;
 					found_declarative_region =
-						find_entities_from_identifier_in_declarative_region<false, false, DeclarativeRegionT>
+						find_local_entities_from_identifier<false, false, DeclarativeRegionT>
 						(
 							identifier_node.value(),
 							found_declarative_region
@@ -213,30 +215,95 @@ impl::find_entities_from_identifier
 	semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 )
 {
-	typename return_type<true, Multiple, EntityT>::type found_entities;
+	//used for applying using directives
+	std::map
+	<
+		std::shared_ptr<const semantic_entities::namespace_>,
+		std::vector<std::shared_ptr<semantic_entities::namespace_>>
+	> namespace_associations;
 
-	//find entities from current to outermost declarative regions
-	//(until global namespace)
+	//indirectly returned object
+	typename return_type<true, true, EntityT>::type found_entities;
+
+	//find entities from current to outermost declarative region
+	//(i.e. the global namespace)
 	while(true)
 	{
-		//find entities in this declarative region
-		found_entities =
-			find_entities_from_identifier_in_declarative_region<true, Multiple, EntityT>(name, current_declarative_region)
-		;
+		//apply using directives (only for namespaces and statement blocks)
+		const utility::vector<std::weak_ptr<semantic_entities::namespace_>>* using_directive_namespaces = 0;
+		if(auto opt_namespace_ptr = utility::get<std::shared_ptr<semantic_entities::namespace_>>(&current_declarative_region))
+			using_directive_namespaces = &((*opt_namespace_ptr)->using_directive_namespaces());
+		else if(auto opt_statement_block_ptr = utility::get<std::shared_ptr<semantic_entities::statement_block>>(&current_declarative_region))
+			using_directive_namespaces = &((*opt_statement_block_ptr)->using_directive_namespaces());
+		if(using_directive_namespaces)
+		{
+			//for each using directive's namespace...
+			for
+			(
+				auto i = using_directive_namespaces->begin();
+				i != using_directive_namespaces->end();
+				++i
+			)
+			{
+				std::shared_ptr<semantic_entities::namespace_> current_using_directive_namespace(*i);
+
+				//find the common enclosing namespace
+				const std::shared_ptr<semantic_entities::namespace_> common_enclosing_namespace =
+					find_common_enclosing_namespace(current_declarative_region, current_using_directive_namespace)
+				;
+
+				//associate the using directive's namespace to the common enclosing namespace
+				namespace_associations[common_enclosing_namespace].push_back(current_using_directive_namespace);
+			}
+		}
+
+		//find entities in this declarative region only
+		add_to_result
+		(
+			found_entities,
+			find_local_entities_from_identifier<true, Multiple, EntityT>(name, current_declarative_region)
+		);
+
+		//find entities in the associated namespaces (only for namespaces)
+		//and add them to the previously found entities
+		if(auto opt_namespace_ptr = utility::get<std::shared_ptr<semantic_entities::namespace_>>(&current_declarative_region))
+		{
+			auto associated_namespaces_it = namespace_associations.find(*opt_namespace_ptr);
+			if(associated_namespaces_it != namespace_associations.end())
+			{
+				const std::vector<std::shared_ptr<semantic_entities::namespace_>>& associated_namespaces = associated_namespaces_it->second;
+
+				//for each associated namespace
+				for(auto i = associated_namespaces.begin(); i != associated_namespaces.end(); ++i)
+				{
+					add_to_result
+					(
+						found_entities,
+						find_local_entities_from_identifier<true, Multiple, EntityT>(name, *i)
+					);
+				}
+			}
+		}
+
+		//stop lookup if entities have been found
 		if(!utility::is_empty(found_entities)) break;
 
-		//only for classes...
+		//find entities in the base classes (only for classes)
 		if(auto opt_class_ptr = utility::get<std::shared_ptr<semantic_entities::class_>>(&current_declarative_region))
 		{
 			std::shared_ptr<semantic_entities::class_> class_ptr = *opt_class_ptr;
 
-			//find entities in the base classes of that class
-			found_entities =
+			add_to_result
+			(
+				found_entities,
 				find_entities_in_base_classes<true, Multiple, EntityT>(name, class_ptr->base_classes())
-			;
+			);
+
+			//stop lookup if entities have been found
 			if(!utility::is_empty(found_entities)) break;
 		}
 
+		//iterate to the enclosing declarative region
 		if(!has_declarative_region(current_declarative_region)) break;
 		current_declarative_region = get_declarative_region(current_declarative_region);
 	}
@@ -246,7 +313,7 @@ impl::find_entities_from_identifier
 
 template<bool Optional, bool Multiple, class EntityT, class DeclarativeRegionT>
 typename return_type<Optional, Multiple, EntityT>::type
-impl::find_entities_in_declarative_region
+impl::find_local_entities
 (
 	const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
 	DeclarativeRegionT& current_declarative_region
@@ -255,7 +322,7 @@ impl::find_entities_in_declarative_region
 	if(auto opt_identifier_node = syntax_nodes::get<syntax_nodes::identifier>(&identifier_or_template_id))
 	{
 		auto identifier_node = *opt_identifier_node;
-		return find_entities_from_identifier_in_declarative_region<Optional, Multiple, EntityT>(identifier_node.value(), current_declarative_region);
+		return find_local_entities_from_identifier<Optional, Multiple, EntityT>(identifier_node.value(), current_declarative_region);
 	}
 	else
 	{
@@ -265,7 +332,7 @@ impl::find_entities_in_declarative_region
 
 template<bool Optional, bool Multiple, class EntityT, class DeclarativeRegionT>
 typename return_type<Optional, Multiple, EntityT>::type
-impl::find_entities_from_identifier_in_declarative_region
+impl::find_local_entities_from_identifier
 (
 	const std::string& name,
 	DeclarativeRegionT& current_declarative_region
@@ -303,7 +370,7 @@ impl::find_entities_in_base_classes
 
 		//find entities in the current declarative region (i.e. current class)
 		typename return_type<Optional, Multiple, EntityT>::type current_class_found_entities =
-			find_entities_from_identifier_in_declarative_region<Optional, Multiple, EntityT>(name, current_class)
+			find_local_entities_from_identifier<Optional, Multiple, EntityT>(name, current_class)
 		;
 
 		//entities found?
@@ -333,34 +400,34 @@ impl::find_entities_in_base_classes
 
 template<class T, class T2>
 void
-impl::add_to_result(T& result, T2& entity)
+impl::add_to_result(T& result, const T2& entity)
 {
 	result = entity;
 }
 
 template<class T, class T2>
 void
-impl::add_to_result(utility::vector<T>& result, T2& entity)
+impl::add_to_result(std::vector<T>& result, const T2& entity)
 {
 	if(!utility::is_empty(entity)) result.push_back(entity);
 }
 
 template<class T, class T2>
 void
-impl::add_to_result(utility::vector<T>& result, boost::optional<T2>& entity)
+impl::add_to_result(std::vector<T>& result, const boost::optional<T2>& entity)
 {
 	if(!utility::is_empty(entity)) result.push_back(*entity);
 }
 
 template<class T, class T2>
 void
-impl::add_to_result(utility::vector<T>& result, utility::vector<T2>& entities)
+impl::add_to_result(std::vector<T>& result, const std::vector<T2>& entities)
 {
 	std::copy
 	(
 		entities.begin(),
 		entities.end(),
-		std::back_insert_iterator<utility::vector<T>>(result)
+		std::back_insert_iterator<std::vector<T>>(result)
 	);
 }
 
@@ -446,15 +513,15 @@ impl::return_result<false, false, utility::variant<EntitiesT...>>::result(typena
 }
 
 template<class EntityT>
-utility::vector<std::shared_ptr<EntityT>>&
-impl::return_result<true, true, EntityT>::result(utility::vector<std::shared_ptr<EntityT>>& result)
+std::vector<std::shared_ptr<EntityT>>&
+impl::return_result<true, true, EntityT>::result(std::vector<std::shared_ptr<EntityT>>& result)
 {
 	return result;
 }
 
 template<class EntityT>
-utility::vector<std::shared_ptr<EntityT>>&
-impl::return_result<false, true, EntityT>::result(utility::vector<std::shared_ptr<EntityT>>& result)
+std::vector<std::shared_ptr<EntityT>>&
+impl::return_result<false, true, EntityT>::result(std::vector<std::shared_ptr<EntityT>>& result)
 {
 	if(result.empty())
 		throw std::runtime_error("no entity found");

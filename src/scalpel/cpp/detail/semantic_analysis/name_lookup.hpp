@@ -27,11 +27,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <scalpel/cpp/syntax_tree.hpp>
 #include <scalpel/utility/is_empty.hpp>
 #include <scalpel/utility/variant.hpp>
-#include <scalpel/utility/vector.hpp>
 #include <boost/optional.hpp>
-#include <sstream>
-#include <memory>
 #include <string>
+#include <vector>
+#include <memory>
+#include <sstream>
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace name_lookup
 {
@@ -60,13 +60,13 @@ struct return_type<false, false, utility::variant<EntitiesT...>>
 template<bool Optional, class EntityT>
 struct return_type<Optional, true, EntityT>
 {
-	typedef utility::vector<std::shared_ptr<EntityT>> type;
+	typedef std::vector<std::shared_ptr<EntityT>> type;
 };
 
 template<bool Optional, class... EntitiesT>
 struct return_type<Optional, true, utility::variant<EntitiesT...>>
 {
-	typedef utility::vector<utility::variant<EntitiesT...>> type;
+	typedef std::vector<utility::variant<EntitiesT...>> type;
 };
 
 
@@ -169,24 +169,24 @@ class impl
 
 	/**
 	Find entities corresponding to the given identifier_or_template_id node,
-	in the given declarative region only
+	in the given declarative region only.
 	*/
 	template<bool Optional, bool Multiple, class EntityT, class DeclarativeRegionT>
 	static
 	typename return_type<Optional, Multiple, EntityT>::type
-	find_entities_in_declarative_region
+	find_local_entities
 	(
 		const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
 		DeclarativeRegionT& current_declarative_region
 	);
 
 	/**
-	Find entities of the given name, in the given declarative region only
+	Find entities of the given name, in the given declarative region only.
 	*/
 	template<bool Optional, bool Multiple, class EntityT, class DeclarativeRegionT>
 	static
 	typename return_type<Optional, Multiple, EntityT>::type
-	find_entities_from_identifier_in_declarative_region
+	find_local_entities_from_identifier
 	(
 		const std::string& name,
 		DeclarativeRegionT& current_declarative_region
@@ -204,35 +204,44 @@ class impl
 		utility::vector<std::shared_ptr<semantic_entities::class_>>::range base_classes
 	);
 
-
+	/**
+	Find the nearest enclosing namespace containing both a and b.
+	*/
+	static
+	std::shared_ptr<semantic_entities::namespace_>
+	find_common_enclosing_namespace
+	(
+		const semantic_entities::declarative_region_shared_ptr_variant& a,
+		const std::shared_ptr<semantic_entities::namespace_> b
+	);
 
 	//result = entity
 	template<class T, class T2>
 	inline
 	static
 	void
-	add_to_result(T& result, T2& entity);
+	add_to_result(T& result, const T2& entity);
 
 	//add entity to result if entity isn't empty
 	template<class T, class T2>
 	inline
 	static
 	void
-	add_to_result(utility::vector<T>& result, T2& entity);
+	add_to_result(std::vector<T>& result, const T2& entity);
 
 	//add entity to result if entity isn't empty
 	template<class T, class T2>
 	inline
 	static
 	void
-	add_to_result(utility::vector<T>& result, boost::optional<T2>& entity);
+	add_to_result(std::vector<T>& result, const boost::optional<T2>& entity);
 
 	//append entities to result
 	template<class T, class T2>
 	inline
 	static
 	void
-	add_to_result(utility::vector<T>& result, utility::vector<T2>& entities);
+	add_to_result(std::vector<T>& result, const std::vector<T2>& entities);
 
 
 
@@ -293,8 +302,8 @@ class impl
 	{
 		//return result;
 		static
-		utility::vector<std::shared_ptr<EntityT>>&
-		result(utility::vector<std::shared_ptr<EntityT>>& result);
+		std::vector<std::shared_ptr<EntityT>>&
+		result(std::vector<std::shared_ptr<EntityT>>& result);
 	};
 
 	template<class EntityT>
@@ -303,8 +312,8 @@ class impl
 		//return result;
 		//throw an exception if the result is empty
 		static
-		utility::vector<std::shared_ptr<EntityT>>&
-		result(utility::vector<std::shared_ptr<EntityT>>& result);
+		std::vector<std::shared_ptr<EntityT>>&
+		result(std::vector<std::shared_ptr<EntityT>>& result);
 	};
 };
 
