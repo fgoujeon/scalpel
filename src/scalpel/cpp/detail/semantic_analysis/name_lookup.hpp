@@ -118,6 +118,16 @@ class impl
 		const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
 	);
 
+	//used for applying using directives
+	typedef
+		std::map
+		<
+			std::shared_ptr<const semantic_entities::namespace_>,
+			std::vector<std::shared_ptr<semantic_entities::namespace_>>
+		>
+		namespace_association_map
+	;
+
 	/**
 	Find the declarative region corresponding to the given
 	nested-identifier-or-template-id syntax node
@@ -202,6 +212,15 @@ class impl
 	(
 		const std::string& name,
 		utility::vector<std::shared_ptr<semantic_entities::class_>>::range base_classes
+	);
+
+	static
+	void
+	apply_using_directives
+	(
+		const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region,
+		const utility::vector<std::weak_ptr<semantic_entities::namespace_>>& using_directive_namespaces,
+		namespace_association_map& namespace_associations
 	);
 
 	/**

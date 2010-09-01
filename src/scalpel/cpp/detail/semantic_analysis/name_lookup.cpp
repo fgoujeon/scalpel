@@ -19,9 +19,46 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "name_lookup.hpp"
+#include <stdexcept>
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace name_lookup
 {
+
+void
+impl::apply_using_directives
+(
+	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region,
+	const utility::vector<std::weak_ptr<semantic_entities::namespace_>>& using_directive_namespaces,
+	namespace_association_map& namespace_associations
+)
+{
+	//for each using directive's namespace...
+	for
+	(
+		auto i = using_directive_namespaces.begin();
+		i != using_directive_namespaces.end();
+		++i
+	)
+	{
+		std::shared_ptr<semantic_entities::namespace_> current_using_directive_namespace(*i);
+
+		//find the common enclosing namespace
+		const std::shared_ptr<semantic_entities::namespace_> common_enclosing_namespace =
+			find_common_enclosing_namespace(current_declarative_region, current_using_directive_namespace)
+		;
+
+		//associate the using directive's namespace to the common enclosing namespace
+		namespace_associations[common_enclosing_namespace].push_back(current_using_directive_namespace);
+
+		//proceed recursively with the using directive's namespaces of the using directive's namespace
+		apply_using_directives
+		(
+			current_declarative_region,
+			current_using_directive_namespace->using_directive_namespaces(),
+			namespace_associations
+		);
+	}
+}
 
 std::shared_ptr<semantic_entities::namespace_>
 impl::find_common_enclosing_namespace
@@ -56,7 +93,7 @@ impl::find_common_enclosing_namespace
 		current_declarative_region_a = get_declarative_region(current_declarative_region_a);
 	}
 
-	throw "";
+	throw std::runtime_error("find_common_enclosing_namespace() error: the given declarative regions don't have a common namespace");
 }
 
 }}}}} //namespace scalpel::cpp::detail::semantic_analysis::name_lookup

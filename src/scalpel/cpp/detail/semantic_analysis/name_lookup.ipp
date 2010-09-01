@@ -216,11 +216,7 @@ impl::find_entities_from_identifier
 )
 {
 	//used for applying using directives
-	std::map
-	<
-		std::shared_ptr<const semantic_entities::namespace_>,
-		std::vector<std::shared_ptr<semantic_entities::namespace_>>
-	> namespace_associations;
+	namespace_association_map namespace_associations;
 
 	//indirectly returned object
 	typename return_type<true, true, EntityT>::type found_entities;
@@ -230,32 +226,20 @@ impl::find_entities_from_identifier
 	while(true)
 	{
 		//apply using directives (only for namespaces and statement blocks)
-		const utility::vector<std::weak_ptr<semantic_entities::namespace_>>* using_directive_namespaces = 0;
 		if(auto opt_namespace_ptr = utility::get<std::shared_ptr<semantic_entities::namespace_>>(&current_declarative_region))
-			using_directive_namespaces = &((*opt_namespace_ptr)->using_directive_namespaces());
-		else if(auto opt_statement_block_ptr = utility::get<std::shared_ptr<semantic_entities::statement_block>>(&current_declarative_region))
-			using_directive_namespaces = &((*opt_statement_block_ptr)->using_directive_namespaces());
-		if(using_directive_namespaces)
-		{
-			//for each using directive's namespace...
-			for
+			apply_using_directives
 			(
-				auto i = using_directive_namespaces->begin();
-				i != using_directive_namespaces->end();
-				++i
-			)
-			{
-				std::shared_ptr<semantic_entities::namespace_> current_using_directive_namespace(*i);
-
-				//find the common enclosing namespace
-				const std::shared_ptr<semantic_entities::namespace_> common_enclosing_namespace =
-					find_common_enclosing_namespace(current_declarative_region, current_using_directive_namespace)
-				;
-
-				//associate the using directive's namespace to the common enclosing namespace
-				namespace_associations[common_enclosing_namespace].push_back(current_using_directive_namespace);
-			}
-		}
+				current_declarative_region,
+				(*opt_namespace_ptr)->using_directive_namespaces(),
+				namespace_associations
+			);
+		else if(auto opt_statement_block_ptr = utility::get<std::shared_ptr<semantic_entities::statement_block>>(&current_declarative_region))
+			apply_using_directives
+			(
+				current_declarative_region,
+				(*opt_statement_block_ptr)->using_directive_namespaces(),
+				namespace_associations
+			);
 
 		//find entities in this declarative region only
 		add_to_result
