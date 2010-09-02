@@ -101,14 +101,8 @@ test_case_4()
 		BOOST_CHECK_EQUAL(found_entities.size(), 2);
 		if(found_entities.size() == 2)
 		{
-			BOOST_CHECK
-			(
-				std::find(found_entities.begin(), found_entities.end(), variable_m_i) != found_entities.end()
-			);
-			BOOST_CHECK
-			(
-				std::find(found_entities.begin(), found_entities.end(), variable_n_i) != found_entities.end()
-			);
+			BOOST_CHECK(found_entities.find(variable_m_i) != found_entities.end());
+			BOOST_CHECK(found_entities.find(variable_n_i) != found_entities.end());
 		}
 	}
 }

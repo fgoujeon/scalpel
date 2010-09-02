@@ -327,16 +327,19 @@ impl::find_in_namespace_from_identifier
 	std::shared_ptr<semantic_entities::namespace_> current_namespace
 )
 {
-	typename return_type<EntityT, true, Multiple>::type found_entities;
-
 	//look up in the current namespace
-	found_entities = find_local_entities_from_identifier<EntityT, true, Multiple>(name, current_namespace);
+	{
+		typename return_type<EntityT, true, Multiple>::type found_entities =
+			find_local_entities_from_identifier<EntityT, true, Multiple>(name, current_namespace)
+		;
 
-	//if entities have been found, return them
-	if(!utility::is_empty(found_entities))
-		return std::move(return_result<EntityT, Optional, Multiple>::result(found_entities));
+		//if entities have been found, return them
+		if(!utility::is_empty(found_entities))
+			return std::move(return_result<EntityT, Optional, Multiple>::result(found_entities));
+	}
 
-	//otherwise, look up in using directive's namespaces
+	//if no entity is found, look up in using directive's namespaces
+	typename return_type<EntityT, true, true>::type found_entities;
 	for
 	(
 		auto i = current_namespace->using_directive_namespaces().begin();
@@ -456,27 +459,27 @@ impl::add_to_result(T& result, const U& entity)
 
 template<class T, class U>
 void
-impl::add_to_result(std::vector<T>& result, const U& entity)
+impl::add_to_result(std::set<T>& result, const U& entity)
 {
-	if(!utility::is_empty(entity)) result.push_back(entity);
+	if(!utility::is_empty(entity)) result.insert(entity);
 }
 
 template<class T, class U>
 void
-impl::add_to_result(std::vector<T>& result, const boost::optional<U>& entity)
+impl::add_to_result(std::set<T>& result, const boost::optional<U>& entity)
 {
-	if(!utility::is_empty(entity)) result.push_back(*entity);
+	if(!utility::is_empty(entity)) result.insert(*entity);
 }
 
 template<class T, class U>
 void
-impl::add_to_result(std::vector<T>& result, const std::vector<U>& entities)
+impl::add_to_result(std::set<T>& result, const std::set<U>& entities)
 {
 	std::copy
 	(
 		entities.begin(),
 		entities.end(),
-		std::back_insert_iterator<std::vector<T>>(result)
+		std::insert_iterator<std::set<T>>(result, result.end())
 	);
 }
 
@@ -492,7 +495,7 @@ impl::return_result<EntityT, true, false>::result(typename return_type<EntityT, 
 	}
 	else if(result.size() == 1)
 	{
-		return result.front();
+		return *result.begin();
 	}
 	else
 	{
@@ -517,7 +520,7 @@ impl::return_result<EntityT, false, false>::result(typename return_type<EntityT,
 	}
 	else if(result.size() == 1)
 	{
-		return result.front();
+		return *result.begin();
 	}
 	else
 	{
@@ -544,7 +547,7 @@ impl::return_result<utility::variant<EntitiesT...>, false, false>::result(typena
 	}
 	else if(result.size() == 1)
 	{
-		return result.front();
+		return *result.begin();
 	}
 	else
 	{
@@ -562,15 +565,15 @@ impl::return_result<utility::variant<EntitiesT...>, false, false>::result(typena
 }
 
 template<class EntityT>
-std::vector<std::shared_ptr<EntityT>>&
-impl::return_result<EntityT, true, true>::result(std::vector<std::shared_ptr<EntityT>>& result)
+std::set<std::shared_ptr<EntityT>>&
+impl::return_result<EntityT, true, true>::result(std::set<std::shared_ptr<EntityT>>& result)
 {
 	return result;
 }
 
 template<class EntityT>
-std::vector<std::shared_ptr<EntityT>>&
-impl::return_result<EntityT, false, true>::result(std::vector<std::shared_ptr<EntityT>>& result)
+std::set<std::shared_ptr<EntityT>>&
+impl::return_result<EntityT, false, true>::result(std::set<std::shared_ptr<EntityT>>& result)
 {
 	if(result.empty())
 		throw std::runtime_error("no entity found");

@@ -299,14 +299,8 @@ test_case_6()
 		BOOST_CHECK_EQUAL(found_entities.size(), 2);
 		if(found_entities.size() == 2)
 		{
-			BOOST_CHECK
-			(
-				std::find(found_entities.begin(), found_entities.end(), function_y_h) != found_entities.end()
-			);
-			BOOST_CHECK
-			(
-				std::find(found_entities.begin(), found_entities.end(), function_z_h) != found_entities.end()
-			);
+			BOOST_CHECK(found_entities.find(function_y_h) != found_entities.end());
+			BOOST_CHECK(found_entities.find(function_z_h) != found_entities.end());
 		}
 	}
 }

@@ -130,20 +130,18 @@ test_case_2()
 	//name lookup test
 	//
 	{
-		auto found_entities = find<simple_function, true, true>(identifier("f"), function_g_test);
+		auto found_entities = find<simple_function, false, true>(identifier("f"), function_g_test);
 		BOOST_CHECK_EQUAL(found_entities.size(), 2);
 		if(found_entities.size() == 2)
 		{
-			BOOST_CHECK_EQUAL(found_entities.front(), function_c0_f);
-			BOOST_CHECK_EQUAL(found_entities.back(), function_c1base_f);
+			BOOST_CHECK(found_entities.find(function_c0_f) != found_entities.end());
+			BOOST_CHECK(found_entities.find(function_c1base_f) != found_entities.end());
 		}
 	}
 
 	{
-		auto found_entities = find<simple_function, true, true>(identifier("g"), function_g_test);
-		BOOST_CHECK_EQUAL(found_entities.size(), 1);
-		if(found_entities.size() == 1)
-			BOOST_CHECK_EQUAL(found_entities.front(), function_c1_g);
+		auto found_entity = find<simple_function, false, false>(identifier("g"), function_g_test);
+		BOOST_CHECK_EQUAL(found_entity, function_c1_g);
 	}
 
 	{

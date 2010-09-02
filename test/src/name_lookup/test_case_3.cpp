@@ -148,8 +148,8 @@ test_case_3()
 		BOOST_CHECK_EQUAL(found_entities.size(), 2);
 		if(found_entities.size() == 2)
 		{
-			BOOST_CHECK_EQUAL(found_entities.front(), variable_a_i);
-			BOOST_CHECK_EQUAL(found_entities.back(), variable_a_b_c_i);
+			BOOST_CHECK(found_entities.find(variable_a_i) != found_entities.end());
+			BOOST_CHECK(found_entities.find(variable_a_b_c_i) != found_entities.end());
 		}
 	}
 

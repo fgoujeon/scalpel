@@ -29,6 +29,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <scalpel/utility/variant.hpp>
 #include <boost/optional.hpp>
 #include <string>
+#include <set>
 #include <vector>
 #include <memory>
 #include <sstream>
@@ -60,13 +61,13 @@ struct return_type<utility::variant<EntitiesT...>, false, false>
 template<class EntityT, bool Optional>
 struct return_type<EntityT, Optional, true>
 {
-	typedef std::vector<std::shared_ptr<EntityT>> type;
+	typedef std::set<std::shared_ptr<EntityT>> type;
 };
 
 template<class... EntitiesT, bool Optional>
 struct return_type<utility::variant<EntitiesT...>, Optional, true>
 {
-	typedef std::vector<utility::variant<EntitiesT...>> type;
+	typedef std::set<utility::variant<EntitiesT...>> type;
 };
 
 
@@ -278,21 +279,21 @@ class impl
 	inline
 	static
 	void
-	add_to_result(std::vector<T>& result, const U& entity);
+	add_to_result(std::set<T>& result, const U& entity);
 
 	//add entity to result if entity isn't empty
 	template<class T, class U>
 	inline
 	static
 	void
-	add_to_result(std::vector<T>& result, const boost::optional<U>& entity);
+	add_to_result(std::set<T>& result, const boost::optional<U>& entity);
 
 	//append entities to result
 	template<class T, class U>
 	inline
 	static
 	void
-	add_to_result(std::vector<T>& result, const std::vector<U>& entities);
+	add_to_result(std::set<T>& result, const std::set<U>& entities);
 
 
 
@@ -302,8 +303,8 @@ class impl
 	template<class EntityT>
 	struct return_result<EntityT, true, false>
 	{
-		//return the only one element of the vector
-		//throw an exception if there's more than one element in the vector
+		//return the only one element of the set
+		//throw an exception if there's more than one element in the set
 		static
 		typename return_type<EntityT, true, false>::type
 		result(typename return_type<EntityT, true, true>::type& result);
@@ -317,9 +318,9 @@ class impl
 	template<class EntityT>
 	struct return_result<EntityT, false, false>
 	{
-		//return the only one element of the vector
+		//return the only one element of the set
 		//throw an exception if there's zero or more than one element in
-		//the vector
+		//the set
 		static
 		typename return_type<EntityT, false, false>::type
 		result(typename return_type<EntityT, false, true>::type& result);
@@ -334,9 +335,9 @@ class impl
 	template<class... EntitiesT>
 	struct return_result<utility::variant<EntitiesT...>, false, false>
 	{
-		//return the only one element of the vector
+		//return the only one element of the set
 		//throw an exception if there's zero or more than one element in
-		//the vector
+		//the set
 		static
 		typename return_type<utility::variant<EntitiesT...>, false, false>::type
 		result(typename return_type<utility::variant<EntitiesT...>, false, true>::type& result);
@@ -353,8 +354,8 @@ class impl
 	{
 		//return result;
 		static
-		std::vector<std::shared_ptr<EntityT>>&
-		result(std::vector<std::shared_ptr<EntityT>>& result);
+		std::set<std::shared_ptr<EntityT>>&
+		result(std::set<std::shared_ptr<EntityT>>& result);
 	};
 
 	template<class EntityT>
@@ -363,8 +364,8 @@ class impl
 		//return result;
 		//throw an exception if the result is empty
 		static
-		std::vector<std::shared_ptr<EntityT>>&
-		result(std::vector<std::shared_ptr<EntityT>>& result);
+		std::set<std::shared_ptr<EntityT>>&
+		result(std::set<std::shared_ptr<EntityT>>& result);
 	};
 };
 

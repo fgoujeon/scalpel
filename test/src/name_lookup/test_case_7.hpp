@@ -18,48 +18,16 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_UTILITY_IS_EMPTY_IPP
-#define SCALPEL_UTILITY_IS_EMPTY_IPP
+#ifndef NAME_LOOKUP_TEST_CASE_7_HPP
+#define NAME_LOOKUP_TEST_CASE_7_HPP
 
-namespace scalpel { namespace utility
+namespace name_lookup
 {
 
-template<class T>
-bool
-is_empty(const std::vector<T>& container)
-{
-	return container.empty();
-}
+void
+test_case_7();
 
-template<class T>
-bool
-is_empty(const std::set<T>& container)
-{
-	return container.empty();
-}
-
-template<class T>
-bool
-is_empty(const vector<T>& container)
-{
-	return container.empty();
-}
-
-template<class T>
-bool
-is_empty(const std::shared_ptr<T>& container)
-{
-	return !container;
-}
-
-template<class T>
-bool
-is_empty(const boost::optional<T>& container)
-{
-	return !container;
-}
-
-}} //namespace scalpel::utility
+} //namespace name_lookup
 
 #endif
 

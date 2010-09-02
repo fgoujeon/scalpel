@@ -23,6 +23,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "vector.hpp"
 #include <boost/optional.hpp>
+#include <vector>
+#include <set>
 #include <memory>
 
 namespace scalpel { namespace utility
@@ -32,6 +34,11 @@ template<class T>
 inline
 bool
 is_empty(const std::vector<T>& container);
+
+template<class T>
+inline
+bool
+is_empty(const std::set<T>& container);
 
 template<class T>
 inline
