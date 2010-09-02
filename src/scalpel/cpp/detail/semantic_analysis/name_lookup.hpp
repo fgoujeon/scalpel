@@ -76,13 +76,18 @@ struct return_type<utility::variant<EntitiesT...>, Optional, true>
 Find entities corresponding to the given nested identifier
 (or nested template-id),
 from the given declarative region (qualified name lookup).
+apply_using_directives_for_unqualified_id_part determines whether the name
+lookup of the unqualified-id part of the given nested identifier must apply
+using directives. It must be set to false when looking up the declaration of a
+function we're going to define.
 */
 template<class EntityT, bool Optional, bool Multiple>
 typename return_type<EntityT, Optional, Multiple>::type
 find
 (
 	const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node,
-	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
+	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region,
+	const bool apply_using_directives_for_unqualified_id_part = true
 );
 
 /**
@@ -107,7 +112,8 @@ class impl
 	find
 	(
 		const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node,
-		const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
+		const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region,
+		const bool apply_using_directives_for_unqualified_id_part = true
 	);
 
 	template<class EntityT, bool Optional, bool Multiple>

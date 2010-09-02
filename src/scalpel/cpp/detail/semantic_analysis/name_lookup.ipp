@@ -31,7 +31,8 @@ typename return_type<EntityT, Optional, Multiple>::type
 find
 (
 	const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node,
-	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
+	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region,
+	const bool apply_using_directives_for_unqualified_id_part
 )
 {
 	//Check whether the given qualified name is really qualified.
@@ -58,10 +59,12 @@ find
 
 	//find entities in the last declarative region
 	auto identifier_or_template_id_node = get_identifier_or_template_id(nested_identifier_or_template_id_node);
-	if(auto opt_namespace_ptr = utility::get<std::shared_ptr<semantic_entities::namespace_>>(&last_declarative_region))
-		return impl::find_in_namespace<EntityT, Optional, Multiple>(identifier_or_template_id_node, *opt_namespace_ptr);
-	else
-		return impl::find_local_entities<EntityT, Optional, Multiple>(identifier_or_template_id_node, last_declarative_region);
+	if(apply_using_directives_for_unqualified_id_part)
+	{
+		if(auto opt_namespace_ptr = utility::get<std::shared_ptr<semantic_entities::namespace_>>(&last_declarative_region))
+			return impl::find_in_namespace<EntityT, Optional, Multiple>(identifier_or_template_id_node, *opt_namespace_ptr);
+	}
+	return impl::find_local_entities<EntityT, Optional, Multiple>(identifier_or_template_id_node, last_declarative_region);
 }
 
 template<class EntityT, bool Optional, bool Multiple>
