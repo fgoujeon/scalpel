@@ -72,32 +72,32 @@ test_case_5()
 	auto variable_a_i = std::make_shared<variable>
 	(
 		"i",
-		built_in_type_shared_ptrs::int_
+		fundamental_type_shared_ptrs::int_
 	);
 	auto variable_b_i = std::make_shared<variable>
 	(
 		"i",
-		built_in_type_shared_ptrs::int_
+		fundamental_type_shared_ptrs::int_
 	);
 	auto variable_b_j = std::make_shared<variable>
 	(
 		"j",
-		built_in_type_shared_ptrs::int_
+		fundamental_type_shared_ptrs::int_
 	);
 	auto variable_c_k = std::make_shared<variable>
 	(
 		"k",
-		built_in_type_shared_ptrs::int_
+		fundamental_type_shared_ptrs::int_
 	);
 	auto variable_d_j = std::make_shared<variable>
 	(
 		"j",
-		built_in_type_shared_ptrs::int_
+		fundamental_type_shared_ptrs::int_
 	);
 	auto variable_d_k = std::make_shared<variable>
 	(
 		"k",
-		built_in_type_shared_ptrs::int_
+		fundamental_type_shared_ptrs::int_
 	);
 
 	//assembling

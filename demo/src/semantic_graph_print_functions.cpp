@@ -33,9 +33,9 @@ print_type
 	const unsigned int indent_level
 )
 {
-	if(auto opt_type_ptr = scalpel::utility::get<std::shared_ptr<const built_in_type>>(&n))
+	if(auto opt_type_ptr = scalpel::utility::get<std::shared_ptr<const fundamental_type>>(&n))
 	{
-		std::cout << indent(indent_level) << "<built_in_type type=\"";
+		std::cout << indent(indent_level) << "<fundamental_type type=\"";
 		print(*opt_type_ptr);
 	   	std::cout << "\"/>\n";
 	}
@@ -78,33 +78,33 @@ print_type
 void
 print
 (
-	std::shared_ptr<const built_in_type> built_in_t
+	std::shared_ptr<const fundamental_type> built_in_t
 )
 {
-	std::vector<std::pair<std::shared_ptr<const built_in_type>, const char*>> built_in_types_table =
+	std::vector<std::pair<std::shared_ptr<const fundamental_type>, const char*>> fundamental_types_table =
 	{
-		{built_in_type_shared_ptrs::bool_, "bool"},
-		{built_in_type_shared_ptrs::char_, "char"},
-		{built_in_type_shared_ptrs::double_, "double"},
-		{built_in_type_shared_ptrs::float_, "float"},
-		{built_in_type_shared_ptrs::int_, "int"},
-		{built_in_type_shared_ptrs::long_double, "long double"},
-		{built_in_type_shared_ptrs::long_int, "long int"},
-		{built_in_type_shared_ptrs::long_long_int, "long long int"},
-		{built_in_type_shared_ptrs::short_int, "short int"},
-		{built_in_type_shared_ptrs::unsigned_char, "unsigned char"},
-		{built_in_type_shared_ptrs::unsigned_int, "unsigned int"},
-		{built_in_type_shared_ptrs::unsigned_long_int, "unsigned long int"},
-		{built_in_type_shared_ptrs::unsigned_long_long_int, "unsigned long long int"},
-		{built_in_type_shared_ptrs::unsigned_short_int, "unsigned short int"},
-		{built_in_type_shared_ptrs::void_, "void"},
-		{built_in_type_shared_ptrs::wchar_t_, "wchar_t"}
+		{fundamental_type_shared_ptrs::bool_, "bool"},
+		{fundamental_type_shared_ptrs::char_, "char"},
+		{fundamental_type_shared_ptrs::double_, "double"},
+		{fundamental_type_shared_ptrs::float_, "float"},
+		{fundamental_type_shared_ptrs::int_, "int"},
+		{fundamental_type_shared_ptrs::long_double, "long double"},
+		{fundamental_type_shared_ptrs::long_int, "long int"},
+		{fundamental_type_shared_ptrs::long_long_int, "long long int"},
+		{fundamental_type_shared_ptrs::short_int, "short int"},
+		{fundamental_type_shared_ptrs::unsigned_char, "unsigned char"},
+		{fundamental_type_shared_ptrs::unsigned_int, "unsigned int"},
+		{fundamental_type_shared_ptrs::unsigned_long_int, "unsigned long int"},
+		{fundamental_type_shared_ptrs::unsigned_long_long_int, "unsigned long long int"},
+		{fundamental_type_shared_ptrs::unsigned_short_int, "unsigned short int"},
+		{fundamental_type_shared_ptrs::void_, "void"},
+		{fundamental_type_shared_ptrs::wchar_t_, "wchar_t"}
 	};
 
-	for(auto i = built_in_types_table.begin(); i != built_in_types_table.end(); ++i)
+	for(auto i = fundamental_types_table.begin(); i != fundamental_types_table.end(); ++i)
 	{
 		auto pair = *i;
-		std::shared_ptr<const built_in_type> t = pair.first;
+		std::shared_ptr<const fundamental_type> t = pair.first;
 		const char* type_str = pair.second;
 
 		if(t == built_in_t)

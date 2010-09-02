@@ -18,16 +18,16 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_BUILT_IN_TYPE_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_BUILT_IN_TYPE_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_FUNDAMENTAL_TYPE_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_FUNDAMENTAL_TYPE_HPP
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 /**
-Represents a C++ built in type.
+Represents a C++ fundamental type.
 */
-class built_in_type
+class fundamental_type
 {
 	private:
 		enum type_enum
@@ -50,44 +50,44 @@ class built_in_type
 			WCHAR_T
 		};
 
-		built_in_type(type_enum t);
+		fundamental_type(type_enum t);
 
 		//
 		//disable copy and move
 		//
-		built_in_type(const built_in_type&) = delete;
+		fundamental_type(const fundamental_type&) = delete;
 
-		built_in_type(built_in_type&&) = delete;
+		fundamental_type(fundamental_type&&) = delete;
 
-		const built_in_type&
-		operator=(const built_in_type&) = delete;
+		const fundamental_type&
+		operator=(const fundamental_type&) = delete;
 
-		const built_in_type&
-		operator=(built_in_type&&) = delete;
+		const fundamental_type&
+		operator=(fundamental_type&&) = delete;
 
 	public:
 		bool
-		operator==(const built_in_type& o) const;
+		operator==(const fundamental_type& o) const;
 
 		bool
-		operator!=(const built_in_type& o) const;
+		operator!=(const fundamental_type& o) const;
 
-		static const built_in_type bool_;
-		static const built_in_type char_;
-		static const built_in_type double_;
-		static const built_in_type float_;
-		static const built_in_type int_;
-		static const built_in_type long_double;
-		static const built_in_type long_int;
-		static const built_in_type long_long_int;
-		static const built_in_type short_int;
-		static const built_in_type unsigned_char;
-		static const built_in_type unsigned_int;
-		static const built_in_type unsigned_long_int;
-		static const built_in_type unsigned_long_long_int;
-		static const built_in_type unsigned_short_int;
-		static const built_in_type void_;
-		static const built_in_type wchar_t_;
+		static const fundamental_type bool_;
+		static const fundamental_type char_;
+		static const fundamental_type double_;
+		static const fundamental_type float_;
+		static const fundamental_type int_;
+		static const fundamental_type long_double;
+		static const fundamental_type long_int;
+		static const fundamental_type long_long_int;
+		static const fundamental_type short_int;
+		static const fundamental_type unsigned_char;
+		static const fundamental_type unsigned_int;
+		static const fundamental_type unsigned_long_int;
+		static const fundamental_type unsigned_long_long_int;
+		static const fundamental_type unsigned_short_int;
+		static const fundamental_type void_;
+		static const fundamental_type wchar_t_;
 
 	private:
 		type_enum type_;

@@ -44,7 +44,7 @@ print_type
 void
 print
 (
-	std::shared_ptr<const built_in_type>
+	std::shared_ptr<const fundamental_type>
 );
 
 void

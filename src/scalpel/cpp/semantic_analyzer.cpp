@@ -404,8 +404,8 @@ semantic_analyzer::decorate_type
 	return return_type;
 }
 
-std::shared_ptr<const semantic_entities::built_in_type>
-semantic_analyzer::get_built_in_type
+std::shared_ptr<const semantic_entities::fundamental_type>
+semantic_analyzer::get_fundamental_type
 (
 	const bool bool_type,
 	const bool char_type,
@@ -437,7 +437,7 @@ semantic_analyzer::get_built_in_type
 		!wchar_t_type
 	)
 	{
-		return built_in_type_shared_ptrs::bool_;
+		return fundamental_type_shared_ptrs::bool_;
 	}
 	else if
 	(
@@ -455,7 +455,7 @@ semantic_analyzer::get_built_in_type
 		!wchar_t_type
 	)
 	{
-		return built_in_type_shared_ptrs::char_;
+		return fundamental_type_shared_ptrs::char_;
 	}
 	else if
 	(
@@ -473,7 +473,7 @@ semantic_analyzer::get_built_in_type
 		!wchar_t_type
 	)
 	{
-		return built_in_type_shared_ptrs::double_;
+		return fundamental_type_shared_ptrs::double_;
 	}
 	else if
 	(
@@ -491,7 +491,7 @@ semantic_analyzer::get_built_in_type
 		!wchar_t_type
 	)
 	{
-		return built_in_type_shared_ptrs::float_;
+		return fundamental_type_shared_ptrs::float_;
 	}
 	else if
 	(
@@ -508,7 +508,7 @@ semantic_analyzer::get_built_in_type
 		!wchar_t_type
 	)
 	{
-		return built_in_type_shared_ptrs::int_;
+		return fundamental_type_shared_ptrs::int_;
 	}
 	else if
 	(
@@ -526,7 +526,7 @@ semantic_analyzer::get_built_in_type
 		!wchar_t_type
 	)
 	{
-		return built_in_type_shared_ptrs::long_double;
+		return fundamental_type_shared_ptrs::long_double;
 	}
 	else if
 	(
@@ -544,7 +544,7 @@ semantic_analyzer::get_built_in_type
 		!wchar_t_type
 	)
 	{
-		return built_in_type_shared_ptrs::long_int;
+		return fundamental_type_shared_ptrs::long_int;
 	}
 	else if
 	(
@@ -562,7 +562,7 @@ semantic_analyzer::get_built_in_type
 		!wchar_t_type
 	)
 	{
-		return built_in_type_shared_ptrs::long_long_int;
+		return fundamental_type_shared_ptrs::long_long_int;
 	}
 	else if
 	(
@@ -580,7 +580,7 @@ semantic_analyzer::get_built_in_type
 		!wchar_t_type
 	)
 	{
-		return built_in_type_shared_ptrs::short_int;
+		return fundamental_type_shared_ptrs::short_int;
 	}
 	else if
 	(
@@ -598,7 +598,7 @@ semantic_analyzer::get_built_in_type
 		!wchar_t_type
 	)
 	{
-		return built_in_type_shared_ptrs::unsigned_char;
+		return fundamental_type_shared_ptrs::unsigned_char;
 	}
 	else if
 	(
@@ -616,7 +616,7 @@ semantic_analyzer::get_built_in_type
 		!wchar_t_type
 	)
 	{
-		return built_in_type_shared_ptrs::unsigned_int;
+		return fundamental_type_shared_ptrs::unsigned_int;
 	}
 	else if
 	(
@@ -634,7 +634,7 @@ semantic_analyzer::get_built_in_type
 		!wchar_t_type
 	)
 	{
-		return built_in_type_shared_ptrs::unsigned_long_int;
+		return fundamental_type_shared_ptrs::unsigned_long_int;
 	}
 	else if
 	(
@@ -652,7 +652,7 @@ semantic_analyzer::get_built_in_type
 		!wchar_t_type
 	)
 	{
-		return built_in_type_shared_ptrs::unsigned_long_long_int;
+		return fundamental_type_shared_ptrs::unsigned_long_long_int;
 	}
 	else if
 	(
@@ -670,7 +670,7 @@ semantic_analyzer::get_built_in_type
 		!wchar_t_type
 	)
 	{
-		return built_in_type_shared_ptrs::unsigned_short_int;
+		return fundamental_type_shared_ptrs::unsigned_short_int;
 	}
 	else if
 	(
@@ -688,7 +688,7 @@ semantic_analyzer::get_built_in_type
 		!wchar_t_type
 	)
 	{
-		return built_in_type_shared_ptrs::void_;
+		return fundamental_type_shared_ptrs::void_;
 	}
 	else if
 	(
@@ -706,7 +706,7 @@ semantic_analyzer::get_built_in_type
 		wchar_t_type
 	)
 	{
-		return built_in_type_shared_ptrs::wchar_t_;
+		return fundamental_type_shared_ptrs::wchar_t_;
 	}
 
 	throw std::runtime_error("Incorrect built-in type");

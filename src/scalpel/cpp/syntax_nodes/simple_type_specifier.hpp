@@ -23,7 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "nested_identifier_or_template_id.hpp"
 #include "simple_template_type_specifier.hpp"
-#include "built_in_type_specifier.hpp"
+#include "fundamental_type_specifier.hpp"
 #include "common.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
@@ -34,7 +34,7 @@ typedef
 	<
         nested_identifier_or_template_id,
         simple_template_type_specifier,
-        built_in_type_specifier
+        fundamental_type_specifier
 	>
 	simple_type_specifier
 ;

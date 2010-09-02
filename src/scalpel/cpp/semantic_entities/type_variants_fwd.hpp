@@ -27,7 +27,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 class array;
-class built_in_type;
+class fundamental_type;
 class class_;
 class const_;
 class pointer;
@@ -38,7 +38,7 @@ typedef
 	utility::variant
 	<
 		std::shared_ptr<const array>,
-		std::shared_ptr<const built_in_type>,
+		std::shared_ptr<const fundamental_type>,
 		std::shared_ptr<const class_>,
 		std::shared_ptr<const const_>,
 		std::shared_ptr<const pointer>,

@@ -213,7 +213,7 @@ class grammar
             TYPE_SPECIFIER,
             SIMPLE_TYPE_SPECIFIER,
             SIMPLE_TEMPLATE_TYPE_SPECIFIER,
-            BUILT_IN_TYPE_SPECIFIER,
+            FUNDAMENTAL_TYPE_SPECIFIER,
             IDENTIFIER_OR_TEMPLATE_ID,
             ELABORATED_TYPE_SPECIFIER,
 			CLASS_ELABORATED_SPECIFIER,
@@ -536,7 +536,7 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TYPE_SPECIFIER>> type_specifier;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::SIMPLE_TYPE_SPECIFIER>> simple_type_specifier;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::SIMPLE_TEMPLATE_TYPE_SPECIFIER>> simple_template_type_specifier;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::BUILT_IN_TYPE_SPECIFIER>> built_in_type_specifier;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::FUNDAMENTAL_TYPE_SPECIFIER>> fundamental_type_specifier;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ELABORATED_TYPE_SPECIFIER>> elaborated_type_specifier;
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CLASS_ELABORATED_SPECIFIER>> class_elaborated_specifier;
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ENUM_ELABORATED_SPECIFIER>> enum_elaborated_specifier;

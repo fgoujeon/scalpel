@@ -22,13 +22,13 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_VARIANTS_HPP
 
 #include "array.hpp"
-#include "built_in_type.hpp"
+#include "fundamental_type.hpp"
 #include "class_.hpp"
 #include "const_.hpp"
 #include "pointer.hpp"
 #include "reference.hpp"
 #include "volatile_.hpp"
-#include "type_variants.hpp"
+#include "type_variants_fwd.hpp"
 
 #endif
 

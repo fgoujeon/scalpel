@@ -82,34 +82,34 @@ test_case_3()
 	auto function_a_b_f1 = simple_function::make_shared
 	(
 		"f1",
-		built_in_type_shared_ptrs::void_
+		fundamental_type_shared_ptrs::void_
 	);
 	auto function_a_d_f2 = simple_function::make_shared
 	(
 		"f2",
-		built_in_type_shared_ptrs::void_
+		fundamental_type_shared_ptrs::void_
 	);
 	auto function_a_f3 = simple_function::make_shared
 	(
 		"f3",
-		built_in_type_shared_ptrs::void_
+		fundamental_type_shared_ptrs::void_
 	);
 	auto function_f4 = simple_function::make_shared
 	(
 		"f4",
-		built_in_type_shared_ptrs::void_
+		fundamental_type_shared_ptrs::void_
 	);
 
 	//variables
 	auto variable_a_i = std::make_shared<variable>
 	(
 		"i",
-		built_in_type_shared_ptrs::int_
+		fundamental_type_shared_ptrs::int_
 	);
 	auto variable_a_b_c_i = std::make_shared<variable>
 	(
 		"i",
-		built_in_type_shared_ptrs::int_
+		fundamental_type_shared_ptrs::int_
 	);
 
 	//assembling

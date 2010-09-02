@@ -1093,7 +1093,7 @@ semantic_analyzer::create_type
 
 	if(!opt_return_type)
 	{
-		opt_return_type = get_built_in_type
+		opt_return_type = get_fundamental_type
 		(
 			bool_type,
 			char_type,
@@ -1185,7 +1185,7 @@ semantic_analyzer::get_conversion_function_type
 
 	if(!opt_return_type)
 	{
-		opt_return_type = get_built_in_type
+		opt_return_type = get_fundamental_type
 		(
 			bool_type,
 			char_type,
@@ -1269,54 +1269,54 @@ semantic_analyzer::get_type_info
 				)
 			;
 		}
-		else if(auto opt_built_in_type_specifier_node = syntax_nodes::get<syntax_nodes::built_in_type_specifier>(&simple_type_specifier_node))
+		else if(auto opt_fundamental_type_specifier_node = syntax_nodes::get<syntax_nodes::fundamental_type_specifier>(&simple_type_specifier_node))
 		{
-			auto built_in_type_specifier_node = *opt_built_in_type_specifier_node;
+			auto fundamental_type_specifier_node = *opt_fundamental_type_specifier_node;
 
-			if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::char_>>(&built_in_type_specifier_node))
+			if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::char_>>(&fundamental_type_specifier_node))
 			{
 				char_type = true;
 			}
-			else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::wchar_t_>>(&built_in_type_specifier_node))
+			else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::wchar_t_>>(&fundamental_type_specifier_node))
 			{
 				wchar_t_type = true;
 			}
-			else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::bool_>>(&built_in_type_specifier_node))
+			else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::bool_>>(&fundamental_type_specifier_node))
 			{
 				bool_type = true;
 			}
-			else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::short_>>(&built_in_type_specifier_node))
+			else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::short_>>(&fundamental_type_specifier_node))
 			{
 				short_type = true;
 			}
-			else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::int_>>(&built_in_type_specifier_node))
+			else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::int_>>(&fundamental_type_specifier_node))
 			{
 				int_type = true;
 			}
-			else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::long_>>(&built_in_type_specifier_node))
+			else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::long_>>(&fundamental_type_specifier_node))
 			{
 				if(!long_type)
 					long_type = true;
 				else
 					long_long_type = true;
 			}
-			else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::signed_>>(&built_in_type_specifier_node))
+			else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::signed_>>(&fundamental_type_specifier_node))
 			{
 				signed_type = true;
 			}
-			else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::unsigned_>>(&built_in_type_specifier_node))
+			else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::unsigned_>>(&fundamental_type_specifier_node))
 			{
 				unsigned_type = true;
 			}
-			else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::float_>>(&built_in_type_specifier_node))
+			else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::float_>>(&fundamental_type_specifier_node))
 			{
 				float_type = true;
 			}
-			else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::double_>>(&built_in_type_specifier_node))
+			else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::double_>>(&fundamental_type_specifier_node))
 			{
 				double_type = true;
 			}
-			else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::void_>>(&built_in_type_specifier_node))
+			else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::void_>>(&fundamental_type_specifier_node))
 			{
 				void_type = true;
 			}

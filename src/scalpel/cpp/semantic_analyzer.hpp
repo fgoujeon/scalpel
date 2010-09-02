@@ -450,8 +450,8 @@ class semantic_analyzer
 			std::shared_ptr<DeclarativeRegionT> current_declarative_region
 		);
 
-		std::shared_ptr<const semantic_entities::built_in_type>
-		get_built_in_type
+		std::shared_ptr<const semantic_entities::fundamental_type>
+		get_fundamental_type
 		(
 			const bool bool_type,
 			const bool char_type,

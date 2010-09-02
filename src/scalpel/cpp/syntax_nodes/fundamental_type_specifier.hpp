@@ -18,8 +18,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_BUILT_IN_TYPE_SPECIFIER_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_BUILT_IN_TYPE_SPECIFIER_HPP
+#ifndef SCALPEL_CPP_SYNTAX_NODES_FUNDAMENTAL_TYPE_SPECIFIER_HPP
+#define SCALPEL_CPP_SYNTAX_NODES_FUNDAMENTAL_TYPE_SPECIFIER_HPP
 
 #include "common.hpp"
 
@@ -41,7 +41,7 @@ typedef
 		predefined_text_node<str::double_>,
 		predefined_text_node<str::void_>
 	>
-	built_in_type_specifier
+	fundamental_type_specifier
 ;
 
 }}} //namespace scalpel::cpp::syntax_nodes

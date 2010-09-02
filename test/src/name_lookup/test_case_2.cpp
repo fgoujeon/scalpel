@@ -79,35 +79,35 @@ test_case_2()
 	auto function_c0_inner_f = simple_function::make_shared
 	(
 		"f",
-		built_in_type_shared_ptrs::void_
+		fundamental_type_shared_ptrs::void_
 	);
 	auto function_c0_f = simple_function::make_shared
 	(
 		"f",
-		built_in_type_shared_ptrs::void_
+		fundamental_type_shared_ptrs::void_
 	);
 	auto struct_c1base = class_::make_shared("c1base");
 	auto function_c1base_f = simple_function::make_shared
 	(
 		"f",
-		built_in_type_shared_ptrs::void_
+		fundamental_type_shared_ptrs::void_
 	);
 	auto function_c1base_g = simple_function::make_shared
 	(
 		"g",
-		built_in_type_shared_ptrs::void_
+		fundamental_type_shared_ptrs::void_
 	);
 	auto struct_c1 = class_::make_shared("c1");
 	auto function_c1_g = simple_function::make_shared
 	(
 		"g",
-		built_in_type_shared_ptrs::void_
+		fundamental_type_shared_ptrs::void_
 	);
 	auto struct_c = class_::make_shared("c");
 	auto function_g_test = simple_function::make_shared
 	(
 		"test",
-		built_in_type_shared_ptrs::void_
+		fundamental_type_shared_ptrs::void_
 	);
 
 	semantic_graph->add_member(struct_c0);

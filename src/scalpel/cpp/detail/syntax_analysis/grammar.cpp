@@ -1020,12 +1020,12 @@ grammar::grammar()
 	simple_type_specifier
 		= nested_identifier_or_template_id
 		| simple_template_type_specifier
-		| built_in_type_specifier
+		| fundamental_type_specifier
 	;
 	simple_template_type_specifier
 		= !(str_p("::") >> !s) >> nested_name_specifier >> !s >> "template" >> !s >> template_id
 	;
-	built_in_type_specifier
+	fundamental_type_specifier
 		= str_p("char")
 		| "wchar_t"
 		| "bool"

@@ -64,19 +64,19 @@ test_case_4()
 	auto function_f = simple_function::make_shared
 	(
 		"f",
-		built_in_type_shared_ptrs::void_
+		fundamental_type_shared_ptrs::void_
 	);
 
 	//variables
 	auto variable_m_i = std::make_shared<variable>
 	(
 		"i",
-		built_in_type_shared_ptrs::int_
+		fundamental_type_shared_ptrs::int_
 	);
 	auto variable_n_i = std::make_shared<variable>
 	(
 		"i",
-		built_in_type_shared_ptrs::int_
+		fundamental_type_shared_ptrs::int_
 	);
 
 	//assembling

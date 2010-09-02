@@ -20,7 +20,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "class_.hpp"
 #include "namespace_.hpp"
-#include "built_in_type_shared_ptrs.hpp"
+#include "fundamental_type_shared_ptrs.hpp"
 #include <scalpel/utility/are_pointed_objects_equal.hpp>
 #include <memory>
 
@@ -572,7 +572,7 @@ class_::constructor::constructor
 		simple_function::make_shared
 		(
 			"_",
-			built_in_type_shared_ptrs::void_,
+			fundamental_type_shared_ptrs::void_,
 			std::move(parameters),
 			is_inline,
 			false

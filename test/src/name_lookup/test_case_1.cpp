@@ -69,34 +69,34 @@ test_case_1()
 	auto variable_a_i = std::make_shared<variable>
 	(
 		"i",
-		built_in_type_shared_ptrs::int_
+		fundamental_type_shared_ptrs::int_
 	);
 	auto struct_a_b = class_::make_shared("B");
 	auto function_a_b_f = simple_function::make_shared
 	(
 		"f",
-		built_in_type_shared_ptrs::void_
+		fundamental_type_shared_ptrs::void_
 	);
 	auto function_a_g = simple_function::make_shared
 	(
 		"g",
-		built_in_type_shared_ptrs::void_
+		fundamental_type_shared_ptrs::void_
 	);
 	auto namespace_a_c = namespace_::make_shared("C");
 	auto variable_a_c_n = std::make_shared<variable>
 	(
 		"n",
-		built_in_type_shared_ptrs::int_
+		fundamental_type_shared_ptrs::int_
 	);
 	auto variable_i = std::make_shared<variable>
 	(
 		"i",
-		built_in_type_shared_ptrs::int_
+		fundamental_type_shared_ptrs::int_
 	);
 	auto variable_j = std::make_shared<variable>
 	(
 		"j",
-		built_in_type_shared_ptrs::int_
+		fundamental_type_shared_ptrs::int_
 	);
 
 	semantic_graph->add_member(namespace_a);
