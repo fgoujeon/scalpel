@@ -100,7 +100,7 @@ semantic_analyzer::fill_class
 			//get base class
 			auto nested_identifier_or_template_id_node = get_nested_identifier_or_template_id(base_specifier_node);
 			std::shared_ptr<class_> base_class =
-				name_lookup::find_entities<false, false, class_>(nested_identifier_or_template_id_node, c)
+				name_lookup::find<class_, false, false>(nested_identifier_or_template_id_node, c)
 			;
 
 			c->add_base_class(base_class, access, is_virtual);

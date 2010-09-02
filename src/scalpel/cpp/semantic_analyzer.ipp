@@ -681,7 +681,7 @@ semantic_analyzer::define_simple_function
 	std::shared_ptr<semantic_entities::simple_function> function_entity;
 	{
 		std::shared_ptr<semantic_entities::simple_function> found_function =
-			name_lookup::find_entities<true, false, semantic_entities::simple_function>(function_name, current_declarative_region)
+			name_lookup::find<semantic_entities::simple_function, true, false>(function_name, current_declarative_region)
 		;
 		if
 		(
@@ -1257,11 +1257,11 @@ semantic_analyzer::get_type_info
 			t =
 				std::shared_ptr<const semantic_entities::class_>
 				(
-					detail::semantic_analysis::name_lookup::find_entities
+					detail::semantic_analysis::name_lookup::find
 					<
+						semantic_entities::class_,
 						false,
-						false,
-						semantic_entities::class_
+						false
 					>
 					(
 						nested_identifier_or_template_id_node,

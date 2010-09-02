@@ -26,9 +26,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace name_lookup
 {
 
-template<bool Optional, bool Multiple, class EntityT>
-typename return_type<Optional, Multiple, EntityT>::type
-find_entities
+template<class EntityT, bool Optional, bool Multiple>
+typename return_type<EntityT, Optional, Multiple>::type
+find
 (
 	const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node,
 	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
@@ -43,7 +43,7 @@ find_entities
 	)
 	{
 		auto identifier_or_template_id_node = syntax_nodes::get_identifier_or_template_id(nested_identifier_or_template_id_node);
-		return find_entities<Optional, Multiple, EntityT>(identifier_or_template_id_node, current_declarative_region);
+		return find<EntityT, Optional, Multiple>(identifier_or_template_id_node, current_declarative_region);
 	}
 
 	//Find the last declarative region of the nested name specifier
@@ -58,12 +58,12 @@ find_entities
 
 	//find entities in the last declarative region
 	auto identifier_or_template_id_node = get_identifier_or_template_id(nested_identifier_or_template_id_node);
-	return impl::find_local_entities<Optional, Multiple, EntityT>(identifier_or_template_id_node, last_declarative_region);
+	return impl::find_local_entities<EntityT, Optional, Multiple>(identifier_or_template_id_node, last_declarative_region);
 }
 
-template<bool Optional, bool Multiple, class EntityT>
-typename return_type<Optional, Multiple, EntityT>::type
-find_entities
+template<class EntityT, bool Optional, bool Multiple>
+typename return_type<EntityT, Optional, Multiple>::type
+find
 (
 	const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
 	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
@@ -72,7 +72,7 @@ find_entities
 	if(auto opt_identifier_node = syntax_nodes::get<syntax_nodes::identifier>(&identifier_or_template_id))
 	{
 		auto identifier_node = *opt_identifier_node;
-		return impl::find_entities_from_identifier<Optional, Multiple, EntityT>(identifier_node.value(), current_declarative_region);
+		return impl::find_entities_from_identifier<EntityT, Optional, Multiple>(identifier_node.value(), current_declarative_region);
 	}
 	else
 	{
@@ -83,7 +83,7 @@ find_entities
 
 
 template<class DeclarativeRegionT>
-typename return_type<false, false, DeclarativeRegionT>::type
+typename return_type<DeclarativeRegionT, false, false>::type
 impl::find_declarative_region
 (
 	const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node,
@@ -118,8 +118,8 @@ impl::find_declarative_region
 
 			//find the first declarative region
 			auto identifier_or_template_id_node = get_identifier_or_template_id(nested_name_specifier_node);
-			typename return_type<false, false, DeclarativeRegionT>::type first_declarative_region =
-				find_local_entities<false, false, DeclarativeRegionT>(identifier_or_template_id_node, global_namespace)
+			typename return_type<DeclarativeRegionT, false, false>::type first_declarative_region =
+				find_local_entities<DeclarativeRegionT, false, false>(identifier_or_template_id_node, global_namespace)
 			;
 
 			//find the last declarative region
@@ -139,8 +139,8 @@ impl::find_declarative_region
 
 			//find the first declarative region
 			auto identifier_or_template_id_node = get_identifier_or_template_id(nested_name_specifier_node);
-			typename return_type<false, false, DeclarativeRegionT>::type first_declarative_region =
-				find_entities<false, false, DeclarativeRegionT>(identifier_or_template_id_node, current_declarative_region)
+			typename return_type<DeclarativeRegionT, false, false>::type first_declarative_region =
+				find<DeclarativeRegionT, false, false>(identifier_or_template_id_node, current_declarative_region)
 			;
 
 			//find the last declarative region
@@ -154,18 +154,18 @@ impl::find_declarative_region
 }
 
 template<class DeclarativeRegionT>
-typename return_type<false, false, DeclarativeRegionT>::type
+typename return_type<DeclarativeRegionT, false, false>::type
 impl::find_declarative_region
 (
 	const syntax_nodes::nested_name_specifier& nested_name_specifier_node,
-	const typename return_type<false, false, DeclarativeRegionT>::type& current_declarative_region
+	const typename return_type<DeclarativeRegionT, false, false>::type& current_declarative_region
 )
 {
 	if(auto opt_last_part_seq_node = get_last_part_seq(nested_name_specifier_node))
 	{
 		auto last_part_seq_node = *opt_last_part_seq_node;
 
-		typename return_type<false, false, DeclarativeRegionT>::type found_declarative_region = current_declarative_region;
+		typename return_type<DeclarativeRegionT, false, false>::type found_declarative_region = current_declarative_region;
 		for
 		(
 			auto i = last_part_seq_node.begin();
@@ -185,7 +185,7 @@ impl::find_declarative_region
 				{
 					auto identifier_node = *opt_identifier_node;
 					found_declarative_region =
-						find_local_entities_from_identifier<false, false, DeclarativeRegionT>
+						find_local_entities_from_identifier<DeclarativeRegionT, false, false>
 						(
 							identifier_node.value(),
 							found_declarative_region
@@ -207,8 +207,8 @@ impl::find_declarative_region
 	}
 }
 
-template<bool Optional, bool Multiple, class EntityT>
-typename return_type<Optional, Multiple, EntityT>::type
+template<class EntityT, bool Optional, bool Multiple>
+typename return_type<EntityT, Optional, Multiple>::type
 impl::find_entities_from_identifier
 (
 	const std::string& name,
@@ -219,7 +219,7 @@ impl::find_entities_from_identifier
 	namespace_association_map namespace_associations;
 
 	//indirectly returned object
-	typename return_type<true, true, EntityT>::type found_entities;
+	typename return_type<EntityT, true, true>::type found_entities;
 
 	//find entities from current to outermost declarative region
 	//(i.e. the global namespace)
@@ -245,7 +245,7 @@ impl::find_entities_from_identifier
 		add_to_result
 		(
 			found_entities,
-			find_local_entities_from_identifier<true, Multiple, EntityT>(name, current_declarative_region)
+			find_local_entities_from_identifier<EntityT, true, Multiple>(name, current_declarative_region)
 		);
 
 		//find entities in the associated namespaces (only for namespaces)
@@ -263,7 +263,7 @@ impl::find_entities_from_identifier
 					add_to_result
 					(
 						found_entities,
-						find_local_entities_from_identifier<true, Multiple, EntityT>(name, *i)
+						find_local_entities_from_identifier<EntityT, true, Multiple>(name, *i)
 					);
 				}
 			}
@@ -280,7 +280,7 @@ impl::find_entities_from_identifier
 			add_to_result
 			(
 				found_entities,
-				find_entities_in_base_classes<true, Multiple, EntityT>(name, class_ptr->base_classes())
+				find_entities_in_base_classes<EntityT, true, Multiple>(name, class_ptr->base_classes())
 			);
 
 			//stop lookup if entities have been found
@@ -292,11 +292,11 @@ impl::find_entities_from_identifier
 		current_declarative_region = get_enclosing_declarative_region(current_declarative_region);
 	}
 
-	return std::move(return_result<Optional, Multiple, EntityT>::result(found_entities));
+	return std::move(return_result<EntityT, Optional, Multiple>::result(found_entities));
 }
 
-template<bool Optional, bool Multiple, class EntityT, class DeclarativeRegionT>
-typename return_type<Optional, Multiple, EntityT>::type
+template<class EntityT, bool Optional, bool Multiple, class DeclarativeRegionT>
+typename return_type<EntityT, Optional, Multiple>::type
 impl::find_local_entities
 (
 	const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
@@ -306,7 +306,7 @@ impl::find_local_entities
 	if(auto opt_identifier_node = syntax_nodes::get<syntax_nodes::identifier>(&identifier_or_template_id))
 	{
 		auto identifier_node = *opt_identifier_node;
-		return find_local_entities_from_identifier<Optional, Multiple, EntityT>(identifier_node.value(), current_declarative_region);
+		return find_local_entities_from_identifier<EntityT, Optional, Multiple>(identifier_node.value(), current_declarative_region);
 	}
 	else
 	{
@@ -314,15 +314,15 @@ impl::find_local_entities
 	}
 }
 
-template<bool Optional, bool Multiple, class EntityT, class DeclarativeRegionT>
-typename return_type<Optional, Multiple, EntityT>::type
+template<class EntityT, bool Optional, bool Multiple, class DeclarativeRegionT>
+typename return_type<EntityT, Optional, Multiple>::type
 impl::find_local_entities_from_identifier
 (
 	const std::string& name,
 	DeclarativeRegionT& current_declarative_region
 )
 {
-	typename return_type<true, Multiple, EntityT>::type found_entities;
+	typename return_type<EntityT, true, Multiple>::type found_entities;
 
 	typename get_members_type_traits<EntityT>::return_type members = get_members<EntityT>(current_declarative_region);
 	for(auto i = members.begin(); i != members.end(); ++i)
@@ -335,26 +335,26 @@ impl::find_local_entities_from_identifier
 		}
 	}
 
-	return std::move(return_result<Optional, Multiple, EntityT>::result(found_entities));
+	return std::move(return_result<EntityT, Optional, Multiple>::result(found_entities));
 }
 
-template<bool Optional, bool Multiple, class EntityT>
-typename return_type<Optional, Multiple, EntityT>::type
+template<class EntityT, bool Optional, bool Multiple>
+typename return_type<EntityT, Optional, Multiple>::type
 impl::find_entities_in_base_classes
 (
 	const std::string& name,
 	utility::vector<std::shared_ptr<semantic_entities::class_>>::range base_classes
 )
 {
-	typename return_type<Optional, true, EntityT>::type found_entities;
+	typename return_type<EntityT, Optional, true>::type found_entities;
 
 	for(auto i = base_classes.begin(); i != base_classes.end(); ++i)
 	{
 		std::shared_ptr<semantic_entities::class_> current_class = *i;
 
 		//find entities in the current declarative region (i.e. current class)
-		typename return_type<Optional, Multiple, EntityT>::type current_class_found_entities =
-			find_local_entities_from_identifier<Optional, Multiple, EntityT>(name, current_class)
+		typename return_type<EntityT, Optional, Multiple>::type current_class_found_entities =
+			find_local_entities_from_identifier<EntityT, Optional, Multiple>(name, current_class)
 		;
 
 		//entities found?
@@ -366,8 +366,8 @@ impl::find_entities_in_base_classes
 		else
 		{
 			//find entities in the current declarative region's base classes
-			typename return_type<Optional, Multiple, EntityT>::type current_class_base_classes_found_entities =
-				find_entities_in_base_classes<Optional, Multiple, EntityT>(name, current_class->base_classes())
+			typename return_type<EntityT, Optional, Multiple>::type current_class_base_classes_found_entities =
+				find_entities_in_base_classes<EntityT, Optional, Multiple>(name, current_class->base_classes())
 			;
 
 			//add them to the list
@@ -377,35 +377,35 @@ impl::find_entities_in_base_classes
 
 	//If Multiple, return the full list.
 	//If not Multiple, return the only one element of the list.
-	return std::move(return_result<Optional, Multiple, EntityT>::result(found_entities));
+	return std::move(return_result<EntityT, Optional, Multiple>::result(found_entities));
 }
 
 
 
-template<class T, class T2>
+template<class T, class U>
 void
-impl::add_to_result(T& result, const T2& entity)
+impl::add_to_result(T& result, const U& entity)
 {
 	result = entity;
 }
 
-template<class T, class T2>
+template<class T, class U>
 void
-impl::add_to_result(std::vector<T>& result, const T2& entity)
+impl::add_to_result(std::vector<T>& result, const U& entity)
 {
 	if(!utility::is_empty(entity)) result.push_back(entity);
 }
 
-template<class T, class T2>
+template<class T, class U>
 void
-impl::add_to_result(std::vector<T>& result, const boost::optional<T2>& entity)
+impl::add_to_result(std::vector<T>& result, const boost::optional<U>& entity)
 {
 	if(!utility::is_empty(entity)) result.push_back(*entity);
 }
 
-template<class T, class T2>
+template<class T, class U>
 void
-impl::add_to_result(std::vector<T>& result, const std::vector<T2>& entities)
+impl::add_to_result(std::vector<T>& result, const std::vector<U>& entities)
 {
 	std::copy
 	(
@@ -418,12 +418,12 @@ impl::add_to_result(std::vector<T>& result, const std::vector<T2>& entities)
 
 
 template<class EntityT>
-typename return_type<true, false, EntityT>::type
-impl::return_result<true, false, EntityT>::result(typename return_type<true, true, EntityT>::type& result)
+typename return_type<EntityT, true, false>::type
+impl::return_result<EntityT, true, false>::result(typename return_type<EntityT, true, true>::type& result)
 {
 	if(result.empty())
 	{
-		return typename return_type<true, false, EntityT>::type(); //empty result
+		return typename return_type<EntityT, true, false>::type(); //empty result
 	}
 	else if(result.size() == 1)
 	{
@@ -436,15 +436,15 @@ impl::return_result<true, false, EntityT>::result(typename return_type<true, tru
 }
 
 template<class EntityT>
-typename return_type<true, false, EntityT>::type
-impl::return_result<true, false, EntityT>::result(typename return_type<true, false, EntityT>::type& result)
+typename return_type<EntityT, true, false>::type
+impl::return_result<EntityT, true, false>::result(typename return_type<EntityT, true, false>::type& result)
 {
 	return result;
 }
 
 template<class EntityT>
-typename return_type<false, false, EntityT>::type
-impl::return_result<false, false, EntityT>::result(typename return_type<false, true, EntityT>::type& result)
+typename return_type<EntityT, false, false>::type
+impl::return_result<EntityT, false, false>::result(typename return_type<EntityT, false, true>::type& result)
 {
 	if(result.empty())
 	{
@@ -461,8 +461,8 @@ impl::return_result<false, false, EntityT>::result(typename return_type<false, t
 }
 
 template<class EntityT>
-typename return_type<false, false, EntityT>::type
-impl::return_result<false, false, EntityT>::result(typename return_type<true, false, EntityT>::type& result)
+typename return_type<EntityT, false, false>::type
+impl::return_result<EntityT, false, false>::result(typename return_type<EntityT, true, false>::type& result)
 {
 	if(!result)
 		throw std::runtime_error("no entity found");
@@ -470,8 +470,8 @@ impl::return_result<false, false, EntityT>::result(typename return_type<true, fa
 }
 
 template<class... EntitiesT>
-typename return_type<false, false, utility::variant<EntitiesT...>>::type
-impl::return_result<false, false, utility::variant<EntitiesT...>>::result(typename return_type<false, true, utility::variant<EntitiesT...>>::type& result)
+typename return_type<utility::variant<EntitiesT...>, false, false>::type
+impl::return_result<utility::variant<EntitiesT...>, false, false>::result(typename return_type<utility::variant<EntitiesT...>, false, true>::type& result)
 {
 	if(result.empty())
 	{
@@ -488,8 +488,8 @@ impl::return_result<false, false, utility::variant<EntitiesT...>>::result(typena
 }
 
 template<class... EntitiesT>
-typename return_type<false, false, utility::variant<EntitiesT...>>::type
-impl::return_result<false, false, utility::variant<EntitiesT...>>::result(typename return_type<true, false, utility::variant<EntitiesT...>>::type& result)
+typename return_type<utility::variant<EntitiesT...>, false, false>::type
+impl::return_result<utility::variant<EntitiesT...>, false, false>::result(typename return_type<utility::variant<EntitiesT...>, true, false>::type& result)
 {
 	if(!result)
 		throw std::runtime_error("no entity found");
@@ -498,14 +498,14 @@ impl::return_result<false, false, utility::variant<EntitiesT...>>::result(typena
 
 template<class EntityT>
 std::vector<std::shared_ptr<EntityT>>&
-impl::return_result<true, true, EntityT>::result(std::vector<std::shared_ptr<EntityT>>& result)
+impl::return_result<EntityT, true, true>::result(std::vector<std::shared_ptr<EntityT>>& result)
 {
 	return result;
 }
 
 template<class EntityT>
 std::vector<std::shared_ptr<EntityT>>&
-impl::return_result<false, true, EntityT>::result(std::vector<std::shared_ptr<EntityT>>& result)
+impl::return_result<EntityT, false, true>::result(std::vector<std::shared_ptr<EntityT>>& result)
 {
 	if(result.empty())
 		throw std::runtime_error("no entity found");
