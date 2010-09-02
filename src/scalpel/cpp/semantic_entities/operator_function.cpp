@@ -80,12 +80,6 @@ operator_function::defined() const
 	return impl_->defined();
 }
 
-void
-operator_function::defined(const bool d)
-{
-	impl_->defined(d);
-}
-
 bool
 operator_function::has_enclosing_declarative_region() const
 {

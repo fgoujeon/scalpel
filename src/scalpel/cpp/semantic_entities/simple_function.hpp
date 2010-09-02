@@ -105,9 +105,6 @@ class simple_function:
 		bool
 		defined() const;
 
-		void
-		defined(bool d);
-
 		std::shared_ptr<statement_block>
 		body();
 
@@ -123,7 +120,6 @@ class simple_function:
 		std::list<parameter> parameters_;
 		bool is_inline_;
 		bool is_static_;
-		bool defined_;
 		declarative_region_member_impl declarative_region_member_impl_;
 
 		declarative_region_shared_ptr_variants_t declarative_regions_;

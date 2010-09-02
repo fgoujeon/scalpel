@@ -120,11 +120,15 @@ test_case_3()
 	namespace_c->add_member(variable_a_b_c_i);
 	namespace_b->add_using_directive_namespace(namespace_c);
 	namespace_b->add_member(function_a_b_f1);
+	function_a_b_f1->body(std::make_shared<statement_block>());
 	namespace_a->add_member(namespace_d);
 	namespace_d->add_member(function_a_d_f2);
+	function_a_d_f2->body(std::make_shared<statement_block>());
 	function_a_d_f2->body()->add_using_directive_namespace(namespace_c);
 	namespace_a->add_member(function_a_f3);
+	function_a_f3->body(std::make_shared<statement_block>());
 	semantic_graph->add_member(function_f4);
+	function_f4->body(std::make_shared<statement_block>());
 
 
 

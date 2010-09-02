@@ -37,8 +37,7 @@ simple_function::simple_function
 	return_type_(return_type),
 	parameters_(std::move(parameters)),
 	is_inline_(is_inline),
-	is_static_(is_static),
-	defined_(false)
+	is_static_(is_static)
 {
 }
 
@@ -65,9 +64,6 @@ simple_function::make_shared
 			)
 		)
 	;
-
-	//set default body
-	new_simple_function->body(std::make_shared<statement_block>());
 
 	return new_simple_function;
 }
@@ -139,13 +135,7 @@ simple_function::is_static() const
 bool
 simple_function::defined() const
 {
-	return defined_;
-}
-
-void
-simple_function::defined(bool d)
-{
-	defined_ = d;
+	return body_.get();
 }
 
 bool

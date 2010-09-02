@@ -710,7 +710,8 @@ semantic_analyzer::define_simple_function
 		throw std::runtime_error(oss.str().c_str());
 	}
 
-	function_entity->defined(true);
+	//TODO define the function
+	function_entity->body(std::make_shared<semantic_entities::statement_block>());
 }
 
 template<class DeclarativeRegionT>

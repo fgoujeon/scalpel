@@ -66,9 +66,6 @@ class operator_function
 		bool
 		defined() const;
 
-		void
-		defined(const bool d);
-
 		bool
 		has_enclosing_declarative_region() const;
 
