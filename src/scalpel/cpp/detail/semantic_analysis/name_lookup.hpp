@@ -177,6 +177,36 @@ class impl
 		semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 	);
 
+
+
+	/**
+	Find entities corresponding to the given identifier_or_template_id node,
+	in the given namespace, applying using directives as defined in the
+	qualified name lookup section of the C++ standard.
+	*/
+	template<class EntityT, bool Optional, bool Multiple>
+	static
+	typename return_type<EntityT, Optional, Multiple>::type
+	find_in_namespace
+	(
+		const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
+		std::shared_ptr<semantic_entities::namespace_> current_namespace
+	);
+
+	/**
+	Find in namespace from an identifier.
+	*/
+	template<class EntityT, bool Optional, bool Multiple>
+	static
+	typename return_type<EntityT, Optional, Multiple>::type
+	find_in_namespace_from_identifier
+	(
+		const std::string& name,
+		std::shared_ptr<semantic_entities::namespace_> current_namespace
+	);
+
+
+
 	/**
 	Find entities corresponding to the given identifier_or_template_id node,
 	in the given declarative region only.
@@ -201,6 +231,8 @@ class impl
 		const std::string& name,
 		DeclarativeRegionT& current_declarative_region
 	);
+
+
 
 	/**
 	Find entities of the given name, in the given base classes

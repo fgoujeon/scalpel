@@ -58,7 +58,10 @@ find
 
 	//find entities in the last declarative region
 	auto identifier_or_template_id_node = get_identifier_or_template_id(nested_identifier_or_template_id_node);
-	return impl::find_local_entities<EntityT, Optional, Multiple>(identifier_or_template_id_node, last_declarative_region);
+	if(auto opt_namespace_ptr = utility::get<std::shared_ptr<semantic_entities::namespace_>>(&last_declarative_region))
+		return impl::find_in_namespace<EntityT, Optional, Multiple>(identifier_or_template_id_node, *opt_namespace_ptr);
+	else
+		return impl::find_local_entities<EntityT, Optional, Multiple>(identifier_or_template_id_node, last_declarative_region);
 }
 
 template<class EntityT, bool Optional, bool Multiple>
@@ -294,6 +297,68 @@ impl::find_entities_from_identifier
 
 	return std::move(return_result<EntityT, Optional, Multiple>::result(found_entities));
 }
+
+
+
+template<class EntityT, bool Optional, bool Multiple>
+typename return_type<EntityT, Optional, Multiple>::type
+impl::find_in_namespace
+(
+	const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
+	std::shared_ptr<semantic_entities::namespace_> current_namespace
+)
+{
+	if(auto opt_identifier_node = syntax_nodes::get<syntax_nodes::identifier>(&identifier_or_template_id))
+	{
+		auto identifier_node = *opt_identifier_node;
+		return find_in_namespace_from_identifier<EntityT, Optional, Multiple>(identifier_node.value(), current_namespace);
+	}
+	else
+	{
+		throw std::runtime_error("Not implemented yet");
+	}
+}
+
+template<class EntityT, bool Optional, bool Multiple>
+typename return_type<EntityT, Optional, Multiple>::type
+impl::find_in_namespace_from_identifier
+(
+	const std::string& name,
+	std::shared_ptr<semantic_entities::namespace_> current_namespace
+)
+{
+	typename return_type<EntityT, true, Multiple>::type found_entities;
+
+	//look up in the current namespace
+	found_entities = find_local_entities_from_identifier<EntityT, true, Multiple>(name, current_namespace);
+
+	//if entities have been found, return them
+	if(!utility::is_empty(found_entities))
+		return std::move(return_result<EntityT, Optional, Multiple>::result(found_entities));
+
+	//otherwise, look up in using directive's namespaces
+	for
+	(
+		auto i = current_namespace->using_directive_namespaces().begin();
+		i != current_namespace->using_directive_namespaces().end();
+		++i
+	)
+	{
+		add_to_result
+		(
+			found_entities,
+			find_in_namespace_from_identifier<EntityT, Optional, Multiple>
+			(
+				name,
+				std::shared_ptr<semantic_entities::namespace_>(*i)
+			)
+		);
+	}
+
+	return std::move(return_result<EntityT, Optional, Multiple>::result(found_entities));
+}
+
+
 
 template<class EntityT, bool Optional, bool Multiple, class DeclarativeRegionT>
 typename return_type<EntityT, Optional, Multiple>::type
