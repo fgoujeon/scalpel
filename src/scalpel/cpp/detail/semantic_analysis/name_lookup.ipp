@@ -311,7 +311,15 @@ impl::find_in_namespace
 	if(auto opt_identifier_node = syntax_nodes::get<syntax_nodes::identifier>(&identifier_or_template_id))
 	{
 		auto identifier_node = *opt_identifier_node;
-		return find_in_namespace_from_identifier<EntityT, Optional, Multiple>(identifier_node.value(), current_namespace);
+		std::vector<std::shared_ptr<semantic_entities::namespace_>> already_seached_namespaces;
+		return
+			find_in_namespace_from_identifier<EntityT, Optional, Multiple>
+			(
+				identifier_node.value(),
+				current_namespace,
+				already_seached_namespaces
+			)
+		;
 	}
 	else
 	{
@@ -324,11 +332,14 @@ typename return_type<EntityT, Optional, Multiple>::type
 impl::find_in_namespace_from_identifier
 (
 	const std::string& name,
-	std::shared_ptr<semantic_entities::namespace_> current_namespace
+	std::shared_ptr<semantic_entities::namespace_> current_namespace,
+	std::vector<std::shared_ptr<semantic_entities::namespace_>>& already_seached_namespaces
 )
 {
-	//look up in the current namespace
+	//search in the current namespace
 	{
+		already_seached_namespaces.push_back(current_namespace);
+
 		typename return_type<EntityT, true, Multiple>::type found_entities =
 			find_local_entities_from_identifier<EntityT, true, Multiple>(name, current_namespace)
 		;
@@ -338,7 +349,7 @@ impl::find_in_namespace_from_identifier
 			return std::move(return_result<EntityT, Optional, Multiple>::result(found_entities));
 	}
 
-	//if no entity is found, look up in using directive's namespaces
+	//if no entity is found, search in using directive's namespaces
 	typename return_type<EntityT, true, true>::type found_entities;
 	for
 	(
@@ -347,15 +358,30 @@ impl::find_in_namespace_from_identifier
 		++i
 	)
 	{
-		add_to_result
+		std::shared_ptr<semantic_entities::namespace_> using_directive_namespace(*i);
+
+		//make sure the namespace has not been already searched
+		if
 		(
-			found_entities,
-			find_in_namespace_from_identifier<EntityT, Optional, Multiple>
+			std::find
 			(
-				name,
-				std::shared_ptr<semantic_entities::namespace_>(*i)
-			)
-		);
+				already_seached_namespaces.begin(),
+				already_seached_namespaces.end(),
+				using_directive_namespace
+			) == already_seached_namespaces.end()
+		)
+		{
+			add_to_result
+			(
+				found_entities,
+				find_in_namespace_from_identifier<EntityT, true, Multiple>
+				(
+					name,
+					using_directive_namespace,
+					already_seached_namespaces
+				)
+			);
+		}
 	}
 
 	return std::move(return_result<EntityT, Optional, Multiple>::result(found_entities));

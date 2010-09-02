@@ -203,7 +203,8 @@ class impl
 	find_in_namespace_from_identifier
 	(
 		const std::string& name,
-		std::shared_ptr<semantic_entities::namespace_> current_namespace
+		std::shared_ptr<semantic_entities::namespace_> current_namespace,
+		std::vector<std::shared_ptr<semantic_entities::namespace_>>& already_seached_namespaces
 	);
 
 
