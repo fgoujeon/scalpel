@@ -54,27 +54,27 @@ namespace_::name() const
 }
 
 bool
-namespace_::has_declarative_region() const
+namespace_::has_enclosing_declarative_region() const
 {
-	return !declarative_region_.expired();
+	return !enclosing_declarative_region_.expired();
 }
 
 std::shared_ptr<namespace_>
-namespace_::declarative_region()
+namespace_::enclosing_declarative_region()
 {
-	return std::shared_ptr<namespace_>(declarative_region_);
+	return std::shared_ptr<namespace_>(enclosing_declarative_region_);
 }
 
 std::shared_ptr<const namespace_>
-namespace_::declarative_region() const
+namespace_::enclosing_declarative_region() const
 {
-	return std::shared_ptr<const namespace_>(declarative_region_);
+	return std::shared_ptr<const namespace_>(enclosing_declarative_region_);
 }
 
 void
-namespace_::declarative_region(std::shared_ptr<namespace_> declarative_region)
+namespace_::enclosing_declarative_region(std::shared_ptr<namespace_> enclosing_declarative_region)
 {
-	declarative_region_ = declarative_region;
+	enclosing_declarative_region_ = enclosing_declarative_region;
 }
 
 const namespace_::open_declarative_region_shared_ptr_variants_t&
@@ -152,7 +152,7 @@ namespace_::using_directive_namespaces() const
 void
 namespace_::add_member(std::shared_ptr<namespace_> member)
 {
-	member->declarative_region(shared_from_this());
+	member->enclosing_declarative_region(shared_from_this());
     namespaces_.push_back(member);
 	open_declarative_regions_.push_back(member);
 }
@@ -160,7 +160,7 @@ namespace_::add_member(std::shared_ptr<namespace_> member)
 void
 namespace_::add_member(std::shared_ptr<class_> member)
 {
-	member->declarative_region(shared_from_this());
+	member->enclosing_declarative_region(shared_from_this());
     classes_.push_back(member);
 	open_declarative_regions_.push_back(member);
 }
@@ -168,21 +168,21 @@ namespace_::add_member(std::shared_ptr<class_> member)
 void
 namespace_::add_member(std::shared_ptr<simple_function> member)
 {
-	member->declarative_region(shared_from_this());
+	member->enclosing_declarative_region(shared_from_this());
     simple_functions_.push_back(member);
 }
 
 void
 namespace_::add_member(std::shared_ptr<operator_function> member)
 {
-	member->declarative_region(shared_from_this());
+	member->enclosing_declarative_region(shared_from_this());
     operator_functions_.push_back(member);
 }
 
 void
 namespace_::add_member(std::shared_ptr<variable> member)
 {
-	member->declarative_region(shared_from_this());
+	member->enclosing_declarative_region(shared_from_this());
     variables_.push_back(member);
 }
 

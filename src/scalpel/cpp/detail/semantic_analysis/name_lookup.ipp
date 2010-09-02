@@ -96,9 +96,9 @@ impl::find_declarative_region
 	{
 		//the first declarative region is in the global namespace
 		semantic_entities::declarative_region_shared_ptr_variant outermost_declarative_region = current_declarative_region;
-		while(has_declarative_region(outermost_declarative_region))
+		while(has_enclosing_declarative_region(outermost_declarative_region))
 		{
-			outermost_declarative_region = get_declarative_region(outermost_declarative_region);
+			outermost_declarative_region = get_enclosing_declarative_region(outermost_declarative_region);
 		}
 		std::shared_ptr<semantic_entities::namespace_> global_namespace;
 		try
@@ -288,8 +288,8 @@ impl::find_entities_from_identifier
 		}
 
 		//iterate to the enclosing declarative region
-		if(!has_declarative_region(current_declarative_region)) break;
-		current_declarative_region = get_declarative_region(current_declarative_region);
+		if(!has_enclosing_declarative_region(current_declarative_region)) break;
+		current_declarative_region = get_enclosing_declarative_region(current_declarative_region);
 	}
 
 	return std::move(return_result<Optional, Multiple, EntityT>::result(found_entities));

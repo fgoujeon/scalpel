@@ -89,16 +89,16 @@ class namespace_:
         name() const;
 
 		bool
-		has_declarative_region() const;
+		has_enclosing_declarative_region() const;
 
 		std::shared_ptr<namespace_>
-		declarative_region();
+		enclosing_declarative_region();
 
 		std::shared_ptr<const namespace_>
-		declarative_region() const;
+		enclosing_declarative_region() const;
 
 		void
-		declarative_region(std::shared_ptr<namespace_> declarative_region);
+		enclosing_declarative_region(std::shared_ptr<namespace_> enclosing_declarative_region);
 
 		const open_declarative_region_shared_ptr_variants_t&
 		open_declarative_regions();
@@ -156,7 +156,7 @@ class namespace_:
 
     private:
         std::string name_;
-		std::weak_ptr<namespace_> declarative_region_;
+		std::weak_ptr<namespace_> enclosing_declarative_region_;
 
 		//polymorphic containers
 		open_declarative_region_shared_ptr_variants_t open_declarative_regions_;

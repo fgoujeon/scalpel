@@ -55,21 +55,21 @@ class statement_block
 		operator=(statement_block&& o);
 
 		bool
-		has_declarative_region() const
+		has_enclosing_declarative_region() const
 		{
-			return declarative_region_member_impl_.has_declarative_region();
+			return declarative_region_member_impl_.has_enclosing_declarative_region();
 		}
 
 		declarative_region_shared_ptr_variant
-		declarative_region() const
+		enclosing_declarative_region() const
 		{
-			return declarative_region_member_impl_.declarative_region();
+			return declarative_region_member_impl_.enclosing_declarative_region();
 		}
 
 		void
-		declarative_region(const declarative_region_shared_ptr_variant& decl_region)
+		enclosing_declarative_region(const declarative_region_shared_ptr_variant& decl_region)
 		{
-			declarative_region_member_impl_.declarative_region(decl_region);
+			declarative_region_member_impl_.enclosing_declarative_region(decl_region);
 		}
 
 		const statement_blocks_t&

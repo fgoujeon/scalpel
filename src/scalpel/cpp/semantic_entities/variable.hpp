@@ -60,13 +60,13 @@ class variable
 		is_static() const;
 
 		bool
-		has_declarative_region() const;
+		has_enclosing_declarative_region() const;
 
 		declarative_region_shared_ptr_variant
-		declarative_region() const;
+		enclosing_declarative_region() const;
 
 		void
-		declarative_region(const declarative_region_shared_ptr_variant& declarative_region);
+		enclosing_declarative_region(const declarative_region_shared_ptr_variant& enclosing_declarative_region);
 
 	private:
 		type_shared_ptr_variant type_;

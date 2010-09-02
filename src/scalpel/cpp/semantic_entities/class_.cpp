@@ -50,21 +50,21 @@ class_::name() const
 }
 
 bool
-class_::has_declarative_region() const
+class_::has_enclosing_declarative_region() const
 {
-	return declarative_region_member_impl_.has_declarative_region();
+	return declarative_region_member_impl_.has_enclosing_declarative_region();
 }
 
 declarative_region_shared_ptr_variant
-class_::declarative_region() const
+class_::enclosing_declarative_region() const
 {
-	return declarative_region_member_impl_.declarative_region();
+	return declarative_region_member_impl_.enclosing_declarative_region();
 }
 
 void
-class_::declarative_region(const declarative_region_shared_ptr_variant& decl_region)
+class_::enclosing_declarative_region(const declarative_region_shared_ptr_variant& decl_region)
 {
-	declarative_region_member_impl_.declarative_region(decl_region);
+	declarative_region_member_impl_.enclosing_declarative_region(decl_region);
 }
 
 const class_::open_declarative_region_shared_ptr_variants_t&
@@ -180,7 +180,7 @@ class_::add_base_class
 void
 class_::add_member(std::shared_ptr<class_> member, const access acc)
 {
-	member->declarative_region(shared_from_this());
+	member->enclosing_declarative_region(shared_from_this());
 	nested_classes_.push_back(member);
 	open_declarative_regions_.push_back(member);
 
@@ -190,7 +190,7 @@ class_::add_member(std::shared_ptr<class_> member, const access acc)
 void
 class_::add_member(std::shared_ptr<constructor> member, const access acc)
 {
-	member->declarative_region(shared_from_this());
+	member->enclosing_declarative_region(shared_from_this());
     constructors_.push_back(member);
 
 	member_access_[std::shared_ptr<const constructor>(member)] = acc;
@@ -205,7 +205,7 @@ class_::set_destructor
 	const bool is_pure
 )
 {
-	member->declarative_region(shared_from_this());
+	member->enclosing_declarative_region(shared_from_this());
 	destructor_ = member;
 
 	std::shared_ptr<const destructor> const_member(member);
@@ -237,7 +237,7 @@ class_::add_member
 	const bool is_pure
 )
 {
-	member->declarative_region(shared_from_this());
+	member->enclosing_declarative_region(shared_from_this());
     simple_functions_.push_back(member);
 
 	std::shared_ptr<const simple_function> const_member(member);
@@ -259,7 +259,7 @@ class_::add_member
 	const bool is_pure
 )
 {
-	member->declarative_region(shared_from_this());
+	member->enclosing_declarative_region(shared_from_this());
     operator_functions_.push_back(member);
 
 	std::shared_ptr<const operator_function> const_member(member);
@@ -281,7 +281,7 @@ class_::add_member
 	const bool is_pure
 )
 {
-	member->declarative_region(shared_from_this());
+	member->enclosing_declarative_region(shared_from_this());
     conversion_functions_.push_back(member);
 
 	std::shared_ptr<const conversion_function> const_member(member);
@@ -300,7 +300,7 @@ class_::add_member
 	const bool is_mutable
 )
 {
-	member->declarative_region(shared_from_this());
+	member->enclosing_declarative_region(shared_from_this());
     variables_.push_back(member);
 
 	std::shared_ptr<const variable> const_member(member);
@@ -622,21 +622,21 @@ class_::constructor::is_explicit() const
 }
 
 bool
-class_::constructor::has_declarative_region() const
+class_::constructor::has_enclosing_declarative_region() const
 {
-	return declarative_region_member_impl_.has_declarative_region();
+	return declarative_region_member_impl_.has_enclosing_declarative_region();
 }
 
 declarative_region_shared_ptr_variant
-class_::constructor::declarative_region() const
+class_::constructor::enclosing_declarative_region() const
 {
-	return declarative_region_member_impl_.declarative_region();
+	return declarative_region_member_impl_.enclosing_declarative_region();
 }
 
 void
-class_::constructor::declarative_region(const declarative_region_shared_ptr_variant& decl_region)
+class_::constructor::enclosing_declarative_region(const declarative_region_shared_ptr_variant& decl_region)
 {
-	declarative_region_member_impl_.declarative_region(decl_region);
+	declarative_region_member_impl_.enclosing_declarative_region(decl_region);
 }
 
 
@@ -661,21 +661,21 @@ class_::destructor::is_inline() const
 }
 
 bool
-class_::destructor::has_declarative_region() const
+class_::destructor::has_enclosing_declarative_region() const
 {
-	return declarative_region_member_impl_.has_declarative_region();
+	return declarative_region_member_impl_.has_enclosing_declarative_region();
 }
 
 declarative_region_shared_ptr_variant
-class_::destructor::declarative_region() const
+class_::destructor::enclosing_declarative_region() const
 {
-	return declarative_region_member_impl_.declarative_region();
+	return declarative_region_member_impl_.enclosing_declarative_region();
 }
 
 void
-class_::destructor::declarative_region(const declarative_region_shared_ptr_variant& decl_region)
+class_::destructor::enclosing_declarative_region(const declarative_region_shared_ptr_variant& decl_region)
 {
-	declarative_region_member_impl_.declarative_region(decl_region);
+	declarative_region_member_impl_.enclosing_declarative_region(decl_region);
 }
 
 bool
@@ -721,21 +721,21 @@ class_::conversion_function::is_inline() const
 }
 
 bool
-class_::conversion_function::has_declarative_region() const
+class_::conversion_function::has_enclosing_declarative_region() const
 {
-	return declarative_region_member_impl_.has_declarative_region();
+	return declarative_region_member_impl_.has_enclosing_declarative_region();
 }
 
 declarative_region_shared_ptr_variant
-class_::conversion_function::declarative_region() const
+class_::conversion_function::enclosing_declarative_region() const
 {
-	return declarative_region_member_impl_.declarative_region();
+	return declarative_region_member_impl_.enclosing_declarative_region();
 }
 
 void
-class_::conversion_function::declarative_region(const declarative_region_shared_ptr_variant& decl_region)
+class_::conversion_function::enclosing_declarative_region(const declarative_region_shared_ptr_variant& decl_region)
 {
-	declarative_region_member_impl_.declarative_region(decl_region);
+	declarative_region_member_impl_.enclosing_declarative_region(decl_region);
 }
 
 bool

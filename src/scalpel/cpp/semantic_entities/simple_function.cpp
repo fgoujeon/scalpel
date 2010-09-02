@@ -149,21 +149,21 @@ simple_function::defined(bool d)
 }
 
 bool
-simple_function::has_declarative_region() const
+simple_function::has_enclosing_declarative_region() const
 {
-	return declarative_region_member_impl_.has_declarative_region();
+	return declarative_region_member_impl_.has_enclosing_declarative_region();
 }
 
 declarative_region_shared_ptr_variant
-simple_function::declarative_region() const
+simple_function::enclosing_declarative_region() const
 {
-	return declarative_region_member_impl_.declarative_region();
+	return declarative_region_member_impl_.enclosing_declarative_region();
 }
 
 void
-simple_function::declarative_region(const declarative_region_shared_ptr_variant& decl_region)
+simple_function::enclosing_declarative_region(const declarative_region_shared_ptr_variant& decl_region)
 {
-	declarative_region_member_impl_.declarative_region(decl_region);
+	declarative_region_member_impl_.enclosing_declarative_region(decl_region);
 }
 
 std::shared_ptr<statement_block>
@@ -182,7 +182,7 @@ void
 simple_function::body(std::shared_ptr<statement_block> b)
 {
 	body_ = b;
-	body_->declarative_region(shared_from_this());
+	body_->enclosing_declarative_region(shared_from_this());
 }
 
 bool

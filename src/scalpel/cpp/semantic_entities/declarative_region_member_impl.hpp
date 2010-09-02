@@ -31,16 +31,16 @@ class declarative_region_member_impl
 {
     public:
 		bool
-		has_declarative_region() const;
+		has_enclosing_declarative_region() const;
 
 		declarative_region_shared_ptr_variant
-		declarative_region() const;
+		enclosing_declarative_region() const;
 
 		void
-		declarative_region(const declarative_region_shared_ptr_variant& declarative_region);
+		enclosing_declarative_region(const declarative_region_shared_ptr_variant& enclosing_declarative_region);
 
     private:
-		boost::optional<declarative_region_weak_ptr_variant> declarative_region_;
+		boost::optional<declarative_region_weak_ptr_variant> enclosing_declarative_region_;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

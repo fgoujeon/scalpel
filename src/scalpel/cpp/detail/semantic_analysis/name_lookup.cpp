@@ -83,14 +83,14 @@ impl::find_common_enclosing_namespace
 					return current_namespace_a;
 
 				//iterate to the enclosing namespace
-				if(!current_namespace_b->has_declarative_region()) break;
-				current_namespace_b = current_namespace_b->declarative_region();
+				if(!current_namespace_b->has_enclosing_declarative_region()) break;
+				current_namespace_b = current_namespace_b->enclosing_declarative_region();
 			}
 		}
 
 		//iterate to the enclosing declarative region
-		if(!has_declarative_region(current_declarative_region_a)) break;
-		current_declarative_region_a = get_declarative_region(current_declarative_region_a);
+		if(!has_enclosing_declarative_region(current_declarative_region_a)) break;
+		current_declarative_region_a = get_enclosing_declarative_region(current_declarative_region_a);
 	}
 
 	throw std::runtime_error("find_common_enclosing_namespace() error: the given declarative regions don't have a common namespace");

@@ -80,21 +80,21 @@ variable::is_static() const
 }
 
 bool
-variable::has_declarative_region() const
+variable::has_enclosing_declarative_region() const
 {
-	return declarative_region_member_impl_.has_declarative_region();
+	return declarative_region_member_impl_.has_enclosing_declarative_region();
 }
 
 declarative_region_shared_ptr_variant
-variable::declarative_region() const
+variable::enclosing_declarative_region() const
 {
-	return declarative_region_member_impl_.declarative_region();
+	return declarative_region_member_impl_.enclosing_declarative_region();
 }
 
 void
-variable::declarative_region(const declarative_region_shared_ptr_variant& decl_region)
+variable::enclosing_declarative_region(const declarative_region_shared_ptr_variant& decl_region)
 {
-	declarative_region_member_impl_.declarative_region(decl_region);
+	declarative_region_member_impl_.enclosing_declarative_region(decl_region);
 }
 
 bool

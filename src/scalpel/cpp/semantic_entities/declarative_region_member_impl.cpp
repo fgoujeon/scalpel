@@ -24,25 +24,25 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 bool
-declarative_region_member_impl::has_declarative_region() const
+declarative_region_member_impl::has_enclosing_declarative_region() const
 {
-	return declarative_region_;
+	return enclosing_declarative_region_;
 }
 
 declarative_region_shared_ptr_variant
-declarative_region_member_impl::declarative_region() const
+declarative_region_member_impl::enclosing_declarative_region() const
 {
-	if(declarative_region_)
-		return to_shared_ptr_variant(*declarative_region_);
+	if(enclosing_declarative_region_)
+		return to_shared_ptr_variant(*enclosing_declarative_region_);
 	else
 		throw std::runtime_error("The declarative region is not set.");
 }
 
 void
-declarative_region_member_impl::declarative_region(const declarative_region_shared_ptr_variant& decl_region)
+declarative_region_member_impl::enclosing_declarative_region(const declarative_region_shared_ptr_variant& decl_region)
 {
-	if(!declarative_region_)
-		declarative_region_ = to_weak_ptr_variant(decl_region);
+	if(!enclosing_declarative_region_)
+		enclosing_declarative_region_ = to_weak_ptr_variant(decl_region);
 	else
 		throw std::runtime_error("The declarative region is already set.");
 }

@@ -87,21 +87,21 @@ operator_function::defined(const bool d)
 }
 
 bool
-operator_function::has_declarative_region() const
+operator_function::has_enclosing_declarative_region() const
 {
-	return impl_->has_declarative_region();
+	return impl_->has_enclosing_declarative_region();
 }
 
 declarative_region_shared_ptr_variant
-operator_function::declarative_region() const
+operator_function::enclosing_declarative_region() const
 {
-	return impl_->declarative_region();
+	return impl_->enclosing_declarative_region();
 }
 
 void
-operator_function::declarative_region(const declarative_region_shared_ptr_variant& decl_region)
+operator_function::enclosing_declarative_region(const declarative_region_shared_ptr_variant& decl_region)
 {
-	impl_->declarative_region(decl_region);
+	impl_->enclosing_declarative_region(decl_region);
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

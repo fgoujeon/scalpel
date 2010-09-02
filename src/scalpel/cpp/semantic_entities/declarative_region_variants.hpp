@@ -71,10 +71,10 @@ const std::string&
 get_name(const open_declarative_region_shared_ptr_variant& var);
 
 bool
-has_declarative_region(const declarative_region_shared_ptr_variant& var);
+has_enclosing_declarative_region(const declarative_region_shared_ptr_variant& var);
 
 declarative_region_shared_ptr_variant
-get_declarative_region(const declarative_region_shared_ptr_variant& var);
+get_enclosing_declarative_region(const declarative_region_shared_ptr_variant& var);
 
 declarative_region_shared_ptr_variant
 to_shared_ptr_variant(const declarative_region_weak_ptr_variant& var);

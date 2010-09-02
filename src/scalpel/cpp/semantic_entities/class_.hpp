@@ -104,13 +104,13 @@ class class_:
         name() const;
 
 		bool
-		has_declarative_region() const;
+		has_enclosing_declarative_region() const;
 
 		declarative_region_shared_ptr_variant
-		declarative_region() const;
+		enclosing_declarative_region() const;
 
 		void
-		declarative_region(const declarative_region_shared_ptr_variant& declarative_region);
+		enclosing_declarative_region(const declarative_region_shared_ptr_variant& enclosing_declarative_region);
 
 		const open_declarative_region_shared_ptr_variants_t&
 		open_declarative_regions();
@@ -326,13 +326,13 @@ class class_::constructor
 		is_explicit() const;
 
 		bool
-		has_declarative_region() const;
+		has_enclosing_declarative_region() const;
 
 		declarative_region_shared_ptr_variant
-		declarative_region() const;
+		enclosing_declarative_region() const;
 
 		void
-		declarative_region(const declarative_region_shared_ptr_variant& declarative_region);
+		enclosing_declarative_region(const declarative_region_shared_ptr_variant& enclosing_declarative_region);
 
 	private:
 		std::shared_ptr<semantic_entities::simple_function> impl_;
@@ -353,13 +353,13 @@ class class_::destructor
 		is_inline() const;
 
 		bool
-		has_declarative_region() const;
+		has_enclosing_declarative_region() const;
 
 		declarative_region_shared_ptr_variant
-		declarative_region() const;
+		enclosing_declarative_region() const;
 
 		void
-		declarative_region(const declarative_region_shared_ptr_variant& declarative_region);
+		enclosing_declarative_region(const declarative_region_shared_ptr_variant& enclosing_declarative_region);
 
 	private:
 		bool is_inline_;
@@ -392,13 +392,13 @@ class class_::conversion_function
 		is_inline() const;
 
 		bool
-		has_declarative_region() const;
+		has_enclosing_declarative_region() const;
 
 		declarative_region_shared_ptr_variant
-		declarative_region() const;
+		enclosing_declarative_region() const;
 
 		void
-		declarative_region(const declarative_region_shared_ptr_variant& declarative_region);
+		enclosing_declarative_region(const declarative_region_shared_ptr_variant& enclosing_declarative_region);
 
 	private:
 		type_shared_ptr_variant return_type_;
