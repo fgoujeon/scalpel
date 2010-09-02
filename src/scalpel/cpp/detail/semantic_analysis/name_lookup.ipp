@@ -365,7 +365,7 @@ typename return_type<EntityT, Optional, Multiple>::type
 impl::find_local_entities
 (
 	const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
-	DeclarativeRegionT& current_declarative_region
+	const DeclarativeRegionT& current_declarative_region
 )
 {
 	if(auto opt_identifier_node = syntax_nodes::get<syntax_nodes::identifier>(&identifier_or_template_id))
@@ -384,7 +384,7 @@ typename return_type<EntityT, Optional, Multiple>::type
 impl::find_local_entities_from_identifier
 (
 	const std::string& name,
-	DeclarativeRegionT& current_declarative_region
+	const DeclarativeRegionT& current_declarative_region
 )
 {
 	typename return_type<EntityT, true, Multiple>::type found_entities;

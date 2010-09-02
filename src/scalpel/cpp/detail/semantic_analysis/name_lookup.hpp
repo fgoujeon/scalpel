@@ -217,7 +217,7 @@ class impl
 	find_local_entities
 	(
 		const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
-		DeclarativeRegionT& current_declarative_region
+		const DeclarativeRegionT& current_declarative_region
 	);
 
 	/**
@@ -229,7 +229,7 @@ class impl
 	find_local_entities_from_identifier
 	(
 		const std::string& name,
-		DeclarativeRegionT& current_declarative_region
+		const DeclarativeRegionT& current_declarative_region
 	);
 
 
