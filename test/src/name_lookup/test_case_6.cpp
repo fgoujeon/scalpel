@@ -189,7 +189,7 @@ test_case_6()
 			space(""),
 			identifier("g")
 		);
-		auto found_entity = find<simple_function, false, false>(ab_g_syntax_node, function_test);
+		auto found_entity = find<simple_function>(ab_g_syntax_node, function_test);
 		BOOST_CHECK_EQUAL(found_entity, function_ab_g);
 	}
 
@@ -210,7 +210,7 @@ test_case_6()
 			space(""),
 			identifier("f")
 		);
-		auto found_entities = find<simple_function, false, true>(ab_f_syntax_node, function_test);
+		auto found_entities = find<simple_function, true>(ab_f_syntax_node, function_test);
 		BOOST_CHECK_EQUAL(found_entities.size(), 2);
 		if(found_entities.size() == 2)
 		{
@@ -242,7 +242,7 @@ test_case_6()
 			space(""),
 			identifier("x")
 		);
-		auto found_entity = find<variable, true, false>(ab_x_syntax_node, function_test);
+		auto found_entity = find<variable, false, true>(ab_x_syntax_node, function_test);
 		BOOST_CHECK(!found_entity.get());
 	}
 
@@ -263,7 +263,7 @@ test_case_6()
 			space(""),
 			identifier("i")
 		);
-		auto found_entities = find<variable, false, true>(ab_i_syntax_node, function_test);
+		auto found_entities = find<variable, true>(ab_i_syntax_node, function_test);
 		BOOST_CHECK_EQUAL(found_entities.size(), 2);
 		if(found_entities.size() == 2)
 		{
@@ -295,7 +295,7 @@ test_case_6()
 			space(""),
 			identifier("h")
 		);
-		auto found_entities = find<simple_function, false, true>(ab_h_syntax_node, function_test);
+		auto found_entities = find<simple_function, true>(ab_h_syntax_node, function_test);
 		BOOST_CHECK_EQUAL(found_entities.size(), 2);
 		if(found_entities.size() == 2)
 		{

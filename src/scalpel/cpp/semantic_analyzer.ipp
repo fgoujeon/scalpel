@@ -681,7 +681,7 @@ semantic_analyzer::define_simple_function
 	std::shared_ptr<semantic_entities::simple_function> function_entity;
 	{
 		std::shared_ptr<semantic_entities::simple_function> found_function =
-			name_lookup::find<semantic_entities::simple_function, true, false>(function_name, current_declarative_region)
+			name_lookup::find<semantic_entities::simple_function, false, true>(function_name, current_declarative_region)
 		;
 		if
 		(

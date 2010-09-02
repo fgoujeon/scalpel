@@ -117,13 +117,13 @@ test_case_1()
 
 	//find i
 	{
-		auto found_entity = find<variable, false, false>(identifier("i"), function_a_b_f);
+		auto found_entity = find<variable>(identifier("i"), function_a_b_f);
 		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
 	}
 
 	//find j
 	{
-		auto found_entity = find<variable, false, false>(identifier("j"), function_a_b_f);
+		auto found_entity = find<variable>(identifier("j"), function_a_b_f);
 		BOOST_CHECK_EQUAL(found_entity, variable_j);
 	}
 
@@ -144,7 +144,7 @@ test_case_1()
 			space(""),
 			identifier("n")
 		);
-		auto found_entity = find<variable, false, false>(variable_a_c_n_syntax_node, function_a_b_f);
+		auto found_entity = find<variable>(variable_a_c_n_syntax_node, function_a_b_f);
 		BOOST_CHECK_EQUAL(found_entity, variable_a_c_n);
 	}
 
@@ -165,7 +165,7 @@ test_case_1()
 			space(""),
 			identifier("i")
 		);
-		auto found_entity = find<variable, false, false>(variable_a_i_syntax_node, function_a_b_f);
+		auto found_entity = find<variable>(variable_a_i_syntax_node, function_a_b_f);
 		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
 	}
 
@@ -179,7 +179,7 @@ test_case_1()
 			space(""),
 			identifier("i")
 		);
-		auto found_entity = find<variable, false, false>(variable_i_syntax_node, function_a_b_f);
+		auto found_entity = find<variable>(variable_i_syntax_node, function_a_b_f);
 		BOOST_CHECK_EQUAL(found_entity, variable_i);
 	}
 
@@ -200,7 +200,7 @@ test_case_1()
 			space(""),
 			identifier("C")
 		);
-		auto found_entity = find<namespace_, false, false>(a_c_syntax_node, function_a_b_f);
+		auto found_entity = find<namespace_>(a_c_syntax_node, function_a_b_f);
 		BOOST_CHECK_EQUAL(found_entity, namespace_a_c);
 	}
 }

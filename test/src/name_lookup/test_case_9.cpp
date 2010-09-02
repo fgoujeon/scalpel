@@ -114,7 +114,7 @@ test_case_9()
 			space(""),
 			identifier("f")
 		);
-		auto found_entity = find<simple_function, true, false>(a_f_syntax_node, semantic_graph, false);
+		auto found_entity = find<simple_function, false, true>(a_f_syntax_node, semantic_graph, false);
 		BOOST_CHECK(!found_entity.get());
 	}
 
@@ -135,7 +135,7 @@ test_case_9()
 			space(""),
 			identifier("f")
 		);
-		auto found_entity = find<simple_function, true, false>(b_f_syntax_node, semantic_graph, false);
+		auto found_entity = find<simple_function>(b_f_syntax_node, semantic_graph, false);
 		BOOST_CHECK_EQUAL(found_entity, function_a_b_f);
 	}
 }
