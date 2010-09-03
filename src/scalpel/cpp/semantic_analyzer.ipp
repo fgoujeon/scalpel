@@ -29,7 +29,11 @@ namespace scalpel { namespace cpp
 {
 
 template<class DeclarativeRegionT>
-semantic_analyzer::alternative_visitor<DeclarativeRegionT>::alternative_visitor(semantic_analyzer& analyzer, std::shared_ptr<DeclarativeRegionT> current_declarative_region):
+semantic_analyzer::alternative_visitor<DeclarativeRegionT>::alternative_visitor
+(
+	semantic_analyzer& analyzer,
+	std::shared_ptr<DeclarativeRegionT> current_declarative_region
+):
 	analyzer_(analyzer),
 	parent_entity_(current_declarative_region)
 {
@@ -222,7 +226,11 @@ semantic_analyzer::analyze(const syntax_nodes::for_statement& syntax_node, std::
 
 template<class DeclarativeRegionT>
 void
-semantic_analyzer::analyze(const syntax_nodes::function_definition& function_definition_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region)
+semantic_analyzer::analyze
+(
+	const syntax_nodes::function_definition& function_definition_node,
+	std::shared_ptr<DeclarativeRegionT> current_declarative_region
+)
 {
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
@@ -387,12 +395,16 @@ semantic_analyzer::analyze(const syntax_nodes::namespace_alias_definition&, std:
 
 template<class DeclarativeRegionT>
 void
-semantic_analyzer::analyze(const syntax_nodes::namespace_definition& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region)
+semantic_analyzer::analyze
+(
+	const syntax_nodes::namespace_definition& syntax_node,
+	std::shared_ptr<DeclarativeRegionT> current_declarative_region
+)
 {
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
 
-	//get the namespace name
+	//get the name of the namespace
 	std::string namespace_name;
 	const optional_node<identifier>& identifier_node = get_identifier(syntax_node);
 	if(identifier_node)
@@ -403,14 +415,14 @@ semantic_analyzer::analyze(const syntax_nodes::namespace_definition& syntax_node
 	//create the namespace entity
 	std::shared_ptr<namespace_> new_namespace = namespace_::make_shared(namespace_name);
 
-	//add_member the namespace to the current declarative region
+	//add the namespace to the current declarative region
 	current_declarative_region->add_member(new_namespace);
 
-	//add_member the declarations of the namespace definition in the namespace semantic node
-	const optional_node<declaration_seq>& a_declaration_seq = get_declaration_seq(syntax_node);
-	if(a_declaration_seq)
+	//add the declarations of the namespace definition in the namespace semantic node
+	const optional_node<declaration_seq>& opt_declaration_seq_node = get_declaration_seq(syntax_node);
+	if(opt_declaration_seq_node)
 	{
-		analyze(*a_declaration_seq, new_namespace);
+		analyze(*opt_declaration_seq_node, new_namespace);
 	}
 }
 
@@ -648,8 +660,39 @@ semantic_analyzer::analyze(const syntax_nodes::using_declaration&, std::shared_p
 
 template<class DeclarativeRegionT>
 void
-semantic_analyzer::analyze(const syntax_nodes::using_directive&, std::shared_ptr<DeclarativeRegionT>)
+semantic_analyzer::analyze
+(
+	const syntax_nodes::using_directive& using_directive_node,
+	std::shared_ptr<DeclarativeRegionT> current_declarative_region
+)
 {
+	using namespace syntax_nodes;
+	using namespace semantic_entities;
+
+	//convert the using-directive node to a nested-identifier-or-template-id node
+	syntax_nodes::nested_identifier_or_template_id nested_identifier_or_template_id_node
+	(
+		has_leading_double_colon(using_directive_node) ?
+			predefined_text_node<str::double_colon>() :
+			optional_node<predefined_text_node<str::double_colon>>()
+		,
+		space(""),
+		get_nested_name_specifier_node(using_directive_node),
+		space(""),
+		get_identifier_node(using_directive_node)
+	);
+
+	//find the namespace designated by the using directive
+	std::shared_ptr<namespace_> using_directive_namespace =
+		detail::semantic_analysis::name_lookup::find<namespace_>
+		(
+			nested_identifier_or_template_id_node,
+			current_declarative_region
+		)
+	;
+
+	//add the using directive's namespace to the current declarative region
+	current_declarative_region->add_using_directive_namespace(using_directive_namespace);
 }
 
 template<class DeclarativeRegionT>
@@ -657,6 +700,8 @@ void
 semantic_analyzer::analyze(const syntax_nodes::while_statement&, std::shared_ptr<DeclarativeRegionT>)
 {
 }
+
+
 
 template<class DeclarativeRegionT>
 void

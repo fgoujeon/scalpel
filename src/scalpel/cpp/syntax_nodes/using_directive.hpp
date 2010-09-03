@@ -52,6 +52,27 @@ typedef
 	using_directive
 ;
 
+inline
+bool
+has_leading_double_colon(const using_directive& o)
+{
+	return get<4>(o);
+}
+
+inline
+const optional_node<nested_name_specifier>&
+get_nested_name_specifier_node(const using_directive& o)
+{
+	return get<6>(o);
+}
+
+inline
+const identifier&
+get_identifier_node(const using_directive& o)
+{
+	return get<8>(o);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
