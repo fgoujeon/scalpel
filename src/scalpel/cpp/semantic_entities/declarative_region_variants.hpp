@@ -28,6 +28,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 class namespace_;
+class namespace_alias;
 class class_;
 class simple_function;
 class statement_block;
@@ -59,6 +60,7 @@ typedef
 	scalpel::utility::variant
 	<
 		std::shared_ptr<namespace_>,
+		std::shared_ptr<namespace_alias>,
 		std::shared_ptr<class_>
 	>
 	open_declarative_region_shared_ptr_variant

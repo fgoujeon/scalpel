@@ -20,6 +20,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "declarative_region_variants.hpp"
 #include "namespace_.hpp"
+#include "namespace_alias.hpp"
 #include "class_.hpp"
 #include "simple_function.hpp"
 #include "statement_block.hpp"

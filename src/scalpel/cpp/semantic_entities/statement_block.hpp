@@ -38,21 +38,18 @@ Represents a C++ statement block.
 class statement_block
 {
     public:
+		typedef utility::vector<open_declarative_region_shared_ptr_variant> open_declarative_region_shared_ptr_variants_t;
 		typedef utility::vector<std::weak_ptr<namespace_>> weak_namespaces_t;
 		typedef utility::vector<std::shared_ptr<statement_block>> statement_blocks_t;
 		typedef utility::vector<std::shared_ptr<variable>> variables_t;
+		typedef utility::vector<std::shared_ptr<namespace_alias>> namespace_aliases_t;
 
         statement_block();
 
 		statement_block(const statement_block& o) = delete;
 
-		statement_block(statement_block&& o);
-
 		const statement_block&
 		operator=(const statement_block& o) = delete;
-
-		const statement_block&
-		operator=(statement_block&& o);
 
 		bool
 		has_enclosing_declarative_region() const
@@ -72,20 +69,29 @@ class statement_block
 			declarative_region_member_impl_.enclosing_declarative_region(decl_region);
 		}
 
+		const open_declarative_region_shared_ptr_variants_t&
+		open_declarative_regions();
+
 		const statement_blocks_t&
 		statement_blocks() const;
 
 		const variables_t&
 		variables() const;
 
+		const namespace_aliases_t&
+		namespace_aliases() const;
+
 		const weak_namespaces_t&
 		using_directive_namespaces() const;
 
 		void
-		add(std::shared_ptr<statement_block> o);
+		add_member(std::shared_ptr<statement_block> member);
 
 		void
-		add(std::shared_ptr<variable> o);
+		add_member(std::shared_ptr<variable> member);
+
+		void
+		add_member(std::shared_ptr<namespace_alias> member);
 
         void
         add_using_directive_namespace(std::shared_ptr<namespace_> n);
@@ -93,8 +99,13 @@ class statement_block
     private:
 		declarative_region_member_impl declarative_region_member_impl_;
 
+		//polymorphic containers
+		open_declarative_region_shared_ptr_variants_t open_declarative_regions_;
+
+		//members
 		statement_blocks_t statement_blocks_;
 		variables_t variables_;
+		namespace_aliases_t namespace_aliases_;
 
         weak_namespaces_t using_directive_namespaces_;
 };

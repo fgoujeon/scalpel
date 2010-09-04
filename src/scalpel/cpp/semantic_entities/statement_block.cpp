@@ -28,19 +28,10 @@ statement_block::statement_block()
 {
 }
 
-statement_block::statement_block(statement_block&& o):
-	statement_blocks_(std::move(o.statement_blocks_)),
-	variables_(std::move(o.variables_))
+const statement_block::open_declarative_region_shared_ptr_variants_t&
+statement_block::open_declarative_regions()
 {
-}
-
-const statement_block&
-statement_block::operator=(statement_block&& o)
-{
-	statement_blocks_ = std::move(o.statement_blocks_);
-	variables_ = std::move(o.variables_);
-
-	return *this;
+	return open_declarative_regions_;
 }
 
 const statement_block::statement_blocks_t&
@@ -55,6 +46,12 @@ statement_block::variables() const
 	return variables_;
 }
 
+const statement_block::namespace_aliases_t&
+statement_block::namespace_aliases() const
+{
+	return namespace_aliases_;
+}
+
 const statement_block::weak_namespaces_t&
 statement_block::using_directive_namespaces() const
 {
@@ -62,15 +59,22 @@ statement_block::using_directive_namespaces() const
 }
 
 void
-statement_block::add(std::shared_ptr<statement_block> o)
+statement_block::add_member(std::shared_ptr<statement_block> member)
 {
-	statement_blocks_.push_back(o);
+	statement_blocks_.push_back(member);
 }
 
 void
-statement_block::add(std::shared_ptr<variable> o)
+statement_block::add_member(std::shared_ptr<variable> member)
 {
-	variables_.push_back(o);
+	variables_.push_back(member);
+}
+
+void
+statement_block::add_member(std::shared_ptr<namespace_alias> member)
+{
+    namespace_aliases_.push_back(member);
+	open_declarative_regions_.push_back(member);
 }
 
 void

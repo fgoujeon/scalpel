@@ -68,6 +68,12 @@ GENERATE_SIMPLE_GET_MEMBERS_SPECIALIZATION(namespace_, class_, classes)
 GENERATE_SIMPLE_GET_MEMBERS_SPECIALIZATION(namespace_, simple_function, simple_functions)
 GENERATE_SIMPLE_GET_MEMBERS_SPECIALIZATION(namespace_, variable, variables)
 
+GENERATE_SIMPLE_GET_MEMBERS_SPECIALIZATION(namespace_alias, open_declarative_region_shared_ptr_variant, open_declarative_regions)
+GENERATE_SIMPLE_GET_MEMBERS_SPECIALIZATION(namespace_alias, namespace_, namespaces)
+GENERATE_SIMPLE_GET_MEMBERS_SPECIALIZATION(namespace_alias, class_, classes)
+GENERATE_SIMPLE_GET_MEMBERS_SPECIALIZATION(namespace_alias, simple_function, simple_functions)
+GENERATE_SIMPLE_GET_MEMBERS_SPECIALIZATION(namespace_alias, variable, variables)
+
 GENERATE_SIMPLE_GET_MEMBERS_SPECIALIZATION(class_, open_declarative_region_shared_ptr_variant, open_declarative_regions)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION (class_, namespace_)
 GENERATE_SIMPLE_GET_MEMBERS_SPECIALIZATION(class_, class_, nested_classes)
@@ -87,7 +93,7 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION (operator_function, simple_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION (operator_function, variable)
 */
 
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION (statement_block, open_declarative_region_shared_ptr_variant)
+GENERATE_SIMPLE_GET_MEMBERS_SPECIALIZATION(statement_block, open_declarative_region_shared_ptr_variant, open_declarative_regions)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION (statement_block, namespace_)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION (statement_block, class_)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION (statement_block, simple_function)

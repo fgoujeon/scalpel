@@ -143,6 +143,12 @@ namespace_::variables() const
 	return variables_;
 }
 
+const namespace_::namespace_aliases_t&
+namespace_::namespace_aliases() const
+{
+	return namespace_aliases_;
+}
+
 const namespace_::weak_namespaces_t&
 namespace_::using_directive_namespaces() const
 {
@@ -184,6 +190,13 @@ namespace_::add_member(std::shared_ptr<variable> member)
 {
 	member->enclosing_declarative_region(shared_from_this());
     variables_.push_back(member);
+}
+
+void
+namespace_::add_member(std::shared_ptr<namespace_alias> member)
+{
+    namespace_aliases_.push_back(member);
+	open_declarative_regions_.push_back(member);
 }
 
 void

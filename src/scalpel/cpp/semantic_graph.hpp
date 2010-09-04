@@ -28,6 +28,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "semantic_entities/const_.hpp"
 #include "semantic_entities/declarative_region_variants.hpp"
 #include "semantic_entities/namespace_.hpp"
+#include "semantic_entities/namespace_alias.hpp"
 #include "semantic_entities/operator_.hpp"
 #include "semantic_entities/operator_function.hpp"
 #include "semantic_entities/pointer.hpp"
