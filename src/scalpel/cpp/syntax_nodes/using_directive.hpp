@@ -61,14 +61,14 @@ has_leading_double_colon(const using_directive& o)
 
 inline
 const optional_node<nested_name_specifier>&
-get_nested_name_specifier_node(const using_directive& o)
+get_nested_name_specifier(const using_directive& o)
 {
 	return get<6>(o);
 }
 
 inline
 const identifier&
-get_identifier_node(const using_directive& o)
+get_identifier(const using_directive& o)
 {
 	return get<8>(o);
 }

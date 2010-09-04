@@ -719,9 +719,9 @@ semantic_analyzer::analyze
 			optional_node<predefined_text_node<str::double_colon>>()
 		,
 		space(""),
-		get_nested_name_specifier_node(using_directive_node),
+		get_nested_name_specifier(using_directive_node),
 		space(""),
-		get_identifier_node(using_directive_node)
+		get_identifier(using_directive_node)
 	);
 
 	//find the namespace designated by the using directive
