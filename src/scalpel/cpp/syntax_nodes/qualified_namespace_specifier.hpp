@@ -45,6 +45,27 @@ typedef
 	qualified_namespace_specifier
 ;
 
+inline
+bool
+has_leading_double_colon(const qualified_namespace_specifier& o)
+{
+	return get<0>(o);
+}
+
+inline
+const optional_node<nested_name_specifier>&
+get_nested_name_specifier(const qualified_namespace_specifier& o)
+{
+	return get<2>(o);
+}
+
+inline
+const identifier&
+get_identifier(const qualified_namespace_specifier& o)
+{
+	return get<4>(o);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif

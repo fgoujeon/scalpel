@@ -49,6 +49,21 @@ typedef
 	namespace_alias_definition
 ;
 
+inline
+const identifier&
+get_identifier(const namespace_alias_definition& o)
+{
+	return get<2>(o);
+}
+
+inline
+const qualified_namespace_specifier&
+get_qualified_namespace_specifier(const namespace_alias_definition& o)
+{
+	return get<6>(o);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

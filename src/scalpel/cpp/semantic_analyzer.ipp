@@ -389,8 +389,50 @@ semantic_analyzer::analyze(const syntax_nodes::member_specification_access_speci
 
 template<class DeclarativeRegionT>
 void
-semantic_analyzer::analyze(const syntax_nodes::namespace_alias_definition&, std::shared_ptr<DeclarativeRegionT>)
+semantic_analyzer::analyze
+(
+	const syntax_nodes::namespace_alias_definition& namespace_alias_definition_node,
+	std::shared_ptr<DeclarativeRegionT> current_declarative_region
+)
 {
+	using namespace syntax_nodes;
+	using namespace semantic_entities;
+
+	const qualified_namespace_specifier& qualified_namespace_specifier_node =
+		get_qualified_namespace_specifier(namespace_alias_definition_node)
+	;
+
+	//convert the qualified-namespace-specifier node to a nested-identifier-or-template-id node
+	syntax_nodes::nested_identifier_or_template_id nested_identifier_or_template_id_node
+	(
+		has_leading_double_colon(qualified_namespace_specifier_node) ?
+			predefined_text_node<str::double_colon>() :
+			optional_node<predefined_text_node<str::double_colon>>()
+		,
+		space(""),
+		get_nested_name_specifier(qualified_namespace_specifier_node),
+		space(""),
+		get_identifier(qualified_namespace_specifier_node)
+	);
+
+	//find the namespace designated by the namespace alias
+	std::shared_ptr<namespace_> found_namespace =
+		detail::semantic_analysis::name_lookup::find<namespace_>
+		(
+			nested_identifier_or_template_id_node,
+			current_declarative_region
+		)
+	;
+
+	//create the namespace alias semantic entity
+	auto new_namespace_alias = std::make_shared<namespace_alias>
+	(
+		get_identifier(namespace_alias_definition_node).value(),
+		found_namespace
+	);
+
+	//add the namespace alias to the current declarative region
+	current_declarative_region->add_member(new_namespace_alias);
 }
 
 template<class DeclarativeRegionT>
