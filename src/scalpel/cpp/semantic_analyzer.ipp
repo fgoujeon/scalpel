@@ -23,6 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "detail/semantic_analysis/basic_functions.hpp"
 #include "detail/semantic_analysis/name_lookup.hpp"
+#include <scalpel/utility/variant.hpp>
 #include <sstream>
 
 namespace scalpel { namespace cpp
@@ -237,69 +238,103 @@ semantic_analyzer::analyze
 	using namespace detail::semantic_analysis;
 
 	auto declarator_node = get_declarator(function_definition_node);
+	boost::optional<nested_identifier_or_template_id> opt_nested_identifier_or_template_id_node;
 
-	//
-	//get the declarative region of the function
-	//
-	/*
-	std::shared_ptr<named_declarative_region> enclosing_declarative_region;
-
+	//If the function definition has a nested-name-specifier
+	//(like in "void n::f(){/*...*/}"), the function must be already declared.
+	//Check whether it's the case.
+	bool declaration_must_exist = false;
 	auto direct_declarator_node = get_direct_declarator(declarator_node);
 	auto first_part_node = get_first_part(direct_declarator_node);
 	auto opt_declarator_id_node = get<declarator_id>(&first_part_node);
 	if(opt_declarator_id_node)
 	{
 		auto declarator_id_node = *opt_declarator_id_node;
-		if(auto opt_id_expression_node = get<id_expression>(&declarator_id_node))
+		if(opt_nested_identifier_or_template_id_node = get<nested_identifier_or_template_id>(&declarator_id_node))
 		{
-			auto id_expression_node = *opt_id_expression_node;
-
-			if(auto opt_unqualified_id_node = get<unqualified_id>(&id_expression_node))
+			auto nested_identifier_or_template_id_node = *opt_nested_identifier_or_template_id_node;
+			if(get_nested_name_specifier(nested_identifier_or_template_id_node))
 			{
-				enclosing_declarative_region = declarative_region_cursor_.current_declarative_region();
-			}
-			else if(auto opt_qualified_id_node = get<qualified_id>(&id_expression_node))
-			{
-				return;
-				auto qualified_id_node = *opt_qualified_id_node;
-				//get<qualified_identifier>(a_qualified_id)
-				//get<qualified_operator_function_id>(a_qualified_id)
-				//get<qualified_template_id>(a_qualified_id)
-
-				if(auto opt_qualified_nested_id_node = get<qualified_nested_id>(&qualified_id_node))
-				{
-					bool leading_double_colon = has_double_colon(*opt_qualified_nested_id_node);
-					auto nested_name_specifier_node = get_nested_name_specifier(*opt_qualified_nested_id_node);
-
-					if(leading_double_colon)
-					{
-						enclosing_declarative_region = name_lookup::find_declarative_region(declarative_region_cursor_.global_declarative_region_path(), nested_name_specifier_node);
-					}
-					else
-					{
-						enclosing_declarative_region = name_lookup::find_declarative_region(declarative_region_cursor_.declarative_region_path(), nested_name_specifier_node);
-					}
-				}
-			}
-			else
-			{
-				assert(false);
+				declaration_must_exist = true;
 			}
 		}
 	}
-	*/
 
-	if(auto opt_decl_specifier_seq_node = get_decl_specifier_seq(function_definition_node))
+	if(is_simple_function_declaration(declarator_node))
 	{
+		auto opt_decl_specifier_seq_node = get_decl_specifier_seq(function_definition_node);
+		assert(opt_decl_specifier_seq_node);
 		auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
-		if(is_simple_function_declaration(declarator_node))
+
+		//create a new function
+		std::shared_ptr<simple_function> new_function = create_simple_function
+		(
+			decl_specifier_seq_node,
+			declarator_node,
+			current_declarative_region
+		);
+
+		//this function pointer will point to either new_function or
+		//(if any) to the already existing (undefined) function
+		std::shared_ptr<simple_function> function_to_be_defined;
+
+		if(declaration_must_exist)
 		{
-			define_simple_function(decl_specifier_seq_node, declarator_node, current_declarative_region);
+			assert(opt_nested_identifier_or_template_id_node);
+			auto nested_identifier_or_template_id_node = *opt_nested_identifier_or_template_id_node;
+
+			//find the function declaration
+			std::set<std::shared_ptr<simple_function>> found_functions =
+				name_lookup::find<simple_function, true>
+				(
+					nested_identifier_or_template_id_node,
+					current_declarative_region
+				)
+			;
+			for
+			(
+				auto i = found_functions.begin();
+				i != found_functions.end();
+				++i
+			)
+			{
+				std::shared_ptr<simple_function> found_function = *i;
+				if(found_function->has_same_signature(*new_function))
+				{
+					function_to_be_defined = found_function;
+					break;
+				}
+			}
+
+			//make sure we found the declaration
+			if(!function_to_be_defined)
+			{
+				std::ostringstream oss;
+				oss << new_function->name() << " is not declared";
+				throw std::runtime_error(oss.str().c_str());
+			}
+
+			//check whether the function is undefined as expected
+			if(function_to_be_defined->defined())
+			{
+				std::ostringstream oss;
+				oss << "Redefinition of " << function_to_be_defined->name();
+				throw std::runtime_error(oss.str().c_str());
+			}
 		}
-		else if(is_operator_function_declaration(declarator_node))
+		else
 		{
-			//TODO define_function<operator_function>(decl_specifier_seq_node, declarator_node, current_declarative_region);
+			//declare the function and add it to the current declarative region
+			function_to_be_defined = new_function;
+			current_declarative_region->add_member(new_function);
 		}
+
+		//TODO define the function
+		function_to_be_defined->body(std::make_shared<semantic_entities::statement_block>());
+	}
+	else if(is_operator_function_declaration(declarator_node))
+	{
+		//TODO
 	}
 }
 
@@ -744,62 +779,6 @@ semantic_analyzer::analyze(const syntax_nodes::while_statement&, std::shared_ptr
 }
 
 
-
-template<class DeclarativeRegionT>
-void
-semantic_analyzer::define_simple_function
-(
-	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-	const syntax_nodes::declarator& declarator_node,
-	std::shared_ptr<DeclarativeRegionT> current_declarative_region
-)
-{
-	using namespace detail::semantic_analysis;
-
-	//get the function name
-	syntax_nodes::identifier function_name = get_identifier(declarator_node);
-
-	//create a simple_function object
-	std::shared_ptr<semantic_entities::simple_function> new_function =
-		create_simple_function(decl_specifier_seq_node, declarator_node, current_declarative_region)
-	;
-
-	//find a matching simple_function semantic entity (must exist if the function has already been declared)
-	std::shared_ptr<semantic_entities::simple_function> function_entity;
-	{
-		std::shared_ptr<semantic_entities::simple_function> found_function =
-			name_lookup::find<semantic_entities::simple_function, false, true>(function_name, current_declarative_region)
-		;
-		if
-		(
-			found_function &&
-			found_function->has_same_signature(*new_function)
-		)
-		{
-			function_entity = found_function;
-		}
-	}
-
-	//if the function hasn't been declared, this definition serves as a declaration
-	if(!function_entity)
-	{
-		function_entity = new_function;
-		current_declarative_region->add_member(new_function);
-	}
-
-	assert(function_entity);
-
-	//check whether the function is undefined
-	if(function_entity->defined())
-	{
-		std::ostringstream oss;
-		oss << "Redefinition of " << function_name.value();
-		throw std::runtime_error(oss.str().c_str());
-	}
-
-	//TODO define the function
-	function_entity->body(std::make_shared<semantic_entities::statement_block>());
-}
 
 template<class DeclarativeRegionT>
 std::shared_ptr<semantic_entities::simple_function>

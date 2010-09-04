@@ -323,26 +323,6 @@ class semantic_analyzer
 
 
 		//
-		//function definition functions
-		//
-
-		/**
-		Define a function from the two syntax node parameters. It may also
-		create the function and add it to the current declarative region if it
-		hasn't been declared yet.
-		*/
-		template<class DeclarativeRegionT>
-		void
-		define_simple_function
-		(
-			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-			const syntax_nodes::declarator& declarator_node,
-			std::shared_ptr<DeclarativeRegionT> current_declarative_region
-		);
-
-
-
-		//
 		//function creation functions
 		//
 
