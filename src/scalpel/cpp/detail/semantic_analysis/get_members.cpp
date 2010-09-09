@@ -39,7 +39,7 @@ struct get_declarative_region_members_impl: public utility::static_visitor<typen
 
 #define GENERATE_SIMPLE_GET_MEMBERS_SPECIALIZATION(PARENT_TYPE, MEMBER_TYPE, PARENT_MEMBER_FUNCTION) \
 template<> \
-typename get_members_type_traits<semantic_entities::MEMBER_TYPE>::return_type \
+get_members_type_traits<semantic_entities::MEMBER_TYPE>::return_type \
 get_members<semantic_entities::MEMBER_TYPE, std::shared_ptr<semantic_entities::PARENT_TYPE>>(std::shared_ptr<semantic_entities::PARENT_TYPE> parent) \
 { \
 	return parent->PARENT_MEMBER_FUNCTION(); \
@@ -47,7 +47,7 @@ get_members<semantic_entities::MEMBER_TYPE, std::shared_ptr<semantic_entities::P
 
 #define GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(PARENT_TYPE, MEMBER_TYPE) \
 template<> \
-typename get_members_type_traits<semantic_entities::MEMBER_TYPE>::return_type \
+get_members_type_traits<semantic_entities::MEMBER_TYPE>::return_type \
 get_members<semantic_entities::MEMBER_TYPE, std::shared_ptr<semantic_entities::PARENT_TYPE>>(std::shared_ptr<semantic_entities::PARENT_TYPE>) \
 { \
 	return get_members_type_traits<semantic_entities::MEMBER_TYPE>::return_type(); \
@@ -55,7 +55,7 @@ get_members<semantic_entities::MEMBER_TYPE, std::shared_ptr<semantic_entities::P
 
 #define GENERATE_DECLARATIVE_REGION_VARIANT_GET_MEMBERS_SPECIALIZATION(PARENT_TYPE, MEMBER_TYPE) \
 template<> \
-typename get_members_type_traits<semantic_entities::MEMBER_TYPE>::return_type \
+get_members_type_traits<semantic_entities::MEMBER_TYPE>::return_type \
 get_members<semantic_entities::MEMBER_TYPE, semantic_entities::PARENT_TYPE>(semantic_entities::PARENT_TYPE parent) \
 { \
 	get_declarative_region_members_impl<semantic_entities::MEMBER_TYPE> impl; \
