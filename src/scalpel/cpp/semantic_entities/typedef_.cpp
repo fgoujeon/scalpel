@@ -18,18 +18,31 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_VARIANTS_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_VARIANTS_HPP
-
-#include "array.hpp"
-#include "class_.hpp"
-#include "const_.hpp"
-#include "fundamental_type.hpp"
-#include "pointer.hpp"
-#include "reference.hpp"
 #include "typedef_.hpp"
-#include "volatile_.hpp"
-#include "type_variants_fwd.hpp"
+#include "type_variants.hpp"
+#include <scalpel/utility/are_pointed_objects_equal.hpp>
 
-#endif
+namespace scalpel { namespace cpp { namespace semantic_entities
+{
+
+typedef_::typedef_(const type_shared_ptr_variant& associated_type):
+	associated_type_(associated_type)
+{
+}
+
+bool
+operator==(const typedef_& lhs, const typedef_& rhs)
+{
+	return
+		are_pointed_objects_equal(lhs.associated_type(), rhs.associated_type())
+	;
+}
+
+bool
+operator!=(const typedef_& lhs, const typedef_& rhs)
+{
+	return !operator==(lhs, rhs);
+}
+
+}}} //namespace scalpel::cpp::semantic_entities
 

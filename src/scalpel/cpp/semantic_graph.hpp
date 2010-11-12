@@ -22,11 +22,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_GRAPH_HPP
 
 #include "semantic_entities/array.hpp"
-#include "semantic_entities/fundamental_type.hpp"
-#include "semantic_entities/fundamental_type_shared_ptrs.hpp"
 #include "semantic_entities/class_.hpp"
 #include "semantic_entities/const_.hpp"
 #include "semantic_entities/declarative_region_variants.hpp"
+#include "semantic_entities/fundamental_type.hpp"
+#include "semantic_entities/fundamental_type_shared_ptrs.hpp"
 #include "semantic_entities/namespace_.hpp"
 #include "semantic_entities/namespace_alias.hpp"
 #include "semantic_entities/operator_.hpp"
@@ -36,6 +36,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "semantic_entities/simple_function.hpp"
 #include "semantic_entities/statement_block.hpp"
 #include "semantic_entities/type_variants.hpp"
+#include "semantic_entities/typedef_.hpp"
 #include "semantic_entities/variable.hpp"
 #include "semantic_entities/volatile_.hpp"
 

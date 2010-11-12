@@ -27,11 +27,12 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 class array;
-class fundamental_type;
 class class_;
 class const_;
+class fundamental_type;
 class pointer;
 class reference;
+class typedef_;
 class volatile_;
 
 typedef
@@ -43,6 +44,7 @@ typedef
 		std::shared_ptr<const const_>,
 		std::shared_ptr<const pointer>,
 		std::shared_ptr<const reference>,
+		std::shared_ptr<const typedef_>,
 		std::shared_ptr<const volatile_>
 	>
 	type_shared_ptr_variant

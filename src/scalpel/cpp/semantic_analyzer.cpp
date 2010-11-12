@@ -39,9 +39,75 @@ semantic_analyzer::operator()(const syntax_tree& tree)
 
 	auto opt_declaration_seq_node = get_declaration_seq_node(tree);
 	if(opt_declaration_seq_node)
-		analyze(*opt_declaration_seq_node, global_namespace);
+	{
+		auto declaration_seq_node = *opt_declaration_seq_node;
+		fill_namespace(global_namespace, declaration_seq_node);
+	}
 
 	return global_namespace;
+}
+
+std::shared_ptr<semantic_entities::namespace_>
+semantic_analyzer::create_namespace
+(
+	const syntax_nodes::namespace_definition& namespace_definition_node
+)
+{
+	//get the name of the namespace
+	std::string namespace_name;
+	const optional_node<identifier>& identifier_node = get_identifier(namespace_definition_node);
+	if(identifier_node)
+	{
+		namespace_name = identifier_node->value();
+	}
+
+	//create the namespace entity
+	return namespace_::make_shared(namespace_name);
+}
+
+void
+semantic_analyzer::fill_namespace
+(
+	std::shared_ptr<semantic_entities::namespace_> namespace_entity,
+	const syntax_nodes::namespace_definition& namespace_definition_node
+)
+{
+	const optional_node<declaration_seq>& opt_declaration_seq_node = get_declaration_seq(namespace_definition_node);
+	if(opt_declaration_seq_node)
+		fill_namespace(namespace_entity, *opt_declaration_seq_node);
+}
+
+void
+semantic_analyzer::fill_namespace
+(
+	std::shared_ptr<semantic_entities::namespace_> namespace_entity,
+	const syntax_nodes::declaration_seq& declaration_seq_node
+)
+{
+	//add the declarations of the namespace definition in the namespace semantic entity
+	for(auto i = declaration_seq_node.begin(); i != declaration_seq_node.end(); ++i)
+	{
+		auto declaration_node = i->main_node();
+
+		//if(const boost::optional<const block_declaration&> opt_block_declaration_node = get<block_declaration>(&declaration_node))
+		//	analyze(*opt_block_declaration_node, namespace_entity);
+		/*else*/ if(const boost::optional<const function_definition&> opt_function_definition_node = get<function_definition>(&declaration_node))
+			analyze(*opt_function_definition_node, namespace_entity);
+		//else if(const boost::optional<const template_declaration&> opt_template_declaration_node = get<template_declaration>(&declaration_node))
+		//	analyze(*opt_template_declaration_node, namespace_entity);
+		//else if(const boost::optional<const explicit_instantiation&> opt_explicit_instantiation_node = get<explicit_instantiation>(&declaration_node))
+		//	analyze(*opt_explicit_instantiation_node, namespace_entity);
+		//else if(const boost::optional<const explicit_specialization&> opt_explicit_specialization_node = get<explicit_specialization>(&declaration_node))
+		//	analyze(*opt_explicit_specialization_node, namespace_entity);
+		//else if(const boost::optional<const linkage_specification&> opt_linkage_specification_node = get<linkage_specification>(&declaration_node))
+		//	analyze(*opt_linkage_specification_node, namespace_entity);
+		else if(const boost::optional<const namespace_definition&> opt_namespace_definition_node = get<namespace_definition>(&declaration_node))
+		{
+			std::shared_ptr<namespace_> new_namespace = create_namespace(*opt_namespace_definition_node);
+			namespace_entity->add_member(new_namespace);
+			fill_namespace(new_namespace, *opt_namespace_definition_node);
+		}
+	}
 }
 
 std::shared_ptr<class_>
