@@ -266,43 +266,6 @@ semantic_analyzer::analyze(const syntax_nodes::simple_declaration& simple_declar
 	}
 }
 
-template<class DeclarativeRegionT>
-void
-semantic_analyzer::analyze
-(
-	const syntax_nodes::using_directive& using_directive_node,
-	std::shared_ptr<DeclarativeRegionT> current_declarative_region
-)
-{
-	using namespace syntax_nodes;
-	using namespace semantic_entities;
-
-	//convert the using-directive node to a nested-identifier-or-template-id node
-	syntax_nodes::nested_identifier_or_template_id nested_identifier_or_template_id_node
-	(
-		has_leading_double_colon(using_directive_node) ?
-			predefined_text_node<str::double_colon>() :
-			optional_node<predefined_text_node<str::double_colon>>()
-		,
-		space(""),
-		get_nested_name_specifier(using_directive_node),
-		space(""),
-		get_identifier(using_directive_node)
-	);
-
-	//find the namespace designated by the using directive
-	std::shared_ptr<namespace_> using_directive_namespace =
-		detail::semantic_analysis::name_lookup::find<namespace_>
-		(
-			nested_identifier_or_template_id_node,
-			current_declarative_region
-		)
-	;
-
-	//add the using directive's namespace to the current declarative region
-	current_declarative_region->add_using_directive_namespace(using_directive_namespace);
-}
-
 
 
 template<class DeclarativeRegionT>

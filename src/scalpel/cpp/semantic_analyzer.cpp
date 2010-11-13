@@ -105,7 +105,10 @@ semantic_analyzer::fill_namespace
 			//else if(const boost::optional<const using_declaration&> opt_using_declaration_node = get<using_declaration>(&block_declaration_node))
 			//	analyze(*opt_using_declaration_node, namespace_entity);
 			else if(const boost::optional<const using_directive&> opt_using_directive_node = get<using_directive>(&block_declaration_node))
-				analyze(*opt_using_directive_node, namespace_entity);
+			{
+				std::shared_ptr<namespace_> new_using_directive = create_using_directive(*opt_using_directive_node, namespace_entity);
+				namespace_entity->add_using_directive_namespace(new_using_directive);
+			}
 		}
 		else if(const boost::optional<const function_definition&> opt_function_definition_node = get<function_definition>(&declaration_node))
 			analyze(*opt_function_definition_node, namespace_entity);
@@ -460,6 +463,34 @@ semantic_analyzer::create_namespace_alias
 	(
 		get_identifier(namespace_alias_definition_node).value(),
 		found_namespace
+	);
+}
+
+std::shared_ptr<semantic_entities::namespace_>
+semantic_analyzer::create_using_directive
+(
+	const syntax_nodes::using_directive& using_directive_node,
+	std::shared_ptr<semantic_entities::namespace_> current_namespace
+)
+{
+	//convert the using-directive node to a nested-identifier-or-template-id node
+	syntax_nodes::nested_identifier_or_template_id nested_identifier_or_template_id_node
+	(
+		has_leading_double_colon(using_directive_node) ?
+			predefined_text_node<str::double_colon>() :
+			optional_node<predefined_text_node<str::double_colon>>()
+		,
+		space(""),
+		get_nested_name_specifier(using_directive_node),
+		space(""),
+		get_identifier(using_directive_node)
+	);
+
+	//find the namespace designated by the using directive
+	return detail::semantic_analysis::name_lookup::find<namespace_>
+	(
+		nested_identifier_or_template_id_node,
+		current_namespace
 	);
 }
 
