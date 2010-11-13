@@ -18,8 +18,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ANALYZER_IPP
-#define SCALPEL_CPP_SEMANTIC_ANALYZER_IPP
+#ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_IPP
+#define SCALPEL_CPP_SEMANTIC_ANALYSIS_IPP
 
 #include "detail/semantic_analysis/basic_functions.hpp"
 #include "detail/semantic_analysis/name_lookup.hpp"
@@ -29,7 +29,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp
 {
 
-namespace semantic_analyzer
+namespace semantic_analysis
 {
 
 template<class DeclarativeRegionT>
@@ -941,7 +941,7 @@ create_variable
 	);
 }
 
-} //namespace semantic_analyzer
+} //namespace semantic_analysis
 
 }} //namespace scalpel::cpp
 

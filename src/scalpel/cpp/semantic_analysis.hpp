@@ -18,8 +18,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ANALYZER_HPP
-#define SCALPEL_CPP_SEMANTIC_ANALYZER_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_HPP
+#define SCALPEL_CPP_SEMANTIC_ANALYSIS_HPP
 
 #include "syntax_tree.hpp"
 #include "semantic_graph.hpp"
@@ -28,8 +28,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp
 {
 
-namespace semantic_analyzer
+namespace semantic_analysis
 {
+
+std::shared_ptr<semantic_graph>
+analyze(const syntax_tree& tree);
 
 template<class DeclarativeRegionT>
 void
@@ -44,9 +47,6 @@ analyze(const syntax_nodes::simple_declaration& syntax_node, std::shared_ptr<Dec
 //
 //namespace creation functions
 //
-
-std::shared_ptr<semantic_graph>
-create_semantic_graph(const syntax_tree& tree);
 
 std::shared_ptr<semantic_entities::namespace_>
 create_namespace
@@ -251,11 +251,11 @@ create_using_directive
 	std::shared_ptr<semantic_entities::namespace_> current_namespace
 );
 
-} //namespace semantic_analyzer
+} //namespace semantic_analysis
 
 }} //namespace scalpel::cpp
 
-#include "semantic_analyzer.ipp"
+#include "semantic_analysis.ipp"
 
 #endif
 

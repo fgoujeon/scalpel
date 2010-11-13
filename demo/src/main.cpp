@@ -20,7 +20,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "syntax_tree_print_functions.hpp"
 #include "semantic_graph_print_functions.hpp"
-#include <scalpel/cpp/semantic_analyzer.hpp>
+#include <scalpel/cpp/semantic_analysis.hpp>
 #include <scalpel/cpp/syntax_analyzer.hpp>
 #include <scalpel/cpp/preprocessor.hpp>
 #include <boost/program_options.hpp>
@@ -125,7 +125,7 @@ main(int argc, char** argv)
 		}
 
 		//semantic analysis
-		std::shared_ptr<const scalpel::cpp::semantic_graph> graph = semantic_analyzer::create_semantic_graph(tree);
+		std::shared_ptr<const scalpel::cpp::semantic_graph> graph = semantic_analysis::analyze(tree);
 
 		//print semantic graph
 		if(print_semantic_graph)
