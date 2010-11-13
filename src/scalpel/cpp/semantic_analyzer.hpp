@@ -28,233 +28,230 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp
 {
 
-/**
-@brief Analyses the semantics of the source code of a full C++ program.
-*/
-class semantic_analyzer
+namespace semantic_analyzer
 {
-	public:
-		std::shared_ptr<semantic_graph>
-		operator()(const syntax_tree& tree);
 
-	private:
-		template<class DeclarativeRegionT>
-		void
-		analyze(const syntax_nodes::function_definition& function_definition_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
+template<class DeclarativeRegionT>
+void
+analyze(const syntax_nodes::function_definition& function_definition_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-		template<class DeclarativeRegionT>
-		void
-		analyze(const syntax_nodes::simple_declaration& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
+template<class DeclarativeRegionT>
+void
+analyze(const syntax_nodes::simple_declaration& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
 
 
-		//
-		//namespace creation functions
-		//
+//
+//namespace creation functions
+//
 
-		std::shared_ptr<semantic_entities::namespace_>
-		create_namespace
-		(
-			const syntax_nodes::namespace_definition& namespace_definition_node
-		);
+std::shared_ptr<semantic_graph>
+create_semantic_graph(const syntax_tree& tree);
 
-		void
-		fill_namespace
-		(
-			std::shared_ptr<semantic_entities::namespace_> namespace_entity,
-			const syntax_nodes::namespace_definition& namespace_definition_node
-		);
+std::shared_ptr<semantic_entities::namespace_>
+create_namespace
+(
+	const syntax_nodes::namespace_definition& namespace_definition_node
+);
 
-		void
-		fill_namespace
-		(
-			std::shared_ptr<semantic_entities::namespace_> namespace_entity,
-			const syntax_nodes::declaration_seq& declaration_seq_node
-		);
+void
+fill_namespace
+(
+	std::shared_ptr<semantic_entities::namespace_> namespace_entity,
+	const syntax_nodes::namespace_definition& namespace_definition_node
+);
 
-
-
-		//
-		//class creation functions
-		//
-
-		std::shared_ptr<semantic_entities::class_>
-		create_class(const syntax_nodes::class_specifier& syntax_node);
-
-		void
-		fill_class(std::shared_ptr<semantic_entities::class_> c, const syntax_nodes::class_specifier& syntax_node);
+void
+fill_namespace
+(
+	std::shared_ptr<semantic_entities::namespace_> namespace_entity,
+	const syntax_nodes::declaration_seq& declaration_seq_node
+);
 
 
 
-		//
-		//function creation functions
-		//
+//
+//class creation functions
+//
 
-		template<class DeclarativeRegionT>
-		std::shared_ptr<semantic_entities::simple_function>
-		create_simple_function
-		(
-			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-			const syntax_nodes::declarator& declarator_node,
-			std::shared_ptr<DeclarativeRegionT> current_declarative_region
-		);
+std::shared_ptr<semantic_entities::class_>
+create_class(const syntax_nodes::class_specifier& syntax_node);
 
-		template<class DeclarativeRegionT>
-		std::shared_ptr<semantic_entities::operator_function>
-		create_operator_function
-		(
-			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-			const syntax_nodes::declarator& declarator_node,
-			std::shared_ptr<DeclarativeRegionT> current_declarative_region
-		);
-
-		template<class DeclarativeRegionT>
-		semantic_entities::simple_function::parameters_t
-		create_parameters
-		(
-			const syntax_nodes::declarator& declarator_node,
-			std::shared_ptr<DeclarativeRegionT> current_declarative_region
-		);
+void
+fill_class(std::shared_ptr<semantic_entities::class_> c, const syntax_nodes::class_specifier& syntax_node);
 
 
 
-		//
-		//type creation functions
-		//
+//
+//function creation functions
+//
 
-		template<class DeclarativeRegionT>
-		semantic_entities::type_shared_ptr_variant
-		create_type
-		(
-			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-			const syntax_nodes::declarator& declarator_node,
-			std::shared_ptr<DeclarativeRegionT> current_declarative_region
-		);
+template<class DeclarativeRegionT>
+std::shared_ptr<semantic_entities::simple_function>
+create_simple_function
+(
+	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
+	const syntax_nodes::declarator& declarator_node,
+	std::shared_ptr<DeclarativeRegionT> current_declarative_region
+);
 
-		template<class DeclarativeRegionT>
-		semantic_entities::type_shared_ptr_variant
-		create_type
-		(
-			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-			const syntax_nodes::abstract_declarator& abstract_declarator_node,
-			std::shared_ptr<DeclarativeRegionT> current_declarative_region
-		);
+template<class DeclarativeRegionT>
+std::shared_ptr<semantic_entities::operator_function>
+create_operator_function
+(
+	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
+	const syntax_nodes::declarator& declarator_node,
+	std::shared_ptr<DeclarativeRegionT> current_declarative_region
+);
 
-		template<class DeclarativeRegionT>
-		semantic_entities::type_shared_ptr_variant
-		create_type
-		(
-			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-			std::shared_ptr<DeclarativeRegionT> current_declarative_region
-		);
-
-		template<class DeclarativeRegionT>
-		semantic_entities::type_shared_ptr_variant
-		get_conversion_function_type
-		(
-			const syntax_nodes::declarator& declarator_node,
-			std::shared_ptr<DeclarativeRegionT> current_declarative_region
-		);
-
-		semantic_entities::type_shared_ptr_variant
-		decorate_type
-		(
-			semantic_entities::type_shared_ptr_variant return_type,
-			const bool const_qualified,
-			const bool volatile_qualified
-		);
-
-		semantic_entities::type_shared_ptr_variant
-		decorate_type
-		(
-			semantic_entities::type_shared_ptr_variant return_type,
-			const syntax_nodes::ptr_operator_seq& ptr_operator_seq_node
-		);
-
-		template<class DeclarativeRegionT>
-		void
-		get_type_info
-		(
-			const syntax_nodes::type_specifier& type_specifier_node,
-			boost::optional<semantic_entities::type_shared_ptr_variant>& t,
-			bool& bool_type,
-			bool& char_type,
-			bool& double_type,
-			bool& float_type,
-			bool& int_type,
-			bool& long_long_type,
-			bool& long_type,
-			bool& short_type,
-			bool& signed_type,
-			bool& unsigned_type,
-			bool& void_type,
-			bool& wchar_t_type,
-			bool& const_qualified,
-			bool& volatile_qualified,
-			std::shared_ptr<DeclarativeRegionT> current_declarative_region
-		);
-
-		std::shared_ptr<const semantic_entities::fundamental_type>
-		get_fundamental_type
-		(
-			const bool bool_type,
-			const bool char_type,
-			const bool double_type,
-			const bool float_type,
-			const bool int_type,
-			const bool long_long_type,
-			const bool long_type,
-			const bool short_type,
-			const bool signed_type,
-			const bool unsigned_type,
-			const bool void_type,
-			const bool wchar_t_type
-		);
+template<class DeclarativeRegionT>
+semantic_entities::simple_function::parameters_t
+create_parameters
+(
+	const syntax_nodes::declarator& declarator_node,
+	std::shared_ptr<DeclarativeRegionT> current_declarative_region
+);
 
 
 
-		//
-		//variable creation functions
-		//
+//
+//type creation functions
+//
 
-		template<class DeclarativeRegionT>
-		std::vector<std::shared_ptr<semantic_entities::variable>>
-		create_variables
-		(
-			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-			const syntax_nodes::init_declarator_list& init_declarator_list_node,
-			std::shared_ptr<DeclarativeRegionT> current_declarative_region
-		);
+template<class DeclarativeRegionT>
+semantic_entities::type_shared_ptr_variant
+create_type
+(
+	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
+	const syntax_nodes::declarator& declarator_node,
+	std::shared_ptr<DeclarativeRegionT> current_declarative_region
+);
 
-		template<class DeclarativeRegionT>
-		std::shared_ptr<semantic_entities::variable>
-		create_variable
-		(
-			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-			const syntax_nodes::declarator& declarator_node,
-			std::shared_ptr<DeclarativeRegionT> current_declarative_region
-		);
+template<class DeclarativeRegionT>
+semantic_entities::type_shared_ptr_variant
+create_type
+(
+	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
+	const syntax_nodes::abstract_declarator& abstract_declarator_node,
+	std::shared_ptr<DeclarativeRegionT> current_declarative_region
+);
+
+template<class DeclarativeRegionT>
+semantic_entities::type_shared_ptr_variant
+create_type
+(
+	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
+	std::shared_ptr<DeclarativeRegionT> current_declarative_region
+);
+
+template<class DeclarativeRegionT>
+semantic_entities::type_shared_ptr_variant
+get_conversion_function_type
+(
+	const syntax_nodes::declarator& declarator_node,
+	std::shared_ptr<DeclarativeRegionT> current_declarative_region
+);
+
+semantic_entities::type_shared_ptr_variant
+decorate_type
+(
+	semantic_entities::type_shared_ptr_variant return_type,
+	const bool const_qualified,
+	const bool volatile_qualified
+);
+
+semantic_entities::type_shared_ptr_variant
+decorate_type
+(
+	semantic_entities::type_shared_ptr_variant return_type,
+	const syntax_nodes::ptr_operator_seq& ptr_operator_seq_node
+);
+
+template<class DeclarativeRegionT>
+void
+get_type_info
+(
+	const syntax_nodes::type_specifier& type_specifier_node,
+	boost::optional<semantic_entities::type_shared_ptr_variant>& t,
+	bool& bool_type,
+	bool& char_type,
+	bool& double_type,
+	bool& float_type,
+	bool& int_type,
+	bool& long_long_type,
+	bool& long_type,
+	bool& short_type,
+	bool& signed_type,
+	bool& unsigned_type,
+	bool& void_type,
+	bool& wchar_t_type,
+	bool& const_qualified,
+	bool& volatile_qualified,
+	std::shared_ptr<DeclarativeRegionT> current_declarative_region
+);
+
+std::shared_ptr<const semantic_entities::fundamental_type>
+get_fundamental_type
+(
+	const bool bool_type,
+	const bool char_type,
+	const bool double_type,
+	const bool float_type,
+	const bool int_type,
+	const bool long_long_type,
+	const bool long_type,
+	const bool short_type,
+	const bool signed_type,
+	const bool unsigned_type,
+	const bool void_type,
+	const bool wchar_t_type
+);
 
 
 
-		//
-		//misc creation functions
-		//
+//
+//variable creation functions
+//
 
-		std::shared_ptr<semantic_entities::namespace_alias>
-		create_namespace_alias
-		(
-			const syntax_nodes::namespace_alias_definition& namespace_alias_definition_node,
-			std::shared_ptr<semantic_entities::namespace_> current_namespace
-		);
+template<class DeclarativeRegionT>
+std::vector<std::shared_ptr<semantic_entities::variable>>
+create_variables
+(
+	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
+	const syntax_nodes::init_declarator_list& init_declarator_list_node,
+	std::shared_ptr<DeclarativeRegionT> current_declarative_region
+);
 
-		std::shared_ptr<semantic_entities::namespace_>
-		create_using_directive
-		(
-			const syntax_nodes::using_directive& using_directive_node,
-			std::shared_ptr<semantic_entities::namespace_> current_namespace
-		);
-};
+template<class DeclarativeRegionT>
+std::shared_ptr<semantic_entities::variable>
+create_variable
+(
+	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
+	const syntax_nodes::declarator& declarator_node,
+	std::shared_ptr<DeclarativeRegionT> current_declarative_region
+);
+
+
+
+//
+//misc creation functions
+//
+
+std::shared_ptr<semantic_entities::namespace_alias>
+create_namespace_alias
+(
+	const syntax_nodes::namespace_alias_definition& namespace_alias_definition_node,
+	std::shared_ptr<semantic_entities::namespace_> current_namespace
+);
+
+std::shared_ptr<semantic_entities::namespace_>
+create_using_directive
+(
+	const syntax_nodes::using_directive& using_directive_node,
+	std::shared_ptr<semantic_entities::namespace_> current_namespace
+);
+
+} //namespace semantic_analyzer
 
 }} //namespace scalpel::cpp
 

@@ -46,7 +46,7 @@ typedef
 
 inline
 const optional_node<declaration_seq>&
-get_declaration_seq_node(const translation_unit& o)
+get_declaration_seq(const translation_unit& o)
 {
 	return get<1>(o);
 }

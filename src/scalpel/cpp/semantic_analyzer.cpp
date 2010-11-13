@@ -27,17 +27,20 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp
 {
 
+namespace semantic_analyzer
+{
+
 using namespace syntax_nodes;
 using namespace semantic_entities;
 using namespace detail::semantic_analysis;
 
 std::shared_ptr<semantic_graph>
-semantic_analyzer::operator()(const syntax_tree& tree)
+create_semantic_graph(const syntax_tree& tree)
 {
 	//create semantic graph
 	std::shared_ptr<namespace_> global_namespace = namespace_::make_shared();
 
-	auto opt_declaration_seq_node = get_declaration_seq_node(tree);
+	auto opt_declaration_seq_node = get_declaration_seq(tree);
 	if(opt_declaration_seq_node)
 	{
 		auto declaration_seq_node = *opt_declaration_seq_node;
@@ -48,7 +51,7 @@ semantic_analyzer::operator()(const syntax_tree& tree)
 }
 
 std::shared_ptr<semantic_entities::namespace_>
-semantic_analyzer::create_namespace
+create_namespace
 (
 	const syntax_nodes::namespace_definition& namespace_definition_node
 )
@@ -66,7 +69,7 @@ semantic_analyzer::create_namespace
 }
 
 void
-semantic_analyzer::fill_namespace
+fill_namespace
 (
 	std::shared_ptr<semantic_entities::namespace_> namespace_entity,
 	const syntax_nodes::namespace_definition& namespace_definition_node
@@ -78,7 +81,7 @@ semantic_analyzer::fill_namespace
 }
 
 void
-semantic_analyzer::fill_namespace
+fill_namespace
 (
 	std::shared_ptr<semantic_entities::namespace_> namespace_entity,
 	const syntax_nodes::declaration_seq& declaration_seq_node
@@ -130,7 +133,7 @@ semantic_analyzer::fill_namespace
 }
 
 std::shared_ptr<class_>
-semantic_analyzer::create_class(const class_specifier& syntax_node)
+create_class(const class_specifier& syntax_node)
 {
 	//get the name of the class
 	std::string class_name;
@@ -151,7 +154,7 @@ semantic_analyzer::create_class(const class_specifier& syntax_node)
 }
 
 void
-semantic_analyzer::fill_class
+fill_class
 (
 	std::shared_ptr<class_> c,
 	const class_specifier& class_specifier_node
@@ -426,7 +429,7 @@ semantic_analyzer::fill_class
 }
 
 semantic_entities::type_shared_ptr_variant
-semantic_analyzer::decorate_type
+decorate_type
 (
 	semantic_entities::type_shared_ptr_variant return_type,
 	const bool is_const,
@@ -442,7 +445,7 @@ semantic_analyzer::decorate_type
 }
 
 semantic_entities::type_shared_ptr_variant
-semantic_analyzer::decorate_type
+decorate_type
 (
 	semantic_entities::type_shared_ptr_variant return_type,
 	const syntax_nodes::ptr_operator_seq& ptr_operator_seq_node
@@ -490,7 +493,7 @@ semantic_analyzer::decorate_type
 }
 
 std::shared_ptr<const semantic_entities::fundamental_type>
-semantic_analyzer::get_fundamental_type
+get_fundamental_type
 (
 	const bool bool_type,
 	const bool char_type,
@@ -798,7 +801,7 @@ semantic_analyzer::get_fundamental_type
 }
 
 std::shared_ptr<namespace_alias>
-semantic_analyzer::create_namespace_alias
+create_namespace_alias
 (
 	const syntax_nodes::namespace_alias_definition& namespace_alias_definition_node,
 	std::shared_ptr<namespace_> current_namespace
@@ -839,7 +842,7 @@ semantic_analyzer::create_namespace_alias
 }
 
 std::shared_ptr<semantic_entities::namespace_>
-semantic_analyzer::create_using_directive
+create_using_directive
 (
 	const syntax_nodes::using_directive& using_directive_node,
 	std::shared_ptr<semantic_entities::namespace_> current_namespace
@@ -865,6 +868,8 @@ semantic_analyzer::create_using_directive
 		current_namespace
 	);
 }
+
+} //namespace semantic_analyzer
 
 }} //namespace scalpel::cpp
 

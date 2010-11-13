@@ -89,7 +89,6 @@ main(int argc, char** argv)
 
 	scalpel::cpp::preprocessor preprocessor;
 	scalpel::cpp::syntax_analyzer syntax_analyzer;
-	scalpel::cpp::semantic_analyzer semantic_analyzer;
 
 	for(auto i = input_files.begin(); i != input_files.end(); ++i) //for each input file
 	{
@@ -126,7 +125,7 @@ main(int argc, char** argv)
 		}
 
 		//semantic analysis
-		std::shared_ptr<const scalpel::cpp::semantic_graph> graph = semantic_analyzer(tree);
+		std::shared_ptr<const scalpel::cpp::semantic_graph> graph = semantic_analyzer::create_semantic_graph(tree);
 
 		//print semantic graph
 		if(print_semantic_graph)

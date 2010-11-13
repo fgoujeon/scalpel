@@ -29,9 +29,12 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp
 {
 
+namespace semantic_analyzer
+{
+
 template<class DeclarativeRegionT>
 void
-semantic_analyzer::analyze
+analyze
 (
 	const syntax_nodes::function_definition& function_definition_node,
 	std::shared_ptr<DeclarativeRegionT> current_declarative_region
@@ -144,7 +147,7 @@ semantic_analyzer::analyze
 
 template<class DeclarativeRegionT>
 void
-semantic_analyzer::analyze(const syntax_nodes::simple_declaration& simple_declaration_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region)
+analyze(const syntax_nodes::simple_declaration& simple_declaration_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region)
 {
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
@@ -262,7 +265,7 @@ semantic_analyzer::analyze(const syntax_nodes::simple_declaration& simple_declar
 
 template<class DeclarativeRegionT>
 std::shared_ptr<semantic_entities::simple_function>
-semantic_analyzer::create_simple_function
+create_simple_function
 (
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
 	const syntax_nodes::declarator& declarator_node,
@@ -281,7 +284,7 @@ semantic_analyzer::create_simple_function
 
 template<class DeclarativeRegionT>
 std::shared_ptr<semantic_entities::operator_function>
-semantic_analyzer::create_operator_function
+create_operator_function
 (
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
 	const syntax_nodes::declarator& declarator_node,
@@ -425,7 +428,7 @@ semantic_analyzer::create_operator_function
 
 template<class DeclarativeRegionT>
 semantic_entities::simple_function::parameters_t
-semantic_analyzer::create_parameters
+create_parameters
 (
 	const syntax_nodes::declarator& declarator_node,
 	std::shared_ptr<DeclarativeRegionT> current_declarative_region
@@ -515,7 +518,7 @@ semantic_analyzer::create_parameters
 
 template<class DeclarativeRegionT>
 semantic_entities::type_shared_ptr_variant
-semantic_analyzer::create_type
+create_type
 (
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
 	const syntax_nodes::declarator& declarator_node,
@@ -556,7 +559,7 @@ semantic_analyzer::create_type
 
 template<class DeclarativeRegionT>
 semantic_entities::type_shared_ptr_variant
-semantic_analyzer::create_type
+create_type
 (
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
 	const syntax_nodes::abstract_declarator& abstract_declarator_node,
@@ -576,7 +579,7 @@ semantic_analyzer::create_type
 
 template<class DeclarativeRegionT>
 semantic_entities::type_shared_ptr_variant
-semantic_analyzer::create_type
+create_type
 (
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
 	std::shared_ptr<DeclarativeRegionT> current_declarative_region
@@ -667,7 +670,7 @@ semantic_analyzer::create_type
 
 template<class DeclarativeRegionT>
 semantic_entities::type_shared_ptr_variant
-semantic_analyzer::get_conversion_function_type
+get_conversion_function_type
 (
 	const syntax_nodes::declarator& declarator_node,
 	std::shared_ptr<DeclarativeRegionT> current_declarative_region
@@ -765,7 +768,7 @@ semantic_analyzer::get_conversion_function_type
 
 template<class DeclarativeRegionT>
 void
-semantic_analyzer::get_type_info
+get_type_info
 (
 	const syntax_nodes::type_specifier& type_specifier_node,
 	boost::optional<semantic_entities::type_shared_ptr_variant>& t,
@@ -888,7 +891,7 @@ semantic_analyzer::get_type_info
 
 template<class DeclarativeRegionT>
 std::vector<std::shared_ptr<semantic_entities::variable>>
-semantic_analyzer::create_variables
+create_variables
 (
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
 	const syntax_nodes::init_declarator_list& init_declarator_list_node,
@@ -923,7 +926,7 @@ semantic_analyzer::create_variables
 
 template<class DeclarativeRegionT>
 std::shared_ptr<semantic_entities::variable>
-semantic_analyzer::create_variable
+create_variable
 (
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
 	const syntax_nodes::declarator& declarator_node,
@@ -937,6 +940,8 @@ semantic_analyzer::create_variable
 		detail::semantic_analysis::has_static_specifier(decl_specifier_seq_node)
 	);
 }
+
+} //namespace semantic_analyzer
 
 }} //namespace scalpel::cpp
 
