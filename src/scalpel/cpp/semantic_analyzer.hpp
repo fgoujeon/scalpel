@@ -51,10 +51,6 @@ class semantic_analyzer
 
 		template<class DeclarativeRegionT>
 		void
-		analyze(const syntax_nodes::namespace_alias_definition& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
-
-		template<class DeclarativeRegionT>
-		void
 		analyze(const syntax_nodes::simple_declaration& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
 		template<class DeclarativeRegionT>
@@ -98,6 +94,19 @@ class semantic_analyzer
 
 		void
 		fill_class(std::shared_ptr<semantic_entities::class_> c, const syntax_nodes::class_specifier& syntax_node);
+
+
+
+		//
+		//namespace alias creation function
+		//
+
+		std::shared_ptr<semantic_entities::namespace_alias>
+		create_namespace_alias
+		(
+			const syntax_nodes::namespace_alias_definition& namespace_alias_definition_node,
+			std::shared_ptr<semantic_entities::namespace_> current_namespace
+		);
 
 
 

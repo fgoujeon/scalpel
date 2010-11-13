@@ -89,9 +89,25 @@ semantic_analyzer::fill_namespace
 	{
 		auto declaration_node = i->main_node();
 
-		//if(const boost::optional<const block_declaration&> opt_block_declaration_node = get<block_declaration>(&declaration_node))
-		//	analyze(*opt_block_declaration_node, namespace_entity);
-		/*else*/ if(const boost::optional<const function_definition&> opt_function_definition_node = get<function_definition>(&declaration_node))
+		if(const boost::optional<const block_declaration&> opt_block_declaration_node = get<block_declaration>(&declaration_node))
+		{
+			const block_declaration& block_declaration_node = *opt_block_declaration_node;
+
+			if(const boost::optional<const simple_declaration&> opt_simple_declaration_node = get<simple_declaration>(&block_declaration_node))
+				analyze(*opt_simple_declaration_node, namespace_entity);
+			//else if(const boost::optional<const asm_definition&> opt_asm_definition_node = get<asm_definition>(&block_declaration_node))
+			//	analyze(*opt_asm_definition_node, namespace_entity);
+			else if(const boost::optional<const namespace_alias_definition&> opt_namespace_alias_definition_node = get<namespace_alias_definition>(&block_declaration_node))
+			{
+				std::shared_ptr<namespace_alias> new_namespace_alias = create_namespace_alias(*opt_namespace_alias_definition_node, namespace_entity);
+				namespace_entity->add_member(new_namespace_alias);
+			}
+			//else if(const boost::optional<const using_declaration&> opt_using_declaration_node = get<using_declaration>(&block_declaration_node))
+			//	analyze(*opt_using_declaration_node, namespace_entity);
+			else if(const boost::optional<const using_directive&> opt_using_directive_node = get<using_directive>(&block_declaration_node))
+				analyze(*opt_using_directive_node, namespace_entity);
+		}
+		else if(const boost::optional<const function_definition&> opt_function_definition_node = get<function_definition>(&declaration_node))
 			analyze(*opt_function_definition_node, namespace_entity);
 		//else if(const boost::optional<const template_declaration&> opt_template_declaration_node = get<template_declaration>(&declaration_node))
 		//	analyze(*opt_template_declaration_node, namespace_entity);
@@ -404,6 +420,47 @@ semantic_analyzer::fill_class
 			}
 		}
 	}
+}
+
+std::shared_ptr<namespace_alias>
+semantic_analyzer::create_namespace_alias
+(
+	const syntax_nodes::namespace_alias_definition& namespace_alias_definition_node,
+	std::shared_ptr<namespace_> current_namespace
+)
+{
+	const qualified_namespace_specifier& qualified_namespace_specifier_node =
+		get_qualified_namespace_specifier(namespace_alias_definition_node)
+	;
+
+	//convert the qualified-namespace-specifier node to a nested-identifier-or-template-id node
+	syntax_nodes::nested_identifier_or_template_id nested_identifier_or_template_id_node
+	(
+		has_leading_double_colon(qualified_namespace_specifier_node) ?
+			predefined_text_node<str::double_colon>() :
+			optional_node<predefined_text_node<str::double_colon>>()
+		,
+		space(""),
+		get_nested_name_specifier(qualified_namespace_specifier_node),
+		space(""),
+		get_identifier(qualified_namespace_specifier_node)
+	);
+
+	//find the namespace designated by the namespace alias
+	std::shared_ptr<namespace_> found_namespace =
+		detail::semantic_analysis::name_lookup::find<namespace_>
+		(
+			nested_identifier_or_template_id_node,
+			current_namespace
+		)
+	;
+
+	//create the namespace alias semantic entity
+	return std::make_shared<namespace_alias>
+	(
+		get_identifier(namespace_alias_definition_node).value(),
+		found_namespace
+	);
 }
 
 semantic_entities::type_shared_ptr_variant
