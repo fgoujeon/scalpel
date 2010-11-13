@@ -31,18 +31,6 @@ namespace scalpel { namespace cpp
 
 template<class DeclarativeRegionT>
 void
-semantic_analyzer::analyze(const syntax_nodes::class_specifier& class_specifier_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region)
-{
-	using namespace syntax_nodes;
-	using namespace semantic_entities;
-
-	std::shared_ptr<class_> new_class = create_class(class_specifier_node);
-	current_declarative_region->add_member(new_class);
-	fill_class(new_class, class_specifier_node);
-}
-
-template<class DeclarativeRegionT>
-void
 semantic_analyzer::analyze
 (
 	const syntax_nodes::function_definition& function_definition_node,
@@ -180,7 +168,11 @@ semantic_analyzer::analyze(const syntax_nodes::simple_declaration& simple_declar
 		auto opt_class_specifier_node = get<class_specifier>(&type_specifier_node);
 		assert(opt_class_specifier_node);
 
-		analyze(*opt_class_specifier_node, current_declarative_region);
+		const syntax_nodes::class_specifier& class_specifier_node = *opt_class_specifier_node;
+
+		std::shared_ptr<class_> new_class = create_class(class_specifier_node);
+		current_declarative_region->add_member(new_class);
+		fill_class(new_class, class_specifier_node);
 	}
 	else if(is_class_forward_declaration(simple_declaration_node))
 	{

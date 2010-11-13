@@ -34,17 +34,10 @@ namespace scalpel { namespace cpp
 class semantic_analyzer
 {
 	public:
-		template<class DeclarativeRegionT>
-		class alternative_visitor;
-
 		std::shared_ptr<semantic_graph>
 		operator()(const syntax_tree& tree);
 
 	private:
-		template<class DeclarativeRegionT>
-		void
-		analyze(const syntax_nodes::class_specifier& class_specifier_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
-
 		template<class DeclarativeRegionT>
 		void
 		analyze(const syntax_nodes::function_definition& function_definition_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
@@ -90,26 +83,6 @@ class semantic_analyzer
 
 		void
 		fill_class(std::shared_ptr<semantic_entities::class_> c, const syntax_nodes::class_specifier& syntax_node);
-
-
-
-		//
-		//misc creation functions
-		//
-
-		std::shared_ptr<semantic_entities::namespace_alias>
-		create_namespace_alias
-		(
-			const syntax_nodes::namespace_alias_definition& namespace_alias_definition_node,
-			std::shared_ptr<semantic_entities::namespace_> current_namespace
-		);
-
-		std::shared_ptr<semantic_entities::namespace_>
-		create_using_directive
-		(
-			const syntax_nodes::using_directive& using_directive_node,
-			std::shared_ptr<semantic_entities::namespace_> current_namespace
-		);
 
 
 
@@ -260,6 +233,26 @@ class semantic_analyzer
 			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
 			const syntax_nodes::declarator& declarator_node,
 			std::shared_ptr<DeclarativeRegionT> current_declarative_region
+		);
+
+
+
+		//
+		//misc creation functions
+		//
+
+		std::shared_ptr<semantic_entities::namespace_alias>
+		create_namespace_alias
+		(
+			const syntax_nodes::namespace_alias_definition& namespace_alias_definition_node,
+			std::shared_ptr<semantic_entities::namespace_> current_namespace
+		);
+
+		std::shared_ptr<semantic_entities::namespace_>
+		create_using_directive
+		(
+			const syntax_nodes::using_directive& using_directive_node,
+			std::shared_ptr<semantic_entities::namespace_> current_namespace
 		);
 };
 

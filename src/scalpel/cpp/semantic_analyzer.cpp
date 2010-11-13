@@ -425,75 +425,6 @@ semantic_analyzer::fill_class
 	}
 }
 
-std::shared_ptr<namespace_alias>
-semantic_analyzer::create_namespace_alias
-(
-	const syntax_nodes::namespace_alias_definition& namespace_alias_definition_node,
-	std::shared_ptr<namespace_> current_namespace
-)
-{
-	const qualified_namespace_specifier& qualified_namespace_specifier_node =
-		get_qualified_namespace_specifier(namespace_alias_definition_node)
-	;
-
-	//convert the qualified-namespace-specifier node to a nested-identifier-or-template-id node
-	syntax_nodes::nested_identifier_or_template_id nested_identifier_or_template_id_node
-	(
-		has_leading_double_colon(qualified_namespace_specifier_node) ?
-			predefined_text_node<str::double_colon>() :
-			optional_node<predefined_text_node<str::double_colon>>()
-		,
-		space(""),
-		get_nested_name_specifier(qualified_namespace_specifier_node),
-		space(""),
-		get_identifier(qualified_namespace_specifier_node)
-	);
-
-	//find the namespace designated by the namespace alias
-	std::shared_ptr<namespace_> found_namespace =
-		detail::semantic_analysis::name_lookup::find<namespace_>
-		(
-			nested_identifier_or_template_id_node,
-			current_namespace
-		)
-	;
-
-	//create the namespace alias semantic entity
-	return std::make_shared<namespace_alias>
-	(
-		get_identifier(namespace_alias_definition_node).value(),
-		found_namespace
-	);
-}
-
-std::shared_ptr<semantic_entities::namespace_>
-semantic_analyzer::create_using_directive
-(
-	const syntax_nodes::using_directive& using_directive_node,
-	std::shared_ptr<semantic_entities::namespace_> current_namespace
-)
-{
-	//convert the using-directive node to a nested-identifier-or-template-id node
-	syntax_nodes::nested_identifier_or_template_id nested_identifier_or_template_id_node
-	(
-		has_leading_double_colon(using_directive_node) ?
-			predefined_text_node<str::double_colon>() :
-			optional_node<predefined_text_node<str::double_colon>>()
-		,
-		space(""),
-		get_nested_name_specifier(using_directive_node),
-		space(""),
-		get_identifier(using_directive_node)
-	);
-
-	//find the namespace designated by the using directive
-	return detail::semantic_analysis::name_lookup::find<namespace_>
-	(
-		nested_identifier_or_template_id_node,
-		current_namespace
-	);
-}
-
 semantic_entities::type_shared_ptr_variant
 semantic_analyzer::decorate_type
 (
@@ -864,6 +795,75 @@ semantic_analyzer::get_fundamental_type
 	}
 
 	throw std::runtime_error("Incorrect built-in type");
+}
+
+std::shared_ptr<namespace_alias>
+semantic_analyzer::create_namespace_alias
+(
+	const syntax_nodes::namespace_alias_definition& namespace_alias_definition_node,
+	std::shared_ptr<namespace_> current_namespace
+)
+{
+	const qualified_namespace_specifier& qualified_namespace_specifier_node =
+		get_qualified_namespace_specifier(namespace_alias_definition_node)
+	;
+
+	//convert the qualified-namespace-specifier node to a nested-identifier-or-template-id node
+	syntax_nodes::nested_identifier_or_template_id nested_identifier_or_template_id_node
+	(
+		has_leading_double_colon(qualified_namespace_specifier_node) ?
+			predefined_text_node<str::double_colon>() :
+			optional_node<predefined_text_node<str::double_colon>>()
+		,
+		space(""),
+		get_nested_name_specifier(qualified_namespace_specifier_node),
+		space(""),
+		get_identifier(qualified_namespace_specifier_node)
+	);
+
+	//find the namespace designated by the namespace alias
+	std::shared_ptr<namespace_> found_namespace =
+		detail::semantic_analysis::name_lookup::find<namespace_>
+		(
+			nested_identifier_or_template_id_node,
+			current_namespace
+		)
+	;
+
+	//create the namespace alias semantic entity
+	return std::make_shared<namespace_alias>
+	(
+		get_identifier(namespace_alias_definition_node).value(),
+		found_namespace
+	);
+}
+
+std::shared_ptr<semantic_entities::namespace_>
+semantic_analyzer::create_using_directive
+(
+	const syntax_nodes::using_directive& using_directive_node,
+	std::shared_ptr<semantic_entities::namespace_> current_namespace
+)
+{
+	//convert the using-directive node to a nested-identifier-or-template-id node
+	syntax_nodes::nested_identifier_or_template_id nested_identifier_or_template_id_node
+	(
+		has_leading_double_colon(using_directive_node) ?
+			predefined_text_node<str::double_colon>() :
+			optional_node<predefined_text_node<str::double_colon>>()
+		,
+		space(""),
+		get_nested_name_specifier(using_directive_node),
+		space(""),
+		get_identifier(using_directive_node)
+	);
+
+	//find the namespace designated by the using directive
+	return detail::semantic_analysis::name_lookup::find<namespace_>
+	(
+		nested_identifier_or_template_id_node,
+		current_namespace
+	);
 }
 
 }} //namespace scalpel::cpp
