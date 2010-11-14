@@ -78,21 +78,6 @@ enum simple_declaration_type
 simple_declaration_type
 get_simple_declaration_type(const syntax_nodes::simple_declaration& simple_declaration_node);
 
-bool
-is_class_declaration(const syntax_nodes::simple_declaration& simple_declaration_node);
-
-bool
-is_class_forward_declaration(const syntax_nodes::simple_declaration& simple_declaration_node);
-
-bool
-is_simple_function_declaration(const syntax_nodes::simple_declaration& simple_declaration_node);
-
-bool
-is_operator_function_declaration(const syntax_nodes::simple_declaration& simple_declaration_node);
-
-bool
-is_variable_declaration(const syntax_nodes::simple_declaration& simple_declaration_node);
-
 
 
 //

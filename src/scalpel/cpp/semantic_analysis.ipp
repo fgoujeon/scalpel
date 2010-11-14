@@ -153,111 +153,130 @@ analyze(const syntax_nodes::simple_declaration& simple_declaration_node, std::sh
 	using namespace semantic_entities;
 	using namespace detail::semantic_analysis;
 
-	if(is_class_declaration(simple_declaration_node))
+	switch(get_simple_declaration_type(simple_declaration_node))
 	{
-		auto opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node);
-		assert(opt_decl_specifier_seq_node);
-
-		const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
-		assert(decl_specifier_seq_node.size() == 1);
-
-		const decl_specifier& decl_specifier_node = decl_specifier_seq_node.front().main_node();
-
-		auto opt_type_specifier_node = get<type_specifier>(&decl_specifier_node);
-		assert(opt_type_specifier_node);
-
-		auto type_specifier_node = *opt_type_specifier_node;
-
-		auto opt_class_specifier_node = get<class_specifier>(&type_specifier_node);
-		assert(opt_class_specifier_node);
-
-		const syntax_nodes::class_specifier& class_specifier_node = *opt_class_specifier_node;
-
-		std::shared_ptr<class_> new_class = create_class(class_specifier_node);
-		current_declarative_region->add_member(new_class);
-		fill_class(new_class, class_specifier_node);
-	}
-	else if(is_class_forward_declaration(simple_declaration_node))
-	{
-		auto opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node);
-		assert(opt_decl_specifier_seq_node);
-
-		const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
-		assert(decl_specifier_seq_node.size() == 1);
-
-		const decl_specifier& decl_specifier_node = decl_specifier_seq_node.front().main_node();
-
-		auto opt_type_specifier_node = get<type_specifier>(&decl_specifier_node);
-		assert(opt_type_specifier_node);
-
-		auto type_specifier_node = *opt_type_specifier_node;
-
-		auto opt_elaborated_type_specifier_node = get<elaborated_type_specifier>(&type_specifier_node);
-		assert(opt_elaborated_type_specifier_node);
-
-		auto elaborated_type_specifier_node = *opt_elaborated_type_specifier_node;
-
-		auto opt_class_elaborated_specifier_node = get<class_elaborated_specifier>(&elaborated_type_specifier_node);
-		assert(opt_class_elaborated_specifier_node);
-
-		const identifier_or_template_id& identifier_or_template_id_node = get_identifier_or_template_id(*opt_class_elaborated_specifier_node);
-
-		auto opt_identifier_node = get<identifier>(&identifier_or_template_id_node);
-		assert(opt_identifier_node);
-
-		const std::string& class_name = opt_identifier_node->value();
-		current_declarative_region->add_member(class_::make_shared(class_name));
-	}
-	else if(is_variable_declaration(simple_declaration_node))
-	{
-		auto opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node);
-		auto opt_init_declarator_list_node = get_init_declarator_list(simple_declaration_node);
-		assert(opt_decl_specifier_seq_node);
-		assert(opt_init_declarator_list_node);
-
-		const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
-
-		auto init_declarator_list_node = *opt_init_declarator_list_node;
-
-		std::vector<std::shared_ptr<variable>> variables = create_variables(decl_specifier_seq_node, init_declarator_list_node, current_declarative_region);
-		//for each variable
-		for
-		(
-			auto i = variables.begin();
-			i != variables.end();
-			++i
-		)
+		case simple_declaration_type::CLASS_DECLARATION:
 		{
-			current_declarative_region->add_member(*i);
+			auto opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node);
+			assert(opt_decl_specifier_seq_node);
+
+			const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
+			assert(decl_specifier_seq_node.size() == 1);
+
+			const decl_specifier& decl_specifier_node = decl_specifier_seq_node.front().main_node();
+
+			auto opt_type_specifier_node = get<type_specifier>(&decl_specifier_node);
+			assert(opt_type_specifier_node);
+
+			auto type_specifier_node = *opt_type_specifier_node;
+
+			auto opt_class_specifier_node = get<class_specifier>(&type_specifier_node);
+			assert(opt_class_specifier_node);
+
+			const syntax_nodes::class_specifier& class_specifier_node = *opt_class_specifier_node;
+
+			std::shared_ptr<class_> new_class = create_class(class_specifier_node);
+			current_declarative_region->add_member(new_class);
+			fill_class(new_class, class_specifier_node);
+
+			break;
 		}
-	}
-	else if(is_simple_function_declaration(simple_declaration_node))
-	{
-		auto opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node);
-		auto opt_init_declarator_list_node = get_init_declarator_list(simple_declaration_node);
-		assert(opt_decl_specifier_seq_node);
-		assert(opt_init_declarator_list_node);
+		case simple_declaration_type::CLASS_FORWARD_DECLARATION:
+		{
+			auto opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node);
+			assert(opt_decl_specifier_seq_node);
 
-		auto init_declarator_list_node = *opt_init_declarator_list_node;
-		assert(init_declarator_list_node.size() == 1);
+			const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
+			assert(decl_specifier_seq_node.size() == 1);
 
-		auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
-		auto declarator_node = get_declarator(init_declarator_list_node.front().main_node());
-		current_declarative_region->add_member(create_simple_function(decl_specifier_seq_node, declarator_node, current_declarative_region));
-	}
-	else if(is_operator_function_declaration(simple_declaration_node))
-	{
-		auto opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node);
-		auto opt_init_declarator_list_node = get_init_declarator_list(simple_declaration_node);
-		assert(opt_decl_specifier_seq_node);
-		assert(opt_init_declarator_list_node);
+			const decl_specifier& decl_specifier_node = decl_specifier_seq_node.front().main_node();
 
-		auto init_declarator_list_node = *opt_init_declarator_list_node;
-		assert(init_declarator_list_node.size() == 1);
+			auto opt_type_specifier_node = get<type_specifier>(&decl_specifier_node);
+			assert(opt_type_specifier_node);
 
-		auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
-		auto declarator_node = get_declarator(init_declarator_list_node.front().main_node());
-		current_declarative_region->add_member(create_operator_function(decl_specifier_seq_node, declarator_node, current_declarative_region));
+			auto type_specifier_node = *opt_type_specifier_node;
+
+			auto opt_elaborated_type_specifier_node = get<elaborated_type_specifier>(&type_specifier_node);
+			assert(opt_elaborated_type_specifier_node);
+
+			auto elaborated_type_specifier_node = *opt_elaborated_type_specifier_node;
+
+			auto opt_class_elaborated_specifier_node = get<class_elaborated_specifier>(&elaborated_type_specifier_node);
+			assert(opt_class_elaborated_specifier_node);
+
+			const identifier_or_template_id& identifier_or_template_id_node = get_identifier_or_template_id(*opt_class_elaborated_specifier_node);
+
+			auto opt_identifier_node = get<identifier>(&identifier_or_template_id_node);
+			assert(opt_identifier_node);
+
+			const std::string& class_name = opt_identifier_node->value();
+			current_declarative_region->add_member(class_::make_shared(class_name));
+
+			break;
+		}
+		case simple_declaration_type::VARIABLE_DECLARATION:
+		{
+			auto opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node);
+			auto opt_init_declarator_list_node = get_init_declarator_list(simple_declaration_node);
+			assert(opt_decl_specifier_seq_node);
+			assert(opt_init_declarator_list_node);
+
+			const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
+
+			auto init_declarator_list_node = *opt_init_declarator_list_node;
+
+			std::vector<std::shared_ptr<variable>> variables = create_variables(decl_specifier_seq_node, init_declarator_list_node, current_declarative_region);
+			//for each variable
+			for
+			(
+				auto i = variables.begin();
+				i != variables.end();
+				++i
+			)
+			{
+				current_declarative_region->add_member(*i);
+			}
+
+			break;
+		}
+		case simple_declaration_type::SIMPLE_FUNCTION_DECLARATION:
+		{
+			auto opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node);
+			auto opt_init_declarator_list_node = get_init_declarator_list(simple_declaration_node);
+			assert(opt_decl_specifier_seq_node);
+			assert(opt_init_declarator_list_node);
+
+			auto init_declarator_list_node = *opt_init_declarator_list_node;
+			assert(init_declarator_list_node.size() == 1);
+
+			auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
+			auto declarator_node = get_declarator(init_declarator_list_node.front().main_node());
+			current_declarative_region->add_member(create_simple_function(decl_specifier_seq_node, declarator_node, current_declarative_region));
+
+			break;
+		}
+		case simple_declaration_type::OPERATOR_FUNCTION_DECLARATION:
+		{
+			auto opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node);
+			auto opt_init_declarator_list_node = get_init_declarator_list(simple_declaration_node);
+			assert(opt_decl_specifier_seq_node);
+			assert(opt_init_declarator_list_node);
+
+			auto init_declarator_list_node = *opt_init_declarator_list_node;
+			assert(init_declarator_list_node.size() == 1);
+
+			auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
+			auto declarator_node = get_declarator(init_declarator_list_node.front().main_node());
+			current_declarative_region->add_member(create_operator_function(decl_specifier_seq_node, declarator_node, current_declarative_region));
+
+			break;
+		}
+		case simple_declaration_type::VARIABLE_STYLE_TYPEDEF_DECLARATION:
+		{
+			break;
+		}
+		case simple_declaration_type::EMPTY:
+			break;
 	}
 }
 
