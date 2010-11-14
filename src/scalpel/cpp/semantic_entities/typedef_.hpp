@@ -22,6 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_TYPEDEF_HPP
 
 #include "type_variants_fwd.hpp"
+#include "declarative_region_member_impl.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -32,16 +33,43 @@ Represents the const qualifier.
 class typedef_
 {
 	public:
-		typedef_(const type_shared_ptr_variant& associated_type);
+		typedef_(const std::string& name, const type_shared_ptr_variant& type);
+
+		const std::string&
+		name() const
+		{
+			return name_;
+		}
 
 		const type_shared_ptr_variant&
-		associated_type() const
+		type() const
 		{
-			return associated_type_;
+			return type_;
+		}
+
+		bool
+		has_enclosing_declarative_region() const
+		{
+			return declarative_region_member_impl_.has_enclosing_declarative_region();
+		}
+
+		declarative_region_shared_ptr_variant
+		enclosing_declarative_region() const
+		{
+			return declarative_region_member_impl_.enclosing_declarative_region();
+		}
+
+		void
+		enclosing_declarative_region(const declarative_region_shared_ptr_variant& enclosing_declarative_region)
+		{
+			declarative_region_member_impl_.enclosing_declarative_region(enclosing_declarative_region);
 		}
 
 	private:
-		type_shared_ptr_variant associated_type_;
+		std::string name_;
+		type_shared_ptr_variant type_;
+
+		declarative_region_member_impl declarative_region_member_impl_;
 };
 
 bool

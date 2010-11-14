@@ -234,7 +234,7 @@ create_variable
 
 
 //
-//misc creation functions
+//other entities' creation functions
 //
 
 std::shared_ptr<semantic_entities::namespace_alias>
@@ -249,6 +249,14 @@ create_using_directive
 (
 	const syntax_nodes::using_directive& using_directive_node,
 	std::shared_ptr<semantic_entities::namespace_> current_namespace
+);
+
+template<class DeclarativeRegionT>
+std::vector<std::shared_ptr<semantic_entities::typedef_>>
+create_typedefs_from_variable_style_typedef_declaration
+(
+	const syntax_nodes::simple_declaration& simple_declaration_node,
+	std::shared_ptr<DeclarativeRegionT> current_declarative_region
 );
 
 } //namespace semantic_analysis

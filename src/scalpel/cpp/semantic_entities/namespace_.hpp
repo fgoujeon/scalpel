@@ -21,6 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_NAMESPACE_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_NAMESPACE_HPP
 
+#include "typedef_.hpp"
 #include "variable.hpp"
 #include "operator_function.hpp"
 #include "simple_function.hpp"
@@ -50,6 +51,7 @@ class namespace_:
 		typedef utility::vector<std::shared_ptr<namespace_>> namespaces_t;
 		typedef utility::vector<std::weak_ptr<namespace_>> weak_namespaces_t;
 		typedef utility::vector<std::shared_ptr<class_>> classes_t;
+		typedef utility::vector<std::shared_ptr<typedef_>> typedefs_t;
 		typedef utility::vector<std::shared_ptr<simple_function>> simple_functions_t;
 		typedef utility::vector<std::shared_ptr<operator_function>> operator_functions_t;
 		typedef utility::vector<std::shared_ptr<variable>> variables_t;
@@ -118,6 +120,9 @@ class namespace_:
 		const classes_t&
 		classes() const;
 
+		const typedefs_t&
+		typedefs() const;
+
 		simple_functions_t::range
 		simple_functions();
 
@@ -149,6 +154,9 @@ class namespace_:
 		add_member(std::shared_ptr<class_> member);
 
 		void
+		add_member(std::shared_ptr<typedef_> member);
+
+		void
 		add_member(std::shared_ptr<simple_function> member);
 
 		void
@@ -173,6 +181,7 @@ class namespace_:
 		//members
 		namespaces_t namespaces_;
 		classes_t classes_;
+		typedefs_t typedefs_;
 		simple_functions_t simple_functions_;
 		operator_functions_t operator_functions_;
 		variables_t variables_;

@@ -21,6 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_CLASS_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_CLASS_HPP
 
+#include "typedef_.hpp"
 #include "variable.hpp"
 #include "operator_function.hpp"
 #include "simple_function.hpp"
@@ -54,6 +55,7 @@ class class_:
 			utility::variant
 			<
 				std::shared_ptr<const class_>,
+				std::shared_ptr<const typedef_>,
 				std::shared_ptr<const constructor>,
 				std::shared_ptr<const destructor>,
 				std::shared_ptr<const simple_function>,
@@ -67,6 +69,7 @@ class class_:
 		typedef utility::vector<member_t> members_t;
 		typedef utility::vector<open_declarative_region_shared_ptr_variant> open_declarative_region_shared_ptr_variants_t;
 		typedef utility::vector<std::shared_ptr<class_>> classes_t;
+		typedef utility::vector<std::shared_ptr<typedef_>> typedefs_t;
 		typedef utility::vector<std::shared_ptr<constructor>> constructors_t;
 		typedef utility::vector<std::shared_ptr<simple_function>> simple_functions_t;
 		typedef utility::vector<std::shared_ptr<operator_function>> operator_functions_t;
@@ -127,6 +130,9 @@ class class_:
 		const classes_t&
 		nested_classes() const;
 
+		const typedefs_t&
+		typedefs() const;
+
 		constructors_t::range
 		constructors();
 
@@ -176,6 +182,9 @@ class class_:
         */
         void
         add_member(std::shared_ptr<class_> member, const access acc = PUBLIC);
+
+        void
+        add_member(std::shared_ptr<typedef_> member, const access acc = PUBLIC);
 
         void
         add_member(std::shared_ptr<constructor> member, const access acc = PUBLIC);
@@ -279,6 +288,7 @@ class class_:
 		//members
 		classes_t base_classes_;
 		classes_t nested_classes_;
+		typedefs_t typedefs_;
 		constructors_t constructors_;
 		std::shared_ptr<destructor> destructor_;
 		simple_functions_t simple_functions_;

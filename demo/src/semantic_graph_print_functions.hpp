@@ -119,6 +119,13 @@ print
 	const unsigned int indent_level
 );
 
+void
+print_typedef
+(
+	std::shared_ptr<const typedef_> entity,
+	const unsigned int indent_level
+);
+
 std::string
 attribute(const class_::access& a);
 

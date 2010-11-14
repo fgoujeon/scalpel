@@ -107,6 +107,12 @@ namespace_::classes() const
 	return classes_;
 }
 
+const namespace_::typedefs_t&
+namespace_::typedefs() const
+{
+	return typedefs_;
+}
+
 namespace_::simple_functions_t::range
 namespace_::simple_functions()
 {
@@ -172,6 +178,13 @@ namespace_::add_member(std::shared_ptr<class_> member)
 }
 
 void
+namespace_::add_member(std::shared_ptr<typedef_> member)
+{
+	member->enclosing_declarative_region(shared_from_this());
+    typedefs_.push_back(member);
+}
+
+void
 namespace_::add_member(std::shared_ptr<simple_function> member)
 {
 	member->enclosing_declarative_region(shared_from_this());
@@ -212,9 +225,12 @@ operator==(const namespace_& lhs, const namespace_& rhs)
 		lhs.name() == rhs.name() &&
 		are_pointed_objects_equal(lhs.namespaces(), rhs.namespaces()) &&
 		are_pointed_objects_equal(lhs.classes(), rhs.classes()) &&
+		are_pointed_objects_equal(lhs.typedefs(), rhs.typedefs()) &&
 		are_pointed_objects_equal(lhs.simple_functions(), rhs.simple_functions()) &&
 		are_pointed_objects_equal(lhs.operator_functions(), rhs.operator_functions()) &&
-		are_pointed_objects_equal(lhs.variables(), rhs.variables())
+		are_pointed_objects_equal(lhs.variables(), rhs.variables()) //&&
+		//are_pointed_objects_equal(lhs.namespace_aliases(), rhs.namespace_aliases()) &&
+		//are_pointed_objects_equal(lhs.using_directive_namespaces(), rhs.using_directive_namespaces())
 	;
 }
 

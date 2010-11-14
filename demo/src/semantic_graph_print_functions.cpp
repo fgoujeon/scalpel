@@ -135,6 +135,9 @@ print_namespace
 	for(auto i = n->classes().begin(); i != n->classes().end(); ++i)
 		print(*i, indent_level + 1);
 
+	for(auto i = n->typedefs().begin(); i != n->typedefs().end(); ++i)
+		print_typedef(*i, indent_level + 1);
+
 	for(auto i = n->simple_functions().begin(); i != n->simple_functions().end(); ++i)
 		print(*i, indent_level + 1);
 
@@ -471,6 +474,34 @@ print
 	print_type(entity->type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</type>\n";
 	std::cout << indent(indent_level) << "</variable>\n";
+}
+
+void
+print_typedef
+(
+	std::shared_ptr<const typedef_> entity,
+	const unsigned int indent_level
+)
+{
+	std::cout << indent(indent_level) << "<typedef";
+	std::cout << " name=\"" << entity->name() << "\"";
+	//extra attributes if the function is a class member function
+	if(entity->has_enclosing_declarative_region())
+	{
+		declarative_region_shared_ptr_variant enclosing_declarative_region = entity->enclosing_declarative_region();
+		if(auto opt_class = utility::get<std::shared_ptr<class_>>(&enclosing_declarative_region))
+		{
+			std::shared_ptr<class_> enclosing_declarative_region = *opt_class;
+
+			class_::access acc = enclosing_declarative_region->member_access(entity);
+			std::cout << attribute(acc);
+		}
+	}
+	std::cout << ">\n";
+	std::cout << indent(indent_level + 1) << "<type>\n";
+	print_type(entity->type(), indent_level + 2);
+	std::cout << indent(indent_level + 1) << "</type>\n";
+	std::cout << indent(indent_level) << "</typedef>\n";
 }
 
 std::string

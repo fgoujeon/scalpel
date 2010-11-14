@@ -25,8 +25,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-typedef_::typedef_(const type_shared_ptr_variant& associated_type):
-	associated_type_(associated_type)
+typedef_::typedef_(const std::string& name, const type_shared_ptr_variant& type):
+	name_(name),
+	type_(type)
 {
 }
 
@@ -34,7 +35,8 @@ bool
 operator==(const typedef_& lhs, const typedef_& rhs)
 {
 	return
-		are_pointed_objects_equal(lhs.associated_type(), rhs.associated_type())
+		lhs.name() == rhs.name() &&
+		are_pointed_objects_equal(lhs.type(), rhs.type())
 	;
 }
 

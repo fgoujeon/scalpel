@@ -97,6 +97,12 @@ class_::nested_classes() const
 	return nested_classes_;
 }
 
+const class_::typedefs_t&
+class_::typedefs() const
+{
+	return typedefs_;
+}
+
 class_::constructors_t::range
 class_::constructors()
 {
@@ -185,6 +191,15 @@ class_::add_member(std::shared_ptr<class_> member, const access acc)
 	open_declarative_regions_.push_back(member);
 
 	member_access_[std::shared_ptr<const class_>(member)] = acc;
+}
+
+void
+class_::add_member(std::shared_ptr<typedef_> member, const access acc)
+{
+	member->enclosing_declarative_region(shared_from_this());
+    typedefs_.push_back(member);
+
+	member_access_[std::shared_ptr<const typedef_>(member)] = acc;
 }
 
 void
@@ -425,6 +440,22 @@ operator==(const class_& lhs, const class_& rhs)
 	(
 		auto i = lhs.nested_classes().begin(), j = rhs.nested_classes().begin();
 		i != lhs.nested_classes().end();
+		++i, ++j
+	)
+	{
+		if(**i != **j)
+			return false;
+		if(lhs.member_access(*i) != rhs.member_access(*j))
+			return false;
+	}
+
+	//typedefs
+	if(lhs.typedefs().size() != rhs.typedefs().size())
+		return false;
+	for
+	(
+		auto i = lhs.typedefs().begin(), j = rhs.typedefs().begin();
+		i != lhs.typedefs().end();
 		++i, ++j
 	)
 	{

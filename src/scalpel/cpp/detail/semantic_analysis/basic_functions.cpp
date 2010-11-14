@@ -406,7 +406,7 @@ get_simple_declaration_type(const syntax_nodes::simple_declaration& simple_decla
 		(
 			class_specifier_count == 0 &&
 			class_elaborated_specifier_count == 0 &&
-			simple_type_specifier_count == 1 &&
+			simple_type_specifier_count >= 1 &&
 			typedef_keyword_count == 0 &&
 			friend_keyword_count == 0 &&
 			operator_function_id_count == 0 &&
@@ -417,7 +417,7 @@ get_simple_declaration_type(const syntax_nodes::simple_declaration& simple_decla
 		(
 			class_specifier_count == 0 &&
 			class_elaborated_specifier_count == 0 &&
-			simple_type_specifier_count == 1 &&
+			simple_type_specifier_count >= 1 &&
 			typedef_keyword_count == 0 &&
 			friend_keyword_count == 0 &&
 			operator_function_id_count == 1 &&
@@ -428,7 +428,7 @@ get_simple_declaration_type(const syntax_nodes::simple_declaration& simple_decla
 		(
 			class_specifier_count == 0 &&
 			class_elaborated_specifier_count == 0 &&
-			simple_type_specifier_count == 1 &&
+			simple_type_specifier_count >= 1 &&
 			typedef_keyword_count == 0 &&
 			friend_keyword_count == 0 &&
 			operator_function_id_count == 0 &&
@@ -439,7 +439,7 @@ get_simple_declaration_type(const syntax_nodes::simple_declaration& simple_decla
 		(
 			class_specifier_count == 0 &&
 			class_elaborated_specifier_count == 0 &&
-			simple_type_specifier_count == 1 &&
+			simple_type_specifier_count >= 1 &&
 			typedef_keyword_count == 1 &&
 			friend_keyword_count == 0 &&
 			operator_function_id_count == 0 &&

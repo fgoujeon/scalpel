@@ -273,6 +273,15 @@ analyze(const syntax_nodes::simple_declaration& simple_declaration_node, std::sh
 		}
 		case simple_declaration_type::VARIABLE_STYLE_TYPEDEF_DECLARATION:
 		{
+			std::vector<std::shared_ptr<semantic_entities::typedef_>> typedefs =
+				create_typedefs_from_variable_style_typedef_declaration(simple_declaration_node, current_declarative_region)
+			;
+
+			for(auto i = typedefs.begin(); i != typedefs.end(); ++i)
+			{
+				current_declarative_region->add_member(*i);
+			}
+
 			break;
 		}
 		case simple_declaration_type::EMPTY:
@@ -958,6 +967,51 @@ create_variable
 		create_type(decl_specifier_seq_node, declarator_node, current_declarative_region),
 		detail::semantic_analysis::has_static_specifier(decl_specifier_seq_node)
 	);
+}
+
+template<class DeclarativeRegionT>
+std::vector<std::shared_ptr<semantic_entities::typedef_>>
+create_typedefs_from_variable_style_typedef_declaration
+(
+	const syntax_nodes::simple_declaration& simple_declaration_node,
+	std::shared_ptr<DeclarativeRegionT> current_declarative_region
+)
+{
+	auto opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node);
+	assert(opt_decl_specifier_seq_node);
+	auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
+
+	auto opt_init_declarator_list_node = get_init_declarator_list(simple_declaration_node);
+	assert(opt_init_declarator_list_node);
+	auto init_declarator_list_node = *opt_init_declarator_list_node;
+
+	//let's ignore the typedef keyword and create variables
+	std::vector<std::shared_ptr<semantic_entities::variable>> fake_variables =
+		create_variables
+		(
+			decl_specifier_seq_node,
+			init_declarator_list_node,
+			current_declarative_region
+		)
+	;
+
+	//variable's name = typedef's name
+	std::vector<std::shared_ptr<semantic_entities::typedef_>> typedefs;
+	for(auto i = fake_variables.begin(); i != fake_variables.end(); ++i)
+	{
+		std::shared_ptr<semantic_entities::variable> fake_variable = *i;
+
+		typedefs.push_back
+		(
+			std::make_shared<semantic_entities::typedef_>
+			(
+				fake_variable->name(),
+				fake_variable->type()
+			)
+		);
+	}
+
+	return typedefs;
 }
 
 } //namespace semantic_analysis
