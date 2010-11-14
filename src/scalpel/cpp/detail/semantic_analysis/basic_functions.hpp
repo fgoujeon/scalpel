@@ -64,14 +64,25 @@ has_pure_specifier(const syntax_nodes::member_declarator_declarator& member_decl
 //simple-declaration related
 //
 
+enum simple_declaration_type
+{
+	EMPTY,
+	CLASS_DECLARATION,
+	CLASS_FORWARD_DECLARATION,
+	SIMPLE_FUNCTION_DECLARATION,
+	OPERATOR_FUNCTION_DECLARATION,
+	VARIABLE_DECLARATION,
+	VARIABLE_STYLE_TYPEDEF_DECLARATION
+};
+
+simple_declaration_type
+get_simple_declaration_type(const syntax_nodes::simple_declaration& simple_declaration_node);
+
 bool
 is_class_declaration(const syntax_nodes::simple_declaration& simple_declaration_node);
 
 bool
 is_class_forward_declaration(const syntax_nodes::simple_declaration& simple_declaration_node);
-
-bool
-is_function_declaration(const syntax_nodes::simple_declaration& simple_declaration_node);
 
 bool
 is_simple_function_declaration(const syntax_nodes::simple_declaration& simple_declaration_node);
