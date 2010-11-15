@@ -224,15 +224,6 @@ get_fundamental_type
 //
 
 template<class DeclarativeRegionT>
-std::vector<std::shared_ptr<semantic_entities::variable>>
-create_variables
-(
-	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-	const syntax_nodes::init_declarator_list& init_declarator_list_node,
-	std::shared_ptr<DeclarativeRegionT> current_declarative_region
-);
-
-template<class DeclarativeRegionT>
 std::shared_ptr<semantic_entities::variable>
 create_variable
 (

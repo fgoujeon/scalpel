@@ -1093,41 +1093,6 @@ get_type_info
 }
 
 template<class DeclarativeRegionT>
-std::vector<std::shared_ptr<semantic_entities::variable>>
-create_variables
-(
-	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-	const syntax_nodes::init_declarator_list& init_declarator_list_node,
-	std::shared_ptr<DeclarativeRegionT> current_declarative_region
-)
-{
-	std::vector<std::shared_ptr<semantic_entities::variable>> variables;
-
-	//for each variable
-	for
-	(
-		auto i = init_declarator_list_node.begin();
-		i != init_declarator_list_node.end();
-		++i
-	)
-	{
-		auto init_declarator_node = i->main_node();
-		auto declarator_node = get_declarator(init_declarator_node);
-		variables.push_back
-		(
-			create_variable
-			(
-				decl_specifier_seq_node,
-				declarator_node,
-				current_declarative_region
-			)
-		);
-	}
-
-	return variables;
-}
-
-template<class DeclarativeRegionT>
 std::shared_ptr<semantic_entities::variable>
 create_variable
 (
