@@ -99,6 +99,16 @@ template<class DeclarativeRegionT>
 std::shared_ptr<semantic_entities::operator_function>
 create_operator_function
 (
+	const syntax_nodes::declarator& declarator_node,
+	const semantic_entities::type_shared_ptr_variant type,
+	const bool is_inline,
+	std::shared_ptr<DeclarativeRegionT> current_declarative_region
+);
+
+template<class DeclarativeRegionT>
+std::shared_ptr<semantic_entities::operator_function>
+create_operator_function
+(
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
 	const syntax_nodes::declarator& declarator_node,
 	std::shared_ptr<DeclarativeRegionT> current_declarative_region
@@ -249,14 +259,6 @@ create_using_directive
 (
 	const syntax_nodes::using_directive& using_directive_node,
 	std::shared_ptr<semantic_entities::namespace_> current_namespace
-);
-
-template<class DeclarativeRegionT>
-std::vector<std::shared_ptr<semantic_entities::typedef_>>
-create_typedefs_from_variable_style_typedef_declaration
-(
-	const syntax_nodes::simple_declaration& simple_declaration_node,
-	std::shared_ptr<DeclarativeRegionT> current_declarative_region
 );
 
 } //namespace semantic_analysis

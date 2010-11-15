@@ -27,6 +27,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
 {
 
+//TODO A lot of syntax checks are done in some of these functions.
+//That kind of work should be done by the syntax analyzer.
+//The grammar should be reformulated so the semantic analysis
+//can be performed more straightforwardly.
+
 //
 //class related
 //
@@ -61,22 +66,39 @@ has_pure_specifier(const syntax_nodes::member_declarator_declarator& member_decl
 
 
 //
-//simple-declaration related
+//decl_specifier_seq related
 //
 
-enum simple_declaration_type
+enum decl_specifier_seq_type
 {
-	EMPTY,
-	CLASS_DECLARATION,
-	CLASS_FORWARD_DECLARATION,
-	SIMPLE_FUNCTION_DECLARATION,
-	OPERATOR_FUNCTION_DECLARATION,
-	VARIABLE_DECLARATION,
-	VARIABLE_STYLE_TYPEDEF_DECLARATION
+	EMPTY_DECL_SPECIFIER_SEQ,
+	SIMPLE_DECL_SPECIFIER_SEQ,
+	CLASS_DECL_SPECIFIER_SEQ,
+	CLASS_FORWARD_DECL_SPECIFIER_SEQ,
+	TYPEDEF_DECL_SPECIFIER_SEQ
 };
 
-simple_declaration_type
-get_simple_declaration_type(const syntax_nodes::simple_declaration& simple_declaration_node);
+decl_specifier_seq_type
+get_decl_specifier_seq_type(const syntax_nodes::optional_node<syntax_nodes::decl_specifier_seq>& opt_decl_specifier_seq_node);
+
+const syntax_nodes::class_specifier&
+get_class_specifier(const syntax_nodes::optional_node<syntax_nodes::decl_specifier_seq>& opt_decl_specifier_seq_node);
+
+
+
+//
+//declarator related
+//
+
+enum declarator_type
+{
+	SIMPLE_FUNCTION_DECLARATOR,
+	OPERATOR_FUNCTION_DECLARATOR,
+	VARIABLE_DECLARATOR
+};
+
+declarator_type
+get_declarator_type(const syntax_nodes::declarator& declarator_node);
 
 
 

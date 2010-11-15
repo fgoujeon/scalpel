@@ -151,29 +151,20 @@ analyze(const syntax_nodes::simple_declaration& simple_declaration_node, std::sh
 {
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
-	using namespace detail::semantic_analysis;
+	namespace detail = detail::semantic_analysis;
 
-	switch(get_simple_declaration_type(simple_declaration_node))
+	auto opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node);
+	auto opt_init_declarator_list_node = get_init_declarator_list(simple_declaration_node);
+
+	switch(detail::get_decl_specifier_seq_type(opt_decl_specifier_seq_node))
 	{
-		case simple_declaration_type::CLASS_DECLARATION:
+		case detail::decl_specifier_seq_type::EMPTY_DECL_SPECIFIER_SEQ:
 		{
-			auto opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node);
-			assert(opt_decl_specifier_seq_node);
-
-			const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
-			assert(decl_specifier_seq_node.size() == 1);
-
-			const decl_specifier& decl_specifier_node = decl_specifier_seq_node.front().main_node();
-
-			auto opt_type_specifier_node = get<type_specifier>(&decl_specifier_node);
-			assert(opt_type_specifier_node);
-
-			auto type_specifier_node = *opt_type_specifier_node;
-
-			auto opt_class_specifier_node = get<class_specifier>(&type_specifier_node);
-			assert(opt_class_specifier_node);
-
-			const syntax_nodes::class_specifier& class_specifier_node = *opt_class_specifier_node;
+			break;
+		}
+		case detail::decl_specifier_seq_type::CLASS_DECL_SPECIFIER_SEQ:
+		{
+			const syntax_nodes::class_specifier& class_specifier_node = detail::get_class_specifier(opt_decl_specifier_seq_node);
 
 			std::shared_ptr<class_> new_class = create_class(class_specifier_node);
 			current_declarative_region->add_member(new_class);
@@ -181,9 +172,8 @@ analyze(const syntax_nodes::simple_declaration& simple_declaration_node, std::sh
 
 			break;
 		}
-		case simple_declaration_type::CLASS_FORWARD_DECLARATION:
+		case detail::decl_specifier_seq_type::CLASS_FORWARD_DECL_SPECIFIER_SEQ:
 		{
-			auto opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node);
 			assert(opt_decl_specifier_seq_node);
 
 			const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
@@ -214,78 +204,120 @@ analyze(const syntax_nodes::simple_declaration& simple_declaration_node, std::sh
 
 			break;
 		}
-		case simple_declaration_type::VARIABLE_DECLARATION:
+		case detail::decl_specifier_seq_type::SIMPLE_DECL_SPECIFIER_SEQ:
 		{
-			auto opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node);
-			auto opt_init_declarator_list_node = get_init_declarator_list(simple_declaration_node);
 			assert(opt_decl_specifier_seq_node);
-			assert(opt_init_declarator_list_node);
 
-			const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
+			type_shared_ptr_variant basic_type = create_type(*opt_decl_specifier_seq_node, current_declarative_region);
 
-			auto init_declarator_list_node = *opt_init_declarator_list_node;
-
-			std::vector<std::shared_ptr<variable>> variables = create_variables(decl_specifier_seq_node, init_declarator_list_node, current_declarative_region);
-			//for each variable
-			for
-			(
-				auto i = variables.begin();
-				i != variables.end();
-				++i
-			)
+			if(opt_init_declarator_list_node)
 			{
-				current_declarative_region->add_member(*i);
+				const init_declarator_list& init_declarator_list_node = *opt_init_declarator_list_node;
+
+				for(auto i = init_declarator_list_node.begin(); i != init_declarator_list_node.end(); ++i)
+				{
+					const init_declarator& init_declarator_node = i->main_node();
+					const declarator& declarator_node = get_declarator(init_declarator_node);
+
+					const syntax_nodes::optional_node<syntax_nodes::ptr_operator_seq>& opt_ptr_operator_seq_node = get_ptr_operator_seq(declarator_node);
+
+					//decorate type with hypothetical pointers, references and arrays
+					type_shared_ptr_variant type = basic_type;
+					if(opt_ptr_operator_seq_node)
+						type = decorate_type(basic_type, *opt_ptr_operator_seq_node);
+
+					//static? inline?
+					const bool is_static = detail::has_static_specifier(*opt_decl_specifier_seq_node);
+					const bool is_inline = detail::has_inline_specifier(*opt_decl_specifier_seq_node);
+
+					switch(detail::get_declarator_type(declarator_node))
+					{
+						case detail::declarator_type::SIMPLE_FUNCTION_DECLARATOR:
+							current_declarative_region->add_member
+							(
+								semantic_entities::simple_function::make_shared
+								(
+									detail::get_identifier(declarator_node).value(),
+									type,
+									create_parameters(declarator_node, current_declarative_region),
+									is_inline,
+									is_static
+								)
+							);
+							break;
+						case detail::declarator_type::OPERATOR_FUNCTION_DECLARATOR:
+							current_declarative_region->add_member
+							(
+								create_operator_function
+								(
+									declarator_node,
+									type,
+									is_inline,
+									current_declarative_region
+								)
+							);
+							break;
+						case detail::declarator_type::VARIABLE_DECLARATOR:
+							current_declarative_region->add_member
+							(
+								std::make_shared<semantic_entities::variable>
+								(
+									detail::get_identifier(declarator_node).value(),
+									type,
+									is_static
+								)
+							);
+							break;
+					}
+				}
 			}
 
 			break;
 		}
-		case simple_declaration_type::SIMPLE_FUNCTION_DECLARATION:
+		case detail::decl_specifier_seq_type::TYPEDEF_DECL_SPECIFIER_SEQ:
 		{
-			auto opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node);
-			auto opt_init_declarator_list_node = get_init_declarator_list(simple_declaration_node);
 			assert(opt_decl_specifier_seq_node);
-			assert(opt_init_declarator_list_node);
 
-			auto init_declarator_list_node = *opt_init_declarator_list_node;
-			assert(init_declarator_list_node.size() == 1);
+			type_shared_ptr_variant basic_type = create_type(*opt_decl_specifier_seq_node, current_declarative_region);
 
-			auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
-			auto declarator_node = get_declarator(init_declarator_list_node.front().main_node());
-			current_declarative_region->add_member(create_simple_function(decl_specifier_seq_node, declarator_node, current_declarative_region));
-
-			break;
-		}
-		case simple_declaration_type::OPERATOR_FUNCTION_DECLARATION:
-		{
-			auto opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node);
-			auto opt_init_declarator_list_node = get_init_declarator_list(simple_declaration_node);
-			assert(opt_decl_specifier_seq_node);
-			assert(opt_init_declarator_list_node);
-
-			auto init_declarator_list_node = *opt_init_declarator_list_node;
-			assert(init_declarator_list_node.size() == 1);
-
-			auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
-			auto declarator_node = get_declarator(init_declarator_list_node.front().main_node());
-			current_declarative_region->add_member(create_operator_function(decl_specifier_seq_node, declarator_node, current_declarative_region));
-
-			break;
-		}
-		case simple_declaration_type::VARIABLE_STYLE_TYPEDEF_DECLARATION:
-		{
-			std::vector<std::shared_ptr<semantic_entities::typedef_>> typedefs =
-				create_typedefs_from_variable_style_typedef_declaration(simple_declaration_node, current_declarative_region)
-			;
-
-			for(auto i = typedefs.begin(); i != typedefs.end(); ++i)
+			if(opt_init_declarator_list_node)
 			{
-				current_declarative_region->add_member(*i);
+				const init_declarator_list& init_declarator_list_node = *opt_init_declarator_list_node;
+
+				for(auto i = init_declarator_list_node.begin(); i != init_declarator_list_node.end(); ++i)
+				{
+					const init_declarator& init_declarator_node = i->main_node();
+					const declarator& declarator_node = get_declarator(init_declarator_node);
+
+					const syntax_nodes::optional_node<syntax_nodes::ptr_operator_seq>& opt_ptr_operator_seq_node = get_ptr_operator_seq(declarator_node);
+
+					//decorate type with hypothetical pointers, references and arrays
+					type_shared_ptr_variant type = basic_type;
+					if(opt_ptr_operator_seq_node)
+						type = decorate_type(basic_type, *opt_ptr_operator_seq_node);
+
+					switch(detail::get_declarator_type(declarator_node))
+					{
+						case detail::declarator_type::SIMPLE_FUNCTION_DECLARATOR:
+							break;
+						case detail::declarator_type::OPERATOR_FUNCTION_DECLARATOR:
+							break;
+						case detail::declarator_type::VARIABLE_DECLARATOR:
+							current_declarative_region->add_member
+							(
+								std::make_shared<semantic_entities::typedef_>
+								(
+									detail::get_identifier(declarator_node).value(),
+									type
+								)
+							);
+							break;
+					}
+				}
 			}
 
 			break;
 		}
-		case simple_declaration_type::EMPTY:
-			break;
 	}
 }
 
@@ -307,6 +339,149 @@ create_simple_function
 		create_parameters(declarator_node, current_declarative_region),
 		detail::semantic_analysis::has_inline_specifier(decl_specifier_seq_node),
 		detail::semantic_analysis::has_static_specifier(decl_specifier_seq_node)
+	);
+}
+
+template<class DeclarativeRegionT>
+std::shared_ptr<semantic_entities::operator_function>
+create_operator_function
+(
+	const syntax_nodes::declarator& declarator_node,
+	const semantic_entities::type_shared_ptr_variant type,
+	const bool is_inline,
+	std::shared_ptr<DeclarativeRegionT> current_declarative_region
+)
+{
+	//
+	//get the overloaded operator
+	//
+	semantic_entities::operator_ op = semantic_entities::operator_::AMPERSAND;
+
+	auto direct_declarator_node = get_direct_declarator(declarator_node);
+	auto direct_declarator_node_first_part_node = get_first_part(direct_declarator_node);
+	auto opt_declarator_id_node = syntax_nodes::get<syntax_nodes::declarator_id>(&direct_declarator_node_first_part_node);
+	assert(opt_declarator_id_node);
+	auto declarator_id_node = *opt_declarator_id_node;
+	auto opt_id_expression_node = syntax_nodes::get<syntax_nodes::id_expression>(&declarator_id_node);
+	assert(opt_id_expression_node);
+	auto id_expression_node = *opt_id_expression_node;
+	auto opt_unqualified_id_node = syntax_nodes::get<syntax_nodes::unqualified_id>(&id_expression_node);
+	assert(opt_unqualified_id_node);
+	auto unqualified_id_node = *opt_unqualified_id_node;
+	auto opt_operator_function_id_node = syntax_nodes::get<syntax_nodes::operator_function_id>(&unqualified_id_node);
+	assert(opt_operator_function_id_node);
+	auto operator_function_id_node = *opt_operator_function_id_node;
+	auto operator_node = get_operator(operator_function_id_node);
+
+	if(auto opt_simple_operator_node = syntax_nodes::get<syntax_nodes::simple_operator>(&operator_node))
+	{
+		auto simple_operator_node = *opt_simple_operator_node;
+
+		if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::new_>>(&simple_operator_node))
+			op = semantic_entities::operator_::NEW;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::delete_>>(&simple_operator_node))
+			op = semantic_entities::operator_::DELETE;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::double_right_angle_bracket_equal>>(&simple_operator_node))
+			op = semantic_entities::operator_::DOUBLE_RIGHT_ANGLE_BRACKET_EQUAL;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::double_left_angle_bracket_equal>>(&simple_operator_node))
+			op = semantic_entities::operator_::DOUBLE_LEFT_ANGLE_BRACKET_EQUAL;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::arrow_asterisk>>(&simple_operator_node))
+			op = semantic_entities::operator_::ARROW_ASTERISK;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::plus_equal>>(&simple_operator_node))
+			op = semantic_entities::operator_::PLUS_EQUAL;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::minus_equal>>(&simple_operator_node))
+			op = semantic_entities::operator_::MINUS_EQUAL;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::asterisk_equal>>(&simple_operator_node))
+			op = semantic_entities::operator_::ASTERISK_EQUAL;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::slash_equal>>(&simple_operator_node))
+			op = semantic_entities::operator_::SLASH_EQUAL;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::percent_equal>>(&simple_operator_node))
+			op = semantic_entities::operator_::PERCENT_EQUAL;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::circumflex_equal>>(&simple_operator_node))
+			op = semantic_entities::operator_::CIRCUMFLEX_EQUAL;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::ampersand_equal>>(&simple_operator_node))
+			op = semantic_entities::operator_::AMPERSAND_EQUAL;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::pipe_equal>>(&simple_operator_node))
+			op = semantic_entities::operator_::PIPE_EQUAL;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::double_left_angle_bracket>>(&simple_operator_node))
+			op = semantic_entities::operator_::DOUBLE_LEFT_ANGLE_BRACKET;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::double_right_angle_bracket>>(&simple_operator_node))
+			op = semantic_entities::operator_::DOUBLE_RIGHT_ANGLE_BRACKET;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::double_equal>>(&simple_operator_node))
+			op = semantic_entities::operator_::DOUBLE_EQUAL;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::exclamation_equal>>(&simple_operator_node))
+			op = semantic_entities::operator_::EXCLAMATION_EQUAL;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::left_angle_bracket_equal>>(&simple_operator_node))
+			op = semantic_entities::operator_::LEFT_ANGLE_BRACKET_EQUAL;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::right_angle_bracket_equal>>(&simple_operator_node))
+			op = semantic_entities::operator_::RIGHT_ANGLE_BRACKET_EQUAL;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::double_ampersand>>(&simple_operator_node))
+			op = semantic_entities::operator_::DOUBLE_AMPERSAND;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::double_pipe>>(&simple_operator_node))
+			op = semantic_entities::operator_::DOUBLE_PIPE;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::double_plus>>(&simple_operator_node))
+			op = semantic_entities::operator_::DOUBLE_PLUS;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::double_minus>>(&simple_operator_node))
+			op = semantic_entities::operator_::DOUBLE_MINUS;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::arrow>>(&simple_operator_node))
+			op = semantic_entities::operator_::ARROW;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::round_brackets>>(&simple_operator_node))
+			op = semantic_entities::operator_::ROUND_BRACKETS;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::square_brackets>>(&simple_operator_node))
+			op = semantic_entities::operator_::SQUARE_BRACKETS;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::comma>>(&simple_operator_node))
+			op = semantic_entities::operator_::COMMA;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::plus>>(&simple_operator_node))
+			op = semantic_entities::operator_::PLUS;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::minus>>(&simple_operator_node))
+			op = semantic_entities::operator_::MINUS;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::asterisk>>(&simple_operator_node))
+			op = semantic_entities::operator_::ASTERISK;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::slash>>(&simple_operator_node))
+			op = semantic_entities::operator_::SLASH;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::percent>>(&simple_operator_node))
+			op = semantic_entities::operator_::PERCENT;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::circumflex>>(&simple_operator_node))
+			op = semantic_entities::operator_::CIRCUMFLEX;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::ampersand>>(&simple_operator_node))
+			op = semantic_entities::operator_::AMPERSAND;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::pipe>>(&simple_operator_node))
+			op = semantic_entities::operator_::PIPE;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::tilde>>(&simple_operator_node))
+			op = semantic_entities::operator_::TILDE;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::exclamation>>(&simple_operator_node))
+			op = semantic_entities::operator_::EXCLAMATION;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::equal>>(&simple_operator_node))
+			op = semantic_entities::operator_::EQUAL;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::left_angle_bracket>>(&simple_operator_node))
+			op = semantic_entities::operator_::LEFT_ANGLE_BRACKET;
+		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::right_angle_bracket>>(&simple_operator_node))
+			op = semantic_entities::operator_::RIGHT_ANGLE_BRACKET;
+		else
+			assert(false);
+	}
+	else if(auto opt_array_operator_node = syntax_nodes::get<syntax_nodes::array_operator>(&operator_node))
+	{
+		auto array_operator_node = *opt_array_operator_node;
+
+		if(syntax_nodes::get<syntax_nodes::new_array_operator>(&array_operator_node))
+			op = semantic_entities::operator_::NEW_ARRAY;
+		else if(syntax_nodes::get<syntax_nodes::delete_array_operator>(&array_operator_node))
+			op = semantic_entities::operator_::DELETE_ARRAY;
+		else
+			assert(false);
+	}
+	else
+	{
+		assert(false);
+	}
+
+	return std::make_shared<semantic_entities::operator_function>
+	(
+		op,
+		type,
+		create_parameters(declarator_node, current_declarative_region),
+		is_inline
 	);
 }
 
@@ -967,51 +1142,6 @@ create_variable
 		create_type(decl_specifier_seq_node, declarator_node, current_declarative_region),
 		detail::semantic_analysis::has_static_specifier(decl_specifier_seq_node)
 	);
-}
-
-template<class DeclarativeRegionT>
-std::vector<std::shared_ptr<semantic_entities::typedef_>>
-create_typedefs_from_variable_style_typedef_declaration
-(
-	const syntax_nodes::simple_declaration& simple_declaration_node,
-	std::shared_ptr<DeclarativeRegionT> current_declarative_region
-)
-{
-	auto opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node);
-	assert(opt_decl_specifier_seq_node);
-	auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
-
-	auto opt_init_declarator_list_node = get_init_declarator_list(simple_declaration_node);
-	assert(opt_init_declarator_list_node);
-	auto init_declarator_list_node = *opt_init_declarator_list_node;
-
-	//let's ignore the typedef keyword and create variables
-	std::vector<std::shared_ptr<semantic_entities::variable>> fake_variables =
-		create_variables
-		(
-			decl_specifier_seq_node,
-			init_declarator_list_node,
-			current_declarative_region
-		)
-	;
-
-	//variable's name = typedef's name
-	std::vector<std::shared_ptr<semantic_entities::typedef_>> typedefs;
-	for(auto i = fake_variables.begin(); i != fake_variables.end(); ++i)
-	{
-		std::shared_ptr<semantic_entities::variable> fake_variable = *i;
-
-		typedefs.push_back
-		(
-			std::make_shared<semantic_entities::typedef_>
-			(
-				fake_variable->name(),
-				fake_variable->type()
-			)
-		);
-	}
-
-	return typedefs;
 }
 
 } //namespace semantic_analysis
