@@ -237,6 +237,53 @@ fill_class
 				}
 				else if(auto opt_member_declaration_member_declarator_list_node = get<member_declaration_member_declarator_list>(&*opt_member_declaration_node))
 				{
+					/*
+					boost::optional<type_shared_ptr_variant> opt_decl_specifier_seq_type;
+					bool has_typedef_specifier = false;
+					bool has_static_specifier = false;
+					bool has_inline_specifier = false;
+
+					if
+					(
+						const optional_node<decl_specifier_seq>& opt_decl_specifier_seq_node =
+							get_decl_specifier_seq(*opt_member_declaration_member_declarator_list_node)
+					)
+					{
+						opt_decl_specifier_seq_type = process_decl_specifier_seq
+						(
+							*opt_decl_specifier_seq_node,
+							current_declarative_region,
+							has_typedef_specifier, //out parameter
+							has_static_specifier, //out parameter
+							has_inline_specifier //out parameter
+						);
+					}
+
+					if
+					(
+						const optional_node<member_declarator_list>& opt_member_declarator_list_node =
+							get_member_declarator_list(*opt_member_declaration_member_declarator_list_node)
+					)
+					{
+						auto member_declarator_list_node = *opt_member_declarator_list_node;
+
+						for
+						(
+							auto j = member_declarator_list_node.begin();
+							j != member_declarator_list_node.end();
+							++j
+						)
+						{
+							auto member_declarator_node = j->main_node();
+							if(auto opt_member_declarator_declarator_node = get<member_declarator_declarator>(&member_declarator_node))
+							{
+								auto member_declarator_declarator_node = *opt_member_declarator_declarator_node;
+								auto declarator_node = get_declarator(member_declarator_declarator_node);
+							}
+						}
+					}
+					*/
+
 					auto opt_decl_specifier_seq_node = get_decl_specifier_seq(*opt_member_declaration_member_declarator_list_node);
 					auto opt_member_declarator_list_node = get_member_declarator_list(*opt_member_declaration_member_declarator_list_node);
 
@@ -416,6 +463,9 @@ fill_class
 					{
 						assert(false);
 					}
+
+
+
 				}
 				else if(auto opt_member_declaration_unqualified_id_node = get<member_declaration_unqualified_id>(&*opt_member_declaration_node))
 				{

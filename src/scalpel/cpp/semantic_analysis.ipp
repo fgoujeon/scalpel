@@ -179,7 +179,7 @@ analyze(const syntax_nodes::simple_declaration& simple_declaration_node, std::sh
 			const init_declarator& init_declarator_node = i->main_node();
 			const declarator& declarator_node = get_declarator(init_declarator_node);
 
-			process_declarator
+			declarator_entity_shared_ptr_variant declarator_entity = create_entity
 			(
 				declarator_node,
 				current_declarative_region,
@@ -188,6 +188,17 @@ analyze(const syntax_nodes::simple_declaration& simple_declaration_node, std::sh
 				has_static_specifier,
 				has_inline_specifier
 			);
+
+			if(auto opt_simple_function_entity = get<std::shared_ptr<simple_function>>(&declarator_entity))
+				current_declarative_region->add_member(*opt_simple_function_entity);
+			else if(auto opt_operator_function_entity = get<std::shared_ptr<operator_function>>(&declarator_entity))
+				current_declarative_region->add_member(*opt_operator_function_entity);
+			else if(auto opt_variable_entity = get<std::shared_ptr<variable>>(&declarator_entity))
+				current_declarative_region->add_member(*opt_variable_entity);
+			else if(auto opt_typedef_entity = get<std::shared_ptr<typedef_>>(&declarator_entity))
+				current_declarative_region->add_member(*opt_typedef_entity);
+			else
+				assert(false);
 		}
 	}
 }
@@ -252,8 +263,8 @@ process_decl_specifier_seq
 }
 
 template<class DeclarativeRegionT>
-void
-process_declarator
+declarator_entity_shared_ptr_variant
+create_entity
 (
 	const syntax_nodes::declarator& declarator_node,
 	std::shared_ptr<DeclarativeRegionT> current_declarative_region,
@@ -273,7 +284,7 @@ process_declarator
 	{
 		//if there's no type to decorate, there's an error
 		if(!opt_decl_specifier_seq_type)
-			throw std::runtime_error("process_declarator error");
+			throw std::runtime_error("create_entity error");
 
 		opt_type = decorate_type(*opt_decl_specifier_seq_type, *opt_ptr_operator_seq_node);
 	}
@@ -283,72 +294,56 @@ process_declarator
 		case detail::declarator_type::SIMPLE_FUNCTION_DECLARATOR:
 		{
 			if(!opt_type)
-				throw std::runtime_error("process_declarator error");
+				throw std::runtime_error("create_entity error");
 
-			current_declarative_region->add_member
+			return semantic_entities::simple_function::make_shared
 			(
-				semantic_entities::simple_function::make_shared
-				(
-					detail::get_identifier(declarator_node).value(),
-					*opt_type,
-					create_parameters(declarator_node, current_declarative_region),
-					has_inline_specifier,
-					has_static_specifier
-				)
+				detail::get_identifier(declarator_node).value(),
+				*opt_type,
+				create_parameters(declarator_node, current_declarative_region),
+				has_inline_specifier,
+				has_static_specifier
 			);
-
-			break;
 		}
 		case detail::declarator_type::OPERATOR_FUNCTION_DECLARATOR:
 		{
 			if(!opt_type)
-				throw std::runtime_error("process_declarator error");
+				throw std::runtime_error("create_entity error");
 
-			current_declarative_region->add_member
+			return create_operator_function
 			(
-				create_operator_function
-				(
-					declarator_node,
-					*opt_type,
-					has_inline_specifier,
-					current_declarative_region
-				)
+				declarator_node,
+				*opt_type,
+				has_inline_specifier,
+				current_declarative_region
 			);
-
-			break;
 		}
 		case detail::declarator_type::VARIABLE_DECLARATOR:
 		{
 			if(!opt_type)
-				throw std::runtime_error("process_declarator error");
+				throw std::runtime_error("create_entity error");
 
 			if(has_typedef_specifier)
 			{
-				current_declarative_region->add_member
+				return std::make_shared<semantic_entities::typedef_>
 				(
-					std::make_shared<semantic_entities::typedef_>
-					(
-						detail::get_identifier(declarator_node).value(),
-						*opt_type
-					)
+					detail::get_identifier(declarator_node).value(),
+					*opt_type
 				);
 			}
 			else
 			{
-				current_declarative_region->add_member
+				return std::make_shared<semantic_entities::variable>
 				(
-					std::make_shared<semantic_entities::variable>
-					(
-						detail::get_identifier(declarator_node).value(),
-						*opt_type,
-						has_static_specifier
-					)
+					detail::get_identifier(declarator_node).value(),
+					*opt_type,
+					has_static_specifier
 				);
 			}
-
-			break;
 		}
 	}
+
+	throw std::runtime_error("create_entity error");
 }
 
 

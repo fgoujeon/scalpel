@@ -42,8 +42,8 @@ template<class DeclarativeRegionT>
 void
 analyze(const syntax_nodes::simple_declaration& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-//Get (+ create and add for some cases) the type corresponding
-//to the given decl-specifier-seq.
+//Get and/or create the type corresponding to the given decl-specifier-seq.
+//Add it to the given declarative region.
 //Also get specifiers.
 template<class DeclarativeRegionT>
 semantic_entities::type_shared_ptr_variant
@@ -56,11 +56,23 @@ process_decl_specifier_seq
 	bool& has_inline_specifier //out parameter
 );
 
-//Create and add variable/function/typedef/etc.
-//corresponding to the given declarator.
+
+
+typedef
+	utility::variant
+	<
+		std::shared_ptr<semantic_entities::simple_function>,
+		std::shared_ptr<semantic_entities::operator_function>,
+		std::shared_ptr<semantic_entities::variable>,
+		std::shared_ptr<semantic_entities::typedef_>
+	>
+	declarator_entity_shared_ptr_variant
+;
+
+//Create variable/function/typedef/etc. corresponding to the given declarator.
 template<class DeclarativeRegionT>
-void
-process_declarator
+declarator_entity_shared_ptr_variant
+create_entity
 (
 	const syntax_nodes::declarator& declarator_node,
 	std::shared_ptr<DeclarativeRegionT> current_declarative_region,
