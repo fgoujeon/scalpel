@@ -73,8 +73,7 @@ enum decl_specifier_seq_type
 {
 	SIMPLE_DECL_SPECIFIER_SEQ,
 	CLASS_DECL_SPECIFIER_SEQ,
-	CLASS_FORWARD_DECL_SPECIFIER_SEQ,
-	TYPEDEF_DECL_SPECIFIER_SEQ
+	CLASS_FORWARD_DECL_SPECIFIER_SEQ
 };
 
 decl_specifier_seq_type
@@ -85,38 +84,6 @@ get_class_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_n
 
 const syntax_nodes::class_elaborated_specifier&
 get_class_elaborated_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node);
-
-
-
-//
-//declarator related
-//
-
-enum declarator_type
-{
-	SIMPLE_FUNCTION_DECLARATOR,
-	OPERATOR_FUNCTION_DECLARATOR,
-	VARIABLE_DECLARATOR
-};
-
-declarator_type
-get_declarator_type(const syntax_nodes::declarator& declarator_node);
-
-
-
-//
-//qualifier related
-//
-
-template<const std::string& Qualifier>
-bool
-is_qualified(const syntax_nodes::declarator& declarator_node);
-
-
-
-//
-//specifier related
-//
 
 template<class SpecifierNodeT, const std::string& Specifier>
 bool
@@ -156,6 +123,35 @@ has_mutable_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq
 {
 	return has_specifier<syntax_nodes::storage_class_specifier, utility::extern_strings::mutable_>(decl_specifier_seq_node);
 }
+
+bool
+has_typedef_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node);
+
+
+
+//
+//declarator related
+//
+
+enum declarator_type
+{
+	SIMPLE_FUNCTION_DECLARATOR,
+	OPERATOR_FUNCTION_DECLARATOR,
+	VARIABLE_DECLARATOR
+};
+
+declarator_type
+get_declarator_type(const syntax_nodes::declarator& declarator_node);
+
+
+
+//
+//qualifier related
+//
+
+template<const std::string& Qualifier>
+bool
+is_qualified(const syntax_nodes::declarator& declarator_node);
 
 
 

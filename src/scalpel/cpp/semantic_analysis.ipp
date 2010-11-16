@@ -154,7 +154,7 @@ analyze(const syntax_nodes::simple_declaration& simple_declaration_node, std::sh
 	namespace detail = detail::semantic_analysis;
 
 	boost::optional<type_shared_ptr_variant> opt_decl_specifier_seq_type;
-	bool is_typedef_decl_specifier_seq = false;
+	bool has_typedef_specifier = false;
 	bool is_static = false;
 	bool is_inline = false;
 
@@ -162,6 +162,7 @@ analyze(const syntax_nodes::simple_declaration& simple_declaration_node, std::sh
 	{
 		const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
 
+		has_typedef_specifier = detail::has_typedef_specifier(decl_specifier_seq_node);
 		is_static = detail::has_static_specifier(decl_specifier_seq_node);
 		is_inline = detail::has_inline_specifier(decl_specifier_seq_node);
 
@@ -194,12 +195,6 @@ analyze(const syntax_nodes::simple_declaration& simple_declaration_node, std::sh
 			case detail::decl_specifier_seq_type::SIMPLE_DECL_SPECIFIER_SEQ:
 			{
 				opt_decl_specifier_seq_type = create_undecorated_type(decl_specifier_seq_node, current_declarative_region);
-				break;
-			}
-			case detail::decl_specifier_seq_type::TYPEDEF_DECL_SPECIFIER_SEQ:
-			{
-				opt_decl_specifier_seq_type = create_undecorated_type(decl_specifier_seq_node, current_declarative_region);
-				is_typedef_decl_specifier_seq = true;
 				break;
 			}
 		}
@@ -273,7 +268,7 @@ analyze(const syntax_nodes::simple_declaration& simple_declaration_node, std::sh
 					if(!opt_type)
 						throw std::runtime_error("simple declaration analysis error");
 
-					if(is_typedef_decl_specifier_seq)
+					if(has_typedef_specifier)
 					{
 						current_declarative_region->add_member
 						(

@@ -210,8 +210,6 @@ get_decl_specifier_seq_type(const syntax_nodes::decl_specifier_seq& decl_specifi
 	unsigned int class_specifier_count = 0; //class XXX {...};
 	unsigned int class_elaborated_specifier_count = 0; //class XXX;
 	unsigned int simple_type_specifier_count = 0;
-	unsigned int typedef_keyword_count = 0;
-	unsigned int friend_keyword_count = 0;
 
 
 
@@ -271,11 +269,11 @@ get_decl_specifier_seq_type(const syntax_nodes::decl_specifier_seq& decl_specifi
 		}
 		else if(get<predefined_text_node<str::friend_>>(&decl_specifier_node))
 		{
-			++friend_keyword_count;
+			//nothing
 		}
 		else if(get<predefined_text_node<str::typedef_>>(&decl_specifier_node))
 		{
-			++typedef_keyword_count;
+			//nothing
 		}
 	}
 
@@ -289,38 +287,23 @@ get_decl_specifier_seq_type(const syntax_nodes::decl_specifier_seq& decl_specifi
 	(
 		class_specifier_count == 0 &&
 		class_elaborated_specifier_count == 0 &&
-		simple_type_specifier_count >= 1 &&
-		typedef_keyword_count == 0 &&
-		friend_keyword_count == 0
+		simple_type_specifier_count >= 1
 	)
 		return decl_specifier_seq_type::SIMPLE_DECL_SPECIFIER_SEQ;
 	else if
 	(
 		class_specifier_count == 1 &&
 		class_elaborated_specifier_count == 0 &&
-		simple_type_specifier_count == 0 &&
-		typedef_keyword_count == 0 &&
-		friend_keyword_count == 0
+		simple_type_specifier_count == 0
 	)
 		return decl_specifier_seq_type::CLASS_DECL_SPECIFIER_SEQ;
 	else if
 	(
 		class_specifier_count == 0 &&
 		class_elaborated_specifier_count == 1 &&
-		simple_type_specifier_count == 0 &&
-		typedef_keyword_count == 0 &&
-		friend_keyword_count == 0
+		simple_type_specifier_count == 0
 	)
 		return decl_specifier_seq_type::CLASS_FORWARD_DECL_SPECIFIER_SEQ;
-	else if
-	(
-		class_specifier_count == 0 &&
-		class_elaborated_specifier_count == 0 &&
-		simple_type_specifier_count >= 1 &&
-		typedef_keyword_count == 1 &&
-		friend_keyword_count == 0
-	)
-		return decl_specifier_seq_type::TYPEDEF_DECL_SPECIFIER_SEQ;
 
 	throw std::runtime_error("get_decl_specifier_seq_type error");
 }
@@ -367,6 +350,25 @@ get_class_elaborated_specifier(const syntax_nodes::decl_specifier_seq& decl_spec
 	assert(opt_class_elaborated_specifier_node);
 
 	return *opt_class_elaborated_specifier_node;
+}
+
+bool
+has_typedef_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node)
+{
+	for
+	(
+		auto i = decl_specifier_seq_node.begin();
+		i < decl_specifier_seq_node.end();
+		++i
+	)
+	{
+		const decl_specifier& decl_specifier_node = i->main_node();
+
+		if(get<predefined_text_node<utility::extern_strings::typedef_>>(&decl_specifier_node))
+			return true;
+	}
+
+	return false;
 }
 
 
