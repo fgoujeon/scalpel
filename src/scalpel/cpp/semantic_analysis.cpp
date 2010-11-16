@@ -149,7 +149,6 @@ create_class(const class_specifier& class_specifier_node)
 	}
 
 	//create the class
-	assert(class_name != "");
 	return class_::make_shared(class_name);
 }
 
