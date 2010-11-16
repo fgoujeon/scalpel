@@ -158,24 +158,18 @@ analyze(const syntax_nodes::simple_declaration& simple_declaration_node, std::sh
 	bool is_static = false;
 	bool is_inline = false;
 
+	if(const optional_node<decl_specifier_seq>& opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node))
 	{
-		auto opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node);
+		const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
 
-		if(opt_decl_specifier_seq_node)
-		{
-			is_static = detail::has_static_specifier(*opt_decl_specifier_seq_node);
-			is_inline = detail::has_inline_specifier(*opt_decl_specifier_seq_node);
-		}
+		is_static = detail::has_static_specifier(decl_specifier_seq_node);
+		is_inline = detail::has_inline_specifier(decl_specifier_seq_node);
 
-		switch(detail::get_decl_specifier_seq_type(opt_decl_specifier_seq_node))
+		switch(detail::get_decl_specifier_seq_type(decl_specifier_seq_node))
 		{
-			case detail::decl_specifier_seq_type::EMPTY_DECL_SPECIFIER_SEQ:
-			{
-				break;
-			}
 			case detail::decl_specifier_seq_type::CLASS_DECL_SPECIFIER_SEQ:
 			{
-				const syntax_nodes::class_specifier& class_specifier_node = detail::get_class_specifier(opt_decl_specifier_seq_node);
+				const syntax_nodes::class_specifier& class_specifier_node = detail::get_class_specifier(decl_specifier_seq_node);
 
 				std::shared_ptr<class_> new_class = create_class(class_specifier_node);
 				current_declarative_region->add_member(new_class);
@@ -187,7 +181,7 @@ analyze(const syntax_nodes::simple_declaration& simple_declaration_node, std::sh
 			}
 			case detail::decl_specifier_seq_type::CLASS_FORWARD_DECL_SPECIFIER_SEQ:
 			{
-				const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node = detail::get_class_elaborated_specifier(opt_decl_specifier_seq_node);
+				const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node = detail::get_class_elaborated_specifier(decl_specifier_seq_node);
 
 				std::shared_ptr<class_> new_class = create_class(class_elaborated_specifier_node);
 				current_declarative_region->add_member(new_class);
@@ -198,16 +192,12 @@ analyze(const syntax_nodes::simple_declaration& simple_declaration_node, std::sh
 			}
 			case detail::decl_specifier_seq_type::SIMPLE_DECL_SPECIFIER_SEQ:
 			{
-				assert(opt_decl_specifier_seq_node);
-				opt_decl_specifier_seq_type = create_type(*opt_decl_specifier_seq_node, current_declarative_region);
-
+				opt_decl_specifier_seq_type = create_type(decl_specifier_seq_node, current_declarative_region);
 				break;
 			}
 			case detail::decl_specifier_seq_type::TYPEDEF_DECL_SPECIFIER_SEQ:
 			{
-				assert(opt_decl_specifier_seq_node);
-				opt_decl_specifier_seq_type = create_type(*opt_decl_specifier_seq_node, current_declarative_region);
-
+				opt_decl_specifier_seq_type = create_type(decl_specifier_seq_node, current_declarative_region);
 				is_typedef_decl_specifier_seq = true;
 
 				break;

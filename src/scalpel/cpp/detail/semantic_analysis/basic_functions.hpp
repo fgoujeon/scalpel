@@ -71,7 +71,6 @@ has_pure_specifier(const syntax_nodes::member_declarator_declarator& member_decl
 
 enum decl_specifier_seq_type
 {
-	EMPTY_DECL_SPECIFIER_SEQ,
 	SIMPLE_DECL_SPECIFIER_SEQ,
 	CLASS_DECL_SPECIFIER_SEQ,
 	CLASS_FORWARD_DECL_SPECIFIER_SEQ,
@@ -79,13 +78,13 @@ enum decl_specifier_seq_type
 };
 
 decl_specifier_seq_type
-get_decl_specifier_seq_type(const syntax_nodes::optional_node<syntax_nodes::decl_specifier_seq>& opt_decl_specifier_seq_node);
+get_decl_specifier_seq_type(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node);
 
 const syntax_nodes::class_specifier&
-get_class_specifier(const syntax_nodes::optional_node<syntax_nodes::decl_specifier_seq>& opt_decl_specifier_seq_node);
+get_class_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node);
 
 const syntax_nodes::class_elaborated_specifier&
-get_class_elaborated_specifier(const syntax_nodes::optional_node<syntax_nodes::decl_specifier_seq>& opt_decl_specifier_seq_node);
+get_class_elaborated_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node);
 
 
 

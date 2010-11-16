@@ -201,15 +201,8 @@ has_pure_specifier(const syntax_nodes::member_declarator_declarator& member_decl
 //
 
 decl_specifier_seq_type
-get_decl_specifier_seq_type(const syntax_nodes::optional_node<syntax_nodes::decl_specifier_seq>& opt_decl_specifier_seq_node)
+get_decl_specifier_seq_type(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node)
 {
-	if(!opt_decl_specifier_seq_node)
-		return decl_specifier_seq_type::EMPTY_DECL_SPECIFIER_SEQ;
-
-	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
-
-
-
 	//
 	//node counters' declaration
 	//
@@ -333,11 +326,8 @@ get_decl_specifier_seq_type(const syntax_nodes::optional_node<syntax_nodes::decl
 }
 
 const syntax_nodes::class_specifier&
-get_class_specifier(const syntax_nodes::optional_node<syntax_nodes::decl_specifier_seq>& opt_decl_specifier_seq_node)
+get_class_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node)
 {
-	assert(opt_decl_specifier_seq_node);
-
-	const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
 	assert(decl_specifier_seq_node.size() == 1);
 
 	const decl_specifier& decl_specifier_node = decl_specifier_seq_node.front().main_node();
@@ -354,11 +344,8 @@ get_class_specifier(const syntax_nodes::optional_node<syntax_nodes::decl_specifi
 }
 
 const syntax_nodes::class_elaborated_specifier&
-get_class_elaborated_specifier(const syntax_nodes::optional_node<syntax_nodes::decl_specifier_seq>& opt_decl_specifier_seq_node)
+get_class_elaborated_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node)
 {
-	assert(opt_decl_specifier_seq_node);
-
-	const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
 	assert(decl_specifier_seq_node.size() == 1);
 
 	const decl_specifier& decl_specifier_node = decl_specifier_seq_node.front().main_node();
