@@ -328,19 +328,22 @@ get_decl_specifier_seq_type(const syntax_nodes::decl_specifier_seq& decl_specifi
 const syntax_nodes::class_specifier&
 get_class_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node)
 {
-	assert(decl_specifier_seq_node.size() == 1);
+	for(auto i = decl_specifier_seq_node.begin(); i != decl_specifier_seq_node.end(); ++i)
+	{
+		const decl_specifier& decl_specifier_node = i->main_node();
 
-	const decl_specifier& decl_specifier_node = decl_specifier_seq_node.front().main_node();
+		if(const boost::optional<const type_specifier&> opt_type_specifier_node = get<type_specifier>(&decl_specifier_node))
+		{
+			const type_specifier& type_specifier_node = *opt_type_specifier_node;
 
-	const boost::optional<const type_specifier&> opt_type_specifier_node = get<type_specifier>(&decl_specifier_node);
-	assert(opt_type_specifier_node);
+			if(const boost::optional<const class_specifier&> opt_class_specifier_node = get<class_specifier>(&type_specifier_node))
+			{
+				return *opt_class_specifier_node;
+			}
+		}
+	}
 
-	const type_specifier& type_specifier_node = *opt_type_specifier_node;
-
-	const boost::optional<const class_specifier&> opt_class_specifier_node = get<class_specifier>(&type_specifier_node);
-	assert(opt_class_specifier_node);
-
-	return *opt_class_specifier_node;
+	assert(false);
 }
 
 const syntax_nodes::class_elaborated_specifier&

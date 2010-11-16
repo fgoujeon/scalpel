@@ -133,11 +133,11 @@ fill_namespace
 }
 
 std::shared_ptr<class_>
-create_class(const class_specifier& syntax_node)
+create_class(const class_specifier& class_specifier_node)
 {
 	//get the name of the class
 	std::string class_name;
-	const optional_node<identifier_or_template_id>& opt_id_or_templ = get_identifier_or_template_id(get_class_head(syntax_node));
+	const optional_node<identifier_or_template_id>& opt_id_or_templ = get_identifier_or_template_id(get_class_head(class_specifier_node));
 	if(opt_id_or_templ)
 	{
 		const boost::optional<const identifier&> id = get<identifier>(&*opt_id_or_templ);
