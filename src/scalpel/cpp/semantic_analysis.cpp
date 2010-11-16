@@ -153,6 +153,23 @@ create_class(const class_specifier& syntax_node)
 	return class_::make_shared(class_name);
 }
 
+std::shared_ptr<semantic_entities::class_>
+create_class(const class_elaborated_specifier& class_elaborated_specifier_node)
+{
+	//get the name of the class
+	std::string class_name;
+	const identifier_or_template_id& identifier_or_template_id_node = get_identifier_or_template_id(class_elaborated_specifier_node);
+
+	if(const boost::optional<const identifier&> opt_identifier_node = get<identifier>(&identifier_or_template_id_node))
+	{
+		class_name = opt_identifier_node->value();
+	}
+
+	//create the class
+	assert(class_name != "");
+	return class_::make_shared(class_name);
+}
+
 void
 fill_class
 (

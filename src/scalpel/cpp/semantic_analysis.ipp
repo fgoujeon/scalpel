@@ -174,33 +174,10 @@ analyze(const syntax_nodes::simple_declaration& simple_declaration_node, std::sh
 		}
 		case detail::decl_specifier_seq_type::CLASS_FORWARD_DECL_SPECIFIER_SEQ:
 		{
-			assert(opt_decl_specifier_seq_node);
+			const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node = detail::get_class_elaborated_specifier(opt_decl_specifier_seq_node);
 
-			const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
-			assert(decl_specifier_seq_node.size() == 1);
-
-			const decl_specifier& decl_specifier_node = decl_specifier_seq_node.front().main_node();
-
-			auto opt_type_specifier_node = get<type_specifier>(&decl_specifier_node);
-			assert(opt_type_specifier_node);
-
-			auto type_specifier_node = *opt_type_specifier_node;
-
-			auto opt_elaborated_type_specifier_node = get<elaborated_type_specifier>(&type_specifier_node);
-			assert(opt_elaborated_type_specifier_node);
-
-			auto elaborated_type_specifier_node = *opt_elaborated_type_specifier_node;
-
-			auto opt_class_elaborated_specifier_node = get<class_elaborated_specifier>(&elaborated_type_specifier_node);
-			assert(opt_class_elaborated_specifier_node);
-
-			const identifier_or_template_id& identifier_or_template_id_node = get_identifier_or_template_id(*opt_class_elaborated_specifier_node);
-
-			auto opt_identifier_node = get<identifier>(&identifier_or_template_id_node);
-			assert(opt_identifier_node);
-
-			const std::string& class_name = opt_identifier_node->value();
-			current_declarative_region->add_member(class_::make_shared(class_name));
+			std::shared_ptr<class_> new_class = create_class(class_elaborated_specifier_node);
+			current_declarative_region->add_member(new_class);
 
 			break;
 		}

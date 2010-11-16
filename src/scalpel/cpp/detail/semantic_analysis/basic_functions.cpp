@@ -353,6 +353,32 @@ get_class_specifier(const syntax_nodes::optional_node<syntax_nodes::decl_specifi
 	return *opt_class_specifier_node;
 }
 
+const syntax_nodes::class_elaborated_specifier&
+get_class_elaborated_specifier(const syntax_nodes::optional_node<syntax_nodes::decl_specifier_seq>& opt_decl_specifier_seq_node)
+{
+	assert(opt_decl_specifier_seq_node);
+
+	const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
+	assert(decl_specifier_seq_node.size() == 1);
+
+	const decl_specifier& decl_specifier_node = decl_specifier_seq_node.front().main_node();
+
+	const boost::optional<const type_specifier&> opt_type_specifier_node = get<type_specifier>(&decl_specifier_node);
+	assert(opt_type_specifier_node);
+
+	const type_specifier& type_specifier_node = *opt_type_specifier_node;
+
+	const boost::optional<const elaborated_type_specifier&> opt_elaborated_type_specifier_node = get<elaborated_type_specifier>(&type_specifier_node);
+	assert(opt_elaborated_type_specifier_node);
+
+	const elaborated_type_specifier& elaborated_type_specifier_node = *opt_elaborated_type_specifier_node;
+
+	const boost::optional<const class_elaborated_specifier&> opt_class_elaborated_specifier_node = get<class_elaborated_specifier>(&elaborated_type_specifier_node);
+	assert(opt_class_elaborated_specifier_node);
+
+	return *opt_class_elaborated_specifier_node;
+}
+
 
 
 //

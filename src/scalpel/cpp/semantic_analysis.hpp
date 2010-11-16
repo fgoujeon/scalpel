@@ -77,6 +77,9 @@ fill_namespace
 std::shared_ptr<semantic_entities::class_>
 create_class(const syntax_nodes::class_specifier& syntax_node);
 
+std::shared_ptr<semantic_entities::class_>
+create_class(const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node);
+
 void
 fill_class(std::shared_ptr<semantic_entities::class_> c, const syntax_nodes::class_specifier& syntax_node);
 

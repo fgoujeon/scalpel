@@ -84,6 +84,9 @@ get_decl_specifier_seq_type(const syntax_nodes::optional_node<syntax_nodes::decl
 const syntax_nodes::class_specifier&
 get_class_specifier(const syntax_nodes::optional_node<syntax_nodes::decl_specifier_seq>& opt_decl_specifier_seq_node);
 
+const syntax_nodes::class_elaborated_specifier&
+get_class_elaborated_specifier(const syntax_nodes::optional_node<syntax_nodes::decl_specifier_seq>& opt_decl_specifier_seq_node);
+
 
 
 //
