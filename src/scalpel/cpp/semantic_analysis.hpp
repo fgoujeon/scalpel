@@ -42,6 +42,34 @@ template<class DeclarativeRegionT>
 void
 analyze(const syntax_nodes::simple_declaration& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
+//Get (+ create and add for some cases) the type corresponding
+//to the given decl-specifier-seq.
+//Also get specifiers.
+template<class DeclarativeRegionT>
+semantic_entities::type_shared_ptr_variant
+process_decl_specifier_seq
+(
+	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
+	std::shared_ptr<DeclarativeRegionT> current_declarative_region,
+	bool& has_typedef_specifier, //out parameter
+	bool& has_static_specifier, //out parameter
+	bool& has_inline_specifier //out parameter
+);
+
+//Create and add variable/function/typedef/etc.
+//corresponding to the given declarator.
+template<class DeclarativeRegionT>
+void
+process_declarator
+(
+	const syntax_nodes::declarator& declarator_node,
+	std::shared_ptr<DeclarativeRegionT> current_declarative_region,
+	const boost::optional<semantic_entities::type_shared_ptr_variant> opt_decl_specifier_seq_type,
+	const bool has_typedef_specifier,
+	const bool has_static_specifier,
+	const bool has_inline_specifier
+);
+
 
 
 //
