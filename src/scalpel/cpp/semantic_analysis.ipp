@@ -153,147 +153,159 @@ analyze(const syntax_nodes::simple_declaration& simple_declaration_node, std::sh
 	using namespace semantic_entities;
 	namespace detail = detail::semantic_analysis;
 
-	auto opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node);
-	auto opt_init_declarator_list_node = get_init_declarator_list(simple_declaration_node);
+	boost::optional<type_shared_ptr_variant> opt_decl_specifier_seq_type;
+	bool is_typedef_decl_specifier_seq = false;
+	bool is_static = false;
+	bool is_inline = false;
 
-	switch(detail::get_decl_specifier_seq_type(opt_decl_specifier_seq_node))
 	{
-		case detail::decl_specifier_seq_type::EMPTY_DECL_SPECIFIER_SEQ:
+		auto opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node);
+
+		if(opt_decl_specifier_seq_node)
 		{
-			break;
+			is_static = detail::has_static_specifier(*opt_decl_specifier_seq_node);
+			is_inline = detail::has_inline_specifier(*opt_decl_specifier_seq_node);
 		}
-		case detail::decl_specifier_seq_type::CLASS_DECL_SPECIFIER_SEQ:
+
+		switch(detail::get_decl_specifier_seq_type(opt_decl_specifier_seq_node))
 		{
-			const syntax_nodes::class_specifier& class_specifier_node = detail::get_class_specifier(opt_decl_specifier_seq_node);
-
-			std::shared_ptr<class_> new_class = create_class(class_specifier_node);
-			current_declarative_region->add_member(new_class);
-			fill_class(new_class, class_specifier_node);
-
-			break;
-		}
-		case detail::decl_specifier_seq_type::CLASS_FORWARD_DECL_SPECIFIER_SEQ:
-		{
-			const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node = detail::get_class_elaborated_specifier(opt_decl_specifier_seq_node);
-
-			std::shared_ptr<class_> new_class = create_class(class_elaborated_specifier_node);
-			current_declarative_region->add_member(new_class);
-
-			break;
-		}
-		case detail::decl_specifier_seq_type::SIMPLE_DECL_SPECIFIER_SEQ:
-		{
-			assert(opt_decl_specifier_seq_node);
-
-			type_shared_ptr_variant basic_type = create_type(*opt_decl_specifier_seq_node, current_declarative_region);
-
-			if(opt_init_declarator_list_node)
+			case detail::decl_specifier_seq_type::EMPTY_DECL_SPECIFIER_SEQ:
 			{
-				const init_declarator_list& init_declarator_list_node = *opt_init_declarator_list_node;
+				break;
+			}
+			case detail::decl_specifier_seq_type::CLASS_DECL_SPECIFIER_SEQ:
+			{
+				const syntax_nodes::class_specifier& class_specifier_node = detail::get_class_specifier(opt_decl_specifier_seq_node);
 
-				for(auto i = init_declarator_list_node.begin(); i != init_declarator_list_node.end(); ++i)
-				{
-					const init_declarator& init_declarator_node = i->main_node();
-					const declarator& declarator_node = get_declarator(init_declarator_node);
+				std::shared_ptr<class_> new_class = create_class(class_specifier_node);
+				current_declarative_region->add_member(new_class);
+				fill_class(new_class, class_specifier_node);
 
-					const syntax_nodes::optional_node<syntax_nodes::ptr_operator_seq>& opt_ptr_operator_seq_node = get_ptr_operator_seq(declarator_node);
+				opt_decl_specifier_seq_type = std::shared_ptr<const class_>(new_class);
 
-					//decorate type with hypothetical pointers, references and arrays
-					type_shared_ptr_variant type = basic_type;
-					if(opt_ptr_operator_seq_node)
-						type = decorate_type(basic_type, *opt_ptr_operator_seq_node);
+				break;
+			}
+			case detail::decl_specifier_seq_type::CLASS_FORWARD_DECL_SPECIFIER_SEQ:
+			{
+				const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node = detail::get_class_elaborated_specifier(opt_decl_specifier_seq_node);
 
-					//static? inline?
-					const bool is_static = detail::has_static_specifier(*opt_decl_specifier_seq_node);
-					const bool is_inline = detail::has_inline_specifier(*opt_decl_specifier_seq_node);
+				std::shared_ptr<class_> new_class = create_class(class_elaborated_specifier_node);
+				current_declarative_region->add_member(new_class);
 
-					switch(detail::get_declarator_type(declarator_node))
-					{
-						case detail::declarator_type::SIMPLE_FUNCTION_DECLARATOR:
-							current_declarative_region->add_member
-							(
-								semantic_entities::simple_function::make_shared
-								(
-									detail::get_identifier(declarator_node).value(),
-									type,
-									create_parameters(declarator_node, current_declarative_region),
-									is_inline,
-									is_static
-								)
-							);
-							break;
-						case detail::declarator_type::OPERATOR_FUNCTION_DECLARATOR:
-							current_declarative_region->add_member
-							(
-								create_operator_function
-								(
-									declarator_node,
-									type,
-									is_inline,
-									current_declarative_region
-								)
-							);
-							break;
-						case detail::declarator_type::VARIABLE_DECLARATOR:
-							current_declarative_region->add_member
-							(
-								std::make_shared<semantic_entities::variable>
-								(
-									detail::get_identifier(declarator_node).value(),
-									type,
-									is_static
-								)
-							);
-							break;
-					}
-				}
+				opt_decl_specifier_seq_type = std::shared_ptr<const class_>(new_class);
+
+				break;
+			}
+			case detail::decl_specifier_seq_type::SIMPLE_DECL_SPECIFIER_SEQ:
+			{
+				assert(opt_decl_specifier_seq_node);
+				opt_decl_specifier_seq_type = create_type(*opt_decl_specifier_seq_node, current_declarative_region);
+
+				break;
+			}
+			case detail::decl_specifier_seq_type::TYPEDEF_DECL_SPECIFIER_SEQ:
+			{
+				assert(opt_decl_specifier_seq_node);
+				opt_decl_specifier_seq_type = create_type(*opt_decl_specifier_seq_node, current_declarative_region);
+
+				is_typedef_decl_specifier_seq = true;
+
+				break;
+			}
+		}
+	}
+
+	if(const optional_node<init_declarator_list> opt_init_declarator_list_node = get_init_declarator_list(simple_declaration_node))
+	{
+		const init_declarator_list& init_declarator_list_node = *opt_init_declarator_list_node;
+
+		for(auto i = init_declarator_list_node.begin(); i != init_declarator_list_node.end(); ++i)
+		{
+			const init_declarator& init_declarator_node = i->main_node();
+			const declarator& declarator_node = get_declarator(init_declarator_node);
+
+			//decorate type with hypothetical pointers and references
+			boost::optional<type_shared_ptr_variant> opt_type = opt_decl_specifier_seq_type;
+			if(const syntax_nodes::optional_node<syntax_nodes::ptr_operator_seq>& opt_ptr_operator_seq_node = get_ptr_operator_seq(declarator_node))
+			{
+				//if there's no type to decorate, there's an error
+				if(!opt_decl_specifier_seq_type)
+					throw std::runtime_error("simple declaration analysis error");
+
+				opt_type = decorate_type(*opt_decl_specifier_seq_type, *opt_ptr_operator_seq_node);
 			}
 
-			break;
-		}
-		case detail::decl_specifier_seq_type::TYPEDEF_DECL_SPECIFIER_SEQ:
-		{
-			assert(opt_decl_specifier_seq_node);
-
-			type_shared_ptr_variant basic_type = create_type(*opt_decl_specifier_seq_node, current_declarative_region);
-
-			if(opt_init_declarator_list_node)
+			switch(detail::get_declarator_type(declarator_node))
 			{
-				const init_declarator_list& init_declarator_list_node = *opt_init_declarator_list_node;
-
-				for(auto i = init_declarator_list_node.begin(); i != init_declarator_list_node.end(); ++i)
+				case detail::declarator_type::SIMPLE_FUNCTION_DECLARATOR:
 				{
-					const init_declarator& init_declarator_node = i->main_node();
-					const declarator& declarator_node = get_declarator(init_declarator_node);
+					if(!opt_type)
+						throw std::runtime_error("simple declaration analysis error");
 
-					const syntax_nodes::optional_node<syntax_nodes::ptr_operator_seq>& opt_ptr_operator_seq_node = get_ptr_operator_seq(declarator_node);
+					current_declarative_region->add_member
+					(
+						semantic_entities::simple_function::make_shared
+						(
+							detail::get_identifier(declarator_node).value(),
+							*opt_type,
+							create_parameters(declarator_node, current_declarative_region),
+							is_inline,
+							is_static
+						)
+					);
 
-					//decorate type with hypothetical pointers, references and arrays
-					type_shared_ptr_variant type = basic_type;
-					if(opt_ptr_operator_seq_node)
-						type = decorate_type(basic_type, *opt_ptr_operator_seq_node);
+					break;
+				}
+				case detail::declarator_type::OPERATOR_FUNCTION_DECLARATOR:
+				{
+					if(!opt_type)
+						throw std::runtime_error("simple declaration analysis error");
 
-					switch(detail::get_declarator_type(declarator_node))
+					current_declarative_region->add_member
+					(
+						create_operator_function
+						(
+							declarator_node,
+							*opt_type,
+							is_inline,
+							current_declarative_region
+						)
+					);
+
+					break;
+				}
+				case detail::declarator_type::VARIABLE_DECLARATOR:
+				{
+					if(!opt_type)
+						throw std::runtime_error("simple declaration analysis error");
+
+					if(is_typedef_decl_specifier_seq)
 					{
-						case detail::declarator_type::SIMPLE_FUNCTION_DECLARATOR:
-							break;
-						case detail::declarator_type::OPERATOR_FUNCTION_DECLARATOR:
-							break;
-						case detail::declarator_type::VARIABLE_DECLARATOR:
-							current_declarative_region->add_member
+						current_declarative_region->add_member
+						(
+							std::make_shared<semantic_entities::typedef_>
 							(
-								std::make_shared<semantic_entities::typedef_>
-								(
-									detail::get_identifier(declarator_node).value(),
-									type
-								)
-							);
-							break;
+								detail::get_identifier(declarator_node).value(),
+								*opt_type
+							)
+						);
 					}
+					else
+					{
+						current_declarative_region->add_member
+						(
+							std::make_shared<semantic_entities::variable>
+							(
+								detail::get_identifier(declarator_node).value(),
+								*opt_type,
+								is_static
+							)
+						);
+					}
+
+					break;
 				}
 			}
-
-			break;
 		}
 	}
 }
