@@ -159,6 +159,14 @@ create_type
 
 template<class DeclarativeRegionT>
 semantic_entities::type_shared_ptr_variant
+create_undecorated_type
+(
+	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
+	std::shared_ptr<DeclarativeRegionT> current_declarative_region
+);
+
+template<class DeclarativeRegionT>
+semantic_entities::type_shared_ptr_variant
 get_conversion_function_type
 (
 	const syntax_nodes::declarator& declarator_node,
@@ -168,15 +176,24 @@ get_conversion_function_type
 semantic_entities::type_shared_ptr_variant
 decorate_type
 (
-	semantic_entities::type_shared_ptr_variant return_type,
+	semantic_entities::type_shared_ptr_variant type,
 	const bool const_qualified,
 	const bool volatile_qualified
 );
 
+//decorate type with decl-specifier-seq's const and volatile
 semantic_entities::type_shared_ptr_variant
 decorate_type
 (
-	semantic_entities::type_shared_ptr_variant return_type,
+	semantic_entities::type_shared_ptr_variant type,
+	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node
+);
+
+//decorate type with ptr-operator-seq's pointers and references
+semantic_entities::type_shared_ptr_variant
+decorate_type
+(
+	semantic_entities::type_shared_ptr_variant type,
 	const syntax_nodes::ptr_operator_seq& ptr_operator_seq_node
 );
 

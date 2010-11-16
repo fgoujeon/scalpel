@@ -448,23 +448,53 @@ fill_class
 semantic_entities::type_shared_ptr_variant
 decorate_type
 (
-	semantic_entities::type_shared_ptr_variant return_type,
+	semantic_entities::type_shared_ptr_variant type,
 	const bool is_const,
 	const bool is_volatile
 )
 {
 	if(is_const)
-		return_type = std::make_shared<const const_>(return_type);
+		type = std::make_shared<const const_>(type);
 	if(is_volatile)
-		return_type = std::make_shared<const volatile_>(return_type);
+		type = std::make_shared<const volatile_>(type);
 
-	return return_type;
+	return type;
 }
 
 semantic_entities::type_shared_ptr_variant
 decorate_type
 (
-	semantic_entities::type_shared_ptr_variant return_type,
+	semantic_entities::type_shared_ptr_variant type,
+	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node
+)
+{
+	for(auto i = decl_specifier_seq_node.begin(); i != decl_specifier_seq_node.end(); ++i)
+	{
+		const decl_specifier& decl_specifier_node = i->main_node();
+
+		if(const boost::optional<const type_specifier&> opt_type_specifier_node = get<type_specifier>(&decl_specifier_node))
+		{
+			const type_specifier& type_specifier_node = *opt_type_specifier_node;
+
+			if(const boost::optional<const cv_qualifier&> opt_cv_qualifier_node = get<cv_qualifier>(&type_specifier_node))
+			{
+				const cv_qualifier& cv_qualifier_node = *opt_cv_qualifier_node;
+
+				if(get<predefined_text_node<str::const_>>(&cv_qualifier_node))
+					type = std::make_shared<const const_>(type);
+				else if(get<predefined_text_node<str::volatile_>>(&cv_qualifier_node))
+					type = std::make_shared<const volatile_>(type);
+			}
+		}
+	}
+
+	return type;
+}
+
+semantic_entities::type_shared_ptr_variant
+decorate_type
+(
+	semantic_entities::type_shared_ptr_variant type,
 	const syntax_nodes::ptr_operator_seq& ptr_operator_seq_node
 )
 {
@@ -475,7 +505,7 @@ decorate_type
 		{
 			auto ptr_ptr_operator_node = *opt_ptr_ptr_operator_node;
 
-			return_type = std::make_shared<const pointer>(return_type);
+			type = std::make_shared<const pointer>(type);
 
 			if(auto opt_cv_qualifier_seq_node = get_cv_qualifier_seq(ptr_ptr_operator_node))
 			{
@@ -491,22 +521,22 @@ decorate_type
 
 					if(get<predefined_text_node<str::const_>>(&cv_qualifier_node))
 					{
-						return_type = std::make_shared<const const_>(return_type);
+						type = std::make_shared<const const_>(type);
 					}
 					else if(get<predefined_text_node<str::volatile_>>(&cv_qualifier_node))
 					{
-						return_type = std::make_shared<const volatile_>(return_type);
+						type = std::make_shared<const volatile_>(type);
 					}
 				}
 			}
 		}
 		else if(auto ref_ptr_operator_node = get<ref_ptr_operator>(&ptr_operator_node))
 		{
-			return_type = std::make_shared<const reference>(return_type);
+			type = std::make_shared<const reference>(type);
 		}
 	}
 
-	return return_type;
+	return type;
 }
 
 std::shared_ptr<const semantic_entities::fundamental_type>

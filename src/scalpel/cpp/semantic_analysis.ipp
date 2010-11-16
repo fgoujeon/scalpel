@@ -165,6 +165,7 @@ analyze(const syntax_nodes::simple_declaration& simple_declaration_node, std::sh
 		is_static = detail::has_static_specifier(decl_specifier_seq_node);
 		is_inline = detail::has_inline_specifier(decl_specifier_seq_node);
 
+		//create and/or get undecorated type
 		switch(detail::get_decl_specifier_seq_type(decl_specifier_seq_node))
 		{
 			case detail::decl_specifier_seq_type::CLASS_DECL_SPECIFIER_SEQ:
@@ -192,20 +193,23 @@ analyze(const syntax_nodes::simple_declaration& simple_declaration_node, std::sh
 			}
 			case detail::decl_specifier_seq_type::SIMPLE_DECL_SPECIFIER_SEQ:
 			{
-				opt_decl_specifier_seq_type = create_type(decl_specifier_seq_node, current_declarative_region);
+				opt_decl_specifier_seq_type = create_undecorated_type(decl_specifier_seq_node, current_declarative_region);
 				break;
 			}
 			case detail::decl_specifier_seq_type::TYPEDEF_DECL_SPECIFIER_SEQ:
 			{
-				opt_decl_specifier_seq_type = create_type(decl_specifier_seq_node, current_declarative_region);
+				opt_decl_specifier_seq_type = create_undecorated_type(decl_specifier_seq_node, current_declarative_region);
 				is_typedef_decl_specifier_seq = true;
-
 				break;
 			}
 		}
+
+		//decorate type
+		assert(opt_decl_specifier_seq_type);
+		opt_decl_specifier_seq_type = decorate_type(*opt_decl_specifier_seq_type, decl_specifier_seq_node);
 	}
 
-	if(const optional_node<init_declarator_list> opt_init_declarator_list_node = get_init_declarator_list(simple_declaration_node))
+	if(const optional_node<init_declarator_list>& opt_init_declarator_list_node = get_init_declarator_list(simple_declaration_node))
 	{
 		const init_declarator_list& init_declarator_list_node = *opt_init_declarator_list_node;
 
@@ -846,6 +850,99 @@ create_type
 	semantic_entities::type_shared_ptr_variant return_type = *opt_return_type;
 
 	return_type = decorate_type(return_type, is_const, is_volatile);
+
+	return return_type;
+}
+
+template<class DeclarativeRegionT>
+semantic_entities::type_shared_ptr_variant
+create_undecorated_type
+(
+	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
+	std::shared_ptr<DeclarativeRegionT> current_declarative_region
+)
+{
+	boost::optional<semantic_entities::type_shared_ptr_variant> opt_return_type;
+	bool bool_type = false;
+	bool char_type = false;
+	bool double_type = false;
+	bool float_type = false;
+	bool int_type = false;
+	bool long_long_type = false;
+	bool long_type = false;
+	bool short_type = false;
+	bool signed_type = false;
+	bool unsigned_type = false;
+	bool void_type = false;
+	bool wchar_t_type = false;
+
+	bool ignored;
+	/*
+	bool is_const = false;
+	bool is_volatile = false;
+	*/
+
+	for
+	(
+		auto i = decl_specifier_seq_node.begin();
+		i < decl_specifier_seq_node.end();
+		++i
+	)
+	{
+		const syntax_nodes::decl_specifier& decl_specifier_node = i->main_node();
+
+		//auto opt_function_specifier_node = syntax_nodes::get<function_specifier>(&decl_specifier_node);
+		//auto opt_storage_class_specifier_node = syntax_nodes::get<storage_class_specifier>(&decl_specifier_node);
+		//syntax_nodes::predefined_text_node<str::friend_>
+		//syntax_nodes::predefined_text_node<str::typedef_>
+
+		if(auto opt_type_specifier_node = syntax_nodes::get<syntax_nodes::type_specifier>(&decl_specifier_node))
+		{
+			auto type_specifier_node = *opt_type_specifier_node;
+			get_type_info
+			(
+				type_specifier_node,
+				opt_return_type,
+				bool_type,
+				char_type,
+				double_type,
+				float_type,
+				int_type,
+				long_long_type,
+				long_type,
+				short_type,
+				signed_type,
+				unsigned_type,
+				void_type,
+				wchar_t_type,
+				ignored,
+				ignored,
+				current_declarative_region
+			);
+		}
+	}
+
+	if(!opt_return_type)
+	{
+		opt_return_type = get_fundamental_type
+		(
+			bool_type,
+			char_type,
+			double_type,
+			float_type,
+			int_type,
+			long_long_type,
+			long_type,
+			short_type,
+			signed_type,
+			unsigned_type,
+			void_type,
+			wchar_t_type
+		);
+	}
+
+	assert(opt_return_type);
+	semantic_entities::type_shared_ptr_variant return_type = *opt_return_type;
 
 	return return_type;
 }
