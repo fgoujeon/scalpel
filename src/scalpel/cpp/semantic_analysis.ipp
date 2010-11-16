@@ -157,17 +157,18 @@ analyze(const syntax_nodes::simple_declaration& simple_declaration_node, std::sh
 	bool has_typedef_specifier = false;
 	bool has_static_specifier = false;
 	bool has_inline_specifier = false;
+	bool has_explicit_specifier = false;
 
 	if(const optional_node<decl_specifier_seq>& opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node))
 	{
-		opt_decl_specifier_seq_type = process_decl_specifier_seq
-		(
-			*opt_decl_specifier_seq_node,
-			current_declarative_region,
-			has_typedef_specifier, //out parameter
-			has_static_specifier, //out parameter
-			has_inline_specifier //out parameter
-		);
+		const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
+
+		has_typedef_specifier = detail::has_typedef_specifier(decl_specifier_seq_node);
+		has_static_specifier = detail::has_static_specifier(decl_specifier_seq_node);
+		has_inline_specifier = detail::has_inline_specifier(decl_specifier_seq_node);
+		has_explicit_specifier = detail::has_explicit_specifier(decl_specifier_seq_node);
+
+		opt_decl_specifier_seq_type = process_decl_specifier_seq(decl_specifier_seq_node, current_declarative_region);
 	}
 
 	if(const optional_node<init_declarator_list>& opt_init_declarator_list_node = get_init_declarator_list(simple_declaration_node))
@@ -186,7 +187,8 @@ analyze(const syntax_nodes::simple_declaration& simple_declaration_node, std::sh
 				opt_decl_specifier_seq_type,
 				has_typedef_specifier,
 				has_static_specifier,
-				has_inline_specifier
+				has_inline_specifier,
+				has_explicit_specifier
 			);
 
 			if(auto opt_simple_function_entity = get<std::shared_ptr<simple_function>>(&declarator_entity))
@@ -204,25 +206,18 @@ analyze(const syntax_nodes::simple_declaration& simple_declaration_node, std::sh
 }
 
 template<class DeclarativeRegionT>
-semantic_entities::type_shared_ptr_variant
+boost::optional<semantic_entities::type_shared_ptr_variant>
 process_decl_specifier_seq
 (
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-	std::shared_ptr<DeclarativeRegionT> current_declarative_region,
-	bool& has_typedef_specifier, //out parameter
-	bool& has_static_specifier, //out parameter
-	bool& has_inline_specifier //out parameter
+	std::shared_ptr<DeclarativeRegionT> current_declarative_region
 )
 {
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
 	namespace detail = detail::semantic_analysis;
 
-	boost::optional<type_shared_ptr_variant> opt_decl_specifier_seq_type;
-
-	has_typedef_specifier = detail::has_typedef_specifier(decl_specifier_seq_node);
-	has_static_specifier = detail::has_static_specifier(decl_specifier_seq_node);
-	has_inline_specifier = detail::has_inline_specifier(decl_specifier_seq_node);
+	boost::optional<type_shared_ptr_variant> opt_undecorated_type;
 
 	//create and/or get undecorated type
 	switch(detail::get_decl_specifier_seq_type(decl_specifier_seq_node))
@@ -235,7 +230,7 @@ process_decl_specifier_seq
 			current_declarative_region->add_member(new_class);
 			fill_class(new_class, class_specifier_node);
 
-			opt_decl_specifier_seq_type = std::shared_ptr<const class_>(new_class);
+			opt_undecorated_type = std::shared_ptr<const class_>(new_class);
 
 			break;
 		}
@@ -246,20 +241,26 @@ process_decl_specifier_seq
 			std::shared_ptr<class_> new_class = create_class(class_elaborated_specifier_node);
 			current_declarative_region->add_member(new_class);
 
-			opt_decl_specifier_seq_type = std::shared_ptr<const class_>(new_class);
+			opt_undecorated_type = std::shared_ptr<const class_>(new_class);
 
 			break;
 		}
 		case detail::decl_specifier_seq_type::SIMPLE_DECL_SPECIFIER_SEQ:
 		{
-			opt_decl_specifier_seq_type = create_undecorated_type(decl_specifier_seq_node, current_declarative_region);
+			opt_undecorated_type = create_undecorated_type(decl_specifier_seq_node, current_declarative_region);
+			break;
+		}
+		case detail::decl_specifier_seq_type::CONSTRUCTOR_DECL_SPECIFIER_SEQ:
+		{
 			break;
 		}
 	}
 
 	//decorate type
-	assert(opt_decl_specifier_seq_type);
-	return decorate_type(*opt_decl_specifier_seq_type, decl_specifier_seq_node);
+	if(opt_undecorated_type)
+		return decorate_type(*opt_undecorated_type, decl_specifier_seq_node);
+	else
+		return opt_undecorated_type;
 }
 
 template<class DeclarativeRegionT>
@@ -271,7 +272,8 @@ create_entity
 	const boost::optional<semantic_entities::type_shared_ptr_variant> opt_decl_specifier_seq_type,
 	const bool has_typedef_specifier,
 	const bool has_static_specifier,
-	const bool has_inline_specifier
+	const bool has_inline_specifier,
+	const bool has_explicit_specifier
 )
 {
 	using namespace syntax_nodes;
@@ -284,7 +286,7 @@ create_entity
 	{
 		//if there's no type to decorate, there's an error
 		if(!opt_decl_specifier_seq_type)
-			throw std::runtime_error("create_entity error");
+			throw std::runtime_error("create_entity error 1");
 
 		opt_type = decorate_type(*opt_decl_specifier_seq_type, *opt_ptr_operator_seq_node);
 	}
@@ -293,22 +295,27 @@ create_entity
 	{
 		case detail::declarator_type::SIMPLE_FUNCTION_DECLARATOR:
 		{
-			if(!opt_type)
-				throw std::runtime_error("create_entity error");
-
-			return semantic_entities::simple_function::make_shared
-			(
-				detail::get_identifier(declarator_node).value(),
-				*opt_type,
-				create_parameters(declarator_node, current_declarative_region),
-				has_inline_specifier,
-				has_static_specifier
-			);
+			if(opt_type)
+				return semantic_entities::simple_function::make_shared
+				(
+					detail::get_identifier(declarator_node).value(),
+					*opt_type,
+					create_parameters(declarator_node, current_declarative_region),
+					has_inline_specifier,
+					has_static_specifier
+				);
+			else
+				return std::make_shared<semantic_entities::class_::constructor>
+				(
+					create_parameters(declarator_node, current_declarative_region),
+					has_inline_specifier,
+					has_explicit_specifier
+				);
 		}
 		case detail::declarator_type::OPERATOR_FUNCTION_DECLARATOR:
 		{
 			if(!opt_type)
-				throw std::runtime_error("create_entity error");
+				throw std::runtime_error("create_entity error 3");
 
 			return create_operator_function
 			(
@@ -321,7 +328,7 @@ create_entity
 		case detail::declarator_type::VARIABLE_DECLARATOR:
 		{
 			if(!opt_type)
-				throw std::runtime_error("create_entity error");
+				throw std::runtime_error("create_entity error 4");
 
 			if(has_typedef_specifier)
 			{
@@ -343,7 +350,7 @@ create_entity
 		}
 	}
 
-	throw std::runtime_error("create_entity error");
+	throw std::runtime_error("create_entity error 5");
 }
 
 

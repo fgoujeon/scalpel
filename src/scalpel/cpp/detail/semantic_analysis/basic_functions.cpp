@@ -292,6 +292,13 @@ get_decl_specifier_seq_type(const syntax_nodes::decl_specifier_seq& decl_specifi
 		return decl_specifier_seq_type::SIMPLE_DECL_SPECIFIER_SEQ;
 	else if
 	(
+		class_specifier_count == 0 &&
+		class_elaborated_specifier_count == 0 &&
+		simple_type_specifier_count == 0
+	)
+		return decl_specifier_seq_type::CONSTRUCTOR_DECL_SPECIFIER_SEQ;
+	else if
+	(
 		class_specifier_count == 1 &&
 		class_elaborated_specifier_count == 0 &&
 		simple_type_specifier_count == 0

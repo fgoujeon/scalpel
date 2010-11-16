@@ -32,7 +32,7 @@ namespace semantic_analysis
 
 using namespace syntax_nodes;
 using namespace semantic_entities;
-using namespace detail::semantic_analysis;
+namespace detail = detail::semantic_analysis;
 
 std::shared_ptr<semantic_graph>
 analyze(const syntax_tree& tree)
@@ -172,7 +172,7 @@ create_class(const class_elaborated_specifier& class_elaborated_specifier_node)
 void
 fill_class
 (
-	std::shared_ptr<class_> c,
+	std::shared_ptr<class_> class_entity,
 	const class_specifier& class_specifier_node
 )
 {
@@ -198,16 +198,16 @@ fill_class
 			class_::access access = class_::access::PRIVATE; //if nothing is specified, the access is private
 			if(auto opt_access_specifier_node = get_access_specifier(base_specifier_node))
 			{
-				access = get_access(*opt_access_specifier_node);
+				access = detail::get_access(*opt_access_specifier_node);
 			}
 
 			//get base class
 			auto nested_identifier_or_template_id_node = get_nested_identifier_or_template_id(base_specifier_node);
 			std::shared_ptr<class_> base_class =
-				name_lookup::find<class_, false, false>(nested_identifier_or_template_id_node, c)
+				detail::name_lookup::find<class_, false, false>(nested_identifier_or_template_id_node, class_entity)
 			;
 
-			c->add_base_class(base_class, access, is_virtual);
+			class_entity->add_base_class(base_class, access, is_virtual);
 		}
 	}
 
@@ -233,15 +233,17 @@ fill_class
 				if(auto opt_member_declaration_function_definition_node = get<member_declaration_function_definition>(&*opt_member_declaration_node))
 				{
 					auto function_definition_node = get_function_definition(*opt_member_declaration_function_definition_node);
-					//analyze(function_definition_node, c);
+					//analyze(function_definition_node, class_entity);
 				}
 				else if(auto opt_member_declaration_member_declarator_list_node = get<member_declaration_member_declarator_list>(&*opt_member_declaration_node))
 				{
-					/*
 					boost::optional<type_shared_ptr_variant> opt_decl_specifier_seq_type;
 					bool has_typedef_specifier = false;
 					bool has_static_specifier = false;
 					bool has_inline_specifier = false;
+					bool has_explicit_specifier = false;
+					bool has_virtual_specifier = false;
+					bool has_mutable_specifier = false;
 
 					if
 					(
@@ -249,14 +251,16 @@ fill_class
 							get_decl_specifier_seq(*opt_member_declaration_member_declarator_list_node)
 					)
 					{
-						opt_decl_specifier_seq_type = process_decl_specifier_seq
-						(
-							*opt_decl_specifier_seq_node,
-							current_declarative_region,
-							has_typedef_specifier, //out parameter
-							has_static_specifier, //out parameter
-							has_inline_specifier //out parameter
-						);
+						const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
+
+						has_typedef_specifier = detail::has_typedef_specifier(decl_specifier_seq_node);
+						has_static_specifier = detail::has_static_specifier(decl_specifier_seq_node);
+						has_inline_specifier = detail::has_inline_specifier(decl_specifier_seq_node);
+						has_explicit_specifier = detail::has_explicit_specifier(decl_specifier_seq_node);
+						has_virtual_specifier = detail::has_virtual_specifier(decl_specifier_seq_node);
+						has_mutable_specifier = detail::has_mutable_specifier(decl_specifier_seq_node);
+
+						opt_decl_specifier_seq_type = process_decl_specifier_seq(decl_specifier_seq_node, class_entity);
 					}
 
 					if
@@ -279,11 +283,64 @@ fill_class
 							{
 								auto member_declarator_declarator_node = *opt_member_declarator_declarator_node;
 								auto declarator_node = get_declarator(member_declarator_declarator_node);
+
+								declarator_entity_shared_ptr_variant declarator_entity = create_entity
+								(
+									declarator_node,
+									class_entity,
+									opt_decl_specifier_seq_type,
+									has_typedef_specifier,
+									has_static_specifier,
+									has_inline_specifier,
+									has_explicit_specifier
+								);
+
+								if(auto opt_constructor_entity = get<std::shared_ptr<class_::constructor>>(&declarator_entity))
+									class_entity->add_member
+									(
+										*opt_constructor_entity,
+										current_access
+									);
+								else if(auto opt_simple_function_entity = get<std::shared_ptr<simple_function>>(&declarator_entity))
+									class_entity->add_member
+									(
+										*opt_simple_function_entity,
+										current_access,
+										detail::is_qualified<str::const_>(declarator_node),
+										detail::is_qualified<str::volatile_>(declarator_node),
+										has_virtual_specifier,
+										detail::has_pure_specifier(member_declarator_declarator_node)
+									);
+								else if(auto opt_operator_function_entity = get<std::shared_ptr<operator_function>>(&declarator_entity))
+									class_entity->add_member
+									(
+										*opt_operator_function_entity,
+										current_access,
+										detail::is_qualified<str::const_>(declarator_node),
+										detail::is_qualified<str::volatile_>(declarator_node),
+										has_virtual_specifier,
+										detail::has_pure_specifier(member_declarator_declarator_node)
+									);
+								else if(auto opt_variable_entity = get<std::shared_ptr<variable>>(&declarator_entity))
+									class_entity->add_member
+									(
+										*opt_variable_entity,
+										current_access,
+										has_mutable_specifier
+									);
+								else if(auto opt_typedef_entity = get<std::shared_ptr<typedef_>>(&declarator_entity))
+									class_entity->add_member
+									(
+										*opt_typedef_entity,
+										current_access
+									);
+								else
+									assert(false);
 							}
 						}
 					}
-					*/
 
+					/*
 					auto opt_decl_specifier_seq_node = get_decl_specifier_seq(*opt_member_declaration_member_declarator_list_node);
 					auto opt_member_declarator_list_node = get_member_declarator_list(*opt_member_declaration_member_declarator_list_node);
 
@@ -309,23 +366,14 @@ fill_class
 									{
 										if(is_operator_function_declaration(declarator_node)) //operator function
 										{
-											c->add_member
-											(
-												create_operator_function(decl_specifier_seq_node, declarator_node, c),
-												current_access,
-												is_qualified<str::const_>(declarator_node),
-												is_qualified<str::volatile_>(declarator_node),
-												has_virtual_specifier(decl_specifier_seq_node),
-												has_pure_specifier(member_declarator_declarator_node)
-											);
 										}
 										else if(is_conversion_function_declaration(declarator_node)) //conversion function
 										{
-											c->add_member
+											class_entity->add_member
 											(
 												std::make_shared<class_::conversion_function>
 												(
-													get_conversion_function_type(declarator_node, c),
+													get_conversion_function_type(declarator_node, class_entity),
 													has_inline_specifier(decl_specifier_seq_node)
 												),
 												current_access,
@@ -335,24 +383,14 @@ fill_class
 												has_pure_specifier(member_declarator_declarator_node)
 											);
 										}
-										else if(c->name() == get_identifier(declarator_node).value()) //constructor or destructor
+										else if(class_entity->name() == get_identifier(declarator_node).value()) //constructor or destructor
 										{
 											if(!is_destructor_declaration(declarator_node)) //constructor
 											{
-												c->add_member
-												(
-													std::make_shared<class_::constructor>
-													(
-														std::move(create_parameters(declarator_node, c)),
-														has_inline_specifier(decl_specifier_seq_node),
-														has_explicit_specifier(decl_specifier_seq_node)
-													),
-													current_access
-												);
 											}
 											else //destructor
 											{
-												c->set_destructor
+												class_entity->set_destructor
 												(
 													std::make_shared<class_::destructor>
 													(
@@ -366,36 +404,21 @@ fill_class
 										}
 										else //simple function
 										{
-											c->add_member
-											(
-												create_simple_function(decl_specifier_seq_node, declarator_node, c),
-												current_access,
-												is_qualified<str::const_>(declarator_node),
-												is_qualified<str::volatile_>(declarator_node),
-												has_virtual_specifier(decl_specifier_seq_node),
-												has_pure_specifier(member_declarator_declarator_node)
-											);
 										}
 									}
 									else //variable
 									{
-										c->add_member
-										(
-											create_variable(decl_specifier_seq_node, declarator_node, c),
-											current_access,
-											has_mutable_specifier(decl_specifier_seq_node)
-										);
 									}
 								}
 								else
 								{
 									if(is_conversion_function_declaration(declarator_node)) //conversion function
 									{
-										c->add_member
+										class_entity->add_member
 										(
 											std::make_shared<class_::conversion_function>
 											(
-												get_conversion_function_type(declarator_node, c),
+												get_conversion_function_type(declarator_node, class_entity),
 												false
 											),
 											current_access,
@@ -405,24 +428,14 @@ fill_class
 											false
 										);
 									}
-									else if(c->name() == get_identifier(declarator_node).value()) //constructor or destructor
+									else if(class_entity->name() == get_identifier(declarator_node).value()) //constructor or destructor
 									{
 										if(!is_destructor_declaration(declarator_node)) //constructor
 										{
-											c->add_member
-											(
-												std::make_shared<class_::constructor>
-												(
-													std::move(create_parameters(declarator_node, c)),
-													false,
-													false
-												),
-												current_access
-											);
 										}
 										else //destructor
 										{
-											c->set_destructor
+											class_entity->set_destructor
 											(
 												std::make_shared<class_::destructor>(false),
 												current_access,
@@ -435,34 +448,7 @@ fill_class
 							}
 						}
 					}
-					else if(opt_decl_specifier_seq_node)
-					{
-						auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
-						for(auto j = decl_specifier_seq_node.begin(); j != decl_specifier_seq_node.end(); ++j)
-						{
-							auto decl_specifier_node = j->main_node();
-							if(auto opt_type_specifier_node = get<type_specifier>(&decl_specifier_node))
-							{
-								auto type_specifier_node = *opt_type_specifier_node;
-								if(auto opt_class_specifier_node = get<class_specifier>(&type_specifier_node))
-								{
-									auto class_specifier_node = *opt_class_specifier_node;
-
-									std::shared_ptr<class_> new_nested_class = create_class(class_specifier_node);
-									c->add_member
-									(
-										new_nested_class,
-										current_access
-									);
-									fill_class(new_nested_class, class_specifier_node);
-								}
-							}
-						}
-					}
-					else
-					{
-						assert(false);
-					}
+					*/
 
 
 
@@ -484,7 +470,7 @@ fill_class
 			else if(auto opt_member_specification_access_specifier_node = get<member_specification_access_specifier>(&part))
 			{
 				auto access_specifier_node = get_access_specifier(*opt_member_specification_access_specifier_node);
-				current_access = get_access(access_specifier_node);
+				current_access = detail::get_access(access_specifier_node);
 			}
 			else
 			{
@@ -922,7 +908,7 @@ create_namespace_alias
 
 	//find the namespace designated by the namespace alias
 	std::shared_ptr<namespace_> found_namespace =
-		detail::semantic_analysis::name_lookup::find<namespace_>
+		detail::name_lookup::find<namespace_>
 		(
 			nested_identifier_or_template_id_node,
 			current_namespace
@@ -958,7 +944,7 @@ create_using_directive
 	);
 
 	//find the namespace designated by the using directive
-	return detail::semantic_analysis::name_lookup::find<namespace_>
+	return detail::name_lookup::find<namespace_>
 	(
 		nested_identifier_or_template_id_node,
 		current_namespace

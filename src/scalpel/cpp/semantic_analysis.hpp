@@ -44,16 +44,12 @@ analyze(const syntax_nodes::simple_declaration& syntax_node, std::shared_ptr<Dec
 
 //Get and/or create the type corresponding to the given decl-specifier-seq.
 //Add it to the given declarative region.
-//Also get specifiers.
 template<class DeclarativeRegionT>
-semantic_entities::type_shared_ptr_variant
+boost::optional<semantic_entities::type_shared_ptr_variant>
 process_decl_specifier_seq
 (
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-	std::shared_ptr<DeclarativeRegionT> current_declarative_region,
-	bool& has_typedef_specifier, //out parameter
-	bool& has_static_specifier, //out parameter
-	bool& has_inline_specifier //out parameter
+	std::shared_ptr<DeclarativeRegionT> current_declarative_region
 );
 
 
@@ -61,6 +57,7 @@ process_decl_specifier_seq
 typedef
 	utility::variant
 	<
+		std::shared_ptr<semantic_entities::class_::constructor>,
 		std::shared_ptr<semantic_entities::simple_function>,
 		std::shared_ptr<semantic_entities::operator_function>,
 		std::shared_ptr<semantic_entities::variable>,
@@ -79,7 +76,8 @@ create_entity
 	const boost::optional<semantic_entities::type_shared_ptr_variant> opt_decl_specifier_seq_type,
 	const bool has_typedef_specifier,
 	const bool has_static_specifier,
-	const bool has_inline_specifier
+	const bool has_inline_specifier,
+	const bool has_explicit_specifier
 );
 
 

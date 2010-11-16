@@ -72,6 +72,7 @@ has_pure_specifier(const syntax_nodes::member_declarator_declarator& member_decl
 enum decl_specifier_seq_type
 {
 	SIMPLE_DECL_SPECIFIER_SEQ,
+	CONSTRUCTOR_DECL_SPECIFIER_SEQ,
 	CLASS_DECL_SPECIFIER_SEQ,
 	CLASS_FORWARD_DECL_SPECIFIER_SEQ
 };
