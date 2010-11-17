@@ -411,6 +411,10 @@ print
 
 		class_::access acc = enclosing_declarative_region->member_access(entity);
 		std::cout << attribute(acc);
+		if(enclosing_declarative_region->is_const_member_function(entity))
+			std::cout << " const=\"true\"";
+		if(enclosing_declarative_region->is_volatile_member_function(entity))
+			std::cout << " volatile=\"true\"";
 		if(enclosing_declarative_region->is_virtual_member_function(entity))
 			std::cout << " virtual=\"true\"";
 		if(enclosing_declarative_region->is_pure_member_function(entity))

@@ -325,6 +325,14 @@ create_entity
 				current_declarative_region
 			);
 		}
+		case detail::declarator_type::CONVERSION_FUNCTION_DECLARATOR:
+		{
+			return std::make_shared<semantic_entities::class_::conversion_function>
+			(
+				get_conversion_function_type(declarator_node, current_declarative_region),
+				has_inline_specifier
+			);
+		}
 		case detail::declarator_type::VARIABLE_DECLARATOR:
 		{
 			if(!opt_type)
