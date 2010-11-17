@@ -149,15 +149,6 @@ create_operator_function
 );
 
 template<class DeclarativeRegionT>
-std::shared_ptr<semantic_entities::operator_function>
-create_operator_function
-(
-	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-	const syntax_nodes::declarator& declarator_node,
-	std::shared_ptr<DeclarativeRegionT> current_declarative_region
-);
-
-template<class DeclarativeRegionT>
 semantic_entities::simple_function::parameters_t
 create_parameters
 (
@@ -275,21 +266,6 @@ get_fundamental_type
 	const bool unsigned_type,
 	const bool void_type,
 	const bool wchar_t_type
-);
-
-
-
-//
-//variable creation functions
-//
-
-template<class DeclarativeRegionT>
-std::shared_ptr<semantic_entities::variable>
-create_variable
-(
-	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-	const syntax_nodes::declarator& declarator_node,
-	std::shared_ptr<DeclarativeRegionT> current_declarative_region
 );
 
 
