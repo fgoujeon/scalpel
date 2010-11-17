@@ -377,25 +377,6 @@ create_entity
 
 
 template<class DeclarativeRegionT>
-std::shared_ptr<semantic_entities::simple_function>
-create_simple_function
-(
-	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-	const syntax_nodes::declarator& declarator_node,
-	std::shared_ptr<DeclarativeRegionT> current_declarative_region
-)
-{
-	return semantic_entities::simple_function::make_shared
-	(
-		detail::semantic_analysis::get_identifier(declarator_node).value(),
-		create_type(decl_specifier_seq_node, declarator_node, current_declarative_region),
-		create_parameters(declarator_node, current_declarative_region),
-		detail::semantic_analysis::has_inline_specifier(decl_specifier_seq_node),
-		detail::semantic_analysis::has_static_specifier(decl_specifier_seq_node)
-	);
-}
-
-template<class DeclarativeRegionT>
 std::shared_ptr<semantic_entities::operator_function>
 create_operator_function
 (

@@ -136,15 +136,6 @@ fill_class(std::shared_ptr<semantic_entities::class_> c, const syntax_nodes::cla
 //
 
 template<class DeclarativeRegionT>
-std::shared_ptr<semantic_entities::simple_function>
-create_simple_function
-(
-	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-	const syntax_nodes::declarator& declarator_node,
-	std::shared_ptr<DeclarativeRegionT> current_declarative_region
-);
-
-template<class DeclarativeRegionT>
 std::shared_ptr<semantic_entities::operator_function>
 create_operator_function
 (
@@ -218,7 +209,7 @@ decorate_type
 	const bool volatile_qualified
 );
 
-//decorate type with decl-specifier-seq's const and volatile
+//decorate type with decl-specifier-seq's const and volatile specifiers
 semantic_entities::type_shared_ptr_variant
 decorate_type
 (
