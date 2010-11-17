@@ -31,6 +31,9 @@ class identifier: public leaf_node
 {
 	public:
 		explicit
+		identifier(const std::string& value);
+
+		explicit
 		identifier(std::string&& value);
 
 		identifier(const identifier& i);

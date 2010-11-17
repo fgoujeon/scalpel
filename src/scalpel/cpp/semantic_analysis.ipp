@@ -147,55 +147,67 @@ analyze
 		//(if any) to the already existing (undefined) function
 		std::shared_ptr<simple_function> function_to_be_defined;
 
-		if(declaration_must_exist)
-		{
-			assert(opt_nested_identifier_or_template_id_node);
-			auto nested_identifier_or_template_id_node = *opt_nested_identifier_or_template_id_node;
 
-			//find the function declaration
-			std::set<std::shared_ptr<simple_function>> found_functions =
-				detail::name_lookup::find<simple_function, true>
+		//find the functions of the same name
+		std::set<std::shared_ptr<simple_function>> found_functions;
+		if(opt_nested_identifier_or_template_id_node)
+		{
+			found_functions =
+				detail::name_lookup::find<simple_function, true, true>
 				(
-					nested_identifier_or_template_id_node,
+					*opt_nested_identifier_or_template_id_node,
 					current_declarative_region
 				)
 			;
-			for
-			(
-				auto i = found_functions.begin();
-				i != found_functions.end();
-				++i
-			)
-			{
-				std::shared_ptr<simple_function> found_function = *i;
-				if(found_function->has_same_signature(*new_function))
-				{
-					function_to_be_defined = found_function;
-					break;
-				}
-			}
-
-			//make sure we found the declaration
-			if(!function_to_be_defined)
-			{
-				std::ostringstream oss;
-				oss << new_function->name() << " is not declared";
-				throw std::runtime_error(oss.str().c_str());
-			}
-
-			//check whether the function is undefined as expected
-			if(function_to_be_defined->defined())
-			{
-				std::ostringstream oss;
-				oss << "Redefinition of " << function_to_be_defined->name();
-				throw std::runtime_error(oss.str().c_str());
-			}
 		}
 		else
+		{
+			found_functions =
+				detail::name_lookup::find<simple_function, true, true>
+				(
+					identifier(new_function->name()),
+					current_declarative_region
+				)
+			;
+		}
+
+		//filter the found functions with signature
+		for
+		(
+			auto i = found_functions.begin();
+			i != found_functions.end();
+			++i
+		)
+		{
+			std::shared_ptr<simple_function> found_function = *i;
+			if(found_function->has_same_signature(*new_function))
+			{
+				function_to_be_defined = found_function;
+				break;
+			}
+		}
+
+		//
+		if(declaration_must_exist && !function_to_be_defined)
+		{
+			std::ostringstream oss;
+			oss << new_function->name() << " is not declared";
+			throw std::runtime_error(oss.str().c_str());
+		}
+
+		if(!function_to_be_defined)
 		{
 			//declare the function and add it to the current declarative region
 			function_to_be_defined = new_function;
 			current_declarative_region->add_member(new_function);
+		}
+
+		//check whether the function is undefined as expected
+		if(function_to_be_defined->defined())
+		{
+			std::ostringstream oss;
+			oss << "Redefinition of " << function_to_be_defined->name();
+			throw std::runtime_error(oss.str().c_str());
 		}
 
 		//TODO define the function
