@@ -136,9 +136,10 @@ has_typedef_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq
 
 enum declarator_type
 {
-	SIMPLE_FUNCTION_DECLARATOR,
+	DESTRUCTOR_DECLARATOR,
 	OPERATOR_FUNCTION_DECLARATOR,
 	CONVERSION_FUNCTION_DECLARATOR,
+	SIMPLE_FUNCTION_DECLARATOR,
 	VARIABLE_DECLARATOR
 };
 

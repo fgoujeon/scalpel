@@ -301,6 +301,14 @@ fill_class
 										*opt_constructor_entity,
 										current_access
 									);
+								else if(auto opt_destructor_entity = get<std::shared_ptr<class_::destructor>>(&declarator_entity))
+									class_entity->set_destructor
+									(
+										*opt_destructor_entity,
+										current_access,
+										has_virtual_specifier,
+										detail::has_pure_specifier(member_declarator_declarator_node)
+									);
 								else if(auto opt_operator_function_entity = get<std::shared_ptr<operator_function>>(&declarator_entity))
 									class_entity->add_member
 									(

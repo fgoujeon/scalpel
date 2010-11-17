@@ -58,6 +58,7 @@ typedef
 	utility::variant
 	<
 		std::shared_ptr<semantic_entities::class_::constructor>,
+		std::shared_ptr<semantic_entities::class_::destructor>,
 		std::shared_ptr<semantic_entities::operator_function>,
 		std::shared_ptr<semantic_entities::class_::conversion_function>,
 		std::shared_ptr<semantic_entities::simple_function>,

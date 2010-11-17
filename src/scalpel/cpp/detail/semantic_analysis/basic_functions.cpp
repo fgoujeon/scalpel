@@ -393,6 +393,7 @@ get_declarator_type(const syntax_nodes::declarator& declarator_node)
 
 	unsigned int operator_function_id_count = 0;
 	unsigned int conversion_function_id_count = 0;
+	unsigned int destructor_name_count = 0;
 	unsigned int direct_declarator_function_part_count = 0;
 
 
@@ -429,6 +430,7 @@ get_declarator_type(const syntax_nodes::declarator& declarator_node)
 				}
 				else if(get<destructor_name>(&unqualified_id_node))
 				{
+					++destructor_name_count;
 				}
 				else if(get<template_id>(&unqualified_id_node))
 				{
@@ -474,13 +476,15 @@ get_declarator_type(const syntax_nodes::declarator& declarator_node)
 	(
 		operator_function_id_count == 0 &&
 		conversion_function_id_count == 0 &&
+		destructor_name_count == 1 &&
 		direct_declarator_function_part_count == 1
 	)
-		return declarator_type::SIMPLE_FUNCTION_DECLARATOR;
+		return declarator_type::DESTRUCTOR_DECLARATOR;
 	else if
 	(
 		operator_function_id_count == 1 &&
 		conversion_function_id_count == 0 &&
+		destructor_name_count == 0 &&
 		direct_declarator_function_part_count == 1
 	)
 		return declarator_type::OPERATOR_FUNCTION_DECLARATOR;
@@ -488,6 +492,7 @@ get_declarator_type(const syntax_nodes::declarator& declarator_node)
 	(
 		operator_function_id_count == 0 &&
 		conversion_function_id_count == 1 &&
+		destructor_name_count == 0 &&
 		direct_declarator_function_part_count == 1
 	)
 		return declarator_type::CONVERSION_FUNCTION_DECLARATOR;
@@ -495,6 +500,15 @@ get_declarator_type(const syntax_nodes::declarator& declarator_node)
 	(
 		operator_function_id_count == 0 &&
 		conversion_function_id_count == 0 &&
+		destructor_name_count == 0 &&
+		direct_declarator_function_part_count == 1
+	)
+		return declarator_type::SIMPLE_FUNCTION_DECLARATOR;
+	else if
+	(
+		operator_function_id_count == 0 &&
+		conversion_function_id_count == 0 &&
+		destructor_name_count == 0 &&
 		direct_declarator_function_part_count == 0
 	)
 		return declarator_type::VARIABLE_DECLARATOR;

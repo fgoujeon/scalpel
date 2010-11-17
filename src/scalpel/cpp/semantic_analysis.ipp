@@ -312,6 +312,16 @@ create_entity
 					has_explicit_specifier
 				);
 		}
+		case detail::declarator_type::DESTRUCTOR_DECLARATOR:
+		{
+			if(opt_type)
+				throw std::runtime_error("create_entity error 2");
+
+			return std::make_shared<semantic_entities::class_::destructor>
+			(
+				has_inline_specifier
+			);
+		}
 		case detail::declarator_type::OPERATOR_FUNCTION_DECLARATOR:
 		{
 			if(!opt_type)
@@ -327,6 +337,9 @@ create_entity
 		}
 		case detail::declarator_type::CONVERSION_FUNCTION_DECLARATOR:
 		{
+			if(opt_type)
+				throw std::runtime_error("create_entity error 3b");
+
 			return std::make_shared<semantic_entities::class_::conversion_function>
 			(
 				get_conversion_function_type(declarator_node, current_declarative_region),
