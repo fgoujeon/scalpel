@@ -146,66 +146,6 @@ analyze
 }
 
 template<class DeclarativeRegionT>
-void
-analyze(const syntax_nodes::simple_declaration& simple_declaration_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region)
-{
-	using namespace syntax_nodes;
-	using namespace semantic_entities;
-	namespace detail = detail::semantic_analysis;
-
-	boost::optional<type_shared_ptr_variant> opt_decl_specifier_seq_type;
-	bool has_typedef_specifier = false;
-	bool has_static_specifier = false;
-	bool has_inline_specifier = false;
-	bool has_explicit_specifier = false;
-
-	if(const optional_node<decl_specifier_seq>& opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node))
-	{
-		const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
-
-		has_typedef_specifier = detail::has_typedef_specifier(decl_specifier_seq_node);
-		has_static_specifier = detail::has_static_specifier(decl_specifier_seq_node);
-		has_inline_specifier = detail::has_inline_specifier(decl_specifier_seq_node);
-		has_explicit_specifier = detail::has_explicit_specifier(decl_specifier_seq_node);
-
-		opt_decl_specifier_seq_type = process_decl_specifier_seq(decl_specifier_seq_node, current_declarative_region);
-	}
-
-	if(const optional_node<init_declarator_list>& opt_init_declarator_list_node = get_init_declarator_list(simple_declaration_node))
-	{
-		const init_declarator_list& init_declarator_list_node = *opt_init_declarator_list_node;
-
-		for(auto i = init_declarator_list_node.begin(); i != init_declarator_list_node.end(); ++i)
-		{
-			const init_declarator& init_declarator_node = i->main_node();
-			const declarator& declarator_node = get_declarator(init_declarator_node);
-
-			declarator_entity_shared_ptr_variant declarator_entity = create_entity
-			(
-				declarator_node,
-				current_declarative_region,
-				opt_decl_specifier_seq_type,
-				has_typedef_specifier,
-				has_static_specifier,
-				has_inline_specifier,
-				has_explicit_specifier
-			);
-
-			if(auto opt_simple_function_entity = get<std::shared_ptr<simple_function>>(&declarator_entity))
-				current_declarative_region->add_member(*opt_simple_function_entity);
-			else if(auto opt_operator_function_entity = get<std::shared_ptr<operator_function>>(&declarator_entity))
-				current_declarative_region->add_member(*opt_operator_function_entity);
-			else if(auto opt_variable_entity = get<std::shared_ptr<variable>>(&declarator_entity))
-				current_declarative_region->add_member(*opt_variable_entity);
-			else if(auto opt_typedef_entity = get<std::shared_ptr<typedef_>>(&declarator_entity))
-				current_declarative_region->add_member(*opt_typedef_entity);
-			else
-				assert(false);
-		}
-	}
-}
-
-template<class DeclarativeRegionT>
 boost::optional<semantic_entities::type_shared_ptr_variant>
 process_decl_specifier_seq
 (

@@ -97,7 +97,7 @@ fill_namespace
 			const block_declaration& block_declaration_node = *opt_block_declaration_node;
 
 			if(const boost::optional<const simple_declaration&> opt_simple_declaration_node = get<simple_declaration>(&block_declaration_node))
-				analyze(*opt_simple_declaration_node, namespace_entity);
+				fill_namespace(namespace_entity, *opt_simple_declaration_node);
 			//else if(const boost::optional<const asm_definition&> opt_asm_definition_node = get<asm_definition>(&block_declaration_node))
 			//	analyze(*opt_asm_definition_node, namespace_entity);
 			else if(const boost::optional<const namespace_alias_definition&> opt_namespace_alias_definition_node = get<namespace_alias_definition>(&block_declaration_node))
@@ -128,6 +128,65 @@ fill_namespace
 			std::shared_ptr<namespace_> new_namespace = create_namespace(*opt_namespace_definition_node);
 			namespace_entity->add_member(new_namespace);
 			fill_namespace(new_namespace, *opt_namespace_definition_node);
+		}
+	}
+}
+
+void
+fill_namespace
+(
+	std::shared_ptr<semantic_entities::namespace_> namespace_entity,
+	const syntax_nodes::simple_declaration& simple_declaration_node
+)
+{
+	boost::optional<type_shared_ptr_variant> opt_decl_specifier_seq_type;
+	bool has_typedef_specifier = false;
+	bool has_static_specifier = false;
+	bool has_inline_specifier = false;
+	bool has_explicit_specifier = false;
+
+	if(const optional_node<decl_specifier_seq>& opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node))
+	{
+		const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
+
+		has_typedef_specifier = detail::has_typedef_specifier(decl_specifier_seq_node);
+		has_static_specifier = detail::has_static_specifier(decl_specifier_seq_node);
+		has_inline_specifier = detail::has_inline_specifier(decl_specifier_seq_node);
+		has_explicit_specifier = detail::has_explicit_specifier(decl_specifier_seq_node);
+
+		opt_decl_specifier_seq_type = process_decl_specifier_seq(decl_specifier_seq_node, namespace_entity);
+	}
+
+	if(const optional_node<init_declarator_list>& opt_init_declarator_list_node = get_init_declarator_list(simple_declaration_node))
+	{
+		const init_declarator_list& init_declarator_list_node = *opt_init_declarator_list_node;
+
+		for(auto i = init_declarator_list_node.begin(); i != init_declarator_list_node.end(); ++i)
+		{
+			const init_declarator& init_declarator_node = i->main_node();
+			const declarator& declarator_node = get_declarator(init_declarator_node);
+
+			declarator_entity_shared_ptr_variant declarator_entity = create_entity
+			(
+				declarator_node,
+				namespace_entity,
+				opt_decl_specifier_seq_type,
+				has_typedef_specifier,
+				has_static_specifier,
+				has_inline_specifier,
+				has_explicit_specifier
+			);
+
+			if(auto opt_simple_function_entity = get<std::shared_ptr<simple_function>>(&declarator_entity))
+				namespace_entity->add_member(*opt_simple_function_entity);
+			else if(auto opt_operator_function_entity = get<std::shared_ptr<operator_function>>(&declarator_entity))
+				namespace_entity->add_member(*opt_operator_function_entity);
+			else if(auto opt_variable_entity = get<std::shared_ptr<variable>>(&declarator_entity))
+				namespace_entity->add_member(*opt_variable_entity);
+			else if(auto opt_typedef_entity = get<std::shared_ptr<typedef_>>(&declarator_entity))
+				namespace_entity->add_member(*opt_typedef_entity);
+			else
+				assert(false);
 		}
 	}
 }

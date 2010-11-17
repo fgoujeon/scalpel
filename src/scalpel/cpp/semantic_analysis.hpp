@@ -38,12 +38,9 @@ template<class DeclarativeRegionT>
 void
 analyze(const syntax_nodes::function_definition& function_definition_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
 
-template<class DeclarativeRegionT>
-void
-analyze(const syntax_nodes::simple_declaration& syntax_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
-
 //Get and/or create the type corresponding to the given decl-specifier-seq.
-//Add it to the given declarative region.
+//Add it to the given declarative region (in case of created type).
+//Return the type, decorated with const and volatile specifiers.
 template<class DeclarativeRegionT>
 boost::optional<semantic_entities::type_shared_ptr_variant>
 process_decl_specifier_seq
@@ -99,6 +96,13 @@ fill_namespace
 (
 	std::shared_ptr<semantic_entities::namespace_> namespace_entity,
 	const syntax_nodes::namespace_definition& namespace_definition_node
+);
+
+void
+fill_namespace
+(
+	std::shared_ptr<semantic_entities::namespace_> namespace_entity,
+	const syntax_nodes::simple_declaration& simple_declaration_node
 );
 
 void
