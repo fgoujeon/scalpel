@@ -42,30 +42,6 @@ get_access(const syntax_nodes::access_specifier access_specifier_node);
 
 
 //
-//function related
-//
-
-bool
-is_function_declaration(const syntax_nodes::declarator& declarator_node);
-
-bool
-is_simple_function_declaration(const syntax_nodes::declarator& declarator_node);
-
-bool
-is_operator_function_declaration(const syntax_nodes::declarator& declarator_node);
-
-bool
-is_conversion_function_declaration(const syntax_nodes::declarator& declarator_node);
-
-bool
-is_destructor_declaration(const syntax_nodes::declarator& declarator_node);
-
-bool
-has_pure_specifier(const syntax_nodes::member_declarator_declarator& member_declarator_declarator_node);
-
-
-
-//
 //decl_specifier_seq related
 //
 
@@ -127,6 +103,9 @@ has_mutable_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq
 
 bool
 has_typedef_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node);
+
+bool
+has_pure_specifier(const syntax_nodes::member_declarator_declarator& member_declarator_declarator_node);
 
 
 

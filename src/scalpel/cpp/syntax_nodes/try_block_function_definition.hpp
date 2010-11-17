@@ -55,6 +55,13 @@ get_decl_specifier_seq(const try_block_function_definition& o)
 	return get<0>(o);
 }
 
+inline
+const declarator&
+get_declarator(const try_block_function_definition& o)
+{
+	return get<2>(o);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif

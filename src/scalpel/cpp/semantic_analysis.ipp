@@ -42,44 +42,106 @@ analyze
 {
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
-	using namespace detail::semantic_analysis;
+	namespace detail = detail::semantic_analysis;
 
-	auto declarator_node = get_declarator(function_definition_node);
-	boost::optional<nested_identifier_or_template_id> opt_nested_identifier_or_template_id_node;
+	const boost::optional<const simple_function_definition&> opt_simple_function_definition =
+		get<simple_function_definition>(&function_definition_node)
+	;
+	const boost::optional<const try_block_function_definition&> opt_try_block_function_definition =
+		get<try_block_function_definition>(&function_definition_node)
+	;
+	assert(opt_simple_function_definition || opt_try_block_function_definition);
+
+	const optional_node<decl_specifier_seq>& opt_decl_specifier_seq_node =
+		opt_simple_function_definition ?
+		get_decl_specifier_seq(*opt_simple_function_definition) :
+		get_decl_specifier_seq(*opt_try_block_function_definition)
+	;
+	const declarator& declarator_node =
+		opt_simple_function_definition ?
+		get_declarator(*opt_simple_function_definition) :
+		get_declarator(*opt_try_block_function_definition)
+	;
 
 	//If the function definition has a nested-name-specifier
 	//(like in "void n::f(){/*...*/}"), the function must be already declared.
 	//Check whether it's the case.
 	bool declaration_must_exist = false;
-	auto direct_declarator_node = get_direct_declarator(declarator_node);
-	auto first_part_node = get_first_part(direct_declarator_node);
-	auto opt_declarator_id_node = get<declarator_id>(&first_part_node);
-	if(opt_declarator_id_node)
+	boost::optional<nested_identifier_or_template_id> opt_nested_identifier_or_template_id_node;
 	{
-		auto declarator_id_node = *opt_declarator_id_node;
-		if(opt_nested_identifier_or_template_id_node = get<nested_identifier_or_template_id>(&declarator_id_node))
+		auto direct_declarator_node = get_direct_declarator(declarator_node);
+		auto first_part_node = get_first_part(direct_declarator_node);
+		auto opt_declarator_id_node = get<declarator_id>(&first_part_node);
+		if(opt_declarator_id_node)
 		{
-			auto nested_identifier_or_template_id_node = *opt_nested_identifier_or_template_id_node;
-			if(get_nested_name_specifier(nested_identifier_or_template_id_node))
+			auto declarator_id_node = *opt_declarator_id_node;
+			if(opt_nested_identifier_or_template_id_node = get<nested_identifier_or_template_id>(&declarator_id_node))
 			{
-				declaration_must_exist = true;
+				auto nested_identifier_or_template_id_node = *opt_nested_identifier_or_template_id_node;
+				if(get_nested_name_specifier(nested_identifier_or_template_id_node))
+				{
+					declaration_must_exist = true;
+				}
 			}
 		}
 	}
 
-	if(is_simple_function_declaration(declarator_node))
-	{
-		auto opt_decl_specifier_seq_node = get_decl_specifier_seq(function_definition_node);
-		assert(opt_decl_specifier_seq_node);
-		auto decl_specifier_seq_node = *opt_decl_specifier_seq_node;
 
-		//create a new function
-		std::shared_ptr<simple_function> new_function = create_simple_function
-		(
-			decl_specifier_seq_node,
-			declarator_node,
-			current_declarative_region
-		);
+
+	//
+	//Analyze the decl-specifier-seq node.
+	//
+
+	boost::optional<type_shared_ptr_variant> opt_decl_specifier_seq_type;
+	bool has_typedef_specifier = false;
+	bool has_static_specifier = false;
+	bool has_inline_specifier = false;
+	bool has_explicit_specifier = false;
+
+	if(opt_decl_specifier_seq_node)
+	{
+		const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
+
+		has_typedef_specifier = detail::has_typedef_specifier(decl_specifier_seq_node);
+		has_static_specifier = detail::has_static_specifier(decl_specifier_seq_node);
+		has_inline_specifier = detail::has_inline_specifier(decl_specifier_seq_node);
+		has_explicit_specifier = detail::has_explicit_specifier(decl_specifier_seq_node);
+
+		opt_decl_specifier_seq_type = process_decl_specifier_seq(decl_specifier_seq_node, current_declarative_region);
+	}
+
+
+
+	//
+	//Analyze and process the declarator node.
+	//
+
+	declarator_entity_shared_ptr_variant declarator_entity = create_entity
+	(
+		declarator_node,
+		current_declarative_region,
+		opt_decl_specifier_seq_type,
+		has_typedef_specifier,
+		has_static_specifier,
+		has_inline_specifier,
+		has_explicit_specifier
+	);
+
+	if(auto opt_constructor_entity = get<std::shared_ptr<class_::constructor>>(&declarator_entity))
+	{
+	}
+	else if(auto opt_destructor_entity = get<std::shared_ptr<class_::destructor>>(&declarator_entity))
+	{
+	}
+	else if(auto opt_operator_function_entity = get<std::shared_ptr<operator_function>>(&declarator_entity))
+	{
+	}
+	else if(auto opt_conversion_function_entity = get<std::shared_ptr<class_::conversion_function>>(&declarator_entity))
+	{
+	}
+	else if(auto opt_simple_function_entity = get<std::shared_ptr<simple_function>>(&declarator_entity))
+	{
+		std::shared_ptr<simple_function> new_function = *opt_simple_function_entity;
 
 		//this function pointer will point to either new_function or
 		//(if any) to the already existing (undefined) function
@@ -92,7 +154,7 @@ analyze
 
 			//find the function declaration
 			std::set<std::shared_ptr<simple_function>> found_functions =
-				name_lookup::find<simple_function, true>
+				detail::name_lookup::find<simple_function, true>
 				(
 					nested_identifier_or_template_id_node,
 					current_declarative_region
@@ -139,10 +201,8 @@ analyze
 		//TODO define the function
 		function_to_be_defined->body(std::make_shared<semantic_entities::statement_block>());
 	}
-	else if(is_operator_function_declaration(declarator_node))
-	{
-		//TODO
-	}
+	else
+		assert(false);
 }
 
 template<class DeclarativeRegionT>

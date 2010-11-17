@@ -41,6 +41,8 @@ analyze(const syntax_nodes::function_definition& function_definition_node, std::
 //Get and/or create the type corresponding to the given decl-specifier-seq.
 //Add it to the given declarative region (in case of created type).
 //Return the type, decorated with const and volatile specifiers.
+//The returned value is optional, because there can be only specifiers
+//(other than type decorators) in the given decl-specifier-seq.
 template<class DeclarativeRegionT>
 boost::optional<semantic_entities::type_shared_ptr_variant>
 process_decl_specifier_seq

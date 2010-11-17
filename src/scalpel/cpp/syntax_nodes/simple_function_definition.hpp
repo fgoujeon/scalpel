@@ -59,6 +59,13 @@ get_decl_specifier_seq(const simple_function_definition& o)
 }
 
 inline
+const declarator&
+get_declarator(const simple_function_definition& o)
+{
+	return get<2>(o);
+}
+
+inline
 const compound_statement&
 get_compound_statement(const simple_function_definition& o)
 {

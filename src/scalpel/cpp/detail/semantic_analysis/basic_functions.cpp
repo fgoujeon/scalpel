@@ -58,145 +58,6 @@ get_access(const syntax_nodes::access_specifier access_specifier_node)
 
 
 //
-//function related
-//
-
-bool
-is_function_declaration(const declarator& declarator_node)
-{
-	auto direct_declarator_node = get_direct_declarator(declarator_node);
-	if(auto direct_declarator_node_last_part_seq = get_last_part_seq(direct_declarator_node))
-	{
-		for(auto i = direct_declarator_node_last_part_seq->begin(); i != direct_declarator_node_last_part_seq->end(); ++i)
-		{
-			const direct_declarator_last_part& last_part = i->main_node();
-
-			if(get<direct_declarator_function_part>(&last_part))
-			{
-				return true;
-			}
-		}
-	}
-
-	return false;
-}
-
-bool
-is_simple_function_declaration(const declarator& declarator_node)
-{
-	auto direct_declarator_node = get_direct_declarator(declarator_node);
-
-	if(!has_identifier(declarator_node))
-		return false;
-
-	if(auto direct_declarator_node_last_part_seq = get_last_part_seq(direct_declarator_node))
-	{
-		for(auto i = direct_declarator_node_last_part_seq->begin(); i != direct_declarator_node_last_part_seq->end(); ++i)
-		{
-			const direct_declarator_last_part& last_part = i->main_node();
-
-			if(get<direct_declarator_function_part>(&last_part))
-			{
-				return true;
-			}
-		}
-	}
-
-	return false;
-}
-
-bool
-is_operator_function_declaration(const declarator& declarator_node)
-{
-	auto direct_declarator_node = get_direct_declarator(declarator_node);
-	auto direct_declarator_node_first_part_node = get_first_part(direct_declarator_node);
-	if(auto opt_declarator_id_node = get<declarator_id>(&direct_declarator_node_first_part_node))
-	{
-		auto declarator_id_node = *opt_declarator_id_node;
-		if(auto opt_id_expression_node = get<id_expression>(&declarator_id_node))
-		{
-			auto id_expression_node = *opt_id_expression_node;
-			if(auto opt_unqualified_id_node = get<unqualified_id>(&id_expression_node))
-			{
-				auto unqualified_id_node = *opt_unqualified_id_node;
-				if(get<operator_function_id>(&unqualified_id_node))
-				{
-					return true;
-				}
-			}
-		}
-	}
-
-	return false;
-}
-
-bool
-is_conversion_function_declaration(const declarator& declarator_node)
-{
-	auto direct_declarator_node = get_direct_declarator(declarator_node);
-	auto direct_declarator_node_first_part_node = get_first_part(direct_declarator_node);
-	if(auto opt_declarator_id_node = get<declarator_id>(&direct_declarator_node_first_part_node))
-	{
-		auto declarator_id_node = *opt_declarator_id_node;
-		if(auto opt_id_expression_node = get<id_expression>(&declarator_id_node))
-		{
-			auto id_expression_node = *opt_id_expression_node;
-			if(auto opt_unqualified_id_node = get<unqualified_id>(&id_expression_node))
-			{
-				auto unqualified_id_node = *opt_unqualified_id_node;
-				if(get<conversion_function_id>(&unqualified_id_node))
-				{
-					return true;
-				}
-			}
-		}
-	}
-
-	return false;
-}
-
-bool
-is_destructor_declaration(const syntax_nodes::declarator& declarator_node)
-{
-	auto direct_declarator_node = get_direct_declarator(declarator_node);
-	auto first_part_node = get_first_part(direct_declarator_node);
-	auto opt_declarator_id_node = get<declarator_id>(&first_part_node);
-	if(opt_declarator_id_node)
-	{
-		auto opt_id_expression_node = get<id_expression>(&*opt_declarator_id_node);
-		if(opt_id_expression_node)
-		{
-			auto opt_unqualified_id_node = get<unqualified_id>(&*opt_id_expression_node);
-			auto opt_qualified_id_node = get<qualified_id>(&*opt_id_expression_node);
-
-			if(opt_unqualified_id_node)
-			{
-				return get<destructor_name>(&*opt_unqualified_id_node);
-			}
-		}
-	}
-
-	return false;
-}
-
-bool
-has_pure_specifier(const syntax_nodes::member_declarator_declarator& member_declarator_declarator_node)
-{
-	if(auto opt_constant_initializer_node = get_constant_initializer(member_declarator_declarator_node))
-	{
-		//auto constant_initializer_node = *opt_constant_initializer_node;
-		//if(get<pure_specifier>(&constant_initializer_node))
-		{
-			return true;
-		}
-	}
-
-	return false;
-}
-
-
-
-//
 //decl_specifier_seq related
 //
 
@@ -373,6 +234,21 @@ has_typedef_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq
 
 		if(get<predefined_text_node<utility::extern_strings::typedef_>>(&decl_specifier_node))
 			return true;
+	}
+
+	return false;
+}
+
+bool
+has_pure_specifier(const syntax_nodes::member_declarator_declarator& member_declarator_declarator_node)
+{
+	if(auto opt_constant_initializer_node = get_constant_initializer(member_declarator_declarator_node))
+	{
+		//auto constant_initializer_node = *opt_constant_initializer_node;
+		//if(get<pure_specifier>(&constant_initializer_node))
+		{
+			return true;
+		}
 	}
 
 	return false;
