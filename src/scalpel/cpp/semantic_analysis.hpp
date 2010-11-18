@@ -40,36 +40,6 @@ analyze(const syntax_nodes::function_definition& function_definition_node, std::
 
 
 
-typedef
-	utility::variant
-	<
-		std::shared_ptr<semantic_entities::class_::constructor>,
-		std::shared_ptr<semantic_entities::class_::destructor>,
-		std::shared_ptr<semantic_entities::operator_function>,
-		std::shared_ptr<semantic_entities::class_::conversion_function>,
-		std::shared_ptr<semantic_entities::simple_function>,
-		std::shared_ptr<semantic_entities::variable>,
-		std::shared_ptr<semantic_entities::typedef_>
-	>
-	declarator_entity_shared_ptr_variant
-;
-
-//Create variable/function/typedef/etc. corresponding to the given declarator.
-template<class DeclarativeRegionT>
-declarator_entity_shared_ptr_variant
-create_entity
-(
-	const syntax_nodes::declarator& declarator_node,
-	std::shared_ptr<DeclarativeRegionT> current_declarative_region,
-	boost::optional<semantic_entities::type_shared_ptr_variant> opt_type,
-	const bool has_typedef_specifier,
-	const bool has_static_specifier,
-	const bool has_inline_specifier,
-	const bool has_explicit_specifier
-);
-
-
-
 //
 //namespace creation functions
 //
@@ -134,22 +104,20 @@ fill_class
 //function creation functions
 //
 
-template<class DeclarativeRegionT>
 std::shared_ptr<semantic_entities::operator_function>
 create_operator_function
 (
 	const syntax_nodes::declarator& declarator_node,
 	const semantic_entities::type_shared_ptr_variant type,
 	const bool is_inline,
-	std::shared_ptr<DeclarativeRegionT> current_declarative_region
+	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 );
 
-template<class DeclarativeRegionT>
 semantic_entities::simple_function::parameters_t
 create_parameters
 (
 	const syntax_nodes::parameter_declaration_list& parameter_declaration_list_node,
-	std::shared_ptr<DeclarativeRegionT> current_declarative_region
+	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 );
 
 
@@ -158,20 +126,18 @@ create_parameters
 //type creation functions
 //
 
-template<class DeclarativeRegionT>
 semantic_entities::type_shared_ptr_variant
 create_undecorated_type
 (
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-	std::shared_ptr<DeclarativeRegionT> current_declarative_region
+	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 );
 
-template<class DeclarativeRegionT>
 semantic_entities::type_shared_ptr_variant
 get_conversion_function_type
 (
 	const syntax_nodes::declarator& declarator_node,
-	std::shared_ptr<DeclarativeRegionT> current_declarative_region
+	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 );
 
 //decorate type with decl-specifier-seq's const and volatile specifiers
@@ -201,7 +167,6 @@ decorate_type
 	const syntax_nodes::ptr_operator_seq& ptr_operator_seq_node
 );
 
-template<class DeclarativeRegionT>
 void
 get_type_info
 (
@@ -221,7 +186,7 @@ get_type_info
 	bool& wchar_t_type,
 	bool& const_qualified,
 	bool& volatile_qualified,
-	std::shared_ptr<DeclarativeRegionT> current_declarative_region
+	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 );
 
 std::shared_ptr<const semantic_entities::fundamental_type>
@@ -246,6 +211,33 @@ get_fundamental_type
 //
 //other entities' creation functions
 //
+
+typedef
+	utility::variant
+	<
+		std::shared_ptr<semantic_entities::class_::constructor>,
+		std::shared_ptr<semantic_entities::class_::destructor>,
+		std::shared_ptr<semantic_entities::operator_function>,
+		std::shared_ptr<semantic_entities::class_::conversion_function>,
+		std::shared_ptr<semantic_entities::simple_function>,
+		std::shared_ptr<semantic_entities::variable>,
+		std::shared_ptr<semantic_entities::typedef_>
+	>
+	declarator_entity_shared_ptr_variant
+;
+
+//Create variable/function/typedef/etc. corresponding to the given declarator.
+declarator_entity_shared_ptr_variant
+create_entity
+(
+	const syntax_nodes::declarator& declarator_node,
+	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region,
+	boost::optional<semantic_entities::type_shared_ptr_variant> opt_type,
+	const bool has_typedef_specifier,
+	const bool has_static_specifier,
+	const bool has_inline_specifier,
+	const bool has_explicit_specifier
+);
 
 std::shared_ptr<semantic_entities::namespace_alias>
 create_namespace_alias
