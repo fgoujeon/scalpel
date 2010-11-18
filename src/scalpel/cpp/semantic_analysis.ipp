@@ -543,7 +543,11 @@ create_parameters
 	std::shared_ptr<DeclarativeRegionT> current_declarative_region
 )
 {
-	std::list<semantic_entities::simple_function::parameter> parameters;
+	using namespace syntax_nodes;
+	using namespace semantic_entities;
+	namespace detail = detail::semantic_analysis;
+
+	std::list<simple_function::parameter> parameters;
 
 	for
 	(
@@ -555,18 +559,35 @@ create_parameters
 		auto parameter_declaration_node = j->main_node();
 		auto decl_specifier_seq_node = get_decl_specifier_seq(parameter_declaration_node);
 
+		semantic_entities::type_shared_ptr_variant type =
+			decorate_type
+			(
+				create_undecorated_type
+				(
+					decl_specifier_seq_node,
+					current_declarative_region
+				),
+				decl_specifier_seq_node
+			)
+		;
+
 		if(auto opt_declarator_node = get_declarator(parameter_declaration_node))
 		{
 			auto declarator_node = *opt_declarator_node;
+
+			if(const optional_node<ptr_operator_seq>& opt_ptr_operator_seq_node = get_ptr_operator_seq(declarator_node))
+			{
+				type = decorate_type(type, *opt_ptr_operator_seq_node);
+			}
 
 			parameters.push_back
 			(
 				std::move
 				(
-					semantic_entities::simple_function::parameter
+					simple_function::parameter
 					(
-						create_type(decl_specifier_seq_node, declarator_node, current_declarative_region),
-						detail::semantic_analysis::get_identifier(declarator_node).value()
+						type,
+						detail::get_identifier(declarator_node).value()
 					)
 				)
 			);
@@ -575,13 +596,22 @@ create_parameters
 		{
 			auto abstract_declarator_node = *opt_abstract_declarator_node;
 
+			if(boost::optional<const ptr_operator_seq&> opt_ptr_operator_seq_node = get<ptr_operator_seq>(&abstract_declarator_node))
+			{
+				type = decorate_type(type, *opt_ptr_operator_seq_node);
+			}
+			else if(boost::optional<const direct_abstract_declarator&> opt_direct_abstract_declarator_node = get<direct_abstract_declarator>(&abstract_declarator_node))
+			{
+				assert(false); //not managed yet
+			}
+
 			parameters.push_back
 			(
 				std::move
 				(
-					semantic_entities::simple_function::parameter
+					simple_function::parameter
 					(
-						create_type(decl_specifier_seq_node, abstract_declarator_node, current_declarative_region),
+						type,
 						""
 					)
 				)
@@ -593,9 +623,9 @@ create_parameters
 			(
 				std::move
 				(
-					semantic_entities::simple_function::parameter
+					simple_function::parameter
 					(
-						create_type(decl_specifier_seq_node, current_declarative_region),
+						type,
 						""
 					)
 				)
@@ -606,24 +636,7 @@ create_parameters
 	return parameters;
 }
 
-template<class DeclarativeRegionT>
-semantic_entities::type_shared_ptr_variant
-create_type
-(
-	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-	const syntax_nodes::declarator& declarator_node,
-	std::shared_ptr<DeclarativeRegionT> current_declarative_region
-)
-{
-	semantic_entities::type_shared_ptr_variant return_type = create_type(decl_specifier_seq_node, current_declarative_region);
-
-	//decorate type with hypothetical pointers and/or reference
-	if(auto opt_ptr_operator_seq_node = get_ptr_operator_seq(declarator_node))
-	{
-		auto ptr_operator_seq_node = *opt_ptr_operator_seq_node;
-		return_type = decorate_type(return_type, ptr_operator_seq_node);
-	}
-
+/*
 	//decorate type with hypothetical arrays
 	auto direct_declarator_node = get_direct_declarator(declarator_node);
 	if(auto opt_last_part_seq_node = get_last_part_seq(direct_declarator_node))
@@ -643,120 +656,7 @@ create_type
 			}
 		}
 	}
-
-	return return_type;
-}
-
-template<class DeclarativeRegionT>
-semantic_entities::type_shared_ptr_variant
-create_type
-(
-	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-	const syntax_nodes::abstract_declarator& abstract_declarator_node,
-	std::shared_ptr<DeclarativeRegionT> current_declarative_region
-)
-{
-	semantic_entities::type_shared_ptr_variant return_type = create_type(decl_specifier_seq_node, current_declarative_region);
-
-	if(auto opt_ptr_operator_seq_node = syntax_nodes::get<syntax_nodes::ptr_operator_seq>(&abstract_declarator_node))
-	{
-		auto ptr_operator_seq_node = *opt_ptr_operator_seq_node;
-		return_type = decorate_type(return_type, ptr_operator_seq_node);
-	}
-
-	return return_type;
-}
-
-template<class DeclarativeRegionT>
-semantic_entities::type_shared_ptr_variant
-create_type
-(
-	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-	std::shared_ptr<DeclarativeRegionT> current_declarative_region
-)
-{
-	boost::optional<semantic_entities::type_shared_ptr_variant> opt_return_type;
-	bool bool_type = false;
-	bool char_type = false;
-	bool double_type = false;
-	bool float_type = false;
-	bool int_type = false;
-	bool long_long_type = false;
-	bool long_type = false;
-	bool short_type = false;
-	bool signed_type = false;
-	bool unsigned_type = false;
-	bool void_type = false;
-	bool wchar_t_type = false;
-	bool is_const = false;
-	bool is_volatile = false;
-
-	for
-	(
-		auto i = decl_specifier_seq_node.begin();
-		i < decl_specifier_seq_node.end();
-		++i
-	)
-	{
-		const syntax_nodes::decl_specifier& decl_specifier_node = i->main_node();
-
-		//auto opt_function_specifier_node = syntax_nodes::get<function_specifier>(&decl_specifier_node);
-		//auto opt_storage_class_specifier_node = syntax_nodes::get<storage_class_specifier>(&decl_specifier_node);
-		//syntax_nodes::predefined_text_node<str::friend_>
-		//syntax_nodes::predefined_text_node<str::typedef_>
-
-		if(auto opt_type_specifier_node = syntax_nodes::get<syntax_nodes::type_specifier>(&decl_specifier_node))
-		{
-			auto type_specifier_node = *opt_type_specifier_node;
-			get_type_info
-			(
-				type_specifier_node,
-				opt_return_type,
-				bool_type,
-				char_type,
-				double_type,
-				float_type,
-				int_type,
-				long_long_type,
-				long_type,
-				short_type,
-				signed_type,
-				unsigned_type,
-				void_type,
-				wchar_t_type,
-				is_const,
-				is_volatile,
-				current_declarative_region
-			);
-		}
-	}
-
-	if(!opt_return_type)
-	{
-		opt_return_type = get_fundamental_type
-		(
-			bool_type,
-			char_type,
-			double_type,
-			float_type,
-			int_type,
-			long_long_type,
-			long_type,
-			short_type,
-			signed_type,
-			unsigned_type,
-			void_type,
-			wchar_t_type
-		);
-	}
-
-	assert(opt_return_type);
-	semantic_entities::type_shared_ptr_variant return_type = *opt_return_type;
-
-	return_type = decorate_type(return_type, is_const, is_volatile);
-
-	return return_type;
-}
+*/
 
 template<class DeclarativeRegionT>
 semantic_entities::type_shared_ptr_variant

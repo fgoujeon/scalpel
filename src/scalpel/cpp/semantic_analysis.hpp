@@ -161,32 +161,6 @@ create_parameters
 
 template<class DeclarativeRegionT>
 semantic_entities::type_shared_ptr_variant
-create_type
-(
-	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-	const syntax_nodes::declarator& declarator_node,
-	std::shared_ptr<DeclarativeRegionT> current_declarative_region
-);
-
-template<class DeclarativeRegionT>
-semantic_entities::type_shared_ptr_variant
-create_type
-(
-	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-	const syntax_nodes::abstract_declarator& abstract_declarator_node,
-	std::shared_ptr<DeclarativeRegionT> current_declarative_region
-);
-
-template<class DeclarativeRegionT>
-semantic_entities::type_shared_ptr_variant
-create_type
-(
-	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-	std::shared_ptr<DeclarativeRegionT> current_declarative_region
-);
-
-template<class DeclarativeRegionT>
-semantic_entities::type_shared_ptr_variant
 create_undecorated_type
 (
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
