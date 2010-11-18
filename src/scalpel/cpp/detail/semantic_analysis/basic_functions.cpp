@@ -150,28 +150,28 @@ get_decl_specifier_seq_type(const syntax_nodes::decl_specifier_seq& decl_specifi
 		class_elaborated_specifier_count == 0 &&
 		simple_type_specifier_count >= 1
 	)
-		return decl_specifier_seq_type::SIMPLE_DECL_SPECIFIER_SEQ;
+		return decl_specifier_seq_type::SIMPLE_TYPE;
 	else if
 	(
 		class_specifier_count == 0 &&
 		class_elaborated_specifier_count == 0 &&
 		simple_type_specifier_count == 0
 	)
-		return decl_specifier_seq_type::CONSTRUCTOR_DECL_SPECIFIER_SEQ;
+		return decl_specifier_seq_type::NO_TYPE;
 	else if
 	(
 		class_specifier_count == 1 &&
 		class_elaborated_specifier_count == 0 &&
 		simple_type_specifier_count == 0
 	)
-		return decl_specifier_seq_type::CLASS_DECL_SPECIFIER_SEQ;
+		return decl_specifier_seq_type::CLASS_DECLARATION;
 	else if
 	(
 		class_specifier_count == 0 &&
 		class_elaborated_specifier_count == 1 &&
 		simple_type_specifier_count == 0
 	)
-		return decl_specifier_seq_type::CLASS_FORWARD_DECL_SPECIFIER_SEQ;
+		return decl_specifier_seq_type::CLASS_FORWARD_DECLARATION;
 
 	throw std::runtime_error("get_decl_specifier_seq_type error");
 }

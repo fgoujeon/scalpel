@@ -45,12 +45,12 @@ get_access(const syntax_nodes::access_specifier access_specifier_node);
 //decl_specifier_seq related
 //
 
-enum decl_specifier_seq_type
+enum class decl_specifier_seq_type
 {
-	SIMPLE_DECL_SPECIFIER_SEQ,
-	CONSTRUCTOR_DECL_SPECIFIER_SEQ,
-	CLASS_DECL_SPECIFIER_SEQ,
-	CLASS_FORWARD_DECL_SPECIFIER_SEQ
+	NO_TYPE,
+	SIMPLE_TYPE,
+	CLASS_DECLARATION,
+	CLASS_FORWARD_DECLARATION
 };
 
 decl_specifier_seq_type
@@ -113,7 +113,7 @@ has_pure_specifier(const syntax_nodes::member_declarator_declarator& member_decl
 //declarator related
 //
 
-enum declarator_type
+enum class declarator_type
 {
 	DESTRUCTOR_DECLARATOR,
 	OPERATOR_FUNCTION_DECLARATOR,

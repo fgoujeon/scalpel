@@ -92,7 +92,7 @@ analyze
 	//Analyze the decl-specifier-seq node.
 	//
 
-	boost::optional<type_shared_ptr_variant> opt_decl_specifier_seq_type;
+	boost::optional<type_shared_ptr_variant> opt_undecorated_type;
 	bool has_typedef_specifier = false;
 	bool has_static_specifier = false;
 	bool has_inline_specifier = false;
@@ -107,7 +107,46 @@ analyze
 		has_inline_specifier = detail::has_inline_specifier(decl_specifier_seq_node);
 		has_explicit_specifier = detail::has_explicit_specifier(decl_specifier_seq_node);
 
-		opt_decl_specifier_seq_type = process_decl_specifier_seq(decl_specifier_seq_node, current_declarative_region);
+		//create and/or get undecorated type
+		switch(detail::get_decl_specifier_seq_type(decl_specifier_seq_node))
+		{
+			case detail::decl_specifier_seq_type::CLASS_DECLARATION:
+			{
+				const syntax_nodes::class_specifier& class_specifier_node = detail::get_class_specifier(decl_specifier_seq_node);
+
+				std::shared_ptr<class_> new_class = create_class(class_specifier_node);
+				current_declarative_region->add_member(new_class);
+				fill_class(new_class, class_specifier_node);
+
+				opt_undecorated_type = std::shared_ptr<const class_>(new_class);
+
+				break;
+			}
+			case detail::decl_specifier_seq_type::CLASS_FORWARD_DECLARATION:
+			{
+				const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node = detail::get_class_elaborated_specifier(decl_specifier_seq_node);
+
+				std::shared_ptr<class_> new_class = create_class(class_elaborated_specifier_node);
+				current_declarative_region->add_member(new_class);
+
+				opt_undecorated_type = std::shared_ptr<const class_>(new_class);
+
+				break;
+			}
+			case detail::decl_specifier_seq_type::SIMPLE_TYPE:
+			{
+				opt_undecorated_type = create_undecorated_type(decl_specifier_seq_node, current_declarative_region);
+				break;
+			}
+			case detail::decl_specifier_seq_type::NO_TYPE:
+			{
+				break;
+			}
+		}
+
+		//decorate type
+		if(opt_undecorated_type)
+			opt_undecorated_type = decorate_type(*opt_undecorated_type, decl_specifier_seq_node);
 	}
 
 
@@ -120,7 +159,7 @@ analyze
 	(
 		declarator_node,
 		current_declarative_region,
-		opt_decl_specifier_seq_type,
+		opt_undecorated_type,
 		has_typedef_specifier,
 		has_static_specifier,
 		has_inline_specifier,
@@ -215,64 +254,6 @@ analyze
 	}
 	else
 		assert(false);
-}
-
-template<class DeclarativeRegionT>
-boost::optional<semantic_entities::type_shared_ptr_variant>
-process_decl_specifier_seq
-(
-	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-	std::shared_ptr<DeclarativeRegionT> current_declarative_region
-)
-{
-	using namespace syntax_nodes;
-	using namespace semantic_entities;
-	namespace detail = detail::semantic_analysis;
-
-	boost::optional<type_shared_ptr_variant> opt_undecorated_type;
-
-	//create and/or get undecorated type
-	switch(detail::get_decl_specifier_seq_type(decl_specifier_seq_node))
-	{
-		case detail::decl_specifier_seq_type::CLASS_DECL_SPECIFIER_SEQ:
-		{
-			const syntax_nodes::class_specifier& class_specifier_node = detail::get_class_specifier(decl_specifier_seq_node);
-
-			std::shared_ptr<class_> new_class = create_class(class_specifier_node);
-			current_declarative_region->add_member(new_class);
-			fill_class(new_class, class_specifier_node);
-
-			opt_undecorated_type = std::shared_ptr<const class_>(new_class);
-
-			break;
-		}
-		case detail::decl_specifier_seq_type::CLASS_FORWARD_DECL_SPECIFIER_SEQ:
-		{
-			const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node = detail::get_class_elaborated_specifier(decl_specifier_seq_node);
-
-			std::shared_ptr<class_> new_class = create_class(class_elaborated_specifier_node);
-			current_declarative_region->add_member(new_class);
-
-			opt_undecorated_type = std::shared_ptr<const class_>(new_class);
-
-			break;
-		}
-		case detail::decl_specifier_seq_type::SIMPLE_DECL_SPECIFIER_SEQ:
-		{
-			opt_undecorated_type = create_undecorated_type(decl_specifier_seq_node, current_declarative_region);
-			break;
-		}
-		case detail::decl_specifier_seq_type::CONSTRUCTOR_DECL_SPECIFIER_SEQ:
-		{
-			break;
-		}
-	}
-
-	//decorate type
-	if(opt_undecorated_type)
-		return decorate_type(*opt_undecorated_type, decl_specifier_seq_node);
-	else
-		return opt_undecorated_type;
 }
 
 template<class DeclarativeRegionT>

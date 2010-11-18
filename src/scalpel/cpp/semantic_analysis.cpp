@@ -139,7 +139,7 @@ fill_namespace
 	const syntax_nodes::simple_declaration& simple_declaration_node
 )
 {
-	boost::optional<type_shared_ptr_variant> opt_decl_specifier_seq_type;
+	boost::optional<type_shared_ptr_variant> opt_undecorated_type;
 	bool has_typedef_specifier = false;
 	bool has_static_specifier = false;
 	bool has_inline_specifier = false;
@@ -154,7 +154,46 @@ fill_namespace
 		has_inline_specifier = detail::has_inline_specifier(decl_specifier_seq_node);
 		has_explicit_specifier = detail::has_explicit_specifier(decl_specifier_seq_node);
 
-		opt_decl_specifier_seq_type = process_decl_specifier_seq(decl_specifier_seq_node, namespace_entity);
+		//create and/or get undecorated type
+		switch(detail::get_decl_specifier_seq_type(decl_specifier_seq_node))
+		{
+			case detail::decl_specifier_seq_type::CLASS_DECLARATION:
+			{
+				const syntax_nodes::class_specifier& class_specifier_node = detail::get_class_specifier(decl_specifier_seq_node);
+
+				std::shared_ptr<class_> new_class = create_class(class_specifier_node);
+				namespace_entity->add_member(new_class);
+				fill_class(new_class, class_specifier_node);
+
+				opt_undecorated_type = std::shared_ptr<const class_>(new_class);
+
+				break;
+			}
+			case detail::decl_specifier_seq_type::CLASS_FORWARD_DECLARATION:
+			{
+				const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node = detail::get_class_elaborated_specifier(decl_specifier_seq_node);
+
+				std::shared_ptr<class_> new_class = create_class(class_elaborated_specifier_node);
+				namespace_entity->add_member(new_class);
+
+				opt_undecorated_type = std::shared_ptr<const class_>(new_class);
+
+				break;
+			}
+			case detail::decl_specifier_seq_type::SIMPLE_TYPE:
+			{
+				opt_undecorated_type = create_undecorated_type(decl_specifier_seq_node, namespace_entity);
+				break;
+			}
+			case detail::decl_specifier_seq_type::NO_TYPE:
+			{
+				break;
+			}
+		}
+
+		//decorate type
+		if(opt_undecorated_type)
+			opt_undecorated_type = decorate_type(*opt_undecorated_type, decl_specifier_seq_node);
 	}
 
 	if(const optional_node<init_declarator_list>& opt_init_declarator_list_node = get_init_declarator_list(simple_declaration_node))
@@ -170,7 +209,7 @@ fill_namespace
 			(
 				declarator_node,
 				namespace_entity,
-				opt_decl_specifier_seq_type,
+				opt_undecorated_type,
 				has_typedef_specifier,
 				has_static_specifier,
 				has_inline_specifier,
@@ -296,7 +335,7 @@ fill_class
 				}
 				else if(auto opt_member_declaration_member_declarator_list_node = get<member_declaration_member_declarator_list>(&*opt_member_declaration_node))
 				{
-					boost::optional<type_shared_ptr_variant> opt_decl_specifier_seq_type;
+					boost::optional<type_shared_ptr_variant> opt_undecorated_type;
 					bool has_typedef_specifier = false;
 					bool has_static_specifier = false;
 					bool has_inline_specifier = false;
@@ -319,7 +358,46 @@ fill_class
 						has_virtual_specifier = detail::has_virtual_specifier(decl_specifier_seq_node);
 						has_mutable_specifier = detail::has_mutable_specifier(decl_specifier_seq_node);
 
-						opt_decl_specifier_seq_type = process_decl_specifier_seq(decl_specifier_seq_node, class_entity);
+						//create and/or get undecorated type
+						switch(detail::get_decl_specifier_seq_type(decl_specifier_seq_node))
+						{
+							case detail::decl_specifier_seq_type::CLASS_DECLARATION:
+							{
+								const syntax_nodes::class_specifier& class_specifier_node = detail::get_class_specifier(decl_specifier_seq_node);
+
+								std::shared_ptr<class_> new_class = create_class(class_specifier_node);
+								class_entity->add_member(new_class, current_access);
+								fill_class(new_class, class_specifier_node);
+
+								opt_undecorated_type = std::shared_ptr<const class_>(new_class);
+
+								break;
+							}
+							case detail::decl_specifier_seq_type::CLASS_FORWARD_DECLARATION:
+							{
+								const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node = detail::get_class_elaborated_specifier(decl_specifier_seq_node);
+
+								std::shared_ptr<class_> new_class = create_class(class_elaborated_specifier_node);
+								class_entity->add_member(new_class, current_access);
+
+								opt_undecorated_type = std::shared_ptr<const class_>(new_class);
+
+								break;
+							}
+							case detail::decl_specifier_seq_type::SIMPLE_TYPE:
+							{
+								opt_undecorated_type = create_undecorated_type(decl_specifier_seq_node, class_entity);
+								break;
+							}
+							case detail::decl_specifier_seq_type::NO_TYPE:
+							{
+								break;
+							}
+						}
+
+						//decorate type
+						if(opt_undecorated_type)
+							opt_undecorated_type = decorate_type(*opt_undecorated_type, decl_specifier_seq_node);
 					}
 
 					if
@@ -347,7 +425,7 @@ fill_class
 								(
 									declarator_node,
 									class_entity,
-									opt_decl_specifier_seq_type,
+									opt_undecorated_type,
 									has_typedef_specifier,
 									has_static_specifier,
 									has_inline_specifier,
