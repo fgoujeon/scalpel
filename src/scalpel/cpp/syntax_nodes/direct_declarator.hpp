@@ -104,6 +104,15 @@ typedef
 	direct_declarator_array_part
 ;
 
+inline
+const optional_node<conditional_expression>&
+get_conditional_expression(const direct_declarator_array_part& o)
+{
+	return get<2>(o);
+}
+
+
+
 typedef
 	alternative_node
 	<

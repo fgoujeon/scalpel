@@ -517,9 +517,17 @@ decorate_type
 		)
 		{
 			auto last_part_node = i->main_node();
-			if(auto array_part = syntax_nodes::get<syntax_nodes::direct_declarator_array_part>(&last_part_node))
+			if(auto opt_array_part_node = syntax_nodes::get<syntax_nodes::direct_declarator_array_part>(&last_part_node))
 			{
-				type = std::make_shared<const semantic_entities::array>(0, type);
+				if(get_conditional_expression(*opt_array_part_node))
+				{
+					type = std::make_shared<const semantic_entities::array>(0, type);
+				}
+				else
+				{
+					//int i[] == int i*
+					type = std::make_shared<const semantic_entities::pointer>(type);
+				}
 			}
 		}
 	}
