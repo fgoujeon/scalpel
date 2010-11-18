@@ -114,7 +114,19 @@ std::shared_ptr<semantic_entities::class_>
 create_class(const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node);
 
 void
-fill_class(std::shared_ptr<semantic_entities::class_> c, const syntax_nodes::class_specifier& syntax_node);
+fill_class
+(
+	std::shared_ptr<semantic_entities::class_> class_entity,
+	const syntax_nodes::class_specifier& class_specifier_node
+);
+
+void
+fill_class
+(
+	const std::shared_ptr<semantic_entities::class_> class_entity,
+	const semantic_entities::class_::access current_access,
+	const syntax_nodes::member_declaration_member_declarator_list& member_declaration_member_declarator_list_node
+);
 
 
 

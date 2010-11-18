@@ -335,165 +335,12 @@ fill_class
 				}
 				else if(auto opt_member_declaration_member_declarator_list_node = get<member_declaration_member_declarator_list>(&*opt_member_declaration_node))
 				{
-					boost::optional<type_shared_ptr_variant> opt_undecorated_type;
-					bool has_typedef_specifier = false;
-					bool has_static_specifier = false;
-					bool has_inline_specifier = false;
-					bool has_explicit_specifier = false;
-					bool has_virtual_specifier = false;
-					bool has_mutable_specifier = false;
-
-					if
+					fill_class
 					(
-						const optional_node<decl_specifier_seq>& opt_decl_specifier_seq_node =
-							get_decl_specifier_seq(*opt_member_declaration_member_declarator_list_node)
-					)
-					{
-						const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
-
-						has_typedef_specifier = detail::has_typedef_specifier(decl_specifier_seq_node);
-						has_static_specifier = detail::has_static_specifier(decl_specifier_seq_node);
-						has_inline_specifier = detail::has_inline_specifier(decl_specifier_seq_node);
-						has_explicit_specifier = detail::has_explicit_specifier(decl_specifier_seq_node);
-						has_virtual_specifier = detail::has_virtual_specifier(decl_specifier_seq_node);
-						has_mutable_specifier = detail::has_mutable_specifier(decl_specifier_seq_node);
-
-						//create and/or get undecorated type
-						switch(detail::get_decl_specifier_seq_type(decl_specifier_seq_node))
-						{
-							case detail::decl_specifier_seq_type::CLASS_DECLARATION:
-							{
-								const syntax_nodes::class_specifier& class_specifier_node = detail::get_class_specifier(decl_specifier_seq_node);
-
-								std::shared_ptr<class_> new_class = create_class(class_specifier_node);
-								class_entity->add_member(new_class, current_access);
-								fill_class(new_class, class_specifier_node);
-
-								opt_undecorated_type = std::shared_ptr<const class_>(new_class);
-
-								break;
-							}
-							case detail::decl_specifier_seq_type::CLASS_FORWARD_DECLARATION:
-							{
-								const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node = detail::get_class_elaborated_specifier(decl_specifier_seq_node);
-
-								std::shared_ptr<class_> new_class = create_class(class_elaborated_specifier_node);
-								class_entity->add_member(new_class, current_access);
-
-								opt_undecorated_type = std::shared_ptr<const class_>(new_class);
-
-								break;
-							}
-							case detail::decl_specifier_seq_type::SIMPLE_TYPE:
-							{
-								opt_undecorated_type = create_undecorated_type(decl_specifier_seq_node, class_entity);
-								break;
-							}
-							case detail::decl_specifier_seq_type::NO_TYPE:
-							{
-								break;
-							}
-						}
-
-						//decorate type
-						if(opt_undecorated_type)
-							opt_undecorated_type = decorate_type(*opt_undecorated_type, decl_specifier_seq_node);
-					}
-
-					if
-					(
-						const optional_node<member_declarator_list>& opt_member_declarator_list_node =
-							get_member_declarator_list(*opt_member_declaration_member_declarator_list_node)
-					)
-					{
-						auto member_declarator_list_node = *opt_member_declarator_list_node;
-
-						for
-						(
-							auto j = member_declarator_list_node.begin();
-							j != member_declarator_list_node.end();
-							++j
-						)
-						{
-							auto member_declarator_node = j->main_node();
-							if(auto opt_member_declarator_declarator_node = get<member_declarator_declarator>(&member_declarator_node))
-							{
-								auto member_declarator_declarator_node = *opt_member_declarator_declarator_node;
-								auto declarator_node = get_declarator(member_declarator_declarator_node);
-
-								declarator_entity_shared_ptr_variant declarator_entity = create_entity
-								(
-									declarator_node,
-									class_entity,
-									opt_undecorated_type,
-									has_typedef_specifier,
-									has_static_specifier,
-									has_inline_specifier,
-									has_explicit_specifier
-								);
-
-								if(auto opt_constructor_entity = get<std::shared_ptr<class_::constructor>>(&declarator_entity))
-									class_entity->add_member
-									(
-										*opt_constructor_entity,
-										current_access
-									);
-								else if(auto opt_destructor_entity = get<std::shared_ptr<class_::destructor>>(&declarator_entity))
-									class_entity->set_destructor
-									(
-										*opt_destructor_entity,
-										current_access,
-										has_virtual_specifier,
-										detail::has_pure_specifier(member_declarator_declarator_node)
-									);
-								else if(auto opt_operator_function_entity = get<std::shared_ptr<operator_function>>(&declarator_entity))
-									class_entity->add_member
-									(
-										*opt_operator_function_entity,
-										current_access,
-										detail::is_qualified<str::const_>(declarator_node),
-										detail::is_qualified<str::volatile_>(declarator_node),
-										has_virtual_specifier,
-										detail::has_pure_specifier(member_declarator_declarator_node)
-									);
-								else if(auto opt_conversion_function_entity = get<std::shared_ptr<class_::conversion_function>>(&declarator_entity))
-									class_entity->add_member
-									(
-										*opt_conversion_function_entity,
-										current_access,
-										detail::is_qualified<str::const_>(declarator_node),
-										detail::is_qualified<str::volatile_>(declarator_node),
-										has_virtual_specifier,
-										detail::has_pure_specifier(member_declarator_declarator_node)
-									);
-								else if(auto opt_simple_function_entity = get<std::shared_ptr<simple_function>>(&declarator_entity))
-									class_entity->add_member
-									(
-										*opt_simple_function_entity,
-										current_access,
-										detail::is_qualified<str::const_>(declarator_node),
-										detail::is_qualified<str::volatile_>(declarator_node),
-										has_virtual_specifier,
-										detail::has_pure_specifier(member_declarator_declarator_node)
-									);
-								else if(auto opt_variable_entity = get<std::shared_ptr<variable>>(&declarator_entity))
-									class_entity->add_member
-									(
-										*opt_variable_entity,
-										current_access,
-										has_mutable_specifier
-									);
-								else if(auto opt_typedef_entity = get<std::shared_ptr<typedef_>>(&declarator_entity))
-									class_entity->add_member
-									(
-										*opt_typedef_entity,
-										current_access
-									);
-								else
-									assert(false);
-							}
-						}
-					}
+						class_entity,
+						current_access,
+						*opt_member_declaration_member_declarator_list_node
+					);
 				}
 				else if(auto opt_member_declaration_unqualified_id_node = get<member_declaration_unqualified_id>(&*opt_member_declaration_node))
 				{
@@ -517,6 +364,179 @@ fill_class
 			else
 			{
 				assert(false);
+			}
+		}
+	}
+}
+
+void
+fill_class
+(
+	const std::shared_ptr<semantic_entities::class_> class_entity,
+	const class_::access current_access,
+	const syntax_nodes::member_declaration_member_declarator_list& member_declaration_member_declarator_list_node
+)
+{
+	boost::optional<type_shared_ptr_variant> opt_undecorated_type;
+	bool has_typedef_specifier = false;
+	bool has_static_specifier = false;
+	bool has_inline_specifier = false;
+	bool has_explicit_specifier = false;
+	bool has_virtual_specifier = false;
+	bool has_mutable_specifier = false;
+
+	if
+	(
+		const optional_node<decl_specifier_seq>& opt_decl_specifier_seq_node =
+			get_decl_specifier_seq(member_declaration_member_declarator_list_node)
+	)
+	{
+		const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
+
+		has_typedef_specifier = detail::has_typedef_specifier(decl_specifier_seq_node);
+		has_static_specifier = detail::has_static_specifier(decl_specifier_seq_node);
+		has_inline_specifier = detail::has_inline_specifier(decl_specifier_seq_node);
+		has_explicit_specifier = detail::has_explicit_specifier(decl_specifier_seq_node);
+		has_virtual_specifier = detail::has_virtual_specifier(decl_specifier_seq_node);
+		has_mutable_specifier = detail::has_mutable_specifier(decl_specifier_seq_node);
+
+		//create and/or get undecorated type
+		switch(detail::get_decl_specifier_seq_type(decl_specifier_seq_node))
+		{
+			case detail::decl_specifier_seq_type::CLASS_DECLARATION:
+			{
+				const syntax_nodes::class_specifier& class_specifier_node =
+					detail::get_class_specifier(decl_specifier_seq_node)
+				;
+
+				std::shared_ptr<class_> new_class = create_class(class_specifier_node);
+				class_entity->add_member(new_class, current_access);
+				fill_class(new_class, class_specifier_node);
+
+				opt_undecorated_type = std::shared_ptr<const class_>(new_class);
+
+				break;
+			}
+			case detail::decl_specifier_seq_type::CLASS_FORWARD_DECLARATION:
+			{
+				const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node =
+					detail::get_class_elaborated_specifier(decl_specifier_seq_node)
+				;
+
+				std::shared_ptr<class_> new_class = create_class(class_elaborated_specifier_node);
+				class_entity->add_member(new_class, current_access);
+
+				opt_undecorated_type = std::shared_ptr<const class_>(new_class);
+
+				break;
+			}
+			case detail::decl_specifier_seq_type::SIMPLE_TYPE:
+			{
+				opt_undecorated_type = create_undecorated_type(decl_specifier_seq_node, class_entity);
+				break;
+			}
+			case detail::decl_specifier_seq_type::NO_TYPE:
+			{
+				break;
+			}
+		}
+
+		//decorate type
+		if(opt_undecorated_type)
+			opt_undecorated_type = decorate_type(*opt_undecorated_type, decl_specifier_seq_node);
+	}
+
+	if
+	(
+		const optional_node<member_declarator_list>& opt_member_declarator_list_node =
+			get_member_declarator_list(member_declaration_member_declarator_list_node)
+	)
+	{
+		auto member_declarator_list_node = *opt_member_declarator_list_node;
+
+		for
+		(
+			auto j = member_declarator_list_node.begin();
+			j != member_declarator_list_node.end();
+			++j
+		)
+		{
+			auto member_declarator_node = j->main_node();
+			if(auto opt_member_declarator_declarator_node = get<member_declarator_declarator>(&member_declarator_node))
+			{
+				auto member_declarator_declarator_node = *opt_member_declarator_declarator_node;
+				auto declarator_node = get_declarator(member_declarator_declarator_node);
+
+				declarator_entity_shared_ptr_variant declarator_entity = create_entity
+				(
+					declarator_node,
+					class_entity,
+					opt_undecorated_type,
+					has_typedef_specifier,
+					has_static_specifier,
+					has_inline_specifier,
+					has_explicit_specifier
+				);
+
+				if(auto opt_constructor_entity = get<std::shared_ptr<class_::constructor>>(&declarator_entity))
+					class_entity->add_member
+					(
+						*opt_constructor_entity,
+						current_access
+					);
+				else if(auto opt_destructor_entity = get<std::shared_ptr<class_::destructor>>(&declarator_entity))
+					class_entity->set_destructor
+					(
+						*opt_destructor_entity,
+						current_access,
+						has_virtual_specifier,
+						detail::has_pure_specifier(member_declarator_declarator_node)
+					);
+				else if(auto opt_operator_function_entity = get<std::shared_ptr<operator_function>>(&declarator_entity))
+					class_entity->add_member
+					(
+						*opt_operator_function_entity,
+						current_access,
+						detail::is_qualified<str::const_>(declarator_node),
+						detail::is_qualified<str::volatile_>(declarator_node),
+						has_virtual_specifier,
+						detail::has_pure_specifier(member_declarator_declarator_node)
+					);
+				else if(auto opt_conversion_function_entity = get<std::shared_ptr<class_::conversion_function>>(&declarator_entity))
+					class_entity->add_member
+					(
+						*opt_conversion_function_entity,
+						current_access,
+						detail::is_qualified<str::const_>(declarator_node),
+						detail::is_qualified<str::volatile_>(declarator_node),
+						has_virtual_specifier,
+						detail::has_pure_specifier(member_declarator_declarator_node)
+					);
+				else if(auto opt_simple_function_entity = get<std::shared_ptr<simple_function>>(&declarator_entity))
+					class_entity->add_member
+					(
+						*opt_simple_function_entity,
+						current_access,
+						detail::is_qualified<str::const_>(declarator_node),
+						detail::is_qualified<str::volatile_>(declarator_node),
+						has_virtual_specifier,
+						detail::has_pure_specifier(member_declarator_declarator_node)
+					);
+				else if(auto opt_variable_entity = get<std::shared_ptr<variable>>(&declarator_entity))
+					class_entity->add_member
+					(
+						*opt_variable_entity,
+						current_access,
+						has_mutable_specifier
+					);
+				else if(auto opt_typedef_entity = get<std::shared_ptr<typedef_>>(&declarator_entity))
+					class_entity->add_member
+					(
+						*opt_typedef_entity,
+						current_access
+					);
+				else
+					assert(false);
 			}
 		}
 	}

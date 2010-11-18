@@ -76,7 +76,7 @@ class class_:
 		typedef utility::vector<std::shared_ptr<conversion_function>> conversion_functions_t;
 		typedef utility::vector<std::shared_ptr<variable>> variables_t;
 
-		enum access
+		enum class access
 		{
 			PUBLIC,
 			PROTECTED,
@@ -173,7 +173,7 @@ class class_:
         add_base_class
 		(
 			std::shared_ptr<class_> base_class,
-			const access acc = PUBLIC,
+			const access acc = access::PUBLIC,
 			bool is_virtual = false
 		);
 
@@ -181,19 +181,19 @@ class class_:
         Adds a nested class.
         */
         void
-        add_member(std::shared_ptr<class_> member, const access acc = PUBLIC);
+        add_member(std::shared_ptr<class_> member, const access acc = access::PUBLIC);
 
         void
-        add_member(std::shared_ptr<typedef_> member, const access acc = PUBLIC);
+        add_member(std::shared_ptr<typedef_> member, const access acc = access::PUBLIC);
 
         void
-        add_member(std::shared_ptr<constructor> member, const access acc = PUBLIC);
+        add_member(std::shared_ptr<constructor> member, const access acc = access::PUBLIC);
 
 		void
 		set_destructor
 		(
 			std::shared_ptr<destructor> member,
-			const access acc = PUBLIC,
+			const access acc = access::PUBLIC,
 			const bool is_virtual = false,
 			const bool is_pure = false
 		);
@@ -205,7 +205,7 @@ class class_:
         add_member
 		(
 			std::shared_ptr<simple_function> member,
-			const access acc = PUBLIC,
+			const access acc = access::PUBLIC,
 			const bool is_const = false,
 			const bool is_volatile = false,
 			const bool is_virtual = false,
@@ -216,7 +216,7 @@ class class_:
         add_member
 		(
 			std::shared_ptr<operator_function> member,
-			const access acc = PUBLIC,
+			const access acc = access::PUBLIC,
 			const bool is_const = false,
 			const bool is_volatile = false,
 			const bool is_virtual = false,
@@ -227,7 +227,7 @@ class class_:
         add_member
 		(
 			std::shared_ptr<conversion_function> member,
-			const access acc = PUBLIC,
+			const access acc = access::PUBLIC,
 			const bool is_const = false,
 			const bool is_volatile = false,
 			const bool is_virtual = false,
@@ -238,7 +238,7 @@ class class_:
 		add_member
 		(
 			std::shared_ptr<variable> member,
-			const access acc = PUBLIC,
+			const access acc = access::PUBLIC,
 			const bool is_mutable = false
 		);
 
