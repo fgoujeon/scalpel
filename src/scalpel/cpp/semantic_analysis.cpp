@@ -494,6 +494,75 @@ semantic_entities::type_shared_ptr_variant
 decorate_type
 (
 	semantic_entities::type_shared_ptr_variant type,
+	const syntax_nodes::declarator& declarator_node
+)
+{
+	//decorate type with hypothetical pointers and/or reference
+	if(auto opt_ptr_operator_seq_node = get_ptr_operator_seq(declarator_node))
+	{
+		auto ptr_operator_seq_node = *opt_ptr_operator_seq_node;
+		type = decorate_type(type, ptr_operator_seq_node);
+	}
+
+	//decorate type with hypothetical arrays
+	auto direct_declarator_node = get_direct_declarator(declarator_node);
+	if(auto opt_last_part_seq_node = get_last_part_seq(direct_declarator_node))
+	{
+		auto last_part_seq_node = *opt_last_part_seq_node;
+		for
+		(
+			auto i = last_part_seq_node.begin();
+			i != last_part_seq_node.end();
+			++i
+		)
+		{
+			auto last_part_node = i->main_node();
+			if(auto array_part = syntax_nodes::get<syntax_nodes::direct_declarator_array_part>(&last_part_node))
+			{
+				type = std::make_shared<const semantic_entities::array>(0, type);
+			}
+		}
+	}
+
+	return type;
+}
+
+bool
+has_type_decorators(const syntax_nodes::declarator& declarator_node)
+{
+	//pointers?
+	if(get_ptr_operator_seq(declarator_node))
+	{
+		return true;
+	}
+
+	//arrays?
+	auto direct_declarator_node = get_direct_declarator(declarator_node);
+	if(auto opt_last_part_seq_node = get_last_part_seq(direct_declarator_node))
+	{
+		auto last_part_seq_node = *opt_last_part_seq_node;
+		for
+		(
+			auto i = last_part_seq_node.begin();
+			i != last_part_seq_node.end();
+			++i
+		)
+		{
+			auto last_part_node = i->main_node();
+			if(get<syntax_nodes::direct_declarator_array_part>(&last_part_node))
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+semantic_entities::type_shared_ptr_variant
+decorate_type
+(
+	semantic_entities::type_shared_ptr_variant type,
 	const syntax_nodes::ptr_operator_seq& ptr_operator_seq_node
 )
 {

@@ -281,7 +281,7 @@ create_entity
 (
 	const syntax_nodes::declarator& declarator_node,
 	std::shared_ptr<DeclarativeRegionT> current_declarative_region,
-	const boost::optional<semantic_entities::type_shared_ptr_variant> opt_decl_specifier_seq_type,
+	boost::optional<semantic_entities::type_shared_ptr_variant> opt_type,
 	const bool has_typedef_specifier,
 	const bool has_static_specifier,
 	const bool has_inline_specifier,
@@ -292,15 +292,14 @@ create_entity
 	using namespace semantic_entities;
 	namespace detail = detail::semantic_analysis;
 
-	//decorate type with hypothetical pointers and references
-	boost::optional<type_shared_ptr_variant> opt_type = opt_decl_specifier_seq_type;
-	if(const syntax_nodes::optional_node<syntax_nodes::ptr_operator_seq>& opt_ptr_operator_seq_node = get_ptr_operator_seq(declarator_node))
+	//decorate type with hypothetical pointers, references and arrays
+	if(has_type_decorators(declarator_node))
 	{
 		//if there's no type to decorate, there's an error
-		if(!opt_decl_specifier_seq_type)
+		if(!opt_type)
 			throw std::runtime_error("create_entity error 1");
 
-		opt_type = decorate_type(*opt_decl_specifier_seq_type, *opt_ptr_operator_seq_node);
+		opt_type = decorate_type(*opt_type, declarator_node);
 	}
 
 	switch(detail::get_declarator_type(declarator_node))
@@ -575,18 +574,13 @@ create_parameters
 		{
 			auto declarator_node = *opt_declarator_node;
 
-			if(const optional_node<ptr_operator_seq>& opt_ptr_operator_seq_node = get_ptr_operator_seq(declarator_node))
-			{
-				type = decorate_type(type, *opt_ptr_operator_seq_node);
-			}
-
 			parameters.push_back
 			(
 				std::move
 				(
 					simple_function::parameter
 					(
-						type,
+						decorate_type(type, declarator_node),
 						detail::get_identifier(declarator_node).value()
 					)
 				)
@@ -635,28 +629,6 @@ create_parameters
 
 	return parameters;
 }
-
-/*
-	//decorate type with hypothetical arrays
-	auto direct_declarator_node = get_direct_declarator(declarator_node);
-	if(auto opt_last_part_seq_node = get_last_part_seq(direct_declarator_node))
-	{
-		auto last_part_seq_node = *opt_last_part_seq_node;
-		for
-		(
-			auto i = last_part_seq_node.begin();
-			i != last_part_seq_node.end();
-			++i
-		)
-		{
-			auto last_part_node = i->main_node();
-			if(auto array_part = syntax_nodes::get<syntax_nodes::direct_declarator_array_part>(&last_part_node))
-			{
-				return_type = std::make_shared<const semantic_entities::array>(0, return_type);
-			}
-		}
-	}
-*/
 
 template<class DeclarativeRegionT>
 semantic_entities::type_shared_ptr_variant

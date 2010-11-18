@@ -74,7 +74,7 @@ create_entity
 (
 	const syntax_nodes::declarator& declarator_node,
 	std::shared_ptr<DeclarativeRegionT> current_declarative_region,
-	const boost::optional<semantic_entities::type_shared_ptr_variant> opt_decl_specifier_seq_type,
+	boost::optional<semantic_entities::type_shared_ptr_variant> opt_type,
 	const bool has_typedef_specifier,
 	const bool has_static_specifier,
 	const bool has_inline_specifier,
@@ -190,6 +190,17 @@ decorate_type
 	semantic_entities::type_shared_ptr_variant type,
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node
 );
+
+//decorate type with declarator's pointers, references and arrays
+semantic_entities::type_shared_ptr_variant
+decorate_type
+(
+	semantic_entities::type_shared_ptr_variant type,
+	const syntax_nodes::declarator& declarator_node
+);
+
+bool
+has_type_decorators(const syntax_nodes::declarator& declarator_node);
 
 //decorate type with ptr-operator-seq's pointers and references
 semantic_entities::type_shared_ptr_variant
