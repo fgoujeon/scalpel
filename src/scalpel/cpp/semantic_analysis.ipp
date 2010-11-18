@@ -731,7 +731,11 @@ get_conversion_function_type
 	std::shared_ptr<DeclarativeRegionT> current_declarative_region
 )
 {
-	boost::optional<semantic_entities::type_shared_ptr_variant> opt_return_type;
+	using namespace syntax_nodes;
+	using namespace semantic_entities;
+	namespace detail = detail::semantic_analysis;
+
+	boost::optional<type_shared_ptr_variant> opt_type;
 	bool bool_type = false;
 	bool char_type = false;
 	bool double_type = false;
@@ -769,7 +773,7 @@ get_conversion_function_type
 		get_type_info
 		(
 			type_specifier_node,
-			opt_return_type,
+			opt_type,
 			bool_type,
 			char_type,
 			double_type,
@@ -788,9 +792,9 @@ get_conversion_function_type
 		);
 	}
 
-	if(!opt_return_type)
+	if(!opt_type)
 	{
-		opt_return_type = get_fundamental_type
+		opt_type = get_fundamental_type
 		(
 			bool_type,
 			char_type,
@@ -807,18 +811,21 @@ get_conversion_function_type
 		);
 	}
 
-	assert(opt_return_type);
-	semantic_entities::type_shared_ptr_variant return_type = *opt_return_type;
+	assert(opt_type);
+	type_shared_ptr_variant type = *opt_type;
 
-	return_type = decorate_type(return_type, is_const, is_volatile);
+	if(is_const)
+		type = std::make_shared<const const_>(type);
+	if(is_volatile)
+		type = std::make_shared<const volatile_>(type);
 
 	if(auto opt_ptr_operator_seq_node = get_ptr_operator_seq(conversion_function_id_node))
 	{
 		auto ptr_operator_seq_node = *opt_ptr_operator_seq_node;
-		return_type = decorate_type(return_type, ptr_operator_seq_node);
+		type = decorate_type(type, ptr_operator_seq_node);
 	}
 
-	return return_type;
+	return type;
 }
 
 template<class DeclarativeRegionT>

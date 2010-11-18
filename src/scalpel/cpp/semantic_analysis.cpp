@@ -448,22 +448,6 @@ semantic_entities::type_shared_ptr_variant
 decorate_type
 (
 	semantic_entities::type_shared_ptr_variant type,
-	const bool is_const,
-	const bool is_volatile
-)
-{
-	if(is_const)
-		type = std::make_shared<const const_>(type);
-	if(is_volatile)
-		type = std::make_shared<const volatile_>(type);
-
-	return type;
-}
-
-semantic_entities::type_shared_ptr_variant
-decorate_type
-(
-	semantic_entities::type_shared_ptr_variant type,
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node
 )
 {

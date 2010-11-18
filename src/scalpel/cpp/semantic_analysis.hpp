@@ -175,14 +175,6 @@ get_conversion_function_type
 	std::shared_ptr<DeclarativeRegionT> current_declarative_region
 );
 
-semantic_entities::type_shared_ptr_variant
-decorate_type
-(
-	semantic_entities::type_shared_ptr_variant type,
-	const bool const_qualified,
-	const bool volatile_qualified
-);
-
 //decorate type with decl-specifier-seq's const and volatile specifiers
 semantic_entities::type_shared_ptr_variant
 decorate_type
