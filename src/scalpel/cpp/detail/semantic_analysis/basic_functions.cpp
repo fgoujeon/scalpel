@@ -392,11 +392,35 @@ get_declarator_type(const syntax_nodes::declarator& declarator_node)
 	throw std::runtime_error("get_declarator_type error");
 }
 
+const syntax_nodes::parameter_declaration_list&
+get_parameter_declaration_list(const syntax_nodes::declarator& declarator_node)
+{
+	const direct_declarator& direct_declarator_node = get_direct_declarator(declarator_node);
+	if(const optional_node<direct_declarator_last_part_seq>& opt_last_part_seq_node = get_last_part_seq(direct_declarator_node))
+	{
+		const direct_declarator_last_part_seq& last_part_seq_node = *opt_last_part_seq_node;
+		for(auto i = last_part_seq_node.begin(); i != last_part_seq_node.end(); ++i)
+		{
+			const direct_declarator_last_part& last_part_node = i->main_node();
+			if(boost::optional<const direct_declarator_function_part&> opt_function_part_node = syntax_nodes::get<syntax_nodes::direct_declarator_function_part>(&last_part_node))
+			{
+				if(const optional_node<parameter_declaration_clause>& opt_parameter_declaration_clause_node = get_parameter_declaration_clause(*opt_function_part_node))
+				{
+					if
+					(
+						const optional_node<parameter_declaration_list>& opt_parameter_declaration_list_node =
+							get_parameter_declaration_list(*opt_parameter_declaration_clause_node)
+					)
+					{
+						return *opt_parameter_declaration_list_node;
+					}
+				}
+			}
+		}
+	}
 
-
-//
-//common
-//
+	assert(false);
+}
 
 syntax_nodes::identifier
 get_identifier(const declarator& declarator_node)

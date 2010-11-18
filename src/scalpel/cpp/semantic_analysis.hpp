@@ -149,7 +149,7 @@ template<class DeclarativeRegionT>
 semantic_entities::simple_function::parameters_t
 create_parameters
 (
-	const syntax_nodes::declarator& declarator_node,
+	const syntax_nodes::parameter_declaration_list& parameter_declaration_list_node,
 	std::shared_ptr<DeclarativeRegionT> current_declarative_region
 );
 

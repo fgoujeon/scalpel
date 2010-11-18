@@ -312,14 +312,14 @@ create_entity
 				(
 					detail::get_identifier(declarator_node).value(),
 					*opt_type,
-					create_parameters(declarator_node, current_declarative_region),
+					create_parameters(detail::get_parameter_declaration_list(declarator_node), current_declarative_region),
 					has_inline_specifier,
 					has_static_specifier
 				);
 			else
 				return std::make_shared<semantic_entities::class_::constructor>
 				(
-					create_parameters(declarator_node, current_declarative_region),
+					create_parameters(detail::get_parameter_declaration_list(declarator_node), current_declarative_region),
 					has_inline_specifier,
 					has_explicit_specifier
 				);
@@ -398,6 +398,10 @@ create_operator_function
 	std::shared_ptr<DeclarativeRegionT> current_declarative_region
 )
 {
+	using namespace syntax_nodes;
+	using namespace semantic_entities;
+	namespace detail = detail::semantic_analysis;
+
 	//
 	//get the overloaded operator
 	//
@@ -526,7 +530,7 @@ create_operator_function
 	(
 		op,
 		type,
-		create_parameters(declarator_node, current_declarative_region),
+		create_parameters(detail::get_parameter_declaration_list(declarator_node), current_declarative_region),
 		is_inline
 	);
 }
@@ -535,86 +539,67 @@ template<class DeclarativeRegionT>
 semantic_entities::simple_function::parameters_t
 create_parameters
 (
-	const syntax_nodes::declarator& declarator_node,
+	const syntax_nodes::parameter_declaration_list& parameter_declaration_list_node,
 	std::shared_ptr<DeclarativeRegionT> current_declarative_region
 )
 {
 	std::list<semantic_entities::simple_function::parameter> parameters;
 
-	auto direct_declarator_node = get_direct_declarator(declarator_node);
-	if(auto opt_last_part_seq_node = get_last_part_seq(direct_declarator_node))
+	for
+	(
+		auto j = parameter_declaration_list_node.begin();
+		j != parameter_declaration_list_node.end();
+		++j
+	)
 	{
-		auto last_part_seq_node = *opt_last_part_seq_node;
-		for(auto i = last_part_seq_node.begin(); i != last_part_seq_node.end(); ++i)
+		auto parameter_declaration_node = j->main_node();
+		auto decl_specifier_seq_node = get_decl_specifier_seq(parameter_declaration_node);
+
+		if(auto opt_declarator_node = get_declarator(parameter_declaration_node))
 		{
-			auto last_part_node = i->main_node();
-			if(auto opt_function_part_node = syntax_nodes::get<syntax_nodes::direct_declarator_function_part>(&last_part_node))
-			{
-				if(auto opt_parameter_declaration_clause_node = get_parameter_declaration_clause(*opt_function_part_node))
-				{
-					if(auto opt_parameter_declaration_list_node = get_parameter_declaration_list(*opt_parameter_declaration_clause_node))
-					{
-						auto parameter_declaration_list_node = *opt_parameter_declaration_list_node;
-						for
-						(
-							auto j = parameter_declaration_list_node.begin();
-							j != parameter_declaration_list_node.end();
-							++j
-						)
-						{
-							auto parameter_declaration_node = j->main_node();
-							auto decl_specifier_seq_node = get_decl_specifier_seq(parameter_declaration_node);
+			auto declarator_node = *opt_declarator_node;
 
-							if(auto opt_declarator_node = get_declarator(parameter_declaration_node))
-							{
-								auto declarator_node = *opt_declarator_node;
+			parameters.push_back
+			(
+				std::move
+				(
+					semantic_entities::simple_function::parameter
+					(
+						create_type(decl_specifier_seq_node, declarator_node, current_declarative_region),
+						detail::semantic_analysis::get_identifier(declarator_node).value()
+					)
+				)
+			);
+		}
+		else if(auto opt_abstract_declarator_node = get_abstract_declarator(parameter_declaration_node))
+		{
+			auto abstract_declarator_node = *opt_abstract_declarator_node;
 
-								parameters.push_back
-								(
-									std::move
-									(
-										semantic_entities::simple_function::parameter
-										(
-											create_type(decl_specifier_seq_node, declarator_node, current_declarative_region),
-											detail::semantic_analysis::get_identifier(declarator_node).value()
-										)
-									)
-								);
-							}
-							else if(auto opt_abstract_declarator_node = get_abstract_declarator(parameter_declaration_node))
-							{
-								auto abstract_declarator_node = *opt_abstract_declarator_node;
-
-								parameters.push_back
-								(
-									std::move
-									(
-										semantic_entities::simple_function::parameter
-										(
-											create_type(decl_specifier_seq_node, abstract_declarator_node, current_declarative_region),
-											""
-										)
-									)
-								);
-							}
-							else
-							{
-								parameters.push_back
-								(
-									std::move
-									(
-										semantic_entities::simple_function::parameter
-										(
-											create_type(decl_specifier_seq_node, current_declarative_region),
-											""
-										)
-									)
-								);
-							}
-						}
-					}
-				}
-			}
+			parameters.push_back
+			(
+				std::move
+				(
+					semantic_entities::simple_function::parameter
+					(
+						create_type(decl_specifier_seq_node, abstract_declarator_node, current_declarative_region),
+						""
+					)
+				)
+			);
+		}
+		else
+		{
+			parameters.push_back
+			(
+				std::move
+				(
+					semantic_entities::simple_function::parameter
+					(
+						create_type(decl_specifier_seq_node, current_declarative_region),
+						""
+					)
+				)
+			);
 		}
 	}
 

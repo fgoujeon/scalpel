@@ -125,21 +125,12 @@ enum declarator_type
 declarator_type
 get_declarator_type(const syntax_nodes::declarator& declarator_node);
 
-
-
-//
-//qualifier related
-//
+const syntax_nodes::parameter_declaration_list&
+get_parameter_declaration_list(const syntax_nodes::declarator& declarator_node);
 
 template<const std::string& Qualifier>
 bool
 is_qualified(const syntax_nodes::declarator& declarator_node);
-
-
-
-//
-//common
-//
 
 syntax_nodes::identifier
 get_identifier(const syntax_nodes::declarator& declarator_node);
