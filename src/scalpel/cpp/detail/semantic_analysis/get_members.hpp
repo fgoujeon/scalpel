@@ -72,6 +72,11 @@ struct get_members_type_traits<semantic_entities::variable>
 	typedef utility::vector<std::shared_ptr<semantic_entities::variable>>::range return_type;
 };
 
+template<>
+struct get_members_type_traits<semantic_entities::namespace_alias>
+{
+	typedef utility::vector<std::shared_ptr<semantic_entities::namespace_alias>>::range return_type;
+};
 
 
 template<class MemberT, class ParentT>

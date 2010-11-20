@@ -149,6 +149,12 @@ namespace_::variables() const
 	return variables_;
 }
 
+namespace_::namespace_aliases_t::range
+namespace_::namespace_aliases()
+{
+	return namespace_aliases_;
+}
+
 const namespace_::namespace_aliases_t&
 namespace_::namespace_aliases() const
 {

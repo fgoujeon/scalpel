@@ -55,7 +55,7 @@ print_namespace
 );
 
 void
-print
+print_class
 (
 	std::shared_ptr<const class_> c,
 	const unsigned int indent_level
@@ -116,6 +116,13 @@ void
 print
 (
 	std::shared_ptr<const variable> v,
+	const unsigned int indent_level
+);
+
+void
+print_namespace_alias
+(
+	std::shared_ptr<const namespace_alias> entity,
 	const unsigned int indent_level
 );
 

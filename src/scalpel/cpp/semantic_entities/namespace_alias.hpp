@@ -21,12 +21,13 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_NAMESPACE_ALIAS_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_NAMESPACE_ALIAS_HPP
 
-#include "namespace_.hpp"
 #include <string>
 #include <memory>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
+
+class namespace_;
 
 /**
 Represents a C++ namespace alias.
@@ -50,30 +51,6 @@ class namespace_alias
 		referred_namespace() const
 		{
 			return std::shared_ptr<namespace_>(referred_namespace_);
-		}
-
-		bool
-		has_enclosing_declarative_region() const
-		{
-			return referred_namespace_.lock()->has_enclosing_declarative_region();
-		}
-
-		std::shared_ptr<namespace_>
-		enclosing_declarative_region()
-		{
-			return referred_namespace_.lock()->enclosing_declarative_region();
-		}
-
-		std::shared_ptr<const namespace_>
-		enclosing_declarative_region() const
-		{
-			return referred_namespace_.lock()->enclosing_declarative_region();
-		}
-
-		void
-		enclosing_declarative_region(std::shared_ptr<namespace_> enclosing_declarative_region)
-		{
-			referred_namespace_.lock()->enclosing_declarative_region(enclosing_declarative_region);
 		}
 
 	private:

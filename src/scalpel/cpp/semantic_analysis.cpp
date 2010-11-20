@@ -1595,11 +1595,19 @@ create_using_directive
 	);
 
 	//find the namespace designated by the using directive
-	return detail::name_lookup::find<namespace_>
+	std::shared_ptr<namespace_> found_namespace = detail::name_lookup::find<namespace_, false, true>
 	(
 		nested_identifier_or_template_id_node,
 		current_namespace
 	);
+	if(found_namespace) return found_namespace;
+
+	//try to find a namespace alias if no namespace has been found
+	return detail::name_lookup::find<namespace_alias>
+	(
+		nested_identifier_or_template_id_node,
+		current_namespace
+	)->referred_namespace();
 }
 
 } //namespace semantic_analysis

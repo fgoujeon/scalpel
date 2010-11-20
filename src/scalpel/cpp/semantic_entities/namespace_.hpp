@@ -21,6 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_NAMESPACE_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_NAMESPACE_HPP
 
+#include "namespace_alias.hpp"
 #include "typedef_.hpp"
 #include "variable.hpp"
 #include "operator_function.hpp"
@@ -36,8 +37,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
-
-class namespace_alias;
 
 /**
 Represents a C++ namespace.
@@ -140,6 +139,9 @@ class namespace_:
 
 		const variables_t&
 		variables() const;
+
+		namespace_aliases_t::range
+		namespace_aliases();
 
 		const namespace_aliases_t&
 		namespace_aliases() const;

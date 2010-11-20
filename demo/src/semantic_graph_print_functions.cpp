@@ -127,13 +127,17 @@ print_namespace
 	{
 		std::cout << " name=\"" << n->name() << "\"";
 	}
+	std::cout << " id=\"" << n << "\"";
 	std::cout << ">\n";
+
+	for(auto i = n->namespace_aliases().begin(); i != n->namespace_aliases().end(); ++i)
+		print_namespace_alias(*i, indent_level + 1);
 
 	for(auto i = n->namespaces().begin(); i != n->namespaces().end(); ++i)
 		print_namespace(*i, indent_level + 1);
 
 	for(auto i = n->classes().begin(); i != n->classes().end(); ++i)
-		print(*i, indent_level + 1);
+		print_class(*i, indent_level + 1);
 
 	for(auto i = n->typedefs().begin(); i != n->typedefs().end(); ++i)
 		print_typedef(*i, indent_level + 1);
@@ -151,7 +155,7 @@ print_namespace
 }
 
 void
-print
+print_class
 (
 	std::shared_ptr<const class_> c,
 	const unsigned int indent_level
@@ -189,7 +193,7 @@ print
 	}
 
 	for(auto i = c->nested_classes().begin(); i != c->nested_classes().end(); ++i)
-		print(*i, indent_level + 1);
+		print_class(*i, indent_level + 1);
 
 	for(auto i = c->constructors().begin(); i != c->constructors().end(); ++i)
 		print(*i, indent_level + 1);
@@ -489,7 +493,7 @@ print_typedef
 {
 	std::cout << indent(indent_level) << "<typedef";
 	std::cout << " name=\"" << entity->name() << "\"";
-	//extra attributes if the function is a class member function
+	//extra attributes if the typedef is member of a class
 	if(entity->has_enclosing_declarative_region())
 	{
 		declarative_region_shared_ptr_variant enclosing_declarative_region = entity->enclosing_declarative_region();
@@ -506,6 +510,19 @@ print_typedef
 	print_type(entity->type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</type>\n";
 	std::cout << indent(indent_level) << "</typedef>\n";
+}
+
+void
+print_namespace_alias
+(
+	std::shared_ptr<const namespace_alias> entity,
+	const unsigned int indent_level
+)
+{
+	std::cout << indent(indent_level) << "<namespace_alias";
+	std::cout << " name=\"" << entity->name() << "\"";
+	std::cout << " id=\"" << entity->referred_namespace() << "\"";
+	std::cout << "/>\n";
 }
 
 std::string
