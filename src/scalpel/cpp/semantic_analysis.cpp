@@ -157,7 +157,7 @@ fill_namespace
 		//create and/or get undecorated type
 		switch(detail::get_decl_specifier_seq_type(decl_specifier_seq_node))
 		{
-			case detail::decl_specifier_seq_type::CLASS_DECLARATION:
+			case detail::type_specifier_seq_type::CLASS_DECLARATION:
 			{
 				const syntax_nodes::class_specifier& class_specifier_node = detail::get_class_specifier(decl_specifier_seq_node);
 
@@ -169,7 +169,7 @@ fill_namespace
 
 				break;
 			}
-			case detail::decl_specifier_seq_type::CLASS_FORWARD_DECLARATION:
+			case detail::type_specifier_seq_type::CLASS_FORWARD_DECLARATION:
 			{
 				const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node = detail::get_class_elaborated_specifier(decl_specifier_seq_node);
 
@@ -180,12 +180,12 @@ fill_namespace
 
 				break;
 			}
-			case detail::decl_specifier_seq_type::SIMPLE_TYPE:
+			case detail::type_specifier_seq_type::SIMPLE_TYPE:
 			{
 				opt_undecorated_type = create_type(decl_specifier_seq_node, namespace_entity);
 				break;
 			}
-			case detail::decl_specifier_seq_type::NO_TYPE:
+			case detail::type_specifier_seq_type::NO_TYPE:
 			{
 				break;
 			}
@@ -403,7 +403,7 @@ fill_class
 		//create and/or get undecorated type
 		switch(detail::get_decl_specifier_seq_type(decl_specifier_seq_node))
 		{
-			case detail::decl_specifier_seq_type::CLASS_DECLARATION:
+			case detail::type_specifier_seq_type::CLASS_DECLARATION:
 			{
 				const syntax_nodes::class_specifier& class_specifier_node =
 					detail::get_class_specifier(decl_specifier_seq_node)
@@ -417,7 +417,7 @@ fill_class
 
 				break;
 			}
-			case detail::decl_specifier_seq_type::CLASS_FORWARD_DECLARATION:
+			case detail::type_specifier_seq_type::CLASS_FORWARD_DECLARATION:
 			{
 				const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node =
 					detail::get_class_elaborated_specifier(decl_specifier_seq_node)
@@ -430,12 +430,12 @@ fill_class
 
 				break;
 			}
-			case detail::decl_specifier_seq_type::SIMPLE_TYPE:
+			case detail::type_specifier_seq_type::SIMPLE_TYPE:
 			{
 				opt_undecorated_type = create_type(decl_specifier_seq_node, class_entity);
 				break;
 			}
-			case detail::decl_specifier_seq_type::NO_TYPE:
+			case detail::type_specifier_seq_type::NO_TYPE:
 			{
 				break;
 			}
@@ -690,6 +690,40 @@ create_operator_function
 	);
 }
 
+semantic_entities::type_shared_ptr_variant
+get_conversion_function_type
+(
+	const syntax_nodes::declarator& declarator_node,
+	const declarative_region_shared_ptr_variant current_declarative_region
+)
+{
+	auto direct_declarator_node = get_direct_declarator(declarator_node);
+	auto direct_declarator_node_first_part_node = get_first_part(direct_declarator_node);
+	auto opt_declarator_id_node = syntax_nodes::get<syntax_nodes::declarator_id>(&direct_declarator_node_first_part_node);
+	assert(opt_declarator_id_node);
+	auto declarator_id_node = *opt_declarator_id_node;
+	auto opt_id_expression_node = syntax_nodes::get<syntax_nodes::id_expression>(&declarator_id_node);
+	assert(opt_id_expression_node);
+	auto id_expression_node = *opt_id_expression_node;
+	auto opt_unqualified_id_node = syntax_nodes::get<syntax_nodes::unqualified_id>(&id_expression_node);
+	assert(opt_unqualified_id_node);
+	auto unqualified_id_node = *opt_unqualified_id_node;
+	auto opt_conversion_function_id_node = syntax_nodes::get<syntax_nodes::conversion_function_id>(&unqualified_id_node);
+	assert(opt_conversion_function_id_node);
+	auto conversion_function_id_node = *opt_conversion_function_id_node;
+
+	auto type_specifier_seq_node = get_type_specifier_seq(conversion_function_id_node);
+	type_shared_ptr_variant type = create_type(type_specifier_seq_node, current_declarative_region);
+
+	if(auto opt_ptr_operator_seq_node = get_ptr_operator_seq(conversion_function_id_node))
+	{
+		auto ptr_operator_seq_node = *opt_ptr_operator_seq_node;
+		type = decorate_type(type, ptr_operator_seq_node);
+	}
+
+	return type;
+}
+
 semantic_entities::simple_function::parameters_t
 create_parameters
 (
@@ -794,26 +828,7 @@ create_type
 	const declarative_region_shared_ptr_variant current_declarative_region
 )
 {
-	//convert the decl-specifier-seq to a type-specifier-seq
-	syntax_nodes::type_specifier_seq type_specifier_seq_node;
-	for
-	(
-		auto i = decl_specifier_seq_node.begin();
-		i < decl_specifier_seq_node.end();
-		++i
-	)
-	{
-		const syntax_nodes::decl_specifier& decl_specifier_node = i->main_node();
-
-		if(boost::optional<const type_specifier&> opt_type_specifier_node = get<type_specifier>(&decl_specifier_node))
-		{
-			const type_specifier& type_specifier_node = *opt_type_specifier_node;
-			type_specifier_seq_node.push_back(type_specifier_seq::item(space(""), space(""), type_specifier_node));
-		}
-	}
-
-	//use the create_type() function which takes a type-specifier-seq
-	return create_type(type_specifier_seq_node, current_declarative_region);
+	return create_type(detail::to_type_specifier_seq(decl_specifier_seq_node), current_declarative_region);
 }
 
 semantic_entities::type_shared_ptr_variant
@@ -929,40 +944,6 @@ create_type
 		assert(opt_return_type);
 		return *opt_return_type;
 	}
-}
-
-semantic_entities::type_shared_ptr_variant
-get_conversion_function_type
-(
-	const syntax_nodes::declarator& declarator_node,
-	const declarative_region_shared_ptr_variant current_declarative_region
-)
-{
-	auto direct_declarator_node = get_direct_declarator(declarator_node);
-	auto direct_declarator_node_first_part_node = get_first_part(direct_declarator_node);
-	auto opt_declarator_id_node = syntax_nodes::get<syntax_nodes::declarator_id>(&direct_declarator_node_first_part_node);
-	assert(opt_declarator_id_node);
-	auto declarator_id_node = *opt_declarator_id_node;
-	auto opt_id_expression_node = syntax_nodes::get<syntax_nodes::id_expression>(&declarator_id_node);
-	assert(opt_id_expression_node);
-	auto id_expression_node = *opt_id_expression_node;
-	auto opt_unqualified_id_node = syntax_nodes::get<syntax_nodes::unqualified_id>(&id_expression_node);
-	assert(opt_unqualified_id_node);
-	auto unqualified_id_node = *opt_unqualified_id_node;
-	auto opt_conversion_function_id_node = syntax_nodes::get<syntax_nodes::conversion_function_id>(&unqualified_id_node);
-	assert(opt_conversion_function_id_node);
-	auto conversion_function_id_node = *opt_conversion_function_id_node;
-
-	auto type_specifier_seq_node = get_type_specifier_seq(conversion_function_id_node);
-	type_shared_ptr_variant type = create_type(type_specifier_seq_node, current_declarative_region);
-
-	if(auto opt_ptr_operator_seq_node = get_ptr_operator_seq(conversion_function_id_node))
-	{
-		auto ptr_operator_seq_node = *opt_ptr_operator_seq_node;
-		type = decorate_type(type, ptr_operator_seq_node);
-	}
-
-	return type;
 }
 
 semantic_entities::type_shared_ptr_variant

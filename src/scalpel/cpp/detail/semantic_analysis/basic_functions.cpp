@@ -58,204 +58,6 @@ get_access(const syntax_nodes::access_specifier access_specifier_node)
 
 
 //
-//decl_specifier_seq related
-//
-
-decl_specifier_seq_type
-get_decl_specifier_seq_type(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node)
-{
-	//
-	//node counters' declaration
-	//
-
-	unsigned int class_specifier_count = 0; //class XXX {...};
-	unsigned int class_elaborated_specifier_count = 0; //class XXX;
-	unsigned int simple_type_specifier_count = 0;
-
-
-
-	//
-	//node counting
-	//
-
-	for(auto i = decl_specifier_seq_node.begin(); i != decl_specifier_seq_node.end(); ++i)
-	{
-		auto decl_specifier_node = i->main_node();
-
-		if(auto opt_type_specifier_node = get<type_specifier>(&decl_specifier_node))
-		{
-			auto type_specifier_node = *opt_type_specifier_node;
-
-			if(get<simple_type_specifier>(&type_specifier_node))
-			{
-				++simple_type_specifier_count;
-			}
-			else if(get<class_specifier>(&type_specifier_node))
-			{
-				++class_specifier_count;
-			}
-			else if(get<enum_specifier>(&type_specifier_node))
-			{
-			}
-			else if(auto opt_elaborated_type_specifier_node = get<elaborated_type_specifier>(&type_specifier_node))
-			{
-				auto elaborated_type_specifier_node = *opt_elaborated_type_specifier_node;
-
-				if(get<class_elaborated_specifier>(&elaborated_type_specifier_node))
-				{
-					++class_elaborated_specifier_count;
-				}
-				else if(get<enum_elaborated_specifier>(&elaborated_type_specifier_node))
-				{
-				}
-				else if(get<typename_template_elaborated_specifier>(&elaborated_type_specifier_node))
-				{
-				}
-				else if(get<typename_elaborated_specifier>(&elaborated_type_specifier_node))
-				{
-				}
-			}
-			else if(get<cv_qualifier>(&type_specifier_node))
-			{
-			}
-		}
-		else if(get<function_specifier>(&decl_specifier_node))
-		{
-			//nothing
-		}
-		else if(get<storage_class_specifier>(&decl_specifier_node))
-		{
-			//nothing
-		}
-		else if(get<predefined_text_node<str::friend_>>(&decl_specifier_node))
-		{
-			//nothing
-		}
-		else if(get<predefined_text_node<str::typedef_>>(&decl_specifier_node))
-		{
-			//nothing
-		}
-	}
-
-
-
-	//
-	//result
-	//
-
-	if
-	(
-		class_specifier_count == 0 &&
-		class_elaborated_specifier_count == 0 &&
-		simple_type_specifier_count >= 1
-	)
-		return decl_specifier_seq_type::SIMPLE_TYPE;
-	else if
-	(
-		class_specifier_count == 0 &&
-		class_elaborated_specifier_count == 0 &&
-		simple_type_specifier_count == 0
-	)
-		return decl_specifier_seq_type::NO_TYPE;
-	else if
-	(
-		class_specifier_count == 1 &&
-		class_elaborated_specifier_count == 0 &&
-		simple_type_specifier_count == 0
-	)
-		return decl_specifier_seq_type::CLASS_DECLARATION;
-	else if
-	(
-		class_specifier_count == 0 &&
-		class_elaborated_specifier_count == 1 &&
-		simple_type_specifier_count == 0
-	)
-		return decl_specifier_seq_type::CLASS_FORWARD_DECLARATION;
-
-	throw std::runtime_error("get_decl_specifier_seq_type error");
-}
-
-const syntax_nodes::class_specifier&
-get_class_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node)
-{
-	for(auto i = decl_specifier_seq_node.begin(); i != decl_specifier_seq_node.end(); ++i)
-	{
-		const decl_specifier& decl_specifier_node = i->main_node();
-
-		if(const boost::optional<const type_specifier&> opt_type_specifier_node = get<type_specifier>(&decl_specifier_node))
-		{
-			const type_specifier& type_specifier_node = *opt_type_specifier_node;
-
-			if(const boost::optional<const class_specifier&> opt_class_specifier_node = get<class_specifier>(&type_specifier_node))
-			{
-				return *opt_class_specifier_node;
-			}
-		}
-	}
-
-	assert(false);
-}
-
-const syntax_nodes::class_elaborated_specifier&
-get_class_elaborated_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node)
-{
-	assert(decl_specifier_seq_node.size() == 1);
-
-	const decl_specifier& decl_specifier_node = decl_specifier_seq_node.front().main_node();
-
-	const boost::optional<const type_specifier&> opt_type_specifier_node = get<type_specifier>(&decl_specifier_node);
-	assert(opt_type_specifier_node);
-
-	const type_specifier& type_specifier_node = *opt_type_specifier_node;
-
-	const boost::optional<const elaborated_type_specifier&> opt_elaborated_type_specifier_node = get<elaborated_type_specifier>(&type_specifier_node);
-	assert(opt_elaborated_type_specifier_node);
-
-	const elaborated_type_specifier& elaborated_type_specifier_node = *opt_elaborated_type_specifier_node;
-
-	const boost::optional<const class_elaborated_specifier&> opt_class_elaborated_specifier_node = get<class_elaborated_specifier>(&elaborated_type_specifier_node);
-	assert(opt_class_elaborated_specifier_node);
-
-	return *opt_class_elaborated_specifier_node;
-}
-
-bool
-has_typedef_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node)
-{
-	for
-	(
-		auto i = decl_specifier_seq_node.begin();
-		i < decl_specifier_seq_node.end();
-		++i
-	)
-	{
-		const decl_specifier& decl_specifier_node = i->main_node();
-
-		if(get<predefined_text_node<utility::extern_strings::typedef_>>(&decl_specifier_node))
-			return true;
-	}
-
-	return false;
-}
-
-bool
-has_pure_specifier(const syntax_nodes::member_declarator_declarator& member_declarator_declarator_node)
-{
-	if(auto opt_constant_initializer_node = get_constant_initializer(member_declarator_declarator_node))
-	{
-		//auto constant_initializer_node = *opt_constant_initializer_node;
-		//if(get<pure_specifier>(&constant_initializer_node))
-		{
-			return true;
-		}
-	}
-
-	return false;
-}
-
-
-
-//
 //type-specifier-seq related
 //
 
@@ -351,6 +153,119 @@ get_type_specifier_seq_type(const syntax_nodes::type_specifier_seq& type_specifi
 		return type_specifier_seq_type::CLASS_FORWARD_DECLARATION;
 
 	throw std::runtime_error("get_type_specifier_seq_type error");
+}
+
+
+
+//
+//decl_specifier_seq related
+//
+
+type_specifier_seq_type
+get_decl_specifier_seq_type(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node)
+{
+	return get_type_specifier_seq_type(to_type_specifier_seq(decl_specifier_seq_node));
+}
+
+syntax_nodes::type_specifier_seq
+to_type_specifier_seq(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node)
+{
+	syntax_nodes::type_specifier_seq type_specifier_seq_node;
+	for
+	(
+		auto i = decl_specifier_seq_node.begin();
+		i < decl_specifier_seq_node.end();
+		++i
+	)
+	{
+		const syntax_nodes::decl_specifier& decl_specifier_node = i->main_node();
+
+		if(boost::optional<const type_specifier&> opt_type_specifier_node = get<type_specifier>(&decl_specifier_node))
+		{
+			const type_specifier& type_specifier_node = *opt_type_specifier_node;
+			type_specifier_seq_node.push_back(type_specifier_seq::item(space(""), space(""), type_specifier_node));
+		}
+	}
+
+	return type_specifier_seq_node;
+}
+
+const syntax_nodes::class_specifier&
+get_class_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node)
+{
+	for(auto i = decl_specifier_seq_node.begin(); i != decl_specifier_seq_node.end(); ++i)
+	{
+		const decl_specifier& decl_specifier_node = i->main_node();
+
+		if(const boost::optional<const type_specifier&> opt_type_specifier_node = get<type_specifier>(&decl_specifier_node))
+		{
+			const type_specifier& type_specifier_node = *opt_type_specifier_node;
+
+			if(const boost::optional<const class_specifier&> opt_class_specifier_node = get<class_specifier>(&type_specifier_node))
+			{
+				return *opt_class_specifier_node;
+			}
+		}
+	}
+
+	assert(false);
+}
+
+const syntax_nodes::class_elaborated_specifier&
+get_class_elaborated_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node)
+{
+	assert(decl_specifier_seq_node.size() == 1);
+
+	const decl_specifier& decl_specifier_node = decl_specifier_seq_node.front().main_node();
+
+	const boost::optional<const type_specifier&> opt_type_specifier_node = get<type_specifier>(&decl_specifier_node);
+	assert(opt_type_specifier_node);
+
+	const type_specifier& type_specifier_node = *opt_type_specifier_node;
+
+	const boost::optional<const elaborated_type_specifier&> opt_elaborated_type_specifier_node = get<elaborated_type_specifier>(&type_specifier_node);
+	assert(opt_elaborated_type_specifier_node);
+
+	const elaborated_type_specifier& elaborated_type_specifier_node = *opt_elaborated_type_specifier_node;
+
+	const boost::optional<const class_elaborated_specifier&> opt_class_elaborated_specifier_node = get<class_elaborated_specifier>(&elaborated_type_specifier_node);
+	assert(opt_class_elaborated_specifier_node);
+
+	return *opt_class_elaborated_specifier_node;
+}
+
+bool
+has_typedef_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node)
+{
+	for
+	(
+		auto i = decl_specifier_seq_node.begin();
+		i < decl_specifier_seq_node.end();
+		++i
+	)
+	{
+		const decl_specifier& decl_specifier_node = i->main_node();
+
+		if(get<predefined_text_node<utility::extern_strings::typedef_>>(&decl_specifier_node))
+			return true;
+	}
+
+	return false;
+}
+
+bool
+has_pure_specifier(const syntax_nodes::member_declarator_declarator& member_declarator_declarator_node)
+{
+	if(auto opt_constant_initializer_node = get_constant_initializer(member_declarator_declarator_node))
+	{
+		//auto constant_initializer_node = *opt_constant_initializer_node;
+		//if(get<pure_specifier>(&constant_initializer_node))
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 

@@ -110,7 +110,7 @@ analyze
 		//create and/or get undecorated type
 		switch(detail::get_decl_specifier_seq_type(decl_specifier_seq_node))
 		{
-			case detail::decl_specifier_seq_type::CLASS_DECLARATION:
+			case detail::type_specifier_seq_type::CLASS_DECLARATION:
 			{
 				const syntax_nodes::class_specifier& class_specifier_node = detail::get_class_specifier(decl_specifier_seq_node);
 
@@ -122,7 +122,7 @@ analyze
 
 				break;
 			}
-			case detail::decl_specifier_seq_type::CLASS_FORWARD_DECLARATION:
+			case detail::type_specifier_seq_type::CLASS_FORWARD_DECLARATION:
 			{
 				const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node = detail::get_class_elaborated_specifier(decl_specifier_seq_node);
 
@@ -133,12 +133,12 @@ analyze
 
 				break;
 			}
-			case detail::decl_specifier_seq_type::SIMPLE_TYPE:
+			case detail::type_specifier_seq_type::SIMPLE_TYPE:
 			{
 				opt_undecorated_type = create_type(decl_specifier_seq_node, current_declarative_region);
 				break;
 			}
-			case detail::decl_specifier_seq_type::NO_TYPE:
+			case detail::type_specifier_seq_type::NO_TYPE:
 			{
 				break;
 			}

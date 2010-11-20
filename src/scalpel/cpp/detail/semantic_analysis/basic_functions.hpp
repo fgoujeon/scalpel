@@ -42,10 +42,10 @@ get_access(const syntax_nodes::access_specifier access_specifier_node);
 
 
 //
-//decl_specifier_seq related
+//type-specifier-seq related
 //
 
-enum class decl_specifier_seq_type
+enum class type_specifier_seq_type
 {
 	NO_TYPE,
 	SIMPLE_TYPE,
@@ -53,8 +53,20 @@ enum class decl_specifier_seq_type
 	CLASS_FORWARD_DECLARATION
 };
 
-decl_specifier_seq_type
+type_specifier_seq_type
+get_type_specifier_seq_type(const syntax_nodes::type_specifier_seq& type_specifier_seq_node);
+
+
+
+//
+//decl_specifier_seq related
+//
+
+type_specifier_seq_type
 get_decl_specifier_seq_type(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node);
+
+syntax_nodes::type_specifier_seq
+to_type_specifier_seq(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node);
 
 const syntax_nodes::class_specifier&
 get_class_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node);
@@ -106,23 +118,6 @@ has_typedef_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq
 
 bool
 has_pure_specifier(const syntax_nodes::member_declarator_declarator& member_declarator_declarator_node);
-
-
-
-//
-//type-specifier-seq related
-//
-
-enum class type_specifier_seq_type
-{
-	NO_TYPE,
-	SIMPLE_TYPE,
-	CLASS_DECLARATION,
-	CLASS_FORWARD_DECLARATION
-};
-
-type_specifier_seq_type
-get_type_specifier_seq_type(const syntax_nodes::type_specifier_seq& type_specifier_seq_node);
 
 
 

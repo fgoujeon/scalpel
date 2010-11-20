@@ -113,6 +113,13 @@ create_operator_function
 	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 );
 
+semantic_entities::type_shared_ptr_variant
+get_conversion_function_type
+(
+	const syntax_nodes::declarator& declarator_node,
+	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+);
+
 semantic_entities::simple_function::parameters_t
 create_parameters
 (
@@ -143,13 +150,6 @@ semantic_entities::type_shared_ptr_variant
 create_type
 (
 	const syntax_nodes::type_specifier_seq& type_specifier_seq_node,
-	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
-);
-
-semantic_entities::type_shared_ptr_variant
-get_conversion_function_type
-(
-	const syntax_nodes::declarator& declarator_node,
 	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 );
 
