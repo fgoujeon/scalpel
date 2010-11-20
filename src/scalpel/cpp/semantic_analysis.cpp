@@ -182,7 +182,7 @@ fill_namespace
 			}
 			case detail::decl_specifier_seq_type::SIMPLE_TYPE:
 			{
-				opt_undecorated_type = create_undecorated_type(decl_specifier_seq_node, namespace_entity);
+				opt_undecorated_type = create_type(decl_specifier_seq_node, namespace_entity);
 				break;
 			}
 			case detail::decl_specifier_seq_type::NO_TYPE:
@@ -432,7 +432,7 @@ fill_class
 			}
 			case detail::decl_specifier_seq_type::SIMPLE_TYPE:
 			{
-				opt_undecorated_type = create_undecorated_type(decl_specifier_seq_node, class_entity);
+				opt_undecorated_type = create_type(decl_specifier_seq_node, class_entity);
 				break;
 			}
 			case detail::decl_specifier_seq_type::NO_TYPE:
@@ -712,7 +712,7 @@ create_parameters
 		semantic_entities::type_shared_ptr_variant type =
 			decorate_type
 			(
-				create_undecorated_type
+				create_type
 				(
 					decl_specifier_seq_node,
 					current_declarative_region
@@ -788,7 +788,7 @@ create_parameters
 //
 
 semantic_entities::type_shared_ptr_variant
-create_undecorated_type
+create_type
 (
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
 	const declarative_region_shared_ptr_variant current_declarative_region
@@ -807,12 +807,6 @@ create_undecorated_type
 	bool unsigned_type = false;
 	bool void_type = false;
 	bool wchar_t_type = false;
-
-	bool ignored;
-	/*
-	bool is_const = false;
-	bool is_volatile = false;
-	*/
 
 	for
 	(
@@ -847,8 +841,6 @@ create_undecorated_type
 				unsigned_type,
 				void_type,
 				wchar_t_type,
-				ignored,
-				ignored,
 				current_declarative_region
 			);
 		}
@@ -880,7 +872,7 @@ create_undecorated_type
 }
 
 semantic_entities::type_shared_ptr_variant
-create_undecorated_type
+create_type
 (
 	const syntax_nodes::type_specifier_seq& type_specifier_seq_node,
 	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
@@ -899,8 +891,6 @@ create_undecorated_type
 	bool unsigned_type = false;
 	bool void_type = false;
 	bool wchar_t_type = false;
-
-	bool ignored;
 
 	for
 	(
@@ -927,8 +917,6 @@ create_undecorated_type
 			unsigned_type,
 			void_type,
 			wchar_t_type,
-			ignored,
-			ignored,
 			current_declarative_region
 		);
 	}
@@ -979,7 +967,7 @@ get_conversion_function_type
 	auto conversion_function_id_node = *opt_conversion_function_id_node;
 
 	auto type_specifier_seq_node = get_type_specifier_seq(conversion_function_id_node);
-	type_shared_ptr_variant type = create_undecorated_type(type_specifier_seq_node, current_declarative_region);
+	type_shared_ptr_variant type = create_type(type_specifier_seq_node, current_declarative_region);
 
 	if(auto opt_ptr_operator_seq_node = get_ptr_operator_seq(conversion_function_id_node))
 	{
@@ -1162,8 +1150,6 @@ get_type_info
 	bool& unsigned_type,
 	bool& void_type,
 	bool& wchar_t_type,
-	bool& is_const,
-	bool& is_volatile,
 	const declarative_region_shared_ptr_variant current_declarative_region
 )
 {
@@ -1248,21 +1234,6 @@ get_type_info
 			{
 				void_type = true;
 			}
-		}
-	}
-	else if(auto opt_cv_qualifier_node = get<cv_qualifier>(&type_specifier_node))
-	{
-		auto cv_qualifier_node = *opt_cv_qualifier_node;
-		//predefined_text_node<str::const_>
-		//predefined_text_node<str::volatile_>
-
-		if(get<predefined_text_node<str::const_>>(&cv_qualifier_node))
-		{
-			is_const = true;
-		}
-		else if(get<predefined_text_node<str::volatile_>>(&cv_qualifier_node))
-		{
-			is_volatile = true;
 		}
 	}
 }

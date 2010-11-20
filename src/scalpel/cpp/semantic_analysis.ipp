@@ -135,7 +135,7 @@ analyze
 			}
 			case detail::decl_specifier_seq_type::SIMPLE_TYPE:
 			{
-				opt_undecorated_type = create_undecorated_type(decl_specifier_seq_node, current_declarative_region);
+				opt_undecorated_type = create_type(decl_specifier_seq_node, current_declarative_region);
 				break;
 			}
 			case detail::decl_specifier_seq_type::NO_TYPE:

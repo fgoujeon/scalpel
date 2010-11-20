@@ -130,7 +130,7 @@ create_parameters
 //The returned type is not decorated by the qualifiers of
 //the decl-specifier-seq.
 semantic_entities::type_shared_ptr_variant
-create_undecorated_type
+create_type
 (
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
 	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
@@ -140,7 +140,7 @@ create_undecorated_type
 //The returned type is not decorated by the qualifiers of
 //the type-specifier-seq.
 semantic_entities::type_shared_ptr_variant
-create_undecorated_type
+create_type
 (
 	const syntax_nodes::type_specifier_seq& type_specifier_seq_node,
 	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
@@ -197,8 +197,6 @@ get_type_info
 	bool& unsigned_type,
 	bool& void_type,
 	bool& wchar_t_type,
-	bool& const_qualified,
-	bool& volatile_qualified,
 	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 );
 
