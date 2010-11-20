@@ -45,6 +45,14 @@ get_members<semantic_entities::MEMBER_TYPE, std::shared_ptr<semantic_entities::P
 	return parent->PARENT_MEMBER_FUNCTION(); \
 }
 
+#define GENERATE_NAMESPACE_ALIAS_GET_MEMBERS_SPECIALIZATION(PARENT_TYPE, MEMBER_TYPE, PARENT_MEMBER_FUNCTION) \
+template<> \
+get_members_type_traits<semantic_entities::MEMBER_TYPE>::return_type \
+get_members<semantic_entities::MEMBER_TYPE, std::shared_ptr<semantic_entities::PARENT_TYPE>>(std::shared_ptr<semantic_entities::PARENT_TYPE> parent) \
+{ \
+	return parent->referred_namespace()->PARENT_MEMBER_FUNCTION(); \
+}
+
 #define GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(PARENT_TYPE, MEMBER_TYPE) \
 template<> \
 get_members_type_traits<semantic_entities::MEMBER_TYPE>::return_type \
@@ -68,11 +76,11 @@ GENERATE_SIMPLE_GET_MEMBERS_SPECIALIZATION(namespace_, class_, classes)
 GENERATE_SIMPLE_GET_MEMBERS_SPECIALIZATION(namespace_, simple_function, simple_functions)
 GENERATE_SIMPLE_GET_MEMBERS_SPECIALIZATION(namespace_, variable, variables)
 
-GENERATE_SIMPLE_GET_MEMBERS_SPECIALIZATION(namespace_alias, open_declarative_region_shared_ptr_variant, open_declarative_regions)
-GENERATE_SIMPLE_GET_MEMBERS_SPECIALIZATION(namespace_alias, namespace_, namespaces)
-GENERATE_SIMPLE_GET_MEMBERS_SPECIALIZATION(namespace_alias, class_, classes)
-GENERATE_SIMPLE_GET_MEMBERS_SPECIALIZATION(namespace_alias, simple_function, simple_functions)
-GENERATE_SIMPLE_GET_MEMBERS_SPECIALIZATION(namespace_alias, variable, variables)
+GENERATE_NAMESPACE_ALIAS_GET_MEMBERS_SPECIALIZATION(namespace_alias, open_declarative_region_shared_ptr_variant, open_declarative_regions)
+GENERATE_NAMESPACE_ALIAS_GET_MEMBERS_SPECIALIZATION(namespace_alias, namespace_, namespaces)
+GENERATE_NAMESPACE_ALIAS_GET_MEMBERS_SPECIALIZATION(namespace_alias, class_, classes)
+GENERATE_NAMESPACE_ALIAS_GET_MEMBERS_SPECIALIZATION(namespace_alias, simple_function, simple_functions)
+GENERATE_NAMESPACE_ALIAS_GET_MEMBERS_SPECIALIZATION(namespace_alias, variable, variables)
 
 GENERATE_SIMPLE_GET_MEMBERS_SPECIALIZATION(class_, open_declarative_region_shared_ptr_variant, open_declarative_regions)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION (class_, namespace_)
