@@ -21,13 +21,14 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_NAMESPACE_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_NAMESPACE_HPP
 
+#include "declarative_region_variants.hpp"
+#include "namespace_or_namespace_alias_variants.hpp"
 #include "namespace_alias.hpp"
-#include "typedef_.hpp"
-#include "variable.hpp"
+#include "class_.hpp"
 #include "operator_function.hpp"
 #include "simple_function.hpp"
-#include "class_.hpp"
-#include "declarative_region_variants.hpp"
+#include "typedef_.hpp"
+#include "variable.hpp"
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 #include <string>
@@ -47,6 +48,9 @@ class namespace_:
 {
 	public:
 		typedef utility::vector<open_declarative_region_shared_ptr_variant> open_declarative_region_shared_ptr_variants_t;
+		typedef utility::vector<namespace_or_namespace_alias_shared_ptr_variant> namespace_or_namespace_alias_shared_ptr_variants_t;
+
+		typedef utility::vector<std::shared_ptr<namespace_alias>> namespace_aliases_t;
 		typedef utility::vector<std::shared_ptr<namespace_>> namespaces_t;
 		typedef utility::vector<std::weak_ptr<namespace_>> weak_namespaces_t;
 		typedef utility::vector<std::shared_ptr<class_>> classes_t;
@@ -54,7 +58,6 @@ class namespace_:
 		typedef utility::vector<std::shared_ptr<simple_function>> simple_functions_t;
 		typedef utility::vector<std::shared_ptr<operator_function>> operator_functions_t;
 		typedef utility::vector<std::shared_ptr<variable>> variables_t;
-		typedef utility::vector<std::shared_ptr<namespace_alias>> namespace_aliases_t;
 
 	private:
 		/**
@@ -107,6 +110,9 @@ class namespace_:
 		const open_declarative_region_shared_ptr_variants_t&
 		open_declarative_regions();
 
+		const namespace_or_namespace_alias_shared_ptr_variants_t&
+		namespaces_and_namespace_aliases();
+
 		namespaces_t::range
 		namespaces();
 
@@ -150,6 +156,12 @@ class namespace_:
 		using_directive_namespaces() const;
 
 		void
+		add_member(std::shared_ptr<namespace_alias> member);
+
+		void
+		add_member(std::shared_ptr<namespace_or_namespace_alias_shared_ptr_variant> member);
+
+		void
 		add_member(std::shared_ptr<namespace_> member);
 
 		void
@@ -168,9 +180,6 @@ class namespace_:
 		add_member(std::shared_ptr<variable> member);
 
 		void
-		add_member(std::shared_ptr<namespace_alias> member);
-
-		void
 		add_using_directive_namespace(std::shared_ptr<namespace_> n);
 
 	private:
@@ -179,15 +188,16 @@ class namespace_:
 
 		//polymorphic containers
 		open_declarative_region_shared_ptr_variants_t open_declarative_regions_;
+		namespace_or_namespace_alias_shared_ptr_variants_t namespaces_and_namespace_aliases_;
 
 		//members
+		namespace_aliases_t namespace_aliases_;
 		namespaces_t namespaces_;
 		classes_t classes_;
 		typedefs_t typedefs_;
 		simple_functions_t simple_functions_;
 		operator_functions_t operator_functions_;
 		variables_t variables_;
-		namespace_aliases_t namespace_aliases_;
 
 		weak_namespaces_t using_directive_namespaces_;
 };

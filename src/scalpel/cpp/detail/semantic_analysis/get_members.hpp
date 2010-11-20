@@ -37,6 +37,18 @@ struct get_members_type_traits<semantic_entities::open_declarative_region_shared
 };
 
 template<>
+struct get_members_type_traits<semantic_entities::namespace_or_namespace_alias_shared_ptr_variant>
+{
+	typedef utility::vector<semantic_entities::namespace_or_namespace_alias_shared_ptr_variant> return_type;
+};
+
+template<>
+struct get_members_type_traits<semantic_entities::namespace_alias>
+{
+	typedef utility::vector<std::shared_ptr<semantic_entities::namespace_alias>>::range return_type;
+};
+
+template<>
 struct get_members_type_traits<semantic_entities::namespace_>
 {
 	typedef utility::vector<std::shared_ptr<semantic_entities::namespace_>>::range return_type;
@@ -70,12 +82,6 @@ template<>
 struct get_members_type_traits<semantic_entities::variable>
 {
 	typedef utility::vector<std::shared_ptr<semantic_entities::variable>>::range return_type;
-};
-
-template<>
-struct get_members_type_traits<semantic_entities::namespace_alias>
-{
-	typedef utility::vector<std::shared_ptr<semantic_entities::namespace_alias>>::range return_type;
 };
 
 
