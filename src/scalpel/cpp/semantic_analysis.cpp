@@ -880,13 +880,13 @@ create_undecorated_type
 }
 
 semantic_entities::type_shared_ptr_variant
-get_conversion_function_type
+create_undecorated_type
 (
-	const syntax_nodes::declarator& declarator_node,
-	const declarative_region_shared_ptr_variant current_declarative_region
+	const syntax_nodes::type_specifier_seq& type_specifier_seq_node,
+	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 )
 {
-	boost::optional<type_shared_ptr_variant> opt_type;
+	boost::optional<semantic_entities::type_shared_ptr_variant> opt_return_type;
 	bool bool_type = false;
 	bool char_type = false;
 	bool double_type = false;
@@ -899,32 +899,22 @@ get_conversion_function_type
 	bool unsigned_type = false;
 	bool void_type = false;
 	bool wchar_t_type = false;
-	bool is_const = false;
-	bool is_volatile = false;
 
-	auto direct_declarator_node = get_direct_declarator(declarator_node);
-	auto direct_declarator_node_first_part_node = get_first_part(direct_declarator_node);
-	auto opt_declarator_id_node = syntax_nodes::get<syntax_nodes::declarator_id>(&direct_declarator_node_first_part_node);
-	assert(opt_declarator_id_node);
-	auto declarator_id_node = *opt_declarator_id_node;
-	auto opt_id_expression_node = syntax_nodes::get<syntax_nodes::id_expression>(&declarator_id_node);
-	assert(opt_id_expression_node);
-	auto id_expression_node = *opt_id_expression_node;
-	auto opt_unqualified_id_node = syntax_nodes::get<syntax_nodes::unqualified_id>(&id_expression_node);
-	assert(opt_unqualified_id_node);
-	auto unqualified_id_node = *opt_unqualified_id_node;
-	auto opt_conversion_function_id_node = syntax_nodes::get<syntax_nodes::conversion_function_id>(&unqualified_id_node);
-	assert(opt_conversion_function_id_node);
-	auto conversion_function_id_node = *opt_conversion_function_id_node;
+	bool ignored;
 
-	auto type_specifier_seq_node = get_type_specifier_seq(conversion_function_id_node);
-	for(auto i = type_specifier_seq_node.begin(); i != type_specifier_seq_node.end(); ++i)
+	for
+	(
+		auto i = type_specifier_seq_node.begin();
+		i < type_specifier_seq_node.end();
+		++i
+	)
 	{
-		auto type_specifier_node = i->main_node();
+		const syntax_nodes::type_specifier& type_specifier_node = i->main_node();
+
 		get_type_info
 		(
 			type_specifier_node,
-			opt_type,
+			opt_return_type,
 			bool_type,
 			char_type,
 			double_type,
@@ -937,15 +927,15 @@ get_conversion_function_type
 			unsigned_type,
 			void_type,
 			wchar_t_type,
-			is_const,
-			is_volatile,
+			ignored,
+			ignored,
 			current_declarative_region
 		);
 	}
 
-	if(!opt_type)
+	if(!opt_return_type)
 	{
-		opt_type = get_fundamental_type
+		opt_return_type = get_fundamental_type
 		(
 			bool_type,
 			char_type,
@@ -962,13 +952,34 @@ get_conversion_function_type
 		);
 	}
 
-	assert(opt_type);
-	type_shared_ptr_variant type = *opt_type;
+	assert(opt_return_type);
+	return *opt_return_type;
+}
 
-	if(is_const)
-		type = std::make_shared<const const_>(type);
-	if(is_volatile)
-		type = std::make_shared<const volatile_>(type);
+semantic_entities::type_shared_ptr_variant
+get_conversion_function_type
+(
+	const syntax_nodes::declarator& declarator_node,
+	const declarative_region_shared_ptr_variant current_declarative_region
+)
+{
+	auto direct_declarator_node = get_direct_declarator(declarator_node);
+	auto direct_declarator_node_first_part_node = get_first_part(direct_declarator_node);
+	auto opt_declarator_id_node = syntax_nodes::get<syntax_nodes::declarator_id>(&direct_declarator_node_first_part_node);
+	assert(opt_declarator_id_node);
+	auto declarator_id_node = *opt_declarator_id_node;
+	auto opt_id_expression_node = syntax_nodes::get<syntax_nodes::id_expression>(&declarator_id_node);
+	assert(opt_id_expression_node);
+	auto id_expression_node = *opt_id_expression_node;
+	auto opt_unqualified_id_node = syntax_nodes::get<syntax_nodes::unqualified_id>(&id_expression_node);
+	assert(opt_unqualified_id_node);
+	auto unqualified_id_node = *opt_unqualified_id_node;
+	auto opt_conversion_function_id_node = syntax_nodes::get<syntax_nodes::conversion_function_id>(&unqualified_id_node);
+	assert(opt_conversion_function_id_node);
+	auto conversion_function_id_node = *opt_conversion_function_id_node;
+
+	auto type_specifier_seq_node = get_type_specifier_seq(conversion_function_id_node);
+	type_shared_ptr_variant type = create_undecorated_type(type_specifier_seq_node, current_declarative_region);
 
 	if(auto opt_ptr_operator_seq_node = get_ptr_operator_seq(conversion_function_id_node))
 	{

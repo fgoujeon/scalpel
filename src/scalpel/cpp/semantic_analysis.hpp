@@ -126,10 +126,23 @@ create_parameters
 //type creation functions
 //
 
+//Create the type described by the given decl-specifier-seq.
+//The returned type is not decorated by the qualifiers of
+//the decl-specifier-seq.
 semantic_entities::type_shared_ptr_variant
 create_undecorated_type
 (
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
+	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+);
+
+//Create the type described by the given type-specifier-seq.
+//The returned type is not decorated by the qualifiers of
+//the type-specifier-seq.
+semantic_entities::type_shared_ptr_variant
+create_undecorated_type
+(
+	const syntax_nodes::type_specifier_seq& type_specifier_seq_node,
 	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 );
 

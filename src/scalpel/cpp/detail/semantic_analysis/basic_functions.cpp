@@ -121,12 +121,11 @@ get_decl_specifier_seq_type(const syntax_nodes::decl_specifier_seq& decl_specifi
 		}
 		else if(get<function_specifier>(&decl_specifier_node))
 		{
+			//nothing
 		}
 		else if(get<storage_class_specifier>(&decl_specifier_node))
 		{
-		}
-		else if(get<function_specifier>(&decl_specifier_node))
-		{
+			//nothing
 		}
 		else if(get<predefined_text_node<str::friend_>>(&decl_specifier_node))
 		{
@@ -252,6 +251,106 @@ has_pure_specifier(const syntax_nodes::member_declarator_declarator& member_decl
 	}
 
 	return false;
+}
+
+
+
+//
+//type-specifier-seq related
+//
+
+type_specifier_seq_type
+get_type_specifier_seq_type(const syntax_nodes::type_specifier_seq& type_specifier_seq_node)
+{
+	//
+	//node counters' declaration
+	//
+
+	unsigned int class_specifier_count = 0; //class XXX {...};
+	unsigned int class_elaborated_specifier_count = 0; //class XXX;
+	unsigned int simple_type_specifier_count = 0;
+
+
+
+	//
+	//node counting
+	//
+
+	for(auto i = type_specifier_seq_node.begin(); i != type_specifier_seq_node.end(); ++i)
+	{
+		auto type_specifier_node = i->main_node();
+
+		if(get<simple_type_specifier>(&type_specifier_node))
+		{
+			++simple_type_specifier_count;
+		}
+		else if(get<class_specifier>(&type_specifier_node))
+		{
+			++class_specifier_count;
+		}
+		else if(get<enum_specifier>(&type_specifier_node))
+		{
+		}
+		else if(auto opt_elaborated_type_specifier_node = get<elaborated_type_specifier>(&type_specifier_node))
+		{
+			auto elaborated_type_specifier_node = *opt_elaborated_type_specifier_node;
+
+			if(get<class_elaborated_specifier>(&elaborated_type_specifier_node))
+			{
+				++class_elaborated_specifier_count;
+			}
+			else if(get<enum_elaborated_specifier>(&elaborated_type_specifier_node))
+			{
+			}
+			else if(get<typename_template_elaborated_specifier>(&elaborated_type_specifier_node))
+			{
+			}
+			else if(get<typename_elaborated_specifier>(&elaborated_type_specifier_node))
+			{
+			}
+		}
+		else if(get<cv_qualifier>(&type_specifier_node))
+		{
+			//nothing
+		}
+	}
+
+
+
+	//
+	//result
+	//
+
+	if
+	(
+		class_specifier_count == 0 &&
+		class_elaborated_specifier_count == 0 &&
+		simple_type_specifier_count >= 1
+	)
+		return type_specifier_seq_type::SIMPLE_TYPE;
+	else if
+	(
+		class_specifier_count == 0 &&
+		class_elaborated_specifier_count == 0 &&
+		simple_type_specifier_count == 0
+	)
+		return type_specifier_seq_type::NO_TYPE;
+	else if
+	(
+		class_specifier_count == 1 &&
+		class_elaborated_specifier_count == 0 &&
+		simple_type_specifier_count == 0
+	)
+		return type_specifier_seq_type::CLASS_DECLARATION;
+	else if
+	(
+		class_specifier_count == 0 &&
+		class_elaborated_specifier_count == 1 &&
+		simple_type_specifier_count == 0
+	)
+		return type_specifier_seq_type::CLASS_FORWARD_DECLARATION;
+
+	throw std::runtime_error("get_type_specifier_seq_type error");
 }
 
 

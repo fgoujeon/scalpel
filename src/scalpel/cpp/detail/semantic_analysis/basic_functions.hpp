@@ -110,6 +110,23 @@ has_pure_specifier(const syntax_nodes::member_declarator_declarator& member_decl
 
 
 //
+//type-specifier-seq related
+//
+
+enum class type_specifier_seq_type
+{
+	NO_TYPE,
+	SIMPLE_TYPE,
+	CLASS_DECLARATION,
+	CLASS_FORWARD_DECLARATION
+};
+
+type_specifier_seq_type
+get_type_specifier_seq_type(const syntax_nodes::type_specifier_seq& type_specifier_seq_node);
+
+
+
+//
 //declarator related
 //
 
