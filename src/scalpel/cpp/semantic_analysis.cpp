@@ -1559,10 +1559,13 @@ create_namespace_alias
 
 	//find the namespace designated by the namespace alias
 	std::shared_ptr<namespace_> found_namespace =
-		detail::name_lookup::find<namespace_>
+		get_namespace
 		(
-			nested_identifier_or_template_id_node,
-			current_namespace
+			detail::name_lookup::find<namespace_or_namespace_alias_shared_ptr_variant>
+			(
+				nested_identifier_or_template_id_node,
+				current_namespace
+			)
 		)
 	;
 
@@ -1594,7 +1597,7 @@ create_using_directive
 		get_identifier(using_directive_node)
 	);
 
-	//find the namespace (or the namespace alias) designated by the using directive
+	//find the namespace designated by the using directive
 	return get_namespace
 	(
 		detail::name_lookup::find<namespace_or_namespace_alias_shared_ptr_variant>
