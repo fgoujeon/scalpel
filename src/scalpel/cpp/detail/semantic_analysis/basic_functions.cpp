@@ -406,7 +406,7 @@ get_declarator_type(const syntax_nodes::declarator& declarator_node)
 	throw std::runtime_error("get_declarator_type error");
 }
 
-const syntax_nodes::parameter_declaration_list&
+boost::optional<const syntax_nodes::parameter_declaration_list&>
 get_parameter_declaration_list(const syntax_nodes::declarator& declarator_node)
 {
 	const direct_declarator& direct_declarator_node = get_direct_declarator(declarator_node);
@@ -433,7 +433,7 @@ get_parameter_declaration_list(const syntax_nodes::declarator& declarator_node)
 		}
 	}
 
-	assert(false);
+	return boost::optional<const syntax_nodes::parameter_declaration_list&>();
 }
 
 syntax_nodes::identifier

@@ -137,7 +137,7 @@ enum class declarator_type
 declarator_type
 get_declarator_type(const syntax_nodes::declarator& declarator_node);
 
-const syntax_nodes::parameter_declaration_list&
+boost::optional<const syntax_nodes::parameter_declaration_list&>
 get_parameter_declaration_list(const syntax_nodes::declarator& declarator_node);
 
 template<const std::string& Qualifier>

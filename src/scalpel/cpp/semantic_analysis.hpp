@@ -123,6 +123,13 @@ get_conversion_function_type
 semantic_entities::simple_function::parameters_t
 create_parameters
 (
+	boost::optional<const syntax_nodes::parameter_declaration_list&> opt_parameter_declaration_list_node,
+	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+);
+
+semantic_entities::simple_function::parameters_t
+create_parameters
+(
 	const syntax_nodes::parameter_declaration_list& parameter_declaration_list_node,
 	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 );
