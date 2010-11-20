@@ -82,6 +82,12 @@ class list_node
 		}
 
 		void
+		push_back(const item& t)
+		{
+			items_.push_back(t);
+		}
+
+		void
 		push_back(item&& t)
 		{
 			items_.push_back(std::move(t));
@@ -140,6 +146,13 @@ class list_node<T, SeparatorNode>::item
 		(
 			optional_node<space>&& pre_separator_space,
 			optional_node<space>&& post_separator_space,
+			const T& main_node
+		);
+
+		item
+		(
+			optional_node<space>&& pre_separator_space,
+			optional_node<space>&& post_separator_space,
 			T&& main_node
 		);
 
@@ -169,6 +182,19 @@ list_node<T, SeparatorNode>::item::item
 	optional_node<space>&& pre_separator_space,
 	optional_node<space>&& post_separator_space,
 	T&& main_node
+):
+	pre_separator_space_(pre_separator_space),
+	post_separator_space_(post_separator_space),
+	main_node_(main_node)
+{
+}
+
+template<class T, const leaf_node& SeparatorNode>
+list_node<T, SeparatorNode>::item::item
+(
+	optional_node<space>&& pre_separator_space,
+	optional_node<space>&& post_separator_space,
+	const T& main_node
 ):
 	pre_separator_space_(pre_separator_space),
 	post_separator_space_(post_separator_space),

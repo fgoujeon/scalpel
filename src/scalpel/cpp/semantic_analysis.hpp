@@ -180,26 +180,6 @@ decorate_type
 	const syntax_nodes::ptr_operator_seq& ptr_operator_seq_node
 );
 
-void
-get_type_info
-(
-	const syntax_nodes::type_specifier& type_specifier_node,
-	boost::optional<semantic_entities::type_shared_ptr_variant>& t,
-	bool& bool_type,
-	bool& char_type,
-	bool& double_type,
-	bool& float_type,
-	bool& int_type,
-	bool& long_long_type,
-	bool& long_type,
-	bool& short_type,
-	bool& signed_type,
-	bool& unsigned_type,
-	bool& void_type,
-	bool& wchar_t_type,
-	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
-);
-
 std::shared_ptr<const semantic_entities::fundamental_type>
 get_fundamental_type
 (

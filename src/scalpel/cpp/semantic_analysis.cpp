@@ -794,20 +794,8 @@ create_type
 	const declarative_region_shared_ptr_variant current_declarative_region
 )
 {
-	boost::optional<semantic_entities::type_shared_ptr_variant> opt_return_type;
-	bool bool_type = false;
-	bool char_type = false;
-	bool double_type = false;
-	bool float_type = false;
-	bool int_type = false;
-	bool long_long_type = false;
-	bool long_type = false;
-	bool short_type = false;
-	bool signed_type = false;
-	bool unsigned_type = false;
-	bool void_type = false;
-	bool wchar_t_type = false;
-
+	//convert the decl-specifier-seq to a type-specifier-seq
+	syntax_nodes::type_specifier_seq type_specifier_seq_node;
 	for
 	(
 		auto i = decl_specifier_seq_node.begin();
@@ -817,58 +805,15 @@ create_type
 	{
 		const syntax_nodes::decl_specifier& decl_specifier_node = i->main_node();
 
-		//auto opt_function_specifier_node = syntax_nodes::get<function_specifier>(&decl_specifier_node);
-		//auto opt_storage_class_specifier_node = syntax_nodes::get<storage_class_specifier>(&decl_specifier_node);
-		//syntax_nodes::predefined_text_node<str::friend_>
-		//syntax_nodes::predefined_text_node<str::typedef_>
-
-		if(auto opt_type_specifier_node = syntax_nodes::get<syntax_nodes::type_specifier>(&decl_specifier_node))
+		if(boost::optional<const type_specifier&> opt_type_specifier_node = get<type_specifier>(&decl_specifier_node))
 		{
-			auto type_specifier_node = *opt_type_specifier_node;
-			get_type_info
-			(
-				type_specifier_node,
-				opt_return_type,
-				bool_type,
-				char_type,
-				double_type,
-				float_type,
-				int_type,
-				long_long_type,
-				long_type,
-				short_type,
-				signed_type,
-				unsigned_type,
-				void_type,
-				wchar_t_type,
-				current_declarative_region
-			);
+			const type_specifier& type_specifier_node = *opt_type_specifier_node;
+			type_specifier_seq_node.push_back(type_specifier_seq::item(space(""), space(""), type_specifier_node));
 		}
 	}
 
-	if(!opt_return_type)
-	{
-		opt_return_type = get_fundamental_type
-		(
-			bool_type,
-			char_type,
-			double_type,
-			float_type,
-			int_type,
-			long_long_type,
-			long_type,
-			short_type,
-			signed_type,
-			unsigned_type,
-			void_type,
-			wchar_t_type
-		);
-	}
-
-	assert(opt_return_type);
-	semantic_entities::type_shared_ptr_variant return_type = *opt_return_type;
-
-	return return_type;
+	//use the create_type() function which takes a type-specifier-seq
+	return create_type(type_specifier_seq_node, current_declarative_region);
 }
 
 semantic_entities::type_shared_ptr_variant
@@ -879,6 +824,7 @@ create_type
 )
 {
 	boost::optional<semantic_entities::type_shared_ptr_variant> opt_return_type;
+	bool is_fundamental_type = false;
 	bool bool_type = false;
 	bool char_type = false;
 	bool double_type = false;
@@ -901,29 +847,68 @@ create_type
 	{
 		const syntax_nodes::type_specifier& type_specifier_node = i->main_node();
 
-		get_type_info
-		(
-			type_specifier_node,
-			opt_return_type,
-			bool_type,
-			char_type,
-			double_type,
-			float_type,
-			int_type,
-			long_long_type,
-			long_type,
-			short_type,
-			signed_type,
-			unsigned_type,
-			void_type,
-			wchar_t_type,
-			current_declarative_region
-		);
+		if(auto opt_simple_type_specifier_node = get<simple_type_specifier>(&type_specifier_node))
+		{
+			auto simple_type_specifier_node = *opt_simple_type_specifier_node;
+
+			if(auto opt_nested_identifier_or_template_id_node = get<nested_identifier_or_template_id>(&simple_type_specifier_node))
+			{
+				auto nested_identifier_or_template_id_node = *opt_nested_identifier_or_template_id_node;
+				opt_return_type =
+					std::shared_ptr<const class_>
+					(
+						detail::name_lookup::find
+						<
+							semantic_entities::class_,
+							false,
+							false
+						>
+						(
+							nested_identifier_or_template_id_node,
+							current_declarative_region
+						)
+					)
+				;
+			}
+			else if(auto opt_fundamental_type_specifier_node = get<fundamental_type_specifier>(&simple_type_specifier_node))
+			{
+				auto fundamental_type_specifier_node = *opt_fundamental_type_specifier_node;
+
+				is_fundamental_type = true;
+
+				if(get<predefined_text_node<str::char_>>(&fundamental_type_specifier_node))
+					char_type = true;
+				else if(get<predefined_text_node<str::wchar_t_>>(&fundamental_type_specifier_node))
+					wchar_t_type = true;
+				else if(get<predefined_text_node<str::bool_>>(&fundamental_type_specifier_node))
+					bool_type = true;
+				else if(get<predefined_text_node<str::short_>>(&fundamental_type_specifier_node))
+					short_type = true;
+				else if(get<predefined_text_node<str::int_>>(&fundamental_type_specifier_node))
+					int_type = true;
+				else if(get<predefined_text_node<str::long_>>(&fundamental_type_specifier_node))
+					if(!long_type)
+						long_type = true;
+					else
+						long_long_type = true;
+				else if(get<predefined_text_node<str::signed_>>(&fundamental_type_specifier_node))
+					signed_type = true;
+				else if(get<predefined_text_node<str::unsigned_>>(&fundamental_type_specifier_node))
+					unsigned_type = true;
+				else if(get<predefined_text_node<str::float_>>(&fundamental_type_specifier_node))
+					float_type = true;
+				else if(get<predefined_text_node<str::double_>>(&fundamental_type_specifier_node))
+					double_type = true;
+				else if(get<predefined_text_node<str::void_>>(&fundamental_type_specifier_node))
+					void_type = true;
+			}
+		}
 	}
 
-	if(!opt_return_type)
+	if(is_fundamental_type)
 	{
-		opt_return_type = get_fundamental_type
+		assert(!opt_return_type);
+		return get_fundamental_type
 		(
 			bool_type,
 			char_type,
@@ -939,9 +924,11 @@ create_type
 			wchar_t_type
 		);
 	}
-
-	assert(opt_return_type);
-	return *opt_return_type;
+	else
+	{
+		assert(opt_return_type);
+		return *opt_return_type;
+	}
 }
 
 semantic_entities::type_shared_ptr_variant
@@ -1131,111 +1118,6 @@ decorate_type
 	}
 
 	return type;
-}
-
-void
-get_type_info
-(
-	const syntax_nodes::type_specifier& type_specifier_node,
-	boost::optional<semantic_entities::type_shared_ptr_variant>& t,
-	bool& bool_type,
-	bool& char_type,
-	bool& double_type,
-	bool& float_type,
-	bool& int_type,
-	bool& long_long_type,
-	bool& long_type,
-	bool& short_type,
-	bool& signed_type,
-	bool& unsigned_type,
-	bool& void_type,
-	bool& wchar_t_type,
-	const declarative_region_shared_ptr_variant current_declarative_region
-)
-{
-	//simple_type_specifier
-	//class_specifier
-	//enum_specifier
-	//elaborated_type_specifier
-	//cv_qualifier
-
-	if(auto opt_simple_type_specifier_node = get<simple_type_specifier>(&type_specifier_node))
-	{
-		auto simple_type_specifier_node = *opt_simple_type_specifier_node;
-		//simple_template_type_specifier,
-
-		if(auto opt_nested_identifier_or_template_id_node = get<nested_identifier_or_template_id>(&simple_type_specifier_node))
-		{
-			auto nested_identifier_or_template_id_node = *opt_nested_identifier_or_template_id_node;
-			t =
-				std::shared_ptr<const class_>
-				(
-					detail::name_lookup::find
-					<
-						semantic_entities::class_,
-						false,
-						false
-					>
-					(
-						nested_identifier_or_template_id_node,
-						current_declarative_region
-					)
-				)
-			;
-		}
-		else if(auto opt_fundamental_type_specifier_node = get<fundamental_type_specifier>(&simple_type_specifier_node))
-		{
-			auto fundamental_type_specifier_node = *opt_fundamental_type_specifier_node;
-
-			if(get<predefined_text_node<str::char_>>(&fundamental_type_specifier_node))
-			{
-				char_type = true;
-			}
-			else if(get<predefined_text_node<str::wchar_t_>>(&fundamental_type_specifier_node))
-			{
-				wchar_t_type = true;
-			}
-			else if(get<predefined_text_node<str::bool_>>(&fundamental_type_specifier_node))
-			{
-				bool_type = true;
-			}
-			else if(get<predefined_text_node<str::short_>>(&fundamental_type_specifier_node))
-			{
-				short_type = true;
-			}
-			else if(get<predefined_text_node<str::int_>>(&fundamental_type_specifier_node))
-			{
-				int_type = true;
-			}
-			else if(get<predefined_text_node<str::long_>>(&fundamental_type_specifier_node))
-			{
-				if(!long_type)
-					long_type = true;
-				else
-					long_long_type = true;
-			}
-			else if(get<predefined_text_node<str::signed_>>(&fundamental_type_specifier_node))
-			{
-				signed_type = true;
-			}
-			else if(get<predefined_text_node<str::unsigned_>>(&fundamental_type_specifier_node))
-			{
-				unsigned_type = true;
-			}
-			else if(get<predefined_text_node<str::float_>>(&fundamental_type_specifier_node))
-			{
-				float_type = true;
-			}
-			else if(get<predefined_text_node<str::double_>>(&fundamental_type_specifier_node))
-			{
-				double_type = true;
-			}
-			else if(get<predefined_text_node<str::void_>>(&fundamental_type_specifier_node))
-			{
-				void_type = true;
-			}
-		}
-	}
 }
 
 std::shared_ptr<const semantic_entities::fundamental_type>
