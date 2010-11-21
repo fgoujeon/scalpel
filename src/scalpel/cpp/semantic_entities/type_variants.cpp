@@ -44,11 +44,16 @@ get_name(const named_compound_type_shared_ptr_variant var)
 
 struct to_type_shared_ptr_variant_impl_struct: public utility::static_visitor<type_shared_ptr_variant>
 {
-	template<class T>
 	type_shared_ptr_variant
-	operator()(std::shared_ptr<T> t) const
+	operator()(std::shared_ptr<class_> t) const
 	{
-		return type_shared_ptr_variant(std::shared_ptr<const T>(t));
+		return type_shared_ptr_variant(std::shared_ptr<const class_>(t));
+	}
+
+	type_shared_ptr_variant
+	operator()(std::shared_ptr<typedef_> t) const
+	{
+		return t->type();
 	}
 };
 to_type_shared_ptr_variant_impl_struct to_type_shared_ptr_variant_impl;
