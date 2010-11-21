@@ -68,6 +68,8 @@ class class_:
 
 		typedef utility::vector<member_t> members_t;
 		typedef utility::vector<open_declarative_region_shared_ptr_variant> open_declarative_region_shared_ptr_variants_t;
+		typedef utility::vector<named_compound_type_shared_ptr_variant> named_compound_type_shared_ptr_variants_t;
+
 		typedef utility::vector<std::shared_ptr<class_>> classes_t;
 		typedef utility::vector<std::shared_ptr<typedef_>> typedefs_t;
 		typedef utility::vector<std::shared_ptr<constructor>> constructors_t;
@@ -117,6 +119,9 @@ class class_:
 
 		const open_declarative_region_shared_ptr_variants_t&
 		open_declarative_regions();
+
+		const named_compound_type_shared_ptr_variants_t&
+		named_compound_types();
 
 		classes_t::range
 		base_classes();
@@ -274,6 +279,7 @@ class class_:
 
 		//polymorphic containers
 		open_declarative_region_shared_ptr_variants_t open_declarative_regions_;
+		named_compound_type_shared_ptr_variants_t named_compound_types_;
 
 		//member information
 		std::map<std::shared_ptr<const class_>, access> base_class_access_;

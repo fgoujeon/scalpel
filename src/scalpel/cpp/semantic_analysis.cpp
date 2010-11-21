@@ -882,12 +882,13 @@ create_type
 			if(auto opt_nested_identifier_or_template_id_node = get<nested_identifier_or_template_id>(&simple_type_specifier_node))
 			{
 				auto nested_identifier_or_template_id_node = *opt_nested_identifier_or_template_id_node;
+
 				opt_return_type =
-					std::shared_ptr<const class_>
+					to_type_shared_ptr_variant
 					(
 						detail::name_lookup::find
 						<
-							semantic_entities::class_,
+							named_compound_type_shared_ptr_variant,
 							false,
 							false
 						>

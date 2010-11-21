@@ -89,6 +89,12 @@ namespace_::namespaces_and_namespace_aliases()
 	return namespaces_and_namespace_aliases_;
 }
 
+const namespace_::named_compound_type_shared_ptr_variants_t&
+namespace_::named_compound_types()
+{
+	return named_compound_types_;
+}
+
 namespace_::namespaces_t::range
 namespace_::namespaces()
 {
@@ -188,6 +194,7 @@ namespace_::add_member(std::shared_ptr<class_> member)
 	member->enclosing_declarative_region(shared_from_this());
     classes_.push_back(member);
 	open_declarative_regions_.push_back(member);
+	named_compound_types_.push_back(member);
 }
 
 void
@@ -195,6 +202,7 @@ namespace_::add_member(std::shared_ptr<typedef_> member)
 {
 	member->enclosing_declarative_region(shared_from_this());
     typedefs_.push_back(member);
+	named_compound_types_.push_back(member);
 }
 
 void

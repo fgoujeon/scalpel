@@ -49,6 +49,7 @@ class namespace_:
 	public:
 		typedef utility::vector<open_declarative_region_shared_ptr_variant> open_declarative_region_shared_ptr_variants_t;
 		typedef utility::vector<namespace_or_namespace_alias_shared_ptr_variant> namespace_or_namespace_alias_shared_ptr_variants_t;
+		typedef utility::vector<named_compound_type_shared_ptr_variant> named_compound_type_shared_ptr_variants_t;
 
 		typedef utility::vector<std::shared_ptr<namespace_alias>> namespace_aliases_t;
 		typedef utility::vector<std::shared_ptr<namespace_>> namespaces_t;
@@ -112,6 +113,9 @@ class namespace_:
 
 		const namespace_or_namespace_alias_shared_ptr_variants_t&
 		namespaces_and_namespace_aliases();
+
+		const named_compound_type_shared_ptr_variants_t&
+		named_compound_types();
 
 		namespaces_t::range
 		namespaces();
@@ -189,6 +193,7 @@ class namespace_:
 		//polymorphic containers
 		open_declarative_region_shared_ptr_variants_t open_declarative_regions_;
 		namespace_or_namespace_alias_shared_ptr_variants_t namespaces_and_namespace_aliases_;
+		named_compound_type_shared_ptr_variants_t named_compound_types_;
 
 		//members
 		namespace_aliases_t namespace_aliases_;

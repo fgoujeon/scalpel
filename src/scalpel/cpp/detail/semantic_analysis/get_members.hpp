@@ -43,6 +43,12 @@ struct get_members_type_traits<semantic_entities::namespace_or_namespace_alias_s
 };
 
 template<>
+struct get_members_type_traits<semantic_entities::named_compound_type_shared_ptr_variant>
+{
+	typedef utility::vector<semantic_entities::named_compound_type_shared_ptr_variant> return_type;
+};
+
+template<>
 struct get_members_type_traits<semantic_entities::namespace_alias>
 {
 	typedef utility::vector<std::shared_ptr<semantic_entities::namespace_alias>>::range return_type;
