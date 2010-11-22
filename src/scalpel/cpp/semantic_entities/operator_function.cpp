@@ -63,7 +63,7 @@ operator_function::return_type() const
 	return impl_->return_type();
 }
 
-const std::list<operator_function::parameter>&
+const operator_function::parameters_t&
 operator_function::parameters() const
 {
 	return impl_->parameters();

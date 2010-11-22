@@ -335,7 +335,7 @@ print_simple_function
 	print_type(entity->return_type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</return_type>\n";
 
-	const std::list<simple_function::parameter>& parameters = entity->parameters();
+	const simple_function::parameters_t& parameters = entity->parameters();
 	if(!parameters.empty())
 	{
 		std::cout << indent(indent_level + 1) << "<parameters>\n";
@@ -389,7 +389,7 @@ print_operator_function
 	print_type(entity->return_type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</return_type>\n";
 
-	const std::list<simple_function::parameter>& parameters = entity->parameters();
+	const simple_function::parameters_t& parameters = entity->parameters();
 	if(!parameters.empty())
 	{
 		std::cout << indent(indent_level + 1) << "<parameters>\n";
@@ -440,16 +440,16 @@ print_conversion_function
 void
 print_parameter
 (
-	const simple_function::parameter& p,
+	const std::shared_ptr<const simple_function::parameter> p,
 	const unsigned int indent_level
 )
 {
 	std::cout << indent(indent_level) << "<parameter";
-	if(!p.name().empty())
-		std::cout << " name=\"" << p.name() << "\"";
+	if(!p->name().empty())
+		std::cout << " name=\"" << p->name() << "\"";
 	std::cout << ">\n";
 	std::cout << indent(indent_level + 1) << "<type>\n";
-	print_type(p.type(), indent_level + 2);
+	print_type(p->type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</type>\n";
 	std::cout << indent(indent_level) << "</parameter>\n";
 }

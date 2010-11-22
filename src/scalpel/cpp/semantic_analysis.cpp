@@ -746,7 +746,7 @@ create_parameters
 	const declarative_region_shared_ptr_variant current_declarative_region
 )
 {
-	std::list<simple_function::parameter> parameters;
+	simple_function::parameters_t parameters;
 
 	for
 	(
@@ -776,13 +776,10 @@ create_parameters
 
 			parameters.push_back
 			(
-				std::move
+				std::make_shared<simple_function::parameter>
 				(
-					simple_function::parameter
-					(
-						decorate_type(type, declarator_node),
-						detail::get_identifier(declarator_node).value()
-					)
+					decorate_type(type, declarator_node),
+					detail::get_identifier(declarator_node).value()
 				)
 			);
 		}
@@ -801,13 +798,10 @@ create_parameters
 
 			parameters.push_back
 			(
-				std::move
+				std::make_shared<simple_function::parameter>
 				(
-					simple_function::parameter
-					(
-						type,
-						""
-					)
+					type,
+					""
 				)
 			);
 		}
@@ -815,13 +809,10 @@ create_parameters
 		{
 			parameters.push_back
 			(
-				std::move
+				std::make_shared<simple_function::parameter>
 				(
-					simple_function::parameter
-					(
-						type,
-						""
-					)
+					type,
+					""
 				)
 			);
 		}

@@ -45,7 +45,7 @@ class simple_function:
 		class parameter;
 
 		typedef std::vector<declarative_region_shared_ptr_variant> declarative_region_shared_ptr_variants_t;
-		typedef std::list<parameter> parameters_t;
+		typedef utility::shared_ptr_vector<parameter> parameters_t;
 
 	private:
         simple_function
@@ -117,7 +117,7 @@ class simple_function:
     private:
         std::string name_;
 		type_shared_ptr_variant return_type_;
-		std::list<parameter> parameters_;
+		parameters_t parameters_;
 		bool is_inline_;
 		bool is_static_;
 		declarative_region_member_impl declarative_region_member_impl_;

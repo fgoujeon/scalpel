@@ -29,7 +29,7 @@ simple_function::simple_function
 (
 	const std::string& name,
 	const type_shared_ptr_variant& return_type,
-	std::list<parameter>&& parameters,
+	parameters_t&& parameters,
 	bool is_inline,
 	bool is_static
 ):
@@ -95,7 +95,7 @@ simple_function::has_same_parameters(const simple_function& f) const
 	{
 		auto param = *i;
 		auto param2 = *j;
-		if(!are_pointed_objects_equal(param.type(), param2.type()))
+		if(!are_pointed_objects_equal(param->type(), param2->type()))
 			return false;
 	}
 
@@ -114,7 +114,7 @@ simple_function::return_type() const
 	return return_type_;
 }
 
-const std::list<simple_function::parameter>&
+const simple_function::parameters_t&
 simple_function::parameters() const
 {
 	return parameters_;
@@ -185,7 +185,7 @@ operator==(const simple_function& lhs, const simple_function& rhs)
 		lhs.defined() == rhs.defined() &&
 		*lhs.body() == *rhs.body() &&
 		utility::are_pointed_objects_equal(lhs.return_type(), rhs.return_type()) &&
-		lhs.parameters() == rhs.parameters()
+		utility::are_pointed_objects_equal(lhs.parameters(), rhs.parameters())
 	;
 }
 
