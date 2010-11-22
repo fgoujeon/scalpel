@@ -28,9 +28,10 @@ operator_function::operator_function
 	const operator_ op,
 	const type_shared_ptr_variant& return_type,
 	parameters_t&& parameters,
-	const bool is_is_inline
+	const bool is_inline,
+	const bool is_static
 ):
-	impl_(simple_function::make_shared("", return_type, std::move(parameters), is_is_inline, false)),
+	impl_(simple_function::make_shared("", return_type, std::move(parameters), is_inline, is_static)),
     op_(op)
 {
 }
@@ -72,6 +73,12 @@ bool
 operator_function::is_inline() const
 {
 	return impl_->is_inline();
+}
+
+bool
+operator_function::is_static() const
+{
+	return impl_->is_static();
 }
 
 bool

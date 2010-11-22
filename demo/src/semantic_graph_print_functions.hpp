@@ -42,7 +42,7 @@ print_type
 );
 
 void
-print
+print_fundamental_type
 (
 	std::shared_ptr<const fundamental_type>
 );
@@ -71,49 +71,49 @@ print_base_class
 );
 
 void
-print
+print_constructor
 (
 	std::shared_ptr<const class_::constructor> c,
 	const unsigned int indent_level
 );
 
 void
-print
+print_destructor
 (
 	std::shared_ptr<const class_::destructor> d,
 	const unsigned int indent_level
 );
 
 void
-print
+print_simple_function
 (
 	std::shared_ptr<const simple_function> f,
 	const unsigned int indent_level
 );
 
 void
-print
+print_operator_function
 (
 	std::shared_ptr<const operator_function> f,
 	const unsigned int indent_level
 );
 
 void
-print
+print_conversion_function
 (
 	std::shared_ptr<const class_::conversion_function> f,
 	const unsigned int indent_level
 );
 
 void
-print
+print_parameter
 (
 	const simple_function::parameter& p,
 	const unsigned int indent_level
 );
 
 void
-print
+print_variable
 (
 	std::shared_ptr<const variable> v,
 	const unsigned int indent_level

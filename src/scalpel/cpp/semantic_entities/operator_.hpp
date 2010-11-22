@@ -24,7 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-enum operator_
+enum class operator_
 {
 	NEW,
 	NEW_ARRAY,

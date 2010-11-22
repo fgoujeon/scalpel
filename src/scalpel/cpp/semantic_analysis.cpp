@@ -554,6 +554,7 @@ create_operator_function
 	const syntax_nodes::declarator& declarator_node,
 	const semantic_entities::type_shared_ptr_variant type,
 	const bool is_inline,
+	const bool is_static,
 	const declarative_region_shared_ptr_variant current_declarative_region
 )
 {
@@ -686,7 +687,8 @@ create_operator_function
 		op,
 		type,
 		create_parameters(detail::get_parameter_declaration_list(declarator_node), current_declarative_region),
-		is_inline
+		is_inline,
+		is_static
 	);
 }
 
@@ -1492,6 +1494,7 @@ create_entity
 				declarator_node,
 				*opt_type,
 				has_inline_specifier,
+				has_static_specifier,
 				current_declarative_region
 			);
 		}

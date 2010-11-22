@@ -110,6 +110,7 @@ create_operator_function
 	const syntax_nodes::declarator& declarator_node,
 	const semantic_entities::type_shared_ptr_variant type,
 	const bool is_inline,
+	const bool is_static,
 	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 );
 

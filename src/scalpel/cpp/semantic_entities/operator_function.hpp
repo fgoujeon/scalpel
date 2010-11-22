@@ -42,7 +42,8 @@ class operator_function
 			const operator_ op,
 			const type_shared_ptr_variant& return_type,
 			parameters_t&& parameters,
-			const bool is_is_inline
+			const bool is_inline,
+			const bool is_static
 		);
 
 		bool
@@ -62,6 +63,9 @@ class operator_function
 
 		bool
 		is_inline() const;
+
+		bool
+		is_static() const;
 
 		bool
 		defined() const;

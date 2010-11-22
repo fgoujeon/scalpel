@@ -36,7 +36,7 @@ print_type
 	if(auto opt_type_ptr = scalpel::utility::get<std::shared_ptr<const fundamental_type>>(&n))
 	{
 		std::cout << indent(indent_level) << "<fundamental_type type=\"";
-		print(*opt_type_ptr);
+		print_fundamental_type(*opt_type_ptr);
 	   	std::cout << "\"/>\n";
 	}
 	else if(auto opt_type_ptr = scalpel::utility::get<std::shared_ptr<const const_>>(&n))
@@ -76,7 +76,7 @@ print_type
 }
 
 void
-print
+print_fundamental_type
 (
 	std::shared_ptr<const fundamental_type> built_in_t
 )
@@ -143,13 +143,13 @@ print_namespace
 		print_typedef(*i, indent_level + 1);
 
 	for(auto i = n->simple_functions().begin(); i != n->simple_functions().end(); ++i)
-		print(*i, indent_level + 1);
+		print_simple_function(*i, indent_level + 1);
 
 	for(auto i = n->operator_functions().begin(); i != n->operator_functions().end(); ++i)
-		print(*i, indent_level + 1);
+		print_operator_function(*i, indent_level + 1);
 
 	for(auto i = n->variables().begin(); i != n->variables().end(); ++i)
-		print(*i, indent_level + 1);
+		print_variable(*i, indent_level + 1);
 
 	std::cout << indent(indent_level) << "</namespace>\n";
 }
@@ -196,21 +196,21 @@ print_class
 		print_class(*i, indent_level + 1);
 
 	for(auto i = c->constructors().begin(); i != c->constructors().end(); ++i)
-		print(*i, indent_level + 1);
+		print_constructor(*i, indent_level + 1);
 
-	print(c->get_destructor(), indent_level + 1);
+	print_destructor(c->get_destructor(), indent_level + 1);
 
 	for(auto i = c->simple_functions().begin(); i != c->simple_functions().end(); ++i)
-		print(*i, indent_level + 1);
+		print_simple_function(*i, indent_level + 1);
 
 	for(auto i = c->operator_functions().begin(); i != c->operator_functions().end(); ++i)
-		print(*i, indent_level + 1);
+		print_operator_function(*i, indent_level + 1);
 
 	for(auto i = c->conversion_functions().begin(); i != c->conversion_functions().end(); ++i)
-		print(*i, indent_level + 1);
+		print_conversion_function(*i, indent_level + 1);
 
 	for(auto i = c->variables().begin(); i != c->variables().end(); ++i)
-		print(*i, indent_level + 1);
+		print_variable(*i, indent_level + 1);
 
 	std::cout << indent(indent_level) << "</class>\n";
 }
@@ -233,7 +233,7 @@ print_base_class
 }
 
 void
-print
+print_constructor
 (
 	std::shared_ptr<const class_::constructor> entity,
 	const unsigned int indent_level
@@ -259,7 +259,7 @@ print
 		std::cout << indent(indent_level + 1) << "<parameters>\n";
 		for(auto i = parameters.begin(); i != parameters.end(); ++i)
 		{
-			print(*i, indent_level + 2);
+			print_parameter(*i, indent_level + 2);
 		}
 		std::cout << indent(indent_level + 1) << "</parameters>\n";
 	}
@@ -268,7 +268,7 @@ print
 }
 
 void
-print
+print_destructor
 (
 	std::shared_ptr<const class_::destructor> entity,
 	const unsigned int indent_level
@@ -294,7 +294,7 @@ print
 }
 
 void
-print
+print_simple_function
 (
 	std::shared_ptr<const simple_function> entity,
 	const unsigned int indent_level
@@ -341,7 +341,7 @@ print
 		std::cout << indent(indent_level + 1) << "<parameters>\n";
 		for(auto i = parameters.begin(); i != parameters.end(); ++i)
 		{
-			print(*i, indent_level + 2);
+			print_parameter(*i, indent_level + 2);
 		}
 		std::cout << indent(indent_level + 1) << "</parameters>\n";
 	}
@@ -350,7 +350,7 @@ print
 }
 
 void
-print
+print_operator_function
 (
 	std::shared_ptr<const operator_function> entity,
 	const unsigned int indent_level
@@ -381,6 +381,8 @@ print
 	}
 	if(entity->is_inline())
 		std::cout << " inline=\"true\"";
+	if(entity->is_static())
+		std::cout << " static=\"true\"";
 	std::cout << ">\n";
 
 	std::cout << indent(indent_level + 1) << "<return_type>\n";
@@ -393,7 +395,7 @@ print
 		std::cout << indent(indent_level + 1) << "<parameters>\n";
 		for(auto i = parameters.begin(); i != parameters.end(); ++i)
 		{
-			print(*i, indent_level + 2);
+			print_parameter(*i, indent_level + 2);
 		}
 		std::cout << indent(indent_level + 1) << "</parameters>\n";
 	}
@@ -402,7 +404,7 @@ print
 }
 
 void
-print
+print_conversion_function
 (
 	std::shared_ptr<const class_::conversion_function> entity,
 	const unsigned int indent_level
@@ -436,7 +438,7 @@ print
 }
 
 void
-print
+print_parameter
 (
 	const simple_function::parameter& p,
 	const unsigned int indent_level
@@ -453,7 +455,7 @@ print
 }
 
 void
-print
+print_variable
 (
 	std::shared_ptr<const variable> entity,
 	const unsigned int indent_level
