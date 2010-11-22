@@ -22,7 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_GET_MEMBERS_HPP
 
 #include <scalpel/cpp/semantic_graph.hpp>
-#include <scalpel/utility/vector.hpp>
+#include <scalpel/utility/shared_ptr_vector.hpp>
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
 {
@@ -33,61 +33,61 @@ struct get_members_type_traits;
 template<>
 struct get_members_type_traits<semantic_entities::open_declarative_region_shared_ptr_variant>
 {
-	typedef utility::vector<semantic_entities::open_declarative_region_shared_ptr_variant> return_type;
+	typedef std::vector<semantic_entities::open_declarative_region_shared_ptr_variant> return_type;
 };
 
 template<>
 struct get_members_type_traits<semantic_entities::namespace_or_namespace_alias_shared_ptr_variant>
 {
-	typedef utility::vector<semantic_entities::namespace_or_namespace_alias_shared_ptr_variant> return_type;
+	typedef std::vector<semantic_entities::namespace_or_namespace_alias_shared_ptr_variant> return_type;
 };
 
 template<>
 struct get_members_type_traits<semantic_entities::named_compound_type_shared_ptr_variant>
 {
-	typedef utility::vector<semantic_entities::named_compound_type_shared_ptr_variant> return_type;
+	typedef std::vector<semantic_entities::named_compound_type_shared_ptr_variant> return_type;
 };
 
 template<>
 struct get_members_type_traits<semantic_entities::namespace_alias>
 {
-	typedef utility::vector<std::shared_ptr<semantic_entities::namespace_alias>>::range return_type;
+	typedef utility::shared_ptr_vector<semantic_entities::namespace_alias>::range return_type;
 };
 
 template<>
 struct get_members_type_traits<semantic_entities::namespace_>
 {
-	typedef utility::vector<std::shared_ptr<semantic_entities::namespace_>>::range return_type;
+	typedef utility::shared_ptr_vector<semantic_entities::namespace_>::range return_type;
 };
 
 template<>
 struct get_members_type_traits<semantic_entities::class_>
 {
-	typedef utility::vector<std::shared_ptr<semantic_entities::class_>>::range return_type;
+	typedef utility::shared_ptr_vector<semantic_entities::class_>::range return_type;
 };
 
 template<>
 struct get_members_type_traits<semantic_entities::simple_function>
 {
-	typedef utility::vector<std::shared_ptr<semantic_entities::simple_function>>::range return_type;
+	typedef utility::shared_ptr_vector<semantic_entities::simple_function>::range return_type;
 };
 
 template<>
 struct get_members_type_traits<semantic_entities::operator_function>
 {
-	typedef utility::vector<std::shared_ptr<semantic_entities::operator_function>>::range return_type;
+	typedef utility::shared_ptr_vector<semantic_entities::operator_function>::range return_type;
 };
 
 template<>
 struct get_members_type_traits<semantic_entities::statement_block>
 {
-	typedef utility::vector<std::shared_ptr<semantic_entities::statement_block>>::range return_type;
+	typedef utility::shared_ptr_vector<semantic_entities::statement_block>::range return_type;
 };
 
 template<>
 struct get_members_type_traits<semantic_entities::variable>
 {
-	typedef utility::vector<std::shared_ptr<semantic_entities::variable>>::range return_type;
+	typedef utility::shared_ptr_vector<semantic_entities::variable>::range return_type;
 };
 
 

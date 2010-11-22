@@ -47,18 +47,18 @@ class namespace_:
 	public boost::noncopyable
 {
 	public:
-		typedef utility::vector<open_declarative_region_shared_ptr_variant> open_declarative_region_shared_ptr_variants_t;
-		typedef utility::vector<namespace_or_namespace_alias_shared_ptr_variant> namespace_or_namespace_alias_shared_ptr_variants_t;
-		typedef utility::vector<named_compound_type_shared_ptr_variant> named_compound_type_shared_ptr_variants_t;
+		typedef std::vector<open_declarative_region_shared_ptr_variant> open_declarative_region_shared_ptr_variants_t;
+		typedef std::vector<namespace_or_namespace_alias_shared_ptr_variant> namespace_or_namespace_alias_shared_ptr_variants_t;
+		typedef std::vector<named_compound_type_shared_ptr_variant> named_compound_type_shared_ptr_variants_t;
 
-		typedef utility::vector<std::shared_ptr<namespace_alias>> namespace_aliases_t;
-		typedef utility::vector<std::shared_ptr<namespace_>> namespaces_t;
-		typedef utility::vector<std::weak_ptr<namespace_>> weak_namespaces_t;
-		typedef utility::vector<std::shared_ptr<class_>> classes_t;
-		typedef utility::vector<std::shared_ptr<typedef_>> typedefs_t;
-		typedef utility::vector<std::shared_ptr<simple_function>> simple_functions_t;
-		typedef utility::vector<std::shared_ptr<operator_function>> operator_functions_t;
-		typedef utility::vector<std::shared_ptr<variable>> variables_t;
+		typedef std::vector<std::weak_ptr<namespace_>> weak_namespaces_t;
+		typedef utility::shared_ptr_vector<namespace_alias> namespace_aliases_t;
+		typedef utility::shared_ptr_vector<namespace_> namespaces_t;
+		typedef utility::shared_ptr_vector<class_> classes_t;
+		typedef utility::shared_ptr_vector<typedef_> typedefs_t;
+		typedef utility::shared_ptr_vector<simple_function> simple_functions_t;
+		typedef utility::shared_ptr_vector<operator_function> operator_functions_t;
+		typedef utility::shared_ptr_vector<variable> variables_t;
 
 	private:
 		/**

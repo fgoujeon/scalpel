@@ -27,12 +27,12 @@ namespace scalpel { namespace utility
 /**
  * Test contained pointed objects for equality.
  */
-template<typename T, template<typename> class ContainerT>
+template<typename T>
 bool
 are_pointed_objects_equal
 (
-	const ContainerT<std::shared_ptr<T>>& lhs,
-	const ContainerT<std::shared_ptr<T>>& rhs
+	const shared_ptr_vector<T>& lhs,
+	const shared_ptr_vector<T>& rhs
 )
 {
 	if(lhs.size() == rhs.size())
@@ -54,12 +54,12 @@ are_pointed_objects_equal
 /**
  * Test contained pointed objects for equality.
  */
-template<typename T, template<typename> class ContainerT>
+template<typename T>
 bool
 are_pointed_objects_equal
 (
-	const ContainerT<std::weak_ptr<T>>& lhs,
-	const ContainerT<std::weak_ptr<T>>& rhs
+	const std::vector<std::weak_ptr<T>>& lhs,
+	const std::vector<std::weak_ptr<T>>& rhs
 )
 {
 	if(lhs.size() == rhs.size())
@@ -77,7 +77,6 @@ are_pointed_objects_equal
 		return false;
 	}
 }
-
 
 
 

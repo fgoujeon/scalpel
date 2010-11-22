@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_UTILITY_IS_EMPTY_HPP
 #define SCALPEL_UTILITY_IS_EMPTY_HPP
 
-#include "vector.hpp"
+#include "shared_ptr_vector.hpp"
 #include <boost/optional.hpp>
 #include <vector>
 #include <set>
@@ -43,7 +43,7 @@ is_empty(const std::set<T>& container);
 template<class T>
 inline
 bool
-is_empty(const vector<T>& container);
+is_empty(const shared_ptr_vector<T>& container);
 
 template<class T>
 inline

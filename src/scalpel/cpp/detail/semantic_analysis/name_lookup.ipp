@@ -440,7 +440,7 @@ typename return_type<EntityT, Multiple, Optional>::type
 impl::find_entities_in_base_classes
 (
 	const std::string& name,
-	utility::vector<std::shared_ptr<semantic_entities::class_>>::range base_classes
+	utility::shared_ptr_vector<semantic_entities::class_>::range base_classes
 )
 {
 	typename return_type<EntityT, true, Optional>::type found_entities;

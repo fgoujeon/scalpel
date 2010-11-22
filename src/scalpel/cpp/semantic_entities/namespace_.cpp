@@ -245,14 +245,14 @@ operator==(const namespace_& lhs, const namespace_& rhs)
 {
 	return
 		lhs.name() == rhs.name() &&
-		are_pointed_objects_equal(lhs.namespaces(), rhs.namespaces()) &&
-		are_pointed_objects_equal(lhs.classes(), rhs.classes()) &&
-		are_pointed_objects_equal(lhs.typedefs(), rhs.typedefs()) &&
-		are_pointed_objects_equal(lhs.simple_functions(), rhs.simple_functions()) &&
-		are_pointed_objects_equal(lhs.operator_functions(), rhs.operator_functions()) &&
-		are_pointed_objects_equal(lhs.variables(), rhs.variables()) &&
-		are_pointed_objects_equal(lhs.namespace_aliases(), rhs.namespace_aliases()) &&
-		are_pointed_objects_equal(lhs.using_directive_namespaces(), rhs.using_directive_namespaces())
+		utility::are_pointed_objects_equal(lhs.namespaces(), rhs.namespaces()) &&
+		utility::are_pointed_objects_equal(lhs.classes(), rhs.classes()) &&
+		utility::are_pointed_objects_equal(lhs.typedefs(), rhs.typedefs()) &&
+		utility::are_pointed_objects_equal(lhs.simple_functions(), rhs.simple_functions()) &&
+		utility::are_pointed_objects_equal(lhs.operator_functions(), rhs.operator_functions()) &&
+		utility::are_pointed_objects_equal(lhs.variables(), rhs.variables()) &&
+		utility::are_pointed_objects_equal(lhs.namespace_aliases(), rhs.namespace_aliases()) &&
+		utility::are_pointed_objects_equal(lhs.using_directive_namespaces(), rhs.using_directive_namespaces())
 	;
 }
 

@@ -87,8 +87,8 @@ bool
 operator==(const statement_block& lhs, const statement_block& rhs)
 {
 	return
-		are_pointed_objects_equal(lhs.statement_blocks(), rhs.statement_blocks()) &&
-		are_pointed_objects_equal(lhs.variables(), rhs.variables())
+		utility::are_pointed_objects_equal(lhs.statement_blocks(), rhs.statement_blocks()) &&
+		utility::are_pointed_objects_equal(lhs.variables(), rhs.variables())
 	;
 }
 

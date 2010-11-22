@@ -28,7 +28,7 @@ void
 impl::apply_using_directives
 (
 	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region,
-	const utility::vector<std::weak_ptr<semantic_entities::namespace_>>& using_directive_namespaces,
+	const std::vector<std::weak_ptr<semantic_entities::namespace_>>& using_directive_namespaces,
 	namespace_association_map& namespace_associations
 )
 {

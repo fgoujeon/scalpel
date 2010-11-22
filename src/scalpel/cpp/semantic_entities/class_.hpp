@@ -28,7 +28,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "declarative_region_member_impl.hpp"
 #include "declarative_region_variants.hpp"
 #include "type_variants_fwd.hpp"
-#include <scalpel/utility/vector.hpp>
+#include <scalpel/utility/shared_ptr_vector.hpp>
 #include <boost/noncopyable.hpp>
 #include <string>
 #include <vector>
@@ -66,17 +66,17 @@ class class_:
 			member_t
 		;
 
-		typedef utility::vector<member_t> members_t;
-		typedef utility::vector<open_declarative_region_shared_ptr_variant> open_declarative_region_shared_ptr_variants_t;
-		typedef utility::vector<named_compound_type_shared_ptr_variant> named_compound_type_shared_ptr_variants_t;
+		typedef std::vector<member_t> members_t;
+		typedef std::vector<open_declarative_region_shared_ptr_variant> open_declarative_region_shared_ptr_variants_t;
+		typedef std::vector<named_compound_type_shared_ptr_variant> named_compound_type_shared_ptr_variants_t;
 
-		typedef utility::vector<std::shared_ptr<class_>> classes_t;
-		typedef utility::vector<std::shared_ptr<typedef_>> typedefs_t;
-		typedef utility::vector<std::shared_ptr<constructor>> constructors_t;
-		typedef utility::vector<std::shared_ptr<simple_function>> simple_functions_t;
-		typedef utility::vector<std::shared_ptr<operator_function>> operator_functions_t;
-		typedef utility::vector<std::shared_ptr<conversion_function>> conversion_functions_t;
-		typedef utility::vector<std::shared_ptr<variable>> variables_t;
+		typedef utility::shared_ptr_vector<class_> classes_t;
+		typedef utility::shared_ptr_vector<typedef_> typedefs_t;
+		typedef utility::shared_ptr_vector<constructor> constructors_t;
+		typedef utility::shared_ptr_vector<simple_function> simple_functions_t;
+		typedef utility::shared_ptr_vector<operator_function> operator_functions_t;
+		typedef utility::shared_ptr_vector<conversion_function> conversion_functions_t;
+		typedef utility::shared_ptr_vector<variable> variables_t;
 
 		enum class access
 		{

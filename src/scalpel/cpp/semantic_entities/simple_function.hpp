@@ -44,7 +44,7 @@ class simple_function:
     public:
 		class parameter;
 
-		typedef utility::vector<declarative_region_shared_ptr_variant> declarative_region_shared_ptr_variants_t;
+		typedef std::vector<declarative_region_shared_ptr_variant> declarative_region_shared_ptr_variants_t;
 		typedef std::list<parameter> parameters_t;
 
 	private:

@@ -22,7 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_STATEMENT_BLOCK_HPP
 
 #include "variable.hpp"
-#include <scalpel/utility/vector.hpp>
+#include <scalpel/utility/shared_ptr_vector.hpp>
 #include <string>
 #include <memory>
 
@@ -38,11 +38,12 @@ Represents a C++ statement block.
 class statement_block
 {
     public:
-		typedef utility::vector<open_declarative_region_shared_ptr_variant> open_declarative_region_shared_ptr_variants_t;
-		typedef utility::vector<std::weak_ptr<namespace_>> weak_namespaces_t;
-		typedef utility::vector<std::shared_ptr<statement_block>> statement_blocks_t;
-		typedef utility::vector<std::shared_ptr<variable>> variables_t;
-		typedef utility::vector<std::shared_ptr<namespace_alias>> namespace_aliases_t;
+		typedef std::vector<open_declarative_region_shared_ptr_variant> open_declarative_region_shared_ptr_variants_t;
+
+		typedef std::vector<std::weak_ptr<namespace_>> weak_namespaces_t;
+		typedef utility::shared_ptr_vector<statement_block> statement_blocks_t;
+		typedef utility::shared_ptr_vector<variable> variables_t;
+		typedef utility::shared_ptr_vector<namespace_alias> namespace_aliases_t;
 
         statement_block();
 

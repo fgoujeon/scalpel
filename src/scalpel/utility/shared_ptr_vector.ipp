@@ -18,45 +18,29 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_UTILITY_IS_EMPTY_IPP
-#define SCALPEL_UTILITY_IS_EMPTY_IPP
+#ifndef SCALPEL_UTILITY_SHARED_PTR_VECTOR_IPP
+#define SCALPEL_UTILITY_SHARED_PTR_VECTOR_IPP
 
 namespace scalpel { namespace utility
 {
 
-template<class T>
-bool
-is_empty(const std::vector<T>& container)
+template<typename T>
+shared_ptr_vector<T>::shared_ptr_vector()
 {
-	return container.empty();
 }
 
-template<class T>
-bool
-is_empty(const std::set<T>& container)
+template<typename T>
+shared_ptr_vector<T>::shared_ptr_vector(shared_ptr_vector&& o):
+	raw_vector_(std::move(o.raw_vector_))
 {
-	return container.empty();
 }
 
-template<class T>
-bool
-is_empty(const shared_ptr_vector<T>& container)
+template<typename T>
+const shared_ptr_vector<T>&
+shared_ptr_vector<T>::operator=(shared_ptr_vector&& o)
 {
-	return container.empty();
-}
-
-template<class T>
-bool
-is_empty(const std::shared_ptr<T>& container)
-{
-	return !container;
-}
-
-template<class T>
-bool
-is_empty(const boost::optional<T>& container)
-{
-	return !container;
+	raw_vector_ = std::move(o.raw_vector_);
+	return *this;
 }
 
 }} //namespace scalpel::utility
