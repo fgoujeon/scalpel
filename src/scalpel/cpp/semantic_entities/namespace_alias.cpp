@@ -33,5 +33,21 @@ namespace_alias::namespace_alias
 {
 }
 
+bool
+operator==(const namespace_alias& lhs, const namespace_alias& rhs)
+{
+	return
+		lhs.name() == rhs.name() //&&
+		//TODO how to prevent cyclic dependency?
+		//lhs.referred_namespace() == rhs.referred_namespace()
+	;
+}
+
+bool
+operator!=(const namespace_alias& lhs, const namespace_alias& rhs)
+{
+	return !operator==(lhs, rhs);
+}
+
 }}} //namespace scalpel::cpp::semantic_entities
 

@@ -250,9 +250,9 @@ operator==(const namespace_& lhs, const namespace_& rhs)
 		are_pointed_objects_equal(lhs.typedefs(), rhs.typedefs()) &&
 		are_pointed_objects_equal(lhs.simple_functions(), rhs.simple_functions()) &&
 		are_pointed_objects_equal(lhs.operator_functions(), rhs.operator_functions()) &&
-		are_pointed_objects_equal(lhs.variables(), rhs.variables()) //&&
-		//are_pointed_objects_equal(lhs.namespace_aliases(), rhs.namespace_aliases()) &&
-		//are_pointed_objects_equal(lhs.using_directive_namespaces(), rhs.using_directive_namespaces())
+		are_pointed_objects_equal(lhs.variables(), rhs.variables()) &&
+		are_pointed_objects_equal(lhs.namespace_aliases(), rhs.namespace_aliases()) &&
+		are_pointed_objects_equal(lhs.using_directive_namespaces(), rhs.using_directive_namespaces())
 	;
 }
 

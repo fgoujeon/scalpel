@@ -42,6 +42,7 @@ class vector
 
 		typedef typename raw_vector_t::size_type size_type;
 		typedef typename raw_vector_t::value_type value_type;
+		typedef T& reference;
 		typedef const T& const_reference;
 
 		vector();
@@ -60,6 +61,18 @@ class vector
 		operator==(const vector& rhs)
 		{
 			return raw_vector_ == rhs.raw_vector_;
+		}
+
+		reference
+		operator[](const typename raw_vector_t::size_type n)
+		{
+			return raw_vector_[n];
+		}
+
+		const_reference
+		operator[](const typename raw_vector_t::size_type n) const
+		{
+			return raw_vector_[n];
 		}
 
 		size_type
