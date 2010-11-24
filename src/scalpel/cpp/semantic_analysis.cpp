@@ -267,7 +267,7 @@ fill_namespace
 		}
 		else
 		{
-			std::runtime_error("error: function_entity declaration missing");
+			throw std::runtime_error("error: function_entity declaration missing");
 		}
 	}
 	else
