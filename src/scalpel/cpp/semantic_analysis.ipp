@@ -21,8 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_IPP
 #define SCALPEL_CPP_SEMANTIC_ANALYSIS_IPP
 
-#include "detail/semantic_analysis/basic_functions.hpp"
 #include "detail/semantic_analysis/name_lookup.hpp"
+#include "detail/semantic_analysis/syntax_node_analysis.hpp"
 #include <scalpel/utility/variant.hpp>
 #include <sstream>
 
@@ -50,7 +50,7 @@ find_function
 	if
 	(
 		boost::optional<const syntax_nodes::nested_identifier_or_template_id&> opt_nested_identifier_or_template_id_node =
-			detail::get_nested_identifier_or_template_id(detail::get_declarator(function_definition_node))
+			detail::syntax_node_analysis::get_nested_identifier_or_template_id(detail::syntax_node_analysis::get_declarator(function_definition_node))
 	)
 	{
 		found_functions =

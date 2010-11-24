@@ -20,7 +20,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "semantic_analysis.hpp"
 #include "detail/semantic_analysis/name_lookup.hpp"
-#include "detail/semantic_analysis/basic_functions.hpp"
+#include "detail/semantic_analysis/syntax_node_analysis.hpp"
 #include <iostream>
 #include <stdexcept>
 
@@ -149,17 +149,19 @@ fill_namespace
 	{
 		const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
 
-		has_typedef_specifier = detail::has_typedef_specifier(decl_specifier_seq_node);
-		has_static_specifier = detail::has_static_specifier(decl_specifier_seq_node);
-		has_inline_specifier = detail::has_inline_specifier(decl_specifier_seq_node);
-		has_explicit_specifier = detail::has_explicit_specifier(decl_specifier_seq_node);
+		has_typedef_specifier = detail::syntax_node_analysis::has_typedef_specifier(decl_specifier_seq_node);
+		has_static_specifier = detail::syntax_node_analysis::has_static_specifier(decl_specifier_seq_node);
+		has_inline_specifier = detail::syntax_node_analysis::has_inline_specifier(decl_specifier_seq_node);
+		has_explicit_specifier = detail::syntax_node_analysis::has_explicit_specifier(decl_specifier_seq_node);
 
 		//create and/or get undecorated type
-		switch(detail::get_decl_specifier_seq_type(decl_specifier_seq_node))
+		switch(detail::syntax_node_analysis::get_decl_specifier_seq_type(decl_specifier_seq_node))
 		{
-			case detail::type_specifier_seq_type::CLASS_DECLARATION:
+			case detail::syntax_node_analysis::type_specifier_seq_type::CLASS_DECLARATION:
 			{
-				const syntax_nodes::class_specifier& class_specifier_node = detail::get_class_specifier(decl_specifier_seq_node);
+				const syntax_nodes::class_specifier& class_specifier_node =
+					detail::syntax_node_analysis::get_class_specifier(decl_specifier_seq_node)
+				;
 
 				std::shared_ptr<class_> new_class = create_class(class_specifier_node);
 				namespace_entity->add_member(new_class);
@@ -169,9 +171,11 @@ fill_namespace
 
 				break;
 			}
-			case detail::type_specifier_seq_type::CLASS_FORWARD_DECLARATION:
+			case detail::syntax_node_analysis::type_specifier_seq_type::CLASS_FORWARD_DECLARATION:
 			{
-				const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node = detail::get_class_elaborated_specifier(decl_specifier_seq_node);
+				const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node =
+					detail::syntax_node_analysis::get_class_elaborated_specifier(decl_specifier_seq_node)
+				;
 
 				std::shared_ptr<class_> new_class = create_class(class_elaborated_specifier_node);
 				namespace_entity->add_member(new_class);
@@ -180,12 +184,12 @@ fill_namespace
 
 				break;
 			}
-			case detail::type_specifier_seq_type::SIMPLE_TYPE:
+			case detail::syntax_node_analysis::type_specifier_seq_type::SIMPLE_TYPE:
 			{
 				opt_undecorated_type = create_type(decl_specifier_seq_node, namespace_entity);
 				break;
 			}
-			case detail::type_specifier_seq_type::NO_TYPE:
+			case detail::syntax_node_analysis::type_specifier_seq_type::NO_TYPE:
 			{
 				break;
 			}
@@ -258,7 +262,7 @@ fill_namespace
 	;
 
 	//if the function_entity's name is qualified (xxx::f())
-	if(detail::is_qualified(function_definition_node))
+	if(detail::syntax_node_analysis::is_qualified(function_definition_node))
 	{
 		if(opt_already_existing_function_entity)
 		{
@@ -384,7 +388,7 @@ fill_class
 			class_::access access = class_::access::PRIVATE; //if nothing is specified, the access is private
 			if(auto opt_access_specifier_node = get_access_specifier(base_specifier_node))
 			{
-				access = detail::get_access(*opt_access_specifier_node);
+				access = detail::syntax_node_analysis::get_access(*opt_access_specifier_node);
 			}
 
 			//get base class
@@ -447,7 +451,7 @@ fill_class
 			else if(auto opt_member_specification_access_specifier_node = get<member_specification_access_specifier>(&part))
 			{
 				auto access_specifier_node = get_access_specifier(*opt_member_specification_access_specifier_node);
-				current_access = detail::get_access(access_specifier_node);
+				current_access = detail::syntax_node_analysis::get_access(access_specifier_node);
 			}
 			else
 			{
@@ -481,20 +485,20 @@ fill_class
 	{
 		const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
 
-		has_typedef_specifier = detail::has_typedef_specifier(decl_specifier_seq_node);
-		has_static_specifier = detail::has_static_specifier(decl_specifier_seq_node);
-		has_inline_specifier = detail::has_inline_specifier(decl_specifier_seq_node);
-		has_explicit_specifier = detail::has_explicit_specifier(decl_specifier_seq_node);
-		has_virtual_specifier = detail::has_virtual_specifier(decl_specifier_seq_node);
-		has_mutable_specifier = detail::has_mutable_specifier(decl_specifier_seq_node);
+		has_typedef_specifier = detail::syntax_node_analysis::has_typedef_specifier(decl_specifier_seq_node);
+		has_static_specifier = detail::syntax_node_analysis::has_static_specifier(decl_specifier_seq_node);
+		has_inline_specifier = detail::syntax_node_analysis::has_inline_specifier(decl_specifier_seq_node);
+		has_explicit_specifier = detail::syntax_node_analysis::has_explicit_specifier(decl_specifier_seq_node);
+		has_virtual_specifier = detail::syntax_node_analysis::has_virtual_specifier(decl_specifier_seq_node);
+		has_mutable_specifier = detail::syntax_node_analysis::has_mutable_specifier(decl_specifier_seq_node);
 
 		//create and/or get undecorated type
-		switch(detail::get_decl_specifier_seq_type(decl_specifier_seq_node))
+		switch(detail::syntax_node_analysis::get_decl_specifier_seq_type(decl_specifier_seq_node))
 		{
-			case detail::type_specifier_seq_type::CLASS_DECLARATION:
+			case detail::syntax_node_analysis::type_specifier_seq_type::CLASS_DECLARATION:
 			{
 				const syntax_nodes::class_specifier& class_specifier_node =
-					detail::get_class_specifier(decl_specifier_seq_node)
+					detail::syntax_node_analysis::get_class_specifier(decl_specifier_seq_node)
 				;
 
 				std::shared_ptr<class_> new_class = create_class(class_specifier_node);
@@ -505,10 +509,10 @@ fill_class
 
 				break;
 			}
-			case detail::type_specifier_seq_type::CLASS_FORWARD_DECLARATION:
+			case detail::syntax_node_analysis::type_specifier_seq_type::CLASS_FORWARD_DECLARATION:
 			{
 				const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node =
-					detail::get_class_elaborated_specifier(decl_specifier_seq_node)
+					detail::syntax_node_analysis::get_class_elaborated_specifier(decl_specifier_seq_node)
 				;
 
 				std::shared_ptr<class_> new_class = create_class(class_elaborated_specifier_node);
@@ -518,12 +522,12 @@ fill_class
 
 				break;
 			}
-			case detail::type_specifier_seq_type::SIMPLE_TYPE:
+			case detail::syntax_node_analysis::type_specifier_seq_type::SIMPLE_TYPE:
 			{
 				opt_undecorated_type = create_type(decl_specifier_seq_node, class_entity);
 				break;
 			}
-			case detail::type_specifier_seq_type::NO_TYPE:
+			case detail::syntax_node_analysis::type_specifier_seq_type::NO_TYPE:
 			{
 				break;
 			}
@@ -578,37 +582,37 @@ fill_class
 						*opt_destructor_entity,
 						current_access,
 						has_virtual_specifier,
-						detail::has_pure_specifier(member_declarator_declarator_node)
+						detail::syntax_node_analysis::has_pure_specifier(member_declarator_declarator_node)
 					);
 				else if(auto opt_operator_function_entity = get<std::shared_ptr<operator_function>>(&declarator_entity))
 					class_entity->add_member
 					(
 						*opt_operator_function_entity,
 						current_access,
-						detail::is_qualified<str::const_>(declarator_node),
-						detail::is_qualified<str::volatile_>(declarator_node),
+						detail::syntax_node_analysis::is_qualified<str::const_>(declarator_node),
+						detail::syntax_node_analysis::is_qualified<str::volatile_>(declarator_node),
 						has_virtual_specifier,
-						detail::has_pure_specifier(member_declarator_declarator_node)
+						detail::syntax_node_analysis::has_pure_specifier(member_declarator_declarator_node)
 					);
 				else if(auto opt_conversion_function_entity = get<std::shared_ptr<class_::conversion_function>>(&declarator_entity))
 					class_entity->add_member
 					(
 						*opt_conversion_function_entity,
 						current_access,
-						detail::is_qualified<str::const_>(declarator_node),
-						detail::is_qualified<str::volatile_>(declarator_node),
+						detail::syntax_node_analysis::is_qualified<str::const_>(declarator_node),
+						detail::syntax_node_analysis::is_qualified<str::volatile_>(declarator_node),
 						has_virtual_specifier,
-						detail::has_pure_specifier(member_declarator_declarator_node)
+						detail::syntax_node_analysis::has_pure_specifier(member_declarator_declarator_node)
 					);
 				else if(auto opt_simple_function_entity = get<std::shared_ptr<simple_function>>(&declarator_entity))
 					class_entity->add_member
 					(
 						*opt_simple_function_entity,
 						current_access,
-						detail::is_qualified<str::const_>(declarator_node),
-						detail::is_qualified<str::volatile_>(declarator_node),
+						detail::syntax_node_analysis::is_qualified<str::const_>(declarator_node),
+						detail::syntax_node_analysis::is_qualified<str::volatile_>(declarator_node),
 						has_virtual_specifier,
-						detail::has_pure_specifier(member_declarator_declarator_node)
+						detail::syntax_node_analysis::has_pure_specifier(member_declarator_declarator_node)
 					);
 				else if(auto opt_variable_entity = get<std::shared_ptr<variable>>(&declarator_entity))
 					class_entity->add_member
@@ -656,29 +660,31 @@ create_function
 	if
 	(
 		const optional_node<decl_specifier_seq>& opt_decl_specifier_seq_node =
-			detail::get_decl_specifier_seq(function_definition_node)
+			detail::syntax_node_analysis::get_decl_specifier_seq(function_definition_node)
 	)
 	{
 		const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
 
-		has_typedef_specifier = detail::has_typedef_specifier(decl_specifier_seq_node);
-		has_static_specifier = detail::has_static_specifier(decl_specifier_seq_node);
-		has_inline_specifier = detail::has_inline_specifier(decl_specifier_seq_node);
-		has_explicit_specifier = detail::has_explicit_specifier(decl_specifier_seq_node);
+		has_typedef_specifier = detail::syntax_node_analysis::has_typedef_specifier(decl_specifier_seq_node);
+		has_static_specifier = detail::syntax_node_analysis::has_static_specifier(decl_specifier_seq_node);
+		has_inline_specifier = detail::syntax_node_analysis::has_inline_specifier(decl_specifier_seq_node);
+		has_explicit_specifier = detail::syntax_node_analysis::has_explicit_specifier(decl_specifier_seq_node);
 
 		//create and/or get undecorated type
-		switch(detail::get_decl_specifier_seq_type(decl_specifier_seq_node))
+		switch(detail::syntax_node_analysis::get_decl_specifier_seq_type(decl_specifier_seq_node))
 		{
-			case detail::type_specifier_seq_type::CLASS_DECLARATION:
+			case detail::syntax_node_analysis::type_specifier_seq_type::CLASS_DECLARATION:
 			{
 				throw std::runtime_error("error: new types may not be defined in a return type");
 				break;
 			}
-			case detail::type_specifier_seq_type::CLASS_FORWARD_DECLARATION:
+			case detail::syntax_node_analysis::type_specifier_seq_type::CLASS_FORWARD_DECLARATION:
 			{
 				assert(false); //not managed yet
 
-				const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node = detail::get_class_elaborated_specifier(decl_specifier_seq_node);
+				const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node =
+					detail::syntax_node_analysis::get_class_elaborated_specifier(decl_specifier_seq_node)
+				;
 
 				std::shared_ptr<class_> new_class = create_class(class_elaborated_specifier_node);
 				//current_declarative_region->add_member(new_class);
@@ -687,12 +693,12 @@ create_function
 
 				break;
 			}
-			case detail::type_specifier_seq_type::SIMPLE_TYPE:
+			case detail::syntax_node_analysis::type_specifier_seq_type::SIMPLE_TYPE:
 			{
 				opt_undecorated_type = create_type(decl_specifier_seq_node, current_declarative_region);
 				break;
 			}
-			case detail::type_specifier_seq_type::NO_TYPE:
+			case detail::syntax_node_analysis::type_specifier_seq_type::NO_TYPE:
 			{
 				break;
 			}
@@ -711,7 +717,7 @@ create_function
 
 	declarator_entity_shared_ptr_variant declarator_entity = create_entity
 	(
-		detail::get_declarator(function_definition_node),
+		detail::syntax_node_analysis::get_declarator(function_definition_node),
 		current_declarative_region,
 		opt_undecorated_type,
 		has_typedef_specifier,
@@ -945,7 +951,7 @@ create_operator_function
 	(
 		op,
 		type,
-		create_parameters(detail::get_parameter_declaration_list(declarator_node), current_declarative_region),
+		create_parameters(detail::syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
 		is_inline,
 		is_static
 	);
@@ -1038,7 +1044,7 @@ create_parameters
 				std::make_shared<simple_function::parameter>
 				(
 					decorate_type(type, declarator_node),
-					detail::get_identifier(declarator_node).value()
+					detail::syntax_node_analysis::get_identifier(declarator_node).value()
 				)
 			);
 		}
@@ -1093,7 +1099,7 @@ create_type
 	const declarative_region_shared_ptr_variant current_declarative_region
 )
 {
-	return create_type(detail::to_type_specifier_seq(decl_specifier_seq_node), current_declarative_region);
+	return create_type(detail::syntax_node_analysis::to_type_specifier_seq(decl_specifier_seq_node), current_declarative_region);
 }
 
 semantic_entities::type_shared_ptr_variant
@@ -1703,28 +1709,28 @@ create_entity
 		opt_type = decorate_type(*opt_type, declarator_node);
 	}
 
-	switch(detail::get_declarator_type(declarator_node))
+	switch(detail::syntax_node_analysis::get_declarator_type(declarator_node))
 	{
-		case detail::declarator_type::SIMPLE_FUNCTION_DECLARATOR:
+		case detail::syntax_node_analysis::declarator_type::SIMPLE_FUNCTION_DECLARATOR:
 		{
 			if(opt_type)
 				return semantic_entities::simple_function::make_shared
 				(
-					detail::get_identifier(declarator_node).value(),
+					detail::syntax_node_analysis::get_identifier(declarator_node).value(),
 					*opt_type,
-					create_parameters(detail::get_parameter_declaration_list(declarator_node), current_declarative_region),
+					create_parameters(detail::syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
 					has_inline_specifier,
 					has_static_specifier
 				);
 			else
 				return std::make_shared<semantic_entities::class_::constructor>
 				(
-					create_parameters(detail::get_parameter_declaration_list(declarator_node), current_declarative_region),
+					create_parameters(detail::syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
 					has_inline_specifier,
 					has_explicit_specifier
 				);
 		}
-		case detail::declarator_type::DESTRUCTOR_DECLARATOR:
+		case detail::syntax_node_analysis::declarator_type::DESTRUCTOR_DECLARATOR:
 		{
 			if(opt_type)
 				throw std::runtime_error("create_entity error 2");
@@ -1734,7 +1740,7 @@ create_entity
 				has_inline_specifier
 			);
 		}
-		case detail::declarator_type::OPERATOR_FUNCTION_DECLARATOR:
+		case detail::syntax_node_analysis::declarator_type::OPERATOR_FUNCTION_DECLARATOR:
 		{
 			if(!opt_type)
 				throw std::runtime_error("create_entity error 3");
@@ -1748,7 +1754,7 @@ create_entity
 				current_declarative_region
 			);
 		}
-		case detail::declarator_type::CONVERSION_FUNCTION_DECLARATOR:
+		case detail::syntax_node_analysis::declarator_type::CONVERSION_FUNCTION_DECLARATOR:
 		{
 			if(opt_type)
 				throw std::runtime_error("create_entity error 3b");
@@ -1759,7 +1765,7 @@ create_entity
 				has_inline_specifier
 			);
 		}
-		case detail::declarator_type::VARIABLE_DECLARATOR:
+		case detail::syntax_node_analysis::declarator_type::VARIABLE_DECLARATOR:
 		{
 			if(!opt_type)
 				throw std::runtime_error("create_entity error 4");
@@ -1768,7 +1774,7 @@ create_entity
 			{
 				return std::make_shared<semantic_entities::typedef_>
 				(
-					detail::get_identifier(declarator_node).value(),
+					detail::syntax_node_analysis::get_identifier(declarator_node).value(),
 					*opt_type
 				);
 			}
@@ -1776,7 +1782,7 @@ create_entity
 			{
 				return std::make_shared<semantic_entities::variable>
 				(
-					detail::get_identifier(declarator_node).value(),
+					detail::syntax_node_analysis::get_identifier(declarator_node).value(),
 					*opt_type,
 					has_static_specifier
 				);

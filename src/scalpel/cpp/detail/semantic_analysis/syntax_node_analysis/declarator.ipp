@@ -18,10 +18,10 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <scalpel/cpp/syntax_tree.hpp>
-#include <scalpel/cpp/semantic_graph.hpp>
+#ifndef SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_SYNTAX_NODE_ANALYSIS_DECLARATOR_IPP
+#define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_SYNTAX_NODE_ANALYSIS_DECLARATOR_IPP
 
-namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
+namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace syntax_node_analysis
 {
 
 template<const std::string& Qualifier>
@@ -59,31 +59,7 @@ is_qualified(const syntax_nodes::declarator& declarator_node)
 	return false;
 }
 
-template<class SpecifierNodeT, const std::string& Specifier>
-bool
-has_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node)
-{
-	using namespace syntax_nodes;
+}}}}} //namespace scalpel::cpp::detail::semantic_analysis::syntax_node_analysis
 
-	for
-	(
-		auto i = decl_specifier_seq_node.begin();
-		i < decl_specifier_seq_node.end();
-		++i
-	)
-	{
-		const decl_specifier& decl_specifier_node = i->main_node();
-
-		if(auto opt_specifier_node = get<SpecifierNodeT>(&decl_specifier_node))
-		{
-			auto specifier_node = *opt_specifier_node;
-			if(get<predefined_text_node<Specifier>>(&specifier_node))
-				return true;
-		}
-	}
-
-	return false;
-}
-
-}}}} //namespace scalpel::cpp::detail::semantic_analysis
+#endif
 

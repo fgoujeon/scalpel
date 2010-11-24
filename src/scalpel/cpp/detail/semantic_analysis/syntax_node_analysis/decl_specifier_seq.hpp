@@ -18,49 +18,14 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_BASIC_FUNCTIONS_HPP
-#define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_BASIC_FUNCTIONS_HPP
+#ifndef SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_SYNTAX_NODE_ANALYSIS_DECL_SPECIFIER_SEQ_HPP
+#define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_SYNTAX_NODE_ANALYSIS_DECL_SPECIFIER_SEQ_HPP
 
+#include "type_specifier_seq.hpp"
 #include <scalpel/cpp/syntax_tree.hpp>
-#include <scalpel/cpp/semantic_graph.hpp>
 
-namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
+namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace syntax_node_analysis
 {
-
-//TODO A lot of syntax checks are done in some of these functions.
-//That kind of work should be done by the syntax analyzer.
-//The grammar should be reformulated so the semantic analysis
-//can be performed more straightforwardly.
-
-//
-//class related
-//
-
-semantic_entities::class_::access
-get_access(const syntax_nodes::access_specifier access_specifier_node);
-
-
-
-//
-//type-specifier-seq related
-//
-
-enum class type_specifier_seq_type
-{
-	NO_TYPE,
-	SIMPLE_TYPE,
-	CLASS_DECLARATION,
-	CLASS_FORWARD_DECLARATION
-};
-
-type_specifier_seq_type
-get_type_specifier_seq_type(const syntax_nodes::type_specifier_seq& type_specifier_seq_node);
-
-
-
-//
-//decl_specifier_seq related
-//
 
 type_specifier_seq_type
 get_decl_specifier_seq_type(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node);
@@ -116,73 +81,9 @@ has_mutable_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq
 bool
 has_typedef_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node);
 
-bool
-has_pure_specifier(const syntax_nodes::member_declarator_declarator& member_declarator_declarator_node);
+}}}}} //namespace scalpel::cpp::detail::semantic_analysis::syntax_node_analysis
 
-
-
-//
-//declarator related
-//
-
-enum class declarator_type
-{
-	DESTRUCTOR_DECLARATOR,
-	OPERATOR_FUNCTION_DECLARATOR,
-	CONVERSION_FUNCTION_DECLARATOR,
-	SIMPLE_FUNCTION_DECLARATOR,
-	VARIABLE_DECLARATOR
-};
-
-declarator_type
-get_declarator_type(const syntax_nodes::declarator& declarator_node);
-
-boost::optional<const syntax_nodes::parameter_declaration_list&>
-get_parameter_declaration_list(const syntax_nodes::declarator& declarator_node);
-
-template<const std::string& Qualifier>
-bool
-is_qualified(const syntax_nodes::declarator& declarator_node);
-
-syntax_nodes::identifier
-get_identifier(const syntax_nodes::declarator& declarator_node);
-
-bool
-has_identifier(const syntax_nodes::declarator& declarator_node);
-
-boost::optional<const syntax_nodes::nested_identifier_or_template_id&>
-get_nested_identifier_or_template_id
-(
-	const syntax_nodes::declarator& declarator_node
-);
-
-
-
-//
-//function-definition related
-//
-
-const syntax_nodes::optional_node<syntax_nodes::decl_specifier_seq>&
-get_decl_specifier_seq
-(
-	const syntax_nodes::function_definition& function_definition_node
-);
-
-const syntax_nodes::declarator&
-get_declarator
-(
-	const syntax_nodes::function_definition& function_definition_node
-);
-
-bool
-is_qualified
-(
-	const syntax_nodes::function_definition& function_definition_node
-);
-
-}}}} //namespace scalpel::cpp::detail::semantic_analysis
-
-#include "basic_functions.ipp"
+#include "decl_specifier_seq.ipp"
 
 #endif
 
