@@ -150,6 +150,36 @@ get_identifier(const syntax_nodes::declarator& declarator_node);
 bool
 has_identifier(const syntax_nodes::declarator& declarator_node);
 
+boost::optional<const syntax_nodes::nested_identifier_or_template_id&>
+get_nested_identifier_or_template_id
+(
+	const syntax_nodes::declarator& declarator_node
+);
+
+
+
+//
+//function-definition related
+//
+
+const syntax_nodes::optional_node<syntax_nodes::decl_specifier_seq>&
+get_decl_specifier_seq
+(
+	const syntax_nodes::function_definition& function_definition_node
+);
+
+const syntax_nodes::declarator&
+get_declarator
+(
+	const syntax_nodes::function_definition& function_definition_node
+);
+
+bool
+is_qualified
+(
+	const syntax_nodes::function_definition& function_definition_node
+);
+
 }}}} //namespace scalpel::cpp::detail::semantic_analysis
 
 #include "basic_functions.ipp"

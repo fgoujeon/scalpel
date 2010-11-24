@@ -69,7 +69,7 @@ class variable
 		enclosing_declarative_region(const declarative_region_shared_ptr_variant& enclosing_declarative_region);
 
 	private:
-		type_shared_ptr_variant type_;
+		type_shared_ptr_variant type_; //TODO prevent cyclic dependency
 		std::string name_;
 		bool is_static_;
 		declarative_region_member_impl declarative_region_member_impl_;

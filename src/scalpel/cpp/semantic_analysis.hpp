@@ -34,10 +34,6 @@ namespace semantic_analysis
 std::shared_ptr<semantic_graph>
 analyze(const syntax_tree& tree);
 
-template<class DeclarativeRegionT>
-void
-analyze(const syntax_nodes::function_definition& function_definition_node, std::shared_ptr<DeclarativeRegionT> current_declarative_region);
-
 
 
 //
@@ -69,6 +65,13 @@ fill_namespace
 (
 	std::shared_ptr<semantic_entities::namespace_> namespace_entity,
 	const syntax_nodes::declaration_seq& declaration_seq_node
+);
+
+void
+fill_namespace
+(
+	std::shared_ptr<semantic_entities::namespace_> namespace_entity,
+	const syntax_nodes::function_definition& function_definition_node
 );
 
 
@@ -103,6 +106,52 @@ fill_class
 //
 //function creation functions
 //
+
+typedef
+	utility::variant
+	<
+		std::shared_ptr<semantic_entities::class_::constructor>,
+		std::shared_ptr<semantic_entities::class_::destructor>,
+		std::shared_ptr<semantic_entities::operator_function>,
+		std::shared_ptr<semantic_entities::class_::conversion_function>,
+		std::shared_ptr<semantic_entities::simple_function>
+	>
+	function_shared_ptr_variant
+;
+
+function_shared_ptr_variant
+create_function
+(
+	const syntax_nodes::function_definition& function_definition_node,
+	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+);
+
+void
+define_function
+(
+	const function_shared_ptr_variant& function_entity,
+	const syntax_nodes::function_definition& function_definition_node,
+	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+);
+
+//find the function corresponding to the given function signature
+boost::optional<function_shared_ptr_variant>
+find_function
+(
+	const function_shared_ptr_variant function_signature,
+	const syntax_nodes::function_definition& function_definition_node,
+	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+);
+
+//find the function corresponding to the given function signature
+template<class FunctionT>
+std::shared_ptr<FunctionT>
+find_function
+(
+	const std::shared_ptr<const FunctionT> function_signature,
+	const syntax_nodes::function_definition& function_definition_node,
+	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+);
 
 std::shared_ptr<semantic_entities::operator_function>
 create_operator_function

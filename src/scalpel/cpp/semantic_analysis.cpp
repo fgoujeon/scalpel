@@ -50,6 +50,12 @@ analyze(const syntax_tree& tree)
 	return global_namespace;
 }
 
+
+
+//
+//namespace creation functions
+//
+
 std::shared_ptr<semantic_entities::namespace_>
 create_namespace
 (
@@ -99,14 +105,12 @@ fill_namespace
 			if(const boost::optional<const simple_declaration&> opt_simple_declaration_node = get<simple_declaration>(&block_declaration_node))
 				fill_namespace(namespace_entity, *opt_simple_declaration_node);
 			//else if(const boost::optional<const asm_definition&> opt_asm_definition_node = get<asm_definition>(&block_declaration_node))
-			//	analyze(*opt_asm_definition_node, namespace_entity);
 			else if(const boost::optional<const namespace_alias_definition&> opt_namespace_alias_definition_node = get<namespace_alias_definition>(&block_declaration_node))
 			{
 				std::shared_ptr<namespace_alias> new_namespace_alias = create_namespace_alias(*opt_namespace_alias_definition_node, namespace_entity);
 				namespace_entity->add_member(new_namespace_alias);
 			}
 			//else if(const boost::optional<const using_declaration&> opt_using_declaration_node = get<using_declaration>(&block_declaration_node))
-			//	analyze(*opt_using_declaration_node, namespace_entity);
 			else if(const boost::optional<const using_directive&> opt_using_directive_node = get<using_directive>(&block_declaration_node))
 			{
 				std::shared_ptr<namespace_> new_using_directive = create_using_directive(*opt_using_directive_node, namespace_entity);
@@ -114,15 +118,11 @@ fill_namespace
 			}
 		}
 		else if(const boost::optional<const function_definition&> opt_function_definition_node = get<function_definition>(&declaration_node))
-			analyze(*opt_function_definition_node, namespace_entity);
+			fill_namespace(namespace_entity, *opt_function_definition_node);
 		//else if(const boost::optional<const template_declaration&> opt_template_declaration_node = get<template_declaration>(&declaration_node))
-		//	analyze(*opt_template_declaration_node, namespace_entity);
 		//else if(const boost::optional<const explicit_instantiation&> opt_explicit_instantiation_node = get<explicit_instantiation>(&declaration_node))
-		//	analyze(*opt_explicit_instantiation_node, namespace_entity);
 		//else if(const boost::optional<const explicit_specialization&> opt_explicit_specialization_node = get<explicit_specialization>(&declaration_node))
-		//	analyze(*opt_explicit_specialization_node, namespace_entity);
 		//else if(const boost::optional<const linkage_specification&> opt_linkage_specification_node = get<linkage_specification>(&declaration_node))
-		//	analyze(*opt_linkage_specification_node, namespace_entity);
 		else if(const boost::optional<const namespace_definition&> opt_namespace_definition_node = get<namespace_definition>(&declaration_node))
 		{
 			std::shared_ptr<namespace_> new_namespace = create_namespace(*opt_namespace_definition_node);
@@ -229,6 +229,94 @@ fill_namespace
 		}
 	}
 }
+
+void
+fill_namespace
+(
+	std::shared_ptr<semantic_entities::namespace_> namespace_entity,
+	const syntax_nodes::function_definition& function_definition_node
+)
+{
+	//create an empty function_entity corresponding to the function_entity-definition
+	function_shared_ptr_variant function_entity = create_function
+	(
+		function_definition_node,
+		namespace_entity
+	);
+
+	//The function_entity may have already been declared previously in the code.
+	//If so, the function_entity entity corresponding to the function_entity-definition
+	//(and to the previous function_entity declaration) already exists.
+	//Let's try to find it.
+	boost::optional<function_shared_ptr_variant> opt_already_existing_function_entity =
+		find_function
+		(
+			function_entity,
+			function_definition_node,
+			namespace_entity
+		)
+	;
+
+	//if the function_entity's name is qualified (xxx::f())
+	if(detail::is_qualified(function_definition_node))
+	{
+		if(opt_already_existing_function_entity)
+		{
+			//define the function_entity
+			define_function(*opt_already_existing_function_entity, function_definition_node, namespace_entity);
+		}
+		else
+		{
+			std::runtime_error("error: function_entity declaration missing");
+		}
+	}
+	else
+	{
+		if(opt_already_existing_function_entity)
+		{
+			//define the function_entity
+			define_function
+			(
+				*opt_already_existing_function_entity,
+				function_definition_node,
+				namespace_entity
+			);
+		}
+		else
+		{
+			//declare the function_entity
+			if
+			(
+				get<std::shared_ptr<class_::constructor>>(&function_entity) ||
+				get<std::shared_ptr<class_::destructor>>(&function_entity) ||
+				get<std::shared_ptr<class_::conversion_function>>(&function_entity)
+			)
+			{
+				std::runtime_error("error: this function_entity must be a nonstatic member function_entity");
+			}
+			else if(auto opt_operator_function_entity = get<std::shared_ptr<operator_function>>(&function_entity))
+				namespace_entity->add_member(*opt_operator_function_entity);
+			else if(auto opt_simple_function_entity = get<std::shared_ptr<simple_function>>(&function_entity))
+				namespace_entity->add_member(*opt_simple_function_entity);
+			else
+				assert(false);
+
+			//define the function_entity
+			define_function
+			(
+				function_entity,
+				function_definition_node,
+				namespace_entity
+			);
+		}
+	}
+}
+
+
+
+//
+//class creation functions
+//
 
 std::shared_ptr<class_>
 create_class(const class_specifier& class_specifier_node)
@@ -547,6 +635,177 @@ fill_class
 //
 //function creation functions
 //
+
+function_shared_ptr_variant
+create_function
+(
+	const syntax_nodes::function_definition& function_definition_node,
+	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+)
+{
+	//
+	//Analyze the decl-specifier-seq node.
+	//
+
+	boost::optional<type_shared_ptr_variant> opt_undecorated_type;
+	bool has_typedef_specifier = false;
+	bool has_static_specifier = false;
+	bool has_inline_specifier = false;
+	bool has_explicit_specifier = false;
+
+	if
+	(
+		const optional_node<decl_specifier_seq>& opt_decl_specifier_seq_node =
+			detail::get_decl_specifier_seq(function_definition_node)
+	)
+	{
+		const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
+
+		has_typedef_specifier = detail::has_typedef_specifier(decl_specifier_seq_node);
+		has_static_specifier = detail::has_static_specifier(decl_specifier_seq_node);
+		has_inline_specifier = detail::has_inline_specifier(decl_specifier_seq_node);
+		has_explicit_specifier = detail::has_explicit_specifier(decl_specifier_seq_node);
+
+		//create and/or get undecorated type
+		switch(detail::get_decl_specifier_seq_type(decl_specifier_seq_node))
+		{
+			case detail::type_specifier_seq_type::CLASS_DECLARATION:
+			{
+				throw std::runtime_error("error: new types may not be defined in a return type");
+				break;
+			}
+			case detail::type_specifier_seq_type::CLASS_FORWARD_DECLARATION:
+			{
+				assert(false); //not managed yet
+
+				const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node = detail::get_class_elaborated_specifier(decl_specifier_seq_node);
+
+				std::shared_ptr<class_> new_class = create_class(class_elaborated_specifier_node);
+				//current_declarative_region->add_member(new_class);
+
+				opt_undecorated_type = std::shared_ptr<const class_>(new_class);
+
+				break;
+			}
+			case detail::type_specifier_seq_type::SIMPLE_TYPE:
+			{
+				opt_undecorated_type = create_type(decl_specifier_seq_node, current_declarative_region);
+				break;
+			}
+			case detail::type_specifier_seq_type::NO_TYPE:
+			{
+				break;
+			}
+		}
+
+		//decorate type
+		if(opt_undecorated_type)
+			opt_undecorated_type = decorate_type(*opt_undecorated_type, decl_specifier_seq_node);
+	}
+
+
+
+	//
+	//Analyze the declarator node.
+	//
+
+	declarator_entity_shared_ptr_variant declarator_entity = create_entity
+	(
+		detail::get_declarator(function_definition_node),
+		current_declarative_region,
+		opt_undecorated_type,
+		has_typedef_specifier,
+		has_static_specifier,
+		has_inline_specifier,
+		has_explicit_specifier
+	);
+
+	if(auto opt_constructor_entity = get<std::shared_ptr<class_::constructor>>(&declarator_entity))
+		return *opt_constructor_entity;
+	else if(auto opt_destructor_entity = get<std::shared_ptr<class_::destructor>>(&declarator_entity))
+		return *opt_destructor_entity;
+	else if(auto opt_operator_function_entity = get<std::shared_ptr<operator_function>>(&declarator_entity))
+		return *opt_operator_function_entity;
+	else if(auto opt_conversion_function_entity = get<std::shared_ptr<class_::conversion_function>>(&declarator_entity))
+		return *opt_conversion_function_entity;
+	else if(auto opt_simple_function_entity = get<std::shared_ptr<simple_function>>(&declarator_entity))
+		return *opt_simple_function_entity;
+	else
+		assert(false);
+}
+
+void
+define_function
+(
+	const function_shared_ptr_variant& function_entity,
+	const syntax_nodes::function_definition& function_definition_node,
+	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+)
+{
+	if(auto opt_constructor_entity = get<std::shared_ptr<class_::constructor>>(&function_entity))
+	{
+		assert(false); //not managed yet
+	}
+	else if(auto opt_destructor_entity = get<std::shared_ptr<class_::destructor>>(&function_entity))
+	{
+		assert(false); //not managed yet
+	}
+	else if(auto opt_operator_function_entity = get<std::shared_ptr<operator_function>>(&function_entity))
+	{
+		assert(false); //not managed yet
+	}
+	else if(auto opt_conversion_function_entity = get<std::shared_ptr<class_::conversion_function>>(&function_entity))
+	{
+		assert(false); //not managed yet
+	}
+	else if(auto opt_simple_function_entity = get<std::shared_ptr<simple_function>>(&function_entity))
+		(*opt_simple_function_entity)->body(std::make_shared<semantic_entities::statement_block>());
+	else
+		assert(false);
+}
+
+boost::optional<function_shared_ptr_variant>
+find_function
+(
+	const function_shared_ptr_variant function_signature,
+	const syntax_nodes::function_definition& function_definition_node,
+	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+)
+{
+	if(auto opt_constructor_entity = get<std::shared_ptr<class_::constructor>>(&function_signature))
+	{
+		assert(false); //not managed yet
+	}
+	else if(auto opt_destructor_entity = get<std::shared_ptr<class_::destructor>>(&function_signature))
+	{
+		assert(false); //not managed yet
+	}
+	else if(auto opt_operator_function_signature = get<std::shared_ptr<operator_function>>(&function_signature))
+	{
+		assert(false); //not managed yet
+	}
+	else if(auto opt_conversion_function_signature = get<std::shared_ptr<class_::conversion_function>>(&function_signature))
+	{
+		assert(false); //not managed yet
+	}
+	else if(auto opt_simple_function_signature = get<std::shared_ptr<simple_function>>(&function_signature))
+	{
+		std::shared_ptr<simple_function> function_declaration =
+			find_function<simple_function>
+			(
+				*opt_simple_function_signature,
+				function_definition_node,
+				current_declarative_region
+			)
+		;
+		if(function_declaration)
+			return function_shared_ptr_variant(function_declaration);
+	}
+	else
+		assert(false);
+
+	return boost::optional<function_shared_ptr_variant>();
+}
 
 std::shared_ptr<semantic_entities::operator_function>
 create_operator_function

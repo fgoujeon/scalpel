@@ -588,5 +588,93 @@ has_identifier(const declarator& declarator_node)
 	return false;
 }
 
+boost::optional<const nested_identifier_or_template_id&>
+get_nested_identifier_or_template_id
+(
+	const syntax_nodes::declarator& declarator_node
+)
+{
+	const direct_declarator& direct_declarator_node = get_direct_declarator(declarator_node);
+	const direct_declarator_first_part& first_part_node = get_first_part(direct_declarator_node);
+	if(const boost::optional<const declarator_id&> opt_declarator_id_node = get<declarator_id>(&first_part_node))
+	{
+		const declarator_id& declarator_id_node = *opt_declarator_id_node;
+		return get<nested_identifier_or_template_id>(&declarator_id_node);
+	}
+
+	return boost::optional<const nested_identifier_or_template_id&>();
+}
+
+
+
+//
+//function-definition related
+//
+
+const optional_node<decl_specifier_seq>&
+get_decl_specifier_seq
+(
+	const syntax_nodes::function_definition& function_definition_node
+)
+{
+	if
+	(
+		const boost::optional<const simple_function_definition&> opt_simple_function_definition =
+			get<simple_function_definition>(&function_definition_node)
+	)
+		return get_decl_specifier_seq(*opt_simple_function_definition);
+	else if
+	(
+		const boost::optional<const try_block_function_definition&> opt_try_block_function_definition =
+			get<try_block_function_definition>(&function_definition_node)
+	)
+		return get_decl_specifier_seq(*opt_try_block_function_definition);
+	else
+		assert(false);
+}
+
+const syntax_nodes::declarator&
+get_declarator
+(
+	const syntax_nodes::function_definition& function_definition_node
+)
+{
+	if
+	(
+		const boost::optional<const simple_function_definition&> opt_simple_function_definition =
+			get<simple_function_definition>(&function_definition_node)
+	)
+		return get_declarator(*opt_simple_function_definition);
+	else if
+	(
+		const boost::optional<const try_block_function_definition&> opt_try_block_function_definition =
+			get<try_block_function_definition>(&function_definition_node)
+	)
+		return get_declarator(*opt_try_block_function_definition);
+	else
+		assert(false);
+}
+
+bool
+is_qualified
+(
+	const syntax_nodes::function_definition& function_definition_node
+)
+{
+	boost::optional<const nested_identifier_or_template_id&> opt_nested_identifier_or_template_id =
+		get_nested_identifier_or_template_id(get_declarator(function_definition_node));
+	;
+
+	if(opt_nested_identifier_or_template_id)
+	{
+		if(get_nested_name_specifier(*opt_nested_identifier_or_template_id))
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 }}}} //namespace scalpel::cpp::detail::semantic_analysis
 
