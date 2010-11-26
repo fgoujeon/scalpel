@@ -52,10 +52,7 @@ bool
 has_identifier(const syntax_nodes::declarator& declarator_node);
 
 boost::optional<const syntax_nodes::nested_identifier_or_template_id&>
-get_nested_identifier_or_template_id
-(
-	const syntax_nodes::declarator& declarator_node
-);
+get_nested_identifier_or_template_id(const syntax_nodes::declarator& declarator_node);
 
 }}}}} //namespace scalpel::cpp::detail::semantic_analysis::syntax_node_analysis
 

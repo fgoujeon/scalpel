@@ -18,18 +18,14 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_IPP
-#define SCALPEL_CPP_SEMANTIC_ANALYSIS_IPP
+#ifndef SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_FUNCTION_CONSTRUCTION_IPP
+#define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_FUNCTION_CONSTRUCTION_IPP
 
-#include "detail/semantic_analysis/semantic_graph_analysis/name_lookup.hpp"
-#include "detail/semantic_analysis/syntax_node_analysis.hpp"
-#include <scalpel/utility/variant.hpp>
-#include <sstream>
+#include "semantic_graph_analysis.hpp"
+#include "syntax_node_analysis.hpp"
+#include <set>
 
-namespace scalpel { namespace cpp
-{
-
-namespace semantic_analysis
+namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
 {
 
 template<class FunctionT>
@@ -50,11 +46,11 @@ find_function
 	if
 	(
 		boost::optional<const syntax_nodes::nested_identifier_or_template_id&> opt_nested_identifier_or_template_id_node =
-			detail::syntax_node_analysis::get_nested_identifier_or_template_id(detail::syntax_node_analysis::get_declarator(function_definition_node))
+			syntax_node_analysis::get_nested_identifier_or_template_id(syntax_node_analysis::get_declarator(function_definition_node))
 	)
 	{
 		found_functions =
-			detail::semantic_graph_analysis::name_lookup::find<FunctionT, true, true>
+			semantic_graph_analysis::name_lookup::find<FunctionT, true, true>
 			(
 				*opt_nested_identifier_or_template_id_node,
 				current_declarative_region,
@@ -65,7 +61,7 @@ find_function
 	else
 	{
 		found_functions =
-			detail::semantic_graph_analysis::name_lookup::find<FunctionT, true, true>
+			semantic_graph_analysis::name_lookup::find<FunctionT, true, true>
 			(
 				identifier(function_signature->name()),
 				current_declarative_region
@@ -92,9 +88,7 @@ find_function
 	return std::shared_ptr<FunctionT>();
 }
 
-} //namespace semantic_analysis
-
-}} //namespace scalpel::cpp
+}}}} //namespace scalpel::cpp::detail::semantic_analysis
 
 #endif
 
