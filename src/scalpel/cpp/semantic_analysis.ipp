@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_IPP
 #define SCALPEL_CPP_SEMANTIC_ANALYSIS_IPP
 
-#include "detail/semantic_analysis/name_lookup.hpp"
+#include "detail/semantic_analysis/semantic_graph_analysis/name_lookup.hpp"
 #include "detail/semantic_analysis/syntax_node_analysis.hpp"
 #include <scalpel/utility/variant.hpp>
 #include <sstream>
@@ -54,7 +54,7 @@ find_function
 	)
 	{
 		found_functions =
-			detail::name_lookup::find<FunctionT, true, true>
+			detail::semantic_graph_analysis::name_lookup::find<FunctionT, true, true>
 			(
 				*opt_nested_identifier_or_template_id_node,
 				current_declarative_region,
@@ -65,7 +65,7 @@ find_function
 	else
 	{
 		found_functions =
-			detail::name_lookup::find<FunctionT, true, true>
+			detail::semantic_graph_analysis::name_lookup::find<FunctionT, true, true>
 			(
 				identifier(function_signature->name()),
 				current_declarative_region

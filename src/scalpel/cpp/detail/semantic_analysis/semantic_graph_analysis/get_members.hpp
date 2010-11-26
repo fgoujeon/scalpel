@@ -18,13 +18,13 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_GET_MEMBERS_HPP
-#define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_GET_MEMBERS_HPP
+#ifndef SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_SEMANTIC_GRAPH_ANALYSIS_GET_MEMBERS_HPP
+#define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_SEMANTIC_GRAPH_ANALYSIS_GET_MEMBERS_HPP
 
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <scalpel/utility/shared_ptr_vector.hpp>
 
-namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
+namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace semantic_graph_analysis
 {
 
 template<class EntityT>
@@ -95,7 +95,7 @@ template<class MemberT, class ParentT>
 typename get_members_type_traits<MemberT>::return_type
 get_members(ParentT parent);
 
-}}}} //namespace scalpel::cpp::detail::semantic_analysis
+}}}}} //namespace scalpel::cpp::detail::semantic_analysis::semantic_graph_analysis
 
 #endif
 

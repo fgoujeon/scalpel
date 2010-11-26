@@ -22,7 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <scalpel/utility/variant.hpp>
 
-namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
+namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace semantic_graph_analysis
 {
 
 //visitors for declarative region variants
@@ -140,5 +140,5 @@ GENERATE_DECLARATIVE_REGION_VARIANT_GET_MEMBERS_SPECIALIZATION(open_declarative_
 GENERATE_DECLARATIVE_REGION_VARIANT_GET_MEMBERS_SPECIALIZATION(open_declarative_region_shared_ptr_variant, variable)
 GENERATE_DECLARATIVE_REGION_VARIANT_GET_MEMBERS_SPECIALIZATION(open_declarative_region_shared_ptr_variant, namespace_alias)
 
-}}}} //namespace scalpel::cpp::detail::semantic_analysis
+}}}}} //namespace scalpel::cpp::detail::semantic_analysis::semantic_graph_analysis
 

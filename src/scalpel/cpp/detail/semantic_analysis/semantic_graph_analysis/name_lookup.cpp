@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "name_lookup.hpp"
 #include <stdexcept>
 
-namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace name_lookup
+namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace semantic_graph_analysis { namespace name_lookup
 {
 
 void
@@ -96,5 +96,5 @@ impl::find_common_enclosing_namespace
 	throw std::runtime_error("find_common_enclosing_namespace() error: the given declarative regions don't have a common namespace");
 }
 
-}}}}} //namespace scalpel::cpp::detail::semantic_analysis::name_lookup
+}}}}}} //namespace scalpel::cpp::detail::semantic_analysis::semantic_graph_analysis::name_lookup
 

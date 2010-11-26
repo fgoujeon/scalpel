@@ -19,7 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "semantic_analysis.hpp"
-#include "detail/semantic_analysis/name_lookup.hpp"
+#include "detail/semantic_analysis/semantic_graph_analysis/name_lookup.hpp"
 #include "detail/semantic_analysis/syntax_node_analysis.hpp"
 #include <iostream>
 #include <stdexcept>
@@ -394,7 +394,7 @@ fill_class
 			//get base class
 			auto nested_identifier_or_template_id_node = get_nested_identifier_or_template_id(base_specifier_node);
 			std::shared_ptr<class_> base_class =
-				detail::name_lookup::find<class_, false, false>(nested_identifier_or_template_id_node, class_entity)
+				detail::semantic_graph_analysis::name_lookup::find<class_, false, false>(nested_identifier_or_template_id_node, class_entity)
 			;
 
 			class_entity->add_base_class(base_class, access, is_virtual);
@@ -1144,7 +1144,7 @@ create_type
 				opt_return_type =
 					to_type_shared_ptr_variant
 					(
-						detail::name_lookup::find
+						detail::semantic_graph_analysis::name_lookup::find
 						<
 							named_compound_type_shared_ptr_variant,
 							false,
@@ -1821,7 +1821,7 @@ create_namespace_alias
 	std::shared_ptr<namespace_> found_namespace =
 		get_namespace
 		(
-			detail::name_lookup::find<namespace_or_namespace_alias_shared_ptr_variant>
+			detail::semantic_graph_analysis::name_lookup::find<namespace_or_namespace_alias_shared_ptr_variant>
 			(
 				nested_identifier_or_template_id_node,
 				current_namespace
@@ -1860,7 +1860,7 @@ create_using_directive
 	//find the namespace designated by the using directive
 	return get_namespace
 	(
-		detail::name_lookup::find<namespace_or_namespace_alias_shared_ptr_variant>
+		detail::semantic_graph_analysis::name_lookup::find<namespace_or_namespace_alias_shared_ptr_variant>
 		(
 			nested_identifier_or_template_id_node,
 			current_namespace

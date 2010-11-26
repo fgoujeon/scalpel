@@ -21,9 +21,10 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_NAME_LOOKUP_IPP
 #define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_NAME_LOOKUP_IPP
 
-#include <map>
+#include "get_name.hpp"
+#include "get_members.hpp"
 
-namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace name_lookup
+namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace semantic_graph_analysis { namespace name_lookup
 {
 
 template<class EntityT, bool Multiple, bool Optional>
@@ -419,6 +420,8 @@ impl::find_local_entities_from_identifier
 	const DeclarativeRegionT& current_declarative_region
 )
 {
+	using namespace semantic_graph_analysis;
+
 	typename return_type<EntityT, Multiple, true>::type found_entities;
 
 	typename get_members_type_traits<EntityT>::return_type members = get_members<EntityT>(current_declarative_region);
@@ -443,6 +446,8 @@ impl::find_entities_in_base_classes
 	utility::shared_ptr_vector<semantic_entities::class_>::range base_classes
 )
 {
+	using namespace semantic_graph_analysis;
+
 	typename return_type<EntityT, true, Optional>::type found_entities;
 
 	for(auto i = base_classes.begin(); i != base_classes.end(); ++i)
@@ -609,7 +614,7 @@ impl::return_result<EntityT, true, false>::result(std::set<std::shared_ptr<Entit
 	return result;
 }
 
-}}}}} //namespace scalpel::cpp::detail::semantic_analysis::name_lookup
+}}}}}} //namespace scalpel::cpp::detail::semantic_analysis::semantic_graph_analysis::name_lookup
 
 #endif
 
