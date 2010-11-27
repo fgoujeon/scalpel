@@ -116,13 +116,13 @@ create_function
 		has_explicit_specifier
 	);
 
-	if(auto opt_constructor_entity = get<std::shared_ptr<class_::constructor>>(&declarator_entity))
+	if(auto opt_constructor_entity = get<std::shared_ptr<constructor>>(&declarator_entity))
 		return *opt_constructor_entity;
-	else if(auto opt_destructor_entity = get<std::shared_ptr<class_::destructor>>(&declarator_entity))
+	else if(auto opt_destructor_entity = get<std::shared_ptr<destructor>>(&declarator_entity))
 		return *opt_destructor_entity;
 	else if(auto opt_operator_function_entity = get<std::shared_ptr<operator_function>>(&declarator_entity))
 		return *opt_operator_function_entity;
-	else if(auto opt_conversion_function_entity = get<std::shared_ptr<class_::conversion_function>>(&declarator_entity))
+	else if(auto opt_conversion_function_entity = get<std::shared_ptr<conversion_function>>(&declarator_entity))
 		return *opt_conversion_function_entity;
 	else if(auto opt_simple_function_entity = get<std::shared_ptr<simple_function>>(&declarator_entity))
 		return *opt_simple_function_entity;
@@ -138,11 +138,11 @@ define_function
 	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 )
 {
-	if(auto opt_constructor_entity = get<std::shared_ptr<class_::constructor>>(&function_entity))
+	if(auto opt_constructor_entity = get<std::shared_ptr<constructor>>(&function_entity))
 	{
 		assert(false); //not managed yet
 	}
-	else if(auto opt_destructor_entity = get<std::shared_ptr<class_::destructor>>(&function_entity))
+	else if(auto opt_destructor_entity = get<std::shared_ptr<destructor>>(&function_entity))
 	{
 		assert(false); //not managed yet
 	}
@@ -150,7 +150,7 @@ define_function
 	{
 		assert(false); //not managed yet
 	}
-	else if(auto opt_conversion_function_entity = get<std::shared_ptr<class_::conversion_function>>(&function_entity))
+	else if(auto opt_conversion_function_entity = get<std::shared_ptr<conversion_function>>(&function_entity))
 	{
 		assert(false); //not managed yet
 	}
@@ -168,11 +168,11 @@ find_function
 	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 )
 {
-	if(auto opt_constructor_entity = get<std::shared_ptr<class_::constructor>>(&function_signature))
+	if(auto opt_constructor_entity = get<std::shared_ptr<constructor>>(&function_signature))
 	{
 		assert(false); //not managed yet
 	}
-	else if(auto opt_destructor_entity = get<std::shared_ptr<class_::destructor>>(&function_signature))
+	else if(auto opt_destructor_entity = get<std::shared_ptr<destructor>>(&function_signature))
 	{
 		assert(false); //not managed yet
 	}
@@ -180,7 +180,7 @@ find_function
 	{
 		assert(false); //not managed yet
 	}
-	else if(auto opt_conversion_function_signature = get<std::shared_ptr<class_::conversion_function>>(&function_signature))
+	else if(auto opt_conversion_function_signature = get<std::shared_ptr<conversion_function>>(&function_signature))
 	{
 		assert(false); //not managed yet
 	}

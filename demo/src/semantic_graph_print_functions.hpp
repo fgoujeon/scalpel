@@ -73,14 +73,14 @@ print_base_class
 void
 print_constructor
 (
-	std::shared_ptr<const class_::constructor> c,
+	std::shared_ptr<const constructor> c,
 	const unsigned int indent_level
 );
 
 void
 print_destructor
 (
-	std::shared_ptr<const class_::destructor> d,
+	std::shared_ptr<const destructor> d,
 	const unsigned int indent_level
 );
 
@@ -101,7 +101,7 @@ print_operator_function
 void
 print_conversion_function
 (
-	std::shared_ptr<const class_::conversion_function> f,
+	std::shared_ptr<const conversion_function> f,
 	const unsigned int indent_level
 );
 

@@ -21,6 +21,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_CLASS_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_CLASS_HPP
 
+#include "constructor.hpp"
+#include "destructor.hpp"
+#include "conversion_function.hpp"
 #include "typedef_.hpp"
 #include "variable.hpp"
 #include "operator_function.hpp"
@@ -47,10 +50,6 @@ class class_:
 	public std::enable_shared_from_this<class_>
 {
 	public:
-		class constructor;
-		class destructor;
-		class conversion_function;
-
 		typedef
 			utility::variant
 			<
@@ -308,125 +307,6 @@ operator==(const class_& lhs, const class_& rhs);
 
 bool
 operator!=(const class_& lhs, const class_& rhs);
-
-
-
-class class_::constructor
-{
-	public:
-		typedef simple_function::parameter parameter;
-		typedef simple_function::parameters_t parameters_t;
-
-		constructor
-		(
-			parameters_t&& parameters,
-			const bool is_inline,
-			const bool is_explicit
-		);
-
-		constructor(constructor&& o);
-
-		bool
-		operator==(const constructor& rhs) const;
-
-		bool
-		operator!=(const constructor& rhs) const;
-
-		const parameters_t&
-		parameters() const;
-
-		bool
-		is_inline() const;
-
-		bool
-		is_explicit() const;
-
-		bool
-		has_enclosing_declarative_region() const;
-
-		declarative_region_shared_ptr_variant
-		enclosing_declarative_region() const;
-
-		void
-		enclosing_declarative_region(const declarative_region_shared_ptr_variant& enclosing_declarative_region);
-
-	private:
-		std::shared_ptr<semantic_entities::simple_function> impl_;
-		bool is_explicit_;
-		declarative_region_member_impl declarative_region_member_impl_;
-};
-
-
-
-class class_::destructor
-{
-	public:
-		destructor(const bool is_inline);
-
-		destructor(destructor&& o);
-
-		bool
-		is_inline() const;
-
-		bool
-		has_enclosing_declarative_region() const;
-
-		declarative_region_shared_ptr_variant
-		enclosing_declarative_region() const;
-
-		void
-		enclosing_declarative_region(const declarative_region_shared_ptr_variant& enclosing_declarative_region);
-
-	private:
-		bool is_inline_;
-		declarative_region_member_impl declarative_region_member_impl_;
-};
-
-bool
-operator==(const class_::destructor& lhs, const class_::destructor& rhs);
-
-bool
-operator!=(const class_::destructor& lhs, const class_::destructor& rhs);
-
-
-
-class class_::conversion_function
-{
-	public:
-		conversion_function
-		(
-			const type_shared_ptr_variant& return_type,
-			const bool is_inline
-		);
-
-		conversion_function(conversion_function&& o);
-
-		const type_shared_ptr_variant&
-		return_type() const;
-
-		bool
-		is_inline() const;
-
-		bool
-		has_enclosing_declarative_region() const;
-
-		declarative_region_shared_ptr_variant
-		enclosing_declarative_region() const;
-
-		void
-		enclosing_declarative_region(const declarative_region_shared_ptr_variant& enclosing_declarative_region);
-
-	private:
-		type_shared_ptr_variant return_type_;
-		bool is_inline_;
-		declarative_region_member_impl declarative_region_member_impl_;
-};
-
-bool
-operator==(const class_::conversion_function& lhs, const class_::conversion_function& rhs);
-
-bool
-operator!=(const class_::conversion_function& lhs, const class_::conversion_function& rhs);
 
 }}} //namespace scalpel::cpp::semantic_entities
 

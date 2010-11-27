@@ -65,7 +65,7 @@ create_entity
 					has_static_specifier
 				);
 			else
-				return std::make_shared<semantic_entities::class_::constructor>
+				return std::make_shared<semantic_entities::constructor>
 				(
 					create_parameters(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
 					has_inline_specifier,
@@ -77,7 +77,7 @@ create_entity
 			if(opt_type)
 				throw std::runtime_error("create_entity error 2");
 
-			return std::make_shared<semantic_entities::class_::destructor>
+			return std::make_shared<semantic_entities::destructor>
 			(
 				has_inline_specifier
 			);
@@ -101,7 +101,7 @@ create_entity
 			if(opt_type)
 				throw std::runtime_error("create_entity error 3b");
 
-			return std::make_shared<semantic_entities::class_::conversion_function>
+			return std::make_shared<semantic_entities::conversion_function>
 			(
 				get_conversion_function_type(declarator_node, current_declarative_region),
 				has_inline_specifier

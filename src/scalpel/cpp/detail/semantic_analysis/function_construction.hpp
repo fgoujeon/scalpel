@@ -32,10 +32,10 @@ namespace scalpel { namespace cpp { namespace detail { namespace semantic_analys
 typedef
 	utility::variant
 	<
-		std::shared_ptr<semantic_entities::class_::constructor>,
-		std::shared_ptr<semantic_entities::class_::destructor>,
+		std::shared_ptr<semantic_entities::constructor>,
+		std::shared_ptr<semantic_entities::destructor>,
 		std::shared_ptr<semantic_entities::operator_function>,
-		std::shared_ptr<semantic_entities::class_::conversion_function>,
+		std::shared_ptr<semantic_entities::conversion_function>,
 		std::shared_ptr<semantic_entities::simple_function>
 	>
 	function_shared_ptr_variant

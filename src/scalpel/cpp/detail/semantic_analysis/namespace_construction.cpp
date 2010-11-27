@@ -266,9 +266,9 @@ fill_namespace
 			//declare the function_entity
 			if
 			(
-				get<std::shared_ptr<class_::constructor>>(&function_entity) ||
-				get<std::shared_ptr<class_::destructor>>(&function_entity) ||
-				get<std::shared_ptr<class_::conversion_function>>(&function_entity)
+				get<std::shared_ptr<constructor>>(&function_entity) ||
+				get<std::shared_ptr<destructor>>(&function_entity) ||
+				get<std::shared_ptr<conversion_function>>(&function_entity)
 			)
 			{
 				std::runtime_error("error: this function_entity must be a nonstatic member function_entity");

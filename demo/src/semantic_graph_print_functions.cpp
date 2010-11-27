@@ -235,7 +235,7 @@ print_base_class
 void
 print_constructor
 (
-	std::shared_ptr<const class_::constructor> entity,
+	std::shared_ptr<const constructor> entity,
 	const unsigned int indent_level
 )
 {
@@ -253,7 +253,7 @@ print_constructor
 		std::cout << " explicit=\"true\"";
 	std::cout << ">\n";
 
-	const class_::constructor::parameters_t& parameters = entity->parameters();
+	const constructor::parameters_t& parameters = entity->parameters();
 	if(!parameters.empty())
 	{
 		std::cout << indent(indent_level + 1) << "<parameters>\n";
@@ -270,7 +270,7 @@ print_constructor
 void
 print_destructor
 (
-	std::shared_ptr<const class_::destructor> entity,
+	std::shared_ptr<const destructor> entity,
 	const unsigned int indent_level
 )
 {
@@ -406,7 +406,7 @@ print_operator_function
 void
 print_conversion_function
 (
-	std::shared_ptr<const class_::conversion_function> entity,
+	std::shared_ptr<const conversion_function> entity,
 	const unsigned int indent_level
 )
 {
