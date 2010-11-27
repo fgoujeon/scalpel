@@ -60,7 +60,6 @@ endif(${cxx0x_test})
 file(
 	GLOB_RECURSE sources
 	src/*.cpp
-	src/*.h
 )
 add_library(
 	scalpel

@@ -30,6 +30,10 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 class namespace_;
 class namespace_alias;
 class class_;
+class constructor;
+class destructor;
+class operator_function;
+class conversion_function;
 class simple_function;
 class statement_block;
 
@@ -38,6 +42,10 @@ typedef
 	<
 		std::shared_ptr<namespace_>,
 		std::shared_ptr<class_>,
+		std::shared_ptr<constructor>,
+		std::shared_ptr<destructor>,
+		std::shared_ptr<operator_function>,
+		std::shared_ptr<conversion_function>,
 		std::shared_ptr<simple_function>,
 		std::shared_ptr<statement_block>
 	>
@@ -49,6 +57,10 @@ typedef
 	<
 		std::weak_ptr<namespace_>,
 		std::weak_ptr<class_>,
+		std::weak_ptr<constructor>,
+		std::weak_ptr<destructor>,
+		std::weak_ptr<operator_function>,
+		std::weak_ptr<conversion_function>,
 		std::weak_ptr<simple_function>,
 		std::weak_ptr<statement_block>
 	>

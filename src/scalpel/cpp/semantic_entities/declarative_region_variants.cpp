@@ -22,6 +22,10 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "namespace_.hpp"
 #include "namespace_alias.hpp"
 #include "class_.hpp"
+#include "constructor.hpp"
+#include "destructor.hpp"
+#include "operator_function.hpp"
+#include "conversion_function.hpp"
 #include "simple_function.hpp"
 #include "statement_block.hpp"
 #include <scalpel/utility/extern_strings.hpp>
@@ -36,6 +40,30 @@ struct get_name_impl_struct: public utility::static_visitor<const std::string&>
 	operator()(std::shared_ptr<T> t) const
 	{
 		return t->name();
+	}
+
+	const std::string&
+	operator()(std::shared_ptr<constructor>) const
+	{
+		return utility::extern_strings::empty;
+	}
+
+	const std::string&
+	operator()(std::shared_ptr<destructor>) const
+	{
+		return utility::extern_strings::empty;
+	}
+
+	const std::string&
+	operator()(std::shared_ptr<operator_function>) const
+	{
+		return utility::extern_strings::empty;
+	}
+
+	const std::string&
+	operator()(std::shared_ptr<conversion_function>) const
+	{
+		return utility::extern_strings::empty;
 	}
 
 	const std::string&
