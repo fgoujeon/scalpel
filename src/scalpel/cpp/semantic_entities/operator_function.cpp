@@ -82,12 +82,6 @@ operator_function::is_static() const
 }
 
 bool
-operator_function::defined() const
-{
-	return impl_->defined();
-}
-
-bool
 operator_function::has_enclosing_declarative_region() const
 {
 	return impl_->has_enclosing_declarative_region();
@@ -106,3 +100,4 @@ operator_function::enclosing_declarative_region(const declarative_region_shared_
 }
 
 }}} //namespace scalpel::cpp::semantic_entities
+

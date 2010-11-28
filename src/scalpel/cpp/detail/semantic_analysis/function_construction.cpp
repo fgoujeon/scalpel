@@ -139,21 +139,13 @@ define_function
 )
 {
 	if(auto opt_constructor_entity = get<std::shared_ptr<constructor>>(&function_entity))
-	{
-		assert(false); //not managed yet
-	}
+		(*opt_constructor_entity)->body(std::make_shared<semantic_entities::statement_block>());
 	else if(auto opt_destructor_entity = get<std::shared_ptr<destructor>>(&function_entity))
-	{
-		assert(false); //not managed yet
-	}
+		(*opt_destructor_entity)->body(std::make_shared<semantic_entities::statement_block>());
 	else if(auto opt_operator_function_entity = get<std::shared_ptr<operator_function>>(&function_entity))
-	{
-		assert(false); //not managed yet
-	}
+		(*opt_operator_function_entity)->body(std::make_shared<semantic_entities::statement_block>());
 	else if(auto opt_conversion_function_entity = get<std::shared_ptr<conversion_function>>(&function_entity))
-	{
-		assert(false); //not managed yet
-	}
+		(*opt_conversion_function_entity)->body(std::make_shared<semantic_entities::statement_block>());
 	else if(auto opt_simple_function_entity = get<std::shared_ptr<simple_function>>(&function_entity))
 		(*opt_simple_function_entity)->body(std::make_shared<semantic_entities::statement_block>());
 	else

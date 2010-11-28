@@ -29,9 +29,10 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 /**
-Represents a C++ operator simple_function.
+Represents a C++ operator function.
 */
-class operator_function
+class operator_function:
+	public std::enable_shared_from_this<operator_function>
 {
     public:
 		typedef simple_function::parameter parameter;
@@ -68,9 +69,6 @@ class operator_function
 		is_static() const;
 
 		bool
-		defined() const;
-
-		bool
 		has_enclosing_declarative_region() const;
 
 		declarative_region_shared_ptr_variant
@@ -79,9 +77,36 @@ class operator_function
 		void
 		enclosing_declarative_region(const declarative_region_shared_ptr_variant& enclosing_declarative_region);
 
+		bool
+		defined() const
+		{
+			return body_.get();
+		}
+
+		std::shared_ptr<statement_block>
+		body()
+		{
+			return body_;
+		}
+
+		std::shared_ptr<const statement_block>
+		body() const
+		{
+			return body_;
+		}
+
+		void
+		body(std::shared_ptr<statement_block> b)
+		{
+			body_ = b;
+			body_->enclosing_declarative_region(shared_from_this());
+		}
+
     private:
 		std::shared_ptr<simple_function> impl_;
         operator_ op_;
+
+		std::shared_ptr<statement_block> body_;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

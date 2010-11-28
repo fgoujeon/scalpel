@@ -28,7 +28,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-class constructor
+class constructor:
+	public std::enable_shared_from_this<constructor>
 {
 	public:
 		typedef simple_function::parameter parameter;
@@ -67,10 +68,37 @@ class constructor
 		void
 		enclosing_declarative_region(const declarative_region_shared_ptr_variant& enclosing_declarative_region);
 
+		bool
+		defined() const
+		{
+			return body_.get();
+		}
+
+		std::shared_ptr<statement_block>
+		body()
+		{
+			return body_;
+		}
+
+		std::shared_ptr<const statement_block>
+		body() const
+		{
+			return body_;
+		}
+
+		void
+		body(std::shared_ptr<statement_block> b)
+		{
+			body_ = b;
+			body_->enclosing_declarative_region(shared_from_this());
+		}
+
 	private:
 		std::shared_ptr<semantic_entities::simple_function> impl_;
 		bool is_explicit_;
 		declarative_region_member_impl declarative_region_member_impl_;
+
+		std::shared_ptr<statement_block> body_;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

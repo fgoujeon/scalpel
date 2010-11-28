@@ -19,6 +19,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "conversion_function.hpp"
+#include "type_variants.hpp"
+#include <scalpel/utility/are_pointed_objects_equal.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -74,7 +76,8 @@ operator==(const conversion_function& lhs, const conversion_function& rhs)
 {
 	return
 		lhs.is_inline() == rhs.is_inline() &&
-		lhs.return_type() == rhs.return_type()
+		utility::are_pointed_objects_equal(lhs.return_type(), rhs.return_type()) &&
+		*lhs.body() == *rhs.body()
 	;
 }
 

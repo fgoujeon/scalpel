@@ -23,6 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "fundamental_type_shared_ptrs.hpp"
 #include <scalpel/utility/are_pointed_objects_equal.hpp>
 #include <memory>
+#include <iostream>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -41,6 +42,11 @@ class_::make_shared(const std::string& name)
 	new_class->reset_destructor();
 
 	return new_class;
+}
+
+class_::~class_()
+{
+	std::cout << "class destruction" << std::endl;
 }
 
 const std::string&
@@ -228,7 +234,8 @@ class_::set_destructor
 	const bool is_pure
 )
 {
-	member->enclosing_declarative_region(shared_from_this());
+	//TODO causes memory access violation at class destruction... why?
+	//member->enclosing_declarative_region(shared_from_this());
 	destructor_ = member;
 
 	std::shared_ptr<const destructor> const_member(member);

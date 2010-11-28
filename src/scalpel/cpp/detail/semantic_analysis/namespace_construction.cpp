@@ -271,7 +271,7 @@ fill_namespace
 				get<std::shared_ptr<conversion_function>>(&function_entity)
 			)
 			{
-				std::runtime_error("error: this function_entity must be a nonstatic member function_entity");
+				std::runtime_error("error: this function must be a nonstatic member function_entity");
 			}
 			else if(auto opt_operator_function_entity = get<std::shared_ptr<operator_function>>(&function_entity))
 				namespace_entity->add_member(*opt_operator_function_entity);

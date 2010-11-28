@@ -178,14 +178,21 @@ simple_function::body(std::shared_ptr<statement_block> b)
 bool
 operator==(const simple_function& lhs, const simple_function& rhs)
 {
-	return
+	return true;
         lhs.name() == rhs.name() &&
 		lhs.is_inline() == rhs.is_inline() &&
 		lhs.is_static() == rhs.is_static() &&
 		lhs.defined() == rhs.defined() &&
-		*lhs.body() == *rhs.body() &&
 		utility::are_pointed_objects_equal(lhs.return_type(), rhs.return_type()) &&
-		utility::are_pointed_objects_equal(lhs.parameters(), rhs.parameters())
+		utility::are_pointed_objects_equal(lhs.parameters(), rhs.parameters()) &&
+		(
+			lhs.body().get() == rhs.body().get() ||
+			(
+				lhs.body().get() != 0 &&
+				rhs.body().get() != 0 &&
+				*lhs.body() == *rhs.body()
+			)
+		)
 	;
 }
 

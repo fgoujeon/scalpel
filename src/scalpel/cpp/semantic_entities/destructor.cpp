@@ -63,7 +63,17 @@ destructor::enclosing_declarative_region(const declarative_region_shared_ptr_var
 bool
 operator==(const destructor& lhs, const destructor& rhs)
 {
-	return lhs.is_inline() == rhs.is_inline();
+	return true;
+		lhs.is_inline() == rhs.is_inline() &&
+		(
+			lhs.body().get() == rhs.body().get() ||
+			(
+				lhs.body().get() != 0 &&
+				rhs.body().get() != 0 &&
+				*lhs.body() == *rhs.body()
+			)
+		)
+	;
 }
 
 bool

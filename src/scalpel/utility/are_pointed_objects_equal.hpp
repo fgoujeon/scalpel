@@ -106,9 +106,12 @@ namespace are_pointed_objects_equal_impl
 			bool
 			operator()(const std::shared_ptr<const T>& lhs) const
 			{
-				const T& lhs_ref = *lhs;
-				const T& rhs_ref = *rhs_;
-				return lhs_ref == rhs_ref;
+				if(lhs.get() == 0 && rhs_.get() == 0)
+					return true;
+				else if(lhs.get() == 0 || rhs_.get() == 0)
+					return false;
+				else
+					return *lhs == *rhs_;
 			}
 
 		private:
