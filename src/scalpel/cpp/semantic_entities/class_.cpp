@@ -44,11 +44,6 @@ class_::make_shared(const std::string& name)
 	return new_class;
 }
 
-class_::~class_()
-{
-	std::cout << "class destruction" << std::endl;
-}
-
 const std::string&
 class_::name() const
 {

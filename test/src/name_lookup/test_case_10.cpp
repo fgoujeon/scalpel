@@ -106,7 +106,7 @@ test_case_10()
 			space(""),
 			identifier("i")
 		);
-		auto found_entity = find<variable>(as_i_syntax_node, function_test->body());
+		auto found_entity = find<false, false, variable>(as_i_syntax_node, function_test->body());
 		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
 	}
 
@@ -127,7 +127,7 @@ test_case_10()
 			space(""),
 			identifier("i")
 		);
-		auto found_entity = find<variable>(as2_i_syntax_node, function_test->body());
+		auto found_entity = find<false, false, variable>(as2_i_syntax_node, function_test->body());
 		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
 	}
 }

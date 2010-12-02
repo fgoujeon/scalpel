@@ -101,8 +101,6 @@ class class_:
 		std::shared_ptr<class_>
 		make_shared(const std::string& name);
 
-		~class_();
-
         /**
         @return the name of the class
         */

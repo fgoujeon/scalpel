@@ -82,9 +82,9 @@ create_type
 					(
 						semantic_graph_analysis::name_lookup::find
 						<
-							named_compound_type_shared_ptr_variant,
 							false,
-							false
+							false,
+							named_compound_type_shared_ptr_variant
 						>
 						(
 							nested_identifier_or_template_id_node,

@@ -35,35 +35,58 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace semantic_graph_analysis { namespace name_lookup
 {
 
-template<class EntityT, bool Multiple, bool Optional>
+/*
+result_type's truth table:
+
+| Variadic | Variant | Multiple | Optional | result_type::type
+|----------|---------|----------|----------|------------------
+|     0    |    0    |     0    |     X    |        (1)
+|     0    |    0    |     1    |     X    |        (2)
+|     0    |    1    |     0    |     0    |        (3)
+|     0    |    1    |     0    |     1    |        (4)
+|     0    |    1    |     1    |     X    |        (5)
+|     1    |    0    |     0    |     0    |        (6)
+|     1    |    0    |     0    |     1    |        (7)
+|     1    |    0    |     1    |     X    |        (8)
+|     1    |    1    |     X    |     X    |        (E)
+
+(1) std::shared_ptr<EntityT>
+(2) std::set<(1)>
+(3) utility::variant<EntitiesT...>
+(4) boost::optional<(3)>
+(5) std::set<(3)>
+(E) Error
+*/
+
+template<bool Optional, bool Multiple, class EntityT>
 struct return_type;
 
-template<class EntityT, bool Optional>
-struct return_type<EntityT, false, Optional>
+template<bool Optional, class EntityT>
+struct return_type<Optional, false, EntityT>
 {
 	typedef std::shared_ptr<EntityT> type;
 };
 
 template<class... EntitiesT>
-struct return_type<utility::variant<EntitiesT...>, false, true>
+struct return_type<true, false, utility::variant<EntitiesT...>>
 {
 	typedef boost::optional<utility::variant<EntitiesT...>> type;
 };
 
 template<class... EntitiesT>
-struct return_type<utility::variant<EntitiesT...>, false, false>
+struct return_type<false, false, utility::variant<EntitiesT...>>
 {
 	typedef utility::variant<EntitiesT...> type;
 };
 
-template<class EntityT, bool Optional>
-struct return_type<EntityT, true, Optional>
+template<bool Optional, class EntityT>
+struct return_type<Optional, true, EntityT>
 {
 	typedef std::set<std::shared_ptr<EntityT>> type;
 };
 
-template<class... EntitiesT, bool Optional>
-struct return_type<utility::variant<EntitiesT...>, true, Optional>
+template<bool Optional, class... EntitiesT>
+struct return_type<Optional, true, utility::variant<EntitiesT...>>
 {
 	typedef std::set<utility::variant<EntitiesT...>> type;
 };
@@ -79,8 +102,8 @@ lookup of the unqualified-id part of the given nested identifier must apply
 using directives. It must be set to false when looking up the declaration of a
 function we're going to define.
 */
-template<class EntityT, bool Multiple = false, bool Optional = false>
-typename return_type<EntityT, Multiple, Optional>::type
+template<bool Optional, bool Multiple, class EntityT>
+typename return_type<Optional, Multiple, EntityT>::type
 find
 (
 	const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node,
@@ -92,8 +115,8 @@ find
 Find entities corresponding to the given identifier_or_template_id node,
 from the given declarative region (unqualified name lookup).
 */
-template<class EntityT, bool Multiple = false, bool Optional = false>
-typename return_type<EntityT, Multiple, Optional>::type
+template<bool Optional, bool Multiple, class EntityT>
+typename return_type<Optional, Multiple, EntityT>::type
 find
 (
 	const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
@@ -104,9 +127,9 @@ find
 
 class impl
 {
-	template<class EntityT, bool Multiple, bool Optional>
+	template<bool Optional, bool Multiple, class EntityT>
 	friend
-	typename return_type<EntityT, Multiple, Optional>::type
+	typename return_type<Optional, Multiple, EntityT>::type
 	find
 	(
 		const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node,
@@ -114,9 +137,9 @@ class impl
 		const bool apply_using_directives_for_unqualified_id_part = true
 	);
 
-	template<class EntityT, bool Multiple, bool Optional>
+	template<bool Optional, bool Multiple, class EntityT>
 	friend
-	typename return_type<EntityT, Multiple, Optional>::type
+	typename return_type<Optional, Multiple, EntityT>::type
 	find
 	(
 		const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
@@ -146,7 +169,7 @@ class impl
 	//would have been more appropriate.
 	template<class DeclarativeRegionT>
 	static
-	typename return_type<DeclarativeRegionT, false, false>::type
+	typename return_type<false, false, DeclarativeRegionT>::type
 	find_declarative_region
 	(
 		const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node,
@@ -162,20 +185,20 @@ class impl
 	*/
 	template<class DeclarativeRegionT>
 	static
-	typename return_type<DeclarativeRegionT, false, false>::type
+	typename return_type<false, false, DeclarativeRegionT>::type
 	find_declarative_region
 	(
 		const syntax_nodes::nested_name_specifier& nested_name_specifier_node,
-		const typename return_type<DeclarativeRegionT, false, false>::type& current_declarative_region
+		const typename return_type<false, false, DeclarativeRegionT>::type& current_declarative_region
 	);
 
 	/**
 	Find entities corresponding to the given name,
 	from the given declarative region (unqualified name lookup)
 	*/
-	template<class EntityT, bool Multiple, bool Optional>
+	template<bool Optional, bool Multiple, class EntityT>
 	static
-	typename return_type<EntityT, Multiple, Optional>::type
+	typename return_type<Optional, Multiple, EntityT>::type
 	find_entities_from_identifier
 	(
 		const std::string& name,
@@ -189,9 +212,9 @@ class impl
 	in the given namespace, applying using directives as defined in the
 	qualified name lookup section of the C++ standard.
 	*/
-	template<class EntityT, bool Multiple, bool Optional>
+	template<bool Optional, bool Multiple, class EntityT>
 	static
-	typename return_type<EntityT, Multiple, Optional>::type
+	typename return_type<Optional, Multiple, EntityT>::type
 	find_in_namespace
 	(
 		const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
@@ -201,9 +224,9 @@ class impl
 	/**
 	Find in namespace from an identifier.
 	*/
-	template<class EntityT, bool Multiple, bool Optional>
+	template<bool Optional, bool Multiple, class EntityT>
 	static
-	typename return_type<EntityT, Multiple, Optional>::type
+	typename return_type<Optional, Multiple, EntityT>::type
 	find_in_namespace_from_identifier
 	(
 		const std::string& name,
@@ -217,9 +240,9 @@ class impl
 	Find entities corresponding to the given identifier_or_template_id node,
 	in the given declarative region only.
 	*/
-	template<class EntityT, bool Multiple, bool Optional, class DeclarativeRegionT>
+	template<bool Optional, bool Multiple, class EntityT, class DeclarativeRegionT>
 	static
-	typename return_type<EntityT, Multiple, Optional>::type
+	typename return_type<Optional, Multiple, EntityT>::type
 	find_local_entities
 	(
 		const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
@@ -229,9 +252,9 @@ class impl
 	/**
 	Find entities of the given name, in the given declarative region only.
 	*/
-	template<class EntityT, bool Multiple, bool Optional, class DeclarativeRegionT>
+	template<bool Optional, bool Multiple, class EntityT, class DeclarativeRegionT>
 	static
-	typename return_type<EntityT, Multiple, Optional>::type
+	typename return_type<Optional, Multiple, EntityT>::type
 	find_local_entities_from_identifier
 	(
 		const std::string& name,
@@ -243,9 +266,9 @@ class impl
 	/**
 	Find entities of the given name, in the given base classes
 	*/
-	template<class EntityT, bool Multiple, bool Optional>
+	template<bool Optional, bool Multiple, class EntityT>
 	static
-	typename return_type<EntityT, Multiple, Optional>::type
+	typename return_type<Optional, Multiple, EntityT>::type
 	find_entities_in_base_classes
 	(
 		const std::string& name,
@@ -302,60 +325,60 @@ class impl
 
 
 
-	template<class EntityT, bool Multiple, bool Optional>
+	template<bool Optional, bool Multiple, class EntityT>
 	struct return_result;
 
 	template<class EntityT>
-	struct return_result<EntityT, false, true>
+	struct return_result<true, false, EntityT>
 	{
 		//return the only one element of the set
 		//throw an exception if there's more than one element in the set
 		static
-		typename return_type<EntityT, false, true>::type
-		result(typename return_type<EntityT, true, true>::type& result);
+		typename return_type<true, false, EntityT>::type
+		result(typename return_type<true, true, EntityT>::type& result);
 
 		//return result;
 		static
-		typename return_type<EntityT, false, true>::type
-		result(typename return_type<EntityT, false, true>::type& result);
+		typename return_type<true, false, EntityT>::type
+		result(typename return_type<true, false, EntityT>::type& result);
 	};
 
 	template<class EntityT>
-	struct return_result<EntityT, false, false>
+	struct return_result<false, false, EntityT>
 	{
 		//return the only one element of the set
 		//throw an exception if there's zero or more than one element in
 		//the set
 		static
-		typename return_type<EntityT, false, false>::type
-		result(typename return_type<EntityT, true, false>::type& result);
+		typename return_type<false, false, EntityT>::type
+		result(typename return_type<false, true, EntityT>::type& result);
 
 		//return result;
 		//throw an exception if the result is empty
 		static
-		typename return_type<EntityT, false, false>::type
-		result(typename return_type<EntityT, false, true>::type& result);
+		typename return_type<false, false, EntityT>::type
+		result(typename return_type<true, false, EntityT>::type& result);
 	};
 
 	template<class... EntitiesT>
-	struct return_result<utility::variant<EntitiesT...>, false, false>
+	struct return_result<false, false, utility::variant<EntitiesT...>>
 	{
 		//return the only one element of the set
 		//throw an exception if there's zero or more than one element in
 		//the set
 		static
-		typename return_type<utility::variant<EntitiesT...>, false, false>::type
-		result(typename return_type<utility::variant<EntitiesT...>, true, false>::type& result);
+		typename return_type<false, false, utility::variant<EntitiesT...>>::type
+		result(typename return_type<false, true, utility::variant<EntitiesT...>>::type& result);
 
 		//return *result;
 		//throw an exception if the result is empty
 		static
-		typename return_type<utility::variant<EntitiesT...>, false, false>::type
-		result(typename return_type<utility::variant<EntitiesT...>, false, true>::type& result);
+		typename return_type<false, false, utility::variant<EntitiesT...>>::type
+		result(typename return_type<true, false, utility::variant<EntitiesT...>>::type& result);
 	};
 
 	template<class EntityT>
-	struct return_result<EntityT, true, true>
+	struct return_result<true, true, EntityT>
 	{
 		//return result;
 		static
@@ -364,7 +387,7 @@ class impl
 	};
 
 	template<class EntityT>
-	struct return_result<EntityT, true, false>
+	struct return_result<false, true, EntityT>
 	{
 		//return result;
 		//throw an exception if the result is empty

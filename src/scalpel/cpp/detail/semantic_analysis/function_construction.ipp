@@ -50,7 +50,7 @@ find_function
 	)
 	{
 		found_functions =
-			semantic_graph_analysis::name_lookup::find<FunctionT, true, true>
+			semantic_graph_analysis::name_lookup::find<true, true, FunctionT>
 			(
 				*opt_nested_identifier_or_template_id_node,
 				current_declarative_region,
@@ -61,7 +61,7 @@ find_function
 	else
 	{
 		found_functions =
-			semantic_graph_analysis::name_lookup::find<FunctionT, true, true>
+			semantic_graph_analysis::name_lookup::find<true, true, FunctionT>
 			(
 				identifier(function_signature->name()),
 				current_declarative_region

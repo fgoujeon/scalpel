@@ -138,13 +138,13 @@ test_case_3()
 
 	//look up i from a::b::f1(), must find a::b::c::i
 	{
-		auto found_entity = find<variable>(identifier("i"), function_a_b_f1->body());
+		auto found_entity = find<false, false, variable>(identifier("i"), function_a_b_f1->body());
 		BOOST_CHECK_EQUAL(found_entity, variable_a_b_c_i);
 	}
 
 	//look up i from a::d::f2(), must find a::i and a::b::c::i
 	{
-		auto found_entities = find<variable, true>(identifier("i"), function_a_d_f2->body());
+		auto found_entities = find<false, true, variable>(identifier("i"), function_a_d_f2->body());
 		BOOST_CHECK_EQUAL(found_entities.size(), 2);
 		if(found_entities.size() == 2)
 		{
@@ -155,13 +155,13 @@ test_case_3()
 
 	//look up i from a::f3(), must find a::i
 	{
-		auto found_entity = find<variable>(identifier("i"), function_a_f3->body());
+		auto found_entity = find<false, false, variable>(identifier("i"), function_a_f3->body());
 		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
 	}
 
 	//look up i from f4(), must find nothing
 	{
-		auto found_entity = find<variable, false, true>(identifier("i"), function_f4->body());
+		auto found_entity = find<true, false, variable>(identifier("i"), function_f4->body());
 		BOOST_CHECK(!found_entity);
 	}
 }

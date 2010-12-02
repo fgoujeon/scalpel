@@ -119,7 +119,7 @@ test_case_7()
 			space(""),
 			identifier("i")
 		);
-		auto found_entity = find<variable>(bc_i_syntax_node, function_test);
+		auto found_entity = find<false, false, variable>(bc_i_syntax_node, function_test);
 		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
 	}
 }

@@ -163,7 +163,7 @@ create_namespace_alias
 	std::shared_ptr<namespace_> found_namespace =
 		get_namespace
 		(
-			semantic_graph_analysis::name_lookup::find<namespace_or_namespace_alias_shared_ptr_variant>
+			semantic_graph_analysis::name_lookup::find<false, false, namespace_or_namespace_alias_shared_ptr_variant>
 			(
 				nested_identifier_or_template_id_node,
 				current_namespace
@@ -202,7 +202,7 @@ create_using_directive
 	//find the namespace designated by the using directive
 	return get_namespace
 	(
-		semantic_graph_analysis::name_lookup::find<namespace_or_namespace_alias_shared_ptr_variant>
+		semantic_graph_analysis::name_lookup::find<false, false, namespace_or_namespace_alias_shared_ptr_variant>
 		(
 			nested_identifier_or_template_id_node,
 			current_namespace
