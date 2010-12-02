@@ -48,7 +48,7 @@ typedef
 		std::shared_ptr<conversion_function>,
 		std::shared_ptr<simple_function>,
 		std::shared_ptr<statement_block>
-	>
+	>::type
 	declarative_region_shared_ptr_variant
 ;
 
@@ -63,7 +63,7 @@ typedef
 		std::weak_ptr<conversion_function>,
 		std::weak_ptr<simple_function>,
 		std::weak_ptr<statement_block>
-	>
+	>::type
 	declarative_region_weak_ptr_variant
 ;
 
@@ -74,7 +74,7 @@ typedef
 		std::shared_ptr<namespace_>,
 		std::shared_ptr<namespace_alias>,
 		std::shared_ptr<class_>
-	>
+	>::type
 	open_declarative_region_shared_ptr_variant
 ;
 

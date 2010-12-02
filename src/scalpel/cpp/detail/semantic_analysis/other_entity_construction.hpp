@@ -38,7 +38,7 @@ typedef
 		std::shared_ptr<semantic_entities::simple_function>,
 		std::shared_ptr<semantic_entities::variable>,
 		std::shared_ptr<semantic_entities::typedef_>
-	>
+	>::type
 	declarator_entity_shared_ptr_variant
 ;
 

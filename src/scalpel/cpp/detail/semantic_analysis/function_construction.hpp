@@ -37,7 +37,7 @@ typedef
 		std::shared_ptr<semantic_entities::operator_function>,
 		std::shared_ptr<semantic_entities::conversion_function>,
 		std::shared_ptr<semantic_entities::simple_function>
-	>
+	>::type
 	function_shared_ptr_variant
 ;
 

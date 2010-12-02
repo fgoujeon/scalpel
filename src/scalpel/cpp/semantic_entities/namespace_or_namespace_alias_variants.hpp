@@ -35,7 +35,7 @@ typedef
 	<
 		std::shared_ptr<namespace_>,
 		std::shared_ptr<namespace_alias>
-	>
+	>::type
 	namespace_or_namespace_alias_shared_ptr_variant
 ;
 

@@ -61,7 +61,7 @@ class class_:
 				std::shared_ptr<const conversion_function>,
 				std::shared_ptr<const operator_function>,
 				std::shared_ptr<const variable>
-			>
+			>::type
 			member_t
 		;
 

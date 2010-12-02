@@ -45,7 +45,7 @@ typedef
 		std::shared_ptr<const pointer>,
 		std::shared_ptr<const reference>,
 		std::shared_ptr<const volatile_>
-	>
+	>::type
 	type_shared_ptr_variant
 ;
 
@@ -55,7 +55,7 @@ typedef
 	<
 		std::shared_ptr<class_>,
 		std::shared_ptr<typedef_>
-	>
+	>::type
 	named_compound_type_shared_ptr_variant
 ;
 

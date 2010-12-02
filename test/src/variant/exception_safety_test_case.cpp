@@ -56,8 +56,9 @@ void
 exception_safety_test_case()
 {
 	typedef
-		scalpel::utility::variant
+		scalpel::utility::basic_variant
 		<
+			scalpel::utility::identity,
 			int,
 			throw_on_second_copy,
 			std::string,

@@ -572,8 +572,11 @@ impl::return_result<false, false, EntityT>::result(typename return_type<true, fa
 }
 
 template<class... EntitiesT>
-typename return_type<false, false, utility::variant<EntitiesT...>>::type
-impl::return_result<false, false, utility::variant<EntitiesT...>>::result(typename return_type<false, true, utility::variant<EntitiesT...>>::type& result)
+typename return_type<false, false, utility::basic_variant<utility::identity, EntitiesT...>>::type
+impl::return_result<false, false, utility::basic_variant<utility::identity, EntitiesT...>>::result
+(
+	typename return_type<false, true, utility::basic_variant<utility::identity, EntitiesT...>>::type& result
+)
 {
 	if(result.empty())
 	{
@@ -590,8 +593,11 @@ impl::return_result<false, false, utility::variant<EntitiesT...>>::result(typena
 }
 
 template<class... EntitiesT>
-typename return_type<false, false, utility::variant<EntitiesT...>>::type
-impl::return_result<false, false, utility::variant<EntitiesT...>>::result(typename return_type<true, false, utility::variant<EntitiesT...>>::type& result)
+typename return_type<false, false, utility::basic_variant<utility::identity, EntitiesT...>>::type
+impl::return_result<false, false, utility::basic_variant<utility::identity, EntitiesT...>>::result
+(
+	typename return_type<true, false, utility::basic_variant<utility::identity, EntitiesT...>>::type& result
+)
 {
 	if(!result)
 		throw std::runtime_error("no entity found");

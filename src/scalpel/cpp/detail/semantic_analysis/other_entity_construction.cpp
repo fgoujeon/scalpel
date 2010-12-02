@@ -160,14 +160,24 @@ create_namespace_alias
 	);
 
 	//find the namespace designated by the namespace alias
-	std::shared_ptr<namespace_> found_namespace =
-		get_namespace
+	//std::shared_ptr<namespace_> found_namespace =
+	//	get_namespace
+	//	(
+	//		semantic_graph_analysis::name_lookup::find<false, false, namespace_or_namespace_alias_shared_ptr_variant>
+	//		(
+	//			nested_identifier_or_template_id_node,
+	//			current_namespace
+	//		)
+	//	)
+	//;
+	std::shared_ptr<namespace_> found_namespace;
+
+	//semantic_graph_analysis::name_lookup::return_type<false, false, namespace_or_namespace_alias_shared_ptr_variant>::type found_entity =
+	semantic_graph_analysis::name_lookup::return_type<false, false, namespace_or_namespace_alias_shared_ptr_variant>::type found_entity =
+		semantic_graph_analysis::name_lookup::find<false, false, namespace_or_namespace_alias_shared_ptr_variant>
 		(
-			semantic_graph_analysis::name_lookup::find<false, false, namespace_or_namespace_alias_shared_ptr_variant>
-			(
-				nested_identifier_or_template_id_node,
-				current_namespace
-			)
+			nested_identifier_or_template_id_node,
+			current_namespace
 		)
 	;
 

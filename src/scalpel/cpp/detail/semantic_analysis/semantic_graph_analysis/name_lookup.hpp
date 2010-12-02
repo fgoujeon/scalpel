@@ -68,15 +68,15 @@ struct return_type<Optional, false, EntityT>
 };
 
 template<class... EntitiesT>
-struct return_type<true, false, utility::variant<EntitiesT...>>
+struct return_type<true, false, utility::basic_variant<utility::identity, EntitiesT...>>
 {
-	typedef boost::optional<utility::variant<EntitiesT...>> type;
+	typedef boost::optional<typename utility::variant<EntitiesT...>::type> type;
 };
 
 template<class... EntitiesT>
-struct return_type<false, false, utility::variant<EntitiesT...>>
+struct return_type<false, false, utility::basic_variant<utility::identity, EntitiesT...>>
 {
-	typedef utility::variant<EntitiesT...> type;
+	typedef typename utility::variant<EntitiesT...>::type type;
 };
 
 template<bool Optional, class EntityT>
@@ -86,9 +86,9 @@ struct return_type<Optional, true, EntityT>
 };
 
 template<bool Optional, class... EntitiesT>
-struct return_type<Optional, true, utility::variant<EntitiesT...>>
+struct return_type<Optional, true, utility::basic_variant<utility::identity, EntitiesT...>>
 {
-	typedef std::set<utility::variant<EntitiesT...>> type;
+	typedef std::set<typename utility::variant<EntitiesT...>::type> type;
 };
 
 
@@ -361,20 +361,20 @@ class impl
 	};
 
 	template<class... EntitiesT>
-	struct return_result<false, false, utility::variant<EntitiesT...>>
+	struct return_result<false, false, utility::basic_variant<utility::identity, EntitiesT...>>
 	{
 		//return the only one element of the set
 		//throw an exception if there's zero or more than one element in
 		//the set
 		static
-		typename return_type<false, false, utility::variant<EntitiesT...>>::type
-		result(typename return_type<false, true, utility::variant<EntitiesT...>>::type& result);
+		typename return_type<false, false, utility::basic_variant<utility::identity, EntitiesT...>>::type
+		result(typename return_type<false, true, utility::basic_variant<utility::identity, EntitiesT...>>::type& result);
 
 		//return *result;
 		//throw an exception if the result is empty
 		static
-		typename return_type<false, false, utility::variant<EntitiesT...>>::type
-		result(typename return_type<true, false, utility::variant<EntitiesT...>>::type& result);
+		typename return_type<false, false, utility::basic_variant<utility::identity, EntitiesT...>>::type
+		result(typename return_type<true, false, utility::basic_variant<utility::identity, EntitiesT...>>::type& result);
 	};
 
 	template<class EntityT>
