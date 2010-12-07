@@ -65,7 +65,15 @@ find
 		if(auto opt_namespace_ptr = utility::get<std::shared_ptr<semantic_entities::namespace_>>(&last_declarative_region))
 			return impl::find_in_namespace<Optional, Multiple, EntityT>(identifier_or_template_id_node, *opt_namespace_ptr);
 	}
-	return impl::find_local_entities<Optional, Multiple, EntityT>(identifier_or_template_id_node, last_declarative_region);
+	return
+		impl::find_local_entities
+		<
+			semantic_entities::open_declarative_region_shared_ptr_variant,
+			Optional,
+			Multiple,
+			EntityT
+		>(identifier_or_template_id_node, last_declarative_region)
+	;
 }
 
 template<bool Optional, bool Multiple, class EntityT>
@@ -126,7 +134,13 @@ impl::find_declarative_region
 			//find the first declarative region
 			auto identifier_or_template_id_node = get_identifier_or_template_id(nested_name_specifier_node);
 			typename return_type<false, false, DeclarativeRegionT>::type first_declarative_region =
-				find_local_entities<false, false, DeclarativeRegionT>(identifier_or_template_id_node, global_namespace)
+				find_local_entities
+				<
+					std::shared_ptr<semantic_entities::namespace_>,
+					false,
+					false,
+					DeclarativeRegionT
+				>(identifier_or_template_id_node, global_namespace)
 			;
 
 			//find the last declarative region
@@ -192,7 +206,13 @@ impl::find_declarative_region
 				{
 					auto identifier_node = *opt_identifier_node;
 					found_declarative_region =
-						find_local_entities_from_identifier<false, false, DeclarativeRegionT>
+						find_local_entities_from_identifier
+						<
+							typename return_type<false, false, DeclarativeRegionT>::type,
+							false,
+							false,
+							DeclarativeRegionT
+						>
 						(
 							identifier_node.value(),
 							found_declarative_region
@@ -252,7 +272,13 @@ impl::find_entities_from_identifier
 		add_to_result
 		(
 			found_entities,
-			find_local_entities_from_identifier<true, Multiple, EntityT>(name, current_declarative_region)
+			find_local_entities_from_identifier
+			<
+				semantic_entities::declarative_region_shared_ptr_variant,
+				true,
+				Multiple,
+				EntityT
+			>(name, current_declarative_region)
 		);
 
 		//find entities in the associated namespaces (only for namespaces)
@@ -270,7 +296,13 @@ impl::find_entities_from_identifier
 					add_to_result
 					(
 						found_entities,
-						find_local_entities_from_identifier<true, Multiple, EntityT>(name, *i)
+						find_local_entities_from_identifier
+						<
+							std::shared_ptr<semantic_entities::namespace_>,
+							true,
+							Multiple,
+							EntityT
+						>(name, *i)
 					);
 				}
 			}
@@ -345,7 +377,13 @@ impl::find_in_namespace_from_identifier
 		already_seached_namespaces.push_back(current_namespace);
 
 		typename return_type<true, Multiple, EntityT>::type found_entities =
-			find_local_entities_from_identifier<true, Multiple, EntityT>(name, current_namespace)
+			find_local_entities_from_identifier
+			<
+				std::shared_ptr<semantic_entities::namespace_>,
+				true,
+				Multiple,
+				EntityT
+			>(name, current_namespace)
 		;
 
 		//if entities have been found, return them
@@ -393,7 +431,7 @@ impl::find_in_namespace_from_identifier
 
 
 
-template<bool Optional, bool Multiple, class EntityT, class DeclarativeRegionT>
+template<class DeclarativeRegionT, bool Optional, bool Multiple, class EntityT>
 typename return_type<Optional, Multiple, EntityT>::type
 impl::find_local_entities
 (
@@ -404,7 +442,15 @@ impl::find_local_entities
 	if(auto opt_identifier_node = syntax_nodes::get<syntax_nodes::identifier>(&identifier_or_template_id))
 	{
 		auto identifier_node = *opt_identifier_node;
-		return find_local_entities_from_identifier<Optional, Multiple, EntityT>(identifier_node.value(), current_declarative_region);
+		return
+			find_local_entities_from_identifier
+			<
+				DeclarativeRegionT,
+				Optional,
+				Multiple,
+				EntityT
+			>(identifier_node.value(), current_declarative_region)
+		;
 	}
 	else
 	{
@@ -412,7 +458,7 @@ impl::find_local_entities
 	}
 }
 
-template<bool Optional, bool Multiple, class EntityT, class DeclarativeRegionT>
+template<class DeclarativeRegionT, bool Optional, bool Multiple, class EntityT>
 typename return_type<Optional, Multiple, EntityT>::type
 impl::find_local_entities_from_identifier
 (
@@ -456,7 +502,13 @@ impl::find_entities_in_base_classes
 
 		//find entities in the current declarative region (i.e. current class)
 		typename return_type<Optional, Multiple, EntityT>::type current_class_found_entities =
-			find_local_entities_from_identifier<Optional, Multiple, EntityT>(name, current_class)
+			find_local_entities_from_identifier
+			<
+				std::shared_ptr<semantic_entities::class_>,
+				Optional,
+				Multiple,
+				EntityT
+			>(name, current_class)
 		;
 
 		//entities found?

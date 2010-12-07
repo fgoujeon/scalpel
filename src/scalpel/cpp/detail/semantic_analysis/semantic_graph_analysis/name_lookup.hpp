@@ -24,6 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <scalpel/cpp/syntax_tree.hpp>
 #include <scalpel/utility/is_empty.hpp>
+#include <scalpel/utility/shared_ptr_variant.hpp>
 #include <scalpel/utility/variant.hpp>
 #include <boost/optional.hpp>
 #include <string>
@@ -38,57 +39,88 @@ namespace scalpel { namespace cpp { namespace detail { namespace semantic_analys
 /*
 result_type's truth table:
 
-| Variadic | Variant | Multiple | Optional | result_type::type
-|----------|---------|----------|----------|------------------
-|     0    |    0    |     0    |     X    |        (1)
-|     0    |    0    |     1    |     X    |        (2)
-|     0    |    1    |     0    |     0    |        (3)
-|     0    |    1    |     0    |     1    |        (4)
-|     0    |    1    |     1    |     X    |        (5)
-|     1    |    0    |     0    |     0    |        (6)
-|     1    |    0    |     0    |     1    |        (7)
-|     1    |    0    |     1    |     X    |        (8)
-|     1    |    1    |     X    |     X    |        (E)
+ --------------------------------------------------------------
+| Variadic | Variant | Multiple | Optional | result_type::type |
+|----------|---------|----------|----------|-------------------|
+|     0    |    0    |     0    |     X    |        (1)        |
+|     0    |    0    |     1    |     X    |        (2)        |
+|     0    |    1    |     0    |     0    |        (3)        |
+|     0    |    1    |     0    |     1    |        (4)        |
+|     0    |    1    |     1    |     X    |        (5)        |
+|     1    |    0    |     0    |     0    |        (6)        |
+|     1    |    0    |     0    |     1    |        (7)        |
+|     1    |    0    |     1    |     X    |        (8)        |
+|     1    |    1    |     X    |     X    |        (E)        |
+ --------------------------------------------------------------
 
 (1) std::shared_ptr<EntityT>
 (2) std::set<(1)>
 (3) utility::variant<EntitiesT...>
 (4) boost::optional<(3)>
 (5) std::set<(3)>
+(6) utility::shared_ptr_variant<EntitiesT...>
+(7) boost::optional<(6)>
+(8) std::set<(6)>
 (E) Error
 */
 
-template<bool Optional, bool Multiple, class EntityT>
+template<bool Optional, bool Multiple, class... EntitiesT>
 struct return_type;
 
+//(1)
 template<bool Optional, class EntityT>
 struct return_type<Optional, false, EntityT>
 {
 	typedef std::shared_ptr<EntityT> type;
 };
 
-template<class... EntitiesT>
-struct return_type<true, false, utility::basic_variant<utility::identity, EntitiesT...>>
-{
-	typedef boost::optional<typename utility::variant<EntitiesT...>::type> type;
-};
-
-template<class... EntitiesT>
-struct return_type<false, false, utility::basic_variant<utility::identity, EntitiesT...>>
-{
-	typedef typename utility::variant<EntitiesT...>::type type;
-};
-
+//(2)
 template<bool Optional, class EntityT>
 struct return_type<Optional, true, EntityT>
 {
 	typedef std::set<std::shared_ptr<EntityT>> type;
 };
 
+//(3)
+template<class... EntitiesT>
+struct return_type<false, false, utility::basic_variant<utility::identity, EntitiesT...>>
+{
+	typedef typename utility::variant<EntitiesT...>::type type;
+};
+
+//(4)
+template<class... EntitiesT>
+struct return_type<true, false, utility::basic_variant<utility::identity, EntitiesT...>>
+{
+	typedef boost::optional<typename utility::variant<EntitiesT...>::type> type;
+};
+
+//(5)
 template<bool Optional, class... EntitiesT>
 struct return_type<Optional, true, utility::basic_variant<utility::identity, EntitiesT...>>
 {
 	typedef std::set<typename utility::variant<EntitiesT...>::type> type;
+};
+
+//(6)
+template<class EntityT, class EntityT2, class... EntitiesT>
+struct return_type<false, false, EntityT, EntityT2, EntitiesT...>
+{
+	typedef utility::shared_ptr_variant<EntityT, EntityT2, EntitiesT...> type;
+};
+
+//(7)
+template<class EntityT, class EntityT2, class... EntitiesT>
+struct return_type<true, false, EntityT, EntityT2, EntitiesT...>
+{
+	typedef boost::optional<utility::shared_ptr_variant<EntityT, EntityT2, EntitiesT...>> type;
+};
+
+//(8)
+template<bool Optional, class EntityT, class EntityT2, class... EntitiesT>
+struct return_type<Optional, true, EntityT, EntityT2, EntitiesT...>
+{
+	typedef std::set<utility::shared_ptr_variant<EntityT, EntityT2, EntitiesT...>> type;
 };
 
 
@@ -240,7 +272,7 @@ class impl
 	Find entities corresponding to the given identifier_or_template_id node,
 	in the given declarative region only.
 	*/
-	template<bool Optional, bool Multiple, class EntityT, class DeclarativeRegionT>
+	template<class DeclarativeRegionT, bool Optional, bool Multiple, class EntityT>
 	static
 	typename return_type<Optional, Multiple, EntityT>::type
 	find_local_entities
@@ -252,7 +284,7 @@ class impl
 	/**
 	Find entities of the given name, in the given declarative region only.
 	*/
-	template<bool Optional, bool Multiple, class EntityT, class DeclarativeRegionT>
+	template<class DeclarativeRegionT, bool Optional, bool Multiple, class EntityT>
 	static
 	typename return_type<Optional, Multiple, EntityT>::type
 	find_local_entities_from_identifier
