@@ -48,13 +48,6 @@ get_name<semantic_entities::open_declarative_region_shared_ptr_variant>(semantic
 
 template<>
 const std::string&
-get_name<semantic_entities::namespace_or_namespace_alias_shared_ptr_variant>(semantic_entities::namespace_or_namespace_alias_shared_ptr_variant entity)
-{
-	return semantic_entities::get_name(entity);
-}
-
-template<>
-const std::string&
 get_name<semantic_entities::named_compound_type_shared_ptr_variant>(semantic_entities::named_compound_type_shared_ptr_variant entity)
 {
 	return semantic_entities::get_name(entity);

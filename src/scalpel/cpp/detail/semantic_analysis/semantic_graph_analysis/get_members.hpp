@@ -37,12 +37,6 @@ struct get_members_type_traits<semantic_entities::open_declarative_region_shared
 };
 
 template<>
-struct get_members_type_traits<semantic_entities::namespace_or_namespace_alias_shared_ptr_variant>
-{
-	typedef std::vector<semantic_entities::namespace_or_namespace_alias_shared_ptr_variant> return_type;
-};
-
-template<>
 struct get_members_type_traits<semantic_entities::named_compound_type_shared_ptr_variant>
 {
 	typedef std::vector<semantic_entities::named_compound_type_shared_ptr_variant> return_type;

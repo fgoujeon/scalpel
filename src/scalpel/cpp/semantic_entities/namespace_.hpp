@@ -22,7 +22,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_NAMESPACE_HPP
 
 #include "declarative_region_variants.hpp"
-#include "namespace_or_namespace_alias_variants.hpp"
 #include "namespace_alias.hpp"
 #include "class_.hpp"
 #include "operator_function.hpp"
@@ -48,7 +47,6 @@ class namespace_:
 {
 	public:
 		typedef std::vector<open_declarative_region_shared_ptr_variant> open_declarative_region_shared_ptr_variants_t;
-		typedef std::vector<namespace_or_namespace_alias_shared_ptr_variant> namespace_or_namespace_alias_shared_ptr_variants_t;
 		typedef std::vector<named_compound_type_shared_ptr_variant> named_compound_type_shared_ptr_variants_t;
 
 		typedef std::vector<std::weak_ptr<namespace_>> weak_namespaces_t;
@@ -111,9 +109,6 @@ class namespace_:
 		const open_declarative_region_shared_ptr_variants_t&
 		open_declarative_regions();
 
-		const namespace_or_namespace_alias_shared_ptr_variants_t&
-		namespaces_and_namespace_aliases();
-
 		const named_compound_type_shared_ptr_variants_t&
 		named_compound_types();
 
@@ -163,9 +158,6 @@ class namespace_:
 		add_member(std::shared_ptr<namespace_alias> member);
 
 		void
-		add_member(std::shared_ptr<namespace_or_namespace_alias_shared_ptr_variant> member);
-
-		void
 		add_member(std::shared_ptr<namespace_> member);
 
 		void
@@ -192,7 +184,6 @@ class namespace_:
 
 		//polymorphic containers
 		open_declarative_region_shared_ptr_variants_t open_declarative_regions_;
-		namespace_or_namespace_alias_shared_ptr_variants_t namespaces_and_namespace_aliases_;
 		named_compound_type_shared_ptr_variants_t named_compound_types_;
 
 		//members
