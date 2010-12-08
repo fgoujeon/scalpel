@@ -22,6 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "function_construction.hpp"
 #include "type_construction.hpp"
 #include "syntax_node_analysis.hpp"
+#include "semantic_graph_analysis/get_namespace.hpp"
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
 {
@@ -159,7 +160,7 @@ create_namespace_alias
 		get_identifier(qualified_namespace_specifier_node)
 	);
 
-	//find the namespace designated by the namespace alias
+	//find the namespace or namespace alias designated by the namespace alias
 	utility::shared_ptr_variant<namespace_, namespace_alias>::type found_entity =
 		semantic_graph_analysis::name_lookup::find<false, false, namespace_, namespace_alias>
 		(
@@ -169,13 +170,7 @@ create_namespace_alias
 	;
 
 	//get the namespace entity
-	std::shared_ptr<namespace_> found_namespace;
-	if(std::shared_ptr<namespace_>* opt_namespace = get<namespace_>(&found_entity))
-		found_namespace = *opt_namespace;
-	else if(std::shared_ptr<namespace_alias>* opt_namespace_alias = get<namespace_alias>(&found_entity))
-		found_namespace = (*opt_namespace_alias)->referred_namespace();
-	else
-		assert(false);
+	std::shared_ptr<namespace_> found_namespace = semantic_graph_analysis::get_namespace(found_entity);
 
 	//create the namespace alias semantic entity
 	return std::make_shared<namespace_alias>
@@ -205,15 +200,17 @@ create_using_directive
 		get_identifier(using_directive_node)
 	);
 
-	//find the namespace designated by the using directive
-	return get_namespace
-	(
-		semantic_graph_analysis::name_lookup::find<false, false, namespace_or_namespace_alias_shared_ptr_variant>
+	//find the namespace or namespace alias designated by the using directive
+	utility::shared_ptr_variant<namespace_, namespace_alias>::type found_entity =
+		semantic_graph_analysis::name_lookup::find<false, false, namespace_, namespace_alias>
 		(
 			nested_identifier_or_template_id_node,
 			current_namespace
 		)
-	);
+	;
+
+	//get and return the namespace entity
+	return semantic_graph_analysis::get_namespace(found_entity);
 }
 
 }}}} //namespace scalpel::cpp::detail::semantic_analysis

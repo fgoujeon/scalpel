@@ -58,6 +58,7 @@ template<template<typename> class TypeTraitT, typename T, typename... Ts>
 class basic_variant<TypeTraitT, T, Ts...>
 {
 	public:
+		typedef T raw_head_t;
 		typedef typename TypeTraitT<T>::type head_t;
 		typedef basic_variant<TypeTraitT, Ts...> tail_t;
 
@@ -482,6 +483,7 @@ class apply_visitor_impl
 		>::type* = 0
 	);
 
+	typedef typename CurrentVariantT::raw_head_t raw_head_t;
 	typedef typename CurrentVariantT::head_t head_t;
 	typedef typename CurrentVariantT::tail_t tail_t;
 
@@ -493,7 +495,7 @@ class apply_visitor_impl
 		const FullVariantT& var
 	)
 	{
-		const head_t* opt_object = get<head_t>(&var);
+		const head_t* opt_object = get<raw_head_t>(&var);
 		if(opt_object)
 		{
 			return variant_visitor(*opt_object);
