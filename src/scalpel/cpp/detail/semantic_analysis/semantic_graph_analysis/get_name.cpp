@@ -46,16 +46,10 @@ get_name<semantic_entities::open_declarative_region_shared_ptr_variant>(semantic
 	return semantic_entities::get_name(entity);
 }
 
-template<>
-const std::string&
-get_name<semantic_entities::named_compound_type_shared_ptr_variant>(semantic_entities::named_compound_type_shared_ptr_variant entity)
-{
-	return semantic_entities::get_name(entity);
-}
-
 GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(namespace_alias)
 GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(namespace_)
 GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(class_)
+GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(typedef_)
 GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(simple_function)
 GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(variable)
 

@@ -21,6 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "type_construction.hpp"
 #include "semantic_graph_analysis.hpp"
 #include "syntax_node_analysis.hpp"
+#include "semantic_graph_analysis/to_type_shared_ptr_variant.hpp"
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
 {
@@ -77,21 +78,21 @@ create_type
 			{
 				auto nested_identifier_or_template_id_node = *opt_nested_identifier_or_template_id_node;
 
-				opt_return_type =
-					to_type_shared_ptr_variant
+				utility::shared_ptr_variant<class_, typedef_>::type found_type =
+					semantic_graph_analysis::name_lookup::find
+					<
+						false,
+						false,
+						class_,
+						typedef_
+					>
 					(
-						semantic_graph_analysis::name_lookup::find
-						<
-							false,
-							false,
-							named_compound_type_shared_ptr_variant
-						>
-						(
-							nested_identifier_or_template_id_node,
-							current_declarative_region
-						)
+						nested_identifier_or_template_id_node,
+						current_declarative_region
 					)
 				;
+
+				opt_return_type = semantic_graph_analysis::to_type_shared_ptr_variant(found_type);
 			}
 			else if(auto opt_fundamental_type_specifier_node = get<fundamental_type_specifier>(&simple_type_specifier_node))
 			{

@@ -49,22 +49,6 @@ typedef
 	type_shared_ptr_variant
 ;
 
-//non-fundamental types that can be referred to by a name
-typedef
-	utility::variant
-	<
-		std::shared_ptr<class_>,
-		std::shared_ptr<typedef_>
-	>::type
-	named_compound_type_shared_ptr_variant
-;
-
-const std::string&
-get_name(const named_compound_type_shared_ptr_variant var);
-
-type_shared_ptr_variant
-to_type_shared_ptr_variant(const named_compound_type_shared_ptr_variant var);
-
 }}} //namespace scalpel::cpp::semantic_entities
 
 #endif

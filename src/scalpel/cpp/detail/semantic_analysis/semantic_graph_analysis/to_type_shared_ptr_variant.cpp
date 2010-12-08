@@ -18,31 +18,14 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "type_variants.hpp"
+#include "to_type_shared_ptr_variant.hpp"
 
-namespace scalpel { namespace cpp { namespace semantic_entities
+namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace semantic_graph_analysis
 {
 
-struct get_named_compound_type_name_impl_struct: public utility::static_visitor<const std::string&>
-{
-	template<class T>
-	const std::string&
-	operator()(std::shared_ptr<T> t) const
-	{
-		return t->name();
-	}
-};
-get_named_compound_type_name_impl_struct get_named_compound_type_name_impl;
+using namespace semantic_entities;
 
-const std::string&
-get_name(const named_compound_type_shared_ptr_variant var)
-{
-	return utility::apply_visitor(get_named_compound_type_name_impl, var);
-}
-
-
-
-struct to_type_shared_ptr_variant_impl_struct: public utility::static_visitor<type_shared_ptr_variant>
+struct: public utility::static_visitor<type_shared_ptr_variant>
 {
 	type_shared_ptr_variant
 	operator()(std::shared_ptr<class_> t) const
@@ -55,14 +38,13 @@ struct to_type_shared_ptr_variant_impl_struct: public utility::static_visitor<ty
 	{
 		return t->type();
 	}
-};
-to_type_shared_ptr_variant_impl_struct to_type_shared_ptr_variant_impl;
+} to_type_shared_ptr_variant_impl;
 
 type_shared_ptr_variant
-to_type_shared_ptr_variant(const named_compound_type_shared_ptr_variant var)
+to_type_shared_ptr_variant(const utility::shared_ptr_variant<semantic_entities::class_, semantic_entities::typedef_>::type& var)
 {
 	return utility::apply_visitor(to_type_shared_ptr_variant_impl, var);
 }
 
-}}} //namespace scalpel::cpp::semantic_entities
+}}}}} //namespace scalpel::cpp::detail::semantic_analysis::semantic_graph_analysis
 
