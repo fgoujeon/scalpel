@@ -138,6 +138,26 @@ class basic_variant<TypeTraitT, T, Ts...>
 		const basic_variant&
 		operator=(const basic_variant& rhs);
 
+	private:
+		const basic_variant&
+		assign(const basic_variant& rhs);
+
+		template<typename T2>
+		const basic_variant&
+		assign
+		(
+			const T2& rhs,
+			typename boost::disable_if
+			<
+				boost::is_same
+				<
+					typename boost::remove_const<T2>::type,
+					basic_variant
+				>
+			>::type* = 0 //avoid conflict with primary assign()
+		);
+
+	public:
 		//Return true if *this and rhs contain the same type and
 		//content_this == content_rhs.
 		bool
@@ -267,12 +287,19 @@ template<template<typename> class TypeTraitT, typename T, typename... Ts>
 const basic_variant<TypeTraitT, T, Ts...>&
 basic_variant<TypeTraitT, T, Ts...>::operator=(const basic_variant<TypeTraitT, T, Ts...>& rhs)
 {
+	return assign(rhs);
+}
+
+template<template<typename> class TypeTraitT, typename T, typename... Ts>
+const basic_variant<TypeTraitT, T, Ts...>&
+basic_variant<TypeTraitT, T, Ts...>::assign(const basic_variant& rhs)
+{
 	//exception safety: ensure the may-throw copy of the rhs basic_variant's content
 	//occurs before the erasure of the lhs basic_variant's content
 	if(!head_)
 	{
 		if(rhs.head_)
-			head_ = std::unique_ptr<T>(new T(*rhs.head_));
+			head_ = std::unique_ptr<head_t>(new head_t(*rhs.head_));
 
 		tail_ = rhs.tail_;
 	}
@@ -282,12 +309,31 @@ basic_variant<TypeTraitT, T, Ts...>::operator=(const basic_variant<TypeTraitT, T
 
 		//erase the lhs basic_variant's content
 		if(rhs.head_)
-			head_ = std::unique_ptr<T>(new T(*rhs.head_));
+			head_ = std::unique_ptr<head_t>(new head_t(*rhs.head_));
 		else
 			head_.reset();
 	}
 
 	return *this;
+}
+
+template<template<typename> class TypeTraitT, typename T, typename... Ts>
+template<typename T2>
+const basic_variant<TypeTraitT, T, Ts...>&
+basic_variant<TypeTraitT, T, Ts...>::assign
+(
+	const T2& rhs,
+	typename boost::disable_if
+	<
+		boost::is_same
+		<
+			typename boost::remove_const<T2>::type,
+			basic_variant
+		>
+	>::type*
+)
+{
+	return basic_variant(rhs);
 }
 
 template<template<typename> class TypeTraitT, typename T, typename... Ts>

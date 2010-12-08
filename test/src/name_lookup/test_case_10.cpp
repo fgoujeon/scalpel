@@ -22,6 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <scalpel/cpp/detail/semantic_analysis/semantic_graph_analysis/name_lookup.hpp>
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <scalpel/cpp/syntax_tree.hpp>
+#include <scalpel/utility/shared_ptr_variant.hpp>
 #include <boost/test/unit_test.hpp>
 
 namespace name_lookup
@@ -129,6 +130,16 @@ test_case_10()
 		);
 		auto found_entity = find<false, false, variable>(as2_i_syntax_node, function_test->body());
 		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
+	}
+
+	//look up a from as, must find a
+	{
+		scalpel::utility::shared_ptr_variant<namespace_, namespace_alias>::type found_entity =
+			find<false, false, namespace_, namespace_alias>(identifier("as"), function_test->body())
+		;
+		std::shared_ptr<namespace_alias> found_namespace_alias = get<namespace_alias>(found_entity);
+		BOOST_CHECK_EQUAL(found_namespace_alias, namespace_alias_as);
+		BOOST_CHECK_EQUAL(found_namespace_alias->referred_namespace(), namespace_a);
 	}
 }
 

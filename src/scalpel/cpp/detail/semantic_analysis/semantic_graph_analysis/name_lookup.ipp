@@ -466,7 +466,67 @@ impl::find_local_entities_from_identifier
 	const DeclarativeRegionT& current_declarative_region
 )
 {
-	return return_type<Optional, Multiple, EntityT, EntityT2, EntitiesT...>::type();
+	typename return_type<true, Multiple, EntityT, EntityT2, EntitiesT...>::type found_entities;
+
+	find_variadic_local_entities_from_identifier
+	<
+		DeclarativeRegionT,
+		Optional,
+		Multiple,
+		typename return_type<true, Multiple, EntityT, EntityT2, EntitiesT...>::type,
+		EntityT,
+		EntityT2,
+		EntitiesT...
+	>::find(name, current_declarative_region, found_entities);
+
+	return return_result<Optional, Multiple, EntityT, EntityT2, EntitiesT...>::result(found_entities);
+}
+
+template<class DeclarativeRegionT, bool Optional, bool Multiple, class ReturnT>
+void
+impl::find_variadic_local_entities_from_identifier<DeclarativeRegionT, Optional, Multiple, ReturnT>::find
+(
+	const std::string&,
+	const DeclarativeRegionT&,
+	ReturnT&
+)
+{
+	//does nothing
+}
+
+template<class DeclarativeRegionT, bool Optional, bool Multiple, class ReturnT, class EntityT, class... EntitiesT>
+void
+impl::find_variadic_local_entities_from_identifier<DeclarativeRegionT, Optional, Multiple, ReturnT, EntityT, EntitiesT...>::find
+(
+	const std::string& name,
+	const DeclarativeRegionT& current_declarative_region,
+	ReturnT& found_entities
+)
+{
+	//find entities of type EntityT in the current declarative region
+	typename return_type<Optional, Multiple, EntityT>::type entities =
+		find_local_entities_from_identifier<DeclarativeRegionT, true, Multiple, EntityT>(name, current_declarative_region)
+	;
+
+	//if entities have been found...
+	if(!utility::is_empty(entities))
+	{
+		//... add them to the list...
+		add_to_result(found_entities, entities);
+
+		//and stop if we want a single entity
+		if(!Multiple) return;
+	}
+
+	//recursive call for other types of EntitiesT
+	find_variadic_local_entities_from_identifier
+	<
+		DeclarativeRegionT,
+		true,
+		Multiple,
+		ReturnT,
+		EntitiesT...
+	>::find(name, current_declarative_region, found_entities);
 }
 
 template<class DeclarativeRegionT, bool Optional, bool Multiple, class EntityT>
@@ -660,6 +720,39 @@ typename return_type<false, false, utility::basic_variant<utility::identity, Ent
 impl::return_result<false, false, utility::basic_variant<utility::identity, EntitiesT...>>::result
 (
 	typename return_type<true, false, utility::basic_variant<utility::identity, EntitiesT...>>::type& result
+)
+{
+	if(!result)
+		throw std::runtime_error("no entity found");
+	return *result;
+}
+
+template<class EntityT, class EntityT2, class... EntitiesT>
+typename return_type<false, false, EntityT, EntityT2, EntitiesT...>::type
+impl::return_result<false, false, EntityT, EntityT2, EntitiesT...>::result
+(
+	typename return_type<false, true, EntityT, EntityT2, EntitiesT...>::type& result
+)
+{
+	if(result.empty())
+	{
+		throw std::runtime_error("no entity found");
+	}
+	else if(result.size() == 1)
+	{
+		return *result.begin();
+	}
+	else
+	{
+		throw std::runtime_error("more than one entities found");
+	}
+}
+
+template<class EntityT, class EntityT2, class... EntitiesT>
+typename return_type<false, false, EntityT, EntityT2, EntitiesT...>::type
+impl::return_result<false, false, EntityT, EntityT2, EntitiesT...>::result
+(
+	typename return_type<true, false, EntityT, EntityT2, EntitiesT...>::type& result
 )
 {
 	if(!result)

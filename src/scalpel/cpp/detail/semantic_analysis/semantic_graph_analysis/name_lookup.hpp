@@ -106,21 +106,21 @@ struct return_type<Optional, true, utility::basic_variant<utility::identity, Ent
 template<class EntityT, class EntityT2, class... EntitiesT>
 struct return_type<false, false, EntityT, EntityT2, EntitiesT...>
 {
-	typedef utility::shared_ptr_variant<EntityT, EntityT2, EntitiesT...> type;
+	typedef typename utility::shared_ptr_variant<EntityT, EntityT2, EntitiesT...>::type type;
 };
 
 //(7)
 template<class EntityT, class EntityT2, class... EntitiesT>
 struct return_type<true, false, EntityT, EntityT2, EntitiesT...>
 {
-	typedef boost::optional<utility::shared_ptr_variant<EntityT, EntityT2, EntitiesT...>> type;
+	typedef boost::optional<typename utility::shared_ptr_variant<EntityT, EntityT2, EntitiesT...>::type> type;
 };
 
 //(8)
 template<bool Optional, class EntityT, class EntityT2, class... EntitiesT>
 struct return_type<Optional, true, EntityT, EntityT2, EntitiesT...>
 {
-	typedef std::set<utility::shared_ptr_variant<EntityT, EntityT2, EntitiesT...>> type;
+	typedef std::set<typename utility::shared_ptr_variant<EntityT, EntityT2, EntitiesT...>::type> type;
 };
 
 
@@ -293,6 +293,35 @@ class impl
 		const DeclarativeRegionT& current_declarative_region
 	);
 
+	template<class DeclarativeRegionT, bool Optional, bool Multiple, class ReturnT, class... EntitiesT>
+	struct find_variadic_local_entities_from_identifier;
+
+	template<class DeclarativeRegionT, bool Optional, bool Multiple, class ReturnT>
+	struct find_variadic_local_entities_from_identifier<DeclarativeRegionT, Optional, Multiple, ReturnT>
+	{
+		static
+		void
+		find
+		(
+			const std::string& name,
+			const DeclarativeRegionT& current_declarative_region,
+			ReturnT& found_entities
+		);
+	};
+
+	template<class DeclarativeRegionT, bool Optional, bool Multiple, class ReturnT, class EntityT, class... EntitiesT>
+	struct find_variadic_local_entities_from_identifier<DeclarativeRegionT, Optional, Multiple, ReturnT, EntityT, EntitiesT...>
+	{
+		static
+		void
+		find
+		(
+			const std::string& name,
+			const DeclarativeRegionT& current_declarative_region,
+			ReturnT& found_entities
+		);
+	};
+
 	/**
 	Find entities of the given name, in the given declarative region only.
 	*/
@@ -419,6 +448,23 @@ class impl
 		static
 		typename return_type<false, false, utility::basic_variant<utility::identity, EntitiesT...>>::type
 		result(typename return_type<true, false, utility::basic_variant<utility::identity, EntitiesT...>>::type& result);
+	};
+
+	template<class EntityT, class EntityT2, class... EntitiesT>
+	struct return_result<false, false, EntityT, EntityT2, EntitiesT...>
+	{
+		//return the only one element of the set
+		//throw an exception if there's zero or more than one element in
+		//the set
+		static
+		typename return_type<false, false, EntityT, EntityT2, EntitiesT...>::type
+		result(typename return_type<false, true, EntityT, EntityT2, EntitiesT...>::type& result);
+
+		//return *result;
+		//throw an exception if the result is empty
+		static
+		typename return_type<false, false, EntityT, EntityT2, EntitiesT...>::type
+		result(typename return_type<true, false, EntityT, EntityT2, EntitiesT...>::type& result);
 	};
 
 	template<class... EntitiesT>
