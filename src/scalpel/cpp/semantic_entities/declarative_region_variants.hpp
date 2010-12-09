@@ -22,6 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_DECLARATIVE_REGION_VARIANTS_HPP
 
 #include <scalpel/utility/variant.hpp>
+#include <scalpel/utility/shared_ptr_variant.hpp>
 #include <memory>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
@@ -38,16 +39,16 @@ class simple_function;
 class statement_block;
 
 typedef
-	scalpel::utility::variant
+	scalpel::utility::shared_ptr_variant
 	<
-		std::shared_ptr<namespace_>,
-		std::shared_ptr<class_>,
-		std::shared_ptr<constructor>,
-		std::shared_ptr<destructor>,
-		std::shared_ptr<operator_function>,
-		std::shared_ptr<conversion_function>,
-		std::shared_ptr<simple_function>,
-		std::shared_ptr<statement_block>
+		namespace_,
+		class_,
+		constructor,
+		destructor,
+		operator_function,
+		conversion_function,
+		simple_function,
+		statement_block
 	>::type
 	declarative_region_shared_ptr_variant
 ;
@@ -69,11 +70,11 @@ typedef
 
 //open declarative regions are those considered during a qualified name lookup
 typedef
-	scalpel::utility::variant
+	scalpel::utility::shared_ptr_variant
 	<
-		std::shared_ptr<namespace_>,
-		std::shared_ptr<namespace_alias>,
-		std::shared_ptr<class_>
+		namespace_,
+		namespace_alias,
+		class_
 	>::type
 	open_declarative_region_shared_ptr_variant
 ;
@@ -99,3 +100,4 @@ to_weak_ptr_variant(const declarative_region_shared_ptr_variant& var);
 }}} //namespace scalpel::cpp::semantic_entities
 
 #endif
+

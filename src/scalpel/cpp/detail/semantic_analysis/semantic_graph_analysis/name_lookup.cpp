@@ -71,7 +71,7 @@ impl::find_common_enclosing_namespace
 	semantic_entities::declarative_region_shared_ptr_variant current_declarative_region_a = a;
 	while(true)
 	{
-		if(auto opt_namespace_ptr = utility::get<std::shared_ptr<semantic_entities::namespace_>>(&current_declarative_region_a))
+		if(auto opt_namespace_ptr = utility::get<semantic_entities::namespace_>(&current_declarative_region_a))
 		{
 			const std::shared_ptr<semantic_entities::namespace_> current_namespace_a = *opt_namespace_ptr;
 

@@ -23,20 +23,20 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <scalpel/cpp/syntax_tree.hpp>
-#include <scalpel/utility/variant.hpp>
+#include <scalpel/utility/shared_ptr_variant.hpp>
 #include <memory>
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
 {
 
 typedef
-	utility::variant
+	utility::shared_ptr_variant
 	<
-		std::shared_ptr<semantic_entities::constructor>,
-		std::shared_ptr<semantic_entities::destructor>,
-		std::shared_ptr<semantic_entities::operator_function>,
-		std::shared_ptr<semantic_entities::conversion_function>,
-		std::shared_ptr<semantic_entities::simple_function>
+		semantic_entities::constructor,
+		semantic_entities::destructor,
+		semantic_entities::operator_function,
+		semantic_entities::conversion_function,
+		semantic_entities::simple_function
 	>::type
 	function_shared_ptr_variant
 ;

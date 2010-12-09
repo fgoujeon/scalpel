@@ -168,7 +168,7 @@ print_class
 	if(c->has_enclosing_declarative_region())
 	{
 		declarative_region_shared_ptr_variant enclosing_declarative_region = c->enclosing_declarative_region();
-		if(auto opt_class = utility::get<std::shared_ptr<class_>>(&enclosing_declarative_region))
+		if(auto opt_class = utility::get<class_>(&enclosing_declarative_region))
 		{
 			std::shared_ptr<class_> enclosing_declarative_region = *opt_class;
 
@@ -242,7 +242,7 @@ print_constructor
 	std::cout << indent(indent_level) << "<constructor";
 	if(entity->has_enclosing_declarative_region())
 	{
-		std::shared_ptr<class_> enclosing_declarative_region = utility::get<std::shared_ptr<class_>>(entity->enclosing_declarative_region());
+		std::shared_ptr<class_> enclosing_declarative_region = utility::get<class_>(entity->enclosing_declarative_region());
 
 		class_::access acc = enclosing_declarative_region->member_access(entity);
 		std::cout << attribute(acc);
@@ -277,7 +277,7 @@ print_destructor
 	std::cout << indent(indent_level) << "<destructor";
 	if(entity->has_enclosing_declarative_region())
 	{
-		std::shared_ptr<class_> enclosing_declarative_region = utility::get<std::shared_ptr<class_>>(entity->enclosing_declarative_region());
+		std::shared_ptr<class_> enclosing_declarative_region = utility::get<class_>(entity->enclosing_declarative_region());
 
 		class_::access acc = enclosing_declarative_region->member_access(entity);
 		std::cout << attribute(acc);
@@ -306,7 +306,7 @@ print_simple_function
 	if(entity->has_enclosing_declarative_region())
 	{
 		declarative_region_shared_ptr_variant enclosing_declarative_region = entity->enclosing_declarative_region();
-		if(auto opt_class = utility::get<std::shared_ptr<class_>>(&enclosing_declarative_region))
+		if(auto opt_class = utility::get<class_>(&enclosing_declarative_region))
 		{
 			std::shared_ptr<class_> enclosing_declarative_region = *opt_class;
 
@@ -362,7 +362,7 @@ print_operator_function
 	if(entity->has_enclosing_declarative_region())
 	{
 		declarative_region_shared_ptr_variant enclosing_declarative_region = entity->enclosing_declarative_region();
-		if(auto opt_class = utility::get<std::shared_ptr<class_>>(&enclosing_declarative_region))
+		if(auto opt_class = utility::get<class_>(&enclosing_declarative_region))
 		{
 			std::shared_ptr<class_> enclosing_declarative_region = *opt_class;
 
@@ -413,7 +413,7 @@ print_conversion_function
 	std::cout << indent(indent_level) << "<conversion_function";
 	if(entity->has_enclosing_declarative_region())
 	{
-		std::shared_ptr<class_> enclosing_declarative_region = utility::get<std::shared_ptr<class_>>(entity->enclosing_declarative_region());
+		std::shared_ptr<class_> enclosing_declarative_region = utility::get<class_>(entity->enclosing_declarative_region());
 
 		class_::access acc = enclosing_declarative_region->member_access(entity);
 		std::cout << attribute(acc);
@@ -467,7 +467,7 @@ print_variable
 	if(entity->has_enclosing_declarative_region())
 	{
 		declarative_region_shared_ptr_variant enclosing_declarative_region = entity->enclosing_declarative_region();
-		if(auto opt_class = utility::get<std::shared_ptr<class_>>(&enclosing_declarative_region))
+		if(auto opt_class = utility::get<class_>(&enclosing_declarative_region))
 		{
 			std::shared_ptr<class_> enclosing_declarative_region = *opt_class;
 
@@ -499,7 +499,7 @@ print_typedef
 	if(entity->has_enclosing_declarative_region())
 	{
 		declarative_region_shared_ptr_variant enclosing_declarative_region = entity->enclosing_declarative_region();
-		if(auto opt_class = utility::get<std::shared_ptr<class_>>(&enclosing_declarative_region))
+		if(auto opt_class = utility::get<class_>(&enclosing_declarative_region))
 		{
 			std::shared_ptr<class_> enclosing_declarative_region = *opt_class;
 

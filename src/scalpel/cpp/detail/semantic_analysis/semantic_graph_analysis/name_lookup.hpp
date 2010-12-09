@@ -55,7 +55,7 @@ result_type's truth table:
 
 (1) std::shared_ptr<EntityT>
 (2) std::set<(1)>
-(3) utility::variant<EntitiesT...>
+(3) utility::shared_ptr_variant<EntitiesT...>
 (4) boost::optional<(3)>
 (5) std::set<(3)>
 (6) utility::shared_ptr_variant<EntitiesT...>
@@ -83,23 +83,23 @@ struct return_type<Optional, true, EntityT>
 
 //(3)
 template<class... EntitiesT>
-struct return_type<false, false, utility::basic_variant<utility::identity, EntitiesT...>>
+struct return_type<false, false, utility::basic_variant<utility::add_shared_ptr, EntitiesT...>>
 {
-	typedef typename utility::variant<EntitiesT...>::type type;
+	typedef typename utility::shared_ptr_variant<EntitiesT...>::type type;
 };
 
 //(4)
 template<class... EntitiesT>
-struct return_type<true, false, utility::basic_variant<utility::identity, EntitiesT...>>
+struct return_type<true, false, utility::basic_variant<utility::add_shared_ptr, EntitiesT...>>
 {
-	typedef boost::optional<typename utility::variant<EntitiesT...>::type> type;
+	typedef boost::optional<typename utility::shared_ptr_variant<EntitiesT...>::type> type;
 };
 
 //(5)
 template<bool Optional, class... EntitiesT>
-struct return_type<Optional, true, utility::basic_variant<utility::identity, EntitiesT...>>
+struct return_type<Optional, true, utility::basic_variant<utility::add_shared_ptr, EntitiesT...>>
 {
-	typedef std::set<typename utility::variant<EntitiesT...>::type> type;
+	typedef std::set<typename utility::shared_ptr_variant<EntitiesT...>::type> type;
 };
 
 //(6)
@@ -434,20 +434,20 @@ class impl
 	};
 
 	template<class... EntitiesT>
-	struct return_result<false, false, utility::basic_variant<utility::identity, EntitiesT...>>
+	struct return_result<false, false, utility::basic_variant<utility::add_shared_ptr, EntitiesT...>>
 	{
 		//return the only one element of the set
 		//throw an exception if there's zero or more than one element in
 		//the set
 		static
-		typename return_type<false, false, utility::basic_variant<utility::identity, EntitiesT...>>::type
-		result(typename return_type<false, true, utility::basic_variant<utility::identity, EntitiesT...>>::type& result);
+		typename return_type<false, false, utility::basic_variant<utility::add_shared_ptr, EntitiesT...>>::type
+		result(typename return_type<false, true, utility::basic_variant<utility::add_shared_ptr, EntitiesT...>>::type& result);
 
 		//return *result;
 		//throw an exception if the result is empty
 		static
-		typename return_type<false, false, utility::basic_variant<utility::identity, EntitiesT...>>::type
-		result(typename return_type<true, false, utility::basic_variant<utility::identity, EntitiesT...>>::type& result);
+		typename return_type<false, false, utility::basic_variant<utility::add_shared_ptr, EntitiesT...>>::type
+		result(typename return_type<true, false, utility::basic_variant<utility::add_shared_ptr, EntitiesT...>>::type& result);
 	};
 
 	template<class EntityT, class EntityT2, class... EntitiesT>

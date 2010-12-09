@@ -62,7 +62,7 @@ find
 	auto identifier_or_template_id_node = get_identifier_or_template_id(nested_identifier_or_template_id_node);
 	if(apply_using_directives_for_unqualified_id_part)
 	{
-		if(auto opt_namespace_ptr = utility::get<std::shared_ptr<semantic_entities::namespace_>>(&last_declarative_region))
+		if(std::shared_ptr<semantic_entities::namespace_>* opt_namespace_ptr = utility::get<semantic_entities::namespace_>(&last_declarative_region))
 			return impl::find_in_namespace<Optional, Multiple, EntitiesT...>(identifier_or_template_id_node, *opt_namespace_ptr);
 	}
 	return
@@ -119,7 +119,7 @@ impl::find_declarative_region
 		try
 		{
 			global_namespace =
-				utility::get<std::shared_ptr<semantic_entities::namespace_>>(outermost_declarative_region)
+				utility::get<semantic_entities::namespace_>(outermost_declarative_region)
 			;
 		}
 		catch(...)
@@ -253,14 +253,14 @@ impl::find_entities_from_identifier
 	while(true)
 	{
 		//apply using directives (only for namespaces and statement blocks)
-		if(auto opt_namespace_ptr = utility::get<std::shared_ptr<semantic_entities::namespace_>>(&current_declarative_region))
+		if(auto opt_namespace_ptr = utility::get<semantic_entities::namespace_>(&current_declarative_region))
 			apply_using_directives
 			(
 				current_declarative_region,
 				(*opt_namespace_ptr)->using_directive_namespaces(),
 				namespace_associations
 			);
-		else if(auto opt_statement_block_ptr = utility::get<std::shared_ptr<semantic_entities::statement_block>>(&current_declarative_region))
+		else if(auto opt_statement_block_ptr = utility::get<semantic_entities::statement_block>(&current_declarative_region))
 			apply_using_directives
 			(
 				current_declarative_region,
@@ -283,7 +283,7 @@ impl::find_entities_from_identifier
 
 		//find entities in the associated namespaces (only for namespaces)
 		//and add them to the previously found entities
-		if(auto opt_namespace_ptr = utility::get<std::shared_ptr<semantic_entities::namespace_>>(&current_declarative_region))
+		if(auto opt_namespace_ptr = utility::get<semantic_entities::namespace_>(&current_declarative_region))
 		{
 			auto associated_namespaces_it = namespace_associations.find(*opt_namespace_ptr);
 			if(associated_namespaces_it != namespace_associations.end())
@@ -312,7 +312,7 @@ impl::find_entities_from_identifier
 		if(!utility::is_empty(found_entities)) break;
 
 		//find entities in the base classes (only for classes)
-		if(auto opt_class_ptr = utility::get<std::shared_ptr<semantic_entities::class_>>(&current_declarative_region))
+		if(auto opt_class_ptr = utility::get<semantic_entities::class_>(&current_declarative_region))
 		{
 			std::shared_ptr<semantic_entities::class_> class_ptr = *opt_class_ptr;
 
@@ -695,10 +695,10 @@ impl::return_result<false, false, EntitiesT...>::result(typename return_type<tru
 }
 
 template<class... EntitiesT>
-typename return_type<false, false, utility::basic_variant<utility::identity, EntitiesT...>>::type
-impl::return_result<false, false, utility::basic_variant<utility::identity, EntitiesT...>>::result
+typename return_type<false, false, utility::basic_variant<utility::add_shared_ptr, EntitiesT...>>::type
+impl::return_result<false, false, utility::basic_variant<utility::add_shared_ptr, EntitiesT...>>::result
 (
-	typename return_type<false, true, utility::basic_variant<utility::identity, EntitiesT...>>::type& result
+	typename return_type<false, true, utility::basic_variant<utility::add_shared_ptr, EntitiesT...>>::type& result
 )
 {
 	if(result.empty())
@@ -716,10 +716,10 @@ impl::return_result<false, false, utility::basic_variant<utility::identity, Enti
 }
 
 template<class... EntitiesT>
-typename return_type<false, false, utility::basic_variant<utility::identity, EntitiesT...>>::type
-impl::return_result<false, false, utility::basic_variant<utility::identity, EntitiesT...>>::result
+typename return_type<false, false, utility::basic_variant<utility::add_shared_ptr, EntitiesT...>>::type
+impl::return_result<false, false, utility::basic_variant<utility::add_shared_ptr, EntitiesT...>>::result
 (
-	typename return_type<true, false, utility::basic_variant<utility::identity, EntitiesT...>>::type& result
+	typename return_type<true, false, utility::basic_variant<utility::add_shared_ptr, EntitiesT...>>::type& result
 )
 {
 	if(!result)

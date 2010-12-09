@@ -266,16 +266,16 @@ fill_namespace
 			//declare the function_entity
 			if
 			(
-				get<std::shared_ptr<constructor>>(&function_entity) ||
-				get<std::shared_ptr<destructor>>(&function_entity) ||
-				get<std::shared_ptr<conversion_function>>(&function_entity)
+				get<constructor>(&function_entity) ||
+				get<destructor>(&function_entity) ||
+				get<conversion_function>(&function_entity)
 			)
 			{
 				std::runtime_error("error: this function must be a nonstatic member function_entity");
 			}
-			else if(auto opt_operator_function_entity = get<std::shared_ptr<operator_function>>(&function_entity))
+			else if(auto opt_operator_function_entity = get<operator_function>(&function_entity))
 				namespace_entity->add_member(*opt_operator_function_entity);
-			else if(auto opt_simple_function_entity = get<std::shared_ptr<simple_function>>(&function_entity))
+			else if(auto opt_simple_function_entity = get<simple_function>(&function_entity))
 				namespace_entity->add_member(*opt_simple_function_entity);
 			else
 				assert(false);

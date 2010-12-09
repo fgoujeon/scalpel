@@ -138,15 +138,15 @@ define_function
 	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 )
 {
-	if(auto opt_constructor_entity = get<std::shared_ptr<constructor>>(&function_entity))
+	if(auto opt_constructor_entity = get<constructor>(&function_entity))
 		(*opt_constructor_entity)->body(std::make_shared<semantic_entities::statement_block>());
-	else if(auto opt_destructor_entity = get<std::shared_ptr<destructor>>(&function_entity))
+	else if(auto opt_destructor_entity = get<destructor>(&function_entity))
 		(*opt_destructor_entity)->body(std::make_shared<semantic_entities::statement_block>());
-	else if(auto opt_operator_function_entity = get<std::shared_ptr<operator_function>>(&function_entity))
+	else if(auto opt_operator_function_entity = get<operator_function>(&function_entity))
 		(*opt_operator_function_entity)->body(std::make_shared<semantic_entities::statement_block>());
-	else if(auto opt_conversion_function_entity = get<std::shared_ptr<conversion_function>>(&function_entity))
+	else if(auto opt_conversion_function_entity = get<conversion_function>(&function_entity))
 		(*opt_conversion_function_entity)->body(std::make_shared<semantic_entities::statement_block>());
-	else if(auto opt_simple_function_entity = get<std::shared_ptr<simple_function>>(&function_entity))
+	else if(auto opt_simple_function_entity = get<simple_function>(&function_entity))
 		(*opt_simple_function_entity)->body(std::make_shared<semantic_entities::statement_block>());
 	else
 		assert(false);
@@ -160,23 +160,23 @@ find_function
 	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 )
 {
-	if(auto opt_constructor_entity = get<std::shared_ptr<constructor>>(&function_signature))
+	if(auto opt_constructor_entity = get<constructor>(&function_signature))
 	{
 		assert(false); //not managed yet
 	}
-	else if(auto opt_destructor_entity = get<std::shared_ptr<destructor>>(&function_signature))
+	else if(auto opt_destructor_entity = get<destructor>(&function_signature))
 	{
 		assert(false); //not managed yet
 	}
-	else if(auto opt_operator_function_signature = get<std::shared_ptr<operator_function>>(&function_signature))
+	else if(auto opt_operator_function_signature = get<operator_function>(&function_signature))
 	{
 		assert(false); //not managed yet
 	}
-	else if(auto opt_conversion_function_signature = get<std::shared_ptr<conversion_function>>(&function_signature))
+	else if(auto opt_conversion_function_signature = get<conversion_function>(&function_signature))
 	{
 		assert(false); //not managed yet
 	}
-	else if(auto opt_simple_function_signature = get<std::shared_ptr<simple_function>>(&function_signature))
+	else if(auto opt_simple_function_signature = get<simple_function>(&function_signature))
 	{
 		std::shared_ptr<simple_function> function_declaration =
 			find_function<simple_function>
