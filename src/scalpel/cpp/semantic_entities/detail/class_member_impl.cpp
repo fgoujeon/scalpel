@@ -18,35 +18,42 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "declarative_region_member_impl.hpp"
+#include "class_member_impl.hpp"
+#include "../class_.hpp"
 #include <scalpel/utility/ptr_variant_conversion_functions.hpp>
 
-namespace scalpel { namespace cpp { namespace semantic_entities
+namespace scalpel { namespace cpp { namespace semantic_entities { namespace detail
 {
 
 bool
-declarative_region_member_impl::has_enclosing_declarative_region() const
+class_member_impl::has_enclosing_declarative_region() const
 {
-	return enclosing_declarative_region_;
+	return !enclosing_declarative_region_.expired();
 }
 
-declarative_region_shared_ptr_variant
-declarative_region_member_impl::enclosing_declarative_region() const
+std::shared_ptr<class_>
+class_member_impl::enclosing_class() const
 {
-	if(enclosing_declarative_region_)
-		return utility::to_shared_ptr_variant(*enclosing_declarative_region_);
+	if(!enclosing_declarative_region_.expired())
+		return enclosing_declarative_region_.lock();
 	else
 		throw std::runtime_error("The declarative region is not set.");
 }
 
-void
-declarative_region_member_impl::enclosing_declarative_region(const declarative_region_shared_ptr_variant& decl_region)
+declarative_region_shared_ptr_variant
+class_member_impl::enclosing_declarative_region() const
 {
-	if(!enclosing_declarative_region_)
-		enclosing_declarative_region_ = utility::to_weak_ptr_variant(decl_region);
+	return enclosing_class();
+}
+
+void
+class_member_impl::enclosing_declarative_region(const std::shared_ptr<class_>& decl_region)
+{
+	if(enclosing_declarative_region_.expired())
+		enclosing_declarative_region_ = decl_region;
 	else
 		throw std::runtime_error("The declarative region is already set.");
 }
 
-}}} //namespace scalpel::cpp::semantic_entities
+}}}} //namespace scalpel::cpp::semantic_entities::detail
 

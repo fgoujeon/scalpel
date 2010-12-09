@@ -24,7 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "statement_block.hpp"
 #include "type_variants_fwd.hpp"
 #include "declarative_region_variants.hpp"
-#include "declarative_region_member_impl.hpp"
+#include "detail/declarative_region_member_impl.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -84,7 +84,7 @@ class conversion_function:
 	private:
 		type_shared_ptr_variant return_type_;
 		bool is_inline_;
-		declarative_region_member_impl declarative_region_member_impl_;
+		detail::declarative_region_member_impl declarative_region_member_impl_;
 
 		std::shared_ptr<statement_block> body_;
 };

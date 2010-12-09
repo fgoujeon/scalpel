@@ -22,7 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_VARIABLE_HPP
 
 #include "type_variants_fwd.hpp"
-#include "declarative_region_member_impl.hpp"
+#include "detail/declarative_region_member_impl.hpp"
 #include <boost/noncopyable.hpp>
 #include <string>
 #include <memory>
@@ -72,7 +72,7 @@ class variable
 		type_shared_ptr_variant type_; //TODO prevent cyclic dependency
 		std::string name_;
 		bool is_static_;
-		declarative_region_member_impl declarative_region_member_impl_;
+		detail::declarative_region_member_impl declarative_region_member_impl_;
 };
 
 bool

@@ -37,9 +37,9 @@ find_function
 	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 )
 {
+	namespace detail = detail::semantic_analysis;
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
-	namespace detail = detail::semantic_analysis;
 
 	//find the functions from the name
 	std::set<std::shared_ptr<simple_function>> found_functions;

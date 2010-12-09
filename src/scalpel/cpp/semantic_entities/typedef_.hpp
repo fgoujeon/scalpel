@@ -22,7 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_TYPEDEF_HPP
 
 #include "type_variants_fwd.hpp"
-#include "declarative_region_member_impl.hpp"
+#include "detail/declarative_region_member_impl.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -69,7 +69,7 @@ class typedef_
 		std::string name_;
 		type_shared_ptr_variant type_;
 
-		declarative_region_member_impl declarative_region_member_impl_;
+		detail::declarative_region_member_impl declarative_region_member_impl_;
 };
 
 bool

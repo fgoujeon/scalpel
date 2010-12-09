@@ -28,9 +28,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "variable.hpp"
 #include "operator_function.hpp"
 #include "simple_function.hpp"
-#include "declarative_region_member_impl.hpp"
 #include "declarative_region_variants.hpp"
 #include "type_variants_fwd.hpp"
+#include "detail/declarative_region_member_impl.hpp"
 #include <scalpel/utility/shared_ptr_vector.hpp>
 #include <boost/noncopyable.hpp>
 #include <string>
@@ -273,7 +273,7 @@ class class_:
 
     private:
         std::string name_;
-		declarative_region_member_impl declarative_region_member_impl_;
+		detail::declarative_region_member_impl declarative_region_member_impl_;
 
 		//polymorphic containers
 		open_declarative_region_shared_ptr_variants_t open_declarative_regions_;

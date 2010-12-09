@@ -98,7 +98,7 @@ class statement_block
         add_using_directive_namespace(std::shared_ptr<namespace_> n);
 
     private:
-		declarative_region_member_impl declarative_region_member_impl_;
+		detail::declarative_region_member_impl declarative_region_member_impl_;
 
 		//polymorphic containers
 		open_declarative_region_shared_ptr_variants_t open_declarative_regions_;

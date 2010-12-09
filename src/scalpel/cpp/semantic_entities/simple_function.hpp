@@ -23,9 +23,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "variable.hpp"
 #include "statement_block.hpp"
-#include "declarative_region_member_impl.hpp"
 #include "declarative_region_variants.hpp"
 #include "type_variants_fwd.hpp"
+#include "detail/declarative_region_member_impl.hpp"
 #include <boost/optional.hpp>
 #include <string>
 #include <list>
@@ -120,7 +120,7 @@ class simple_function:
 		parameters_t parameters_;
 		bool is_inline_;
 		bool is_static_;
-		declarative_region_member_impl declarative_region_member_impl_;
+		detail::declarative_region_member_impl declarative_region_member_impl_;
 
 		declarative_region_shared_ptr_variants_t declarative_regions_;
 

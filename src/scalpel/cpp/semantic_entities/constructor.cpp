@@ -19,6 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "constructor.hpp"
+#include "class_.hpp"
 #include "fundamental_type_shared_ptrs.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
@@ -66,6 +67,12 @@ constructor::operator!=(const constructor& rhs) const
 	return !operator==(rhs);
 }
 
+const std::string&
+constructor::name() const
+{
+	return class_member_impl_.enclosing_class()->name();
+}
+
 const constructor::parameters_t&
 constructor::parameters() const
 {
@@ -82,24 +89,6 @@ bool
 constructor::is_explicit() const
 {
 	return is_explicit_;
-}
-
-bool
-constructor::has_enclosing_declarative_region() const
-{
-	return declarative_region_member_impl_.has_enclosing_declarative_region();
-}
-
-declarative_region_shared_ptr_variant
-constructor::enclosing_declarative_region() const
-{
-	return declarative_region_member_impl_.enclosing_declarative_region();
-}
-
-void
-constructor::enclosing_declarative_region(const declarative_region_shared_ptr_variant& decl_region)
-{
-	declarative_region_member_impl_.enclosing_declarative_region(decl_region);
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

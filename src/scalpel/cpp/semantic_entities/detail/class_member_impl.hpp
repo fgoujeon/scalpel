@@ -18,37 +18,40 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "semantic_analysis.hpp"
-#include "detail/semantic_analysis/namespace_construction.hpp"
-#include <iostream>
-#include <stdexcept>
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_DETAIL_CLASS_MEMBER_IMPL_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_DETAIL_CLASS_MEMBER_IMPL_HPP
 
-namespace scalpel { namespace cpp
+#include "../declarative_region_variants.hpp"
+#include <memory>
+
+namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-namespace semantic_analysis
+class class_;
+
+namespace detail
 {
 
-using namespace syntax_nodes;
-using namespace semantic_entities;
-
-std::shared_ptr<semantic_graph>
-analyze(const syntax_tree& tree)
+class class_member_impl
 {
-	//create semantic graph
-	std::shared_ptr<namespace_> global_namespace = namespace_::make_shared();
+    public:
+		bool
+		has_enclosing_declarative_region() const;
 
-	auto opt_declaration_seq_node = get_declaration_seq(tree);
-	if(opt_declaration_seq_node)
-	{
-		auto declaration_seq_node = *opt_declaration_seq_node;
-		cpp::detail::semantic_analysis::fill_namespace(global_namespace, declaration_seq_node);
-	}
+		std::shared_ptr<class_>
+		enclosing_class() const;
 
-	return global_namespace;
-}
+		declarative_region_shared_ptr_variant
+		enclosing_declarative_region() const;
 
-} //namespace semantic_analysis
+		void
+		enclosing_declarative_region(const std::shared_ptr<class_>& enclosing_declarative_region);
 
-}} //namespace scalpel::cpp
+    private:
+		std::weak_ptr<class_> enclosing_declarative_region_;
+};
+
+}}}} //namespace scalpel::cpp::semantic_entities::detail
+
+#endif
 

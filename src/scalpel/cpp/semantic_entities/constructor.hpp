@@ -22,8 +22,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_CONSTRUCTOR_HPP
 
 #include "simple_function.hpp"
-#include "declarative_region_member_impl.hpp"
 #include "declarative_region_variants.hpp"
+#include "detail/class_member_impl.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -50,6 +50,9 @@ class constructor:
 		bool
 		operator!=(const constructor& rhs) const;
 
+		const std::string&
+		name() const;
+
 		const parameters_t&
 		parameters() const;
 
@@ -60,13 +63,22 @@ class constructor:
 		is_explicit() const;
 
 		bool
-		has_enclosing_declarative_region() const;
+		has_enclosing_declarative_region() const
+		{
+			return class_member_impl_.has_enclosing_declarative_region();
+		}
 
 		declarative_region_shared_ptr_variant
-		enclosing_declarative_region() const;
+		enclosing_declarative_region() const
+		{
+			return class_member_impl_.enclosing_declarative_region();
+		}
 
 		void
-		enclosing_declarative_region(const declarative_region_shared_ptr_variant& enclosing_declarative_region);
+		enclosing_declarative_region(const std::shared_ptr<class_>& enclosing_declarative_region)
+		{
+			class_member_impl_.enclosing_declarative_region(enclosing_declarative_region);
+		}
 
 		bool
 		defined() const
@@ -96,7 +108,7 @@ class constructor:
 	private:
 		std::shared_ptr<semantic_entities::simple_function> impl_;
 		bool is_explicit_;
-		declarative_region_member_impl declarative_region_member_impl_;
+		detail::class_member_impl class_member_impl_;
 
 		std::shared_ptr<statement_block> body_;
 };

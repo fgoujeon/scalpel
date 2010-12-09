@@ -18,13 +18,13 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_DECLARATIVE_REGION_MEMBER_IMPL_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_DECLARATIVE_REGION_MEMBER_IMPL_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_DETAIL_DECLARATIVE_REGION_MEMBER_IMPL_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_DETAIL_DECLARATIVE_REGION_MEMBER_IMPL_HPP
 
-#include "declarative_region_variants.hpp"
+#include "../declarative_region_variants.hpp"
 #include <boost/optional.hpp>
 
-namespace scalpel { namespace cpp { namespace semantic_entities
+namespace scalpel { namespace cpp { namespace semantic_entities { namespace detail
 {
 
 class declarative_region_member_impl
@@ -43,7 +43,7 @@ class declarative_region_member_impl
 		boost::optional<declarative_region_weak_ptr_variant> enclosing_declarative_region_;
 };
 
-}}} //namespace scalpel::cpp::semantic_entities
+}}}} //namespace scalpel::cpp::semantic_entities::detail
 
 #endif
 
