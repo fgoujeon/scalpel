@@ -116,15 +116,15 @@ create_function
 		has_explicit_specifier
 	);
 
-	if(auto opt_constructor_entity = get<std::shared_ptr<constructor>>(&declarator_entity))
+	if(auto opt_constructor_entity = get<constructor>(&declarator_entity))
 		return *opt_constructor_entity;
-	else if(auto opt_destructor_entity = get<std::shared_ptr<destructor>>(&declarator_entity))
+	else if(auto opt_destructor_entity = get<destructor>(&declarator_entity))
 		return *opt_destructor_entity;
-	else if(auto opt_operator_function_entity = get<std::shared_ptr<operator_function>>(&declarator_entity))
+	else if(auto opt_operator_function_entity = get<operator_function>(&declarator_entity))
 		return *opt_operator_function_entity;
-	else if(auto opt_conversion_function_entity = get<std::shared_ptr<conversion_function>>(&declarator_entity))
+	else if(auto opt_conversion_function_entity = get<conversion_function>(&declarator_entity))
 		return *opt_conversion_function_entity;
-	else if(auto opt_simple_function_entity = get<std::shared_ptr<simple_function>>(&declarator_entity))
+	else if(auto opt_simple_function_entity = get<simple_function>(&declarator_entity))
 		return *opt_simple_function_entity;
 	else
 		assert(false);

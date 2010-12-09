@@ -278,13 +278,13 @@ fill_class
 					has_explicit_specifier
 				);
 
-				if(auto opt_constructor_entity = get<std::shared_ptr<constructor>>(&declarator_entity))
+				if(auto opt_constructor_entity = get<constructor>(&declarator_entity))
 					class_entity->add_member
 					(
 						*opt_constructor_entity,
 						current_access
 					);
-				else if(auto opt_destructor_entity = get<std::shared_ptr<destructor>>(&declarator_entity))
+				else if(auto opt_destructor_entity = get<destructor>(&declarator_entity))
 					class_entity->set_destructor
 					(
 						*opt_destructor_entity,
@@ -292,7 +292,7 @@ fill_class
 						has_virtual_specifier,
 						syntax_node_analysis::has_pure_specifier(member_declarator_declarator_node)
 					);
-				else if(auto opt_operator_function_entity = get<std::shared_ptr<operator_function>>(&declarator_entity))
+				else if(auto opt_operator_function_entity = get<operator_function>(&declarator_entity))
 					class_entity->add_member
 					(
 						*opt_operator_function_entity,
@@ -302,7 +302,7 @@ fill_class
 						has_virtual_specifier,
 						syntax_node_analysis::has_pure_specifier(member_declarator_declarator_node)
 					);
-				else if(auto opt_conversion_function_entity = get<std::shared_ptr<conversion_function>>(&declarator_entity))
+				else if(auto opt_conversion_function_entity = get<conversion_function>(&declarator_entity))
 					class_entity->add_member
 					(
 						*opt_conversion_function_entity,
@@ -312,7 +312,7 @@ fill_class
 						has_virtual_specifier,
 						syntax_node_analysis::has_pure_specifier(member_declarator_declarator_node)
 					);
-				else if(auto opt_simple_function_entity = get<std::shared_ptr<simple_function>>(&declarator_entity))
+				else if(auto opt_simple_function_entity = get<simple_function>(&declarator_entity))
 					class_entity->add_member
 					(
 						*opt_simple_function_entity,
@@ -322,14 +322,14 @@ fill_class
 						has_virtual_specifier,
 						syntax_node_analysis::has_pure_specifier(member_declarator_declarator_node)
 					);
-				else if(auto opt_variable_entity = get<std::shared_ptr<variable>>(&declarator_entity))
+				else if(auto opt_variable_entity = get<variable>(&declarator_entity))
 					class_entity->add_member
 					(
 						*opt_variable_entity,
 						current_access,
 						has_mutable_specifier
 					);
-				else if(auto opt_typedef_entity = get<std::shared_ptr<typedef_>>(&declarator_entity))
+				else if(auto opt_typedef_entity = get<typedef_>(&declarator_entity))
 					class_entity->add_member
 					(
 						*opt_typedef_entity,

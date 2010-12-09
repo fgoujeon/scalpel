@@ -18,38 +18,28 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_VARIANTS_FWD_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_VARIANTS_FWD_HPP
+#ifndef SCALPEL_UTILITY_CONST_SHARED_PTR_VARIANT_HPP
+#define SCALPEL_UTILITY_CONST_SHARED_PTR_VARIANT_HPP
 
-#include <scalpel/utility/const_shared_ptr_variant.hpp>
+#include "basic_variant.hpp"
+#include <memory>
 
-namespace scalpel { namespace cpp { namespace semantic_entities
+namespace scalpel { namespace utility
 {
 
-class array;
-class class_;
-class const_;
-class fundamental_type;
-class pointer;
-class reference;
-class typedef_;
-class volatile_;
+template<typename T>
+struct add_const_and_shared_ptr
+{
+	typedef std::shared_ptr<const T> type;
+};
 
-typedef
-	utility::const_shared_ptr_variant
-	<
-		array,
-		fundamental_type,
-		class_,
-		const_,
-		pointer,
-		reference,
-		volatile_
-	>::type
-	type_shared_ptr_variant
-;
+template<typename... Ts>
+struct const_shared_ptr_variant
+{
+	typedef basic_variant<add_const_and_shared_ptr, Ts...> type;
+};
 
-}}} //namespace scalpel::cpp::semantic_entities
+}} //namespace scalpel::utility
 
 #endif
 

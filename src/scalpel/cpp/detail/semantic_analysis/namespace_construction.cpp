@@ -195,13 +195,13 @@ fill_namespace
 				has_explicit_specifier
 			);
 
-			if(auto opt_simple_function_entity = get<std::shared_ptr<simple_function>>(&declarator_entity))
+			if(auto opt_simple_function_entity = get<simple_function>(&declarator_entity))
 				namespace_entity->add_member(*opt_simple_function_entity);
-			else if(auto opt_operator_function_entity = get<std::shared_ptr<operator_function>>(&declarator_entity))
+			else if(auto opt_operator_function_entity = get<operator_function>(&declarator_entity))
 				namespace_entity->add_member(*opt_operator_function_entity);
-			else if(auto opt_variable_entity = get<std::shared_ptr<variable>>(&declarator_entity))
+			else if(auto opt_variable_entity = get<variable>(&declarator_entity))
 				namespace_entity->add_member(*opt_variable_entity);
-			else if(auto opt_typedef_entity = get<std::shared_ptr<typedef_>>(&declarator_entity))
+			else if(auto opt_typedef_entity = get<typedef_>(&declarator_entity))
 				namespace_entity->add_member(*opt_typedef_entity);
 			else
 				assert(false);
