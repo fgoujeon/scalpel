@@ -23,6 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <scalpel/utility/variant.hpp>
 #include <scalpel/utility/shared_ptr_variant.hpp>
+#include <scalpel/utility/weak_ptr_variant.hpp>
 #include <memory>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
@@ -54,16 +55,16 @@ typedef
 ;
 
 typedef
-	scalpel::utility::variant
+	scalpel::utility::weak_ptr_variant
 	<
-		std::weak_ptr<namespace_>,
-		std::weak_ptr<class_>,
-		std::weak_ptr<constructor>,
-		std::weak_ptr<destructor>,
-		std::weak_ptr<operator_function>,
-		std::weak_ptr<conversion_function>,
-		std::weak_ptr<simple_function>,
-		std::weak_ptr<statement_block>
+		namespace_,
+		class_,
+		constructor,
+		destructor,
+		operator_function,
+		conversion_function,
+		simple_function,
+		statement_block
 	>::type
 	declarative_region_weak_ptr_variant
 ;
