@@ -124,43 +124,5 @@ get_enclosing_declarative_region(const declarative_region_shared_ptr_variant& va
 	return utility::apply_visitor(get_enclosing_declarative_region_impl, var);
 }
 
-
-
-struct to_shared_ptr_variant_impl_struct: public utility::static_visitor<declarative_region_shared_ptr_variant>
-{
-	template<class T>
-	declarative_region_shared_ptr_variant
-	operator()(std::weak_ptr<T> t) const
-	{
-		return std::shared_ptr<T>(t);
-	}
-};
-to_shared_ptr_variant_impl_struct to_shared_ptr_variant_impl;
-
-declarative_region_shared_ptr_variant
-to_shared_ptr_variant(const declarative_region_weak_ptr_variant& var)
-{
-	return utility::apply_visitor(to_shared_ptr_variant_impl, var);
-}
-
-
-
-struct to_weak_ptr_variant_impl_struct: public utility::static_visitor<declarative_region_weak_ptr_variant>
-{
-	template<class T>
-	declarative_region_weak_ptr_variant
-	operator()(std::shared_ptr<T> t) const
-	{
-		return std::weak_ptr<T>(t);
-	}
-};
-to_weak_ptr_variant_impl_struct to_weak_ptr_variant_impl;
-
-declarative_region_weak_ptr_variant
-to_weak_ptr_variant(const declarative_region_shared_ptr_variant& var)
-{
-	return utility::apply_visitor(to_weak_ptr_variant_impl, var);
-}
-
 }}} //namespace scalpel::cpp::semantic_entities
 
