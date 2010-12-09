@@ -73,6 +73,13 @@ constructor::name() const
 	return class_member_impl_.enclosing_class()->name();
 }
 
+bool
+constructor::has_same_signature(const constructor& f) const
+{
+	//TODO
+	return true;
+}
+
 const constructor::parameters_t&
 constructor::parameters() const
 {

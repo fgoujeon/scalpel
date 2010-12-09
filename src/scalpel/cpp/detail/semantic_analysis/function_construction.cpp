@@ -162,7 +162,16 @@ find_function
 {
 	if(auto opt_constructor_entity = get<constructor>(&function_signature))
 	{
-		assert(false); //not managed yet
+		std::shared_ptr<constructor> function_declaration =
+			find_function<constructor>
+			(
+				*opt_constructor_entity,
+				function_definition_node,
+				current_declarative_region
+			)
+		;
+		if(function_declaration)
+			return function_shared_ptr_variant(function_declaration);
 	}
 	else if(auto opt_destructor_entity = get<destructor>(&function_signature))
 	{

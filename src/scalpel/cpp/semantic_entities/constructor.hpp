@@ -53,6 +53,9 @@ class constructor:
 		const std::string&
 		name() const;
 
+		bool
+		has_same_signature(const constructor& f) const;
+
 		const parameters_t&
 		parameters() const;
 

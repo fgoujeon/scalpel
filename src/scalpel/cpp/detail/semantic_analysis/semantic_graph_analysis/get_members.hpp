@@ -61,6 +61,12 @@ struct get_members_type_traits<semantic_entities::typedef_>
 };
 
 template<>
+struct get_members_type_traits<semantic_entities::constructor>
+{
+	typedef utility::shared_ptr_vector<semantic_entities::constructor>::range return_type;
+};
+
+template<>
 struct get_members_type_traits<semantic_entities::simple_function>
 {
 	typedef utility::shared_ptr_vector<semantic_entities::simple_function>::range return_type;
@@ -83,6 +89,7 @@ struct get_members_type_traits<semantic_entities::variable>
 {
 	typedef utility::shared_ptr_vector<semantic_entities::variable>::range return_type;
 };
+
 
 
 template<class MemberT, class ParentT>

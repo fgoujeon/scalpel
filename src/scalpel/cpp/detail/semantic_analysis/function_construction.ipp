@@ -42,7 +42,7 @@ find_function
 	using namespace semantic_entities;
 
 	//find the functions from the name
-	std::set<std::shared_ptr<simple_function>> found_functions;
+	std::set<std::shared_ptr<FunctionT>> found_functions;
 	if
 	(
 		boost::optional<const syntax_nodes::nested_identifier_or_template_id&> opt_nested_identifier_or_template_id_node =
@@ -81,7 +81,6 @@ find_function
 		if(found_function->has_same_signature(*function_signature))
 		{
 			return found_function;
-			break;
 		}
 	}
 
