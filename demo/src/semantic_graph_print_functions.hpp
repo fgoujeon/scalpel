@@ -106,6 +106,13 @@ print_conversion_function
 );
 
 void
+print_function_parameter_list
+(
+	const function_parameter_list& entity,
+	const unsigned int indent_level
+);
+
+void
 print_function_parameter
 (
 	const std::shared_ptr<const function_parameter> p,

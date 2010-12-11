@@ -253,16 +253,7 @@ print_constructor
 		std::cout << " explicit=\"true\"";
 	std::cout << ">\n";
 
-	const function_parameter_list& parameters = entity->parameters();
-	if(!parameters.empty())
-	{
-		std::cout << indent(indent_level + 1) << "<parameters>\n";
-		for(auto i = parameters.begin(); i != parameters.end(); ++i)
-		{
-			print_function_parameter(*i, indent_level + 2);
-		}
-		std::cout << indent(indent_level + 1) << "</parameters>\n";
-	}
+	print_function_parameter_list(entity->parameters(), indent_level + 1);
 
 	std::cout << indent(indent_level) << "</constructor>\n";
 }
@@ -335,16 +326,7 @@ print_simple_function
 	print_type(entity->return_type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</return_type>\n";
 
-	const function_parameter_list& parameters = entity->parameters();
-	if(!parameters.empty())
-	{
-		std::cout << indent(indent_level + 1) << "<parameters>\n";
-		for(auto i = parameters.begin(); i != parameters.end(); ++i)
-		{
-			print_function_parameter(*i, indent_level + 2);
-		}
-		std::cout << indent(indent_level + 1) << "</parameters>\n";
-	}
+	print_function_parameter_list(entity->parameters(), indent_level + 1);
 
 	std::cout << indent(indent_level) << "</simple_function>\n";
 }
@@ -389,16 +371,7 @@ print_operator_function
 	print_type(entity->return_type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</return_type>\n";
 
-	const function_parameter_list& parameters = entity->parameters();
-	if(!parameters.empty())
-	{
-		std::cout << indent(indent_level + 1) << "<parameters>\n";
-		for(auto i = parameters.begin(); i != parameters.end(); ++i)
-		{
-			print_function_parameter(*i, indent_level + 2);
-		}
-		std::cout << indent(indent_level + 1) << "</parameters>\n";
-	}
+	print_function_parameter_list(entity->parameters(), indent_level + 1);
 
 	std::cout << indent(indent_level) << "</operator_function>\n";
 }
@@ -435,6 +408,24 @@ print_conversion_function
 	std::cout << indent(indent_level + 1) << "</return_type>\n";
 
 	std::cout << indent(indent_level) << "</conversion_function>\n";
+}
+
+void
+print_function_parameter_list
+(
+	const function_parameter_list& entity,
+	const unsigned int indent_level
+)
+{
+	if(!entity.empty())
+	{
+		std::cout << indent(indent_level) << "<parameters>\n";
+		for(auto i = entity.begin(); i != entity.end(); ++i)
+		{
+			print_function_parameter(*i, indent_level + 1);
+		}
+		std::cout << indent(indent_level) << "</parameters>\n";
+	}
 }
 
 void
