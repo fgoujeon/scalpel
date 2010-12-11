@@ -21,6 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_SIMPLE_FUNCTION_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_SIMPLE_FUNCTION_HPP
 
+#include "function_parameter.hpp"
 #include "variable.hpp"
 #include "statement_block.hpp"
 #include "declarative_region_variants.hpp"
@@ -42,10 +43,8 @@ class simple_function:
 	public std::enable_shared_from_this<simple_function>
 {
     public:
-		class parameter;
-
 		typedef std::vector<declarative_region_shared_ptr_variant> declarative_region_shared_ptr_variants_t;
-		typedef utility::shared_ptr_vector<parameter> parameters_t;
+		typedef utility::shared_ptr_vector<function_parameter> parameters_t;
 
 	private:
         simple_function
@@ -132,37 +131,6 @@ operator==(const simple_function& lhs, const simple_function& rhs);
 
 bool
 operator!=(const simple_function& lhs, const simple_function& rhs);
-
-
-
-class simple_function::parameter
-{
-	public:
-		parameter(const type_shared_ptr_variant& t, const std::string& name);
-
-		parameter(const parameter& o);
-
-		parameter(parameter&& o);
-
-		const parameter&
-		operator=(const parameter& o);
-
-		const parameter&
-		operator=(parameter&& o);
-
-		const type_shared_ptr_variant&
-		type() const;
-
-		const std::string&
-		name() const;
-
-	private:
-		type_shared_ptr_variant type_;
-		std::string name_;
-};
-
-bool
-operator==(const simple_function::parameter& lhs, const simple_function::parameter& rhs);
 
 }}} //namespace scalpel::cpp::semantic_entities
 

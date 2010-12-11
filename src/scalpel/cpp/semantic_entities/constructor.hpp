@@ -32,7 +32,6 @@ class constructor:
 	public std::enable_shared_from_this<constructor>
 {
 	public:
-		typedef simple_function::parameter parameter;
 		typedef simple_function::parameters_t parameters_t;
 
 		constructor

@@ -259,7 +259,7 @@ print_constructor
 		std::cout << indent(indent_level + 1) << "<parameters>\n";
 		for(auto i = parameters.begin(); i != parameters.end(); ++i)
 		{
-			print_parameter(*i, indent_level + 2);
+			print_function_parameter(*i, indent_level + 2);
 		}
 		std::cout << indent(indent_level + 1) << "</parameters>\n";
 	}
@@ -341,7 +341,7 @@ print_simple_function
 		std::cout << indent(indent_level + 1) << "<parameters>\n";
 		for(auto i = parameters.begin(); i != parameters.end(); ++i)
 		{
-			print_parameter(*i, indent_level + 2);
+			print_function_parameter(*i, indent_level + 2);
 		}
 		std::cout << indent(indent_level + 1) << "</parameters>\n";
 	}
@@ -395,7 +395,7 @@ print_operator_function
 		std::cout << indent(indent_level + 1) << "<parameters>\n";
 		for(auto i = parameters.begin(); i != parameters.end(); ++i)
 		{
-			print_parameter(*i, indent_level + 2);
+			print_function_parameter(*i, indent_level + 2);
 		}
 		std::cout << indent(indent_level + 1) << "</parameters>\n";
 	}
@@ -438,9 +438,9 @@ print_conversion_function
 }
 
 void
-print_parameter
+print_function_parameter
 (
-	const std::shared_ptr<const simple_function::parameter> p,
+	const std::shared_ptr<const function_parameter> p,
 	const unsigned int indent_level
 )
 {

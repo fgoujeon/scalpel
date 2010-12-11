@@ -35,7 +35,6 @@ class operator_function:
 	public std::enable_shared_from_this<operator_function>
 {
     public:
-		typedef simple_function::parameter parameter;
 		typedef simple_function::parameters_t parameters_t;
 
         operator_function

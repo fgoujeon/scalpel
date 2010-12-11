@@ -106,9 +106,9 @@ print_conversion_function
 );
 
 void
-print_parameter
+print_function_parameter
 (
-	const std::shared_ptr<const simple_function::parameter> p,
+	const std::shared_ptr<const function_parameter> p,
 	const unsigned int indent_level
 );
 

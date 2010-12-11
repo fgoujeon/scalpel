@@ -432,7 +432,7 @@ create_parameters
 
 			parameters.push_back
 			(
-				std::make_shared<simple_function::parameter>
+				std::make_shared<function_parameter>
 				(
 					decorate_type(type, declarator_node),
 					syntax_node_analysis::get_identifier(declarator_node).value()
@@ -454,7 +454,7 @@ create_parameters
 
 			parameters.push_back
 			(
-				std::make_shared<simple_function::parameter>
+				std::make_shared<function_parameter>
 				(
 					type,
 					""
@@ -465,7 +465,7 @@ create_parameters
 		{
 			parameters.push_back
 			(
-				std::make_shared<simple_function::parameter>
+				std::make_shared<function_parameter>
 				(
 					type,
 					""
