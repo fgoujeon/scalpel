@@ -78,7 +78,7 @@ find_function
 	)
 	{
 		std::shared_ptr<FunctionT> found_function = *i;
-		if(found_function->has_same_signature(*function_signature))
+		if(have_same_signature(*found_function, *function_signature))
 		{
 			return found_function;
 		}

@@ -21,8 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_CONSTRUCTOR_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_CONSTRUCTOR_HPP
 
+#include "statement_block.hpp"
 #include "function_parameter_list.hpp"
-#include "simple_function.hpp"
 #include "declarative_region_variants.hpp"
 #include "detail/class_member_impl.hpp"
 
@@ -40,28 +40,28 @@ class constructor:
 			const bool is_explicit
 		);
 
-		constructor(constructor&& o);
-
-		bool
-		operator==(const constructor& rhs) const;
-
-		bool
-		operator!=(const constructor& rhs) const;
+		constructor(constructor&& rhs);
 
 		const std::string&
 		name() const;
 
-		bool
-		has_same_signature(const constructor& f) const;
-
 		const function_parameter_list&
-		parameters() const;
+		parameters() const
+		{
+			return parameters_;
+		}
 
 		bool
-		is_inline() const;
+		is_inline() const
+		{
+			return is_inline_;
+		}
 
 		bool
-		is_explicit() const;
+		is_explicit() const
+		{
+			return is_explicit_;
+		}
 
 		bool
 		has_enclosing_declarative_region() const
@@ -107,12 +107,22 @@ class constructor:
 		}
 
 	private:
-		std::shared_ptr<semantic_entities::simple_function> impl_;
+		function_parameter_list parameters_;
+		bool is_inline_;
 		bool is_explicit_;
 		detail::class_member_impl class_member_impl_;
 
 		std::shared_ptr<statement_block> body_;
 };
+
+bool
+operator==(const constructor& lhs, const constructor& rhs);
+
+bool
+operator!=(const constructor& lhs, const constructor& rhs);
+
+bool
+have_same_signature(const constructor& lhs, const constructor& rhs);
 
 }}} //namespace scalpel::cpp::semantic_entities
 

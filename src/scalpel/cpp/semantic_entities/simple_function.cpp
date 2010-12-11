@@ -68,40 +68,6 @@ simple_function::make_shared
 	return new_simple_function;
 }
 
-bool
-simple_function::has_same_signature(const simple_function& f) const
-{
-	return
-		name_ == f.name_ &&
-		return_type_ == f.return_type_ &&
-		has_same_parameters(f) &&
-		is_inline_ == f.is_inline_ &&
-		is_static_ == f.is_static_
-	;
-}
-
-bool
-simple_function::has_same_parameters(const simple_function& f) const
-{
-	if(parameters_.size() != f.parameters_.size())
-		return false;
-
-	for
-	(
-		function_parameter_list::const_iterator i = parameters_.begin(), j = f.parameters_.begin();
-		i != parameters_.end();
-		++i, ++j
-	)
-	{
-		auto param = *i;
-		auto param2 = *j;
-		if(!are_pointed_objects_equal(param->type(), param2->type()))
-			return false;
-	}
-
-	return true;
-}
-
 const std::string&
 simple_function::name() const
 {
@@ -175,16 +141,13 @@ simple_function::body(std::shared_ptr<statement_block> b)
 	body_->enclosing_declarative_region(shared_from_this());
 }
 
+
+
 bool
 operator==(const simple_function& lhs, const simple_function& rhs)
 {
-	return true;
-        lhs.name() == rhs.name() &&
-		lhs.is_inline() == rhs.is_inline() &&
-		lhs.is_static() == rhs.is_static() &&
-		lhs.defined() == rhs.defined() &&
-		utility::are_pointed_objects_equal(lhs.return_type(), rhs.return_type()) &&
-		lhs.parameters() == rhs.parameters() &&
+	return
+		have_same_signature(lhs, rhs) &&
 		(
 			lhs.body().get() == rhs.body().get() ||
 			(
@@ -200,6 +163,18 @@ bool
 operator!=(const simple_function& lhs, const simple_function& rhs)
 {
 	return !operator==(lhs, rhs);
+}
+
+bool
+have_same_signature(const simple_function& lhs, const simple_function& rhs)
+{
+	return
+		lhs.name() == rhs.name() &&
+		lhs.is_inline() == rhs.is_inline() &&
+		lhs.is_static() == rhs.is_static() &&
+		utility::are_pointed_objects_equal(lhs.return_type(), rhs.return_type()) &&
+		lhs.parameters() == rhs.parameters()
+	;
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

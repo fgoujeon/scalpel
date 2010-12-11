@@ -31,40 +31,17 @@ constructor::constructor
 	const bool is_inline,
 	const bool is_explicit
 ):
-	impl_
-	(
-		simple_function::make_shared
-		(
-			"_",
-			fundamental_type_shared_ptrs::void_,
-			std::move(parameters),
-			is_inline,
-			false
-		)
-	),
+	parameters_(std::move(parameters)),
+	is_inline_(is_inline),
 	is_explicit_(is_explicit)
 {
 }
 
-constructor::constructor(constructor&& o):
-	impl_(std::move(o.impl_)),
-	is_explicit_(o.is_explicit_)
+constructor::constructor(constructor&& rhs):
+	parameters_(std::move(rhs.parameters_)),
+	is_inline_(rhs.is_inline_),
+	is_explicit_(rhs.is_explicit_)
 {
-}
-
-bool
-constructor::operator==(const constructor& rhs) const
-{
-	return
-		is_explicit_ == rhs.is_explicit_ &&
-		*impl_ == *rhs.impl_
-	;
-}
-
-bool
-constructor::operator!=(const constructor& rhs) const
-{
-	return !operator==(rhs);
 }
 
 const std::string&
@@ -73,29 +50,38 @@ constructor::name() const
 	return class_member_impl_.enclosing_class()->name();
 }
 
-bool
-constructor::has_same_signature(const constructor& f) const
-{
-	//TODO
-	return true;
-}
 
-const function_parameter_list&
-constructor::parameters() const
-{
-	return impl_->parameters();
-}
 
 bool
-constructor::is_inline() const
+operator==(const constructor& lhs, const constructor& rhs)
 {
-	return impl_->is_inline();
+	return
+		have_same_signature(lhs, rhs) &&
+		(
+			lhs.body().get() == rhs.body().get() ||
+			(
+				lhs.body().get() != 0 &&
+				rhs.body().get() != 0 &&
+				*lhs.body() == *rhs.body()
+			)
+		)
+	;
 }
 
 bool
-constructor::is_explicit() const
+operator!=(const constructor& lhs, const constructor& rhs)
 {
-	return is_explicit_;
+	return !operator==(lhs, rhs);
+}
+
+bool
+have_same_signature(const constructor& lhs, const constructor& rhs)
+{
+	return
+		lhs.is_inline() == rhs.is_inline() &&
+		lhs.is_explicit() == rhs.is_explicit() &&
+		lhs.parameters() == rhs.parameters()
+	;
 }
 
 }}} //namespace scalpel::cpp::semantic_entities
