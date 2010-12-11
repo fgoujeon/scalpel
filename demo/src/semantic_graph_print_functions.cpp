@@ -253,7 +253,7 @@ print_constructor
 		std::cout << " explicit=\"true\"";
 	std::cout << ">\n";
 
-	const constructor::parameters_t& parameters = entity->parameters();
+	const function_parameter_list& parameters = entity->parameters();
 	if(!parameters.empty())
 	{
 		std::cout << indent(indent_level + 1) << "<parameters>\n";
@@ -335,7 +335,7 @@ print_simple_function
 	print_type(entity->return_type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</return_type>\n";
 
-	const simple_function::parameters_t& parameters = entity->parameters();
+	const function_parameter_list& parameters = entity->parameters();
 	if(!parameters.empty())
 	{
 		std::cout << indent(indent_level + 1) << "<parameters>\n";
@@ -389,7 +389,7 @@ print_operator_function
 	print_type(entity->return_type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</return_type>\n";
 
-	const simple_function::parameters_t& parameters = entity->parameters();
+	const function_parameter_list& parameters = entity->parameters();
 	if(!parameters.empty())
 	{
 		std::cout << indent(indent_level + 1) << "<parameters>\n";

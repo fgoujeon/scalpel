@@ -27,7 +27,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 
 constructor::constructor
 (
-	parameters_t&& parameters,
+	function_parameter_list&& parameters,
 	const bool is_inline,
 	const bool is_explicit
 ):
@@ -80,7 +80,7 @@ constructor::has_same_signature(const constructor& f) const
 	return true;
 }
 
-const constructor::parameters_t&
+const function_parameter_list&
 constructor::parameters() const
 {
 	return impl_->parameters();

@@ -21,6 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_CONSTRUCTOR_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_CONSTRUCTOR_HPP
 
+#include "function_parameter_list.hpp"
 #include "simple_function.hpp"
 #include "declarative_region_variants.hpp"
 #include "detail/class_member_impl.hpp"
@@ -32,11 +33,9 @@ class constructor:
 	public std::enable_shared_from_this<constructor>
 {
 	public:
-		typedef simple_function::parameters_t parameters_t;
-
 		constructor
 		(
-			parameters_t&& parameters,
+			function_parameter_list&& parameters,
 			const bool is_inline,
 			const bool is_explicit
 		);
@@ -55,7 +54,7 @@ class constructor:
 		bool
 		has_same_signature(const constructor& f) const;
 
-		const parameters_t&
+		const function_parameter_list&
 		parameters() const;
 
 		bool

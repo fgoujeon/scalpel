@@ -92,14 +92,14 @@ get_conversion_function_type
 	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 );
 
-semantic_entities::simple_function::parameters_t
+semantic_entities::function_parameter_list
 create_parameters
 (
 	boost::optional<const syntax_nodes::parameter_declaration_list&> opt_parameter_declaration_list_node,
 	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 );
 
-semantic_entities::simple_function::parameters_t
+semantic_entities::function_parameter_list
 create_parameters
 (
 	const syntax_nodes::parameter_declaration_list& parameter_declaration_list_node,

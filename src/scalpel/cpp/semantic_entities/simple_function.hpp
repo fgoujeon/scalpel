@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_SIMPLE_FUNCTION_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_SIMPLE_FUNCTION_HPP
 
-#include "function_parameter.hpp"
+#include "function_parameter_list.hpp"
 #include "variable.hpp"
 #include "statement_block.hpp"
 #include "declarative_region_variants.hpp"
@@ -44,14 +44,13 @@ class simple_function:
 {
     public:
 		typedef std::vector<declarative_region_shared_ptr_variant> declarative_region_shared_ptr_variants_t;
-		typedef utility::shared_ptr_vector<function_parameter> parameters_t;
 
 	private:
         simple_function
 		(
 			const std::string& name,
 			const type_shared_ptr_variant& return_type,
-			parameters_t&& parameters,
+			function_parameter_list&& parameters,
 			bool is_inline,
 			bool is_static
 		);
@@ -63,7 +62,7 @@ class simple_function:
 		(
 			const std::string& name,
 			const type_shared_ptr_variant& return_type,
-			parameters_t&& parameters = parameters_t(),
+			function_parameter_list&& parameters = function_parameter_list(),
 			bool is_inline = false,
 			bool is_static = false
 		);
@@ -92,7 +91,7 @@ class simple_function:
 		const type_shared_ptr_variant&
 		return_type() const;
 
-		const parameters_t&
+		const function_parameter_list&
 		parameters() const;
 
 		bool
@@ -116,7 +115,7 @@ class simple_function:
     private:
         std::string name_;
 		type_shared_ptr_variant return_type_;
-		parameters_t parameters_;
+		function_parameter_list parameters_;
 		bool is_inline_;
 		bool is_static_;
 		detail::declarative_region_member_impl declarative_region_member_impl_;

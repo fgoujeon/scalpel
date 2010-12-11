@@ -29,7 +29,7 @@ simple_function::simple_function
 (
 	const std::string& name,
 	const type_shared_ptr_variant& return_type,
-	parameters_t&& parameters,
+	function_parameter_list&& parameters,
 	bool is_inline,
 	bool is_static
 ):
@@ -46,7 +46,7 @@ simple_function::make_shared
 (
 	const std::string& name,
 	const type_shared_ptr_variant& return_type,
-	parameters_t&& parameters,
+	function_parameter_list&& parameters,
 	bool is_inline,
 	bool is_static
 )
@@ -88,7 +88,7 @@ simple_function::has_same_parameters(const simple_function& f) const
 
 	for
 	(
-		parameters_t::const_iterator i = parameters_.begin(), j = f.parameters_.begin();
+		function_parameter_list::const_iterator i = parameters_.begin(), j = f.parameters_.begin();
 		i != parameters_.end();
 		++i, ++j
 	)
@@ -114,7 +114,7 @@ simple_function::return_type() const
 	return return_type_;
 }
 
-const simple_function::parameters_t&
+const function_parameter_list&
 simple_function::parameters() const
 {
 	return parameters_;
@@ -184,7 +184,7 @@ operator==(const simple_function& lhs, const simple_function& rhs)
 		lhs.is_static() == rhs.is_static() &&
 		lhs.defined() == rhs.defined() &&
 		utility::are_pointed_objects_equal(lhs.return_type(), rhs.return_type()) &&
-		utility::are_pointed_objects_equal(lhs.parameters(), rhs.parameters()) &&
+		lhs.parameters() == rhs.parameters() &&
 		(
 			lhs.body().get() == rhs.body().get() ||
 			(

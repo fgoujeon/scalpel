@@ -27,7 +27,7 @@ operator_function::operator_function
 (
 	const operator_ op,
 	const type_shared_ptr_variant& return_type,
-	parameters_t&& parameters,
+	function_parameter_list&& parameters,
 	const bool is_inline,
 	const bool is_static
 ):
@@ -63,7 +63,7 @@ operator_function::return_type() const
 	return impl_->return_type();
 }
 
-const operator_function::parameters_t&
+const function_parameter_list&
 operator_function::parameters() const
 {
 	return impl_->parameters();

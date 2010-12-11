@@ -382,7 +382,7 @@ get_conversion_function_type
 	return type;
 }
 
-semantic_entities::simple_function::parameters_t
+semantic_entities::function_parameter_list
 create_parameters
 (
 	boost::optional<const syntax_nodes::parameter_declaration_list&> opt_parameter_declaration_list_node,
@@ -392,17 +392,17 @@ create_parameters
 	if(opt_parameter_declaration_list_node)
 		return create_parameters(*opt_parameter_declaration_list_node, current_declarative_region);
 	else
-		return semantic_entities::simple_function::parameters_t();
+		return semantic_entities::function_parameter_list();
 }
 
-semantic_entities::simple_function::parameters_t
+semantic_entities::function_parameter_list
 create_parameters
 (
 	const syntax_nodes::parameter_declaration_list& parameter_declaration_list_node,
 	const declarative_region_shared_ptr_variant current_declarative_region
 )
 {
-	simple_function::parameters_t parameters;
+	function_parameter_list parameters;
 
 	for
 	(
