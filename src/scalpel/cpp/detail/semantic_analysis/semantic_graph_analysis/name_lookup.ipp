@@ -21,6 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_NAME_LOOKUP_IPP
 #define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_NAME_LOOKUP_IPP
 
+#include "get_global_namespace.hpp"
 #include "get_name.hpp"
 #include "get_members.hpp"
 
@@ -141,22 +142,9 @@ find_declarative_region
 	if(has_leading_double_colon(nested_identifier_or_template_id_node))
 	{
 		//the first declarative region is in the global namespace
-		semantic_entities::declarative_region_shared_ptr_variant outermost_declarative_region = current_declarative_region;
-		while(has_enclosing_declarative_region(outermost_declarative_region))
-		{
-			outermost_declarative_region = get_enclosing_declarative_region(outermost_declarative_region);
-		}
-		std::shared_ptr<semantic_entities::namespace_> global_namespace;
-		try
-		{
-			global_namespace =
-				utility::get<semantic_entities::namespace_>(outermost_declarative_region)
-			;
-		}
-		catch(...)
-		{
-			throw std::runtime_error("find_declarative_region error: the outermost declarative region isn't a namespace.");
-		}
+		std::shared_ptr<semantic_entities::namespace_> global_namespace =
+			semantic_graph_analysis::get_global_namespace(current_declarative_region)
+		;
 
 		if(opt_nested_name_specifier_node)
 		{
