@@ -155,28 +155,48 @@ find
 	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
 );
 
+template<bool Optional, bool Multiple>
+typename return_type<Optional, Multiple, semantic_entities::operator_function>::type
+find_operator_functions
+(
+	const semantic_entities::operator_& op,
+	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
+);
 
 
-class impl
+
+namespace detail
 {
-	template<bool Optional, bool Multiple, class... EntitiesT>
-	friend
-	typename return_type<Optional, Multiple, EntitiesT...>::type
-	find
-	(
-		const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node,
-		const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region,
-		const bool apply_using_directives_for_unqualified_id_part = true
-	);
+	namespace identification_policies
+	{
+		struct by_name
+		{
+			typedef std::string identifier_t;
 
-	template<bool Optional, bool Multiple, class... EntitiesT>
-	friend
-	typename return_type<Optional, Multiple, EntitiesT...>::type
-	find
-	(
-		const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
-		const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
-	);
+			template<class EntityT>
+			static
+			bool
+			has_identifier(const EntityT& entity, const identifier_t& identifier)
+			{
+				return get_name(entity) == identifier;
+			}
+		};
+
+		struct by_operator
+		{
+			typedef semantic_entities::operator_ identifier_t;
+
+			template<class EntityT>
+			static
+			bool
+			has_identifier(const EntityT& entity, const identifier_t& identifier)
+			{
+				return entity->get_operator() == identifier;
+			}
+		};
+	}
+
+
 
 	//used for applying using directives
 	typedef
@@ -200,7 +220,6 @@ class impl
 	//A syntax node type containing an optional '::' and a nested-name-specifier
 	//would have been more appropriate.
 	template<class DeclarativeRegionT>
-	static
 	typename return_type<false, false, DeclarativeRegionT>::type
 	find_declarative_region
 	(
@@ -216,7 +235,6 @@ class impl
 	intermediate declarative region(s) (X and Y in the example).
 	*/
 	template<class DeclarativeRegionT>
-	static
 	typename return_type<false, false, DeclarativeRegionT>::type
 	find_declarative_region
 	(
@@ -228,12 +246,11 @@ class impl
 	Find entities corresponding to the given name,
 	from the given declarative region (unqualified name lookup)
 	*/
-	template<bool Optional, bool Multiple, class... EntitiesT>
-	static
+	template<class IdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
 	typename return_type<Optional, Multiple, EntitiesT...>::type
 	find_entities_from_identifier
 	(
-		const std::string& name,
+		const typename IdentificationPolicy::identifier_t& identifier,
 		semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 	);
 
@@ -245,7 +262,6 @@ class impl
 	qualified name lookup section of the C++ standard.
 	*/
 	template<bool Optional, bool Multiple, class... EntitiesT>
-	static
 	typename return_type<Optional, Multiple, EntitiesT...>::type
 	find_in_namespace
 	(
@@ -256,12 +272,11 @@ class impl
 	/**
 	Find in namespace from an identifier.
 	*/
-	template<bool Optional, bool Multiple, class... EntitiesT>
-	static
+	template<class IdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
 	typename return_type<Optional, Multiple, EntitiesT...>::type
 	find_in_namespace_from_identifier
 	(
-		const std::string& name,
+		const typename IdentificationPolicy::identifier_t& identifier,
 		std::shared_ptr<semantic_entities::namespace_> current_namespace,
 		std::vector<std::shared_ptr<semantic_entities::namespace_>>& already_seached_namespaces
 	);
@@ -273,7 +288,6 @@ class impl
 	in the given declarative region only.
 	*/
 	template<class DeclarativeRegionT, bool Optional, bool Multiple, class... EntitiesT>
-	static
 	typename return_type<Optional, Multiple, EntitiesT...>::type
 	find_local_entities
 	(
@@ -284,39 +298,38 @@ class impl
 	/**
 	Find entities of the given name, in the given declarative region only.
 	*/
-	template<class DeclarativeRegionT, bool Optional, bool Multiple, class EntityT, class EntityT2, class... EntitiesT>
-	static
+	template<class IdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple, class EntityT, class EntityT2, class... EntitiesT>
 	typename return_type<Optional, Multiple, EntityT, EntityT2, EntitiesT...>::type
 	find_local_entities_from_identifier
 	(
-		const std::string& name,
+		const typename IdentificationPolicy::identifier_t& identifier,
 		const DeclarativeRegionT& current_declarative_region
 	);
 
-	template<class DeclarativeRegionT, bool Optional, bool Multiple, class ReturnT, class... EntitiesT>
+	template<class IdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple, class ReturnT, class... EntitiesT>
 	struct find_variadic_local_entities_from_identifier;
 
-	template<class DeclarativeRegionT, bool Optional, bool Multiple, class ReturnT>
-	struct find_variadic_local_entities_from_identifier<DeclarativeRegionT, Optional, Multiple, ReturnT>
+	template<class IdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple, class ReturnT>
+	struct find_variadic_local_entities_from_identifier<IdentificationPolicy, DeclarativeRegionT, Optional, Multiple, ReturnT>
 	{
 		static
 		void
 		find
 		(
-			const std::string& name,
+			const typename IdentificationPolicy::identifier_t& identifier,
 			const DeclarativeRegionT& current_declarative_region,
 			ReturnT& found_entities
 		);
 	};
 
-	template<class DeclarativeRegionT, bool Optional, bool Multiple, class ReturnT, class EntityT, class... EntitiesT>
-	struct find_variadic_local_entities_from_identifier<DeclarativeRegionT, Optional, Multiple, ReturnT, EntityT, EntitiesT...>
+	template<class IdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple, class ReturnT, class EntityT, class... EntitiesT>
+	struct find_variadic_local_entities_from_identifier<IdentificationPolicy, DeclarativeRegionT, Optional, Multiple, ReturnT, EntityT, EntitiesT...>
 	{
 		static
 		void
 		find
 		(
-			const std::string& name,
+			const typename IdentificationPolicy::identifier_t& identifier,
 			const DeclarativeRegionT& current_declarative_region,
 			ReturnT& found_entities
 		);
@@ -325,12 +338,11 @@ class impl
 	/**
 	Find entities of the given name, in the given declarative region only.
 	*/
-	template<class DeclarativeRegionT, bool Optional, bool Multiple, class EntityT>
-	static
+	template<class IdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple, class EntityT>
 	typename return_type<Optional, Multiple, EntityT>::type
 	find_local_entities_from_identifier
 	(
-		const std::string& name,
+		const typename IdentificationPolicy::identifier_t& identifier,
 		const DeclarativeRegionT& current_declarative_region
 	);
 
@@ -339,16 +351,14 @@ class impl
 	/**
 	Find entities of the given name, in the given base classes
 	*/
-	template<bool Optional, bool Multiple, class... EntitiesT>
-	static
+	template<class IdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
 	typename return_type<Optional, Multiple, EntitiesT...>::type
 	find_entities_in_base_classes
 	(
-		const std::string& name,
+		const typename IdentificationPolicy::identifier_t& identifier,
 		utility::shared_ptr_vector<semantic_entities::class_>::range base_classes
 	);
 
-	static
 	void
 	apply_using_directives
 	(
@@ -360,7 +370,6 @@ class impl
 	/**
 	Find the nearest enclosing namespace containing both a and b.
 	*/
-	static
 	std::shared_ptr<semantic_entities::namespace_>
 	find_common_enclosing_namespace
 	(
@@ -371,28 +380,24 @@ class impl
 	//result = entity
 	template<class T, class U>
 	inline
-	static
 	void
 	add_to_result(T& result, const U& entity);
 
 	//add entity to result if entity isn't empty
 	template<class T, class U>
 	inline
-	static
 	void
 	add_to_result(std::set<T>& result, const U& entity);
 
 	//add entity to result if entity isn't empty
 	template<class T, class U>
 	inline
-	static
 	void
 	add_to_result(std::set<T>& result, const boost::optional<U>& entity);
 
 	//append entities to result
 	template<class T, class U>
 	inline
-	static
 	void
 	add_to_result(std::set<T>& result, const std::set<U>& entities);
 
@@ -485,7 +490,7 @@ class impl
 		typename return_type<false, true, EntitiesT...>::type&
 		result(typename return_type<true, true, EntitiesT...>::type& result);
 	};
-};
+}
 
 }}}}}} //namespace scalpel::cpp::detail::semantic_analysis::semantic_graph_analysis::name_lookup
 

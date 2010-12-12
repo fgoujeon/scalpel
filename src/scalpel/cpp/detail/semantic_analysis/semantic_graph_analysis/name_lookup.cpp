@@ -24,8 +24,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace semantic_graph_analysis { namespace name_lookup
 {
 
+namespace detail
+{
+
 void
-impl::apply_using_directives
+apply_using_directives
 (
 	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region,
 	const std::vector<std::weak_ptr<semantic_entities::namespace_>>& using_directive_namespaces,
@@ -50,7 +53,7 @@ impl::apply_using_directives
 		//associate the using directive's namespace to the common enclosing namespace
 		namespace_associations[common_enclosing_namespace].push_back(current_using_directive_namespace);
 
-		//proceed recursively with the using directive's namespaces of the using directive's namespace
+		//process recursively with the using directive's namespaces of the using directive's namespace
 		apply_using_directives
 		(
 			current_declarative_region,
@@ -61,7 +64,7 @@ impl::apply_using_directives
 }
 
 std::shared_ptr<semantic_entities::namespace_>
-impl::find_common_enclosing_namespace
+find_common_enclosing_namespace
 (
 	const semantic_entities::declarative_region_shared_ptr_variant& a,
 	const std::shared_ptr<semantic_entities::namespace_> b
@@ -95,6 +98,8 @@ impl::find_common_enclosing_namespace
 
 	throw std::runtime_error("find_common_enclosing_namespace() error: the given declarative regions don't have a common namespace");
 }
+
+} //namespace detail
 
 }}}}}} //namespace scalpel::cpp::detail::semantic_analysis::semantic_graph_analysis::name_lookup
 

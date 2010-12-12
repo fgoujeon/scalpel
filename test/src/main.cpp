@@ -31,6 +31,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "name_lookup/test_case_8.hpp"
 #include "name_lookup/test_case_9.hpp"
 #include "name_lookup/test_case_10.hpp"
+#include "name_lookup/test_case_11.hpp"
 #include "syntax_analysis/single_file_tester.hpp"
 #include "get_recursive_file_list.hpp"
 #include <boost/program_options.hpp>
@@ -121,6 +122,7 @@ init_unit_test()
     framework::master_test_suite().add(BOOST_TEST_CASE(&name_lookup::test_case_8));
     framework::master_test_suite().add(BOOST_TEST_CASE(&name_lookup::test_case_9));
     framework::master_test_suite().add(BOOST_TEST_CASE(&name_lookup::test_case_10));
+    framework::master_test_suite().add(BOOST_TEST_CASE(&name_lookup::test_case_11));
 
 
 
