@@ -25,7 +25,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 
 operator_function::operator_function
 (
-	const operator_ op,
+	const overloadable_operator op,
 	const type_shared_ptr_variant& return_type,
 	function_parameter_list&& parameters,
 	const bool is_inline,
@@ -51,7 +51,7 @@ operator_function::operator!=(const operator_function& rhs) const
 	return !operator==(rhs);
 }
 
-operator_
+overloadable_operator
 operator_function::get_operator() const
 {
 	return op_;

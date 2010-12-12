@@ -18,13 +18,13 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_OPERATOR_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_OPERATOR_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_OVERLOADABLE_OPERATOR_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_OVERLOADABLE_OPERATOR_HPP
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-enum class operator_
+enum class overloadable_operator
 {
 	NEW,
 	NEW_ARRAY,

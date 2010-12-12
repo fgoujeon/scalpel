@@ -144,7 +144,7 @@ std::string
 attribute(const class_::access& a);
 
 std::string
-attribute(const semantic_entities::operator_ op);
+attribute(const semantic_entities::overloadable_operator op);
 
 } //namespace semantic_graph_print_functions
 

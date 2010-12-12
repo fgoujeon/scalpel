@@ -65,12 +65,12 @@ test_case_11()
 	//functions
 	auto operator_function_equal = std::make_shared<operator_function>
 	(
-		scalpel::cpp::semantic_entities::operator_::DOUBLE_EQUAL,
+		scalpel::cpp::semantic_entities::overloadable_operator::DOUBLE_EQUAL,
 		fundamental_type_shared_ptrs::bool_
 	);
 	auto operator_function_not_equal = std::make_shared<operator_function>
 	(
-		scalpel::cpp::semantic_entities::operator_::DOUBLE_EQUAL,
+		scalpel::cpp::semantic_entities::overloadable_operator::DOUBLE_EQUAL,
 		fundamental_type_shared_ptrs::bool_
 	);
 	auto function_test = simple_function::make_shared
@@ -95,7 +95,7 @@ test_case_11()
 	//look up operator== from function test, must find it
 	{
 		std::shared_ptr<operator_function> found_entity =
-			find_operator_functions<false, false>(scalpel::cpp::semantic_entities::operator_::DOUBLE_EQUAL, function_test)
+			find_operator_functions<false, false>(scalpel::cpp::semantic_entities::overloadable_operator::DOUBLE_EQUAL, function_test)
 		;
 		BOOST_CHECK_EQUAL(found_entity, operator_function_equal);
 	}

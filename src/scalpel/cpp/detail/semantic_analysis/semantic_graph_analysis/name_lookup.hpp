@@ -159,7 +159,7 @@ template<bool Optional, bool Multiple>
 typename return_type<Optional, Multiple, semantic_entities::operator_function>::type
 find_operator_functions
 (
-	const semantic_entities::operator_& op,
+	const semantic_entities::overloadable_operator& op,
 	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
 );
 
@@ -184,7 +184,7 @@ namespace detail
 
 		struct by_operator
 		{
-			typedef semantic_entities::operator_ identifier_t;
+			typedef semantic_entities::overloadable_operator identifier_t;
 
 			template<class EntityT>
 			static

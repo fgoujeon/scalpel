@@ -542,137 +542,137 @@ attribute(const class_::access& a)
 }
 
 std::string
-attribute(const semantic_entities::operator_ op)
+attribute(const semantic_entities::overloadable_operator op)
 {
 	std::ostringstream oss;
 
 	oss << " operator=\"";
 	switch(op)
 	{
-		case semantic_entities::operator_::NEW:
+		case semantic_entities::overloadable_operator::NEW:
 			oss << "new";
 			break;
-		case semantic_entities::operator_::NEW_ARRAY:
+		case semantic_entities::overloadable_operator::NEW_ARRAY:
 			oss << "new[]";
 			break;
-		case semantic_entities::operator_::DELETE:
+		case semantic_entities::overloadable_operator::DELETE:
 			oss << "delete";
 			break;
-		case semantic_entities::operator_::DELETE_ARRAY:
+		case semantic_entities::overloadable_operator::DELETE_ARRAY:
 			oss << "delete[]";
 			break;
-		case semantic_entities::operator_::DOUBLE_RIGHT_ANGLE_BRACKET_EQUAL:
+		case semantic_entities::overloadable_operator::DOUBLE_RIGHT_ANGLE_BRACKET_EQUAL:
 			oss << ">>=";
 			break;
-		case semantic_entities::operator_::DOUBLE_LEFT_ANGLE_BRACKET_EQUAL:
+		case semantic_entities::overloadable_operator::DOUBLE_LEFT_ANGLE_BRACKET_EQUAL:
 			oss << "<<=";
 			break;
-		case semantic_entities::operator_::ARROW_ASTERISK:
+		case semantic_entities::overloadable_operator::ARROW_ASTERISK:
 			oss << "->*";
 			break;
-		case semantic_entities::operator_::PLUS_EQUAL:
+		case semantic_entities::overloadable_operator::PLUS_EQUAL:
 			oss << "+=";
 			break;
-		case semantic_entities::operator_::MINUS_EQUAL:
+		case semantic_entities::overloadable_operator::MINUS_EQUAL:
 			oss << "-=";
 			break;
-		case semantic_entities::operator_::ASTERISK_EQUAL:
+		case semantic_entities::overloadable_operator::ASTERISK_EQUAL:
 			oss << "*=";
 			break;
-		case semantic_entities::operator_::SLASH_EQUAL:
+		case semantic_entities::overloadable_operator::SLASH_EQUAL:
 			oss << "/=";
 			break;
-		case semantic_entities::operator_::PERCENT_EQUAL:
+		case semantic_entities::overloadable_operator::PERCENT_EQUAL:
 			oss << "%=";
 			break;
-		case semantic_entities::operator_::CIRCUMFLEX_EQUAL:
+		case semantic_entities::overloadable_operator::CIRCUMFLEX_EQUAL:
 			oss << "^=";
 			break;
-		case semantic_entities::operator_::AMPERSAND_EQUAL:
+		case semantic_entities::overloadable_operator::AMPERSAND_EQUAL:
 			oss << "&=";
 			break;
-		case semantic_entities::operator_::PIPE_EQUAL:
+		case semantic_entities::overloadable_operator::PIPE_EQUAL:
 			oss << "|=";
 			break;
-		case semantic_entities::operator_::DOUBLE_LEFT_ANGLE_BRACKET:
+		case semantic_entities::overloadable_operator::DOUBLE_LEFT_ANGLE_BRACKET:
 			oss << "<<";
 			break;
-		case semantic_entities::operator_::DOUBLE_RIGHT_ANGLE_BRACKET:
+		case semantic_entities::overloadable_operator::DOUBLE_RIGHT_ANGLE_BRACKET:
 			oss << ">>";
 			break;
-		case semantic_entities::operator_::DOUBLE_EQUAL:
+		case semantic_entities::overloadable_operator::DOUBLE_EQUAL:
 			oss << "==";
 			break;
-		case semantic_entities::operator_::EXCLAMATION_EQUAL:
+		case semantic_entities::overloadable_operator::EXCLAMATION_EQUAL:
 			oss << "!=";
 			break;
-		case semantic_entities::operator_::LEFT_ANGLE_BRACKET_EQUAL:
+		case semantic_entities::overloadable_operator::LEFT_ANGLE_BRACKET_EQUAL:
 			oss << "<=";
 			break;
-		case semantic_entities::operator_::RIGHT_ANGLE_BRACKET_EQUAL:
+		case semantic_entities::overloadable_operator::RIGHT_ANGLE_BRACKET_EQUAL:
 			oss << ">=";
 			break;
-		case semantic_entities::operator_::DOUBLE_AMPERSAND:
+		case semantic_entities::overloadable_operator::DOUBLE_AMPERSAND:
 			oss << "&&";
 			break;
-		case semantic_entities::operator_::DOUBLE_PIPE:
+		case semantic_entities::overloadable_operator::DOUBLE_PIPE:
 			oss << "||";
 			break;
-		case semantic_entities::operator_::DOUBLE_PLUS:
+		case semantic_entities::overloadable_operator::DOUBLE_PLUS:
 			oss << "++";
 			break;
-		case semantic_entities::operator_::DOUBLE_MINUS:
+		case semantic_entities::overloadable_operator::DOUBLE_MINUS:
 			oss << "--";
 			break;
-		case semantic_entities::operator_::ARROW:
+		case semantic_entities::overloadable_operator::ARROW:
 			oss << "->";
 			break;
-		case semantic_entities::operator_::ROUND_BRACKETS:
+		case semantic_entities::overloadable_operator::ROUND_BRACKETS:
 			oss << "()";
 			break;
-		case semantic_entities::operator_::SQUARE_BRACKETS:
+		case semantic_entities::overloadable_operator::SQUARE_BRACKETS:
 			oss << "[]";
 			break;
-		case semantic_entities::operator_::COMMA:
+		case semantic_entities::overloadable_operator::COMMA:
 			oss << ",";
 			break;
-		case semantic_entities::operator_::PLUS:
+		case semantic_entities::overloadable_operator::PLUS:
 			oss << "+";
 			break;
-		case semantic_entities::operator_::MINUS:
+		case semantic_entities::overloadable_operator::MINUS:
 			oss << "-";
 			break;
-		case semantic_entities::operator_::ASTERISK:
+		case semantic_entities::overloadable_operator::ASTERISK:
 			oss << "*";
 			break;
-		case semantic_entities::operator_::SLASH:
+		case semantic_entities::overloadable_operator::SLASH:
 			oss << "/";
 			break;
-		case semantic_entities::operator_::PERCENT:
+		case semantic_entities::overloadable_operator::PERCENT:
 			oss << "%";
 			break;
-		case semantic_entities::operator_::CIRCUMFLEX:
+		case semantic_entities::overloadable_operator::CIRCUMFLEX:
 			oss << "^";
 			break;
-		case semantic_entities::operator_::AMPERSAND:
+		case semantic_entities::overloadable_operator::AMPERSAND:
 			oss << "&";
 			break;
-		case semantic_entities::operator_::PIPE:
+		case semantic_entities::overloadable_operator::PIPE:
 			oss << "|";
 			break;
-		case semantic_entities::operator_::TILDE:
+		case semantic_entities::overloadable_operator::TILDE:
 			oss << "~";
 			break;
-		case semantic_entities::operator_::EXCLAMATION:
+		case semantic_entities::overloadable_operator::EXCLAMATION:
 			oss << "!";
 			break;
-		case semantic_entities::operator_::EQUAL:
+		case semantic_entities::overloadable_operator::EQUAL:
 			oss << "=";
 			break;
-		case semantic_entities::operator_::LEFT_ANGLE_BRACKET:
+		case semantic_entities::overloadable_operator::LEFT_ANGLE_BRACKET:
 			oss << "<";
 			break;
-		case semantic_entities::operator_::RIGHT_ANGLE_BRACKET:
+		case semantic_entities::overloadable_operator::RIGHT_ANGLE_BRACKET:
 			oss << ">";
 			break;
 	}

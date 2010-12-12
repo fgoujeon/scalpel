@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_OPERATOR_FUNCTION_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_OPERATOR_FUNCTION_HPP
 
-#include "operator_.hpp"
+#include "overloadable_operator.hpp"
 #include "function_parameter_list.hpp"
 #include "simple_function.hpp"
 #include <memory>
@@ -38,7 +38,7 @@ class operator_function:
     public:
         operator_function
 		(
-			const operator_ op,
+			const overloadable_operator op,
 			const type_shared_ptr_variant& return_type,
 			function_parameter_list&& parameters = function_parameter_list(),
 			const bool is_inline = false,
@@ -51,7 +51,7 @@ class operator_function:
 		bool
 		operator!=(const operator_function& rhs) const;
 
-		operator_
+		overloadable_operator
 		get_operator() const;
 
 		const type_shared_ptr_variant&
@@ -102,7 +102,7 @@ class operator_function:
 
     private:
 		std::shared_ptr<simple_function> impl_;
-        operator_ op_;
+        overloadable_operator op_;
 
 		std::shared_ptr<statement_block> body_;
 };
