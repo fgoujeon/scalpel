@@ -97,7 +97,7 @@ test_case_4()
 
 	//look up i from f(), must find m::i and n::i
 	{
-		auto found_entities = find<false, true, variable>(identifier("i"), function_f->body());
+		auto found_entities = find<false, true, variable>("i", function_f->body());
 		BOOST_CHECK_EQUAL(found_entities.size(), 2);
 		if(found_entities.size() == 2)
 		{

@@ -78,6 +78,12 @@ create_type
 			{
 				auto nested_identifier_or_template_id_node = *opt_nested_identifier_or_template_id_node;
 
+				std::string entity_name;
+				if(boost::optional<const identifier&> opt_identifier_node = get<identifier>(&get_identifier_or_template_id(nested_identifier_or_template_id_node)))
+					entity_name = opt_identifier_node->value();
+				else
+					assert(false);
+
 				utility::shared_ptr_variant<class_, typedef_>::type found_type =
 					semantic_graph_analysis::name_lookup::find
 					<
@@ -87,7 +93,9 @@ create_type
 						typedef_
 					>
 					(
-						nested_identifier_or_template_id_node,
+						has_leading_double_colon(nested_identifier_or_template_id_node),
+						get_nested_name_specifier(nested_identifier_or_template_id_node),
+						entity_name,
 						current_declarative_region
 					)
 				;

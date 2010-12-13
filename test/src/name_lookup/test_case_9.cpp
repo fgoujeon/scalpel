@@ -99,22 +99,23 @@ test_case_9()
 
 	//look up a::f() (undefined function's declaration) from global namespace, must find nothing
 	{
-		nested_identifier_or_template_id a_f_syntax_node
-		(
-			optional_node<predefined_text_node<str::double_colon>>(),
-			space(""),
-			nested_name_specifier
+		auto found_entity =
+			find<true, false, simple_function>
 			(
-				identifier("a"),
-				space(""),
-				predefined_text_node<str::double_colon>(),
-				space(""),
-				optional_node<nested_name_specifier_last_part_seq>()
-			),
-			space(""),
-			identifier("f")
-		);
-		auto found_entity = find<true, false, simple_function>(a_f_syntax_node, semantic_graph, false);
+				false,
+				nested_name_specifier
+				(
+					identifier("a"),
+					space(""),
+					predefined_text_node<str::double_colon>(),
+					space(""),
+					optional_node<nested_name_specifier_last_part_seq>()
+				),
+				"f",
+				semantic_graph,
+				false
+			)
+		;
 		BOOST_CHECK(!found_entity.get());
 	}
 
@@ -135,7 +136,23 @@ test_case_9()
 			space(""),
 			identifier("f")
 		);
-		auto found_entity = find<false, false, simple_function>(b_f_syntax_node, semantic_graph, false);
+		auto found_entity =
+			find<false, false, simple_function>
+			(
+				false,
+				nested_name_specifier
+				(
+					identifier("b"),
+					space(""),
+					predefined_text_node<str::double_colon>(),
+					space(""),
+					optional_node<nested_name_specifier_last_part_seq>()
+				),
+				"f",
+				semantic_graph,
+				false
+			)
+		;
 		BOOST_CHECK_EQUAL(found_entity, function_a_b_f);
 	}
 }

@@ -23,9 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace semantic_graph_analysis
 {
 
-using namespace semantic_entities;
-
-std::shared_ptr<namespace_>
+std::shared_ptr<semantic_entities::namespace_>
 get_global_namespace(semantic_entities::declarative_region_shared_ptr_variant current_declarative_region)
 {
 	//get the outermost declarative region

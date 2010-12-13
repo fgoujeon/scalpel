@@ -104,22 +104,23 @@ test_case_7()
 
 	//look up bc::i from function test, must find a::i
 	{
-		nested_identifier_or_template_id bc_i_syntax_node
-		(
-			optional_node<predefined_text_node<str::double_colon>>(),
-			space(""),
-			nested_name_specifier
+		auto found_entity =
+			find<false, false, variable>
 			(
-				identifier("bc"),
-				space(""),
-				predefined_text_node<str::double_colon>(),
-				space(""),
-				optional_node<nested_name_specifier_last_part_seq>()
-			),
-			space(""),
-			identifier("i")
-		);
-		auto found_entity = find<false, false, variable>(bc_i_syntax_node, function_test);
+				false,
+				nested_name_specifier
+				(
+					identifier("bc"),
+					space(""),
+					predefined_text_node<str::double_colon>(),
+					space(""),
+					optional_node<nested_name_specifier_last_part_seq>()
+				),
+				"i",
+				function_test
+			)
+		;
+
 		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
 	}
 }

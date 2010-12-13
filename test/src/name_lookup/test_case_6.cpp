@@ -174,43 +174,45 @@ test_case_6()
 
 	//look up ab::g() from function test, must find ab::g()
 	{
-		nested_identifier_or_template_id ab_g_syntax_node
-		(
-			optional_node<predefined_text_node<str::double_colon>>(),
-			space(""),
-			nested_name_specifier
+		auto found_entity =
+			find<false, false, simple_function>
 			(
-				identifier("ab"),
-				space(""),
-				predefined_text_node<str::double_colon>(),
-				space(""),
-				optional_node<nested_name_specifier_last_part_seq>()
-			),
-			space(""),
-			identifier("g")
-		);
-		auto found_entity = find<false, false, simple_function>(ab_g_syntax_node, function_test);
+				false,
+				nested_name_specifier
+				(
+					identifier("ab"),
+					space(""),
+					predefined_text_node<str::double_colon>(),
+					space(""),
+					optional_node<nested_name_specifier_last_part_seq>()
+				),
+				"g",
+				function_test
+			)
+		;
+
 		BOOST_CHECK_EQUAL(found_entity, function_ab_g);
 	}
 
 	//look up ab::f() from function test, must find a::f() and b::f()
 	{
-		nested_identifier_or_template_id ab_f_syntax_node
-		(
-			optional_node<predefined_text_node<str::double_colon>>(),
-			space(""),
-			nested_name_specifier
+		auto found_entities =
+			find<false, true, simple_function>
 			(
-				identifier("ab"),
-				space(""),
-				predefined_text_node<str::double_colon>(),
-				space(""),
-				optional_node<nested_name_specifier_last_part_seq>()
-			),
-			space(""),
-			identifier("f")
-		);
-		auto found_entities = find<false, true, simple_function>(ab_f_syntax_node, function_test);
+				false,
+				nested_name_specifier
+				(
+					identifier("ab"),
+					space(""),
+					predefined_text_node<str::double_colon>(),
+					space(""),
+					optional_node<nested_name_specifier_last_part_seq>()
+				),
+				"f",
+				function_test
+			)
+		;
+
 		BOOST_CHECK_EQUAL(found_entities.size(), 2);
 		if(found_entities.size() == 2)
 		{
@@ -227,43 +229,44 @@ test_case_6()
 
 	//look up ab::x from function test, must find nothing
 	{
-		nested_identifier_or_template_id ab_x_syntax_node
-		(
-			optional_node<predefined_text_node<str::double_colon>>(),
-			space(""),
-			nested_name_specifier
+		auto found_entity =
+			find<true, false, variable>
 			(
-				identifier("ab"),
-				space(""),
-				predefined_text_node<str::double_colon>(),
-				space(""),
-				optional_node<nested_name_specifier_last_part_seq>()
-			),
-			space(""),
-			identifier("x")
-		);
-		auto found_entity = find<true, false, variable>(ab_x_syntax_node, function_test);
+				false,
+				nested_name_specifier
+				(
+					identifier("ab"),
+					space(""),
+					predefined_text_node<str::double_colon>(),
+					space(""),
+					optional_node<nested_name_specifier_last_part_seq>()
+				),
+				"x",
+				function_test
+			)
+		;
 		BOOST_CHECK(!found_entity.get());
 	}
 
 	//look up ab::i from function test, must find a::i and b::i
 	{
-		nested_identifier_or_template_id ab_i_syntax_node
-		(
-			optional_node<predefined_text_node<str::double_colon>>(),
-			space(""),
-			nested_name_specifier
+		auto found_entities =
+			find<false, true, variable>
 			(
-				identifier("ab"),
-				space(""),
-				predefined_text_node<str::double_colon>(),
-				space(""),
-				optional_node<nested_name_specifier_last_part_seq>()
-			),
-			space(""),
-			identifier("i")
-		);
-		auto found_entities = find<false, true, variable>(ab_i_syntax_node, function_test);
+				false,
+				nested_name_specifier
+				(
+					identifier("ab"),
+					space(""),
+					predefined_text_node<str::double_colon>(),
+					space(""),
+					optional_node<nested_name_specifier_last_part_seq>()
+				),
+				"i",
+				function_test
+			)
+		;
+
 		BOOST_CHECK_EQUAL(found_entities.size(), 2);
 		if(found_entities.size() == 2)
 		{
@@ -280,22 +283,23 @@ test_case_6()
 
 	//look up ab::h() from function test, must find y::h() and z::h()
 	{
-		nested_identifier_or_template_id ab_h_syntax_node
-		(
-			optional_node<predefined_text_node<str::double_colon>>(),
-			space(""),
-			nested_name_specifier
+		auto found_entities =
+			find<false, true, simple_function>
 			(
-				identifier("ab"),
-				space(""),
-				predefined_text_node<str::double_colon>(),
-				space(""),
-				optional_node<nested_name_specifier_last_part_seq>()
-			),
-			space(""),
-			identifier("h")
-		);
-		auto found_entities = find<false, true, simple_function>(ab_h_syntax_node, function_test);
+				false,
+				nested_name_specifier
+				(
+					identifier("ab"),
+					space(""),
+					predefined_text_node<str::double_colon>(),
+					space(""),
+					optional_node<nested_name_specifier_last_part_seq>()
+				),
+				"h",
+				function_test
+			)
+		;
+
 		BOOST_CHECK_EQUAL(found_entities.size(), 2);
 		if(found_entities.size() == 2)
 		{

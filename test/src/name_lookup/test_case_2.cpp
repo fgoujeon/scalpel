@@ -130,7 +130,7 @@ test_case_2()
 	//name lookup test
 	//
 	{
-		auto found_entities = find<false, true, simple_function>(identifier("f"), function_g_test);
+		auto found_entities = find<false, true, simple_function>("f", function_g_test);
 		BOOST_CHECK_EQUAL(found_entities.size(), 2);
 		if(found_entities.size() == 2)
 		{
@@ -140,52 +140,53 @@ test_case_2()
 	}
 
 	{
-		auto found_entity = find<false, false, simple_function>(identifier("g"), function_g_test);
+		auto found_entity = find<false, false, simple_function>("g", function_g_test);
 		BOOST_CHECK_EQUAL(found_entity, function_c1_g);
 	}
 
 	{
-		auto found_entity = find<false, false, class_>(identifier("inner"), function_g_test);
+		auto found_entity = find<false, false, class_>("inner", function_g_test);
 		BOOST_CHECK_EQUAL(found_entity, struct_c0_inner);
 	}
 
 	{
-		nested_identifier_or_template_id c1base_f_syntax_node
-		(
-			optional_node<predefined_text_node<str::double_colon>>(),
-			space(""),
-			nested_name_specifier
+		auto found_entity =
+			find<false, false, simple_function>
 			(
-				identifier("c1base"),
-				space(""),
-				predefined_text_node<str::double_colon>(),
-				space(""),
-				optional_node<nested_name_specifier_last_part_seq>()
-			),
-			space(""),
-			identifier("f")
-		);
-		auto found_entity = find<false, false, simple_function>(c1base_f_syntax_node, function_g_test);
+				false,
+				nested_name_specifier
+				(
+					identifier("c1base"),
+					space(""),
+					predefined_text_node<str::double_colon>(),
+					space(""),
+					optional_node<nested_name_specifier_last_part_seq>()
+				),
+				"f",
+				function_g_test
+			)
+		;
 		BOOST_CHECK_EQUAL(found_entity, function_c1base_f);
 	}
 
 	{
-		nested_identifier_or_template_id global_c0_f_syntax_node
-		(
-			predefined_text_node<str::double_colon>(),
-			space(""),
-			nested_name_specifier
+		auto found_entity =
+			find<false, false, simple_function>
 			(
-				identifier("c0"),
-				space(""),
-				predefined_text_node<str::double_colon>(),
-				space(""),
-				optional_node<nested_name_specifier_last_part_seq>()
-			),
-			space(""),
-			identifier("f")
-		);
-		auto found_entity = find<false, false, simple_function>(global_c0_f_syntax_node, function_g_test);
+				true,
+				nested_name_specifier
+				(
+					identifier("c0"),
+					space(""),
+					predefined_text_node<str::double_colon>(),
+					space(""),
+					optional_node<nested_name_specifier_last_part_seq>()
+				),
+				"f",
+				function_g_test
+			)
+		;
+
 		BOOST_CHECK_EQUAL(found_entity, function_c0_f);
 	}
 
@@ -208,23 +209,22 @@ test_case_2()
 			)
 		);
 
-		nested_identifier_or_template_id c0_inner_f_syntax_node
-		(
-			predefined_text_node<str::double_colon>(),
-			space(""),
-			nested_name_specifier
+		auto found_entity =
+			find<false, false, simple_function>
 			(
-				identifier("c0"),
-				space(""),
-				predefined_text_node<str::double_colon>(),
-				space(""),
-				std::move(nested_name_specifier_last_part_seq_node)
-			),
-			space(""),
-			identifier("f")
-		);
-
-		auto found_entity = find<false, false, simple_function>(c0_inner_f_syntax_node, function_g_test);
+				false,
+				nested_name_specifier
+				(
+					identifier("c0"),
+					space(""),
+					predefined_text_node<str::double_colon>(),
+					space(""),
+					std::move(nested_name_specifier_last_part_seq_node)
+				),
+				"f",
+				function_g_test
+			)
+		;
 		BOOST_CHECK_EQUAL(found_entity, function_c0_inner_f);
 	}
 }

@@ -92,50 +92,50 @@ test_case_10()
 
 	//look up as::i from function test, must find a::i
 	{
-		nested_identifier_or_template_id as_i_syntax_node
-		(
-			optional_node<predefined_text_node<str::double_colon>>(),
-			space(""),
-			nested_name_specifier
+		auto found_entity =
+			find<false, false, variable>
 			(
-				identifier("as"),
-				space(""),
-				predefined_text_node<str::double_colon>(),
-				space(""),
-				optional_node<nested_name_specifier_last_part_seq>()
-			),
-			space(""),
-			identifier("i")
-		);
-		auto found_entity = find<false, false, variable>(as_i_syntax_node, function_test->body());
+				false,
+				nested_name_specifier
+				(
+					identifier("as"),
+					space(""),
+					predefined_text_node<str::double_colon>(),
+					space(""),
+					optional_node<nested_name_specifier_last_part_seq>()
+				),
+				"i",
+				function_test->body()
+			)
+		;
 		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
 	}
 
 	//look up as2::i from function test, must find a::i
 	{
-		nested_identifier_or_template_id as2_i_syntax_node
-		(
-			optional_node<predefined_text_node<str::double_colon>>(),
-			space(""),
-			nested_name_specifier
+		auto found_entity =
+			find<false, false, variable>
 			(
-				identifier("as2"),
-				space(""),
-				predefined_text_node<str::double_colon>(),
-				space(""),
-				optional_node<nested_name_specifier_last_part_seq>()
-			),
-			space(""),
-			identifier("i")
-		);
-		auto found_entity = find<false, false, variable>(as2_i_syntax_node, function_test->body());
+				false,
+				nested_name_specifier
+				(
+					identifier("as2"),
+					space(""),
+					predefined_text_node<str::double_colon>(),
+					space(""),
+					optional_node<nested_name_specifier_last_part_seq>()
+				),
+				"i",
+				function_test->body()
+			)
+		;
 		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
 	}
 
 	//look up a from as, must find a
 	{
 		scalpel::utility::shared_ptr_variant<namespace_, namespace_alias>::type found_entity =
-			find<false, false, namespace_, namespace_alias>(identifier("as"), function_test->body())
+			find<false, false, namespace_, namespace_alias>("as", function_test->body())
 		;
 		std::shared_ptr<namespace_alias> found_namespace_alias = get<namespace_alias>(found_entity);
 		BOOST_CHECK_EQUAL(found_namespace_alias, namespace_alias_as);

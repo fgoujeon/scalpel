@@ -99,106 +99,106 @@ test_case_8()
 
 	//look up a::j from function test, must find a::j
 	{
-		nested_identifier_or_template_id a_j_syntax_node
-		(
-			optional_node<predefined_text_node<str::double_colon>>(),
-			space(""),
-			nested_name_specifier
+		auto found_entity =
+			find<false, false, variable>
 			(
-				identifier("a"),
-				space(""),
-				predefined_text_node<str::double_colon>(),
-				space(""),
-				optional_node<nested_name_specifier_last_part_seq>()
-			),
-			space(""),
-			identifier("j")
-		);
-		auto found_entity = find<false, false, variable>(a_j_syntax_node, function_test);
+				false,
+				nested_name_specifier
+				(
+					identifier("a"),
+					space(""),
+					predefined_text_node<str::double_colon>(),
+					space(""),
+					optional_node<nested_name_specifier_last_part_seq>()
+				),
+				"j",
+				function_test
+			)
+		;
 		BOOST_CHECK_EQUAL(found_entity, variable_a_j);
 	}
 
 	//look up b::j from function test, must find a::j
 	{
-		nested_identifier_or_template_id b_j_syntax_node
-		(
-			optional_node<predefined_text_node<str::double_colon>>(),
-			space(""),
-			nested_name_specifier
+		auto found_entity =
+			find<false, false, variable>
 			(
-				identifier("b"),
-				space(""),
-				predefined_text_node<str::double_colon>(),
-				space(""),
-				optional_node<nested_name_specifier_last_part_seq>()
-			),
-			space(""),
-			identifier("j")
-		);
-		auto found_entity = find<false, false, variable>(b_j_syntax_node, function_test);
+				false,
+				nested_name_specifier
+				(
+					identifier("b"),
+					space(""),
+					predefined_text_node<str::double_colon>(),
+					space(""),
+					optional_node<nested_name_specifier_last_part_seq>()
+				),
+				"j",
+				function_test
+			)
+		;
 		BOOST_CHECK_EQUAL(found_entity, variable_a_j);
 	}
 
 	//look up a::i from function test, must find b::i
 	{
-		nested_identifier_or_template_id a_i_syntax_node
-		(
-			optional_node<predefined_text_node<str::double_colon>>(),
-			space(""),
-			nested_name_specifier
+		auto found_entity =
+			find<false, false, variable>
 			(
-				identifier("a"),
-				space(""),
-				predefined_text_node<str::double_colon>(),
-				space(""),
-				optional_node<nested_name_specifier_last_part_seq>()
-			),
-			space(""),
-			identifier("i")
-		);
-		auto found_entity = find<false, false, variable>(a_i_syntax_node, function_test);
+				false,
+				nested_name_specifier
+				(
+					identifier("a"),
+					space(""),
+					predefined_text_node<str::double_colon>(),
+					space(""),
+					optional_node<nested_name_specifier_last_part_seq>()
+				),
+				"i",
+				function_test
+			)
+		;
 		BOOST_CHECK_EQUAL(found_entity, variable_b_i);
 	}
 
 	//look up b::i from function test, must find b::i
 	{
-		nested_identifier_or_template_id b_i_syntax_node
-		(
-			optional_node<predefined_text_node<str::double_colon>>(),
-			space(""),
-			nested_name_specifier
+		auto found_entity =
+			find<false, false, variable>
 			(
-				identifier("b"),
-				space(""),
-				predefined_text_node<str::double_colon>(),
-				space(""),
-				optional_node<nested_name_specifier_last_part_seq>()
-			),
-			space(""),
-			identifier("i")
-		);
-		auto found_entity = find<false, false, variable>(b_i_syntax_node, function_test);
+				false,
+				nested_name_specifier
+				(
+					identifier("b"),
+					space(""),
+					predefined_text_node<str::double_colon>(),
+					space(""),
+					optional_node<nested_name_specifier_last_part_seq>()
+				),
+				"i",
+				function_test
+			)
+		;
 		BOOST_CHECK_EQUAL(found_entity, variable_b_i);
 	}
 
 	//look up b::k from function test, must find nothing
 	{
-		nested_identifier_or_template_id b_k_syntax_node
-		(
-			optional_node<predefined_text_node<str::double_colon>>(),
-			space(""),
-			nested_name_specifier
+		auto found_entity =
+			find<true, false, variable>
 			(
-				identifier("b"),
-				space(""),
-				predefined_text_node<str::double_colon>(),
-				space(""),
-				optional_node<nested_name_specifier_last_part_seq>()
-			),
-			space(""),
-			identifier("k")
-		);
-		auto found_entity = find<true, false, variable>(b_k_syntax_node, function_test);
+				false,
+				nested_name_specifier
+				(
+					identifier("b"),
+					space(""),
+					predefined_text_node<str::double_colon>(),
+					space(""),
+					optional_node<nested_name_specifier_last_part_seq>()
+				),
+				"k",
+				function_test
+			)
+		;
 		BOOST_CHECK(!found_entity.get());
 	}
 }

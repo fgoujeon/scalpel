@@ -42,9 +42,6 @@ class constructor:
 
 		constructor(constructor&& rhs);
 
-		const std::string&
-		name() const;
-
 		const function_parameter_list&
 		parameters() const
 		{

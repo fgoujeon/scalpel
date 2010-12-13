@@ -138,7 +138,9 @@ template<bool Optional, bool Multiple, class... EntitiesT>
 typename return_type<Optional, Multiple, EntitiesT...>::type
 find
 (
-	const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node,
+	const bool has_leading_double_colon,
+	const syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>& opt_nested_name_specifier_node,
+	const std::string& name,
 	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region,
 	const bool apply_using_directives_for_unqualified_id_part = true
 );
@@ -151,7 +153,7 @@ template<bool Optional, bool Multiple, class... EntitiesT>
 typename return_type<Optional, Multiple, EntitiesT...>::type
 find
 (
-	const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
+	const std::string& name,
 	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
 );
 
@@ -208,6 +210,8 @@ namespace detail
 		namespace_association_map
 	;
 
+
+
 	/**
 	Find the declarative region corresponding to the given
 	nested-identifier-or-template-id syntax node
@@ -216,14 +220,12 @@ namespace detail
 	DeclarativeRegionT determines both the return type and the type of the
 	intermediate declarative region(s) (X and Y in the example).
 	*/
-	//TODO nested_identifier_or_template_id provides too much information.
-	//A syntax node type containing an optional '::' and a nested-name-specifier
-	//would have been more appropriate.
 	template<class DeclarativeRegionT>
 	typename return_type<false, false, DeclarativeRegionT>::type
 	find_declarative_region
 	(
-		const syntax_nodes::nested_identifier_or_template_id& nested_identifier_or_template_id_node,
+		const bool has_leading_double_colon,
+		const syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>& opt_nested_name_specifier_node,
 		const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
 	);
 
@@ -243,12 +245,12 @@ namespace detail
 	);
 
 	/**
-	Find entities corresponding to the given name,
+	Find entities corresponding to the given identifier,
 	from the given declarative region (unqualified name lookup)
 	*/
 	template<class IdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
 	typename return_type<Optional, Multiple, EntitiesT...>::type
-	find_entities_from_identifier
+	find_entities
 	(
 		const typename IdentificationPolicy::identifier_t& identifier,
 		semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
@@ -257,24 +259,24 @@ namespace detail
 
 
 	/**
-	Find entities corresponding to the given identifier_or_template_id node,
+	Find entities corresponding to the given identifier,
 	in the given namespace, applying using directives as defined in the
 	qualified name lookup section of the C++ standard.
 	*/
-	template<bool Optional, bool Multiple, class... EntitiesT>
+	template<class IdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
 	typename return_type<Optional, Multiple, EntitiesT...>::type
 	find_in_namespace
 	(
-		const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
+		const typename IdentificationPolicy::identifier_t& identifier,
 		std::shared_ptr<semantic_entities::namespace_> current_namespace
 	);
 
 	/**
-	Find in namespace from an identifier.
+	Recursive part of above function.
 	*/
 	template<class IdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
 	typename return_type<Optional, Multiple, EntitiesT...>::type
-	find_in_namespace_from_identifier
+	find_in_namespace
 	(
 		const typename IdentificationPolicy::identifier_t& identifier,
 		std::shared_ptr<semantic_entities::namespace_> current_namespace,
@@ -284,33 +286,21 @@ namespace detail
 
 
 	/**
-	Find entities corresponding to the given identifier_or_template_id node,
-	in the given declarative region only.
-	*/
-	template<class DeclarativeRegionT, bool Optional, bool Multiple, class... EntitiesT>
-	typename return_type<Optional, Multiple, EntitiesT...>::type
-	find_local_entities
-	(
-		const syntax_nodes::identifier_or_template_id& identifier_or_template_id,
-		const DeclarativeRegionT& current_declarative_region
-	);
-
-	/**
-	Find entities of the given name, in the given declarative region only.
+	Find entities of the given identifier, in the given declarative region only.
 	*/
 	template<class IdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple, class EntityT, class EntityT2, class... EntitiesT>
 	typename return_type<Optional, Multiple, EntityT, EntityT2, EntitiesT...>::type
-	find_local_entities_from_identifier
+	find_local_entities
 	(
 		const typename IdentificationPolicy::identifier_t& identifier,
 		const DeclarativeRegionT& current_declarative_region
 	);
 
 	template<class IdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple, class ReturnT, class... EntitiesT>
-	struct find_variadic_local_entities_from_identifier;
+	struct find_variadic_local_entities;
 
 	template<class IdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple, class ReturnT>
-	struct find_variadic_local_entities_from_identifier<IdentificationPolicy, DeclarativeRegionT, Optional, Multiple, ReturnT>
+	struct find_variadic_local_entities<IdentificationPolicy, DeclarativeRegionT, Optional, Multiple, ReturnT>
 	{
 		static
 		void
@@ -323,7 +313,7 @@ namespace detail
 	};
 
 	template<class IdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple, class ReturnT, class EntityT, class... EntitiesT>
-	struct find_variadic_local_entities_from_identifier<IdentificationPolicy, DeclarativeRegionT, Optional, Multiple, ReturnT, EntityT, EntitiesT...>
+	struct find_variadic_local_entities<IdentificationPolicy, DeclarativeRegionT, Optional, Multiple, ReturnT, EntityT, EntitiesT...>
 	{
 		static
 		void
@@ -336,11 +326,11 @@ namespace detail
 	};
 
 	/**
-	Find entities of the given name, in the given declarative region only.
+	Find entities of the given identifier, in the given declarative region only.
 	*/
 	template<class IdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple, class EntityT>
 	typename return_type<Optional, Multiple, EntityT>::type
-	find_local_entities_from_identifier
+	find_local_entities
 	(
 		const typename IdentificationPolicy::identifier_t& identifier,
 		const DeclarativeRegionT& current_declarative_region
@@ -349,7 +339,7 @@ namespace detail
 
 
 	/**
-	Find entities of the given name, in the given base classes
+	Find entities of the given identifier, in the given base classes
 	*/
 	template<class IdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
 	typename return_type<Optional, Multiple, EntitiesT...>::type
@@ -376,6 +366,8 @@ namespace detail
 		const semantic_entities::declarative_region_shared_ptr_variant& a,
 		const std::shared_ptr<semantic_entities::namespace_> b
 	);
+
+
 
 	//result = entity
 	template<class T, class U>

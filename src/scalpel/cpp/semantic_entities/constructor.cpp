@@ -44,12 +44,6 @@ constructor::constructor(constructor&& rhs):
 {
 }
 
-const std::string&
-constructor::name() const
-{
-	return class_member_impl_.enclosing_class()->name();
-}
-
 
 
 bool

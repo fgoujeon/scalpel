@@ -161,10 +161,18 @@ create_namespace_alias
 	);
 
 	//find the namespace or namespace alias designated by the namespace alias
+	std::string entity_name;
+	if(boost::optional<const identifier&> opt_identifier_node = get<identifier>(&get_identifier_or_template_id(nested_identifier_or_template_id_node)))
+		entity_name = opt_identifier_node->value();
+	else
+		assert(false);
+
 	utility::shared_ptr_variant<namespace_, namespace_alias>::type found_entity =
 		semantic_graph_analysis::name_lookup::find<false, false, namespace_, namespace_alias>
 		(
-			nested_identifier_or_template_id_node,
+			has_leading_double_colon(nested_identifier_or_template_id_node),
+			get_nested_name_specifier(nested_identifier_or_template_id_node),
+			entity_name,
 			current_namespace
 		)
 	;
@@ -187,24 +195,13 @@ create_using_directive
 	std::shared_ptr<semantic_entities::namespace_> current_namespace
 )
 {
-	//convert the using-directive node to a nested-identifier-or-template-id node
-	syntax_nodes::nested_identifier_or_template_id nested_identifier_or_template_id_node
-	(
-		has_leading_double_colon(using_directive_node) ?
-			predefined_text_node<str::double_colon>() :
-			optional_node<predefined_text_node<str::double_colon>>()
-		,
-		space(""),
-		get_nested_name_specifier(using_directive_node),
-		space(""),
-		get_identifier(using_directive_node)
-	);
-
 	//find the namespace or namespace alias designated by the using directive
 	utility::shared_ptr_variant<namespace_, namespace_alias>::type found_entity =
 		semantic_graph_analysis::name_lookup::find<false, false, namespace_, namespace_alias>
 		(
-			nested_identifier_or_template_id_node,
+			has_leading_double_colon(using_directive_node),
+			get_nested_name_specifier(using_directive_node),
+			get_identifier(using_directive_node).value(),
 			current_namespace
 		)
 	;
