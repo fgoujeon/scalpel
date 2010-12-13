@@ -40,13 +40,15 @@ test_case_11()
 	/*
 	class c
 	{
+		c
+		operator+(const c&);
 	};
 
 	bool
-	operator==(const c&, const c&);
+	operator!=(const c&, const c&);
 
 	bool
-	operator!=(const c&, const c&);
+	operator==(const c&, const c&);
 
 	void
 	test()
@@ -63,12 +65,17 @@ test_case_11()
 	auto class_c = class_::make_shared("c");
 
 	//functions
-	auto operator_function_equal = std::make_shared<operator_function>
+	auto operator_function_plus = std::make_shared<operator_function>
 	(
-		scalpel::cpp::semantic_entities::overloadable_operator::DOUBLE_EQUAL,
+		scalpel::cpp::semantic_entities::overloadable_operator::PLUS,
 		fundamental_type_shared_ptrs::bool_
 	);
 	auto operator_function_not_equal = std::make_shared<operator_function>
+	(
+		scalpel::cpp::semantic_entities::overloadable_operator::EXCLAMATION_EQUAL,
+		fundamental_type_shared_ptrs::bool_
+	);
+	auto operator_function_equal = std::make_shared<operator_function>
 	(
 		scalpel::cpp::semantic_entities::overloadable_operator::DOUBLE_EQUAL,
 		fundamental_type_shared_ptrs::bool_
@@ -81,8 +88,9 @@ test_case_11()
 
 	//assembling
 	semantic_graph->add_member(class_c);
-	semantic_graph->add_member(operator_function_equal);
+	class_c->add_member(operator_function_plus);
 	semantic_graph->add_member(operator_function_not_equal);
+	semantic_graph->add_member(operator_function_equal);
 	semantic_graph->add_member(function_test);
 	function_test->body(std::make_shared<statement_block>());
 
@@ -98,6 +106,27 @@ test_case_11()
 			find_operator_functions<false, false>(scalpel::cpp::semantic_entities::overloadable_operator::DOUBLE_EQUAL, function_test)
 		;
 		BOOST_CHECK_EQUAL(found_entity, operator_function_equal);
+	}
+
+	//look up c::operator+ from function test, must find it
+	{
+		std::shared_ptr<operator_function> found_entity =
+			find_operator_functions<false, false>
+			(
+				false,
+				nested_name_specifier
+				(
+					identifier("c"),
+					space(""),
+					predefined_text_node<str::double_colon>(),
+					space(""),
+					optional_node<nested_name_specifier_last_part_seq>()
+				),
+				scalpel::cpp::semantic_entities::overloadable_operator::PLUS,
+				function_test
+			)
+		;
+		BOOST_CHECK_EQUAL(found_entity, operator_function_plus);
 	}
 }
 

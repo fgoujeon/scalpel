@@ -126,6 +126,26 @@ struct return_type<Optional, true, EntityT, EntityT2, EntitiesT...>
 
 
 /**
+Find entities corresponding to the given identifier_or_template_id node,
+from the given declarative region (unqualified name lookup).
+*/
+template<bool Optional, bool Multiple, class... EntitiesT>
+typename return_type<Optional, Multiple, EntitiesT...>::type
+find
+(
+	const std::string& name,
+	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
+);
+
+template<bool Optional, bool Multiple>
+typename return_type<Optional, Multiple, semantic_entities::operator_function>::type
+find_operator_functions
+(
+	const semantic_entities::overloadable_operator& op,
+	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
+);
+
+/**
 Find entities corresponding to the given nested identifier
 (or nested template-id),
 from the given declarative region (qualified name lookup).
@@ -145,24 +165,15 @@ find
 	const bool apply_using_directives_for_unqualified_id_part = true
 );
 
-/**
-Find entities corresponding to the given identifier_or_template_id node,
-from the given declarative region (unqualified name lookup).
-*/
-template<bool Optional, bool Multiple, class... EntitiesT>
-typename return_type<Optional, Multiple, EntitiesT...>::type
-find
-(
-	const std::string& name,
-	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
-);
-
 template<bool Optional, bool Multiple>
 typename return_type<Optional, Multiple, semantic_entities::operator_function>::type
 find_operator_functions
 (
+	const bool has_leading_double_colon,
+	const syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>& opt_nested_name_specifier_node,
 	const semantic_entities::overloadable_operator& op,
-	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
+	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region,
+	const bool apply_using_directives_for_unqualified_id_part = true
 );
 
 
@@ -213,6 +224,34 @@ namespace detail
 
 
 	/**
+	Find entities corresponding to the given identifier,
+	from the given declarative region (unqualified name lookup).
+	*/
+	template<class IdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
+	typename return_type<Optional, Multiple, EntitiesT...>::type
+	find_entities
+	(
+		const typename IdentificationPolicy::identifier_t& identifier,
+		semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+	);
+
+	/**
+	Find entities corresponding to the given nested identifier
+	(or nested template-id),
+	from the given declarative region (qualified name lookup).
+	*/
+	template<class IdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
+	typename return_type<Optional, Multiple, EntitiesT...>::type
+	find_entities
+	(
+		const bool has_leading_double_colon,
+		const syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>& opt_nested_name_specifier_node,
+		const typename IdentificationPolicy::identifier_t& identifier,
+		const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region,
+		const bool apply_using_directives_for_unqualified_id_part
+	);
+
+	/**
 	Find the declarative region corresponding to the given
 	nested-identifier-or-template-id syntax node
 	(i.e. Z in the expression "X::Y::Z::"),
@@ -242,18 +281,6 @@ namespace detail
 	(
 		const syntax_nodes::nested_name_specifier& nested_name_specifier_node,
 		const typename return_type<false, false, DeclarativeRegionT>::type& current_declarative_region
-	);
-
-	/**
-	Find entities corresponding to the given identifier,
-	from the given declarative region (unqualified name lookup)
-	*/
-	template<class IdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
-	typename return_type<Optional, Multiple, EntitiesT...>::type
-	find_entities
-	(
-		const typename IdentificationPolicy::identifier_t& identifier,
-		semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 	);
 
 

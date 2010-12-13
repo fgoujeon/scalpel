@@ -32,75 +32,6 @@ template<bool Optional, bool Multiple, class... EntitiesT>
 typename return_type<Optional, Multiple, EntitiesT...>::type
 find
 (
-	const bool has_leading_double_colon,
-	const syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>& opt_nested_name_specifier_node,
-	const std::string& name,
-	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region,
-	const bool apply_using_directives_for_unqualified_id_part
-)
-{
-	//Check whether the given qualified identifier is really qualified.
-	//If not, perform a simple unqualified identifier lookup.
-	if
-	(
-		!has_leading_double_colon &&
-		!opt_nested_name_specifier_node
-	)
-	{
-		return
-			detail::find_entities
-			<
-				detail::identification_policies::by_name,
-				Optional,
-				Multiple,
-				EntitiesT...
-			>(name, current_declarative_region)
-		;
-	}
-
-	//Find the last declarative region of the nested identifier specifier
-	//(i.e. Z in "[::]X::Y::Z::").
-	semantic_entities::open_declarative_region_shared_ptr_variant last_declarative_region =
-		detail::find_declarative_region<semantic_entities::open_declarative_region_shared_ptr_variant>
-		(
-			has_leading_double_colon,
-			opt_nested_name_specifier_node,
-			current_declarative_region
-		)
-	;
-
-	//find entities in the last declarative region
-	if(apply_using_directives_for_unqualified_id_part)
-	{
-		if(std::shared_ptr<semantic_entities::namespace_>* opt_namespace_ptr = utility::get<semantic_entities::namespace_>(&last_declarative_region))
-		{
-			return
-				detail::find_in_namespace
-				<
-					detail::identification_policies::by_name,
-					Optional,
-					Multiple,
-					EntitiesT...
-				>(name, *opt_namespace_ptr)
-			;
-		}
-	}
-	return
-		detail::find_local_entities
-		<
-			detail::identification_policies::by_name,
-			semantic_entities::open_declarative_region_shared_ptr_variant,
-			Optional,
-			Multiple,
-			EntitiesT...
-		>(name, last_declarative_region)
-	;
-}
-
-template<bool Optional, bool Multiple, class... EntitiesT>
-typename return_type<Optional, Multiple, EntitiesT...>::type
-find
-(
 	const std::string& name,
 	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
 )
@@ -135,10 +66,247 @@ find_operator_functions
 	;
 }
 
+template<bool Optional, bool Multiple, class... EntitiesT>
+typename return_type<Optional, Multiple, EntitiesT...>::type
+find
+(
+	const bool has_leading_double_colon,
+	const syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>& opt_nested_name_specifier_node,
+	const std::string& name,
+	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region,
+	const bool apply_using_directives_for_unqualified_id_part
+)
+{
+	return
+		detail::find_entities
+		<
+			detail::identification_policies::by_name,
+			Optional,
+			Multiple,
+			EntitiesT...
+		>
+		(
+			has_leading_double_colon,
+			opt_nested_name_specifier_node,
+			name,
+			current_declarative_region,
+			apply_using_directives_for_unqualified_id_part
+		)
+	;
+}
+
+template<bool Optional, bool Multiple>
+typename return_type<Optional, Multiple, semantic_entities::operator_function>::type
+find_operator_functions
+(
+	const bool has_leading_double_colon,
+	const syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>& opt_nested_name_specifier_node,
+	const semantic_entities::overloadable_operator& op,
+	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region,
+	const bool apply_using_directives_for_unqualified_id_part
+)
+{
+	return
+		detail::find_entities
+		<
+			detail::identification_policies::by_operator,
+			Optional,
+			Multiple,
+			semantic_entities::operator_function
+		>
+		(
+			has_leading_double_colon,
+			opt_nested_name_specifier_node,
+			op,
+			current_declarative_region,
+			apply_using_directives_for_unqualified_id_part
+		)
+	;
+}
+
 
 
 namespace detail
 {
+
+template<class IdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
+typename return_type<Optional, Multiple, EntitiesT...>::type
+find_entities
+(
+	const typename IdentificationPolicy::identifier_t& identifier,
+	semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+)
+{
+	//used for applying using directives
+	namespace_association_map namespace_associations;
+
+	//indirectly returned object
+	typename return_type<true, true, EntitiesT...>::type found_entities;
+
+	//find entities from current to outermost declarative region
+	//(i.e. the global namespace)
+	while(true)
+	{
+		//apply using directives (only for namespaces and statement blocks)
+		if(auto opt_namespace_ptr = utility::get<semantic_entities::namespace_>(&current_declarative_region))
+			apply_using_directives
+			(
+				current_declarative_region,
+				(*opt_namespace_ptr)->using_directive_namespaces(),
+				namespace_associations
+			);
+		else if(auto opt_statement_block_ptr = utility::get<semantic_entities::statement_block>(&current_declarative_region))
+			apply_using_directives
+			(
+				current_declarative_region,
+				(*opt_statement_block_ptr)->using_directive_namespaces(),
+				namespace_associations
+			);
+
+		//find entities in this declarative region only
+		add_to_result
+		(
+			found_entities,
+			find_local_entities
+			<
+				IdentificationPolicy,
+				semantic_entities::declarative_region_shared_ptr_variant,
+				true,
+				Multiple,
+				EntitiesT...
+			>(identifier, current_declarative_region)
+		);
+
+		//find entities in the associated namespaces (only for namespaces)
+		//and add them to the previously found entities
+		if(auto opt_namespace_ptr = utility::get<semantic_entities::namespace_>(&current_declarative_region))
+		{
+			auto associated_namespaces_it = namespace_associations.find(*opt_namespace_ptr);
+			if(associated_namespaces_it != namespace_associations.end())
+			{
+				const std::vector<std::shared_ptr<semantic_entities::namespace_>>& associated_namespaces = associated_namespaces_it->second;
+
+				//for each associated namespace
+				for(auto i = associated_namespaces.begin(); i != associated_namespaces.end(); ++i)
+				{
+					add_to_result
+					(
+						found_entities,
+						find_local_entities
+						<
+							IdentificationPolicy,
+							std::shared_ptr<semantic_entities::namespace_>,
+							true,
+							Multiple,
+							EntitiesT...
+						>(identifier, *i)
+					);
+				}
+			}
+		}
+
+		//stop lookup if entities have been found
+		if(!utility::is_empty(found_entities)) break;
+
+		//find entities in the base classes (only for classes)
+		if(auto opt_class_ptr = utility::get<semantic_entities::class_>(&current_declarative_region))
+		{
+			std::shared_ptr<semantic_entities::class_> class_ptr = *opt_class_ptr;
+
+			add_to_result
+			(
+				found_entities,
+				find_entities_in_base_classes
+				<
+					IdentificationPolicy,
+					true,
+					Multiple,
+					EntitiesT...
+				>(identifier, class_ptr->base_classes())
+			);
+
+			//stop lookup if entities have been found
+			if(!utility::is_empty(found_entities)) break;
+		}
+
+		//iterate to the enclosing declarative region
+		if(!has_enclosing_declarative_region(current_declarative_region)) break;
+		current_declarative_region = get_enclosing_declarative_region(current_declarative_region);
+	}
+
+	return std::move(return_result<Optional, Multiple, EntitiesT...>::result(found_entities));
+}
+
+template<class IdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
+typename return_type<Optional, Multiple, EntitiesT...>::type
+find_entities
+(
+	const bool has_leading_double_colon,
+	const syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>& opt_nested_name_specifier_node,
+	const typename IdentificationPolicy::identifier_t& identifier,
+	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region,
+	const bool apply_using_directives_for_unqualified_id_part
+)
+{
+	//Check whether the given qualified identifier is really qualified.
+	//If not, perform a simple unqualified identifier lookup.
+	if
+	(
+		!has_leading_double_colon &&
+		!opt_nested_name_specifier_node
+	)
+	{
+		return
+			detail::find_entities
+			<
+				IdentificationPolicy,
+				Optional,
+				Multiple,
+				EntitiesT...
+			>(identifier, current_declarative_region)
+		;
+	}
+
+	//Find the last declarative region of the nested identifier specifier
+	//(i.e. Z in "[::]X::Y::Z::").
+	semantic_entities::open_declarative_region_shared_ptr_variant last_declarative_region =
+		detail::find_declarative_region<semantic_entities::open_declarative_region_shared_ptr_variant>
+		(
+			has_leading_double_colon,
+			opt_nested_name_specifier_node,
+			current_declarative_region
+		)
+	;
+
+	//find entities in the last declarative region
+	if(apply_using_directives_for_unqualified_id_part)
+	{
+		if(std::shared_ptr<semantic_entities::namespace_>* opt_namespace_ptr = utility::get<semantic_entities::namespace_>(&last_declarative_region))
+		{
+			return
+				detail::find_in_namespace
+				<
+					IdentificationPolicy,
+					Optional,
+					Multiple,
+					EntitiesT...
+				>(identifier, *opt_namespace_ptr)
+			;
+		}
+	}
+	return
+		detail::find_local_entities
+		<
+			IdentificationPolicy,
+			semantic_entities::open_declarative_region_shared_ptr_variant,
+			Optional,
+			Multiple,
+			EntitiesT...
+		>(identifier, last_declarative_region)
+	;
+}
+
+
 
 template<class DeclarativeRegionT>
 typename return_type<false, false, DeclarativeRegionT>::type
@@ -279,116 +447,6 @@ find_declarative_region
 
 template<class IdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
 typename return_type<Optional, Multiple, EntitiesT...>::type
-find_entities
-(
-	const typename IdentificationPolicy::identifier_t& identifier,
-	semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
-)
-{
-	//used for applying using directives
-	namespace_association_map namespace_associations;
-
-	//indirectly returned object
-	typename return_type<true, true, EntitiesT...>::type found_entities;
-
-	//find entities from current to outermost declarative region
-	//(i.e. the global namespace)
-	while(true)
-	{
-		//apply using directives (only for namespaces and statement blocks)
-		if(auto opt_namespace_ptr = utility::get<semantic_entities::namespace_>(&current_declarative_region))
-			apply_using_directives
-			(
-				current_declarative_region,
-				(*opt_namespace_ptr)->using_directive_namespaces(),
-				namespace_associations
-			);
-		else if(auto opt_statement_block_ptr = utility::get<semantic_entities::statement_block>(&current_declarative_region))
-			apply_using_directives
-			(
-				current_declarative_region,
-				(*opt_statement_block_ptr)->using_directive_namespaces(),
-				namespace_associations
-			);
-
-		//find entities in this declarative region only
-		add_to_result
-		(
-			found_entities,
-			find_local_entities
-			<
-				IdentificationPolicy,
-				semantic_entities::declarative_region_shared_ptr_variant,
-				true,
-				Multiple,
-				EntitiesT...
-			>(identifier, current_declarative_region)
-		);
-
-		//find entities in the associated namespaces (only for namespaces)
-		//and add them to the previously found entities
-		if(auto opt_namespace_ptr = utility::get<semantic_entities::namespace_>(&current_declarative_region))
-		{
-			auto associated_namespaces_it = namespace_associations.find(*opt_namespace_ptr);
-			if(associated_namespaces_it != namespace_associations.end())
-			{
-				const std::vector<std::shared_ptr<semantic_entities::namespace_>>& associated_namespaces = associated_namespaces_it->second;
-
-				//for each associated namespace
-				for(auto i = associated_namespaces.begin(); i != associated_namespaces.end(); ++i)
-				{
-					add_to_result
-					(
-						found_entities,
-						find_local_entities
-						<
-							IdentificationPolicy,
-							std::shared_ptr<semantic_entities::namespace_>,
-							true,
-							Multiple,
-							EntitiesT...
-						>(identifier, *i)
-					);
-				}
-			}
-		}
-
-		//stop lookup if entities have been found
-		if(!utility::is_empty(found_entities)) break;
-
-		//find entities in the base classes (only for classes)
-		if(auto opt_class_ptr = utility::get<semantic_entities::class_>(&current_declarative_region))
-		{
-			std::shared_ptr<semantic_entities::class_> class_ptr = *opt_class_ptr;
-
-			add_to_result
-			(
-				found_entities,
-				find_entities_in_base_classes
-				<
-					IdentificationPolicy,
-					true,
-					Multiple,
-					EntitiesT...
-				>(identifier, class_ptr->base_classes())
-			);
-
-			//stop lookup if entities have been found
-			if(!utility::is_empty(found_entities)) break;
-		}
-
-		//iterate to the enclosing declarative region
-		if(!has_enclosing_declarative_region(current_declarative_region)) break;
-		current_declarative_region = get_enclosing_declarative_region(current_declarative_region);
-	}
-
-	return std::move(return_result<Optional, Multiple, EntitiesT...>::result(found_entities));
-}
-
-
-
-template<class IdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
-typename return_type<Optional, Multiple, EntitiesT...>::type
 find_in_namespace
 (
 	const typename IdentificationPolicy::identifier_t& identifier,
@@ -399,7 +457,7 @@ find_in_namespace
 	return
 		find_in_namespace
 		<
-			identification_policies::by_name,
+			IdentificationPolicy,
 			Optional,
 			Multiple,
 			EntitiesT...
