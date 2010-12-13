@@ -170,7 +170,7 @@ create_namespace_alias
 	utility::shared_ptr_variant<namespace_, namespace_alias>::type found_entity =
 		semantic_graph_analysis::name_lookup::find
 		<
-			semantic_graph_analysis::name_lookup::entity_identification_policies::by_name,
+			semantic_graph_analysis::identifier_getting_policies::get_name,
 			false,
 			false,
 			namespace_,
@@ -206,7 +206,7 @@ create_using_directive
 	utility::shared_ptr_variant<namespace_, namespace_alias>::type found_entity =
 		semantic_graph_analysis::name_lookup::find
 		<
-			semantic_graph_analysis::name_lookup::entity_identification_policies::by_name,
+			semantic_graph_analysis::identifier_getting_policies::get_name,
 			false,
 			false,
 			namespace_,

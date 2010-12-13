@@ -30,6 +30,13 @@ const std::string& \
 get_name<std::shared_ptr<semantic_entities::ENTITY_TYPE>>(std::shared_ptr<semantic_entities::ENTITY_TYPE> entity) \
 { \
 	return entity->name(); \
+} \
+\
+template<> \
+const std::string& \
+get_name<std::shared_ptr<semantic_entities::ENTITY_TYPE const>>(std::shared_ptr<semantic_entities::ENTITY_TYPE const> entity) \
+{ \
+	return entity->name(); \
 }
 
 template<>

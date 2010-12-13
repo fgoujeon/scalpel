@@ -33,6 +33,7 @@ test_case_11()
 {
 	using namespace scalpel::cpp::syntax_nodes;
 	using namespace scalpel::cpp::semantic_entities;
+	using namespace scalpel::cpp::detail::semantic_analysis::semantic_graph_analysis;
 	using namespace scalpel::cpp::detail::semantic_analysis::semantic_graph_analysis::name_lookup;
 
 	//
@@ -103,7 +104,7 @@ test_case_11()
 	//look up operator== from function test, must find it
 	{
 		std::shared_ptr<operator_function> found_entity =
-			find<entity_identification_policies::by_operator, false, false, operator_function>
+			find<identifier_getting_policies::get_operator, false, false, operator_function>
 			(
 				scalpel::cpp::semantic_entities::overloadable_operator::DOUBLE_EQUAL,
 				function_test
@@ -115,7 +116,7 @@ test_case_11()
 	//look up c::operator+ from function test, must find it
 	{
 		std::shared_ptr<operator_function> found_entity =
-			find<entity_identification_policies::by_operator, false, false, operator_function>
+			find<identifier_getting_policies::get_operator, false, false, operator_function>
 			(
 				false,
 				nested_name_specifier

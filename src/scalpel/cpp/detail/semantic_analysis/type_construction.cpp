@@ -87,7 +87,7 @@ create_type
 				utility::shared_ptr_variant<class_, typedef_>::type found_type =
 					semantic_graph_analysis::name_lookup::find
 					<
-						semantic_graph_analysis::name_lookup::entity_identification_policies::by_name,
+						semantic_graph_analysis::identifier_getting_policies::get_name,
 						false,
 						false,
 						class_,

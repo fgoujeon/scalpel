@@ -179,7 +179,11 @@ find_function
 	else if(auto opt_simple_function_signature = get<simple_function>(&function_signature))
 	{
 		std::shared_ptr<simple_function> function_declaration =
-			find_function<simple_function>
+			find_function
+			<
+				semantic_graph_analysis::identifier_getting_policies::get_name,
+				simple_function
+			>
 			(
 				*opt_simple_function_signature,
 				function_definition_node,

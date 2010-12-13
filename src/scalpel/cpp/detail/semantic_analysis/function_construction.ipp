@@ -28,7 +28,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
 {
 
-template<class FunctionT>
+template<class IdentifierGettingPolicy, class FunctionT>
 std::shared_ptr<FunctionT>
 find_function
 (
@@ -52,7 +52,7 @@ find_function
 		found_functions =
 			semantic_graph_analysis::name_lookup::find
 			<
-				semantic_graph_analysis::name_lookup::entity_identification_policies::by_name,
+				IdentifierGettingPolicy,
 				false,
 				true,
 				FunctionT
@@ -60,7 +60,7 @@ find_function
 			(
 				has_leading_double_colon(*opt_nested_identifier_or_template_id_node),
 				get_nested_name_specifier(*opt_nested_identifier_or_template_id_node),
-				function_signature->name(),
+				IdentifierGettingPolicy::get_identifier(function_signature),
 				current_declarative_region,
 				false
 			)
@@ -71,13 +71,13 @@ find_function
 		found_functions =
 			semantic_graph_analysis::name_lookup::find
 			<
-				semantic_graph_analysis::name_lookup::entity_identification_policies::by_name,
+				IdentifierGettingPolicy,
 				false,
 				true,
 				FunctionT
 			>
 			(
-				function_signature->name(),
+				IdentifierGettingPolicy::get_identifier(function_signature),
 				current_declarative_region
 			)
 		;

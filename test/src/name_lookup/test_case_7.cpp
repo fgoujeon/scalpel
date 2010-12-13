@@ -32,6 +32,7 @@ test_case_7()
 {
 	using namespace scalpel::cpp::syntax_nodes;
 	using namespace scalpel::cpp::semantic_entities;
+	using namespace scalpel::cpp::detail::semantic_analysis::semantic_graph_analysis;
 	using namespace scalpel::cpp::detail::semantic_analysis::semantic_graph_analysis::name_lookup;
 
 	//
@@ -105,7 +106,7 @@ test_case_7()
 	//look up bc::i from function test, must find a::i
 	{
 		auto found_entity =
-			find<entity_identification_policies::by_name, false, false, variable>
+			find<identifier_getting_policies::get_name, false, false, variable>
 			(
 				false,
 				nested_name_specifier

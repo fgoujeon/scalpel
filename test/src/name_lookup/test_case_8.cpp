@@ -32,6 +32,7 @@ test_case_8()
 {
 	using namespace scalpel::cpp::syntax_nodes;
 	using namespace scalpel::cpp::semantic_entities;
+	using namespace scalpel::cpp::detail::semantic_analysis::semantic_graph_analysis;
 	using namespace scalpel::cpp::detail::semantic_analysis::semantic_graph_analysis::name_lookup;
 
 	//
@@ -100,7 +101,7 @@ test_case_8()
 	//look up a::j from function test, must find a::j
 	{
 		auto found_entity =
-			find<entity_identification_policies::by_name, false, false, variable>
+			find<identifier_getting_policies::get_name, false, false, variable>
 			(
 				false,
 				nested_name_specifier
@@ -121,7 +122,7 @@ test_case_8()
 	//look up b::j from function test, must find a::j
 	{
 		auto found_entity =
-			find<entity_identification_policies::by_name, false, false, variable>
+			find<identifier_getting_policies::get_name, false, false, variable>
 			(
 				false,
 				nested_name_specifier
@@ -142,7 +143,7 @@ test_case_8()
 	//look up a::i from function test, must find b::i
 	{
 		auto found_entity =
-			find<entity_identification_policies::by_name, false, false, variable>
+			find<identifier_getting_policies::get_name, false, false, variable>
 			(
 				false,
 				nested_name_specifier
@@ -163,7 +164,7 @@ test_case_8()
 	//look up b::i from function test, must find b::i
 	{
 		auto found_entity =
-			find<entity_identification_policies::by_name, false, false, variable>
+			find<identifier_getting_policies::get_name, false, false, variable>
 			(
 				false,
 				nested_name_specifier
@@ -184,7 +185,7 @@ test_case_8()
 	//look up b::k from function test, must find nothing
 	{
 		auto found_entity =
-			find<entity_identification_policies::by_name, true, false, variable>
+			find<identifier_getting_policies::get_name, true, false, variable>
 			(
 				false,
 				nested_name_specifier
