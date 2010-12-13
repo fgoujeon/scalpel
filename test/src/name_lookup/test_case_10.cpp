@@ -93,7 +93,7 @@ test_case_10()
 	//look up as::i from function test, must find a::i
 	{
 		auto found_entity =
-			find<false, false, variable>
+			find<entity_identification_policies::by_name, false, false, variable>
 			(
 				false,
 				nested_name_specifier
@@ -114,7 +114,7 @@ test_case_10()
 	//look up as2::i from function test, must find a::i
 	{
 		auto found_entity =
-			find<false, false, variable>
+			find<entity_identification_policies::by_name, false, false, variable>
 			(
 				false,
 				nested_name_specifier
@@ -135,7 +135,7 @@ test_case_10()
 	//look up a from as, must find a
 	{
 		scalpel::utility::shared_ptr_variant<namespace_, namespace_alias>::type found_entity =
-			find<false, false, namespace_, namespace_alias>("as", function_test->body())
+			find<entity_identification_policies::by_name, false, false, namespace_, namespace_alias>("as", function_test->body())
 		;
 		std::shared_ptr<namespace_alias> found_namespace_alias = get<namespace_alias>(found_entity);
 		BOOST_CHECK_EQUAL(found_namespace_alias, namespace_alias_as);

@@ -100,7 +100,7 @@ test_case_8()
 	//look up a::j from function test, must find a::j
 	{
 		auto found_entity =
-			find<false, false, variable>
+			find<entity_identification_policies::by_name, false, false, variable>
 			(
 				false,
 				nested_name_specifier
@@ -121,7 +121,7 @@ test_case_8()
 	//look up b::j from function test, must find a::j
 	{
 		auto found_entity =
-			find<false, false, variable>
+			find<entity_identification_policies::by_name, false, false, variable>
 			(
 				false,
 				nested_name_specifier
@@ -142,7 +142,7 @@ test_case_8()
 	//look up a::i from function test, must find b::i
 	{
 		auto found_entity =
-			find<false, false, variable>
+			find<entity_identification_policies::by_name, false, false, variable>
 			(
 				false,
 				nested_name_specifier
@@ -163,7 +163,7 @@ test_case_8()
 	//look up b::i from function test, must find b::i
 	{
 		auto found_entity =
-			find<false, false, variable>
+			find<entity_identification_policies::by_name, false, false, variable>
 			(
 				false,
 				nested_name_specifier
@@ -184,7 +184,7 @@ test_case_8()
 	//look up b::k from function test, must find nothing
 	{
 		auto found_entity =
-			find<true, false, variable>
+			find<entity_identification_policies::by_name, true, false, variable>
 			(
 				false,
 				nested_name_specifier

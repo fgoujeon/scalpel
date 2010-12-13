@@ -117,20 +117,20 @@ test_case_1()
 
 	//find i
 	{
-		auto found_entity = find<false, false, variable>("i", function_a_b_f);
+		auto found_entity = find<entity_identification_policies::by_name, false, false, variable>("i", function_a_b_f);
 		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
 	}
 
 	//find j
 	{
-		auto found_entity = find<false, false, variable>("j", function_a_b_f);
+		auto found_entity = find<entity_identification_policies::by_name, false, false, variable>("j", function_a_b_f);
 		BOOST_CHECK_EQUAL(found_entity, variable_j);
 	}
 
 	//find C::n
 	{
 		auto found_entity =
-			find<false, false, variable>
+			find<entity_identification_policies::by_name, false, false, variable>
 			(
 				false,
 				nested_name_specifier
@@ -151,7 +151,7 @@ test_case_1()
 	//find ::A::i
 	{
 		auto found_entity =
-			find<false, false, variable>
+			find<entity_identification_policies::by_name, false, false, variable>
 			(
 				true,
 				nested_name_specifier
@@ -172,7 +172,7 @@ test_case_1()
 	//find ::i
 	{
 		auto found_entity =
-			find<false, false, variable>
+			find<entity_identification_policies::by_name, false, false, variable>
 			(
 				true,
 				optional_node<nested_name_specifier>(),
@@ -186,7 +186,7 @@ test_case_1()
 	//find namespace A::C
 	{
 		auto found_entity =
-			find<false, false, namespace_>
+			find<entity_identification_policies::by_name, false, false, namespace_>
 			(
 				false,
 				nested_name_specifier

@@ -28,115 +28,16 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace semantic_graph_analysis { namespace name_lookup
 {
 
-template<bool Optional, bool Multiple, class... EntitiesT>
+template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
 typename return_type<Optional, Multiple, EntitiesT...>::type
 find
 (
-	const std::string& name,
-	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
-)
-{
-	return
-		detail::find_entities
-		<
-			detail::identification_policies::by_name,
-			Optional,
-			Multiple,
-			EntitiesT...
-		>(name, current_declarative_region)
-	;
-}
-
-template<bool Optional, bool Multiple>
-typename return_type<Optional, Multiple, semantic_entities::operator_function>::type
-find_operator_functions
-(
-	const semantic_entities::overloadable_operator& op,
-	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
-)
-{
-	return
-		detail::find_entities
-		<
-			detail::identification_policies::by_operator,
-			Optional,
-			Multiple,
-			semantic_entities::operator_function
-		>(op, current_declarative_region)
-	;
-}
-
-template<bool Optional, bool Multiple, class... EntitiesT>
-typename return_type<Optional, Multiple, EntitiesT...>::type
-find
-(
-	const bool has_leading_double_colon,
-	const syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>& opt_nested_name_specifier_node,
-	const std::string& name,
-	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region,
-	const bool apply_using_directives_for_unqualified_id_part
-)
-{
-	return
-		detail::find_entities
-		<
-			detail::identification_policies::by_name,
-			Optional,
-			Multiple,
-			EntitiesT...
-		>
-		(
-			has_leading_double_colon,
-			opt_nested_name_specifier_node,
-			name,
-			current_declarative_region,
-			apply_using_directives_for_unqualified_id_part
-		)
-	;
-}
-
-template<bool Optional, bool Multiple>
-typename return_type<Optional, Multiple, semantic_entities::operator_function>::type
-find_operator_functions
-(
-	const bool has_leading_double_colon,
-	const syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>& opt_nested_name_specifier_node,
-	const semantic_entities::overloadable_operator& op,
-	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region,
-	const bool apply_using_directives_for_unqualified_id_part
-)
-{
-	return
-		detail::find_entities
-		<
-			detail::identification_policies::by_operator,
-			Optional,
-			Multiple,
-			semantic_entities::operator_function
-		>
-		(
-			has_leading_double_colon,
-			opt_nested_name_specifier_node,
-			op,
-			current_declarative_region,
-			apply_using_directives_for_unqualified_id_part
-		)
-	;
-}
-
-
-
-namespace detail
-{
-
-template<class IdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
-typename return_type<Optional, Multiple, EntitiesT...>::type
-find_entities
-(
-	const typename IdentificationPolicy::identifier_t& identifier,
+	const typename EntityIdentificationPolicy::identifier_t& identifier,
 	semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 )
 {
+	using namespace detail;
+
 	//used for applying using directives
 	namespace_association_map namespace_associations;
 
@@ -169,7 +70,7 @@ find_entities
 			found_entities,
 			find_local_entities
 			<
-				IdentificationPolicy,
+				EntityIdentificationPolicy,
 				semantic_entities::declarative_region_shared_ptr_variant,
 				true,
 				Multiple,
@@ -194,7 +95,7 @@ find_entities
 						found_entities,
 						find_local_entities
 						<
-							IdentificationPolicy,
+							EntityIdentificationPolicy,
 							std::shared_ptr<semantic_entities::namespace_>,
 							true,
 							Multiple,
@@ -218,7 +119,7 @@ find_entities
 				found_entities,
 				find_entities_in_base_classes
 				<
-					IdentificationPolicy,
+					EntityIdentificationPolicy,
 					true,
 					Multiple,
 					EntitiesT...
@@ -237,17 +138,19 @@ find_entities
 	return std::move(return_result<Optional, Multiple, EntitiesT...>::result(found_entities));
 }
 
-template<class IdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
+template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
 typename return_type<Optional, Multiple, EntitiesT...>::type
-find_entities
+find
 (
 	const bool has_leading_double_colon,
 	const syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>& opt_nested_name_specifier_node,
-	const typename IdentificationPolicy::identifier_t& identifier,
+	const typename EntityIdentificationPolicy::identifier_t& identifier,
 	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region,
 	const bool apply_using_directives_for_unqualified_id_part
 )
 {
+	using namespace detail;
+
 	//Check whether the given qualified identifier is really qualified.
 	//If not, perform a simple unqualified identifier lookup.
 	if
@@ -257,9 +160,9 @@ find_entities
 	)
 	{
 		return
-			detail::find_entities
+			find
 			<
-				IdentificationPolicy,
+				EntityIdentificationPolicy,
 				Optional,
 				Multiple,
 				EntitiesT...
@@ -270,7 +173,7 @@ find_entities
 	//Find the last declarative region of the nested identifier specifier
 	//(i.e. Z in "[::]X::Y::Z::").
 	semantic_entities::open_declarative_region_shared_ptr_variant last_declarative_region =
-		detail::find_declarative_region<semantic_entities::open_declarative_region_shared_ptr_variant>
+		find_declarative_region<semantic_entities::open_declarative_region_shared_ptr_variant>
 		(
 			has_leading_double_colon,
 			opt_nested_name_specifier_node,
@@ -284,9 +187,9 @@ find_entities
 		if(std::shared_ptr<semantic_entities::namespace_>* opt_namespace_ptr = utility::get<semantic_entities::namespace_>(&last_declarative_region))
 		{
 			return
-				detail::find_in_namespace
+				find_in_namespace
 				<
-					IdentificationPolicy,
+					EntityIdentificationPolicy,
 					Optional,
 					Multiple,
 					EntitiesT...
@@ -295,9 +198,9 @@ find_entities
 		}
 	}
 	return
-		detail::find_local_entities
+		find_local_entities
 		<
-			IdentificationPolicy,
+			EntityIdentificationPolicy,
 			semantic_entities::open_declarative_region_shared_ptr_variant,
 			Optional,
 			Multiple,
@@ -307,6 +210,9 @@ find_entities
 }
 
 
+
+namespace detail
+{
 
 template<class DeclarativeRegionT>
 typename return_type<false, false, DeclarativeRegionT>::type
@@ -339,7 +245,7 @@ find_declarative_region
 			typename return_type<false, false, DeclarativeRegionT>::type first_declarative_region =
 				find_local_entities
 				<
-					identification_policies::by_name,
+					entity_identification_policies::by_name,
 					std::shared_ptr<semantic_entities::namespace_>,
 					false,
 					false,
@@ -371,7 +277,13 @@ find_declarative_region
 
 			//find the first declarative region
 			typename return_type<false, false, DeclarativeRegionT>::type first_declarative_region =
-				find<false, false, DeclarativeRegionT>(first_declarative_region_name, current_declarative_region)
+				find
+				<
+					entity_identification_policies::by_name,
+					false,
+					false,
+					DeclarativeRegionT
+				>(first_declarative_region_name, current_declarative_region)
 			;
 
 			//find the last declarative region
@@ -418,7 +330,7 @@ find_declarative_region
 					found_declarative_region =
 						find_local_entities
 						<
-							identification_policies::by_name,
+							entity_identification_policies::by_name,
 							typename return_type<false, false, DeclarativeRegionT>::type,
 							false,
 							false,
@@ -445,11 +357,11 @@ find_declarative_region
 	}
 }
 
-template<class IdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
+template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
 typename return_type<Optional, Multiple, EntitiesT...>::type
 find_in_namespace
 (
-	const typename IdentificationPolicy::identifier_t& identifier,
+	const typename EntityIdentificationPolicy::identifier_t& identifier,
 	std::shared_ptr<semantic_entities::namespace_> current_namespace
 )
 {
@@ -457,7 +369,7 @@ find_in_namespace
 	return
 		find_in_namespace
 		<
-			IdentificationPolicy,
+			EntityIdentificationPolicy,
 			Optional,
 			Multiple,
 			EntitiesT...
@@ -470,11 +382,11 @@ find_in_namespace
 	;
 }
 
-template<class IdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
+template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
 typename return_type<Optional, Multiple, EntitiesT...>::type
 find_in_namespace
 (
-	const typename IdentificationPolicy::identifier_t& identifier,
+	const typename EntityIdentificationPolicy::identifier_t& identifier,
 	std::shared_ptr<semantic_entities::namespace_> current_namespace,
 	std::vector<std::shared_ptr<semantic_entities::namespace_>>& already_searched_namespaces
 )
@@ -486,7 +398,7 @@ find_in_namespace
 		typename return_type<true, Multiple, EntitiesT...>::type found_entities =
 			find_local_entities
 			<
-				IdentificationPolicy,
+				EntityIdentificationPolicy,
 				std::shared_ptr<semantic_entities::namespace_>,
 				true,
 				Multiple,
@@ -524,7 +436,7 @@ find_in_namespace
 			add_to_result
 			(
 				found_entities,
-				find_in_namespace<IdentificationPolicy, true, Multiple, EntitiesT...>
+				find_in_namespace<EntityIdentificationPolicy, true, Multiple, EntitiesT...>
 				(
 					identifier,
 					using_directive_namespace,
@@ -539,11 +451,11 @@ find_in_namespace
 
 
 
-template<class IdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple, class EntityT, class EntityT2, class... EntitiesT>
+template<class EntityIdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple, class EntityT, class EntityT2, class... EntitiesT>
 typename return_type<Optional, Multiple, EntityT, EntityT2, EntitiesT...>::type
 find_local_entities
 (
-	const typename IdentificationPolicy::identifier_t& identifier,
+	const typename EntityIdentificationPolicy::identifier_t& identifier,
 	const DeclarativeRegionT& current_declarative_region
 )
 {
@@ -551,7 +463,7 @@ find_local_entities
 
 	find_variadic_local_entities
 	<
-		IdentificationPolicy,
+		EntityIdentificationPolicy,
 		DeclarativeRegionT,
 		Optional,
 		Multiple,
@@ -564,11 +476,11 @@ find_local_entities
 	return return_result<Optional, Multiple, EntityT, EntityT2, EntitiesT...>::result(found_entities);
 }
 
-template<class IdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple, class ReturnT>
+template<class EntityIdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple, class ReturnT>
 void
-find_variadic_local_entities<IdentificationPolicy, DeclarativeRegionT, Optional, Multiple, ReturnT>::find
+find_variadic_local_entities<EntityIdentificationPolicy, DeclarativeRegionT, Optional, Multiple, ReturnT>::find
 (
-	const typename IdentificationPolicy::identifier_t&,
+	const typename EntityIdentificationPolicy::identifier_t&,
 	const DeclarativeRegionT&,
 	ReturnT&
 )
@@ -576,11 +488,11 @@ find_variadic_local_entities<IdentificationPolicy, DeclarativeRegionT, Optional,
 	//does nothing
 }
 
-template<class IdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple, class ReturnT, class EntityT, class... EntitiesT>
+template<class EntityIdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple, class ReturnT, class EntityT, class... EntitiesT>
 void
-find_variadic_local_entities<IdentificationPolicy, DeclarativeRegionT, Optional, Multiple, ReturnT, EntityT, EntitiesT...>::find
+find_variadic_local_entities<EntityIdentificationPolicy, DeclarativeRegionT, Optional, Multiple, ReturnT, EntityT, EntitiesT...>::find
 (
-	const typename IdentificationPolicy::identifier_t& identifier,
+	const typename EntityIdentificationPolicy::identifier_t& identifier,
 	const DeclarativeRegionT& current_declarative_region,
 	ReturnT& found_entities
 )
@@ -589,7 +501,7 @@ find_variadic_local_entities<IdentificationPolicy, DeclarativeRegionT, Optional,
 	typename return_type<Optional, Multiple, EntityT>::type entities =
 		find_local_entities
 		<
-			IdentificationPolicy,
+			EntityIdentificationPolicy,
 			DeclarativeRegionT,
 			true,
 			Multiple,
@@ -610,7 +522,7 @@ find_variadic_local_entities<IdentificationPolicy, DeclarativeRegionT, Optional,
 	//recursive call for other types of EntitiesT
 	find_variadic_local_entities
 	<
-		IdentificationPolicy,
+		EntityIdentificationPolicy,
 		DeclarativeRegionT,
 		true,
 		Multiple,
@@ -619,11 +531,11 @@ find_variadic_local_entities<IdentificationPolicy, DeclarativeRegionT, Optional,
 	>::find(identifier, current_declarative_region, found_entities);
 }
 
-template<class IdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple, class EntityT>
+template<class EntityIdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple, class EntityT>
 typename return_type<Optional, Multiple, EntityT>::type
 find_local_entities
 (
-	const typename IdentificationPolicy::identifier_t& identifier,
+	const typename EntityIdentificationPolicy::identifier_t& identifier,
 	const DeclarativeRegionT& current_declarative_region
 )
 {
@@ -635,7 +547,7 @@ find_local_entities
 	for(auto i = members.begin(); i != members.end(); ++i)
 	{
 		auto current_entity = *i;
-		if(IdentificationPolicy::has_identifier(current_entity, identifier))
+		if(EntityIdentificationPolicy::has_identifier(current_entity, identifier))
 		{
 			add_to_result(found_entities, current_entity);
 			if(!Multiple) break;
@@ -645,11 +557,11 @@ find_local_entities
 	return std::move(return_result<Optional, Multiple, EntityT>::result(found_entities));
 }
 
-template<class IdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
+template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
 typename return_type<Optional, Multiple, EntitiesT...>::type
 find_entities_in_base_classes
 (
-	const typename IdentificationPolicy::identifier_t& identifier,
+	const typename EntityIdentificationPolicy::identifier_t& identifier,
 	utility::shared_ptr_vector<semantic_entities::class_>::range base_classes
 )
 {
@@ -665,7 +577,7 @@ find_entities_in_base_classes
 		typename return_type<Optional, Multiple, EntitiesT...>::type current_class_found_entities =
 			find_local_entities
 			<
-				IdentificationPolicy,
+				EntityIdentificationPolicy,
 				std::shared_ptr<semantic_entities::class_>,
 				Optional,
 				Multiple,
@@ -685,7 +597,7 @@ find_entities_in_base_classes
 			typename return_type<Optional, Multiple, EntitiesT...>::type current_class_base_classes_found_entities =
 				find_entities_in_base_classes
 				<
-					IdentificationPolicy,
+					EntityIdentificationPolicy,
 					Optional,
 					Multiple,
 					EntitiesT...

@@ -50,11 +50,17 @@ find_function
 	)
 	{
 		found_functions =
-			semantic_graph_analysis::name_lookup::find<false, true, FunctionT>
+			semantic_graph_analysis::name_lookup::find
+			<
+				semantic_graph_analysis::name_lookup::entity_identification_policies::by_name,
+				false,
+				true,
+				FunctionT
+			>
 			(
 				has_leading_double_colon(*opt_nested_identifier_or_template_id_node),
 				get_nested_name_specifier(*opt_nested_identifier_or_template_id_node),
-				identifier(function_signature->name()).value(),
+				function_signature->name(),
 				current_declarative_region,
 				false
 			)
@@ -63,9 +69,15 @@ find_function
 	else
 	{
 		found_functions =
-			semantic_graph_analysis::name_lookup::find<false, true, FunctionT>
+			semantic_graph_analysis::name_lookup::find
+			<
+				semantic_graph_analysis::name_lookup::entity_identification_policies::by_name,
+				false,
+				true,
+				FunctionT
+			>
 			(
-				identifier(function_signature->name()).value(),
+				function_signature->name(),
 				current_declarative_region
 			)
 		;

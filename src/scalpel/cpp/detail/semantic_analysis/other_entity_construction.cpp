@@ -168,7 +168,14 @@ create_namespace_alias
 		assert(false);
 
 	utility::shared_ptr_variant<namespace_, namespace_alias>::type found_entity =
-		semantic_graph_analysis::name_lookup::find<false, false, namespace_, namespace_alias>
+		semantic_graph_analysis::name_lookup::find
+		<
+			semantic_graph_analysis::name_lookup::entity_identification_policies::by_name,
+			false,
+			false,
+			namespace_,
+			namespace_alias
+		>
 		(
 			has_leading_double_colon(nested_identifier_or_template_id_node),
 			get_nested_name_specifier(nested_identifier_or_template_id_node),
@@ -197,7 +204,14 @@ create_using_directive
 {
 	//find the namespace or namespace alias designated by the using directive
 	utility::shared_ptr_variant<namespace_, namespace_alias>::type found_entity =
-		semantic_graph_analysis::name_lookup::find<false, false, namespace_, namespace_alias>
+		semantic_graph_analysis::name_lookup::find
+		<
+			semantic_graph_analysis::name_lookup::entity_identification_policies::by_name,
+			false,
+			false,
+			namespace_,
+			namespace_alias
+		>
 		(
 			has_leading_double_colon(using_directive_node),
 			get_nested_name_specifier(using_directive_node),

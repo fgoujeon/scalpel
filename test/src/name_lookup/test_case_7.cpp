@@ -105,7 +105,7 @@ test_case_7()
 	//look up bc::i from function test, must find a::i
 	{
 		auto found_entity =
-			find<false, false, variable>
+			find<entity_identification_policies::by_name, false, false, variable>
 			(
 				false,
 				nested_name_specifier
