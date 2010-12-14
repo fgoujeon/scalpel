@@ -21,9 +21,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_NAME_LOOKUP_IPP
 #define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_NAME_LOOKUP_IPP
 
-#include "semantic_graph_analysis/get_global_namespace.hpp"
-#include "semantic_graph_analysis/get_name.hpp"
-#include "semantic_graph_analysis/get_members.hpp"
+#include "semantic_entity_analysis/get_global_namespace.hpp"
+#include "semantic_entity_analysis/get_name.hpp"
+#include "semantic_entity_analysis/get_members.hpp"
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace name_lookup
 {
@@ -227,7 +227,7 @@ find_declarative_region
 	{
 		//the first declarative region is in the global namespace
 		std::shared_ptr<semantic_entities::namespace_> global_namespace =
-			semantic_graph_analysis::get_global_namespace(current_declarative_region)
+			semantic_entity_analysis::get_global_namespace(current_declarative_region)
 		;
 
 		if(opt_nested_name_specifier_node)
@@ -245,7 +245,7 @@ find_declarative_region
 			typename return_type<false, false, DeclarativeRegionT>::type first_declarative_region =
 				find_local_entities
 				<
-					semantic_graph_analysis::identifier_getting_policies::get_name,
+					semantic_entity_analysis::identifier_getting_policies::get_name,
 					std::shared_ptr<semantic_entities::namespace_>,
 					false,
 					false,
@@ -279,7 +279,7 @@ find_declarative_region
 			typename return_type<false, false, DeclarativeRegionT>::type first_declarative_region =
 				find
 				<
-					semantic_graph_analysis::identifier_getting_policies::get_name,
+					semantic_entity_analysis::identifier_getting_policies::get_name,
 					false,
 					false,
 					DeclarativeRegionT
@@ -330,7 +330,7 @@ find_declarative_region
 					found_declarative_region =
 						find_local_entities
 						<
-							semantic_graph_analysis::identifier_getting_policies::get_name,
+							semantic_entity_analysis::identifier_getting_policies::get_name,
 							typename return_type<false, false, DeclarativeRegionT>::type,
 							false,
 							false,
@@ -539,7 +539,7 @@ find_local_entities
 	const DeclarativeRegionT& current_declarative_region
 )
 {
-	using namespace semantic_graph_analysis;
+	using namespace semantic_entity_analysis;
 
 	typename return_type<true, Multiple, EntityT>::type found_entities;
 
@@ -565,7 +565,7 @@ find_entities_in_base_classes
 	utility::shared_ptr_vector<semantic_entities::class_>::range base_classes
 )
 {
-	using namespace semantic_graph_analysis;
+	using namespace semantic_entity_analysis;
 
 	typename return_type<Optional, true, EntitiesT...>::type found_entities;
 

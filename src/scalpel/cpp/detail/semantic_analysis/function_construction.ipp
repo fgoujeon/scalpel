@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_FUNCTION_CONSTRUCTION_IPP
 #define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_FUNCTION_CONSTRUCTION_IPP
 
-#include "semantic_graph_analysis/identifier_getting_policies.hpp"
+#include "semantic_entity_analysis/identifier_getting_policies.hpp"
 #include "name_lookup.hpp"
 #include "syntax_node_analysis.hpp"
 #include <set>
@@ -42,7 +42,7 @@ find_function
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
 
-	typedef typename semantic_graph_analysis::get_identifier_getting_policy<FunctionT>::policy_t identifier_getting_policy_t;
+	typedef typename semantic_entity_analysis::get_identifier_getting_policy<FunctionT>::policy_t identifier_getting_policy_t;
 
 	//find the functions with the same identifier
 	std::set<std::shared_ptr<FunctionT>> found_functions;

@@ -18,14 +18,14 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_SEMANTIC_GRAPH_ANALYSIS_IDENTIFIER_GETTING_POLICIES_HPP
-#define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_SEMANTIC_GRAPH_ANALYSIS_IDENTIFIER_GETTING_POLICIES_HPP
+#ifndef SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_SEMANTIC_ENTITY_ANALYSIS_IDENTIFIER_GETTING_POLICIES_HPP
+#define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_SEMANTIC_ENTITY_ANALYSIS_IDENTIFIER_GETTING_POLICIES_HPP
 
 #include "get_name.hpp"
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <string>
 
-namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace semantic_graph_analysis
+namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace semantic_entity_analysis
 {
 
 namespace identifier_getting_policies
@@ -52,7 +52,7 @@ namespace identifier_getting_policies
 		identifier_t
 		get_identifier(const EntityT& entity)
 		{
-			return semantic_graph_analysis::get_name(entity);
+			return semantic_entity_analysis::get_name(entity);
 		}
 	};
 
@@ -89,7 +89,7 @@ GENERATE_GET_IDENTIFIER_GETTING_POLICY_SPECIALIZATION(simple_function, get_name)
 
 #undef GENERATE_GET_IDENTIFIER_GETTING_POLICY_SPECIALIZATION
 
-}}}}} //namespace scalpel::cpp::detail::semantic_analysis::semantic_graph_analysis
+}}}}} //namespace scalpel::cpp::detail::semantic_analysis::semantic_entity_analysis
 
 #endif
 

@@ -18,20 +18,10 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_SEMANTIC_GRAPH_ANALYSIS_GET_GLOBAL_NAMESPACE_HPP
-#define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_SEMANTIC_GRAPH_ANALYSIS_GET_GLOBAL_NAMESPACE_HPP
+#ifndef SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_SEMANTIC_ENTITY_ANALYSIS_HPP
+#define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_SEMANTIC_ENTITY_ANALYSIS_HPP
 
-#include <scalpel/cpp/semantic_entities/declarative_region_variants.hpp>
-#include <scalpel/cpp/semantic_entities/namespace_.hpp>
-#include <memory>
-
-namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace semantic_graph_analysis
-{
-
-std::shared_ptr<semantic_entities::namespace_>
-get_global_namespace(semantic_entities::declarative_region_shared_ptr_variant current_declarative_region);
-
-}}}}} //namespace scalpel::cpp::detail::semantic_analysis::semantic_graph_analysis
+#include "semantic_entity_analysis/name_lookup.hpp"
 
 #endif
 

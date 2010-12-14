@@ -34,7 +34,7 @@ test_case_10()
 	using namespace scalpel::cpp::syntax_nodes;
 	using namespace scalpel::cpp::semantic_entities;
 	using namespace scalpel::cpp::detail::semantic_analysis::name_lookup;
-	using namespace scalpel::cpp::detail::semantic_analysis::semantic_graph_analysis;
+	using namespace scalpel::cpp::detail::semantic_analysis::semantic_entity_analysis;
 
 	//
 	//construction of the semantic graph of the following source code:

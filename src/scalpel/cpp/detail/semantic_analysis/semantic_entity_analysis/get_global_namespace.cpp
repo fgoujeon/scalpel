@@ -20,7 +20,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "get_global_namespace.hpp"
 
-namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace semantic_graph_analysis
+namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace semantic_entity_analysis
 {
 
 std::shared_ptr<semantic_entities::namespace_>
@@ -43,5 +43,5 @@ get_global_namespace(semantic_entities::declarative_region_shared_ptr_variant cu
 	}
 }
 
-}}}}} //namespace scalpel::cpp::detail::semantic_analysis::semantic_graph_analysis
+}}}}} //namespace scalpel::cpp::detail::semantic_analysis::semantic_entity_analysis
 

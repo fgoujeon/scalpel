@@ -22,7 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "function_construction.hpp"
 #include "type_construction.hpp"
 #include "syntax_node_analysis.hpp"
-#include "semantic_graph_analysis/get_namespace.hpp"
+#include "semantic_entity_analysis/get_namespace.hpp"
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
 {
@@ -170,7 +170,7 @@ create_namespace_alias
 	utility::shared_ptr_variant<namespace_, namespace_alias>::type found_entity =
 		name_lookup::find
 		<
-			semantic_graph_analysis::identifier_getting_policies::get_name,
+			semantic_entity_analysis::identifier_getting_policies::get_name,
 			false,
 			false,
 			namespace_,
@@ -185,7 +185,7 @@ create_namespace_alias
 	;
 
 	//get the namespace entity
-	std::shared_ptr<namespace_> found_namespace = semantic_graph_analysis::get_namespace(found_entity);
+	std::shared_ptr<namespace_> found_namespace = semantic_entity_analysis::get_namespace(found_entity);
 
 	//create the namespace alias semantic entity
 	return std::make_shared<namespace_alias>
@@ -206,7 +206,7 @@ create_using_directive
 	utility::shared_ptr_variant<namespace_, namespace_alias>::type found_entity =
 		name_lookup::find
 		<
-			semantic_graph_analysis::identifier_getting_policies::get_name,
+			semantic_entity_analysis::identifier_getting_policies::get_name,
 			false,
 			false,
 			namespace_,
@@ -221,7 +221,7 @@ create_using_directive
 	;
 
 	//get and return the namespace entity
-	return semantic_graph_analysis::get_namespace(found_entity);
+	return semantic_entity_analysis::get_namespace(found_entity);
 }
 
 }}}} //namespace scalpel::cpp::detail::semantic_analysis

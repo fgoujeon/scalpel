@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "get_name.hpp"
 #include <scalpel/cpp/semantic_graph.hpp>
 
-namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace semantic_graph_analysis
+namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace semantic_entity_analysis
 {
 
 #define GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(ENTITY_TYPE) \
@@ -60,5 +60,5 @@ GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(typedef_)
 GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(simple_function)
 GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(variable)
 
-}}}}} //namespace scalpel::cpp::detail::semantic_analysis::semantic_graph_analysis
+}}}}} //namespace scalpel::cpp::detail::semantic_analysis::semantic_entity_analysis
 

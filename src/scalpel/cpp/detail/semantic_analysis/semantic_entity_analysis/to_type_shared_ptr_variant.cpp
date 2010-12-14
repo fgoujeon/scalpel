@@ -20,7 +20,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "to_type_shared_ptr_variant.hpp"
 
-namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace semantic_graph_analysis
+namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace semantic_entity_analysis
 {
 
 using namespace semantic_entities;
@@ -46,5 +46,5 @@ to_type_shared_ptr_variant(const utility::shared_ptr_variant<semantic_entities::
 	return utility::apply_visitor(to_type_shared_ptr_variant_impl, var);
 }
 
-}}}}} //namespace scalpel::cpp::detail::semantic_analysis::semantic_graph_analysis
+}}}}} //namespace scalpel::cpp::detail::semantic_analysis::semantic_entity_analysis
 

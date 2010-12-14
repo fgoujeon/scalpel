@@ -18,19 +18,21 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_SEMANTIC_GRAPH_ANALYSIS_GET_NAME_HPP
-#define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_SEMANTIC_GRAPH_ANALYSIS_GET_NAME_HPP
+#ifndef SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_SEMANTIC_ENTITY_ANALYSIS_GET_NAMESPACE_HPP
+#define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_SEMANTIC_ENTITY_ANALYSIS_GET_NAMESPACE_HPP
 
-#include <string>
+#include <scalpel/cpp/semantic_entities/namespace_alias.hpp>
+#include <scalpel/cpp/semantic_entities/namespace_.hpp>
+#include <scalpel/utility/shared_ptr_variant.hpp>
+#include <memory>
 
-namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace semantic_graph_analysis
+namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace semantic_entity_analysis
 {
 
-template<class EntityT>
-const std::string&
-get_name(EntityT entity);
+std::shared_ptr<semantic_entities::namespace_>
+get_namespace(const utility::shared_ptr_variant<semantic_entities::namespace_, semantic_entities::namespace_alias>::type& var);
 
-}}}}} //namespace scalpel::cpp::detail::semantic_analysis::semantic_graph_analysis
+}}}}} //namespace scalpel::cpp::detail::semantic_analysis::semantic_entity_analysis
 
 #endif
 
