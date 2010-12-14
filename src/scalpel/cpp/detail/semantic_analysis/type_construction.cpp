@@ -19,9 +19,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "type_construction.hpp"
-#include "semantic_graph_analysis.hpp"
-#include "syntax_node_analysis.hpp"
 #include "semantic_graph_analysis/to_type_shared_ptr_variant.hpp"
+#include "semantic_graph_analysis/name_lookup.hpp"
+#include "syntax_node_analysis.hpp"
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
 {

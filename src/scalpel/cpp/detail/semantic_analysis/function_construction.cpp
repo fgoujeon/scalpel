@@ -22,7 +22,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "class_construction.hpp"
 #include "type_construction.hpp"
 #include "other_entity_construction.hpp"
-#include "semantic_graph_analysis.hpp"
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
 {
@@ -77,7 +76,7 @@ create_function
 				;
 
 				std::shared_ptr<class_> new_class = create_class(class_elaborated_specifier_node);
-				//current_declarative_region->add_member(new_class);
+				//TODO current_declarative_region->add_member(new_class);
 
 				opt_undecorated_type = std::shared_ptr<const class_>(new_class);
 
@@ -134,10 +133,11 @@ void
 define_function
 (
 	const function_shared_ptr_variant& function_entity,
-	const syntax_nodes::function_definition& function_definition_node,
-	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+	const syntax_nodes::function_definition& /*function_definition_node*/,
+	const semantic_entities::declarative_region_shared_ptr_variant /*current_declarative_region*/
 )
 {
+	//TODO
 	if(auto opt_constructor_entity = get<constructor>(&function_entity))
 		(*opt_constructor_entity)->body(std::make_shared<semantic_entities::statement_block>());
 	else if(auto opt_destructor_entity = get<destructor>(&function_entity))
@@ -162,28 +162,42 @@ find_function
 {
 	if(auto opt_constructor_entity = get<constructor>(&function_signature))
 	{
-		assert(false); //not managed yet
+		std::shared_ptr<constructor> function_declaration =
+			find_function<constructor>
+			(
+				*opt_constructor_entity,
+				function_definition_node,
+				current_declarative_region
+			)
+		;
+		if(function_declaration)
+			return function_shared_ptr_variant(function_declaration);
 	}
-	else if(auto opt_destructor_entity = get<destructor>(&function_signature))
+	else if(get<destructor>(&function_signature))
 	{
 		assert(false); //not managed yet
 	}
 	else if(auto opt_operator_function_signature = get<operator_function>(&function_signature))
 	{
-		assert(false); //not managed yet
+		std::shared_ptr<operator_function> function_declaration =
+			find_function<operator_function>
+			(
+				*opt_operator_function_signature,
+				function_definition_node,
+				current_declarative_region
+			)
+		;
+		if(function_declaration)
+			return function_shared_ptr_variant(function_declaration);
 	}
-	else if(auto opt_conversion_function_signature = get<conversion_function>(&function_signature))
+	else if(get<conversion_function>(&function_signature))
 	{
 		assert(false); //not managed yet
 	}
 	else if(auto opt_simple_function_signature = get<simple_function>(&function_signature))
 	{
 		std::shared_ptr<simple_function> function_declaration =
-			find_function
-			<
-				semantic_graph_analysis::identifier_getting_policies::get_name,
-				simple_function
-			>
+			find_function<simple_function>
 			(
 				*opt_simple_function_signature,
 				function_definition_node,
@@ -214,22 +228,7 @@ create_operator_function
 	//
 	semantic_entities::overloadable_operator op = semantic_entities::overloadable_operator::AMPERSAND;
 
-	auto direct_declarator_node = get_direct_declarator(declarator_node);
-	auto direct_declarator_node_first_part_node = get_first_part(direct_declarator_node);
-	auto opt_declarator_id_node = syntax_nodes::get<syntax_nodes::declarator_id>(&direct_declarator_node_first_part_node);
-	assert(opt_declarator_id_node);
-	auto declarator_id_node = *opt_declarator_id_node;
-	auto opt_id_expression_node = syntax_nodes::get<syntax_nodes::id_expression>(&declarator_id_node);
-	assert(opt_id_expression_node);
-	auto id_expression_node = *opt_id_expression_node;
-	auto opt_unqualified_id_node = syntax_nodes::get<syntax_nodes::unqualified_id>(&id_expression_node);
-	assert(opt_unqualified_id_node);
-	auto unqualified_id_node = *opt_unqualified_id_node;
-	auto opt_operator_function_id_node = syntax_nodes::get<syntax_nodes::operator_function_id>(&unqualified_id_node);
-	assert(opt_operator_function_id_node);
-	auto operator_function_id_node = *opt_operator_function_id_node;
-	auto operator_node = get_operator(operator_function_id_node);
-
+	const syntax_nodes::operator_& operator_node = syntax_node_analysis::get_operator(declarator_node);
 	if(auto opt_simple_operator_node = syntax_nodes::get<syntax_nodes::simple_operator>(&operator_node))
 	{
 		auto simple_operator_node = *opt_simple_operator_node;

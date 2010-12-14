@@ -77,16 +77,13 @@ is_qualified
 	const syntax_nodes::function_definition& function_definition_node
 )
 {
-	boost::optional<const nested_identifier_or_template_id&> opt_nested_identifier_or_template_id =
-		get_nested_identifier_or_template_id(get_declarator(function_definition_node));
+	optional_node<nested_name_specifier> opt_nested_name_specifier_node =
+		get_nested_name_specifier(get_declarator(function_definition_node));
 	;
 
-	if(opt_nested_identifier_or_template_id)
+	if(opt_nested_name_specifier_node)
 	{
-		if(get_nested_name_specifier(*opt_nested_identifier_or_template_id))
-		{
-			return true;
-		}
+		return true;
 	}
 
 	return false;

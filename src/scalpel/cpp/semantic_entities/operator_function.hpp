@@ -45,35 +45,53 @@ class operator_function:
 			const bool is_static = false
 		);
 
-		bool
-		operator==(const operator_function& rhs) const;
-
-		bool
-		operator!=(const operator_function& rhs) const;
-
 		overloadable_operator
-		get_operator() const;
+		get_operator() const
+		{
+			return op_;
+		}
 
 		const type_shared_ptr_variant&
-		return_type() const;
+		return_type() const
+		{
+			return return_type_;
+		}
 
 		const function_parameter_list&
-		parameters() const;
+		parameters() const
+		{
+			return parameters_;
+		}
 
 		bool
-		is_inline() const;
+		is_inline() const
+		{
+			return is_inline_;
+		}
 
 		bool
-		is_static() const;
+		is_static() const
+		{
+			return is_static_;
+		}
 
 		bool
-		has_enclosing_declarative_region() const;
+		has_enclosing_declarative_region() const
+		{
+			return declarative_region_member_impl_.has_enclosing_declarative_region();
+		}
 
 		declarative_region_shared_ptr_variant
-		enclosing_declarative_region() const;
+		enclosing_declarative_region() const
+		{
+			return declarative_region_member_impl_.enclosing_declarative_region();
+		}
 
 		void
-		enclosing_declarative_region(const declarative_region_shared_ptr_variant& enclosing_declarative_region);
+		enclosing_declarative_region(const declarative_region_shared_ptr_variant& enclosing_declarative_region)
+		{
+			declarative_region_member_impl_.enclosing_declarative_region(enclosing_declarative_region);
+		}
 
 		bool
 		defined() const
@@ -101,11 +119,24 @@ class operator_function:
 		}
 
     private:
-		std::shared_ptr<simple_function> impl_;
         overloadable_operator op_;
+		type_shared_ptr_variant return_type_;
+		function_parameter_list parameters_;
+		bool is_inline_;
+		bool is_static_;
+		detail::declarative_region_member_impl declarative_region_member_impl_;
 
 		std::shared_ptr<statement_block> body_;
 };
+
+bool
+operator==(const operator_function& lhs, const operator_function& rhs);
+
+bool
+operator!=(const operator_function& lhs, const operator_function& rhs);
+
+bool
+have_same_signature(const operator_function& lhs, const operator_function& rhs);
 
 }}} //namespace scalpel::cpp::semantic_entities
 

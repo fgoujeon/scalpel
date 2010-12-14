@@ -51,8 +51,11 @@ get_identifier(const syntax_nodes::declarator& declarator_node);
 bool
 has_identifier(const syntax_nodes::declarator& declarator_node);
 
-boost::optional<const syntax_nodes::nested_identifier_or_template_id&>
-get_nested_identifier_or_template_id(const syntax_nodes::declarator& declarator_node);
+syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>
+get_nested_name_specifier(const syntax_nodes::declarator& declarator_node);
+
+const syntax_nodes::operator_&
+get_operator(const syntax_nodes::declarator& declarator_node);
 
 }}}}} //namespace scalpel::cpp::detail::semantic_analysis::syntax_node_analysis
 

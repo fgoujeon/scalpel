@@ -32,6 +32,8 @@ class optional_node
     public:
         optional_node();
 
+        optional_node(const T& node);
+
         optional_node(T&& node);
 
         optional_node(const optional_node& o);
@@ -64,6 +66,12 @@ class optional_node
 
 template<class T>
 optional_node<T>::optional_node()
+{
+}
+
+template<class T>
+optional_node<T>::optional_node(const T& node):
+	node_(new T(node))
 {
 }
 

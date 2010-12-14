@@ -19,6 +19,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "operator_function.hpp"
+#include "type_variants.hpp"
+#include <scalpel/utility/are_pointed_objects_equal.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -31,72 +33,46 @@ operator_function::operator_function
 	const bool is_inline,
 	const bool is_static
 ):
-	impl_(simple_function::make_shared("", return_type, std::move(parameters), is_inline, is_static)),
-    op_(op)
+    op_(op),
+	return_type_(return_type),
+	parameters_(std::move(parameters)),
+	is_inline_(is_inline),
+	is_static_(is_static)
 {
 }
 
 bool
-operator_function::operator==(const operator_function& rhs) const
+operator==(const operator_function& lhs, const operator_function& rhs)
 {
 	return
-		op_ == rhs.op_ &&
-		*impl_ == *rhs.impl_
+		have_same_signature(lhs, rhs) &&
+		(
+			lhs.body().get() == rhs.body().get() ||
+			(
+				lhs.body().get() != 0 &&
+				rhs.body().get() != 0 &&
+				*lhs.body() == *rhs.body()
+			)
+		)
 	;
 }
 
 bool
-operator_function::operator!=(const operator_function& rhs) const
+operator!=(const operator_function& lhs, const operator_function& rhs)
 {
-	return !operator==(rhs);
-}
-
-overloadable_operator
-operator_function::get_operator() const
-{
-	return op_;
-}
-
-const type_shared_ptr_variant&
-operator_function::return_type() const
-{
-	return impl_->return_type();
-}
-
-const function_parameter_list&
-operator_function::parameters() const
-{
-	return impl_->parameters();
+	return !operator==(lhs, rhs);
 }
 
 bool
-operator_function::is_inline() const
+have_same_signature(const operator_function& lhs, const operator_function& rhs)
 {
-	return impl_->is_inline();
-}
-
-bool
-operator_function::is_static() const
-{
-	return impl_->is_static();
-}
-
-bool
-operator_function::has_enclosing_declarative_region() const
-{
-	return impl_->has_enclosing_declarative_region();
-}
-
-declarative_region_shared_ptr_variant
-operator_function::enclosing_declarative_region() const
-{
-	return impl_->enclosing_declarative_region();
-}
-
-void
-operator_function::enclosing_declarative_region(const declarative_region_shared_ptr_variant& decl_region)
-{
-	impl_->enclosing_declarative_region(decl_region);
+	return
+		lhs.get_operator() == rhs.get_operator() &&
+		lhs.is_inline() == rhs.is_inline() &&
+		lhs.is_static() == rhs.is_static() &&
+		utility::are_pointed_objects_equal(lhs.return_type(), rhs.return_type()) &&
+		lhs.parameters() == rhs.parameters()
+	;
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

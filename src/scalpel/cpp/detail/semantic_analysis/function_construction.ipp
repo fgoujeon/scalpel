@@ -21,14 +21,16 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_FUNCTION_CONSTRUCTION_IPP
 #define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_FUNCTION_CONSTRUCTION_IPP
 
-#include "semantic_graph_analysis.hpp"
+#include "semantic_graph_analysis/identifier_getting_policies.hpp"
+#include "semantic_graph_analysis/name_lookup.hpp"
 #include "syntax_node_analysis.hpp"
 #include <set>
+#include <iostream>
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
 {
 
-template<class IdentifierGettingPolicy, class FunctionT>
+template<class FunctionT>
 std::shared_ptr<FunctionT>
 find_function
 (
@@ -37,51 +39,33 @@ find_function
 	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 )
 {
-	namespace detail = detail::semantic_analysis;
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
 
-	//find the functions from the name
+	typedef typename semantic_graph_analysis::get_identifier_getting_policy<FunctionT>::policy_t identifier_getting_policy_t;
+
+	//find the functions with the same identifier
 	std::set<std::shared_ptr<FunctionT>> found_functions;
-	if
-	(
-		boost::optional<const syntax_nodes::nested_identifier_or_template_id&> opt_nested_identifier_or_template_id_node =
-			syntax_node_analysis::get_nested_identifier_or_template_id(syntax_node_analysis::get_declarator(function_definition_node))
-	)
-	{
-		found_functions =
-			semantic_graph_analysis::name_lookup::find
-			<
-				IdentifierGettingPolicy,
-				false,
-				true,
-				FunctionT
-			>
-			(
-				has_leading_double_colon(*opt_nested_identifier_or_template_id_node),
-				get_nested_name_specifier(*opt_nested_identifier_or_template_id_node),
-				IdentifierGettingPolicy::get_identifier(function_signature),
-				current_declarative_region,
-				false
-			)
-		;
-	}
-	else
-	{
-		found_functions =
-			semantic_graph_analysis::name_lookup::find
-			<
-				IdentifierGettingPolicy,
-				false,
-				true,
-				FunctionT
-			>
-			(
-				IdentifierGettingPolicy::get_identifier(function_signature),
-				current_declarative_region
-			)
-		;
-	}
+
+	optional_node<nested_name_specifier> opt_nested_name_specifier_node =
+		syntax_node_analysis::get_nested_name_specifier(syntax_node_analysis::get_declarator(function_definition_node))
+	;
+	found_functions =
+		semantic_graph_analysis::name_lookup::find
+		<
+			identifier_getting_policy_t,
+			false,
+			true,
+			FunctionT
+		>
+		(
+			false, //has_leading_double_colon(*opt_nested_identifier_or_template_id_node),
+			opt_nested_name_specifier_node,
+			identifier_getting_policy_t::get_identifier(function_signature),
+			current_declarative_region,
+			false
+		)
+	;
 
 	//filter the found functions with the signature
 	for

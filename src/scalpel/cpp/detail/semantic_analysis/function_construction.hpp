@@ -66,7 +66,7 @@ find_function
 );
 
 //find the function corresponding to the given function signature
-template<class IdentifierGettingPolicy, class FunctionT>
+template<class FunctionT>
 std::shared_ptr<FunctionT>
 find_function
 (

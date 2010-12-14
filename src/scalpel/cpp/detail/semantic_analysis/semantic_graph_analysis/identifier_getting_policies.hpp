@@ -22,7 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_SEMANTIC_GRAPH_ANALYSIS_IDENTIFIER_GETTING_POLICIES_HPP
 
 #include "get_name.hpp"
-#include <scalpel/cpp/semantic_entities/overloadable_operator.hpp>
+#include <scalpel/cpp/semantic_graph.hpp>
 #include <string>
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace semantic_graph_analysis
@@ -69,6 +69,25 @@ namespace identifier_getting_policies
 		}
 	};
 }
+
+
+
+template<class Entity>
+struct get_identifier_getting_policy;
+
+#define GENERATE_GET_IDENTIFIER_GETTING_POLICY_SPECIALIZATION(ENTITY_TYPE, POLICY) \
+template<> \
+struct get_identifier_getting_policy<semantic_entities::ENTITY_TYPE> \
+{ \
+	typedef identifier_getting_policies::POLICY policy_t; \
+};
+
+GENERATE_GET_IDENTIFIER_GETTING_POLICY_SPECIALIZATION(constructor, get_null)
+GENERATE_GET_IDENTIFIER_GETTING_POLICY_SPECIALIZATION(destructor, get_null)
+GENERATE_GET_IDENTIFIER_GETTING_POLICY_SPECIALIZATION(operator_function, get_operator)
+GENERATE_GET_IDENTIFIER_GETTING_POLICY_SPECIALIZATION(simple_function, get_name)
+
+#undef GENERATE_GET_IDENTIFIER_GETTING_POLICY_SPECIALIZATION
 
 }}}}} //namespace scalpel::cpp::detail::semantic_analysis::semantic_graph_analysis
 
