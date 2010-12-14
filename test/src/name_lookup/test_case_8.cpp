@@ -19,7 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "test_case_8.hpp"
-#include <scalpel/cpp/detail/semantic_analysis/semantic_graph_analysis/name_lookup.hpp>
+#include <scalpel/cpp/detail/semantic_analysis/name_lookup.hpp>
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <scalpel/cpp/syntax_tree.hpp>
 #include <boost/test/unit_test.hpp>
@@ -32,8 +32,8 @@ test_case_8()
 {
 	using namespace scalpel::cpp::syntax_nodes;
 	using namespace scalpel::cpp::semantic_entities;
+	using namespace scalpel::cpp::detail::semantic_analysis::name_lookup;
 	using namespace scalpel::cpp::detail::semantic_analysis::semantic_graph_analysis;
-	using namespace scalpel::cpp::detail::semantic_analysis::semantic_graph_analysis::name_lookup;
 
 	//
 	//construction of the semantic graph of the following source code:

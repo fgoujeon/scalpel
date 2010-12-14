@@ -21,11 +21,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_NAME_LOOKUP_IPP
 #define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_NAME_LOOKUP_IPP
 
-#include "get_global_namespace.hpp"
-#include "get_name.hpp"
-#include "get_members.hpp"
+#include "semantic_graph_analysis/get_global_namespace.hpp"
+#include "semantic_graph_analysis/get_name.hpp"
+#include "semantic_graph_analysis/get_members.hpp"
 
-namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace semantic_graph_analysis { namespace name_lookup
+namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace name_lookup
 {
 
 template<class IdentifierGettingPolicy, bool Optional, bool Multiple, class... EntitiesT>
@@ -245,7 +245,7 @@ find_declarative_region
 			typename return_type<false, false, DeclarativeRegionT>::type first_declarative_region =
 				find_local_entities
 				<
-					identifier_getting_policies::get_name,
+					semantic_graph_analysis::identifier_getting_policies::get_name,
 					std::shared_ptr<semantic_entities::namespace_>,
 					false,
 					false,
@@ -279,7 +279,7 @@ find_declarative_region
 			typename return_type<false, false, DeclarativeRegionT>::type first_declarative_region =
 				find
 				<
-					identifier_getting_policies::get_name,
+					semantic_graph_analysis::identifier_getting_policies::get_name,
 					false,
 					false,
 					DeclarativeRegionT
@@ -330,7 +330,7 @@ find_declarative_region
 					found_declarative_region =
 						find_local_entities
 						<
-							identifier_getting_policies::get_name,
+							semantic_graph_analysis::identifier_getting_policies::get_name,
 							typename return_type<false, false, DeclarativeRegionT>::type,
 							false,
 							false,
@@ -787,7 +787,7 @@ return_result<false, true, EntitiesT...>::result(typename return_type<true, true
 
 } //namespace detail
 
-}}}}}} //namespace scalpel::cpp::detail::semantic_analysis::semantic_graph_analysis::name_lookup
+}}}}} //namespace scalpel::cpp::detail::semantic_analysis::name_lookup
 
 #endif
 

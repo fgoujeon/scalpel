@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "name_lookup.hpp"
 #include <stdexcept>
 
-namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace semantic_graph_analysis { namespace name_lookup
+namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace name_lookup
 {
 
 namespace detail
@@ -101,5 +101,5 @@ find_common_enclosing_namespace
 
 } //namespace detail
 
-}}}}}} //namespace scalpel::cpp::detail::semantic_analysis::semantic_graph_analysis::name_lookup
+}}}}} //namespace scalpel::cpp::detail::semantic_analysis::name_lookup
 

@@ -168,7 +168,7 @@ create_namespace_alias
 		assert(false);
 
 	utility::shared_ptr_variant<namespace_, namespace_alias>::type found_entity =
-		semantic_graph_analysis::name_lookup::find
+		name_lookup::find
 		<
 			semantic_graph_analysis::identifier_getting_policies::get_name,
 			false,
@@ -204,7 +204,7 @@ create_using_directive
 {
 	//find the namespace or namespace alias designated by the using directive
 	utility::shared_ptr_variant<namespace_, namespace_alias>::type found_entity =
-		semantic_graph_analysis::name_lookup::find
+		name_lookup::find
 		<
 			semantic_graph_analysis::identifier_getting_policies::get_name,
 			false,

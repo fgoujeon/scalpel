@@ -19,8 +19,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "type_construction.hpp"
+#include "name_lookup.hpp"
 #include "semantic_graph_analysis/to_type_shared_ptr_variant.hpp"
-#include "semantic_graph_analysis/name_lookup.hpp"
 #include "syntax_node_analysis.hpp"
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
@@ -85,7 +85,7 @@ create_type
 					assert(false);
 
 				utility::shared_ptr_variant<class_, typedef_>::type found_type =
-					semantic_graph_analysis::name_lookup::find
+					name_lookup::find
 					<
 						semantic_graph_analysis::identifier_getting_policies::get_name,
 						false,

@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_NAME_LOOKUP_HPP
 #define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_NAME_LOOKUP_HPP
 
-#include "identifier_getting_policies.hpp"
+#include "semantic_graph_analysis/identifier_getting_policies.hpp"
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <scalpel/cpp/syntax_tree.hpp>
 #include <scalpel/utility/is_empty.hpp>
@@ -34,7 +34,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <memory>
 #include <sstream>
 
-namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace semantic_graph_analysis { namespace name_lookup
+namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace name_lookup
 {
 
 /*
@@ -462,7 +462,7 @@ namespace detail
 	};
 }
 
-}}}}}} //namespace scalpel::cpp::detail::semantic_analysis::semantic_graph_analysis::name_lookup
+}}}}} //namespace scalpel::cpp::detail::semantic_analysis::name_lookup
 
 #include "name_lookup.ipp"
 

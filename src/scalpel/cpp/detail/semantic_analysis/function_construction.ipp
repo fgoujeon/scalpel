@@ -22,7 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_FUNCTION_CONSTRUCTION_IPP
 
 #include "semantic_graph_analysis/identifier_getting_policies.hpp"
-#include "semantic_graph_analysis/name_lookup.hpp"
+#include "name_lookup.hpp"
 #include "syntax_node_analysis.hpp"
 #include <set>
 #include <iostream>
@@ -51,7 +51,7 @@ find_function
 		syntax_node_analysis::get_nested_name_specifier(syntax_node_analysis::get_declarator(function_definition_node))
 	;
 	found_functions =
-		semantic_graph_analysis::name_lookup::find
+		name_lookup::find
 		<
 			identifier_getting_policy_t,
 			false,

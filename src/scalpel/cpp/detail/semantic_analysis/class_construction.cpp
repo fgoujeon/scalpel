@@ -21,7 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "class_construction.hpp"
 #include "type_construction.hpp"
 #include "other_entity_construction.hpp"
-#include "semantic_graph_analysis.hpp"
+#include "name_lookup.hpp"
+#include "semantic_graph_analysis/identifier_getting_policies.hpp"
 #include "syntax_node_analysis.hpp"
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
@@ -88,6 +89,7 @@ fill_class
 		)
 		{
 			auto base_specifier_node = i->main_node();
+			auto nested_identifier_or_template_id_node = get_nested_identifier_or_template_id(base_specifier_node);
 
 			//is it virtual inheritance?
 			bool is_virtual = has_virtual_keyword(base_specifier_node);
@@ -99,10 +101,29 @@ fill_class
 				access = syntax_node_analysis::get_access(*opt_access_specifier_node);
 			}
 
+			//get base class name
+			std::string base_class_name;
+			const identifier_or_template_id& identifier_or_template_id_node = get_identifier_or_template_id(nested_identifier_or_template_id_node);
+			if(boost::optional<const identifier&> opt_identifier_node = get<identifier>(&identifier_or_template_id_node))
+				base_class_name = opt_identifier_node->value();
+			else
+				assert(false); //not managed yet
+
 			//get base class
-			auto nested_identifier_or_template_id_node = get_nested_identifier_or_template_id(base_specifier_node);
 			std::shared_ptr<class_> base_class =
-				semantic_graph_analysis::name_lookup::find<false, false, class_>(nested_identifier_or_template_id_node, class_entity)
+				name_lookup::find
+				<
+					semantic_graph_analysis::identifier_getting_policies::get_name,
+					false,
+					false,
+					class_
+				>
+				(
+					has_leading_double_colon(nested_identifier_or_template_id_node),
+					get_nested_name_specifier(nested_identifier_or_template_id_node),
+					base_class_name,
+					class_entity
+				)
 			;
 
 			class_entity->add_base_class(base_class, access, is_virtual);
