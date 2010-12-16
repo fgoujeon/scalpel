@@ -41,6 +41,8 @@ test_case_11()
 	/*
 	class c
 	{
+		~c();
+
 		c
 		operator+(const c&);
 	};
@@ -50,13 +52,6 @@ test_case_11()
 
 	bool
 	operator==(const c&, const c&);
-
-	void
-	test()
-	{
-		c c1, c2;
-		operator==(c1, c2);
-	}
 	*/
 
 	//namespaces
@@ -66,6 +61,8 @@ test_case_11()
 	auto class_c = class_::make_shared("c");
 
 	//functions
+	auto c_constructor = std::make_shared<constructor>();
+	auto c_destructor = std::make_shared<destructor>();
 	auto operator_function_plus = std::make_shared<operator_function>
 	(
 		scalpel::cpp::semantic_entities::overloadable_operator::PLUS,
@@ -81,19 +78,14 @@ test_case_11()
 		scalpel::cpp::semantic_entities::overloadable_operator::DOUBLE_EQUAL,
 		fundamental_type_shared_ptrs::bool_
 	);
-	auto function_test = simple_function::make_shared
-	(
-		"test",
-		fundamental_type_shared_ptrs::void_
-	);
 
 	//assembling
 	semantic_graph->add_member(class_c);
+	class_c->add_member(c_constructor);
+	class_c->set_destructor(c_destructor);
 	class_c->add_member(operator_function_plus);
 	semantic_graph->add_member(operator_function_not_equal);
 	semantic_graph->add_member(operator_function_equal);
-	semantic_graph->add_member(function_test);
-	function_test->body(std::make_shared<statement_block>());
 
 
 
@@ -101,19 +93,19 @@ test_case_11()
 	//name lookup test
 	//
 
-	//look up operator== from function test, must find it
+	//look up operator==() from global namespace, must find it
 	{
 		std::shared_ptr<operator_function> found_entity =
 			find<identifier_getting_policies::get_operator, false, false, operator_function>
 			(
 				scalpel::cpp::semantic_entities::overloadable_operator::DOUBLE_EQUAL,
-				function_test
+				semantic_graph
 			)
 		;
 		BOOST_CHECK_EQUAL(found_entity, operator_function_equal);
 	}
 
-	//look up c::operator+ from function test, must find it
+	//look up c::operator+() from global namespace, must find it
 	{
 		std::shared_ptr<operator_function> found_entity =
 			find<identifier_getting_policies::get_operator, false, false, operator_function>
@@ -128,10 +120,55 @@ test_case_11()
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				scalpel::cpp::semantic_entities::overloadable_operator::PLUS,
-				function_test
+				semantic_graph,
+				false
 			)
 		;
 		BOOST_CHECK_EQUAL(found_entity, operator_function_plus);
+	}
+
+	//look up c::c() from global namespace, must find it
+	{
+		std::shared_ptr<constructor> found_entity =
+			find<identifier_getting_policies::get_null, false, false, constructor>
+			(
+				false,
+				nested_name_specifier
+				(
+					identifier("c"),
+					space(""),
+					predefined_text_node<str::double_colon>(),
+					space(""),
+					optional_node<nested_name_specifier_last_part_seq>()
+				),
+				0,
+				semantic_graph,
+				false
+			)
+		;
+		BOOST_CHECK_EQUAL(found_entity, c_constructor);
+	}
+
+	//look up c::~c() from global namespace, must find it
+	{
+		std::shared_ptr<destructor> found_entity =
+			find<identifier_getting_policies::get_null, false, false, destructor>
+			(
+				false,
+				nested_name_specifier
+				(
+					identifier("c"),
+					space(""),
+					predefined_text_node<str::double_colon>(),
+					space(""),
+					optional_node<nested_name_specifier_last_part_seq>()
+				),
+				0,
+				semantic_graph,
+				false
+			)
+		;
+		BOOST_CHECK_EQUAL(found_entity, c_destructor);
 	}
 }
 

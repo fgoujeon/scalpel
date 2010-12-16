@@ -35,12 +35,12 @@ class constructor:
 	public:
 		constructor
 		(
-			function_parameter_list&& parameters,
-			const bool is_inline,
-			const bool is_explicit
+			function_parameter_list&& parameters = function_parameter_list(),
+			const bool is_inline = false,
+			const bool is_explicit = false
 		);
 
-		constructor(constructor&& rhs);
+		constructor(const constructor& rhs) = delete;
 
 		const function_parameter_list&
 		parameters() const

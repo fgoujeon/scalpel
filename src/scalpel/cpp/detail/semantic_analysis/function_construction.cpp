@@ -173,9 +173,18 @@ find_function
 		if(function_declaration)
 			return function_shared_ptr_variant(function_declaration);
 	}
-	else if(get<destructor>(&function_signature))
+	else if(auto opt_destructor_entity = get<destructor>(&function_signature))
 	{
-		assert(false); //not managed yet
+		std::shared_ptr<destructor> function_declaration =
+			find_function<destructor>
+			(
+				*opt_destructor_entity,
+				function_definition_node,
+				current_declarative_region
+			)
+		;
+		if(function_declaration)
+			return function_shared_ptr_variant(function_declaration);
 	}
 	else if(auto opt_operator_function_signature = get<operator_function>(&function_signature))
 	{

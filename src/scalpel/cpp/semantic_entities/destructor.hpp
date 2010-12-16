@@ -32,9 +32,9 @@ class destructor:
 	public std::enable_shared_from_this<destructor>
 {
 	public:
-		destructor(const bool is_inline);
+		destructor(const bool is_inline = false);
 
-		destructor(destructor&& o);
+		destructor(const destructor& rhs);
 
 		bool
 		is_inline() const;
@@ -85,6 +85,9 @@ operator==(const destructor& lhs, const destructor& rhs);
 
 bool
 operator!=(const destructor& lhs, const destructor& rhs);
+
+bool
+have_same_signature(const destructor& lhs, const destructor& rhs);
 
 }}} //namespace scalpel::cpp::semantic_entities
 

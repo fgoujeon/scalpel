@@ -142,6 +142,9 @@ class class_:
 		const constructors_t&
 		constructors() const;
 
+		std::shared_ptr<destructor>
+		get_destructor();
+
 		std::shared_ptr<const destructor>
 		get_destructor() const;
 

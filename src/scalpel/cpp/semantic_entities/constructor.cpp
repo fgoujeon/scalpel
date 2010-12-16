@@ -37,13 +37,6 @@ constructor::constructor
 {
 }
 
-constructor::constructor(constructor&& rhs):
-	parameters_(std::move(rhs.parameters_)),
-	is_inline_(rhs.is_inline_),
-	is_explicit_(rhs.is_explicit_)
-{
-}
-
 
 
 bool

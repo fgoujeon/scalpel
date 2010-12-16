@@ -122,6 +122,12 @@ class_::constructors() const
 	return constructors_;
 }
 
+std::shared_ptr<destructor>
+class_::get_destructor()
+{
+	return destructor_;
+}
+
 std::shared_ptr<const destructor>
 class_::get_destructor() const
 {

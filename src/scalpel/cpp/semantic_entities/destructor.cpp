@@ -31,8 +31,9 @@ destructor::destructor
 {
 }
 
-destructor::destructor(destructor&& o):
-	is_inline_(o.is_inline_)
+destructor::destructor(const destructor& rhs):
+	std::enable_shared_from_this<destructor>(),
+	is_inline_(rhs.is_inline_)
 {
 }
 
@@ -80,6 +81,12 @@ bool
 operator!=(const destructor& lhs, const destructor& rhs)
 {
 	return !operator==(lhs, rhs);
+}
+
+bool
+have_same_signature(const destructor&, const destructor&)
+{
+	return true;
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

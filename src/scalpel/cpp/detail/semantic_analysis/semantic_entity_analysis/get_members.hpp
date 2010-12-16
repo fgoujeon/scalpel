@@ -22,6 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_SEMANTIC_ENTITY_ANALYSIS_GET_MEMBERS_HPP
 
 #include <scalpel/cpp/semantic_graph.hpp>
+#include <scalpel/utility/single_object_range.hpp>
 #include <scalpel/utility/shared_ptr_vector.hpp>
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace semantic_entity_analysis
@@ -64,6 +65,12 @@ template<>
 struct get_members_type_traits<semantic_entities::constructor>
 {
 	typedef utility::shared_ptr_vector<semantic_entities::constructor>::range return_type;
+};
+
+template<>
+struct get_members_type_traits<semantic_entities::destructor>
+{
+	typedef utility::single_object_range<std::shared_ptr<semantic_entities::destructor>> return_type;
 };
 
 template<>
