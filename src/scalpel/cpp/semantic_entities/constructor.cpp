@@ -43,6 +43,8 @@ bool
 operator==(const constructor& lhs, const constructor& rhs)
 {
 	return
+		lhs.is_inline() == rhs.is_inline() &&
+		lhs.is_explicit() == rhs.is_explicit() &&
 		have_same_signature(lhs, rhs) &&
 		(
 			lhs.body().get() == rhs.body().get() ||
@@ -65,8 +67,6 @@ bool
 have_same_signature(const constructor& lhs, const constructor& rhs)
 {
 	return
-		lhs.is_inline() == rhs.is_inline() &&
-		lhs.is_explicit() == rhs.is_explicit() &&
 		lhs.parameters() == rhs.parameters()
 	;
 }

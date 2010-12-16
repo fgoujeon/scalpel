@@ -147,6 +147,8 @@ bool
 operator==(const simple_function& lhs, const simple_function& rhs)
 {
 	return
+		lhs.is_inline() == rhs.is_inline() &&
+		lhs.is_static() == rhs.is_static() &&
 		have_same_signature(lhs, rhs) &&
 		(
 			lhs.body().get() == rhs.body().get() ||
@@ -170,8 +172,6 @@ have_same_signature(const simple_function& lhs, const simple_function& rhs)
 {
 	return
 		lhs.name() == rhs.name() &&
-		lhs.is_inline() == rhs.is_inline() &&
-		lhs.is_static() == rhs.is_static() &&
 		utility::are_pointed_objects_equal(lhs.return_type(), rhs.return_type()) &&
 		lhs.parameters() == rhs.parameters()
 	;
