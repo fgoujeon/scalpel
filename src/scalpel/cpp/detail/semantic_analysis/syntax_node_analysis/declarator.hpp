@@ -43,7 +43,7 @@ get_parameter_declaration_list(const syntax_nodes::declarator& declarator_node);
 
 template<const std::string& Qualifier>
 bool
-is_qualified(const syntax_nodes::declarator& declarator_node);
+has_qualifier(const syntax_nodes::declarator& declarator_node);
 
 syntax_nodes::identifier
 get_identifier(const syntax_nodes::declarator& declarator_node);

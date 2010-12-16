@@ -26,7 +26,7 @@ namespace scalpel { namespace cpp { namespace detail { namespace semantic_analys
 
 template<const std::string& Qualifier>
 bool
-is_qualified(const syntax_nodes::declarator& declarator_node)
+has_qualifier(const syntax_nodes::declarator& declarator_node)
 {
 	using namespace syntax_nodes;
 

@@ -318,8 +318,8 @@ fill_class
 					(
 						*opt_operator_function_entity,
 						current_access,
-						syntax_node_analysis::is_qualified<str::const_>(declarator_node),
-						syntax_node_analysis::is_qualified<str::volatile_>(declarator_node),
+						syntax_node_analysis::has_qualifier<str::const_>(declarator_node),
+						syntax_node_analysis::has_qualifier<str::volatile_>(declarator_node),
 						has_virtual_specifier,
 						syntax_node_analysis::has_pure_specifier(member_declarator_declarator_node)
 					);
@@ -328,8 +328,8 @@ fill_class
 					(
 						*opt_conversion_function_entity,
 						current_access,
-						syntax_node_analysis::is_qualified<str::const_>(declarator_node),
-						syntax_node_analysis::is_qualified<str::volatile_>(declarator_node),
+						syntax_node_analysis::has_qualifier<str::const_>(declarator_node),
+						syntax_node_analysis::has_qualifier<str::volatile_>(declarator_node),
 						has_virtual_specifier,
 						syntax_node_analysis::has_pure_specifier(member_declarator_declarator_node)
 					);
@@ -338,8 +338,8 @@ fill_class
 					(
 						*opt_simple_function_entity,
 						current_access,
-						syntax_node_analysis::is_qualified<str::const_>(declarator_node),
-						syntax_node_analysis::is_qualified<str::volatile_>(declarator_node),
+						syntax_node_analysis::has_qualifier<str::const_>(declarator_node),
+						syntax_node_analysis::has_qualifier<str::volatile_>(declarator_node),
 						has_virtual_specifier,
 						syntax_node_analysis::has_pure_specifier(member_declarator_declarator_node)
 					);
