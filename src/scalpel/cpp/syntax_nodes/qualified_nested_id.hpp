@@ -51,7 +51,7 @@ typedef
 
 inline
 bool
-has_double_colon(const qualified_nested_id& o)
+has_leading_double_colon(const qualified_nested_id& o)
 {
 	return get<0>(o);
 }

@@ -77,16 +77,10 @@ is_qualified
 	const syntax_nodes::function_definition& function_definition_node
 )
 {
-	optional_node<nested_name_specifier> opt_nested_name_specifier_node =
-		get_nested_name_specifier(get_declarator(function_definition_node));
+	return
+		has_leading_double_colon(get_declarator(function_definition_node)) ||
+		get_nested_name_specifier(get_declarator(function_definition_node))
 	;
-
-	if(opt_nested_name_specifier_node)
-	{
-		return true;
-	}
-
-	return false;
 }
 
 }}}}} //namespace scalpel::cpp::detail::semantic_analysis::syntax_node_analysis

@@ -385,20 +385,70 @@ has_identifier(const declarator& declarator_node)
 	return false;
 }
 
-syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>
-get_nested_name_specifier(const syntax_nodes::declarator& declarator_node)
+boost::optional<const syntax_nodes::declarator_id&>
+get_declarator_id(const syntax_nodes::declarator& declarator_node)
 {
 	const direct_declarator& direct_declarator_node = get_direct_declarator(declarator_node);
 	const direct_declarator_first_part& first_part_node = get_first_part(direct_declarator_node);
-	if(const boost::optional<const declarator_id&> opt_declarator_id_node = get<declarator_id>(&first_part_node))
+	return get<declarator_id>(&first_part_node);
+}
+
+bool
+has_leading_double_colon(const syntax_nodes::declarator& declarator_node)
+{
+	//operator function:
+	//declarator_id -> id_expression -> qualified_id -> qualified_nested_id -> ::
+
+	//simple function:
+	//declarator_id -> nested_identifier_or_template_id -> ::
+
+	if(const boost::optional<const declarator_id&> opt_declarator_id_node = get_declarator_id(declarator_node))
 	{
 		const declarator_id& declarator_id_node = *opt_declarator_id_node;
 
-		//operator function:
-		//declarator_id -> id_expression -> qualified_id -> qualified_nested_id -> nested_name_specifier
+		if(boost::optional<const id_expression&> opt_id_expression_node = get<id_expression>(&declarator_id_node))
+		{
+			const id_expression& id_expression_node = *opt_id_expression_node;
 
-		//simple function:
-		//declarator_id -> nested_identifier_or_template_id -> nested_name_specifier
+			if(boost::optional<const qualified_id&> opt_qualified_id_node = get<qualified_id>(&id_expression_node))
+			{
+				const qualified_id& qualified_id_node = *opt_qualified_id_node;
+
+				if(boost::optional<const qualified_nested_id&> opt_qualified_nested_id_node = get<qualified_nested_id>(&qualified_id_node))
+				{
+					const qualified_nested_id& qualified_nested_id_node = *opt_qualified_nested_id_node;
+					return has_leading_double_colon(qualified_nested_id_node);
+				}
+			}
+		}
+		else if
+		(
+			boost::optional<const nested_identifier_or_template_id&> opt_nested_identifier_or_template_id_node =
+				get<nested_identifier_or_template_id>(&declarator_id_node)
+		)
+		{
+			const nested_identifier_or_template_id& nested_identifier_or_template_id_node =
+				*opt_nested_identifier_or_template_id_node
+			;
+			return has_leading_double_colon(nested_identifier_or_template_id_node);
+		}
+	}
+
+	return false;
+}
+
+syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>
+get_nested_name_specifier(const syntax_nodes::declarator& declarator_node)
+{
+	//operator function:
+	//declarator_id -> id_expression -> qualified_id -> qualified_nested_id -> nested_name_specifier
+
+	//simple function:
+	//declarator_id -> nested_identifier_or_template_id -> nested_name_specifier
+
+	if(const boost::optional<const declarator_id&> opt_declarator_id_node = get_declarator_id(declarator_node))
+	{
+		const declarator_id& declarator_id_node = *opt_declarator_id_node;
 
 		if(boost::optional<const id_expression&> opt_id_expression_node = get<id_expression>(&declarator_id_node))
 		{

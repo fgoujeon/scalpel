@@ -51,6 +51,12 @@ get_identifier(const syntax_nodes::declarator& declarator_node);
 bool
 has_identifier(const syntax_nodes::declarator& declarator_node);
 
+boost::optional<const syntax_nodes::declarator_id&>
+get_declarator_id(const syntax_nodes::declarator& declarator_node);
+
+bool
+has_leading_double_colon(const syntax_nodes::declarator& declarator_node);
+
 syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>
 get_nested_name_specifier(const syntax_nodes::declarator& declarator_node);
 

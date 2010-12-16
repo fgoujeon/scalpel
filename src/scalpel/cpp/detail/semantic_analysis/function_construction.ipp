@@ -47,9 +47,7 @@ find_function
 	//find the functions with the same identifier
 	std::set<std::shared_ptr<FunctionT>> found_functions;
 
-	optional_node<nested_name_specifier> opt_nested_name_specifier_node =
-		syntax_node_analysis::get_nested_name_specifier(syntax_node_analysis::get_declarator(function_definition_node))
-	;
+	const declarator& declarator_node = syntax_node_analysis::get_declarator(function_definition_node);
 	found_functions =
 		name_lookup::find
 		<
@@ -59,8 +57,8 @@ find_function
 			FunctionT
 		>
 		(
-			false, //has_leading_double_colon(*opt_nested_identifier_or_template_id_node),
-			opt_nested_name_specifier_node,
+			syntax_node_analysis::has_leading_double_colon(declarator_node),
+			syntax_node_analysis::get_nested_name_specifier(declarator_node),
 			identifier_getting_policy_t::get_identifier(function_signature),
 			current_declarative_region,
 			false
