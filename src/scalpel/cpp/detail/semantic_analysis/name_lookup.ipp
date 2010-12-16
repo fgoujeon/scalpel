@@ -547,7 +547,7 @@ find_local_entities
 	for(auto i = members.begin(); i != members.end(); ++i)
 	{
 		auto current_entity = *i;
-		if(IdentifierGettingPolicy::get_identifier(current_entity) == identifier)
+		if(IdentifierGettingPolicy::are_identifiers_equal(current_entity, identifier))
 		{
 			add_to_result(found_entities, current_entity);
 			if(!Multiple) break;

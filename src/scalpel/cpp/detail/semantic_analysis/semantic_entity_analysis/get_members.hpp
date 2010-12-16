@@ -74,15 +74,21 @@ struct get_members_type_traits<semantic_entities::destructor>
 };
 
 template<>
-struct get_members_type_traits<semantic_entities::simple_function>
-{
-	typedef utility::shared_ptr_vector<semantic_entities::simple_function>::range return_type;
-};
-
-template<>
 struct get_members_type_traits<semantic_entities::operator_function>
 {
 	typedef utility::shared_ptr_vector<semantic_entities::operator_function>::range return_type;
+};
+
+template<>
+struct get_members_type_traits<semantic_entities::conversion_function>
+{
+	typedef utility::shared_ptr_vector<semantic_entities::conversion_function>::range return_type;
+};
+
+template<>
+struct get_members_type_traits<semantic_entities::simple_function>
+{
+	typedef utility::shared_ptr_vector<semantic_entities::simple_function>::range return_type;
 };
 
 template<>

@@ -36,10 +36,10 @@ class conversion_function:
 		conversion_function
 		(
 			const type_shared_ptr_variant& return_type,
-			const bool is_inline
+			const bool is_inline = false
 		);
 
-		conversion_function(conversion_function&& o);
+		conversion_function(const conversion_function& rhs);
 
 		const type_shared_ptr_variant&
 		return_type() const;
@@ -94,6 +94,9 @@ operator==(const conversion_function& lhs, const conversion_function& rhs);
 
 bool
 operator!=(const conversion_function& lhs, const conversion_function& rhs);
+
+bool
+have_same_signature(const conversion_function& lhs, const conversion_function& rhs);
 
 }}} //namespace scalpel::cpp::semantic_entities
 

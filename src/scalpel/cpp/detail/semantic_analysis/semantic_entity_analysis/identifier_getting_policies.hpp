@@ -23,6 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "get_name.hpp"
 #include <scalpel/cpp/semantic_graph.hpp>
+#include <scalpel/utility/are_pointed_objects_equal.hpp>
 #include <string>
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace semantic_entity_analysis
@@ -41,6 +42,14 @@ namespace identifier_getting_policies
 		{
 			return 0;
 		}
+
+		template<class EntityT>
+		static
+		bool
+		are_identifiers_equal(const EntityT&, const identifier_t&)
+		{
+			return true;
+		}
 	};
 
 	struct get_name
@@ -54,6 +63,14 @@ namespace identifier_getting_policies
 		{
 			return semantic_entity_analysis::get_name(entity);
 		}
+
+		template<class EntityT>
+		static
+		bool
+		are_identifiers_equal(const EntityT& entity, const identifier_t& identifier)
+		{
+			return get_identifier(entity) == identifier;
+		}
 	};
 
 	struct get_operator
@@ -66,6 +83,35 @@ namespace identifier_getting_policies
 		get_identifier(const EntityT& entity)
 		{
 			return entity->get_operator();
+		}
+
+		template<class EntityT>
+		static
+		bool
+		are_identifiers_equal(const EntityT& entity, const identifier_t& identifier)
+		{
+			return get_identifier(entity) == identifier;
+		}
+	};
+
+	struct get_type
+	{
+		typedef semantic_entities::type_shared_ptr_variant identifier_t;
+
+		template<class EntityT>
+		static
+		identifier_t
+		get_identifier(const EntityT& entity)
+		{
+			return entity->return_type();
+		}
+
+		template<class EntityT>
+		static
+		bool
+		are_identifiers_equal(const EntityT& entity, const identifier_t& identifier)
+		{
+			return are_pointed_objects_equal(get_identifier(entity), identifier);
 		}
 	};
 }
@@ -85,6 +131,7 @@ struct get_identifier_getting_policy<semantic_entities::ENTITY_TYPE> \
 GENERATE_GET_IDENTIFIER_GETTING_POLICY_SPECIALIZATION(constructor, get_null)
 GENERATE_GET_IDENTIFIER_GETTING_POLICY_SPECIALIZATION(destructor, get_null)
 GENERATE_GET_IDENTIFIER_GETTING_POLICY_SPECIALIZATION(operator_function, get_operator)
+GENERATE_GET_IDENTIFIER_GETTING_POLICY_SPECIALIZATION(conversion_function, get_type)
 GENERATE_GET_IDENTIFIER_GETTING_POLICY_SPECIALIZATION(simple_function, get_name)
 
 #undef GENERATE_GET_IDENTIFIER_GETTING_POLICY_SPECIALIZATION

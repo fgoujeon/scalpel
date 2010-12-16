@@ -45,6 +45,10 @@ test_case_11()
 
 		c
 		operator+(const c&);
+
+		operator int();
+
+		operator int*();
 	};
 
 	bool
@@ -63,10 +67,18 @@ test_case_11()
 	//functions
 	auto c_constructor = std::make_shared<constructor>();
 	auto c_destructor = std::make_shared<destructor>();
-	auto operator_function_plus = std::make_shared<operator_function>
+	auto c_operator_function_plus = std::make_shared<operator_function>
 	(
 		scalpel::cpp::semantic_entities::overloadable_operator::PLUS,
 		fundamental_type_shared_ptrs::bool_
+	);
+	auto c_conversion_function_int = std::make_shared<conversion_function>
+	(
+		fundamental_type_shared_ptrs::int_
+	);
+	auto c_conversion_function_int_ptr = std::make_shared<conversion_function>
+	(
+		std::make_shared<const pointer>(fundamental_type_shared_ptrs::int_)
 	);
 	auto operator_function_not_equal = std::make_shared<operator_function>
 	(
@@ -83,7 +95,9 @@ test_case_11()
 	semantic_graph->add_member(class_c);
 	class_c->add_member(c_constructor);
 	class_c->set_destructor(c_destructor);
-	class_c->add_member(operator_function_plus);
+	class_c->add_member(c_conversion_function_int);
+	class_c->add_member(c_conversion_function_int_ptr);
+	class_c->add_member(c_operator_function_plus);
 	semantic_graph->add_member(operator_function_not_equal);
 	semantic_graph->add_member(operator_function_equal);
 
@@ -124,7 +138,7 @@ test_case_11()
 				false
 			)
 		;
-		BOOST_CHECK_EQUAL(found_entity, operator_function_plus);
+		BOOST_CHECK_EQUAL(found_entity, c_operator_function_plus);
 	}
 
 	//look up c::c() from global namespace, must find it
@@ -169,6 +183,28 @@ test_case_11()
 			)
 		;
 		BOOST_CHECK_EQUAL(found_entity, c_destructor);
+	}
+
+	//look up c::operator int*() from global namespace, must find it
+	{
+		std::shared_ptr<conversion_function> found_entity =
+			find<identifier_getting_policies::get_type, false, false, conversion_function>
+			(
+				false,
+				nested_name_specifier
+				(
+					identifier("c"),
+					space(""),
+					predefined_text_node<str::double_colon>(),
+					space(""),
+					optional_node<nested_name_specifier_last_part_seq>()
+				),
+				std::make_shared<const pointer>(fundamental_type_shared_ptrs::int_),
+				semantic_graph,
+				false
+			)
+		;
+		BOOST_CHECK_EQUAL(found_entity, c_conversion_function_int_ptr);
 	}
 }
 

@@ -35,9 +35,9 @@ conversion_function::conversion_function
 {
 }
 
-conversion_function::conversion_function(conversion_function&& o):
-	return_type_(std::move(o.return_type_)),
-	is_inline_(o.is_inline_)
+conversion_function::conversion_function(const conversion_function& rhs):
+	return_type_(rhs.return_type_),
+	is_inline_(rhs.is_inline_)
 {
 }
 
@@ -85,6 +85,14 @@ bool
 operator!=(const conversion_function& lhs, const conversion_function& rhs)
 {
 	return !operator==(lhs, rhs);
+}
+
+bool
+have_same_signature(const conversion_function& lhs, const conversion_function& rhs)
+{
+	return
+		utility::are_pointed_objects_equal(lhs.return_type(), rhs.return_type())
+	;
 }
 
 }}} //namespace scalpel::cpp::semantic_entities
