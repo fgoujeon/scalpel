@@ -48,8 +48,8 @@ has_qualifier(const syntax_nodes::declarator& declarator_node);
 syntax_nodes::identifier
 get_identifier(const syntax_nodes::declarator& declarator_node);
 
-bool
-has_identifier(const syntax_nodes::declarator& declarator_node);
+syntax_nodes::operator_
+get_operator(const syntax_nodes::declarator& declarator_node);
 
 const syntax_nodes::declarator_id&
 get_declarator_id(const syntax_nodes::declarator& declarator_node);
@@ -59,9 +59,6 @@ has_leading_double_colon(const syntax_nodes::declarator& declarator_node);
 
 syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>
 get_nested_name_specifier(const syntax_nodes::declarator& declarator_node);
-
-const syntax_nodes::operator_&
-get_operator(const syntax_nodes::declarator& declarator_node);
 
 //cannot fail
 syntax_nodes::unqualified_id
