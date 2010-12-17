@@ -152,83 +152,48 @@ define_function
 		assert(false);
 }
 
-boost::optional<function_shared_ptr_variant>
+class find_function_visitor: public utility::static_visitor<function_shared_ptr_variant>
+{
+	public:
+		find_function_visitor
+		(
+			const syntax_nodes::function_definition& function_definition_node,
+			const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
+		):
+			function_definition_node_(function_definition_node),
+			current_declarative_region_(current_declarative_region)
+		{
+		}
+
+		template<class T>
+		function_shared_ptr_variant
+		operator()(std::shared_ptr<T> function_signature) const
+		{
+			return
+				find_function<T>
+				(
+					function_signature,
+					function_definition_node_,
+					current_declarative_region_
+				)
+			;
+		}
+
+	private:
+		const syntax_nodes::function_definition& function_definition_node_;
+		const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region_;
+};
+
+function_shared_ptr_variant
 find_function
 (
-	const function_shared_ptr_variant function_signature,
+	const function_shared_ptr_variant& function_signature,
 	const syntax_nodes::function_definition& function_definition_node,
 	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 )
 {
-	if(auto opt_constructor_entity = get<constructor>(&function_signature))
-	{
-		std::shared_ptr<constructor> function_declaration =
-			find_function<constructor>
-			(
-				*opt_constructor_entity,
-				function_definition_node,
-				current_declarative_region
-			)
-		;
-		if(function_declaration)
-			return function_shared_ptr_variant(function_declaration);
-	}
-	else if(auto opt_destructor_entity = get<destructor>(&function_signature))
-	{
-		std::shared_ptr<destructor> function_declaration =
-			find_function<destructor>
-			(
-				*opt_destructor_entity,
-				function_definition_node,
-				current_declarative_region
-			)
-		;
-		if(function_declaration)
-			return function_shared_ptr_variant(function_declaration);
-	}
-	else if(auto opt_operator_function_signature = get<operator_function>(&function_signature))
-	{
-		std::shared_ptr<operator_function> function_declaration =
-			find_function<operator_function>
-			(
-				*opt_operator_function_signature,
-				function_definition_node,
-				current_declarative_region
-			)
-		;
-		if(function_declaration)
-			return function_shared_ptr_variant(function_declaration);
-	}
-	else if(auto opt_conversion_function_signature = get<conversion_function>(&function_signature))
-	{
-		std::shared_ptr<conversion_function> function_declaration =
-			find_function<conversion_function>
-			(
-				*opt_conversion_function_signature,
-				function_definition_node,
-				current_declarative_region
-			)
-		;
-		if(function_declaration)
-			return function_shared_ptr_variant(function_declaration);
-	}
-	else if(auto opt_simple_function_signature = get<simple_function>(&function_signature))
-	{
-		std::shared_ptr<simple_function> function_declaration =
-			find_function<simple_function>
-			(
-				*opt_simple_function_signature,
-				function_definition_node,
-				current_declarative_region
-			)
-		;
-		if(function_declaration)
-			return function_shared_ptr_variant(function_declaration);
-	}
-	else
-		assert(false);
-
-	return boost::optional<function_shared_ptr_variant>();
+	find_function_visitor visitor(function_definition_node, current_declarative_region);
+	return utility::apply_visitor(visitor, function_signature);
 }
 
 std::shared_ptr<semantic_entities::operator_function>

@@ -57,10 +57,10 @@ define_function
 );
 
 //find the function corresponding to the given function signature
-boost::optional<function_shared_ptr_variant>
+function_shared_ptr_variant
 find_function
 (
-	const function_shared_ptr_variant function_signature,
+	const function_shared_ptr_variant& function_signature,
 	const syntax_nodes::function_definition& function_definition_node,
 	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 );
