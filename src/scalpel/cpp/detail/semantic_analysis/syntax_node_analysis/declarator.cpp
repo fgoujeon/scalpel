@@ -19,6 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "declarator.hpp"
+#include "template_id.hpp"
 #include <stdexcept>
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace syntax_node_analysis
@@ -385,12 +386,26 @@ has_identifier(const declarator& declarator_node)
 	return false;
 }
 
-boost::optional<const syntax_nodes::declarator_id&>
+const syntax_nodes::declarator_id&
 get_declarator_id(const syntax_nodes::declarator& declarator_node)
 {
 	const direct_declarator& direct_declarator_node = get_direct_declarator(declarator_node);
 	const direct_declarator_first_part& first_part_node = get_first_part(direct_declarator_node);
-	return get<declarator_id>(&first_part_node);
+
+	if(boost::optional<const bracketed_declarator&> opt_bracketed_declarator_node = get<bracketed_declarator>(&first_part_node))
+	{
+		const bracketed_declarator& bracketed_declarator_node = *opt_bracketed_declarator_node;
+		const declarator& declarator_node = get_declarator(bracketed_declarator_node);
+		return get_declarator_id(declarator_node);
+	}
+	else if(boost::optional<const declarator_id&> opt_declarator_id_node = get<declarator_id>(&first_part_node))
+	{
+		return *opt_declarator_id_node;
+	}
+	else
+	{
+		assert(false);
+	}
 }
 
 bool
@@ -402,36 +417,37 @@ has_leading_double_colon(const syntax_nodes::declarator& declarator_node)
 	//simple function:
 	//declarator_id -> nested_identifier_or_template_id -> ::
 
-	if(const boost::optional<const declarator_id&> opt_declarator_id_node = get_declarator_id(declarator_node))
+	const declarator_id& declarator_id_node = get_declarator_id(declarator_node);
+
+	if(boost::optional<const id_expression&> opt_id_expression_node = get<id_expression>(&declarator_id_node))
 	{
-		const declarator_id& declarator_id_node = *opt_declarator_id_node;
+		const id_expression& id_expression_node = *opt_id_expression_node;
 
-		if(boost::optional<const id_expression&> opt_id_expression_node = get<id_expression>(&declarator_id_node))
+		if(boost::optional<const qualified_id&> opt_qualified_id_node = get<qualified_id>(&id_expression_node))
 		{
-			const id_expression& id_expression_node = *opt_id_expression_node;
+			const qualified_id& qualified_id_node = *opt_qualified_id_node;
 
-			if(boost::optional<const qualified_id&> opt_qualified_id_node = get<qualified_id>(&id_expression_node))
+			if(boost::optional<const qualified_nested_id&> opt_qualified_nested_id_node = get<qualified_nested_id>(&qualified_id_node))
 			{
-				const qualified_id& qualified_id_node = *opt_qualified_id_node;
-
-				if(boost::optional<const qualified_nested_id&> opt_qualified_nested_id_node = get<qualified_nested_id>(&qualified_id_node))
-				{
-					const qualified_nested_id& qualified_nested_id_node = *opt_qualified_nested_id_node;
-					return has_leading_double_colon(qualified_nested_id_node);
-				}
+				const qualified_nested_id& qualified_nested_id_node = *opt_qualified_nested_id_node;
+				return has_leading_double_colon(qualified_nested_id_node);
 			}
 		}
-		else if
-		(
-			boost::optional<const nested_identifier_or_template_id&> opt_nested_identifier_or_template_id_node =
-				get<nested_identifier_or_template_id>(&declarator_id_node)
-		)
-		{
-			const nested_identifier_or_template_id& nested_identifier_or_template_id_node =
-				*opt_nested_identifier_or_template_id_node
-			;
-			return has_leading_double_colon(nested_identifier_or_template_id_node);
-		}
+	}
+	else if
+	(
+		boost::optional<const nested_identifier_or_template_id&> opt_nested_identifier_or_template_id_node =
+			get<nested_identifier_or_template_id>(&declarator_id_node)
+	)
+	{
+		const nested_identifier_or_template_id& nested_identifier_or_template_id_node =
+			*opt_nested_identifier_or_template_id_node
+		;
+		return has_leading_double_colon(nested_identifier_or_template_id_node);
+	}
+	else
+	{
+		assert(false);
 	}
 
 	return false;
@@ -446,44 +462,45 @@ get_nested_name_specifier(const syntax_nodes::declarator& declarator_node)
 	//simple function:
 	//declarator_id -> nested_identifier_or_template_id -> nested_name_specifier
 
-	if(const boost::optional<const declarator_id&> opt_declarator_id_node = get_declarator_id(declarator_node))
+	const declarator_id& declarator_id_node = get_declarator_id(declarator_node);
+
+	if(boost::optional<const id_expression&> opt_id_expression_node = get<id_expression>(&declarator_id_node))
 	{
-		const declarator_id& declarator_id_node = *opt_declarator_id_node;
+		const id_expression& id_expression_node = *opt_id_expression_node;
 
-		if(boost::optional<const id_expression&> opt_id_expression_node = get<id_expression>(&declarator_id_node))
+		if(boost::optional<const qualified_id&> opt_qualified_id_node = get<qualified_id>(&id_expression_node))
 		{
-			const id_expression& id_expression_node = *opt_id_expression_node;
+			const qualified_id& qualified_id_node = *opt_qualified_id_node;
 
-			if(boost::optional<const qualified_id&> opt_qualified_id_node = get<qualified_id>(&id_expression_node))
+			if(boost::optional<const qualified_nested_id&> opt_qualified_nested_id_node = get<qualified_nested_id>(&qualified_id_node))
 			{
-				const qualified_id& qualified_id_node = *opt_qualified_id_node;
-
-				if(boost::optional<const qualified_nested_id&> opt_qualified_nested_id_node = get<qualified_nested_id>(&qualified_id_node))
-				{
-					const qualified_nested_id& qualified_nested_id_node = *opt_qualified_nested_id_node;
-					return optional_node<nested_name_specifier>(get_nested_name_specifier(qualified_nested_id_node));
-				}
+				const qualified_nested_id& qualified_nested_id_node = *opt_qualified_nested_id_node;
+				return optional_node<nested_name_specifier>(get_nested_name_specifier(qualified_nested_id_node));
 			}
 		}
-		else if
+	}
+	else if
+	(
+		boost::optional<const nested_identifier_or_template_id&> opt_nested_identifier_or_template_id_node =
+			get<nested_identifier_or_template_id>(&declarator_id_node)
+	)
+	{
+		const nested_identifier_or_template_id& nested_identifier_or_template_id_node =
+			*opt_nested_identifier_or_template_id_node
+		;
+
+		if
 		(
-			boost::optional<const nested_identifier_or_template_id&> opt_nested_identifier_or_template_id_node =
-				get<nested_identifier_or_template_id>(&declarator_id_node)
+			const optional_node<nested_name_specifier>& opt_nested_name_specifier_node =
+				get_nested_name_specifier(nested_identifier_or_template_id_node)
 		)
 		{
-			const nested_identifier_or_template_id& nested_identifier_or_template_id_node =
-				*opt_nested_identifier_or_template_id_node
-			;
-
-			if
-			(
-				const optional_node<nested_name_specifier>& opt_nested_name_specifier_node =
-					get_nested_name_specifier(nested_identifier_or_template_id_node)
-			)
-			{
-				return *opt_nested_name_specifier_node;
-			}
+			return *opt_nested_name_specifier_node;
 		}
+	}
+	else
+	{
+		assert(false);
 	}
 
 	return optional_node<nested_name_specifier>();
@@ -531,6 +548,87 @@ get_operator(const syntax_nodes::declarator& declarator_node)
 	}
 
 	assert(false);
+}
+
+syntax_nodes::unqualified_id
+get_unqualified_id(const syntax_nodes::declarator& declarator_node)
+{
+	const declarator_id& declarator_id_node = get_declarator_id(declarator_node);
+
+	if(boost::optional<const id_expression&> opt_id_expression_node = get<id_expression>(&declarator_id_node))
+	{
+		const id_expression& id_expression_node = *opt_id_expression_node;
+
+		if(boost::optional<const unqualified_id&> opt_unqualified_id_node = get<unqualified_id>(&id_expression_node))
+		{
+			return *opt_unqualified_id_node;
+		}
+		else if(boost::optional<const qualified_id&> opt_qualified_id_node = get<qualified_id>(&id_expression_node))
+		{
+			const qualified_id& qualified_id_node = *opt_qualified_id_node;
+
+			if(boost::optional<const qualified_identifier&> opt_qualified_identifier_node = get<qualified_identifier>(&qualified_id_node))
+			{
+				const qualified_identifier& qualified_identifier_node = *opt_qualified_identifier_node;
+				return unqualified_id(get_identifier(qualified_identifier_node));
+			}
+			else if(boost::optional<const qualified_nested_id&> opt_qualified_nested_id_node = get<qualified_nested_id>(&qualified_id_node))
+			{
+				const qualified_nested_id& qualified_nested_id_node = *opt_qualified_nested_id_node;
+				return get_unqualified_id(qualified_nested_id_node);
+			}
+			else if(boost::optional<const qualified_operator_function_id&> opt_qualified_operator_function_id_node = get<qualified_operator_function_id>(&qualified_id_node))
+			{
+				const qualified_operator_function_id& qualified_operator_function_id_node = *opt_qualified_operator_function_id_node;
+				return unqualified_id(get_operator_function_id(qualified_operator_function_id_node));
+			}
+			else if(boost::optional<const qualified_template_id&> opt_qualified_template_id_node = get<qualified_template_id>(&qualified_id_node))
+			{
+				const qualified_template_id& qualified_template_id_node = *opt_qualified_template_id_node;
+				return get_unqualified_id(get_template_id(qualified_template_id_node));
+			}
+			else
+			{
+				assert(false);
+			}
+		}
+		else
+		{
+			assert(false);
+		}
+	}
+	else if
+	(
+		boost::optional<const nested_identifier_or_template_id&> opt_nested_identifier_or_template_id_node =
+			get<nested_identifier_or_template_id>(&declarator_id_node)
+	)
+	{
+		const nested_identifier_or_template_id& nested_identifier_or_template_id_node =
+			*opt_nested_identifier_or_template_id_node
+		;
+		const identifier_or_template_id& identifier_or_template_id_node =
+			get_identifier_or_template_id(nested_identifier_or_template_id_node)
+		;
+
+		if(boost::optional<const identifier&> opt_identifier_node = get<identifier>(&identifier_or_template_id_node))
+		{
+			const identifier& identifier_node = *opt_identifier_node;
+			return unqualified_id(identifier_node);
+		}
+		else if(boost::optional<const template_id&> opt_template_id_node = get<template_id>(&identifier_or_template_id_node))
+		{
+			const template_id& template_id_node = *opt_template_id_node;
+			return get_unqualified_id(template_id_node);
+		}
+		else
+		{
+			assert(false);
+		}
+	}
+	else
+	{
+		assert(false);
+	}
 }
 
 }}}}} //namespace scalpel::cpp::detail::semantic_analysis::syntax_node_analysis

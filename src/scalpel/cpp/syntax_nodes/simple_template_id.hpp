@@ -49,6 +49,9 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 	(predefined_text_node<str::right_angle_bracket>)
 )
 
+const identifier&
+get_identifier(const simple_template_id& o);
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"

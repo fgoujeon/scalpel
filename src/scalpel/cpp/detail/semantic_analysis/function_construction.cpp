@@ -367,27 +367,17 @@ get_conversion_function_type
 	const declarative_region_shared_ptr_variant current_declarative_region
 )
 {
-	auto direct_declarator_node = get_direct_declarator(declarator_node);
-	auto direct_declarator_node_first_part_node = get_first_part(direct_declarator_node);
-	auto opt_declarator_id_node = syntax_nodes::get<syntax_nodes::declarator_id>(&direct_declarator_node_first_part_node);
-	assert(opt_declarator_id_node);
-	auto declarator_id_node = *opt_declarator_id_node;
-	auto opt_id_expression_node = syntax_nodes::get<syntax_nodes::id_expression>(&declarator_id_node);
-	assert(opt_id_expression_node);
-	auto id_expression_node = *opt_id_expression_node;
-	auto opt_unqualified_id_node = syntax_nodes::get<syntax_nodes::unqualified_id>(&id_expression_node);
-	assert(opt_unqualified_id_node);
-	auto unqualified_id_node = *opt_unqualified_id_node;
-	auto opt_conversion_function_id_node = syntax_nodes::get<syntax_nodes::conversion_function_id>(&unqualified_id_node);
+	const unqualified_id& unqualified_id_node = syntax_node_analysis::get_unqualified_id(declarator_node);
+	boost::optional<const conversion_function_id&> opt_conversion_function_id_node = syntax_nodes::get<conversion_function_id>(&unqualified_id_node);
 	assert(opt_conversion_function_id_node);
-	auto conversion_function_id_node = *opt_conversion_function_id_node;
+	const conversion_function_id& conversion_function_id_node = *opt_conversion_function_id_node;
 
-	auto type_specifier_seq_node = get_type_specifier_seq(conversion_function_id_node);
+	const type_specifier_seq& type_specifier_seq_node = get_type_specifier_seq(conversion_function_id_node);
 	type_shared_ptr_variant type = create_type(type_specifier_seq_node, current_declarative_region);
 
-	if(auto opt_ptr_operator_seq_node = get_ptr_operator_seq(conversion_function_id_node))
+	if(const optional_node<ptr_operator_seq>& opt_ptr_operator_seq_node = get_ptr_operator_seq(conversion_function_id_node))
 	{
-		auto ptr_operator_seq_node = *opt_ptr_operator_seq_node;
+		const ptr_operator_seq& ptr_operator_seq_node = *opt_ptr_operator_seq_node;
 		type = decorate_type(type, ptr_operator_seq_node);
 	}
 

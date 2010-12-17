@@ -18,37 +18,19 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_QUALIFIED_TEMPLATE_ID_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_QUALIFIED_TEMPLATE_ID_HPP
+#ifndef SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_SYNTAX_NODE_ANALYSIS_TEMPLATE_ID_HPP
+#define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_SYNTAX_NODE_ANALYSIS_TEMPLATE_ID_HPP
 
-#include "template_id.hpp"
-#include "common.hpp"
+#include <scalpel/cpp/syntax_tree.hpp>
 
-namespace scalpel { namespace cpp { namespace syntax_nodes
+namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace syntax_node_analysis
 {
 
-/**
-qualified_template_id
-	= str_p("::") >> !s >> template_id
-;
-*/
-typedef
-	sequence_node
-	<
-		predefined_text_node<str::double_colon>,
-		optional_node<space>,
-		template_id
-	>
-	qualified_template_id
-;
+//cannot fail
+syntax_nodes::unqualified_id
+get_unqualified_id(const syntax_nodes::template_id& template_id_node);
 
-inline
-const template_id&
-get_template_id(const qualified_template_id& o)
-{
-	return get<2>(o);
-}
-
-}}} //namespace scalpel::cpp::syntax_nodes
+}}}}} //namespace scalpel::cpp::detail::semantic_analysis::syntax_node_analysis
 
 #endif
+

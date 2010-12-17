@@ -44,6 +44,13 @@ typedef
 	bracketed_declarator
 ;
 
+inline
+const declarator&
+get_declarator(const bracketed_declarator& o)
+{
+	return get<2>(o);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif

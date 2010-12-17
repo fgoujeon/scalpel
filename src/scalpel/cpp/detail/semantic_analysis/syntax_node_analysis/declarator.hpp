@@ -51,7 +51,7 @@ get_identifier(const syntax_nodes::declarator& declarator_node);
 bool
 has_identifier(const syntax_nodes::declarator& declarator_node);
 
-boost::optional<const syntax_nodes::declarator_id&>
+const syntax_nodes::declarator_id&
 get_declarator_id(const syntax_nodes::declarator& declarator_node);
 
 bool
@@ -62,6 +62,10 @@ get_nested_name_specifier(const syntax_nodes::declarator& declarator_node);
 
 const syntax_nodes::operator_&
 get_operator(const syntax_nodes::declarator& declarator_node);
+
+//cannot fail
+syntax_nodes::unqualified_id
+get_unqualified_id(const syntax_nodes::declarator& declarator_node);
 
 }}}}} //namespace scalpel::cpp::detail::semantic_analysis::syntax_node_analysis
 

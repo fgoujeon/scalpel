@@ -42,6 +42,13 @@ typedef
 	qualified_operator_function_id
 ;
 
+inline
+const operator_function_id&
+get_operator_function_id(const qualified_operator_function_id& o)
+{
+	return get<2>(o);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif

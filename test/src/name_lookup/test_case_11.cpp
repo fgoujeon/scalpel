@@ -46,7 +46,7 @@ test_case_11()
 		c
 		operator+(const c&);
 
-		operator int();
+		operator double*();
 
 		operator int*();
 	};
@@ -72,9 +72,9 @@ test_case_11()
 		scalpel::cpp::semantic_entities::overloadable_operator::PLUS,
 		fundamental_type_shared_ptrs::bool_
 	);
-	auto c_conversion_function_int = std::make_shared<conversion_function>
+	auto c_conversion_function_double_ptr = std::make_shared<conversion_function>
 	(
-		fundamental_type_shared_ptrs::int_
+		std::make_shared<const pointer>(fundamental_type_shared_ptrs::double_)
 	);
 	auto c_conversion_function_int_ptr = std::make_shared<conversion_function>
 	(
@@ -95,7 +95,7 @@ test_case_11()
 	semantic_graph->add_member(class_c);
 	class_c->add_member(c_constructor);
 	class_c->set_destructor(c_destructor);
-	class_c->add_member(c_conversion_function_int);
+	class_c->add_member(c_conversion_function_double_ptr);
 	class_c->add_member(c_conversion_function_int_ptr);
 	class_c->add_member(c_operator_function_plus);
 	semantic_graph->add_member(operator_function_not_equal);
