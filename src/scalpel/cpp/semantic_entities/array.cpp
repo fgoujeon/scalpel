@@ -28,10 +28,10 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 array::array
 (
 	const unsigned int size,
-	const type_shared_ptr_variant& decorated_type
+	const type_shared_ptr_variant& qualified_type
 ):
 	size_(size),
-	decorated_type_(decorated_type)
+	qualified_type_(qualified_type)
 {
 }
 
@@ -40,7 +40,7 @@ operator==(const array& lhs, const array& rhs)
 {
 	return
 		lhs.size() == rhs.size() &&
-		are_pointed_objects_equal(lhs.decorated_type(), rhs.decorated_type())
+		are_pointed_objects_equal(lhs.qualified_type(), rhs.qualified_type())
 	;
 }
 

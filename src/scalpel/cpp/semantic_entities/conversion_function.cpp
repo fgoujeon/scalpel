@@ -36,6 +36,7 @@ conversion_function::conversion_function
 }
 
 conversion_function::conversion_function(const conversion_function& rhs):
+	std::enable_shared_from_this<conversion_function>(),
 	return_type_(rhs.return_type_),
 	is_inline_(rhs.is_inline_)
 {

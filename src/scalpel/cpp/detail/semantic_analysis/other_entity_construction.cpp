@@ -42,14 +42,14 @@ create_entity
 	const bool has_explicit_specifier
 )
 {
-	//decorate type with hypothetical pointers, references and arrays
+	//qualify type with hypothetical pointers, references and arrays
 	if(has_type_decorators(declarator_node))
 	{
-		//if there's no type to decorate, there's an error
+		//if there's no type to qualify, there's an error
 		if(!opt_type)
 			throw std::runtime_error("create_entity error 1");
 
-		opt_type = decorate_type(*opt_type, declarator_node);
+		opt_type = qualify_type(*opt_type, declarator_node);
 	}
 
 	switch(syntax_node_analysis::get_declarator_type(declarator_node))

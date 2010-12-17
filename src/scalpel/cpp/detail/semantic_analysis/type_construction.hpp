@@ -30,7 +30,7 @@ namespace scalpel { namespace cpp { namespace detail { namespace semantic_analys
 {
 
 //Create the type described by the given decl-specifier-seq.
-//The returned type is not decorated by the qualifiers of
+//The returned type is not qualified by the qualifiers of
 //the decl-specifier-seq.
 semantic_entities::type_shared_ptr_variant
 create_type
@@ -40,7 +40,7 @@ create_type
 );
 
 //Create the type described by the given type-specifier-seq.
-//The returned type is not decorated by the qualifiers of
+//The returned type is not qualified by the qualifiers of
 //the type-specifier-seq.
 semantic_entities::type_shared_ptr_variant
 create_type
@@ -49,17 +49,17 @@ create_type
 	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 );
 
-//decorate type with decl-specifier-seq's const and volatile specifiers
+//qualify type with decl-specifier-seq's const and volatile specifiers
 semantic_entities::type_shared_ptr_variant
-decorate_type
+qualify_type
 (
 	semantic_entities::type_shared_ptr_variant type,
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node
 );
 
-//decorate type with declarator's pointers, references and arrays
+//qualify type with declarator's pointers, references and arrays
 semantic_entities::type_shared_ptr_variant
-decorate_type
+qualify_type
 (
 	semantic_entities::type_shared_ptr_variant type,
 	const syntax_nodes::declarator& declarator_node
@@ -68,9 +68,9 @@ decorate_type
 bool
 has_type_decorators(const syntax_nodes::declarator& declarator_node);
 
-//decorate type with ptr-operator-seq's pointers and references
+//qualify type with ptr-operator-seq's pointers and references
 semantic_entities::type_shared_ptr_variant
-decorate_type
+qualify_type
 (
 	semantic_entities::type_shared_ptr_variant type,
 	const syntax_nodes::ptr_operator_seq& ptr_operator_seq_node

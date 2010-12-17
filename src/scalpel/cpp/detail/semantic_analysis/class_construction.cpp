@@ -198,7 +198,7 @@ fill_class
 	const syntax_nodes::member_declaration_member_declarator_list& member_declaration_member_declarator_list_node
 )
 {
-	boost::optional<type_shared_ptr_variant> opt_undecorated_type;
+	boost::optional<type_shared_ptr_variant> opt_unqualified_type;
 	bool has_typedef_specifier = false;
 	bool has_static_specifier = false;
 	bool has_inline_specifier = false;
@@ -234,7 +234,7 @@ fill_class
 				class_entity->add_member(new_class, current_access);
 				fill_class(new_class, class_specifier_node);
 
-				opt_undecorated_type = std::shared_ptr<const class_>(new_class);
+				opt_unqualified_type = std::shared_ptr<const class_>(new_class);
 
 				break;
 			}
@@ -247,13 +247,13 @@ fill_class
 				std::shared_ptr<class_> new_class = create_class(class_elaborated_specifier_node);
 				class_entity->add_member(new_class, current_access);
 
-				opt_undecorated_type = std::shared_ptr<const class_>(new_class);
+				opt_unqualified_type = std::shared_ptr<const class_>(new_class);
 
 				break;
 			}
 			case syntax_node_analysis::type_specifier_seq_type::SIMPLE_TYPE:
 			{
-				opt_undecorated_type = create_type(decl_specifier_seq_node, class_entity);
+				opt_unqualified_type = create_type(decl_specifier_seq_node, class_entity);
 				break;
 			}
 			case syntax_node_analysis::type_specifier_seq_type::NO_TYPE:
@@ -262,9 +262,9 @@ fill_class
 			}
 		}
 
-		//decorate type
-		if(opt_undecorated_type)
-			opt_undecorated_type = decorate_type(*opt_undecorated_type, decl_specifier_seq_node);
+		//qualify type
+		if(opt_unqualified_type)
+			opt_unqualified_type = qualify_type(*opt_unqualified_type, decl_specifier_seq_node);
 	}
 
 	if
@@ -292,7 +292,7 @@ fill_class
 				(
 					declarator_node,
 					class_entity,
-					opt_undecorated_type,
+					opt_unqualified_type,
 					has_typedef_specifier,
 					has_static_specifier,
 					has_inline_specifier,

@@ -40,7 +40,7 @@ create_function
 	//Analyze the decl-specifier-seq node.
 	//
 
-	boost::optional<type_shared_ptr_variant> opt_undecorated_type;
+	boost::optional<type_shared_ptr_variant> opt_unqualified_type;
 	bool has_typedef_specifier = false;
 	bool has_static_specifier = false;
 	bool has_inline_specifier = false;
@@ -78,13 +78,13 @@ create_function
 				std::shared_ptr<class_> new_class = create_class(class_elaborated_specifier_node);
 				//TODO current_declarative_region->add_member(new_class);
 
-				opt_undecorated_type = std::shared_ptr<const class_>(new_class);
+				opt_unqualified_type = std::shared_ptr<const class_>(new_class);
 
 				break;
 			}
 			case syntax_node_analysis::type_specifier_seq_type::SIMPLE_TYPE:
 			{
-				opt_undecorated_type = create_type(decl_specifier_seq_node, current_declarative_region);
+				opt_unqualified_type = create_type(decl_specifier_seq_node, current_declarative_region);
 				break;
 			}
 			case syntax_node_analysis::type_specifier_seq_type::NO_TYPE:
@@ -93,9 +93,9 @@ create_function
 			}
 		}
 
-		//decorate type
-		if(opt_undecorated_type)
-			opt_undecorated_type = decorate_type(*opt_undecorated_type, decl_specifier_seq_node);
+		//qualify type
+		if(opt_unqualified_type)
+			opt_unqualified_type = qualify_type(*opt_unqualified_type, decl_specifier_seq_node);
 	}
 
 
@@ -108,7 +108,7 @@ create_function
 	(
 		syntax_node_analysis::get_declarator(function_definition_node),
 		current_declarative_region,
-		opt_undecorated_type,
+		opt_unqualified_type,
 		has_typedef_specifier,
 		has_static_specifier,
 		has_inline_specifier,
@@ -343,7 +343,7 @@ get_conversion_function_type
 	if(const optional_node<ptr_operator_seq>& opt_ptr_operator_seq_node = get_ptr_operator_seq(conversion_function_id_node))
 	{
 		const ptr_operator_seq& ptr_operator_seq_node = *opt_ptr_operator_seq_node;
-		type = decorate_type(type, ptr_operator_seq_node);
+		type = qualify_type(type, ptr_operator_seq_node);
 	}
 
 	return type;
@@ -382,7 +382,7 @@ create_parameters
 		auto decl_specifier_seq_node = get_decl_specifier_seq(parameter_declaration_node);
 
 		semantic_entities::type_shared_ptr_variant type =
-			decorate_type
+			qualify_type
 			(
 				create_type
 				(
@@ -401,7 +401,7 @@ create_parameters
 			(
 				std::make_shared<function_parameter>
 				(
-					decorate_type(type, declarator_node),
+					qualify_type(type, declarator_node),
 					syntax_node_analysis::get_identifier(declarator_node).value()
 				)
 			);
@@ -412,7 +412,7 @@ create_parameters
 
 			if(boost::optional<const ptr_operator_seq&> opt_ptr_operator_seq_node = get<ptr_operator_seq>(&abstract_declarator_node))
 			{
-				type = decorate_type(type, *opt_ptr_operator_seq_node);
+				type = qualify_type(type, *opt_ptr_operator_seq_node);
 			}
 			else if(boost::optional<const direct_abstract_declarator&> opt_direct_abstract_declarator_node = get<direct_abstract_declarator>(&abstract_declarator_node))
 			{

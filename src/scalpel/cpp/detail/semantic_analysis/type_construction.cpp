@@ -165,7 +165,7 @@ create_type
 }
 
 semantic_entities::type_shared_ptr_variant
-decorate_type
+qualify_type
 (
 	semantic_entities::type_shared_ptr_variant type,
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node
@@ -195,20 +195,20 @@ decorate_type
 }
 
 semantic_entities::type_shared_ptr_variant
-decorate_type
+qualify_type
 (
 	semantic_entities::type_shared_ptr_variant type,
 	const syntax_nodes::declarator& declarator_node
 )
 {
-	//decorate type with hypothetical pointers and/or reference
+	//qualify type with hypothetical pointers and/or reference
 	if(auto opt_ptr_operator_seq_node = get_ptr_operator_seq(declarator_node))
 	{
 		auto ptr_operator_seq_node = *opt_ptr_operator_seq_node;
-		type = decorate_type(type, ptr_operator_seq_node);
+		type = qualify_type(type, ptr_operator_seq_node);
 	}
 
-	//decorate type with hypothetical arrays
+	//qualify type with hypothetical arrays
 	auto direct_declarator_node = get_direct_declarator(declarator_node);
 	if(auto opt_last_part_seq_node = get_last_part_seq(direct_declarator_node))
 	{
@@ -272,7 +272,7 @@ has_type_decorators(const syntax_nodes::declarator& declarator_node)
 }
 
 semantic_entities::type_shared_ptr_variant
-decorate_type
+qualify_type
 (
 	semantic_entities::type_shared_ptr_variant type,
 	const syntax_nodes::ptr_operator_seq& ptr_operator_seq_node

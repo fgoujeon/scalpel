@@ -25,8 +25,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-reference::reference(const type_shared_ptr_variant& decorated_type):
-	decorated_type_(decorated_type)
+reference::reference(const type_shared_ptr_variant& qualified_type):
+	qualified_type_(qualified_type)
 {
 }
 
@@ -34,7 +34,7 @@ bool
 operator==(const reference& lhs, const reference& rhs)
 {
 	return
-		are_pointed_objects_equal(lhs.decorated_type(), rhs.decorated_type())
+		are_pointed_objects_equal(lhs.qualified_type(), rhs.qualified_type())
 	;
 }
 

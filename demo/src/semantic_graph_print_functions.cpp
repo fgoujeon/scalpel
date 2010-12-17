@@ -42,31 +42,31 @@ print_type
 	else if(auto opt_type_ptr = scalpel::utility::get<const_>(&n))
 	{
 		std::cout << indent(indent_level) << "<const>\n";
-		print_type((*opt_type_ptr)->decorated_type(), indent_level + 1);
+		print_type((*opt_type_ptr)->qualified_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</const>\n";
 	}
 	else if(auto opt_type_ptr = scalpel::utility::get<volatile_>(&n))
 	{
 		std::cout << indent(indent_level) << "<volatile>\n";
-		print_type((*opt_type_ptr)->decorated_type(), indent_level + 1);
+		print_type((*opt_type_ptr)->qualified_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</volatile>\n";
 	}
 	else if(auto opt_type_ptr = scalpel::utility::get<pointer>(&n))
 	{
 		std::cout << indent(indent_level) << "<pointer>\n";
-		print_type((*opt_type_ptr)->decorated_type(), indent_level + 1);
+		print_type((*opt_type_ptr)->qualified_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</pointer>\n";
 	}
 	else if(auto opt_type_ptr = scalpel::utility::get<reference>(&n))
 	{
 		std::cout << indent(indent_level) << "<reference>\n";
-		print_type((*opt_type_ptr)->decorated_type(), indent_level + 1);
+		print_type((*opt_type_ptr)->qualified_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</reference>\n";
 	}
 	else if(auto opt_type_ptr = scalpel::utility::get<array>(&n))
 	{
 		std::cout << indent(indent_level) << "<array size=\"" << (*opt_type_ptr)->size() << "\">\n";
-		print_type((*opt_type_ptr)->decorated_type(), indent_level + 1);
+		print_type((*opt_type_ptr)->qualified_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</array>\n";
 	}
 	else if(auto opt_type_ptr = scalpel::utility::get<class_>(&n))
