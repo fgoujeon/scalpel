@@ -131,8 +131,8 @@ namespace are_pointed_objects_equal_impl
 			bool
 			operator()(const std::shared_ptr<const T>& rhs) const
 			{
-				complete_equals_visitor<T> equals_visitor_1(rhs);
-				return utility::apply_visitor(equals_visitor_1, lhs_);
+				complete_equals_visitor<T> visitor(rhs);
+				return utility::apply_visitor(visitor, lhs_);
 			}
 
 		private:
@@ -147,8 +147,8 @@ template<class VariantT>
 bool
 are_pointed_objects_equal(const VariantT& lhs, const VariantT& rhs)
 {
-	are_pointed_objects_equal_impl::partial_equals_visitor<VariantT> equals_visitor_1(lhs);
-	return utility::apply_visitor(equals_visitor_1, rhs);
+	are_pointed_objects_equal_impl::partial_equals_visitor<VariantT> visitor(lhs);
+	return utility::apply_visitor(visitor, rhs);
 }
 
 }} //namespace scalpel::utility

@@ -127,7 +127,7 @@ have_same_signature(const CLASS_NAME& lhs, const CLASS_NAME& rhs) \
 		BOOST_PP_IIF(HAS_NAME, lhs.name() == rhs.name() &&,) \
 		BOOST_PP_IIF(HAS_OPERATOR, lhs.get_operator() == rhs.get_operator() &&,) \
 		BOOST_PP_IIF(HAS_RETURN_TYPE, utility::are_pointed_objects_equal(lhs.return_type(), rhs.return_type()) &&,) \
-		BOOST_PP_IIF(HAS_PARAMETERS, lhs.parameters() == rhs.parameters() &&,) \
+		BOOST_PP_IIF(HAS_PARAMETERS, have_same_types(lhs.parameters(), rhs.parameters()) &&,) \
 		true \
 	; \
 }

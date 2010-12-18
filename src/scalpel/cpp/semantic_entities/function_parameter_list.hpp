@@ -35,6 +35,9 @@ operator==(const function_parameter_list& lhs, const function_parameter_list& rh
 bool
 operator!=(const function_parameter_list& lhs, const function_parameter_list& rhs);
 
+bool
+have_same_types(const function_parameter_list& lhs, const function_parameter_list& rhs);
+
 }}} //namespace scalpel::cpp::semantic_entities
 
 #endif

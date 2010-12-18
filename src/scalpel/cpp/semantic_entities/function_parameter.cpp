@@ -77,8 +77,8 @@ bool
 operator==(const function_parameter& lhs, const function_parameter& rhs)
 {
 	return
-		utility::are_pointed_objects_equal(lhs.type(), rhs.type()) &&
-		lhs.name() == rhs.name()
+		lhs.name() == rhs.name() &&
+		utility::are_pointed_objects_equal(lhs.type(), rhs.type())
 	;
 }
 
