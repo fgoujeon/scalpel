@@ -57,7 +57,7 @@ define_function
 );
 
 //find the function corresponding to the given function signature
-function_shared_ptr_variant
+boost::optional<function_shared_ptr_variant>
 find_function
 (
 	const function_shared_ptr_variant& function_signature,

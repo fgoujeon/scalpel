@@ -216,7 +216,7 @@ fill_namespace
 	const syntax_nodes::function_definition& function_definition_node
 )
 {
-	//create an empty function_entity corresponding to the function_entity-definition
+	//create an empty function corresponding to the function-definition
 	function_shared_ptr_variant function_entity = create_function
 	(
 		function_definition_node,
@@ -224,8 +224,8 @@ fill_namespace
 	);
 
 	//The function_entity may have already been declared previously in the code.
-	//If so, the function_entity entity corresponding to the function_entity-definition
-	//(and to the previous function_entity declaration) already exists.
+	//If so, the function entity corresponding to the function-definition
+	//(and to the previous function declaration) already exists.
 	//Let's try to find it.
 	boost::optional<function_shared_ptr_variant> opt_already_existing_function_entity =
 		find_function
@@ -236,24 +236,26 @@ fill_namespace
 		)
 	;
 
-	//if the function_entity's name is qualified (xxx::f())
+	//if the function's name is qualified (xxx::f())
 	if(syntax_node_analysis::is_qualified(function_definition_node))
 	{
 		if(opt_already_existing_function_entity)
 		{
-			//define the function_entity
+			//define the function
 			define_function(*opt_already_existing_function_entity, function_definition_node, namespace_entity);
 		}
 		else
 		{
-			throw std::runtime_error("error: function_entity declaration missing");
+			//since the name of the function is qualified,
+			//the function should have been declared
+			throw std::runtime_error("error: function declaration missing");
 		}
 	}
 	else
 	{
 		if(opt_already_existing_function_entity)
 		{
-			//define the function_entity
+			//define the function
 			define_function
 			(
 				*opt_already_existing_function_entity,
@@ -263,7 +265,7 @@ fill_namespace
 		}
 		else
 		{
-			//declare the function_entity
+			//declare the function
 			if
 			(
 				get<constructor>(&function_entity) ||
@@ -271,7 +273,7 @@ fill_namespace
 				get<conversion_function>(&function_entity)
 			)
 			{
-				std::runtime_error("error: this function must be a nonstatic member function_entity");
+				std::runtime_error("error: this function must be a nonstatic member function");
 			}
 			else if(auto opt_operator_function_entity = get<operator_function>(&function_entity))
 				namespace_entity->add_member(*opt_operator_function_entity);
@@ -280,7 +282,7 @@ fill_namespace
 			else
 				assert(false);
 
-			//define the function_entity
+			//define the function
 			define_function
 			(
 				function_entity,

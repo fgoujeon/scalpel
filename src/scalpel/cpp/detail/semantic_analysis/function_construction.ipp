@@ -52,7 +52,7 @@ find_function
 		name_lookup::find
 		<
 			identifier_getting_policy_t,
-			false,
+			true,
 			true,
 			FunctionT
 		>
@@ -80,7 +80,8 @@ find_function
 		}
 	}
 
-	throw std::runtime_error("No matching function overload found.");
+	//if nothing is found
+	return std::shared_ptr<FunctionT>();
 }
 
 }}}} //namespace scalpel::cpp::detail::semantic_analysis

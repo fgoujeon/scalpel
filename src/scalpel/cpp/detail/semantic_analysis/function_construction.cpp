@@ -152,7 +152,7 @@ define_function
 		assert(false);
 }
 
-class find_function_visitor: public utility::static_visitor<function_shared_ptr_variant>
+class find_function_visitor: public utility::static_visitor<boost::optional<function_shared_ptr_variant>>
 {
 	public:
 		find_function_visitor
@@ -166,10 +166,10 @@ class find_function_visitor: public utility::static_visitor<function_shared_ptr_
 		}
 
 		template<class T>
-		function_shared_ptr_variant
+		boost::optional<function_shared_ptr_variant>
 		operator()(std::shared_ptr<T> function_signature) const
 		{
-			return
+			std::shared_ptr<T> found_function =
 				find_function<T>
 				(
 					function_signature,
@@ -177,6 +177,11 @@ class find_function_visitor: public utility::static_visitor<function_shared_ptr_
 					current_declarative_region_
 				)
 			;
+
+			if(found_function)
+				return function_shared_ptr_variant(found_function);
+			else
+				return boost::optional<function_shared_ptr_variant>();
 		}
 
 	private:
@@ -184,7 +189,7 @@ class find_function_visitor: public utility::static_visitor<function_shared_ptr_
 		const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region_;
 };
 
-function_shared_ptr_variant
+boost::optional<function_shared_ptr_variant>
 find_function
 (
 	const function_shared_ptr_variant& function_signature,
