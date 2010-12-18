@@ -21,7 +21,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/preprocessor/control/iif.hpp>
 #include <boost/preprocessor/logical/or.hpp>
 #include <boost/preprocessor/punctuation/comma_if.hpp>
-#include <boost/preprocessor/punctuation/comma.hpp>
 
 #define GENERATE_FUNCTION_DEFINITION(CLASS_NAME, HAS_NAME, HAS_OPERATOR, HAS_RETURN_TYPE, HAS_PARAMETERS, HAS_STATIC, HAS_EXPLICIT) \
 CLASS_NAME::CLASS_NAME \
@@ -103,14 +102,7 @@ operator==(const CLASS_NAME& lhs, const CLASS_NAME& rhs) \
 		BOOST_PP_IIF(HAS_STATIC, lhs.is_static() == rhs.is_static() &&,) \
 		BOOST_PP_IIF(HAS_EXPLICIT, lhs.is_explicit() == rhs.is_explicit() &&,) \
 		have_same_signature(lhs, rhs) && \
-		( \
-			lhs.body().get() == rhs.body().get() || \
-			( \
-				lhs.body().get() != 0 && \
-				rhs.body().get() != 0 && \
-				*lhs.body() == *rhs.body() \
-			) \
-		) \
+		utility::are_pointed_objects_equal(lhs.body(), rhs.body()) \
 	; \
 } \
  \

@@ -439,7 +439,7 @@ operator==(const class_& lhs, const class_& rhs)
 		++i, ++j
 	)
 	{
-		if(**i != **j)
+		if(!utility::are_pointed_objects_equal(*i, *j))
 			return false;
 		if(lhs.base_class_access(*i) != rhs.base_class_access(*j))
 			return false;
@@ -457,7 +457,7 @@ operator==(const class_& lhs, const class_& rhs)
 		++i, ++j
 	)
 	{
-		if(**i != **j)
+		if(!utility::are_pointed_objects_equal(*i, *j))
 			return false;
 		if(lhs.member_access(*i) != rhs.member_access(*j))
 			return false;
@@ -473,7 +473,7 @@ operator==(const class_& lhs, const class_& rhs)
 		++i, ++j
 	)
 	{
-		if(**i != **j)
+		if(!utility::are_pointed_objects_equal(*i, *j))
 			return false;
 		if(lhs.member_access(*i) != rhs.member_access(*j))
 			return false;
@@ -489,14 +489,14 @@ operator==(const class_& lhs, const class_& rhs)
 		++i, ++j
 	)
 	{
-		if(**i != **j)
+		if(!utility::are_pointed_objects_equal(*i, *j))
 			return false;
 		if(lhs.member_access(*i) != rhs.member_access(*j))
 			return false;
 	}
 
 	//destructor
-	if(*lhs.get_destructor() != *rhs.get_destructor())
+	if(!utility::are_pointed_objects_equal(lhs.get_destructor(), rhs.get_destructor()))
 		return false;
 	if(lhs.member_access(lhs.get_destructor()) != rhs.member_access(rhs.get_destructor()))
 		return false;
@@ -515,7 +515,7 @@ operator==(const class_& lhs, const class_& rhs)
 		++i, ++j
 	)
 	{
-		if(**i != **j)
+		if(!utility::are_pointed_objects_equal(*i, *j))
 			return false;
 		if(lhs.member_access(*i) != rhs.member_access(*j))
 			return false;
@@ -539,7 +539,7 @@ operator==(const class_& lhs, const class_& rhs)
 		++i, ++j
 	)
 	{
-		if(**i != **j)
+		if(!utility::are_pointed_objects_equal(*i, *j))
 			return false;
 		if(lhs.member_access(*i) != rhs.member_access(*j))
 			return false;
@@ -563,7 +563,7 @@ operator==(const class_& lhs, const class_& rhs)
 		++i, ++j
 	)
 	{
-		if(**i != **j)
+		if(!utility::are_pointed_objects_equal(*i, *j))
 			return false;
 		if(lhs.member_access(*i) != rhs.member_access(*j))
 			return false;
@@ -587,7 +587,7 @@ operator==(const class_& lhs, const class_& rhs)
 		++i, ++j
 	)
 	{
-		if(**i != **j)
+		if(!utility::are_pointed_objects_equal(*i, *j))
 			return false;
 		if(lhs.member_access(*i) != rhs.member_access(*j))
 			return false;

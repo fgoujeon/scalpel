@@ -21,6 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "destructor.hpp"
 #include "detail/function_definition_macro_template.hpp"
 #include <scalpel/utility/ptr_variant_conversion_functions.hpp>
+#include <scalpel/utility/are_pointed_objects_equal.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
