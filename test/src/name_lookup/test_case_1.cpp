@@ -61,7 +61,6 @@ test_case_1()
 
 	void A::B::f()
 	{
-		//look from here
 	}
 	*/
 
@@ -116,19 +115,25 @@ test_case_1()
 	//name lookup test
 	//
 
-	//find i
+	//lookup i from function test, must find it
 	{
 		auto found_entity = find<identifier_getting_policies::get_name, false, false, variable>("i", function_a_b_f);
 		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
 	}
 
-	//find j
+	//lookup j from function test, must find it
 	{
 		auto found_entity = find<identifier_getting_policies::get_name, false, false, variable>("j", function_a_b_f);
 		BOOST_CHECK_EQUAL(found_entity, variable_j);
 	}
 
-	//find C::n
+	//lookup B from itself, must find it
+	{
+		auto found_entity = find<identifier_getting_policies::get_name, false, false, class_>("B", struct_a_b);
+		BOOST_CHECK_EQUAL(found_entity, struct_a_b);
+	}
+
+	//lookup C::n from function test, must find it
 	{
 		auto found_entity =
 			find<identifier_getting_policies::get_name, false, false, variable>
@@ -149,7 +154,7 @@ test_case_1()
 		BOOST_CHECK_EQUAL(found_entity, variable_a_c_n);
 	}
 
-	//find ::A::i
+	//lookup ::A::i from function test, must find it
 	{
 		auto found_entity =
 			find<identifier_getting_policies::get_name, false, false, variable>
@@ -170,7 +175,7 @@ test_case_1()
 		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
 	}
 
-	//find ::i
+	//lookup ::i from function test, must find it
 	{
 		auto found_entity =
 			find<identifier_getting_policies::get_name, false, false, variable>
@@ -184,7 +189,7 @@ test_case_1()
 		BOOST_CHECK_EQUAL(found_entity, variable_i);
 	}
 
-	//find namespace A::C
+	//lookup namespace A::C from function test, must find it
 	{
 		auto found_entity =
 			find<identifier_getting_policies::get_name, false, false, namespace_>

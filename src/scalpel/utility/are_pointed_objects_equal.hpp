@@ -25,6 +25,42 @@ namespace scalpel { namespace utility
 {
 
 /**
+ * Test pointed objects for equality.
+ */
+template<typename T>
+bool
+are_pointed_objects_equal
+(
+	const std::shared_ptr<T>& lhs,
+	const std::shared_ptr<T>& rhs
+)
+{
+	//does the pointers point to the same object?
+	if(lhs.get() == rhs.get())
+		return true;
+
+	//prevent null pointer dereference
+	if(lhs.get() == 0 || rhs.get() == 0)
+		return false;
+
+	return *lhs == *rhs;
+}
+
+/**
+ * Test pointed objects for equality.
+ */
+template<typename T>
+bool
+are_pointed_objects_equal
+(
+	const std::weak_ptr<T>& lhs,
+	const std::weak_ptr<T>& rhs
+)
+{
+	return are_pointed_objects_equal(lhs.lock(), rhs.lock());
+}
+
+/**
  * Test contained pointed objects for equality.
  */
 template<typename T>
@@ -39,7 +75,7 @@ are_pointed_objects_equal
 	{
 		for(unsigned int i = 0; i < lhs.size(); ++i)
 		{
-			if(*lhs[i] != *rhs[i])
+			if(!are_pointed_objects_equal(lhs[i], rhs[i]))
 				return false;
 		}
 
@@ -66,7 +102,7 @@ are_pointed_objects_equal
 	{
 		for(unsigned int i = 0; i < lhs.size(); ++i)
 		{
-			if(lhs[i].lock() != rhs[i].lock())
+			if(!are_pointed_objects_equal(lhs[i], rhs[i]))
 				return false;
 		}
 
@@ -106,12 +142,7 @@ namespace are_pointed_objects_equal_impl
 			bool
 			operator()(const std::shared_ptr<const T>& lhs) const
 			{
-				if(lhs.get() == 0 && rhs_.get() == 0)
-					return true;
-				else if(lhs.get() == 0 || rhs_.get() == 0)
-					return false;
-				else
-					return *lhs == *rhs_;
+				return are_pointed_objects_equal(lhs, rhs_);
 			}
 
 		private:
