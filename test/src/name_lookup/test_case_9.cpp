@@ -70,12 +70,12 @@ test_case_9()
 	auto namespace_d = namespace_::make_shared("d");
 
 	//functions
-	auto function_a_b_f = simple_function::make_shared
+	auto function_a_b_f = std::make_shared<simple_function>
 	(
 		"f",
 		fundamental_type_shared_ptrs::void_
 	);
-	auto function_c_d_f = simple_function::make_shared
+	auto function_c_d_f = std::make_shared<simple_function>
 	(
 		"f",
 		fundamental_type_shared_ptrs::void_

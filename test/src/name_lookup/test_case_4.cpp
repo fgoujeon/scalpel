@@ -62,7 +62,7 @@ test_case_4()
 	auto namespace_n = namespace_::make_shared("n");
 
 	//functions
-	auto function_f = simple_function::make_shared
+	auto function_f = std::make_shared<simple_function>
 	(
 		"f",
 		fundamental_type_shared_ptrs::void_

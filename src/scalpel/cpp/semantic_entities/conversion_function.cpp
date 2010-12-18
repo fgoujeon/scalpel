@@ -20,81 +20,16 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "conversion_function.hpp"
 #include "type_variants.hpp"
+#include "detail/function_definition_macro_template.hpp"
+#include <scalpel/utility/ptr_variant_conversion_functions.hpp>
 #include <scalpel/utility/are_pointed_objects_equal.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-conversion_function::conversion_function
-(
-	const type_shared_ptr_variant& return_type,
-	const bool is_inline
-):
-	return_type_(return_type),
-	is_inline_(is_inline)
-{
-}
-
-conversion_function::conversion_function(const conversion_function& rhs):
-	std::enable_shared_from_this<conversion_function>(),
-	return_type_(rhs.return_type_),
-	is_inline_(rhs.is_inline_)
-{
-}
-
-const type_shared_ptr_variant&
-conversion_function::return_type() const
-{
-	return return_type_;
-}
-
-bool
-conversion_function::is_inline() const
-{
-	return is_inline_;
-}
-
-bool
-conversion_function::has_enclosing_declarative_region() const
-{
-	return declarative_region_member_impl_.has_enclosing_declarative_region();
-}
-
-declarative_region_shared_ptr_variant
-conversion_function::enclosing_declarative_region() const
-{
-	return declarative_region_member_impl_.enclosing_declarative_region();
-}
-
-void
-conversion_function::enclosing_declarative_region(const declarative_region_shared_ptr_variant& decl_region)
-{
-	declarative_region_member_impl_.enclosing_declarative_region(decl_region);
-}
-
-bool
-operator==(const conversion_function& lhs, const conversion_function& rhs)
-{
-	return
-		lhs.is_inline() == rhs.is_inline() &&
-		utility::are_pointed_objects_equal(lhs.return_type(), rhs.return_type()) &&
-		*lhs.body() == *rhs.body()
-	;
-}
-
-bool
-operator!=(const conversion_function& lhs, const conversion_function& rhs)
-{
-	return !operator==(lhs, rhs);
-}
-
-bool
-have_same_signature(const conversion_function& lhs, const conversion_function& rhs)
-{
-	return
-		utility::are_pointed_objects_equal(lhs.return_type(), rhs.return_type())
-	;
-}
+GENERATE_FUNCTION_DEFINITION(conversion_function, 0, 0, 1, 0, 0, 1)
 
 }}} //namespace scalpel::cpp::semantic_entities
+
+#include "detail/function_definition_macro_template_undef.hpp"
 

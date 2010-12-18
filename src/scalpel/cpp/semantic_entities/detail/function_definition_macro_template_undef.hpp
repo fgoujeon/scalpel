@@ -18,18 +18,5 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "operator_function.hpp"
-#include "type_variants.hpp"
-#include "detail/function_definition_macro_template.hpp"
-#include <scalpel/utility/are_pointed_objects_equal.hpp>
-#include <scalpel/utility/ptr_variant_conversion_functions.hpp>
-
-namespace scalpel { namespace cpp { namespace semantic_entities
-{
-
-GENERATE_FUNCTION_DEFINITION(operator_function, 0, 1, 1, 1, 1, 0)
-
-}}} //namespace scalpel::cpp::semantic_entities
-
-#include "detail/function_definition_macro_template_undef.hpp"
+#undef GENERATE_FUNCTION_DEFINITION
 

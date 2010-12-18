@@ -57,7 +57,7 @@ create_entity
 		case syntax_node_analysis::declarator_type::SIMPLE_FUNCTION_DECLARATOR:
 		{
 			if(opt_type)
-				return semantic_entities::simple_function::make_shared
+				return std::make_shared<semantic_entities::simple_function>
 				(
 					syntax_node_analysis::get_identifier(declarator_node).value(),
 					*opt_type,

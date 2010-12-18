@@ -24,104 +24,16 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "statement_block.hpp"
 #include "function_parameter_list.hpp"
 #include "declarative_region_variants.hpp"
-#include "detail/class_member_impl.hpp"
+#include "detail/function_declaration_macro_template.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-class constructor:
-	public std::enable_shared_from_this<constructor>
-{
-	public:
-		constructor
-		(
-			function_parameter_list&& parameters = function_parameter_list(),
-			const bool is_inline = false,
-			const bool is_explicit = false
-		);
-
-		constructor(const constructor& rhs) = delete;
-
-		const function_parameter_list&
-		parameters() const
-		{
-			return parameters_;
-		}
-
-		bool
-		is_inline() const
-		{
-			return is_inline_;
-		}
-
-		bool
-		is_explicit() const
-		{
-			return is_explicit_;
-		}
-
-		bool
-		has_enclosing_declarative_region() const
-		{
-			return class_member_impl_.has_enclosing_declarative_region();
-		}
-
-		declarative_region_shared_ptr_variant
-		enclosing_declarative_region() const
-		{
-			return class_member_impl_.enclosing_declarative_region();
-		}
-
-		void
-		enclosing_declarative_region(const std::shared_ptr<class_>& enclosing_declarative_region)
-		{
-			class_member_impl_.enclosing_declarative_region(enclosing_declarative_region);
-		}
-
-		bool
-		defined() const
-		{
-			return body_.get();
-		}
-
-		std::shared_ptr<statement_block>
-		body()
-		{
-			return body_;
-		}
-
-		std::shared_ptr<const statement_block>
-		body() const
-		{
-			return body_;
-		}
-
-		void
-		body(std::shared_ptr<statement_block> b)
-		{
-			body_ = b;
-			body_->enclosing_declarative_region(shared_from_this());
-		}
-
-	private:
-		function_parameter_list parameters_;
-		bool is_inline_;
-		bool is_explicit_;
-		detail::class_member_impl class_member_impl_;
-
-		std::shared_ptr<statement_block> body_;
-};
-
-bool
-operator==(const constructor& lhs, const constructor& rhs);
-
-bool
-operator!=(const constructor& lhs, const constructor& rhs);
-
-bool
-have_same_signature(const constructor& lhs, const constructor& rhs);
+GENERATE_FUNCTION_DECLARATION(constructor, 0, 0, 0, 1, 0, 1)
 
 }}} //namespace scalpel::cpp::semantic_entities
+
+#include "detail/function_declaration_macro_template_undef.hpp"
 
 #endif
 

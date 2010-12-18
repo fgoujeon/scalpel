@@ -72,7 +72,7 @@ test_case_7()
 	auto namespace_bc = namespace_::make_shared("bc");
 
 	//functions
-	auto function_test = simple_function::make_shared
+	auto function_test = std::make_shared<simple_function>
 	(
 		"test",
 		fundamental_type_shared_ptrs::void_

@@ -80,22 +80,22 @@ test_case_3()
 	auto namespace_d = namespace_::make_shared("d");
 
 	//functions
-	auto function_a_b_f1 = simple_function::make_shared
+	auto function_a_b_f1 = std::make_shared<simple_function>
 	(
 		"f1",
 		fundamental_type_shared_ptrs::void_
 	);
-	auto function_a_d_f2 = simple_function::make_shared
+	auto function_a_d_f2 = std::make_shared<simple_function>
 	(
 		"f2",
 		fundamental_type_shared_ptrs::void_
 	);
-	auto function_a_f3 = simple_function::make_shared
+	auto function_a_f3 = std::make_shared<simple_function>
 	(
 		"f3",
 		fundamental_type_shared_ptrs::void_
 	);
-	auto function_f4 = simple_function::make_shared
+	auto function_f4 = std::make_shared<simple_function>
 	(
 		"f4",
 		fundamental_type_shared_ptrs::void_

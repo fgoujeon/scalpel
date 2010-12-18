@@ -24,72 +24,16 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "statement_block.hpp"
 #include "declarative_region_variants.hpp"
 #include "detail/declarative_region_member_impl.hpp"
+#include "detail/function_declaration_macro_template.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-class destructor:
-	public std::enable_shared_from_this<destructor>
-{
-	public:
-		destructor(const bool is_inline = false);
-
-		destructor(const destructor& rhs);
-
-		bool
-		is_inline() const;
-
-		bool
-		has_enclosing_declarative_region() const;
-
-		declarative_region_shared_ptr_variant
-		enclosing_declarative_region() const;
-
-		void
-		enclosing_declarative_region(const declarative_region_shared_ptr_variant& enclosing_declarative_region);
-
-		bool
-		defined() const
-		{
-			return body_.get();
-		}
-
-		std::shared_ptr<statement_block>
-		body()
-		{
-			return body_;
-		}
-
-		std::shared_ptr<const statement_block>
-		body() const
-		{
-			return body_;
-		}
-
-		void
-		body(std::shared_ptr<statement_block> b)
-		{
-			body_ = b;
-			body_->enclosing_declarative_region(shared_from_this());
-		}
-
-	private:
-		bool is_inline_;
-		detail::declarative_region_member_impl declarative_region_member_impl_;
-
-		std::shared_ptr<statement_block> body_;
-};
-
-bool
-operator==(const destructor& lhs, const destructor& rhs);
-
-bool
-operator!=(const destructor& lhs, const destructor& rhs);
-
-bool
-have_same_signature(const destructor& lhs, const destructor& rhs);
+GENERATE_FUNCTION_DECLARATION(destructor, 0, 0, 0, 0, 0, 0)
 
 }}} //namespace scalpel::cpp::semantic_entities
+
+#include "detail/function_declaration_macro_template_undef.hpp"
 
 #endif
 

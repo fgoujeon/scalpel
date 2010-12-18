@@ -27,6 +27,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "declarative_region_variants.hpp"
 #include "type_variants_fwd.hpp"
 #include "detail/declarative_region_member_impl.hpp"
+#include "detail/function_declaration_macro_template.hpp"
 #include <boost/optional.hpp>
 #include <string>
 #include <list>
@@ -35,100 +36,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-/**
-Represents a C++ non-special function (which is neither a constructor nor an
-operator function nor a conversion function).
-*/
-class simple_function:
-	public std::enable_shared_from_this<simple_function>
-{
-    public:
-		typedef std::vector<declarative_region_shared_ptr_variant> declarative_region_shared_ptr_variants_t;
-
-	private:
-        simple_function
-		(
-			const std::string& name,
-			const type_shared_ptr_variant& return_type,
-			function_parameter_list&& parameters,
-			bool is_inline,
-			bool is_static
-		);
-
-	public:
-		static
-		std::shared_ptr<simple_function>
-		make_shared
-		(
-			const std::string& name,
-			const type_shared_ptr_variant& return_type,
-			function_parameter_list&& parameters = function_parameter_list(),
-			bool is_inline = false,
-			bool is_static = false
-		);
-
-        /**
-        @return the name of the function
-        */
-        const std::string&
-        name() const;
-
-		bool
-		has_enclosing_declarative_region() const;
-
-		declarative_region_shared_ptr_variant
-		enclosing_declarative_region() const;
-
-		void
-		enclosing_declarative_region(const declarative_region_shared_ptr_variant& enclosing_declarative_region);
-
-		const type_shared_ptr_variant&
-		return_type() const;
-
-		const function_parameter_list&
-		parameters() const;
-
-		bool
-		is_inline() const;
-
-		bool
-		is_static() const;
-
-		bool
-		defined() const;
-
-		std::shared_ptr<statement_block>
-		body();
-
-		std::shared_ptr<const statement_block>
-		body() const;
-
-		void
-		body(std::shared_ptr<statement_block> b);
-
-    private:
-        std::string name_;
-		type_shared_ptr_variant return_type_;
-		function_parameter_list parameters_;
-		bool is_inline_;
-		bool is_static_;
-		detail::declarative_region_member_impl declarative_region_member_impl_;
-
-		declarative_region_shared_ptr_variants_t declarative_regions_;
-
-		std::shared_ptr<statement_block> body_;
-};
-
-bool
-operator==(const simple_function& lhs, const simple_function& rhs);
-
-bool
-operator!=(const simple_function& lhs, const simple_function& rhs);
-
-bool
-have_same_signature(const simple_function& lhs, const simple_function& rhs);
+GENERATE_FUNCTION_DECLARATION(simple_function, 1, 0, 1, 1, 1, 0)
 
 }}} //namespace scalpel::cpp::semantic_entities
+
+#include "detail/function_declaration_macro_template_undef.hpp"
 
 #endif
 

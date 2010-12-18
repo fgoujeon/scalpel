@@ -19,57 +19,16 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "constructor.hpp"
-#include "class_.hpp"
 #include "fundamental_type_shared_ptrs.hpp"
+#include "detail/function_definition_macro_template.hpp"
+#include <scalpel/utility/ptr_variant_conversion_functions.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-constructor::constructor
-(
-	function_parameter_list&& parameters,
-	const bool is_inline,
-	const bool is_explicit
-):
-	parameters_(std::move(parameters)),
-	is_inline_(is_inline),
-	is_explicit_(is_explicit)
-{
-}
-
-
-
-bool
-operator==(const constructor& lhs, const constructor& rhs)
-{
-	return
-		lhs.is_inline() == rhs.is_inline() &&
-		lhs.is_explicit() == rhs.is_explicit() &&
-		have_same_signature(lhs, rhs) &&
-		(
-			lhs.body().get() == rhs.body().get() ||
-			(
-				lhs.body().get() != 0 &&
-				rhs.body().get() != 0 &&
-				*lhs.body() == *rhs.body()
-			)
-		)
-	;
-}
-
-bool
-operator!=(const constructor& lhs, const constructor& rhs)
-{
-	return !operator==(lhs, rhs);
-}
-
-bool
-have_same_signature(const constructor& lhs, const constructor& rhs)
-{
-	return
-		lhs.parameters() == rhs.parameters()
-	;
-}
+GENERATE_FUNCTION_DEFINITION(constructor, 0, 0, 0, 1, 0, 1)
 
 }}} //namespace scalpel::cpp::semantic_entities
+
+#include "detail/function_definition_macro_template_undef.hpp"
 

@@ -64,7 +64,7 @@ test_case_10()
 	auto namespace_alias_as2 = std::make_shared<namespace_alias>("as2", namespace_a);
 
 	//functions
-	auto function_test = simple_function::make_shared
+	auto function_test = std::make_shared<simple_function>
 	(
 		"test",
 		fundamental_type_shared_ptrs::void_
