@@ -57,6 +57,12 @@ struct get_name_impl_struct: public utility::static_visitor<const std::string&>
 	}
 
 	const std::string&
+	operator()(std::shared_ptr<operator_member_function>) const
+	{
+		return utility::extern_strings::empty;
+	}
+
+	const std::string&
 	operator()(std::shared_ptr<conversion_function>) const
 	{
 		return utility::extern_strings::empty;

@@ -35,6 +35,7 @@ class class_;
 class constructor;
 class destructor;
 class operator_function;
+class operator_member_function;
 class conversion_function;
 class simple_function;
 class simple_member_function;
@@ -48,6 +49,7 @@ typedef
 		constructor,
 		destructor,
 		operator_function,
+		operator_member_function,
 		conversion_function,
 		simple_function,
 		simple_member_function,
@@ -64,6 +66,7 @@ typedef
 		constructor,
 		destructor,
 		operator_function,
+		operator_member_function,
 		conversion_function,
 		simple_function,
 		simple_member_function,

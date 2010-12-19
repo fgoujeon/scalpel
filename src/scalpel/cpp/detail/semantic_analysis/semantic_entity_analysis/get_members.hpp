@@ -29,7 +29,10 @@ namespace scalpel { namespace cpp { namespace detail { namespace semantic_analys
 {
 
 template<class EntityT>
-struct get_members_type_traits;
+struct get_members_type_traits
+{
+	typedef typename utility::shared_ptr_vector<EntityT>::range return_type;
+};
 
 template<>
 struct get_members_type_traits<semantic_entities::open_declarative_region_shared_ptr_variant>
@@ -38,75 +41,9 @@ struct get_members_type_traits<semantic_entities::open_declarative_region_shared
 };
 
 template<>
-struct get_members_type_traits<semantic_entities::namespace_alias>
-{
-	typedef utility::shared_ptr_vector<semantic_entities::namespace_alias>::range return_type;
-};
-
-template<>
-struct get_members_type_traits<semantic_entities::namespace_>
-{
-	typedef utility::shared_ptr_vector<semantic_entities::namespace_>::range return_type;
-};
-
-template<>
-struct get_members_type_traits<semantic_entities::class_>
-{
-	typedef utility::shared_ptr_vector<semantic_entities::class_>::range return_type;
-};
-
-template<>
-struct get_members_type_traits<semantic_entities::typedef_>
-{
-	typedef utility::shared_ptr_vector<semantic_entities::typedef_>::range return_type;
-};
-
-template<>
-struct get_members_type_traits<semantic_entities::constructor>
-{
-	typedef utility::shared_ptr_vector<semantic_entities::constructor>::range return_type;
-};
-
-template<>
 struct get_members_type_traits<semantic_entities::destructor>
 {
 	typedef utility::single_object_range<std::shared_ptr<semantic_entities::destructor>> return_type;
-};
-
-template<>
-struct get_members_type_traits<semantic_entities::operator_function>
-{
-	typedef utility::shared_ptr_vector<semantic_entities::operator_function>::range return_type;
-};
-
-template<>
-struct get_members_type_traits<semantic_entities::conversion_function>
-{
-	typedef utility::shared_ptr_vector<semantic_entities::conversion_function>::range return_type;
-};
-
-template<>
-struct get_members_type_traits<semantic_entities::simple_function>
-{
-	typedef utility::shared_ptr_vector<semantic_entities::simple_function>::range return_type;
-};
-
-template<>
-struct get_members_type_traits<semantic_entities::simple_member_function>
-{
-	typedef utility::shared_ptr_vector<semantic_entities::simple_member_function>::range return_type;
-};
-
-template<>
-struct get_members_type_traits<semantic_entities::statement_block>
-{
-	typedef utility::shared_ptr_vector<semantic_entities::statement_block>::range return_type;
-};
-
-template<>
-struct get_members_type_traits<semantic_entities::variable>
-{
-	typedef utility::shared_ptr_vector<semantic_entities::variable>::range return_type;
 };
 
 
