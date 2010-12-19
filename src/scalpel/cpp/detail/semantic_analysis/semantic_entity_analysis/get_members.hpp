@@ -29,50 +29,50 @@ namespace scalpel { namespace cpp { namespace detail { namespace semantic_analys
 {
 
 template<class EntityT>
-struct get_members_type_traits
+struct get_members_return_type
 {
-	typedef typename utility::shared_ptr_vector<EntityT>::range return_type;
+	typedef typename utility::shared_ptr_vector<EntityT>::range type;
 };
 
 template<>
-struct get_members_type_traits<semantic_entities::open_declarative_region_shared_ptr_variant>
+struct get_members_return_type<semantic_entities::open_declarative_region_shared_ptr_variant>
 {
-	typedef std::vector<semantic_entities::open_declarative_region_shared_ptr_variant> return_type;
+	typedef std::vector<semantic_entities::open_declarative_region_shared_ptr_variant> type;
 };
 
 template<>
-struct get_members_type_traits<semantic_entities::destructor>
+struct get_members_return_type<semantic_entities::destructor>
 {
-	typedef utility::single_object_range<std::shared_ptr<semantic_entities::destructor>> return_type;
+	typedef utility::single_object_range<std::shared_ptr<semantic_entities::destructor>> type;
 };
 
 
 
 template<class MemberT, class ParentT>
-typename get_members_type_traits<MemberT>::return_type
-get_members(ParentT parent);
+typename get_members_return_type<MemberT>::type
+get_members(const ParentT& parent);
 
 template<class MemberT>
-typename get_members_type_traits<MemberT>::return_type
-get_members(std::shared_ptr<semantic_entities::namespace_alias> parent)
+typename get_members_return_type<MemberT>::type
+get_members(const std::shared_ptr<semantic_entities::namespace_alias>& parent)
 {
 	return get_members<MemberT>(parent->referred_namespace());
 }
 
 //visitor template for declarative region variants
 template<class MemberT>
-struct get_declarative_region_members_visitor: public utility::static_visitor<typename get_members_type_traits<MemberT>::return_type>
+struct get_declarative_region_members_visitor: public utility::static_visitor<typename get_members_return_type<MemberT>::type>
 {
 	template<class T>
-	typename get_members_type_traits<MemberT>::return_type
-	operator()(std::shared_ptr<T> t) const
+	typename get_members_return_type<MemberT>::type
+	operator()(const std::shared_ptr<T>& t) const
 	{
 		return get_members<MemberT>(t);
 	}
 };
 
 template<class MemberT>
-typename get_members_type_traits<MemberT>::return_type
+typename get_members_return_type<MemberT>::type
 get_members(const semantic_entities::declarative_region_shared_ptr_variant& parent)
 {
 	get_declarative_region_members_visitor<MemberT> visitor;
@@ -80,7 +80,7 @@ get_members(const semantic_entities::declarative_region_shared_ptr_variant& pare
 }
 
 template<class MemberT>
-typename get_members_type_traits<MemberT>::return_type
+typename get_members_return_type<MemberT>::type
 get_members(const semantic_entities::open_declarative_region_shared_ptr_variant& parent)
 {
 	get_declarative_region_members_visitor<MemberT> visitor;

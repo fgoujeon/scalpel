@@ -543,7 +543,7 @@ find_local_entities
 
 	typename return_type<true, Multiple, EntityT>::type found_entities;
 
-	typename get_members_type_traits<EntityT>::return_type members = get_members<EntityT>(current_declarative_region);
+	typename get_members_return_type<EntityT>::type members = get_members<EntityT>(current_declarative_region);
 	for(auto i = members.begin(); i != members.end(); ++i)
 	{
 		auto current_entity = *i;

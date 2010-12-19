@@ -26,18 +26,18 @@ namespace scalpel { namespace cpp { namespace detail { namespace semantic_analys
 
 #define GENERATE_GET_MEMBERS_SPECIALIZATION(PARENT_TYPE, MEMBER_TYPE, PARENT_MEMBER_FUNCTION) \
 template<> \
-get_members_type_traits<semantic_entities::MEMBER_TYPE>::return_type \
-get_members<semantic_entities::MEMBER_TYPE, std::shared_ptr<semantic_entities::PARENT_TYPE>>(std::shared_ptr<semantic_entities::PARENT_TYPE> parent) \
+get_members_return_type<semantic_entities::MEMBER_TYPE>::type \
+get_members<semantic_entities::MEMBER_TYPE, std::shared_ptr<semantic_entities::PARENT_TYPE>>(const std::shared_ptr<semantic_entities::PARENT_TYPE>& parent) \
 { \
 	return parent->PARENT_MEMBER_FUNCTION(); \
 }
 
 #define GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(PARENT_TYPE, MEMBER_TYPE) \
 template<> \
-get_members_type_traits<semantic_entities::MEMBER_TYPE>::return_type \
-get_members<semantic_entities::MEMBER_TYPE, std::shared_ptr<semantic_entities::PARENT_TYPE>>(std::shared_ptr<semantic_entities::PARENT_TYPE>) \
+get_members_return_type<semantic_entities::MEMBER_TYPE>::type \
+get_members<semantic_entities::MEMBER_TYPE, std::shared_ptr<semantic_entities::PARENT_TYPE>>(const std::shared_ptr<semantic_entities::PARENT_TYPE>&) \
 { \
-	return get_members_type_traits<semantic_entities::MEMBER_TYPE>::return_type(); \
+	return get_members_return_type<semantic_entities::MEMBER_TYPE>::type(); \
 }
 
 GENERATE_GET_MEMBERS_SPECIALIZATION      (namespace_, open_declarative_region_shared_ptr_variant, open_declarative_regions)
