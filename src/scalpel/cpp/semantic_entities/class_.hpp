@@ -21,13 +21,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_CLASS_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_CLASS_HPP
 
-#include "constructor.hpp"
-#include "destructor.hpp"
-#include "conversion_function.hpp"
+#include "functions.hpp"
 #include "typedef_.hpp"
 #include "variable.hpp"
-#include "operator_function.hpp"
-#include "simple_function.hpp"
 #include "declarative_region_variants.hpp"
 #include "type_variants_fwd.hpp"
 #include "detail/declarative_region_member_impl.hpp"

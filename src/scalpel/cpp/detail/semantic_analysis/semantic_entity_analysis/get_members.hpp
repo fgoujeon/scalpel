@@ -92,6 +92,12 @@ struct get_members_type_traits<semantic_entities::simple_function>
 };
 
 template<>
+struct get_members_type_traits<semantic_entities::simple_member_function>
+{
+	typedef utility::shared_ptr_vector<semantic_entities::simple_member_function>::range return_type;
+};
+
+template<>
 struct get_members_type_traits<semantic_entities::statement_block>
 {
 	typedef utility::shared_ptr_vector<semantic_entities::statement_block>::range return_type;

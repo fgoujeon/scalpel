@@ -22,11 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "namespace_.hpp"
 #include "namespace_alias.hpp"
 #include "class_.hpp"
-#include "constructor.hpp"
-#include "destructor.hpp"
-#include "operator_function.hpp"
-#include "conversion_function.hpp"
-#include "simple_function.hpp"
+#include "functions.hpp"
 #include "statement_block.hpp"
 #include <scalpel/utility/extern_strings.hpp>
 

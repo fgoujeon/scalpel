@@ -24,8 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "declarative_region_variants.hpp"
 #include "namespace_alias.hpp"
 #include "class_.hpp"
-#include "operator_function.hpp"
-#include "simple_function.hpp"
+#include "functions.hpp"
 #include "typedef_.hpp"
 #include "variable.hpp"
 #include <boost/noncopyable.hpp>

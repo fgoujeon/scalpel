@@ -37,6 +37,7 @@ class destructor;
 class operator_function;
 class conversion_function;
 class simple_function;
+class simple_member_function;
 class statement_block;
 
 typedef
@@ -49,6 +50,7 @@ typedef
 		operator_function,
 		conversion_function,
 		simple_function,
+		simple_member_function,
 		statement_block
 	>::type
 	declarative_region_shared_ptr_variant
@@ -64,6 +66,7 @@ typedef
 		operator_function,
 		conversion_function,
 		simple_function,
+		simple_member_function,
 		statement_block
 	>::type
 	declarative_region_weak_ptr_variant
