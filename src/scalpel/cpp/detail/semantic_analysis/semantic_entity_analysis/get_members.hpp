@@ -52,6 +52,41 @@ template<class MemberT, class ParentT>
 typename get_members_type_traits<MemberT>::return_type
 get_members(ParentT parent);
 
+template<class MemberT>
+typename get_members_type_traits<MemberT>::return_type
+get_members(std::shared_ptr<semantic_entities::namespace_alias> parent)
+{
+	return get_members<MemberT>(parent->referred_namespace());
+}
+
+//visitor template for declarative region variants
+template<class MemberT>
+struct get_declarative_region_members_visitor: public utility::static_visitor<typename get_members_type_traits<MemberT>::return_type>
+{
+	template<class T>
+	typename get_members_type_traits<MemberT>::return_type
+	operator()(std::shared_ptr<T> t) const
+	{
+		return get_members<MemberT>(t);
+	}
+};
+
+template<class MemberT>
+typename get_members_type_traits<MemberT>::return_type
+get_members(const semantic_entities::declarative_region_shared_ptr_variant& parent)
+{
+	get_declarative_region_members_visitor<MemberT> visitor;
+	return utility::apply_visitor(visitor, parent);
+}
+
+template<class MemberT>
+typename get_members_type_traits<MemberT>::return_type
+get_members(const semantic_entities::open_declarative_region_shared_ptr_variant& parent)
+{
+	get_declarative_region_members_visitor<MemberT> visitor;
+	return utility::apply_visitor(visitor, parent);
+}
+
 }}}}} //namespace scalpel::cpp::detail::semantic_analysis::semantic_entity_analysis
 
 #endif
