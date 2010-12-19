@@ -71,17 +71,5 @@ get_declarator
 		assert(false);
 }
 
-bool
-is_qualified
-(
-	const syntax_nodes::function_definition& function_definition_node
-)
-{
-	return
-		has_leading_double_colon(get_declarator(function_definition_node)) ||
-		get_nested_name_specifier(get_declarator(function_definition_node))
-	;
-}
-
 }}}}} //namespace scalpel::cpp::detail::semantic_analysis::syntax_node_analysis
 

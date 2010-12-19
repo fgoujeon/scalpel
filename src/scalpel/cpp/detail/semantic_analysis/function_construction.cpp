@@ -33,7 +33,8 @@ function_shared_ptr_variant
 create_function
 (
 	const syntax_nodes::function_definition& function_definition_node,
-	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region,
+	const bool is_class_member
 )
 {
 	//
@@ -44,6 +45,7 @@ create_function
 	bool has_typedef_specifier = false;
 	bool has_static_specifier = false;
 	bool has_inline_specifier = false;
+	bool has_virtual_specifier = false;
 	bool has_explicit_specifier = false;
 
 	if
@@ -57,6 +59,7 @@ create_function
 		has_typedef_specifier = syntax_node_analysis::has_typedef_specifier(decl_specifier_seq_node);
 		has_static_specifier = syntax_node_analysis::has_static_specifier(decl_specifier_seq_node);
 		has_inline_specifier = syntax_node_analysis::has_inline_specifier(decl_specifier_seq_node);
+		has_virtual_specifier = syntax_node_analysis::has_virtual_specifier(decl_specifier_seq_node);
 		has_explicit_specifier = syntax_node_analysis::has_explicit_specifier(decl_specifier_seq_node);
 
 		//create and/or get undecorated type
@@ -112,17 +115,23 @@ create_function
 		has_typedef_specifier,
 		has_static_specifier,
 		has_inline_specifier,
-		has_explicit_specifier
+		has_virtual_specifier,
+		has_explicit_specifier,
+		is_class_member
 	);
 
 	if(auto opt_constructor_entity = get<constructor>(&declarator_entity))
 		return *opt_constructor_entity;
 	else if(auto opt_destructor_entity = get<destructor>(&declarator_entity))
 		return *opt_destructor_entity;
-	else if(auto opt_operator_function_entity = get<operator_function>(&declarator_entity))
-		return *opt_operator_function_entity;
+	else if(auto opt_operator_member_function_entity = get<operator_member_function>(&declarator_entity))
+		return *opt_operator_member_function_entity;
 	else if(auto opt_conversion_function_entity = get<conversion_function>(&declarator_entity))
 		return *opt_conversion_function_entity;
+	else if(auto opt_simple_member_function_entity = get<simple_member_function>(&declarator_entity))
+		return *opt_simple_member_function_entity;
+	else if(auto opt_operator_function_entity = get<operator_function>(&declarator_entity))
+		return *opt_operator_function_entity;
 	else if(auto opt_simple_function_entity = get<simple_function>(&declarator_entity))
 		return *opt_simple_function_entity;
 	else
@@ -142,10 +151,14 @@ define_function
 		(*opt_constructor_entity)->body(std::make_shared<semantic_entities::statement_block>());
 	else if(auto opt_destructor_entity = get<destructor>(&function_entity))
 		(*opt_destructor_entity)->body(std::make_shared<semantic_entities::statement_block>());
-	else if(auto opt_operator_function_entity = get<operator_function>(&function_entity))
+	else if(auto opt_operator_function_entity = get<operator_member_function>(&function_entity))
 		(*opt_operator_function_entity)->body(std::make_shared<semantic_entities::statement_block>());
 	else if(auto opt_conversion_function_entity = get<conversion_function>(&function_entity))
 		(*opt_conversion_function_entity)->body(std::make_shared<semantic_entities::statement_block>());
+	else if(auto opt_simple_function_entity = get<simple_member_function>(&function_entity))
+		(*opt_simple_function_entity)->body(std::make_shared<semantic_entities::statement_block>());
+	else if(auto opt_operator_function_entity = get<operator_function>(&function_entity))
+		(*opt_operator_function_entity)->body(std::make_shared<semantic_entities::statement_block>());
 	else if(auto opt_simple_function_entity = get<simple_function>(&function_entity))
 		(*opt_simple_function_entity)->body(std::make_shared<semantic_entities::statement_block>());
 	else
@@ -201,106 +214,97 @@ find_function
 	return utility::apply_visitor(visitor, function_signature);
 }
 
-std::shared_ptr<semantic_entities::operator_function>
-create_operator_function
+semantic_entities::overloadable_operator
+get_operator_function_operator
 (
-	const syntax_nodes::declarator& declarator_node,
-	const semantic_entities::type_shared_ptr_variant type,
-	const bool is_inline,
-	const bool is_static,
-	const declarative_region_shared_ptr_variant current_declarative_region
+	const syntax_nodes::declarator& declarator_node
 )
 {
-	//
-	//get the overloaded operator
-	//
-	semantic_entities::overloadable_operator op = semantic_entities::overloadable_operator::AMPERSAND;
-
 	const syntax_nodes::operator_& operator_node = syntax_node_analysis::get_operator(declarator_node);
 	if(auto opt_simple_operator_node = syntax_nodes::get<syntax_nodes::simple_operator>(&operator_node))
 	{
 		auto simple_operator_node = *opt_simple_operator_node;
 
 		if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::new_>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::NEW;
+			return semantic_entities::overloadable_operator::NEW;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::delete_>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::DELETE;
+			return semantic_entities::overloadable_operator::DELETE;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::double_right_angle_bracket_equal>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::DOUBLE_RIGHT_ANGLE_BRACKET_EQUAL;
+			return semantic_entities::overloadable_operator::DOUBLE_RIGHT_ANGLE_BRACKET_EQUAL;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::double_left_angle_bracket_equal>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::DOUBLE_LEFT_ANGLE_BRACKET_EQUAL;
+			return semantic_entities::overloadable_operator::DOUBLE_LEFT_ANGLE_BRACKET_EQUAL;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::arrow_asterisk>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::ARROW_ASTERISK;
+			return semantic_entities::overloadable_operator::ARROW_ASTERISK;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::plus_equal>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::PLUS_EQUAL;
+			return semantic_entities::overloadable_operator::PLUS_EQUAL;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::minus_equal>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::MINUS_EQUAL;
+			return semantic_entities::overloadable_operator::MINUS_EQUAL;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::asterisk_equal>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::ASTERISK_EQUAL;
+			return semantic_entities::overloadable_operator::ASTERISK_EQUAL;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::slash_equal>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::SLASH_EQUAL;
+			return semantic_entities::overloadable_operator::SLASH_EQUAL;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::percent_equal>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::PERCENT_EQUAL;
+			return semantic_entities::overloadable_operator::PERCENT_EQUAL;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::circumflex_equal>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::CIRCUMFLEX_EQUAL;
+			return semantic_entities::overloadable_operator::CIRCUMFLEX_EQUAL;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::ampersand_equal>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::AMPERSAND_EQUAL;
+			return semantic_entities::overloadable_operator::AMPERSAND_EQUAL;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::pipe_equal>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::PIPE_EQUAL;
+			return semantic_entities::overloadable_operator::PIPE_EQUAL;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::double_left_angle_bracket>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::DOUBLE_LEFT_ANGLE_BRACKET;
+			return semantic_entities::overloadable_operator::DOUBLE_LEFT_ANGLE_BRACKET;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::double_right_angle_bracket>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::DOUBLE_RIGHT_ANGLE_BRACKET;
+			return semantic_entities::overloadable_operator::DOUBLE_RIGHT_ANGLE_BRACKET;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::double_equal>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::DOUBLE_EQUAL;
+			return semantic_entities::overloadable_operator::DOUBLE_EQUAL;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::exclamation_equal>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::EXCLAMATION_EQUAL;
+			return semantic_entities::overloadable_operator::EXCLAMATION_EQUAL;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::left_angle_bracket_equal>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::LEFT_ANGLE_BRACKET_EQUAL;
+			return semantic_entities::overloadable_operator::LEFT_ANGLE_BRACKET_EQUAL;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::right_angle_bracket_equal>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::RIGHT_ANGLE_BRACKET_EQUAL;
+			return semantic_entities::overloadable_operator::RIGHT_ANGLE_BRACKET_EQUAL;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::double_ampersand>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::DOUBLE_AMPERSAND;
+			return semantic_entities::overloadable_operator::DOUBLE_AMPERSAND;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::double_pipe>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::DOUBLE_PIPE;
+			return semantic_entities::overloadable_operator::DOUBLE_PIPE;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::double_plus>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::DOUBLE_PLUS;
+			return semantic_entities::overloadable_operator::DOUBLE_PLUS;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::double_minus>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::DOUBLE_MINUS;
+			return semantic_entities::overloadable_operator::DOUBLE_MINUS;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::arrow>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::ARROW;
+			return semantic_entities::overloadable_operator::ARROW;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::round_brackets>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::ROUND_BRACKETS;
+			return semantic_entities::overloadable_operator::ROUND_BRACKETS;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::square_brackets>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::SQUARE_BRACKETS;
+			return semantic_entities::overloadable_operator::SQUARE_BRACKETS;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::comma>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::COMMA;
+			return semantic_entities::overloadable_operator::COMMA;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::plus>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::PLUS;
+			return semantic_entities::overloadable_operator::PLUS;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::minus>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::MINUS;
+			return semantic_entities::overloadable_operator::MINUS;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::asterisk>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::ASTERISK;
+			return semantic_entities::overloadable_operator::ASTERISK;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::slash>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::SLASH;
+			return semantic_entities::overloadable_operator::SLASH;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::percent>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::PERCENT;
+			return semantic_entities::overloadable_operator::PERCENT;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::circumflex>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::CIRCUMFLEX;
+			return semantic_entities::overloadable_operator::CIRCUMFLEX;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::ampersand>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::AMPERSAND;
+			return semantic_entities::overloadable_operator::AMPERSAND;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::pipe>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::PIPE;
+			return semantic_entities::overloadable_operator::PIPE;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::tilde>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::TILDE;
+			return semantic_entities::overloadable_operator::TILDE;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::exclamation>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::EXCLAMATION;
+			return semantic_entities::overloadable_operator::EXCLAMATION;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::equal>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::EQUAL;
+			return semantic_entities::overloadable_operator::EQUAL;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::left_angle_bracket>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::LEFT_ANGLE_BRACKET;
+			return semantic_entities::overloadable_operator::LEFT_ANGLE_BRACKET;
 		else if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::right_angle_bracket>>(&simple_operator_node))
-			op = semantic_entities::overloadable_operator::RIGHT_ANGLE_BRACKET;
+			return semantic_entities::overloadable_operator::RIGHT_ANGLE_BRACKET;
 		else
 			assert(false);
 	}
@@ -309,9 +313,9 @@ create_operator_function
 		auto array_operator_node = *opt_array_operator_node;
 
 		if(syntax_nodes::get<syntax_nodes::new_array_operator>(&array_operator_node))
-			op = semantic_entities::overloadable_operator::NEW_ARRAY;
+			return semantic_entities::overloadable_operator::NEW_ARRAY;
 		else if(syntax_nodes::get<syntax_nodes::delete_array_operator>(&array_operator_node))
-			op = semantic_entities::overloadable_operator::DELETE_ARRAY;
+			return semantic_entities::overloadable_operator::DELETE_ARRAY;
 		else
 			assert(false);
 	}
@@ -319,15 +323,6 @@ create_operator_function
 	{
 		assert(false);
 	}
-
-	return std::make_shared<semantic_entities::operator_function>
-	(
-		op,
-		type,
-		create_parameters(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
-		is_inline,
-		is_static
-	);
 }
 
 semantic_entities::type_shared_ptr_variant

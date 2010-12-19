@@ -160,7 +160,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 GENERATE_FUNCTION_DEFINITION(constructor             , 0, 0, 0, 1, 0, 0, 0, 0, 1)
 GENERATE_FUNCTION_DEFINITION(destructor              , 0, 0, 0, 0, 0, 0, 0, 1, 0)
 GENERATE_FUNCTION_DEFINITION(operator_member_function, 0, 1, 1, 1, 0, 1, 1, 1, 0)
-GENERATE_FUNCTION_DEFINITION(conversion_function     , 0, 0, 1, 0, 0, 0, 0, 0, 1)
+GENERATE_FUNCTION_DEFINITION(conversion_function     , 0, 0, 1, 0, 0, 1, 1, 1, 1)
 GENERATE_FUNCTION_DEFINITION(simple_member_function  , 1, 0, 1, 1, 1, 1, 1, 1, 0)
 
 //free functions

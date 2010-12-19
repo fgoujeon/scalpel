@@ -200,14 +200,14 @@ print_class
 
 	print_destructor(c->get_destructor(), indent_level + 1);
 
-	for(auto i = c->simple_functions().begin(); i != c->simple_functions().end(); ++i)
-		print_simple_function(*i, indent_level + 1);
-
 	for(auto i = c->operator_functions().begin(); i != c->operator_functions().end(); ++i)
-		print_operator_function(*i, indent_level + 1);
+		print_operator_member_function(*i, indent_level + 1);
 
 	for(auto i = c->conversion_functions().begin(); i != c->conversion_functions().end(); ++i)
 		print_conversion_function(*i, indent_level + 1);
+
+	for(auto i = c->simple_functions().begin(); i != c->simple_functions().end(); ++i)
+		print_simple_member_function(*i, indent_level + 1);
 
 	for(auto i = c->variables().begin(); i != c->variables().end(); ++i)
 		print_variable(*i, indent_level + 1);
@@ -251,6 +251,8 @@ print_constructor
 		std::cout << " inline=\"true\"";
 	if(entity->is_explicit())
 		std::cout << " explicit=\"true\"";
+	if(!entity->defined())
+		std::cout << " defined=\"false\"";
 	std::cout << ">\n";
 
 	print_function_parameter_list(entity->parameters(), indent_level + 1);
@@ -266,58 +268,129 @@ print_destructor
 )
 {
 	std::cout << indent(indent_level) << "<destructor";
-	if(entity->has_enclosing_declarative_region())
-	{
-		std::shared_ptr<class_> enclosing_declarative_region = utility::get<class_>(entity->enclosing_declarative_region());
 
-		class_::access acc = enclosing_declarative_region->member_access(entity);
-		std::cout << attribute(acc);
-		if(enclosing_declarative_region->is_virtual_member_function(entity))
-			std::cout << " virtual=\"true\"";
-		if(enclosing_declarative_region->is_pure_member_function(entity))
-			std::cout << " pure=\"true\"";
-	}
+	assert(entity->has_enclosing_declarative_region());
+	declarative_region_shared_ptr_variant enclosing_declarative_region = entity->enclosing_declarative_region();
+	std::shared_ptr<class_> enclosing_class = utility::get<class_>(enclosing_declarative_region);
+
+	class_::access acc = enclosing_class->member_access(entity);
+	std::cout << attribute(acc);
 	if(entity->is_inline())
 		std::cout << " inline=\"true\"";
+	if(entity->is_virtual())
+		std::cout << " virtual=\"true\"";
+	if(entity->is_pure())
+		std::cout << " pure=\"true\"";
+	if(!entity->defined())
+		std::cout << " defined=\"false\"";
 	std::cout << ">\n";
 
 	std::cout << indent(indent_level) << "</destructor>\n";
 }
 
 void
-print_simple_function
+print_operator_member_function
 (
-	std::shared_ptr<const simple_function> entity,
+	std::shared_ptr<const operator_member_function> entity,
+	const unsigned int indent_level
+)
+{
+	std::cout << indent(indent_level) << "<operator_function";
+	std::cout << attribute(entity->get_operator());
+
+	assert(entity->has_enclosing_declarative_region());
+	declarative_region_shared_ptr_variant enclosing_declarative_region = entity->enclosing_declarative_region();
+	std::shared_ptr<class_> enclosing_class = utility::get<class_>(enclosing_declarative_region);
+
+	class_::access acc = enclosing_class->member_access(entity);
+	std::cout << attribute(acc);
+	if(entity->is_inline())
+		std::cout << " inline=\"true\"";
+	if(entity->is_const())
+		std::cout << " const=\"true\"";
+	if(entity->is_volatile())
+		std::cout << " volatile=\"true\"";
+	if(entity->is_virtual())
+		std::cout << " virtual=\"true\"";
+	if(entity->is_pure())
+		std::cout << " pure=\"true\"";
+	if(!entity->defined())
+		std::cout << " defined=\"false\"";
+	std::cout << ">\n";
+
+	std::cout << indent(indent_level + 1) << "<return_type>\n";
+	print_type(entity->return_type(), indent_level + 2);
+	std::cout << indent(indent_level + 1) << "</return_type>\n";
+
+	print_function_parameter_list(entity->parameters(), indent_level + 1);
+
+	std::cout << indent(indent_level) << "</operator_function>\n";
+}
+
+void
+print_conversion_function
+(
+	std::shared_ptr<const conversion_function> entity,
+	const unsigned int indent_level
+)
+{
+	std::cout << indent(indent_level) << "<conversion_function";
+
+	assert(entity->has_enclosing_declarative_region());
+	declarative_region_shared_ptr_variant enclosing_declarative_region = entity->enclosing_declarative_region();
+	std::shared_ptr<class_> enclosing_class = utility::get<class_>(enclosing_declarative_region);
+
+	class_::access acc = enclosing_class->member_access(entity);
+	std::cout << attribute(acc);
+	if(entity->is_inline())
+		std::cout << " inline=\"true\"";
+	if(entity->is_const())
+		std::cout << " const=\"true\"";
+	if(entity->is_volatile())
+		std::cout << " volatile=\"true\"";
+	if(entity->is_virtual())
+		std::cout << " virtual=\"true\"";
+	if(entity->is_pure())
+		std::cout << " pure=\"true\"";
+	if(!entity->defined())
+		std::cout << " defined=\"false\"";
+	std::cout << ">\n";
+
+	std::cout << indent(indent_level + 1) << "<return_type>\n";
+	print_type(entity->return_type(), indent_level + 2);
+	std::cout << indent(indent_level + 1) << "</return_type>\n";
+
+	std::cout << indent(indent_level) << "</conversion_function>\n";
+}
+
+void
+print_simple_member_function
+(
+	std::shared_ptr<const simple_member_function> entity,
 	const unsigned int indent_level
 )
 {
 	std::cout << indent(indent_level) << "<simple_function";
 	std::cout << " name=\"" << entity->name() << "\"";
-	//extra attributes if the function is a class member function
-	if(entity->has_enclosing_declarative_region())
-	{
-		declarative_region_shared_ptr_variant enclosing_declarative_region = entity->enclosing_declarative_region();
-		if(auto opt_class = utility::get<class_>(&enclosing_declarative_region))
-		{
-			std::shared_ptr<class_> enclosing_declarative_region = *opt_class;
 
-			class_::access acc = enclosing_declarative_region->member_access(entity);
-			std::cout << attribute(acc);
+	assert(entity->has_enclosing_declarative_region());
+	declarative_region_shared_ptr_variant enclosing_declarative_region = entity->enclosing_declarative_region();
+	std::shared_ptr<class_> enclosing_class = utility::get<class_>(enclosing_declarative_region);
 
-			if(enclosing_declarative_region->is_const_member_function(entity))
-				std::cout << " const=\"true\"";
-			if(enclosing_declarative_region->is_volatile_member_function(entity))
-				std::cout << " volatile=\"true\"";
-			if(enclosing_declarative_region->is_virtual_member_function(entity))
-				std::cout << " virtual=\"true\"";
-			if(enclosing_declarative_region->is_pure_member_function(entity))
-				std::cout << " pure=\"true\"";
-		}
-	}
-	if(entity->is_static())
-		std::cout << " static=\"true\"";
+	class_::access acc = enclosing_class->member_access(entity);
+	std::cout << attribute(acc);
 	if(entity->is_inline())
 		std::cout << " inline=\"true\"";
+	if(entity->is_static())
+		std::cout << " static=\"true\"";
+	if(entity->is_const())
+		std::cout << " const=\"true\"";
+	if(entity->is_volatile())
+		std::cout << " volatile=\"true\"";
+	if(entity->is_virtual())
+		std::cout << " virtual=\"true\"";
+	if(entity->is_pure())
+		std::cout << " pure=\"true\"";
 	if(!entity->defined())
 		std::cout << " defined=\"false\"";
 	std::cout << ">\n";
@@ -340,31 +413,12 @@ print_operator_function
 {
 	std::cout << indent(indent_level) << "<operator_function";
 	std::cout << attribute(entity->get_operator());
-	//extra attributes if the function is a class member function
-	if(entity->has_enclosing_declarative_region())
-	{
-		declarative_region_shared_ptr_variant enclosing_declarative_region = entity->enclosing_declarative_region();
-		if(auto opt_class = utility::get<class_>(&enclosing_declarative_region))
-		{
-			std::shared_ptr<class_> enclosing_declarative_region = *opt_class;
-
-			class_::access acc = enclosing_declarative_region->member_access(entity);
-			std::cout << attribute(acc);
-
-			if(enclosing_declarative_region->is_const_member_function(entity))
-				std::cout << " const=\"true\"";
-			if(enclosing_declarative_region->is_volatile_member_function(entity))
-				std::cout << " volatile=\"true\"";
-			if(enclosing_declarative_region->is_virtual_member_function(entity))
-				std::cout << " virtual=\"true\"";
-			if(enclosing_declarative_region->is_pure_member_function(entity))
-				std::cout << " pure=\"true\"";
-		}
-	}
 	if(entity->is_inline())
 		std::cout << " inline=\"true\"";
 	if(entity->is_static())
 		std::cout << " static=\"true\"";
+	if(!entity->defined())
+		std::cout << " defined=\"false\"";
 	std::cout << ">\n";
 
 	std::cout << indent(indent_level + 1) << "<return_type>\n";
@@ -377,37 +431,29 @@ print_operator_function
 }
 
 void
-print_conversion_function
+print_simple_function
 (
-	std::shared_ptr<const conversion_function> entity,
+	std::shared_ptr<const simple_function> entity,
 	const unsigned int indent_level
 )
 {
-	std::cout << indent(indent_level) << "<conversion_function";
-	if(entity->has_enclosing_declarative_region())
-	{
-		std::shared_ptr<class_> enclosing_declarative_region = utility::get<class_>(entity->enclosing_declarative_region());
-
-		class_::access acc = enclosing_declarative_region->member_access(entity);
-		std::cout << attribute(acc);
-		if(enclosing_declarative_region->is_const_member_function(entity))
-			std::cout << " const=\"true\"";
-		if(enclosing_declarative_region->is_volatile_member_function(entity))
-			std::cout << " volatile=\"true\"";
-		if(enclosing_declarative_region->is_virtual_member_function(entity))
-			std::cout << " virtual=\"true\"";
-		if(enclosing_declarative_region->is_pure_member_function(entity))
-			std::cout << " pure=\"true\"";
-	}
+	std::cout << indent(indent_level) << "<simple_function";
+	std::cout << " name=\"" << entity->name() << "\"";
+	if(entity->is_static())
+		std::cout << " static=\"true\"";
 	if(entity->is_inline())
 		std::cout << " inline=\"true\"";
+	if(!entity->defined())
+		std::cout << " defined=\"false\"";
 	std::cout << ">\n";
 
 	std::cout << indent(indent_level + 1) << "<return_type>\n";
 	print_type(entity->return_type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</return_type>\n";
 
-	std::cout << indent(indent_level) << "</conversion_function>\n";
+	print_function_parameter_list(entity->parameters(), indent_level + 1);
+
+	std::cout << indent(indent_level) << "</simple_function>\n";
 }
 
 void

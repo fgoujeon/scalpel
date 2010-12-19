@@ -67,7 +67,7 @@ test_case_11()
 	//functions
 	auto c_constructor = std::make_shared<constructor>();
 	auto c_destructor = std::make_shared<destructor>();
-	auto c_operator_function_plus = std::make_shared<operator_function>
+	auto c_operator_function_plus = std::make_shared<operator_member_function>
 	(
 		scalpel::cpp::semantic_entities::overloadable_operator::PLUS,
 		fundamental_type_shared_ptrs::bool_
@@ -121,8 +121,8 @@ test_case_11()
 
 	//look up c::operator+() from global namespace, must find it
 	{
-		std::shared_ptr<operator_function> found_entity =
-			find<identifier_getting_policies::get_operator, false, false, operator_function>
+		std::shared_ptr<operator_member_function> found_entity =
+			find<identifier_getting_policies::get_operator, false, false, operator_member_function>
 			(
 				false,
 				nested_name_specifier

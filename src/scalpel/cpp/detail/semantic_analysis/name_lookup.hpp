@@ -158,6 +158,22 @@ find
 	const bool apply_using_directives_for_unqualified_id_part = true
 );
 
+/**
+Find the declarative region corresponding to the given
+nested-identifier syntax node (i.e. Z in the expression "X::Y::Z::"),
+from the given declarative region.
+DeclarativeRegionT determines both the return type and the type of the
+intermediate declarative region(s) (X and Y in the example).
+*/
+template<class DeclarativeRegionT>
+typename return_type<false, false, DeclarativeRegionT>::type
+find
+(
+	const bool has_leading_double_colon,
+	const syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>& opt_nested_name_specifier_node,
+	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
+);
+
 
 
 namespace detail
@@ -200,23 +216,6 @@ namespace detail
 		const typename IdentifierGettingPolicy::identifier_t& identifier,
 		const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region,
 		const bool apply_using_directives_for_unqualified_id_part
-	);
-
-	/**
-	Find the declarative region corresponding to the given
-	nested-identifier-or-template-id syntax node
-	(i.e. Z in the expression "X::Y::Z::"),
-	from the given declarative region.
-	DeclarativeRegionT determines both the return type and the type of the
-	intermediate declarative region(s) (X and Y in the example).
-	*/
-	template<class DeclarativeRegionT>
-	typename return_type<false, false, DeclarativeRegionT>::type
-	find_declarative_region
-	(
-		const bool has_leading_double_colon,
-		const syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>& opt_nested_name_specifier_node,
-		const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
 	);
 
 	/**

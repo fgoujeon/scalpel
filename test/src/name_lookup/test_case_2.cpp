@@ -77,35 +77,35 @@ test_case_2()
 	auto semantic_graph = scalpel::cpp::semantic_graph::make_shared();
 	auto struct_c0 = class_::make_shared("c0");
 	auto struct_c0_inner = class_::make_shared("inner");
-	auto function_c0_inner_f = std::make_shared<simple_function>
+	auto function_c0_inner_f = std::make_shared<simple_member_function>
 	(
 		"f",
 		fundamental_type_shared_ptrs::void_
 	);
-	auto function_c0_f = std::make_shared<simple_function>
+	auto function_c0_f = std::make_shared<simple_member_function>
 	(
 		"f",
 		fundamental_type_shared_ptrs::void_
 	);
 	auto struct_c1base = class_::make_shared("c1base");
-	auto function_c1base_f = std::make_shared<simple_function>
+	auto function_c1base_f = std::make_shared<simple_member_function>
 	(
 		"f",
 		fundamental_type_shared_ptrs::void_
 	);
-	auto function_c1base_g = std::make_shared<simple_function>
+	auto function_c1base_g = std::make_shared<simple_member_function>
 	(
 		"g",
 		fundamental_type_shared_ptrs::void_
 	);
 	auto struct_c1 = class_::make_shared("c1");
-	auto function_c1_g = std::make_shared<simple_function>
+	auto function_c1_g = std::make_shared<simple_member_function>
 	(
 		"g",
 		fundamental_type_shared_ptrs::void_
 	);
 	auto struct_c = class_::make_shared("c");
-	auto function_g_test = std::make_shared<simple_function>
+	auto function_g_test = std::make_shared<simple_member_function>
 	(
 		"test",
 		fundamental_type_shared_ptrs::void_
@@ -131,7 +131,7 @@ test_case_2()
 	//name lookup test
 	//
 	{
-		auto found_entities = find<identifier_getting_policies::get_name, false, true, simple_function>("f", function_g_test);
+		auto found_entities = find<identifier_getting_policies::get_name, false, true, simple_member_function>("f", function_g_test);
 		BOOST_CHECK_EQUAL(found_entities.size(), 2);
 		if(found_entities.size() == 2)
 		{
@@ -141,7 +141,7 @@ test_case_2()
 	}
 
 	{
-		auto found_entity = find<identifier_getting_policies::get_name, false, false, simple_function>("g", function_g_test);
+		auto found_entity = find<identifier_getting_policies::get_name, false, false, simple_member_function>("g", function_g_test);
 		BOOST_CHECK_EQUAL(found_entity, function_c1_g);
 	}
 
@@ -152,7 +152,7 @@ test_case_2()
 
 	{
 		auto found_entity =
-			find<identifier_getting_policies::get_name, false, false, simple_function>
+			find<identifier_getting_policies::get_name, false, false, simple_member_function>
 			(
 				false,
 				nested_name_specifier
@@ -172,7 +172,7 @@ test_case_2()
 
 	{
 		auto found_entity =
-			find<identifier_getting_policies::get_name, false, false, simple_function>
+			find<identifier_getting_policies::get_name, false, false, simple_member_function>
 			(
 				true,
 				nested_name_specifier
@@ -211,7 +211,7 @@ test_case_2()
 		);
 
 		auto found_entity =
-			find<identifier_getting_policies::get_name, false, false, simple_function>
+			find<identifier_getting_policies::get_name, false, false, simple_member_function>
 			(
 				false,
 				nested_name_specifier

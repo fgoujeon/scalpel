@@ -202,8 +202,8 @@ fill_class
 	bool has_typedef_specifier = false;
 	bool has_static_specifier = false;
 	bool has_inline_specifier = false;
-	bool has_explicit_specifier = false;
 	bool has_virtual_specifier = false;
+	bool has_explicit_specifier = false;
 	bool has_mutable_specifier = false;
 
 	if
@@ -217,8 +217,8 @@ fill_class
 		has_typedef_specifier = syntax_node_analysis::has_typedef_specifier(decl_specifier_seq_node);
 		has_static_specifier = syntax_node_analysis::has_static_specifier(decl_specifier_seq_node);
 		has_inline_specifier = syntax_node_analysis::has_inline_specifier(decl_specifier_seq_node);
-		has_explicit_specifier = syntax_node_analysis::has_explicit_specifier(decl_specifier_seq_node);
 		has_virtual_specifier = syntax_node_analysis::has_virtual_specifier(decl_specifier_seq_node);
+		has_explicit_specifier = syntax_node_analysis::has_explicit_specifier(decl_specifier_seq_node);
 		has_mutable_specifier = syntax_node_analysis::has_mutable_specifier(decl_specifier_seq_node);
 
 		//create and/or get undecorated type
@@ -296,7 +296,9 @@ fill_class
 					has_typedef_specifier,
 					has_static_specifier,
 					has_inline_specifier,
-					has_explicit_specifier
+					has_virtual_specifier,
+					has_explicit_specifier,
+					true
 				);
 
 				if(auto opt_constructor_entity = get<constructor>(&declarator_entity))
@@ -309,39 +311,25 @@ fill_class
 					class_entity->set_destructor
 					(
 						*opt_destructor_entity,
-						current_access,
-						has_virtual_specifier,
-						syntax_node_analysis::has_pure_specifier(member_declarator_declarator_node)
+						current_access
 					);
-				else if(auto opt_operator_function_entity = get<operator_function>(&declarator_entity))
+				else if(auto opt_operator_function_entity = get<operator_member_function>(&declarator_entity))
 					class_entity->add_member
 					(
 						*opt_operator_function_entity,
-						current_access,
-						syntax_node_analysis::has_qualifier<str::const_>(declarator_node),
-						syntax_node_analysis::has_qualifier<str::volatile_>(declarator_node),
-						has_virtual_specifier,
-						syntax_node_analysis::has_pure_specifier(member_declarator_declarator_node)
+						current_access
 					);
 				else if(auto opt_conversion_function_entity = get<conversion_function>(&declarator_entity))
 					class_entity->add_member
 					(
 						*opt_conversion_function_entity,
-						current_access,
-						syntax_node_analysis::has_qualifier<str::const_>(declarator_node),
-						syntax_node_analysis::has_qualifier<str::volatile_>(declarator_node),
-						has_virtual_specifier,
-						syntax_node_analysis::has_pure_specifier(member_declarator_declarator_node)
+						current_access
 					);
-				else if(auto opt_simple_function_entity = get<simple_function>(&declarator_entity))
+				else if(auto opt_simple_function_entity = get<simple_member_function>(&declarator_entity))
 					class_entity->add_member
 					(
 						*opt_simple_function_entity,
-						current_access,
-						syntax_node_analysis::has_qualifier<str::const_>(declarator_node),
-						syntax_node_analysis::has_qualifier<str::volatile_>(declarator_node),
-						has_virtual_specifier,
-						syntax_node_analysis::has_pure_specifier(member_declarator_declarator_node)
+						current_access
 					);
 				else if(auto opt_variable_entity = get<variable>(&declarator_entity))
 					class_entity->add_member

@@ -34,8 +34,10 @@ typedef
 	<
 		semantic_entities::constructor,
 		semantic_entities::destructor,
-		semantic_entities::operator_function,
+		semantic_entities::operator_member_function,
 		semantic_entities::conversion_function,
+		semantic_entities::simple_member_function,
+		semantic_entities::operator_function,
 		semantic_entities::simple_function
 	>::type
 	function_shared_ptr_variant
@@ -45,7 +47,8 @@ function_shared_ptr_variant
 create_function
 (
 	const syntax_nodes::function_definition& function_definition_node,
-	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region,
+	const bool is_class_member
 );
 
 void
@@ -75,14 +78,10 @@ find_function
 	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 );
 
-std::shared_ptr<semantic_entities::operator_function>
-create_operator_function
+semantic_entities::overloadable_operator
+get_operator_function_operator
 (
-	const syntax_nodes::declarator& declarator_node,
-	const semantic_entities::type_shared_ptr_variant type,
-	const bool is_inline,
-	const bool is_static,
-	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+	const syntax_nodes::declarator& declarator_node
 );
 
 semantic_entities::type_shared_ptr_variant

@@ -173,7 +173,7 @@ find
 	//Find the last declarative region of the nested identifier specifier
 	//(i.e. Z in "[::]X::Y::Z::").
 	semantic_entities::open_declarative_region_shared_ptr_variant last_declarative_region =
-		find_declarative_region<semantic_entities::open_declarative_region_shared_ptr_variant>
+		find<semantic_entities::open_declarative_region_shared_ptr_variant>
 		(
 			has_leading_double_colon,
 			opt_nested_name_specifier_node,
@@ -209,14 +209,9 @@ find
 	;
 }
 
-
-
-namespace detail
-{
-
 template<class DeclarativeRegionT>
 typename return_type<false, false, DeclarativeRegionT>::type
-find_declarative_region
+find
 (
 	const bool has_leading_double_colon,
 	const syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>& opt_nested_name_specifier_node,
@@ -243,7 +238,7 @@ find_declarative_region
 
 			//find the first declarative region
 			typename return_type<false, false, DeclarativeRegionT>::type first_declarative_region =
-				find_local_entities
+				detail::find_local_entities
 				<
 					semantic_entity_analysis::identifier_getting_policies::get_name,
 					std::shared_ptr<semantic_entities::namespace_>,
@@ -254,7 +249,7 @@ find_declarative_region
 			;
 
 			//find the last declarative region
-			return find_declarative_region<DeclarativeRegionT>(nested_name_specifier_node, first_declarative_region);
+			return detail::find_declarative_region<DeclarativeRegionT>(nested_name_specifier_node, first_declarative_region);
 		}
 		else
 		{
@@ -287,7 +282,7 @@ find_declarative_region
 			;
 
 			//find the last declarative region
-			return find_declarative_region<DeclarativeRegionT>(nested_name_specifier_node, first_declarative_region);
+			return detail::find_declarative_region<DeclarativeRegionT>(nested_name_specifier_node, first_declarative_region);
 		}
 		else
 		{
@@ -295,6 +290,11 @@ find_declarative_region
 		}
 	}
 }
+
+
+
+namespace detail
+{
 
 template<class DeclarativeRegionT>
 typename return_type<false, false, DeclarativeRegionT>::type

@@ -228,19 +228,14 @@ void
 class_::set_destructor
 (
 	std::shared_ptr<destructor> member,
-	const access acc,
-	const bool is_virtual,
-	const bool is_pure
+	const access acc
 )
 {
-	//TODO causes memory access violation at class destruction... why?
-	//member->enclosing_declarative_region(shared_from_this());
+	member->enclosing_declarative_region(shared_from_this());
 	destructor_ = member;
 
 	std::shared_ptr<const destructor> const_member(member);
 	member_access_[const_member] = acc;
-	if(is_virtual) virtual_member_functions_.push_back(const_member);
-	if(is_pure) pure_member_functions_.push_back(const_member);
 }
 
 void
@@ -249,65 +244,43 @@ class_::reset_destructor()
 	set_destructor
 	(
 		std::make_shared<destructor>(false),
-		access::PUBLIC,
-		false,
-		false
+		access::PUBLIC
 	);
 }
 
 void
 class_::add_member
 (
-	std::shared_ptr<simple_function> member,
-	const access acc,
-	const bool is_const,
-	const bool is_volatile,
-	const bool is_virtual,
-	const bool is_pure
+	std::shared_ptr<simple_member_function> member,
+	const access acc
 )
 {
 	member->enclosing_declarative_region(shared_from_this());
     simple_functions_.push_back(member);
 
-	std::shared_ptr<const simple_function> const_member(member);
+	std::shared_ptr<const simple_member_function> const_member(member);
 	member_access_[const_member] = acc;
-	if(is_const) const_member_functions_.push_back(const_member);
-	if(is_volatile) volatile_member_functions_.push_back(const_member);
-	if(is_virtual) virtual_member_functions_.push_back(const_member);
-	if(is_pure) pure_member_functions_.push_back(const_member);
 }
 
 void
 class_::add_member
 (
-	std::shared_ptr<operator_function> member,
-	const access acc,
-	const bool is_const,
-	const bool is_volatile,
-	const bool is_virtual,
-	const bool is_pure
+	std::shared_ptr<operator_member_function> member,
+	const access acc
 )
 {
 	member->enclosing_declarative_region(shared_from_this());
     operator_functions_.push_back(member);
 
-	std::shared_ptr<const operator_function> const_member(member);
+	std::shared_ptr<const operator_member_function> const_member(member);
 	member_access_[const_member] = acc;
-	if(is_const) const_member_functions_.push_back(const_member);
-	if(is_volatile) volatile_member_functions_.push_back(const_member);
-	if(is_virtual) virtual_member_functions_.push_back(const_member);
-	if(is_pure) pure_member_functions_.push_back(const_member);
 }
 
 void
 class_::add_member
 (
 	std::shared_ptr<conversion_function> member,
-	const access acc,
-	const bool is_const,
-	const bool is_volatile,
-	const bool is_virtual,
-	const bool is_pure
+	const access acc
 )
 {
 	member->enclosing_declarative_region(shared_from_this());
@@ -315,10 +288,6 @@ class_::add_member
 
 	std::shared_ptr<const conversion_function> const_member(member);
 	member_access_[const_member] = acc;
-	if(is_const) const_member_functions_.push_back(const_member);
-	if(is_volatile) volatile_member_functions_.push_back(const_member);
-	if(is_virtual) virtual_member_functions_.push_back(const_member);
-	if(is_pure) pure_member_functions_.push_back(const_member);
 }
 
 void
@@ -366,50 +335,6 @@ class_::member_access(const member_t& member) const
 		return it->second;
 	else
 		throw std::runtime_error("The given entity is not a member of that class.");
-}
-
-bool
-class_::is_const_member_function(const member_t& member) const
-{
-	return std::find
-	(
-		const_member_functions_.begin(),
-		const_member_functions_.end(),
-		member
-	) != const_member_functions_.end();
-}
-
-bool
-class_::is_volatile_member_function(const member_t& member) const
-{
-	return std::find
-	(
-		volatile_member_functions_.begin(),
-		volatile_member_functions_.end(),
-		member
-	) != volatile_member_functions_.end();
-}
-
-bool
-class_::is_virtual_member_function(const member_t& member) const
-{
-	return std::find
-	(
-		virtual_member_functions_.begin(),
-		virtual_member_functions_.end(),
-		member
-	) != virtual_member_functions_.end();
-}
-
-bool
-class_::is_pure_member_function(const member_t& member) const
-{
-	return std::find
-	(
-		pure_member_functions_.begin(),
-		pure_member_functions_.end(),
-		member
-	) != pure_member_functions_.end();
 }
 
 bool
@@ -500,10 +425,6 @@ operator==(const class_& lhs, const class_& rhs)
 		return false;
 	if(lhs.member_access(lhs.get_destructor()) != rhs.member_access(rhs.get_destructor()))
 		return false;
-	if(lhs.is_virtual_member_function(lhs.get_destructor()) != rhs.is_virtual_member_function(rhs.get_destructor()))
-		return false;
-	if(lhs.is_pure_member_function(lhs.get_destructor()) != rhs.is_pure_member_function(rhs.get_destructor()))
-		return false;
 
 	//simple functions
 	if(lhs.simple_functions().size() != rhs.simple_functions().size())
@@ -518,14 +439,6 @@ operator==(const class_& lhs, const class_& rhs)
 		if(!utility::are_pointed_objects_equal(*i, *j))
 			return false;
 		if(lhs.member_access(*i) != rhs.member_access(*j))
-			return false;
-		if(lhs.is_const_member_function(*i) != rhs.is_const_member_function(*j))
-			return false;
-		if(lhs.is_volatile_member_function(*i) != rhs.is_volatile_member_function(*j))
-			return false;
-		if(lhs.is_virtual_member_function(*i) != rhs.is_virtual_member_function(*j))
-			return false;
-		if(lhs.is_pure_member_function(*i) != rhs.is_pure_member_function(*j))
 			return false;
 	}
 
@@ -543,14 +456,6 @@ operator==(const class_& lhs, const class_& rhs)
 			return false;
 		if(lhs.member_access(*i) != rhs.member_access(*j))
 			return false;
-		if(lhs.is_const_member_function(*i) != rhs.is_const_member_function(*j))
-			return false;
-		if(lhs.is_volatile_member_function(*i) != rhs.is_volatile_member_function(*j))
-			return false;
-		if(lhs.is_virtual_member_function(*i) != rhs.is_virtual_member_function(*j))
-			return false;
-		if(lhs.is_pure_member_function(*i) != rhs.is_pure_member_function(*j))
-			return false;
 	}
 
 	//conversion functions
@@ -566,14 +471,6 @@ operator==(const class_& lhs, const class_& rhs)
 		if(!utility::are_pointed_objects_equal(*i, *j))
 			return false;
 		if(lhs.member_access(*i) != rhs.member_access(*j))
-			return false;
-		if(lhs.is_const_member_function(*i) != rhs.is_const_member_function(*j))
-			return false;
-		if(lhs.is_volatile_member_function(*i) != rhs.is_volatile_member_function(*j))
-			return false;
-		if(lhs.is_virtual_member_function(*i) != rhs.is_virtual_member_function(*j))
-			return false;
-		if(lhs.is_pure_member_function(*i) != rhs.is_pure_member_function(*j))
 			return false;
 	}
 

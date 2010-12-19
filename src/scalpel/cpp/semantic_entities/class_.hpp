@@ -53,9 +53,9 @@ class class_:
 				std::shared_ptr<const typedef_>,
 				std::shared_ptr<const constructor>,
 				std::shared_ptr<const destructor>,
-				std::shared_ptr<const simple_function>,
+				std::shared_ptr<const operator_member_function>,
 				std::shared_ptr<const conversion_function>,
-				std::shared_ptr<const operator_function>,
+				std::shared_ptr<const simple_member_function>,
 				std::shared_ptr<const variable>
 			>::type
 			member_t
@@ -67,9 +67,9 @@ class class_:
 		typedef utility::shared_ptr_vector<class_> classes_t;
 		typedef utility::shared_ptr_vector<typedef_> typedefs_t;
 		typedef utility::shared_ptr_vector<constructor> constructors_t;
-		typedef utility::shared_ptr_vector<simple_function> simple_functions_t;
-		typedef utility::shared_ptr_vector<operator_function> operator_functions_t;
+		typedef utility::shared_ptr_vector<operator_member_function> operator_functions_t;
 		typedef utility::shared_ptr_vector<conversion_function> conversion_functions_t;
+		typedef utility::shared_ptr_vector<simple_member_function> simple_functions_t;
 		typedef utility::shared_ptr_vector<variable> variables_t;
 
 		enum class access
@@ -195,9 +195,7 @@ class class_:
 		set_destructor
 		(
 			std::shared_ptr<destructor> member,
-			const access acc = access::PUBLIC,
-			const bool is_virtual = false,
-			const bool is_pure = false
+			const access acc = access::PUBLIC
 		);
 
 		void
@@ -206,34 +204,22 @@ class class_:
         void
         add_member
 		(
-			std::shared_ptr<simple_function> member,
-			const access acc = access::PUBLIC,
-			const bool is_const = false,
-			const bool is_volatile = false,
-			const bool is_virtual = false,
-			const bool is_pure = false
+			std::shared_ptr<simple_member_function> member,
+			const access acc = access::PUBLIC
 		);
 
         void
         add_member
 		(
-			std::shared_ptr<operator_function> member,
-			const access acc = access::PUBLIC,
-			const bool is_const = false,
-			const bool is_volatile = false,
-			const bool is_virtual = false,
-			const bool is_pure = false
+			std::shared_ptr<operator_member_function> member,
+			const access acc = access::PUBLIC
 		);
 
         void
         add_member
 		(
 			std::shared_ptr<conversion_function> member,
-			const access acc = access::PUBLIC,
-			const bool is_const = false,
-			const bool is_volatile = false,
-			const bool is_virtual = false,
-			const bool is_pure = false
+			const access acc = access::PUBLIC
 		);
 
 		void
@@ -256,18 +242,6 @@ class class_:
 		member_access(const member_t& member) const;
 
 		bool
-		is_const_member_function(const member_t& member) const;
-
-		bool
-		is_volatile_member_function(const member_t& member) const;
-
-		bool
-		is_virtual_member_function(const member_t& member) const;
-
-		bool
-		is_pure_member_function(const member_t& member) const;
-
-		bool
 		is_mutable_member_variable(std::shared_ptr<const variable> member) const;
 
     private:
@@ -281,10 +255,6 @@ class class_:
 		std::map<std::shared_ptr<const class_>, access> base_class_access_;
 		classes_t virtual_base_classes_;
 		std::map<const member_t, access> member_access_;
-		members_t const_member_functions_;
-		members_t volatile_member_functions_;
-		members_t virtual_member_functions_;
-		members_t pure_member_functions_;
 		std::vector<std::shared_ptr<const variable>> mutable_member_variables_;
 
 		//members

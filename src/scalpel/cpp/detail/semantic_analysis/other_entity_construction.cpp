@@ -39,7 +39,9 @@ create_entity
 	const bool has_typedef_specifier,
 	const bool has_static_specifier,
 	const bool has_inline_specifier,
-	const bool has_explicit_specifier
+	const bool has_virtual_specifier,
+	const bool has_explicit_specifier,
+	const bool is_class_member
 )
 {
 	//qualify type with hypothetical pointers, references and arrays
@@ -57,30 +59,60 @@ create_entity
 		case syntax_node_analysis::declarator_type::SIMPLE_FUNCTION_DECLARATOR:
 		{
 			if(opt_type)
-				return std::make_shared<semantic_entities::simple_function>
-				(
-					syntax_node_analysis::get_identifier(declarator_node).value(),
-					*opt_type,
-					create_parameters(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
-					has_inline_specifier,
-					has_static_specifier
-				);
+			{
+				if(is_class_member)
+				{
+					return std::make_shared<semantic_entities::simple_member_function>
+					(
+						syntax_node_analysis::get_identifier(declarator_node).value(),
+						*opt_type,
+						create_parameters(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
+						has_inline_specifier,
+						has_static_specifier,
+						syntax_node_analysis::has_const_function_qualifier(declarator_node),
+						syntax_node_analysis::has_volatile_function_qualifier(declarator_node),
+						has_virtual_specifier,
+						false //TODO pure
+					);
+				}
+				else
+				{
+					return std::make_shared<semantic_entities::simple_function>
+					(
+						syntax_node_analysis::get_identifier(declarator_node).value(),
+						*opt_type,
+						create_parameters(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
+						has_inline_specifier,
+						has_static_specifier
+					);
+				}
+			}
 			else
+			{
+				if(!is_class_member)
+					throw std::runtime_error("create_entity error: a constructor must be a class member");
+
 				return std::make_shared<semantic_entities::constructor>
 				(
 					create_parameters(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
 					has_inline_specifier,
 					has_explicit_specifier
 				);
+			}
 		}
 		case syntax_node_analysis::declarator_type::DESTRUCTOR_DECLARATOR:
 		{
 			if(opt_type)
 				throw std::runtime_error("create_entity error 2");
 
+			if(!is_class_member)
+				throw std::runtime_error("create_entity error: a destructor must be a class member");
+
 			return std::make_shared<semantic_entities::destructor>
 			(
-				has_inline_specifier
+				has_inline_specifier,
+				has_virtual_specifier,
+				false //TODO pure
 			);
 		}
 		case syntax_node_analysis::declarator_type::OPERATOR_FUNCTION_DECLARATOR:
@@ -88,24 +120,48 @@ create_entity
 			if(!opt_type)
 				throw std::runtime_error("create_entity error 3");
 
-			return create_operator_function
-			(
-				declarator_node,
-				*opt_type,
-				has_inline_specifier,
-				has_static_specifier,
-				current_declarative_region
-			);
+			if(is_class_member)
+			{
+				return std::make_shared<operator_member_function>
+				(
+					get_operator_function_operator(declarator_node),
+					*opt_type,
+					create_parameters(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
+					has_inline_specifier,
+					syntax_node_analysis::has_const_function_qualifier(declarator_node),
+					syntax_node_analysis::has_volatile_function_qualifier(declarator_node),
+					has_virtual_specifier,
+					false //TODO pure
+				);
+			}
+			else
+			{
+				return std::make_shared<operator_function>
+				(
+					get_operator_function_operator(declarator_node),
+					*opt_type,
+					create_parameters(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
+					has_inline_specifier,
+					has_static_specifier
+				);
+			}
 		}
 		case syntax_node_analysis::declarator_type::CONVERSION_FUNCTION_DECLARATOR:
 		{
 			if(opt_type)
 				throw std::runtime_error("create_entity error 3b");
 
+			if(!is_class_member)
+				throw std::runtime_error("create_entity error: a conversion function must be a class member");
+
 			return std::make_shared<semantic_entities::conversion_function>
 			(
 				get_conversion_function_type(declarator_node, current_declarative_region),
-				has_inline_specifier
+				has_inline_specifier,
+				syntax_node_analysis::has_const_function_qualifier(declarator_node),
+				syntax_node_analysis::has_volatile_function_qualifier(declarator_node),
+				has_virtual_specifier,
+				false //TODO pure
 			);
 		}
 		case syntax_node_analysis::declarator_type::VARIABLE_DECLARATOR:

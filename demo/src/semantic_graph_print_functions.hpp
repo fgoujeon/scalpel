@@ -37,7 +37,7 @@ using namespace scalpel::cpp::semantic_entities;
 void
 print_type
 (
-	const semantic_entities::type_shared_ptr_variant& n,
+	const semantic_entities::type_shared_ptr_variant& entity,
 	const unsigned int indent_level
 );
 
@@ -50,21 +50,21 @@ print_fundamental_type
 void
 print_namespace
 (
-	std::shared_ptr<const namespace_> n,
+	std::shared_ptr<const namespace_> entity,
 	const unsigned int indent_level = 0
 );
 
 void
 print_class
 (
-	std::shared_ptr<const class_> c,
+	std::shared_ptr<const class_> entity,
 	const unsigned int indent_level
 );
 
 void
 print_base_class
 (
-	std::shared_ptr<const class_> c,
+	std::shared_ptr<const class_> entity,
 	const class_::access acc,
 	const bool is_virtual,
 	const unsigned int indent_level
@@ -73,35 +73,49 @@ print_base_class
 void
 print_constructor
 (
-	std::shared_ptr<const constructor> c,
+	std::shared_ptr<const constructor> entity,
 	const unsigned int indent_level
 );
 
 void
 print_destructor
 (
-	std::shared_ptr<const destructor> d,
+	std::shared_ptr<const destructor> entity,
 	const unsigned int indent_level
 );
 
 void
-print_simple_function
+print_operator_member_function
 (
-	std::shared_ptr<const simple_function> f,
-	const unsigned int indent_level
-);
-
-void
-print_operator_function
-(
-	std::shared_ptr<const operator_function> f,
+	std::shared_ptr<const operator_member_function> entity,
 	const unsigned int indent_level
 );
 
 void
 print_conversion_function
 (
-	std::shared_ptr<const conversion_function> f,
+	std::shared_ptr<const conversion_function> entity,
+	const unsigned int indent_level
+);
+
+void
+print_simple_member_function
+(
+	std::shared_ptr<const simple_member_function> entity,
+	const unsigned int indent_level
+);
+
+void
+print_operator_function
+(
+	std::shared_ptr<const operator_function> entity,
+	const unsigned int indent_level
+);
+
+void
+print_simple_function
+(
+	std::shared_ptr<const simple_function> entity,
 	const unsigned int indent_level
 );
 
@@ -115,14 +129,14 @@ print_function_parameter_list
 void
 print_function_parameter
 (
-	const std::shared_ptr<const function_parameter> p,
+	const std::shared_ptr<const function_parameter> entity,
 	const unsigned int indent_level
 );
 
 void
 print_variable
 (
-	std::shared_ptr<const variable> v,
+	std::shared_ptr<const variable> entity,
 	const unsigned int indent_level
 );
 

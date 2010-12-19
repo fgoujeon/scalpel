@@ -118,6 +118,7 @@ fill_namespace
 	bool has_typedef_specifier = false;
 	bool has_static_specifier = false;
 	bool has_inline_specifier = false;
+	bool has_virtual_specifier = false;
 	bool has_explicit_specifier = false;
 
 	if(const optional_node<decl_specifier_seq>& opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node))
@@ -127,6 +128,7 @@ fill_namespace
 		has_typedef_specifier = syntax_node_analysis::has_typedef_specifier(decl_specifier_seq_node);
 		has_static_specifier = syntax_node_analysis::has_static_specifier(decl_specifier_seq_node);
 		has_inline_specifier = syntax_node_analysis::has_inline_specifier(decl_specifier_seq_node);
+		has_virtual_specifier = syntax_node_analysis::has_virtual_specifier(decl_specifier_seq_node);
 		has_explicit_specifier = syntax_node_analysis::has_explicit_specifier(decl_specifier_seq_node);
 
 		//create and/or get undecorated type
@@ -192,7 +194,9 @@ fill_namespace
 				has_typedef_specifier,
 				has_static_specifier,
 				has_inline_specifier,
-				has_explicit_specifier
+				has_virtual_specifier,
+				has_explicit_specifier,
+				false
 			);
 
 			if(auto opt_simple_function_entity = get<simple_function>(&declarator_entity))
@@ -216,11 +220,31 @@ fill_namespace
 	const syntax_nodes::function_definition& function_definition_node
 )
 {
+	const declarator& declarator_node = syntax_node_analysis::get_declarator(function_definition_node);
+	const bool has_leading_double_colon = syntax_node_analysis::has_leading_double_colon(declarator_node);
+	const syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>& opt_nested_name_specifier_node =
+		syntax_node_analysis::get_nested_name_specifier(declarator_node)
+	;
+
+	//find the enclosing declarative region of the function (xxx in void xxx::f())
+	const open_declarative_region_shared_ptr_variant& enclosing_declarative_region =
+		name_lookup::find<open_declarative_region_shared_ptr_variant>
+		(
+			has_leading_double_colon,
+			opt_nested_name_specifier_node,
+			namespace_entity
+		)
+	;
+
+	//is it a class member function?
+	const bool is_class_member = utility::get<class_>(&enclosing_declarative_region);
+
 	//create an empty function corresponding to the function-definition
 	function_shared_ptr_variant function_entity = create_function
 	(
 		function_definition_node,
-		namespace_entity
+		namespace_entity,
+		is_class_member
 	);
 
 	//The function_entity may have already been declared previously in the code.
@@ -237,7 +261,7 @@ fill_namespace
 	;
 
 	//if the function's name is qualified (xxx::f())
-	if(syntax_node_analysis::is_qualified(function_definition_node))
+	if(has_leading_double_colon || opt_nested_name_specifier_node)
 	{
 		if(opt_already_existing_function_entity)
 		{
@@ -266,12 +290,7 @@ fill_namespace
 		else
 		{
 			//declare the function
-			if
-			(
-				get<constructor>(&function_entity) ||
-				get<destructor>(&function_entity) ||
-				get<conversion_function>(&function_entity)
-			)
+			if(is_class_member)
 			{
 				std::runtime_error("error: this function must be a nonstatic member function");
 			}

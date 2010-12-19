@@ -38,12 +38,6 @@ get_declarator
 	const syntax_nodes::function_definition& function_definition_node
 );
 
-bool
-is_qualified
-(
-	const syntax_nodes::function_definition& function_definition_node
-);
-
 }}}}} //namespace scalpel::cpp::detail::semantic_analysis::syntax_node_analysis
 
 #endif

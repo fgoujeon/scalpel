@@ -36,6 +36,8 @@ typedef
 		semantic_entities::operator_function,
 		semantic_entities::conversion_function,
 		semantic_entities::simple_function,
+		semantic_entities::operator_member_function,
+		semantic_entities::simple_member_function,
 		semantic_entities::variable,
 		semantic_entities::typedef_
 	>::type
@@ -52,7 +54,9 @@ create_entity
 	const bool has_typedef_specifier,
 	const bool has_static_specifier,
 	const bool has_inline_specifier,
-	const bool has_explicit_specifier
+	const bool has_virtual_specifier,
+	const bool has_explicit_specifier,
+	const bool is_class_member
 );
 
 std::shared_ptr<semantic_entities::namespace_alias>
