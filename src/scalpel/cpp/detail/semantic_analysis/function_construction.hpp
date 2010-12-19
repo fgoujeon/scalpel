@@ -64,8 +64,7 @@ boost::optional<function_shared_ptr_variant>
 find_function
 (
 	const function_shared_ptr_variant& function_signature,
-	const syntax_nodes::function_definition& function_definition_node,
-	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+	const semantic_entities::open_declarative_region_shared_ptr_variant& function_declarative_region
 );
 
 //find the function corresponding to the given function signature
@@ -74,8 +73,7 @@ std::shared_ptr<FunctionT>
 find_function
 (
 	const std::shared_ptr<const FunctionT> function_signature,
-	const syntax_nodes::function_definition& function_definition_node,
-	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+	const semantic_entities::open_declarative_region_shared_ptr_variant& function_declarative_region
 );
 
 semantic_entities::overloadable_operator

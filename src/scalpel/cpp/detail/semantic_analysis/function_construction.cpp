@@ -22,6 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "class_construction.hpp"
 #include "type_construction.hpp"
 #include "other_entity_construction.hpp"
+#include "syntax_node_analysis.hpp"
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
 {
@@ -170,11 +171,9 @@ class find_function_visitor: public utility::static_visitor<boost::optional<func
 	public:
 		find_function_visitor
 		(
-			const syntax_nodes::function_definition& function_definition_node,
-			const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
+			const semantic_entities::open_declarative_region_shared_ptr_variant& function_declarative_region
 		):
-			function_definition_node_(function_definition_node),
-			current_declarative_region_(current_declarative_region)
+			function_declarative_region_(function_declarative_region)
 		{
 		}
 
@@ -186,8 +185,7 @@ class find_function_visitor: public utility::static_visitor<boost::optional<func
 				find_function<T>
 				(
 					function_signature,
-					function_definition_node_,
-					current_declarative_region_
+					function_declarative_region_
 				)
 			;
 
@@ -198,19 +196,17 @@ class find_function_visitor: public utility::static_visitor<boost::optional<func
 		}
 
 	private:
-		const syntax_nodes::function_definition& function_definition_node_;
-		const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region_;
+		const semantic_entities::open_declarative_region_shared_ptr_variant& function_declarative_region_;
 };
 
 boost::optional<function_shared_ptr_variant>
 find_function
 (
 	const function_shared_ptr_variant& function_signature,
-	const syntax_nodes::function_definition& function_definition_node,
-	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+	const semantic_entities::open_declarative_region_shared_ptr_variant& function_declarative_region
 )
 {
-	find_function_visitor visitor(function_definition_node, current_declarative_region);
+	find_function_visitor visitor(function_declarative_region);
 	return utility::apply_visitor(visitor, function_signature);
 }
 

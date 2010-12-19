@@ -23,7 +23,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "semantic_entity_analysis/identifier_getting_policies.hpp"
 #include "name_lookup.hpp"
-#include "syntax_node_analysis.hpp"
 #include <set>
 #include <iostream>
 
@@ -35,8 +34,7 @@ std::shared_ptr<FunctionT>
 find_function
 (
 	const std::shared_ptr<const FunctionT> function_signature,
-	const syntax_nodes::function_definition& function_definition_node,
-	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+	const semantic_entities::open_declarative_region_shared_ptr_variant& function_declarative_region
 )
 {
 	using namespace syntax_nodes;
@@ -47,9 +45,8 @@ find_function
 	//find the functions with the same identifier
 	std::set<std::shared_ptr<FunctionT>> found_functions;
 
-	const declarator& declarator_node = syntax_node_analysis::get_declarator(function_definition_node);
 	found_functions =
-		name_lookup::find
+		name_lookup::find_local
 		<
 			identifier_getting_policy_t,
 			true,
@@ -57,11 +54,8 @@ find_function
 			FunctionT
 		>
 		(
-			syntax_node_analysis::has_leading_double_colon(declarator_node),
-			syntax_node_analysis::get_nested_name_specifier(declarator_node),
 			identifier_getting_policy_t::get_identifier(function_signature),
-			current_declarative_region,
-			false
+			function_declarative_region
 		)
 	;
 

@@ -227,8 +227,8 @@ fill_namespace
 	;
 
 	//find the enclosing declarative region of the function (xxx in void xxx::f())
-	const open_declarative_region_shared_ptr_variant& enclosing_declarative_region =
-		name_lookup::find<open_declarative_region_shared_ptr_variant>
+	const open_declarative_region_shared_ptr_variant& function_declarative_region =
+		name_lookup::find_declarative_region
 		(
 			has_leading_double_colon,
 			opt_nested_name_specifier_node,
@@ -237,7 +237,7 @@ fill_namespace
 	;
 
 	//is it a class member function?
-	const bool is_class_member = utility::get<class_>(&enclosing_declarative_region);
+	const bool is_class_member = utility::get<class_>(&function_declarative_region);
 
 	//create an empty function corresponding to the function-definition
 	function_shared_ptr_variant function_entity = create_function
@@ -255,12 +255,11 @@ fill_namespace
 		find_function
 		(
 			function_entity,
-			function_definition_node,
-			namespace_entity
+			function_declarative_region
 		)
 	;
 
-	//if the function's name is qualified (xxx::f())
+	//if the function's identifier is qualified (xxx::f())
 	if(has_leading_double_colon || opt_nested_name_specifier_node)
 	{
 		if(opt_already_existing_function_entity)
@@ -270,7 +269,7 @@ fill_namespace
 		}
 		else
 		{
-			//since the name of the function is qualified,
+			//since the identifier of the function is qualified,
 			//the function should have been declared
 			throw std::runtime_error("error: function declaration missing");
 		}

@@ -127,7 +127,7 @@ struct return_type<Optional, true, EntityT, EntityT2, EntitiesT...>
 
 
 /**
-Find entities corresponding to the given identifier_or_template_id node,
+Find entities corresponding to the given identifier,
 from the given declarative region (unqualified name lookup).
 */
 template<class IdentifierGettingPolicy, bool Optional, bool Multiple, class... EntitiesT>
@@ -139,8 +139,7 @@ find
 );
 
 /**
-Find entities corresponding to the given nested identifier
-(or nested template-id),
+Find entities corresponding to the given nested identifier,
 from the given declarative region (qualified name lookup).
 apply_using_directives_for_unqualified_id_part determines whether the name
 lookup of the unqualified-id part of the given nested identifier must apply
@@ -162,16 +161,26 @@ find
 Find the declarative region corresponding to the given
 nested-identifier syntax node (i.e. Z in the expression "X::Y::Z::"),
 from the given declarative region.
-DeclarativeRegionT determines both the return type and the type of the
-intermediate declarative region(s) (X and Y in the example).
 */
-template<class DeclarativeRegionT>
-typename return_type<false, false, DeclarativeRegionT>::type
-find
+semantic_entities::open_declarative_region_shared_ptr_variant
+find_declarative_region
 (
 	const bool has_leading_double_colon,
 	const syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>& opt_nested_name_specifier_node,
 	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
+);
+
+/**
+Find entities corresponding to the given identifier,
+in the given declarative region only.
+Using directives are not applied.
+*/
+template<class IdentifierGettingPolicy, bool Optional, bool Multiple, class... EntitiesT>
+typename return_type<Optional, Multiple, EntitiesT...>::type
+find_local
+(
+	const typename IdentifierGettingPolicy::identifier_t& identifier,
+	semantic_entities::open_declarative_region_shared_ptr_variant current_declarative_region
 );
 
 
@@ -225,12 +234,11 @@ namespace detail
 	DeclarativeRegionT determines both the return type and the type of the
 	intermediate declarative region(s) (X and Y in the example).
 	*/
-	template<class DeclarativeRegionT>
-	typename return_type<false, false, DeclarativeRegionT>::type
+	semantic_entities::open_declarative_region_shared_ptr_variant
 	find_declarative_region
 	(
 		const syntax_nodes::nested_name_specifier& nested_name_specifier_node,
-		const typename return_type<false, false, DeclarativeRegionT>::type& current_declarative_region
+		const semantic_entities::open_declarative_region_shared_ptr_variant& current_declarative_region
 	);
 
 

@@ -173,7 +173,7 @@ find
 	//Find the last declarative region of the nested identifier specifier
 	//(i.e. Z in "[::]X::Y::Z::").
 	semantic_entities::open_declarative_region_shared_ptr_variant last_declarative_region =
-		find<semantic_entities::open_declarative_region_shared_ptr_variant>
+		find_declarative_region
 		(
 			has_leading_double_colon,
 			opt_nested_name_specifier_node,
@@ -209,153 +209,30 @@ find
 	;
 }
 
-template<class DeclarativeRegionT>
-typename return_type<false, false, DeclarativeRegionT>::type
-find
+template<class IdentifierGettingPolicy, bool Optional, bool Multiple, class... EntitiesT>
+typename return_type<Optional, Multiple, EntitiesT...>::type
+find_local
 (
-	const bool has_leading_double_colon,
-	const syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>& opt_nested_name_specifier_node,
-	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
+	const typename IdentifierGettingPolicy::identifier_t& identifier,
+	semantic_entities::open_declarative_region_shared_ptr_variant current_declarative_region
 )
 {
-	if(has_leading_double_colon)
-	{
-		//the first declarative region is in the global namespace
-		std::shared_ptr<semantic_entities::namespace_> global_namespace =
-			semantic_entity_analysis::get_global_namespace(current_declarative_region)
-		;
-
-		if(opt_nested_name_specifier_node)
-		{
-			auto nested_name_specifier_node = *opt_nested_name_specifier_node;
-
-			auto identifier_or_template_id_node = get_identifier_or_template_id(nested_name_specifier_node);
-			std::string first_declarative_region_name;
-			if(boost::optional<const syntax_nodes::identifier&> opt_identifier_node = syntax_nodes::get<syntax_nodes::identifier>(&identifier_or_template_id_node))
-				first_declarative_region_name = opt_identifier_node->value();
-			else
-				assert(false);
-
-			//find the first declarative region
-			typename return_type<false, false, DeclarativeRegionT>::type first_declarative_region =
-				detail::find_local_entities
-				<
-					semantic_entity_analysis::identifier_getting_policies::get_name,
-					std::shared_ptr<semantic_entities::namespace_>,
-					false,
-					false,
-					DeclarativeRegionT
-				>(first_declarative_region_name, global_namespace)
-			;
-
-			//find the last declarative region
-			return detail::find_declarative_region<DeclarativeRegionT>(nested_name_specifier_node, first_declarative_region);
-		}
-		else
-		{
-			//both the first and last declarative regions ARE the global namespace
-			return global_namespace;
-		}
-	}
-	else
-	{
-		if(opt_nested_name_specifier_node)
-		{
-			auto nested_name_specifier_node = *opt_nested_name_specifier_node;
-			auto identifier_or_template_id_node = get_identifier_or_template_id(nested_name_specifier_node);
-
-			std::string first_declarative_region_name;
-			if(boost::optional<const syntax_nodes::identifier&> opt_identifier_node = syntax_nodes::get<syntax_nodes::identifier>(&identifier_or_template_id_node))
-				first_declarative_region_name = opt_identifier_node->value();
-			else
-				assert(false);
-
-			//find the first declarative region
-			typename return_type<false, false, DeclarativeRegionT>::type first_declarative_region =
-				find
-				<
-					semantic_entity_analysis::identifier_getting_policies::get_name,
-					false,
-					false,
-					DeclarativeRegionT
-				>(first_declarative_region_name, current_declarative_region)
-			;
-
-			//find the last declarative region
-			return detail::find_declarative_region<DeclarativeRegionT>(nested_name_specifier_node, first_declarative_region);
-		}
-		else
-		{
-			assert(false); //case already handled
-		}
-	}
+	return
+		detail::find_local_entities
+		<
+			IdentifierGettingPolicy,
+			semantic_entities::open_declarative_region_shared_ptr_variant,
+			Optional,
+			Multiple,
+			EntitiesT...
+		>(identifier, current_declarative_region)
+	;
 }
 
 
 
 namespace detail
 {
-
-template<class DeclarativeRegionT>
-typename return_type<false, false, DeclarativeRegionT>::type
-find_declarative_region
-(
-	const syntax_nodes::nested_name_specifier& nested_name_specifier_node,
-	const typename return_type<false, false, DeclarativeRegionT>::type& current_declarative_region
-)
-{
-	if(auto opt_last_part_seq_node = get_last_part_seq(nested_name_specifier_node))
-	{
-		auto last_part_seq_node = *opt_last_part_seq_node;
-
-		typename return_type<false, false, DeclarativeRegionT>::type found_declarative_region = current_declarative_region;
-		for
-		(
-			auto i = last_part_seq_node.begin();
-			i != last_part_seq_node.end();
-			++i
-		)
-		{
-			const syntax_nodes::nested_name_specifier_last_part& last_part_node = i->main_node();
-			if(has_template_keyword(last_part_node))
-			{
-				assert(false); //not implemented yet (template)
-			}
-			else
-			{
-				const syntax_nodes::identifier_or_template_id& identifier_or_template_id_node = get_identifier_or_template_id(last_part_node);
-				if(auto opt_identifier_node = syntax_nodes::get<syntax_nodes::identifier>(&identifier_or_template_id_node))
-				{
-					auto identifier_node = *opt_identifier_node;
-					found_declarative_region =
-						find_local_entities
-						<
-							semantic_entity_analysis::identifier_getting_policies::get_name,
-							typename return_type<false, false, DeclarativeRegionT>::type,
-							false,
-							false,
-							DeclarativeRegionT
-						>
-						(
-							identifier_node.value(),
-							found_declarative_region
-						)
-					;
-				}
-				else
-				{
-					assert(false); //not implemented yet (template)
-				}
-			}
-		}
-
-		return found_declarative_region;
-	}
-	else
-	{
-		return current_declarative_region;
-	}
-}
 
 template<class IdentifierGettingPolicy, bool Optional, bool Multiple, class... EntitiesT>
 typename return_type<Optional, Multiple, EntitiesT...>::type
