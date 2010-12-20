@@ -51,8 +51,6 @@ single_file_tester::parse_file(const std::string& filename)
 	//close file
 	file.close();
 
-	std::cout << "Analyzing " << filename << "...\n";
-
 	//preprocessing
 	std::string preprocessed_code = preprocessor_(buffer.str(), include_paths_, macro_definitions_);
 

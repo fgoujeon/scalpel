@@ -18,16 +18,32 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef NAME_LOOKUP_TEST_CASE_7_HPP
-#define NAME_LOOKUP_TEST_CASE_7_HPP
+#include "analyzer.hpp"
+#include <boost/test/unit_test.hpp>
 
-namespace name_lookup
+namespace semantic_analysis
 {
 
-void
-test_case_7();
+BOOST_AUTO_TEST_CASE(simple_free_function)
+{
+	using namespace scalpel::cpp::semantic_entities;
 
-} //namespace name_lookup
+	std::shared_ptr<scalpel::cpp::semantic_graph> semantic_graph = analyze
+	(
+		"int "
+		"main() "
+		"{ "
+		"} "
+	);
 
-#endif
+	auto expected_semantic_graph = namespace_::make_shared();
+	auto function_main = std::make_shared<simple_function>("main", fundamental_type_shared_ptrs::int_);
+
+	expected_semantic_graph->add_member(function_main);
+	function_main->body(std::make_shared<statement_block>());
+
+	BOOST_CHECK(*semantic_graph == *expected_semantic_graph);
+}
+
+} //namespace semantic_analysis
 

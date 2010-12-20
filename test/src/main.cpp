@@ -20,18 +20,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #define BOOST_TEST_ALTERNATIVE_INIT_API //don't use legacy API
 
-#include "variant/exception_safety_test_case.hpp"
-#include "name_lookup/test_case_1.hpp"
-#include "name_lookup/test_case_2.hpp"
-#include "name_lookup/test_case_3.hpp"
-#include "name_lookup/test_case_4.hpp"
-#include "name_lookup/test_case_5.hpp"
-#include "name_lookup/test_case_6.hpp"
-#include "name_lookup/test_case_7.hpp"
-#include "name_lookup/test_case_8.hpp"
-#include "name_lookup/test_case_9.hpp"
-#include "name_lookup/test_case_10.hpp"
-#include "name_lookup/test_case_11.hpp"
 #include "syntax_analysis/single_file_tester.hpp"
 #include "get_recursive_file_list.hpp"
 #include <boost/program_options.hpp>
@@ -105,32 +93,6 @@ init_unit_test()
 	//add the syntax analysis test cases (one per test file) to the master test suite
 	boost::callback1<std::string> tm = boost::bind(&syntax_analysis::single_file_tester::parse_file, &syntax_analysis_single_file_tester, _1);
     framework::master_test_suite().add(BOOST_PARAM_TEST_CASE(tm, test_files.begin(), test_files.end()));
-
-
-
-	//
-	//Name lookup test suite
-	//
-
-    framework::master_test_suite().add(BOOST_TEST_CASE(&name_lookup::test_case_1));
-    framework::master_test_suite().add(BOOST_TEST_CASE(&name_lookup::test_case_2));
-    framework::master_test_suite().add(BOOST_TEST_CASE(&name_lookup::test_case_3));
-    framework::master_test_suite().add(BOOST_TEST_CASE(&name_lookup::test_case_4));
-    framework::master_test_suite().add(BOOST_TEST_CASE(&name_lookup::test_case_5));
-    framework::master_test_suite().add(BOOST_TEST_CASE(&name_lookup::test_case_6));
-    framework::master_test_suite().add(BOOST_TEST_CASE(&name_lookup::test_case_7));
-    framework::master_test_suite().add(BOOST_TEST_CASE(&name_lookup::test_case_8));
-    framework::master_test_suite().add(BOOST_TEST_CASE(&name_lookup::test_case_9));
-    framework::master_test_suite().add(BOOST_TEST_CASE(&name_lookup::test_case_10));
-    framework::master_test_suite().add(BOOST_TEST_CASE(&name_lookup::test_case_11));
-
-
-
-	//
-	//Variant test suite
-	//
-
-    framework::master_test_suite().add(BOOST_TEST_CASE(&variant::exception_safety_test_case));
 
     return true;
 }

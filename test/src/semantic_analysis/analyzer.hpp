@@ -18,14 +18,17 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef NAME_LOOKUP_TEST_CASE_8_HPP
-#define NAME_LOOKUP_TEST_CASE_8_HPP
+#ifndef SEMANTIC_ANALYSIS_ANALYZER_HPP
+#define SEMANTIC_ANALYSIS_ANALYZER_HPP
 
-namespace name_lookup
+#include <scalpel/cpp/semantic_graph.hpp>
+#include <memory>
+
+namespace semantic_analysis
 {
 
-void
-test_case_8();
+std::shared_ptr<scalpel::cpp::semantic_graph>
+analyze(const std::string& source_code);
 
 } //namespace name_lookup
 

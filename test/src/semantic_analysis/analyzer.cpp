@@ -18,16 +18,29 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef NAME_LOOKUP_TEST_CASE_6_HPP
-#define NAME_LOOKUP_TEST_CASE_6_HPP
+#include "analyzer.hpp"
+#include <scalpel/cpp/semantic_analysis.hpp>
+#include <scalpel/cpp/syntax_analyzer.hpp>
+#include <scalpel/cpp/preprocessor.hpp>
 
-namespace name_lookup
+namespace semantic_analysis
 {
 
-void
-test_case_6();
+std::shared_ptr<scalpel::cpp::semantic_graph>
+analyze(const std::string& source_code)
+{
+	scalpel::cpp::preprocessor preprocessor;
+	scalpel::cpp::syntax_analyzer syntax_analyzer;
+
+	//preprocessing
+	const std::string preprocessed_code = preprocessor(source_code + '\n', {}, {});
+
+	//syntax analysis
+	scalpel::cpp::syntax_tree tree = syntax_analyzer(preprocessed_code);
+
+	//semantic analysis
+	return scalpel::cpp::semantic_analysis::analyze(tree);
+}
 
 } //namespace name_lookup
-
-#endif
 

@@ -18,7 +18,6 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "exception_safety_test_case.hpp"
 #include <scalpel/utility/variant.hpp>
 #include <boost/test/unit_test.hpp>
 #include <stdexcept>
@@ -52,8 +51,7 @@ struct throw_on_second_copy
 
 struct throw_on_second_copy2: public throw_on_second_copy{};
 
-void
-exception_safety_test_case()
+BOOST_AUTO_TEST_CASE(exception_safety_test_case)
 {
 	typedef
 		scalpel::utility::basic_variant

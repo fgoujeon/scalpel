@@ -18,7 +18,6 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "test_case_9.hpp"
 #include <scalpel/cpp/detail/semantic_analysis/name_lookup.hpp>
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <scalpel/cpp/syntax_tree.hpp>
@@ -27,8 +26,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace name_lookup
 {
 
-void
-test_case_9()
+BOOST_AUTO_TEST_CASE(test_case_9)
 {
 	using namespace scalpel::cpp::syntax_nodes;
 	using namespace scalpel::cpp::semantic_entities;
