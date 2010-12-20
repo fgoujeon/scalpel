@@ -87,7 +87,7 @@ create_type
 				utility::shared_ptr_variant<class_, typedef_>::type found_type =
 					name_lookup::find
 					<
-						semantic_entity_analysis::identifier_getting_policies::get_name,
+						semantic_entity_analysis::identification_policies::by_name,
 						false,
 						false,
 						class_,

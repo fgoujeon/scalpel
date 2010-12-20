@@ -226,7 +226,7 @@ create_namespace_alias
 	utility::shared_ptr_variant<namespace_, namespace_alias>::type found_entity =
 		name_lookup::find
 		<
-			semantic_entity_analysis::identifier_getting_policies::get_name,
+			semantic_entity_analysis::identification_policies::by_name,
 			false,
 			false,
 			namespace_,
@@ -262,7 +262,7 @@ create_using_directive
 	utility::shared_ptr_variant<namespace_, namespace_alias>::type found_entity =
 		name_lookup::find
 		<
-			semantic_entity_analysis::identifier_getting_policies::get_name,
+			semantic_entity_analysis::identification_policies::by_name,
 			false,
 			false,
 			namespace_,

@@ -110,7 +110,7 @@ test_case_11()
 	//look up operator==() from global namespace, must find it
 	{
 		std::shared_ptr<operator_function> found_entity =
-			find<identifier_getting_policies::get_operator, false, false, operator_function>
+			find<identification_policies::by_overloaded_operator, false, false, operator_function>
 			(
 				scalpel::cpp::semantic_entities::overloadable_operator::DOUBLE_EQUAL,
 				semantic_graph
@@ -122,7 +122,7 @@ test_case_11()
 	//look up c::operator+() from global namespace, must find it
 	{
 		std::shared_ptr<operator_member_function> found_entity =
-			find<identifier_getting_policies::get_operator, false, false, operator_member_function>
+			find<identification_policies::by_overloaded_operator, false, false, operator_member_function>
 			(
 				false,
 				nested_name_specifier
@@ -144,7 +144,7 @@ test_case_11()
 	//look up c::c() from global namespace, must find it
 	{
 		std::shared_ptr<constructor> found_entity =
-			find<identifier_getting_policies::get_null, false, false, constructor>
+			find<identification_policies::by_nothing, false, false, constructor>
 			(
 				false,
 				nested_name_specifier
@@ -166,7 +166,7 @@ test_case_11()
 	//look up c::~c() from global namespace, must find it
 	{
 		std::shared_ptr<destructor> found_entity =
-			find<identifier_getting_policies::get_null, false, false, destructor>
+			find<identification_policies::by_nothing, false, false, destructor>
 			(
 				false,
 				nested_name_specifier
@@ -188,7 +188,7 @@ test_case_11()
 	//look up c::operator int*() from global namespace, must find it
 	{
 		std::shared_ptr<conversion_function> found_entity =
-			find<identifier_getting_policies::get_type, false, false, conversion_function>
+			find<identification_policies::by_return_type, false, false, conversion_function>
 			(
 				false,
 				nested_name_specifier

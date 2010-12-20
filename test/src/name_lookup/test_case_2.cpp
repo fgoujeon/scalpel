@@ -131,7 +131,7 @@ test_case_2()
 	//name lookup test
 	//
 	{
-		auto found_entities = find<identifier_getting_policies::get_name, false, true, simple_member_function>("f", function_g_test);
+		auto found_entities = find<identification_policies::by_name, false, true, simple_member_function>("f", function_g_test);
 		BOOST_CHECK_EQUAL(found_entities.size(), 2);
 		if(found_entities.size() == 2)
 		{
@@ -141,18 +141,18 @@ test_case_2()
 	}
 
 	{
-		auto found_entity = find<identifier_getting_policies::get_name, false, false, simple_member_function>("g", function_g_test);
+		auto found_entity = find<identification_policies::by_name, false, false, simple_member_function>("g", function_g_test);
 		BOOST_CHECK_EQUAL(found_entity, function_c1_g);
 	}
 
 	{
-		auto found_entity = find<identifier_getting_policies::get_name, false, false, class_>("inner", function_g_test);
+		auto found_entity = find<identification_policies::by_name, false, false, class_>("inner", function_g_test);
 		BOOST_CHECK_EQUAL(found_entity, struct_c0_inner);
 	}
 
 	{
 		auto found_entity =
-			find<identifier_getting_policies::get_name, false, false, simple_member_function>
+			find<identification_policies::by_name, false, false, simple_member_function>
 			(
 				false,
 				nested_name_specifier
@@ -172,7 +172,7 @@ test_case_2()
 
 	{
 		auto found_entity =
-			find<identifier_getting_policies::get_name, false, false, simple_member_function>
+			find<identification_policies::by_name, false, false, simple_member_function>
 			(
 				true,
 				nested_name_specifier
@@ -211,7 +211,7 @@ test_case_2()
 		);
 
 		auto found_entity =
-			find<identifier_getting_policies::get_name, false, false, simple_member_function>
+			find<identification_policies::by_name, false, false, simple_member_function>
 			(
 				false,
 				nested_name_specifier

@@ -56,7 +56,7 @@ find_declarative_region
 			typename return_type<false, false, open_declarative_region_shared_ptr_variant>::type first_declarative_region =
 				detail::find_local_entities
 				<
-					semantic_entity_analysis::identifier_getting_policies::get_name,
+					semantic_entity_analysis::identification_policies::by_name,
 					std::shared_ptr<semantic_entities::namespace_>,
 					false,
 					false,
@@ -90,7 +90,7 @@ find_declarative_region
 			typename return_type<false, false, open_declarative_region_shared_ptr_variant>::type first_declarative_region =
 				find
 				<
-					semantic_entity_analysis::identifier_getting_policies::get_name,
+					semantic_entity_analysis::identification_policies::by_name,
 					false,
 					false,
 					open_declarative_region_shared_ptr_variant
@@ -143,7 +143,7 @@ find_declarative_region
 					found_declarative_region =
 						find_local_entities
 						<
-							semantic_entity_analysis::identifier_getting_policies::get_name,
+							semantic_entity_analysis::identification_policies::by_name,
 							open_declarative_region_shared_ptr_variant,
 							false,
 							false,

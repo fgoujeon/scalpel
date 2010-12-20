@@ -101,7 +101,7 @@ test_case_9()
 	//look up a::f() (undefined function's declaration) from global namespace, must find nothing
 	{
 		auto found_entity =
-			find<identifier_getting_policies::get_name, true, false, simple_function>
+			find<identification_policies::by_name, true, false, simple_function>
 			(
 				false,
 				nested_name_specifier
@@ -138,7 +138,7 @@ test_case_9()
 			identifier("f")
 		);
 		auto found_entity =
-			find<identifier_getting_policies::get_name, false, false, simple_function>
+			find<identification_policies::by_name, false, false, simple_function>
 			(
 				false,
 				nested_name_specifier

@@ -117,26 +117,26 @@ test_case_1()
 
 	//lookup i from function test, must find it
 	{
-		auto found_entity = find<identifier_getting_policies::get_name, false, false, variable>("i", function_a_b_f);
+		auto found_entity = find<identification_policies::by_name, false, false, variable>("i", function_a_b_f);
 		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
 	}
 
 	//lookup j from function test, must find it
 	{
-		auto found_entity = find<identifier_getting_policies::get_name, false, false, variable>("j", function_a_b_f);
+		auto found_entity = find<identification_policies::by_name, false, false, variable>("j", function_a_b_f);
 		BOOST_CHECK_EQUAL(found_entity, variable_j);
 	}
 
 	//lookup B from itself, must find it
 	{
-		auto found_entity = find<identifier_getting_policies::get_name, false, false, class_>("B", struct_a_b);
+		auto found_entity = find<identification_policies::by_name, false, false, class_>("B", struct_a_b);
 		BOOST_CHECK_EQUAL(found_entity, struct_a_b);
 	}
 
 	//lookup C::n from function test, must find it
 	{
 		auto found_entity =
-			find<identifier_getting_policies::get_name, false, false, variable>
+			find<identification_policies::by_name, false, false, variable>
 			(
 				false,
 				nested_name_specifier
@@ -157,7 +157,7 @@ test_case_1()
 	//lookup ::A::i from function test, must find it
 	{
 		auto found_entity =
-			find<identifier_getting_policies::get_name, false, false, variable>
+			find<identification_policies::by_name, false, false, variable>
 			(
 				true,
 				nested_name_specifier
@@ -178,7 +178,7 @@ test_case_1()
 	//lookup ::i from function test, must find it
 	{
 		auto found_entity =
-			find<identifier_getting_policies::get_name, false, false, variable>
+			find<identification_policies::by_name, false, false, variable>
 			(
 				true,
 				optional_node<nested_name_specifier>(),
@@ -192,7 +192,7 @@ test_case_1()
 	//lookup namespace A::C from function test, must find it
 	{
 		auto found_entity =
-			find<identifier_getting_policies::get_name, false, false, namespace_>
+			find<identification_policies::by_name, false, false, namespace_>
 			(
 				false,
 				nested_name_specifier

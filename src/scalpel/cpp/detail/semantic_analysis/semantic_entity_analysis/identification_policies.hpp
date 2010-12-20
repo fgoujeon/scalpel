@@ -18,8 +18,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_SEMANTIC_ENTITY_ANALYSIS_IDENTIFIER_GETTING_POLICIES_HPP
-#define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_SEMANTIC_ENTITY_ANALYSIS_IDENTIFIER_GETTING_POLICIES_HPP
+#ifndef SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_SEMANTIC_ENTITY_ANALYSIS_IDENTIFICATION_POLICIES_HPP
+#define SCALPEL_CPP_DETAIL_SEMANTIC_ANALYSIS_SEMANTIC_ENTITY_ANALYSIS_IDENTIFICATION_POLICIES_HPP
 
 #include "get_name.hpp"
 #include <scalpel/cpp/semantic_graph.hpp>
@@ -29,9 +29,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace semantic_entity_analysis
 {
 
-namespace identifier_getting_policies
+//these policies define how an entity can be identified
+//(either by its name, its overloaded operator, etc.)
+namespace identification_policies
 {
-	struct get_null
+	struct by_nothing
 	{
 		typedef void* identifier_t;
 
@@ -52,7 +54,7 @@ namespace identifier_getting_policies
 		}
 	};
 
-	struct get_name
+	struct by_name
 	{
 		typedef std::string identifier_t;
 
@@ -73,7 +75,7 @@ namespace identifier_getting_policies
 		}
 	};
 
-	struct get_operator
+	struct by_overloaded_operator
 	{
 		typedef semantic_entities::overloadable_operator identifier_t;
 
@@ -94,7 +96,7 @@ namespace identifier_getting_policies
 		}
 	};
 
-	struct get_type
+	struct by_return_type
 	{
 		typedef semantic_entities::type_shared_ptr_variant identifier_t;
 
@@ -118,25 +120,26 @@ namespace identifier_getting_policies
 
 
 
+//relate an entity type with its corresponding identification policy
 template<class Entity>
-struct get_identifier_getting_policy;
+struct get_identification_policy;
 
-#define GENERATE_GET_IDENTIFIER_GETTING_POLICY_SPECIALIZATION(ENTITY_TYPE, POLICY) \
+#define GENERATE_GET_IDENTIFICATION_POLICY_SPECIALIZATION(ENTITY_TYPE, POLICY) \
 template<> \
-struct get_identifier_getting_policy<semantic_entities::ENTITY_TYPE> \
+struct get_identification_policy<semantic_entities::ENTITY_TYPE> \
 { \
-	typedef identifier_getting_policies::POLICY policy_t; \
+	typedef identification_policies::POLICY policy_t; \
 };
 
-GENERATE_GET_IDENTIFIER_GETTING_POLICY_SPECIALIZATION(constructor, get_null)
-GENERATE_GET_IDENTIFIER_GETTING_POLICY_SPECIALIZATION(destructor, get_null)
-GENERATE_GET_IDENTIFIER_GETTING_POLICY_SPECIALIZATION(operator_member_function, get_operator)
-GENERATE_GET_IDENTIFIER_GETTING_POLICY_SPECIALIZATION(conversion_function, get_type)
-GENERATE_GET_IDENTIFIER_GETTING_POLICY_SPECIALIZATION(simple_member_function, get_name)
-GENERATE_GET_IDENTIFIER_GETTING_POLICY_SPECIALIZATION(operator_function, get_operator)
-GENERATE_GET_IDENTIFIER_GETTING_POLICY_SPECIALIZATION(simple_function, get_name)
+GENERATE_GET_IDENTIFICATION_POLICY_SPECIALIZATION(constructor, by_nothing)
+GENERATE_GET_IDENTIFICATION_POLICY_SPECIALIZATION(destructor, by_nothing)
+GENERATE_GET_IDENTIFICATION_POLICY_SPECIALIZATION(operator_member_function, by_overloaded_operator)
+GENERATE_GET_IDENTIFICATION_POLICY_SPECIALIZATION(conversion_function, by_return_type)
+GENERATE_GET_IDENTIFICATION_POLICY_SPECIALIZATION(simple_member_function, by_name)
+GENERATE_GET_IDENTIFICATION_POLICY_SPECIALIZATION(operator_function, by_overloaded_operator)
+GENERATE_GET_IDENTIFICATION_POLICY_SPECIALIZATION(simple_function, by_name)
 
-#undef GENERATE_GET_IDENTIFIER_GETTING_POLICY_SPECIALIZATION
+#undef GENERATE_GET_IDENTIFICATION_POLICY_SPECIALIZATION
 
 }}}}} //namespace scalpel::cpp::detail::semantic_analysis::semantic_entity_analysis
 

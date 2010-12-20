@@ -176,7 +176,7 @@ test_case_6()
 	//look up ab::g() from function test, must find ab::g()
 	{
 		auto found_entity =
-			find<identifier_getting_policies::get_name, false, false, simple_function>
+			find<identification_policies::by_name, false, false, simple_function>
 			(
 				false,
 				nested_name_specifier
@@ -198,7 +198,7 @@ test_case_6()
 	//look up ab::f() from function test, must find a::f() and b::f()
 	{
 		auto found_entities =
-			find<identifier_getting_policies::get_name, false, true, simple_function>
+			find<identification_policies::by_name, false, true, simple_function>
 			(
 				false,
 				nested_name_specifier
@@ -231,7 +231,7 @@ test_case_6()
 	//look up ab::x from function test, must find nothing
 	{
 		auto found_entity =
-			find<identifier_getting_policies::get_name, true, false, variable>
+			find<identification_policies::by_name, true, false, variable>
 			(
 				false,
 				nested_name_specifier
@@ -252,7 +252,7 @@ test_case_6()
 	//look up ab::i from function test, must find a::i and b::i
 	{
 		auto found_entities =
-			find<identifier_getting_policies::get_name, false, true, variable>
+			find<identification_policies::by_name, false, true, variable>
 			(
 				false,
 				nested_name_specifier
@@ -285,7 +285,7 @@ test_case_6()
 	//look up ab::h() from function test, must find y::h() and z::h()
 	{
 		auto found_entities =
-			find<identifier_getting_policies::get_name, false, true, simple_function>
+			find<identification_policies::by_name, false, true, simple_function>
 			(
 				false,
 				nested_name_specifier
