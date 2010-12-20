@@ -84,7 +84,7 @@ namespace identification_policies
 		identifier_t
 		get_identifier(const EntityT& entity)
 		{
-			return entity->get_operator();
+			return entity->overloaded_operator();
 		}
 
 		template<class EntityT>

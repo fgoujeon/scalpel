@@ -41,7 +41,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 CLASS_NAME::CLASS_NAME \
 ( \
 	BOOST_PP_IIF(HAS_NAME, const std::string& name,) BOOST_PP_COMMA_IF(HAS_NAME) \
-	BOOST_PP_IIF(HAS_OPERATOR, const overloadable_operator op,) BOOST_PP_COMMA_IF(HAS_OPERATOR) \
+	BOOST_PP_IIF(HAS_OPERATOR, const overloadable_operator overloaded_operator,) BOOST_PP_COMMA_IF(HAS_OPERATOR) \
 	BOOST_PP_IIF(HAS_RETURN_TYPE, const type_shared_ptr_variant& return_type,) BOOST_PP_COMMA_IF(HAS_RETURN_TYPE) \
 	BOOST_PP_IIF(HAS_PARAMETERS, function_parameter_list&& parameters,) BOOST_PP_COMMA_IF(HAS_PARAMETERS) \
 	bool is_inline, \
@@ -54,7 +54,7 @@ CLASS_NAME::CLASS_NAME \
 	void* const \
 ): \
 	BOOST_PP_IIF(HAS_NAME, name_(name),) BOOST_PP_COMMA_IF(HAS_NAME) \
-	BOOST_PP_IIF(HAS_OPERATOR, op_(op),) BOOST_PP_COMMA_IF(HAS_OPERATOR) \
+	BOOST_PP_IIF(HAS_OPERATOR, overloaded_operator_(overloaded_operator),) BOOST_PP_COMMA_IF(HAS_OPERATOR) \
 	BOOST_PP_IIF(HAS_RETURN_TYPE, return_type_(return_type),) BOOST_PP_COMMA_IF(HAS_RETURN_TYPE) \
 	BOOST_PP_IIF(HAS_PARAMETERS, parameters_(std::move(parameters)),) BOOST_PP_COMMA_IF(HAS_PARAMETERS) \
 	is_inline_(is_inline), \
@@ -146,7 +146,7 @@ have_same_signature(const CLASS_NAME& lhs, const CLASS_NAME& rhs) \
 		BOOST_PP_IIF(HAS_CONST, lhs.is_const() == rhs.is_const() &&,) \
 		BOOST_PP_IIF(HAS_VOLATILE, lhs.is_volatile() == rhs.is_volatile() &&,) \
 		BOOST_PP_IIF(HAS_NAME, lhs.name() == rhs.name() &&,) \
-		BOOST_PP_IIF(HAS_OPERATOR, lhs.get_operator() == rhs.get_operator() &&,) \
+		BOOST_PP_IIF(HAS_OPERATOR, lhs.overloaded_operator() == rhs.overloaded_operator() &&,) \
 		BOOST_PP_IIF(HAS_RETURN_TYPE, utility::are_pointed_objects_equal(lhs.return_type(), rhs.return_type()) &&,) \
 		BOOST_PP_IIF(HAS_PARAMETERS, have_same_types(lhs.parameters(), rhs.parameters()) &&,) \
 		true \

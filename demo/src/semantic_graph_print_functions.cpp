@@ -296,7 +296,7 @@ print_operator_member_function
 )
 {
 	std::cout << indent(indent_level) << "<operator_function";
-	std::cout << attribute(entity->get_operator());
+	std::cout << attribute(entity->overloaded_operator());
 
 	assert(entity->has_enclosing_declarative_region());
 	declarative_region_shared_ptr_variant enclosing_declarative_region = entity->enclosing_declarative_region();
@@ -412,7 +412,7 @@ print_operator_function
 )
 {
 	std::cout << indent(indent_level) << "<operator_function";
-	std::cout << attribute(entity->get_operator());
+	std::cout << attribute(entity->overloaded_operator());
 	if(entity->is_inline())
 		std::cout << " inline=\"true\"";
 	if(entity->is_static())
