@@ -139,6 +139,21 @@ create_function
 		assert(false);
 }
 
+class define_function_visitor: public utility::static_visitor<void>
+{
+	public:
+		template<class T>
+		void
+		operator()(std::shared_ptr<T> function_entity) const
+		{
+			//check whether the function is undefined as it have to be
+			if(function_entity->defined())
+				throw std::runtime_error("error: the function is already defined");
+
+			function_entity->body(std::make_shared<semantic_entities::statement_block>());
+		}
+};
+
 void
 define_function
 (
@@ -147,23 +162,8 @@ define_function
 	const semantic_entities::declarative_region_shared_ptr_variant /*current_declarative_region*/
 )
 {
-	//TODO
-	if(auto opt_constructor_entity = get<constructor>(&function_entity))
-		(*opt_constructor_entity)->body(std::make_shared<semantic_entities::statement_block>());
-	else if(auto opt_destructor_entity = get<destructor>(&function_entity))
-		(*opt_destructor_entity)->body(std::make_shared<semantic_entities::statement_block>());
-	else if(auto opt_operator_function_entity = get<operator_member_function>(&function_entity))
-		(*opt_operator_function_entity)->body(std::make_shared<semantic_entities::statement_block>());
-	else if(auto opt_conversion_function_entity = get<conversion_function>(&function_entity))
-		(*opt_conversion_function_entity)->body(std::make_shared<semantic_entities::statement_block>());
-	else if(auto opt_simple_function_entity = get<simple_member_function>(&function_entity))
-		(*opt_simple_function_entity)->body(std::make_shared<semantic_entities::statement_block>());
-	else if(auto opt_operator_function_entity = get<operator_function>(&function_entity))
-		(*opt_operator_function_entity)->body(std::make_shared<semantic_entities::statement_block>());
-	else if(auto opt_simple_function_entity = get<simple_function>(&function_entity))
-		(*opt_simple_function_entity)->body(std::make_shared<semantic_entities::statement_block>());
-	else
-		assert(false);
+	define_function_visitor visitor;
+	return utility::apply_visitor(visitor, function_entity);
 }
 
 class find_function_visitor: public utility::static_visitor<boost::optional<function_shared_ptr_variant>>

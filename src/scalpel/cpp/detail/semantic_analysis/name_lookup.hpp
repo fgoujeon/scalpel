@@ -161,6 +161,7 @@ find
 Find the declarative region corresponding to the given
 nested-identifier syntax node (i.e. Z in the expression "X::Y::Z::"),
 from the given declarative region.
+If has_leading_double_colon is false, the second argument cannot be omitted.
 */
 semantic_entities::open_declarative_region_shared_ptr_variant
 find_declarative_region
@@ -228,11 +229,9 @@ namespace detail
 	);
 
 	/**
-	Find the declarative region corresponding to the given nested-name-specifier
-	syntax node (i.e. Z in the expression "X::Y::Z::"),
+	Find the declarative region corresponding to the given
+	nested-identifier syntax node (i.e. Z in the expression "X::Y::Z::"),
 	from the given declarative region (where X must be declared).
-	DeclarativeRegionT determines both the return type and the type of the
-	intermediate declarative region(s) (X and Y in the example).
 	*/
 	semantic_entities::open_declarative_region_shared_ptr_variant
 	find_declarative_region

@@ -537,6 +537,7 @@ class apply_visitor_impl<void, VariantVisitorT, FullVariantT, CurrentVariantT, H
 		>::type* = 0
 	);
 
+	typedef typename CurrentVariantT::raw_head_t raw_head_t;
 	typedef typename CurrentVariantT::head_t head_t;
 	typedef typename CurrentVariantT::tail_t tail_t;
 
@@ -548,7 +549,7 @@ class apply_visitor_impl<void, VariantVisitorT, FullVariantT, CurrentVariantT, H
 		const FullVariantT& var
 	)
 	{
-		const head_t* opt_object = get<head_t>(&var);
+		const head_t* opt_object = get<raw_head_t>(&var);
 		if(opt_object)
 		{
 			variant_visitor(*opt_object);

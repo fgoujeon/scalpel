@@ -60,7 +60,7 @@ namespace identification_policies
 
 		template<class EntityT>
 		static
-		identifier_t
+		const identifier_t&
 		get_identifier(const EntityT& entity)
 		{
 			return semantic_entity_analysis::get_name(entity);
@@ -102,7 +102,7 @@ namespace identification_policies
 
 		template<class EntityT>
 		static
-		identifier_t
+		const identifier_t&
 		get_identifier(const EntityT& entity)
 		{
 			return entity->return_type();

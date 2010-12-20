@@ -102,7 +102,12 @@ find_declarative_region
 		}
 		else
 		{
-			assert(false); //case already handled
+			//error
+			assert(false);
+
+			//we could simply return current_declarative_region here,
+			//but the cast to open_declarative_region_shared_ptr_variant
+			//could raise an exception
 		}
 	}
 }

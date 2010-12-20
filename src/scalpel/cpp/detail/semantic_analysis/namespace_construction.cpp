@@ -225,15 +225,19 @@ fill_namespace
 	const syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>& opt_nested_name_specifier_node =
 		syntax_node_analysis::get_nested_name_specifier(declarator_node)
 	;
+	//is the function's identifier qualified (xxx::f())?
+	const bool is_qualified = has_leading_double_colon || opt_nested_name_specifier_node;
 
 	//find the enclosing declarative region of the function (xxx in void xxx::f())
 	const open_declarative_region_shared_ptr_variant& function_declarative_region =
+		is_qualified ?
 		name_lookup::find_declarative_region
 		(
 			has_leading_double_colon,
 			opt_nested_name_specifier_node,
 			namespace_entity
-		)
+		):
+		namespace_entity
 	;
 
 	//is it a class member function?
@@ -259,8 +263,7 @@ fill_namespace
 		)
 	;
 
-	//if the function's identifier is qualified (xxx::f())
-	if(has_leading_double_colon || opt_nested_name_specifier_node)
+	if(is_qualified)
 	{
 		if(opt_already_existing_function_entity)
 		{
