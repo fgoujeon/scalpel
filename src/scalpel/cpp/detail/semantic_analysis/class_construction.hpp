@@ -49,6 +49,14 @@ fill_class
 	const syntax_nodes::member_declaration_member_declarator_list& member_declaration_member_declarator_list_node
 );
 
+void
+fill_class
+(
+	const std::shared_ptr<semantic_entities::class_> class_entity,
+	const semantic_entities::class_::access function_access,
+	const syntax_nodes::function_definition& function_definition_node
+);
+
 }}}} //namespace scalpel::cpp::detail::semantic_analysis
 
 #endif

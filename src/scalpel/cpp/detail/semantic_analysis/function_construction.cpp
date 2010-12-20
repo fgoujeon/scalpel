@@ -163,7 +163,7 @@ define_function
 )
 {
 	define_function_visitor visitor;
-	return utility::apply_visitor(visitor, function_entity);
+	utility::apply_visitor(visitor, function_entity);
 }
 
 class find_function_visitor: public utility::static_visitor<boost::optional<function_shared_ptr_variant>>

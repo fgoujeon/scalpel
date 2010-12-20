@@ -19,6 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "class_construction.hpp"
+#include "function_construction.hpp"
 #include "type_construction.hpp"
 #include "other_entity_construction.hpp"
 #include "name_lookup.hpp"
@@ -152,7 +153,12 @@ fill_class
 				if(auto opt_member_declaration_function_definition_node = get<member_declaration_function_definition>(&*opt_member_declaration_node))
 				{
 					auto function_definition_node = get_function_definition(*opt_member_declaration_function_definition_node);
-					//analyze(function_definition_node, class_entity);
+					fill_class
+					(
+						class_entity,
+						current_access,
+						function_definition_node
+					);
 				}
 				else if(auto opt_member_declaration_member_declarator_list_node = get<member_declaration_member_declarator_list>(&*opt_member_declaration_node))
 				{
@@ -349,6 +355,90 @@ fill_class
 			}
 		}
 	}
+}
+
+namespace
+{
+	class add_function_to_class_visitor: public utility::static_visitor<void>
+	{
+		public:
+			add_function_to_class_visitor
+			(
+				const std::shared_ptr<semantic_entities::class_>& class_entity,
+				const class_::access function_access
+			):
+				class_entity_(class_entity),
+				function_access_(function_access)
+			{
+			}
+
+			template<class T>
+			void
+			operator()(const std::shared_ptr<T>& function_entity) const
+			{
+				class_entity_->add_member(function_entity, function_access_);
+			}
+
+			void
+			operator()(const std::shared_ptr<destructor>& function_entity) const
+			{
+				class_entity_->set_destructor(function_entity, function_access_);
+			}
+
+			void
+			operator()(const std::shared_ptr<simple_function>&) const
+			{
+				assert(false);
+			}
+
+			void
+			operator()(const std::shared_ptr<operator_function>&) const
+			{
+				assert(false);
+			}
+
+		private:
+			const std::shared_ptr<semantic_entities::class_>& class_entity_;
+			const class_::access function_access_;
+	};
+}
+
+void
+fill_class
+(
+	const std::shared_ptr<semantic_entities::class_> class_entity,
+	const class_::access function_access,
+	const syntax_nodes::function_definition& function_definition_node
+)
+{
+	//make sure the function's name isn't qualified
+	const declarator& declarator_node = syntax_node_analysis::get_declarator(function_definition_node);
+	const bool has_leading_double_colon = syntax_node_analysis::has_leading_double_colon(declarator_node);
+	const syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>& opt_nested_name_specifier_node =
+		syntax_node_analysis::get_nested_name_specifier(declarator_node)
+	;
+	if(has_leading_double_colon || opt_nested_name_specifier_node)
+		throw std::runtime_error("error: invalid use of '::'");
+
+	//create the function
+	function_shared_ptr_variant function_entity = create_function
+	(
+		function_definition_node,
+		class_entity,
+		true
+	);
+
+	//add the function to the class
+	add_function_to_class_visitor visitor(class_entity, function_access);
+	utility::apply_visitor(visitor, function_entity);
+
+	//define the function
+	define_function
+	(
+		function_entity,
+		function_definition_node,
+		class_entity
+	);
 }
 
 }}}} //namespace scalpel::cpp::detail::semantic_analysis
