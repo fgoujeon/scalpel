@@ -59,6 +59,8 @@ class shared_ptr_vector
 
 		shared_ptr_vector();
 
+		shared_ptr_vector(std::initializer_list<std::shared_ptr<T>>&& initializer_list);
+
 		shared_ptr_vector(const shared_ptr_vector& o) = delete;
 
 		shared_ptr_vector(shared_ptr_vector&& o);

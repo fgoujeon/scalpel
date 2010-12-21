@@ -30,6 +30,12 @@ shared_ptr_vector<T>::shared_ptr_vector()
 }
 
 template<typename T>
+shared_ptr_vector<T>::shared_ptr_vector(std::initializer_list<std::shared_ptr<T>>&& initializer_list):
+	raw_vector_(std::move(initializer_list))
+{
+}
+
+template<typename T>
 shared_ptr_vector<T>::shared_ptr_vector(shared_ptr_vector&& o):
 	raw_vector_(std::move(o.raw_vector_))
 {
