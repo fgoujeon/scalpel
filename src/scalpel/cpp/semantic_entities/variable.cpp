@@ -29,11 +29,11 @@ variable::variable
 (
 	const std::string& name,
 	const type_shared_ptr_variant& type,
-	bool is_is_static
+	bool is_static
 ):
 	type_(type),
 	name_(name),
-	is_static_(is_is_static)
+	is_static_(is_static)
 {
 }
 

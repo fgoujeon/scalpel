@@ -40,7 +40,7 @@ class variable
 		(
 			const std::string& name,
 			const type_shared_ptr_variant& type,
-			bool is_is_static = false
+			bool is_static = false
 		);
 
 		variable(const variable& v);
