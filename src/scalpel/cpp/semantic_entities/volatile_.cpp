@@ -20,7 +20,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "volatile_.hpp"
 #include "type_variants.hpp"
-#include <scalpel/utility/are_pointed_objects_equal.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -34,7 +33,7 @@ bool
 operator==(const volatile_& lhs, const volatile_& rhs)
 {
 	return
-		are_pointed_objects_equal(lhs.qualified_type(), rhs.qualified_type())
+		equals(lhs.qualified_type(), rhs.qualified_type())
 	;
 }
 

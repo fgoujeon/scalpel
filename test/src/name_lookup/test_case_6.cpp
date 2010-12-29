@@ -88,59 +88,59 @@ BOOST_AUTO_TEST_CASE(test_case_6)
 	auto function_y_f = std::make_shared<simple_function>
 	(
 		"f",
-		fundamental_type_shared_ptrs::void_
+		fundamental_type::VOID
 	);
 	auto function_y_h = std::make_shared<simple_function>
 	(
 		"h",
-		fundamental_type_shared_ptrs::void_
+		fundamental_type::VOID
 	);
 	auto function_z_h = std::make_shared<simple_function>
 	(
 		"h",
-		fundamental_type_shared_ptrs::void_
+		fundamental_type::VOID
 	);
 	auto function_a_f = std::make_shared<simple_function>
 	(
 		"f",
-		fundamental_type_shared_ptrs::void_
+		fundamental_type::VOID
 	);
 	auto function_a_g = std::make_shared<simple_function>
 	(
 		"g",
-		fundamental_type_shared_ptrs::void_
+		fundamental_type::VOID
 	);
 	auto function_b_f = std::make_shared<simple_function>
 	(
 		"f",
-		fundamental_type_shared_ptrs::void_
+		fundamental_type::VOID
 	);
 	auto function_ab_g = std::make_shared<simple_function>
 	(
 		"g",
-		fundamental_type_shared_ptrs::void_
+		fundamental_type::VOID
 	);
 	auto function_test = std::make_shared<simple_function>
 	(
 		"test",
-		fundamental_type_shared_ptrs::void_
+		fundamental_type::VOID
 	);
 
 	//variables
 	auto variable_x = std::make_shared<variable>
 	(
 		"x",
-		fundamental_type_shared_ptrs::int_
+		fundamental_type::INT
 	);
 	auto variable_a_i = std::make_shared<variable>
 	(
 		"i",
-		fundamental_type_shared_ptrs::int_
+		fundamental_type::INT
 	);
 	auto variable_b_i = std::make_shared<variable>
 	(
 		"i",
-		fundamental_type_shared_ptrs::int_
+		fundamental_type::INT
 	);
 
 	//assembling

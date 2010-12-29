@@ -27,70 +27,24 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 /**
 Represents a C++ fundamental type.
 */
-class fundamental_type
+enum class fundamental_type
 {
-	private:
-		enum type_enum
-		{
-			BOOL,
-			CHAR,
-			DOUBLE,
-			FLOAT,
-			INT,
-			LONG_DOUBLE,
-			LONG_INT,
-			LONG_LONG_INT,
-			SHORT_INT,
-			UNSIGNED_CHAR,
-			UNSIGNED_INT,
-			UNSIGNED_LONG_INT,
-			UNSIGNED_LONG_LONG_INT,
-			UNSIGNED_SHORT_INT,
-			VOID,
-			WCHAR_T
-		};
-
-		fundamental_type(type_enum t);
-
-		//
-		//disable copy and move
-		//
-		fundamental_type(const fundamental_type&) = delete;
-
-		fundamental_type(fundamental_type&&) = delete;
-
-		const fundamental_type&
-		operator=(const fundamental_type&) = delete;
-
-		const fundamental_type&
-		operator=(fundamental_type&&) = delete;
-
-	public:
-		bool
-		operator==(const fundamental_type& o) const;
-
-		bool
-		operator!=(const fundamental_type& o) const;
-
-		static const fundamental_type bool_;
-		static const fundamental_type char_;
-		static const fundamental_type double_;
-		static const fundamental_type float_;
-		static const fundamental_type int_;
-		static const fundamental_type long_double;
-		static const fundamental_type long_int;
-		static const fundamental_type long_long_int;
-		static const fundamental_type short_int;
-		static const fundamental_type unsigned_char;
-		static const fundamental_type unsigned_int;
-		static const fundamental_type unsigned_long_int;
-		static const fundamental_type unsigned_long_long_int;
-		static const fundamental_type unsigned_short_int;
-		static const fundamental_type void_;
-		static const fundamental_type wchar_t_;
-
-	private:
-		type_enum type_;
+	BOOL,
+	CHAR,
+	DOUBLE,
+	FLOAT,
+	INT,
+	LONG_DOUBLE,
+	LONG_INT,
+	LONG_LONG_INT,
+	SHORT_INT,
+	UNSIGNED_CHAR,
+	UNSIGNED_INT,
+	UNSIGNED_LONG_INT,
+	UNSIGNED_LONG_LONG_INT,
+	UNSIGNED_SHORT_INT,
+	VOID,
+	WCHAR_T
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

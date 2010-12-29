@@ -154,8 +154,8 @@ safe_type_comparison
 		const unqualified_type_shared_ptr_variant& rhs_unqualified_type = get_unqualified_type(rhs.type());
 		if
 		(
-			(opt_lhs_type = utility::get<class_>(&lhs_unqualified_type)) &&
-			(opt_rhs_type = utility::get<class_>(&rhs_unqualified_type))
+			(opt_lhs_type = utility::get<std::shared_ptr<const class_>>(&lhs_unqualified_type)) &&
+			(opt_rhs_type = utility::get<std::shared_ptr<const class_>>(&rhs_unqualified_type))
 		)
 		{
 			const unsigned int lhs_back_index = get_declarative_region_back_index
@@ -177,7 +177,7 @@ safe_type_comparison
 	}
 
 	//directly compare lhs' and rhs' types
-	return are_pointed_objects_equal(lhs.type(), rhs.type());
+	return equals(lhs.type(), rhs.type());
 }
 
 bool

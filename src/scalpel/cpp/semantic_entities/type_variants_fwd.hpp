@@ -21,7 +21,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_VARIANTS_FWD_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_VARIANTS_FWD_HPP
 
+#include "fundamental_type.hpp"
 #include <scalpel/utility/const_shared_ptr_variant.hpp>
+#include <scalpel/utility/variant.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -29,40 +31,42 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 class array;
 class class_;
 class const_;
-class fundamental_type;
 class pointer;
 class reference;
 class typedef_;
 class volatile_;
 
 typedef
-	utility::const_shared_ptr_variant
+	utility::variant
 	<
-		array,
+		std::shared_ptr<const array>,
 		fundamental_type,
-		class_,
-		const_,
-		pointer,
-		reference,
-		volatile_
+		std::shared_ptr<const class_>,
+		std::shared_ptr<const const_>,
+		std::shared_ptr<const pointer>,
+		std::shared_ptr<const reference>,
+		std::shared_ptr<const volatile_>
 	>::type
 	type_shared_ptr_variant
 ;
 
 typedef
-	utility::const_shared_ptr_variant
+	utility::variant
 	<
 		fundamental_type,
-		class_
+		std::shared_ptr<const class_>
 	>::type
 	unqualified_type_shared_ptr_variant
 ;
 
-unqualified_type_shared_ptr_variant
-get_unqualified_type(const type_shared_ptr_variant& type);
+bool
+equals(const type_shared_ptr_variant& lhs, const type_shared_ptr_variant& rhs);
 
 bool
 have_same_qualifiers(const type_shared_ptr_variant& lhs, const type_shared_ptr_variant& rhs);
+
+unqualified_type_shared_ptr_variant
+get_unqualified_type(const type_shared_ptr_variant& type);
 
 }}} //namespace scalpel::cpp::semantic_entities
 

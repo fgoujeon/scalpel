@@ -68,25 +68,25 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 	auto c_operator_function_plus = std::make_shared<operator_member_function>
 	(
 		scalpel::cpp::semantic_entities::overloadable_operator::PLUS,
-		fundamental_type_shared_ptrs::bool_
+		fundamental_type::BOOL
 	);
 	auto c_conversion_function_double_ptr = std::make_shared<conversion_function>
 	(
-		std::make_shared<const pointer>(fundamental_type_shared_ptrs::double_)
+		std::make_shared<const pointer>(fundamental_type::DOUBLE)
 	);
 	auto c_conversion_function_int_ptr = std::make_shared<conversion_function>
 	(
-		std::make_shared<const pointer>(fundamental_type_shared_ptrs::int_)
+		std::make_shared<const pointer>(fundamental_type::INT)
 	);
 	auto operator_function_not_equal = std::make_shared<operator_function>
 	(
 		scalpel::cpp::semantic_entities::overloadable_operator::EXCLAMATION_EQUAL,
-		fundamental_type_shared_ptrs::bool_
+		fundamental_type::BOOL
 	);
 	auto operator_function_equal = std::make_shared<operator_function>
 	(
 		scalpel::cpp::semantic_entities::overloadable_operator::DOUBLE_EQUAL,
-		fundamental_type_shared_ptrs::bool_
+		fundamental_type::BOOL
 	);
 
 	//assembling
@@ -197,7 +197,7 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 					space(""),
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
-				std::make_shared<const pointer>(fundamental_type_shared_ptrs::int_),
+				std::make_shared<const pointer>(fundamental_type::INT),
 				semantic_graph,
 				false
 			)

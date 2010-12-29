@@ -175,7 +175,7 @@ BOOST_AUTO_TEST_CASE(complex_class)
 			{
 				std::make_shared<function_parameter>
 				(
-					fundamental_type_shared_ptrs::int_,
+					fundamental_type::INT,
 					"i"
 				)
 			}
@@ -194,7 +194,7 @@ BOOST_AUTO_TEST_CASE(complex_class)
 						std::make_shared<const const_>
 						(
 							//std::shared_ptr<const class_>(class_test)
-							fundamental_type_shared_ptrs::int_
+							fundamental_type::INT
 						)
 					),
 					"t"
@@ -210,21 +210,21 @@ BOOST_AUTO_TEST_CASE(complex_class)
 		overloadable_operator::NEW_ARRAY,
 		std::make_shared<const pointer>
 		(
-			fundamental_type_shared_ptrs::void_
+			fundamental_type::VOID
 		),
 		function_parameter_list
 		(
 			{
 				std::make_shared<function_parameter>
 				(
-					fundamental_type_shared_ptrs::unsigned_long_int,
+					fundamental_type::UNSIGNED_LONG_INT,
 					""
 				),
 				std::make_shared<function_parameter>
 				(
 					std::make_shared<const pointer>
 					(
-						fundamental_type_shared_ptrs::void_
+						fundamental_type::VOID
 					),
 					""
 				)
@@ -234,7 +234,7 @@ BOOST_AUTO_TEST_CASE(complex_class)
 	auto operator_function_test_delete_array = std::make_shared<operator_member_function>
 	(
 		overloadable_operator::DELETE_ARRAY,
-		fundamental_type_shared_ptrs::void_,
+		fundamental_type::VOID,
 		function_parameter_list
 		(
 			{
@@ -242,7 +242,7 @@ BOOST_AUTO_TEST_CASE(complex_class)
 				(
 					std::make_shared<const pointer>
 					(
-						fundamental_type_shared_ptrs::void_
+						fundamental_type::VOID
 					),
 					""
 				)
@@ -253,7 +253,7 @@ BOOST_AUTO_TEST_CASE(complex_class)
 	//conversion function
 	auto conversion_function_test_int = std::make_shared<conversion_function>
 	(
-		fundamental_type_shared_ptrs::int_,
+		fundamental_type::INT,
 		false,
 		true
 	);
@@ -263,7 +263,7 @@ BOOST_AUTO_TEST_CASE(complex_class)
 		std::make_shared<simple_member_function>
 		(
 			"static_function",
-			fundamental_type_shared_ptrs::bool_,
+			fundamental_type::BOOL,
 			function_parameter_list(),
 			false,
 			true
@@ -273,7 +273,7 @@ BOOST_AUTO_TEST_CASE(complex_class)
 		std::make_shared<simple_member_function>
 		(
 			"value",
-			fundamental_type_shared_ptrs::int_,
+			fundamental_type::INT,
 			function_parameter_list(),
 			true,
 			false,
@@ -284,7 +284,7 @@ BOOST_AUTO_TEST_CASE(complex_class)
 		std::make_shared<simple_member_function>
 		(
 			"pure_virtual",
-			fundamental_type_shared_ptrs::void_,
+			fundamental_type::VOID,
 			function_parameter_list(),
 			false,
 			false,
@@ -298,17 +298,17 @@ BOOST_AUTO_TEST_CASE(complex_class)
 		std::make_shared<simple_member_function>
 		(
 			"update",
-			fundamental_type_shared_ptrs::void_
+			fundamental_type::VOID
 		)
 	;
 
 	//variables
-	auto variable_test_value = std::make_shared<variable>("value_", fundamental_type_shared_ptrs::int_);
+	auto variable_test_value = std::make_shared<variable>("value_", fundamental_type::INT);
 	auto variable_test_b =
 		std::make_shared<variable>
 		(
 			"b",
-			std::make_shared<const const_>(fundamental_type_shared_ptrs::bool_),
+			std::make_shared<const const_>(fundamental_type::BOOL),
 			true
 		)
 	;

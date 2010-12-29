@@ -71,32 +71,32 @@ BOOST_AUTO_TEST_CASE(test_case_5)
 	auto variable_a_i = std::make_shared<variable>
 	(
 		"i",
-		fundamental_type_shared_ptrs::int_
+		fundamental_type::INT
 	);
 	auto variable_b_i = std::make_shared<variable>
 	(
 		"i",
-		fundamental_type_shared_ptrs::int_
+		fundamental_type::INT
 	);
 	auto variable_b_j = std::make_shared<variable>
 	(
 		"j",
-		fundamental_type_shared_ptrs::int_
+		fundamental_type::INT
 	);
 	auto variable_c_k = std::make_shared<variable>
 	(
 		"k",
-		fundamental_type_shared_ptrs::int_
+		fundamental_type::INT
 	);
 	auto variable_d_j = std::make_shared<variable>
 	(
 		"j",
-		fundamental_type_shared_ptrs::int_
+		fundamental_type::INT
 	);
 	auto variable_d_k = std::make_shared<variable>
 	(
 		"k",
-		fundamental_type_shared_ptrs::int_
+		fundamental_type::INT
 	);
 
 	//assembling

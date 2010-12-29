@@ -147,7 +147,7 @@ have_same_signature(const CLASS_NAME& lhs, const CLASS_NAME& rhs) \
 		BOOST_PP_IIF(HAS_VOLATILE, lhs.is_volatile() == rhs.is_volatile() &&,) \
 		BOOST_PP_IIF(HAS_NAME, lhs.name() == rhs.name() &&,) \
 		BOOST_PP_IIF(HAS_OPERATOR, lhs.overloaded_operator() == rhs.overloaded_operator() &&,) \
-		BOOST_PP_IIF(HAS_RETURN_TYPE, utility::are_pointed_objects_equal(lhs.return_type(), rhs.return_type()) &&,) \
+		BOOST_PP_IIF(HAS_RETURN_TYPE, equals(lhs.return_type(), rhs.return_type()) &&,) \
 		BOOST_PP_IIF(HAS_PARAMETERS, have_same_types(lhs.parameters(), rhs.parameters()) &&,) \
 		true \
 	; \

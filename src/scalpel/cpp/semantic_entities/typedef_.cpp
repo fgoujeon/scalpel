@@ -20,7 +20,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "typedef_.hpp"
 #include "type_variants.hpp"
-#include <scalpel/utility/are_pointed_objects_equal.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -36,7 +35,7 @@ operator==(const typedef_& lhs, const typedef_& rhs)
 {
 	return
 		lhs.name() == rhs.name() &&
-		are_pointed_objects_equal(lhs.type(), rhs.type())
+		equals(lhs.type(), rhs.type())
 	;
 }
 

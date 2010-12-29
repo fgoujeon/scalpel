@@ -59,7 +59,7 @@ BOOST_AUTO_TEST_CASE(complex_type)
 											(
 												std::make_shared<const const_>
 												(
-													fundamental_type_shared_ptrs::unsigned_long_int
+													fundamental_type::UNSIGNED_LONG_INT
 												)
 											)
 										)
@@ -77,7 +77,7 @@ BOOST_AUTO_TEST_CASE(complex_type)
 		"j",
 		std::make_shared<const const_>
 		(
-			fundamental_type_shared_ptrs::unsigned_long_int
+			fundamental_type::UNSIGNED_LONG_INT
 		)
 	);
 

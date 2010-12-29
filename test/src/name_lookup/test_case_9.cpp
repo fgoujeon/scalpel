@@ -71,12 +71,12 @@ BOOST_AUTO_TEST_CASE(test_case_9)
 	auto function_a_b_f = std::make_shared<simple_function>
 	(
 		"f",
-		fundamental_type_shared_ptrs::void_
+		fundamental_type::VOID
 	);
 	auto function_c_d_f = std::make_shared<simple_function>
 	(
 		"f",
-		fundamental_type_shared_ptrs::void_
+		fundamental_type::VOID
 	);
 
 	//assembling

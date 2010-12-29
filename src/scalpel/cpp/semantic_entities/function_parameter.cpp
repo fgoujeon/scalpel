@@ -78,7 +78,7 @@ operator==(const function_parameter& lhs, const function_parameter& rhs)
 {
 	return
 		lhs.name() == rhs.name() &&
-		utility::are_pointed_objects_equal(lhs.type(), rhs.type())
+		equals(lhs.type(), rhs.type())
 	;
 }
 

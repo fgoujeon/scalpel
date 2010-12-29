@@ -39,75 +39,72 @@ print_type
 		print_fundamental_type(*opt_type_ptr);
 	   	std::cout << "\"/>\n";
 	}
-	else if(auto opt_type_ptr = scalpel::utility::get<const_>(&n))
+	else if(auto opt_type_ptr = scalpel::utility::get<std::shared_ptr<const const_>>(&n))
 	{
 		std::cout << indent(indent_level) << "<const>\n";
 		print_type((*opt_type_ptr)->qualified_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</const>\n";
 	}
-	else if(auto opt_type_ptr = scalpel::utility::get<volatile_>(&n))
+	else if(auto opt_type_ptr = scalpel::utility::get<std::shared_ptr<const volatile_>>(&n))
 	{
 		std::cout << indent(indent_level) << "<volatile>\n";
 		print_type((*opt_type_ptr)->qualified_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</volatile>\n";
 	}
-	else if(auto opt_type_ptr = scalpel::utility::get<pointer>(&n))
+	else if(auto opt_type_ptr = scalpel::utility::get<std::shared_ptr<const pointer>>(&n))
 	{
 		std::cout << indent(indent_level) << "<pointer>\n";
 		print_type((*opt_type_ptr)->qualified_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</pointer>\n";
 	}
-	else if(auto opt_type_ptr = scalpel::utility::get<reference>(&n))
+	else if(auto opt_type_ptr = scalpel::utility::get<std::shared_ptr<const reference>>(&n))
 	{
 		std::cout << indent(indent_level) << "<reference>\n";
 		print_type((*opt_type_ptr)->qualified_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</reference>\n";
 	}
-	else if(auto opt_type_ptr = scalpel::utility::get<array>(&n))
+	else if(auto opt_type_ptr = scalpel::utility::get<std::shared_ptr<const array>>(&n))
 	{
 		std::cout << indent(indent_level) << "<array size=\"" << (*opt_type_ptr)->size() << "\">\n";
 		print_type((*opt_type_ptr)->qualified_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</array>\n";
 	}
-	else if(auto opt_type_ptr = scalpel::utility::get<class_>(&n))
+	else if(auto opt_type_ptr = scalpel::utility::get<std::shared_ptr<const class_>>(&n))
 	{
 		std::cout << indent(indent_level) << "<class id=\"" << *opt_type_ptr << "\"/>\n";
 	}
 }
 
 void
-print_fundamental_type
-(
-	std::shared_ptr<const fundamental_type> built_in_t
-)
+print_fundamental_type(const fundamental_type type)
 {
-	std::vector<std::pair<std::shared_ptr<const fundamental_type>, const char*>> fundamental_types_table =
+	std::vector<std::pair<fundamental_type, const char*>> fundamental_types_table =
 	{
-		{fundamental_type_shared_ptrs::bool_, "bool"},
-		{fundamental_type_shared_ptrs::char_, "char"},
-		{fundamental_type_shared_ptrs::double_, "double"},
-		{fundamental_type_shared_ptrs::float_, "float"},
-		{fundamental_type_shared_ptrs::int_, "int"},
-		{fundamental_type_shared_ptrs::long_double, "long double"},
-		{fundamental_type_shared_ptrs::long_int, "long int"},
-		{fundamental_type_shared_ptrs::long_long_int, "long long int"},
-		{fundamental_type_shared_ptrs::short_int, "short int"},
-		{fundamental_type_shared_ptrs::unsigned_char, "unsigned char"},
-		{fundamental_type_shared_ptrs::unsigned_int, "unsigned int"},
-		{fundamental_type_shared_ptrs::unsigned_long_int, "unsigned long int"},
-		{fundamental_type_shared_ptrs::unsigned_long_long_int, "unsigned long long int"},
-		{fundamental_type_shared_ptrs::unsigned_short_int, "unsigned short int"},
-		{fundamental_type_shared_ptrs::void_, "void"},
-		{fundamental_type_shared_ptrs::wchar_t_, "wchar_t"}
+		{fundamental_type::BOOL, "bool"},
+		{fundamental_type::CHAR, "char"},
+		{fundamental_type::DOUBLE, "double"},
+		{fundamental_type::FLOAT, "float"},
+		{fundamental_type::INT, "int"},
+		{fundamental_type::LONG_DOUBLE, "long double"},
+		{fundamental_type::LONG_INT, "long int"},
+		{fundamental_type::LONG_LONG_INT, "long long int"},
+		{fundamental_type::SHORT_INT, "short int"},
+		{fundamental_type::UNSIGNED_CHAR, "unsigned char"},
+		{fundamental_type::UNSIGNED_INT, "unsigned int"},
+		{fundamental_type::UNSIGNED_LONG_INT, "unsigned long int"},
+		{fundamental_type::UNSIGNED_LONG_LONG_INT, "unsigned long long int"},
+		{fundamental_type::UNSIGNED_SHORT_INT, "unsigned short int"},
+		{fundamental_type::VOID, "void"},
+		{fundamental_type::WCHAR_T, "wchar_t"}
 	};
 
 	for(auto i = fundamental_types_table.begin(); i != fundamental_types_table.end(); ++i)
 	{
 		auto pair = *i;
-		std::shared_ptr<const fundamental_type> t = pair.first;
+		const fundamental_type t = pair.first;
 		const char* type_str = pair.second;
 
-		if(t == built_in_t)
+		if(t == type)
 		{
 			std::cout << type_str;
 			break;

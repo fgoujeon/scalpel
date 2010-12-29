@@ -67,34 +67,34 @@ BOOST_AUTO_TEST_CASE(test_case_1)
 	auto variable_a_i = std::make_shared<variable>
 	(
 		"i",
-		fundamental_type_shared_ptrs::int_
+		fundamental_type::INT
 	);
 	auto struct_a_b = class_::make_shared("B");
 	auto function_a_b_f = std::make_shared<simple_member_function>
 	(
 		"f",
-		fundamental_type_shared_ptrs::void_
+		fundamental_type::VOID
 	);
 	auto function_a_g = std::make_shared<simple_function>
 	(
 		"g",
-		fundamental_type_shared_ptrs::void_
+		fundamental_type::VOID
 	);
 	auto namespace_a_c = namespace_::make_shared("C");
 	auto variable_a_c_n = std::make_shared<variable>
 	(
 		"n",
-		fundamental_type_shared_ptrs::int_
+		fundamental_type::INT
 	);
 	auto variable_i = std::make_shared<variable>
 	(
 		"i",
-		fundamental_type_shared_ptrs::int_
+		fundamental_type::INT
 	);
 	auto variable_j = std::make_shared<variable>
 	(
 		"j",
-		fundamental_type_shared_ptrs::int_
+		fundamental_type::INT
 	);
 
 	semantic_graph->add_member(namespace_a);

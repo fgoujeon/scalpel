@@ -78,35 +78,35 @@ BOOST_AUTO_TEST_CASE(test_case_2)
 	auto function_c0_inner_f = std::make_shared<simple_member_function>
 	(
 		"f",
-		fundamental_type_shared_ptrs::void_
+		fundamental_type::VOID
 	);
 	auto function_c0_f = std::make_shared<simple_member_function>
 	(
 		"f",
-		fundamental_type_shared_ptrs::void_
+		fundamental_type::VOID
 	);
 	auto struct_c1base = class_::make_shared("c1base");
 	auto function_c1base_f = std::make_shared<simple_member_function>
 	(
 		"f",
-		fundamental_type_shared_ptrs::void_
+		fundamental_type::VOID
 	);
 	auto function_c1base_g = std::make_shared<simple_member_function>
 	(
 		"g",
-		fundamental_type_shared_ptrs::void_
+		fundamental_type::VOID
 	);
 	auto struct_c1 = class_::make_shared("c1");
 	auto function_c1_g = std::make_shared<simple_member_function>
 	(
 		"g",
-		fundamental_type_shared_ptrs::void_
+		fundamental_type::VOID
 	);
 	auto struct_c = class_::make_shared("c");
 	auto function_g_test = std::make_shared<simple_member_function>
 	(
 		"test",
-		fundamental_type_shared_ptrs::void_
+		fundamental_type::VOID
 	);
 
 	semantic_graph->add_member(struct_c0);

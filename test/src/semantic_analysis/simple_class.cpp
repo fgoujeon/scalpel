@@ -74,7 +74,7 @@ BOOST_AUTO_TEST_CASE(simple_class)
 				(
 					std::make_shared<const const_>
 					(
-						fundamental_type_shared_ptrs::unsigned_int
+						fundamental_type::UNSIGNED_INT
 					),
 					"size"
 				)
@@ -85,7 +85,7 @@ BOOST_AUTO_TEST_CASE(simple_class)
 		std::make_shared<simple_member_function>
 		(
 			"size",
-			fundamental_type_shared_ptrs::unsigned_int,
+			fundamental_type::UNSIGNED_INT,
 			function_parameter_list(),
 			false,
 			false,
@@ -96,7 +96,7 @@ BOOST_AUTO_TEST_CASE(simple_class)
 		std::make_shared<simple_member_function>
 		(
 			"size",
-			fundamental_type_shared_ptrs::void_,
+			fundamental_type::VOID,
 			function_parameter_list
 			(
 				{
@@ -104,7 +104,7 @@ BOOST_AUTO_TEST_CASE(simple_class)
 					(
 						std::make_shared<const const_>
 						(
-							fundamental_type_shared_ptrs::unsigned_int
+							fundamental_type::UNSIGNED_INT
 						),
 						"size"
 					)
@@ -112,7 +112,7 @@ BOOST_AUTO_TEST_CASE(simple_class)
 			)
 		)
 	;
-	auto variable_square_size = std::make_shared<variable>("size_", fundamental_type_shared_ptrs::unsigned_int);
+	auto variable_square_size = std::make_shared<variable>("size_", fundamental_type::UNSIGNED_INT);
 
 	expected_semantic_graph->add_member(class_square);
 	class_square->add_member(constructor_square, class_::access::PUBLIC);

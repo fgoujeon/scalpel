@@ -48,7 +48,7 @@ have_same_types(const function_parameter_list& lhs, const function_parameter_lis
 		const std::shared_ptr<const function_parameter>& lhs_param = *i;
 		const std::shared_ptr<const function_parameter>& rhs_param = *j;
 
-		if(!utility::are_pointed_objects_equal(lhs_param->type(), rhs_param->type()))
+		if(!equals(lhs_param->type(), rhs_param->type()))
 			return false;
 	}
 

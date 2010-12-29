@@ -319,7 +319,7 @@ qualify_type
 	return type;
 }
 
-std::shared_ptr<const semantic_entities::fundamental_type>
+semantic_entities::fundamental_type
 get_fundamental_type
 (
 	const bool bool_type,
@@ -352,7 +352,7 @@ get_fundamental_type
 		!wchar_t_type
 	)
 	{
-		return fundamental_type_shared_ptrs::bool_;
+		return fundamental_type::BOOL;
 	}
 	else if
 	(
@@ -370,7 +370,7 @@ get_fundamental_type
 		!wchar_t_type
 	)
 	{
-		return fundamental_type_shared_ptrs::char_;
+		return fundamental_type::CHAR;
 	}
 	else if
 	(
@@ -388,7 +388,7 @@ get_fundamental_type
 		!wchar_t_type
 	)
 	{
-		return fundamental_type_shared_ptrs::double_;
+		return fundamental_type::DOUBLE;
 	}
 	else if
 	(
@@ -406,7 +406,7 @@ get_fundamental_type
 		!wchar_t_type
 	)
 	{
-		return fundamental_type_shared_ptrs::float_;
+		return fundamental_type::FLOAT;
 	}
 	else if
 	(
@@ -423,7 +423,7 @@ get_fundamental_type
 		!wchar_t_type
 	)
 	{
-		return fundamental_type_shared_ptrs::int_;
+		return fundamental_type::INT;
 	}
 	else if
 	(
@@ -441,7 +441,7 @@ get_fundamental_type
 		!wchar_t_type
 	)
 	{
-		return fundamental_type_shared_ptrs::long_double;
+		return fundamental_type::LONG_DOUBLE;
 	}
 	else if
 	(
@@ -459,7 +459,7 @@ get_fundamental_type
 		!wchar_t_type
 	)
 	{
-		return fundamental_type_shared_ptrs::long_int;
+		return fundamental_type::LONG_INT;
 	}
 	else if
 	(
@@ -477,7 +477,7 @@ get_fundamental_type
 		!wchar_t_type
 	)
 	{
-		return fundamental_type_shared_ptrs::long_long_int;
+		return fundamental_type::LONG_LONG_INT;
 	}
 	else if
 	(
@@ -495,7 +495,7 @@ get_fundamental_type
 		!wchar_t_type
 	)
 	{
-		return fundamental_type_shared_ptrs::short_int;
+		return fundamental_type::SHORT_INT;
 	}
 	else if
 	(
@@ -513,7 +513,7 @@ get_fundamental_type
 		!wchar_t_type
 	)
 	{
-		return fundamental_type_shared_ptrs::unsigned_char;
+		return fundamental_type::UNSIGNED_CHAR;
 	}
 	else if
 	(
@@ -531,7 +531,7 @@ get_fundamental_type
 		!wchar_t_type
 	)
 	{
-		return fundamental_type_shared_ptrs::unsigned_int;
+		return fundamental_type::UNSIGNED_INT;
 	}
 	else if
 	(
@@ -549,7 +549,7 @@ get_fundamental_type
 		!wchar_t_type
 	)
 	{
-		return fundamental_type_shared_ptrs::unsigned_long_int;
+		return fundamental_type::UNSIGNED_LONG_INT;
 	}
 	else if
 	(
@@ -567,7 +567,7 @@ get_fundamental_type
 		!wchar_t_type
 	)
 	{
-		return fundamental_type_shared_ptrs::unsigned_long_long_int;
+		return fundamental_type::UNSIGNED_LONG_LONG_INT;
 	}
 	else if
 	(
@@ -585,7 +585,7 @@ get_fundamental_type
 		!wchar_t_type
 	)
 	{
-		return fundamental_type_shared_ptrs::unsigned_short_int;
+		return fundamental_type::UNSIGNED_SHORT_INT;
 	}
 	else if
 	(
@@ -603,7 +603,7 @@ get_fundamental_type
 		!wchar_t_type
 	)
 	{
-		return fundamental_type_shared_ptrs::void_;
+		return fundamental_type::VOID;
 	}
 	else if
 	(
@@ -621,7 +621,7 @@ get_fundamental_type
 		wchar_t_type
 	)
 	{
-		return fundamental_type_shared_ptrs::wchar_t_;
+		return fundamental_type::WCHAR_T;
 	}
 
 	throw std::runtime_error("Incorrect built-in type");

@@ -42,10 +42,7 @@ print_type
 );
 
 void
-print_fundamental_type
-(
-	std::shared_ptr<const fundamental_type>
-);
+print_fundamental_type(const fundamental_type type);
 
 void
 print_namespace

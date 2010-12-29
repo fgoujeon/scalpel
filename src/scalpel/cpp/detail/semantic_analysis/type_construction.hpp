@@ -76,7 +76,7 @@ qualify_type
 	const syntax_nodes::ptr_operator_seq& ptr_operator_seq_node
 );
 
-std::shared_ptr<const semantic_entities::fundamental_type>
+semantic_entities::fundamental_type
 get_fundamental_type
 (
 	const bool bool_type,

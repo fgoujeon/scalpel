@@ -37,7 +37,7 @@ BOOST_AUTO_TEST_CASE(simple_free_function)
 	);
 
 	auto expected_semantic_graph = namespace_::make_shared();
-	auto function_main = std::make_shared<simple_function>("main", fundamental_type_shared_ptrs::int_);
+	auto function_main = std::make_shared<simple_function>("main", fundamental_type::INT);
 
 	expected_semantic_graph->add_member(function_main);
 	function_main->body(std::make_shared<statement_block>());
