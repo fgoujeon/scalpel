@@ -82,7 +82,7 @@ get_operator_function_operator
 	const syntax_nodes::declarator& declarator_node
 );
 
-semantic_entities::type_variant
+semantic_entities::weak_type_variant
 get_conversion_function_type
 (
 	const syntax_nodes::declarator& declarator_node,

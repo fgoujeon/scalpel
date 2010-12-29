@@ -204,7 +204,7 @@ fill_class
 	const syntax_nodes::member_declaration_member_declarator_list& member_declaration_member_declarator_list_node
 )
 {
-	boost::optional<type_variant> opt_unqualified_type;
+	boost::optional<weak_type_variant> opt_unqualified_type;
 	bool has_typedef_specifier = false;
 	bool has_static_specifier = false;
 	bool has_inline_specifier = false;
@@ -240,7 +240,7 @@ fill_class
 				class_entity->add_member(new_class, current_access);
 				fill_class(new_class, class_specifier_node);
 
-				opt_unqualified_type = std::shared_ptr<const class_>(new_class);
+				opt_unqualified_type = std::weak_ptr<const class_>(new_class);
 
 				break;
 			}
@@ -253,7 +253,7 @@ fill_class
 				std::shared_ptr<class_> new_class = create_class(class_elaborated_specifier_node);
 				class_entity->add_member(new_class, current_access);
 
-				opt_unqualified_type = std::shared_ptr<const class_>(new_class);
+				opt_unqualified_type = std::weak_ptr<const class_>(new_class);
 
 				break;
 			}

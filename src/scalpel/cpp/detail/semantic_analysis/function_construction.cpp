@@ -42,7 +42,7 @@ create_function
 	//Analyze the decl-specifier-seq node.
 	//
 
-	boost::optional<type_variant> opt_unqualified_type;
+	boost::optional<weak_type_variant> opt_unqualified_type;
 	bool has_typedef_specifier = false;
 	bool has_static_specifier = false;
 	bool has_inline_specifier = false;
@@ -75,14 +75,14 @@ create_function
 			{
 				assert(false); //not managed yet
 
-				const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node =
-					syntax_node_analysis::get_class_elaborated_specifier(decl_specifier_seq_node)
-				;
+				//const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node =
+				//	syntax_node_analysis::get_class_elaborated_specifier(decl_specifier_seq_node)
+				//;
 
-				std::shared_ptr<class_> new_class = create_class(class_elaborated_specifier_node);
-				//TODO current_declarative_region->add_member(new_class);
+				//std::shared_ptr<class_> new_class = create_class(class_elaborated_specifier_node);
+				////TODO current_declarative_region->add_member(new_class);
 
-				opt_unqualified_type = std::shared_ptr<const class_>(new_class);
+				//opt_unqualified_type = std::shared_ptr<const class_>(new_class);
 
 				break;
 			}
@@ -321,7 +321,7 @@ get_operator_function_operator
 	}
 }
 
-semantic_entities::type_variant
+semantic_entities::weak_type_variant
 get_conversion_function_type
 (
 	const syntax_nodes::declarator& declarator_node,
@@ -334,7 +334,7 @@ get_conversion_function_type
 	const conversion_function_id& conversion_function_id_node = *opt_conversion_function_id_node;
 
 	const type_specifier_seq& type_specifier_seq_node = get_type_specifier_seq(conversion_function_id_node);
-	type_variant type = create_type(type_specifier_seq_node, current_declarative_region);
+	weak_type_variant type = create_type(type_specifier_seq_node, current_declarative_region);
 
 	if(const optional_node<ptr_operator_seq>& opt_ptr_operator_seq_node = get_ptr_operator_seq(conversion_function_id_node))
 	{
@@ -377,7 +377,7 @@ create_parameters
 		auto parameter_declaration_node = j->main_node();
 		auto decl_specifier_seq_node = get_decl_specifier_seq(parameter_declaration_node);
 
-		semantic_entities::type_variant type =
+		semantic_entities::weak_type_variant type =
 			qualify_type
 			(
 				create_type
@@ -397,7 +397,7 @@ create_parameters
 			(
 				std::make_shared<function_parameter>
 				(
-					qualify_type(type, declarator_node),
+					to_type_variant(qualify_type(type, declarator_node)),
 					syntax_node_analysis::get_identifier(declarator_node).value()
 				)
 			);
@@ -419,7 +419,7 @@ create_parameters
 			(
 				std::make_shared<function_parameter>
 				(
-					type,
+					to_type_variant(type),
 					""
 				)
 			);
@@ -430,7 +430,7 @@ create_parameters
 			(
 				std::make_shared<function_parameter>
 				(
-					type,
+					to_type_variant(type),
 					""
 				)
 			);

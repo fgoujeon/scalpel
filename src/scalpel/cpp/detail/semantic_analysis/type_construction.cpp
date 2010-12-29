@@ -29,7 +29,7 @@ namespace scalpel { namespace cpp { namespace detail { namespace semantic_analys
 using namespace syntax_nodes;
 using namespace semantic_entities;
 
-semantic_entities::type_variant
+semantic_entities::weak_type_variant
 create_type
 (
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
@@ -39,14 +39,14 @@ create_type
 	return create_type(syntax_node_analysis::to_type_specifier_seq(decl_specifier_seq_node), current_declarative_region);
 }
 
-semantic_entities::type_variant
+semantic_entities::weak_type_variant
 create_type
 (
 	const syntax_nodes::type_specifier_seq& type_specifier_seq_node,
 	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 )
 {
-	boost::optional<semantic_entities::type_variant> opt_return_type;
+	boost::optional<semantic_entities::weak_type_variant> opt_return_type;
 	bool is_fundamental_type = false;
 	bool bool_type = false;
 	bool char_type = false;
@@ -101,7 +101,7 @@ create_type
 					)
 				;
 
-				opt_return_type = semantic_entity_analysis::to_type_variant(found_type);
+				opt_return_type = to_weak_type_variant(semantic_entity_analysis::to_type_variant(found_type));
 			}
 			else if(auto opt_fundamental_type_specifier_node = get<fundamental_type_specifier>(&simple_type_specifier_node))
 			{
@@ -164,10 +164,10 @@ create_type
 	}
 }
 
-semantic_entities::type_variant
+semantic_entities::weak_type_variant
 qualify_type
 (
-	semantic_entities::type_variant type,
+	semantic_entities::weak_type_variant type,
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node
 )
 {
@@ -184,9 +184,9 @@ qualify_type
 				const cv_qualifier& cv_qualifier_node = *opt_cv_qualifier_node;
 
 				if(get<predefined_text_node<str::const_>>(&cv_qualifier_node))
-					type = const_(type);
+					type = const_(to_type_variant(type));
 				else if(get<predefined_text_node<str::volatile_>>(&cv_qualifier_node))
-					type = volatile_(type);
+					type = volatile_(to_type_variant(type));
 			}
 		}
 	}
@@ -194,10 +194,10 @@ qualify_type
 	return type;
 }
 
-semantic_entities::type_variant
+semantic_entities::weak_type_variant
 qualify_type
 (
-	semantic_entities::type_variant type,
+	semantic_entities::weak_type_variant type,
 	const syntax_nodes::declarator& declarator_node
 )
 {
@@ -225,12 +225,12 @@ qualify_type
 			{
 				if(get_conditional_expression(*opt_array_part_node))
 				{
-					type = array(0, type);
+					type = array(0, to_type_variant(type));
 				}
 				else
 				{
 					//int i[] == int i*
-					type = pointer(type);
+					type = pointer(to_type_variant(type));
 				}
 			}
 		}
@@ -271,10 +271,10 @@ has_type_decorators(const syntax_nodes::declarator& declarator_node)
 	return false;
 }
 
-semantic_entities::type_variant
+semantic_entities::weak_type_variant
 qualify_type
 (
-	semantic_entities::type_variant type,
+	semantic_entities::weak_type_variant type,
 	const syntax_nodes::ptr_operator_seq& ptr_operator_seq_node
 )
 {
@@ -285,7 +285,7 @@ qualify_type
 		{
 			auto ptr_ptr_operator_node = *opt_ptr_ptr_operator_node;
 
-			type = pointer(type);
+			type = pointer(to_type_variant(type));
 
 			if(auto opt_cv_qualifier_seq_node = get_cv_qualifier_seq(ptr_ptr_operator_node))
 			{
@@ -301,18 +301,18 @@ qualify_type
 
 					if(get<predefined_text_node<str::const_>>(&cv_qualifier_node))
 					{
-						type = const_(type);
+						type = const_(to_type_variant(type));
 					}
 					else if(get<predefined_text_node<str::volatile_>>(&cv_qualifier_node))
 					{
-						type = volatile_(type);
+						type = volatile_(to_type_variant(type));
 					}
 				}
 			}
 		}
 		else if(auto ref_ptr_operator_node = get<ref_ptr_operator>(&ptr_operator_node))
 		{
-			type = reference(type);
+			type = reference(to_type_variant(type));
 		}
 	}
 

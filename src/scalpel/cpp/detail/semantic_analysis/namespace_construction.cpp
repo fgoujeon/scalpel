@@ -114,7 +114,7 @@ fill_namespace
 	const syntax_nodes::simple_declaration& simple_declaration_node
 )
 {
-	boost::optional<type_variant> opt_unqualified_type;
+	boost::optional<weak_type_variant> opt_unqualified_type;
 	bool has_typedef_specifier = false;
 	bool has_static_specifier = false;
 	bool has_inline_specifier = false;
@@ -144,7 +144,7 @@ fill_namespace
 				namespace_entity->add_member(new_class);
 				fill_class(new_class, class_specifier_node);
 
-				opt_unqualified_type = std::shared_ptr<const class_>(new_class);
+				opt_unqualified_type = std::weak_ptr<const class_>(new_class);
 
 				break;
 			}
@@ -157,7 +157,7 @@ fill_namespace
 				std::shared_ptr<class_> new_class = create_class(class_elaborated_specifier_node);
 				namespace_entity->add_member(new_class);
 
-				opt_unqualified_type = std::shared_ptr<const class_>(new_class);
+				opt_unqualified_type = std::weak_ptr<const class_>(new_class);
 
 				break;
 			}
