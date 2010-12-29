@@ -29,7 +29,7 @@ namespace semantic_graph_print_functions
 void
 print_type
 (
-	const semantic_entities::type_variant& n,
+	const semantic_entities::weak_type_variant& n,
 	const unsigned int indent_level
 )
 {
@@ -69,9 +69,9 @@ print_type
 		print_type((*opt_type).qualified_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</array>\n";
 	}
-	else if(auto opt_type = scalpel::utility::get<std::shared_ptr<const class_>>(&n))
+	else if(auto opt_type = scalpel::utility::get<std::weak_ptr<const class_>>(&n))
 	{
-		std::cout << indent(indent_level) << "<class id=\"" << *opt_type << "\"/>\n";
+		std::cout << indent(indent_level) << "<class id=\"" << opt_type->lock().get() << "\"/>\n";
 	}
 }
 
@@ -316,7 +316,7 @@ print_operator_member_function
 	std::cout << ">\n";
 
 	std::cout << indent(indent_level + 1) << "<return_type>\n";
-	print_type(entity->return_type(), indent_level + 2);
+	print_type(to_weak_type_variant(entity->return_type()), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</return_type>\n";
 
 	print_function_parameter_list(entity->parameters(), indent_level + 1);
@@ -354,7 +354,7 @@ print_conversion_function
 	std::cout << ">\n";
 
 	std::cout << indent(indent_level + 1) << "<return_type>\n";
-	print_type(entity->return_type(), indent_level + 2);
+	print_type(to_weak_type_variant(entity->return_type()), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</return_type>\n";
 
 	std::cout << indent(indent_level) << "</conversion_function>\n";
@@ -393,7 +393,7 @@ print_simple_member_function
 	std::cout << ">\n";
 
 	std::cout << indent(indent_level + 1) << "<return_type>\n";
-	print_type(entity->return_type(), indent_level + 2);
+	print_type(to_weak_type_variant(entity->return_type()), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</return_type>\n";
 
 	print_function_parameter_list(entity->parameters(), indent_level + 1);
@@ -419,7 +419,7 @@ print_operator_function
 	std::cout << ">\n";
 
 	std::cout << indent(indent_level + 1) << "<return_type>\n";
-	print_type(entity->return_type(), indent_level + 2);
+	print_type(to_weak_type_variant(entity->return_type()), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</return_type>\n";
 
 	print_function_parameter_list(entity->parameters(), indent_level + 1);
@@ -445,7 +445,7 @@ print_simple_function
 	std::cout << ">\n";
 
 	std::cout << indent(indent_level + 1) << "<return_type>\n";
-	print_type(entity->return_type(), indent_level + 2);
+	print_type(to_weak_type_variant(entity->return_type()), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</return_type>\n";
 
 	print_function_parameter_list(entity->parameters(), indent_level + 1);
@@ -483,7 +483,7 @@ print_function_parameter
 		std::cout << " name=\"" << p->name() << "\"";
 	std::cout << ">\n";
 	std::cout << indent(indent_level + 1) << "<type>\n";
-	print_type(p->type(), indent_level + 2);
+	print_type(to_weak_type_variant(p->type()), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</type>\n";
 	std::cout << indent(indent_level) << "</parameter>\n";
 }
@@ -515,7 +515,7 @@ print_variable
 		std::cout << " static=\"true\"";
 	std::cout << ">\n";
 	std::cout << indent(indent_level + 1) << "<type>\n";
-	print_type(entity->type(), indent_level + 2);
+	print_type(to_weak_type_variant(entity->type()), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</type>\n";
 	std::cout << indent(indent_level) << "</variable>\n";
 }
@@ -543,7 +543,7 @@ print_typedef
 	}
 	std::cout << ">\n";
 	std::cout << indent(indent_level + 1) << "<type>\n";
-	print_type(entity->type(), indent_level + 2);
+	print_type(to_weak_type_variant(entity->type()), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</type>\n";
 	std::cout << indent(indent_level) << "</typedef>\n";
 }

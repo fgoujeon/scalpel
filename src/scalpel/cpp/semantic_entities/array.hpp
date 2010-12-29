@@ -44,10 +44,10 @@ class array
 			return size_;
 		}
 
-		type_variant
+		const weak_type_variant&
 		qualified_type() const
 		{
-			return to_type_variant(qualified_type_);
+			return qualified_type_;
 		}
 
 	private:

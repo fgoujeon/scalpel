@@ -48,7 +48,7 @@ namespace
 			operator()(const T& lhs) const
 			{
 				//TODO check equality of current qualifiers (necessary for array)
-				return equals(lhs.qualified_type(), rhs_.qualified_type());
+				return equals(to_type_variant(lhs.qualified_type()), to_type_variant(rhs_.qualified_type()));
 			}
 
 		private:
@@ -143,6 +143,13 @@ equals(const type_variant& lhs, const type_variant& rhs)
 	return utility::apply_visitor(visitor, rhs);
 }
 
+bool
+equals(const weak_type_variant& lhs, const weak_type_variant& rhs)
+{
+	partial_equals_visitor visitor(to_type_variant(lhs));
+	return utility::apply_visitor(visitor, to_type_variant(rhs));
+}
+
 
 
 
@@ -171,7 +178,7 @@ namespace
 			operator()(const T& lhs) const
 			{
 				//TODO check equality of current qualifiers (necessary for array)
-				return have_same_qualifiers(lhs.qualified_type(), rhs_.qualified_type());
+				return have_same_qualifiers(to_type_variant(lhs.qualified_type()), to_type_variant(rhs_.qualified_type()));
 			}
 
 		private:
@@ -290,7 +297,7 @@ namespace
 		unqualified_type_variant
 		operator()(const T& t) const
 		{
-			return get_unqualified_type(t.qualified_type());
+			return get_unqualified_type(to_type_variant(t.qualified_type()));
 		}
 
 		unqualified_type_variant

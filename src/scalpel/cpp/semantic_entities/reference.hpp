@@ -34,10 +34,10 @@ class reference
 	public:
 		reference(const weak_type_variant& qualified_type);
 
-		type_variant
+		const weak_type_variant&
 		qualified_type() const
 		{
-			return to_type_variant(qualified_type_);
+			return qualified_type_;
 		}
 
 	private:
