@@ -34,7 +34,7 @@ BOOST_AUTO_TEST_CASE(cycle_proof_equality)
 		std::make_shared<variable>
 		(
 			"ptr",
-			std::make_shared<const pointer>
+			pointer
 			(
 				std::shared_ptr<const class_>(class_test_1)
 			)
@@ -49,7 +49,7 @@ BOOST_AUTO_TEST_CASE(cycle_proof_equality)
 		std::make_shared<variable>
 		(
 			"ptr",
-			std::make_shared<const pointer>
+			pointer
 			(
 				std::shared_ptr<const class_>(class_test_2)
 			)
@@ -64,9 +64,9 @@ BOOST_AUTO_TEST_CASE(cycle_proof_equality)
 		std::make_shared<variable>
 		(
 			"ptr",
-			std::make_shared<const pointer>
+			pointer
 			(
-				std::make_shared<const const_>
+				const_
 				(
 					std::shared_ptr<const class_>(class_test_3)
 				)
@@ -82,7 +82,7 @@ BOOST_AUTO_TEST_CASE(cycle_proof_equality)
 		std::make_shared<variable>
 		(
 			"ptr",
-			std::make_shared<const reference>
+			reference
 			(
 				std::shared_ptr<const class_>(class_test_4)
 			)

@@ -189,9 +189,9 @@ BOOST_AUTO_TEST_CASE(complex_class)
 			{
 				std::make_shared<function_parameter>
 				(
-					std::make_shared<const reference>
+					reference
 					(
-						std::make_shared<const const_>
+						const_
 						(
 							//std::shared_ptr<const class_>(class_test)
 							fundamental_type::INT
@@ -208,7 +208,7 @@ BOOST_AUTO_TEST_CASE(complex_class)
 	auto operator_function_test_new_array = std::make_shared<operator_member_function>
 	(
 		overloadable_operator::NEW_ARRAY,
-		std::make_shared<const pointer>
+		pointer
 		(
 			fundamental_type::VOID
 		),
@@ -222,7 +222,7 @@ BOOST_AUTO_TEST_CASE(complex_class)
 				),
 				std::make_shared<function_parameter>
 				(
-					std::make_shared<const pointer>
+					pointer
 					(
 						fundamental_type::VOID
 					),
@@ -240,7 +240,7 @@ BOOST_AUTO_TEST_CASE(complex_class)
 			{
 				std::make_shared<function_parameter>
 				(
-					std::make_shared<const pointer>
+					pointer
 					(
 						fundamental_type::VOID
 					),
@@ -308,7 +308,7 @@ BOOST_AUTO_TEST_CASE(complex_class)
 		std::make_shared<variable>
 		(
 			"b",
-			std::make_shared<const const_>(fundamental_type::BOOL),
+			const_(fundamental_type::BOOL),
 			true
 		)
 	;

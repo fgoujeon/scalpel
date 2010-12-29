@@ -33,45 +33,45 @@ print_type
 	const unsigned int indent_level
 )
 {
-	if(auto opt_type_ptr = scalpel::utility::get<fundamental_type>(&n))
+	if(auto opt_type = scalpel::utility::get<fundamental_type>(&n))
 	{
 		std::cout << indent(indent_level) << "<fundamental_type type=\"";
-		print_fundamental_type(*opt_type_ptr);
+		print_fundamental_type(*opt_type);
 	   	std::cout << "\"/>\n";
 	}
-	else if(auto opt_type_ptr = scalpel::utility::get<std::shared_ptr<const const_>>(&n))
+	else if(auto opt_type = scalpel::utility::get<const_>(&n))
 	{
 		std::cout << indent(indent_level) << "<const>\n";
-		print_type((*opt_type_ptr)->qualified_type(), indent_level + 1);
+		print_type((*opt_type).qualified_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</const>\n";
 	}
-	else if(auto opt_type_ptr = scalpel::utility::get<std::shared_ptr<const volatile_>>(&n))
+	else if(auto opt_type = scalpel::utility::get<volatile_>(&n))
 	{
 		std::cout << indent(indent_level) << "<volatile>\n";
-		print_type((*opt_type_ptr)->qualified_type(), indent_level + 1);
+		print_type((*opt_type).qualified_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</volatile>\n";
 	}
-	else if(auto opt_type_ptr = scalpel::utility::get<std::shared_ptr<const pointer>>(&n))
+	else if(auto opt_type = scalpel::utility::get<pointer>(&n))
 	{
 		std::cout << indent(indent_level) << "<pointer>\n";
-		print_type((*opt_type_ptr)->qualified_type(), indent_level + 1);
+		print_type((*opt_type).qualified_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</pointer>\n";
 	}
-	else if(auto opt_type_ptr = scalpel::utility::get<std::shared_ptr<const reference>>(&n))
+	else if(auto opt_type = scalpel::utility::get<reference>(&n))
 	{
 		std::cout << indent(indent_level) << "<reference>\n";
-		print_type((*opt_type_ptr)->qualified_type(), indent_level + 1);
+		print_type((*opt_type).qualified_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</reference>\n";
 	}
-	else if(auto opt_type_ptr = scalpel::utility::get<std::shared_ptr<const array>>(&n))
+	else if(auto opt_type = scalpel::utility::get<array>(&n))
 	{
-		std::cout << indent(indent_level) << "<array size=\"" << (*opt_type_ptr)->size() << "\">\n";
-		print_type((*opt_type_ptr)->qualified_type(), indent_level + 1);
+		std::cout << indent(indent_level) << "<array size=\"" << (*opt_type).size() << "\">\n";
+		print_type((*opt_type).qualified_type(), indent_level + 1);
 		std::cout << indent(indent_level) << "</array>\n";
 	}
-	else if(auto opt_type_ptr = scalpel::utility::get<std::shared_ptr<const class_>>(&n))
+	else if(auto opt_type = scalpel::utility::get<std::shared_ptr<const class_>>(&n))
 	{
-		std::cout << indent(indent_level) << "<class id=\"" << *opt_type_ptr << "\"/>\n";
+		std::cout << indent(indent_level) << "<class id=\"" << *opt_type << "\"/>\n";
 	}
 }
 

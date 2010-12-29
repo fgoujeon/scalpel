@@ -37,27 +37,27 @@ BOOST_AUTO_TEST_CASE(complex_type)
 	auto variable_i = std::make_shared<variable>
 	(
 		"i",
-		std::make_shared<const pointer>
+		pointer
 		(
-			std::make_shared<const pointer>
+			pointer
 			(
-				std::make_shared<const pointer>
+				pointer
 				(
-					std::make_shared<const pointer>
+					pointer
 					(
-						std::make_shared<const const_>
+						const_
 						(
-							std::make_shared<const pointer>
+							pointer
 							(
-								std::make_shared<const pointer>
+								pointer
 								(
-									std::make_shared<const volatile_>
+									volatile_
 									(
-										std::make_shared<const const_>
+										const_
 										(
-											std::make_shared<const pointer>
+											pointer
 											(
-												std::make_shared<const const_>
+												const_
 												(
 													fundamental_type::UNSIGNED_LONG_INT
 												)
@@ -75,7 +75,7 @@ BOOST_AUTO_TEST_CASE(complex_type)
 	auto variable_j = std::make_shared<variable>
 	(
 		"j",
-		std::make_shared<const const_>
+		const_
 		(
 			fundamental_type::UNSIGNED_LONG_INT
 		)

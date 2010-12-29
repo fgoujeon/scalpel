@@ -48,7 +48,7 @@ namespace
 			operator()(const T& lhs) const
 			{
 				//TODO check equality of current qualifiers (necessary for array)
-				return equals(lhs->qualified_type(), rhs_->qualified_type());
+				return equals(lhs.qualified_type(), rhs_.qualified_type());
 			}
 
 		private:
@@ -171,7 +171,7 @@ namespace
 			operator()(const T& lhs) const
 			{
 				//TODO check equality of current qualifiers (necessary for array)
-				return have_same_qualifiers(lhs->qualified_type(), rhs_->qualified_type());
+				return have_same_qualifiers(lhs.qualified_type(), rhs_.qualified_type());
 			}
 
 		private:
@@ -290,7 +290,7 @@ namespace
 		unqualified_type_shared_ptr_variant
 		operator()(const T& t) const
 		{
-			return get_unqualified_type(t->qualified_type());
+			return get_unqualified_type(t.qualified_type());
 		}
 
 		unqualified_type_shared_ptr_variant

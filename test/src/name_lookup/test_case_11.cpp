@@ -72,11 +72,11 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 	);
 	auto c_conversion_function_double_ptr = std::make_shared<conversion_function>
 	(
-		std::make_shared<const pointer>(fundamental_type::DOUBLE)
+		pointer(fundamental_type::DOUBLE)
 	);
 	auto c_conversion_function_int_ptr = std::make_shared<conversion_function>
 	(
-		std::make_shared<const pointer>(fundamental_type::INT)
+		pointer(fundamental_type::INT)
 	);
 	auto operator_function_not_equal = std::make_shared<operator_function>
 	(
@@ -197,7 +197,7 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 					space(""),
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
-				std::make_shared<const pointer>(fundamental_type::INT),
+				pointer(fundamental_type::INT),
 				semantic_graph,
 				false
 			)

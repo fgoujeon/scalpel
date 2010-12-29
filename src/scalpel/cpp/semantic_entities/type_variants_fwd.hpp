@@ -39,13 +39,13 @@ class volatile_;
 typedef
 	utility::variant
 	<
-		std::shared_ptr<const array>,
+		array,
 		fundamental_type,
 		std::shared_ptr<const class_>,
-		std::shared_ptr<const const_>,
-		std::shared_ptr<const pointer>,
-		std::shared_ptr<const reference>,
-		std::shared_ptr<const volatile_>
+		const_,
+		pointer,
+		reference,
+		volatile_
 	>::type
 	type_shared_ptr_variant
 ;

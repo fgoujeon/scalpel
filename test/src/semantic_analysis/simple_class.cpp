@@ -72,7 +72,7 @@ BOOST_AUTO_TEST_CASE(simple_class)
 			{
 				std::make_shared<function_parameter>
 				(
-					std::make_shared<const const_>
+					const_
 					(
 						fundamental_type::UNSIGNED_INT
 					),
@@ -102,7 +102,7 @@ BOOST_AUTO_TEST_CASE(simple_class)
 				{
 					std::make_shared<function_parameter>
 					(
-						std::make_shared<const const_>
+						const_
 						(
 							fundamental_type::UNSIGNED_INT
 						),
