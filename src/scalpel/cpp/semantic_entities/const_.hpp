@@ -32,7 +32,7 @@ Represents the const qualifier.
 class const_
 {
 	public:
-		const_(const type_variant& qualified_type);
+		const_(const weak_type_variant& qualified_type);
 
 		type_variant
 		qualified_type() const

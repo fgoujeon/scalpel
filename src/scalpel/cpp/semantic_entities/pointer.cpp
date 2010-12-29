@@ -24,8 +24,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-pointer::pointer(const type_variant& qualified_type):
-	qualified_type_(to_weak_type_variant(qualified_type))
+pointer::pointer(const weak_type_variant& qualified_type):
+	qualified_type_(qualified_type)
 {
 }
 

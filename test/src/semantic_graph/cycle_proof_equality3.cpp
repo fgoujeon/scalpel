@@ -48,7 +48,7 @@ BOOST_AUTO_TEST_CASE(cycle_proof_equality3)
 			"ptr",
 			pointer
 			(
-				std::shared_ptr<const class_>(class_a_1)
+				std::weak_ptr<const class_>(class_a_1)
 			)
 		)
 	;
@@ -66,7 +66,7 @@ BOOST_AUTO_TEST_CASE(cycle_proof_equality3)
 			"ptr",
 			pointer
 			(
-				std::shared_ptr<const class_>(class_a_2)
+				std::weak_ptr<const class_>(class_a_2)
 			)
 		)
 	;

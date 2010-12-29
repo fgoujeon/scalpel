@@ -32,7 +32,7 @@ Represents the const qualifier.
 class volatile_
 {
 	public:
-		volatile_(const type_variant& qualified_type);
+		volatile_(const weak_type_variant& qualified_type);
 
 		type_variant
 		qualified_type() const

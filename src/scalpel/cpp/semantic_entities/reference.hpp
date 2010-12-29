@@ -32,7 +32,7 @@ Represents the const qualifier.
 class reference
 {
 	public:
-		reference(const type_variant& qualified_type);
+		reference(const weak_type_variant& qualified_type);
 
 		type_variant
 		qualified_type() const

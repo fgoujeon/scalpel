@@ -184,9 +184,9 @@ qualify_type
 				const cv_qualifier& cv_qualifier_node = *opt_cv_qualifier_node;
 
 				if(get<predefined_text_node<str::const_>>(&cv_qualifier_node))
-					type = const_(to_type_variant(type));
+					type = const_(type);
 				else if(get<predefined_text_node<str::volatile_>>(&cv_qualifier_node))
-					type = volatile_(to_type_variant(type));
+					type = volatile_(type);
 			}
 		}
 	}
@@ -225,12 +225,12 @@ qualify_type
 			{
 				if(get_conditional_expression(*opt_array_part_node))
 				{
-					type = array(0, to_type_variant(type));
+					type = array(0, type);
 				}
 				else
 				{
 					//int i[] == int i*
-					type = pointer(to_type_variant(type));
+					type = pointer(type);
 				}
 			}
 		}
@@ -285,7 +285,7 @@ qualify_type
 		{
 			auto ptr_ptr_operator_node = *opt_ptr_ptr_operator_node;
 
-			type = pointer(to_type_variant(type));
+			type = pointer(type);
 
 			if(auto opt_cv_qualifier_seq_node = get_cv_qualifier_seq(ptr_ptr_operator_node))
 			{
@@ -301,18 +301,18 @@ qualify_type
 
 					if(get<predefined_text_node<str::const_>>(&cv_qualifier_node))
 					{
-						type = const_(to_type_variant(type));
+						type = const_(type);
 					}
 					else if(get<predefined_text_node<str::volatile_>>(&cv_qualifier_node))
 					{
-						type = volatile_(to_type_variant(type));
+						type = volatile_(type);
 					}
 				}
 			}
 		}
 		else if(auto ref_ptr_operator_node = get<ref_ptr_operator>(&ptr_operator_node))
 		{
-			type = reference(to_type_variant(type));
+			type = reference(type);
 		}
 	}
 

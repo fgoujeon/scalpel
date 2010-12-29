@@ -32,7 +32,7 @@ Represents the const qualifier.
 class pointer
 {
 	public:
-		pointer(const type_variant& qualified_type);
+		pointer(const weak_type_variant& qualified_type);
 
 		type_variant
 		qualified_type() const

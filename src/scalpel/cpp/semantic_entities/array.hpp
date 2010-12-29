@@ -35,7 +35,7 @@ class array
 		array
 		(
 			const unsigned int size,
-			const type_variant& qualified_type
+			const weak_type_variant& qualified_type
 		);
 
 		unsigned int
