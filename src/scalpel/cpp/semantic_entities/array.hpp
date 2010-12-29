@@ -35,7 +35,7 @@ class array
 		array
 		(
 			const unsigned int size,
-			const type_shared_ptr_variant& qualified_type
+			const type_variant& qualified_type
 		);
 
 		unsigned int
@@ -44,7 +44,7 @@ class array
 			return size_;
 		}
 
-		const type_shared_ptr_variant&
+		const type_variant&
 		qualified_type() const
 		{
 			return qualified_type_;
@@ -52,7 +52,7 @@ class array
 
 	private:
 		unsigned int size_;
-		type_shared_ptr_variant qualified_type_;
+		type_variant qualified_type_;
 };
 
 bool

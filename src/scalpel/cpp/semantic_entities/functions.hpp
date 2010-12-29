@@ -59,7 +59,7 @@ class CLASS_NAME: \
 		( \
 			BOOST_PP_IIF(HAS_NAME, const std::string& name,) BOOST_PP_COMMA_IF(HAS_NAME) \
 			BOOST_PP_IIF(HAS_OPERATOR, const overloadable_operator overloaded_operator,) BOOST_PP_COMMA_IF(HAS_OPERATOR) \
-			BOOST_PP_IIF(HAS_RETURN_TYPE, const type_shared_ptr_variant& return_type,) BOOST_PP_COMMA_IF(HAS_RETURN_TYPE) \
+			BOOST_PP_IIF(HAS_RETURN_TYPE, const type_variant& return_type,) BOOST_PP_COMMA_IF(HAS_RETURN_TYPE) \
 			BOOST_PP_IIF(HAS_PARAMETERS, function_parameter_list&& parameters = function_parameter_list(),) BOOST_PP_COMMA_IF(HAS_PARAMETERS) \
 			bool is_inline = false, \
 			BOOST_PP_IIF(HAS_STATIC, bool is_static = false,) BOOST_PP_COMMA_IF(HAS_STATIC) \
@@ -94,7 +94,7 @@ class CLASS_NAME: \
 		BOOST_PP_IIF \
 		( \
 			HAS_RETURN_TYPE, \
-			const type_shared_ptr_variant& \
+			const type_variant& \
 			return_type() const \
 			{ \
 				return return_type_; \
@@ -208,7 +208,7 @@ class CLASS_NAME: \
 		BOOST_PP_IIF \
 		( \
 			HAS_RETURN_TYPE, \
-			type_shared_ptr_variant return_type_;, \
+			type_variant return_type_;, \
 		) \
 		BOOST_PP_IIF \
 		( \

@@ -27,7 +27,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 array::array
 (
 	const unsigned int size,
-	const type_shared_ptr_variant& qualified_type
+	const type_variant& qualified_type
 ):
 	size_(size),
 	qualified_type_(qualified_type)

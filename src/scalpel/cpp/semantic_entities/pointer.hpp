@@ -32,16 +32,16 @@ Represents the const qualifier.
 class pointer
 {
 	public:
-		pointer(const type_shared_ptr_variant& qualified_type);
+		pointer(const type_variant& qualified_type);
 
-		const type_shared_ptr_variant&
+		const type_variant&
 		qualified_type() const
 		{
 			return qualified_type_;
 		}
 
 	private:
-		type_shared_ptr_variant qualified_type_;
+		type_variant qualified_type_;
 };
 
 bool

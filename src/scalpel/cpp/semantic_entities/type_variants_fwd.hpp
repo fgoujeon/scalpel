@@ -47,7 +47,7 @@ typedef
 		reference,
 		volatile_
 	>::type
-	type_shared_ptr_variant
+	type_variant
 ;
 
 typedef
@@ -56,17 +56,17 @@ typedef
 		fundamental_type,
 		std::shared_ptr<const class_>
 	>::type
-	unqualified_type_shared_ptr_variant
+	unqualified_type_variant
 ;
 
 bool
-equals(const type_shared_ptr_variant& lhs, const type_shared_ptr_variant& rhs);
+equals(const type_variant& lhs, const type_variant& rhs);
 
 bool
-have_same_qualifiers(const type_shared_ptr_variant& lhs, const type_shared_ptr_variant& rhs);
+have_same_qualifiers(const type_variant& lhs, const type_variant& rhs);
 
-unqualified_type_shared_ptr_variant
-get_unqualified_type(const type_shared_ptr_variant& type);
+unqualified_type_variant
+get_unqualified_type(const type_variant& type);
 
 }}} //namespace scalpel::cpp::semantic_entities
 

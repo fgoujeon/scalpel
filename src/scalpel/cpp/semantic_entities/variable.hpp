@@ -39,7 +39,7 @@ class variable
 		variable
 		(
 			const std::string& name,
-			const type_shared_ptr_variant& type,
+			const type_variant& type,
 			bool is_static = false
 		);
 
@@ -50,7 +50,7 @@ class variable
 		const variable&
 		operator=(variable&& v);
 
-		const type_shared_ptr_variant&
+		const type_variant&
 		type() const;
 
 		const std::string&
@@ -69,7 +69,7 @@ class variable
 		enclosing_declarative_region(const declarative_region_shared_ptr_variant& enclosing_declarative_region);
 
 	private:
-		type_shared_ptr_variant type_; //TODO prevent cyclic dependency
+		type_variant type_;
 		std::string name_;
 		bool is_static_;
 		detail::declarative_region_member_impl declarative_region_member_impl_;

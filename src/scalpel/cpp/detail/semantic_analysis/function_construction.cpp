@@ -42,7 +42,7 @@ create_function
 	//Analyze the decl-specifier-seq node.
 	//
 
-	boost::optional<type_shared_ptr_variant> opt_unqualified_type;
+	boost::optional<type_variant> opt_unqualified_type;
 	bool has_typedef_specifier = false;
 	bool has_static_specifier = false;
 	bool has_inline_specifier = false;
@@ -321,7 +321,7 @@ get_operator_function_operator
 	}
 }
 
-semantic_entities::type_shared_ptr_variant
+semantic_entities::type_variant
 get_conversion_function_type
 (
 	const syntax_nodes::declarator& declarator_node,
@@ -334,7 +334,7 @@ get_conversion_function_type
 	const conversion_function_id& conversion_function_id_node = *opt_conversion_function_id_node;
 
 	const type_specifier_seq& type_specifier_seq_node = get_type_specifier_seq(conversion_function_id_node);
-	type_shared_ptr_variant type = create_type(type_specifier_seq_node, current_declarative_region);
+	type_variant type = create_type(type_specifier_seq_node, current_declarative_region);
 
 	if(const optional_node<ptr_operator_seq>& opt_ptr_operator_seq_node = get_ptr_operator_seq(conversion_function_id_node))
 	{
@@ -377,7 +377,7 @@ create_parameters
 		auto parameter_declaration_node = j->main_node();
 		auto decl_specifier_seq_node = get_decl_specifier_seq(parameter_declaration_node);
 
-		semantic_entities::type_shared_ptr_variant type =
+		semantic_entities::type_variant type =
 			qualify_type
 			(
 				create_type

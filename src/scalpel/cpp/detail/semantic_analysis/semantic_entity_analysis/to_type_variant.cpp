@@ -18,32 +18,32 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "to_type_shared_ptr_variant.hpp"
+#include "to_type_variant.hpp"
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace semantic_entity_analysis
 {
 
 using namespace semantic_entities;
 
-struct: public utility::static_visitor<type_shared_ptr_variant>
+struct: public utility::static_visitor<type_variant>
 {
-	type_shared_ptr_variant
+	type_variant
 	operator()(std::shared_ptr<class_> t) const
 	{
-		return type_shared_ptr_variant(std::shared_ptr<const class_>(t));
+		return type_variant(std::shared_ptr<const class_>(t));
 	}
 
-	type_shared_ptr_variant
+	type_variant
 	operator()(std::shared_ptr<typedef_> t) const
 	{
 		return t->type();
 	}
-} to_type_shared_ptr_variant_impl;
+} to_type_variant_impl;
 
-type_shared_ptr_variant
-to_type_shared_ptr_variant(const utility::shared_ptr_variant<semantic_entities::class_, semantic_entities::typedef_>::type& var)
+type_variant
+to_type_variant(const utility::shared_ptr_variant<semantic_entities::class_, semantic_entities::typedef_>::type& var)
 {
-	return utility::apply_visitor(to_type_shared_ptr_variant_impl, var);
+	return utility::apply_visitor(to_type_variant_impl, var);
 }
 
 }}}}} //namespace scalpel::cpp::detail::semantic_analysis::semantic_entity_analysis

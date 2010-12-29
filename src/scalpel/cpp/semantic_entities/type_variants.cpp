@@ -118,7 +118,7 @@ namespace
 	class partial_equals_visitor: public utility::static_visitor<bool>
 	{
 		public:
-			partial_equals_visitor(const type_shared_ptr_variant& lhs):
+			partial_equals_visitor(const type_variant& lhs):
 				lhs_(lhs)
 			{
 			}
@@ -132,12 +132,12 @@ namespace
 			}
 
 		private:
-			const type_shared_ptr_variant& lhs_;
+			const type_variant& lhs_;
 	};
 }
 
 bool
-equals(const type_shared_ptr_variant& lhs, const type_shared_ptr_variant& rhs)
+equals(const type_variant& lhs, const type_variant& rhs)
 {
 	partial_equals_visitor visitor(lhs);
 	return utility::apply_visitor(visitor, rhs);
@@ -255,7 +255,7 @@ namespace
 	class partial_have_same_qualifiers_visitor: public utility::static_visitor<bool>
 	{
 		public:
-			partial_have_same_qualifiers_visitor(const type_shared_ptr_variant& lhs):
+			partial_have_same_qualifiers_visitor(const type_variant& lhs):
 				lhs_(lhs)
 			{
 			}
@@ -269,12 +269,12 @@ namespace
 			}
 
 		private:
-			const type_shared_ptr_variant& lhs_;
+			const type_variant& lhs_;
 	};
 }
 
 bool
-have_same_qualifiers(const type_shared_ptr_variant& lhs, const type_shared_ptr_variant& rhs)
+have_same_qualifiers(const type_variant& lhs, const type_variant& rhs)
 {
 	partial_have_same_qualifiers_visitor visitor(lhs);
 	return utility::apply_visitor(visitor, rhs);
@@ -284,22 +284,22 @@ have_same_qualifiers(const type_shared_ptr_variant& lhs, const type_shared_ptr_v
 
 namespace
 {
-	struct: public utility::static_visitor<unqualified_type_shared_ptr_variant>
+	struct: public utility::static_visitor<unqualified_type_variant>
 	{
 		template<class T>
-		unqualified_type_shared_ptr_variant
+		unqualified_type_variant
 		operator()(const T& t) const
 		{
 			return get_unqualified_type(t.qualified_type());
 		}
 
-		unqualified_type_shared_ptr_variant
+		unqualified_type_variant
 		operator()(const std::shared_ptr<const class_>& t) const
 		{
 			return t;
 		}
 
-		unqualified_type_shared_ptr_variant
+		unqualified_type_variant
 		operator()(fundamental_type t) const
 		{
 			return t;
@@ -307,8 +307,8 @@ namespace
 	} get_unqualified_type_visitor;
 }
 
-unqualified_type_shared_ptr_variant
-get_unqualified_type(const type_shared_ptr_variant& type)
+unqualified_type_variant
+get_unqualified_type(const type_variant& type)
 {
 	return utility::apply_visitor(get_unqualified_type_visitor, type);
 }

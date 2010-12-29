@@ -29,7 +29,7 @@ namespace semantic_graph_print_functions
 void
 print_type
 (
-	const semantic_entities::type_shared_ptr_variant& n,
+	const semantic_entities::type_variant& n,
 	const unsigned int indent_level
 )
 {

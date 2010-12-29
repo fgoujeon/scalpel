@@ -24,7 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-typedef_::typedef_(const std::string& name, const type_shared_ptr_variant& type):
+typedef_::typedef_(const std::string& name, const type_variant& type):
 	name_(name),
 	type_(type)
 {

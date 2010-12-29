@@ -25,7 +25,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-function_parameter::function_parameter(const type_shared_ptr_variant& t, const std::string& name):
+function_parameter::function_parameter(const type_variant& t, const std::string& name):
 	type_(t),
 	name_(name)
 {
@@ -61,7 +61,7 @@ function_parameter::operator=(function_parameter&& o)
 	return *this;
 }
 
-const type_shared_ptr_variant&
+const type_variant&
 function_parameter::type() const
 {
 	return type_;

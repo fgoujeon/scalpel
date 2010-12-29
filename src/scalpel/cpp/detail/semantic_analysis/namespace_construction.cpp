@@ -114,7 +114,7 @@ fill_namespace
 	const syntax_nodes::simple_declaration& simple_declaration_node
 )
 {
-	boost::optional<type_shared_ptr_variant> opt_unqualified_type;
+	boost::optional<type_variant> opt_unqualified_type;
 	bool has_typedef_specifier = false;
 	bool has_static_specifier = false;
 	bool has_inline_specifier = false;

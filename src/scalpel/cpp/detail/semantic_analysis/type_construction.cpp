@@ -20,7 +20,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "type_construction.hpp"
 #include "name_lookup.hpp"
-#include "semantic_entity_analysis/to_type_shared_ptr_variant.hpp"
+#include "semantic_entity_analysis/to_type_variant.hpp"
 #include "syntax_node_analysis.hpp"
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
@@ -29,7 +29,7 @@ namespace scalpel { namespace cpp { namespace detail { namespace semantic_analys
 using namespace syntax_nodes;
 using namespace semantic_entities;
 
-semantic_entities::type_shared_ptr_variant
+semantic_entities::type_variant
 create_type
 (
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
@@ -39,14 +39,14 @@ create_type
 	return create_type(syntax_node_analysis::to_type_specifier_seq(decl_specifier_seq_node), current_declarative_region);
 }
 
-semantic_entities::type_shared_ptr_variant
+semantic_entities::type_variant
 create_type
 (
 	const syntax_nodes::type_specifier_seq& type_specifier_seq_node,
 	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 )
 {
-	boost::optional<semantic_entities::type_shared_ptr_variant> opt_return_type;
+	boost::optional<semantic_entities::type_variant> opt_return_type;
 	bool is_fundamental_type = false;
 	bool bool_type = false;
 	bool char_type = false;
@@ -101,7 +101,7 @@ create_type
 					)
 				;
 
-				opt_return_type = semantic_entity_analysis::to_type_shared_ptr_variant(found_type);
+				opt_return_type = semantic_entity_analysis::to_type_variant(found_type);
 			}
 			else if(auto opt_fundamental_type_specifier_node = get<fundamental_type_specifier>(&simple_type_specifier_node))
 			{
@@ -164,10 +164,10 @@ create_type
 	}
 }
 
-semantic_entities::type_shared_ptr_variant
+semantic_entities::type_variant
 qualify_type
 (
-	semantic_entities::type_shared_ptr_variant type,
+	semantic_entities::type_variant type,
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node
 )
 {
@@ -194,10 +194,10 @@ qualify_type
 	return type;
 }
 
-semantic_entities::type_shared_ptr_variant
+semantic_entities::type_variant
 qualify_type
 (
-	semantic_entities::type_shared_ptr_variant type,
+	semantic_entities::type_variant type,
 	const syntax_nodes::declarator& declarator_node
 )
 {
@@ -271,10 +271,10 @@ has_type_decorators(const syntax_nodes::declarator& declarator_node)
 	return false;
 }
 
-semantic_entities::type_shared_ptr_variant
+semantic_entities::type_variant
 qualify_type
 (
-	semantic_entities::type_shared_ptr_variant type,
+	semantic_entities::type_variant type,
 	const syntax_nodes::ptr_operator_seq& ptr_operator_seq_node
 )
 {

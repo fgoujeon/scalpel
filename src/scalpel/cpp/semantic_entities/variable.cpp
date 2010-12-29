@@ -28,7 +28,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 variable::variable
 (
 	const std::string& name,
-	const type_shared_ptr_variant& type,
+	const type_variant& type,
 	bool is_static
 ):
 	type_(type),
@@ -61,7 +61,7 @@ variable::operator=(variable&& rhs)
 	return *this;
 }
 
-const type_shared_ptr_variant&
+const type_variant&
 variable::type() const
 {
 	return type_;
@@ -150,8 +150,8 @@ safe_type_comparison
 		const std::shared_ptr<const class_>* opt_lhs_type;
 		const std::shared_ptr<const class_>* opt_rhs_type;
 
-		const unqualified_type_shared_ptr_variant& lhs_unqualified_type = get_unqualified_type(lhs.type());
-		const unqualified_type_shared_ptr_variant& rhs_unqualified_type = get_unqualified_type(rhs.type());
+		const unqualified_type_variant& lhs_unqualified_type = get_unqualified_type(lhs.type());
+		const unqualified_type_variant& rhs_unqualified_type = get_unqualified_type(rhs.type());
 		if
 		(
 			(opt_lhs_type = utility::get<std::shared_ptr<const class_>>(&lhs_unqualified_type)) &&

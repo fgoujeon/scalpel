@@ -24,7 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-pointer::pointer(const type_shared_ptr_variant& qualified_type):
+pointer::pointer(const type_variant& qualified_type):
 	qualified_type_(qualified_type)
 {
 }

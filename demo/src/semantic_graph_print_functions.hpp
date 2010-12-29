@@ -37,7 +37,7 @@ using namespace scalpel::cpp::semantic_entities;
 void
 print_type
 (
-	const semantic_entities::type_shared_ptr_variant& entity,
+	const semantic_entities::type_variant& entity,
 	const unsigned int indent_level
 );
 

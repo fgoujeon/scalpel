@@ -98,7 +98,7 @@ namespace identification_policies
 
 	struct by_return_type
 	{
-		typedef semantic_entities::type_shared_ptr_variant identifier_t;
+		typedef semantic_entities::type_variant identifier_t;
 
 		template<class EntityT>
 		static

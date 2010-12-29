@@ -32,16 +32,16 @@ Represents the const qualifier.
 class const_
 {
 	public:
-		const_(const type_shared_ptr_variant& qualified_type);
+		const_(const type_variant& qualified_type);
 
-		const type_shared_ptr_variant&
+		const type_variant&
 		qualified_type() const
 		{
 			return qualified_type_;
 		}
 
 	private:
-		type_shared_ptr_variant qualified_type_;
+		type_variant qualified_type_;
 };
 
 bool
