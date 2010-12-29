@@ -44,15 +44,15 @@ class array
 			return size_;
 		}
 
-		const type_variant&
+		type_variant
 		qualified_type() const
 		{
-			return qualified_type_;
+			return to_type_variant(qualified_type_);
 		}
 
 	private:
 		unsigned int size_;
-		type_variant qualified_type_;
+		weak_type_variant qualified_type_;
 };
 
 bool

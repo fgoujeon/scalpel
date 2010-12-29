@@ -26,7 +26,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 function_parameter::function_parameter(const type_variant& t, const std::string& name):
-	type_(t),
+	type_(to_weak_type_variant(t)),
 	name_(name)
 {
 }
@@ -61,10 +61,10 @@ function_parameter::operator=(function_parameter&& o)
 	return *this;
 }
 
-const type_variant&
+type_variant
 function_parameter::type() const
 {
-	return type_;
+	return to_type_variant(type_);
 }
 
 const std::string&

@@ -31,7 +31,7 @@ variable::variable
 	const type_variant& type,
 	bool is_static
 ):
-	type_(type),
+	type_(to_weak_type_variant(type)),
 	name_(name),
 	is_static_(is_static)
 {
@@ -61,10 +61,10 @@ variable::operator=(variable&& rhs)
 	return *this;
 }
 
-const type_variant&
+type_variant
 variable::type() const
 {
-	return type_;
+	return to_type_variant(type_);
 }
 
 const std::string&

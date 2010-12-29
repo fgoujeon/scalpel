@@ -53,12 +53,30 @@ typedef
 typedef
 	utility::variant
 	<
+		array,
+		fundamental_type,
+		std::weak_ptr<const class_>,
+		const_,
+		pointer,
+		reference,
+		volatile_
+	>::type
+	weak_type_variant
+;
+
+typedef
+	utility::variant
+	<
 		fundamental_type,
 		std::shared_ptr<const class_>
 	>::type
 	unqualified_type_variant
 ;
 
+//perform a recursive value comparison for qualifier instances,
+//a value comparison for fundamental_type instances and a pointer
+//comparison for class_ instances
+//TODO find a more expressive name
 bool
 equals(const type_variant& lhs, const type_variant& rhs);
 
@@ -67,6 +85,12 @@ have_same_qualifiers(const type_variant& lhs, const type_variant& rhs);
 
 unqualified_type_variant
 get_unqualified_type(const type_variant& type);
+
+weak_type_variant
+to_weak_type_variant(const type_variant& type);
+
+type_variant
+to_type_variant(const weak_type_variant& type);
 
 }}} //namespace scalpel::cpp::semantic_entities
 

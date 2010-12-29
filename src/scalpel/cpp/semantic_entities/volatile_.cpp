@@ -25,7 +25,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 volatile_::volatile_(const type_variant& qualified_type):
-	qualified_type_(qualified_type)
+	qualified_type_(to_weak_type_variant(qualified_type))
 {
 }
 

@@ -42,14 +42,14 @@ class function_parameter
 		const function_parameter&
 		operator=(function_parameter&& o);
 
-		const type_variant&
+		type_variant
 		type() const;
 
 		const std::string&
 		name() const;
 
 	private:
-		type_variant type_;
+		weak_type_variant type_;
 		std::string name_;
 };
 

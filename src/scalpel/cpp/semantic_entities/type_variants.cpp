@@ -313,5 +313,59 @@ get_unqualified_type(const type_variant& type)
 	return utility::apply_visitor(get_unqualified_type_visitor, type);
 }
 
+
+
+namespace
+{
+	struct: public utility::static_visitor<weak_type_variant>
+	{
+		template<class T>
+		weak_type_variant
+		operator()(const T& t) const
+		{
+			return t;
+		}
+
+		weak_type_variant
+		operator()(const std::shared_ptr<const class_>& t) const
+		{
+			return std::weak_ptr<const class_>(t);
+		}
+	} to_weak_type_variant_visitor;
+}
+
+weak_type_variant
+to_weak_type_variant(const type_variant& type)
+{
+	return utility::apply_visitor(to_weak_type_variant_visitor, type);
+}
+
+
+
+namespace
+{
+	struct: public utility::static_visitor<type_variant>
+	{
+		template<class T>
+		type_variant
+		operator()(const T& t) const
+		{
+			return t;
+		}
+
+		type_variant
+		operator()(const std::weak_ptr<const class_>& t) const
+		{
+			return t.lock();
+		}
+	} to_type_variant_visitor;
+}
+
+type_variant
+to_type_variant(const weak_type_variant& type)
+{
+	return utility::apply_visitor(to_type_variant_visitor, type);
+}
+
 }}} //namespace scalpel::cpp::semantic_entities
 

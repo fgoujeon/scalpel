@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_TYPEDEF_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_TYPEDEF_HPP
 
-#include "type_variants_fwd.hpp"
+#include "type_variants.hpp"
 #include "detail/declarative_region_member_impl.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
@@ -41,10 +41,10 @@ class typedef_
 			return name_;
 		}
 
-		const type_variant&
+		type_variant
 		type() const
 		{
-			return type_;
+			return to_type_variant(type_);
 		}
 
 		bool
@@ -67,7 +67,7 @@ class typedef_
 
 	private:
 		std::string name_;
-		type_variant type_;
+		weak_type_variant type_;
 
 		detail::declarative_region_member_impl declarative_region_member_impl_;
 };

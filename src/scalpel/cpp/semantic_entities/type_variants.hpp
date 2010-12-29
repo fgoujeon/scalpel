@@ -24,7 +24,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "array.hpp"
 #include "class_.hpp"
 #include "const_.hpp"
-#include "fundamental_type.hpp"
 #include "pointer.hpp"
 #include "reference.hpp"
 #include "typedef_.hpp"

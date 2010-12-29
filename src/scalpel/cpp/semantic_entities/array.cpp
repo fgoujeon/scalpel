@@ -30,7 +30,7 @@ array::array
 	const type_variant& qualified_type
 ):
 	size_(size),
-	qualified_type_(qualified_type)
+	qualified_type_(to_weak_type_variant(qualified_type))
 {
 }
 

@@ -34,14 +34,14 @@ class const_
 	public:
 		const_(const type_variant& qualified_type);
 
-		const type_variant&
+		type_variant
 		qualified_type() const
 		{
-			return qualified_type_;
+			return to_type_variant(qualified_type_);
 		}
 
 	private:
-		type_variant qualified_type_;
+		weak_type_variant qualified_type_;
 };
 
 bool
