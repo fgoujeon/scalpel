@@ -351,6 +351,23 @@ class_::is_mutable_member_variable(std::shared_ptr<const variable> member) const
 bool
 operator==(const class_& lhs, const class_& rhs)
 {
+	return cycle_proof_equals(lhs, rhs, 0);
+}
+
+bool
+operator!=(const class_& lhs, const class_& rhs)
+{
+	return !operator==(lhs, rhs);
+}
+
+bool
+cycle_proof_equals
+(
+	const class_& lhs,
+	const class_& rhs,
+	const unsigned int enclosing_declarative_region_count
+)
+{
 	if(lhs.name() != rhs.name())
 		return false;
 
@@ -382,7 +399,8 @@ operator==(const class_& lhs, const class_& rhs)
 		++i, ++j
 	)
 	{
-		if(!utility::are_pointed_objects_equal(*i, *j))
+		//if(!utility::are_pointed_objects_equal(*i, *j))
+		if(!cycle_proof_equals(**i, **j, enclosing_declarative_region_count + 1))
 			return false;
 		if(lhs.member_access(*i) != rhs.member_access(*j))
 			return false;
@@ -484,7 +502,8 @@ operator==(const class_& lhs, const class_& rhs)
 		++i, ++j
 	)
 	{
-		if(!utility::are_pointed_objects_equal(*i, *j))
+		//if(!utility::are_pointed_objects_equal(*i, *j))
+		if(!cycle_proof_equals(**i, **j, enclosing_declarative_region_count + 1))
 			return false;
 		if(lhs.member_access(*i) != rhs.member_access(*j))
 			return false;
@@ -493,12 +512,6 @@ operator==(const class_& lhs, const class_& rhs)
 	}
 
 	return true;
-}
-
-bool
-operator!=(const class_& lhs, const class_& rhs)
-{
-	return !operator==(lhs, rhs);
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

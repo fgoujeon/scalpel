@@ -100,17 +100,99 @@ variable::enclosing_declarative_region(const declarative_region_shared_ptr_varia
 bool
 operator==(const variable& lhs, const variable& rhs)
 {
-	return
-		lhs.name() == rhs.name() &&
-		lhs.is_static() == rhs.is_static() &&
-		are_pointed_objects_equal(lhs.type(), rhs.type())
-	;
+	return cycle_proof_equals(lhs, rhs, 0);
 }
 
 bool
 operator!=(const variable& lhs, const variable& rhs)
 {
 	return !operator==(lhs, rhs);
+}
+
+unsigned int
+get_declarative_region_back_index
+(
+	declarative_region_shared_ptr_variant current_declarative_region,
+	const std::shared_ptr<const class_> class_to_be_found,
+	const unsigned int max_back_index
+)
+{
+	unsigned int back_index = 1;
+
+	while(back_index <= max_back_index)
+	{
+		if(const std::shared_ptr<class_>* opt_current_class = utility::get<class_>(&current_declarative_region))
+		{
+			if(*opt_current_class == class_to_be_found) return back_index;
+		}
+
+		//iterate to the enclosing declarative region
+		current_declarative_region = get_enclosing_declarative_region(current_declarative_region);
+		++back_index;
+	}
+
+	return 0;
+}
+
+bool
+safe_type_comparison
+(
+	const variable& lhs,
+	const variable& rhs,
+	const unsigned int enclosing_declarative_region_count
+)
+{
+	if(enclosing_declarative_region_count > 0)
+	{
+		if(!have_same_qualifiers(lhs.type(), rhs.type()))
+			return false;
+
+		const std::shared_ptr<const class_>* opt_lhs_type;
+		const std::shared_ptr<const class_>* opt_rhs_type;
+
+		const unqualified_type_shared_ptr_variant& lhs_unqualified_type = get_unqualified_type(lhs.type());
+		const unqualified_type_shared_ptr_variant& rhs_unqualified_type = get_unqualified_type(rhs.type());
+		if
+		(
+			(opt_lhs_type = utility::get<class_>(&lhs_unqualified_type)) &&
+			(opt_rhs_type = utility::get<class_>(&rhs_unqualified_type))
+		)
+		{
+			const unsigned int lhs_back_index = get_declarative_region_back_index
+			(
+				lhs.enclosing_declarative_region(),
+				*opt_lhs_type,
+				enclosing_declarative_region_count
+			);
+			const unsigned int rhs_back_index = get_declarative_region_back_index
+			(
+				rhs.enclosing_declarative_region(),
+				*opt_rhs_type,
+				enclosing_declarative_region_count
+			);
+
+			if(lhs_back_index != 0 && rhs_back_index != 0)
+				return lhs_back_index == rhs_back_index;
+		}
+	}
+
+	//directly compare lhs' and rhs' types
+	return are_pointed_objects_equal(lhs.type(), rhs.type());
+}
+
+bool
+cycle_proof_equals
+(
+	const variable& lhs,
+	const variable& rhs,
+	const unsigned int enclosing_declarative_region_count
+)
+{
+	return
+		lhs.name() == rhs.name() &&
+		lhs.is_static() == rhs.is_static() &&
+		safe_type_comparison(lhs, rhs, enclosing_declarative_region_count)
+	;
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

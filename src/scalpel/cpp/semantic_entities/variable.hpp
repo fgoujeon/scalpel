@@ -81,6 +81,14 @@ operator==(const variable& lhs, const variable& rhs);
 bool
 operator!=(const variable& lhs, const variable& rhs);
 
+bool
+cycle_proof_equals
+(
+	const variable& lhs,
+	const variable& rhs,
+	const unsigned int enclosing_declarative_region_count
+);
+
 }}} //namespace scalpel::cpp::semantic_entities
 
 #endif

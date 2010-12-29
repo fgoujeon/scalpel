@@ -49,6 +49,21 @@ typedef
 	type_shared_ptr_variant
 ;
 
+typedef
+	utility::const_shared_ptr_variant
+	<
+		fundamental_type,
+		class_
+	>::type
+	unqualified_type_shared_ptr_variant
+;
+
+unqualified_type_shared_ptr_variant
+get_unqualified_type(const type_shared_ptr_variant& type);
+
+bool
+have_same_qualifiers(const type_shared_ptr_variant& lhs, const type_shared_ptr_variant& rhs);
+
 }}} //namespace scalpel::cpp::semantic_entities
 
 #endif
