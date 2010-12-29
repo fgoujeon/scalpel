@@ -65,22 +65,15 @@ namespace
 			{
 			}
 
-			//lhs' type is a qualifier
+			//rhs' and lhs' types are different
 			template<class U>
 			bool
-			operator()(const std::shared_ptr<const U>&) const
+			operator()(const U&) const
 			{
 				return false;
 			}
 
-			//lhs' type is class_
-			bool
-			operator()(const std::shared_ptr<const class_>& lhs) const
-			{
-				return lhs.get() == rhs_.get();
-			}
-
-			//lhs' type is fundamental_type
+			//rhs' and lhs' types are identical
 			bool
 			operator()(fundamental_type) const
 			{
@@ -101,22 +94,15 @@ namespace
 			{
 			}
 
-			//lhs' type is a qualifier
+			//rhs' and lhs' types are different
 			template<class U>
 			bool
-			operator()(const std::shared_ptr<const U>&) const
+			operator()(const U&) const
 			{
 				return false;
 			}
 
-			//lhs' type is class_
-			bool
-			operator()(const std::shared_ptr<const class_>&) const
-			{
-				return false;
-			}
-
-			//lhs' type is fundamental_type
+			//rhs' and lhs' types are identical
 			bool
 			operator()(const fundamental_type lhs) const
 			{
@@ -302,7 +288,7 @@ namespace
 	{
 		template<class T>
 		unqualified_type_shared_ptr_variant
-		operator()(const std::shared_ptr<const T>& t) const
+		operator()(const T& t) const
 		{
 			return get_unqualified_type(t->qualified_type());
 		}
