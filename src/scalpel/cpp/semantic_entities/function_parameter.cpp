@@ -61,10 +61,10 @@ function_parameter::operator=(function_parameter&& o)
 	return *this;
 }
 
-type_variant
+const weak_type_variant&
 function_parameter::type() const
 {
-	return to_type_variant(type_);
+	return type_;
 }
 
 const std::string&

@@ -483,7 +483,7 @@ print_function_parameter
 		std::cout << " name=\"" << p->name() << "\"";
 	std::cout << ">\n";
 	std::cout << indent(indent_level + 1) << "<type>\n";
-	print_type(to_weak_type_variant(p->type()), indent_level + 2);
+	print_type(p->type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</type>\n";
 	std::cout << indent(indent_level) << "</parameter>\n";
 }
