@@ -316,7 +316,7 @@ print_operator_member_function
 	std::cout << ">\n";
 
 	std::cout << indent(indent_level + 1) << "<return_type>\n";
-	print_type(to_weak_type_variant(entity->return_type()), indent_level + 2);
+	print_type(entity->return_type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</return_type>\n";
 
 	print_function_parameter_list(entity->parameters(), indent_level + 1);
@@ -354,7 +354,7 @@ print_conversion_function
 	std::cout << ">\n";
 
 	std::cout << indent(indent_level + 1) << "<return_type>\n";
-	print_type(to_weak_type_variant(entity->return_type()), indent_level + 2);
+	print_type(entity->return_type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</return_type>\n";
 
 	std::cout << indent(indent_level) << "</conversion_function>\n";
@@ -393,7 +393,7 @@ print_simple_member_function
 	std::cout << ">\n";
 
 	std::cout << indent(indent_level + 1) << "<return_type>\n";
-	print_type(to_weak_type_variant(entity->return_type()), indent_level + 2);
+	print_type(entity->return_type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</return_type>\n";
 
 	print_function_parameter_list(entity->parameters(), indent_level + 1);
@@ -419,7 +419,7 @@ print_operator_function
 	std::cout << ">\n";
 
 	std::cout << indent(indent_level + 1) << "<return_type>\n";
-	print_type(to_weak_type_variant(entity->return_type()), indent_level + 2);
+	print_type(entity->return_type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</return_type>\n";
 
 	print_function_parameter_list(entity->parameters(), indent_level + 1);
@@ -445,7 +445,7 @@ print_simple_function
 	std::cout << ">\n";
 
 	std::cout << indent(indent_level + 1) << "<return_type>\n";
-	print_type(to_weak_type_variant(entity->return_type()), indent_level + 2);
+	print_type(entity->return_type(), indent_level + 2);
 	std::cout << indent(indent_level + 1) << "</return_type>\n";
 
 	print_function_parameter_list(entity->parameters(), indent_level + 1);

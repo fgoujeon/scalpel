@@ -94,10 +94,10 @@ class CLASS_NAME: \
 		BOOST_PP_IIF \
 		( \
 			HAS_RETURN_TYPE, \
-			type_variant \
+			const weak_type_variant& \
 			return_type() const \
 			{ \
-				return to_type_variant(return_type_); \
+				return return_type_; \
 			}, \
 		) \
  \

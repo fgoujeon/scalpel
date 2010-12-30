@@ -98,11 +98,11 @@ namespace identification_policies
 
 	struct by_return_type
 	{
-		typedef semantic_entities::type_variant identifier_t;
+		typedef semantic_entities::weak_type_variant identifier_t;
 
 		template<class EntityT>
 		static
-		identifier_t
+		const identifier_t&
 		get_identifier(const EntityT& entity)
 		{
 			return entity->return_type();
