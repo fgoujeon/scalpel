@@ -32,7 +32,7 @@ namespace scalpel { namespace cpp { namespace detail { namespace semantic_analys
 //Create the type described by the given decl-specifier-seq.
 //The returned type is not qualified by the qualifiers of
 //the decl-specifier-seq.
-semantic_entities::weak_type_variant
+semantic_entities::type_variant
 create_type
 (
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
@@ -42,7 +42,7 @@ create_type
 //Create the type described by the given type-specifier-seq.
 //The returned type is not qualified by the qualifiers of
 //the type-specifier-seq.
-semantic_entities::weak_type_variant
+semantic_entities::type_variant
 create_type
 (
 	const syntax_nodes::type_specifier_seq& type_specifier_seq_node,
@@ -50,18 +50,18 @@ create_type
 );
 
 //qualify type with decl-specifier-seq's const and volatile specifiers
-semantic_entities::weak_type_variant
+semantic_entities::type_variant
 qualify_type
 (
-	semantic_entities::weak_type_variant type,
+	semantic_entities::type_variant type,
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node
 );
 
 //qualify type with declarator's pointers, references and arrays
-semantic_entities::weak_type_variant
+semantic_entities::type_variant
 qualify_type
 (
-	semantic_entities::weak_type_variant type,
+	semantic_entities::type_variant type,
 	const syntax_nodes::declarator& declarator_node
 );
 
@@ -69,10 +69,10 @@ bool
 has_type_decorators(const syntax_nodes::declarator& declarator_node);
 
 //qualify type with ptr-operator-seq's pointers and references
-semantic_entities::weak_type_variant
+semantic_entities::type_variant
 qualify_type
 (
-	semantic_entities::weak_type_variant type,
+	semantic_entities::type_variant type,
 	const syntax_nodes::ptr_operator_seq& ptr_operator_seq_node
 );
 

@@ -35,7 +35,7 @@ class array
 		array
 		(
 			const unsigned int size,
-			const weak_type_variant& qualified_type
+			const type_variant& qualified_type
 		);
 
 		unsigned int
@@ -44,7 +44,7 @@ class array
 			return size_;
 		}
 
-		const weak_type_variant&
+		const type_variant&
 		qualified_type() const
 		{
 			return qualified_type_;
@@ -52,7 +52,7 @@ class array
 
 	private:
 		unsigned int size_;
-		weak_type_variant qualified_type_;
+		type_variant qualified_type_;
 };
 
 bool

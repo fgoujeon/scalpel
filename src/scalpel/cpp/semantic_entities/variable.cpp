@@ -28,7 +28,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 variable::variable
 (
 	const std::string& name,
-	const weak_type_variant& type,
+	const type_variant& type,
 	bool is_static
 ):
 	type_(type),
@@ -61,7 +61,7 @@ variable::operator=(variable&& rhs)
 	return *this;
 }
 
-const weak_type_variant&
+const type_variant&
 variable::type() const
 {
 	return type_;

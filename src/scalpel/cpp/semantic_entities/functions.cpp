@@ -42,7 +42,7 @@ CLASS_NAME::CLASS_NAME \
 ( \
 	BOOST_PP_IIF(HAS_NAME, const std::string& name,) BOOST_PP_COMMA_IF(HAS_NAME) \
 	BOOST_PP_IIF(HAS_OPERATOR, const overloadable_operator overloaded_operator,) BOOST_PP_COMMA_IF(HAS_OPERATOR) \
-	BOOST_PP_IIF(HAS_RETURN_TYPE, const weak_type_variant& return_type,) BOOST_PP_COMMA_IF(HAS_RETURN_TYPE) \
+	BOOST_PP_IIF(HAS_RETURN_TYPE, const type_variant& return_type,) BOOST_PP_COMMA_IF(HAS_RETURN_TYPE) \
 	BOOST_PP_IIF(HAS_PARAMETERS, function_parameter_list&& parameters,) BOOST_PP_COMMA_IF(HAS_PARAMETERS) \
 	bool is_inline, \
 	BOOST_PP_IIF(HAS_STATIC, bool is_static,) BOOST_PP_COMMA_IF(HAS_STATIC) \

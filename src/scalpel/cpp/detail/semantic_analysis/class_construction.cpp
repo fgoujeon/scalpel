@@ -204,7 +204,7 @@ fill_class
 	const syntax_nodes::member_declaration_member_declarator_list& member_declaration_member_declarator_list_node
 )
 {
-	boost::optional<weak_type_variant> opt_unqualified_type;
+	boost::optional<type_variant> opt_unqualified_type;
 	bool has_typedef_specifier = false;
 	bool has_static_specifier = false;
 	bool has_inline_specifier = false;

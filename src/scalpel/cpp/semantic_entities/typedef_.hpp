@@ -33,7 +33,7 @@ Represents the const qualifier.
 class typedef_
 {
 	public:
-		typedef_(const std::string& name, const weak_type_variant& type);
+		typedef_(const std::string& name, const type_variant& type);
 
 		const std::string&
 		name() const
@@ -41,7 +41,7 @@ class typedef_
 			return name_;
 		}
 
-		const weak_type_variant&
+		const type_variant&
 		type() const
 		{
 			return type_;
@@ -67,7 +67,7 @@ class typedef_
 
 	private:
 		std::string name_;
-		weak_type_variant type_;
+		type_variant type_;
 
 		detail::declarative_region_member_impl declarative_region_member_impl_;
 };

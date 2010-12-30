@@ -41,27 +41,13 @@ typedef
 	<
 		array,
 		fundamental_type,
-		std::shared_ptr<const class_>,
-		const_,
-		pointer,
-		reference,
-		volatile_
-	>::type
-	type_variant
-;
-
-typedef
-	utility::variant
-	<
-		array,
-		fundamental_type,
 		std::weak_ptr<const class_>,
 		const_,
 		pointer,
 		reference,
 		volatile_
 	>::type
-	weak_type_variant
+	type_variant
 ;
 
 typedef
@@ -74,16 +60,10 @@ typedef
 ;
 
 bool
-have_same_qualifiers(const weak_type_variant& lhs, const weak_type_variant& rhs);
+have_same_qualifiers(const type_variant& lhs, const type_variant& rhs);
 
 unqualified_type_variant
-get_unqualified_type(const weak_type_variant& type);
-
-//weak_type_variant
-//to_weak_type_variant(const type_variant& type);
-//
-//type_variant
-//to_type_variant(const weak_type_variant& type);
+get_unqualified_type(const type_variant& type);
 
 }}} //namespace scalpel::cpp::semantic_entities
 

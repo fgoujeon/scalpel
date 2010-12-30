@@ -132,7 +132,7 @@ namespace
 	class partial_have_same_qualifiers_visitor: public utility::static_visitor<bool>
 	{
 		public:
-			partial_have_same_qualifiers_visitor(const weak_type_variant& lhs):
+			partial_have_same_qualifiers_visitor(const type_variant& lhs):
 				lhs_(lhs)
 			{
 			}
@@ -146,12 +146,12 @@ namespace
 			}
 
 		private:
-			const weak_type_variant& lhs_;
+			const type_variant& lhs_;
 	};
 }
 
 bool
-have_same_qualifiers(const weak_type_variant& lhs, const weak_type_variant& rhs)
+have_same_qualifiers(const type_variant& lhs, const type_variant& rhs)
 {
 	partial_have_same_qualifiers_visitor visitor(lhs);
 	return utility::apply_visitor(visitor, rhs);
@@ -185,63 +185,9 @@ namespace
 }
 
 unqualified_type_variant
-get_unqualified_type(const weak_type_variant& type)
+get_unqualified_type(const type_variant& type)
 {
 	return utility::apply_visitor(get_unqualified_type_visitor, type);
-}
-
-
-
-namespace
-{
-	struct: public utility::static_visitor<weak_type_variant>
-	{
-		template<class T>
-		weak_type_variant
-		operator()(const T& t) const
-		{
-			return t;
-		}
-
-		weak_type_variant
-		operator()(const std::shared_ptr<const class_>& t) const
-		{
-			return std::weak_ptr<const class_>(t);
-		}
-	} to_weak_type_variant_visitor;
-}
-
-weak_type_variant
-to_weak_type_variant(const type_variant& type)
-{
-	return utility::apply_visitor(to_weak_type_variant_visitor, type);
-}
-
-
-
-namespace
-{
-	struct: public utility::static_visitor<type_variant>
-	{
-		template<class T>
-		type_variant
-		operator()(const T& t) const
-		{
-			return t;
-		}
-
-		type_variant
-		operator()(const std::weak_ptr<const class_>& t) const
-		{
-			return t.lock();
-		}
-	} to_type_variant_visitor;
-}
-
-type_variant
-to_type_variant(const weak_type_variant& type)
-{
-	return utility::apply_visitor(to_type_variant_visitor, type);
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

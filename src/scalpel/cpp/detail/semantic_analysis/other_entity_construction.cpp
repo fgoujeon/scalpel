@@ -35,7 +35,7 @@ create_entity
 (
 	const syntax_nodes::declarator& declarator_node,
 	const declarative_region_shared_ptr_variant current_declarative_region,
-	boost::optional<semantic_entities::weak_type_variant> opt_type,
+	boost::optional<semantic_entities::type_variant> opt_type,
 	const bool has_typedef_specifier,
 	const bool has_static_specifier,
 	const bool has_inline_specifier,
