@@ -764,8 +764,8 @@ semantic_graph_serializer::attribute(const semantic_entities::overloadable_opera
 void
 serialize_semantic_graph
 (
-	std::ostream& output,
-	std::shared_ptr<const semantic_graph> graph
+	std::shared_ptr<const semantic_graph> graph,
+	std::ostream& output
 )
 {
 	semantic_graph_serializer serializer;

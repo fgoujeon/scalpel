@@ -120,7 +120,7 @@ single_file_tester::test_semantic_analysis(const std::string& filename)
 
 	//serialize the semantic graph
 	std::ostringstream semantic_graph_xml;
-	cpp2xml::serialize_semantic_graph(semantic_graph_xml, semantic_graph);
+	cpp2xml::serialize_semantic_graph(semantic_graph, semantic_graph_xml);
 
 	//open the result file
 	std::string expected_output_filename = filename.substr(0, filename.length() - 4) + ".xml";

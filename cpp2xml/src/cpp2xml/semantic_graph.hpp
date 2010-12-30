@@ -192,8 +192,8 @@ class semantic_graph_serializer
 void
 serialize_semantic_graph
 (
-	std::ostream& output,
-	std::shared_ptr<const semantic_graph> graph
+	std::shared_ptr<const semantic_graph> graph,
+	std::ostream& output
 );
 
 } //namespace cpp2xml
