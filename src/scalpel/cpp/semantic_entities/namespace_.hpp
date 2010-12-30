@@ -195,12 +195,6 @@ class namespace_:
 		weak_namespaces_t using_directive_namespaces_;
 };
 
-bool
-operator==(const namespace_& lhs, const namespace_& rhs);
-
-bool
-operator!=(const namespace_& lhs, const namespace_& rhs);
-
 }}} //namespace scalpel::cpp::semantic_entities
 
 #endif

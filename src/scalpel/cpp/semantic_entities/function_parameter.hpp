@@ -53,12 +53,6 @@ class function_parameter
 		std::string name_;
 };
 
-bool
-operator==(const function_parameter& lhs, const function_parameter& rhs);
-
-bool
-operator!=(const function_parameter& lhs, const function_parameter& rhs);
-
 }}} //namespace scalpel::cpp::semantic_entities
 
 #endif

@@ -19,7 +19,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "statement_block.hpp"
-#include <scalpel/utility/are_pointed_objects_equal.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -81,21 +80,6 @@ void
 statement_block::add_using_directive_namespace(std::shared_ptr<namespace_> n)
 {
 	using_directive_namespaces_.push_back(n);
-}
-
-bool
-operator==(const statement_block& lhs, const statement_block& rhs)
-{
-	return
-		utility::are_pointed_objects_equal(lhs.statement_blocks(), rhs.statement_blocks()) &&
-		utility::are_pointed_objects_equal(lhs.variables(), rhs.variables())
-	;
-}
-
-bool
-operator!=(const statement_block& lhs, const statement_block& rhs)
-{
-	return !operator==(lhs, rhs);
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

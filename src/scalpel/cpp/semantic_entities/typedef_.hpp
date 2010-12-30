@@ -72,12 +72,6 @@ class typedef_
 		detail::declarative_region_member_impl declarative_region_member_impl_;
 };
 
-bool
-operator==(const typedef_& lhs, const typedef_& rhs);
-
-bool
-operator!=(const typedef_& lhs, const typedef_& rhs);
-
 }}} //namespace scalpel::cpp::semantic_entities
 
 #endif

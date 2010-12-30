@@ -269,20 +269,6 @@ class class_:
 		variables_t variables_;
 };
 
-bool
-operator==(const class_& lhs, const class_& rhs);
-
-bool
-operator!=(const class_& lhs, const class_& rhs);
-
-bool
-cycle_proof_equals
-(
-	const class_& lhs,
-	const class_& rhs,
-	const unsigned int enclosing_declarative_region_count
-);
-
 }}} //namespace scalpel::cpp::semantic_entities
 
 #endif

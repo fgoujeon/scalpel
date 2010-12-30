@@ -19,7 +19,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "namespace_.hpp"
-#include <scalpel/utility/are_pointed_objects_equal.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -228,28 +227,6 @@ void
 namespace_::add_using_directive_namespace(std::shared_ptr<namespace_> n)
 {
 	using_directive_namespaces_.push_back(n);
-}
-
-bool
-operator==(const namespace_& lhs, const namespace_& rhs)
-{
-	return
-		lhs.name() == rhs.name() &&
-		utility::are_pointed_objects_equal(lhs.namespaces(), rhs.namespaces()) &&
-		utility::are_pointed_objects_equal(lhs.classes(), rhs.classes()) &&
-		utility::are_pointed_objects_equal(lhs.typedefs(), rhs.typedefs()) &&
-		utility::are_pointed_objects_equal(lhs.simple_functions(), rhs.simple_functions()) &&
-		utility::are_pointed_objects_equal(lhs.operator_functions(), rhs.operator_functions()) &&
-		utility::are_pointed_objects_equal(lhs.variables(), rhs.variables()) &&
-		utility::are_pointed_objects_equal(lhs.namespace_aliases(), rhs.namespace_aliases()) &&
-		utility::are_pointed_objects_equal(lhs.using_directive_namespaces(), rhs.using_directive_namespaces())
-	;
-}
-
-bool
-operator!=(const namespace_& lhs, const namespace_& rhs)
-{
-	return !operator==(lhs, rhs);
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

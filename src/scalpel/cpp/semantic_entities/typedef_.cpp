@@ -29,20 +29,5 @@ typedef_::typedef_(const std::string& name, const type_variant& type):
 {
 }
 
-bool
-operator==(const typedef_& lhs, const typedef_& rhs)
-{
-	return
-		lhs.name() == rhs.name() &&
-		lhs.type() == rhs.type()
-	;
-}
-
-bool
-operator!=(const typedef_& lhs, const typedef_& rhs)
-{
-	return !operator==(lhs, rhs);
-}
-
 }}} //namespace scalpel::cpp::semantic_entities
 

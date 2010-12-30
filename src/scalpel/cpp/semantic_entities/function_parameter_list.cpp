@@ -20,22 +20,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "function_parameter_list.hpp"
 #include "type_variants.hpp"
-#include <scalpel/utility/are_pointed_objects_equal.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
-
-bool
-operator==(const function_parameter_list& lhs, const function_parameter_list& rhs)
-{
-	return utility::are_pointed_objects_equal(lhs, rhs);
-}
-
-bool
-operator!=(const function_parameter_list& lhs, const function_parameter_list& rhs)
-{
-	return !operator==(lhs, rhs);
-}
 
 bool
 have_same_types(const function_parameter_list& lhs, const function_parameter_list& rhs)

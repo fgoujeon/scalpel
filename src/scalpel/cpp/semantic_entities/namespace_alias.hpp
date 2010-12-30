@@ -58,12 +58,6 @@ class namespace_alias
 		std::weak_ptr<namespace_> referred_namespace_;
 };
 
-bool
-operator==(const namespace_alias& lhs, const namespace_alias& rhs);
-
-bool
-operator!=(const namespace_alias& lhs, const namespace_alias& rhs);
-
 }}} //namespace scalpel::cpp::semantic_entities
 
 #endif

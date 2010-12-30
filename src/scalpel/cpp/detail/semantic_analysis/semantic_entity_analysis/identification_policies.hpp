@@ -23,7 +23,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "get_name.hpp"
 #include <scalpel/cpp/semantic_graph.hpp>
-#include <scalpel/utility/are_pointed_objects_equal.hpp>
 #include <string>
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace semantic_entity_analysis

@@ -20,7 +20,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "functions.hpp"
 #include "type_variants.hpp"
-#include <scalpel/utility/are_pointed_objects_equal.hpp>
 #include <scalpel/utility/ptr_variant_conversion_functions.hpp>
 #include <boost/preprocessor/control/iif.hpp>
 #include <boost/preprocessor/logical/or.hpp>
@@ -118,26 +117,6 @@ CLASS_NAME::enclosing_declarative_region(const declarative_region_shared_ptr_var
 } \
  \
  \
- \
-bool \
-operator==(const CLASS_NAME& lhs, const CLASS_NAME& rhs) \
-{ \
-	return \
-		lhs.is_inline() == rhs.is_inline() && \
-		BOOST_PP_IIF(HAS_STATIC, lhs.is_static() == rhs.is_static() &&,) \
-		BOOST_PP_IIF(HAS_VIRTUAL, lhs.is_virtual() == rhs.is_virtual() &&,) \
-		BOOST_PP_IIF(HAS_VIRTUAL, lhs.is_pure() == rhs.is_pure() &&,) \
-		BOOST_PP_IIF(HAS_EXPLICIT, lhs.is_explicit() == rhs.is_explicit() &&,) \
-		have_same_signature(lhs, rhs) && \
-		utility::are_pointed_objects_equal(lhs.body(), rhs.body()) \
-	; \
-} \
- \
-bool \
-operator!=(const CLASS_NAME& lhs, const CLASS_NAME& rhs) \
-{ \
-	return !operator==(lhs, rhs); \
-} \
  \
 bool \
 have_same_signature(const CLASS_NAME& lhs, const CLASS_NAME& rhs) \

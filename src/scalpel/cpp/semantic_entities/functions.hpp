@@ -249,12 +249,6 @@ class CLASS_NAME: \
 }; \
  \
 bool \
-operator==(const CLASS_NAME& lhs, const CLASS_NAME& rhs); \
- \
-bool \
-operator!=(const CLASS_NAME& lhs, const CLASS_NAME& rhs); \
- \
-bool \
 have_same_signature(const CLASS_NAME& lhs, const CLASS_NAME& rhs);
 
 namespace scalpel { namespace cpp { namespace semantic_entities

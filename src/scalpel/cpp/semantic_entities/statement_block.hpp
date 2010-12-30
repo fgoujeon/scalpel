@@ -111,12 +111,6 @@ class statement_block
         weak_namespaces_t using_directive_namespaces_;
 };
 
-bool
-operator==(const statement_block& lhs, const statement_block& rhs);
-
-bool
-operator!=(const statement_block& lhs, const statement_block& rhs);
-
 }}} //namespace scalpel::cpp::semantic_entities
 
 #endif

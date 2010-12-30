@@ -20,7 +20,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "function_parameter.hpp"
 #include "type_variants.hpp"
-#include <scalpel/utility/are_pointed_objects_equal.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -71,21 +70,6 @@ const std::string&
 function_parameter::name() const
 {
 	return name_;
-}
-
-bool
-operator==(const function_parameter& lhs, const function_parameter& rhs)
-{
-	return
-		lhs.name() == rhs.name() &&
-		lhs.type() == rhs.type()
-	;
-}
-
-bool
-operator!=(const function_parameter& lhs, const function_parameter& rhs)
-{
-	return !operator==(lhs, rhs);
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

@@ -81,11 +81,7 @@ init_unit_test()
 	analysis_single_file_tester.include_paths(include_paths);
 	analysis_single_file_tester.macro_definitions(macro_definitions);
 
-
-
-	//
 	//Syntax analysis test suite
-	//
 	{
 		//build test file list
 		std::vector<std::string> syntax_analysis_test_files = get_recursive_file_list("test/testfiles/syntax_analysis");
@@ -95,12 +91,7 @@ init_unit_test()
 		framework::master_test_suite().add(BOOST_PARAM_TEST_CASE(tm, syntax_analysis_test_files.begin(), syntax_analysis_test_files.end()));
 	}
 
-
-
-	//
 	//Semantic analysis test suite
-	//
-
 	{
 		//build test file list
 		std::vector<std::string> semantic_analysis_test_files = get_recursive_file_list("test/testfiles/semantic_analysis");
