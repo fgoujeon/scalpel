@@ -297,11 +297,11 @@ namespace
 		unqualified_type_variant
 		operator()(const T& t) const
 		{
-			return get_unqualified_type(to_type_variant(t.qualified_type()));
+			return get_unqualified_type(t.qualified_type());
 		}
 
 		unqualified_type_variant
-		operator()(const std::shared_ptr<const class_>& t) const
+		operator()(const std::weak_ptr<const class_>& t) const
 		{
 			return t;
 		}
@@ -315,7 +315,7 @@ namespace
 }
 
 unqualified_type_variant
-get_unqualified_type(const type_variant& type)
+get_unqualified_type(const weak_type_variant& type)
 {
 	return utility::apply_visitor(get_unqualified_type_visitor, type);
 }

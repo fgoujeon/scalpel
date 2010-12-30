@@ -68,7 +68,7 @@ typedef
 	utility::variant
 	<
 		fundamental_type,
-		std::shared_ptr<const class_>
+		std::weak_ptr<const class_>
 	>::type
 	unqualified_type_variant
 ;
@@ -87,7 +87,7 @@ bool
 have_same_qualifiers(const type_variant& lhs, const type_variant& rhs);
 
 unqualified_type_variant
-get_unqualified_type(const type_variant& type);
+get_unqualified_type(const weak_type_variant& type);
 
 weak_type_variant
 to_weak_type_variant(const type_variant& type);

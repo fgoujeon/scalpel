@@ -113,7 +113,7 @@ unsigned int
 get_declarative_region_back_index
 (
 	declarative_region_shared_ptr_variant current_declarative_region,
-	const std::shared_ptr<const class_> class_to_be_found,
+	const std::weak_ptr<const class_>& class_to_be_found,
 	const unsigned int max_back_index
 )
 {
@@ -123,7 +123,7 @@ get_declarative_region_back_index
 	{
 		if(const std::shared_ptr<class_>* opt_current_class = utility::get<class_>(&current_declarative_region))
 		{
-			if(*opt_current_class == class_to_be_found) return back_index;
+			if(*opt_current_class == class_to_be_found.lock()) return back_index;
 		}
 
 		//iterate to the enclosing declarative region
@@ -147,15 +147,15 @@ safe_type_comparison
 		if(!have_same_qualifiers(lhs.type(), rhs.type()))
 			return false;
 
-		const std::shared_ptr<const class_>* opt_lhs_type;
-		const std::shared_ptr<const class_>* opt_rhs_type;
+		const std::weak_ptr<const class_>* opt_lhs_type;
+		const std::weak_ptr<const class_>* opt_rhs_type;
 
-		const unqualified_type_variant& lhs_unqualified_type = get_unqualified_type(lhs.type());
-		const unqualified_type_variant& rhs_unqualified_type = get_unqualified_type(rhs.type());
+		const unqualified_type_variant& lhs_unqualified_type = get_unqualified_type(to_weak_type_variant(lhs.type()));
+		const unqualified_type_variant& rhs_unqualified_type = get_unqualified_type(to_weak_type_variant(rhs.type()));
 		if
 		(
-			(opt_lhs_type = utility::get<std::shared_ptr<const class_>>(&lhs_unqualified_type)) &&
-			(opt_rhs_type = utility::get<std::shared_ptr<const class_>>(&rhs_unqualified_type))
+			(opt_lhs_type = utility::get<std::weak_ptr<const class_>>(&lhs_unqualified_type)) &&
+			(opt_rhs_type = utility::get<std::weak_ptr<const class_>>(&rhs_unqualified_type))
 		)
 		{
 			const unsigned int lhs_back_index = get_declarative_region_back_index
