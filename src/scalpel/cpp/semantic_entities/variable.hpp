@@ -39,7 +39,7 @@ class variable
 		variable
 		(
 			const std::string& name,
-			const type_variant& type,
+			const weak_type_variant& type,
 			bool is_static = false
 		);
 

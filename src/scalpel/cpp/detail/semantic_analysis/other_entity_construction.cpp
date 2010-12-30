@@ -182,7 +182,7 @@ create_entity
 				return std::make_shared<semantic_entities::variable>
 				(
 					syntax_node_analysis::get_identifier(declarator_node).value(),
-					to_type_variant(*opt_type),
+					*opt_type,
 					has_static_specifier
 				);
 			}

@@ -28,10 +28,10 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 variable::variable
 (
 	const std::string& name,
-	const type_variant& type,
+	const weak_type_variant& type,
 	bool is_static
 ):
-	type_(to_weak_type_variant(type)),
+	type_(type),
 	name_(name),
 	is_static_(is_static)
 {
