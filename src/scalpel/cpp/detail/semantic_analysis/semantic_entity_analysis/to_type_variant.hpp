@@ -30,7 +30,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis { namespace semantic_entity_analysis
 {
 
-semantic_entities::type_variant
+semantic_entities::weak_type_variant
 to_type_variant(const utility::shared_ptr_variant<semantic_entities::class_, semantic_entities::typedef_>::type& var);
 
 }}}}} //namespace scalpel::cpp::detail::semantic_analysis::semantic_entity_analysis

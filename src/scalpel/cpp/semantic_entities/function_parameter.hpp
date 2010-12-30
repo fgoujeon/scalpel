@@ -30,7 +30,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 class function_parameter
 {
 	public:
-		function_parameter(const type_variant& t, const std::string& name);
+		function_parameter(const weak_type_variant& type, const std::string& name);
 
 		function_parameter(const function_parameter& o);
 

@@ -101,7 +101,7 @@ create_type
 					)
 				;
 
-				opt_return_type = to_weak_type_variant(semantic_entity_analysis::to_type_variant(found_type));
+				opt_return_type = semantic_entity_analysis::to_type_variant(found_type);
 			}
 			else if(auto opt_fundamental_type_specifier_node = get<fundamental_type_specifier>(&simple_type_specifier_node))
 			{

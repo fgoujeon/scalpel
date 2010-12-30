@@ -397,7 +397,7 @@ create_parameters
 			(
 				std::make_shared<function_parameter>
 				(
-					to_type_variant(qualify_type(type, declarator_node)),
+					qualify_type(type, declarator_node),
 					syntax_node_analysis::get_identifier(declarator_node).value()
 				)
 			);
@@ -419,7 +419,7 @@ create_parameters
 			(
 				std::make_shared<function_parameter>
 				(
-					to_type_variant(type),
+					type,
 					""
 				)
 			);
@@ -430,7 +430,7 @@ create_parameters
 			(
 				std::make_shared<function_parameter>
 				(
-					to_type_variant(type),
+					type,
 					""
 				)
 			);

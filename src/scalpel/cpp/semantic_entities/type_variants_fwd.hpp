@@ -79,11 +79,11 @@ have_same_qualifiers(const weak_type_variant& lhs, const weak_type_variant& rhs)
 unqualified_type_variant
 get_unqualified_type(const weak_type_variant& type);
 
-weak_type_variant
-to_weak_type_variant(const type_variant& type);
-
-type_variant
-to_type_variant(const weak_type_variant& type);
+//weak_type_variant
+//to_weak_type_variant(const type_variant& type);
+//
+//type_variant
+//to_type_variant(const weak_type_variant& type);
 
 }}} //namespace scalpel::cpp::semantic_entities
 

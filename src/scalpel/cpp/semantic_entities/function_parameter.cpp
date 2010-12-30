@@ -25,8 +25,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-function_parameter::function_parameter(const type_variant& t, const std::string& name):
-	type_(to_weak_type_variant(t)),
+function_parameter::function_parameter(const weak_type_variant& type, const std::string& name):
+	type_(type),
 	name_(name)
 {
 }

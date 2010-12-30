@@ -25,22 +25,22 @@ namespace scalpel { namespace cpp { namespace detail { namespace semantic_analys
 
 using namespace semantic_entities;
 
-struct: public utility::static_visitor<type_variant>
+struct: public utility::static_visitor<weak_type_variant>
 {
-	type_variant
+	weak_type_variant
 	operator()(std::shared_ptr<class_> t) const
 	{
-		return type_variant(std::shared_ptr<const class_>(t));
+		return weak_type_variant(std::weak_ptr<const class_>(t));
 	}
 
-	type_variant
+	weak_type_variant
 	operator()(std::shared_ptr<typedef_> t) const
 	{
-		return semantic_entities::to_type_variant(t->type());
+		return t->type();
 	}
 } to_type_variant_impl;
 
-type_variant
+weak_type_variant
 to_type_variant(const utility::shared_ptr_variant<semantic_entities::class_, semantic_entities::typedef_>::type& var)
 {
 	return utility::apply_visitor(to_type_variant_impl, var);
