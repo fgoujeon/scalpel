@@ -36,7 +36,7 @@ struct: public utility::static_visitor<type_variant>
 	type_variant
 	operator()(std::shared_ptr<typedef_> t) const
 	{
-		return t->type();
+		return semantic_entities::to_type_variant(t->type());
 	}
 } to_type_variant_impl;
 

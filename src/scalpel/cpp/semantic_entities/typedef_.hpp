@@ -41,10 +41,10 @@ class typedef_
 			return name_;
 		}
 
-		type_variant
+		const weak_type_variant&
 		type() const
 		{
-			return to_type_variant(type_);
+			return type_;
 		}
 
 		bool
