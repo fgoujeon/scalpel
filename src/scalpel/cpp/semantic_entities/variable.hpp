@@ -50,7 +50,7 @@ class variable
 		const variable&
 		operator=(variable&& v);
 
-		type_variant
+		const weak_type_variant&
 		type() const;
 
 		const std::string&

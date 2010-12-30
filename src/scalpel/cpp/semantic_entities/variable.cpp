@@ -61,10 +61,10 @@ variable::operator=(variable&& rhs)
 	return *this;
 }
 
-type_variant
+const weak_type_variant&
 variable::type() const
 {
-	return to_type_variant(type_);
+	return type_;
 }
 
 const std::string&
@@ -144,14 +144,14 @@ safe_type_comparison
 {
 	if(enclosing_declarative_region_count > 0)
 	{
-		if(!have_same_qualifiers(to_weak_type_variant(lhs.type()), to_weak_type_variant(rhs.type())))
+		if(!have_same_qualifiers(lhs.type(), rhs.type()))
 			return false;
 
 		const std::weak_ptr<const class_>* opt_lhs_type;
 		const std::weak_ptr<const class_>* opt_rhs_type;
 
-		const unqualified_type_variant& lhs_unqualified_type = get_unqualified_type(to_weak_type_variant(lhs.type()));
-		const unqualified_type_variant& rhs_unqualified_type = get_unqualified_type(to_weak_type_variant(rhs.type()));
+		const unqualified_type_variant& lhs_unqualified_type = get_unqualified_type(lhs.type());
+		const unqualified_type_variant& rhs_unqualified_type = get_unqualified_type(rhs.type());
 		if
 		(
 			(opt_lhs_type = utility::get<std::weak_ptr<const class_>>(&lhs_unqualified_type)) &&
