@@ -178,7 +178,7 @@ namespace
 			operator()(const T& lhs) const
 			{
 				//TODO check equality of current qualifiers (necessary for array)
-				return have_same_qualifiers(to_type_variant(lhs.qualified_type()), to_type_variant(rhs_.qualified_type()));
+				return have_same_qualifiers(lhs.qualified_type(), rhs_.qualified_type());
 			}
 
 		private:
@@ -187,10 +187,10 @@ namespace
 
 	//rhs' type is class_
 	template<>
-	class complete_have_same_qualifiers_visitor<std::shared_ptr<const class_>>: public utility::static_visitor<bool>
+	class complete_have_same_qualifiers_visitor<std::weak_ptr<const class_>>: public utility::static_visitor<bool>
 	{
 		public:
-			complete_have_same_qualifiers_visitor(const std::shared_ptr<const class_>& rhs):
+			complete_have_same_qualifiers_visitor(const std::weak_ptr<const class_>& rhs):
 				rhs_(rhs)
 			{
 			}
@@ -205,7 +205,7 @@ namespace
 
 			//lhs' type is class_
 			bool
-			operator()(const std::shared_ptr<const class_>&) const
+			operator()(const std::weak_ptr<const class_>&) const
 			{
 				return true;
 			}
@@ -218,7 +218,7 @@ namespace
 			}
 
 		private:
-			const std::shared_ptr<const class_>& rhs_;
+			const std::weak_ptr<const class_>& rhs_;
 	};
 
 	//rhs' type is fundamental_type
@@ -241,7 +241,7 @@ namespace
 
 			//lhs' type is class_
 			bool
-			operator()(const std::shared_ptr<const class_>&) const
+			operator()(const std::weak_ptr<const class_>&) const
 			{
 				return true;
 			}
@@ -262,7 +262,7 @@ namespace
 	class partial_have_same_qualifiers_visitor: public utility::static_visitor<bool>
 	{
 		public:
-			partial_have_same_qualifiers_visitor(const type_variant& lhs):
+			partial_have_same_qualifiers_visitor(const weak_type_variant& lhs):
 				lhs_(lhs)
 			{
 			}
@@ -276,12 +276,12 @@ namespace
 			}
 
 		private:
-			const type_variant& lhs_;
+			const weak_type_variant& lhs_;
 	};
 }
 
 bool
-have_same_qualifiers(const type_variant& lhs, const type_variant& rhs)
+have_same_qualifiers(const weak_type_variant& lhs, const weak_type_variant& rhs)
 {
 	partial_have_same_qualifiers_visitor visitor(lhs);
 	return utility::apply_visitor(visitor, rhs);

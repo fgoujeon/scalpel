@@ -144,7 +144,7 @@ safe_type_comparison
 {
 	if(enclosing_declarative_region_count > 0)
 	{
-		if(!have_same_qualifiers(lhs.type(), rhs.type()))
+		if(!have_same_qualifiers(to_weak_type_variant(lhs.type()), to_weak_type_variant(rhs.type())))
 			return false;
 
 		const std::weak_ptr<const class_>* opt_lhs_type;

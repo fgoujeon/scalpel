@@ -84,7 +84,7 @@ bool
 equals(const weak_type_variant& lhs, const weak_type_variant& rhs);
 
 bool
-have_same_qualifiers(const type_variant& lhs, const type_variant& rhs);
+have_same_qualifiers(const weak_type_variant& lhs, const weak_type_variant& rhs);
 
 unqualified_type_variant
 get_unqualified_type(const weak_type_variant& type);
