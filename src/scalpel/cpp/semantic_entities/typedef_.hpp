@@ -33,7 +33,7 @@ Represents the const qualifier.
 class typedef_
 {
 	public:
-		typedef_(const std::string& name, const type_variant& type);
+		typedef_(const std::string& name, const weak_type_variant& type);
 
 		const std::string&
 		name() const
