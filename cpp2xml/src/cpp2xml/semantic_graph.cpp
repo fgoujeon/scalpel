@@ -18,13 +18,22 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "semantic_graph_print_functions.hpp"
+#include "semantic_graph.hpp"
+#include "detail/basic_print_functions.hpp"
 #include <scalpel/utility/variant.hpp>
 #include <vector>
 #include <sstream>
 
-namespace semantic_graph_print_functions
+namespace cpp2xml
 {
+
+using namespace detail;
+
+void
+print_semantic_graph(std::shared_ptr<const semantic_graph> graph)
+{
+	print_namespace(graph);
+}
 
 void
 print_type
@@ -724,5 +733,5 @@ attribute(const semantic_entities::overloadable_operator op)
 	return oss.str();
 }
 
-} //namespace semantic_graph_print_functions
+} //namespace cpp2xml
 

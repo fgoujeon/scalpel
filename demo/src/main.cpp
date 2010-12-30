@@ -18,8 +18,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "syntax_tree_print_functions.hpp"
-#include "semantic_graph_print_functions.hpp"
+#include <cpp2xml/semantic_graph.hpp>
+#include <cpp2xml/syntax_tree.hpp>
 #include <scalpel/cpp/semantic_analysis.hpp>
 #include <scalpel/cpp/syntax_analyzer.hpp>
 #include <scalpel/cpp/preprocessor.hpp>
@@ -121,17 +121,17 @@ main(int argc, char** argv)
 		if(print_syntax_tree)
 		{
 			std::cout << "Syntax tree:\n";
-			print(tree);
+			cpp2xml::print_syntax_tree(tree);
 		}
 
-		//semantic analysis
-		std::shared_ptr<const scalpel::cpp::semantic_graph> graph = semantic_analysis::analyze(tree);
-
-		//print semantic graph
 		if(print_semantic_graph)
 		{
+			//semantic analysis
+			std::shared_ptr<const scalpel::cpp::semantic_graph> graph = scalpel::cpp::semantic_analysis::analyze(tree);
+
+			//print semantic graph
 			std::cout << "Semantic graph:\n";
-			semantic_graph_print_functions::print_namespace(graph);
+			cpp2xml::print_semantic_graph(graph);
 		}
 	}
 

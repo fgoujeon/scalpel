@@ -84,6 +84,9 @@ target_link_libraries(
 )
 
 add_subdirectory(
+	cpp2xml
+)
+add_subdirectory(
 	test
 )
 add_subdirectory(

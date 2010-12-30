@@ -18,10 +18,10 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SYNTAX_TREE_PRINT_FUNCTIONS_HPP
-#define SYNTAX_TREE_PRINT_FUNCTIONS_HPP
+#ifndef CPP2XML_SYNTAX_TREE_HPP
+#define CPP2XML_SYNTAX_TREE_HPP
 
-#include "basic_print_functions.hpp"
+#include "detail/basic_print_functions.hpp"
 #include <scalpel/cpp/syntax_tree.hpp>
 #include <scalpel/cpp/syntax_nodes/utility/type_traits.hpp>
 #include <scalpel/cpp/syntax_nodes/utility/value_getter.hpp>
@@ -29,10 +29,13 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <sstream>
 #include <iostream>
 
+namespace cpp2xml
+{
+
 using namespace scalpel::cpp;
 using namespace scalpel::cpp::syntax_nodes;
 using namespace scalpel::cpp::syntax_nodes::utility;
-
+using namespace detail;
 
 template<class T>
 struct type_getter
@@ -344,6 +347,10 @@ get_alive_node_count(const T& node)
 
 
 
+inline
+void
+print_syntax_tree(const scalpel::cpp::syntax_tree& tree);
+
 //overload for sequence nodes
 template<class SyntaxNodeT>
 void
@@ -420,6 +427,13 @@ print
 );
 
 
+
+inline
+void
+print_syntax_tree(const scalpel::cpp::syntax_tree& tree)
+{
+	print(tree);
+}
 
 //overload for sequence nodes
 template<class SyntaxNodeT>
@@ -564,6 +578,8 @@ print
 {
 	//does nothing
 }
+
+} //namespace cpp2xml
 
 #endif
 

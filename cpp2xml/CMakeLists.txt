@@ -18,44 +18,38 @@
 
 cmake_minimum_required(VERSION 2.6)
 
-#project
-project(Scalpel.Demo)
-set(EXECUTABLE_OUTPUT_PATH bin)
+#Project
+project(Scalpel.Cpp2Xml)
+set(LIBRARY_OUTPUT_PATH lib)
 
-#executable
+#Library
 file(
-	GLOB_RECURSE
-	sources
-	src/*
+	GLOB_RECURSE sources
+	src/*.cpp
 )
-add_executable(
-	demo
+add_library(
+	cpp2xml
+	SHARED
 	${sources}
 )
+include_directories(src/)
 
 #Scalpel
 include_directories(
 	../src
 )
 
-#cpp2xml
-include_directories(
-	../cpp2xml/src
-)
-
 #Boost
 include(FindBoost)
 find_package(
 	Boost 1.36.0
-	REQUIRED program_options
+	REQUIRED wave
 )
 link_directories(${Boost_LIBRARY_DIRS})
 include_directories(${Boost_INCLUDE_DIRS})
 
 #Linking
 target_link_libraries(
-	demo
-	scalpel
 	cpp2xml
 	${Boost_LIBRARIES}
 )

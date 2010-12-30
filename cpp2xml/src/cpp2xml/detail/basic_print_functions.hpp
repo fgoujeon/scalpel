@@ -18,17 +18,22 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef BASIC_PRINT_FUNCTIONS_HPP
-#define BASIC_PRINT_FUNCTIONS_HPP
+#ifndef CPP2XML_DETAIL_BASIC_PRINT_FUNCTIONS_HPP
+#define CPP2XML_DETAIL_BASIC_PRINT_FUNCTIONS_HPP
 
 #include <string>
 #include <sstream>
+
+namespace cpp2xml { namespace detail
+{
 
 std::string
 indent(unsigned int level);
 
 std::string
 strip_special_chars(const std::string& value);
+
+}} //namespace cpp2xml::detail
 
 #endif
 

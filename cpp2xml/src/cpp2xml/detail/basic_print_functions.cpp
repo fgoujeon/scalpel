@@ -20,6 +20,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "basic_print_functions.hpp"
 
+namespace cpp2xml { namespace detail
+{
+
 std::string
 indent(unsigned int level)
 {
@@ -58,4 +61,6 @@ strip_special_chars(const std::string& value)
 	}
 	return new_value;
 }
+
+}} //namespace cpp2xml::detail
 
