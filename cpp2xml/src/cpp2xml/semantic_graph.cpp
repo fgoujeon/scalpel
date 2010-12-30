@@ -30,62 +30,71 @@ namespace cpp2xml
 using namespace detail;
 
 void
-print_semantic_graph(std::shared_ptr<const semantic_graph> graph)
+print_semantic_graph
+(
+	std::ostream& output,
+	std::shared_ptr<const semantic_graph> graph
+)
 {
-	print_namespace(graph);
+	print_namespace(output, graph);
 }
 
 void
 print_type
 (
+	std::ostream& output,
 	const semantic_entities::type_variant& n,
 	const unsigned int indent_level
 )
 {
 	if(auto opt_type = scalpel::utility::get<fundamental_type>(&n))
 	{
-		std::cout << indent(indent_level) << "<fundamental_type type=\"";
-		print_fundamental_type(*opt_type);
-	   	std::cout << "\"/>\n";
+		output << indent(indent_level) << "<fundamental_type type=\"";
+		print_fundamental_type(output, *opt_type);
+	   	output << "\"/>\n";
 	}
 	else if(auto opt_type = scalpel::utility::get<const_>(&n))
 	{
-		std::cout << indent(indent_level) << "<const>\n";
-		print_type((*opt_type).qualified_type(), indent_level + 1);
-		std::cout << indent(indent_level) << "</const>\n";
+		output << indent(indent_level) << "<const>\n";
+		print_type(output, (*opt_type).qualified_type(), indent_level + 1);
+		output << indent(indent_level) << "</const>\n";
 	}
 	else if(auto opt_type = scalpel::utility::get<volatile_>(&n))
 	{
-		std::cout << indent(indent_level) << "<volatile>\n";
-		print_type((*opt_type).qualified_type(), indent_level + 1);
-		std::cout << indent(indent_level) << "</volatile>\n";
+		output << indent(indent_level) << "<volatile>\n";
+		print_type(output, (*opt_type).qualified_type(), indent_level + 1);
+		output << indent(indent_level) << "</volatile>\n";
 	}
 	else if(auto opt_type = scalpel::utility::get<pointer>(&n))
 	{
-		std::cout << indent(indent_level) << "<pointer>\n";
-		print_type((*opt_type).qualified_type(), indent_level + 1);
-		std::cout << indent(indent_level) << "</pointer>\n";
+		output << indent(indent_level) << "<pointer>\n";
+		print_type(output, (*opt_type).qualified_type(), indent_level + 1);
+		output << indent(indent_level) << "</pointer>\n";
 	}
 	else if(auto opt_type = scalpel::utility::get<reference>(&n))
 	{
-		std::cout << indent(indent_level) << "<reference>\n";
-		print_type((*opt_type).qualified_type(), indent_level + 1);
-		std::cout << indent(indent_level) << "</reference>\n";
+		output << indent(indent_level) << "<reference>\n";
+		print_type(output, (*opt_type).qualified_type(), indent_level + 1);
+		output << indent(indent_level) << "</reference>\n";
 	}
 	else if(auto opt_type = scalpel::utility::get<array>(&n))
 	{
-		std::cout << indent(indent_level) << "<array size=\"" << (*opt_type).size() << "\">\n";
-		print_type((*opt_type).qualified_type(), indent_level + 1);
-		std::cout << indent(indent_level) << "</array>\n";
+		output << indent(indent_level) << "<array size=\"" << (*opt_type).size() << "\">\n";
+		print_type(output, (*opt_type).qualified_type(), indent_level + 1);
+		output << indent(indent_level) << "</array>\n";
 	}
 	else if(auto opt_type = scalpel::utility::get<std::weak_ptr<const class_>>(&n))
 	{
-		std::cout << indent(indent_level) << "<class id=\"" << opt_type->lock().get() << "\"/>\n";
+		output << indent(indent_level) << "<class id=\"" << opt_type->lock().get() << "\"/>\n";
 	}
 }
 
 void
-print_fundamental_type(const fundamental_type type)
+print_fundamental_type
+(
+	std::ostream& output,
+	const fundamental_type type
+)
 {
 	std::vector<std::pair<fundamental_type, const char*>> fundamental_types_table =
 	{
@@ -115,7 +124,7 @@ print_fundamental_type(const fundamental_type type)
 
 		if(t == type)
 		{
-			std::cout << type_str;
+			output << type_str;
 			break;
 		}
 	}
@@ -124,52 +133,54 @@ print_fundamental_type(const fundamental_type type)
 void
 print_namespace
 (
+	std::ostream& output,
 	std::shared_ptr<const namespace_> n,
 	const unsigned int indent_level
 )
 {
-	std::cout << indent(indent_level) << "<namespace";
+	output << indent(indent_level) << "<namespace";
 	if(n->name() != "")
 	{
-		std::cout << " name=\"" << n->name() << "\"";
+		output << " name=\"" << n->name() << "\"";
 	}
-	std::cout << " id=\"" << n << "\"";
-	std::cout << ">\n";
+	output << " id=\"" << n << "\"";
+	output << ">\n";
 
 	for(auto i = n->namespace_aliases().begin(); i != n->namespace_aliases().end(); ++i)
-		print_namespace_alias(*i, indent_level + 1);
+		print_namespace_alias(output, *i, indent_level + 1);
 
 	for(auto i = n->namespaces().begin(); i != n->namespaces().end(); ++i)
-		print_namespace(*i, indent_level + 1);
+		print_namespace(output, *i, indent_level + 1);
 
 	for(auto i = n->classes().begin(); i != n->classes().end(); ++i)
-		print_class(*i, indent_level + 1);
+		print_class(output, *i, indent_level + 1);
 
 	for(auto i = n->typedefs().begin(); i != n->typedefs().end(); ++i)
-		print_typedef(*i, indent_level + 1);
+		print_typedef(output, *i, indent_level + 1);
 
 	for(auto i = n->simple_functions().begin(); i != n->simple_functions().end(); ++i)
-		print_simple_function(*i, indent_level + 1);
+		print_simple_function(output, *i, indent_level + 1);
 
 	for(auto i = n->operator_functions().begin(); i != n->operator_functions().end(); ++i)
-		print_operator_function(*i, indent_level + 1);
+		print_operator_function(output, *i, indent_level + 1);
 
 	for(auto i = n->variables().begin(); i != n->variables().end(); ++i)
-		print_variable(*i, indent_level + 1);
+		print_variable(output, *i, indent_level + 1);
 
-	std::cout << indent(indent_level) << "</namespace>\n";
+	output << indent(indent_level) << "</namespace>\n";
 }
 
 void
 print_class
 (
+	std::ostream& output,
 	std::shared_ptr<const class_> c,
 	const unsigned int indent_level
 )
 {
-	std::cout << indent(indent_level) << "<class";
-	std::cout << " name=\"" << c->name() << "\"";
-	std::cout << " id=\"" << c << "\"";
+	output << indent(indent_level) << "<class";
+	output << " name=\"" << c->name() << "\"";
+	output << " id=\"" << c << "\"";
 	//extra attributes if the class is a nested class
 	if(c->has_enclosing_declarative_region())
 	{
@@ -179,333 +190,345 @@ print_class
 			std::shared_ptr<class_> enclosing_declarative_region = *opt_class;
 
 			class_::access acc = enclosing_declarative_region->member_access(c);
-			std::cout << attribute(acc);
+			output << attribute(acc);
 		}
 	}
-	std::cout << ">\n";
+	output << ">\n";
 
 	if(!c->base_classes().empty())
 	{
-		std::cout << indent(indent_level + 1) << "<base_classes>\n";
+		output << indent(indent_level + 1) << "<base_classes>\n";
 		for(auto i = c->base_classes().begin(); i != c->base_classes().end(); ++i)
 			print_base_class
 			(
+				output,
 				*i,
 				c->base_class_access(*i),
 				c->is_virtual_base_class(*i),
 				indent_level + 2
 			);
-		std::cout << indent(indent_level + 1) << "</base_classes>\n";
+		output << indent(indent_level + 1) << "</base_classes>\n";
 	}
 
 	for(auto i = c->nested_classes().begin(); i != c->nested_classes().end(); ++i)
-		print_class(*i, indent_level + 1);
+		print_class(output, *i, indent_level + 1);
 
 	for(auto i = c->constructors().begin(); i != c->constructors().end(); ++i)
-		print_constructor(*i, indent_level + 1);
+		print_constructor(output, *i, indent_level + 1);
 
-	print_destructor(c->get_destructor(), indent_level + 1);
+	print_destructor(output, c->get_destructor(), indent_level + 1);
 
 	for(auto i = c->operator_functions().begin(); i != c->operator_functions().end(); ++i)
-		print_operator_member_function(*i, indent_level + 1);
+		print_operator_member_function(output, *i, indent_level + 1);
 
 	for(auto i = c->conversion_functions().begin(); i != c->conversion_functions().end(); ++i)
-		print_conversion_function(*i, indent_level + 1);
+		print_conversion_function(output, *i, indent_level + 1);
 
 	for(auto i = c->simple_functions().begin(); i != c->simple_functions().end(); ++i)
-		print_simple_member_function(*i, indent_level + 1);
+		print_simple_member_function(output, *i, indent_level + 1);
 
 	for(auto i = c->variables().begin(); i != c->variables().end(); ++i)
-		print_variable(*i, indent_level + 1);
+		print_variable(output, *i, indent_level + 1);
 
-	std::cout << indent(indent_level) << "</class>\n";
+	output << indent(indent_level) << "</class>\n";
 }
 
 void
 print_base_class
 (
+	std::ostream& output,
 	std::shared_ptr<const class_> c,
 	const class_::access acc,
 	const bool is_virtual,
 	const unsigned int indent_level
 )
 {
-	std::cout << indent(indent_level) << "<base_class";
-	std::cout << " id=\"" << c << "\"";
-	std::cout << attribute(acc);
+	output << indent(indent_level) << "<base_class";
+	output << " id=\"" << c << "\"";
+	output << attribute(acc);
 	if(is_virtual)
-		std::cout << " virtual=\"true\"";
-	std::cout << "/>\n";
+		output << " virtual=\"true\"";
+	output << "/>\n";
 }
 
 void
 print_constructor
 (
+	std::ostream& output,
 	std::shared_ptr<const constructor> entity,
 	const unsigned int indent_level
 )
 {
-	std::cout << indent(indent_level) << "<constructor";
+	output << indent(indent_level) << "<constructor";
 	if(entity->has_enclosing_declarative_region())
 	{
 		std::shared_ptr<class_> enclosing_declarative_region = utility::get<class_>(entity->enclosing_declarative_region());
 
 		class_::access acc = enclosing_declarative_region->member_access(entity);
-		std::cout << attribute(acc);
+		output << attribute(acc);
 	}
 	if(entity->is_inline())
-		std::cout << " inline=\"true\"";
+		output << " inline=\"true\"";
 	if(entity->is_explicit())
-		std::cout << " explicit=\"true\"";
+		output << " explicit=\"true\"";
 	if(!entity->defined())
-		std::cout << " defined=\"false\"";
-	std::cout << ">\n";
+		output << " defined=\"false\"";
+	output << ">\n";
 
-	print_function_parameter_list(entity->parameters(), indent_level + 1);
+	print_function_parameter_list(output, entity->parameters(), indent_level + 1);
 
-	std::cout << indent(indent_level) << "</constructor>\n";
+	output << indent(indent_level) << "</constructor>\n";
 }
 
 void
 print_destructor
 (
+	std::ostream& output,
 	std::shared_ptr<const destructor> entity,
 	const unsigned int indent_level
 )
 {
-	std::cout << indent(indent_level) << "<destructor";
+	output << indent(indent_level) << "<destructor";
 
 	assert(entity->has_enclosing_declarative_region());
 	declarative_region_shared_ptr_variant enclosing_declarative_region = entity->enclosing_declarative_region();
 	std::shared_ptr<class_> enclosing_class = utility::get<class_>(enclosing_declarative_region);
 
 	class_::access acc = enclosing_class->member_access(entity);
-	std::cout << attribute(acc);
+	output << attribute(acc);
 	if(entity->is_inline())
-		std::cout << " inline=\"true\"";
+		output << " inline=\"true\"";
 	if(entity->is_virtual())
-		std::cout << " virtual=\"true\"";
+		output << " virtual=\"true\"";
 	if(entity->is_pure())
-		std::cout << " pure=\"true\"";
+		output << " pure=\"true\"";
 	if(!entity->defined())
-		std::cout << " defined=\"false\"";
-	std::cout << ">\n";
+		output << " defined=\"false\"";
+	output << ">\n";
 
-	std::cout << indent(indent_level) << "</destructor>\n";
+	output << indent(indent_level) << "</destructor>\n";
 }
 
 void
 print_operator_member_function
 (
+	std::ostream& output,
 	std::shared_ptr<const operator_member_function> entity,
 	const unsigned int indent_level
 )
 {
-	std::cout << indent(indent_level) << "<operator_function";
-	std::cout << attribute(entity->overloaded_operator());
+	output << indent(indent_level) << "<operator_function";
+	output << attribute(entity->overloaded_operator());
 
 	assert(entity->has_enclosing_declarative_region());
 	declarative_region_shared_ptr_variant enclosing_declarative_region = entity->enclosing_declarative_region();
 	std::shared_ptr<class_> enclosing_class = utility::get<class_>(enclosing_declarative_region);
 
 	class_::access acc = enclosing_class->member_access(entity);
-	std::cout << attribute(acc);
+	output << attribute(acc);
 	if(entity->is_inline())
-		std::cout << " inline=\"true\"";
+		output << " inline=\"true\"";
 	if(entity->is_const())
-		std::cout << " const=\"true\"";
+		output << " const=\"true\"";
 	if(entity->is_volatile())
-		std::cout << " volatile=\"true\"";
+		output << " volatile=\"true\"";
 	if(entity->is_virtual())
-		std::cout << " virtual=\"true\"";
+		output << " virtual=\"true\"";
 	if(entity->is_pure())
-		std::cout << " pure=\"true\"";
+		output << " pure=\"true\"";
 	if(!entity->defined())
-		std::cout << " defined=\"false\"";
-	std::cout << ">\n";
+		output << " defined=\"false\"";
+	output << ">\n";
 
-	std::cout << indent(indent_level + 1) << "<return_type>\n";
-	print_type(entity->return_type(), indent_level + 2);
-	std::cout << indent(indent_level + 1) << "</return_type>\n";
+	output << indent(indent_level + 1) << "<return_type>\n";
+	print_type(output, entity->return_type(), indent_level + 2);
+	output << indent(indent_level + 1) << "</return_type>\n";
 
-	print_function_parameter_list(entity->parameters(), indent_level + 1);
+	print_function_parameter_list(output, entity->parameters(), indent_level + 1);
 
-	std::cout << indent(indent_level) << "</operator_function>\n";
+	output << indent(indent_level) << "</operator_function>\n";
 }
 
 void
 print_conversion_function
 (
+	std::ostream& output,
 	std::shared_ptr<const conversion_function> entity,
 	const unsigned int indent_level
 )
 {
-	std::cout << indent(indent_level) << "<conversion_function";
+	output << indent(indent_level) << "<conversion_function";
 
 	assert(entity->has_enclosing_declarative_region());
 	declarative_region_shared_ptr_variant enclosing_declarative_region = entity->enclosing_declarative_region();
 	std::shared_ptr<class_> enclosing_class = utility::get<class_>(enclosing_declarative_region);
 
 	class_::access acc = enclosing_class->member_access(entity);
-	std::cout << attribute(acc);
+	output << attribute(acc);
 	if(entity->is_inline())
-		std::cout << " inline=\"true\"";
+		output << " inline=\"true\"";
 	if(entity->is_const())
-		std::cout << " const=\"true\"";
+		output << " const=\"true\"";
 	if(entity->is_volatile())
-		std::cout << " volatile=\"true\"";
+		output << " volatile=\"true\"";
 	if(entity->is_virtual())
-		std::cout << " virtual=\"true\"";
+		output << " virtual=\"true\"";
 	if(entity->is_pure())
-		std::cout << " pure=\"true\"";
+		output << " pure=\"true\"";
 	if(!entity->defined())
-		std::cout << " defined=\"false\"";
-	std::cout << ">\n";
+		output << " defined=\"false\"";
+	output << ">\n";
 
-	std::cout << indent(indent_level + 1) << "<return_type>\n";
-	print_type(entity->return_type(), indent_level + 2);
-	std::cout << indent(indent_level + 1) << "</return_type>\n";
+	output << indent(indent_level + 1) << "<return_type>\n";
+	print_type(output, entity->return_type(), indent_level + 2);
+	output << indent(indent_level + 1) << "</return_type>\n";
 
-	std::cout << indent(indent_level) << "</conversion_function>\n";
+	output << indent(indent_level) << "</conversion_function>\n";
 }
 
 void
 print_simple_member_function
 (
+	std::ostream& output,
 	std::shared_ptr<const simple_member_function> entity,
 	const unsigned int indent_level
 )
 {
-	std::cout << indent(indent_level) << "<simple_function";
-	std::cout << " name=\"" << entity->name() << "\"";
+	output << indent(indent_level) << "<simple_function";
+	output << " name=\"" << entity->name() << "\"";
 
 	assert(entity->has_enclosing_declarative_region());
 	declarative_region_shared_ptr_variant enclosing_declarative_region = entity->enclosing_declarative_region();
 	std::shared_ptr<class_> enclosing_class = utility::get<class_>(enclosing_declarative_region);
 
 	class_::access acc = enclosing_class->member_access(entity);
-	std::cout << attribute(acc);
+	output << attribute(acc);
 	if(entity->is_inline())
-		std::cout << " inline=\"true\"";
+		output << " inline=\"true\"";
 	if(entity->is_static())
-		std::cout << " static=\"true\"";
+		output << " static=\"true\"";
 	if(entity->is_const())
-		std::cout << " const=\"true\"";
+		output << " const=\"true\"";
 	if(entity->is_volatile())
-		std::cout << " volatile=\"true\"";
+		output << " volatile=\"true\"";
 	if(entity->is_virtual())
-		std::cout << " virtual=\"true\"";
+		output << " virtual=\"true\"";
 	if(entity->is_pure())
-		std::cout << " pure=\"true\"";
+		output << " pure=\"true\"";
 	if(!entity->defined())
-		std::cout << " defined=\"false\"";
-	std::cout << ">\n";
+		output << " defined=\"false\"";
+	output << ">\n";
 
-	std::cout << indent(indent_level + 1) << "<return_type>\n";
-	print_type(entity->return_type(), indent_level + 2);
-	std::cout << indent(indent_level + 1) << "</return_type>\n";
+	output << indent(indent_level + 1) << "<return_type>\n";
+	print_type(output, entity->return_type(), indent_level + 2);
+	output << indent(indent_level + 1) << "</return_type>\n";
 
-	print_function_parameter_list(entity->parameters(), indent_level + 1);
+	print_function_parameter_list(output, entity->parameters(), indent_level + 1);
 
-	std::cout << indent(indent_level) << "</simple_function>\n";
+	output << indent(indent_level) << "</simple_function>\n";
 }
 
 void
 print_operator_function
 (
+	std::ostream& output,
 	std::shared_ptr<const operator_function> entity,
 	const unsigned int indent_level
 )
 {
-	std::cout << indent(indent_level) << "<operator_function";
-	std::cout << attribute(entity->overloaded_operator());
+	output << indent(indent_level) << "<operator_function";
+	output << attribute(entity->overloaded_operator());
 	if(entity->is_inline())
-		std::cout << " inline=\"true\"";
+		output << " inline=\"true\"";
 	if(entity->is_static())
-		std::cout << " static=\"true\"";
+		output << " static=\"true\"";
 	if(!entity->defined())
-		std::cout << " defined=\"false\"";
-	std::cout << ">\n";
+		output << " defined=\"false\"";
+	output << ">\n";
 
-	std::cout << indent(indent_level + 1) << "<return_type>\n";
-	print_type(entity->return_type(), indent_level + 2);
-	std::cout << indent(indent_level + 1) << "</return_type>\n";
+	output << indent(indent_level + 1) << "<return_type>\n";
+	print_type(output, entity->return_type(), indent_level + 2);
+	output << indent(indent_level + 1) << "</return_type>\n";
 
-	print_function_parameter_list(entity->parameters(), indent_level + 1);
+	print_function_parameter_list(output, entity->parameters(), indent_level + 1);
 
-	std::cout << indent(indent_level) << "</operator_function>\n";
+	output << indent(indent_level) << "</operator_function>\n";
 }
 
 void
 print_simple_function
 (
+	std::ostream& output,
 	std::shared_ptr<const simple_function> entity,
 	const unsigned int indent_level
 )
 {
-	std::cout << indent(indent_level) << "<simple_function";
-	std::cout << " name=\"" << entity->name() << "\"";
+	output << indent(indent_level) << "<simple_function";
+	output << " name=\"" << entity->name() << "\"";
 	if(entity->is_static())
-		std::cout << " static=\"true\"";
+		output << " static=\"true\"";
 	if(entity->is_inline())
-		std::cout << " inline=\"true\"";
+		output << " inline=\"true\"";
 	if(!entity->defined())
-		std::cout << " defined=\"false\"";
-	std::cout << ">\n";
+		output << " defined=\"false\"";
+	output << ">\n";
 
-	std::cout << indent(indent_level + 1) << "<return_type>\n";
-	print_type(entity->return_type(), indent_level + 2);
-	std::cout << indent(indent_level + 1) << "</return_type>\n";
+	output << indent(indent_level + 1) << "<return_type>\n";
+	print_type(output, entity->return_type(), indent_level + 2);
+	output << indent(indent_level + 1) << "</return_type>\n";
 
-	print_function_parameter_list(entity->parameters(), indent_level + 1);
+	print_function_parameter_list(output, entity->parameters(), indent_level + 1);
 
-	std::cout << indent(indent_level) << "</simple_function>\n";
+	output << indent(indent_level) << "</simple_function>\n";
 }
 
 void
 print_function_parameter_list
 (
+	std::ostream& output,
 	const function_parameter_list& entity,
 	const unsigned int indent_level
 )
 {
 	if(!entity.empty())
 	{
-		std::cout << indent(indent_level) << "<parameters>\n";
+		output << indent(indent_level) << "<parameters>\n";
 		for(auto i = entity.begin(); i != entity.end(); ++i)
 		{
-			print_function_parameter(*i, indent_level + 1);
+			print_function_parameter(output, *i, indent_level + 1);
 		}
-		std::cout << indent(indent_level) << "</parameters>\n";
+		output << indent(indent_level) << "</parameters>\n";
 	}
 }
 
 void
 print_function_parameter
 (
+	std::ostream& output,
 	const std::shared_ptr<const function_parameter> p,
 	const unsigned int indent_level
 )
 {
-	std::cout << indent(indent_level) << "<parameter";
+	output << indent(indent_level) << "<parameter";
 	if(!p->name().empty())
-		std::cout << " name=\"" << p->name() << "\"";
-	std::cout << ">\n";
-	std::cout << indent(indent_level + 1) << "<type>\n";
-	print_type(p->type(), indent_level + 2);
-	std::cout << indent(indent_level + 1) << "</type>\n";
-	std::cout << indent(indent_level) << "</parameter>\n";
+		output << " name=\"" << p->name() << "\"";
+	output << ">\n";
+	output << indent(indent_level + 1) << "<type>\n";
+	print_type(output, p->type(), indent_level + 2);
+	output << indent(indent_level + 1) << "</type>\n";
+	output << indent(indent_level) << "</parameter>\n";
 }
 
 void
 print_variable
 (
+	std::ostream& output,
 	std::shared_ptr<const variable> entity,
 	const unsigned int indent_level
 )
 {
-	std::cout << indent(indent_level) << "<variable";
-	std::cout << " name=\"" << entity->name() << "\"";
+	output << indent(indent_level) << "<variable";
+	output << " name=\"" << entity->name() << "\"";
 	//extra attributes if the function is a class member function
 	if(entity->has_enclosing_declarative_region())
 	{
@@ -515,29 +538,30 @@ print_variable
 			std::shared_ptr<class_> enclosing_declarative_region = *opt_class;
 
 			class_::access acc = enclosing_declarative_region->member_access(entity);
-			std::cout << attribute(acc);
+			output << attribute(acc);
 			if(enclosing_declarative_region->is_mutable_member_variable(entity))
-				std::cout << " mutable=\"true\"";
+				output << " mutable=\"true\"";
 		}
 	}
 	if(entity->is_static())
-		std::cout << " static=\"true\"";
-	std::cout << ">\n";
-	std::cout << indent(indent_level + 1) << "<type>\n";
-	print_type(entity->type(), indent_level + 2);
-	std::cout << indent(indent_level + 1) << "</type>\n";
-	std::cout << indent(indent_level) << "</variable>\n";
+		output << " static=\"true\"";
+	output << ">\n";
+	output << indent(indent_level + 1) << "<type>\n";
+	print_type(output, entity->type(), indent_level + 2);
+	output << indent(indent_level + 1) << "</type>\n";
+	output << indent(indent_level) << "</variable>\n";
 }
 
 void
 print_typedef
 (
+	std::ostream& output,
 	std::shared_ptr<const typedef_> entity,
 	const unsigned int indent_level
 )
 {
-	std::cout << indent(indent_level) << "<typedef";
-	std::cout << " name=\"" << entity->name() << "\"";
+	output << indent(indent_level) << "<typedef";
+	output << " name=\"" << entity->name() << "\"";
 	//extra attributes if the typedef is member of a class
 	if(entity->has_enclosing_declarative_region())
 	{
@@ -547,27 +571,28 @@ print_typedef
 			std::shared_ptr<class_> enclosing_declarative_region = *opt_class;
 
 			class_::access acc = enclosing_declarative_region->member_access(entity);
-			std::cout << attribute(acc);
+			output << attribute(acc);
 		}
 	}
-	std::cout << ">\n";
-	std::cout << indent(indent_level + 1) << "<type>\n";
-	print_type(entity->type(), indent_level + 2);
-	std::cout << indent(indent_level + 1) << "</type>\n";
-	std::cout << indent(indent_level) << "</typedef>\n";
+	output << ">\n";
+	output << indent(indent_level + 1) << "<type>\n";
+	print_type(output, entity->type(), indent_level + 2);
+	output << indent(indent_level + 1) << "</type>\n";
+	output << indent(indent_level) << "</typedef>\n";
 }
 
 void
 print_namespace_alias
 (
+	std::ostream& output,
 	std::shared_ptr<const namespace_alias> entity,
 	const unsigned int indent_level
 )
 {
-	std::cout << indent(indent_level) << "<namespace_alias";
-	std::cout << " name=\"" << entity->name() << "\"";
-	std::cout << " id=\"" << entity->referred_namespace() << "\"";
-	std::cout << "/>\n";
+	output << indent(indent_level) << "<namespace_alias";
+	output << " name=\"" << entity->name() << "\"";
+	output << " id=\"" << entity->referred_namespace() << "\"";
+	output << "/>\n";
 }
 
 std::string

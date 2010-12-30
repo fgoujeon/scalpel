@@ -24,7 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <string>
 #include <sstream>
-#include <iostream>
+#include <ostream>
 
 namespace cpp2xml
 {
@@ -34,21 +34,31 @@ using namespace scalpel::cpp;
 using namespace scalpel::cpp::semantic_entities;
 
 void
-print_semantic_graph(std::shared_ptr<const semantic_graph> graph);
+print_semantic_graph
+(
+	std::ostream& output,
+	std::shared_ptr<const semantic_graph> graph
+);
 
 void
 print_type
 (
+	std::ostream& output,
 	const semantic_entities::type_variant& entity,
 	const unsigned int indent_level
 );
 
 void
-print_fundamental_type(const fundamental_type type);
+print_fundamental_type
+(
+	std::ostream& output,
+	const fundamental_type type
+);
 
 void
 print_namespace
 (
+	std::ostream& output,
 	std::shared_ptr<const namespace_> entity,
 	const unsigned int indent_level = 0
 );
@@ -56,6 +66,7 @@ print_namespace
 void
 print_class
 (
+	std::ostream& output,
 	std::shared_ptr<const class_> entity,
 	const unsigned int indent_level
 );
@@ -63,6 +74,7 @@ print_class
 void
 print_base_class
 (
+	std::ostream& output,
 	std::shared_ptr<const class_> entity,
 	const class_::access acc,
 	const bool is_virtual,
@@ -72,6 +84,7 @@ print_base_class
 void
 print_constructor
 (
+	std::ostream& output,
 	std::shared_ptr<const constructor> entity,
 	const unsigned int indent_level
 );
@@ -79,6 +92,7 @@ print_constructor
 void
 print_destructor
 (
+	std::ostream& output,
 	std::shared_ptr<const destructor> entity,
 	const unsigned int indent_level
 );
@@ -86,6 +100,7 @@ print_destructor
 void
 print_operator_member_function
 (
+	std::ostream& output,
 	std::shared_ptr<const operator_member_function> entity,
 	const unsigned int indent_level
 );
@@ -93,6 +108,7 @@ print_operator_member_function
 void
 print_conversion_function
 (
+	std::ostream& output,
 	std::shared_ptr<const conversion_function> entity,
 	const unsigned int indent_level
 );
@@ -100,6 +116,7 @@ print_conversion_function
 void
 print_simple_member_function
 (
+	std::ostream& output,
 	std::shared_ptr<const simple_member_function> entity,
 	const unsigned int indent_level
 );
@@ -107,6 +124,7 @@ print_simple_member_function
 void
 print_operator_function
 (
+	std::ostream& output,
 	std::shared_ptr<const operator_function> entity,
 	const unsigned int indent_level
 );
@@ -114,6 +132,7 @@ print_operator_function
 void
 print_simple_function
 (
+	std::ostream& output,
 	std::shared_ptr<const simple_function> entity,
 	const unsigned int indent_level
 );
@@ -121,6 +140,7 @@ print_simple_function
 void
 print_function_parameter_list
 (
+	std::ostream& output,
 	const function_parameter_list& entity,
 	const unsigned int indent_level
 );
@@ -128,6 +148,7 @@ print_function_parameter_list
 void
 print_function_parameter
 (
+	std::ostream& output,
 	const std::shared_ptr<const function_parameter> entity,
 	const unsigned int indent_level
 );
@@ -135,6 +156,7 @@ print_function_parameter
 void
 print_variable
 (
+	std::ostream& output,
 	std::shared_ptr<const variable> entity,
 	const unsigned int indent_level
 );
@@ -142,6 +164,7 @@ print_variable
 void
 print_namespace_alias
 (
+	std::ostream& output,
 	std::shared_ptr<const namespace_alias> entity,
 	const unsigned int indent_level
 );
@@ -149,6 +172,7 @@ print_namespace_alias
 void
 print_typedef
 (
+	std::ostream& output,
 	std::shared_ptr<const typedef_> entity,
 	const unsigned int indent_level
 );
