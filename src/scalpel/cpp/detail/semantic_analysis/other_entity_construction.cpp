@@ -65,7 +65,7 @@ create_entity
 					return std::make_shared<semantic_entities::simple_member_function>
 					(
 						syntax_node_analysis::get_identifier(declarator_node).value(),
-						to_type_variant(*opt_type),
+						*opt_type,
 						create_parameters(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
 						has_inline_specifier,
 						has_static_specifier,
@@ -80,7 +80,7 @@ create_entity
 					return std::make_shared<semantic_entities::simple_function>
 					(
 						syntax_node_analysis::get_identifier(declarator_node).value(),
-						to_type_variant(*opt_type),
+						*opt_type,
 						create_parameters(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
 						has_inline_specifier,
 						has_static_specifier
@@ -125,7 +125,7 @@ create_entity
 				return std::make_shared<operator_member_function>
 				(
 					get_operator_function_operator(declarator_node),
-					to_type_variant(*opt_type),
+					*opt_type,
 					create_parameters(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
 					has_inline_specifier,
 					syntax_node_analysis::has_const_function_qualifier(declarator_node),
@@ -139,7 +139,7 @@ create_entity
 				return std::make_shared<operator_function>
 				(
 					get_operator_function_operator(declarator_node),
-					to_type_variant(*opt_type),
+					*opt_type,
 					create_parameters(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
 					has_inline_specifier,
 					has_static_specifier
@@ -156,7 +156,7 @@ create_entity
 
 			return std::make_shared<semantic_entities::conversion_function>
 			(
-				to_type_variant(get_conversion_function_type(declarator_node, current_declarative_region)),
+				get_conversion_function_type(declarator_node, current_declarative_region),
 				has_inline_specifier,
 				syntax_node_analysis::has_const_function_qualifier(declarator_node),
 				syntax_node_analysis::has_volatile_function_qualifier(declarator_node),

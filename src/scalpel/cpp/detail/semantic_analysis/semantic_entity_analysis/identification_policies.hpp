@@ -102,7 +102,7 @@ namespace identification_policies
 
 		template<class EntityT>
 		static
-		const identifier_t&
+		identifier_t
 		get_identifier(const EntityT& entity)
 		{
 			return entity->return_type();
