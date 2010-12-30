@@ -33,7 +33,7 @@ bool
 operator==(const pointer& lhs, const pointer& rhs)
 {
 	return
-		equals(lhs.qualified_type(), rhs.qualified_type())
+		lhs.qualified_type() == rhs.qualified_type()
 	;
 }
 

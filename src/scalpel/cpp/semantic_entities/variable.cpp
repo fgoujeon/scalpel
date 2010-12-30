@@ -177,7 +177,7 @@ safe_type_comparison
 	}
 
 	//directly compare lhs' and rhs' types
-	return equals(lhs.type(), rhs.type());
+	return lhs.type() == rhs.type();
 }
 
 bool

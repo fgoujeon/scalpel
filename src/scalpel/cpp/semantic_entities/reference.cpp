@@ -33,7 +33,7 @@ bool
 operator==(const reference& lhs, const reference& rhs)
 {
 	return
-		equals(lhs.qualified_type(), rhs.qualified_type())
+		lhs.qualified_type() == rhs.qualified_type()
 	;
 }
 

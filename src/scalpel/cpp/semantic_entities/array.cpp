@@ -39,7 +39,7 @@ operator==(const array& lhs, const array& rhs)
 {
 	return
 		lhs.size() == rhs.size() &&
-		equals(lhs.qualified_type(), rhs.qualified_type())
+		lhs.qualified_type() == rhs.qualified_type()
 	;
 }
 

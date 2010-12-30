@@ -33,7 +33,7 @@ bool
 operator==(const volatile_& lhs, const volatile_& rhs)
 {
 	return
-		equals(lhs.qualified_type(), rhs.qualified_type())
+		lhs.qualified_type() == rhs.qualified_type()
 	;
 }
 

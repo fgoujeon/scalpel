@@ -22,8 +22,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_VARIANTS_FWD_HPP
 
 #include "fundamental_type.hpp"
-#include <scalpel/utility/const_shared_ptr_variant.hpp>
 #include <scalpel/utility/variant.hpp>
+#include <scalpel/utility/weak_ptr_equality.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -72,16 +72,6 @@ typedef
 	>::type
 	unqualified_type_variant
 ;
-
-//perform a recursive value comparison for qualifier instances,
-//a value comparison for fundamental_type instances and a pointer
-//comparison for class_ instances
-//TODO find a more expressive name
-bool
-equals(const type_variant& lhs, const type_variant& rhs);
-
-bool
-equals(const weak_type_variant& lhs, const weak_type_variant& rhs);
 
 bool
 have_same_qualifiers(const weak_type_variant& lhs, const weak_type_variant& rhs);

@@ -18,30 +18,27 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "const_.hpp"
-#include "type_variants.hpp"
+#ifndef SCALPEL_UTILITY_WEAK_PTR_EQUALITY_HPP
+#define SCALPEL_UTILITY_WEAK_PTR_EQUALITY_HPP
 
-namespace scalpel { namespace cpp { namespace semantic_entities
+namespace scalpel { namespace utility
 {
 
-const_::const_(const weak_type_variant& qualified_type):
-	qualified_type_(qualified_type)
-{
-}
-
+template<typename T>
 bool
-operator==(const const_& lhs, const const_& rhs)
+operator==(const std::weak_ptr<T>& lhs, const std::weak_ptr<T>& rhs)
 {
-	return
-		lhs.qualified_type() == rhs.qualified_type()
-	;
+	return lhs.lock() == rhs.lock();
 }
 
+template<typename T>
 bool
-operator!=(const const_& lhs, const const_& rhs)
+operator!=(const std::weak_ptr<T>& lhs, const std::weak_ptr<T>& rhs)
 {
-	return !operator==(lhs, rhs);
+	return lhs.lock() != rhs.lock();
 }
 
-}}} //namespace scalpel::cpp::semantic_entities
+}} //namespace scalpel::utility
+
+#endif
 

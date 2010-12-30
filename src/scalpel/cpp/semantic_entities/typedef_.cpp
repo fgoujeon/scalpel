@@ -34,7 +34,7 @@ operator==(const typedef_& lhs, const typedef_& rhs)
 {
 	return
 		lhs.name() == rhs.name() &&
-		equals(lhs.type(), rhs.type())
+		lhs.type() == rhs.type()
 	;
 }
 

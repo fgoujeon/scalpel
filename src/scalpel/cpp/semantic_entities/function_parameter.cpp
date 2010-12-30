@@ -78,7 +78,7 @@ operator==(const function_parameter& lhs, const function_parameter& rhs)
 {
 	return
 		lhs.name() == rhs.name() &&
-		equals(lhs.type(), rhs.type())
+		lhs.type() == rhs.type()
 	;
 }
 

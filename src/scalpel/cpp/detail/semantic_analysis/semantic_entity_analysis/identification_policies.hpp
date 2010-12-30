@@ -113,7 +113,7 @@ namespace identification_policies
 		bool
 		are_identifiers_equal(const EntityT& entity, const identifier_t& identifier)
 		{
-			return equals(get_identifier(entity), identifier);
+			return get_identifier(entity) == identifier;
 		}
 	};
 }
