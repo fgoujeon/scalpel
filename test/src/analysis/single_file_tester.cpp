@@ -19,7 +19,10 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "single_file_tester.hpp"
+#include <cpp2xml/semantic_graph.hpp>
+#include <scalpel/cpp/semantic_analysis.hpp>
 #include <scalpel/cpp/syntax_nodes/utility/value_getter.hpp>
+#include <boost/test/unit_test.hpp>
 #include <memory>
 #include <iostream>
 #include <sstream>
@@ -28,10 +31,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <fstream>
 
 using namespace boost::spirit;
-using namespace std;
 using scalpel::cpp::syntax_nodes::utility::get_value;
 
-namespace syntax_analysis
+namespace analysis
 {
 
 void
@@ -41,11 +43,11 @@ single_file_tester::parse_file(const std::string& filename)
 	std::ifstream file(filename.c_str());
 	if(!file)
 	{
-		throw runtime_error("There's no file named " + filename + ".");
+		throw std::runtime_error("There's no file named " + filename + ".");
 	}
 
 	//read file
-	ostringstream buffer;
+	std::ostringstream buffer;
 	buffer << file.rdbuf();
 
 	//close file
@@ -87,6 +89,59 @@ single_file_tester::parse_file(const std::string& filename)
 }
 
 void
+single_file_tester::test_semantic_analysis(const std::string& filename)
+{
+	//is this a .cpp file?
+	if(filename.substr(filename.length() - 4, 4) != ".cpp")
+		return;
+
+	//open file
+	std::ifstream file(filename.c_str());
+	if(!file)
+	{
+		throw std::runtime_error("There's no file named " + filename + ".");
+	}
+
+	//read file
+	std::ostringstream buffer;
+	buffer << file.rdbuf();
+
+	//close file
+	file.close();
+
+	//preprocessing
+	std::string preprocessed_code = preprocessor_(buffer.str(), include_paths_, macro_definitions_);
+
+	//syntax analysis
+	scalpel::cpp::syntax_tree syntax_tree = syntax_analyzer_(preprocessed_code);
+
+	//semantic analysis
+	std::shared_ptr<scalpel::cpp::semantic_graph> semantic_graph = scalpel::cpp::semantic_analysis::analyze(syntax_tree);
+
+	//serialize the semantic graph
+	std::ostringstream semantic_graph_xml;
+	cpp2xml::serialize_semantic_graph(semantic_graph_xml, semantic_graph);
+
+	//open the result file
+	std::string expected_output_filename = filename.substr(0, filename.length() - 4) + ".xml";
+	std::ifstream expected_output_file(expected_output_filename.c_str());
+	if(!expected_output_file)
+	{
+		throw std::runtime_error("There's no file named " + expected_output_filename + ".");
+	}
+
+	//read the result file
+	std::ostringstream expected_output_buffer;
+	expected_output_buffer << expected_output_file.rdbuf();
+
+	//close the result file
+	expected_output_file.close();
+
+	//compare the results
+	BOOST_CHECK_EQUAL(semantic_graph_xml.str(), expected_output_buffer.str());
+}
+
+void
 single_file_tester::include_paths(const std::vector<std::string>& include_paths)
 {
 	include_paths_ = include_paths;
@@ -98,5 +153,5 @@ single_file_tester::macro_definitions(const std::vector<std::string>& macro_defi
 	macro_definitions_ = macro_definitions;
 }
 
-} //namespace syntax_analysis
+} //namespace analysis
 

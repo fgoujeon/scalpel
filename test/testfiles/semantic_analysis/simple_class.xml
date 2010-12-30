@@ -1,0 +1,41 @@
+<namespace id="n0">
+ <class name="square" id="c0">
+  <constructor access="public">
+   <parameters>
+    <parameter name="size">
+     <type>
+      <const>
+       <fundamental_type type="unsigned int"/>
+      </const>
+     </type>
+    </parameter>
+   </parameters>
+  </constructor>
+  <destructor access="public" defined="false">
+  </destructor>
+  <simple_function name="size" access="public" const="true">
+   <return_type>
+    <fundamental_type type="unsigned int"/>
+   </return_type>
+  </simple_function>
+  <simple_function name="size" access="public">
+   <return_type>
+    <fundamental_type type="void"/>
+   </return_type>
+   <parameters>
+    <parameter name="size">
+     <type>
+      <const>
+       <fundamental_type type="unsigned int"/>
+      </const>
+     </type>
+    </parameter>
+   </parameters>
+  </simple_function>
+  <variable name="size_" access="private">
+   <type>
+    <fundamental_type type="unsigned int"/>
+   </type>
+  </variable>
+ </class>
+</namespace>

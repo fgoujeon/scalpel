@@ -1,0 +1,36 @@
+<namespace id="n0">
+ <variable name="i">
+  <type>
+   <pointer>
+    <pointer>
+     <pointer>
+      <pointer>
+       <const>
+        <pointer>
+         <pointer>
+          <volatile>
+           <const>
+            <pointer>
+             <const>
+              <fundamental_type type="unsigned long int"/>
+             </const>
+            </pointer>
+           </const>
+          </volatile>
+         </pointer>
+        </pointer>
+       </const>
+      </pointer>
+     </pointer>
+    </pointer>
+   </pointer>
+  </type>
+ </variable>
+ <variable name="j">
+  <type>
+   <const>
+    <fundamental_type type="unsigned long int"/>
+   </const>
+  </type>
+ </variable>
+</namespace>

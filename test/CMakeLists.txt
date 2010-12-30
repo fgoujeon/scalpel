@@ -38,6 +38,11 @@ include_directories(
 	../src
 )
 
+#cpp2xml
+include_directories(
+	../cpp2xml/src
+)
+
 #Boost
 include(FindBoost)
 find_package(
@@ -51,5 +56,6 @@ include_directories(${Boost_INCLUDE_DIRS})
 target_link_libraries(
 	test
 	scalpel
+	cpp2xml
 	${Boost_LIBRARIES}
 )

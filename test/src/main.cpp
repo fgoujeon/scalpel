@@ -20,7 +20,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #define BOOST_TEST_ALTERNATIVE_INIT_API //don't use legacy API
 
-#include "syntax_analysis/single_file_tester.hpp"
+#include "analysis/single_file_tester.hpp"
 #include "get_recursive_file_list.hpp"
 #include <boost/program_options.hpp>
 #include <boost/test/included/unit_test.hpp>
@@ -30,7 +30,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 using namespace boost::unit_test;
 
-syntax_analysis::single_file_tester syntax_analysis_single_file_tester;
+analysis::single_file_tester analysis_single_file_tester;
 
 bool
 init_unit_test()
@@ -78,21 +78,37 @@ init_unit_test()
 		}
 	}
 
-	syntax_analysis_single_file_tester.include_paths(include_paths);
-	syntax_analysis_single_file_tester.macro_definitions(macro_definitions);
+	analysis_single_file_tester.include_paths(include_paths);
+	analysis_single_file_tester.macro_definitions(macro_definitions);
 
 
 
 	//
 	//Syntax analysis test suite
 	//
+	{
+		//build test file list
+		std::vector<std::string> syntax_analysis_test_files = get_recursive_file_list("test/testfiles/syntax_analysis");
 
-	//build test file list
-	std::vector<std::string> test_files = get_recursive_file_list("test/testfiles");
+		//add the syntax analysis test cases (one per test file) to the master test suite
+		boost::callback1<std::string> tm = boost::bind(&analysis::single_file_tester::parse_file, &analysis_single_file_tester, _1);
+		framework::master_test_suite().add(BOOST_PARAM_TEST_CASE(tm, syntax_analysis_test_files.begin(), syntax_analysis_test_files.end()));
+	}
 
-	//add the syntax analysis test cases (one per test file) to the master test suite
-	boost::callback1<std::string> tm = boost::bind(&syntax_analysis::single_file_tester::parse_file, &syntax_analysis_single_file_tester, _1);
-    framework::master_test_suite().add(BOOST_PARAM_TEST_CASE(tm, test_files.begin(), test_files.end()));
+
+
+	//
+	//Semantic analysis test suite
+	//
+
+	{
+		//build test file list
+		std::vector<std::string> semantic_analysis_test_files = get_recursive_file_list("test/testfiles/semantic_analysis");
+
+		//add the syntax analysis test cases (one per test file) to the master test suite
+		boost::callback1<std::string> tm = boost::bind(&analysis::single_file_tester::test_semantic_analysis, &analysis_single_file_tester, _1);
+		framework::master_test_suite().add(BOOST_PARAM_TEST_CASE(tm, semantic_analysis_test_files.begin(), semantic_analysis_test_files.end()));
+	}
 
     return true;
 }

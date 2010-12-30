@@ -1,0 +1,121 @@
+<namespace id="n0">
+ <namespace name="n" id="n1">
+  <namespace name="n2" id="n2">
+   <class name="super_test" id="c0">
+    <destructor access="public" defined="false">
+    </destructor>
+   </class>
+  </namespace>
+ </namespace>
+ <class name="virtual_base" id="c1">
+  <destructor access="public" defined="false">
+  </destructor>
+ </class>
+ <class name="virtual_base2" id="c2">
+  <destructor access="public" defined="false">
+  </destructor>
+ </class>
+ <class name="test" id="c3">
+  <base_classes>
+   <base_class id="c0" access="public"/>
+   <base_class id="c1" access="private" virtual="true"/>
+   <base_class id="c2" access="protected" virtual="true"/>
+  </base_classes>
+  <constructor access="public" defined="false">
+   <parameters>
+    <parameter name="i">
+     <type>
+      <fundamental_type type="int"/>
+     </type>
+    </parameter>
+   </parameters>
+  </constructor>
+  <constructor access="public" defined="false">
+   <parameters>
+    <parameter name="t">
+     <type>
+      <reference>
+       <const>
+        <fundamental_type type="int"/>
+       </const>
+      </reference>
+     </type>
+    </parameter>
+   </parameters>
+  </constructor>
+  <destructor access="public" defined="false">
+  </destructor>
+  <operator_function operator="new[]" access="public" defined="false">
+   <return_type>
+    <pointer>
+     <fundamental_type type="void"/>
+    </pointer>
+   </return_type>
+   <parameters>
+    <parameter>
+     <type>
+      <fundamental_type type="unsigned long int"/>
+     </type>
+    </parameter>
+    <parameter>
+     <type>
+      <pointer>
+       <fundamental_type type="void"/>
+      </pointer>
+     </type>
+    </parameter>
+   </parameters>
+  </operator_function>
+  <operator_function operator="delete[]" access="public" defined="false">
+   <return_type>
+    <fundamental_type type="void"/>
+   </return_type>
+   <parameters>
+    <parameter>
+     <type>
+      <pointer>
+       <fundamental_type type="void"/>
+      </pointer>
+     </type>
+    </parameter>
+   </parameters>
+  </operator_function>
+  <conversion_function access="public" const="true" defined="false">
+   <return_type>
+    <fundamental_type type="int"/>
+   </return_type>
+  </conversion_function>
+  <simple_function name="static_function" access="public" static="true" defined="false">
+   <return_type>
+    <fundamental_type type="bool"/>
+   </return_type>
+  </simple_function>
+  <simple_function name="value" access="public" inline="true" const="true" defined="false">
+   <return_type>
+    <fundamental_type type="int"/>
+   </return_type>
+  </simple_function>
+  <simple_function name="pure_virtual" access="public" virtual="true" defined="false">
+   <return_type>
+    <fundamental_type type="void"/>
+   </return_type>
+  </simple_function>
+  <simple_function name="update" access="protected" defined="false">
+   <return_type>
+    <fundamental_type type="void"/>
+   </return_type>
+  </simple_function>
+  <variable name="value_" access="private">
+   <type>
+    <fundamental_type type="int"/>
+   </type>
+  </variable>
+  <variable name="b" access="private" static="true">
+   <type>
+    <const>
+     <fundamental_type type="bool"/>
+    </const>
+   </type>
+  </variable>
+ </class>
+</namespace>

@@ -1,0 +1,7 @@
+<namespace id="n0">
+ <simple_function name="main">
+  <return_type>
+   <fundamental_type type="int"/>
+  </return_type>
+ </simple_function>
+</namespace>

@@ -29,18 +29,14 @@ namespace cpp2xml
 
 using namespace detail;
 
-void
-print_semantic_graph
-(
-	std::ostream& output,
-	std::shared_ptr<const semantic_graph> graph
-)
+semantic_graph_serializer::semantic_graph_serializer():
+	namespace_id_counter_(0),
+	class_id_counter_(0)
 {
-	print_namespace(output, graph);
 }
 
 void
-print_type
+semantic_graph_serializer::serialize_type
 (
 	std::ostream& output,
 	const semantic_entities::type_variant& n,
@@ -50,47 +46,47 @@ print_type
 	if(auto opt_type = scalpel::utility::get<fundamental_type>(&n))
 	{
 		output << indent(indent_level) << "<fundamental_type type=\"";
-		print_fundamental_type(output, *opt_type);
+		serialize_fundamental_type(output, *opt_type);
 	   	output << "\"/>\n";
 	}
 	else if(auto opt_type = scalpel::utility::get<const_>(&n))
 	{
 		output << indent(indent_level) << "<const>\n";
-		print_type(output, (*opt_type).qualified_type(), indent_level + 1);
+		serialize_type(output, (*opt_type).qualified_type(), indent_level + 1);
 		output << indent(indent_level) << "</const>\n";
 	}
 	else if(auto opt_type = scalpel::utility::get<volatile_>(&n))
 	{
 		output << indent(indent_level) << "<volatile>\n";
-		print_type(output, (*opt_type).qualified_type(), indent_level + 1);
+		serialize_type(output, (*opt_type).qualified_type(), indent_level + 1);
 		output << indent(indent_level) << "</volatile>\n";
 	}
 	else if(auto opt_type = scalpel::utility::get<pointer>(&n))
 	{
 		output << indent(indent_level) << "<pointer>\n";
-		print_type(output, (*opt_type).qualified_type(), indent_level + 1);
+		serialize_type(output, (*opt_type).qualified_type(), indent_level + 1);
 		output << indent(indent_level) << "</pointer>\n";
 	}
 	else if(auto opt_type = scalpel::utility::get<reference>(&n))
 	{
 		output << indent(indent_level) << "<reference>\n";
-		print_type(output, (*opt_type).qualified_type(), indent_level + 1);
+		serialize_type(output, (*opt_type).qualified_type(), indent_level + 1);
 		output << indent(indent_level) << "</reference>\n";
 	}
 	else if(auto opt_type = scalpel::utility::get<array>(&n))
 	{
 		output << indent(indent_level) << "<array size=\"" << (*opt_type).size() << "\">\n";
-		print_type(output, (*opt_type).qualified_type(), indent_level + 1);
+		serialize_type(output, (*opt_type).qualified_type(), indent_level + 1);
 		output << indent(indent_level) << "</array>\n";
 	}
 	else if(auto opt_type = scalpel::utility::get<std::weak_ptr<const class_>>(&n))
 	{
-		output << indent(indent_level) << "<class id=\"" << opt_type->lock().get() << "\"/>\n";
+		output << indent(indent_level) << "<class id=\"c" << class_ids_[opt_type->lock().get()] << "\"/>\n";
 	}
 }
 
 void
-print_fundamental_type
+semantic_graph_serializer::serialize_fundamental_type
 (
 	std::ostream& output,
 	const fundamental_type type
@@ -131,7 +127,7 @@ print_fundamental_type
 }
 
 void
-print_namespace
+semantic_graph_serializer::serialize_namespace
 (
 	std::ostream& output,
 	std::shared_ptr<const namespace_> n,
@@ -143,35 +139,38 @@ print_namespace
 	{
 		output << " name=\"" << n->name() << "\"";
 	}
-	output << " id=\"" << n << "\"";
+	output << " id=\"n" << namespace_id_counter_ << "\"";
 	output << ">\n";
 
+	namespace_ids_[n.get()] = namespace_id_counter_;
+	++namespace_id_counter_;
+
 	for(auto i = n->namespace_aliases().begin(); i != n->namespace_aliases().end(); ++i)
-		print_namespace_alias(output, *i, indent_level + 1);
+		serialize_namespace_alias(output, *i, indent_level + 1);
 
 	for(auto i = n->namespaces().begin(); i != n->namespaces().end(); ++i)
-		print_namespace(output, *i, indent_level + 1);
+		serialize_namespace(output, *i, indent_level + 1);
 
 	for(auto i = n->classes().begin(); i != n->classes().end(); ++i)
-		print_class(output, *i, indent_level + 1);
+		serialize_class(output, *i, indent_level + 1);
 
 	for(auto i = n->typedefs().begin(); i != n->typedefs().end(); ++i)
-		print_typedef(output, *i, indent_level + 1);
+		serialize_typedef(output, *i, indent_level + 1);
 
 	for(auto i = n->simple_functions().begin(); i != n->simple_functions().end(); ++i)
-		print_simple_function(output, *i, indent_level + 1);
+		serialize_simple_function(output, *i, indent_level + 1);
 
 	for(auto i = n->operator_functions().begin(); i != n->operator_functions().end(); ++i)
-		print_operator_function(output, *i, indent_level + 1);
+		serialize_operator_function(output, *i, indent_level + 1);
 
 	for(auto i = n->variables().begin(); i != n->variables().end(); ++i)
-		print_variable(output, *i, indent_level + 1);
+		serialize_variable(output, *i, indent_level + 1);
 
 	output << indent(indent_level) << "</namespace>\n";
 }
 
 void
-print_class
+semantic_graph_serializer::serialize_class
 (
 	std::ostream& output,
 	std::shared_ptr<const class_> c,
@@ -180,7 +179,7 @@ print_class
 {
 	output << indent(indent_level) << "<class";
 	output << " name=\"" << c->name() << "\"";
-	output << " id=\"" << c << "\"";
+	output << " id=\"c" << class_id_counter_ << "\"";
 	//extra attributes if the class is a nested class
 	if(c->has_enclosing_declarative_region())
 	{
@@ -195,11 +194,14 @@ print_class
 	}
 	output << ">\n";
 
+	class_ids_[c.get()] = class_id_counter_;
+	++class_id_counter_;
+
 	if(!c->base_classes().empty())
 	{
 		output << indent(indent_level + 1) << "<base_classes>\n";
 		for(auto i = c->base_classes().begin(); i != c->base_classes().end(); ++i)
-			print_base_class
+			serialize_base_class
 			(
 				output,
 				*i,
@@ -211,30 +213,30 @@ print_class
 	}
 
 	for(auto i = c->nested_classes().begin(); i != c->nested_classes().end(); ++i)
-		print_class(output, *i, indent_level + 1);
+		serialize_class(output, *i, indent_level + 1);
 
 	for(auto i = c->constructors().begin(); i != c->constructors().end(); ++i)
-		print_constructor(output, *i, indent_level + 1);
+		serialize_constructor(output, *i, indent_level + 1);
 
-	print_destructor(output, c->get_destructor(), indent_level + 1);
+	serialize_destructor(output, c->get_destructor(), indent_level + 1);
 
 	for(auto i = c->operator_functions().begin(); i != c->operator_functions().end(); ++i)
-		print_operator_member_function(output, *i, indent_level + 1);
+		serialize_operator_member_function(output, *i, indent_level + 1);
 
 	for(auto i = c->conversion_functions().begin(); i != c->conversion_functions().end(); ++i)
-		print_conversion_function(output, *i, indent_level + 1);
+		serialize_conversion_function(output, *i, indent_level + 1);
 
 	for(auto i = c->simple_functions().begin(); i != c->simple_functions().end(); ++i)
-		print_simple_member_function(output, *i, indent_level + 1);
+		serialize_simple_member_function(output, *i, indent_level + 1);
 
 	for(auto i = c->variables().begin(); i != c->variables().end(); ++i)
-		print_variable(output, *i, indent_level + 1);
+		serialize_variable(output, *i, indent_level + 1);
 
 	output << indent(indent_level) << "</class>\n";
 }
 
 void
-print_base_class
+semantic_graph_serializer::serialize_base_class
 (
 	std::ostream& output,
 	std::shared_ptr<const class_> c,
@@ -244,7 +246,7 @@ print_base_class
 )
 {
 	output << indent(indent_level) << "<base_class";
-	output << " id=\"" << c << "\"";
+	output << " id=\"c" << class_ids_[c.get()] << "\"";
 	output << attribute(acc);
 	if(is_virtual)
 		output << " virtual=\"true\"";
@@ -252,7 +254,7 @@ print_base_class
 }
 
 void
-print_constructor
+semantic_graph_serializer::serialize_constructor
 (
 	std::ostream& output,
 	std::shared_ptr<const constructor> entity,
@@ -275,13 +277,13 @@ print_constructor
 		output << " defined=\"false\"";
 	output << ">\n";
 
-	print_function_parameter_list(output, entity->parameters(), indent_level + 1);
+	serialize_function_parameter_list(output, entity->parameters(), indent_level + 1);
 
 	output << indent(indent_level) << "</constructor>\n";
 }
 
 void
-print_destructor
+semantic_graph_serializer::serialize_destructor
 (
 	std::ostream& output,
 	std::shared_ptr<const destructor> entity,
@@ -310,7 +312,7 @@ print_destructor
 }
 
 void
-print_operator_member_function
+semantic_graph_serializer::serialize_operator_member_function
 (
 	std::ostream& output,
 	std::shared_ptr<const operator_member_function> entity,
@@ -341,16 +343,16 @@ print_operator_member_function
 	output << ">\n";
 
 	output << indent(indent_level + 1) << "<return_type>\n";
-	print_type(output, entity->return_type(), indent_level + 2);
+	serialize_type(output, entity->return_type(), indent_level + 2);
 	output << indent(indent_level + 1) << "</return_type>\n";
 
-	print_function_parameter_list(output, entity->parameters(), indent_level + 1);
+	serialize_function_parameter_list(output, entity->parameters(), indent_level + 1);
 
 	output << indent(indent_level) << "</operator_function>\n";
 }
 
 void
-print_conversion_function
+semantic_graph_serializer::serialize_conversion_function
 (
 	std::ostream& output,
 	std::shared_ptr<const conversion_function> entity,
@@ -380,14 +382,14 @@ print_conversion_function
 	output << ">\n";
 
 	output << indent(indent_level + 1) << "<return_type>\n";
-	print_type(output, entity->return_type(), indent_level + 2);
+	serialize_type(output, entity->return_type(), indent_level + 2);
 	output << indent(indent_level + 1) << "</return_type>\n";
 
 	output << indent(indent_level) << "</conversion_function>\n";
 }
 
 void
-print_simple_member_function
+semantic_graph_serializer::serialize_simple_member_function
 (
 	std::ostream& output,
 	std::shared_ptr<const simple_member_function> entity,
@@ -420,16 +422,16 @@ print_simple_member_function
 	output << ">\n";
 
 	output << indent(indent_level + 1) << "<return_type>\n";
-	print_type(output, entity->return_type(), indent_level + 2);
+	serialize_type(output, entity->return_type(), indent_level + 2);
 	output << indent(indent_level + 1) << "</return_type>\n";
 
-	print_function_parameter_list(output, entity->parameters(), indent_level + 1);
+	serialize_function_parameter_list(output, entity->parameters(), indent_level + 1);
 
 	output << indent(indent_level) << "</simple_function>\n";
 }
 
 void
-print_operator_function
+semantic_graph_serializer::serialize_operator_function
 (
 	std::ostream& output,
 	std::shared_ptr<const operator_function> entity,
@@ -447,16 +449,16 @@ print_operator_function
 	output << ">\n";
 
 	output << indent(indent_level + 1) << "<return_type>\n";
-	print_type(output, entity->return_type(), indent_level + 2);
+	serialize_type(output, entity->return_type(), indent_level + 2);
 	output << indent(indent_level + 1) << "</return_type>\n";
 
-	print_function_parameter_list(output, entity->parameters(), indent_level + 1);
+	serialize_function_parameter_list(output, entity->parameters(), indent_level + 1);
 
 	output << indent(indent_level) << "</operator_function>\n";
 }
 
 void
-print_simple_function
+semantic_graph_serializer::serialize_simple_function
 (
 	std::ostream& output,
 	std::shared_ptr<const simple_function> entity,
@@ -474,16 +476,16 @@ print_simple_function
 	output << ">\n";
 
 	output << indent(indent_level + 1) << "<return_type>\n";
-	print_type(output, entity->return_type(), indent_level + 2);
+	serialize_type(output, entity->return_type(), indent_level + 2);
 	output << indent(indent_level + 1) << "</return_type>\n";
 
-	print_function_parameter_list(output, entity->parameters(), indent_level + 1);
+	serialize_function_parameter_list(output, entity->parameters(), indent_level + 1);
 
 	output << indent(indent_level) << "</simple_function>\n";
 }
 
 void
-print_function_parameter_list
+semantic_graph_serializer::serialize_function_parameter_list
 (
 	std::ostream& output,
 	const function_parameter_list& entity,
@@ -495,14 +497,14 @@ print_function_parameter_list
 		output << indent(indent_level) << "<parameters>\n";
 		for(auto i = entity.begin(); i != entity.end(); ++i)
 		{
-			print_function_parameter(output, *i, indent_level + 1);
+			serialize_function_parameter(output, *i, indent_level + 1);
 		}
 		output << indent(indent_level) << "</parameters>\n";
 	}
 }
 
 void
-print_function_parameter
+semantic_graph_serializer::serialize_function_parameter
 (
 	std::ostream& output,
 	const std::shared_ptr<const function_parameter> p,
@@ -514,13 +516,13 @@ print_function_parameter
 		output << " name=\"" << p->name() << "\"";
 	output << ">\n";
 	output << indent(indent_level + 1) << "<type>\n";
-	print_type(output, p->type(), indent_level + 2);
+	serialize_type(output, p->type(), indent_level + 2);
 	output << indent(indent_level + 1) << "</type>\n";
 	output << indent(indent_level) << "</parameter>\n";
 }
 
 void
-print_variable
+semantic_graph_serializer::serialize_variable
 (
 	std::ostream& output,
 	std::shared_ptr<const variable> entity,
@@ -547,13 +549,13 @@ print_variable
 		output << " static=\"true\"";
 	output << ">\n";
 	output << indent(indent_level + 1) << "<type>\n";
-	print_type(output, entity->type(), indent_level + 2);
+	serialize_type(output, entity->type(), indent_level + 2);
 	output << indent(indent_level + 1) << "</type>\n";
 	output << indent(indent_level) << "</variable>\n";
 }
 
 void
-print_typedef
+semantic_graph_serializer::serialize_typedef
 (
 	std::ostream& output,
 	std::shared_ptr<const typedef_> entity,
@@ -576,13 +578,13 @@ print_typedef
 	}
 	output << ">\n";
 	output << indent(indent_level + 1) << "<type>\n";
-	print_type(output, entity->type(), indent_level + 2);
+	serialize_type(output, entity->type(), indent_level + 2);
 	output << indent(indent_level + 1) << "</type>\n";
 	output << indent(indent_level) << "</typedef>\n";
 }
 
 void
-print_namespace_alias
+semantic_graph_serializer::serialize_namespace_alias
 (
 	std::ostream& output,
 	std::shared_ptr<const namespace_alias> entity,
@@ -591,12 +593,12 @@ print_namespace_alias
 {
 	output << indent(indent_level) << "<namespace_alias";
 	output << " name=\"" << entity->name() << "\"";
-	output << " id=\"" << entity->referred_namespace() << "\"";
+	output << " id=\"n" << namespace_ids_[entity->referred_namespace().get()] << "\"";
 	output << "/>\n";
 }
 
 std::string
-attribute(const class_::access& a)
+semantic_graph_serializer::attribute(const class_::access& a)
 {
 	std::ostringstream oss;
 
@@ -619,7 +621,7 @@ attribute(const class_::access& a)
 }
 
 std::string
-attribute(const semantic_entities::overloadable_operator op)
+semantic_graph_serializer::attribute(const semantic_entities::overloadable_operator op)
 {
 	std::ostringstream oss;
 
@@ -756,6 +758,18 @@ attribute(const semantic_entities::overloadable_operator op)
 	oss << "\"";
 
 	return oss.str();
+}
+
+
+void
+serialize_semantic_graph
+(
+	std::ostream& output,
+	std::shared_ptr<const semantic_graph> graph
+)
+{
+	semantic_graph_serializer serializer;
+	serializer.serialize_namespace(output, graph);
 }
 
 } //namespace cpp2xml

@@ -18,29 +18,38 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "analyzer.hpp"
-#include <scalpel/cpp/semantic_analysis.hpp>
-#include <scalpel/cpp/syntax_analyzer.hpp>
+#ifndef ANALYSIS_SINGLE_FILE_TESTER_HPP
+#define ANALYSIS_SINGLE_FILE_TESTER_HPP
+
 #include <scalpel/cpp/preprocessor.hpp>
+#include <scalpel/cpp/syntax_analyzer.hpp>
 
-namespace semantic_analysis
+namespace analysis
 {
 
-std::shared_ptr<scalpel::cpp::semantic_graph>
-analyze(const std::string& source_code)
+class single_file_tester
 {
-	scalpel::cpp::preprocessor preprocessor;
-	scalpel::cpp::syntax_analyzer syntax_analyzer;
+    public:
+        void
+        parse_file(const std::string& filename);
 
-	//preprocessing
-	const std::string preprocessed_code = preprocessor(source_code + '\n', {}, {});
+        void
+        test_semantic_analysis(const std::string& filename);
 
-	//syntax analysis
-	scalpel::cpp::syntax_tree tree = syntax_analyzer(preprocessed_code);
+		void
+		include_paths(const std::vector<std::string>& include_paths);
 
-	//semantic analysis
-	return scalpel::cpp::semantic_analysis::analyze(tree);
-}
+		void
+		macro_definitions(const std::vector<std::string>& macro_definitions);
 
-} //namespace name_lookup
+    private:
+		std::vector<std::string> include_paths_;
+		std::vector<std::string> macro_definitions_;
+        scalpel::cpp::preprocessor preprocessor_;
+        scalpel::cpp::syntax_analyzer syntax_analyzer_;
+};
+
+} //namespace analysis
+
+#endif
 
