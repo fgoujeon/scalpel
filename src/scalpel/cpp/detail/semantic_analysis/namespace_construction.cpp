@@ -196,6 +196,7 @@ fill_namespace
 				has_inline_specifier,
 				has_virtual_specifier,
 				has_explicit_specifier,
+				false,
 				false
 			);
 

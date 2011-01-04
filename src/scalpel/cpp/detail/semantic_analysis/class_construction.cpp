@@ -294,6 +294,8 @@ fill_class
 				auto member_declarator_declarator_node = *opt_member_declarator_declarator_node;
 				auto declarator_node = get_declarator(member_declarator_declarator_node);
 
+				const bool has_pure_specifier = syntax_node_analysis::has_pure_specifier(member_declarator_declarator_node);
+
 				declarator_entity_shared_ptr_variant declarator_entity = create_entity
 				(
 					declarator_node,
@@ -304,6 +306,7 @@ fill_class
 					has_inline_specifier,
 					has_virtual_specifier,
 					has_explicit_specifier,
+					has_pure_specifier,
 					true
 				);
 

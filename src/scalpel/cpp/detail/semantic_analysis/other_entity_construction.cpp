@@ -41,6 +41,7 @@ create_entity
 	const bool has_inline_specifier,
 	const bool has_virtual_specifier,
 	const bool has_explicit_specifier,
+	const bool has_pure_specifier,
 	const bool is_class_member
 )
 {
@@ -72,7 +73,7 @@ create_entity
 						syntax_node_analysis::has_const_function_qualifier(declarator_node),
 						syntax_node_analysis::has_volatile_function_qualifier(declarator_node),
 						has_virtual_specifier,
-						false //TODO pure
+						has_pure_specifier
 					);
 				}
 				else
@@ -112,7 +113,7 @@ create_entity
 			(
 				has_inline_specifier,
 				has_virtual_specifier,
-				false //TODO pure
+				has_pure_specifier
 			);
 		}
 		case syntax_node_analysis::declarator_type::OPERATOR_FUNCTION_DECLARATOR:
@@ -131,7 +132,7 @@ create_entity
 					syntax_node_analysis::has_const_function_qualifier(declarator_node),
 					syntax_node_analysis::has_volatile_function_qualifier(declarator_node),
 					has_virtual_specifier,
-					false //TODO pure
+					has_pure_specifier
 				);
 			}
 			else
@@ -161,7 +162,7 @@ create_entity
 				syntax_node_analysis::has_const_function_qualifier(declarator_node),
 				syntax_node_analysis::has_volatile_function_qualifier(declarator_node),
 				has_virtual_specifier,
-				false //TODO pure
+				has_pure_specifier
 			);
 		}
 		case syntax_node_analysis::declarator_type::VARIABLE_DECLARATOR:

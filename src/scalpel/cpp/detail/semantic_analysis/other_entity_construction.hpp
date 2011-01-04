@@ -56,6 +56,7 @@ create_entity
 	const bool has_inline_specifier,
 	const bool has_virtual_specifier,
 	const bool has_explicit_specifier,
+	const bool has_pure_specifier,
 	const bool is_class_member
 );
 

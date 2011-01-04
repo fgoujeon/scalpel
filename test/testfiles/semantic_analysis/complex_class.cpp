@@ -51,7 +51,7 @@ class test: public n::n2::super_test, virtual virtual_base, protected virtual vi
 
 		virtual
 		void
-		pure_virtual() ;//= 0;
+		pure_virtual() = 0;
 
 	protected:
 		void

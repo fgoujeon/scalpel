@@ -131,7 +131,7 @@
     <fundamental_type type="int"/>
    </return_type>
   </simple_function>
-  <simple_function name="pure_virtual" access="public" virtual="true">
+  <simple_function name="pure_virtual" access="public" virtual="true" pure="true">
    <return_type>
     <fundamental_type type="void"/>
    </return_type>

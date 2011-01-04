@@ -118,6 +118,7 @@ create_function
 		has_inline_specifier,
 		has_virtual_specifier,
 		has_explicit_specifier,
+		false,
 		is_class_member
 	);
 
