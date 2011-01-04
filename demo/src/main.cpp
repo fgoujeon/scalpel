@@ -109,7 +109,8 @@ main(int argc, char** argv)
 		//close file
 		file.close();
 
-		std::cout << "Analyzing " << filename << "...\n";
+		if(input_files.size() > 1)
+			std::cout << "Analyzing " << filename << "...\n";
 
 		//preprocessing
 		std::string preprocessed_code = preprocessor(buffer.str(), include_paths, macro_definitions);
@@ -120,7 +121,8 @@ main(int argc, char** argv)
 		//print syntax tree
 		if(print_syntax_tree)
 		{
-			std::cout << "Syntax tree:\n";
+			if(print_semantic_graph)
+				std::cout << "Syntax tree:\n";
 			cpp2xml::print_syntax_tree(tree);
 		}
 
@@ -130,7 +132,8 @@ main(int argc, char** argv)
 			std::shared_ptr<const scalpel::cpp::semantic_graph> graph = scalpel::cpp::semantic_analysis::analyze(tree);
 
 			//print semantic graph
-			std::cout << "Semantic graph:\n";
+			if(print_syntax_tree)
+				std::cout << "Semantic graph:\n";
 			cpp2xml::serialize_semantic_graph(graph, std::cout);
 		}
 	}

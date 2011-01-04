@@ -21,7 +21,7 @@
    <base_class id="c1" access="private" virtual="true"/>
    <base_class id="c2" access="protected" virtual="true"/>
   </base_classes>
-  <constructor access="public" defined="false">
+  <constructor access="public" explicit="true">
    <parameters>
     <parameter name="i">
      <type>
@@ -30,22 +30,58 @@
     </parameter>
    </parameters>
   </constructor>
-  <constructor access="public" defined="false">
+  <constructor access="public">
    <parameters>
     <parameter name="t">
      <type>
       <reference>
        <const>
-        <fundamental_type type="int"/>
+        <class id="c3"/>
        </const>
       </reference>
      </type>
     </parameter>
    </parameters>
   </constructor>
-  <destructor access="public" defined="false">
+  <destructor access="public" virtual="true">
   </destructor>
-  <operator_function operator="new[]" access="public" defined="false">
+  <operator_function operator="=" access="public">
+   <return_type>
+    <reference>
+     <const>
+      <class id="c3"/>
+     </const>
+    </reference>
+   </return_type>
+   <parameters>
+    <parameter name="t">
+     <type>
+      <reference>
+       <const>
+        <class id="c3"/>
+       </const>
+      </reference>
+     </type>
+    </parameter>
+   </parameters>
+  </operator_function>
+  <operator_function operator="==" access="public" const="true">
+   <return_type>
+    <fundamental_type type="bool"/>
+   </return_type>
+   <parameters>
+    <parameter name="t">
+     <type>
+      <reference>
+       <const>
+        <class id="c3"/>
+       </const>
+      </reference>
+     </type>
+    </parameter>
+   </parameters>
+  </operator_function>
+  <operator_function operator="new[]" access="public">
    <return_type>
     <pointer>
      <fundamental_type type="void"/>
@@ -66,7 +102,7 @@
     </parameter>
    </parameters>
   </operator_function>
-  <operator_function operator="delete[]" access="public" defined="false">
+  <operator_function operator="delete[]" access="public">
    <return_type>
     <fundamental_type type="void"/>
    </return_type>
@@ -80,27 +116,27 @@
     </parameter>
    </parameters>
   </operator_function>
-  <conversion_function access="public" const="true" defined="false">
+  <conversion_function access="public" const="true">
    <return_type>
     <fundamental_type type="int"/>
    </return_type>
   </conversion_function>
-  <simple_function name="static_function" access="public" static="true" defined="false">
+  <simple_function name="static_function" access="public" static="true">
    <return_type>
     <fundamental_type type="bool"/>
    </return_type>
   </simple_function>
-  <simple_function name="value" access="public" inline="true" const="true" defined="false">
+  <simple_function name="value" access="public" inline="true" const="true">
    <return_type>
     <fundamental_type type="int"/>
    </return_type>
   </simple_function>
-  <simple_function name="pure_virtual" access="public" virtual="true" defined="false">
+  <simple_function name="pure_virtual" access="public" virtual="true">
    <return_type>
     <fundamental_type type="void"/>
    </return_type>
   </simple_function>
-  <simple_function name="update" access="protected" defined="false">
+  <simple_function name="update" access="protected">
    <return_type>
     <fundamental_type type="void"/>
    </return_type>
