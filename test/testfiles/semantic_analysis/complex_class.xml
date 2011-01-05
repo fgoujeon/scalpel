@@ -136,7 +136,7 @@
     <fundamental_type type="void"/>
    </return_type>
   </simple_function>
-  <simple_function name="update" access="protected">
+  <simple_function name="update" access="protected" inline="true">
    <return_type>
     <fundamental_type type="void"/>
    </return_type>

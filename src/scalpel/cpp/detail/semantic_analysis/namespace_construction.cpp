@@ -249,7 +249,8 @@ fill_namespace
 	(
 		function_definition_node,
 		namespace_entity,
-		is_class_member
+		is_class_member,
+		false
 	);
 
 	//The function_entity may have already been declared previously in the code.

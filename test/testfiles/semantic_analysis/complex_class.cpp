@@ -55,7 +55,9 @@ class test: public n::n2::super_test, virtual virtual_base, protected virtual vi
 
 	protected:
 		void
-		update();
+		update()
+		{
+		}
 
 	private:
 		int value_;
@@ -117,11 +119,6 @@ test::value() const
 
 void
 test::pure_virtual()
-{
-}
-
-void
-test::update()
 {
 }
 

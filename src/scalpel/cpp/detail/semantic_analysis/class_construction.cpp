@@ -428,6 +428,7 @@ fill_class
 	(
 		function_definition_node,
 		class_entity,
+		true,
 		true
 	);
 

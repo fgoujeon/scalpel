@@ -35,7 +35,8 @@ create_function
 (
 	const syntax_nodes::function_definition& function_definition_node,
 	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region,
-	const bool is_class_member
+	const bool is_class_member,
+	const bool is_defined_in_class
 )
 {
 	//
@@ -59,7 +60,7 @@ create_function
 
 		has_typedef_specifier = syntax_node_analysis::has_typedef_specifier(decl_specifier_seq_node);
 		has_static_specifier = syntax_node_analysis::has_static_specifier(decl_specifier_seq_node);
-		has_inline_specifier = syntax_node_analysis::has_inline_specifier(decl_specifier_seq_node);
+		has_inline_specifier = is_defined_in_class || syntax_node_analysis::has_inline_specifier(decl_specifier_seq_node);
 		has_virtual_specifier = syntax_node_analysis::has_virtual_specifier(decl_specifier_seq_node);
 		has_explicit_specifier = syntax_node_analysis::has_explicit_specifier(decl_specifier_seq_node);
 
