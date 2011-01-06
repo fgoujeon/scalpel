@@ -192,6 +192,8 @@ semantic_graph_serializer::serialize_class
 			output << attribute(acc);
 		}
 	}
+	if(!c->complete())
+		output << " complete=\"false\"";
 	output << ">\n";
 
 	class_ids_[c.get()] = class_id_counter_;

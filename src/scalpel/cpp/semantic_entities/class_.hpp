@@ -103,6 +103,18 @@ class class_:
         name() const;
 
 		bool
+		complete() const
+		{
+			return complete_;
+		}
+
+		void
+		complete(const bool b)
+		{
+			complete_ = b;
+		}
+
+		bool
 		has_enclosing_declarative_region() const;
 
 		declarative_region_shared_ptr_variant
@@ -246,6 +258,7 @@ class class_:
 
     private:
         std::string name_;
+		bool complete_;
 		detail::declarative_region_member_impl declarative_region_member_impl_;
 
 		//polymorphic containers

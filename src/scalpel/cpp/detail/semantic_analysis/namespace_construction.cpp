@@ -141,7 +141,7 @@ fill_namespace
 				;
 
 				std::shared_ptr<class_> new_class = create_class(class_specifier_node);
-				namespace_entity->add_member(new_class);
+				new_class = add_class(namespace_entity, new_class);
 				fill_class(new_class, class_specifier_node);
 
 				opt_unqualified_type = std::weak_ptr<const class_>(new_class);
@@ -155,7 +155,7 @@ fill_namespace
 				;
 
 				std::shared_ptr<class_> new_class = create_class(class_elaborated_specifier_node);
-				namespace_entity->add_member(new_class);
+				new_class = add_class(namespace_entity, new_class);
 
 				opt_unqualified_type = std::weak_ptr<const class_>(new_class);
 
@@ -314,6 +314,25 @@ fill_namespace
 			);
 		}
 	}
+}
+
+std::shared_ptr<semantic_entities::class_>
+add_class
+(
+	const std::shared_ptr<semantic_entities::namespace_>& namespace_entity,
+	const std::shared_ptr<semantic_entities::class_>& class_entity
+)
+{
+	namespace_::classes_t::range classes = namespace_entity->classes();
+	for(auto i = classes.begin(); i != classes.end(); ++i)
+	{
+		const std::shared_ptr<semantic_entities::class_>& current_class = *i;
+		if(!current_class->complete() && current_class->name() == class_entity->name())
+			return current_class;
+	}
+
+	namespace_entity->add_member(class_entity);
+	return class_entity;
 }
 
 }}}} //namespace scalpel::cpp::detail::semantic_analysis

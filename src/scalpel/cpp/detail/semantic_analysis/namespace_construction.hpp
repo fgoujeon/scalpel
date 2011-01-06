@@ -62,6 +62,17 @@ fill_namespace
 	const syntax_nodes::function_definition& function_definition_node
 );
 
+//Check whether the given class hasn't been forward declared in the given
+//namespace.
+//If so, return the forward declared class.
+//If not, add the given class to the given namespace and return the given class.
+std::shared_ptr<semantic_entities::class_>
+add_class
+(
+	const std::shared_ptr<semantic_entities::namespace_>& namespace_entity,
+	const std::shared_ptr<semantic_entities::class_>& class_entity
+);
+
 }}}} //namespace scalpel::cpp::detail::semantic_analysis
 
 #endif

@@ -27,7 +27,8 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 class_::class_(const std::string& name):
-    name_(name)
+    name_(name),
+	complete_(false)
 {
 }
 

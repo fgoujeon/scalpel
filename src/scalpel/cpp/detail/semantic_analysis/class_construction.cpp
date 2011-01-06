@@ -194,6 +194,8 @@ fill_class
 			}
 		}
 	}
+
+	class_entity->complete(true);
 }
 
 void
@@ -237,7 +239,7 @@ fill_class
 				;
 
 				std::shared_ptr<class_> new_class = create_class(class_specifier_node);
-				class_entity->add_member(new_class, current_access);
+				new_class = add_class(class_entity, new_class, current_access);
 				fill_class(new_class, class_specifier_node);
 
 				opt_unqualified_type = std::weak_ptr<const class_>(new_class);
@@ -251,7 +253,7 @@ fill_class
 				;
 
 				std::shared_ptr<class_> new_class = create_class(class_elaborated_specifier_node);
-				class_entity->add_member(new_class, current_access);
+				new_class = add_class(class_entity, new_class, current_access);
 
 				opt_unqualified_type = std::weak_ptr<const class_>(new_class);
 
@@ -443,6 +445,26 @@ fill_class
 		function_definition_node,
 		class_entity
 	);
+}
+
+std::shared_ptr<semantic_entities::class_>
+add_class
+(
+	const std::shared_ptr<semantic_entities::class_>& parent_class_entity,
+	const std::shared_ptr<semantic_entities::class_>& class_entity,
+	const class_::access current_access
+)
+{
+	class_::classes_t::range classes = parent_class_entity->nested_classes();
+	for(auto i = classes.begin(); i != classes.end(); ++i)
+	{
+		const std::shared_ptr<semantic_entities::class_>& current_class = *i;
+		if(!current_class->complete() && current_class->name() == class_entity->name())
+			return current_class;
+	}
+
+	parent_class_entity->add_member(class_entity, current_access);
+	return class_entity;
 }
 
 }}}} //namespace scalpel::cpp::detail::semantic_analysis

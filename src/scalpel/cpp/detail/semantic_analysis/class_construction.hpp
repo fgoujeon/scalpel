@@ -57,6 +57,19 @@ fill_class
 	const syntax_nodes::function_definition& function_definition_node
 );
 
+//Check whether the given class hasn't been forward declared in the given
+//parent class.
+//If so, return the forward declared class.
+//If not, add the given class to the given parent class
+//and return the given class.
+std::shared_ptr<semantic_entities::class_>
+add_class
+(
+	const std::shared_ptr<semantic_entities::class_>& parent_class_entity,
+	const std::shared_ptr<semantic_entities::class_>& class_entity,
+	const semantic_entities::class_::access current_access
+);
+
 }}}} //namespace scalpel::cpp::detail::semantic_analysis
 
 #endif
