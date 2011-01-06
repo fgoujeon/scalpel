@@ -24,6 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "other_entity_construction.hpp"
 #include "name_lookup.hpp"
 #include "semantic_entity_analysis/identification_policies.hpp"
+#include "syntax_node_analysis/class_specifier.hpp"
 #include "syntax_node_analysis.hpp"
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
@@ -35,21 +36,7 @@ using namespace semantic_entities;
 std::shared_ptr<class_>
 create_class(const class_specifier& class_specifier_node)
 {
-	//get the name of the class
-	std::string class_name;
-	const optional_node<identifier_or_template_id>& opt_id_or_templ = get_identifier_or_template_id(get_class_head(class_specifier_node));
-	if(opt_id_or_templ)
-	{
-		const boost::optional<const identifier&> id = get<identifier>(&*opt_id_or_templ);
-
-		if(id)
-		{
-			class_name = id->value();
-		}
-	}
-
-	//create the class
-	return class_::make_shared(class_name);
+	return class_::make_shared(syntax_node_analysis::get_identifier(class_specifier_node));
 }
 
 std::shared_ptr<semantic_entities::class_>
@@ -234,15 +221,41 @@ fill_class
 		{
 			case syntax_node_analysis::type_specifier_seq_type::CLASS_DECLARATION:
 			{
-				const syntax_nodes::class_specifier& class_specifier_node =
+				const class_specifier& class_specifier_node =
 					syntax_node_analysis::get_class_specifier(decl_specifier_seq_node)
 				;
+				const class_head& class_head_node = get_class_head(class_specifier_node);
+				const optional_node<nested_name_specifier>& opt_nested_name_specifier_node =
+					get_nested_name_specifier(class_head_node)
+				;
 
-				std::shared_ptr<class_> new_class = create_class(class_specifier_node);
-				new_class = add_class(class_entity, new_class, current_access);
-				fill_class(new_class, class_specifier_node);
+				if(opt_nested_name_specifier_node)
+				{
+					//find the class
+					const std::shared_ptr<class_> found_class =
+						name_lookup::find<semantic_entity_analysis::identification_policies::by_name, false, false, class_>
+						(
+							false,
+							opt_nested_name_specifier_node,
+							syntax_node_analysis::get_identifier(class_specifier_node),
+							class_entity,
+							false
+						)
+					;
 
-				opt_unqualified_type = static_cast<const class_*>(new_class.get());
+					//and define it
+					fill_class(found_class, class_specifier_node);
+
+					opt_unqualified_type = static_cast<const class_*>(found_class.get());
+				}
+				else
+				{
+					std::shared_ptr<class_> new_class = create_class(class_specifier_node);
+					new_class = add_class(class_entity, new_class, current_access);
+					fill_class(new_class, class_specifier_node);
+
+					opt_unqualified_type = static_cast<const class_*>(new_class.get());
+				}
 
 				break;
 			}

@@ -61,6 +61,13 @@ get_class_key(const class_head& o)
 }
 
 inline
+const optional_node<nested_name_specifier>&
+get_nested_name_specifier(const class_head& o)
+{
+	return get<2>(o);
+}
+
+inline
 const optional_node<identifier_or_template_id>&
 get_identifier_or_template_id(const class_head& o)
 {
