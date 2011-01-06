@@ -84,7 +84,7 @@ init_unit_test()
 	//Syntax analysis test suite
 	{
 		//build test file list
-		std::vector<std::string> syntax_analysis_test_files = get_recursive_file_list("test/testfiles/syntax_analysis");
+		std::vector<std::string> syntax_analysis_test_files = get_recursive_file_list("test/testfiles/syntax_analysis", ".cpp");
 
 		//add the syntax analysis test cases (one per test file) to the master test suite
 		boost::callback1<std::string> tm = boost::bind(&analysis::single_file_tester::parse_file, &analysis_single_file_tester, _1);
@@ -94,11 +94,27 @@ init_unit_test()
 	//Semantic analysis test suite
 	{
 		//build test file list
-		std::vector<std::string> semantic_analysis_test_files = get_recursive_file_list("test/testfiles/semantic_analysis");
+		std::vector<std::string> semantic_analysis_test_files = get_recursive_file_list("test/testfiles/semantic_analysis", ".cpp");
 
 		//add the syntax analysis test cases (one per test file) to the master test suite
 		boost::callback1<std::string> tm = boost::bind(&analysis::single_file_tester::test_semantic_analysis, &analysis_single_file_tester, _1);
 		framework::master_test_suite().add(BOOST_PARAM_TEST_CASE(tm, semantic_analysis_test_files.begin(), semantic_analysis_test_files.end()));
+	}
+
+	//Emit warning for skipped test files
+	{
+		std::vector<std::string> syntax_analysis_skipped_test_files = get_recursive_file_list("test/testfiles/syntax_analysis", ".skip");
+		std::vector<std::string> semantic_analysis_skipped_test_files = get_recursive_file_list("test/testfiles/semantic_analysis", ".skip");
+		if(!syntax_analysis_skipped_test_files.empty() || !semantic_analysis_skipped_test_files.empty())
+		{
+			std::cout << "Warning: the following test files will be skipped, because they're supposed to highlight known bugs. ";
+			std::cout << "Remove the '.skip' extension to add them back to the test suite.\n";
+			for(auto i = syntax_analysis_skipped_test_files.begin(); i != syntax_analysis_skipped_test_files.end(); ++i)
+				std::cout << "- " << *i << "\n";
+			for(auto i = semantic_analysis_skipped_test_files.begin(); i != semantic_analysis_skipped_test_files.end(); ++i)
+				std::cout << "- " << *i << "\n";
+			std::cout << "\n";
+		}
 	}
 
     return true;

@@ -25,7 +25,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <vector>
 
 std::vector<std::string>
-get_recursive_file_list(const std::string path_str);
+get_recursive_file_list(const std::string& path_str, const std::string& extension);
 
 #endif
 

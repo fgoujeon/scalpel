@@ -23,7 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "boost/filesystem/path.hpp"
 
 std::vector<std::string>
-get_recursive_file_list(const std::string path_str)
+get_recursive_file_list(const std::string& path_str, const std::string& extension)
 {
 	namespace fs = boost::filesystem;
 
@@ -42,7 +42,7 @@ get_recursive_file_list(const std::string path_str)
 		if(fs::is_directory(dir_itr->status())) //if the item is a directory...
 		{
 			//recursively get its files...
-			std::vector<std::string> subdir_filenames = get_recursive_file_list(dir_itr->path().string());
+			std::vector<std::string> subdir_filenames = get_recursive_file_list(dir_itr->path().string(), extension);
 
 			//... and append them to the list
 			std::insert_iterator<std::vector<std::string>> filenames_ii(filenames, filenames.end());
@@ -55,8 +55,11 @@ get_recursive_file_list(const std::string path_str)
 		}
 		else if(fs::is_regular_file(dir_itr->status())) //if the item is a file...
 		{
-			//append it to the list
-			filenames.push_back(dir_itr->path().string());
+			if(dir_itr->path().extension() == extension) //if the file has the correct extension...
+			{
+				//append it to the list
+				filenames.push_back(dir_itr->path().string());
+			}
 		}
 	}
 
