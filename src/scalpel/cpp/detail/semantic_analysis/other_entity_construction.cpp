@@ -21,8 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "other_entity_construction.hpp"
 #include "function_construction.hpp"
 #include "type_construction.hpp"
-#include "syntax_node_analysis.hpp"
 #include "semantic_entity_analysis/get_namespace.hpp"
+#include "syntax_node_analysis/declarator.hpp"
 
 namespace scalpel { namespace cpp { namespace detail { namespace semantic_analysis
 {
