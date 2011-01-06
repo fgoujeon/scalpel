@@ -57,10 +57,10 @@ namespace
 
 	//rhs' type is class_
 	template<>
-	class complete_have_same_qualifiers_visitor<std::weak_ptr<const class_>>: public utility::static_visitor<bool>
+	class complete_have_same_qualifiers_visitor<const class_*>: public utility::static_visitor<bool>
 	{
 		public:
-			complete_have_same_qualifiers_visitor(const std::weak_ptr<const class_>& rhs):
+			complete_have_same_qualifiers_visitor(const class_* rhs):
 				rhs_(rhs)
 			{
 			}
@@ -75,7 +75,7 @@ namespace
 
 			//lhs' type is class_
 			bool
-			operator()(const std::weak_ptr<const class_>&) const
+			operator()(const class_*) const
 			{
 				return true;
 			}
@@ -88,7 +88,7 @@ namespace
 			}
 
 		private:
-			const std::weak_ptr<const class_>& rhs_;
+			const class_* rhs_;
 	};
 
 	//rhs' type is fundamental_type
@@ -111,7 +111,7 @@ namespace
 
 			//lhs' type is class_
 			bool
-			operator()(const std::weak_ptr<const class_>&) const
+			operator()(const class_*) const
 			{
 				return true;
 			}
@@ -171,7 +171,7 @@ namespace
 		}
 
 		unqualified_type_variant
-		operator()(const std::weak_ptr<const class_>& t) const
+		operator()(const class_* t) const
 		{
 			return t;
 		}

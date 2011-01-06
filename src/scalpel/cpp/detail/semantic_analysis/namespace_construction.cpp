@@ -144,7 +144,7 @@ fill_namespace
 				new_class = add_class(namespace_entity, new_class);
 				fill_class(new_class, class_specifier_node);
 
-				opt_unqualified_type = std::weak_ptr<const class_>(new_class);
+				opt_unqualified_type = static_cast<const class_*>(new_class.get());
 
 				break;
 			}
@@ -157,7 +157,7 @@ fill_namespace
 				std::shared_ptr<class_> new_class = create_class(class_elaborated_specifier_node);
 				new_class = add_class(namespace_entity, new_class);
 
-				opt_unqualified_type = std::weak_ptr<const class_>(new_class);
+				opt_unqualified_type = static_cast<const class_*>(new_class.get());
 
 				break;
 			}

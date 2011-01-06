@@ -23,7 +23,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "fundamental_type.hpp"
 #include <scalpel/utility/variant.hpp>
-#include <scalpel/utility/weak_ptr_equality.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -41,7 +40,7 @@ typedef
 	<
 		array,
 		fundamental_type,
-		std::weak_ptr<const class_>,
+		const class_*,
 		const_,
 		pointer,
 		reference,
@@ -54,7 +53,7 @@ typedef
 	utility::variant
 	<
 		fundamental_type,
-		std::weak_ptr<const class_>
+		const class_*
 	>::type
 	unqualified_type_variant
 ;

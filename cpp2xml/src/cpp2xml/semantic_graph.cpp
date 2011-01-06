@@ -79,9 +79,9 @@ semantic_graph_serializer::serialize_type
 		serialize_type(output, (*opt_type).qualified_type(), indent_level + 1);
 		output << indent(indent_level) << "</array>\n";
 	}
-	else if(auto opt_type = scalpel::utility::get<std::weak_ptr<const class_>>(&n))
+	else if(auto opt_type = scalpel::utility::get<const class_*>(&n))
 	{
-		output << indent(indent_level) << "<class id=\"c" << class_ids_[opt_type->lock().get()] << "\"/>\n";
+		output << indent(indent_level) << "<class id=\"c" << class_ids_[*opt_type] << "\"/>\n";
 	}
 }
 

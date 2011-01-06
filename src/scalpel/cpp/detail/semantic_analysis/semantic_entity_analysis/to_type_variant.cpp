@@ -30,7 +30,7 @@ struct: public utility::static_visitor<type_variant>
 	type_variant
 	operator()(std::shared_ptr<class_> t) const
 	{
-		return type_variant(std::weak_ptr<const class_>(t));
+		return type_variant(static_cast<const class_*>(t.get()));
 	}
 
 	type_variant
