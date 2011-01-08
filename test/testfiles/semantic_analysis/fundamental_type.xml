@@ -1,0 +1,134 @@
+<namespace id="n0">
+ <variable name="v1">
+  <type>
+   <fundamental_type type="char"/>
+  </type>
+ </variable>
+ <variable name="v2">
+  <type>
+   <fundamental_type type="unsigned char"/>
+  </type>
+ </variable>
+ <variable name="v3">
+  <type>
+   <fundamental_type type="signed char"/>
+  </type>
+ </variable>
+ <variable name="v4">
+  <type>
+   <fundamental_type type="bool"/>
+  </type>
+ </variable>
+ <variable name="v5">
+  <type>
+   <fundamental_type type="unsigned int"/>
+  </type>
+ </variable>
+ <variable name="v6">
+  <type>
+   <fundamental_type type="unsigned int"/>
+  </type>
+ </variable>
+ <variable name="v7">
+  <type>
+   <fundamental_type type="int"/>
+  </type>
+ </variable>
+ <variable name="v8">
+  <type>
+   <fundamental_type type="int"/>
+  </type>
+ </variable>
+ <variable name="v9">
+  <type>
+   <fundamental_type type="int"/>
+  </type>
+ </variable>
+ <variable name="v10">
+  <type>
+   <fundamental_type type="unsigned short int"/>
+  </type>
+ </variable>
+ <variable name="v11">
+  <type>
+   <fundamental_type type="unsigned short int"/>
+  </type>
+ </variable>
+ <variable name="v12">
+  <type>
+   <fundamental_type type="unsigned long int"/>
+  </type>
+ </variable>
+ <variable name="v13">
+  <type>
+   <fundamental_type type="unsigned long int"/>
+  </type>
+ </variable>
+ <variable name="v14">
+  <type>
+   <fundamental_type type="long int"/>
+  </type>
+ </variable>
+ <variable name="v15">
+  <type>
+   <fundamental_type type="long int"/>
+  </type>
+ </variable>
+ <variable name="v16">
+  <type>
+   <fundamental_type type="long int"/>
+  </type>
+ </variable>
+ <variable name="v17">
+  <type>
+   <fundamental_type type="long int"/>
+  </type>
+ </variable>
+ <variable name="v18">
+  <type>
+   <fundamental_type type="short int"/>
+  </type>
+ </variable>
+ <variable name="v19">
+  <type>
+   <fundamental_type type="short int"/>
+  </type>
+ </variable>
+ <variable name="v20">
+  <type>
+   <fundamental_type type="short int"/>
+  </type>
+ </variable>
+ <variable name="v21">
+  <type>
+   <fundamental_type type="short int"/>
+  </type>
+ </variable>
+ <variable name="v22">
+  <type>
+   <fundamental_type type="wchar_t"/>
+  </type>
+ </variable>
+ <variable name="v23">
+  <type>
+   <fundamental_type type="float"/>
+  </type>
+ </variable>
+ <variable name="v24">
+  <type>
+   <fundamental_type type="double"/>
+  </type>
+ </variable>
+ <variable name="v25">
+  <type>
+   <fundamental_type type="long double"/>
+  </type>
+ </variable>
+ <variable name="v26">
+  <type>
+   <pointer>
+    <fundamental_type type="void"/>
+   </pointer>
+  </type>
+ </variable>
+</namespace>

@@ -376,6 +376,24 @@ get_fundamental_type
 	else if
 	(
 		!bool_type &&
+		char_type &&
+		!double_type &&
+		!float_type &&
+		!int_type &&
+		!long_long_type &&
+		!long_type &&
+		!short_type &&
+		signed_type &&
+		!unsigned_type &&
+		!void_type &&
+		!wchar_t_type
+	)
+	{
+		return fundamental_type::SIGNED_CHAR;
+	}
+	else if
+	(
+		!bool_type &&
 		!char_type &&
 		double_type &&
 		!float_type &&
@@ -450,11 +468,9 @@ get_fundamental_type
 		!char_type &&
 		!double_type &&
 		!float_type &&
-		//int_type &&
 		!long_long_type &&
 		long_type &&
 		!short_type &&
-		//signed_type &&
 		!unsigned_type &&
 		!void_type &&
 		!wchar_t_type
@@ -468,11 +484,8 @@ get_fundamental_type
 		!char_type &&
 		!double_type &&
 		!float_type &&
-		//int_type &&
 		long_long_type &&
-		//long_type &&
 		!short_type &&
-		//signed_type &&
 		!unsigned_type &&
 		!void_type &&
 		!wchar_t_type
@@ -486,11 +499,9 @@ get_fundamental_type
 		!char_type &&
 		!double_type &&
 		!float_type &&
-		//!int_type &&
 		!long_long_type &&
 		!long_type &&
 		short_type &&
-		//!signed_type &&
 		!unsigned_type &&
 		!void_type &&
 		!wchar_t_type
@@ -522,7 +533,6 @@ get_fundamental_type
 		!char_type &&
 		!double_type &&
 		!float_type &&
-		//!int_type &&
 		!long_long_type &&
 		!long_type &&
 		!short_type &&
@@ -540,7 +550,6 @@ get_fundamental_type
 		!char_type &&
 		!double_type &&
 		!float_type &&
-		//!int_type &&
 		!long_long_type &&
 		long_type &&
 		!short_type &&
@@ -558,9 +567,7 @@ get_fundamental_type
 		!char_type &&
 		!double_type &&
 		!float_type &&
-		//!int_type &&
 		long_long_type &&
-		//!long_type &&
 		!short_type &&
 		!signed_type &&
 		unsigned_type &&
@@ -576,7 +583,6 @@ get_fundamental_type
 		!char_type &&
 		!double_type &&
 		!float_type &&
-		//!int_type &&
 		!long_long_type &&
 		!long_type &&
 		short_type &&

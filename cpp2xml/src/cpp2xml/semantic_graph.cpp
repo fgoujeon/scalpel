@@ -103,6 +103,7 @@ semantic_graph_serializer::serialize_fundamental_type
 		{fundamental_type::LONG_INT, "long int"},
 		{fundamental_type::LONG_LONG_INT, "long long int"},
 		{fundamental_type::SHORT_INT, "short int"},
+		{fundamental_type::SIGNED_CHAR, "signed char"},
 		{fundamental_type::UNSIGNED_CHAR, "unsigned char"},
 		{fundamental_type::UNSIGNED_INT, "unsigned int"},
 		{fundamental_type::UNSIGNED_LONG_INT, "unsigned long int"},

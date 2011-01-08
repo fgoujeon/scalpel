@@ -1,0 +1,27 @@
+char               v1;
+unsigned char      v2;
+signed char        v3;
+bool               v4;
+unsigned           v5;
+unsigned int       v6;
+signed             v7;
+signed int         v8;
+int                v9;
+unsigned short int v10;
+unsigned short     v11;
+unsigned long int  v12;
+unsigned long      v13;
+signed long int    v14;
+signed long        v15;
+long int           v16;
+long               v17;
+signed short int   v18;
+signed short       v19;
+short int          v20;
+short              v21;
+wchar_t            v22;
+float              v23;
+double             v24;
+long double        v25;
+void*              v26;
+
