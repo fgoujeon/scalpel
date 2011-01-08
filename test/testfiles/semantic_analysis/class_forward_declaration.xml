@@ -1,0 +1,12 @@
+<namespace id="n0">
+ <namespace name="n" id="n1">
+  <class name="s" id="c0">
+   <destructor access="public" defined="false">
+   </destructor>
+  </class>
+ </namespace>
+ <class name="s" id="c1">
+  <destructor access="public" defined="false">
+  </destructor>
+ </class>
+</namespace>
