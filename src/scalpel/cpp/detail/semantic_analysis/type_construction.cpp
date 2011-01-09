@@ -172,6 +172,10 @@ qualify_type
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node
 )
 {
+	bool const_qualified = false;
+	bool volatile_qualified = false;
+
+	//find qualifiers
 	for(auto i = decl_specifier_seq_node.begin(); i != decl_specifier_seq_node.end(); ++i)
 	{
 		const decl_specifier& decl_specifier_node = i->main_node();
@@ -185,12 +189,22 @@ qualify_type
 				const cv_qualifier& cv_qualifier_node = *opt_cv_qualifier_node;
 
 				if(get<predefined_text_node<str::const_>>(&cv_qualifier_node))
-					type = const_(type);
+					const_qualified = true;
 				else if(get<predefined_text_node<str::volatile_>>(&cv_qualifier_node))
-					type = volatile_(type);
+					volatile_qualified = true;
+
+				//TODO error if two const or two volatile
 			}
 		}
 	}
+
+	//qualify
+	if(const_qualified && volatile_qualified)
+		type = cv_qualifiers(type, cv_qualification::CONST_AND_VOLATILE);
+	else if(const_qualified)
+		type = cv_qualifiers(type, cv_qualification::CONST);
+	else if(volatile_qualified)
+		type = cv_qualifiers(type, cv_qualification::VOLATILE);
 
 	return type;
 }
@@ -288,6 +302,10 @@ qualify_type
 
 			type = pointer(type);
 
+			bool const_qualified = false;
+			bool volatile_qualified = false;
+
+			//find cv-qualifiers
 			if(auto opt_cv_qualifier_seq_node = get_cv_qualifier_seq(ptr_ptr_operator_node))
 			{
 				auto cv_qualifier_seq_node = *opt_cv_qualifier_seq_node;
@@ -301,15 +319,19 @@ qualify_type
 					auto cv_qualifier_node = i->main_node();
 
 					if(get<predefined_text_node<str::const_>>(&cv_qualifier_node))
-					{
-						type = const_(type);
-					}
+						const_qualified = true;
 					else if(get<predefined_text_node<str::volatile_>>(&cv_qualifier_node))
-					{
-						type = volatile_(type);
-					}
+						volatile_qualified = true;
 				}
 			}
+
+			//apply cv-qualifiers
+			if(const_qualified && volatile_qualified)
+				type = cv_qualifiers(type, cv_qualification::CONST_AND_VOLATILE);
+			else if(const_qualified)
+				type = cv_qualifiers(type, cv_qualification::CONST);
+			else if(volatile_qualified)
+				type = cv_qualifiers(type, cv_qualification::VOLATILE);
 		}
 		else if(auto ref_ptr_operator_node = get<ref_ptr_operator>(&ptr_operator_node))
 		{

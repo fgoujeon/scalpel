@@ -29,11 +29,10 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 
 class array;
 class class_;
-class const_;
+class cv_qualifiers;
 class pointer;
 class reference;
 class typedef_;
-class volatile_;
 
 typedef
 	utility::variant
@@ -41,10 +40,9 @@ typedef
 		array,
 		fundamental_type,
 		const class_*,
-		const_,
+		cv_qualifiers,
 		pointer,
-		reference,
-		volatile_
+		reference
 	>::type
 	type_variant
 ;

@@ -180,22 +180,10 @@ namespace
 			const std::shared_ptr<const function_parameter>& param = *i;
 			type_variant param_type = param->type();
 
-			//remove const qualifier
-			if(const_* opt_const = utility::get<const_>(&param_type))
+			//remove cv-qualifiers
+			if(cv_qualifiers* opt_cv_qualifiers = utility::get<cv_qualifiers>(&param_type))
 			{
-				param_type = opt_const->qualified_type();
-			}
-
-			//remove volatile qualifier
-			if(volatile_* opt_volatile = utility::get<volatile_>(&param_type))
-			{
-				param_type = opt_volatile->qualified_type();
-			}
-
-			//remove const qualifier
-			if(const_* opt_const = utility::get<const_>(&param_type))
-			{
-				param_type = opt_const->qualified_type();
+				param_type = opt_cv_qualifiers->qualified_type();
 			}
 
 			//array of T -> pointer to T

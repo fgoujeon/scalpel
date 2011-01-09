@@ -6,9 +6,9 @@
   <parameters>
    <parameter>
     <type>
-     <const>
+     <cv_qualifiers const="true">
       <fundamental_type type="int"/>
-     </const>
+     </cv_qualifiers>
     </type>
    </parameter>
   </parameters>
@@ -20,29 +20,9 @@
   <parameters>
    <parameter>
     <type>
-     <volatile>
-      <const>
-       <fundamental_type type="int"/>
-      </const>
-     </volatile>
-    </type>
-   </parameter>
-  </parameters>
- </simple_function>
- <simple_function name="i">
-  <return_type>
-   <fundamental_type type="void"/>
-  </return_type>
-  <parameters>
-   <parameter>
-    <type>
-     <const>
-      <volatile>
-       <pointer>
-        <fundamental_type type="int"/>
-       </pointer>
-      </volatile>
-     </const>
+     <cv_qualifiers const="true" volatile="true">
+      <fundamental_type type="int"/>
+     </cv_qualifiers>
     </type>
    </parameter>
   </parameters>
@@ -54,13 +34,29 @@
   <parameters>
    <parameter>
     <type>
-     <const>
+     <cv_qualifiers const="true" volatile="true">
       <pointer>
-       <const>
-        <fundamental_type type="double"/>
-       </const>
+       <fundamental_type type="int"/>
       </pointer>
-     </const>
+     </cv_qualifiers>
+    </type>
+   </parameter>
+  </parameters>
+ </simple_function>
+ <simple_function name="i">
+  <return_type>
+   <fundamental_type type="void"/>
+  </return_type>
+  <parameters>
+   <parameter>
+    <type>
+     <cv_qualifiers const="true">
+      <pointer>
+       <cv_qualifiers const="true">
+        <fundamental_type type="double"/>
+       </cv_qualifiers>
+      </pointer>
+     </cv_qualifiers>
     </type>
    </parameter>
   </parameters>

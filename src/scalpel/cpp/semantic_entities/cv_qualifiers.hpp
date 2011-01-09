@@ -18,21 +18,28 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_VOLATILE_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_VOLATILE_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_CV_QUALIFIERS_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_CV_QUALIFIERS_HPP
 
 #include "type_variants_fwd.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
+enum class cv_qualification
+{
+	CONST,
+	VOLATILE,
+	CONST_AND_VOLATILE
+};
+
 /**
-Represents the const qualifier.
+Represents the const and volatile qualifiers.
 */
-class volatile_
+class cv_qualifiers
 {
 	public:
-		volatile_(const type_variant& qualified_type);
+		cv_qualifiers(const type_variant& qualified_type, const cv_qualification qualification);
 
 		const type_variant&
 		qualified_type() const
@@ -40,15 +47,40 @@ class volatile_
 			return qualified_type_;
 		}
 
+		cv_qualification
+		qualification() const
+		{
+			return qualification_;
+		}
+
+		bool
+		const_qualified() const
+		{
+			return
+				qualification_ == cv_qualification::CONST ||
+				qualification_ == cv_qualification::CONST_AND_VOLATILE
+			;
+		}
+
+		bool
+		volatile_qualified() const
+		{
+			return
+				qualification_ == cv_qualification::VOLATILE ||
+				qualification_ == cv_qualification::CONST_AND_VOLATILE
+			;
+		}
+
 	private:
 		type_variant qualified_type_;
+		cv_qualification qualification_;
 };
 
 bool
-operator==(const volatile_& lhs, const volatile_& rhs);
+operator==(const cv_qualifiers& lhs, const cv_qualifiers& rhs);
 
 bool
-operator!=(const volatile_& lhs, const volatile_& rhs);
+operator!=(const cv_qualifiers& lhs, const cv_qualifiers& rhs);
 
 }}} //namespace scalpel::cpp::semantic_entities
 

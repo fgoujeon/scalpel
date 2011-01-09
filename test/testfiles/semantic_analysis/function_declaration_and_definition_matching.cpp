@@ -8,13 +8,13 @@ void g(int)
 {
 }
 
-void i(int* volatile const);
-void i(int*)
+void h(int* volatile const);
+void h(int*)
 {
 }
 
-void h(const double* const);
-void h(const double ds[5])
+void i(const double* const);
+void i(const double ds[5])
 {
 }
 

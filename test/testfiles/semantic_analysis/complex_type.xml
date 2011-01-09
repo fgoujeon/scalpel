@@ -5,21 +5,19 @@
     <pointer>
      <pointer>
       <pointer>
-       <const>
+       <cv_qualifiers const="true">
         <pointer>
          <pointer>
-          <volatile>
-           <const>
-            <pointer>
-             <const>
-              <fundamental_type type="unsigned long int"/>
-             </const>
-            </pointer>
-           </const>
-          </volatile>
+          <cv_qualifiers const="true" volatile="true">
+           <pointer>
+            <cv_qualifiers const="true">
+             <fundamental_type type="unsigned long int"/>
+            </cv_qualifiers>
+           </pointer>
+          </cv_qualifiers>
          </pointer>
         </pointer>
-       </const>
+       </cv_qualifiers>
       </pointer>
      </pointer>
     </pointer>
@@ -28,9 +26,9 @@
  </variable>
  <variable name="j">
   <type>
-   <const>
+   <cv_qualifiers const="true">
     <fundamental_type type="unsigned long int"/>
-   </const>
+   </cv_qualifiers>
   </type>
  </variable>
 </namespace>

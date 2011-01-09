@@ -23,11 +23,10 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "array.hpp"
 #include "class_.hpp"
-#include "const_.hpp"
+#include "cv_qualifiers.hpp"
 #include "pointer.hpp"
 #include "reference.hpp"
 #include "typedef_.hpp"
-#include "volatile_.hpp"
 #include "type_variants_fwd.hpp"
 
 #endif
