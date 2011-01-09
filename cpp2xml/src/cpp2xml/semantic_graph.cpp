@@ -49,16 +49,16 @@ semantic_graph_serializer::serialize_type
 		serialize_fundamental_type(output, *opt_type);
 	   	output << "\"/>\n";
 	}
-	else if(auto opt_type = scalpel::utility::get<cv_qualifiers>(&n))
+	else if(auto opt_type = scalpel::utility::get<cv_qualified_type>(&n))
 	{
-		output << indent(indent_level) << "<cv_qualifiers";
+		output << indent(indent_level) << "<cv_qualified_type";
 		if(opt_type->const_qualified())
 			output << " const=\"true\"";
 		if(opt_type->volatile_qualified())
 			output << " volatile=\"true\"";
 		output << ">\n";
 		serialize_type(output, (*opt_type).qualified_type(), indent_level + 1);
-		output << indent(indent_level) << "</cv_qualifiers>\n";
+		output << indent(indent_level) << "</cv_qualified_type>\n";
 	}
 	else if(auto opt_type = scalpel::utility::get<pointer>(&n))
 	{

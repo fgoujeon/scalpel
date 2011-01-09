@@ -181,9 +181,9 @@ namespace
 			type_variant param_type = param->type();
 
 			//remove cv-qualifiers
-			if(cv_qualifiers* opt_cv_qualifiers = utility::get<cv_qualifiers>(&param_type))
+			if(cv_qualified_type* opt_cv_qualified_type = utility::get<cv_qualified_type>(&param_type))
 			{
-				param_type = opt_cv_qualifiers->qualified_type();
+				param_type = opt_cv_qualified_type->qualified_type();
 			}
 
 			//array of T -> pointer to T

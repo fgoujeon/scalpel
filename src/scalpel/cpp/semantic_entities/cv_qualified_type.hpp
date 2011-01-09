@@ -18,28 +18,28 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_CV_QUALIFIERS_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_CV_QUALIFIERS_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_CV_QUALIFIED_TYPE_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_CV_QUALIFIED_TYPE_HPP
 
 #include "type_variants_fwd.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-enum class cv_qualification
-{
-	CONST,
-	VOLATILE,
-	CONST_AND_VOLATILE
-};
-
 /**
 Represents the const and volatile qualifiers.
 */
-class cv_qualifiers
+class cv_qualified_type
 {
 	public:
-		cv_qualifiers(const type_variant& qualified_type, const cv_qualification qualification);
+		enum class qualification_type
+		{
+			CONST,
+			VOLATILE,
+			CONST_AND_VOLATILE
+		};
+
+		cv_qualified_type(const type_variant& qualified_type, const qualification_type qualification);
 
 		const type_variant&
 		qualified_type() const
@@ -47,7 +47,7 @@ class cv_qualifiers
 			return qualified_type_;
 		}
 
-		cv_qualification
+		qualification_type
 		qualification() const
 		{
 			return qualification_;
@@ -57,8 +57,8 @@ class cv_qualifiers
 		const_qualified() const
 		{
 			return
-				qualification_ == cv_qualification::CONST ||
-				qualification_ == cv_qualification::CONST_AND_VOLATILE
+				qualification_ == qualification_type::CONST ||
+				qualification_ == qualification_type::CONST_AND_VOLATILE
 			;
 		}
 
@@ -66,21 +66,21 @@ class cv_qualifiers
 		volatile_qualified() const
 		{
 			return
-				qualification_ == cv_qualification::VOLATILE ||
-				qualification_ == cv_qualification::CONST_AND_VOLATILE
+				qualification_ == qualification_type::VOLATILE ||
+				qualification_ == qualification_type::CONST_AND_VOLATILE
 			;
 		}
 
 	private:
 		type_variant qualified_type_;
-		cv_qualification qualification_;
+		qualification_type qualification_;
 };
 
 bool
-operator==(const cv_qualifiers& lhs, const cv_qualifiers& rhs);
+operator==(const cv_qualified_type& lhs, const cv_qualified_type& rhs);
 
 bool
-operator!=(const cv_qualifiers& lhs, const cv_qualifiers& rhs);
+operator!=(const cv_qualified_type& lhs, const cv_qualified_type& rhs);
 
 }}} //namespace scalpel::cpp::semantic_entities
 

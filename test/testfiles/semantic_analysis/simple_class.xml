@@ -4,9 +4,9 @@
    <parameters>
     <parameter name="size">
      <type>
-      <cv_qualifiers const="true">
+      <cv_qualified_type const="true">
        <fundamental_type type="unsigned int"/>
-      </cv_qualifiers>
+      </cv_qualified_type>
      </type>
     </parameter>
    </parameters>
@@ -25,9 +25,9 @@
    <parameters>
     <parameter name="size">
      <type>
-      <cv_qualifiers const="true">
+      <cv_qualified_type const="true">
        <fundamental_type type="unsigned int"/>
-      </cv_qualifiers>
+      </cv_qualified_type>
      </type>
     </parameter>
    </parameters>

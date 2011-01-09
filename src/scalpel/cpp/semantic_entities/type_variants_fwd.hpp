@@ -29,7 +29,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 
 class array;
 class class_;
-class cv_qualifiers;
+class cv_qualified_type;
 class pointer;
 class reference;
 class typedef_;
@@ -40,27 +40,12 @@ typedef
 		array,
 		fundamental_type,
 		const class_*,
-		cv_qualifiers,
+		cv_qualified_type,
 		pointer,
 		reference
 	>::type
 	type_variant
 ;
-
-typedef
-	utility::variant
-	<
-		fundamental_type,
-		const class_*
-	>::type
-	unqualified_type_variant
-;
-
-bool
-have_same_qualifiers(const type_variant& lhs, const type_variant& rhs);
-
-unqualified_type_variant
-get_unqualified_type(const type_variant& type);
 
 }}} //namespace scalpel::cpp::semantic_entities
 

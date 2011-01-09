@@ -6,9 +6,9 @@
   <parameters>
    <parameter>
     <type>
-     <cv_qualifiers const="true">
+     <cv_qualified_type const="true">
       <fundamental_type type="int"/>
-     </cv_qualifiers>
+     </cv_qualified_type>
     </type>
    </parameter>
   </parameters>
@@ -20,9 +20,9 @@
   <parameters>
    <parameter>
     <type>
-     <cv_qualifiers const="true" volatile="true">
+     <cv_qualified_type const="true" volatile="true">
       <fundamental_type type="int"/>
-     </cv_qualifiers>
+     </cv_qualified_type>
     </type>
    </parameter>
   </parameters>
@@ -34,11 +34,11 @@
   <parameters>
    <parameter>
     <type>
-     <cv_qualifiers const="true" volatile="true">
+     <cv_qualified_type const="true" volatile="true">
       <pointer>
        <fundamental_type type="int"/>
       </pointer>
-     </cv_qualifiers>
+     </cv_qualified_type>
     </type>
    </parameter>
   </parameters>
@@ -50,13 +50,13 @@
   <parameters>
    <parameter>
     <type>
-     <cv_qualifiers const="true">
+     <cv_qualified_type const="true">
       <pointer>
-       <cv_qualifiers const="true">
+       <cv_qualified_type const="true">
         <fundamental_type type="double"/>
-       </cv_qualifiers>
+       </cv_qualified_type>
       </pointer>
-     </cv_qualifiers>
+     </cv_qualified_type>
     </type>
    </parameter>
   </parameters>

@@ -23,7 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "array.hpp"
 #include "class_.hpp"
-#include "cv_qualifiers.hpp"
+#include "cv_qualified_type.hpp"
 #include "pointer.hpp"
 #include "reference.hpp"
 #include "typedef_.hpp"

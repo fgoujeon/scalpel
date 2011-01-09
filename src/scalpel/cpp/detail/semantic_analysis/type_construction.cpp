@@ -200,11 +200,11 @@ qualify_type
 
 	//qualify
 	if(const_qualified && volatile_qualified)
-		type = cv_qualifiers(type, cv_qualification::CONST_AND_VOLATILE);
+		type = cv_qualified_type(type, cv_qualified_type::qualification_type::CONST_AND_VOLATILE);
 	else if(const_qualified)
-		type = cv_qualifiers(type, cv_qualification::CONST);
+		type = cv_qualified_type(type, cv_qualified_type::qualification_type::CONST);
 	else if(volatile_qualified)
-		type = cv_qualifiers(type, cv_qualification::VOLATILE);
+		type = cv_qualified_type(type, cv_qualified_type::qualification_type::VOLATILE);
 
 	return type;
 }
@@ -327,11 +327,11 @@ qualify_type
 
 			//apply cv-qualifiers
 			if(const_qualified && volatile_qualified)
-				type = cv_qualifiers(type, cv_qualification::CONST_AND_VOLATILE);
+				type = cv_qualified_type(type, cv_qualified_type::qualification_type::CONST_AND_VOLATILE);
 			else if(const_qualified)
-				type = cv_qualifiers(type, cv_qualification::CONST);
+				type = cv_qualified_type(type, cv_qualified_type::qualification_type::CONST);
 			else if(volatile_qualified)
-				type = cv_qualifiers(type, cv_qualification::VOLATILE);
+				type = cv_qualified_type(type, cv_qualified_type::qualification_type::VOLATILE);
 		}
 		else if(auto ref_ptr_operator_node = get<ref_ptr_operator>(&ptr_operator_node))
 		{

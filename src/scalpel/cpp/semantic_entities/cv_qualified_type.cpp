@@ -18,20 +18,20 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "cv_qualifiers.hpp"
+#include "cv_qualified_type.hpp"
 #include "type_variants.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-cv_qualifiers::cv_qualifiers(const type_variant& qualified_type, const cv_qualification qualification):
+cv_qualified_type::cv_qualified_type(const type_variant& qualified_type, const qualification_type qualification):
 	qualified_type_(qualified_type),
 	qualification_(qualification)
 {
 }
 
 bool
-operator==(const cv_qualifiers& lhs, const cv_qualifiers& rhs)
+operator==(const cv_qualified_type& lhs, const cv_qualified_type& rhs)
 {
 	return
 		lhs.qualification() == rhs.qualification() &&
@@ -40,7 +40,7 @@ operator==(const cv_qualifiers& lhs, const cv_qualifiers& rhs)
 }
 
 bool
-operator!=(const cv_qualifiers& lhs, const cv_qualifiers& rhs)
+operator!=(const cv_qualified_type& lhs, const cv_qualified_type& rhs)
 {
 	return !operator==(lhs, rhs);
 }

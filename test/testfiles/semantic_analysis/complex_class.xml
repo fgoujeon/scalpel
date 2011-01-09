@@ -35,9 +35,9 @@
     <parameter name="t">
      <type>
       <reference>
-       <cv_qualifiers const="true">
+       <cv_qualified_type const="true">
         <class id="c3"/>
-       </cv_qualifiers>
+       </cv_qualified_type>
       </reference>
      </type>
     </parameter>
@@ -48,18 +48,18 @@
   <operator_function operator="=" access="public">
    <return_type>
     <reference>
-     <cv_qualifiers const="true">
+     <cv_qualified_type const="true">
       <class id="c3"/>
-     </cv_qualifiers>
+     </cv_qualified_type>
     </reference>
    </return_type>
    <parameters>
     <parameter name="t">
      <type>
       <reference>
-       <cv_qualifiers const="true">
+       <cv_qualified_type const="true">
         <class id="c3"/>
-       </cv_qualifiers>
+       </cv_qualified_type>
       </reference>
      </type>
     </parameter>
@@ -73,9 +73,9 @@
     <parameter name="t">
      <type>
       <reference>
-       <cv_qualifiers const="true">
+       <cv_qualified_type const="true">
         <class id="c3"/>
-       </cv_qualifiers>
+       </cv_qualified_type>
       </reference>
      </type>
     </parameter>
@@ -148,9 +148,9 @@
   </variable>
   <variable name="b" access="private" static="true">
    <type>
-    <cv_qualifiers const="true">
+    <cv_qualified_type const="true">
      <fundamental_type type="bool"/>
-    </cv_qualifiers>
+    </cv_qualified_type>
    </type>
   </variable>
  </class>

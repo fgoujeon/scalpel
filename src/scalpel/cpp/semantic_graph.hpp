@@ -23,7 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "semantic_entities/array.hpp"
 #include "semantic_entities/class_.hpp"
-#include "semantic_entities/cv_qualifiers.hpp"
+#include "semantic_entities/cv_qualified_type.hpp"
 #include "semantic_entities/declarative_region_variants.hpp"
 #include "semantic_entities/functions.hpp"
 #include "semantic_entities/fundamental_type.hpp"
