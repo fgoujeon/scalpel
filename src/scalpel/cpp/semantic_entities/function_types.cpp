@@ -24,27 +24,23 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define GENERATE_FUNCTION_TYPE_DEFINITION( \
 	CLASS_NAME, \
 	HAS_PARENT_CLASS, \
-	HAS_CV_QUALIFIER, \
-	HAS_RETURN_TYPE, \
-	HAS_PARAMETERS \
+	HAS_CV_QUALIFIER \
 ) \
 CLASS_NAME::CLASS_NAME \
 ( \
 	BOOST_PP_IIF(HAS_PARENT_CLASS, const class_* parent_class_p,) BOOST_PP_COMMA_IF(HAS_PARENT_CLASS) \
 	BOOST_PP_IIF(HAS_CV_QUALIFIER, const bool const_qualified_p,) BOOST_PP_COMMA_IF(HAS_CV_QUALIFIER) \
 	BOOST_PP_IIF(HAS_CV_QUALIFIER, const bool volatile_qualified_p,) BOOST_PP_COMMA_IF(HAS_CV_QUALIFIER) \
-	BOOST_PP_IIF(HAS_RETURN_TYPE, const type_variant& return_type_p,) BOOST_PP_COMMA_IF(HAS_RETURN_TYPE) \
-	BOOST_PP_IIF(HAS_PARAMETERS, const std::vector<type_variant>& parameter_types_p,) BOOST_PP_COMMA_IF(HAS_PARAMETERS) \
-	BOOST_PP_IIF(HAS_PARAMETERS, const bool variadic_p,) BOOST_PP_COMMA_IF(HAS_PARAMETERS) \
-	void* const \
+	const type_variant& return_type_p, \
+	const std::vector<type_variant>& parameter_types_p, \
+	const bool variadic_p \
 ): \
 	BOOST_PP_IIF(HAS_PARENT_CLASS, parent_class(parent_class_p),) BOOST_PP_COMMA_IF(HAS_PARENT_CLASS) \
 	BOOST_PP_IIF(HAS_CV_QUALIFIER, const_qualified(const_qualified_p),) BOOST_PP_COMMA_IF(HAS_CV_QUALIFIER) \
 	BOOST_PP_IIF(HAS_CV_QUALIFIER, volatile_qualified(volatile_qualified_p),) BOOST_PP_COMMA_IF(HAS_CV_QUALIFIER) \
-	BOOST_PP_IIF(HAS_RETURN_TYPE, return_type(return_type_p),) BOOST_PP_COMMA_IF(HAS_RETURN_TYPE) \
-	BOOST_PP_IIF(HAS_PARAMETERS, parameter_types(parameter_types_p),) BOOST_PP_COMMA_IF(HAS_PARAMETERS) \
-	BOOST_PP_IIF(HAS_PARAMETERS, variadic(variadic_p),) BOOST_PP_COMMA_IF(HAS_PARAMETERS) \
-	nothing_() \
+	return_type(return_type_p), \
+	parameter_types(parameter_types_p), \
+	variadic(variadic_p) \
 { \
 } \
  \
@@ -55,20 +51,17 @@ operator==(const CLASS_NAME& lhs, const CLASS_NAME& rhs) \
 		BOOST_PP_IIF(HAS_PARENT_CLASS, lhs.parent_class == rhs.parent_class &&,) \
 		BOOST_PP_IIF(HAS_CV_QUALIFIER, lhs.const_qualified == rhs.const_qualified &&,) \
 		BOOST_PP_IIF(HAS_CV_QUALIFIER, lhs.volatile_qualified == rhs.volatile_qualified &&,) \
-		BOOST_PP_IIF(HAS_RETURN_TYPE, lhs.return_type == rhs.return_type &&,) \
-		BOOST_PP_IIF(HAS_PARAMETERS, lhs.parameter_types == rhs.parameter_types &&,) \
-		BOOST_PP_IIF(HAS_PARAMETERS, lhs.variadic == rhs.variadic &&,) \
-		true \
+		lhs.return_type == rhs.return_type && \
+		lhs.parameter_types == rhs.parameter_types && \
+		lhs.variadic == rhs.variadic \
 	; \
 }
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-GENERATE_FUNCTION_TYPE_DEFINITION(constructor_type,     1, 0, 0, 1)
-GENERATE_FUNCTION_TYPE_DEFINITION(destructor_type,      1, 0, 0, 0)
-GENERATE_FUNCTION_TYPE_DEFINITION(member_function_type, 1, 1, 1, 1)
-GENERATE_FUNCTION_TYPE_DEFINITION(function_type,        0, 0, 1, 1)
+GENERATE_FUNCTION_TYPE_DEFINITION(member_function_type, 1, 1)
+GENERATE_FUNCTION_TYPE_DEFINITION(function_type,        0, 0)
 
 }}} //namespace scalpel::cpp::semantic_entities
 
