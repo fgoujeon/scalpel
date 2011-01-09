@@ -1,0 +1,68 @@
+<namespace id="n0">
+ <simple_function name="f">
+  <return_type>
+   <fundamental_type type="void"/>
+  </return_type>
+  <parameters>
+   <parameter>
+    <type>
+     <const>
+      <fundamental_type type="int"/>
+     </const>
+    </type>
+   </parameter>
+  </parameters>
+ </simple_function>
+ <simple_function name="g">
+  <return_type>
+   <fundamental_type type="void"/>
+  </return_type>
+  <parameters>
+   <parameter>
+    <type>
+     <volatile>
+      <const>
+       <fundamental_type type="int"/>
+      </const>
+     </volatile>
+    </type>
+   </parameter>
+  </parameters>
+ </simple_function>
+ <simple_function name="i">
+  <return_type>
+   <fundamental_type type="void"/>
+  </return_type>
+  <parameters>
+   <parameter>
+    <type>
+     <const>
+      <volatile>
+       <pointer>
+        <fundamental_type type="int"/>
+       </pointer>
+      </volatile>
+     </const>
+    </type>
+   </parameter>
+  </parameters>
+ </simple_function>
+ <simple_function name="h">
+  <return_type>
+   <fundamental_type type="void"/>
+  </return_type>
+  <parameters>
+   <parameter>
+    <type>
+     <const>
+      <pointer>
+       <const>
+        <fundamental_type type="double"/>
+       </const>
+      </pointer>
+     </const>
+    </type>
+   </parameter>
+  </parameters>
+ </simple_function>
+</namespace>

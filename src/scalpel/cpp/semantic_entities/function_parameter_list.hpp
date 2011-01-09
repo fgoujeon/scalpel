@@ -29,9 +29,6 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 
 typedef utility::shared_ptr_vector<function_parameter> function_parameter_list;
 
-bool
-have_same_types(const function_parameter_list& lhs, const function_parameter_list& rhs);
-
 }}} //namespace scalpel::cpp::semantic_entities
 
 #endif

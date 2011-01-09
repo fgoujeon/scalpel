@@ -116,7 +116,16 @@ single_file_tester::test_semantic_analysis(const std::string& filename)
 	scalpel::cpp::syntax_tree syntax_tree = syntax_analyzer_(preprocessed_code);
 
 	//semantic analysis
-	std::shared_ptr<scalpel::cpp::semantic_graph> semantic_graph = scalpel::cpp::semantic_analysis::analyze(syntax_tree);
+	std::shared_ptr<scalpel::cpp::semantic_graph> semantic_graph;
+	try
+	{
+		semantic_graph = scalpel::cpp::semantic_analysis::analyze(syntax_tree);
+	}
+	catch(...)
+	{
+		std::cout << "Exception during the semantic analysis of '" << filename << "':\n";
+		throw;
+	}
 
 	//serialize the semantic graph
 	std::ostringstream semantic_graph_xml;
