@@ -167,6 +167,34 @@ get_parameter_declaration_list(const syntax_nodes::declarator& declarator_node)
 	return boost::optional<const syntax_nodes::parameter_declaration_list&>();
 }
 
+bool
+has_ellipsis(const syntax_nodes::declarator& declarator_node)
+{
+	const direct_declarator& direct_declarator_node = get_direct_declarator(declarator_node);
+	if(const optional_node<direct_declarator_last_part_seq>& opt_last_part_seq_node = get_last_part_seq(direct_declarator_node))
+	{
+		const direct_declarator_last_part_seq& last_part_seq_node = *opt_last_part_seq_node;
+
+		for(auto i = last_part_seq_node.begin(); i != last_part_seq_node.end(); ++i)
+		{
+			const direct_declarator_last_part& last_part_node = i->main_node();
+
+			if(const boost::optional<const direct_declarator_function_part&> opt_function_part_node = get<direct_declarator_function_part>(&last_part_node))
+			{
+				const direct_declarator_function_part& function_part_node = *opt_function_part_node;
+
+				if(const optional_node<parameter_declaration_clause>& opt_parameter_declaration_clause_node = get_parameter_declaration_clause(function_part_node))
+				{
+					const parameter_declaration_clause& parameter_declaration_clause_node = *opt_parameter_declaration_clause_node;
+					return has_ellipsis(parameter_declaration_clause_node);
+				}
+			}
+		}
+	}
+
+	return false;
+}
+
 syntax_nodes::identifier
 get_identifier(const declarator& declarator_node)
 {

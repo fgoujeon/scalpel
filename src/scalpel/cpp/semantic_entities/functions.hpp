@@ -48,6 +48,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 	HAS_OPERATOR, \
 	HAS_RETURN_TYPE, \
 	HAS_PARAMETERS, \
+	HAS_VARIADIC, \
 	HAS_STATIC, \
 	HAS_CV_QUALIFIER, \
 	HAS_VIRTUAL, \
@@ -63,13 +64,14 @@ class CLASS_NAME: \
 			BOOST_PP_IIF(HAS_OPERATOR, const overloadable_operator overloaded_operator,) BOOST_PP_COMMA_IF(HAS_OPERATOR) \
 			BOOST_PP_IIF(HAS_RETURN_TYPE, const type_variant& return_type,) BOOST_PP_COMMA_IF(HAS_RETURN_TYPE) \
 			BOOST_PP_IIF(HAS_PARAMETERS, function_parameter_list&& parameters = function_parameter_list(),) BOOST_PP_COMMA_IF(HAS_PARAMETERS) \
-			bool is_inline = false, \
-			BOOST_PP_IIF(HAS_STATIC, bool is_static = false,) BOOST_PP_COMMA_IF(HAS_STATIC) \
-			BOOST_PP_IIF(HAS_CV_QUALIFIER, bool is_const = false,) BOOST_PP_COMMA_IF(HAS_CV_QUALIFIER) \
-			BOOST_PP_IIF(HAS_CV_QUALIFIER, bool is_volatile = false,) BOOST_PP_COMMA_IF(HAS_CV_QUALIFIER) \
-			BOOST_PP_IIF(HAS_VIRTUAL, bool is_virtual = false,) BOOST_PP_COMMA_IF(HAS_VIRTUAL) \
-			BOOST_PP_IIF(HAS_VIRTUAL, bool is_pure = false,) BOOST_PP_COMMA_IF(HAS_VIRTUAL) \
-			BOOST_PP_IIF(HAS_EXPLICIT, bool is_explicit = false,) BOOST_PP_COMMA_IF(HAS_EXPLICIT) \
+			BOOST_PP_IIF(HAS_VARIADIC, const bool variadic = false,) BOOST_PP_COMMA_IF(HAS_VARIADIC) \
+			const bool is_inline = false, \
+			BOOST_PP_IIF(HAS_STATIC, const bool is_static = false,) BOOST_PP_COMMA_IF(HAS_STATIC) \
+			BOOST_PP_IIF(HAS_CV_QUALIFIER, const bool is_const = false,) BOOST_PP_COMMA_IF(HAS_CV_QUALIFIER) \
+			BOOST_PP_IIF(HAS_CV_QUALIFIER, const bool is_volatile = false,) BOOST_PP_COMMA_IF(HAS_CV_QUALIFIER) \
+			BOOST_PP_IIF(HAS_VIRTUAL, const bool is_virtual = false,) BOOST_PP_COMMA_IF(HAS_VIRTUAL) \
+			BOOST_PP_IIF(HAS_VIRTUAL, const bool is_pure = false,) BOOST_PP_COMMA_IF(HAS_VIRTUAL) \
+			BOOST_PP_IIF(HAS_EXPLICIT, const bool is_explicit = false,) BOOST_PP_COMMA_IF(HAS_EXPLICIT) \
 			void* const = 0 \
 		); \
  \
@@ -115,6 +117,16 @@ class CLASS_NAME: \
 			std::vector<type_variant> \
 			parameter_types() const; \
 			, \
+		) \
+ \
+		BOOST_PP_IIF \
+		( \
+			HAS_VARIADIC, \
+			bool \
+			variadic() const \
+			{ \
+				return variadic_; \
+			}, \
 		) \
  \
 		BOOST_PP_IIF \
@@ -228,6 +240,11 @@ class CLASS_NAME: \
 			HAS_PARAMETERS, \
 			function_parameter_list parameters_;, \
 		) \
+		BOOST_PP_IIF \
+		( \
+			HAS_VARIADIC, \
+			bool variadic_;, \
+		) \
 		bool is_inline_; \
 		BOOST_PP_IIF \
 		( \
@@ -268,15 +285,15 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 //member functions
-GENERATE_FUNCTION_DECLARATION(constructor,              0, /*ignored*/,          0, 0, 0, 1, 0, 0, 0, 1)
-GENERATE_FUNCTION_DECLARATION(destructor,               0, /*ignored*/,          0, 0, 0, 0, 0, 0, 1, 0)
-GENERATE_FUNCTION_DECLARATION(operator_member_function, 1, member_function_type, 0, 1, 1, 1, 0, 1, 1, 0)
-GENERATE_FUNCTION_DECLARATION(conversion_function,      1, member_function_type, 0, 0, 1, 0, 0, 1, 1, 1)
-GENERATE_FUNCTION_DECLARATION(simple_member_function,   1, member_function_type, 1, 0, 1, 1, 1, 1, 1, 0)
+GENERATE_FUNCTION_DECLARATION(constructor,              0, /*ignored*/,          0, 0, 0, 1, 1, 0, 0, 0, 1)
+GENERATE_FUNCTION_DECLARATION(destructor,               0, /*ignored*/,          0, 0, 0, 0, 0, 0, 0, 1, 0)
+GENERATE_FUNCTION_DECLARATION(operator_member_function, 1, member_function_type, 0, 1, 1, 1, 0, 0, 1, 1, 0)
+GENERATE_FUNCTION_DECLARATION(conversion_function,      1, member_function_type, 0, 0, 1, 0, 0, 0, 1, 1, 1)
+GENERATE_FUNCTION_DECLARATION(simple_member_function,   1, member_function_type, 1, 0, 1, 1, 1, 1, 1, 1, 0)
 
 //free functions
-GENERATE_FUNCTION_DECLARATION(operator_function,        1, function_type,        0, 1, 1, 1, 1, 0, 0, 0)
-GENERATE_FUNCTION_DECLARATION(simple_function,          1, function_type,        1, 0, 1, 1, 1, 0, 0, 0)
+GENERATE_FUNCTION_DECLARATION(operator_function,        1, function_type,        0, 1, 1, 1, 0, 1, 0, 0, 0)
+GENERATE_FUNCTION_DECLARATION(simple_function,          1, function_type,        1, 0, 1, 1, 1, 1, 0, 0, 0)
 
 }}} //namespace scalpel::cpp::semantic_entities
 

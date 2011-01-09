@@ -54,6 +54,13 @@ get_parameter_declaration_list(const parameter_declaration_clause& o)
 	return get<0>(o);
 }
 
+inline
+bool
+has_ellipsis(const parameter_declaration_clause& o)
+{
+	return get<4>(o);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif

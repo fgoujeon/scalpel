@@ -68,6 +68,7 @@ create_entity
 						syntax_node_analysis::get_identifier(declarator_node).value(),
 						*opt_type,
 						create_parameters(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
+						syntax_node_analysis::has_ellipsis(declarator_node),
 						has_inline_specifier,
 						has_static_specifier,
 						syntax_node_analysis::has_const_function_qualifier(declarator_node),
@@ -83,6 +84,7 @@ create_entity
 						syntax_node_analysis::get_identifier(declarator_node).value(),
 						*opt_type,
 						create_parameters(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
+						syntax_node_analysis::has_ellipsis(declarator_node),
 						has_inline_specifier,
 						has_static_specifier
 					);
@@ -96,6 +98,7 @@ create_entity
 				return std::make_shared<semantic_entities::constructor>
 				(
 					create_parameters(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
+					syntax_node_analysis::has_ellipsis(declarator_node),
 					has_inline_specifier,
 					has_explicit_specifier
 				);

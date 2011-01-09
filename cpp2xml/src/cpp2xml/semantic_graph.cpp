@@ -271,6 +271,8 @@ semantic_graph_serializer::serialize_constructor
 		class_::access acc = enclosing_declarative_region->member_access(entity);
 		output << attribute(acc);
 	}
+	if(entity->variadic())
+		output << " variadic=\"true\"";
 	if(entity->is_inline())
 		output << " inline=\"true\"";
 	if(entity->is_explicit())
@@ -407,6 +409,8 @@ semantic_graph_serializer::serialize_simple_member_function
 
 	class_::access acc = enclosing_class->member_access(entity);
 	output << attribute(acc);
+	if(entity->variadic())
+		output << " variadic=\"true\"";
 	if(entity->is_inline())
 		output << " inline=\"true\"";
 	if(entity->is_static())
@@ -469,6 +473,8 @@ semantic_graph_serializer::serialize_simple_function
 {
 	output << indent(indent_level) << "<simple_function";
 	output << " name=\"" << entity->name() << "\"";
+	if(entity->variadic())
+		output << " variadic=\"true\"";
 	if(entity->is_static())
 		output << " static=\"true\"";
 	if(entity->is_inline())

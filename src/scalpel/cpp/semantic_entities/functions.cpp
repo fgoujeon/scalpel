@@ -33,6 +33,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 	HAS_OPERATOR, \
 	HAS_RETURN_TYPE, \
 	HAS_PARAMETERS, \
+	HAS_VARIADIC, \
 	HAS_STATIC, \
 	HAS_CV_QUALIFIER, \
 	HAS_VIRTUAL, \
@@ -45,19 +46,21 @@ CLASS_NAME::CLASS_NAME \
 	BOOST_PP_IIF(HAS_OPERATOR, const overloadable_operator overloaded_operator,) BOOST_PP_COMMA_IF(HAS_OPERATOR) \
 	BOOST_PP_IIF(HAS_RETURN_TYPE, const type_variant& return_type,) BOOST_PP_COMMA_IF(HAS_RETURN_TYPE) \
 	BOOST_PP_IIF(HAS_PARAMETERS, function_parameter_list&& parameters,) BOOST_PP_COMMA_IF(HAS_PARAMETERS) \
-	bool is_inline, \
-	BOOST_PP_IIF(HAS_STATIC, bool is_static,) BOOST_PP_COMMA_IF(HAS_STATIC) \
-	BOOST_PP_IIF(HAS_CV_QUALIFIER, bool is_const,) BOOST_PP_COMMA_IF(HAS_CV_QUALIFIER) \
-	BOOST_PP_IIF(HAS_CV_QUALIFIER, bool is_volatile,) BOOST_PP_COMMA_IF(HAS_CV_QUALIFIER) \
-	BOOST_PP_IIF(HAS_VIRTUAL, bool is_virtual,) BOOST_PP_COMMA_IF(HAS_VIRTUAL) \
-	BOOST_PP_IIF(HAS_VIRTUAL, bool is_pure,) BOOST_PP_COMMA_IF(HAS_VIRTUAL) \
-	BOOST_PP_IIF(HAS_EXPLICIT, bool is_explicit,) BOOST_PP_COMMA_IF(HAS_EXPLICIT) \
+	BOOST_PP_IIF(HAS_VARIADIC, const bool variadic,) BOOST_PP_COMMA_IF(HAS_VARIADIC) \
+	const bool is_inline, \
+	BOOST_PP_IIF(HAS_STATIC, const bool is_static,) BOOST_PP_COMMA_IF(HAS_STATIC) \
+	BOOST_PP_IIF(HAS_CV_QUALIFIER, const bool is_const,) BOOST_PP_COMMA_IF(HAS_CV_QUALIFIER) \
+	BOOST_PP_IIF(HAS_CV_QUALIFIER, const bool is_volatile,) BOOST_PP_COMMA_IF(HAS_CV_QUALIFIER) \
+	BOOST_PP_IIF(HAS_VIRTUAL, const bool is_virtual,) BOOST_PP_COMMA_IF(HAS_VIRTUAL) \
+	BOOST_PP_IIF(HAS_VIRTUAL, const bool is_pure,) BOOST_PP_COMMA_IF(HAS_VIRTUAL) \
+	BOOST_PP_IIF(HAS_EXPLICIT, const bool is_explicit,) BOOST_PP_COMMA_IF(HAS_EXPLICIT) \
 	void* const \
 ): \
 	BOOST_PP_IIF(HAS_NAME, name_(name),) BOOST_PP_COMMA_IF(HAS_NAME) \
 	BOOST_PP_IIF(HAS_OPERATOR, overloaded_operator_(overloaded_operator),) BOOST_PP_COMMA_IF(HAS_OPERATOR) \
 	BOOST_PP_IIF(HAS_RETURN_TYPE, return_type_(return_type),) BOOST_PP_COMMA_IF(HAS_RETURN_TYPE) \
 	BOOST_PP_IIF(HAS_PARAMETERS, parameters_(std::move(parameters)),) BOOST_PP_COMMA_IF(HAS_PARAMETERS) \
+	BOOST_PP_IIF(HAS_VARIADIC, variadic_(variadic),) BOOST_PP_COMMA_IF(HAS_VARIADIC) \
 	is_inline_(is_inline), \
 	BOOST_PP_IIF(HAS_STATIC, is_static_(is_static),) BOOST_PP_COMMA_IF(HAS_STATIC) \
 	BOOST_PP_IIF(HAS_CV_QUALIFIER, is_const_(is_const),) BOOST_PP_COMMA_IF(HAS_CV_QUALIFIER) \
@@ -83,7 +86,7 @@ BOOST_PP_IIF \
 				BOOST_PP_IIF(HAS_CV_QUALIFIER, is_volatile_,) BOOST_PP_COMMA_IF(HAS_CV_QUALIFIER) \
 				BOOST_PP_IIF(HAS_RETURN_TYPE, return_type_,) BOOST_PP_COMMA_IF(HAS_RETURN_TYPE) \
 				BOOST_PP_IIF(HAS_PARAMETERS, parameter_types(), std::vector<type_variant>()), \
-				false \
+				BOOST_PP_IIF(HAS_VARIADIC, variadic_, false) \
 			) \
 		; \
 	}, \
@@ -161,6 +164,7 @@ have_same_signature(const CLASS_NAME& lhs, const CLASS_NAME& rhs) \
 		BOOST_PP_IIF(HAS_OPERATOR, lhs.overloaded_operator() == rhs.overloaded_operator() &&,) \
 		BOOST_PP_IIF(HAS_RETURN_TYPE, lhs.return_type() == rhs.return_type() &&,) \
 		BOOST_PP_IIF(HAS_PARAMETERS, lhs.parameter_types() == rhs.parameter_types() &&,) \
+		BOOST_PP_IIF(HAS_VARIADIC, lhs.variadic() == rhs.variadic() &&,) \
 		true \
 	; \
 }
@@ -206,15 +210,15 @@ namespace
 
 
 //member functions
-GENERATE_FUNCTION_DEFINITION(constructor,              0, /*ignored*/,          0, 0, 0, 1, 0, 0, 0, 1, 1)
-GENERATE_FUNCTION_DEFINITION(destructor,               0, /*ignored*/,          0, 0, 0, 0, 0, 0, 1, 0, 1)
-GENERATE_FUNCTION_DEFINITION(operator_member_function, 1, member_function_type, 0, 1, 1, 1, 0, 1, 1, 0, 1)
-GENERATE_FUNCTION_DEFINITION(conversion_function,      1, member_function_type, 0, 0, 1, 0, 0, 1, 1, 1, 1)
-GENERATE_FUNCTION_DEFINITION(simple_member_function,   1, member_function_type, 1, 0, 1, 1, 1, 1, 1, 0, 1)
+GENERATE_FUNCTION_DEFINITION(constructor,              0, /*ignored*/,          0, 0, 0, 1, 1, 0, 0, 0, 1, 1)
+GENERATE_FUNCTION_DEFINITION(destructor,               0, /*ignored*/,          0, 0, 0, 0, 0, 0, 0, 1, 0, 1)
+GENERATE_FUNCTION_DEFINITION(operator_member_function, 1, member_function_type, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1)
+GENERATE_FUNCTION_DEFINITION(conversion_function,      1, member_function_type, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1)
+GENERATE_FUNCTION_DEFINITION(simple_member_function,   1, member_function_type, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1)
 
 //free functions
-GENERATE_FUNCTION_DEFINITION(operator_function,        1, function_type,        0, 1, 1, 1, 1, 0, 0, 0, 0)
-GENERATE_FUNCTION_DEFINITION(simple_function,          1, function_type,        1, 0, 1, 1, 1, 0, 0, 0, 0)
+GENERATE_FUNCTION_DEFINITION(operator_function,        1, function_type,        0, 1, 1, 1, 0, 1, 0, 0, 0, 0)
+GENERATE_FUNCTION_DEFINITION(simple_function,          1, function_type,        1, 0, 1, 1, 1, 1, 0, 0, 0, 0)
 
 }}} //namespace scalpel::cpp::semantic_entities
 

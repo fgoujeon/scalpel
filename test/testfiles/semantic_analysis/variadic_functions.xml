@@ -1,0 +1,37 @@
+<namespace id="n0">
+ <class name="s" id="c0">
+  <constructor access="public" variadic="true">
+   <parameters>
+    <parameter>
+     <type>
+      <fundamental_type type="int"/>
+     </type>
+    </parameter>
+   </parameters>
+  </constructor>
+  <destructor access="public" defined="false">
+  </destructor>
+  <simple_function name="f" access="public" variadic="true" defined="false">
+   <return_type>
+    <fundamental_type type="bool"/>
+   </return_type>
+  </simple_function>
+ </class>
+ <simple_function name="f" variadic="true">
+  <return_type>
+   <fundamental_type type="void"/>
+  </return_type>
+ </simple_function>
+ <simple_function name="g" variadic="true" defined="false">
+  <return_type>
+   <fundamental_type type="void"/>
+  </return_type>
+  <parameters>
+   <parameter>
+    <type>
+     <fundamental_type type="double"/>
+    </type>
+   </parameter>
+  </parameters>
+ </simple_function>
+</namespace>
