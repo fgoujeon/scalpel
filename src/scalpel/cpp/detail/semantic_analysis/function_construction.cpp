@@ -430,14 +430,27 @@ create_parameters
 		}
 		else
 		{
-			parameters.push_back
-			(
-				std::make_shared<function_parameter>
+			//void f(void) == void f()
+			bool empty_parameter_list = false;
+			if(const fundamental_type* const opt_fundamental_type = get<fundamental_type>(&type))
+			{
+				empty_parameter_list =
+					*opt_fundamental_type == fundamental_type::VOID &&
+					parameter_declaration_list_node.size() == 1
+				;
+			}
+
+			if(!empty_parameter_list)
+			{
+				parameters.push_back
 				(
-					type,
-					""
-				)
-			);
+					std::make_shared<function_parameter>
+					(
+						type,
+						""
+					)
+				);
+			}
 		}
 	}
 
