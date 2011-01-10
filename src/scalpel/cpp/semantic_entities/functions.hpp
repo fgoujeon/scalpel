@@ -27,7 +27,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "variable.hpp"
 #include "statement_block.hpp"
 #include "declarative_region_variants.hpp"
-#include "type_variants_fwd.hpp"
+#include "type_variant_fwd.hpp"
 #include "detail/declarative_region_member_impl.hpp"
 #include <scalpel/utility/empty.hpp>
 #include <boost/optional.hpp>

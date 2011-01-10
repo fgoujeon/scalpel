@@ -21,11 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_CLASS_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_CLASS_HPP
 
-#include "functions.hpp"
-#include "typedef_.hpp"
-#include "variable.hpp"
 #include "declarative_region_variants.hpp"
-#include "type_variants_fwd.hpp"
+#include "type_variant_fwd.hpp"
 #include "detail/declarative_region_member_impl.hpp"
 #include <scalpel/utility/shared_ptr_vector.hpp>
 #include <boost/noncopyable.hpp>
@@ -37,6 +34,13 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 class namespace_;
+class typedef_;
+class constructor;
+class destructor;
+class operator_member_function;
+class conversion_function;
+class simple_member_function;
+class variable;
 
 /**
 Represents a C++ class.

@@ -19,7 +19,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "variable.hpp"
-#include "type_variants.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {

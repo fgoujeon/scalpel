@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_FUNCTION_PARAMETER_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_FUNCTION_PARAMETER_HPP
 
-#include "type_variants_fwd.hpp"
+#include "type_variant_fwd.hpp"
 #include <string>
 
 namespace scalpel { namespace cpp { namespace semantic_entities

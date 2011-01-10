@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_VARIABLE_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_VARIABLE_HPP
 
-#include "type_variants_fwd.hpp"
+#include "type_variant.hpp"
 #include "detail/declarative_region_member_impl.hpp"
 #include <boost/noncopyable.hpp>
 #include <string>

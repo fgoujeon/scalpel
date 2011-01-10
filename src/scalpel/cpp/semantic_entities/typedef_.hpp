@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_TYPEDEF_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_TYPEDEF_HPP
 
-#include "type_variants.hpp"
+#include "type_variant.hpp"
 #include "detail/declarative_region_member_impl.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities

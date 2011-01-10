@@ -20,8 +20,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "class_.hpp"
 #include "namespace_.hpp"
+#include "typedef_.hpp"
+#include "functions.hpp"
+#include "variable.hpp"
+#include "type_variant.hpp"
 #include <memory>
-#include <iostream>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {

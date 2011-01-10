@@ -33,7 +33,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "semantic_entities/pointer.hpp"
 #include "semantic_entities/reference.hpp"
 #include "semantic_entities/statement_block.hpp"
-#include "semantic_entities/type_variants.hpp"
+#include "semantic_entities/type_variant.hpp"
 #include "semantic_entities/typedef_.hpp"
 #include "semantic_entities/variable.hpp"
 

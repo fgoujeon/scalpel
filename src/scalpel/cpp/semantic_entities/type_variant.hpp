@@ -18,16 +18,15 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_VARIANTS_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_VARIANTS_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_VARIANT_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_VARIANT_HPP
 
 #include "array.hpp"
 #include "class_.hpp"
 #include "cv_qualified_type.hpp"
 #include "pointer.hpp"
 #include "reference.hpp"
-#include "typedef_.hpp"
-#include "type_variants_fwd.hpp"
+#include "type_variant_fwd.hpp"
 
 #endif
 

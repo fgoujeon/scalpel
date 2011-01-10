@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_FUNCTION_TYPES_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_FUNCTION_TYPES_HPP
 
-#include "type_variants_fwd.hpp"
+#include "type_variant_fwd.hpp"
 #include <boost/preprocessor/control/iif.hpp>
 #include <boost/preprocessor/punctuation/comma_if.hpp>
 #include <vector>

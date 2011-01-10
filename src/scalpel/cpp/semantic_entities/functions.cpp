@@ -19,7 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "functions.hpp"
-#include "type_variants.hpp"
+#include "type_variant.hpp"
 #include <scalpel/utility/ptr_variant_conversion_functions.hpp>
 #include <boost/preprocessor/control/iif.hpp>
 #include <boost/preprocessor/logical/or.hpp>

@@ -19,7 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "function_types.hpp"
-#include "type_variants.hpp"
+#include "type_variant.hpp"
 
 #define GENERATE_FUNCTION_TYPE_DEFINITION( \
 	CLASS_NAME, \
