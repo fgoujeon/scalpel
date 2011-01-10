@@ -68,6 +68,14 @@ fill_class
 )
 {
 	auto class_head_node = get_class_head(class_specifier_node);
+	auto class_key_node = get_class_key(class_head_node);
+
+	//default access: public for structs, private for classes
+	const class_::access default_access =
+		get<predefined_text_node<str::class_>>(&class_key_node) ?
+		class_::access::PRIVATE :
+		class_::access::PUBLIC
+	;
 
 	//get base classes
 	if(auto opt_base_clause_node = get_base_clause(class_head_node))
@@ -87,7 +95,7 @@ fill_class
 			bool is_virtual = has_virtual_keyword(base_specifier_node);
 
 			//get base class access
-			class_::access access = class_::access::PRIVATE; //if nothing is specified, the access is private
+			class_::access access = default_access;
 			if(auto opt_access_specifier_node = get_access_specifier(base_specifier_node))
 			{
 				access = syntax_node_analysis::get_access(*opt_access_specifier_node);
@@ -122,15 +130,8 @@ fill_class
 		}
 	}
 
-	//default current_access
-	auto class_key_node = get_class_key(class_head_node);
-	class_::access current_access = class_::access::PUBLIC; //the default current_access is public...
-	if(get<predefined_text_node<str::class_>>(&class_key_node)) //... unless the syntax node represents a class (neither a struct nor a union)
-	{
-		current_access = class_::access::PRIVATE;
-	}
-
 	//get the members of the class
+	class_::access current_access = default_access;
 	auto opt_member_specification = get_member_specification(class_specifier_node);
 	if(opt_member_specification)
 	{
