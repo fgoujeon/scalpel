@@ -28,7 +28,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define GENERATE_FUNCTION_DEFINITION( \
 	CLASS_NAME, \
 	HAS_TYPE, \
-	TYPE, \
 	HAS_NAME, \
 	HAS_OPERATOR, \
 	HAS_RETURN_TYPE, \
@@ -75,16 +74,16 @@ CLASS_NAME::CLASS_NAME \
 BOOST_PP_IIF \
 ( \
 	HAS_TYPE, \
-	TYPE \
+	function_type \
 	CLASS_NAME::type_without_parent_class() const \
 	{ \
 		return \
-			TYPE \
+			function_type \
 			( \
-				BOOST_PP_IIF(IS_MEMBER, 0,) BOOST_PP_COMMA_IF(IS_MEMBER) \
-				BOOST_PP_IIF(HAS_CV_QUALIFIER, is_const_,) BOOST_PP_COMMA_IF(HAS_CV_QUALIFIER) \
-				BOOST_PP_IIF(HAS_CV_QUALIFIER, is_volatile_,) BOOST_PP_COMMA_IF(HAS_CV_QUALIFIER) \
-				BOOST_PP_IIF(HAS_RETURN_TYPE, return_type_,) BOOST_PP_COMMA_IF(HAS_RETURN_TYPE) \
+				BOOST_PP_IIF(IS_MEMBER, 0, 0), \
+				BOOST_PP_IIF(HAS_CV_QUALIFIER, is_const_, false), \
+				BOOST_PP_IIF(HAS_CV_QUALIFIER, is_volatile_, false), \
+				return_type_, \
 				BOOST_PP_IIF(HAS_PARAMETERS, parameter_types(), std::vector<type_variant>()), \
 				BOOST_PP_IIF(HAS_VARIADIC, variadic_, false) \
 			) \
@@ -210,15 +209,15 @@ namespace
 
 
 //member functions
-GENERATE_FUNCTION_DEFINITION(constructor,              0, /*ignored*/,          0, 0, 0, 1, 1, 0, 0, 0, 1, 1)
-GENERATE_FUNCTION_DEFINITION(destructor,               0, /*ignored*/,          0, 0, 0, 0, 0, 0, 0, 1, 0, 1)
-GENERATE_FUNCTION_DEFINITION(operator_member_function, 1, member_function_type, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1)
-GENERATE_FUNCTION_DEFINITION(conversion_function,      1, member_function_type, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1)
-GENERATE_FUNCTION_DEFINITION(simple_member_function,   1, member_function_type, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1)
+GENERATE_FUNCTION_DEFINITION(constructor,              0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1)
+GENERATE_FUNCTION_DEFINITION(destructor,               0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1)
+GENERATE_FUNCTION_DEFINITION(operator_member_function, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1)
+GENERATE_FUNCTION_DEFINITION(conversion_function,      1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1)
+GENERATE_FUNCTION_DEFINITION(simple_member_function,   1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1)
 
 //free functions
-GENERATE_FUNCTION_DEFINITION(operator_function,        1, function_type,        0, 1, 1, 1, 0, 1, 0, 0, 0, 0)
-GENERATE_FUNCTION_DEFINITION(simple_function,          1, function_type,        1, 0, 1, 1, 1, 1, 0, 0, 0, 0)
+GENERATE_FUNCTION_DEFINITION(operator_function,        1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0)
+GENERATE_FUNCTION_DEFINITION(simple_function,          1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0)
 
 }}} //namespace scalpel::cpp::semantic_entities
 

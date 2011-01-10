@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_FUNCTIONS_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_FUNCTIONS_HPP
 
-#include "function_types.hpp"
+#include "function_type.hpp"
 #include "overloadable_operator.hpp"
 #include "function_parameter_list.hpp"
 #include "variable.hpp"
@@ -43,7 +43,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define GENERATE_FUNCTION_DECLARATION( \
 	CLASS_NAME, \
 	HAS_TYPE, \
-	TYPE, \
 	HAS_NAME, \
 	HAS_OPERATOR, \
 	HAS_RETURN_TYPE, \
@@ -132,7 +131,7 @@ class CLASS_NAME: \
 		BOOST_PP_IIF \
 		( \
 			HAS_TYPE, \
-			TYPE \
+			function_type \
 			type_without_parent_class() const;, \
 		) \
  \
@@ -285,15 +284,15 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 //member functions
-GENERATE_FUNCTION_DECLARATION(constructor,              0, /*ignored*/,          0, 0, 0, 1, 1, 0, 0, 0, 1)
-GENERATE_FUNCTION_DECLARATION(destructor,               0, /*ignored*/,          0, 0, 0, 0, 0, 0, 0, 1, 0)
-GENERATE_FUNCTION_DECLARATION(operator_member_function, 1, member_function_type, 0, 1, 1, 1, 0, 0, 1, 1, 0)
-GENERATE_FUNCTION_DECLARATION(conversion_function,      1, member_function_type, 0, 0, 1, 0, 0, 0, 1, 1, 1)
-GENERATE_FUNCTION_DECLARATION(simple_member_function,   1, member_function_type, 1, 0, 1, 1, 1, 1, 1, 1, 0)
+GENERATE_FUNCTION_DECLARATION(constructor,              0, 0, 0, 0, 1, 1, 0, 0, 0, 1)
+GENERATE_FUNCTION_DECLARATION(destructor,               0, 0, 0, 0, 0, 0, 0, 0, 1, 0)
+GENERATE_FUNCTION_DECLARATION(operator_member_function, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0)
+GENERATE_FUNCTION_DECLARATION(conversion_function,      1, 0, 0, 1, 0, 0, 0, 1, 1, 1)
+GENERATE_FUNCTION_DECLARATION(simple_member_function,   1, 1, 0, 1, 1, 1, 1, 1, 1, 0)
 
 //free functions
-GENERATE_FUNCTION_DECLARATION(operator_function,        1, function_type,        0, 1, 1, 1, 0, 1, 0, 0, 0)
-GENERATE_FUNCTION_DECLARATION(simple_function,          1, function_type,        1, 0, 1, 1, 1, 1, 0, 0, 0)
+GENERATE_FUNCTION_DECLARATION(operator_function,        1, 0, 1, 1, 1, 0, 1, 0, 0, 0)
+GENERATE_FUNCTION_DECLARATION(simple_function,          1, 1, 0, 1, 1, 1, 1, 0, 0, 0)
 
 }}} //namespace scalpel::cpp::semantic_entities
 
