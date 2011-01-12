@@ -37,12 +37,11 @@ using namespace scalpel::cpp::semantic_entities;
 class semantic_graph_serializer
 {
 	public:
-		semantic_graph_serializer();
+		semantic_graph_serializer(std::ostream& output);
 
 		void
 		serialize_type
 		(
-			std::ostream& output,
 			const semantic_entities::type_variant& entity,
 			const unsigned int indent_level
 		);
@@ -50,14 +49,12 @@ class semantic_graph_serializer
 		void
 		serialize_fundamental_type
 		(
-			std::ostream& output,
 			const fundamental_type type
 		);
 
 		void
 		serialize_namespace
 		(
-			std::ostream& output,
 			std::shared_ptr<const namespace_> entity,
 			const unsigned int indent_level = 0
 		);
@@ -65,7 +62,6 @@ class semantic_graph_serializer
 		void
 		serialize_class
 		(
-			std::ostream& output,
 			std::shared_ptr<const class_> entity,
 			const unsigned int indent_level
 		);
@@ -73,7 +69,6 @@ class semantic_graph_serializer
 		void
 		serialize_base_class
 		(
-			std::ostream& output,
 			std::shared_ptr<const class_> entity,
 			const class_::access acc,
 			const bool is_virtual,
@@ -83,7 +78,6 @@ class semantic_graph_serializer
 		void
 		serialize_constructor
 		(
-			std::ostream& output,
 			std::shared_ptr<const constructor> entity,
 			const unsigned int indent_level
 		);
@@ -91,7 +85,6 @@ class semantic_graph_serializer
 		void
 		serialize_destructor
 		(
-			std::ostream& output,
 			std::shared_ptr<const destructor> entity,
 			const unsigned int indent_level
 		);
@@ -99,7 +92,6 @@ class semantic_graph_serializer
 		void
 		serialize_operator_member_function
 		(
-			std::ostream& output,
 			std::shared_ptr<const operator_member_function> entity,
 			const unsigned int indent_level
 		);
@@ -107,7 +99,6 @@ class semantic_graph_serializer
 		void
 		serialize_conversion_function
 		(
-			std::ostream& output,
 			std::shared_ptr<const conversion_function> entity,
 			const unsigned int indent_level
 		);
@@ -115,7 +106,6 @@ class semantic_graph_serializer
 		void
 		serialize_simple_member_function
 		(
-			std::ostream& output,
 			std::shared_ptr<const simple_member_function> entity,
 			const unsigned int indent_level
 		);
@@ -123,7 +113,6 @@ class semantic_graph_serializer
 		void
 		serialize_operator_function
 		(
-			std::ostream& output,
 			std::shared_ptr<const operator_function> entity,
 			const unsigned int indent_level
 		);
@@ -131,15 +120,20 @@ class semantic_graph_serializer
 		void
 		serialize_simple_function
 		(
-			std::ostream& output,
 			std::shared_ptr<const simple_function> entity,
+			const unsigned int indent_level
+		);
+
+		void
+		serialize_function_type
+		(
+			const function_type& entity,
 			const unsigned int indent_level
 		);
 
 		void
 		serialize_function_parameter_list
 		(
-			std::ostream& output,
 			const function_parameter_list& entity,
 			const unsigned int indent_level
 		);
@@ -147,7 +141,6 @@ class semantic_graph_serializer
 		void
 		serialize_function_parameter
 		(
-			std::ostream& output,
 			const std::shared_ptr<const function_parameter> entity,
 			const unsigned int indent_level
 		);
@@ -155,7 +148,6 @@ class semantic_graph_serializer
 		void
 		serialize_variable
 		(
-			std::ostream& output,
 			std::shared_ptr<const variable> entity,
 			const unsigned int indent_level
 		);
@@ -163,7 +155,6 @@ class semantic_graph_serializer
 		void
 		serialize_namespace_alias
 		(
-			std::ostream& output,
 			std::shared_ptr<const namespace_alias> entity,
 			const unsigned int indent_level
 		);
@@ -171,7 +162,6 @@ class semantic_graph_serializer
 		void
 		serialize_typedef
 		(
-			std::ostream& output,
 			std::shared_ptr<const typedef_> entity,
 			const unsigned int indent_level
 		);
@@ -183,6 +173,7 @@ class semantic_graph_serializer
 		attribute(const semantic_entities::overloadable_operator op);
 
 	private:
+		std::ostream& output_;
 		unsigned int namespace_id_counter_;
 		unsigned int class_id_counter_;
 		std::map<const scalpel::cpp::semantic_entities::namespace_*, unsigned int> namespace_ids_;

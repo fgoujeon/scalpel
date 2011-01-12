@@ -102,7 +102,7 @@ create_function
 
 		//qualify type
 		if(opt_unqualified_type)
-			opt_unqualified_type = qualify_type(*opt_unqualified_type, decl_specifier_seq_node);
+			qualify_type(*opt_unqualified_type, decl_specifier_seq_node);
 	}
 
 
@@ -343,7 +343,7 @@ get_conversion_function_type
 	if(const optional_node<ptr_operator_seq>& opt_ptr_operator_seq_node = get_ptr_operator_seq(conversion_function_id_node))
 	{
 		const ptr_operator_seq& ptr_operator_seq_node = *opt_ptr_operator_seq_node;
-		type = qualify_type(type, ptr_operator_seq_node);
+		qualify_type(type, ptr_operator_seq_node);
 	}
 
 	return type;
@@ -382,26 +382,30 @@ create_parameters
 		auto decl_specifier_seq_node = get_decl_specifier_seq(parameter_declaration_node);
 
 		semantic_entities::type_variant type =
-			qualify_type
+			create_type
 			(
-				create_type
-				(
-					decl_specifier_seq_node,
-					current_declarative_region
-				),
-				decl_specifier_seq_node
+				decl_specifier_seq_node,
+				current_declarative_region
 			)
 		;
+
+		qualify_type
+		(
+			type,
+			decl_specifier_seq_node
+		);
 
 		if(auto opt_declarator_node = get_declarator(parameter_declaration_node))
 		{
 			auto declarator_node = *opt_declarator_node;
 
+			qualify_type(type, declarator_node);
+
 			parameters.push_back
 			(
 				std::make_shared<function_parameter>
 				(
-					qualify_type(type, declarator_node),
+					type,
 					syntax_node_analysis::get_identifier(declarator_node).value()
 				)
 			);
@@ -412,7 +416,7 @@ create_parameters
 
 			if(boost::optional<const ptr_operator_seq&> opt_ptr_operator_seq_node = get<ptr_operator_seq>(&abstract_declarator_node))
 			{
-				type = qualify_type(type, *opt_ptr_operator_seq_node);
+				qualify_type(type, *opt_ptr_operator_seq_node);
 			}
 			else if(boost::optional<const direct_abstract_declarator&> opt_direct_abstract_declarator_node = get<direct_abstract_declarator>(&abstract_declarator_node))
 			{
@@ -455,6 +459,40 @@ create_parameters
 	}
 
 	return parameters;
+}
+
+std::vector<semantic_entities::type_variant>
+create_parameter_types
+(
+	boost::optional<const syntax_nodes::parameter_declaration_list&> opt_parameter_declaration_list_node,
+	const declarative_region_shared_ptr_variant current_declarative_region
+)
+{
+	if(opt_parameter_declaration_list_node)
+		return create_parameter_types(*opt_parameter_declaration_list_node, current_declarative_region);
+	else
+		return std::vector<semantic_entities::type_variant>();
+}
+
+std::vector<semantic_entities::type_variant>
+create_parameter_types
+(
+	const syntax_nodes::parameter_declaration_list& parameter_declaration_list_node,
+	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+)
+{
+	semantic_entities::function_parameter_list parameters =
+		create_parameters(parameter_declaration_list_node, current_declarative_region)
+	;
+
+	std::vector<semantic_entities::type_variant> parameter_types;
+	for(auto i = parameters.begin(); i != parameters.end(); ++i)
+	{
+		const function_parameter& p = **i;
+		parameter_types.push_back(p.type());
+	}
+
+	return parameter_types;
 }
 
 }}}} //namespace scalpel::cpp::detail::semantic_analysis

@@ -104,6 +104,20 @@ create_parameters
 	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
 );
 
+std::vector<semantic_entities::type_variant>
+create_parameter_types
+(
+	boost::optional<const syntax_nodes::parameter_declaration_list&> opt_parameter_declaration_list_node,
+	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+);
+
+std::vector<semantic_entities::type_variant>
+create_parameter_types
+(
+	const syntax_nodes::parameter_declaration_list& parameter_declaration_list_node,
+	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+);
+
 }}}} //namespace scalpel::cpp::detail::semantic_analysis
 
 #include "function_construction.ipp"

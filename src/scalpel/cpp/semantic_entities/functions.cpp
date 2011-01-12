@@ -81,11 +81,11 @@ BOOST_PP_IIF \
 			function_type \
 			( \
 				BOOST_PP_IIF(IS_MEMBER, 0, 0), \
-				BOOST_PP_IIF(HAS_CV_QUALIFIER, is_const_, false), \
-				BOOST_PP_IIF(HAS_CV_QUALIFIER, is_volatile_, false), \
 				return_type_, \
 				BOOST_PP_IIF(HAS_PARAMETERS, parameter_types(), std::vector<type_variant>()), \
-				BOOST_PP_IIF(HAS_VARIADIC, variadic_, false) \
+				BOOST_PP_IIF(HAS_VARIADIC, variadic_, false), \
+				BOOST_PP_IIF(HAS_CV_QUALIFIER, is_const_, false), \
+				BOOST_PP_IIF(HAS_CV_QUALIFIER, is_volatile_, false) \
 			) \
 		; \
 	}, \

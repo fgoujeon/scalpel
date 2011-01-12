@@ -204,7 +204,7 @@ fill_namespace
 
 		//qualify type
 		if(opt_unqualified_type)
-			opt_unqualified_type = qualify_type(*opt_unqualified_type, decl_specifier_seq_node);
+			qualify_type(*opt_unqualified_type, decl_specifier_seq_node);
 	}
 
 	if(const optional_node<init_declarator_list>& opt_init_declarator_list_node = get_init_declarator_list(simple_declaration_node))

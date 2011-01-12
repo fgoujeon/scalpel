@@ -46,13 +46,13 @@ create_entity
 )
 {
 	//qualify type with hypothetical pointers, references and arrays
-	if(has_type_decorators(declarator_node))
+	if(syntax_node_analysis::has_type_qualifiers(declarator_node))
 	{
 		//if there's no type to qualify, there's an error
 		if(!opt_type)
 			throw std::runtime_error("create_entity error 1");
 
-		opt_type = qualify_type(*opt_type, declarator_node);
+		qualify_type(*opt_type, declarator_node);
 	}
 
 	switch(syntax_node_analysis::get_declarator_type(declarator_node))
@@ -79,15 +79,33 @@ create_entity
 				}
 				else
 				{
-					return std::make_shared<semantic_entities::simple_function>
-					(
-						syntax_node_analysis::get_identifier(declarator_node).value(),
-						*opt_type,
-						create_parameters(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
-						syntax_node_analysis::has_ellipsis(declarator_node),
-						has_inline_specifier,
-						has_static_specifier
-					);
+					if(has_typedef_specifier)
+					{
+						return std::make_shared<semantic_entities::typedef_>
+						(
+							syntax_node_analysis::get_identifier(declarator_node).value(),
+							function_type
+							(
+								*opt_type, //return type
+								create_parameter_types(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
+								syntax_node_analysis::has_ellipsis(declarator_node),
+								syntax_node_analysis::has_const_function_qualifier(declarator_node),
+								syntax_node_analysis::has_volatile_function_qualifier(declarator_node)
+							)
+						);
+					}
+					else
+					{
+						return std::make_shared<semantic_entities::simple_function>
+						(
+							syntax_node_analysis::get_identifier(declarator_node).value(),
+							*opt_type,
+							create_parameters(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
+							syntax_node_analysis::has_ellipsis(declarator_node),
+							has_inline_specifier,
+							has_static_specifier
+						);
+					}
 				}
 			}
 			else

@@ -486,5 +486,37 @@ has_volatile_function_qualifier(const syntax_nodes::declarator& declarator_node)
 	return false;
 }
 
+bool
+has_type_qualifiers(const syntax_nodes::declarator& declarator_node)
+{
+	//pointers?
+	if(get_ptr_operator_seq(declarator_node))
+	{
+		return true;
+	}
+
+	//arrays?
+	auto direct_declarator_node = get_direct_declarator(declarator_node);
+	if(auto opt_last_part_seq_node = get_last_part_seq(direct_declarator_node))
+	{
+		auto last_part_seq_node = *opt_last_part_seq_node;
+		for
+		(
+			auto i = last_part_seq_node.begin();
+			i != last_part_seq_node.end();
+			++i
+		)
+		{
+			auto last_part_node = i->main_node();
+			if(get<syntax_nodes::direct_declarator_array_part>(&last_part_node))
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 }}}}} //namespace scalpel::cpp::detail::semantic_analysis::syntax_node_analysis
 

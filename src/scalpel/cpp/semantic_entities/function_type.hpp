@@ -30,25 +30,73 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 
 class class_;
 
-struct function_type
+class function_type
 {
 	public:
 		function_type
 		(
-			const class_* parent_class,
-			const bool const_qualified,
-			const bool volatile_qualified,
 			const type_variant& return_type,
 			const std::vector<type_variant>& parameter_types,
-			const bool variadic
+			const bool variadic,
+			const bool const_qualified,
+			const bool volatile_qualified
 		);
 
-		const class_* parent_class;
-		const bool const_qualified;
-		const bool volatile_qualified;
-		const type_variant return_type;
-		const std::vector<type_variant> parameter_types;
-		const bool variadic;
+		function_type
+		(
+			const class_* parent_class,
+			const type_variant& return_type,
+			const std::vector<type_variant>& parameter_types,
+			const bool variadic,
+			const bool const_qualified,
+			const bool volatile_qualified
+		);
+
+		function_type(const function_type& rhs);
+
+		const class_*
+		parent_class() const
+		{
+			return parent_class_;
+		}
+
+		const type_variant&
+		return_type() const
+		{
+			return return_type_;
+		}
+
+		const std::vector<type_variant>&
+		parameter_types() const
+		{
+			return parameter_types_;
+		}
+
+		bool
+		variadic() const
+		{
+			return variadic_;
+		}
+
+		bool
+		const_qualified() const
+		{
+			return const_qualified_;
+		}
+
+		bool
+		volatile_qualified() const
+		{
+			return volatile_qualified_;
+		}
+
+	private:
+		const class_* parent_class_;
+		const type_variant return_type_;
+		const std::vector<type_variant> parameter_types_;
+		const bool variadic_;
+		const bool const_qualified_;
+		const bool volatile_qualified_;
 };
 
 bool

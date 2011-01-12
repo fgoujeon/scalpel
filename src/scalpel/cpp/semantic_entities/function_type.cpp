@@ -26,19 +26,46 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 
 function_type::function_type
 (
-	const class_* parent_class_p,
-	const bool const_qualified_p,
-	const bool volatile_qualified_p,
-	const type_variant& return_type_p,
-	const std::vector<type_variant>& parameter_types_p,
-	const bool variadic_p
+	const type_variant& return_type,
+	const std::vector<type_variant>& parameter_types,
+	const bool variadic,
+	const bool const_qualified,
+	const bool volatile_qualified
 ):
-	parent_class(parent_class_p),
-	const_qualified(const_qualified_p),
-	volatile_qualified(volatile_qualified_p),
-	return_type(return_type_p),
-	parameter_types(parameter_types_p),
-	variadic(variadic_p)
+	parent_class_(0),
+	return_type_(return_type),
+	parameter_types_(parameter_types),
+	variadic_(variadic),
+	const_qualified_(const_qualified),
+	volatile_qualified_(volatile_qualified)
+{
+}
+
+function_type::function_type
+(
+	const class_* parent_class,
+	const type_variant& return_type,
+	const std::vector<type_variant>& parameter_types,
+	const bool variadic,
+	const bool const_qualified,
+	const bool volatile_qualified
+):
+	parent_class_(parent_class),
+	return_type_(return_type),
+	parameter_types_(parameter_types),
+	variadic_(variadic),
+	const_qualified_(const_qualified),
+	volatile_qualified_(volatile_qualified)
+{
+}
+
+function_type::function_type(const function_type& rhs):
+	parent_class_(rhs.parent_class_),
+	return_type_(rhs.return_type_),
+	parameter_types_(rhs.parameter_types_),
+	variadic_(rhs.variadic_),
+	const_qualified_(rhs.const_qualified_),
+	volatile_qualified_(rhs.volatile_qualified_)
 {
 }
 
@@ -46,12 +73,12 @@ bool
 operator==(const function_type& lhs, const function_type& rhs)
 {
 	return
-		lhs.parent_class == rhs.parent_class &&
-		lhs.const_qualified == rhs.const_qualified &&
-		lhs.volatile_qualified == rhs.volatile_qualified &&
-		lhs.return_type == rhs.return_type &&
-		lhs.parameter_types == rhs.parameter_types &&
-		lhs.variadic == rhs.variadic
+		lhs.parent_class() == rhs.parent_class() &&
+		lhs.const_qualified() == rhs.const_qualified() &&
+		lhs.volatile_qualified() == rhs.volatile_qualified() &&
+		lhs.return_type() == rhs.return_type() &&
+		lhs.variadic() == rhs.variadic() &&
+		lhs.parameter_types() == rhs.parameter_types()
 	;
 }
 

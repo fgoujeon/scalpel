@@ -29,7 +29,8 @@ namespace cpp2xml
 
 using namespace detail;
 
-semantic_graph_serializer::semantic_graph_serializer():
+semantic_graph_serializer::semantic_graph_serializer(std::ostream& output):
+	output_(output),
 	namespace_id_counter_(0),
 	class_id_counter_(0)
 {
@@ -38,60 +39,62 @@ semantic_graph_serializer::semantic_graph_serializer():
 void
 semantic_graph_serializer::serialize_type
 (
-	std::ostream& output,
 	const semantic_entities::type_variant& n,
 	const unsigned int indent_level
 )
 {
 	if(auto opt_type = scalpel::utility::get<fundamental_type>(&n))
 	{
-		output << indent(indent_level) << "<fundamental_type type=\"";
-		serialize_fundamental_type(output, *opt_type);
-	   	output << "\"/>\n";
+		output_ << indent(indent_level) << "<fundamental_type type=\"";
+		serialize_fundamental_type(*opt_type);
+	   	output_ << "\"/>\n";
+	}
+	else if(const function_type* opt_type = scalpel::utility::get<function_type>(&n))
+	{
+		serialize_function_type(*opt_type, indent_level);
 	}
 	else if(auto opt_type = scalpel::utility::get<cv_qualified_type>(&n))
 	{
-		output << indent(indent_level) << "<cv_qualified_type";
+		output_ << indent(indent_level) << "<cv_qualified_type";
 		if(opt_type->const_qualified())
-			output << " const=\"true\"";
+			output_ << " const=\"true\"";
 		if(opt_type->volatile_qualified())
-			output << " volatile=\"true\"";
-		output << ">\n";
-		serialize_type(output, (*opt_type).qualified_type(), indent_level + 1);
-		output << indent(indent_level) << "</cv_qualified_type>\n";
+			output_ << " volatile=\"true\"";
+		output_ << ">\n";
+		serialize_type((*opt_type).qualified_type(), indent_level + 1);
+		output_ << indent(indent_level) << "</cv_qualified_type>\n";
 	}
 	else if(auto opt_type = scalpel::utility::get<pointer>(&n))
 	{
-		output << indent(indent_level) << "<pointer>\n";
-		serialize_type(output, (*opt_type).qualified_type(), indent_level + 1);
-		output << indent(indent_level) << "</pointer>\n";
+		output_ << indent(indent_level) << "<pointer>\n";
+		serialize_type((*opt_type).qualified_type(), indent_level + 1);
+		output_ << indent(indent_level) << "</pointer>\n";
 	}
 	else if(auto opt_type = scalpel::utility::get<reference>(&n))
 	{
-		output << indent(indent_level) << "<reference>\n";
-		serialize_type(output, (*opt_type).qualified_type(), indent_level + 1);
-		output << indent(indent_level) << "</reference>\n";
+		output_ << indent(indent_level) << "<reference>\n";
+		serialize_type((*opt_type).qualified_type(), indent_level + 1);
+		output_ << indent(indent_level) << "</reference>\n";
 	}
 	else if(auto opt_type = scalpel::utility::get<array>(&n))
 	{
-		output << indent(indent_level) << "<array size=\"" << (*opt_type).size() << "\">\n";
-		serialize_type(output, (*opt_type).qualified_type(), indent_level + 1);
-		output << indent(indent_level) << "</array>\n";
+		output_ << indent(indent_level) << "<array size=\"" << (*opt_type).size() << "\">\n";
+		serialize_type((*opt_type).qualified_type(), indent_level + 1);
+		output_ << indent(indent_level) << "</array>\n";
 	}
 	else if(auto opt_type = scalpel::utility::get<const class_*>(&n))
 	{
-		output << indent(indent_level) << "<class id=\"c" << class_ids_[*opt_type] << "\"/>\n";
+		output_ << indent(indent_level) << "<class id=\"c" << class_ids_[*opt_type] << "\"/>\n";
 	}
 }
 
 void
 semantic_graph_serializer::serialize_fundamental_type
 (
-	std::ostream& output,
 	const fundamental_type type
 )
 {
-	std::vector<std::pair<fundamental_type, const char*>> fundamental_types_table =
+	std::map<fundamental_type, const char*> fundamental_types_map =
 	{
 		{fundamental_type::BOOL, "bool"},
 		{fundamental_type::CHAR, "char"},
@@ -112,74 +115,61 @@ semantic_graph_serializer::serialize_fundamental_type
 		{fundamental_type::WCHAR_T, "wchar_t"}
 	};
 
-	for(auto i = fundamental_types_table.begin(); i != fundamental_types_table.end(); ++i)
-	{
-		auto pair = *i;
-		const fundamental_type t = pair.first;
-		const char* type_str = pair.second;
-
-		if(t == type)
-		{
-			output << type_str;
-			break;
-		}
-	}
+	output_ << fundamental_types_map[type];
 }
 
 void
 semantic_graph_serializer::serialize_namespace
 (
-	std::ostream& output,
 	std::shared_ptr<const namespace_> n,
 	const unsigned int indent_level
 )
 {
-	output << indent(indent_level) << "<namespace";
+	output_ << indent(indent_level) << "<namespace";
 	if(n->name() != "")
 	{
-		output << " name=\"" << n->name() << "\"";
+		output_ << " name=\"" << n->name() << "\"";
 	}
-	output << " id=\"n" << namespace_id_counter_ << "\"";
-	output << ">\n";
+	output_ << " id=\"n" << namespace_id_counter_ << "\"";
+	output_ << ">\n";
 
 	namespace_ids_[n.get()] = namespace_id_counter_;
 	++namespace_id_counter_;
 
 	for(auto i = n->namespace_aliases().begin(); i != n->namespace_aliases().end(); ++i)
-		serialize_namespace_alias(output, *i, indent_level + 1);
+		serialize_namespace_alias(*i, indent_level + 1);
 
 	for(auto i = n->namespaces().begin(); i != n->namespaces().end(); ++i)
-		serialize_namespace(output, *i, indent_level + 1);
+		serialize_namespace(*i, indent_level + 1);
 
 	for(auto i = n->classes().begin(); i != n->classes().end(); ++i)
-		serialize_class(output, *i, indent_level + 1);
+		serialize_class(*i, indent_level + 1);
 
 	for(auto i = n->typedefs().begin(); i != n->typedefs().end(); ++i)
-		serialize_typedef(output, *i, indent_level + 1);
+		serialize_typedef(*i, indent_level + 1);
 
 	for(auto i = n->simple_functions().begin(); i != n->simple_functions().end(); ++i)
-		serialize_simple_function(output, *i, indent_level + 1);
+		serialize_simple_function(*i, indent_level + 1);
 
 	for(auto i = n->operator_functions().begin(); i != n->operator_functions().end(); ++i)
-		serialize_operator_function(output, *i, indent_level + 1);
+		serialize_operator_function(*i, indent_level + 1);
 
 	for(auto i = n->variables().begin(); i != n->variables().end(); ++i)
-		serialize_variable(output, *i, indent_level + 1);
+		serialize_variable(*i, indent_level + 1);
 
-	output << indent(indent_level) << "</namespace>\n";
+	output_ << indent(indent_level) << "</namespace>\n";
 }
 
 void
 semantic_graph_serializer::serialize_class
 (
-	std::ostream& output,
 	std::shared_ptr<const class_> c,
 	const unsigned int indent_level
 )
 {
-	output << indent(indent_level) << "<class";
-	output << " name=\"" << c->name() << "\"";
-	output << " id=\"c" << class_id_counter_ << "\"";
+	output_ << indent(indent_level) << "<class";
+	output_ << " name=\"" << c->name() << "\"";
+	output_ << " id=\"c" << class_id_counter_ << "\"";
 	//extra attributes if the class is a nested class
 	if(c->has_enclosing_declarative_region())
 	{
@@ -189,356 +179,378 @@ semantic_graph_serializer::serialize_class
 			std::shared_ptr<class_> enclosing_declarative_region = *opt_class;
 
 			class_::access acc = enclosing_declarative_region->member_access(c);
-			output << attribute(acc);
+			output_ << attribute(acc);
 		}
 	}
 	if(!c->complete())
-		output << " complete=\"false\"";
-	output << ">\n";
+		output_ << " complete=\"false\"";
+	output_ << ">\n";
 
 	class_ids_[c.get()] = class_id_counter_;
 	++class_id_counter_;
 
 	if(!c->base_classes().empty())
 	{
-		output << indent(indent_level + 1) << "<base_classes>\n";
+		output_ << indent(indent_level + 1) << "<base_classes>\n";
 		for(auto i = c->base_classes().begin(); i != c->base_classes().end(); ++i)
 			serialize_base_class
 			(
-				output,
 				*i,
 				c->base_class_access(*i),
 				c->is_virtual_base_class(*i),
 				indent_level + 2
 			);
-		output << indent(indent_level + 1) << "</base_classes>\n";
+		output_ << indent(indent_level + 1) << "</base_classes>\n";
 	}
 
 	for(auto i = c->nested_classes().begin(); i != c->nested_classes().end(); ++i)
-		serialize_class(output, *i, indent_level + 1);
+		serialize_class(*i, indent_level + 1);
 
 	for(auto i = c->constructors().begin(); i != c->constructors().end(); ++i)
-		serialize_constructor(output, *i, indent_level + 1);
+		serialize_constructor(*i, indent_level + 1);
 
-	serialize_destructor(output, c->get_destructor(), indent_level + 1);
+	serialize_destructor(c->get_destructor(), indent_level + 1);
 
 	for(auto i = c->operator_functions().begin(); i != c->operator_functions().end(); ++i)
-		serialize_operator_member_function(output, *i, indent_level + 1);
+		serialize_operator_member_function(*i, indent_level + 1);
 
 	for(auto i = c->conversion_functions().begin(); i != c->conversion_functions().end(); ++i)
-		serialize_conversion_function(output, *i, indent_level + 1);
+		serialize_conversion_function(*i, indent_level + 1);
 
 	for(auto i = c->simple_functions().begin(); i != c->simple_functions().end(); ++i)
-		serialize_simple_member_function(output, *i, indent_level + 1);
+		serialize_simple_member_function(*i, indent_level + 1);
 
 	for(auto i = c->variables().begin(); i != c->variables().end(); ++i)
-		serialize_variable(output, *i, indent_level + 1);
+		serialize_variable(*i, indent_level + 1);
 
-	output << indent(indent_level) << "</class>\n";
+	output_ << indent(indent_level) << "</class>\n";
 }
 
 void
 semantic_graph_serializer::serialize_base_class
 (
-	std::ostream& output,
 	std::shared_ptr<const class_> c,
 	const class_::access acc,
 	const bool is_virtual,
 	const unsigned int indent_level
 )
 {
-	output << indent(indent_level) << "<base_class";
-	output << " id=\"c" << class_ids_[c.get()] << "\"";
-	output << attribute(acc);
+	output_ << indent(indent_level) << "<base_class";
+	output_ << " id=\"c" << class_ids_[c.get()] << "\"";
+	output_ << attribute(acc);
 	if(is_virtual)
-		output << " virtual=\"true\"";
-	output << "/>\n";
+		output_ << " virtual=\"true\"";
+	output_ << "/>\n";
 }
 
 void
 semantic_graph_serializer::serialize_constructor
 (
-	std::ostream& output,
 	std::shared_ptr<const constructor> entity,
 	const unsigned int indent_level
 )
 {
-	output << indent(indent_level) << "<constructor";
+	output_ << indent(indent_level) << "<constructor";
 	if(entity->has_enclosing_declarative_region())
 	{
 		std::shared_ptr<class_> enclosing_declarative_region = utility::get<class_>(entity->enclosing_declarative_region());
 
 		class_::access acc = enclosing_declarative_region->member_access(entity);
-		output << attribute(acc);
+		output_ << attribute(acc);
 	}
 	if(entity->variadic())
-		output << " variadic=\"true\"";
+		output_ << " variadic=\"true\"";
 	if(entity->is_inline())
-		output << " inline=\"true\"";
+		output_ << " inline=\"true\"";
 	if(entity->is_explicit())
-		output << " explicit=\"true\"";
+		output_ << " explicit=\"true\"";
 	if(!entity->defined())
-		output << " defined=\"false\"";
-	output << ">\n";
+		output_ << " defined=\"false\"";
+	output_ << ">\n";
 
-	serialize_function_parameter_list(output, entity->parameters(), indent_level + 1);
+	serialize_function_parameter_list(entity->parameters(), indent_level + 1);
 
-	output << indent(indent_level) << "</constructor>\n";
+	output_ << indent(indent_level) << "</constructor>\n";
 }
 
 void
 semantic_graph_serializer::serialize_destructor
 (
-	std::ostream& output,
 	std::shared_ptr<const destructor> entity,
 	const unsigned int indent_level
 )
 {
-	output << indent(indent_level) << "<destructor";
+	output_ << indent(indent_level) << "<destructor";
 
 	assert(entity->has_enclosing_declarative_region());
 	declarative_region_shared_ptr_variant enclosing_declarative_region = entity->enclosing_declarative_region();
 	std::shared_ptr<class_> enclosing_class = utility::get<class_>(enclosing_declarative_region);
 
 	class_::access acc = enclosing_class->member_access(entity);
-	output << attribute(acc);
+	output_ << attribute(acc);
 	if(entity->is_inline())
-		output << " inline=\"true\"";
+		output_ << " inline=\"true\"";
 	if(entity->is_virtual())
-		output << " virtual=\"true\"";
+		output_ << " virtual=\"true\"";
 	if(entity->is_pure())
-		output << " pure=\"true\"";
+		output_ << " pure=\"true\"";
 	if(!entity->defined())
-		output << " defined=\"false\"";
-	output << ">\n";
+		output_ << " defined=\"false\"";
+	output_ << ">\n";
 
-	output << indent(indent_level) << "</destructor>\n";
+	output_ << indent(indent_level) << "</destructor>\n";
 }
 
 void
 semantic_graph_serializer::serialize_operator_member_function
 (
-	std::ostream& output,
 	std::shared_ptr<const operator_member_function> entity,
 	const unsigned int indent_level
 )
 {
-	output << indent(indent_level) << "<operator_function";
-	output << attribute(entity->overloaded_operator());
+	output_ << indent(indent_level) << "<operator_function";
+	output_ << attribute(entity->overloaded_operator());
 
 	assert(entity->has_enclosing_declarative_region());
 	declarative_region_shared_ptr_variant enclosing_declarative_region = entity->enclosing_declarative_region();
 	std::shared_ptr<class_> enclosing_class = utility::get<class_>(enclosing_declarative_region);
 
 	class_::access acc = enclosing_class->member_access(entity);
-	output << attribute(acc);
+	output_ << attribute(acc);
 	if(entity->is_inline())
-		output << " inline=\"true\"";
+		output_ << " inline=\"true\"";
 	if(entity->is_const())
-		output << " const=\"true\"";
+		output_ << " const=\"true\"";
 	if(entity->is_volatile())
-		output << " volatile=\"true\"";
+		output_ << " volatile=\"true\"";
 	if(entity->is_virtual())
-		output << " virtual=\"true\"";
+		output_ << " virtual=\"true\"";
 	if(entity->is_pure())
-		output << " pure=\"true\"";
+		output_ << " pure=\"true\"";
 	if(!entity->defined())
-		output << " defined=\"false\"";
-	output << ">\n";
+		output_ << " defined=\"false\"";
+	output_ << ">\n";
 
-	output << indent(indent_level + 1) << "<return_type>\n";
-	serialize_type(output, entity->return_type(), indent_level + 2);
-	output << indent(indent_level + 1) << "</return_type>\n";
+	output_ << indent(indent_level + 1) << "<return_type>\n";
+	serialize_type(entity->return_type(), indent_level + 2);
+	output_ << indent(indent_level + 1) << "</return_type>\n";
 
-	serialize_function_parameter_list(output, entity->parameters(), indent_level + 1);
+	serialize_function_parameter_list(entity->parameters(), indent_level + 1);
 
-	output << indent(indent_level) << "</operator_function>\n";
+	output_ << indent(indent_level) << "</operator_function>\n";
 }
 
 void
 semantic_graph_serializer::serialize_conversion_function
 (
-	std::ostream& output,
 	std::shared_ptr<const conversion_function> entity,
 	const unsigned int indent_level
 )
 {
-	output << indent(indent_level) << "<conversion_function";
+	output_ << indent(indent_level) << "<conversion_function";
 
 	assert(entity->has_enclosing_declarative_region());
 	declarative_region_shared_ptr_variant enclosing_declarative_region = entity->enclosing_declarative_region();
 	std::shared_ptr<class_> enclosing_class = utility::get<class_>(enclosing_declarative_region);
 
 	class_::access acc = enclosing_class->member_access(entity);
-	output << attribute(acc);
+	output_ << attribute(acc);
 	if(entity->is_inline())
-		output << " inline=\"true\"";
+		output_ << " inline=\"true\"";
 	if(entity->is_const())
-		output << " const=\"true\"";
+		output_ << " const=\"true\"";
 	if(entity->is_volatile())
-		output << " volatile=\"true\"";
+		output_ << " volatile=\"true\"";
 	if(entity->is_virtual())
-		output << " virtual=\"true\"";
+		output_ << " virtual=\"true\"";
 	if(entity->is_pure())
-		output << " pure=\"true\"";
+		output_ << " pure=\"true\"";
 	if(!entity->defined())
-		output << " defined=\"false\"";
-	output << ">\n";
+		output_ << " defined=\"false\"";
+	output_ << ">\n";
 
-	output << indent(indent_level + 1) << "<return_type>\n";
-	serialize_type(output, entity->return_type(), indent_level + 2);
-	output << indent(indent_level + 1) << "</return_type>\n";
+	output_ << indent(indent_level + 1) << "<return_type>\n";
+	serialize_type(entity->return_type(), indent_level + 2);
+	output_ << indent(indent_level + 1) << "</return_type>\n";
 
-	output << indent(indent_level) << "</conversion_function>\n";
+	output_ << indent(indent_level) << "</conversion_function>\n";
 }
 
 void
 semantic_graph_serializer::serialize_simple_member_function
 (
-	std::ostream& output,
 	std::shared_ptr<const simple_member_function> entity,
 	const unsigned int indent_level
 )
 {
-	output << indent(indent_level) << "<simple_function";
-	output << " name=\"" << entity->name() << "\"";
+	output_ << indent(indent_level) << "<simple_function";
+	output_ << " name=\"" << entity->name() << "\"";
 
 	assert(entity->has_enclosing_declarative_region());
 	declarative_region_shared_ptr_variant enclosing_declarative_region = entity->enclosing_declarative_region();
 	std::shared_ptr<class_> enclosing_class = utility::get<class_>(enclosing_declarative_region);
 
 	class_::access acc = enclosing_class->member_access(entity);
-	output << attribute(acc);
+	output_ << attribute(acc);
 	if(entity->variadic())
-		output << " variadic=\"true\"";
+		output_ << " variadic=\"true\"";
 	if(entity->is_inline())
-		output << " inline=\"true\"";
+		output_ << " inline=\"true\"";
 	if(entity->is_static())
-		output << " static=\"true\"";
+		output_ << " static=\"true\"";
 	if(entity->is_const())
-		output << " const=\"true\"";
+		output_ << " const=\"true\"";
 	if(entity->is_volatile())
-		output << " volatile=\"true\"";
+		output_ << " volatile=\"true\"";
 	if(entity->is_virtual())
-		output << " virtual=\"true\"";
+		output_ << " virtual=\"true\"";
 	if(entity->is_pure())
-		output << " pure=\"true\"";
+		output_ << " pure=\"true\"";
 	if(!entity->defined())
-		output << " defined=\"false\"";
-	output << ">\n";
+		output_ << " defined=\"false\"";
+	output_ << ">\n";
 
-	output << indent(indent_level + 1) << "<return_type>\n";
-	serialize_type(output, entity->return_type(), indent_level + 2);
-	output << indent(indent_level + 1) << "</return_type>\n";
+	output_ << indent(indent_level + 1) << "<return_type>\n";
+	serialize_type(entity->return_type(), indent_level + 2);
+	output_ << indent(indent_level + 1) << "</return_type>\n";
 
-	serialize_function_parameter_list(output, entity->parameters(), indent_level + 1);
+	serialize_function_parameter_list(entity->parameters(), indent_level + 1);
 
-	output << indent(indent_level) << "</simple_function>\n";
+	output_ << indent(indent_level) << "</simple_function>\n";
 }
 
 void
 semantic_graph_serializer::serialize_operator_function
 (
-	std::ostream& output,
 	std::shared_ptr<const operator_function> entity,
 	const unsigned int indent_level
 )
 {
-	output << indent(indent_level) << "<operator_function";
-	output << attribute(entity->overloaded_operator());
+	output_ << indent(indent_level) << "<operator_function";
+	output_ << attribute(entity->overloaded_operator());
 	if(entity->is_inline())
-		output << " inline=\"true\"";
+		output_ << " inline=\"true\"";
 	if(entity->is_static())
-		output << " static=\"true\"";
+		output_ << " static=\"true\"";
 	if(!entity->defined())
-		output << " defined=\"false\"";
-	output << ">\n";
+		output_ << " defined=\"false\"";
+	output_ << ">\n";
 
-	output << indent(indent_level + 1) << "<return_type>\n";
-	serialize_type(output, entity->return_type(), indent_level + 2);
-	output << indent(indent_level + 1) << "</return_type>\n";
+	output_ << indent(indent_level + 1) << "<return_type>\n";
+	serialize_type(entity->return_type(), indent_level + 2);
+	output_ << indent(indent_level + 1) << "</return_type>\n";
 
-	serialize_function_parameter_list(output, entity->parameters(), indent_level + 1);
+	serialize_function_parameter_list(entity->parameters(), indent_level + 1);
 
-	output << indent(indent_level) << "</operator_function>\n";
+	output_ << indent(indent_level) << "</operator_function>\n";
 }
 
 void
 semantic_graph_serializer::serialize_simple_function
 (
-	std::ostream& output,
 	std::shared_ptr<const simple_function> entity,
 	const unsigned int indent_level
 )
 {
-	output << indent(indent_level) << "<simple_function";
-	output << " name=\"" << entity->name() << "\"";
+	output_ << indent(indent_level) << "<simple_function";
+	output_ << " name=\"" << entity->name() << "\"";
 	if(entity->variadic())
-		output << " variadic=\"true\"";
+		output_ << " variadic=\"true\"";
 	if(entity->is_static())
-		output << " static=\"true\"";
+		output_ << " static=\"true\"";
 	if(entity->is_inline())
-		output << " inline=\"true\"";
+		output_ << " inline=\"true\"";
 	if(!entity->defined())
-		output << " defined=\"false\"";
-	output << ">\n";
+		output_ << " defined=\"false\"";
+	output_ << ">\n";
 
-	output << indent(indent_level + 1) << "<return_type>\n";
-	serialize_type(output, entity->return_type(), indent_level + 2);
-	output << indent(indent_level + 1) << "</return_type>\n";
+	output_ << indent(indent_level + 1) << "<return_type>\n";
+	serialize_type(entity->return_type(), indent_level + 2);
+	output_ << indent(indent_level + 1) << "</return_type>\n";
 
-	serialize_function_parameter_list(output, entity->parameters(), indent_level + 1);
+	serialize_function_parameter_list(entity->parameters(), indent_level + 1);
 
-	output << indent(indent_level) << "</simple_function>\n";
+	output_ << indent(indent_level) << "</simple_function>\n";
+}
+
+void
+semantic_graph_serializer::serialize_function_type
+(
+	const function_type& entity,
+	const unsigned int indent_level
+)
+{
+	output_ << indent(indent_level) << "<function_type";
+	if(entity.parent_class())
+		output_ << " class_id=\"c" << class_ids_[entity.parent_class()] << "\"";
+	if(entity.variadic())
+		output_ << " variadic=\"true\"";
+	if(entity.const_qualified())
+		output_ << " const=\"true\"";
+	if(entity.volatile_qualified())
+		output_ << " volatile=\"true\"";
+	output_ << ">\n";
+
+	output_ << indent(indent_level + 1) << "<return_type>\n";
+	serialize_type(entity.return_type(), indent_level + 2);
+	output_ << indent(indent_level + 1) << "</return_type>\n";
+
+	const std::vector<type_variant>& parameter_types = entity.parameter_types();
+	output_ << indent(indent_level + 1) << "<parameter_types>\n";
+	for(auto i = parameter_types.begin(); i != parameter_types.end(); ++i)
+	{
+		const type_variant& type = *i;
+		serialize_type(type, indent_level + 2);
+	}
+	output_ << indent(indent_level + 1) << "</parameter_types>\n";
+
+	output_ << indent(indent_level) << "</function_type>\n";
 }
 
 void
 semantic_graph_serializer::serialize_function_parameter_list
 (
-	std::ostream& output,
 	const function_parameter_list& entity,
 	const unsigned int indent_level
 )
 {
 	if(!entity.empty())
 	{
-		output << indent(indent_level) << "<parameters>\n";
+		output_ << indent(indent_level) << "<parameters>\n";
 		for(auto i = entity.begin(); i != entity.end(); ++i)
 		{
-			serialize_function_parameter(output, *i, indent_level + 1);
+			serialize_function_parameter(*i, indent_level + 1);
 		}
-		output << indent(indent_level) << "</parameters>\n";
+		output_ << indent(indent_level) << "</parameters>\n";
 	}
 }
 
 void
 semantic_graph_serializer::serialize_function_parameter
 (
-	std::ostream& output,
 	const std::shared_ptr<const function_parameter> p,
 	const unsigned int indent_level
 )
 {
-	output << indent(indent_level) << "<parameter";
+	output_ << indent(indent_level) << "<parameter";
 	if(!p->name().empty())
-		output << " name=\"" << p->name() << "\"";
-	output << ">\n";
-	output << indent(indent_level + 1) << "<type>\n";
-	serialize_type(output, p->type(), indent_level + 2);
-	output << indent(indent_level + 1) << "</type>\n";
-	output << indent(indent_level) << "</parameter>\n";
+		output_ << " name=\"" << p->name() << "\"";
+	output_ << ">\n";
+	output_ << indent(indent_level + 1) << "<type>\n";
+	serialize_type(p->type(), indent_level + 2);
+	output_ << indent(indent_level + 1) << "</type>\n";
+	output_ << indent(indent_level) << "</parameter>\n";
 }
 
 void
 semantic_graph_serializer::serialize_variable
 (
-	std::ostream& output,
 	std::shared_ptr<const variable> entity,
 	const unsigned int indent_level
 )
 {
-	output << indent(indent_level) << "<variable";
-	output << " name=\"" << entity->name() << "\"";
+	output_ << indent(indent_level) << "<variable";
+	output_ << " name=\"" << entity->name() << "\"";
 	//extra attributes if the function is a class member function
 	if(entity->has_enclosing_declarative_region())
 	{
@@ -548,30 +560,29 @@ semantic_graph_serializer::serialize_variable
 			std::shared_ptr<class_> enclosing_declarative_region = *opt_class;
 
 			class_::access acc = enclosing_declarative_region->member_access(entity);
-			output << attribute(acc);
+			output_ << attribute(acc);
 			if(enclosing_declarative_region->is_mutable_member_variable(entity))
-				output << " mutable=\"true\"";
+				output_ << " mutable=\"true\"";
 		}
 	}
 	if(entity->is_static())
-		output << " static=\"true\"";
-	output << ">\n";
-	output << indent(indent_level + 1) << "<type>\n";
-	serialize_type(output, entity->type(), indent_level + 2);
-	output << indent(indent_level + 1) << "</type>\n";
-	output << indent(indent_level) << "</variable>\n";
+		output_ << " static=\"true\"";
+	output_ << ">\n";
+	output_ << indent(indent_level + 1) << "<type>\n";
+	serialize_type(entity->type(), indent_level + 2);
+	output_ << indent(indent_level + 1) << "</type>\n";
+	output_ << indent(indent_level) << "</variable>\n";
 }
 
 void
 semantic_graph_serializer::serialize_typedef
 (
-	std::ostream& output,
 	std::shared_ptr<const typedef_> entity,
 	const unsigned int indent_level
 )
 {
-	output << indent(indent_level) << "<typedef";
-	output << " name=\"" << entity->name() << "\"";
+	output_ << indent(indent_level) << "<typedef";
+	output_ << " name=\"" << entity->name() << "\"";
 	//extra attributes if the typedef is member of a class
 	if(entity->has_enclosing_declarative_region())
 	{
@@ -581,28 +592,27 @@ semantic_graph_serializer::serialize_typedef
 			std::shared_ptr<class_> enclosing_declarative_region = *opt_class;
 
 			class_::access acc = enclosing_declarative_region->member_access(entity);
-			output << attribute(acc);
+			output_ << attribute(acc);
 		}
 	}
-	output << ">\n";
-	output << indent(indent_level + 1) << "<type>\n";
-	serialize_type(output, entity->type(), indent_level + 2);
-	output << indent(indent_level + 1) << "</type>\n";
-	output << indent(indent_level) << "</typedef>\n";
+	output_ << ">\n";
+	output_ << indent(indent_level + 1) << "<type>\n";
+	serialize_type(entity->type(), indent_level + 2);
+	output_ << indent(indent_level + 1) << "</type>\n";
+	output_ << indent(indent_level) << "</typedef>\n";
 }
 
 void
 semantic_graph_serializer::serialize_namespace_alias
 (
-	std::ostream& output,
 	std::shared_ptr<const namespace_alias> entity,
 	const unsigned int indent_level
 )
 {
-	output << indent(indent_level) << "<namespace_alias";
-	output << " name=\"" << entity->name() << "\"";
-	output << " id=\"n" << namespace_ids_[entity->referred_namespace().get()] << "\"";
-	output << "/>\n";
+	output_ << indent(indent_level) << "<namespace_alias";
+	output_ << " name=\"" << entity->name() << "\"";
+	output_ << " id=\"n" << namespace_ids_[entity->referred_namespace().get()] << "\"";
+	output_ << "/>\n";
 }
 
 std::string
@@ -776,8 +786,8 @@ serialize_semantic_graph
 	std::ostream& output
 )
 {
-	semantic_graph_serializer serializer;
-	serializer.serialize_namespace(output, graph);
+	semantic_graph_serializer serializer(output);
+	serializer.serialize_namespace(graph);
 }
 
 } //namespace cpp2xml

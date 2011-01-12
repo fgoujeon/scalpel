@@ -30,6 +30,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 class array;
 class class_;
 class cv_qualified_type;
+class function_type;
 class pointer;
 class reference;
 
@@ -38,6 +39,7 @@ typedef
 	<
 		array,
 		fundamental_type,
+		function_type,
 		const class_*,
 		cv_qualified_type,
 		pointer,
