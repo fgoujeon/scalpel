@@ -206,6 +206,9 @@ semantic_graph_serializer::serialize_class
 	for(auto i = c->nested_classes().begin(); i != c->nested_classes().end(); ++i)
 		serialize_class(*i, indent_level + 1);
 
+	for(auto i = c->typedefs().begin(); i != c->typedefs().end(); ++i)
+		serialize_typedef(*i, indent_level + 1);
+
 	for(auto i = c->constructors().begin(); i != c->constructors().end(); ++i)
 		serialize_constructor(*i, indent_level + 1);
 

@@ -67,41 +67,42 @@ create_entity
 		{
 			if(opt_type)
 			{
-				if(is_class_member)
+				if(has_typedef_specifier)
 				{
-					return std::make_shared<semantic_entities::simple_member_function>
+					return std::make_shared<semantic_entities::typedef_>
 					(
 						syntax_node_analysis::get_identifier(declarator_node).value(),
-						*opt_type,
-						create_parameters(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
-						syntax_node_analysis::has_ellipsis(declarator_node),
-						has_inline_specifier,
-						has_static_specifier,
-						syntax_node_analysis::has_const_function_qualifier(declarator_node),
-						syntax_node_analysis::has_volatile_function_qualifier(declarator_node),
-						has_virtual_specifier,
-						has_pure_specifier
+						//the bracketed qualifiers qualify the function type, not the return type
+						qualify_type_with_bracketed_qualifiers
+						(
+							function_type
+							(
+								*opt_type, //return type
+								create_parameter_types(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
+								syntax_node_analysis::has_ellipsis(declarator_node),
+								syntax_node_analysis::has_const_function_qualifier(declarator_node),
+								syntax_node_analysis::has_volatile_function_qualifier(declarator_node)
+							),
+							declarator_node
+						)
 					);
 				}
 				else
 				{
-					if(has_typedef_specifier)
+					if(is_class_member)
 					{
-						return std::make_shared<semantic_entities::typedef_>
+						return std::make_shared<semantic_entities::simple_member_function>
 						(
 							syntax_node_analysis::get_identifier(declarator_node).value(),
-							qualify_type_with_bracketed_qualifiers
-							(
-								function_type
-								(
-									*opt_type, //return type
-									create_parameter_types(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
-									syntax_node_analysis::has_ellipsis(declarator_node),
-									syntax_node_analysis::has_const_function_qualifier(declarator_node),
-									syntax_node_analysis::has_volatile_function_qualifier(declarator_node)
-								),
-								declarator_node
-							)
+							*opt_type,
+							create_parameters(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
+							syntax_node_analysis::has_ellipsis(declarator_node),
+							has_inline_specifier,
+							has_static_specifier,
+							syntax_node_analysis::has_const_function_qualifier(declarator_node),
+							syntax_node_analysis::has_volatile_function_qualifier(declarator_node),
+							has_virtual_specifier,
+							has_pure_specifier
 						);
 					}
 					else
@@ -214,12 +215,63 @@ create_entity
 			}
 			else
 			{
-				return std::make_shared<semantic_entities::variable>
-				(
-					syntax_node_analysis::get_identifier(declarator_node).value(),
-					*opt_type,
-					has_static_specifier
-				);
+				if(const function_type* opt_function_type = utility::get<function_type>(&*opt_type))
+				{
+					//the declaration looks like:
+					//  typedef void fun_t(int);
+					//  fun_t f;
+
+					const function_type& ftype = *opt_function_type;
+					const std::vector<type_variant>& parameter_types = ftype.parameter_types();
+
+					function_parameter_list parameter_list;
+					for(auto i = parameter_types.begin(); i != parameter_types.end(); ++i)
+					{
+						const type_variant& parameter_type = *i;
+						parameter_list.push_back
+						(
+							std::make_shared<function_parameter>(parameter_type)
+						);
+					}
+
+					if(is_class_member)
+					{
+						return std::make_shared<semantic_entities::simple_member_function>
+						(
+							syntax_node_analysis::get_identifier(declarator_node).value(),
+							ftype.return_type(),
+							std::move(parameter_list),
+							ftype.variadic(),
+							has_inline_specifier,
+							has_static_specifier,
+							ftype.const_qualified(),
+							ftype.volatile_qualified(),
+							has_virtual_specifier,
+							has_pure_specifier
+						);
+					}
+					else
+					{
+						return std::make_shared<semantic_entities::simple_function>
+						(
+							syntax_node_analysis::get_identifier(declarator_node).value(),
+							ftype.return_type(),
+							std::move(parameter_list),
+							ftype.variadic(),
+							has_inline_specifier,
+							has_static_specifier
+						);
+					}
+				}
+				else
+				{
+					return std::make_shared<semantic_entities::variable>
+					(
+						syntax_node_analysis::get_identifier(declarator_node).value(),
+						*opt_type,
+						has_static_specifier
+					);
+				}
 			}
 		}
 	}

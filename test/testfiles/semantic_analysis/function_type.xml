@@ -1,15 +1,61 @@
 <namespace id="n0">
- <typedef name="predicate">
+ <class name="c" id="c0">
+  <typedef name="const_fun_t" access="private">
+   <type>
+    <function_type const="true">
+     <return_type>
+      <fundamental_type type="int"/>
+     </return_type>
+     <parameter_types>
+     </parameter_types>
+    </function_type>
+   </type>
+  </typedef>
+  <destructor access="public" defined="false">
+  </destructor>
+  <simple_function name="f" access="private">
+   <return_type>
+    <fundamental_type type="int"/>
+   </return_type>
+  </simple_function>
+  <simple_function name="g" access="private" static="true" defined="false">
+   <return_type>
+    <fundamental_type type="int"/>
+   </return_type>
+  </simple_function>
+  <simple_function name="h" access="private" const="true" defined="false">
+   <return_type>
+    <fundamental_type type="int"/>
+   </return_type>
+  </simple_function>
+ </class>
+ <typedef name="fun_t">
   <type>
    <function_type>
     <return_type>
-     <fundamental_type type="bool"/>
+     <fundamental_type type="int"/>
     </return_type>
     <parameter_types>
-     <fundamental_type type="int"/>
-     <fundamental_type type="int"/>
     </parameter_types>
    </function_type>
   </type>
  </typedef>
+ <simple_function name="f" defined="false">
+  <return_type>
+   <fundamental_type type="int"/>
+  </return_type>
+ </simple_function>
+ <variable name="f_ptr">
+  <type>
+   <pointer>
+    <function_type>
+     <return_type>
+      <fundamental_type type="int"/>
+     </return_type>
+     <parameter_types>
+     </parameter_types>
+    </function_type>
+   </pointer>
+  </type>
+ </variable>
 </namespace>

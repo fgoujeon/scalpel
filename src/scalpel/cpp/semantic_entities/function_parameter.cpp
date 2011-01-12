@@ -30,6 +30,11 @@ function_parameter::function_parameter(const type_variant& type, const std::stri
 {
 }
 
+function_parameter::function_parameter(const type_variant& type):
+	type_(type)
+{
+}
+
 function_parameter::function_parameter(const function_parameter& o):
 	type_(o.type_),
 	name_(o.name_)

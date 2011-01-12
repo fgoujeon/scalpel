@@ -32,6 +32,9 @@ class function_parameter
 	public:
 		function_parameter(const type_variant& type, const std::string& name);
 
+		explicit
+		function_parameter(const type_variant& type);
+
 		function_parameter(const function_parameter& o);
 
 		function_parameter(function_parameter&& o);
