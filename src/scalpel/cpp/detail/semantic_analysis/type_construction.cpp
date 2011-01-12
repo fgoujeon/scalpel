@@ -221,8 +221,17 @@ qualify_type
 		qualify_type(type, ptr_operator_seq_node);
 	}
 
+	const direct_declarator& direct_declarator_node = get_direct_declarator(declarator_node);
+
+	//qualify type with hypothetical pointers and/or reference
+	const direct_declarator_first_part& first_part_node = get_first_part(direct_declarator_node);
+	if(const boost::optional<const bracketed_declarator&> opt_bracketed_declarator_node = get<bracketed_declarator>(&first_part_node))
+	{
+		const bracketed_declarator& bracketed_declarator_node = *opt_bracketed_declarator_node;
+		qualify_type(type, get_declarator(bracketed_declarator_node));
+	}
+
 	//qualify type with hypothetical arrays
-	auto direct_declarator_node = get_direct_declarator(declarator_node);
 	if(auto opt_last_part_seq_node = get_last_part_seq(direct_declarator_node))
 	{
 		auto last_part_seq_node = *opt_last_part_seq_node;

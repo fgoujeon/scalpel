@@ -400,6 +400,14 @@ basic_variant<TypeTraitT, T, Ts...>::get(const T2*& object) const
 }
 
 
+
+template<template<typename> class TypeTraitT, typename... Ts>
+bool
+operator!=(const basic_variant<TypeTraitT, Ts...>& lhs, const basic_variant<TypeTraitT, Ts...>& rhs)
+{
+	return !(lhs == rhs);
+}
+
 template<typename ReturnT, template<typename> class TypeTraitT, typename... Ts>
 typename TypeTraitT<ReturnT>::type*
 get(basic_variant<TypeTraitT, Ts...>* var)

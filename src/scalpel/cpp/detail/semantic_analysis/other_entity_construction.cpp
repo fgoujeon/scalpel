@@ -46,12 +46,18 @@ create_entity
 )
 {
 	//qualify type with hypothetical pointers, references and arrays
-	if(syntax_node_analysis::has_type_qualifiers(declarator_node))
+	if(!opt_type)
 	{
-		//if there's no type to qualify, there's an error
-		if(!opt_type)
-			throw std::runtime_error("create_entity error 1");
+		type_variant test_type = fundamental_type::VOID;
+		type_variant old_test_type = test_type;
+		qualify_type(test_type, declarator_node);
 
+		//if there's no type to qualify, there's an error
+		if(test_type != old_test_type)
+			throw std::runtime_error("create_entity error 1");
+	}
+	else
+	{
 		qualify_type(*opt_type, declarator_node);
 	}
 
