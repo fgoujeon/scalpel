@@ -1,0 +1,17 @@
+<namespace id="n0">
+ <typedef name="fun_ptr">
+  <type>
+   <cv_qualified_type const="true">
+    <pointer>
+     <function_type>
+      <return_type>
+       <fundamental_type type="int"/>
+      </return_type>
+      <parameter_types>
+      </parameter_types>
+     </function_type>
+    </pointer>
+   </cv_qualified_type>
+  </type>
+ </typedef>
+</namespace>

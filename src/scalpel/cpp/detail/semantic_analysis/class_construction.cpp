@@ -290,7 +290,7 @@ fill_class
 
 		//qualify type
 		if(opt_unqualified_type)
-			qualify_type(*opt_unqualified_type, decl_specifier_seq_node);
+			opt_unqualified_type = qualify_type(*opt_unqualified_type, decl_specifier_seq_node);
 	}
 
 	if

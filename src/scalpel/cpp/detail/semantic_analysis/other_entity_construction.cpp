@@ -45,20 +45,20 @@ create_entity
 	const bool is_class_member
 )
 {
-	//qualify type with hypothetical pointers, references and arrays
+	//if there's no type, check whether there's no type qualification
 	if(!opt_type)
 	{
 		type_variant test_type = fundamental_type::VOID;
-		type_variant old_test_type = test_type;
-		qualify_type(test_type, declarator_node);
+		type_variant new_test_type = qualify_type(test_type, declarator_node);
 
 		//if there's no type to qualify, there's an error
-		if(test_type != old_test_type)
+		if(test_type != new_test_type)
 			throw std::runtime_error("create_entity error 1");
 	}
-	else
+
+	if(opt_type)
 	{
-		qualify_type(*opt_type, declarator_node);
+		opt_type = qualify_type_with_pointers(*opt_type, declarator_node);
 	}
 
 	switch(syntax_node_analysis::get_declarator_type(declarator_node))
@@ -90,13 +90,17 @@ create_entity
 						return std::make_shared<semantic_entities::typedef_>
 						(
 							syntax_node_analysis::get_identifier(declarator_node).value(),
-							function_type
+							qualify_type_with_bracketed_qualifiers
 							(
-								*opt_type, //return type
-								create_parameter_types(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
-								syntax_node_analysis::has_ellipsis(declarator_node),
-								syntax_node_analysis::has_const_function_qualifier(declarator_node),
-								syntax_node_analysis::has_volatile_function_qualifier(declarator_node)
+								function_type
+								(
+									*opt_type, //return type
+									create_parameter_types(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
+									syntax_node_analysis::has_ellipsis(declarator_node),
+									syntax_node_analysis::has_const_function_qualifier(declarator_node),
+									syntax_node_analysis::has_volatile_function_qualifier(declarator_node)
+								),
+								declarator_node
 							)
 						);
 					}
@@ -196,6 +200,9 @@ create_entity
 		{
 			if(!opt_type)
 				throw std::runtime_error("create_entity error 4");
+
+			opt_type = qualify_type_with_bracketed_qualifiers(*opt_type, declarator_node);
+			opt_type = qualify_type_with_arrays(*opt_type, declarator_node);
 
 			if(has_typedef_specifier)
 			{

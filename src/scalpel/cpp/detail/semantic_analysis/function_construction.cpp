@@ -102,7 +102,7 @@ create_function
 
 		//qualify type
 		if(opt_unqualified_type)
-			qualify_type(*opt_unqualified_type, decl_specifier_seq_node);
+			opt_unqualified_type = qualify_type(*opt_unqualified_type, decl_specifier_seq_node);
 	}
 
 
@@ -343,7 +343,7 @@ get_conversion_function_type
 	if(const optional_node<ptr_operator_seq>& opt_ptr_operator_seq_node = get_ptr_operator_seq(conversion_function_id_node))
 	{
 		const ptr_operator_seq& ptr_operator_seq_node = *opt_ptr_operator_seq_node;
-		qualify_type(type, ptr_operator_seq_node);
+		type = qualify_type(type, ptr_operator_seq_node);
 	}
 
 	return type;
@@ -382,30 +382,26 @@ create_parameters
 		auto decl_specifier_seq_node = get_decl_specifier_seq(parameter_declaration_node);
 
 		semantic_entities::type_variant type =
-			create_type
+			qualify_type
 			(
-				decl_specifier_seq_node,
-				current_declarative_region
+				create_type
+				(
+					decl_specifier_seq_node,
+					current_declarative_region
+				),
+				decl_specifier_seq_node
 			)
 		;
-
-		qualify_type
-		(
-			type,
-			decl_specifier_seq_node
-		);
 
 		if(auto opt_declarator_node = get_declarator(parameter_declaration_node))
 		{
 			auto declarator_node = *opt_declarator_node;
 
-			qualify_type(type, declarator_node);
-
 			parameters.push_back
 			(
 				std::make_shared<function_parameter>
 				(
-					type,
+					qualify_type(type, declarator_node),
 					syntax_node_analysis::get_identifier(declarator_node).value()
 				)
 			);
@@ -416,7 +412,7 @@ create_parameters
 
 			if(boost::optional<const ptr_operator_seq&> opt_ptr_operator_seq_node = get<ptr_operator_seq>(&abstract_declarator_node))
 			{
-				qualify_type(type, *opt_ptr_operator_seq_node);
+				type = qualify_type(type, *opt_ptr_operator_seq_node);
 			}
 			else if(boost::optional<const direct_abstract_declarator&> opt_direct_abstract_declarator_node = get<direct_abstract_declarator>(&abstract_declarator_node))
 			{

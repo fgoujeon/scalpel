@@ -165,10 +165,10 @@ create_type
 	}
 }
 
-void
+semantic_entities::type_variant
 qualify_type
 (
-	semantic_entities::type_variant& type,
+	semantic_entities::type_variant type,
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node
 )
 {
@@ -205,33 +205,66 @@ qualify_type
 		type = cv_qualified_type(type, cv_qualified_type::qualification_type::CONST);
 	else if(volatile_qualified)
 		type = cv_qualified_type(type, cv_qualified_type::qualification_type::VOLATILE);
+
+	return type;
 }
 
-void
+semantic_entities::type_variant
 qualify_type
 (
-	semantic_entities::type_variant& type,
+	semantic_entities::type_variant type,
 	const syntax_nodes::declarator& declarator_node
 )
 {
-	//qualify type with hypothetical pointers and/or reference
+	type = qualify_type_with_pointers(type, declarator_node);
+	type = qualify_type_with_bracketed_qualifiers(type, declarator_node);
+	type = qualify_type_with_arrays(type, declarator_node);
+
+	return type;
+}
+
+semantic_entities::type_variant
+qualify_type_with_pointers
+(
+	semantic_entities::type_variant type,
+	const syntax_nodes::declarator& declarator_node
+)
+{
 	if(auto opt_ptr_operator_seq_node = get_ptr_operator_seq(declarator_node))
 	{
 		auto ptr_operator_seq_node = *opt_ptr_operator_seq_node;
-		qualify_type(type, ptr_operator_seq_node);
+		type = qualify_type(type, ptr_operator_seq_node);
 	}
 
-	const direct_declarator& direct_declarator_node = get_direct_declarator(declarator_node);
+	return type;
+}
 
-	//qualify type with hypothetical pointers and/or reference
+semantic_entities::type_variant
+qualify_type_with_bracketed_qualifiers
+(
+	semantic_entities::type_variant type,
+	const syntax_nodes::declarator& declarator_node
+)
+{
+	const direct_declarator& direct_declarator_node = get_direct_declarator(declarator_node);
 	const direct_declarator_first_part& first_part_node = get_first_part(direct_declarator_node);
 	if(const boost::optional<const bracketed_declarator&> opt_bracketed_declarator_node = get<bracketed_declarator>(&first_part_node))
 	{
 		const bracketed_declarator& bracketed_declarator_node = *opt_bracketed_declarator_node;
-		qualify_type(type, get_declarator(bracketed_declarator_node));
+		type = qualify_type(type, get_declarator(bracketed_declarator_node));
 	}
 
-	//qualify type with hypothetical arrays
+	return type;
+}
+
+semantic_entities::type_variant
+qualify_type_with_arrays
+(
+	semantic_entities::type_variant type,
+	const syntax_nodes::declarator& declarator_node
+)
+{
+	const direct_declarator& direct_declarator_node = get_direct_declarator(declarator_node);
 	if(auto opt_last_part_seq_node = get_last_part_seq(direct_declarator_node))
 	{
 		auto last_part_seq_node = *opt_last_part_seq_node;
@@ -257,12 +290,15 @@ qualify_type
 			}
 		}
 	}
+
+	return type;
 }
 
-void
+
+semantic_entities::type_variant
 qualify_type
 (
-	semantic_entities::type_variant& type,
+	semantic_entities::type_variant type,
 	const syntax_nodes::ptr_operator_seq& ptr_operator_seq_node
 )
 {
@@ -311,6 +347,8 @@ qualify_type
 			type = reference(type);
 		}
 	}
+
+	return type;
 }
 
 semantic_entities::fundamental_type

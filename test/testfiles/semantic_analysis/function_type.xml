@@ -1,0 +1,15 @@
+<namespace id="n0">
+ <typedef name="predicate">
+  <type>
+   <function_type>
+    <return_type>
+     <fundamental_type type="bool"/>
+    </return_type>
+    <parameter_types>
+     <fundamental_type type="int"/>
+     <fundamental_type type="int"/>
+    </parameter_types>
+   </function_type>
+  </type>
+ </typedef>
+</namespace>
