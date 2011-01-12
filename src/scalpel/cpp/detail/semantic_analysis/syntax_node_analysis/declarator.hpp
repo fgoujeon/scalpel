@@ -73,6 +73,12 @@ has_const_function_qualifier(const syntax_nodes::declarator& declarator_node);
 bool
 has_volatile_function_qualifier(const syntax_nodes::declarator& declarator_node);
 
+bool
+has_type_qualifiers(const syntax_nodes::declarator& declarator_node);
+
+bool
+has_bracketed_type_qualifiers(const syntax_nodes::declarator& declarator_node);
+
 }}}}} //namespace scalpel::cpp::detail::semantic_analysis::syntax_node_analysis
 
 #include "declarator.ipp"

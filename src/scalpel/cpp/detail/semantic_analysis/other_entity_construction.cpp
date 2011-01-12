@@ -45,15 +45,10 @@ create_entity
 	const bool is_class_member
 )
 {
-	//if there's no type, check whether there's no type qualification
-	if(!opt_type)
+	//if there are qualifiers but no type to qualify, there's an error
+	if(!opt_type && syntax_node_analysis::has_type_qualifiers(declarator_node))
 	{
-		type_variant test_type = fundamental_type::VOID;
-		type_variant new_test_type = qualify_type(test_type, declarator_node);
-
-		//if there's no type to qualify, there's an error
-		if(test_type != new_test_type)
-			throw std::runtime_error("create_entity error 1");
+		throw std::runtime_error("create_entity error 1");
 	}
 
 	if(opt_type)
@@ -89,33 +84,56 @@ create_entity
 				}
 				else
 				{
-					if(is_class_member)
+					if(syntax_node_analysis::has_bracketed_type_qualifiers(declarator_node))
 					{
-						return std::make_shared<semantic_entities::simple_member_function>
+						return std::make_shared<semantic_entities::variable>
 						(
 							syntax_node_analysis::get_identifier(declarator_node).value(),
-							*opt_type,
-							create_parameters(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
-							syntax_node_analysis::has_ellipsis(declarator_node),
-							has_inline_specifier,
-							has_static_specifier,
-							syntax_node_analysis::has_const_function_qualifier(declarator_node),
-							syntax_node_analysis::has_volatile_function_qualifier(declarator_node),
-							has_virtual_specifier,
-							has_pure_specifier
+							qualify_type_with_bracketed_qualifiers
+							(
+								function_type
+								(
+									*opt_type, //return type
+									create_parameter_types(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
+									syntax_node_analysis::has_ellipsis(declarator_node),
+									syntax_node_analysis::has_const_function_qualifier(declarator_node),
+									syntax_node_analysis::has_volatile_function_qualifier(declarator_node)
+								),
+								declarator_node
+							),
+							has_static_specifier
 						);
 					}
 					else
 					{
-						return std::make_shared<semantic_entities::simple_function>
-						(
-							syntax_node_analysis::get_identifier(declarator_node).value(),
-							*opt_type,
-							create_parameters(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
-							syntax_node_analysis::has_ellipsis(declarator_node),
-							has_inline_specifier,
-							has_static_specifier
-						);
+						if(is_class_member)
+						{
+							return std::make_shared<semantic_entities::simple_member_function>
+							(
+								syntax_node_analysis::get_identifier(declarator_node).value(),
+								*opt_type,
+								create_parameters(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
+								syntax_node_analysis::has_ellipsis(declarator_node),
+								has_inline_specifier,
+								has_static_specifier,
+								syntax_node_analysis::has_const_function_qualifier(declarator_node),
+								syntax_node_analysis::has_volatile_function_qualifier(declarator_node),
+								has_virtual_specifier,
+								has_pure_specifier
+							);
+						}
+						else
+						{
+							return std::make_shared<semantic_entities::simple_function>
+							(
+								syntax_node_analysis::get_identifier(declarator_node).value(),
+								*opt_type,
+								create_parameters(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
+								syntax_node_analysis::has_ellipsis(declarator_node),
+								has_inline_specifier,
+								has_static_specifier
+							);
+						}
 					}
 				}
 			}

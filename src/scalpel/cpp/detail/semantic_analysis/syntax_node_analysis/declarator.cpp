@@ -486,5 +486,57 @@ has_volatile_function_qualifier(const syntax_nodes::declarator& declarator_node)
 	return false;
 }
 
+bool
+has_type_qualifiers(const syntax_nodes::declarator& declarator_node)
+{
+	//pointers and/or references
+	if(auto opt_ptr_operator_seq_node = get_ptr_operator_seq(declarator_node))
+	{
+		return true;
+	}
+
+	//bracketed qualifiers
+	if(has_bracketed_type_qualifiers(declarator_node))
+	{
+		return true;
+	}
+
+	//arrays
+	const direct_declarator& direct_declarator_node = get_direct_declarator(declarator_node);
+	if(auto opt_last_part_seq_node = get_last_part_seq(direct_declarator_node))
+	{
+		auto last_part_seq_node = *opt_last_part_seq_node;
+		for
+		(
+			auto i = last_part_seq_node.begin();
+			i != last_part_seq_node.end();
+			++i
+		)
+		{
+			auto last_part_node = i->main_node();
+			if(auto opt_array_part_node = syntax_nodes::get<syntax_nodes::direct_declarator_array_part>(&last_part_node))
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+bool
+has_bracketed_type_qualifiers(const syntax_nodes::declarator& declarator_node)
+{
+	const direct_declarator& direct_declarator_node = get_direct_declarator(declarator_node);
+	const direct_declarator_first_part& first_part_node = get_first_part(direct_declarator_node);
+	if(const boost::optional<const bracketed_declarator&> opt_bracketed_declarator_node = get<bracketed_declarator>(&first_part_node))
+	{
+		const bracketed_declarator& bracketed_declarator_node = *opt_bracketed_declarator_node;
+		return has_type_qualifiers(get_declarator(bracketed_declarator_node));
+	}
+
+	return false;
+}
+
 }}}}} //namespace scalpel::cpp::detail::semantic_analysis::syntax_node_analysis
 
