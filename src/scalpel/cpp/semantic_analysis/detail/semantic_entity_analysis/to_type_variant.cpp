@@ -18,37 +18,33 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "semantic_analysis.hpp"
-#include "semantic_analysis/detail/namespace_construction.hpp"
-#include <iostream>
-#include <stdexcept>
+#include "to_type_variant.hpp"
 
-namespace scalpel { namespace cpp
+namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail { namespace semantic_entity_analysis
 {
 
-namespace semantic_analysis
-{
-
-using namespace syntax_nodes;
 using namespace semantic_entities;
 
-std::shared_ptr<semantic_graph>
-analyze(const syntax_tree& tree)
+struct: public utility::static_visitor<type_variant>
 {
-	//create semantic graph
-	std::shared_ptr<namespace_> global_namespace = namespace_::make_shared();
-
-	auto opt_declaration_seq_node = get_declaration_seq(tree);
-	if(opt_declaration_seq_node)
+	type_variant
+	operator()(std::shared_ptr<class_> t) const
 	{
-		auto declaration_seq_node = *opt_declaration_seq_node;
-		cpp::semantic_analysis::detail::fill_namespace(global_namespace, declaration_seq_node);
+		return type_variant(static_cast<const class_*>(t.get()));
 	}
 
-	return global_namespace;
+	type_variant
+	operator()(std::shared_ptr<typedef_> t) const
+	{
+		return t->type();
+	}
+} to_type_variant_impl;
+
+type_variant
+to_type_variant(const utility::shared_ptr_variant<semantic_entities::class_, semantic_entities::typedef_>::type& var)
+{
+	return utility::apply_visitor(to_type_variant_impl, var);
 }
 
-} //namespace semantic_analysis
-
-}} //namespace scalpel::cpp
+}}}}} //namespace scalpel::cpp::semantic_analysis::detail::semantic_entity_analysis
 

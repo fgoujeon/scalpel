@@ -18,37 +18,31 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "semantic_analysis.hpp"
-#include "semantic_analysis/detail/namespace_construction.hpp"
-#include <iostream>
-#include <stdexcept>
+#include "class_specifier.hpp"
 
-namespace scalpel { namespace cpp
-{
-
-namespace semantic_analysis
+namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail { namespace syntax_node_analysis
 {
 
 using namespace syntax_nodes;
-using namespace semantic_entities;
 
-std::shared_ptr<semantic_graph>
-analyze(const syntax_tree& tree)
+std::string
+get_identifier(const syntax_nodes::class_specifier& class_specifier_node)
 {
-	//create semantic graph
-	std::shared_ptr<namespace_> global_namespace = namespace_::make_shared();
+	std::string class_name;
 
-	auto opt_declaration_seq_node = get_declaration_seq(tree);
-	if(opt_declaration_seq_node)
+	const optional_node<identifier_or_template_id>& opt_id_or_templ = get_identifier_or_template_id(get_class_head(class_specifier_node));
+	if(opt_id_or_templ)
 	{
-		auto declaration_seq_node = *opt_declaration_seq_node;
-		cpp::semantic_analysis::detail::fill_namespace(global_namespace, declaration_seq_node);
+		const boost::optional<const identifier&> id = get<identifier>(&*opt_id_or_templ);
+
+		if(id)
+		{
+			class_name = id->value();
+		}
 	}
 
-	return global_namespace;
+	return class_name;
 }
 
-} //namespace semantic_analysis
-
-}} //namespace scalpel::cpp
+}}}}} //namespace scalpel::cpp::semantic_analysis::detail::syntax_node_analysis
 

@@ -18,37 +18,23 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "semantic_analysis.hpp"
-#include "semantic_analysis/detail/namespace_construction.hpp"
-#include <iostream>
-#include <stdexcept>
+#ifndef SCALPEL_CPP_SYNTAX_ANALYSIS_DETAIL_PARSE_TREE_TO_SYNTAX_TREE_OTHER_NODE_CONVERTER_HPP
+#define SCALPEL_CPP_SYNTAX_ANALYSIS_DETAIL_PARSE_TREE_TO_SYNTAX_TREE_OTHER_NODE_CONVERTER_HPP
 
-namespace scalpel { namespace cpp
+#include "basic_functions.hpp"
+#include "typedefs.hpp"
+#include "../../../syntax_tree.hpp"
+
+namespace scalpel { namespace cpp { namespace syntax_analysis { namespace detail { namespace parse_tree_to_syntax_tree
 {
 
-namespace semantic_analysis
+template<class SyntaxNodeT>
+SyntaxNodeT
+convert_leaf_node(const tree_node_t& node)
 {
-
-using namespace syntax_nodes;
-using namespace semantic_entities;
-
-std::shared_ptr<semantic_graph>
-analyze(const syntax_tree& tree)
-{
-	//create semantic graph
-	std::shared_ptr<namespace_> global_namespace = namespace_::make_shared();
-
-	auto opt_declaration_seq_node = get_declaration_seq(tree);
-	if(opt_declaration_seq_node)
-	{
-		auto declaration_seq_node = *opt_declaration_seq_node;
-		cpp::semantic_analysis::detail::fill_namespace(global_namespace, declaration_seq_node);
-	}
-
-	return global_namespace;
+	return SyntaxNodeT(get_only_child_value(node));
 }
 
-} //namespace semantic_analysis
+}}}}} //namespace scalpel::cpp::syntax_analysis::detail
 
-}} //namespace scalpel::cpp
-
+#endif

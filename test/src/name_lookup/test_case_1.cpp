@@ -18,7 +18,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <scalpel/cpp/detail/semantic_analysis/name_lookup.hpp>
+#include <scalpel/cpp/semantic_analysis/detail/name_lookup.hpp>
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <scalpel/cpp/syntax_tree.hpp>
 #include <boost/test/unit_test.hpp>
@@ -30,8 +30,8 @@ BOOST_AUTO_TEST_CASE(test_case_1)
 {
 	using namespace scalpel::cpp::syntax_nodes;
 	using namespace scalpel::cpp::semantic_entities;
-	using namespace scalpel::cpp::detail::semantic_analysis::name_lookup;
-	using namespace scalpel::cpp::detail::semantic_analysis::semantic_entity_analysis;
+	using namespace scalpel::cpp::semantic_analysis::detail::name_lookup;
+	using namespace scalpel::cpp::semantic_analysis::detail::semantic_entity_analysis;
 
 	//
 	//construction of the semantic graph of the following source code:

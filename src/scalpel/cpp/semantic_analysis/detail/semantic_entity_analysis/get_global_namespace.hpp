@@ -18,33 +18,20 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_ANALYZER_HPP
-#define SCALPEL_CPP_SYNTAX_ANALYZER_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_SEMANTIC_ENTITY_ANALYSIS_GET_GLOBAL_NAMESPACE_HPP
+#define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_SEMANTIC_ENTITY_ANALYSIS_GET_GLOBAL_NAMESPACE_HPP
 
-#include "syntax_tree.hpp"
-#include "syntax_analysis/detail/grammar.hpp"
+#include <scalpel/cpp/semantic_entities/declarative_region_variants.hpp>
+#include <scalpel/cpp/semantic_entities/namespace_.hpp>
+#include <memory>
 
-namespace scalpel { namespace cpp
+namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail { namespace semantic_entity_analysis
 {
 
-/**
-@brief Analyses the syntax of the source code of a full C++ program.
+std::shared_ptr<semantic_entities::namespace_>
+get_global_namespace(semantic_entities::declarative_region_shared_ptr_variant current_declarative_region);
 
-Analyses the syntax of the source code of a full C++ program, by calling the
-operator() function. After parsing the input, it generates a syntax tree of the
-source code and returns it.
-*/
-class syntax_analyzer
-{
-    public:
-		syntax_tree
-        operator()(const std::string& input);
-
-    private:
-		syntax_analysis::detail::grammar grammar_;
-};
-
-}} //namespace scalpel::cpp
+}}}}} //namespace scalpel::cpp::semantic_analysis::detail::semantic_entity_analysis
 
 #endif
 

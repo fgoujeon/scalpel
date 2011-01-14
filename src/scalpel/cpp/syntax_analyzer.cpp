@@ -23,12 +23,12 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #endif
 
 #include "syntax_analyzer.hpp"
-#include "detail/syntax_analysis/parse_tree_to_syntax_tree.hpp"
+#include "syntax_analysis/detail/parse_tree_to_syntax_tree.hpp"
 #include <boost/spirit/include/classic_parse_tree.hpp>
 #include <iostream>
 #include <stdexcept>
 
-using namespace scalpel::cpp::detail::syntax_analysis;
+using namespace scalpel::cpp::syntax_analysis::detail;
 
 namespace scalpel { namespace cpp
 {

@@ -18,33 +18,10 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_ANALYZER_HPP
-#define SCALPEL_CPP_SYNTAX_ANALYZER_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_SEMANTIC_ENTITY_ANALYSIS_HPP
+#define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_SEMANTIC_ENTITY_ANALYSIS_HPP
 
-#include "syntax_tree.hpp"
-#include "syntax_analysis/detail/grammar.hpp"
-
-namespace scalpel { namespace cpp
-{
-
-/**
-@brief Analyses the syntax of the source code of a full C++ program.
-
-Analyses the syntax of the source code of a full C++ program, by calling the
-operator() function. After parsing the input, it generates a syntax tree of the
-source code and returns it.
-*/
-class syntax_analyzer
-{
-    public:
-		syntax_tree
-        operator()(const std::string& input);
-
-    private:
-		syntax_analysis::detail::grammar grammar_;
-};
-
-}} //namespace scalpel::cpp
+#include "semantic_entity_analysis/name_lookup.hpp"
 
 #endif
 

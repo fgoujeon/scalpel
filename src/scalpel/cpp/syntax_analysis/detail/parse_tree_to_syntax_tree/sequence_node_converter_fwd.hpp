@@ -18,33 +18,18 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_ANALYZER_HPP
-#define SCALPEL_CPP_SYNTAX_ANALYZER_HPP
+#ifndef SCALPEL_CPP_SYNTAX_ANALYSIS_DETAIL_PARSE_TREE_TO_SYNTAX_TREE_SEQUENCE_NODE_CONVERTER_FWD_HPP
+#define SCALPEL_CPP_SYNTAX_ANALYSIS_DETAIL_PARSE_TREE_TO_SYNTAX_TREE_SEQUENCE_NODE_CONVERTER_FWD_HPP
 
-#include "syntax_tree.hpp"
-#include "syntax_analysis/detail/grammar.hpp"
+#include "typedefs.hpp"
 
-namespace scalpel { namespace cpp
+namespace scalpel { namespace cpp { namespace syntax_analysis { namespace detail { namespace parse_tree_to_syntax_tree
 {
 
-/**
-@brief Analyses the syntax of the source code of a full C++ program.
+template<class SequenceNodeT>
+SequenceNodeT
+convert_sequence_node(const tree_node_t& node);
 
-Analyses the syntax of the source code of a full C++ program, by calling the
-operator() function. After parsing the input, it generates a syntax tree of the
-source code and returns it.
-*/
-class syntax_analyzer
-{
-    public:
-		syntax_tree
-        operator()(const std::string& input);
-
-    private:
-		syntax_analysis::detail::grammar grammar_;
-};
-
-}} //namespace scalpel::cpp
+}}}}} //namespace scalpel::cpp::syntax_analysis::detail::parse_tree_to_syntax_tree
 
 #endif
-
