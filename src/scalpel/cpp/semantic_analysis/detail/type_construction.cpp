@@ -19,6 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "type_construction.hpp"
+#include "function_construction.hpp"
 #include "name_lookup.hpp"
 #include "semantic_entity_analysis/to_type_variant.hpp"
 #include "syntax_node_analysis/declarator.hpp"
@@ -205,6 +206,72 @@ qualify_type
 		type = cv_qualified_type(type, cv_qualified_type::qualification_type::CONST);
 	else if(volatile_qualified)
 		type = cv_qualified_type(type, cv_qualified_type::qualification_type::VOLATILE);
+
+	return type;
+}
+
+semantic_entities::type_variant
+qualify_type2
+(
+	semantic_entities::type_variant type,
+	const syntax_nodes::declarator& declarator_node,
+	const declarative_region_shared_ptr_variant& current_declarative_region
+)
+{
+	const direct_declarator& direct_declarator_node = get_direct_declarator(declarator_node);
+	const direct_declarator_first_part& first_part_node = get_first_part(direct_declarator_node);
+
+	//pointers
+	if(auto opt_ptr_operator_seq_node = get_ptr_operator_seq(declarator_node))
+	{
+		auto ptr_operator_seq_node = *opt_ptr_operator_seq_node;
+		type = qualify_type(type, ptr_operator_seq_node);
+	}
+
+	//arrays and function type
+	if(const optional_node<direct_declarator_last_part_seq>& opt_last_part_seq_node = get_last_part_seq(get_direct_declarator(declarator_node)))
+	{
+		const direct_declarator_last_part_seq& last_part_seq_node = *opt_last_part_seq_node;
+
+		for(auto i = last_part_seq_node.begin(); i != last_part_seq_node.end(); ++i)
+		{
+			const direct_declarator_last_part& last_part_node = i->main_node();
+
+			if(const boost::optional<const direct_declarator_function_part&> opt_function_part_node = get<direct_declarator_function_part>(&last_part_node))
+			{
+				type =
+					function_type
+					(
+						0,
+						type, //return type
+						create_parameter_types(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
+						syntax_node_analysis::has_ellipsis(declarator_node),
+						syntax_node_analysis::has_const_function_qualifier(declarator_node),
+						syntax_node_analysis::has_volatile_function_qualifier(declarator_node)
+					)
+				;
+			}
+			else if(const boost::optional<const direct_declarator_array_part&> opt_array_part_node = get<direct_declarator_array_part>(&last_part_node))
+			{
+				if(get_conditional_expression(*opt_array_part_node))
+				{
+					type = array(0, type);
+				}
+				else
+				{
+					//int i[] == int i*
+					type = pointer(type);
+				}
+			}
+		}
+	}
+
+	//bracketed-declarator's qualifiers
+	if(const boost::optional<const bracketed_declarator&> opt_bracketed_declarator_node = get<bracketed_declarator>(&first_part_node))
+	{
+		const bracketed_declarator& bracketed_declarator_node = *opt_bracketed_declarator_node;
+		type = qualify_type(type, get_declarator(bracketed_declarator_node));
+	}
 
 	return type;
 }

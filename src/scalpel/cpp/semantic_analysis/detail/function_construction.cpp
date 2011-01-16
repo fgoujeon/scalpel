@@ -401,7 +401,7 @@ create_parameters
 			(
 				std::make_shared<function_parameter>
 				(
-					qualify_type(type, declarator_node),
+					qualify_type2(type, declarator_node, current_declarative_region),
 					syntax_node_analysis::get_identifier(declarator_node).value()
 				)
 			);

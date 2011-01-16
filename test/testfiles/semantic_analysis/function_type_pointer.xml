@@ -14,6 +14,27 @@
    </cv_qualified_type>
   </type>
  </typedef>
+ <simple_function name="f">
+  <return_type>
+   <fundamental_type type="void"/>
+  </return_type>
+  <parameters>
+   <parameter name="fun_ptr">
+    <type>
+     <pointer>
+      <function_type>
+       <return_type>
+        <fundamental_type type="void"/>
+       </return_type>
+       <parameter_types>
+        <fundamental_type type="int"/>
+       </parameter_types>
+      </function_type>
+     </pointer>
+    </type>
+   </parameter>
+  </parameters>
+ </simple_function>
  <variable name="fun_ptr">
   <type>
    <cv_qualified_type const="true">

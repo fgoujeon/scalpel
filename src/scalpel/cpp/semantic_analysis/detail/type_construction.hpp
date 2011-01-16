@@ -57,6 +57,14 @@ qualify_type
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node
 );
 
+semantic_entities::type_variant
+qualify_type2
+(
+	semantic_entities::type_variant type,
+	const syntax_nodes::declarator& declarator_node,
+	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
+);
+
 //Qualify type with declarator's pointers, references and arrays.
 //This is a composition of the three following qualify_type_with_*() functions.
 semantic_entities::type_variant
