@@ -37,7 +37,17 @@ using namespace scalpel::cpp::semantic_entities;
 class semantic_graph_serializer
 {
 	public:
+		typedef std::map<const scalpel::cpp::semantic_entities::namespace_*, unsigned int> namespace_ids_t;
+		typedef std::map<const scalpel::cpp::semantic_entities::class_*, unsigned int> class_ids_t;
+
 		semantic_graph_serializer(std::ostream& output);
+
+		void
+		operator()(std::shared_ptr<const namespace_> entity);
+
+	private:
+		void
+		initialize_ids(const std::shared_ptr<const namespace_>& entity);
 
 		void
 		serialize_type
@@ -172,12 +182,23 @@ class semantic_graph_serializer
 		std::string
 		attribute(const semantic_entities::overloadable_operator op);
 
-	private:
+		void
+		define_ids(const std::shared_ptr<const namespace_>& entity);
+
+		void
+		define_ids(const std::shared_ptr<const class_>& entity);
+
+		unsigned int
+		class_id(const scalpel::cpp::semantic_entities::class_*) const;
+
+		unsigned int
+		namespace_id(const scalpel::cpp::semantic_entities::namespace_*) const;
+
 		std::ostream& output_;
 		unsigned int namespace_id_counter_;
 		unsigned int class_id_counter_;
-		std::map<const scalpel::cpp::semantic_entities::namespace_*, unsigned int> namespace_ids_;
-		std::map<const scalpel::cpp::semantic_entities::class_*, unsigned int> class_ids_;
+		namespace_ids_t namespace_ids_;
+		class_ids_t class_ids_;
 };
 
 void

@@ -30,10 +30,23 @@ namespace cpp2xml
 using namespace detail;
 
 semantic_graph_serializer::semantic_graph_serializer(std::ostream& output):
-	output_(output),
-	namespace_id_counter_(0),
-	class_id_counter_(0)
+	output_(output)
 {
+}
+
+void
+semantic_graph_serializer::operator()(std::shared_ptr<const namespace_> entity)
+{
+	initialize_ids(entity);
+	serialize_namespace(entity);
+}
+
+void
+semantic_graph_serializer::initialize_ids(const std::shared_ptr<const namespace_>& entity)
+{
+	namespace_id_counter_ = 0;
+	class_id_counter_ = 0;
+	define_ids(entity);
 }
 
 void
@@ -84,7 +97,7 @@ semantic_graph_serializer::serialize_type
 	}
 	else if(auto opt_type = scalpel::utility::get<const class_*>(&n))
 	{
-		output_ << indent(indent_level) << "<class id=\"c" << class_ids_[*opt_type] << "\"/>\n";
+		output_ << indent(indent_level) << "<class id=\"c" << class_id(*opt_type) << "\"/>\n";
 	}
 }
 
@@ -130,11 +143,8 @@ semantic_graph_serializer::serialize_namespace
 	{
 		output_ << " name=\"" << n->name() << "\"";
 	}
-	output_ << " id=\"n" << namespace_id_counter_ << "\"";
+	output_ << " id=\"n" << namespace_id(n.get()) << "\"";
 	output_ << ">\n";
-
-	namespace_ids_[n.get()] = namespace_id_counter_;
-	++namespace_id_counter_;
 
 	for(auto i = n->namespace_aliases().begin(); i != n->namespace_aliases().end(); ++i)
 		serialize_namespace_alias(*i, indent_level + 1);
@@ -169,7 +179,7 @@ semantic_graph_serializer::serialize_class
 {
 	output_ << indent(indent_level) << "<class";
 	output_ << " name=\"" << c->name() << "\"";
-	output_ << " id=\"c" << class_id_counter_ << "\"";
+	output_ << " id=\"c" << class_id(c.get()) << "\"";
 	//extra attributes if the class is a nested class
 	if(c->has_enclosing_declarative_region())
 	{
@@ -185,9 +195,6 @@ semantic_graph_serializer::serialize_class
 	if(!c->complete())
 		output_ << " complete=\"false\"";
 	output_ << ">\n";
-
-	class_ids_[c.get()] = class_id_counter_;
-	++class_id_counter_;
 
 	if(!c->base_classes().empty())
 	{
@@ -239,7 +246,7 @@ semantic_graph_serializer::serialize_base_class
 )
 {
 	output_ << indent(indent_level) << "<base_class";
-	output_ << " id=\"c" << class_ids_[c.get()] << "\"";
+	output_ << " id=\"c" << class_id(c.get()) << "\"";
 	output_ << attribute(acc);
 	if(is_virtual)
 		output_ << " virtual=\"true\"";
@@ -485,7 +492,7 @@ semantic_graph_serializer::serialize_function_type
 {
 	output_ << indent(indent_level) << "<function_type";
 	if(entity.parent_class())
-		output_ << " class_id=\"c" << class_ids_[entity.parent_class()] << "\"";
+		output_ << " class_id=\"c" << class_id(entity.parent_class()) << "\"";
 	if(entity.variadic())
 		output_ << " variadic=\"true\"";
 	if(entity.const_qualified())
@@ -614,7 +621,7 @@ semantic_graph_serializer::serialize_namespace_alias
 {
 	output_ << indent(indent_level) << "<namespace_alias";
 	output_ << " name=\"" << entity->name() << "\"";
-	output_ << " id=\"n" << namespace_ids_[entity->referred_namespace().get()] << "\"";
+	output_ << " id=\"n" << namespace_id(entity->referred_namespace().get()) << "\"";
 	output_ << "/>\n";
 }
 
@@ -781,6 +788,49 @@ semantic_graph_serializer::attribute(const semantic_entities::overloadable_opera
 	return oss.str();
 }
 
+void
+semantic_graph_serializer::define_ids(const std::shared_ptr<const namespace_>& entity)
+{
+	namespace_ids_[entity.get()] = namespace_id_counter_;
+	++namespace_id_counter_;
+
+	for(auto i = entity->namespaces().begin(); i != entity->namespaces().end(); ++i)
+		define_ids(*i);
+	for(auto i = entity->classes().begin(); i != entity->classes().end(); ++i)
+		define_ids(*i);
+}
+
+void
+semantic_graph_serializer::define_ids(const std::shared_ptr<const class_>& entity)
+{
+	class_ids_[entity.get()] = class_id_counter_;
+	++class_id_counter_;
+
+	for(auto i = entity->nested_classes().begin(); i != entity->nested_classes().end(); ++i)
+		define_ids(*i);
+}
+
+unsigned int
+semantic_graph_serializer::class_id(const scalpel::cpp::semantic_entities::class_* class_entity) const
+{
+	class_ids_t::const_iterator it = class_ids_.find(class_entity);
+	if(it != class_ids_.end())
+		return it->second;
+	else
+		assert(false);
+}
+
+unsigned int
+semantic_graph_serializer::namespace_id(const scalpel::cpp::semantic_entities::namespace_* namespace_entity) const
+{
+	namespace_ids_t::const_iterator it = namespace_ids_.find(namespace_entity);
+	if(it != namespace_ids_.end())
+		return it->second;
+	else
+		assert(false);
+}
+
+
 
 void
 serialize_semantic_graph
@@ -790,7 +840,7 @@ serialize_semantic_graph
 )
 {
 	semantic_graph_serializer serializer(output);
-	serializer.serialize_namespace(graph);
+	serializer(graph);
 }
 
 } //namespace cpp2xml

@@ -1,20 +1,40 @@
 <namespace id="n0">
- <class name="c" id="c0">
+ <namespace name="n" id="n1">
+  <class name="c" id="c0">
+   <destructor access="public" defined="false">
+   </destructor>
+  </class>
+  <variable name="fun_ptr">
+   <type>
+    <pointer>
+     <function_type class_id="c0">
+      <return_type>
+       <fundamental_type type="void"/>
+      </return_type>
+      <parameter_types>
+       <fundamental_type type="int"/>
+      </parameter_types>
+     </function_type>
+    </pointer>
+   </type>
+  </variable>
+  <variable name="fun_ptr2">
+   <type>
+    <pointer>
+     <function_type class_id="c1">
+      <return_type>
+       <fundamental_type type="void"/>
+      </return_type>
+      <parameter_types>
+       <fundamental_type type="int"/>
+      </parameter_types>
+     </function_type>
+    </pointer>
+   </type>
+  </variable>
+ </namespace>
+ <class name="c" id="c1">
   <destructor access="public" defined="false">
   </destructor>
  </class>
- <variable name="fun_ptr">
-  <type>
-   <pointer>
-    <function_type class_id="c0">
-     <return_type>
-      <fundamental_type type="void"/>
-     </return_type>
-     <parameter_types>
-      <fundamental_type type="int"/>
-     </parameter_types>
-    </function_type>
-   </pointer>
-  </type>
- </variable>
 </namespace>
