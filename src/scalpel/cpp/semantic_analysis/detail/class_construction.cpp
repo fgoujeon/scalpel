@@ -485,5 +485,90 @@ add_class
 	return class_entity;
 }
 
+std::shared_ptr<semantic_entities::class_>
+find_class
+(
+	const member_function_ptr_operator& member_function_ptr_operator_node,
+	const declarative_region_shared_ptr_variant& current_declarative_region
+)
+{
+	const bool has_leading_double_colon = syntax_nodes::has_leading_double_colon(member_function_ptr_operator_node);
+
+	const nested_name_specifier& nested_name_specifier_node =
+		get_nested_name_specifier(member_function_ptr_operator_node)
+	;
+
+
+	//
+	//convert nested_name_specifier -> (nested_name_specifier without last identifier) + last identifier
+	//
+
+	const optional_node<nested_name_specifier_last_part_seq>& opt_last_part_seq_node =
+		get_last_part_seq(nested_name_specifier_node)
+	;
+
+	//get the last identifier
+	identifier_or_template_id nested_name_specifier_last_identifier =
+		opt_last_part_seq_node ?
+		get_identifier_or_template_id((*opt_last_part_seq_node)[opt_last_part_seq_node->size() - 1].main_node()) :
+		get_identifier_or_template_id(nested_name_specifier_node)
+	;
+
+	//create a nested-name-specifier without the last identifier
+	optional_node<nested_name_specifier> opt_new_nested_name_specifier_node;
+	if(opt_last_part_seq_node)
+	{
+		//copy the last-part by omitting the last node (i.e. the last identifier)
+		const nested_name_specifier_last_part_seq& last_part_seq_node = *opt_last_part_seq_node;
+		nested_name_specifier_last_part_seq new_last_part_seq_node;
+		for(unsigned int i = 0; i < last_part_seq_node.size() - 1; ++i)
+		{
+			new_last_part_seq_node.push_back
+			(
+				nested_name_specifier_last_part_seq::item
+				(
+					optional_node<space>(),
+					optional_node<space>(),
+					last_part_seq_node[i].main_node()
+				)
+			);
+		}
+
+		//create the nested-name-specifier node
+		identifier_or_template_id new_identifier_or_template_id_node = get_identifier_or_template_id(nested_name_specifier_node);
+		opt_new_nested_name_specifier_node =
+			nested_name_specifier
+			(
+				std::move(new_identifier_or_template_id_node),
+				optional_node<space>(),
+				predefined_text_node<str::double_colon>(),
+				optional_node<space>(),
+				optional_node<nested_name_specifier_last_part_seq>()
+			)
+		;
+	}
+
+
+	std::string last_identifier;
+	if(const boost::optional<const identifier&> opt_identifier_node = get<identifier>(&nested_name_specifier_last_identifier))
+	{
+		last_identifier = opt_identifier_node->value();
+	}
+	else
+	{
+		assert(false); //not managed yet
+	}
+
+	return
+		name_lookup::find<semantic_entity_analysis::identification_policies::by_name, false, false, class_>
+		(
+			has_leading_double_colon,
+			opt_new_nested_name_specifier_node,
+			last_identifier,
+			current_declarative_region
+		)
+	;
+}
+
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
 

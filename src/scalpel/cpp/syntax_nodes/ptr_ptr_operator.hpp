@@ -28,6 +28,62 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
+typedef
+	sequence_node
+	<
+		predefined_text_node<str::asterisk>,
+		optional_node<space>,
+		optional_node<cv_qualifier_seq>
+	>
+	simple_ptr_ptr_operator
+;
+
+inline
+const optional_node<cv_qualifier_seq>&
+get_cv_qualifier_seq(const simple_ptr_ptr_operator& o)
+{
+	return get<2>(o);
+}
+
+
+
+typedef
+	sequence_node
+	<
+		optional_node<predefined_text_node<str::double_colon>>,
+		optional_node<space>,
+		nested_name_specifier,
+		optional_node<space>,
+		predefined_text_node<str::asterisk>,
+		optional_node<space>,
+		optional_node<cv_qualifier_seq>
+	>
+	member_function_ptr_operator
+;
+
+inline
+bool
+has_leading_double_colon(const member_function_ptr_operator& o)
+{
+	return get<0>(o);
+}
+
+inline
+const nested_name_specifier&
+get_nested_name_specifier(const member_function_ptr_operator& o)
+{
+	return get<2>(o);
+}
+
+inline
+const optional_node<cv_qualifier_seq>&
+get_cv_qualifier_seq(const member_function_ptr_operator& o)
+{
+	return get<6>(o);
+}
+
+
+
 /**
 ptr_ptr_operator
 	= ch_p('*') >> !(!s >> cv_qualifier_seq)
@@ -35,25 +91,13 @@ ptr_ptr_operator
 ;
 */
 typedef
-	sequence_node
+	alternative_node
 	<
-		optional_node<predefined_text_node<str::double_colon>>,
-		optional_node<space>,
-		optional_node<nested_name_specifier>,
-		optional_node<space>,
-		predefined_text_node<str::asterisk>,
-		optional_node<space>,
-		optional_node<cv_qualifier_seq>
+		simple_ptr_ptr_operator,
+		member_function_ptr_operator
 	>
 	ptr_ptr_operator
 ;
-
-inline
-const optional_node<cv_qualifier_seq>&
-get_cv_qualifier_seq(const ptr_ptr_operator& o)
-{
-	return get<6>(o);
-}
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

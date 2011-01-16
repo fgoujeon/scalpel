@@ -70,6 +70,13 @@ add_class
 	const semantic_entities::class_::access current_access
 );
 
+std::shared_ptr<semantic_entities::class_>
+find_class
+(
+	const syntax_nodes::member_function_ptr_operator& member_function_ptr_operator_node,
+	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
+);
+
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
 
 #endif

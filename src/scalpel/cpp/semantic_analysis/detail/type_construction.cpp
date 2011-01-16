@@ -315,22 +315,26 @@ qualify_type
 			bool volatile_qualified = false;
 
 			//find cv-qualifiers
-			if(auto opt_cv_qualifier_seq_node = get_cv_qualifier_seq(ptr_ptr_operator_node))
+			if(auto opt_simple_ptr_ptr_operator_node = get<simple_ptr_ptr_operator>(&ptr_ptr_operator_node))
 			{
-				auto cv_qualifier_seq_node = *opt_cv_qualifier_seq_node;
-				for
-				(
-					auto i = cv_qualifier_seq_node.begin();
-					i != cv_qualifier_seq_node.end();
-					++i
-				)
+				const simple_ptr_ptr_operator& simple_ptr_ptr_operator_node = *opt_simple_ptr_ptr_operator_node;
+				if(auto opt_cv_qualifier_seq_node = get_cv_qualifier_seq(simple_ptr_ptr_operator_node))
 				{
-					auto cv_qualifier_node = i->main_node();
+					auto cv_qualifier_seq_node = *opt_cv_qualifier_seq_node;
+					for
+					(
+						auto i = cv_qualifier_seq_node.begin();
+						i != cv_qualifier_seq_node.end();
+						++i
+					)
+					{
+						auto cv_qualifier_node = i->main_node();
 
-					if(get<predefined_text_node<str::const_>>(&cv_qualifier_node))
-						const_qualified = true;
-					else if(get<predefined_text_node<str::volatile_>>(&cv_qualifier_node))
-						volatile_qualified = true;
+						if(get<predefined_text_node<str::const_>>(&cv_qualifier_node))
+							const_qualified = true;
+						else if(get<predefined_text_node<str::volatile_>>(&cv_qualifier_node))
+							volatile_qualified = true;
+					}
 				}
 			}
 

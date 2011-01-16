@@ -35,15 +35,6 @@ class function_type
 	public:
 		function_type
 		(
-			const type_variant& return_type,
-			const std::vector<type_variant>& parameter_types,
-			const bool variadic,
-			const bool const_qualified,
-			const bool volatile_qualified
-		);
-
-		function_type
-		(
 			const class_* parent_class,
 			const type_variant& return_type,
 			const std::vector<type_variant>& parameter_types,

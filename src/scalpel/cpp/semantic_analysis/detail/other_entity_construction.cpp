@@ -19,9 +19,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "other_entity_construction.hpp"
+#include "class_construction.hpp"
 #include "function_construction.hpp"
 #include "type_construction.hpp"
 #include "semantic_entity_analysis/get_namespace.hpp"
+#include "semantic_entity_analysis/identification_policies.hpp"
 #include "syntax_node_analysis/declarator.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail
@@ -34,7 +36,7 @@ declarator_entity_shared_ptr_variant
 create_entity
 (
 	const syntax_nodes::declarator& declarator_node,
-	const declarative_region_shared_ptr_variant current_declarative_region,
+	const declarative_region_shared_ptr_variant& current_declarative_region,
 	boost::optional<semantic_entities::type_variant> opt_type,
 	const bool has_typedef_specifier,
 	const bool has_static_specifier,
@@ -72,6 +74,7 @@ create_entity
 						(
 							function_type
 							(
+								0,
 								*opt_type, //return type
 								create_parameter_types(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
 								syntax_node_analysis::has_ellipsis(declarator_node),
@@ -86,6 +89,24 @@ create_entity
 				{
 					if(syntax_node_analysis::has_bracketed_type_qualifiers(declarator_node))
 					{
+						std::shared_ptr<class_> parent_class;
+
+						//get the class designated by the member-function-ptr-operator (c in "void (c::*f)(int)")
+						if
+						(
+							boost::optional<const member_function_ptr_operator&> opt_member_function_ptr_operator_node =
+								syntax_node_analysis::get_member_function_ptr_operator(declarator_node)
+						)
+						{
+							parent_class =
+								find_class
+								(
+									*opt_member_function_ptr_operator_node,
+									current_declarative_region
+								)
+							;
+						}
+
 						return std::make_shared<semantic_entities::variable>
 						(
 							syntax_node_analysis::get_identifier(declarator_node).value(),
@@ -93,6 +114,7 @@ create_entity
 							(
 								function_type
 								(
+									parent_class.get(),
 									*opt_type, //return type
 									create_parameter_types(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
 									syntax_node_analysis::has_ellipsis(declarator_node),

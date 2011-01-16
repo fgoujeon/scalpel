@@ -81,6 +81,12 @@ class list_node
 			return items_.front();
 		}
 
+		const item&
+		operator[](const unsigned int index) const
+		{
+			return items_[index];
+		}
+
 		void
 		push_back(const item& t)
 		{

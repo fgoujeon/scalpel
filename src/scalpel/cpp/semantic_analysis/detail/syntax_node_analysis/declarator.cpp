@@ -538,5 +538,38 @@ has_bracketed_type_qualifiers(const syntax_nodes::declarator& declarator_node)
 	return false;
 }
 
+boost::optional<const member_function_ptr_operator&>
+get_member_function_ptr_operator(const syntax_nodes::declarator& declarator_node)
+{
+	//declarator -> direct_declarator -> direct_declarator_first_part ->
+	//bracketed_declarator -> declarator -> ptr_operator_seq -> ptr_operator ->
+	//ptr_ptr_operator -> nested_name_specifier
+
+	const direct_declarator& direct_declarator_node = get_direct_declarator(declarator_node);
+	const direct_declarator_first_part& first_part_node = get_first_part(direct_declarator_node);
+	if(const boost::optional<const bracketed_declarator&> opt_bracketed_declarator_node = get<bracketed_declarator>(&first_part_node))
+	{
+		const bracketed_declarator& bracketed_declarator_node = *opt_bracketed_declarator_node;
+		const declarator& declarator_node = get_declarator(bracketed_declarator_node);
+
+		const optional_node<ptr_operator_seq>& opt_ptr_operator_seq_node = get_ptr_operator_seq(declarator_node);
+		if(opt_ptr_operator_seq_node)
+		{
+			const ptr_operator_seq& ptr_operator_seq_node = *opt_ptr_operator_seq_node;
+			for(auto i = ptr_operator_seq_node.begin(); i != ptr_operator_seq_node.end(); ++i)
+			{
+				const ptr_operator& ptr_operator_node = i->main_node();
+				if(const boost::optional<const ptr_ptr_operator&> opt_ptr_ptr_operator_node = get<ptr_ptr_operator>(&ptr_operator_node))
+				{
+					const ptr_ptr_operator& ptr_ptr_operator_node = *opt_ptr_ptr_operator_node;
+					return get<member_function_ptr_operator>(&ptr_ptr_operator_node);
+				}
+			}
+		}
+	}
+
+	return boost::optional<const member_function_ptr_operator&>();
+}
+
 }}}}} //namespace scalpel::cpp::semantic_analysis::detail::syntax_node_analysis
 

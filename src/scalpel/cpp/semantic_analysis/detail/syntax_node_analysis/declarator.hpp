@@ -79,6 +79,9 @@ has_type_qualifiers(const syntax_nodes::declarator& declarator_node);
 bool
 has_bracketed_type_qualifiers(const syntax_nodes::declarator& declarator_node);
 
+boost::optional<const syntax_nodes::member_function_ptr_operator&>
+get_member_function_ptr_operator(const syntax_nodes::declarator& declarator_node);
+
 }}}}} //namespace scalpel::cpp::semantic_analysis::detail::syntax_node_analysis
 
 #include "declarator.ipp"
