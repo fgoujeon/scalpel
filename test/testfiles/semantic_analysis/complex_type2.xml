@@ -1,21 +1,21 @@
 <namespace id="n0">
  <variable name="i">
   <type>
-   <array size="0">
-    <array size="0">
-     <pointer>
+   <pointer>
+    <pointer>
+     <array size="0">
       <pointer>
-       <pointer>
-        <cv_qualified_type const="true">
-         <pointer>
+       <cv_qualified_type const="true">
+        <pointer>
+         <array size="0">
           <fundamental_type type="int"/>
-         </pointer>
-        </cv_qualified_type>
-       </pointer>
+         </array>
+        </pointer>
+       </cv_qualified_type>
       </pointer>
-     </pointer>
-    </array>
-   </array>
+     </array>
+    </pointer>
+   </pointer>
   </type>
  </variable>
 </namespace>

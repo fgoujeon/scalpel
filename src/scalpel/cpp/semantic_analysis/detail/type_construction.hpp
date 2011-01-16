@@ -57,63 +57,23 @@ qualify_type
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node
 );
 
-semantic_entities::type_variant
-qualify_type2
-(
-	semantic_entities::type_variant type,
-	const syntax_nodes::declarator& declarator_node,
-	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
-);
-
-//Qualify type with declarator's pointers, references and arrays.
-//This is a composition of the three following qualify_type_with_*() functions.
+//qualify type with declarator's pointers, references, arrays and function types
 semantic_entities::type_variant
 qualify_type
 (
 	semantic_entities::type_variant type,
-	const syntax_nodes::declarator& declarator_node
-);
-
-//Qualify type with declarator's pointers and references.
-semantic_entities::type_variant
-qualify_type_with_pointers
-(
-	semantic_entities::type_variant type,
-	const syntax_nodes::declarator& declarator_node
-);
-
-//Qualify type with declarator's bracketed pointers, references and arrays.
-//int (*const ptr);
-semantic_entities::type_variant
-qualify_type_with_bracketed_qualifiers
-(
-	semantic_entities::type_variant type,
-	const syntax_nodes::declarator& declarator_node
-);
-
-//Qualify type with declarator's arrays.
-semantic_entities::type_variant
-qualify_type_with_arrays
-(
-	semantic_entities::type_variant type,
-	const syntax_nodes::declarator& declarator_node
+	const syntax_nodes::declarator& declarator_node,
+	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region,
+	const bool ignore_function_type = false
 );
 
 //qualify type with ptr-operator-seq's pointers and references
 semantic_entities::type_variant
-qualify_type2
+qualify_type
 (
 	semantic_entities::type_variant type,
 	const syntax_nodes::ptr_operator_seq& ptr_operator_seq_node,
 	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
-);
-
-//qualify type with ptr-operator-seq's pointers and references
-semantic_entities::type_variant
-qualify_type
-(
-	semantic_entities::type_variant type,
-	const syntax_nodes::ptr_operator_seq& ptr_operator_seq_node
 );
 
 //qualify type with cv-qualifier-seq's const and volatile

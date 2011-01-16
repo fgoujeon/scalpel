@@ -343,7 +343,7 @@ get_conversion_function_type
 	if(const optional_node<ptr_operator_seq>& opt_ptr_operator_seq_node = get_ptr_operator_seq(conversion_function_id_node))
 	{
 		const ptr_operator_seq& ptr_operator_seq_node = *opt_ptr_operator_seq_node;
-		type = qualify_type(type, ptr_operator_seq_node);
+		type = qualify_type(type, ptr_operator_seq_node, current_declarative_region);
 	}
 
 	return type;
@@ -401,7 +401,7 @@ create_parameters
 			(
 				std::make_shared<function_parameter>
 				(
-					qualify_type2(type, declarator_node, current_declarative_region),
+					qualify_type(type, declarator_node, current_declarative_region),
 					syntax_node_analysis::get_identifier(declarator_node).value()
 				)
 			);
@@ -412,7 +412,7 @@ create_parameters
 
 			if(boost::optional<const ptr_operator_seq&> opt_ptr_operator_seq_node = get<ptr_operator_seq>(&abstract_declarator_node))
 			{
-				type = qualify_type(type, *opt_ptr_operator_seq_node);
+				type = qualify_type(type, *opt_ptr_operator_seq_node, current_declarative_region);
 			}
 			else if(boost::optional<const direct_abstract_declarator&> opt_direct_abstract_declarator_node = get<direct_abstract_declarator>(&abstract_declarator_node))
 			{

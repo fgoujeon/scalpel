@@ -47,17 +47,6 @@ create_entity
 	const bool is_class_member
 )
 {
-	//if there are qualifiers but no type to qualify, there's an error
-	if(!opt_type && syntax_node_analysis::has_type_qualifiers(declarator_node))
-	{
-		throw std::runtime_error("create_entity error 1");
-	}
-
-	if(opt_type)
-	{
-		opt_type = qualify_type_with_pointers(*opt_type, declarator_node);
-	}
-
 	switch(syntax_node_analysis::get_declarator_type(declarator_node))
 	{
 		case syntax_node_analysis::declarator_type::SIMPLE_FUNCTION_DECLARATOR:
@@ -66,68 +55,31 @@ create_entity
 			{
 				if(has_typedef_specifier)
 				{
+					opt_type = qualify_type(*opt_type, declarator_node, current_declarative_region);
+
 					return std::make_shared<semantic_entities::typedef_>
 					(
 						syntax_node_analysis::get_identifier(declarator_node).value(),
-						//the bracketed qualifiers qualify the function type, not the return type
-						qualify_type_with_bracketed_qualifiers
-						(
-							function_type
-							(
-								0,
-								*opt_type, //return type
-								create_parameter_types(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
-								syntax_node_analysis::has_ellipsis(declarator_node),
-								syntax_node_analysis::has_const_function_qualifier(declarator_node),
-								syntax_node_analysis::has_volatile_function_qualifier(declarator_node)
-							),
-							declarator_node
-						)
+						*opt_type
 					);
 				}
 				else
 				{
 					if(syntax_node_analysis::has_bracketed_type_qualifiers(declarator_node))
 					{
-						std::shared_ptr<class_> parent_class;
-
-						//get the class designated by the member-function-ptr-operator (c in "void (c::*f)(int)")
-						if
-						(
-							boost::optional<const member_function_ptr_operator&> opt_member_function_ptr_operator_node =
-								syntax_node_analysis::get_member_function_ptr_operator(declarator_node)
-						)
-						{
-							parent_class =
-								find_class
-								(
-									*opt_member_function_ptr_operator_node,
-									current_declarative_region
-								)
-							;
-						}
+						opt_type = qualify_type(*opt_type, declarator_node, current_declarative_region);
 
 						return std::make_shared<semantic_entities::variable>
 						(
 							syntax_node_analysis::get_identifier(declarator_node).value(),
-							qualify_type_with_bracketed_qualifiers
-							(
-								function_type
-								(
-									parent_class.get(),
-									*opt_type, //return type
-									create_parameter_types(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
-									syntax_node_analysis::has_ellipsis(declarator_node),
-									syntax_node_analysis::has_const_function_qualifier(declarator_node),
-									syntax_node_analysis::has_volatile_function_qualifier(declarator_node)
-								),
-								declarator_node
-							),
+							*opt_type,
 							has_static_specifier
 						);
 					}
 					else
 					{
+						opt_type = qualify_type(*opt_type, declarator_node, current_declarative_region, true);
+
 						if(is_class_member)
 						{
 							return std::make_shared<semantic_entities::simple_member_function>
@@ -193,6 +145,8 @@ create_entity
 			if(!opt_type)
 				throw std::runtime_error("create_entity error 3");
 
+			opt_type = qualify_type(*opt_type, declarator_node, current_declarative_region, true);
+
 			if(is_class_member)
 			{
 				return std::make_shared<operator_member_function>
@@ -242,8 +196,7 @@ create_entity
 			if(!opt_type)
 				throw std::runtime_error("create_entity error 4");
 
-			opt_type = qualify_type_with_bracketed_qualifiers(*opt_type, declarator_node);
-			opt_type = qualify_type_with_arrays(*opt_type, declarator_node);
+			opt_type = qualify_type(*opt_type, declarator_node, current_declarative_region);
 
 			if(has_typedef_specifier)
 			{

@@ -212,11 +212,12 @@ qualify_type
 }
 
 semantic_entities::type_variant
-qualify_type2
+qualify_type
 (
 	semantic_entities::type_variant type,
 	const syntax_nodes::declarator& declarator_node,
-	const declarative_region_shared_ptr_variant& current_declarative_region
+	const declarative_region_shared_ptr_variant& current_declarative_region,
+	const bool ignore_function_type
 )
 {
 	const direct_declarator& direct_declarator_node = get_direct_declarator(declarator_node);
@@ -226,11 +227,11 @@ qualify_type2
 	if(auto opt_ptr_operator_seq_node = get_ptr_operator_seq(declarator_node))
 	{
 		auto ptr_operator_seq_node = *opt_ptr_operator_seq_node;
-		type = qualify_type2(type, ptr_operator_seq_node, current_declarative_region);
+		type = qualify_type(type, ptr_operator_seq_node, current_declarative_region);
 	}
 
 	//arrays and function type
-	if(const optional_node<direct_declarator_last_part_seq>& opt_last_part_seq_node = get_last_part_seq(get_direct_declarator(declarator_node)))
+	if(const optional_node<direct_declarator_last_part_seq>& opt_last_part_seq_node = get_last_part_seq(direct_declarator_node))
 	{
 		const direct_declarator_last_part_seq& last_part_seq_node = *opt_last_part_seq_node;
 
@@ -238,21 +239,29 @@ qualify_type2
 		{
 			const direct_declarator_last_part& last_part_node = i->main_node();
 
-			if(const boost::optional<const direct_declarator_function_part&> opt_function_part_node = get<direct_declarator_function_part>(&last_part_node))
+			if(!ignore_function_type)
 			{
-				type =
-					function_type
-					(
-						0,
-						type, //return type
-						create_parameter_types(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
-						syntax_node_analysis::has_ellipsis(declarator_node),
-						syntax_node_analysis::has_const_function_qualifier(declarator_node),
-						syntax_node_analysis::has_volatile_function_qualifier(declarator_node)
-					)
-				;
+				if(const boost::optional<const direct_declarator_function_part&> opt_function_part_node = get<direct_declarator_function_part>(&last_part_node))
+				{
+					type =
+						function_type
+						(
+							0,
+							type, //return type
+							create_parameter_types(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
+							syntax_node_analysis::has_ellipsis(declarator_node),
+							syntax_node_analysis::has_const_function_qualifier(declarator_node),
+							syntax_node_analysis::has_volatile_function_qualifier(declarator_node)
+						)
+					;
+				}
 			}
-			else if(const boost::optional<const direct_declarator_array_part&> opt_array_part_node = get<direct_declarator_array_part>(&last_part_node))
+
+			if
+			(
+				const boost::optional<const direct_declarator_array_part&> opt_array_part_node =
+					get<direct_declarator_array_part>(&last_part_node)
+			)
 			{
 				if(get_conditional_expression(*opt_array_part_node))
 				{
@@ -271,7 +280,7 @@ qualify_type2
 	if(const boost::optional<const bracketed_declarator&> opt_bracketed_declarator_node = get<bracketed_declarator>(&first_part_node))
 	{
 		const bracketed_declarator& bracketed_declarator_node = *opt_bracketed_declarator_node;
-		type = qualify_type2(type, get_declarator(bracketed_declarator_node), current_declarative_region);
+		type = qualify_type(type, get_declarator(bracketed_declarator_node), current_declarative_region);
 	}
 
 	return type;
@@ -279,91 +288,6 @@ qualify_type2
 
 semantic_entities::type_variant
 qualify_type
-(
-	semantic_entities::type_variant type,
-	const syntax_nodes::declarator& declarator_node
-)
-{
-	type = qualify_type_with_pointers(type, declarator_node);
-	type = qualify_type_with_bracketed_qualifiers(type, declarator_node);
-	type = qualify_type_with_arrays(type, declarator_node);
-
-	return type;
-}
-
-semantic_entities::type_variant
-qualify_type_with_pointers
-(
-	semantic_entities::type_variant type,
-	const syntax_nodes::declarator& declarator_node
-)
-{
-	if(auto opt_ptr_operator_seq_node = get_ptr_operator_seq(declarator_node))
-	{
-		auto ptr_operator_seq_node = *opt_ptr_operator_seq_node;
-		type = qualify_type(type, ptr_operator_seq_node);
-	}
-
-	return type;
-}
-
-semantic_entities::type_variant
-qualify_type_with_bracketed_qualifiers
-(
-	semantic_entities::type_variant type,
-	const syntax_nodes::declarator& declarator_node
-)
-{
-	const direct_declarator& direct_declarator_node = get_direct_declarator(declarator_node);
-	const direct_declarator_first_part& first_part_node = get_first_part(direct_declarator_node);
-	if(const boost::optional<const bracketed_declarator&> opt_bracketed_declarator_node = get<bracketed_declarator>(&first_part_node))
-	{
-		const bracketed_declarator& bracketed_declarator_node = *opt_bracketed_declarator_node;
-		type = qualify_type(type, get_declarator(bracketed_declarator_node));
-	}
-
-	return type;
-}
-
-semantic_entities::type_variant
-qualify_type_with_arrays
-(
-	semantic_entities::type_variant type,
-	const syntax_nodes::declarator& declarator_node
-)
-{
-	const direct_declarator& direct_declarator_node = get_direct_declarator(declarator_node);
-	if(auto opt_last_part_seq_node = get_last_part_seq(direct_declarator_node))
-	{
-		auto last_part_seq_node = *opt_last_part_seq_node;
-		for
-		(
-			auto i = last_part_seq_node.begin();
-			i != last_part_seq_node.end();
-			++i
-		)
-		{
-			auto last_part_node = i->main_node();
-			if(auto opt_array_part_node = syntax_nodes::get<syntax_nodes::direct_declarator_array_part>(&last_part_node))
-			{
-				if(get_conditional_expression(*opt_array_part_node))
-				{
-					type = array(0, type);
-				}
-				else
-				{
-					//int i[] == int i*
-					type = pointer(type);
-				}
-			}
-		}
-	}
-
-	return type;
-}
-
-semantic_entities::type_variant
-qualify_type2
 (
 	semantic_entities::type_variant type,
 	const syntax_nodes::ptr_operator_seq& ptr_operator_seq_node,
@@ -405,40 +329,6 @@ qualify_type2
 				type = pointer(type);
 
 				if(auto opt_cv_qualifier_seq_node = get_cv_qualifier_seq(member_function_ptr_operator_node))
-				{
-					type = qualify_type(type, *opt_cv_qualifier_seq_node);
-				}
-			}
-		}
-		else if(auto ref_ptr_operator_node = get<ref_ptr_operator>(&ptr_operator_node))
-		{
-			type = reference(type);
-		}
-	}
-
-	return type;
-}
-
-semantic_entities::type_variant
-qualify_type
-(
-	semantic_entities::type_variant type,
-	const syntax_nodes::ptr_operator_seq& ptr_operator_seq_node
-)
-{
-	for(auto i = ptr_operator_seq_node.begin(); i != ptr_operator_seq_node.end(); ++i)
-	{
-		auto ptr_operator_node = i->main_node();
-		if(auto opt_ptr_ptr_operator_node = get<ptr_ptr_operator>(&ptr_operator_node))
-		{
-			auto ptr_ptr_operator_node = *opt_ptr_ptr_operator_node;
-
-			type = pointer(type);
-
-			if(auto opt_simple_ptr_ptr_operator_node = get<simple_ptr_ptr_operator>(&ptr_ptr_operator_node))
-			{
-				const simple_ptr_ptr_operator& simple_ptr_ptr_operator_node = *opt_simple_ptr_ptr_operator_node;
-				if(auto opt_cv_qualifier_seq_node = get_cv_qualifier_seq(simple_ptr_ptr_operator_node))
 				{
 					type = qualify_type(type, *opt_cv_qualifier_seq_node);
 				}
