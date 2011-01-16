@@ -36,8 +36,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 	HAS_STATIC, \
 	HAS_CV_QUALIFIER, \
 	HAS_VIRTUAL, \
-	HAS_EXPLICIT, \
-	IS_MEMBER \
+	HAS_EXPLICIT \
 ) \
 CLASS_NAME::CLASS_NAME \
 ( \
@@ -75,12 +74,11 @@ BOOST_PP_IIF \
 ( \
 	HAS_TYPE, \
 	function_type \
-	CLASS_NAME::type_without_parent_class() const \
+	CLASS_NAME::type() const \
 	{ \
 		return \
 			function_type \
 			( \
-				BOOST_PP_IIF(IS_MEMBER, 0, 0), \
 				return_type_, \
 				BOOST_PP_IIF(HAS_PARAMETERS, parameter_types(), std::vector<type_variant>()), \
 				BOOST_PP_IIF(HAS_VARIADIC, variadic_, false), \
@@ -209,15 +207,15 @@ namespace
 
 
 //member functions
-GENERATE_FUNCTION_DEFINITION(constructor,              0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1)
-GENERATE_FUNCTION_DEFINITION(destructor,               0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1)
-GENERATE_FUNCTION_DEFINITION(operator_member_function, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1)
-GENERATE_FUNCTION_DEFINITION(conversion_function,      1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1)
-GENERATE_FUNCTION_DEFINITION(simple_member_function,   1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1)
+GENERATE_FUNCTION_DEFINITION(constructor,              0, 0, 0, 0, 1, 1, 0, 0, 0, 1)
+GENERATE_FUNCTION_DEFINITION(destructor,               0, 0, 0, 0, 0, 0, 0, 0, 1, 0)
+GENERATE_FUNCTION_DEFINITION(operator_member_function, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0)
+GENERATE_FUNCTION_DEFINITION(conversion_function,      1, 0, 0, 1, 0, 0, 0, 1, 1, 1)
+GENERATE_FUNCTION_DEFINITION(simple_member_function,   1, 1, 0, 1, 1, 1, 1, 1, 1, 0)
 
 //free functions
-GENERATE_FUNCTION_DEFINITION(operator_function,        1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0)
-GENERATE_FUNCTION_DEFINITION(simple_function,          1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0)
+GENERATE_FUNCTION_DEFINITION(operator_function,        1, 0, 1, 1, 1, 0, 1, 0, 0, 0)
+GENERATE_FUNCTION_DEFINITION(simple_function,          1, 1, 0, 1, 1, 1, 1, 0, 0, 0)
 
 }}} //namespace scalpel::cpp::semantic_entities
 

@@ -26,14 +26,12 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 
 function_type::function_type
 (
-	const class_* parent_class,
 	const type_variant& return_type,
 	const std::vector<type_variant>& parameter_types,
 	const bool variadic,
 	const bool const_qualified,
 	const bool volatile_qualified
 ):
-	parent_class_(parent_class),
 	return_type_(return_type),
 	parameter_types_(parameter_types),
 	variadic_(variadic),
@@ -43,7 +41,6 @@ function_type::function_type
 }
 
 function_type::function_type(const function_type& rhs):
-	parent_class_(rhs.parent_class_),
 	return_type_(rhs.return_type_),
 	parameter_types_(rhs.parameter_types_),
 	variadic_(rhs.variadic_),
@@ -56,13 +53,18 @@ bool
 operator==(const function_type& lhs, const function_type& rhs)
 {
 	return
-		lhs.parent_class() == rhs.parent_class() &&
 		lhs.const_qualified() == rhs.const_qualified() &&
 		lhs.volatile_qualified() == rhs.volatile_qualified() &&
 		lhs.return_type() == rhs.return_type() &&
 		lhs.variadic() == rhs.variadic() &&
 		lhs.parameter_types() == rhs.parameter_types()
 	;
+}
+
+bool
+operator!=(const function_type& lhs, const function_type& rhs)
+{
+	return !(lhs == rhs);
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

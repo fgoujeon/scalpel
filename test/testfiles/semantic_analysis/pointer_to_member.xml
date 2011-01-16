@@ -6,8 +6,8 @@
   </class>
   <variable name="fun_ptr">
    <type>
-    <pointer>
-     <function_type class_id="c0">
+    <pointer_to_member class_id="c0">
+     <function_type>
       <return_type>
        <fundamental_type type="void"/>
       </return_type>
@@ -15,21 +15,14 @@
        <fundamental_type type="int"/>
       </parameter_types>
      </function_type>
-    </pointer>
+    </pointer_to_member>
    </type>
   </variable>
-  <variable name="fun_ptr2">
+  <variable name="int_ptr">
    <type>
-    <pointer>
-     <function_type class_id="c1">
-      <return_type>
-       <fundamental_type type="void"/>
-      </return_type>
-      <parameter_types>
-       <fundamental_type type="int"/>
-      </parameter_types>
-     </function_type>
-    </pointer>
+    <pointer_to_member class_id="c1">
+     <fundamental_type type="int"/>
+    </pointer_to_member>
    </type>
   </variable>
  </namespace>
@@ -42,18 +35,11 @@
    <fundamental_type type="void"/>
   </return_type>
   <parameters>
-   <parameter name="fun_ptr">
+   <parameter name="int_ptr">
     <type>
-     <pointer>
-      <function_type class_id="c1">
-       <return_type>
-        <fundamental_type type="void"/>
-       </return_type>
-       <parameter_types>
-        <fundamental_type type="int"/>
-       </parameter_types>
-      </function_type>
-     </pointer>
+     <pointer_to_member class_id="c1">
+      <fundamental_type type="int"/>
+     </pointer_to_member>
     </type>
    </parameter>
   </parameters>

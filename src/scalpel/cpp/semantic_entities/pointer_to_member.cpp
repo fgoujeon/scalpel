@@ -18,17 +18,36 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_VARIANT_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_VARIANT_HPP
-
-#include "array.hpp"
-#include "class_.hpp"
-#include "cv_qualified_type.hpp"
-#include "function_type.hpp"
-#include "pointer.hpp"
 #include "pointer_to_member.hpp"
-#include "reference.hpp"
-#include "type_variant_fwd.hpp"
+#include "type_variant.hpp"
 
-#endif
+namespace scalpel { namespace cpp { namespace semantic_entities
+{
+
+pointer_to_member::pointer_to_member
+(
+	const type_variant& qualified_type,
+	const std::shared_ptr<const class_>& member_class
+):
+	qualified_type_(qualified_type),
+	member_class_(member_class)
+{
+}
+
+bool
+operator==(const pointer_to_member& lhs, const pointer_to_member& rhs)
+{
+	return
+		lhs.member_class().get() == rhs.member_class().get() &&
+		lhs.qualified_type() == rhs.qualified_type()
+	;
+}
+
+bool
+operator!=(const pointer_to_member& lhs, const pointer_to_member& rhs)
+{
+	return !operator==(lhs, rhs);
+}
+
+}}} //namespace scalpel::cpp::semantic_entities
 

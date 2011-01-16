@@ -246,7 +246,6 @@ qualify_type
 					type =
 						function_type
 						(
-							0,
 							type, //return type
 							create_parameter_types(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
 							syntax_node_analysis::has_ellipsis(declarator_node),
@@ -317,7 +316,7 @@ qualify_type
 				const member_function_ptr_operator& member_function_ptr_operator_node = *opt_member_function_ptr_operator_node;
 
 				//get the class designated by the member-function-ptr-operator (c in "void (c::*f)(int)")
-				std::shared_ptr<class_> parent_class =
+				std::shared_ptr<class_> member_class =
 					find_class
 					(
 						member_function_ptr_operator_node,
@@ -325,8 +324,7 @@ qualify_type
 					)
 				;
 
-				utility::get<function_type>(type).parent_class(parent_class.get());
-				type = pointer(type);
+				type = pointer_to_member(type, member_class);
 
 				if(auto opt_cv_qualifier_seq_node = get_cv_qualifier_seq(member_function_ptr_operator_node))
 				{

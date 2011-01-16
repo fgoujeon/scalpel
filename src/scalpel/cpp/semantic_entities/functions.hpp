@@ -132,7 +132,7 @@ class CLASS_NAME: \
 		( \
 			HAS_TYPE, \
 			function_type \
-			type_without_parent_class() const;, \
+			type() const;, \
 		) \
  \
 		bool \

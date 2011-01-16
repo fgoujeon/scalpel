@@ -9,10 +9,10 @@ namespace n
 	};
 
 	void (c::*fun_ptr)(int);
-	void (::c::*fun_ptr2)(int);
+	int ::c::* int_ptr;
 }
 
-void f(void (c::*fun_ptr)(int))
+void f(int c::* int_ptr)
 {
 }
 

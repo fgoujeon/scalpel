@@ -83,6 +83,14 @@ semantic_graph_serializer::serialize_type
 		serialize_type((*opt_type).qualified_type(), indent_level + 1);
 		output_ << indent(indent_level) << "</pointer>\n";
 	}
+	else if(auto opt_type = scalpel::utility::get<pointer_to_member>(&n))
+	{
+		output_ << indent(indent_level) << "<pointer_to_member";
+		output_ << " class_id=\"c" << class_id(opt_type->member_class().get()) << "\"";
+		output_ << ">\n";
+		serialize_type((*opt_type).qualified_type(), indent_level + 1);
+		output_ << indent(indent_level) << "</pointer_to_member>\n";
+	}
 	else if(auto opt_type = scalpel::utility::get<reference>(&n))
 	{
 		output_ << indent(indent_level) << "<reference>\n";
@@ -491,8 +499,6 @@ semantic_graph_serializer::serialize_function_type
 )
 {
 	output_ << indent(indent_level) << "<function_type";
-	if(entity.parent_class())
-		output_ << " class_id=\"c" << class_id(entity.parent_class()) << "\"";
 	if(entity.variadic())
 		output_ << " variadic=\"true\"";
 	if(entity.const_qualified())

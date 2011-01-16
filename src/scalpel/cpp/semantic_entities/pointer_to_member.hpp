@@ -18,11 +18,10 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_FUNCTION_TYPE_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_FUNCTION_TYPE_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_POINTER_TO_MEMBER_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_POINTER_TO_MEMBER_HPP
 
 #include "type_variant_fwd.hpp"
-#include <vector>
 #include <memory>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
@@ -30,63 +29,40 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 
 class class_;
 
-class function_type
+/**
+Represents the const qualifier.
+*/
+class pointer_to_member
 {
 	public:
-		function_type
+		pointer_to_member
 		(
-			const type_variant& return_type,
-			const std::vector<type_variant>& parameter_types,
-			const bool variadic,
-			const bool const_qualified,
-			const bool volatile_qualified
+			const type_variant& qualified_type,
+			const std::shared_ptr<const class_>& member_class
 		);
 
-		function_type(const function_type& rhs);
-
 		const type_variant&
-		return_type() const
+		qualified_type() const
 		{
-			return return_type_;
+			return qualified_type_;
 		}
 
-		const std::vector<type_variant>&
-		parameter_types() const
+		std::shared_ptr<const class_>
+		member_class() const
 		{
-			return parameter_types_;
-		}
-
-		bool
-		variadic() const
-		{
-			return variadic_;
-		}
-
-		bool
-		const_qualified() const
-		{
-			return const_qualified_;
-		}
-
-		bool
-		volatile_qualified() const
-		{
-			return volatile_qualified_;
+			return member_class_.lock();
 		}
 
 	private:
-		const type_variant return_type_;
-		const std::vector<type_variant> parameter_types_;
-		const bool variadic_;
-		const bool const_qualified_;
-		const bool volatile_qualified_;
+		type_variant qualified_type_;
+		std::weak_ptr<const class_> member_class_;
 };
 
 bool
-operator==(const function_type& lhs, const function_type& rhs);
+operator==(const pointer_to_member& lhs, const pointer_to_member& rhs);
 
 bool
-operator!=(const function_type& lhs, const function_type& rhs);
+operator!=(const pointer_to_member& lhs, const pointer_to_member& rhs);
 
 }}} //namespace scalpel::cpp::semantic_entities
 

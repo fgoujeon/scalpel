@@ -32,6 +32,7 @@ class class_;
 class cv_qualified_type;
 class function_type;
 class pointer;
+class pointer_to_member;
 class reference;
 
 typedef
@@ -43,6 +44,7 @@ typedef
 		const class_*,
 		cv_qualified_type,
 		pointer,
+		pointer_to_member,
 		reference
 	>::type
 	type_variant
