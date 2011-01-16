@@ -12,3 +12,7 @@ namespace n
 	void (::c::*fun_ptr2)(int);
 }
 
+void f(void (c::*fun_ptr)(int))
+{
+}
+

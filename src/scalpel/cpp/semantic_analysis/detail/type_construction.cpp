@@ -20,6 +20,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "type_construction.hpp"
 #include "function_construction.hpp"
+#include "class_construction.hpp"
 #include "name_lookup.hpp"
 #include "semantic_entity_analysis/to_type_variant.hpp"
 #include "syntax_node_analysis/declarator.hpp"
@@ -225,7 +226,7 @@ qualify_type2
 	if(auto opt_ptr_operator_seq_node = get_ptr_operator_seq(declarator_node))
 	{
 		auto ptr_operator_seq_node = *opt_ptr_operator_seq_node;
-		type = qualify_type(type, ptr_operator_seq_node);
+		type = qualify_type2(type, ptr_operator_seq_node, current_declarative_region);
 	}
 
 	//arrays and function type
@@ -270,7 +271,7 @@ qualify_type2
 	if(const boost::optional<const bracketed_declarator&> opt_bracketed_declarator_node = get<bracketed_declarator>(&first_part_node))
 	{
 		const bracketed_declarator& bracketed_declarator_node = *opt_bracketed_declarator_node;
-		type = qualify_type(type, get_declarator(bracketed_declarator_node));
+		type = qualify_type2(type, get_declarator(bracketed_declarator_node), current_declarative_region);
 	}
 
 	return type;
@@ -361,6 +362,62 @@ qualify_type_with_arrays
 	return type;
 }
 
+semantic_entities::type_variant
+qualify_type2
+(
+	semantic_entities::type_variant type,
+	const syntax_nodes::ptr_operator_seq& ptr_operator_seq_node,
+	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
+)
+{
+	for(auto i = ptr_operator_seq_node.begin(); i != ptr_operator_seq_node.end(); ++i)
+	{
+		auto ptr_operator_node = i->main_node();
+		if(auto opt_ptr_ptr_operator_node = get<ptr_ptr_operator>(&ptr_operator_node))
+		{
+			auto ptr_ptr_operator_node = *opt_ptr_ptr_operator_node;
+
+			if(auto opt_simple_ptr_ptr_operator_node = get<simple_ptr_ptr_operator>(&ptr_ptr_operator_node))
+			{
+				const simple_ptr_ptr_operator& simple_ptr_ptr_operator_node = *opt_simple_ptr_ptr_operator_node;
+
+				type = pointer(type);
+
+				if(auto opt_cv_qualifier_seq_node = get_cv_qualifier_seq(simple_ptr_ptr_operator_node))
+				{
+					type = qualify_type(type, *opt_cv_qualifier_seq_node);
+				}
+			}
+			else if(auto opt_member_function_ptr_operator_node = get<member_function_ptr_operator>(&ptr_ptr_operator_node))
+			{
+				const member_function_ptr_operator& member_function_ptr_operator_node = *opt_member_function_ptr_operator_node;
+
+				//get the class designated by the member-function-ptr-operator (c in "void (c::*f)(int)")
+				std::shared_ptr<class_> parent_class =
+					find_class
+					(
+						member_function_ptr_operator_node,
+						current_declarative_region
+					)
+				;
+
+				utility::get<function_type>(type).parent_class(parent_class.get());
+				type = pointer(type);
+
+				if(auto opt_cv_qualifier_seq_node = get_cv_qualifier_seq(member_function_ptr_operator_node))
+				{
+					type = qualify_type(type, *opt_cv_qualifier_seq_node);
+				}
+			}
+		}
+		else if(auto ref_ptr_operator_node = get<ref_ptr_operator>(&ptr_operator_node))
+		{
+			type = reference(type);
+		}
+	}
+
+	return type;
+}
 
 semantic_entities::type_variant
 qualify_type
@@ -378,46 +435,56 @@ qualify_type
 
 			type = pointer(type);
 
-			bool const_qualified = false;
-			bool volatile_qualified = false;
-
-			//find cv-qualifiers
 			if(auto opt_simple_ptr_ptr_operator_node = get<simple_ptr_ptr_operator>(&ptr_ptr_operator_node))
 			{
 				const simple_ptr_ptr_operator& simple_ptr_ptr_operator_node = *opt_simple_ptr_ptr_operator_node;
 				if(auto opt_cv_qualifier_seq_node = get_cv_qualifier_seq(simple_ptr_ptr_operator_node))
 				{
-					auto cv_qualifier_seq_node = *opt_cv_qualifier_seq_node;
-					for
-					(
-						auto i = cv_qualifier_seq_node.begin();
-						i != cv_qualifier_seq_node.end();
-						++i
-					)
-					{
-						auto cv_qualifier_node = i->main_node();
-
-						if(get<predefined_text_node<str::const_>>(&cv_qualifier_node))
-							const_qualified = true;
-						else if(get<predefined_text_node<str::volatile_>>(&cv_qualifier_node))
-							volatile_qualified = true;
-					}
+					type = qualify_type(type, *opt_cv_qualifier_seq_node);
 				}
 			}
-
-			//apply cv-qualifiers
-			if(const_qualified && volatile_qualified)
-				type = cv_qualified_type(type, cv_qualified_type::qualification_type::CONST_AND_VOLATILE);
-			else if(const_qualified)
-				type = cv_qualified_type(type, cv_qualified_type::qualification_type::CONST);
-			else if(volatile_qualified)
-				type = cv_qualified_type(type, cv_qualified_type::qualification_type::VOLATILE);
 		}
 		else if(auto ref_ptr_operator_node = get<ref_ptr_operator>(&ptr_operator_node))
 		{
 			type = reference(type);
 		}
 	}
+
+	return type;
+}
+
+semantic_entities::type_variant
+qualify_type
+(
+	semantic_entities::type_variant type,
+	const syntax_nodes::cv_qualifier_seq& cv_qualifier_seq_node
+)
+{
+	//find cv-qualifiers
+	bool const_qualified = false;
+	bool volatile_qualified = false;
+	for
+	(
+		auto i = cv_qualifier_seq_node.begin();
+		i != cv_qualifier_seq_node.end();
+		++i
+	)
+	{
+		auto cv_qualifier_node = i->main_node();
+
+		if(get<predefined_text_node<str::const_>>(&cv_qualifier_node))
+			const_qualified = true;
+		else if(get<predefined_text_node<str::volatile_>>(&cv_qualifier_node))
+			volatile_qualified = true;
+	}
+
+	//apply cv-qualifiers
+	if(const_qualified && volatile_qualified)
+		type = cv_qualified_type(type, cv_qualified_type::qualification_type::CONST_AND_VOLATILE);
+	else if(const_qualified)
+		type = cv_qualified_type(type, cv_qualified_type::qualification_type::CONST);
+	else if(volatile_qualified)
+		type = cv_qualified_type(type, cv_qualified_type::qualification_type::VOLATILE);
 
 	return type;
 }

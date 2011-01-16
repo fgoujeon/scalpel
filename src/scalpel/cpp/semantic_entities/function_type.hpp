@@ -51,6 +51,12 @@ class function_type
 			return parent_class_;
 		}
 
+		void
+		parent_class(const class_* c)
+		{
+			parent_class_ = c;
+		}
+
 		const type_variant&
 		return_type() const
 		{

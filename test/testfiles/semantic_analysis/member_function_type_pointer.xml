@@ -37,4 +37,25 @@
   <destructor access="public" defined="false">
   </destructor>
  </class>
+ <simple_function name="f">
+  <return_type>
+   <fundamental_type type="void"/>
+  </return_type>
+  <parameters>
+   <parameter name="fun_ptr">
+    <type>
+     <pointer>
+      <function_type class_id="c1">
+       <return_type>
+        <fundamental_type type="void"/>
+       </return_type>
+       <parameter_types>
+        <fundamental_type type="int"/>
+       </parameter_types>
+      </function_type>
+     </pointer>
+    </type>
+   </parameter>
+  </parameters>
+ </simple_function>
 </namespace>

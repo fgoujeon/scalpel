@@ -101,10 +101,27 @@ qualify_type_with_arrays
 
 //qualify type with ptr-operator-seq's pointers and references
 semantic_entities::type_variant
+qualify_type2
+(
+	semantic_entities::type_variant type,
+	const syntax_nodes::ptr_operator_seq& ptr_operator_seq_node,
+	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
+);
+
+//qualify type with ptr-operator-seq's pointers and references
+semantic_entities::type_variant
 qualify_type
 (
 	semantic_entities::type_variant type,
 	const syntax_nodes::ptr_operator_seq& ptr_operator_seq_node
+);
+
+//qualify type with cv-qualifier-seq's const and volatile
+semantic_entities::type_variant
+qualify_type
+(
+	semantic_entities::type_variant type,
+	const syntax_nodes::cv_qualifier_seq& cv_qualifier_seq_node
 );
 
 semantic_entities::fundamental_type
