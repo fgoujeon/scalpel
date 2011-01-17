@@ -20,3 +20,5 @@ c::f()
 
 void g(int ());
 
+void h(int* (unsigned int...));
+

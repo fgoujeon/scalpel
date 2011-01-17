@@ -1280,9 +1280,16 @@ grammar::grammar()
 		= type_specifier % !s
 	;
 
+	/*
+	Original rule is:
+		abstract-declarator
+			= ptr-operator, [abstract-declarator]
+			| direct-abstract-declarator
+		;
+	*/
 	abstract_declarator
-		= ptr_operator_seq
-		| direct_abstract_declarator
+		= !(ptr_operator_seq >> !s) >> direct_abstract_declarator
+		| ptr_operator_seq
 	;
 
 	/*

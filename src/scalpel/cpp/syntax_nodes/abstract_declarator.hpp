@@ -23,7 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "ptr_operator_seq.hpp"
 
-#include "detail/macros/alternative_node_pimpl_declaration.hpp"
+#include "detail/macros/sequence_node_pimpl_declaration.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
@@ -32,19 +32,27 @@ class direct_abstract_declarator;
 
 /**
 abstract_declarator
-	= ptr_operator_seq
-	| direct_abstract_declarator
+	= [{ptr_operator_seq}], direct_abstract_declarator
+	| ptr_operator_seq
 ;
 */
-SCALPEL_ALTERNATIVE_NODE_PIMPL_DECLARATION
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	abstract_declarator,
-	(ptr_operator_seq)
-	(direct_abstract_declarator)
+	(optional_node<ptr_operator_seq>)
+	(optional_node<space>)
+	(optional_node<direct_abstract_declarator>)
 )
+
+const optional_node<ptr_operator_seq>&
+get_ptr_operator_seq(const abstract_declarator& o);
+
+const optional_node<direct_abstract_declarator>&
+get_direct_abstract_declarator(const abstract_declarator& o);
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
-#include "detail/macros/alternative_node_pimpl_declaration_undef.hpp"
+#include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif
+

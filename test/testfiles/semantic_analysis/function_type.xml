@@ -63,6 +63,27 @@
    </parameter>
   </parameters>
  </simple_function>
+ <simple_function name="h" defined="false">
+  <return_type>
+   <fundamental_type type="void"/>
+  </return_type>
+  <parameters>
+   <parameter>
+    <type>
+     <function_type variadic="true">
+      <return_type>
+       <pointer>
+        <fundamental_type type="int"/>
+       </pointer>
+      </return_type>
+      <parameter_types>
+       <fundamental_type type="unsigned int"/>
+      </parameter_types>
+     </function_type>
+    </type>
+   </parameter>
+  </parameters>
+ </simple_function>
  <variable name="f_ptr">
   <type>
    <pointer>

@@ -255,11 +255,12 @@ qualify_type
 	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
 )
 {
-	if(boost::optional<const ptr_operator_seq&> opt_ptr_operator_seq_node = get<ptr_operator_seq>(&abstract_declarator_node))
+	if(const optional_node<ptr_operator_seq>& opt_ptr_operator_seq_node = get_ptr_operator_seq(abstract_declarator_node))
 	{
 		type = qualify_type(type, *opt_ptr_operator_seq_node, current_declarative_region);
 	}
-	else if(boost::optional<const direct_abstract_declarator&> opt_direct_abstract_declarator_node = get<direct_abstract_declarator>(&abstract_declarator_node))
+
+	if(const optional_node<direct_abstract_declarator>& opt_direct_abstract_declarator_node = get_direct_abstract_declarator(abstract_declarator_node))
 	{
 		const direct_abstract_declarator& direct_abstract_declarator_node = *opt_direct_abstract_declarator_node;
 
