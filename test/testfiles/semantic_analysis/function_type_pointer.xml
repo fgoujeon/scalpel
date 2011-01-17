@@ -35,6 +35,27 @@
    </parameter>
   </parameters>
  </simple_function>
+ <simple_function name="g" defined="false">
+  <return_type>
+   <fundamental_type type="void"/>
+  </return_type>
+  <parameters>
+   <parameter>
+    <type>
+     <pointer>
+      <function_type>
+       <return_type>
+        <fundamental_type type="int"/>
+       </return_type>
+       <parameter_types>
+        <fundamental_type type="double"/>
+       </parameter_types>
+      </function_type>
+     </pointer>
+    </type>
+   </parameter>
+  </parameters>
+ </simple_function>
  <variable name="fun_ptr">
   <type>
    <cv_qualified_type const="true">

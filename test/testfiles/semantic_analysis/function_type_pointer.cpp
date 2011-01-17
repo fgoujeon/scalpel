@@ -7,3 +7,5 @@ void f(void (*fun_ptr)(int))
 {
 }
 
+void g(int (*)(double));
+

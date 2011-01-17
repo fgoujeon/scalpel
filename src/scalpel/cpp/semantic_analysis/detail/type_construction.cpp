@@ -273,11 +273,16 @@ qualify_type
 
 			if
 			(
-				const optional_node<direct_declarator_last_part>& last_part_node =
+				const optional_node<direct_declarator_last_part>& opt_last_part_node =
 					get_last_part(bracketed_abstract_declarator_node)
 			)
 			{
+				const direct_declarator_last_part& last_part_node = *opt_last_part_node;
+				type = qualify_type(type, last_part_node, current_declarative_region, false);
 			}
+
+			const abstract_declarator& abstract_declarator_node = get_abstract_declarator(bracketed_abstract_declarator_node);
+			type = qualify_type(type, abstract_declarator_node, current_declarative_region);
 		}
 		else if
 		(
@@ -305,39 +310,52 @@ qualify_type
 	for(auto i = last_part_seq_node.begin(); i != last_part_seq_node.end(); ++i)
 	{
 		const direct_declarator_last_part& last_part_node = i->main_node();
+		type = qualify_type(type, last_part_node, current_declarative_region, ignore_function_type);
+	}
 
-		if(!ignore_function_type)
+	return type;
+}
+
+semantic_entities::type_variant
+qualify_type
+(
+	semantic_entities::type_variant type,
+	const syntax_nodes::direct_declarator_last_part& last_part_node,
+	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region,
+	const bool ignore_function_type
+)
+{
+	if(!ignore_function_type)
+	{
+		if(const boost::optional<const direct_declarator_function_part&> opt_function_part_node = get<direct_declarator_function_part>(&last_part_node))
 		{
-			if(const boost::optional<const direct_declarator_function_part&> opt_function_part_node = get<direct_declarator_function_part>(&last_part_node))
-			{
-				type =
-					function_type
-					(
-						type, //return type
-						create_parameter_types(syntax_node_analysis::get_parameter_declaration_list(last_part_seq_node), current_declarative_region),
-						syntax_node_analysis::has_ellipsis(last_part_seq_node),
-						syntax_node_analysis::has_const_function_qualifier(last_part_seq_node),
-						syntax_node_analysis::has_volatile_function_qualifier(last_part_seq_node)
-					)
-				;
-			}
+			type =
+				function_type
+				(
+					type, //return type
+					create_parameter_types(syntax_node_analysis::get_parameter_declaration_list(last_part_node), current_declarative_region),
+					syntax_node_analysis::has_ellipsis(last_part_node),
+					syntax_node_analysis::has_const_function_qualifier(last_part_node),
+					syntax_node_analysis::has_volatile_function_qualifier(last_part_node)
+				)
+			;
 		}
+	}
 
-		if
-		(
-			const boost::optional<const direct_declarator_array_part&> opt_array_part_node =
-				get<direct_declarator_array_part>(&last_part_node)
-		)
+	if
+	(
+		const boost::optional<const direct_declarator_array_part&> opt_array_part_node =
+			get<direct_declarator_array_part>(&last_part_node)
+	)
+	{
+		if(get_conditional_expression(*opt_array_part_node))
 		{
-			if(get_conditional_expression(*opt_array_part_node))
-			{
-				type = array(0, type);
-			}
-			else
-			{
-				//int i[] == int i*
-				type = pointer(type);
-			}
+			type = array(0, type);
+		}
+		else
+		{
+			//int i[] == int i*
+			type = pointer(type);
 		}
 	}
 

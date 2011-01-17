@@ -44,11 +44,17 @@ get_parameter_declaration_list(const syntax_nodes::declarator& declarator_node);
 boost::optional<const syntax_nodes::parameter_declaration_list&>
 get_parameter_declaration_list(const syntax_nodes::direct_declarator_last_part_seq& last_part_seq_node);
 
+boost::optional<const syntax_nodes::parameter_declaration_list&>
+get_parameter_declaration_list(const syntax_nodes::direct_declarator_last_part& last_part_node);
+
 bool
 has_ellipsis(const syntax_nodes::declarator& declarator_node);
 
 bool
 has_ellipsis(const syntax_nodes::direct_declarator_last_part_seq& last_part_seq_node);
+
+bool
+has_ellipsis(const syntax_nodes::direct_declarator_last_part& last_part_node);
 
 template<const std::string& Qualifier>
 bool
@@ -80,10 +86,16 @@ bool
 has_const_function_qualifier(const syntax_nodes::direct_declarator_last_part_seq& last_part_seq_node);
 
 bool
+has_const_function_qualifier(const syntax_nodes::direct_declarator_last_part& last_part_node);
+
+bool
 has_volatile_function_qualifier(const syntax_nodes::declarator& declarator_node);
 
 bool
 has_volatile_function_qualifier(const syntax_nodes::direct_declarator_last_part_seq& last_part_seq_node);
+
+bool
+has_volatile_function_qualifier(const syntax_nodes::direct_declarator_last_part& last_part_node);
 
 bool
 has_type_qualifiers(const syntax_nodes::declarator& declarator_node);
