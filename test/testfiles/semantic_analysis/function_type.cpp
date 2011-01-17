@@ -18,3 +18,5 @@ c::f()
 	return 0;
 }
 
+void g(int ());
+

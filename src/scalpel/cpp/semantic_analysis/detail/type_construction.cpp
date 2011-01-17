@@ -234,45 +234,7 @@ qualify_type
 	if(const optional_node<direct_declarator_last_part_seq>& opt_last_part_seq_node = get_last_part_seq(direct_declarator_node))
 	{
 		const direct_declarator_last_part_seq& last_part_seq_node = *opt_last_part_seq_node;
-
-		for(auto i = last_part_seq_node.begin(); i != last_part_seq_node.end(); ++i)
-		{
-			const direct_declarator_last_part& last_part_node = i->main_node();
-
-			if(!ignore_function_type)
-			{
-				if(const boost::optional<const direct_declarator_function_part&> opt_function_part_node = get<direct_declarator_function_part>(&last_part_node))
-				{
-					type =
-						function_type
-						(
-							type, //return type
-							create_parameter_types(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
-							syntax_node_analysis::has_ellipsis(declarator_node),
-							syntax_node_analysis::has_const_function_qualifier(declarator_node),
-							syntax_node_analysis::has_volatile_function_qualifier(declarator_node)
-						)
-					;
-				}
-			}
-
-			if
-			(
-				const boost::optional<const direct_declarator_array_part&> opt_array_part_node =
-					get<direct_declarator_array_part>(&last_part_node)
-			)
-			{
-				if(get_conditional_expression(*opt_array_part_node))
-				{
-					type = array(0, type);
-				}
-				else
-				{
-					//int i[] == int i*
-					type = pointer(type);
-				}
-			}
-		}
+		type = qualify_type(type, last_part_seq_node, current_declarative_region, ignore_function_type);
 	}
 
 	//bracketed-declarator's qualifiers
@@ -280,6 +242,103 @@ qualify_type
 	{
 		const bracketed_declarator& bracketed_declarator_node = *opt_bracketed_declarator_node;
 		type = qualify_type(type, get_declarator(bracketed_declarator_node), current_declarative_region);
+	}
+
+	return type;
+}
+
+semantic_entities::type_variant
+qualify_type
+(
+	semantic_entities::type_variant type,
+	const syntax_nodes::abstract_declarator& abstract_declarator_node,
+	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
+)
+{
+	if(boost::optional<const ptr_operator_seq&> opt_ptr_operator_seq_node = get<ptr_operator_seq>(&abstract_declarator_node))
+	{
+		type = qualify_type(type, *opt_ptr_operator_seq_node, current_declarative_region);
+	}
+	else if(boost::optional<const direct_abstract_declarator&> opt_direct_abstract_declarator_node = get<direct_abstract_declarator>(&abstract_declarator_node))
+	{
+		const direct_abstract_declarator& direct_abstract_declarator_node = *opt_direct_abstract_declarator_node;
+
+		if
+		(
+			boost::optional<const bracketed_abstract_declarator&> opt_bracketed_abstract_declarator_node =
+				get<bracketed_abstract_declarator>(&direct_abstract_declarator_node)
+		)
+		{
+			const bracketed_abstract_declarator& bracketed_abstract_declarator_node = *opt_bracketed_abstract_declarator_node;
+
+			if
+			(
+				const optional_node<direct_declarator_last_part>& last_part_node =
+					get_last_part(bracketed_abstract_declarator_node)
+			)
+			{
+			}
+		}
+		else if
+		(
+			boost::optional<const direct_declarator_last_part_seq&> opt_direct_declarator_last_part_seq_node =
+				get<direct_declarator_last_part_seq>(&direct_abstract_declarator_node)
+		)
+		{
+			const direct_declarator_last_part_seq& last_part_seq_node = *opt_direct_declarator_last_part_seq_node;
+			type = qualify_type(type, last_part_seq_node, current_declarative_region, false);
+		}
+	}
+
+	return type;
+}
+
+semantic_entities::type_variant
+qualify_type
+(
+	semantic_entities::type_variant type,
+	const syntax_nodes::direct_declarator_last_part_seq& last_part_seq_node,
+	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region,
+	const bool ignore_function_type
+)
+{
+	for(auto i = last_part_seq_node.begin(); i != last_part_seq_node.end(); ++i)
+	{
+		const direct_declarator_last_part& last_part_node = i->main_node();
+
+		if(!ignore_function_type)
+		{
+			if(const boost::optional<const direct_declarator_function_part&> opt_function_part_node = get<direct_declarator_function_part>(&last_part_node))
+			{
+				type =
+					function_type
+					(
+						type, //return type
+						create_parameter_types(syntax_node_analysis::get_parameter_declaration_list(last_part_seq_node), current_declarative_region),
+						syntax_node_analysis::has_ellipsis(last_part_seq_node),
+						syntax_node_analysis::has_const_function_qualifier(last_part_seq_node),
+						syntax_node_analysis::has_volatile_function_qualifier(last_part_seq_node)
+					)
+				;
+			}
+		}
+
+		if
+		(
+			const boost::optional<const direct_declarator_array_part&> opt_array_part_node =
+				get<direct_declarator_array_part>(&last_part_node)
+		)
+		{
+			if(get_conditional_expression(*opt_array_part_node))
+			{
+				type = array(0, type);
+			}
+			else
+			{
+				//int i[] == int i*
+				type = pointer(type);
+			}
+		}
 	}
 
 	return type;

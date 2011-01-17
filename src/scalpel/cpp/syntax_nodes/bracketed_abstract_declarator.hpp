@@ -42,10 +42,24 @@ typedef
 		optional_node<space>,
 		predefined_text_node<str::closing_round_bracket>,
 		optional_node<space>,
-		direct_declarator_last_part
+		optional_node<direct_declarator_last_part>
 	>
 	bracketed_abstract_declarator
 ;
+
+inline
+const abstract_declarator&
+get_abstract_declarator(const bracketed_abstract_declarator& o)
+{
+	return get<2>(o);
+}
+
+inline
+const optional_node<direct_declarator_last_part>&
+get_last_part(const bracketed_abstract_declarator& o)
+{
+	return get<6>(o);
+}
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

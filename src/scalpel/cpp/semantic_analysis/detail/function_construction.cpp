@@ -410,21 +410,11 @@ create_parameters
 		{
 			auto abstract_declarator_node = *opt_abstract_declarator_node;
 
-			if(boost::optional<const ptr_operator_seq&> opt_ptr_operator_seq_node = get<ptr_operator_seq>(&abstract_declarator_node))
-			{
-				type = qualify_type(type, *opt_ptr_operator_seq_node, current_declarative_region);
-			}
-			else if(boost::optional<const direct_abstract_declarator&> opt_direct_abstract_declarator_node = get<direct_abstract_declarator>(&abstract_declarator_node))
-			{
-				assert(false); //not managed yet
-			}
-
 			parameters.push_back
 			(
 				std::make_shared<function_parameter>
 				(
-					type,
-					""
+					qualify_type(type, abstract_declarator_node, current_declarative_region)
 				)
 			);
 		}

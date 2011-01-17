@@ -144,21 +144,33 @@ get_parameter_declaration_list(const syntax_nodes::declarator& declarator_node)
 	if(const optional_node<direct_declarator_last_part_seq>& opt_last_part_seq_node = get_last_part_seq(direct_declarator_node))
 	{
 		const direct_declarator_last_part_seq& last_part_seq_node = *opt_last_part_seq_node;
-		for(auto i = last_part_seq_node.begin(); i != last_part_seq_node.end(); ++i)
+		return get_parameter_declaration_list(last_part_seq_node);
+	}
+
+	return boost::optional<const syntax_nodes::parameter_declaration_list&>();
+}
+
+boost::optional<const syntax_nodes::parameter_declaration_list&>
+get_parameter_declaration_list(const syntax_nodes::direct_declarator_last_part_seq& last_part_seq_node)
+{
+	for(auto i = last_part_seq_node.begin(); i != last_part_seq_node.end(); ++i)
+	{
+		const direct_declarator_last_part& last_part_node = i->main_node();
+		if
+		(
+			boost::optional<const direct_declarator_function_part&> opt_function_part_node =
+				syntax_nodes::get<syntax_nodes::direct_declarator_function_part>(&last_part_node)
+		)
 		{
-			const direct_declarator_last_part& last_part_node = i->main_node();
-			if(boost::optional<const direct_declarator_function_part&> opt_function_part_node = syntax_nodes::get<syntax_nodes::direct_declarator_function_part>(&last_part_node))
+			if(const optional_node<parameter_declaration_clause>& opt_parameter_declaration_clause_node = get_parameter_declaration_clause(*opt_function_part_node))
 			{
-				if(const optional_node<parameter_declaration_clause>& opt_parameter_declaration_clause_node = get_parameter_declaration_clause(*opt_function_part_node))
+				if
+				(
+					const optional_node<parameter_declaration_list>& opt_parameter_declaration_list_node =
+						get_parameter_declaration_list(*opt_parameter_declaration_clause_node)
+				)
 				{
-					if
-					(
-						const optional_node<parameter_declaration_list>& opt_parameter_declaration_list_node =
-							get_parameter_declaration_list(*opt_parameter_declaration_clause_node)
-					)
-					{
-						return *opt_parameter_declaration_list_node;
-					}
+					return *opt_parameter_declaration_list_node;
 				}
 			}
 		}
@@ -174,20 +186,27 @@ has_ellipsis(const syntax_nodes::declarator& declarator_node)
 	if(const optional_node<direct_declarator_last_part_seq>& opt_last_part_seq_node = get_last_part_seq(direct_declarator_node))
 	{
 		const direct_declarator_last_part_seq& last_part_seq_node = *opt_last_part_seq_node;
+		return has_ellipsis(last_part_seq_node);
+	}
 
-		for(auto i = last_part_seq_node.begin(); i != last_part_seq_node.end(); ++i)
+	return false;
+}
+
+bool
+has_ellipsis(const syntax_nodes::direct_declarator_last_part_seq& last_part_seq_node)
+{
+	for(auto i = last_part_seq_node.begin(); i != last_part_seq_node.end(); ++i)
+	{
+		const direct_declarator_last_part& last_part_node = i->main_node();
+
+		if(const boost::optional<const direct_declarator_function_part&> opt_function_part_node = get<direct_declarator_function_part>(&last_part_node))
 		{
-			const direct_declarator_last_part& last_part_node = i->main_node();
+			const direct_declarator_function_part& function_part_node = *opt_function_part_node;
 
-			if(const boost::optional<const direct_declarator_function_part&> opt_function_part_node = get<direct_declarator_function_part>(&last_part_node))
+			if(const optional_node<parameter_declaration_clause>& opt_parameter_declaration_clause_node = get_parameter_declaration_clause(function_part_node))
 			{
-				const direct_declarator_function_part& function_part_node = *opt_function_part_node;
-
-				if(const optional_node<parameter_declaration_clause>& opt_parameter_declaration_clause_node = get_parameter_declaration_clause(function_part_node))
-				{
-					const parameter_declaration_clause& parameter_declaration_clause_node = *opt_parameter_declaration_clause_node;
-					return has_ellipsis(parameter_declaration_clause_node);
-				}
+				const parameter_declaration_clause& parameter_declaration_clause_node = *opt_parameter_declaration_clause_node;
+				return has_ellipsis(parameter_declaration_clause_node);
 			}
 		}
 	}
@@ -423,26 +442,33 @@ has_const_function_qualifier(const syntax_nodes::declarator& declarator_node)
 	if(const optional_node<direct_declarator_last_part_seq>& opt_last_part_seq_node = get_last_part_seq(direct_declarator_node))
 	{
 		const direct_declarator_last_part_seq& last_part_seq_node = *opt_last_part_seq_node;
+		return has_const_function_qualifier(last_part_seq_node);
+	}
 
-		for(auto i = last_part_seq_node.begin(); i != last_part_seq_node.end(); ++i)
+	return false;
+}
+
+bool
+has_const_function_qualifier(const syntax_nodes::direct_declarator_last_part_seq& last_part_seq_node)
+{
+	for(auto i = last_part_seq_node.begin(); i != last_part_seq_node.end(); ++i)
+	{
+		const direct_declarator_last_part& last_part_node = i->main_node();
+
+		if(const boost::optional<const direct_declarator_function_part&> opt_function_part_node = get<direct_declarator_function_part>(&last_part_node))
 		{
-			const direct_declarator_last_part& last_part_node = i->main_node();
+			const direct_declarator_function_part& function_part_node = *opt_function_part_node;
 
-			if(const boost::optional<const direct_declarator_function_part&> opt_function_part_node = get<direct_declarator_function_part>(&last_part_node))
+			if(const optional_node<cv_qualifier_seq>& opt_cv_qualifier_seq_node = get_cv_qualifier_seq(function_part_node))
 			{
-				const direct_declarator_function_part& function_part_node = *opt_function_part_node;
+				const cv_qualifier_seq& cv_qualifier_seq_node = *opt_cv_qualifier_seq_node;
 
-				if(const optional_node<cv_qualifier_seq>& opt_cv_qualifier_seq_node = get_cv_qualifier_seq(function_part_node))
+				for(auto j = cv_qualifier_seq_node.begin(); j != cv_qualifier_seq_node.end(); ++j)
 				{
-					const cv_qualifier_seq& cv_qualifier_seq_node = *opt_cv_qualifier_seq_node;
+					const cv_qualifier& cv_qualifier_node = j->main_node();
 
-					for(auto j = cv_qualifier_seq_node.begin(); j != cv_qualifier_seq_node.end(); ++j)
-					{
-						const cv_qualifier& cv_qualifier_node = j->main_node();
-
-						if(get<predefined_text_node<str::const_>>(&cv_qualifier_node))
-							return true;
-					}
+					if(get<predefined_text_node<str::const_>>(&cv_qualifier_node))
+						return true;
 				}
 			}
 		}
@@ -458,26 +484,33 @@ has_volatile_function_qualifier(const syntax_nodes::declarator& declarator_node)
 	if(const optional_node<direct_declarator_last_part_seq>& opt_last_part_seq_node = get_last_part_seq(direct_declarator_node))
 	{
 		const direct_declarator_last_part_seq& last_part_seq_node = *opt_last_part_seq_node;
+		return has_volatile_function_qualifier(last_part_seq_node);
+	}
 
-		for(auto i = last_part_seq_node.begin(); i != last_part_seq_node.end(); ++i)
+	return false;
+}
+
+bool
+has_volatile_function_qualifier(const syntax_nodes::direct_declarator_last_part_seq& last_part_seq_node)
+{
+	for(auto i = last_part_seq_node.begin(); i != last_part_seq_node.end(); ++i)
+	{
+		const direct_declarator_last_part& last_part_node = i->main_node();
+
+		if(const boost::optional<const direct_declarator_function_part&> opt_function_part_node = get<direct_declarator_function_part>(&last_part_node))
 		{
-			const direct_declarator_last_part& last_part_node = i->main_node();
+			const direct_declarator_function_part& function_part_node = *opt_function_part_node;
 
-			if(const boost::optional<const direct_declarator_function_part&> opt_function_part_node = get<direct_declarator_function_part>(&last_part_node))
+			if(const optional_node<cv_qualifier_seq>& opt_cv_qualifier_seq_node = get_cv_qualifier_seq(function_part_node))
 			{
-				const direct_declarator_function_part& function_part_node = *opt_function_part_node;
+				const cv_qualifier_seq& cv_qualifier_seq_node = *opt_cv_qualifier_seq_node;
 
-				if(const optional_node<cv_qualifier_seq>& opt_cv_qualifier_seq_node = get_cv_qualifier_seq(function_part_node))
+				for(auto j = cv_qualifier_seq_node.begin(); j != cv_qualifier_seq_node.end(); ++j)
 				{
-					const cv_qualifier_seq& cv_qualifier_seq_node = *opt_cv_qualifier_seq_node;
+					const cv_qualifier& cv_qualifier_node = j->main_node();
 
-					for(auto j = cv_qualifier_seq_node.begin(); j != cv_qualifier_seq_node.end(); ++j)
-					{
-						const cv_qualifier& cv_qualifier_node = j->main_node();
-
-						if(get<predefined_text_node<str::volatile_>>(&cv_qualifier_node))
-							return true;
-					}
+					if(get<predefined_text_node<str::volatile_>>(&cv_qualifier_node))
+						return true;
 				}
 			}
 		}
