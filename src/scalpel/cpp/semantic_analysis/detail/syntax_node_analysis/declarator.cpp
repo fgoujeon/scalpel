@@ -600,13 +600,9 @@ has_bracketed_type_qualifiers(const syntax_nodes::declarator& declarator_node)
 	return false;
 }
 
-boost::optional<const member_function_ptr_operator&>
-get_member_function_ptr_operator(const syntax_nodes::declarator& declarator_node)
+boost::optional<const ptr_to_member_operator&>
+get_ptr_to_member_operator(const syntax_nodes::declarator& declarator_node)
 {
-	//declarator -> direct_declarator -> direct_declarator_first_part ->
-	//bracketed_declarator -> declarator -> ptr_operator_seq -> ptr_operator ->
-	//ptr_ptr_operator -> nested_name_specifier
-
 	const direct_declarator& direct_declarator_node = get_direct_declarator(declarator_node);
 	const direct_declarator_first_part& first_part_node = get_first_part(direct_declarator_node);
 	if(const boost::optional<const bracketed_declarator&> opt_bracketed_declarator_node = get<bracketed_declarator>(&first_part_node))
@@ -624,13 +620,13 @@ get_member_function_ptr_operator(const syntax_nodes::declarator& declarator_node
 				if(const boost::optional<const ptr_ptr_operator&> opt_ptr_ptr_operator_node = get<ptr_ptr_operator>(&ptr_operator_node))
 				{
 					const ptr_ptr_operator& ptr_ptr_operator_node = *opt_ptr_ptr_operator_node;
-					return get<member_function_ptr_operator>(&ptr_ptr_operator_node);
+					return get<ptr_to_member_operator>(&ptr_ptr_operator_node);
 				}
 			}
 		}
 	}
 
-	return boost::optional<const member_function_ptr_operator&>();
+	return boost::optional<const ptr_to_member_operator&>();
 }
 
 }}}}} //namespace scalpel::cpp::semantic_analysis::detail::syntax_node_analysis

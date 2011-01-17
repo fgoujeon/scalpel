@@ -1243,14 +1243,14 @@ grammar::grammar()
 
 	ptr_ptr_operator
 		= simple_ptr_ptr_operator
-		| member_function_ptr_operator
+		| ptr_to_member_operator
 	;
 
 	simple_ptr_ptr_operator
 		= ch_p('*') >> !(!s >> cv_qualifier_seq)
 	;
 
-	member_function_ptr_operator
+	ptr_to_member_operator
 		= !(str_p("::") >> !s) >> nested_name_specifier >> !s >> '*' >> !(!s >> cv_qualifier_seq)
 	;
 

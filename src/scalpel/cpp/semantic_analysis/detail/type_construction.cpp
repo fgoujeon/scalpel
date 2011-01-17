@@ -389,22 +389,22 @@ qualify_type
 					type = qualify_type(type, *opt_cv_qualifier_seq_node);
 				}
 			}
-			else if(auto opt_member_function_ptr_operator_node = get<member_function_ptr_operator>(&ptr_ptr_operator_node))
+			else if(auto opt_ptr_to_member_operator_node = get<ptr_to_member_operator>(&ptr_ptr_operator_node))
 			{
-				const member_function_ptr_operator& member_function_ptr_operator_node = *opt_member_function_ptr_operator_node;
+				const ptr_to_member_operator& ptr_to_member_operator_node = *opt_ptr_to_member_operator_node;
 
-				//get the class designated by the member-function-ptr-operator (c in "void (c::*f)(int)")
+				//get the class designated by the ptr-to-member-operator (c in "void (c::*f)(int)")
 				std::shared_ptr<class_> member_class =
 					find_class
 					(
-						member_function_ptr_operator_node,
+						ptr_to_member_operator_node,
 						current_declarative_region
 					)
 				;
 
 				type = pointer_to_member(type, member_class);
 
-				if(auto opt_cv_qualifier_seq_node = get_cv_qualifier_seq(member_function_ptr_operator_node))
+				if(auto opt_cv_qualifier_seq_node = get_cv_qualifier_seq(ptr_to_member_operator_node))
 				{
 					type = qualify_type(type, *opt_cv_qualifier_seq_node);
 				}

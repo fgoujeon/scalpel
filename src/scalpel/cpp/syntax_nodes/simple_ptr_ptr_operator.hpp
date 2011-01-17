@@ -18,30 +18,31 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_PTR_PTR_OPERATOR_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_PTR_PTR_OPERATOR_HPP
+#ifndef SCALPEL_CPP_SYNTAX_NODES_SIMPLE_PTR_PTR_OPERATOR_HPP
+#define SCALPEL_CPP_SYNTAX_NODES_SIMPLE_PTR_PTR_OPERATOR_HPP
 
-#include "simple_ptr_ptr_operator.hpp"
-#include "ptr_to_member_operator.hpp"
+#include "cv_qualifier_seq.hpp"
 #include "common.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-/**
-ptr_ptr_operator
-	= ch_p('*') >> !(!s >> cv_qualifier_seq)
-	| !(str_p("::") >> !s) >> nested_name_specifier >> !s >> '*' >> !(!s >> cv_qualifier_seq)
-;
-*/
 typedef
-	alternative_node
+	sequence_node
 	<
-		simple_ptr_ptr_operator,
-		ptr_to_member_operator
+		predefined_text_node<str::asterisk>,
+		optional_node<space>,
+		optional_node<cv_qualifier_seq>
 	>
-	ptr_ptr_operator
+	simple_ptr_ptr_operator
 ;
+
+inline
+const optional_node<cv_qualifier_seq>&
+get_cv_qualifier_seq(const simple_ptr_ptr_operator& o)
+{
+	return get<2>(o);
+}
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

@@ -488,14 +488,14 @@ add_class
 std::shared_ptr<semantic_entities::class_>
 find_class
 (
-	const member_function_ptr_operator& member_function_ptr_operator_node,
+	const ptr_to_member_operator& ptr_to_member_operator_node,
 	const declarative_region_shared_ptr_variant& current_declarative_region
 )
 {
-	const bool has_leading_double_colon = syntax_nodes::has_leading_double_colon(member_function_ptr_operator_node);
+	const bool has_leading_double_colon = syntax_nodes::has_leading_double_colon(ptr_to_member_operator_node);
 
 	const nested_name_specifier& nested_name_specifier_node =
-		get_nested_name_specifier(member_function_ptr_operator_node)
+		get_nested_name_specifier(ptr_to_member_operator_node)
 	;
 
 

@@ -18,30 +18,50 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_PTR_PTR_OPERATOR_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_PTR_PTR_OPERATOR_HPP
+#ifndef SCALPEL_CPP_SYNTAX_NODES_PTR_TO_MEMBER_OPERATOR_HPP
+#define SCALPEL_CPP_SYNTAX_NODES_PTR_TO_MEMBER_OPERATOR_HPP
 
-#include "simple_ptr_ptr_operator.hpp"
-#include "ptr_to_member_operator.hpp"
+#include "nested_name_specifier.hpp"
+#include "cv_qualifier_seq.hpp"
 #include "common.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-/**
-ptr_ptr_operator
-	= ch_p('*') >> !(!s >> cv_qualifier_seq)
-	| !(str_p("::") >> !s) >> nested_name_specifier >> !s >> '*' >> !(!s >> cv_qualifier_seq)
-;
-*/
 typedef
-	alternative_node
+	sequence_node
 	<
-		simple_ptr_ptr_operator,
-		ptr_to_member_operator
+		optional_node<predefined_text_node<str::double_colon>>,
+		optional_node<space>,
+		nested_name_specifier,
+		optional_node<space>,
+		predefined_text_node<str::asterisk>,
+		optional_node<space>,
+		optional_node<cv_qualifier_seq>
 	>
-	ptr_ptr_operator
+	ptr_to_member_operator
 ;
+
+inline
+bool
+has_leading_double_colon(const ptr_to_member_operator& o)
+{
+	return get<0>(o);
+}
+
+inline
+const nested_name_specifier&
+get_nested_name_specifier(const ptr_to_member_operator& o)
+{
+	return get<2>(o);
+}
+
+inline
+const optional_node<cv_qualifier_seq>&
+get_cv_qualifier_seq(const ptr_to_member_operator& o)
+{
+	return get<6>(o);
+}
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
