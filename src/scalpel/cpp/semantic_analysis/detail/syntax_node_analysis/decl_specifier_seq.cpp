@@ -75,6 +75,27 @@ get_class_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_n
 	assert(false);
 }
 
+const syntax_nodes::enum_specifier&
+get_enum_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node)
+{
+	for(auto i = decl_specifier_seq_node.begin(); i != decl_specifier_seq_node.end(); ++i)
+	{
+		const decl_specifier& decl_specifier_node = i->main_node();
+
+		if(const boost::optional<const type_specifier&> opt_type_specifier_node = get<type_specifier>(&decl_specifier_node))
+		{
+			const type_specifier& type_specifier_node = *opt_type_specifier_node;
+
+			if(const boost::optional<const enum_specifier&> opt_enum_specifier_node = get<enum_specifier>(&type_specifier_node))
+			{
+				return *opt_enum_specifier_node;
+			}
+		}
+	}
+
+	assert(false);
+}
+
 const syntax_nodes::class_elaborated_specifier&
 get_class_elaborated_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node)
 {

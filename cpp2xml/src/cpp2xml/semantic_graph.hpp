@@ -86,6 +86,13 @@ class semantic_graph_serializer
 		);
 
 		void
+		serialize_enum
+		(
+			std::shared_ptr<const enum_> entity,
+			const unsigned int indent_level
+		);
+
+		void
 		serialize_constructor
 		(
 			std::shared_ptr<const constructor> entity,

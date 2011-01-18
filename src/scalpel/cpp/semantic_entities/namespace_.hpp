@@ -24,6 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "declarative_region_variants.hpp"
 #include "namespace_alias.hpp"
 #include "class_.hpp"
+#include "enum_.hpp"
 #include "functions.hpp"
 #include "typedef_.hpp"
 #include "variable.hpp"
@@ -51,6 +52,7 @@ class namespace_:
 		typedef utility::shared_ptr_vector<namespace_alias> namespace_aliases_t;
 		typedef utility::shared_ptr_vector<namespace_> namespaces_t;
 		typedef utility::shared_ptr_vector<class_> classes_t;
+		typedef utility::shared_ptr_vector<enum_> enums_t;
 		typedef utility::shared_ptr_vector<typedef_> typedefs_t;
 		typedef utility::shared_ptr_vector<simple_function> simple_functions_t;
 		typedef utility::shared_ptr_vector<operator_function> operator_functions_t;
@@ -119,6 +121,12 @@ class namespace_:
 		const classes_t&
 		classes() const;
 
+		enums_t::range
+		enums();
+
+		const enums_t&
+		enums() const;
+
 		typedefs_t::range
 		typedefs();
 
@@ -162,6 +170,9 @@ class namespace_:
 		add_member(std::shared_ptr<class_> member);
 
 		void
+		add_member(std::shared_ptr<enum_> member);
+
+		void
 		add_member(std::shared_ptr<typedef_> member);
 
 		void
@@ -187,6 +198,7 @@ class namespace_:
 		namespace_aliases_t namespace_aliases_;
 		namespaces_t namespaces_;
 		classes_t classes_;
+		enums_t enums_;
 		typedefs_t typedefs_;
 		simple_functions_t simple_functions_;
 		operator_functions_t operator_functions_;

@@ -34,6 +34,7 @@ get_type_specifier_seq_type(const syntax_nodes::type_specifier_seq& type_specifi
 	//
 
 	unsigned int class_specifier_count = 0; //class XXX {...};
+	unsigned int enum_specifier_count = 0; //class XXX {...};
 	unsigned int class_elaborated_specifier_count = 0; //class XXX;
 	unsigned int simple_type_specifier_count = 0;
 
@@ -57,6 +58,7 @@ get_type_specifier_seq_type(const syntax_nodes::type_specifier_seq& type_specifi
 		}
 		else if(get<enum_specifier>(&type_specifier_node))
 		{
+			++enum_specifier_count;
 		}
 		else if(auto opt_elaborated_type_specifier_node = get<elaborated_type_specifier>(&type_specifier_node))
 		{
@@ -92,30 +94,42 @@ get_type_specifier_seq_type(const syntax_nodes::type_specifier_seq& type_specifi
 	(
 		class_specifier_count == 0 &&
 		class_elaborated_specifier_count == 0 &&
-		simple_type_specifier_count >= 1
+		simple_type_specifier_count >= 1 &&
+		enum_specifier_count == 0
 	)
 		return type_specifier_seq_type::SIMPLE_TYPE;
 	else if
 	(
 		class_specifier_count == 0 &&
 		class_elaborated_specifier_count == 0 &&
-		simple_type_specifier_count == 0
+		simple_type_specifier_count == 0 &&
+		enum_specifier_count == 0
 	)
 		return type_specifier_seq_type::NO_TYPE;
 	else if
 	(
 		class_specifier_count == 1 &&
 		class_elaborated_specifier_count == 0 &&
-		simple_type_specifier_count == 0
+		simple_type_specifier_count == 0 &&
+		enum_specifier_count == 0
 	)
 		return type_specifier_seq_type::CLASS_DECLARATION;
 	else if
 	(
 		class_specifier_count == 0 &&
 		class_elaborated_specifier_count == 1 &&
-		simple_type_specifier_count == 0
+		simple_type_specifier_count == 0 &&
+		enum_specifier_count == 0
 	)
 		return type_specifier_seq_type::CLASS_FORWARD_DECLARATION;
+	else if
+	(
+		class_specifier_count == 0 &&
+		class_elaborated_specifier_count == 0 &&
+		simple_type_specifier_count == 0 &&
+		enum_specifier_count == 1
+	)
+		return type_specifier_seq_type::ENUMERATION_DECLARATION;
 
 	throw std::runtime_error("get_type_specifier_seq_type error");
 }

@@ -36,6 +36,9 @@ to_type_specifier_seq(const syntax_nodes::decl_specifier_seq& decl_specifier_seq
 const syntax_nodes::class_specifier&
 get_class_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node);
 
+const syntax_nodes::enum_specifier&
+get_enum_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node);
+
 const syntax_nodes::class_elaborated_specifier&
 get_class_elaborated_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node);
 

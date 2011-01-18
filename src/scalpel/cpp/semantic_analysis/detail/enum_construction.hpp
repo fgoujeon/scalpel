@@ -18,41 +18,20 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_VARIANT_FWD_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_VARIANT_FWD_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_ENUM_CONSTRUCTION_HPP
+#define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_ENUM_CONSTRUCTION_HPP
 
-#include "fundamental_type.hpp"
-#include <scalpel/utility/variant.hpp>
+#include <scalpel/cpp/semantic_graph.hpp>
+#include <scalpel/cpp/syntax_tree.hpp>
+#include <memory>
 
-namespace scalpel { namespace cpp { namespace semantic_entities
+namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail
 {
 
-class array;
-class class_;
-class cv_qualified_type;
-class enum_;
-class function_type;
-class pointer;
-class pointer_to_member;
-class reference;
+std::shared_ptr<semantic_entities::enum_>
+create_enum(const syntax_nodes::enum_specifier& enum_specifier_node);
 
-typedef
-	utility::variant
-	<
-		array,
-		fundamental_type,
-		function_type,
-		const class_*,
-		cv_qualified_type,
-		const enum_*,
-		pointer,
-		pointer_to_member,
-		reference
-	>::type
-	type_variant
-;
-
-}}} //namespace scalpel::cpp::semantic_entities
+}}}} //namespace scalpel::cpp::semantic_analysis::detail
 
 #endif
 

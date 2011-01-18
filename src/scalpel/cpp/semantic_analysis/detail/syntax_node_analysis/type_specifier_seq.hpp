@@ -31,7 +31,8 @@ enum class type_specifier_seq_type
 	NO_TYPE,
 	SIMPLE_TYPE,
 	CLASS_DECLARATION,
-	CLASS_FORWARD_DECLARATION
+	CLASS_FORWARD_DECLARATION,
+	ENUMERATION_DECLARATION
 };
 
 type_specifier_seq_type

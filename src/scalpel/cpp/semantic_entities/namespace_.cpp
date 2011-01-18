@@ -106,6 +106,18 @@ namespace_::classes() const
 	return classes_;
 }
 
+namespace_::enums_t::range
+namespace_::enums()
+{
+	return enums_;
+}
+
+const namespace_::enums_t&
+namespace_::enums() const
+{
+	return enums_;
+}
+
 namespace_::typedefs_t::range
 namespace_::typedefs()
 {
@@ -186,6 +198,13 @@ namespace_::add_member(std::shared_ptr<class_> member)
 	member->enclosing_declarative_region(shared_from_this());
     classes_.push_back(member);
 	open_declarative_regions_.push_back(member);
+}
+
+void
+namespace_::add_member(std::shared_ptr<enum_> member)
+{
+	member->enclosing_declarative_region(shared_from_this());
+    enums_.push_back(member);
 }
 
 void

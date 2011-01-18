@@ -51,6 +51,13 @@ typedef
 	enum_specifier
 ;
 
+inline
+const optional_node<identifier>&
+get_identifier(const enum_specifier& o)
+{
+	return get<2>(o);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif

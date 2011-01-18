@@ -163,6 +163,9 @@ semantic_graph_serializer::serialize_namespace
 	for(auto i = n->classes().begin(); i != n->classes().end(); ++i)
 		serialize_class(*i, indent_level + 1);
 
+	for(auto i = n->enums().begin(); i != n->enums().end(); ++i)
+		serialize_enum(*i, indent_level + 1);
+
 	for(auto i = n->typedefs().begin(); i != n->typedefs().end(); ++i)
 		serialize_typedef(*i, indent_level + 1);
 
@@ -259,6 +262,19 @@ semantic_graph_serializer::serialize_base_class
 	if(is_virtual)
 		output_ << " virtual=\"true\"";
 	output_ << "/>\n";
+}
+
+void
+semantic_graph_serializer::serialize_enum
+(
+	std::shared_ptr<const enum_> entity,
+	const unsigned int indent_level
+)
+{
+	output_ << indent(indent_level) << "<enum";
+	output_ << " name=\"" << entity->name() << "\"";
+	output_ << ">\n";
+	output_ << indent(indent_level) << "</enum>\n";
 }
 
 void
