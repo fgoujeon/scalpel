@@ -39,6 +39,7 @@ class semantic_graph_serializer
 	public:
 		typedef std::map<const scalpel::cpp::semantic_entities::namespace_*, unsigned int> namespace_ids_t;
 		typedef std::map<const scalpel::cpp::semantic_entities::class_*, unsigned int> class_ids_t;
+		typedef std::map<const scalpel::cpp::semantic_entities::enum_*, unsigned int> enum_ids_t;
 
 		semantic_graph_serializer(std::ostream& output);
 
@@ -195,17 +196,25 @@ class semantic_graph_serializer
 		void
 		define_ids(const std::shared_ptr<const class_>& entity);
 
-		unsigned int
-		class_id(const scalpel::cpp::semantic_entities::class_*) const;
+		void
+		define_ids(const std::shared_ptr<const enum_>& entity);
 
 		unsigned int
 		namespace_id(const scalpel::cpp::semantic_entities::namespace_*) const;
 
+		unsigned int
+		class_id(const scalpel::cpp::semantic_entities::class_*) const;
+
+		unsigned int
+		enum_id(const scalpel::cpp::semantic_entities::enum_*) const;
+
 		std::ostream& output_;
 		unsigned int namespace_id_counter_;
 		unsigned int class_id_counter_;
+		unsigned int enum_id_counter_;
 		namespace_ids_t namespace_ids_;
 		class_ids_t class_ids_;
+		enum_ids_t enum_ids_;
 };
 
 void
