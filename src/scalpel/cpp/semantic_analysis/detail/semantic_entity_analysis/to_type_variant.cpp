@@ -25,23 +25,40 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 
 using namespace semantic_entities;
 
-struct: public utility::static_visitor<type_variant>
+namespace
 {
-	type_variant
-	operator()(std::shared_ptr<class_> t) const
+	struct: public utility::static_visitor<type_variant>
 	{
-		return type_variant(static_cast<const class_*>(t.get()));
-	}
+		type_variant
+		operator()(std::shared_ptr<class_> t) const
+		{
+			return type_variant(static_cast<const class_*>(t.get()));
+		}
 
-	type_variant
-	operator()(std::shared_ptr<typedef_> t) const
-	{
-		return t->type();
-	}
-} to_type_variant_impl;
+		type_variant
+		operator()(std::shared_ptr<enum_> t) const
+		{
+			return type_variant(static_cast<const enum_*>(t.get()));
+		}
 
-type_variant
-to_type_variant(const utility::shared_ptr_variant<semantic_entities::class_, semantic_entities::typedef_>::type& var)
+		type_variant
+		operator()(std::shared_ptr<typedef_> t) const
+		{
+			return t->type();
+		}
+	} to_type_variant_impl;
+}
+
+semantic_entities::type_variant
+to_type_variant
+(
+	const utility::shared_ptr_variant
+	<
+		semantic_entities::class_,
+		semantic_entities::typedef_,
+		semantic_entities::enum_
+	>::type& var
+)
 {
 	return utility::apply_visitor(to_type_variant_impl, var);
 }

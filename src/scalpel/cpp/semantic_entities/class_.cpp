@@ -100,6 +100,18 @@ class_::nested_classes() const
 	return nested_classes_;
 }
 
+class_::enums_t::range
+class_::enums()
+{
+	return enums_;
+}
+
+const class_::enums_t&
+class_::enums() const
+{
+	return enums_;
+}
+
 class_::typedefs_t::range
 class_::typedefs()
 {
@@ -206,6 +218,15 @@ class_::add_member(std::shared_ptr<class_> member, const access acc)
 	open_declarative_regions_.push_back(member);
 
 	member_access_[std::shared_ptr<const class_>(member)] = acc;
+}
+
+void
+class_::add_member(std::shared_ptr<enum_> member, const access acc)
+{
+	member->enclosing_declarative_region(shared_from_this());
+    enums_.push_back(member);
+
+	member_access_[std::shared_ptr<const enum_>(member)] = acc;
 }
 
 void

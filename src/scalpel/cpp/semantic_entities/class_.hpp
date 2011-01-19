@@ -34,6 +34,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 class namespace_;
+class enum_;
 class typedef_;
 class constructor;
 class destructor;
@@ -54,6 +55,7 @@ class class_:
 			utility::variant
 			<
 				std::shared_ptr<const class_>,
+				std::shared_ptr<const enum_>,
 				std::shared_ptr<const typedef_>,
 				std::shared_ptr<const constructor>,
 				std::shared_ptr<const destructor>,
@@ -69,6 +71,7 @@ class class_:
 		typedef std::vector<open_declarative_region_shared_ptr_variant> open_declarative_region_shared_ptr_variants_t;
 
 		typedef utility::shared_ptr_vector<class_> classes_t;
+		typedef utility::shared_ptr_vector<enum_> enums_t;
 		typedef utility::shared_ptr_vector<typedef_> typedefs_t;
 		typedef utility::shared_ptr_vector<constructor> constructors_t;
 		typedef utility::shared_ptr_vector<operator_member_function> operator_functions_t;
@@ -142,6 +145,12 @@ class class_:
 		const classes_t&
 		nested_classes() const;
 
+		enums_t::range
+		enums();
+
+		const enums_t&
+		enums() const;
+
 		typedefs_t::range
 		typedefs();
 
@@ -200,6 +209,9 @@ class class_:
         */
         void
         add_member(std::shared_ptr<class_> member, const access acc = access::PUBLIC);
+
+		void
+		add_member(std::shared_ptr<enum_> member, const access acc = access::PUBLIC);
 
         void
         add_member(std::shared_ptr<typedef_> member, const access acc = access::PUBLIC);
@@ -277,6 +289,7 @@ class class_:
 		//members
 		classes_t base_classes_;
 		classes_t nested_classes_;
+		enums_t enums_;
 		typedefs_t typedefs_;
 		constructors_t constructors_;
 		std::shared_ptr<destructor> destructor_;
