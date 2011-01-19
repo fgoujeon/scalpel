@@ -47,8 +47,23 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 	(optional_node<conditional_expression>)
 )
 
+inline
+const identifier&
+get_identifier(const enumerator_definition& o)
+{
+	return get<0>(o);
+}
+
+inline
+const optional_node<conditional_expression>&
+get_conditional_expression(const enumerator_definition& o)
+{
+	return get<4>(o);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif
+

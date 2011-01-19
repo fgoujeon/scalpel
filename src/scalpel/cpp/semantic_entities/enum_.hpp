@@ -22,6 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_ENUM_HPP
 
 #include "detail/declarative_region_member_impl.hpp"
+#include <scalpel/utility/shared_ptr_vector.hpp>
 #include <string>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
@@ -33,6 +34,9 @@ Represents a C++ enum.
 class enum_
 {
 	public:
+		class constant;
+		typedef utility::shared_ptr_vector<constant> constants_t;
+
         explicit
         enum_(const std::string& name);
 
@@ -40,6 +44,18 @@ class enum_
 		name() const
 		{
 			return name_;
+		}
+
+		const constants_t&
+		constants() const
+		{
+			return constants_;
+		}
+
+		void
+		add(const std::shared_ptr<constant>& c)
+		{
+			constants_.push_back(c);
 		}
 
 		bool
@@ -62,7 +78,30 @@ class enum_
 
     private:
         std::string name_;
+		constants_t constants_;
 		detail::declarative_region_member_impl declarative_region_member_impl_;
+};
+
+class enum_::constant
+{
+	public:
+        constant(const std::string& name, const int value);
+
+		const std::string&
+		name() const
+		{
+			return name_;
+		}
+
+		int
+		value() const
+		{
+			return value_;
+		}
+
+	private:
+		std::string name_;
+		int value_;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

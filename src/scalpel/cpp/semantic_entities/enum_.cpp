@@ -28,5 +28,11 @@ enum_::enum_(const std::string& name):
 {
 }
 
+enum_::constant::constant(const std::string& name, const int value):
+	name_(name),
+	value_(value)
+{
+}
+
 }}} //namespace scalpel::cpp::semantic_entities
 

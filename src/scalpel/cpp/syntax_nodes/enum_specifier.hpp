@@ -58,6 +58,13 @@ get_identifier(const enum_specifier& o)
 	return get<2>(o);
 }
 
+inline
+const optional_node<enumerator_list>&
+get_enumerator_list(const enum_specifier& o)
+{
+	return get<6>(o);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif

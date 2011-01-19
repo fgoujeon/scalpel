@@ -33,5 +33,32 @@ create_enum(const enum_specifier& enum_specifier_node)
 	return std::make_shared<enum_>(syntax_node_analysis::get_identifier(enum_specifier_node));
 }
 
+void
+fill_enum
+(
+	const std::shared_ptr<semantic_entities::enum_>& enum_entity,
+	const syntax_nodes::enum_specifier& enum_specifier_node
+)
+{
+	int value_counter = 0;
+
+	if(const optional_node<enumerator_list>& opt_enumerator_list_node = get_enumerator_list(enum_specifier_node))
+	{
+		const enumerator_list& enumerator_list_node = *opt_enumerator_list_node;
+		for(auto i = enumerator_list_node.begin(); i != enumerator_list_node.end(); ++i)
+		{
+			const enumerator_definition& enumerator_definition_node = i->main_node();
+			enum_entity->add
+			(
+				std::make_shared<enum_::constant>
+				(
+					get_identifier(enumerator_definition_node).value(),
+					value_counter++
+				)
+			);
+		}
+	}
+}
+
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
 

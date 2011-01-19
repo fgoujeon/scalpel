@@ -282,6 +282,16 @@ semantic_graph_serializer::serialize_enum
 		output_ << " name=\"" << entity->name() << "\"";
 	output_ << " id=\"e" << enum_id(entity.get()) << "\"";
 	output_ << ">\n";
+
+	for(auto i = entity->constants().begin(); i != entity->constants().end(); ++i)
+	{
+		const std::shared_ptr<const enum_::constant> constant = *i;
+		output_ << indent(indent_level + 1) << "<constant";
+		output_ << " name=\"" << constant->name() << "\"";
+		output_ << " value=\"" << constant->value() << "\"";
+		output_ << ">\n";
+	}
+
 	output_ << indent(indent_level) << "</enum>\n";
 }
 

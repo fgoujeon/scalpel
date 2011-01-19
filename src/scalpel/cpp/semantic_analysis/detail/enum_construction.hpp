@@ -31,6 +31,13 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 std::shared_ptr<semantic_entities::enum_>
 create_enum(const syntax_nodes::enum_specifier& enum_specifier_node);
 
+void
+fill_enum
+(
+	const std::shared_ptr<semantic_entities::enum_>& enum_entity,
+	const syntax_nodes::enum_specifier& enum_specifier_node
+);
+
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
 
 #endif
