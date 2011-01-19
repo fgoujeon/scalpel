@@ -1,0 +1,25 @@
+<namespace id="n0">
+ <class name="s" id="c0">
+  <enum name="color" id="e0">
+   <constant name="RED" value="0">
+   <constant name="GREEN" value="1">
+   <constant name="BLUE" value="2">
+  </enum>
+  <destructor access="public" defined="false">
+  </destructor>
+ </class>
+ <enum name="direction" id="e1">
+  <constant name="LEFT" value="0">
+  <constant name="RIGHT" value="1">
+ </enum>
+ <variable name="c">
+  <type>
+   <enum id="e0"/>
+  </type>
+ </variable>
+ <variable name="d">
+  <type>
+   <enum id="e1"/>
+  </type>
+ </variable>
+</namespace>

@@ -19,6 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "class_construction.hpp"
+#include "enum_construction.hpp"
 #include "function_construction.hpp"
 #include "type_construction.hpp"
 #include "other_entity_construction.hpp"
@@ -274,6 +275,20 @@ fill_class
 				new_class = add_class(class_entity, new_class, current_access);
 
 				opt_unqualified_type = static_cast<const class_*>(new_class.get());
+
+				break;
+			}
+			case syntax_node_analysis::type_specifier_seq_type::ENUMERATION_DECLARATION:
+			{
+				const enum_specifier& enum_specifier_node =
+					syntax_node_analysis::get_enum_specifier(decl_specifier_seq_node)
+				;
+
+				std::shared_ptr<enum_> new_enum = create_enum(enum_specifier_node);
+				class_entity->add_member(new_enum, current_access);
+				fill_enum(new_enum, enum_specifier_node);
+
+				opt_unqualified_type = static_cast<const enum_*>(new_enum.get());
 
 				break;
 			}
