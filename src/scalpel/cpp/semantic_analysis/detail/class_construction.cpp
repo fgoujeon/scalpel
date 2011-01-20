@@ -127,7 +127,7 @@ fill_class
 				)
 			;
 
-			class_entity->add_base_class(base_class, access, is_virtual);
+			class_entity->add_base_class(*base_class, access, is_virtual);
 		}
 	}
 

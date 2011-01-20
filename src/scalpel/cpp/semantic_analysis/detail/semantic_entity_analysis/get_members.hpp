@@ -50,13 +50,14 @@ struct get_members_return_type<semantic_entities::destructor>
 
 template<class MemberT, class ParentT>
 typename get_members_return_type<MemberT>::type
-get_members(const ParentT& parent);
+get_members(ParentT& parent);
 
 template<class MemberT>
 typename get_members_return_type<MemberT>::type
 get_members(const std::shared_ptr<semantic_entities::namespace_alias>& parent)
 {
-	return get_members<MemberT>(parent->referred_namespace());
+	std::shared_ptr<semantic_entities::namespace_> n = parent->referred_namespace();
+	return get_members<MemberT>(n);
 }
 
 //visitor template for declarative region variants
@@ -73,7 +74,7 @@ struct get_declarative_region_members_visitor: public utility::static_visitor<ty
 
 template<class MemberT>
 typename get_members_return_type<MemberT>::type
-get_members(const semantic_entities::declarative_region_shared_ptr_variant& parent)
+get_members(semantic_entities::declarative_region_shared_ptr_variant& parent)
 {
 	get_declarative_region_members_visitor<MemberT> visitor;
 	return utility::apply_visitor(visitor, parent);
@@ -81,7 +82,7 @@ get_members(const semantic_entities::declarative_region_shared_ptr_variant& pare
 
 template<class MemberT>
 typename get_members_return_type<MemberT>::type
-get_members(const semantic_entities::open_declarative_region_shared_ptr_variant& parent)
+get_members(semantic_entities::open_declarative_region_shared_ptr_variant& parent)
 {
 	get_declarative_region_members_visitor<MemberT> visitor;
 	return utility::apply_visitor(visitor, parent);

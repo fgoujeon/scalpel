@@ -70,6 +70,7 @@ create_function
 		switch(syntax_node_analysis::get_decl_specifier_seq_type(decl_specifier_seq_node))
 		{
 			case syntax_node_analysis::type_specifier_seq_type::CLASS_DECLARATION:
+			case syntax_node_analysis::type_specifier_seq_type::ENUMERATION_DECLARATION:
 			{
 				throw std::runtime_error("error: new types may not be defined in a return type");
 				break;

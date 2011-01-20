@@ -25,6 +25,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "type_variant_fwd.hpp"
 #include "detail/declarative_region_member_impl.hpp"
 #include <scalpel/utility/shared_ptr_vector.hpp>
+#include <scalpel/utility/const_ptr_variant.hpp>
 #include <boost/noncopyable.hpp>
 #include <string>
 #include <vector>
@@ -47,22 +48,21 @@ class variable;
 Represents a C++ class.
 */
 class class_:
-	public boost::noncopyable,
 	public std::enable_shared_from_this<class_>
 {
 	public:
 		typedef
-			utility::variant
+			utility::const_ptr_variant
 			<
-				std::shared_ptr<const class_>,
-				std::shared_ptr<const enum_>,
-				std::shared_ptr<const typedef_>,
-				std::shared_ptr<const constructor>,
-				std::shared_ptr<const destructor>,
-				std::shared_ptr<const operator_member_function>,
-				std::shared_ptr<const conversion_function>,
-				std::shared_ptr<const simple_member_function>,
-				std::shared_ptr<const variable>
+				class_,
+				enum_,
+				typedef_,
+				constructor,
+				destructor,
+				operator_member_function,
+				conversion_function,
+				simple_member_function,
+				variable
 			>::type
 			member_t
 		;
@@ -78,6 +78,9 @@ class class_:
 		typedef utility::shared_ptr_vector<conversion_function> conversion_functions_t;
 		typedef utility::shared_ptr_vector<simple_member_function> simple_functions_t;
 		typedef utility::shared_ptr_vector<variable> variables_t;
+
+		typedef std::vector<class_*> class_ptrs_t;
+		typedef std::vector<const variable*> variable_ptrs_t;
 
 		enum class access
 		{
@@ -102,6 +105,11 @@ class class_:
 		static
 		std::shared_ptr<class_>
 		make_shared(const std::string& name);
+
+        class_(const class_&) = delete;
+
+        const class_&
+		operator=(const class_&) = delete;
 
         /**
         @return the name of the class
@@ -133,10 +141,10 @@ class class_:
 		const open_declarative_region_shared_ptr_variants_t&
 		open_declarative_regions();
 
-		classes_t::range
+		const class_ptrs_t&
 		base_classes();
 
-		const classes_t&
+		const class_ptrs_t&
 		base_classes() const;
 
 		classes_t::range
@@ -199,7 +207,7 @@ class class_:
         void
         add_base_class
 		(
-			std::shared_ptr<class_> base_class,
+			class_& base_class,
 			const access acc = access::PUBLIC,
 			bool is_virtual = false
 		);
@@ -260,17 +268,17 @@ class class_:
 
 		//get the access of the given base class
 		access
-		base_class_access(std::shared_ptr<const class_> base_class) const;
+		base_class_access(const class_& base_class) const;
 
 		bool
-		is_virtual_base_class(std::shared_ptr<const class_> base_class) const;
+		is_virtual_base_class(const class_& base_class) const;
 
 		//get the access of the given class member
 		access
 		member_access(const member_t& member) const;
 
 		bool
-		is_mutable_member_variable(std::shared_ptr<const variable> member) const;
+		is_mutable_member_variable(const variable& member) const;
 
     private:
         std::string name_;
@@ -281,13 +289,13 @@ class class_:
 		open_declarative_region_shared_ptr_variants_t open_declarative_regions_;
 
 		//member information
-		std::map<std::shared_ptr<const class_>, access> base_class_access_;
-		classes_t virtual_base_classes_;
-		std::map<const member_t, access> member_access_;
-		std::vector<std::shared_ptr<const variable>> mutable_member_variables_;
+		std::map<const class_*, access> base_class_access_;
+		class_ptrs_t virtual_base_classes_;
+		std::map<member_t, access> member_access_;
+		variable_ptrs_t mutable_member_variables_;
 
 		//members
-		classes_t base_classes_;
+		class_ptrs_t base_classes_;
 		classes_t nested_classes_;
 		enums_t enums_;
 		typedefs_t typedefs_;

@@ -117,11 +117,11 @@ BOOST_AUTO_TEST_CASE(test_case_2)
 	struct_c1base->add_member(function_c1base_f);
 	struct_c1base->add_member(function_c1base_g);
 	semantic_graph->add_member(struct_c1);
-	struct_c1->add_base_class(struct_c1base);
+	struct_c1->add_base_class(*struct_c1base);
 	struct_c1->add_member(function_c1_g);
 	semantic_graph->add_member(struct_c);
-	struct_c->add_base_class(struct_c0);
-	struct_c->add_base_class(struct_c1);
+	struct_c->add_base_class(*struct_c0);
+	struct_c->add_base_class(*struct_c1);
 	struct_c->add_member(function_g_test);
 
 

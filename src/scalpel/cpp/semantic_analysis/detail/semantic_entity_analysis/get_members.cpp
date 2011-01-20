@@ -27,7 +27,13 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 #define GENERATE_GET_MEMBERS_SPECIALIZATION(PARENT_TYPE, MEMBER_TYPE, PARENT_MEMBER_FUNCTION) \
 template<> \
 get_members_return_type<semantic_entities::MEMBER_TYPE>::type \
-get_members<semantic_entities::MEMBER_TYPE, std::shared_ptr<semantic_entities::PARENT_TYPE>>(const std::shared_ptr<semantic_entities::PARENT_TYPE>& parent) \
+get_members<semantic_entities::MEMBER_TYPE, std::shared_ptr<semantic_entities::PARENT_TYPE>>(std::shared_ptr<semantic_entities::PARENT_TYPE>& parent) \
+{ \
+	return parent->PARENT_MEMBER_FUNCTION(); \
+} \
+template<> \
+get_members_return_type<semantic_entities::MEMBER_TYPE>::type \
+get_members<semantic_entities::MEMBER_TYPE, const std::shared_ptr<semantic_entities::PARENT_TYPE>>(const std::shared_ptr<semantic_entities::PARENT_TYPE>& parent) \
 { \
 	return parent->PARENT_MEMBER_FUNCTION(); \
 }
@@ -35,10 +41,33 @@ get_members<semantic_entities::MEMBER_TYPE, std::shared_ptr<semantic_entities::P
 #define GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(PARENT_TYPE, MEMBER_TYPE) \
 template<> \
 get_members_return_type<semantic_entities::MEMBER_TYPE>::type \
-get_members<semantic_entities::MEMBER_TYPE, std::shared_ptr<semantic_entities::PARENT_TYPE>>(const std::shared_ptr<semantic_entities::PARENT_TYPE>&) \
+get_members<semantic_entities::MEMBER_TYPE, std::shared_ptr<semantic_entities::PARENT_TYPE>>(std::shared_ptr<semantic_entities::PARENT_TYPE>&) \
+{ \
+	return get_members_return_type<semantic_entities::MEMBER_TYPE>::type(); \
+} \
+template<> \
+get_members_return_type<semantic_entities::MEMBER_TYPE>::type \
+get_members<semantic_entities::MEMBER_TYPE, const std::shared_ptr<semantic_entities::PARENT_TYPE>>(const std::shared_ptr<semantic_entities::PARENT_TYPE>&) \
 { \
 	return get_members_return_type<semantic_entities::MEMBER_TYPE>::type(); \
 }
+
+#define AAA_GENERATE_GET_MEMBERS_SPECIALIZATION(PARENT_TYPE, MEMBER_TYPE, PARENT_MEMBER_FUNCTION) \
+template<> \
+get_members_return_type<semantic_entities::MEMBER_TYPE>::type \
+get_members<semantic_entities::MEMBER_TYPE, semantic_entities::PARENT_TYPE>(semantic_entities::PARENT_TYPE& parent) \
+{ \
+	return parent.PARENT_MEMBER_FUNCTION(); \
+}
+
+#define AAA_GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(PARENT_TYPE, MEMBER_TYPE) \
+template<> \
+get_members_return_type<semantic_entities::MEMBER_TYPE>::type \
+get_members<semantic_entities::MEMBER_TYPE, semantic_entities::PARENT_TYPE>(semantic_entities::PARENT_TYPE&) \
+{ \
+	return get_members_return_type<semantic_entities::MEMBER_TYPE>::type(); \
+}
+
 
 GENERATE_GET_MEMBERS_SPECIALIZATION      (namespace_, open_declarative_region_shared_ptr_variant, open_declarative_regions)
 GENERATE_GET_MEMBERS_SPECIALIZATION      (namespace_, namespace_, namespaces)
@@ -69,6 +98,21 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(class_, simple_function)
 GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, simple_member_function, simple_functions)
 GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, variable, variables)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(class_, namespace_alias)
+
+AAA_GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, open_declarative_region_shared_ptr_variant, open_declarative_regions)
+AAA_GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(class_, namespace_)
+AAA_GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, class_, nested_classes)
+AAA_GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, enum_, enums)
+AAA_GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, typedef_, typedefs)
+AAA_GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, constructor, constructors)
+AAA_GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, destructor, get_destructor)
+AAA_GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(class_, operator_function)
+AAA_GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, operator_member_function, operator_functions)
+AAA_GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, conversion_function, conversion_functions)
+AAA_GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(class_, simple_function)
+AAA_GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, simple_member_function, simple_functions)
+AAA_GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, variable, variables)
+AAA_GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(class_, namespace_alias)
 
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(constructor, open_declarative_region_shared_ptr_variant)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(constructor, namespace_)

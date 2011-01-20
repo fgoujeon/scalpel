@@ -134,7 +134,7 @@ main(int argc, char** argv)
 			//print semantic graph
 			if(print_syntax_tree)
 				std::cout << "Semantic graph:\n";
-			cpp2xml::serialize_semantic_graph(graph, std::cout);
+			cpp2xml::serialize_semantic_graph(*graph, std::cout);
 		}
 	}
 

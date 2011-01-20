@@ -277,7 +277,7 @@ namespace detail
 	find_local_entities
 	(
 		const typename EntityIdentificationPolicy::identifier_t& identifier,
-		const DeclarativeRegionT& current_declarative_region
+		DeclarativeRegionT& current_declarative_region
 	);
 
 	template<class EntityIdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple, class ReturnT, class... EntitiesT>
@@ -291,7 +291,7 @@ namespace detail
 		find
 		(
 			const typename EntityIdentificationPolicy::identifier_t& identifier,
-			const DeclarativeRegionT& current_declarative_region,
+			DeclarativeRegionT& current_declarative_region,
 			ReturnT& found_entities
 		);
 	};
@@ -304,7 +304,7 @@ namespace detail
 		find
 		(
 			const typename EntityIdentificationPolicy::identifier_t& identifier,
-			const DeclarativeRegionT& current_declarative_region,
+			DeclarativeRegionT& current_declarative_region,
 			ReturnT& found_entities
 		);
 	};
@@ -317,7 +317,7 @@ namespace detail
 	find_local_entities
 	(
 		const typename EntityIdentificationPolicy::identifier_t& identifier,
-		const DeclarativeRegionT& current_declarative_region
+		DeclarativeRegionT& current_declarative_region
 	);
 
 
@@ -330,7 +330,7 @@ namespace detail
 	find_entities_in_base_classes
 	(
 		const typename EntityIdentificationPolicy::identifier_t& identifier,
-		utility::shared_ptr_vector<semantic_entities::class_>::range base_classes
+		const std::vector<semantic_entities::class_*>& base_classes
 	);
 
 	void

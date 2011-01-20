@@ -37,7 +37,7 @@ find_declarative_region
 	if(has_leading_double_colon)
 	{
 		//the first declarative region is in the global namespace
-		const std::shared_ptr<semantic_entities::namespace_>& global_namespace =
+		std::shared_ptr<semantic_entities::namespace_> global_namespace =
 			semantic_entity_analysis::get_global_namespace(current_declarative_region)
 		;
 

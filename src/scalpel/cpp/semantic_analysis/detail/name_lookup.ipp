@@ -49,14 +49,14 @@ find
 	while(true)
 	{
 		//apply using directives (only for namespaces and statement blocks)
-		if(auto opt_namespace_ptr = utility::get<semantic_entities::namespace_>(&current_declarative_region))
+		if(std::shared_ptr<semantic_entities::namespace_>* opt_namespace_ptr = utility::get<semantic_entities::namespace_>(&current_declarative_region))
 			apply_using_directives
 			(
 				current_declarative_region,
 				(*opt_namespace_ptr)->using_directive_namespaces(),
 				namespace_associations
 			);
-		else if(auto opt_statement_block_ptr = utility::get<semantic_entities::statement_block>(&current_declarative_region))
+		else if(std::shared_ptr<semantic_entities::statement_block>* opt_statement_block_ptr = utility::get<semantic_entities::statement_block>(&current_declarative_region))
 			apply_using_directives
 			(
 				current_declarative_region,
@@ -80,7 +80,7 @@ find
 
 		//find entities in the associated namespaces (only for namespaces)
 		//and add them to the previously found entities
-		if(auto opt_namespace_ptr = utility::get<semantic_entities::namespace_>(&current_declarative_region))
+		if(std::shared_ptr<semantic_entities::namespace_>* opt_namespace_ptr = utility::get<semantic_entities::namespace_>(&current_declarative_region))
 		{
 			auto associated_namespaces_it = namespace_associations.find(*opt_namespace_ptr);
 			if(associated_namespaces_it != namespace_associations.end())
@@ -90,6 +90,8 @@ find
 				//for each associated namespace
 				for(auto i = associated_namespaces.begin(); i != associated_namespaces.end(); ++i)
 				{
+					std::shared_ptr<semantic_entities::namespace_> associated_namespace = *i;
+
 					add_to_result
 					(
 						found_entities,
@@ -100,7 +102,7 @@ find
 							true,
 							Multiple,
 							EntitiesT...
-						>(identifier, *i)
+						>(identifier, associated_namespace)
 					);
 				}
 			}
@@ -333,7 +335,7 @@ typename return_type<Optional, Multiple, EntityT, EntityT2, EntitiesT...>::type
 find_local_entities
 (
 	const typename EntityIdentificationPolicy::identifier_t& identifier,
-	const DeclarativeRegionT& current_declarative_region
+	DeclarativeRegionT& current_declarative_region
 )
 {
 	typename return_type<true, Multiple, EntityT, EntityT2, EntitiesT...>::type found_entities;
@@ -358,7 +360,7 @@ void
 find_variadic_local_entities<EntityIdentificationPolicy, DeclarativeRegionT, Optional, Multiple, ReturnT>::find
 (
 	const typename EntityIdentificationPolicy::identifier_t&,
-	const DeclarativeRegionT&,
+	DeclarativeRegionT&,
 	ReturnT&
 )
 {
@@ -370,7 +372,7 @@ void
 find_variadic_local_entities<EntityIdentificationPolicy, DeclarativeRegionT, Optional, Multiple, ReturnT, EntityT, EntitiesT...>::find
 (
 	const typename EntityIdentificationPolicy::identifier_t& identifier,
-	const DeclarativeRegionT& current_declarative_region,
+	DeclarativeRegionT& current_declarative_region,
 	ReturnT& found_entities
 )
 {
@@ -413,7 +415,7 @@ typename return_type<Optional, Multiple, EntityT>::type
 find_local_entities
 (
 	const typename EntityIdentificationPolicy::identifier_t& identifier,
-	const DeclarativeRegionT& current_declarative_region
+	DeclarativeRegionT& current_declarative_region
 )
 {
 	using namespace semantic_entity_analysis;
@@ -439,7 +441,7 @@ typename return_type<Optional, Multiple, EntitiesT...>::type
 find_entities_in_base_classes
 (
 	const typename EntityIdentificationPolicy::identifier_t& identifier,
-	utility::shared_ptr_vector<semantic_entities::class_>::range base_classes
+	const std::vector<semantic_entities::class_*>& base_classes
 )
 {
 	using namespace semantic_entity_analysis;
@@ -448,14 +450,14 @@ find_entities_in_base_classes
 
 	for(auto i = base_classes.begin(); i != base_classes.end(); ++i)
 	{
-		std::shared_ptr<semantic_entities::class_> current_class = *i;
+		semantic_entities::class_& current_class = **i;
 
 		//find entities in the current declarative region (i.e. current class)
 		typename return_type<Optional, Multiple, EntitiesT...>::type current_class_found_entities =
 			find_local_entities
 			<
 				EntityIdentificationPolicy,
-				std::shared_ptr<semantic_entities::class_>,
+				semantic_entities::class_,
 				Optional,
 				Multiple,
 				EntitiesT...
@@ -478,7 +480,7 @@ find_entities_in_base_classes
 					Optional,
 					Multiple,
 					EntitiesT...
-				>(identifier, current_class->base_classes())
+				>(identifier, current_class.base_classes())
 			;
 
 			//add them to the list

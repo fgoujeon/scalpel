@@ -44,11 +44,11 @@ class semantic_graph_serializer
 		semantic_graph_serializer(std::ostream& output);
 
 		void
-		operator()(std::shared_ptr<const namespace_> entity);
+		operator()(const namespace_& entity);
 
 	private:
 		void
-		initialize_ids(const std::shared_ptr<const namespace_>& entity);
+		initialize_ids(const namespace_& entity);
 
 		void
 		serialize_type
@@ -66,21 +66,21 @@ class semantic_graph_serializer
 		void
 		serialize_namespace
 		(
-			std::shared_ptr<const namespace_> entity,
+			const namespace_& entity,
 			const unsigned int indent_level = 0
 		);
 
 		void
 		serialize_class
 		(
-			std::shared_ptr<const class_> entity,
+			const class_& entity,
 			const unsigned int indent_level
 		);
 
 		void
 		serialize_base_class
 		(
-			std::shared_ptr<const class_> entity,
+			const class_& entity,
 			const class_::access acc,
 			const bool is_virtual,
 			const unsigned int indent_level
@@ -89,56 +89,56 @@ class semantic_graph_serializer
 		void
 		serialize_enum
 		(
-			std::shared_ptr<const enum_> entity,
+			const enum_& entity,
 			const unsigned int indent_level
 		);
 
 		void
 		serialize_constructor
 		(
-			std::shared_ptr<const constructor> entity,
+			const constructor& entity,
 			const unsigned int indent_level
 		);
 
 		void
 		serialize_destructor
 		(
-			std::shared_ptr<const destructor> entity,
+			const destructor& entity,
 			const unsigned int indent_level
 		);
 
 		void
 		serialize_operator_member_function
 		(
-			std::shared_ptr<const operator_member_function> entity,
+			const operator_member_function& entity,
 			const unsigned int indent_level
 		);
 
 		void
 		serialize_conversion_function
 		(
-			std::shared_ptr<const conversion_function> entity,
+			const conversion_function& entity,
 			const unsigned int indent_level
 		);
 
 		void
 		serialize_simple_member_function
 		(
-			std::shared_ptr<const simple_member_function> entity,
+			const simple_member_function& entity,
 			const unsigned int indent_level
 		);
 
 		void
 		serialize_operator_function
 		(
-			std::shared_ptr<const operator_function> entity,
+			const operator_function& entity,
 			const unsigned int indent_level
 		);
 
 		void
 		serialize_simple_function
 		(
-			std::shared_ptr<const simple_function> entity,
+			const simple_function& entity,
 			const unsigned int indent_level
 		);
 
@@ -159,28 +159,28 @@ class semantic_graph_serializer
 		void
 		serialize_function_parameter
 		(
-			const std::shared_ptr<const function_parameter> entity,
+			const function_parameter& entity,
 			const unsigned int indent_level
 		);
 
 		void
 		serialize_variable
 		(
-			std::shared_ptr<const variable> entity,
+			const variable& entity,
 			const unsigned int indent_level
 		);
 
 		void
 		serialize_namespace_alias
 		(
-			std::shared_ptr<const namespace_alias> entity,
+			const namespace_alias& entity,
 			const unsigned int indent_level
 		);
 
 		void
 		serialize_typedef
 		(
-			std::shared_ptr<const typedef_> entity,
+			const typedef_& entity,
 			const unsigned int indent_level
 		);
 
@@ -191,22 +191,22 @@ class semantic_graph_serializer
 		attribute(const semantic_entities::overloadable_operator op);
 
 		void
-		define_ids(const std::shared_ptr<const namespace_>& entity);
+		define_ids(const namespace_& entity);
 
 		void
-		define_ids(const std::shared_ptr<const class_>& entity);
+		define_ids(const class_& entity);
 
 		void
-		define_ids(const std::shared_ptr<const enum_>& entity);
+		define_ids(const enum_& entity);
 
 		unsigned int
-		namespace_id(const scalpel::cpp::semantic_entities::namespace_*) const;
+		namespace_id(const scalpel::cpp::semantic_entities::namespace_&) const;
 
 		unsigned int
-		class_id(const scalpel::cpp::semantic_entities::class_*) const;
+		class_id(const scalpel::cpp::semantic_entities::class_&) const;
 
 		unsigned int
-		enum_id(const scalpel::cpp::semantic_entities::enum_*) const;
+		enum_id(const scalpel::cpp::semantic_entities::enum_&) const;
 
 		std::ostream& output_;
 		unsigned int namespace_id_counter_;
@@ -220,7 +220,7 @@ class semantic_graph_serializer
 void
 serialize_semantic_graph
 (
-	std::shared_ptr<const semantic_graph> graph,
+	const semantic_graph& graph,
 	std::ostream& output
 );
 

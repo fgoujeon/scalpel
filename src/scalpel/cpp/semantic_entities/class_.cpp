@@ -76,13 +76,13 @@ class_::open_declarative_regions()
 	return open_declarative_regions_;
 }
 
-class_::classes_t::range
+const class_::class_ptrs_t&
 class_::base_classes()
 {
 	return base_classes_;
 }
 
-const class_::classes_t&
+const class_::class_ptrs_t&
 class_::base_classes() const
 {
 	return base_classes_;
@@ -199,15 +199,15 @@ class_::variables() const
 void
 class_::add_base_class
 (
-	std::shared_ptr<class_> base_class,
+	class_& base_class,
 	const access acc,
 	bool is_virtual
 )
 {
-	base_classes_.push_back(base_class);
+	base_classes_.push_back(&base_class);
 
-	base_class_access_[base_class] = acc;
-	if(is_virtual) virtual_base_classes_.push_back(base_class);
+	base_class_access_[&base_class] = acc;
+	if(is_virtual) virtual_base_classes_.push_back(&base_class);
 }
 
 void
@@ -217,7 +217,7 @@ class_::add_member(std::shared_ptr<class_> member, const access acc)
 	nested_classes_.push_back(member);
 	open_declarative_regions_.push_back(member);
 
-	member_access_[std::shared_ptr<const class_>(member)] = acc;
+	member_access_[static_cast<const class_*>(member.get())] = acc;
 }
 
 void
@@ -226,7 +226,7 @@ class_::add_member(std::shared_ptr<enum_> member, const access acc)
 	member->enclosing_declarative_region(shared_from_this());
     enums_.push_back(member);
 
-	member_access_[std::shared_ptr<const enum_>(member)] = acc;
+	member_access_[static_cast<const enum_*>(member.get())] = acc;
 }
 
 void
@@ -235,7 +235,7 @@ class_::add_member(std::shared_ptr<typedef_> member, const access acc)
 	member->enclosing_declarative_region(shared_from_this());
     typedefs_.push_back(member);
 
-	member_access_[std::shared_ptr<const typedef_>(member)] = acc;
+	member_access_[static_cast<const typedef_*>(member.get())] = acc;
 }
 
 void
@@ -244,7 +244,7 @@ class_::add_member(std::shared_ptr<constructor> member, const access acc)
 	member->enclosing_declarative_region(shared_from_this());
     constructors_.push_back(member);
 
-	member_access_[std::shared_ptr<const constructor>(member)] = acc;
+	member_access_[static_cast<const constructor*>(member.get())] = acc;
 }
 
 void
@@ -257,8 +257,7 @@ class_::set_destructor
 	member->enclosing_declarative_region(shared_from_this());
 	destructor_ = member;
 
-	std::shared_ptr<const destructor> const_member(member);
-	member_access_[const_member] = acc;
+	member_access_[static_cast<const destructor*>(member.get())] = acc;
 }
 
 void
@@ -281,8 +280,7 @@ class_::add_member
 	member->enclosing_declarative_region(shared_from_this());
     simple_functions_.push_back(member);
 
-	std::shared_ptr<const simple_member_function> const_member(member);
-	member_access_[const_member] = acc;
+	member_access_[static_cast<const simple_member_function*>(member.get())] = acc;
 }
 
 void
@@ -295,8 +293,7 @@ class_::add_member
 	member->enclosing_declarative_region(shared_from_this());
     operator_functions_.push_back(member);
 
-	std::shared_ptr<const operator_member_function> const_member(member);
-	member_access_[const_member] = acc;
+	member_access_[static_cast<const operator_member_function*>(member.get())] = acc;
 }
 
 void
@@ -309,8 +306,7 @@ class_::add_member
 	member->enclosing_declarative_region(shared_from_this());
     conversion_functions_.push_back(member);
 
-	std::shared_ptr<const conversion_function> const_member(member);
-	member_access_[const_member] = acc;
+	member_access_[static_cast<const conversion_function*>(member.get())] = acc;
 }
 
 void
@@ -324,15 +320,14 @@ class_::add_member
 	member->enclosing_declarative_region(shared_from_this());
     variables_.push_back(member);
 
-	std::shared_ptr<const variable> const_member(member);
-	member_access_[const_member] = acc;
-	if(is_mutable) mutable_member_variables_.push_back(const_member);
+	member_access_[static_cast<const variable*>(member.get())] = acc;
+	if(is_mutable) mutable_member_variables_.push_back(member.get());
 }
 
 class_::access
-class_::base_class_access(std::shared_ptr<const class_> base_class) const
+class_::base_class_access(const class_& base_class) const
 {
-	auto it = base_class_access_.find(base_class);
+	auto it = base_class_access_.find(&base_class);
 	if(it != base_class_access_.end())
 		return it->second;
 	else
@@ -340,13 +335,13 @@ class_::base_class_access(std::shared_ptr<const class_> base_class) const
 }
 
 bool
-class_::is_virtual_base_class(std::shared_ptr<const class_> base_class) const
+class_::is_virtual_base_class(const class_& base_class) const
 {
 	return std::find
 	(
 		virtual_base_classes_.begin(),
 		virtual_base_classes_.end(),
-		base_class
+		&base_class
 	) != virtual_base_classes_.end();
 }
 
@@ -361,13 +356,13 @@ class_::member_access(const member_t& member) const
 }
 
 bool
-class_::is_mutable_member_variable(std::shared_ptr<const variable> member) const
+class_::is_mutable_member_variable(const variable& member) const
 {
 	return std::find
 	(
 		mutable_member_variables_.begin(),
 		mutable_member_variables_.end(),
-		member
+		&member
 	) != mutable_member_variables_.end();
 }
 
