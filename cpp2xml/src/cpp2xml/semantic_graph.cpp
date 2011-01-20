@@ -87,7 +87,7 @@ semantic_graph_serializer::serialize_type
 	else if(auto opt_type = scalpel::utility::get<pointer_to_member>(&n))
 	{
 		output_ << indent(indent_level) << "<pointer_to_member";
-		output_ << " class_id=\"c" << class_id(*opt_type->member_class().get()) << "\"";
+		output_ << " class_id=\"c" << class_id(opt_type->member_class()) << "\"";
 		output_ << ">\n";
 		serialize_type((*opt_type).qualified_type(), indent_level + 1);
 		output_ << indent(indent_level) << "</pointer_to_member>\n";

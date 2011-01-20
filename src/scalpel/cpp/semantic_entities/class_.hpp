@@ -26,7 +26,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "detail/declarative_region_member_impl.hpp"
 #include <scalpel/utility/shared_ptr_vector.hpp>
 #include <scalpel/utility/const_ptr_variant.hpp>
-#include <boost/noncopyable.hpp>
 #include <string>
 #include <vector>
 #include <map>

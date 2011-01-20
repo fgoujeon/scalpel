@@ -27,7 +27,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 pointer_to_member::pointer_to_member
 (
 	const type_variant& qualified_type,
-	const std::shared_ptr<const class_>& member_class
+	const class_& member_class
 ):
 	qualified_type_(qualified_type),
 	member_class_(member_class)
@@ -38,7 +38,7 @@ bool
 operator==(const pointer_to_member& lhs, const pointer_to_member& rhs)
 {
 	return
-		lhs.member_class().get() == rhs.member_class().get() &&
+		&lhs.member_class() == &rhs.member_class() &&
 		lhs.qualified_type() == rhs.qualified_type()
 	;
 }

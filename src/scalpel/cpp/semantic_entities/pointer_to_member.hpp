@@ -38,7 +38,7 @@ class pointer_to_member
 		pointer_to_member
 		(
 			const type_variant& qualified_type,
-			const std::shared_ptr<const class_>& member_class
+			const class_& member_class
 		);
 
 		const type_variant&
@@ -47,15 +47,15 @@ class pointer_to_member
 			return qualified_type_;
 		}
 
-		std::shared_ptr<const class_>
+		const class_&
 		member_class() const
 		{
-			return member_class_.lock();
+			return member_class_;
 		}
 
 	private:
 		type_variant qualified_type_;
-		std::weak_ptr<const class_> member_class_;
+		const class_& member_class_;
 };
 
 bool

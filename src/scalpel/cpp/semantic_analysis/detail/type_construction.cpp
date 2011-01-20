@@ -403,7 +403,7 @@ qualify_type
 					)
 				;
 
-				type = pointer_to_member(type, member_class);
+				type = pointer_to_member(type, *member_class);
 
 				if(auto opt_cv_qualifier_seq_node = get_cv_qualifier_seq(ptr_to_member_operator_node))
 				{
