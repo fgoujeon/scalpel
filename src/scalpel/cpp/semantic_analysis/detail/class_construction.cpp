@@ -286,7 +286,7 @@ fill_class
 
 				std::shared_ptr<enum_> new_enum = create_enum(enum_specifier_node);
 				class_entity.add_member(new_enum, current_access);
-				fill_enum(new_enum, enum_specifier_node);
+				fill_enum(*new_enum, enum_specifier_node);
 
 				opt_unqualified_type = static_cast<const enum_*>(new_enum.get());
 

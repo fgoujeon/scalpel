@@ -36,7 +36,7 @@ create_enum(const enum_specifier& enum_specifier_node)
 void
 fill_enum
 (
-	const std::shared_ptr<semantic_entities::enum_>& enum_entity,
+	semantic_entities::enum_& enum_entity,
 	const syntax_nodes::enum_specifier& enum_specifier_node
 )
 {
@@ -48,7 +48,7 @@ fill_enum
 		for(auto i = enumerator_list_node.begin(); i != enumerator_list_node.end(); ++i)
 		{
 			const enumerator_definition& enumerator_definition_node = i->main_node();
-			enum_entity->add
+			enum_entity.add
 			(
 				std::make_shared<enum_::constant>
 				(

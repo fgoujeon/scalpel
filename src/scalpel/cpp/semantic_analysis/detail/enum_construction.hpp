@@ -34,7 +34,7 @@ create_enum(const syntax_nodes::enum_specifier& enum_specifier_node);
 void
 fill_enum
 (
-	const std::shared_ptr<semantic_entities::enum_>& enum_entity,
+	semantic_entities::enum_& enum_entity,
 	const syntax_nodes::enum_specifier& enum_specifier_node
 );
 
