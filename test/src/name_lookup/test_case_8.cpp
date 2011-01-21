@@ -111,7 +111,7 @@ BOOST_AUTO_TEST_CASE(test_case_8)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"j",
-				function_test
+				function_test.get()
 			)
 		;
 		BOOST_CHECK_EQUAL(found_entity, variable_a_j);
@@ -132,7 +132,7 @@ BOOST_AUTO_TEST_CASE(test_case_8)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"j",
-				function_test
+				function_test.get()
 			)
 		;
 		BOOST_CHECK_EQUAL(found_entity, variable_a_j);
@@ -153,7 +153,7 @@ BOOST_AUTO_TEST_CASE(test_case_8)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"i",
-				function_test
+				function_test.get()
 			)
 		;
 		BOOST_CHECK_EQUAL(found_entity, variable_b_i);
@@ -174,7 +174,7 @@ BOOST_AUTO_TEST_CASE(test_case_8)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"i",
-				function_test
+				function_test.get()
 			)
 		;
 		BOOST_CHECK_EQUAL(found_entity, variable_b_i);
@@ -195,7 +195,7 @@ BOOST_AUTO_TEST_CASE(test_case_8)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"k",
-				function_test
+				function_test.get()
 			)
 		;
 		BOOST_CHECK(!found_entity.get());

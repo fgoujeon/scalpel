@@ -158,7 +158,7 @@ fill_namespace
 							false,
 							opt_nested_name_specifier_node,
 							syntax_node_analysis::get_identifier(class_specifier_node),
-							namespace_entity,
+							namespace_entity.get(),
 							false
 						)
 					;
@@ -208,7 +208,7 @@ fill_namespace
 			}
 			case syntax_node_analysis::type_specifier_seq_type::SIMPLE_TYPE:
 			{
-				opt_unqualified_type = create_type(decl_specifier_seq_node, namespace_entity);
+				opt_unqualified_type = create_type(decl_specifier_seq_node, namespace_entity.get());
 				break;
 			}
 			case syntax_node_analysis::type_specifier_seq_type::NO_TYPE:
@@ -234,7 +234,7 @@ fill_namespace
 			declarator_entity_shared_ptr_variant declarator_entity = create_entity
 			(
 				declarator_node,
-				namespace_entity,
+				namespace_entity.get(),
 				opt_unqualified_type,
 				has_typedef_specifier,
 				has_static_specifier,
@@ -275,15 +275,15 @@ fill_namespace
 	const bool is_qualified = has_leading_double_colon || opt_nested_name_specifier_node;
 
 	//find the enclosing declarative region of the function (xxx in void xxx::f())
-	const open_declarative_region_shared_ptr_variant& function_declarative_region =
+	const open_declarative_region_ptr_variant& function_declarative_region =
 		is_qualified ?
 		name_lookup::find_declarative_region
 		(
 			has_leading_double_colon,
 			opt_nested_name_specifier_node,
-			namespace_entity
+			namespace_entity.get()
 		):
-		namespace_entity
+		namespace_entity.get()
 	;
 
 	//is it a class member function?
@@ -293,7 +293,7 @@ fill_namespace
 	function_shared_ptr_variant function_entity = create_function
 	(
 		function_definition_node,
-		namespace_entity,
+		namespace_entity.get(),
 		is_class_member,
 		false
 	);
@@ -315,7 +315,7 @@ fill_namespace
 		if(opt_already_existing_function_entity)
 		{
 			//define the function
-			define_function(*opt_already_existing_function_entity, function_definition_node, namespace_entity);
+			define_function(*opt_already_existing_function_entity, function_definition_node, namespace_entity.get());
 		}
 		else
 		{
@@ -333,7 +333,7 @@ fill_namespace
 			(
 				*opt_already_existing_function_entity,
 				function_definition_node,
-				namespace_entity
+				namespace_entity.get()
 			);
 		}
 		else
@@ -355,7 +355,7 @@ fill_namespace
 			(
 				function_entity,
 				function_definition_node,
-				namespace_entity
+				namespace_entity.get()
 			);
 		}
 	}

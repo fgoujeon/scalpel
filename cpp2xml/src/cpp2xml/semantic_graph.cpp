@@ -200,12 +200,12 @@ semantic_graph_serializer::serialize_class
 	//extra attributes if the class is a nested class
 	if(entity.has_enclosing_declarative_region())
 	{
-		declarative_region_shared_ptr_variant enclosing_declarative_region = entity.enclosing_declarative_region();
-		if(auto opt_class = utility::get<class_>(&enclosing_declarative_region))
+		declarative_region_ptr_variant enclosing_declarative_region = entity.enclosing_declarative_region();
+		if(class_** opt_class = utility::get<class_>(&enclosing_declarative_region))
 		{
-			std::shared_ptr<class_> enclosing_declarative_region = *opt_class;
+			class_& enclosing_declarative_region = **opt_class;
 
-			class_::access acc = enclosing_declarative_region->member_access(&entity);
+			class_::access acc = enclosing_declarative_region.member_access(&entity);
 			output_ << attribute(acc);
 		}
 	}
@@ -308,7 +308,7 @@ semantic_graph_serializer::serialize_constructor
 	output_ << indent(indent_level) << "<constructor";
 	if(entity.has_enclosing_declarative_region())
 	{
-		std::shared_ptr<class_> enclosing_declarative_region = utility::get<class_>(entity.enclosing_declarative_region());
+		class_* enclosing_declarative_region = utility::get<class_>(entity.enclosing_declarative_region());
 
 		class_::access acc = enclosing_declarative_region->member_access(&entity);
 		output_ << attribute(acc);
@@ -338,8 +338,8 @@ semantic_graph_serializer::serialize_destructor
 	output_ << indent(indent_level) << "<destructor";
 
 	assert(entity.has_enclosing_declarative_region());
-	declarative_region_shared_ptr_variant enclosing_declarative_region = entity.enclosing_declarative_region();
-	std::shared_ptr<class_> enclosing_class = utility::get<class_>(enclosing_declarative_region);
+	declarative_region_ptr_variant enclosing_declarative_region = entity.enclosing_declarative_region();
+	class_* enclosing_class = utility::get<class_>(enclosing_declarative_region);
 
 	class_::access acc = enclosing_class->member_access(&entity);
 	output_ << attribute(acc);
@@ -367,8 +367,8 @@ semantic_graph_serializer::serialize_operator_member_function
 	output_ << attribute(entity.overloaded_operator());
 
 	assert(entity.has_enclosing_declarative_region());
-	declarative_region_shared_ptr_variant enclosing_declarative_region = entity.enclosing_declarative_region();
-	std::shared_ptr<class_> enclosing_class = utility::get<class_>(enclosing_declarative_region);
+	declarative_region_ptr_variant enclosing_declarative_region = entity.enclosing_declarative_region();
+	class_* enclosing_class = utility::get<class_>(enclosing_declarative_region);
 
 	class_::access acc = enclosing_class->member_access(&entity);
 	output_ << attribute(acc);
@@ -405,8 +405,8 @@ semantic_graph_serializer::serialize_conversion_function
 	output_ << indent(indent_level) << "<conversion_function";
 
 	assert(entity.has_enclosing_declarative_region());
-	declarative_region_shared_ptr_variant enclosing_declarative_region = entity.enclosing_declarative_region();
-	std::shared_ptr<class_> enclosing_class = utility::get<class_>(enclosing_declarative_region);
+	declarative_region_ptr_variant enclosing_declarative_region = entity.enclosing_declarative_region();
+	class_* enclosing_class = utility::get<class_>(enclosing_declarative_region);
 
 	class_::access acc = enclosing_class->member_access(&entity);
 	output_ << attribute(acc);
@@ -442,8 +442,8 @@ semantic_graph_serializer::serialize_simple_member_function
 	output_ << " name=\"" << entity.name() << "\"";
 
 	assert(entity.has_enclosing_declarative_region());
-	declarative_region_shared_ptr_variant enclosing_declarative_region = entity.enclosing_declarative_region();
-	std::shared_ptr<class_> enclosing_class = utility::get<class_>(enclosing_declarative_region);
+	declarative_region_ptr_variant enclosing_declarative_region = entity.enclosing_declarative_region();
+	class_* enclosing_class = utility::get<class_>(enclosing_declarative_region);
 
 	class_::access acc = enclosing_class->member_access(&entity);
 	output_ << attribute(acc);
@@ -607,10 +607,10 @@ semantic_graph_serializer::serialize_variable
 	//extra attributes if the function is a class member function
 	if(entity.has_enclosing_declarative_region())
 	{
-		declarative_region_shared_ptr_variant enclosing_declarative_region = entity.enclosing_declarative_region();
+		declarative_region_ptr_variant enclosing_declarative_region = entity.enclosing_declarative_region();
 		if(auto opt_class = utility::get<class_>(&enclosing_declarative_region))
 		{
-			std::shared_ptr<class_> enclosing_declarative_region = *opt_class;
+			class_* enclosing_declarative_region = *opt_class;
 
 			class_::access acc = enclosing_declarative_region->member_access(&entity);
 			output_ << attribute(acc);
@@ -639,10 +639,10 @@ semantic_graph_serializer::serialize_typedef
 	//extra attributes if the typedef is member of a class
 	if(entity.has_enclosing_declarative_region())
 	{
-		declarative_region_shared_ptr_variant enclosing_declarative_region = entity.enclosing_declarative_region();
+		declarative_region_ptr_variant enclosing_declarative_region = entity.enclosing_declarative_region();
 		if(auto opt_class = utility::get<class_>(&enclosing_declarative_region))
 		{
-			std::shared_ptr<class_> enclosing_declarative_region = *opt_class;
+			class_* enclosing_declarative_region = *opt_class;
 
 			class_::access acc = enclosing_declarative_region->member_access(&entity);
 			output_ << attribute(acc);

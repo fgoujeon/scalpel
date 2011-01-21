@@ -47,7 +47,7 @@ function_shared_ptr_variant
 create_function
 (
 	const syntax_nodes::function_definition& function_definition_node,
-	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region,
+	const semantic_entities::declarative_region_ptr_variant current_declarative_region,
 	const bool is_class_member,
 	const bool is_defined_in_class
 );
@@ -57,7 +57,7 @@ define_function
 (
 	const function_shared_ptr_variant& function_entity,
 	const syntax_nodes::function_definition& function_definition_node,
-	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+	const semantic_entities::declarative_region_ptr_variant current_declarative_region
 );
 
 //find the function corresponding to the given function signature
@@ -65,7 +65,7 @@ boost::optional<function_shared_ptr_variant>
 find_function
 (
 	const function_shared_ptr_variant& function_signature,
-	const semantic_entities::open_declarative_region_shared_ptr_variant& function_declarative_region
+	const semantic_entities::open_declarative_region_ptr_variant& function_declarative_region
 );
 
 //find the function corresponding to the given function signature
@@ -74,7 +74,7 @@ std::shared_ptr<FunctionT>
 find_function
 (
 	const std::shared_ptr<const FunctionT> function_signature,
-	const semantic_entities::open_declarative_region_shared_ptr_variant& function_declarative_region
+	const semantic_entities::open_declarative_region_ptr_variant& function_declarative_region
 );
 
 semantic_entities::overloadable_operator
@@ -87,35 +87,35 @@ semantic_entities::type_variant
 get_conversion_function_type
 (
 	const syntax_nodes::declarator& declarator_node,
-	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+	const semantic_entities::declarative_region_ptr_variant current_declarative_region
 );
 
 semantic_entities::function_parameter_list
 create_parameters
 (
 	boost::optional<const syntax_nodes::parameter_declaration_list&> opt_parameter_declaration_list_node,
-	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+	const semantic_entities::declarative_region_ptr_variant current_declarative_region
 );
 
 semantic_entities::function_parameter_list
 create_parameters
 (
 	const syntax_nodes::parameter_declaration_list& parameter_declaration_list_node,
-	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+	const semantic_entities::declarative_region_ptr_variant current_declarative_region
 );
 
 std::vector<semantic_entities::type_variant>
 create_parameter_types
 (
 	boost::optional<const syntax_nodes::parameter_declaration_list&> opt_parameter_declaration_list_node,
-	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+	const semantic_entities::declarative_region_ptr_variant current_declarative_region
 );
 
 std::vector<semantic_entities::type_variant>
 create_parameter_types
 (
 	const syntax_nodes::parameter_declaration_list& parameter_declaration_list_node,
-	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+	const semantic_entities::declarative_region_ptr_variant current_declarative_region
 );
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail

@@ -27,7 +27,7 @@ statement_block::statement_block()
 {
 }
 
-const statement_block::open_declarative_region_shared_ptr_variants_t&
+const statement_block::open_declarative_region_ptr_variants_t&
 statement_block::open_declarative_regions()
 {
 	return open_declarative_regions_;
@@ -73,7 +73,7 @@ void
 statement_block::add_member(std::shared_ptr<namespace_alias> member)
 {
     namespace_aliases_.push_back(member);
-	open_declarative_regions_.push_back(member);
+	open_declarative_regions_.push_back(member.get());
 }
 
 void

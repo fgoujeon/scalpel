@@ -36,6 +36,18 @@ get_members_return_type<semantic_entities::MEMBER_TYPE>::type \
 get_members<semantic_entities::MEMBER_TYPE, const std::shared_ptr<semantic_entities::PARENT_TYPE>>(const std::shared_ptr<semantic_entities::PARENT_TYPE>& parent) \
 { \
 	return parent->PARENT_MEMBER_FUNCTION(); \
+} \
+template<> \
+get_members_return_type<semantic_entities::MEMBER_TYPE>::type \
+get_members<semantic_entities::MEMBER_TYPE, semantic_entities::PARENT_TYPE>(semantic_entities::PARENT_TYPE& parent) \
+{ \
+	return parent.PARENT_MEMBER_FUNCTION(); \
+} \
+template<> \
+get_members_return_type<semantic_entities::MEMBER_TYPE>::type \
+get_members<semantic_entities::MEMBER_TYPE, semantic_entities::PARENT_TYPE*>(semantic_entities::PARENT_TYPE*& parent) \
+{ \
+	return parent->PARENT_MEMBER_FUNCTION(); \
 }
 
 #define GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(PARENT_TYPE, MEMBER_TYPE) \
@@ -50,26 +62,21 @@ get_members_return_type<semantic_entities::MEMBER_TYPE>::type \
 get_members<semantic_entities::MEMBER_TYPE, const std::shared_ptr<semantic_entities::PARENT_TYPE>>(const std::shared_ptr<semantic_entities::PARENT_TYPE>&) \
 { \
 	return get_members_return_type<semantic_entities::MEMBER_TYPE>::type(); \
-}
-
-#define AAA_GENERATE_GET_MEMBERS_SPECIALIZATION(PARENT_TYPE, MEMBER_TYPE, PARENT_MEMBER_FUNCTION) \
-template<> \
-get_members_return_type<semantic_entities::MEMBER_TYPE>::type \
-get_members<semantic_entities::MEMBER_TYPE, semantic_entities::PARENT_TYPE>(semantic_entities::PARENT_TYPE& parent) \
-{ \
-	return parent.PARENT_MEMBER_FUNCTION(); \
-}
-
-#define AAA_GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(PARENT_TYPE, MEMBER_TYPE) \
+} \
 template<> \
 get_members_return_type<semantic_entities::MEMBER_TYPE>::type \
 get_members<semantic_entities::MEMBER_TYPE, semantic_entities::PARENT_TYPE>(semantic_entities::PARENT_TYPE&) \
 { \
 	return get_members_return_type<semantic_entities::MEMBER_TYPE>::type(); \
+} \
+template<> \
+get_members_return_type<semantic_entities::MEMBER_TYPE>::type \
+get_members<semantic_entities::MEMBER_TYPE, semantic_entities::PARENT_TYPE*>(semantic_entities::PARENT_TYPE*&) \
+{ \
+	return get_members_return_type<semantic_entities::MEMBER_TYPE>::type(); \
 }
 
-
-GENERATE_GET_MEMBERS_SPECIALIZATION      (namespace_, open_declarative_region_shared_ptr_variant, open_declarative_regions)
+GENERATE_GET_MEMBERS_SPECIALIZATION      (namespace_, open_declarative_region_ptr_variant, open_declarative_regions)
 GENERATE_GET_MEMBERS_SPECIALIZATION      (namespace_, namespace_, namespaces)
 GENERATE_GET_MEMBERS_SPECIALIZATION      (namespace_, class_, classes)
 GENERATE_GET_MEMBERS_SPECIALIZATION      (namespace_, enum_, enums)
@@ -84,7 +91,7 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(namespace_, simple_member_function)
 GENERATE_GET_MEMBERS_SPECIALIZATION      (namespace_, variable, variables)
 GENERATE_GET_MEMBERS_SPECIALIZATION      (namespace_, namespace_alias, namespace_aliases)
 
-GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, open_declarative_region_shared_ptr_variant, open_declarative_regions)
+GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, open_declarative_region_ptr_variant, open_declarative_regions)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(class_, namespace_)
 GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, class_, nested_classes)
 GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, enum_, enums)
@@ -99,22 +106,7 @@ GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, simple_member_function, simple
 GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, variable, variables)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(class_, namespace_alias)
 
-AAA_GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, open_declarative_region_shared_ptr_variant, open_declarative_regions)
-AAA_GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(class_, namespace_)
-AAA_GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, class_, nested_classes)
-AAA_GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, enum_, enums)
-AAA_GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, typedef_, typedefs)
-AAA_GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, constructor, constructors)
-AAA_GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, destructor, get_destructor)
-AAA_GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(class_, operator_function)
-AAA_GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, operator_member_function, operator_functions)
-AAA_GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, conversion_function, conversion_functions)
-AAA_GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(class_, simple_function)
-AAA_GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, simple_member_function, simple_functions)
-AAA_GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, variable, variables)
-AAA_GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(class_, namespace_alias)
-
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(constructor, open_declarative_region_shared_ptr_variant)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(constructor, open_declarative_region_ptr_variant)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(constructor, namespace_)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(constructor, class_)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(constructor, enum_)
@@ -129,7 +121,7 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(constructor, simple_member_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(constructor, variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(constructor, namespace_alias)
 
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(destructor, open_declarative_region_shared_ptr_variant)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(destructor, open_declarative_region_ptr_variant)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(destructor, namespace_)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(destructor, class_)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(destructor, enum_)
@@ -144,7 +136,7 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(destructor, simple_member_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(destructor, variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(destructor, namespace_alias)
 
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(operator_function, open_declarative_region_shared_ptr_variant)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(operator_function, open_declarative_region_ptr_variant)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(operator_function, namespace_)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(operator_function, class_)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(operator_function, enum_)
@@ -159,7 +151,7 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(operator_function, simple_member_funct
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(operator_function, variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(operator_function, namespace_alias)
 
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(operator_member_function, open_declarative_region_shared_ptr_variant)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(operator_member_function, open_declarative_region_ptr_variant)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(operator_member_function, namespace_)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(operator_member_function, class_)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(operator_member_function, enum_)
@@ -174,7 +166,7 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(operator_member_function, simple_membe
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(operator_member_function, variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(operator_member_function, namespace_alias)
 
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(conversion_function, open_declarative_region_shared_ptr_variant)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(conversion_function, open_declarative_region_ptr_variant)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(conversion_function, namespace_)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(conversion_function, class_)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(conversion_function, enum_)
@@ -189,7 +181,7 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(conversion_function, simple_member_fun
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(conversion_function, variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(conversion_function, namespace_alias)
 
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(simple_function, open_declarative_region_shared_ptr_variant)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(simple_function, open_declarative_region_ptr_variant)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(simple_function, namespace_)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(simple_function, class_)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(simple_function, enum_)
@@ -204,7 +196,7 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(simple_function, simple_member_functio
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(simple_function, variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(simple_function, namespace_alias)
 
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(simple_member_function, open_declarative_region_shared_ptr_variant)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(simple_member_function, open_declarative_region_ptr_variant)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(simple_member_function, namespace_)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(simple_member_function, class_)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(simple_member_function, enum_)
@@ -219,7 +211,7 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(simple_member_function, simple_member_
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(simple_member_function, variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(simple_member_function, namespace_alias)
 
-GENERATE_GET_MEMBERS_SPECIALIZATION      (statement_block, open_declarative_region_shared_ptr_variant, open_declarative_regions)
+GENERATE_GET_MEMBERS_SPECIALIZATION      (statement_block, open_declarative_region_ptr_variant, open_declarative_regions)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(statement_block, namespace_)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(statement_block, class_)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(statement_block, enum_)

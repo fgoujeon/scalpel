@@ -36,7 +36,7 @@ semantic_entities::type_variant
 create_type
 (
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+	const semantic_entities::declarative_region_ptr_variant current_declarative_region
 );
 
 //Create the type described by the given type-specifier-seq.
@@ -46,7 +46,7 @@ semantic_entities::type_variant
 create_type
 (
 	const syntax_nodes::type_specifier_seq& type_specifier_seq_node,
-	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+	const semantic_entities::declarative_region_ptr_variant current_declarative_region
 );
 
 //qualify type with decl-specifier-seq's const and volatile specifiers
@@ -63,7 +63,7 @@ qualify_type
 (
 	semantic_entities::type_variant type,
 	const syntax_nodes::declarator& declarator_node,
-	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region,
+	const semantic_entities::declarative_region_ptr_variant& current_declarative_region,
 	const bool ignore_function_type = false
 );
 
@@ -73,7 +73,7 @@ qualify_type
 (
 	semantic_entities::type_variant type,
 	const syntax_nodes::abstract_declarator& abstract_declarator_node,
-	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
+	const semantic_entities::declarative_region_ptr_variant& current_declarative_region
 );
 
 //qualify type with direct-declarator-last-part-seq's arrays and function types
@@ -82,7 +82,7 @@ qualify_type
 (
 	semantic_entities::type_variant type,
 	const syntax_nodes::direct_declarator_last_part_seq& last_part_seq_node,
-	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region,
+	const semantic_entities::declarative_region_ptr_variant& current_declarative_region,
 	const bool ignore_function_type
 );
 
@@ -92,7 +92,7 @@ qualify_type
 (
 	semantic_entities::type_variant type,
 	const syntax_nodes::direct_declarator_last_part& last_part_node,
-	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region,
+	const semantic_entities::declarative_region_ptr_variant& current_declarative_region,
 	const bool ignore_function_type
 );
 
@@ -102,7 +102,7 @@ qualify_type
 (
 	semantic_entities::type_variant type,
 	const syntax_nodes::ptr_operator_seq& ptr_operator_seq_node,
-	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
+	const semantic_entities::declarative_region_ptr_variant& current_declarative_region
 );
 
 //qualify type with cv-qualifier-seq's const and volatile

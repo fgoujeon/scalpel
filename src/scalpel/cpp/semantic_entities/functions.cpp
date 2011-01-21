@@ -122,7 +122,7 @@ void \
 CLASS_NAME::body(std::shared_ptr<statement_block> b) \
 { \
 	body_ = b; \
-	body_->enclosing_declarative_region(shared_from_this()); \
+	body_->enclosing_declarative_region(static_cast<CLASS_NAME*>(this)); \
 } \
  \
 bool \
@@ -131,20 +131,20 @@ CLASS_NAME::has_enclosing_declarative_region() const \
 	return enclosing_declarative_region_; \
 } \
  \
-declarative_region_shared_ptr_variant \
+declarative_region_ptr_variant \
 CLASS_NAME::enclosing_declarative_region() const \
 { \
 	if(enclosing_declarative_region_) \
-		return utility::to_shared_ptr_variant(*enclosing_declarative_region_); \
+		return *enclosing_declarative_region_; \
 	else \
 		throw std::runtime_error("The declarative region is not set."); \
 } \
  \
 void \
-CLASS_NAME::enclosing_declarative_region(const declarative_region_shared_ptr_variant& decl_region) \
+CLASS_NAME::enclosing_declarative_region(const declarative_region_ptr_variant& decl_region) \
 { \
 	if(!enclosing_declarative_region_) \
-		enclosing_declarative_region_ = utility::to_weak_ptr_variant(decl_region); \
+		enclosing_declarative_region_ = decl_region; \
 	else \
 		throw std::runtime_error("The declarative region is already set."); \
 } \

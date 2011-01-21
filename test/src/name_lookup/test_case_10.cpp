@@ -104,7 +104,7 @@ BOOST_AUTO_TEST_CASE(test_case_10)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"i",
-				function_test->body()
+				function_test->body().get()
 			)
 		;
 		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
@@ -125,7 +125,7 @@ BOOST_AUTO_TEST_CASE(test_case_10)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"i",
-				function_test->body()
+				function_test->body().get()
 			)
 		;
 		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
@@ -134,7 +134,7 @@ BOOST_AUTO_TEST_CASE(test_case_10)
 	//look up a from as, must find a
 	{
 		scalpel::utility::shared_ptr_variant<namespace_, namespace_alias>::type found_entity =
-			find<identification_policies::by_name, false, false, namespace_, namespace_alias>("as", function_test->body())
+			find<identification_policies::by_name, false, false, namespace_, namespace_alias>("as", function_test->body().get())
 		;
 		std::shared_ptr<namespace_alias> found_namespace_alias = get<namespace_alias>(found_entity);
 		BOOST_CHECK_EQUAL(found_namespace_alias, namespace_alias_as);

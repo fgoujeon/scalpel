@@ -38,7 +38,7 @@ Represents a C++ statement block.
 class statement_block
 {
     public:
-		typedef std::vector<open_declarative_region_shared_ptr_variant> open_declarative_region_shared_ptr_variants_t;
+		typedef std::vector<open_declarative_region_ptr_variant> open_declarative_region_ptr_variants_t;
 
 		typedef std::vector<std::weak_ptr<namespace_>> weak_namespaces_t;
 		typedef utility::shared_ptr_vector<statement_block> statement_blocks_t;
@@ -58,19 +58,19 @@ class statement_block
 			return declarative_region_member_impl_.has_enclosing_declarative_region();
 		}
 
-		declarative_region_shared_ptr_variant
+		declarative_region_ptr_variant
 		enclosing_declarative_region() const
 		{
 			return declarative_region_member_impl_.enclosing_declarative_region();
 		}
 
 		void
-		enclosing_declarative_region(const declarative_region_shared_ptr_variant& decl_region)
+		enclosing_declarative_region(const declarative_region_ptr_variant& decl_region)
 		{
 			declarative_region_member_impl_.enclosing_declarative_region(decl_region);
 		}
 
-		const open_declarative_region_shared_ptr_variants_t&
+		const open_declarative_region_ptr_variants_t&
 		open_declarative_regions();
 
 		const statement_blocks_t&
@@ -101,7 +101,7 @@ class statement_block
 		detail::declarative_region_member_impl declarative_region_member_impl_;
 
 		//polymorphic containers
-		open_declarative_region_shared_ptr_variants_t open_declarative_regions_;
+		open_declarative_region_ptr_variants_t open_declarative_regions_;
 
 		//members
 		statement_blocks_t statement_blocks_;

@@ -19,12 +19,13 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "get_global_namespace.hpp"
+#include <cassert>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail { namespace semantic_entity_analysis
 {
 
-std::shared_ptr<semantic_entities::namespace_>
-get_global_namespace(semantic_entities::declarative_region_shared_ptr_variant current_declarative_region)
+semantic_entities::namespace_&
+get_global_namespace(semantic_entities::declarative_region_ptr_variant current_declarative_region)
 {
 	//get the outermost declarative region
 	while(has_enclosing_declarative_region(current_declarative_region))
@@ -35,7 +36,7 @@ get_global_namespace(semantic_entities::declarative_region_shared_ptr_variant cu
 	//try to cast it to a namespace
 	try
 	{
-		return utility::get<semantic_entities::namespace_>(current_declarative_region);
+		return *utility::get<semantic_entities::namespace_>(current_declarative_region);
 	}
 	catch(...)
 	{

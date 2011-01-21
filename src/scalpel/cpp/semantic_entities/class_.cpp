@@ -58,19 +58,19 @@ class_::has_enclosing_declarative_region() const
 	return declarative_region_member_impl_.has_enclosing_declarative_region();
 }
 
-declarative_region_shared_ptr_variant
+declarative_region_ptr_variant
 class_::enclosing_declarative_region() const
 {
 	return declarative_region_member_impl_.enclosing_declarative_region();
 }
 
 void
-class_::enclosing_declarative_region(const declarative_region_shared_ptr_variant& decl_region)
+class_::enclosing_declarative_region(const declarative_region_ptr_variant& decl_region)
 {
 	declarative_region_member_impl_.enclosing_declarative_region(decl_region);
 }
 
-const class_::open_declarative_region_shared_ptr_variants_t&
+const class_::open_declarative_region_ptr_variants_t&
 class_::open_declarative_regions()
 {
 	return open_declarative_regions_;
@@ -213,9 +213,9 @@ class_::add_base_class
 void
 class_::add_member(std::shared_ptr<class_> member, const access acc)
 {
-	member->enclosing_declarative_region(shared_from_this());
+	member->enclosing_declarative_region(static_cast<class_*>(this));
 	nested_classes_.push_back(member);
-	open_declarative_regions_.push_back(member);
+	open_declarative_regions_.push_back(member.get());
 
 	member_access_[static_cast<const class_*>(member.get())] = acc;
 }
@@ -223,7 +223,7 @@ class_::add_member(std::shared_ptr<class_> member, const access acc)
 void
 class_::add_member(std::shared_ptr<enum_> member, const access acc)
 {
-	member->enclosing_declarative_region(shared_from_this());
+	member->enclosing_declarative_region(static_cast<class_*>(this));
     enums_.push_back(member);
 
 	member_access_[static_cast<const enum_*>(member.get())] = acc;
@@ -232,7 +232,7 @@ class_::add_member(std::shared_ptr<enum_> member, const access acc)
 void
 class_::add_member(std::shared_ptr<typedef_> member, const access acc)
 {
-	member->enclosing_declarative_region(shared_from_this());
+	member->enclosing_declarative_region(static_cast<class_*>(this));
     typedefs_.push_back(member);
 
 	member_access_[static_cast<const typedef_*>(member.get())] = acc;
@@ -241,7 +241,7 @@ class_::add_member(std::shared_ptr<typedef_> member, const access acc)
 void
 class_::add_member(std::shared_ptr<constructor> member, const access acc)
 {
-	member->enclosing_declarative_region(shared_from_this());
+	member->enclosing_declarative_region(static_cast<class_*>(this));
     constructors_.push_back(member);
 
 	member_access_[static_cast<const constructor*>(member.get())] = acc;
@@ -254,7 +254,7 @@ class_::set_destructor
 	const access acc
 )
 {
-	member->enclosing_declarative_region(shared_from_this());
+	member->enclosing_declarative_region(static_cast<class_*>(this));
 	destructor_ = member;
 
 	member_access_[static_cast<const destructor*>(member.get())] = acc;
@@ -277,7 +277,7 @@ class_::add_member
 	const access acc
 )
 {
-	member->enclosing_declarative_region(shared_from_this());
+	member->enclosing_declarative_region(static_cast<class_*>(this));
     simple_functions_.push_back(member);
 
 	member_access_[static_cast<const simple_member_function*>(member.get())] = acc;
@@ -290,7 +290,7 @@ class_::add_member
 	const access acc
 )
 {
-	member->enclosing_declarative_region(shared_from_this());
+	member->enclosing_declarative_region(static_cast<class_*>(this));
     operator_functions_.push_back(member);
 
 	member_access_[static_cast<const operator_member_function*>(member.get())] = acc;
@@ -303,7 +303,7 @@ class_::add_member
 	const access acc
 )
 {
-	member->enclosing_declarative_region(shared_from_this());
+	member->enclosing_declarative_region(static_cast<class_*>(this));
     conversion_functions_.push_back(member);
 
 	member_access_[static_cast<const conversion_function*>(member.get())] = acc;
@@ -317,7 +317,7 @@ class_::add_member
 	const bool is_mutable
 )
 {
-	member->enclosing_declarative_region(shared_from_this());
+	member->enclosing_declarative_region(static_cast<class_*>(this));
     variables_.push_back(member);
 
 	member_access_[static_cast<const variable*>(member.get())] = acc;

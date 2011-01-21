@@ -36,7 +36,7 @@ semantic_entities::type_variant
 create_type
 (
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-	const declarative_region_shared_ptr_variant current_declarative_region
+	const declarative_region_ptr_variant current_declarative_region
 )
 {
 	return create_type(syntax_node_analysis::to_type_specifier_seq(decl_specifier_seq_node), current_declarative_region);
@@ -46,7 +46,7 @@ semantic_entities::type_variant
 create_type
 (
 	const syntax_nodes::type_specifier_seq& type_specifier_seq_node,
-	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+	const semantic_entities::declarative_region_ptr_variant current_declarative_region
 )
 {
 	boost::optional<semantic_entities::type_variant> opt_return_type;
@@ -217,7 +217,7 @@ qualify_type
 (
 	semantic_entities::type_variant type,
 	const syntax_nodes::declarator& declarator_node,
-	const declarative_region_shared_ptr_variant& current_declarative_region,
+	const declarative_region_ptr_variant& current_declarative_region,
 	const bool ignore_function_type
 )
 {
@@ -253,7 +253,7 @@ qualify_type
 (
 	semantic_entities::type_variant type,
 	const syntax_nodes::abstract_declarator& abstract_declarator_node,
-	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
+	const semantic_entities::declarative_region_ptr_variant& current_declarative_region
 )
 {
 	if(const optional_node<ptr_operator_seq>& opt_ptr_operator_seq_node = get_ptr_operator_seq(abstract_declarator_node))
@@ -305,7 +305,7 @@ qualify_type
 (
 	semantic_entities::type_variant type,
 	const syntax_nodes::direct_declarator_last_part_seq& last_part_seq_node,
-	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region,
+	const semantic_entities::declarative_region_ptr_variant& current_declarative_region,
 	const bool ignore_function_type
 )
 {
@@ -323,7 +323,7 @@ qualify_type
 (
 	semantic_entities::type_variant type,
 	const syntax_nodes::direct_declarator_last_part& last_part_node,
-	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region,
+	const semantic_entities::declarative_region_ptr_variant& current_declarative_region,
 	const bool ignore_function_type
 )
 {
@@ -369,7 +369,7 @@ qualify_type
 (
 	semantic_entities::type_variant type,
 	const syntax_nodes::ptr_operator_seq& ptr_operator_seq_node,
-	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
+	const semantic_entities::declarative_region_ptr_variant& current_declarative_region
 )
 {
 	for(auto i = ptr_operator_seq_node.begin(); i != ptr_operator_seq_node.end(); ++i)

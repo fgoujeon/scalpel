@@ -123,7 +123,7 @@ fill_class
 					has_leading_double_colon(nested_identifier_or_template_id_node),
 					get_nested_name_specifier(nested_identifier_or_template_id_node),
 					base_class_name,
-					class_entity
+					class_entity.get()
 				)
 			;
 
@@ -244,7 +244,7 @@ fill_class
 							false,
 							opt_nested_name_specifier_node,
 							syntax_node_analysis::get_identifier(class_specifier_node),
-							class_entity,
+							class_entity.get(),
 							false
 						)
 					;
@@ -294,7 +294,7 @@ fill_class
 			}
 			case syntax_node_analysis::type_specifier_seq_type::SIMPLE_TYPE:
 			{
-				opt_unqualified_type = create_type(decl_specifier_seq_node, class_entity);
+				opt_unqualified_type = create_type(decl_specifier_seq_node, class_entity.get());
 				break;
 			}
 			case syntax_node_analysis::type_specifier_seq_type::NO_TYPE:
@@ -334,7 +334,7 @@ fill_class
 				declarator_entity_shared_ptr_variant declarator_entity = create_entity
 				(
 					declarator_node,
-					class_entity,
+					class_entity.get(),
 					opt_unqualified_type,
 					has_typedef_specifier,
 					has_static_specifier,
@@ -462,7 +462,7 @@ fill_class
 	function_shared_ptr_variant function_entity = create_function
 	(
 		function_definition_node,
-		class_entity,
+		class_entity.get(),
 		true,
 		true
 	);
@@ -476,7 +476,7 @@ fill_class
 	(
 		function_entity,
 		function_definition_node,
-		class_entity
+		class_entity.get()
 	);
 }
 
@@ -504,7 +504,7 @@ std::shared_ptr<semantic_entities::class_>
 find_class
 (
 	const ptr_to_member_operator& ptr_to_member_operator_node,
-	const declarative_region_shared_ptr_variant& current_declarative_region
+	const declarative_region_ptr_variant& current_declarative_region
 )
 {
 	const bool has_leading_double_colon = syntax_nodes::has_leading_double_colon(ptr_to_member_operator_node);

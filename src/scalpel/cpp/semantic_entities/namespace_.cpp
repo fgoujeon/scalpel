@@ -23,12 +23,14 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-namespace_::namespace_()
+namespace_::namespace_():
+	enclosing_declarative_region_(0)
 {
 }
 
 namespace_::namespace_(const std::string& name):
-    name_(name)
+    name_(name),
+	enclosing_declarative_region_(0)
 {
 }
 
@@ -55,28 +57,28 @@ namespace_::name() const
 bool
 namespace_::has_enclosing_declarative_region() const
 {
-	return !enclosing_declarative_region_.expired();
+	return enclosing_declarative_region_;
 }
 
-std::shared_ptr<namespace_>
+namespace_*
 namespace_::enclosing_declarative_region()
 {
-	return std::shared_ptr<namespace_>(enclosing_declarative_region_);
+	return enclosing_declarative_region_;
 }
 
-std::shared_ptr<const namespace_>
+const namespace_*
 namespace_::enclosing_declarative_region() const
 {
-	return std::shared_ptr<const namespace_>(enclosing_declarative_region_);
+	return enclosing_declarative_region_;
 }
 
 void
-namespace_::enclosing_declarative_region(std::shared_ptr<namespace_> enclosing_declarative_region)
+namespace_::enclosing_declarative_region(namespace_& enclosing_declarative_region)
 {
-	enclosing_declarative_region_ = enclosing_declarative_region;
+	enclosing_declarative_region_ = &enclosing_declarative_region;
 }
 
-const namespace_::open_declarative_region_shared_ptr_variants_t&
+const namespace_::open_declarative_region_ptr_variants_t&
 namespace_::open_declarative_regions()
 {
 	return open_declarative_regions_;
@@ -187,51 +189,51 @@ namespace_::using_directive_namespaces() const
 void
 namespace_::add_member(std::shared_ptr<namespace_> member)
 {
-	member->enclosing_declarative_region(shared_from_this());
+	member->enclosing_declarative_region(*this);
     namespaces_.push_back(member);
-	open_declarative_regions_.push_back(member);
+	open_declarative_regions_.push_back(member.get());
 }
 
 void
 namespace_::add_member(std::shared_ptr<class_> member)
 {
-	member->enclosing_declarative_region(shared_from_this());
+	member->enclosing_declarative_region(static_cast<namespace_*>(this));
     classes_.push_back(member);
-	open_declarative_regions_.push_back(member);
+	open_declarative_regions_.push_back(member.get());
 }
 
 void
 namespace_::add_member(std::shared_ptr<enum_> member)
 {
-	member->enclosing_declarative_region(shared_from_this());
+	member->enclosing_declarative_region(static_cast<namespace_*>(this));
     enums_.push_back(member);
 }
 
 void
 namespace_::add_member(std::shared_ptr<typedef_> member)
 {
-	member->enclosing_declarative_region(shared_from_this());
+	member->enclosing_declarative_region(static_cast<namespace_*>(this));
     typedefs_.push_back(member);
 }
 
 void
 namespace_::add_member(std::shared_ptr<simple_function> member)
 {
-	member->enclosing_declarative_region(shared_from_this());
+	member->enclosing_declarative_region(static_cast<namespace_*>(this));
     simple_functions_.push_back(member);
 }
 
 void
 namespace_::add_member(std::shared_ptr<operator_function> member)
 {
-	member->enclosing_declarative_region(shared_from_this());
+	member->enclosing_declarative_region(static_cast<namespace_*>(this));
     operator_functions_.push_back(member);
 }
 
 void
 namespace_::add_member(std::shared_ptr<variable> member)
 {
-	member->enclosing_declarative_region(shared_from_this());
+	member->enclosing_declarative_region(static_cast<namespace_*>(this));
     variables_.push_back(member);
 }
 
@@ -239,7 +241,7 @@ void
 namespace_::add_member(std::shared_ptr<namespace_alias> member)
 {
     namespace_aliases_.push_back(member);
-	open_declarative_regions_.push_back(member);
+	open_declarative_regions_.push_back(member.get());
 }
 
 void

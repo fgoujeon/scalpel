@@ -27,28 +27,28 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 #define GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(ENTITY_TYPE) \
 template<> \
 const std::string& \
-get_name<std::shared_ptr<semantic_entities::ENTITY_TYPE>>(std::shared_ptr<semantic_entities::ENTITY_TYPE> entity) \
+get_name<std::shared_ptr<semantic_entities::ENTITY_TYPE>>(const std::shared_ptr<semantic_entities::ENTITY_TYPE>& entity) \
 { \
 	return entity->name(); \
 } \
 \
 template<> \
 const std::string& \
-get_name<std::shared_ptr<semantic_entities::ENTITY_TYPE const>>(std::shared_ptr<semantic_entities::ENTITY_TYPE const> entity) \
+get_name<std::shared_ptr<semantic_entities::ENTITY_TYPE const>>(const std::shared_ptr<semantic_entities::ENTITY_TYPE const>& entity) \
 { \
 	return entity->name(); \
 }
 
 template<>
 const std::string&
-get_name<semantic_entities::declarative_region_shared_ptr_variant>(semantic_entities::declarative_region_shared_ptr_variant entity)
+get_name<semantic_entities::declarative_region_ptr_variant>(const semantic_entities::declarative_region_ptr_variant& entity)
 {
 	return semantic_entities::get_name(entity);
 }
 
 template<>
 const std::string&
-get_name<semantic_entities::open_declarative_region_shared_ptr_variant>(semantic_entities::open_declarative_region_shared_ptr_variant entity)
+get_name<semantic_entities::open_declarative_region_ptr_variant>(const semantic_entities::open_declarative_region_ptr_variant& entity)
 {
 	return semantic_entities::get_name(entity);
 }

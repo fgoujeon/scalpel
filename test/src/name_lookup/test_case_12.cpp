@@ -74,7 +74,7 @@ BOOST_AUTO_TEST_CASE(test_case_12)
 			find<identification_policies::by_name, false, false, class_>
 			(
 				"c",
-				namespace_n
+				namespace_n.get()
 			)
 		;
 
@@ -89,7 +89,7 @@ BOOST_AUTO_TEST_CASE(test_case_12)
 				true,
 				optional_node<nested_name_specifier>(),
 				"c",
-				namespace_n
+				namespace_n.get()
 			)
 		;
 

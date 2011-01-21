@@ -111,7 +111,7 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 			find<identification_policies::by_overloaded_operator, false, false, operator_function>
 			(
 				scalpel::cpp::semantic_entities::overloadable_operator::DOUBLE_EQUAL,
-				semantic_graph
+				semantic_graph.get()
 			)
 		;
 		BOOST_CHECK_EQUAL(found_entity, operator_function_equal);
@@ -132,7 +132,7 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				scalpel::cpp::semantic_entities::overloadable_operator::PLUS,
-				semantic_graph,
+				semantic_graph.get(),
 				false
 			)
 		;
@@ -154,7 +154,7 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				0,
-				semantic_graph,
+				semantic_graph.get(),
 				false
 			)
 		;
@@ -176,7 +176,7 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				0,
-				semantic_graph,
+				semantic_graph.get(),
 				false
 			)
 		;
@@ -198,7 +198,7 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				pointer(fundamental_type::INT),
-				semantic_graph,
+				semantic_graph.get(),
 				false
 			)
 		;

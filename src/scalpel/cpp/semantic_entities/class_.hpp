@@ -67,7 +67,7 @@ class class_:
 		;
 
 		typedef std::vector<member_t> members_t;
-		typedef std::vector<open_declarative_region_shared_ptr_variant> open_declarative_region_shared_ptr_variants_t;
+		typedef std::vector<open_declarative_region_ptr_variant> open_declarative_region_ptr_variants_t;
 
 		typedef utility::shared_ptr_vector<class_> classes_t;
 		typedef utility::shared_ptr_vector<enum_> enums_t;
@@ -131,13 +131,13 @@ class class_:
 		bool
 		has_enclosing_declarative_region() const;
 
-		declarative_region_shared_ptr_variant
+		declarative_region_ptr_variant
 		enclosing_declarative_region() const;
 
 		void
-		enclosing_declarative_region(const declarative_region_shared_ptr_variant& enclosing_declarative_region);
+		enclosing_declarative_region(const declarative_region_ptr_variant& enclosing_declarative_region);
 
-		const open_declarative_region_shared_ptr_variants_t&
+		const open_declarative_region_ptr_variants_t&
 		open_declarative_regions();
 
 		const class_ptrs_t&
@@ -285,7 +285,7 @@ class class_:
 		detail::declarative_region_member_impl declarative_region_member_impl_;
 
 		//polymorphic containers
-		open_declarative_region_shared_ptr_variants_t open_declarative_regions_;
+		open_declarative_region_ptr_variants_t open_declarative_regions_;
 
 		//member information
 		std::map<const class_*, access> base_class_access_;

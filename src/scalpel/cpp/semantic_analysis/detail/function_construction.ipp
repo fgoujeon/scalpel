@@ -34,7 +34,7 @@ std::shared_ptr<FunctionT>
 find_function
 (
 	const std::shared_ptr<const FunctionT> function_signature,
-	const semantic_entities::open_declarative_region_shared_ptr_variant& function_declarative_region
+	const semantic_entities::open_declarative_region_ptr_variant& function_declarative_region
 )
 {
 	using namespace syntax_nodes;

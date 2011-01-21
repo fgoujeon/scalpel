@@ -36,7 +36,7 @@ function_shared_ptr_variant
 create_function
 (
 	const syntax_nodes::function_definition& function_definition_node,
-	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region,
+	const semantic_entities::declarative_region_ptr_variant current_declarative_region,
 	const bool is_class_member,
 	const bool is_defined_in_class
 )
@@ -164,7 +164,7 @@ define_function
 (
 	const function_shared_ptr_variant& function_entity,
 	const syntax_nodes::function_definition& /*function_definition_node*/,
-	const semantic_entities::declarative_region_shared_ptr_variant /*current_declarative_region*/
+	const semantic_entities::declarative_region_ptr_variant /*current_declarative_region*/
 )
 {
 	define_function_visitor visitor;
@@ -176,7 +176,7 @@ class find_function_visitor: public utility::static_visitor<boost::optional<func
 	public:
 		find_function_visitor
 		(
-			const semantic_entities::open_declarative_region_shared_ptr_variant& function_declarative_region
+			const semantic_entities::open_declarative_region_ptr_variant& function_declarative_region
 		):
 			function_declarative_region_(function_declarative_region)
 		{
@@ -201,14 +201,14 @@ class find_function_visitor: public utility::static_visitor<boost::optional<func
 		}
 
 	private:
-		const semantic_entities::open_declarative_region_shared_ptr_variant& function_declarative_region_;
+		const semantic_entities::open_declarative_region_ptr_variant& function_declarative_region_;
 };
 
 boost::optional<function_shared_ptr_variant>
 find_function
 (
 	const function_shared_ptr_variant& function_signature,
-	const semantic_entities::open_declarative_region_shared_ptr_variant& function_declarative_region
+	const semantic_entities::open_declarative_region_ptr_variant& function_declarative_region
 )
 {
 	find_function_visitor visitor(function_declarative_region);
@@ -330,7 +330,7 @@ semantic_entities::type_variant
 get_conversion_function_type
 (
 	const syntax_nodes::declarator& declarator_node,
-	const declarative_region_shared_ptr_variant current_declarative_region
+	const declarative_region_ptr_variant current_declarative_region
 )
 {
 	const unqualified_id& unqualified_id_node = syntax_node_analysis::get_unqualified_id(declarator_node);
@@ -354,7 +354,7 @@ semantic_entities::function_parameter_list
 create_parameters
 (
 	boost::optional<const syntax_nodes::parameter_declaration_list&> opt_parameter_declaration_list_node,
-	const declarative_region_shared_ptr_variant current_declarative_region
+	const declarative_region_ptr_variant current_declarative_region
 )
 {
 	if(opt_parameter_declaration_list_node)
@@ -367,7 +367,7 @@ semantic_entities::function_parameter_list
 create_parameters
 (
 	const syntax_nodes::parameter_declaration_list& parameter_declaration_list_node,
-	const declarative_region_shared_ptr_variant current_declarative_region
+	const declarative_region_ptr_variant current_declarative_region
 )
 {
 	function_parameter_list parameters;
@@ -452,7 +452,7 @@ std::vector<semantic_entities::type_variant>
 create_parameter_types
 (
 	boost::optional<const syntax_nodes::parameter_declaration_list&> opt_parameter_declaration_list_node,
-	const declarative_region_shared_ptr_variant current_declarative_region
+	const declarative_region_ptr_variant current_declarative_region
 )
 {
 	if(opt_parameter_declaration_list_node)
@@ -465,7 +465,7 @@ std::vector<semantic_entities::type_variant>
 create_parameter_types
 (
 	const syntax_nodes::parameter_declaration_list& parameter_declaration_list_node,
-	const semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+	const semantic_entities::declarative_region_ptr_variant current_declarative_region
 )
 {
 	semantic_entities::function_parameter_list parameters =

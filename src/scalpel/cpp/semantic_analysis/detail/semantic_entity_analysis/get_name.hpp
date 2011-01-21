@@ -28,7 +28,7 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 
 template<class EntityT>
 const std::string&
-get_name(EntityT entity);
+get_name(const EntityT& entity);
 
 }}}}} //namespace scalpel::cpp::semantic_analysis::detail::semantic_entity_analysis
 

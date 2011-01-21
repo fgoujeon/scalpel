@@ -36,7 +36,7 @@ declarator_entity_shared_ptr_variant
 create_entity
 (
 	const syntax_nodes::declarator& declarator_node,
-	const declarative_region_shared_ptr_variant& current_declarative_region,
+	const declarative_region_ptr_variant& current_declarative_region,
 	boost::optional<semantic_entities::type_variant> opt_type,
 	const bool has_typedef_specifier,
 	const bool has_static_specifier,
@@ -316,7 +316,7 @@ create_namespace_alias
 			has_leading_double_colon(nested_identifier_or_template_id_node),
 			get_nested_name_specifier(nested_identifier_or_template_id_node),
 			entity_name,
-			current_namespace
+			current_namespace.get()
 		)
 	;
 
@@ -352,7 +352,7 @@ create_using_directive
 			has_leading_double_colon(using_directive_node),
 			get_nested_name_specifier(using_directive_node),
 			get_identifier(using_directive_node).value(),
-			current_namespace
+			current_namespace.get()
 		)
 	;
 

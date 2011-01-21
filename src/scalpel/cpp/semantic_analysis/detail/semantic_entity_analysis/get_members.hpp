@@ -35,9 +35,9 @@ struct get_members_return_type
 };
 
 template<>
-struct get_members_return_type<semantic_entities::open_declarative_region_shared_ptr_variant>
+struct get_members_return_type<semantic_entities::open_declarative_region_ptr_variant>
 {
-	typedef std::vector<semantic_entities::open_declarative_region_shared_ptr_variant> type;
+	typedef std::vector<semantic_entities::open_declarative_region_ptr_variant> type;
 };
 
 template<>
@@ -60,13 +60,21 @@ get_members(const std::shared_ptr<semantic_entities::namespace_alias>& parent)
 	return get_members<MemberT>(n);
 }
 
+template<class MemberT>
+typename get_members_return_type<MemberT>::type
+get_members(semantic_entities::namespace_alias*& parent)
+{
+	std::shared_ptr<semantic_entities::namespace_> n = parent->referred_namespace();
+	return get_members<MemberT>(n);
+}
+
 //visitor template for declarative region variants
 template<class MemberT>
 struct get_declarative_region_members_visitor: public utility::static_visitor<typename get_members_return_type<MemberT>::type>
 {
 	template<class T>
 	typename get_members_return_type<MemberT>::type
-	operator()(const std::shared_ptr<T>& t) const
+	operator()(T* t) const
 	{
 		return get_members<MemberT>(t);
 	}
@@ -74,7 +82,7 @@ struct get_declarative_region_members_visitor: public utility::static_visitor<ty
 
 template<class MemberT>
 typename get_members_return_type<MemberT>::type
-get_members(semantic_entities::declarative_region_shared_ptr_variant& parent)
+get_members(semantic_entities::declarative_region_ptr_variant& parent)
 {
 	get_declarative_region_members_visitor<MemberT> visitor;
 	return utility::apply_visitor(visitor, parent);
@@ -82,7 +90,7 @@ get_members(semantic_entities::declarative_region_shared_ptr_variant& parent)
 
 template<class MemberT>
 typename get_members_return_type<MemberT>::type
-get_members(semantic_entities::open_declarative_region_shared_ptr_variant& parent)
+get_members(semantic_entities::open_declarative_region_ptr_variant& parent)
 {
 	get_declarative_region_members_visitor<MemberT> visitor;
 	return utility::apply_visitor(visitor, parent);

@@ -46,7 +46,7 @@ class namespace_:
 	public boost::noncopyable
 {
 	public:
-		typedef std::vector<open_declarative_region_shared_ptr_variant> open_declarative_region_shared_ptr_variants_t;
+		typedef std::vector<open_declarative_region_ptr_variant> open_declarative_region_ptr_variants_t;
 
 		typedef std::vector<std::weak_ptr<namespace_>> weak_namespaces_t;
 		typedef utility::shared_ptr_vector<namespace_alias> namespace_aliases_t;
@@ -97,16 +97,16 @@ class namespace_:
 		bool
 		has_enclosing_declarative_region() const;
 
-		std::shared_ptr<namespace_>
+		namespace_*
 		enclosing_declarative_region();
 
-		std::shared_ptr<const namespace_>
+		const namespace_*
 		enclosing_declarative_region() const;
 
 		void
-		enclosing_declarative_region(std::shared_ptr<namespace_> enclosing_declarative_region);
+		enclosing_declarative_region(namespace_& enclosing_declarative_region);
 
-		const open_declarative_region_shared_ptr_variants_t&
+		const open_declarative_region_ptr_variants_t&
 		open_declarative_regions();
 
 		namespaces_t::range
@@ -189,10 +189,10 @@ class namespace_:
 
 	private:
 		std::string name_;
-		std::weak_ptr<namespace_> enclosing_declarative_region_;
+		namespace_* enclosing_declarative_region_;
 
 		//polymorphic containers
-		open_declarative_region_shared_ptr_variants_t open_declarative_regions_;
+		open_declarative_region_ptr_variants_t open_declarative_regions_;
 
 		//members
 		namespace_aliases_t namespace_aliases_;

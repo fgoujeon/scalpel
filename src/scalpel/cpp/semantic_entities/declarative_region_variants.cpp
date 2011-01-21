@@ -33,43 +33,43 @@ struct get_name_impl_struct: public utility::static_visitor<const std::string&>
 {
 	template<class T>
 	const std::string&
-	operator()(std::shared_ptr<T> t) const
+	operator()(T* t) const
 	{
 		return t->name();
 	}
 
 	const std::string&
-	operator()(std::shared_ptr<constructor>) const
+	operator()(constructor*) const
 	{
 		return utility::extern_strings::empty;
 	}
 
 	const std::string&
-	operator()(std::shared_ptr<destructor>) const
+	operator()(destructor*) const
 	{
 		return utility::extern_strings::empty;
 	}
 
 	const std::string&
-	operator()(std::shared_ptr<operator_function>) const
+	operator()(operator_function*) const
 	{
 		return utility::extern_strings::empty;
 	}
 
 	const std::string&
-	operator()(std::shared_ptr<operator_member_function>) const
+	operator()(operator_member_function*) const
 	{
 		return utility::extern_strings::empty;
 	}
 
 	const std::string&
-	operator()(std::shared_ptr<conversion_function>) const
+	operator()(conversion_function*) const
 	{
 		return utility::extern_strings::empty;
 	}
 
 	const std::string&
-	operator()(std::shared_ptr<statement_block>) const
+	operator()(statement_block*) const
 	{
 		return utility::extern_strings::empty;
 	}
@@ -77,13 +77,13 @@ struct get_name_impl_struct: public utility::static_visitor<const std::string&>
 get_name_impl_struct get_name_impl;
 
 const std::string&
-get_name(const declarative_region_shared_ptr_variant& var)
+get_name(const declarative_region_ptr_variant& var)
 {
 	return utility::apply_visitor(get_name_impl, var);
 }
 
 const std::string&
-get_name(const open_declarative_region_shared_ptr_variant& var)
+get_name(const open_declarative_region_ptr_variant& var)
 {
 	return utility::apply_visitor(get_name_impl, var);
 }
@@ -94,7 +94,7 @@ struct has_enclosing_declarative_region_impl_struct: public utility::static_visi
 {
 	template<class T>
 	bool
-	operator()(std::shared_ptr<T> t) const
+	operator()(T* t) const
 	{
 		return t->has_enclosing_declarative_region();
 	}
@@ -102,26 +102,26 @@ struct has_enclosing_declarative_region_impl_struct: public utility::static_visi
 has_enclosing_declarative_region_impl_struct has_enclosing_declarative_region_impl;
 
 bool
-has_enclosing_declarative_region(const declarative_region_shared_ptr_variant& var)
+has_enclosing_declarative_region(const declarative_region_ptr_variant& var)
 {
 	return utility::apply_visitor(has_enclosing_declarative_region_impl, var);
 }
 
 
 
-struct get_enclosing_declarative_region_impl_struct: public utility::static_visitor<declarative_region_shared_ptr_variant>
+struct get_enclosing_declarative_region_impl_struct: public utility::static_visitor<declarative_region_ptr_variant>
 {
 	template<class T>
-	declarative_region_shared_ptr_variant
-	operator()(std::shared_ptr<T> t) const
+	declarative_region_ptr_variant
+	operator()(T* t) const
 	{
 		return t->enclosing_declarative_region();
 	}
 };
 get_enclosing_declarative_region_impl_struct get_enclosing_declarative_region_impl;
 
-declarative_region_shared_ptr_variant
-get_enclosing_declarative_region(const declarative_region_shared_ptr_variant& var)
+declarative_region_ptr_variant
+get_enclosing_declarative_region(const declarative_region_ptr_variant& var)
 {
 	return utility::apply_visitor(get_enclosing_declarative_region_impl, var);
 }

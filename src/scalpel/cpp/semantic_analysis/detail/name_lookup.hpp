@@ -89,6 +89,13 @@ struct return_type<false, false, utility::basic_variant<utility::add_shared_ptr,
 	typedef typename utility::shared_ptr_variant<EntitiesT...>::type type;
 };
 
+//(3)bis
+template<class... EntitiesT>
+struct return_type<false, false, utility::basic_variant<utility::add_ptr, EntitiesT...>>
+{
+	typedef typename utility::ptr_variant<EntitiesT...>::type type;
+};
+
 //(4)
 template<class... EntitiesT>
 struct return_type<true, false, utility::basic_variant<utility::add_shared_ptr, EntitiesT...>>
@@ -96,11 +103,25 @@ struct return_type<true, false, utility::basic_variant<utility::add_shared_ptr, 
 	typedef boost::optional<typename utility::shared_ptr_variant<EntitiesT...>::type> type;
 };
 
+//(4)bis
+template<class... EntitiesT>
+struct return_type<true, false, utility::basic_variant<utility::add_ptr, EntitiesT...>>
+{
+	typedef boost::optional<typename utility::ptr_variant<EntitiesT...>::type> type;
+};
+
 //(5)
 template<bool Optional, class... EntitiesT>
 struct return_type<Optional, true, utility::basic_variant<utility::add_shared_ptr, EntitiesT...>>
 {
 	typedef std::set<typename utility::shared_ptr_variant<EntitiesT...>::type> type;
+};
+
+//(5)bis
+template<bool Optional, class... EntitiesT>
+struct return_type<Optional, true, utility::basic_variant<utility::add_ptr, EntitiesT...>>
+{
+	typedef std::set<typename utility::ptr_variant<EntitiesT...>::type> type;
 };
 
 //(6)
@@ -135,7 +156,7 @@ typename return_type<Optional, Multiple, EntitiesT...>::type
 find
 (
 	const typename EntityIdentificationPolicy::identifier_t& identifier,
-	semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+	semantic_entities::declarative_region_ptr_variant current_declarative_region
 );
 
 /**
@@ -153,7 +174,7 @@ find
 	const bool has_leading_double_colon,
 	const syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>& opt_nested_name_specifier_node,
 	const typename EntityIdentificationPolicy::identifier_t& identifier,
-	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region,
+	const semantic_entities::declarative_region_ptr_variant& current_declarative_region,
 	const bool apply_using_directives_for_unqualified_id_part = true
 );
 
@@ -163,12 +184,12 @@ nested-identifier syntax node (i.e. Z in the expression "X::Y::Z::"),
 from the given declarative region.
 If has_leading_double_colon is false, the second argument cannot be omitted.
 */
-semantic_entities::open_declarative_region_shared_ptr_variant
+semantic_entities::open_declarative_region_ptr_variant
 find_declarative_region
 (
 	const bool has_leading_double_colon,
 	const syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>& opt_nested_name_specifier_node,
-	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region
+	const semantic_entities::declarative_region_ptr_variant& current_declarative_region
 );
 
 /**
@@ -181,7 +202,7 @@ typename return_type<Optional, Multiple, EntitiesT...>::type
 find_local
 (
 	const typename EntityIdentificationPolicy::identifier_t& identifier,
-	semantic_entities::open_declarative_region_shared_ptr_variant current_declarative_region
+	semantic_entities::open_declarative_region_ptr_variant current_declarative_region
 );
 
 
@@ -192,7 +213,7 @@ namespace detail
 	typedef
 		std::map
 		<
-			std::shared_ptr<const semantic_entities::namespace_>,
+			const semantic_entities::namespace_*,
 			std::vector<std::shared_ptr<semantic_entities::namespace_>>
 		>
 		namespace_association_map
@@ -209,7 +230,7 @@ namespace detail
 	find_entities
 	(
 		const typename EntityIdentificationPolicy::identifier_t& identifier,
-		semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+		semantic_entities::declarative_region_ptr_variant current_declarative_region
 	);
 
 	/**
@@ -224,7 +245,7 @@ namespace detail
 		const bool has_leading_double_colon,
 		const syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>& opt_nested_name_specifier_node,
 		const typename EntityIdentificationPolicy::identifier_t& identifier,
-		const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region,
+		const semantic_entities::declarative_region_ptr_variant& current_declarative_region,
 		const bool apply_using_directives_for_unqualified_id_part
 	);
 
@@ -233,11 +254,11 @@ namespace detail
 	nested-identifier syntax node (i.e. Z in the expression "X::Y::Z::"),
 	from the given declarative region (where X must be declared).
 	*/
-	semantic_entities::open_declarative_region_shared_ptr_variant
+	semantic_entities::open_declarative_region_ptr_variant
 	find_declarative_region
 	(
 		const syntax_nodes::nested_name_specifier& nested_name_specifier_node,
-		const semantic_entities::open_declarative_region_shared_ptr_variant& current_declarative_region
+		const semantic_entities::open_declarative_region_ptr_variant& current_declarative_region
 	);
 
 
@@ -252,7 +273,7 @@ namespace detail
 	find_in_namespace
 	(
 		const typename EntityIdentificationPolicy::identifier_t& identifier,
-		std::shared_ptr<semantic_entities::namespace_> current_namespace
+		semantic_entities::namespace_& current_namespace
 	);
 
 	/**
@@ -263,8 +284,8 @@ namespace detail
 	find_in_namespace
 	(
 		const typename EntityIdentificationPolicy::identifier_t& identifier,
-		std::shared_ptr<semantic_entities::namespace_> current_namespace,
-		std::vector<std::shared_ptr<semantic_entities::namespace_>>& already_seached_namespaces
+		semantic_entities::namespace_& current_namespace,
+		std::vector<semantic_entities::namespace_*>& already_seached_namespaces
 	);
 
 
@@ -336,7 +357,7 @@ namespace detail
 	void
 	apply_using_directives
 	(
-		const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region,
+		const semantic_entities::declarative_region_ptr_variant& current_declarative_region,
 		const std::vector<std::weak_ptr<semantic_entities::namespace_>>& using_directive_namespaces,
 		namespace_association_map& namespace_associations
 	);
@@ -344,10 +365,10 @@ namespace detail
 	/**
 	Find the nearest enclosing namespace containing both a and b.
 	*/
-	std::shared_ptr<semantic_entities::namespace_>
+	semantic_entities::namespace_&
 	find_common_enclosing_namespace
 	(
-		const semantic_entities::declarative_region_shared_ptr_variant& a,
+		const semantic_entities::declarative_region_ptr_variant& a,
 		const std::shared_ptr<semantic_entities::namespace_> b
 	);
 
@@ -429,6 +450,23 @@ namespace detail
 		static
 		typename return_type<false, false, utility::basic_variant<utility::add_shared_ptr, EntitiesT...>>::type
 		result(typename return_type<true, false, utility::basic_variant<utility::add_shared_ptr, EntitiesT...>>::type& result);
+	};
+
+	template<class... EntitiesT>
+	struct return_result<false, false, utility::basic_variant<utility::add_ptr, EntitiesT...>>
+	{
+		//return the only one element of the set
+		//throw an exception if there's zero or more than one element in
+		//the set
+		static
+		typename return_type<false, false, utility::basic_variant<utility::add_ptr, EntitiesT...>>::type
+		result(typename return_type<false, true, utility::basic_variant<utility::add_ptr, EntitiesT...>>::type& result);
+
+		//return *result;
+		//throw an exception if the result is empty
+		static
+		typename return_type<false, false, utility::basic_variant<utility::add_ptr, EntitiesT...>>::type
+		result(typename return_type<true, false, utility::basic_variant<utility::add_ptr, EntitiesT...>>::type& result);
 	};
 
 	template<class EntityT, class EntityT2, class... EntitiesT>

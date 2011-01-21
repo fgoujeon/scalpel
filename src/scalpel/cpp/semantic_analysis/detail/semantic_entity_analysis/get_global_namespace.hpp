@@ -28,8 +28,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail { namespace semantic_entity_analysis
 {
 
-std::shared_ptr<semantic_entities::namespace_>
-get_global_namespace(semantic_entities::declarative_region_shared_ptr_variant current_declarative_region);
+semantic_entities::namespace_&
+get_global_namespace(semantic_entities::declarative_region_ptr_variant current_declarative_region);
 
 }}}}} //namespace scalpel::cpp::semantic_analysis::detail::semantic_entity_analysis
 

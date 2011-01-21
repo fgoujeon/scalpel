@@ -116,7 +116,7 @@ BOOST_AUTO_TEST_CASE(test_case_7)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"i",
-				function_test
+				function_test.get()
 			)
 		;
 

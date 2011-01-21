@@ -62,11 +62,11 @@ class variable
 		bool
 		has_enclosing_declarative_region() const;
 
-		declarative_region_shared_ptr_variant
+		declarative_region_ptr_variant
 		enclosing_declarative_region() const;
 
 		void
-		enclosing_declarative_region(const declarative_region_shared_ptr_variant& enclosing_declarative_region);
+		enclosing_declarative_region(const declarative_region_ptr_variant& enclosing_declarative_region);
 
 	private:
 		type_variant type_;

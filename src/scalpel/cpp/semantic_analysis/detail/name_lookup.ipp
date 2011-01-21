@@ -33,7 +33,7 @@ typename return_type<Optional, Multiple, EntitiesT...>::type
 find
 (
 	const typename EntityIdentificationPolicy::identifier_t& identifier,
-	semantic_entities::declarative_region_shared_ptr_variant current_declarative_region
+	semantic_entities::declarative_region_ptr_variant current_declarative_region
 )
 {
 	using namespace detail;
@@ -49,14 +49,14 @@ find
 	while(true)
 	{
 		//apply using directives (only for namespaces and statement blocks)
-		if(std::shared_ptr<semantic_entities::namespace_>* opt_namespace_ptr = utility::get<semantic_entities::namespace_>(&current_declarative_region))
+		if(semantic_entities::namespace_** opt_namespace_ptr = utility::get<semantic_entities::namespace_>(&current_declarative_region))
 			apply_using_directives
 			(
 				current_declarative_region,
 				(*opt_namespace_ptr)->using_directive_namespaces(),
 				namespace_associations
 			);
-		else if(std::shared_ptr<semantic_entities::statement_block>* opt_statement_block_ptr = utility::get<semantic_entities::statement_block>(&current_declarative_region))
+		else if(semantic_entities::statement_block** opt_statement_block_ptr = utility::get<semantic_entities::statement_block>(&current_declarative_region))
 			apply_using_directives
 			(
 				current_declarative_region,
@@ -71,7 +71,7 @@ find
 			find_local_entities
 			<
 				EntityIdentificationPolicy,
-				semantic_entities::declarative_region_shared_ptr_variant,
+				semantic_entities::declarative_region_ptr_variant,
 				true,
 				Multiple,
 				EntitiesT...
@@ -80,7 +80,7 @@ find
 
 		//find entities in the associated namespaces (only for namespaces)
 		//and add them to the previously found entities
-		if(std::shared_ptr<semantic_entities::namespace_>* opt_namespace_ptr = utility::get<semantic_entities::namespace_>(&current_declarative_region))
+		if(semantic_entities::namespace_** opt_namespace_ptr = utility::get<semantic_entities::namespace_>(&current_declarative_region))
 		{
 			auto associated_namespaces_it = namespace_associations.find(*opt_namespace_ptr);
 			if(associated_namespaces_it != namespace_associations.end())
@@ -112,9 +112,9 @@ find
 		if(!utility::is_empty(found_entities)) break;
 
 		//find entities in the base classes (only for classes)
-		if(auto opt_class_ptr = utility::get<semantic_entities::class_>(&current_declarative_region))
+		if(semantic_entities::class_** opt_class_ptr = utility::get<semantic_entities::class_>(&current_declarative_region))
 		{
-			std::shared_ptr<semantic_entities::class_> class_ptr = *opt_class_ptr;
+			semantic_entities::class_* class_ptr = *opt_class_ptr;
 
 			add_to_result
 			(
@@ -147,7 +147,7 @@ find
 	const bool has_leading_double_colon,
 	const syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>& opt_nested_name_specifier_node,
 	const typename EntityIdentificationPolicy::identifier_t& identifier,
-	const semantic_entities::declarative_region_shared_ptr_variant& current_declarative_region,
+	const semantic_entities::declarative_region_ptr_variant& current_declarative_region,
 	const bool apply_using_directives_for_unqualified_id_part
 )
 {
@@ -174,7 +174,7 @@ find
 
 	//Find the last declarative region of the nested identifier specifier
 	//(i.e. Z in "[::]X::Y::Z::").
-	semantic_entities::open_declarative_region_shared_ptr_variant last_declarative_region =
+	semantic_entities::open_declarative_region_ptr_variant last_declarative_region =
 		find_declarative_region
 		(
 			has_leading_double_colon,
@@ -186,7 +186,7 @@ find
 	//find entities in the last declarative region
 	if(apply_using_directives_for_unqualified_id_part)
 	{
-		if(std::shared_ptr<semantic_entities::namespace_>* opt_namespace_ptr = utility::get<semantic_entities::namespace_>(&last_declarative_region))
+		if(semantic_entities::namespace_** opt_namespace_ptr = utility::get<semantic_entities::namespace_>(&last_declarative_region))
 		{
 			return
 				find_in_namespace
@@ -195,7 +195,7 @@ find
 					Optional,
 					Multiple,
 					EntitiesT...
-				>(identifier, *opt_namespace_ptr)
+				>(identifier, **opt_namespace_ptr)
 			;
 		}
 	}
@@ -203,7 +203,7 @@ find
 		find_local_entities
 		<
 			EntityIdentificationPolicy,
-			semantic_entities::open_declarative_region_shared_ptr_variant,
+			semantic_entities::open_declarative_region_ptr_variant,
 			Optional,
 			Multiple,
 			EntitiesT...
@@ -216,14 +216,14 @@ typename return_type<Optional, Multiple, EntitiesT...>::type
 find_local
 (
 	const typename EntityIdentificationPolicy::identifier_t& identifier,
-	semantic_entities::open_declarative_region_shared_ptr_variant current_declarative_region
+	semantic_entities::open_declarative_region_ptr_variant current_declarative_region
 )
 {
 	return
 		detail::find_local_entities
 		<
 			EntityIdentificationPolicy,
-			semantic_entities::open_declarative_region_shared_ptr_variant,
+			semantic_entities::open_declarative_region_ptr_variant,
 			Optional,
 			Multiple,
 			EntitiesT...
@@ -241,10 +241,10 @@ typename return_type<Optional, Multiple, EntitiesT...>::type
 find_in_namespace
 (
 	const typename EntityIdentificationPolicy::identifier_t& identifier,
-	std::shared_ptr<semantic_entities::namespace_> current_namespace
+	semantic_entities::namespace_& current_namespace
 )
 {
-	std::vector<std::shared_ptr<semantic_entities::namespace_>> already_searched_namespaces;
+	std::vector<semantic_entities::namespace_*> already_searched_namespaces;
 	return
 		find_in_namespace
 		<
@@ -266,19 +266,19 @@ typename return_type<Optional, Multiple, EntitiesT...>::type
 find_in_namespace
 (
 	const typename EntityIdentificationPolicy::identifier_t& identifier,
-	std::shared_ptr<semantic_entities::namespace_> current_namespace,
-	std::vector<std::shared_ptr<semantic_entities::namespace_>>& already_searched_namespaces
+	semantic_entities::namespace_& current_namespace,
+	std::vector<semantic_entities::namespace_*>& already_searched_namespaces
 )
 {
 	//search in the current namespace
 	{
-		already_searched_namespaces.push_back(current_namespace);
+		already_searched_namespaces.push_back(&current_namespace);
 
 		typename return_type<true, Multiple, EntitiesT...>::type found_entities =
 			find_local_entities
 			<
 				EntityIdentificationPolicy,
-				std::shared_ptr<semantic_entities::namespace_>,
+				semantic_entities::namespace_,
 				true,
 				Multiple,
 				EntitiesT...
@@ -294,8 +294,8 @@ find_in_namespace
 	typename return_type<true, true, EntitiesT...>::type found_entities;
 	for
 	(
-		auto i = current_namespace->using_directive_namespaces().begin();
-		i != current_namespace->using_directive_namespaces().end();
+		auto i = current_namespace.using_directive_namespaces().begin();
+		i != current_namespace.using_directive_namespaces().end();
 		++i
 	)
 	{
@@ -308,7 +308,7 @@ find_in_namespace
 			(
 				already_searched_namespaces.begin(),
 				already_searched_namespaces.end(),
-				using_directive_namespace
+				using_directive_namespace.get()
 			) == already_searched_namespaces.end()
 		)
 		{
@@ -318,7 +318,7 @@ find_in_namespace
 				find_in_namespace<EntityIdentificationPolicy, true, Multiple, EntitiesT...>
 				(
 					identifier,
-					using_directive_namespace,
+					*using_directive_namespace,
 					already_searched_namespaces
 				)
 			);
@@ -614,6 +614,40 @@ return_result<false, false, utility::basic_variant<utility::add_shared_ptr, Enti
 		throw std::runtime_error("no entity found");
 	return *result;
 }
+
+template<class... EntitiesT>
+typename return_type<false, false, utility::basic_variant<utility::add_ptr, EntitiesT...>>::type
+return_result<false, false, utility::basic_variant<utility::add_ptr, EntitiesT...>>::result
+(
+	typename return_type<false, true, utility::basic_variant<utility::add_ptr, EntitiesT...>>::type& result
+)
+{
+	if(result.empty())
+	{
+		throw std::runtime_error("no entity found");
+	}
+	else if(result.size() == 1)
+	{
+		return *result.begin();
+	}
+	else
+	{
+		throw std::runtime_error("more than one entities found");
+	}
+}
+
+template<class... EntitiesT>
+typename return_type<false, false, utility::basic_variant<utility::add_ptr, EntitiesT...>>::type
+return_result<false, false, utility::basic_variant<utility::add_ptr, EntitiesT...>>::result
+(
+	typename return_type<true, false, utility::basic_variant<utility::add_ptr, EntitiesT...>>::type& result
+)
+{
+	if(!result)
+		throw std::runtime_error("no entity found");
+	return *result;
+}
+
 
 template<class EntityT, class EntityT2, class... EntitiesT>
 typename return_type<false, false, EntityT, EntityT2, EntitiesT...>::type

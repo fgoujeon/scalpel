@@ -212,11 +212,11 @@ class CLASS_NAME: \
 		bool \
 		has_enclosing_declarative_region() const; \
  \
-		declarative_region_shared_ptr_variant \
+		declarative_region_ptr_variant \
 		enclosing_declarative_region() const; \
  \
 		void \
-		enclosing_declarative_region(const declarative_region_shared_ptr_variant& enclosing_declarative_region); \
+		enclosing_declarative_region(const declarative_region_ptr_variant& enclosing_declarative_region); \
  \
     private: \
 		BOOST_PP_IIF \
@@ -274,7 +274,7 @@ class CLASS_NAME: \
 		std::shared_ptr<statement_block> body_; \
 		const utility::empty nothing_; \
  \
-		boost::optional<declarative_region_weak_ptr_variant> enclosing_declarative_region_; \
+		boost::optional<declarative_region_ptr_variant> enclosing_declarative_region_; \
 }; \
  \
 bool \
