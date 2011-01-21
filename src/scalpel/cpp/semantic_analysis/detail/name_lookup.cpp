@@ -191,7 +191,7 @@ apply_using_directives
 		++i
 	)
 	{
-		std::shared_ptr<semantic_entities::namespace_> current_using_directive_namespace(*i);
+		semantic_entities::namespace_& current_using_directive_namespace = *(*i).lock().get();
 
 		//find the common enclosing namespace
 		namespace_& common_enclosing_namespace =
@@ -199,13 +199,13 @@ apply_using_directives
 		;
 
 		//associate the using directive's namespace to the common enclosing namespace
-		namespace_associations[&common_enclosing_namespace].push_back(current_using_directive_namespace.get());
+		namespace_associations[&common_enclosing_namespace].push_back(&current_using_directive_namespace);
 
 		//process recursively with the using directive's namespaces of the using directive's namespace
 		apply_using_directives
 		(
 			current_declarative_region,
-			current_using_directive_namespace->using_directive_namespaces(),
+			current_using_directive_namespace.using_directive_namespaces(),
 			namespace_associations
 		);
 	}
@@ -215,7 +215,7 @@ semantic_entities::namespace_&
 find_common_enclosing_namespace
 (
 	const semantic_entities::declarative_region_ptr_variant& a,
-	const std::shared_ptr<semantic_entities::namespace_> b
+	semantic_entities::namespace_& b
 )
 {
 	semantic_entities::declarative_region_ptr_variant current_declarative_region_a = a;
@@ -224,7 +224,7 @@ find_common_enclosing_namespace
 		if(namespace_** opt_namespace_ptr = utility::get<semantic_entities::namespace_>(&current_declarative_region_a))
 		{
 			namespace_* current_namespace_a = *opt_namespace_ptr;
-			namespace_* current_namespace_b = b.get();
+			namespace_* current_namespace_b = &b;
 			while(true) //from b to outermost namespace...
 			{
 				if(current_namespace_a == current_namespace_b)

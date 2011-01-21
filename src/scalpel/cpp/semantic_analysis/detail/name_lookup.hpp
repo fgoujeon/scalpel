@@ -369,7 +369,7 @@ namespace detail
 	find_common_enclosing_namespace
 	(
 		const semantic_entities::declarative_region_ptr_variant& a,
-		const std::shared_ptr<semantic_entities::namespace_> b
+		semantic_entities::namespace_& b
 	);
 
 
