@@ -37,28 +37,28 @@ create_namespace
 void
 fill_namespace
 (
-	std::shared_ptr<semantic_entities::namespace_> namespace_entity,
+	semantic_entities::namespace_& namespace_entity,
 	const syntax_nodes::namespace_definition& namespace_definition_node
 );
 
 void
 fill_namespace
 (
-	std::shared_ptr<semantic_entities::namespace_> namespace_entity,
+	semantic_entities::namespace_& namespace_entity,
 	const syntax_nodes::simple_declaration& simple_declaration_node
 );
 
 void
 fill_namespace
 (
-	std::shared_ptr<semantic_entities::namespace_> namespace_entity,
+	semantic_entities::namespace_& namespace_entity,
 	const syntax_nodes::declaration_seq& declaration_seq_node
 );
 
 void
 fill_namespace
 (
-	std::shared_ptr<semantic_entities::namespace_> namespace_entity,
+	semantic_entities::namespace_& namespace_entity,
 	const syntax_nodes::function_definition& function_definition_node
 );
 
@@ -69,7 +69,7 @@ fill_namespace
 std::shared_ptr<semantic_entities::class_>
 add_class
 (
-	const std::shared_ptr<semantic_entities::namespace_>& namespace_entity,
+	semantic_entities::namespace_& namespace_entity,
 	const std::shared_ptr<semantic_entities::class_>& class_entity
 );
 

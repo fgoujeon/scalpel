@@ -42,7 +42,7 @@ analyze(const syntax_tree& tree)
 	if(opt_declaration_seq_node)
 	{
 		auto declaration_seq_node = *opt_declaration_seq_node;
-		cpp::semantic_analysis::detail::fill_namespace(global_namespace, declaration_seq_node);
+		cpp::semantic_analysis::detail::fill_namespace(*global_namespace, declaration_seq_node);
 	}
 
 	return global_namespace;
