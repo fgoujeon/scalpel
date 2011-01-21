@@ -362,6 +362,14 @@ namespace detail
 		namespace_association_map& namespace_associations
 	);
 
+	void
+	apply_using_directives
+	(
+		const semantic_entities::declarative_region_ptr_variant& current_declarative_region,
+		const std::vector<semantic_entities::namespace_*>& using_directive_namespaces,
+		namespace_association_map& namespace_associations
+	);
+
 	/**
 	Find the nearest enclosing namespace containing both a and b.
 	*/

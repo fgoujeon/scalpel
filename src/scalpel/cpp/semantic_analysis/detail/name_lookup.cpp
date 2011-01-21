@@ -183,7 +183,7 @@ apply_using_directives
 	namespace_association_map& namespace_associations
 )
 {
-	//for each using directive's namespace...
+	std::vector<semantic_entities::namespace_*> using_directive_namespaces2;
 	for
 	(
 		auto i = using_directive_namespaces.begin();
@@ -192,6 +192,34 @@ apply_using_directives
 	)
 	{
 		semantic_entities::namespace_& current_using_directive_namespace = *(*i).lock().get();
+		using_directive_namespaces2.push_back(&current_using_directive_namespace);
+	}
+
+	apply_using_directives
+	(
+		current_declarative_region,
+		using_directive_namespaces2,
+		namespace_associations
+	);
+}
+
+void
+apply_using_directives
+(
+	const semantic_entities::declarative_region_ptr_variant& current_declarative_region,
+	const std::vector<semantic_entities::namespace_*>& using_directive_namespaces,
+	namespace_association_map& namespace_associations
+)
+{
+	//for each using directive's namespace...
+	for
+	(
+		auto i = using_directive_namespaces.begin();
+		i != using_directive_namespaces.end();
+		++i
+	)
+	{
+		semantic_entities::namespace_& current_using_directive_namespace = **i;
 
 		//find the common enclosing namespace
 		namespace_& common_enclosing_namespace =
