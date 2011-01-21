@@ -214,7 +214,7 @@ namespace detail
 		std::map
 		<
 			const semantic_entities::namespace_*,
-			std::vector<std::shared_ptr<semantic_entities::namespace_>>
+			std::vector<semantic_entities::namespace_*>
 		>
 		namespace_association_map
 	;

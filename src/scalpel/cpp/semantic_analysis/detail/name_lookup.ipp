@@ -85,12 +85,12 @@ find
 			auto associated_namespaces_it = namespace_associations.find(*opt_namespace_ptr);
 			if(associated_namespaces_it != namespace_associations.end())
 			{
-				const std::vector<std::shared_ptr<semantic_entities::namespace_>>& associated_namespaces = associated_namespaces_it->second;
+				const std::vector<semantic_entities::namespace_*>& associated_namespaces = associated_namespaces_it->second;
 
 				//for each associated namespace
 				for(auto i = associated_namespaces.begin(); i != associated_namespaces.end(); ++i)
 				{
-					std::shared_ptr<semantic_entities::namespace_> associated_namespace = *i;
+					semantic_entities::namespace_& associated_namespace = **i;
 
 					add_to_result
 					(
@@ -98,7 +98,7 @@ find
 						find_local_entities
 						<
 							EntityIdentificationPolicy,
-							std::shared_ptr<semantic_entities::namespace_>,
+							semantic_entities::namespace_,
 							true,
 							Multiple,
 							EntitiesT...

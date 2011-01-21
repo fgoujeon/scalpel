@@ -199,7 +199,7 @@ apply_using_directives
 		;
 
 		//associate the using directive's namespace to the common enclosing namespace
-		namespace_associations[&common_enclosing_namespace].push_back(current_using_directive_namespace);
+		namespace_associations[&common_enclosing_namespace].push_back(current_using_directive_namespace.get());
 
 		//process recursively with the using directive's namespaces of the using directive's namespace
 		apply_using_directives
