@@ -276,7 +276,7 @@ std::shared_ptr<namespace_alias>
 create_namespace_alias
 (
 	const syntax_nodes::namespace_alias_definition& namespace_alias_definition_node,
-	std::shared_ptr<namespace_> current_namespace
+	namespace_& current_namespace
 )
 {
 	const qualified_namespace_specifier& qualified_namespace_specifier_node =
@@ -316,7 +316,7 @@ create_namespace_alias
 			has_leading_double_colon(nested_identifier_or_template_id_node),
 			get_nested_name_specifier(nested_identifier_or_template_id_node),
 			entity_name,
-			current_namespace.get()
+			&current_namespace
 		)
 	;
 
@@ -335,7 +335,7 @@ std::shared_ptr<semantic_entities::namespace_>
 create_using_directive
 (
 	const syntax_nodes::using_directive& using_directive_node,
-	std::shared_ptr<semantic_entities::namespace_> current_namespace
+	semantic_entities::namespace_& current_namespace
 )
 {
 	//find the namespace or namespace alias designated by the using directive
@@ -352,7 +352,7 @@ create_using_directive
 			has_leading_double_colon(using_directive_node),
 			get_nested_name_specifier(using_directive_node),
 			get_identifier(using_directive_node).value(),
-			current_namespace.get()
+			&current_namespace
 		)
 	;
 

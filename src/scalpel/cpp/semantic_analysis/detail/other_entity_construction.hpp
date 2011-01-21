@@ -64,14 +64,14 @@ std::shared_ptr<semantic_entities::namespace_alias>
 create_namespace_alias
 (
 	const syntax_nodes::namespace_alias_definition& namespace_alias_definition_node,
-	std::shared_ptr<semantic_entities::namespace_> current_namespace
+	semantic_entities::namespace_& current_namespace
 );
 
 std::shared_ptr<semantic_entities::namespace_>
 create_using_directive
 (
 	const syntax_nodes::using_directive& using_directive_node,
-	std::shared_ptr<semantic_entities::namespace_> current_namespace
+	semantic_entities::namespace_& current_namespace
 );
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail

@@ -87,13 +87,13 @@ fill_namespace
 			//else if(const boost::optional<const asm_definition&> opt_asm_definition_node = get<asm_definition>(&block_declaration_node))
 			else if(const boost::optional<const namespace_alias_definition&> opt_namespace_alias_definition_node = get<namespace_alias_definition>(&block_declaration_node))
 			{
-				std::shared_ptr<namespace_alias> new_namespace_alias = create_namespace_alias(*opt_namespace_alias_definition_node, namespace_entity);
+				std::shared_ptr<namespace_alias> new_namespace_alias = create_namespace_alias(*opt_namespace_alias_definition_node, *namespace_entity);
 				namespace_entity->add_member(new_namespace_alias);
 			}
 			//else if(const boost::optional<const using_declaration&> opt_using_declaration_node = get<using_declaration>(&block_declaration_node))
 			else if(const boost::optional<const using_directive&> opt_using_directive_node = get<using_directive>(&block_declaration_node))
 			{
-				std::shared_ptr<namespace_> new_using_directive = create_using_directive(*opt_using_directive_node, namespace_entity);
+				std::shared_ptr<namespace_> new_using_directive = create_using_directive(*opt_using_directive_node, *namespace_entity);
 				namespace_entity->add_using_directive_namespace(new_using_directive);
 			}
 		}
