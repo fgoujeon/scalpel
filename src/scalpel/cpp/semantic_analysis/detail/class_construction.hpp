@@ -37,14 +37,14 @@ create_class(const syntax_nodes::class_elaborated_specifier& class_elaborated_sp
 void
 fill_class
 (
-	std::shared_ptr<semantic_entities::class_> class_entity,
+	semantic_entities::class_& class_entity,
 	const syntax_nodes::class_specifier& class_specifier_node
 );
 
 void
 fill_class
 (
-	const std::shared_ptr<semantic_entities::class_> class_entity,
+	semantic_entities::class_& class_entity,
 	const semantic_entities::class_::access current_access,
 	const syntax_nodes::member_declaration_member_declarator_list& member_declaration_member_declarator_list_node
 );
@@ -52,7 +52,7 @@ fill_class
 void
 fill_class
 (
-	const std::shared_ptr<semantic_entities::class_> class_entity,
+	semantic_entities::class_& class_entity,
 	const semantic_entities::class_::access function_access,
 	const syntax_nodes::function_definition& function_definition_node
 );
@@ -65,7 +65,7 @@ fill_class
 std::shared_ptr<semantic_entities::class_>
 add_class
 (
-	const std::shared_ptr<semantic_entities::class_>& parent_class_entity,
+	semantic_entities::class_& parent_class_entity,
 	const std::shared_ptr<semantic_entities::class_>& class_entity,
 	const semantic_entities::class_::access current_access
 );

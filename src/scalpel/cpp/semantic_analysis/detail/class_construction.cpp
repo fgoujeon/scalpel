@@ -64,7 +64,7 @@ create_class(const class_elaborated_specifier& class_elaborated_specifier_node)
 void
 fill_class
 (
-	std::shared_ptr<class_> class_entity,
+	semantic_entities::class_& class_entity,
 	const class_specifier& class_specifier_node
 )
 {
@@ -123,11 +123,11 @@ fill_class
 					has_leading_double_colon(nested_identifier_or_template_id_node),
 					get_nested_name_specifier(nested_identifier_or_template_id_node),
 					base_class_name,
-					class_entity.get()
+					&class_entity
 				)
 			;
 
-			class_entity->add_base_class(*base_class, access, is_virtual);
+			class_entity.add_base_class(*base_class, access, is_virtual);
 		}
 	}
 
@@ -188,13 +188,13 @@ fill_class
 		}
 	}
 
-	class_entity->complete(true);
+	class_entity.complete(true);
 }
 
 void
 fill_class
 (
-	const std::shared_ptr<semantic_entities::class_> class_entity,
+	semantic_entities::class_& class_entity,
 	const class_::access current_access,
 	const syntax_nodes::member_declaration_member_declarator_list& member_declaration_member_declarator_list_node
 )
@@ -244,13 +244,13 @@ fill_class
 							false,
 							opt_nested_name_specifier_node,
 							syntax_node_analysis::get_identifier(class_specifier_node),
-							class_entity.get(),
+							&class_entity,
 							false
 						)
 					;
 
 					//and define it
-					fill_class(found_class, class_specifier_node);
+					fill_class(*found_class, class_specifier_node);
 
 					opt_unqualified_type = static_cast<const class_*>(found_class.get());
 				}
@@ -258,7 +258,7 @@ fill_class
 				{
 					std::shared_ptr<class_> new_class = create_class(class_specifier_node);
 					new_class = add_class(class_entity, new_class, current_access);
-					fill_class(new_class, class_specifier_node);
+					fill_class(*new_class, class_specifier_node);
 
 					opt_unqualified_type = static_cast<const class_*>(new_class.get());
 				}
@@ -285,7 +285,7 @@ fill_class
 				;
 
 				std::shared_ptr<enum_> new_enum = create_enum(enum_specifier_node);
-				class_entity->add_member(new_enum, current_access);
+				class_entity.add_member(new_enum, current_access);
 				fill_enum(new_enum, enum_specifier_node);
 
 				opt_unqualified_type = static_cast<const enum_*>(new_enum.get());
@@ -294,7 +294,7 @@ fill_class
 			}
 			case syntax_node_analysis::type_specifier_seq_type::SIMPLE_TYPE:
 			{
-				opt_unqualified_type = create_type(decl_specifier_seq_node, class_entity.get());
+				opt_unqualified_type = create_type(decl_specifier_seq_node, &class_entity);
 				break;
 			}
 			case syntax_node_analysis::type_specifier_seq_type::NO_TYPE:
@@ -334,7 +334,7 @@ fill_class
 				declarator_entity_shared_ptr_variant declarator_entity = create_entity
 				(
 					declarator_node,
-					class_entity.get(),
+					&class_entity,
 					opt_unqualified_type,
 					has_typedef_specifier,
 					has_static_specifier,
@@ -346,44 +346,44 @@ fill_class
 				);
 
 				if(auto opt_constructor_entity = get<constructor>(&declarator_entity))
-					class_entity->add_member
+					class_entity.add_member
 					(
 						*opt_constructor_entity,
 						current_access
 					);
 				else if(auto opt_destructor_entity = get<destructor>(&declarator_entity))
-					class_entity->set_destructor
+					class_entity.set_destructor
 					(
 						*opt_destructor_entity,
 						current_access
 					);
 				else if(auto opt_operator_function_entity = get<operator_member_function>(&declarator_entity))
-					class_entity->add_member
+					class_entity.add_member
 					(
 						*opt_operator_function_entity,
 						current_access
 					);
 				else if(auto opt_conversion_function_entity = get<conversion_function>(&declarator_entity))
-					class_entity->add_member
+					class_entity.add_member
 					(
 						*opt_conversion_function_entity,
 						current_access
 					);
 				else if(auto opt_simple_function_entity = get<simple_member_function>(&declarator_entity))
-					class_entity->add_member
+					class_entity.add_member
 					(
 						*opt_simple_function_entity,
 						current_access
 					);
 				else if(auto opt_variable_entity = get<variable>(&declarator_entity))
-					class_entity->add_member
+					class_entity.add_member
 					(
 						*opt_variable_entity,
 						current_access,
 						has_mutable_specifier
 					);
 				else if(auto opt_typedef_entity = get<typedef_>(&declarator_entity))
-					class_entity->add_member
+					class_entity.add_member
 					(
 						*opt_typedef_entity,
 						current_access
@@ -402,7 +402,7 @@ namespace
 		public:
 			add_function_to_class_visitor
 			(
-				const std::shared_ptr<semantic_entities::class_>& class_entity,
+				class_& class_entity,
 				const class_::access function_access
 			):
 				class_entity_(class_entity),
@@ -414,13 +414,13 @@ namespace
 			void
 			operator()(const std::shared_ptr<T>& function_entity) const
 			{
-				class_entity_->add_member(function_entity, function_access_);
+				class_entity_.add_member(function_entity, function_access_);
 			}
 
 			void
 			operator()(const std::shared_ptr<destructor>& function_entity) const
 			{
-				class_entity_->set_destructor(function_entity, function_access_);
+				class_entity_.set_destructor(function_entity, function_access_);
 			}
 
 			void
@@ -436,7 +436,7 @@ namespace
 			}
 
 		private:
-			const std::shared_ptr<semantic_entities::class_>& class_entity_;
+			class_& class_entity_;
 			const class_::access function_access_;
 	};
 }
@@ -444,7 +444,7 @@ namespace
 void
 fill_class
 (
-	const std::shared_ptr<semantic_entities::class_> class_entity,
+	semantic_entities::class_& class_entity,
 	const class_::access function_access,
 	const syntax_nodes::function_definition& function_definition_node
 )
@@ -462,7 +462,7 @@ fill_class
 	function_shared_ptr_variant function_entity = create_function
 	(
 		function_definition_node,
-		class_entity.get(),
+		&class_entity,
 		true,
 		true
 	);
@@ -476,19 +476,19 @@ fill_class
 	(
 		function_entity,
 		function_definition_node,
-		class_entity.get()
+		&class_entity
 	);
 }
 
 std::shared_ptr<semantic_entities::class_>
 add_class
 (
-	const std::shared_ptr<semantic_entities::class_>& parent_class_entity,
+	semantic_entities::class_& parent_class_entity,
 	const std::shared_ptr<semantic_entities::class_>& class_entity,
 	const class_::access current_access
 )
 {
-	class_::classes_t::range classes = parent_class_entity->nested_classes();
+	class_::classes_t::range classes = parent_class_entity.nested_classes();
 	for(auto i = classes.begin(); i != classes.end(); ++i)
 	{
 		const std::shared_ptr<semantic_entities::class_>& current_class = *i;
@@ -496,7 +496,7 @@ add_class
 			return current_class;
 	}
 
-	parent_class_entity->add_member(class_entity, current_access);
+	parent_class_entity.add_member(class_entity, current_access);
 	return class_entity;
 }
 

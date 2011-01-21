@@ -164,7 +164,7 @@ fill_namespace
 					;
 
 					//and define it
-					fill_class(found_class, class_specifier_node);
+					fill_class(*found_class, class_specifier_node);
 
 					opt_unqualified_type = static_cast<const class_*>(found_class.get());
 				}
@@ -172,7 +172,7 @@ fill_namespace
 				{
 					std::shared_ptr<class_> new_class = create_class(class_specifier_node);
 					new_class = add_class(namespace_entity, new_class);
-					fill_class(new_class, class_specifier_node);
+					fill_class(*new_class, class_specifier_node);
 
 					opt_unqualified_type = static_cast<const class_*>(new_class.get());
 				}
