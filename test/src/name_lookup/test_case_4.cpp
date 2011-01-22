@@ -83,10 +83,10 @@ BOOST_AUTO_TEST_CASE(test_case_4)
 	namespace_m->add_member(variable_m_i);
 	semantic_graph->add_member(namespace_n);
 	namespace_n->add_member(variable_n_i);
-	namespace_n->add_using_directive_namespace(namespace_m);
+	//namespace_n->add_using_directive_namespace(*namespace_m);
 	semantic_graph->add_member(function_f);
 	function_f->body(std::make_shared<statement_block>());
-	function_f->body()->add_using_directive_namespace(namespace_n);
+	//function_f->body()->add_using_directive_namespace(*namespace_n);
 
 
 

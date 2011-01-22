@@ -180,11 +180,11 @@ namespace_::namespace_aliases() const
 	return namespace_aliases_;
 }
 
-const namespace_::weak_namespaces_t&
-namespace_::using_directive_namespaces() const
-{
-	return using_directive_namespaces_;
-}
+//const namespace_::weak_namespaces_t&
+//namespace_::using_directive_namespaces() const
+//{
+//	return using_directive_namespaces_;
+//}
 
 void
 namespace_::add_member(std::shared_ptr<namespace_> member)
@@ -244,11 +244,11 @@ namespace_::add_member(std::shared_ptr<namespace_alias> member)
 	open_declarative_regions_.push_back(member.get());
 }
 
-void
-namespace_::add_using_directive_namespace(std::shared_ptr<namespace_> n)
-{
-	using_directive_namespaces_.push_back(n);
-}
+//void
+//namespace_::add_using_directive_namespace(namespace_& n)
+//{
+//	using_directive_namespaces_.push_back(&n);
+//}
 
 }}} //namespace scalpel::cpp::semantic_entities
 

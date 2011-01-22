@@ -107,10 +107,10 @@ BOOST_AUTO_TEST_CASE(test_case_5)
 	namespace_b->add_member(variable_b_j);
 	namespace_b->add_member(namespace_c);
 	namespace_c->add_member(namespace_d);
-	namespace_d->add_using_directive_namespace(namespace_a);
+	//namespace_d->add_using_directive_namespace(*namespace_a);
 	namespace_d->add_member(variable_d_j);
 	namespace_d->add_member(variable_d_k);
-	namespace_c->add_using_directive_namespace(namespace_d);
+	//namespace_c->add_using_directive_namespace(*namespace_d);
 	namespace_c->add_member(variable_c_k);
 
 
