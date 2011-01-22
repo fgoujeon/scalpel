@@ -48,23 +48,29 @@ struct get_members_return_type<semantic_entities::destructor>
 
 
 
-template<class MemberT, class ParentT>
-typename get_members_return_type<MemberT>::type
-get_members(ParentT& parent);
+#define GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(PARENT_TYPE) \
+template<class MemberT> \
+typename get_members_return_type<MemberT>::type \
+get_members(semantic_entities::PARENT_TYPE& parent);
+
+GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(namespace_)
+GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(class_)
+GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(constructor)
+GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(destructor)
+GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(operator_function)
+GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(operator_member_function)
+GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(conversion_function)
+GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(simple_function)
+GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(simple_member_function)
+GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(statement_block)
+
+#undef GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE
 
 template<class MemberT>
 typename get_members_return_type<MemberT>::type
-get_members(const std::shared_ptr<semantic_entities::namespace_alias>& parent)
+get_members(semantic_entities::namespace_alias& parent)
 {
-	semantic_entities::namespace_& n = parent->referred_namespace();
-	return get_members<MemberT>(n);
-}
-
-template<class MemberT>
-typename get_members_return_type<MemberT>::type
-get_members(semantic_entities::namespace_alias*& parent)
-{
-	semantic_entities::namespace_& n = parent->referred_namespace();
+	semantic_entities::namespace_& n = parent.referred_namespace();
 	return get_members<MemberT>(n);
 }
 
@@ -76,7 +82,7 @@ struct get_declarative_region_members_visitor: public utility::static_visitor<ty
 	typename get_members_return_type<MemberT>::type
 	operator()(T* t) const
 	{
-		return get_members<MemberT>(t);
+		return get_members<MemberT>(*t);
 	}
 };
 

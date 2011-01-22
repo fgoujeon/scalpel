@@ -140,8 +140,7 @@ BOOST_AUTO_TEST_CASE(test_case_2)
 
 	{
 		auto found_entity = find<identification_policies::by_name, false, false, simple_member_function>("g", function_g_test.get());
-		//BOOST_CHECK_EQUAL(found_entity, function_c1_g.get());
-		BOOST_CHECK(found_entity == 0);
+		BOOST_CHECK_EQUAL(found_entity, function_c1_g.get());
 	}
 
 	{
