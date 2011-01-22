@@ -22,7 +22,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_NAMESPACE_ALIAS_HPP
 
 #include <string>
-#include <memory>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -38,7 +37,7 @@ class namespace_alias
 		namespace_alias
 		(
 			const std::string name,
-			std::shared_ptr<namespace_> referred_namespace
+			namespace_& referred_namespace
 		);
 
 		const std::string&
@@ -47,15 +46,21 @@ class namespace_alias
 			return name_;
 		}
 
-		std::shared_ptr<namespace_>
+		namespace_&
+		referred_namespace()
+		{
+			return referred_namespace_;
+		}
+
+		const namespace_&
 		referred_namespace() const
 		{
-			return std::shared_ptr<namespace_>(referred_namespace_);
+			return referred_namespace_;
 		}
 
 	private:
 		std::string name_;
-		std::weak_ptr<namespace_> referred_namespace_;
+		namespace_& referred_namespace_;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

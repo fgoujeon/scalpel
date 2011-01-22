@@ -56,7 +56,7 @@ template<class MemberT>
 typename get_members_return_type<MemberT>::type
 get_members(const std::shared_ptr<semantic_entities::namespace_alias>& parent)
 {
-	std::shared_ptr<semantic_entities::namespace_> n = parent->referred_namespace();
+	semantic_entities::namespace_& n = parent->referred_namespace();
 	return get_members<MemberT>(n);
 }
 
@@ -64,7 +64,7 @@ template<class MemberT>
 typename get_members_return_type<MemberT>::type
 get_members(semantic_entities::namespace_alias*& parent)
 {
-	std::shared_ptr<semantic_entities::namespace_> n = parent->referred_namespace();
+	semantic_entities::namespace_& n = parent->referred_namespace();
 	return get_members<MemberT>(n);
 }
 

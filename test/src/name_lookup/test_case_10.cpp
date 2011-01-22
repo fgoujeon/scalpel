@@ -58,8 +58,8 @@ BOOST_AUTO_TEST_CASE(test_case_10)
 	auto namespace_a = namespace_::make_shared("a");
 
 	//namespace aliases
-	auto namespace_alias_as = std::make_shared<namespace_alias>("as", namespace_a);
-	auto namespace_alias_as2 = std::make_shared<namespace_alias>("as2", namespace_a);
+	auto namespace_alias_as = std::make_shared<namespace_alias>("as", *namespace_a);
+	auto namespace_alias_as2 = std::make_shared<namespace_alias>("as2", *namespace_a);
 
 	//functions
 	auto function_test = std::make_shared<simple_function>
@@ -138,7 +138,7 @@ BOOST_AUTO_TEST_CASE(test_case_10)
 		;
 		std::shared_ptr<namespace_alias> found_namespace_alias = get<namespace_alias>(found_entity);
 		BOOST_CHECK_EQUAL(found_namespace_alias, namespace_alias_as);
-		BOOST_CHECK_EQUAL(found_namespace_alias->referred_namespace(), namespace_a);
+		BOOST_CHECK_EQUAL(&found_namespace_alias->referred_namespace(), namespace_a.get());
 	}
 }
 

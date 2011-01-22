@@ -664,7 +664,7 @@ semantic_graph_serializer::serialize_namespace_alias
 {
 	output_ << indent(indent_level) << "<namespace_alias";
 	output_ << " name=\"" << entity.name() << "\"";
-	output_ << " id=\"n" << namespace_id(*entity.referred_namespace().get()) << "\"";
+	output_ << " id=\"n" << namespace_id(entity.referred_namespace()) << "\"";
 	output_ << "/>\n";
 }
 

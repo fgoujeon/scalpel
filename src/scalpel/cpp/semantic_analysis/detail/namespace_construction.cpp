@@ -93,7 +93,7 @@ fill_namespace
 			//else if(const boost::optional<const using_declaration&> opt_using_declaration_node = get<using_declaration>(&block_declaration_node))
 			else if(const boost::optional<const using_directive&> opt_using_directive_node = get<using_directive>(&block_declaration_node))
 			{
-				std::shared_ptr<namespace_> new_using_directive = create_using_directive(*opt_using_directive_node, namespace_entity);
+				//namespace_& new_using_directive = create_using_directive(*opt_using_directive_node, namespace_entity);
 				//namespace_entity.add_using_directive_namespace(*new_using_directive);
 			}
 		}

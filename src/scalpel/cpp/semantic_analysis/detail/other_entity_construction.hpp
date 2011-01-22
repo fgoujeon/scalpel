@@ -67,7 +67,7 @@ create_namespace_alias
 	semantic_entities::namespace_& current_namespace
 );
 
-std::shared_ptr<semantic_entities::namespace_>
+semantic_entities::namespace_&
 create_using_directive
 (
 	const syntax_nodes::using_directive& using_directive_node,

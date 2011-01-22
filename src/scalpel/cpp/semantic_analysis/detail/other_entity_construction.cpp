@@ -321,7 +321,7 @@ create_namespace_alias
 	;
 
 	//get the namespace entity
-	std::shared_ptr<namespace_> found_namespace = semantic_entity_analysis::get_namespace(found_entity);
+	namespace_& found_namespace = semantic_entity_analysis::get_namespace(found_entity);
 
 	//create the namespace alias semantic entity
 	return std::make_shared<namespace_alias>
@@ -331,7 +331,7 @@ create_namespace_alias
 	);
 }
 
-std::shared_ptr<semantic_entities::namespace_>
+semantic_entities::namespace_&
 create_using_directive
 (
 	const syntax_nodes::using_directive& using_directive_node,

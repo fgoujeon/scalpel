@@ -25,15 +25,15 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 
 using namespace semantic_entities;
 
-struct get_namespace_impl_struct: public utility::static_visitor<std::shared_ptr<namespace_>>
+struct get_namespace_impl_struct: public utility::static_visitor<namespace_&>
 {
-	std::shared_ptr<namespace_>
+	namespace_&
 	operator()(std::shared_ptr<namespace_> t) const
 	{
-		return t;
+		return *t;
 	}
 
-	std::shared_ptr<namespace_>
+	namespace_&
 	operator()(std::shared_ptr<namespace_alias> t) const
 	{
 		return t->referred_namespace();
@@ -41,7 +41,7 @@ struct get_namespace_impl_struct: public utility::static_visitor<std::shared_ptr
 };
 get_namespace_impl_struct get_namespace_impl;
 
-std::shared_ptr<namespace_>
+namespace_&
 get_namespace(const utility::shared_ptr_variant<semantic_entities::namespace_, semantic_entities::namespace_alias>::type& var)
 {
 	return utility::apply_visitor(get_namespace_impl, var);

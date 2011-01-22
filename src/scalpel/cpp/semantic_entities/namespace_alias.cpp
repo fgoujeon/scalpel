@@ -26,7 +26,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 namespace_alias::namespace_alias
 (
 	const std::string name,
-	std::shared_ptr<namespace_> referred_namespace
+	namespace_& referred_namespace
 ):
 	name_(name),
 	referred_namespace_(referred_namespace)
