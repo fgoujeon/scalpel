@@ -23,6 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <scalpel/cpp/syntax_tree.hpp>
+#include <scalpel/utility/ptr_variant.hpp>
 #include <scalpel/utility/shared_ptr_variant.hpp>
 #include <memory>
 
@@ -43,6 +44,23 @@ typedef
 	function_shared_ptr_variant
 ;
 
+typedef
+	utility::ptr_variant
+	<
+		semantic_entities::constructor,
+		semantic_entities::destructor,
+		semantic_entities::operator_member_function,
+		semantic_entities::conversion_function,
+		semantic_entities::simple_member_function,
+		semantic_entities::operator_function,
+		semantic_entities::simple_function
+	>::type
+	function_ptr_variant
+;
+
+function_ptr_variant
+to_function_ptr_variant(const function_shared_ptr_variant& var);
+
 function_shared_ptr_variant
 create_function
 (
@@ -55,25 +73,25 @@ create_function
 void
 define_function
 (
-	const function_shared_ptr_variant& function_entity,
+	const function_ptr_variant& function_entity,
 	const syntax_nodes::function_definition& function_definition_node,
 	const semantic_entities::declarative_region_ptr_variant current_declarative_region
 );
 
 //find the function corresponding to the given function signature
-boost::optional<function_shared_ptr_variant>
+boost::optional<function_ptr_variant>
 find_function
 (
-	const function_shared_ptr_variant& function_signature,
+	const function_ptr_variant& function_signature,
 	const semantic_entities::open_declarative_region_ptr_variant& function_declarative_region
 );
 
 //find the function corresponding to the given function signature
 template<class FunctionT>
-std::shared_ptr<FunctionT>
+FunctionT*
 find_function
 (
-	const std::shared_ptr<const FunctionT> function_signature,
+	const FunctionT& function_signature,
 	const semantic_entities::open_declarative_region_ptr_variant& function_declarative_region
 );
 

@@ -28,13 +28,13 @@ using namespace semantic_entities;
 struct get_namespace_impl_struct: public utility::static_visitor<namespace_&>
 {
 	namespace_&
-	operator()(std::shared_ptr<namespace_> t) const
+	operator()(namespace_* t) const
 	{
 		return *t;
 	}
 
 	namespace_&
-	operator()(std::shared_ptr<namespace_alias> t) const
+	operator()(namespace_alias* t) const
 	{
 		return t->referred_namespace();
 	}
@@ -42,7 +42,7 @@ struct get_namespace_impl_struct: public utility::static_visitor<namespace_&>
 get_namespace_impl_struct get_namespace_impl;
 
 namespace_&
-get_namespace(const utility::shared_ptr_variant<semantic_entities::namespace_, semantic_entities::namespace_alias>::type& var)
+get_namespace(const utility::ptr_variant<semantic_entities::namespace_, semantic_entities::namespace_alias>::type& var)
 {
 	return utility::apply_visitor(get_namespace_impl, var);
 }

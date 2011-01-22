@@ -137,30 +137,30 @@ BOOST_AUTO_TEST_CASE(test_case_3)
 
 	//look up i from a::b::f1(), must find a::b::c::i
 	{
-		auto found_entity = find<identification_policies::by_name, false, false, variable>("i", function_a_b_f1->body().get());
-		BOOST_CHECK_EQUAL(found_entity, variable_a_b_c_i);
+		variable* found_entity = find<identification_policies::by_name, false, false, variable>("i", function_a_b_f1->body().get());
+		BOOST_CHECK_EQUAL(found_entity, variable_a_b_c_i.get());
 	}
 
 	//look up i from a::d::f2(), must find a::i and a::b::c::i
 	{
-		auto found_entities = find<identification_policies::by_name, false, true, variable>("i", function_a_d_f2->body().get());
+		std::set<variable*> found_entities = find<identification_policies::by_name, false, true, variable>("i", function_a_d_f2->body().get());
 		BOOST_CHECK_EQUAL(found_entities.size(), 2);
 		if(found_entities.size() == 2)
 		{
-			BOOST_CHECK(found_entities.find(variable_a_i) != found_entities.end());
-			BOOST_CHECK(found_entities.find(variable_a_b_c_i) != found_entities.end());
+			BOOST_CHECK(found_entities.find(variable_a_i.get()) != found_entities.end());
+			BOOST_CHECK(found_entities.find(variable_a_b_c_i.get()) != found_entities.end());
 		}
 	}
 
 	//look up i from a::f3(), must find a::i
 	{
-		auto found_entity = find<identification_policies::by_name, false, false, variable>("i", function_a_f3->body().get());
-		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
+		variable* found_entity = find<identification_policies::by_name, false, false, variable>("i", function_a_f3->body().get());
+		BOOST_CHECK_EQUAL(found_entity, variable_a_i.get());
 	}
 
 	//look up i from f4(), must find nothing
 	{
-		auto found_entity = find<identification_policies::by_name, true, false, variable>("i", function_f4->body().get());
+		variable* found_entity = find<identification_policies::by_name, true, false, variable>("i", function_f4->body().get());
 		BOOST_CHECK(!found_entity);
 	}
 }

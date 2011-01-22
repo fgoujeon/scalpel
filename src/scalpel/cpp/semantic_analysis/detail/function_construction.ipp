@@ -30,10 +30,10 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 {
 
 template<class FunctionT>
-std::shared_ptr<FunctionT>
+FunctionT*
 find_function
 (
-	const std::shared_ptr<const FunctionT> function_signature,
+	const FunctionT& function_signature,
 	const semantic_entities::open_declarative_region_ptr_variant& function_declarative_region
 )
 {
@@ -43,9 +43,7 @@ find_function
 	typedef typename semantic_entity_analysis::get_identification_policy<FunctionT>::policy_t identification_policy_t;
 
 	//find the functions with the same identifier
-	std::set<std::shared_ptr<FunctionT>> found_functions;
-
-	found_functions =
+	std::set<FunctionT*> found_functions =
 		name_lookup::find_local
 		<
 			identification_policy_t,
@@ -67,15 +65,15 @@ find_function
 		++i
 	)
 	{
-		std::shared_ptr<FunctionT> found_function = *i;
-		if(have_same_signature(*found_function, *function_signature))
+		FunctionT* found_function = *i;
+		if(have_same_signature(*found_function, function_signature))
 		{
 			return found_function;
 		}
 	}
 
 	//if nothing is found
-	return std::shared_ptr<FunctionT>();
+	return 0;
 }
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail

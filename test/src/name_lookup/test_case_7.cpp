@@ -120,7 +120,7 @@ BOOST_AUTO_TEST_CASE(test_case_7)
 			)
 		;
 
-		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
+		BOOST_CHECK_EQUAL(found_entity, variable_a_i.get());
 	}
 }
 

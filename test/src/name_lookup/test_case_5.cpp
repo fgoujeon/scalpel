@@ -122,7 +122,7 @@ BOOST_AUTO_TEST_CASE(test_case_5)
 	//look up i from namespace d, must find b::i
 	{
 		auto found_entity = find<identification_policies::by_name, false, false, variable>("i", namespace_d.get());
-		BOOST_CHECK_EQUAL(found_entity, variable_b_i);
+		BOOST_CHECK_EQUAL(found_entity, variable_b_i.get());
 	}
 
 	//look up k from namespace c, must find c::k and d::k
@@ -131,21 +131,21 @@ BOOST_AUTO_TEST_CASE(test_case_5)
 		BOOST_CHECK_EQUAL(found_entities.size(), 2);
 		if(found_entities.size() == 2)
 		{
-			BOOST_CHECK(found_entities.find(variable_c_k) != found_entities.end());
-			BOOST_CHECK(found_entities.find(variable_d_k) != found_entities.end());
+			BOOST_CHECK(found_entities.find(variable_c_k.get()) != found_entities.end());
+			BOOST_CHECK(found_entities.find(variable_d_k.get()) != found_entities.end());
 		}
 	}
 
 	//look up i from namespace c, must find b::i
 	{
 		auto found_entity = find<identification_policies::by_name, false, false, variable>("i", namespace_c.get());
-		BOOST_CHECK_EQUAL(found_entity, variable_b_i);
+		BOOST_CHECK_EQUAL(found_entity, variable_b_i.get());
 	}
 
 	//look up j from namespace c, must find d::j
 	{
 		auto found_entity = find<identification_policies::by_name, false, false, variable>("j", namespace_c.get());
-		BOOST_CHECK_EQUAL(found_entity, variable_d_j);
+		BOOST_CHECK_EQUAL(found_entity, variable_d_j.get());
 	}
 }
 

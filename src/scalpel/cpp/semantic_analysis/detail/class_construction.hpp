@@ -70,7 +70,7 @@ add_class
 	const semantic_entities::class_::access current_access
 );
 
-std::shared_ptr<semantic_entities::class_>
+semantic_entities::class_*
 find_class
 (
 	const syntax_nodes::ptr_to_member_operator& ptr_to_member_operator_node,

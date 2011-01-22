@@ -107,19 +107,19 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 
 	//look up operator==() from global namespace, must find it
 	{
-		std::shared_ptr<operator_function> found_entity =
+		operator_function* found_entity =
 			find<identification_policies::by_overloaded_operator, false, false, operator_function>
 			(
 				scalpel::cpp::semantic_entities::overloadable_operator::DOUBLE_EQUAL,
 				semantic_graph.get()
 			)
 		;
-		BOOST_CHECK_EQUAL(found_entity, operator_function_equal);
+		BOOST_CHECK_EQUAL(found_entity, operator_function_equal.get());
 	}
 
 	//look up c::operator+() from global namespace, must find it
 	{
-		std::shared_ptr<operator_member_function> found_entity =
+		operator_member_function* found_entity =
 			find<identification_policies::by_overloaded_operator, false, false, operator_member_function>
 			(
 				false,
@@ -136,12 +136,12 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 				false
 			)
 		;
-		BOOST_CHECK_EQUAL(found_entity, c_operator_function_plus);
+		BOOST_CHECK_EQUAL(found_entity, c_operator_function_plus.get());
 	}
 
 	//look up c::c() from global namespace, must find it
 	{
-		std::shared_ptr<constructor> found_entity =
+		constructor* found_entity =
 			find<identification_policies::by_nothing, false, false, constructor>
 			(
 				false,
@@ -158,12 +158,12 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 				false
 			)
 		;
-		BOOST_CHECK_EQUAL(found_entity, c_constructor);
+		BOOST_CHECK_EQUAL(found_entity, c_constructor.get());
 	}
 
 	//look up c::~c() from global namespace, must find it
 	{
-		std::shared_ptr<destructor> found_entity =
+		destructor* found_entity =
 			find<identification_policies::by_nothing, false, false, destructor>
 			(
 				false,
@@ -180,12 +180,12 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 				false
 			)
 		;
-		BOOST_CHECK_EQUAL(found_entity, c_destructor);
+		BOOST_CHECK_EQUAL(found_entity, c_destructor.get());
 	}
 
 	//look up c::operator int*() from global namespace, must find it
 	{
-		std::shared_ptr<conversion_function> found_entity =
+		conversion_function* found_entity =
 			find<identification_policies::by_return_type, false, false, conversion_function>
 			(
 				false,
@@ -202,7 +202,7 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 				false
 			)
 		;
-		BOOST_CHECK_EQUAL(found_entity, c_conversion_function_int_ptr);
+		BOOST_CHECK_EQUAL(found_entity, c_conversion_function_int_ptr.get());
 	}
 }
 

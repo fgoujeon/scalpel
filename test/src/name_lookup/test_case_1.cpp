@@ -115,20 +115,20 @@ BOOST_AUTO_TEST_CASE(test_case_1)
 
 	//lookup i from function test, must find it
 	{
-		auto found_entity = find<identification_policies::by_name, false, false, variable>("i", function_a_b_f.get());
-		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
+		variable* found_entity = find<identification_policies::by_name, false, false, variable>("i", function_a_b_f.get());
+		BOOST_CHECK_EQUAL(found_entity, variable_a_i.get());
 	}
 
 	//lookup j from function test, must find it
 	{
 		auto found_entity = find<identification_policies::by_name, false, false, variable>("j", function_a_b_f.get());
-		BOOST_CHECK_EQUAL(found_entity, variable_j);
+		BOOST_CHECK_EQUAL(found_entity, variable_j.get());
 	}
 
 	//lookup B from itself, must find it
 	{
 		auto found_entity = find<identification_policies::by_name, false, false, class_>("B", struct_a_b.get());
-		BOOST_CHECK_EQUAL(found_entity, struct_a_b);
+		BOOST_CHECK_EQUAL(found_entity, struct_a_b.get());
 	}
 
 	//lookup C::n from function test, must find it
@@ -149,7 +149,7 @@ BOOST_AUTO_TEST_CASE(test_case_1)
 				function_a_b_f.get()
 			)
 		;
-		BOOST_CHECK_EQUAL(found_entity, variable_a_c_n);
+		BOOST_CHECK_EQUAL(found_entity, variable_a_c_n.get());
 	}
 
 	//lookup ::A::i from function test, must find it
@@ -170,7 +170,7 @@ BOOST_AUTO_TEST_CASE(test_case_1)
 				function_a_b_f.get()
 			)
 		;
-		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
+		BOOST_CHECK_EQUAL(found_entity, variable_a_i.get());
 	}
 
 	//lookup ::i from function test, must find it
@@ -184,7 +184,7 @@ BOOST_AUTO_TEST_CASE(test_case_1)
 				function_a_b_f.get()
 			)
 		;
-		BOOST_CHECK_EQUAL(found_entity, variable_i);
+		BOOST_CHECK_EQUAL(found_entity, variable_i.get());
 	}
 
 	//lookup namespace A::C from function test, must find it
@@ -205,7 +205,7 @@ BOOST_AUTO_TEST_CASE(test_case_1)
 				function_a_b_f.get()
 			)
 		;
-		BOOST_CHECK_EQUAL(found_entity, namespace_a_c);
+		BOOST_CHECK_EQUAL(found_entity, namespace_a_c.get());
 	}
 }
 

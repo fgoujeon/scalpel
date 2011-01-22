@@ -78,7 +78,7 @@ BOOST_AUTO_TEST_CASE(test_case_12)
 			)
 		;
 
-		BOOST_CHECK_EQUAL(found_entity, class_n_c);
+		BOOST_CHECK_EQUAL(found_entity, class_n_c.get());
 	}
 
 	//look up ::c from namespace n, must find c
@@ -93,7 +93,7 @@ BOOST_AUTO_TEST_CASE(test_case_12)
 			)
 		;
 
-		BOOST_CHECK_EQUAL(found_entity, class_c);
+		BOOST_CHECK_EQUAL(found_entity, class_c.get());
 	}
 }
 

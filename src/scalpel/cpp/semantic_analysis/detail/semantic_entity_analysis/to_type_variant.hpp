@@ -33,7 +33,7 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 semantic_entities::type_variant
 to_type_variant
 (
-	const utility::shared_ptr_variant
+	const utility::ptr_variant
 	<
 		semantic_entities::class_,
 		semantic_entities::typedef_,

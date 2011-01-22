@@ -114,7 +114,7 @@ BOOST_AUTO_TEST_CASE(test_case_8)
 				function_test.get()
 			)
 		;
-		BOOST_CHECK_EQUAL(found_entity, variable_a_j);
+		BOOST_CHECK_EQUAL(found_entity, variable_a_j.get());
 	}
 
 	//look up b::j from function test, must find a::j
@@ -135,7 +135,7 @@ BOOST_AUTO_TEST_CASE(test_case_8)
 				function_test.get()
 			)
 		;
-		BOOST_CHECK_EQUAL(found_entity, variable_a_j);
+		BOOST_CHECK_EQUAL(found_entity, variable_a_j.get());
 	}
 
 	//look up a::i from function test, must find b::i
@@ -156,7 +156,7 @@ BOOST_AUTO_TEST_CASE(test_case_8)
 				function_test.get()
 			)
 		;
-		BOOST_CHECK_EQUAL(found_entity, variable_b_i);
+		BOOST_CHECK_EQUAL(found_entity, variable_b_i.get());
 	}
 
 	//look up b::i from function test, must find b::i
@@ -177,7 +177,7 @@ BOOST_AUTO_TEST_CASE(test_case_8)
 				function_test.get()
 			)
 		;
-		BOOST_CHECK_EQUAL(found_entity, variable_b_i);
+		BOOST_CHECK_EQUAL(found_entity, variable_b_i.get());
 	}
 
 	//look up b::k from function test, must find nothing
@@ -198,7 +198,7 @@ BOOST_AUTO_TEST_CASE(test_case_8)
 				function_test.get()
 			)
 		;
-		BOOST_CHECK(!found_entity.get());
+		BOOST_CHECK(!found_entity);
 	}
 }
 

@@ -30,19 +30,19 @@ namespace
 	struct: public utility::static_visitor<type_variant>
 	{
 		type_variant
-		operator()(std::shared_ptr<class_> t) const
+		operator()(class_* t) const
 		{
-			return type_variant(static_cast<const class_*>(t.get()));
+			return type_variant(static_cast<const class_*>(t));
 		}
 
 		type_variant
-		operator()(std::shared_ptr<enum_> t) const
+		operator()(enum_* t) const
 		{
-			return type_variant(static_cast<const enum_*>(t.get()));
+			return type_variant(static_cast<const enum_*>(t));
 		}
 
 		type_variant
-		operator()(std::shared_ptr<typedef_> t) const
+		operator()(typedef_* t) const
 		{
 			return t->type();
 		}
@@ -52,7 +52,7 @@ namespace
 semantic_entities::type_variant
 to_type_variant
 (
-	const utility::shared_ptr_variant
+	const utility::ptr_variant
 	<
 		semantic_entities::class_,
 		semantic_entities::typedef_,

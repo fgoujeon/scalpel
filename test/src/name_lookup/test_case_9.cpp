@@ -98,7 +98,7 @@ BOOST_AUTO_TEST_CASE(test_case_9)
 
 	//look up a::f() (undefined function's declaration) from global namespace, must find nothing
 	{
-		auto found_entity =
+		simple_function* found_entity =
 			find<identification_policies::by_name, true, false, simple_function>
 			(
 				false,
@@ -115,7 +115,7 @@ BOOST_AUTO_TEST_CASE(test_case_9)
 				false
 			)
 		;
-		BOOST_CHECK(!found_entity.get());
+		BOOST_CHECK(!found_entity);
 	}
 
 	//look up b::f() (undefined function's declaration) from global namespace, must find a::b::f()
@@ -152,7 +152,7 @@ BOOST_AUTO_TEST_CASE(test_case_9)
 				false
 			)
 		;
-		BOOST_CHECK_EQUAL(found_entity, function_a_b_f);
+		BOOST_CHECK_EQUAL(found_entity, function_a_b_f.get());
 	}
 }
 

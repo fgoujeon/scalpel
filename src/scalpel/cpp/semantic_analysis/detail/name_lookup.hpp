@@ -25,7 +25,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <scalpel/cpp/syntax_tree.hpp>
 #include <scalpel/utility/is_empty.hpp>
-#include <scalpel/utility/shared_ptr_variant.hpp>
+#include <scalpel/utility/ptr_variant.hpp>
 #include <scalpel/utility/variant.hpp>
 #include <boost/optional.hpp>
 #include <string>
@@ -54,12 +54,12 @@ result_type's truth table:
 |     1    |    1    |     X    |     X    |        (E)        |
  --------------------------------------------------------------
 
-(1) std::shared_ptr<EntityT>
+(1) EntityT*
 (2) std::set<(1)>
-(3) utility::shared_ptr_variant<EntitiesT...>
+(3) utility::ptr_variant<EntitiesT...>
 (4) boost::optional<(3)>
 (5) std::set<(3)>
-(6) utility::shared_ptr_variant<EntitiesT...>
+(6) utility::ptr_variant<EntitiesT...>
 (7) boost::optional<(6)>
 (8) std::set<(6)>
 (E) Error
@@ -72,24 +72,17 @@ struct return_type;
 template<bool Optional, class EntityT>
 struct return_type<Optional, false, EntityT>
 {
-	typedef std::shared_ptr<EntityT> type;
+	typedef EntityT* type;
 };
 
 //(2)
 template<bool Optional, class EntityT>
 struct return_type<Optional, true, EntityT>
 {
-	typedef std::set<std::shared_ptr<EntityT>> type;
+	typedef std::set<EntityT*> type;
 };
 
 //(3)
-template<class... EntitiesT>
-struct return_type<false, false, utility::basic_variant<utility::add_shared_ptr, EntitiesT...>>
-{
-	typedef typename utility::shared_ptr_variant<EntitiesT...>::type type;
-};
-
-//(3)bis
 template<class... EntitiesT>
 struct return_type<false, false, utility::basic_variant<utility::add_ptr, EntitiesT...>>
 {
@@ -98,26 +91,12 @@ struct return_type<false, false, utility::basic_variant<utility::add_ptr, Entiti
 
 //(4)
 template<class... EntitiesT>
-struct return_type<true, false, utility::basic_variant<utility::add_shared_ptr, EntitiesT...>>
-{
-	typedef boost::optional<typename utility::shared_ptr_variant<EntitiesT...>::type> type;
-};
-
-//(4)bis
-template<class... EntitiesT>
 struct return_type<true, false, utility::basic_variant<utility::add_ptr, EntitiesT...>>
 {
 	typedef boost::optional<typename utility::ptr_variant<EntitiesT...>::type> type;
 };
 
 //(5)
-template<bool Optional, class... EntitiesT>
-struct return_type<Optional, true, utility::basic_variant<utility::add_shared_ptr, EntitiesT...>>
-{
-	typedef std::set<typename utility::shared_ptr_variant<EntitiesT...>::type> type;
-};
-
-//(5)bis
 template<bool Optional, class... EntitiesT>
 struct return_type<Optional, true, utility::basic_variant<utility::add_ptr, EntitiesT...>>
 {
@@ -128,21 +107,21 @@ struct return_type<Optional, true, utility::basic_variant<utility::add_ptr, Enti
 template<class EntityT, class EntityT2, class... EntitiesT>
 struct return_type<false, false, EntityT, EntityT2, EntitiesT...>
 {
-	typedef typename utility::shared_ptr_variant<EntityT, EntityT2, EntitiesT...>::type type;
+	typedef typename utility::ptr_variant<EntityT, EntityT2, EntitiesT...>::type type;
 };
 
 //(7)
 template<class EntityT, class EntityT2, class... EntitiesT>
 struct return_type<true, false, EntityT, EntityT2, EntitiesT...>
 {
-	typedef boost::optional<typename utility::shared_ptr_variant<EntityT, EntityT2, EntitiesT...>::type> type;
+	typedef boost::optional<typename utility::ptr_variant<EntityT, EntityT2, EntitiesT...>::type> type;
 };
 
 //(8)
 template<bool Optional, class EntityT, class EntityT2, class... EntitiesT>
 struct return_type<Optional, true, EntityT, EntityT2, EntitiesT...>
 {
-	typedef std::set<typename utility::shared_ptr_variant<EntityT, EntityT2, EntitiesT...>::type> type;
+	typedef std::set<typename utility::ptr_variant<EntityT, EntityT2, EntitiesT...>::type> type;
 };
 
 
@@ -374,17 +353,52 @@ namespace detail
 
 
 
+	template<class T>
+	struct initialize
+	{
+		static
+		void
+		init(T&)
+		{
+		}
+	};
+
+	template<class T>
+	struct initialize<T*>
+	{
+		static
+		void
+		init(T*& result)
+		{
+			result = 0;
+		}
+	};
+
+
+
 	//result = entity
 	template<class T, class U>
 	inline
 	void
 	add_to_result(T& result, const U& entity);
 
+	//result = entity.get()
+	template<class T, class U>
+	inline
+	void
+	add_to_result(T*& result, const std::shared_ptr<U>& entity);
+
 	//add entity to result if entity isn't empty
 	template<class T, class U>
 	inline
 	void
 	add_to_result(std::set<T>& result, const U& entity);
+
+	//add entity to result if entity isn't empty
+	template<class T, class U>
+	inline
+	void
+	add_to_result(std::set<T>& result, const std::shared_ptr<U>& entity);
 
 	//add entity to result if entity isn't empty
 	template<class T, class U>
@@ -406,12 +420,20 @@ namespace detail
 	template<class... EntitiesT>
 	struct return_result<true, false, EntitiesT...>
 	{
+		//(2) -> (1)
+		//or
+		//(5) -> (7)
+		//
 		//return the only one element of the set
 		//throw an exception if there's more than one element in the set
 		static
 		typename return_type<true, false, EntitiesT...>::type
 		result(typename return_type<true, true, EntitiesT...>::type& result);
 
+		//(1) -> (1)
+		//or
+		//(7) -> (7)
+		//
 		//return result;
 		static
 		typename return_type<true, false, EntitiesT...>::type
@@ -421,6 +443,10 @@ namespace detail
 	template<class... EntitiesT>
 	struct return_result<false, false, EntitiesT...>
 	{
+		//(2) -> (1)
+		//or
+		//(8) -> (6)
+		//
 		//return the only one element of the set
 		//throw an exception if there's zero or more than one element in
 		//the set
@@ -428,28 +454,15 @@ namespace detail
 		typename return_type<false, false, EntitiesT...>::type
 		result(typename return_type<false, true, EntitiesT...>::type& result);
 
+		//(1) -> (1)
+		//or
+		//(7) -> (6)
+		//
 		//return result;
 		//throw an exception if the result is empty
 		static
 		typename return_type<false, false, EntitiesT...>::type
 		result(typename return_type<true, false, EntitiesT...>::type& result);
-	};
-
-	template<class... EntitiesT>
-	struct return_result<false, false, utility::basic_variant<utility::add_shared_ptr, EntitiesT...>>
-	{
-		//return the only one element of the set
-		//throw an exception if there's zero or more than one element in
-		//the set
-		static
-		typename return_type<false, false, utility::basic_variant<utility::add_shared_ptr, EntitiesT...>>::type
-		result(typename return_type<false, true, utility::basic_variant<utility::add_shared_ptr, EntitiesT...>>::type& result);
-
-		//return *result;
-		//throw an exception if the result is empty
-		static
-		typename return_type<false, false, utility::basic_variant<utility::add_shared_ptr, EntitiesT...>>::type
-		result(typename return_type<true, false, utility::basic_variant<utility::add_shared_ptr, EntitiesT...>>::type& result);
 	};
 
 	template<class... EntitiesT>

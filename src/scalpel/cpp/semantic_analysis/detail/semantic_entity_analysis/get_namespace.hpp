@@ -30,7 +30,7 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 {
 
 semantic_entities::namespace_&
-get_namespace(const utility::shared_ptr_variant<semantic_entities::namespace_, semantic_entities::namespace_alias>::type& var);
+get_namespace(const utility::ptr_variant<semantic_entities::namespace_, semantic_entities::namespace_alias>::type& var);
 
 }}}}} //namespace scalpel::cpp::semantic_analysis::detail::semantic_entity_analysis
 

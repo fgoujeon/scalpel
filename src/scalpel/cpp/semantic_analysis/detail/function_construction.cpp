@@ -32,6 +32,24 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 using namespace syntax_nodes;
 using namespace semantic_entities;
 
+struct: public utility::static_visitor<function_ptr_variant>
+{
+	template<class T>
+	function_ptr_variant
+	operator()(const std::shared_ptr<T>& function_entity) const
+	{
+		return function_ptr_variant(function_entity.get());
+	}
+} to_function_ptr_variant_visitor;
+
+function_ptr_variant
+to_function_ptr_variant(const function_shared_ptr_variant& var)
+{
+	return utility::apply_visitor(to_function_ptr_variant_visitor, var);
+}
+
+
+
 function_shared_ptr_variant
 create_function
 (
@@ -149,7 +167,7 @@ class define_function_visitor: public utility::static_visitor<void>
 	public:
 		template<class T>
 		void
-		operator()(std::shared_ptr<T> function_entity) const
+		operator()(T* function_entity) const
 		{
 			//check whether the function is undefined as it have to be
 			if(function_entity->defined())
@@ -162,7 +180,7 @@ class define_function_visitor: public utility::static_visitor<void>
 void
 define_function
 (
-	const function_shared_ptr_variant& function_entity,
+	const function_ptr_variant& function_entity,
 	const syntax_nodes::function_definition& /*function_definition_node*/,
 	const semantic_entities::declarative_region_ptr_variant /*current_declarative_region*/
 )
@@ -171,7 +189,7 @@ define_function
 	utility::apply_visitor(visitor, function_entity);
 }
 
-class find_function_visitor: public utility::static_visitor<boost::optional<function_shared_ptr_variant>>
+class find_function_visitor: public utility::static_visitor<boost::optional<function_ptr_variant>>
 {
 	public:
 		find_function_visitor
@@ -183,31 +201,31 @@ class find_function_visitor: public utility::static_visitor<boost::optional<func
 		}
 
 		template<class T>
-		boost::optional<function_shared_ptr_variant>
-		operator()(std::shared_ptr<T> function_signature) const
+		boost::optional<function_ptr_variant>
+		operator()(T* function_signature) const
 		{
-			std::shared_ptr<T> found_function =
+			T* found_function =
 				find_function<T>
 				(
-					function_signature,
+					*function_signature,
 					function_declarative_region_
 				)
 			;
 
 			if(found_function)
-				return function_shared_ptr_variant(found_function);
+				return function_ptr_variant(found_function);
 			else
-				return boost::optional<function_shared_ptr_variant>();
+				return boost::optional<function_ptr_variant>();
 		}
 
 	private:
 		const semantic_entities::open_declarative_region_ptr_variant& function_declarative_region_;
 };
 
-boost::optional<function_shared_ptr_variant>
+boost::optional<function_ptr_variant>
 find_function
 (
-	const function_shared_ptr_variant& function_signature,
+	const function_ptr_variant& function_signature,
 	const semantic_entities::open_declarative_region_ptr_variant& function_declarative_region
 )
 {

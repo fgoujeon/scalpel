@@ -77,6 +77,7 @@ find
 				EntitiesT...
 			>(identifier, current_declarative_region)
 		);
+
 //
 //		//find entities in the associated namespaces (only for namespaces)
 //		//and add them to the previously found entities
@@ -108,6 +109,7 @@ find
 //			}
 //		}
 //
+
 		//stop lookup if entities have been found
 		if(!utility::is_empty(found_entities)) break;
 
@@ -421,6 +423,7 @@ find_local_entities
 	using namespace semantic_entity_analysis;
 
 	typename return_type<true, Multiple, EntityT>::type found_entities;
+	initialize<typename return_type<true, Multiple, EntityT>::type>::init(found_entities);
 
 	typename get_members_return_type<EntityT>::type members = get_members<EntityT>(current_declarative_region);
 	for(auto i = members.begin(); i != members.end(); ++i)
@@ -504,9 +507,23 @@ add_to_result(T& result, const U& entity)
 
 template<class T, class U>
 void
+add_to_result(T*& result, const std::shared_ptr<U>& entity)
+{
+	result = entity.get();
+}
+
+template<class T, class U>
+void
 add_to_result(std::set<T>& result, const U& entity)
 {
 	if(!utility::is_empty(entity)) result.insert(entity);
+}
+
+template<class T, class U>
+void
+add_to_result(std::set<T>& result, const std::shared_ptr<U>& entity)
+{
+	if(!utility::is_empty(entity)) result.insert(entity.get());
 }
 
 template<class T, class U>
@@ -580,39 +597,6 @@ return_result<false, false, EntitiesT...>::result(typename return_type<true, fal
 	if(!result)
 		throw std::runtime_error("no entity found");
 	return result;
-}
-
-template<class... EntitiesT>
-typename return_type<false, false, utility::basic_variant<utility::add_shared_ptr, EntitiesT...>>::type
-return_result<false, false, utility::basic_variant<utility::add_shared_ptr, EntitiesT...>>::result
-(
-	typename return_type<false, true, utility::basic_variant<utility::add_shared_ptr, EntitiesT...>>::type& result
-)
-{
-	if(result.empty())
-	{
-		throw std::runtime_error("no entity found");
-	}
-	else if(result.size() == 1)
-	{
-		return *result.begin();
-	}
-	else
-	{
-		throw std::runtime_error("more than one entities found");
-	}
-}
-
-template<class... EntitiesT>
-typename return_type<false, false, utility::basic_variant<utility::add_shared_ptr, EntitiesT...>>::type
-return_result<false, false, utility::basic_variant<utility::add_shared_ptr, EntitiesT...>>::result
-(
-	typename return_type<true, false, utility::basic_variant<utility::add_shared_ptr, EntitiesT...>>::type& result
-)
-{
-	if(!result)
-		throw std::runtime_error("no entity found");
-	return *result;
 }
 
 template<class... EntitiesT>

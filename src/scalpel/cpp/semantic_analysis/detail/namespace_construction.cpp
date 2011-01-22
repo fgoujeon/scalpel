@@ -152,7 +152,7 @@ fill_namespace
 				if(opt_nested_name_specifier_node)
 				{
 					//find the class
-					const std::shared_ptr<class_> found_class =
+					class_* found_class =
 						name_lookup::find<semantic_entity_analysis::identification_policies::by_name, false, false, class_>
 						(
 							false,
@@ -166,7 +166,7 @@ fill_namespace
 					//and define it
 					fill_class(*found_class, class_specifier_node);
 
-					opt_unqualified_type = static_cast<const class_*>(found_class.get());
+					opt_unqualified_type = static_cast<const class_*>(found_class);
 				}
 				else
 				{
@@ -302,10 +302,10 @@ fill_namespace
 	//If so, the function entity corresponding to the function-definition
 	//(and to the previous function declaration) already exists.
 	//Let's try to find it.
-	boost::optional<function_shared_ptr_variant> opt_already_existing_function_entity =
+	boost::optional<function_ptr_variant> opt_already_existing_function_entity =
 		find_function
 		(
-			function_entity,
+			to_function_ptr_variant(function_entity),
 			function_declarative_region
 		)
 	;
@@ -353,7 +353,7 @@ fill_namespace
 			//define the function
 			define_function
 			(
-				function_entity,
+				to_function_ptr_variant(function_entity),
 				function_definition_node,
 				&namespace_entity
 			);

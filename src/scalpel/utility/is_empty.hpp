@@ -33,31 +33,52 @@ namespace scalpel { namespace utility
 template<class T>
 inline
 bool
-is_empty(const std::vector<T>& container);
+is_empty(const std::vector<T>& container)
+{
+	return container.empty();
+}
 
 template<class T>
 inline
 bool
-is_empty(const std::set<T>& container);
+is_empty(const std::set<T>& container)
+{
+	return container.empty();
+}
 
 template<class T>
 inline
 bool
-is_empty(const shared_ptr_vector<T>& container);
+is_empty(const shared_ptr_vector<T>& container)
+{
+	return container.empty();
+}
 
 template<class T>
 inline
 bool
-is_empty(const std::shared_ptr<T>& container);
+is_empty(const std::shared_ptr<T>& container)
+{
+	return !container;
+}
 
 template<class T>
 inline
 bool
-is_empty(const boost::optional<T>& container);
+is_empty(T* const container)
+{
+	return container == 0;
+}
+
+template<class T>
+inline
+bool
+is_empty(const boost::optional<T>& container)
+{
+	return !container;
+}
 
 }} //namespace scalpel::utility
-
-#include "is_empty.ipp"
 
 #endif
 

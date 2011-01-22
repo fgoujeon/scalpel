@@ -111,7 +111,7 @@ fill_class
 				assert(false); //not managed yet
 
 			//get base class
-			std::shared_ptr<class_> base_class =
+			class_* base_class =
 				name_lookup::find
 				<
 					semantic_entity_analysis::identification_policies::by_name,
@@ -238,7 +238,7 @@ fill_class
 				if(opt_nested_name_specifier_node)
 				{
 					//find the class
-					const std::shared_ptr<class_> found_class =
+					class_* found_class =
 						name_lookup::find<semantic_entity_analysis::identification_policies::by_name, false, false, class_>
 						(
 							false,
@@ -252,7 +252,7 @@ fill_class
 					//and define it
 					fill_class(*found_class, class_specifier_node);
 
-					opt_unqualified_type = static_cast<const class_*>(found_class.get());
+					opt_unqualified_type = static_cast<const class_*>(found_class);
 				}
 				else
 				{
@@ -474,7 +474,7 @@ fill_class
 	//define the function
 	define_function
 	(
-		function_entity,
+		to_function_ptr_variant(function_entity),
 		function_definition_node,
 		&class_entity
 	);
@@ -500,7 +500,7 @@ add_class
 	return class_entity;
 }
 
-std::shared_ptr<semantic_entities::class_>
+semantic_entities::class_*
 find_class
 (
 	const ptr_to_member_operator& ptr_to_member_operator_node,

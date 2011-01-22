@@ -87,7 +87,7 @@ create_type
 				else
 					assert(false);
 
-				utility::shared_ptr_variant<class_, typedef_, enum_>::type found_type =
+				utility::ptr_variant<class_, typedef_, enum_>::type found_type =
 					name_lookup::find
 					<
 						semantic_entity_analysis::identification_policies::by_name,
@@ -395,7 +395,7 @@ qualify_type
 				const ptr_to_member_operator& ptr_to_member_operator_node = *opt_ptr_to_member_operator_node;
 
 				//get the class designated by the ptr-to-member-operator (c in "void (c::*f)(int)")
-				std::shared_ptr<class_> member_class =
+				class_* member_class =
 					find_class
 					(
 						ptr_to_member_operator_node,

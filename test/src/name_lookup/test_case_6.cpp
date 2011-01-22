@@ -190,12 +190,12 @@ BOOST_AUTO_TEST_CASE(test_case_6)
 			)
 		;
 
-		BOOST_CHECK_EQUAL(found_entity, function_ab_g);
+		BOOST_CHECK_EQUAL(found_entity, function_ab_g.get());
 	}
 
 	//look up ab::f() from function test, must find a::f() and b::f()
 	{
-		auto found_entities =
+		std::set<simple_function*> found_entities =
 			find<identification_policies::by_name, false, true, simple_function>
 			(
 				false,
@@ -217,11 +217,11 @@ BOOST_AUTO_TEST_CASE(test_case_6)
 		{
 			BOOST_CHECK
 			(
-				std::find(found_entities.begin(), found_entities.end(), function_a_f) != found_entities.end()
+				std::find(found_entities.begin(), found_entities.end(), function_a_f.get()) != found_entities.end()
 			);
 			BOOST_CHECK
 			(
-				std::find(found_entities.begin(), found_entities.end(), function_b_f) != found_entities.end()
+				std::find(found_entities.begin(), found_entities.end(), function_b_f.get()) != found_entities.end()
 			);
 		}
 	}
@@ -244,7 +244,7 @@ BOOST_AUTO_TEST_CASE(test_case_6)
 				function_test.get()
 			)
 		;
-		BOOST_CHECK(!found_entity.get());
+		BOOST_CHECK(!found_entity);
 	}
 
 	//look up ab::i from function test, must find a::i and b::i
@@ -271,11 +271,11 @@ BOOST_AUTO_TEST_CASE(test_case_6)
 		{
 			BOOST_CHECK
 			(
-				std::find(found_entities.begin(), found_entities.end(), variable_a_i) != found_entities.end()
+				std::find(found_entities.begin(), found_entities.end(), variable_a_i.get()) != found_entities.end()
 			);
 			BOOST_CHECK
 			(
-				std::find(found_entities.begin(), found_entities.end(), variable_b_i) != found_entities.end()
+				std::find(found_entities.begin(), found_entities.end(), variable_b_i.get()) != found_entities.end()
 			);
 		}
 	}
@@ -302,8 +302,8 @@ BOOST_AUTO_TEST_CASE(test_case_6)
 		BOOST_CHECK_EQUAL(found_entities.size(), 2);
 		if(found_entities.size() == 2)
 		{
-			BOOST_CHECK(found_entities.find(function_y_h) != found_entities.end());
-			BOOST_CHECK(found_entities.find(function_z_h) != found_entities.end());
+			BOOST_CHECK(found_entities.find(function_y_h.get()) != found_entities.end());
+			BOOST_CHECK(found_entities.find(function_z_h.get()) != found_entities.end());
 		}
 	}
 }

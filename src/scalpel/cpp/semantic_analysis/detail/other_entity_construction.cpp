@@ -303,7 +303,7 @@ create_namespace_alias
 	else
 		assert(false);
 
-	utility::shared_ptr_variant<namespace_, namespace_alias>::type found_entity =
+	utility::ptr_variant<namespace_, namespace_alias>::type found_entity =
 		name_lookup::find
 		<
 			semantic_entity_analysis::identification_policies::by_name,
@@ -339,7 +339,7 @@ create_using_directive
 )
 {
 	//find the namespace or namespace alias designated by the using directive
-	utility::shared_ptr_variant<namespace_, namespace_alias>::type found_entity =
+	utility::ptr_variant<namespace_, namespace_alias>::type found_entity =
 		name_lookup::find
 		<
 			semantic_entity_analysis::identification_policies::by_name,

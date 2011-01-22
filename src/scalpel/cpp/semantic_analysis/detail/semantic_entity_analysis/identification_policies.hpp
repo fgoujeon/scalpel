@@ -83,6 +83,14 @@ namespace identification_policies
 		identifier_t
 		get_identifier(const EntityT& entity)
 		{
+			return entity.overloaded_operator();
+		}
+
+		template<class EntityT>
+		static
+		identifier_t
+		get_identifier(const std::shared_ptr<EntityT>& entity)
+		{
 			return entity->overloaded_operator();
 		}
 
@@ -103,6 +111,14 @@ namespace identification_policies
 		static
 		const identifier_t&
 		get_identifier(const EntityT& entity)
+		{
+			return entity.return_type();
+		}
+
+		template<class EntityT>
+		static
+		const identifier_t&
+		get_identifier(const std::shared_ptr<EntityT>& entity)
 		{
 			return entity->return_type();
 		}
