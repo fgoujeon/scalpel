@@ -23,7 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <scalpel/cpp/semantic_entities/namespace_alias.hpp>
 #include <scalpel/cpp/semantic_entities/namespace_.hpp>
-#include <scalpel/utility/shared_ptr_variant.hpp>
+#include <scalpel/utility/ptr_variant.hpp>
 #include <memory>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail { namespace semantic_entity_analysis

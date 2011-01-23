@@ -24,7 +24,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <scalpel/cpp/syntax_tree.hpp>
 #include <scalpel/utility/ptr_variant.hpp>
-#include <scalpel/utility/shared_ptr_variant.hpp>
 #include <memory>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail

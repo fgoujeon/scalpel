@@ -21,7 +21,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <scalpel/cpp/semantic_analysis/detail/name_lookup.hpp>
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <scalpel/cpp/syntax_tree.hpp>
-#include <scalpel/utility/shared_ptr_variant.hpp>
 #include <boost/test/unit_test.hpp>
 
 namespace name_lookup
