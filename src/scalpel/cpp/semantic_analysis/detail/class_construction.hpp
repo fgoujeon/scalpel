@@ -28,10 +28,10 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail
 {
 
-std::shared_ptr<semantic_entities::class_>
+std::unique_ptr<semantic_entities::class_>
 create_class(const syntax_nodes::class_specifier& syntax_node);
 
-std::shared_ptr<semantic_entities::class_>
+std::unique_ptr<semantic_entities::class_>
 create_class(const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node);
 
 void
@@ -62,11 +62,11 @@ fill_class
 //If so, return the forward declared class.
 //If not, add the given class to the given parent class
 //and return the given class.
-std::shared_ptr<semantic_entities::class_>
+semantic_entities::class_&
 add_class
 (
 	semantic_entities::class_& parent_class_entity,
-	const std::shared_ptr<semantic_entities::class_>& class_entity,
+	std::unique_ptr<semantic_entities::class_>&& class_entity,
 	const semantic_entities::class_::access current_access
 );
 

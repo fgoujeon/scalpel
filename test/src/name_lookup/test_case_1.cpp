@@ -69,7 +69,7 @@ BOOST_AUTO_TEST_CASE(test_case_1)
 		"i",
 		fundamental_type::INT
 	);
-	auto struct_a_b = class_::make_shared("B");
+	auto struct_a_b = new class_("B");
 	auto function_a_b_f = std::make_shared<simple_member_function>
 	(
 		"f",
@@ -99,7 +99,7 @@ BOOST_AUTO_TEST_CASE(test_case_1)
 
 	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_a));
 	namespace_a->add_member(variable_a_i);
-	namespace_a->add_member(struct_a_b);
+	namespace_a->add_member(std::unique_ptr<class_>(struct_a_b));
 	struct_a_b->add_member(function_a_b_f);
 	namespace_a->add_member(function_a_g);
 	namespace_a->add_member(std::unique_ptr<namespace_>(namespace_a_c));
@@ -127,8 +127,8 @@ BOOST_AUTO_TEST_CASE(test_case_1)
 
 	//lookup B from itself, must find it
 	{
-		auto found_entity = find<identification_policies::by_name, false, false, class_>("B", struct_a_b.get());
-		BOOST_CHECK_EQUAL(found_entity, struct_a_b.get());
+		auto found_entity = find<identification_policies::by_name, false, false, class_>("B", struct_a_b);
+		BOOST_CHECK_EQUAL(found_entity, struct_a_b);
 	}
 
 	//lookup C::n from function test, must find it

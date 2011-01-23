@@ -171,11 +171,11 @@ fill_namespace
 				}
 				else
 				{
-					std::shared_ptr<class_> new_class = create_class(class_specifier_node);
-					new_class = add_class(namespace_entity, new_class);
-					fill_class(*new_class, class_specifier_node);
+					std::unique_ptr<class_> new_class = create_class(class_specifier_node);
+					class_& added_class = add_class(namespace_entity, std::move(new_class));
+					fill_class(added_class, class_specifier_node);
 
-					opt_unqualified_type = static_cast<const class_*>(new_class.get());
+					opt_unqualified_type = static_cast<const class_*>(&added_class);
 				}
 
 				break;
@@ -186,10 +186,10 @@ fill_namespace
 					syntax_node_analysis::get_class_elaborated_specifier(decl_specifier_seq_node)
 				;
 
-				std::shared_ptr<class_> new_class = create_class(class_elaborated_specifier_node);
-				new_class = add_class(namespace_entity, new_class);
+				std::unique_ptr<class_> new_class = create_class(class_elaborated_specifier_node);
+				class_& added_class = add_class(namespace_entity, std::move(new_class));
 
-				opt_unqualified_type = static_cast<const class_*>(new_class.get());
+				opt_unqualified_type = static_cast<const class_*>(&added_class);
 
 				break;
 			}
@@ -362,23 +362,24 @@ fill_namespace
 	}
 }
 
-std::shared_ptr<semantic_entities::class_>
+semantic_entities::class_&
 add_class
 (
 	semantic_entities::namespace_& namespace_entity,
-	const std::shared_ptr<semantic_entities::class_>& class_entity
+	std::unique_ptr<semantic_entities::class_>&& class_entity
 )
 {
 	namespace_::classes_t::range classes = namespace_entity.classes();
 	for(auto i = classes.begin(); i != classes.end(); ++i)
 	{
-		const std::shared_ptr<semantic_entities::class_>& current_class = *i;
-		if(!current_class->complete() && current_class->name() == class_entity->name())
+		class_& current_class = *i;
+		if(!current_class.complete() && current_class.name() == class_entity->name())
 			return current_class;
 	}
 
-	namespace_entity.add_member(class_entity);
-	return class_entity;
+	class_& class_entity_ref = *class_entity;
+	namespace_entity.add_member(std::move(class_entity));
+	return class_entity_ref;
 }
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail

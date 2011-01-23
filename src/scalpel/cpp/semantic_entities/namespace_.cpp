@@ -177,15 +177,17 @@ namespace_::add_member(std::unique_ptr<namespace_>&& member)
 {
 	member->enclosing_declarative_region(*this);
 	open_declarative_regions_.push_back(member.get());
+
     namespaces_.push_back(std::move(member));
 }
 
 void
-namespace_::add_member(std::shared_ptr<class_> member)
+namespace_::add_member(std::unique_ptr<class_>&& member)
 {
 	member->enclosing_declarative_region(static_cast<namespace_*>(this));
-    classes_.push_back(member);
 	open_declarative_regions_.push_back(member.get());
+
+    classes_.push_back(std::move(member));
 }
 
 void

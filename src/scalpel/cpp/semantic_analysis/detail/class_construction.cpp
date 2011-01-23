@@ -38,13 +38,13 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 using namespace syntax_nodes;
 using namespace semantic_entities;
 
-std::shared_ptr<class_>
+std::unique_ptr<semantic_entities::class_>
 create_class(const class_specifier& class_specifier_node)
 {
-	return class_::make_shared(syntax_node_analysis::get_identifier(class_specifier_node));
+	return std::unique_ptr<class_>(new class_(syntax_node_analysis::get_identifier(class_specifier_node)));
 }
 
-std::shared_ptr<semantic_entities::class_>
+std::unique_ptr<semantic_entities::class_>
 create_class(const class_elaborated_specifier& class_elaborated_specifier_node)
 {
 	//get the name of the class
@@ -58,7 +58,7 @@ create_class(const class_elaborated_specifier& class_elaborated_specifier_node)
 
 	//create the class
 	assert(class_name != "");
-	return class_::make_shared(class_name);
+	return std::unique_ptr<class_>(new class_(class_name));
 }
 
 void
@@ -256,11 +256,11 @@ fill_class
 				}
 				else
 				{
-					std::shared_ptr<class_> new_class = create_class(class_specifier_node);
-					new_class = add_class(class_entity, new_class, current_access);
-					fill_class(*new_class, class_specifier_node);
+					std::unique_ptr<class_> new_class = create_class(class_specifier_node);
+					class_& added_class = add_class(class_entity, std::move(new_class), current_access);
+					fill_class(added_class, class_specifier_node);
 
-					opt_unqualified_type = static_cast<const class_*>(new_class.get());
+					opt_unqualified_type = static_cast<const class_*>(&added_class);
 				}
 
 				break;
@@ -271,10 +271,10 @@ fill_class
 					syntax_node_analysis::get_class_elaborated_specifier(decl_specifier_seq_node)
 				;
 
-				std::shared_ptr<class_> new_class = create_class(class_elaborated_specifier_node);
-				new_class = add_class(class_entity, new_class, current_access);
+				std::unique_ptr<class_> new_class = create_class(class_elaborated_specifier_node);
+				class_& added_class = add_class(class_entity, std::move(new_class), current_access);
 
-				opt_unqualified_type = static_cast<const class_*>(new_class.get());
+				opt_unqualified_type = static_cast<const class_*>(&added_class);
 
 				break;
 			}
@@ -480,24 +480,25 @@ fill_class
 	);
 }
 
-std::shared_ptr<semantic_entities::class_>
+semantic_entities::class_&
 add_class
 (
 	semantic_entities::class_& parent_class_entity,
-	const std::shared_ptr<semantic_entities::class_>& class_entity,
+	std::unique_ptr<semantic_entities::class_>&& class_entity,
 	const class_::access current_access
 )
 {
 	class_::classes_t::range classes = parent_class_entity.nested_classes();
 	for(auto i = classes.begin(); i != classes.end(); ++i)
 	{
-		const std::shared_ptr<semantic_entities::class_>& current_class = *i;
-		if(!current_class->complete() && current_class->name() == class_entity->name())
+		class_& current_class = *i;
+		if(!current_class.complete() && current_class.name() == class_entity->name())
 			return current_class;
 	}
 
-	parent_class_entity.add_member(class_entity, current_access);
-	return class_entity;
+	class_& class_entity_ref = *class_entity;
+	parent_class_entity.add_member(std::move(class_entity), current_access);
+	return class_entity_ref;
 }
 
 semantic_entities::class_*

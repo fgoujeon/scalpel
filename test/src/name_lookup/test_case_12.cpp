@@ -54,13 +54,13 @@ BOOST_AUTO_TEST_CASE(test_case_12)
 	auto namespace_n = new namespace_("n");
 
 	//classes
-	auto class_c = class_::make_shared("c");
-	auto class_n_c = class_::make_shared("c");
+	auto class_c = new class_("c");
+	auto class_n_c = new class_("c");
 
 	//assembling
-	semantic_graph.add_member(class_c);
+	semantic_graph.add_member(std::unique_ptr<class_>(class_c));
 	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_n));
-	namespace_n->add_member(class_n_c);
+	namespace_n->add_member(std::unique_ptr<class_>(class_n_c));
 
 
 
@@ -78,7 +78,7 @@ BOOST_AUTO_TEST_CASE(test_case_12)
 			)
 		;
 
-		BOOST_CHECK_EQUAL(found_entity, class_n_c.get());
+		BOOST_CHECK_EQUAL(found_entity, class_n_c);
 	}
 
 	//look up ::c from namespace n, must find c
@@ -93,7 +93,7 @@ BOOST_AUTO_TEST_CASE(test_case_12)
 			)
 		;
 
-		BOOST_CHECK_EQUAL(found_entity, class_c.get());
+		BOOST_CHECK_EQUAL(found_entity, class_c);
 	}
 }
 

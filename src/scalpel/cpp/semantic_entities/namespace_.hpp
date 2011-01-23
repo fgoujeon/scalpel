@@ -49,7 +49,7 @@ class namespace_
 		typedef std::vector<namespace_*> weak_namespaces_t;
 		typedef utility::unique_ptr_vector<namespace_> namespaces_t;
 		typedef utility::shared_ptr_vector<namespace_alias> namespace_aliases_t;
-		typedef utility::shared_ptr_vector<class_> classes_t;
+		typedef utility::unique_ptr_vector<class_> classes_t;
 		typedef utility::shared_ptr_vector<enum_> enums_t;
 		typedef utility::shared_ptr_vector<typedef_> typedefs_t;
 		typedef utility::shared_ptr_vector<simple_function> simple_functions_t;
@@ -154,7 +154,7 @@ class namespace_
 		add_member(std::unique_ptr<namespace_>&& member);
 
 		void
-		add_member(std::shared_ptr<class_> member);
+		add_member(std::unique_ptr<class_>&& member);
 
 		void
 		add_member(std::shared_ptr<enum_> member);

@@ -33,17 +33,7 @@ class_::class_(const std::string& name):
     name_(name),
 	complete_(false)
 {
-}
-
-std::shared_ptr<class_>
-class_::make_shared(const std::string& name)
-{
-	std::shared_ptr<class_> new_class(new class_(name));
-
-	//set default constructor
-	new_class->reset_destructor();
-
-	return new_class;
+	reset_destructor();
 }
 
 const std::string&
@@ -211,13 +201,14 @@ class_::add_base_class
 }
 
 void
-class_::add_member(std::shared_ptr<class_> member, const access acc)
+class_::add_member(std::unique_ptr<class_>&& member, const access acc)
 {
 	member->enclosing_declarative_region(static_cast<class_*>(this));
-	nested_classes_.push_back(member);
-	open_declarative_regions_.push_back(member.get());
 
+	open_declarative_regions_.push_back(member.get());
 	member_access_[static_cast<const class_*>(member.get())] = acc;
+
+	nested_classes_.push_back(std::move(member));
 }
 
 void

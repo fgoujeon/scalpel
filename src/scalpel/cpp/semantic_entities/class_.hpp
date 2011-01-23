@@ -24,6 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "declarative_region_variants.hpp"
 #include "type_variant_fwd.hpp"
 #include "detail/declarative_region_member_impl.hpp"
+#include <scalpel/utility/unique_ptr_vector.hpp>
 #include <scalpel/utility/shared_ptr_vector.hpp>
 #include <scalpel/utility/const_ptr_variant.hpp>
 #include <string>
@@ -46,8 +47,7 @@ class variable;
 /**
 Represents a C++ class.
 */
-class class_:
-	public std::enable_shared_from_this<class_>
+class class_
 {
 	public:
 		typedef
@@ -69,7 +69,7 @@ class class_:
 		typedef std::vector<member_t> members_t;
 		typedef std::vector<open_declarative_region_ptr_variant> open_declarative_region_ptr_variants_t;
 
-		typedef utility::shared_ptr_vector<class_> classes_t;
+		typedef utility::unique_ptr_vector<class_> classes_t;
 		typedef utility::shared_ptr_vector<enum_> enums_t;
 		typedef utility::shared_ptr_vector<typedef_> typedefs_t;
 		typedef utility::shared_ptr_vector<constructor> constructors_t;
@@ -88,22 +88,13 @@ class class_:
 			PRIVATE
 		};
 
-	private:
+	public:
         /**
         Creates a class.
         @param name the class' name
         */
         explicit
         class_(const std::string& name);
-
-	public:
-        /**
-        Creates a class.
-        @param name the class' name
-        */
-		static
-		std::shared_ptr<class_>
-		make_shared(const std::string& name);
 
         class_(const class_&) = delete;
 
@@ -215,7 +206,7 @@ class class_:
         Adds a nested class.
         */
         void
-        add_member(std::shared_ptr<class_> member, const access acc = access::PUBLIC);
+        add_member(std::unique_ptr<class_>&& member, const access acc = access::PUBLIC);
 
 		void
 		add_member(std::shared_ptr<enum_> member, const access acc = access::PUBLIC);

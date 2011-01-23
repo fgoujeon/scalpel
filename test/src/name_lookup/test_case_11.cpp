@@ -60,7 +60,7 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 	scalpel::cpp::semantic_graph semantic_graph;
 
 	//classes
-	auto class_c = class_::make_shared("c");
+	auto class_c = new class_("c");
 
 	//functions
 	auto c_constructor = std::make_shared<constructor>();
@@ -90,7 +90,7 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 	);
 
 	//assembling
-	semantic_graph.add_member(class_c);
+	semantic_graph.add_member(std::unique_ptr<class_>(class_c));
 	class_c->add_member(c_constructor);
 	class_c->set_destructor(c_destructor);
 	class_c->add_member(c_conversion_function_double_ptr);

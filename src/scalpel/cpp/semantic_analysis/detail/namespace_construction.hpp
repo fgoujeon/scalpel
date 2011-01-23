@@ -66,11 +66,11 @@ fill_namespace
 //namespace.
 //If so, return the forward declared class.
 //If not, add the given class to the given namespace and return the given class.
-std::shared_ptr<semantic_entities::class_>
+semantic_entities::class_&
 add_class
 (
 	semantic_entities::namespace_& namespace_entity,
-	const std::shared_ptr<semantic_entities::class_>& class_entity
+	std::unique_ptr<semantic_entities::class_>&& class_entity
 );
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
