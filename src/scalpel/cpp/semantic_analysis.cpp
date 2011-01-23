@@ -32,11 +32,11 @@ namespace semantic_analysis
 using namespace syntax_nodes;
 using namespace semantic_entities;
 
-std::shared_ptr<semantic_graph>
+std::unique_ptr<semantic_graph>
 analyze(const syntax_tree& tree)
 {
 	//create semantic graph
-	std::shared_ptr<namespace_> global_namespace = namespace_::make_shared();
+	std::unique_ptr<namespace_> global_namespace(new namespace_());
 
 	auto opt_declaration_seq_node = get_declaration_seq(tree);
 	if(opt_declaration_seq_node)

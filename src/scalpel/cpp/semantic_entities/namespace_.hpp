@@ -28,7 +28,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "functions.hpp"
 #include "typedef_.hpp"
 #include "variable.hpp"
-#include <boost/noncopyable.hpp>
+#include <scalpel/utility/unique_ptr_vector.hpp>
 #include <boost/optional.hpp>
 #include <string>
 #include <list>
@@ -41,16 +41,14 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 /**
 Represents a C++ namespace.
 */
-class namespace_:
-	public std::enable_shared_from_this<namespace_>,
-	public boost::noncopyable
+class namespace_
 {
 	public:
 		typedef std::vector<open_declarative_region_ptr_variant> open_declarative_region_ptr_variants_t;
 
 		typedef std::vector<namespace_*> weak_namespaces_t;
+		typedef utility::unique_ptr_vector<namespace_> namespaces_t;
 		typedef utility::shared_ptr_vector<namespace_alias> namespace_aliases_t;
-		typedef utility::shared_ptr_vector<namespace_> namespaces_t;
 		typedef utility::shared_ptr_vector<class_> classes_t;
 		typedef utility::shared_ptr_vector<enum_> enums_t;
 		typedef utility::shared_ptr_vector<typedef_> typedefs_t;
@@ -58,7 +56,7 @@ class namespace_:
 		typedef utility::shared_ptr_vector<operator_function> operator_functions_t;
 		typedef utility::shared_ptr_vector<variable> variables_t;
 
-	private:
+	public:
 		/**
 		Creates an anonymous namespace. Equivalent to namespace_("").
 		*/
@@ -71,21 +69,10 @@ class namespace_:
 		explicit
 		namespace_(const std::string& name);
 
-	public:
-		/**
-		Creates an anonymous namespace. Equivalent to make_shared("").
-		*/
-		static
-		std::shared_ptr<namespace_>
-		make_shared();
+		namespace_(const namespace_&) = delete;
 
-		/**
-		Creates a named namespace.
-		@param name the namespace's name
-		*/
-		static
-		std::shared_ptr<namespace_>
-		make_shared(const std::string& name);
+		const namespace_&
+		operator=(const namespace_&) = delete;
 
 		/**
 		@return the name of the namespace
@@ -164,7 +151,7 @@ class namespace_:
 		add_member(std::shared_ptr<namespace_alias> member);
 
 		void
-		add_member(std::shared_ptr<namespace_> member);
+		add_member(std::unique_ptr<namespace_>&& member);
 
 		void
 		add_member(std::shared_ptr<class_> member);

@@ -77,12 +77,12 @@ BOOST_AUTO_TEST_CASE(test_case_6)
 	*/
 
 	//namespaces
-	auto semantic_graph = scalpel::cpp::semantic_graph::make_shared();
-	auto namespace_y = namespace_::make_shared("y");
-	auto namespace_z = namespace_::make_shared("z");
-	auto namespace_a = namespace_::make_shared("a");
-	auto namespace_b = namespace_::make_shared("b");
-	auto namespace_ab = namespace_::make_shared("ab");
+	scalpel::cpp::semantic_graph semantic_graph;
+	auto namespace_y = new namespace_("y");
+	auto namespace_z = new namespace_("z");
+	auto namespace_a = new namespace_("a");
+	auto namespace_b = new namespace_("b");
+	auto namespace_ab = new namespace_("ab");
 
 	//functions
 	auto function_y_f = std::make_shared<simple_function>
@@ -144,26 +144,26 @@ BOOST_AUTO_TEST_CASE(test_case_6)
 	);
 
 	//assembling
-	semantic_graph->add_member(variable_x);
-	semantic_graph->add_member(namespace_y);
+	semantic_graph.add_member(variable_x);
+	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_y));
 	namespace_y->add_member(function_y_f);
 	namespace_y->add_member(function_y_h);
-	semantic_graph->add_member(namespace_z);
+	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_z));
 	namespace_z->add_member(function_z_h);
-	semantic_graph->add_member(namespace_a);
+	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_a));
 	//namespace_a->add_using_directive_namespace(*namespace_y);
 	namespace_a->add_member(function_a_f);
 	namespace_a->add_member(function_a_g);
 	namespace_a->add_member(variable_a_i);
-	semantic_graph->add_member(namespace_b);
+	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_b));
 	//namespace_b->add_using_directive_namespace(*namespace_z);
 	namespace_b->add_member(function_b_f);
 	namespace_b->add_member(variable_b_i);
-	semantic_graph->add_member(namespace_ab);
+	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_ab));
 	//namespace_ab->add_using_directive_namespace(*namespace_a);
 	//namespace_ab->add_using_directive_namespace(*namespace_b);
 	namespace_ab->add_member(function_ab_g);
-	semantic_graph->add_member(function_test);
+	semantic_graph.add_member(function_test);
 
 
 

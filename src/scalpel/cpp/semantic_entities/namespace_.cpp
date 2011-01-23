@@ -34,20 +34,6 @@ namespace_::namespace_(const std::string& name):
 {
 }
 
-std::shared_ptr<namespace_>
-namespace_::make_shared()
-{
-	namespace_* ptr = new namespace_();
-	return std::shared_ptr<namespace_>(ptr);
-}
-
-std::shared_ptr<namespace_>
-namespace_::make_shared(const std::string& name)
-{
-	namespace_* ptr = new namespace_(name);
-	return std::shared_ptr<namespace_>(ptr);
-}
-
 const std::string&
 namespace_::name() const
 {
@@ -187,11 +173,11 @@ namespace_::namespace_aliases() const
 //}
 
 void
-namespace_::add_member(std::shared_ptr<namespace_> member)
+namespace_::add_member(std::unique_ptr<namespace_>&& member)
 {
 	member->enclosing_declarative_region(*this);
-    namespaces_.push_back(member);
 	open_declarative_regions_.push_back(member.get());
+    namespaces_.push_back(std::move(member));
 }
 
 void

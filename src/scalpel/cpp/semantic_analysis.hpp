@@ -31,7 +31,7 @@ namespace scalpel { namespace cpp
 namespace semantic_analysis
 {
 
-std::shared_ptr<semantic_graph>
+std::unique_ptr<semantic_graph>
 analyze(const syntax_tree& tree);
 
 } //namespace semantic_analysis

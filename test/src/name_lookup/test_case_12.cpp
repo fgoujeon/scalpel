@@ -50,16 +50,16 @@ BOOST_AUTO_TEST_CASE(test_case_12)
 	*/
 
 	//namespaces
-	auto semantic_graph = scalpel::cpp::semantic_graph::make_shared();
-	auto namespace_n = scalpel::cpp::semantic_graph::make_shared("n");
+	scalpel::cpp::semantic_graph semantic_graph;
+	auto namespace_n = new namespace_("n");
 
 	//classes
 	auto class_c = class_::make_shared("c");
 	auto class_n_c = class_::make_shared("c");
 
 	//assembling
-	semantic_graph->add_member(class_c);
-	semantic_graph->add_member(namespace_n);
+	semantic_graph.add_member(class_c);
+	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_n));
 	namespace_n->add_member(class_n_c);
 
 
@@ -74,7 +74,7 @@ BOOST_AUTO_TEST_CASE(test_case_12)
 			find<identification_policies::by_name, false, false, class_>
 			(
 				"c",
-				namespace_n.get()
+				namespace_n
 			)
 		;
 
@@ -89,7 +89,7 @@ BOOST_AUTO_TEST_CASE(test_case_12)
 				true,
 				optional_node<nested_name_specifier>(),
 				"c",
-				namespace_n.get()
+				namespace_n
 			)
 		;
 

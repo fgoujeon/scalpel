@@ -62,8 +62,8 @@ BOOST_AUTO_TEST_CASE(test_case_1)
 	}
 	*/
 
-	auto semantic_graph = scalpel::cpp::semantic_graph::make_shared();
-	auto namespace_a = namespace_::make_shared("A");
+	scalpel::cpp::semantic_graph semantic_graph;
+	auto namespace_a = new namespace_("A");
 	auto variable_a_i = std::make_shared<variable>
 	(
 		"i",
@@ -80,7 +80,7 @@ BOOST_AUTO_TEST_CASE(test_case_1)
 		"g",
 		fundamental_type::VOID
 	);
-	auto namespace_a_c = namespace_::make_shared("C");
+	auto namespace_a_c = new namespace_("C");
 	auto variable_a_c_n = std::make_shared<variable>
 	(
 		"n",
@@ -97,15 +97,15 @@ BOOST_AUTO_TEST_CASE(test_case_1)
 		fundamental_type::INT
 	);
 
-	semantic_graph->add_member(namespace_a);
+	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_a));
 	namespace_a->add_member(variable_a_i);
 	namespace_a->add_member(struct_a_b);
 	struct_a_b->add_member(function_a_b_f);
 	namespace_a->add_member(function_a_g);
-	namespace_a->add_member(namespace_a_c);
+	namespace_a->add_member(std::unique_ptr<namespace_>(namespace_a_c));
 	namespace_a_c->add_member(variable_a_c_n);
-	semantic_graph->add_member(variable_i);
-	semantic_graph->add_member(variable_j);
+	semantic_graph.add_member(variable_i);
+	semantic_graph.add_member(variable_j);
 
 
 
@@ -205,7 +205,7 @@ BOOST_AUTO_TEST_CASE(test_case_1)
 				function_a_b_f.get()
 			)
 		;
-		BOOST_CHECK_EQUAL(found_entity, namespace_a_c.get());
+		BOOST_CHECK_EQUAL(found_entity, namespace_a_c);
 	}
 }
 

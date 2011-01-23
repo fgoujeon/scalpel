@@ -28,6 +28,7 @@ template<typename T>
 class single_object_range
 {
 	public:
+		typedef const T value_type;
 		class iterator;
 
 		//empty range

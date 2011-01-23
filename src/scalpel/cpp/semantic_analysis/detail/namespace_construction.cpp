@@ -36,7 +36,7 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 using namespace syntax_nodes;
 using namespace semantic_entities;
 
-std::shared_ptr<semantic_entities::namespace_>
+std::unique_ptr<semantic_entities::namespace_>
 create_namespace
 (
 	const syntax_nodes::namespace_definition& namespace_definition_node
@@ -51,7 +51,7 @@ create_namespace
 	}
 
 	//create the namespace entity
-	return namespace_::make_shared(namespace_name);
+	return std::unique_ptr<namespace_>(new namespace_(namespace_name));
 }
 
 void
@@ -105,9 +105,10 @@ fill_namespace
 		//else if(const boost::optional<const linkage_specification&> opt_linkage_specification_node = get<linkage_specification>(&declaration_node))
 		else if(const boost::optional<const namespace_definition&> opt_namespace_definition_node = get<namespace_definition>(&declaration_node))
 		{
-			std::shared_ptr<namespace_> new_namespace = create_namespace(*opt_namespace_definition_node);
-			namespace_entity.add_member(new_namespace);
-			fill_namespace(*new_namespace, *opt_namespace_definition_node);
+			std::unique_ptr<namespace_> new_namespace = create_namespace(*opt_namespace_definition_node);
+			namespace_& new_namespace_ref = *new_namespace;
+			namespace_entity.add_member(std::move(new_namespace));
+			fill_namespace(new_namespace_ref, *opt_namespace_definition_node);
 		}
 	}
 }

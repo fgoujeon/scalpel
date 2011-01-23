@@ -72,7 +72,7 @@ BOOST_AUTO_TEST_CASE(test_case_2)
 	};
 	*/
 
-	auto semantic_graph = scalpel::cpp::semantic_graph::make_shared();
+	scalpel::cpp::semantic_graph semantic_graph;
 	auto struct_c0 = class_::make_shared("c0");
 	auto struct_c0_inner = class_::make_shared("inner");
 	auto function_c0_inner_f = std::make_shared<simple_member_function>
@@ -109,17 +109,17 @@ BOOST_AUTO_TEST_CASE(test_case_2)
 		fundamental_type::VOID
 	);
 
-	semantic_graph->add_member(struct_c0);
+	semantic_graph.add_member(struct_c0);
 	struct_c0->add_member(struct_c0_inner);
 	struct_c0_inner->add_member(function_c0_inner_f);
 	struct_c0->add_member(function_c0_f);
-	semantic_graph->add_member(struct_c1base);
+	semantic_graph.add_member(struct_c1base);
 	struct_c1base->add_member(function_c1base_f);
 	struct_c1base->add_member(function_c1base_g);
-	semantic_graph->add_member(struct_c1);
+	semantic_graph.add_member(struct_c1);
 	struct_c1->add_base_class(*struct_c1base);
 	struct_c1->add_member(function_c1_g);
-	semantic_graph->add_member(struct_c);
+	semantic_graph.add_member(struct_c);
 	struct_c->add_base_class(*struct_c0);
 	struct_c->add_base_class(*struct_c1);
 	struct_c->add_member(function_g_test);

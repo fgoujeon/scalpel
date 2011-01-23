@@ -63,11 +63,11 @@ BOOST_AUTO_TEST_CASE(test_case_7)
 	*/
 
 	//namespaces
-	auto semantic_graph = scalpel::cpp::semantic_graph::make_shared();
-	auto namespace_a = namespace_::make_shared("a");
-	auto namespace_b = namespace_::make_shared("b");
-	auto namespace_c = namespace_::make_shared("c");
-	auto namespace_bc = namespace_::make_shared("bc");
+	scalpel::cpp::semantic_graph semantic_graph;
+	auto namespace_a = new namespace_("a");
+	auto namespace_b = new namespace_("b");
+	auto namespace_c = new namespace_("c");
+	auto namespace_bc = new namespace_("bc");
 
 	//functions
 	auto function_test = std::make_shared<simple_function>
@@ -84,16 +84,16 @@ BOOST_AUTO_TEST_CASE(test_case_7)
 	);
 
 	//assembling
-	semantic_graph->add_member(namespace_a);
+	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_a));
 	namespace_a->add_member(variable_a_i);
-	semantic_graph->add_member(namespace_b);
+	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_b));
 	//namespace_b->add_using_directive_namespace(*namespace_a);
-	semantic_graph->add_member(namespace_c);
+	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_c));
 	//namespace_c->add_using_directive_namespace(*namespace_a);
-	semantic_graph->add_member(namespace_bc);
+	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_bc));
 	//namespace_bc->add_using_directive_namespace(*namespace_b);
 	//namespace_bc->add_using_directive_namespace(*namespace_c);
-	semantic_graph->add_member(function_test);
+	semantic_graph.add_member(function_test);
 
 
 

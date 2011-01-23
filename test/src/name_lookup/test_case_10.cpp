@@ -54,8 +54,8 @@ BOOST_AUTO_TEST_CASE(test_case_10)
 	*/
 
 	//namespaces
-	auto semantic_graph = scalpel::cpp::semantic_graph::make_shared();
-	auto namespace_a = namespace_::make_shared("a");
+	scalpel::cpp::semantic_graph semantic_graph;
+	auto namespace_a = new namespace_("a");
 
 	//namespace aliases
 	auto namespace_alias_as = std::make_shared<namespace_alias>("as", *namespace_a);
@@ -76,10 +76,10 @@ BOOST_AUTO_TEST_CASE(test_case_10)
 	);
 
 	//assembling
-	semantic_graph->add_member(namespace_a);
+	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_a));
 	namespace_a->add_member(variable_a_i);
-	semantic_graph->add_member(namespace_alias_as);
-	semantic_graph->add_member(function_test);
+	semantic_graph.add_member(namespace_alias_as);
+	semantic_graph.add_member(function_test);
 	function_test->body(std::make_shared<statement_block>());
 	function_test->body()->add_member(namespace_alias_as2);
 
@@ -138,7 +138,7 @@ BOOST_AUTO_TEST_CASE(test_case_10)
 		;
 		namespace_alias* found_namespace_alias = get<namespace_alias>(found_entity);
 		BOOST_CHECK_EQUAL(found_namespace_alias, namespace_alias_as.get());
-		BOOST_CHECK_EQUAL(&found_namespace_alias->referred_namespace(), namespace_a.get());
+		BOOST_CHECK_EQUAL(&found_namespace_alias->referred_namespace(), namespace_a);
 	}
 }
 

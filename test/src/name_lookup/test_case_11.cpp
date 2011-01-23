@@ -57,7 +57,7 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 	*/
 
 	//namespaces
-	auto semantic_graph = scalpel::cpp::semantic_graph::make_shared();
+	scalpel::cpp::semantic_graph semantic_graph;
 
 	//classes
 	auto class_c = class_::make_shared("c");
@@ -90,14 +90,14 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 	);
 
 	//assembling
-	semantic_graph->add_member(class_c);
+	semantic_graph.add_member(class_c);
 	class_c->add_member(c_constructor);
 	class_c->set_destructor(c_destructor);
 	class_c->add_member(c_conversion_function_double_ptr);
 	class_c->add_member(c_conversion_function_int_ptr);
 	class_c->add_member(c_operator_function_plus);
-	semantic_graph->add_member(operator_function_not_equal);
-	semantic_graph->add_member(operator_function_equal);
+	semantic_graph.add_member(operator_function_not_equal);
+	semantic_graph.add_member(operator_function_equal);
 
 
 
@@ -111,7 +111,7 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 			find<identification_policies::by_overloaded_operator, false, false, operator_function>
 			(
 				scalpel::cpp::semantic_entities::overloadable_operator::DOUBLE_EQUAL,
-				semantic_graph.get()
+				&semantic_graph
 			)
 		;
 		BOOST_CHECK_EQUAL(found_entity, operator_function_equal.get());
@@ -132,7 +132,7 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				scalpel::cpp::semantic_entities::overloadable_operator::PLUS,
-				semantic_graph.get(),
+				&semantic_graph,
 				false
 			)
 		;
@@ -154,7 +154,7 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				0,
-				semantic_graph.get(),
+				&semantic_graph,
 				false
 			)
 		;
@@ -176,7 +176,7 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				0,
-				semantic_graph.get(),
+				&semantic_graph,
 				false
 			)
 		;
@@ -198,7 +198,7 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				pointer(fundamental_type::INT),
-				semantic_graph.get(),
+				&semantic_graph,
 				false
 			)
 		;

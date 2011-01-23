@@ -28,7 +28,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail
 {
 
-std::shared_ptr<semantic_entities::namespace_>
+std::unique_ptr<semantic_entities::namespace_>
 create_namespace
 (
 	const syntax_nodes::namespace_definition& namespace_definition_node

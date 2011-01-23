@@ -55,9 +55,9 @@ BOOST_AUTO_TEST_CASE(test_case_4)
 	*/
 
 	//namespaces
-	auto semantic_graph = scalpel::cpp::semantic_graph::make_shared();
-	auto namespace_m = namespace_::make_shared("m");
-	auto namespace_n = namespace_::make_shared("n");
+	scalpel::cpp::semantic_graph semantic_graph;
+	auto namespace_m = new namespace_("m");
+	auto namespace_n = new namespace_("n");
 
 	//functions
 	auto function_f = std::make_shared<simple_function>
@@ -79,12 +79,12 @@ BOOST_AUTO_TEST_CASE(test_case_4)
 	);
 
 	//assembling
-	semantic_graph->add_member(namespace_m);
+	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_m));
 	namespace_m->add_member(variable_m_i);
-	semantic_graph->add_member(namespace_n);
+	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_n));
 	namespace_n->add_member(variable_n_i);
 	//namespace_n->add_using_directive_namespace(*namespace_m);
-	semantic_graph->add_member(function_f);
+	semantic_graph.add_member(function_f);
 	function_f->body(std::make_shared<statement_block>());
 	//function_f->body()->add_using_directive_namespace(*namespace_n);
 

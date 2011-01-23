@@ -428,7 +428,7 @@ find_local_entities
 	typename get_members_return_type<EntityT>::type members = get_members<EntityT>(current_declarative_region);
 	for(auto i = members.begin(); i != members.end(); ++i)
 	{
-		auto current_entity = *i;
+		typename get_members_return_type<EntityT>::type::value_type& current_entity = *i;
 		if(EntityIdentificationPolicy::are_identifiers_equal(current_entity, identifier))
 		{
 			add_to_result(found_entities, current_entity);
@@ -503,6 +503,13 @@ void
 add_to_result(T*& result, const std::shared_ptr<T>& entity)
 {
 	result = entity.get();
+}
+
+template<class T>
+void
+add_to_result(T*& result, T& entity)
+{
+	result = &entity;
 }
 
 template<class T>

@@ -384,6 +384,11 @@ namespace detail
 	template<class T>
 	inline
 	void
+	add_to_result(T*& result, T& entity);
+
+	template<class T>
+	inline
+	void
 	add_to_result(std::set<T*>& result, T* entity);
 
 	template<class T>
