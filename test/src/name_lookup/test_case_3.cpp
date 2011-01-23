@@ -117,13 +117,13 @@ BOOST_AUTO_TEST_CASE(test_case_3)
 	namespace_a->add_member(std::unique_ptr<namespace_>(namespace_b));
 	namespace_b->add_member(std::unique_ptr<namespace_>(namespace_c));
 	namespace_c->add_member(std::unique_ptr<variable>(variable_a_b_c_i));
-	//namespace_b->add_using_directive_namespace(*namespace_c);
+	namespace_b->add_using_directive_namespace(*namespace_c);
 	namespace_b->add_member(std::unique_ptr<simple_function>(function_a_b_f1));
 	function_a_b_f1->body(std::unique_ptr<statement_block>(new statement_block()));
 	namespace_a->add_member(std::unique_ptr<namespace_>(namespace_d));
 	namespace_d->add_member(std::unique_ptr<simple_function>(function_a_d_f2));
 	function_a_d_f2->body(std::unique_ptr<statement_block>(new statement_block()));
-	//function_a_d_f2->body()->add_using_directive_namespace(*namespace_c);
+	function_a_d_f2->body().add_using_directive_namespace(*namespace_c);
 	namespace_a->add_member(std::unique_ptr<simple_function>(function_a_f3));
 	function_a_f3->body(std::unique_ptr<statement_block>(new statement_block()));
 	semantic_graph.add_member(std::unique_ptr<simple_function>(function_f4));

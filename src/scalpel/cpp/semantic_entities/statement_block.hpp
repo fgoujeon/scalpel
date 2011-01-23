@@ -41,7 +41,7 @@ class statement_block
     public:
 		typedef std::vector<open_declarative_region_ptr_variant> open_declarative_region_ptr_variants_t;
 
-		typedef std::vector<namespace_*> weak_namespaces_t;
+		typedef std::vector<namespace_*> namespace_ptrs_t;
 		typedef utility::unique_ptr_vector<statement_block> statement_blocks_t;
 		typedef utility::unique_ptr_vector<variable> variables_t;
 		typedef utility::unique_ptr_vector<namespace_alias> namespace_aliases_t;
@@ -83,8 +83,8 @@ class statement_block
 		const namespace_aliases_t&
 		namespace_aliases() const;
 
-		//const weak_namespaces_t&
-		//using_directive_namespaces() const;
+		const namespace_ptrs_t&
+		using_directive_namespaces() const;
 
 		void
 		add_member(std::unique_ptr<statement_block>&& member);
@@ -95,8 +95,8 @@ class statement_block
 		void
 		add_member(std::unique_ptr<namespace_alias>&& member);
 
-        //void
-        //add_using_directive_namespace(namespace_& n);
+        void
+        add_using_directive_namespace(namespace_& n);
 
     private:
 		detail::declarative_region_member_impl declarative_region_member_impl_;
@@ -109,7 +109,7 @@ class statement_block
 		variables_t variables_;
 		namespace_aliases_t namespace_aliases_;
 
-        //weak_namespaces_t using_directive_namespaces_;
+        namespace_ptrs_t using_directive_namespaces_;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

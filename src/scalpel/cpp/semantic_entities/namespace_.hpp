@@ -46,7 +46,7 @@ class namespace_
 	public:
 		typedef std::vector<open_declarative_region_ptr_variant> open_declarative_region_ptr_variants_t;
 
-		typedef std::vector<namespace_*> weak_namespaces_t;
+		typedef std::vector<namespace_*> namespace_ptrs_t;
 		typedef utility::unique_ptr_vector<namespace_> namespaces_t;
 		typedef utility::unique_ptr_vector<namespace_alias> namespace_aliases_t;
 		typedef utility::unique_ptr_vector<class_> classes_t;
@@ -144,8 +144,8 @@ class namespace_
 		const namespace_aliases_t&
 		namespace_aliases() const;
 
-		//const weak_namespaces_t&
-		//using_directive_namespaces() const;
+		const namespace_ptrs_t&
+		using_directive_namespaces() const;
 
 		void
 		add_member(std::unique_ptr<namespace_alias>&& member);
@@ -171,8 +171,8 @@ class namespace_
 		void
 		add_member(std::unique_ptr<variable>&& member);
 
-		//void
-		//add_using_directive_namespace(namespace_& n);
+		void
+		add_using_directive_namespace(namespace_& n);
 
 	private:
 		std::string name_;
@@ -191,7 +191,7 @@ class namespace_
 		operator_functions_t operator_functions_;
 		variables_t variables_;
 
-		//weak_namespaces_t using_directive_namespaces_;
+		namespace_ptrs_t using_directive_namespaces_;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

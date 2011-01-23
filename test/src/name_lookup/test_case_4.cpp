@@ -83,10 +83,10 @@ BOOST_AUTO_TEST_CASE(test_case_4)
 	namespace_m->add_member(std::unique_ptr<variable>(variable_m_i));
 	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_n));
 	namespace_n->add_member(std::unique_ptr<variable>(variable_n_i));
-	//namespace_n->add_using_directive_namespace(*namespace_m);
+	namespace_n->add_using_directive_namespace(*namespace_m);
 	semantic_graph.add_member(std::unique_ptr<simple_function>(function_f));
 	function_f->body(std::unique_ptr<statement_block>(new statement_block()));
-	//function_f->body()->add_using_directive_namespace(*namespace_n);
+	function_f->body().add_using_directive_namespace(*namespace_n);
 
 
 

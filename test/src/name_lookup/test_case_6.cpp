@@ -151,17 +151,17 @@ BOOST_AUTO_TEST_CASE(test_case_6)
 	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_z));
 	namespace_z->add_member(std::unique_ptr<simple_function>(function_z_h));
 	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_a));
-	//namespace_a->add_using_directive_namespace(*namespace_y);
+	namespace_a->add_using_directive_namespace(*namespace_y);
 	namespace_a->add_member(std::unique_ptr<simple_function>(function_a_f));
 	namespace_a->add_member(std::unique_ptr<simple_function>(function_a_g));
 	namespace_a->add_member(std::unique_ptr<variable>(variable_a_i));
 	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_b));
-	//namespace_b->add_using_directive_namespace(*namespace_z);
+	namespace_b->add_using_directive_namespace(*namespace_z);
 	namespace_b->add_member(std::unique_ptr<simple_function>(function_b_f));
 	namespace_b->add_member(std::unique_ptr<variable>(variable_b_i));
 	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_ab));
-	//namespace_ab->add_using_directive_namespace(*namespace_a);
-	//namespace_ab->add_using_directive_namespace(*namespace_b);
+	namespace_ab->add_using_directive_namespace(*namespace_a);
+	namespace_ab->add_using_directive_namespace(*namespace_b);
 	namespace_ab->add_member(std::unique_ptr<simple_function>(function_ab_g));
 	semantic_graph.add_member(std::unique_ptr<simple_function>(function_test));
 

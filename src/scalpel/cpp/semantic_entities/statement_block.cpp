@@ -51,11 +51,11 @@ statement_block::namespace_aliases() const
 	return namespace_aliases_;
 }
 
-//const statement_block::weak_namespaces_t&
-//statement_block::using_directive_namespaces() const
-//{
-//	return using_directive_namespaces_;
-//}
+const statement_block::namespace_ptrs_t&
+statement_block::using_directive_namespaces() const
+{
+	return using_directive_namespaces_;
+}
 
 void
 statement_block::add_member(std::unique_ptr<statement_block>&& member)
@@ -76,11 +76,11 @@ statement_block::add_member(std::unique_ptr<namespace_alias>&& member)
     namespace_aliases_.push_back(std::move(member));
 }
 
-//void
-//statement_block::add_using_directive_namespace(namespace_& n)
-//{
-//	using_directive_namespaces_.push_back(&n);
-//}
+void
+statement_block::add_using_directive_namespace(namespace_& n)
+{
+	using_directive_namespaces_.push_back(&n);
+}
 
 }}} //namespace scalpel::cpp::semantic_entities
 

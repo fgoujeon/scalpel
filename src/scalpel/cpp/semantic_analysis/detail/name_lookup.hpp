@@ -379,11 +379,6 @@ namespace detail
 	template<class T>
 	inline
 	void
-	add_to_result(T*& result, const std::shared_ptr<T>& entity);
-
-	template<class T>
-	inline
-	void
 	add_to_result(T*& result, T& entity);
 
 	template<class T>
@@ -394,11 +389,6 @@ namespace detail
 	template<class T>
 	void
 	add_to_result(std::set<T*>& result, T& entity);
-
-	template<class T>
-	inline
-	void
-	add_to_result(std::set<T*>& result, const std::shared_ptr<T>& entity);
 
 	template<class T>
 	inline

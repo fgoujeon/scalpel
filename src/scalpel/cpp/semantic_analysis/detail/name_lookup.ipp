@@ -48,23 +48,23 @@ find
 	//(i.e. the global namespace)
 	while(true)
 	{
-//		//apply using directives (only for namespaces and statement blocks)
-//		if(semantic_entities::namespace_** opt_namespace_ptr = utility::get<semantic_entities::namespace_>(&current_declarative_region))
-//			apply_using_directives
-//			(
-//				current_declarative_region,
-//				(*opt_namespace_ptr)->using_directive_namespaces(),
-//				namespace_associations
-//			);
-//		else if(semantic_entities::statement_block** opt_statement_block_ptr = utility::get<semantic_entities::statement_block>(&current_declarative_region))
-//			apply_using_directives
-//			(
-//				current_declarative_region,
-//				(*opt_statement_block_ptr)->using_directive_namespaces(),
-//				namespace_associations
-//			);
-//
-//		//find entities in this declarative region only
+		//apply using directives (only for namespaces and statement blocks)
+		if(semantic_entities::namespace_** opt_namespace_ptr = utility::get<semantic_entities::namespace_>(&current_declarative_region))
+			apply_using_directives
+			(
+				current_declarative_region,
+				(*opt_namespace_ptr)->using_directive_namespaces(),
+				namespace_associations
+			);
+		else if(semantic_entities::statement_block** opt_statement_block_ptr = utility::get<semantic_entities::statement_block>(&current_declarative_region))
+			apply_using_directives
+			(
+				current_declarative_region,
+				(*opt_statement_block_ptr)->using_directive_namespaces(),
+				namespace_associations
+			);
+
+		//find entities in this declarative region only
 		add_to_result
 		(
 			found_entities,
@@ -78,37 +78,35 @@ find
 			>(identifier, current_declarative_region)
 		);
 
-//
-//		//find entities in the associated namespaces (only for namespaces)
-//		//and add them to the previously found entities
-//		if(semantic_entities::namespace_** opt_namespace_ptr = utility::get<semantic_entities::namespace_>(&current_declarative_region))
-//		{
-//			auto associated_namespaces_it = namespace_associations.find(*opt_namespace_ptr);
-//			if(associated_namespaces_it != namespace_associations.end())
-//			{
-//				const std::vector<semantic_entities::namespace_*>& associated_namespaces = associated_namespaces_it->second;
-//
-//				//for each associated namespace
-//				for(auto i = associated_namespaces.begin(); i != associated_namespaces.end(); ++i)
-//				{
-//					semantic_entities::namespace_& associated_namespace = **i;
-//
-//					add_to_result
-//					(
-//						found_entities,
-//						find_local_entities
-//						<
-//							EntityIdentificationPolicy,
-//							semantic_entities::namespace_,
-//							true,
-//							Multiple,
-//							EntitiesT...
-//						>(identifier, associated_namespace)
-//					);
-//				}
-//			}
-//		}
-//
+		//find entities in the associated namespaces (only for namespaces)
+		//and add them to the previously found entities
+		if(semantic_entities::namespace_** opt_namespace_ptr = utility::get<semantic_entities::namespace_>(&current_declarative_region))
+		{
+			auto associated_namespaces_it = namespace_associations.find(*opt_namespace_ptr);
+			if(associated_namespaces_it != namespace_associations.end())
+			{
+				const std::vector<semantic_entities::namespace_*>& associated_namespaces = associated_namespaces_it->second;
+
+				//for each associated namespace
+				for(auto i = associated_namespaces.begin(); i != associated_namespaces.end(); ++i)
+				{
+					semantic_entities::namespace_& associated_namespace = **i;
+
+					add_to_result
+					(
+						found_entities,
+						find_local_entities
+						<
+							EntityIdentificationPolicy,
+							semantic_entities::namespace_,
+							true,
+							Multiple,
+							EntitiesT...
+						>(identifier, associated_namespace)
+					);
+				}
+			}
+		}
 
 		//stop lookup if entities have been found
 		if(!utility::is_empty(found_entities)) break;
@@ -201,6 +199,7 @@ find
 			;
 		}
 	}
+
 	return
 		find_local_entities
 		<
@@ -294,38 +293,38 @@ find_in_namespace
 
 	//if no entity is found, search in using directive's namespaces
 	typename return_type<true, true, EntitiesT...>::type found_entities;
-	//for
-	//(
-	//	auto i = current_namespace.using_directive_namespaces().begin();
-	//	i != current_namespace.using_directive_namespaces().end();
-	//	++i
-	//)
-	//{
-	//	std::shared_ptr<semantic_entities::namespace_> using_directive_namespace(*i);
+	for
+	(
+		auto i = current_namespace.using_directive_namespaces().begin();
+		i != current_namespace.using_directive_namespaces().end();
+		++i
+	)
+	{
+		semantic_entities::namespace_& using_directive_namespace = **i;
 
-	//	//make sure the namespace has not been already searched
-	//	if
-	//	(
-	//		std::find
-	//		(
-	//			already_searched_namespaces.begin(),
-	//			already_searched_namespaces.end(),
-	//			using_directive_namespace.get()
-	//		) == already_searched_namespaces.end()
-	//	)
-	//	{
-	//		add_to_result
-	//		(
-	//			found_entities,
-	//			find_in_namespace<EntityIdentificationPolicy, true, Multiple, EntitiesT...>
-	//			(
-	//				identifier,
-	//				*using_directive_namespace,
-	//				already_searched_namespaces
-	//			)
-	//		);
-	//	}
-	//}
+		//make sure the namespace has not been already searched
+		if
+		(
+			std::find
+			(
+				already_searched_namespaces.begin(),
+				already_searched_namespaces.end(),
+				&using_directive_namespace
+			) == already_searched_namespaces.end()
+		)
+		{
+			add_to_result
+			(
+				found_entities,
+				find_in_namespace<EntityIdentificationPolicy, true, Multiple, EntitiesT...>
+				(
+					identifier,
+					using_directive_namespace,
+					already_searched_namespaces
+				)
+			);
+		}
+	}
 
 	return std::move(return_result<Optional, Multiple, EntitiesT...>::result(found_entities));
 }
@@ -500,13 +499,6 @@ find_entities_in_base_classes
 
 template<class T>
 void
-add_to_result(T*& result, const std::shared_ptr<T>& entity)
-{
-	result = entity.get();
-}
-
-template<class T>
-void
 add_to_result(T*& result, T& entity)
 {
 	result = &entity;
@@ -524,13 +516,6 @@ void
 add_to_result(std::set<T*>& result, T& entity)
 {
 	result.insert(&entity);
-}
-
-template<class T>
-void
-add_to_result(std::set<T*>& result, const std::shared_ptr<T>& entity)
-{
-	if(entity) result.insert(entity.get());
 }
 
 template<class T>
