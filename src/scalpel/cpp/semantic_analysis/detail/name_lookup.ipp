@@ -498,51 +498,62 @@ find_entities_in_base_classes
 
 
 
-template<class T, class U>
+template<class T>
 void
-add_to_result(T& result, const U& entity)
-{
-	result = entity;
-}
-
-template<class T, class U>
-void
-add_to_result(T*& result, const std::shared_ptr<U>& entity)
+add_to_result(T*& result, const std::shared_ptr<T>& entity)
 {
 	result = entity.get();
 }
 
-template<class T, class U>
+template<class T>
 void
-add_to_result(std::set<T>& result, const U& entity)
+add_to_result(std::set<T*>& result, T* entity)
 {
-	if(!utility::is_empty(entity)) result.insert(entity);
+	if(entity) result.insert(entity);
 }
 
-template<class T, class U>
+template<class T>
 void
-add_to_result(std::set<T>& result, const std::shared_ptr<U>& entity)
+add_to_result(std::set<T*>& result, const std::shared_ptr<T>& entity)
 {
-	if(!utility::is_empty(entity)) result.insert(entity.get());
+	if(entity) result.insert(entity.get());
 }
 
-template<class T, class U>
+template<class T>
 void
-add_to_result(std::set<T>& result, const boost::optional<U>& entity)
-{
-	if(!utility::is_empty(entity)) result.insert(*entity);
-}
-
-template<class T, class U>
-void
-add_to_result(std::set<T>& result, const std::set<U>& entities)
+add_to_result(std::set<T*>& result, const std::set<T*>& entities)
 {
 	std::copy
 	(
 		entities.begin(),
 		entities.end(),
-		std::insert_iterator<std::set<T>>(result, result.end())
+		std::insert_iterator<std::set<T*>>(result, result.end())
 	);
+}
+
+template<class T>
+void
+add_to_result(std::set<T>& result, const boost::optional<T>& entity)
+{
+	if(entity) result.insert(*entity);
+}
+
+template<class T>
+void
+add_to_result(boost::optional<T>& result, const T& entity)
+{
+	result = entity;
+}
+
+template<class T, class... Ts>
+void
+add_to_result
+(
+	boost::optional<utility::basic_variant<utility::add_ptr, Ts...>>& result,
+	T* entity
+)
+{
+	result = utility::basic_variant<utility::add_ptr, Ts...>(entity);
 }
 
 

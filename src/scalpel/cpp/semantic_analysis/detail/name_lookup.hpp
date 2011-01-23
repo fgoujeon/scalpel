@@ -376,41 +376,45 @@ namespace detail
 
 
 
-	//result = entity
-	template<class T, class U>
+	template<class T>
 	inline
 	void
-	add_to_result(T& result, const U& entity);
+	add_to_result(T*& result, const std::shared_ptr<T>& entity);
 
-	//result = entity.get()
-	template<class T, class U>
+	template<class T>
 	inline
 	void
-	add_to_result(T*& result, const std::shared_ptr<U>& entity);
+	add_to_result(std::set<T*>& result, T* entity);
 
-	//add entity to result if entity isn't empty
-	template<class T, class U>
+	template<class T>
 	inline
 	void
-	add_to_result(std::set<T>& result, const U& entity);
+	add_to_result(std::set<T*>& result, const std::shared_ptr<T>& entity);
 
-	//add entity to result if entity isn't empty
-	template<class T, class U>
+	template<class T>
 	inline
 	void
-	add_to_result(std::set<T>& result, const std::shared_ptr<U>& entity);
+	add_to_result(std::set<T*>& result, const std::set<T*>& entity);
 
 	//add entity to result if entity isn't empty
-	template<class T, class U>
+	template<class T>
 	inline
 	void
-	add_to_result(std::set<T>& result, const boost::optional<U>& entity);
+	add_to_result(std::set<T>& result, const boost::optional<T>& entity);
 
-	//append entities to result
-	template<class T, class U>
+	template<class T>
 	inline
 	void
-	add_to_result(std::set<T>& result, const std::set<U>& entities);
+	add_to_result(boost::optional<T>& result, const T& entity);
+
+	template<class T, class... Ts>
+	inline
+	void
+	add_to_result
+	(
+		boost::optional<utility::basic_variant<utility::add_ptr, Ts...>>& result,
+		T* entity
+	);
 
 
 
