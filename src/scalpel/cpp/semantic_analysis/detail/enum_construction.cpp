@@ -27,10 +27,10 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 using namespace syntax_nodes;
 using namespace semantic_entities;
 
-std::shared_ptr<enum_>
+std::unique_ptr<enum_>
 create_enum(const enum_specifier& enum_specifier_node)
 {
-	return std::make_shared<enum_>(syntax_node_analysis::get_identifier(enum_specifier_node));
+	return std::unique_ptr<enum_>(new enum_(syntax_node_analysis::get_identifier(enum_specifier_node)));
 }
 
 void

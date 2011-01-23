@@ -47,6 +47,12 @@ struct get_members_return_type<semantic_entities::class_>
 };
 
 template<>
+struct get_members_return_type<semantic_entities::enum_>
+{
+	typedef typename utility::unique_ptr_vector<semantic_entities::enum_>::range type;
+};
+
+template<>
 struct get_members_return_type<semantic_entities::open_declarative_region_ptr_variant>
 {
 	typedef std::vector<semantic_entities::open_declarative_region_ptr_variant> type;

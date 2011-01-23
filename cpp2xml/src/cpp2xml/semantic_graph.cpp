@@ -169,7 +169,7 @@ semantic_graph_serializer::serialize_namespace
 		serialize_class(*i, indent_level + 1);
 
 	for(auto i = entity.enums().begin(); i != entity.enums().end(); ++i)
-		serialize_enum(**i, indent_level + 1);
+		serialize_enum(*i, indent_level + 1);
 
 	for(auto i = entity.typedefs().begin(); i != entity.typedefs().end(); ++i)
 		serialize_typedef(**i, indent_level + 1);
@@ -231,7 +231,7 @@ semantic_graph_serializer::serialize_class
 		serialize_class(*i, indent_level + 1);
 
 	for(auto i = entity.enums().begin(); i != entity.enums().end(); ++i)
-		serialize_enum(**i, indent_level + 1);
+		serialize_enum(*i, indent_level + 1);
 
 	for(auto i = entity.typedefs().begin(); i != entity.typedefs().end(); ++i)
 		serialize_typedef(**i, indent_level + 1);
@@ -842,7 +842,7 @@ semantic_graph_serializer::define_ids(const namespace_& entity)
 	for(auto i = entity.classes().begin(); i != entity.classes().end(); ++i)
 		define_ids(*i);
 	for(auto i = entity.enums().begin(); i != entity.enums().end(); ++i)
-		define_ids(**i);
+		define_ids(*i);
 }
 
 void
@@ -854,7 +854,7 @@ semantic_graph_serializer::define_ids(const class_& entity)
 	for(auto i = entity.nested_classes().begin(); i != entity.nested_classes().end(); ++i)
 		define_ids(*i);
 	for(auto i = entity.enums().begin(); i != entity.enums().end(); ++i)
-		define_ids(**i);
+		define_ids(*i);
 }
 
 void

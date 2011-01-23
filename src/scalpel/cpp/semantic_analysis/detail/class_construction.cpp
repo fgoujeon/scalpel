@@ -284,11 +284,12 @@ fill_class
 					syntax_node_analysis::get_enum_specifier(decl_specifier_seq_node)
 				;
 
-				std::shared_ptr<enum_> new_enum = create_enum(enum_specifier_node);
-				class_entity.add_member(new_enum, current_access);
-				fill_enum(*new_enum, enum_specifier_node);
+				std::unique_ptr<enum_> new_enum = create_enum(enum_specifier_node);
+				enum_& new_enum_ref = *new_enum;
+				class_entity.add_member(std::move(new_enum), current_access);
+				fill_enum(new_enum_ref, enum_specifier_node);
 
-				opt_unqualified_type = static_cast<const enum_*>(new_enum.get());
+				opt_unqualified_type = static_cast<const enum_*>(&new_enum_ref);
 
 				break;
 			}

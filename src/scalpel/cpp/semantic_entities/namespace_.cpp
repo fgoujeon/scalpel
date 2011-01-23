@@ -191,10 +191,10 @@ namespace_::add_member(std::unique_ptr<class_>&& member)
 }
 
 void
-namespace_::add_member(std::shared_ptr<enum_> member)
+namespace_::add_member(std::unique_ptr<enum_>&& member)
 {
 	member->enclosing_declarative_region(static_cast<namespace_*>(this));
-    enums_.push_back(member);
+    enums_.push_back(std::move(member));
 }
 
 void

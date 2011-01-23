@@ -212,12 +212,13 @@ class_::add_member(std::unique_ptr<class_>&& member, const access acc)
 }
 
 void
-class_::add_member(std::shared_ptr<enum_> member, const access acc)
+class_::add_member(std::unique_ptr<enum_>&& member, const access acc)
 {
 	member->enclosing_declarative_region(static_cast<class_*>(this));
-    enums_.push_back(member);
 
 	member_access_[static_cast<const enum_*>(member.get())] = acc;
+
+    enums_.push_back(std::move(member));
 }
 
 void
