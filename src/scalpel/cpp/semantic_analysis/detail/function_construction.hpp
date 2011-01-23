@@ -31,20 +31,6 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 {
 
 typedef
-	utility::shared_ptr_variant
-	<
-		semantic_entities::constructor,
-		semantic_entities::destructor,
-		semantic_entities::operator_member_function,
-		semantic_entities::conversion_function,
-		semantic_entities::simple_member_function,
-		semantic_entities::operator_function,
-		semantic_entities::simple_function
-	>::type
-	function_shared_ptr_variant
-;
-
-typedef
 	utility::ptr_variant
 	<
 		semantic_entities::constructor,
@@ -59,9 +45,6 @@ typedef
 ;
 
 function_ptr_variant
-to_function_ptr_variant(const function_shared_ptr_variant& var);
-
-function_shared_ptr_variant
 create_function
 (
 	const syntax_nodes::function_definition& function_definition_node,

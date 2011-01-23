@@ -58,18 +58,18 @@ BOOST_AUTO_TEST_CASE(test_case_10)
 	auto namespace_a = new namespace_("a");
 
 	//namespace aliases
-	auto namespace_alias_as = std::make_shared<namespace_alias>("as", *namespace_a);
-	auto namespace_alias_as2 = std::make_shared<namespace_alias>("as2", *namespace_a);
+	auto namespace_alias_as = new namespace_alias("as", *namespace_a);
+	auto namespace_alias_as2 = new namespace_alias("as2", *namespace_a);
 
 	//functions
-	auto function_test = std::make_shared<simple_function>
+	auto function_test = new simple_function
 	(
 		"test",
 		fundamental_type::VOID
 	);
 
 	//variables
-	auto variable_a_i = std::make_shared<variable>
+	auto variable_a_i = new variable
 	(
 		"i",
 		fundamental_type::INT
@@ -77,11 +77,11 @@ BOOST_AUTO_TEST_CASE(test_case_10)
 
 	//assembling
 	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_a));
-	namespace_a->add_member(variable_a_i);
-	semantic_graph.add_member(namespace_alias_as);
-	semantic_graph.add_member(function_test);
-	function_test->body(std::make_shared<statement_block>());
-	function_test->body()->add_member(namespace_alias_as2);
+	namespace_a->add_member(std::unique_ptr<variable>(variable_a_i));
+	semantic_graph.add_member(std::unique_ptr<namespace_alias>(namespace_alias_as));
+	semantic_graph.add_member(std::unique_ptr<simple_function>(function_test));
+	function_test->body(std::unique_ptr<statement_block>(new statement_block()));
+	function_test->body().add_member(std::unique_ptr<namespace_alias>(namespace_alias_as2));
 
 
 
@@ -104,10 +104,10 @@ BOOST_AUTO_TEST_CASE(test_case_10)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"i",
-				function_test->body().get()
+				&function_test->body()
 			)
 		;
-		BOOST_CHECK_EQUAL(found_entity, variable_a_i.get());
+		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
 	}
 
 	//look up as2::i from function test, must find a::i
@@ -125,19 +125,19 @@ BOOST_AUTO_TEST_CASE(test_case_10)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"i",
-				function_test->body().get()
+				&function_test->body()
 			)
 		;
-		BOOST_CHECK_EQUAL(found_entity, variable_a_i.get());
+		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
 	}
 
 	//look up a from as, must find a
 	{
 		scalpel::utility::ptr_variant<namespace_, namespace_alias>::type found_entity =
-			find<identification_policies::by_name, false, false, namespace_, namespace_alias>("as", function_test->body().get())
+			find<identification_policies::by_name, false, false, namespace_, namespace_alias>("as", &function_test->body())
 		;
 		namespace_alias* found_namespace_alias = get<namespace_alias>(found_entity);
-		BOOST_CHECK_EQUAL(found_namespace_alias, namespace_alias_as.get());
+		BOOST_CHECK_EQUAL(found_namespace_alias, namespace_alias_as);
 		BOOST_CHECK_EQUAL(&found_namespace_alias->referred_namespace(), namespace_a);
 	}
 }

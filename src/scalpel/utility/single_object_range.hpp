@@ -28,13 +28,13 @@ template<typename T>
 class single_object_range
 {
 	public:
-		typedef const T value_type;
+		typedef T value_type;
 		class iterator;
 
 		//empty range
 		single_object_range();
 
-		single_object_range(const T& object);
+		single_object_range(T& object);
 
 		iterator
 		begin();
@@ -43,7 +43,7 @@ class single_object_range
 		end();
 
 	private:
-		const T* object_;
+		T* object_;
 };
 
 template<typename T>
@@ -52,7 +52,7 @@ class single_object_range<T>::iterator
 	public:
 		iterator();
 
-		iterator(const T& object);
+		iterator(T& object);
 
 		bool
 		operator==(const iterator& rhs);
@@ -63,11 +63,11 @@ class single_object_range<T>::iterator
 		iterator
 		operator++();
 
-		const T&
+		T&
 		operator*();
 
 	private:
-		const T* object_;
+		T* object_;
 };
 
 }} //namespace scalpel::utility

@@ -126,16 +126,16 @@ class_::constructors() const
 	return constructors_;
 }
 
-std::shared_ptr<destructor>
+destructor&
 class_::get_destructor()
 {
-	return destructor_;
+	return *destructor_;
 }
 
-std::shared_ptr<const destructor>
+const destructor&
 class_::get_destructor() const
 {
-	return destructor_;
+	return *destructor_;
 }
 
 class_::simple_functions_t::range
@@ -222,34 +222,37 @@ class_::add_member(std::unique_ptr<enum_>&& member, const access acc)
 }
 
 void
-class_::add_member(std::shared_ptr<typedef_> member, const access acc)
+class_::add_member(std::unique_ptr<typedef_>&& member, const access acc)
 {
 	member->enclosing_declarative_region(static_cast<class_*>(this));
-    typedefs_.push_back(member);
 
 	member_access_[static_cast<const typedef_*>(member.get())] = acc;
+
+    typedefs_.push_back(std::move(member));
 }
 
 void
-class_::add_member(std::shared_ptr<constructor> member, const access acc)
+class_::add_member(std::unique_ptr<constructor>&& member, const access acc)
 {
 	member->enclosing_declarative_region(static_cast<class_*>(this));
-    constructors_.push_back(member);
 
 	member_access_[static_cast<const constructor*>(member.get())] = acc;
+
+    constructors_.push_back(std::move(member));
 }
 
 void
 class_::set_destructor
 (
-	std::shared_ptr<destructor> member,
+	std::unique_ptr<destructor>&& member,
 	const access acc
 )
 {
 	member->enclosing_declarative_region(static_cast<class_*>(this));
-	destructor_ = member;
 
 	member_access_[static_cast<const destructor*>(member.get())] = acc;
+
+	destructor_ = std::move(member);
 }
 
 void
@@ -257,7 +260,7 @@ class_::reset_destructor()
 {
 	set_destructor
 	(
-		std::make_shared<destructor>(false),
+		std::unique_ptr<destructor>(new destructor(false)),
 		access::PUBLIC
 	);
 }
@@ -265,55 +268,59 @@ class_::reset_destructor()
 void
 class_::add_member
 (
-	std::shared_ptr<simple_member_function> member,
+	std::unique_ptr<simple_member_function>&& member,
 	const access acc
 )
 {
 	member->enclosing_declarative_region(static_cast<class_*>(this));
-    simple_functions_.push_back(member);
 
 	member_access_[static_cast<const simple_member_function*>(member.get())] = acc;
+
+    simple_functions_.push_back(std::move(member));
 }
 
 void
 class_::add_member
 (
-	std::shared_ptr<operator_member_function> member,
+	std::unique_ptr<operator_member_function>&& member,
 	const access acc
 )
 {
 	member->enclosing_declarative_region(static_cast<class_*>(this));
-    operator_functions_.push_back(member);
 
 	member_access_[static_cast<const operator_member_function*>(member.get())] = acc;
+
+    operator_functions_.push_back(std::move(member));
 }
 
 void
 class_::add_member
 (
-	std::shared_ptr<conversion_function> member,
+	std::unique_ptr<conversion_function>&& member,
 	const access acc
 )
 {
 	member->enclosing_declarative_region(static_cast<class_*>(this));
-    conversion_functions_.push_back(member);
 
 	member_access_[static_cast<const conversion_function*>(member.get())] = acc;
+
+    conversion_functions_.push_back(std::move(member));
 }
 
 void
 class_::add_member
 (
-	std::shared_ptr<variable> member,
+	std::unique_ptr<variable>&& member,
 	const access acc,
 	const bool is_mutable
 )
 {
 	member->enclosing_declarative_region(static_cast<class_*>(this));
-    variables_.push_back(member);
 
 	member_access_[static_cast<const variable*>(member.get())] = acc;
 	if(is_mutable) mutable_member_variables_.push_back(member.get());
+
+    variables_.push_back(std::move(member));
 }
 
 class_::access

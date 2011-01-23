@@ -48,13 +48,13 @@ class namespace_
 
 		typedef std::vector<namespace_*> weak_namespaces_t;
 		typedef utility::unique_ptr_vector<namespace_> namespaces_t;
-		typedef utility::shared_ptr_vector<namespace_alias> namespace_aliases_t;
+		typedef utility::unique_ptr_vector<namespace_alias> namespace_aliases_t;
 		typedef utility::unique_ptr_vector<class_> classes_t;
 		typedef utility::unique_ptr_vector<enum_> enums_t;
-		typedef utility::shared_ptr_vector<typedef_> typedefs_t;
-		typedef utility::shared_ptr_vector<simple_function> simple_functions_t;
-		typedef utility::shared_ptr_vector<operator_function> operator_functions_t;
-		typedef utility::shared_ptr_vector<variable> variables_t;
+		typedef utility::unique_ptr_vector<typedef_> typedefs_t;
+		typedef utility::unique_ptr_vector<simple_function> simple_functions_t;
+		typedef utility::unique_ptr_vector<operator_function> operator_functions_t;
+		typedef utility::unique_ptr_vector<variable> variables_t;
 
 	public:
 		/**
@@ -148,7 +148,7 @@ class namespace_
 		//using_directive_namespaces() const;
 
 		void
-		add_member(std::shared_ptr<namespace_alias> member);
+		add_member(std::unique_ptr<namespace_alias>&& member);
 
 		void
 		add_member(std::unique_ptr<namespace_>&& member);
@@ -160,16 +160,16 @@ class namespace_
 		add_member(std::unique_ptr<enum_>&& member);
 
 		void
-		add_member(std::shared_ptr<typedef_> member);
+		add_member(std::unique_ptr<typedef_>&& member);
 
 		void
-		add_member(std::shared_ptr<simple_function> member);
+		add_member(std::unique_ptr<simple_function>&& member);
 
 		void
-		add_member(std::shared_ptr<operator_function> member);
+		add_member(std::unique_ptr<operator_function>&& member);
 
 		void
-		add_member(std::shared_ptr<variable> member);
+		add_member(std::unique_ptr<variable>&& member);
 
 		//void
 		//add_using_directive_namespace(namespace_& n);

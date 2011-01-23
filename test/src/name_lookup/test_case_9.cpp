@@ -68,12 +68,12 @@ BOOST_AUTO_TEST_CASE(test_case_9)
 	auto namespace_d = new namespace_("d");
 
 	//functions
-	auto function_a_b_f = std::make_shared<simple_function>
+	auto function_a_b_f = new simple_function
 	(
 		"f",
 		fundamental_type::VOID
 	);
-	auto function_c_d_f = std::make_shared<simple_function>
+	auto function_c_d_f = new simple_function
 	(
 		"f",
 		fundamental_type::VOID
@@ -82,11 +82,11 @@ BOOST_AUTO_TEST_CASE(test_case_9)
 	//assembling
 	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_a));
 	namespace_a->add_member(std::unique_ptr<namespace_>(namespace_b));
-	namespace_b->add_member(function_a_b_f);
+	namespace_b->add_member(std::unique_ptr<simple_function>(function_a_b_f));
 	//namespace_a->add_using_directive_namespace(*namespace_b);
 	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_c));
 	namespace_c->add_member(std::unique_ptr<namespace_>(namespace_d));
-	namespace_d->add_member(function_c_d_f);
+	namespace_d->add_member(std::unique_ptr<simple_function>(function_c_d_f));
 	//semantic_graph.add_using_directive_namespace(*namespace_a);
 	//semantic_graph.add_using_directive_namespace(*namespace_d);
 
@@ -152,7 +152,7 @@ BOOST_AUTO_TEST_CASE(test_case_9)
 				false
 			)
 		;
-		BOOST_CHECK_EQUAL(found_entity, function_a_b_f.get());
+		BOOST_CHECK_EQUAL(found_entity, function_a_b_f);
 	}
 }
 

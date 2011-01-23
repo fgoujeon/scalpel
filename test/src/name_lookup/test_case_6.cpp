@@ -85,85 +85,85 @@ BOOST_AUTO_TEST_CASE(test_case_6)
 	auto namespace_ab = new namespace_("ab");
 
 	//functions
-	auto function_y_f = std::make_shared<simple_function>
+	auto function_y_f = new simple_function
 	(
 		"f",
 		fundamental_type::VOID
 	);
-	auto function_y_h = std::make_shared<simple_function>
+	auto function_y_h = new simple_function
 	(
 		"h",
 		fundamental_type::VOID
 	);
-	auto function_z_h = std::make_shared<simple_function>
+	auto function_z_h = new simple_function
 	(
 		"h",
 		fundamental_type::VOID
 	);
-	auto function_a_f = std::make_shared<simple_function>
+	auto function_a_f = new simple_function
 	(
 		"f",
 		fundamental_type::VOID
 	);
-	auto function_a_g = std::make_shared<simple_function>
+	auto function_a_g = new simple_function
 	(
 		"g",
 		fundamental_type::VOID
 	);
-	auto function_b_f = std::make_shared<simple_function>
+	auto function_b_f = new simple_function
 	(
 		"f",
 		fundamental_type::VOID
 	);
-	auto function_ab_g = std::make_shared<simple_function>
+	auto function_ab_g = new simple_function
 	(
 		"g",
 		fundamental_type::VOID
 	);
-	auto function_test = std::make_shared<simple_function>
+	auto function_test = new simple_function
 	(
 		"test",
 		fundamental_type::VOID
 	);
 
 	//variables
-	auto variable_x = std::make_shared<variable>
+	auto variable_x = new variable
 	(
 		"x",
 		fundamental_type::INT
 	);
-	auto variable_a_i = std::make_shared<variable>
+	auto variable_a_i = new variable
 	(
 		"i",
 		fundamental_type::INT
 	);
-	auto variable_b_i = std::make_shared<variable>
+	auto variable_b_i = new variable
 	(
 		"i",
 		fundamental_type::INT
 	);
 
 	//assembling
-	semantic_graph.add_member(variable_x);
+	semantic_graph.add_member(std::unique_ptr<variable>(variable_x));
 	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_y));
-	namespace_y->add_member(function_y_f);
-	namespace_y->add_member(function_y_h);
+	namespace_y->add_member(std::unique_ptr<simple_function>(function_y_f));
+	namespace_y->add_member(std::unique_ptr<simple_function>(function_y_h));
 	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_z));
-	namespace_z->add_member(function_z_h);
+	namespace_z->add_member(std::unique_ptr<simple_function>(function_z_h));
 	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_a));
 	//namespace_a->add_using_directive_namespace(*namespace_y);
-	namespace_a->add_member(function_a_f);
-	namespace_a->add_member(function_a_g);
-	namespace_a->add_member(variable_a_i);
+	namespace_a->add_member(std::unique_ptr<simple_function>(function_a_f));
+	namespace_a->add_member(std::unique_ptr<simple_function>(function_a_g));
+	namespace_a->add_member(std::unique_ptr<variable>(variable_a_i));
 	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_b));
 	//namespace_b->add_using_directive_namespace(*namespace_z);
-	namespace_b->add_member(function_b_f);
-	namespace_b->add_member(variable_b_i);
+	namespace_b->add_member(std::unique_ptr<simple_function>(function_b_f));
+	namespace_b->add_member(std::unique_ptr<variable>(variable_b_i));
 	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_ab));
 	//namespace_ab->add_using_directive_namespace(*namespace_a);
 	//namespace_ab->add_using_directive_namespace(*namespace_b);
-	namespace_ab->add_member(function_ab_g);
-	semantic_graph.add_member(function_test);
+	namespace_ab->add_member(std::unique_ptr<simple_function>(function_ab_g));
+	semantic_graph.add_member(std::unique_ptr<simple_function>(function_test));
 
 
 
@@ -186,11 +186,11 @@ BOOST_AUTO_TEST_CASE(test_case_6)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"g",
-				function_test.get()
+				function_test
 			)
 		;
 
-		BOOST_CHECK_EQUAL(found_entity, function_ab_g.get());
+		BOOST_CHECK_EQUAL(found_entity, function_ab_g);
 	}
 
 	//look up ab::f() from function test, must find a::f() and b::f()
@@ -208,7 +208,7 @@ BOOST_AUTO_TEST_CASE(test_case_6)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"f",
-				function_test.get()
+				function_test
 			)
 		;
 
@@ -217,11 +217,11 @@ BOOST_AUTO_TEST_CASE(test_case_6)
 		{
 			BOOST_CHECK
 			(
-				std::find(found_entities.begin(), found_entities.end(), function_a_f.get()) != found_entities.end()
+				std::find(found_entities.begin(), found_entities.end(), function_a_f) != found_entities.end()
 			);
 			BOOST_CHECK
 			(
-				std::find(found_entities.begin(), found_entities.end(), function_b_f.get()) != found_entities.end()
+				std::find(found_entities.begin(), found_entities.end(), function_b_f) != found_entities.end()
 			);
 		}
 	}
@@ -241,7 +241,7 @@ BOOST_AUTO_TEST_CASE(test_case_6)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"x",
-				function_test.get()
+				function_test
 			)
 		;
 		BOOST_CHECK(!found_entity);
@@ -262,7 +262,7 @@ BOOST_AUTO_TEST_CASE(test_case_6)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"i",
-				function_test.get()
+				function_test
 			)
 		;
 
@@ -271,11 +271,11 @@ BOOST_AUTO_TEST_CASE(test_case_6)
 		{
 			BOOST_CHECK
 			(
-				std::find(found_entities.begin(), found_entities.end(), variable_a_i.get()) != found_entities.end()
+				std::find(found_entities.begin(), found_entities.end(), variable_a_i) != found_entities.end()
 			);
 			BOOST_CHECK
 			(
-				std::find(found_entities.begin(), found_entities.end(), variable_b_i.get()) != found_entities.end()
+				std::find(found_entities.begin(), found_entities.end(), variable_b_i) != found_entities.end()
 			);
 		}
 	}
@@ -295,15 +295,15 @@ BOOST_AUTO_TEST_CASE(test_case_6)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"h",
-				function_test.get()
+				function_test
 			)
 		;
 
 		BOOST_CHECK_EQUAL(found_entities.size(), 2);
 		if(found_entities.size() == 2)
 		{
-			BOOST_CHECK(found_entities.find(function_y_h.get()) != found_entities.end());
-			BOOST_CHECK(found_entities.find(function_z_h.get()) != found_entities.end());
+			BOOST_CHECK(found_entities.find(function_y_h) != found_entities.end());
+			BOOST_CHECK(found_entities.find(function_z_h) != found_entities.end());
 		}
 	}
 }

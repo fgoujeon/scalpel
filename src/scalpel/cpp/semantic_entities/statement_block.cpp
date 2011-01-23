@@ -58,22 +58,22 @@ statement_block::namespace_aliases() const
 //}
 
 void
-statement_block::add_member(std::shared_ptr<statement_block> member)
+statement_block::add_member(std::unique_ptr<statement_block>&& member)
 {
-	statement_blocks_.push_back(member);
+	statement_blocks_.push_back(std::move(member));
 }
 
 void
-statement_block::add_member(std::shared_ptr<variable> member)
+statement_block::add_member(std::unique_ptr<variable>&& member)
 {
-	variables_.push_back(member);
+	variables_.push_back(std::move(member));
 }
 
 void
-statement_block::add_member(std::shared_ptr<namespace_alias> member)
+statement_block::add_member(std::unique_ptr<namespace_alias>&& member)
 {
-    namespace_aliases_.push_back(member);
 	open_declarative_regions_.push_back(member.get());
+    namespace_aliases_.push_back(std::move(member));
 }
 
 //void

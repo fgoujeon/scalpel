@@ -68,32 +68,32 @@ BOOST_AUTO_TEST_CASE(test_case_5)
 	auto namespace_d = new namespace_("d");
 
 	//variables
-	auto variable_a_i = std::make_shared<variable>
+	auto variable_a_i = new variable
 	(
 		"i",
 		fundamental_type::INT
 	);
-	auto variable_b_i = std::make_shared<variable>
+	auto variable_b_i = new variable
 	(
 		"i",
 		fundamental_type::INT
 	);
-	auto variable_b_j = std::make_shared<variable>
+	auto variable_b_j = new variable
 	(
 		"j",
 		fundamental_type::INT
 	);
-	auto variable_c_k = std::make_shared<variable>
+	auto variable_c_k = new variable
 	(
 		"k",
 		fundamental_type::INT
 	);
-	auto variable_d_j = std::make_shared<variable>
+	auto variable_d_j = new variable
 	(
 		"j",
 		fundamental_type::INT
 	);
-	auto variable_d_k = std::make_shared<variable>
+	auto variable_d_k = new variable
 	(
 		"k",
 		fundamental_type::INT
@@ -101,17 +101,17 @@ BOOST_AUTO_TEST_CASE(test_case_5)
 
 	//assembling
 	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_a));
-	namespace_a->add_member(variable_a_i);
+	namespace_a->add_member(std::unique_ptr<variable>(variable_a_i));
 	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_b));
-	namespace_b->add_member(variable_b_i);
-	namespace_b->add_member(variable_b_j);
+	namespace_b->add_member(std::unique_ptr<variable>(variable_b_i));
+	namespace_b->add_member(std::unique_ptr<variable>(variable_b_j));
 	namespace_b->add_member(std::unique_ptr<namespace_>(namespace_c));
 	namespace_c->add_member(std::unique_ptr<namespace_>(namespace_d));
 	//namespace_d->add_using_directive_namespace(*namespace_a);
-	namespace_d->add_member(variable_d_j);
-	namespace_d->add_member(variable_d_k);
+	namespace_d->add_member(std::unique_ptr<variable>(variable_d_j));
+	namespace_d->add_member(std::unique_ptr<variable>(variable_d_k));
 	//namespace_c->add_using_directive_namespace(*namespace_d);
-	namespace_c->add_member(variable_c_k);
+	namespace_c->add_member(std::unique_ptr<variable>(variable_c_k));
 
 
 
@@ -122,7 +122,7 @@ BOOST_AUTO_TEST_CASE(test_case_5)
 	//look up i from namespace d, must find b::i
 	{
 		auto found_entity = find<identification_policies::by_name, false, false, variable>("i", namespace_d);
-		BOOST_CHECK_EQUAL(found_entity, variable_b_i.get());
+		BOOST_CHECK_EQUAL(found_entity, variable_b_i);
 	}
 
 	//look up k from namespace c, must find c::k and d::k
@@ -131,21 +131,21 @@ BOOST_AUTO_TEST_CASE(test_case_5)
 		BOOST_CHECK_EQUAL(found_entities.size(), 2);
 		if(found_entities.size() == 2)
 		{
-			BOOST_CHECK(found_entities.find(variable_c_k.get()) != found_entities.end());
-			BOOST_CHECK(found_entities.find(variable_d_k.get()) != found_entities.end());
+			BOOST_CHECK(found_entities.find(variable_c_k) != found_entities.end());
+			BOOST_CHECK(found_entities.find(variable_d_k) != found_entities.end());
 		}
 	}
 
 	//look up i from namespace c, must find b::i
 	{
 		auto found_entity = find<identification_policies::by_name, false, false, variable>("i", namespace_c);
-		BOOST_CHECK_EQUAL(found_entity, variable_b_i.get());
+		BOOST_CHECK_EQUAL(found_entity, variable_b_i);
 	}
 
 	//look up j from namespace c, must find d::j
 	{
 		auto found_entity = find<identification_policies::by_name, false, false, variable>("j", namespace_c);
-		BOOST_CHECK_EQUAL(found_entity, variable_d_j.get());
+		BOOST_CHECK_EQUAL(found_entity, variable_d_j);
 	}
 }
 

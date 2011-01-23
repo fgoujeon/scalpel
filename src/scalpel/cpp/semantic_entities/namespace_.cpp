@@ -198,38 +198,38 @@ namespace_::add_member(std::unique_ptr<enum_>&& member)
 }
 
 void
-namespace_::add_member(std::shared_ptr<typedef_> member)
+namespace_::add_member(std::unique_ptr<typedef_>&& member)
 {
 	member->enclosing_declarative_region(static_cast<namespace_*>(this));
-    typedefs_.push_back(member);
+    typedefs_.push_back(std::move(member));
 }
 
 void
-namespace_::add_member(std::shared_ptr<simple_function> member)
+namespace_::add_member(std::unique_ptr<simple_function>&& member)
 {
 	member->enclosing_declarative_region(static_cast<namespace_*>(this));
-    simple_functions_.push_back(member);
+    simple_functions_.push_back(std::move(member));
 }
 
 void
-namespace_::add_member(std::shared_ptr<operator_function> member)
+namespace_::add_member(std::unique_ptr<operator_function>&& member)
 {
 	member->enclosing_declarative_region(static_cast<namespace_*>(this));
-    operator_functions_.push_back(member);
+    operator_functions_.push_back(std::move(member));
 }
 
 void
-namespace_::add_member(std::shared_ptr<variable> member)
+namespace_::add_member(std::unique_ptr<variable>&& member)
 {
 	member->enclosing_declarative_region(static_cast<namespace_*>(this));
-    variables_.push_back(member);
+    variables_.push_back(std::move(member));
 }
 
 void
-namespace_::add_member(std::shared_ptr<namespace_alias> member)
+namespace_::add_member(std::unique_ptr<namespace_alias>&& member)
 {
-    namespace_aliases_.push_back(member);
 	open_declarative_regions_.push_back(member.get());
+    namespace_aliases_.push_back(std::move(member));
 }
 
 //void

@@ -64,48 +64,48 @@ BOOST_AUTO_TEST_CASE(test_case_1)
 
 	scalpel::cpp::semantic_graph semantic_graph;
 	auto namespace_a = new namespace_("A");
-	auto variable_a_i = std::make_shared<variable>
+	auto variable_a_i = new variable
 	(
 		"i",
 		fundamental_type::INT
 	);
 	auto struct_a_b = new class_("B");
-	auto function_a_b_f = std::make_shared<simple_member_function>
+	auto function_a_b_f = new simple_member_function
 	(
 		"f",
 		fundamental_type::VOID
 	);
-	auto function_a_g = std::make_shared<simple_function>
+	auto function_a_g = new simple_function
 	(
 		"g",
 		fundamental_type::VOID
 	);
 	auto namespace_a_c = new namespace_("C");
-	auto variable_a_c_n = std::make_shared<variable>
+	auto variable_a_c_n = new variable
 	(
 		"n",
 		fundamental_type::INT
 	);
-	auto variable_i = std::make_shared<variable>
+	auto variable_i = new variable
 	(
 		"i",
 		fundamental_type::INT
 	);
-	auto variable_j = std::make_shared<variable>
+	auto variable_j = new variable
 	(
 		"j",
 		fundamental_type::INT
 	);
 
 	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_a));
-	namespace_a->add_member(variable_a_i);
+	namespace_a->add_member(std::unique_ptr<variable>(variable_a_i));
 	namespace_a->add_member(std::unique_ptr<class_>(struct_a_b));
-	struct_a_b->add_member(function_a_b_f);
-	namespace_a->add_member(function_a_g);
+	struct_a_b->add_member(std::unique_ptr<simple_member_function>(function_a_b_f));
+	namespace_a->add_member(std::unique_ptr<simple_function>(function_a_g));
 	namespace_a->add_member(std::unique_ptr<namespace_>(namespace_a_c));
-	namespace_a_c->add_member(variable_a_c_n);
-	semantic_graph.add_member(variable_i);
-	semantic_graph.add_member(variable_j);
+	namespace_a_c->add_member(std::unique_ptr<variable>(variable_a_c_n));
+	semantic_graph.add_member(std::unique_ptr<variable>(variable_i));
+	semantic_graph.add_member(std::unique_ptr<variable>(variable_j));
 
 
 
@@ -115,14 +115,14 @@ BOOST_AUTO_TEST_CASE(test_case_1)
 
 	//lookup i from function test, must find it
 	{
-		variable* found_entity = find<identification_policies::by_name, false, false, variable>("i", function_a_b_f.get());
-		BOOST_CHECK_EQUAL(found_entity, variable_a_i.get());
+		variable* found_entity = find<identification_policies::by_name, false, false, variable>("i", function_a_b_f);
+		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
 	}
 
 	//lookup j from function test, must find it
 	{
-		auto found_entity = find<identification_policies::by_name, false, false, variable>("j", function_a_b_f.get());
-		BOOST_CHECK_EQUAL(found_entity, variable_j.get());
+		auto found_entity = find<identification_policies::by_name, false, false, variable>("j", function_a_b_f);
+		BOOST_CHECK_EQUAL(found_entity, variable_j);
 	}
 
 	//lookup B from itself, must find it
@@ -146,10 +146,10 @@ BOOST_AUTO_TEST_CASE(test_case_1)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"n",
-				function_a_b_f.get()
+				function_a_b_f
 			)
 		;
-		BOOST_CHECK_EQUAL(found_entity, variable_a_c_n.get());
+		BOOST_CHECK_EQUAL(found_entity, variable_a_c_n);
 	}
 
 	//lookup ::A::i from function test, must find it
@@ -167,10 +167,10 @@ BOOST_AUTO_TEST_CASE(test_case_1)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"i",
-				function_a_b_f.get()
+				function_a_b_f
 			)
 		;
-		BOOST_CHECK_EQUAL(found_entity, variable_a_i.get());
+		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
 	}
 
 	//lookup ::i from function test, must find it
@@ -181,10 +181,10 @@ BOOST_AUTO_TEST_CASE(test_case_1)
 				true,
 				optional_node<nested_name_specifier>(),
 				"i",
-				function_a_b_f.get()
+				function_a_b_f
 			)
 		;
-		BOOST_CHECK_EQUAL(found_entity, variable_i.get());
+		BOOST_CHECK_EQUAL(found_entity, variable_i);
 	}
 
 	//lookup namespace A::C from function test, must find it
@@ -202,7 +202,7 @@ BOOST_AUTO_TEST_CASE(test_case_1)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"C",
-				function_a_b_f.get()
+				function_a_b_f
 			)
 		;
 		BOOST_CHECK_EQUAL(found_entity, namespace_a_c);

@@ -32,7 +32,7 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 using namespace syntax_nodes;
 using namespace semantic_entities;
 
-declarator_entity_shared_ptr_variant
+declarator_entity_ptr_variant
 create_entity
 (
 	const syntax_nodes::declarator& declarator_node,
@@ -57,7 +57,7 @@ create_entity
 				{
 					opt_type = qualify_type(*opt_type, declarator_node, current_declarative_region);
 
-					return std::make_shared<semantic_entities::typedef_>
+					return new typedef_
 					(
 						syntax_node_analysis::get_identifier(declarator_node).value(),
 						*opt_type
@@ -69,7 +69,7 @@ create_entity
 					{
 						opt_type = qualify_type(*opt_type, declarator_node, current_declarative_region);
 
-						return std::make_shared<semantic_entities::variable>
+						return new variable
 						(
 							syntax_node_analysis::get_identifier(declarator_node).value(),
 							*opt_type,
@@ -82,7 +82,7 @@ create_entity
 
 						if(is_class_member)
 						{
-							return std::make_shared<semantic_entities::simple_member_function>
+							return new simple_member_function
 							(
 								syntax_node_analysis::get_identifier(declarator_node).value(),
 								*opt_type,
@@ -98,7 +98,7 @@ create_entity
 						}
 						else
 						{
-							return std::make_shared<semantic_entities::simple_function>
+							return new simple_function
 							(
 								syntax_node_analysis::get_identifier(declarator_node).value(),
 								*opt_type,
@@ -116,7 +116,7 @@ create_entity
 				if(!is_class_member)
 					throw std::runtime_error("create_entity error: a constructor must be a class member");
 
-				return std::make_shared<semantic_entities::constructor>
+				return new constructor
 				(
 					create_parameters(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
 					syntax_node_analysis::has_ellipsis(declarator_node),
@@ -133,7 +133,7 @@ create_entity
 			if(!is_class_member)
 				throw std::runtime_error("create_entity error: a destructor must be a class member");
 
-			return std::make_shared<semantic_entities::destructor>
+			return new destructor
 			(
 				has_inline_specifier,
 				has_virtual_specifier,
@@ -149,7 +149,7 @@ create_entity
 
 			if(is_class_member)
 			{
-				return std::make_shared<operator_member_function>
+				return new operator_member_function
 				(
 					get_operator_function_operator(declarator_node),
 					*opt_type,
@@ -163,7 +163,7 @@ create_entity
 			}
 			else
 			{
-				return std::make_shared<operator_function>
+				return new operator_function
 				(
 					get_operator_function_operator(declarator_node),
 					*opt_type,
@@ -181,7 +181,7 @@ create_entity
 			if(!is_class_member)
 				throw std::runtime_error("create_entity error: a conversion function must be a class member");
 
-			return std::make_shared<semantic_entities::conversion_function>
+			return new conversion_function
 			(
 				get_conversion_function_type(declarator_node, current_declarative_region),
 				has_inline_specifier,
@@ -200,7 +200,7 @@ create_entity
 
 			if(has_typedef_specifier)
 			{
-				return std::make_shared<semantic_entities::typedef_>
+				return new semantic_entities::typedef_
 				(
 					syntax_node_analysis::get_identifier(declarator_node).value(),
 					*opt_type
@@ -223,13 +223,13 @@ create_entity
 						const type_variant& parameter_type = *i;
 						parameter_list.push_back
 						(
-							std::make_shared<function_parameter>(parameter_type)
+							std::unique_ptr<function_parameter>(new function_parameter(parameter_type))
 						);
 					}
 
 					if(is_class_member)
 					{
-						return std::make_shared<semantic_entities::simple_member_function>
+						return new simple_member_function
 						(
 							syntax_node_analysis::get_identifier(declarator_node).value(),
 							ftype.return_type(),
@@ -245,7 +245,7 @@ create_entity
 					}
 					else
 					{
-						return std::make_shared<semantic_entities::simple_function>
+						return new simple_function
 						(
 							syntax_node_analysis::get_identifier(declarator_node).value(),
 							ftype.return_type(),
@@ -258,7 +258,7 @@ create_entity
 				}
 				else
 				{
-					return std::make_shared<semantic_entities::variable>
+					return new variable
 					(
 						syntax_node_analysis::get_identifier(declarator_node).value(),
 						*opt_type,
@@ -272,7 +272,7 @@ create_entity
 	throw std::runtime_error("create_entity error 5");
 }
 
-std::shared_ptr<namespace_alias>
+std::unique_ptr<namespace_alias>
 create_namespace_alias
 (
 	const syntax_nodes::namespace_alias_definition& namespace_alias_definition_node,
@@ -324,10 +324,13 @@ create_namespace_alias
 	namespace_& found_namespace = semantic_entity_analysis::get_namespace(found_entity);
 
 	//create the namespace alias semantic entity
-	return std::make_shared<namespace_alias>
+	return std::unique_ptr<namespace_alias>
 	(
-		get_identifier(namespace_alias_definition_node).value(),
-		found_namespace
+		new namespace_alias
+		(
+			get_identifier(namespace_alias_definition_node).value(),
+			found_namespace
+		)
 	);
 }
 

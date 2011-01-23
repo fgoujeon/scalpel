@@ -25,7 +25,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "type_variant_fwd.hpp"
 #include "detail/declarative_region_member_impl.hpp"
 #include <scalpel/utility/unique_ptr_vector.hpp>
-#include <scalpel/utility/shared_ptr_vector.hpp>
+#include <scalpel/utility/unique_ptr_vector.hpp>
 #include <scalpel/utility/const_ptr_variant.hpp>
 #include <string>
 #include <vector>
@@ -71,12 +71,12 @@ class class_
 
 		typedef utility::unique_ptr_vector<class_> classes_t;
 		typedef utility::unique_ptr_vector<enum_> enums_t;
-		typedef utility::shared_ptr_vector<typedef_> typedefs_t;
-		typedef utility::shared_ptr_vector<constructor> constructors_t;
-		typedef utility::shared_ptr_vector<operator_member_function> operator_functions_t;
-		typedef utility::shared_ptr_vector<conversion_function> conversion_functions_t;
-		typedef utility::shared_ptr_vector<simple_member_function> simple_functions_t;
-		typedef utility::shared_ptr_vector<variable> variables_t;
+		typedef utility::unique_ptr_vector<typedef_> typedefs_t;
+		typedef utility::unique_ptr_vector<constructor> constructors_t;
+		typedef utility::unique_ptr_vector<operator_member_function> operator_functions_t;
+		typedef utility::unique_ptr_vector<conversion_function> conversion_functions_t;
+		typedef utility::unique_ptr_vector<simple_member_function> simple_functions_t;
+		typedef utility::unique_ptr_vector<variable> variables_t;
 
 		typedef std::vector<class_*> class_ptrs_t;
 		typedef std::vector<const variable*> variable_ptrs_t;
@@ -161,10 +161,10 @@ class class_
 		const constructors_t&
 		constructors() const;
 
-		std::shared_ptr<destructor>
+		destructor&
 		get_destructor();
 
-		std::shared_ptr<const destructor>
+		const destructor&
 		get_destructor() const;
 
 		simple_functions_t::range
@@ -212,15 +212,15 @@ class class_
 		add_member(std::unique_ptr<enum_>&& member, const access acc = access::PUBLIC);
 
         void
-        add_member(std::shared_ptr<typedef_> member, const access acc = access::PUBLIC);
+        add_member(std::unique_ptr<typedef_>&& member, const access acc = access::PUBLIC);
 
         void
-        add_member(std::shared_ptr<constructor> member, const access acc = access::PUBLIC);
+        add_member(std::unique_ptr<constructor>&& member, const access acc = access::PUBLIC);
 
 		void
 		set_destructor
 		(
-			std::shared_ptr<destructor> member,
+			std::unique_ptr<destructor>&& member,
 			const access acc = access::PUBLIC
 		);
 
@@ -230,28 +230,28 @@ class class_
         void
         add_member
 		(
-			std::shared_ptr<simple_member_function> member,
+			std::unique_ptr<simple_member_function>&& member,
 			const access acc = access::PUBLIC
 		);
 
         void
         add_member
 		(
-			std::shared_ptr<operator_member_function> member,
+			std::unique_ptr<operator_member_function>&& member,
 			const access acc = access::PUBLIC
 		);
 
         void
         add_member
 		(
-			std::shared_ptr<conversion_function> member,
+			std::unique_ptr<conversion_function>&& member,
 			const access acc = access::PUBLIC
 		);
 
 		void
 		add_member
 		(
-			std::shared_ptr<variable> member,
+			std::unique_ptr<variable>&& member,
 			const access acc = access::PUBLIC,
 			const bool is_mutable = false
 		);
@@ -290,7 +290,7 @@ class class_
 		enums_t enums_;
 		typedefs_t typedefs_;
 		constructors_t constructors_;
-		std::shared_ptr<destructor> destructor_;
+		std::unique_ptr<destructor> destructor_;
 		simple_functions_t simple_functions_;
 		operator_functions_t operator_functions_;
 		conversion_functions_t conversion_functions_;

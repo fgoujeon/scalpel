@@ -87,8 +87,8 @@ fill_namespace
 			//else if(const boost::optional<const asm_definition&> opt_asm_definition_node = get<asm_definition>(&block_declaration_node))
 			else if(const boost::optional<const namespace_alias_definition&> opt_namespace_alias_definition_node = get<namespace_alias_definition>(&block_declaration_node))
 			{
-				std::shared_ptr<namespace_alias> new_namespace_alias = create_namespace_alias(*opt_namespace_alias_definition_node, namespace_entity);
-				namespace_entity.add_member(new_namespace_alias);
+				std::unique_ptr<namespace_alias> new_namespace_alias = create_namespace_alias(*opt_namespace_alias_definition_node, namespace_entity);
+				namespace_entity.add_member(std::move(new_namespace_alias));
 			}
 			//else if(const boost::optional<const using_declaration&> opt_using_declaration_node = get<using_declaration>(&block_declaration_node))
 			else if(const boost::optional<const using_directive&> opt_using_directive_node = get<using_directive>(&block_declaration_node))
@@ -233,7 +233,7 @@ fill_namespace
 			const init_declarator& init_declarator_node = i->main_node();
 			const declarator& declarator_node = get_declarator(init_declarator_node);
 
-			declarator_entity_shared_ptr_variant declarator_entity = create_entity
+			declarator_entity_ptr_variant declarator_entity = create_entity
 			(
 				declarator_node,
 				&namespace_entity,
@@ -248,13 +248,13 @@ fill_namespace
 			);
 
 			if(auto opt_simple_function_entity = get<simple_function>(&declarator_entity))
-				namespace_entity.add_member(*opt_simple_function_entity);
+				namespace_entity.add_member(std::unique_ptr<simple_function>(*opt_simple_function_entity));
 			else if(auto opt_operator_function_entity = get<operator_function>(&declarator_entity))
-				namespace_entity.add_member(*opt_operator_function_entity);
+				namespace_entity.add_member(std::unique_ptr<operator_function>(*opt_operator_function_entity));
 			else if(auto opt_variable_entity = get<variable>(&declarator_entity))
-				namespace_entity.add_member(*opt_variable_entity);
+				namespace_entity.add_member(std::unique_ptr<variable>(*opt_variable_entity));
 			else if(auto opt_typedef_entity = get<typedef_>(&declarator_entity))
-				namespace_entity.add_member(*opt_typedef_entity);
+				namespace_entity.add_member(std::unique_ptr<typedef_>(*opt_typedef_entity));
 			else
 				assert(false);
 		}
@@ -292,7 +292,7 @@ fill_namespace
 	const bool is_class_member = utility::get<class_>(&function_declarative_region);
 
 	//create an empty function corresponding to the function-definition
-	function_shared_ptr_variant function_entity = create_function
+	function_ptr_variant function_entity = create_function
 	(
 		function_definition_node,
 		&namespace_entity,
@@ -307,7 +307,7 @@ fill_namespace
 	boost::optional<function_ptr_variant> opt_already_existing_function_entity =
 		find_function
 		(
-			to_function_ptr_variant(function_entity),
+			function_entity,
 			function_declarative_region
 		)
 	;
@@ -346,16 +346,16 @@ fill_namespace
 				std::runtime_error("error: this function must be a nonstatic member function");
 			}
 			else if(auto opt_operator_function_entity = get<operator_function>(&function_entity))
-				namespace_entity.add_member(*opt_operator_function_entity);
+				namespace_entity.add_member(std::unique_ptr<operator_function>(*opt_operator_function_entity));
 			else if(auto opt_simple_function_entity = get<simple_function>(&function_entity))
-				namespace_entity.add_member(*opt_simple_function_entity);
+				namespace_entity.add_member(std::unique_ptr<simple_function>(*opt_simple_function_entity));
 			else
 				assert(false);
 
 			//define the function
 			define_function
 			(
-				to_function_ptr_variant(function_entity),
+				function_entity,
 				function_definition_node,
 				&namespace_entity
 			);

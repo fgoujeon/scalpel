@@ -32,25 +32,7 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 using namespace syntax_nodes;
 using namespace semantic_entities;
 
-struct: public utility::static_visitor<function_ptr_variant>
-{
-	template<class T>
-	function_ptr_variant
-	operator()(const std::shared_ptr<T>& function_entity) const
-	{
-		return function_ptr_variant(function_entity.get());
-	}
-} to_function_ptr_variant_visitor;
-
 function_ptr_variant
-to_function_ptr_variant(const function_shared_ptr_variant& var)
-{
-	return utility::apply_visitor(to_function_ptr_variant_visitor, var);
-}
-
-
-
-function_shared_ptr_variant
 create_function
 (
 	const syntax_nodes::function_definition& function_definition_node,
@@ -130,7 +112,7 @@ create_function
 	//Analyze the declarator node.
 	//
 
-	declarator_entity_shared_ptr_variant declarator_entity = create_entity
+	declarator_entity_ptr_variant declarator_entity = create_entity
 	(
 		syntax_node_analysis::get_declarator(function_definition_node),
 		current_declarative_region,
@@ -173,7 +155,7 @@ class define_function_visitor: public utility::static_visitor<void>
 			if(function_entity->defined())
 				throw std::runtime_error("error: the function is already defined");
 
-			function_entity->body(std::make_shared<semantic_entities::statement_block>());
+			function_entity->body(std::unique_ptr<statement_block>(new statement_block()));
 		}
 };
 
@@ -418,10 +400,13 @@ create_parameters
 
 			parameters.push_back
 			(
-				std::make_shared<function_parameter>
+				std::unique_ptr<function_parameter>
 				(
-					qualify_type(type, declarator_node, current_declarative_region),
-					syntax_node_analysis::get_identifier(declarator_node).value()
+					new function_parameter
+					(
+						qualify_type(type, declarator_node, current_declarative_region),
+						syntax_node_analysis::get_identifier(declarator_node).value()
+					)
 				)
 			);
 		}
@@ -431,9 +416,12 @@ create_parameters
 
 			parameters.push_back
 			(
-				std::make_shared<function_parameter>
+				std::unique_ptr<function_parameter>
 				(
-					qualify_type(type, abstract_declarator_node, current_declarative_region)
+					new function_parameter
+					(
+						qualify_type(type, abstract_declarator_node, current_declarative_region)
+					)
 				)
 			);
 		}
@@ -453,10 +441,12 @@ create_parameters
 			{
 				parameters.push_back
 				(
-					std::make_shared<function_parameter>
+					std::unique_ptr<function_parameter>
 					(
-						type,
-						""
+						new function_parameter
+						(
+							type
+						)
 					)
 				);
 			}
@@ -493,7 +483,7 @@ create_parameter_types
 	std::vector<semantic_entities::type_variant> parameter_types;
 	for(auto i = parameters.begin(); i != parameters.end(); ++i)
 	{
-		const function_parameter& p = **i;
+		const function_parameter& p = *i;
 		parameter_types.push_back(p.type());
 	}
 

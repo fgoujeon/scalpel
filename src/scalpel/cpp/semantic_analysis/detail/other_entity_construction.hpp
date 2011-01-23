@@ -29,7 +29,7 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 {
 
 typedef
-	utility::shared_ptr_variant
+	utility::ptr_variant
 	<
 		semantic_entities::constructor,
 		semantic_entities::destructor,
@@ -41,11 +41,11 @@ typedef
 		semantic_entities::variable,
 		semantic_entities::typedef_
 	>::type
-	declarator_entity_shared_ptr_variant
+	declarator_entity_ptr_variant
 ;
 
 //Create variable/function/typedef/etc. corresponding to the given declarator.
-declarator_entity_shared_ptr_variant
+declarator_entity_ptr_variant
 create_entity
 (
 	const syntax_nodes::declarator& declarator_node,
@@ -60,7 +60,7 @@ create_entity
 	const bool is_class_member
 );
 
-std::shared_ptr<semantic_entities::namespace_alias>
+std::unique_ptr<semantic_entities::namespace_alias>
 create_namespace_alias
 (
 	const syntax_nodes::namespace_alias_definition& namespace_alias_definition_node,

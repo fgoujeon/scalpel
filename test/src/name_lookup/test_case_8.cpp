@@ -63,19 +63,19 @@ BOOST_AUTO_TEST_CASE(test_case_8)
 	auto namespace_b = new namespace_("b");
 
 	//functions
-	auto function_test = std::make_shared<simple_function>
+	auto function_test = new simple_function
 	(
 		"test",
 		fundamental_type::VOID
 	);
 
 	//variables
-	auto variable_b_i = std::make_shared<variable>
+	auto variable_b_i = new variable
 	(
 		"i",
 		fundamental_type::INT
 	);
-	auto variable_a_j = std::make_shared<variable>
+	auto variable_a_j = new variable
 	(
 		"j",
 		fundamental_type::INT
@@ -84,11 +84,11 @@ BOOST_AUTO_TEST_CASE(test_case_8)
 	//assembling
 	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_a));
 	//namespace_a->add_using_directive_namespace(*namespace_b);
-	namespace_a->add_member(variable_a_j);
+	namespace_a->add_member(std::unique_ptr<variable>(variable_a_j));
 	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_b));
 	//namespace_b->add_using_directive_namespace(*namespace_a);
-	namespace_b->add_member(variable_b_i);
-	semantic_graph.add_member(function_test);
+	namespace_b->add_member(std::unique_ptr<variable>(variable_b_i));
+	semantic_graph.add_member(std::unique_ptr<simple_function>(function_test));
 
 
 
@@ -111,10 +111,10 @@ BOOST_AUTO_TEST_CASE(test_case_8)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"j",
-				function_test.get()
+				function_test
 			)
 		;
-		BOOST_CHECK_EQUAL(found_entity, variable_a_j.get());
+		BOOST_CHECK_EQUAL(found_entity, variable_a_j);
 	}
 
 	//look up b::j from function test, must find a::j
@@ -132,10 +132,10 @@ BOOST_AUTO_TEST_CASE(test_case_8)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"j",
-				function_test.get()
+				function_test
 			)
 		;
-		BOOST_CHECK_EQUAL(found_entity, variable_a_j.get());
+		BOOST_CHECK_EQUAL(found_entity, variable_a_j);
 	}
 
 	//look up a::i from function test, must find b::i
@@ -153,10 +153,10 @@ BOOST_AUTO_TEST_CASE(test_case_8)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"i",
-				function_test.get()
+				function_test
 			)
 		;
-		BOOST_CHECK_EQUAL(found_entity, variable_b_i.get());
+		BOOST_CHECK_EQUAL(found_entity, variable_b_i);
 	}
 
 	//look up b::i from function test, must find b::i
@@ -174,10 +174,10 @@ BOOST_AUTO_TEST_CASE(test_case_8)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"i",
-				function_test.get()
+				function_test
 			)
 		;
-		BOOST_CHECK_EQUAL(found_entity, variable_b_i.get());
+		BOOST_CHECK_EQUAL(found_entity, variable_b_i);
 	}
 
 	//look up b::k from function test, must find nothing
@@ -195,7 +195,7 @@ BOOST_AUTO_TEST_CASE(test_case_8)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"k",
-				function_test.get()
+				function_test
 			)
 		;
 		BOOST_CHECK(!found_entity);

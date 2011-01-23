@@ -23,7 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <scalpel/utility/single_object_range.hpp>
-#include <scalpel/utility/shared_ptr_vector.hpp>
+#include <scalpel/utility/unique_ptr_vector.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail { namespace semantic_entity_analysis
 {
@@ -31,25 +31,7 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 template<class EntityT>
 struct get_members_return_type
 {
-	typedef typename utility::shared_ptr_vector<EntityT>::range type;
-};
-
-template<>
-struct get_members_return_type<semantic_entities::namespace_>
-{
-	typedef typename utility::unique_ptr_vector<semantic_entities::namespace_>::range type;
-};
-
-template<>
-struct get_members_return_type<semantic_entities::class_>
-{
-	typedef typename utility::unique_ptr_vector<semantic_entities::class_>::range type;
-};
-
-template<>
-struct get_members_return_type<semantic_entities::enum_>
-{
-	typedef typename utility::unique_ptr_vector<semantic_entities::enum_>::range type;
+	typedef typename utility::unique_ptr_vector<EntityT>::range type;
 };
 
 template<>
@@ -61,7 +43,7 @@ struct get_members_return_type<semantic_entities::open_declarative_region_ptr_va
 template<>
 struct get_members_return_type<semantic_entities::destructor>
 {
-	typedef utility::single_object_range<std::shared_ptr<semantic_entities::destructor>> type;
+	typedef utility::single_object_range<semantic_entities::destructor> type;
 };
 
 

@@ -160,7 +160,7 @@ semantic_graph_serializer::serialize_namespace
 	output_ << ">\n";
 
 	for(auto i = entity.namespace_aliases().begin(); i != entity.namespace_aliases().end(); ++i)
-		serialize_namespace_alias(**i, indent_level + 1);
+		serialize_namespace_alias(*i, indent_level + 1);
 
 	for(auto i = entity.namespaces().begin(); i != entity.namespaces().end(); ++i)
 		serialize_namespace(*i, indent_level + 1);
@@ -172,16 +172,16 @@ semantic_graph_serializer::serialize_namespace
 		serialize_enum(*i, indent_level + 1);
 
 	for(auto i = entity.typedefs().begin(); i != entity.typedefs().end(); ++i)
-		serialize_typedef(**i, indent_level + 1);
+		serialize_typedef(*i, indent_level + 1);
 
 	for(auto i = entity.simple_functions().begin(); i != entity.simple_functions().end(); ++i)
-		serialize_simple_function(**i, indent_level + 1);
+		serialize_simple_function(*i, indent_level + 1);
 
 	for(auto i = entity.operator_functions().begin(); i != entity.operator_functions().end(); ++i)
-		serialize_operator_function(**i, indent_level + 1);
+		serialize_operator_function(*i, indent_level + 1);
 
 	for(auto i = entity.variables().begin(); i != entity.variables().end(); ++i)
-		serialize_variable(**i, indent_level + 1);
+		serialize_variable(*i, indent_level + 1);
 
 	output_ << indent(indent_level) << "</namespace>\n";
 }
@@ -234,24 +234,24 @@ semantic_graph_serializer::serialize_class
 		serialize_enum(*i, indent_level + 1);
 
 	for(auto i = entity.typedefs().begin(); i != entity.typedefs().end(); ++i)
-		serialize_typedef(**i, indent_level + 1);
+		serialize_typedef(*i, indent_level + 1);
 
 	for(auto i = entity.constructors().begin(); i != entity.constructors().end(); ++i)
-		serialize_constructor(**i, indent_level + 1);
+		serialize_constructor(*i, indent_level + 1);
 
-	serialize_destructor(*entity.get_destructor(), indent_level + 1);
+	serialize_destructor(entity.get_destructor(), indent_level + 1);
 
 	for(auto i = entity.operator_functions().begin(); i != entity.operator_functions().end(); ++i)
-		serialize_operator_member_function(**i, indent_level + 1);
+		serialize_operator_member_function(*i, indent_level + 1);
 
 	for(auto i = entity.conversion_functions().begin(); i != entity.conversion_functions().end(); ++i)
-		serialize_conversion_function(**i, indent_level + 1);
+		serialize_conversion_function(*i, indent_level + 1);
 
 	for(auto i = entity.simple_functions().begin(); i != entity.simple_functions().end(); ++i)
-		serialize_simple_member_function(**i, indent_level + 1);
+		serialize_simple_member_function(*i, indent_level + 1);
 
 	for(auto i = entity.variables().begin(); i != entity.variables().end(); ++i)
-		serialize_variable(**i, indent_level + 1);
+		serialize_variable(*i, indent_level + 1);
 
 	output_ << indent(indent_level) << "</class>\n";
 }
@@ -288,10 +288,10 @@ semantic_graph_serializer::serialize_enum
 
 	for(auto i = entity.constants().begin(); i != entity.constants().end(); ++i)
 	{
-		const std::shared_ptr<const enum_::constant> constant = *i;
+		const enum_::constant& constant = *i;
 		output_ << indent(indent_level + 1) << "<constant";
-		output_ << " name=\"" << constant->name() << "\"";
-		output_ << " value=\"" << constant->value() << "\"";
+		output_ << " name=\"" << constant.name() << "\"";
+		output_ << " value=\"" << constant.value() << "\"";
 		output_ << ">\n";
 	}
 
@@ -572,7 +572,7 @@ semantic_graph_serializer::serialize_function_parameter_list
 		output_ << indent(indent_level) << "<parameters>\n";
 		for(auto i = entity.begin(); i != entity.end(); ++i)
 		{
-			serialize_function_parameter(**i, indent_level + 1);
+			serialize_function_parameter(*i, indent_level + 1);
 		}
 		output_ << indent(indent_level) << "</parameters>\n";
 	}

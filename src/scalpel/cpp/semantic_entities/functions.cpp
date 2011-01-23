@@ -106,22 +106,22 @@ CLASS_NAME::defined() const \
 	return body_.get(); \
 } \
  \
-std::shared_ptr<statement_block> \
+statement_block& \
 CLASS_NAME::body() \
 { \
-	return body_; \
+	return *body_; \
 } \
  \
-std::shared_ptr<const statement_block> \
+const statement_block& \
 CLASS_NAME::body() const \
 { \
-	return body_; \
+	return *body_; \
 } \
  \
 void \
-CLASS_NAME::body(std::shared_ptr<statement_block> b) \
+CLASS_NAME::body(std::unique_ptr<statement_block>&& b) \
 { \
-	body_ = b; \
+	body_ = std::move(b); \
 	body_->enclosing_declarative_region(static_cast<CLASS_NAME*>(this)); \
 } \
  \
@@ -178,8 +178,8 @@ namespace
 
 		for(auto i = parameters.begin(); i != parameters.end(); ++i)
 		{
-			const std::shared_ptr<const function_parameter>& param = *i;
-			type_variant param_type = param->type();
+			const function_parameter& param = *i;
+			type_variant param_type = param.type();
 
 			//remove cv-qualifiers
 			if(cv_qualified_type* opt_cv_qualified_type = utility::get<cv_qualified_type>(&param_type))

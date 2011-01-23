@@ -63,27 +63,27 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 	auto class_c = new class_("c");
 
 	//functions
-	auto c_constructor = std::make_shared<constructor>();
-	auto c_destructor = std::make_shared<destructor>();
-	auto c_operator_function_plus = std::make_shared<operator_member_function>
+	auto c_constructor = new constructor();
+	auto c_destructor = new destructor();
+	auto c_operator_function_plus = new operator_member_function
 	(
 		scalpel::cpp::semantic_entities::overloadable_operator::PLUS,
 		fundamental_type::BOOL
 	);
-	auto c_conversion_function_double_ptr = std::make_shared<conversion_function>
+	auto c_conversion_function_double_ptr = new conversion_function
 	(
 		pointer(fundamental_type::DOUBLE)
 	);
-	auto c_conversion_function_int_ptr = std::make_shared<conversion_function>
+	auto c_conversion_function_int_ptr = new conversion_function
 	(
 		pointer(fundamental_type::INT)
 	);
-	auto operator_function_not_equal = std::make_shared<operator_function>
+	auto operator_function_not_equal = new operator_function
 	(
 		scalpel::cpp::semantic_entities::overloadable_operator::EXCLAMATION_EQUAL,
 		fundamental_type::BOOL
 	);
-	auto operator_function_equal = std::make_shared<operator_function>
+	auto operator_function_equal = new operator_function
 	(
 		scalpel::cpp::semantic_entities::overloadable_operator::DOUBLE_EQUAL,
 		fundamental_type::BOOL
@@ -91,13 +91,13 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 
 	//assembling
 	semantic_graph.add_member(std::unique_ptr<class_>(class_c));
-	class_c->add_member(c_constructor);
-	class_c->set_destructor(c_destructor);
-	class_c->add_member(c_conversion_function_double_ptr);
-	class_c->add_member(c_conversion_function_int_ptr);
-	class_c->add_member(c_operator_function_plus);
-	semantic_graph.add_member(operator_function_not_equal);
-	semantic_graph.add_member(operator_function_equal);
+	class_c->add_member(std::unique_ptr<constructor>(c_constructor));
+	class_c->set_destructor(std::unique_ptr<destructor>(c_destructor));
+	class_c->add_member(std::unique_ptr<conversion_function>(c_conversion_function_double_ptr));
+	class_c->add_member(std::unique_ptr<conversion_function>(c_conversion_function_int_ptr));
+	class_c->add_member(std::unique_ptr<operator_member_function>(c_operator_function_plus));
+	semantic_graph.add_member(std::unique_ptr<operator_function>(operator_function_not_equal));
+	semantic_graph.add_member(std::unique_ptr<operator_function>(operator_function_equal));
 
 
 
@@ -114,7 +114,7 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 				&semantic_graph
 			)
 		;
-		BOOST_CHECK_EQUAL(found_entity, operator_function_equal.get());
+		BOOST_CHECK_EQUAL(found_entity, operator_function_equal);
 	}
 
 	//look up c::operator+() from global namespace, must find it
@@ -136,7 +136,7 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 				false
 			)
 		;
-		BOOST_CHECK_EQUAL(found_entity, c_operator_function_plus.get());
+		BOOST_CHECK_EQUAL(found_entity, c_operator_function_plus);
 	}
 
 	//look up c::c() from global namespace, must find it
@@ -158,7 +158,7 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 				false
 			)
 		;
-		BOOST_CHECK_EQUAL(found_entity, c_constructor.get());
+		BOOST_CHECK_EQUAL(found_entity, c_constructor);
 	}
 
 	//look up c::~c() from global namespace, must find it
@@ -180,7 +180,7 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 				false
 			)
 		;
-		BOOST_CHECK_EQUAL(found_entity, c_destructor.get());
+		BOOST_CHECK_EQUAL(found_entity, c_destructor);
 	}
 
 	//look up c::operator int*() from global namespace, must find it
@@ -202,7 +202,7 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 				false
 			)
 		;
-		BOOST_CHECK_EQUAL(found_entity, c_conversion_function_int_ptr.get());
+		BOOST_CHECK_EQUAL(found_entity, c_conversion_function_int_ptr);
 	}
 }
 

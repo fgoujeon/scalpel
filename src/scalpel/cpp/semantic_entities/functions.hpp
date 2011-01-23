@@ -53,8 +53,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 	HAS_VIRTUAL, \
 	HAS_EXPLICIT \
 ) \
-class CLASS_NAME: \
-	public std::enable_shared_from_this<CLASS_NAME> \
+class CLASS_NAME \
 { \
     public: \
 		CLASS_NAME \
@@ -200,14 +199,14 @@ class CLASS_NAME: \
 		bool \
 		defined() const; \
  \
-		std::shared_ptr<statement_block> \
+		statement_block& \
 		body(); \
  \
-		std::shared_ptr<const statement_block> \
+		const statement_block& \
 		body() const; \
  \
 		void \
-		body(std::shared_ptr<statement_block> b); \
+		body(std::unique_ptr<statement_block>&& b); \
  \
 		bool \
 		has_enclosing_declarative_region() const; \
@@ -271,7 +270,7 @@ class CLASS_NAME: \
 			HAS_EXPLICIT, \
 			bool is_explicit_;, \
 		) \
-		std::shared_ptr<statement_block> body_; \
+		std::unique_ptr<statement_block> body_; \
 		const utility::empty nothing_; \
  \
 		boost::optional<declarative_region_ptr_variant> enclosing_declarative_region_; \

@@ -31,7 +31,7 @@ single_object_range<T>::single_object_range():
 }
 
 template<typename T>
-single_object_range<T>::single_object_range(const T& object):
+single_object_range<T>::single_object_range(T& object):
 	object_(&object)
 {
 }
@@ -62,7 +62,7 @@ single_object_range<T>::iterator::iterator():
 }
 
 template<typename T>
-single_object_range<T>::iterator::iterator(const T& object):
+single_object_range<T>::iterator::iterator(T& object):
 	object_(&object)
 {
 }
@@ -90,7 +90,7 @@ single_object_range<T>::iterator::operator++()
 }
 
 template<typename T>
-const T&
+T&
 single_object_range<T>::iterator::operator*()
 {
 	return *object_;

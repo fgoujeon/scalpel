@@ -332,7 +332,7 @@ fill_class
 
 				const bool has_pure_specifier = syntax_node_analysis::has_pure_specifier(member_declarator_declarator_node);
 
-				declarator_entity_shared_ptr_variant declarator_entity = create_entity
+				declarator_entity_ptr_variant declarator_entity = create_entity
 				(
 					declarator_node,
 					&class_entity,
@@ -349,44 +349,44 @@ fill_class
 				if(auto opt_constructor_entity = get<constructor>(&declarator_entity))
 					class_entity.add_member
 					(
-						*opt_constructor_entity,
+						std::unique_ptr<constructor>(*opt_constructor_entity),
 						current_access
 					);
 				else if(auto opt_destructor_entity = get<destructor>(&declarator_entity))
 					class_entity.set_destructor
 					(
-						*opt_destructor_entity,
+						std::unique_ptr<destructor>(*opt_destructor_entity),
 						current_access
 					);
 				else if(auto opt_operator_function_entity = get<operator_member_function>(&declarator_entity))
 					class_entity.add_member
 					(
-						*opt_operator_function_entity,
+						std::unique_ptr<operator_member_function>(*opt_operator_function_entity),
 						current_access
 					);
 				else if(auto opt_conversion_function_entity = get<conversion_function>(&declarator_entity))
 					class_entity.add_member
 					(
-						*opt_conversion_function_entity,
+						std::unique_ptr<conversion_function>(*opt_conversion_function_entity),
 						current_access
 					);
 				else if(auto opt_simple_function_entity = get<simple_member_function>(&declarator_entity))
 					class_entity.add_member
 					(
-						*opt_simple_function_entity,
+						std::unique_ptr<simple_member_function>(*opt_simple_function_entity),
 						current_access
 					);
 				else if(auto opt_variable_entity = get<variable>(&declarator_entity))
 					class_entity.add_member
 					(
-						*opt_variable_entity,
+						std::unique_ptr<variable>(*opt_variable_entity),
 						current_access,
 						has_mutable_specifier
 					);
 				else if(auto opt_typedef_entity = get<typedef_>(&declarator_entity))
 					class_entity.add_member
 					(
-						*opt_typedef_entity,
+						std::unique_ptr<typedef_>(*opt_typedef_entity),
 						current_access
 					);
 				else
@@ -413,25 +413,25 @@ namespace
 
 			template<class T>
 			void
-			operator()(const std::shared_ptr<T>& function_entity) const
+			operator()(T* function_entity) const
 			{
-				class_entity_.add_member(function_entity, function_access_);
+				class_entity_.add_member(std::unique_ptr<T>(function_entity), function_access_);
 			}
 
 			void
-			operator()(const std::shared_ptr<destructor>& function_entity) const
+			operator()(destructor* function_entity) const
 			{
-				class_entity_.set_destructor(function_entity, function_access_);
+				class_entity_.set_destructor(std::unique_ptr<destructor>(function_entity), function_access_);
 			}
 
 			void
-			operator()(const std::shared_ptr<simple_function>&) const
+			operator()(simple_function*) const
 			{
 				assert(false);
 			}
 
 			void
-			operator()(const std::shared_ptr<operator_function>&) const
+			operator()(operator_function*) const
 			{
 				assert(false);
 			}
@@ -460,7 +460,7 @@ fill_class
 		throw std::runtime_error("error: invalid use of '::'");
 
 	//create the function
-	function_shared_ptr_variant function_entity = create_function
+	function_ptr_variant function_entity = create_function
 	(
 		function_definition_node,
 		&class_entity,
@@ -475,7 +475,7 @@ fill_class
 	//define the function
 	define_function
 	(
-		to_function_ptr_variant(function_entity),
+		function_entity,
 		function_definition_node,
 		&class_entity
 	);

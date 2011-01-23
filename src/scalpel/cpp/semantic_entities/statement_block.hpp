@@ -22,7 +22,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_STATEMENT_BLOCK_HPP
 
 #include "variable.hpp"
-#include <scalpel/utility/shared_ptr_vector.hpp>
+#include "namespace_alias.hpp"
+#include <scalpel/utility/unique_ptr_vector.hpp>
 #include <string>
 #include <memory>
 
@@ -41,9 +42,9 @@ class statement_block
 		typedef std::vector<open_declarative_region_ptr_variant> open_declarative_region_ptr_variants_t;
 
 		typedef std::vector<namespace_*> weak_namespaces_t;
-		typedef utility::shared_ptr_vector<statement_block> statement_blocks_t;
-		typedef utility::shared_ptr_vector<variable> variables_t;
-		typedef utility::shared_ptr_vector<namespace_alias> namespace_aliases_t;
+		typedef utility::unique_ptr_vector<statement_block> statement_blocks_t;
+		typedef utility::unique_ptr_vector<variable> variables_t;
+		typedef utility::unique_ptr_vector<namespace_alias> namespace_aliases_t;
 
         statement_block();
 
@@ -86,13 +87,13 @@ class statement_block
 		//using_directive_namespaces() const;
 
 		void
-		add_member(std::shared_ptr<statement_block> member);
+		add_member(std::unique_ptr<statement_block>&& member);
 
 		void
-		add_member(std::shared_ptr<variable> member);
+		add_member(std::unique_ptr<variable>&& member);
 
 		void
-		add_member(std::shared_ptr<namespace_alias> member);
+		add_member(std::unique_ptr<namespace_alias>&& member);
 
         //void
         //add_using_directive_namespace(namespace_& n);

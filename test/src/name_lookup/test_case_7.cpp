@@ -70,14 +70,14 @@ BOOST_AUTO_TEST_CASE(test_case_7)
 	auto namespace_bc = new namespace_("bc");
 
 	//functions
-	auto function_test = std::make_shared<simple_function>
+	auto function_test = new simple_function
 	(
 		"test",
 		fundamental_type::VOID
 	);
 
 	//variables
-	auto variable_a_i = std::make_shared<variable>
+	auto variable_a_i = new variable
 	(
 		"i",
 		fundamental_type::INT
@@ -85,7 +85,7 @@ BOOST_AUTO_TEST_CASE(test_case_7)
 
 	//assembling
 	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_a));
-	namespace_a->add_member(variable_a_i);
+	namespace_a->add_member(std::unique_ptr<variable>(variable_a_i));
 	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_b));
 	//namespace_b->add_using_directive_namespace(*namespace_a);
 	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_c));
@@ -93,7 +93,7 @@ BOOST_AUTO_TEST_CASE(test_case_7)
 	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_bc));
 	//namespace_bc->add_using_directive_namespace(*namespace_b);
 	//namespace_bc->add_using_directive_namespace(*namespace_c);
-	semantic_graph.add_member(function_test);
+	semantic_graph.add_member(std::unique_ptr<simple_function>(function_test));
 
 
 
@@ -116,11 +116,11 @@ BOOST_AUTO_TEST_CASE(test_case_7)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"i",
-				function_test.get()
+				function_test
 			)
 		;
 
-		BOOST_CHECK_EQUAL(found_entity, variable_a_i.get());
+		BOOST_CHECK_EQUAL(found_entity, variable_a_i);
 	}
 }
 

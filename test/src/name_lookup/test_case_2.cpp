@@ -75,35 +75,35 @@ BOOST_AUTO_TEST_CASE(test_case_2)
 	scalpel::cpp::semantic_graph semantic_graph;
 	auto struct_c0 = new class_("c0");
 	auto struct_c0_inner = new class_("inner");
-	auto function_c0_inner_f = std::make_shared<simple_member_function>
+	auto function_c0_inner_f = new simple_member_function
 	(
 		"f",
 		fundamental_type::VOID
 	);
-	auto function_c0_f = std::make_shared<simple_member_function>
+	auto function_c0_f = new simple_member_function
 	(
 		"f",
 		fundamental_type::VOID
 	);
 	auto struct_c1base = new class_("c1base");
-	auto function_c1base_f = std::make_shared<simple_member_function>
+	auto function_c1base_f = new simple_member_function
 	(
 		"f",
 		fundamental_type::VOID
 	);
-	auto function_c1base_g = std::make_shared<simple_member_function>
+	auto function_c1base_g = new simple_member_function
 	(
 		"g",
 		fundamental_type::VOID
 	);
 	auto struct_c1 = new class_("c1");
-	auto function_c1_g = std::make_shared<simple_member_function>
+	auto function_c1_g = new simple_member_function
 	(
 		"g",
 		fundamental_type::VOID
 	);
 	auto struct_c = new class_("c");
-	auto function_g_test = std::make_shared<simple_member_function>
+	auto function_g_test = new simple_member_function
 	(
 		"test",
 		fundamental_type::VOID
@@ -111,40 +111,40 @@ BOOST_AUTO_TEST_CASE(test_case_2)
 
 	semantic_graph.add_member(std::unique_ptr<class_>(struct_c0));
 	struct_c0->add_member(std::unique_ptr<class_>(struct_c0_inner));
-	struct_c0_inner->add_member(function_c0_inner_f);
-	struct_c0->add_member(function_c0_f);
+	struct_c0_inner->add_member(std::unique_ptr<simple_member_function>(function_c0_inner_f));
+	struct_c0->add_member(std::unique_ptr<simple_member_function>(function_c0_f));
 	semantic_graph.add_member(std::unique_ptr<class_>(struct_c1base));
-	struct_c1base->add_member(function_c1base_f);
-	struct_c1base->add_member(function_c1base_g);
+	struct_c1base->add_member(std::unique_ptr<simple_member_function>(function_c1base_f));
+	struct_c1base->add_member(std::unique_ptr<simple_member_function>(function_c1base_g));
 	semantic_graph.add_member(std::unique_ptr<class_>(struct_c1));
 	struct_c1->add_base_class(*struct_c1base);
-	struct_c1->add_member(function_c1_g);
+	struct_c1->add_member(std::unique_ptr<simple_member_function>(function_c1_g));
 	semantic_graph.add_member(std::unique_ptr<class_>(struct_c));
 	struct_c->add_base_class(*struct_c0);
 	struct_c->add_base_class(*struct_c1);
-	struct_c->add_member(function_g_test);
+	struct_c->add_member(std::unique_ptr<simple_member_function>(function_g_test));
 
 
 	//
 	//name lookup test
 	//
 	{
-		auto found_entities = find<identification_policies::by_name, false, true, simple_member_function>("f", function_g_test.get());
+		auto found_entities = find<identification_policies::by_name, false, true, simple_member_function>("f", function_g_test);
 		BOOST_CHECK_EQUAL(found_entities.size(), 2);
 		if(found_entities.size() == 2)
 		{
-			BOOST_CHECK(found_entities.find(function_c0_f.get()) != found_entities.end());
-			BOOST_CHECK(found_entities.find(function_c1base_f.get()) != found_entities.end());
+			BOOST_CHECK(found_entities.find(function_c0_f) != found_entities.end());
+			BOOST_CHECK(found_entities.find(function_c1base_f) != found_entities.end());
 		}
 	}
 
 	{
-		auto found_entity = find<identification_policies::by_name, false, false, simple_member_function>("g", function_g_test.get());
-		BOOST_CHECK_EQUAL(found_entity, function_c1_g.get());
+		auto found_entity = find<identification_policies::by_name, false, false, simple_member_function>("g", function_g_test);
+		BOOST_CHECK_EQUAL(found_entity, function_c1_g);
 	}
 
 	{
-		auto found_entity = find<identification_policies::by_name, false, false, class_>("inner", function_g_test.get());
+		auto found_entity = find<identification_policies::by_name, false, false, class_>("inner", function_g_test);
 		BOOST_CHECK_EQUAL(found_entity, struct_c0_inner);
 	}
 
@@ -162,10 +162,10 @@ BOOST_AUTO_TEST_CASE(test_case_2)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"f",
-				function_g_test.get()
+				function_g_test
 			)
 		;
-		BOOST_CHECK_EQUAL(found_entity, function_c1base_f.get());
+		BOOST_CHECK_EQUAL(found_entity, function_c1base_f);
 	}
 
 	{
@@ -182,11 +182,11 @@ BOOST_AUTO_TEST_CASE(test_case_2)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"f",
-				function_g_test.get()
+				function_g_test
 			)
 		;
 
-		BOOST_CHECK_EQUAL(found_entity, function_c0_f.get());
+		BOOST_CHECK_EQUAL(found_entity, function_c0_f);
 	}
 
 	{
@@ -221,10 +221,10 @@ BOOST_AUTO_TEST_CASE(test_case_2)
 					std::move(nested_name_specifier_last_part_seq_node)
 				),
 				"f",
-				function_g_test.get()
+				function_g_test
 			)
 		;
-		BOOST_CHECK_EQUAL(found_entity, function_c0_inner_f.get());
+		BOOST_CHECK_EQUAL(found_entity, function_c0_inner_f);
 	}
 }
 
