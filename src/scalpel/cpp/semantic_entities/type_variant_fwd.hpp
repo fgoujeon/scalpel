@@ -48,7 +48,7 @@ typedef
 		pointer,
 		pointer_to_member,
 		reference
-	>::type
+	>
 	type_variant
 ;
 

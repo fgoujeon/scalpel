@@ -24,7 +24,7 @@ set(LIBRARY_OUTPUT_PATH lib)
 
 #GCC settings
 if(CMAKE_COMPILER_IS_GNUCXX)
-	add_definitions(-std=c++0x -W -Wall -pedantic)
+	add_definitions(-std=c++0x -W -Wall -pedantic -fno-strict-aliasing)
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
 #Check for required C++0x partial support

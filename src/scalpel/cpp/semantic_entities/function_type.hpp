@@ -28,8 +28,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-class class_;
-
 class function_type
 {
 	public:

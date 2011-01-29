@@ -59,7 +59,7 @@ function_parameter::operator=(const function_parameter& o)
 const function_parameter&
 function_parameter::operator=(function_parameter&& o)
 {
-	type_ = o.type_;
+	//type_ = o.type_;
 	name_ = std::move(o.name_);
 
 	return *this;

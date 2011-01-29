@@ -53,7 +53,7 @@ function_type&
 function_type::operator=(const function_type& rhs)
 {
 	return_type_ = std::unique_ptr<type_variant>(new type_variant(*rhs.return_type_));
-	parameter_types_ = rhs.parameter_types_;
+	//parameter_types_ = rhs.parameter_types_;
 	variadic_ = rhs.variadic_;
 	const_qualified_ = rhs.const_qualified_;
 	volatile_qualified_ = rhs.volatile_qualified_;

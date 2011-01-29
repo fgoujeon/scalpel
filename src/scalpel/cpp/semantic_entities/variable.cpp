@@ -52,7 +52,7 @@ variable::variable(variable&& rhs):
 const variable&
 variable::operator=(variable&& rhs)
 {
-	type_ = rhs.type_;
+	//type_ = rhs.type_;
 	name_ = std::move(rhs.name_);
 	is_static_ = rhs.is_static_;
 
