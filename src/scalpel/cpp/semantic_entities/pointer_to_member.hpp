@@ -41,21 +41,23 @@ class pointer_to_member
 			const class_& member_class
 		);
 
+		pointer_to_member(const pointer_to_member& rhs);
+
+		pointer_to_member&
+		operator=(const pointer_to_member& rhs);
+
 		const type_variant&
-		qualified_type() const
-		{
-			return qualified_type_;
-		}
+		qualified_type() const;
 
 		const class_&
 		member_class() const
 		{
-			return member_class_;
+			return *member_class_;
 		}
 
 	private:
-		type_variant qualified_type_;
-		const class_& member_class_;
+		std::unique_ptr<type_variant> qualified_type_;
+		const class_* member_class_;
 };
 
 bool

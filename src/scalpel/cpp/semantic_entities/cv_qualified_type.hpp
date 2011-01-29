@@ -22,6 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_CV_QUALIFIED_TYPE_HPP
 
 #include "type_variant_fwd.hpp"
+#include <memory>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -41,11 +42,13 @@ class cv_qualified_type
 
 		cv_qualified_type(const type_variant& qualified_type, const qualification_type qualification);
 
+		cv_qualified_type(const cv_qualified_type& rhs);
+
+		cv_qualified_type&
+		operator=(const cv_qualified_type& rhs);
+
 		const type_variant&
-		qualified_type() const
-		{
-			return qualified_type_;
-		}
+		qualified_type() const;
 
 		qualification_type
 		qualification() const
@@ -72,7 +75,7 @@ class cv_qualified_type
 		}
 
 	private:
-		type_variant qualified_type_;
+		std::unique_ptr<type_variant> qualified_type_;
 		qualification_type qualification_;
 };
 

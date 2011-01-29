@@ -30,8 +30,28 @@ array::array
 	const type_variant& qualified_type
 ):
 	size_(size),
-	qualified_type_(qualified_type)
+	qualified_type_(std::unique_ptr<type_variant>(new type_variant(qualified_type)))
 {
+}
+
+array::array(const array& rhs):
+	size_(rhs.size_),
+	qualified_type_(std::unique_ptr<type_variant>(new type_variant(*rhs.qualified_type_)))
+{
+}
+
+const type_variant&
+array::qualified_type() const
+{
+	return *qualified_type_;
+}
+
+array&
+array::operator=(const array& rhs)
+{
+	size_ = rhs.size_;
+	qualified_type_ = std::unique_ptr<type_variant>(new type_variant(*rhs.qualified_type_));
+	return *this;
 }
 
 bool

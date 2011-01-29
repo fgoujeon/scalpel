@@ -25,9 +25,29 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 cv_qualified_type::cv_qualified_type(const type_variant& qualified_type, const qualification_type qualification):
-	qualified_type_(qualified_type),
+	qualified_type_(std::unique_ptr<type_variant>(new type_variant(qualified_type))),
 	qualification_(qualification)
 {
+}
+
+cv_qualified_type::cv_qualified_type(const cv_qualified_type& rhs):
+	qualified_type_(std::unique_ptr<type_variant>(new type_variant(*rhs.qualified_type_))),
+	qualification_(rhs.qualification_)
+{
+}
+
+cv_qualified_type&
+cv_qualified_type::operator=(const cv_qualified_type& rhs)
+{
+	qualified_type_ = std::unique_ptr<type_variant>(new type_variant(*rhs.qualified_type_));
+	qualification_ = rhs.qualification_;
+	return *this;
+}
+
+const type_variant&
+cv_qualified_type::qualified_type() const
+{
+	return *qualified_type_;
 }
 
 bool

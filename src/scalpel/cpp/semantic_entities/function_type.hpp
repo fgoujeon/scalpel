@@ -44,11 +44,11 @@ class function_type
 
 		function_type(const function_type& rhs);
 
+		function_type&
+		operator=(const function_type& rhs);
+
 		const type_variant&
-		return_type() const
-		{
-			return return_type_;
-		}
+		return_type() const;
 
 		const std::vector<type_variant>&
 		parameter_types() const
@@ -75,11 +75,11 @@ class function_type
 		}
 
 	private:
-		const type_variant return_type_;
-		const std::vector<type_variant> parameter_types_;
-		const bool variadic_;
-		const bool const_qualified_;
-		const bool volatile_qualified_;
+		std::unique_ptr<type_variant> return_type_;
+		std::vector<type_variant> parameter_types_;
+		bool variadic_;
+		bool const_qualified_;
+		bool volatile_qualified_;
 };
 
 bool

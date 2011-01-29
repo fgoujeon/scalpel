@@ -29,9 +29,29 @@ pointer_to_member::pointer_to_member
 	const type_variant& qualified_type,
 	const class_& member_class
 ):
-	qualified_type_(qualified_type),
-	member_class_(member_class)
+	qualified_type_(std::unique_ptr<type_variant>(new type_variant(qualified_type))),
+	member_class_(&member_class)
 {
+}
+
+pointer_to_member::pointer_to_member(const pointer_to_member& rhs):
+	qualified_type_(std::unique_ptr<type_variant>(new type_variant(*rhs.qualified_type_))),
+	member_class_(rhs.member_class_)
+{
+}
+
+pointer_to_member&
+pointer_to_member::operator=(const pointer_to_member& rhs)
+{
+	qualified_type_ = std::unique_ptr<type_variant>(new type_variant(*rhs.qualified_type_));
+	member_class_ = rhs.member_class_;
+	return *this;
+}
+
+const type_variant&
+pointer_to_member::qualified_type() const
+{
+	return *qualified_type_;
 }
 
 bool

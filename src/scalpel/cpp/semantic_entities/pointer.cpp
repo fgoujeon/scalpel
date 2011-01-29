@@ -25,8 +25,26 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 pointer::pointer(const type_variant& qualified_type):
-	qualified_type_(qualified_type)
+	qualified_type_(std::unique_ptr<type_variant>(new type_variant(qualified_type)))
 {
+}
+
+pointer::pointer(const pointer& rhs):
+	qualified_type_(std::unique_ptr<type_variant>(new type_variant(*rhs.qualified_type_)))
+{
+}
+
+pointer&
+pointer::operator=(const pointer& rhs)
+{
+	qualified_type_ = std::unique_ptr<type_variant>(new type_variant(*rhs.qualified_type_));
+	return *this;
+}
+
+const type_variant&
+pointer::qualified_type() const
+{
+	return *qualified_type_;
 }
 
 bool
