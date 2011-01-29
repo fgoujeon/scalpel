@@ -18,13 +18,25 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_UTILITY_VARIANT_HPP
-#define SCALPEL_UTILITY_VARIANT_HPP
+#ifndef SCALPEL_UTILITY_VARIANT_REPLACE_REFERENCE_BY_POINTER_HPP
+#define SCALPEL_UTILITY_VARIANT_REPLACE_REFERENCE_BY_POINTER_HPP
 
-#include "variant/variant.hpp"
-#include "variant/apply_visitor.hpp"
-#include "variant/get.hpp"
-#include "variant/static_visitor.hpp"
+namespace scalpel { namespace utility
+{
+
+template<typename T>
+struct replace_reference_by_pointer
+{
+	typedef T type;
+};
+
+template<typename T>
+struct replace_reference_by_pointer<T&>
+{
+	typedef T* type;
+};
+
+}} //namespace scalpel::utility
 
 #endif
 

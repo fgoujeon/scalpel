@@ -18,13 +18,43 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_UTILITY_VARIANT_HPP
-#define SCALPEL_UTILITY_VARIANT_HPP
+#ifndef SCALPEL_UTILITY_VARIANT_GET_HPP
+#define SCALPEL_UTILITY_VARIANT_GET_HPP
 
-#include "variant/variant.hpp"
-#include "variant/apply_visitor.hpp"
-#include "variant/get.hpp"
-#include "variant/static_visitor.hpp"
+#include "variant.hpp"
+
+namespace scalpel { namespace utility
+{
+
+template<typename U, typename... Ts>
+U&
+get(variant<Ts...>& var)
+{
+	return var.template get<U>();
+}
+
+template<typename U, typename... Ts>
+const U&
+get(const variant<Ts...>& var)
+{
+	return var.template get<U>();
+}
+
+template<typename U, typename... Ts>
+U*
+get(variant<Ts...>* var)
+{
+	return var->template get_optional<U>();
+}
+
+template<typename U, typename... Ts>
+const U*
+get(const variant<Ts...>* var)
+{
+	return var->template get_optional<U>();
+}
+
+}} //namespace scalpel::utility
 
 #endif
 

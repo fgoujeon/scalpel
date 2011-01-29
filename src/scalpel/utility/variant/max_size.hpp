@@ -18,13 +18,32 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_UTILITY_VARIANT_HPP
-#define SCALPEL_UTILITY_VARIANT_HPP
+#ifndef SCALPEL_UTILITY_VARIANT_MAX_SIZE_HPP
+#define SCALPEL_UTILITY_VARIANT_MAX_SIZE_HPP
 
-#include "variant/variant.hpp"
-#include "variant/apply_visitor.hpp"
-#include "variant/get.hpp"
-#include "variant/static_visitor.hpp"
+#include "custom_sizeof.hpp"
+
+namespace scalpel { namespace utility
+{
+
+template<typename... Ts>
+struct max_size;
+
+template<>
+struct max_size<>
+{
+	static const unsigned int value = 0;
+};
+
+template<typename T, typename... Ts>
+struct max_size<T, Ts...>
+{
+	static const unsigned int current_type_size = custom_sizeof<T>::value;
+	static const unsigned int next_type_size = max_size<Ts...>::value;
+	static const unsigned int value = current_type_size > next_type_size ? current_type_size : next_type_size;
+};
+
+}} //namespace scalpel::utility
 
 #endif
 

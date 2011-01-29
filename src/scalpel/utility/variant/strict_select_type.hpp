@@ -18,13 +18,35 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_UTILITY_VARIANT_HPP
-#define SCALPEL_UTILITY_VARIANT_HPP
+#ifndef SCALPEL_UTILITY_VARIANT_STRICT_SELECT_TYPE_HPP
+#define SCALPEL_UTILITY_VARIANT_STRICT_SELECT_TYPE_HPP
 
-#include "variant/variant.hpp"
-#include "variant/apply_visitor.hpp"
-#include "variant/get.hpp"
-#include "variant/static_visitor.hpp"
+namespace scalpel { namespace utility
+{
+
+template<typename U, typename... Ts>
+struct strict_select_type;
+
+template<typename U>
+struct strict_select_type<U>
+{
+};
+
+//U == T
+template<typename T, typename... Ts>
+struct strict_select_type<T, T, Ts...>
+{
+	typedef T type;
+};
+
+//U != T, let's try to find U among Ts
+template<typename U, typename T, typename... Ts>
+struct strict_select_type<U, T, Ts...>
+{
+	typedef typename strict_select_type<U, Ts...>::type type;
+};
+
+}} //namespace scalpel::utility
 
 #endif
 

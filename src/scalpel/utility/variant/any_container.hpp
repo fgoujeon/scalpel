@@ -18,13 +18,49 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_UTILITY_VARIANT_HPP
-#define SCALPEL_UTILITY_VARIANT_HPP
+#ifndef SCALPEL_UTILITY_VARIANT_ANY_CONTAINER_HPP
+#define SCALPEL_UTILITY_VARIANT_ANY_CONTAINER_HPP
 
-#include "variant/variant.hpp"
-#include "variant/apply_visitor.hpp"
-#include "variant/get.hpp"
-#include "variant/static_visitor.hpp"
+namespace scalpel { namespace utility
+{
+
+template<unsigned int Size>
+class any_container
+{
+	public:
+		template<typename T>
+		T&
+		get()
+		{
+			return *reinterpret_cast<T*>(buffer_);
+		}
+
+		template<typename T>
+		const T&
+		get() const
+		{
+			return *reinterpret_cast<const T*>(buffer_);
+		}
+
+		template<typename T>
+		void
+		set(const T& value)
+		{
+			new(buffer_) T(value);
+		}
+
+		template<typename T>
+		void
+		clear()
+		{
+			get<T>().~T();
+		}
+
+	private:
+		char buffer_[Size];
+};
+
+}} //namespace scalpel::utility
 
 #endif
 

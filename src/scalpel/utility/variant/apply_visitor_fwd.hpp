@@ -18,13 +18,41 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_UTILITY_VARIANT_HPP
-#define SCALPEL_UTILITY_VARIANT_HPP
+#ifndef SCALPEL_UTILITY_VARIANT_APPLY_VISITOR_FWD_HPP
+#define SCALPEL_UTILITY_VARIANT_APPLY_VISITOR_FWD_HPP
 
-#include "variant/variant.hpp"
-#include "variant/apply_visitor.hpp"
-#include "variant/get.hpp"
-#include "variant/static_visitor.hpp"
+#include "variant_fwd.hpp"
+#include <boost/utility/enable_if.hpp>
+#include <boost/type_traits/is_same.hpp>
+
+namespace scalpel { namespace utility
+{
+
+template<class Visitor, typename... Ts>
+void
+apply_visitor
+(
+	Visitor& visitor,
+	const variant<Ts...>& var,
+	typename boost::enable_if
+	<
+		boost::is_same<typename Visitor::return_type, void>
+	>::type* = 0
+);
+
+template<class Visitor, typename... Ts>
+typename Visitor::return_type
+apply_visitor
+(
+	Visitor& visitor,
+	const variant<Ts...>& var,
+	typename boost::disable_if
+	<
+		boost::is_same<typename Visitor::return_type, void>
+	>::type* = 0
+);
+
+}} //namespace scalpel::utility
 
 #endif
 

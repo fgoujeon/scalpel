@@ -18,13 +18,19 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_UTILITY_VARIANT_HPP
-#define SCALPEL_UTILITY_VARIANT_HPP
+#ifndef SCALPEL_UTILITY_VARIANT_STATIC_VISITOR_HPP
+#define SCALPEL_UTILITY_VARIANT_STATIC_VISITOR_HPP
 
-#include "variant/variant.hpp"
-#include "variant/apply_visitor.hpp"
-#include "variant/get.hpp"
-#include "variant/static_visitor.hpp"
+namespace scalpel { namespace utility
+{
+
+template<typename ResultType>
+struct static_visitor
+{
+	typedef ResultType result_type;
+};
+
+}} //namespace scalpel::utility
 
 #endif
 

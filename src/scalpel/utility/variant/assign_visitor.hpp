@@ -18,13 +18,37 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_UTILITY_VARIANT_HPP
-#define SCALPEL_UTILITY_VARIANT_HPP
+#ifndef SCALPEL_UTILITY_VARIANT_ASSIGN_VISITOR_HPP
+#define SCALPEL_UTILITY_VARIANT_ASSIGN_VISITOR_HPP
 
-#include "variant/variant.hpp"
-#include "variant/apply_visitor.hpp"
-#include "variant/get.hpp"
-#include "variant/static_visitor.hpp"
+#include "variant_fwd.hpp"
+
+namespace scalpel { namespace utility
+{
+
+template<typename... Ts>
+struct assign_visitor
+{
+	public:
+		typedef void return_type;
+
+		assign_visitor(variant<Ts...>& lhs):
+			lhs_(lhs)
+		{
+		}
+
+		template<typename T>
+		void
+		operator()(const T& rhs) const
+		{
+			lhs_.template set<T>(rhs);
+		}
+
+	private:
+		variant<Ts...>& lhs_;
+};
+
+}} //namespace scalpel::utility
 
 #endif
 

@@ -21,6 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_UTILITY_BASIC_VARIANT_HPP
 #define SCALPEL_UTILITY_BASIC_VARIANT_HPP
 
+#include "variant/static_visitor.hpp"
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/utility/enable_if.hpp>
@@ -457,15 +458,6 @@ get(const basic_variant<TypeTraitT, Ts...>& var)
 		throw std::runtime_error("basic_variant: bad get");
 	return *return_object;
 }
-
-
-
-template<typename ResultTypeT>
-class static_visitor
-{
-	public:
-		typedef ResultTypeT result_type;
-};
 
 
 
