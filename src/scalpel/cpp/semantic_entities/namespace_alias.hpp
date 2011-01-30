@@ -40,6 +40,11 @@ class namespace_alias
 			namespace_& referred_namespace
 		);
 
+		namespace_alias(const namespace_alias&) = delete;
+
+		namespace_alias&
+		operator=(const namespace_alias&) = delete;
+
 		const std::string&
 		name() const
 		{

@@ -43,12 +43,10 @@ class variable
 			bool is_static = false
 		);
 
-		variable(const variable& v);
+		variable(const variable&) = delete;
 
-		variable(variable&& v);
-
-		const variable&
-		operator=(variable&& v);
+		variable&
+		operator=(const variable&) = delete;
 
 		const type_variant&
 		type() const;

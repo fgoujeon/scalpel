@@ -48,10 +48,10 @@ class statement_block
 
         statement_block();
 
-		statement_block(const statement_block& o) = delete;
+		statement_block(const statement_block&) = delete;
 
 		const statement_block&
-		operator=(const statement_block& o) = delete;
+		operator=(const statement_block&) = delete;
 
 		bool
 		has_enclosing_declarative_region() const

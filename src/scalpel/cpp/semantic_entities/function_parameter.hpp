@@ -35,15 +35,10 @@ class function_parameter
 		explicit
 		function_parameter(const type_variant& type);
 
-		function_parameter(const function_parameter& o);
+		function_parameter(const function_parameter&) = delete;
 
-		function_parameter(function_parameter&& o);
-
-		const function_parameter&
-		operator=(const function_parameter& o);
-
-		const function_parameter&
-		operator=(function_parameter&& o);
+		function_parameter&
+		operator=(const function_parameter& o) = delete;
 
 		const type_variant&
 		type() const;

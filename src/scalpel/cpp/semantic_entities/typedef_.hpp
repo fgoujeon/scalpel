@@ -35,6 +35,11 @@ class typedef_
 	public:
 		typedef_(const std::string& name, const type_variant& type);
 
+		typedef_(const typedef_&) = delete;
+
+		typedef_&
+		operator=(const typedef_&) = delete;
+
 		const std::string&
 		name() const
 		{

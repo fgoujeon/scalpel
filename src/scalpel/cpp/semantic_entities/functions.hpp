@@ -73,6 +73,11 @@ class CLASS_NAME \
 			void* const = 0 \
 		); \
  \
+		CLASS_NAME(const CLASS_NAME&) = delete; \
+ \
+		CLASS_NAME& \
+		operator=(const CLASS_NAME&) = delete; \
+ \
 		BOOST_PP_IIF \
 		( \
 			HAS_NAME, \

@@ -35,30 +35,6 @@ variable::variable
 {
 }
 
-variable::variable(const variable& rhs):
-	type_(rhs.type_),
-	name_(rhs.name_),
-	is_static_(rhs.is_static_)
-{
-}
-
-variable::variable(variable&& rhs):
-	type_(rhs.type_),
-	name_(std::move(rhs.name_)),
-	is_static_(rhs.is_static_)
-{
-}
-
-const variable&
-variable::operator=(variable&& rhs)
-{
-	//type_ = rhs.type_;
-	name_ = std::move(rhs.name_);
-	is_static_ = rhs.is_static_;
-
-	return *this;
-}
-
 const type_variant&
 variable::type() const
 {

@@ -35,36 +35,6 @@ function_parameter::function_parameter(const type_variant& type):
 {
 }
 
-function_parameter::function_parameter(const function_parameter& o):
-	type_(o.type_),
-	name_(o.name_)
-{
-}
-
-function_parameter::function_parameter(function_parameter&& o):
-	type_(std::move(o.type_)),
-	name_(std::move(o.name_))
-{
-}
-
-const function_parameter&
-function_parameter::operator=(const function_parameter& o)
-{
-	type_ = o.type_;
-	name_ = o.name_;
-
-	return *this;
-}
-
-const function_parameter&
-function_parameter::operator=(function_parameter&& o)
-{
-	//type_ = o.type_;
-	name_ = std::move(o.name_);
-
-	return *this;
-}
-
 const type_variant&
 function_parameter::type() const
 {
