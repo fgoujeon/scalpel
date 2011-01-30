@@ -88,6 +88,10 @@ class variant
 	private:
 		template<typename U>
 		void
+		set(U& value);
+
+		template<typename U>
+		void
 		set(const U& value);
 
 		void

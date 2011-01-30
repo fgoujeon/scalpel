@@ -39,9 +39,16 @@ struct assign_visitor
 
 		template<typename T>
 		void
-		operator()(const T& rhs) const
+		operator()(const T& value) const
 		{
-			lhs_.template set<T>(rhs);
+			lhs_.template set<T>(value);
+		}
+
+		template<typename T>
+		void
+		operator()(T& value) const
+		{
+			lhs_.template set<T>(value);
 		}
 
 	private:
