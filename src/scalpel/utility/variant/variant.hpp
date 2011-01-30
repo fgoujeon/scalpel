@@ -23,20 +23,10 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "max_size.hpp"
 #include "any_container.hpp"
-#include "apply_visitor_fwd.hpp"
 #include "assign_visitor.hpp"
-#include "clear_visitor.hpp"
-#include "equal_visitor.hpp"
-#include "select_type.hpp"
-#include "strict_select_type.hpp"
 #include "replace_reference_by_pointer.hpp"
-#include "type_index_getter.hpp"
-#include "get_address_if.hpp"
-#include "dereference_if.hpp"
 #include <boost/type_traits/is_same.hpp>
-#include <boost/type_traits/is_reference.hpp>
-#include <stdexcept>
-#include <cassert>
+#include <boost/utility/enable_if.hpp>
 
 namespace scalpel { namespace utility
 {
@@ -55,129 +45,50 @@ class variant
 		(
 			U& value,
 			typename boost::disable_if<boost::is_same<U, variant>>::type* = 0
-		)
-		{
-			//std::cout << "variant ctor 1" << std::endl;
-			set<typename select_type<U&, Ts...>::type>(value);
-			assert(type_index_ != 0);
-		}
+		);
 
 		template<typename U>
 		variant
 		(
 			const U& value,
 			typename boost::disable_if<boost::is_same<U, variant>>::type* = 0
-		)
-		{
-			//std::cout << "variant ctor 2" << std::endl;
-			set<typename select_type<U, Ts...>::type>(value);
-			assert(type_index_ != 0);
-		}
+		);
 
 		variant(const variant& rhs);
 
-		~variant()
-		{
-			clear();
-		}
+		~variant();
 
 		variant&
 		operator=(const variant& rhs);
 
 		template<typename U>
 		typename boost::disable_if<boost::is_same<U, variant>, variant&>::type
-		operator=(U& value)
-		{
-			//std::cout << "variant assign" << std::endl;
-			clear();
-			set<typename select_type<U&, Ts...>::type>(value);
-			return *this;
-		}
+		operator=(U& value);
 
 		template<typename U>
 		typename boost::disable_if<boost::is_same<U, variant>, variant&>::type
-		operator=(const U& value)
-		{
-			//std::cout << "variant assign const" << std::endl;
-			clear();
-			set<typename select_type<U, Ts...>::type>(value);
-			return *this;
-		}
+		operator=(const U& value);
 
 		template<typename U>
 		U&
-		get()
-		{
-			typedef strict_select_type<U, Ts...> ignored_t; //just check whether U is in Ts
-			typedef U selected_type_t;
-			const bool selected_type_is_reference = boost::is_reference<selected_type_t>::value;
-			typedef typename replace_reference_by_pointer<selected_type_t>::type any_container_type_t;
-
-			if(type_index_getter<Ts...>::template get<U>() != type_index_) throw std::runtime_error("bad get");
-
-			any_container_type_t& value = container_.get<any_container_type_t>();
-			return dereference_if<selected_type_is_reference>(value);
-		}
+		get();
 
 		template<typename U>
 		const U&
-		get() const
-		{
-			typedef strict_select_type<U, Ts...> ignored_t; //just check whether U is in Ts
-			typedef U selected_type_t;
-			const bool selected_type_is_reference = boost::is_reference<selected_type_t>::value;
-			typedef typename replace_reference_by_pointer<selected_type_t>::type any_container_type_t;
-
-			if(type_index_getter<Ts...>::template get<U>() != type_index_) throw std::runtime_error("bad get");
-
-			const any_container_type_t& value = container_.get<any_container_type_t>();
-			return dereference_if<selected_type_is_reference>(value);
-		}
+		get() const;
 
 		template<typename U>
 		U*
-		get_optional()
-		{
-			typedef strict_select_type<U, Ts...> ignored_t; //just check whether U is in Ts
-			typedef U selected_type_t;
-			const bool selected_type_is_reference = boost::is_reference<selected_type_t>::value;
-			typedef typename replace_reference_by_pointer<selected_type_t>::type any_container_type_t;
-
-			if(type_index_getter<Ts...>::template get<U>() != type_index_) return 0;
-
-			any_container_type_t& value = container_.get<any_container_type_t>();
-			return &dereference_if<selected_type_is_reference>(value);
-		}
+		get_optional();
 
 		template<typename U>
 		const U*
-		get_optional() const
-		{
-			typedef strict_select_type<U, Ts...> ignored_t; //just check whether U is in Ts
-			typedef U selected_type_t;
-			const bool selected_type_is_reference = boost::is_reference<selected_type_t>::value;
-			typedef typename replace_reference_by_pointer<selected_type_t>::type any_container_type_t;
-
-			if(type_index_getter<Ts...>::template get<U>() != type_index_) return 0;
-
-			const any_container_type_t& value = container_.get<any_container_type_t>();
-			return &dereference_if<selected_type_is_reference>(value);
-		}
+		get_optional() const;
 
 	private:
 		template<typename U>
 		void
-		set(const U& value)
-		{
-			typedef typename select_type<U, Ts...>::type selected_type_t;
-			const bool selected_type_is_reference = boost::is_reference<selected_type_t>::value;
-			typedef typename replace_reference_by_pointer<selected_type_t>::type any_container_type_t;
-
-			any_container_type_t any_container_value = get_address_if<selected_type_is_reference>(value);
-			container_.set<any_container_type_t>(any_container_value);
-
-			type_index_ = type_index_getter<Ts...>::template get<U>();
-		}
+		set(const U& value);
 
 		void
 		clear();
@@ -195,51 +106,16 @@ class variant
 };
 
 template<typename... Ts>
-variant<Ts...>::variant(const variant& rhs)
-{
-	//std::cout << "variant copy ctor" << std::endl;
-	assign_visitor<Ts...> visitor(*this);
-	apply_visitor(visitor, rhs);
-	assert(type_index_ != 0);
-}
-
-template<typename... Ts>
-variant<Ts...>&
-variant<Ts...>::operator=(const variant& rhs)
-{
-	//std::cout << "variant copy assign" << std::endl;
-	clear();
-	assign_visitor<Ts...> visitor(*this);
-	apply_visitor(visitor, rhs);
-	assert(type_index_ != 0);
-	return *this;
-}
-
-template<typename... Ts>
-void
-variant<Ts...>::clear()
-{
-	assert(type_index_ != 0);
-	clear_visitor<size, Ts...> visitor(container_);
-	apply_visitor(visitor, *this);
-}
+bool
+operator==(const variant<Ts...>& lhs, const variant<Ts...>& rhs);
 
 template<typename... Ts>
 bool
-operator==(const variant<Ts...>& lhs, const variant<Ts...>& rhs)
-{
-	partial_equal_visitor<Ts...> visitor(lhs);
-	return apply_visitor(visitor, rhs);
-}
-
-template<typename... Ts>
-bool
-operator!=(const variant<Ts...>& lhs, const variant<Ts...>& rhs)
-{
-	return !(lhs == rhs);
-}
+operator!=(const variant<Ts...>& lhs, const variant<Ts...>& rhs);
 
 }} //namespace scalpel::utility
+
+#include "variant.ipp"
 
 #endif
 
