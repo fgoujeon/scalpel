@@ -117,14 +117,12 @@ U&
 variant<Ts...>::get()
 {
 	typedef strict_select_type<U, Ts...> ignored_t; //just check whether U is in Ts
-	typedef U selected_type_t;
-	const bool selected_type_is_reference = boost::is_reference<selected_type_t>::value;
-	typedef typename replace_reference_by_pointer<selected_type_t>::type any_container_type_t;
+	typedef typename replace_reference_by_pointer<U>::type any_container_type_t;
 
 	if(type_index_getter<Ts...>::template get<U>() != type_index_) throw std::runtime_error("bad get");
 
 	any_container_type_t& value = container_.get<any_container_type_t>();
-	return dereference_if<selected_type_is_reference>(value);
+	return dereference_if<boost::is_reference<U>::value>(value);
 }
 
 template<typename... Ts>
@@ -133,14 +131,12 @@ const U&
 variant<Ts...>::get() const
 {
 	typedef strict_select_type<U, Ts...> ignored_t; //just check whether U is in Ts
-	typedef U selected_type_t;
-	const bool selected_type_is_reference = boost::is_reference<selected_type_t>::value;
-	typedef typename replace_reference_by_pointer<selected_type_t>::type any_container_type_t;
+	typedef typename replace_reference_by_pointer<U>::type any_container_type_t;
 
 	if(type_index_getter<Ts...>::template get<U>() != type_index_) throw std::runtime_error("bad get");
 
 	const any_container_type_t& value = container_.get<any_container_type_t>();
-	return dereference_if<selected_type_is_reference>(value);
+	return dereference_if<boost::is_reference<U>::value>(value);
 }
 
 template<typename... Ts>
@@ -149,14 +145,12 @@ U*
 variant<Ts...>::get_optional()
 {
 	typedef strict_select_type<U, Ts...> ignored_t; //just check whether U is in Ts
-	typedef U selected_type_t;
-	const bool selected_type_is_reference = boost::is_reference<selected_type_t>::value;
-	typedef typename replace_reference_by_pointer<selected_type_t>::type any_container_type_t;
+	typedef typename replace_reference_by_pointer<U>::type any_container_type_t;
 
 	if(type_index_getter<Ts...>::template get<U>() != type_index_) return 0;
 
 	any_container_type_t& value = container_.get<any_container_type_t>();
-	return &dereference_if<selected_type_is_reference>(value);
+	return &dereference_if<boost::is_reference<U>::value>(value);
 }
 
 template<typename... Ts>
@@ -165,14 +159,12 @@ const U*
 variant<Ts...>::get_optional() const
 {
 	typedef strict_select_type<U, Ts...> ignored_t; //just check whether U is in Ts
-	typedef U selected_type_t;
-	const bool selected_type_is_reference = boost::is_reference<selected_type_t>::value;
-	typedef typename replace_reference_by_pointer<selected_type_t>::type any_container_type_t;
+	typedef typename replace_reference_by_pointer<U>::type any_container_type_t;
 
 	if(type_index_getter<Ts...>::template get<U>() != type_index_) return 0;
 
 	const any_container_type_t& value = container_.get<any_container_type_t>();
-	return &dereference_if<selected_type_is_reference>(value);
+	return &dereference_if<boost::is_reference<U>::value>(value);
 }
 
 template<typename... Ts>

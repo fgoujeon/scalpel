@@ -56,11 +56,11 @@ struct dereference_if_impl<false, false, T>
 template<typename T>
 struct dereference_if_impl<true, true, T*>
 {
-	typedef const T& return_type;
+	typedef T& return_type;
 
 	static
 	return_type
-	result(const T* t)
+	result(T* t)
 	{
 		return *t;
 	}
@@ -69,11 +69,11 @@ struct dereference_if_impl<true, true, T*>
 template<typename T>
 struct dereference_if_impl<false, true, T>
 {
-	typedef const T& return_type;
+	typedef T const& return_type;
 
 	static
 	return_type
-	result(const T& t)
+	result(T const& t)
 	{
 		return t;
 	}
@@ -88,7 +88,7 @@ dereference_if(T& t)
 
 template<bool Cond, typename T>
 typename dereference_if_impl<Cond, true, T>::return_type
-dereference_if(const T& t)
+dereference_if(T const& t)
 {
 	return dereference_if_impl<Cond, true, T>::result(t);
 }
