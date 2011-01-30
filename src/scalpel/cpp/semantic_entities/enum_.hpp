@@ -40,6 +40,11 @@ class enum_
         explicit
         enum_(const std::string& name);
 
+        enum_(const enum_&) = delete;
+
+        enum_&
+		operator=(const enum_&) = delete;
+
 		const std::string&
 		name() const
 		{
@@ -86,6 +91,11 @@ class enum_::constant
 {
 	public:
         constant(const std::string& name, const int value);
+
+        constant(const constant&) = delete;
+
+        constant&
+		operator=(const constant&) = delete;
 
 		const std::string&
 		name() const

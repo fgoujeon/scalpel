@@ -115,3 +115,4 @@ class statement_block
 }}} //namespace scalpel::cpp::semantic_entities
 
 #endif
+
