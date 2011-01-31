@@ -5,6 +5,7 @@
 *.project
 *.sh
 *.swp
+*.swo
 *.workspace
 *~
 .exrc

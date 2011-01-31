@@ -24,7 +24,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "apply_visitor_fwd.hpp"
 #include "clear_visitor.hpp"
 #include "equal_visitor.hpp"
-#include "select_type.hpp"
 #include "strict_select_type.hpp"
 #include "type_index_getter.hpp"
 #include "get_address_if.hpp"
@@ -40,12 +39,12 @@ template<typename... Ts>
 template<typename U>
 variant<Ts...>::variant
 (
-	U& value,
+	const U& value,
 	typename boost::disable_if<boost::is_same<U, variant>>::type*
 )
 {
-	//std::cout << "variant ctor 1" << std::endl;
-	set<typename select_type<U&, Ts...>::type>(value);
+	//std::cout << "variant ctor 2" << std::endl;
+	set<typename select_type<U, Ts...>::type>(value);
 	assert(type_index_ != 0);
 }
 
@@ -53,12 +52,12 @@ template<typename... Ts>
 template<typename U>
 variant<Ts...>::variant
 (
-	const U& value,
+	U& value,
 	typename boost::disable_if<boost::is_same<U, variant>>::type*
 )
 {
-	//std::cout << "variant ctor 2" << std::endl;
-	set<typename select_type<U, Ts...>::type>(value);
+	//std::cout << "variant ctor 1" << std::endl;
+	set<typename select_type<U&, Ts...>::type>(value);
 	assert(type_index_ != 0);
 }
 
@@ -92,22 +91,22 @@ variant<Ts...>::operator=(const variant& rhs)
 template<typename... Ts>
 template<typename U>
 typename boost::disable_if<boost::is_same<U, variant<Ts...>>, variant<Ts...>&>::type
-variant<Ts...>::operator=(U& value)
+variant<Ts...>::operator=(const U& value)
 {
-	//std::cout << "variant assign" << std::endl;
+	//std::cout << "variant assign const" << std::endl;
 	clear();
-	set<typename select_type<U&, Ts...>::type>(value);
+	set<typename select_type<U, Ts...>::type>(value);
 	return *this;
 }
 
 template<typename... Ts>
 template<typename U>
 typename boost::disable_if<boost::is_same<U, variant<Ts...>>, variant<Ts...>&>::type
-variant<Ts...>::operator=(const U& value)
+variant<Ts...>::operator=(U& value)
 {
-	//std::cout << "variant assign const" << std::endl;
+	//std::cout << "variant assign" << std::endl;
 	clear();
-	set<typename select_type<U, Ts...>::type>(value);
+	set<typename select_type<U&, Ts...>::type>(value);
 	return *this;
 }
 
@@ -170,12 +169,19 @@ variant<Ts...>::get_optional() const
 template<typename... Ts>
 template<typename U>
 void
-variant<Ts...>::set(U& value)
+variant<Ts...>::set
+(
+	const U& value,
+	typename boost::disable_if
+	<
+		is_reference_of_non_const<typename select_type<U, Ts...>::type>
+	>::type*
+)
 {
 	typedef typename select_type<U, Ts...>::type selected_type_t;
 	typedef typename replace_reference_by_pointer<selected_type_t>::type any_container_type_t;
 
-	any_container_type_t any_container_value = get_address_if<boost::is_reference<selected_type_t>::value>(value);
+	const any_container_type_t& any_container_value = get_address_if<boost::is_reference<selected_type_t>::value>(value);
 	container_.set<any_container_type_t>(any_container_value);
 
 	type_index_ = type_index_getter<Ts...>::template get<U>();
@@ -184,7 +190,14 @@ variant<Ts...>::set(U& value)
 template<typename... Ts>
 template<typename U>
 void
-variant<Ts...>::set(const U& value)
+variant<Ts...>::set
+(
+	U& value,
+	typename boost::enable_if
+	<
+		is_reference_of_non_const<typename select_type<U, Ts...>::type>
+	>::type*
+)
 {
 	typedef typename select_type<U, Ts...>::type selected_type_t;
 	typedef typename replace_reference_by_pointer<selected_type_t>::type any_container_type_t;

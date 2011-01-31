@@ -21,6 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_UTILITY_VARIANT_VARIANT_HPP
 #define SCALPEL_UTILITY_VARIANT_VARIANT_HPP
 
+#include "is_reference_of_non_const.hpp"
+#include "select_type.hpp"
 #include "max_size.hpp"
 #include "any_container.hpp"
 #include "assign_visitor.hpp"
@@ -40,17 +42,19 @@ class variant
 		template<typename... T2s>
 		friend struct assign_visitor;
 
-		template<typename U>
-		variant
-		(
-			U& value,
-			typename boost::disable_if<boost::is_same<U, variant>>::type* = 0
-		);
-
+		//general case
 		template<typename U>
 		variant
 		(
 			const U& value,
+			typename boost::disable_if<boost::is_same<U, variant>>::type* = 0
+		);
+
+		//if U is a reference of non-const
+		template<typename U>
+		variant
+		(
+			U& value,
 			typename boost::disable_if<boost::is_same<U, variant>>::type* = 0
 		);
 
@@ -61,13 +65,15 @@ class variant
 		variant&
 		operator=(const variant& rhs);
 
+		//general case
 		template<typename U>
-		typename boost::disable_if<boost::is_same<U, variant>, variant&>::type
-		operator=(U& value);
-
-		template<typename U>
-		typename boost::disable_if<boost::is_same<U, variant>, variant&>::type
+		typename boost::disable_if<boost::is_same<U, variant<Ts...>>, variant<Ts...>&>::type
 		operator=(const U& value);
+
+		//if U is a reference of non-const
+		template<typename U>
+		typename boost::disable_if<boost::is_same<U, variant<Ts...>>, variant<Ts...>&>::type
+		operator=(U& value);
 
 		template<typename U>
 		U&
@@ -86,13 +92,29 @@ class variant
 		get_optional() const;
 
 	private:
+		//general case
 		template<typename U>
 		void
-		set(U& value);
+		set
+		(
+			const U& value,
+			typename boost::disable_if
+			<
+				is_reference_of_non_const<typename select_type<U, Ts...>::type>
+			>::type* = 0
+		);
 
+		//if U is a reference of non-const
 		template<typename U>
 		void
-		set(const U& value);
+		set
+		(
+			U& value,
+			typename boost::enable_if
+			<
+				is_reference_of_non_const<typename select_type<U, Ts...>::type>
+			>::type* = 0
+		);
 
 		void
 		clear();
