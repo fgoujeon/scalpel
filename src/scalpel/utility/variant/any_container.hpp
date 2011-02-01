@@ -28,11 +28,6 @@ template<unsigned int Size>
 class any_container
 {
 	public:
-		any_container():
-			empty_(true)
-		{
-		}
-
 		template<typename T>
 		T&
 		get()
@@ -62,7 +57,7 @@ class any_container
 
 			set<Set>(value);
 
-			if(!empty_) (*reinterpret_cast<Clear*>(old_buffer)).~Clear();
+			(*reinterpret_cast<Clear*>(old_buffer)).~Clear();
 		}
 
 		template<typename T>
@@ -70,7 +65,6 @@ class any_container
 		set(const T& value)
 		{
 			new(buffer_) T(value);
-			empty_ = false;
 		}
 
 		template<typename T>
@@ -82,7 +76,6 @@ class any_container
 
 	private:
 		char buffer_[Size];
-		bool empty_;
 };
 
 }} //namespace scalpel::utility
