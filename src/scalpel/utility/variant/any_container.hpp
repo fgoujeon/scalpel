@@ -28,6 +28,11 @@ template<unsigned int Size>
 class any_container
 {
 	public:
+		any_container():
+			empty_(true)
+		{
+		}
+
 		template<typename T>
 		T&
 		get()
@@ -42,11 +47,30 @@ class any_container
 			return *reinterpret_cast<const T*>(buffer_);
 		}
 
+		//It's safer to call this function instead of clear() then set(),
+		//in case where the object to be cleared stores data that are used by
+		//the copy constructor of the new object's class.
+		template<typename Clear, typename Set>
+		void
+		clear_and_set(const Set& value)
+		{
+			char old_buffer[Size];
+			for(unsigned int i = 0; i < Size; ++i)
+			{
+				old_buffer[i] = buffer_[i];
+			}
+
+			set<Set>(value);
+
+			if(!empty_) (*reinterpret_cast<Clear*>(old_buffer)).~Clear();
+		}
+
 		template<typename T>
 		void
 		set(const T& value)
 		{
 			new(buffer_) T(value);
+			empty_ = false;
 		}
 
 		template<typename T>
@@ -58,6 +82,7 @@ class any_container
 
 	private:
 		char buffer_[Size];
+		bool empty_;
 };
 
 }} //namespace scalpel::utility

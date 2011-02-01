@@ -98,6 +98,7 @@ class variant
 		set
 		(
 			const U& value,
+			const bool clear = true,
 			typename boost::disable_if
 			<
 				is_reference_of_non_const<typename select_type<U, Ts...>::type>
@@ -110,14 +111,12 @@ class variant
 		set
 		(
 			U& value,
+			const bool clear = true,
 			typename boost::enable_if
 			<
 				is_reference_of_non_const<typename select_type<U, Ts...>::type>
 			>::type* = 0
 		);
-
-		void
-		clear();
 
 	public:
 		unsigned int

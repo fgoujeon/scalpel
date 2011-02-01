@@ -22,6 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_UTILITY_VARIANT_VARIANT_IPP
 
 #include "apply_visitor_fwd.hpp"
+#include "clear_and_set_visitor.hpp"
 #include "clear_visitor.hpp"
 #include "equal_visitor.hpp"
 #include "strict_select_type.hpp"
@@ -44,7 +45,7 @@ variant<Ts...>::variant
 )
 {
 	//std::cout << "variant ctor 2" << std::endl;
-	set<typename select_type<U, Ts...>::type>(value);
+	set<typename select_type<U, Ts...>::type>(value, false);
 	assert(type_index_ != 0);
 }
 
@@ -57,7 +58,7 @@ variant<Ts...>::variant
 )
 {
 	//std::cout << "variant ctor 1" << std::endl;
-	set<typename select_type<U&, Ts...>::type>(value);
+	set<typename select_type<U&, Ts...>::type>(value, false);
 	assert(type_index_ != 0);
 }
 
@@ -65,7 +66,7 @@ template<typename... Ts>
 variant<Ts...>::variant(const variant& rhs)
 {
 	//std::cout << "variant copy ctor" << std::endl;
-	assign_visitor<Ts...> visitor(*this);
+	assign_visitor<Ts...> visitor(*this, false);
 	apply_visitor(visitor, rhs);
 	assert(type_index_ != 0);
 }
@@ -73,7 +74,8 @@ variant<Ts...>::variant(const variant& rhs)
 template<typename... Ts>
 variant<Ts...>::~variant()
 {
-	clear();
+	clear_visitor<size> visitor(container_);
+	apply_visitor(visitor, *this);
 }
 
 template<typename... Ts>
@@ -81,7 +83,6 @@ variant<Ts...>&
 variant<Ts...>::operator=(const variant& rhs)
 {
 	//std::cout << "variant copy assign" << std::endl;
-	clear();
 	assign_visitor<Ts...> visitor(*this);
 	apply_visitor(visitor, rhs);
 	assert(type_index_ != 0);
@@ -94,7 +95,6 @@ typename boost::disable_if<boost::is_same<U, variant<Ts...>>, variant<Ts...>&>::
 variant<Ts...>::operator=(const U& value)
 {
 	//std::cout << "variant assign const" << std::endl;
-	clear();
 	set<typename select_type<U, Ts...>::type>(value);
 	return *this;
 }
@@ -105,7 +105,6 @@ typename boost::disable_if<boost::is_same<U, variant<Ts...>>, variant<Ts...>&>::
 variant<Ts...>::operator=(U& value)
 {
 	//std::cout << "variant assign" << std::endl;
-	clear();
 	set<typename select_type<U&, Ts...>::type>(value);
 	return *this;
 }
@@ -172,6 +171,7 @@ void
 variant<Ts...>::set
 (
 	const U& value,
+	const bool clear,
 	typename boost::disable_if
 	<
 		is_reference_of_non_const<typename select_type<U, Ts...>::type>
@@ -182,7 +182,15 @@ variant<Ts...>::set
 	typedef typename replace_reference_by_pointer<selected_type_t>::type any_container_type_t;
 
 	const any_container_type_t& any_container_value = get_address_if<boost::is_reference<selected_type_t>::value>(value);
-	container_.set<any_container_type_t>(any_container_value);
+	if(clear)
+	{
+		clear_and_set_visitor<size, any_container_type_t> visitor(container_, any_container_value);
+		apply_visitor(visitor, *this);
+	}
+	else
+	{
+		container_.set<any_container_type_t>(any_container_value);
+	}
 
 	type_index_ = type_index_getter<Ts...>::template get<U>();
 }
@@ -193,6 +201,7 @@ void
 variant<Ts...>::set
 (
 	U& value,
+	const bool clear,
 	typename boost::enable_if
 	<
 		is_reference_of_non_const<typename select_type<U, Ts...>::type>
@@ -203,18 +212,17 @@ variant<Ts...>::set
 	typedef typename replace_reference_by_pointer<selected_type_t>::type any_container_type_t;
 
 	any_container_type_t any_container_value = get_address_if<boost::is_reference<selected_type_t>::value>(value);
-	container_.set<any_container_type_t>(any_container_value);
+	if(clear)
+	{
+		clear_and_set_visitor<size, any_container_type_t> visitor(container_, any_container_value);
+		apply_visitor(visitor, *this);
+	}
+	else
+	{
+		container_.set<any_container_type_t>(any_container_value);
+	}
 
 	type_index_ = type_index_getter<Ts...>::template get<U>();
-}
-
-template<typename... Ts>
-void
-variant<Ts...>::clear()
-{
-	assert(type_index_ != 0);
-	clear_visitor<size, Ts...> visitor(container_);
-	apply_visitor(visitor, *this);
 }
 
 

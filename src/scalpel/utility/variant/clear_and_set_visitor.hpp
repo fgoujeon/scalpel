@@ -18,43 +18,36 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_UTILITY_VARIANT_ASSIGN_VISITOR_HPP
-#define SCALPEL_UTILITY_VARIANT_ASSIGN_VISITOR_HPP
+#ifndef SCALPEL_UTILITY_VARIANT_CLEAR_AND_SET_VISITOR_HPP
+#define SCALPEL_UTILITY_VARIANT_CLEAR_AND_SET_VISITOR_HPP
 
 #include "variant_fwd.hpp"
 
 namespace scalpel { namespace utility
 {
 
-template<typename... Ts>
-struct assign_visitor
+template<unsigned int Size, typename Set>
+struct clear_and_set_visitor
 {
 	public:
 		typedef void return_type;
 
-		assign_visitor(variant<Ts...>& lhs, const bool clear = true):
-			lhs_(lhs),
-			clear_(clear)
+		clear_and_set_visitor(any_container<Size>& container, const Set& value):
+			container_(container),
+			value_(value)
 		{
 		}
 
-		template<typename T>
+		template<typename Clear>
 		void
-		operator()(const T& value) const
+		operator()(const Clear&) const
 		{
-			lhs_.template set<T>(value, clear_);
-		}
-
-		template<typename T>
-		void
-		operator()(T& value) const
-		{
-			lhs_.template set<T>(value, clear_);
+			container_.template clear_and_set<Clear, Set>(value_);
 		}
 
 	private:
-		variant<Ts...>& lhs_;
-		const bool clear_;
+		any_container<Size>& container_;
+		const Set& value_;
 };
 
 }} //namespace scalpel::utility
