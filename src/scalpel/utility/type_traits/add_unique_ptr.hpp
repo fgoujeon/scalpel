@@ -18,23 +18,21 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_UTILITY_CONST_PTR_VARIANT_HPP
-#define SCALPEL_UTILITY_CONST_PTR_VARIANT_HPP
+#ifndef SCALPEL_UTILITY_TYPE_TRAITS_ADD_UNIQUE_PTR_HPP
+#define SCALPEL_UTILITY_TYPE_TRAITS_ADD_UNIQUE_PTR_HPP
 
-#include "variant.hpp"
-#include "apply_type_trait_to_variadic_template_parameters.hpp"
-#include "type_traits/add_const_and_pointer.hpp"
+#include <memory>
 
-namespace scalpel { namespace utility
+namespace scalpel { namespace utility { namespace type_traits
 {
 
-template<typename... Ts>
-struct const_ptr_variant
+template<typename T>
+struct add_unique_ptr
 {
-	typedef typename apply_type_trait_to_variadic_template_parameters<type_traits::add_const_and_pointer, variant, Ts...>::type type;
+	typedef std::unique_ptr<T> type;
 };
 
-}} //namespace scalpel::utility
+}}} //namespace scalpel::utility::type_traits
 
 #endif
 
