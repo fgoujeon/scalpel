@@ -121,7 +121,7 @@ void \
 CLASS_NAME::body(std::unique_ptr<statement_block>&& b) \
 { \
 	body_ = std::move(b); \
-	body_->enclosing_declarative_region(static_cast<CLASS_NAME*>(this)); \
+	body_->enclosing_declarative_region(this); \
 } \
  \
 bool \

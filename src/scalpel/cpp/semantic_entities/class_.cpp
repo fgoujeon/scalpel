@@ -203,7 +203,7 @@ class_::add_base_class
 void
 class_::add_member(std::unique_ptr<class_>&& member, const access acc)
 {
-	member->enclosing_declarative_region(static_cast<class_*>(this));
+	member->enclosing_declarative_region(this);
 
 	open_declarative_regions_.push_back(member.get());
 	member_access_[static_cast<const class_*>(member.get())] = acc;
@@ -214,7 +214,7 @@ class_::add_member(std::unique_ptr<class_>&& member, const access acc)
 void
 class_::add_member(std::unique_ptr<enum_>&& member, const access acc)
 {
-	member->enclosing_declarative_region(static_cast<class_*>(this));
+	member->enclosing_declarative_region(this);
 
 	member_access_[static_cast<const enum_*>(member.get())] = acc;
 
@@ -224,7 +224,7 @@ class_::add_member(std::unique_ptr<enum_>&& member, const access acc)
 void
 class_::add_member(std::unique_ptr<typedef_>&& member, const access acc)
 {
-	member->enclosing_declarative_region(static_cast<class_*>(this));
+	member->enclosing_declarative_region(this);
 
 	member_access_[static_cast<const typedef_*>(member.get())] = acc;
 
@@ -234,7 +234,7 @@ class_::add_member(std::unique_ptr<typedef_>&& member, const access acc)
 void
 class_::add_member(std::unique_ptr<constructor>&& member, const access acc)
 {
-	member->enclosing_declarative_region(static_cast<class_*>(this));
+	member->enclosing_declarative_region(this);
 
 	member_access_[static_cast<const constructor*>(member.get())] = acc;
 
@@ -248,7 +248,7 @@ class_::set_destructor
 	const access acc
 )
 {
-	member->enclosing_declarative_region(static_cast<class_*>(this));
+	member->enclosing_declarative_region(this);
 
 	member_access_[static_cast<const destructor*>(member.get())] = acc;
 
@@ -272,7 +272,7 @@ class_::add_member
 	const access acc
 )
 {
-	member->enclosing_declarative_region(static_cast<class_*>(this));
+	member->enclosing_declarative_region(this);
 
 	member_access_[static_cast<const simple_member_function*>(member.get())] = acc;
 
@@ -286,7 +286,7 @@ class_::add_member
 	const access acc
 )
 {
-	member->enclosing_declarative_region(static_cast<class_*>(this));
+	member->enclosing_declarative_region(this);
 
 	member_access_[static_cast<const operator_member_function*>(member.get())] = acc;
 
@@ -300,7 +300,7 @@ class_::add_member
 	const access acc
 )
 {
-	member->enclosing_declarative_region(static_cast<class_*>(this));
+	member->enclosing_declarative_region(this);
 
 	member_access_[static_cast<const conversion_function*>(member.get())] = acc;
 
@@ -315,7 +315,7 @@ class_::add_member
 	const bool is_mutable
 )
 {
-	member->enclosing_declarative_region(static_cast<class_*>(this));
+	member->enclosing_declarative_region(this);
 
 	member_access_[static_cast<const variable*>(member.get())] = acc;
 	if(is_mutable) mutable_member_variables_.push_back(member.get());

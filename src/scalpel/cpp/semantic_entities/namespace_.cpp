@@ -184,7 +184,7 @@ namespace_::add_member(std::unique_ptr<namespace_>&& member)
 void
 namespace_::add_member(std::unique_ptr<class_>&& member)
 {
-	member->enclosing_declarative_region(static_cast<namespace_*>(this));
+	member->enclosing_declarative_region(this);
 	open_declarative_regions_.push_back(member.get());
 
     classes_.push_back(std::move(member));
@@ -193,35 +193,35 @@ namespace_::add_member(std::unique_ptr<class_>&& member)
 void
 namespace_::add_member(std::unique_ptr<enum_>&& member)
 {
-	member->enclosing_declarative_region(static_cast<namespace_*>(this));
+	member->enclosing_declarative_region(this);
     enums_.push_back(std::move(member));
 }
 
 void
 namespace_::add_member(std::unique_ptr<typedef_>&& member)
 {
-	member->enclosing_declarative_region(static_cast<namespace_*>(this));
+	member->enclosing_declarative_region(this);
     typedefs_.push_back(std::move(member));
 }
 
 void
 namespace_::add_member(std::unique_ptr<simple_function>&& member)
 {
-	member->enclosing_declarative_region(static_cast<namespace_*>(this));
+	member->enclosing_declarative_region(this);
     simple_functions_.push_back(std::move(member));
 }
 
 void
 namespace_::add_member(std::unique_ptr<operator_function>&& member)
 {
-	member->enclosing_declarative_region(static_cast<namespace_*>(this));
+	member->enclosing_declarative_region(this);
     operator_functions_.push_back(std::move(member));
 }
 
 void
 namespace_::add_member(std::unique_ptr<variable>&& member)
 {
-	member->enclosing_declarative_region(static_cast<namespace_*>(this));
+	member->enclosing_declarative_region(this);
     variables_.push_back(std::move(member));
 }
 
