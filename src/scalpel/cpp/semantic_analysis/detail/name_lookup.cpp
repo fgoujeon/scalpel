@@ -221,7 +221,7 @@ find_common_enclosing_namespace
 	semantic_entities::declarative_region_ptr_variant current_declarative_region_a = a;
 	while(true) //from a to outermost declarative region...
 	{
-		if(namespace_** opt_namespace_ptr = utility::get<semantic_entities::namespace_>(&current_declarative_region_a))
+		if(namespace_** opt_namespace_ptr = utility::get<semantic_entities::namespace_*>(&current_declarative_region_a))
 		{
 			namespace_* current_namespace_a = *opt_namespace_ptr;
 			namespace_* current_namespace_b = &b;

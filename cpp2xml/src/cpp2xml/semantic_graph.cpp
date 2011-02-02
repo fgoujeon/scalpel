@@ -201,7 +201,7 @@ semantic_graph_serializer::serialize_class
 	if(entity.has_enclosing_declarative_region())
 	{
 		declarative_region_ptr_variant enclosing_declarative_region = entity.enclosing_declarative_region();
-		if(class_** opt_class = utility::get<class_>(&enclosing_declarative_region))
+		if(class_** opt_class = utility::get<class_*>(&enclosing_declarative_region))
 		{
 			class_& enclosing_declarative_region = **opt_class;
 
@@ -308,7 +308,7 @@ semantic_graph_serializer::serialize_constructor
 	output_ << indent(indent_level) << "<constructor";
 	if(entity.has_enclosing_declarative_region())
 	{
-		class_* enclosing_declarative_region = utility::get<class_>(entity.enclosing_declarative_region());
+		class_* enclosing_declarative_region = utility::get<class_*>(entity.enclosing_declarative_region());
 
 		class_::access acc = enclosing_declarative_region->member_access(&entity);
 		output_ << attribute(acc);
@@ -339,7 +339,7 @@ semantic_graph_serializer::serialize_destructor
 
 	assert(entity.has_enclosing_declarative_region());
 	declarative_region_ptr_variant enclosing_declarative_region = entity.enclosing_declarative_region();
-	class_* enclosing_class = utility::get<class_>(enclosing_declarative_region);
+	class_* enclosing_class = utility::get<class_*>(enclosing_declarative_region);
 
 	class_::access acc = enclosing_class->member_access(&entity);
 	output_ << attribute(acc);
@@ -368,7 +368,7 @@ semantic_graph_serializer::serialize_operator_member_function
 
 	assert(entity.has_enclosing_declarative_region());
 	declarative_region_ptr_variant enclosing_declarative_region = entity.enclosing_declarative_region();
-	class_* enclosing_class = utility::get<class_>(enclosing_declarative_region);
+	class_* enclosing_class = utility::get<class_*>(enclosing_declarative_region);
 
 	class_::access acc = enclosing_class->member_access(&entity);
 	output_ << attribute(acc);
@@ -406,7 +406,7 @@ semantic_graph_serializer::serialize_conversion_function
 
 	assert(entity.has_enclosing_declarative_region());
 	declarative_region_ptr_variant enclosing_declarative_region = entity.enclosing_declarative_region();
-	class_* enclosing_class = utility::get<class_>(enclosing_declarative_region);
+	class_* enclosing_class = utility::get<class_*>(enclosing_declarative_region);
 
 	class_::access acc = enclosing_class->member_access(&entity);
 	output_ << attribute(acc);
@@ -443,7 +443,7 @@ semantic_graph_serializer::serialize_simple_member_function
 
 	assert(entity.has_enclosing_declarative_region());
 	declarative_region_ptr_variant enclosing_declarative_region = entity.enclosing_declarative_region();
-	class_* enclosing_class = utility::get<class_>(enclosing_declarative_region);
+	class_* enclosing_class = utility::get<class_*>(enclosing_declarative_region);
 
 	class_::access acc = enclosing_class->member_access(&entity);
 	output_ << attribute(acc);
@@ -608,7 +608,7 @@ semantic_graph_serializer::serialize_variable
 	if(entity.has_enclosing_declarative_region())
 	{
 		declarative_region_ptr_variant enclosing_declarative_region = entity.enclosing_declarative_region();
-		if(auto opt_class = utility::get<class_>(&enclosing_declarative_region))
+		if(auto opt_class = utility::get<class_*>(&enclosing_declarative_region))
 		{
 			class_* enclosing_declarative_region = *opt_class;
 
@@ -640,7 +640,7 @@ semantic_graph_serializer::serialize_typedef
 	if(entity.has_enclosing_declarative_region())
 	{
 		declarative_region_ptr_variant enclosing_declarative_region = entity.enclosing_declarative_region();
-		if(auto opt_class = utility::get<class_>(&enclosing_declarative_region))
+		if(auto opt_class = utility::get<class_*>(&enclosing_declarative_region))
 		{
 			class_* enclosing_declarative_region = *opt_class;
 

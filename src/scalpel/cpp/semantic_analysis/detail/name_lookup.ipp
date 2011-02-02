@@ -49,14 +49,14 @@ find
 	while(true)
 	{
 		//apply using directives (only for namespaces and statement blocks)
-		if(semantic_entities::namespace_** opt_namespace_ptr = utility::get<semantic_entities::namespace_>(&current_declarative_region))
+		if(semantic_entities::namespace_** opt_namespace_ptr = utility::get<semantic_entities::namespace_*>(&current_declarative_region))
 			apply_using_directives
 			(
 				current_declarative_region,
 				(*opt_namespace_ptr)->using_directive_namespaces(),
 				namespace_associations
 			);
-		else if(semantic_entities::statement_block** opt_statement_block_ptr = utility::get<semantic_entities::statement_block>(&current_declarative_region))
+		else if(semantic_entities::statement_block** opt_statement_block_ptr = utility::get<semantic_entities::statement_block*>(&current_declarative_region))
 			apply_using_directives
 			(
 				current_declarative_region,
@@ -80,7 +80,7 @@ find
 
 		//find entities in the associated namespaces (only for namespaces)
 		//and add them to the previously found entities
-		if(semantic_entities::namespace_** opt_namespace_ptr = utility::get<semantic_entities::namespace_>(&current_declarative_region))
+		if(semantic_entities::namespace_** opt_namespace_ptr = utility::get<semantic_entities::namespace_*>(&current_declarative_region))
 		{
 			auto associated_namespaces_it = namespace_associations.find(*opt_namespace_ptr);
 			if(associated_namespaces_it != namespace_associations.end())
@@ -112,7 +112,7 @@ find
 		if(!utility::is_empty(found_entities)) break;
 
 		//find entities in the base classes (only for classes)
-		if(semantic_entities::class_** opt_class_ptr = utility::get<semantic_entities::class_>(&current_declarative_region))
+		if(semantic_entities::class_** opt_class_ptr = utility::get<semantic_entities::class_*>(&current_declarative_region))
 		{
 			semantic_entities::class_* class_ptr = *opt_class_ptr;
 
@@ -186,7 +186,7 @@ find
 	//find entities in the last declarative region
 	if(apply_using_directives_for_unqualified_id_part)
 	{
-		if(semantic_entities::namespace_** opt_namespace_ptr = utility::get<semantic_entities::namespace_>(&last_declarative_region))
+		if(semantic_entities::namespace_** opt_namespace_ptr = utility::get<semantic_entities::namespace_*>(&last_declarative_region))
 		{
 			return
 				find_in_namespace
@@ -548,11 +548,11 @@ template<class T, class... Ts>
 void
 add_to_result
 (
-	boost::optional<utility::basic_variant<utility::add_ptr, Ts...>>& result,
+	boost::optional<utility::variant<Ts...>>& result,
 	T* entity
 )
 {
-	result = utility::basic_variant<utility::add_ptr, Ts...>(entity);
+	result = utility::variant<Ts...>(entity);
 }
 
 
@@ -610,10 +610,10 @@ return_result<false, false, EntitiesT...>::result(typename return_type<true, fal
 }
 
 template<class... EntitiesT>
-typename return_type<false, false, utility::basic_variant<utility::add_ptr, EntitiesT...>>::type
-return_result<false, false, utility::basic_variant<utility::add_ptr, EntitiesT...>>::result
+typename return_type<false, false, utility::variant<EntitiesT...>>::type
+return_result<false, false, utility::variant<EntitiesT...>>::result
 (
-	typename return_type<false, true, utility::basic_variant<utility::add_ptr, EntitiesT...>>::type& result
+	typename return_type<false, true, utility::variant<EntitiesT...>>::type& result
 )
 {
 	if(result.empty())
@@ -631,10 +631,10 @@ return_result<false, false, utility::basic_variant<utility::add_ptr, EntitiesT..
 }
 
 template<class... EntitiesT>
-typename return_type<false, false, utility::basic_variant<utility::add_ptr, EntitiesT...>>::type
-return_result<false, false, utility::basic_variant<utility::add_ptr, EntitiesT...>>::result
+typename return_type<false, false, utility::variant<EntitiesT...>>::type
+return_result<false, false, utility::variant<EntitiesT...>>::result
 (
-	typename return_type<true, false, utility::basic_variant<utility::add_ptr, EntitiesT...>>::type& result
+	typename return_type<true, false, utility::variant<EntitiesT...>>::type& result
 )
 {
 	if(!result)

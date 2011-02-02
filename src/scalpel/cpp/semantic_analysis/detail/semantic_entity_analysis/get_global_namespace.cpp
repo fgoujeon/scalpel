@@ -36,7 +36,7 @@ get_global_namespace(semantic_entities::declarative_region_ptr_variant current_d
 	//try to cast it to a namespace
 	try
 	{
-		return *utility::get<semantic_entities::namespace_>(current_declarative_region);
+		return *utility::get<semantic_entities::namespace_*>(current_declarative_region);
 	}
 	catch(...)
 	{

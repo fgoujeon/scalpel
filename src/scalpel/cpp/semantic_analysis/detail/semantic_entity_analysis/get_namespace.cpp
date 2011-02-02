@@ -25,26 +25,28 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 
 using namespace semantic_entities;
 
-struct get_namespace_impl_struct: public utility::static_visitor<namespace_&>
+namespace
 {
-	namespace_&
-	operator()(namespace_* t) const
+	struct get_namespace_impl_struct: public utility::static_visitor<namespace_&>
 	{
-		return *t;
-	}
+		namespace_&
+		operator()(namespace_* t) const
+		{
+			return *t;
+		}
 
-	namespace_&
-	operator()(namespace_alias* t) const
-	{
-		return t->referred_namespace();
-	}
-};
-get_namespace_impl_struct get_namespace_impl;
+		namespace_&
+		operator()(namespace_alias* t) const
+		{
+			return t->referred_namespace();
+		}
+	} get_namespace_visitor;
+}
 
 namespace_&
 get_namespace(const utility::ptr_variant<semantic_entities::namespace_, semantic_entities::namespace_alias>::type& var)
 {
-	return utility::apply_visitor(get_namespace_impl, var);
+	return utility::apply_visitor(get_namespace_visitor, var);
 }
 
 }}}}} //namespace scalpel::cpp::semantic_analysis::detail::semantic_entity_analysis

@@ -247,13 +247,13 @@ fill_namespace
 				false
 			);
 
-			if(auto opt_simple_function_entity = get<simple_function>(&declarator_entity))
+			if(auto opt_simple_function_entity = get<simple_function*>(&declarator_entity))
 				namespace_entity.add_member(std::unique_ptr<simple_function>(*opt_simple_function_entity));
-			else if(auto opt_operator_function_entity = get<operator_function>(&declarator_entity))
+			else if(auto opt_operator_function_entity = get<operator_function*>(&declarator_entity))
 				namespace_entity.add_member(std::unique_ptr<operator_function>(*opt_operator_function_entity));
-			else if(auto opt_variable_entity = get<variable>(&declarator_entity))
+			else if(auto opt_variable_entity = get<variable*>(&declarator_entity))
 				namespace_entity.add_member(std::unique_ptr<variable>(*opt_variable_entity));
-			else if(auto opt_typedef_entity = get<typedef_>(&declarator_entity))
+			else if(auto opt_typedef_entity = get<typedef_*>(&declarator_entity))
 				namespace_entity.add_member(std::unique_ptr<typedef_>(*opt_typedef_entity));
 			else
 				assert(false);
@@ -289,7 +289,7 @@ fill_namespace
 	;
 
 	//is it a class member function?
-	const bool is_class_member = utility::get<class_>(&function_declarative_region);
+	const bool is_class_member = utility::get<class_*>(&function_declarative_region);
 
 	//create an empty function corresponding to the function-definition
 	function_ptr_variant function_entity = create_function
@@ -345,9 +345,9 @@ fill_namespace
 			{
 				std::runtime_error("error: this function must be a nonstatic member function");
 			}
-			else if(auto opt_operator_function_entity = get<operator_function>(&function_entity))
+			else if(auto opt_operator_function_entity = get<operator_function*>(&function_entity))
 				namespace_entity.add_member(std::unique_ptr<operator_function>(*opt_operator_function_entity));
-			else if(auto opt_simple_function_entity = get<simple_function>(&function_entity))
+			else if(auto opt_simple_function_entity = get<simple_function*>(&function_entity))
 				namespace_entity.add_member(std::unique_ptr<simple_function>(*opt_simple_function_entity));
 			else
 				assert(false);

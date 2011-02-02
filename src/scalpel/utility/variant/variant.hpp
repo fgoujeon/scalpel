@@ -138,6 +138,10 @@ template<typename... Ts>
 bool
 operator!=(const variant<Ts...>& lhs, const variant<Ts...>& rhs);
 
+template<typename... Ts>
+bool
+operator<(const variant<Ts...>& lhs, const variant<Ts...>& rhs);
+
 }} //namespace scalpel::utility
 
 #include "variant.ipp"

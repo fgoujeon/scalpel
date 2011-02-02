@@ -135,7 +135,7 @@ BOOST_AUTO_TEST_CASE(test_case_10)
 		scalpel::utility::ptr_variant<namespace_, namespace_alias>::type found_entity =
 			find<identification_policies::by_name, false, false, namespace_, namespace_alias>("as", &function_test->body())
 		;
-		namespace_alias* found_namespace_alias = get<namespace_alias>(found_entity);
+		namespace_alias* found_namespace_alias = get<namespace_alias*>(found_entity);
 		BOOST_CHECK_EQUAL(found_namespace_alias, namespace_alias_as);
 		BOOST_CHECK_EQUAL(&found_namespace_alias->referred_namespace(), namespace_a);
 	}

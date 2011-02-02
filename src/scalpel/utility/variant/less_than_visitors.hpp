@@ -18,22 +18,22 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_UTILITY_VARIANT_EQUAL_VISITOR_HPP
-#define SCALPEL_UTILITY_VARIANT_EQUAL_VISITOR_HPP
+#ifndef SCALPEL_UTILITY_VARIANT_LESS_THAN_VISITORS_HPP
+#define SCALPEL_UTILITY_VARIANT_LESS_THAN_VISITORS_HPP
 
 #include "apply_visitor_fwd.hpp"
 #include "variant_fwd.hpp"
+#include "static_visitor.hpp"
+#include <cassert>
 
 namespace scalpel { namespace utility
 {
 
 template<typename T>
-struct complete_equal_visitor
+struct complete_less_than_visitor: public static_visitor<bool>
 {
 	public:
-		typedef bool return_type;
-
-		complete_equal_visitor(const T& rhs):
+		complete_less_than_visitor(const T& rhs):
 			rhs_(rhs)
 		{
 		}
@@ -41,13 +41,14 @@ struct complete_equal_visitor
 		bool
 		operator()(const T& lhs) const
 		{
-			return lhs == rhs_;
+			return lhs < rhs_;
 		}
 
 		template<typename U>
 		bool
 		operator()(const U&) const
 		{
+			assert(false);
 			return false;
 		}
 
@@ -56,12 +57,10 @@ struct complete_equal_visitor
 };
 
 template<typename... Ts>
-struct partial_equal_visitor
+struct partial_less_than_visitor: public static_visitor<bool>
 {
 	public:
-		typedef bool return_type;
-
-		partial_equal_visitor(const variant<Ts...>& lhs):
+		partial_less_than_visitor(const variant<Ts...>& lhs):
 			lhs_(lhs)
 		{
 		}
@@ -70,7 +69,7 @@ struct partial_equal_visitor
 		bool
 		operator()(const T& rhs) const
 		{
-			complete_equal_visitor<T> visitor(rhs);
+			complete_less_than_visitor<T> visitor(rhs);
 			return apply_visitor(visitor, lhs_);
 		}
 

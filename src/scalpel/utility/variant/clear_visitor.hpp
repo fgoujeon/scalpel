@@ -22,16 +22,15 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_UTILITY_VARIANT_CLEAR_VISITOR_HPP
 
 #include "any_container.hpp"
+#include "static_visitor.hpp"
 
 namespace scalpel { namespace utility
 {
 
 template<unsigned int Size, typename... Ts>
-struct clear_visitor
+struct clear_visitor: public static_visitor<void>
 {
 	public:
-		typedef void return_type;
-
 		clear_visitor(any_container<Size>& container):
 			container_(container)
 		{

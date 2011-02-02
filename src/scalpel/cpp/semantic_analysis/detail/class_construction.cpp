@@ -346,44 +346,44 @@ fill_class
 					true
 				);
 
-				if(auto opt_constructor_entity = get<constructor>(&declarator_entity))
+				if(auto opt_constructor_entity = get<constructor*>(&declarator_entity))
 					class_entity.add_member
 					(
 						std::unique_ptr<constructor>(*opt_constructor_entity),
 						current_access
 					);
-				else if(auto opt_destructor_entity = get<destructor>(&declarator_entity))
+				else if(auto opt_destructor_entity = get<destructor*>(&declarator_entity))
 					class_entity.set_destructor
 					(
 						std::unique_ptr<destructor>(*opt_destructor_entity),
 						current_access
 					);
-				else if(auto opt_operator_function_entity = get<operator_member_function>(&declarator_entity))
+				else if(auto opt_operator_function_entity = get<operator_member_function*>(&declarator_entity))
 					class_entity.add_member
 					(
 						std::unique_ptr<operator_member_function>(*opt_operator_function_entity),
 						current_access
 					);
-				else if(auto opt_conversion_function_entity = get<conversion_function>(&declarator_entity))
+				else if(auto opt_conversion_function_entity = get<conversion_function*>(&declarator_entity))
 					class_entity.add_member
 					(
 						std::unique_ptr<conversion_function>(*opt_conversion_function_entity),
 						current_access
 					);
-				else if(auto opt_simple_function_entity = get<simple_member_function>(&declarator_entity))
+				else if(auto opt_simple_function_entity = get<simple_member_function*>(&declarator_entity))
 					class_entity.add_member
 					(
 						std::unique_ptr<simple_member_function>(*opt_simple_function_entity),
 						current_access
 					);
-				else if(auto opt_variable_entity = get<variable>(&declarator_entity))
+				else if(auto opt_variable_entity = get<variable*>(&declarator_entity))
 					class_entity.add_member
 					(
 						std::unique_ptr<variable>(*opt_variable_entity),
 						current_access,
 						has_mutable_specifier
 					);
-				else if(auto opt_typedef_entity = get<typedef_>(&declarator_entity))
+				else if(auto opt_typedef_entity = get<typedef_*>(&declarator_entity))
 					class_entity.add_member
 					(
 						std::unique_ptr<typedef_>(*opt_typedef_entity),

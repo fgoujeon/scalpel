@@ -21,10 +21,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_UTILITY_VARIANT_APPLY_VISITOR_HPP
 #define SCALPEL_UTILITY_VARIANT_APPLY_VISITOR_HPP
 
-#include <boost/type_traits/is_same.hpp>
-#include <boost/utility/enable_if.hpp>
+#include "apply_visitor_fwd.hpp"
+#include "variant.hpp"
 #include <cassert>
-#include <iostream>
 
 namespace scalpel { namespace utility
 {
@@ -44,11 +43,10 @@ namespace impl
 		visit
 		(
 			Visitor&,
-			const Variant& var
+			const Variant&
 		)
 		{
 			//won't be called
-			std::cout << var.type_index() << std::endl;
 			assert(false);
 			throw "";
 		}
@@ -89,7 +87,7 @@ namespace impl
 		static const unsigned int index = 0;
 
 		static
-		typename Visitor::return_type
+		typename Visitor::result_type
 		visit
 		(
 			Visitor&,
@@ -108,7 +106,7 @@ namespace impl
 		static const unsigned int index = apply_return_visitor_impl<Visitor, Variant, Ts...>::index + 1;
 
 		static
-		typename Visitor::return_type
+		typename Visitor::result_type
 		visit
 		(
 			Visitor& visitor,
@@ -137,7 +135,7 @@ apply_visitor
 	const variant<Ts...>& var,
 	typename boost::enable_if
 	<
-		boost::is_same<typename Visitor::return_type, void>
+		boost::is_same<typename Visitor::result_type, void>
 	>::type* = 0
 )
 {
@@ -145,14 +143,14 @@ apply_visitor
 }
 
 template<class Visitor, typename... Ts>
-typename Visitor::return_type
+typename Visitor::result_type
 apply_visitor
 (
 	Visitor& visitor,
 	const variant<Ts...>& var,
 	typename boost::disable_if
 	<
-		boost::is_same<typename Visitor::return_type, void>
+		boost::is_same<typename Visitor::result_type, void>
 	>::type* = 0
 )
 {

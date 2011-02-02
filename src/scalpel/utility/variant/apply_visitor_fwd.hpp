@@ -36,19 +36,19 @@ apply_visitor
 	const variant<Ts...>& var,
 	typename boost::enable_if
 	<
-		boost::is_same<typename Visitor::return_type, void>
+		boost::is_same<typename Visitor::result_type, void>
 	>::type* = 0
 );
 
 template<class Visitor, typename... Ts>
-typename Visitor::return_type
+typename Visitor::result_type
 apply_visitor
 (
 	Visitor& visitor,
 	const variant<Ts...>& var,
 	typename boost::disable_if
 	<
-		boost::is_same<typename Visitor::return_type, void>
+		boost::is_same<typename Visitor::result_type, void>
 	>::type* = 0
 );
 

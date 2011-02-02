@@ -19,6 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "to_type_variant.hpp"
+#include <scalpel/utility/variant/apply_visitor.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail { namespace semantic_entity_analysis
 {
@@ -52,7 +53,7 @@ namespace
 semantic_entities::type_variant
 to_type_variant
 (
-	const utility::ptr_variant
+	const typename utility::ptr_variant
 	<
 		semantic_entities::class_,
 		semantic_entities::typedef_,

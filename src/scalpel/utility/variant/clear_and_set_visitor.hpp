@@ -21,17 +21,16 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_UTILITY_VARIANT_CLEAR_AND_SET_VISITOR_HPP
 #define SCALPEL_UTILITY_VARIANT_CLEAR_AND_SET_VISITOR_HPP
 
-#include "variant_fwd.hpp"
+#include "any_container.hpp"
+#include "static_visitor.hpp"
 
 namespace scalpel { namespace utility
 {
 
 template<unsigned int Size, typename Set>
-struct clear_and_set_visitor
+struct clear_and_set_visitor: public static_visitor<void>
 {
 	public:
-		typedef void return_type;
-
 		clear_and_set_visitor(any_container<Size>& container, const Set& value):
 			container_(container),
 			value_(value)

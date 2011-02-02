@@ -18,14 +18,12 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_SEMANTIC_ENTITY_ANALYSIS_TO_TYPE_SHARED_PTR_VARIANT_HPP
-#define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_SEMANTIC_ENTITY_ANALYSIS_TO_TYPE_SHARED_PTR_VARIANT_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_SEMANTIC_ENTITY_ANALYSIS_TO_TYPE_VARIANT_HPP
+#define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_SEMANTIC_ENTITY_ANALYSIS_TO_TYPE_VARIANT_HPP
 
-#include <scalpel/cpp/semantic_entities/class_.hpp>
-#include <scalpel/cpp/semantic_entities/typedef_.hpp>
 #include <scalpel/cpp/semantic_entities/type_variant.hpp>
+#include <scalpel/cpp/semantic_entities/typedef_.hpp>
 #include <scalpel/utility/ptr_variant.hpp>
-#include <memory>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail { namespace semantic_entity_analysis
 {
@@ -33,7 +31,7 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 semantic_entities::type_variant
 to_type_variant
 (
-	const utility::ptr_variant
+	const typename utility::ptr_variant
 	<
 		semantic_entities::class_,
 		semantic_entities::typedef_,

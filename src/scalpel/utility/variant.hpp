@@ -21,9 +21,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_UTILITY_VARIANT_HPP
 #define SCALPEL_UTILITY_VARIANT_HPP
 
-#include "variant/variant.hpp"
 #include "variant/apply_visitor.hpp"
 #include "variant/get.hpp"
+#include "variant/variant.hpp"
 #include "variant/static_visitor.hpp"
 
 #endif

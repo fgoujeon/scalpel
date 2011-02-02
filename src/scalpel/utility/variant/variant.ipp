@@ -24,7 +24,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "apply_visitor_fwd.hpp"
 #include "clear_and_set_visitor.hpp"
 #include "clear_visitor.hpp"
-#include "equal_visitor.hpp"
+#include "equals_visitors.hpp"
+#include "less_than_visitors.hpp"
 #include "strict_select_type.hpp"
 #include "type_index_getter.hpp"
 #include "get_address_if.hpp"
@@ -192,7 +193,7 @@ variant<Ts...>::set
 		container_.set<any_container_type_t>(any_container_value);
 	}
 
-	type_index_ = type_index_getter<Ts...>::template get<U>();
+	type_index_ = type_index_getter<Ts...>::template get<selected_type_t>();
 }
 
 template<typename... Ts>
@@ -222,7 +223,7 @@ variant<Ts...>::set
 		container_.set<any_container_type_t>(any_container_value);
 	}
 
-	type_index_ = type_index_getter<Ts...>::template get<U>();
+	type_index_ = type_index_getter<Ts...>::template get<selected_type_t>();
 }
 
 
@@ -231,7 +232,7 @@ template<typename... Ts>
 bool
 operator==(const variant<Ts...>& lhs, const variant<Ts...>& rhs)
 {
-	partial_equal_visitor<Ts...> visitor(lhs);
+	partial_equals_visitor<Ts...> visitor(lhs);
 	return apply_visitor(visitor, rhs);
 }
 
@@ -240,6 +241,21 @@ bool
 operator!=(const variant<Ts...>& lhs, const variant<Ts...>& rhs)
 {
 	return !(lhs == rhs);
+}
+
+template<typename... Ts>
+bool
+operator<(const variant<Ts...>& lhs, const variant<Ts...>& rhs)
+{
+	if(lhs.type_index() != rhs.type_index())
+	{
+		return lhs.type_index() > rhs.type_index();
+	}
+	else
+	{
+		partial_less_than_visitor<Ts...> visitor(lhs);
+		return apply_visitor(visitor, rhs);
+	}
 }
 
 }} //namespace scalpel::utility
