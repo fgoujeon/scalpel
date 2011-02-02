@@ -29,101 +29,107 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-struct get_name_impl_struct: public utility::static_visitor<const std::string&>
+namespace
 {
-	template<class T>
-	const std::string&
-	operator()(T* t) const
+	struct: public utility::static_visitor<const std::string&>
 	{
-		return t->name();
-	}
+		template<class T>
+		const std::string&
+		operator()(T* t) const
+		{
+			return t->name();
+		}
 
-	const std::string&
-	operator()(constructor*) const
-	{
-		return utility::extern_strings::empty;
-	}
+		const std::string&
+		operator()(constructor*) const
+		{
+			return utility::extern_strings::empty;
+		}
 
-	const std::string&
-	operator()(destructor*) const
-	{
-		return utility::extern_strings::empty;
-	}
+		const std::string&
+		operator()(destructor*) const
+		{
+			return utility::extern_strings::empty;
+		}
 
-	const std::string&
-	operator()(operator_function*) const
-	{
-		return utility::extern_strings::empty;
-	}
+		const std::string&
+		operator()(operator_function*) const
+		{
+			return utility::extern_strings::empty;
+		}
 
-	const std::string&
-	operator()(operator_member_function*) const
-	{
-		return utility::extern_strings::empty;
-	}
+		const std::string&
+		operator()(operator_member_function*) const
+		{
+			return utility::extern_strings::empty;
+		}
 
-	const std::string&
-	operator()(conversion_function*) const
-	{
-		return utility::extern_strings::empty;
-	}
+		const std::string&
+		operator()(conversion_function*) const
+		{
+			return utility::extern_strings::empty;
+		}
 
-	const std::string&
-	operator()(statement_block*) const
-	{
-		return utility::extern_strings::empty;
-	}
-};
-get_name_impl_struct get_name_impl;
+		const std::string&
+		operator()(statement_block*) const
+		{
+			return utility::extern_strings::empty;
+		}
+	} get_name_visitor;
+}
 
 const std::string&
 get_name(const declarative_region_ptr_variant& var)
 {
-	return utility::apply_visitor(get_name_impl, var);
+	return utility::apply_visitor(get_name_visitor, var);
 }
 
 const std::string&
 get_name(const open_declarative_region_ptr_variant& var)
 {
-	return utility::apply_visitor(get_name_impl, var);
+	return utility::apply_visitor(get_name_visitor, var);
 }
 
 
 
-struct has_enclosing_declarative_region_impl_struct: public utility::static_visitor<bool>
+namespace
 {
-	template<class T>
-	bool
-	operator()(T* t) const
+	struct: public utility::static_visitor<bool>
 	{
-		return t->has_enclosing_declarative_region();
-	}
-};
-has_enclosing_declarative_region_impl_struct has_enclosing_declarative_region_impl;
+		template<class T>
+		bool
+		operator()(T* t) const
+		{
+			return t->has_enclosing_declarative_region();
+		}
+	} has_enclosing_declarative_region_visitor;
+}
 
 bool
 has_enclosing_declarative_region(const declarative_region_ptr_variant& var)
 {
-	return utility::apply_visitor(has_enclosing_declarative_region_impl, var);
+	return utility::apply_visitor(has_enclosing_declarative_region_visitor, var);
 }
 
 
 
-struct get_enclosing_declarative_region_impl_struct: public utility::static_visitor<declarative_region_ptr_variant>
+namespace
 {
-	template<class T>
-	declarative_region_ptr_variant
-	operator()(T* t) const
+	struct: public utility::static_visitor<declarative_region_ptr_variant>
 	{
-		return t->enclosing_declarative_region();
-	}
-};
-get_enclosing_declarative_region_impl_struct get_enclosing_declarative_region_impl;
+		template<class T>
+		declarative_region_ptr_variant
+		operator()(T* t) const
+		{
+			return t->enclosing_declarative_region();
+		}
+	} get_enclosing_declarative_region_visitor;
+}
 
 declarative_region_ptr_variant
 get_enclosing_declarative_region(const declarative_region_ptr_variant& var)
 {
-	return utility::apply_visitor(get_enclosing_declarative_region_impl, var);
+	return utility::apply_visitor(get_enclosing_declarative_region_visitor, var);
 }
 
 }}} //namespace scalpel::cpp::semantic_entities
