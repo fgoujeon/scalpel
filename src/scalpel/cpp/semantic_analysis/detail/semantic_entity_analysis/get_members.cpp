@@ -24,6 +24,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail { namespace semantic_entity_analysis
 {
 
+//TODO these empty containers should be const
+
 template<class Entity>
 struct empty_result
 {
