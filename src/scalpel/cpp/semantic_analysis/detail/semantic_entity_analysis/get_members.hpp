@@ -23,35 +23,67 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <scalpel/utility/single_object_range.hpp>
+#include <scalpel/utility/single_object_const_range.hpp>
 #include <scalpel/utility/unique_ptr_vector.hpp>
+#include <vector>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail { namespace semantic_entity_analysis
 {
 
-template<class EntityT>
-struct get_members_return_type
+template<class Entity, bool Const>
+struct member_type_traits;
+
+template<class Entity>
+struct member_type_traits<Entity, false>
 {
-	typedef typename utility::unique_ptr_vector<EntityT>::range type;
+	typedef typename utility::unique_ptr_vector<Entity>::range return_type;
+	typedef typename return_type::reference reference;
+};
+
+template<class Entity>
+struct member_type_traits<Entity, true>
+{
+	typedef const utility::unique_ptr_vector<Entity>& return_type;
+	typedef typename utility::unique_ptr_vector<Entity>::const_reference reference;
 };
 
 template<>
-struct get_members_return_type<semantic_entities::open_declarative_region_ptr_variant>
+struct member_type_traits<semantic_entities::open_declarative_region_ptr_variant, false>
 {
-	typedef std::vector<semantic_entities::open_declarative_region_ptr_variant> type;
+	typedef const std::vector<semantic_entities::open_declarative_region_ptr_variant>& return_type;
+	typedef std::vector<semantic_entities::open_declarative_region_ptr_variant>::const_reference reference;
 };
 
 template<>
-struct get_members_return_type<semantic_entities::destructor>
+struct member_type_traits<semantic_entities::open_declarative_region_ptr_variant, true>:
+	member_type_traits<semantic_entities::open_declarative_region_ptr_variant, false>
 {
-	typedef utility::single_object_range<semantic_entities::destructor> type;
+};
+
+template<>
+struct member_type_traits<semantic_entities::destructor, false>
+{
+	typedef utility::single_object_range<semantic_entities::destructor> return_type;
+	typedef typename return_type::reference reference;
+};
+
+template<>
+struct member_type_traits<semantic_entities::destructor, true>
+{
+	typedef utility::single_object_const_range<semantic_entities::destructor> return_type;
+	typedef typename return_type::reference reference;
 };
 
 
 
 #define GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(PARENT_TYPE) \
 template<class MemberT> \
-typename get_members_return_type<MemberT>::type \
-get_members(semantic_entities::PARENT_TYPE& parent);
+typename member_type_traits<MemberT, false>::return_type \
+get_members(semantic_entities::PARENT_TYPE& parent); \
+ \
+template<class MemberT> \
+typename member_type_traits<MemberT, true>::return_type \
+get_members(const semantic_entities::PARENT_TYPE& parent);
 
 GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(namespace_)
 GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(class_)
@@ -67,19 +99,29 @@ GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(statement_block)
 #undef GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE
 
 template<class MemberT>
-typename get_members_return_type<MemberT>::type
+typename member_type_traits<MemberT, false>::return_type
 get_members(semantic_entities::namespace_alias& parent)
 {
 	semantic_entities::namespace_& n = parent.referred_namespace();
 	return get_members<MemberT>(n);
 }
 
+template<class MemberT>
+typename member_type_traits<MemberT, true>::return_type
+get_members(const semantic_entities::namespace_alias& parent)
+{
+	semantic_entities::namespace_& n = parent.referred_namespace();
+	return get_members<MemberT>(n);
+}
+
+
+
 //visitor template for declarative region variants
 template<class MemberT>
-struct get_declarative_region_members_visitor: public utility::static_visitor<typename get_members_return_type<MemberT>::type>
+struct get_declarative_region_members_visitor: public utility::static_visitor<typename member_type_traits<MemberT, false>::return_type>
 {
 	template<class T>
-	typename get_members_return_type<MemberT>::type
+	typename member_type_traits<MemberT, false>::return_type
 	operator()(T* t) const
 	{
 		return get_members<MemberT>(*t);
@@ -87,7 +129,7 @@ struct get_declarative_region_members_visitor: public utility::static_visitor<ty
 };
 
 template<class MemberT>
-typename get_members_return_type<MemberT>::type
+typename member_type_traits<MemberT, false>::return_type
 get_members(semantic_entities::declarative_region_ptr_variant& parent)
 {
 	get_declarative_region_members_visitor<MemberT> visitor;
@@ -95,7 +137,7 @@ get_members(semantic_entities::declarative_region_ptr_variant& parent)
 }
 
 template<class MemberT>
-typename get_members_return_type<MemberT>::type
+typename member_type_traits<MemberT, false>::return_type
 get_members(semantic_entities::open_declarative_region_ptr_variant& parent)
 {
 	get_declarative_region_members_visitor<MemberT> visitor;

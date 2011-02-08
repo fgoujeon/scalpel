@@ -18,36 +18,27 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_UTILITY_SINGLE_OBJECT_RANGE_IPP
-#define SCALPEL_UTILITY_SINGLE_OBJECT_RANGE_IPP
+#ifndef SCALPEL_UTILITY_SINGLE_OBJECT_CONST_RANGE_IPP
+#define SCALPEL_UTILITY_SINGLE_OBJECT_CONST_RANGE_IPP
 
 namespace scalpel { namespace utility
 {
 
 template<typename T>
-single_object_range<T>::single_object_range():
+single_object_const_range<T>::single_object_const_range():
 	object_(0)
 {
 }
 
 template<typename T>
-single_object_range<T>::single_object_range(T& object):
+single_object_const_range<T>::single_object_const_range(const T& object):
 	object_(&object)
 {
 }
 
 template<typename T>
-single_object_range<T>::operator single_object_const_range<T>() const
-{
-	if(object_)
-		return single_object_const_range<T>(*object_);
-	else
-		return single_object_const_range<T>();
-}
-
-template<typename T>
-typename single_object_range<T>::iterator
-single_object_range<T>::begin()
+typename single_object_const_range<T>::iterator
+single_object_const_range<T>::begin()
 {
 	if(object_)
 		return iterator(*object_);
@@ -56,8 +47,8 @@ single_object_range<T>::begin()
 }
 
 template<typename T>
-typename single_object_range<T>::iterator
-single_object_range<T>::end()
+typename single_object_const_range<T>::iterator
+single_object_const_range<T>::end()
 {
 	return iterator();
 }
@@ -65,42 +56,42 @@ single_object_range<T>::end()
 
 
 template<typename T>
-single_object_range<T>::iterator::iterator():
+single_object_const_range<T>::iterator::iterator():
 	object_(0)
 {
 }
 
 template<typename T>
-single_object_range<T>::iterator::iterator(T& object):
+single_object_const_range<T>::iterator::iterator(const T& object):
 	object_(&object)
 {
 }
 
 template<typename T>
 bool
-single_object_range<T>::iterator::operator==(const iterator& rhs)
+single_object_const_range<T>::iterator::operator==(const iterator& rhs)
 {
 	return object_ == rhs.object_;
 }
 
 template<typename T>
 bool
-single_object_range<T>::iterator::operator!=(const iterator& rhs)
+single_object_const_range<T>::iterator::operator!=(const iterator& rhs)
 {
 	return !operator==(rhs);
 }
 
 template<typename T>
-typename single_object_range<T>::iterator::iterator
-single_object_range<T>::iterator::operator++()
+typename single_object_const_range<T>::iterator::iterator
+single_object_const_range<T>::iterator::operator++()
 {
 	object_ = 0;
 	return *this;
 }
 
 template<typename T>
-T&
-single_object_range<T>::iterator::operator*()
+const T&
+single_object_const_range<T>::iterator::operator*() const
 {
 	return *object_;
 }

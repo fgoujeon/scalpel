@@ -24,51 +24,106 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail { namespace semantic_entity_analysis
 {
 
-#define GENERATE_GET_MEMBERS_SPECIALIZATION(PARENT_TYPE, MEMBER_TYPE, PARENT_MEMBER_FUNCTION) \
+template<class Entity>
+struct empty_result
+{
+	typedef utility::unique_ptr_vector<Entity> type;
+	static type value;
+};
+
+template<class Entity>
+typename empty_result<Entity>::type
+	empty_result<Entity>::value
+;
+
+template<>
+struct empty_result<semantic_entities::open_declarative_region_ptr_variant>
+{
+	typedef std::vector<semantic_entities::open_declarative_region_ptr_variant> type;
+	static type value;
+};
+
+typename empty_result<semantic_entities::open_declarative_region_ptr_variant>::type
+	empty_result<semantic_entities::open_declarative_region_ptr_variant>::value
+;
+
+template<>
+struct empty_result<semantic_entities::destructor>
+{
+	typedef utility::single_object_range<semantic_entities::destructor> type;
+	static type value;
+};
+
+typename empty_result<semantic_entities::destructor>::type
+	empty_result<semantic_entities::destructor>::value
+;
+
+
+
+#define GENERATE_NON_CONST_GET_MEMBERS_SPECIALIZATION(PARENT_TYPE, MEMBER_TYPE, PARENT_MEMBER_FUNCTION) \
 template<> \
-get_members_return_type<semantic_entities::MEMBER_TYPE>::type \
+member_type_traits<semantic_entities::MEMBER_TYPE, false>::return_type \
 get_members<semantic_entities::MEMBER_TYPE>(semantic_entities::PARENT_TYPE& parent) \
+{ \
+	return parent.PARENT_MEMBER_FUNCTION(); \
+}
+
+#define GENERATE_GET_MEMBERS_SPECIALIZATION(PARENT_TYPE, MEMBER_TYPE, PARENT_MEMBER_FUNCTION) \
+GENERATE_NON_CONST_GET_MEMBERS_SPECIALIZATION(PARENT_TYPE, MEMBER_TYPE, PARENT_MEMBER_FUNCTION) \
+ \
+template<> \
+member_type_traits<semantic_entities::MEMBER_TYPE, true>::return_type \
+get_members<semantic_entities::MEMBER_TYPE>(const semantic_entities::PARENT_TYPE& parent) \
 { \
 	return parent.PARENT_MEMBER_FUNCTION(); \
 }
 
 #define GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(PARENT_TYPE, MEMBER_TYPE) \
 template<> \
-get_members_return_type<semantic_entities::MEMBER_TYPE>::type \
+member_type_traits<semantic_entities::MEMBER_TYPE, false>::return_type \
 get_members<semantic_entities::MEMBER_TYPE>(semantic_entities::PARENT_TYPE&) \
 { \
-	return get_members_return_type<semantic_entities::MEMBER_TYPE>::type(); \
+	return empty_result<semantic_entities::MEMBER_TYPE>::value; \
+} \
+ \
+template<> \
+member_type_traits<semantic_entities::MEMBER_TYPE, true>::return_type \
+get_members<semantic_entities::MEMBER_TYPE>(const semantic_entities::PARENT_TYPE&) \
+{ \
+	return empty_result<semantic_entities::MEMBER_TYPE>::value; \
 }
 
-GENERATE_GET_MEMBERS_SPECIALIZATION      (namespace_, open_declarative_region_ptr_variant, open_declarative_regions)
-GENERATE_GET_MEMBERS_SPECIALIZATION      (namespace_, namespace_, namespaces)
-GENERATE_GET_MEMBERS_SPECIALIZATION      (namespace_, class_, classes)
-GENERATE_GET_MEMBERS_SPECIALIZATION      (namespace_, enum_, enums)
-GENERATE_GET_MEMBERS_SPECIALIZATION      (namespace_, typedef_, typedefs)
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(namespace_, constructor)
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(namespace_, destructor)
-GENERATE_GET_MEMBERS_SPECIALIZATION      (namespace_, operator_function, operator_functions)
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(namespace_, operator_member_function)
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(namespace_, conversion_function)
-GENERATE_GET_MEMBERS_SPECIALIZATION      (namespace_, simple_function, simple_functions)
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(namespace_, simple_member_function)
-GENERATE_GET_MEMBERS_SPECIALIZATION      (namespace_, variable, variables)
-GENERATE_GET_MEMBERS_SPECIALIZATION      (namespace_, namespace_alias, namespace_aliases)
 
-GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, open_declarative_region_ptr_variant, open_declarative_regions)
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(class_, namespace_)
-GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, class_, nested_classes)
-GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, enum_, enums)
-GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, typedef_, typedefs)
-GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, constructor, constructors)
-GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, destructor, get_destructor)
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(class_, operator_function)
-GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, operator_member_function, operator_functions)
-GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, conversion_function, conversion_functions)
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(class_, simple_function)
-GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, simple_member_function, simple_functions)
-GENERATE_GET_MEMBERS_SPECIALIZATION      (class_, variable, variables)
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(class_, namespace_alias)
+
+GENERATE_NON_CONST_GET_MEMBERS_SPECIALIZATION(namespace_, open_declarative_region_ptr_variant, open_declarative_regions)
+GENERATE_GET_MEMBERS_SPECIALIZATION          (namespace_, namespace_, namespaces)
+GENERATE_GET_MEMBERS_SPECIALIZATION          (namespace_, class_, classes)
+GENERATE_GET_MEMBERS_SPECIALIZATION          (namespace_, enum_, enums)
+GENERATE_GET_MEMBERS_SPECIALIZATION          (namespace_, typedef_, typedefs)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (namespace_, constructor)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (namespace_, destructor)
+GENERATE_GET_MEMBERS_SPECIALIZATION          (namespace_, operator_function, operator_functions)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (namespace_, operator_member_function)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (namespace_, conversion_function)
+GENERATE_GET_MEMBERS_SPECIALIZATION          (namespace_, simple_function, simple_functions)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (namespace_, simple_member_function)
+GENERATE_GET_MEMBERS_SPECIALIZATION          (namespace_, variable, variables)
+GENERATE_GET_MEMBERS_SPECIALIZATION          (namespace_, namespace_alias, namespace_aliases)
+
+GENERATE_NON_CONST_GET_MEMBERS_SPECIALIZATION(class_, open_declarative_region_ptr_variant, open_declarative_regions)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (class_, namespace_)
+GENERATE_GET_MEMBERS_SPECIALIZATION          (class_, class_, nested_classes)
+GENERATE_GET_MEMBERS_SPECIALIZATION          (class_, enum_, enums)
+GENERATE_GET_MEMBERS_SPECIALIZATION          (class_, typedef_, typedefs)
+GENERATE_GET_MEMBERS_SPECIALIZATION          (class_, constructor, constructors)
+GENERATE_GET_MEMBERS_SPECIALIZATION          (class_, destructor, get_destructor)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (class_, operator_function)
+GENERATE_GET_MEMBERS_SPECIALIZATION          (class_, operator_member_function, operator_functions)
+GENERATE_GET_MEMBERS_SPECIALIZATION          (class_, conversion_function, conversion_functions)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (class_, simple_function)
+GENERATE_GET_MEMBERS_SPECIALIZATION          (class_, simple_member_function, simple_functions)
+GENERATE_GET_MEMBERS_SPECIALIZATION          (class_, variable, variables)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (class_, namespace_alias)
 
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(constructor, open_declarative_region_ptr_variant)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(constructor, namespace_)
@@ -175,20 +230,20 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(simple_member_function, simple_member_
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(simple_member_function, variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(simple_member_function, namespace_alias)
 
-GENERATE_GET_MEMBERS_SPECIALIZATION      (statement_block, open_declarative_region_ptr_variant, open_declarative_regions)
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(statement_block, namespace_)
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(statement_block, class_)
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(statement_block, enum_)
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(statement_block, typedef_)
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(statement_block, constructor)
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(statement_block, destructor)
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(statement_block, operator_function)
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(statement_block, operator_member_function)
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(statement_block, conversion_function)
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(statement_block, simple_function)
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(statement_block, simple_member_function)
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(statement_block, variable)
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(statement_block, namespace_alias)
+GENERATE_NON_CONST_GET_MEMBERS_SPECIALIZATION(statement_block, open_declarative_region_ptr_variant, open_declarative_regions)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, namespace_)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, class_)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, enum_)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, typedef_)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, constructor)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, destructor)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, operator_function)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, operator_member_function)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, conversion_function)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, simple_function)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, simple_member_function)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, variable)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, namespace_alias)
 
 }}}}} //namespace scalpel::cpp::semantic_analysis::detail::semantic_entity_analysis
 

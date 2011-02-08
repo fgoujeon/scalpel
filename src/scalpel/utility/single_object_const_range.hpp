@@ -18,28 +18,24 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_UTILITY_SINGLE_OBJECT_RANGE_HPP
-#define SCALPEL_UTILITY_SINGLE_OBJECT_RANGE_HPP
-
-#include "single_object_const_range.hpp"
+#ifndef SCALPEL_UTILITY_SINGLE_OBJECT_CONST_RANGE_HPP
+#define SCALPEL_UTILITY_SINGLE_OBJECT_CONST_RANGE_HPP
 
 namespace scalpel { namespace utility
 {
 
 template<typename T>
-class single_object_range
+class single_object_const_range
 {
 	public:
 		typedef T value_type;
-		typedef T& reference;
+		typedef const T& reference;
 		class iterator;
 
-		//empty range
-		single_object_range();
+		//empty const_range
+		single_object_const_range();
 
-		single_object_range(T& object);
-
-		operator single_object_const_range<T>() const;
+		single_object_const_range(const T& object);
 
 		iterator
 		begin();
@@ -48,16 +44,16 @@ class single_object_range
 		end();
 
 	private:
-		T* object_;
+		const T* object_;
 };
 
 template<typename T>
-class single_object_range<T>::iterator
+class single_object_const_range<T>::iterator
 {
 	public:
 		iterator();
 
-		iterator(T& object);
+		iterator(const T& object);
 
 		bool
 		operator==(const iterator& rhs);
@@ -68,16 +64,16 @@ class single_object_range<T>::iterator
 		iterator
 		operator++();
 
-		T&
-		operator*();
+		const T&
+		operator*() const;
 
 	private:
-		T* object_;
+		const T* object_;
 };
 
 }} //namespace scalpel::utility
 
-#include "single_object_range.ipp"
+#include "single_object_const_range.ipp"
 
 #endif
 

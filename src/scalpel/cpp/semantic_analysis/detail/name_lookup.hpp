@@ -56,7 +56,7 @@ result_type's truth table:
 
 (1) EntityT*
 (2) std::set<(1)>
-(3) utility::ptr_variant<EntitiesT...>
+(3) utility::variant<EntitiesT...>
 (4) boost::optional<(3)>
 (5) std::set<(3)>
 (6) utility::ptr_variant<EntitiesT...>

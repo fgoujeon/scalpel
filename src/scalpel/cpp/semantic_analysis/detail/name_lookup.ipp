@@ -424,10 +424,10 @@ find_local_entities
 	typename return_type<true, Multiple, EntityT>::type found_entities;
 	initialize<typename return_type<true, Multiple, EntityT>::type>::init(found_entities);
 
-	typename get_members_return_type<EntityT>::type members = get_members<EntityT>(current_declarative_region);
+	typename member_type_traits<EntityT, false>::return_type members = get_members<EntityT>(current_declarative_region);
 	for(auto i = members.begin(); i != members.end(); ++i)
 	{
-		typename get_members_return_type<EntityT>::type::value_type& current_entity = *i;
+		typename member_type_traits<EntityT, false>::reference current_entity = *i;
 		if(EntityIdentificationPolicy::are_identifiers_equal(current_entity, identifier))
 		{
 			add_to_result(found_entities, current_entity);

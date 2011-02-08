@@ -39,15 +39,14 @@ class unique_ptr_vector
 	private:
 		typedef std::vector<std::unique_ptr<T>> raw_vector_t;
 
-		typedef typename raw_vector_t::iterator raw_iterator;
 		typedef typename raw_vector_t::const_iterator raw_const_iterator;
 
 		typedef std::function<T& (const std::unique_ptr<T>&)> to_reference_function_t;
 		typedef std::function<const T& (const std::unique_ptr<T>&)> to_const_reference_function_t;
 
 	public:
-		typedef boost::transform_iterator<to_reference_function_t, raw_iterator, T&> iterator;
-		typedef boost::transform_iterator<to_const_reference_function_t, raw_const_iterator, const T&> const_iterator;
+		typedef boost::transform_iterator<to_reference_function_t, raw_const_iterator> iterator;
+		typedef boost::transform_iterator<to_const_reference_function_t, raw_const_iterator> const_iterator;
 
 		/**
 		Gives read/write access to the pointed objects (but no access to the container itself).
@@ -57,7 +56,7 @@ class unique_ptr_vector
 
 		typedef typename raw_vector_t::size_type size_type;
 		typedef typename raw_vector_t::value_type value_type;
-		typedef std::unique_ptr<T> const_reference;
+		typedef const T& const_reference;
 
 		unique_ptr_vector();
 
@@ -83,6 +82,11 @@ class unique_ptr_vector
 		operator[](const typename raw_vector_t::size_type n) const
 		{
 			return raw_vector_[n];
+		}
+
+		operator range() const
+		{
+			return range(begin(), end());
 		}
 
 		size_type
