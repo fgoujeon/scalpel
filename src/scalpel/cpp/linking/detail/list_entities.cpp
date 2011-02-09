@@ -19,6 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "list_entities.hpp"
+#include "create_unique_id.hpp"
 #include "../../semantic_analysis/detail/semantic_entity_analysis/get_members.hpp"
 
 namespace scalpel { namespace cpp { namespace linking { namespace detail
@@ -81,7 +82,7 @@ namespace
 		for(auto i = entities.begin(); i != entities.end(); ++i)
 		{
 			const ChildEntity& entity = *i;
-			tree.entities<ChildEntity>().add("unique_name", entity);
+			tree.entities<ChildEntity>().add(create_unique_id(entity), entity);
 
 			list_child_entities(entity, tree);
 		}
