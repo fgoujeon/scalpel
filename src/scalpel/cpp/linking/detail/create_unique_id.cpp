@@ -121,6 +121,118 @@ namespace
 		assert(false);
 		return "";
 	}
+
+	std::string
+	to_string
+	(
+		const fundamental_type type
+	)
+	{
+		switch(type)
+		{
+			case fundamental_type::BOOL:
+				return "bool";
+			case fundamental_type::CHAR:
+				return "char";
+			case fundamental_type::DOUBLE:
+				return "double";
+			case fundamental_type::FLOAT:
+				return "float";
+			case fundamental_type::INT:
+				return "int";
+			case fundamental_type::LONG_DOUBLE:
+				return "long double";
+			case fundamental_type::LONG_INT:
+				return "long int";
+			case fundamental_type::LONG_LONG_INT:
+				return "long long int";
+			case fundamental_type::SHORT_INT:
+				return "short int";
+			case fundamental_type::SIGNED_CHAR:
+				return "signed char";
+			case fundamental_type::UNSIGNED_CHAR:
+				return "unsigned char";
+			case fundamental_type::UNSIGNED_INT:
+				return "unsigned int";
+			case fundamental_type::UNSIGNED_LONG_INT:
+				return "unsigned long int";
+			case fundamental_type::UNSIGNED_LONG_LONG_INT:
+				return "unsigned long long int";
+			case fundamental_type::UNSIGNED_SHORT_INT:
+				return "unsigned short int";
+			case fundamental_type::VOID:
+				return "void";
+			case fundamental_type::WCHAR_T:
+				return "wchar_t";
+		}
+
+		assert(false);
+		return "";
+	}
+
+	std::string
+	to_string(const array&)
+	{
+		return "";
+	}
+
+	std::string
+	to_string(const reference&)
+	{
+		return "";
+	}
+
+	std::string
+	to_string(const pointer&)
+	{
+		return "";
+	}
+
+	std::string
+	to_string(const pointer_to_member&)
+	{
+		return "";
+	}
+
+	std::string
+	to_string(const enum_*)
+	{
+		return "";
+	}
+
+	std::string
+	to_string(const class_*)
+	{
+		return "";
+	}
+
+	std::string
+	to_string(const function_type&)
+	{
+		return "";
+	}
+
+	std::string
+	to_string(const cv_qualified_type&)
+	{
+		return "";
+	}
+
+	struct: utility::static_visitor<std::string>
+	{
+		template<typename T>
+		std::string
+		operator()(const T& t)
+		{
+			return to_string(t);
+		}
+	} to_string_visitor;
+
+	std::string
+	to_string(const semantic_entities::type_variant& n)
+	{
+		return utility::apply_visitor(to_string_visitor, n);
+	}
 }
 
 std::string
@@ -166,7 +278,7 @@ std::string
 create_unique_id(const semantic_entities::conversion_function& entity)
 {
 	const std::string& class_name = utility::get<class_*>(entity.enclosing_declarative_region())->name();
-	return class_name + "::operator" + class_name;
+	return class_name + "::" + to_string(entity.return_type());
 }
 
 std::string
@@ -185,7 +297,17 @@ create_unique_id(const semantic_entities::operator_function& entity)
 std::string
 create_unique_id(const semantic_entities::simple_function& entity)
 {
-	return entity.name();
+	std::string str = entity.name() + ' ';
+
+	const function_type& type = entity.type();
+	const std::vector<type_variant>& parameter_types = type.parameter_types();
+	for(auto i = parameter_types.begin(); i != parameter_types.end(); ++i)
+	{
+		const type_variant& parameter_type = *i;
+		str += to_string(parameter_type) + ',';
+	}
+
+	return str;
 }
 
 std::string

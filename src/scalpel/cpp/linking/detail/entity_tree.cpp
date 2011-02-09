@@ -25,14 +25,14 @@ namespace scalpel { namespace cpp { namespace linking { namespace detail
 
 #define GENERATE_ENTITIES_FUNCTION_TEMPLATE_SPECIALIZATION(ENTITY_TYPE, VARIABLE) \
 template<> \
-matching_entity_list<semantic_entities::ENTITY_TYPE>& \
+entity_list<semantic_entities::ENTITY_TYPE>& \
 entity_tree::entities() \
 { \
 	return VARIABLE; \
 } \
  \
 template<> \
-const matching_entity_list<semantic_entities::ENTITY_TYPE>& \
+const entity_list<semantic_entities::ENTITY_TYPE>& \
 entity_tree::entities() const \
 { \
 	return VARIABLE; \

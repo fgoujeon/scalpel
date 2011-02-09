@@ -18,34 +18,18 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_LINKING_DETAIL_MATCHING_ENTITY_LIST_HPP
-#define SCALPEL_CPP_LINKING_DETAIL_MATCHING_ENTITY_LIST_HPP
+#ifndef SCALPEL_CPP_LINKING_DETAIL_MERGE_HPP
+#define SCALPEL_CPP_LINKING_DETAIL_MERGE_HPP
 
-#include <map>
-#include <string>
-#include <vector>
+#include "entity_tree.hpp"
+#include <scalpel/cpp/semantic_graph.hpp>
+#include <scalpel/utility/unique_ptr_vector.hpp>
 
 namespace scalpel { namespace cpp { namespace linking { namespace detail
 {
 
-//Every entity in such a list represents the same entity.
-template<class Entity>
-class matching_entity_list
-{
-	public:
-		void
-		add(const std::string& unique_id, const Entity& entity);
-
-	private:
-		std::map<std::string, std::vector<const Entity*>> raw_list_;
-};
-
-template<class Entity>
-void
-matching_entity_list<Entity>::add(const std::string& unique_id, const Entity& entity)
-{
-	raw_list_[unique_id].push_back(&entity);
-}
+std::unique_ptr<semantic_graph>
+merge(const utility::unique_ptr_vector<semantic_graph>& semantic_graphs, const entity_tree& tree);
 
 }}}} //namespace scalpel::cpp::linking::detail
 

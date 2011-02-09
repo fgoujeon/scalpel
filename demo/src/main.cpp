@@ -20,6 +20,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <cpp2xml/semantic_graph.hpp>
 #include <cpp2xml/syntax_tree.hpp>
+#include <scalpel/cpp/linking.hpp>
 #include <scalpel/cpp/semantic_analysis.hpp>
 #include <scalpel/cpp/syntax_analyzer.hpp>
 #include <scalpel/cpp/preprocessor.hpp>
@@ -37,6 +38,7 @@ main(int argc, char** argv)
 	std::vector<std::string> macro_definitions;
 	bool print_syntax_tree = true;
 	bool print_semantic_graph = true;
+	bool print_linked_semantic_graph = true;
 
 	//get program options
 	{
@@ -62,8 +64,9 @@ main(int argc, char** argv)
 				"\"MACRO(x)=\" define MACRO(x) as nothing (empty)\n"
 				"\"MACRO(x)=definition\" define MACRO(x) as definition"
 			)
-			("no-syntax-tree", "don't print syntax tree")
-			("no-semantic-graph", "don't print semantic graph")
+			("no-syntax-tree", "don't print the syntax tree")
+			("no-semantic-graph", "don't print the semantic graph")
+			("no-linked-semantic-graph", "don't print the linked semantic graph")
 		;
 
 		po::options_description all_options("Allowed options");
@@ -85,11 +88,13 @@ main(int argc, char** argv)
 
 		print_syntax_tree = !vm.count("no-syntax-tree");
 		print_semantic_graph = !vm.count("no-semantic-graph");
+		print_linked_semantic_graph = !vm.count("no-linked-semantic-graph") && input_files.size() > 1;
 	}
 
 	scalpel::cpp::preprocessor preprocessor;
 	scalpel::cpp::syntax_analyzer syntax_analyzer;
 
+	scalpel::utility::unique_ptr_vector<scalpel::cpp::semantic_graph> semantic_graphs;
 	for(auto i = input_files.begin(); i != input_files.end(); ++i) //for each input file
 	{
 		const std::string& filename = *i;
@@ -109,9 +114,6 @@ main(int argc, char** argv)
 		//close file
 		file.close();
 
-		if(input_files.size() > 1)
-			std::cout << "Analyzing " << filename << "...\n";
-
 		//preprocessing
 		std::string preprocessed_code = preprocessor(buffer.str(), include_paths, macro_definitions);
 
@@ -121,21 +123,43 @@ main(int argc, char** argv)
 		//print syntax tree
 		if(print_syntax_tree)
 		{
-			if(print_semantic_graph)
-				std::cout << "Syntax tree:\n";
+			if(print_semantic_graph || print_linked_semantic_graph)
+			{
+				std::cout << "Syntax tree";
+				if(print_linked_semantic_graph)
+					std::cout << " of " << filename;
+				std::cout << ":\n";
+			}
 			cpp2xml::print_syntax_tree(tree);
 		}
 
+		//semantic analysis
+		std::unique_ptr<scalpel::cpp::semantic_graph> graph = scalpel::cpp::semantic_analysis::analyze(tree);
+
+		//print semantic graph
 		if(print_semantic_graph)
 		{
-			//semantic analysis
-			std::shared_ptr<const scalpel::cpp::semantic_graph> graph = scalpel::cpp::semantic_analysis::analyze(tree);
-
-			//print semantic graph
-			if(print_syntax_tree)
-				std::cout << "Semantic graph:\n";
+			if(print_syntax_tree || print_linked_semantic_graph)
+			{
+				std::cout << "Semantic graph";
+				if(print_linked_semantic_graph)
+					std::cout << " of " << filename;
+				std::cout << ":\n";
+			}
 			cpp2xml::serialize_semantic_graph(*graph, std::cout);
 		}
+
+		semantic_graphs.push_back(std::move(graph));
+	}
+
+	if(print_linked_semantic_graph)
+	{
+		//linking
+		std::unique_ptr<scalpel::cpp::semantic_graph> linked_graph = scalpel::cpp::linking::link(semantic_graphs);
+
+		//print linked semantic graph
+		std::cout << "Linked semantic graph:\n";
+		cpp2xml::serialize_semantic_graph(*linked_graph, std::cout);
 	}
 
 	return 0;

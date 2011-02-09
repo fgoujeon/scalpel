@@ -18,32 +18,25 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_UTILITY_UNIQUE_PTR_VECTOR_IPP
-#define SCALPEL_UTILITY_UNIQUE_PTR_VECTOR_IPP
+#ifndef SCALPEL_CPP_LINKING_HPP
+#define SCALPEL_CPP_LINKING_HPP
 
-namespace scalpel { namespace utility
+#include "semantic_graph.hpp"
+#include <scalpel/utility/unique_ptr_vector.hpp>
+#include <memory>
+
+namespace scalpel { namespace cpp
 {
 
-template<typename T>
-unique_ptr_vector<T>::unique_ptr_vector()
+namespace linking
 {
-}
 
-template<typename T>
-unique_ptr_vector<T>::unique_ptr_vector(unique_ptr_vector&& o):
-	raw_vector_(std::move(o.raw_vector_))
-{
-}
+std::unique_ptr<semantic_graph>
+link(const utility::unique_ptr_vector<semantic_graph>& semantic_graphs);
 
-template<typename T>
-const unique_ptr_vector<T>&
-unique_ptr_vector<T>::operator=(unique_ptr_vector&& o)
-{
-	raw_vector_ = std::move(o.raw_vector_);
-	return *this;
-}
+} //namespace semantic_analysis
 
-}} //namespace scalpel::utility
+}} //namespace scalpel::cpp
 
 #endif
 

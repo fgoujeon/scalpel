@@ -82,7 +82,7 @@ namespace
 		for(auto i = entities.begin(); i != entities.end(); ++i)
 		{
 			const ChildEntity& entity = *i;
-			tree.entities<ChildEntity>().add(create_unique_id(entity), entity);
+			tree.entities<ChildEntity>().list[create_unique_id(entity)].push_back(&entity);
 
 			list_child_entities(entity, tree);
 		}

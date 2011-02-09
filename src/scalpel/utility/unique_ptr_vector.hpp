@@ -60,8 +60,6 @@ class unique_ptr_vector
 
 		unique_ptr_vector();
 
-		unique_ptr_vector(std::initializer_list<std::unique_ptr<T>>&& initializer_list);
-
 		unique_ptr_vector(const unique_ptr_vector& o) = delete;
 
 		unique_ptr_vector(unique_ptr_vector&& o);
