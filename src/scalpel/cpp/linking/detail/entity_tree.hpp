@@ -35,7 +35,14 @@ struct entity_list
 
 struct entity_tree
 {
-	std::map<std::string, entity_tree> subtrees;
+	enum class tree_type
+	{
+		NAMESPACE,
+		CLASS
+	};
+
+	explicit
+	entity_tree(tree_type t);
 
 	template<class Entity>
 	entity_list<Entity>&
@@ -45,7 +52,8 @@ struct entity_tree
 	const entity_list<Entity>&
 	entities() const;
 
-	entity_list<semantic_entities::class_> classes;
+	tree_type type;
+	std::map<std::string, entity_tree> subtrees;
 	entity_list<semantic_entities::enum_> enums;
 	entity_list<semantic_entities::typedef_> typedefs;
 	entity_list<semantic_entities::constructor> constructors;

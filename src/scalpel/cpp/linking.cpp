@@ -60,11 +60,18 @@ print(const detail::entity_tree& tree, const unsigned int indent_count = 0)
 		const std::string& name = i->first;
 		const detail::entity_tree& subtree = i->second;
 
-		std::cout << indent(indent_count) << "namespace " << name << ":\n";
+		switch(subtree.type)
+		{
+			case detail::entity_tree::tree_type::NAMESPACE:
+				std::cout << indent(indent_count) << "namespace " << name << ":\n";
+				break;
+			case detail::entity_tree::tree_type::CLASS:
+				std::cout << indent(indent_count) << "class " << name << ":\n";
+				break;
+		}
 		print(subtree, indent_count + 1);
 	}
 
-	print("classes", tree.classes, indent_count);
 	print("enums", tree.enums, indent_count);
 	print("typedefs", tree.typedefs, indent_count);
 	print("constructors", tree.constructors, indent_count);
@@ -88,5 +95,4 @@ link(const utility::unique_ptr_vector<semantic_graph>& semantic_graphs)
 } //namespace semantic_analysis
 
 }} //namespace scalpel::cpp
-
 

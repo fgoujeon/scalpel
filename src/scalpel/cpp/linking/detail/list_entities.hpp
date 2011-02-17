@@ -29,7 +29,7 @@ namespace scalpel { namespace cpp { namespace linking { namespace detail
 {
 
 entity_tree
-list_entities(const utility::unique_ptr_vector<semantic_entities::namespace_>& semantic_graphs);
+list_entities(const utility::unique_ptr_vector<semantic_graph>& semantic_graphs);
 
 }}}} //namespace scalpel::cpp::linking::detail
 

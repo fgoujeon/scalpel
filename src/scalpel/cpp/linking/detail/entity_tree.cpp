@@ -23,6 +23,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace linking { namespace detail
 {
 
+entity_tree::entity_tree(tree_type t):
+	type(t)
+{
+}
+
 #define GENERATE_ENTITIES_FUNCTION_TEMPLATE_SPECIALIZATION(ENTITY_TYPE, VARIABLE) \
 template<> \
 entity_list<semantic_entities::ENTITY_TYPE>& \
@@ -38,7 +43,6 @@ entity_tree::entities() const \
 	return VARIABLE; \
 }
 
-GENERATE_ENTITIES_FUNCTION_TEMPLATE_SPECIALIZATION(class_, classes)
 GENERATE_ENTITIES_FUNCTION_TEMPLATE_SPECIALIZATION(enum_, enums)
 GENERATE_ENTITIES_FUNCTION_TEMPLATE_SPECIALIZATION(typedef_, typedefs)
 GENERATE_ENTITIES_FUNCTION_TEMPLATE_SPECIALIZATION(constructor, constructors)
