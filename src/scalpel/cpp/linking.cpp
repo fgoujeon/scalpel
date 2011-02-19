@@ -48,7 +48,7 @@ print(const std::string& title, const detail::entity_list<Entity>& list, const u
 	{
 		std::cout << indent(indent_count) << title << ":\n";
 		for(auto i = list.list.begin(); i != list.list.end(); ++i)
-			std::cout << indent(indent_count + 1) << i->first << " (x" << i->second.size() << ")\n";
+			std::cout << indent(indent_count + 1) << '"' << i->first << "\" (x" << i->second.size() << ")\n";
 	}
 }
 
@@ -88,7 +88,7 @@ std::unique_ptr<semantic_graph>
 link(const utility::unique_ptr_vector<semantic_graph>& semantic_graphs)
 {
 	detail::entity_tree entity_tree = detail::list_entities(semantic_graphs);
-	//print(entity_tree);
+	print(entity_tree);
 	return detail::merge(semantic_graphs, entity_tree);
 }
 

@@ -28,6 +28,27 @@ using namespace semantic_entities;
 namespace
 {
 	std::string
+	to_string(const type_variant& n);
+
+	std::string
+	to_string(const std::vector<type_variant>& parameter_types);
+
+	std::string
+	create_global_unique_id(const declarative_region_ptr_variant& region);
+
+	std::string
+	create_global_unique_id(const namespace_& entity);
+
+	std::string
+	create_global_unique_id(const class_& entity);
+
+	std::string
+	create_global_unique_id(const enum_& entity);
+}
+
+namespace
+{
+	std::string
 	to_string(const overloadable_operator& op)
 	{
 		switch(op)
@@ -123,10 +144,7 @@ namespace
 	}
 
 	std::string
-	to_string
-	(
-		const fundamental_type type
-	)
+	to_string(const fundamental_type type)
 	{
 		switch(type)
 		{
@@ -171,52 +189,65 @@ namespace
 	}
 
 	std::string
-	to_string(const array&)
+	to_string(const array& entity)
 	{
-		return "";
+		return to_string(entity.qualified_type()) + "[]";
 	}
 
 	std::string
-	to_string(const reference&)
+	to_string(const reference& entity)
 	{
-		return "";
+		return to_string(entity.qualified_type()) + "&";
 	}
 
 	std::string
-	to_string(const pointer&)
+	to_string(const pointer& entity)
 	{
-		return "";
+		return to_string(entity.qualified_type()) + "*";
 	}
 
 	std::string
-	to_string(const pointer_to_member&)
+	to_string(const pointer_to_member& entity)
 	{
-		return "";
+		return to_string(entity.qualified_type()) + " " + create_global_unique_id(entity.member_class()) + "::*";
 	}
 
 	std::string
-	to_string(const enum_*)
+	to_string(const enum_* entity)
 	{
-		return "";
+		return create_global_unique_id(*entity);
 	}
 
 	std::string
-	to_string(const class_*)
+	to_string(const class_* entity)
 	{
-		return "";
+		return create_global_unique_id(*entity);
 	}
 
 	std::string
-	to_string(const function_type&)
+	to_string(const function_type& entity)
 	{
-		return "";
+		return to_string(entity.return_type()) + to_string(entity.parameter_types());
 	}
 
 	std::string
-	to_string(const cv_qualified_type&)
+	to_string(const cv_qualified_type& entity)
 	{
+		switch(entity.qualification())
+		{
+			case cv_qualified_type::qualification_type::CONST_AND_VOLATILE:
+				return to_string(entity.qualified_type()) + " const volatile";
+			case cv_qualified_type::qualification_type::CONST:
+				return to_string(entity.qualified_type()) + " const";
+			case cv_qualified_type::qualification_type::VOLATILE:
+				return to_string(entity.qualified_type()) + " volatile";
+		}
+
+		assert(false);
 		return "";
 	}
+
+
 
 	struct: utility::static_visitor<std::string>
 	{
@@ -232,6 +263,83 @@ namespace
 	to_string(const semantic_entities::type_variant& n)
 	{
 		return utility::apply_visitor(to_string_visitor, n);
+	}
+
+	std::string
+	to_string(const std::vector<type_variant>& parameter_types)
+	{
+		std::string str = "(";
+
+		if(!parameter_types.empty())
+		{
+			auto i = parameter_types.begin();
+			str += to_string(*i);
+			++i;
+			for(; i != parameter_types.end(); ++i)
+			{
+				str += ',' + to_string(*i);
+			}
+		}
+
+		return str + ')';
+	}
+
+
+
+	struct: utility::static_visitor<std::string>
+	{
+		template<typename T>
+		std::string
+		operator()(const T*)
+		{
+			assert(false);
+			return "";
+		}
+
+		std::string
+		operator()(const namespace_* entity)
+		{
+			return create_global_unique_id(*entity);
+		}
+
+		std::string
+		operator()(const class_* entity)
+		{
+			return create_global_unique_id(*entity);
+		}
+	} create_global_unique_id_visitor;
+
+	std::string
+	create_global_unique_id(const declarative_region_ptr_variant& region)
+	{
+		return utility::apply_visitor(create_global_unique_id_visitor, region);
+	}
+
+	std::string
+	create_global_unique_id(const namespace_& entity)
+	{
+		if(entity.has_enclosing_declarative_region())
+			return create_global_unique_id(*entity.enclosing_declarative_region()) + "::" + entity.name();
+		else
+			return entity.name();
+	}
+
+	std::string
+	create_global_unique_id(const class_& entity)
+	{
+		if(entity.has_enclosing_declarative_region())
+			return create_global_unique_id(entity.enclosing_declarative_region()) + "::" + entity.name();
+		else
+			return entity.name();
+	}
+
+	std::string
+	create_global_unique_id(const enum_& entity)
+	{
+		if(entity.has_enclosing_declarative_region())
+			return create_global_unique_id(entity.enclosing_declarative_region()) + "::" + entity.name();
+		else
+			return entity.name();
 	}
 }
 
@@ -256,58 +364,43 @@ create_unique_id(const semantic_entities::typedef_& entity)
 std::string
 create_unique_id(const semantic_entities::constructor& entity)
 {
-	const std::string& class_name = utility::get<class_*>(entity.enclosing_declarative_region())->name();
-	return class_name + "::" + class_name;
+	return to_string(entity.parameter_types());;
 }
 
 std::string
-create_unique_id(const semantic_entities::destructor& entity)
+create_unique_id(const semantic_entities::destructor&)
 {
-	const std::string& class_name = utility::get<class_*>(entity.enclosing_declarative_region())->name();
-	return class_name + "::~" + class_name;
+	return "";
 }
 
 std::string
 create_unique_id(const semantic_entities::operator_member_function& entity)
 {
-	const std::string& class_name = utility::get<class_*>(entity.enclosing_declarative_region())->name();
-	return class_name + "::" + to_string(entity.overloaded_operator());
+	return to_string(entity.overloaded_operator()) + to_string(entity.parameter_types());;
 }
 
 std::string
 create_unique_id(const semantic_entities::conversion_function& entity)
 {
-	const std::string& class_name = utility::get<class_*>(entity.enclosing_declarative_region())->name();
-	return class_name + "::" + to_string(entity.return_type());
+	return to_string(entity.return_type());
 }
 
 std::string
 create_unique_id(const semantic_entities::simple_member_function& entity)
 {
-	const std::string& class_name = utility::get<class_*>(entity.enclosing_declarative_region())->name();
-	return class_name + "::" + entity.name();
+	return entity.name() + to_string(entity.parameter_types());;
 }
 
 std::string
 create_unique_id(const semantic_entities::operator_function& entity)
 {
-	return to_string(entity.overloaded_operator());
+	return to_string(entity.overloaded_operator()) + to_string(entity.parameter_types());;
 }
 
 std::string
 create_unique_id(const semantic_entities::simple_function& entity)
 {
-	std::string str = entity.name() + ' ';
-
-	const function_type& type = entity.type();
-	const std::vector<type_variant>& parameter_types = type.parameter_types();
-	for(auto i = parameter_types.begin(); i != parameter_types.end(); ++i)
-	{
-		const type_variant& parameter_type = *i;
-		str += to_string(parameter_type) + ',';
-	}
-
-	return str;
+	return entity.name() + to_string(entity.parameter_types());
 }
 
 std::string
