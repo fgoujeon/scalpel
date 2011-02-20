@@ -22,13 +22,12 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_LINKING_DETAIL_LINKING_TREE_NAMESPACE_HPP
 
 #include "entity_list.hpp"
+#include "class_.hpp"
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <vector>
 
 namespace scalpel { namespace cpp { namespace linking { namespace detail { namespace linking_tree
 {
-
-struct class_;
 
 struct namespace_
 {

@@ -18,8 +18,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_LINKING_DETAIL_MERGE_HPP
-#define SCALPEL_CPP_LINKING_DETAIL_MERGE_HPP
+#ifndef SCALPEL_CPP_LINKING_DETAIL_MERGE_ENTITIES_HPP
+#define SCALPEL_CPP_LINKING_DETAIL_MERGE_ENTITIES_HPP
 
 #include "linking_tree.hpp"
 #include <scalpel/cpp/semantic_graph.hpp>
@@ -35,7 +35,7 @@ std::unique_ptr<semantic_entities::class_>
 create_class(const linking_tree::class_& tree, const std::string& class_name);
 
 std::unique_ptr<semantic_graph>
-merge(const linking_tree::namespace_& tree);
+merge_entities(const linking_tree::namespace_& tree);
 
 }}}} //namespace scalpel::cpp::linking::detail
 

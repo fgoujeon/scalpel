@@ -18,7 +18,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "merge.hpp"
+#include "merge_entities.hpp"
 
 namespace scalpel { namespace cpp { namespace linking { namespace detail
 {
@@ -55,7 +55,7 @@ create_class(const linking_tree::class_&, const std::string& class_name)
 }
 
 std::unique_ptr<semantic_graph>
-merge(const linking_tree::namespace_& tree)
+merge_entities(const linking_tree::namespace_& tree)
 {
 	return create_namespace(tree, "");
 }

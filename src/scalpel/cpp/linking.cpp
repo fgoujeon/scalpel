@@ -19,7 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "linking.hpp"
-#include "linking/detail/merge.hpp"
+#include "linking/detail/merge_entities.hpp"
 #include "linking/detail/list_entities.hpp"
 #include "linking/detail/linking_tree.hpp"
 #include <iostream>
@@ -112,7 +112,7 @@ link(const utility::unique_ptr_vector<semantic_graph>& semantic_graphs)
 {
 	detail::linking_tree::namespace_ entity_tree = detail::list_entities(semantic_graphs);
 	print(entity_tree);
-	return detail::merge(entity_tree);
+	return detail::merge_entities(entity_tree);
 }
 
 } //namespace semantic_analysis
