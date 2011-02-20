@@ -19,7 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "class_.hpp"
-#include "member_typedef.hpp"
+#include "typedef_.hpp"
 #include "functions.hpp"
 #include "variable.hpp"
 #include "type_variant.hpp"

@@ -29,5 +29,12 @@ typedef_::typedef_(const std::string& name, const type_variant& type):
 {
 }
 
+member_typedef::member_typedef(const std::string& name, const type_variant& type, const member_access access):
+	name_(name),
+	type_(type),
+	access_(access)
+{
+}
+
 }}} //namespace scalpel::cpp::semantic_entities
 

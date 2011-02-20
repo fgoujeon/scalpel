@@ -23,7 +23,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <scalpel/cpp/semantic_entities/type_variant.hpp>
 #include <scalpel/cpp/semantic_entities/typedef_.hpp>
-#include <scalpel/cpp/semantic_entities/member_typedef.hpp>
 #include <scalpel/utility/ptr_variant.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail { namespace semantic_entity_analysis

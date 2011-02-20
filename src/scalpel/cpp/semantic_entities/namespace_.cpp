@@ -19,7 +19,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "namespace_.hpp"
-#include "member_typedef.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
