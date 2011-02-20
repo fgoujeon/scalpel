@@ -244,7 +244,8 @@ fill_namespace
 				has_virtual_specifier,
 				has_explicit_specifier,
 				false,
-				false
+				false,
+				member_access::PUBLIC
 			);
 
 			if(auto opt_simple_function_entity = get<simple_function*>(&declarator_entity))

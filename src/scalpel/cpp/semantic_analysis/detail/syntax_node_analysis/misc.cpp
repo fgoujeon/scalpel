@@ -26,27 +26,27 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 using namespace syntax_nodes;
 using namespace semantic_entities;
 
-class_::access
+member_access
 get_access(const syntax_nodes::access_specifier access_specifier_node)
 {
 	if(get<predefined_text_node<str::public_>>(&access_specifier_node))
 	{
-		return class_::access::PUBLIC;
+		return member_access::PUBLIC;
 	}
 	else if(get<predefined_text_node<str::protected_>>(&access_specifier_node))
 	{
-		return class_::access::PROTECTED;
+		return member_access::PROTECTED;
 	}
 	else if(get<predefined_text_node<str::private_>>(&access_specifier_node))
 	{
-		return class_::access::PRIVATE;
+		return member_access::PRIVATE;
 	}
 	else
 	{
 		assert(false);
 	}
 
-	return class_::access::PRIVATE;
+	return member_access::PRIVATE;
 }
 
 bool

@@ -44,7 +44,8 @@ create_entity
 	const bool has_virtual_specifier,
 	const bool has_explicit_specifier,
 	const bool has_pure_specifier,
-	const bool is_class_member
+	const bool is_class_member,
+	const semantic_entities::member_access access
 )
 {
 	switch(syntax_node_analysis::get_declarator_type(declarator_node))
@@ -57,11 +58,23 @@ create_entity
 				{
 					opt_type = qualify_type(*opt_type, declarator_node, current_declarative_region);
 
-					return new typedef_
-					(
-						syntax_node_analysis::get_identifier(declarator_node).value(),
-						*opt_type
-					);
+					if(is_class_member)
+					{
+						return new member_typedef
+						(
+							syntax_node_analysis::get_identifier(declarator_node).value(),
+							*opt_type,
+							access
+						);
+					}
+					else
+					{
+						return new typedef_
+						(
+							syntax_node_analysis::get_identifier(declarator_node).value(),
+							*opt_type
+						);
+					}
 				}
 				else
 				{
@@ -200,11 +213,23 @@ create_entity
 
 			if(has_typedef_specifier)
 			{
-				return new semantic_entities::typedef_
-				(
-					syntax_node_analysis::get_identifier(declarator_node).value(),
-					*opt_type
-				);
+				if(is_class_member)
+				{
+					return new member_typedef
+					(
+						syntax_node_analysis::get_identifier(declarator_node).value(),
+						*opt_type,
+						access
+					);
+				}
+				else
+				{
+					return new typedef_
+					(
+						syntax_node_analysis::get_identifier(declarator_node).value(),
+						*opt_type
+					);
+				}
 			}
 			else
 			{

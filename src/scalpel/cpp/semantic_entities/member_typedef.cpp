@@ -18,22 +18,17 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_SYNTAX_NODE_ANALYSIS_MISC_HPP
-#define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_SYNTAX_NODE_ANALYSIS_MISC_HPP
+#include "member_typedef.hpp"
 
-#include <scalpel/cpp/semantic_entities/member_access.hpp>
-#include <scalpel/cpp/syntax_tree.hpp>
-
-namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail { namespace syntax_node_analysis
+namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-semantic_entities::member_access
-get_access(const syntax_nodes::access_specifier access_specifier_node);
+member_typedef::member_typedef(const std::string& name, const type_variant& type, const member_access access):
+	name_(name),
+	type_(type),
+	access_(access)
+{
+}
 
-bool
-has_pure_specifier(const syntax_nodes::member_declarator_declarator& member_declarator_declarator_node);
-
-}}}}} //namespace scalpel::cpp::semantic_analysis::detail::syntax_node_analysis
-
-#endif
+}}} //namespace scalpel::cpp::semantic_entities
 

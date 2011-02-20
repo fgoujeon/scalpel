@@ -205,7 +205,7 @@ semantic_graph_serializer::serialize_class
 		{
 			class_& enclosing_declarative_region = **opt_class;
 
-			class_::access acc = enclosing_declarative_region.member_access(&entity);
+			member_access acc = enclosing_declarative_region.get_member_access(&entity);
 			output_ << attribute(acc);
 		}
 	}
@@ -260,7 +260,7 @@ void
 semantic_graph_serializer::serialize_base_class
 (
 	const class_& entity,
-	const class_::access acc,
+	const member_access acc,
 	const bool is_virtual,
 	const unsigned int indent_level
 )
@@ -310,7 +310,7 @@ semantic_graph_serializer::serialize_constructor
 	{
 		class_* enclosing_declarative_region = utility::get<class_*>(entity.enclosing_declarative_region());
 
-		class_::access acc = enclosing_declarative_region->member_access(&entity);
+		member_access acc = enclosing_declarative_region->get_member_access(&entity);
 		output_ << attribute(acc);
 	}
 	if(entity.variadic())
@@ -341,7 +341,7 @@ semantic_graph_serializer::serialize_destructor
 	declarative_region_ptr_variant enclosing_declarative_region = entity.enclosing_declarative_region();
 	class_* enclosing_class = utility::get<class_*>(enclosing_declarative_region);
 
-	class_::access acc = enclosing_class->member_access(&entity);
+	member_access acc = enclosing_class->get_member_access(&entity);
 	output_ << attribute(acc);
 	if(entity.is_inline())
 		output_ << " inline=\"true\"";
@@ -370,7 +370,7 @@ semantic_graph_serializer::serialize_operator_member_function
 	declarative_region_ptr_variant enclosing_declarative_region = entity.enclosing_declarative_region();
 	class_* enclosing_class = utility::get<class_*>(enclosing_declarative_region);
 
-	class_::access acc = enclosing_class->member_access(&entity);
+	member_access acc = enclosing_class->get_member_access(&entity);
 	output_ << attribute(acc);
 	if(entity.is_inline())
 		output_ << " inline=\"true\"";
@@ -408,7 +408,7 @@ semantic_graph_serializer::serialize_conversion_function
 	declarative_region_ptr_variant enclosing_declarative_region = entity.enclosing_declarative_region();
 	class_* enclosing_class = utility::get<class_*>(enclosing_declarative_region);
 
-	class_::access acc = enclosing_class->member_access(&entity);
+	member_access acc = enclosing_class->get_member_access(&entity);
 	output_ << attribute(acc);
 	if(entity.is_inline())
 		output_ << " inline=\"true\"";
@@ -445,7 +445,7 @@ semantic_graph_serializer::serialize_simple_member_function
 	declarative_region_ptr_variant enclosing_declarative_region = entity.enclosing_declarative_region();
 	class_* enclosing_class = utility::get<class_*>(enclosing_declarative_region);
 
-	class_::access acc = enclosing_class->member_access(&entity);
+	member_access acc = enclosing_class->get_member_access(&entity);
 	output_ << attribute(acc);
 	if(entity.variadic())
 		output_ << " variadic=\"true\"";
@@ -612,7 +612,7 @@ semantic_graph_serializer::serialize_variable
 		{
 			class_* enclosing_declarative_region = *opt_class;
 
-			class_::access acc = enclosing_declarative_region->member_access(&entity);
+			member_access acc = enclosing_declarative_region->get_member_access(&entity);
 			output_ << attribute(acc);
 			if(enclosing_declarative_region->is_mutable_member_variable(entity))
 				output_ << " mutable=\"true\"";
@@ -636,18 +636,23 @@ semantic_graph_serializer::serialize_typedef
 {
 	output_ << indent(indent_level) << "<typedef";
 	output_ << " name=\"" << entity.name() << "\"";
-	//extra attributes if the typedef is member of a class
-	if(entity.has_enclosing_declarative_region())
-	{
-		declarative_region_ptr_variant enclosing_declarative_region = entity.enclosing_declarative_region();
-		if(auto opt_class = utility::get<class_*>(&enclosing_declarative_region))
-		{
-			class_* enclosing_declarative_region = *opt_class;
+	output_ << ">\n";
+	output_ << indent(indent_level + 1) << "<type>\n";
+	serialize_type(entity.type(), indent_level + 2);
+	output_ << indent(indent_level + 1) << "</type>\n";
+	output_ << indent(indent_level) << "</typedef>\n";
+}
 
-			class_::access acc = enclosing_declarative_region->member_access(&entity);
-			output_ << attribute(acc);
-		}
-	}
+void
+semantic_graph_serializer::serialize_typedef
+(
+	const member_typedef& entity,
+	const unsigned int indent_level
+)
+{
+	output_ << indent(indent_level) << "<typedef";
+	output_ << " name=\"" << entity.name() << "\"";
+	output_ << attribute(entity.access());
 	output_ << ">\n";
 	output_ << indent(indent_level + 1) << "<type>\n";
 	serialize_type(entity.type(), indent_level + 2);
@@ -669,20 +674,20 @@ semantic_graph_serializer::serialize_namespace_alias
 }
 
 std::string
-semantic_graph_serializer::attribute(const class_::access& a)
+semantic_graph_serializer::attribute(const member_access& a)
 {
 	std::ostringstream oss;
 
 	oss << " access=\"";
 	switch(a)
 	{
-		case class_::access::PUBLIC:
+		case member_access::PUBLIC:
 			oss << "public";
 			break;
-		case class_::access::PROTECTED:
+		case member_access::PROTECTED:
 			oss << "protected";
 			break;
-		case class_::access::PRIVATE:
+		case member_access::PRIVATE:
 			oss << "private";
 			break;
 	}

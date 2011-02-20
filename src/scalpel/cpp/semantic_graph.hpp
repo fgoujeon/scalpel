@@ -29,6 +29,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "semantic_entities/function_type.hpp"
 #include "semantic_entities/functions.hpp"
 #include "semantic_entities/fundamental_type.hpp"
+#include "semantic_entities/member_access.hpp"
+#include "semantic_entities/member_typedef.hpp"
 #include "semantic_entities/namespace_.hpp"
 #include "semantic_entities/namespace_alias.hpp"
 #include "semantic_entities/overloadable_operator.hpp"

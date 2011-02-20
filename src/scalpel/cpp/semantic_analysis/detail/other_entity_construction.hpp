@@ -39,7 +39,8 @@ typedef
 		semantic_entities::operator_member_function,
 		semantic_entities::simple_member_function,
 		semantic_entities::variable,
-		semantic_entities::typedef_
+		semantic_entities::typedef_,
+		semantic_entities::member_typedef
 	>::type
 	declarator_entity_ptr_variant
 ;
@@ -57,7 +58,8 @@ create_entity
 	const bool has_virtual_specifier,
 	const bool has_explicit_specifier,
 	const bool has_pure_specifier,
-	const bool is_class_member
+	const bool is_class_member,
+	const semantic_entities::member_access access
 );
 
 std::unique_ptr<semantic_entities::namespace_alias>

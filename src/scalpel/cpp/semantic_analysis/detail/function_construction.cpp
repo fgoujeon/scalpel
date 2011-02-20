@@ -123,7 +123,8 @@ create_function
 		has_virtual_specifier,
 		has_explicit_specifier,
 		false,
-		is_class_member
+		is_class_member,
+		member_access::PUBLIC
 	);
 
 	if(auto opt_constructor_entity = get<constructor*>(&declarator_entity))

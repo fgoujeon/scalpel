@@ -23,6 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "declarative_region_variants.hpp"
 #include "type_variant_fwd.hpp"
+#include "member_access.hpp"
 #include "detail/declarative_region_member_impl.hpp"
 #include <scalpel/utility/unique_ptr_vector.hpp>
 #include <scalpel/utility/unique_ptr_vector.hpp>
@@ -34,9 +35,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-class namespace_;
 class enum_;
-class typedef_;
+class member_typedef;
 class constructor;
 class destructor;
 class operator_member_function;
@@ -55,7 +55,7 @@ class class_
 			<
 				class_,
 				enum_,
-				typedef_,
+				member_typedef,
 				constructor,
 				destructor,
 				operator_member_function,
@@ -71,7 +71,7 @@ class class_
 
 		typedef utility::unique_ptr_vector<class_> classes_t;
 		typedef utility::unique_ptr_vector<enum_> enums_t;
-		typedef utility::unique_ptr_vector<typedef_> typedefs_t;
+		typedef utility::unique_ptr_vector<member_typedef> typedefs_t;
 		typedef utility::unique_ptr_vector<constructor> constructors_t;
 		typedef utility::unique_ptr_vector<operator_member_function> operator_functions_t;
 		typedef utility::unique_ptr_vector<conversion_function> conversion_functions_t;
@@ -80,13 +80,6 @@ class class_
 
 		typedef std::vector<class_*> class_ptrs_t;
 		typedef std::vector<const variable*> variable_ptrs_t;
-
-		enum class access
-		{
-			PUBLIC,
-			PROTECTED,
-			PRIVATE
-		};
 
 	public:
         /**
@@ -198,7 +191,7 @@ class class_
         add_base_class
 		(
 			class_& base_class,
-			const access acc = access::PUBLIC,
+			const member_access acc = member_access::PUBLIC,
 			bool is_virtual = false
 		);
 
@@ -206,22 +199,22 @@ class class_
         Adds a nested class.
         */
         void
-        add_member(std::unique_ptr<class_>&& member, const access acc = access::PUBLIC);
+        add_member(std::unique_ptr<class_>&& member, const member_access acc = member_access::PUBLIC);
 
 		void
-		add_member(std::unique_ptr<enum_>&& member, const access acc = access::PUBLIC);
+		add_member(std::unique_ptr<enum_>&& member, const member_access acc = member_access::PUBLIC);
 
         void
-        add_member(std::unique_ptr<typedef_>&& member, const access acc = access::PUBLIC);
+        add_member(std::unique_ptr<member_typedef>&& member);
 
         void
-        add_member(std::unique_ptr<constructor>&& member, const access acc = access::PUBLIC);
+        add_member(std::unique_ptr<constructor>&& member, const member_access acc = member_access::PUBLIC);
 
 		void
 		set_destructor
 		(
 			std::unique_ptr<destructor>&& member,
-			const access acc = access::PUBLIC
+			const member_access acc = member_access::PUBLIC
 		);
 
 		void
@@ -231,41 +224,41 @@ class class_
         add_member
 		(
 			std::unique_ptr<simple_member_function>&& member,
-			const access acc = access::PUBLIC
+			const member_access acc = member_access::PUBLIC
 		);
 
         void
         add_member
 		(
 			std::unique_ptr<operator_member_function>&& member,
-			const access acc = access::PUBLIC
+			const member_access acc = member_access::PUBLIC
 		);
 
         void
         add_member
 		(
 			std::unique_ptr<conversion_function>&& member,
-			const access acc = access::PUBLIC
+			const member_access acc = member_access::PUBLIC
 		);
 
 		void
 		add_member
 		(
 			std::unique_ptr<variable>&& member,
-			const access acc = access::PUBLIC,
+			const member_access acc = member_access::PUBLIC,
 			const bool is_mutable = false
 		);
 
-		//get the access of the given base class
-		access
+		//get the member_access of the given base class
+		member_access
 		base_class_access(const class_& base_class) const;
 
 		bool
 		is_virtual_base_class(const class_& base_class) const;
 
-		//get the access of the given class member
-		access
-		member_access(const member_t& member) const;
+		//get the member_access of the given class member
+		member_access
+		get_member_access(const member_t& member) const;
 
 		bool
 		is_mutable_member_variable(const variable& member) const;
@@ -279,9 +272,9 @@ class class_
 		open_declarative_region_ptr_variants_t open_declarative_regions_;
 
 		//member information
-		std::map<const class_*, access> base_class_access_;
+		std::map<const class_*, member_access> base_class_access_;
 		class_ptrs_t virtual_base_classes_;
-		std::map<member_t, access> member_access_;
+		std::map<member_t, member_access> member_access_;
 		variable_ptrs_t mutable_member_variables_;
 
 		//members

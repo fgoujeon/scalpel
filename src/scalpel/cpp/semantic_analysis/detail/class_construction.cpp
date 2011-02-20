@@ -72,10 +72,10 @@ fill_class
 	auto class_key_node = get_class_key(class_head_node);
 
 	//default access: public for structs, private for classes
-	const class_::access default_access =
+	const member_access default_access =
 		get<predefined_text_node<str::class_>>(&class_key_node) ?
-		class_::access::PRIVATE :
-		class_::access::PUBLIC
+		member_access::PRIVATE :
+		member_access::PUBLIC
 	;
 
 	//get base classes
@@ -96,7 +96,7 @@ fill_class
 			bool is_virtual = has_virtual_keyword(base_specifier_node);
 
 			//get base class access
-			class_::access access = default_access;
+			member_access access = default_access;
 			if(auto opt_access_specifier_node = get_access_specifier(base_specifier_node))
 			{
 				access = syntax_node_analysis::get_access(*opt_access_specifier_node);
@@ -132,7 +132,7 @@ fill_class
 	}
 
 	//get the members of the class
-	class_::access current_access = default_access;
+	member_access current_access = default_access;
 	auto opt_member_specification = get_member_specification(class_specifier_node);
 	if(opt_member_specification)
 	{
@@ -195,7 +195,7 @@ void
 fill_class
 (
 	semantic_entities::class_& class_entity,
-	const class_::access current_access,
+	const member_access current_access,
 	const syntax_nodes::member_declaration_member_declarator_list& member_declaration_member_declarator_list_node
 )
 {
@@ -343,7 +343,8 @@ fill_class
 					has_virtual_specifier,
 					has_explicit_specifier,
 					has_pure_specifier,
-					true
+					true,
+					current_access
 				);
 
 				if(auto opt_constructor_entity = get<constructor*>(&declarator_entity))
@@ -383,11 +384,10 @@ fill_class
 						current_access,
 						has_mutable_specifier
 					);
-				else if(auto opt_typedef_entity = get<typedef_*>(&declarator_entity))
+				else if(auto opt_typedef_entity = get<member_typedef*>(&declarator_entity))
 					class_entity.add_member
 					(
-						std::unique_ptr<typedef_>(*opt_typedef_entity),
-						current_access
+						std::unique_ptr<member_typedef>(*opt_typedef_entity)
 					);
 				else
 					assert(false);
@@ -404,7 +404,7 @@ namespace
 			add_function_to_class_visitor
 			(
 				class_& class_entity,
-				const class_::access function_access
+				const member_access function_access
 			):
 				class_entity_(class_entity),
 				function_access_(function_access)
@@ -438,7 +438,7 @@ namespace
 
 		private:
 			class_& class_entity_;
-			const class_::access function_access_;
+			const member_access function_access_;
 	};
 }
 
@@ -446,7 +446,7 @@ void
 fill_class
 (
 	semantic_entities::class_& class_entity,
-	const class_::access function_access,
+	const member_access function_access,
 	const syntax_nodes::function_definition& function_definition_node
 )
 {
@@ -486,7 +486,7 @@ add_class
 (
 	semantic_entities::class_& parent_class_entity,
 	std::unique_ptr<semantic_entities::class_>&& class_entity,
-	const class_::access current_access
+	const member_access current_access
 )
 {
 	class_::classes_t::range classes = parent_class_entity.nested_classes();

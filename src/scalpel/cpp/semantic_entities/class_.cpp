@@ -19,8 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "class_.hpp"
-#include "namespace_.hpp"
-#include "typedef_.hpp"
+#include "member_typedef.hpp"
 #include "functions.hpp"
 #include "variable.hpp"
 #include "type_variant.hpp"
@@ -190,7 +189,7 @@ void
 class_::add_base_class
 (
 	class_& base_class,
-	const access acc,
+	const member_access acc,
 	bool is_virtual
 )
 {
@@ -201,7 +200,7 @@ class_::add_base_class
 }
 
 void
-class_::add_member(std::unique_ptr<class_>&& member, const access acc)
+class_::add_member(std::unique_ptr<class_>&& member, const member_access acc)
 {
 	member->enclosing_declarative_region(this);
 
@@ -212,7 +211,7 @@ class_::add_member(std::unique_ptr<class_>&& member, const access acc)
 }
 
 void
-class_::add_member(std::unique_ptr<enum_>&& member, const access acc)
+class_::add_member(std::unique_ptr<enum_>&& member, const member_access acc)
 {
 	member->enclosing_declarative_region(this);
 
@@ -222,17 +221,14 @@ class_::add_member(std::unique_ptr<enum_>&& member, const access acc)
 }
 
 void
-class_::add_member(std::unique_ptr<typedef_>&& member, const access acc)
+class_::add_member(std::unique_ptr<member_typedef>&& member)
 {
 	member->enclosing_declarative_region(this);
-
-	member_access_[static_cast<const typedef_*>(member.get())] = acc;
-
     typedefs_.push_back(std::move(member));
 }
 
 void
-class_::add_member(std::unique_ptr<constructor>&& member, const access acc)
+class_::add_member(std::unique_ptr<constructor>&& member, const member_access acc)
 {
 	member->enclosing_declarative_region(this);
 
@@ -245,7 +241,7 @@ void
 class_::set_destructor
 (
 	std::unique_ptr<destructor>&& member,
-	const access acc
+	const member_access acc
 )
 {
 	member->enclosing_declarative_region(this);
@@ -261,7 +257,7 @@ class_::reset_destructor()
 	set_destructor
 	(
 		std::unique_ptr<destructor>(new destructor(false)),
-		access::PUBLIC
+		member_access::PUBLIC
 	);
 }
 
@@ -269,7 +265,7 @@ void
 class_::add_member
 (
 	std::unique_ptr<simple_member_function>&& member,
-	const access acc
+	const member_access acc
 )
 {
 	member->enclosing_declarative_region(this);
@@ -283,7 +279,7 @@ void
 class_::add_member
 (
 	std::unique_ptr<operator_member_function>&& member,
-	const access acc
+	const member_access acc
 )
 {
 	member->enclosing_declarative_region(this);
@@ -297,7 +293,7 @@ void
 class_::add_member
 (
 	std::unique_ptr<conversion_function>&& member,
-	const access acc
+	const member_access acc
 )
 {
 	member->enclosing_declarative_region(this);
@@ -311,7 +307,7 @@ void
 class_::add_member
 (
 	std::unique_ptr<variable>&& member,
-	const access acc,
+	const member_access acc,
 	const bool is_mutable
 )
 {
@@ -323,7 +319,7 @@ class_::add_member
     variables_.push_back(std::move(member));
 }
 
-class_::access
+member_access
 class_::base_class_access(const class_& base_class) const
 {
 	auto it = base_class_access_.find(&base_class);
@@ -344,8 +340,8 @@ class_::is_virtual_base_class(const class_& base_class) const
 	) != virtual_base_classes_.end();
 }
 
-class_::access
-class_::member_access(const member_t& member) const
+member_access
+class_::get_member_access(const member_t& member) const
 {
 	auto it = member_access_.find(member);
 	if(it != member_access_.end())

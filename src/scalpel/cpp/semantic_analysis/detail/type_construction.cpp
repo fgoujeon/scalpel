@@ -87,7 +87,7 @@ create_type
 				else
 					assert(false);
 
-				utility::ptr_variant<class_, typedef_, enum_>::type found_type =
+				utility::ptr_variant<class_, typedef_, member_typedef, enum_>::type found_type =
 					name_lookup::find
 					<
 						semantic_entity_analysis::identification_policies::by_name,
@@ -95,6 +95,7 @@ create_type
 						false,
 						class_,
 						typedef_,
+						member_typedef,
 						enum_
 					>
 					(

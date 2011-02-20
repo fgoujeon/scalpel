@@ -81,7 +81,7 @@ class semantic_graph_serializer
 		serialize_base_class
 		(
 			const class_& entity,
-			const class_::access acc,
+			const member_access acc,
 			const bool is_virtual,
 			const unsigned int indent_level
 		);
@@ -184,8 +184,15 @@ class semantic_graph_serializer
 			const unsigned int indent_level
 		);
 
+		void
+		serialize_typedef
+		(
+			const member_typedef& entity,
+			const unsigned int indent_level
+		);
+
 		std::string
-		attribute(const class_::access& a);
+		attribute(const member_access& a);
 
 		std::string
 		attribute(const semantic_entities::overloadable_operator op);
