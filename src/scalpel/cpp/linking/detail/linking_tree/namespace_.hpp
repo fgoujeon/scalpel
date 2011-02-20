@@ -43,11 +43,11 @@ struct namespace_
 
 template<class Entity>
 entity_list<Entity>&
-get_entities(namespace_& n);
+get_entity_list(namespace_& n);
 
 template<class Entity>
 const entity_list<Entity>&
-get_entities(const namespace_& n);
+get_entity_list(const namespace_& n);
 
 }}}}} //namespace scalpel::cpp::linking::detail::linking_tree
 

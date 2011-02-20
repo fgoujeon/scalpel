@@ -19,35 +19,21 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "class_.hpp"
+#include "macros/get_entity_list.hpp"
 
 namespace scalpel { namespace cpp { namespace linking { namespace detail { namespace linking_tree
 {
 
-#define GENERATE_ENTITIES_FUNCTION_TEMPLATE_SPECIALIZATION(CLASS, ENTITY_TYPE, VARIABLE) \
-template<> \
-entity_list<semantic_entities::ENTITY_TYPE>& \
-get_entities(CLASS& o) \
-{ \
-	return o.VARIABLE; \
-} \
- \
-template<> \
-const entity_list<semantic_entities::ENTITY_TYPE>& \
-get_entities(const CLASS& o) \
-{ \
-	return o.VARIABLE; \
-}
-
-GENERATE_ENTITIES_FUNCTION_TEMPLATE_SPECIALIZATION(class_, enum_, enums)
-GENERATE_ENTITIES_FUNCTION_TEMPLATE_SPECIALIZATION(class_, typedef_, typedefs)
-GENERATE_ENTITIES_FUNCTION_TEMPLATE_SPECIALIZATION(class_, constructor, constructors)
-GENERATE_ENTITIES_FUNCTION_TEMPLATE_SPECIALIZATION(class_, destructor, destructors)
-GENERATE_ENTITIES_FUNCTION_TEMPLATE_SPECIALIZATION(class_, operator_member_function, operator_member_functions)
-GENERATE_ENTITIES_FUNCTION_TEMPLATE_SPECIALIZATION(class_, conversion_function, conversion_functions)
-GENERATE_ENTITIES_FUNCTION_TEMPLATE_SPECIALIZATION(class_, simple_member_function, simple_member_functions)
-GENERATE_ENTITIES_FUNCTION_TEMPLATE_SPECIALIZATION(class_, variable, variables)
-
-#undef GENERATE_ENTITIES_FUNCTION_TEMPLATE_SPECIALIZATION
+GENERATE_GET_ENTITY_LIST_SPECIALIZATION(class_, enum_, enums)
+GENERATE_GET_ENTITY_LIST_SPECIALIZATION(class_, typedef_, typedefs)
+GENERATE_GET_ENTITY_LIST_SPECIALIZATION(class_, constructor, constructors)
+GENERATE_GET_ENTITY_LIST_SPECIALIZATION(class_, destructor, destructors)
+GENERATE_GET_ENTITY_LIST_SPECIALIZATION(class_, operator_member_function, operator_member_functions)
+GENERATE_GET_ENTITY_LIST_SPECIALIZATION(class_, conversion_function, conversion_functions)
+GENERATE_GET_ENTITY_LIST_SPECIALIZATION(class_, simple_member_function, simple_member_functions)
+GENERATE_GET_ENTITY_LIST_SPECIALIZATION(class_, variable, variables)
 
 }}}}} //namespace scalpel::cpp::linking::detail
+
+#include "macros/get_entity_list_undef.hpp"
 

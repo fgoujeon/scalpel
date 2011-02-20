@@ -18,19 +18,18 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "namespace_.hpp"
-#include "macros/get_entity_list.hpp"
-
-namespace scalpel { namespace cpp { namespace linking { namespace detail { namespace linking_tree
-{
-
-GENERATE_GET_ENTITY_LIST_SPECIALIZATION(namespace_, enum_, enums)
-GENERATE_GET_ENTITY_LIST_SPECIALIZATION(namespace_, typedef_, typedefs)
-GENERATE_GET_ENTITY_LIST_SPECIALIZATION(namespace_, operator_function, operator_functions)
-GENERATE_GET_ENTITY_LIST_SPECIALIZATION(namespace_, simple_function, simple_functions)
-GENERATE_GET_ENTITY_LIST_SPECIALIZATION(namespace_, variable, variables)
-
-}}}}} //namespace scalpel::cpp::linking::detail
-
-#include "macros/get_entity_list_undef.hpp"
+#define GENERATE_GET_ENTITY_LIST_SPECIALIZATION(CLASS, ENTITY_TYPE, VARIABLE) \
+template<> \
+entity_list<semantic_entities::ENTITY_TYPE>& \
+get_entity_list(CLASS& o) \
+{ \
+	return o.VARIABLE; \
+} \
+ \
+template<> \
+const entity_list<semantic_entities::ENTITY_TYPE>& \
+get_entity_list(const CLASS& o) \
+{ \
+	return o.VARIABLE; \
+}
 

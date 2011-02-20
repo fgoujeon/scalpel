@@ -124,7 +124,7 @@ namespace
 		for(auto i = entities.begin(); i != entities.end(); ++i)
 		{
 			const ChildEntity& entity = *i;
-			linking_tree::get_entities<ChildEntity>(tree).list[create_unique_id(entity)].push_back(&entity);
+			linking_tree::get_entity_list<ChildEntity>(tree).list[create_unique_id(entity)].push_back(&entity);
 		}
 	}
 }
