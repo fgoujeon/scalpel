@@ -18,42 +18,19 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_LINKING_DETAIL_ENTITY_TREE_HPP
-#define SCALPEL_CPP_LINKING_DETAIL_ENTITY_TREE_HPP
+#ifndef SCALPEL_CPP_LINKING_DETAIL_LINKING_TREE_CLASS_HPP
+#define SCALPEL_CPP_LINKING_DETAIL_LINKING_TREE_CLASS_HPP
 
+#include "entity_list.hpp"
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <vector>
 
-namespace scalpel { namespace cpp { namespace linking { namespace detail
+namespace scalpel { namespace cpp { namespace linking { namespace detail { namespace linking_tree
 {
 
-template<class Entity>
-struct entity_list
+struct class_
 {
-	std::map<std::string, std::vector<const Entity*>> list;
-};
-
-struct entity_tree
-{
-	enum class tree_type
-	{
-		NAMESPACE,
-		CLASS
-	};
-
-	explicit
-	entity_tree(tree_type t);
-
-	template<class Entity>
-	entity_list<Entity>&
-	entities();
-
-	template<class Entity>
-	const entity_list<Entity>&
-	entities() const;
-
-	tree_type type;
-	std::map<std::string, entity_tree> subtrees;
+	std::map<std::string, class_> classes;
 	entity_list<semantic_entities::enum_> enums;
 	entity_list<semantic_entities::typedef_> typedefs;
 	entity_list<semantic_entities::constructor> constructors;
@@ -61,12 +38,18 @@ struct entity_tree
 	entity_list<semantic_entities::operator_member_function> operator_member_functions;
 	entity_list<semantic_entities::conversion_function> conversion_functions;
 	entity_list<semantic_entities::simple_member_function> simple_member_functions;
-	entity_list<semantic_entities::operator_function> operator_functions;
-	entity_list<semantic_entities::simple_function> simple_functions;
 	entity_list<semantic_entities::variable> variables;
 };
 
-}}}} //namespace scalpel::cpp::linking::detail
+template<class Entity>
+entity_list<Entity>&
+get_entities(class_& n);
+
+template<class Entity>
+const entity_list<Entity>&
+get_entities(const class_& n);
+
+}}}}} //namespace scalpel::cpp::linking::detail::linking_tree
 
 #endif
 

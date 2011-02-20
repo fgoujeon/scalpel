@@ -21,15 +21,21 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_LINKING_DETAIL_MERGE_HPP
 #define SCALPEL_CPP_LINKING_DETAIL_MERGE_HPP
 
-#include "entity_tree.hpp"
+#include "linking_tree.hpp"
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <scalpel/utility/unique_ptr_vector.hpp>
 
 namespace scalpel { namespace cpp { namespace linking { namespace detail
 {
 
+std::unique_ptr<semantic_entities::namespace_>
+create_namespace(const linking_tree::namespace_& tree, const std::string& namespace_name);
+
+std::unique_ptr<semantic_entities::class_>
+create_class(const linking_tree::class_& tree, const std::string& class_name);
+
 std::unique_ptr<semantic_graph>
-merge(const utility::unique_ptr_vector<semantic_graph>& semantic_graphs, const entity_tree& tree);
+merge(const linking_tree::namespace_& tree);
 
 }}}} //namespace scalpel::cpp::linking::detail
 

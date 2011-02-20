@@ -18,20 +18,23 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_LINKING_DETAIL_LIST_ENTITIES_HPP
-#define SCALPEL_CPP_LINKING_DETAIL_LIST_ENTITIES_HPP
+#ifndef SCALPEL_CPP_LINKING_DETAIL_LINKING_TREE_ENTITY_LIST_HPP
+#define SCALPEL_CPP_LINKING_DETAIL_LINKING_TREE_ENTITY_LIST_HPP
 
-#include "linking_tree.hpp"
-#include <scalpel/cpp/semantic_graph.hpp>
-#include <scalpel/utility/unique_ptr_vector.hpp>
+#include <vector>
+#include <string>
+#include <map>
 
-namespace scalpel { namespace cpp { namespace linking { namespace detail
+namespace scalpel { namespace cpp { namespace linking { namespace detail { namespace linking_tree
 {
 
-linking_tree::namespace_
-list_entities(const utility::unique_ptr_vector<semantic_graph>& semantic_graphs);
+template<class Entity>
+struct entity_list
+{
+	std::map<std::string, std::vector<const Entity*>> list;
+};
 
-}}}} //namespace scalpel::cpp::linking::detail
+}}}}} //namespace scalpel::cpp::linking::detail::linking_tree
 
 #endif
 
