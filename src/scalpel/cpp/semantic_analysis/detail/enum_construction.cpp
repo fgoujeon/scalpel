@@ -50,9 +50,9 @@ fill_enum
 			const enumerator_definition& enumerator_definition_node = i->main_node();
 			enum_entity.add
 			(
-				std::unique_ptr<enum_::constant>
+				std::unique_ptr<enum_constant>
 				(
-					new enum_::constant
+					new enum_constant
 					(
 						get_identifier(enumerator_definition_node).value(),
 						value_counter++

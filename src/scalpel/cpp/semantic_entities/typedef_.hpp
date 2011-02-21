@@ -24,10 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "type_variant.hpp"
 #include "detail/declarative_region_member_impl.hpp"
 #include <boost/preprocessor/control/iif.hpp>
-#include <boost/preprocessor/logical/or.hpp>
 #include <boost/preprocessor/punctuation/comma_if.hpp>
-#include <boost/preprocessor/punctuation/comma.hpp>
-#include <boost/preprocessor/facilities/empty.hpp>
 
 #define GENERATE_TYPEDEF_DECLARATION(CLASS_NAME, IS_MEMBER) \
 class CLASS_NAME \

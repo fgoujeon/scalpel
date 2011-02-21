@@ -288,7 +288,7 @@ semantic_graph_serializer::serialize_enum
 
 	for(auto i = entity.constants().begin(); i != entity.constants().end(); ++i)
 	{
-		const enum_::constant& constant = *i;
+		const enum_constant& constant = *i;
 		output_ << indent(indent_level + 1) << "<constant";
 		output_ << " name=\"" << constant.name() << "\"";
 		output_ << " value=\"" << constant.value() << "\"";

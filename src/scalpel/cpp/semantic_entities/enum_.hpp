@@ -21,6 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_ENUM_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_ENUM_HPP
 
+#include "enum_constant.hpp"
 #include "detail/declarative_region_member_impl.hpp"
 #include <scalpel/utility/unique_ptr_vector.hpp>
 #include <string>
@@ -28,14 +29,10 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-/**
-Represents a C++ enum.
-*/
 class enum_
 {
 	public:
-		class constant;
-		typedef utility::unique_ptr_vector<constant> constants_t;
+		typedef utility::unique_ptr_vector<enum_constant> constants_t;
 
         explicit
         enum_(const std::string& name);
@@ -58,7 +55,7 @@ class enum_
 		}
 
 		void
-		add(std::unique_ptr<constant>&& c)
+		add(std::unique_ptr<enum_constant>&& c)
 		{
 			constants_.push_back(std::move(c));
 		}
@@ -85,33 +82,6 @@ class enum_
         std::string name_;
 		constants_t constants_;
 		detail::declarative_region_member_impl declarative_region_member_impl_;
-};
-
-class enum_::constant
-{
-	public:
-        constant(const std::string& name, const int value);
-
-        constant(const constant&) = delete;
-
-        constant&
-		operator=(const constant&) = delete;
-
-		const std::string&
-		name() const
-		{
-			return name_;
-		}
-
-		int
-		value() const
-		{
-			return value_;
-		}
-
-	private:
-		std::string name_;
-		int value_;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities
