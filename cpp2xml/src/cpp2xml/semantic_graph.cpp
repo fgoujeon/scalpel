@@ -112,6 +112,10 @@ semantic_graph_serializer::serialize_type
 	{
 		output_ << indent(indent_level) << "<enum id=\"e" << enum_id(**opt_type) << "\"/>\n";
 	}
+	else if(auto opt_type = scalpel::utility::get<const member_enum*>(&n))
+	{
+		output_ << indent(indent_level) << "<enum id=\"e" << enum_id(**opt_type) << "\"/>\n";
+	}
 }
 
 void
@@ -277,6 +281,31 @@ void
 semantic_graph_serializer::serialize_enum
 (
 	const enum_& entity,
+	const unsigned int indent_level
+)
+{
+	output_ << indent(indent_level) << "<enum";
+	if(!entity.name().empty())
+		output_ << " name=\"" << entity.name() << "\"";
+	output_ << " id=\"e" << enum_id(entity) << "\"";
+	output_ << ">\n";
+
+	for(auto i = entity.constants().begin(); i != entity.constants().end(); ++i)
+	{
+		const enum_constant& constant = *i;
+		output_ << indent(indent_level + 1) << "<constant";
+		output_ << " name=\"" << constant.name() << "\"";
+		output_ << " value=\"" << constant.value() << "\"";
+		output_ << ">\n";
+	}
+
+	output_ << indent(indent_level) << "</enum>\n";
+}
+
+void
+semantic_graph_serializer::serialize_enum
+(
+	const member_enum& entity,
 	const unsigned int indent_level
 )
 {
@@ -869,6 +898,13 @@ semantic_graph_serializer::define_ids(const enum_& entity)
 	++enum_id_counter_;
 }
 
+void
+semantic_graph_serializer::define_ids(const member_enum& entity)
+{
+	member_enum_ids_[&entity] = enum_id_counter_;
+	++enum_id_counter_;
+}
+
 unsigned int
 semantic_graph_serializer::namespace_id(const scalpel::cpp::semantic_entities::namespace_& namespace_entity) const
 {
@@ -894,6 +930,16 @@ semantic_graph_serializer::enum_id(const scalpel::cpp::semantic_entities::enum_&
 {
 	enum_ids_t::const_iterator it = enum_ids_.find(&enum_entity);
 	if(it != enum_ids_.end())
+		return it->second;
+	else
+		assert(false);
+}
+
+unsigned int
+semantic_graph_serializer::enum_id(const scalpel::cpp::semantic_entities::member_enum& enum_entity) const
+{
+	member_enum_ids_t::const_iterator it = member_enum_ids_.find(&enum_entity);
+	if(it != member_enum_ids_.end())
 		return it->second;
 	else
 		assert(false);

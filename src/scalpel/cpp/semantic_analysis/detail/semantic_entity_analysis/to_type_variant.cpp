@@ -37,12 +37,6 @@ namespace
 		}
 
 		type_variant
-		operator()(enum_* t) const
-		{
-			return type_variant(static_cast<const enum_*>(t));
-		}
-
-		type_variant
 		operator()(typedef_* t) const
 		{
 			return t->type();
@@ -52,6 +46,18 @@ namespace
 		operator()(member_typedef* t) const
 		{
 			return t->type();
+		}
+
+		type_variant
+		operator()(enum_* t) const
+		{
+			return type_variant(static_cast<const enum_*>(t));
+		}
+
+		type_variant
+		operator()(member_enum* t) const
+		{
+			return type_variant(static_cast<const member_enum*>(t));
 		}
 	} to_type_variant_impl;
 }
@@ -64,7 +70,8 @@ to_type_variant
 		semantic_entities::class_,
 		semantic_entities::typedef_,
 		semantic_entities::member_typedef,
-		semantic_entities::enum_
+		semantic_entities::enum_,
+		semantic_entities::member_enum
 	>::type& var
 )
 {

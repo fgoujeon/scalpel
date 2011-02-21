@@ -28,5 +28,11 @@ enum_::enum_(const std::string& name):
 {
 }
 
+member_enum::member_enum(const std::string& name, const member_access access):
+    name_(name),
+	access_(access)
+{
+}
+
 }}} //namespace scalpel::cpp::semantic_entities
 

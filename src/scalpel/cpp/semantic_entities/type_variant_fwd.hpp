@@ -31,6 +31,7 @@ class array;
 class class_;
 class cv_qualified_type;
 class enum_;
+class member_enum;
 class function_type;
 class pointer;
 class pointer_to_member;
@@ -45,6 +46,7 @@ typedef
 		const class_*,
 		cv_qualified_type,
 		const enum_*,
+		const member_enum*,
 		pointer,
 		pointer_to_member,
 		reference

@@ -87,7 +87,14 @@ create_type
 				else
 					assert(false);
 
-				utility::ptr_variant<class_, typedef_, member_typedef, enum_>::type found_type =
+				utility::ptr_variant
+				<
+					class_,
+					typedef_,
+					member_typedef,
+					enum_,
+					member_enum
+				>::type found_type =
 					name_lookup::find
 					<
 						semantic_entity_analysis::identification_policies::by_name,
@@ -96,7 +103,8 @@ create_type
 						class_,
 						typedef_,
 						member_typedef,
-						enum_
+						enum_,
+						member_enum
 					>
 					(
 						has_leading_double_colon(nested_identifier_or_template_id_node),

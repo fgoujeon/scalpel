@@ -36,7 +36,8 @@ to_type_variant
 		semantic_entities::class_,
 		semantic_entities::typedef_,
 		semantic_entities::member_typedef,
-		semantic_entities::enum_
+		semantic_entities::enum_,
+		semantic_entities::member_enum
 	>::type& var
 );
 

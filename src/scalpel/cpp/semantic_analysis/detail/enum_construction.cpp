@@ -33,34 +33,10 @@ create_enum(const enum_specifier& enum_specifier_node)
 	return std::unique_ptr<enum_>(new enum_(syntax_node_analysis::get_identifier(enum_specifier_node)));
 }
 
-void
-fill_enum
-(
-	semantic_entities::enum_& enum_entity,
-	const syntax_nodes::enum_specifier& enum_specifier_node
-)
+std::unique_ptr<member_enum>
+create_member_enum(const enum_specifier& enum_specifier_node, const member_access access)
 {
-	int value_counter = 0;
-
-	if(const optional_node<enumerator_list>& opt_enumerator_list_node = get_enumerator_list(enum_specifier_node))
-	{
-		const enumerator_list& enumerator_list_node = *opt_enumerator_list_node;
-		for(auto i = enumerator_list_node.begin(); i != enumerator_list_node.end(); ++i)
-		{
-			const enumerator_definition& enumerator_definition_node = i->main_node();
-			enum_entity.add
-			(
-				std::unique_ptr<enum_constant>
-				(
-					new enum_constant
-					(
-						get_identifier(enumerator_definition_node).value(),
-						value_counter++
-					)
-				)
-			);
-		}
-	}
+	return std::unique_ptr<member_enum>(new member_enum(syntax_node_analysis::get_identifier(enum_specifier_node), access));
 }
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail

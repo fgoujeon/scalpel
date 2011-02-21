@@ -35,7 +35,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-class enum_;
+class member_enum;
 class member_typedef;
 class constructor;
 class destructor;
@@ -54,7 +54,7 @@ class class_
 			utility::const_ptr_variant
 			<
 				class_,
-				enum_,
+				member_enum,
 				member_typedef,
 				constructor,
 				destructor,
@@ -70,7 +70,7 @@ class class_
 		typedef std::vector<open_declarative_region_ptr_variant> open_declarative_region_ptr_variants_t;
 
 		typedef utility::unique_ptr_vector<class_> classes_t;
-		typedef utility::unique_ptr_vector<enum_> enums_t;
+		typedef utility::unique_ptr_vector<member_enum> enums_t;
 		typedef utility::unique_ptr_vector<member_typedef> typedefs_t;
 		typedef utility::unique_ptr_vector<constructor> constructors_t;
 		typedef utility::unique_ptr_vector<operator_member_function> operator_functions_t;
@@ -202,7 +202,7 @@ class class_
         add_member(std::unique_ptr<class_>&& member, const member_access acc = member_access::PUBLIC);
 
 		void
-		add_member(std::unique_ptr<enum_>&& member, const member_access acc = member_access::PUBLIC);
+		add_member(std::unique_ptr<member_enum>&& member);
 
         void
         add_member(std::unique_ptr<member_typedef>&& member);

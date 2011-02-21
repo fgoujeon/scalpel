@@ -18,21 +18,11 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_ENUM_CONSTRUCTION_HPP
-#define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_ENUM_CONSTRUCTION_HPP
-
-#include <scalpel/cpp/semantic_graph.hpp>
-#include <scalpel/cpp/syntax_tree.hpp>
-#include <memory>
+#ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_ENUM_CONSTRUCTION_IPP
+#define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_ENUM_CONSTRUCTION_IPP
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail
 {
-
-std::unique_ptr<semantic_entities::enum_>
-create_enum(const syntax_nodes::enum_specifier& enum_specifier_node);
-
-std::unique_ptr<semantic_entities::member_enum>
-create_member_enum(const syntax_nodes::enum_specifier& enum_specifier_node, const semantic_entities::member_access access);
 
 template<class Enum>
 void
@@ -40,11 +30,32 @@ fill_enum
 (
 	Enum& enum_entity,
 	const syntax_nodes::enum_specifier& enum_specifier_node
-);
+)
+{
+	int value_counter = 0;
+
+	if(const syntax_nodes::optional_node<syntax_nodes::enumerator_list>& opt_enumerator_list_node = get_enumerator_list(enum_specifier_node))
+	{
+		const syntax_nodes::enumerator_list& enumerator_list_node = *opt_enumerator_list_node;
+		for(auto i = enumerator_list_node.begin(); i != enumerator_list_node.end(); ++i)
+		{
+			const syntax_nodes::enumerator_definition& enumerator_definition_node = i->main_node();
+			enum_entity.add
+			(
+				std::unique_ptr<semantic_entities::enum_constant>
+				(
+					new semantic_entities::enum_constant
+					(
+						get_identifier(enumerator_definition_node).value(),
+						value_counter++
+					)
+				)
+			);
+		}
+	}
+}
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
-
-#include "enum_construction.ipp"
 
 #endif
 
