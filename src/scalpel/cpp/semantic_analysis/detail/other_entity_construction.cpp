@@ -39,6 +39,7 @@ create_entity
 	const declarative_region_ptr_variant& current_declarative_region,
 	boost::optional<semantic_entities::type_variant> opt_type,
 	const bool has_typedef_specifier,
+	const bool has_mutable_specifier,
 	const bool has_static_specifier,
 	const bool has_inline_specifier,
 	const bool has_virtual_specifier,
@@ -82,12 +83,26 @@ create_entity
 					{
 						opt_type = qualify_type(*opt_type, declarator_node, current_declarative_region);
 
-						return new variable
-						(
-							syntax_node_analysis::get_identifier(declarator_node).value(),
-							*opt_type,
-							has_static_specifier
-						);
+						if(is_class_member)
+						{
+							return new member_variable
+							(
+								syntax_node_analysis::get_identifier(declarator_node).value(),
+								*opt_type,
+								has_static_specifier,
+								has_mutable_specifier,
+								access
+							);
+						}
+						else
+						{
+							return new variable
+							(
+								syntax_node_analysis::get_identifier(declarator_node).value(),
+								*opt_type,
+								has_static_specifier
+							);
+						}
 					}
 					else
 					{
@@ -283,12 +298,26 @@ create_entity
 				}
 				else
 				{
-					return new variable
-					(
-						syntax_node_analysis::get_identifier(declarator_node).value(),
-						*opt_type,
-						has_static_specifier
-					);
+					if(is_class_member)
+					{
+						return new member_variable
+						(
+							syntax_node_analysis::get_identifier(declarator_node).value(),
+							*opt_type,
+							has_static_specifier,
+							has_mutable_specifier,
+							access
+						);
+					}
+					else
+					{
+						return new variable
+						(
+							syntax_node_analysis::get_identifier(declarator_node).value(),
+							*opt_type,
+							has_static_specifier
+						);
+					}
 				}
 			}
 		}

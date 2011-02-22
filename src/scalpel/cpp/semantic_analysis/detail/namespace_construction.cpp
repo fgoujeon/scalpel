@@ -124,8 +124,6 @@ fill_namespace
 	bool has_typedef_specifier = false;
 	bool has_static_specifier = false;
 	bool has_inline_specifier = false;
-	bool has_virtual_specifier = false;
-	bool has_explicit_specifier = false;
 
 	if(const optional_node<decl_specifier_seq>& opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node))
 	{
@@ -134,8 +132,6 @@ fill_namespace
 		has_typedef_specifier = syntax_node_analysis::has_typedef_specifier(decl_specifier_seq_node);
 		has_static_specifier = syntax_node_analysis::has_static_specifier(decl_specifier_seq_node);
 		has_inline_specifier = syntax_node_analysis::has_inline_specifier(decl_specifier_seq_node);
-		has_virtual_specifier = syntax_node_analysis::has_virtual_specifier(decl_specifier_seq_node);
-		has_explicit_specifier = syntax_node_analysis::has_explicit_specifier(decl_specifier_seq_node);
 
 		//create and/or get undecorated type
 		switch(syntax_node_analysis::get_decl_specifier_seq_type(decl_specifier_seq_node))
@@ -239,10 +235,11 @@ fill_namespace
 				&namespace_entity,
 				opt_unqualified_type,
 				has_typedef_specifier,
+				false,
 				has_static_specifier,
 				has_inline_specifier,
-				has_virtual_specifier,
-				has_explicit_specifier,
+				false,
+				false,
 				false,
 				false,
 				member_access::PUBLIC

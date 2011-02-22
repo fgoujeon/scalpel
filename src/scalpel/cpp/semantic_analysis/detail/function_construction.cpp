@@ -118,6 +118,7 @@ create_function
 		current_declarative_region,
 		opt_unqualified_type,
 		has_typedef_specifier,
+		false,
 		has_static_specifier,
 		has_inline_specifier,
 		has_virtual_specifier,

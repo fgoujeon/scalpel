@@ -201,11 +201,11 @@ fill_class
 {
 	boost::optional<type_variant> opt_unqualified_type;
 	bool has_typedef_specifier = false;
+	bool has_mutable_specifier = false;
 	bool has_static_specifier = false;
 	bool has_inline_specifier = false;
 	bool has_virtual_specifier = false;
 	bool has_explicit_specifier = false;
-	bool has_mutable_specifier = false;
 
 	if
 	(
@@ -216,11 +216,11 @@ fill_class
 		const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
 
 		has_typedef_specifier = syntax_node_analysis::has_typedef_specifier(decl_specifier_seq_node);
+		has_mutable_specifier = syntax_node_analysis::has_mutable_specifier(decl_specifier_seq_node);
 		has_static_specifier = syntax_node_analysis::has_static_specifier(decl_specifier_seq_node);
 		has_inline_specifier = syntax_node_analysis::has_inline_specifier(decl_specifier_seq_node);
 		has_virtual_specifier = syntax_node_analysis::has_virtual_specifier(decl_specifier_seq_node);
 		has_explicit_specifier = syntax_node_analysis::has_explicit_specifier(decl_specifier_seq_node);
-		has_mutable_specifier = syntax_node_analysis::has_mutable_specifier(decl_specifier_seq_node);
 
 		//create and/or get undecorated type
 		switch(syntax_node_analysis::get_decl_specifier_seq_type(decl_specifier_seq_node))
@@ -338,6 +338,7 @@ fill_class
 					&class_entity,
 					opt_unqualified_type,
 					has_typedef_specifier,
+					has_mutable_specifier,
 					has_static_specifier,
 					has_inline_specifier,
 					has_virtual_specifier,
@@ -377,18 +378,10 @@ fill_class
 						std::unique_ptr<simple_member_function>(*opt_simple_function_entity),
 						current_access
 					);
-				else if(auto opt_variable_entity = get<variable*>(&declarator_entity))
-					class_entity.add_member
-					(
-						std::unique_ptr<variable>(*opt_variable_entity),
-						current_access,
-						has_mutable_specifier
-					);
+				else if(auto opt_variable_entity = get<member_variable*>(&declarator_entity))
+					class_entity.add_member(std::unique_ptr<member_variable>(*opt_variable_entity));
 				else if(auto opt_typedef_entity = get<member_typedef*>(&declarator_entity))
-					class_entity.add_member
-					(
-						std::unique_ptr<member_typedef>(*opt_typedef_entity)
-					);
+					class_entity.add_member(std::unique_ptr<member_typedef>(*opt_typedef_entity));
 				else
 					assert(false);
 			}

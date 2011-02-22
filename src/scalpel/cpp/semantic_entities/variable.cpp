@@ -27,7 +27,7 @@ variable::variable
 (
 	const std::string& name,
 	const type_variant& type,
-	bool is_static
+	const bool is_static
 ):
 	type_(type),
 	name_(name),
@@ -35,40 +35,20 @@ variable::variable
 {
 }
 
-const type_variant&
-variable::type() const
+member_variable::member_variable
+(
+	const std::string& name,
+	const type_variant& type,
+	const bool is_static,
+	const bool is_mutable,
+	const member_access access
+):
+	type_(type),
+	name_(name),
+	is_static_(is_static),
+	is_mutable_(is_mutable),
+	access_(access)
 {
-	return type_;
-}
-
-const std::string&
-variable::name() const
-{
-	return name_;
-}
-
-bool
-variable::is_static() const
-{
-	return is_static_;
-}
-
-bool
-variable::has_enclosing_declarative_region() const
-{
-	return declarative_region_member_impl_.has_enclosing_declarative_region();
-}
-
-declarative_region_ptr_variant
-variable::enclosing_declarative_region() const
-{
-	return declarative_region_member_impl_.enclosing_declarative_region();
-}
-
-void
-variable::enclosing_declarative_region(const declarative_region_ptr_variant& decl_region)
-{
-	declarative_region_member_impl_.enclosing_declarative_region(decl_region);
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

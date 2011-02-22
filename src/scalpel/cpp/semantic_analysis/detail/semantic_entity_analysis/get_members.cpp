@@ -128,7 +128,7 @@ GENERATE_GET_MEMBERS_SPECIALIZATION          (class_, operator_member_function, 
 GENERATE_GET_MEMBERS_SPECIALIZATION          (class_, conversion_function, conversion_functions)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (class_, simple_function)
 GENERATE_GET_MEMBERS_SPECIALIZATION          (class_, simple_member_function, simple_functions)
-GENERATE_GET_MEMBERS_SPECIALIZATION          (class_, variable, variables)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (class_, variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (class_, namespace_alias)
 
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(constructor, open_declarative_region_ptr_variant)

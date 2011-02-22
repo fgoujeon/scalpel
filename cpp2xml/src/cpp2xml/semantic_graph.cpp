@@ -633,20 +633,27 @@ semantic_graph_serializer::serialize_variable
 {
 	output_ << indent(indent_level) << "<variable";
 	output_ << " name=\"" << entity.name() << "\"";
-	//extra attributes if the function is a class member function
-	if(entity.has_enclosing_declarative_region())
-	{
-		declarative_region_ptr_variant enclosing_declarative_region = entity.enclosing_declarative_region();
-		if(auto opt_class = utility::get<class_*>(&enclosing_declarative_region))
-		{
-			class_* enclosing_declarative_region = *opt_class;
+	if(entity.is_static())
+		output_ << " static=\"true\"";
+	output_ << ">\n";
+	output_ << indent(indent_level + 1) << "<type>\n";
+	serialize_type(entity.type(), indent_level + 2);
+	output_ << indent(indent_level + 1) << "</type>\n";
+	output_ << indent(indent_level) << "</variable>\n";
+}
 
-			member_access acc = enclosing_declarative_region->get_member_access(&entity);
-			output_ << attribute(acc);
-			if(enclosing_declarative_region->is_mutable_member_variable(entity))
-				output_ << " mutable=\"true\"";
-		}
-	}
+void
+semantic_graph_serializer::serialize_variable
+(
+	const member_variable& entity,
+	const unsigned int indent_level
+)
+{
+	output_ << indent(indent_level) << "<variable";
+	output_ << " name=\"" << entity.name() << "\"";
+	output_ << attribute(entity.access());
+	if(entity.is_mutable())
+		output_ << " mutable=\"true\"";
 	if(entity.is_static())
 		output_ << " static=\"true\"";
 	output_ << ">\n";

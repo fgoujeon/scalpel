@@ -23,56 +23,111 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "type_variant.hpp"
 #include "detail/declarative_region_member_impl.hpp"
-#include <boost/noncopyable.hpp>
+#include <boost/preprocessor/control/iif.hpp>
+#include <boost/preprocessor/punctuation/comma_if.hpp>
 #include <string>
 #include <memory>
+
+#define GENERATE_VARIABLE_DECLARATION(CLASS_NAME, IS_MEMBER) \
+class CLASS_NAME \
+{ \
+	public: \
+		CLASS_NAME \
+		( \
+			const std::string& name, \
+			const type_variant& type, \
+			bool is_static = false BOOST_PP_COMMA_IF(IS_MEMBER) \
+			BOOST_PP_IIF(IS_MEMBER, const bool is_mutable = false,) BOOST_PP_COMMA_IF(IS_MEMBER) \
+			BOOST_PP_IIF(IS_MEMBER, const member_access access = member_access::PUBLIC,) \
+		); \
+ \
+		CLASS_NAME(const CLASS_NAME&) = delete; \
+ \
+		CLASS_NAME& \
+		operator=(const CLASS_NAME&) = delete; \
+ \
+		const type_variant& \
+		type() const \
+		{ \
+			return type_; \
+		} \
+ \
+		const std::string& \
+		name() const \
+		{ \
+			return name_; \
+		} \
+ \
+		bool \
+		is_static() const \
+		{ \
+			return is_static_; \
+		} \
+ \
+		BOOST_PP_IIF \
+		( \
+			IS_MEMBER, \
+			bool \
+			is_mutable() const \
+			{ \
+				return is_mutable_; \
+			}, \
+		) \
+ \
+		BOOST_PP_IIF \
+		( \
+			IS_MEMBER, \
+			member_access \
+			access() const \
+			{ \
+				return access_; \
+			}, \
+		) \
+ \
+		bool \
+		has_enclosing_declarative_region() const \
+		{ \
+			return declarative_region_member_impl_.has_enclosing_declarative_region(); \
+		} \
+ \
+		declarative_region_ptr_variant \
+		enclosing_declarative_region() const \
+		{ \
+			return declarative_region_member_impl_.enclosing_declarative_region(); \
+		} \
+ \
+		void \
+		enclosing_declarative_region(const declarative_region_ptr_variant& enclosing_declarative_region) \
+		{ \
+			declarative_region_member_impl_.enclosing_declarative_region(enclosing_declarative_region); \
+		} \
+ \
+	private: \
+		type_variant type_; \
+		std::string name_; \
+		bool is_static_; \
+		BOOST_PP_IIF \
+		( \
+			IS_MEMBER, \
+			bool is_mutable_;, \
+		) \
+		BOOST_PP_IIF \
+		( \
+			IS_MEMBER, \
+			member_access access_;, \
+		) \
+		detail::declarative_region_member_impl declarative_region_member_impl_; \
+};
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-/**
-Represents a C++ variable.
-*/
-class variable
-{
-	public:
-		variable
-		(
-			const std::string& name,
-			const type_variant& type,
-			bool is_static = false
-		);
-
-		variable(const variable&) = delete;
-
-		variable&
-		operator=(const variable&) = delete;
-
-		const type_variant&
-		type() const;
-
-		const std::string&
-		name() const;
-
-		bool
-		is_static() const;
-
-		bool
-		has_enclosing_declarative_region() const;
-
-		declarative_region_ptr_variant
-		enclosing_declarative_region() const;
-
-		void
-		enclosing_declarative_region(const declarative_region_ptr_variant& enclosing_declarative_region);
-
-	private:
-		type_variant type_;
-		std::string name_;
-		bool is_static_;
-		detail::declarative_region_member_impl declarative_region_member_impl_;
-};
+GENERATE_VARIABLE_DECLARATION(variable, 0)
+GENERATE_VARIABLE_DECLARATION(member_variable, 1)
 
 }}} //namespace scalpel::cpp::semantic_entities
 
+#undef GENERATE_VARIABLE_DECLARATION
+
 #endif
+

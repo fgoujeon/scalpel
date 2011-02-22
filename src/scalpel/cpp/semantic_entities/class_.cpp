@@ -301,18 +301,9 @@ class_::add_member
 }
 
 void
-class_::add_member
-(
-	std::unique_ptr<variable>&& member,
-	const member_access acc,
-	const bool is_mutable
-)
+class_::add_member(std::unique_ptr<member_variable>&& member)
 {
 	member->enclosing_declarative_region(this);
-
-	member_access_[static_cast<const variable*>(member.get())] = acc;
-	if(is_mutable) mutable_member_variables_.push_back(member.get());
-
     variables_.push_back(std::move(member));
 }
 
@@ -345,17 +336,6 @@ class_::get_member_access(const member_t& member) const
 		return it->second;
 	else
 		throw std::runtime_error("The given entity is not a member of that class.");
-}
-
-bool
-class_::is_mutable_member_variable(const variable& member) const
-{
-	return std::find
-	(
-		mutable_member_variables_.begin(),
-		mutable_member_variables_.end(),
-		&member
-	) != mutable_member_variables_.end();
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

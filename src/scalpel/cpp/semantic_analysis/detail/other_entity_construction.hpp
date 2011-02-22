@@ -39,6 +39,7 @@ typedef
 		semantic_entities::operator_member_function,
 		semantic_entities::simple_member_function,
 		semantic_entities::variable,
+		semantic_entities::member_variable,
 		semantic_entities::typedef_,
 		semantic_entities::member_typedef
 	>::type
@@ -53,6 +54,7 @@ create_entity
 	const semantic_entities::declarative_region_ptr_variant& current_declarative_region,
 	boost::optional<semantic_entities::type_variant> opt_type,
 	const bool has_typedef_specifier,
+	const bool has_mutable_specifier,
 	const bool has_static_specifier,
 	const bool has_inline_specifier,
 	const bool has_virtual_specifier,

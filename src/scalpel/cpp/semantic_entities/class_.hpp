@@ -42,7 +42,7 @@ class destructor;
 class operator_member_function;
 class conversion_function;
 class simple_member_function;
-class variable;
+class member_variable;
 
 /**
 Represents a C++ class.
@@ -54,14 +54,11 @@ class class_
 			utility::const_ptr_variant
 			<
 				class_,
-				member_enum,
-				member_typedef,
 				constructor,
 				destructor,
 				operator_member_function,
 				conversion_function,
-				simple_member_function,
-				variable
+				simple_member_function
 			>::type
 			member_t
 		;
@@ -76,10 +73,9 @@ class class_
 		typedef utility::unique_ptr_vector<operator_member_function> operator_functions_t;
 		typedef utility::unique_ptr_vector<conversion_function> conversion_functions_t;
 		typedef utility::unique_ptr_vector<simple_member_function> simple_functions_t;
-		typedef utility::unique_ptr_vector<variable> variables_t;
+		typedef utility::unique_ptr_vector<member_variable> variables_t;
 
 		typedef std::vector<class_*> class_ptrs_t;
-		typedef std::vector<const variable*> variable_ptrs_t;
 
 	public:
         /**
@@ -242,12 +238,7 @@ class class_
 		);
 
 		void
-		add_member
-		(
-			std::unique_ptr<variable>&& member,
-			const member_access acc = member_access::PUBLIC,
-			const bool is_mutable = false
-		);
+		add_member(std::unique_ptr<member_variable>&& member);
 
 		//get the member_access of the given base class
 		member_access
@@ -259,9 +250,6 @@ class class_
 		//get the member_access of the given class member
 		member_access
 		get_member_access(const member_t& member) const;
-
-		bool
-		is_mutable_member_variable(const variable& member) const;
 
     private:
         std::string name_;
@@ -275,7 +263,6 @@ class class_
 		std::map<const class_*, member_access> base_class_access_;
 		class_ptrs_t virtual_base_classes_;
 		std::map<member_t, member_access> member_access_;
-		variable_ptrs_t mutable_member_variables_;
 
 		//members
 		class_ptrs_t base_classes_;

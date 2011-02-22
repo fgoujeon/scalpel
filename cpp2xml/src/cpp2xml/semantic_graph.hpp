@@ -179,6 +179,13 @@ class semantic_graph_serializer
 		);
 
 		void
+		serialize_variable
+		(
+			const member_variable& entity,
+			const unsigned int indent_level
+		);
+
+		void
 		serialize_namespace_alias
 		(
 			const namespace_alias& entity,
