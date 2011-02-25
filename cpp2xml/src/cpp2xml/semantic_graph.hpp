@@ -81,9 +81,7 @@ class semantic_graph_serializer
 		void
 		serialize_base_class
 		(
-			const class_& entity,
-			const member_access acc,
-			const bool is_virtual,
+			const base_class& entity,
 			const unsigned int indent_level
 		);
 

@@ -111,7 +111,7 @@ fill_class
 				assert(false); //not managed yet
 
 			//get base class
-			class_* base_class =
+			class_* base =
 				name_lookup::find
 				<
 					semantic_entity_analysis::identification_policies::by_name,
@@ -127,7 +127,7 @@ fill_class
 				)
 			;
 
-			class_entity.add_base_class(*base_class, access, is_virtual);
+			class_entity.add_base_class(base_class(*base, access, is_virtual));
 		}
 	}
 

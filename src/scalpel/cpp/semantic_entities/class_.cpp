@@ -65,13 +65,7 @@ class_::open_declarative_regions()
 	return open_declarative_regions_;
 }
 
-const class_::class_ptrs_t&
-class_::base_classes()
-{
-	return base_classes_;
-}
-
-const class_::class_ptrs_t&
+const class_::base_classes_t&
 class_::base_classes() const
 {
 	return base_classes_;
@@ -186,17 +180,9 @@ class_::variables() const
 }
 
 void
-class_::add_base_class
-(
-	class_& base_class,
-	const member_access acc,
-	bool is_virtual
-)
+class_::add_base_class(const base_class& bc)
 {
-	base_classes_.push_back(&base_class);
-
-	base_class_access_[&base_class] = acc;
-	if(is_virtual) virtual_base_classes_.push_back(&base_class);
+	base_classes_.push_back(bc);
 }
 
 void
@@ -273,27 +259,6 @@ class_::add_member(std::unique_ptr<member_variable>&& member)
 {
 	member->enclosing_declarative_region(this);
     variables_.push_back(std::move(member));
-}
-
-member_access
-class_::base_class_access(const class_& base_class) const
-{
-	auto it = base_class_access_.find(&base_class);
-	if(it != base_class_access_.end())
-		return it->second;
-	else
-		throw std::runtime_error("The given entity is not a base class of that class.");
-}
-
-bool
-class_::is_virtual_base_class(const class_& base_class) const
-{
-	return std::find
-	(
-		virtual_base_classes_.begin(),
-		virtual_base_classes_.end(),
-		&base_class
-	) != virtual_base_classes_.end();
 }
 
 member_access

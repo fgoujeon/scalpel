@@ -443,7 +443,7 @@ typename return_type<Optional, Multiple, EntitiesT...>::type
 find_entities_in_base_classes
 (
 	const typename EntityIdentificationPolicy::identifier_t& identifier,
-	const std::vector<semantic_entities::class_*>& base_classes
+	const std::vector<semantic_entities::base_class>& base_classes
 )
 {
 	using namespace semantic_entity_analysis;
@@ -452,7 +452,7 @@ find_entities_in_base_classes
 
 	for(auto i = base_classes.begin(); i != base_classes.end(); ++i)
 	{
-		semantic_entities::class_& current_class = **i;
+		semantic_entities::class_& current_class = i->base();
 
 		//find entities in the current declarative region (i.e. current class)
 		typename return_type<Optional, Multiple, EntitiesT...>::type current_class_found_entities =

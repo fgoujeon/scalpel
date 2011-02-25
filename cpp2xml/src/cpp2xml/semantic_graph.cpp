@@ -221,13 +221,7 @@ semantic_graph_serializer::serialize_class
 	{
 		output_ << indent(indent_level + 1) << "<base_classes>\n";
 		for(auto i = entity.base_classes().begin(); i != entity.base_classes().end(); ++i)
-			serialize_base_class
-			(
-				**i,
-				entity.base_class_access(**i),
-				entity.is_virtual_base_class(**i),
-				indent_level + 2
-			);
+			serialize_base_class(*i, indent_level + 2);
 		output_ << indent(indent_level + 1) << "</base_classes>\n";
 	}
 
@@ -263,16 +257,14 @@ semantic_graph_serializer::serialize_class
 void
 semantic_graph_serializer::serialize_base_class
 (
-	const class_& entity,
-	const member_access acc,
-	const bool is_virtual,
+	const base_class& entity,
 	const unsigned int indent_level
 )
 {
 	output_ << indent(indent_level) << "<base_class";
-	output_ << " id=\"c" << class_id(entity) << "\"";
-	output_ << attribute(acc);
-	if(is_virtual)
+	output_ << " id=\"c" << class_id(entity.base()) << "\"";
+	output_ << attribute(entity.access());
+	if(entity.is_virtual())
 		output_ << " virtual=\"true\"";
 	output_ << "/>\n";
 }

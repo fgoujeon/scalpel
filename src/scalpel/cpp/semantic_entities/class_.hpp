@@ -21,6 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_CLASS_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_CLASS_HPP
 
+#include "base_class.hpp"
 #include "declarative_region_variants.hpp"
 #include "type_variant_fwd.hpp"
 #include "member_access.hpp"
@@ -61,6 +62,7 @@ class class_
 		typedef std::vector<member_t> members_t;
 		typedef std::vector<open_declarative_region_ptr_variant> open_declarative_region_ptr_variants_t;
 
+		typedef std::vector<base_class> base_classes_t;
 		typedef utility::unique_ptr_vector<class_> classes_t;
 		typedef utility::unique_ptr_vector<member_enum> enums_t;
 		typedef utility::unique_ptr_vector<member_typedef> typedefs_t;
@@ -115,10 +117,7 @@ class class_
 		const open_declarative_region_ptr_variants_t&
 		open_declarative_regions();
 
-		const class_ptrs_t&
-		base_classes();
-
-		const class_ptrs_t&
+		const base_classes_t&
 		base_classes() const;
 
 		classes_t::range
@@ -179,12 +178,7 @@ class class_
 		Adds a base class.
 		*/
         void
-        add_base_class
-		(
-			class_& base_class,
-			const member_access acc = member_access::PUBLIC,
-			bool is_virtual = false
-		);
+        add_base_class(const base_class& bc);
 
         /**
         Adds a nested class.
@@ -219,13 +213,6 @@ class class_
 		void
 		add_member(std::unique_ptr<member_variable>&& member);
 
-		//get the member_access of the given base class
-		member_access
-		base_class_access(const class_& base_class) const;
-
-		bool
-		is_virtual_base_class(const class_& base_class) const;
-
 		//get the member_access of the given class member
 		member_access
 		get_member_access(const member_t& member) const;
@@ -239,12 +226,10 @@ class class_
 		open_declarative_region_ptr_variants_t open_declarative_regions_;
 
 		//member information
-		std::map<const class_*, member_access> base_class_access_;
-		class_ptrs_t virtual_base_classes_;
 		std::map<member_t, member_access> member_access_;
 
 		//members
-		class_ptrs_t base_classes_;
+		base_classes_t base_classes_;
 		classes_t nested_classes_;
 		enums_t enums_;
 		typedefs_t typedefs_;

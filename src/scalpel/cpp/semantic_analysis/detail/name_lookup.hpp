@@ -330,7 +330,7 @@ namespace detail
 	find_entities_in_base_classes
 	(
 		const typename EntityIdentificationPolicy::identifier_t& identifier,
-		const std::vector<semantic_entities::class_*>& base_classes
+		const std::vector<semantic_entities::base_class>& base_classes
 	);
 
 	void
