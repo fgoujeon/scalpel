@@ -29,7 +29,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "declarative_region_variants.hpp"
 #include "type_variant_fwd.hpp"
 #include "detail/declarative_region_member_impl.hpp"
-#include <scalpel/utility/empty.hpp>
 #include <boost/optional.hpp>
 #include <boost/preprocessor/control/iif.hpp>
 #include <boost/preprocessor/logical/or.hpp>
@@ -42,6 +41,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #define GENERATE_FUNCTION_DECLARATION( \
 	CLASS_NAME, \
+	IS_MEMBER, \
 	HAS_TYPE, \
 	HAS_NAME, \
 	HAS_OPERATOR, \
@@ -63,14 +63,14 @@ class CLASS_NAME \
 			BOOST_PP_IIF(HAS_RETURN_TYPE, const type_variant& return_type,) BOOST_PP_COMMA_IF(HAS_RETURN_TYPE) \
 			BOOST_PP_IIF(HAS_PARAMETERS, function_parameter_list&& parameters = function_parameter_list(),) BOOST_PP_COMMA_IF(HAS_PARAMETERS) \
 			BOOST_PP_IIF(HAS_VARIADIC, const bool variadic = false,) BOOST_PP_COMMA_IF(HAS_VARIADIC) \
-			const bool is_inline = false, \
-			BOOST_PP_IIF(HAS_STATIC, const bool is_static = false,) BOOST_PP_COMMA_IF(HAS_STATIC) \
+			BOOST_PP_IIF(IS_MEMBER, const member_access access = member_access::PUBLIC,) BOOST_PP_COMMA_IF(IS_MEMBER) \
 			BOOST_PP_IIF(HAS_CV_QUALIFIER, const bool is_const = false,) BOOST_PP_COMMA_IF(HAS_CV_QUALIFIER) \
 			BOOST_PP_IIF(HAS_CV_QUALIFIER, const bool is_volatile = false,) BOOST_PP_COMMA_IF(HAS_CV_QUALIFIER) \
+			BOOST_PP_IIF(HAS_STATIC, const bool is_static = false,) BOOST_PP_COMMA_IF(HAS_STATIC) \
+			BOOST_PP_IIF(HAS_EXPLICIT, const bool is_explicit = false,) BOOST_PP_COMMA_IF(HAS_EXPLICIT) \
 			BOOST_PP_IIF(HAS_VIRTUAL, const bool is_virtual = false,) BOOST_PP_COMMA_IF(HAS_VIRTUAL) \
 			BOOST_PP_IIF(HAS_VIRTUAL, const bool is_pure = false,) BOOST_PP_COMMA_IF(HAS_VIRTUAL) \
-			BOOST_PP_IIF(HAS_EXPLICIT, const bool is_explicit = false,) BOOST_PP_COMMA_IF(HAS_EXPLICIT) \
-			void* const = 0 \
+			const bool is_inline = false \
 		); \
  \
 		CLASS_NAME(const CLASS_NAME&) = delete; \
@@ -129,6 +129,16 @@ class CLASS_NAME \
 			variadic() const \
 			{ \
 				return variadic_; \
+			}, \
+		) \
+ \
+		BOOST_PP_IIF \
+		( \
+			IS_MEMBER, \
+			member_access \
+			access() const \
+			{ \
+				return access_; \
 			}, \
 		) \
  \
@@ -248,11 +258,10 @@ class CLASS_NAME \
 			HAS_VARIADIC, \
 			bool variadic_;, \
 		) \
-		bool is_inline_; \
 		BOOST_PP_IIF \
 		( \
-			HAS_STATIC, \
-			bool is_static_;, \
+			IS_MEMBER, \
+			member_access access_;, \
 		) \
 		BOOST_PP_IIF \
 		( \
@@ -266,17 +275,22 @@ class CLASS_NAME \
 		) \
 		BOOST_PP_IIF \
 		( \
-			HAS_VIRTUAL, \
-			bool is_virtual_; \
-			bool is_pure_;, \
+			HAS_STATIC, \
+			bool is_static_;, \
 		) \
 		BOOST_PP_IIF \
 		( \
 			HAS_EXPLICIT, \
 			bool is_explicit_;, \
 		) \
+		BOOST_PP_IIF \
+		( \
+			HAS_VIRTUAL, \
+			bool is_virtual_; \
+			bool is_pure_;, \
+		) \
+		bool is_inline_; \
 		std::unique_ptr<statement_block> body_; \
-		const utility::empty nothing_; \
  \
 		boost::optional<declarative_region_ptr_variant> enclosing_declarative_region_; \
 }; \
@@ -288,15 +302,15 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 //member functions
-GENERATE_FUNCTION_DECLARATION(constructor,              0, 0, 0, 0, 1, 1, 0, 0, 0, 1)
-GENERATE_FUNCTION_DECLARATION(destructor,               0, 0, 0, 0, 0, 0, 0, 0, 1, 0)
-GENERATE_FUNCTION_DECLARATION(operator_member_function, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0)
-GENERATE_FUNCTION_DECLARATION(conversion_function,      1, 0, 0, 1, 0, 0, 0, 1, 1, 1)
-GENERATE_FUNCTION_DECLARATION(simple_member_function,   1, 1, 0, 1, 1, 1, 1, 1, 1, 0)
+GENERATE_FUNCTION_DECLARATION(constructor,              1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1)
+GENERATE_FUNCTION_DECLARATION(destructor,               1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0)
+GENERATE_FUNCTION_DECLARATION(operator_member_function, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0)
+GENERATE_FUNCTION_DECLARATION(conversion_function,      1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1)
+GENERATE_FUNCTION_DECLARATION(simple_member_function,   1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0)
 
 //free functions
-GENERATE_FUNCTION_DECLARATION(operator_function,        1, 0, 1, 1, 1, 0, 1, 0, 0, 0)
-GENERATE_FUNCTION_DECLARATION(simple_function,          1, 1, 0, 1, 1, 1, 1, 0, 0, 0)
+GENERATE_FUNCTION_DECLARATION(operator_function,        0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0)
+GENERATE_FUNCTION_DECLARATION(simple_function,          0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0)
 
 }}} //namespace scalpel::cpp::semantic_entities
 

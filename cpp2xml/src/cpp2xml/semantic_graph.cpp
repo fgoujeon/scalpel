@@ -335,13 +335,7 @@ semantic_graph_serializer::serialize_constructor
 )
 {
 	output_ << indent(indent_level) << "<constructor";
-	if(entity.has_enclosing_declarative_region())
-	{
-		class_* enclosing_declarative_region = utility::get<class_*>(entity.enclosing_declarative_region());
-
-		member_access acc = enclosing_declarative_region->get_member_access(&entity);
-		output_ << attribute(acc);
-	}
+	output_ << attribute(entity.access());
 	if(entity.variadic())
 		output_ << " variadic=\"true\"";
 	if(entity.is_inline())
@@ -365,13 +359,7 @@ semantic_graph_serializer::serialize_destructor
 )
 {
 	output_ << indent(indent_level) << "<destructor";
-
-	assert(entity.has_enclosing_declarative_region());
-	declarative_region_ptr_variant enclosing_declarative_region = entity.enclosing_declarative_region();
-	class_* enclosing_class = utility::get<class_*>(enclosing_declarative_region);
-
-	member_access acc = enclosing_class->get_member_access(&entity);
-	output_ << attribute(acc);
+	output_ << attribute(entity.access());
 	if(entity.is_inline())
 		output_ << " inline=\"true\"";
 	if(entity.is_virtual())
@@ -394,13 +382,7 @@ semantic_graph_serializer::serialize_operator_member_function
 {
 	output_ << indent(indent_level) << "<operator_function";
 	output_ << attribute(entity.overloaded_operator());
-
-	assert(entity.has_enclosing_declarative_region());
-	declarative_region_ptr_variant enclosing_declarative_region = entity.enclosing_declarative_region();
-	class_* enclosing_class = utility::get<class_*>(enclosing_declarative_region);
-
-	member_access acc = enclosing_class->get_member_access(&entity);
-	output_ << attribute(acc);
+	output_ << attribute(entity.access());
 	if(entity.is_inline())
 		output_ << " inline=\"true\"";
 	if(entity.is_const())
@@ -432,13 +414,7 @@ semantic_graph_serializer::serialize_conversion_function
 )
 {
 	output_ << indent(indent_level) << "<conversion_function";
-
-	assert(entity.has_enclosing_declarative_region());
-	declarative_region_ptr_variant enclosing_declarative_region = entity.enclosing_declarative_region();
-	class_* enclosing_class = utility::get<class_*>(enclosing_declarative_region);
-
-	member_access acc = enclosing_class->get_member_access(&entity);
-	output_ << attribute(acc);
+	output_ << attribute(entity.access());
 	if(entity.is_inline())
 		output_ << " inline=\"true\"";
 	if(entity.is_const())
@@ -469,13 +445,7 @@ semantic_graph_serializer::serialize_simple_member_function
 {
 	output_ << indent(indent_level) << "<simple_function";
 	output_ << " name=\"" << entity.name() << "\"";
-
-	assert(entity.has_enclosing_declarative_region());
-	declarative_region_ptr_variant enclosing_declarative_region = entity.enclosing_declarative_region();
-	class_* enclosing_class = utility::get<class_*>(enclosing_declarative_region);
-
-	member_access acc = enclosing_class->get_member_access(&entity);
-	output_ << attribute(acc);
+	output_ << attribute(entity.access());
 	if(entity.variadic())
 		output_ << " variadic=\"true\"";
 	if(entity.is_inline())

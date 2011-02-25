@@ -349,35 +349,15 @@ fill_class
 				);
 
 				if(auto opt_constructor_entity = get<constructor*>(&declarator_entity))
-					class_entity.add_member
-					(
-						std::unique_ptr<constructor>(*opt_constructor_entity),
-						current_access
-					);
+					class_entity.add_member(std::unique_ptr<constructor>(*opt_constructor_entity));
 				else if(auto opt_destructor_entity = get<destructor*>(&declarator_entity))
-					class_entity.set_destructor
-					(
-						std::unique_ptr<destructor>(*opt_destructor_entity),
-						current_access
-					);
+					class_entity.set_destructor(std::unique_ptr<destructor>(*opt_destructor_entity));
 				else if(auto opt_operator_function_entity = get<operator_member_function*>(&declarator_entity))
-					class_entity.add_member
-					(
-						std::unique_ptr<operator_member_function>(*opt_operator_function_entity),
-						current_access
-					);
+					class_entity.add_member(std::unique_ptr<operator_member_function>(*opt_operator_function_entity));
 				else if(auto opt_conversion_function_entity = get<conversion_function*>(&declarator_entity))
-					class_entity.add_member
-					(
-						std::unique_ptr<conversion_function>(*opt_conversion_function_entity),
-						current_access
-					);
+					class_entity.add_member(std::unique_ptr<conversion_function>(*opt_conversion_function_entity));
 				else if(auto opt_simple_function_entity = get<simple_member_function*>(&declarator_entity))
-					class_entity.add_member
-					(
-						std::unique_ptr<simple_member_function>(*opt_simple_function_entity),
-						current_access
-					);
+					class_entity.add_member(std::unique_ptr<simple_member_function>(*opt_simple_function_entity));
 				else if(auto opt_variable_entity = get<member_variable*>(&declarator_entity))
 					class_entity.add_member(std::unique_ptr<member_variable>(*opt_variable_entity));
 				else if(auto opt_typedef_entity = get<member_typedef*>(&declarator_entity))
@@ -394,13 +374,8 @@ namespace
 	class add_function_to_class_visitor: public utility::static_visitor<void>
 	{
 		public:
-			add_function_to_class_visitor
-			(
-				class_& class_entity,
-				const member_access function_access
-			):
-				class_entity_(class_entity),
-				function_access_(function_access)
+			add_function_to_class_visitor(class_& class_entity):
+				class_entity_(class_entity)
 			{
 			}
 
@@ -408,13 +383,13 @@ namespace
 			void
 			operator()(T* function_entity) const
 			{
-				class_entity_.add_member(std::unique_ptr<T>(function_entity), function_access_);
+				class_entity_.add_member(std::unique_ptr<T>(function_entity));
 			}
 
 			void
 			operator()(destructor* function_entity) const
 			{
-				class_entity_.set_destructor(std::unique_ptr<destructor>(function_entity), function_access_);
+				class_entity_.set_destructor(std::unique_ptr<destructor>(function_entity));
 			}
 
 			void
@@ -431,7 +406,6 @@ namespace
 
 		private:
 			class_& class_entity_;
-			const member_access function_access_;
 	};
 }
 
@@ -439,7 +413,7 @@ void
 fill_class
 (
 	semantic_entities::class_& class_entity,
-	const member_access function_access,
+	const semantic_entities::member_access access,
 	const syntax_nodes::function_definition& function_definition_node
 )
 {
@@ -458,11 +432,12 @@ fill_class
 		function_definition_node,
 		&class_entity,
 		true,
-		true
+		true,
+		access
 	);
 
 	//add the function to the class
-	add_function_to_class_visitor visitor(class_entity, function_access);
+	add_function_to_class_visitor visitor(class_entity);
 	utility::apply_visitor(visitor, function_entity);
 
 	//define the function

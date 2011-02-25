@@ -53,12 +53,7 @@ class class_
 		typedef
 			utility::const_ptr_variant
 			<
-				class_,
-				constructor,
-				destructor,
-				operator_member_function,
-				conversion_function,
-				simple_member_function
+				class_
 			>::type
 			member_t
 		;
@@ -204,38 +199,22 @@ class class_
         add_member(std::unique_ptr<member_typedef>&& member);
 
         void
-        add_member(std::unique_ptr<constructor>&& member, const member_access acc = member_access::PUBLIC);
+        add_member(std::unique_ptr<constructor>&& member);
 
 		void
-		set_destructor
-		(
-			std::unique_ptr<destructor>&& member,
-			const member_access acc = member_access::PUBLIC
-		);
+		set_destructor(std::unique_ptr<destructor>&& member);
 
 		void
 		reset_destructor();
 
         void
-        add_member
-		(
-			std::unique_ptr<simple_member_function>&& member,
-			const member_access acc = member_access::PUBLIC
-		);
+        add_member(std::unique_ptr<simple_member_function>&& member);
 
         void
-        add_member
-		(
-			std::unique_ptr<operator_member_function>&& member,
-			const member_access acc = member_access::PUBLIC
-		);
+        add_member(std::unique_ptr<operator_member_function>&& member);
 
         void
-        add_member
-		(
-			std::unique_ptr<conversion_function>&& member,
-			const member_access acc = member_access::PUBLIC
-		);
+        add_member(std::unique_ptr<conversion_function>&& member);
 
 		void
 		add_member(std::unique_ptr<member_variable>&& member);

@@ -225,26 +225,16 @@ class_::add_member(std::unique_ptr<member_typedef>&& member)
 }
 
 void
-class_::add_member(std::unique_ptr<constructor>&& member, const member_access acc)
+class_::add_member(std::unique_ptr<constructor>&& member)
 {
 	member->enclosing_declarative_region(this);
-
-	member_access_[static_cast<const constructor*>(member.get())] = acc;
-
     constructors_.push_back(std::move(member));
 }
 
 void
-class_::set_destructor
-(
-	std::unique_ptr<destructor>&& member,
-	const member_access acc
-)
+class_::set_destructor(std::unique_ptr<destructor>&& member)
 {
 	member->enclosing_declarative_region(this);
-
-	member_access_[static_cast<const destructor*>(member.get())] = acc;
-
 	destructor_ = std::move(member);
 }
 
@@ -253,50 +243,28 @@ class_::reset_destructor()
 {
 	set_destructor
 	(
-		std::unique_ptr<destructor>(new destructor(false)),
-		member_access::PUBLIC
+		std::unique_ptr<destructor>(new destructor(member_access::PUBLIC, false))
 	);
 }
 
 void
-class_::add_member
-(
-	std::unique_ptr<simple_member_function>&& member,
-	const member_access acc
-)
+class_::add_member(std::unique_ptr<simple_member_function>&& member)
 {
 	member->enclosing_declarative_region(this);
-
-	member_access_[static_cast<const simple_member_function*>(member.get())] = acc;
-
     simple_functions_.push_back(std::move(member));
 }
 
 void
-class_::add_member
-(
-	std::unique_ptr<operator_member_function>&& member,
-	const member_access acc
-)
+class_::add_member(std::unique_ptr<operator_member_function>&& member)
 {
 	member->enclosing_declarative_region(this);
-
-	member_access_[static_cast<const operator_member_function*>(member.get())] = acc;
-
     operator_functions_.push_back(std::move(member));
 }
 
 void
-class_::add_member
-(
-	std::unique_ptr<conversion_function>&& member,
-	const member_access acc
-)
+class_::add_member(std::unique_ptr<conversion_function>&& member)
 {
 	member->enclosing_declarative_region(this);
-
-	member_access_[static_cast<const conversion_function*>(member.get())] = acc;
-
     conversion_functions_.push_back(std::move(member));
 }
 

@@ -38,7 +38,8 @@ create_function
 	const syntax_nodes::function_definition& function_definition_node,
 	const semantic_entities::declarative_region_ptr_variant current_declarative_region,
 	const bool is_class_member,
-	const bool is_defined_in_class
+	const bool is_defined_in_class,
+	const member_access access
 )
 {
 	//
@@ -125,7 +126,7 @@ create_function
 		has_explicit_specifier,
 		false,
 		is_class_member,
-		member_access::PUBLIC
+		access
 	);
 
 	if(auto opt_constructor_entity = get<constructor*>(&declarator_entity))

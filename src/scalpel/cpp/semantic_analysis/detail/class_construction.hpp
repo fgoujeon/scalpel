@@ -53,7 +53,7 @@ void
 fill_class
 (
 	semantic_entities::class_& class_entity,
-	const semantic_entities::member_access function_access,
+	const semantic_entities::member_access access,
 	const syntax_nodes::function_definition& function_definition_node
 );
 

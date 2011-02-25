@@ -295,7 +295,8 @@ fill_namespace
 		function_definition_node,
 		&namespace_entity,
 		is_class_member,
-		false
+		false,
+		member_access::PUBLIC
 	);
 
 	//The function_entity may have already been declared previously in the code.

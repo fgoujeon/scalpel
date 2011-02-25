@@ -116,12 +116,13 @@ create_entity
 								*opt_type,
 								create_parameters(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
 								syntax_node_analysis::has_ellipsis(declarator_node),
-								has_inline_specifier,
-								has_static_specifier,
+								access,
 								syntax_node_analysis::has_const_function_qualifier(declarator_node),
 								syntax_node_analysis::has_volatile_function_qualifier(declarator_node),
+								has_static_specifier,
 								has_virtual_specifier,
-								has_pure_specifier
+								has_pure_specifier,
+								has_inline_specifier
 							);
 						}
 						else
@@ -132,8 +133,8 @@ create_entity
 								*opt_type,
 								create_parameters(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
 								syntax_node_analysis::has_ellipsis(declarator_node),
-								has_inline_specifier,
-								has_static_specifier
+								has_static_specifier,
+								has_inline_specifier
 							);
 						}
 					}
@@ -148,8 +149,9 @@ create_entity
 				(
 					create_parameters(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
 					syntax_node_analysis::has_ellipsis(declarator_node),
-					has_inline_specifier,
-					has_explicit_specifier
+					access,
+					has_explicit_specifier,
+					has_inline_specifier
 				);
 			}
 		}
@@ -163,9 +165,10 @@ create_entity
 
 			return new destructor
 			(
-				has_inline_specifier,
+				access,
 				has_virtual_specifier,
-				has_pure_specifier
+				has_pure_specifier,
+				has_inline_specifier
 			);
 		}
 		case syntax_node_analysis::declarator_type::OPERATOR_FUNCTION_DECLARATOR:
@@ -182,11 +185,12 @@ create_entity
 					get_operator_function_operator(declarator_node),
 					*opt_type,
 					create_parameters(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
-					has_inline_specifier,
+					access,
 					syntax_node_analysis::has_const_function_qualifier(declarator_node),
 					syntax_node_analysis::has_volatile_function_qualifier(declarator_node),
 					has_virtual_specifier,
-					has_pure_specifier
+					has_pure_specifier,
+					has_inline_specifier
 				);
 			}
 			else
@@ -196,8 +200,8 @@ create_entity
 					get_operator_function_operator(declarator_node),
 					*opt_type,
 					create_parameters(syntax_node_analysis::get_parameter_declaration_list(declarator_node), current_declarative_region),
-					has_inline_specifier,
-					has_static_specifier
+					has_static_specifier,
+					has_inline_specifier
 				);
 			}
 		}
@@ -212,11 +216,12 @@ create_entity
 			return new conversion_function
 			(
 				get_conversion_function_type(declarator_node, current_declarative_region),
-				has_inline_specifier,
+				access,
 				syntax_node_analysis::has_const_function_qualifier(declarator_node),
 				syntax_node_analysis::has_volatile_function_qualifier(declarator_node),
 				has_virtual_specifier,
-				has_pure_specifier
+				has_pure_specifier,
+				has_inline_specifier
 			);
 		}
 		case syntax_node_analysis::declarator_type::VARIABLE_DECLARATOR:
@@ -275,12 +280,13 @@ create_entity
 							ftype.return_type(),
 							std::move(parameter_list),
 							ftype.variadic(),
-							has_inline_specifier,
-							has_static_specifier,
+							access,
 							ftype.const_qualified(),
 							ftype.volatile_qualified(),
+							has_static_specifier,
 							has_virtual_specifier,
-							has_pure_specifier
+							has_pure_specifier,
+							has_inline_specifier
 						);
 					}
 					else
@@ -291,8 +297,8 @@ create_entity
 							ftype.return_type(),
 							std::move(parameter_list),
 							ftype.variadic(),
-							has_inline_specifier,
-							has_static_specifier
+							has_static_specifier,
+							has_inline_specifier
 						);
 					}
 				}
