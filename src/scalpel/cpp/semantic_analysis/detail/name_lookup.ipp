@@ -447,46 +447,91 @@ find_entities_in_base_classes
 )
 {
 	using namespace semantic_entity_analysis;
+	using namespace semantic_entities;
 
 	typename return_type<Optional, true, EntitiesT...>::type found_entities;
 
 	for(auto i = base_classes.begin(); i != base_classes.end(); ++i)
 	{
-		semantic_entities::class_& current_class = i->base();
+		typename utility::ptr_variant<class_, member_class>::type current_class = i->base();
 
-		//find entities in the current declarative region (i.e. current class)
-		typename return_type<Optional, Multiple, EntitiesT...>::type current_class_found_entities =
-			find_local_entities
-			<
-				EntityIdentificationPolicy,
-				semantic_entities::class_,
-				Optional,
-				Multiple,
-				EntitiesT...
-			>(identifier, current_class)
-		;
+		if(class_** opt = utility::get<class_*>(&current_class))
+		{
+			class_& current_class = **opt;
 
-		//entities found?
-		if(!utility::is_empty(current_class_found_entities))
-		{
-			//add them to the list
-			add_to_result(found_entities, current_class_found_entities);
-		}
-		else
-		{
-			//find entities in the current declarative region's base classes
-			typename return_type<Optional, Multiple, EntitiesT...>::type current_class_base_classes_found_entities =
-				find_entities_in_base_classes
+			//find entities in the current declarative region (i.e. current class)
+			typename return_type<Optional, Multiple, EntitiesT...>::type current_class_found_entities =
+				find_local_entities
 				<
 					EntityIdentificationPolicy,
+					semantic_entities::class_,
 					Optional,
 					Multiple,
 					EntitiesT...
-				>(identifier, current_class.base_classes())
+				>(identifier, current_class)
 			;
 
-			//add them to the list
-			add_to_result(found_entities, current_class_base_classes_found_entities);
+			//entities found?
+			if(!utility::is_empty(current_class_found_entities))
+			{
+				//add them to the list
+				add_to_result(found_entities, current_class_found_entities);
+			}
+			else
+			{
+				//find entities in the current declarative region's base classes
+				typename return_type<Optional, Multiple, EntitiesT...>::type current_class_base_classes_found_entities =
+					find_entities_in_base_classes
+					<
+						EntityIdentificationPolicy,
+						Optional,
+						Multiple,
+						EntitiesT...
+					>(identifier, current_class.base_classes())
+				;
+
+				//add them to the list
+				add_to_result(found_entities, current_class_base_classes_found_entities);
+			}
+		}
+		else if(member_class** opt = utility::get<member_class*>(&current_class))
+		{
+			member_class& current_class = **opt;
+
+			//find entities in the current declarative region (i.e. current class)
+			typename return_type<Optional, Multiple, EntitiesT...>::type current_class_found_entities =
+				find_local_entities
+				<
+					EntityIdentificationPolicy,
+					semantic_entities::member_class,
+					Optional,
+					Multiple,
+					EntitiesT...
+				>(identifier, current_class)
+			;
+
+			//entities found?
+			if(!utility::is_empty(current_class_found_entities))
+			{
+				//add them to the list
+				add_to_result(found_entities, current_class_found_entities);
+			}
+			else
+			{
+				//find entities in the current declarative region's base classes
+				typename return_type<Optional, Multiple, EntitiesT...>::type current_class_base_classes_found_entities =
+					find_entities_in_base_classes
+					<
+						EntityIdentificationPolicy,
+						Optional,
+						Multiple,
+						EntitiesT...
+					>(identifier, current_class.base_classes())
+				;
+
+				//add them to the list
+				add_to_result(found_entities, current_class_base_classes_found_entities);
+			}
 		}
 	}
 

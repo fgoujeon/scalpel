@@ -87,7 +87,7 @@ semantic_graph_serializer::serialize_type
 	else if(auto opt_type = scalpel::utility::get<pointer_to_member>(&n))
 	{
 		output_ << indent(indent_level) << "<pointer_to_member";
-		output_ << " class_id=\"c" << class_id(opt_type->member_class()) << "\"";
+		output_ << " class_id=\"c" << class_id(opt_type->parent_class()) << "\"";
 		output_ << ">\n";
 		serialize_type((*opt_type).qualified_type(), indent_level + 1);
 		output_ << indent(indent_level) << "</pointer_to_member>\n";
@@ -105,6 +105,10 @@ semantic_graph_serializer::serialize_type
 		output_ << indent(indent_level) << "</array>\n";
 	}
 	else if(auto opt_type = scalpel::utility::get<const class_*>(&n))
+	{
+		output_ << indent(indent_level) << "<class id=\"c" << class_id(**opt_type) << "\"/>\n";
+	}
+	else if(auto opt_type = scalpel::utility::get<const member_class*>(&n))
 	{
 		output_ << indent(indent_level) << "<class id=\"c" << class_id(**opt_type) << "\"/>\n";
 	}
@@ -201,18 +205,59 @@ semantic_graph_serializer::serialize_class
 	if(!entity.name().empty())
 		output_ << " name=\"" << entity.name() << "\"";
 	output_ << " id=\"c" << class_id(entity) << "\"";
-	//extra attributes if the class is a nested class
-	if(entity.has_enclosing_declarative_region())
-	{
-		declarative_region_ptr_variant enclosing_declarative_region = entity.enclosing_declarative_region();
-		if(class_** opt_class = utility::get<class_*>(&enclosing_declarative_region))
-		{
-			class_& enclosing_declarative_region = **opt_class;
+	if(!entity.complete())
+		output_ << " complete=\"false\"";
+	output_ << ">\n";
 
-			member_access acc = enclosing_declarative_region.get_member_access(&entity);
-			output_ << attribute(acc);
-		}
+	if(!entity.base_classes().empty())
+	{
+		output_ << indent(indent_level + 1) << "<base_classes>\n";
+		for(auto i = entity.base_classes().begin(); i != entity.base_classes().end(); ++i)
+			serialize_base_class(*i, indent_level + 2);
+		output_ << indent(indent_level + 1) << "</base_classes>\n";
 	}
+
+	for(auto i = entity.nested_classes().begin(); i != entity.nested_classes().end(); ++i)
+		serialize_class(*i, indent_level + 1);
+
+	for(auto i = entity.enums().begin(); i != entity.enums().end(); ++i)
+		serialize_enum(*i, indent_level + 1);
+
+	for(auto i = entity.typedefs().begin(); i != entity.typedefs().end(); ++i)
+		serialize_typedef(*i, indent_level + 1);
+
+	for(auto i = entity.constructors().begin(); i != entity.constructors().end(); ++i)
+		serialize_constructor(*i, indent_level + 1);
+
+	serialize_destructor(entity.get_destructor(), indent_level + 1);
+
+	for(auto i = entity.operator_functions().begin(); i != entity.operator_functions().end(); ++i)
+		serialize_operator_member_function(*i, indent_level + 1);
+
+	for(auto i = entity.conversion_functions().begin(); i != entity.conversion_functions().end(); ++i)
+		serialize_conversion_function(*i, indent_level + 1);
+
+	for(auto i = entity.simple_functions().begin(); i != entity.simple_functions().end(); ++i)
+		serialize_simple_member_function(*i, indent_level + 1);
+
+	for(auto i = entity.variables().begin(); i != entity.variables().end(); ++i)
+		serialize_variable(*i, indent_level + 1);
+
+	output_ << indent(indent_level) << "</class>\n";
+}
+
+void
+semantic_graph_serializer::serialize_class
+(
+	const member_class& entity,
+	const unsigned int indent_level
+)
+{
+	output_ << indent(indent_level) << "<class";
+	if(!entity.name().empty())
+		output_ << " name=\"" << entity.name() << "\"";
+	output_ << " id=\"c" << class_id(entity) << "\"";
+	output_ << attribute(entity.access());
 	if(!entity.complete())
 		output_ << " complete=\"false\"";
 	output_ << ">\n";
@@ -861,6 +906,18 @@ semantic_graph_serializer::define_ids(const class_& entity)
 }
 
 void
+semantic_graph_serializer::define_ids(const member_class& entity)
+{
+	member_class_ids_[&entity] = class_id_counter_;
+	++class_id_counter_;
+
+	for(auto i = entity.nested_classes().begin(); i != entity.nested_classes().end(); ++i)
+		define_ids(*i);
+	for(auto i = entity.enums().begin(); i != entity.enums().end(); ++i)
+		define_ids(*i);
+}
+
+void
 semantic_graph_serializer::define_ids(const enum_& entity)
 {
 	enum_ids_[&entity] = enum_id_counter_;
@@ -892,6 +949,34 @@ semantic_graph_serializer::class_id(const scalpel::cpp::semantic_entities::class
 		return it->second;
 	else
 		assert(false);
+}
+
+unsigned int
+semantic_graph_serializer::class_id(const scalpel::cpp::semantic_entities::member_class& class_entity) const
+{
+	member_class_ids_t::const_iterator it = member_class_ids_.find(&class_entity);
+	if(it != member_class_ids_.end())
+		return it->second;
+	else
+		assert(false);
+}
+
+unsigned int
+semantic_graph_serializer::class_id
+(
+	const typename scalpel::utility::ptr_variant
+	<
+		scalpel::cpp::semantic_entities::class_,
+		scalpel::cpp::semantic_entities::member_class
+	>::type& entity
+) const
+{
+	if(const class_* const* opt = scalpel::utility::get<class_*>(&entity))
+		return class_id(**opt);
+	else if(const member_class* const* opt = scalpel::utility::get<member_class*>(&entity))
+		return class_id(**opt);
+
+	assert(false);
 }
 
 unsigned int

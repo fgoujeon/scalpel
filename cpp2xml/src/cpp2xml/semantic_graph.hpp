@@ -39,6 +39,7 @@ class semantic_graph_serializer
 	public:
 		typedef std::map<const scalpel::cpp::semantic_entities::namespace_*, unsigned int> namespace_ids_t;
 		typedef std::map<const scalpel::cpp::semantic_entities::class_*, unsigned int> class_ids_t;
+		typedef std::map<const scalpel::cpp::semantic_entities::member_class*, unsigned int> member_class_ids_t;
 		typedef std::map<const scalpel::cpp::semantic_entities::enum_*, unsigned int> enum_ids_t;
 		typedef std::map<const scalpel::cpp::semantic_entities::member_enum*, unsigned int> member_enum_ids_t;
 
@@ -75,6 +76,13 @@ class semantic_graph_serializer
 		serialize_class
 		(
 			const class_& entity,
+			const unsigned int indent_level
+		);
+
+		void
+		serialize_class
+		(
+			const member_class& entity,
 			const unsigned int indent_level
 		);
 
@@ -217,6 +225,9 @@ class semantic_graph_serializer
 		define_ids(const class_& entity);
 
 		void
+		define_ids(const member_class& entity);
+
+		void
 		define_ids(const enum_& entity);
 
 		void
@@ -227,6 +238,19 @@ class semantic_graph_serializer
 
 		unsigned int
 		class_id(const scalpel::cpp::semantic_entities::class_&) const;
+
+		unsigned int
+		class_id(const scalpel::cpp::semantic_entities::member_class&) const;
+
+		unsigned int
+		class_id
+		(
+			const typename scalpel::utility::ptr_variant
+			<
+				scalpel::cpp::semantic_entities::class_,
+				scalpel::cpp::semantic_entities::member_class
+			>::type& entity
+		) const;
 
 		unsigned int
 		enum_id(const scalpel::cpp::semantic_entities::enum_&) const;
@@ -240,6 +264,7 @@ class semantic_graph_serializer
 		unsigned int enum_id_counter_;
 		namespace_ids_t namespace_ids_;
 		class_ids_t class_ids_;
+		member_class_ids_t member_class_ids_;
 		enum_ids_t enum_ids_;
 		member_enum_ids_t member_enum_ids_;
 };

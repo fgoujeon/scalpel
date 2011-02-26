@@ -34,6 +34,7 @@ to_type_variant
 	const typename utility::ptr_variant
 	<
 		semantic_entities::class_,
+		semantic_entities::member_class,
 		semantic_entities::typedef_,
 		semantic_entities::member_typedef,
 		semantic_entities::enum_,

@@ -37,10 +37,14 @@ namespace
 	create_global_unique_id(const declarative_region_ptr_variant& region);
 
 	std::string
-	create_global_unique_id(const namespace_& entity);
+	create_global_unique_id(const typename utility::ptr_variant<class_, member_class>::type& region);
 
 	std::string
-	create_global_unique_id(const class_& entity);
+	create_global_unique_id(const namespace_& entity);
+
+	template<class Class>
+	std::string
+	create_global_unique_id(const Class& entity);
 
 	std::string
 	create_global_unique_id(const enum_& entity);
@@ -209,7 +213,7 @@ namespace
 	std::string
 	to_string(const pointer_to_member& entity)
 	{
-		return to_string(entity.qualified_type()) + " " + create_global_unique_id(entity.member_class()) + "::*";
+		return to_string(entity.qualified_type()) + " " + create_global_unique_id(entity.parent_class()) + "::*";
 	}
 
 	std::string
@@ -307,10 +311,22 @@ namespace
 		{
 			return create_global_unique_id(*entity);
 		}
+
+		std::string
+		operator()(const member_class* entity)
+		{
+			return create_global_unique_id(*entity);
+		}
 	} create_global_unique_id_visitor;
 
 	std::string
 	create_global_unique_id(const declarative_region_ptr_variant& region)
+	{
+		return utility::apply_visitor(create_global_unique_id_visitor, region);
+	}
+
+	std::string
+	create_global_unique_id(const typename utility::ptr_variant<class_, member_class>::type& region)
 	{
 		return utility::apply_visitor(create_global_unique_id_visitor, region);
 	}
@@ -324,8 +340,9 @@ namespace
 			return entity.name();
 	}
 
+	template<class Class>
 	std::string
-	create_global_unique_id(const class_& entity)
+	create_global_unique_id(const Class& entity)
 	{
 		if(entity.has_enclosing_declarative_region())
 			return create_global_unique_id(entity.enclosing_declarative_region()) + "::" + entity.name();

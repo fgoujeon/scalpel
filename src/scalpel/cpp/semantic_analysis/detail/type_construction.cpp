@@ -90,6 +90,7 @@ create_type
 				utility::ptr_variant
 				<
 					class_,
+					member_class,
 					typedef_,
 					member_typedef,
 					enum_,
@@ -101,6 +102,7 @@ create_type
 						false,
 						false,
 						class_,
+						member_class,
 						typedef_,
 						member_typedef,
 						enum_,
@@ -404,7 +406,7 @@ qualify_type
 				const ptr_to_member_operator& ptr_to_member_operator_node = *opt_ptr_to_member_operator_node;
 
 				//get the class designated by the ptr-to-member-operator (c in "void (c::*f)(int)")
-				class_* member_class =
+				typename utility::ptr_variant<class_, member_class>::type found_class =
 					find_class
 					(
 						ptr_to_member_operator_node,
@@ -412,7 +414,7 @@ qualify_type
 					)
 				;
 
-				type = pointer_to_member(type, *member_class);
+				type = pointer_to_member(type, found_class);
 
 				if(auto opt_cv_qualifier_seq_node = get_cv_qualifier_seq(ptr_to_member_operator_node))
 				{

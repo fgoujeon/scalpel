@@ -26,11 +26,11 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 
 base_class::base_class
 (
-	class_& base,
+	const base_class_t& base,
 	const member_access access,
 	bool is_virtual
 ):
-	base_(&base),
+	base_(base),
 	access_(access),
 	is_virtual_(is_virtual)
 {

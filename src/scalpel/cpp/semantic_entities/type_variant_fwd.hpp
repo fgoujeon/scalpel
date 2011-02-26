@@ -29,6 +29,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 
 class array;
 class class_;
+class member_class;
 class cv_qualified_type;
 class enum_;
 class member_enum;
@@ -44,6 +45,7 @@ typedef
 		fundamental_type,
 		function_type,
 		const class_*,
+		const member_class*,
 		cv_qualified_type,
 		const enum_*,
 		const member_enum*,

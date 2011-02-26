@@ -22,26 +22,31 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_BASE_CLASS_HPP
 
 #include "member_access.hpp"
+#include <scalpel/utility/ptr_variant.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 class class_;
+class member_class;
 
 class base_class
 {
 	public:
+		typedef typename utility::ptr_variant<class_, member_class>::type base_class_t;
+
+		explicit
 		base_class
 		(
-			class_& base,
+			const base_class_t& base,
 			const member_access access = member_access::PUBLIC,
 			bool is_virtual = false
 		);
 
-		class_&
+		const base_class_t&
 		base() const
 		{
-			return *base_;
+			return base_;
 		}
 
 		member_access
@@ -57,7 +62,7 @@ class base_class
 		}
 
 	private:
-		class_* base_;
+		base_class_t base_;
 		member_access access_;
 		bool is_virtual_;
 };

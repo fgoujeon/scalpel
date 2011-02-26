@@ -74,7 +74,7 @@ BOOST_AUTO_TEST_CASE(test_case_2)
 
 	scalpel::cpp::semantic_graph semantic_graph;
 	auto struct_c0 = new class_("c0");
-	auto struct_c0_inner = new class_("inner");
+	auto struct_c0_inner = new member_class("inner");
 	auto function_c0_inner_f = new simple_member_function
 	(
 		"f",
@@ -110,18 +110,18 @@ BOOST_AUTO_TEST_CASE(test_case_2)
 	);
 
 	semantic_graph.add_member(std::unique_ptr<class_>(struct_c0));
-	struct_c0->add_member(std::unique_ptr<class_>(struct_c0_inner));
+	struct_c0->add_member(std::unique_ptr<member_class>(struct_c0_inner));
 	struct_c0_inner->add_member(std::unique_ptr<simple_member_function>(function_c0_inner_f));
 	struct_c0->add_member(std::unique_ptr<simple_member_function>(function_c0_f));
 	semantic_graph.add_member(std::unique_ptr<class_>(struct_c1base));
 	struct_c1base->add_member(std::unique_ptr<simple_member_function>(function_c1base_f));
 	struct_c1base->add_member(std::unique_ptr<simple_member_function>(function_c1base_g));
 	semantic_graph.add_member(std::unique_ptr<class_>(struct_c1));
-	struct_c1->add_base_class(*struct_c1base);
+	struct_c1->add_base_class(base_class(struct_c1base));
 	struct_c1->add_member(std::unique_ptr<simple_member_function>(function_c1_g));
 	semantic_graph.add_member(std::unique_ptr<class_>(struct_c));
-	struct_c->add_base_class(*struct_c0);
-	struct_c->add_base_class(*struct_c1);
+	struct_c->add_base_class(base_class(struct_c0));
+	struct_c->add_base_class(base_class(struct_c1));
 	struct_c->add_member(std::unique_ptr<simple_member_function>(function_g_test));
 
 
@@ -144,7 +144,7 @@ BOOST_AUTO_TEST_CASE(test_case_2)
 	}
 
 	{
-		auto found_entity = find<identification_policies::by_name, false, false, class_>("inner", function_g_test);
+		auto found_entity = find<identification_policies::by_name, false, false, member_class>("inner", function_g_test);
 		BOOST_CHECK_EQUAL(found_entity, struct_c0_inner);
 	}
 

@@ -31,6 +31,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 class namespace_;
 class namespace_alias;
 class class_;
+class member_class;
 class constructor;
 class destructor;
 class operator_function;
@@ -45,6 +46,7 @@ typedef
 	<
 		namespace_,
 		class_,
+		member_class,
 		constructor,
 		destructor,
 		operator_function,
@@ -63,7 +65,8 @@ typedef
 	<
 		namespace_,
 		namespace_alias,
-		class_
+		class_,
+		member_class
 	>::type
 	open_declarative_region_ptr_variant
 ;

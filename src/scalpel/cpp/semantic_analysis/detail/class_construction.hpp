@@ -31,28 +31,44 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 std::unique_ptr<semantic_entities::class_>
 create_class(const syntax_nodes::class_specifier& syntax_node);
 
-std::unique_ptr<semantic_entities::class_>
-create_class(const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node);
+std::unique_ptr<semantic_entities::member_class>
+create_member_class(const syntax_nodes::class_specifier& syntax_node, const semantic_entities::member_access access);
 
+std::unique_ptr<semantic_entities::class_>
+create_class
+(
+	const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node
+);
+
+std::unique_ptr<semantic_entities::member_class>
+create_member_class
+(
+	const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node,
+	const semantic_entities::member_access access
+);
+
+template<class Class>
 void
 fill_class
 (
-	semantic_entities::class_& class_entity,
+	Class& class_entity,
 	const syntax_nodes::class_specifier& class_specifier_node
 );
 
+template<class Class>
 void
 fill_class
 (
-	semantic_entities::class_& class_entity,
+	Class& class_entity,
 	const semantic_entities::member_access current_access,
 	const syntax_nodes::member_declaration_member_declarator_list& member_declaration_member_declarator_list_node
 );
 
+template<class Class>
 void
 fill_class
 (
-	semantic_entities::class_& class_entity,
+	Class& class_entity,
 	const semantic_entities::member_access access,
 	const syntax_nodes::function_definition& function_definition_node
 );
@@ -62,15 +78,15 @@ fill_class
 //If so, return the forward declared class.
 //If not, add the given class to the given parent class
 //and return the given class.
-semantic_entities::class_&
+template<class ParentClass>
+semantic_entities::member_class&
 add_class
 (
-	semantic_entities::class_& parent_class_entity,
-	std::unique_ptr<semantic_entities::class_>&& class_entity,
-	const semantic_entities::member_access current_access
+	ParentClass& parent_class_entity,
+	std::unique_ptr<semantic_entities::member_class>&& class_entity
 );
 
-semantic_entities::class_*
+typename utility::ptr_variant<semantic_entities::class_, semantic_entities::member_class>::type
 find_class
 (
 	const syntax_nodes::ptr_to_member_operator& ptr_to_member_operator_node,
@@ -78,6 +94,8 @@ find_class
 );
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
+
+#include "class_construction.ipp"
 
 #endif
 

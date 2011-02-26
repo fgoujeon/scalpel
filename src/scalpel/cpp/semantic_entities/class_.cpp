@@ -25,251 +25,225 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "type_variant.hpp"
 #include <memory>
 
+#define GENERATE_CLASS_DEFINITION(CLASS_NAME, IS_MEMBER) \
+CLASS_NAME::CLASS_NAME \
+( \
+	const std::string& name BOOST_PP_COMMA_IF(IS_MEMBER) \
+	BOOST_PP_IIF(IS_MEMBER, const member_access access,) \
+): \
+    name_(name), \
+	BOOST_PP_IIF(IS_MEMBER, access_(access),) BOOST_PP_COMMA_IF(IS_MEMBER) \
+	complete_(false) \
+{ \
+	reset_destructor(); \
+} \
+ \
+const CLASS_NAME::open_declarative_region_ptr_variants_t& \
+CLASS_NAME::open_declarative_regions() \
+{ \
+	return open_declarative_regions_; \
+} \
+ \
+const CLASS_NAME::base_classes_t& \
+CLASS_NAME::base_classes() const \
+{ \
+	return base_classes_; \
+} \
+ \
+CLASS_NAME::classes_t::range \
+CLASS_NAME::nested_classes() \
+{ \
+	return nested_classes_; \
+} \
+ \
+const CLASS_NAME::classes_t& \
+CLASS_NAME::nested_classes() const \
+{ \
+	return nested_classes_; \
+} \
+ \
+CLASS_NAME::enums_t::range \
+CLASS_NAME::enums() \
+{ \
+	return enums_; \
+} \
+ \
+const CLASS_NAME::enums_t& \
+CLASS_NAME::enums() const \
+{ \
+	return enums_; \
+} \
+ \
+CLASS_NAME::typedefs_t::range \
+CLASS_NAME::typedefs() \
+{ \
+	return typedefs_; \
+} \
+ \
+const CLASS_NAME::typedefs_t& \
+CLASS_NAME::typedefs() const \
+{ \
+	return typedefs_; \
+} \
+ \
+CLASS_NAME::constructors_t::range \
+CLASS_NAME::constructors() \
+{ \
+	return constructors_; \
+} \
+ \
+const CLASS_NAME::constructors_t& \
+CLASS_NAME::constructors() const \
+{ \
+	return constructors_; \
+} \
+ \
+destructor& \
+CLASS_NAME::get_destructor() \
+{ \
+	return *destructor_; \
+} \
+ \
+const destructor& \
+CLASS_NAME::get_destructor() const \
+{ \
+	return *destructor_; \
+} \
+ \
+CLASS_NAME::simple_functions_t::range \
+CLASS_NAME::simple_functions() \
+{ \
+	return simple_functions_; \
+} \
+ \
+const CLASS_NAME::simple_functions_t& \
+CLASS_NAME::simple_functions() const \
+{ \
+	return simple_functions_; \
+} \
+ \
+CLASS_NAME::operator_functions_t::range \
+CLASS_NAME::operator_functions() \
+{ \
+	return operator_functions_; \
+} \
+ \
+const CLASS_NAME::operator_functions_t& \
+CLASS_NAME::operator_functions() const \
+{ \
+	return operator_functions_; \
+} \
+ \
+CLASS_NAME::conversion_functions_t::range \
+CLASS_NAME::conversion_functions() \
+{ \
+	return conversion_functions_; \
+} \
+ \
+const CLASS_NAME::conversion_functions_t& \
+CLASS_NAME::conversion_functions() const \
+{ \
+	return conversion_functions_; \
+} \
+ \
+CLASS_NAME::variables_t::range \
+CLASS_NAME::variables() \
+{ \
+	return variables_; \
+} \
+ \
+const CLASS_NAME::variables_t& \
+CLASS_NAME::variables() const \
+{ \
+	return variables_; \
+} \
+ \
+void \
+CLASS_NAME::add_base_class(const base_class& bc) \
+{ \
+	base_classes_.push_back(bc); \
+} \
+ \
+void \
+CLASS_NAME::add_member(std::unique_ptr<member_class>&& member) \
+{ \
+	member->enclosing_declarative_region(this); \
+	open_declarative_regions_.push_back(member.get()); \
+	nested_classes_.push_back(std::move(member)); \
+} \
+ \
+void \
+CLASS_NAME::add_member(std::unique_ptr<member_enum>&& member) \
+{ \
+	member->enclosing_declarative_region(this); \
+    enums_.push_back(std::move(member)); \
+} \
+ \
+void \
+CLASS_NAME::add_member(std::unique_ptr<member_typedef>&& member) \
+{ \
+	member->enclosing_declarative_region(this); \
+    typedefs_.push_back(std::move(member)); \
+} \
+ \
+void \
+CLASS_NAME::add_member(std::unique_ptr<constructor>&& member) \
+{ \
+	member->enclosing_declarative_region(this); \
+    constructors_.push_back(std::move(member)); \
+} \
+ \
+void \
+CLASS_NAME::set_destructor(std::unique_ptr<destructor>&& member) \
+{ \
+	member->enclosing_declarative_region(this); \
+	destructor_ = std::move(member); \
+} \
+ \
+void \
+CLASS_NAME::reset_destructor() \
+{ \
+	set_destructor \
+	( \
+		std::unique_ptr<destructor>(new destructor(member_access::PUBLIC, false)) \
+	); \
+} \
+ \
+void \
+CLASS_NAME::add_member(std::unique_ptr<simple_member_function>&& member) \
+{ \
+	member->enclosing_declarative_region(this); \
+    simple_functions_.push_back(std::move(member)); \
+} \
+ \
+void \
+CLASS_NAME::add_member(std::unique_ptr<operator_member_function>&& member) \
+{ \
+	member->enclosing_declarative_region(this); \
+    operator_functions_.push_back(std::move(member)); \
+} \
+ \
+void \
+CLASS_NAME::add_member(std::unique_ptr<conversion_function>&& member) \
+{ \
+	member->enclosing_declarative_region(this); \
+    conversion_functions_.push_back(std::move(member)); \
+} \
+ \
+void \
+CLASS_NAME::add_member(std::unique_ptr<member_variable>&& member) \
+{ \
+	member->enclosing_declarative_region(this); \
+    variables_.push_back(std::move(member)); \
+}
+
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-class_::class_(const std::string& name):
-    name_(name),
-	complete_(false)
-{
-	reset_destructor();
-}
-
-const std::string&
-class_::name() const
-{
-    return name_;
-}
-
-bool
-class_::has_enclosing_declarative_region() const
-{
-	return declarative_region_member_impl_.has_enclosing_declarative_region();
-}
-
-declarative_region_ptr_variant
-class_::enclosing_declarative_region() const
-{
-	return declarative_region_member_impl_.enclosing_declarative_region();
-}
-
-void
-class_::enclosing_declarative_region(const declarative_region_ptr_variant& decl_region)
-{
-	declarative_region_member_impl_.enclosing_declarative_region(decl_region);
-}
-
-const class_::open_declarative_region_ptr_variants_t&
-class_::open_declarative_regions()
-{
-	return open_declarative_regions_;
-}
-
-const class_::base_classes_t&
-class_::base_classes() const
-{
-	return base_classes_;
-}
-
-class_::classes_t::range
-class_::nested_classes()
-{
-	return nested_classes_;
-}
-
-const class_::classes_t&
-class_::nested_classes() const
-{
-	return nested_classes_;
-}
-
-class_::enums_t::range
-class_::enums()
-{
-	return enums_;
-}
-
-const class_::enums_t&
-class_::enums() const
-{
-	return enums_;
-}
-
-class_::typedefs_t::range
-class_::typedefs()
-{
-	return typedefs_;
-}
-
-const class_::typedefs_t&
-class_::typedefs() const
-{
-	return typedefs_;
-}
-
-class_::constructors_t::range
-class_::constructors()
-{
-	return constructors_;
-}
-
-const class_::constructors_t&
-class_::constructors() const
-{
-	return constructors_;
-}
-
-destructor&
-class_::get_destructor()
-{
-	return *destructor_;
-}
-
-const destructor&
-class_::get_destructor() const
-{
-	return *destructor_;
-}
-
-class_::simple_functions_t::range
-class_::simple_functions()
-{
-	return simple_functions_;
-}
-
-const class_::simple_functions_t&
-class_::simple_functions() const
-{
-	return simple_functions_;
-}
-
-class_::operator_functions_t::range
-class_::operator_functions()
-{
-	return operator_functions_;
-}
-
-const class_::operator_functions_t&
-class_::operator_functions() const
-{
-	return operator_functions_;
-}
-
-class_::conversion_functions_t::range
-class_::conversion_functions()
-{
-	return conversion_functions_;
-}
-
-const class_::conversion_functions_t&
-class_::conversion_functions() const
-{
-	return conversion_functions_;
-}
-
-class_::variables_t::range
-class_::variables()
-{
-	return variables_;
-}
-
-const class_::variables_t&
-class_::variables() const
-{
-	return variables_;
-}
-
-void
-class_::add_base_class(const base_class& bc)
-{
-	base_classes_.push_back(bc);
-}
-
-void
-class_::add_member(std::unique_ptr<class_>&& member, const member_access acc)
-{
-	member->enclosing_declarative_region(this);
-
-	open_declarative_regions_.push_back(member.get());
-	member_access_[static_cast<const class_*>(member.get())] = acc;
-
-	nested_classes_.push_back(std::move(member));
-}
-
-void
-class_::add_member(std::unique_ptr<member_enum>&& member)
-{
-	member->enclosing_declarative_region(this);
-    enums_.push_back(std::move(member));
-}
-
-void
-class_::add_member(std::unique_ptr<member_typedef>&& member)
-{
-	member->enclosing_declarative_region(this);
-    typedefs_.push_back(std::move(member));
-}
-
-void
-class_::add_member(std::unique_ptr<constructor>&& member)
-{
-	member->enclosing_declarative_region(this);
-    constructors_.push_back(std::move(member));
-}
-
-void
-class_::set_destructor(std::unique_ptr<destructor>&& member)
-{
-	member->enclosing_declarative_region(this);
-	destructor_ = std::move(member);
-}
-
-void
-class_::reset_destructor()
-{
-	set_destructor
-	(
-		std::unique_ptr<destructor>(new destructor(member_access::PUBLIC, false))
-	);
-}
-
-void
-class_::add_member(std::unique_ptr<simple_member_function>&& member)
-{
-	member->enclosing_declarative_region(this);
-    simple_functions_.push_back(std::move(member));
-}
-
-void
-class_::add_member(std::unique_ptr<operator_member_function>&& member)
-{
-	member->enclosing_declarative_region(this);
-    operator_functions_.push_back(std::move(member));
-}
-
-void
-class_::add_member(std::unique_ptr<conversion_function>&& member)
-{
-	member->enclosing_declarative_region(this);
-    conversion_functions_.push_back(std::move(member));
-}
-
-void
-class_::add_member(std::unique_ptr<member_variable>&& member)
-{
-	member->enclosing_declarative_region(this);
-    variables_.push_back(std::move(member));
-}
-
-member_access
-class_::get_member_access(const member_t& member) const
-{
-	auto it = member_access_.find(member);
-	if(it != member_access_.end())
-		return it->second;
-	else
-		throw std::runtime_error("The given entity is not a member of that class.");
-}
+GENERATE_CLASS_DEFINITION(class_, 0)
+GENERATE_CLASS_DEFINITION(member_class, 1)
 
 }}} //namespace scalpel::cpp::semantic_entities
+
+#undef GENERATE_CLASS_DEFINITION
 

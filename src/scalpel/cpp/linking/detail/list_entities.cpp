@@ -29,9 +29,9 @@ using namespace semantic_entities;
 
 namespace
 {
-	template<class ParentEntityTree>
+	template<class Class, class ParentEntityTree>
 	void
-	list_child_entities(const class_& parent_entity, ParentEntityTree& tree);
+	list_class_child_entities(const Class& parent_entity, ParentEntityTree& tree);
 
 	template<class ChildEntity, class ParentEntity, class ParentEntityTree>
 	void
@@ -72,7 +72,7 @@ namespace
 				it = tree.classes.insert(std::pair<std::string, linking_tree::class_>(class_name, linking_tree::class_())).first;
 			}
 
-			list_child_entities(child_class, it->second);
+			list_class_child_entities(child_class, it->second);
 		}
 
 		//fill current tree
@@ -83,15 +83,15 @@ namespace
 		list_child_entities_of_type<variable>(parent_entity, tree);
 	}
 
-	template<class ParentEntityTree>
+	template<class Class, class ParentEntityTree>
 	void
-	list_child_entities(const class_& parent_entity, ParentEntityTree& tree)
+	list_class_child_entities(const Class& parent_entity, ParentEntityTree& tree)
 	{
 		//create and fill class subtrees
-		const utility::unique_ptr_vector<class_>& child_classes = parent_entity.nested_classes();
+		const utility::unique_ptr_vector<member_class>& child_classes = parent_entity.nested_classes();
 		for(auto i = child_classes.begin(); i != child_classes.end(); ++i)
 		{
-			const class_& child_class = *i;
+			const member_class& child_class = *i;
 			const std::string& class_name = child_class.name();
 
 			auto it = tree.classes.find(class_name);
@@ -100,7 +100,7 @@ namespace
 				it = tree.classes.insert(std::pair<std::string, linking_tree::class_>(class_name, linking_tree::class_())).first;
 			}
 
-			list_child_entities(child_class, it->second);
+			list_class_child_entities(child_class, it->second);
 		}
 
 		//fill current tree

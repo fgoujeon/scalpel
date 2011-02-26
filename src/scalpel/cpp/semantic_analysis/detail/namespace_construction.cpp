@@ -150,7 +150,13 @@ fill_namespace
 				{
 					//find the class
 					class_* found_class =
-						name_lookup::find<semantic_entity_analysis::identification_policies::by_name, false, false, class_>
+						name_lookup::find
+						<
+							semantic_entity_analysis::identification_policies::by_name,
+							false,
+							false,
+							class_
+						>
 						(
 							false,
 							opt_nested_name_specifier_node,

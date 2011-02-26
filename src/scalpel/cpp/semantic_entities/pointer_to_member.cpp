@@ -27,16 +27,16 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 pointer_to_member::pointer_to_member
 (
 	const type_variant& qualified_type,
-	const class_& member_class
+	const parent_class_t& parent_class
 ):
 	qualified_type_(std::unique_ptr<type_variant>(new type_variant(qualified_type))),
-	member_class_(&member_class)
+	parent_class_(parent_class)
 {
 }
 
 pointer_to_member::pointer_to_member(const pointer_to_member& rhs):
 	qualified_type_(std::unique_ptr<type_variant>(new type_variant(*rhs.qualified_type_))),
-	member_class_(rhs.member_class_)
+	parent_class_(rhs.parent_class_)
 {
 }
 
@@ -44,7 +44,7 @@ pointer_to_member&
 pointer_to_member::operator=(const pointer_to_member& rhs)
 {
 	qualified_type_ = std::unique_ptr<type_variant>(new type_variant(*rhs.qualified_type_));
-	member_class_ = rhs.member_class_;
+	parent_class_ = rhs.parent_class_;
 	return *this;
 }
 
@@ -58,7 +58,7 @@ bool
 operator==(const pointer_to_member& lhs, const pointer_to_member& rhs)
 {
 	return
-		&lhs.member_class() == &rhs.member_class() &&
+		lhs.parent_class() == rhs.parent_class() &&
 		lhs.qualified_type() == rhs.qualified_type()
 	;
 }

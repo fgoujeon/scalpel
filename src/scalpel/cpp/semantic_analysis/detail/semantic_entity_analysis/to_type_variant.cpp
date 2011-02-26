@@ -30,10 +30,11 @@ namespace
 {
 	struct: public utility::static_visitor<type_variant>
 	{
+		template<class T>
 		type_variant
-		operator()(class_* t) const
+		operator()(T* t) const
 		{
-			return type_variant(static_cast<const class_*>(t));
+			return type_variant(static_cast<const T*>(t));
 		}
 
 		type_variant
@@ -47,18 +48,6 @@ namespace
 		{
 			return t->type();
 		}
-
-		type_variant
-		operator()(enum_* t) const
-		{
-			return type_variant(static_cast<const enum_*>(t));
-		}
-
-		type_variant
-		operator()(member_enum* t) const
-		{
-			return type_variant(static_cast<const member_enum*>(t));
-		}
 	} to_type_variant_impl;
 }
 
@@ -68,6 +57,7 @@ to_type_variant
 	const typename utility::ptr_variant
 	<
 		semantic_entities::class_,
+		semantic_entities::member_class,
 		semantic_entities::typedef_,
 		semantic_entities::member_typedef,
 		semantic_entities::enum_,
