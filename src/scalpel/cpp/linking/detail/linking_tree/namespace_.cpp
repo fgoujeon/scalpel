@@ -24,6 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace linking { namespace detail { namespace linking_tree
 {
 
+GENERATE_GET_ENTITY_LIST_SPECIALIZATION(namespace_, class_, classes2)
 GENERATE_GET_ENTITY_LIST_SPECIALIZATION(namespace_, enum_, enums)
 GENERATE_GET_ENTITY_LIST_SPECIALIZATION(namespace_, typedef_, typedefs)
 GENERATE_GET_ENTITY_LIST_SPECIALIZATION(namespace_, operator_function, operator_functions)

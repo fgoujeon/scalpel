@@ -76,6 +76,7 @@ namespace
 		}
 
 		//fill current tree
+		list_child_entities_of_type<class_>(parent_entity, tree);
 		list_child_entities_of_type<enum_>(parent_entity, tree);
 		list_child_entities_of_type<typedef_>(parent_entity, tree);
 		list_child_entities_of_type<operator_function>(parent_entity, tree);
@@ -104,14 +105,14 @@ namespace
 		}
 
 		//fill current tree
-		list_child_entities_of_type<enum_>(parent_entity, tree);
-		list_child_entities_of_type<typedef_>(parent_entity, tree);
+		list_child_entities_of_type<member_enum>(parent_entity, tree);
+		list_child_entities_of_type<member_typedef>(parent_entity, tree);
 		list_child_entities_of_type<constructor>(parent_entity, tree);
 		list_child_entities_of_type<destructor>(parent_entity, tree);
 		list_child_entities_of_type<operator_member_function>(parent_entity, tree);
 		list_child_entities_of_type<conversion_function>(parent_entity, tree);
 		list_child_entities_of_type<simple_member_function>(parent_entity, tree);
-		list_child_entities_of_type<variable>(parent_entity, tree);
+		list_child_entities_of_type<member_variable>(parent_entity, tree);
 	}
 
 	template<class ChildEntity, class ParentEntity, class ParentEntityTree>

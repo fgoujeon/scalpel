@@ -23,16 +23,10 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "linking_tree.hpp"
 #include <scalpel/cpp/semantic_graph.hpp>
-#include <scalpel/utility/unique_ptr_vector.hpp>
+#include <memory>
 
 namespace scalpel { namespace cpp { namespace linking { namespace detail
 {
-
-std::unique_ptr<semantic_entities::namespace_>
-create_namespace(const linking_tree::namespace_& tree, const std::string& namespace_name);
-
-std::unique_ptr<semantic_entities::class_>
-create_class(const linking_tree::class_& tree, const std::string& class_name);
 
 std::unique_ptr<semantic_graph>
 merge_entities(const linking_tree::namespace_& tree);

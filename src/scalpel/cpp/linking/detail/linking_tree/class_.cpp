@@ -24,14 +24,14 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace linking { namespace detail { namespace linking_tree
 {
 
-GENERATE_GET_ENTITY_LIST_SPECIALIZATION(class_, enum_, enums)
-GENERATE_GET_ENTITY_LIST_SPECIALIZATION(class_, typedef_, typedefs)
+GENERATE_GET_ENTITY_LIST_SPECIALIZATION(class_, member_enum, enums)
+GENERATE_GET_ENTITY_LIST_SPECIALIZATION(class_, member_typedef, typedefs)
 GENERATE_GET_ENTITY_LIST_SPECIALIZATION(class_, constructor, constructors)
 GENERATE_GET_ENTITY_LIST_SPECIALIZATION(class_, destructor, destructors)
 GENERATE_GET_ENTITY_LIST_SPECIALIZATION(class_, operator_member_function, operator_member_functions)
 GENERATE_GET_ENTITY_LIST_SPECIALIZATION(class_, conversion_function, conversion_functions)
 GENERATE_GET_ENTITY_LIST_SPECIALIZATION(class_, simple_member_function, simple_member_functions)
-GENERATE_GET_ENTITY_LIST_SPECIALIZATION(class_, variable, variables)
+GENERATE_GET_ENTITY_LIST_SPECIALIZATION(class_, member_variable, variables)
 
 }}}}} //namespace scalpel::cpp::linking::detail
 

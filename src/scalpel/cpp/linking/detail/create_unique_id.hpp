@@ -41,10 +41,19 @@ std::string
 create_unique_id(const semantic_entities::class_& entity);
 
 std::string
+create_unique_id(const semantic_entities::member_class& entity);
+
+std::string
 create_unique_id(const semantic_entities::enum_& entity);
 
 std::string
+create_unique_id(const semantic_entities::member_enum& entity);
+
+std::string
 create_unique_id(const semantic_entities::typedef_& entity);
+
+std::string
+create_unique_id(const semantic_entities::member_typedef& entity);
 
 std::string
 create_unique_id(const semantic_entities::constructor& entity);
@@ -69,6 +78,9 @@ create_unique_id(const semantic_entities::simple_function& entity);
 
 std::string
 create_unique_id(const semantic_entities::variable& entity);
+
+std::string
+create_unique_id(const semantic_entities::member_variable& entity);
 
 }}}} //namespace scalpel::cpp::linking::detail
 

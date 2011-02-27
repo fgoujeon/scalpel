@@ -367,13 +367,31 @@ create_unique_id(const semantic_entities::class_& entity)
 }
 
 std::string
+create_unique_id(const semantic_entities::member_class& entity)
+{
+	return entity.name();
+}
+
+std::string
 create_unique_id(const semantic_entities::enum_& entity)
 {
 	return entity.name();
 }
 
 std::string
+create_unique_id(const semantic_entities::member_enum& entity)
+{
+	return entity.name();
+}
+
+std::string
 create_unique_id(const semantic_entities::typedef_& entity)
+{
+	return entity.name();
+}
+
+std::string
+create_unique_id(const semantic_entities::member_typedef& entity)
 {
 	return entity.name();
 }
@@ -422,6 +440,12 @@ create_unique_id(const semantic_entities::simple_function& entity)
 
 std::string
 create_unique_id(const semantic_entities::variable& entity)
+{
+	return entity.name();
+}
+
+std::string
+create_unique_id(const semantic_entities::member_variable& entity)
 {
 	return entity.name();
 }

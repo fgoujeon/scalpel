@@ -113,6 +113,7 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (namespace_, conversion_function)
 GENERATE_GET_MEMBERS_SPECIALIZATION          (namespace_, simple_function, simple_functions)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (namespace_, simple_member_function)
 GENERATE_GET_MEMBERS_SPECIALIZATION          (namespace_, variable, variables)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (namespace_, member_variable)
 GENERATE_GET_MEMBERS_SPECIALIZATION          (namespace_, namespace_alias, namespace_aliases)
 
 GENERATE_NON_CONST_GET_MEMBERS_SPECIALIZATION(class_, open_declarative_region_ptr_variant, open_declarative_regions)
@@ -131,6 +132,7 @@ GENERATE_GET_MEMBERS_SPECIALIZATION          (class_, conversion_function, conve
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (class_, simple_function)
 GENERATE_GET_MEMBERS_SPECIALIZATION          (class_, simple_member_function, simple_functions)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (class_, variable)
+GENERATE_GET_MEMBERS_SPECIALIZATION          (class_, member_variable, variables)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (class_, namespace_alias)
 
 GENERATE_NON_CONST_GET_MEMBERS_SPECIALIZATION(member_class, open_declarative_region_ptr_variant, open_declarative_regions)
@@ -149,6 +151,7 @@ GENERATE_GET_MEMBERS_SPECIALIZATION          (member_class, conversion_function,
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (member_class, simple_function)
 GENERATE_GET_MEMBERS_SPECIALIZATION          (member_class, simple_member_function, simple_functions)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (member_class, variable)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (member_class, member_variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (member_class, namespace_alias)
 
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(constructor, open_declarative_region_ptr_variant)
@@ -167,6 +170,7 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(constructor, conversion_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(constructor, simple_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(constructor, simple_member_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(constructor, variable)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(constructor, member_variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(constructor, namespace_alias)
 
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(destructor, open_declarative_region_ptr_variant)
@@ -185,6 +189,7 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(destructor, conversion_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(destructor, simple_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(destructor, simple_member_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(destructor, variable)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(destructor, member_variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(destructor, namespace_alias)
 
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(operator_function, open_declarative_region_ptr_variant)
@@ -203,6 +208,7 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(operator_function, conversion_function
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(operator_function, simple_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(operator_function, simple_member_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(operator_function, variable)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(operator_function, member_variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(operator_function, namespace_alias)
 
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(operator_member_function, open_declarative_region_ptr_variant)
@@ -221,6 +227,7 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(operator_member_function, conversion_f
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(operator_member_function, simple_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(operator_member_function, simple_member_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(operator_member_function, variable)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(operator_member_function, member_variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(operator_member_function, namespace_alias)
 
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(conversion_function, open_declarative_region_ptr_variant)
@@ -239,6 +246,7 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(conversion_function, conversion_functi
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(conversion_function, simple_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(conversion_function, simple_member_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(conversion_function, variable)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(conversion_function, member_variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(conversion_function, namespace_alias)
 
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(simple_function, open_declarative_region_ptr_variant)
@@ -257,6 +265,7 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(simple_function, conversion_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(simple_function, simple_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(simple_function, simple_member_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(simple_function, variable)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(simple_function, member_variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(simple_function, namespace_alias)
 
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(simple_member_function, open_declarative_region_ptr_variant)
@@ -275,6 +284,7 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(simple_member_function, conversion_fun
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(simple_member_function, simple_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(simple_member_function, simple_member_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(simple_member_function, variable)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(simple_member_function, member_variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(simple_member_function, namespace_alias)
 
 GENERATE_NON_CONST_GET_MEMBERS_SPECIALIZATION(statement_block, open_declarative_region_ptr_variant, open_declarative_regions)
@@ -293,6 +303,7 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, conversion_functi
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, simple_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, simple_member_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, variable)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, member_variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, namespace_alias)
 
 }}}}} //namespace scalpel::cpp::semantic_analysis::detail::semantic_entity_analysis

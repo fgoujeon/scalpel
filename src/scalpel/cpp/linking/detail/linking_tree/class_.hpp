@@ -31,14 +31,14 @@ namespace scalpel { namespace cpp { namespace linking { namespace detail { names
 struct class_
 {
 	std::map<std::string, class_> classes;
-	entity_list<semantic_entities::enum_> enums;
-	entity_list<semantic_entities::typedef_> typedefs;
+	entity_list<semantic_entities::member_enum> enums;
+	entity_list<semantic_entities::member_typedef> typedefs;
 	entity_list<semantic_entities::constructor> constructors;
 	entity_list<semantic_entities::destructor> destructors;
 	entity_list<semantic_entities::operator_member_function> operator_member_functions;
 	entity_list<semantic_entities::conversion_function> conversion_functions;
 	entity_list<semantic_entities::simple_member_function> simple_member_functions;
-	entity_list<semantic_entities::variable> variables;
+	entity_list<semantic_entities::member_variable> variables;
 };
 
 template<class Entity>

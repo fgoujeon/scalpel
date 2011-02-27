@@ -33,6 +33,7 @@ struct namespace_
 {
 	std::map<std::string, namespace_> namespaces;
 	std::map<std::string, class_> classes;
+	entity_list<semantic_entities::class_> classes2;
 	entity_list<semantic_entities::enum_> enums;
 	entity_list<semantic_entities::typedef_> typedefs;
 	entity_list<semantic_entities::operator_function> operator_functions;
