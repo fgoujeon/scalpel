@@ -39,6 +39,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 class CLASS_NAME \
 { \
 	public: \
+		typedef \
+			BOOST_PP_IIF(IS_MEMBER, class_*, namespace_*) \
+			enclosing_declarative_region_t \
+		; \
+ \
 		typedef std::vector<open_declarative_region_ptr_variant> open_declarative_region_ptr_variants_t; \
  \
 		typedef std::vector<base_class> base_classes_t; \
@@ -187,6 +192,9 @@ class CLASS_NAME \
  \
 		void \
 		set_destructor(std::unique_ptr<destructor>&& member); \
+ \
+		void \
+		add_member(std::unique_ptr<destructor>&& member); \
  \
 		void \
 		reset_destructor(); \

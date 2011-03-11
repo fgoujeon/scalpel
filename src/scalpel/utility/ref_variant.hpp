@@ -18,20 +18,23 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "namespace_.hpp"
-#include "macros/get_entity_list.hpp"
+#ifndef SCALPEL_UTILITY_REF_VARIANT_HPP
+#define SCALPEL_UTILITY_REF_VARIANT_HPP
 
-namespace scalpel { namespace cpp { namespace linking { namespace detail { namespace linking_tree
+#include "variant.hpp"
+#include "apply_type_trait_to_variadic_template_parameters.hpp"
+#include <boost/type_traits/add_reference.hpp>
+
+namespace scalpel { namespace utility
 {
 
-GENERATE_GET_ENTITY_LIST_SPECIALIZATION(namespace_, class_, classes2)
-GENERATE_GET_ENTITY_LIST_SPECIALIZATION(namespace_, enum_, enums)
-GENERATE_GET_ENTITY_LIST_SPECIALIZATION(namespace_, typedef_, typedefs)
-GENERATE_GET_ENTITY_LIST_SPECIALIZATION(namespace_, operator_function, operator_functions)
-GENERATE_GET_ENTITY_LIST_SPECIALIZATION(namespace_, simple_function, simple_functions)
-GENERATE_GET_ENTITY_LIST_SPECIALIZATION(namespace_, variable, variables)
+template<typename... Ts>
+struct ref_variant
+{
+	typedef typename apply_type_trait_to_variadic_template_parameters<boost::add_reference, variant, Ts...>::type type;
+};
 
-}}}}} //namespace scalpel::cpp::linking::detail
+}} //namespace scalpel::utility
 
-#include "macros/get_entity_list_undef.hpp"
+#endif
 

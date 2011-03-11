@@ -201,6 +201,13 @@ CLASS_NAME::set_destructor(std::unique_ptr<destructor>&& member) \
 } \
  \
 void \
+CLASS_NAME::add_member(std::unique_ptr<destructor>&& member) \
+{ \
+	member->enclosing_declarative_region(this); \
+	destructor_ = std::move(member); \
+} \
+ \
+void \
 CLASS_NAME::reset_destructor() \
 { \
 	set_destructor \

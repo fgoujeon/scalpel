@@ -19,7 +19,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "assemble_final_graph.hpp"
+#include <scalpel/cpp/semantic_entities/generic_functions/detail/get_enclosing_declarative_region.hpp>
 #include <scalpel/utility/variant.hpp>
+#include <iostream>
 
 namespace scalpel { namespace cpp { namespace linking { namespace detail
 {
@@ -80,7 +82,7 @@ namespace
 
 			//get the enclosing declarative region of the input entity
 			assert(current_entity->has_enclosing_declarative_region());
-			declarative_region_ptr_variant enclosing_declarative_region = current_entity->enclosing_declarative_region();
+			auto enclosing_declarative_region = generic_functions::detail::get_enclosing_declarative_region(*current_entity);
 
 			//find the corresponding final entity of the enclosing declarative region
 			//and
@@ -98,31 +100,22 @@ assemble_final_graph
 	old_to_new_entity_maps& entity_maps
 )
 {
-	//assemble namespaces
-	for(auto i = get_entity_groups_of_type<namespace_>(groups).begin(); i != get_entity_groups_of_type<namespace_>(groups).end(); ++i)
-	{
-		assert(!i->second.empty());
-		const namespace_* current_entity = i->second.front();
-
-		//find the corresponding final entity
-		auto it = entity_maps.get<namespace_>().find(current_entity);
-		assert(it != entity_maps.get<namespace_>().end());
-		namespace_* final_entity = it->second;
-
-		//get the enclosing declarative region of the input entity
-		const namespace_* enclosing_declarative_region = current_entity->enclosing_declarative_region();
-		assert(enclosing_declarative_region);
-
-		//find the corresponding final entity of the enclosing declarative region
-		auto it2 = entity_maps.get<namespace_>().find(enclosing_declarative_region);
-		assert(it2 != entity_maps.get<namespace_>().end());
-		namespace_* final_decl_region = it2->second;
-
-		//add the final entity to the final declarative region entity
-		final_decl_region->add_member(std::unique_ptr<namespace_>(final_entity));
-	}
-
-	//assemble_entities_of_type<class_>(groups, entity_maps);
+	assemble_entities_of_type<namespace_>(groups, entity_maps);
+	assemble_entities_of_type<class_>(groups, entity_maps);
+	assemble_entities_of_type<member_class>(groups, entity_maps);
+	assemble_entities_of_type<enum_>(groups, entity_maps);
+	assemble_entities_of_type<member_enum>(groups, entity_maps);
+	assemble_entities_of_type<typedef_>(groups, entity_maps);
+	assemble_entities_of_type<member_typedef>(groups, entity_maps);
+	assemble_entities_of_type<constructor>(groups, entity_maps);
+	assemble_entities_of_type<destructor>(groups, entity_maps);
+	assemble_entities_of_type<operator_member_function>(groups, entity_maps);
+	assemble_entities_of_type<conversion_function>(groups, entity_maps);
+	assemble_entities_of_type<simple_member_function>(groups, entity_maps);
+	assemble_entities_of_type<operator_function>(groups, entity_maps);
+	assemble_entities_of_type<simple_function>(groups, entity_maps);
+	assemble_entities_of_type<variable>(groups, entity_maps);
+	assemble_entities_of_type<member_variable>(groups, entity_maps);
 
 	return std::move(entity_maps.global_namespace);
 }

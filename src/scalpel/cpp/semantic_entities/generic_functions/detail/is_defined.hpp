@@ -23,7 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <scalpel/cpp/semantic_graph.hpp>
 
-namespace scalpel { namespace cpp { namespace semantic_entities
+namespace scalpel { namespace cpp { namespace semantic_entities { namespace generic_functions { namespace detail
 {
 
 bool
@@ -87,7 +87,7 @@ is_defined(const Entity& entity)
 	return entity.defined();
 }
 
-}}} //namespace scalpel::cpp::semantic_entities
+}}}}} //namespace scalpel::cpp::semantic_entities::generic_functions::detail
 
 #endif
 

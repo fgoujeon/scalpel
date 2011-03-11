@@ -438,7 +438,7 @@ namespace
 			for(auto j = group.begin(); j != group.end(); ++j)
 			{
 				const Entity* current_entity = *j;
-				if(is_defined(*current_entity))
+				if(generic_functions::detail::is_defined(*current_entity))
 				{
 					if(defined_entity != 0 && ErrorIfMultipleDefinition)
 						throw std::runtime_error(("multiple definition of " + group_id).c_str());
