@@ -19,7 +19,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "assemble_final_graph.hpp"
-#include <scalpel/cpp/semantic_entities/generic_queries/detail/get_enclosing_declarative_region.hpp>
 #include <scalpel/utility/variant.hpp>
 #include <iostream>
 
@@ -30,11 +29,25 @@ using namespace semantic_entities;
 
 namespace
 {
+	//add the given entity (final_entity) to the correct declarative region of
+	//the final graph (found in entity_maps, using enclosing_declarative_region)
+	template<class Entity, class EnclosingDeclarativeRegion>
+	void
+	add_entity_to_final_graph
+	(
+		old_to_new_entity_maps& entity_maps,
+		Entity* final_entity,
+		const EnclosingDeclarativeRegion& enclosing_declarative_region
+	);
+}
+
+namespace
+{
 	template<class Entity>
-	struct find_and_add_visitor: scalpel::utility::static_visitor<void>
+	struct add_entity_to_final_graph_visitor: scalpel::utility::static_visitor<void>
 	{
 		public:
-			find_and_add_visitor
+			add_entity_to_final_graph_visitor
 			(
 				old_to_new_entity_maps& entity_maps,
 				Entity* final_entity
@@ -48,19 +61,49 @@ namespace
 			void
 			operator()(const EnclosingDeclarativeRegion* enclosing_declarative_region) const
 			{
-				//find the corresponding final entity of the enclosing declarative region
-				auto it = entity_maps_.get<EnclosingDeclarativeRegion>().find(enclosing_declarative_region);
-				assert(it != entity_maps_.get<EnclosingDeclarativeRegion>().end());
-				EnclosingDeclarativeRegion* final_enclosing_declarative_region = it->second;
-
-				//add the final entity to the final declarative region entity
-				final_enclosing_declarative_region->add_member(std::move(std::unique_ptr<Entity>(final_entity_)));
+				add_entity_to_final_graph<Entity, EnclosingDeclarativeRegion>
+				(
+					entity_maps_,
+					final_entity_,
+					*enclosing_declarative_region
+				);
 			}
 
 		private:
 			old_to_new_entity_maps& entity_maps_;
 			Entity* final_entity_;
 	};
+
+	template<class Entity, class EnclosingDeclarativeRegion>
+	void
+	add_entity_to_final_graph
+	(
+		old_to_new_entity_maps& entity_maps,
+		Entity* final_entity,
+		const EnclosingDeclarativeRegion& enclosing_declarative_region
+	)
+	{
+		//find the corresponding final entity of the enclosing declarative region
+		auto it = entity_maps.get<EnclosingDeclarativeRegion>().find(&enclosing_declarative_region);
+		assert(it != entity_maps.get<EnclosingDeclarativeRegion>().end());
+		EnclosingDeclarativeRegion* final_enclosing_declarative_region = it->second;
+
+		//add the final entity to the final declarative region entity
+		final_enclosing_declarative_region->add_member(std::move(std::unique_ptr<Entity>(final_entity)));
+	}
+
+	template<class Entity, class... DeclarativeRegions>
+	void
+	add_entity_to_final_graph
+	(
+		old_to_new_entity_maps& entity_maps,
+		Entity* final_entity,
+		const utility::variant<DeclarativeRegions...>& enclosing_declarative_region
+	)
+	{
+		add_entity_to_final_graph_visitor<Entity> visitor(entity_maps, final_entity);
+		apply_visitor(visitor, enclosing_declarative_region);
+	}
 
 	template<class Entity>
 	void
@@ -80,15 +123,14 @@ namespace
 			assert(it != entity_maps.get<Entity>().end());
 			Entity* final_entity = it->second;
 
-			//get the enclosing declarative region of the input entity
+			//add the final entity to the final graph
 			assert(current_entity->has_enclosing_declarative_region());
-			auto enclosing_declarative_region = generic_queries::detail::get_enclosing_declarative_region(*current_entity);
-
-			//find the corresponding final entity of the enclosing declarative region
-			//and
-			//add the final entity to the final declarative region entity
-			find_and_add_visitor<Entity> visitor(entity_maps, final_entity);
-			apply_visitor(visitor, enclosing_declarative_region);
+			add_entity_to_final_graph
+			(
+				entity_maps,
+				final_entity,
+				current_entity->enclosing_declarative_region()
+			);
 		}
 	}
 }
