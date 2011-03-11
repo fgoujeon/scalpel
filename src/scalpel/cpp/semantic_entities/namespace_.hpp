@@ -81,18 +81,6 @@ class namespace_
 		const std::string&
 		name() const;
 
-		bool
-		has_enclosing_declarative_region() const;
-
-		namespace_*
-		enclosing_declarative_region();
-
-		const namespace_*
-		enclosing_declarative_region() const;
-
-		void
-		enclosing_declarative_region(namespace_& enclosing_declarative_region);
-
 		const open_declarative_region_ptr_variants_t&
 		open_declarative_regions();
 
@@ -176,7 +164,6 @@ class namespace_
 
 	private:
 		std::string name_;
-		namespace_* enclosing_declarative_region_;
 
 		//polymorphic containers
 		open_declarative_region_ptr_variants_t open_declarative_regions_;
@@ -192,6 +179,8 @@ class namespace_
 		variables_t variables_;
 
 		namespace_ptrs_t using_directive_namespaces_;
+
+		DECLARATIVE_REGION_MEMBER_IMPL(detail::declarative_region_member_impl<namespace_>)
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

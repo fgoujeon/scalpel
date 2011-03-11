@@ -53,24 +53,6 @@ class statement_block
 		const statement_block&
 		operator=(const statement_block&) = delete;
 
-		bool
-		has_enclosing_declarative_region() const
-		{
-			return declarative_region_member_impl_.has_enclosing_declarative_region();
-		}
-
-		declarative_region_ptr_variant
-		enclosing_declarative_region() const
-		{
-			return declarative_region_member_impl_.enclosing_declarative_region();
-		}
-
-		void
-		enclosing_declarative_region(const declarative_region_ptr_variant& decl_region)
-		{
-			declarative_region_member_impl_.enclosing_declarative_region(decl_region);
-		}
-
 		const open_declarative_region_ptr_variants_t&
 		open_declarative_regions();
 
@@ -99,8 +81,6 @@ class statement_block
         add_using_directive_namespace(namespace_& n);
 
     private:
-		detail::declarative_region_member_impl declarative_region_member_impl_;
-
 		//polymorphic containers
 		open_declarative_region_ptr_variants_t open_declarative_regions_;
 
@@ -110,6 +90,21 @@ class statement_block
 		namespace_aliases_t namespace_aliases_;
 
         namespace_ptrs_t using_directive_namespaces_;
+
+		typedef
+			detail::declarative_region_member_impl
+			<
+				constructor,
+				destructor,
+				operator_member_function,
+				conversion_function,
+				simple_member_function,
+				operator_function,
+				simple_function
+			>
+			declarative_region_member_impl_type
+		;
+		DECLARATIVE_REGION_MEMBER_IMPL(declarative_region_member_impl_type)
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

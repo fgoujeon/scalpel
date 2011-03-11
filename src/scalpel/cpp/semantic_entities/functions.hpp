@@ -223,15 +223,6 @@ class CLASS_NAME \
 		void \
 		body(std::unique_ptr<statement_block>&& b); \
  \
-		bool \
-		has_enclosing_declarative_region() const; \
- \
-		declarative_region_ptr_variant \
-		enclosing_declarative_region() const; \
- \
-		void \
-		enclosing_declarative_region(const declarative_region_ptr_variant& enclosing_declarative_region); \
- \
     private: \
 		BOOST_PP_IIF \
 		( \
@@ -293,6 +284,13 @@ class CLASS_NAME \
 		std::unique_ptr<statement_block> body_; \
  \
 		boost::optional<declarative_region_ptr_variant> enclosing_declarative_region_; \
+ \
+		BOOST_PP_IIF \
+		( \
+			IS_MEMBER, \
+			DECLARATIVE_REGION_MEMBER_IMPL(member_function_declarative_region_member_impl_t), \
+			DECLARATIVE_REGION_MEMBER_IMPL(detail::declarative_region_member_impl<namespace_>) \
+		) \
 }; \
  \
 bool \
@@ -300,6 +298,11 @@ have_same_signature(const CLASS_NAME& lhs, const CLASS_NAME& rhs);
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
+
+typedef
+	detail::declarative_region_member_impl<class_, member_class>
+	member_function_declarative_region_member_impl_t
+;
 
 //member functions
 GENERATE_FUNCTION_DECLARATION(constructor,              1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1)

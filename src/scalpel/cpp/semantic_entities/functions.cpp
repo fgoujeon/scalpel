@@ -125,30 +125,6 @@ CLASS_NAME::body(std::unique_ptr<statement_block>&& b) \
 	body_->enclosing_declarative_region(this); \
 } \
  \
-bool \
-CLASS_NAME::has_enclosing_declarative_region() const \
-{ \
-	return enclosing_declarative_region_; \
-} \
- \
-declarative_region_ptr_variant \
-CLASS_NAME::enclosing_declarative_region() const \
-{ \
-	if(enclosing_declarative_region_) \
-		return *enclosing_declarative_region_; \
-	else \
-		throw std::runtime_error("The declarative region is not set."); \
-} \
- \
-void \
-CLASS_NAME::enclosing_declarative_region(const declarative_region_ptr_variant& decl_region) \
-{ \
-	if(!enclosing_declarative_region_) \
-		enclosing_declarative_region_ = decl_region; \
-	else \
-		throw std::runtime_error("The declarative region is already set."); \
-} \
- \
  \
  \
 bool \

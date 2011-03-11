@@ -34,7 +34,7 @@ typename utility::const_ptr_variant
 get_enclosing_declarative_region(const namespace_& entity)
 {
 	assert(entity.has_enclosing_declarative_region());
-	return entity.enclosing_declarative_region();
+	return &entity.enclosing_declarative_region();
 }
 
 typename utility::const_ptr_variant
@@ -44,19 +44,18 @@ typename utility::const_ptr_variant
 get_enclosing_declarative_region(const class_& entity)
 {
 	assert(entity.has_enclosing_declarative_region());
-	declarative_region_ptr_variant edr = entity.enclosing_declarative_region();
-	return static_cast<const namespace_*>(utility::get<namespace_*>(edr));
+	return &entity.enclosing_declarative_region();
 }
 
 typename utility::const_ptr_variant
 <
-	class_
+	class_,
+	member_class
 >::type
 get_enclosing_declarative_region(const member_class& entity)
 {
 	assert(entity.has_enclosing_declarative_region());
-	declarative_region_ptr_variant edr = entity.enclosing_declarative_region();
-	return static_cast<const class_*>(utility::get<class_*>(edr));
+	return entity.enclosing_declarative_region();
 }
 
 typename utility::const_ptr_variant
@@ -66,19 +65,18 @@ typename utility::const_ptr_variant
 get_enclosing_declarative_region(const enum_& entity)
 {
 	assert(entity.has_enclosing_declarative_region());
-	declarative_region_ptr_variant edr = entity.enclosing_declarative_region();
-	return static_cast<const namespace_*>(utility::get<namespace_*>(edr));
+	return &entity.enclosing_declarative_region();
 }
 
 typename utility::const_ptr_variant
 <
-	class_
+	class_,
+	member_class
 >::type
 get_enclosing_declarative_region(const member_enum& entity)
 {
 	assert(entity.has_enclosing_declarative_region());
-	declarative_region_ptr_variant edr = entity.enclosing_declarative_region();
-	return static_cast<const class_*>(utility::get<class_*>(edr));
+	return entity.enclosing_declarative_region();
 }
 
 typename utility::const_ptr_variant
@@ -88,74 +86,73 @@ typename utility::const_ptr_variant
 get_enclosing_declarative_region(const typedef_& entity)
 {
 	assert(entity.has_enclosing_declarative_region());
-	declarative_region_ptr_variant edr = entity.enclosing_declarative_region();
-	return static_cast<const namespace_*>(utility::get<namespace_*>(edr));
+	return &entity.enclosing_declarative_region();
 }
 
 typename utility::const_ptr_variant
 <
-	class_
+	class_,
+	member_class
 >::type
 get_enclosing_declarative_region(const member_typedef& entity)
 {
 	assert(entity.has_enclosing_declarative_region());
-	declarative_region_ptr_variant edr = entity.enclosing_declarative_region();
-	return static_cast<const class_*>(utility::get<class_*>(edr));
+	return entity.enclosing_declarative_region();
 }
 
 typename utility::const_ptr_variant
 <
-	class_
+	class_,
+	member_class
 >::type
 get_enclosing_declarative_region(const constructor& entity)
 {
 	assert(entity.has_enclosing_declarative_region());
-	declarative_region_ptr_variant edr = entity.enclosing_declarative_region();
-	return static_cast<const class_*>(utility::get<class_*>(edr));
+	return entity.enclosing_declarative_region();
 }
 
 typename utility::const_ptr_variant
 <
-	class_
+	class_,
+	member_class
 >::type
 get_enclosing_declarative_region(const destructor& entity)
 {
 	assert(entity.has_enclosing_declarative_region());
-	declarative_region_ptr_variant edr = entity.enclosing_declarative_region();
-	return static_cast<const class_*>(utility::get<class_*>(edr));
+	return entity.enclosing_declarative_region();
 }
 
 typename utility::const_ptr_variant
 <
-	class_
+	class_,
+	member_class
 >::type
 get_enclosing_declarative_region(const operator_member_function& entity)
 {
 	assert(entity.has_enclosing_declarative_region());
-	declarative_region_ptr_variant edr = entity.enclosing_declarative_region();
-	return static_cast<const class_*>(utility::get<class_*>(edr));
+	return entity.enclosing_declarative_region();
 }
 
 typename utility::const_ptr_variant
 <
-	class_
+	class_,
+	member_class
 >::type
 get_enclosing_declarative_region(const conversion_function& entity)
 {
 	assert(entity.has_enclosing_declarative_region());
-	declarative_region_ptr_variant edr = entity.enclosing_declarative_region();
-	return static_cast<const class_*>(utility::get<class_*>(edr));
+	return entity.enclosing_declarative_region();
 }
 
 typename utility::const_ptr_variant
 <
-	class_
+	class_,
+	member_class
 >::type
 get_enclosing_declarative_region(const simple_member_function& entity)
 {
 	assert(entity.has_enclosing_declarative_region());
-	declarative_region_ptr_variant edr = entity.enclosing_declarative_region();
-	return static_cast<const class_*>(utility::get<class_*>(edr));
+	return entity.enclosing_declarative_region();
 }
 
 typename utility::const_ptr_variant
@@ -165,8 +162,7 @@ typename utility::const_ptr_variant
 get_enclosing_declarative_region(const operator_function& entity)
 {
 	assert(entity.has_enclosing_declarative_region());
-	declarative_region_ptr_variant edr = entity.enclosing_declarative_region();
-	return static_cast<const namespace_*>(utility::get<namespace_*>(edr));
+	return &entity.enclosing_declarative_region();
 }
 
 typename utility::const_ptr_variant
@@ -176,8 +172,7 @@ typename utility::const_ptr_variant
 get_enclosing_declarative_region(const simple_function& entity)
 {
 	assert(entity.has_enclosing_declarative_region());
-	declarative_region_ptr_variant edr = entity.enclosing_declarative_region();
-	return static_cast<const namespace_*>(utility::get<namespace_*>(edr));
+	return &entity.enclosing_declarative_region();
 }
 
 typename utility::const_ptr_variant
@@ -187,19 +182,18 @@ typename utility::const_ptr_variant
 get_enclosing_declarative_region(const variable& entity)
 {
 	assert(entity.has_enclosing_declarative_region());
-	declarative_region_ptr_variant edr = entity.enclosing_declarative_region();
-	return static_cast<const namespace_*>(utility::get<namespace_*>(edr));
+	return &entity.enclosing_declarative_region();
 }
 
 typename utility::const_ptr_variant
 <
-	class_
+	class_,
+	member_class
 >::type
 get_enclosing_declarative_region(const member_variable& entity)
 {
 	assert(entity.has_enclosing_declarative_region());
-	declarative_region_ptr_variant edr = entity.enclosing_declarative_region();
-	return static_cast<const class_*>(utility::get<class_*>(edr));
+	return entity.enclosing_declarative_region();
 }
 
 }}}}} //namespace scalpel::cpp::semantic_entities::generic_queries::detail

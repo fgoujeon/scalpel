@@ -23,14 +23,12 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-namespace_::namespace_():
-	enclosing_declarative_region_(0)
+namespace_::namespace_()
 {
 }
 
 namespace_::namespace_(const std::string& name):
-    name_(name),
-	enclosing_declarative_region_(0)
+    name_(name)
 {
 }
 
@@ -38,30 +36,6 @@ const std::string&
 namespace_::name() const
 {
     return name_;
-}
-
-bool
-namespace_::has_enclosing_declarative_region() const
-{
-	return enclosing_declarative_region_;
-}
-
-namespace_*
-namespace_::enclosing_declarative_region()
-{
-	return enclosing_declarative_region_;
-}
-
-const namespace_*
-namespace_::enclosing_declarative_region() const
-{
-	return enclosing_declarative_region_;
-}
-
-void
-namespace_::enclosing_declarative_region(namespace_& enclosing_declarative_region)
-{
-	enclosing_declarative_region_ = &enclosing_declarative_region;
 }
 
 const namespace_::open_declarative_region_ptr_variants_t&
@@ -184,7 +158,7 @@ namespace_::add_member(std::unique_ptr<namespace_>&& member)
 void
 namespace_::add_member(std::unique_ptr<class_>&& member)
 {
-	member->enclosing_declarative_region(this);
+	member->enclosing_declarative_region(*this);
 	open_declarative_regions_.push_back(member.get());
 
     classes_.push_back(std::move(member));
@@ -193,35 +167,35 @@ namespace_::add_member(std::unique_ptr<class_>&& member)
 void
 namespace_::add_member(std::unique_ptr<enum_>&& member)
 {
-	member->enclosing_declarative_region(this);
+	member->enclosing_declarative_region(*this);
     enums_.push_back(std::move(member));
 }
 
 void
 namespace_::add_member(std::unique_ptr<typedef_>&& member)
 {
-	member->enclosing_declarative_region(this);
+	member->enclosing_declarative_region(*this);
     typedefs_.push_back(std::move(member));
 }
 
 void
 namespace_::add_member(std::unique_ptr<simple_function>&& member)
 {
-	member->enclosing_declarative_region(this);
+	member->enclosing_declarative_region(*this);
     simple_functions_.push_back(std::move(member));
 }
 
 void
 namespace_::add_member(std::unique_ptr<operator_function>&& member)
 {
-	member->enclosing_declarative_region(this);
+	member->enclosing_declarative_region(*this);
     operator_functions_.push_back(std::move(member));
 }
 
 void
 namespace_::add_member(std::unique_ptr<variable>&& member)
 {
-	member->enclosing_declarative_region(this);
+	member->enclosing_declarative_region(*this);
     variables_.push_back(std::move(member));
 }
 

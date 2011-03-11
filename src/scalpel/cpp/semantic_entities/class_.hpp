@@ -31,6 +31,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <scalpel/utility/const_ptr_variant.hpp>
 #include <boost/preprocessor/control/iif.hpp>
 #include <boost/preprocessor/punctuation/comma_if.hpp>
+#include <boost/preprocessor/punctuation/comma.hpp>
 #include <string>
 #include <vector>
 #include <map>
@@ -39,11 +40,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 class CLASS_NAME \
 { \
 	public: \
-		typedef \
-			BOOST_PP_IIF(IS_MEMBER, class_*, namespace_*) \
-			enclosing_declarative_region_t \
-		; \
- \
 		typedef std::vector<open_declarative_region_ptr_variant> open_declarative_region_ptr_variants_t; \
  \
 		typedef std::vector<base_class> base_classes_t; \
@@ -96,24 +92,6 @@ class CLASS_NAME \
 				return access_; \
 			}, \
 		) \
- \
-		bool \
-		has_enclosing_declarative_region() const \
-		{ \
-			return declarative_region_member_impl_.has_enclosing_declarative_region(); \
-		} \
- \
-		declarative_region_ptr_variant \
-		enclosing_declarative_region() const \
-		{ \
-			return declarative_region_member_impl_.enclosing_declarative_region(); \
-		} \
- \
-		void \
-		enclosing_declarative_region(const declarative_region_ptr_variant& decl_region) \
-		{ \
-			declarative_region_member_impl_.enclosing_declarative_region(decl_region); \
-		} \
  \
 		const open_declarative_region_ptr_variants_t& \
 		open_declarative_regions(); \
@@ -219,7 +197,6 @@ class CLASS_NAME \
 			member_access access_;, \
 		) \
 		bool complete_; \
-		detail::declarative_region_member_impl declarative_region_member_impl_; \
  \
 		open_declarative_region_ptr_variants_t open_declarative_regions_; \
  \
@@ -233,6 +210,13 @@ class CLASS_NAME \
 		operator_functions_t operator_functions_; \
 		conversion_functions_t conversion_functions_; \
 		variables_t variables_; \
+ \
+		BOOST_PP_IIF \
+		( \
+			IS_MEMBER, \
+			DECLARATIVE_REGION_MEMBER_IMPL(member_class_declarative_region_member_impl_t), \
+			DECLARATIVE_REGION_MEMBER_IMPL(detail::declarative_region_member_impl<namespace_>) \
+		) \
 };
 
 namespace scalpel { namespace cpp { namespace semantic_entities
@@ -246,6 +230,11 @@ class operator_member_function;
 class conversion_function;
 class simple_member_function;
 class member_variable;
+
+typedef
+	detail::declarative_region_member_impl<class_, member_class>
+	member_class_declarative_region_member_impl_t
+;
 
 class member_class;
 GENERATE_CLASS_DECLARATION(class_, 0)

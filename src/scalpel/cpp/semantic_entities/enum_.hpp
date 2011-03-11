@@ -75,24 +75,6 @@ class CLASS_NAME \
 			}, \
 		) \
  \
-		bool \
-		has_enclosing_declarative_region() const \
-		{ \
-			return declarative_region_member_impl_.has_enclosing_declarative_region(); \
-		} \
- \
-		declarative_region_ptr_variant \
-		enclosing_declarative_region() const \
-		{ \
-			return declarative_region_member_impl_.enclosing_declarative_region(); \
-		} \
- \
-		void \
-		enclosing_declarative_region(const declarative_region_ptr_variant& enclosing_declarative_region) \
-		{ \
-			declarative_region_member_impl_.enclosing_declarative_region(enclosing_declarative_region); \
-		} \
- \
     private: \
         std::string name_; \
 		constants_t constants_; \
@@ -101,11 +83,26 @@ class CLASS_NAME \
 			IS_MEMBER, \
 			member_access access_;, \
 		) \
-		detail::declarative_region_member_impl declarative_region_member_impl_; \
+ \
+		BOOST_PP_IIF \
+		( \
+			IS_MEMBER, \
+			DECLARATIVE_REGION_MEMBER_IMPL(member_enum_declarative_region_member_impl_t), \
+			DECLARATIVE_REGION_MEMBER_IMPL(detail::declarative_region_member_impl<namespace_>) \
+		) \
 };
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
+
+class namespace_;
+class class_;
+class member_class;
+
+typedef
+	detail::declarative_region_member_impl<class_, member_class>
+	member_enum_declarative_region_member_impl_t
+;
 
 GENERATE_ENUM_DECLARATION(enum_, 0)
 GENERATE_ENUM_DECLARATION(member_enum, 1)

@@ -121,7 +121,109 @@ namespace
 		declarative_region_ptr_variant
 		operator()(T* t) const
 		{
+			return t;
+		}
+	} to_declarative_region_ptr_variant;
+
+	struct: public utility::static_visitor<declarative_region_ptr_variant>
+	{
+		/*
+		template<class T>
+		declarative_region_ptr_variant
+		operator()(T* t) const
+		{
 			return t->enclosing_declarative_region();
+		}
+		*/
+
+		declarative_region_ptr_variant
+		operator()(namespace_* t) const
+		{
+			return &t->enclosing_declarative_region();
+		}
+
+		declarative_region_ptr_variant
+		operator()(class_* t) const
+		{
+			return &t->enclosing_declarative_region();
+		}
+
+		declarative_region_ptr_variant
+		operator()(member_class* t) const
+		{
+			return apply_visitor(to_declarative_region_ptr_variant, t->enclosing_declarative_region());
+		}
+
+		declarative_region_ptr_variant
+		operator()(typedef_* t) const
+		{
+			return &t->enclosing_declarative_region();
+		}
+
+		declarative_region_ptr_variant
+		operator()(member_typedef* t) const
+		{
+			return apply_visitor(to_declarative_region_ptr_variant, t->enclosing_declarative_region());
+		}
+
+		declarative_region_ptr_variant
+		operator()(enum_* t) const
+		{
+			return &t->enclosing_declarative_region();
+		}
+
+		declarative_region_ptr_variant
+		operator()(member_enum* t) const
+		{
+			return apply_visitor(to_declarative_region_ptr_variant, t->enclosing_declarative_region());
+		}
+
+		declarative_region_ptr_variant
+		operator()(constructor* t) const
+		{
+			return apply_visitor(to_declarative_region_ptr_variant, t->enclosing_declarative_region());
+		}
+
+		declarative_region_ptr_variant
+		operator()(destructor* t) const
+		{
+			return apply_visitor(to_declarative_region_ptr_variant, t->enclosing_declarative_region());
+		}
+
+		declarative_region_ptr_variant
+		operator()(operator_member_function* t) const
+		{
+			return apply_visitor(to_declarative_region_ptr_variant, t->enclosing_declarative_region());
+		}
+
+		declarative_region_ptr_variant
+		operator()(conversion_function* t) const
+		{
+			return apply_visitor(to_declarative_region_ptr_variant, t->enclosing_declarative_region());
+		}
+
+		declarative_region_ptr_variant
+		operator()(simple_member_function* t) const
+		{
+			return apply_visitor(to_declarative_region_ptr_variant, t->enclosing_declarative_region());
+		}
+
+		declarative_region_ptr_variant
+		operator()(operator_function* t) const
+		{
+			return &t->enclosing_declarative_region();
+		}
+
+		declarative_region_ptr_variant
+		operator()(simple_function* t) const
+		{
+			return &t->enclosing_declarative_region();
+		}
+
+		declarative_region_ptr_variant
+		operator()(statement_block* t) const
+		{
+			return apply_visitor(to_declarative_region_ptr_variant, t->enclosing_declarative_region());
 		}
 	} get_enclosing_declarative_region_visitor;
 }

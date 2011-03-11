@@ -232,7 +232,7 @@ find_common_enclosing_namespace
 
 				//iterate to the enclosing namespace
 				if(!current_namespace_b->has_enclosing_declarative_region()) break;
-				current_namespace_b = current_namespace_b->enclosing_declarative_region();
+				current_namespace_b = &current_namespace_b->enclosing_declarative_region();
 			}
 		}
 
