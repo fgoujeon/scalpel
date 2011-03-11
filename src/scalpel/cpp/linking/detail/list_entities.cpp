@@ -20,7 +20,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "list_entities.hpp"
 #include "create_unique_id.hpp"
-#include "../../semantic_analysis/detail/semantic_entity_analysis/get_members.hpp"
+#include <scalpel/cpp/semantic_entities/generic_queries/detail/get_members.hpp>
 
 namespace scalpel { namespace cpp { namespace linking { namespace detail
 {
@@ -89,8 +89,8 @@ namespace
 	void
 	list_child_entities_of_type(const ParentEntity& parent_entity, entity_groups& groups)
 	{
-		typename semantic_analysis::detail::semantic_entity_analysis::member_type_traits<ChildEntity, true>::return_type entities =
-			semantic_analysis::detail::semantic_entity_analysis::get_members<ChildEntity>(parent_entity)
+		typename generic_queries::detail::member_type_traits<ChildEntity, true>::return_type entities =
+			generic_queries::detail::get_members<ChildEntity>(parent_entity)
 		;
 		for(auto i = entities.begin(); i != entities.end(); ++i)
 		{

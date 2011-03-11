@@ -18,13 +18,13 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_GENERIC_FUNCTIONS_DETAIL_GET_ENCLOSING_DECLARATIVE_REGION_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_GENERIC_FUNCTIONS_DETAIL_GET_ENCLOSING_DECLARATIVE_REGION_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_GENERIC_QUERIES_DETAIL_GET_ENCLOSING_DECLARATIVE_REGION_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_GENERIC_QUERIES_DETAIL_GET_ENCLOSING_DECLARATIVE_REGION_HPP
 
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <scalpel/utility/const_ptr_variant.hpp>
 
-namespace scalpel { namespace cpp { namespace semantic_entities { namespace generic_functions { namespace detail
+namespace scalpel { namespace cpp { namespace semantic_entities { namespace generic_queries { namespace detail
 {
 
 typename utility::const_ptr_variant
@@ -202,7 +202,7 @@ get_enclosing_declarative_region(const member_variable& entity)
 	return static_cast<const class_*>(utility::get<class_*>(edr));
 }
 
-}}}}} //namespace scalpel::cpp::semantic_entities::generic_functions::detail
+}}}}} //namespace scalpel::cpp::semantic_entities::generic_queries::detail
 
 #endif
 

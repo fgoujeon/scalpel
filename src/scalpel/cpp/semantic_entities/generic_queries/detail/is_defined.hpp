@@ -18,12 +18,12 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_GENERIC_FUNCTIONS_DETAIL_IS_DEFINIED_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_GENERIC_FUNCTIONS_DETAIL_IS_DEFINIED_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_GENERIC_QUERIES_DETAIL_IS_DEFINIED_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_GENERIC_QUERIES_DETAIL_IS_DEFINIED_HPP
 
 #include <scalpel/cpp/semantic_graph.hpp>
 
-namespace scalpel { namespace cpp { namespace semantic_entities { namespace generic_functions { namespace detail
+namespace scalpel { namespace cpp { namespace semantic_entities { namespace generic_queries { namespace detail
 {
 
 bool
@@ -87,7 +87,7 @@ is_defined(const Entity& entity)
 	return entity.defined();
 }
 
-}}}}} //namespace scalpel::cpp::semantic_entities::generic_functions::detail
+}}}}} //namespace scalpel::cpp::semantic_entities::generic_queries::detail
 
 #endif
 

@@ -23,7 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "semantic_entity_analysis/get_global_namespace.hpp"
 #include "semantic_entity_analysis/get_name.hpp"
-#include "semantic_entity_analysis/get_members.hpp"
+#include <scalpel/cpp/semantic_entities/generic_queries/detail/get_members.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail { namespace name_lookup
 {
@@ -424,10 +424,12 @@ find_local_entities
 	typename return_type<true, Multiple, EntityT>::type found_entities;
 	initialize<typename return_type<true, Multiple, EntityT>::type>::init(found_entities);
 
-	typename member_type_traits<EntityT, false>::return_type members = get_members<EntityT>(current_declarative_region);
+	typename semantic_entities::generic_queries::detail::member_type_traits<EntityT, false>::return_type members =
+		semantic_entities::generic_queries::detail::get_members<EntityT>(current_declarative_region)
+	;
 	for(auto i = members.begin(); i != members.end(); ++i)
 	{
-		typename member_type_traits<EntityT, false>::reference current_entity = *i;
+		typename semantic_entities::generic_queries::detail::member_type_traits<EntityT, false>::reference current_entity = *i;
 		if(EntityIdentificationPolicy::are_identifiers_equal(current_entity, identifier))
 		{
 			add_to_result(found_entities, current_entity);

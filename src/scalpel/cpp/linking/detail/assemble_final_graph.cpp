@@ -19,7 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "assemble_final_graph.hpp"
-#include <scalpel/cpp/semantic_entities/generic_functions/detail/get_enclosing_declarative_region.hpp>
+#include <scalpel/cpp/semantic_entities/generic_queries/detail/get_enclosing_declarative_region.hpp>
 #include <scalpel/utility/variant.hpp>
 #include <iostream>
 
@@ -82,7 +82,7 @@ namespace
 
 			//get the enclosing declarative region of the input entity
 			assert(current_entity->has_enclosing_declarative_region());
-			auto enclosing_declarative_region = generic_functions::detail::get_enclosing_declarative_region(*current_entity);
+			auto enclosing_declarative_region = generic_queries::detail::get_enclosing_declarative_region(*current_entity);
 
 			//find the corresponding final entity of the enclosing declarative region
 			//and

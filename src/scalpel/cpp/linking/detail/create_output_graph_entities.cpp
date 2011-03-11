@@ -19,7 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "create_output_graph_entities.hpp"
-#include <scalpel/cpp/semantic_entities/generic_functions/detail/is_defined.hpp>
+#include <scalpel/cpp/semantic_entities/generic_queries/detail/is_defined.hpp>
 
 namespace scalpel { namespace cpp { namespace linking { namespace detail
 {
@@ -438,7 +438,7 @@ namespace
 			for(auto j = group.begin(); j != group.end(); ++j)
 			{
 				const Entity* current_entity = *j;
-				if(generic_functions::detail::is_defined(*current_entity))
+				if(generic_queries::detail::is_defined(*current_entity))
 				{
 					if(defined_entity != 0 && ErrorIfMultipleDefinition)
 						throw std::runtime_error(("multiple definition of " + group_id).c_str());

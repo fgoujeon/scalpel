@@ -27,7 +27,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <scalpel/utility/unique_ptr_vector.hpp>
 #include <vector>
 
-namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail { namespace semantic_entity_analysis
+namespace scalpel { namespace cpp { namespace semantic_entities { namespace generic_queries { namespace detail
 {
 
 template<class Entity, bool Const>
@@ -145,7 +145,7 @@ get_members(semantic_entities::open_declarative_region_ptr_variant& parent)
 	return utility::apply_visitor(visitor, parent);
 }
 
-}}}}} //namespace scalpel::cpp::semantic_analysis::detail::semantic_entity_analysis
+}}}}} //namespace scalpel::cpp::semantic_entities::generic_queries::detail
 
 #endif
 

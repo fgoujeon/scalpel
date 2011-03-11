@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "get_members.hpp"
 #include <scalpel/cpp/semantic_graph.hpp>
 
-namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail { namespace semantic_entity_analysis
+namespace scalpel { namespace cpp { namespace semantic_entities { namespace generic_queries { namespace detail
 {
 
 //TODO these empty containers should be const
@@ -306,5 +306,5 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, member_variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, namespace_alias)
 
-}}}}} //namespace scalpel::cpp::semantic_analysis::detail::semantic_entity_analysis
+}}}}} //namespace scalpel::cpp::semantic_entities::generic_queries::detail
 
