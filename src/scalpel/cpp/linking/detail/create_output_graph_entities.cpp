@@ -403,6 +403,23 @@ namespace
 
 namespace
 {
+	void
+	create_global_namespace
+	(
+		const entity_groups& groups,
+		old_to_new_entity_maps& entity_maps
+	)
+	{
+		//create the global namespace
+		entity_maps.global_namespace = std::unique_ptr<namespace_>(new namespace_());
+
+		for(auto i = groups.global_namespaces.begin(); i != groups.global_namespaces.end(); ++i)
+		{
+			//add links between the old global namespaces and the new one
+			entity_maps.namespaces.insert(std::pair<const namespace_*, namespace_*>(*i, entity_maps.global_namespace.get()));
+		}
+	}
+
 	template<class Entity, bool ErrorIfMultipleDefinition = true>
 	void
 	create_entities_of_type
@@ -435,9 +452,6 @@ namespace
 			//create a new entity by copying the selected one
 			Entity* new_entity = create_entity(selected_entity);
 
-			//add it to the entity set
-			//get_entities_of_type<Entity>(output_entities).push_back(new_entity);
-
 			//add links between groups' entities and the new entity
 			for(auto j = group.begin(); j != group.end(); ++j)
 			{
@@ -454,6 +468,7 @@ create_output_graph_entities
 	old_to_new_entity_maps& entity_maps
 )
 {
+	create_global_namespace(groups, entity_maps);
 	create_entities_of_type<semantic_entities::namespace_, false>(groups.namespaces, entity_maps);
 	create_entities_of_type<semantic_entities::class_, false>(groups.classes, entity_maps);
 	create_entities_of_type<semantic_entities::member_class, false>(groups.member_classes, entity_maps);

@@ -36,6 +36,7 @@ struct entity_groups_of_type
 
 struct entity_groups
 {
+	std::vector<const semantic_entities::namespace_*> global_namespaces;
 	typename entity_groups_of_type<semantic_entities::namespace_>::type namespaces;
 	typename entity_groups_of_type<semantic_entities::class_>::type classes;
 	typename entity_groups_of_type<semantic_entities::member_class>::type member_classes;

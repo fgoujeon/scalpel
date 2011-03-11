@@ -33,7 +33,7 @@ std::unique_ptr<semantic_graph>
 assemble_final_graph
 (
 	const entity_groups& groups,
-	const old_to_new_entity_maps& entity_maps
+	old_to_new_entity_maps& entity_maps
 );
 
 }}}} //namespace scalpel::cpp::linking::detail

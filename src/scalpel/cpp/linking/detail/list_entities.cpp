@@ -110,7 +110,7 @@ list_entities(const utility::unique_ptr_vector<semantic_graph>& semantic_graphs)
 	{
 		const semantic_graph& graph = *i;
 		list_child_entities(graph, groups);
-		get_entity_groups_of_type<namespace_>(groups)[create_unique_id(graph)].push_back(&graph);
+		groups.global_namespaces.push_back(&graph);
 	}
 
 	return groups;

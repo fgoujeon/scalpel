@@ -23,6 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <map>
+#include <vector>
 
 namespace scalpel { namespace cpp { namespace linking { namespace detail
 {
@@ -37,6 +38,7 @@ struct old_to_new_entity_maps
 	const std::map<const Entity*, Entity*>&
 	get() const;
 
+	std::unique_ptr<semantic_entities::namespace_> global_namespace;
 	std::map<const semantic_entities::namespace_*, semantic_entities::namespace_*> namespaces;
 	std::map<const semantic_entities::class_*, semantic_entities::class_*> classes;
 	std::map<const semantic_entities::member_class*, semantic_entities::member_class*> member_classes;
