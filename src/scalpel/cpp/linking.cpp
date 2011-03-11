@@ -19,9 +19,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "linking.hpp"
-#include "linking/detail/merge_entities.hpp"
+#include "linking/detail/assemble_final_graph.hpp"
+#include "linking/detail/create_output_graph_entities.hpp"
 #include "linking/detail/list_entities.hpp"
-#include "linking/detail/linking_tree.hpp"
+#include "linking/detail/old_to_new_entity_maps.hpp"
+#include "linking/detail/entity_groups.hpp"
 #include <iostream>
 
 namespace scalpel { namespace cpp
@@ -32,87 +34,51 @@ namespace linking
 
 namespace
 {
-	void
-	print(const detail::linking_tree::class_& tree, const unsigned int indent_count = 0);
-}
-
-namespace
-{
-	std::string
-	indent(const unsigned int count)
-	{
-		std::string str;
-		for(unsigned int i = 0; i < count; ++i) str += ' ';
-		return str;
-	}
-
 	template<class Entity>
 	void
-	print(const std::string& title, const detail::linking_tree::entity_list<Entity>& list, const unsigned int indent_count = 0)
+	print(const std::string& title, const typename detail::entity_groups_of_type<Entity>::type& group)
 	{
-		const unsigned int entity_count = list.list.size();
+		const unsigned int entity_count = group.size();
 		if(entity_count > 0)
 		{
-			std::cout << indent(indent_count) << title << ":\n";
-			for(auto i = list.list.begin(); i != list.list.end(); ++i)
-				std::cout << indent(indent_count + 1) << '"' << i->first << "\" (x" << i->second.size() << ")\n";
+			std::cout << title << ":\n";
+			for(auto i = group.begin(); i != group.end(); ++i)
+				std::cout << '"' << i->first << "\" (x" << i->second.size() << ")\n";
 		}
 	}
 
 	void
-	print(const detail::linking_tree::namespace_& tree, const unsigned int indent_count = 0)
+	print(const detail::entity_groups& groups)
 	{
-		for(auto i = tree.namespaces.begin(); i != tree.namespaces.end(); ++i)
-		{
-			const std::string& name = i->first;
-			const detail::linking_tree::namespace_& subtree = i->second;
-			std::cout << indent(indent_count) << "namespace " << name << ":\n";
-			print(subtree, indent_count + 1);
-		}
-
-		for(auto i = tree.classes.begin(); i != tree.classes.end(); ++i)
-		{
-			const std::string& name = i->first;
-			const detail::linking_tree::class_& subtree = i->second;
-			std::cout << indent(indent_count) << "class " << name << ":\n";
-			print(subtree, indent_count + 1);
-		}
-
-		print("enums", tree.enums, indent_count);
-		print("typedefs", tree.typedefs, indent_count);
-		print("operator_functions", tree.operator_functions, indent_count);
-		print("simple_functions", tree.simple_functions, indent_count);
-		print("variables", tree.variables, indent_count);
-	}
-
-	void
-	print(const detail::linking_tree::class_& tree, const unsigned int indent_count)
-	{
-		for(auto i = tree.classes.begin(); i != tree.classes.end(); ++i)
-		{
-			const std::string& name = i->first;
-			const detail::linking_tree::class_& subtree = i->second;
-			std::cout << indent(indent_count) << "class " << name << ":\n";
-			print(subtree, indent_count + 1);
-		}
-
-		print("enums", tree.enums, indent_count);
-		print("typedefs", tree.typedefs, indent_count);
-		print("constructors", tree.constructors, indent_count);
-		print("destructors", tree.destructors, indent_count);
-		print("operator_member_functions", tree.operator_member_functions, indent_count);
-		print("conversion_functions", tree.conversion_functions, indent_count);
-		print("simple_member_functions", tree.simple_member_functions, indent_count);
-		print("variables", tree.variables, indent_count);
+		print<semantic_entities::namespace_>("namespace_", groups.namespaces);
+		print<semantic_entities::class_>("class_", groups.classes);
+		print<semantic_entities::member_class>("member_class", groups.member_classes);
+		print<semantic_entities::enum_>("enum_", groups.enums);
+		print<semantic_entities::member_enum>("member_enum", groups.member_enums);
+		print<semantic_entities::typedef_>("typedef_", groups.typedefs);
+		print<semantic_entities::member_typedef>("member_typedef", groups.member_typedefs);
+		print<semantic_entities::constructor>("constructor", groups.constructors);
+		print<semantic_entities::destructor>("destructor", groups.destructors);
+		print<semantic_entities::operator_member_function>("operator_member_function", groups.operator_member_functions);
+		print<semantic_entities::conversion_function>("conversion_function", groups.conversion_functions);
+		print<semantic_entities::simple_member_function>("simple_member_function", groups.simple_member_functions);
+		print<semantic_entities::operator_function>("operator_function", groups.operator_functions);
+		print<semantic_entities::simple_function>("simple_function", groups.simple_functions);
+		print<semantic_entities::variable>("variable", groups.variables);
+		print<semantic_entities::member_variable>("member_variable", groups.member_variables);
 	}
 }
 
 std::unique_ptr<semantic_graph>
 link(const utility::unique_ptr_vector<semantic_graph>& semantic_graphs)
 {
-	detail::linking_tree::namespace_ entity_tree = detail::list_entities(semantic_graphs);
-	print(entity_tree);
-	return detail::merge_entities(entity_tree);
+	detail::entity_groups groups = detail::list_entities(semantic_graphs);
+	print(groups);
+
+	detail::old_to_new_entity_maps old_to_new_entity_maps;
+	detail::create_output_graph_entities(groups, old_to_new_entity_maps);
+
+	return detail::assemble_final_graph(groups, old_to_new_entity_maps);
 }
 
 } //namespace semantic_analysis

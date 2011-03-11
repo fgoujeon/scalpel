@@ -361,6 +361,12 @@ namespace
 }
 
 std::string
+create_unique_id(const semantic_entities::namespace_& entity)
+{
+	return entity.name();
+}
+
+std::string
 create_unique_id(const semantic_entities::class_& entity)
 {
 	return entity.name();

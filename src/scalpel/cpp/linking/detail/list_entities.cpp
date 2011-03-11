@@ -29,95 +29,65 @@ using namespace semantic_entities;
 
 namespace
 {
-	template<class Class, class ParentEntityTree>
+	template<class Class>
 	void
-	list_class_child_entities(const Class& parent_entity, ParentEntityTree& tree);
+	list_child_entities(const Class& parent_entity, entity_groups& groups);
 
-	template<class ChildEntity, class ParentEntity, class ParentEntityTree>
+	template<class ChildEntity, class ParentEntity>
 	void
-	list_child_entities_of_type(const ParentEntity& parent_entity, ParentEntityTree& tree);
+	list_child_entities_of_type(const ParentEntity& parent_entity, entity_groups& groups);
 }
 
 namespace
 {
 	void
-	list_child_entities(const namespace_& parent_entity, linking_tree::namespace_& tree)
+	list_child_entities(const namespace_& parent_entity, entity_groups& groups)
 	{
-		//create and fill namespace subtrees
 		const utility::unique_ptr_vector<namespace_>& child_namespaces = parent_entity.namespaces();
 		for(auto i = child_namespaces.begin(); i != child_namespaces.end(); ++i)
 		{
-			const namespace_& child_namespace = *i;
-			const std::string& namespace_name = child_namespace.name();
-
-			auto it = tree.namespaces.find(namespace_name);
-			if(it == tree.namespaces.end())
-			{
-				it = tree.namespaces.insert(std::pair<std::string, linking_tree::namespace_>(namespace_name, linking_tree::namespace_())).first;
-			}
-
-			list_child_entities(child_namespace, it->second);
+			list_child_entities(*i, groups);
 		}
 
-		//create and fill class subtrees
 		const utility::unique_ptr_vector<class_>& child_classes = parent_entity.classes();
 		for(auto i = child_classes.begin(); i != child_classes.end(); ++i)
 		{
-			const class_& child_class = *i;
-			const std::string& class_name = child_class.name();
-
-			auto it = tree.classes.find(class_name);
-			if(it == tree.classes.end())
-			{
-				it = tree.classes.insert(std::pair<std::string, linking_tree::class_>(class_name, linking_tree::class_())).first;
-			}
-
-			list_class_child_entities(child_class, it->second);
+			list_child_entities(*i, groups);
 		}
 
-		//fill current tree
-		list_child_entities_of_type<class_>(parent_entity, tree);
-		list_child_entities_of_type<enum_>(parent_entity, tree);
-		list_child_entities_of_type<typedef_>(parent_entity, tree);
-		list_child_entities_of_type<operator_function>(parent_entity, tree);
-		list_child_entities_of_type<simple_function>(parent_entity, tree);
-		list_child_entities_of_type<variable>(parent_entity, tree);
+		list_child_entities_of_type<namespace_>(parent_entity, groups);
+		list_child_entities_of_type<class_>(parent_entity, groups);
+		list_child_entities_of_type<enum_>(parent_entity, groups);
+		list_child_entities_of_type<typedef_>(parent_entity, groups);
+		list_child_entities_of_type<operator_function>(parent_entity, groups);
+		list_child_entities_of_type<simple_function>(parent_entity, groups);
+		list_child_entities_of_type<variable>(parent_entity, groups);
 	}
 
-	template<class Class, class ParentEntityTree>
+	template<class Class>
 	void
-	list_class_child_entities(const Class& parent_entity, ParentEntityTree& tree)
+	list_child_entities(const Class& parent_entity, entity_groups& groups)
 	{
-		//create and fill class subtrees
 		const utility::unique_ptr_vector<member_class>& child_classes = parent_entity.nested_classes();
 		for(auto i = child_classes.begin(); i != child_classes.end(); ++i)
 		{
-			const member_class& child_class = *i;
-			const std::string& class_name = child_class.name();
-
-			auto it = tree.classes.find(class_name);
-			if(it == tree.classes.end())
-			{
-				it = tree.classes.insert(std::pair<std::string, linking_tree::class_>(class_name, linking_tree::class_())).first;
-			}
-
-			list_class_child_entities(child_class, it->second);
+			list_child_entities(*i, groups);
 		}
 
-		//fill current tree
-		list_child_entities_of_type<member_enum>(parent_entity, tree);
-		list_child_entities_of_type<member_typedef>(parent_entity, tree);
-		list_child_entities_of_type<constructor>(parent_entity, tree);
-		list_child_entities_of_type<destructor>(parent_entity, tree);
-		list_child_entities_of_type<operator_member_function>(parent_entity, tree);
-		list_child_entities_of_type<conversion_function>(parent_entity, tree);
-		list_child_entities_of_type<simple_member_function>(parent_entity, tree);
-		list_child_entities_of_type<member_variable>(parent_entity, tree);
+		list_child_entities_of_type<member_class>(parent_entity, groups);
+		list_child_entities_of_type<member_enum>(parent_entity, groups);
+		list_child_entities_of_type<member_typedef>(parent_entity, groups);
+		list_child_entities_of_type<constructor>(parent_entity, groups);
+		list_child_entities_of_type<destructor>(parent_entity, groups);
+		list_child_entities_of_type<operator_member_function>(parent_entity, groups);
+		list_child_entities_of_type<conversion_function>(parent_entity, groups);
+		list_child_entities_of_type<simple_member_function>(parent_entity, groups);
+		list_child_entities_of_type<member_variable>(parent_entity, groups);
 	}
 
-	template<class ChildEntity, class ParentEntity, class ParentEntityTree>
+	template<class ChildEntity, class ParentEntity>
 	void
-	list_child_entities_of_type(const ParentEntity& parent_entity, ParentEntityTree& tree)
+	list_child_entities_of_type(const ParentEntity& parent_entity, entity_groups& groups)
 	{
 		typename semantic_analysis::detail::semantic_entity_analysis::member_type_traits<ChildEntity, true>::return_type entities =
 			semantic_analysis::detail::semantic_entity_analysis::get_members<ChildEntity>(parent_entity)
@@ -125,24 +95,25 @@ namespace
 		for(auto i = entities.begin(); i != entities.end(); ++i)
 		{
 			const ChildEntity& entity = *i;
-			linking_tree::get_entity_list<ChildEntity>(tree).list[create_unique_id(entity)].push_back(&entity);
+			get_entity_groups_of_type<ChildEntity>(groups)[create_unique_id(entity)].push_back(&entity);
 		}
 	}
 }
 
-linking_tree::namespace_
+entity_groups
 list_entities(const utility::unique_ptr_vector<semantic_graph>& semantic_graphs)
 {
-	linking_tree::namespace_ tree;
+	entity_groups groups;
 
 	//for each semantic graph...
 	for(auto i = semantic_graphs.begin(); i != semantic_graphs.end(); ++i)
 	{
 		const semantic_graph& graph = *i;
-		list_child_entities(graph, tree);
+		list_child_entities(graph, groups);
+		get_entity_groups_of_type<namespace_>(groups)[create_unique_id(graph)].push_back(&graph);
 	}
 
-	return tree;
+	return groups;
 }
 
 }}}} //namespace scalpel::cpp::linking::detail

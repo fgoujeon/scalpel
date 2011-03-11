@@ -38,6 +38,9 @@ namespace scalpel { namespace cpp { namespace linking { namespace detail
 //name mangling performed by conventional compilers.
 
 std::string
+create_unique_id(const semantic_entities::namespace_& entity);
+
+std::string
 create_unique_id(const semantic_entities::class_& entity);
 
 std::string
