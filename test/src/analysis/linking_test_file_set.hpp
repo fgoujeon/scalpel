@@ -18,14 +18,22 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef GET_RECURSIVE_FILE_LIST_HPP
-#define GET_RECURSIVE_FILE_LIST_HPP
+#ifndef ANALYSIS_LINKING_TEST_FILE_SET_HPP
+#define ANALYSIS_LINKING_TEST_FILE_SET_HPP
 
 #include <string>
 #include <vector>
 
-std::vector<std::string>
-get_recursive_file_list(const std::string& path_str, const std::string& extension);
+namespace analysis
+{
+
+struct linking_test_file_set
+{
+	std::vector<std::string> cpp_files;
+	std::string output_file;
+};
+
+} //namespace analysis
 
 #endif
 

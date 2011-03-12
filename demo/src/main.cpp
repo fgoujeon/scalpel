@@ -158,7 +158,8 @@ main(int argc, char** argv)
 		std::unique_ptr<scalpel::cpp::semantic_graph> linked_graph = scalpel::cpp::linking::link(semantic_graphs);
 
 		//print linked semantic graph
-		std::cout << "Linked semantic graph:\n";
+		if(print_syntax_tree || print_semantic_graph)
+			std::cout << "Linked semantic graph:\n";
 		cpp2xml::serialize_semantic_graph(*linked_graph, std::cout);
 	}
 

@@ -47,7 +47,7 @@ include_directories(
 include(FindBoost)
 find_package(
 	Boost 1.36.0
-	REQUIRED program_options
+	REQUIRED program_options regex
 )
 link_directories(${Boost_LIBRARY_DIRS})
 include_directories(${Boost_INCLUDE_DIRS})
@@ -59,3 +59,4 @@ target_link_libraries(
 	cpp2xml
 	${Boost_LIBRARIES}
 )
+

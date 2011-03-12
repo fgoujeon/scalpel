@@ -1,0 +1,10 @@
+<namespace id="n0">
+ <namespace name="m" id="n1">
+ </namespace>
+ <namespace name="n" id="n2">
+  <namespace name="n2" id="n3">
+  </namespace>
+  <namespace name="n3" id="n4">
+  </namespace>
+ </namespace>
+</namespace>

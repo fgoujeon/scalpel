@@ -20,6 +20,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "single_file_tester.hpp"
 #include <cpp2xml/semantic_graph.hpp>
+#include <scalpel/cpp/linking.hpp>
 #include <scalpel/cpp/semantic_analysis.hpp>
 #include <scalpel/cpp/syntax_nodes/utility/value_getter.hpp>
 #include <boost/test/unit_test.hpp>
@@ -116,7 +117,7 @@ single_file_tester::test_semantic_analysis(const std::string& filename)
 	scalpel::cpp::syntax_tree syntax_tree = syntax_analyzer_(preprocessed_code);
 
 	//semantic analysis
-	std::shared_ptr<scalpel::cpp::semantic_graph> semantic_graph;
+	std::unique_ptr<scalpel::cpp::semantic_graph> semantic_graph;
 	try
 	{
 		semantic_graph = scalpel::cpp::semantic_analysis::analyze(syntax_tree);
@@ -137,6 +138,74 @@ single_file_tester::test_semantic_analysis(const std::string& filename)
 	if(!expected_output_file)
 	{
 		throw std::runtime_error("There's no file named " + expected_output_filename + ".");
+	}
+
+	//read the result file
+	std::ostringstream expected_output_buffer;
+	expected_output_buffer << expected_output_file.rdbuf();
+
+	//close the result file
+	expected_output_file.close();
+
+	//compare the results
+	BOOST_CHECK_EQUAL(semantic_graph_xml.str(), expected_output_buffer.str());
+}
+
+void
+single_file_tester::test_linking(const linking_test_file_set& file_set)
+{
+	scalpel::utility::unique_ptr_vector<scalpel::cpp::semantic_graph> semantic_graphs;
+	for(auto i = file_set.cpp_files.begin(); i != file_set.cpp_files.end(); ++i) //for each input file
+	{
+		const std::string& filename = *i;
+
+		//open file
+		std::ifstream file(filename.c_str());
+		if(!file)
+		{
+			throw std::runtime_error("There's no file named " + filename + ".");
+		}
+
+		//read file
+		std::ostringstream buffer;
+		buffer << file.rdbuf();
+
+		//close file
+		file.close();
+
+		//preprocessing
+		std::string preprocessed_code = preprocessor_(buffer.str(), include_paths_, macro_definitions_);
+
+		//syntax analysis
+		scalpel::cpp::syntax_tree syntax_tree = syntax_analyzer_(preprocessed_code);
+
+		//semantic analysis
+		std::unique_ptr<scalpel::cpp::semantic_graph> semantic_graph;
+		try
+		{
+			semantic_graph = scalpel::cpp::semantic_analysis::analyze(syntax_tree);
+		}
+		catch(...)
+		{
+			std::cout << "Exception during the semantic analysis of '" << filename << "':\n";
+			throw;
+		}
+
+		semantic_graphs.push_back(std::move(semantic_graph));
+	}
+
+	//linking
+	std::unique_ptr<scalpel::cpp::semantic_graph> final_semantic_graph = scalpel::cpp::linking::link(semantic_graphs);
+
+	//serialize the semantic graph
+	std::ostringstream semantic_graph_xml;
+	cpp2xml::serialize_semantic_graph(*final_semantic_graph, semantic_graph_xml);
+
+	//open the result file
+	std::ifstream expected_output_file(file_set.output_file.c_str());
+	if(!expected_output_file)
+	{
+		throw std::runtime_error("There's no file named " + file_set.output_file + ".");
 	}
 
 	//read the result file

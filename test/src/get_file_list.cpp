@@ -18,12 +18,12 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "get_recursive_file_list.hpp"
-#include "boost/filesystem/operations.hpp"
-#include "boost/filesystem/path.hpp"
+#include "get_file_list.hpp"
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/path.hpp>
 
 std::vector<std::string>
-get_recursive_file_list(const std::string& path_str, const std::string& extension)
+get_file_list(const std::string& path_str, const boost::regex& regex, const bool recursive)
 {
 	namespace fs = boost::filesystem;
 
@@ -39,10 +39,10 @@ get_recursive_file_list(const std::string& path_str, const std::string& extensio
 		++dir_itr
 	)
 	{
-		if(fs::is_directory(dir_itr->status())) //if the item is a directory...
+		if(fs::is_directory(dir_itr->status()) && recursive) //if the item is a directory...
 		{
 			//recursively get its files...
-			std::vector<std::string> subdir_filenames = get_recursive_file_list(dir_itr->path().string(), extension);
+			std::vector<std::string> subdir_filenames = get_file_list(dir_itr->path().string(), regex);
 
 			//... and append them to the list
 			std::insert_iterator<std::vector<std::string>> filenames_ii(filenames, filenames.end());
@@ -55,7 +55,7 @@ get_recursive_file_list(const std::string& path_str, const std::string& extensio
 		}
 		else if(fs::is_regular_file(dir_itr->status())) //if the item is a file...
 		{
-			if(dir_itr->path().extension() == extension) //if the file has the correct extension...
+			if(boost::regex_match(dir_itr->path().string(), regex)) //if the file's name matches the regex...
 			{
 				//append it to the list
 				filenames.push_back(dir_itr->path().string());

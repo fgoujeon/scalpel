@@ -21,7 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define BOOST_TEST_ALTERNATIVE_INIT_API //don't use legacy API
 
 #include "analysis/single_file_tester.hpp"
-#include "get_recursive_file_list.hpp"
+#include "analysis/linking_test_file_set.hpp"
+#include "get_file_list.hpp"
 #include <boost/program_options.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/parameterized_test.hpp>
@@ -84,7 +85,7 @@ init_unit_test()
 	//Syntax analysis test suite
 	{
 		//build test file list
-		std::vector<std::string> syntax_analysis_test_files = get_recursive_file_list("test/testfiles/syntax_analysis", ".cpp");
+		std::vector<std::string> syntax_analysis_test_files = get_file_list("test/testfiles/syntax_analysis", boost::regex(".*\\.cpp"), true);
 
 		//add the syntax analysis test cases (one per test file) to the master test suite
 		boost::callback1<std::string> tm = boost::bind(&analysis::single_file_tester::parse_file, &analysis_single_file_tester, _1);
@@ -94,17 +95,56 @@ init_unit_test()
 	//Semantic analysis test suite
 	{
 		//build test file list
-		std::vector<std::string> semantic_analysis_test_files = get_recursive_file_list("test/testfiles/semantic_analysis", ".cpp");
+		std::vector<std::string> semantic_analysis_test_files = get_file_list("test/testfiles/semantic_analysis", boost::regex(".*\\.cpp"), true);
 
-		//add the syntax analysis test cases (one per test file) to the master test suite
+		//add the semantic analysis test cases (one per test file) to the master test suite
 		boost::callback1<std::string> tm = boost::bind(&analysis::single_file_tester::test_semantic_analysis, &analysis_single_file_tester, _1);
 		framework::master_test_suite().add(BOOST_PARAM_TEST_CASE(tm, semantic_analysis_test_files.begin(), semantic_analysis_test_files.end()));
 	}
 
+	//Linking test suite
+	{
+		//
+		//build test file list
+		//
+
+		std::vector<analysis::linking_test_file_set> test_files;
+
+		//find all output files
+		std::vector<std::string> output_files = get_file_list("test/testfiles/linking", boost::regex(".*\\.out"));
+
+		for(auto i = output_files.begin(); i != output_files.end(); ++i) //for each output file...
+		{
+			const std::string output_file_name = *i;
+			const std::string base_file_name = output_file_name.substr(0, output_file_name.length() - 4);
+
+			//find the corresponding CPP input files
+			std::vector<std::string> input_file_names = get_file_list("test/testfiles/linking", boost::regex(base_file_name + "\\..*\\.cpp"));
+
+			//create a file set and add it to the list
+			test_files.push_back
+			(
+				analysis::linking_test_file_set
+				{
+					input_file_names,
+					output_file_name
+				}
+			);
+		}
+
+
+		//
+		//create the linking test cases (one per file set) and add them to the master test suite
+		//
+
+		boost::callback1<analysis::linking_test_file_set> tm = boost::bind(&analysis::single_file_tester::test_linking, &analysis_single_file_tester, _1);
+		framework::master_test_suite().add(BOOST_PARAM_TEST_CASE(tm, test_files.begin(), test_files.end()));
+	}
+
 	//Emit warning for skipped test files
 	{
-		std::vector<std::string> syntax_analysis_skipped_test_files = get_recursive_file_list("test/testfiles/syntax_analysis", ".skip");
-		std::vector<std::string> semantic_analysis_skipped_test_files = get_recursive_file_list("test/testfiles/semantic_analysis", ".skip");
+		std::vector<std::string> syntax_analysis_skipped_test_files = get_file_list("test/testfiles/syntax_analysis", boost::regex(".*\\.skip"), true);
+		std::vector<std::string> semantic_analysis_skipped_test_files = get_file_list("test/testfiles/semantic_analysis", boost::regex(".*\\.skip"), true);
 		if(!syntax_analysis_skipped_test_files.empty() || !semantic_analysis_skipped_test_files.empty())
 		{
 			std::cout << "Warning: the following test files will be skipped, because they're supposed to highlight known bugs. ";

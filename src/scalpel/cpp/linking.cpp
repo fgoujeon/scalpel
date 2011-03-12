@@ -73,11 +73,9 @@ std::unique_ptr<semantic_graph>
 link(const utility::unique_ptr_vector<semantic_graph>& semantic_graphs)
 {
 	detail::entity_groups groups = detail::list_entities(semantic_graphs);
-	print(groups);
-
+	//print(groups);
 	detail::old_to_new_entity_maps old_to_new_entity_maps;
 	detail::create_output_graph_entities(groups, old_to_new_entity_maps);
-
 	return detail::assemble_final_graph(groups, old_to_new_entity_maps);
 }
 
