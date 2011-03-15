@@ -1,0 +1,17 @@
+<namespace id="n0">
+ <simple_function name="f">
+  <return_type>
+   <fundamental_type type="void"/>
+  </return_type>
+ </simple_function>
+ <simple_function name="g">
+  <return_type>
+   <fundamental_type type="void"/>
+  </return_type>
+ </simple_function>
+ <simple_function name="h" defined="false">
+  <return_type>
+   <fundamental_type type="void"/>
+  </return_type>
+ </simple_function>
+</namespace>

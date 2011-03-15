@@ -18,20 +18,20 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_LINKING_DETAIL_CREATE_OUTPUT_GRAPH_ENTITIES_HPP
-#define SCALPEL_CPP_LINKING_DETAIL_CREATE_OUTPUT_GRAPH_ENTITIES_HPP
+#ifndef SCALPEL_CPP_LINKING_DETAIL_CREATE_FINAL_GRAPH_ENTITIES_HPP
+#define SCALPEL_CPP_LINKING_DETAIL_CREATE_FINAL_GRAPH_ENTITIES_HPP
 
-#include "old_to_new_entity_maps.hpp"
+#include "final_graph_entities.hpp"
 #include "entity_groups.hpp"
 
 namespace scalpel { namespace cpp { namespace linking { namespace detail
 {
 
 void
-create_output_graph_entities
+create_final_graph_entities
 (
 	const entity_groups& groups,
-	old_to_new_entity_maps& entity_maps
+	final_graph_entities& final_entities
 );
 
 }}}} //namespace scalpel::cpp::linking::detail

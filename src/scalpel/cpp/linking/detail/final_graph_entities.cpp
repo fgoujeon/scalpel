@@ -18,19 +18,19 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "old_to_new_entity_maps.hpp"
+#include "final_graph_entities.hpp"
 
 #define GENERATE_GET_ENTITIES_SPECIALIZATION(ENTITY_TYPE, VARIABLE) \
 template<> \
 std::map<const semantic_entities::ENTITY_TYPE*, semantic_entities::ENTITY_TYPE*>& \
-old_to_new_entity_maps::get<semantic_entities::ENTITY_TYPE>() \
+final_graph_entities::get_map_of_type<semantic_entities::ENTITY_TYPE>() \
 { \
 	return VARIABLE; \
 } \
  \
 template<> \
 const std::map<const semantic_entities::ENTITY_TYPE*, semantic_entities::ENTITY_TYPE*>& \
-old_to_new_entity_maps::get<semantic_entities::ENTITY_TYPE>() const \
+final_graph_entities::get_map_of_type<semantic_entities::ENTITY_TYPE>() const \
 { \
 	return VARIABLE; \
 }

@@ -18,8 +18,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_LINKING_DETAIL_OLD_TO_NEW_ENTITY_MAPS_HPP
-#define SCALPEL_CPP_LINKING_DETAIL_OLD_TO_NEW_ENTITY_MAPS_HPP
+#ifndef SCALPEL_CPP_LINKING_DETAIL_FINAL_GRAPH_ENTITIES_HPP
+#define SCALPEL_CPP_LINKING_DETAIL_FINAL_GRAPH_ENTITIES_HPP
 
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <map>
@@ -28,15 +28,15 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace linking { namespace detail
 {
 
-struct old_to_new_entity_maps
+struct final_graph_entities
 {
 	template<class Entity>
 	std::map<const Entity*, Entity*>&
-	get();
+	get_map_of_type();
 
 	template<class Entity>
 	const std::map<const Entity*, Entity*>&
-	get() const;
+	get_map_of_type() const;
 
 	std::unique_ptr<semantic_entities::namespace_> global_namespace;
 	std::map<const semantic_entities::namespace_*, semantic_entities::namespace_*> namespaces;

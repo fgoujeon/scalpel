@@ -30,12 +30,12 @@ using namespace semantic_entities;
 namespace
 {
 	//add the given entity (final_entity) to the correct declarative region of
-	//the final graph (found in entity_maps, using enclosing_declarative_region)
+	//the final graph (found in final_entities, using enclosing_declarative_region)
 	template<class Entity, class EnclosingDeclarativeRegion>
 	void
 	add_entity_to_final_graph
 	(
-		old_to_new_entity_maps& entity_maps,
+		final_graph_entities& final_entities,
 		Entity* final_entity,
 		const EnclosingDeclarativeRegion& enclosing_declarative_region
 	);
@@ -49,10 +49,10 @@ namespace
 		public:
 			add_entity_to_final_graph_visitor
 			(
-				old_to_new_entity_maps& entity_maps,
+				final_graph_entities& final_entities,
 				Entity* final_entity
 			):
-				entity_maps_(entity_maps),
+				entity_maps_(final_entities),
 				final_entity_(final_entity)
 			{
 			}
@@ -70,7 +70,7 @@ namespace
 			}
 
 		private:
-			old_to_new_entity_maps& entity_maps_;
+			final_graph_entities& entity_maps_;
 			Entity* final_entity_;
 	};
 
@@ -78,14 +78,14 @@ namespace
 	void
 	add_entity_to_final_graph
 	(
-		old_to_new_entity_maps& entity_maps,
+		final_graph_entities& final_entities,
 		Entity* final_entity,
 		const EnclosingDeclarativeRegion& enclosing_declarative_region
 	)
 	{
 		//find the corresponding final entity of the enclosing declarative region
-		auto it = entity_maps.get<EnclosingDeclarativeRegion>().find(&enclosing_declarative_region);
-		assert(it != entity_maps.get<EnclosingDeclarativeRegion>().end());
+		auto it = final_entities.get_map_of_type<EnclosingDeclarativeRegion>().find(&enclosing_declarative_region);
+		assert(it != final_entities.get_map_of_type<EnclosingDeclarativeRegion>().end());
 		EnclosingDeclarativeRegion* final_enclosing_declarative_region = it->second;
 
 		//add the final entity to the final declarative region entity
@@ -96,12 +96,12 @@ namespace
 	void
 	add_entity_to_final_graph
 	(
-		old_to_new_entity_maps& entity_maps,
+		final_graph_entities& final_entities,
 		Entity* final_entity,
 		const utility::variant<DeclarativeRegions...>& enclosing_declarative_region
 	)
 	{
-		add_entity_to_final_graph_visitor<Entity> visitor(entity_maps, final_entity);
+		add_entity_to_final_graph_visitor<Entity> visitor(final_entities, final_entity);
 		apply_visitor(visitor, enclosing_declarative_region);
 	}
 
@@ -110,7 +110,7 @@ namespace
 	assemble_entities_of_type
 	(
 		const entity_groups& groups,
-		old_to_new_entity_maps& entity_maps
+		final_graph_entities& final_entities
 	)
 	{
 		for(auto i = get_entity_groups_of_type<Entity>(groups).begin(); i != get_entity_groups_of_type<Entity>(groups).end(); ++i)
@@ -119,15 +119,15 @@ namespace
 			const Entity* current_entity = i->second.front();
 
 			//find the corresponding final entity
-			auto it = entity_maps.get<Entity>().find(current_entity);
-			assert(it != entity_maps.get<Entity>().end());
+			auto it = final_entities.get_map_of_type<Entity>().find(current_entity);
+			assert(it != final_entities.get_map_of_type<Entity>().end());
 			Entity* final_entity = it->second;
 
 			//add the final entity to the final graph
 			assert(current_entity->has_enclosing_declarative_region());
 			add_entity_to_final_graph
 			(
-				entity_maps,
+				final_entities,
 				final_entity,
 				current_entity->enclosing_declarative_region()
 			);
@@ -139,27 +139,27 @@ std::unique_ptr<semantic_graph>
 assemble_final_graph
 (
 	const entity_groups& groups,
-	old_to_new_entity_maps& entity_maps
+	final_graph_entities& final_entities
 )
 {
-	assemble_entities_of_type<namespace_>(groups, entity_maps);
-	assemble_entities_of_type<class_>(groups, entity_maps);
-	assemble_entities_of_type<member_class>(groups, entity_maps);
-	assemble_entities_of_type<enum_>(groups, entity_maps);
-	assemble_entities_of_type<member_enum>(groups, entity_maps);
-	assemble_entities_of_type<typedef_>(groups, entity_maps);
-	assemble_entities_of_type<member_typedef>(groups, entity_maps);
-	assemble_entities_of_type<constructor>(groups, entity_maps);
-	assemble_entities_of_type<destructor>(groups, entity_maps);
-	assemble_entities_of_type<operator_member_function>(groups, entity_maps);
-	assemble_entities_of_type<conversion_function>(groups, entity_maps);
-	assemble_entities_of_type<simple_member_function>(groups, entity_maps);
-	assemble_entities_of_type<operator_function>(groups, entity_maps);
-	assemble_entities_of_type<simple_function>(groups, entity_maps);
-	assemble_entities_of_type<variable>(groups, entity_maps);
-	assemble_entities_of_type<member_variable>(groups, entity_maps);
+	assemble_entities_of_type<namespace_>(groups, final_entities);
+	assemble_entities_of_type<class_>(groups, final_entities);
+	assemble_entities_of_type<member_class>(groups, final_entities);
+	assemble_entities_of_type<enum_>(groups, final_entities);
+	assemble_entities_of_type<member_enum>(groups, final_entities);
+	assemble_entities_of_type<typedef_>(groups, final_entities);
+	assemble_entities_of_type<member_typedef>(groups, final_entities);
+	assemble_entities_of_type<constructor>(groups, final_entities);
+	assemble_entities_of_type<destructor>(groups, final_entities);
+	assemble_entities_of_type<operator_member_function>(groups, final_entities);
+	assemble_entities_of_type<conversion_function>(groups, final_entities);
+	assemble_entities_of_type<simple_member_function>(groups, final_entities);
+	assemble_entities_of_type<operator_function>(groups, final_entities);
+	assemble_entities_of_type<simple_function>(groups, final_entities);
+	assemble_entities_of_type<variable>(groups, final_entities);
+	assemble_entities_of_type<member_variable>(groups, final_entities);
 
-	return std::move(entity_maps.global_namespace);
+	return std::move(final_entities.global_namespace);
 }
 
 }}}} //namespace scalpel::cpp::linking::detail

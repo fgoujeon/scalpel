@@ -20,9 +20,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "linking.hpp"
 #include "linking/detail/assemble_final_graph.hpp"
-#include "linking/detail/create_output_graph_entities.hpp"
+#include "linking/detail/create_final_graph_entities.hpp"
 #include "linking/detail/list_entities.hpp"
-#include "linking/detail/old_to_new_entity_maps.hpp"
+#include "linking/detail/final_graph_entities.hpp"
 #include "linking/detail/entity_groups.hpp"
 #include <iostream>
 
@@ -74,9 +74,9 @@ link(const utility::unique_ptr_vector<semantic_graph>& semantic_graphs)
 {
 	detail::entity_groups groups = detail::list_entities(semantic_graphs);
 	//print(groups);
-	detail::old_to_new_entity_maps old_to_new_entity_maps;
-	detail::create_output_graph_entities(groups, old_to_new_entity_maps);
-	return detail::assemble_final_graph(groups, old_to_new_entity_maps);
+	detail::final_graph_entities final_graph_entities;
+	detail::create_final_graph_entities(groups, final_graph_entities);
+	return detail::assemble_final_graph(groups, final_graph_entities);
 }
 
 } //namespace semantic_analysis
