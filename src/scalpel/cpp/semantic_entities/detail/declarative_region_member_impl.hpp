@@ -136,6 +136,9 @@ private: \
 	typedef IMPL declarative_region_member_impl_t; \
  \
 public: \
+	typedef declarative_region_member_impl_t::declarative_region_t enclosing_declarative_region_t; \
+	typedef declarative_region_member_impl_t::const_declarative_region_t const_enclosing_declarative_region_t; \
+ \
 	bool \
 	has_enclosing_declarative_region() const \
 	{ \

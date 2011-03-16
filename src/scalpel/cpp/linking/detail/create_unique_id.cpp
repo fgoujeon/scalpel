@@ -25,6 +25,10 @@ namespace scalpel { namespace cpp { namespace linking { namespace detail
 
 using namespace semantic_entities;
 
+template<class... Entities>
+std::string
+create_unique_id(const utility::variant<Entities...>& entity);
+
 namespace
 {
 	std::string
@@ -32,24 +36,6 @@ namespace
 
 	std::string
 	to_string(const std::vector<type_variant>& parameter_types);
-
-	std::string
-	create_global_unique_id(const declarative_region_ptr_variant& region);
-
-	std::string
-	create_global_unique_id(const typename utility::ptr_variant<class_, member_class>::type& region);
-
-	std::string
-	create_global_unique_id(const namespace_& entity);
-
-	std::string
-	create_global_unique_id(const class_& entity);
-
-	std::string
-	create_global_unique_id(const member_class& entity);
-
-	std::string
-	create_global_unique_id(const enum_& entity);
 }
 
 namespace
@@ -215,19 +201,19 @@ namespace
 	std::string
 	to_string(const pointer_to_member& entity)
 	{
-		return to_string(entity.qualified_type()) + " " + create_global_unique_id(entity.parent_class()) + "::*";
+		return to_string(entity.qualified_type()) + " " + create_unique_id(entity.parent_class()) + "::*";
 	}
 
 	std::string
 	to_string(const enum_* entity)
 	{
-		return create_global_unique_id(*entity);
+		return create_unique_id(*entity);
 	}
 
 	std::string
 	to_string(const class_* entity)
 	{
-		return create_global_unique_id(*entity);
+		return create_unique_id(*entity);
 	}
 
 	std::string
@@ -292,188 +278,158 @@ namespace
 
 
 
+	template<class Entity>
+	std::string
+	create_enclosing_declarative_region_unique_id(const Entity& entity)
+	{
+		typedef typename Entity::const_enclosing_declarative_region_t enclosing_declarative_region_t;
+
+		if(entity.has_enclosing_declarative_region())
+		{
+			const enclosing_declarative_region_t& enclosing_declarative_region =
+				entity.enclosing_declarative_region()
+			;
+
+			//if(enclosing_declarative_region.has_enclosing_declarative_region()) //global namespace?
+			{
+				return create_unique_id(enclosing_declarative_region) + "::";
+			}
+		}
+
+		return "";
+	}
+}
+
+
+
+namespace
+{
 	struct: utility::static_visitor<std::string>
 	{
 		template<typename T>
 		std::string
-		operator()(const T*)
+		operator()(const T& t)
 		{
-			assert(false);
-			return "";
+			return create_unique_id(t);
 		}
 
+		template<typename T>
 		std::string
-		operator()(const namespace_* entity)
+		operator()(const T* t)
 		{
-			return create_global_unique_id(*entity);
+			return create_unique_id(*t);
 		}
 
+		template<typename T>
 		std::string
-		operator()(const class_* entity)
+		operator()(T* const& t)
 		{
-			return create_global_unique_id(*entity);
+			return create_unique_id(*t);
 		}
+	} create_unique_id_visitor;
+}
 
-		std::string
-		operator()(const member_class* entity)
-		{
-			return create_global_unique_id(*entity);
-		}
-	} create_global_unique_id_visitor;
-
-	std::string
-	create_global_unique_id(const declarative_region_ptr_variant& region)
-	{
-		return utility::apply_visitor(create_global_unique_id_visitor, region);
-	}
-
-	std::string
-	create_global_unique_id(const typename utility::ptr_variant<class_, member_class>::type& region)
-	{
-		return utility::apply_visitor(create_global_unique_id_visitor, region);
-	}
-
-	std::string
-	create_global_unique_id(const typename utility::const_ptr_variant<class_, member_class>::type& region)
-	{
-		return utility::apply_visitor(create_global_unique_id_visitor, region);
-	}
-
-	std::string
-	create_global_unique_id(const namespace_& entity)
-	{
-		if(entity.has_enclosing_declarative_region())
-			return create_global_unique_id(entity.enclosing_declarative_region()) + "::" + entity.name();
-		else
-			return entity.name();
-	}
-
-	template<class Class>
-	std::string
-	create_class_global_unique_id(const Class& entity)
-	{
-		if(entity.has_enclosing_declarative_region())
-			return create_global_unique_id(entity.enclosing_declarative_region()) + "::" + entity.name();
-		else
-			return entity.name();
-	}
-
-	std::string
-	create_global_unique_id(const class_& entity)
-	{
-		return create_class_global_unique_id(entity);
-	}
-
-	std::string
-	create_global_unique_id(const member_class& entity)
-	{
-		return create_class_global_unique_id(entity);
-	}
-
-	std::string
-	create_global_unique_id(const enum_& entity)
-	{
-		if(entity.has_enclosing_declarative_region())
-			return create_global_unique_id(entity.enclosing_declarative_region()) + "::" + entity.name();
-		else
-			return entity.name();
-	}
+template<class... Entities>
+std::string
+create_unique_id(const utility::variant<Entities...>& entity)
+{
+	return apply_visitor(create_unique_id_visitor, entity);
 }
 
 std::string
 create_unique_id(const semantic_entities::namespace_& entity)
 {
-	return entity.name();
+	return create_enclosing_declarative_region_unique_id(entity) + entity.name();
 }
 
 std::string
 create_unique_id(const semantic_entities::class_& entity)
 {
-	return entity.name();
+	return create_enclosing_declarative_region_unique_id(entity) + entity.name();
 }
 
 std::string
 create_unique_id(const semantic_entities::member_class& entity)
 {
-	return entity.name();
+	return create_enclosing_declarative_region_unique_id(entity) + entity.name();
 }
 
 std::string
 create_unique_id(const semantic_entities::enum_& entity)
 {
-	return entity.name();
+	return create_enclosing_declarative_region_unique_id(entity) + entity.name();
 }
 
 std::string
 create_unique_id(const semantic_entities::member_enum& entity)
 {
-	return entity.name();
+	return create_enclosing_declarative_region_unique_id(entity) + entity.name();
 }
 
 std::string
 create_unique_id(const semantic_entities::typedef_& entity)
 {
-	return entity.name();
+	return create_enclosing_declarative_region_unique_id(entity) + entity.name();
 }
 
 std::string
 create_unique_id(const semantic_entities::member_typedef& entity)
 {
-	return entity.name();
+	return create_enclosing_declarative_region_unique_id(entity) + entity.name();
 }
 
 std::string
 create_unique_id(const semantic_entities::constructor& entity)
 {
-	return to_string(entity.parameter_types());;
+	return create_enclosing_declarative_region_unique_id(entity) + to_string(entity.parameter_types());
 }
 
 std::string
-create_unique_id(const semantic_entities::destructor&)
+create_unique_id(const semantic_entities::destructor& entity)
 {
-	return "";
+	return create_enclosing_declarative_region_unique_id(entity);
 }
 
 std::string
 create_unique_id(const semantic_entities::operator_member_function& entity)
 {
-	return to_string(entity.overloaded_operator()) + to_string(entity.parameter_types());;
+	return create_enclosing_declarative_region_unique_id(entity) + to_string(entity.overloaded_operator()) + to_string(entity.parameter_types());
 }
 
 std::string
 create_unique_id(const semantic_entities::conversion_function& entity)
 {
-	return to_string(entity.return_type());
+	return create_enclosing_declarative_region_unique_id(entity) + to_string(entity.return_type());
 }
 
 std::string
 create_unique_id(const semantic_entities::simple_member_function& entity)
 {
-	return entity.name() + to_string(entity.parameter_types());;
+	return create_enclosing_declarative_region_unique_id(entity) + entity.name() + to_string(entity.parameter_types());
 }
 
 std::string
 create_unique_id(const semantic_entities::operator_function& entity)
 {
-	return to_string(entity.overloaded_operator()) + to_string(entity.parameter_types());;
+	return create_enclosing_declarative_region_unique_id(entity) + to_string(entity.overloaded_operator()) + to_string(entity.parameter_types());
 }
 
 std::string
 create_unique_id(const semantic_entities::simple_function& entity)
 {
-	return entity.name() + to_string(entity.parameter_types());
+	return create_enclosing_declarative_region_unique_id(entity) + entity.name() + to_string(entity.parameter_types());
 }
 
 std::string
 create_unique_id(const semantic_entities::variable& entity)
 {
-	return entity.name();
+	return create_enclosing_declarative_region_unique_id(entity) + entity.name();
 }
 
 std::string
 create_unique_id(const semantic_entities::member_variable& entity)
 {
-	return entity.name();
+	return create_enclosing_declarative_region_unique_id(entity) + entity.name();
 }
 
 }}}} //namespace scalpel::cpp::linking::detail
