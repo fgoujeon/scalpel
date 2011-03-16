@@ -1,0 +1,36 @@
+<namespace id="n0">
+ <class name="c" id="c0" complete="false">
+  <destructor access="public" defined="false">
+  </destructor>
+ </class>
+ <simple_function name="f">
+  <return_type>
+   <fundamental_type type="void"/>
+  </return_type>
+  <parameters>
+   <parameter>
+    <type>
+     <reference>
+      <cv_qualified_type const="true">
+       <class id="c0"/>
+      </cv_qualified_type>
+     </reference>
+    </type>
+   </parameter>
+  </parameters>
+ </simple_function>
+ <simple_function name="f">
+  <return_type>
+   <fundamental_type type="void"/>
+  </return_type>
+  <parameters>
+   <parameter>
+    <type>
+     <reference>
+      <class id="c0"/>
+     </reference>
+    </type>
+   </parameter>
+  </parameters>
+ </simple_function>
+</namespace>

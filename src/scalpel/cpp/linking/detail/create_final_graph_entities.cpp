@@ -30,67 +30,111 @@ using namespace semantic_entities;
 namespace
 {
 	function_parameter_list
-	create_function_parameter_list(const function_parameter_list& entity);
+	create_function_parameter_list
+	(
+		const function_parameter_list& entity,
+		const final_graph_entities& final_entities
+	);
 
 	std::unique_ptr<function_parameter>
-	create_function_parameter(const function_parameter& entity);
+	create_function_parameter
+	(
+		const function_parameter& entity,
+		const final_graph_entities& final_entities
+	);
 
 	type_variant
-	create_type(const type_variant& entity);
+	create_type
+	(
+		const type_variant& entity,
+		const final_graph_entities& final_entities
+	);
 }
 
 //private function definitions
 namespace
 {
 	namespace_*
-	create_entity(const namespace_& entity)
+	create_entity
+	(
+		const namespace_& entity,
+		const final_graph_entities&
+	)
 	{
 		return new namespace_(entity.name());
 	}
 
 	class_*
-	create_entity(const class_& entity)
+	create_entity
+	(
+		const class_& entity,
+		const final_graph_entities&
+	)
 	{
 		return new class_(entity.name());
 	}
 
 	member_class*
-	create_entity(const member_class& entity)
+	create_entity
+	(
+		const member_class& entity,
+		const final_graph_entities&
+	)
 	{
 		return new member_class(entity.name(), entity.access());
 	}
 
 	enum_*
-	create_entity(const enum_& entity)
+	create_entity
+	(
+		const enum_& entity,
+		const final_graph_entities&
+	)
 	{
 		return new enum_(entity.name());
 	}
 
 	member_enum*
-	create_entity(const member_enum& entity)
+	create_entity
+	(
+		const member_enum& entity,
+		const final_graph_entities&
+	)
 	{
 		return new member_enum(entity.name(), entity.access());
 	}
 
 	typedef_*
-	create_entity(const typedef_& entity)
+	create_entity
+	(
+		const typedef_& entity,
+		const final_graph_entities& final_entities
+	)
 	{
-		return new typedef_(entity.name(), create_type(entity.type()));
+		return new typedef_(entity.name(), create_type(entity.type(), final_entities));
 	}
 
 	member_typedef*
-	create_entity(const member_typedef& entity)
+	create_entity
+	(
+		const member_typedef& entity,
+		const final_graph_entities& final_entities
+	)
 	{
-		return new member_typedef(entity.name(), create_type(entity.type()), entity.access());
+		return new member_typedef(entity.name(), create_type(entity.type(), final_entities), entity.access());
 	}
 
 	constructor*
-	create_entity(const constructor& entity)
+	create_entity
+	(
+		const constructor& entity,
+		const final_graph_entities& final_entities
+	)
 	{
 		constructor* new_entity =
 			new constructor
 			(
-				create_function_parameter_list(entity.parameters()),
+				create_function_parameter_list(entity.parameters(), final_entities),
 				entity.variadic(),
 				entity.access(),
 				entity.is_explicit(),
@@ -105,7 +149,11 @@ namespace
 	}
 
 	destructor*
-	create_entity(const destructor& entity)
+	create_entity
+	(
+		const destructor& entity,
+		const final_graph_entities&
+	)
 	{
 		destructor* new_entity =
 			new destructor
@@ -122,14 +170,18 @@ namespace
 	}
 
 	operator_member_function*
-	create_entity(const operator_member_function& entity)
+	create_entity
+	(
+		const operator_member_function& entity,
+		const final_graph_entities& final_entities
+	)
 	{
 		operator_member_function* new_entity =
 			new operator_member_function
 			(
 				entity.overloaded_operator(),
-				create_type(entity.return_type()),
-				create_function_parameter_list(entity.parameters()),
+				create_type(entity.return_type(), final_entities),
+				create_function_parameter_list(entity.parameters(), final_entities),
 				entity.access(),
 				entity.is_const(),
 				entity.is_volatile(),
@@ -146,12 +198,16 @@ namespace
 	}
 
 	conversion_function*
-	create_entity(const conversion_function& entity)
+	create_entity
+	(
+		const conversion_function& entity,
+		const final_graph_entities& final_entities
+	)
 	{
 		conversion_function* new_entity =
 			new conversion_function
 			(
-				create_type(entity.return_type()),
+				create_type(entity.return_type(), final_entities),
 				entity.access(),
 				entity.is_const(),
 				entity.is_volatile(),
@@ -169,14 +225,18 @@ namespace
 	}
 
 	simple_member_function*
-	create_entity(const simple_member_function& entity)
+	create_entity
+	(
+		const simple_member_function& entity,
+		const final_graph_entities& final_entities
+	)
 	{
 		simple_member_function* new_entity =
 			new simple_member_function
 			(
 				entity.name(),
-				create_type(entity.return_type()),
-				create_function_parameter_list(entity.parameters()),
+				create_type(entity.return_type(), final_entities),
+				create_function_parameter_list(entity.parameters(), final_entities),
 				entity.variadic(),
 				entity.access(),
 				entity.is_const(),
@@ -195,14 +255,18 @@ namespace
 	}
 
 	operator_function*
-	create_entity(const operator_function& entity)
+	create_entity
+	(
+		const operator_function& entity,
+		const final_graph_entities& final_entities
+	)
 	{
 		operator_function* new_entity =
 			new operator_function
 			(
 				entity.overloaded_operator(),
-				create_type(entity.return_type()),
-				create_function_parameter_list(entity.parameters()),
+				create_type(entity.return_type(), final_entities),
+				create_function_parameter_list(entity.parameters(), final_entities),
 				entity.is_static(),
 				entity.is_inline()
 			)
@@ -215,14 +279,18 @@ namespace
 	}
 
 	simple_function*
-	create_entity(const simple_function& entity)
+	create_entity
+	(
+		const simple_function& entity,
+		const final_graph_entities& final_entities
+	)
 	{
 		simple_function* new_entity =
 			new simple_function
 			(
 				entity.name(),
-				create_type(entity.return_type()),
-				create_function_parameter_list(entity.parameters()),
+				create_type(entity.return_type(), final_entities),
+				create_function_parameter_list(entity.parameters(), final_entities),
 				entity.variadic(),
 				entity.is_static(),
 				entity.is_inline()
@@ -236,25 +304,33 @@ namespace
 	}
 
 	variable*
-	create_entity(const variable& entity)
+	create_entity
+	(
+		const variable& entity,
+		const final_graph_entities& final_entities
+	)
 	{
 		return
 			new variable
 			(
 				entity.name(),
-				create_type(entity.type())
+				create_type(entity.type(), final_entities)
 			)
 		;
 	}
 
 	member_variable*
-	create_entity(const member_variable& entity)
+	create_entity
+	(
+		const member_variable& entity,
+		const final_graph_entities& final_entities
+	)
 	{
 		return
 			new member_variable
 			(
 				entity.name(),
-				create_type(entity.type()),
+				create_type(entity.type(), final_entities),
 				entity.is_static(),
 				entity.is_mutable(),
 				entity.access()
@@ -263,110 +339,150 @@ namespace
 	}
 
 	function_parameter_list
-	create_function_parameter_list(const function_parameter_list& entity)
+	create_function_parameter_list
+	(
+		const function_parameter_list& entity,
+		const final_graph_entities& final_entities
+	)
 	{
 		function_parameter_list new_entity;
 
 		for(auto i = entity.begin(); i != entity.end(); ++i)
 		{
-			new_entity.push_back(create_function_parameter(*i));
+			new_entity.push_back(create_function_parameter(*i, final_entities));
 		}
 
 		return new_entity;
 	}
 
 	std::unique_ptr<function_parameter>
-	create_function_parameter(const function_parameter& entity)
+	create_function_parameter
+	(
+		const function_parameter& entity,
+		const final_graph_entities& final_entities
+	)
 	{
-		return std::unique_ptr<function_parameter>(new function_parameter(create_type(entity.type()), entity.name()));
+		return std::unique_ptr<function_parameter>
+		(
+			new function_parameter
+			(
+				create_type(entity.type(), final_entities),
+				entity.name()
+			)
+		);
 	}
 
 
 
 	struct create_type_visitor_struct: utility::static_visitor<type_variant>
 	{
-		type_variant
-		operator()(const array& type) const
-		{
-			return array(type.size(), create_type(type.qualified_type()));
-		}
+		public:
+			create_type_visitor_struct(const final_graph_entities& final_entities):
+				final_entities_(final_entities)
+			{
+			}
 
-		type_variant
-		operator()(const fundamental_type& type) const
-		{
-			return type;
-		}
+			type_variant
+			operator()(const array& type) const
+			{
+				return array(type.size(), create_type(type.qualified_type(), final_entities_));
+			}
 
-		type_variant
-		operator()(const function_type& type) const
-		{
-			return function_type
-			(
-				create_type(type.return_type()),
-				std::vector<type_variant>(), //TODO
-				type.variadic(),
-				type.const_qualified(),
-				type.volatile_qualified()
-			);
-		}
+			type_variant
+			operator()(const fundamental_type& type) const
+			{
+				return type;
+			}
 
-		type_variant
-		operator()(const class_* type) const
-		{
-			return type; //TODO
-		}
+			type_variant
+			operator()(const function_type& type) const
+			{
+				return function_type
+				(
+					create_type(type.return_type(), final_entities_),
+					std::vector<type_variant>(), //TODO
+					type.variadic(),
+					type.const_qualified(),
+					type.volatile_qualified()
+				);
+			}
 
-		type_variant
-		operator()(const member_class* type) const
-		{
-			return type; //TODO
-		}
+			type_variant
+			operator()(const class_* type) const
+			{
+				auto it = final_entities_.classes.find(type);
+				assert(it != final_entities_.classes.end());
+				return static_cast<const class_*>(it->second);
+			}
 
-		type_variant
-		operator()(const cv_qualified_type& type) const
-		{
-			return cv_qualified_type(create_type(type.qualified_type()), type.qualification());
-		}
+			type_variant
+			operator()(const member_class* type) const
+			{
+				auto it = final_entities_.member_classes.find(type);
+				assert(it != final_entities_.member_classes.end());
+				return static_cast<const member_class*>(it->second);
+			}
 
-		type_variant
-		operator()(const enum_* type) const
-		{
-			return type; //TODO
-		}
+			type_variant
+			operator()(const cv_qualified_type& type) const
+			{
+				return cv_qualified_type
+				(
+					create_type(type.qualified_type(), final_entities_),
+					type.qualification()
+				);
+			}
 
-		type_variant
-		operator()(const member_enum* type) const
-		{
-			return type; //TODO
-		}
+			type_variant
+			operator()(const enum_* type) const
+			{
+				auto it = final_entities_.enums.find(type);
+				assert(it != final_entities_.enums.end());
+				return static_cast<const enum_*>(it->second);
+			}
 
-		type_variant
-		operator()(const pointer& type) const
-		{
-			return pointer(create_type(type.qualified_type()));
-		}
+			type_variant
+			operator()(const member_enum* type) const
+			{
+				auto it = final_entities_.member_enums.find(type);
+				assert(it != final_entities_.member_enums.end());
+				return static_cast<const member_enum*>(it->second);
+			}
 
-		type_variant
-		operator()(const pointer_to_member& type) const
-		{
-			return pointer_to_member
-			(
-				create_type(type.qualified_type()),
-				pointer_to_member::parent_class_t(static_cast<class_*>(0)) //TODO
-			);
-		}
+			type_variant
+			operator()(const pointer& type) const
+			{
+				return pointer(create_type(type.qualified_type(), final_entities_));
+			}
 
-		type_variant
-		operator()(const reference& type) const
-		{
-			return reference(create_type(type.qualified_type()));
-		}
+			type_variant
+			operator()(const pointer_to_member& type) const
+			{
+				return pointer_to_member
+				(
+					create_type(type.qualified_type(), final_entities_),
+					pointer_to_member::parent_class_t(static_cast<class_*>(0)) //TODO
+				);
+			}
+
+			type_variant
+			operator()(const reference& type) const
+			{
+				return reference(create_type(type.qualified_type(), final_entities_));
+			}
+
+		private:
+			const final_graph_entities& final_entities_;
 	};
 
 	type_variant
-	create_type(const type_variant& entity)
+	create_type
+	(
+		const type_variant& entity,
+		const final_graph_entities& final_entities
+	)
 	{
-		create_type_visitor_struct visitor;
+		create_type_visitor_struct visitor(final_entities);
 		return utility::apply_visitor(visitor, entity);
 	}
 }
@@ -420,7 +536,7 @@ namespace
 			const Entity& selected_entity = defined_entity ? *defined_entity : *group.front();
 
 			//create a new entity by copying the selected one
-			Entity* new_entity = create_entity(selected_entity);
+			Entity* new_entity = create_entity(selected_entity, final_entities);
 
 			//add links between groups' entities and the new entity
 			for(auto j = group.begin(); j != group.end(); ++j)
