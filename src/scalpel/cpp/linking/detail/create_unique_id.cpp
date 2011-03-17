@@ -135,119 +135,124 @@ namespace
 		return "";
 	}
 
-	std::string
-	to_string(const fundamental_type type)
-	{
-		switch(type)
-		{
-			case fundamental_type::BOOL:
-				return "bool";
-			case fundamental_type::CHAR:
-				return "char";
-			case fundamental_type::DOUBLE:
-				return "double";
-			case fundamental_type::FLOAT:
-				return "float";
-			case fundamental_type::INT:
-				return "int";
-			case fundamental_type::LONG_DOUBLE:
-				return "long double";
-			case fundamental_type::LONG_INT:
-				return "long int";
-			case fundamental_type::LONG_LONG_INT:
-				return "long long int";
-			case fundamental_type::SHORT_INT:
-				return "short int";
-			case fundamental_type::SIGNED_CHAR:
-				return "signed char";
-			case fundamental_type::UNSIGNED_CHAR:
-				return "unsigned char";
-			case fundamental_type::UNSIGNED_INT:
-				return "unsigned int";
-			case fundamental_type::UNSIGNED_LONG_INT:
-				return "unsigned long int";
-			case fundamental_type::UNSIGNED_LONG_LONG_INT:
-				return "unsigned long long int";
-			case fundamental_type::UNSIGNED_SHORT_INT:
-				return "unsigned short int";
-			case fundamental_type::VOID:
-				return "void";
-			case fundamental_type::WCHAR_T:
-				return "wchar_t";
-		}
-
-		assert(false);
-		return "";
-	}
-
-	std::string
-	to_string(const array& entity)
-	{
-		return to_string(entity.qualified_type()) + "[]";
-	}
-
-	std::string
-	to_string(const reference& entity)
-	{
-		return to_string(entity.qualified_type()) + "&";
-	}
-
-	std::string
-	to_string(const pointer& entity)
-	{
-		return to_string(entity.qualified_type()) + "*";
-	}
-
-	std::string
-	to_string(const pointer_to_member& entity)
-	{
-		return to_string(entity.qualified_type()) + " " + create_unique_id(entity.parent_class()) + "::*";
-	}
-
-	std::string
-	to_string(const enum_* entity)
-	{
-		return create_unique_id(*entity);
-	}
-
-	std::string
-	to_string(const class_* entity)
-	{
-		return create_unique_id(*entity);
-	}
-
-	std::string
-	to_string(const function_type& entity)
-	{
-		return to_string(entity.return_type()) + to_string(entity.parameter_types());
-	}
-
-	std::string
-	to_string(const cv_qualified_type& entity)
-	{
-		switch(entity.qualification())
-		{
-			case cv_qualified_type::qualification_type::CONST_AND_VOLATILE:
-				return to_string(entity.qualified_type()) + " const volatile";
-			case cv_qualified_type::qualification_type::CONST:
-				return to_string(entity.qualified_type()) + " const";
-			case cv_qualified_type::qualification_type::VOLATILE:
-				return to_string(entity.qualified_type()) + " volatile";
-		}
-
-		assert(false);
-		return "";
-	}
-
 
 
 	struct: utility::static_visitor<std::string>
 	{
-		template<typename T>
 		std::string
-		operator()(const T& t)
+		operator()(const fundamental_type type)
 		{
-			return to_string(t);
+			switch(type)
+			{
+				case fundamental_type::BOOL:
+					return "bool";
+				case fundamental_type::CHAR:
+					return "char";
+				case fundamental_type::DOUBLE:
+					return "double";
+				case fundamental_type::FLOAT:
+					return "float";
+				case fundamental_type::INT:
+					return "int";
+				case fundamental_type::LONG_DOUBLE:
+					return "long double";
+				case fundamental_type::LONG_INT:
+					return "long int";
+				case fundamental_type::LONG_LONG_INT:
+					return "long long int";
+				case fundamental_type::SHORT_INT:
+					return "short int";
+				case fundamental_type::SIGNED_CHAR:
+					return "signed char";
+				case fundamental_type::UNSIGNED_CHAR:
+					return "unsigned char";
+				case fundamental_type::UNSIGNED_INT:
+					return "unsigned int";
+				case fundamental_type::UNSIGNED_LONG_INT:
+					return "unsigned long int";
+				case fundamental_type::UNSIGNED_LONG_LONG_INT:
+					return "unsigned long long int";
+				case fundamental_type::UNSIGNED_SHORT_INT:
+					return "unsigned short int";
+				case fundamental_type::VOID:
+					return "void";
+				case fundamental_type::WCHAR_T:
+					return "wchar_t";
+			}
+
+			assert(false);
+			return "";
+		}
+
+		std::string
+		operator()(const array& entity)
+		{
+			return to_string(entity.qualified_type()) + "[]";
+		}
+
+		std::string
+		operator()(const reference& entity)
+		{
+			return to_string(entity.qualified_type()) + "&";
+		}
+
+		std::string
+		operator()(const pointer& entity)
+		{
+			return to_string(entity.qualified_type()) + "*";
+		}
+
+		std::string
+		operator()(const pointer_to_member& entity)
+		{
+			return to_string(entity.qualified_type()) + " " + create_unique_id(entity.parent_class()) + "::*";
+		}
+
+		std::string
+		operator()(const enum_* entity)
+		{
+			return create_unique_id(*entity);
+		}
+
+		std::string
+		operator()(const member_enum* entity)
+		{
+			return create_unique_id(*entity);
+		}
+
+		std::string
+		operator()(const class_* entity)
+		{
+			return create_unique_id(*entity);
+		}
+
+		std::string
+		operator()(const member_class* entity)
+		{
+			return create_unique_id(*entity);
+		}
+
+		std::string
+		operator()(const function_type& entity)
+		{
+			return to_string(entity.return_type()) + to_string(entity.parameter_types());
+		}
+
+		std::string
+		operator()(const cv_qualified_type& entity)
+		{
+			switch(entity.qualification())
+			{
+				case cv_qualified_type::qualification_type::CONST_AND_VOLATILE:
+					return to_string(entity.qualified_type()) + " const volatile";
+				case cv_qualified_type::qualification_type::CONST:
+					return to_string(entity.qualified_type()) + " const";
+				case cv_qualified_type::qualification_type::VOLATILE:
+					return to_string(entity.qualified_type()) + " volatile";
+			}
+
+			assert(false);
+			return "";
 		}
 	} to_string_visitor;
 

@@ -95,7 +95,8 @@ namespace
 		for(auto i = entities.begin(); i != entities.end(); ++i)
 		{
 			const ChildEntity& entity = *i;
-			get_entity_groups_of_type<ChildEntity>(groups)[create_unique_id(entity)].push_back(&entity);
+			const std::string unique_id = create_unique_id(entity);
+			get_entity_groups_of_type<ChildEntity>(groups)[unique_id].push_back(&entity);
 		}
 	}
 }
