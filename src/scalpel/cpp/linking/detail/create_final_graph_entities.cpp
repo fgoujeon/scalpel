@@ -72,11 +72,14 @@ namespace
 	create_entity
 	(
 		const class_& entity,
-		const final_graph_entities&
+		final_graph_entities& final_entities
 	)
 	{
 		class_* new_class = new class_(entity.name());
 		new_class->complete(entity.complete());
+
+		final_entities.class_pairs.push_back(old_and_new_entity_pair<class_>{&entity, new_class});
+
 		return new_class;
 	}
 
@@ -519,6 +522,47 @@ namespace
 		create_type_visitor_struct visitor(final_entities);
 		return utility::apply_visitor(visitor, entity);
 	}
+
+
+	struct find_final_class_visitor: utility::static_visitor<typename utility::ptr_variant<class_, member_class>::type>
+	{
+		public:
+			find_final_class_visitor(const final_graph_entities& final_entities):
+				final_entities_(final_entities)
+			{
+			}
+
+			template<class Class>
+			typename utility::ptr_variant<class_, member_class>::type
+			operator()(const Class* base)
+			{
+				auto it = final_entities_.get_map_of_type<Class>().find(base);
+				assert(it != final_entities_.get_map_of_type<Class>().end());
+				return it->second;
+			}
+
+		private:
+			const final_graph_entities& final_entities_;
+	};
+
+	base_class
+	create_base_class
+	(
+		const base_class& entity,
+		const final_graph_entities& final_entities
+	)
+	{
+		find_final_class_visitor visitor(final_entities);
+
+		return
+			base_class
+			(
+				apply_visitor(visitor, entity.base()),
+				entity.access(),
+				entity.is_virtual()
+			)
+		;
+	}
 }
 
 namespace
@@ -579,6 +623,23 @@ namespace
 			}
 		}
 	}
+
+	template<class Class>
+	void
+	add_base_classes(final_graph_entities& final_entities)
+	{
+		for(auto i = final_entities.get_pairs_of_type<Class>().begin(); i != final_entities.get_pairs_of_type<Class>().end(); ++i)
+		{
+			const Class& old_entity = *(i->old_entity);
+			Class& new_entity = *(i->new_entity);
+
+			for(auto j = old_entity.base_classes().begin(); j != old_entity.base_classes().end(); ++j)
+			{
+				const base_class& current_base_class = *j;
+				new_entity.add_base_class(create_base_class(current_base_class, final_entities));
+			}
+		}
+	}
 }
 
 void
@@ -589,22 +650,26 @@ create_final_graph_entities
 )
 {
 	create_global_namespace(groups, final_entities);
-	create_entities_of_type<semantic_entities::namespace_, false>(groups.namespaces, final_entities);
-	create_entities_of_type<semantic_entities::class_, false>(groups.classes, final_entities);
-	create_entities_of_type<semantic_entities::member_class, false>(groups.member_classes, final_entities);
-	create_entities_of_type<semantic_entities::enum_, false>(groups.enums, final_entities);
-	create_entities_of_type<semantic_entities::member_enum, false>(groups.member_enums, final_entities);
-	create_entities_of_type<semantic_entities::typedef_, false>(groups.typedefs, final_entities);
-	create_entities_of_type<semantic_entities::member_typedef, false>(groups.member_typedefs, final_entities);
-	create_entities_of_type<semantic_entities::constructor>(groups.constructors, final_entities);
-	create_entities_of_type<semantic_entities::destructor>(groups.destructors, final_entities);
-	create_entities_of_type<semantic_entities::operator_member_function>(groups.operator_member_functions, final_entities);
-	create_entities_of_type<semantic_entities::conversion_function>(groups.conversion_functions, final_entities);
-	create_entities_of_type<semantic_entities::simple_member_function>(groups.simple_member_functions, final_entities);
-	create_entities_of_type<semantic_entities::operator_function>(groups.operator_functions, final_entities);
-	create_entities_of_type<semantic_entities::simple_function>(groups.simple_functions, final_entities);
-	create_entities_of_type<semantic_entities::variable>(groups.variables, final_entities);
-	create_entities_of_type<semantic_entities::member_variable>(groups.member_variables, final_entities);
+
+	create_entities_of_type<namespace_, false>(groups.namespaces, final_entities);
+	create_entities_of_type<class_, false>(groups.classes, final_entities);
+	create_entities_of_type<member_class, false>(groups.member_classes, final_entities);
+	create_entities_of_type<enum_, false>(groups.enums, final_entities);
+	create_entities_of_type<member_enum, false>(groups.member_enums, final_entities);
+	create_entities_of_type<typedef_, false>(groups.typedefs, final_entities);
+	create_entities_of_type<member_typedef, false>(groups.member_typedefs, final_entities);
+	create_entities_of_type<constructor>(groups.constructors, final_entities);
+	create_entities_of_type<destructor>(groups.destructors, final_entities);
+	create_entities_of_type<operator_member_function>(groups.operator_member_functions, final_entities);
+	create_entities_of_type<conversion_function>(groups.conversion_functions, final_entities);
+	create_entities_of_type<simple_member_function>(groups.simple_member_functions, final_entities);
+	create_entities_of_type<operator_function>(groups.operator_functions, final_entities);
+	create_entities_of_type<simple_function>(groups.simple_functions, final_entities);
+	create_entities_of_type<variable>(groups.variables, final_entities);
+	create_entities_of_type<member_variable>(groups.member_variables, final_entities);
+
+	add_base_classes<class_>(final_entities);
+	add_base_classes<member_class>(final_entities);
 }
 
 }}}} //namespace scalpel::cpp::linking::detail

@@ -28,6 +28,13 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace linking { namespace detail
 {
 
+template<class Entity>
+struct old_and_new_entity_pair
+{
+	const Entity* old_entity;
+	Entity* new_entity;
+};
+
 struct final_graph_entities
 {
 	template<class Entity>
@@ -55,6 +62,19 @@ struct final_graph_entities
 	std::map<const semantic_entities::simple_function*, semantic_entities::simple_function*> simple_functions;
 	std::map<const semantic_entities::variable*, semantic_entities::variable*> variables;
 	std::map<const semantic_entities::member_variable*, semantic_entities::member_variable*> member_variables;
+
+
+
+	template<class Entity>
+	std::vector<old_and_new_entity_pair<Entity>>&
+	get_pairs_of_type();
+
+	template<class Entity>
+	const std::vector<old_and_new_entity_pair<Entity>>&
+	get_pairs_of_type() const;
+
+	std::vector<old_and_new_entity_pair<semantic_entities::class_>> class_pairs;
+	std::vector<old_and_new_entity_pair<semantic_entities::member_class>> member_class_pairs;
 };
 
 }}}} //namespace scalpel::cpp::linking::detail

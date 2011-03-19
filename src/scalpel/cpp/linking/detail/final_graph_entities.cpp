@@ -35,6 +35,21 @@ final_graph_entities::get_map_of_type<semantic_entities::ENTITY_TYPE>() const \
 	return VARIABLE; \
 }
 
+#define GENERATE_GET_PAIRS_SPECIALIZATION(ENTITY_TYPE, VARIABLE) \
+template<> \
+std::vector<old_and_new_entity_pair<semantic_entities::ENTITY_TYPE>>& \
+final_graph_entities::get_pairs_of_type<semantic_entities::ENTITY_TYPE>() \
+{ \
+	return VARIABLE; \
+} \
+ \
+template<> \
+const std::vector<old_and_new_entity_pair<semantic_entities::ENTITY_TYPE>>& \
+final_graph_entities::get_pairs_of_type<semantic_entities::ENTITY_TYPE>() const \
+{ \
+	return VARIABLE; \
+}
+
 namespace scalpel { namespace cpp { namespace linking { namespace detail
 {
 
@@ -55,7 +70,11 @@ GENERATE_GET_ENTITIES_SPECIALIZATION(simple_function, simple_functions)
 GENERATE_GET_ENTITIES_SPECIALIZATION(variable, variables)
 GENERATE_GET_ENTITIES_SPECIALIZATION(member_variable, member_variables)
 
+GENERATE_GET_PAIRS_SPECIALIZATION(class_, class_pairs)
+GENERATE_GET_PAIRS_SPECIALIZATION(member_class, member_class_pairs)
+
 }}}} //namespace scalpel::cpp::linking::detail
 
 #undef GENERATE_GET_ENTITIES_SPECIALIZATION
+#undef GENERATE_GET_PAIRS_SPECIALIZATION
 
