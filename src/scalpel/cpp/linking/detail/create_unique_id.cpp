@@ -281,7 +281,19 @@ namespace
 		return str + ')';
 	}
 
-
+	template<class Function>
+	std::string
+	function_cv_qualifiers_to_string(const Function& entity)
+	{
+		if(entity.is_const() && entity.is_volatile())
+			return "const volatile";
+		else if(entity.is_const())
+			return "const";
+		else if(entity.is_const() && entity.is_volatile())
+			return "volatile";
+		else
+			return "";
+	}
 
 	template<class Entity>
 	std::string
@@ -398,43 +410,71 @@ create_unique_id(const semantic_entities::destructor& entity)
 std::string
 create_unique_id(const semantic_entities::operator_member_function& entity)
 {
-	return create_enclosing_declarative_region_unique_id(entity) + to_string(entity.overloaded_operator()) + to_string(entity.parameter_types());
+	return
+		create_enclosing_declarative_region_unique_id(entity) +
+		to_string(entity.overloaded_operator()) +
+		to_string(entity.parameter_types()) +
+		function_cv_qualifiers_to_string(entity)
+	;
 }
 
 std::string
 create_unique_id(const semantic_entities::conversion_function& entity)
 {
-	return create_enclosing_declarative_region_unique_id(entity) + to_string(entity.return_type());
+	return
+		create_enclosing_declarative_region_unique_id(entity) +
+		to_string(entity.return_type()) +
+		function_cv_qualifiers_to_string(entity)
+	;
 }
 
 std::string
 create_unique_id(const semantic_entities::simple_member_function& entity)
 {
-	return create_enclosing_declarative_region_unique_id(entity) + entity.name() + to_string(entity.parameter_types());
+	return
+		create_enclosing_declarative_region_unique_id(entity) +
+		entity.name() +
+		to_string(entity.parameter_types()) +
+		function_cv_qualifiers_to_string(entity)
+	;
 }
 
 std::string
 create_unique_id(const semantic_entities::operator_function& entity)
 {
-	return create_enclosing_declarative_region_unique_id(entity) + to_string(entity.overloaded_operator()) + to_string(entity.parameter_types());
+	return
+		create_enclosing_declarative_region_unique_id(entity) +
+		to_string(entity.overloaded_operator()) +
+		to_string(entity.parameter_types())
+	;
 }
 
 std::string
 create_unique_id(const semantic_entities::simple_function& entity)
 {
-	return create_enclosing_declarative_region_unique_id(entity) + entity.name() + to_string(entity.parameter_types());
+	return
+		create_enclosing_declarative_region_unique_id(entity) +
+		entity.name() +
+		to_string(entity.parameter_types())
+	;
 }
 
 std::string
 create_unique_id(const semantic_entities::variable& entity)
 {
-	return create_enclosing_declarative_region_unique_id(entity) + entity.name();
+	return
+		create_enclosing_declarative_region_unique_id(entity) +
+		entity.name()
+	;
 }
 
 std::string
 create_unique_id(const semantic_entities::member_variable& entity)
 {
-	return create_enclosing_declarative_region_unique_id(entity) + entity.name();
+	return
+		create_enclosing_declarative_region_unique_id(entity) +
+		entity.name()
+	;
 }
 
 }}}} //namespace scalpel::cpp::linking::detail
