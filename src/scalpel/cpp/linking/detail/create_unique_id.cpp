@@ -19,6 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "create_unique_id.hpp"
+#include <sstream>
 
 namespace scalpel { namespace cpp { namespace linking { namespace detail
 {
@@ -43,96 +44,9 @@ namespace
 	std::string
 	to_string(const overloadable_operator& op)
 	{
-		switch(op)
-		{
-			case overloadable_operator::NEW:
-				return "new";
-			case overloadable_operator::NEW_ARRAY:
-				return "new[]";
-			case overloadable_operator::DELETE:
-				return "delete";
-			case overloadable_operator::DELETE_ARRAY:
-				return "delete[]";
-			case overloadable_operator::DOUBLE_RIGHT_ANGLE_BRACKET_EQUAL:
-				return ">>=";
-			case overloadable_operator::DOUBLE_LEFT_ANGLE_BRACKET_EQUAL:
-				return "<<=";
-			case overloadable_operator::ARROW_ASTERISK:
-				return "->*";
-			case overloadable_operator::PLUS_EQUAL:
-				return "+=";
-			case overloadable_operator::MINUS_EQUAL:
-				return "-=";
-			case overloadable_operator::ASTERISK_EQUAL:
-				return "*=";
-			case overloadable_operator::SLASH_EQUAL:
-				return "/=";
-			case overloadable_operator::PERCENT_EQUAL:
-				return "%=";
-			case overloadable_operator::CIRCUMFLEX_EQUAL:
-				return "^=";
-			case overloadable_operator::AMPERSAND_EQUAL:
-				return "&=";
-			case overloadable_operator::PIPE_EQUAL:
-				return "|=";
-			case overloadable_operator::DOUBLE_LEFT_ANGLE_BRACKET:
-				return "<<";
-			case overloadable_operator::DOUBLE_RIGHT_ANGLE_BRACKET:
-				return ">>";
-			case overloadable_operator::DOUBLE_EQUAL:
-				return "==";
-			case overloadable_operator::EXCLAMATION_EQUAL:
-				return "!=";
-			case overloadable_operator::LEFT_ANGLE_BRACKET_EQUAL:
-				return "<=";
-			case overloadable_operator::RIGHT_ANGLE_BRACKET_EQUAL:
-				return ">=";
-			case overloadable_operator::DOUBLE_AMPERSAND:
-				return "&&";
-			case overloadable_operator::DOUBLE_PIPE:
-				return "||";
-			case overloadable_operator::DOUBLE_PLUS:
-				return "++";
-			case overloadable_operator::DOUBLE_MINUS:
-				return "--";
-			case overloadable_operator::ARROW:
-				return "->";
-			case overloadable_operator::ROUND_BRACKETS:
-				return "()";
-			case overloadable_operator::SQUARE_BRACKETS:
-				return "[]";
-			case overloadable_operator::COMMA:
-				return ",";
-			case overloadable_operator::PLUS:
-				return "+";
-			case overloadable_operator::MINUS:
-				return "-";
-			case overloadable_operator::ASTERISK:
-				return "*";
-			case overloadable_operator::SLASH:
-				return "/";
-			case overloadable_operator::PERCENT:
-				return "%";
-			case overloadable_operator::CIRCUMFLEX:
-				return "^";
-			case overloadable_operator::AMPERSAND:
-				return "&";
-			case overloadable_operator::PIPE:
-				return "|";
-			case overloadable_operator::TILDE:
-				return "~";
-			case overloadable_operator::EXCLAMATION:
-				return "!";
-			case overloadable_operator::EQUAL:
-				return "=";
-			case overloadable_operator::LEFT_ANGLE_BRACKET:
-				return "<";
-			case overloadable_operator::RIGHT_ANGLE_BRACKET:
-				return ">";
-		}
-
-		assert(false);
-		return "";
+		std::ostringstream oss;
+		oss << "@o" << static_cast<unsigned int>(op);
+		return oss.str();
 	}
 
 
@@ -142,46 +56,9 @@ namespace
 		std::string
 		operator()(const fundamental_type type)
 		{
-			switch(type)
-			{
-				case fundamental_type::BOOL:
-					return "bool";
-				case fundamental_type::CHAR:
-					return "char";
-				case fundamental_type::DOUBLE:
-					return "double";
-				case fundamental_type::FLOAT:
-					return "float";
-				case fundamental_type::INT:
-					return "int";
-				case fundamental_type::LONG_DOUBLE:
-					return "long double";
-				case fundamental_type::LONG_INT:
-					return "long int";
-				case fundamental_type::LONG_LONG_INT:
-					return "long long int";
-				case fundamental_type::SHORT_INT:
-					return "short int";
-				case fundamental_type::SIGNED_CHAR:
-					return "signed char";
-				case fundamental_type::UNSIGNED_CHAR:
-					return "unsigned char";
-				case fundamental_type::UNSIGNED_INT:
-					return "unsigned int";
-				case fundamental_type::UNSIGNED_LONG_INT:
-					return "unsigned long int";
-				case fundamental_type::UNSIGNED_LONG_LONG_INT:
-					return "unsigned long long int";
-				case fundamental_type::UNSIGNED_SHORT_INT:
-					return "unsigned short int";
-				case fundamental_type::VOID:
-					return "void";
-				case fundamental_type::WCHAR_T:
-					return "wchar_t";
-			}
-
-			assert(false);
-			return "";
+			std::ostringstream oss;
+			oss << "@t" << static_cast<unsigned int>(type);
+			return oss.str();
 		}
 
 		std::string

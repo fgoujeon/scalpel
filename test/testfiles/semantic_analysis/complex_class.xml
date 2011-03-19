@@ -1,17 +1,17 @@
 <namespace id="n0">
  <namespace name="n" id="n1">
   <namespace name="n2" id="n2">
-   <class name="super_test" id="c0">
+   <class name="base1" id="c0">
     <destructor access="public" defined="false">
     </destructor>
    </class>
   </namespace>
  </namespace>
- <class name="virtual_base" id="c1">
+ <class name="base2" id="c1">
   <destructor access="public" defined="false">
   </destructor>
  </class>
- <class name="virtual_base2" id="c2">
+ <class name="base3" id="c2">
   <destructor access="public" defined="false">
   </destructor>
  </class>
@@ -21,15 +21,6 @@
    <base_class id="c1" access="private" virtual="true"/>
    <base_class id="c2" access="protected" virtual="true"/>
   </base_classes>
-  <constructor access="public" explicit="true">
-   <parameters>
-    <parameter name="i">
-     <type>
-      <fundamental_type type="int"/>
-     </type>
-    </parameter>
-   </parameters>
-  </constructor>
   <constructor access="public">
    <parameters>
     <parameter name="t">
@@ -39,6 +30,15 @@
         <class id="c3"/>
        </cv_qualified_type>
       </reference>
+     </type>
+    </parameter>
+   </parameters>
+  </constructor>
+  <constructor access="public" explicit="true">
+   <parameters>
+    <parameter name="i">
+     <type>
+      <fundamental_type type="int"/>
      </type>
     </parameter>
    </parameters>

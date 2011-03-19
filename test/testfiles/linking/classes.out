@@ -1,5 +1,5 @@
 <namespace id="n0">
- <class name="c" id="c0" complete="false">
+ <class name="c" id="c0">
   <destructor access="public" defined="false">
   </destructor>
  </class>

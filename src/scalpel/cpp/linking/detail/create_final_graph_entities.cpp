@@ -192,6 +192,7 @@ namespace
 			new destructor
 			(
 				entity.access(),
+				entity.is_virtual(),
 				entity.is_inline()
 			)
 		;

@@ -2,27 +2,27 @@ namespace n
 {
 	namespace n2
 	{
-		class super_test
+		class base1
 		{
 		};
 	}
 }
 
-class virtual_base
+class base2
 {
 };
 
-class virtual_base2
+class base3
 {
 };
 
-class test: public n::n2::super_test, virtual virtual_base, protected virtual virtual_base2
+class test: public n::n2::base1, virtual base2, protected virtual base3
 {
 	public:
+		test(const test& t);
+
 		explicit
 		test(int i);
-
-		test(const test& t);
 
 		virtual
 		~test();
