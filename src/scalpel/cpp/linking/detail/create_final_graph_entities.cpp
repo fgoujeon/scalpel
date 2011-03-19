@@ -49,6 +49,10 @@ namespace
 		const type_variant& entity,
 		const final_graph_entities& final_entities
 	);
+
+	template<class Enum>
+	void
+	copy_constants(const Enum& src, Enum& dest);
 }
 
 //private function definitions
@@ -91,7 +95,9 @@ namespace
 		const final_graph_entities&
 	)
 	{
-		return new enum_(entity.name());
+		enum_* new_enum = new enum_(entity.name());
+		copy_constants(entity, *new_enum);
+		return new_enum;
 	}
 
 	member_enum*
@@ -101,7 +107,30 @@ namespace
 		const final_graph_entities&
 	)
 	{
-		return new member_enum(entity.name(), entity.access());
+		member_enum* new_enum = new member_enum(entity.name(), entity.access());
+		copy_constants(entity, *new_enum);
+		return new_enum;
+	}
+
+	template<class Enum>
+	void
+	copy_constants(const Enum& src, Enum& dest)
+	{
+		for(auto i = src.constants().begin(); i != src.constants().end(); ++i)
+		{
+			const enum_constant& current_enum_constant = *i;
+			dest.add
+			(
+				std::unique_ptr<enum_constant>
+				(
+					new enum_constant
+					(
+						current_enum_constant.name(),
+						current_enum_constant.value()
+					)
+				)
+			);
+		}
 	}
 
 	typedef_*
