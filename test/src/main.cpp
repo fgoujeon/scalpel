@@ -95,7 +95,7 @@ init_unit_test()
 	//Semantic analysis test suite
 	{
 		//build test file list
-		std::vector<std::string> semantic_analysis_test_files = get_file_list("test/testfiles/semantic_analysis", boost::regex(".*\\.cpp"), true);
+		std::vector<std::string> semantic_analysis_test_files = get_file_list("test/testfiles/semantic_analysis", boost::regex(".*\\.cpp"));
 
 		//add the semantic analysis test cases (one per test file) to the master test suite
 		boost::callback1<std::string> tm = boost::bind(&analysis::single_file_tester::test_semantic_analysis, &analysis_single_file_tester, _1);
@@ -104,39 +104,56 @@ init_unit_test()
 
 	//Linking test suite
 	{
-		//
-		//build test file list
-		//
-
 		std::vector<analysis::linking_test_file_set> test_files;
 
-		//find all output files
-		std::vector<std::string> output_files = get_file_list("test/testfiles/linking", boost::regex(".*\\.out"));
-
-		for(auto i = output_files.begin(); i != output_files.end(); ++i) //for each output file...
+		//fill the test file list with testfiles/linking files
 		{
-			const std::string output_file_name = *i;
-			const std::string base_file_name = output_file_name.substr(0, output_file_name.length() - 4);
+			//find all output files
+			std::vector<std::string> output_files = get_file_list("test/testfiles/linking", boost::regex(".*\\.out"));
 
-			//find the corresponding CPP input files
-			std::vector<std::string> input_file_names = get_file_list("test/testfiles/linking", boost::regex(base_file_name + "\\..*\\.cpp"));
+			for(auto i = output_files.begin(); i != output_files.end(); ++i) //for each output file...
+			{
+				const std::string output_file_name = *i;
+				const std::string base_file_name = output_file_name.substr(0, output_file_name.length() - 4);
 
-			//create a file set and add it to the list
-			test_files.push_back
-			(
-				analysis::linking_test_file_set
-				{
-					input_file_names,
-					output_file_name
-				}
-			);
+				//find the corresponding CPP input files
+				std::vector<std::string> input_file_names = get_file_list("test/testfiles/linking", boost::regex(base_file_name + "\\..*\\.cpp"));
+
+				//create a file set and add it to the list
+				test_files.push_back
+				(
+					analysis::linking_test_file_set
+					{
+						input_file_names,
+						output_file_name
+					}
+				);
+			}
 		}
 
+		//fill the test file list with testfiles/semantic_analysis files (for single-file linking tests)
+		{
+			std::vector<std::string> output_files = get_file_list("test/testfiles/semantic_analysis", boost::regex(".*\\.xml"));
 
-		//
+			for(auto i = output_files.begin(); i != output_files.end(); ++i) //for each output file...
+			{
+				const std::string output_file_name = *i;
+				const std::string base_file_name = output_file_name.substr(0, output_file_name.length() - 4);
+				const std::string input_file_name = base_file_name + ".cpp";
+
+				//create a file set and add it to the list
+				test_files.push_back
+				(
+					analysis::linking_test_file_set
+					{
+						{input_file_name},
+						output_file_name
+					}
+				);
+			}
+		}
+
 		//create the linking test cases (one per file set) and add them to the master test suite
-		//
-
 		boost::callback1<analysis::linking_test_file_set> tm = boost::bind(&analysis::single_file_tester::test_linking, &analysis_single_file_tester, _1);
 		framework::master_test_suite().add(BOOST_PARAM_TEST_CASE(tm, test_files.begin(), test_files.end()));
 	}

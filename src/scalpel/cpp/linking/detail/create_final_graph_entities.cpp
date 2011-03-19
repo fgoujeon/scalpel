@@ -75,7 +75,9 @@ namespace
 		const final_graph_entities&
 	)
 	{
-		return new class_(entity.name());
+		class_* new_class = new class_(entity.name());
+		new_class->complete(entity.complete());
+		return new_class;
 	}
 
 	member_class*
@@ -85,7 +87,9 @@ namespace
 		const final_graph_entities&
 	)
 	{
-		return new member_class(entity.name(), entity.access());
+		member_class* new_class = new member_class(entity.name(), entity.access());
+		new_class->complete(entity.complete());
+		return new_class;
 	}
 
 	enum_*
