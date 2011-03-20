@@ -87,11 +87,14 @@ namespace
 	create_entity
 	(
 		const member_class& entity,
-		const final_graph_entities&
+		final_graph_entities& final_entities
 	)
 	{
 		member_class* new_class = new member_class(entity.name(), entity.access());
 		new_class->complete(entity.complete());
+
+		final_entities.member_class_pairs.push_back(old_and_new_entity_pair<member_class>{&entity, new_class});
+
 		return new_class;
 	}
 

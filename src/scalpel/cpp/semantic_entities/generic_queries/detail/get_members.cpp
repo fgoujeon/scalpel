@@ -151,7 +151,7 @@ GENERATE_GET_MEMBERS_SPECIALIZATION          (member_class, conversion_function,
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (member_class, simple_function)
 GENERATE_GET_MEMBERS_SPECIALIZATION          (member_class, simple_member_function, simple_functions)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (member_class, variable)
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (member_class, member_variable)
+GENERATE_GET_MEMBERS_SPECIALIZATION          (member_class, member_variable, variables)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (member_class, namespace_alias)
 
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(constructor, open_declarative_region_ptr_variant)
