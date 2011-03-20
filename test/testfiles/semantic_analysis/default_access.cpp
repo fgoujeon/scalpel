@@ -1,13 +1,13 @@
-struct super
+struct base
 {
 };
 
-struct s: super
+class c: base
 {
 	int i;
 };
 
-class c: super
+struct s: base
 {
 	int i;
 };

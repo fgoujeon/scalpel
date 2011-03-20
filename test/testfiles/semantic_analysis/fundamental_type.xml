@@ -1,45 +1,45 @@
 <namespace id="n0">
- <variable name="v1">
+ <variable name="v01">
   <type>
    <fundamental_type type="char"/>
   </type>
  </variable>
- <variable name="v2">
+ <variable name="v02">
   <type>
    <fundamental_type type="unsigned char"/>
   </type>
  </variable>
- <variable name="v3">
+ <variable name="v03">
   <type>
    <fundamental_type type="signed char"/>
   </type>
  </variable>
- <variable name="v4">
+ <variable name="v04">
   <type>
    <fundamental_type type="bool"/>
   </type>
  </variable>
- <variable name="v5">
+ <variable name="v05">
   <type>
    <fundamental_type type="unsigned int"/>
   </type>
  </variable>
- <variable name="v6">
+ <variable name="v06">
   <type>
    <fundamental_type type="unsigned int"/>
   </type>
  </variable>
- <variable name="v7">
+ <variable name="v07">
   <type>
    <fundamental_type type="int"/>
   </type>
  </variable>
- <variable name="v8">
+ <variable name="v08">
   <type>
    <fundamental_type type="int"/>
   </type>
  </variable>
- <variable name="v9">
+ <variable name="v09">
   <type>
    <fundamental_type type="int"/>
   </type>

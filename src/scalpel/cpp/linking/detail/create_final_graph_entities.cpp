@@ -431,6 +431,48 @@ namespace
 
 
 
+	struct find_final_class_visitor: utility::static_visitor<typename utility::ptr_variant<class_, member_class>::type>
+	{
+		public:
+			find_final_class_visitor(const final_graph_entities& final_entities):
+				final_entities_(final_entities)
+			{
+			}
+
+			template<class Class>
+			typename utility::ptr_variant<class_, member_class>::type
+			operator()(const Class* base)
+			{
+				auto it = final_entities_.get_map_of_type<Class>().find(base);
+				assert(it != final_entities_.get_map_of_type<Class>().end());
+				return it->second;
+			}
+
+		private:
+			const final_graph_entities& final_entities_;
+	};
+
+	base_class
+	create_base_class
+	(
+		const base_class& entity,
+		const final_graph_entities& final_entities
+	)
+	{
+		find_final_class_visitor visitor(final_entities);
+
+		return
+			base_class
+			(
+				apply_visitor(visitor, entity.base()),
+				entity.access(),
+				entity.is_virtual()
+			)
+		;
+	}
+
+
+
 	struct create_type_visitor_struct: utility::static_visitor<type_variant>
 	{
 		public:
@@ -515,10 +557,12 @@ namespace
 			type_variant
 			operator()(const pointer_to_member& type) const
 			{
+				find_final_class_visitor visitor(final_entities_);
+
 				return pointer_to_member
 				(
 					create_type(type.qualified_type(), final_entities_),
-					pointer_to_member::parent_class_t(static_cast<class_*>(0)) //TODO
+					pointer_to_member::parent_class_t(apply_visitor(visitor, type.parent_class()))
 				);
 			}
 
@@ -541,47 +585,6 @@ namespace
 	{
 		create_type_visitor_struct visitor(final_entities);
 		return utility::apply_visitor(visitor, entity);
-	}
-
-
-	struct find_final_class_visitor: utility::static_visitor<typename utility::ptr_variant<class_, member_class>::type>
-	{
-		public:
-			find_final_class_visitor(const final_graph_entities& final_entities):
-				final_entities_(final_entities)
-			{
-			}
-
-			template<class Class>
-			typename utility::ptr_variant<class_, member_class>::type
-			operator()(const Class* base)
-			{
-				auto it = final_entities_.get_map_of_type<Class>().find(base);
-				assert(it != final_entities_.get_map_of_type<Class>().end());
-				return it->second;
-			}
-
-		private:
-			const final_graph_entities& final_entities_;
-	};
-
-	base_class
-	create_base_class
-	(
-		const base_class& entity,
-		const final_graph_entities& final_entities
-	)
-	{
-		find_final_class_visitor visitor(final_entities);
-
-		return
-			base_class
-			(
-				apply_visitor(visitor, entity.base()),
-				entity.access(),
-				entity.is_virtual()
-			)
-		;
 	}
 }
 

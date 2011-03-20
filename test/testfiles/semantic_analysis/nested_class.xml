@@ -1,6 +1,6 @@
 <namespace id="n0">
  <class name="a_class" id="c0">
-  <class name="a_nested_class" id="c1" access="public">
+  <class name="nested_class" id="c1" access="public">
    <destructor access="public" defined="false">
    </destructor>
    <variable name="i" access="private">
@@ -9,7 +9,7 @@
     </type>
    </variable>
   </class>
-  <class name="another_nested_class" id="c2" access="public">
+  <class name="nested_class2" id="c2" access="public">
    <base_classes>
     <base_class id="c1" access="public"/>
    </base_classes>
