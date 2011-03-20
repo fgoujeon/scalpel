@@ -45,6 +45,41 @@
   </constructor>
   <destructor access="public" virtual="true">
   </destructor>
+  <operator_function operator="new[]" access="public">
+   <return_type>
+    <pointer>
+     <fundamental_type type="void"/>
+    </pointer>
+   </return_type>
+   <parameters>
+    <parameter>
+     <type>
+      <fundamental_type type="unsigned long int"/>
+     </type>
+    </parameter>
+    <parameter>
+     <type>
+      <pointer>
+       <fundamental_type type="void"/>
+      </pointer>
+     </type>
+    </parameter>
+   </parameters>
+  </operator_function>
+  <operator_function operator="delete[]" access="public">
+   <return_type>
+    <fundamental_type type="void"/>
+   </return_type>
+   <parameters>
+    <parameter>
+     <type>
+      <pointer>
+       <fundamental_type type="void"/>
+      </pointer>
+     </type>
+    </parameter>
+   </parameters>
+  </operator_function>
   <operator_function operator="=" access="public">
    <return_type>
     <reference>
@@ -81,59 +116,19 @@
     </parameter>
    </parameters>
   </operator_function>
-  <operator_function operator="new[]" access="public">
-   <return_type>
-    <pointer>
-     <fundamental_type type="void"/>
-    </pointer>
-   </return_type>
-   <parameters>
-    <parameter>
-     <type>
-      <fundamental_type type="unsigned long int"/>
-     </type>
-    </parameter>
-    <parameter>
-     <type>
-      <pointer>
-       <fundamental_type type="void"/>
-      </pointer>
-     </type>
-    </parameter>
-   </parameters>
-  </operator_function>
-  <operator_function operator="delete[]" access="public">
-   <return_type>
-    <fundamental_type type="void"/>
-   </return_type>
-   <parameters>
-    <parameter>
-     <type>
-      <pointer>
-       <fundamental_type type="void"/>
-      </pointer>
-     </type>
-    </parameter>
-   </parameters>
-  </operator_function>
   <conversion_function access="public" const="true">
    <return_type>
     <fundamental_type type="int"/>
    </return_type>
   </conversion_function>
-  <simple_function name="static_function" access="public" static="true">
-   <return_type>
-    <fundamental_type type="bool"/>
-   </return_type>
-  </simple_function>
-  <simple_function name="value" access="public" inline="true" const="true">
-   <return_type>
-    <fundamental_type type="int"/>
-   </return_type>
-  </simple_function>
   <simple_function name="pure_virtual" access="public" virtual="true" pure="true">
    <return_type>
     <fundamental_type type="void"/>
+   </return_type>
+  </simple_function>
+  <simple_function name="static_function" access="public" static="true">
+   <return_type>
+    <fundamental_type type="bool"/>
    </return_type>
   </simple_function>
   <simple_function name="update" access="protected" inline="true">
@@ -141,16 +136,21 @@
     <fundamental_type type="void"/>
    </return_type>
   </simple_function>
-  <variable name="value_" access="private">
-   <type>
+  <simple_function name="value" access="public" inline="true" const="true">
+   <return_type>
     <fundamental_type type="int"/>
-   </type>
-  </variable>
+   </return_type>
+  </simple_function>
   <variable name="b" access="private" static="true">
    <type>
     <cv_qualified_type const="true">
      <fundamental_type type="bool"/>
     </cv_qualified_type>
+   </type>
+  </variable>
+  <variable name="value_" access="private">
+   <type>
+    <fundamental_type type="int"/>
    </type>
   </variable>
  </class>

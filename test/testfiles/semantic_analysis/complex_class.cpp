@@ -27,31 +27,27 @@ class test: public n::n2::base1, virtual base2, protected virtual base3
 		virtual
 		~test();
 
-		const test&
-		operator=(const test& t);
-
-		bool
-		operator==(const test& t) const;
-
 		void*
 		operator new[](long unsigned int, void*);
 
 		void
 		operator delete[](void*);
 
-		operator int() const;
+		const test&
+		operator=(const test& t);
 
-		static
 		bool
-		static_function();
+		operator==(const test& t) const;
 
-		inline
-		int
-		value() const;
+		operator int() const;
 
 		virtual
 		void
 		pure_virtual() = 0;
+
+		static
+		bool
+		static_function();
 
 	protected:
 		void
@@ -59,9 +55,14 @@ class test: public n::n2::base1, virtual base2, protected virtual base3
 		{
 		}
 
+	public:
+		inline
+		int
+		value() const;
+
 	private:
-		int value_;
 		static const bool b = false;
+		int value_;
 };
 
 test::test(int)
