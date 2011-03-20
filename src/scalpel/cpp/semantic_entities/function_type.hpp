@@ -31,10 +31,12 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 class function_type
 {
 	public:
+		typedef std::vector<type_variant> parameter_types_t;
+
 		function_type
 		(
 			const type_variant& return_type,
-			const std::vector<type_variant>& parameter_types,
+			const parameter_types_t& parameter_types,
 			const bool variadic,
 			const bool const_qualified,
 			const bool volatile_qualified
@@ -48,7 +50,7 @@ class function_type
 		const type_variant&
 		return_type() const;
 
-		const std::vector<type_variant>&
+		const parameter_types_t&
 		parameter_types() const
 		{
 			return parameter_types_;
@@ -74,7 +76,7 @@ class function_type
 
 	private:
 		std::unique_ptr<type_variant> return_type_;
-		std::vector<type_variant> parameter_types_;
+		parameter_types_t parameter_types_;
 		bool variadic_;
 		bool const_qualified_;
 		bool volatile_qualified_;

@@ -375,6 +375,23 @@ namespace
 		;
 	}
 
+	function_type::parameter_types_t
+	create_function_parameter_types
+	(
+		const function_type::parameter_types_t& parameter_types,
+		const final_graph_entities& final_entities
+	)
+	{
+		function_type::parameter_types_t new_parameter_types;
+
+		for(auto i = parameter_types.begin(); i != parameter_types.end(); ++i)
+		{
+			new_parameter_types.push_back(create_type(*i, final_entities));
+		}
+
+		return new_parameter_types;
+	}
+
 	function_parameter_list
 	create_function_parameter_list
 	(
@@ -437,7 +454,7 @@ namespace
 				return function_type
 				(
 					create_type(type.return_type(), final_entities_),
-					std::vector<type_variant>(), //TODO
+					create_function_parameter_types(type.parameter_types(), final_entities_),
 					type.variadic(),
 					type.const_qualified(),
 					type.volatile_qualified()

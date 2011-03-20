@@ -27,7 +27,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 function_type::function_type
 (
 	const type_variant& return_type,
-	const std::vector<type_variant>& parameter_types,
+	const parameter_types_t& parameter_types,
 	const bool variadic,
 	const bool const_qualified,
 	const bool volatile_qualified
