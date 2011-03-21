@@ -22,6 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "analysis/single_file_tester.hpp"
 #include "analysis/linking_test_file_set.hpp"
+#include "analysis/semantic_analysis_test_file_set.hpp"
 #include "get_file_list.hpp"
 #include <boost/program_options.hpp>
 #include <boost/test/included/unit_test.hpp>
@@ -94,12 +95,35 @@ init_unit_test()
 
 	//Semantic analysis test suite
 	{
-		//build test file list
-		std::vector<std::string> semantic_analysis_test_files = get_file_list("test/testfiles/semantic_analysis", boost::regex(".*\\.cpp"));
+		std::vector<analysis::semantic_analysis_test_file_set> test_files;
 
-		//add the semantic analysis test cases (one per test file) to the master test suite
-		boost::callback1<std::string> tm = boost::bind(&analysis::single_file_tester::test_semantic_analysis, &analysis_single_file_tester, _1);
-		framework::master_test_suite().add(BOOST_PARAM_TEST_CASE(tm, semantic_analysis_test_files.begin(), semantic_analysis_test_files.end()));
+		//fill the test file list with testfiles/semantic_analysis files (for single-file linking tests)
+		{
+			std::vector<std::string> output_files = get_file_list("test/testfiles/semantic_analysis", boost::regex(".*\\.xml"));
+
+			for(auto i = output_files.begin(); i != output_files.end(); ++i) //for each output file...
+			{
+				const std::string output_file_name = *i;
+				const std::string base_file_name = output_file_name.substr(0, output_file_name.length() - 4);
+				const std::string input_file_name = base_file_name + ".cpp";
+
+				//create a file set and add it to the list
+				test_files.push_back
+				(
+					analysis::semantic_analysis_test_file_set
+					{
+						input_file_name,
+						output_file_name
+					}
+				);
+			}
+		}
+
+		//create the semantic analysis test cases (one per file set) and add them to the master test suite
+		boost::callback1<analysis::semantic_analysis_test_file_set> tm =
+			boost::bind(&analysis::single_file_tester::test_semantic_analysis, &analysis_single_file_tester, _1)
+		;
+		framework::master_test_suite().add(BOOST_PARAM_TEST_CASE(tm, test_files.begin(), test_files.end()));
 	}
 
 	//Linking test suite

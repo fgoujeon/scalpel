@@ -21,6 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef ANALYSIS_SINGLE_FILE_TESTER_HPP
 #define ANALYSIS_SINGLE_FILE_TESTER_HPP
 
+#include "semantic_analysis_test_file_set.hpp"
 #include "linking_test_file_set.hpp"
 #include <scalpel/cpp/preprocessor.hpp>
 #include <scalpel/cpp/syntax_analyzer.hpp>
@@ -35,7 +36,7 @@ class single_file_tester
         parse_file(const std::string& filename);
 
         void
-        test_semantic_analysis(const std::string& filename);
+		test_semantic_analysis(const semantic_analysis_test_file_set& file_set);
 
         void
         test_linking(const linking_test_file_set& file_set);

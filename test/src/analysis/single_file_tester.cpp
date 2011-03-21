@@ -90,17 +90,16 @@ single_file_tester::parse_file(const std::string& filename)
 }
 
 void
-single_file_tester::test_semantic_analysis(const std::string& filename)
+single_file_tester::test_semantic_analysis(const semantic_analysis_test_file_set& file_set)
 {
-	//is this a .cpp file?
-	if(filename.substr(filename.length() - 4, 4) != ".cpp")
-		return;
+	const std::string& input_filename = file_set.input_file;
+	const std::string& expected_output_filename = file_set.output_file;
 
 	//open file
-	std::ifstream file(filename.c_str());
+	std::ifstream file(input_filename.c_str());
 	if(!file)
 	{
-		throw std::runtime_error("There's no file named " + filename + ".");
+		throw std::runtime_error("There's no file named " + input_filename + ".");
 	}
 
 	//read file
@@ -124,7 +123,7 @@ single_file_tester::test_semantic_analysis(const std::string& filename)
 	}
 	catch(...)
 	{
-		std::cout << "Exception during the semantic analysis of '" << filename << "':\n";
+		std::cout << "Exception during the semantic analysis of '" << input_filename << "':\n";
 		throw;
 	}
 
@@ -133,7 +132,6 @@ single_file_tester::test_semantic_analysis(const std::string& filename)
 	cpp2xml::serialize_semantic_graph(*semantic_graph, semantic_graph_xml);
 
 	//open the result file
-	std::string expected_output_filename = filename.substr(0, filename.length() - 4) + ".xml";
 	std::ifstream expected_output_file(expected_output_filename.c_str());
 	if(!expected_output_file)
 	{
