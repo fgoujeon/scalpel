@@ -18,8 +18,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_DETAIL_DECLARATIVE_REGION_MEMBER_IMPL_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_DETAIL_DECLARATIVE_REGION_MEMBER_IMPL_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_IMPL_DETAIL_DECLARATIVE_REGION_MEMBER_IMPL_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_IMPL_DETAIL_DECLARATIVE_REGION_MEMBER_IMPL_HPP
 
 #include <scalpel/utility/ptr_variant.hpp>
 #include <scalpel/utility/const_ptr_variant.hpp>
@@ -28,7 +28,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/preprocessor/seq.hpp>
 #include <boost/preprocessor/punctuation/comma.hpp>
 
-namespace scalpel { namespace cpp { namespace semantic_entities { namespace detail
+namespace scalpel { namespace cpp { namespace semantic_entities { namespace impl { namespace detail
 {
 
 template<class... DeclarativeRegions>
@@ -129,42 +129,7 @@ class declarative_region_member_impl<DeclarativeRegion>
 		DeclarativeRegion* enclosing_declarative_region_;
 };
 
-}}}} //namespace scalpel::cpp::semantic_entities::detail
-
-#define DECLARATIVE_REGION_MEMBER_IMPL(IMPL) \
-private: \
-	typedef IMPL declarative_region_member_impl_t; \
- \
-public: \
-	typedef declarative_region_member_impl_t::declarative_region_t enclosing_declarative_region_t; \
-	typedef declarative_region_member_impl_t::const_declarative_region_t const_enclosing_declarative_region_t; \
- \
-	bool \
-	has_enclosing_declarative_region() const \
-	{ \
-		return declarative_region_member_impl_.has_enclosing_declarative_region(); \
-	} \
- \
-	declarative_region_member_impl_t::declarative_region_t \
-	enclosing_declarative_region() \
-	{ \
-		return declarative_region_member_impl_.enclosing_declarative_region(); \
-	} \
- \
-	declarative_region_member_impl_t::const_declarative_region_t \
-	enclosing_declarative_region() const \
-	{ \
-		return declarative_region_member_impl_.enclosing_declarative_region(); \
-	} \
- \
-	void \
-	enclosing_declarative_region(declarative_region_member_impl_t::input_declarative_region_t enclosing_declarative_region) \
-	{ \
-		declarative_region_member_impl_.enclosing_declarative_region(enclosing_declarative_region); \
-	} \
- \
-private: \
-	declarative_region_member_impl_t declarative_region_member_impl_;
+}}}}} //namespace scalpel::cpp::semantic_entities::impl::detail
 
 #include "declarative_region_member_impl.ipp"
 

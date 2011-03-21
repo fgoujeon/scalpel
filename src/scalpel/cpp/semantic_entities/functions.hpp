@@ -28,7 +28,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "statement_block.hpp"
 #include "declarative_region_variants.hpp"
 #include "type_variant_fwd.hpp"
-#include "detail/declarative_region_member_impl.hpp"
+#include "impl/detail/declarative_region_member_impl.hpp"
+#include "macros/detail/declarative_region_member_impl.hpp"
 #include <boost/optional.hpp>
 #include <boost/preprocessor/control/iif.hpp>
 #include <boost/preprocessor/logical/or.hpp>
@@ -289,7 +290,7 @@ class CLASS_NAME \
 		( \
 			IS_MEMBER, \
 			DECLARATIVE_REGION_MEMBER_IMPL(member_function_declarative_region_member_impl_t), \
-			DECLARATIVE_REGION_MEMBER_IMPL(detail::declarative_region_member_impl<namespace_>) \
+			DECLARATIVE_REGION_MEMBER_IMPL(impl::detail::declarative_region_member_impl<namespace_>) \
 		) \
 }; \
  \
@@ -300,7 +301,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 typedef
-	detail::declarative_region_member_impl<class_, member_class>
+	impl::detail::declarative_region_member_impl<class_, member_class>
 	member_function_declarative_region_member_impl_t
 ;
 
@@ -318,6 +319,8 @@ GENERATE_FUNCTION_DECLARATION(simple_function,          0, 1, 1, 0, 1, 1, 1, 1, 
 }}} //namespace scalpel::cpp::semantic_entities
 
 #undef GENERATE_FUNCTION_DECLARATION
+
+#include "macros/detail/declarative_region_member_impl_undef.hpp"
 
 #endif
 

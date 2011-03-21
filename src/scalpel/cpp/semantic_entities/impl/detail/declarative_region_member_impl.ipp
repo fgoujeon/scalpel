@@ -18,10 +18,10 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_DETAIL_DECLARATIVE_REGION_MEMBER_IMPL_IPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_DETAIL_DECLARATIVE_REGION_MEMBER_IMPL_IPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_IMPL_DETAIL_DECLARATIVE_REGION_MEMBER_IMPL_IPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_IMPL_DETAIL_DECLARATIVE_REGION_MEMBER_IMPL_IPP
 
-namespace scalpel { namespace cpp { namespace semantic_entities { namespace detail
+namespace scalpel { namespace cpp { namespace semantic_entities { namespace impl { namespace detail
 {
 
 template<class DeclarativeRegion1, class DeclarativeRegion2, class... DeclarativeRegions>
@@ -98,7 +98,7 @@ declarative_region_member_impl<DeclarativeRegion>::enclosing_declarative_region(
 		throw std::runtime_error("The declarative region is already set.");
 }
 
-}}}} //namespace scalpel::cpp::semantic_entities::detail
+}}}}} //namespace scalpel::cpp::semantic_entities::impl::detail
 
 #endif
 

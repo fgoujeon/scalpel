@@ -28,6 +28,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "functions.hpp"
 #include "typedef_.hpp"
 #include "variable.hpp"
+#include "macros/detail/declarative_region_member_impl.hpp"
 #include <scalpel/utility/unique_ptr_vector.hpp>
 #include <boost/optional.hpp>
 #include <string>
@@ -180,10 +181,12 @@ class namespace_
 
 		namespace_ptrs_t using_directive_namespaces_;
 
-		DECLARATIVE_REGION_MEMBER_IMPL(detail::declarative_region_member_impl<namespace_>)
+		DECLARATIVE_REGION_MEMBER_IMPL(impl::detail::declarative_region_member_impl<namespace_>)
 };
 
 }}} //namespace scalpel::cpp::semantic_entities
+
+#include "macros/detail/declarative_region_member_impl_undef.hpp"
 
 #endif
 

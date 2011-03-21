@@ -97,7 +97,7 @@ init_unit_test()
 	{
 		std::vector<analysis::semantic_analysis_test_file_set> test_files;
 
-		//fill the test file list with testfiles/semantic_analysis files (for single-file linking tests)
+		//fill the test file list with testfiles/semantic_analysis files
 		{
 			std::vector<std::string> output_files = get_file_list("test/testfiles/semantic_analysis", boost::regex(".*\\.xml"));
 

@@ -23,7 +23,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "enum_constant.hpp"
 #include "member_access.hpp"
-#include "detail/declarative_region_member_impl.hpp"
+#include "impl/detail/declarative_region_member_impl.hpp"
+#include "macros/detail/declarative_region_member_impl.hpp"
 #include <scalpel/utility/unique_ptr_vector.hpp>
 #include <boost/preprocessor/control/iif.hpp>
 #include <boost/preprocessor/punctuation/comma_if.hpp>
@@ -88,7 +89,7 @@ class CLASS_NAME \
 		( \
 			IS_MEMBER, \
 			DECLARATIVE_REGION_MEMBER_IMPL(member_enum_declarative_region_member_impl_t), \
-			DECLARATIVE_REGION_MEMBER_IMPL(detail::declarative_region_member_impl<namespace_>) \
+			DECLARATIVE_REGION_MEMBER_IMPL(impl::detail::declarative_region_member_impl<namespace_>) \
 		) \
 };
 
@@ -100,7 +101,7 @@ class class_;
 class member_class;
 
 typedef
-	detail::declarative_region_member_impl<class_, member_class>
+	impl::detail::declarative_region_member_impl<class_, member_class>
 	member_enum_declarative_region_member_impl_t
 ;
 
@@ -108,6 +109,8 @@ GENERATE_ENUM_DECLARATION(enum_, 0)
 GENERATE_ENUM_DECLARATION(member_enum, 1)
 
 }}} //namespace scalpel::cpp::semantic_entities
+
+#include "macros/detail/declarative_region_member_impl_undef.hpp"
 
 #endif
 

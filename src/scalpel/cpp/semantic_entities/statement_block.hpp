@@ -23,6 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "variable.hpp"
 #include "namespace_alias.hpp"
+#include "macros/detail/declarative_region_member_impl.hpp"
 #include <scalpel/utility/unique_ptr_vector.hpp>
 #include <string>
 #include <memory>
@@ -92,7 +93,7 @@ class statement_block
         namespace_ptrs_t using_directive_namespaces_;
 
 		typedef
-			detail::declarative_region_member_impl
+			impl::detail::declarative_region_member_impl
 			<
 				constructor,
 				destructor,
@@ -108,6 +109,8 @@ class statement_block
 };
 
 }}} //namespace scalpel::cpp::semantic_entities
+
+#include "macros/detail/declarative_region_member_impl_undef.hpp"
 
 #endif
 

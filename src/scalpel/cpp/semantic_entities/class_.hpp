@@ -25,7 +25,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "declarative_region_variants.hpp"
 #include "type_variant_fwd.hpp"
 #include "member_access.hpp"
-#include "detail/declarative_region_member_impl.hpp"
+#include "impl/detail/declarative_region_member_impl.hpp"
+#include "macros/detail/declarative_region_member_impl.hpp"
 #include <scalpel/utility/unique_ptr_vector.hpp>
 #include <scalpel/utility/unique_ptr_vector.hpp>
 #include <scalpel/utility/const_ptr_variant.hpp>
@@ -215,7 +216,7 @@ class CLASS_NAME \
 		( \
 			IS_MEMBER, \
 			DECLARATIVE_REGION_MEMBER_IMPL(member_class_declarative_region_member_impl_t), \
-			DECLARATIVE_REGION_MEMBER_IMPL(detail::declarative_region_member_impl<namespace_>) \
+			DECLARATIVE_REGION_MEMBER_IMPL(impl::detail::declarative_region_member_impl<namespace_>) \
 		) \
 };
 
@@ -232,7 +233,7 @@ class simple_member_function;
 class member_variable;
 
 typedef
-	detail::declarative_region_member_impl<class_, member_class>
+	impl::detail::declarative_region_member_impl<class_, member_class>
 	member_class_declarative_region_member_impl_t
 ;
 
@@ -243,6 +244,8 @@ GENERATE_CLASS_DECLARATION(member_class, 1)
 }}} //namespace scalpel::cpp::semantic_entities
 
 #undef GENERATE_CLASS_DECLARATION
+
+#include "macros/detail/declarative_region_member_impl_undef.hpp"
 
 #endif
 

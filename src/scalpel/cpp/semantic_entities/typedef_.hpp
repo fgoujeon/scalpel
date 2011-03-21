@@ -22,7 +22,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_TYPEDEF_HPP
 
 #include "type_variant.hpp"
-#include "detail/declarative_region_member_impl.hpp"
+#include "impl/detail/declarative_region_member_impl.hpp"
+#include "macros/detail/declarative_region_member_impl.hpp"
 #include <boost/preprocessor/control/iif.hpp>
 #include <boost/preprocessor/punctuation/comma_if.hpp>
 
@@ -77,7 +78,7 @@ class CLASS_NAME \
 		( \
 			IS_MEMBER, \
 			DECLARATIVE_REGION_MEMBER_IMPL(member_typedef_declarative_region_member_impl_t), \
-			DECLARATIVE_REGION_MEMBER_IMPL(detail::declarative_region_member_impl<namespace_>) \
+			DECLARATIVE_REGION_MEMBER_IMPL(impl::detail::declarative_region_member_impl<namespace_>) \
 		) \
 };
 
@@ -85,7 +86,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 typedef
-	detail::declarative_region_member_impl<class_, member_class>
+	impl::detail::declarative_region_member_impl<class_, member_class>
 	member_typedef_declarative_region_member_impl_t
 ;
 
@@ -95,6 +96,8 @@ GENERATE_TYPEDEF_DECLARATION(member_typedef, 1)
 }}} //namespace scalpel::cpp::semantic_entities
 
 #undef GENERATE_TYPEDEF_DECLARATION
+
+#include "macros/detail/declarative_region_member_impl_undef.hpp"
 
 #endif
 
