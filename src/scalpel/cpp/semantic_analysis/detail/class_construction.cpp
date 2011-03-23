@@ -100,7 +100,7 @@ create_member_class
 	return std::unique_ptr<member_class>(new member_class(class_name, access));
 }
 
-typename utility::ptr_variant<semantic_entities::class_, semantic_entities::member_class>::type
+semantic_entities::class_ptr_variant
 find_class
 (
 	const ptr_to_member_operator& ptr_to_member_operator_node,

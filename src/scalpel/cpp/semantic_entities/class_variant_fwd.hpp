@@ -18,22 +18,27 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "base_class.hpp"
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_CLASS_VARIANT_FWD_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_CLASS_VARIANT_FWD_HPP
+
+#include <scalpel/utility/ptr_variant.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-base_class::base_class
-(
-	const class_ptr_variant& base,
-	const member_access access,
-	bool is_virtual
-):
-	base_(base),
-	access_(access),
-	is_virtual_(is_virtual)
-{
-}
+class class_;
+class member_class;
+
+typedef
+	typename utility::ptr_variant
+	<
+		class_,
+		member_class
+	>::type
+	class_ptr_variant
+;
 
 }}} //namespace scalpel::cpp::semantic_entities
+
+#endif
 

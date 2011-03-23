@@ -86,7 +86,7 @@ add_class
 	std::unique_ptr<semantic_entities::member_class>&& class_entity
 );
 
-typename utility::ptr_variant<semantic_entities::class_, semantic_entities::member_class>::type
+semantic_entities::class_ptr_variant
 find_class
 (
 	const syntax_nodes::ptr_to_member_operator& ptr_to_member_operator_node,

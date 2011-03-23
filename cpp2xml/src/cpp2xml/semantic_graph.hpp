@@ -243,14 +243,7 @@ class semantic_graph_serializer
 		class_id(const scalpel::cpp::semantic_entities::member_class&) const;
 
 		unsigned int
-		class_id
-		(
-			const typename scalpel::utility::ptr_variant
-			<
-				scalpel::cpp::semantic_entities::class_,
-				scalpel::cpp::semantic_entities::member_class
-			>::type& entity
-		) const;
+		class_id(const scalpel::cpp::semantic_entities::class_ptr_variant& entity) const;
 
 		unsigned int
 		enum_id(const scalpel::cpp::semantic_entities::enum_&) const;

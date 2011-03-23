@@ -431,7 +431,7 @@ namespace
 
 
 
-	struct find_final_class_visitor: utility::static_visitor<typename utility::ptr_variant<class_, member_class>::type>
+	struct find_final_class_visitor: utility::static_visitor<class_ptr_variant>
 	{
 		public:
 			find_final_class_visitor(const final_graph_entities& final_entities):
@@ -440,7 +440,7 @@ namespace
 			}
 
 			template<class Class>
-			typename utility::ptr_variant<class_, member_class>::type
+			class_ptr_variant
 			operator()(const Class* base)
 			{
 				auto it = final_entities_.get_map_of_type<Class>().find(base);
@@ -562,7 +562,7 @@ namespace
 				return pointer_to_member
 				(
 					create_type(type.qualified_type(), final_entities_),
-					pointer_to_member::parent_class_t(apply_visitor(visitor, type.parent_class()))
+					apply_visitor(visitor, type.parent_class())
 				);
 			}
 

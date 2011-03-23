@@ -406,7 +406,7 @@ qualify_type
 				const ptr_to_member_operator& ptr_to_member_operator_node = *opt_ptr_to_member_operator_node;
 
 				//get the class designated by the ptr-to-member-operator (c in "void (c::*f)(int)")
-				typename utility::ptr_variant<class_, member_class>::type found_class =
+				const class_ptr_variant found_class =
 					find_class
 					(
 						ptr_to_member_operator_node,

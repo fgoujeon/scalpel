@@ -27,7 +27,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 pointer_to_member::pointer_to_member
 (
 	const type_variant& qualified_type,
-	const parent_class_t& parent_class
+	const class_ptr_variant& parent_class
 ):
 	qualified_type_(std::unique_ptr<type_variant>(new type_variant(qualified_type))),
 	parent_class_(parent_class)

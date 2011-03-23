@@ -22,7 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_POINTER_TO_MEMBER_HPP
 
 #include "type_variant_fwd.hpp"
-#include <scalpel/utility/ptr_variant.hpp>
+#include "class_variant_fwd.hpp"
 #include <memory>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
@@ -34,12 +34,10 @@ Represents the const qualifier.
 class pointer_to_member
 {
 	public:
-		typedef typename utility::ptr_variant<class_, member_class>::type parent_class_t;
-
 		pointer_to_member
 		(
 			const type_variant& qualified_type,
-			const parent_class_t& member_class
+			const class_ptr_variant& member_class
 		);
 
 		pointer_to_member(const pointer_to_member& rhs);
@@ -50,7 +48,7 @@ class pointer_to_member
 		const type_variant&
 		qualified_type() const;
 
-		const parent_class_t&
+		const class_ptr_variant&
 		parent_class() const
 		{
 			return parent_class_;
@@ -58,7 +56,7 @@ class pointer_to_member
 
 	private:
 		std::unique_ptr<type_variant> qualified_type_;
-		parent_class_t parent_class_;
+		class_ptr_variant parent_class_;
 };
 
 bool

@@ -455,9 +455,9 @@ find_entities_in_base_classes
 
 	for(auto i = base_classes.begin(); i != base_classes.end(); ++i)
 	{
-		typename utility::ptr_variant<class_, member_class>::type current_class = i->base();
+		const class_ptr_variant& current_class = i->base();
 
-		if(class_** opt = utility::get<class_*>(&current_class))
+		if(class_* const* opt = utility::get<class_*>(&current_class))
 		{
 			class_& current_class = **opt;
 
@@ -496,7 +496,7 @@ find_entities_in_base_classes
 				add_to_result(found_entities, current_class_base_classes_found_entities);
 			}
 		}
-		else if(member_class** opt = utility::get<member_class*>(&current_class))
+		else if(member_class* const* opt = utility::get<member_class*>(&current_class))
 		{
 			member_class& current_class = **opt;
 
