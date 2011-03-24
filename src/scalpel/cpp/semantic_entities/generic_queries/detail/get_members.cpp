@@ -98,7 +98,7 @@ get_members<semantic_entities::MEMBER_TYPE>(const semantic_entities::PARENT_TYPE
 
 
 GENERATE_NON_CONST_GET_MEMBERS_SPECIALIZATION(namespace_, open_declarative_region_ptr_variant, open_declarative_regions)
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (namespace_, unnamed_namespace)
+GENERATE_GET_MEMBERS_SPECIALIZATION          (namespace_, unnamed_namespace, unnamed_namespaces)
 GENERATE_GET_MEMBERS_SPECIALIZATION          (namespace_, namespace_, namespaces)
 GENERATE_GET_MEMBERS_SPECIALIZATION          (namespace_, class_, classes)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (namespace_, member_class)
@@ -118,7 +118,7 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (namespace_, member_variable)
 GENERATE_GET_MEMBERS_SPECIALIZATION          (namespace_, namespace_alias, namespace_aliases)
 
 GENERATE_NON_CONST_GET_MEMBERS_SPECIALIZATION(unnamed_namespace, open_declarative_region_ptr_variant, open_declarative_regions)
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (unnamed_namespace, unnamed_namespace)
+GENERATE_GET_MEMBERS_SPECIALIZATION          (unnamed_namespace, unnamed_namespace, unnamed_namespaces)
 GENERATE_GET_MEMBERS_SPECIALIZATION          (unnamed_namespace, namespace_, namespaces)
 GENERATE_GET_MEMBERS_SPECIALIZATION          (unnamed_namespace, class_, classes)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (unnamed_namespace, member_class)

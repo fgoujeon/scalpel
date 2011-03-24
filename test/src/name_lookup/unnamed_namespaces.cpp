@@ -69,9 +69,9 @@ BOOST_AUTO_TEST_CASE(unnamed_namespaces)
 
 	//namespaces
 	scalpel::cpp::semantic_graph semantic_graph;
-	auto namespace_xxx = new namespace_();
+	auto namespace_xxx = new unnamed_namespace();
 	auto namespace_a = new namespace_("a");
-	auto namespace_a_xxx = new namespace_();
+	auto namespace_a_xxx = new unnamed_namespace();
 
 	//functions
 	auto function_f = new simple_function
@@ -108,11 +108,11 @@ BOOST_AUTO_TEST_CASE(unnamed_namespaces)
 	);
 
 	//assembling
-	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_xxx));
+	semantic_graph.add_member(std::unique_ptr<unnamed_namespace>(namespace_xxx));
 	namespace_xxx->add_member(std::unique_ptr<variable>(variable_xxx_i));
 	semantic_graph.add_member(std::unique_ptr<simple_function>(function_f));
 	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_a));
-	namespace_a->add_member(std::unique_ptr<namespace_>(namespace_a_xxx));
+	namespace_a->add_member(std::unique_ptr<unnamed_namespace>(namespace_a_xxx));
 	namespace_a_xxx->add_member(std::unique_ptr<variable>(variable_a_xxx_i));
 	namespace_a_xxx->add_member(std::unique_ptr<variable>(variable_a_xxx_j));
 	namespace_a->add_member(std::unique_ptr<simple_function>(function_a_g));
@@ -126,17 +126,17 @@ BOOST_AUTO_TEST_CASE(unnamed_namespaces)
 	//
 
 	//look up i from function f(), must find <unnamed>::i
-//	{
-//		auto found_entity =
-//			find<identification_policies::by_name, false, false, variable>
-//			(
-//				"i",
-//				function_f
-//			)
-//		;
-//
-//		BOOST_CHECK_EQUAL(found_entity, variable_xxx_i);
-//	}
+	{
+		auto found_entity =
+			find<identification_policies::by_name, false, false, variable>
+			(
+				"i",
+				function_f
+			)
+		;
+
+		BOOST_CHECK_EQUAL(found_entity, variable_xxx_i);
+	}
 }
 
 } //namespace name_lookup
