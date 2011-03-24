@@ -23,6 +23,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "semantic_entity_analysis/get_global_namespace.hpp"
 #include "semantic_entity_analysis/get_name.hpp"
+#include <scalpel/cpp/semantic_entities/generic_queries/detail/has_enclosing_declarative_region.hpp>
+#include <scalpel/cpp/semantic_entities/generic_queries/detail/enclosing_declarative_region.hpp>
 #include <scalpel/cpp/semantic_entities/generic_queries/detail/get_members.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail { namespace name_lookup
@@ -52,15 +54,25 @@ find
 		if(semantic_entities::namespace_** opt_namespace_ptr = utility::get<semantic_entities::namespace_*>(&current_declarative_region))
 			apply_using_directives
 			(
-				current_declarative_region,
+				**opt_namespace_ptr,
 				(*opt_namespace_ptr)->using_directive_namespaces(),
+				(*opt_namespace_ptr)->get_unnamed_namespace(),
+				namespace_associations
+			);
+		else if(semantic_entities::unnamed_namespace** opt_namespace_ptr = utility::get<semantic_entities::unnamed_namespace*>(&current_declarative_region))
+			apply_using_directives
+			(
+				**opt_namespace_ptr,
+				(*opt_namespace_ptr)->using_directive_namespaces(),
+				(*opt_namespace_ptr)->get_unnamed_namespace(),
 				namespace_associations
 			);
 		else if(semantic_entities::statement_block** opt_statement_block_ptr = utility::get<semantic_entities::statement_block*>(&current_declarative_region))
 			apply_using_directives
 			(
-				current_declarative_region,
+				**opt_statement_block_ptr,
 				(*opt_statement_block_ptr)->using_directive_namespaces(),
+				0,
 				namespace_associations
 			);
 
@@ -85,9 +97,10 @@ find
 			auto associated_namespaces_it = namespace_associations.find(*opt_namespace_ptr);
 			if(associated_namespaces_it != namespace_associations.end())
 			{
-				const std::vector<semantic_entities::namespace_*>& associated_namespaces = associated_namespaces_it->second;
-
 				//for each associated namespace
+				const std::vector<semantic_entities::namespace_*>& associated_namespaces =
+					associated_namespaces_it->second.namespaces
+				;
 				for(auto i = associated_namespaces.begin(); i != associated_namespaces.end(); ++i)
 				{
 					semantic_entities::namespace_& associated_namespace = **i;
@@ -103,6 +116,28 @@ find
 							Multiple,
 							EntitiesT...
 						>(identifier, associated_namespace)
+					);
+				}
+
+				//for each associated unnamed namespace
+				const std::vector<semantic_entities::unnamed_namespace*>& associated_unnamed_namespaces =
+					associated_namespaces_it->second.unnamed_namespaces
+				;
+				for(auto i = associated_unnamed_namespaces.begin(); i != associated_unnamed_namespaces.end(); ++i)
+				{
+					semantic_entities::unnamed_namespace& associated_unnamed_namespace = **i;
+
+					add_to_result
+					(
+						found_entities,
+						find_local_entities
+						<
+							EntityIdentificationPolicy,
+							semantic_entities::unnamed_namespace,
+							true,
+							Multiple,
+							EntitiesT...
+						>(identifier, associated_unnamed_namespace)
 					);
 				}
 			}
@@ -540,6 +575,102 @@ find_entities_in_base_classes
 	//If Multiple, return the full list.
 	//If not Multiple, return the only one element of the list.
 	return std::move(return_result<Optional, Multiple, EntitiesT...>::result(found_entities));
+}
+
+template<class DeclarativeRegion>
+void
+apply_using_directives
+(
+	DeclarativeRegion& declarative_region,
+	const std::vector<semantic_entities::namespace_*>& using_directive_namespaces,
+	semantic_entities::unnamed_namespace* opt_unnamed_namespace,
+	namespace_association_map& namespace_associations
+)
+{
+	using namespace semantic_entities;
+
+	//for each using directive's namespace...
+	for
+	(
+		auto i = using_directive_namespaces.begin();
+		i != using_directive_namespaces.end();
+		++i
+	)
+	{
+		semantic_entities::namespace_& current_using_directive_namespace = **i;
+
+		//find the common enclosing namespace
+		namespace_ptr_variant common_enclosing_namespace =
+			find_common_enclosing_namespace(declarative_region, &current_using_directive_namespace)
+		;
+
+		//associate the using directive's namespace to the common enclosing namespace
+		namespace_associations[common_enclosing_namespace].namespaces.push_back(&current_using_directive_namespace);
+
+		//process recursively with the using directive's namespaces of the using directive's namespace
+		apply_using_directives
+		(
+			declarative_region,
+			current_using_directive_namespace.using_directive_namespaces(),
+			current_using_directive_namespace.get_unnamed_namespace(),
+			namespace_associations
+		);
+	}
+
+	//unnamed namespace
+	if(opt_unnamed_namespace)
+	{
+		//find the common enclosing namespace
+		namespace_ptr_variant common_enclosing_namespace =
+			find_common_enclosing_namespace(declarative_region, opt_unnamed_namespace)
+		;
+
+		//associate the using directive's namespace to the common enclosing namespace
+		namespace_associations[common_enclosing_namespace].unnamed_namespaces.push_back(opt_unnamed_namespace);
+	}
+}
+
+template<class DeclarativeRegion>
+semantic_entities::namespace_ptr_variant
+find_common_enclosing_namespace
+(
+	DeclarativeRegion& a,
+	const semantic_entities::namespace_ptr_variant& b
+)
+{
+	using namespace semantic_entities;
+
+	declarative_region_ptr_variant current_declarative_region_a = &a;
+	while(true) //from a to outermost declarative region...
+	{
+		namespace_** opt_namespace_ptr_a = utility::get<namespace_*>(&current_declarative_region_a);
+		unnamed_namespace** opt_unnamed_namespace_ptr_a = utility::get<unnamed_namespace*>(&current_declarative_region_a);
+
+		if(opt_namespace_ptr_a || opt_unnamed_namespace_ptr_a) //if the current enclosing declarative region of a is a namespace...
+		{
+			namespace_ptr_variant current_namespace_a =
+				opt_namespace_ptr_a ?
+				namespace_ptr_variant(*opt_namespace_ptr_a) :
+				namespace_ptr_variant(*opt_unnamed_namespace_ptr_a)
+			;
+			namespace_ptr_variant current_namespace_b = b;
+			while(true) //from b to outermost namespace...
+			{
+				if(current_namespace_a == current_namespace_b)
+					return current_namespace_a;
+
+				//iterate to the enclosing namespace
+				if(!generic_queries::detail::has_enclosing_declarative_region(current_namespace_b)) break;
+				current_namespace_b = generic_queries::detail::enclosing_declarative_region(current_namespace_b);
+			}
+		}
+
+		//iterate to the enclosing declarative region
+		if(!has_enclosing_declarative_region(current_declarative_region_a)) break;
+		current_declarative_region_a = get_enclosing_declarative_region(current_declarative_region_a);
+	}
+
+	throw std::runtime_error("find_common_enclosing_namespace() error: the given declarative regions don't have a common namespace");
 }
 
 

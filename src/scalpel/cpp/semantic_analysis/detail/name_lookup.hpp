@@ -189,11 +189,17 @@ find_local
 namespace detail
 {
 	//used for applying using directives
+	struct associated_namespaces
+	{
+		std::vector<semantic_entities::namespace_*> namespaces;
+		std::vector<semantic_entities::unnamed_namespace*> unnamed_namespaces;
+	};
+
 	typedef
 		std::map
 		<
 			semantic_entities::namespace_ptr_variant,
-			std::vector<semantic_entities::namespace_*>
+			associated_namespaces
 		>
 		namespace_association_map
 	;
@@ -333,22 +339,25 @@ namespace detail
 		const std::vector<semantic_entities::base_class>& base_classes
 	);
 
+	template<class DeclarativeRegion>
 	void
 	apply_using_directives
 	(
-		const semantic_entities::declarative_region_ptr_variant& current_declarative_region,
+		DeclarativeRegion& declarative_region,
 		const std::vector<semantic_entities::namespace_*>& using_directive_namespaces,
+		semantic_entities::unnamed_namespace* opt_unnamed_namespace,
 		namespace_association_map& namespace_associations
 	);
 
 	/**
 	Find the nearest enclosing namespace containing both a and b.
 	*/
+	template<class DeclarativeRegion>
 	semantic_entities::namespace_ptr_variant
 	find_common_enclosing_namespace
 	(
-		const semantic_entities::declarative_region_ptr_variant& a,
-		semantic_entities::namespace_& b
+		DeclarativeRegion& a,
+		const semantic_entities::namespace_ptr_variant& b
 	);
 
 
