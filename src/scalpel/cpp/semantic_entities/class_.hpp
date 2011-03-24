@@ -216,13 +216,15 @@ class CLASS_NAME \
 		( \
 			IS_MEMBER, \
 			DECLARATIVE_REGION_MEMBER_IMPL(member_class_declarative_region_member_impl_t), \
-			DECLARATIVE_REGION_MEMBER_IMPL(impl::detail::declarative_region_member_impl<namespace_>) \
+			DECLARATIVE_REGION_MEMBER_IMPL(class_declarative_region_member_impl_t) \
 		) \
 };
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
+class namespace_;
+class unnamed_namespace;
 class member_enum;
 class member_typedef;
 class constructor;
@@ -231,6 +233,11 @@ class operator_member_function;
 class conversion_function;
 class simple_member_function;
 class member_variable;
+
+typedef
+	impl::detail::declarative_region_member_impl<namespace_, unnamed_namespace>
+	class_declarative_region_member_impl_t
+;
 
 typedef
 	impl::detail::declarative_region_member_impl<class_, member_class>

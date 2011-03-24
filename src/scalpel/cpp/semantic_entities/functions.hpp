@@ -290,7 +290,7 @@ class CLASS_NAME \
 		( \
 			IS_MEMBER, \
 			DECLARATIVE_REGION_MEMBER_IMPL(member_function_declarative_region_member_impl_t), \
-			DECLARATIVE_REGION_MEMBER_IMPL(impl::detail::declarative_region_member_impl<namespace_>) \
+			DECLARATIVE_REGION_MEMBER_IMPL(function_declarative_region_member_impl_t) \
 		) \
 }; \
  \
@@ -299,6 +299,11 @@ have_same_signature(const CLASS_NAME& lhs, const CLASS_NAME& rhs);
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
+
+typedef
+	impl::detail::declarative_region_member_impl<namespace_, unnamed_namespace>
+	function_declarative_region_member_impl_t
+;
 
 typedef
 	impl::detail::declarative_region_member_impl<class_, member_class>

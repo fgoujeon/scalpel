@@ -220,6 +220,12 @@ namespace
 		{
 			return create_unique_id(*t);
 		}
+
+		std::string
+		operator()(const unnamed_namespace*)
+		{
+			return "";
+		}
 	} create_unique_id_visitor;
 }
 

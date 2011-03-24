@@ -89,7 +89,7 @@ class CLASS_NAME \
 		( \
 			IS_MEMBER, \
 			DECLARATIVE_REGION_MEMBER_IMPL(member_enum_declarative_region_member_impl_t), \
-			DECLARATIVE_REGION_MEMBER_IMPL(impl::detail::declarative_region_member_impl<namespace_>) \
+			DECLARATIVE_REGION_MEMBER_IMPL(enum_declarative_region_member_impl_t) \
 		) \
 };
 
@@ -97,8 +97,14 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 class namespace_;
+class unnamed_namespace;
 class class_;
 class member_class;
+
+typedef
+	impl::detail::declarative_region_member_impl<namespace_, unnamed_namespace>
+	enum_declarative_region_member_impl_t
+;
 
 typedef
 	impl::detail::declarative_region_member_impl<class_, member_class>

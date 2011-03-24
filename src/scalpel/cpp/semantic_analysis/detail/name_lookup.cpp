@@ -19,6 +19,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "name_lookup.hpp"
+#include <scalpel/cpp/semantic_entities/generic_queries/detail/has_enclosing_declarative_region.hpp>
+#include <scalpel/cpp/semantic_entities/generic_queries/detail/enclosing_declarative_region.hpp>
 #include <stdexcept>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail { namespace name_lookup
@@ -194,12 +196,12 @@ apply_using_directives
 		semantic_entities::namespace_& current_using_directive_namespace = **i;
 
 		//find the common enclosing namespace
-		namespace_& common_enclosing_namespace =
+		namespace_ptr_variant common_enclosing_namespace =
 			find_common_enclosing_namespace(current_declarative_region, current_using_directive_namespace)
 		;
 
 		//associate the using directive's namespace to the common enclosing namespace
-		namespace_associations[&common_enclosing_namespace].push_back(&current_using_directive_namespace);
+		namespace_associations[common_enclosing_namespace].push_back(&current_using_directive_namespace);
 
 		//process recursively with the using directive's namespaces of the using directive's namespace
 		apply_using_directives
@@ -211,28 +213,35 @@ apply_using_directives
 	}
 }
 
-semantic_entities::namespace_&
+semantic_entities::namespace_ptr_variant
 find_common_enclosing_namespace
 (
 	const semantic_entities::declarative_region_ptr_variant& a,
 	semantic_entities::namespace_& b
 )
 {
-	semantic_entities::declarative_region_ptr_variant current_declarative_region_a = a;
+	declarative_region_ptr_variant current_declarative_region_a = a;
 	while(true) //from a to outermost declarative region...
 	{
-		if(namespace_** opt_namespace_ptr = utility::get<semantic_entities::namespace_*>(&current_declarative_region_a))
+		namespace_** opt_namespace_ptr_a = utility::get<namespace_*>(&current_declarative_region_a);
+		unnamed_namespace** opt_unnamed_namespace_ptr_a = utility::get<unnamed_namespace*>(&current_declarative_region_a);
+
+		if(opt_namespace_ptr_a || opt_unnamed_namespace_ptr_a) //if the current enclosing declarative region of a is a namespace...
 		{
-			namespace_* current_namespace_a = *opt_namespace_ptr;
-			namespace_* current_namespace_b = &b;
+			namespace_ptr_variant current_namespace_a =
+				opt_namespace_ptr_a ?
+				namespace_ptr_variant(*opt_namespace_ptr_a) :
+				namespace_ptr_variant(*opt_unnamed_namespace_ptr_a)
+			;
+			namespace_ptr_variant current_namespace_b = &b;
 			while(true) //from b to outermost namespace...
 			{
 				if(current_namespace_a == current_namespace_b)
-					return *current_namespace_a;
+					return current_namespace_a;
 
 				//iterate to the enclosing namespace
-				if(!current_namespace_b->has_enclosing_declarative_region()) break;
-				current_namespace_b = &current_namespace_b->enclosing_declarative_region();
+				if(!generic_queries::detail::has_enclosing_declarative_region(current_namespace_b)) break;
+				current_namespace_b = generic_queries::detail::enclosing_declarative_region(current_namespace_b);
 			}
 		}
 

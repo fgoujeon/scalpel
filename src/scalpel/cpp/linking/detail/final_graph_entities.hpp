@@ -47,6 +47,7 @@ struct final_graph_entities
 
 	std::unique_ptr<semantic_entities::namespace_> global_namespace;
 	std::map<const semantic_entities::namespace_*, semantic_entities::namespace_*> namespaces;
+	std::map<const semantic_entities::unnamed_namespace*, semantic_entities::unnamed_namespace*> unnamed_namespaces;
 	std::map<const semantic_entities::class_*, semantic_entities::class_*> classes;
 	std::map<const semantic_entities::member_class*, semantic_entities::member_class*> member_classes;
 	std::map<const semantic_entities::enum_*, semantic_entities::enum_*> enums;

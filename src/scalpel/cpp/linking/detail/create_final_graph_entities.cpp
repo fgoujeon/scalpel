@@ -598,7 +598,7 @@ namespace
 	)
 	{
 		//create the global namespace
-		final_entities.global_namespace = std::unique_ptr<namespace_>(new namespace_());
+		final_entities.global_namespace = std::unique_ptr<namespace_>(new namespace_(""));
 
 		for(auto i = groups.global_namespaces.begin(); i != groups.global_namespaces.end(); ++i)
 		{

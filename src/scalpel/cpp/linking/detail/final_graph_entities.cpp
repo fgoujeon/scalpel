@@ -54,6 +54,7 @@ namespace scalpel { namespace cpp { namespace linking { namespace detail
 {
 
 GENERATE_GET_ENTITIES_SPECIALIZATION(namespace_, namespaces)
+GENERATE_GET_ENTITIES_SPECIALIZATION(unnamed_namespace, unnamed_namespaces)
 GENERATE_GET_ENTITIES_SPECIALIZATION(class_, classes)
 GENERATE_GET_ENTITIES_SPECIALIZATION(member_class, member_classes)
 GENERATE_GET_ENTITIES_SPECIALIZATION(enum_, enums)

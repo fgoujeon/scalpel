@@ -18,37 +18,27 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "semantic_analysis.hpp"
-#include "semantic_analysis/detail/namespace_construction.hpp"
-#include <iostream>
-#include <stdexcept>
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_NAMESPACE_VARIANT_FWD_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_NAMESPACE_VARIANT_FWD_HPP
 
-namespace scalpel { namespace cpp
+#include <scalpel/utility/ptr_variant.hpp>
+
+namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-namespace semantic_analysis
-{
+class namespace_;
+class unnamed_namespace;
 
-using namespace syntax_nodes;
-using namespace semantic_entities;
+typedef
+	typename utility::ptr_variant
+	<
+		namespace_,
+		unnamed_namespace
+	>::type
+	namespace_ptr_variant
+;
 
-std::unique_ptr<semantic_graph>
-analyze(const syntax_tree& tree)
-{
-	//create semantic graph
-	std::unique_ptr<namespace_> global_namespace(new namespace_(""));
+}}} //namespace scalpel::cpp::semantic_entities
 
-	auto opt_declaration_seq_node = get_declaration_seq(tree);
-	if(opt_declaration_seq_node)
-	{
-		auto declaration_seq_node = *opt_declaration_seq_node;
-		cpp::semantic_analysis::detail::fill_namespace(*global_namespace, declaration_seq_node);
-	}
-
-	return global_namespace;
-}
-
-} //namespace semantic_analysis
-
-}} //namespace scalpel::cpp
+#endif
 

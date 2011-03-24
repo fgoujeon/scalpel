@@ -192,7 +192,7 @@ namespace detail
 	typedef
 		std::map
 		<
-			const semantic_entities::namespace_*,
+			semantic_entities::namespace_ptr_variant,
 			std::vector<semantic_entities::namespace_*>
 		>
 		namespace_association_map
@@ -344,7 +344,7 @@ namespace detail
 	/**
 	Find the nearest enclosing namespace containing both a and b.
 	*/
-	semantic_entities::namespace_&
+	semantic_entities::namespace_ptr_variant
 	find_common_enclosing_namespace
 	(
 		const semantic_entities::declarative_region_ptr_variant& a,

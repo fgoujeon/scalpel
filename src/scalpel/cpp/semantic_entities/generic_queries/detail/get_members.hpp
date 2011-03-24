@@ -86,6 +86,7 @@ typename member_type_traits<MemberT, true>::return_type \
 get_members(const semantic_entities::PARENT_TYPE& parent);
 
 GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(namespace_)
+GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(unnamed_namespace)
 GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(class_)
 GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(member_class)
 GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(constructor)

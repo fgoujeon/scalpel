@@ -20,197 +20,201 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "namespace_.hpp"
 
+#define GENERATE_NAMESPACE_DEFINITION(CLASS_NAME, IS_NAMED) \
+CLASS_NAME::CLASS_NAME() \
+{ \
+} \
+ \
+BOOST_PP_IIF  \
+(  \
+	IS_NAMED,  \
+	CLASS_NAME::CLASS_NAME(const std::string& name): \
+		name_(name) \
+	{ \
+	}, \
+)  \
+ \
+const CLASS_NAME::open_declarative_region_ptr_variants_t& \
+CLASS_NAME::open_declarative_regions() \
+{ \
+	return open_declarative_regions_; \
+} \
+ \
+CLASS_NAME::namespaces_t::range \
+CLASS_NAME::namespaces() \
+{ \
+	return namespaces_; \
+} \
+ \
+const CLASS_NAME::namespaces_t& \
+CLASS_NAME::namespaces() const \
+{ \
+	return namespaces_; \
+} \
+ \
+CLASS_NAME::classes_t::range \
+CLASS_NAME::classes() \
+{ \
+	return classes_; \
+} \
+ \
+const CLASS_NAME::classes_t& \
+CLASS_NAME::classes() const \
+{ \
+	return classes_; \
+} \
+ \
+CLASS_NAME::enums_t::range \
+CLASS_NAME::enums() \
+{ \
+	return enums_; \
+} \
+ \
+const CLASS_NAME::enums_t& \
+CLASS_NAME::enums() const \
+{ \
+	return enums_; \
+} \
+ \
+CLASS_NAME::typedefs_t::range \
+CLASS_NAME::typedefs() \
+{ \
+	return typedefs_; \
+} \
+ \
+const CLASS_NAME::typedefs_t& \
+CLASS_NAME::typedefs() const \
+{ \
+	return typedefs_; \
+} \
+ \
+CLASS_NAME::simple_functions_t::range \
+CLASS_NAME::simple_functions() \
+{ \
+	return simple_functions_; \
+} \
+ \
+const CLASS_NAME::simple_functions_t& \
+CLASS_NAME::simple_functions() const \
+{ \
+	return simple_functions_; \
+} \
+ \
+CLASS_NAME::operator_functions_t::range \
+CLASS_NAME::operator_functions() \
+{ \
+	return operator_functions_; \
+} \
+ \
+const CLASS_NAME::operator_functions_t& \
+CLASS_NAME::operator_functions() const \
+{ \
+	return operator_functions_; \
+} \
+ \
+CLASS_NAME::variables_t::range \
+CLASS_NAME::variables() \
+{ \
+	return variables_; \
+} \
+ \
+const CLASS_NAME::variables_t& \
+CLASS_NAME::variables() const \
+{ \
+	return variables_; \
+} \
+ \
+CLASS_NAME::namespace_aliases_t::range \
+CLASS_NAME::namespace_aliases() \
+{ \
+	return namespace_aliases_; \
+} \
+ \
+const CLASS_NAME::namespace_aliases_t& \
+CLASS_NAME::namespace_aliases() const \
+{ \
+	return namespace_aliases_; \
+} \
+ \
+const CLASS_NAME::namespace_ptrs_t& \
+CLASS_NAME::using_directive_namespaces() const \
+{ \
+	return using_directive_namespaces_; \
+} \
+ \
+void \
+CLASS_NAME::add_member(std::unique_ptr<namespace_>&& member) \
+{ \
+	member->enclosing_declarative_region(this); \
+	open_declarative_regions_.push_back(member.get()); \
+ \
+    namespaces_.push_back(std::move(member)); \
+} \
+ \
+void \
+CLASS_NAME::add_member(std::unique_ptr<class_>&& member) \
+{ \
+	member->enclosing_declarative_region(this); \
+	open_declarative_regions_.push_back(member.get()); \
+ \
+    classes_.push_back(std::move(member)); \
+} \
+ \
+void \
+CLASS_NAME::add_member(std::unique_ptr<enum_>&& member) \
+{ \
+	member->enclosing_declarative_region(this); \
+    enums_.push_back(std::move(member)); \
+} \
+ \
+void \
+CLASS_NAME::add_member(std::unique_ptr<typedef_>&& member) \
+{ \
+	member->enclosing_declarative_region(this); \
+    typedefs_.push_back(std::move(member)); \
+} \
+ \
+void \
+CLASS_NAME::add_member(std::unique_ptr<simple_function>&& member) \
+{ \
+	member->enclosing_declarative_region(this); \
+    simple_functions_.push_back(std::move(member)); \
+} \
+ \
+void \
+CLASS_NAME::add_member(std::unique_ptr<operator_function>&& member) \
+{ \
+	member->enclosing_declarative_region(this); \
+    operator_functions_.push_back(std::move(member)); \
+} \
+ \
+void \
+CLASS_NAME::add_member(std::unique_ptr<variable>&& member) \
+{ \
+	member->enclosing_declarative_region(this); \
+    variables_.push_back(std::move(member)); \
+} \
+ \
+void \
+CLASS_NAME::add_member(std::unique_ptr<namespace_alias>&& member) \
+{ \
+	open_declarative_regions_.push_back(member.get()); \
+    namespace_aliases_.push_back(std::move(member)); \
+} \
+ \
+void \
+CLASS_NAME::add_using_directive_namespace(namespace_& n) \
+{ \
+	using_directive_namespaces_.push_back(&n); \
+}
+
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-namespace_::namespace_()
-{
-}
-
-namespace_::namespace_(const std::string& name):
-    name_(name)
-{
-}
-
-const std::string&
-namespace_::name() const
-{
-    return name_;
-}
-
-const namespace_::open_declarative_region_ptr_variants_t&
-namespace_::open_declarative_regions()
-{
-	return open_declarative_regions_;
-}
-
-namespace_::namespaces_t::range
-namespace_::namespaces()
-{
-	return namespaces_;
-}
-
-const namespace_::namespaces_t&
-namespace_::namespaces() const
-{
-	return namespaces_;
-}
-
-namespace_::classes_t::range
-namespace_::classes()
-{
-	return classes_;
-}
-
-const namespace_::classes_t&
-namespace_::classes() const
-{
-	return classes_;
-}
-
-namespace_::enums_t::range
-namespace_::enums()
-{
-	return enums_;
-}
-
-const namespace_::enums_t&
-namespace_::enums() const
-{
-	return enums_;
-}
-
-namespace_::typedefs_t::range
-namespace_::typedefs()
-{
-	return typedefs_;
-}
-
-const namespace_::typedefs_t&
-namespace_::typedefs() const
-{
-	return typedefs_;
-}
-
-namespace_::simple_functions_t::range
-namespace_::simple_functions()
-{
-	return simple_functions_;
-}
-
-const namespace_::simple_functions_t&
-namespace_::simple_functions() const
-{
-	return simple_functions_;
-}
-
-namespace_::operator_functions_t::range
-namespace_::operator_functions()
-{
-	return operator_functions_;
-}
-
-const namespace_::operator_functions_t&
-namespace_::operator_functions() const
-{
-	return operator_functions_;
-}
-
-namespace_::variables_t::range
-namespace_::variables()
-{
-	return variables_;
-}
-
-const namespace_::variables_t&
-namespace_::variables() const
-{
-	return variables_;
-}
-
-namespace_::namespace_aliases_t::range
-namespace_::namespace_aliases()
-{
-	return namespace_aliases_;
-}
-
-const namespace_::namespace_aliases_t&
-namespace_::namespace_aliases() const
-{
-	return namespace_aliases_;
-}
-
-const namespace_::namespace_ptrs_t&
-namespace_::using_directive_namespaces() const
-{
-	return using_directive_namespaces_;
-}
-
-void
-namespace_::add_member(std::unique_ptr<namespace_>&& member)
-{
-	member->enclosing_declarative_region(*this);
-	open_declarative_regions_.push_back(member.get());
-
-    namespaces_.push_back(std::move(member));
-}
-
-void
-namespace_::add_member(std::unique_ptr<class_>&& member)
-{
-	member->enclosing_declarative_region(*this);
-	open_declarative_regions_.push_back(member.get());
-
-    classes_.push_back(std::move(member));
-}
-
-void
-namespace_::add_member(std::unique_ptr<enum_>&& member)
-{
-	member->enclosing_declarative_region(*this);
-    enums_.push_back(std::move(member));
-}
-
-void
-namespace_::add_member(std::unique_ptr<typedef_>&& member)
-{
-	member->enclosing_declarative_region(*this);
-    typedefs_.push_back(std::move(member));
-}
-
-void
-namespace_::add_member(std::unique_ptr<simple_function>&& member)
-{
-	member->enclosing_declarative_region(*this);
-    simple_functions_.push_back(std::move(member));
-}
-
-void
-namespace_::add_member(std::unique_ptr<operator_function>&& member)
-{
-	member->enclosing_declarative_region(*this);
-    operator_functions_.push_back(std::move(member));
-}
-
-void
-namespace_::add_member(std::unique_ptr<variable>&& member)
-{
-	member->enclosing_declarative_region(*this);
-    variables_.push_back(std::move(member));
-}
-
-void
-namespace_::add_member(std::unique_ptr<namespace_alias>&& member)
-{
-	open_declarative_regions_.push_back(member.get());
-    namespace_aliases_.push_back(std::move(member));
-}
-
-void
-namespace_::add_using_directive_namespace(namespace_& n)
-{
-	using_directive_namespaces_.push_back(&n);
-}
+GENERATE_NAMESPACE_DEFINITION(namespace_, 1)
+GENERATE_NAMESPACE_DEFINITION(unnamed_namespace, 0)
 
 }}} //namespace scalpel::cpp::semantic_entities
+
+#undef GENERATE_NAMESPACE_DEFINITION
 
