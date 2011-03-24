@@ -52,16 +52,16 @@ CLASS_NAME::namespaces() const \
 	return namespaces_; \
 } \
  \
-CLASS_NAME::unnamed_namespaces_t::range \
-CLASS_NAME::unnamed_namespaces() \
+unnamed_namespace* \
+CLASS_NAME::get_unnamed_namespace() \
 { \
-	return unnamed_namespaces_; \
+	return unnamed_namespace_.get(); \
 } \
  \
-const CLASS_NAME::unnamed_namespaces_t& \
-CLASS_NAME::unnamed_namespaces() const \
+const unnamed_namespace* \
+CLASS_NAME::get_unnamed_namespace() const \
 { \
-	return unnamed_namespaces_; \
+	return unnamed_namespace_.get(); \
 } \
  \
 CLASS_NAME::classes_t::range \
@@ -164,12 +164,10 @@ CLASS_NAME::add_member(std::unique_ptr<namespace_>&& member) \
 } \
  \
 void \
-CLASS_NAME::add_member(std::unique_ptr<unnamed_namespace>&& member) \
+CLASS_NAME::set_unnamed_namespace(std::unique_ptr<unnamed_namespace>&& member) \
 { \
 	member->enclosing_declarative_region(this); \
-	open_declarative_regions_.push_back(member.get()); \
- \
-    unnamed_namespaces_.push_back(std::move(member)); \
+    unnamed_namespace_ = std::move(member); \
 } \
  \
 void \

@@ -26,7 +26,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace name_lookup
 {
 
-BOOST_AUTO_TEST_CASE(unnamed_namespaces)
+BOOST_AUTO_TEST_CASE(test_case_13)
 {
 	using namespace scalpel::cpp::syntax_nodes;
 	using namespace scalpel::cpp::semantic_entities;
@@ -36,42 +36,24 @@ BOOST_AUTO_TEST_CASE(unnamed_namespaces)
 	//
 	//construction of the semantic graph of the following source code:
 	/*
-		namespace
+		namespace a
 		{
 			int i;
 		}
+
+		using namespace a;
+
+		int i;
+
 		void f()
 		{
 			i++;
-		}
-
-		namespace a
-		{
-			namespace
-			{
-				int i;
-				int j;
-			}
-			void g()
-			{
-				i++;
-			}
-		}
-
-		using namespace a;
-		void h()
-		{
-			i++;
-			a::i++;
-			j++;
 		}
 	*/
 
 	//namespaces
 	scalpel::cpp::semantic_graph semantic_graph;
-	auto namespace_xxx = new unnamed_namespace();
 	auto namespace_a = new namespace_("a");
-	auto namespace_a_xxx = new unnamed_namespace();
 
 	//functions
 	auto function_f = new simple_function
@@ -79,45 +61,25 @@ BOOST_AUTO_TEST_CASE(unnamed_namespaces)
 		"f",
 		fundamental_type::VOID
 	);
-	auto function_a_g = new simple_function
-	(
-		"g",
-		fundamental_type::VOID
-	);
-	auto function_h = new simple_function
-	(
-		"h",
-		fundamental_type::VOID
-	);
 
 	//variables
-	auto variable_xxx_i = new variable
+	auto variable_a_i = new variable
 	(
 		"i",
 		fundamental_type::INT
 	);
-	auto variable_a_xxx_i = new variable
+	auto variable_i = new variable
 	(
 		"i",
-		fundamental_type::INT
-	);
-	auto variable_a_xxx_j = new variable
-	(
-		"j",
 		fundamental_type::INT
 	);
 
 	//assembling
-	semantic_graph.set_unnamed_namespace(std::unique_ptr<unnamed_namespace>(namespace_xxx));
-	namespace_xxx->add_member(std::unique_ptr<variable>(variable_xxx_i));
-	semantic_graph.add_member(std::unique_ptr<simple_function>(function_f));
 	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_a));
-	namespace_a->set_unnamed_namespace(std::unique_ptr<unnamed_namespace>(namespace_a_xxx));
-	namespace_a_xxx->add_member(std::unique_ptr<variable>(variable_a_xxx_i));
-	namespace_a_xxx->add_member(std::unique_ptr<variable>(variable_a_xxx_j));
-	namespace_a->add_member(std::unique_ptr<simple_function>(function_a_g));
+	namespace_a->add_member(std::unique_ptr<variable>(variable_a_i));
 	semantic_graph.add_using_directive_namespace(*namespace_a);
-	semantic_graph.add_member(std::unique_ptr<simple_function>(function_h));
+	semantic_graph.add_member(std::unique_ptr<variable>(variable_i));
+	semantic_graph.add_member(std::unique_ptr<simple_function>(function_f));
 
 
 
@@ -125,17 +87,22 @@ BOOST_AUTO_TEST_CASE(unnamed_namespaces)
 	//name lookup test
 	//
 
-	//look up i from function f(), must find <unnamed>::i
+	//look up i from function f(), must find i and a::i
 	{
-		auto found_entity =
-			find<identification_policies::by_name, false, false, variable>
+		auto found_entities =
+			find<identification_policies::by_name, false, true, variable>
 			(
 				"i",
 				function_f
 			)
 		;
 
-		BOOST_CHECK_EQUAL(found_entity, variable_xxx_i);
+		BOOST_CHECK(found_entities.size() == 2);
+		if(found_entities.size() == 2)
+		{
+			BOOST_CHECK(found_entities.find(variable_i) != found_entities.end());
+			BOOST_CHECK(found_entities.find(variable_a_i) != found_entities.end());
+		}
 	}
 }
 

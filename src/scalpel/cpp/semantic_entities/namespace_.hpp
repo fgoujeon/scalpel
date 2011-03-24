@@ -45,7 +45,6 @@ class CLASS_NAME \
  \
 		typedef std::vector<namespace_*> namespace_ptrs_t; \
 		typedef utility::unique_ptr_vector<namespace_> namespaces_t; \
-		typedef utility::unique_ptr_vector<unnamed_namespace> unnamed_namespaces_t; \
 		typedef utility::unique_ptr_vector<namespace_alias> namespace_aliases_t; \
 		typedef utility::unique_ptr_vector<class_> classes_t; \
 		typedef utility::unique_ptr_vector<enum_> enums_t; \
@@ -87,11 +86,11 @@ class CLASS_NAME \
 		const namespaces_t& \
 		namespaces() const; \
  \
-		unnamed_namespaces_t::range \
-		unnamed_namespaces(); \
+		unnamed_namespace* \
+		get_unnamed_namespace(); \
  \
-		const unnamed_namespaces_t& \
-		unnamed_namespaces() const; \
+		const unnamed_namespace* \
+		get_unnamed_namespace() const; \
  \
 		classes_t::range \
 		classes(); \
@@ -145,7 +144,7 @@ class CLASS_NAME \
 		add_member(std::unique_ptr<namespace_>&& member); \
  \
 		void \
-		add_member(std::unique_ptr<unnamed_namespace>&& member); \
+		set_unnamed_namespace(std::unique_ptr<unnamed_namespace>&& member); \
  \
 		void \
 		add_member(std::unique_ptr<class_>&& member); \
@@ -179,7 +178,7 @@ class CLASS_NAME \
  \
 		namespace_aliases_t namespace_aliases_; \
 		namespaces_t namespaces_; \
-		unnamed_namespaces_t unnamed_namespaces_; \
+		std::unique_ptr<unnamed_namespace> unnamed_namespace_; \
 		classes_t classes_; \
 		enums_t enums_; \
 		typedefs_t typedefs_; \
