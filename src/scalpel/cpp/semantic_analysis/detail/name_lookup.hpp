@@ -253,23 +253,23 @@ namespace detail
 	in the given namespace, applying using directives as defined in the
 	qualified name lookup section of the C++ standard.
 	*/
-	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
+	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT, class Namespace>
 	typename return_type<Optional, Multiple, EntitiesT...>::type
 	find_in_namespace
 	(
 		const typename EntityIdentificationPolicy::identifier_t& identifier,
-		semantic_entities::namespace_& current_namespace
+		Namespace& current_namespace
 	);
 
 	/**
 	Recursive part of above function.
 	*/
-	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
+	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT, class Namespace>
 	typename return_type<Optional, Multiple, EntitiesT...>::type
 	find_in_namespace
 	(
 		const typename EntityIdentificationPolicy::identifier_t& identifier,
-		semantic_entities::namespace_& current_namespace,
+		Namespace& current_namespace,
 		std::vector<semantic_entities::namespace_*>& already_seached_namespaces
 	);
 

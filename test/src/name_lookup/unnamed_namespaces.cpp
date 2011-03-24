@@ -182,12 +182,11 @@ BOOST_AUTO_TEST_CASE(unnamed_namespaces)
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"i",
-				function_h,
-				false
+				function_h
 			)
 		;
 
-		BOOST_CHECK_EQUAL(found_entity, variable_a_xxx_j);
+		BOOST_CHECK_EQUAL(found_entity, variable_a_xxx_i);
 	}
 
 	//look up j from function h(), must find a::<unnamed>::i

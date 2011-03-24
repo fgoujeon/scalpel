@@ -272,12 +272,12 @@ find_local
 namespace detail
 {
 
-template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
+template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT, class Namespace>
 typename return_type<Optional, Multiple, EntitiesT...>::type
 find_in_namespace
 (
 	const typename EntityIdentificationPolicy::identifier_t& identifier,
-	semantic_entities::namespace_& current_namespace
+	Namespace& current_namespace
 )
 {
 	std::vector<semantic_entities::namespace_*> already_searched_namespaces;
@@ -297,24 +297,49 @@ find_in_namespace
 	;
 }
 
-template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
+inline
+void
+add_to_if_namespace
+(
+	std::vector<semantic_entities::namespace_*>& namespaces,
+	semantic_entities::namespace_& n
+)
+{
+	namespaces.push_back(&n);
+}
+
+inline
+void
+add_to_if_namespace
+(
+	std::vector<semantic_entities::namespace_*>&,
+	semantic_entities::unnamed_namespace&
+)
+{
+}
+
+template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT, class Namespace>
 typename return_type<Optional, Multiple, EntitiesT...>::type
 find_in_namespace
 (
 	const typename EntityIdentificationPolicy::identifier_t& identifier,
-	semantic_entities::namespace_& current_namespace,
+	Namespace& current_namespace,
 	std::vector<semantic_entities::namespace_*>& already_searched_namespaces
 )
 {
+	using namespace semantic_entities;
+
+	typename return_type<true, true, EntitiesT...>::type found_entities;
+
 	//search in the current namespace
 	{
-		already_searched_namespaces.push_back(&current_namespace);
+		add_to_if_namespace(already_searched_namespaces, current_namespace);
 
 		typename return_type<true, Multiple, EntitiesT...>::type found_entities =
 			find_local_entities
 			<
 				EntityIdentificationPolicy,
-				semantic_entities::namespace_,
+				Namespace,
 				true,
 				Multiple,
 				EntitiesT...
@@ -326,8 +351,22 @@ find_in_namespace
 			return std::move(return_result<Optional, Multiple, EntitiesT...>::result(found_entities));
 	}
 
+	//search in the current namespace's unnamed namespace
+	if(unnamed_namespace* opt_unnamed_namespace = current_namespace.get_unnamed_namespace())
+	{
+		add_to_result
+		(
+			found_entities,
+			find_in_namespace<EntityIdentificationPolicy, true, Multiple, EntitiesT...>
+			(
+				identifier,
+				*opt_unnamed_namespace,
+				already_searched_namespaces
+			)
+		);
+	}
+
 	//if no entity is found, search in using directive's namespaces
-	typename return_type<true, true, EntitiesT...>::type found_entities;
 	for
 	(
 		auto i = current_namespace.using_directive_namespaces().begin();
