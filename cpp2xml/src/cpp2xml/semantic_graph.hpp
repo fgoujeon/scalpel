@@ -73,6 +73,13 @@ class semantic_graph_serializer
 		);
 
 		void
+		serialize_unnamed_namespace
+		(
+			const unnamed_namespace& entity,
+			const unsigned int indent_level = 0
+		);
+
+		void
 		serialize_class
 		(
 			const class_& entity,

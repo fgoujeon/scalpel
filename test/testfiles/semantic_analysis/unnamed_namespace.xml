@@ -1,0 +1,14 @@
+<namespace id="n0">
+ <unnamed_namespace>
+  <variable name="i">
+   <type>
+    <fundamental_type type="int"/>
+   </type>
+  </variable>
+ </unnamed_namespace>
+ <variable name="i">
+  <type>
+   <fundamental_type type="int"/>
+  </type>
+ </variable>
+</namespace>

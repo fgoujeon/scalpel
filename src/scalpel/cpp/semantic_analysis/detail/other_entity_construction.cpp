@@ -332,68 +332,6 @@ create_entity
 	throw std::runtime_error("create_entity error 5");
 }
 
-std::unique_ptr<namespace_alias>
-create_namespace_alias
-(
-	const syntax_nodes::namespace_alias_definition& namespace_alias_definition_node,
-	namespace_& current_namespace
-)
-{
-	const qualified_namespace_specifier& qualified_namespace_specifier_node =
-		get_qualified_namespace_specifier(namespace_alias_definition_node)
-	;
-
-	//convert the qualified-namespace-specifier node to a nested-identifier-or-template-id node
-	syntax_nodes::nested_identifier_or_template_id nested_identifier_or_template_id_node
-	(
-		has_leading_double_colon(qualified_namespace_specifier_node) ?
-			predefined_text_node<str::double_colon>() :
-			optional_node<predefined_text_node<str::double_colon>>()
-		,
-		space(""),
-		get_nested_name_specifier(qualified_namespace_specifier_node),
-		space(""),
-		get_identifier(qualified_namespace_specifier_node)
-	);
-
-	//find the namespace or namespace alias designated by the namespace alias
-	std::string entity_name;
-	if(boost::optional<const identifier&> opt_identifier_node = get<identifier>(&get_identifier_or_template_id(nested_identifier_or_template_id_node)))
-		entity_name = opt_identifier_node->value();
-	else
-		assert(false);
-
-	utility::ptr_variant<namespace_, namespace_alias>::type found_entity =
-		name_lookup::find
-		<
-			semantic_entity_analysis::identification_policies::by_name,
-			false,
-			false,
-			namespace_,
-			namespace_alias
-		>
-		(
-			has_leading_double_colon(nested_identifier_or_template_id_node),
-			get_nested_name_specifier(nested_identifier_or_template_id_node),
-			entity_name,
-			&current_namespace
-		)
-	;
-
-	//get the namespace entity
-	namespace_& found_namespace = semantic_entity_analysis::get_namespace(found_entity);
-
-	//create the namespace alias semantic entity
-	return std::unique_ptr<namespace_alias>
-	(
-		new namespace_alias
-		(
-			get_identifier(namespace_alias_definition_node).value(),
-			found_namespace
-		)
-	);
-}
-
 semantic_entities::namespace_&
 create_using_directive
 (

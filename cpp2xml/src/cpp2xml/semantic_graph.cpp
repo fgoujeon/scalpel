@@ -173,6 +173,9 @@ semantic_graph_serializer::serialize_namespace
 	for(auto i = entity.namespaces().begin(); i != entity.namespaces().end(); ++i)
 		serialize_namespace(*i, indent_level + 1);
 
+	if(const unnamed_namespace* opt_namespace = entity.get_unnamed_namespace())
+		serialize_unnamed_namespace(*opt_namespace, indent_level + 1);
+
 	for(auto i = entity.classes().begin(); i != entity.classes().end(); ++i)
 		serialize_class(*i, indent_level + 1);
 
@@ -192,6 +195,45 @@ semantic_graph_serializer::serialize_namespace
 		serialize_variable(*i, indent_level + 1);
 
 	output_ << indent(indent_level) << "</namespace>\n";
+}
+
+void
+semantic_graph_serializer::serialize_unnamed_namespace
+(
+	const unnamed_namespace& entity,
+	const unsigned int indent_level
+)
+{
+	output_ << indent(indent_level) << "<unnamed_namespace>\n";
+
+	for(auto i = entity.namespace_aliases().begin(); i != entity.namespace_aliases().end(); ++i)
+		serialize_namespace_alias(*i, indent_level + 1);
+
+	for(auto i = entity.namespaces().begin(); i != entity.namespaces().end(); ++i)
+		serialize_namespace(*i, indent_level + 1);
+
+	if(const unnamed_namespace* opt_namespace = entity.get_unnamed_namespace())
+		serialize_unnamed_namespace(*opt_namespace, indent_level + 1);
+
+	for(auto i = entity.classes().begin(); i != entity.classes().end(); ++i)
+		serialize_class(*i, indent_level + 1);
+
+	for(auto i = entity.enums().begin(); i != entity.enums().end(); ++i)
+		serialize_enum(*i, indent_level + 1);
+
+	for(auto i = entity.typedefs().begin(); i != entity.typedefs().end(); ++i)
+		serialize_typedef(*i, indent_level + 1);
+
+	for(auto i = entity.simple_functions().begin(); i != entity.simple_functions().end(); ++i)
+		serialize_simple_function(*i, indent_level + 1);
+
+	for(auto i = entity.operator_functions().begin(); i != entity.operator_functions().end(); ++i)
+		serialize_operator_function(*i, indent_level + 1);
+
+	for(auto i = entity.variables().begin(); i != entity.variables().end(); ++i)
+		serialize_variable(*i, indent_level + 1);
+
+	output_ << indent(indent_level) << "</unnamed_namespace>\n";
 }
 
 void

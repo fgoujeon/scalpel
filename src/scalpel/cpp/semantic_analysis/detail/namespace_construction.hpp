@@ -28,37 +28,45 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail
 {
 
-std::unique_ptr<semantic_entities::namespace_>
+utility::variant
+<
+	semantic_entities::namespace_*,
+	semantic_entities::unnamed_namespace*
+>
 create_namespace
 (
 	const syntax_nodes::namespace_definition& namespace_definition_node
 );
 
+template<class Namespace>
 void
 fill_namespace
 (
-	semantic_entities::namespace_& namespace_entity,
+	Namespace& namespace_entity,
 	const syntax_nodes::namespace_definition& namespace_definition_node
 );
 
+template<class Namespace>
 void
 fill_namespace
 (
-	semantic_entities::namespace_& namespace_entity,
+	Namespace& namespace_entity,
 	const syntax_nodes::simple_declaration& simple_declaration_node
 );
 
+template<class Namespace>
 void
 fill_namespace
 (
-	semantic_entities::namespace_& namespace_entity,
+	Namespace& namespace_entity,
 	const syntax_nodes::declaration_seq& declaration_seq_node
 );
 
+template<class Namespace>
 void
 fill_namespace
 (
-	semantic_entities::namespace_& namespace_entity,
+	Namespace& namespace_entity,
 	const syntax_nodes::function_definition& function_definition_node
 );
 
@@ -66,14 +74,17 @@ fill_namespace
 //namespace.
 //If so, return the forward declared class.
 //If not, add the given class to the given namespace and return the given class.
+template<class Namespace>
 semantic_entities::class_&
 add_class
 (
-	semantic_entities::namespace_& namespace_entity,
+	Namespace& namespace_entity,
 	std::unique_ptr<semantic_entities::class_>&& class_entity
 );
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
+
+#include "namespace_construction.ipp"
 
 #endif
 

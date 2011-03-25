@@ -66,6 +66,7 @@ typedef
 	scalpel::utility::ptr_variant
 	<
 		namespace_,
+		unnamed_namespace,
 		namespace_alias,
 		class_,
 		member_class

@@ -64,11 +64,12 @@ create_entity
 	const semantic_entities::member_access access
 );
 
+template<class Namespace>
 std::unique_ptr<semantic_entities::namespace_alias>
 create_namespace_alias
 (
 	const syntax_nodes::namespace_alias_definition& namespace_alias_definition_node,
-	semantic_entities::namespace_& current_namespace
+	Namespace& current_namespace
 );
 
 semantic_entities::namespace_&
@@ -79,6 +80,8 @@ create_using_directive
 );
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
+
+#include "other_entity_construction.ipp"
 
 #endif
 
