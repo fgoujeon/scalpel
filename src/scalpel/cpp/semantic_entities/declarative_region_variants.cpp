@@ -47,6 +47,12 @@ namespace
 		}
 
 		const std::string&
+		operator()(linked_unnamed_namespace*) const
+		{
+			return utility::extern_strings::empty;
+		}
+
+		const std::string&
 		operator()(constructor*) const
 		{
 			return utility::extern_strings::empty;

@@ -29,7 +29,9 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 class namespace_;
+class linked_namespace;
 class unnamed_namespace;
+class linked_unnamed_namespace;
 class namespace_alias;
 class class_;
 class member_class;
@@ -46,7 +48,9 @@ typedef
 	scalpel::utility::ptr_variant
 	<
 		namespace_,
+		linked_namespace,
 		unnamed_namespace,
+		linked_unnamed_namespace,
 		class_,
 		member_class,
 		constructor,
@@ -66,7 +70,9 @@ typedef
 	scalpel::utility::ptr_variant
 	<
 		namespace_,
+		linked_namespace,
 		unnamed_namespace,
+		linked_unnamed_namespace,
 		namespace_alias,
 		class_,
 		member_class

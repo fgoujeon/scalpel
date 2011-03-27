@@ -49,6 +49,11 @@ namespace
 			list_child_entities(*i, groups);
 		}
 
+		if(const unnamed_namespace* opt_unnamed_namespace = parent_entity.get_unnamed_namespace())
+		{
+			groups.unnamed_namespaces.push_back(opt_unnamed_namespace);
+		}
+
 		const utility::unique_ptr_vector<class_>& child_classes = parent_entity.classes();
 		for(auto i = child_classes.begin(); i != child_classes.end(); ++i)
 		{

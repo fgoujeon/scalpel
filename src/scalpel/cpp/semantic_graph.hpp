@@ -48,6 +48,7 @@ namespace scalpel { namespace cpp
 {
 
 typedef semantic_entities::namespace_ semantic_graph;
+typedef semantic_entities::linked_namespace linked_semantic_graph;
 
 }} //namespace scalpel::cpp
 

@@ -21,6 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_LINKING_DETAIL_FINAL_GRAPH_ENTITIES_HPP
 #define SCALPEL_CPP_LINKING_DETAIL_FINAL_GRAPH_ENTITIES_HPP
 
+#include "linked_type.hpp"
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <map>
 #include <vector>
@@ -38,16 +39,16 @@ struct old_and_new_entity_pair
 struct final_graph_entities
 {
 	template<class Entity>
-	std::map<const Entity*, Entity*>&
-	get_map_of_type();
+	std::map<const typename nonlinked_type<Entity>::type*, Entity*>&
+	get_map_of_linked_type();
 
 	template<class Entity>
-	const std::map<const Entity*, Entity*>&
-	get_map_of_type() const;
+	const std::map<const typename nonlinked_type<Entity>::type*, Entity*>&
+	get_map_of_linked_type() const;
 
-	std::unique_ptr<semantic_entities::namespace_> global_namespace;
-	std::map<const semantic_entities::namespace_*, semantic_entities::namespace_*> namespaces;
-	std::map<const semantic_entities::unnamed_namespace*, semantic_entities::unnamed_namespace*> unnamed_namespaces;
+	std::unique_ptr<semantic_entities::linked_namespace> global_namespace;
+	std::map<const semantic_entities::namespace_*, semantic_entities::linked_namespace*> namespaces;
+	std::map<const semantic_entities::unnamed_namespace*, semantic_entities::linked_unnamed_namespace*> unnamed_namespaces;
 	std::map<const semantic_entities::class_*, semantic_entities::class_*> classes;
 	std::map<const semantic_entities::member_class*, semantic_entities::member_class*> member_classes;
 	std::map<const semantic_entities::enum_*, semantic_entities::enum_*> enums;

@@ -18,23 +18,43 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_LINKING_DETAIL_ASSEMBLE_FINAL_GRAPH_HPP
-#define SCALPEL_CPP_LINKING_DETAIL_ASSEMBLE_FINAL_GRAPH_HPP
+#ifndef SCALPEL_CPP_LINKING_DETAIL_GENERATE_TYPE_TRAITS_HPP
+#define SCALPEL_CPP_LINKING_DETAIL_GENERATE_TYPE_TRAITS_HPP
 
-#include "final_graph_entities.hpp"
-#include "entity_groups.hpp"
 #include <scalpel/cpp/semantic_graph.hpp>
-#include <memory>
 
 namespace scalpel { namespace cpp { namespace linking { namespace detail
 {
 
-std::unique_ptr<linked_semantic_graph>
-assemble_final_graph
-(
-	const entity_groups& groups,
-	final_graph_entities& final_entities
-);
+template<class Entity>
+struct linked_type
+{
+	typedef Entity type;
+};
+
+template<class Entity>
+struct nonlinked_type
+{
+	typedef Entity type;
+};
+
+#define GENERATE_TYPE_TRAITS(NONLINKED_TYPE, LINKED_TYPE) \
+template<> \
+struct linked_type<semantic_entities::NONLINKED_TYPE> \
+{ \
+	typedef semantic_entities::LINKED_TYPE type; \
+}; \
+ \
+template<> \
+struct nonlinked_type<semantic_entities::LINKED_TYPE> \
+{ \
+	typedef semantic_entities::NONLINKED_TYPE type; \
+};
+
+GENERATE_TYPE_TRAITS(namespace_, linked_namespace)
+GENERATE_TYPE_TRAITS(unnamed_namespace, linked_unnamed_namespace)
+
+#undef GENERATE_TYPE_TRAITS
 
 }}}} //namespace scalpel::cpp::linking::detail
 

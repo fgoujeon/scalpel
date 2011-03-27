@@ -98,11 +98,13 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 
 class namespace_;
 class unnamed_namespace;
+class linked_namespace;
+class linked_unnamed_namespace;
 class class_;
 class member_class;
 
 typedef
-	impl::detail::declarative_region_member_impl<namespace_, unnamed_namespace>
+	impl::detail::declarative_region_member_impl<namespace_, unnamed_namespace, linked_namespace, linked_unnamed_namespace>
 	enum_declarative_region_member_impl_t
 ;
 

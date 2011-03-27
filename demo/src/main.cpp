@@ -155,7 +155,7 @@ main(int argc, char** argv)
 	if(print_linked_semantic_graph)
 	{
 		//linking
-		std::unique_ptr<scalpel::cpp::semantic_graph> linked_graph = scalpel::cpp::linking::link(semantic_graphs);
+		std::unique_ptr<scalpel::cpp::linked_semantic_graph> linked_graph = scalpel::cpp::linking::link(semantic_graphs);
 
 		//print linked semantic graph
 		if(print_syntax_tree || print_semantic_graph)

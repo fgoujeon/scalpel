@@ -37,14 +37,28 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <vector>
 #include <memory>
 
-#define GENERATE_NAMESPACE_DECLARATION(CLASS_NAME, IS_NAMED) \
+#define GENERATE_NAMESPACE_DECLARATION( \
+	CLASS_NAME, \
+	NAMESPACE_TYPE, \
+	UNNAMED_NAMESPACE_TYPE, \
+	DECLARATIVE_REGION_MEMBER_IMPL_T, \
+	IS_NAMED, \
+	CAN_HAVE_MULTIPLE_UNNAMED_NAMESPACES, \
+	HAS_NAMESPACE_ALIASES, \
+	HAS_USING_DIRECTIVE_NAMESPACES \
+) \
 class CLASS_NAME \
 { \
 	public: \
 		typedef std::vector<open_declarative_region_ptr_variant> open_declarative_region_ptr_variants_t; \
  \
 		typedef std::vector<namespace_*> namespace_ptrs_t; \
-		typedef utility::unique_ptr_vector<namespace_> namespaces_t; \
+		typedef utility::unique_ptr_vector<NAMESPACE_TYPE> namespaces_t; \
+		BOOST_PP_IIF \
+		( \
+			CAN_HAVE_MULTIPLE_UNNAMED_NAMESPACES, \
+			typedef utility::unique_ptr_vector<UNNAMED_NAMESPACE_TYPE> unnamed_namespaces_t;, \
+		) \
 		typedef utility::unique_ptr_vector<namespace_alias> namespace_aliases_t; \
 		typedef utility::unique_ptr_vector<class_> classes_t; \
 		typedef utility::unique_ptr_vector<enum_> enums_t; \
@@ -86,11 +100,39 @@ class CLASS_NAME \
 		const namespaces_t& \
 		namespaces() const; \
  \
-		unnamed_namespace* \
-		get_unnamed_namespace(); \
+		BOOST_PP_IIF \
+		( \
+			CAN_HAVE_MULTIPLE_UNNAMED_NAMESPACES, \
  \
-		const unnamed_namespace* \
-		get_unnamed_namespace() const; \
+			unnamed_namespaces_t::range \
+			unnamed_namespaces() \
+			{ \
+				return unnamed_namespaces_; \
+			}, \
+ \
+			UNNAMED_NAMESPACE_TYPE* \
+			get_unnamed_namespace() \
+			{ \
+				return unnamed_namespace_.get(); \
+			} \
+		) \
+ \
+		BOOST_PP_IIF \
+		( \
+			CAN_HAVE_MULTIPLE_UNNAMED_NAMESPACES, \
+ \
+			const unnamed_namespaces_t& \
+			unnamed_namespaces() const \
+			{ \
+				return unnamed_namespaces_; \
+			}, \
+ \
+			const UNNAMED_NAMESPACE_TYPE* \
+			get_unnamed_namespace() const \
+			{ \
+				return unnamed_namespace_.get(); \
+			} \
+		) \
  \
 		classes_t::range \
 		classes(); \
@@ -128,23 +170,53 @@ class CLASS_NAME \
 		const variables_t& \
 		variables() const; \
  \
-		namespace_aliases_t::range \
-		namespace_aliases(); \
+		BOOST_PP_IIF \
+		( \
+			HAS_NAMESPACE_ALIASES, \
  \
-		const namespace_aliases_t& \
-		namespace_aliases() const; \
+			namespace_aliases_t::range \
+			namespace_aliases() \
+			{ \
+				return namespace_aliases_; \
+			} \
  \
-		const namespace_ptrs_t& \
-		using_directive_namespaces() const; \
+			const namespace_aliases_t& \
+			namespace_aliases() const \
+			{ \
+				return namespace_aliases_; \
+			}, \
+		) \
+ \
+		BOOST_PP_IIF \
+		( \
+			HAS_USING_DIRECTIVE_NAMESPACES, \
+			const namespace_ptrs_t& \
+			using_directive_namespaces() const \
+			{ \
+				return using_directive_namespaces_; \
+			}, \
+		) \
+ \
+		BOOST_PP_IIF \
+		( \
+			HAS_NAMESPACE_ALIASES, \
+			void \
+			add_member(std::unique_ptr<namespace_alias>&& member);, \
+		) \
  \
 		void \
-		add_member(std::unique_ptr<namespace_alias>&& member); \
+		add_member(std::unique_ptr<NAMESPACE_TYPE>&& member); \
  \
-		void \
-		add_member(std::unique_ptr<namespace_>&& member); \
+		BOOST_PP_IIF \
+		( \
+			CAN_HAVE_MULTIPLE_UNNAMED_NAMESPACES, \
  \
-		void \
-		set_unnamed_namespace(std::unique_ptr<unnamed_namespace>&& member); \
+			void \
+			add_member(std::unique_ptr<UNNAMED_NAMESPACE_TYPE>&& member);, \
+ \
+			void \
+			set_unnamed_namespace(std::unique_ptr<UNNAMED_NAMESPACE_TYPE>&& member); \
+		) \
  \
 		void \
 		add_member(std::unique_ptr<class_>&& member); \
@@ -164,8 +236,12 @@ class CLASS_NAME \
 		void \
 		add_member(std::unique_ptr<variable>&& member); \
  \
-		void \
-		add_using_directive_namespace(namespace_& n); \
+		BOOST_PP_IIF \
+		( \
+			HAS_USING_DIRECTIVE_NAMESPACES, \
+			void \
+			add_using_directive_namespace(namespace_& n);, \
+		) \
  \
 	private: \
 		BOOST_PP_IIF \
@@ -178,7 +254,12 @@ class CLASS_NAME \
  \
 		namespace_aliases_t namespace_aliases_; \
 		namespaces_t namespaces_; \
-		std::unique_ptr<unnamed_namespace> unnamed_namespace_; \
+		BOOST_PP_IIF \
+		( \
+			CAN_HAVE_MULTIPLE_UNNAMED_NAMESPACES, \
+			unnamed_namespaces_t unnamed_namespaces_;, \
+			std::unique_ptr<UNNAMED_NAMESPACE_TYPE> unnamed_namespace_; \
+		) \
 		classes_t classes_; \
 		enums_t enums_; \
 		typedefs_t typedefs_; \
@@ -188,7 +269,7 @@ class CLASS_NAME \
  \
 		namespace_ptrs_t using_directive_namespaces_; \
  \
-		DECLARATIVE_REGION_MEMBER_IMPL(namespace_declarative_region_member_impl_t) \
+		DECLARATIVE_REGION_MEMBER_IMPL(DECLARATIVE_REGION_MEMBER_IMPL_T) \
 };
 
 namespace scalpel { namespace cpp { namespace semantic_entities
@@ -196,14 +277,23 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 
 class namespace_;
 class unnamed_namespace;
+class linked_namespace;
+class linked_unnamed_namespace;
 
 typedef
 	impl::detail::declarative_region_member_impl<namespace_, unnamed_namespace>
 	namespace_declarative_region_member_impl_t
 ;
 
-GENERATE_NAMESPACE_DECLARATION(namespace_, 1)
-GENERATE_NAMESPACE_DECLARATION(unnamed_namespace, 0)
+typedef
+	impl::detail::declarative_region_member_impl<linked_namespace, linked_unnamed_namespace>
+	linked_namespace_declarative_region_member_impl_t
+;
+
+GENERATE_NAMESPACE_DECLARATION(namespace_, namespace_, unnamed_namespace, namespace_declarative_region_member_impl_t, 1, 0, 1, 1)
+GENERATE_NAMESPACE_DECLARATION(unnamed_namespace, namespace_, unnamed_namespace, namespace_declarative_region_member_impl_t, 0, 0, 1, 1)
+GENERATE_NAMESPACE_DECLARATION(linked_unnamed_namespace, linked_namespace, linked_unnamed_namespace, linked_namespace_declarative_region_member_impl_t, 0, 0, 0, 0)
+GENERATE_NAMESPACE_DECLARATION(linked_namespace, linked_namespace, linked_unnamed_namespace, linked_namespace_declarative_region_member_impl_t, 1, 1, 0, 0)
 
 }}} //namespace scalpel::cpp::semantic_entities
 

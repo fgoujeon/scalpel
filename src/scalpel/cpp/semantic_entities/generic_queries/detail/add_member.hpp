@@ -18,25 +18,32 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_LINKING_DETAIL_ASSEMBLE_FINAL_GRAPH_HPP
-#define SCALPEL_CPP_LINKING_DETAIL_ASSEMBLE_FINAL_GRAPH_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_GENERIC_QUERIES_DETAIL_ADD_MEMBER_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_GENERIC_QUERIES_DETAIL_ADD_MEMBER_HPP
 
-#include "final_graph_entities.hpp"
-#include "entity_groups.hpp"
 #include <scalpel/cpp/semantic_graph.hpp>
-#include <memory>
 
-namespace scalpel { namespace cpp { namespace linking { namespace detail
+namespace scalpel { namespace cpp { namespace semantic_entities { namespace generic_queries { namespace detail
 {
 
-std::unique_ptr<linked_semantic_graph>
-assemble_final_graph
-(
-	const entity_groups& groups,
-	final_graph_entities& final_entities
-);
+template<class DeclarativeRegion, class Entity>
+inline
+void
+add_member(DeclarativeRegion& declarative_region, std::unique_ptr<Entity>&& entity)
+{
+	declarative_region.add_member(std::move(entity));
+}
 
-}}}} //namespace scalpel::cpp::linking::detail
+template<>
+inline
+void
+add_member(linked_unnamed_namespace& declarative_region, std::unique_ptr<linked_unnamed_namespace>&& entity)
+{
+	assert(declarative_region.get_unnamed_namespace() == 0);
+	declarative_region.set_unnamed_namespace(std::move(entity));
+}
+
+}}}}} //namespace scalpel::cpp::semantic_entities::generic_queries::detail
 
 #endif
 

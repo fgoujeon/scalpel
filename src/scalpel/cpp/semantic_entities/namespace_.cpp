@@ -20,7 +20,15 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "namespace_.hpp"
 
-#define GENERATE_NAMESPACE_DEFINITION(CLASS_NAME, IS_NAMED) \
+#define GENERATE_NAMESPACE_DEFINITION( \
+	CLASS_NAME, \
+	NAMESPACE_TYPE, \
+	UNNAMED_NAMESPACE_TYPE, \
+	IS_NAMED, \
+	CAN_HAVE_MULTIPLE_UNNAMED_NAMESPACES, \
+	HAS_NAMESPACE_ALIASES, \
+	HAS_USING_DIRECTIVE_NAMESPACES \
+) \
 CLASS_NAME::CLASS_NAME() \
 { \
 } \
@@ -50,18 +58,6 @@ const CLASS_NAME::namespaces_t& \
 CLASS_NAME::namespaces() const \
 { \
 	return namespaces_; \
-} \
- \
-unnamed_namespace* \
-CLASS_NAME::get_unnamed_namespace() \
-{ \
-	return unnamed_namespace_.get(); \
-} \
- \
-const unnamed_namespace* \
-CLASS_NAME::get_unnamed_namespace() const \
-{ \
-	return unnamed_namespace_.get(); \
 } \
  \
 CLASS_NAME::classes_t::range \
@@ -136,26 +132,8 @@ CLASS_NAME::variables() const \
 	return variables_; \
 } \
  \
-CLASS_NAME::namespace_aliases_t::range \
-CLASS_NAME::namespace_aliases() \
-{ \
-	return namespace_aliases_; \
-} \
- \
-const CLASS_NAME::namespace_aliases_t& \
-CLASS_NAME::namespace_aliases() const \
-{ \
-	return namespace_aliases_; \
-} \
- \
-const CLASS_NAME::namespace_ptrs_t& \
-CLASS_NAME::using_directive_namespaces() const \
-{ \
-	return using_directive_namespaces_; \
-} \
- \
 void \
-CLASS_NAME::add_member(std::unique_ptr<namespace_>&& member) \
+CLASS_NAME::add_member(std::unique_ptr<NAMESPACE_TYPE>&& member) \
 { \
 	member->enclosing_declarative_region(this); \
 	open_declarative_regions_.push_back(member.get()); \
@@ -163,12 +141,24 @@ CLASS_NAME::add_member(std::unique_ptr<namespace_>&& member) \
     namespaces_.push_back(std::move(member)); \
 } \
  \
-void \
-CLASS_NAME::set_unnamed_namespace(std::unique_ptr<unnamed_namespace>&& member) \
-{ \
-	member->enclosing_declarative_region(this); \
-    unnamed_namespace_ = std::move(member); \
-} \
+BOOST_PP_IIF \
+( \
+	CAN_HAVE_MULTIPLE_UNNAMED_NAMESPACES, \
+ \
+	void \
+	CLASS_NAME::add_member(std::unique_ptr<UNNAMED_NAMESPACE_TYPE>&& member) \
+	{ \
+		member->enclosing_declarative_region(this); \
+		unnamed_namespaces_.push_back(std::move(member)); \
+	}, \
+ \
+	void \
+	CLASS_NAME::set_unnamed_namespace(std::unique_ptr<UNNAMED_NAMESPACE_TYPE>&& member) \
+	{ \
+		member->enclosing_declarative_region(this); \
+		unnamed_namespace_ = std::move(member); \
+	} \
+) \
  \
 void \
 CLASS_NAME::add_member(std::unique_ptr<class_>&& member) \
@@ -214,24 +204,34 @@ CLASS_NAME::add_member(std::unique_ptr<variable>&& member) \
     variables_.push_back(std::move(member)); \
 } \
  \
-void \
-CLASS_NAME::add_member(std::unique_ptr<namespace_alias>&& member) \
-{ \
-	open_declarative_regions_.push_back(member.get()); \
-    namespace_aliases_.push_back(std::move(member)); \
-} \
+BOOST_PP_IIF \
+( \
+	HAS_NAMESPACE_ALIASES, \
+	void \
+	CLASS_NAME::add_member(std::unique_ptr<namespace_alias>&& member) \
+	{ \
+		open_declarative_regions_.push_back(member.get()); \
+		namespace_aliases_.push_back(std::move(member)); \
+	}, \
+) \
  \
-void \
-CLASS_NAME::add_using_directive_namespace(namespace_& n) \
-{ \
-	using_directive_namespaces_.push_back(&n); \
-}
+BOOST_PP_IIF \
+( \
+	HAS_USING_DIRECTIVE_NAMESPACES, \
+	void \
+	CLASS_NAME::add_using_directive_namespace(namespace_& n) \
+	{ \
+		using_directive_namespaces_.push_back(&n); \
+	}, \
+)
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-GENERATE_NAMESPACE_DEFINITION(namespace_, 1)
-GENERATE_NAMESPACE_DEFINITION(unnamed_namespace, 0)
+GENERATE_NAMESPACE_DEFINITION(namespace_, namespace_, unnamed_namespace, 1, 0, 1, 1)
+GENERATE_NAMESPACE_DEFINITION(unnamed_namespace, namespace_, unnamed_namespace, 0, 0, 1, 1)
+GENERATE_NAMESPACE_DEFINITION(linked_namespace, linked_namespace, linked_unnamed_namespace, 1, 1, 0, 0)
+GENERATE_NAMESPACE_DEFINITION(linked_unnamed_namespace, linked_namespace, linked_unnamed_namespace, 0, 0, 0, 0)
 
 }}} //namespace scalpel::cpp::semantic_entities
 

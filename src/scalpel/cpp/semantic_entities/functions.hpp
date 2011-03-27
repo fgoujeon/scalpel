@@ -301,7 +301,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 typedef
-	impl::detail::declarative_region_member_impl<namespace_, unnamed_namespace>
+	impl::detail::declarative_region_member_impl<namespace_, unnamed_namespace, linked_namespace, linked_unnamed_namespace>
 	function_declarative_region_member_impl_t
 ;
 

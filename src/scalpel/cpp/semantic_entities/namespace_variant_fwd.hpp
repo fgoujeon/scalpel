@@ -28,12 +28,16 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 
 class namespace_;
 class unnamed_namespace;
+class linked_namespace;
+class linked_unnamed_namespace;
 
 typedef
 	typename utility::ptr_variant
 	<
 		namespace_,
-		unnamed_namespace
+		unnamed_namespace,
+		linked_namespace,
+		linked_unnamed_namespace
 	>::type
 	namespace_ptr_variant
 ;

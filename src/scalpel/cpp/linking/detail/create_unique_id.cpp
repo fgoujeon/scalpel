@@ -224,6 +224,21 @@ namespace
 		std::string
 		operator()(const unnamed_namespace*)
 		{
+			assert(false);
+			return "";
+		}
+
+		std::string
+		operator()(const linked_namespace*)
+		{
+			assert(false);
+			return "";
+		}
+
+		std::string
+		operator()(const linked_unnamed_namespace*)
+		{
+			assert(false);
 			return "";
 		}
 	} create_unique_id_visitor;

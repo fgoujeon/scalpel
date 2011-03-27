@@ -19,6 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "assemble_final_graph.hpp"
+#include <scalpel/cpp/semantic_entities/generic_queries/detail/add_member.hpp>
 #include <scalpel/utility/variant.hpp>
 #include <iostream>
 
@@ -69,6 +70,18 @@ namespace
 				);
 			}
 
+			void
+			operator()(const linked_namespace*) const
+			{
+				assert(false);
+			}
+
+			void
+			operator()(const linked_unnamed_namespace*) const
+			{
+				assert(false);
+			}
+
 		private:
 			final_graph_entities& entity_maps_;
 			Entity* final_entity_;
@@ -83,13 +96,15 @@ namespace
 		const EnclosingDeclarativeRegion& enclosing_declarative_region
 	)
 	{
+		typedef typename linked_type<EnclosingDeclarativeRegion>::type linked_enclosing_declarative_region_t;
+
 		//find the corresponding final entity of the enclosing declarative region
-		auto it = final_entities.get_map_of_type<EnclosingDeclarativeRegion>().find(&enclosing_declarative_region);
-		assert(it != final_entities.get_map_of_type<EnclosingDeclarativeRegion>().end());
-		EnclosingDeclarativeRegion* final_enclosing_declarative_region = it->second;
+		auto it = final_entities.get_map_of_linked_type<linked_enclosing_declarative_region_t>().find(&enclosing_declarative_region);
+		assert(it != final_entities.get_map_of_linked_type<linked_enclosing_declarative_region_t>().end());
+		typename linked_type<EnclosingDeclarativeRegion>::type* final_enclosing_declarative_region = it->second;
 
 		//add the final entity to the final declarative region entity
-		final_enclosing_declarative_region->add_member(std::move(std::unique_ptr<Entity>(final_entity)));
+		generic_queries::detail::add_member(*final_enclosing_declarative_region, std::move(std::unique_ptr<Entity>(final_entity)));
 	}
 
 	template<class Entity, class... DeclarativeRegions>
@@ -113,15 +128,50 @@ namespace
 		final_graph_entities& final_entities
 	)
 	{
-		for(auto i = get_entity_groups_of_type<Entity>(groups).begin(); i != get_entity_groups_of_type<Entity>(groups).end(); ++i)
+		typedef typename nonlinked_type<Entity>::type nonlinked_entity_t;
+
+		const typename entity_groups_of_type<nonlinked_entity_t>::type& groups_of_entity_type =
+			get_entity_groups_of_type<nonlinked_entity_t>(groups)
+		;
+		for(auto i = groups_of_entity_type.begin(); i != groups_of_entity_type.end(); ++i)
 		{
 			assert(!i->second.empty());
-			const Entity* current_entity = i->second.front();
+			const nonlinked_entity_t* current_entity = i->second.front();
 
 			//find the corresponding final entity
-			auto it = final_entities.get_map_of_type<Entity>().find(current_entity);
-			assert(it != final_entities.get_map_of_type<Entity>().end());
+			auto it = final_entities.get_map_of_linked_type<Entity>().find(current_entity);
+			assert(it != final_entities.get_map_of_linked_type<Entity>().end());
 			Entity* final_entity = it->second;
+
+			//add the final entity to the final graph
+			assert(current_entity->has_enclosing_declarative_region());
+			add_entity_to_final_graph
+			(
+				final_entities,
+				final_entity,
+				current_entity->enclosing_declarative_region()
+			);
+		}
+	}
+
+	template<>
+	void
+	assemble_entities_of_type<linked_unnamed_namespace>
+	(
+		const entity_groups& groups,
+		final_graph_entities& final_entities
+	)
+	{
+		//typedef typename nonlinked_type<Entity>::type nonlinked_entity_t;
+
+		for(auto i = groups.unnamed_namespaces.begin(); i != groups.unnamed_namespaces.end(); ++i)
+		{
+			const unnamed_namespace* current_entity = *i;
+
+			//find the corresponding final entity
+			auto it = final_entities.unnamed_namespaces.find(current_entity);
+			assert(it != final_entities.unnamed_namespaces.end());
+			linked_unnamed_namespace* final_entity = it->second;
 
 			//add the final entity to the final graph
 			assert(current_entity->has_enclosing_declarative_region());
@@ -135,14 +185,15 @@ namespace
 	}
 }
 
-std::unique_ptr<semantic_graph>
+std::unique_ptr<linked_namespace>
 assemble_final_graph
 (
 	const entity_groups& groups,
 	final_graph_entities& final_entities
 )
 {
-	assemble_entities_of_type<namespace_>(groups, final_entities);
+	assemble_entities_of_type<linked_namespace>(groups, final_entities);
+	assemble_entities_of_type<linked_unnamed_namespace>(groups, final_entities);
 	assemble_entities_of_type<class_>(groups, final_entities);
 	assemble_entities_of_type<member_class>(groups, final_entities);
 	assemble_entities_of_type<enum_>(groups, final_entities);

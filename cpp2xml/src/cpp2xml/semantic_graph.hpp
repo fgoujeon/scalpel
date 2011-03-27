@@ -38,6 +38,7 @@ class semantic_graph_serializer
 {
 	public:
 		typedef std::map<const scalpel::cpp::semantic_entities::namespace_*, unsigned int> namespace_ids_t;
+		typedef std::map<const scalpel::cpp::semantic_entities::linked_namespace*, unsigned int> linked_namespace_ids_t;
 		typedef std::map<const scalpel::cpp::semantic_entities::class_*, unsigned int> class_ids_t;
 		typedef std::map<const scalpel::cpp::semantic_entities::member_class*, unsigned int> member_class_ids_t;
 		typedef std::map<const scalpel::cpp::semantic_entities::enum_*, unsigned int> enum_ids_t;
@@ -48,9 +49,15 @@ class semantic_graph_serializer
 		void
 		operator()(const namespace_& entity);
 
+		void
+		operator()(const linked_namespace& entity);
+
 	private:
 		void
 		initialize_ids(const namespace_& entity);
+
+		void
+		initialize_ids(const linked_namespace& entity);
 
 		void
 		serialize_type
@@ -73,9 +80,23 @@ class semantic_graph_serializer
 		);
 
 		void
+		serialize_namespace
+		(
+			const linked_namespace& entity,
+			const unsigned int indent_level = 0
+		);
+
+		void
 		serialize_unnamed_namespace
 		(
 			const unnamed_namespace& entity,
+			const unsigned int indent_level = 0
+		);
+
+		void
+		serialize_unnamed_namespace
+		(
+			const linked_unnamed_namespace& entity,
 			const unsigned int indent_level = 0
 		);
 
@@ -229,6 +250,9 @@ class semantic_graph_serializer
 		define_ids(const namespace_& entity);
 
 		void
+		define_ids(const linked_namespace& entity);
+
+		void
 		define_ids(const class_& entity);
 
 		void
@@ -242,6 +266,9 @@ class semantic_graph_serializer
 
 		unsigned int
 		namespace_id(const scalpel::cpp::semantic_entities::namespace_&) const;
+
+		unsigned int
+		namespace_id(const scalpel::cpp::semantic_entities::linked_namespace&) const;
 
 		unsigned int
 		class_id(const scalpel::cpp::semantic_entities::class_&) const;
@@ -263,6 +290,7 @@ class semantic_graph_serializer
 		unsigned int class_id_counter_;
 		unsigned int enum_id_counter_;
 		namespace_ids_t namespace_ids_;
+		linked_namespace_ids_t linked_namespace_ids_;
 		class_ids_t class_ids_;
 		member_class_ids_t member_class_ids_;
 		enum_ids_t enum_ids_;
@@ -273,6 +301,13 @@ void
 serialize_semantic_graph
 (
 	const semantic_graph& graph,
+	std::ostream& output
+);
+
+void
+serialize_semantic_graph
+(
+	const linked_semantic_graph& graph,
 	std::ostream& output
 );
 

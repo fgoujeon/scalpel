@@ -31,7 +31,7 @@ namespace scalpel { namespace cpp
 namespace linking
 {
 
-std::unique_ptr<semantic_graph>
+std::unique_ptr<semantic_entities::linked_namespace>
 link(const utility::unique_ptr_vector<semantic_graph>& semantic_graphs);
 
 } //namespace semantic_analysis

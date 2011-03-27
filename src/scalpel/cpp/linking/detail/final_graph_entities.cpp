@@ -20,17 +20,17 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "final_graph_entities.hpp"
 
-#define GENERATE_GET_ENTITIES_SPECIALIZATION(ENTITY_TYPE, VARIABLE) \
+#define GET_MAP_OF_LINKED_TYPE(ENTITY_TYPE, VARIABLE) \
 template<> \
-std::map<const semantic_entities::ENTITY_TYPE*, semantic_entities::ENTITY_TYPE*>& \
-final_graph_entities::get_map_of_type<semantic_entities::ENTITY_TYPE>() \
+std::map<const typename nonlinked_type<semantic_entities::ENTITY_TYPE>::type*, semantic_entities::ENTITY_TYPE*>& \
+final_graph_entities::get_map_of_linked_type<semantic_entities::ENTITY_TYPE>() \
 { \
 	return VARIABLE; \
 } \
  \
 template<> \
-const std::map<const semantic_entities::ENTITY_TYPE*, semantic_entities::ENTITY_TYPE*>& \
-final_graph_entities::get_map_of_type<semantic_entities::ENTITY_TYPE>() const \
+const std::map<const typename nonlinked_type<semantic_entities::ENTITY_TYPE>::type*, semantic_entities::ENTITY_TYPE*>& \
+final_graph_entities::get_map_of_linked_type<semantic_entities::ENTITY_TYPE>() const \
 { \
 	return VARIABLE; \
 }
@@ -53,29 +53,30 @@ final_graph_entities::get_pairs_of_type<semantic_entities::ENTITY_TYPE>() const 
 namespace scalpel { namespace cpp { namespace linking { namespace detail
 {
 
-GENERATE_GET_ENTITIES_SPECIALIZATION(namespace_, namespaces)
-GENERATE_GET_ENTITIES_SPECIALIZATION(unnamed_namespace, unnamed_namespaces)
-GENERATE_GET_ENTITIES_SPECIALIZATION(class_, classes)
-GENERATE_GET_ENTITIES_SPECIALIZATION(member_class, member_classes)
-GENERATE_GET_ENTITIES_SPECIALIZATION(enum_, enums)
-GENERATE_GET_ENTITIES_SPECIALIZATION(member_enum, member_enums)
-GENERATE_GET_ENTITIES_SPECIALIZATION(typedef_, typedefs)
-GENERATE_GET_ENTITIES_SPECIALIZATION(member_typedef, member_typedefs)
-GENERATE_GET_ENTITIES_SPECIALIZATION(constructor, constructors)
-GENERATE_GET_ENTITIES_SPECIALIZATION(destructor, destructors)
-GENERATE_GET_ENTITIES_SPECIALIZATION(operator_member_function, operator_member_functions)
-GENERATE_GET_ENTITIES_SPECIALIZATION(conversion_function, conversion_functions)
-GENERATE_GET_ENTITIES_SPECIALIZATION(simple_member_function, simple_member_functions)
-GENERATE_GET_ENTITIES_SPECIALIZATION(operator_function, operator_functions)
-GENERATE_GET_ENTITIES_SPECIALIZATION(simple_function, simple_functions)
-GENERATE_GET_ENTITIES_SPECIALIZATION(variable, variables)
-GENERATE_GET_ENTITIES_SPECIALIZATION(member_variable, member_variables)
+GET_MAP_OF_LINKED_TYPE(linked_namespace, namespaces)
+GET_MAP_OF_LINKED_TYPE(linked_unnamed_namespace, unnamed_namespaces)
+GET_MAP_OF_LINKED_TYPE(class_, classes)
+GET_MAP_OF_LINKED_TYPE(member_class, member_classes)
+GET_MAP_OF_LINKED_TYPE(enum_, enums)
+GET_MAP_OF_LINKED_TYPE(member_enum, member_enums)
+GET_MAP_OF_LINKED_TYPE(typedef_, typedefs)
+GET_MAP_OF_LINKED_TYPE(member_typedef, member_typedefs)
+GET_MAP_OF_LINKED_TYPE(constructor, constructors)
+GET_MAP_OF_LINKED_TYPE(destructor, destructors)
+GET_MAP_OF_LINKED_TYPE(operator_member_function, operator_member_functions)
+GET_MAP_OF_LINKED_TYPE(conversion_function, conversion_functions)
+GET_MAP_OF_LINKED_TYPE(simple_member_function, simple_member_functions)
+GET_MAP_OF_LINKED_TYPE(operator_function, operator_functions)
+GET_MAP_OF_LINKED_TYPE(simple_function, simple_functions)
+GET_MAP_OF_LINKED_TYPE(variable, variables)
+GET_MAP_OF_LINKED_TYPE(member_variable, member_variables)
 
 GENERATE_GET_PAIRS_SPECIALIZATION(class_, class_pairs)
 GENERATE_GET_PAIRS_SPECIALIZATION(member_class, member_class_pairs)
 
 }}}} //namespace scalpel::cpp::linking::detail
 
-#undef GENERATE_GET_ENTITIES_SPECIALIZATION
+#undef GET_MAP_OF_NONLINKED_TYPE
+#undef GET_MAP_OF_LINKED_TYPE
 #undef GENERATE_GET_PAIRS_SPECIALIZATION
 

@@ -69,7 +69,7 @@ namespace
 	}
 }
 
-std::unique_ptr<semantic_graph>
+std::unique_ptr<semantic_entities::linked_namespace>
 link(const utility::unique_ptr_vector<semantic_graph>& semantic_graphs)
 {
 	detail::entity_groups groups = detail::list_entities(semantic_graphs);

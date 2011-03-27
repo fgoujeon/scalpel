@@ -235,7 +235,7 @@ class simple_member_function;
 class member_variable;
 
 typedef
-	impl::detail::declarative_region_member_impl<namespace_, unnamed_namespace>
+	impl::detail::declarative_region_member_impl<namespace_, unnamed_namespace, linked_namespace, linked_unnamed_namespace>
 	class_declarative_region_member_impl_t
 ;
 

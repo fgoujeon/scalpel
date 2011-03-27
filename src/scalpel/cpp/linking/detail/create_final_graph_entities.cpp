@@ -58,14 +58,14 @@ namespace
 //private function definitions
 namespace
 {
-	namespace_*
+	linked_namespace*
 	create_entity
 	(
 		const namespace_& entity,
 		const final_graph_entities&
 	)
 	{
-		return new namespace_(entity.name());
+		return new linked_namespace(entity.name());
 	}
 
 	class_*
@@ -443,8 +443,8 @@ namespace
 			class_ptr_variant
 			operator()(const Class* base)
 			{
-				auto it = final_entities_.get_map_of_type<Class>().find(base);
-				assert(it != final_entities_.get_map_of_type<Class>().end());
+				auto it = final_entities_.get_map_of_linked_type<Class>().find(base);
+				assert(it != final_entities_.get_map_of_linked_type<Class>().end());
 				return it->second;
 			}
 
@@ -598,12 +598,39 @@ namespace
 	)
 	{
 		//create the global namespace
-		final_entities.global_namespace = std::unique_ptr<namespace_>(new namespace_(""));
+		final_entities.global_namespace = std::unique_ptr<linked_namespace>(new linked_namespace());
 
 		for(auto i = groups.global_namespaces.begin(); i != groups.global_namespaces.end(); ++i)
 		{
 			//add links between the old global namespaces and the new one
-			final_entities.namespaces.insert(std::pair<const namespace_*, namespace_*>(*i, final_entities.global_namespace.get()));
+			final_entities.namespaces.insert(std::pair<const namespace_*, linked_namespace*>(*i, final_entities.global_namespace.get()));
+		}
+	}
+
+	void
+	create_unnamed_namespaces
+	(
+		const entity_groups& groups,
+		final_graph_entities& final_entities
+	)
+	{
+		//typedef typename nonlinked_type<Entity>::type nonlinked_entity_t;
+
+		for(auto i = groups.unnamed_namespaces.begin(); i != groups.unnamed_namespaces.end(); ++i)
+		{
+			const unnamed_namespace& nonlinked_unnamed_namespace = **i;
+
+			linked_unnamed_namespace* new_entity = new linked_unnamed_namespace();
+
+			//add a link between the nonlinked entity and the new linked one
+			final_entities.unnamed_namespaces.insert
+			(
+				std::pair<const unnamed_namespace*, linked_unnamed_namespace*>
+				(
+					&nonlinked_unnamed_namespace,
+					new_entity
+				)
+			);
 		}
 	}
 
@@ -611,20 +638,22 @@ namespace
 	void
 	create_entities_of_type
 	(
-		const typename detail::entity_groups_of_type<Entity>::type& groups,
+		const typename detail::entity_groups_of_type<typename nonlinked_type<Entity>::type>::type& groups,
 		final_graph_entities& final_entities
 	)
 	{
+		typedef typename nonlinked_type<Entity>::type nonlinked_entity_t;
+
 		for(auto i = groups.begin(); i != groups.end(); ++i) //for each group (1 group = 1 output entity)
 		{
 			const std::string group_id = i->first;
-			const std::vector<const Entity*>& group = i->second;
+			const std::vector<const nonlinked_entity_t*>& group = i->second;
 
 			//find a defined version of the entity
-			const Entity* defined_entity = 0;
+			const nonlinked_entity_t* defined_entity = 0;
 			for(auto j = group.begin(); j != group.end(); ++j)
 			{
-				const Entity* current_entity = *j;
+				const nonlinked_entity_t* current_entity = *j;
 				if(generic_queries::detail::is_defined(*current_entity))
 				{
 					if(defined_entity != 0 && ErrorIfMultipleDefinition)
@@ -634,7 +663,7 @@ namespace
 			}
 
 			//select the first entity if no defined entity has been found
-			const Entity& selected_entity = defined_entity ? *defined_entity : *group.front();
+			const nonlinked_entity_t& selected_entity = defined_entity ? *defined_entity : *group.front();
 
 			//create a new entity by copying the selected one
 			Entity* new_entity = create_entity(selected_entity, final_entities);
@@ -642,7 +671,7 @@ namespace
 			//add links between groups' entities and the new entity
 			for(auto j = group.begin(); j != group.end(); ++j)
 			{
-				final_entities.get_map_of_type<Entity>().insert(std::pair<const Entity*, Entity*>(*j, new_entity));
+				final_entities.get_map_of_linked_type<Entity>().insert(std::pair<const nonlinked_entity_t*, Entity*>(*j, new_entity));
 			}
 		}
 	}
@@ -673,8 +702,9 @@ create_final_graph_entities
 )
 {
 	create_global_namespace(groups, final_entities);
+	create_unnamed_namespaces(groups, final_entities);
 
-	create_entities_of_type<namespace_, false>(groups.namespaces, final_entities);
+	create_entities_of_type<linked_namespace, false>(groups.namespaces, final_entities);
 	create_entities_of_type<class_, false>(groups.classes, final_entities);
 	create_entities_of_type<member_class, false>(groups.member_classes, final_entities);
 	create_entities_of_type<enum_, false>(groups.enums, final_entities);

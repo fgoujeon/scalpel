@@ -193,7 +193,7 @@ single_file_tester::test_linking(const linking_test_file_set& file_set)
 	}
 
 	//linking
-	std::unique_ptr<scalpel::cpp::semantic_graph> final_semantic_graph = scalpel::cpp::linking::link(semantic_graphs);
+	std::unique_ptr<scalpel::cpp::linked_semantic_graph> final_semantic_graph = scalpel::cpp::linking::link(semantic_graphs);
 
 	//serialize the semantic graph
 	std::ostringstream semantic_graph_xml;
