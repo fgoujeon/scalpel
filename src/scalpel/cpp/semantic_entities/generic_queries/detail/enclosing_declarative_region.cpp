@@ -18,18 +18,42 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_GENERIC_QUERIES_DETAIL_ENCLOSING_DECLARATIVE_REGION_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_GENERIC_QUERIES_DETAIL_ENCLOSING_DECLARATIVE_REGION_HPP
-
-#include <scalpel/cpp/semantic_graph.hpp>
+#include "enclosing_declarative_region.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities { namespace generic_queries { namespace detail
 {
 
+namespace
+{
+	struct: utility::static_visitor<namespace_ptr_variant>
+	{
+		template<class Entity>
+		namespace_ptr_variant
+		operator()(Entity* entity) const
+		{
+			return entity;
+		}
+	} to_namespace_ptr_variant_visitor;
+
+	struct: utility::static_visitor<namespace_ptr_variant>
+	{
+		template<class Entity>
+		namespace_ptr_variant
+		operator()(Entity* entity) const
+		{
+			const typename Entity::enclosing_declarative_region_t& enclosing_declarative_region =
+				entity->enclosing_declarative_region()
+			;
+			return apply_visitor(to_namespace_ptr_variant_visitor, enclosing_declarative_region);
+		}
+	} enclosing_declarative_region_visitor;
+}
+
 namespace_ptr_variant
-enclosing_declarative_region(const namespace_ptr_variant& entity);
+enclosing_declarative_region(const namespace_ptr_variant& entity)
+{
+	return apply_visitor(enclosing_declarative_region_visitor, entity);
+}
 
 }}}}} //namespace scalpel::cpp::semantic_entities::generic_queries::detail
-
-#endif
 
