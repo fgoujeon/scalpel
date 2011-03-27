@@ -35,6 +35,21 @@ get_entity_groups_of_type<semantic_entities::ENTITY_TYPE>(const entity_groups& o
 	return o.VARIABLE; \
 }
 
+#define INTERNAL_ENTITIES_OF_TYPE(ENTITY_TYPE, VARIABLE) \
+template<> \
+std::vector<const semantic_entities::ENTITY_TYPE*>& \
+entity_groups::internal_entities_of_type<semantic_entities::ENTITY_TYPE>() \
+{ \
+	return VARIABLE; \
+} \
+ \
+template<> \
+const std::vector<const semantic_entities::ENTITY_TYPE*>& \
+entity_groups::internal_entities_of_type<semantic_entities::ENTITY_TYPE>() const \
+{ \
+	return VARIABLE; \
+}
+
 namespace scalpel { namespace cpp { namespace linking { namespace detail
 {
 
@@ -55,7 +70,26 @@ GENERATE_GET_ENTITY_LIST_SPECIALIZATION(simple_function, simple_functions)
 GENERATE_GET_ENTITY_LIST_SPECIALIZATION(variable, variables)
 GENERATE_GET_ENTITY_LIST_SPECIALIZATION(member_variable, member_variables)
 
+INTERNAL_ENTITIES_OF_TYPE(namespace_, internal_namespaces)
+INTERNAL_ENTITIES_OF_TYPE(unnamed_namespace, internal_unnamed_namespaces)
+INTERNAL_ENTITIES_OF_TYPE(class_, internal_classes)
+INTERNAL_ENTITIES_OF_TYPE(member_class, internal_member_classes)
+INTERNAL_ENTITIES_OF_TYPE(enum_, internal_enums)
+INTERNAL_ENTITIES_OF_TYPE(member_enum, internal_member_enums)
+INTERNAL_ENTITIES_OF_TYPE(typedef_, internal_typedefs)
+INTERNAL_ENTITIES_OF_TYPE(member_typedef, internal_member_typedefs)
+INTERNAL_ENTITIES_OF_TYPE(constructor, internal_constructors)
+INTERNAL_ENTITIES_OF_TYPE(destructor, internal_destructors)
+INTERNAL_ENTITIES_OF_TYPE(operator_member_function, internal_operator_member_functions)
+INTERNAL_ENTITIES_OF_TYPE(conversion_function, internal_conversion_functions)
+INTERNAL_ENTITIES_OF_TYPE(simple_member_function, internal_simple_member_functions)
+INTERNAL_ENTITIES_OF_TYPE(operator_function, internal_operator_functions)
+INTERNAL_ENTITIES_OF_TYPE(simple_function, internal_simple_functions)
+INTERNAL_ENTITIES_OF_TYPE(variable, internal_variables)
+INTERNAL_ENTITIES_OF_TYPE(member_variable, internal_member_variables)
+
 }}}} //namespace scalpel::cpp::linking::detail
 
 #undef GENERATE_GET_ENTITY_LIST_SPECIALIZATION
+#undef INTERNAL_ENTITIES_OF_TYPE
 

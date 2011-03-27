@@ -154,24 +154,25 @@ namespace
 		}
 	}
 
-	template<>
+	template<class Entity>
 	void
-	assemble_entities_of_type<linked_unnamed_namespace>
+	assemble_internal_entities_of_type
 	(
 		const entity_groups& groups,
 		final_graph_entities& final_entities
 	)
 	{
-		//typedef typename nonlinked_type<Entity>::type nonlinked_entity_t;
+		typedef typename nonlinked_type<Entity>::type nonlinked_entity_t;
 
-		for(auto i = groups.unnamed_namespaces.begin(); i != groups.unnamed_namespaces.end(); ++i)
+		const std::vector<const nonlinked_entity_t*>& entities = groups.internal_entities_of_type<nonlinked_entity_t>();
+		for(auto i = entities.begin(); i != entities.end(); ++i)
 		{
-			const unnamed_namespace* current_entity = *i;
+			const nonlinked_entity_t* current_entity = *i;
 
 			//find the corresponding final entity
-			auto it = final_entities.unnamed_namespaces.find(current_entity);
-			assert(it != final_entities.unnamed_namespaces.end());
-			linked_unnamed_namespace* final_entity = it->second;
+			auto it = final_entities.get_map_of_linked_type<Entity>().find(current_entity);
+			assert(it != final_entities.get_map_of_linked_type<Entity>().end());
+			Entity* final_entity = it->second;
 
 			//add the final entity to the final graph
 			assert(current_entity->has_enclosing_declarative_region());
@@ -193,7 +194,6 @@ assemble_final_graph
 )
 {
 	assemble_entities_of_type<linked_namespace>(groups, final_entities);
-	assemble_entities_of_type<linked_unnamed_namespace>(groups, final_entities);
 	assemble_entities_of_type<class_>(groups, final_entities);
 	assemble_entities_of_type<member_class>(groups, final_entities);
 	assemble_entities_of_type<enum_>(groups, final_entities);
@@ -209,6 +209,24 @@ assemble_final_graph
 	assemble_entities_of_type<simple_function>(groups, final_entities);
 	assemble_entities_of_type<variable>(groups, final_entities);
 	assemble_entities_of_type<member_variable>(groups, final_entities);
+
+	assemble_internal_entities_of_type<linked_namespace>(groups, final_entities);
+	assemble_internal_entities_of_type<linked_unnamed_namespace>(groups, final_entities);
+	assemble_internal_entities_of_type<class_>(groups, final_entities);
+	assemble_internal_entities_of_type<member_class>(groups, final_entities);
+	assemble_internal_entities_of_type<enum_>(groups, final_entities);
+	assemble_internal_entities_of_type<member_enum>(groups, final_entities);
+	assemble_internal_entities_of_type<typedef_>(groups, final_entities);
+	assemble_internal_entities_of_type<member_typedef>(groups, final_entities);
+	assemble_internal_entities_of_type<constructor>(groups, final_entities);
+	assemble_internal_entities_of_type<destructor>(groups, final_entities);
+	assemble_internal_entities_of_type<operator_member_function>(groups, final_entities);
+	assemble_internal_entities_of_type<conversion_function>(groups, final_entities);
+	assemble_internal_entities_of_type<simple_member_function>(groups, final_entities);
+	assemble_internal_entities_of_type<operator_function>(groups, final_entities);
+	assemble_internal_entities_of_type<simple_function>(groups, final_entities);
+	assemble_internal_entities_of_type<variable>(groups, final_entities);
+	assemble_internal_entities_of_type<member_variable>(groups, final_entities);
 
 	return std::move(final_entities.global_namespace);
 }

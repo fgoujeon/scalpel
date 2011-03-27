@@ -29,9 +29,16 @@ using namespace semantic_entities;
 
 namespace
 {
+	void
+	list_child_entities(const unnamed_namespace& parent_entity, entity_groups& groups);
+
 	template<class Class>
 	void
 	list_child_entities(const Class& parent_entity, entity_groups& groups);
+
+	template<class ChildEntity, class ParentEntity>
+	void
+	list_and_group_child_entities_of_type(const ParentEntity& parent_entity, entity_groups& groups);
 
 	template<class ChildEntity, class ParentEntity>
 	void
@@ -51,13 +58,32 @@ namespace
 
 		if(const unnamed_namespace* opt_unnamed_namespace = parent_entity.get_unnamed_namespace())
 		{
-			groups.unnamed_namespaces.push_back(opt_unnamed_namespace);
+			groups.internal_unnamed_namespaces.push_back(opt_unnamed_namespace);
+			list_child_entities(*opt_unnamed_namespace, groups);
 		}
 
 		const utility::unique_ptr_vector<class_>& child_classes = parent_entity.classes();
 		for(auto i = child_classes.begin(); i != child_classes.end(); ++i)
 		{
 			list_child_entities(*i, groups);
+		}
+
+		list_and_group_child_entities_of_type<namespace_>(parent_entity, groups);
+		list_and_group_child_entities_of_type<class_>(parent_entity, groups);
+		list_and_group_child_entities_of_type<enum_>(parent_entity, groups);
+		list_and_group_child_entities_of_type<typedef_>(parent_entity, groups);
+		list_and_group_child_entities_of_type<operator_function>(parent_entity, groups);
+		list_and_group_child_entities_of_type<simple_function>(parent_entity, groups);
+		list_and_group_child_entities_of_type<variable>(parent_entity, groups);
+	}
+
+	void
+	list_child_entities(const unnamed_namespace& parent_entity, entity_groups& groups)
+	{
+		if(const unnamed_namespace* opt_unnamed_namespace = parent_entity.get_unnamed_namespace())
+		{
+			groups.internal_unnamed_namespaces.push_back(opt_unnamed_namespace);
+			list_child_entities(*opt_unnamed_namespace, groups);
 		}
 
 		list_child_entities_of_type<namespace_>(parent_entity, groups);
@@ -79,15 +105,30 @@ namespace
 			list_child_entities(*i, groups);
 		}
 
-		list_child_entities_of_type<member_class>(parent_entity, groups);
-		list_child_entities_of_type<member_enum>(parent_entity, groups);
-		list_child_entities_of_type<member_typedef>(parent_entity, groups);
-		list_child_entities_of_type<constructor>(parent_entity, groups);
-		list_child_entities_of_type<destructor>(parent_entity, groups);
-		list_child_entities_of_type<operator_member_function>(parent_entity, groups);
-		list_child_entities_of_type<conversion_function>(parent_entity, groups);
-		list_child_entities_of_type<simple_member_function>(parent_entity, groups);
-		list_child_entities_of_type<member_variable>(parent_entity, groups);
+		list_and_group_child_entities_of_type<member_class>(parent_entity, groups);
+		list_and_group_child_entities_of_type<member_enum>(parent_entity, groups);
+		list_and_group_child_entities_of_type<member_typedef>(parent_entity, groups);
+		list_and_group_child_entities_of_type<constructor>(parent_entity, groups);
+		list_and_group_child_entities_of_type<destructor>(parent_entity, groups);
+		list_and_group_child_entities_of_type<operator_member_function>(parent_entity, groups);
+		list_and_group_child_entities_of_type<conversion_function>(parent_entity, groups);
+		list_and_group_child_entities_of_type<simple_member_function>(parent_entity, groups);
+		list_and_group_child_entities_of_type<member_variable>(parent_entity, groups);
+	}
+
+	template<class ChildEntity, class ParentEntity>
+	void
+	list_and_group_child_entities_of_type(const ParentEntity& parent_entity, entity_groups& groups)
+	{
+		typename generic_queries::detail::member_type_traits<ChildEntity, true>::return_type entities =
+			generic_queries::detail::get_members<ChildEntity>(parent_entity)
+		;
+		for(auto i = entities.begin(); i != entities.end(); ++i)
+		{
+			const ChildEntity& entity = *i;
+			const std::string unique_id = create_unique_id(entity);
+			get_entity_groups_of_type<ChildEntity>(groups)[unique_id].push_back(&entity); //list and group by unique id
+		}
 	}
 
 	template<class ChildEntity, class ParentEntity>
@@ -100,8 +141,7 @@ namespace
 		for(auto i = entities.begin(); i != entities.end(); ++i)
 		{
 			const ChildEntity& entity = *i;
-			const std::string unique_id = create_unique_id(entity);
-			get_entity_groups_of_type<ChildEntity>(groups)[unique_id].push_back(&entity);
+			groups.internal_entities_of_type<ChildEntity>().push_back(&entity);
 		}
 	}
 }

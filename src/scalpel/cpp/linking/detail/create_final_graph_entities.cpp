@@ -68,6 +68,16 @@ namespace
 		return new linked_namespace(entity.name());
 	}
 
+	linked_unnamed_namespace*
+	create_entity
+	(
+		const unnamed_namespace&,
+		const final_graph_entities&
+	)
+	{
+		return new linked_unnamed_namespace();
+	}
+
 	class_*
 	create_entity
 	(
@@ -607,33 +617,6 @@ namespace
 		}
 	}
 
-	void
-	create_unnamed_namespaces
-	(
-		const entity_groups& groups,
-		final_graph_entities& final_entities
-	)
-	{
-		//typedef typename nonlinked_type<Entity>::type nonlinked_entity_t;
-
-		for(auto i = groups.unnamed_namespaces.begin(); i != groups.unnamed_namespaces.end(); ++i)
-		{
-			const unnamed_namespace& nonlinked_unnamed_namespace = **i;
-
-			linked_unnamed_namespace* new_entity = new linked_unnamed_namespace();
-
-			//add a link between the nonlinked entity and the new linked one
-			final_entities.unnamed_namespaces.insert
-			(
-				std::pair<const unnamed_namespace*, linked_unnamed_namespace*>
-				(
-					&nonlinked_unnamed_namespace,
-					new_entity
-				)
-			);
-		}
-	}
-
 	template<class Entity, bool ErrorIfMultipleDefinition = true>
 	void
 	create_entities_of_type
@@ -676,6 +659,36 @@ namespace
 		}
 	}
 
+	template<class Entity>
+	void
+	create_internal_entities_of_type
+	(
+		const entity_groups& groups,
+		final_graph_entities& final_entities
+	)
+	{
+		typedef typename nonlinked_type<Entity>::type nonlinked_entity_t;
+
+		std::vector<const nonlinked_entity_t*> entities = groups.internal_entities_of_type<nonlinked_entity_t>();
+		for(auto i = entities.begin(); i != entities.end(); ++i) //for each entity
+		{
+			const nonlinked_entity_t& entity = **i;
+
+			//create a new entity by copying the selected one
+			Entity* new_entity = create_entity(entity, final_entities);
+
+			//add a link between the nonlinked entity and the new linked one
+			final_entities.get_map_of_linked_type<Entity>().insert
+			(
+				std::pair<const nonlinked_entity_t*, Entity*>
+				(
+					&entity,
+					new_entity
+				)
+			);
+		}
+	}
+
 	template<class Class>
 	void
 	add_base_classes(final_graph_entities& final_entities)
@@ -702,7 +715,6 @@ create_final_graph_entities
 )
 {
 	create_global_namespace(groups, final_entities);
-	create_unnamed_namespaces(groups, final_entities);
 
 	create_entities_of_type<linked_namespace, false>(groups.namespaces, final_entities);
 	create_entities_of_type<class_, false>(groups.classes, final_entities);
@@ -720,6 +732,24 @@ create_final_graph_entities
 	create_entities_of_type<simple_function>(groups.simple_functions, final_entities);
 	create_entities_of_type<variable>(groups.variables, final_entities);
 	create_entities_of_type<member_variable>(groups.member_variables, final_entities);
+
+	create_internal_entities_of_type<linked_namespace>(groups, final_entities);
+	create_internal_entities_of_type<linked_unnamed_namespace>(groups, final_entities);
+	create_internal_entities_of_type<class_>(groups, final_entities);
+	create_internal_entities_of_type<member_class>(groups, final_entities);
+	create_internal_entities_of_type<enum_>(groups, final_entities);
+	create_internal_entities_of_type<member_enum>(groups, final_entities);
+	create_internal_entities_of_type<typedef_>(groups, final_entities);
+	create_internal_entities_of_type<member_typedef>(groups, final_entities);
+	create_internal_entities_of_type<constructor>(groups, final_entities);
+	create_internal_entities_of_type<destructor>(groups, final_entities);
+	create_internal_entities_of_type<operator_member_function>(groups, final_entities);
+	create_internal_entities_of_type<conversion_function>(groups, final_entities);
+	create_internal_entities_of_type<simple_member_function>(groups, final_entities);
+	create_internal_entities_of_type<operator_function>(groups, final_entities);
+	create_internal_entities_of_type<simple_function>(groups, final_entities);
+	create_internal_entities_of_type<variable>(groups, final_entities);
+	create_internal_entities_of_type<member_variable>(groups, final_entities);
 
 	add_base_classes<class_>(final_entities);
 	add_base_classes<member_class>(final_entities);
