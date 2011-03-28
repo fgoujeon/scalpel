@@ -1023,6 +1023,21 @@ semantic_graph_serializer::define_ids(const namespace_& entity)
 
 	for(auto i = entity.namespaces().begin(); i != entity.namespaces().end(); ++i)
 		define_ids(*i);
+	if(const unnamed_namespace* opt_unnamed_namespace = entity.get_unnamed_namespace())
+		define_ids(*opt_unnamed_namespace);
+	for(auto i = entity.classes().begin(); i != entity.classes().end(); ++i)
+		define_ids(*i);
+	for(auto i = entity.enums().begin(); i != entity.enums().end(); ++i)
+		define_ids(*i);
+}
+
+void
+semantic_graph_serializer::define_ids(const unnamed_namespace& entity)
+{
+	for(auto i = entity.namespaces().begin(); i != entity.namespaces().end(); ++i)
+		define_ids(*i);
+	if(const unnamed_namespace* opt_unnamed_namespace = entity.get_unnamed_namespace())
+		define_ids(*opt_unnamed_namespace);
 	for(auto i = entity.classes().begin(); i != entity.classes().end(); ++i)
 		define_ids(*i);
 	for(auto i = entity.enums().begin(); i != entity.enums().end(); ++i)
@@ -1037,6 +1052,21 @@ semantic_graph_serializer::define_ids(const linked_namespace& entity)
 
 	for(auto i = entity.namespaces().begin(); i != entity.namespaces().end(); ++i)
 		define_ids(*i);
+	for(auto i = entity.unnamed_namespaces().begin(); i != entity.unnamed_namespaces().end(); ++i)
+		define_ids(*i);
+	for(auto i = entity.classes().begin(); i != entity.classes().end(); ++i)
+		define_ids(*i);
+	for(auto i = entity.enums().begin(); i != entity.enums().end(); ++i)
+		define_ids(*i);
+}
+
+void
+semantic_graph_serializer::define_ids(const linked_unnamed_namespace& entity)
+{
+	for(auto i = entity.namespaces().begin(); i != entity.namespaces().end(); ++i)
+		define_ids(*i);
+	if(const linked_unnamed_namespace* opt_unnamed_namespace = entity.get_unnamed_namespace())
+		define_ids(*opt_unnamed_namespace);
 	for(auto i = entity.classes().begin(); i != entity.classes().end(); ++i)
 		define_ids(*i);
 	for(auto i = entity.enums().begin(); i != entity.enums().end(); ++i)

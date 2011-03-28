@@ -250,7 +250,13 @@ class semantic_graph_serializer
 		define_ids(const namespace_& entity);
 
 		void
+		define_ids(const unnamed_namespace& entity);
+
+		void
 		define_ids(const linked_namespace& entity);
+
+		void
+		define_ids(const linked_unnamed_namespace& entity);
 
 		void
 		define_ids(const class_& entity);
