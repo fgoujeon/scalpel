@@ -72,11 +72,12 @@ create_namespace_alias
 	Namespace& current_namespace
 );
 
+template<class Namespace>
 semantic_entities::namespace_&
-create_using_directive
+find_using_directive_namespace
 (
 	const syntax_nodes::using_directive& using_directive_node,
-	semantic_entities::namespace_& current_namespace
+	Namespace& current_namespace
 );
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail

@@ -82,8 +82,8 @@ fill_namespace
 			//else if(const boost::optional<const using_declaration&> opt_using_declaration_node = get<using_declaration>(&block_declaration_node))
 			else if(const boost::optional<const using_directive&> opt_using_directive_node = get<using_directive>(&block_declaration_node))
 			{
-				//namespace_& new_using_directive = create_using_directive(*opt_using_directive_node, namespace_entity);
-				//namespace_entity.add_using_directive_namespace(*new_using_directive);
+				namespace_& new_using_directive = find_using_directive_namespace(*opt_using_directive_node, namespace_entity);
+				namespace_entity.add_using_directive_namespace(new_using_directive);
 			}
 		}
 		else if(const boost::optional<const function_definition&> opt_function_definition_node = get<function_definition>(&declaration_node))

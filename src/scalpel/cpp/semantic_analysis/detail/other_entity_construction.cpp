@@ -332,34 +332,5 @@ create_entity
 	throw std::runtime_error("create_entity error 5");
 }
 
-semantic_entities::namespace_&
-create_using_directive
-(
-	const syntax_nodes::using_directive& using_directive_node,
-	semantic_entities::namespace_& current_namespace
-)
-{
-	//find the namespace or namespace alias designated by the using directive
-	utility::ptr_variant<namespace_, namespace_alias>::type found_entity =
-		name_lookup::find
-		<
-			semantic_entity_analysis::identification_policies::by_name,
-			false,
-			false,
-			namespace_,
-			namespace_alias
-		>
-		(
-			has_leading_double_colon(using_directive_node),
-			get_nested_name_specifier(using_directive_node),
-			get_identifier(using_directive_node).value(),
-			&current_namespace
-		)
-	;
-
-	//get and return the namespace entity
-	return semantic_entity_analysis::get_namespace(found_entity);
-}
-
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
 
