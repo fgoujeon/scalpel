@@ -666,6 +666,15 @@ apply_using_directives
 
 		//associate the using directive's namespace to the common enclosing namespace
 		namespace_associations[common_enclosing_namespace].unnamed_namespaces.push_back(opt_unnamed_namespace);
+
+		//process recursively with the child unnamed namespace and the using directive's namespaces
+		apply_using_directives
+		(
+			declarative_region,
+			opt_unnamed_namespace->using_directive_namespaces(),
+			opt_unnamed_namespace->get_unnamed_namespace(),
+			namespace_associations
+		);
 	}
 }
 
