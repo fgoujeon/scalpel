@@ -717,38 +717,53 @@ create_final_graph_entities
 	create_global_namespace(groups, final_entities);
 
 	create_entities_of_type<linked_namespace, false>(groups.namespaces, final_entities);
-	create_entities_of_type<class_, false>(groups.classes, final_entities);
-	create_entities_of_type<member_class, false>(groups.member_classes, final_entities);
-	create_entities_of_type<enum_, false>(groups.enums, final_entities);
-	create_entities_of_type<member_enum, false>(groups.member_enums, final_entities);
-	create_entities_of_type<typedef_, false>(groups.typedefs, final_entities);
-	create_entities_of_type<member_typedef, false>(groups.member_typedefs, final_entities);
-	create_entities_of_type<constructor>(groups.constructors, final_entities);
-	create_entities_of_type<destructor>(groups.destructors, final_entities);
-	create_entities_of_type<operator_member_function>(groups.operator_member_functions, final_entities);
-	create_entities_of_type<conversion_function>(groups.conversion_functions, final_entities);
-	create_entities_of_type<simple_member_function>(groups.simple_member_functions, final_entities);
-	create_entities_of_type<operator_function>(groups.operator_functions, final_entities);
-	create_entities_of_type<simple_function>(groups.simple_functions, final_entities);
-	create_entities_of_type<variable>(groups.variables, final_entities);
-	create_entities_of_type<member_variable>(groups.member_variables, final_entities);
-
 	create_internal_entities_of_type<linked_namespace>(groups, final_entities);
+
 	create_internal_entities_of_type<linked_unnamed_namespace>(groups, final_entities);
+
+	create_entities_of_type<class_, false>(groups.classes, final_entities);
 	create_internal_entities_of_type<class_>(groups, final_entities);
+
+	create_entities_of_type<member_class, false>(groups.member_classes, final_entities);
 	create_internal_entities_of_type<member_class>(groups, final_entities);
+
+	create_entities_of_type<enum_, false>(groups.enums, final_entities);
 	create_internal_entities_of_type<enum_>(groups, final_entities);
+
+	create_entities_of_type<member_enum, false>(groups.member_enums, final_entities);
 	create_internal_entities_of_type<member_enum>(groups, final_entities);
+
+	create_entities_of_type<typedef_, false>(groups.typedefs, final_entities);
 	create_internal_entities_of_type<typedef_>(groups, final_entities);
+
+	create_entities_of_type<member_typedef, false>(groups.member_typedefs, final_entities);
 	create_internal_entities_of_type<member_typedef>(groups, final_entities);
+
+	create_entities_of_type<constructor>(groups.constructors, final_entities);
 	create_internal_entities_of_type<constructor>(groups, final_entities);
+
+	create_entities_of_type<destructor>(groups.destructors, final_entities);
 	create_internal_entities_of_type<destructor>(groups, final_entities);
+
+	create_entities_of_type<operator_member_function>(groups.operator_member_functions, final_entities);
 	create_internal_entities_of_type<operator_member_function>(groups, final_entities);
+
+	create_entities_of_type<conversion_function>(groups.conversion_functions, final_entities);
 	create_internal_entities_of_type<conversion_function>(groups, final_entities);
+
+	create_entities_of_type<simple_member_function>(groups.simple_member_functions, final_entities);
 	create_internal_entities_of_type<simple_member_function>(groups, final_entities);
+
+	create_entities_of_type<operator_function>(groups.operator_functions, final_entities);
 	create_internal_entities_of_type<operator_function>(groups, final_entities);
+
+	create_entities_of_type<simple_function>(groups.simple_functions, final_entities);
 	create_internal_entities_of_type<simple_function>(groups, final_entities);
+
+	create_entities_of_type<variable>(groups.variables, final_entities);
 	create_internal_entities_of_type<variable>(groups, final_entities);
+
+	create_entities_of_type<member_variable>(groups.member_variables, final_entities);
 	create_internal_entities_of_type<member_variable>(groups, final_entities);
 
 	add_base_classes<class_>(final_entities);

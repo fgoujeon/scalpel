@@ -1,11 +1,20 @@
 <namespace id="n0">
  <unnamed_namespace>
+  <class name="c" id="c0">
+   <destructor access="public" defined="false">
+   </destructor>
+  </class>
   <variable name="i">
    <type>
     <fundamental_type type="int"/>
    </type>
   </variable>
  </unnamed_namespace>
+ <variable name="c0">
+  <type>
+   <class id="c0"/>
+  </type>
+ </variable>
  <variable name="i">
   <type>
    <fundamental_type type="int"/>
