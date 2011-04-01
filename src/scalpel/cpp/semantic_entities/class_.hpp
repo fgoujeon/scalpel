@@ -41,8 +41,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 class CLASS_NAME \
 { \
 	public: \
-		typedef std::vector<open_declarative_region_ptr_variant> open_declarative_region_ptr_variants_t; \
- \
 		typedef std::vector<base_class> base_classes_t; \
 		typedef utility::unique_ptr_vector<member_class> classes_t; \
 		typedef utility::unique_ptr_vector<member_enum> enums_t; \
@@ -93,9 +91,6 @@ class CLASS_NAME \
 				return access_; \
 			}, \
 		) \
- \
-		const open_declarative_region_ptr_variants_t& \
-		open_declarative_regions(); \
  \
 		const base_classes_t& \
 		base_classes() const; \
@@ -198,8 +193,6 @@ class CLASS_NAME \
 			member_access access_;, \
 		) \
 		bool complete_; \
- \
-		open_declarative_region_ptr_variants_t open_declarative_regions_; \
  \
 		base_classes_t base_classes_; \
 		classes_t nested_classes_; \

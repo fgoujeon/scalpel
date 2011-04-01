@@ -27,12 +27,6 @@ statement_block::statement_block()
 {
 }
 
-const statement_block::open_declarative_region_ptr_variants_t&
-statement_block::open_declarative_regions()
-{
-	return open_declarative_regions_;
-}
-
 const statement_block::statement_blocks_t&
 statement_block::statement_blocks() const
 {
@@ -43,6 +37,12 @@ const statement_block::variables_t&
 statement_block::variables() const
 {
 	return variables_;
+}
+
+statement_block::namespace_aliases_t::range
+statement_block::namespace_aliases()
+{
+	return namespace_aliases_;
 }
 
 const statement_block::namespace_aliases_t&
@@ -72,7 +72,6 @@ statement_block::add_member(std::unique_ptr<variable>&& member)
 void
 statement_block::add_member(std::unique_ptr<namespace_alias>&& member)
 {
-	open_declarative_regions_.push_back(member.get());
     namespace_aliases_.push_back(std::move(member));
 }
 

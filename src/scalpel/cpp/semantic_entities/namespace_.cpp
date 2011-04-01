@@ -42,12 +42,6 @@ BOOST_PP_IIF  \
 	}, \
 )  \
  \
-const CLASS_NAME::open_declarative_region_ptr_variants_t& \
-CLASS_NAME::open_declarative_regions() \
-{ \
-	return open_declarative_regions_; \
-} \
- \
 CLASS_NAME::namespaces_t::range \
 CLASS_NAME::namespaces() \
 { \
@@ -136,8 +130,6 @@ void \
 CLASS_NAME::add_member(std::unique_ptr<NAMESPACE_TYPE>&& member) \
 { \
 	member->enclosing_declarative_region(this); \
-	open_declarative_regions_.push_back(member.get()); \
- \
     namespaces_.push_back(std::move(member)); \
 } \
  \
@@ -164,8 +156,6 @@ void \
 CLASS_NAME::add_member(std::unique_ptr<class_>&& member) \
 { \
 	member->enclosing_declarative_region(this); \
-	open_declarative_regions_.push_back(member.get()); \
- \
     classes_.push_back(std::move(member)); \
 } \
  \
@@ -210,7 +200,6 @@ BOOST_PP_IIF \
 	void \
 	CLASS_NAME::add_member(std::unique_ptr<namespace_alias>&& member) \
 	{ \
-		open_declarative_regions_.push_back(member.get()); \
 		namespace_aliases_.push_back(std::move(member)); \
 	}, \
 ) \

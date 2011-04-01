@@ -65,19 +65,29 @@ typedef
 	declarative_region_ptr_variant
 ;
 
-//open declarative regions are those considered during a qualified name lookup
+//Open declarative regions are those considered during a qualified name lookup.
+//E.g. if we look up to "X::Y::Z::name", X, Y and Z are the names of three
+//open declarative regions.
 typedef
 	scalpel::utility::ptr_variant
 	<
 		namespace_,
-		linked_namespace,
-		unnamed_namespace,
-		linked_unnamed_namespace,
 		namespace_alias,
 		class_,
 		member_class
 	>::type
 	open_declarative_region_ptr_variant
+;
+
+typedef
+	utility::ptr_variant
+	<
+		namespace_,
+		unnamed_namespace,
+		class_,
+		member_class
+	>::type
+	function_enclosing_declarative_region_ptr_variant
 ;
 
 const std::string&

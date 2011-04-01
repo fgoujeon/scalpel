@@ -294,9 +294,9 @@ fill_namespace
 	const bool is_qualified = has_leading_double_colon || opt_nested_name_specifier_node;
 
 	//find the enclosing declarative region of the function (xxx in void xxx::f())
-	const open_declarative_region_ptr_variant& function_declarative_region =
+	function_enclosing_declarative_region_ptr_variant function_declarative_region =
 		is_qualified ?
-		name_lookup::find_declarative_region
+		find_function_enclosing_declarative_region
 		(
 			has_leading_double_colon,
 			opt_nested_name_specifier_node,
@@ -306,7 +306,10 @@ fill_namespace
 	;
 
 	//is it a class member function?
-	const bool is_class_member = utility::get<class_*>(&function_declarative_region);
+	const bool is_class_member =
+		utility::get<class_*>(&function_declarative_region) ||
+		utility::get<member_class*>(&function_declarative_region)
+	;
 
 	//create an empty function corresponding to the function-definition
 	function_ptr_variant function_entity = create_function
@@ -318,7 +321,7 @@ fill_namespace
 		member_access::PUBLIC
 	);
 
-	//The function_entity may have already been declared previously in the code.
+	//The function entity may have already been declared previously in the code.
 	//If so, the function entity corresponding to the function-definition
 	//(and to the previous function declaration) already exists.
 	//Let's try to find it.

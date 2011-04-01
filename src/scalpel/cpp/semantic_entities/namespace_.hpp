@@ -50,8 +50,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 class CLASS_NAME \
 { \
 	public: \
-		typedef std::vector<open_declarative_region_ptr_variant> open_declarative_region_ptr_variants_t; \
- \
 		typedef std::vector<namespace_*> namespace_ptrs_t; \
 		typedef utility::unique_ptr_vector<NAMESPACE_TYPE> namespaces_t; \
 		BOOST_PP_IIF \
@@ -90,9 +88,6 @@ class CLASS_NAME \
 				return name_; \
 			}, \
 		) \
- \
-		const open_declarative_region_ptr_variants_t& \
-		open_declarative_regions(); \
  \
 		namespaces_t::range \
 		namespaces(); \
@@ -249,8 +244,6 @@ class CLASS_NAME \
 			IS_NAMED, \
 			std::string name_;, \
 		) \
- \
-		open_declarative_region_ptr_variants_t open_declarative_regions_; \
  \
 		namespace_aliases_t namespace_aliases_; \
 		namespaces_t namespaces_; \

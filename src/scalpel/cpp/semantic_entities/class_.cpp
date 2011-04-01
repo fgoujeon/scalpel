@@ -38,12 +38,6 @@ CLASS_NAME::CLASS_NAME \
 	reset_destructor(); \
 } \
  \
-const CLASS_NAME::open_declarative_region_ptr_variants_t& \
-CLASS_NAME::open_declarative_regions() \
-{ \
-	return open_declarative_regions_; \
-} \
- \
 const CLASS_NAME::base_classes_t& \
 CLASS_NAME::base_classes() const \
 { \
@@ -168,7 +162,6 @@ void \
 CLASS_NAME::add_member(std::unique_ptr<member_class>&& member) \
 { \
 	member->enclosing_declarative_region(this); \
-	open_declarative_regions_.push_back(member.get()); \
 	nested_classes_.push_back(std::move(member)); \
 } \
  \

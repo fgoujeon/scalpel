@@ -40,8 +40,6 @@ Represents a C++ statement block.
 class statement_block
 {
     public:
-		typedef std::vector<open_declarative_region_ptr_variant> open_declarative_region_ptr_variants_t;
-
 		typedef std::vector<namespace_*> namespace_ptrs_t;
 		typedef utility::unique_ptr_vector<statement_block> statement_blocks_t;
 		typedef utility::unique_ptr_vector<variable> variables_t;
@@ -54,14 +52,14 @@ class statement_block
 		const statement_block&
 		operator=(const statement_block&) = delete;
 
-		const open_declarative_region_ptr_variants_t&
-		open_declarative_regions();
-
 		const statement_blocks_t&
 		statement_blocks() const;
 
 		const variables_t&
 		variables() const;
+
+		namespace_aliases_t::range
+		namespace_aliases();
 
 		const namespace_aliases_t&
 		namespace_aliases() const;
@@ -82,9 +80,6 @@ class statement_block
         add_using_directive_namespace(namespace_& n);
 
     private:
-		//polymorphic containers
-		open_declarative_region_ptr_variants_t open_declarative_regions_;
-
 		//members
 		statement_blocks_t statement_blocks_;
 		variables_t variables_;

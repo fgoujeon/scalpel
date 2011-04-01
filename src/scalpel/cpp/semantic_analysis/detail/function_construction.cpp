@@ -179,7 +179,7 @@ class find_function_visitor: public utility::static_visitor<boost::optional<func
 	public:
 		find_function_visitor
 		(
-			const semantic_entities::open_declarative_region_ptr_variant& function_declarative_region
+			function_enclosing_declarative_region_ptr_variant& function_declarative_region
 		):
 			function_declarative_region_(function_declarative_region)
 		{
@@ -204,18 +204,45 @@ class find_function_visitor: public utility::static_visitor<boost::optional<func
 		}
 
 	private:
-		const semantic_entities::open_declarative_region_ptr_variant& function_declarative_region_;
+		function_enclosing_declarative_region_ptr_variant& function_declarative_region_;
 };
 
 boost::optional<function_ptr_variant>
 find_function
 (
 	const function_ptr_variant& function_signature,
-	const semantic_entities::open_declarative_region_ptr_variant& function_declarative_region
+	function_enclosing_declarative_region_ptr_variant& function_declarative_region
 )
 {
 	find_function_visitor visitor(function_declarative_region);
 	return utility::apply_visitor(visitor, function_signature);
+}
+
+semantic_entities::function_enclosing_declarative_region_ptr_variant
+find_function_enclosing_declarative_region
+(
+	const bool has_leading_double_colon,
+	const syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>& opt_nested_name_specifier_node,
+	const semantic_entities::declarative_region_ptr_variant& current_declarative_region
+)
+{
+	semantic_entities::open_declarative_region_ptr_variant region =
+		name_lookup::find_declarative_region
+		(
+			has_leading_double_colon,
+			opt_nested_name_specifier_node,
+			current_declarative_region
+		)
+	;
+
+	if(namespace_** opt_region = utility::get<namespace_*>(&region))
+		return *opt_region;
+	else if(class_** opt_region = utility::get<class_*>(&region))
+		return *opt_region;
+	else if(member_class** opt_region = utility::get<member_class*>(&region))
+		return *opt_region;
+
+	assert(false);
 }
 
 semantic_entities::overloadable_operator

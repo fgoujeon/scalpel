@@ -39,17 +39,6 @@ typename empty_result<Entity>::type
 ;
 
 template<>
-struct empty_result<semantic_entities::open_declarative_region_ptr_variant>
-{
-	typedef std::vector<semantic_entities::open_declarative_region_ptr_variant> type;
-	static type value;
-};
-
-typename empty_result<semantic_entities::open_declarative_region_ptr_variant>::type
-	empty_result<semantic_entities::open_declarative_region_ptr_variant>::value
-;
-
-template<>
 struct empty_result<semantic_entities::destructor>
 {
 	typedef utility::single_object_range<semantic_entities::destructor> type;
@@ -97,7 +86,6 @@ get_members<semantic_entities::MEMBER_TYPE>(const semantic_entities::PARENT_TYPE
 
 
 
-GENERATE_NON_CONST_GET_MEMBERS_SPECIALIZATION(namespace_, open_declarative_region_ptr_variant, open_declarative_regions)
 GENERATE_GET_MEMBERS_SPECIALIZATION          (namespace_, namespace_, namespaces)
 //GENERATE_GET_MEMBERS_SPECIALIZATION          (namespace_, unnamed_namespace, get_unnamed_namespace)
 GENERATE_GET_MEMBERS_SPECIALIZATION          (namespace_, class_, classes)
@@ -117,7 +105,6 @@ GENERATE_GET_MEMBERS_SPECIALIZATION          (namespace_, variable, variables)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (namespace_, member_variable)
 GENERATE_GET_MEMBERS_SPECIALIZATION          (namespace_, namespace_alias, namespace_aliases)
 
-GENERATE_NON_CONST_GET_MEMBERS_SPECIALIZATION(linked_namespace, open_declarative_region_ptr_variant, open_declarative_regions)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (linked_namespace, namespace_)
 //GENERATE_GET_MEMBERS_SPECIALIZATION          (linked_namespace, unnamed_namespace, get_unnamed_namespace)
 GENERATE_GET_MEMBERS_SPECIALIZATION          (linked_namespace, class_, classes)
@@ -137,7 +124,6 @@ GENERATE_GET_MEMBERS_SPECIALIZATION          (linked_namespace, variable, variab
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (linked_namespace, member_variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (linked_namespace, namespace_alias)
 
-GENERATE_NON_CONST_GET_MEMBERS_SPECIALIZATION(unnamed_namespace, open_declarative_region_ptr_variant, open_declarative_regions)
 GENERATE_GET_MEMBERS_SPECIALIZATION          (unnamed_namespace, namespace_, namespaces)
 //GENERATE_GET_MEMBERS_SPECIALIZATION          (unnamed_namespace, unnamed_namespace, get_unnamed_namespace)
 GENERATE_GET_MEMBERS_SPECIALIZATION          (unnamed_namespace, class_, classes)
@@ -157,7 +143,6 @@ GENERATE_GET_MEMBERS_SPECIALIZATION          (unnamed_namespace, variable, varia
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (unnamed_namespace, member_variable)
 GENERATE_GET_MEMBERS_SPECIALIZATION          (unnamed_namespace, namespace_alias, namespace_aliases)
 
-GENERATE_NON_CONST_GET_MEMBERS_SPECIALIZATION(linked_unnamed_namespace, open_declarative_region_ptr_variant, open_declarative_regions)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (linked_unnamed_namespace, namespace_)
 //GENERATE_GET_MEMBERS_SPECIALIZATION          (linked_unnamed_namespace, unnamed_namespace, get_unnamed_namespace)
 GENERATE_GET_MEMBERS_SPECIALIZATION          (linked_unnamed_namespace, class_, classes)
@@ -177,7 +162,6 @@ GENERATE_GET_MEMBERS_SPECIALIZATION          (linked_unnamed_namespace, variable
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (linked_unnamed_namespace, member_variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (linked_unnamed_namespace, namespace_alias)
 
-GENERATE_NON_CONST_GET_MEMBERS_SPECIALIZATION(class_, open_declarative_region_ptr_variant, open_declarative_regions)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (class_, namespace_)
 //GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (class_, unnamed_namespace)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (class_, class_)
@@ -197,7 +181,6 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (class_, variable)
 GENERATE_GET_MEMBERS_SPECIALIZATION          (class_, member_variable, variables)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (class_, namespace_alias)
 
-GENERATE_NON_CONST_GET_MEMBERS_SPECIALIZATION(member_class, open_declarative_region_ptr_variant, open_declarative_regions)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (member_class, namespace_)
 //GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (member_class, unnamed_namespace)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (member_class, class_)
@@ -217,7 +200,6 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (member_class, variable)
 GENERATE_GET_MEMBERS_SPECIALIZATION          (member_class, member_variable, variables)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (member_class, namespace_alias)
 
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (constructor, open_declarative_region_ptr_variant)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (constructor, namespace_)
 //GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (constructor, unnamed_namespace)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (constructor, class_)
@@ -237,7 +219,6 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (constructor, variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (constructor, member_variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (constructor, namespace_alias)
 
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (destructor, open_declarative_region_ptr_variant)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (destructor, namespace_)
 //GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (destructor, unnamed_namespace)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (destructor, class_)
@@ -257,7 +238,6 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (destructor, variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (destructor, member_variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (destructor, namespace_alias)
 
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (operator_function, open_declarative_region_ptr_variant)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (operator_function, namespace_)
 //GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (operator_function, unnamed_namespace)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (operator_function, class_)
@@ -277,7 +257,6 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (operator_function, variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (operator_function, member_variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (operator_function, namespace_alias)
 
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (operator_member_function, open_declarative_region_ptr_variant)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (operator_member_function, namespace_)
 //GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (operator_member_function, unnamed_namespace)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (operator_member_function, class_)
@@ -297,7 +276,6 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (operator_member_function, variable
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (operator_member_function, member_variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (operator_member_function, namespace_alias)
 
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (conversion_function, open_declarative_region_ptr_variant)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (conversion_function, namespace_)
 //GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (conversion_function, unnamed_namespace)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (conversion_function, class_)
@@ -317,7 +295,6 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (conversion_function, variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (conversion_function, member_variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (conversion_function, namespace_alias)
 
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (simple_function, open_declarative_region_ptr_variant)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (simple_function, namespace_)
 //GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (simple_function, unnamed_namespace)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (simple_function, class_)
@@ -337,7 +314,6 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (simple_function, variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (simple_function, member_variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (simple_function, namespace_alias)
 
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (simple_member_function, open_declarative_region_ptr_variant)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (simple_member_function, namespace_)
 //GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (simple_member_function, unnamed_namespace)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (simple_member_function, class_)
@@ -357,7 +333,6 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (simple_member_function, variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (simple_member_function, member_variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (simple_member_function, namespace_alias)
 
-GENERATE_NON_CONST_GET_MEMBERS_SPECIALIZATION(statement_block, open_declarative_region_ptr_variant, open_declarative_regions)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, namespace_)
 //GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, unnamed_namespace)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, class_)
@@ -375,7 +350,7 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, simple_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, simple_member_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, member_variable)
-GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, namespace_alias)
+GENERATE_GET_MEMBERS_SPECIALIZATION          (statement_block, namespace_alias, namespace_aliases)
 
 }}}}} //namespace scalpel::cpp::semantic_entities::generic_queries::detail
 

@@ -176,12 +176,12 @@ Find entities corresponding to the given identifier,
 in the given declarative region only.
 Using directives are not applied.
 */
-template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
+template<class EntityIdentificationPolicy, class DeclarativeRegion, bool Optional, bool Multiple, class... EntitiesT>
 typename return_type<Optional, Multiple, EntitiesT...>::type
 find_local
 (
 	const typename EntityIdentificationPolicy::identifier_t& identifier,
-	semantic_entities::open_declarative_region_ptr_variant current_declarative_region
+	DeclarativeRegion& current_declarative_region
 );
 
 
@@ -262,7 +262,7 @@ namespace detail
 	);
 
 	/**
-	Recursive part of above function.
+	Recursive part of the above function.
 	*/
 	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT, class Namespace>
 	typename return_type<Optional, Multiple, EntitiesT...>::type
@@ -278,6 +278,17 @@ namespace detail
 	/**
 	Find entities of the given identifier, in the given declarative region only.
 	*/
+	template<class EntityIdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple, class EntityT>
+	typename return_type<Optional, Multiple, EntityT>::type
+	find_local_entities
+	(
+		const typename EntityIdentificationPolicy::identifier_t& identifier,
+		DeclarativeRegionT& current_declarative_region
+	);
+
+	/**
+	Find entities of the given identifier, in the given declarative region only (variadic version).
+	*/
 	template<class EntityIdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple, class EntityT, class EntityT2, class... EntitiesT>
 	typename return_type<Optional, Multiple, EntityT, EntityT2, EntitiesT...>::type
 	find_local_entities
@@ -286,9 +297,37 @@ namespace detail
 		DeclarativeRegionT& current_declarative_region
 	);
 
+	//Implementation of non-variadic find_local_entities()
+	template<class EntityIdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple, class EntityT>
+	struct find_single_type_local_entities
+	{
+		static
+		typename return_type<Optional, Multiple, EntityT>::type
+		find
+		(
+			const typename EntityIdentificationPolicy::identifier_t& identifier,
+			DeclarativeRegionT& current_declarative_region
+		);
+	};
+
+	//Implementation of non-variadic find_local_entities()
+	template<class EntityIdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple>
+	struct find_single_type_local_entities<EntityIdentificationPolicy, DeclarativeRegionT, Optional, Multiple, semantic_entities::open_declarative_region_ptr_variant>
+	{
+		static
+		typename return_type<Optional, Multiple, semantic_entities::open_declarative_region_ptr_variant>::type
+		find
+		(
+			const typename EntityIdentificationPolicy::identifier_t& identifier,
+			DeclarativeRegionT& current_declarative_region
+		);
+	};
+
+	//Implementation of variadic find_local_entities()
 	template<class EntityIdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple, class ReturnT, class... EntitiesT>
 	struct find_variadic_local_entities;
 
+	//Implementation of variadic find_local_entities()
 	template<class EntityIdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple, class ReturnT>
 	struct find_variadic_local_entities<EntityIdentificationPolicy, DeclarativeRegionT, Optional, Multiple, ReturnT>
 	{
@@ -302,6 +341,7 @@ namespace detail
 		);
 	};
 
+	//Implementation of variadic find_local_entities()
 	template<class EntityIdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple, class ReturnT, class EntityT, class... EntitiesT>
 	struct find_variadic_local_entities<EntityIdentificationPolicy, DeclarativeRegionT, Optional, Multiple, ReturnT, EntityT, EntitiesT...>
 	{
@@ -314,17 +354,6 @@ namespace detail
 			ReturnT& found_entities
 		);
 	};
-
-	/**
-	Find entities of the given identifier, in the given declarative region only.
-	*/
-	template<class EntityIdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple, class EntityT>
-	typename return_type<Optional, Multiple, EntityT>::type
-	find_local_entities
-	(
-		const typename EntityIdentificationPolicy::identifier_t& identifier,
-		DeclarativeRegionT& current_declarative_region
-	);
 
 
 

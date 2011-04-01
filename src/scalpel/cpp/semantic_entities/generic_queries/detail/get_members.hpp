@@ -48,19 +48,6 @@ struct member_type_traits<Entity, true>
 };
 
 template<>
-struct member_type_traits<semantic_entities::open_declarative_region_ptr_variant, false>
-{
-	typedef const std::vector<semantic_entities::open_declarative_region_ptr_variant>& return_type;
-	typedef std::vector<semantic_entities::open_declarative_region_ptr_variant>::const_reference reference;
-};
-
-template<>
-struct member_type_traits<semantic_entities::open_declarative_region_ptr_variant, true>:
-	member_type_traits<semantic_entities::open_declarative_region_ptr_variant, false>
-{
-};
-
-template<>
 struct member_type_traits<semantic_entities::destructor, false>
 {
 	typedef utility::single_object_range<semantic_entities::destructor> return_type;
@@ -132,17 +119,9 @@ struct get_declarative_region_members_visitor: public utility::static_visitor<ty
 	}
 };
 
-template<class MemberT>
+template<class MemberT, class... Entities>
 typename member_type_traits<MemberT, false>::return_type
-get_members(semantic_entities::declarative_region_ptr_variant& parent)
-{
-	get_declarative_region_members_visitor<MemberT> visitor;
-	return utility::apply_visitor(visitor, parent);
-}
-
-template<class MemberT>
-typename member_type_traits<MemberT, false>::return_type
-get_members(semantic_entities::open_declarative_region_ptr_variant& parent)
+get_members(utility::variant<Entities...>& parent)
 {
 	get_declarative_region_members_visitor<MemberT> visitor;
 	return utility::apply_visitor(visitor, parent);
