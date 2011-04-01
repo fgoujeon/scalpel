@@ -235,7 +235,7 @@ fill_class
 					//and define it
 					fill_class(*found_class, class_specifier_node);
 
-					opt_unqualified_type = static_cast<const class_*>(found_class);
+					opt_unqualified_type = found_class;
 				}
 				else
 				{
@@ -243,7 +243,7 @@ fill_class
 					member_class& added_class = add_class(class_entity, std::move(new_class));
 					fill_class(added_class, class_specifier_node);
 
-					opt_unqualified_type = static_cast<const member_class*>(&added_class);
+					opt_unqualified_type = &added_class;
 				}
 
 				break;
@@ -257,7 +257,7 @@ fill_class
 				std::unique_ptr<member_class> new_class = create_member_class(class_elaborated_specifier_node, current_access);
 				member_class& added_class = add_class(class_entity, std::move(new_class));
 
-				opt_unqualified_type = static_cast<const member_class*>(&added_class);
+				opt_unqualified_type = &added_class;
 
 				break;
 			}
@@ -272,7 +272,7 @@ fill_class
 				class_entity.add_member(std::move(new_enum));
 				fill_enum(new_enum_ref, enum_specifier_node);
 
-				opt_unqualified_type = static_cast<const member_enum*>(&new_enum_ref);
+				opt_unqualified_type = &new_enum_ref;
 
 				break;
 			}

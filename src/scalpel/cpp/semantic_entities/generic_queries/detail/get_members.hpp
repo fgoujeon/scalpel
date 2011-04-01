@@ -63,13 +63,17 @@ struct member_type_traits<semantic_entities::destructor, true>
 
 
 
+//
+//Main overloads (implemented in the .ipp file)
+//
+
 #define GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(PARENT_TYPE) \
-template<class MemberT> \
-typename member_type_traits<MemberT, false>::return_type \
+template<class Member> \
+typename member_type_traits<Member, false>::return_type \
 get_members(semantic_entities::PARENT_TYPE& parent); \
  \
-template<class MemberT> \
-typename member_type_traits<MemberT, true>::return_type \
+template<class Member> \
+typename member_type_traits<Member, true>::return_type \
 get_members(const semantic_entities::PARENT_TYPE& parent);
 
 GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(namespace_)
@@ -89,41 +93,94 @@ GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(statement_block)
 
 #undef GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE
 
-template<class MemberT>
-typename member_type_traits<MemberT, false>::return_type
+
+
+//
+//Overloads for namespace_alias
+//
+
+template<class Member>
+typename member_type_traits<Member, false>::return_type
 get_members(semantic_entities::namespace_alias& parent)
 {
 	semantic_entities::namespace_& n = parent.referred_namespace();
-	return get_members<MemberT>(n);
+	return get_members<Member>(n);
 }
 
-template<class MemberT>
-typename member_type_traits<MemberT, true>::return_type
+template<class Member>
+typename member_type_traits<Member, true>::return_type
 get_members(const semantic_entities::namespace_alias& parent)
 {
 	semantic_entities::namespace_& n = parent.referred_namespace();
-	return get_members<MemberT>(n);
+	return get_members<Member>(n);
 }
 
 
 
-//visitor template for declarative region variants
-template<class MemberT>
-struct get_declarative_region_members_visitor: public utility::static_visitor<typename member_type_traits<MemberT, false>::return_type>
+//
+//Overloads for typedef_
+//
+
+template<class Member>
+struct get_type_members_visitor: public utility::static_visitor<typename member_type_traits<Member, false>::return_type>
 {
 	template<class T>
-	typename member_type_traits<MemberT, false>::return_type
-	operator()(T* t) const
+	typename member_type_traits<Member, false>::return_type
+	operator()(const T&) const
 	{
-		return get_members<MemberT>(*t);
+		assert(false);
+	}
+
+	typename member_type_traits<Member, false>::return_type
+	operator()(class_* t) const
+	{
+		return get_members<Member>(*t);
+	}
+
+	typename member_type_traits<Member, false>::return_type
+	operator()(member_class* t) const
+	{
+		return get_members<Member>(*t);
+	}
+
+	typename member_type_traits<Member, false>::return_type
+	operator()(const cv_qualified_type& t) const
+	{
+		get_type_members_visitor<Member> visitor;
+		return utility::apply_visitor(visitor, t.qualified_type());
 	}
 };
 
-template<class MemberT, class... Entities>
-typename member_type_traits<MemberT, false>::return_type
+template<class Member>
+typename member_type_traits<Member, false>::return_type
+get_members(semantic_entities::typedef_& parent)
+{
+	get_type_members_visitor<Member> visitor;
+	return utility::apply_visitor(visitor, parent.type());
+}
+
+
+
+//
+//Overloads for declarative region variants
+//
+
+template<class Member>
+struct get_declarative_region_members_visitor: public utility::static_visitor<typename member_type_traits<Member, false>::return_type>
+{
+	template<class T>
+	typename member_type_traits<Member, false>::return_type
+	operator()(T* t) const
+	{
+		return get_members<Member>(*t);
+	}
+};
+
+template<class Member, class... Entities>
+typename member_type_traits<Member, false>::return_type
 get_members(utility::variant<Entities...>& parent)
 {
-	get_declarative_region_members_visitor<MemberT> visitor;
+	get_declarative_region_members_visitor<Member> visitor;
 	return utility::apply_visitor(visitor, parent);
 }
 

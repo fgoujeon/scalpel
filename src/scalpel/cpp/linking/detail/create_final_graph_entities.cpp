@@ -521,7 +521,7 @@ namespace
 			{
 				auto it = final_entities_.classes.find(type);
 				assert(it != final_entities_.classes.end());
-				return static_cast<const class_*>(it->second);
+				return it->second;
 			}
 
 			type_variant
@@ -529,7 +529,7 @@ namespace
 			{
 				auto it = final_entities_.member_classes.find(type);
 				assert(it != final_entities_.member_classes.end());
-				return static_cast<const member_class*>(it->second);
+				return it->second;
 			}
 
 			type_variant
@@ -547,7 +547,7 @@ namespace
 			{
 				auto it = final_entities_.enums.find(type);
 				assert(it != final_entities_.enums.end());
-				return static_cast<const enum_*>(it->second);
+				return it->second;
 			}
 
 			type_variant
@@ -555,7 +555,7 @@ namespace
 			{
 				auto it = final_entities_.member_enums.find(type);
 				assert(it != final_entities_.member_enums.end());
-				return static_cast<const member_enum*>(it->second);
+				return it->second;
 			}
 
 			type_variant

@@ -43,6 +43,7 @@ class conversion_function;
 class simple_function;
 class simple_member_function;
 class statement_block;
+class typedef_;
 
 typedef
 	scalpel::utility::ptr_variant
@@ -74,7 +75,8 @@ typedef
 		namespace_,
 		namespace_alias,
 		class_,
-		member_class
+		member_class,
+		typedef_
 	>::type
 	open_declarative_region_ptr_variant
 ;

@@ -178,7 +178,7 @@ fill_namespace
 					//and define it
 					fill_class(*found_class, class_specifier_node);
 
-					opt_unqualified_type = static_cast<const class_*>(found_class);
+					opt_unqualified_type = found_class;
 				}
 				else
 				{
@@ -186,7 +186,7 @@ fill_namespace
 					class_& added_class = add_class(namespace_entity, std::move(new_class));
 					fill_class(added_class, class_specifier_node);
 
-					opt_unqualified_type = static_cast<const class_*>(&added_class);
+					opt_unqualified_type = &added_class;
 				}
 
 				break;
@@ -200,7 +200,7 @@ fill_namespace
 				std::unique_ptr<class_> new_class = create_class(class_elaborated_specifier_node);
 				class_& added_class = add_class(namespace_entity, std::move(new_class));
 
-				opt_unqualified_type = static_cast<const class_*>(&added_class);
+				opt_unqualified_type = &added_class;
 
 				break;
 			}
@@ -215,7 +215,7 @@ fill_namespace
 				namespace_entity.add_member(std::move(new_enum));
 				fill_enum(new_enum_ref, enum_specifier_node);
 
-				opt_unqualified_type = static_cast<const enum_*>(&new_enum_ref);
+				opt_unqualified_type = &new_enum_ref;
 
 				break;
 			}

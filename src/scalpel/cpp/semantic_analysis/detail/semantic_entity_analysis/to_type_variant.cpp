@@ -34,7 +34,7 @@ namespace
 		type_variant
 		operator()(T* t) const
 		{
-			return type_variant(static_cast<const T*>(t));
+			return t;
 		}
 
 		type_variant

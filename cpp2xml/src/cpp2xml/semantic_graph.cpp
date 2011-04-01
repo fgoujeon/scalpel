@@ -120,19 +120,19 @@ semantic_graph_serializer::serialize_type
 		serialize_type((*opt_type).qualified_type(), indent_level + 1);
 		output_ << indent(indent_level) << "</array>\n";
 	}
-	else if(auto opt_type = scalpel::utility::get<const class_*>(&n))
+	else if(auto opt_type = scalpel::utility::get<class_*>(&n))
 	{
 		output_ << indent(indent_level) << "<class id=\"c" << class_id(**opt_type) << "\"/>\n";
 	}
-	else if(auto opt_type = scalpel::utility::get<const member_class*>(&n))
+	else if(auto opt_type = scalpel::utility::get<member_class*>(&n))
 	{
 		output_ << indent(indent_level) << "<class id=\"c" << class_id(**opt_type) << "\"/>\n";
 	}
-	else if(auto opt_type = scalpel::utility::get<const enum_*>(&n))
+	else if(auto opt_type = scalpel::utility::get<enum_*>(&n))
 	{
 		output_ << indent(indent_level) << "<enum id=\"e" << enum_id(**opt_type) << "\"/>\n";
 	}
-	else if(auto opt_type = scalpel::utility::get<const member_enum*>(&n))
+	else if(auto opt_type = scalpel::utility::get<member_enum*>(&n))
 	{
 		output_ << indent(indent_level) << "<enum id=\"e" << enum_id(**opt_type) << "\"/>\n";
 	}

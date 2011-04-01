@@ -53,7 +53,7 @@ find_declarative_region
 				assert(false);
 
 			//find the first declarative region
-			typename return_type<false, false, open_declarative_region_ptr_variant>::type first_declarative_region =
+			open_declarative_region_ptr_variant first_declarative_region =
 				detail::find_local_entities
 				<
 					semantic_entity_analysis::identification_policies::by_name,
@@ -87,7 +87,7 @@ find_declarative_region
 				assert(false);
 
 			//find the first declarative region
-			typename return_type<false, false, open_declarative_region_ptr_variant>::type first_declarative_region =
+			open_declarative_region_ptr_variant first_declarative_region =
 				find
 				<
 					semantic_entity_analysis::identification_policies::by_name,

@@ -189,7 +189,7 @@ find
 	using namespace detail;
 
 	//Check whether the given qualified identifier is really qualified.
-	//If not, perform a simple unqualified identifier lookup.
+	//If not, perform a simple unqualified name lookup.
 	if
 	(
 		!has_leading_double_colon &&
@@ -503,7 +503,8 @@ find_single_type_local_entities<EntityIdentificationPolicy, DeclarativeRegionT, 
 			namespace_,
 			namespace_alias,
 			class_,
-			member_class
+			member_class,
+			typedef_
 		>
 		(
 			identifier,
