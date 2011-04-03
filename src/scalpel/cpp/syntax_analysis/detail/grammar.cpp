@@ -1464,8 +1464,8 @@ grammar::grammar()
 	;
 
 	member_declarator
-		= member_declarator_declarator
-		| member_declarator_bit_field_member
+		= member_declarator_bit_field_member
+		| member_declarator_declarator
 	;
 	member_declarator_declarator
 		= declarator >> !constant_initializer
