@@ -35,8 +35,7 @@ dot_pseudo_destructor_name
 typedef
 	sequence_node
 	<
-		predefined_text_node<str::dot>,
-		optional_node<space>/*,
+		predefined_text_node<str::dot>/*,
 		pseudo_destructor_name*/
 	>
 	dot_pseudo_destructor_name
@@ -45,3 +44,4 @@ typedef
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

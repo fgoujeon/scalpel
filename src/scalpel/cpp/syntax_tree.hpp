@@ -126,7 +126,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "syntax_nodes/simple_ptr_ptr_operator.hpp"
 #include "syntax_nodes/simple_template_type_specifier.hpp"
 #include "syntax_nodes/simple_type_specifier.hpp"
-#include "syntax_nodes/space.hpp"
 #include "syntax_nodes/statement.hpp"
 #include "syntax_nodes/statement_seq.hpp"
 #include "syntax_nodes/storage_class_specifier.hpp"

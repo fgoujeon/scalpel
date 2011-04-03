@@ -29,9 +29,7 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
 	classic_labeled_statement,
 	(identifier)
-	(optional_node<space>)
 	(predefined_text_node<str::colon>)
-	(optional_node<space>)
 	(statement)
 )
 

@@ -30,7 +30,6 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
 	cast_expression,
 	(optional_node<cast_expression_first_part_seq>)
-	(optional_node<space>)
 	(unary_expression)
 )
 

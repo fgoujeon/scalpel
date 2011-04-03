@@ -39,7 +39,6 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	new_declarator,
 	(optional_node<ptr_operator_seq>)
-	(optional_node<space>)
 	(optional_node<direct_new_declarator>)
 )
 
@@ -48,3 +47,4 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 #include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif
+

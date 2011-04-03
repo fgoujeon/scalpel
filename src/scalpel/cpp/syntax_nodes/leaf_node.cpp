@@ -66,3 +66,4 @@ leaf_node::value(std::string&& code)
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
+

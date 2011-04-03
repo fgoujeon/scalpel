@@ -42,11 +42,8 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	class_specifier,
 	(class_head)
-	(optional_node<space>)
 	(predefined_text_node<str::opening_brace>)
-	(optional_node<space>)
 	(optional_node<member_specification>)
-	(optional_node<space>)
 	(predefined_text_node<str::closing_brace>)
 )
 
@@ -61,7 +58,7 @@ inline
 const optional_node<member_specification>&
 get_member_specification(const class_specifier& o)
 {
-	return get<4>(o);
+	return get<2>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
@@ -69,3 +66,4 @@ get_member_specification(const class_specifier& o)
 #include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif
+

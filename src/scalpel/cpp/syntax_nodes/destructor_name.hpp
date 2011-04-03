@@ -36,7 +36,6 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::tilde>,
-		optional_node<space>,
 		identifier_or_template_id
 	>
 	destructor_name
@@ -46,9 +45,10 @@ inline
 const identifier_or_template_id&
 get_identifier_or_template_id(const destructor_name& o)
 {
-	return get<2>(o);
+	return get<1>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

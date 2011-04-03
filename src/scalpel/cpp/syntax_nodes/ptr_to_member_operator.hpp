@@ -32,11 +32,8 @@ typedef
 	sequence_node
 	<
 		optional_node<predefined_text_node<str::double_colon>>,
-		optional_node<space>,
 		nested_name_specifier,
-		optional_node<space>,
 		predefined_text_node<str::asterisk>,
-		optional_node<space>,
 		optional_node<cv_qualifier_seq>
 	>
 	ptr_to_member_operator
@@ -53,14 +50,14 @@ inline
 const nested_name_specifier&
 get_nested_name_specifier(const ptr_to_member_operator& o)
 {
-	return get<2>(o);
+	return get<1>(o);
 }
 
 inline
 const optional_node<cv_qualifier_seq>&
 get_cv_qualifier_seq(const ptr_to_member_operator& o)
 {
-	return get<6>(o);
+	return get<3>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

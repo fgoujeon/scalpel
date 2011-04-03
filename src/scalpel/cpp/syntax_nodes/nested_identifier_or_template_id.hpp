@@ -37,9 +37,7 @@ typedef
 	sequence_node
 	<
 		optional_node<predefined_text_node<str::double_colon>>,
-		optional_node<space>,
 		optional_node<nested_name_specifier>,
-		optional_node<space>,
 		identifier_or_template_id
 	>
 	nested_identifier_or_template_id
@@ -56,16 +54,17 @@ inline
 const optional_node<nested_name_specifier>&
 get_nested_name_specifier(const nested_identifier_or_template_id& o)
 {
-	return get<2>(o);
+	return get<1>(o);
 }
 
 inline
 const identifier_or_template_id&
 get_identifier_or_template_id(const nested_identifier_or_template_id& o)
 {
-	return get<4>(o);
+	return get<2>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

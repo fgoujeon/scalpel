@@ -36,9 +36,7 @@ typedef
 		predefined_text_node<str::plus>,
 		predefined_text_node<str::minus>,
 		predefined_text_node<str::exclamation>,
-		predefined_text_node<str::tilde>,
-		predefined_text_node<str::__real___>,
-		predefined_text_node<str::__imag___>
+		predefined_text_node<str::tilde>
 	>
 	unary_operator
 ;
@@ -46,3 +44,4 @@ typedef
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

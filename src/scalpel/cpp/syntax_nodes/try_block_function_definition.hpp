@@ -40,9 +40,7 @@ typedef
 	sequence_node
 	<
 		optional_node<decl_specifier_seq>,
-		optional_node<space>,
 		declarator,
-		optional_node<space>,
 		function_try_block
 	>
 	try_block_function_definition
@@ -59,9 +57,10 @@ inline
 const declarator&
 get_declarator(const try_block_function_definition& o)
 {
-	return get<2>(o);
+	return get<1>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

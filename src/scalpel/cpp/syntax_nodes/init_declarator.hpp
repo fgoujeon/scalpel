@@ -39,7 +39,6 @@ typedef
 	sequence_node
 	<
 		declarator,
-		optional_node<space>,
 		optional_node<initializer>
 	>
 	init_declarator
@@ -55,3 +54,4 @@ get_declarator(const init_declarator& o)
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

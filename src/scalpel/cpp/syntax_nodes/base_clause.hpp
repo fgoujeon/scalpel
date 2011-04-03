@@ -38,7 +38,6 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::colon>,
-		optional_node<space>,
 		base_specifier_list
 	>
 	base_clause
@@ -48,7 +47,7 @@ inline
 const base_specifier_list&
 get_base_specifier_list(const base_clause& o)
 {
-	return get<2>(o);
+	return get<1>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

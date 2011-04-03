@@ -38,7 +38,6 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::equal>,
-		optional_node<space>,
 		initializer_clause
 	>
 	equal_initializer
@@ -47,3 +46,4 @@ typedef
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

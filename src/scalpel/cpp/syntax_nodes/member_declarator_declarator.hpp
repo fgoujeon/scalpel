@@ -37,7 +37,6 @@ typedef
 	sequence_node
 	<
 		declarator,
-		optional_node<space>,
 		optional_node<constant_initializer>
 	>
 	member_declarator_declarator
@@ -54,9 +53,10 @@ inline
 const optional_node<constant_initializer>&
 get_constant_initializer(const member_declarator_declarator& o)
 {
-	return get<2>(o);
+	return get<1>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

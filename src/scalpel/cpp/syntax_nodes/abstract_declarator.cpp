@@ -30,7 +30,6 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
 	abstract_declarator,
 	(optional_node<ptr_operator_seq>)
-	(optional_node<space>)
 	(optional_node<direct_abstract_declarator>)
 )
 
@@ -43,7 +42,7 @@ get_ptr_operator_seq(const abstract_declarator& o)
 const optional_node<direct_abstract_declarator>&
 get_direct_abstract_declarator(const abstract_declarator& o)
 {
-	return get<2>(o);
+	return get<1>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

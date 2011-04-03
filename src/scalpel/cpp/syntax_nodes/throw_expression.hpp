@@ -37,7 +37,6 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	throw_expression,
 	(predefined_text_node<str::throw_>)
-	(optional_node<space>)
 	(optional_node<assignment_expression>)
 )
 
@@ -46,3 +45,4 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 #include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif
+

@@ -40,9 +40,7 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	compound_statement,
 	(predefined_text_node<str::opening_brace>)
-	(optional_node<space>)
 	(optional_node<statement_seq>)
-	(optional_node<space>)
 	(predefined_text_node<str::closing_brace>)
 )
 
@@ -50,7 +48,7 @@ inline
 const optional_node<statement_seq>&
 get_statement_seq(const compound_statement& o)
 {
-	return get<2>(o);
+	return get<1>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

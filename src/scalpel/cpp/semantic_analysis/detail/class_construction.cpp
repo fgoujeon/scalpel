@@ -142,8 +142,6 @@ find_class
 			(
 				nested_name_specifier_last_part_seq::item
 				(
-					optional_node<space>(),
-					optional_node<space>(),
 					last_part_seq_node[i].main_node()
 				)
 			);
@@ -155,9 +153,7 @@ find_class
 			nested_name_specifier
 			(
 				std::move(new_identifier_or_template_id_node),
-				optional_node<space>(),
 				predefined_text_node<str::double_colon>(),
-				optional_node<space>(),
 				optional_node<nested_name_specifier_last_part_seq>()
 			)
 		;

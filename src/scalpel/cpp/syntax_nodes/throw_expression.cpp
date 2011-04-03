@@ -30,7 +30,6 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
 	throw_expression,
 	(predefined_text_node<str::throw_>)
-	(optional_node<space>)
 	(optional_node<assignment_expression>)
 )
 

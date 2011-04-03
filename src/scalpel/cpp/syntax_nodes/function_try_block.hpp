@@ -38,11 +38,8 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::try_>,
-		optional_node<space>,
 		optional_node<ctor_initializer>,
-		optional_node<space>,
 		compound_statement,
-		optional_node<space>,
 		handler_seq
 	>
 	function_try_block
@@ -51,3 +48,4 @@ typedef
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

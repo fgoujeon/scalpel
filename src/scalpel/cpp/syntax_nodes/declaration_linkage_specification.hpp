@@ -37,9 +37,7 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::extern_>,
-		optional_node<space>,
 		string_literal,
-		optional_node<space>,
 		declaration
 	>
 	declaration_linkage_specification
@@ -48,3 +46,4 @@ typedef
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

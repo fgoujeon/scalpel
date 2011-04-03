@@ -231,9 +231,7 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::opening_round_bracket>,
-		optional_node<space>,
 		right_shift_expression,
-		optional_node<space>,
 		predefined_text_node<str::closing_round_bracket>
 	>
 	round_bracketed_right_shift_expression
@@ -243,9 +241,7 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::opening_round_bracket>,
-		optional_node<space>,
 		greater_than_expression,
-		optional_node<space>,
 		predefined_text_node<str::closing_round_bracket>
 	>
 	round_bracketed_greater_than_expression
@@ -365,3 +361,4 @@ typedef
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

@@ -53,7 +53,6 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	assignment_expression_first_part,
 	(logical_or_expression)
-	(optional_node<space>)
 	(assignment_operator)
 )
 
@@ -75,7 +74,6 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	assignment_expression,
 	(optional_node<assignment_expression_first_part_seq>)
-	(optional_node<space>)
 	(assignment_expression_last_part)
 )
 

@@ -36,13 +36,9 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::asm_>,
-		optional_node<space>,
 		predefined_text_node<str::opening_round_bracket>,
-		optional_node<space>,
 		string_literal,
-		optional_node<space>,
 		predefined_text_node<str::closing_round_bracket>,
-		optional_node<space>,
 		predefined_text_node<str::semicolon>
 	>
 	asm_definition

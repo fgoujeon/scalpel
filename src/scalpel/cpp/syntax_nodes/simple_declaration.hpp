@@ -40,9 +40,7 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	simple_declaration,
 	(optional_node<decl_specifier_seq>)
-	(optional_node<space>)
 	(optional_node<init_declarator_list>)
-	(optional_node<space>)
 	(predefined_text_node<str::semicolon>)
 )
 
@@ -57,7 +55,7 @@ inline
 const optional_node<init_declarator_list>&
 get_init_declarator_list(const simple_declaration& o)
 {
-	return get<2>(o);
+	return get<1>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
@@ -65,3 +63,4 @@ get_init_declarator_list(const simple_declaration& o)
 #include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif
+

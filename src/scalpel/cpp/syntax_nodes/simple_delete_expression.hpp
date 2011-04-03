@@ -36,9 +36,7 @@ typedef
 	sequence_node
 	<
 		optional_node<predefined_text_node<str::double_colon>>,
-		optional_node<space>,
 		predefined_text_node<str::delete_>,
-		optional_node<space>,
 		cast_expression
 	>
 	simple_delete_expression
@@ -47,3 +45,4 @@ typedef
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

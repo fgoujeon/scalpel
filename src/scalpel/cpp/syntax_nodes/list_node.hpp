@@ -21,7 +21,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_LIST_NODE_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_LIST_NODE_HPP
 
-#include "space.hpp"
 #include "common_nodes.hpp"
 #include "optional_node.hpp"
 #include <vector>
@@ -150,15 +149,11 @@ class list_node<T, SeparatorNode>::item
 	public:
 		item
 		(
-			optional_node<space>&& pre_separator_space,
-			optional_node<space>&& post_separator_space,
 			const T& main_node
 		);
 
 		item
 		(
-			optional_node<space>&& pre_separator_space,
-			optional_node<space>&& post_separator_space,
 			T&& main_node
 		);
 
@@ -167,30 +162,18 @@ class list_node<T, SeparatorNode>::item
 		const item&
 		operator=(const item& i);
 
-		const optional_node<space>&
-		pre_separator_space_node() const;
-
-		const optional_node<space>&
-		post_separator_space_node() const;
-
 		const T&
 		main_node() const;
 
 	private:
-		optional_node<space> pre_separator_space_;
-		optional_node<space> post_separator_space_;
 		T main_node_;
 };
 
 template<class T, const leaf_node& SeparatorNode>
 list_node<T, SeparatorNode>::item::item
 (
-	optional_node<space>&& pre_separator_space,
-	optional_node<space>&& post_separator_space,
 	T&& main_node
 ):
-	pre_separator_space_(pre_separator_space),
-	post_separator_space_(post_separator_space),
 	main_node_(main_node)
 {
 }
@@ -198,36 +181,16 @@ list_node<T, SeparatorNode>::item::item
 template<class T, const leaf_node& SeparatorNode>
 list_node<T, SeparatorNode>::item::item
 (
-	optional_node<space>&& pre_separator_space,
-	optional_node<space>&& post_separator_space,
 	const T& main_node
 ):
-	pre_separator_space_(pre_separator_space),
-	post_separator_space_(post_separator_space),
 	main_node_(main_node)
 {
 }
 
 template<class T, const leaf_node& SeparatorNode>
 list_node<T, SeparatorNode>::item::item(const item& i):
-	pre_separator_space_(i.pre_separator_space_),
-	post_separator_space_(i.post_separator_space_),
 	main_node_(i.main_node_)
 {
-}
-
-template<class T, const leaf_node& SeparatorNode>
-const optional_node<space>&
-list_node<T, SeparatorNode>::item::pre_separator_space_node() const
-{
-	return pre_separator_space_;
-}
-
-template<class T, const leaf_node& SeparatorNode>
-const optional_node<space>&
-list_node<T, SeparatorNode>::item::post_separator_space_node() const
-{
-	return post_separator_space_;
 }
 
 template<class T, const leaf_node& SeparatorNode>
@@ -241,8 +204,6 @@ template<class T, const leaf_node& SeparatorNode>
 const typename list_node<T, SeparatorNode>::item&
 list_node<T, SeparatorNode>::item::operator=(const item& i)
 {
-	pre_separator_space_ = i.pre_separator_space_;
-	post_separator_space_ = i.post_separator_space_;
 	main_node_ = i.main_node_;
 
 	return *this;
@@ -251,3 +212,4 @@ list_node<T, SeparatorNode>::item::operator=(const item& i)
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

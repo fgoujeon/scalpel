@@ -38,9 +38,7 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::goto_>,
-		optional_node<space>,
 		identifier,
-		optional_node<space>,
 		predefined_text_node<str::semicolon>
 	>
 	goto_statement
@@ -49,3 +47,4 @@ typedef
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

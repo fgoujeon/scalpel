@@ -52,3 +52,4 @@ struct expression: public expression_t
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

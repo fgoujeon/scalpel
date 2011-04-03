@@ -41,11 +41,8 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	simple_template_id,
 	(identifier)
-	(optional_node<space>)
 	(predefined_text_node<str::left_angle_bracket>)
-	(optional_node<space>)
 	(optional_node<template_argument_list>)
-	(optional_node<space>)
 	(predefined_text_node<str::right_angle_bracket>)
 )
 
@@ -57,3 +54,4 @@ get_identifier(const simple_template_id& o);
 #include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif
+

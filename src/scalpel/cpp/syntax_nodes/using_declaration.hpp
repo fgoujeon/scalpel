@@ -38,15 +38,10 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::using_>,
-		optional_node<space>,
 		optional_node<predefined_text_node<str::typename_>>,
-		optional_node<space>,
 		optional_node<predefined_text_node<str::double_colon>>,
-		optional_node<space>,
 		optional_node<nested_name_specifier>,
-		optional_node<space>,
 		unqualified_id,
-		optional_node<space>,
 		predefined_text_node<str::semicolon>
 	>
 	using_declaration
@@ -55,3 +50,4 @@ typedef
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

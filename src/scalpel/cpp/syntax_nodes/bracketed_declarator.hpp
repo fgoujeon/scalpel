@@ -36,9 +36,7 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::opening_round_bracket>,
-		optional_node<space>,
 		declarator,
-		optional_node<space>,
 		predefined_text_node<str::closing_round_bracket>
 	>
 	bracketed_declarator
@@ -48,9 +46,10 @@ inline
 const declarator&
 get_declarator(const bracketed_declarator& o)
 {
-	return get<2>(o);
+	return get<1>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

@@ -37,11 +37,8 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::class_>,
-		optional_node<space>,
 		optional_node<identifier>,
-		optional_node<space>,
 		optional_node<predefined_text_node<str::equal>>,
-		optional_node<space>,
 		optional_node<type_id>
 	>
 	class_type_parameter
@@ -50,3 +47,4 @@ typedef
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

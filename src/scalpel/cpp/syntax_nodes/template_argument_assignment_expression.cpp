@@ -29,7 +29,6 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
 	template_argument_assignment_expression,
 	(optional_node<template_argument_assignment_expression_first_part_seq>)
-	(optional_node<space>)
 	(template_argument_assignment_expression_last_part)
 )
 

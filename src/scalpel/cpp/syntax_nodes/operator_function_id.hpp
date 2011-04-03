@@ -36,7 +36,6 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::operator_>,
-		optional_node<space>,
 		operator_
 	>
 	operator_function_id
@@ -46,9 +45,10 @@ inline
 const operator_&
 get_operator(const operator_function_id& o)
 {
-	return get<2>(o);
+	return get<1>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

@@ -37,7 +37,6 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::continue_>,
-		optional_node<space>,
 		predefined_text_node<str::semicolon>
 	>
 	continue_statement
@@ -46,3 +45,4 @@ typedef
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

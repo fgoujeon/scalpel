@@ -36,9 +36,7 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::opening_round_bracket>,
-		optional_node<space>,
 		expression,
-		optional_node<space>,
 		predefined_text_node<str::closing_round_bracket>
 	>
 	round_bracketed_expression
@@ -47,3 +45,4 @@ typedef
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

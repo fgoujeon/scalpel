@@ -37,13 +37,9 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::namespace_>,
-		optional_node<space>,
 		identifier,
-		optional_node<space>,
 		predefined_text_node<str::equal>,
-		optional_node<space>,
 		qualified_namespace_specifier,
-		optional_node<space>,
 		predefined_text_node<str::semicolon>
 	>
 	namespace_alias_definition
@@ -53,14 +49,14 @@ inline
 const identifier&
 get_identifier(const namespace_alias_definition& o)
 {
-	return get<2>(o);
+	return get<1>(o);
 }
 
 inline
 const qualified_namespace_specifier&
 get_qualified_namespace_specifier(const namespace_alias_definition& o)
 {
-	return get<6>(o);
+	return get<3>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

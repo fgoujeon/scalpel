@@ -35,3 +35,4 @@ typedef
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

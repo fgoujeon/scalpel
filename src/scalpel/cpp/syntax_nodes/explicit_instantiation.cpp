@@ -29,9 +29,7 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
 	explicit_instantiation,
 	(optional_node<predefined_text_node<str::extern_>>)
-	(optional_node<space>)
 	(predefined_text_node<str::template_>)
-	(optional_node<space>)
 	(declaration)
 )
 

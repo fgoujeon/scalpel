@@ -40,17 +40,11 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	if_statement,
 	(predefined_text_node<str::if_>)
-	(optional_node<space>)
 	(predefined_text_node<str::opening_round_bracket>)
-	(optional_node<space>)
 	(condition)
-	(optional_node<space>)
 	(predefined_text_node<str::closing_round_bracket>)
-	(optional_node<space>)
 	(statement)
-	(optional_node<space>)
 	(optional_node<predefined_text_node<str::else_>>)
-	(optional_node<space>)
 	(optional_node<statement>)
 )
 
@@ -58,14 +52,14 @@ inline
 const statement&
 get_statement(const if_statement& o)
 {
-	return get<8>(o);
+	return get<4>(o);
 }
 
 inline
 const optional_node<statement>&
 get_else_statement(const if_statement& o)
 {
-	return get<12>(o);
+	return get<6>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
@@ -73,3 +67,4 @@ get_else_statement(const if_statement& o)
 #include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif
+

@@ -30,9 +30,7 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
 	enumerator_definition,
 	(identifier)
-	(optional_node<space>)
 	(optional_node<predefined_text_node<str::equal>>)
-	(optional_node<space>)
 	(optional_node<conditional_expression>)
 )
 

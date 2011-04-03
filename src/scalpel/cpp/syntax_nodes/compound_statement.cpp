@@ -29,9 +29,7 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
 	compound_statement,
 	(predefined_text_node<str::opening_brace>)
-	(optional_node<space>)
 	(optional_node<statement_seq>)
-	(optional_node<space>)
 	(predefined_text_node<str::closing_brace>)
 )
 

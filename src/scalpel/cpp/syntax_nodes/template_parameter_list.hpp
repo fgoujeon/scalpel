@@ -56,3 +56,4 @@ struct template_parameter_list: public template_parameter_list_t
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

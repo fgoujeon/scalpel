@@ -29,13 +29,9 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
 	namespace_definition,
 	(predefined_text_node<str::namespace_>)
-	(optional_node<space>)
 	(optional_node<identifier>)
-	(optional_node<space>)
 	(predefined_text_node<str::opening_brace>)
-	(optional_node<space>)
 	(optional_node<declaration_seq>)
-	(optional_node<space>)
 	(predefined_text_node<str::closing_brace>)
 )
 

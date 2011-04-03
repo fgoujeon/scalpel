@@ -38,7 +38,6 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	member_specification_access_specifier,
 	(access_specifier)
-	(optional_node<space>)
 	(predefined_text_node<str::colon>)
 )
 
@@ -50,3 +49,4 @@ get_access_specifier(const member_specification_access_specifier& o);
 #include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif
+

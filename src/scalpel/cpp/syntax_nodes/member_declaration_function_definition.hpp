@@ -36,7 +36,6 @@ typedef
 	sequence_node
 	<
 		function_definition,
-		optional_node<space>,
 		optional_node<predefined_text_node<str::semicolon>>
 	>
 	member_declaration_function_definition
@@ -52,3 +51,4 @@ get_function_definition(const member_declaration_function_definition& o)
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

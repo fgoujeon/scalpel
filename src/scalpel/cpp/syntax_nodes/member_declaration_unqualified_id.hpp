@@ -39,13 +39,9 @@ typedef
 	sequence_node
 	<
 		optional_node<predefined_text_node<str::double_colon>>,
-		optional_node<space>,
 		nested_name_specifier,
-		optional_node<space>,
 		optional_node<predefined_text_node<str::template_>>,
-		optional_node<space>,
 		unqualified_id,
-		optional_node<space>,
 		predefined_text_node<str::semicolon>
 	>
 	member_declaration_unqualified_id
@@ -54,3 +50,4 @@ typedef
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

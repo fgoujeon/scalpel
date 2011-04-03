@@ -31,7 +31,6 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::asterisk>,
-		optional_node<space>,
 		optional_node<cv_qualifier_seq>
 	>
 	simple_ptr_ptr_operator
@@ -41,7 +40,7 @@ inline
 const optional_node<cv_qualifier_seq>&
 get_cv_qualifier_seq(const simple_ptr_ptr_operator& o)
 {
-	return get<2>(o);
+	return get<1>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

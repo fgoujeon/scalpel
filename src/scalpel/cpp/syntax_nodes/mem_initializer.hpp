@@ -37,11 +37,8 @@ typedef
 	sequence_node
 	<
 		mem_initializer_id,
-		optional_node<space>,
 		predefined_text_node<str::opening_round_bracket>,
-		optional_node<space>,
 		optional_node<expression>,
-		optional_node<space>,
 		predefined_text_node<str::closing_round_bracket>
 	>
 	mem_initializer
@@ -50,3 +47,4 @@ typedef
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

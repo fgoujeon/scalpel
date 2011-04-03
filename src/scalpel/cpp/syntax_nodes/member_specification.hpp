@@ -49,3 +49,4 @@ class member_specification: public member_specification_t
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

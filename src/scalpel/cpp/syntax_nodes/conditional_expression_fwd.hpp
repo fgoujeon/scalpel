@@ -41,13 +41,9 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	conditional_expression,
 	(logical_or_expression)
-	(optional_node<space>)
 	(optional_node<predefined_text_node<str::question_mark>>)
-	(optional_node<space>)
 	(optional_node<expression>)
-	(optional_node<space>)
 	(optional_node<predefined_text_node<str::colon>>)
-	(optional_node<space>)
 	(optional_node<assignment_expression>)
 )
 
@@ -56,3 +52,4 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 #include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif
+

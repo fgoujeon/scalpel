@@ -39,9 +39,7 @@ typedef
 	sequence_node
 	<
 		optional_node<parameter_declaration_list>,
-		optional_node<space>,
 		optional_node<predefined_text_node<str::comma>>,
-		optional_node<space>,
 		optional_node<predefined_text_node<str::ellipsis>>
 	>
 	parameter_declaration_clause
@@ -58,9 +56,10 @@ inline
 bool
 has_ellipsis(const parameter_declaration_clause& o)
 {
-	return get<4>(o);
+	return get<2>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

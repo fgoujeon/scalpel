@@ -29,7 +29,6 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
 	postfix_expression,
 	(postfix_expression_first_part)
-	(optional_node<space>)
 	(optional_node<postfix_expression_last_part_seq>)
 )
 

@@ -180,9 +180,7 @@ BOOST_AUTO_TEST_CASE(test_case_6)
 				nested_name_specifier
 				(
 					identifier("ab"),
-					space(""),
 					predefined_text_node<str::double_colon>(),
-					space(""),
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"g",
@@ -202,9 +200,7 @@ BOOST_AUTO_TEST_CASE(test_case_6)
 				nested_name_specifier
 				(
 					identifier("ab"),
-					space(""),
 					predefined_text_node<str::double_colon>(),
-					space(""),
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"f",
@@ -235,9 +231,7 @@ BOOST_AUTO_TEST_CASE(test_case_6)
 				nested_name_specifier
 				(
 					identifier("ab"),
-					space(""),
 					predefined_text_node<str::double_colon>(),
-					space(""),
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"x",
@@ -256,9 +250,7 @@ BOOST_AUTO_TEST_CASE(test_case_6)
 				nested_name_specifier
 				(
 					identifier("ab"),
-					space(""),
 					predefined_text_node<str::double_colon>(),
-					space(""),
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"i",
@@ -289,9 +281,7 @@ BOOST_AUTO_TEST_CASE(test_case_6)
 				nested_name_specifier
 				(
 					identifier("ab"),
-					space(""),
 					predefined_text_node<str::double_colon>(),
-					space(""),
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"h",

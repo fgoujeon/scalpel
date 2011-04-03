@@ -24,7 +24,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "detail/basic_print_functions.hpp"
 #include <scalpel/cpp/syntax_tree.hpp>
 #include <scalpel/cpp/syntax_nodes/utility/type_traits.hpp>
-#include <scalpel/cpp/syntax_nodes/utility/value_getter.hpp>
 #include <string>
 #include <sstream>
 #include <iostream>
@@ -34,7 +33,6 @@ namespace cpp2xml
 
 using namespace scalpel::cpp;
 using namespace scalpel::cpp::syntax_nodes;
-using namespace scalpel::cpp::syntax_nodes::utility;
 using namespace detail;
 
 template<class T>
@@ -257,7 +255,6 @@ GET_TYPE_SPECIALIZATION(simple_ptr_ptr_operator)
 GET_TYPE_SPECIALIZATION(simple_template_type_specifier)
 GET_TYPE_SPECIALIZATION(simple_type_specifier)
 GET_TYPE_SPECIALIZATION(simple_type_specifier_postfix_expression)
-GET_TYPE_SPECIALIZATION(space)
 GET_TYPE_SPECIALIZATION(square_bracketed_expression)
 GET_TYPE_SPECIALIZATION(statement)
 GET_TYPE_SPECIALIZATION(statement_seq)
@@ -326,29 +323,6 @@ const std::string
 get_type()
 {
 	return type_getter<T>::get();
-}
-
-
-
-template<class T>
-bool
-is_alive(const T& node)
-{
-	return get_value(node) != "";
-}
-
-template<class T>
-unsigned int
-get_alive_node_count(const T& node)
-{
-	unsigned int count = 0;
-	for(auto i = node.children().begin(); i != node.children().end(); ++i)
-	{
-		const T& child_node = *i;
-		if(is_alive(child_node))
-			++count;
-	}
-	return count;
 }
 
 
@@ -516,9 +490,7 @@ print
 
 		if(!first)
 		{
-			print(item.pre_separator_space_node(), indent_level + 1);
 			print(SyntaxNodeT::separator_node, indent_level + 1);
-			print(item.post_separator_space_node(), indent_level + 1);
 		}
 		print(item.main_node(), indent_level + 1);
 		first = false;

@@ -42,19 +42,12 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	for_statement,
 	(predefined_text_node<str::for_>)
-	(optional_node<space>)
 	(predefined_text_node<str::opening_round_bracket>)
-	(optional_node<space>)
 	(for_init_statement)
-	(optional_node<space>)
 	(optional_node<condition>)
-	(optional_node<space>)
 	(predefined_text_node<str::semicolon>)
-	(optional_node<space>)
 	(optional_node<expression>)
-	(optional_node<space>)
 	(predefined_text_node<str::closing_round_bracket>)
-	(optional_node<space>)
 	(statement)
 )
 
@@ -62,7 +55,7 @@ inline
 const statement&
 get_statement(const for_statement& o)
 {
-	return get<14>(o);
+	return get<7>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
@@ -70,3 +63,4 @@ get_statement(const for_statement& o)
 #include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif
+

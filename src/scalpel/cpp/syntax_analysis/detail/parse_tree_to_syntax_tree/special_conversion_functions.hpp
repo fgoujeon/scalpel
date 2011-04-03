@@ -37,36 +37,20 @@ convert_list_node(const tree_node_t& node)
 
 	if(ContainerT::separator_node.value() == syntax_nodes::common_nodes::empty.value()) //if the list separator is empty
 	{
-		syntax_nodes::optional_node<syntax_nodes::space> space_node;
 		for(tree_node_iterator_t i = node.children.begin(); i != node.children.end(); ++i) //for each child node
 		{
 			const tree_node_t& child_node = *i;
 			const std::string child_value = get_value(child_node);
 
-			if(child_node.value.id() == id_t::SPACE)
-			{
-				space_node = convert_node<syntax_nodes::space>(child_node);
-			}
-			else
-			{
-				typename ContainerT::item item
-				(
-					std::move(space_node),
-					syntax_nodes::optional_node<syntax_nodes::space>(),
-					convert_node<typename ContainerT::type>(child_node)
-				);
-				list.push_back(std::move(item));
-
-				//clear space node
-				space_node = syntax_nodes::optional_node<syntax_nodes::space>();
-			}
+			typename ContainerT::item item
+			(
+				convert_node<typename ContainerT::type>(child_node)
+			);
+			list.push_back(std::move(item));
 		}
 	}
 	else
 	{
-		syntax_nodes::optional_node<syntax_nodes::space> pre_separator_space;
-		syntax_nodes::optional_node<syntax_nodes::space> post_separator_space;
-		bool will_read_post_separator_space = false;
 		for(tree_node_iterator_t i = node.children.begin(); i != node.children.end(); ++i) //for each child node
 		{
 			const tree_node_t& child_node = *i;
@@ -74,34 +58,14 @@ convert_list_node(const tree_node_t& node)
 
 			if(child_value == ContainerT::separator_node.value()) //if the node is a separator
 			{
-				will_read_post_separator_space = true;
-			}
-			else if(child_node.value.id() == id_t::SPACE) //the node is a space
-			{
-				if(!will_read_post_separator_space)
-				{
-					pre_separator_space = convert_node<syntax_nodes::space>(child_node);
-					will_read_post_separator_space = true;
-				}
-				else
-				{
-					post_separator_space = convert_node<syntax_nodes::space>(child_node);
-					will_read_post_separator_space = false;
-				}
 			}
 			else //the node is the main node
 			{
 				typename ContainerT::item item
 				(
-					std::move(pre_separator_space),
-					std::move(post_separator_space),
 					convert_node<typename ContainerT::type>(child_node)
 				);
 				list.push_back(std::move(item));
-
-				pre_separator_space = syntax_nodes::optional_node<syntax_nodes::space>();
-				post_separator_space = syntax_nodes::optional_node<syntax_nodes::space>();
-				will_read_post_separator_space = false;
 			}
 		}
 	}
@@ -147,3 +111,4 @@ convert_predefined_text_node(const tree_node_t&)
 }}}}} //namespace scalpel::cpp::syntax_analysis::detail::parse_tree_to_syntax_tree
 
 #endif
+

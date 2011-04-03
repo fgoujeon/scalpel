@@ -38,15 +38,10 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	template_declaration,
 	(optional_node<predefined_text_node<str::export_>>)
-	(optional_node<space>)
 	(predefined_text_node<str::template_>)
-	(optional_node<space>)
 	(predefined_text_node<str::left_angle_bracket>)
-	(optional_node<space>)
 	(template_parameter_list)
-	(optional_node<space>)
 	(predefined_text_node<str::right_angle_bracket>)
-	(optional_node<space>)
 	(declaration)
 )
 
@@ -55,3 +50,4 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 #include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif
+

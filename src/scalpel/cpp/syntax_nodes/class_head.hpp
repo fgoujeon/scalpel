@@ -43,11 +43,8 @@ typedef
 	sequence_node
 	<
 		class_key,
-		optional_node<space>,
 		optional_node<nested_name_specifier>,
-		optional_node<space>,
 		optional_node<identifier_or_template_id>,
-		optional_node<space>,
 		optional_node<base_clause>
 	>
 	class_head
@@ -64,23 +61,24 @@ inline
 const optional_node<nested_name_specifier>&
 get_nested_name_specifier(const class_head& o)
 {
-	return get<2>(o);
+	return get<1>(o);
 }
 
 inline
 const optional_node<identifier_or_template_id>&
 get_identifier_or_template_id(const class_head& o)
 {
-	return get<4>(o);
+	return get<2>(o);
 }
 
 inline
 const optional_node<base_clause>&
 get_base_clause(const class_head& o)
 {
-	return get<6>(o);
+	return get<3>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

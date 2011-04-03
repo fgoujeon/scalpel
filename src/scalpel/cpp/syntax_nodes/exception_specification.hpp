@@ -36,11 +36,8 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::throw_>,
-		optional_node<space>,
 		predefined_text_node<str::opening_round_bracket>,
-		optional_node<space>,
 		optional_node<type_id_list>,
-		optional_node<space>,
 		predefined_text_node<str::closing_round_bracket>
 	>
 	exception_specification
@@ -49,3 +46,4 @@ typedef
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

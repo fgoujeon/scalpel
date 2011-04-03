@@ -29,9 +29,7 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
 	nested_name_specifier,
 	(identifier_or_template_id)
-	(optional_node<space>)
 	(predefined_text_node<str::double_colon>)
-	(optional_node<space>)
 	(optional_node<nested_name_specifier_last_part_seq>)
 )
 

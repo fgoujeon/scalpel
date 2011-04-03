@@ -29,9 +29,7 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
 	try_block,
 	(predefined_text_node<str::try_>)
-	(optional_node<space>)
 	(compound_statement)
-	(optional_node<space>)
 	(handler_seq)
 )
 

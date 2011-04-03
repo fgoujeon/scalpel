@@ -40,11 +40,8 @@ typedef
 	sequence_node
 	<
 		type_specifier_seq,
-		optional_node<space>,
 		declarator,
-		optional_node<space>,
 		predefined_text_node<str::equal>,
-		optional_node<space>,
 		assignment_expression
 	>
 	assignment_expression_condition

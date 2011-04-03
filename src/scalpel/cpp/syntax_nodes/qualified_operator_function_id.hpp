@@ -36,7 +36,6 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::double_colon>,
-		optional_node<space>,
 		operator_function_id
 	>
 	qualified_operator_function_id
@@ -46,9 +45,10 @@ inline
 const operator_function_id&
 get_operator_function_id(const qualified_operator_function_id& o)
 {
-	return get<2>(o);
+	return get<1>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

@@ -105,9 +105,7 @@ BOOST_AUTO_TEST_CASE(test_case_9)
 				nested_name_specifier
 				(
 					identifier("a"),
-					space(""),
 					predefined_text_node<str::double_colon>(),
-					space(""),
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"f",
@@ -123,16 +121,12 @@ BOOST_AUTO_TEST_CASE(test_case_9)
 		nested_identifier_or_template_id b_f_syntax_node
 		(
 			optional_node<predefined_text_node<str::double_colon>>(),
-			space(""),
 			nested_name_specifier
 			(
 				identifier("b"),
-				space(""),
 				predefined_text_node<str::double_colon>(),
-				space(""),
 				optional_node<nested_name_specifier_last_part_seq>()
 			),
-			space(""),
 			identifier("f")
 		);
 		auto found_entity =
@@ -142,9 +136,7 @@ BOOST_AUTO_TEST_CASE(test_case_9)
 				nested_name_specifier
 				(
 					identifier("b"),
-					space(""),
 					predefined_text_node<str::double_colon>(),
-					space(""),
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"f",

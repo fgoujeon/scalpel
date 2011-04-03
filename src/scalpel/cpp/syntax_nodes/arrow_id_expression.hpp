@@ -36,9 +36,7 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::arrow>,
-		optional_node<space>,
 		optional_node<predefined_text_node<str::template_>>,
-		optional_node<space>,
 		id_expression
 	>
 	arrow_id_expression

@@ -29,7 +29,6 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
 	direct_declarator,
 	(direct_declarator_first_part)
-	(optional_node<space>)
 	(optional_node<direct_declarator_last_part_seq>)
 )
 

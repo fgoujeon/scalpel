@@ -38,9 +38,7 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::return_>,
-		optional_node<space>,
 		optional_node<expression>,
-		optional_node<space>,
 		predefined_text_node<str::semicolon>
 	>
 	return_statement
@@ -49,3 +47,4 @@ typedef
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

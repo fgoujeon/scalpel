@@ -47,9 +47,6 @@ grammar::grammar()
 		]
 	;
 
-	//white separator
-	s = token_node_d[*(ch_p(' ') | '\t' | '\v' | '\f' | '\n')];
-
 
 	/*
 	Sorted in inverse alphabetical order to prevent scanner to parse e.g. "do" when scanning "double"
@@ -292,7 +289,7 @@ grammar::grammar()
 	;
 
 	string_literal
-		= token_node_d[single_string_literal % !s]
+		= token_node_d[+single_string_literal]
 	;
 	single_string_literal
 		= !ch_p('L') >> '"' >> !s_char_sequence >> '"'
@@ -318,19 +315,19 @@ grammar::grammar()
 
 	//1.3 - Basic concepts [gram.basic]
 	translation_unit
-		= !s >> !(declaration_seq >> !s) >> end_p
+		= !declaration_seq >> end_p
 	;
 
 	//1.4 - Expressions [gram.expr]
 	primary_expression
 		= str_p("this")
-		| literal
+		| lexeme_d[literal]
 		| round_bracketed_expression
 		| id_expression
 	;
 
 	round_bracketed_expression
-		= '(' >> !s >> expression >> !s >> ')'
+		= '(' >> expression >> ')'
 	;
 
 	id_expression
@@ -343,13 +340,13 @@ grammar::grammar()
 		| conversion_function_id
 		| destructor_name
 		| (template_id - fake_template_id) // "a < b || c > d" is not a template-id, but a boolean expression!
-		| identifier
+		| lexeme_d[identifier]
 	;
 	fake_template_id
-		= template_id >> !s >>
+		= template_id >>
 		(
 			str_p("this")
-			| literal
+			| lexeme_d[literal]
 			| id_expression
 		)
 	;
@@ -361,16 +358,16 @@ grammar::grammar()
 		| qualified_identifier
 	;
 	qualified_nested_id
-		= !(str_p("::") >> !s) >> nested_name_specifier >> !s >> !("template" >> !s) >> unqualified_id
+		= !str_p("::") >> nested_name_specifier >> !str_p("template") >> unqualified_id
 	;
 	qualified_operator_function_id
-		= str_p("::") >> !s >> operator_function_id
+		= str_p("::") >> operator_function_id
 	;
 	qualified_template_id
-		= str_p("::") >> !s >> template_id
+		= str_p("::") >> template_id
 	;
 	qualified_identifier
-		= str_p("::") >> !s >> identifier
+		= str_p("::") >> lexeme_d[identifier]
 	;
 
 	/*
@@ -419,13 +416,13 @@ grammar::grammar()
 		;
 	*/
 	nested_name_specifier
-		= identifier_or_template_id >> !s >> "::" >> !(!s >> nested_name_specifier_last_part_seq)
+		= identifier_or_template_id >> "::" >> !nested_name_specifier_last_part_seq
 	;
 	nested_name_specifier_last_part_seq
-		= nested_name_specifier_last_part % !s
+		= +nested_name_specifier_last_part
 	;
 	nested_name_specifier_last_part
-		= !(str_p("template") >> !s) >> identifier_or_template_id >> !s >> "::"
+		= !str_p("template") >> identifier_or_template_id >> "::"
 	;
 
 	/*
@@ -435,10 +432,10 @@ grammar::grammar()
 			| postfix_expression >> '[' >> expression >> ']'
 			| postfix_expression >> '(' >> !expression >> ')'
 			| simple_type_specifier >> '(' >> !expression >> ')'
-			| str_p("typename") >> !str_p("::") >> nested_name_specifier >> identifier >> '(' >> !expression >> ')'
-			| str_p("typename") >> !str_p("::") >> nested_name_specifier >> !str_p("template") >> template_id >> '(' >> !expression >> ')'
-			| postfix_expression >> '.' >> !str_p("template") >> id_expression
-			| postfix_expression >> "->" >> !str_p("template") >> id_expression
+			| str_p("typename")tr_p("::") >> nested_name_specifier >> lexeme_d[identifier] >> '(' >> !expression >> ')'
+			| str_p("typename")tr_p("::") >> nested_name_specifiertr_p("template") >> template_id >> '(' >> !expression >> ')'
+			| postfix_expression >> '.'tr_p("template") >> id_expression
+			| postfix_expression >> "->"tr_p("template") >> id_expression
 			| postfix_expression >> '.' >> pseudo_destructor_name
 			| postfix_expression >> "->" >> pseudo_destructor_name
 			| postfix_expression >> "++"
@@ -454,7 +451,7 @@ grammar::grammar()
 	See direct_declarator rule for more information about the different steps to follow.
 	*/
 	postfix_expression
-		= postfix_expression_first_part >> !(!s >> postfix_expression_last_part_seq)
+		= postfix_expression_first_part >> !postfix_expression_last_part_seq
 	;
 	postfix_expression_first_part
 		= primary_expression
@@ -469,7 +466,7 @@ grammar::grammar()
 		| type_id_typeid_expression
 	;
 	postfix_expression_last_part_seq
-		= postfix_expression_last_part % !s
+		= +postfix_expression_last_part
 	;
 	postfix_expression_last_part
 		= square_bracketed_expression
@@ -483,69 +480,69 @@ grammar::grammar()
 	;
 
 	simple_type_specifier_postfix_expression
-		= simple_type_specifier >> !s >> '(' >> !s >> !(expression >> !s) >> ')'
+		= simple_type_specifier >> '(' >> !expression >> ')'
 	;
 
 	typename_expression
-		= str_p("typename") >> !s >> !(str_p("::") >> !s) >> nested_name_specifier >> !s >> identifier >> !s >> '(' >> !s >> !(expression >> !s) >> ')'
+		= str_p("typename") >> !str_p("::") >> nested_name_specifier >> lexeme_d[identifier] >> '(' >> !expression >> ')'
 	;
 
 	template_typename_expression
-		= str_p("typename") >> !s >> !(str_p("::") >> !s) >> nested_name_specifier >> !s >> !(str_p("template") >> !s) >> template_id >> !s >> '(' >> !s >> !(expression >> !s) >> ')'
+		= str_p("typename") >> !str_p("::") >> nested_name_specifier >> !str_p("template") >> template_id >> '(' >> !expression >> ')'
 	;
 
 	dynamic_cast_expression
-		= str_p("dynamic_cast") >> !s >> '<' >> !s >> type_id >> !s >> '>' >> !s >> '(' >> !s >> expression >> !s >> ')'
+		= str_p("dynamic_cast") >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
 	;
 
 	static_cast_expression
-		= str_p("static_cast") >> !s >> '<' >> !s >> type_id >> !s >> '>' >> !s >> '(' >> !s >> expression >> !s >> ')'
+		= str_p("static_cast") >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
 	;
 
 	reinterpret_cast_expression
-		= str_p("reinterpret_cast") >> !s >> '<' >> !s >> type_id >> !s >> '>' >> !s >> '(' >> !s >> expression >> !s >> ')'
+		= str_p("reinterpret_cast") >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
 	;
 
 	const_cast_expression
-		= str_p("const_cast") >> !s >> '<' >> !s >> type_id >> !s >> '>' >> !s >> '(' >> !s >> expression >> !s >> ')'
+		= str_p("const_cast") >> '<' >> type_id >> '>' >> '(' >> expression >> ')'
 	;
 
 	typeid_expression
-		= str_p("typeid") >> !s >> '(' >> !s >> expression >> !s >> ')'
+		= str_p("typeid") >> '(' >> expression >> ')'
 	;
 
 	type_id_typeid_expression
-		= str_p("typeid") >> !s >> '(' >> !s >> type_id >> !s >> ')'
+		= str_p("typeid") >> '(' >> type_id >> ')'
 	;
 
 	square_bracketed_expression
-		= '[' >> !s >> expression >> !s >> ']'
+		= '[' >> expression >> ']'
 	;
 
 	round_bracketed_optional_expression
-		= '(' >> !s >> !(expression >> !s) >> ')'
+		= '(' >> !expression >> ')'
 	;
 
 	dot_id_expression
-		= '.' >> !s >> !(str_p("template") >> !s) >> id_expression
+		= '.' >> !str_p("template") >> id_expression
 	;
 
 	arrow_id_expression
-		= "->" >> !s >> !(str_p("template") >> !s) >> id_expression
+		= "->" >> !str_p("template") >> id_expression
 	;
 
 	dot_pseudo_destructor_name
-		= '.' >> !s >> pseudo_destructor_name
+		= '.' >> pseudo_destructor_name
 	;
 
 	arrow_pseudo_destructor_name
-		= "->" >> !s >> pseudo_destructor_name
+		= "->" >> pseudo_destructor_name
 	;
 
 	pseudo_destructor_name
-		= nested_identifier_or_template_id >> !s >> str_p("::") >> !s >> '~' >> !s >> identifier_or_template_id
-		| !(str_p("::") >> !s) >> nested_name_specifier >> !s >> str_p("template") >> !s >> template_id >> !s >> str_p("::") >> !s >> '~' >> !s >> identifier_or_template_id
-		| !(str_p("::") >> !s) >> !(nested_name_specifier >> !s) >> '~' >> !s >> identifier_or_template_id
+		= nested_identifier_or_template_id >> str_p("::") >> '~' >> identifier_or_template_id
+		| !str_p("::") >> nested_name_specifier >> str_p("template") >> template_id >> str_p("::") >> '~' >> identifier_or_template_id
+		| !str_p("::") >> !nested_name_specifier >> '~' >> identifier_or_template_id
 	;
 
 	unary_expression
@@ -558,15 +555,15 @@ grammar::grammar()
 	;
 
 	unary_operator_unary_expression
-		= unary_operator >> !s >> cast_expression
+		= unary_operator >> cast_expression
 	;
 
 	type_id_sizeof_expression
-		= str_p("sizeof") >> !s >> '(' >> !s >> type_id >> !s >> ')'
+		= str_p("sizeof") >> '(' >> type_id >> ')'
 	;
 
 	unary_sizeof_expression
-		= str_p("sizeof") >> !s >> unary_expression
+		= str_p("sizeof") >> unary_expression
 	;
 
 	unary_operator
@@ -586,25 +583,25 @@ grammar::grammar()
 	;
 
 	type_id_new_expression
-		= !(str_p("::") >> !s) >> str_p("new") >> !s >> !(round_bracketed_expression >> !s) >> '(' >> !s >> type_id >> !s >> ')' >> !(!s >> round_bracketed_optional_expression)
+		= !str_p("::") >> str_p("new") >> !round_bracketed_expression >> '(' >> type_id >> ')' >> !round_bracketed_optional_expression
 	;
 
 	new_type_id_new_expression
-		= !(str_p("::") >> !s) >> str_p("new") >> !s >> !(round_bracketed_expression >> !s) >> new_type_id >> !(!s >> round_bracketed_optional_expression)
+		= !str_p("::") >> str_p("new") >> !round_bracketed_expression >> new_type_id >> !round_bracketed_optional_expression
 	;
 
 	new_type_id
-		= type_specifier_seq >> !(!s >> new_declarator)
+		= type_specifier_seq >> !new_declarator
 	;
 
 	new_declarator
-		= ptr_operator_seq >> !s >> direct_new_declarator
+		= ptr_operator_seq >> direct_new_declarator
 		| ptr_operator_seq
 		| direct_new_declarator
 	;
 
 	direct_new_declarator
-		= '[' >> !s >> expression >> !s >> ']' >> !(!s >> '[' >> !s >> conditional_expression >> !s >> ']')
+		= '[' >> expression >> ']' >> !('[' >> conditional_expression >> ']')
 	;
 
 	delete_expression
@@ -613,61 +610,61 @@ grammar::grammar()
 	;
 
 	simple_delete_expression
-		= !(str_p("::") >> !s) >> "delete" >> !s >> cast_expression
+		= !str_p("::") >> "delete" >> cast_expression
 	;
 
 	array_delete_expression
-		= !(str_p("::") >> !s) >> "delete" >> !s >> '[' >> !s >> ']' >> !s >> cast_expression
+		= !str_p("::") >> "delete" >> '[' >> ']' >> cast_expression
 	;
 
 	cast_expression
 		= longest_d
 		[
 			unary_expression //this alternative must be tried first
-			| cast_expression_first_part_seq >> !s >> unary_expression
+			| cast_expression_first_part_seq >> unary_expression
 		]
 	;
 	cast_expression_first_part_seq
-		= cast_expression_first_part % !s
+		= +cast_expression_first_part
 	;
 	cast_expression_first_part
-		= '(' >> !s >> type_id >> !s >> ')'
+		= '(' >> type_id >> ')'
 	;
 
 	pm_ptr_expression
-		= cast_expression % (!s >> "->*" >> !s)
+		= cast_expression % ("->*")
 	;
 
 	pm_ref_expression
-		= pm_ptr_expression % (!s >> ".*" >> !s)
+		= pm_ptr_expression % (".*")
 	;
 
 	modulo_expression
-		= pm_ref_expression % (!s >> '%' >> !s)
+		= pm_ref_expression % ('%')
 	;
 
 	divisive_expression
-		= modulo_expression % (!s >> '/' >> !s)
+		= modulo_expression % ('/')
 	;
 
 	multiplicative_expression
-		= divisive_expression % (!s >> '*' >> !s)
+		= divisive_expression % ('*')
 	;
 
 	subtractive_expression
-		= multiplicative_expression % (!s >> '-' >> !s)
+		= multiplicative_expression % ('-')
 	;
 
 	additive_expression
-		= subtractive_expression % (!s >> '+' >> !s)
+		= subtractive_expression % ('+')
 	;
 
 	left_shift_expression
-		= additive_expression % (!s >> "<<" >> !s)
+		= additive_expression % ("<<")
 	;
 
 	right_shift_expression
-		= left_shift_expression % (!s >> ">>" >> !s)
+		= left_shift_expression % (">>")
 	;
 	//a shift expression used as a template argument must be placed between brackets if it contains any '>' characters
 	template_argument_right_shift_expression
@@ -675,32 +672,32 @@ grammar::grammar()
 		| left_shift_expression
 	;
 	round_bracketed_right_shift_expression
-		= '(' >> !s >> right_shift_expression >> !s >> ')'
+		= '(' >> right_shift_expression >> ')'
 	;
 
 	less_than_or_equal_to_expression
-		= right_shift_expression % (!s >> "<=" >> !s)
+		= right_shift_expression % ("<=")
 	;
 	template_argument_less_than_or_equal_to_expression
-		= template_argument_right_shift_expression % (!s >> "<=" >> !s)
+		= template_argument_right_shift_expression % ("<=")
 	;
 
 	less_than_expression
-		= less_than_or_equal_to_expression % (!s >> '<' >> !s)
+		= less_than_or_equal_to_expression % ('<')
 	;
 	template_argument_less_than_expression
-		= template_argument_less_than_or_equal_to_expression % (!s >> '<' >> !s)
+		= template_argument_less_than_or_equal_to_expression % ('<')
 	;
 
 	greater_than_or_equal_to_expression
-		= less_than_expression % (!s >> ">=" >> !s)
+		= less_than_expression % (">=")
 	;
 	template_argument_greater_than_or_equal_to_expression
-		= template_argument_less_than_expression % (!s >> ">=" >> !s)
+		= template_argument_less_than_expression % (">=")
 	;
 
 	greater_than_expression
-		= greater_than_or_equal_to_expression % (!s >> '>' >> !s)
+		= greater_than_or_equal_to_expression % ('>')
 	;
 	//a shift expression used as a template argument must be placed between brackets if it contains any '>' characters
 	template_argument_greater_than_expression
@@ -708,81 +705,81 @@ grammar::grammar()
 		| template_argument_greater_than_or_equal_to_expression
 	;
 	round_bracketed_greater_than_expression
-		= '(' >> !s >> greater_than_expression >> !s >> ')'
+		= '(' >> greater_than_expression >> ')'
 	;
 
 	inequality_expression
-		= greater_than_expression % (!s >> "!=" >> !s)
+		= greater_than_expression % ("!=")
 	;
 	template_argument_inequality_expression
-		= template_argument_greater_than_expression % (!s >> "!=" >> !s)
+		= template_argument_greater_than_expression % ("!=")
 	;
 
 	equality_expression
-		= inequality_expression % (!s >> "==" >> !s)
+		= inequality_expression % ("==")
 	;
 	template_argument_equality_expression
-		= template_argument_inequality_expression % (!s >> "==" >> !s)
+		= template_argument_inequality_expression % ("==")
 	;
 
 	and_expression
-		= equality_expression % (!s >> '&' >> !s)
+		= equality_expression % ('&')
 	;
 	template_argument_and_expression
-		= template_argument_equality_expression % (!s >> '&' >> !s)
+		= template_argument_equality_expression % ('&')
 	;
 
 	exclusive_or_expression
-		= and_expression % (!s >> '^' >> !s)
+		= and_expression % ('^')
 	;
 	template_argument_exclusive_or_expression
-		= template_argument_and_expression % (!s >> '^' >> !s)
+		= template_argument_and_expression % ('^')
 	;
 
 	inclusive_or_expression
-		= exclusive_or_expression % (!s >> '|' >> !s)
+		= exclusive_or_expression % ('|')
 	;
 	template_argument_inclusive_or_expression
-		= template_argument_exclusive_or_expression % (!s >> '|' >> !s)
+		= template_argument_exclusive_or_expression % ('|')
 	;
 
 	logical_and_expression
-		= inclusive_or_expression % (!s >> "&&" >> !s)
+		= inclusive_or_expression % ("&&")
 	;
 	template_argument_logical_and_expression
-		= template_argument_inclusive_or_expression % (!s >> "&&" >> !s)
+		= template_argument_inclusive_or_expression % ("&&")
 	;
 
 	logical_or_expression
-		= logical_and_expression % (!s >> "||" >> !s)
+		= logical_and_expression % ("||")
 	;
 	template_argument_logical_or_expression
-		= template_argument_logical_and_expression % (!s >> "||" >> !s)
+		= template_argument_logical_and_expression % ("||")
 	;
 
 	conditional_expression
-		= logical_or_expression >> !(!s >> '?' >> !s >> expression >> !s >> ':' >> !s >> assignment_expression)
+		= logical_or_expression >> !('?' >> expression >> ':' >> assignment_expression)
 	;
 	template_argument_conditional_expression
-		= template_argument_logical_or_expression >> !(!s >> '?' >> !s >> expression >> !s >> ':' >> !s >> template_argument_assignment_expression)
+		= template_argument_logical_or_expression >> !('?' >> expression >> ':' >> template_argument_assignment_expression)
 	;
 
 	/*
 	Original rule is:
 		assignment_expression
-			= logical_or_expression >> !s >> assignment_operator >> !s >> assignment_expression
+			= logical_or_expression >> assignment_operator >> assignment_expression
 			| conditional_expression
 			| throw_expression
 		;
 	*/
 	assignment_expression
-		= !(assignment_expression_first_part_seq >> !s) >> assignment_expression_last_part
+		= !assignment_expression_first_part_seq >> assignment_expression_last_part
 	;
 	assignment_expression_first_part_seq
-		= assignment_expression_first_part % !s
+		= +assignment_expression_first_part
 	;
 	assignment_expression_first_part
-		= logical_or_expression >> !s >> assignment_operator
+		= logical_or_expression >> assignment_operator
 	;
 	assignment_expression_last_part
 		= conditional_expression
@@ -790,13 +787,13 @@ grammar::grammar()
 	;
 
 	template_argument_assignment_expression
-		= !(template_argument_assignment_expression_first_part_seq >> !s) >> template_argument_assignment_expression_last_part
+		= !template_argument_assignment_expression_first_part_seq >> template_argument_assignment_expression_last_part
 	;
 	template_argument_assignment_expression_first_part_seq
-		= template_argument_assignment_expression_first_part % !s
+		= +template_argument_assignment_expression_first_part
 	;
 	template_argument_assignment_expression_first_part
-		= template_argument_logical_or_expression >> !s >> assignment_operator
+		= template_argument_logical_or_expression >> assignment_operator
 	;
 	template_argument_assignment_expression_last_part
 		= template_argument_conditional_expression
@@ -818,7 +815,7 @@ grammar::grammar()
 	;
 
 	expression
-		= assignment_expression % (!s >> ',' >> !s)
+		= assignment_expression % ','
 	;
 
 	//1.5 - Statements [gram.stmt.stmt]
@@ -840,27 +837,27 @@ grammar::grammar()
 	;
 
 	case_statement
-		= str_p("case") >> !s >> conditional_expression >> !s >> ':' >> !s >> statement
+		= str_p("case") >> conditional_expression >> ':' >> statement
 	;
 
 	default_statement
-		= str_p("default") >> !s >> ':' >> !s >> statement
+		= str_p("default") >> ':' >> statement
 	;
 
 	classic_labeled_statement
-		= identifier >> !s >> ':' >> !s >> statement
+		= lexeme_d[identifier] >> ':' >> statement
 	;
 
 	expression_statement
-		= !(expression >> !s) >> ch_p(';')
+		= !expression >> ch_p(';')
 	;
 
 	compound_statement
-		= ch_p('{') >> !s >> !(statement_seq >> !s) >> ch_p('}')
+		= ch_p('{') >> !statement_seq >> ch_p('}')
 	;
 
 	statement_seq
-		= statement % !s
+		= +statement
 	;
 
 	selection_statement
@@ -869,11 +866,11 @@ grammar::grammar()
 	;
 
 	if_statement
-		= str_p("if") >> !s >> '(' >> !s >> condition >> !s >> ')' >> !s >> statement >> !(!s >> "else" >> !s >> statement)
+		= str_p("if") >> '(' >> condition >> ')' >> statement >> !("else" >> statement)
 	;
 
 	switch_statement
-		= str_p("switch") >> !s >> '(' >> !s >> condition >> !s >> ')' >> !s >> statement
+		= str_p("switch") >> '(' >> condition >> ')' >> statement
 	;
 
 	/*
@@ -889,10 +886,10 @@ grammar::grammar()
 	;
 
 	assignment_expression_condition
-		= assignment_expression_condition_type_specifier_seq >> !s >> declarator >> !s >> '=' >> !s >> assignment_expression
+		= assignment_expression_condition_type_specifier_seq >> declarator >> '=' >> assignment_expression
 	;
 	assignment_expression_condition_type_specifier_seq
-		= (type_specifier - (declarator >> !s >> '=' >> !s >> assignment_expression)) % !s
+		= +(type_specifier - (declarator >> '=' >> assignment_expression))
 	;
 
 	iteration_statement
@@ -902,15 +899,15 @@ grammar::grammar()
 	;
 
 	while_statement
-		= str_p("while") >> !s >> '(' >> !s >> condition >> !s >> ')' >> !s >> statement
+		= str_p("while") >> '(' >> condition >> ')' >> statement
 	;
 
 	do_while_statement
-		= str_p("do") >> !s >> statement >> !s >> "while" >> !s >> '(' >> !s >> expression >> !s >> ')' >> !s >> ch_p(';')
+		= str_p("do") >> statement >> "while" >> '(' >> expression >> ')' >> ch_p(';')
 	;
 
 	for_statement
-		= str_p("for") >> !s >> '(' >> !s >> for_init_statement >> !s >> !(condition >> !s) >> ch_p(';') >> !s >> !(expression >> !s) >> ')' >> !s >> statement
+		= str_p("for") >> '(' >> for_init_statement >> !condition >> ch_p(';') >> !expression >> ')' >> statement
 	;
 
 	for_init_statement
@@ -926,25 +923,25 @@ grammar::grammar()
 	;
 
 	break_statement
-		= str_p("break") >> !s >> ch_p(';')
+		= str_p("break") >> ch_p(';')
 	;
 
 	continue_statement
-		= str_p("continue") >> !s >> ch_p(';')
+		= str_p("continue") >> ch_p(';')
 	;
 
 	return_statement
-		= str_p("return") >> !s >> !(expression >> !s) >> ch_p(';')
+		= str_p("return") >> !expression >> ch_p(';')
 	;
 
 	goto_statement
-		= str_p("goto") >> !s >> identifier >> !s >> ch_p(';')
+		= str_p("goto") >> lexeme_d[identifier] >> ch_p(';')
 	;
 
 
 	//1.6 - Declarations [gram.dcl.dcl]
 	declaration_seq
-		= declaration % !s
+		= +declaration
 	;
 
 	declaration
@@ -978,10 +975,10 @@ grammar::grammar()
 	In order to solve this issue, we have to create an extra rule which specifies a tail parser.
 	*/
 	simple_declaration
-		= !(simple_declaration_decl_specifier_seq >> !s) >> !(init_declarator_list >> !s) >> ch_p(';')
+		= !simple_declaration_decl_specifier_seq >> !init_declarator_list >> ch_p(';')
 	;
 	simple_declaration_decl_specifier_seq
-		= (decl_specifier - (init_declarator_list >> !s >> ch_p(';'))) % !s
+		= +(decl_specifier - (init_declarator_list >> ch_p(';')))
 	;
 
 	decl_specifier
@@ -993,7 +990,7 @@ grammar::grammar()
 	;
 
 	decl_specifier_seq
-		= decl_specifier % !s
+		= +decl_specifier
 	;
 
 	storage_class_specifier
@@ -1023,7 +1020,7 @@ grammar::grammar()
 		| fundamental_type_specifier
 	;
 	simple_template_type_specifier
-		= !(str_p("::") >> !s) >> nested_name_specifier >> !s >> "template" >> !s >> template_id
+		= !str_p("::") >> nested_name_specifier >> "template" >> template_id
 	;
 	fundamental_type_specifier
 		= str_p("char")
@@ -1047,56 +1044,56 @@ grammar::grammar()
 	;
 
 	class_elaborated_specifier
-		= class_key >> !s >> !(str_p("::") >> !s) >> !(nested_name_specifier >> !s) >> identifier_or_template_id
+		= class_key >> !str_p("::") >> !nested_name_specifier >> identifier_or_template_id
 	;
 
 	enum_elaborated_specifier
-		= str_p("enum") >> !s >> !(str_p("::") >> !s) >> !(nested_name_specifier >> !s) >> identifier
+		= str_p("enum") >> !str_p("::") >> !nested_name_specifier >> lexeme_d[identifier]
 	;
 
 	typename_template_elaborated_specifier
-		= str_p("typename") >> !s >> !(str_p("::") >> !s) >> nested_name_specifier >> !s >> !(str_p("template") >> !s) >> template_id
+		= str_p("typename") >> !str_p("::") >> nested_name_specifier >> !str_p("template") >> template_id
 	;
 
 	typename_elaborated_specifier
-		= str_p("typename") >> !s >> !(str_p("::") >> !s) >> nested_name_specifier >> !s >> identifier
+		= str_p("typename") >> !str_p("::") >> nested_name_specifier >> lexeme_d[identifier]
 	;
 
 	enum_specifier
-		= str_p("enum") >> !s >> !(identifier >> !s) >> ch_p('{') >> !s >> !(enumerator_list >> !s) >> !(ch_p(',') >> !s) >> ch_p('}')
+		= str_p("enum") >> !lexeme_d[identifier] >> ch_p('{') >> !enumerator_list >> !ch_p(',') >> ch_p('}')
 	;
 
 	enumerator_list
-		= enumerator_definition % (!s >> ',' >> !s)
+		= enumerator_definition % ','
 	;
 
 	enumerator_definition
-		= identifier >> !s >> !('=' >> !s >> conditional_expression)
+		= lexeme_d[identifier] >> !('=' >> conditional_expression)
 	;
 
 	namespace_definition
-		= str_p("namespace") >> !s >> !(identifier >> !s) >> '{' >> !s >> !(declaration_seq >> !s) >> '}'
+		= str_p("namespace") >> !lexeme_d[identifier] >> '{' >> !declaration_seq >> '}'
 	;
 
 	namespace_alias_definition
-		= str_p("namespace") >> !s >> identifier >> !s >> '=' >> !s >> qualified_namespace_specifier >> !s >> ch_p(';')
+		= str_p("namespace") >> lexeme_d[identifier] >> '=' >> qualified_namespace_specifier >> ch_p(';')
 	;
 
 	qualified_namespace_specifier
-		= !(str_p("::") >> !s) >> !(nested_name_specifier >> !s) >> identifier
+		= !str_p("::") >> !nested_name_specifier >> lexeme_d[identifier]
 	;
 
 	using_declaration
-		= "using" >> !s >> !(str_p("typename") >> !s) >> !(str_p("::") >> !s) >> nested_name_specifier >> !s >> unqualified_id >> !s >> ch_p(';')
-		| "using" >> !s >> str_p("::") >> !s >> unqualified_id >> !s >> ch_p(';')
+		= "using" >> !str_p("typename") >> !str_p("::") >> nested_name_specifier >> unqualified_id >> ch_p(';')
+		| "using" >> str_p("::") >> unqualified_id >> ch_p(';')
 	;
 
 	using_directive
-		= str_p("using") >> !s >> "namespace" >> !s >> !(str_p("::") >> !s) >> !(nested_name_specifier >> !s) >> identifier >> !s >> ch_p(';')
+		= str_p("using") >> "namespace" >> !str_p("::") >> !nested_name_specifier >> lexeme_d[identifier] >> ch_p(';')
 	;
 
 	asm_definition
-		= str_p("asm") >> !s >> '(' >> !s >> string_literal >> !s >> ')' >> !s >> ch_p(';')
+		= str_p("asm") >> '(' >> lexeme_d[string_literal] >> ')' >> ch_p(';')
 	;
 
 	linkage_specification
@@ -1105,20 +1102,20 @@ grammar::grammar()
 	;
 
 	declaration_seq_linkage_specification
-		= "extern" >> !s >> string_literal >> !s >> ch_p('{') >> !s >> !(declaration_seq >> !s) >> ch_p('}')
+		= "extern" >> lexeme_d[string_literal] >> ch_p('{') >> !declaration_seq >> ch_p('}')
 	;
 
 	declaration_linkage_specification
-		= "extern" >> !s >> string_literal >> !s >> declaration
+		= "extern" >> lexeme_d[string_literal] >> declaration
 	;
 
 	//1.7 - Declarators [gram.dcl.decl]
 	init_declarator_list
-		= init_declarator % (!s >> ',' >> !s)
+		= init_declarator % ','
 	;
 
 	init_declarator
-		= declarator >> !(!s >> initializer)
+		= declarator >> !initializer
 	;
 
 	/*
@@ -1129,7 +1126,7 @@ grammar::grammar()
 		;
 	*/
 	declarator
-		= !(ptr_operator_seq >> !s) >> direct_declarator
+		= !ptr_operator_seq >> direct_declarator
 	;
 
 	/*
@@ -1209,31 +1206,31 @@ grammar::grammar()
 		;
 	*/
 	direct_declarator
-		= direct_declarator_first_part >> !(!s >> direct_declarator_last_part_seq)
+		= direct_declarator_first_part >> !direct_declarator_last_part_seq
 	;
 	direct_declarator_first_part
 		= bracketed_declarator
 		| declarator_id
 	;
 	bracketed_declarator
-		= '(' >> !s >> declarator >> !s >> ')'
+		= '(' >> declarator >> ')'
 	;
 	direct_declarator_last_part_seq
-		= direct_declarator_last_part % !s
+		= +direct_declarator_last_part
 	;
 	direct_declarator_last_part
 		= direct_declarator_function_part
 		| direct_declarator_array_part
 	;
 	direct_declarator_function_part
-		= '(' >> !s >> !(parameter_declaration_clause >> !s) >> ')' >> !(!s >> cv_qualifier_seq) >> !(!s >> exception_specification)
+		= '(' >> !parameter_declaration_clause >> ')' >> !cv_qualifier_seq >> !exception_specification
 	;
 	direct_declarator_array_part
-		= '[' >> !s >> !(conditional_expression >> !s) >> ']'
+		= '[' >> !conditional_expression >> ']'
 	;
 
 	ptr_operator_seq
-		= ptr_operator % !s
+		= +ptr_operator
 	;
 
 	ptr_operator
@@ -1247,11 +1244,11 @@ grammar::grammar()
 	;
 
 	simple_ptr_ptr_operator
-		= ch_p('*') >> !(!s >> cv_qualifier_seq)
+		= ch_p('*') >> !cv_qualifier_seq
 	;
 
 	ptr_to_member_operator
-		= !(str_p("::") >> !s) >> nested_name_specifier >> !s >> '*' >> !(!s >> cv_qualifier_seq)
+		= !str_p("::") >> nested_name_specifier >> '*' >> !cv_qualifier_seq
 	;
 
 	ref_ptr_operator
@@ -1259,7 +1256,7 @@ grammar::grammar()
 	;
 
 	cv_qualifier_seq
-		= cv_qualifier % !s
+		= +cv_qualifier
 	;
 
 	cv_qualifier
@@ -1273,11 +1270,11 @@ grammar::grammar()
 	;
 
 	type_id
-		= type_specifier_seq >> !(!s >> abstract_declarator)
+		= type_specifier_seq >> !abstract_declarator
 	;
 
 	type_specifier_seq
-		= type_specifier % !s
+		= +type_specifier
 	;
 
 	/*
@@ -1288,7 +1285,7 @@ grammar::grammar()
 		;
 	*/
 	abstract_declarator
-		= !(ptr_operator_seq >> !s) >> direct_abstract_declarator
+		= !ptr_operator_seq >> direct_abstract_declarator
 		| ptr_operator_seq
 	;
 
@@ -1329,38 +1326,38 @@ grammar::grammar()
 		| direct_declarator_last_part_seq
 	;
 	bracketed_abstract_declarator
-		= '(' >> !s >> abstract_declarator >> !s >> ')' >> !(!s >> direct_declarator_last_part)
+		= '(' >> abstract_declarator >> ')' >> !direct_declarator_last_part
 	;
 
 	parameter_declaration_clause
-		= parameter_declaration_list >> !s >> ',' >> !s >> "..."
-		| parameter_declaration_list >> !s >> str_p("...")
+		= parameter_declaration_list >> ',' >> "..."
+		| parameter_declaration_list >> str_p("...")
 		| parameter_declaration_list
 		| str_p("...")
 	;
 
 	parameter_declaration_list
-		= parameter_declaration % (!s >> ',' >> !s)
+		= parameter_declaration % ','
 	;
 
 	parameter_declaration
-		= decl_specifier_seq >> !s >> '=' >> !s >> assignment_expression
-		| parameter_declaration_decl_specifier_seq1 >> !s >> declarator >> !s >> '=' >> !s >> assignment_expression
-		| parameter_declaration_decl_specifier_seq2 >> !s >> declarator
-		| parameter_declaration_decl_specifier_seq3 >> !s >> abstract_declarator >> !s >> '=' >> !s >> assignment_expression
-		| parameter_declaration_decl_specifier_seq4 >> !(!s >> abstract_declarator)
+		= decl_specifier_seq >> '=' >> assignment_expression
+		| parameter_declaration_decl_specifier_seq1 >> declarator >> '=' >> assignment_expression
+		| parameter_declaration_decl_specifier_seq2 >> declarator
+		| parameter_declaration_decl_specifier_seq3 >> abstract_declarator >> '=' >> assignment_expression
+		| parameter_declaration_decl_specifier_seq4 >> !abstract_declarator
 	;
 	parameter_declaration_decl_specifier_seq1
-		= (decl_specifier - (declarator >> !s >> '=' >> !s >> assignment_expression)) % !s
+		= +(decl_specifier - (declarator >> '=' >> assignment_expression))
 	;
 	parameter_declaration_decl_specifier_seq2
-		= (decl_specifier - (declarator >> !s >> (ch_p(',') | ')' | "..."))) % !s
+		= +(decl_specifier - (declarator >> (ch_p(',') | ')' | "...")))
 	;
 	parameter_declaration_decl_specifier_seq3
-		= (decl_specifier - (abstract_declarator >> !s >> '=' >> !s >> assignment_expression)) % !s
+		= +(decl_specifier - (abstract_declarator >> '=' >> assignment_expression))
 	;
 	parameter_declaration_decl_specifier_seq4
-		= (decl_specifier - (abstract_declarator >> !s >> (ch_p(',') | ')' | "..."))) % !s
+		= +(decl_specifier - (abstract_declarator >> (ch_p(',') | ')' | "...")))
 	;
 
 
@@ -1376,20 +1373,20 @@ grammar::grammar()
 		| try_block_function_definition
 	;
 	simple_function_definition
-		= !(function_definition_decl_specifier_seq1 >> !s) >> declarator >> !s >> ctor_initializer >> !s >> compound_statement
-		| !(function_definition_decl_specifier_seq2 >> !s) >> declarator >> !s >> compound_statement
+		= !function_definition_decl_specifier_seq1 >> declarator >> ctor_initializer >> compound_statement
+		| !function_definition_decl_specifier_seq2 >> declarator >> compound_statement
 	;
 	try_block_function_definition
-		= !(function_definition_decl_specifier_seq3 >> !s) >> declarator >> !s >> function_try_block
+		= !function_definition_decl_specifier_seq3 >> declarator >> function_try_block
 	;
 	function_definition_decl_specifier_seq1
-		= (decl_specifier - (declarator >> !s >> ctor_initializer >> !s >> compound_statement)) % !s
+		= +(decl_specifier - (declarator >> ctor_initializer >> compound_statement))
 	;
 	function_definition_decl_specifier_seq2
-		= (decl_specifier - (declarator >> !s >> compound_statement)) % !s
+		= +(decl_specifier - (declarator >> compound_statement))
 	;
 	function_definition_decl_specifier_seq3
-		= (decl_specifier - (declarator >> !s >> function_try_block)) % !s
+		= +(decl_specifier - (declarator >> function_try_block))
 	;
 
 	initializer
@@ -1398,7 +1395,7 @@ grammar::grammar()
 	;
 
 	equal_initializer
-		= ch_p('=') >> !s >> initializer_clause
+		= ch_p('=') >> initializer_clause
 	;
 
 	initializer_clause
@@ -1407,42 +1404,39 @@ grammar::grammar()
 	;
 
 	initializer_list_initializer_clause
-		= ch_p('{') >> !s >> initializer_list >> !s >> !(ch_p(',') >> !s) >> ch_p('}')
-		| ch_p('{') >> !s >> ch_p('}')
+		= ch_p('{') >> initializer_list >> !ch_p(',') >> ch_p('}')
+		| ch_p('{') >> ch_p('}')
 	;
 
 	initializer_list
-		= initializer_clause % (!s >> ',' >> !s)
+		= initializer_clause % ','
 	;
 
 	//1.8 - Classes [gram.class]
 	class_specifier
-		= class_head >> !s >> '{' >> !s >> !(member_specification >> !s) >> '}'
+		= class_head >> '{' >> !member_specification >> '}'
 	;
 
 	class_head
-		= class_key >> !(!s >> nested_name_specifier) >> !s >> identifier_or_template_id >> !(!s >> base_clause)
-		| class_key >> !(!s >> base_clause)
+		= class_key >> !nested_name_specifier >> identifier_or_template_id >> !base_clause
+		| class_key >> !base_clause
 	;
 
 	class_key
-		= token_node_d
-		[
-			str_p("class")
-			| "struct"
-			| "union"
-		]
+		= str_p("class")
+		| "struct"
+		| "union"
 	;
 
 	member_specification
-		= member_specification_part % !s
+		= +member_specification_part
 	;
 	member_specification_part
 		= member_declaration
 		| member_specification_access_specifier
 	;
 	member_specification_access_specifier
-		= access_specifier >> !s >> ':'
+		= access_specifier >> ':'
 	;
 
 	member_declaration
@@ -1453,20 +1447,20 @@ grammar::grammar()
 		| template_declaration
 	;
 	member_declaration_member_declarator_list
-		= !(member_declaration_decl_specifier_seq >> !s) >> !(member_declarator_list >> !s) >> ch_p(';')
+		= !member_declaration_decl_specifier_seq >> !member_declarator_list >> ch_p(';')
 	;
 	member_declaration_unqualified_id
-		= !(str_p("::") >> !s) >> nested_name_specifier >> !s >> !(str_p("template") >> !s) >> unqualified_id >> !s >> ch_p(';')
+		= !str_p("::") >> nested_name_specifier >> !str_p("template") >> unqualified_id >> ch_p(';')
 	;
 	member_declaration_function_definition
-		= function_definition >> !(!s >> ch_p(';'))
+		= function_definition >> !ch_p(';')
 	;
 	member_declaration_decl_specifier_seq
-		= (decl_specifier - (member_declarator_list >> !s >> ch_p(';'))) % !s
+		= +(decl_specifier - (member_declarator_list >> ch_p(';')))
 	;
 
 	member_declarator_list
-		= member_declarator % (!s >> ',' >> !s)
+		= member_declarator % ','
 	;
 
 	member_declarator
@@ -1474,71 +1468,68 @@ grammar::grammar()
 		| member_declarator_bit_field_member
 	;
 	member_declarator_declarator
-		= declarator >> !(!s >> constant_initializer)
+		= declarator >> !constant_initializer
 	;
 	member_declarator_bit_field_member
-		= !(identifier >> !s) >> ':' >> !s >> conditional_expression
+		= !lexeme_d[identifier] >> ':' >> conditional_expression
 	;
 
 	constant_initializer
-		= '=' >> !s >> conditional_expression
+		= '=' >> conditional_expression
 	;
 
 	//convenience rule, not explicitly in the standard
 	destructor_name
-		= '~' >> !s >> identifier_or_template_id
+		= '~' >> identifier_or_template_id
 	;
 
 
 	//1.9 - Derived classes [gram.class.derived]
 	base_clause
-		= ':' >> !s >> base_specifier_list
+		= ':' >> base_specifier_list
 	;
 
 	base_specifier_list
-		= base_specifier % (!s >> ',' >> !s)
+		= base_specifier % ','
 	;
 
 	base_specifier
 		= nested_identifier_or_template_id
-		| "virtual" >> !s >> !(access_specifier >> !s) >> nested_identifier_or_template_id
-		| access_specifier >> !s >> !(str_p("virtual") >> !s) >> nested_identifier_or_template_id
+		| "virtual" >> !access_specifier >> nested_identifier_or_template_id
+		| access_specifier >> !str_p("virtual") >> nested_identifier_or_template_id
 	;
 
 	access_specifier
-		= token_node_d
-		[
-			str_p("private")
-			| "protected"
-			| "public"
-		]
+		= str_p("private")
+		| "protected"
+		| "public"
 	;
 
 	//1.10 - Special member functions [gram.special]
 	conversion_function_id
-		= str_p("operator") >> !s >> type_specifier_seq >> !(!s >> ptr_operator_seq)
+		= str_p("operator") >> type_specifier_seq >> !ptr_operator_seq
 	;
 
 	ctor_initializer
-		= ':' >> !s >> mem_initializer_list
+		= ':' >> mem_initializer_list
 	;
 
 	mem_initializer_list
-		= mem_initializer % (!s >> ',' >> !s)
+		= mem_initializer % ','
 	;
 
 	mem_initializer
-		= mem_initializer_id >> !s >> '(' >> !s >> !(expression >> !s) >> ')'
+		= mem_initializer_id >> '(' >> !expression >> ')'
 	;
 
 	mem_initializer_id
 		= nested_identifier_or_template_id
-		| identifier
+		| lexeme_d[identifier]
 	;
 
 	//1.11 - Overloading [gram.over]
 	operator_function_id
-		= str_p("operator") >> !s >> operator_
+		= str_p("operator") >> operator_
 	;
 
 	operator_
@@ -1552,11 +1543,11 @@ grammar::grammar()
 	;
 
 	new_array_operator
-		= str_p("new") >> !s >> '[' >> !s >> ']'
+		= str_p("new") >> '[' >> ']'
 	;
 
 	delete_array_operator
-		= str_p("delete") >> !s >> '[' >> !s >> ']'
+		= str_p("delete") >> '[' >> ']'
 	;
 
 	simple_operator
@@ -1604,11 +1595,11 @@ grammar::grammar()
 
 	//1.12 - Templates [gram.temp]
 	template_declaration
-		= !(str_p("export") >> !s) >> str_p("template") >> !s >> '<' >> !s >> template_parameter_list >> !s >> '>' >> !s >> declaration
+		= !str_p("export") >> str_p("template") >> '<' >> template_parameter_list >> '>' >> declaration
 	;
 
 	template_parameter_list
-		= template_parameter % (!s >> ',' >> !s)
+		= template_parameter % ','
 	;
 
 	template_parameter
@@ -1623,23 +1614,23 @@ grammar::grammar()
 	;
 
 	class_type_parameter
-		= str_p("class") >> !(!s >> identifier) >> !(!s >> '=' >> !s >> type_id)
+		= str_p("class") >> !lexeme_d[identifier] >> !('=' >> type_id)
 	;
 
 	typename_type_parameter
-		= str_p("typename") >> !(!s >> identifier) >> !(!s >> '=' >> !s >> type_id)
+		= str_p("typename") >> !lexeme_d[identifier] >> !('=' >> type_id)
 	;
 
 	template_type_parameter
-		= str_p("template") >> !s >> '<' >> !s >> template_parameter_list >> !s >> '>' >> !s >> str_p("class") >> !(!s >> identifier) >> !(!s >> '=' >> !s >> id_expression)
+		= str_p("template") >> '<' >> template_parameter_list >> '>' >> str_p("class") >> !lexeme_d[identifier] >> !('=' >> id_expression)
 	;
 
 	simple_template_id
-		= identifier >> !s >> '<' >> !s >> !(template_argument_list >> !s) >> '>'
+		= lexeme_d[identifier] >> '<' >> !template_argument_list >> '>'
 	;
 
 	operator_function_template_id
-		= operator_function_id >> !s >> '<' >> !s >> !(template_argument_list >> !s) >> '>'
+		= operator_function_id >> '<' >> !template_argument_list >> '>'
 	;
 
 	template_id
@@ -1648,7 +1639,7 @@ grammar::grammar()
 	;
 
 	template_argument_list
-		= template_argument % (!s >> ',' >> !s)
+		= template_argument % ','
 	;
 
 	template_argument
@@ -1661,28 +1652,28 @@ grammar::grammar()
 	;
 
 	explicit_instantiation
-		= !(str_p("extern") >> !s) >> str_p("template") >> !s >> declaration
+		= !str_p("extern") >> str_p("template") >> declaration
 	;
 
 	explicit_specialization
-		= str_p("template") >> !s >> '<' >> !s >> '>' >> !s >> declaration
+		= str_p("template") >> '<' >> '>' >> declaration
 	;
 
 	//1.13 - Exception handling [gram.except]
 	try_block
-		= str_p("try") >> !s >> compound_statement >> !s >> handler_seq
+		= str_p("try") >> compound_statement >> handler_seq
 	;
 
 	function_try_block
-		= str_p("try") >> !s >> !(ctor_initializer >> !s) >> compound_statement >> !s >> handler_seq
+		= str_p("try") >> !ctor_initializer >> compound_statement >> handler_seq
 	;
 
 	handler_seq
-		= handler % !s
+		= +handler
 	;
 
 	handler
-		= str_p("catch") >> !s >> '(' >> !s >> exception_declaration >> !s >> ')' >> !s >> compound_statement
+		= str_p("catch") >> '(' >> exception_declaration >> ')' >> compound_statement
 	;
 
 	exception_declaration
@@ -1693,23 +1684,23 @@ grammar::grammar()
 	;
 
 	exception_declarator
-		= type_specifier_seq >> !s >> declarator
+		= type_specifier_seq >> declarator
 	;
 
 	exception_abstract_declarator
-		= type_specifier_seq >> !s >> abstract_declarator
+		= type_specifier_seq >> abstract_declarator
 	;
 
 	throw_expression
-		= "throw" >> !(!s >> assignment_expression)
+		= "throw" >> !assignment_expression
 	;
 
 	exception_specification
-		= str_p("throw") >> !s >> '(' >> !s >> !(type_id_list >> !s) >> ')'
+		= str_p("throw") >> '(' >> !type_id_list >> ')'
 	;
 
 	type_id_list
-		= type_id % (!s >> ',' >> !s)
+		= type_id % ','
 	;
 
 
@@ -1718,11 +1709,11 @@ grammar::grammar()
 	*/
 	identifier_or_template_id
 		= template_id
-		| identifier
+		| lexeme_d[identifier]
 	;
 
 	nested_identifier_or_template_id
-		= !(str_p("::") >> !s) >> !(nested_name_specifier >> !s) >> identifier_or_template_id
+		= !str_p("::") >> !nested_name_specifier >> identifier_or_template_id
 	;
 }
 
@@ -1745,3 +1736,4 @@ grammar::get_start_rule() const
 }
 
 }}}} //namespace scalpel::cpp::syntax_analysis::detail
+

@@ -40,7 +40,6 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	expression_statement,
 	(optional_node<expression>)
-	(optional_node<space>)
 	(predefined_text_node<str::semicolon>)
 )
 
@@ -49,3 +48,4 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 #include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif
+

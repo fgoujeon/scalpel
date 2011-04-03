@@ -22,7 +22,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <cpp2xml/semantic_graph.hpp>
 #include <scalpel/cpp/linking.hpp>
 #include <scalpel/cpp/semantic_analysis.hpp>
-#include <scalpel/cpp/syntax_nodes/utility/value_getter.hpp>
 #include <boost/test/unit_test.hpp>
 #include <memory>
 #include <iostream>
@@ -32,7 +31,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <fstream>
 
 using namespace boost::spirit;
-using scalpel::cpp::syntax_nodes::utility::get_value;
 
 namespace analysis
 {
@@ -70,22 +68,6 @@ single_file_tester::parse_file(const std::string& filename)
 		std::cout << preprocessed_code;
 		std::cout << "\n***\n";
 		throw;
-	}
-
-	//check syntax analysis results
-	if(preprocessed_code != get_value(*tree))
-	{
-		std::cout << "Analysis error!\n";
-		std::cout << "Original content of " << filename << ":\n";
-		std::cout << "***\n";
-		std::cout << preprocessed_code;
-		std::cout << "\n***\n";
-		std::cout << "Analysis results:\n";
-		std::cout << "***\n";
-		std::cout << get_value(*tree);
-		std::cout << "\n***\n\n";
-
-		throw "Analysis error!";
 	}
 }
 

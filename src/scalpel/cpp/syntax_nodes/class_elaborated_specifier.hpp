@@ -39,11 +39,8 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	class_elaborated_specifier,
 	(class_key)
-	(optional_node<space>)
 	(optional_node<predefined_text_node<str::double_colon>>)
-	(optional_node<space>)
 	(optional_node<nested_name_specifier>)
-	(optional_node<space>)
 	(identifier_or_template_id)
 )
 
@@ -51,7 +48,7 @@ inline
 const identifier_or_template_id&
 get_identifier_or_template_id(const class_elaborated_specifier& o)
 {
-	return get<6>(o);
+	return get<3>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
@@ -59,3 +56,4 @@ get_identifier_or_template_id(const class_elaborated_specifier& o)
 #include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif
+

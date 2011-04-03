@@ -32,3 +32,4 @@ typedef list_node<type_specifier> type_specifier_seq;
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

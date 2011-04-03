@@ -140,9 +140,7 @@ BOOST_AUTO_TEST_CASE(test_case_1)
 				nested_name_specifier
 				(
 					identifier("C"),
-					space(""),
 					predefined_text_node<str::double_colon>(),
-					space(""),
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"n",
@@ -161,9 +159,7 @@ BOOST_AUTO_TEST_CASE(test_case_1)
 				nested_name_specifier
 				(
 					identifier("A"),
-					space(""),
 					predefined_text_node<str::double_colon>(),
-					space(""),
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"i",
@@ -196,9 +192,7 @@ BOOST_AUTO_TEST_CASE(test_case_1)
 				nested_name_specifier
 				(
 					identifier("A"),
-					space(""),
 					predefined_text_node<str::double_colon>(),
-					space(""),
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"C",

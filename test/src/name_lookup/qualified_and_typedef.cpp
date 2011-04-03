@@ -80,9 +80,7 @@ BOOST_AUTO_TEST_CASE(qualified_and_typedef)
 				nested_name_specifier
 				(
 					identifier("alias"),
-					space(""),
 					predefined_text_node<str::double_colon>(),
-					space(""),
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"integer",
@@ -102,9 +100,7 @@ BOOST_AUTO_TEST_CASE(qualified_and_typedef)
 				nested_name_specifier
 				(
 					identifier("cv_alias"),
-					space(""),
 					predefined_text_node<str::double_colon>(),
-					space(""),
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"integer",

@@ -29,7 +29,6 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
 	expression_statement,
 	(optional_node<expression>)
-	(optional_node<space>)
 	(predefined_text_node<str::semicolon>)
 )
 

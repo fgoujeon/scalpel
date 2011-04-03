@@ -97,9 +97,7 @@ BOOST_AUTO_TEST_CASE(test_case_10)
 				nested_name_specifier
 				(
 					identifier("as"),
-					space(""),
 					predefined_text_node<str::double_colon>(),
-					space(""),
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"i",
@@ -118,9 +116,7 @@ BOOST_AUTO_TEST_CASE(test_case_10)
 				nested_name_specifier
 				(
 					identifier("as2"),
-					space(""),
 					predefined_text_node<str::double_colon>(),
-					space(""),
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"i",

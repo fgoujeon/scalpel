@@ -45,3 +45,4 @@ SCALPEL_ALTERNATIVE_NODE_PIMPL_DECLARATION
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

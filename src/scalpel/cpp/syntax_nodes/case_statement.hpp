@@ -41,11 +41,8 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	case_statement,
 	(predefined_text_node<str::case_>)
-	(optional_node<space>)
 	(conditional_expression)
-	(optional_node<space>)
 	(predefined_text_node<str::colon>)
-	(optional_node<space>)
 	(statement)
 )
 

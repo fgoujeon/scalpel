@@ -29,17 +29,11 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
 	if_statement,
 	(predefined_text_node<str::if_>)
-	(optional_node<space>)
 	(predefined_text_node<str::opening_round_bracket>)
-	(optional_node<space>)
 	(condition)
-	(optional_node<space>)
 	(predefined_text_node<str::closing_round_bracket>)
-	(optional_node<space>)
 	(statement)
-	(optional_node<space>)
 	(optional_node<predefined_text_node<str::else_>>)
-	(optional_node<space>)
 	(optional_node<statement>)
 )
 

@@ -39,9 +39,7 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	classic_labeled_statement,
 	(identifier)
-	(optional_node<space>)
 	(predefined_text_node<str::colon>)
-	(optional_node<space>)
 	(statement)
 )
 
@@ -50,3 +48,4 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 #include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif
+

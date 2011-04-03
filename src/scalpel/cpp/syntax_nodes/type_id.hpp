@@ -37,7 +37,6 @@ typedef
 	sequence_node
 	<
 		type_specifier_seq,
-		optional_node<space>,
 		optional_node<abstract_declarator>
 	>
 	type_id
@@ -46,3 +45,4 @@ typedef
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

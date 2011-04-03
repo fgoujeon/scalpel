@@ -36,7 +36,6 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::double_colon>,
-		optional_node<space>,
 		template_id
 	>
 	qualified_template_id
@@ -46,9 +45,10 @@ inline
 const template_id&
 get_template_id(const qualified_template_id& o)
 {
-	return get<2>(o);
+	return get<1>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

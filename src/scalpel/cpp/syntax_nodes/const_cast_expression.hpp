@@ -32,17 +32,11 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::const_cast_>,
-		optional_node<space>,
 		predefined_text_node<str::left_angle_bracket>,
-		optional_node<space>,
 		type_id,
-		optional_node<space>,
 		predefined_text_node<str::right_angle_bracket>,
-		optional_node<space>,
 		predefined_text_node<str::opening_round_bracket>,
-		optional_node<space>,
 		expression,
-		optional_node<space>,
 		predefined_text_node<str::closing_round_bracket>
 	>
 	const_cast_expression
@@ -51,3 +45,4 @@ typedef
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

@@ -31,7 +31,6 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
 	assignment_expression,
 	(optional_node<assignment_expression_first_part_seq>)
-	(optional_node<space>)
 	(assignment_expression_last_part)
 )
 
@@ -39,7 +38,6 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
 	assignment_expression_first_part,
 	(logical_or_expression)
-	(optional_node<space>)
 	(assignment_operator)
 )
 

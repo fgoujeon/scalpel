@@ -53,9 +53,7 @@ create_namespace_alias
 			predefined_text_node<str::double_colon>() :
 			optional_node<predefined_text_node<str::double_colon>>()
 		,
-		space(""),
 		get_nested_name_specifier(qualified_namespace_specifier_node),
-		space(""),
 		get_identifier(qualified_namespace_specifier_node)
 	);
 

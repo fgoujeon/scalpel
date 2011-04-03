@@ -154,3 +154,4 @@ optional_node<T>::operator bool() const
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

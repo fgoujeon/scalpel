@@ -47,7 +47,7 @@ to_type_specifier_seq(const syntax_nodes::decl_specifier_seq& decl_specifier_seq
 		if(boost::optional<const type_specifier&> opt_type_specifier_node = get<type_specifier>(&decl_specifier_node))
 		{
 			const type_specifier& type_specifier_node = *opt_type_specifier_node;
-			type_specifier_seq_node.push_back(type_specifier_seq::item(space(""), space(""), type_specifier_node));
+			type_specifier_seq_node.push_back(type_specifier_seq::item(type_specifier_node));
 		}
 	}
 

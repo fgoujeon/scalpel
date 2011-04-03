@@ -30,13 +30,9 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
 	template_argument_conditional_expression,
 	(template_argument_logical_or_expression)
-	(optional_node<space>)
 	(optional_node<predefined_text_node<str::question_mark>>)
-	(optional_node<space>)
 	(optional_node<expression>)
-	(optional_node<space>)
 	(optional_node<predefined_text_node<str::colon>>)
-	(optional_node<space>)
 	(optional_node<template_argument_assignment_expression>)
 )
 

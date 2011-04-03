@@ -156,9 +156,7 @@ BOOST_AUTO_TEST_CASE(test_case_2)
 				nested_name_specifier
 				(
 					identifier("c1base"),
-					space(""),
 					predefined_text_node<str::double_colon>(),
-					space(""),
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"f",
@@ -176,9 +174,7 @@ BOOST_AUTO_TEST_CASE(test_case_2)
 				nested_name_specifier
 				(
 					identifier("c0"),
-					space(""),
 					predefined_text_node<str::double_colon>(),
-					space(""),
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"f",
@@ -195,14 +191,10 @@ BOOST_AUTO_TEST_CASE(test_case_2)
 		(
 			nested_name_specifier_last_part_seq::item
 			(
-				space(""),
-				space(""),
 				nested_name_specifier_last_part
 				(
 					optional_node<predefined_text_node<str::template_>>(),
-					optional_node<space>(),
 					identifier("inner"),
-					optional_node<space>(),
 					predefined_text_node<str::double_colon>()
 				)
 			)
@@ -215,9 +207,7 @@ BOOST_AUTO_TEST_CASE(test_case_2)
 				nested_name_specifier
 				(
 					identifier("c0"),
-					space(""),
 					predefined_text_node<str::double_colon>(),
-					space(""),
 					std::move(nested_name_specifier_last_part_seq_node)
 				),
 				"f",

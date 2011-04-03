@@ -35,8 +35,7 @@ arrow_pseudo_destructor_name
 typedef
 	sequence_node
 	<
-		predefined_text_node<str::arrow>,
-		optional_node<space>/*,
+		predefined_text_node<str::arrow>/*,
 		pseudo_destructor_name*/
 	>
 	arrow_pseudo_destructor_name

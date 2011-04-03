@@ -38,19 +38,12 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::typename_>,
-		optional_node<space>,
 		optional_node<predefined_text_node<str::double_colon>>,
-		optional_node<space>,
 		nested_name_specifier,
-		optional_node<space>,
 		optional_node<predefined_text_node<str::template_>>,
-		optional_node<space>,
 		template_id,
-		optional_node<space>,
 		predefined_text_node<str::opening_round_bracket>,
-		optional_node<space>,
 		optional_node<expression>,
-		optional_node<space>,
 		predefined_text_node<str::closing_round_bracket>
 	>
 	template_typename_expression
@@ -59,3 +52,4 @@ typedef
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

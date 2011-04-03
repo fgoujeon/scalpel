@@ -39,9 +39,7 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	try_block,
 	(predefined_text_node<str::try_>)
-	(optional_node<space>)
 	(compound_statement)
-	(optional_node<space>)
 	(handler_seq)
 )
 
@@ -49,14 +47,14 @@ inline
 const compound_statement&
 get_compound_statement(const try_block& o)
 {
-	return get<2>(o);
+	return get<1>(o);
 }
 
 inline
 const handler_seq&
 get_handler_seq(const try_block& o)
 {
-	return get<4>(o);
+	return get<2>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
@@ -64,3 +62,4 @@ get_handler_seq(const try_block& o)
 #include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif
+

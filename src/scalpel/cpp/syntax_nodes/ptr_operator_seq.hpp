@@ -32,3 +32,4 @@ typedef list_node<ptr_operator> ptr_operator_seq;
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

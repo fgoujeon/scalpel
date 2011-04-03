@@ -36,7 +36,6 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::double_colon>,
-		optional_node<space>,
 		identifier
 	>
 	qualified_identifier
@@ -46,9 +45,10 @@ inline
 const identifier&
 get_identifier(const qualified_identifier& o)
 {
-	return get<2>(o);
+	return get<1>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

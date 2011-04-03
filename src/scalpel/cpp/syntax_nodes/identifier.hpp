@@ -50,3 +50,4 @@ class identifier: public leaf_node
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

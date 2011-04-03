@@ -36,7 +36,6 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::equal>,
-		optional_node<space>,
 		conditional_expression
 	>
 	constant_initializer
@@ -45,3 +44,4 @@ typedef
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

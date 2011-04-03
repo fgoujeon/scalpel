@@ -30,11 +30,8 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
 	initializer_list_initializer_clause,
 	(predefined_text_node<str::opening_brace>)
-	(optional_node<space>)
 	(optional_node<initializer_list>)
-	(optional_node<space>)
 	(optional_node<predefined_text_node<str::comma>>)
-	(optional_node<space>)
 	(predefined_text_node<str::closing_brace>)
 )
 

@@ -34,7 +34,6 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
 	member_specification_access_specifier,
 	(access_specifier)
-	(optional_node<space>)
 	(predefined_text_node<str::colon>)
 )
 

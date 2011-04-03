@@ -29,9 +29,7 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
 	simple_declaration,
 	(optional_node<decl_specifier_seq>)
-	(optional_node<space>)
 	(optional_node<init_declarator_list>)
-	(optional_node<space>)
 	(predefined_text_node<str::semicolon>)
 )
 

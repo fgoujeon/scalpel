@@ -41,9 +41,7 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	enumerator_definition,
 	(identifier)
-	(optional_node<space>)
 	(optional_node<predefined_text_node<str::equal>>)
-	(optional_node<space>)
 	(optional_node<conditional_expression>)
 )
 
@@ -58,7 +56,7 @@ inline
 const optional_node<conditional_expression>&
 get_conditional_expression(const enumerator_definition& o)
 {
-	return get<4>(o);
+	return get<2>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

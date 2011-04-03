@@ -179,3 +179,4 @@ get(const SequenceNodeT& sequence)
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

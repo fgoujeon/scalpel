@@ -46,9 +46,7 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::opening_round_bracket>,
-		optional_node<space>,
 		type_id,
-		optional_node<space>,
 		predefined_text_node<str::closing_round_bracket>
 	>
 	cast_expression_first_part
@@ -66,7 +64,6 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	cast_expression,
 	(optional_node<cast_expression_first_part_seq>)
-	(optional_node<space>)
 	(unary_expression)
 )
 

@@ -40,7 +40,8 @@ syntax_analyzer::operator()(const std::string& input)
 	boost::spirit::tree_parse_info<> info = boost::spirit::pt_parse
 	(
 		input.c_str(),
-		grammar_.get_start_rule()
+		grammar_.get_start_rule(),
+		boost::spirit::space_p
 	);
 
 	//throw an exception if parsing fails

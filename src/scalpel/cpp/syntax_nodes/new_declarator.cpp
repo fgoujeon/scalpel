@@ -30,7 +30,6 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
 	new_declarator,
 	(optional_node<ptr_operator_seq>)
-	(optional_node<space>)
 	(optional_node<direct_new_declarator>)
 )
 

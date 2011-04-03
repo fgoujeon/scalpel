@@ -176,9 +176,7 @@ BOOST_AUTO_TEST_CASE(unnamed_namespaces)
 				nested_name_specifier
 				(
 					identifier("a"),
-					space(""),
 					predefined_text_node<str::double_colon>(),
-					space(""),
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				"i",

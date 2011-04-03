@@ -38,15 +38,10 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::using_>,
-		optional_node<space>,
 		predefined_text_node<str::namespace_>,
-		optional_node<space>,
 		optional_node<predefined_text_node<str::double_colon>>,
-		optional_node<space>,
 		optional_node<nested_name_specifier>,
-		optional_node<space>,
 		identifier,
-		optional_node<space>,
 		predefined_text_node<str::semicolon>
 	>
 	using_directive
@@ -56,23 +51,24 @@ inline
 bool
 has_leading_double_colon(const using_directive& o)
 {
-	return get<4>(o);
+	return get<2>(o);
 }
 
 inline
 const optional_node<nested_name_specifier>&
 get_nested_name_specifier(const using_directive& o)
 {
-	return get<6>(o);
+	return get<3>(o);
 }
 
 inline
 const identifier&
 get_identifier(const using_directive& o)
 {
-	return get<8>(o);
+	return get<4>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

@@ -33,9 +33,7 @@ typedef
 	sequence_node
 	<
 		optional_node<predefined_text_node<str::template_>>,
-		optional_node<space>,
 		identifier_or_template_id,
-		optional_node<space>,
 		predefined_text_node<str::double_colon>
 	>
 	nested_name_specifier_last_part
@@ -52,7 +50,7 @@ inline
 const identifier_or_template_id&
 get_identifier_or_template_id(const nested_name_specifier_last_part& o)
 {
-	return get<2>(o);
+	return get<1>(o);
 }
 
 
@@ -78,9 +76,7 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	nested_name_specifier,
 	(identifier_or_template_id)
-	(optional_node<space>)
 	(predefined_text_node<str::double_colon>)
-	(optional_node<space>)
 	(optional_node<nested_name_specifier_last_part_seq>)
 )
 
@@ -95,7 +91,7 @@ inline
 const optional_node<nested_name_specifier_last_part_seq>&
 get_last_part_seq(const nested_name_specifier& o)
 {
-	return get<4>(o);
+	return get<2>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
@@ -103,3 +99,4 @@ get_last_part_seq(const nested_name_specifier& o)
 #include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif
+

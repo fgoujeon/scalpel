@@ -38,19 +38,23 @@ typedef
 		const char*,
 		boost::spirit::scanner_policies
 		<
-			boost::spirit::iteration_policy,
+			boost::spirit::skip_parser_iteration_policy<boost::spirit::space_parser>,
 			boost::spirit::pt_match_policy
 			<
 				const char*,
-				boost::spirit::node_val_data_factory<boost::spirit::nil_t>,
-				boost::spirit::nil_t
-			>,
-			boost::spirit::action_policy
+				boost::spirit::node_val_data_factory<boost::spirit::nil_t>
+			>
 		>
 	>
 	scanner_t
 ;
 
+typedef
+	boost::spirit::lexeme_scanner<scanner_t>::type
+	lexeme_scanner_t
+;
+
 }}}} //namespace scalpel::cpp::syntax_analysis::detail
 
 #endif
+

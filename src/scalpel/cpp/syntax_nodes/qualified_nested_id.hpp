@@ -39,11 +39,8 @@ typedef
 	sequence_node
 	<
 		optional_node<predefined_text_node<str::double_colon>>,
-		optional_node<space>,
 		nested_name_specifier,
-		optional_node<space>,
 		optional_node<predefined_text_node<str::template_>>,
-		optional_node<space>,
 		unqualified_id
 	>
 	qualified_nested_id
@@ -60,23 +57,24 @@ inline
 const nested_name_specifier&
 get_nested_name_specifier(const qualified_nested_id& o)
 {
-	return get<2>(o);
+	return get<1>(o);
 }
 
 inline
 bool
 has_template_keyword(const qualified_nested_id& o)
 {
-	return get<4>(o);
+	return get<2>(o);
 }
 
 inline
 const unqualified_id&
 get_unqualified_id(const qualified_nested_id& o)
 {
-	return get<6>(o);
+	return get<3>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

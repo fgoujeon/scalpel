@@ -29,11 +29,8 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
 	explicit_specialization,
 	(predefined_text_node<str::template_>)
-	(optional_node<space>)
 	(predefined_text_node<str::left_angle_bracket>)
-	(optional_node<space>)
 	(predefined_text_node<str::right_angle_bracket>)
-	(optional_node<space>)
 	(declaration)
 )
 

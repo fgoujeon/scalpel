@@ -39,7 +39,6 @@ typedef
 	sequence_node
 	<
 		unary_operator,
-		optional_node<space>,
 		cast_expression
 	>
 	unary_operator_unary_expression
@@ -48,3 +47,4 @@ typedef
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

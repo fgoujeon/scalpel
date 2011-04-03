@@ -37,13 +37,9 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::catch_>,
-		optional_node<space>,
 		predefined_text_node<str::opening_round_bracket>,
-		optional_node<space>,
 		exception_declaration,
-		optional_node<space>,
 		predefined_text_node<str::closing_round_bracket>,
-		optional_node<space>,
 		compound_statement
 	>
 	handler
@@ -53,9 +49,10 @@ inline
 const compound_statement&
 get_compound_statement(const handler& o)
 {
-	return get<8>(o);
+	return get<4>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

@@ -101,3 +101,4 @@ extern const leaf_node while_keyword;
 }}}} //namespace scalpel::cpp::syntax_nodes::common_nodes
 
 #endif
+

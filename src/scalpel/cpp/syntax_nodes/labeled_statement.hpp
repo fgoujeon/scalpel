@@ -45,3 +45,4 @@ SCALPEL_ALTERNATIVE_NODE_PIMPL_DECLARATION
 #include "detail/macros/alternative_node_pimpl_declaration_undef.hpp"
 
 #endif
+

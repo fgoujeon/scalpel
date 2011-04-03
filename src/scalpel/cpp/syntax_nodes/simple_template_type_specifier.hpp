@@ -37,11 +37,8 @@ typedef
 	sequence_node
 	<
 		optional_node<predefined_text_node<str::double_colon>>,
-		optional_node<space>,
 		nested_name_specifier,
-		optional_node<space>,
 		predefined_text_node<str::template_>,
-		optional_node<space>,
 		template_id
 	>
 	simple_template_type_specifier
@@ -50,3 +47,4 @@ typedef
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

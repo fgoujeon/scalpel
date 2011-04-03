@@ -30,7 +30,6 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
 	unary_sizeof_expression,
 	(predefined_text_node<str::sizeof_>)
-	(optional_node<space>)
 	(unary_expression)
 )
 

@@ -38,9 +38,7 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	explicit_instantiation,
 	(optional_node<predefined_text_node<str::extern_>>)
-	(optional_node<space>)
 	(predefined_text_node<str::template_>)
-	(optional_node<space>)
 	(declaration)
 )
 
@@ -49,3 +47,4 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 #include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif
+

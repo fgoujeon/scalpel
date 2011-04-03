@@ -56,3 +56,4 @@ const std::string& predefined_text_node<Text>::text_ = Text;
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

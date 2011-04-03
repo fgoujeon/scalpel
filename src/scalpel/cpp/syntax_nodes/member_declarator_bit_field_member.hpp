@@ -37,9 +37,7 @@ typedef
 	sequence_node
 	<
 		optional_node<identifier>,
-		optional_node<space>,
 		predefined_text_node<str::colon>,
-		optional_node<space>,
 		conditional_expression
 	>
 	member_declarator_bit_field_member
@@ -48,3 +46,4 @@ typedef
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

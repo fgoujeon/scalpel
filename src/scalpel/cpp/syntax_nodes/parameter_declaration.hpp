@@ -45,12 +45,9 @@ typedef
 	sequence_node
 	<
 		decl_specifier_seq,
-		optional_node<space>,
 		optional_node<declarator>,
 		optional_node<abstract_declarator>,
-		optional_node<space>,
 		optional_node<predefined_text_node<str::equal>>,
-		optional_node<space>,
 		optional_node<assignment_expression>
 	>
 	parameter_declaration
@@ -67,16 +64,17 @@ inline
 const optional_node<declarator>&
 get_declarator(const parameter_declaration& o)
 {
-	return get<2>(o);
+	return get<1>(o);
 }
 
 inline
 const optional_node<abstract_declarator>&
 get_abstract_declarator(const parameter_declaration& o)
 {
-	return get<3>(o);
+	return get<2>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

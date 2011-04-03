@@ -32,3 +32,4 @@ typedef list_node<statement> statement_seq;
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

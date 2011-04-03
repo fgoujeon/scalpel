@@ -37,9 +37,7 @@ typedef
 	sequence_node
 	<
 		optional_node<decl_specifier_seq>,
-		optional_node<space>,
 		optional_node<member_declarator_list>,
-		optional_node<space>,
 		predefined_text_node<str::semicolon>
 	>
 	member_declaration_member_declarator_list
@@ -56,9 +54,10 @@ inline
 const optional_node<member_declarator_list>&
 get_member_declarator_list(const member_declaration_member_declarator_list& o)
 {
-	return get<2>(o);
+	return get<1>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

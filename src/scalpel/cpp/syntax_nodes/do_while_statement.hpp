@@ -37,17 +37,11 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::do_>,
-		optional_node<space>,
 		statement,
-		optional_node<space>,
 		predefined_text_node<str::while_>,
-		optional_node<space>,
 		predefined_text_node<str::opening_round_bracket>,
-		optional_node<space>,
 		expression,
-		optional_node<space>,
 		predefined_text_node<str::closing_round_bracket>,
-		optional_node<space>,
 		predefined_text_node<str::semicolon>
 	>
 	do_while_statement
@@ -57,9 +51,10 @@ inline
 const statement&
 get_statement(const do_while_statement& o)
 {
-	return get<2>(o);
+	return get<1>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

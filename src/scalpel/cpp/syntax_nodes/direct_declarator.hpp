@@ -65,13 +65,9 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::opening_round_bracket>,
-		optional_node<space>,
 		optional_node<parameter_declaration_clause>,
-		optional_node<space>,
 		predefined_text_node<str::closing_round_bracket>,
-		optional_node<space>,
 		optional_node<cv_qualifier_seq>,
-		optional_node<space>,
 		optional_node<exception_specification>
 	>
 	direct_declarator_function_part
@@ -81,14 +77,14 @@ inline
 const optional_node<parameter_declaration_clause>&
 get_parameter_declaration_clause(const direct_declarator_function_part& o)
 {
-	return get<2>(o);
+	return get<1>(o);
 }
 
 inline
 const optional_node<cv_qualifier_seq>&
 get_cv_qualifier_seq(const direct_declarator_function_part& o)
 {
-	return get<6>(o);
+	return get<3>(o);
 }
 
 
@@ -96,9 +92,7 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::opening_square_bracket>,
-		optional_node<space>,
 		optional_node<conditional_expression>,
-		optional_node<space>,
 		predefined_text_node<str::closing_square_bracket>
 	>
 	direct_declarator_array_part
@@ -108,7 +102,7 @@ inline
 const optional_node<conditional_expression>&
 get_conditional_expression(const direct_declarator_array_part& o)
 {
-	return get<2>(o);
+	return get<1>(o);
 }
 
 
@@ -143,7 +137,6 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	direct_declarator,
 	(direct_declarator_first_part)
-	(optional_node<space>)
 	(optional_node<direct_declarator_last_part_seq>)
 )
 
@@ -158,7 +151,7 @@ inline
 const optional_node<direct_declarator_last_part_seq>&
 get_last_part_seq(const direct_declarator& o)
 {
-	return get<2>(o);
+	return get<1>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
@@ -166,3 +159,4 @@ get_last_part_seq(const direct_declarator& o)
 #include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif
+

@@ -56,3 +56,4 @@ struct initializer_list: public initializer_list_t
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

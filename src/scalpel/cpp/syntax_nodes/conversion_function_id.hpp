@@ -39,9 +39,7 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::operator_>,
-		optional_node<space>,
 		type_specifier_seq,
-		optional_node<space>,
 		optional_node<ptr_operator_seq>
 	>
 	conversion_function_id
@@ -51,14 +49,14 @@ inline
 const type_specifier_seq&
 get_type_specifier_seq(const conversion_function_id& o)
 {
-	return get<2>(o);
+	return get<1>(o);
 }
 
 inline
 const optional_node<ptr_operator_seq>&
 get_ptr_operator_seq(const conversion_function_id& o)
 {
-	return get<4>(o);
+	return get<2>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

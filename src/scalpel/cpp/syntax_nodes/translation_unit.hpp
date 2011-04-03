@@ -37,9 +37,7 @@ translation_unit
 typedef
 	sequence_node
 	<
-		optional_node<space>,
-		optional_node<declaration_seq>,
-		optional_node<space>
+		optional_node<declaration_seq>
 	>
 	translation_unit
 ;
@@ -48,9 +46,10 @@ inline
 const optional_node<declaration_seq>&
 get_declaration_seq(const translation_unit& o)
 {
-	return get<1>(o);
+	return get<0>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

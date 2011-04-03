@@ -21,7 +21,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_DECLARATOR_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_DECLARATOR_HPP
 
-#include "space.hpp"
 #include "ptr_operator.hpp"
 #include "list_node.hpp"
 #include "common.hpp"
@@ -46,7 +45,6 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	declarator,
 	(optional_node<ptr_operator_seq>)
-	(optional_node<space>)
 	(direct_declarator)
 )
 

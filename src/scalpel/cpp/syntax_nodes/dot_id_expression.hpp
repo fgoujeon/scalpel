@@ -38,9 +38,7 @@ typedef
 	sequence_node
 	<
 		predefined_text_node<str::dot>,
-		optional_node<space>,
 		optional_node<predefined_text_node<str::template_>>,
-		optional_node<space>,
 		id_expression
 	>
 	dot_id_expression
@@ -49,3 +47,4 @@ typedef
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

@@ -29,11 +29,8 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
 	class_specifier,
 	(class_head)
-	(optional_node<space>)
 	(predefined_text_node<str::opening_brace>)
-	(optional_node<space>)
 	(optional_node<member_specification>)
-	(optional_node<space>)
 	(predefined_text_node<str::closing_brace>)
 )
 

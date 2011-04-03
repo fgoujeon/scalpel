@@ -31,7 +31,6 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
 	declarator,
 	(optional_node<ptr_operator_seq>)
-	(optional_node<space>)
 	(direct_declarator)
 )
 
@@ -44,9 +43,10 @@ get_ptr_operator_seq(const declarator& o)
 const direct_declarator&
 get_direct_declarator(const declarator& o)
 {
-	return get<2>(o);
+	return get<1>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #include "detail/macros/sequence_node_pimpl_definition_undef.hpp"
+

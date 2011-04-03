@@ -125,9 +125,7 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 				nested_name_specifier
 				(
 					identifier("c"),
-					space(""),
 					predefined_text_node<str::double_colon>(),
-					space(""),
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				scalpel::cpp::semantic_entities::overloadable_operator::PLUS,
@@ -147,9 +145,7 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 				nested_name_specifier
 				(
 					identifier("c"),
-					space(""),
 					predefined_text_node<str::double_colon>(),
-					space(""),
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				0,
@@ -169,9 +165,7 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 				nested_name_specifier
 				(
 					identifier("c"),
-					space(""),
 					predefined_text_node<str::double_colon>(),
-					space(""),
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				0,
@@ -191,9 +185,7 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 				nested_name_specifier
 				(
 					identifier("c"),
-					space(""),
 					predefined_text_node<str::double_colon>(),
-					space(""),
 					optional_node<nested_name_specifier_last_part_seq>()
 				),
 				pointer(fundamental_type::INT),

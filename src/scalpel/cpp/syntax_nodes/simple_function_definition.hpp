@@ -41,11 +41,8 @@ typedef
 	sequence_node
 	<
 		optional_node<decl_specifier_seq>,
-		optional_node<space>,
 		declarator,
-		optional_node<space>,
 		optional_node<ctor_initializer>,
-		optional_node<space>,
 		compound_statement
 	>
 	simple_function_definition
@@ -62,16 +59,17 @@ inline
 const declarator&
 get_declarator(const simple_function_definition& o)
 {
-	return get<2>(o);
+	return get<1>(o);
 }
 
 inline
 const compound_statement&
 get_compound_statement(const simple_function_definition& o)
 {
-	return get<6>(o);
+	return get<3>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
+

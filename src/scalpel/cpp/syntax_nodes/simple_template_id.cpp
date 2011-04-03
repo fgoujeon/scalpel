@@ -30,11 +30,8 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
 	simple_template_id,
 	(identifier)
-	(optional_node<space>)
 	(predefined_text_node<str::left_angle_bracket>)
-	(optional_node<space>)
 	(optional_node<template_argument_list>)
-	(optional_node<space>)
 	(predefined_text_node<str::right_angle_bracket>)
 )
 

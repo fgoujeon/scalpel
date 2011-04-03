@@ -38,13 +38,9 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	while_statement,
 	(predefined_text_node<str::while_>)
-	(optional_node<space>)
 	(predefined_text_node<str::opening_round_bracket>)
-	(optional_node<space>)
 	(condition)
-	(optional_node<space>)
 	(predefined_text_node<str::closing_round_bracket>)
-	(optional_node<space>)
 	(statement)
 )
 
@@ -53,3 +49,4 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 #include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif
+

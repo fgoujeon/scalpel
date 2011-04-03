@@ -38,15 +38,10 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	direct_new_declarator,
 	(predefined_text_node<str::opening_square_bracket>)
-	(optional_node<space>)
 	(expression)
-	(optional_node<space>)
 	(predefined_text_node<str::closing_square_bracket>)
-	(optional_node<space>)
 	(optional_node<predefined_text_node<str::opening_square_bracket>>)
-	(optional_node<space>)
 	(optional_node<conditional_expression>)
-	(optional_node<space>)
 	(optional_node<predefined_text_node<str::closing_square_bracket>>)
 )
 
@@ -55,3 +50,4 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 #include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif
+
