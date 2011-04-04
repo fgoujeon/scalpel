@@ -152,6 +152,18 @@ CLASS_NAME::variables() const \
 	return variables_; \
 } \
  \
+CLASS_NAME::bit_fields_t::range \
+CLASS_NAME::bit_fields() \
+{ \
+	return bit_fields_; \
+} \
+ \
+const CLASS_NAME::bit_fields_t& \
+CLASS_NAME::bit_fields() const \
+{ \
+	return bit_fields_; \
+} \
+ \
 void \
 CLASS_NAME::add_base_class(const base_class& bc) \
 { \
@@ -235,6 +247,13 @@ CLASS_NAME::add_member(std::unique_ptr<member_variable>&& member) \
 { \
 	member->enclosing_declarative_region(this); \
     variables_.push_back(std::move(member)); \
+} \
+ \
+void \
+CLASS_NAME::add_member(std::unique_ptr<bit_field>&& member) \
+{ \
+	member->enclosing_declarative_region(this); \
+    bit_fields_.push_back(std::move(member)); \
 }
 
 namespace scalpel { namespace cpp { namespace semantic_entities

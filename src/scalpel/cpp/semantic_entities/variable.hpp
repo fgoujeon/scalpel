@@ -29,15 +29,21 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <memory>
 
-#define GENERATE_VARIABLE_DECLARATION(CLASS_NAME, IS_MEMBER) \
+#define GENERATE_VARIABLE_DECLARATION( \
+	CLASS_NAME, \
+	IS_MEMBER, \
+	HAS_STATIC, \
+	HAS_SIZE \
+) \
 class CLASS_NAME \
 { \
 	public: \
 		CLASS_NAME \
 		( \
 			const std::string& name, \
-			const type_variant& type, \
-			bool is_static = false BOOST_PP_COMMA_IF(IS_MEMBER) \
+			const type_variant& type BOOST_PP_COMMA_IF(HAS_SIZE) \
+			BOOST_PP_IIF(HAS_SIZE, unsigned int size,) BOOST_PP_COMMA_IF(HAS_STATIC) \
+			BOOST_PP_IIF(HAS_STATIC, bool is_static = false,) BOOST_PP_COMMA_IF(IS_MEMBER) \
 			BOOST_PP_IIF(IS_MEMBER, const bool is_mutable = false,) BOOST_PP_COMMA_IF(IS_MEMBER) \
 			BOOST_PP_IIF(IS_MEMBER, const member_access access = member_access::PUBLIC,) \
 		); \
@@ -59,11 +65,25 @@ class CLASS_NAME \
 			return name_; \
 		} \
  \
-		bool \
-		is_static() const \
-		{ \
-			return is_static_; \
-		} \
+		BOOST_PP_IIF \
+		( \
+			HAS_SIZE, \
+			unsigned int \
+			size() const \
+			{ \
+				return size_; \
+			}, \
+		) \
+ \
+		BOOST_PP_IIF \
+		( \
+			HAS_STATIC, \
+			bool \
+			is_static() const \
+			{ \
+				return is_static_; \
+			}, \
+		) \
  \
 		BOOST_PP_IIF \
 		( \
@@ -88,7 +108,16 @@ class CLASS_NAME \
 	private: \
 		type_variant type_; \
 		std::string name_; \
-		bool is_static_; \
+		BOOST_PP_IIF \
+		( \
+			HAS_SIZE, \
+			unsigned int size_;, \
+		) \
+		BOOST_PP_IIF \
+		( \
+			HAS_STATIC, \
+			bool is_static_;, \
+		) \
 		BOOST_PP_IIF \
 		( \
 			IS_MEMBER, \
@@ -121,8 +150,9 @@ typedef
 	member_variable_declarative_region_member_impl_t
 ;
 
-GENERATE_VARIABLE_DECLARATION(variable, 0)
-GENERATE_VARIABLE_DECLARATION(member_variable, 1)
+GENERATE_VARIABLE_DECLARATION(variable, 0, 1, 0)
+GENERATE_VARIABLE_DECLARATION(member_variable, 1, 1, 0)
+GENERATE_VARIABLE_DECLARATION(bit_field, 1, 0, 1)
 
 }}} //namespace scalpel::cpp::semantic_entities
 

@@ -50,6 +50,7 @@ class CLASS_NAME \
 		typedef utility::unique_ptr_vector<conversion_function> conversion_functions_t; \
 		typedef utility::unique_ptr_vector<simple_member_function> simple_functions_t; \
 		typedef utility::unique_ptr_vector<member_variable> variables_t; \
+		typedef utility::unique_ptr_vector<bit_field> bit_fields_t; \
  \
 	public: \
         explicit \
@@ -149,6 +150,12 @@ class CLASS_NAME \
 		const variables_t& \
 		variables() const; \
  \
+		bit_fields_t::range \
+		bit_fields(); \
+ \
+		const bit_fields_t& \
+		bit_fields() const; \
+ \
         void \
         add_base_class(const base_class& bc); \
  \
@@ -185,6 +192,9 @@ class CLASS_NAME \
 		void \
 		add_member(std::unique_ptr<member_variable>&& member); \
  \
+		void \
+		add_member(std::unique_ptr<bit_field>&& member); \
+ \
     private: \
         std::string name_; \
 		BOOST_PP_IIF \
@@ -204,6 +214,7 @@ class CLASS_NAME \
 		operator_functions_t operator_functions_; \
 		conversion_functions_t conversion_functions_; \
 		variables_t variables_; \
+		bit_fields_t bit_fields_; \
  \
 		BOOST_PP_IIF \
 		( \
@@ -226,6 +237,7 @@ class operator_member_function;
 class conversion_function;
 class simple_member_function;
 class member_variable;
+class bit_field;
 
 typedef
 	impl::detail::declarative_region_member_impl<namespace_, unnamed_namespace, linked_namespace, linked_unnamed_namespace>

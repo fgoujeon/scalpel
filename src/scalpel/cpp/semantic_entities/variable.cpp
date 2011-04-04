@@ -51,5 +51,21 @@ member_variable::member_variable
 {
 }
 
+bit_field::bit_field
+(
+	const std::string& name,
+	const type_variant& type,
+	const unsigned int size,
+	const bool is_mutable,
+	const member_access access
+):
+	type_(type),
+	name_(name),
+	size_(size),
+	is_mutable_(is_mutable),
+	access_(access)
+{
+}
+
 }}} //namespace scalpel::cpp::semantic_entities
 

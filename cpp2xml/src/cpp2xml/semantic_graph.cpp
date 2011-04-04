@@ -379,6 +379,9 @@ semantic_graph_serializer::serialize_class
 	for(auto i = entity.variables().begin(); i != entity.variables().end(); ++i)
 		serialize_variable(*i, indent_level + 1);
 
+	for(auto i = entity.bit_fields().begin(); i != entity.bit_fields().end(); ++i)
+		serialize_bit_field(*i, indent_level + 1);
+
 	output_ << indent(indent_level) << "</class>\n";
 }
 
@@ -431,6 +434,9 @@ semantic_graph_serializer::serialize_class
 
 	for(auto i = entity.variables().begin(); i != entity.variables().end(); ++i)
 		serialize_variable(*i, indent_level + 1);
+
+	for(auto i = entity.bit_fields().begin(); i != entity.bit_fields().end(); ++i)
+		serialize_bit_field(*i, indent_level + 1);
 
 	output_ << indent(indent_level) << "</class>\n";
 }
@@ -804,6 +810,26 @@ semantic_graph_serializer::serialize_variable
 	serialize_type(entity.type(), indent_level + 2);
 	output_ << indent(indent_level + 1) << "</type>\n";
 	output_ << indent(indent_level) << "</variable>\n";
+}
+
+void
+semantic_graph_serializer::serialize_bit_field
+(
+	const bit_field& entity,
+	const unsigned int indent_level
+)
+{
+	output_ << indent(indent_level) << "<bit_field";
+	output_ << " name=\"" << entity.name() << "\"";
+	output_ << " size=\"" << entity.size() << "\"";
+	output_ << attribute(entity.access());
+	if(entity.is_mutable())
+		output_ << " mutable=\"true\"";
+	output_ << ">\n";
+	output_ << indent(indent_level + 1) << "<type>\n";
+	serialize_type(entity.type(), indent_level + 2);
+	output_ << indent(indent_level + 1) << "</type>\n";
+	output_ << indent(indent_level) << "</bit_field>\n";
 }
 
 void

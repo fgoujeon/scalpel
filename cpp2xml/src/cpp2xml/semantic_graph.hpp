@@ -220,6 +220,13 @@ class semantic_graph_serializer
 		);
 
 		void
+		serialize_bit_field
+		(
+			const bit_field& entity,
+			const unsigned int indent_level
+		);
+
+		void
 		serialize_namespace_alias
 		(
 			const namespace_alias& entity,
