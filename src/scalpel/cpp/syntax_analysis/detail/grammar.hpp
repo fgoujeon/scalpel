@@ -36,10 +36,6 @@ namespace scalpel { namespace cpp { namespace syntax_analysis { namespace detail
 class grammar
 {
     public:
-        struct configuration
-        {
-        };
-
         enum parser_id
         {
             FILE,
@@ -341,12 +337,6 @@ class grammar
 
         const boost::spirit::rule<scanner_t>&
         get_start_rule() const;
-
-        const configuration&
-        get_configuration() const;
-
-        void
-        set_configuration(const configuration& a_configuration);
 
     private:
         /*
@@ -674,12 +664,6 @@ class grammar
         */
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::IDENTIFIER_OR_TEMPLATE_ID>> identifier_or_template_id;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::NESTED_IDENTIFIER_OR_TEMPLATE_ID>> nested_identifier_or_template_id;
-
-
-        /*
-        Others
-        */
-        configuration configuration_;
 };
 
 }}}} //namespace scalpel::cpp::syntax_analysis::detail

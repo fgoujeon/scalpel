@@ -1663,7 +1663,7 @@ grammar::grammar()
 		type_template< a & b > t; //(2) assignment_expression
 	*/
 	template_argument
-		= template_argument_assignment_expression - (nested_identifier_or_template_id >> (ch_p('*') | '&'))
+		= (template_argument_assignment_expression - (nested_identifier_or_template_id >> (ch_p('*') | '&')))
 		| type_id
 		| id_expression
 		| template_argument_assignment_expression
@@ -1733,18 +1733,6 @@ grammar::grammar()
 	nested_identifier_or_template_id
 		= !str_p("::") >> !nested_name_specifier >> identifier_or_template_id
 	;
-}
-
-const grammar::configuration&
-grammar::get_configuration() const
-{
-	return configuration_;
-}
-
-void
-grammar::set_configuration(const configuration& a_configuration)
-{
-	configuration_ = a_configuration;
 }
 
 const boost::spirit::rule<scanner_t>&
