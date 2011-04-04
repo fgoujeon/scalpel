@@ -74,7 +74,7 @@ get_declarator_type(const syntax_nodes::declarator& declarator_node)
 
 		for(auto j = last_part_seq_node.begin(); j != last_part_seq_node.end(); ++j)
 		{
-			const direct_declarator_last_part& last_part_node = j->main_node();
+			const direct_declarator_last_part& last_part_node = *j;
 
 			if(get<direct_declarator_function_part>(&last_part_node))
 			{
@@ -155,7 +155,7 @@ get_parameter_declaration_list(const syntax_nodes::direct_declarator_last_part_s
 {
 	for(auto i = last_part_seq_node.begin(); i != last_part_seq_node.end(); ++i)
 	{
-		const direct_declarator_last_part& last_part_node = i->main_node();
+		const direct_declarator_last_part& last_part_node = *i;
 		return get_parameter_declaration_list(last_part_node);
 	}
 
@@ -205,7 +205,7 @@ has_ellipsis(const syntax_nodes::direct_declarator_last_part_seq& last_part_seq_
 {
 	for(auto i = last_part_seq_node.begin(); i != last_part_seq_node.end(); ++i)
 	{
-		const direct_declarator_last_part& last_part_node = i->main_node();
+		const direct_declarator_last_part& last_part_node = *i;
 		return has_ellipsis(last_part_node);
 	}
 
@@ -468,7 +468,7 @@ has_const_function_qualifier(const syntax_nodes::direct_declarator_last_part_seq
 {
 	for(auto i = last_part_seq_node.begin(); i != last_part_seq_node.end(); ++i)
 	{
-		const direct_declarator_last_part& last_part_node = i->main_node();
+		const direct_declarator_last_part& last_part_node = *i;
 		return has_const_function_qualifier(last_part_node);
 	}
 
@@ -488,7 +488,7 @@ has_const_function_qualifier(const syntax_nodes::direct_declarator_last_part& la
 
 			for(auto j = cv_qualifier_seq_node.begin(); j != cv_qualifier_seq_node.end(); ++j)
 			{
-				const cv_qualifier& cv_qualifier_node = j->main_node();
+				const cv_qualifier& cv_qualifier_node = *j;
 
 				if(get<predefined_text_node<str::const_>>(&cv_qualifier_node))
 					return true;
@@ -517,7 +517,7 @@ has_volatile_function_qualifier(const syntax_nodes::direct_declarator_last_part_
 {
 	for(auto i = last_part_seq_node.begin(); i != last_part_seq_node.end(); ++i)
 	{
-		const direct_declarator_last_part& last_part_node = i->main_node();
+		const direct_declarator_last_part& last_part_node = *i;
 		return has_volatile_function_qualifier(last_part_node);
 	}
 
@@ -537,7 +537,7 @@ has_volatile_function_qualifier(const syntax_nodes::direct_declarator_last_part&
 
 			for(auto j = cv_qualifier_seq_node.begin(); j != cv_qualifier_seq_node.end(); ++j)
 			{
-				const cv_qualifier& cv_qualifier_node = j->main_node();
+				const cv_qualifier& cv_qualifier_node = *j;
 
 				if(get<predefined_text_node<str::volatile_>>(&cv_qualifier_node))
 					return true;
@@ -575,7 +575,7 @@ has_type_qualifiers(const syntax_nodes::declarator& declarator_node)
 			++i
 		)
 		{
-			auto last_part_node = i->main_node();
+			auto last_part_node = *i;
 			if(auto opt_array_part_node = syntax_nodes::get<syntax_nodes::direct_declarator_array_part>(&last_part_node))
 			{
 				return true;
@@ -616,7 +616,7 @@ get_ptr_to_member_operator(const syntax_nodes::declarator& declarator_node)
 			const ptr_operator_seq& ptr_operator_seq_node = *opt_ptr_operator_seq_node;
 			for(auto i = ptr_operator_seq_node.begin(); i != ptr_operator_seq_node.end(); ++i)
 			{
-				const ptr_operator& ptr_operator_node = i->main_node();
+				const ptr_operator& ptr_operator_node = *i;
 				if(const boost::optional<const ptr_ptr_operator&> opt_ptr_ptr_operator_node = get<ptr_ptr_operator>(&ptr_operator_node))
 				{
 					const ptr_ptr_operator& ptr_ptr_operator_node = *opt_ptr_ptr_operator_node;

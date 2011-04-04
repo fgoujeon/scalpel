@@ -46,7 +46,7 @@ get_type_specifier_seq_type(const syntax_nodes::type_specifier_seq& type_specifi
 
 	for(auto i = type_specifier_seq_node.begin(); i != type_specifier_seq_node.end(); ++i)
 	{
-		auto type_specifier_node = i->main_node();
+		auto type_specifier_node = *i;
 
 		if(get<simple_type_specifier>(&type_specifier_node))
 		{

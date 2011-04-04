@@ -409,7 +409,7 @@ create_parameters
 		++j
 	)
 	{
-		auto parameter_declaration_node = j->main_node();
+		auto parameter_declaration_node = *j;
 		auto decl_specifier_seq_node = get_decl_specifier_seq(parameter_declaration_node);
 
 		semantic_entities::type_variant type =

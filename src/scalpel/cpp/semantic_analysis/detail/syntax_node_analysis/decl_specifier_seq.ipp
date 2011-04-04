@@ -37,7 +37,7 @@ has_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node)
 		++i
 	)
 	{
-		const decl_specifier& decl_specifier_node = i->main_node();
+		const decl_specifier& decl_specifier_node = *i;
 
 		if(auto opt_specifier_node = get<SpecifierNodeT>(&decl_specifier_node))
 		{

@@ -95,7 +95,7 @@ namespace list_node_check
 	template<class T>
 	static
 	yes_type
-	check_sig(typename T::item*);
+	check_sig(typename T::nodes_t*);
 
 	template<class T>
 	static

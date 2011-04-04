@@ -125,7 +125,7 @@ find_class
 	//get the last identifier
 	identifier_or_template_id nested_name_specifier_last_identifier =
 		opt_last_part_seq_node ?
-		get_identifier_or_template_id((*opt_last_part_seq_node)[opt_last_part_seq_node->size() - 1].main_node()) :
+		get_identifier_or_template_id((*opt_last_part_seq_node)[opt_last_part_seq_node->size() - 1]) :
 		get_identifier_or_template_id(nested_name_specifier_node)
 	;
 
@@ -140,10 +140,7 @@ find_class
 		{
 			new_last_part_seq_node.push_back
 			(
-				nested_name_specifier_last_part_seq::item
-				(
-					last_part_seq_node[i].main_node()
-				)
+				last_part_seq_node[i]
 			);
 		}
 

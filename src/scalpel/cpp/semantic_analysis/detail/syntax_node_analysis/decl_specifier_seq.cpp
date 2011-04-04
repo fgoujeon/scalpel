@@ -42,12 +42,12 @@ to_type_specifier_seq(const syntax_nodes::decl_specifier_seq& decl_specifier_seq
 		++i
 	)
 	{
-		const syntax_nodes::decl_specifier& decl_specifier_node = i->main_node();
+		const syntax_nodes::decl_specifier& decl_specifier_node = *i;
 
 		if(boost::optional<const type_specifier&> opt_type_specifier_node = get<type_specifier>(&decl_specifier_node))
 		{
 			const type_specifier& type_specifier_node = *opt_type_specifier_node;
-			type_specifier_seq_node.push_back(type_specifier_seq::item(type_specifier_node));
+			type_specifier_seq_node.push_back(type_specifier_node);
 		}
 	}
 
@@ -59,7 +59,7 @@ get_class_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_n
 {
 	for(auto i = decl_specifier_seq_node.begin(); i != decl_specifier_seq_node.end(); ++i)
 	{
-		const decl_specifier& decl_specifier_node = i->main_node();
+		const decl_specifier& decl_specifier_node = *i;
 
 		if(const boost::optional<const type_specifier&> opt_type_specifier_node = get<type_specifier>(&decl_specifier_node))
 		{
@@ -80,7 +80,7 @@ get_enum_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_no
 {
 	for(auto i = decl_specifier_seq_node.begin(); i != decl_specifier_seq_node.end(); ++i)
 	{
-		const decl_specifier& decl_specifier_node = i->main_node();
+		const decl_specifier& decl_specifier_node = *i;
 
 		if(const boost::optional<const type_specifier&> opt_type_specifier_node = get<type_specifier>(&decl_specifier_node))
 		{
@@ -101,7 +101,7 @@ get_class_elaborated_specifier(const syntax_nodes::decl_specifier_seq& decl_spec
 {
 	assert(decl_specifier_seq_node.size() == 1);
 
-	const decl_specifier& decl_specifier_node = decl_specifier_seq_node.front().main_node();
+	const decl_specifier& decl_specifier_node = decl_specifier_seq_node.front();
 
 	const boost::optional<const type_specifier&> opt_type_specifier_node = get<type_specifier>(&decl_specifier_node);
 	assert(opt_type_specifier_node);
@@ -129,7 +129,7 @@ has_typedef_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq
 		++i
 	)
 	{
-		const decl_specifier& decl_specifier_node = i->main_node();
+		const decl_specifier& decl_specifier_node = *i;
 
 		if(get<predefined_text_node<utility::extern_strings::typedef_>>(&decl_specifier_node))
 			return true;

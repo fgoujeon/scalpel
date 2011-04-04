@@ -22,7 +22,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SYNTAX_NODES_LIST_NODE_HPP
 
 #include "common_nodes.hpp"
-#include "optional_node.hpp"
 #include <vector>
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
@@ -32,76 +31,74 @@ template<class T, const leaf_node& SeparatorNode = common_nodes::empty>
 class list_node
 {
     public:
-		class item;
-
-		typedef std::vector<item> items_t;
+		typedef std::vector<T> nodes_t;
 		typedef T type;
-		typedef typename items_t::const_iterator const_iterator;
+		typedef typename nodes_t::const_iterator const_iterator;
 
         list_node();
 
-        list_node(const list_node& s);
+        list_node(const list_node& rhs);
 
-        list_node(list_node&& s);
+        list_node(list_node&& rhs);
 
         const list_node&
-		operator=(const list_node& s);
+		operator=(const list_node& rhs);
 
 		const list_node&
-		operator=(list_node&& s);
+		operator=(list_node&& rhs);
 
 		bool
 		empty() const
 		{
-			return items_.empty();
+			return nodes_.empty();
 		}
 
-		typename items_t::size_type
+		typename nodes_t::size_type
 		size() const
 		{
-			return items_.size();
+			return nodes_.size();
 		}
 
 		const_iterator
 		begin() const
 		{
-			return items_.begin();
+			return nodes_.begin();
 		}
 
 		const_iterator
 		end() const
 		{
-			return items_.end();
+			return nodes_.end();
 		}
 
-		const item&
+		const T&
 		front() const
 		{
-			return items_.front();
+			return nodes_.front();
 		}
 
-		const item&
+		const T&
 		operator[](const unsigned int index) const
 		{
-			return items_[index];
+			return nodes_[index];
 		}
 
 		void
-		push_back(const item& t)
+		push_back(const T& t)
 		{
-			items_.push_back(t);
+			nodes_.push_back(t);
 		}
 
 		void
-		push_back(item&& t)
+		push_back(T&& t)
 		{
-			items_.push_back(std::move(t));
+			nodes_.push_back(std::move(t));
 		}
 
 		static const leaf_node& separator_node;
 
 	private:
-		items_t items_;
+		nodes_t nodes_;
 };
 
 template<class T, const leaf_node& SeparatorNode>
@@ -110,104 +107,36 @@ list_node<T, SeparatorNode>::list_node()
 }
 
 template<class T, const leaf_node& SeparatorNode>
-list_node<T, SeparatorNode>::list_node(const list_node& s):
-	items_(s.items_)
+list_node<T, SeparatorNode>::list_node(const list_node& rhs):
+	nodes_(rhs.nodes_)
 {
 }
 
 template<class T, const leaf_node& SeparatorNode>
-list_node<T, SeparatorNode>::list_node(list_node&& s):
-	items_(std::move(s.items_))
+list_node<T, SeparatorNode>::list_node(list_node&& rhs):
+	nodes_(std::move(rhs.nodes_))
 {
 }
 
 template<class T, const leaf_node& SeparatorNode>
 const list_node<T, SeparatorNode>&
-list_node<T, SeparatorNode>::operator=(const list_node& s)
+list_node<T, SeparatorNode>::operator=(const list_node& rhs)
 {
-	items_ = s.items_;
+	nodes_ = rhs.nodes_;
 	return *this;
 }
 
 template<class T, const leaf_node& SeparatorNode>
 const list_node<T, SeparatorNode>&
-list_node<T, SeparatorNode>::operator=(list_node&& s)
+list_node<T, SeparatorNode>::operator=(list_node&& rhs)
 {
-	items_ = std::move(s.items_);
+	nodes_ = std::move(rhs.nodes_);
 	return *this;
 }
 
 template<class T, const leaf_node& SeparatorNode>
 const leaf_node&
 list_node<T, SeparatorNode>::separator_node = SeparatorNode;
-
-
-
-template<class T, const leaf_node& SeparatorNode = common_nodes::empty>
-class list_node<T, SeparatorNode>::item
-{
-	public:
-		item
-		(
-			const T& main_node
-		);
-
-		item
-		(
-			T&& main_node
-		);
-
-		item(const item& i);
-
-		const item&
-		operator=(const item& i);
-
-		const T&
-		main_node() const;
-
-	private:
-		T main_node_;
-};
-
-template<class T, const leaf_node& SeparatorNode>
-list_node<T, SeparatorNode>::item::item
-(
-	T&& main_node
-):
-	main_node_(main_node)
-{
-}
-
-template<class T, const leaf_node& SeparatorNode>
-list_node<T, SeparatorNode>::item::item
-(
-	const T& main_node
-):
-	main_node_(main_node)
-{
-}
-
-template<class T, const leaf_node& SeparatorNode>
-list_node<T, SeparatorNode>::item::item(const item& i):
-	main_node_(i.main_node_)
-{
-}
-
-template<class T, const leaf_node& SeparatorNode>
-const T&
-list_node<T, SeparatorNode>::item::main_node() const
-{
-	return main_node_;
-}
-
-template<class T, const leaf_node& SeparatorNode>
-const typename list_node<T, SeparatorNode>::item&
-list_node<T, SeparatorNode>::item::operator=(const item& i)
-{
-	main_node_ = i.main_node_;
-
-	return *this;
-}
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

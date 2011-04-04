@@ -38,3 +38,4 @@ convert_leaf_node(const tree_node_t& node)
 }}}}} //namespace scalpel::cpp::syntax_analysis::detail
 
 #endif
+

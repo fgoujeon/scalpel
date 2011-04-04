@@ -71,7 +71,7 @@ create_type
 		++i
 	)
 	{
-		const syntax_nodes::type_specifier& type_specifier_node = i->main_node();
+		const syntax_nodes::type_specifier& type_specifier_node = *i;
 
 		if(auto opt_simple_type_specifier_node = get<simple_type_specifier>(&type_specifier_node))
 		{
@@ -192,7 +192,7 @@ qualify_type
 	//find qualifiers
 	for(auto i = decl_specifier_seq_node.begin(); i != decl_specifier_seq_node.end(); ++i)
 	{
-		const decl_specifier& decl_specifier_node = i->main_node();
+		const decl_specifier& decl_specifier_node = *i;
 
 		if(const boost::optional<const type_specifier&> opt_type_specifier_node = get<type_specifier>(&decl_specifier_node))
 		{
@@ -322,7 +322,7 @@ qualify_type
 {
 	for(auto i = last_part_seq_node.begin(); i != last_part_seq_node.end(); ++i)
 	{
-		const direct_declarator_last_part& last_part_node = i->main_node();
+		const direct_declarator_last_part& last_part_node = *i;
 		type = qualify_type(type, last_part_node, current_declarative_region, ignore_function_type);
 	}
 
@@ -385,7 +385,7 @@ qualify_type
 {
 	for(auto i = ptr_operator_seq_node.begin(); i != ptr_operator_seq_node.end(); ++i)
 	{
-		auto ptr_operator_node = i->main_node();
+		auto ptr_operator_node = *i;
 		if(auto opt_ptr_ptr_operator_node = get<ptr_ptr_operator>(&ptr_operator_node))
 		{
 			auto ptr_ptr_operator_node = *opt_ptr_ptr_operator_node;
@@ -448,7 +448,7 @@ qualify_type
 		++i
 	)
 	{
-		auto cv_qualifier_node = i->main_node();
+		auto cv_qualifier_node = *i;
 
 		if(get<predefined_text_node<str::const_>>(&cv_qualifier_node))
 			const_qualified = true;

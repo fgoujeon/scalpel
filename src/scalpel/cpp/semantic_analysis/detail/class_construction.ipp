@@ -67,7 +67,7 @@ fill_class
 			++i
 		)
 		{
-			auto base_specifier_node = i->main_node();
+			auto base_specifier_node = *i;
 			auto nested_identifier_or_template_id_node = get_nested_identifier_or_template_id(base_specifier_node);
 
 			//is it virtual inheritance?
@@ -118,7 +118,7 @@ fill_class
 		auto member_specification_node = *opt_member_specification;
 		for(auto i = member_specification_node.begin(); i != member_specification_node.end(); ++i) //for each part
 		{
-			auto part = i->main_node();
+			auto part = *i;
 
 			if(auto opt_member_declaration_node = get<member_declaration>(&part))
 			{
@@ -307,7 +307,7 @@ fill_class
 			++j
 		)
 		{
-			auto member_declarator_node = j->main_node();
+			auto member_declarator_node = *j;
 			if(auto opt_member_declarator_declarator_node = get<member_declarator_declarator>(&member_declarator_node))
 			{
 				auto member_declarator_declarator_node = *opt_member_declarator_declarator_node;

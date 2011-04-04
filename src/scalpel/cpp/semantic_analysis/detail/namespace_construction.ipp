@@ -65,7 +65,7 @@ fill_namespace
 	//add the declarations of the namespace definition in the namespace semantic entity
 	for(auto i = declaration_seq_node.begin(); i != declaration_seq_node.end(); ++i)
 	{
-		auto declaration_node = i->main_node();
+		auto declaration_node = *i;
 
 		if(const boost::optional<const block_declaration&> opt_block_declaration_node = get<block_declaration>(&declaration_node))
 		{
@@ -241,7 +241,7 @@ fill_namespace
 
 		for(auto i = init_declarator_list_node.begin(); i != init_declarator_list_node.end(); ++i)
 		{
-			const init_declarator& init_declarator_node = i->main_node();
+			const init_declarator& init_declarator_node = *i;
 			const declarator& declarator_node = get_declarator(init_declarator_node);
 
 			declarator_entity_ptr_variant declarator_entity = create_entity

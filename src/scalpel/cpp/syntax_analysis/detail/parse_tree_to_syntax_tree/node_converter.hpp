@@ -146,3 +146,4 @@ convert_node
 }}}}} //namespace scalpel::cpp::syntax_analysis::detail::parse_tree_to_syntax_tree
 
 #endif
+

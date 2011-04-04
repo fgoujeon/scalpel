@@ -487,13 +487,11 @@ print
 	bool first = true;
 	for(auto i = node.begin(); i != node.end(); ++i) //for each node of the list
 	{
-		const typename SyntaxNodeT::item& item = *i;
-
 		if(!first)
 		{
 			print(SyntaxNodeT::separator_node, indent_level + 1);
 		}
-		print(item.main_node(), indent_level + 1);
+		print(*i, indent_level + 1);
 		first = false;
 	}
 	std::cout << indent(indent_level) << "</" << get_type<SyntaxNodeT>() << ">\n";

@@ -134,7 +134,7 @@ find_declarative_region
 			++i
 		)
 		{
-			const syntax_nodes::nested_name_specifier_last_part& last_part_node = i->main_node();
+			const syntax_nodes::nested_name_specifier_last_part& last_part_node = *i;
 			if(has_template_keyword(last_part_node))
 			{
 				assert(false); //not implemented yet (template)

@@ -36,7 +36,7 @@ has_qualifier(const syntax_nodes::declarator& declarator_node)
 		auto last_part_seq_node = *opt_last_part_seq_node;
 		for(auto i = last_part_seq_node.begin(); i != last_part_seq_node.end(); ++i)
 		{
-			auto last_part_node = i->main_node();
+			auto last_part_node = *i;
 			if(auto opt_function_part_node = get<direct_declarator_function_part>(&last_part_node))
 			{
 				auto function_part_node = *opt_function_part_node;
@@ -45,7 +45,7 @@ has_qualifier(const syntax_nodes::declarator& declarator_node)
 					auto cv_qualifier_seq_node = *opt_cv_qualifier_seq_node;
 					for(auto j = cv_qualifier_seq_node.begin(); j != cv_qualifier_seq_node.end(); ++j)
 					{
-						auto cv_qualifier_node = j->main_node();
+						auto cv_qualifier_node = *j;
 						if(get<predefined_text_node<Qualifier>>(&cv_qualifier_node))
 						{
 							return true;

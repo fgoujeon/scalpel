@@ -189,14 +189,11 @@ BOOST_AUTO_TEST_CASE(test_case_2)
 		nested_name_specifier_last_part_seq nested_name_specifier_last_part_seq_node;
 		nested_name_specifier_last_part_seq_node.push_back
 		(
-			nested_name_specifier_last_part_seq::item
+			nested_name_specifier_last_part
 			(
-				nested_name_specifier_last_part
-				(
-					optional_node<predefined_text_node<str::template_>>(),
-					identifier("inner"),
-					predefined_text_node<str::double_colon>()
-				)
+				optional_node<predefined_text_node<str::template_>>(),
+				identifier("inner"),
+				predefined_text_node<str::double_colon>()
 			)
 		);
 

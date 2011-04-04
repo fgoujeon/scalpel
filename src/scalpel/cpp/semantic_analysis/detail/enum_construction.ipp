@@ -39,7 +39,7 @@ fill_enum
 		const syntax_nodes::enumerator_list& enumerator_list_node = *opt_enumerator_list_node;
 		for(auto i = enumerator_list_node.begin(); i != enumerator_list_node.end(); ++i)
 		{
-			const syntax_nodes::enumerator_definition& enumerator_definition_node = i->main_node();
+			const syntax_nodes::enumerator_definition& enumerator_definition_node = *i;
 			enum_entity.add
 			(
 				std::unique_ptr<semantic_entities::enum_constant>
