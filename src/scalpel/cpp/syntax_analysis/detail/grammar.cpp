@@ -1642,13 +1642,31 @@ grammar::grammar()
 		= template_argument % ','
 	;
 
-	template_argument
-		= longest_d
-		[
-			template_argument_assignment_expression //As assignment_expression can contain a '>', we cannot use it directly
-			| type_id
+	/*
+	The original rule is:
+		template_argument
+			= type_id
+			| assignment_expression
 			| id_expression
-		]
+		;
+
+	As assignment_expression can contain a '>', we cannot use it directly.
+
+	In each of these cases, (1) must be considered before (2):
+		type_template< a < b > t; //(1) assignment_expression
+		type_template< a < b > > t; //(2) id_expression or type_id
+
+		type_template< a * > t; //(1) type_id
+		type_template< a * b > t; //(2) assignment_expression
+
+		type_template< a & > t; //(1) type_id
+		type_template< a & b > t; //(2) assignment_expression
+	*/
+	template_argument
+		= template_argument_assignment_expression - (nested_identifier_or_template_id >> (ch_p('*') | '&'))
+		| type_id
+		| id_expression
+		| template_argument_assignment_expression
 	;
 
 	explicit_instantiation

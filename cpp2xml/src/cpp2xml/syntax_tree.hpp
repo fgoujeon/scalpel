@@ -252,6 +252,7 @@ GET_TYPE_SPECIALIZATION(simple_delete_expression)
 GET_TYPE_SPECIALIZATION(simple_function_definition)
 GET_TYPE_SPECIALIZATION(simple_operator)
 GET_TYPE_SPECIALIZATION(simple_ptr_ptr_operator)
+GET_TYPE_SPECIALIZATION(simple_template_id)
 GET_TYPE_SPECIALIZATION(simple_template_type_specifier)
 GET_TYPE_SPECIALIZATION(simple_type_specifier)
 GET_TYPE_SPECIALIZATION(simple_type_specifier_postfix_expression)
@@ -522,7 +523,7 @@ print
 )
 {
 	std::cout << indent(indent_level) << "<predefined_text_node>";
-	std::cout << node.text();
+	std::cout << strip_special_chars(node.text());
 	std::cout << "</predefined_text_node>";
 	std::cout << "\n";
 }
