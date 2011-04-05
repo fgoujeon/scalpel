@@ -18,90 +18,27 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_GENERIC_QUERIES_DETAIL_IS_DEFINED_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_GENERIC_QUERIES_DETAIL_IS_DEFINED_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_GENERIC_QUERIES_DETAIL_HAS_EXTERNAL_LINKAGE_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_GENERIC_QUERIES_DETAIL_HAS_EXTERNAL_LINKAGE_HPP
 
 #include <scalpel/cpp/semantic_graph.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities { namespace generic_queries { namespace detail
 {
 
-inline
-bool
-is_defined(const namespace_&)
-{
-	return true;
-}
-
-inline
-bool
-is_defined(const class_& entity)
-{
-	return entity.complete();
-}
-
-inline
-bool
-is_defined(const member_class& entity)
-{
-	return entity.complete();
-}
-
-inline
-bool
-is_defined(const enum_&)
-{
-	return true;
-}
-
-inline
-bool
-is_defined(const member_enum&)
-{
-	return true;
-}
-
-inline
-bool
-is_defined(const typedef_&)
-{
-	return true;
-}
-
-inline
-bool
-is_defined(const member_typedef&)
-{
-	return true;
-}
-
-inline
-bool
-is_defined(const variable&)
-{
-	return true;
-}
-
-inline
-bool
-is_defined(const member_variable&)
-{
-	return true;
-}
-
-inline
-bool
-is_defined(const bit_field&)
-{
-	return true;
-}
-
 template<class Entity>
 inline
 bool
-is_defined(const Entity& entity)
+has_external_linkage(const Entity&)
 {
-	return entity.defined();
+	return true;
+}
+
+inline
+bool
+has_external_linkage(const bit_field& entity)
+{
+	return !entity.name().empty();
 }
 
 }}}}} //namespace scalpel::cpp::semantic_entities::generic_queries::detail

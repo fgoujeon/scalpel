@@ -85,6 +85,9 @@ create_unique_id(const semantic_entities::variable& entity);
 std::string
 create_unique_id(const semantic_entities::member_variable& entity);
 
+std::string
+create_unique_id(const semantic_entities::bit_field& entity);
+
 }}}} //namespace scalpel::cpp::linking::detail
 
 #endif

@@ -64,6 +64,7 @@ struct final_graph_entities
 	std::map<const semantic_entities::simple_function*, semantic_entities::simple_function*> simple_functions;
 	std::map<const semantic_entities::variable*, semantic_entities::variable*> variables;
 	std::map<const semantic_entities::member_variable*, semantic_entities::member_variable*> member_variables;
+	std::map<const semantic_entities::bit_field*, semantic_entities::bit_field*> bit_fields;
 
 
 

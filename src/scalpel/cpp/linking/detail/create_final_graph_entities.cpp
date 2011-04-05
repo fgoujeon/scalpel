@@ -388,6 +388,27 @@ namespace
 		;
 	}
 
+	bit_field*
+	create_entity
+	(
+		const bit_field& entity,
+		const final_graph_entities& final_entities
+	)
+	{
+		return
+			new bit_field
+			(
+				entity.name(),
+				create_type(entity.type(), final_entities),
+				entity.size(),
+				entity.is_mutable(),
+				entity.access()
+			)
+		;
+	}
+
+
+
 	function_type::parameter_types_t
 	create_function_parameter_types
 	(
@@ -765,6 +786,9 @@ create_final_graph_entities
 
 	create_entities_of_type<member_variable>(groups.member_variables, final_entities);
 	create_internal_entities_of_type<member_variable>(groups, final_entities);
+
+	create_entities_of_type<bit_field>(groups.bit_fields, final_entities);
+	create_internal_entities_of_type<bit_field>(groups, final_entities);
 
 	add_base_classes<class_>(final_entities);
 	add_base_classes<member_class>(final_entities);

@@ -820,7 +820,8 @@ semantic_graph_serializer::serialize_bit_field
 )
 {
 	output_ << indent(indent_level) << "<bit_field";
-	output_ << " name=\"" << entity.name() << "\"";
+	if(!entity.name().empty())
+		output_ << " name=\"" << entity.name() << "\"";
 	output_ << " size=\"" << entity.size() << "\"";
 	output_ << attribute(entity.access());
 	if(entity.is_mutable())

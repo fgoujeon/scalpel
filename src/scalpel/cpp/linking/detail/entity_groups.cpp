@@ -69,6 +69,7 @@ GENERATE_GET_ENTITY_LIST_SPECIALIZATION(operator_function, operator_functions)
 GENERATE_GET_ENTITY_LIST_SPECIALIZATION(simple_function, simple_functions)
 GENERATE_GET_ENTITY_LIST_SPECIALIZATION(variable, variables)
 GENERATE_GET_ENTITY_LIST_SPECIALIZATION(member_variable, member_variables)
+GENERATE_GET_ENTITY_LIST_SPECIALIZATION(bit_field, bit_fields)
 
 INTERNAL_ENTITIES_OF_TYPE(namespace_, internal_namespaces)
 INTERNAL_ENTITIES_OF_TYPE(unnamed_namespace, internal_unnamed_namespaces)
@@ -87,6 +88,7 @@ INTERNAL_ENTITIES_OF_TYPE(operator_function, internal_operator_functions)
 INTERNAL_ENTITIES_OF_TYPE(simple_function, internal_simple_functions)
 INTERNAL_ENTITIES_OF_TYPE(variable, internal_variables)
 INTERNAL_ENTITIES_OF_TYPE(member_variable, internal_member_variables)
+INTERNAL_ENTITIES_OF_TYPE(bit_field, internal_bit_fields)
 
 }}}} //namespace scalpel::cpp::linking::detail
 

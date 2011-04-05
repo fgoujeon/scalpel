@@ -20,6 +20,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "create_unique_id.hpp"
 #include <sstream>
+#include <cassert>
 
 namespace scalpel { namespace cpp { namespace linking { namespace detail
 {
@@ -369,6 +370,16 @@ create_unique_id(const semantic_entities::variable& entity)
 std::string
 create_unique_id(const semantic_entities::member_variable& entity)
 {
+	return
+		create_enclosing_declarative_region_unique_id(entity) +
+		entity.name()
+	;
+}
+
+std::string
+create_unique_id(const semantic_entities::bit_field& entity)
+{
+	assert(!entity.name().empty());
 	return
 		create_enclosing_declarative_region_unique_id(entity) +
 		entity.name()

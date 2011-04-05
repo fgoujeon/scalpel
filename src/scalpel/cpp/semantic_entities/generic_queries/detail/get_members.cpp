@@ -103,6 +103,7 @@ GENERATE_GET_MEMBERS_SPECIALIZATION          (namespace_, simple_function, simpl
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (namespace_, simple_member_function)
 GENERATE_GET_MEMBERS_SPECIALIZATION          (namespace_, variable, variables)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (namespace_, member_variable)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (namespace_, bit_field)
 GENERATE_GET_MEMBERS_SPECIALIZATION          (namespace_, namespace_alias, namespace_aliases)
 
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (linked_namespace, namespace_)
@@ -122,6 +123,7 @@ GENERATE_GET_MEMBERS_SPECIALIZATION          (linked_namespace, simple_function,
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (linked_namespace, simple_member_function)
 GENERATE_GET_MEMBERS_SPECIALIZATION          (linked_namespace, variable, variables)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (linked_namespace, member_variable)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (linked_namespace, bit_field)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (linked_namespace, namespace_alias)
 
 GENERATE_GET_MEMBERS_SPECIALIZATION          (unnamed_namespace, namespace_, namespaces)
@@ -141,6 +143,7 @@ GENERATE_GET_MEMBERS_SPECIALIZATION          (unnamed_namespace, simple_function
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (unnamed_namespace, simple_member_function)
 GENERATE_GET_MEMBERS_SPECIALIZATION          (unnamed_namespace, variable, variables)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (unnamed_namespace, member_variable)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (unnamed_namespace, bit_field)
 GENERATE_GET_MEMBERS_SPECIALIZATION          (unnamed_namespace, namespace_alias, namespace_aliases)
 
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (linked_unnamed_namespace, namespace_)
@@ -160,6 +163,7 @@ GENERATE_GET_MEMBERS_SPECIALIZATION          (linked_unnamed_namespace, simple_f
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (linked_unnamed_namespace, simple_member_function)
 GENERATE_GET_MEMBERS_SPECIALIZATION          (linked_unnamed_namespace, variable, variables)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (linked_unnamed_namespace, member_variable)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (linked_unnamed_namespace, bit_field)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (linked_unnamed_namespace, namespace_alias)
 
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (class_, namespace_)
@@ -179,6 +183,7 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (class_, simple_function)
 GENERATE_GET_MEMBERS_SPECIALIZATION          (class_, simple_member_function, simple_functions)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (class_, variable)
 GENERATE_GET_MEMBERS_SPECIALIZATION          (class_, member_variable, variables)
+GENERATE_GET_MEMBERS_SPECIALIZATION          (class_, bit_field, bit_fields)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (class_, namespace_alias)
 
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (member_class, namespace_)
@@ -198,6 +203,7 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (member_class, simple_function)
 GENERATE_GET_MEMBERS_SPECIALIZATION          (member_class, simple_member_function, simple_functions)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (member_class, variable)
 GENERATE_GET_MEMBERS_SPECIALIZATION          (member_class, member_variable, variables)
+GENERATE_GET_MEMBERS_SPECIALIZATION          (member_class, bit_field, bit_fields)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (member_class, namespace_alias)
 
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (constructor, namespace_)
@@ -217,6 +223,7 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (constructor, simple_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (constructor, simple_member_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (constructor, variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (constructor, member_variable)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (constructor, bit_field)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (constructor, namespace_alias)
 
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (destructor, namespace_)
@@ -236,6 +243,7 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (destructor, simple_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (destructor, simple_member_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (destructor, variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (destructor, member_variable)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (destructor, bit_field)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (destructor, namespace_alias)
 
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (operator_function, namespace_)
@@ -255,6 +263,7 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (operator_function, simple_function
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (operator_function, simple_member_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (operator_function, variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (operator_function, member_variable)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (operator_function, bit_field)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (operator_function, namespace_alias)
 
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (operator_member_function, namespace_)
@@ -274,6 +283,7 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (operator_member_function, simple_f
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (operator_member_function, simple_member_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (operator_member_function, variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (operator_member_function, member_variable)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (operator_member_function, bit_field)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (operator_member_function, namespace_alias)
 
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (conversion_function, namespace_)
@@ -293,6 +303,7 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (conversion_function, simple_functi
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (conversion_function, simple_member_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (conversion_function, variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (conversion_function, member_variable)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (conversion_function, bit_field)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (conversion_function, namespace_alias)
 
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (simple_function, namespace_)
@@ -312,6 +323,7 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (simple_function, simple_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (simple_function, simple_member_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (simple_function, variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (simple_function, member_variable)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (simple_function, bit_field)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (simple_function, namespace_alias)
 
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (simple_member_function, namespace_)
@@ -331,6 +343,7 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (simple_member_function, simple_fun
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (simple_member_function, simple_member_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (simple_member_function, variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (simple_member_function, member_variable)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (simple_member_function, bit_field)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (simple_member_function, namespace_alias)
 
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, namespace_)
@@ -350,6 +363,7 @@ GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, simple_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, simple_member_function)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, variable)
 GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, member_variable)
+GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION    (statement_block, bit_field)
 GENERATE_GET_MEMBERS_SPECIALIZATION          (statement_block, namespace_alias, namespace_aliases)
 
 }}}}} //namespace scalpel::cpp::semantic_entities::generic_queries::detail

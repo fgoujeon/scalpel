@@ -70,6 +70,7 @@ GET_MAP_OF_LINKED_TYPE(operator_function, operator_functions)
 GET_MAP_OF_LINKED_TYPE(simple_function, simple_functions)
 GET_MAP_OF_LINKED_TYPE(variable, variables)
 GET_MAP_OF_LINKED_TYPE(member_variable, member_variables)
+GET_MAP_OF_LINKED_TYPE(bit_field, bit_fields)
 
 GENERATE_GET_PAIRS_SPECIALIZATION(class_, class_pairs)
 GENERATE_GET_PAIRS_SPECIALIZATION(member_class, member_class_pairs)

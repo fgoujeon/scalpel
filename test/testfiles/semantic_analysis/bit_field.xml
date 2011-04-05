@@ -2,14 +2,19 @@
  <class name="s" id="c0">
   <destructor access="public" defined="false">
   </destructor>
-  <bit_field name="i" size="0" access="public">
+  <bit_field name="i" size="0" access="public" mutable="true">
+   <type>
+    <fundamental_type type="bool"/>
+   </type>
+  </bit_field>
+  <bit_field size="0" access="public">
    <type>
     <fundamental_type type="int"/>
    </type>
   </bit_field>
-  <bit_field name="j" size="0" access="public" mutable="true">
+  <bit_field size="0" access="public">
    <type>
-    <fundamental_type type="bool"/>
+    <fundamental_type type="unsigned int"/>
    </type>
   </bit_field>
  </class>

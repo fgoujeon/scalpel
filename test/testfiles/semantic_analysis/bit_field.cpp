@@ -1,6 +1,7 @@
 struct s
 {
-	int i: 5;
-	mutable bool j: 3;
+	mutable bool i: 3;
+	int: 5;
+	unsigned int: 8;
 };
 
