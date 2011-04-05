@@ -128,6 +128,36 @@ find_using_directive_namespace
 	return semantic_entity_analysis::get_namespace(found_entity);
 }
 
+template<class Class>
+std::unique_ptr<semantic_entities::bit_field>
+create_bit_field
+(
+	const syntax_nodes::member_declarator_bit_field_member& member_declarator_bit_field_member_node,
+	const semantic_entities::type_variant& type,
+	const bool is_mutable,
+	const semantic_entities::member_access access,
+	Class&
+)
+{
+	using namespace syntax_nodes;
+	using namespace semantic_entities;
+
+	const optional_node<identifier>& opt_identifier_node = get_identifier(member_declarator_bit_field_member_node);
+	const std::string name = opt_identifier_node ? opt_identifier_node->value() : "";
+
+	return std::unique_ptr<bit_field>
+	(
+		new bit_field
+		(
+			name,
+			type,
+			0, //TODO size
+			is_mutable,
+			access
+		)
+	);
+}
+
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
 
 #endif

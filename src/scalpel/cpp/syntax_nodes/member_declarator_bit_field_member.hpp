@@ -43,6 +43,20 @@ typedef
 	member_declarator_bit_field_member
 ;
 
+inline
+const optional_node<identifier>&
+get_identifier(const member_declarator_bit_field_member& o)
+{
+	return get<0>(o);
+}
+
+inline
+const conditional_expression&
+get_conditional_expression(const member_declarator_bit_field_member& o)
+{
+	return get<2>(o);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif

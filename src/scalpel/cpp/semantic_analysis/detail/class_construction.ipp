@@ -348,6 +348,30 @@ fill_class
 				else
 					assert(false);
 			}
+			else if
+			(
+				boost::optional<const member_declarator_bit_field_member&> opt_member_declarator_bit_field_member_node =
+					get<member_declarator_bit_field_member>(&member_declarator_node)
+			)
+			{
+				assert(opt_unqualified_type);
+
+				class_entity.add_member
+				(
+					create_bit_field
+					(
+						*opt_member_declarator_bit_field_member_node,
+						*opt_unqualified_type,
+						has_mutable_specifier,
+						current_access,
+						class_entity
+					)
+				);
+			}
+			else
+			{
+				assert(false);
+			}
 		}
 	}
 }

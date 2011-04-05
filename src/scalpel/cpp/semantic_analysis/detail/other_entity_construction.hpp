@@ -80,6 +80,17 @@ find_using_directive_namespace
 	Namespace& current_namespace
 );
 
+template<class Class>
+std::unique_ptr<semantic_entities::bit_field>
+create_bit_field
+(
+	const syntax_nodes::member_declarator_bit_field_member& member_declarator_bit_field_member_node,
+	const semantic_entities::type_variant& type,
+	const bool is_mutable,
+	const semantic_entities::member_access access,
+	Class& current_class
+);
+
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
 
 #include "other_entity_construction.ipp"
