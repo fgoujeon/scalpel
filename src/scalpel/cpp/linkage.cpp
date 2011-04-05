@@ -18,18 +18,18 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "linking.hpp"
-#include "linking/detail/assemble_final_graph.hpp"
-#include "linking/detail/create_final_graph_entities.hpp"
-#include "linking/detail/list_entities.hpp"
-#include "linking/detail/final_graph_entities.hpp"
-#include "linking/detail/entity_groups.hpp"
+#include "linkage.hpp"
+#include "linkage/detail/assemble_final_graph.hpp"
+#include "linkage/detail/create_final_graph_entities.hpp"
+#include "linkage/detail/list_entities.hpp"
+#include "linkage/detail/final_graph_entities.hpp"
+#include "linkage/detail/entity_groups.hpp"
 #include <iostream>
 
 namespace scalpel { namespace cpp
 {
 
-namespace linking
+namespace linkage
 {
 
 namespace

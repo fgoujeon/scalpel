@@ -18,12 +18,12 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_LINKING_DETAIL_CREATE_UNIQUE_ID_HPP
-#define SCALPEL_CPP_LINKING_DETAIL_CREATE_UNIQUE_ID_HPP
+#ifndef SCALPEL_CPP_LINKAGE_DETAIL_CREATE_UNIQUE_ID_HPP
+#define SCALPEL_CPP_LINKAGE_DETAIL_CREATE_UNIQUE_ID_HPP
 
 #include <scalpel/cpp/semantic_graph.hpp>
 
-namespace scalpel { namespace cpp { namespace linking { namespace detail
+namespace scalpel { namespace cpp { namespace linkage { namespace detail
 {
 
 //Create the unique id of a semantic entity.
@@ -88,7 +88,7 @@ create_unique_id(const semantic_entities::member_variable& entity);
 std::string
 create_unique_id(const semantic_entities::bit_field& entity);
 
-}}}} //namespace scalpel::cpp::linking::detail
+}}}} //namespace scalpel::cpp::linkage::detail
 
 #endif
 

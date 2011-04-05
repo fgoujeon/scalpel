@@ -22,7 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <sstream>
 #include <cassert>
 
-namespace scalpel { namespace cpp { namespace linking { namespace detail
+namespace scalpel { namespace cpp { namespace linkage { namespace detail
 {
 
 using namespace semantic_entities;
@@ -386,5 +386,5 @@ create_unique_id(const semantic_entities::bit_field& entity)
 	;
 }
 
-}}}} //namespace scalpel::cpp::linking::detail
+}}}} //namespace scalpel::cpp::linkage::detail
 

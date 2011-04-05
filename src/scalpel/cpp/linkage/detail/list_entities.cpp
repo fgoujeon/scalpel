@@ -23,7 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <scalpel/cpp/semantic_entities/generic_queries/detail/get_members.hpp>
 #include <scalpel/cpp/semantic_entities/generic_queries/detail/has_external_linkage.hpp>
 
-namespace scalpel { namespace cpp { namespace linking { namespace detail
+namespace scalpel { namespace cpp { namespace linkage { namespace detail
 {
 
 using namespace semantic_entities;
@@ -166,5 +166,5 @@ list_entities(const utility::unique_ptr_vector<semantic_graph>& semantic_graphs)
 	return groups;
 }
 
-}}}} //namespace scalpel::cpp::linking::detail
+}}}} //namespace scalpel::cpp::linkage::detail
 

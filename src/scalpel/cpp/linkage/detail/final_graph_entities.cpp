@@ -50,7 +50,7 @@ final_graph_entities::get_pairs_of_type<semantic_entities::ENTITY_TYPE>() const 
 	return VARIABLE; \
 }
 
-namespace scalpel { namespace cpp { namespace linking { namespace detail
+namespace scalpel { namespace cpp { namespace linkage { namespace detail
 {
 
 GET_MAP_OF_LINKED_TYPE(linked_namespace, namespaces)
@@ -75,7 +75,7 @@ GET_MAP_OF_LINKED_TYPE(bit_field, bit_fields)
 GENERATE_GET_PAIRS_SPECIALIZATION(class_, class_pairs)
 GENERATE_GET_PAIRS_SPECIALIZATION(member_class, member_class_pairs)
 
-}}}} //namespace scalpel::cpp::linking::detail
+}}}} //namespace scalpel::cpp::linkage::detail
 
 #undef GET_MAP_OF_NONLINKED_TYPE
 #undef GET_MAP_OF_LINKED_TYPE

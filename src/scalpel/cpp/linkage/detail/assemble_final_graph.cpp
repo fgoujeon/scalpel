@@ -23,7 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <scalpel/utility/variant.hpp>
 #include <iostream>
 
-namespace scalpel { namespace cpp { namespace linking { namespace detail
+namespace scalpel { namespace cpp { namespace linkage { namespace detail
 {
 
 using namespace semantic_entities;
@@ -233,5 +233,5 @@ assemble_final_graph
 	return std::move(final_entities.global_namespace);
 }
 
-}}}} //namespace scalpel::cpp::linking::detail
+}}}} //namespace scalpel::cpp::linkage::detail
 

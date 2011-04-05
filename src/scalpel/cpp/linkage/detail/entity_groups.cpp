@@ -50,7 +50,7 @@ entity_groups::internal_entities_of_type<semantic_entities::ENTITY_TYPE>() const
 	return VARIABLE; \
 }
 
-namespace scalpel { namespace cpp { namespace linking { namespace detail
+namespace scalpel { namespace cpp { namespace linkage { namespace detail
 {
 
 GENERATE_GET_ENTITY_LIST_SPECIALIZATION(namespace_, namespaces)
@@ -90,7 +90,7 @@ INTERNAL_ENTITIES_OF_TYPE(variable, internal_variables)
 INTERNAL_ENTITIES_OF_TYPE(member_variable, internal_member_variables)
 INTERNAL_ENTITIES_OF_TYPE(bit_field, internal_bit_fields)
 
-}}}} //namespace scalpel::cpp::linking::detail
+}}}} //namespace scalpel::cpp::linkage::detail
 
 #undef GENERATE_GET_ENTITY_LIST_SPECIALIZATION
 #undef INTERNAL_ENTITIES_OF_TYPE

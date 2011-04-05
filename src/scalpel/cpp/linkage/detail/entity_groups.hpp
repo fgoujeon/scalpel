@@ -18,14 +18,14 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_LINKING_DETAIL_ENTITY_GROUPS_HPP
-#define SCALPEL_CPP_LINKING_DETAIL_ENTITY_GROUPS_HPP
+#ifndef SCALPEL_CPP_LINKAGE_DETAIL_ENTITY_GROUPS_HPP
+#define SCALPEL_CPP_LINKAGE_DETAIL_ENTITY_GROUPS_HPP
 
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <vector>
 #include <map>
 
-namespace scalpel { namespace cpp { namespace linking { namespace detail
+namespace scalpel { namespace cpp { namespace linkage { namespace detail
 {
 
 template<class Entity>
@@ -104,7 +104,7 @@ template<class Entity>
 const typename entity_groups_of_type<Entity>::type&
 get_entity_groups_of_type(const entity_groups& n);
 
-}}}} //namespace scalpel::cpp::linking::detail
+}}}} //namespace scalpel::cpp::linkage::detail
 
 #endif
 

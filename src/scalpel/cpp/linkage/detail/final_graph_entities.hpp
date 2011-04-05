@@ -18,15 +18,15 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_LINKING_DETAIL_FINAL_GRAPH_ENTITIES_HPP
-#define SCALPEL_CPP_LINKING_DETAIL_FINAL_GRAPH_ENTITIES_HPP
+#ifndef SCALPEL_CPP_LINKAGE_DETAIL_FINAL_GRAPH_ENTITIES_HPP
+#define SCALPEL_CPP_LINKAGE_DETAIL_FINAL_GRAPH_ENTITIES_HPP
 
 #include "linked_type.hpp"
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <map>
 #include <vector>
 
-namespace scalpel { namespace cpp { namespace linking { namespace detail
+namespace scalpel { namespace cpp { namespace linkage { namespace detail
 {
 
 template<class Entity>
@@ -80,7 +80,7 @@ struct final_graph_entities
 	std::vector<old_and_new_entity_pair<semantic_entities::member_class>> member_class_pairs;
 };
 
-}}}} //namespace scalpel::cpp::linking::detail
+}}}} //namespace scalpel::cpp::linkage::detail
 
 #endif
 

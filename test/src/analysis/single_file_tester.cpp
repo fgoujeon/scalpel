@@ -20,7 +20,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "single_file_tester.hpp"
 #include <cpp2xml/semantic_graph.hpp>
-#include <scalpel/cpp/linking.hpp>
+#include <scalpel/cpp/linkage.hpp>
 #include <scalpel/cpp/semantic_analysis.hpp>
 #include <boost/test/unit_test.hpp>
 #include <memory>
@@ -132,7 +132,7 @@ single_file_tester::test_semantic_analysis(const semantic_analysis_test_file_set
 }
 
 void
-single_file_tester::test_linking(const linking_test_file_set& file_set)
+single_file_tester::test_linkage(const linkage_test_file_set& file_set)
 {
 	scalpel::utility::unique_ptr_vector<scalpel::cpp::semantic_graph> semantic_graphs;
 	for(auto i = file_set.cpp_files.begin(); i != file_set.cpp_files.end(); ++i) //for each input file
@@ -174,8 +174,8 @@ single_file_tester::test_linking(const linking_test_file_set& file_set)
 		semantic_graphs.push_back(std::move(semantic_graph));
 	}
 
-	//linking
-	std::unique_ptr<scalpel::cpp::linked_semantic_graph> final_semantic_graph = scalpel::cpp::linking::link(semantic_graphs);
+	//linkage
+	std::unique_ptr<scalpel::cpp::linked_semantic_graph> final_semantic_graph = scalpel::cpp::linkage::link(semantic_graphs);
 
 	//serialize the semantic graph
 	std::ostringstream semantic_graph_xml;

@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "create_final_graph_entities.hpp"
 #include <scalpel/cpp/semantic_entities/generic_queries/detail/is_defined.hpp>
 
-namespace scalpel { namespace cpp { namespace linking { namespace detail
+namespace scalpel { namespace cpp { namespace linkage { namespace detail
 {
 
 using namespace semantic_entities;
@@ -794,5 +794,5 @@ create_final_graph_entities
 	add_base_classes<member_class>(final_entities);
 }
 
-}}}} //namespace scalpel::cpp::linking::detail
+}}}} //namespace scalpel::cpp::linkage::detail
 

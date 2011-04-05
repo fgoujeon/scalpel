@@ -18,22 +18,25 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ANALYSIS_LINKING_TEST_FILE_SET_HPP
-#define ANALYSIS_LINKING_TEST_FILE_SET_HPP
+#ifndef SCALPEL_CPP_LINKAGE_DETAIL_ASSEMBLE_FINAL_GRAPH_HPP
+#define SCALPEL_CPP_LINKAGE_DETAIL_ASSEMBLE_FINAL_GRAPH_HPP
 
-#include <string>
-#include <vector>
+#include "final_graph_entities.hpp"
+#include "entity_groups.hpp"
+#include <scalpel/cpp/semantic_graph.hpp>
+#include <memory>
 
-namespace analysis
+namespace scalpel { namespace cpp { namespace linkage { namespace detail
 {
 
-struct linking_test_file_set
-{
-	std::vector<std::string> cpp_files;
-	std::string output_file;
-};
+std::unique_ptr<linked_semantic_graph>
+assemble_final_graph
+(
+	const entity_groups& groups,
+	final_graph_entities& final_entities
+);
 
-} //namespace analysis
+}}}} //namespace scalpel::cpp::linkage::detail
 
 #endif
 

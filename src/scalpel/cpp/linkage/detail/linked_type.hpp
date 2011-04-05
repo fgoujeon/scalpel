@@ -18,12 +18,12 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_LINKING_DETAIL_GENERATE_TYPE_TRAITS_HPP
-#define SCALPEL_CPP_LINKING_DETAIL_GENERATE_TYPE_TRAITS_HPP
+#ifndef SCALPEL_CPP_LINKAGE_DETAIL_GENERATE_TYPE_TRAITS_HPP
+#define SCALPEL_CPP_LINKAGE_DETAIL_GENERATE_TYPE_TRAITS_HPP
 
 #include <scalpel/cpp/semantic_graph.hpp>
 
-namespace scalpel { namespace cpp { namespace linking { namespace detail
+namespace scalpel { namespace cpp { namespace linkage { namespace detail
 {
 
 template<class Entity>
@@ -56,7 +56,7 @@ GENERATE_TYPE_TRAITS(unnamed_namespace, linked_unnamed_namespace)
 
 #undef GENERATE_TYPE_TRAITS
 
-}}}} //namespace scalpel::cpp::linking::detail
+}}}} //namespace scalpel::cpp::linkage::detail
 
 #endif
 

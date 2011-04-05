@@ -18,8 +18,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_LINKING_HPP
-#define SCALPEL_CPP_LINKING_HPP
+#ifndef SCALPEL_CPP_LINKAGE_HPP
+#define SCALPEL_CPP_LINKAGE_HPP
 
 #include "semantic_graph.hpp"
 #include <scalpel/utility/unique_ptr_vector.hpp>
@@ -28,7 +28,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp
 {
 
-namespace linking
+namespace linkage
 {
 
 std::unique_ptr<semantic_entities::linked_namespace>

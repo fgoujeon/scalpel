@@ -20,7 +20,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <cpp2xml/semantic_graph.hpp>
 #include <cpp2xml/syntax_tree.hpp>
-#include <scalpel/cpp/linking.hpp>
+#include <scalpel/cpp/linkage.hpp>
 #include <scalpel/cpp/semantic_analysis.hpp>
 #include <scalpel/cpp/syntax_analyzer.hpp>
 #include <scalpel/cpp/preprocessor.hpp>
@@ -154,8 +154,8 @@ main(int argc, char** argv)
 
 	if(print_linked_semantic_graph)
 	{
-		//linking
-		std::unique_ptr<scalpel::cpp::linked_semantic_graph> linked_graph = scalpel::cpp::linking::link(semantic_graphs);
+		//linkage
+		std::unique_ptr<scalpel::cpp::linked_semantic_graph> linked_graph = scalpel::cpp::linkage::link(semantic_graphs);
 
 		//print linked semantic graph
 		if(print_syntax_tree || print_semantic_graph)
