@@ -26,6 +26,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <scalpel/cpp/semantic_entities/generic_queries/detail/has_enclosing_declarative_region.hpp>
 #include <scalpel/cpp/semantic_entities/generic_queries/detail/enclosing_declarative_region.hpp>
 #include <scalpel/cpp/semantic_entities/generic_queries/detail/get_members.hpp>
+#include <scalpel/cpp/semantic_entities/generic_queries/detail/get_using_declaration_members.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail { namespace name_lookup
 {
@@ -463,16 +464,35 @@ find_single_type_local_entities<EntityIdentificationPolicy, DeclarativeRegionT, 
 	typename return_type<true, Multiple, EntityT>::type found_entities;
 	initialize<typename return_type<true, Multiple, EntityT>::type>::init(found_entities);
 
-	typename semantic_entities::generic_queries::detail::member_type_traits<EntityT, false>::return_type members =
-		semantic_entities::generic_queries::detail::get_members<EntityT>(current_declarative_region)
-	;
-	for(auto i = members.begin(); i != members.end(); ++i)
+	//look up in current declarative region's members
 	{
-		typename semantic_entities::generic_queries::detail::member_type_traits<EntityT, false>::reference current_entity = *i;
-		if(EntityIdentificationPolicy::are_identifiers_equal(current_entity, identifier))
+		typename semantic_entities::generic_queries::detail::get_members_return_type<EntityT, false>::type members =
+			semantic_entities::generic_queries::detail::get_members<EntityT>(current_declarative_region)
+		;
+		for(auto i = members.begin(); i != members.end(); ++i)
 		{
-			add_to_result(found_entities, current_entity);
-			if(!Multiple) break;
+			EntityT& current_entity = *i;
+			if(EntityIdentificationPolicy::are_identifiers_equal(current_entity, identifier))
+			{
+				add_to_result(found_entities, current_entity);
+				if(!Multiple) break;
+			}
+		}
+	}
+
+	//look up in current declarative region's using declaration entities
+	{
+		const std::vector<EntityT*>& members =
+			semantic_entities::generic_queries::detail::get_using_declaration_members<EntityT>(current_declarative_region)
+		;
+		for(auto i = members.begin(); i != members.end(); ++i)
+		{
+			EntityT& current_entity = **i;
+			if(EntityIdentificationPolicy::are_identifiers_equal(current_entity, identifier))
+			{
+				add_to_result(found_entities, current_entity);
+				if(!Multiple) break;
+			}
 		}
 	}
 

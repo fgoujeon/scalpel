@@ -53,7 +53,7 @@ typename empty_result<semantic_entities::destructor>::type
 
 #define GENERATE_NON_CONST_GET_MEMBERS_SPECIALIZATION(PARENT_TYPE, MEMBER_TYPE, PARENT_MEMBER_FUNCTION) \
 template<> \
-member_type_traits<semantic_entities::MEMBER_TYPE, false>::return_type \
+get_members_return_type<semantic_entities::MEMBER_TYPE, false>::type \
 get_members<semantic_entities::MEMBER_TYPE>(semantic_entities::PARENT_TYPE& parent) \
 { \
 	return parent.PARENT_MEMBER_FUNCTION(); \
@@ -63,7 +63,7 @@ get_members<semantic_entities::MEMBER_TYPE>(semantic_entities::PARENT_TYPE& pare
 GENERATE_NON_CONST_GET_MEMBERS_SPECIALIZATION(PARENT_TYPE, MEMBER_TYPE, PARENT_MEMBER_FUNCTION) \
  \
 template<> \
-member_type_traits<semantic_entities::MEMBER_TYPE, true>::return_type \
+get_members_return_type<semantic_entities::MEMBER_TYPE, true>::type \
 get_members<semantic_entities::MEMBER_TYPE>(const semantic_entities::PARENT_TYPE& parent) \
 { \
 	return parent.PARENT_MEMBER_FUNCTION(); \
@@ -71,14 +71,14 @@ get_members<semantic_entities::MEMBER_TYPE>(const semantic_entities::PARENT_TYPE
 
 #define GENERATE_EMPTY_GET_MEMBERS_SPECIALIZATION(PARENT_TYPE, MEMBER_TYPE) \
 template<> \
-member_type_traits<semantic_entities::MEMBER_TYPE, false>::return_type \
+get_members_return_type<semantic_entities::MEMBER_TYPE, false>::type \
 get_members<semantic_entities::MEMBER_TYPE>(semantic_entities::PARENT_TYPE&) \
 { \
 	return empty_result<semantic_entities::MEMBER_TYPE>::value; \
 } \
  \
 template<> \
-member_type_traits<semantic_entities::MEMBER_TYPE, true>::return_type \
+get_members_return_type<semantic_entities::MEMBER_TYPE, true>::type \
 get_members<semantic_entities::MEMBER_TYPE>(const semantic_entities::PARENT_TYPE&) \
 { \
 	return empty_result<semantic_entities::MEMBER_TYPE>::value; \

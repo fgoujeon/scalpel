@@ -51,6 +51,7 @@ class CLASS_NAME \
 { \
 	public: \
 		typedef std::vector<namespace_*> namespace_ptrs_t; \
+ \
 		typedef utility::unique_ptr_vector<NAMESPACE_TYPE> namespaces_t; \
 		BOOST_PP_IIF \
 		( \
@@ -64,6 +65,9 @@ class CLASS_NAME \
 		typedef utility::unique_ptr_vector<simple_function> simple_functions_t; \
 		typedef utility::unique_ptr_vector<operator_function> operator_functions_t; \
 		typedef utility::unique_ptr_vector<variable> variables_t; \
+ \
+		typedef std::vector<class_*> using_declaration_classes_t; \
+		typedef std::vector<variable*> using_declaration_variables_t; \
  \
 	public: \
 		CLASS_NAME(); \
@@ -165,6 +169,18 @@ class CLASS_NAME \
 		const variables_t& \
 		variables() const; \
  \
+		using_declaration_classes_t& \
+		using_declaration_classes() \
+		{ \
+			return using_declaration_classes_; \
+		} \
+ \
+		using_declaration_variables_t& \
+		using_declaration_variables() \
+		{ \
+			return using_declaration_variables_; \
+		} \
+ \
 		BOOST_PP_IIF \
 		( \
 			HAS_NAMESPACE_ALIASES, \
@@ -238,6 +254,12 @@ class CLASS_NAME \
 			add_using_directive_namespace(namespace_& n);, \
 		) \
  \
+		void \
+		add_using_declaration_member(class_& member); \
+ \
+		void \
+		add_using_declaration_member(variable& member); \
+ \
 	private: \
 		BOOST_PP_IIF \
 		( \
@@ -261,6 +283,8 @@ class CLASS_NAME \
 		variables_t variables_; \
  \
 		namespace_ptrs_t using_directive_namespaces_; \
+		using_declaration_classes_t using_declaration_classes_; \
+		using_declaration_variables_t using_declaration_variables_; \
  \
 		DECLARATIVE_REGION_MEMBER_IMPL(DECLARATIVE_REGION_MEMBER_IMPL_T) \
 };

@@ -31,49 +31,45 @@ namespace scalpel { namespace cpp { namespace semantic_entities { namespace gene
 {
 
 template<class Entity, bool Const>
-struct member_type_traits;
+struct get_members_return_type;
 
 template<class Entity>
-struct member_type_traits<Entity, false>
+struct get_members_return_type<Entity, false>
 {
-	typedef typename utility::unique_ptr_vector<Entity>::range return_type;
-	typedef typename return_type::reference reference;
+	typedef typename utility::unique_ptr_vector<Entity>::range type;
 };
 
 template<class Entity>
-struct member_type_traits<Entity, true>
+struct get_members_return_type<Entity, true>
 {
-	typedef const utility::unique_ptr_vector<Entity>& return_type;
-	typedef typename utility::unique_ptr_vector<Entity>::const_reference reference;
+	typedef const utility::unique_ptr_vector<Entity>& type;
 };
 
 template<>
-struct member_type_traits<semantic_entities::destructor, false>
+struct get_members_return_type<semantic_entities::destructor, false>
 {
-	typedef utility::single_object_range<semantic_entities::destructor> return_type;
-	typedef typename return_type::reference reference;
+	typedef utility::single_object_range<semantic_entities::destructor> type;
 };
 
 template<>
-struct member_type_traits<semantic_entities::destructor, true>
+struct get_members_return_type<semantic_entities::destructor, true>
 {
-	typedef utility::single_object_const_range<semantic_entities::destructor> return_type;
-	typedef typename return_type::reference reference;
+	typedef utility::single_object_const_range<semantic_entities::destructor> type;
 };
 
 
 
 //
-//Main overloads (implemented in the .ipp file)
+//Main overloads (implemented in the .hpp file)
 //
 
 #define GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(PARENT_TYPE) \
 template<class Member> \
-typename member_type_traits<Member, false>::return_type \
+typename get_members_return_type<Member, false>::type \
 get_members(semantic_entities::PARENT_TYPE& parent); \
  \
 template<class Member> \
-typename member_type_traits<Member, true>::return_type \
+typename get_members_return_type<Member, true>::type \
 get_members(const semantic_entities::PARENT_TYPE& parent);
 
 GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(namespace_)
@@ -100,7 +96,7 @@ GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(statement_block)
 //
 
 template<class Member>
-typename member_type_traits<Member, false>::return_type
+typename get_members_return_type<Member, false>::type
 get_members(semantic_entities::namespace_alias& parent)
 {
 	semantic_entities::namespace_& n = parent.referred_namespace();
@@ -108,7 +104,7 @@ get_members(semantic_entities::namespace_alias& parent)
 }
 
 template<class Member>
-typename member_type_traits<Member, true>::return_type
+typename get_members_return_type<Member, true>::type
 get_members(const semantic_entities::namespace_alias& parent)
 {
 	semantic_entities::namespace_& n = parent.referred_namespace();
@@ -122,28 +118,28 @@ get_members(const semantic_entities::namespace_alias& parent)
 //
 
 template<class Member>
-struct get_type_members_visitor: public utility::static_visitor<typename member_type_traits<Member, false>::return_type>
+struct get_type_members_visitor: public utility::static_visitor<typename get_members_return_type<Member, false>::type>
 {
 	template<class T>
-	typename member_type_traits<Member, false>::return_type
+	typename get_members_return_type<Member, false>::type
 	operator()(const T&) const
 	{
 		assert(false);
 	}
 
-	typename member_type_traits<Member, false>::return_type
+	typename get_members_return_type<Member, false>::type
 	operator()(class_* t) const
 	{
 		return get_members<Member>(*t);
 	}
 
-	typename member_type_traits<Member, false>::return_type
+	typename get_members_return_type<Member, false>::type
 	operator()(member_class* t) const
 	{
 		return get_members<Member>(*t);
 	}
 
-	typename member_type_traits<Member, false>::return_type
+	typename get_members_return_type<Member, false>::type
 	operator()(const cv_qualified_type& t) const
 	{
 		get_type_members_visitor<Member> visitor;
@@ -152,7 +148,7 @@ struct get_type_members_visitor: public utility::static_visitor<typename member_
 };
 
 template<class Member>
-typename member_type_traits<Member, false>::return_type
+typename get_members_return_type<Member, false>::type
 get_members(semantic_entities::typedef_& parent)
 {
 	get_type_members_visitor<Member> visitor;
@@ -166,10 +162,10 @@ get_members(semantic_entities::typedef_& parent)
 //
 
 template<class Member>
-struct get_declarative_region_members_visitor: public utility::static_visitor<typename member_type_traits<Member, false>::return_type>
+struct get_declarative_region_members_visitor: public utility::static_visitor<typename get_members_return_type<Member, false>::type>
 {
 	template<class T>
-	typename member_type_traits<Member, false>::return_type
+	typename get_members_return_type<Member, false>::type
 	operator()(T* t) const
 	{
 		return get_members<Member>(*t);
@@ -177,7 +173,7 @@ struct get_declarative_region_members_visitor: public utility::static_visitor<ty
 };
 
 template<class Member, class... Entities>
-typename member_type_traits<Member, false>::return_type
+typename get_members_return_type<Member, false>::type
 get_members(utility::variant<Entities...>& parent)
 {
 	get_declarative_region_members_visitor<Member> visitor;

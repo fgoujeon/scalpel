@@ -212,7 +212,19 @@ BOOST_PP_IIF \
 	{ \
 		using_directive_namespaces_.push_back(&n); \
 	}, \
-)
+) \
+ \
+void \
+CLASS_NAME::add_using_declaration_member(class_& member) \
+{ \
+	using_declaration_classes_.push_back(&member); \
+} \
+ \
+void \
+CLASS_NAME::add_using_declaration_member(variable& member) \
+{ \
+	using_declaration_variables_.push_back(&member); \
+}
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
