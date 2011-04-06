@@ -84,6 +84,9 @@ has_mutable_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq
 bool
 has_typedef_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node);
 
+bool
+has_friend_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node);
+
 }}}}} //namespace scalpel::cpp::semantic_analysis::detail::syntax_node_analysis
 
 #include "decl_specifier_seq.ipp"

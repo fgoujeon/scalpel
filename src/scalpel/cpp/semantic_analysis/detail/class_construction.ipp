@@ -184,6 +184,7 @@ fill_class
 
 	boost::optional<type_variant> opt_unqualified_type;
 	bool has_typedef_specifier = false;
+	bool has_friend_specifier = false;
 	bool has_mutable_specifier = false;
 	bool has_static_specifier = false;
 	bool has_inline_specifier = false;
@@ -199,11 +200,15 @@ fill_class
 		const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
 
 		has_typedef_specifier = syntax_node_analysis::has_typedef_specifier(decl_specifier_seq_node);
+		has_friend_specifier = syntax_node_analysis::has_friend_specifier(decl_specifier_seq_node);
 		has_mutable_specifier = syntax_node_analysis::has_mutable_specifier(decl_specifier_seq_node);
 		has_static_specifier = syntax_node_analysis::has_static_specifier(decl_specifier_seq_node);
 		has_inline_specifier = syntax_node_analysis::has_inline_specifier(decl_specifier_seq_node);
 		has_virtual_specifier = syntax_node_analysis::has_virtual_specifier(decl_specifier_seq_node);
 		has_explicit_specifier = syntax_node_analysis::has_explicit_specifier(decl_specifier_seq_node);
+
+		//friend specifications are not implemented yet
+		if(has_friend_specifier) return;
 
 		//create and/or get undecorated type
 		switch(syntax_node_analysis::get_decl_specifier_seq_type(decl_specifier_seq_node))

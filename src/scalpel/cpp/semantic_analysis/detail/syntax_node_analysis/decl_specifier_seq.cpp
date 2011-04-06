@@ -138,5 +138,24 @@ has_typedef_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq
 	return false;
 }
 
+bool
+has_friend_specifier(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node)
+{
+	for
+	(
+		auto i = decl_specifier_seq_node.begin();
+		i < decl_specifier_seq_node.end();
+		++i
+	)
+	{
+		const decl_specifier& decl_specifier_node = *i;
+
+		if(get<predefined_text_node<utility::extern_strings::friend_>>(&decl_specifier_node))
+			return true;
+	}
+
+	return false;
+}
+
 }}}}} //namespace scalpel::cpp::semantic_analysis::detail::syntax_node_analysis
 
