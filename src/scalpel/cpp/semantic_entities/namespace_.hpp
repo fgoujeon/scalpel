@@ -37,6 +37,101 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <vector>
 #include <memory>
 
+#define NAME_PROPERTY \
+	public: \
+		const std::string& \
+		name() const \
+		{ \
+			return name_; \
+		} \
+ \
+	private: \
+		std::string name_;
+
+
+
+#define MEMBERS_OF_TYPE(TYPE, NAME) \
+	public: \
+		typedef utility::unique_ptr_vector<TYPE> NAME##_t; \
+ \
+		NAME##_t::range \
+		NAME(); \
+ \
+		const NAME##_t& \
+		NAME() const; \
+ \
+		void \
+		add_member(std::unique_ptr<TYPE>&& member); \
+ \
+	private: \
+		NAME##_t NAME##_;
+
+
+
+#define MEMBER_OF_TYPE(TYPE, NAME) \
+	public: \
+		TYPE* \
+		get_##NAME() \
+		{ \
+			return NAME##_.get(); \
+		} \
+ \
+		const TYPE* \
+		get_##NAME() const \
+		{ \
+			return NAME##_.get(); \
+		} \
+ \
+		void \
+		set_##NAME(std::unique_ptr<TYPE>&& member); \
+ \
+	private: \
+		std::unique_ptr<TYPE> NAME##_;
+
+
+
+#define USING_DIRECTIVE_NAMESPACES \
+	public: \
+		typedef std::vector<namespace_*> namespace_ptrs_t; \
+ \
+		const namespace_ptrs_t& \
+		using_directive_namespaces() const \
+		{ \
+			return using_directive_namespaces_; \
+		} \
+ \
+		void \
+		add_using_directive_namespace(namespace_& n) \
+		{ \
+			using_directive_namespaces_.push_back(&n); \
+		} \
+ \
+	private: \
+		namespace_ptrs_t using_directive_namespaces_;
+
+
+
+#define USING_DECLARATION_MEMBERS_OF_TYPE(TYPE, NAME) \
+	public: \
+		typedef std::vector<TYPE*> using_declaration_##NAME##_t; \
+ \
+		using_declaration_##NAME##_t& \
+		using_declaration_##NAME() \
+		{ \
+			return using_declaration_##NAME##_; \
+		} \
+ \
+		void \
+		add_using_declaration_member(TYPE& member) \
+		{ \
+			using_declaration_##NAME##_.push_back(&member); \
+		} \
+ \
+	private: \
+		using_declaration_##NAME##_t using_declaration_##NAME##_;
+
+
+
 #define GENERATE_NAMESPACE_DECLARATION( \
 	CLASS_NAME, \
 	NAMESPACE_TYPE, \
@@ -47,246 +142,51 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 	HAS_NAMESPACE_ALIASES, \
 	HAS_USING_DIRECTIVE_NAMESPACES \
 ) \
-class CLASS_NAME \
+struct CLASS_NAME \
 { \
-	public: \
-		typedef std::vector<namespace_*> namespace_ptrs_t; \
+	CLASS_NAME(); \
  \
-		typedef utility::unique_ptr_vector<NAMESPACE_TYPE> namespaces_t; \
-		BOOST_PP_IIF \
-		( \
-			CAN_HAVE_MULTIPLE_UNNAMED_NAMESPACES, \
-			typedef utility::unique_ptr_vector<UNNAMED_NAMESPACE_TYPE> unnamed_namespaces_t;, \
-		) \
-		typedef utility::unique_ptr_vector<namespace_alias> namespace_aliases_t; \
-		typedef utility::unique_ptr_vector<class_> classes_t; \
-		typedef utility::unique_ptr_vector<enum_> enums_t; \
-		typedef utility::unique_ptr_vector<typedef_> typedefs_t; \
-		typedef utility::unique_ptr_vector<simple_function> simple_functions_t; \
-		typedef utility::unique_ptr_vector<operator_function> operator_functions_t; \
-		typedef utility::unique_ptr_vector<variable> variables_t; \
+	BOOST_PP_IIF \
+	( \
+		IS_NAMED, \
+		explicit CLASS_NAME(const std::string& name);, \
+	) \
  \
-		typedef std::vector<class_*> using_declaration_classes_t; \
-		typedef std::vector<variable*> using_declaration_variables_t; \
+	CLASS_NAME(const CLASS_NAME&) = delete; \
  \
-	public: \
-		CLASS_NAME(); \
+	const CLASS_NAME& \
+	operator=(const CLASS_NAME&) = delete; \
  \
-		BOOST_PP_IIF \
-		( \
-			IS_NAMED, \
-			explicit CLASS_NAME(const std::string& name);, \
-		) \
+	BOOST_PP_IIF(IS_NAMED, NAME_PROPERTY,) \
  \
-		CLASS_NAME(const CLASS_NAME&) = delete; \
+	MEMBERS_OF_TYPE(NAMESPACE_TYPE, namespaces) \
+	BOOST_PP_IIF \
+	( \
+		CAN_HAVE_MULTIPLE_UNNAMED_NAMESPACES, \
+		MEMBERS_OF_TYPE(UNNAMED_NAMESPACE_TYPE, unnamed_namespaces), \
+		MEMBER_OF_TYPE(UNNAMED_NAMESPACE_TYPE, unnamed_namespace) \
+	) \
+	BOOST_PP_IIF \
+	( \
+		HAS_NAMESPACE_ALIASES, \
+		MEMBERS_OF_TYPE(namespace_alias, namespace_aliases), \
+	) \
+	MEMBERS_OF_TYPE(class_, classes) \
+	MEMBERS_OF_TYPE(enum_, enums) \
+	MEMBERS_OF_TYPE(typedef_, typedefs) \
+	MEMBERS_OF_TYPE(simple_function, simple_functions) \
+	MEMBERS_OF_TYPE(operator_function, operator_functions) \
+	MEMBERS_OF_TYPE(variable, variables) \
  \
-		const CLASS_NAME& \
-		operator=(const CLASS_NAME&) = delete; \
+	BOOST_PP_IIF \
+	( \
+		HAS_USING_DIRECTIVE_NAMESPACES, \
+		USING_DIRECTIVE_NAMESPACES, \
+	) \
+	USING_DECLARATION_MEMBERS_OF_TYPE(class_, classes) \
+	USING_DECLARATION_MEMBERS_OF_TYPE(variable, variables) \
  \
-		BOOST_PP_IIF \
-		( \
-			IS_NAMED, \
-			const std::string& \
-			name() const \
-			{ \
-				return name_; \
-			}, \
-		) \
- \
-		namespaces_t::range \
-		namespaces(); \
- \
-		const namespaces_t& \
-		namespaces() const; \
- \
-		BOOST_PP_IIF \
-		( \
-			CAN_HAVE_MULTIPLE_UNNAMED_NAMESPACES, \
- \
-			unnamed_namespaces_t::range \
-			unnamed_namespaces() \
-			{ \
-				return unnamed_namespaces_; \
-			}, \
- \
-			UNNAMED_NAMESPACE_TYPE* \
-			get_unnamed_namespace() \
-			{ \
-				return unnamed_namespace_.get(); \
-			} \
-		) \
- \
-		BOOST_PP_IIF \
-		( \
-			CAN_HAVE_MULTIPLE_UNNAMED_NAMESPACES, \
- \
-			const unnamed_namespaces_t& \
-			unnamed_namespaces() const \
-			{ \
-				return unnamed_namespaces_; \
-			}, \
- \
-			const UNNAMED_NAMESPACE_TYPE* \
-			get_unnamed_namespace() const \
-			{ \
-				return unnamed_namespace_.get(); \
-			} \
-		) \
- \
-		classes_t::range \
-		classes(); \
- \
-		const classes_t& \
-		classes() const; \
- \
-		enums_t::range \
-		enums(); \
- \
-		const enums_t& \
-		enums() const; \
- \
-		typedefs_t::range \
-		typedefs(); \
- \
-		const typedefs_t& \
-		typedefs() const; \
- \
-		simple_functions_t::range \
-		simple_functions(); \
- \
-		const simple_functions_t& \
-		simple_functions() const; \
- \
-		operator_functions_t::range \
-		operator_functions(); \
- \
-		const operator_functions_t& \
-		operator_functions() const; \
- \
-		variables_t::range \
-		variables(); \
- \
-		const variables_t& \
-		variables() const; \
- \
-		using_declaration_classes_t& \
-		using_declaration_classes() \
-		{ \
-			return using_declaration_classes_; \
-		} \
- \
-		using_declaration_variables_t& \
-		using_declaration_variables() \
-		{ \
-			return using_declaration_variables_; \
-		} \
- \
-		BOOST_PP_IIF \
-		( \
-			HAS_NAMESPACE_ALIASES, \
- \
-			namespace_aliases_t::range \
-			namespace_aliases() \
-			{ \
-				return namespace_aliases_; \
-			} \
- \
-			const namespace_aliases_t& \
-			namespace_aliases() const \
-			{ \
-				return namespace_aliases_; \
-			}, \
-		) \
- \
-		BOOST_PP_IIF \
-		( \
-			HAS_USING_DIRECTIVE_NAMESPACES, \
-			const namespace_ptrs_t& \
-			using_directive_namespaces() const \
-			{ \
-				return using_directive_namespaces_; \
-			}, \
-		) \
- \
-		BOOST_PP_IIF \
-		( \
-			HAS_NAMESPACE_ALIASES, \
-			void \
-			add_member(std::unique_ptr<namespace_alias>&& member);, \
-		) \
- \
-		void \
-		add_member(std::unique_ptr<NAMESPACE_TYPE>&& member); \
- \
-		BOOST_PP_IIF \
-		( \
-			CAN_HAVE_MULTIPLE_UNNAMED_NAMESPACES, \
- \
-			void \
-			add_member(std::unique_ptr<UNNAMED_NAMESPACE_TYPE>&& member);, \
- \
-			void \
-			set_unnamed_namespace(std::unique_ptr<UNNAMED_NAMESPACE_TYPE>&& member); \
-		) \
- \
-		void \
-		add_member(std::unique_ptr<class_>&& member); \
- \
-		void \
-		add_member(std::unique_ptr<enum_>&& member); \
- \
-		void \
-		add_member(std::unique_ptr<typedef_>&& member); \
- \
-		void \
-		add_member(std::unique_ptr<simple_function>&& member); \
- \
-		void \
-		add_member(std::unique_ptr<operator_function>&& member); \
- \
-		void \
-		add_member(std::unique_ptr<variable>&& member); \
- \
-		BOOST_PP_IIF \
-		( \
-			HAS_USING_DIRECTIVE_NAMESPACES, \
-			void \
-			add_using_directive_namespace(namespace_& n);, \
-		) \
- \
-		void \
-		add_using_declaration_member(class_& member); \
- \
-		void \
-		add_using_declaration_member(variable& member); \
- \
-	private: \
-		BOOST_PP_IIF \
-		( \
-			IS_NAMED, \
-			std::string name_;, \
-		) \
- \
-		namespace_aliases_t namespace_aliases_; \
-		namespaces_t namespaces_; \
-		BOOST_PP_IIF \
-		( \
-			CAN_HAVE_MULTIPLE_UNNAMED_NAMESPACES, \
-			unnamed_namespaces_t unnamed_namespaces_;, \
-			std::unique_ptr<UNNAMED_NAMESPACE_TYPE> unnamed_namespace_; \
-		) \
-		classes_t classes_; \
-		enums_t enums_; \
-		typedefs_t typedefs_; \
-		simple_functions_t simple_functions_; \
-		operator_functions_t operator_functions_; \
-		variables_t variables_; \
- \
-		namespace_ptrs_t using_directive_namespaces_; \
-		using_declaration_classes_t using_declaration_classes_; \
-		using_declaration_variables_t using_declaration_variables_; \
- \
-		DECLARATIVE_REGION_MEMBER_IMPL(DECLARATIVE_REGION_MEMBER_IMPL_T) \
+	DECLARATIVE_REGION_MEMBER_IMPL(DECLARATIVE_REGION_MEMBER_IMPL_T) \
 };
 
 namespace scalpel { namespace cpp { namespace semantic_entities
@@ -314,6 +214,11 @@ GENERATE_NAMESPACE_DECLARATION(linked_namespace, linked_namespace, linked_unname
 
 }}} //namespace scalpel::cpp::semantic_entities
 
+#undef NAME_PROPERTY
+#undef MEMBERS_OF_TYPE
+#undef MEMBER_OF_TYPE
+#undef USING_DIRECTIVE_NAMESPACES
+#undef USING_DECLARATION_MEMBERS_OF_TYPE
 #undef GENERATE_NAMESPACE_DECLARATION
 
 #include "macros/detail/declarative_region_member_impl_undef.hpp"
