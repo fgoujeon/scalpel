@@ -19,38 +19,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "namespace_.hpp"
-
-#define MEMBERS_OF_TYPE(CLASS_NAME, TYPE, NAME, SET_ENCLOSING_DECLARATIVE_REGION) \
-CLASS_NAME::NAME##_t::range \
-CLASS_NAME::NAME() \
-{ \
-	return NAME##_; \
-} \
- \
-const CLASS_NAME::NAME##_t& \
-CLASS_NAME::NAME() const \
-{ \
-	return NAME##_; \
-} \
- \
-void \
-CLASS_NAME::add_member(std::unique_ptr<TYPE>&& member) \
-{ \
-	BOOST_PP_IIF(SET_ENCLOSING_DECLARATIVE_REGION, member->enclosing_declarative_region(this);,) \
-    NAME##_.push_back(std::move(member)); \
-}
-
-
-
-#define MEMBER_OF_TYPE(CLASS_NAME, TYPE, NAME) \
-void \
-CLASS_NAME::set_##NAME(std::unique_ptr<TYPE>&& member) \
-{ \
-	member->enclosing_declarative_region(this); \
-	NAME##_ = std::move(member); \
-}
-
-
+#include "macros/detail/member_definition.hpp"
+#include "macros/detail/single_member_definition.hpp"
 
 #define GENERATE_NAMESPACE_DEFINITION( \
 	CLASS_NAME, \
@@ -74,24 +44,24 @@ BOOST_PP_IIF  \
 	}, \
 )  \
  \
-MEMBERS_OF_TYPE(CLASS_NAME, NAMESPACE_TYPE, namespaces, 1) \
+MEMBER_DEFINITION(CLASS_NAME, NAMESPACE_TYPE, namespaces, 1) \
 BOOST_PP_IIF \
 ( \
 	CAN_HAVE_MULTIPLE_UNNAMED_NAMESPACES, \
-	MEMBERS_OF_TYPE(CLASS_NAME, UNNAMED_NAMESPACE_TYPE, unnamed_namespaces, 1), \
-	MEMBER_OF_TYPE(CLASS_NAME, UNNAMED_NAMESPACE_TYPE, unnamed_namespace) \
+	MEMBER_DEFINITION(CLASS_NAME, UNNAMED_NAMESPACE_TYPE, unnamed_namespaces, 1), \
+	SINGLE_MEMBER_DEFINITION(CLASS_NAME, UNNAMED_NAMESPACE_TYPE, unnamed_namespace) \
 ) \
 BOOST_PP_IIF \
 ( \
 	HAS_NAMESPACE_ALIASES, \
-	MEMBERS_OF_TYPE(CLASS_NAME, namespace_alias, namespace_aliases, 0), \
+	MEMBER_DEFINITION(CLASS_NAME, namespace_alias, namespace_aliases, 0), \
 ) \
-MEMBERS_OF_TYPE(CLASS_NAME, class_, classes, 1) \
-MEMBERS_OF_TYPE(CLASS_NAME, enum_, enums, 1) \
-MEMBERS_OF_TYPE(CLASS_NAME, typedef_, typedefs, 1) \
-MEMBERS_OF_TYPE(CLASS_NAME, simple_function, simple_functions, 1) \
-MEMBERS_OF_TYPE(CLASS_NAME, operator_function, operator_functions, 1) \
-MEMBERS_OF_TYPE(CLASS_NAME, variable, variables, 1)
+MEMBER_DEFINITION(CLASS_NAME, class_, classes, 1) \
+MEMBER_DEFINITION(CLASS_NAME, enum_, enums, 1) \
+MEMBER_DEFINITION(CLASS_NAME, typedef_, typedefs, 1) \
+MEMBER_DEFINITION(CLASS_NAME, simple_function, simple_functions, 1) \
+MEMBER_DEFINITION(CLASS_NAME, operator_function, operator_functions, 1) \
+MEMBER_DEFINITION(CLASS_NAME, variable, variables, 1)
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -104,6 +74,7 @@ GENERATE_NAMESPACE_DEFINITION(linked_unnamed_namespace, linked_namespace, linked
 }}} //namespace scalpel::cpp::semantic_entities
 
 #undef GENERATE_NAMESPACE_DEFINITION
-#undef MEMBERS_OF_TYPE
-#undef MEMBER_OF_TYPE
+
+#include "macros/detail/member_definition_undef.hpp"
+#include "macros/detail/single_member_definition_undef.hpp"
 

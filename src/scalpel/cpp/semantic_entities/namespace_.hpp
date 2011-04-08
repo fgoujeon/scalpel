@@ -28,6 +28,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "functions.hpp"
 #include "typedef_.hpp"
 #include "variable.hpp"
+#include "macros/detail/name_property.hpp"
+#include "macros/detail/member_declaration.hpp"
+#include "macros/detail/single_member_declaration.hpp"
+#include "macros/detail/using_directive_namespace_declaration.hpp"
+#include "macros/detail/using_declaration_member_declaration.hpp"
 #include "macros/detail/declarative_region_member_impl.hpp"
 #include <scalpel/utility/unique_ptr_vector.hpp>
 #include <boost/preprocessor/control/iif.hpp>
@@ -37,101 +42,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <vector>
 #include <memory>
 
-#define NAME_PROPERTY \
-	public: \
-		const std::string& \
-		name() const \
-		{ \
-			return name_; \
-		} \
- \
-	private: \
-		std::string name_;
-
-
-
-#define MEMBERS_OF_TYPE(TYPE, NAME) \
-	public: \
-		typedef utility::unique_ptr_vector<TYPE> NAME##_t; \
- \
-		NAME##_t::range \
-		NAME(); \
- \
-		const NAME##_t& \
-		NAME() const; \
- \
-		void \
-		add_member(std::unique_ptr<TYPE>&& member); \
- \
-	private: \
-		NAME##_t NAME##_;
-
-
-
-#define MEMBER_OF_TYPE(TYPE, NAME) \
-	public: \
-		TYPE* \
-		get_##NAME() \
-		{ \
-			return NAME##_.get(); \
-		} \
- \
-		const TYPE* \
-		get_##NAME() const \
-		{ \
-			return NAME##_.get(); \
-		} \
- \
-		void \
-		set_##NAME(std::unique_ptr<TYPE>&& member); \
- \
-	private: \
-		std::unique_ptr<TYPE> NAME##_;
-
-
-
-#define USING_DIRECTIVE_NAMESPACES \
-	public: \
-		typedef std::vector<namespace_*> namespace_ptrs_t; \
- \
-		const namespace_ptrs_t& \
-		using_directive_namespaces() const \
-		{ \
-			return using_directive_namespaces_; \
-		} \
- \
-		void \
-		add_using_directive_namespace(namespace_& n) \
-		{ \
-			using_directive_namespaces_.push_back(&n); \
-		} \
- \
-	private: \
-		namespace_ptrs_t using_directive_namespaces_;
-
-
-
-#define USING_DECLARATION_MEMBERS_OF_TYPE(TYPE, NAME) \
-	public: \
-		typedef std::vector<TYPE*> using_declaration_##NAME##_t; \
- \
-		using_declaration_##NAME##_t& \
-		using_declaration_##NAME() \
-		{ \
-			return using_declaration_##NAME##_; \
-		} \
- \
-		void \
-		add_using_declaration_member(TYPE& member) \
-		{ \
-			using_declaration_##NAME##_.push_back(&member); \
-		} \
- \
-	private: \
-		using_declaration_##NAME##_t using_declaration_##NAME##_;
-
-
-
 #define GENERATE_NAMESPACE_DECLARATION( \
 	CLASS_NAME, \
 	NAMESPACE_TYPE, \
@@ -140,7 +50,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 	IS_NAMED, \
 	CAN_HAVE_MULTIPLE_UNNAMED_NAMESPACES, \
 	HAS_NAMESPACE_ALIASES, \
-	HAS_USING_DIRECTIVE_NAMESPACES \
+	HAS_USING_DIRECTIVE_NAMESPACE_DECLARATION \
 ) \
 struct CLASS_NAME \
 { \
@@ -159,32 +69,35 @@ struct CLASS_NAME \
  \
 	BOOST_PP_IIF(IS_NAMED, NAME_PROPERTY,) \
  \
-	MEMBERS_OF_TYPE(NAMESPACE_TYPE, namespaces) \
+	MEMBER_DECLARATION(NAMESPACE_TYPE, namespaces) \
 	BOOST_PP_IIF \
 	( \
 		CAN_HAVE_MULTIPLE_UNNAMED_NAMESPACES, \
-		MEMBERS_OF_TYPE(UNNAMED_NAMESPACE_TYPE, unnamed_namespaces), \
-		MEMBER_OF_TYPE(UNNAMED_NAMESPACE_TYPE, unnamed_namespace) \
+		MEMBER_DECLARATION(UNNAMED_NAMESPACE_TYPE, unnamed_namespaces), \
+		SINGLE_MEMBER_DECLARATION(UNNAMED_NAMESPACE_TYPE, unnamed_namespace) \
 	) \
 	BOOST_PP_IIF \
 	( \
 		HAS_NAMESPACE_ALIASES, \
-		MEMBERS_OF_TYPE(namespace_alias, namespace_aliases), \
+		MEMBER_DECLARATION(namespace_alias, namespace_aliases), \
 	) \
-	MEMBERS_OF_TYPE(class_, classes) \
-	MEMBERS_OF_TYPE(enum_, enums) \
-	MEMBERS_OF_TYPE(typedef_, typedefs) \
-	MEMBERS_OF_TYPE(simple_function, simple_functions) \
-	MEMBERS_OF_TYPE(operator_function, operator_functions) \
-	MEMBERS_OF_TYPE(variable, variables) \
+	MEMBER_DECLARATION(class_, classes) \
+	MEMBER_DECLARATION(enum_, enums) \
+	MEMBER_DECLARATION(typedef_, typedefs) \
+	MEMBER_DECLARATION(simple_function, simple_functions) \
+	MEMBER_DECLARATION(operator_function, operator_functions) \
+	MEMBER_DECLARATION(variable, variables) \
  \
 	BOOST_PP_IIF \
 	( \
-		HAS_USING_DIRECTIVE_NAMESPACES, \
-		USING_DIRECTIVE_NAMESPACES, \
+		HAS_USING_DIRECTIVE_NAMESPACE_DECLARATION, \
+		USING_DIRECTIVE_NAMESPACE_DECLARATION, \
 	) \
-	USING_DECLARATION_MEMBERS_OF_TYPE(class_, classes) \
-	USING_DECLARATION_MEMBERS_OF_TYPE(variable, variables) \
+	USING_DECLARATION_MEMBER_DECLARATION(class_, classes) \
+	USING_DECLARATION_MEMBER_DECLARATION(member_class, member_classes) \
+	USING_DECLARATION_MEMBER_DECLARATION(enum_, enums) \
+	USING_DECLARATION_MEMBER_DECLARATION(member_enum, member_enums) \
+	USING_DECLARATION_MEMBER_DECLARATION(variable, variables) \
  \
 	DECLARATIVE_REGION_MEMBER_IMPL(DECLARATIVE_REGION_MEMBER_IMPL_T) \
 };
@@ -214,13 +127,11 @@ GENERATE_NAMESPACE_DECLARATION(linked_namespace, linked_namespace, linked_unname
 
 }}} //namespace scalpel::cpp::semantic_entities
 
-#undef NAME_PROPERTY
-#undef MEMBERS_OF_TYPE
-#undef MEMBER_OF_TYPE
-#undef USING_DIRECTIVE_NAMESPACES
-#undef USING_DECLARATION_MEMBERS_OF_TYPE
-#undef GENERATE_NAMESPACE_DECLARATION
-
+#include "macros/detail/name_property_undef.hpp"
+#include "macros/detail/member_declaration_undef.hpp"
+#include "macros/detail/single_member_declaration_undef.hpp"
+#include "macros/detail/using_directive_namespace_declaration_undef.hpp"
+#include "macros/detail/using_declaration_member_declaration_undef.hpp"
 #include "macros/detail/declarative_region_member_impl_undef.hpp"
 
 #endif
