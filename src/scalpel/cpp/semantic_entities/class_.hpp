@@ -26,6 +26,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "type_variant_fwd.hpp"
 #include "member_access.hpp"
 #include "impl/detail/declarative_region_member_impl.hpp"
+#include "macros/detail/member_declaration.hpp"
+#include "macros/detail/single_member_declaration.hpp"
 #include "macros/detail/declarative_region_member_impl.hpp"
 #include <scalpel/utility/unique_ptr_vector.hpp>
 #include <scalpel/utility/unique_ptr_vector.hpp>
@@ -40,17 +42,19 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define GENERATE_CLASS_DECLARATION(CLASS_NAME, IS_MEMBER) \
 class CLASS_NAME \
 { \
+	MEMBER_DECLARATION(member_class, classes) \
+	MEMBER_DECLARATION(member_enum, enums) \
+	MEMBER_DECLARATION(member_typedef, typedefs) \
+	MEMBER_DECLARATION(constructor, constructors) \
+	SINGLE_MEMBER_DECLARATION(destructor, destructor, 0) \
+	MEMBER_DECLARATION(operator_member_function, operator_functions) \
+	MEMBER_DECLARATION(conversion_function, conversion_functions) \
+	MEMBER_DECLARATION(simple_member_function, simple_functions) \
+	MEMBER_DECLARATION(member_variable, variables) \
+	MEMBER_DECLARATION(bit_field, bit_fields) \
+ \
 	public: \
 		typedef std::vector<base_class> base_classes_t; \
-		typedef utility::unique_ptr_vector<member_class> classes_t; \
-		typedef utility::unique_ptr_vector<member_enum> enums_t; \
-		typedef utility::unique_ptr_vector<member_typedef> typedefs_t; \
-		typedef utility::unique_ptr_vector<constructor> constructors_t; \
-		typedef utility::unique_ptr_vector<operator_member_function> operator_functions_t; \
-		typedef utility::unique_ptr_vector<conversion_function> conversion_functions_t; \
-		typedef utility::unique_ptr_vector<simple_member_function> simple_functions_t; \
-		typedef utility::unique_ptr_vector<member_variable> variables_t; \
-		typedef utility::unique_ptr_vector<bit_field> bit_fields_t; \
  \
 	public: \
         explicit \
@@ -96,104 +100,11 @@ class CLASS_NAME \
 		const base_classes_t& \
 		base_classes() const; \
  \
-		classes_t::range \
-		nested_classes(); \
- \
-		const classes_t& \
-		nested_classes() const; \
- \
-		enums_t::range \
-		enums(); \
- \
-		const enums_t& \
-		enums() const; \
- \
-		typedefs_t::range \
-		typedefs(); \
- \
-		const typedefs_t& \
-		typedefs() const; \
- \
-		constructors_t::range \
-		constructors(); \
- \
-		const constructors_t& \
-		constructors() const; \
- \
-		destructor& \
-		get_destructor(); \
- \
-		const destructor& \
-		get_destructor() const; \
- \
-		simple_functions_t::range \
-		simple_functions(); \
- \
-		const simple_functions_t& \
-		simple_functions() const; \
- \
-		operator_functions_t::range \
-		operator_functions(); \
- \
-		const operator_functions_t& \
-		operator_functions() const; \
- \
-		conversion_functions_t::range \
-		conversion_functions(); \
- \
-		const conversion_functions_t& \
-		conversion_functions() const; \
- \
-		variables_t::range \
-		variables(); \
- \
-		const variables_t& \
-		variables() const; \
- \
-		bit_fields_t::range \
-		bit_fields(); \
- \
-		const bit_fields_t& \
-		bit_fields() const; \
- \
         void \
         add_base_class(const base_class& bc); \
  \
-        void \
-        add_member(std::unique_ptr<member_class>&& member); \
- \
-		void \
-		add_member(std::unique_ptr<member_enum>&& member); \
- \
-        void \
-        add_member(std::unique_ptr<member_typedef>&& member); \
- \
-        void \
-        add_member(std::unique_ptr<constructor>&& member); \
- \
-		void \
-		set_destructor(std::unique_ptr<destructor>&& member); \
- \
-		void \
-		add_member(std::unique_ptr<destructor>&& member); \
- \
 		void \
 		reset_destructor(); \
- \
-        void \
-        add_member(std::unique_ptr<simple_member_function>&& member); \
- \
-        void \
-        add_member(std::unique_ptr<operator_member_function>&& member); \
- \
-        void \
-        add_member(std::unique_ptr<conversion_function>&& member); \
- \
-		void \
-		add_member(std::unique_ptr<member_variable>&& member); \
- \
-		void \
-		add_member(std::unique_ptr<bit_field>&& member); \
  \
     private: \
         std::string name_; \
@@ -205,16 +116,6 @@ class CLASS_NAME \
 		bool complete_; \
  \
 		base_classes_t base_classes_; \
-		classes_t nested_classes_; \
-		enums_t enums_; \
-		typedefs_t typedefs_; \
-		constructors_t constructors_; \
-		std::unique_ptr<destructor> destructor_; \
-		simple_functions_t simple_functions_; \
-		operator_functions_t operator_functions_; \
-		conversion_functions_t conversion_functions_; \
-		variables_t variables_; \
-		bit_fields_t bit_fields_; \
  \
 		BOOST_PP_IIF \
 		( \
@@ -257,6 +158,8 @@ GENERATE_CLASS_DECLARATION(member_class, 1)
 
 #undef GENERATE_CLASS_DECLARATION
 
+#include "macros/detail/member_declaration_undef.hpp"
+#include "macros/detail/single_member_declaration_undef.hpp"
 #include "macros/detail/declarative_region_member_impl_undef.hpp"
 
 #endif

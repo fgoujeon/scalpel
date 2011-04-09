@@ -108,7 +108,7 @@ namespace
 	void
 	list_child_entities(const Class& parent_entity, entity_groups& groups, const bool force_internal_linkage)
 	{
-		const utility::unique_ptr_vector<member_class>& child_classes = parent_entity.nested_classes();
+		const utility::unique_ptr_vector<member_class>& child_classes = parent_entity.classes();
 		for(auto i = child_classes.begin(); i != child_classes.end(); ++i)
 		{
 			list_child_entities(*i, groups, force_internal_linkage);

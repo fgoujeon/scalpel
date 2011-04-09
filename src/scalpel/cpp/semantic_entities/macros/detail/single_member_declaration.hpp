@@ -18,18 +18,30 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define SINGLE_MEMBER_DECLARATION(TYPE, NAME) \
+#include <boost/preprocessor/control/iif.hpp>
+
+#define SINGLE_MEMBER_DECLARATION(TYPE, NAME, OPTIONAL) \
 	public: \
-		TYPE* \
+		TYPE BOOST_PP_IIF(OPTIONAL, *, &) \
 		get_##NAME() \
 		{ \
-			return NAME##_.get(); \
+			BOOST_PP_IIF \
+			( \
+				OPTIONAL, \
+				return NAME##_.get();, \
+				return *NAME##_; \
+			) \
 		} \
  \
-		const TYPE* \
+		const TYPE BOOST_PP_IIF(OPTIONAL, *, &) \
 		get_##NAME() const \
 		{ \
-			return NAME##_.get(); \
+			BOOST_PP_IIF \
+			( \
+				OPTIONAL, \
+				return NAME##_.get();, \
+				return *NAME##_; \
+			) \
 		} \
  \
 		void \

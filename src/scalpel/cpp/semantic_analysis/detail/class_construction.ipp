@@ -477,7 +477,7 @@ add_class
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
 
-	typename ParentClass::classes_t::range classes = parent_class_entity.nested_classes();
+	typename ParentClass::classes_t::range classes = parent_class_entity.classes();
 	for(auto i = classes.begin(); i != classes.end(); ++i)
 	{
 		member_class& current_class = *i;

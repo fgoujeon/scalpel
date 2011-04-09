@@ -23,6 +23,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "functions.hpp"
 #include "variable.hpp"
 #include "type_variant.hpp"
+#include "macros/detail/member_definition.hpp"
+#include "macros/detail/single_member_definition.hpp"
 #include <memory>
 
 #define GENERATE_CLASS_DEFINITION(CLASS_NAME, IS_MEMBER) \
@@ -38,130 +40,21 @@ CLASS_NAME::CLASS_NAME \
 	reset_destructor(); \
 } \
  \
+MEMBER_DEFINITION(CLASS_NAME, member_class, classes, 1) \
+MEMBER_DEFINITION(CLASS_NAME, member_enum, enums, 1) \
+MEMBER_DEFINITION(CLASS_NAME, member_typedef, typedefs, 1) \
+MEMBER_DEFINITION(CLASS_NAME, constructor, constructors, 1) \
+SINGLE_MEMBER_DEFINITION(CLASS_NAME, destructor, destructor) \
+MEMBER_DEFINITION(CLASS_NAME, operator_member_function, operator_functions, 1) \
+MEMBER_DEFINITION(CLASS_NAME, conversion_function, conversion_functions, 1) \
+MEMBER_DEFINITION(CLASS_NAME, simple_member_function, simple_functions, 1) \
+MEMBER_DEFINITION(CLASS_NAME, member_variable, variables, 1) \
+MEMBER_DEFINITION(CLASS_NAME, bit_field, bit_fields, 1) \
+ \
 const CLASS_NAME::base_classes_t& \
 CLASS_NAME::base_classes() const \
 { \
 	return base_classes_; \
-} \
- \
-CLASS_NAME::classes_t::range \
-CLASS_NAME::nested_classes() \
-{ \
-	return nested_classes_; \
-} \
- \
-const CLASS_NAME::classes_t& \
-CLASS_NAME::nested_classes() const \
-{ \
-	return nested_classes_; \
-} \
- \
-CLASS_NAME::enums_t::range \
-CLASS_NAME::enums() \
-{ \
-	return enums_; \
-} \
- \
-const CLASS_NAME::enums_t& \
-CLASS_NAME::enums() const \
-{ \
-	return enums_; \
-} \
- \
-CLASS_NAME::typedefs_t::range \
-CLASS_NAME::typedefs() \
-{ \
-	return typedefs_; \
-} \
- \
-const CLASS_NAME::typedefs_t& \
-CLASS_NAME::typedefs() const \
-{ \
-	return typedefs_; \
-} \
- \
-CLASS_NAME::constructors_t::range \
-CLASS_NAME::constructors() \
-{ \
-	return constructors_; \
-} \
- \
-const CLASS_NAME::constructors_t& \
-CLASS_NAME::constructors() const \
-{ \
-	return constructors_; \
-} \
- \
-destructor& \
-CLASS_NAME::get_destructor() \
-{ \
-	return *destructor_; \
-} \
- \
-const destructor& \
-CLASS_NAME::get_destructor() const \
-{ \
-	return *destructor_; \
-} \
- \
-CLASS_NAME::simple_functions_t::range \
-CLASS_NAME::simple_functions() \
-{ \
-	return simple_functions_; \
-} \
- \
-const CLASS_NAME::simple_functions_t& \
-CLASS_NAME::simple_functions() const \
-{ \
-	return simple_functions_; \
-} \
- \
-CLASS_NAME::operator_functions_t::range \
-CLASS_NAME::operator_functions() \
-{ \
-	return operator_functions_; \
-} \
- \
-const CLASS_NAME::operator_functions_t& \
-CLASS_NAME::operator_functions() const \
-{ \
-	return operator_functions_; \
-} \
- \
-CLASS_NAME::conversion_functions_t::range \
-CLASS_NAME::conversion_functions() \
-{ \
-	return conversion_functions_; \
-} \
- \
-const CLASS_NAME::conversion_functions_t& \
-CLASS_NAME::conversion_functions() const \
-{ \
-	return conversion_functions_; \
-} \
- \
-CLASS_NAME::variables_t::range \
-CLASS_NAME::variables() \
-{ \
-	return variables_; \
-} \
- \
-const CLASS_NAME::variables_t& \
-CLASS_NAME::variables() const \
-{ \
-	return variables_; \
-} \
- \
-CLASS_NAME::bit_fields_t::range \
-CLASS_NAME::bit_fields() \
-{ \
-	return bit_fields_; \
-} \
- \
-const CLASS_NAME::bit_fields_t& \
-CLASS_NAME::bit_fields() const \
-{ \
-	return bit_fields_; \
 } \
  \
 void \
@@ -171,89 +64,12 @@ CLASS_NAME::add_base_class(const base_class& bc) \
 } \
  \
 void \
-CLASS_NAME::add_member(std::unique_ptr<member_class>&& member) \
-{ \
-	member->enclosing_declarative_region(this); \
-	nested_classes_.push_back(std::move(member)); \
-} \
- \
-void \
-CLASS_NAME::add_member(std::unique_ptr<member_enum>&& member) \
-{ \
-	member->enclosing_declarative_region(this); \
-    enums_.push_back(std::move(member)); \
-} \
- \
-void \
-CLASS_NAME::add_member(std::unique_ptr<member_typedef>&& member) \
-{ \
-	member->enclosing_declarative_region(this); \
-    typedefs_.push_back(std::move(member)); \
-} \
- \
-void \
-CLASS_NAME::add_member(std::unique_ptr<constructor>&& member) \
-{ \
-	member->enclosing_declarative_region(this); \
-    constructors_.push_back(std::move(member)); \
-} \
- \
-void \
-CLASS_NAME::set_destructor(std::unique_ptr<destructor>&& member) \
-{ \
-	member->enclosing_declarative_region(this); \
-	destructor_ = std::move(member); \
-} \
- \
-void \
-CLASS_NAME::add_member(std::unique_ptr<destructor>&& member) \
-{ \
-	member->enclosing_declarative_region(this); \
-	destructor_ = std::move(member); \
-} \
- \
-void \
 CLASS_NAME::reset_destructor() \
 { \
 	set_destructor \
 	( \
 		std::unique_ptr<destructor>(new destructor(member_access::PUBLIC, false)) \
 	); \
-} \
- \
-void \
-CLASS_NAME::add_member(std::unique_ptr<simple_member_function>&& member) \
-{ \
-	member->enclosing_declarative_region(this); \
-    simple_functions_.push_back(std::move(member)); \
-} \
- \
-void \
-CLASS_NAME::add_member(std::unique_ptr<operator_member_function>&& member) \
-{ \
-	member->enclosing_declarative_region(this); \
-    operator_functions_.push_back(std::move(member)); \
-} \
- \
-void \
-CLASS_NAME::add_member(std::unique_ptr<conversion_function>&& member) \
-{ \
-	member->enclosing_declarative_region(this); \
-    conversion_functions_.push_back(std::move(member)); \
-} \
- \
-void \
-CLASS_NAME::add_member(std::unique_ptr<member_variable>&& member) \
-{ \
-	member->enclosing_declarative_region(this); \
-    variables_.push_back(std::move(member)); \
-} \
- \
-void \
-CLASS_NAME::add_member(std::unique_ptr<bit_field>&& member) \
-{ \
-	member->enclosing_declarative_region(this); \
-    bit_fields_.push_back(std::move(member)); \
 }
 
 namespace scalpel { namespace cpp { namespace semantic_entities
@@ -265,4 +81,7 @@ GENERATE_CLASS_DEFINITION(member_class, 1)
 }}} //namespace scalpel::cpp::semantic_entities
 
 #undef GENERATE_CLASS_DEFINITION
+
+#include "macros/detail/member_definition_undef.hpp"
+#include "macros/detail/single_member_definition_undef.hpp"
 
