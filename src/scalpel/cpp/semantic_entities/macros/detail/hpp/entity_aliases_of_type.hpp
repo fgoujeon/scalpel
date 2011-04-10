@@ -18,5 +18,28 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#undef USING_DECLARATION_MEMBER_DECLARATION
+#define ENTITY_ALIASES_OF_TYPE(TYPE, NAME) \
+	public: \
+		typedef utility::vector<entity_alias<TYPE>> NAME##_aliases_t; \
+ \
+		NAME##_aliases_t::range \
+		NAME##_aliases() \
+		{ \
+			return NAME##_aliases_; \
+		} \
+ \
+		const NAME##_aliases_t& \
+		NAME##_aliases() const \
+		{ \
+			return NAME##_aliases_; \
+		} \
+ \
+		void \
+		add_member(const entity_alias<TYPE>& member) \
+		{ \
+			NAME##_aliases_.push_back(member); \
+		} \
+ \
+	private: \
+		NAME##_aliases_t NAME##_aliases_;
 

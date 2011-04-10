@@ -323,8 +323,8 @@ fill_namespace
 
 		if(found_entity) //if an entity has been found
 		{
-			//add the entity to the namespace (as a using declaration member)
-			add_using_declaration_member(namespace_entity, *found_entity);
+			//add the entity alias to the namespace
+			add_alias(namespace_entity, *found_entity);
 		}
 		else
 		{
@@ -348,7 +348,7 @@ fill_namespace
 			for(auto i = found_entities.begin(); i != found_entities.end(); ++i)
 			{
 				simple_function& entity = **i;
-				namespace_entity.add_using_declaration_member(entity);
+				namespace_entity.add_member(entity_alias<simple_function>(entity));
 			}
 		}
 	}
@@ -499,10 +499,10 @@ add_class
 
 
 template<class Namespace>
-class add_using_declaration_member_visitor: public utility::static_visitor<void>
+class add_alias_visitor: public utility::static_visitor<void>
 {
 	public:
-		add_using_declaration_member_visitor(Namespace& namespace_entity):
+		add_alias_visitor(Namespace& namespace_entity):
 			namespace_entity_(namespace_entity)
 		{
 		}
@@ -511,7 +511,7 @@ class add_using_declaration_member_visitor: public utility::static_visitor<void>
 		void
 		operator()(Entity* entity)
 		{
-			namespace_entity_.add_using_declaration_member(*entity);
+			namespace_entity_.add_member(semantic_entities::entity_alias<Entity>(*entity));
 		}
 
 	private:
@@ -520,13 +520,13 @@ class add_using_declaration_member_visitor: public utility::static_visitor<void>
 
 template<class Namespace, class... Entities>
 void
-add_using_declaration_member
+add_alias
 (
 	Namespace& namespace_entity,
 	const utility::variant<Entities...>& entity
 )
 {
-	add_using_declaration_member_visitor<Namespace> visitor(namespace_entity);
+	add_alias_visitor<Namespace> visitor(namespace_entity);
 	apply_visitor(visitor, entity);
 }
 

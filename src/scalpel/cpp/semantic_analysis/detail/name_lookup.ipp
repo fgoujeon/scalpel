@@ -26,7 +26,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <scalpel/cpp/semantic_entities/generic_queries/detail/has_enclosing_declarative_region.hpp>
 #include <scalpel/cpp/semantic_entities/generic_queries/detail/enclosing_declarative_region.hpp>
 #include <scalpel/cpp/semantic_entities/generic_queries/detail/get_members.hpp>
-#include <scalpel/cpp/semantic_entities/generic_queries/detail/get_using_declaration_members.hpp>
+#include <scalpel/cpp/semantic_entities/generic_queries/detail/get_entity_aliases.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail { namespace name_lookup
 {
@@ -480,14 +480,14 @@ find_single_type_local_entities<EntityIdentificationPolicy, DeclarativeRegionT, 
 		}
 	}
 
-	//look up in current declarative region's using declaration entities
+	//look up in current declarative region's entity aliases
 	{
-		typename utility::ptr_vector<EntityT>::range members =
-			semantic_entities::generic_queries::detail::get_using_declaration_members<EntityT>(current_declarative_region)
+		typename utility::vector<semantic_entities::entity_alias<EntityT>>::range members =
+			semantic_entities::generic_queries::detail::get_entity_aliases<EntityT>(current_declarative_region)
 		;
 		for(auto i = members.begin(); i != members.end(); ++i)
 		{
-			EntityT& current_entity = *i;
+			EntityT& current_entity = i->referred_entity();
 			if(EntityIdentificationPolicy::are_identifiers_equal(current_entity, identifier))
 			{
 				add_to_result(found_entities, current_entity);

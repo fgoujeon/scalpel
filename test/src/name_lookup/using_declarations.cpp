@@ -70,7 +70,7 @@ BOOST_AUTO_TEST_CASE(using_declarations)
 	//assembling
 	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_n));
 	namespace_n->add_member(std::unique_ptr<variable>(variable_n_i));
-	semantic_graph.add_using_declaration_member(*variable_n_i);
+	semantic_graph.add_member(entity_alias<variable>(*variable_n_i));
 	semantic_graph.add_member(std::unique_ptr<simple_function>(function_f));
 
 	//look up i from function f(), must find n::i

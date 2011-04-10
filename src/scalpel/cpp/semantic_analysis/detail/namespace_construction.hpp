@@ -90,10 +90,10 @@ add_class
 	std::unique_ptr<semantic_entities::class_>&& class_entity
 );
 
-//add the entity to the given namespace
+//add the entity alias to the given namespace
 template<class Namespace, class... Entities>
 void
-add_using_declaration_member
+add_alias
 (
 	Namespace& namespace_entity,
 	const utility::variant<Entities...>& entity

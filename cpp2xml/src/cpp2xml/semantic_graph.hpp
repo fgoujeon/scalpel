@@ -248,9 +248,9 @@ class semantic_graph_serializer
 		);
 
 		void
-		serialize_using_declaration_class
+		serialize_class_alias
 		(
-			const class_& entity,
+			const entity_alias<class_>& entity,
 			const unsigned int indent_level
 		);
 

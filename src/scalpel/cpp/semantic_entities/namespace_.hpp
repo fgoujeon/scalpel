@@ -23,6 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "declarative_region_variants.hpp"
 #include "namespace_alias.hpp"
+#include "entity_alias.hpp"
 #include "class_.hpp"
 #include "enum_.hpp"
 #include "functions.hpp"
@@ -32,10 +33,10 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "macros/detail/member_declaration.hpp"
 #include "macros/detail/single_member_declaration.hpp"
 #include "macros/detail/using_directive_namespace_declaration.hpp"
-#include "macros/detail/using_declaration_member_declaration.hpp"
 #include "macros/detail/declarative_region_member_impl.hpp"
+#include "macros/detail/hpp/entity_aliases_of_type.hpp"
 #include <scalpel/utility/unique_ptr_vector.hpp>
-#include <scalpel/utility/ptr_vector.hpp>
+#include <scalpel/utility/vector.hpp>
 #include <boost/preprocessor/control/iif.hpp>
 #include <boost/preprocessor/punctuation/comma_if.hpp>
 #include <boost/preprocessor/punctuation/comma.hpp>
@@ -94,12 +95,12 @@ struct CLASS_NAME \
 		HAS_USING_DIRECTIVE_NAMESPACE_DECLARATION, \
 		USING_DIRECTIVE_NAMESPACE_DECLARATION, \
 	) \
-	USING_DECLARATION_MEMBER_DECLARATION(class_, classes) \
-	USING_DECLARATION_MEMBER_DECLARATION(enum_, enums) \
-	USING_DECLARATION_MEMBER_DECLARATION(typedef_, typedefs) \
-	USING_DECLARATION_MEMBER_DECLARATION(simple_function, simple_functions) \
-	USING_DECLARATION_MEMBER_DECLARATION(operator_function, operator_functions) \
-	USING_DECLARATION_MEMBER_DECLARATION(variable, variables) \
+	ENTITY_ALIASES_OF_TYPE(class_, class) \
+	ENTITY_ALIASES_OF_TYPE(enum_, enum) \
+	ENTITY_ALIASES_OF_TYPE(typedef_, typedef) \
+	ENTITY_ALIASES_OF_TYPE(simple_function, simple_function) \
+	ENTITY_ALIASES_OF_TYPE(operator_function, operator_function) \
+	ENTITY_ALIASES_OF_TYPE(variable, variable) \
  \
 	DECLARATIVE_REGION_MEMBER_IMPL(DECLARATIVE_REGION_MEMBER_IMPL_T) \
 };
@@ -133,8 +134,8 @@ GENERATE_NAMESPACE_DECLARATION(linked_namespace, linked_namespace, linked_unname
 #include "macros/detail/member_declaration_undef.hpp"
 #include "macros/detail/single_member_declaration_undef.hpp"
 #include "macros/detail/using_directive_namespace_declaration_undef.hpp"
-#include "macros/detail/using_declaration_member_declaration_undef.hpp"
 #include "macros/detail/declarative_region_member_impl_undef.hpp"
+#include "macros/detail/hpp/entity_aliases_of_type_undef.hpp"
 
 #endif
 
