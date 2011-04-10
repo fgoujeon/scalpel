@@ -18,30 +18,20 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_UTILITY_VECTOR_IPP
-#define SCALPEL_UTILITY_VECTOR_IPP
+#ifndef SCALPEL_UTILITY_VECTOR_RANGE_HPP
+#define SCALPEL_UTILITY_VECTOR_RANGE_HPP
+
+#include <boost/range/iterator_range.hpp>
+#include <vector>
 
 namespace scalpel { namespace utility
 {
 
 template<typename T>
-vector<T>::vector()
+struct vector_range
 {
-}
-
-template<typename T>
-vector<T>::vector(vector&& o):
-	raw_vector_(std::move(o.raw_vector_))
-{
-}
-
-template<typename T>
-const vector<T>&
-vector<T>::operator=(vector&& o)
-{
-	raw_vector_ = std::move(o.raw_vector_);
-	return *this;
-}
+	typedef boost::iterator_range<typename std::vector<T>::iterator> type;
+};
 
 }} //namespace scalpel::utility
 

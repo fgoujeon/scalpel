@@ -20,9 +20,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #define ENTITY_ALIASES_OF_TYPE(TYPE, NAME) \
 	public: \
-		typedef utility::vector<entity_alias<TYPE>> NAME##_aliases_t; \
+		typedef std::vector<entity_alias<TYPE>> NAME##_aliases_t; \
  \
-		NAME##_aliases_t::range \
+		typename utility::vector_range<entity_alias<TYPE>>::type \
 		NAME##_aliases() \
 		{ \
 			return NAME##_aliases_; \

@@ -24,24 +24,24 @@ namespace scalpel { namespace cpp { namespace semantic_entities { namespace gene
 {
 
 //TODO should be const
-utility::vector<entity_alias<namespace_>> empty_namespace_ptr_vector;
-utility::vector<entity_alias<namespace_alias>> empty_namespace_alias_ptr_vector;
-utility::vector<entity_alias<class_>> empty_class_ptr_vector;
-utility::vector<entity_alias<member_class>> empty_member_class_ptr_vector;
-utility::vector<entity_alias<enum_>> empty_enum_ptr_vector;
-utility::vector<entity_alias<member_enum>> empty_member_enum_ptr_vector;
-utility::vector<entity_alias<typedef_>> empty_typedef_ptr_vector;
-utility::vector<entity_alias<member_typedef>> empty_member_typedef_ptr_vector;
-utility::vector<entity_alias<constructor>> empty_constructor_ptr_vector;
-utility::vector<entity_alias<destructor>> empty_destructor_ptr_vector;
-utility::vector<entity_alias<operator_member_function>> empty_operator_member_function_ptr_vector;
-utility::vector<entity_alias<conversion_function>> empty_conversion_function_ptr_vector;
-utility::vector<entity_alias<simple_member_function>> empty_simple_member_function_ptr_vector;
-utility::vector<entity_alias<operator_function>> empty_operator_function_ptr_vector;
-utility::vector<entity_alias<simple_function>> empty_simple_function_ptr_vector;
-utility::vector<entity_alias<variable>> empty_variable_ptr_vector;
-utility::vector<entity_alias<member_variable>> empty_member_variable_ptr_vector;
-utility::vector<entity_alias<bit_field>> empty_bit_field_ptr_vector;
+std::vector<entity_alias<namespace_>> empty_namespace_ptr_vector;
+std::vector<entity_alias<namespace_alias>> empty_namespace_alias_ptr_vector;
+std::vector<entity_alias<class_>> empty_class_ptr_vector;
+std::vector<entity_alias<member_class>> empty_member_class_ptr_vector;
+std::vector<entity_alias<enum_>> empty_enum_ptr_vector;
+std::vector<entity_alias<member_enum>> empty_member_enum_ptr_vector;
+std::vector<entity_alias<typedef_>> empty_typedef_ptr_vector;
+std::vector<entity_alias<member_typedef>> empty_member_typedef_ptr_vector;
+std::vector<entity_alias<constructor>> empty_constructor_ptr_vector;
+std::vector<entity_alias<destructor>> empty_destructor_ptr_vector;
+std::vector<entity_alias<operator_member_function>> empty_operator_member_function_ptr_vector;
+std::vector<entity_alias<conversion_function>> empty_conversion_function_ptr_vector;
+std::vector<entity_alias<simple_member_function>> empty_simple_member_function_ptr_vector;
+std::vector<entity_alias<operator_function>> empty_operator_function_ptr_vector;
+std::vector<entity_alias<simple_function>> empty_simple_function_ptr_vector;
+std::vector<entity_alias<variable>> empty_variable_ptr_vector;
+std::vector<entity_alias<member_variable>> empty_member_variable_ptr_vector;
+std::vector<entity_alias<bit_field>> empty_bit_field_ptr_vector;
 
 }}}}} //namespace scalpel::cpp::semantic_entities::generic_queries::detail
 

@@ -482,7 +482,7 @@ find_single_type_local_entities<EntityIdentificationPolicy, DeclarativeRegionT, 
 
 	//look up in current declarative region's entity aliases
 	{
-		typename utility::vector<semantic_entities::entity_alias<EntityT>>::range members =
+		typename utility::vector_range<semantic_entities::entity_alias<EntityT>>::type members =
 			semantic_entities::generic_queries::detail::get_entity_aliases<EntityT>(current_declarative_region)
 		;
 		for(auto i = members.begin(); i != members.end(); ++i)
