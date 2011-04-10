@@ -35,6 +35,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "macros/detail/using_declaration_member_declaration.hpp"
 #include "macros/detail/declarative_region_member_impl.hpp"
 #include <scalpel/utility/unique_ptr_vector.hpp>
+#include <scalpel/utility/ptr_vector.hpp>
 #include <boost/preprocessor/control/iif.hpp>
 #include <boost/preprocessor/punctuation/comma_if.hpp>
 #include <boost/preprocessor/punctuation/comma.hpp>
@@ -94,9 +95,10 @@ struct CLASS_NAME \
 		USING_DIRECTIVE_NAMESPACE_DECLARATION, \
 	) \
 	USING_DECLARATION_MEMBER_DECLARATION(class_, classes) \
-	USING_DECLARATION_MEMBER_DECLARATION(member_class, member_classes) \
 	USING_DECLARATION_MEMBER_DECLARATION(enum_, enums) \
-	USING_DECLARATION_MEMBER_DECLARATION(member_enum, member_enums) \
+	USING_DECLARATION_MEMBER_DECLARATION(typedef_, typedefs) \
+	USING_DECLARATION_MEMBER_DECLARATION(simple_function, simple_functions) \
+	USING_DECLARATION_MEMBER_DECLARATION(operator_function, operator_functions) \
 	USING_DECLARATION_MEMBER_DECLARATION(variable, variables) \
  \
 	DECLARATIVE_REGION_MEMBER_IMPL(DECLARATIVE_REGION_MEMBER_IMPL_T) \

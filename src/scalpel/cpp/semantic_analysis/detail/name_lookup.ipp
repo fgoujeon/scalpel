@@ -482,12 +482,12 @@ find_single_type_local_entities<EntityIdentificationPolicy, DeclarativeRegionT, 
 
 	//look up in current declarative region's using declaration entities
 	{
-		const std::vector<EntityT*>& members =
+		typename utility::ptr_vector<EntityT>::range members =
 			semantic_entities::generic_queries::detail::get_using_declaration_members<EntityT>(current_declarative_region)
 		;
 		for(auto i = members.begin(); i != members.end(); ++i)
 		{
-			EntityT& current_entity = **i;
+			EntityT& current_entity = *i;
 			if(EntityIdentificationPolicy::are_identifiers_equal(current_entity, identifier))
 			{
 				add_to_result(found_entities, current_entity);

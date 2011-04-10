@@ -22,44 +22,45 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_SEMANTIC_ENTITY_ANALYSIS_GET_USING_DECLARATION_MEMBERS_HPP
 
 #include <scalpel/cpp/semantic_graph.hpp>
-#include <vector>
+#include <scalpel/utility/ptr_vector.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities { namespace generic_queries { namespace detail
 {
 
 template<class Member, class DeclarativeRegion>
-const std::vector<Member*>&
+typename utility::ptr_vector<Member>::range
 get_using_declaration_members(DeclarativeRegion& declarative_region);
 
 
 
-extern const std::vector<namespace_*> empty_namespace_ptr_vector;
-extern const std::vector<namespace_alias*> empty_namespace_alias_ptr_vector;
-extern const std::vector<class_*> empty_class_ptr_vector;
-extern const std::vector<member_class*> empty_member_class_ptr_vector;
-extern const std::vector<enum_*> empty_enum_ptr_vector;
-extern const std::vector<member_enum*> empty_member_enum_ptr_vector;
-extern const std::vector<typedef_*> empty_typedef_ptr_vector;
-extern const std::vector<member_typedef*> empty_member_typedef_ptr_vector;
-extern const std::vector<constructor*> empty_constructor_ptr_vector;
-extern const std::vector<destructor*> empty_destructor_ptr_vector;
-extern const std::vector<operator_member_function*> empty_operator_member_function_ptr_vector;
-extern const std::vector<conversion_function*> empty_conversion_function_ptr_vector;
-extern const std::vector<simple_member_function*> empty_simple_member_function_ptr_vector;
-extern const std::vector<operator_function*> empty_operator_function_ptr_vector;
-extern const std::vector<simple_function*> empty_simple_function_ptr_vector;
-extern const std::vector<variable*> empty_variable_ptr_vector;
-extern const std::vector<member_variable*> empty_member_variable_ptr_vector;
-extern const std::vector<bit_field*> empty_bit_field_ptr_vector;
+//TODO should be const
+extern utility::ptr_vector<namespace_> empty_namespace_ptr_vector;
+extern utility::ptr_vector<namespace_alias> empty_namespace_alias_ptr_vector;
+extern utility::ptr_vector<class_> empty_class_ptr_vector;
+extern utility::ptr_vector<member_class> empty_member_class_ptr_vector;
+extern utility::ptr_vector<enum_> empty_enum_ptr_vector;
+extern utility::ptr_vector<member_enum> empty_member_enum_ptr_vector;
+extern utility::ptr_vector<typedef_> empty_typedef_ptr_vector;
+extern utility::ptr_vector<member_typedef> empty_member_typedef_ptr_vector;
+extern utility::ptr_vector<constructor> empty_constructor_ptr_vector;
+extern utility::ptr_vector<destructor> empty_destructor_ptr_vector;
+extern utility::ptr_vector<operator_member_function> empty_operator_member_function_ptr_vector;
+extern utility::ptr_vector<conversion_function> empty_conversion_function_ptr_vector;
+extern utility::ptr_vector<simple_member_function> empty_simple_member_function_ptr_vector;
+extern utility::ptr_vector<operator_function> empty_operator_function_ptr_vector;
+extern utility::ptr_vector<simple_function> empty_simple_function_ptr_vector;
+extern utility::ptr_vector<variable> empty_variable_ptr_vector;
+extern utility::ptr_vector<member_variable> empty_member_variable_ptr_vector;
+extern utility::ptr_vector<bit_field> empty_bit_field_ptr_vector;
 
 template<class Member>
-const std::vector<Member*>&
+utility::ptr_vector<Member>&
 get_empty_ptr_vector_of_type();
 
 #define GET_EMPTY_PTR_VECTOR_OF_TYPE(MEMBER_TYPE, EMPTY_VECTOR) \
 template<> \
 inline \
-const std::vector<MEMBER_TYPE*>& \
+utility::ptr_vector<MEMBER_TYPE>& \
 get_empty_ptr_vector_of_type<MEMBER_TYPE>() \
 { \
 	return EMPTY_VECTOR; \
@@ -102,7 +103,7 @@ struct get_using_declaration_members_impl<MEMBER_TYPE> \
 	template<class DeclarativeRegion> \
 	inline \
 	static \
-	const std::vector<MEMBER_TYPE*>& \
+	utility::ptr_vector<MEMBER_TYPE>::range \
 	get(DeclarativeRegion&) \
 	{ \
 		return get_empty_ptr_vector_of_type<MEMBER_TYPE>(); \
@@ -128,7 +129,7 @@ struct get_using_declaration_members_impl<MEMBER_TYPE> \
 #define RETURN_NOTHING(DECLARATIVE_REGION_TYPE) \
 	static \
 	inline \
-	const std::vector<member_t*>& \
+	utility::ptr_vector<member_t>::range \
 	get(DECLARATIVE_REGION_TYPE&) \
 	{ \
 		return get_empty_ptr_vector_of_type<member_t>(); \
@@ -137,7 +138,7 @@ struct get_using_declaration_members_impl<MEMBER_TYPE> \
 #define RETURN(DECLARATIVE_REGION_TYPE, MEMBER_FUNCTION) \
 	static \
 	inline \
-	const std::vector<member_t*>& \
+	utility::ptr_vector<member_t>::range \
 	get(DECLARATIVE_REGION_TYPE& declarative_region) \
 	{ \
 		return declarative_region.MEMBER_FUNCTION(); \
@@ -146,7 +147,7 @@ struct get_using_declaration_members_impl<MEMBER_TYPE> \
 #define END_FOR \
 	static \
 	inline \
-	const std::vector<member_t*>& \
+	utility::ptr_vector<member_t>::range \
 	get(namespace_alias& declarative_region) \
 	{ \
 		return get(declarative_region.referred_namespace()); \
@@ -314,7 +315,7 @@ END_FOR
 //main overload
 template<class Member, class DeclarativeRegion>
 inline
-const std::vector<Member*>&
+typename utility::ptr_vector<Member>::range
 get_using_declaration_members(DeclarativeRegion& declarative_region)
 {
 	return get_using_declaration_members_impl<Member>::get(declarative_region);
@@ -324,11 +325,11 @@ get_using_declaration_members(DeclarativeRegion& declarative_region)
 
 //overload for declarative region variants
 template<class Member>
-struct get_using_declaration_members_visitor: public utility::static_visitor<const std::vector<Member*>&>
+struct get_using_declaration_members_visitor: public utility::static_visitor<typename utility::ptr_vector<Member>::range>
 {
 	template<class DeclarativeRegion>
 	inline
-	const std::vector<Member*>&
+	typename utility::ptr_vector<Member>::range
 	operator()(DeclarativeRegion* declarative_region) const
 	{
 		return get_using_declaration_members<Member, DeclarativeRegion>(*declarative_region);
@@ -337,7 +338,7 @@ struct get_using_declaration_members_visitor: public utility::static_visitor<con
 
 template<class Member, class... DeclarativeRegions>
 inline
-const std::vector<Member*>&
+typename utility::ptr_vector<Member>::range
 get_using_declaration_members(utility::variant<DeclarativeRegions...>& declarative_region)
 {
 	get_using_declaration_members_visitor<Member> visitor;

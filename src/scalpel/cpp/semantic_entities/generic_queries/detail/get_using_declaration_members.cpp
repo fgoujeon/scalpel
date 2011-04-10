@@ -23,24 +23,25 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities { namespace generic_queries { namespace detail
 {
 
-const std::vector<namespace_*> empty_namespace_ptr_vector;
-const std::vector<namespace_alias*> empty_namespace_alias_ptr_vector;
-const std::vector<class_*> empty_class_ptr_vector;
-const std::vector<member_class*> empty_member_class_ptr_vector;
-const std::vector<enum_*> empty_enum_ptr_vector;
-const std::vector<member_enum*> empty_member_enum_ptr_vector;
-const std::vector<typedef_*> empty_typedef_ptr_vector;
-const std::vector<member_typedef*> empty_member_typedef_ptr_vector;
-const std::vector<constructor*> empty_constructor_ptr_vector;
-const std::vector<destructor*> empty_destructor_ptr_vector;
-const std::vector<operator_member_function*> empty_operator_member_function_ptr_vector;
-const std::vector<conversion_function*> empty_conversion_function_ptr_vector;
-const std::vector<simple_member_function*> empty_simple_member_function_ptr_vector;
-const std::vector<operator_function*> empty_operator_function_ptr_vector;
-const std::vector<simple_function*> empty_simple_function_ptr_vector;
-const std::vector<variable*> empty_variable_ptr_vector;
-const std::vector<member_variable*> empty_member_variable_ptr_vector;
-const std::vector<bit_field*> empty_bit_field_ptr_vector;
+//TODO should be const
+utility::ptr_vector<namespace_> empty_namespace_ptr_vector;
+utility::ptr_vector<namespace_alias> empty_namespace_alias_ptr_vector;
+utility::ptr_vector<class_> empty_class_ptr_vector;
+utility::ptr_vector<member_class> empty_member_class_ptr_vector;
+utility::ptr_vector<enum_> empty_enum_ptr_vector;
+utility::ptr_vector<member_enum> empty_member_enum_ptr_vector;
+utility::ptr_vector<typedef_> empty_typedef_ptr_vector;
+utility::ptr_vector<member_typedef> empty_member_typedef_ptr_vector;
+utility::ptr_vector<constructor> empty_constructor_ptr_vector;
+utility::ptr_vector<destructor> empty_destructor_ptr_vector;
+utility::ptr_vector<operator_member_function> empty_operator_member_function_ptr_vector;
+utility::ptr_vector<conversion_function> empty_conversion_function_ptr_vector;
+utility::ptr_vector<simple_member_function> empty_simple_member_function_ptr_vector;
+utility::ptr_vector<operator_function> empty_operator_function_ptr_vector;
+utility::ptr_vector<simple_function> empty_simple_function_ptr_vector;
+utility::ptr_vector<variable> empty_variable_ptr_vector;
+utility::ptr_vector<member_variable> empty_member_variable_ptr_vector;
+utility::ptr_vector<bit_field> empty_bit_field_ptr_vector;
 
 }}}}} //namespace scalpel::cpp::semantic_entities::generic_queries::detail
 

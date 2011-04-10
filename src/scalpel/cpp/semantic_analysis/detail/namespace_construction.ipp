@@ -79,7 +79,8 @@ fill_namespace
 				std::unique_ptr<namespace_alias> new_namespace_alias = create_namespace_alias(*opt_namespace_alias_definition_node, namespace_entity);
 				namespace_entity.add_member(std::move(new_namespace_alias));
 			}
-			//else if(const boost::optional<const using_declaration&> opt_using_declaration_node = get<using_declaration>(&block_declaration_node))
+			else if(const boost::optional<const using_declaration&> opt_using_declaration_node = get<using_declaration>(&block_declaration_node))
+				fill_namespace(namespace_entity, *opt_using_declaration_node);
 			else if(const boost::optional<const using_directive&> opt_using_directive_node = get<using_directive>(&block_declaration_node))
 			{
 				namespace_& new_using_directive = find_using_directive_namespace(*opt_using_directive_node, namespace_entity);
@@ -279,6 +280,93 @@ void
 fill_namespace
 (
 	Namespace& namespace_entity,
+	const syntax_nodes::using_declaration& using_declaration_node
+)
+{
+	using namespace syntax_nodes;
+	using namespace semantic_entities;
+
+	const unqualified_id& unqualified_id_node = get_unqualified_id(using_declaration_node);
+	const optional_node<nested_name_specifier>& opt_nested_name_specifier_node = get_nested_name_specifier(using_declaration_node);
+
+	if(has_typename_keyword(using_declaration_node))
+		assert(false); //not implemented yet
+
+	//find the designated entity(ies)'s declarative region
+	open_declarative_region_ptr_variant found_declarative_region =
+		name_lookup::find_declarative_region
+		(
+			has_leading_double_colon(using_declaration_node),
+			opt_nested_name_specifier_node,
+			&namespace_entity
+		)
+	;
+
+	//find the designated entity(ies)
+	if(boost::optional<const identifier&> opt_identifier_node = get<identifier>(&unqualified_id_node))
+	{
+		//first, try to find a class, enum, typedef or variable
+		typename boost::optional<utility::ptr_variant<class_, enum_, typedef_, variable>::type> found_entity =
+			name_lookup::find_local
+			<
+				semantic_entity_analysis::identification_policies::by_name,
+				open_declarative_region_ptr_variant,
+				true,
+				false,
+				class_, enum_, typedef_, variable
+			>
+			(
+				opt_identifier_node->value(),
+				found_declarative_region
+			)
+		;
+
+		if(found_entity) //if an entity has been found
+		{
+			//add the entity to the namespace (as a using declaration member)
+			add_using_declaration_member(namespace_entity, *found_entity);
+		}
+		else
+		{
+			//if no entity has been found, try to find functions
+			std::set<simple_function*> found_entities =
+				name_lookup::find_local
+				<
+					semantic_entity_analysis::identification_policies::by_name,
+					open_declarative_region_ptr_variant,
+					false,
+					true,
+					simple_function
+				>
+				(
+					opt_identifier_node->value(),
+					found_declarative_region
+				)
+			;
+
+			//add the functions to the namespace (as using declaration members)
+			for(auto i = found_entities.begin(); i != found_entities.end(); ++i)
+			{
+				simple_function& entity = **i;
+				namespace_entity.add_using_declaration_member(entity);
+			}
+		}
+	}
+	else if(boost::optional<const operator_function_id&> opt_operator_function_id_node = get<operator_function_id>(&unqualified_id_node))
+	{
+		assert(false); //not implemented yet
+	}
+	else
+	{
+		assert(false); //not implemented yet
+	}
+}
+
+template<class Namespace>
+void
+fill_namespace
+(
+	Namespace& namespace_entity,
 	const syntax_nodes::function_definition& function_definition_node
 )
 {
@@ -406,6 +494,40 @@ add_class
 	class_& class_entity_ref = *class_entity;
 	namespace_entity.add_member(std::move(class_entity));
 	return class_entity_ref;
+}
+
+
+
+template<class Namespace>
+class add_using_declaration_member_visitor: public utility::static_visitor<void>
+{
+	public:
+		add_using_declaration_member_visitor(Namespace& namespace_entity):
+			namespace_entity_(namespace_entity)
+		{
+		}
+
+		template<class Entity>
+		void
+		operator()(Entity* entity)
+		{
+			namespace_entity_.add_using_declaration_member(*entity);
+		}
+
+	private:
+		Namespace& namespace_entity_;
+};
+
+template<class Namespace, class... Entities>
+void
+add_using_declaration_member
+(
+	Namespace& namespace_entity,
+	const utility::variant<Entities...>& entity
+)
+{
+	add_using_declaration_member_visitor<Namespace> visitor(namespace_entity);
+	apply_visitor(visitor, entity);
 }
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail

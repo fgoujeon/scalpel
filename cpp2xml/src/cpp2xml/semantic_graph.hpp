@@ -247,6 +247,13 @@ class semantic_graph_serializer
 			const unsigned int indent_level
 		);
 
+		void
+		serialize_using_declaration_class
+		(
+			const class_& entity,
+			const unsigned int indent_level
+		);
+
 		std::string
 		attribute(const member_access& a);
 

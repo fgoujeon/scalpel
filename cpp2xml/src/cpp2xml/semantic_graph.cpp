@@ -210,6 +210,11 @@ semantic_graph_serializer::serialize_namespace
 	for(auto i = entity.variables().begin(); i != entity.variables().end(); ++i)
 		serialize_variable(*i, indent_level + 1);
 
+
+
+	for(auto i = entity.using_declaration_classes().begin(); i != entity.using_declaration_classes().end(); ++i)
+		serialize_using_declaration_class(*i, indent_level + 1);
+
 	output_ << indent(indent_level) << "</namespace>\n";
 }
 
@@ -876,6 +881,18 @@ semantic_graph_serializer::serialize_namespace_alias
 	output_ << indent(indent_level) << "<namespace_alias";
 	output_ << " name=\"" << entity.name() << "\"";
 	output_ << " id=\"n" << namespace_id(entity.referred_namespace()) << "\"";
+	output_ << "/>\n";
+}
+
+void
+semantic_graph_serializer::serialize_using_declaration_class
+(
+	const class_& entity,
+	const unsigned int indent_level
+)
+{
+	output_ << indent(indent_level) << "<using_declaration_class";
+	output_ << " class_id=\"c" << class_id(entity) << "\"";
 	output_ << "/>\n";
 }
 

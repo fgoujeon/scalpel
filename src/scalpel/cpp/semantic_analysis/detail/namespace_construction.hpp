@@ -59,6 +59,14 @@ void
 fill_namespace
 (
 	Namespace& namespace_entity,
+	const syntax_nodes::using_declaration& using_declaration_node
+);
+
+template<class Namespace>
+void
+fill_namespace
+(
+	Namespace& namespace_entity,
 	const syntax_nodes::declaration_seq& declaration_seq_node
 );
 
@@ -80,6 +88,15 @@ add_class
 (
 	Namespace& namespace_entity,
 	std::unique_ptr<semantic_entities::class_>&& class_entity
+);
+
+//add the entity to the given namespace
+template<class Namespace, class... Entities>
+void
+add_using_declaration_member
+(
+	Namespace& namespace_entity,
+	const utility::variant<Entities...>& entity
 );
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail

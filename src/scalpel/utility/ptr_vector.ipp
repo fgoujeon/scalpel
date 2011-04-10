@@ -18,28 +18,32 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define USING_DECLARATION_MEMBER_DECLARATION(TYPE, NAME) \
-	public: \
-		typedef utility::ptr_vector<TYPE> using_declaration_##NAME##_t; \
- \
-		using_declaration_##NAME##_t::range \
-		using_declaration_##NAME() \
-		{ \
-			return using_declaration_##NAME##_; \
-		} \
- \
-		const using_declaration_##NAME##_t& \
-		using_declaration_##NAME() const \
-		{ \
-			return using_declaration_##NAME##_; \
-		} \
- \
-		void \
-		add_using_declaration_member(TYPE& member) \
-		{ \
-			using_declaration_##NAME##_.push_back(member); \
-		} \
- \
-	private: \
-		using_declaration_##NAME##_t using_declaration_##NAME##_;
+#ifndef SCALPEL_UTILITY_PTR_VECTOR_IPP
+#define SCALPEL_UTILITY_PTR_VECTOR_IPP
+
+namespace scalpel { namespace utility
+{
+
+template<typename T>
+ptr_vector<T>::ptr_vector()
+{
+}
+
+template<typename T>
+ptr_vector<T>::ptr_vector(ptr_vector&& o):
+	raw_vector_(std::move(o.raw_vector_))
+{
+}
+
+template<typename T>
+const ptr_vector<T>&
+ptr_vector<T>::operator=(ptr_vector&& o)
+{
+	raw_vector_ = std::move(o.raw_vector_);
+	return *this;
+}
+
+}} //namespace scalpel::utility
+
+#endif
 

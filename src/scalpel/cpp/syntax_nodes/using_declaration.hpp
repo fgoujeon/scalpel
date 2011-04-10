@@ -47,6 +47,34 @@ typedef
 	using_declaration
 ;
 
+inline
+bool
+has_typename_keyword(const using_declaration& o)
+{
+	return get<1>(o);
+}
+
+inline
+bool
+has_leading_double_colon(const using_declaration& o)
+{
+	return get<2>(o);
+}
+
+inline
+const optional_node<nested_name_specifier>&
+get_nested_name_specifier(const using_declaration& o)
+{
+	return get<3>(o);
+}
+
+inline
+const unqualified_id&
+get_unqualified_id(const using_declaration& o)
+{
+	return get<4>(o);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif
