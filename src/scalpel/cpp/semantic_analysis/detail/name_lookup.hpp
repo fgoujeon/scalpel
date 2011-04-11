@@ -22,6 +22,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_NAME_LOOKUP_HPP
 
 #include "semantic_entity_analysis/identification_policies.hpp"
+#include <scalpel/cpp/semantic_entities/type_traits/has_members_of_type.hpp>
+#include <scalpel/cpp/semantic_entities/type_traits/has_entity_aliases_of_type.hpp>
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <scalpel/cpp/syntax_tree.hpp>
 #include <scalpel/utility/is_empty.hpp>
@@ -54,74 +56,74 @@ result_type's truth table:
 |     1    |    1    |     X    |     X    |        (E)        |
  --------------------------------------------------------------
 
-(1) EntityT*
+(1) Entity*
 (2) std::set<(1)>
-(3) utility::variant<EntitiesT...>
+(3) utility::variant<Entities...>
 (4) boost::optional<(3)>
 (5) std::set<(3)>
-(6) utility::ptr_variant<EntitiesT...>
+(6) utility::ptr_variant<Entities...>
 (7) boost::optional<(6)>
 (8) std::set<(6)>
 (E) Error
 */
 
-template<bool Optional, bool Multiple, class... EntitiesT>
+template<bool Optional, bool Multiple, class... Entities>
 struct return_type;
 
 //(1)
-template<bool Optional, class EntityT>
-struct return_type<Optional, false, EntityT>
+template<bool Optional, class Entity>
+struct return_type<Optional, false, Entity>
 {
-	typedef EntityT* type;
+	typedef Entity* type;
 };
 
 //(2)
-template<bool Optional, class EntityT>
-struct return_type<Optional, true, EntityT>
+template<bool Optional, class Entity>
+struct return_type<Optional, true, Entity>
 {
-	typedef std::set<EntityT*> type;
+	typedef std::set<Entity*> type;
 };
 
 //(3)
-template<class... EntitiesT>
-struct return_type<false, false, utility::variant<EntitiesT...>>
+template<class... Entities>
+struct return_type<false, false, utility::variant<Entities...>>
 {
-	typedef utility::variant<EntitiesT...> type;
+	typedef utility::variant<Entities...> type;
 };
 
 //(4)
-template<class... EntitiesT>
-struct return_type<true, false, utility::variant<EntitiesT...>>
+template<class... Entities>
+struct return_type<true, false, utility::variant<Entities...>>
 {
-	typedef boost::optional<utility::variant<EntitiesT...>> type;
+	typedef boost::optional<utility::variant<Entities...>> type;
 };
 
 //(5)
-template<bool Optional, class... EntitiesT>
-struct return_type<Optional, true, utility::variant<EntitiesT...>>
+template<bool Optional, class... Entities>
+struct return_type<Optional, true, utility::variant<Entities...>>
 {
-	typedef std::set<utility::variant<EntitiesT...>> type;
+	typedef std::set<utility::variant<Entities...>> type;
 };
 
 //(6)
-template<class EntityT, class EntityT2, class... EntitiesT>
-struct return_type<false, false, EntityT, EntityT2, EntitiesT...>
+template<class Entity, class Entity2, class... Entities>
+struct return_type<false, false, Entity, Entity2, Entities...>
 {
-	typedef typename utility::ptr_variant<EntityT, EntityT2, EntitiesT...>::type type;
+	typedef typename utility::ptr_variant<Entity, Entity2, Entities...>::type type;
 };
 
 //(7)
-template<class EntityT, class EntityT2, class... EntitiesT>
-struct return_type<true, false, EntityT, EntityT2, EntitiesT...>
+template<class Entity, class Entity2, class... Entities>
+struct return_type<true, false, Entity, Entity2, Entities...>
 {
-	typedef boost::optional<typename utility::ptr_variant<EntityT, EntityT2, EntitiesT...>::type> type;
+	typedef boost::optional<typename utility::ptr_variant<Entity, Entity2, Entities...>::type> type;
 };
 
 //(8)
-template<bool Optional, class EntityT, class EntityT2, class... EntitiesT>
-struct return_type<Optional, true, EntityT, EntityT2, EntitiesT...>
+template<bool Optional, class Entity, class Entity2, class... Entities>
+struct return_type<Optional, true, Entity, Entity2, Entities...>
 {
-	typedef std::set<typename utility::ptr_variant<EntityT, EntityT2, EntitiesT...>::type> type;
+	typedef std::set<typename utility::ptr_variant<Entity, Entity2, Entities...>::type> type;
 };
 
 
@@ -130,8 +132,8 @@ struct return_type<Optional, true, EntityT, EntityT2, EntitiesT...>
 Find entities corresponding to the given identifier,
 from the given declarative region (unqualified name lookup).
 */
-template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
-typename return_type<Optional, Multiple, EntitiesT...>::type
+template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class... Entities>
+typename return_type<Optional, Multiple, Entities...>::type
 find
 (
 	const typename EntityIdentificationPolicy::identifier_t& identifier,
@@ -146,8 +148,8 @@ lookup of the unqualified-id part of the given nested identifier must apply
 using directives. It must be set to false when looking up the declaration of a
 function we're going to define.
 */
-template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
-typename return_type<Optional, Multiple, EntitiesT...>::type
+template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class... Entities>
+typename return_type<Optional, Multiple, Entities...>::type
 find
 (
 	const bool has_leading_double_colon,
@@ -176,8 +178,8 @@ Find entities corresponding to the given identifier,
 in the given declarative region only.
 Using directives are not applied.
 */
-template<class EntityIdentificationPolicy, class DeclarativeRegion, bool Optional, bool Multiple, class... EntitiesT>
-typename return_type<Optional, Multiple, EntitiesT...>::type
+template<class EntityIdentificationPolicy, class DeclarativeRegion, bool Optional, bool Multiple, class... Entities>
+typename return_type<Optional, Multiple, Entities...>::type
 find_local
 (
 	const typename EntityIdentificationPolicy::identifier_t& identifier,
@@ -210,8 +212,8 @@ namespace detail
 	Find entities corresponding to the given identifier,
 	from the given declarative region (unqualified name lookup).
 	*/
-	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
-	typename return_type<Optional, Multiple, EntitiesT...>::type
+	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class... Entities>
+	typename return_type<Optional, Multiple, Entities...>::type
 	find_entities
 	(
 		const typename EntityIdentificationPolicy::identifier_t& identifier,
@@ -223,8 +225,8 @@ namespace detail
 	(or nested template-id),
 	from the given declarative region (qualified name lookup).
 	*/
-	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
-	typename return_type<Optional, Multiple, EntitiesT...>::type
+	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class... Entities>
+	typename return_type<Optional, Multiple, Entities...>::type
 	find_entities
 	(
 		const bool has_leading_double_colon,
@@ -253,8 +255,8 @@ namespace detail
 	in the given namespace, applying using directives as defined in the
 	qualified name lookup section of the C++ standard.
 	*/
-	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT, class Namespace>
-	typename return_type<Optional, Multiple, EntitiesT...>::type
+	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class... Entities, class Namespace>
+	typename return_type<Optional, Multiple, Entities...>::type
 	find_in_namespace
 	(
 		const typename EntityIdentificationPolicy::identifier_t& identifier,
@@ -264,8 +266,8 @@ namespace detail
 	/**
 	Recursive part of the above function.
 	*/
-	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT, class Namespace>
-	typename return_type<Optional, Multiple, EntitiesT...>::type
+	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class... Entities, class Namespace>
+	typename return_type<Optional, Multiple, Entities...>::type
 	find_in_namespace
 	(
 		const typename EntityIdentificationPolicy::identifier_t& identifier,
@@ -276,92 +278,212 @@ namespace detail
 
 
 	/**
-	Find entities of the given identifier, in the given declarative region only.
+	Find entities of the given identifier, in the given declarative region only (variadic version).
 	*/
-	template<class EntityIdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple, class EntityT>
-	typename return_type<Optional, Multiple, EntityT>::type
+	template<class EntityIdentificationPolicy, class DeclarativeRegion, bool Optional, bool Multiple, class Entity, class Entity2, class... Entities>
+	typename return_type<Optional, Multiple, Entity, Entity2, Entities...>::type
 	find_local_entities
 	(
 		const typename EntityIdentificationPolicy::identifier_t& identifier,
-		DeclarativeRegionT& current_declarative_region
+		DeclarativeRegion& current_declarative_region
 	);
 
 	/**
-	Find entities of the given identifier, in the given declarative region only (variadic version).
+	Find entities of the given identifier, in the given declarative region only.
 	*/
-	template<class EntityIdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple, class EntityT, class EntityT2, class... EntitiesT>
-	typename return_type<Optional, Multiple, EntityT, EntityT2, EntitiesT...>::type
+	template<class EntityIdentificationPolicy, class DeclarativeRegion, bool Optional, bool Multiple, class Entity>
+	typename return_type<Optional, Multiple, Entity>::type
 	find_local_entities
 	(
 		const typename EntityIdentificationPolicy::identifier_t& identifier,
-		DeclarativeRegionT& current_declarative_region
+		DeclarativeRegion& current_declarative_region
 	);
 
-	//Implementation of non-variadic find_local_entities()
-	template<class EntityIdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple, class EntityT>
-	struct find_single_type_local_entities
+	//Implementation of variadic find_local_entities()
+	template<class EntityIdentificationPolicy, class DeclarativeRegion, bool Optional, bool Multiple, class ReturnT, class... Entities>
+	struct find_variadic_local_entities;
+
+	//Implementation of variadic find_local_entities()
+	template<class EntityIdentificationPolicy, class DeclarativeRegion, bool Optional, bool Multiple, class ReturnT>
+	struct find_variadic_local_entities<EntityIdentificationPolicy, DeclarativeRegion, Optional, Multiple, ReturnT>
 	{
 		static
-		typename return_type<Optional, Multiple, EntityT>::type
+		void
 		find
 		(
 			const typename EntityIdentificationPolicy::identifier_t& identifier,
-			DeclarativeRegionT& current_declarative_region
+			DeclarativeRegion& current_declarative_region,
+			ReturnT& found_entities
 		);
 	};
 
-	//Implementation of non-variadic find_local_entities()
-	template<class EntityIdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple>
-	struct find_single_type_local_entities<EntityIdentificationPolicy, DeclarativeRegionT, Optional, Multiple, semantic_entities::open_declarative_region_ptr_variant>
+	//Implementation of variadic find_local_entities()
+	template<class EntityIdentificationPolicy, class DeclarativeRegion, bool Optional, bool Multiple, class ReturnT, class Entity, class... Entities>
+	struct find_variadic_local_entities<EntityIdentificationPolicy, DeclarativeRegion, Optional, Multiple, ReturnT, Entity, Entities...>
+	{
+		static
+		void
+		find
+		(
+			const typename EntityIdentificationPolicy::identifier_t& identifier,
+			DeclarativeRegion& current_declarative_region,
+			ReturnT& found_entities
+		);
+	};
+
+	//Implementation of non-variadic find_local_entities(), general case
+	template<class EntityIdentificationPolicy, class DeclarativeRegion, bool Optional, bool Multiple, class Entity>
+	struct find_single_type_local_entities
+	{
+		static
+		typename return_type<Optional, Multiple, Entity>::type
+		find
+		(
+			const typename EntityIdentificationPolicy::identifier_t& identifier,
+			DeclarativeRegion& current_declarative_region
+		);
+	};
+
+	//Implementation of non-variadic find_local_entities(), with DeclarativeRegion = open_declarative_region_ptr_variant
+	template<class EntityIdentificationPolicy, class DeclarativeRegion, bool Optional, bool Multiple>
+	struct find_single_type_local_entities<EntityIdentificationPolicy, DeclarativeRegion, Optional, Multiple, semantic_entities::open_declarative_region_ptr_variant>
 	{
 		static
 		typename return_type<Optional, Multiple, semantic_entities::open_declarative_region_ptr_variant>::type
 		find
 		(
 			const typename EntityIdentificationPolicy::identifier_t& identifier,
-			DeclarativeRegionT& current_declarative_region
+			DeclarativeRegion& current_declarative_region
 		);
 	};
 
-	//Implementation of variadic find_local_entities()
-	template<class EntityIdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple, class ReturnT, class... EntitiesT>
-	struct find_variadic_local_entities;
 
-	//Implementation of variadic find_local_entities()
-	template<class EntityIdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple, class ReturnT>
-	struct find_variadic_local_entities<EntityIdentificationPolicy, DeclarativeRegionT, Optional, Multiple, ReturnT>
+
+	/*
+	Stage 2: Dispatch special declarative region types (variants, typedefs, etc.)
+	*/
+	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class Entity, class DeclarativeRegion>
+	struct find_local_entities2
 	{
 		static
 		void
 		find
 		(
 			const typename EntityIdentificationPolicy::identifier_t& identifier,
-			DeclarativeRegionT& current_declarative_region,
-			ReturnT& found_entities
+			DeclarativeRegion& current_declarative_region,
+			typename return_type<Optional, Multiple, Entity>::type& found_entities
 		);
 	};
 
-	//Implementation of variadic find_local_entities()
-	template<class EntityIdentificationPolicy, class DeclarativeRegionT, bool Optional, bool Multiple, class ReturnT, class EntityT, class... EntitiesT>
-	struct find_variadic_local_entities<EntityIdentificationPolicy, DeclarativeRegionT, Optional, Multiple, ReturnT, EntityT, EntitiesT...>
+	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class Entity, class... DeclarativeRegions>
+	struct find_local_entities2<EntityIdentificationPolicy, Optional, Multiple, Entity, utility::variant<DeclarativeRegions...>>
 	{
 		static
 		void
 		find
 		(
 			const typename EntityIdentificationPolicy::identifier_t& identifier,
-			DeclarativeRegionT& current_declarative_region,
-			ReturnT& found_entities
+			utility::variant<DeclarativeRegions...>& current_declarative_region,
+			typename return_type<Optional, Multiple, Entity>::type& found_entities
+		);
+	};
+
+	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class Entity>
+	struct find_local_entities2<EntityIdentificationPolicy, Optional, Multiple, Entity, semantic_entities::typedef_>
+	{
+		static
+		void
+		find
+		(
+			const typename EntityIdentificationPolicy::identifier_t& identifier,
+			semantic_entities::typedef_& current_declarative_region,
+			typename return_type<Optional, Multiple, Entity>::type& found_entities
+		);
+	};
+
+	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class Entity>
+	struct find_local_entities2<EntityIdentificationPolicy, Optional, Multiple, Entity, semantic_entities::member_typedef>
+	{
+		static
+		void
+		find
+		(
+			const typename EntityIdentificationPolicy::identifier_t& identifier,
+			semantic_entities::member_typedef& current_declarative_region,
+			typename return_type<Optional, Multiple, Entity>::type& found_entities
+		);
+	};
+
+	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class Entity>
+	struct find_local_entities2<EntityIdentificationPolicy, Optional, Multiple, Entity, semantic_entities::namespace_alias>
+	{
+		static
+		void
+		find
+		(
+			const typename EntityIdentificationPolicy::identifier_t& identifier,
+			semantic_entities::namespace_alias& current_declarative_region,
+			typename return_type<Optional, Multiple, Entity>::type& found_entities
 		);
 	};
 
 
 
 	/**
+	Find entities of the given identifier, in the given declarative region's members.
+	*/
+	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class Entity, class DeclarativeRegion>
+	void
+	find_in_declarative_region_members
+	(
+		const typename EntityIdentificationPolicy::identifier_t& identifier,
+		DeclarativeRegion& current_declarative_region,
+		typename return_type<Optional, Multiple, Entity>::type& found_entities,
+		typename boost::enable_if<semantic_entities::type_traits::has_members_of_type<DeclarativeRegion, Entity>>::type* = 0
+	);
+
+	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class Entity, class DeclarativeRegion>
+	void
+	find_in_declarative_region_members
+	(
+		const typename EntityIdentificationPolicy::identifier_t& identifier,
+		DeclarativeRegion& current_declarative_region,
+		typename return_type<Optional, Multiple, Entity>::type& found_entities,
+		typename boost::disable_if<semantic_entities::type_traits::has_members_of_type<DeclarativeRegion, Entity>>::type* = 0
+	);
+
+
+
+	/**
+	Find entities of the given identifier, in the given declarative region's members.
+	*/
+	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class Entity, class DeclarativeRegion>
+	void
+	find_in_declarative_region_entity_aliases
+	(
+		const typename EntityIdentificationPolicy::identifier_t& identifier,
+		DeclarativeRegion& current_declarative_region,
+		typename return_type<Optional, Multiple, Entity>::type& found_entities,
+		typename boost::enable_if<semantic_entities::type_traits::has_entity_aliases_of_type<DeclarativeRegion, Entity>>::type* = 0
+	);
+
+	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class Entity, class DeclarativeRegion>
+	void
+	find_in_declarative_region_entity_aliases
+	(
+		const typename EntityIdentificationPolicy::identifier_t& identifier,
+		DeclarativeRegion& current_declarative_region,
+		typename return_type<Optional, Multiple, Entity>::type& found_entities,
+		typename boost::disable_if<semantic_entities::type_traits::has_entity_aliases_of_type<DeclarativeRegion, Entity>>::type* = 0
+	);
+
+
+
+	/**
 	Find entities of the given identifier, in the given base classes
 	*/
-	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class... EntitiesT>
-	typename return_type<Optional, Multiple, EntitiesT...>::type
+	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class... Entities>
+	typename return_type<Optional, Multiple, Entities...>::type
 	find_entities_in_base_classes
 	(
 		const typename EntityIdentificationPolicy::identifier_t& identifier,
@@ -455,11 +577,11 @@ namespace detail
 
 
 
-	template<bool Optional, bool Multiple, class... EntitiesT>
+	template<bool Optional, bool Multiple, class... Entities>
 	struct return_result;
 
-	template<class... EntitiesT>
-	struct return_result<true, false, EntitiesT...>
+	template<class... Entities>
+	struct return_result<true, false, Entities...>
 	{
 		//(2) -> (1)
 		//or
@@ -468,8 +590,8 @@ namespace detail
 		//return the only one element of the set
 		//throw an exception if there's more than one element in the set
 		static
-		typename return_type<true, false, EntitiesT...>::type
-		result(typename return_type<true, true, EntitiesT...>::type& result);
+		typename return_type<true, false, Entities...>::type
+		result(typename return_type<true, true, Entities...>::type& result);
 
 		//(1) -> (1)
 		//or
@@ -477,12 +599,12 @@ namespace detail
 		//
 		//return result;
 		static
-		typename return_type<true, false, EntitiesT...>::type
-		result(typename return_type<true, false, EntitiesT...>::type& result);
+		typename return_type<true, false, Entities...>::type
+		result(typename return_type<true, false, Entities...>::type& result);
 	};
 
-	template<class... EntitiesT>
-	struct return_result<false, false, EntitiesT...>
+	template<class... Entities>
+	struct return_result<false, false, Entities...>
 	{
 		//(2) -> (1)
 		//or
@@ -492,8 +614,8 @@ namespace detail
 		//throw an exception if there's zero or more than one element in
 		//the set
 		static
-		typename return_type<false, false, EntitiesT...>::type
-		result(typename return_type<false, true, EntitiesT...>::type& result);
+		typename return_type<false, false, Entities...>::type
+		result(typename return_type<false, true, Entities...>::type& result);
 
 		//(1) -> (1)
 		//or
@@ -502,61 +624,61 @@ namespace detail
 		//return result;
 		//throw an exception if the result is empty
 		static
-		typename return_type<false, false, EntitiesT...>::type
-		result(typename return_type<true, false, EntitiesT...>::type& result);
+		typename return_type<false, false, Entities...>::type
+		result(typename return_type<true, false, Entities...>::type& result);
 	};
 
-	template<class... EntitiesT>
-	struct return_result<false, false, utility::variant<EntitiesT...>>
+	template<class... Entities>
+	struct return_result<false, false, utility::variant<Entities...>>
 	{
 		//return the only one element of the set
 		//throw an exception if there's zero or more than one element in
 		//the set
 		static
-		typename return_type<false, false, utility::variant<EntitiesT...>>::type
-		result(typename return_type<false, true, utility::variant<EntitiesT...>>::type& result);
+		typename return_type<false, false, utility::variant<Entities...>>::type
+		result(typename return_type<false, true, utility::variant<Entities...>>::type& result);
 
 		//return *result;
 		//throw an exception if the result is empty
 		static
-		typename return_type<false, false, utility::variant<EntitiesT...>>::type
-		result(typename return_type<true, false, utility::variant<EntitiesT...>>::type& result);
+		typename return_type<false, false, utility::variant<Entities...>>::type
+		result(typename return_type<true, false, utility::variant<Entities...>>::type& result);
 	};
 
-	template<class EntityT, class EntityT2, class... EntitiesT>
-	struct return_result<false, false, EntityT, EntityT2, EntitiesT...>
+	template<class Entity, class Entity2, class... Entities>
+	struct return_result<false, false, Entity, Entity2, Entities...>
 	{
 		//return the only one element of the set
 		//throw an exception if there's zero or more than one element in
 		//the set
 		static
-		typename return_type<false, false, EntityT, EntityT2, EntitiesT...>::type
-		result(typename return_type<false, true, EntityT, EntityT2, EntitiesT...>::type& result);
+		typename return_type<false, false, Entity, Entity2, Entities...>::type
+		result(typename return_type<false, true, Entity, Entity2, Entities...>::type& result);
 
 		//return *result;
 		//throw an exception if the result is empty
 		static
-		typename return_type<false, false, EntityT, EntityT2, EntitiesT...>::type
-		result(typename return_type<true, false, EntityT, EntityT2, EntitiesT...>::type& result);
+		typename return_type<false, false, Entity, Entity2, Entities...>::type
+		result(typename return_type<true, false, Entity, Entity2, Entities...>::type& result);
 	};
 
-	template<class... EntitiesT>
-	struct return_result<true, true, EntitiesT...>
+	template<class... Entities>
+	struct return_result<true, true, Entities...>
 	{
 		//return result;
 		static
-		typename return_type<true, true, EntitiesT...>::type&
-		result(typename return_type<true, true, EntitiesT...>::type& result);
+		typename return_type<true, true, Entities...>::type&
+		result(typename return_type<true, true, Entities...>::type& result);
 	};
 
-	template<class... EntitiesT>
-	struct return_result<false, true, EntitiesT...>
+	template<class... Entities>
+	struct return_result<false, true, Entities...>
 	{
 		//return result;
 		//throw an exception if the result is empty
 		static
-		typename return_type<false, true, EntitiesT...>::type&
-		result(typename return_type<true, true, EntitiesT...>::type& result);
+		typename return_type<false, true, Entities...>::type&
+		result(typename return_type<true, true, Entities...>::type& result);
 	};
 }
 
