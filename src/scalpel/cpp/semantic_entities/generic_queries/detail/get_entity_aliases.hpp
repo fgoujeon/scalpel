@@ -188,7 +188,7 @@ FOR(member_class)
 END_FOR
 
 FOR(enum_)
-	RETURN_NOTHING(namespace_)
+	RETURN(namespace_, enum_aliases)
 	RETURN_NOTHING(linked_namespace)
 	RETURN_NOTHING(unnamed_namespace)
 	RETURN_NOTHING(linked_unnamed_namespace)
@@ -208,7 +208,7 @@ FOR(member_enum)
 END_FOR
 
 FOR(typedef_)
-	RETURN_NOTHING(namespace_)
+	RETURN(namespace_, typedef_aliases)
 	RETURN_NOTHING(linked_namespace)
 	RETURN_NOTHING(unnamed_namespace)
 	RETURN_NOTHING(linked_unnamed_namespace)
@@ -258,7 +258,7 @@ FOR(simple_member_function)
 END_FOR
 
 FOR(operator_function)
-	RETURN_NOTHING(namespace_)
+	RETURN(namespace_, operator_function_aliases)
 	RETURN_NOTHING(linked_namespace)
 	RETURN_NOTHING(unnamed_namespace)
 	RETURN_NOTHING(linked_unnamed_namespace)
@@ -268,7 +268,7 @@ FOR(operator_function)
 END_FOR
 
 FOR(simple_function)
-	RETURN_NOTHING(namespace_)
+	RETURN(namespace_, simple_function_aliases)
 	RETURN_NOTHING(linked_namespace)
 	RETURN_NOTHING(unnamed_namespace)
 	RETURN_NOTHING(linked_unnamed_namespace)
