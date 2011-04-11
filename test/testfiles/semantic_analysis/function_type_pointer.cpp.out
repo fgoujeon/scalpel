@@ -1,4 +1,4 @@
-<namespace id="n0">
+<namespace id="0">
  <typedef name="fun_ptr_t">
   <type>
    <cv_qualified_type const="true">

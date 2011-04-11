@@ -1,5 +1,5 @@
-<namespace id="n0">
- <class name="square" id="c0">
+<namespace id="0">
+ <class name="square" id="0">
   <constructor access="public">
    <parameters>
     <parameter name="size">
@@ -13,12 +13,12 @@
   </constructor>
   <destructor access="public" defined="false">
   </destructor>
-  <simple_function name="size" access="public" const="true">
+  <simple_member_function name="size" access="public" const="true">
    <return_type>
     <fundamental_type type="unsigned int"/>
    </return_type>
-  </simple_function>
-  <simple_function name="size" access="public">
+  </simple_member_function>
+  <simple_member_function name="size" access="public">
    <return_type>
     <fundamental_type type="void"/>
    </return_type>
@@ -31,11 +31,11 @@
      </type>
     </parameter>
    </parameters>
-  </simple_function>
-  <variable name="size_" access="private">
+  </simple_member_function>
+  <member_variable name="size_" access="private">
    <type>
     <fundamental_type type="unsigned int"/>
    </type>
-  </variable>
+  </member_variable>
  </class>
 </namespace>

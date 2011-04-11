@@ -26,21 +26,44 @@ namespace scalpel { namespace cpp { namespace semantic_entities { namespace gene
 
 #define GENERATE_GET_MEMBERS_SPECIALIZATION(PARENT_TYPE, MEMBER_TYPE, PARENT_MEMBER_FUNCTION) \
 template<> \
-get_members_return_type<semantic_entities::MEMBER_TYPE, false>::type \
+get_members_return_type<PARENT_TYPE, semantic_entities::MEMBER_TYPE, false>::type \
 get_members<semantic_entities::MEMBER_TYPE>(semantic_entities::PARENT_TYPE& parent) \
 { \
 	return parent.PARENT_MEMBER_FUNCTION(); \
 } \
  \
 template<> \
-get_members_return_type<semantic_entities::MEMBER_TYPE, true>::type \
+get_members_return_type<PARENT_TYPE, semantic_entities::MEMBER_TYPE, true>::type \
 get_members<semantic_entities::MEMBER_TYPE>(const semantic_entities::PARENT_TYPE& parent) \
 { \
 	return parent.PARENT_MEMBER_FUNCTION(); \
 }
 
+#define GENERATE_GET_UNNAMED_NAMESPACE_SPECIALIZATION(PARENT_TYPE, MEMBER_TYPE) \
+template<> \
+get_members_return_type<PARENT_TYPE, semantic_entities::MEMBER_TYPE, false>::type \
+get_members<semantic_entities::MEMBER_TYPE>(semantic_entities::PARENT_TYPE& parent) \
+{ \
+	semantic_entities::MEMBER_TYPE* entity = parent.get_unnamed_namespace(); \
+	if(entity) \
+		return utility::single_object_range<semantic_entities::MEMBER_TYPE>(*entity); \
+	else \
+		return utility::single_object_range<semantic_entities::MEMBER_TYPE>(); \
+} \
+ \
+template<> \
+get_members_return_type<PARENT_TYPE, semantic_entities::MEMBER_TYPE, true>::type \
+get_members<semantic_entities::MEMBER_TYPE>(const semantic_entities::PARENT_TYPE& parent) \
+{ \
+	const semantic_entities::MEMBER_TYPE* entity = parent.get_unnamed_namespace(); \
+	if(entity) \
+		return utility::single_object_const_range<semantic_entities::MEMBER_TYPE>(*entity); \
+	else \
+		return utility::single_object_const_range<semantic_entities::MEMBER_TYPE>(); \
+}
+
 GENERATE_GET_MEMBERS_SPECIALIZATION(namespace_, namespace_, namespaces)
-//GENERATE_GET_MEMBERS_SPECIALIZATION(namespace_, unnamed_namespace, get_unnamed_namespace)
+GENERATE_GET_UNNAMED_NAMESPACE_SPECIALIZATION(namespace_, unnamed_namespace)
 GENERATE_GET_MEMBERS_SPECIALIZATION(namespace_, class_, classes)
 GENERATE_GET_MEMBERS_SPECIALIZATION(namespace_, enum_, enums)
 GENERATE_GET_MEMBERS_SPECIALIZATION(namespace_, typedef_, typedefs)
@@ -49,7 +72,8 @@ GENERATE_GET_MEMBERS_SPECIALIZATION(namespace_, simple_function, simple_function
 GENERATE_GET_MEMBERS_SPECIALIZATION(namespace_, variable, variables)
 GENERATE_GET_MEMBERS_SPECIALIZATION(namespace_, namespace_alias, namespace_aliases)
 
-//GENERATE_GET_MEMBERS_SPECIALIZATION(linked_namespace, unnamed_namespace, get_unnamed_namespace)
+GENERATE_GET_MEMBERS_SPECIALIZATION(linked_namespace, linked_namespace, namespaces)
+GENERATE_GET_MEMBERS_SPECIALIZATION(linked_namespace, linked_unnamed_namespace, unnamed_namespaces)
 GENERATE_GET_MEMBERS_SPECIALIZATION(linked_namespace, class_, classes)
 GENERATE_GET_MEMBERS_SPECIALIZATION(linked_namespace, enum_, enums)
 GENERATE_GET_MEMBERS_SPECIALIZATION(linked_namespace, typedef_, typedefs)
@@ -58,7 +82,7 @@ GENERATE_GET_MEMBERS_SPECIALIZATION(linked_namespace, simple_function, simple_fu
 GENERATE_GET_MEMBERS_SPECIALIZATION(linked_namespace, variable, variables)
 
 GENERATE_GET_MEMBERS_SPECIALIZATION(unnamed_namespace, namespace_, namespaces)
-//GENERATE_GET_MEMBERS_SPECIALIZATION(unnamed_namespace, unnamed_namespace, get_unnamed_namespace)
+GENERATE_GET_UNNAMED_NAMESPACE_SPECIALIZATION(unnamed_namespace, unnamed_namespace)
 GENERATE_GET_MEMBERS_SPECIALIZATION(unnamed_namespace, class_, classes)
 GENERATE_GET_MEMBERS_SPECIALIZATION(unnamed_namespace, enum_, enums)
 GENERATE_GET_MEMBERS_SPECIALIZATION(unnamed_namespace, typedef_, typedefs)
@@ -67,7 +91,8 @@ GENERATE_GET_MEMBERS_SPECIALIZATION(unnamed_namespace, simple_function, simple_f
 GENERATE_GET_MEMBERS_SPECIALIZATION(unnamed_namespace, variable, variables)
 GENERATE_GET_MEMBERS_SPECIALIZATION(unnamed_namespace, namespace_alias, namespace_aliases)
 
-//GENERATE_GET_MEMBERS_SPECIALIZATION(linked_unnamed_namespace, unnamed_namespace, get_unnamed_namespace)
+GENERATE_GET_MEMBERS_SPECIALIZATION(linked_unnamed_namespace, linked_namespace, namespaces)
+GENERATE_GET_UNNAMED_NAMESPACE_SPECIALIZATION(linked_unnamed_namespace, linked_unnamed_namespace)
 GENERATE_GET_MEMBERS_SPECIALIZATION(linked_unnamed_namespace, class_, classes)
 GENERATE_GET_MEMBERS_SPECIALIZATION(linked_unnamed_namespace, enum_, enums)
 GENERATE_GET_MEMBERS_SPECIALIZATION(linked_unnamed_namespace, typedef_, typedefs)

@@ -1,5 +1,5 @@
-<namespace id="n0">
- <class name="s" id="c0">
+<namespace id="0">
+ <class name="s" id="0">
   <destructor access="public" defined="false">
   </destructor>
   <bit_field name="i" size="0" access="public" mutable="true">

@@ -1,30 +1,30 @@
-<namespace id="n0">
- <class name="base" id="c0">
+<namespace id="0">
+ <class name="base" id="0">
   <destructor access="public" defined="false">
   </destructor>
  </class>
- <class name="c" id="c1">
+ <class name="c" id="1">
   <base_classes>
-   <base_class id="c0" access="private"/>
+   <base_class  class_id="0" access="private"/>
   </base_classes>
   <destructor access="public" defined="false">
   </destructor>
-  <variable name="i" access="private">
+  <member_variable name="i" access="private">
    <type>
     <fundamental_type type="int"/>
    </type>
-  </variable>
+  </member_variable>
  </class>
- <class name="s" id="c2">
+ <class name="s" id="2">
   <base_classes>
-   <base_class id="c0" access="public"/>
+   <base_class  class_id="0" access="public"/>
   </base_classes>
   <destructor access="public" defined="false">
   </destructor>
-  <variable name="i" access="public">
+  <member_variable name="i" access="public">
    <type>
     <fundamental_type type="int"/>
    </type>
-  </variable>
+  </member_variable>
  </class>
 </namespace>

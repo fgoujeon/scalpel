@@ -99,13 +99,12 @@ init_unit_test()
 
 		//fill the test file list with testfiles/semantic_analysis files
 		{
-			std::vector<std::string> output_files = get_file_list("test/testfiles/semantic_analysis", boost::regex(".*\\.xml"));
+			std::vector<std::string> output_files = get_file_list("test/testfiles/semantic_analysis", boost::regex(".*\\.cpp.out"));
 
 			for(auto i = output_files.begin(); i != output_files.end(); ++i) //for each output file...
 			{
 				const std::string output_file_name = *i;
-				const std::string base_file_name = output_file_name.substr(0, output_file_name.length() - 4);
-				const std::string input_file_name = base_file_name + ".cpp";
+				const std::string input_file_name = output_file_name.substr(0, output_file_name.length() - 4);
 
 				//create a file set and add it to the list
 				test_files.push_back
@@ -157,13 +156,12 @@ init_unit_test()
 
 		//fill the test file list with testfiles/semantic_analysis files (for single-file linkage tests)
 		{
-			std::vector<std::string> output_files = get_file_list("test/testfiles/semantic_analysis", boost::regex(".*\\.xml"));
+			std::vector<std::string> output_files = get_file_list("test/testfiles/semantic_analysis", boost::regex(".*\\.cpp.out"));
 
 			for(auto i = output_files.begin(); i != output_files.end(); ++i) //for each output file...
 			{
 				const std::string output_file_name = *i;
-				const std::string base_file_name = output_file_name.substr(0, output_file_name.length() - 4);
-				const std::string input_file_name = base_file_name + ".cpp";
+				const std::string input_file_name = output_file_name.substr(0, output_file_name.length() - 4);
 
 				//create a file set and add it to the list
 				test_files.push_back

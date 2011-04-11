@@ -1,6 +1,6 @@
-<namespace id="n0">
+<namespace id="0">
  <unnamed_namespace>
-  <class name="c" id="c0">
+  <class name="c" id="0">
    <destructor access="public" defined="false">
    </destructor>
   </class>
@@ -12,7 +12,7 @@
  </unnamed_namespace>
  <variable name="c0">
   <type>
-   <class id="c0"/>
+   <class id="0"/>
   </type>
  </variable>
  <variable name="i">

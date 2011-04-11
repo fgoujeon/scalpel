@@ -1,27 +1,27 @@
-<namespace id="n0">
- <class name="a_class" id="c0">
-  <class name="nested_class" id="c1" access="public">
+<namespace id="0">
+ <class name="a_class" id="0">
+  <member_class name="nested_class" id="0" access="public">
    <destructor access="public" defined="false">
    </destructor>
-   <variable name="i" access="private">
+   <member_variable name="i" access="private">
     <type>
      <fundamental_type type="int"/>
     </type>
-   </variable>
-  </class>
-  <class name="nested_class2" id="c2" access="public">
+   </member_variable>
+  </member_class>
+  <member_class name="nested_class2" id="1" access="public">
    <base_classes>
-    <base_class id="c1" access="public"/>
+    <base_class  member_class_id="0" access="public"/>
    </base_classes>
    <destructor access="public" defined="false">
    </destructor>
-  </class>
+  </member_class>
   <destructor access="public" defined="false">
   </destructor>
  </class>
  <variable name="anc">
   <type>
-   <class id="c1"/>
+   <member_class id="0"/>
   </type>
  </variable>
 </namespace>

@@ -1,13 +1,13 @@
-<namespace id="n0">
- <namespace name="n" id="n1">
-  <class name="c" id="c0">
+<namespace id="0">
+ <namespace name="n" id="1">
+  <class name="c" id="0">
    <destructor access="public" defined="false">
    </destructor>
   </class>
  </namespace>
  <variable name="a_c">
   <type>
-   <class id="c0"/>
+   <class id="0"/>
   </type>
  </variable>
 </namespace>

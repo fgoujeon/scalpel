@@ -31,7 +31,7 @@ namespace scalpel { namespace cpp { namespace linkage { namespace detail
 entity_groups
 list_entities(const utility::unique_ptr_vector<semantic_graph>& semantic_graphs);
 
-}}}} //namespace scalpel::cpp::linkage::detail
+}}}} //namespace scalpel::cpp::linking::detail
 
 #endif
 

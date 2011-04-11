@@ -130,7 +130,7 @@ namespace
 	void
 	list_child_entities_of_type(const ParentEntity& parent_entity, entity_groups& groups, const bool force_internal_linkage)
 	{
-		typename generic_queries::detail::get_members_return_type<ChildEntity, true>::type entities =
+		typename generic_queries::detail::get_members_return_type<ParentEntity, ChildEntity, true>::type entities =
 			generic_queries::detail::get_members<ChildEntity>(parent_entity)
 		;
 		for(auto i = entities.begin(); i != entities.end(); ++i)

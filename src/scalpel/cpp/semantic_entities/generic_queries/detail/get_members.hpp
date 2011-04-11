@@ -30,29 +30,53 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities { namespace generic_queries { namespace detail
 {
 
-template<class Entity, bool Const>
+template<class DeclarativeRegion, class Entity, bool Const>
 struct get_members_return_type;
 
-template<class Entity>
-struct get_members_return_type<Entity, false>
+template<class DeclarativeRegion, class Entity>
+struct get_members_return_type<DeclarativeRegion, Entity, false>
 {
 	typedef typename utility::unique_ptr_vector<Entity>::range type;
 };
 
-template<class Entity>
-struct get_members_return_type<Entity, true>
+template<class DeclarativeRegion, class Entity>
+struct get_members_return_type<DeclarativeRegion, Entity, true>
 {
 	typedef const utility::unique_ptr_vector<Entity>& type;
 };
 
+template<class DeclarativeRegion>
+struct get_members_return_type<DeclarativeRegion, semantic_entities::unnamed_namespace, false>
+{
+	typedef utility::single_object_range<semantic_entities::unnamed_namespace> type;
+};
+
+template<class DeclarativeRegion>
+struct get_members_return_type<DeclarativeRegion, semantic_entities::unnamed_namespace, true>
+{
+	typedef utility::single_object_const_range<semantic_entities::unnamed_namespace> type;
+};
+
 template<>
-struct get_members_return_type<semantic_entities::destructor, false>
+struct get_members_return_type<semantic_entities::linked_unnamed_namespace, semantic_entities::linked_unnamed_namespace, false>
+{
+	typedef utility::single_object_range<semantic_entities::linked_unnamed_namespace> type;
+};
+
+template<>
+struct get_members_return_type<semantic_entities::linked_unnamed_namespace, semantic_entities::linked_unnamed_namespace, true>
+{
+	typedef utility::single_object_const_range<semantic_entities::linked_unnamed_namespace> type;
+};
+
+template<class DeclarativeRegion>
+struct get_members_return_type<DeclarativeRegion, semantic_entities::destructor, false>
 {
 	typedef utility::single_object_range<semantic_entities::destructor> type;
 };
 
-template<>
-struct get_members_return_type<semantic_entities::destructor, true>
+template<class DeclarativeRegion>
+struct get_members_return_type<DeclarativeRegion, semantic_entities::destructor, true>
 {
 	typedef utility::single_object_const_range<semantic_entities::destructor> type;
 };
@@ -65,11 +89,11 @@ struct get_members_return_type<semantic_entities::destructor, true>
 
 #define GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(PARENT_TYPE) \
 template<class Member> \
-typename get_members_return_type<Member, false>::type \
+typename get_members_return_type<PARENT_TYPE, Member, false>::type \
 get_members(semantic_entities::PARENT_TYPE& parent); \
  \
 template<class Member> \
-typename get_members_return_type<Member, true>::type \
+typename get_members_return_type<PARENT_TYPE, Member, true>::type \
 get_members(const semantic_entities::PARENT_TYPE& parent);
 
 GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(namespace_)

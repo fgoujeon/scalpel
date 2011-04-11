@@ -759,7 +759,7 @@ find_in_declarative_region_members
 	typename boost::enable_if<semantic_entities::type_traits::has_members_of_type<DeclarativeRegion, Entity>>::type*
 )
 {
-	typename semantic_entities::generic_queries::detail::get_members_return_type<Entity, false>::type members =
+	typename semantic_entities::generic_queries::detail::get_members_return_type<DeclarativeRegion, Entity, false>::type members =
 		semantic_entities::generic_queries::detail::get_members<Entity>(current_declarative_region)
 	;
 	for(auto i = members.begin(); i != members.end(); ++i)
