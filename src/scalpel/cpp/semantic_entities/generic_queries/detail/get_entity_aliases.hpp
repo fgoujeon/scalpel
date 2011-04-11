@@ -22,7 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_SEMANTIC_ENTITY_ANALYSIS_GET_ENTITY_ALIASES_HPP
 
 #include <scalpel/cpp/semantic_graph.hpp>
-#include <scalpel/utility/ptr_vector.hpp>
+#include <scalpel/utility/vector_range.hpp>
 #include <vector>
 
 namespace scalpel { namespace cpp { namespace semantic_entities { namespace generic_queries { namespace detail
