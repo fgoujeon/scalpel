@@ -92,6 +92,12 @@ get_operator_function_operator
 	const syntax_nodes::declarator& declarator_node
 );
 
+semantic_entities::overloadable_operator
+get_operator_function_operator
+(
+	const syntax_nodes::operator_& operator_node
+);
+
 semantic_entities::type_variant
 get_conversion_function_type
 (

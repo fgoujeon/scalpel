@@ -21,7 +21,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef CPP2XML_SEMANTIC_GRAPH_HPP
 #define CPP2XML_SEMANTIC_GRAPH_HPP
 
+#include "detail/type_to_string.hpp"
+#include "detail/basic_print_functions.hpp"
+#include <scalpel/cpp/semantic_entities/type_traits/has_entity_aliases_of_type.hpp>
 #include <scalpel/cpp/semantic_entities/type_traits/has_members_of_type.hpp>
+#include <scalpel/cpp/semantic_entities/generic_queries/detail/get_entity_aliases.hpp>
 #include <scalpel/cpp/semantic_entities/generic_queries/detail/get_members.hpp>
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <string>
@@ -45,13 +49,6 @@ struct entity_id_map
 class semantic_graph_serializer
 {
 	public:
-		typedef std::map<const scalpel::cpp::semantic_entities::namespace_*, unsigned int> namespace_ids_t;
-		typedef std::map<const scalpel::cpp::semantic_entities::linked_namespace*, unsigned int> linked_namespace_ids_t;
-		typedef std::map<const scalpel::cpp::semantic_entities::class_*, unsigned int> class_ids_t;
-		typedef std::map<const scalpel::cpp::semantic_entities::member_class*, unsigned int> member_class_ids_t;
-		typedef std::map<const scalpel::cpp::semantic_entities::enum_*, unsigned int> enum_ids_t;
-		typedef std::map<const scalpel::cpp::semantic_entities::member_enum*, unsigned int> member_enum_ids_t;
-
 		semantic_graph_serializer(std::ostream& output);
 
 		void
@@ -249,12 +246,77 @@ class semantic_graph_serializer
 			const unsigned int indent_level
 		);
 
+		template<class DeclarativeRegion>
 		void
-		serialize_class_alias
+		serialize_entity_aliases
 		(
-			const entity_alias<class_>& entity,
+			const DeclarativeRegion& declarative_region,
 			const unsigned int indent_level
-		);
+		)
+		{
+			serialize_entity_aliases_of_type<namespace_>(declarative_region, indent_level);
+			serialize_entity_aliases_of_type<linked_namespace>(declarative_region, indent_level);
+			serialize_entity_aliases_of_type<unnamed_namespace>(declarative_region, indent_level);
+			serialize_entity_aliases_of_type<linked_unnamed_namespace>(declarative_region, indent_level);
+			serialize_entity_aliases_of_type<class_>(declarative_region, indent_level);
+			serialize_entity_aliases_of_type<member_class>(declarative_region, indent_level);
+			serialize_entity_aliases_of_type<enum_>(declarative_region, indent_level);
+			serialize_entity_aliases_of_type<member_enum>(declarative_region, indent_level);
+			serialize_entity_aliases_of_type<typedef_>(declarative_region, indent_level);
+			serialize_entity_aliases_of_type<member_typedef>(declarative_region, indent_level);
+			serialize_entity_aliases_of_type<constructor>(declarative_region, indent_level);
+			serialize_entity_aliases_of_type<destructor>(declarative_region, indent_level);
+			serialize_entity_aliases_of_type<operator_member_function>(declarative_region, indent_level);
+			serialize_entity_aliases_of_type<conversion_function>(declarative_region, indent_level);
+			serialize_entity_aliases_of_type<simple_member_function>(declarative_region, indent_level);
+			serialize_entity_aliases_of_type<operator_function>(declarative_region, indent_level);
+			serialize_entity_aliases_of_type<simple_function>(declarative_region, indent_level);
+			serialize_entity_aliases_of_type<variable>(declarative_region, indent_level);
+			serialize_entity_aliases_of_type<member_variable>(declarative_region, indent_level);
+			serialize_entity_aliases_of_type<bit_field>(declarative_region, indent_level);
+		}
+
+		template<class Entity, class DeclarativeRegion>
+		void
+		serialize_entity_aliases_of_type
+		(
+			const DeclarativeRegion& declarative_region,
+			const unsigned int indent_level,
+			typename boost::enable_if<scalpel::cpp::semantic_entities::type_traits::has_entity_aliases_of_type<DeclarativeRegion, Entity>>::type* = 0
+		)
+		{
+			const std::vector<scalpel::cpp::semantic_entities::entity_alias<Entity>>& entity_aliases =
+				scalpel::cpp::semantic_entities::generic_queries::detail::get_entity_aliases<Entity>(declarative_region)
+			;
+
+			for(auto i = entity_aliases.begin(); i != entity_aliases.end(); ++i)
+				serialize_entity_alias(*i, indent_level);
+		}
+
+		template<class Entity, class DeclarativeRegion>
+		void
+		serialize_entity_aliases_of_type
+		(
+			const DeclarativeRegion&,
+			const unsigned int,
+			typename boost::disable_if<scalpel::cpp::semantic_entities::type_traits::has_entity_aliases_of_type<DeclarativeRegion, Entity>>::type* = 0
+		)
+		{
+			//does nothing
+		}
+
+		template<class Entity>
+		void
+		serialize_entity_alias
+		(
+			const entity_alias<Entity>& entity,
+			const unsigned int indent_level
+		)
+		{
+			output_ << detail::indent(indent_level) << "<" << detail::type_to_string<Entity>() << "_alias";
+			output_ << " " << detail::type_to_string<Entity>() << "_id=\"" << get_id(entity.referred_entity()) << "\"";
+			output_ << "/>\n";
+		}
 
 
 
@@ -269,6 +331,15 @@ class semantic_graph_serializer
 		(
 			const scalpel::cpp::semantic_entities::class_ptr_variant& entity
 		);
+
+		template<class Entity>
+		std::string
+		id_attribute_to_string(const Entity& entity)
+		{
+			std::ostringstream oss;
+			oss << "id=\"" << get_id(entity) << "\"";
+			return oss.str();
+		}
 
 
 
@@ -289,8 +360,6 @@ class semantic_graph_serializer
 			set_id_of_members_of_type<member_enum>(entity);
 			set_id_of_members_of_type<typedef_>(entity);
 			set_id_of_members_of_type<member_typedef>(entity);
-			set_id_of_members_of_type<constructor>(entity);
-			set_id_of_members_of_type<destructor>(entity);
 			set_id_of_members_of_type<operator_member_function>(entity);
 			set_id_of_members_of_type<conversion_function>(entity);
 			set_id_of_members_of_type<simple_member_function>(entity);
@@ -367,8 +436,6 @@ class semantic_graph_serializer
 		typename entity_id_map<semantic_entities::member_enum>::type member_enum_id_map_;
 		typename entity_id_map<semantic_entities::typedef_>::type typedef_id_map_;
 		typename entity_id_map<semantic_entities::member_typedef>::type member_typedef_id_map_;
-		typename entity_id_map<semantic_entities::constructor>::type constructor_id_map_;
-		typename entity_id_map<semantic_entities::destructor>::type destructor_id_map_;
 		typename entity_id_map<semantic_entities::operator_member_function>::type operator_member_function_id_map_;
 		typename entity_id_map<semantic_entities::conversion_function>::type conversion_function_id_map_;
 		typename entity_id_map<semantic_entities::simple_member_function>::type simple_member_function_id_map_;

@@ -44,6 +44,14 @@ struct get_entity_aliases_impl<MEMBER_TYPE> \
 	get(DECLARATIVE_REGION_TYPE& declarative_region) \
 	{ \
 		return declarative_region.MEMBER_FUNCTION(); \
+	} \
+ \
+	static \
+	inline \
+	const std::vector<entity_alias<member_t>>& \
+	get(const DECLARATIVE_REGION_TYPE& declarative_region) \
+	{ \
+		return declarative_region.MEMBER_FUNCTION(); \
 	}
 
 #define END_FOR \
@@ -108,6 +116,14 @@ template<class Member, class DeclarativeRegion>
 inline
 typename utility::vector_range<entity_alias<Member>>::type
 get_entity_aliases(DeclarativeRegion& declarative_region)
+{
+	return get_entity_aliases_impl<Member>::get(declarative_region);
+}
+
+template<class Member, class DeclarativeRegion>
+inline
+const std::vector<entity_alias<Member>>&
+get_entity_aliases(const DeclarativeRegion& declarative_region)
 {
 	return get_entity_aliases_impl<Member>::get(declarative_region);
 }

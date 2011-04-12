@@ -252,6 +252,15 @@ get_operator_function_operator
 )
 {
 	const syntax_nodes::operator_& operator_node = syntax_node_analysis::get_operator(declarator_node);
+	return get_operator_function_operator(operator_node);
+}
+
+semantic_entities::overloadable_operator
+get_operator_function_operator
+(
+	const syntax_nodes::operator_& operator_node
+)
+{
 	if(auto opt_simple_operator_node = syntax_nodes::get<syntax_nodes::simple_operator>(&operator_node))
 	{
 		auto simple_operator_node = *opt_simple_operator_node;

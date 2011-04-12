@@ -1,21 +1,21 @@
 <namespace id="0">
- <namespace name="n" id="1">
-  <namespace name="n2" id="2">
-   <class name="base1" id="0">
+ <namespace id="1" name="n">
+  <namespace id="2" name="n2">
+   <class id="0" name="base1">
     <destructor access="public" defined="false">
     </destructor>
    </class>
   </namespace>
  </namespace>
- <class name="base2" id="1">
+ <class id="1" name="base2">
   <destructor access="public" defined="false">
   </destructor>
  </class>
- <class name="base3" id="2">
+ <class id="2" name="base3">
   <destructor access="public" defined="false">
   </destructor>
  </class>
- <class name="test" id="3">
+ <class id="3" name="test">
   <base_classes>
    <base_class  class_id="0" access="public"/>
    <base_class  class_id="1" access="private" virtual="true"/>
@@ -45,7 +45,7 @@
   </constructor>
   <destructor access="public" virtual="true">
   </destructor>
-  <operator_member_function operator="new[]" access="public">
+  <operator_member_function id="0" operator="new[]" access="public">
    <return_type>
     <pointer>
      <fundamental_type type="void"/>
@@ -66,7 +66,7 @@
     </parameter>
    </parameters>
   </operator_member_function>
-  <operator_member_function operator="delete[]" access="public">
+  <operator_member_function id="1" operator="delete[]" access="public">
    <return_type>
     <fundamental_type type="void"/>
    </return_type>
@@ -80,7 +80,7 @@
     </parameter>
    </parameters>
   </operator_member_function>
-  <operator_member_function operator="=" access="public">
+  <operator_member_function id="2" operator="=" access="public">
    <return_type>
     <reference>
      <cv_qualified_type const="true">
@@ -100,7 +100,7 @@
     </parameter>
    </parameters>
   </operator_member_function>
-  <operator_member_function operator="==" access="public" const="true">
+  <operator_member_function id="3" operator="==" access="public" const="true">
    <return_type>
     <fundamental_type type="bool"/>
    </return_type>
@@ -116,39 +116,39 @@
     </parameter>
    </parameters>
   </operator_member_function>
-  <conversion_function access="public" const="true">
+  <conversion_function id="0" access="public" const="true">
    <return_type>
     <fundamental_type type="int"/>
    </return_type>
   </conversion_function>
-  <simple_member_function name="pure_virtual" access="public" virtual="true" pure="true">
+  <simple_member_function id="0" name="pure_virtual" access="public" virtual="true" pure="true">
    <return_type>
     <fundamental_type type="void"/>
    </return_type>
   </simple_member_function>
-  <simple_member_function name="static_function" access="public" static="true">
+  <simple_member_function id="1" name="static_function" access="public" static="true">
    <return_type>
     <fundamental_type type="bool"/>
    </return_type>
   </simple_member_function>
-  <simple_member_function name="update" access="protected" inline="true">
+  <simple_member_function id="2" name="update" access="protected" inline="true">
    <return_type>
     <fundamental_type type="void"/>
    </return_type>
   </simple_member_function>
-  <simple_member_function name="value" access="public" inline="true" const="true">
+  <simple_member_function id="3" name="value" access="public" inline="true" const="true">
    <return_type>
     <fundamental_type type="int"/>
    </return_type>
   </simple_member_function>
-  <member_variable name="b" access="private" static="true">
+  <member_variable id="0" name="b" access="private" static="true">
    <type>
     <cv_qualified_type const="true">
      <fundamental_type type="bool"/>
     </cv_qualified_type>
    </type>
   </member_variable>
-  <member_variable name="value_" access="private">
+  <member_variable id="1" name="value_" access="private">
    <type>
     <fundamental_type type="int"/>
    </type>

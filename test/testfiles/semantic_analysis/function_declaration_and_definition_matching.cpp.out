@@ -1,5 +1,5 @@
 <namespace id="0">
- <simple_function name="f">
+ <simple_function id="0" name="f">
   <return_type>
    <fundamental_type type="void"/>
   </return_type>
@@ -13,7 +13,7 @@
    </parameter>
   </parameters>
  </simple_function>
- <simple_function name="g">
+ <simple_function id="1" name="g">
   <return_type>
    <fundamental_type type="void"/>
   </return_type>
@@ -27,7 +27,7 @@
    </parameter>
   </parameters>
  </simple_function>
- <simple_function name="h">
+ <simple_function id="2" name="h">
   <return_type>
    <fundamental_type type="void"/>
   </return_type>
@@ -43,7 +43,7 @@
    </parameter>
   </parameters>
  </simple_function>
- <simple_function name="i">
+ <simple_function id="3" name="i">
   <return_type>
    <fundamental_type type="void"/>
   </return_type>

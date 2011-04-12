@@ -1,5 +1,5 @@
 <namespace id="0">
- <class name="s" id="0">
+ <class id="0" name="s">
   <member_enum name="color" id="0">
    <constant name="RED" value="0">
    <constant name="GREEN" value="1">
@@ -12,12 +12,12 @@
   <constant name="LEFT" value="0">
   <constant name="RIGHT" value="1">
  </enum>
- <variable name="c">
+ <variable id="0" name="c">
   <type>
    <member_enum id="0"/>
   </type>
  </variable>
- <variable name="d">
+ <variable id="1" name="d">
   <type>
    <enum id="0"/>
   </type>

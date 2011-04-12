@@ -1,5 +1,5 @@
 <namespace id="0">
- <simple_function name="f">
+ <simple_function id="0" name="f">
   <return_type>
    <fundamental_type type="void"/>
   </return_type>

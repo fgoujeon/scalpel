@@ -1,5 +1,5 @@
 <namespace id="0">
- <variable name="i">
+ <variable id="0" name="i">
   <type>
    <pointer>
     <pointer>

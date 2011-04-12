@@ -344,7 +344,7 @@ fill_namespace
 				)
 			;
 
-			//add the functions to the namespace (as using declaration members)
+			//add the functions to the namespace (as entity aliases)
 			for(auto i = found_entities.begin(); i != found_entities.end(); ++i)
 			{
 				simple_function& entity = **i;
@@ -354,7 +354,28 @@ fill_namespace
 	}
 	else if(boost::optional<const operator_function_id&> opt_operator_function_id_node = get<operator_function_id>(&unqualified_id_node))
 	{
-		assert(false); //not implemented yet
+		//if no entity has been found, try to find functions
+		std::set<operator_function*> found_entities =
+			name_lookup::find_local
+			<
+				semantic_entity_analysis::identification_policies::by_overloaded_operator,
+				open_declarative_region_ptr_variant,
+				false,
+				true,
+				operator_function
+			>
+			(
+				get_operator_function_operator(get_operator(*opt_operator_function_id_node)),
+				found_declarative_region
+			)
+		;
+
+		//add the functions to the namespace (as entity aliases)
+		for(auto i = found_entities.begin(); i != found_entities.end(); ++i)
+		{
+			operator_function& entity = **i;
+			namespace_entity.add_member(entity_alias<operator_function>(entity));
+		}
 	}
 	else
 	{

@@ -1,10 +1,10 @@
 <namespace id="0">
- <namespace name="n" id="1">
-  <class name="c" id="0">
+ <namespace id="1" name="n">
+  <class id="0" name="c">
    <destructor access="public" defined="false">
    </destructor>
   </class>
-  <variable name="fun_ptr">
+  <variable id="0" name="fun_ptr">
    <type>
     <pointer_to_member  class_id="0">
      <function_type>
@@ -18,7 +18,7 @@
     </pointer_to_member>
    </type>
   </variable>
-  <variable name="int_ptr">
+  <variable id="1" name="int_ptr">
    <type>
     <pointer_to_member  class_id="1">
      <fundamental_type type="int"/>
@@ -26,11 +26,11 @@
    </type>
   </variable>
  </namespace>
- <class name="c" id="1">
+ <class id="1" name="c">
   <destructor access="public" defined="false">
   </destructor>
  </class>
- <simple_function name="f">
+ <simple_function id="0" name="f">
   <return_type>
    <fundamental_type type="void"/>
   </return_type>

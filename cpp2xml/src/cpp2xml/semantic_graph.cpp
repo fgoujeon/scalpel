@@ -19,7 +19,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "semantic_graph.hpp"
-#include "detail/basic_print_functions.hpp"
 #include <scalpel/utility/variant.hpp>
 #include <vector>
 #include <sstream>
@@ -158,11 +157,11 @@ semantic_graph_serializer::serialize_namespace
 )
 {
 	output_ << indent(indent_level) << "<namespace";
+	output_ << " " << id_attribute_to_string(entity);
 	if(entity.name() != "")
 	{
 		output_ << " name=\"" << entity.name() << "\"";
 	}
-	output_ << " id=\"" << get_id(entity) << "\"";
 	output_ << ">\n";
 
 	for(auto i = entity.namespace_aliases().begin(); i != entity.namespace_aliases().end(); ++i)
@@ -192,10 +191,7 @@ semantic_graph_serializer::serialize_namespace
 	for(auto i = entity.variables().begin(); i != entity.variables().end(); ++i)
 		serialize_variable(*i, indent_level + 1);
 
-
-
-	for(auto i = entity.class_aliases().begin(); i != entity.class_aliases().end(); ++i)
-		serialize_class_alias(*i, indent_level + 1);
+	serialize_entity_aliases(entity, indent_level + 1);
 
 	output_ << indent(indent_level) << "</namespace>\n";
 }
@@ -208,11 +204,11 @@ semantic_graph_serializer::serialize_namespace
 )
 {
 	output_ << indent(indent_level) << "<namespace";
+	output_ << " " << id_attribute_to_string(entity);
 	if(entity.name() != "")
 	{
 		output_ << " name=\"" << entity.name() << "\"";
 	}
-	output_ << " id=\"" << get_id(entity) << "\"";
 	output_ << ">\n";
 
 	for(auto i = entity.namespaces().begin(); i != entity.namespaces().end(); ++i)
@@ -325,9 +321,9 @@ semantic_graph_serializer::serialize_class
 )
 {
 	output_ << indent(indent_level) << "<class";
+	output_ << " " << id_attribute_to_string(entity);
 	if(!entity.name().empty())
 		output_ << " name=\"" << entity.name() << "\"";
-	output_ << " id=\"" << get_id(entity) << "\"";
 	if(!entity.complete())
 		output_ << " complete=\"false\"";
 	output_ << ">\n";
@@ -380,9 +376,9 @@ semantic_graph_serializer::serialize_class
 )
 {
 	output_ << indent(indent_level) << "<member_class";
+	output_ << " " << id_attribute_to_string(entity);
 	if(!entity.name().empty())
 		output_ << " name=\"" << entity.name() << "\"";
-	output_ << " id=\"" << get_id(entity) << "\"";
 	output_ << attribute(entity.access());
 	if(!entity.complete())
 		output_ << " complete=\"false\"";
@@ -453,7 +449,7 @@ semantic_graph_serializer::serialize_enum
 	output_ << indent(indent_level) << "<enum";
 	if(!entity.name().empty())
 		output_ << " name=\"" << entity.name() << "\"";
-	output_ << " id=\"" << get_id(entity) << "\"";
+	output_ << " " << id_attribute_to_string(entity);
 	output_ << ">\n";
 
 	for(auto i = entity.constants().begin(); i != entity.constants().end(); ++i)
@@ -478,7 +474,7 @@ semantic_graph_serializer::serialize_enum
 	output_ << indent(indent_level) << "<member_enum";
 	if(!entity.name().empty())
 		output_ << " name=\"" << entity.name() << "\"";
-	output_ << " id=\"" << get_id(entity) << "\"";
+	output_ << " " << id_attribute_to_string(entity);
 	output_ << ">\n";
 
 	for(auto i = entity.constants().begin(); i != entity.constants().end(); ++i)
@@ -547,6 +543,7 @@ semantic_graph_serializer::serialize_operator_member_function
 )
 {
 	output_ << indent(indent_level) << "<operator_member_function";
+	output_ << " " << id_attribute_to_string(entity);
 	output_ << attribute(entity.overloaded_operator());
 	output_ << attribute(entity.access());
 	if(entity.is_inline())
@@ -580,6 +577,7 @@ semantic_graph_serializer::serialize_conversion_function
 )
 {
 	output_ << indent(indent_level) << "<conversion_function";
+	output_ << " " << id_attribute_to_string(entity);
 	output_ << attribute(entity.access());
 	if(entity.is_inline())
 		output_ << " inline=\"true\"";
@@ -610,6 +608,7 @@ semantic_graph_serializer::serialize_simple_member_function
 )
 {
 	output_ << indent(indent_level) << "<simple_member_function";
+	output_ << " " << id_attribute_to_string(entity);
 	output_ << " name=\"" << entity.name() << "\"";
 	output_ << attribute(entity.access());
 	if(entity.variadic())
@@ -647,6 +646,7 @@ semantic_graph_serializer::serialize_operator_function
 )
 {
 	output_ << indent(indent_level) << "<operator_function";
+	output_ << " " << id_attribute_to_string(entity);
 	output_ << attribute(entity.overloaded_operator());
 	if(entity.is_inline())
 		output_ << " inline=\"true\"";
@@ -673,6 +673,7 @@ semantic_graph_serializer::serialize_simple_function
 )
 {
 	output_ << indent(indent_level) << "<simple_function";
+	output_ << " " << id_attribute_to_string(entity);
 	output_ << " name=\"" << entity.name() << "\"";
 	if(entity.variadic())
 		output_ << " variadic=\"true\"";
@@ -768,6 +769,7 @@ semantic_graph_serializer::serialize_variable
 )
 {
 	output_ << indent(indent_level) << "<variable";
+	output_ << " " << id_attribute_to_string(entity);
 	output_ << " name=\"" << entity.name() << "\"";
 	if(entity.is_static())
 		output_ << " static=\"true\"";
@@ -786,6 +788,7 @@ semantic_graph_serializer::serialize_variable
 )
 {
 	output_ << indent(indent_level) << "<member_variable";
+	output_ << " " << id_attribute_to_string(entity);
 	output_ << " name=\"" << entity.name() << "\"";
 	output_ << attribute(entity.access());
 	if(entity.is_mutable())
@@ -807,6 +810,7 @@ semantic_graph_serializer::serialize_bit_field
 )
 {
 	output_ << indent(indent_level) << "<bit_field";
+	output_ << " " << id_attribute_to_string(entity);
 	if(!entity.name().empty())
 		output_ << " name=\"" << entity.name() << "\"";
 	output_ << " size=\"" << entity.size() << "\"";
@@ -828,6 +832,7 @@ semantic_graph_serializer::serialize_typedef
 )
 {
 	output_ << indent(indent_level) << "<typedef";
+	output_ << " " << id_attribute_to_string(entity);
 	output_ << " name=\"" << entity.name() << "\"";
 	output_ << ">\n";
 	output_ << indent(indent_level + 1) << "<type>\n";
@@ -844,6 +849,7 @@ semantic_graph_serializer::serialize_typedef
 )
 {
 	output_ << indent(indent_level) << "<member_typedef";
+	output_ << " " << id_attribute_to_string(entity);
 	output_ << " name=\"" << entity.name() << "\"";
 	output_ << attribute(entity.access());
 	output_ << ">\n";
@@ -862,19 +868,7 @@ semantic_graph_serializer::serialize_namespace_alias
 {
 	output_ << indent(indent_level) << "<namespace_alias";
 	output_ << " name=\"" << entity.name() << "\"";
-	output_ << " id=\"" << get_id(entity.referred_namespace()) << "\"";
-	output_ << "/>\n";
-}
-
-void
-semantic_graph_serializer::serialize_class_alias
-(
-	const entity_alias<class_>& entity,
-	const unsigned int indent_level
-)
-{
-	output_ << indent(indent_level) << "<class_alias";
-	output_ << " class_id=\"" << get_id(entity.referred_entity()) << "\"";
+	output_ << " namespace_id=\"" << get_id(entity.referred_namespace()) << "\"";
 	output_ << "/>\n";
 }
 
@@ -1082,8 +1076,6 @@ ENTITY_ID_MAP_OF_TYPE(enum_, enum_id_map_)
 ENTITY_ID_MAP_OF_TYPE(member_enum, member_enum_id_map_)
 ENTITY_ID_MAP_OF_TYPE(typedef_, typedef_id_map_)
 ENTITY_ID_MAP_OF_TYPE(member_typedef, member_typedef_id_map_)
-ENTITY_ID_MAP_OF_TYPE(constructor, constructor_id_map_)
-ENTITY_ID_MAP_OF_TYPE(destructor, destructor_id_map_)
 ENTITY_ID_MAP_OF_TYPE(operator_member_function, operator_member_function_id_map_)
 ENTITY_ID_MAP_OF_TYPE(conversion_function, conversion_function_id_map_)
 ENTITY_ID_MAP_OF_TYPE(simple_member_function, simple_member_function_id_map_)

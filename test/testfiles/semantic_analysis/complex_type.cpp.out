@@ -1,5 +1,5 @@
 <namespace id="0">
- <variable name="i">
+ <variable id="0" name="i">
   <type>
    <pointer>
     <pointer>
@@ -24,7 +24,7 @@
    </pointer>
   </type>
  </variable>
- <variable name="j">
+ <variable id="1" name="j">
   <type>
    <cv_qualified_type const="true">
     <fundamental_type type="unsigned long int"/>

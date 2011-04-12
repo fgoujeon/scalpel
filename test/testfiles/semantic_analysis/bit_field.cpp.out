@@ -1,18 +1,18 @@
 <namespace id="0">
- <class name="s" id="0">
+ <class id="0" name="s">
   <destructor access="public" defined="false">
   </destructor>
-  <bit_field name="i" size="0" access="public" mutable="true">
+  <bit_field id="0" name="i" size="0" access="public" mutable="true">
    <type>
     <fundamental_type type="bool"/>
    </type>
   </bit_field>
-  <bit_field size="0" access="public">
+  <bit_field id="1" size="0" access="public">
    <type>
     <fundamental_type type="int"/>
    </type>
   </bit_field>
-  <bit_field size="0" access="public">
+  <bit_field id="2" size="0" access="public">
    <type>
     <fundamental_type type="unsigned int"/>
    </type>
