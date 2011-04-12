@@ -1,0 +1,65 @@
+<namespace id="0">
+ <namespace id="1" name="n">
+  <class id="0" name="c" complete="false">
+   <destructor access="public" defined="false">
+   </destructor>
+  </class>
+  <enum name="e" id="0">
+  </enum>
+  <typedef id="0" name="integer">
+   <type>
+    <fundamental_type type="int"/>
+   </type>
+  </typedef>
+  <simple_function id="0" name="f" defined="false">
+   <return_type>
+    <fundamental_type type="void"/>
+   </return_type>
+  </simple_function>
+  <simple_function id="1" name="f" defined="false">
+   <return_type>
+    <fundamental_type type="void"/>
+   </return_type>
+   <parameters>
+    <parameter>
+     <type>
+      <fundamental_type type="int"/>
+     </type>
+    </parameter>
+   </parameters>
+  </simple_function>
+  <operator_function id="0" operator="==" defined="false">
+   <return_type>
+    <fundamental_type type="bool"/>
+   </return_type>
+   <parameters>
+    <parameter>
+     <type>
+      <reference>
+       <class id="0"/>
+      </reference>
+     </type>
+    </parameter>
+    <parameter>
+     <type>
+      <reference>
+       <class id="0"/>
+      </reference>
+     </type>
+    </parameter>
+   </parameters>
+  </operator_function>
+  <variable id="0" name="i">
+   <type>
+    <fundamental_type type="int"/>
+   </type>
+  </variable>
+ </namespace>
+ <class_alias class_id="0"/>
+ <enum_alias enum_id="0"/>
+ <typedef_alias typedef_id="0"/>
+ <operator_function_alias operator_function_id="0"/>
+ <simple_function_alias simple_function_id="0"/>
+ <simple_function_alias simple_function_id="1"/>
+ <variable_alias variable_id="0"/>
+</namespace>
