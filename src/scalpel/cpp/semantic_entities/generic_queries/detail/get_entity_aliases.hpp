@@ -66,44 +66,32 @@ struct get_entity_aliases_impl<MEMBER_TYPE> \
 
 FOR(class_)
 	RETURN(namespace_, class_aliases)
-	RETURN(linked_namespace, class_aliases)
 	RETURN(unnamed_namespace, class_aliases)
-	RETURN(linked_unnamed_namespace, class_aliases)
 END_FOR
 
 FOR(enum_)
 	RETURN(namespace_, enum_aliases)
-	RETURN(linked_namespace, enum_aliases)
 	RETURN(unnamed_namespace, enum_aliases)
-	RETURN(linked_unnamed_namespace, enum_aliases)
 END_FOR
 
 FOR(typedef_)
 	RETURN(namespace_, typedef_aliases)
-	RETURN(linked_namespace, typedef_aliases)
 	RETURN(unnamed_namespace, typedef_aliases)
-	RETURN(linked_unnamed_namespace, typedef_aliases)
 END_FOR
 
 FOR(operator_function)
 	RETURN(namespace_, operator_function_aliases)
-	RETURN(linked_namespace, operator_function_aliases)
 	RETURN(unnamed_namespace, operator_function_aliases)
-	RETURN(linked_unnamed_namespace, operator_function_aliases)
 END_FOR
 
 FOR(simple_function)
 	RETURN(namespace_, simple_function_aliases)
-	RETURN(linked_namespace, simple_function_aliases)
 	RETURN(unnamed_namespace, simple_function_aliases)
-	RETURN(linked_unnamed_namespace, simple_function_aliases)
 END_FOR
 
 FOR(variable)
 	RETURN(namespace_, variable_aliases)
-	RETURN(linked_namespace, variable_aliases)
 	RETURN(unnamed_namespace, variable_aliases)
-	RETURN(linked_unnamed_namespace, variable_aliases)
 END_FOR
 
 #undef FOR

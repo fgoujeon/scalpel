@@ -148,7 +148,7 @@ init_unit_test()
 		framework::master_test_suite().add(BOOST_PARAM_TEST_CASE(tm, test_files.begin(), test_files.end()));
 	}
 
-	//Linking test suite
+	//Linkage test suite
 	{
 		std::vector<analysis::linkage_test_file_set> test_files;
 

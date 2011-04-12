@@ -28,8 +28,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 	UNNAMED_NAMESPACE_TYPE, \
 	IS_NAMED, \
 	CAN_HAVE_MULTIPLE_UNNAMED_NAMESPACES, \
+	HAS_USING_DIRECTIVE_NAMESPACE_DECLARATION, \
 	HAS_NAMESPACE_ALIASES, \
-	HAS_USING_DIRECTIVE_NAMESPACES \
+	HAS_ENTITY_ALIASES \
 ) \
 CLASS_NAME::CLASS_NAME() \
 { \
@@ -66,10 +67,10 @@ MEMBER_DEFINITION(CLASS_NAME, variable, variables, 1)
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-GENERATE_NAMESPACE_DEFINITION(namespace_, namespace_, unnamed_namespace, 1, 0, 1, 1)
-GENERATE_NAMESPACE_DEFINITION(unnamed_namespace, namespace_, unnamed_namespace, 0, 0, 1, 1)
-GENERATE_NAMESPACE_DEFINITION(linked_namespace, linked_namespace, linked_unnamed_namespace, 1, 1, 0, 0)
-GENERATE_NAMESPACE_DEFINITION(linked_unnamed_namespace, linked_namespace, linked_unnamed_namespace, 0, 0, 0, 0)
+GENERATE_NAMESPACE_DEFINITION(namespace_, namespace_, unnamed_namespace, 1, 0, 1, 1, 1)
+GENERATE_NAMESPACE_DEFINITION(unnamed_namespace, namespace_, unnamed_namespace, 0, 0, 1, 1, 1)
+GENERATE_NAMESPACE_DEFINITION(linked_namespace, linked_namespace, linked_unnamed_namespace, 1, 1, 0, 0, 0)
+GENERATE_NAMESPACE_DEFINITION(linked_unnamed_namespace, linked_namespace, linked_unnamed_namespace, 0, 0, 0, 0, 0)
 
 }}} //namespace scalpel::cpp::semantic_entities
 

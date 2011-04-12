@@ -46,26 +46,12 @@ HAS_ENTITY_ALIASES_OF_TYPE(namespace_, operator_function)
 HAS_ENTITY_ALIASES_OF_TYPE(namespace_, simple_function)
 HAS_ENTITY_ALIASES_OF_TYPE(namespace_, variable)
 
-HAS_ENTITY_ALIASES_OF_TYPE(linked_namespace, class_)
-HAS_ENTITY_ALIASES_OF_TYPE(linked_namespace, enum_)
-HAS_ENTITY_ALIASES_OF_TYPE(linked_namespace, typedef_)
-HAS_ENTITY_ALIASES_OF_TYPE(linked_namespace, operator_function)
-HAS_ENTITY_ALIASES_OF_TYPE(linked_namespace, simple_function)
-HAS_ENTITY_ALIASES_OF_TYPE(linked_namespace, variable)
-
 HAS_ENTITY_ALIASES_OF_TYPE(unnamed_namespace, class_)
 HAS_ENTITY_ALIASES_OF_TYPE(unnamed_namespace, enum_)
 HAS_ENTITY_ALIASES_OF_TYPE(unnamed_namespace, typedef_)
 HAS_ENTITY_ALIASES_OF_TYPE(unnamed_namespace, operator_function)
 HAS_ENTITY_ALIASES_OF_TYPE(unnamed_namespace, simple_function)
 HAS_ENTITY_ALIASES_OF_TYPE(unnamed_namespace, variable)
-
-HAS_ENTITY_ALIASES_OF_TYPE(linked_unnamed_namespace, class_)
-HAS_ENTITY_ALIASES_OF_TYPE(linked_unnamed_namespace, enum_)
-HAS_ENTITY_ALIASES_OF_TYPE(linked_unnamed_namespace, typedef_)
-HAS_ENTITY_ALIASES_OF_TYPE(linked_unnamed_namespace, operator_function)
-HAS_ENTITY_ALIASES_OF_TYPE(linked_unnamed_namespace, simple_function)
-HAS_ENTITY_ALIASES_OF_TYPE(linked_unnamed_namespace, variable)
 
 #undef HAS_ENTITY_ALIASES_OF_TYPE
 

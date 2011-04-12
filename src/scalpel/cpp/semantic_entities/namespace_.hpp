@@ -51,8 +51,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 	DECLARATIVE_REGION_MEMBER_IMPL_T, \
 	IS_NAMED, \
 	CAN_HAVE_MULTIPLE_UNNAMED_NAMESPACES, \
+	HAS_USING_DIRECTIVE_NAMESPACE_DECLARATION, \
 	HAS_NAMESPACE_ALIASES, \
-	HAS_USING_DIRECTIVE_NAMESPACE_DECLARATION \
+	HAS_ENTITY_ALIASES \
 ) \
 struct CLASS_NAME \
 { \
@@ -95,12 +96,16 @@ struct CLASS_NAME \
 		HAS_USING_DIRECTIVE_NAMESPACE_DECLARATION, \
 		USING_DIRECTIVE_NAMESPACE_DECLARATION, \
 	) \
-	ENTITY_ALIASES_OF_TYPE(class_, class) \
-	ENTITY_ALIASES_OF_TYPE(enum_, enum) \
-	ENTITY_ALIASES_OF_TYPE(typedef_, typedef) \
-	ENTITY_ALIASES_OF_TYPE(simple_function, simple_function) \
-	ENTITY_ALIASES_OF_TYPE(operator_function, operator_function) \
-	ENTITY_ALIASES_OF_TYPE(variable, variable) \
+	BOOST_PP_IIF \
+	( \
+		HAS_ENTITY_ALIASES, \
+		ENTITY_ALIASES_OF_TYPE(class_, class) \
+		ENTITY_ALIASES_OF_TYPE(enum_, enum) \
+		ENTITY_ALIASES_OF_TYPE(typedef_, typedef) \
+		ENTITY_ALIASES_OF_TYPE(simple_function, simple_function) \
+		ENTITY_ALIASES_OF_TYPE(operator_function, operator_function) \
+		ENTITY_ALIASES_OF_TYPE(variable, variable), \
+	) \
  \
 	DECLARATIVE_REGION_MEMBER_IMPL(DECLARATIVE_REGION_MEMBER_IMPL_T) \
 };
@@ -123,10 +128,10 @@ typedef
 	linked_namespace_declarative_region_member_impl_t
 ;
 
-GENERATE_NAMESPACE_DECLARATION(namespace_, namespace_, unnamed_namespace, namespace_declarative_region_member_impl_t, 1, 0, 1, 1)
-GENERATE_NAMESPACE_DECLARATION(unnamed_namespace, namespace_, unnamed_namespace, namespace_declarative_region_member_impl_t, 0, 0, 1, 1)
-GENERATE_NAMESPACE_DECLARATION(linked_unnamed_namespace, linked_namespace, linked_unnamed_namespace, linked_namespace_declarative_region_member_impl_t, 0, 0, 0, 0)
-GENERATE_NAMESPACE_DECLARATION(linked_namespace, linked_namespace, linked_unnamed_namespace, linked_namespace_declarative_region_member_impl_t, 1, 1, 0, 0)
+GENERATE_NAMESPACE_DECLARATION(namespace_, namespace_, unnamed_namespace, namespace_declarative_region_member_impl_t, 1, 0, 1, 1, 1)
+GENERATE_NAMESPACE_DECLARATION(unnamed_namespace, namespace_, unnamed_namespace, namespace_declarative_region_member_impl_t, 0, 0, 1, 1, 1)
+GENERATE_NAMESPACE_DECLARATION(linked_unnamed_namespace, linked_namespace, linked_unnamed_namespace, linked_namespace_declarative_region_member_impl_t, 0, 0, 0, 0, 0)
+GENERATE_NAMESPACE_DECLARATION(linked_namespace, linked_namespace, linked_unnamed_namespace, linked_namespace_declarative_region_member_impl_t, 1, 1, 0, 0, 0)
 
 }}} //namespace scalpel::cpp::semantic_entities
 
