@@ -18,28 +18,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define ENTITY_ALIASES_OF_TYPE(TYPE, NAME) \
-	public: \
-		typedef std::vector<entity_alias<TYPE>> NAME##_aliases_t; \
- \
-		typename utility::vector_range<entity_alias<TYPE>>::type \
-		NAME##_aliases() \
-		{ \
-			return NAME##_aliases_; \
-		} \
- \
-		const NAME##_aliases_t& \
-		NAME##_aliases() const \
-		{ \
-			return NAME##_aliases_; \
-		} \
- \
-		void \
-		add_member(const entity_alias<TYPE>& member) \
-		{ \
-			NAME##_aliases_.push_back(member); \
-		} \
- \
-	private: \
-		NAME##_aliases_t NAME##_aliases_;
+#include "basic_entity_aliases_of_type.hpp"
+
+#define ENTITY_ALIASES_OF_TYPE(TYPE, NAME) BASIC_ENTITY_ALIASES_OF_TYPE(TYPE, NAME, entity_alias)
 

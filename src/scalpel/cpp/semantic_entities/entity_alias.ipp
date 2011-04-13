@@ -18,59 +18,37 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_ENTITY_ALIAS_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_ENTITY_ALIAS_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_ENTITY_ALIAS_IPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_ENTITY_ALIAS_IPP
 
-#include "member_access.hpp"
 #include <boost/preprocessor/control/iif.hpp>
 #include <boost/preprocessor/punctuation/comma_if.hpp>
 
 #define ENTITY_ALIAS(CLASS_NAME, IS_MEMBER) \
 template<class Entity> \
-class CLASS_NAME \
+CLASS_NAME<Entity>::CLASS_NAME \
+( \
+	Entity& referred_entity BOOST_PP_COMMA_IF(IS_MEMBER) \
+	BOOST_PP_IIF(IS_MEMBER, const member_access access,) \
+): \
+	referred_entity_(&referred_entity) BOOST_PP_COMMA_IF(IS_MEMBER) \
+	BOOST_PP_IIF(IS_MEMBER, access_(access),) \
 { \
-	public: \
-		CLASS_NAME \
-		( \
-			Entity& referred_entity BOOST_PP_COMMA_IF(IS_MEMBER) \
-			BOOST_PP_IIF(IS_MEMBER, const member_access access,) \
-		); \
+} \
  \
-		CLASS_NAME(const CLASS_NAME& rhs); \
+template<class Entity> \
+CLASS_NAME<Entity>::CLASS_NAME(const CLASS_NAME& rhs): \
+	referred_entity_(rhs.referred_entity_) \
+{ \
+} \
  \
-		CLASS_NAME& \
-		operator=(const CLASS_NAME& rhs); \
- \
-		Entity& \
-		referred_entity() \
-		{ \
-			return *referred_entity_; \
-		} \
- \
-		const Entity& \
-		referred_entity() const \
-		{ \
-			return *referred_entity_; \
-		} \
- \
-		BOOST_PP_IIF \
-		( \
-			IS_MEMBER, \
-			member_access \
-			access() const \
-			{ \
-				return access_; \
-			}, \
-		) \
- \
-	private: \
-		Entity* referred_entity_; \
-		BOOST_PP_IIF \
-		( \
-			IS_MEMBER, \
-			member_access access_;, \
-		) \
-};
+template<class Entity> \
+CLASS_NAME<Entity>& \
+CLASS_NAME<Entity>::operator=(const CLASS_NAME& rhs) \
+{ \
+	referred_entity_ = rhs.referred_entity_; \
+	return *this; \
+}
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -81,8 +59,6 @@ ENTITY_ALIAS(member_entity_alias, 1)
 }}} //namespace scalpel::cpp::semantic_entities
 
 #undef ENTITY_ALIAS
-
-#include "entity_alias.ipp"
 
 #endif
 

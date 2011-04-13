@@ -22,6 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_CLASS_HPP
 
 #include "base_class.hpp"
+#include "entity_alias.hpp"
 #include "declarative_region_variants.hpp"
 #include "type_variant_fwd.hpp"
 #include "member_access.hpp"
@@ -29,7 +30,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "macros/detail/member_declaration.hpp"
 #include "macros/detail/single_member_declaration.hpp"
 #include "macros/detail/declarative_region_member_impl.hpp"
-#include <scalpel/utility/unique_ptr_vector.hpp>
+#include "macros/detail/hpp/member_entity_aliases_of_type.hpp"
+#include <scalpel/utility/vector_range.hpp>
 #include <scalpel/utility/unique_ptr_vector.hpp>
 #include <scalpel/utility/const_ptr_variant.hpp>
 #include <boost/preprocessor/control/iif.hpp>
@@ -52,6 +54,15 @@ class CLASS_NAME \
 	MEMBER_DECLARATION(simple_member_function, simple_functions) \
 	MEMBER_DECLARATION(member_variable, variables) \
 	MEMBER_DECLARATION(bit_field, bit_fields) \
+ \
+	MEMBER_ENTITY_ALIASES_OF_TYPE(member_class, class) \
+	MEMBER_ENTITY_ALIASES_OF_TYPE(member_enum, enum) \
+	MEMBER_ENTITY_ALIASES_OF_TYPE(member_typedef, typedef) \
+	MEMBER_ENTITY_ALIASES_OF_TYPE(operator_member_function, operator_function) \
+	MEMBER_ENTITY_ALIASES_OF_TYPE(conversion_function, conversion_function) \
+	MEMBER_ENTITY_ALIASES_OF_TYPE(simple_member_function, simple_function) \
+	MEMBER_ENTITY_ALIASES_OF_TYPE(member_variable, variable) \
+	MEMBER_ENTITY_ALIASES_OF_TYPE(bit_field, bit_field) \
  \
 	public: \
 		typedef std::vector<base_class> base_classes_t; \
@@ -161,6 +172,7 @@ GENERATE_CLASS_DECLARATION(member_class, 1)
 #include "macros/detail/member_declaration_undef.hpp"
 #include "macros/detail/single_member_declaration_undef.hpp"
 #include "macros/detail/declarative_region_member_impl_undef.hpp"
+#include "macros/detail/hpp/member_entity_aliases_of_type_undef.hpp"
 
 #endif
 

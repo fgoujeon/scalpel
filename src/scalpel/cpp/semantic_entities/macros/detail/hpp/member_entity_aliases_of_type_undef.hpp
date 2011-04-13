@@ -18,7 +18,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#undef ENTITY_ALIASES_OF_TYPE
+#undef MEMBER_ENTITY_ALIASES_OF_TYPE
 
 #include "basic_entity_aliases_of_type_undef.hpp"
 
