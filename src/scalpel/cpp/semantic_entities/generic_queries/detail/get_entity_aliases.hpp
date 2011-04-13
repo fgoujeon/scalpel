@@ -55,13 +55,6 @@ struct get_entity_aliases_impl<MEMBER_TYPE> \
 	}
 
 #define END_FOR \
-	static \
-	inline \
-	typename utility::vector_range<entity_alias<member_t>>::type \
-	get(namespace_alias& declarative_region) \
-	{ \
-		return get(declarative_region.referred_namespace()); \
-	} \
 };
 
 FOR(class_)
