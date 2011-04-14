@@ -105,6 +105,13 @@ get_conversion_function_type
 	const semantic_entities::declarative_region_ptr_variant current_declarative_region
 );
 
+semantic_entities::type_variant
+get_conversion_function_type
+(
+	const syntax_nodes::conversion_function_id& conversion_function_id_node,
+	const semantic_entities::declarative_region_ptr_variant current_declarative_region
+);
+
 semantic_entities::function_parameter_list
 create_parameters
 (

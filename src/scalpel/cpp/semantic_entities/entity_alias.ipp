@@ -38,7 +38,8 @@ CLASS_NAME<Entity>::CLASS_NAME \
  \
 template<class Entity> \
 CLASS_NAME<Entity>::CLASS_NAME(const CLASS_NAME& rhs): \
-	referred_entity_(rhs.referred_entity_) \
+	referred_entity_(rhs.referred_entity_) BOOST_PP_COMMA_IF(IS_MEMBER) \
+	BOOST_PP_IIF(IS_MEMBER, access_(rhs.access_),) \
 { \
 } \
  \
@@ -47,6 +48,7 @@ CLASS_NAME<Entity>& \
 CLASS_NAME<Entity>::operator=(const CLASS_NAME& rhs) \
 { \
 	referred_entity_ = rhs.referred_entity_; \
+	BOOST_PP_IIF(IS_MEMBER, access_ = rhs.access_;,) \
 	return *this; \
 }
 

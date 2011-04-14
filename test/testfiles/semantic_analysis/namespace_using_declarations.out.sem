@@ -59,7 +59,7 @@
  <enum_alias enum_id="0"/>
  <typedef_alias typedef_id="0"/>
  <operator_function_alias operator_function_id="0"/>
- <simple_function_alias simple_function_id="0"/>
  <simple_function_alias simple_function_id="1"/>
+ <simple_function_alias simple_function_id="0"/>
  <variable_alias variable_id="0"/>
 </namespace>

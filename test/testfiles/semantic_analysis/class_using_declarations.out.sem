@@ -1,0 +1,83 @@
+<namespace id="0">
+ <class id="0" name="s">
+  <member_class id="0" name="inner" access="public">
+   <destructor access="public" defined="false">
+   </destructor>
+  </member_class>
+  <member_enum name="e" id="0">
+  </member_enum>
+  <member_typedef id="0" name="integer" access="public">
+   <type>
+    <fundamental_type type="int"/>
+   </type>
+  </member_typedef>
+  <destructor access="public" defined="false">
+  </destructor>
+  <operator_member_function id="0" operator="[]" access="public" const="true" defined="false">
+   <return_type>
+    <fundamental_type type="int"/>
+   </return_type>
+   <parameters>
+    <parameter>
+     <type>
+      <fundamental_type type="int"/>
+     </type>
+    </parameter>
+   </parameters>
+  </operator_member_function>
+  <conversion_function id="0" access="public" const="true" defined="false">
+   <return_type>
+    <fundamental_type type="bool"/>
+   </return_type>
+  </conversion_function>
+  <simple_member_function id="0" name="f" access="public" defined="false">
+   <return_type>
+    <fundamental_type type="void"/>
+   </return_type>
+  </simple_member_function>
+  <member_variable id="0" name="i" access="public">
+   <type>
+    <fundamental_type type="int"/>
+   </type>
+  </member_variable>
+  <bit_field id="0" name="j" size="0" access="public">
+   <type>
+    <fundamental_type type="int"/>
+   </type>
+  </bit_field>
+ </class>
+ <class id="1" name="s2">
+  <base_classes>
+   <base_class  class_id="0" access="public"/>
+  </base_classes>
+  <destructor access="public" defined="false">
+  </destructor>
+  <member_class_alias member_class_id="0" access="public"/>
+  <member_enum_alias member_enum_id="0" access="public"/>
+  <member_typedef_alias member_typedef_id="0" access="public"/>
+  <operator_member_function_alias operator_member_function_id="0" access="public"/>
+  <conversion_function_alias conversion_function_id="0" access="public"/>
+  <simple_member_function_alias simple_member_function_id="0" access="public"/>
+  <member_variable_alias member_variable_id="0" access="public"/>
+  <bit_field_alias bit_field_id="0" access="public"/>
+ </class>
+ <class id="2" name="s3">
+  <member_class id="1" name="inner3" access="public">
+   <base_classes>
+    <base_class  class_id="0" access="private"/>
+   </base_classes>
+   <destructor access="public" defined="false">
+   </destructor>
+   <member_class_alias member_class_id="0" access="private"/>
+   <member_enum_alias member_enum_id="0" access="private"/>
+   <member_typedef_alias member_typedef_id="0" access="private"/>
+   <operator_member_function_alias operator_member_function_id="0" access="private"/>
+   <conversion_function_alias conversion_function_id="0" access="private"/>
+   <simple_member_function_alias simple_member_function_id="0" access="private"/>
+   <member_variable_alias member_variable_id="0" access="private"/>
+   <bit_field_alias bit_field_id="0" access="private"/>
+  </member_class>
+  <destructor access="public" defined="false">
+  </destructor>
+ </class>
+</namespace>

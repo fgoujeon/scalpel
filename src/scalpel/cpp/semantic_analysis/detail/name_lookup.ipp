@@ -798,7 +798,7 @@ find_in_declarative_region_entity_aliases
 	typename boost::enable_if<semantic_entities::type_traits::has_entity_aliases_of_type<DeclarativeRegion, Entity>>::type*
 )
 {
-	typename utility::vector_range<semantic_entities::entity_alias<Entity>>::type members =
+	typename semantic_entities::generic_queries::detail::get_entity_aliases_return_type<DeclarativeRegion, Entity, false>::type members =
 		semantic_entities::generic_queries::detail::get_entity_aliases<Entity>(current_declarative_region)
 	;
 	for(auto i = members.begin(); i != members.end(); ++i)

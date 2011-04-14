@@ -83,10 +83,6 @@ struct get_members_return_type<DeclarativeRegion, semantic_entities::destructor,
 
 
 
-//
-//Main overloads (implemented in the .hpp file)
-//
-
 #define GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(PARENT_TYPE) \
 template<class Member> \
 typename get_members_return_type<PARENT_TYPE, Member, false>::type \

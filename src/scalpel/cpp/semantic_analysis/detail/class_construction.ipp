@@ -146,6 +146,12 @@ fill_class
 				}
 				else if(auto opt_using_declaration_node = get<using_declaration>(&*opt_member_declaration_node))
 				{
+					fill_class
+					(
+						class_entity,
+						current_access,
+						*opt_using_declaration_node
+					);
 				}
 				else if(auto opt_template_declaration_node = get<template_declaration>(&*opt_member_declaration_node))
 				{
@@ -466,6 +472,138 @@ fill_class
 	);
 }
 
+template<class Class>
+void
+fill_class
+(
+	Class& class_entity,
+	const semantic_entities::member_access access,
+	const syntax_nodes::using_declaration& using_declaration_node
+)
+{
+	using namespace syntax_nodes;
+	using namespace semantic_entities;
+
+	const unqualified_id& unqualified_id_node = get_unqualified_id(using_declaration_node);
+	const optional_node<nested_name_specifier>& opt_nested_name_specifier_node = get_nested_name_specifier(using_declaration_node);
+
+	if(has_typename_keyword(using_declaration_node))
+		assert(false); //not implemented yet
+
+	//find the designated entity(ies)'s declarative region
+	open_declarative_region_ptr_variant found_declarative_region =
+		name_lookup::find_declarative_region
+		(
+			has_leading_double_colon(using_declaration_node),
+			opt_nested_name_specifier_node,
+			&class_entity
+		)
+	;
+
+	//find the designated entity(ies)
+	if(boost::optional<const identifier&> opt_identifier_node = get<identifier>(&unqualified_id_node))
+	{
+		//first, try to find a class, enum, typedef or variable
+		typename boost::optional<utility::ptr_variant<member_class, member_enum, member_typedef, member_variable, bit_field>::type> found_entity =
+			name_lookup::find_local
+			<
+				semantic_entity_analysis::identification_policies::by_name,
+				open_declarative_region_ptr_variant,
+				true,
+				false,
+				member_class, member_enum, member_typedef, member_variable, bit_field
+			>
+			(
+				opt_identifier_node->value(),
+				found_declarative_region
+			)
+		;
+
+		if(found_entity) //if an entity has been found
+		{
+			//add the entity alias to the class
+			add_alias(class_entity, *found_entity, access);
+		}
+		else
+		{
+			//if no entity has been found, try to find functions
+			std::set<simple_member_function*> found_entities =
+				name_lookup::find_local
+				<
+					semantic_entity_analysis::identification_policies::by_name,
+					open_declarative_region_ptr_variant,
+					false,
+					true,
+					simple_member_function
+				>
+				(
+					opt_identifier_node->value(),
+					found_declarative_region
+				)
+			;
+
+			//add the functions to the class (as entity aliases)
+			for(auto i = found_entities.begin(); i != found_entities.end(); ++i)
+			{
+				simple_member_function& entity = **i;
+				class_entity.add_member(member_entity_alias<simple_member_function>(entity, access));
+			}
+		}
+	}
+	else if(boost::optional<const operator_function_id&> opt_operator_function_id_node = get<operator_function_id>(&unqualified_id_node))
+	{
+		std::set<operator_member_function*> found_entities =
+			name_lookup::find_local
+			<
+				semantic_entity_analysis::identification_policies::by_overloaded_operator,
+				open_declarative_region_ptr_variant,
+				false,
+				true,
+				operator_member_function
+			>
+			(
+				get_operator_function_operator(get_operator(*opt_operator_function_id_node)),
+				found_declarative_region
+			)
+		;
+
+		//add the functions to the class (as entity aliases)
+		for(auto i = found_entities.begin(); i != found_entities.end(); ++i)
+		{
+			operator_member_function& entity = **i;
+			class_entity.add_member(member_entity_alias<operator_member_function>(entity, access));
+		}
+	}
+	else if(boost::optional<const conversion_function_id&> opt_conversion_function_id_node = get<conversion_function_id>(&unqualified_id_node))
+	{
+		std::set<conversion_function*> found_entities =
+			name_lookup::find_local
+			<
+				semantic_entity_analysis::identification_policies::by_return_type,
+				open_declarative_region_ptr_variant,
+				false,
+				true,
+				conversion_function
+			>
+			(
+				get_conversion_function_type(*opt_conversion_function_id_node, &class_entity),
+				found_declarative_region
+			)
+		;
+
+		//add the functions to the class (as entity aliases)
+		for(auto i = found_entities.begin(); i != found_entities.end(); ++i)
+		{
+			conversion_function& entity = **i;
+			class_entity.add_member(member_entity_alias<conversion_function>(entity, access));
+		}
+	}
+	else
+	{
+		assert(false); //not implemented yet
+	}
+}
+
 template<class ParentClass>
 semantic_entities::member_class&
 add_class
@@ -488,6 +626,47 @@ add_class
 	member_class& class_entity_ref = *class_entity;
 	parent_class_entity.add_member(std::move(class_entity));
 	return class_entity_ref;
+}
+
+
+
+template<class Class>
+class add_alias_to_class_visitor: public utility::static_visitor<void>
+{
+	public:
+		add_alias_to_class_visitor
+		(
+			Class& class_entity,
+			const semantic_entities::member_access access
+		):
+			class_entity_(class_entity),
+			access_(access)
+		{
+		}
+
+		template<class Entity>
+		void
+		operator()(Entity* entity)
+		{
+			class_entity_.add_member(semantic_entities::member_entity_alias<Entity>(*entity, access_));
+		}
+
+	private:
+		Class& class_entity_;
+		const semantic_entities::member_access access_;
+};
+
+template<class Class, class... Entities>
+void
+add_alias
+(
+	Class& class_entity,
+	const utility::variant<Entities...>& entity,
+	const semantic_entities::member_access access
+)
+{
+	add_alias_to_class_visitor<Class> visitor(class_entity, access);
+	apply_visitor(visitor, entity);
 }
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail

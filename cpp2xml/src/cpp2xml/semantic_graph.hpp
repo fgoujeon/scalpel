@@ -285,8 +285,10 @@ class semantic_graph_serializer
 			typename boost::enable_if<scalpel::cpp::semantic_entities::type_traits::has_entity_aliases_of_type<DeclarativeRegion, Entity>>::type* = 0
 		)
 		{
-			const std::vector<scalpel::cpp::semantic_entities::entity_alias<Entity>>& entity_aliases =
-				scalpel::cpp::semantic_entities::generic_queries::detail::get_entity_aliases<Entity>(declarative_region)
+			using namespace scalpel::cpp::semantic_entities::generic_queries::detail;
+
+			typename get_entity_aliases_return_type<DeclarativeRegion, Entity, true>::type entity_aliases =
+				get_entity_aliases<Entity>(declarative_region)
 			;
 
 			for(auto i = entity_aliases.begin(); i != entity_aliases.end(); ++i)
@@ -315,6 +317,20 @@ class semantic_graph_serializer
 		{
 			output_ << detail::indent(indent_level) << "<" << detail::type_to_string<Entity>() << "_alias";
 			output_ << " " << detail::type_to_string<Entity>() << "_id=\"" << get_id(entity.referred_entity()) << "\"";
+			output_ << "/>\n";
+		}
+
+		template<class Entity>
+		void
+		serialize_entity_alias
+		(
+			const member_entity_alias<Entity>& entity,
+			const unsigned int indent_level
+		)
+		{
+			output_ << detail::indent(indent_level) << "<" << detail::type_to_string<Entity>() << "_alias";
+			output_ << " " << detail::type_to_string<Entity>() << "_id=\"" << get_id(entity.referred_entity()) << "\"";
+			output_ << attribute(entity.access());
 			output_ << "/>\n";
 		}
 

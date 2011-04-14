@@ -274,6 +274,8 @@ semantic_graph_serializer::serialize_unnamed_namespace
 	for(auto i = entity.variables().begin(); i != entity.variables().end(); ++i)
 		serialize_variable(*i, indent_level + 1);
 
+	serialize_entity_aliases(entity, indent_level + 1);
+
 	output_ << indent(indent_level) << "</unnamed_namespace>\n";
 }
 
@@ -365,6 +367,8 @@ semantic_graph_serializer::serialize_class
 	for(auto i = entity.bit_fields().begin(); i != entity.bit_fields().end(); ++i)
 		serialize_bit_field(*i, indent_level + 1);
 
+	serialize_entity_aliases(entity, indent_level + 1);
+
 	output_ << indent(indent_level) << "</class>\n";
 }
 
@@ -420,6 +424,8 @@ semantic_graph_serializer::serialize_class
 
 	for(auto i = entity.bit_fields().begin(); i != entity.bit_fields().end(); ++i)
 		serialize_bit_field(*i, indent_level + 1);
+
+	serialize_entity_aliases(entity, indent_level + 1);
 
 	output_ << indent(indent_level) << "</member_class>\n";
 }

@@ -73,6 +73,15 @@ fill_class
 	const syntax_nodes::function_definition& function_definition_node
 );
 
+template<class Class>
+void
+fill_class
+(
+	Class& class_entity,
+	const semantic_entities::member_access access,
+	const syntax_nodes::using_declaration& using_declaration_node
+);
+
 //Check whether the given class hasn't been forward declared in the given
 //parent class.
 //If so, return the forward declared class.
@@ -84,6 +93,16 @@ add_class
 (
 	ParentClass& parent_class_entity,
 	std::unique_ptr<semantic_entities::member_class>&& class_entity
+);
+
+//add the entity alias to the given class
+template<class Class, class... Entities>
+void
+add_alias
+(
+	Class& class_entity,
+	const utility::variant<Entities...>& entity,
+	const semantic_entities::member_access access
 );
 
 semantic_entities::class_ptr_variant

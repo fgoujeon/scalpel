@@ -375,8 +375,16 @@ get_conversion_function_type
 	const unqualified_id& unqualified_id_node = syntax_node_analysis::get_unqualified_id(declarator_node);
 	boost::optional<const conversion_function_id&> opt_conversion_function_id_node = syntax_nodes::get<conversion_function_id>(&unqualified_id_node);
 	assert(opt_conversion_function_id_node);
-	const conversion_function_id& conversion_function_id_node = *opt_conversion_function_id_node;
+	return get_conversion_function_type(*opt_conversion_function_id_node, current_declarative_region);
+}
 
+semantic_entities::type_variant
+get_conversion_function_type
+(
+	const syntax_nodes::conversion_function_id& conversion_function_id_node,
+	const semantic_entities::declarative_region_ptr_variant current_declarative_region
+)
+{
 	const type_specifier_seq& type_specifier_seq_node = get_type_specifier_seq(conversion_function_id_node);
 	type_variant type = create_type(type_specifier_seq_node, current_declarative_region);
 
