@@ -40,6 +40,7 @@ find
 )
 {
 	using namespace detail;
+	using namespace semantic_entities;
 
 	//used for applying using directives
 	namespace_association_map namespace_associations;
@@ -52,7 +53,7 @@ find
 	while(true)
 	{
 		//apply using directives (only for namespaces and statement blocks)
-		if(semantic_entities::namespace_** opt_namespace_ptr = utility::get<semantic_entities::namespace_*>(&current_declarative_region))
+		if(namespace_** opt_namespace_ptr = utility::get<namespace_*>(&current_declarative_region))
 			apply_using_directives
 			(
 				**opt_namespace_ptr,
@@ -60,7 +61,7 @@ find
 				(*opt_namespace_ptr)->get_unnamed_namespace(),
 				namespace_associations
 			);
-		else if(semantic_entities::unnamed_namespace** opt_namespace_ptr = utility::get<semantic_entities::unnamed_namespace*>(&current_declarative_region))
+		else if(unnamed_namespace** opt_namespace_ptr = utility::get<unnamed_namespace*>(&current_declarative_region))
 			apply_using_directives
 			(
 				**opt_namespace_ptr,
@@ -68,7 +69,7 @@ find
 				(*opt_namespace_ptr)->get_unnamed_namespace(),
 				namespace_associations
 			);
-		else if(semantic_entities::statement_block** opt_statement_block_ptr = utility::get<semantic_entities::statement_block*>(&current_declarative_region))
+		else if(statement_block** opt_statement_block_ptr = utility::get<statement_block*>(&current_declarative_region))
 			apply_using_directives
 			(
 				**opt_statement_block_ptr,
@@ -84,7 +85,7 @@ find
 			find_local_entities
 			<
 				EntityIdentificationPolicy,
-				semantic_entities::declarative_region_ptr_variant,
+				declarative_region_ptr_variant,
 				true,
 				Multiple,
 				Entities...
@@ -93,18 +94,18 @@ find
 
 		//find entities in the associated namespaces (only for namespaces)
 		//and add them to the previously found entities
-		if(semantic_entities::namespace_** opt_namespace_ptr = utility::get<semantic_entities::namespace_*>(&current_declarative_region))
+		if(namespace_** opt_namespace_ptr = utility::get<namespace_*>(&current_declarative_region))
 		{
 			auto associated_namespaces_it = namespace_associations.find(*opt_namespace_ptr);
 			if(associated_namespaces_it != namespace_associations.end())
 			{
 				//for each associated namespace
-				const std::vector<semantic_entities::namespace_*>& associated_namespaces =
+				const std::vector<namespace_*>& associated_namespaces =
 					associated_namespaces_it->second.namespaces
 				;
 				for(auto i = associated_namespaces.begin(); i != associated_namespaces.end(); ++i)
 				{
-					semantic_entities::namespace_& associated_namespace = **i;
+					namespace_& associated_namespace = **i;
 
 					add_to_result
 					(
@@ -112,7 +113,7 @@ find
 						find_local_entities
 						<
 							EntityIdentificationPolicy,
-							semantic_entities::namespace_,
+							namespace_,
 							true,
 							Multiple,
 							Entities...
@@ -121,12 +122,12 @@ find
 				}
 
 				//for each associated unnamed namespace
-				const std::vector<semantic_entities::unnamed_namespace*>& associated_unnamed_namespaces =
+				const std::vector<unnamed_namespace*>& associated_unnamed_namespaces =
 					associated_namespaces_it->second.unnamed_namespaces
 				;
 				for(auto i = associated_unnamed_namespaces.begin(); i != associated_unnamed_namespaces.end(); ++i)
 				{
-					semantic_entities::unnamed_namespace& associated_unnamed_namespace = **i;
+					unnamed_namespace& associated_unnamed_namespace = **i;
 
 					add_to_result
 					(
@@ -134,7 +135,7 @@ find
 						find_local_entities
 						<
 							EntityIdentificationPolicy,
-							semantic_entities::unnamed_namespace,
+							unnamed_namespace,
 							true,
 							Multiple,
 							Entities...
@@ -148,9 +149,9 @@ find
 		if(!utility::is_empty(found_entities)) break;
 
 		//find entities in the base classes (only for classes)
-		if(semantic_entities::class_** opt_class_ptr = utility::get<semantic_entities::class_*>(&current_declarative_region))
+		if(class_** opt_class_ptr = utility::get<class_*>(&current_declarative_region))
 		{
-			semantic_entities::class_* class_ptr = *opt_class_ptr;
+			class_& class_entity = **opt_class_ptr;
 
 			add_to_result
 			(
@@ -158,18 +159,19 @@ find
 				find_entities_in_base_classes
 				<
 					EntityIdentificationPolicy,
+					class_,
 					true,
 					Multiple,
 					Entities...
-				>(identifier, class_ptr->base_classes())
+				>(identifier, class_entity)
 			);
 
 			//stop lookup if entities have been found
 			if(!utility::is_empty(found_entities)) break;
 		}
-		else if(semantic_entities::member_class** opt_class_ptr = utility::get<semantic_entities::member_class*>(&current_declarative_region))
+		else if(member_class** opt_class_ptr = utility::get<member_class*>(&current_declarative_region))
 		{
-			semantic_entities::member_class* class_ptr = *opt_class_ptr;
+			member_class& class_entity = **opt_class_ptr;
 
 			add_to_result
 			(
@@ -177,10 +179,11 @@ find
 				find_entities_in_base_classes
 				<
 					EntityIdentificationPolicy,
+					member_class,
 					true,
 					Multiple,
 					Entities...
-				>(identifier, class_ptr->base_classes())
+				>(identifier, class_entity)
 			);
 
 			//stop lookup if entities have been found
@@ -207,6 +210,7 @@ find
 )
 {
 	using namespace detail;
+	using namespace semantic_entities;
 
 	//Check whether the given qualified identifier is really qualified.
 	//If not, perform a simple unqualified name lookup.
@@ -229,7 +233,7 @@ find
 
 	//Find the last declarative region of the nested identifier specifier
 	//(i.e. Z in "[::]X::Y::Z::").
-	semantic_entities::open_declarative_region_ptr_variant last_declarative_region =
+	open_declarative_region_ptr_variant last_declarative_region =
 		find_declarative_region
 		(
 			has_leading_double_colon,
@@ -241,7 +245,7 @@ find
 	//find entities in the last declarative region
 	if(apply_using_directives_for_unqualified_id_part)
 	{
-		if(semantic_entities::namespace_** opt_namespace_ptr = utility::get<semantic_entities::namespace_*>(&last_declarative_region))
+		if(namespace_** opt_namespace_ptr = utility::get<namespace_*>(&last_declarative_region))
 		{
 			return
 				find_in_namespace
@@ -260,7 +264,7 @@ find
 		find_local_entities
 		<
 			EntityIdentificationPolicy,
-			semantic_entities::open_declarative_region_ptr_variant,
+			open_declarative_region_ptr_variant,
 			true,
 			Multiple,
 			Entities...
@@ -271,32 +275,34 @@ find
 		return return_result<Optional, Multiple, Entities...>::result(found_entities);
 
 	//find entities in the base classes of the last declarative region (if any)
-	if(semantic_entities::class_** opt_class_ptr = utility::get<semantic_entities::class_*>(&last_declarative_region))
+	if(class_** opt_class_ptr = utility::get<class_*>(&last_declarative_region))
 	{
-		semantic_entities::class_* class_ptr = *opt_class_ptr;
+		class_& class_entity = **opt_class_ptr;
 
 		return
 			find_entities_in_base_classes
 			<
 				EntityIdentificationPolicy,
+				class_,
 				Optional,
 				Multiple,
 				Entities...
-			>(identifier, class_ptr->base_classes())
+			>(identifier, class_entity)
 		;
 	}
-	else if(semantic_entities::member_class** opt_class_ptr = utility::get<semantic_entities::member_class*>(&last_declarative_region))
+	else if(member_class** opt_class_ptr = utility::get<member_class*>(&last_declarative_region))
 	{
-		semantic_entities::member_class* class_ptr = *opt_class_ptr;
+		member_class& class_entity = **opt_class_ptr;
 
 		return
 			find_entities_in_base_classes
 			<
 				EntityIdentificationPolicy,
+				member_class,
 				Optional,
 				Multiple,
 				Entities...
-			>(identifier, class_ptr->base_classes())
+			>(identifier, class_entity)
 		;
 	}
 
@@ -882,12 +888,12 @@ find_in_declarative_region_entity_aliases
 
 
 
-template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class... Entities>
+template<class EntityIdentificationPolicy, class Class, bool Optional, bool Multiple, class... Entities>
 typename return_type<Optional, Multiple, Entities...>::type
 find_entities_in_base_classes
 (
 	const typename EntityIdentificationPolicy::identifier_t& identifier,
-	const std::vector<semantic_entities::base_class>& base_classes
+	Class& class_entity
 )
 {
 	using namespace semantic_entity_analysis;
@@ -895,6 +901,9 @@ find_entities_in_base_classes
 
 	typename return_type<Optional, true, Entities...>::type found_entities;
 
+	const std::vector<semantic_entities::base_class>& base_classes =
+		class_entity.base_classes()
+	;
 	for(auto i = base_classes.begin(); i != base_classes.end(); ++i)
 	{
 		const class_ptr_variant& current_class = i->base();
@@ -928,10 +937,11 @@ find_entities_in_base_classes
 					find_entities_in_base_classes
 					<
 						EntityIdentificationPolicy,
+						class_,
 						Optional,
 						Multiple,
 						Entities...
-					>(identifier, current_class.base_classes())
+					>(identifier, current_class)
 				;
 
 				//add them to the list
@@ -967,10 +977,11 @@ find_entities_in_base_classes
 					find_entities_in_base_classes
 					<
 						EntityIdentificationPolicy,
+						member_class,
 						Optional,
 						Multiple,
 						Entities...
-					>(identifier, current_class.base_classes())
+					>(identifier, current_class)
 				;
 
 				//add them to the list

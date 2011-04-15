@@ -482,12 +482,12 @@ namespace detail
 	/**
 	Find entities of the given identifier, in the given base classes
 	*/
-	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class... Entities>
+	template<class EntityIdentificationPolicy, class Class, bool Optional, bool Multiple, class... Entities>
 	typename return_type<Optional, Multiple, Entities...>::type
 	find_entities_in_base_classes
 	(
 		const typename EntityIdentificationPolicy::identifier_t& identifier,
-		const std::vector<semantic_entities::base_class>& base_classes
+		Class& class_entity
 	);
 
 	template<class DeclarativeRegion>
