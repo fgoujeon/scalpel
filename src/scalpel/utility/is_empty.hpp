@@ -21,6 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_UTILITY_IS_EMPTY_HPP
 #define SCALPEL_UTILITY_IS_EMPTY_HPP
 
+#include "variant.hpp"
 #include <boost/optional.hpp>
 #include <vector>
 #include <set>
@@ -48,14 +49,6 @@ is_empty(const std::set<T>& container)
 template<class T>
 inline
 bool
-is_empty(const std::shared_ptr<T>& container)
-{
-	return !container;
-}
-
-template<class T>
-inline
-bool
 is_empty(T* const container)
 {
 	return container == 0;
@@ -67,6 +60,14 @@ bool
 is_empty(const boost::optional<T>& container)
 {
 	return !container;
+}
+
+template<class... Ts>
+inline
+bool
+is_empty(const utility::variant<Ts...>&)
+{
+	return false;
 }
 
 }} //namespace scalpel::utility

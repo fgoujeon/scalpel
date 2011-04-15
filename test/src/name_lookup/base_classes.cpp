@@ -26,7 +26,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace name_lookup
 {
 
-BOOST_AUTO_TEST_CASE(test_case_2)
+BOOST_AUTO_TEST_CASE(base_classes)
 {
 	using namespace scalpel::cpp::syntax_nodes;
 	using namespace scalpel::cpp::semantic_entities;

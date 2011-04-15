@@ -255,16 +255,52 @@ find
 		}
 	}
 
-	return
+	//find entities in the last declarative region
+	typename return_type<true, Multiple, Entities...>::type found_entities =
 		find_local_entities
 		<
 			EntityIdentificationPolicy,
 			semantic_entities::open_declarative_region_ptr_variant,
-			Optional,
+			true,
 			Multiple,
 			Entities...
 		>(identifier, last_declarative_region)
 	;
+	//stop lookup if entities have been found
+	if(!utility::is_empty(found_entities))
+		return return_result<Optional, Multiple, Entities...>::result(found_entities);
+
+	//find entities in the base classes of the last declarative region (if any)
+	if(semantic_entities::class_** opt_class_ptr = utility::get<semantic_entities::class_*>(&last_declarative_region))
+	{
+		semantic_entities::class_* class_ptr = *opt_class_ptr;
+
+		return
+			find_entities_in_base_classes
+			<
+				EntityIdentificationPolicy,
+				Optional,
+				Multiple,
+				Entities...
+			>(identifier, class_ptr->base_classes())
+		;
+	}
+	else if(semantic_entities::member_class** opt_class_ptr = utility::get<semantic_entities::member_class*>(&last_declarative_region))
+	{
+		semantic_entities::member_class* class_ptr = *opt_class_ptr;
+
+		return
+			find_entities_in_base_classes
+			<
+				EntityIdentificationPolicy,
+				Optional,
+				Multiple,
+				Entities...
+			>(identifier, class_ptr->base_classes())
+		;
+	}
+
+	return return_result<Optional, Multiple, Entities...>::result(found_entities);
 }
 
 template<class EntityIdentificationPolicy, class DeclarativeRegion, bool Optional, bool Multiple, class... Entities>
@@ -371,7 +407,7 @@ find_in_namespace
 			return std::move(return_result<Optional, Multiple, Entities...>::result(found_entities));
 	}
 
-	//search in the current namespace's unnamed namespace
+	//search in the unnamed namespace of the current namespace
 	if(unnamed_namespace* opt_unnamed_namespace = current_namespace.get_unnamed_namespace())
 	{
 		add_to_result
@@ -386,7 +422,7 @@ find_in_namespace
 		);
 	}
 
-	//if no entity is found, search in using directive's namespaces
+	//if no entity is found, search in the using directive namespaces of the current namespace
 	for
 	(
 		auto i = current_namespace.using_directive_namespaces().begin();
@@ -887,7 +923,7 @@ find_entities_in_base_classes
 			}
 			else
 			{
-				//find entities in the current declarative region's base classes
+				//find entities in the base classes of the current declarative region
 				typename return_type<Optional, Multiple, Entities...>::type current_class_base_classes_found_entities =
 					find_entities_in_base_classes
 					<
@@ -1093,6 +1129,14 @@ void
 add_to_result(std::set<T>& result, const boost::optional<T>& entity)
 {
 	if(entity) result.insert(*entity);
+}
+
+template<class T>
+inline
+void
+add_to_result(std::set<T>& result, const T& entity)
+{
+	result.insert(entity);
 }
 
 template<class T>

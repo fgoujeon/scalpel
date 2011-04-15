@@ -564,6 +564,11 @@ namespace detail
 	template<class T>
 	inline
 	void
+	add_to_result(std::set<T>& result, const T& entity);
+
+	template<class T>
+	inline
+	void
 	add_to_result(boost::optional<T>& result, const T& entity);
 
 	template<class T, class... Ts>
