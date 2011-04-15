@@ -167,6 +167,25 @@ find
 			//stop lookup if entities have been found
 			if(!utility::is_empty(found_entities)) break;
 		}
+		else if(semantic_entities::member_class** opt_class_ptr = utility::get<semantic_entities::member_class*>(&current_declarative_region))
+		{
+			semantic_entities::member_class* class_ptr = *opt_class_ptr;
+
+			add_to_result
+			(
+				found_entities,
+				find_entities_in_base_classes
+				<
+					EntityIdentificationPolicy,
+					true,
+					Multiple,
+					Entities...
+				>(identifier, class_ptr->base_classes())
+			);
+
+			//stop lookup if entities have been found
+			if(!utility::is_empty(found_entities)) break;
+		}
 
 		//iterate to the enclosing declarative region
 		if(!has_enclosing_declarative_region(current_declarative_region)) break;
