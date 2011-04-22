@@ -263,7 +263,7 @@ get_operator_function_operator
 {
 	if(auto opt_simple_operator_node = syntax_nodes::get<syntax_nodes::simple_operator>(&operator_node))
 	{
-		auto simple_operator_node = *opt_simple_operator_node;
+		const simple_operator& simple_operator_node = *opt_simple_operator_node;
 
 		if(syntax_nodes::get<syntax_nodes::predefined_text_node<syntax_nodes::str::new_>>(&simple_operator_node))
 			return semantic_entities::overloadable_operator::NEW;
@@ -350,7 +350,7 @@ get_operator_function_operator
 	}
 	else if(auto opt_array_operator_node = syntax_nodes::get<syntax_nodes::array_operator>(&operator_node))
 	{
-		auto array_operator_node = *opt_array_operator_node;
+		const array_operator& array_operator_node = *opt_array_operator_node;
 
 		if(syntax_nodes::get<syntax_nodes::new_array_operator>(&array_operator_node))
 			return semantic_entities::overloadable_operator::NEW_ARRAY;
@@ -426,8 +426,8 @@ create_parameters
 		++j
 	)
 	{
-		auto parameter_declaration_node = *j;
-		auto decl_specifier_seq_node = get_decl_specifier_seq(parameter_declaration_node);
+		const parameter_declaration& parameter_declaration_node = *j;
+		const decl_specifier_seq& decl_specifier_seq_node = get_decl_specifier_seq(parameter_declaration_node);
 
 		semantic_entities::type_variant type =
 			qualify_type
@@ -443,7 +443,7 @@ create_parameters
 
 		if(auto opt_declarator_node = get_declarator(parameter_declaration_node))
 		{
-			auto declarator_node = *opt_declarator_node;
+			const declarator& declarator_node = *opt_declarator_node;
 
 			parameters.push_back
 			(
@@ -459,7 +459,7 @@ create_parameters
 		}
 		else if(auto opt_abstract_declarator_node = get_abstract_declarator(parameter_declaration_node))
 		{
-			auto abstract_declarator_node = *opt_abstract_declarator_node;
+			const abstract_declarator& abstract_declarator_node = *opt_abstract_declarator_node;
 
 			parameters.push_back
 			(
