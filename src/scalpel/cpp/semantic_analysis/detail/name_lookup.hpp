@@ -209,34 +209,6 @@ namespace detail
 
 
 	/**
-	Find entities corresponding to the given identifier,
-	from the given declarative region (unqualified name lookup).
-	*/
-	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class... Entities>
-	typename return_type<Optional, Multiple, Entities...>::type
-	find_entities
-	(
-		const typename EntityIdentificationPolicy::identifier_t& identifier,
-		semantic_entities::declarative_region_ptr_variant current_declarative_region
-	);
-
-	/**
-	Find entities corresponding to the given nested identifier
-	(or nested template-id),
-	from the given declarative region (qualified name lookup).
-	*/
-	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class... Entities>
-	typename return_type<Optional, Multiple, Entities...>::type
-	find_entities
-	(
-		const bool has_leading_double_colon,
-		const syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>& opt_nested_name_specifier_node,
-		const typename EntityIdentificationPolicy::identifier_t& identifier,
-		const semantic_entities::declarative_region_ptr_variant& current_declarative_region,
-		const bool apply_using_directives_for_unqualified_id_part
-	);
-
-	/**
 	Find the declarative region corresponding to the given
 	nested-identifier syntax node (i.e. Z in the expression "X::Y::Z::"),
 	from the given declarative region (where X must be declared).
