@@ -1341,10 +1341,9 @@ grammar::grammar()
 	;
 
 	parameter_declaration
-		= decl_specifier_seq >> '=' >> assignment_expression
-		| parameter_declaration_decl_specifier_seq1 >> declarator >> '=' >> assignment_expression
+		= parameter_declaration_decl_specifier_seq1 >> declarator >> '=' >> assignment_expression
 		| parameter_declaration_decl_specifier_seq2 >> declarator
-		| parameter_declaration_decl_specifier_seq3 >> abstract_declarator >> '=' >> assignment_expression
+		| parameter_declaration_decl_specifier_seq3 >> !abstract_declarator >> '=' >> assignment_expression
 		| parameter_declaration_decl_specifier_seq4 >> !abstract_declarator
 	;
 	parameter_declaration_decl_specifier_seq1
