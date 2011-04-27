@@ -22,4 +22,9 @@
    </type>
   </member_variable>
  </union>
+ <variable id="0" name="u0">
+  <type>
+   <union id="0"/>
+  </type>
+ </variable>
 </namespace>

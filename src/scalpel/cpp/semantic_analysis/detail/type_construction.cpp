@@ -91,6 +91,8 @@ create_type
 				<
 					class_,
 					member_class,
+					union_,
+					member_union,
 					typedef_,
 					member_typedef,
 					enum_,
@@ -103,6 +105,8 @@ create_type
 						false,
 						class_,
 						member_class,
+						union_,
+						member_union,
 						typedef_,
 						member_typedef,
 						enum_,

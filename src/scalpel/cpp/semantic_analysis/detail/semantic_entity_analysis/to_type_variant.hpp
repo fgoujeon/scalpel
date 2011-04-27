@@ -35,6 +35,8 @@ to_type_variant
 	<
 		semantic_entities::class_,
 		semantic_entities::member_class,
+		semantic_entities::union_,
+		semantic_entities::member_union,
 		semantic_entities::typedef_,
 		semantic_entities::member_typedef,
 		semantic_entities::enum_,

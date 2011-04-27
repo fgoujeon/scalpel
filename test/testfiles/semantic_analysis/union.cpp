@@ -11,3 +11,5 @@ union u
 	int i;
 };
 
+u u0;
+

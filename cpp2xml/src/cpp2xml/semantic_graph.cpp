@@ -109,6 +109,14 @@ semantic_graph_serializer::serialize_type
 	{
 		output_ << indent(indent_level) << "<member_class id=\"" << get_id(**opt_type) << "\"/>\n";
 	}
+	else if(auto opt_type = scalpel::utility::get<union_*>(&n))
+	{
+		output_ << indent(indent_level) << "<union id=\"" << get_id(**opt_type) << "\"/>\n";
+	}
+	else if(auto opt_type = scalpel::utility::get<member_union*>(&n))
+	{
+		output_ << indent(indent_level) << "<member_union id=\"" << get_id(**opt_type) << "\"/>\n";
+	}
 	else if(auto opt_type = scalpel::utility::get<enum_*>(&n))
 	{
 		output_ << indent(indent_level) << "<enum id=\"" << get_id(**opt_type) << "\"/>\n";
