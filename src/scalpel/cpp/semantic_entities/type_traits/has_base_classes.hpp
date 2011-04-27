@@ -18,29 +18,33 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_SYNTAX_NODE_ANALYSIS_TYPE_SPECIFIER_SEQ_HPP
-#define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_SYNTAX_NODE_ANALYSIS_TYPE_SPECIFIER_SEQ_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_HAS_BASE_CLASSES_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_HAS_BASE_CLASSES_HPP
 
-#include <scalpel/cpp/syntax_tree.hpp>
+#include <scalpel/cpp/semantic_graph.hpp>
 
-namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail { namespace syntax_node_analysis
+namespace scalpel { namespace cpp { namespace semantic_entities { namespace type_traits
 {
 
-enum class type_specifier_seq_type
+template<class Entity>
+struct has_base_classes
 {
-	NO_TYPE,
-	SIMPLE_TYPE,
-	CLASS_DECLARATION,
-	CLASS_FORWARD_DECLARATION,
-	UNION_DECLARATION,
-	UNION_FORWARD_DECLARATION,
-	ENUMERATION_DECLARATION
+	static const bool value = false;
 };
 
-type_specifier_seq_type
-get_type_specifier_seq_type(const syntax_nodes::type_specifier_seq& type_specifier_seq_node);
+template<>
+struct has_base_classes<class_>
+{
+	static const bool value = true;
+};
 
-}}}}} //namespace scalpel::cpp::semantic_analysis::detail::syntax_node_analysis
+template<>
+struct has_base_classes<member_class>
+{
+	static const bool value = true;
+};
+
+}}}} //namespace scalpel::cpp::semantic_entities::type_traits
 
 #endif
 

@@ -41,10 +41,16 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <vector>
 #include <map>
 
-#define GENERATE_CLASS_DECLARATION(CLASS_NAME, IS_MEMBER) \
+#define GENERATE_CLASS_DECLARATION( \
+	CLASS_NAME, \
+	IS_MEMBER, \
+	HAS_BASE_CLASSES, \
+	HAS_ENTITY_ALIASES \
+) \
 class CLASS_NAME \
 { \
 	MEMBER_DECLARATION(member_class, classes) \
+	MEMBER_DECLARATION(member_union, unions) \
 	MEMBER_DECLARATION(member_enum, enums) \
 	MEMBER_DECLARATION(member_typedef, typedefs) \
 	MEMBER_DECLARATION(constructor, constructors) \
@@ -55,17 +61,27 @@ class CLASS_NAME \
 	MEMBER_DECLARATION(member_variable, variables) \
 	MEMBER_DECLARATION(bit_field, bit_fields) \
  \
-	MEMBER_ENTITY_ALIASES_OF_TYPE(member_class, class) \
-	MEMBER_ENTITY_ALIASES_OF_TYPE(member_enum, enum) \
-	MEMBER_ENTITY_ALIASES_OF_TYPE(member_typedef, typedef) \
-	MEMBER_ENTITY_ALIASES_OF_TYPE(operator_member_function, operator_function) \
-	MEMBER_ENTITY_ALIASES_OF_TYPE(conversion_function, conversion_function) \
-	MEMBER_ENTITY_ALIASES_OF_TYPE(simple_member_function, simple_function) \
-	MEMBER_ENTITY_ALIASES_OF_TYPE(member_variable, variable) \
-	MEMBER_ENTITY_ALIASES_OF_TYPE(bit_field, bit_field) \
+	BOOST_PP_IIF \
+	( \
+		HAS_ENTITY_ALIASES, \
+ \
+		MEMBER_ENTITY_ALIASES_OF_TYPE(member_class, class) \
+		MEMBER_ENTITY_ALIASES_OF_TYPE(member_union, union) \
+		MEMBER_ENTITY_ALIASES_OF_TYPE(member_enum, enum) \
+		MEMBER_ENTITY_ALIASES_OF_TYPE(member_typedef, typedef) \
+		MEMBER_ENTITY_ALIASES_OF_TYPE(operator_member_function, operator_function) \
+		MEMBER_ENTITY_ALIASES_OF_TYPE(conversion_function, conversion_function) \
+		MEMBER_ENTITY_ALIASES_OF_TYPE(simple_member_function, simple_function) \
+		MEMBER_ENTITY_ALIASES_OF_TYPE(member_variable, variable) \
+		MEMBER_ENTITY_ALIASES_OF_TYPE(bit_field, bit_field), \
+	) \
  \
 	public: \
-		typedef std::vector<base_class> base_classes_t; \
+		BOOST_PP_IIF \
+		( \
+			HAS_BASE_CLASSES, \
+			typedef std::vector<base_class> base_classes_t;, \
+		) \
  \
 	public: \
         explicit \
@@ -108,11 +124,16 @@ class CLASS_NAME \
 			}, \
 		) \
  \
-		const base_classes_t& \
-		base_classes() const; \
+		BOOST_PP_IIF \
+		( \
+			HAS_BASE_CLASSES, \
  \
-        void \
-        add_base_class(const base_class& bc); \
+			const base_classes_t& \
+			base_classes() const; \
+ \
+			void \
+			add_base_class(const base_class& bc);, \
+		) \
  \
 		void \
 		reset_destructor(); \
@@ -126,7 +147,11 @@ class CLASS_NAME \
 		) \
 		bool complete_; \
  \
-		base_classes_t base_classes_; \
+		BOOST_PP_IIF \
+		( \
+			HAS_BASE_CLASSES, \
+			base_classes_t base_classes_;, \
+		) \
  \
 		BOOST_PP_IIF \
 		( \
@@ -157,13 +182,17 @@ typedef
 ;
 
 typedef
-	impl::detail::declarative_region_member_impl<class_, member_class>
+	impl::detail::declarative_region_member_impl<class_, member_class, union_, member_union>
 	member_class_declarative_region_member_impl_t
 ;
 
 class member_class;
-GENERATE_CLASS_DECLARATION(class_, 0)
-GENERATE_CLASS_DECLARATION(member_class, 1)
+class union_;
+class member_union;
+GENERATE_CLASS_DECLARATION(class_, 0, 1, 1)
+GENERATE_CLASS_DECLARATION(member_class, 1, 1, 1)
+GENERATE_CLASS_DECLARATION(union_, 0, 0, 0)
+GENERATE_CLASS_DECLARATION(member_union, 1, 0, 0)
 
 }}} //namespace scalpel::cpp::semantic_entities
 

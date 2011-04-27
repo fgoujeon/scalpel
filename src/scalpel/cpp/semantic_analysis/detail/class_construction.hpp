@@ -22,19 +22,24 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_CLASS_CONSTRUCTION_HPP
 
 #include <scalpel/cpp/semantic_graph.hpp>
+#include <scalpel/cpp/semantic_entities/type_traits/has_base_classes.hpp>
+#include <scalpel/cpp/semantic_entities/type_traits/has_entity_aliases.hpp>
 #include <scalpel/cpp/syntax_tree.hpp>
+#include <boost/utility/enable_if.hpp>
 #include <memory>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail
 {
 
-std::unique_ptr<semantic_entities::class_>
+template<class Class>
+std::unique_ptr<Class>
 create_class(const syntax_nodes::class_specifier& syntax_node);
 
 std::unique_ptr<semantic_entities::member_class>
 create_member_class(const syntax_nodes::class_specifier& syntax_node, const semantic_entities::member_access access);
 
-std::unique_ptr<semantic_entities::class_>
+template<class Class>
+std::unique_ptr<Class>
 create_class
 (
 	const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node
@@ -53,6 +58,26 @@ fill_class
 (
 	Class& class_entity,
 	const syntax_nodes::class_specifier& class_specifier_node
+);
+
+template<class Class>
+void
+fill_class
+(
+	Class& class_entity,
+	const semantic_entities::member_access default_access,
+	const syntax_nodes::base_clause& base_clause_node,
+	typename boost::enable_if<semantic_entities::type_traits::has_base_classes<Class>>::type* = 0
+);
+
+template<class Class>
+void
+fill_class
+(
+	Class& class_entity,
+	const semantic_entities::member_access default_access,
+	const syntax_nodes::base_clause& base_clause_node,
+	typename boost::disable_if<semantic_entities::type_traits::has_base_classes<Class>>::type* = 0
 );
 
 template<class Class>
@@ -79,7 +104,18 @@ fill_class
 (
 	Class& class_entity,
 	const semantic_entities::member_access access,
-	const syntax_nodes::using_declaration& using_declaration_node
+	const syntax_nodes::using_declaration& using_declaration_node,
+	typename boost::enable_if<semantic_entities::type_traits::has_entity_aliases<Class>>::type* = 0
+);
+
+template<class Class>
+void
+fill_class
+(
+	Class& class_entity,
+	const semantic_entities::member_access access,
+	const syntax_nodes::using_declaration& using_declaration_node,
+	typename boost::disable_if<semantic_entities::type_traits::has_entity_aliases<Class>>::type* = 0
 );
 
 //Check whether the given class hasn't been forward declared in the given

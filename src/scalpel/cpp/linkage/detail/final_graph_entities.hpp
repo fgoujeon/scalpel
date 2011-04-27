@@ -51,6 +51,8 @@ struct final_graph_entities
 	std::map<const semantic_entities::unnamed_namespace*, semantic_entities::linked_unnamed_namespace*> unnamed_namespaces;
 	std::map<const semantic_entities::class_*, semantic_entities::class_*> classes;
 	std::map<const semantic_entities::member_class*, semantic_entities::member_class*> member_classes;
+	std::map<const semantic_entities::union_*, semantic_entities::union_*> unions;
+	std::map<const semantic_entities::member_union*, semantic_entities::member_union*> member_unions;
 	std::map<const semantic_entities::enum_*, semantic_entities::enum_*> enums;
 	std::map<const semantic_entities::member_enum*, semantic_entities::member_enum*> member_enums;
 	std::map<const semantic_entities::typedef_*, semantic_entities::typedef_*> typedefs;
@@ -78,6 +80,8 @@ struct final_graph_entities
 
 	std::vector<old_and_new_entity_pair<semantic_entities::class_>> class_pairs;
 	std::vector<old_and_new_entity_pair<semantic_entities::member_class>> member_class_pairs;
+	std::vector<old_and_new_entity_pair<semantic_entities::union_>> union_pairs;
+	std::vector<old_and_new_entity_pair<semantic_entities::member_union>> member_union_pairs;
 };
 
 }}}} //namespace scalpel::cpp::linkage::detail

@@ -58,6 +58,7 @@ BOOST_PP_IIF \
 	MEMBER_DEFINITION(CLASS_NAME, namespace_alias, namespace_aliases, 0), \
 ) \
 MEMBER_DEFINITION(CLASS_NAME, class_, classes, 1) \
+MEMBER_DEFINITION(CLASS_NAME, union_, unions, 1) \
 MEMBER_DEFINITION(CLASS_NAME, enum_, enums, 1) \
 MEMBER_DEFINITION(CLASS_NAME, typedef_, typedefs, 1) \
 MEMBER_DEFINITION(CLASS_NAME, simple_function, simple_functions, 1) \

@@ -47,6 +47,8 @@ struct entity_groups
 	typename entity_groups_of_type<semantic_entities::namespace_>::type namespaces;
 	typename entity_groups_of_type<semantic_entities::class_>::type classes;
 	typename entity_groups_of_type<semantic_entities::member_class>::type member_classes;
+	typename entity_groups_of_type<semantic_entities::union_>::type unions;
+	typename entity_groups_of_type<semantic_entities::member_union>::type member_unions;
 	typename entity_groups_of_type<semantic_entities::enum_>::type enums;
 	typename entity_groups_of_type<semantic_entities::member_enum>::type member_enums;
 	typename entity_groups_of_type<semantic_entities::typedef_>::type typedefs;
@@ -72,6 +74,8 @@ struct entity_groups
 	std::vector<const semantic_entities::unnamed_namespace*> internal_unnamed_namespaces;
 	std::vector<const semantic_entities::class_*> internal_classes;
 	std::vector<const semantic_entities::member_class*> internal_member_classes;
+	std::vector<const semantic_entities::union_*> internal_unions;
+	std::vector<const semantic_entities::member_union*> internal_member_unions;
 	std::vector<const semantic_entities::enum_*> internal_enums;
 	std::vector<const semantic_entities::member_enum*> internal_member_enums;
 	std::vector<const semantic_entities::typedef_*> internal_typedefs;

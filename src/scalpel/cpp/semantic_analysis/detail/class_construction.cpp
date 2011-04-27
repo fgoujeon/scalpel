@@ -32,12 +32,6 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 using namespace syntax_nodes;
 using namespace semantic_entities;
 
-std::unique_ptr<class_>
-create_class(const syntax_nodes::class_specifier& class_specifier_node)
-{
-	return std::unique_ptr<class_>(new class_(syntax_node_analysis::get_identifier(class_specifier_node)));
-}
-
 std::unique_ptr<member_class>
 create_member_class(const syntax_nodes::class_specifier& class_specifier_node, const member_access access)
 {
@@ -51,29 +45,6 @@ create_member_class(const syntax_nodes::class_specifier& class_specifier_node, c
 			)
 		)
 	;
-}
-
-std::unique_ptr<class_>
-create_class
-(
-	const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node
-)
-{
-	using namespace syntax_nodes;
-	using namespace semantic_entities;
-
-	//get the name of the class
-	std::string class_name;
-	const identifier_or_template_id& identifier_or_template_id_node = get_identifier_or_template_id(class_elaborated_specifier_node);
-
-	if(const boost::optional<const identifier&> opt_identifier_node = get<identifier>(&identifier_or_template_id_node))
-	{
-		class_name = opt_identifier_node->value();
-	}
-
-	//create the class
-	assert(class_name != "");
-	return std::unique_ptr<class_>(new class_(class_name));
 }
 
 std::unique_ptr<member_class>

@@ -18,29 +18,35 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_SYNTAX_NODE_ANALYSIS_TYPE_SPECIFIER_SEQ_HPP
-#define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_SYNTAX_NODE_ANALYSIS_TYPE_SPECIFIER_SEQ_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_HAS_ENTITY_ALIASES_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_HAS_ENTITY_ALIASES_HPP
 
-#include <scalpel/cpp/syntax_tree.hpp>
+#include <scalpel/cpp/semantic_graph.hpp>
 
-namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail { namespace syntax_node_analysis
+namespace scalpel { namespace cpp { namespace semantic_entities { namespace type_traits
 {
 
-enum class type_specifier_seq_type
+template<class DeclarativeRegion>
+struct has_entity_aliases
 {
-	NO_TYPE,
-	SIMPLE_TYPE,
-	CLASS_DECLARATION,
-	CLASS_FORWARD_DECLARATION,
-	UNION_DECLARATION,
-	UNION_FORWARD_DECLARATION,
-	ENUMERATION_DECLARATION
+	static const bool value = false;
 };
 
-type_specifier_seq_type
-get_type_specifier_seq_type(const syntax_nodes::type_specifier_seq& type_specifier_seq_node);
+#define HAS_ENTITY_ALIASES(DECLARATIVE_REGION_TYPE) \
+template<> \
+struct has_entity_aliases<DECLARATIVE_REGION_TYPE> \
+{ \
+	static const bool value = true; \
+};
 
-}}}}} //namespace scalpel::cpp::semantic_analysis::detail::syntax_node_analysis
+HAS_ENTITY_ALIASES(namespace_)
+HAS_ENTITY_ALIASES(unnamed_namespace)
+HAS_ENTITY_ALIASES(class_)
+HAS_ENTITY_ALIASES(member_class)
+
+#undef HAS_ENTITY_ALIASES
+
+}}}} //namespace scalpel::cpp::semantic_entities::type_traits
 
 #endif
 

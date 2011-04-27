@@ -27,7 +27,12 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "macros/detail/single_member_definition.hpp"
 #include <memory>
 
-#define GENERATE_CLASS_DEFINITION(CLASS_NAME, IS_MEMBER) \
+#define GENERATE_CLASS_DEFINITION( \
+	CLASS_NAME, \
+	IS_MEMBER, \
+	HAS_BASE_CLASSES, \
+	HAS_ENTITY_ALIASES \
+) \
 CLASS_NAME::CLASS_NAME \
 ( \
 	const std::string& name BOOST_PP_COMMA_IF(IS_MEMBER) \
@@ -41,6 +46,7 @@ CLASS_NAME::CLASS_NAME \
 } \
  \
 MEMBER_DEFINITION(CLASS_NAME, member_class, classes, 1) \
+MEMBER_DEFINITION(CLASS_NAME, member_union, unions, 1) \
 MEMBER_DEFINITION(CLASS_NAME, member_enum, enums, 1) \
 MEMBER_DEFINITION(CLASS_NAME, member_typedef, typedefs, 1) \
 MEMBER_DEFINITION(CLASS_NAME, constructor, constructors, 1) \
@@ -51,17 +57,22 @@ MEMBER_DEFINITION(CLASS_NAME, simple_member_function, simple_functions, 1) \
 MEMBER_DEFINITION(CLASS_NAME, member_variable, variables, 1) \
 MEMBER_DEFINITION(CLASS_NAME, bit_field, bit_fields, 1) \
  \
-const CLASS_NAME::base_classes_t& \
-CLASS_NAME::base_classes() const \
-{ \
-	return base_classes_; \
-} \
+BOOST_PP_IIF \
+( \
+	HAS_BASE_CLASSES, \
  \
-void \
-CLASS_NAME::add_base_class(const base_class& bc) \
-{ \
-	base_classes_.push_back(bc); \
-} \
+	const CLASS_NAME::base_classes_t& \
+	CLASS_NAME::base_classes() const \
+	{ \
+		return base_classes_; \
+	} \
+	\
+	void \
+	CLASS_NAME::add_base_class(const base_class& bc) \
+	{ \
+		base_classes_.push_back(bc); \
+	}, \
+) \
  \
 void \
 CLASS_NAME::reset_destructor() \
@@ -75,8 +86,10 @@ CLASS_NAME::reset_destructor() \
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-GENERATE_CLASS_DEFINITION(class_, 0)
-GENERATE_CLASS_DEFINITION(member_class, 1)
+GENERATE_CLASS_DEFINITION(class_, 0, 1, 1)
+GENERATE_CLASS_DEFINITION(member_class, 1, 1, 1)
+GENERATE_CLASS_DEFINITION(union_, 0, 0, 0)
+GENERATE_CLASS_DEFINITION(member_union, 1, 0, 0)
 
 }}} //namespace scalpel::cpp::semantic_entities
 

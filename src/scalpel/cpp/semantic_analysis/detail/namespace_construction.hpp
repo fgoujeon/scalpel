@@ -82,12 +82,12 @@ fill_namespace
 //namespace.
 //If so, return the forward declared class.
 //If not, add the given class to the given namespace and return the given class.
-template<class Namespace>
-semantic_entities::class_&
+template<class Namespace, class Class>
+Class&
 add_class
 (
 	Namespace& namespace_entity,
-	std::unique_ptr<semantic_entities::class_>&& class_entity
+	std::unique_ptr<Class>&& class_entity
 );
 
 //add the entity alias to the given namespace

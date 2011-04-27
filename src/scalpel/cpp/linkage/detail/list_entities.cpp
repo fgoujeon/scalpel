@@ -65,8 +65,15 @@ namespace
 			list_child_entities(*i, groups, force_internal_linkage);
 		}
 
+		const utility::unique_ptr_vector<union_>& child_unions = parent_entity.unions();
+		for(auto i = child_unions.begin(); i != child_unions.end(); ++i)
+		{
+			list_child_entities(*i, groups, force_internal_linkage);
+		}
+
 		list_child_entities_of_type<namespace_>(parent_entity, groups, force_internal_linkage);
 		list_child_entities_of_type<class_>(parent_entity, groups, force_internal_linkage);
+		list_child_entities_of_type<union_>(parent_entity, groups, force_internal_linkage);
 		list_child_entities_of_type<enum_>(parent_entity, groups, force_internal_linkage);
 		list_child_entities_of_type<typedef_>(parent_entity, groups, force_internal_linkage);
 		list_child_entities_of_type<operator_function>(parent_entity, groups, force_internal_linkage);
@@ -95,8 +102,15 @@ namespace
 			list_child_entities(*i, groups, true);
 		}
 
+		const utility::unique_ptr_vector<union_>& child_unions = parent_entity.unions();
+		for(auto i = child_unions.begin(); i != child_unions.end(); ++i)
+		{
+			list_child_entities(*i, groups, true);
+		}
+
 		list_child_entities_of_type<namespace_>(parent_entity, groups, true);
 		list_child_entities_of_type<class_>(parent_entity, groups, true);
+		list_child_entities_of_type<union_>(parent_entity, groups, true);
 		list_child_entities_of_type<enum_>(parent_entity, groups, true);
 		list_child_entities_of_type<typedef_>(parent_entity, groups, true);
 		list_child_entities_of_type<operator_function>(parent_entity, groups, true);

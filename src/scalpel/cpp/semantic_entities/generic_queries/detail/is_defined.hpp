@@ -49,6 +49,20 @@ is_defined(const member_class& entity)
 
 inline
 bool
+is_defined(const union_& entity)
+{
+	return entity.complete();
+}
+
+inline
+bool
+is_defined(const member_union& entity)
+{
+	return entity.complete();
+}
+
+inline
+bool
 is_defined(const enum_&)
 {
 	return true;

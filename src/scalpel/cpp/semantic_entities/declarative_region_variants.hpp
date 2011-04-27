@@ -35,6 +35,8 @@ class linked_unnamed_namespace;
 class namespace_alias;
 class class_;
 class member_class;
+class union_;
+class member_union;
 class constructor;
 class destructor;
 class operator_function;
@@ -54,6 +56,8 @@ typedef
 		linked_unnamed_namespace,
 		class_,
 		member_class,
+		union_,
+		member_union,
 		constructor,
 		destructor,
 		operator_function,
@@ -76,6 +80,8 @@ typedef
 		namespace_alias,
 		class_,
 		member_class,
+		union_,
+		member_union,
 		typedef_
 	>::type
 	open_declarative_region_ptr_variant
@@ -87,7 +93,9 @@ typedef
 		namespace_,
 		unnamed_namespace,
 		class_,
-		member_class
+		member_class,
+		union_,
+		member_union
 	>::type
 	function_enclosing_declarative_region_ptr_variant
 ;

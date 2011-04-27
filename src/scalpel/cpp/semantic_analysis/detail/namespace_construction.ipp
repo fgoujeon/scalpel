@@ -31,6 +31,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "syntax_node_analysis/function_definition.hpp"
 #include "syntax_node_analysis/declarator.hpp"
 #include "syntax_node_analysis/decl_specifier_seq.hpp"
+#include <scalpel/cpp/semantic_entities/generic_queries/detail/get_members.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail
 {
@@ -183,7 +184,7 @@ fill_namespace
 				}
 				else
 				{
-					std::unique_ptr<class_> new_class = create_class(class_specifier_node);
+					std::unique_ptr<class_> new_class = create_class<class_>(class_specifier_node);
 					class_& added_class = add_class(namespace_entity, std::move(new_class));
 					fill_class(added_class, class_specifier_node);
 
@@ -198,10 +199,69 @@ fill_namespace
 					syntax_node_analysis::get_class_elaborated_specifier(decl_specifier_seq_node)
 				;
 
-				std::unique_ptr<class_> new_class = create_class(class_elaborated_specifier_node);
+				std::unique_ptr<class_> new_class = create_class<class_>(class_elaborated_specifier_node);
 				class_& added_class = add_class(namespace_entity, std::move(new_class));
 
 				opt_unqualified_type = &added_class;
+
+				break;
+			}
+			case syntax_node_analysis::type_specifier_seq_type::UNION_DECLARATION:
+			{
+				const class_specifier& class_specifier_node =
+					syntax_node_analysis::get_class_specifier(decl_specifier_seq_node)
+				;
+				const class_head& class_head_node = get_class_head(class_specifier_node);
+				const optional_node<nested_name_specifier>& opt_nested_name_specifier_node =
+					get_nested_name_specifier(class_head_node)
+				;
+
+				if(opt_nested_name_specifier_node)
+				{
+					//find the union
+					union_* found_union =
+						name_lookup::find
+						<
+							semantic_entity_analysis::identification_policies::by_name,
+							false,
+							false,
+							union_
+						>
+						(
+							false,
+							opt_nested_name_specifier_node,
+							syntax_node_analysis::get_identifier(class_specifier_node),
+							&namespace_entity,
+							false
+						)
+					;
+
+					//and define it
+					fill_class(*found_union, class_specifier_node);
+
+					opt_unqualified_type = found_union;
+				}
+				else
+				{
+					std::unique_ptr<union_> new_union = create_class<union_>(class_specifier_node);
+					union_& added_union = add_class(namespace_entity, std::move(new_union));
+					fill_class(added_union, class_specifier_node);
+
+					opt_unqualified_type = &added_union;
+				}
+
+				break;
+			}
+			case syntax_node_analysis::type_specifier_seq_type::UNION_FORWARD_DECLARATION:
+			{
+				const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node =
+					syntax_node_analysis::get_class_elaborated_specifier(decl_specifier_seq_node)
+				;
+
+				std::unique_ptr<union_> new_union = create_class<union_>(class_elaborated_specifier_node);
+				union_& added_union = add_class(namespace_entity, std::move(new_union));
+
+				opt_unqualified_type = &added_union;
 
 				break;
 			}
@@ -493,26 +553,28 @@ fill_namespace
 	}
 }
 
-template<class Namespace>
-semantic_entities::class_&
+template<class Namespace, class Class>
+Class&
 add_class
 (
 	Namespace& namespace_entity,
-	std::unique_ptr<semantic_entities::class_>&& class_entity
+	std::unique_ptr<Class>&& class_entity
 )
 {
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
 
-	namespace_::classes_t::range classes = namespace_entity.classes();
+	typename generic_queries::detail::get_members_return_type<Namespace, Class, false>::type classes =
+		generic_queries::detail::get_members<Class>(namespace_entity)
+	;
 	for(auto i = classes.begin(); i != classes.end(); ++i)
 	{
-		class_& current_class = *i;
+		Class& current_class = *i;
 		if(!current_class.complete() && current_class.name() == class_entity->name())
 			return current_class;
 	}
 
-	class_& class_entity_ref = *class_entity;
+	Class& class_entity_ref = *class_entity;
 	namespace_entity.add_member(std::move(class_entity));
 	return class_entity_ref;
 }

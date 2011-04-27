@@ -53,6 +53,22 @@ add_member(member_class& declarative_region, std::unique_ptr<destructor>&& entit
 template<>
 inline
 void
+add_member(union_& declarative_region, std::unique_ptr<destructor>&& entity)
+{
+	declarative_region.set_destructor(std::move(entity));
+}
+
+template<>
+inline
+void
+add_member(member_union& declarative_region, std::unique_ptr<destructor>&& entity)
+{
+	declarative_region.set_destructor(std::move(entity));
+}
+
+template<>
+inline
+void
 add_member(linked_unnamed_namespace& declarative_region, std::unique_ptr<linked_unnamed_namespace>&& entity)
 {
 	assert(declarative_region.get_unnamed_namespace() == 0);

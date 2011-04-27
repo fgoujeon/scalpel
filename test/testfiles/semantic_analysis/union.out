@@ -1,0 +1,25 @@
+<namespace id="0">
+ <union id="0" name="u">
+  <member_class id="0" name="c" access="public">
+   <destructor access="public" defined="false">
+   </destructor>
+   <member_variable id="0" name="i" access="private">
+    <type>
+     <fundamental_type type="int"/>
+    </type>
+   </member_variable>
+  </member_class>
+  <destructor access="public" defined="false">
+  </destructor>
+  <member_variable id="1" name="d" access="public">
+   <type>
+    <fundamental_type type="double"/>
+   </type>
+  </member_variable>
+  <member_variable id="2" name="i" access="public">
+   <type>
+    <fundamental_type type="int"/>
+   </type>
+  </member_variable>
+ </union>
+</namespace>

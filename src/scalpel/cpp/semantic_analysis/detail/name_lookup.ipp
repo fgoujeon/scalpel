@@ -592,6 +592,8 @@ find_single_type_local_entities<EntityIdentificationPolicy, DeclarativeRegion, O
 			namespace_alias,
 			class_,
 			member_class,
+			union_,
+			member_union,
 			typedef_
 		>
 		(

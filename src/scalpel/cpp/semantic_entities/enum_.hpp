@@ -102,6 +102,8 @@ class linked_namespace;
 class linked_unnamed_namespace;
 class class_;
 class member_class;
+class union_;
+class member_union;
 
 typedef
 	impl::detail::declarative_region_member_impl<namespace_, unnamed_namespace, linked_namespace, linked_unnamed_namespace>
@@ -109,7 +111,7 @@ typedef
 ;
 
 typedef
-	impl::detail::declarative_region_member_impl<class_, member_class>
+	impl::detail::declarative_region_member_impl<class_, member_class, union_, member_union>
 	member_enum_declarative_region_member_impl_t
 ;
 

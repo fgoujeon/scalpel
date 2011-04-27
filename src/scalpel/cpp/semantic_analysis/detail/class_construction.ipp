@@ -36,6 +36,37 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 {
 
 template<class Class>
+std::unique_ptr<Class>
+create_class(const syntax_nodes::class_specifier& class_specifier_node)
+{
+	return std::unique_ptr<Class>(new Class(syntax_node_analysis::get_identifier(class_specifier_node)));
+}
+
+template<class Class>
+std::unique_ptr<Class>
+create_class
+(
+	const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node
+)
+{
+	using namespace syntax_nodes;
+	using namespace semantic_entities;
+
+	//get the name of the class
+	std::string class_name;
+	const identifier_or_template_id& identifier_or_template_id_node = get_identifier_or_template_id(class_elaborated_specifier_node);
+
+	if(const boost::optional<const identifier&> opt_identifier_node = get<identifier>(&identifier_or_template_id_node))
+	{
+		class_name = opt_identifier_node->value();
+	}
+
+	//create the class
+	assert(class_name != "");
+	return std::unique_ptr<Class>(new Class(class_name));
+}
+
+template<class Class>
 void
 fill_class
 (
@@ -49,7 +80,7 @@ fill_class
 	auto class_head_node = get_class_head(class_specifier_node);
 	auto class_key_node = get_class_key(class_head_node);
 
-	//default access: public for structs, private for classes
+	//default access: public for structs and unions, private for classes
 	const member_access default_access =
 		get<predefined_text_node<str::class_>>(&class_key_node) ?
 		member_access::PRIVATE :
@@ -57,57 +88,9 @@ fill_class
 	;
 
 	//get base classes
-	if(auto opt_base_clause_node = get_base_clause(class_head_node))
+	if(const optional_node<base_clause>& opt_base_clause_node = get_base_clause(class_head_node))
 	{
-		auto base_specifier_list_node = get_base_specifier_list(*opt_base_clause_node);
-		for
-		(
-			auto i = base_specifier_list_node.begin();
-			i != base_specifier_list_node.end();
-			++i
-		)
-		{
-			auto base_specifier_node = *i;
-			auto nested_identifier_or_template_id_node = get_nested_identifier_or_template_id(base_specifier_node);
-
-			//is it virtual inheritance?
-			bool is_virtual = has_virtual_keyword(base_specifier_node);
-
-			//get base class access
-			member_access access = default_access;
-			if(auto opt_access_specifier_node = get_access_specifier(base_specifier_node))
-			{
-				access = syntax_node_analysis::get_access(*opt_access_specifier_node);
-			}
-
-			//get base class name
-			std::string base_class_name;
-			const identifier_or_template_id& identifier_or_template_id_node = get_identifier_or_template_id(nested_identifier_or_template_id_node);
-			if(boost::optional<const identifier&> opt_identifier_node = get<identifier>(&identifier_or_template_id_node))
-				base_class_name = opt_identifier_node->value();
-			else
-				assert(false); //not managed yet
-
-			//get base class
-			typename utility::ptr_variant<class_, member_class>::type base =
-				name_lookup::find
-				<
-					semantic_entity_analysis::identification_policies::by_name,
-					false,
-					false,
-					class_,
-					member_class
-				>
-				(
-					has_leading_double_colon(nested_identifier_or_template_id_node),
-					get_nested_name_specifier(nested_identifier_or_template_id_node),
-					base_class_name,
-					&class_entity
-				)
-			;
-
-			class_entity.add_base_class(base_class(base, access, is_virtual));
-		}
+		fill_class(class_entity, default_access, *opt_base_clause_node);
 	}
 
 	//get the members of the class
@@ -174,6 +157,85 @@ fill_class
 	}
 
 	class_entity.complete(true);
+}
+
+template<class Class>
+void
+fill_class
+(
+	Class& class_entity,
+	const semantic_entities::member_access default_access,
+	const syntax_nodes::base_clause& base_clause_node,
+	typename boost::enable_if<semantic_entities::type_traits::has_base_classes<Class>>::type*
+)
+{
+	using namespace syntax_nodes;
+	using namespace semantic_entities;
+
+	const base_specifier_list& base_specifier_list_node = get_base_specifier_list(base_clause_node);
+	for
+	(
+		auto i = base_specifier_list_node.begin();
+		i != base_specifier_list_node.end();
+		++i
+	)
+	{
+		const base_specifier& base_specifier_node = *i;
+		const nested_identifier_or_template_id& nested_identifier_or_template_id_node = get_nested_identifier_or_template_id(base_specifier_node);
+
+		//is it virtual inheritance?
+		bool is_virtual = has_virtual_keyword(base_specifier_node);
+
+		//get base class access
+		member_access access = default_access;
+		if(const optional_node<access_specifier>& opt_access_specifier_node = get_access_specifier(base_specifier_node))
+		{
+			access = syntax_node_analysis::get_access(*opt_access_specifier_node);
+		}
+
+		//get base class name
+		std::string base_class_name;
+		const identifier_or_template_id& identifier_or_template_id_node = get_identifier_or_template_id(nested_identifier_or_template_id_node);
+		if(boost::optional<const identifier&> opt_identifier_node = get<identifier>(&identifier_or_template_id_node))
+			base_class_name = opt_identifier_node->value();
+		else
+			assert(false); //not managed yet
+
+		//get base class
+		typename utility::ptr_variant<class_, member_class>::type base =
+			name_lookup::find
+			<
+				semantic_entity_analysis::identification_policies::by_name,
+				false,
+				false,
+				class_,
+				member_class
+			>
+			(
+				has_leading_double_colon(nested_identifier_or_template_id_node),
+				get_nested_name_specifier(nested_identifier_or_template_id_node),
+				base_class_name,
+				&class_entity
+			)
+		;
+
+		class_entity.add_base_class(base_class(base, access, is_virtual));
+	}
+}
+
+template<class Class>
+void
+fill_class
+(
+	Class& class_entity,
+	const semantic_entities::member_access,
+	const syntax_nodes::base_clause&,
+	typename boost::disable_if<semantic_entities::type_traits::has_base_classes<Class>>::type*
+)
+{
+	std::ostringstream oss;
+	oss << class_entity.name() << " is a union and cannot have base classes.";
+	throw std::runtime_error(oss.str().c_str());
 }
 
 template<class Class>
@@ -478,7 +540,8 @@ fill_class
 (
 	Class& class_entity,
 	const semantic_entities::member_access access,
-	const syntax_nodes::using_declaration& using_declaration_node
+	const syntax_nodes::using_declaration& using_declaration_node,
+	typename boost::enable_if<semantic_entities::type_traits::has_entity_aliases<Class>>::type*
 )
 {
 	using namespace syntax_nodes;
@@ -602,6 +665,21 @@ fill_class
 	{
 		assert(false); //not implemented yet
 	}
+}
+
+template<class Class>
+void
+fill_class
+(
+	Class& class_entity,
+	const semantic_entities::member_access,
+	const syntax_nodes::using_declaration&,
+	typename boost::disable_if<semantic_entities::type_traits::has_entity_aliases<Class>>::type*
+)
+{
+	std::ostringstream oss;
+	oss << class_entity.name() << " is a union and cannot have using declarations.";
+	throw std::runtime_error(oss.str().c_str());
 }
 
 template<class ParentClass>

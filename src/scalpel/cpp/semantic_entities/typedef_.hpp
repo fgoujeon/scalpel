@@ -91,7 +91,7 @@ typedef
 ;
 
 typedef
-	impl::detail::declarative_region_member_impl<class_, member_class>
+	impl::detail::declarative_region_member_impl<class_, member_class, union_, member_union>
 	member_typedef_declarative_region_member_impl_t
 ;
 

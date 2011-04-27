@@ -114,6 +114,13 @@ class semantic_graph_serializer
 		);
 
 		void
+		serialize_union
+		(
+			const union_& entity,
+			const unsigned int indent_level
+		);
+
+		void
 		serialize_base_class
 		(
 			const base_class& entity,
@@ -260,6 +267,8 @@ class semantic_graph_serializer
 			serialize_entity_aliases_of_type<linked_unnamed_namespace>(declarative_region, indent_level);
 			serialize_entity_aliases_of_type<class_>(declarative_region, indent_level);
 			serialize_entity_aliases_of_type<member_class>(declarative_region, indent_level);
+			serialize_entity_aliases_of_type<union_>(declarative_region, indent_level);
+			serialize_entity_aliases_of_type<member_union>(declarative_region, indent_level);
 			serialize_entity_aliases_of_type<enum_>(declarative_region, indent_level);
 			serialize_entity_aliases_of_type<member_enum>(declarative_region, indent_level);
 			serialize_entity_aliases_of_type<typedef_>(declarative_region, indent_level);
@@ -372,6 +381,8 @@ class semantic_graph_serializer
 			set_id_of_members_of_type<linked_unnamed_namespace>(entity);
 			set_id_of_members_of_type<class_>(entity);
 			set_id_of_members_of_type<member_class>(entity);
+			set_id_of_members_of_type<union_>(entity);
+			set_id_of_members_of_type<member_union>(entity);
 			set_id_of_members_of_type<enum_>(entity);
 			set_id_of_members_of_type<member_enum>(entity);
 			set_id_of_members_of_type<typedef_>(entity);
@@ -448,6 +459,8 @@ class semantic_graph_serializer
 		typename entity_id_map<semantic_entities::linked_unnamed_namespace>::type linked_unnamed_namespace_id_map_;
 		typename entity_id_map<semantic_entities::class_>::type class_id_map_;
 		typename entity_id_map<semantic_entities::member_class>::type member_class_id_map_;
+		typename entity_id_map<semantic_entities::union_>::type union_id_map_;
+		typename entity_id_map<semantic_entities::member_union>::type member_union_id_map_;
 		typename entity_id_map<semantic_entities::enum_>::type enum_id_map_;
 		typename entity_id_map<semantic_entities::member_enum>::type member_enum_id_map_;
 		typename entity_id_map<semantic_entities::typedef_>::type typedef_id_map_;

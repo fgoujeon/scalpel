@@ -57,6 +57,8 @@ GET_MAP_OF_LINKED_TYPE(linked_namespace, namespaces)
 GET_MAP_OF_LINKED_TYPE(linked_unnamed_namespace, unnamed_namespaces)
 GET_MAP_OF_LINKED_TYPE(class_, classes)
 GET_MAP_OF_LINKED_TYPE(member_class, member_classes)
+GET_MAP_OF_LINKED_TYPE(union_, unions)
+GET_MAP_OF_LINKED_TYPE(member_union, member_unions)
 GET_MAP_OF_LINKED_TYPE(enum_, enums)
 GET_MAP_OF_LINKED_TYPE(member_enum, member_enums)
 GET_MAP_OF_LINKED_TYPE(typedef_, typedefs)
@@ -74,6 +76,8 @@ GET_MAP_OF_LINKED_TYPE(bit_field, bit_fields)
 
 GENERATE_GET_PAIRS_SPECIALIZATION(class_, class_pairs)
 GENERATE_GET_PAIRS_SPECIALIZATION(member_class, member_class_pairs)
+GENERATE_GET_PAIRS_SPECIALIZATION(union_, union_pairs)
+GENERATE_GET_PAIRS_SPECIALIZATION(member_union, member_union_pairs)
 
 }}}} //namespace scalpel::cpp::linkage::detail
 

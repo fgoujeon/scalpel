@@ -176,6 +176,9 @@ semantic_graph_serializer::serialize_namespace
 	for(auto i = entity.classes().begin(); i != entity.classes().end(); ++i)
 		serialize_class(*i, indent_level + 1);
 
+	for(auto i = entity.unions().begin(); i != entity.unions().end(); ++i)
+		serialize_union(*i, indent_level + 1);
+
 	for(auto i = entity.enums().begin(); i != entity.enums().end(); ++i)
 		serialize_enum(*i, indent_level + 1);
 
@@ -220,6 +223,9 @@ semantic_graph_serializer::serialize_namespace
 	for(auto i = entity.classes().begin(); i != entity.classes().end(); ++i)
 		serialize_class(*i, indent_level + 1);
 
+	for(auto i = entity.unions().begin(); i != entity.unions().end(); ++i)
+		serialize_union(*i, indent_level + 1);
+
 	for(auto i = entity.enums().begin(); i != entity.enums().end(); ++i)
 		serialize_enum(*i, indent_level + 1);
 
@@ -259,6 +265,9 @@ semantic_graph_serializer::serialize_unnamed_namespace
 	for(auto i = entity.classes().begin(); i != entity.classes().end(); ++i)
 		serialize_class(*i, indent_level + 1);
 
+	for(auto i = entity.unions().begin(); i != entity.unions().end(); ++i)
+		serialize_union(*i, indent_level + 1);
+
 	for(auto i = entity.enums().begin(); i != entity.enums().end(); ++i)
 		serialize_enum(*i, indent_level + 1);
 
@@ -296,6 +305,9 @@ semantic_graph_serializer::serialize_unnamed_namespace
 
 	for(auto i = entity.classes().begin(); i != entity.classes().end(); ++i)
 		serialize_class(*i, indent_level + 1);
+
+	for(auto i = entity.unions().begin(); i != entity.unions().end(); ++i)
+		serialize_union(*i, indent_level + 1);
 
 	for(auto i = entity.enums().begin(); i != entity.enums().end(); ++i)
 		serialize_enum(*i, indent_level + 1);
@@ -428,6 +440,53 @@ semantic_graph_serializer::serialize_class
 	serialize_entity_aliases(entity, indent_level + 1);
 
 	output_ << indent(indent_level) << "</member_class>\n";
+}
+
+void
+semantic_graph_serializer::serialize_union
+(
+	const union_& entity,
+	const unsigned int indent_level
+)
+{
+	output_ << indent(indent_level) << "<union";
+	output_ << " " << id_attribute_to_string(entity);
+	if(!entity.name().empty())
+		output_ << " name=\"" << entity.name() << "\"";
+	if(!entity.complete())
+		output_ << " complete=\"false\"";
+	output_ << ">\n";
+
+	for(auto i = entity.classes().begin(); i != entity.classes().end(); ++i)
+		serialize_class(*i, indent_level + 1);
+
+	for(auto i = entity.enums().begin(); i != entity.enums().end(); ++i)
+		serialize_enum(*i, indent_level + 1);
+
+	for(auto i = entity.typedefs().begin(); i != entity.typedefs().end(); ++i)
+		serialize_typedef(*i, indent_level + 1);
+
+	for(auto i = entity.constructors().begin(); i != entity.constructors().end(); ++i)
+		serialize_constructor(*i, indent_level + 1);
+
+	serialize_destructor(entity.get_destructor(), indent_level + 1);
+
+	for(auto i = entity.operator_functions().begin(); i != entity.operator_functions().end(); ++i)
+		serialize_operator_member_function(*i, indent_level + 1);
+
+	for(auto i = entity.conversion_functions().begin(); i != entity.conversion_functions().end(); ++i)
+		serialize_conversion_function(*i, indent_level + 1);
+
+	for(auto i = entity.simple_functions().begin(); i != entity.simple_functions().end(); ++i)
+		serialize_simple_member_function(*i, indent_level + 1);
+
+	for(auto i = entity.variables().begin(); i != entity.variables().end(); ++i)
+		serialize_variable(*i, indent_level + 1);
+
+	for(auto i = entity.bit_fields().begin(); i != entity.bit_fields().end(); ++i)
+		serialize_bit_field(*i, indent_level + 1);
+
+	output_ << indent(indent_level) << "</union>\n";
 }
 
 void
@@ -1078,6 +1137,8 @@ ENTITY_ID_MAP_OF_TYPE(unnamed_namespace, unnamed_namespace_id_map_)
 ENTITY_ID_MAP_OF_TYPE(linked_unnamed_namespace, linked_unnamed_namespace_id_map_)
 ENTITY_ID_MAP_OF_TYPE(class_, class_id_map_)
 ENTITY_ID_MAP_OF_TYPE(member_class, member_class_id_map_)
+ENTITY_ID_MAP_OF_TYPE(union_, union_id_map_)
+ENTITY_ID_MAP_OF_TYPE(member_union, member_union_id_map_)
 ENTITY_ID_MAP_OF_TYPE(enum_, enum_id_map_)
 ENTITY_ID_MAP_OF_TYPE(member_enum, member_enum_id_map_)
 ENTITY_ID_MAP_OF_TYPE(typedef_, typedef_id_map_)

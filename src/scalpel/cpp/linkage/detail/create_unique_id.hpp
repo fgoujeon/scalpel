@@ -47,6 +47,12 @@ std::string
 create_unique_id(const semantic_entities::member_class& entity);
 
 std::string
+create_unique_id(const semantic_entities::union_& entity);
+
+std::string
+create_unique_id(const semantic_entities::member_union& entity);
+
+std::string
 create_unique_id(const semantic_entities::enum_& entity);
 
 std::string

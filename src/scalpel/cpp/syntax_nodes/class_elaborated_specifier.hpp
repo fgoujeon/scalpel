@@ -45,6 +45,13 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 )
 
 inline
+const class_key&
+get_class_key(const class_elaborated_specifier& o)
+{
+	return get<0>(o);
+}
+
+inline
 const identifier_or_template_id&
 get_identifier_or_template_id(const class_elaborated_specifier& o)
 {

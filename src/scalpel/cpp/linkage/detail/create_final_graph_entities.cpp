@@ -108,6 +108,36 @@ namespace
 		return new_class;
 	}
 
+	union_*
+	create_entity
+	(
+		const union_& entity,
+		final_graph_entities& final_entities
+	)
+	{
+		union_* new_union = new union_(entity.name());
+		new_union->complete(entity.complete());
+
+		final_entities.union_pairs.push_back(old_and_new_entity_pair<union_>{&entity, new_union});
+
+		return new_union;
+	}
+
+	member_union*
+	create_entity
+	(
+		const member_union& entity,
+		final_graph_entities& final_entities
+	)
+	{
+		member_union* new_union = new member_union(entity.name(), entity.access());
+		new_union->complete(entity.complete());
+
+		final_entities.member_union_pairs.push_back(old_and_new_entity_pair<member_union>{&entity, new_union});
+
+		return new_union;
+	}
+
 	enum_*
 	create_entity
 	(
@@ -554,6 +584,22 @@ namespace
 			}
 
 			type_variant
+			operator()(const union_* type) const
+			{
+				auto it = final_entities_.unions.find(type);
+				assert(it != final_entities_.unions.end());
+				return it->second;
+			}
+
+			type_variant
+			operator()(const member_union* type) const
+			{
+				auto it = final_entities_.member_unions.find(type);
+				assert(it != final_entities_.member_unions.end());
+				return it->second;
+			}
+
+			type_variant
 			operator()(const cv_qualified_type& type) const
 			{
 				return cv_qualified_type
@@ -747,6 +793,12 @@ create_final_graph_entities
 
 	create_entities_of_type<member_class, false>(groups.member_classes, final_entities);
 	create_internal_entities_of_type<member_class>(groups, final_entities);
+
+	create_entities_of_type<union_, false>(groups.unions, final_entities);
+	create_internal_entities_of_type<union_>(groups, final_entities);
+
+	create_entities_of_type<member_union, false>(groups.member_unions, final_entities);
+	create_internal_entities_of_type<member_union>(groups, final_entities);
 
 	create_entities_of_type<enum_, false>(groups.enums, final_entities);
 	create_internal_entities_of_type<enum_>(groups, final_entities);
