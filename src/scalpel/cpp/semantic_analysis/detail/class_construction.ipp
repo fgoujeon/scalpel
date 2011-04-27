@@ -44,6 +44,26 @@ create_class(const syntax_nodes::class_specifier& class_specifier_node)
 
 template<class Class>
 std::unique_ptr<Class>
+create_member_class
+(
+	const syntax_nodes::class_specifier& class_specifier_node,
+	const semantic_entities::member_access access
+)
+{
+	return
+		std::unique_ptr<Class>
+		(
+			new Class
+			(
+				syntax_node_analysis::get_identifier(class_specifier_node),
+				access
+			)
+		)
+	;
+}
+
+template<class Class>
+std::unique_ptr<Class>
 create_class
 (
 	const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node
@@ -64,6 +84,31 @@ create_class
 	//create the class
 	assert(class_name != "");
 	return std::unique_ptr<Class>(new Class(class_name));
+}
+
+template<class Class>
+std::unique_ptr<Class>
+create_member_class
+(
+	const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node,
+	const semantic_entities::member_access access
+)
+{
+	using namespace syntax_nodes;
+	using namespace semantic_entities;
+
+	//get the name of the class
+	std::string class_name;
+	const identifier_or_template_id& identifier_or_template_id_node = get_identifier_or_template_id(class_elaborated_specifier_node);
+
+	if(const boost::optional<const identifier&> opt_identifier_node = get<identifier>(&identifier_or_template_id_node))
+	{
+		class_name = opt_identifier_node->value();
+	}
+
+	//create the class
+	assert(class_name != "");
+	return std::unique_ptr<Class>(new Class(class_name, access));
 }
 
 template<class Class>
@@ -312,7 +357,7 @@ fill_class
 				}
 				else
 				{
-					std::unique_ptr<member_class> new_class = create_member_class(class_specifier_node, current_access);
+					std::unique_ptr<member_class> new_class = create_member_class<member_class>(class_specifier_node, current_access);
 					member_class& added_class = add_class(class_entity, std::move(new_class));
 					fill_class(added_class, class_specifier_node);
 
@@ -327,10 +372,63 @@ fill_class
 					syntax_node_analysis::get_class_elaborated_specifier(decl_specifier_seq_node)
 				;
 
-				std::unique_ptr<member_class> new_class = create_member_class(class_elaborated_specifier_node, current_access);
+				std::unique_ptr<member_class> new_class = create_member_class<member_class>(class_elaborated_specifier_node, current_access);
 				member_class& added_class = add_class(class_entity, std::move(new_class));
 
 				opt_unqualified_type = &added_class;
+
+				break;
+			}
+			case syntax_node_analysis::type_specifier_seq_type::UNION_DECLARATION:
+			{
+				const class_specifier& class_specifier_node =
+					syntax_node_analysis::get_class_specifier(decl_specifier_seq_node)
+				;
+				const class_head& class_head_node = get_class_head(class_specifier_node);
+				const optional_node<nested_name_specifier>& opt_nested_name_specifier_node =
+					get_nested_name_specifier(class_head_node)
+				;
+
+				if(opt_nested_name_specifier_node)
+				{
+					//find the class
+					member_union* found_union =
+						name_lookup::find<semantic_entity_analysis::identification_policies::by_name, false, false, member_union>
+						(
+							false,
+							opt_nested_name_specifier_node,
+							syntax_node_analysis::get_identifier(class_specifier_node),
+							&class_entity,
+							false
+						)
+					;
+
+					//and define it
+					fill_class(*found_union, class_specifier_node);
+
+					opt_unqualified_type = found_union;
+				}
+				else
+				{
+					std::unique_ptr<member_union> new_union = create_member_class<member_union>(class_specifier_node, current_access);
+					member_union& added_union = add_class(class_entity, std::move(new_union));
+					fill_class(added_union, class_specifier_node);
+
+					opt_unqualified_type = &added_union;
+				}
+
+				break;
+			}
+			case syntax_node_analysis::type_specifier_seq_type::UNION_FORWARD_DECLARATION:
+			{
+				const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node =
+					syntax_node_analysis::get_class_elaborated_specifier(decl_specifier_seq_node)
+				;
+
+				std::unique_ptr<member_union> new_union = create_member_class<member_union>(class_elaborated_specifier_node, current_access);
+				member_union& added_union = add_class(class_entity, std::move(new_union));
+
+				opt_unqualified_type = &added_union;
 
 				break;
 			}

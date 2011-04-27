@@ -128,7 +128,14 @@ namespace
 			list_child_entities(*i, groups, force_internal_linkage);
 		}
 
+		const utility::unique_ptr_vector<member_union>& child_unions = parent_entity.unions();
+		for(auto i = child_unions.begin(); i != child_unions.end(); ++i)
+		{
+			list_child_entities(*i, groups, force_internal_linkage);
+		}
+
 		list_child_entities_of_type<member_class>(parent_entity, groups, force_internal_linkage);
+		list_child_entities_of_type<member_union>(parent_entity, groups, force_internal_linkage);
 		list_child_entities_of_type<member_enum>(parent_entity, groups, force_internal_linkage);
 		list_child_entities_of_type<member_typedef>(parent_entity, groups, force_internal_linkage);
 		list_child_entities_of_type<constructor>(parent_entity, groups, force_internal_linkage);

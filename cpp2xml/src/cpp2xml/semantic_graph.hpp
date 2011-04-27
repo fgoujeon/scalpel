@@ -121,6 +121,13 @@ class semantic_graph_serializer
 		);
 
 		void
+		serialize_union
+		(
+			const member_union& entity,
+			const unsigned int indent_level
+		);
+
+		void
 		serialize_base_class
 		(
 			const base_class& entity,
