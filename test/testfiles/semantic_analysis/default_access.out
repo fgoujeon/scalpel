@@ -9,11 +9,11 @@
   </base_classes>
   <destructor access="public" defined="false">
   </destructor>
-  <member_variable id="0" name="i" access="private">
+  <variable id="0" name="i" access="private">
    <type>
     <fundamental_type type="int"/>
    </type>
-  </member_variable>
+  </variable>
  </class>
  <class id="2" name="s">
   <base_classes>
@@ -21,10 +21,10 @@
   </base_classes>
   <destructor access="public" defined="false">
   </destructor>
-  <member_variable id="1" name="i" access="public">
+  <variable id="1" name="i" access="public">
    <type>
     <fundamental_type type="int"/>
    </type>
-  </member_variable>
+  </variable>
  </class>
 </namespace>

@@ -1,14 +1,14 @@
 <namespace id="0">
  <class id="0" name="s">
-  <member_enum name="color" id="0">
+  <enum id="0" name="color" access="private">
    <constant name="RED" value="0">
    <constant name="GREEN" value="1">
    <constant name="BLUE" value="2">
-  </member_enum>
+  </enum>
   <destructor access="public" defined="false">
   </destructor>
  </class>
- <enum name="direction" id="0">
+ <enum id="0" name="direction">
   <constant name="LEFT" value="0">
   <constant name="RIGHT" value="1">
  </enum>

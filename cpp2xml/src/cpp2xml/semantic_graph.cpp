@@ -158,406 +158,6 @@ semantic_graph_serializer::serialize_fundamental_type
 }
 
 void
-semantic_graph_serializer::serialize_namespace
-(
-	const namespace_& entity,
-	const unsigned int indent_level
-)
-{
-	output_ << indent(indent_level) << "<namespace";
-	output_ << " " << id_attribute_to_string(entity);
-	if(entity.name() != "")
-	{
-		output_ << " name=\"" << entity.name() << "\"";
-	}
-	output_ << ">\n";
-
-	for(auto i = entity.namespace_aliases().begin(); i != entity.namespace_aliases().end(); ++i)
-		serialize_namespace_alias(*i, indent_level + 1);
-
-	for(auto i = entity.namespaces().begin(); i != entity.namespaces().end(); ++i)
-		serialize_namespace(*i, indent_level + 1);
-
-	if(const unnamed_namespace* opt_namespace = entity.get_unnamed_namespace())
-		serialize_unnamed_namespace(*opt_namespace, indent_level + 1);
-
-	for(auto i = entity.classes().begin(); i != entity.classes().end(); ++i)
-		serialize_class(*i, indent_level + 1);
-
-	for(auto i = entity.unions().begin(); i != entity.unions().end(); ++i)
-		serialize_union(*i, indent_level + 1);
-
-	for(auto i = entity.enums().begin(); i != entity.enums().end(); ++i)
-		serialize_enum(*i, indent_level + 1);
-
-	for(auto i = entity.typedefs().begin(); i != entity.typedefs().end(); ++i)
-		serialize_typedef(*i, indent_level + 1);
-
-	for(auto i = entity.simple_functions().begin(); i != entity.simple_functions().end(); ++i)
-		serialize_simple_function(*i, indent_level + 1);
-
-	for(auto i = entity.operator_functions().begin(); i != entity.operator_functions().end(); ++i)
-		serialize_operator_function(*i, indent_level + 1);
-
-	for(auto i = entity.variables().begin(); i != entity.variables().end(); ++i)
-		serialize_variable(*i, indent_level + 1);
-
-	serialize_entity_aliases(entity, indent_level + 1);
-
-	output_ << indent(indent_level) << "</namespace>\n";
-}
-
-void
-semantic_graph_serializer::serialize_namespace
-(
-	const linked_namespace& entity,
-	const unsigned int indent_level
-)
-{
-	output_ << indent(indent_level) << "<namespace";
-	output_ << " " << id_attribute_to_string(entity);
-	if(entity.name() != "")
-	{
-		output_ << " name=\"" << entity.name() << "\"";
-	}
-	output_ << ">\n";
-
-	for(auto i = entity.namespaces().begin(); i != entity.namespaces().end(); ++i)
-		serialize_namespace(*i, indent_level + 1);
-
-	for(auto i = entity.unnamed_namespaces().begin(); i != entity.unnamed_namespaces().end(); ++i)
-		serialize_unnamed_namespace(*i, indent_level + 1);
-
-	for(auto i = entity.classes().begin(); i != entity.classes().end(); ++i)
-		serialize_class(*i, indent_level + 1);
-
-	for(auto i = entity.unions().begin(); i != entity.unions().end(); ++i)
-		serialize_union(*i, indent_level + 1);
-
-	for(auto i = entity.enums().begin(); i != entity.enums().end(); ++i)
-		serialize_enum(*i, indent_level + 1);
-
-	for(auto i = entity.typedefs().begin(); i != entity.typedefs().end(); ++i)
-		serialize_typedef(*i, indent_level + 1);
-
-	for(auto i = entity.simple_functions().begin(); i != entity.simple_functions().end(); ++i)
-		serialize_simple_function(*i, indent_level + 1);
-
-	for(auto i = entity.operator_functions().begin(); i != entity.operator_functions().end(); ++i)
-		serialize_operator_function(*i, indent_level + 1);
-
-	for(auto i = entity.variables().begin(); i != entity.variables().end(); ++i)
-		serialize_variable(*i, indent_level + 1);
-
-	output_ << indent(indent_level) << "</namespace>\n";
-}
-
-void
-semantic_graph_serializer::serialize_unnamed_namespace
-(
-	const unnamed_namespace& entity,
-	const unsigned int indent_level
-)
-{
-	output_ << indent(indent_level) << "<unnamed_namespace>\n";
-
-	for(auto i = entity.namespace_aliases().begin(); i != entity.namespace_aliases().end(); ++i)
-		serialize_namespace_alias(*i, indent_level + 1);
-
-	for(auto i = entity.namespaces().begin(); i != entity.namespaces().end(); ++i)
-		serialize_namespace(*i, indent_level + 1);
-
-	if(const unnamed_namespace* opt_namespace = entity.get_unnamed_namespace())
-		serialize_unnamed_namespace(*opt_namespace, indent_level + 1);
-
-	for(auto i = entity.classes().begin(); i != entity.classes().end(); ++i)
-		serialize_class(*i, indent_level + 1);
-
-	for(auto i = entity.unions().begin(); i != entity.unions().end(); ++i)
-		serialize_union(*i, indent_level + 1);
-
-	for(auto i = entity.enums().begin(); i != entity.enums().end(); ++i)
-		serialize_enum(*i, indent_level + 1);
-
-	for(auto i = entity.typedefs().begin(); i != entity.typedefs().end(); ++i)
-		serialize_typedef(*i, indent_level + 1);
-
-	for(auto i = entity.simple_functions().begin(); i != entity.simple_functions().end(); ++i)
-		serialize_simple_function(*i, indent_level + 1);
-
-	for(auto i = entity.operator_functions().begin(); i != entity.operator_functions().end(); ++i)
-		serialize_operator_function(*i, indent_level + 1);
-
-	for(auto i = entity.variables().begin(); i != entity.variables().end(); ++i)
-		serialize_variable(*i, indent_level + 1);
-
-	serialize_entity_aliases(entity, indent_level + 1);
-
-	output_ << indent(indent_level) << "</unnamed_namespace>\n";
-}
-
-void
-semantic_graph_serializer::serialize_unnamed_namespace
-(
-	const linked_unnamed_namespace& entity,
-	const unsigned int indent_level
-)
-{
-	output_ << indent(indent_level) << "<unnamed_namespace>\n";
-
-	for(auto i = entity.namespaces().begin(); i != entity.namespaces().end(); ++i)
-		serialize_namespace(*i, indent_level + 1);
-
-	if(const linked_unnamed_namespace* opt_namespace = entity.get_unnamed_namespace())
-		serialize_unnamed_namespace(*opt_namespace, indent_level + 1);
-
-	for(auto i = entity.classes().begin(); i != entity.classes().end(); ++i)
-		serialize_class(*i, indent_level + 1);
-
-	for(auto i = entity.unions().begin(); i != entity.unions().end(); ++i)
-		serialize_union(*i, indent_level + 1);
-
-	for(auto i = entity.enums().begin(); i != entity.enums().end(); ++i)
-		serialize_enum(*i, indent_level + 1);
-
-	for(auto i = entity.typedefs().begin(); i != entity.typedefs().end(); ++i)
-		serialize_typedef(*i, indent_level + 1);
-
-	for(auto i = entity.simple_functions().begin(); i != entity.simple_functions().end(); ++i)
-		serialize_simple_function(*i, indent_level + 1);
-
-	for(auto i = entity.operator_functions().begin(); i != entity.operator_functions().end(); ++i)
-		serialize_operator_function(*i, indent_level + 1);
-
-	for(auto i = entity.variables().begin(); i != entity.variables().end(); ++i)
-		serialize_variable(*i, indent_level + 1);
-
-	output_ << indent(indent_level) << "</unnamed_namespace>\n";
-}
-
-void
-semantic_graph_serializer::serialize_class
-(
-	const class_& entity,
-	const unsigned int indent_level
-)
-{
-	output_ << indent(indent_level) << "<class";
-	output_ << " " << id_attribute_to_string(entity);
-	if(!entity.name().empty())
-		output_ << " name=\"" << entity.name() << "\"";
-	if(!entity.complete())
-		output_ << " complete=\"false\"";
-	output_ << ">\n";
-
-	if(!entity.base_classes().empty())
-	{
-		output_ << indent(indent_level + 1) << "<base_classes>\n";
-		for(auto i = entity.base_classes().begin(); i != entity.base_classes().end(); ++i)
-			serialize_base_class(*i, indent_level + 2);
-		output_ << indent(indent_level + 1) << "</base_classes>\n";
-	}
-
-	for(auto i = entity.classes().begin(); i != entity.classes().end(); ++i)
-		serialize_class(*i, indent_level + 1);
-
-	for(auto i = entity.unions().begin(); i != entity.unions().end(); ++i)
-		serialize_union(*i, indent_level + 1);
-
-	for(auto i = entity.enums().begin(); i != entity.enums().end(); ++i)
-		serialize_enum(*i, indent_level + 1);
-
-	for(auto i = entity.typedefs().begin(); i != entity.typedefs().end(); ++i)
-		serialize_typedef(*i, indent_level + 1);
-
-	for(auto i = entity.constructors().begin(); i != entity.constructors().end(); ++i)
-		serialize_constructor(*i, indent_level + 1);
-
-	serialize_destructor(entity.get_destructor(), indent_level + 1);
-
-	for(auto i = entity.operator_functions().begin(); i != entity.operator_functions().end(); ++i)
-		serialize_operator_member_function(*i, indent_level + 1);
-
-	for(auto i = entity.conversion_functions().begin(); i != entity.conversion_functions().end(); ++i)
-		serialize_conversion_function(*i, indent_level + 1);
-
-	for(auto i = entity.simple_functions().begin(); i != entity.simple_functions().end(); ++i)
-		serialize_simple_member_function(*i, indent_level + 1);
-
-	for(auto i = entity.variables().begin(); i != entity.variables().end(); ++i)
-		serialize_variable(*i, indent_level + 1);
-
-	for(auto i = entity.bit_fields().begin(); i != entity.bit_fields().end(); ++i)
-		serialize_bit_field(*i, indent_level + 1);
-
-	serialize_entity_aliases(entity, indent_level + 1);
-
-	output_ << indent(indent_level) << "</class>\n";
-}
-
-void
-semantic_graph_serializer::serialize_class
-(
-	const member_class& entity,
-	const unsigned int indent_level
-)
-{
-	output_ << indent(indent_level) << "<member_class";
-	output_ << " " << id_attribute_to_string(entity);
-	if(!entity.name().empty())
-		output_ << " name=\"" << entity.name() << "\"";
-	output_ << attribute(entity.access());
-	if(!entity.complete())
-		output_ << " complete=\"false\"";
-	output_ << ">\n";
-
-	if(!entity.base_classes().empty())
-	{
-		output_ << indent(indent_level + 1) << "<base_classes>\n";
-		for(auto i = entity.base_classes().begin(); i != entity.base_classes().end(); ++i)
-			serialize_base_class(*i, indent_level + 2);
-		output_ << indent(indent_level + 1) << "</base_classes>\n";
-	}
-
-	for(auto i = entity.classes().begin(); i != entity.classes().end(); ++i)
-		serialize_class(*i, indent_level + 1);
-
-	for(auto i = entity.unions().begin(); i != entity.unions().end(); ++i)
-		serialize_union(*i, indent_level + 1);
-
-	for(auto i = entity.enums().begin(); i != entity.enums().end(); ++i)
-		serialize_enum(*i, indent_level + 1);
-
-	for(auto i = entity.typedefs().begin(); i != entity.typedefs().end(); ++i)
-		serialize_typedef(*i, indent_level + 1);
-
-	for(auto i = entity.constructors().begin(); i != entity.constructors().end(); ++i)
-		serialize_constructor(*i, indent_level + 1);
-
-	serialize_destructor(entity.get_destructor(), indent_level + 1);
-
-	for(auto i = entity.operator_functions().begin(); i != entity.operator_functions().end(); ++i)
-		serialize_operator_member_function(*i, indent_level + 1);
-
-	for(auto i = entity.conversion_functions().begin(); i != entity.conversion_functions().end(); ++i)
-		serialize_conversion_function(*i, indent_level + 1);
-
-	for(auto i = entity.simple_functions().begin(); i != entity.simple_functions().end(); ++i)
-		serialize_simple_member_function(*i, indent_level + 1);
-
-	for(auto i = entity.variables().begin(); i != entity.variables().end(); ++i)
-		serialize_variable(*i, indent_level + 1);
-
-	for(auto i = entity.bit_fields().begin(); i != entity.bit_fields().end(); ++i)
-		serialize_bit_field(*i, indent_level + 1);
-
-	serialize_entity_aliases(entity, indent_level + 1);
-
-	output_ << indent(indent_level) << "</member_class>\n";
-}
-
-void
-semantic_graph_serializer::serialize_union
-(
-	const union_& entity,
-	const unsigned int indent_level
-)
-{
-	output_ << indent(indent_level) << "<union";
-	output_ << " " << id_attribute_to_string(entity);
-	if(!entity.name().empty())
-		output_ << " name=\"" << entity.name() << "\"";
-	if(!entity.complete())
-		output_ << " complete=\"false\"";
-	output_ << ">\n";
-
-	for(auto i = entity.classes().begin(); i != entity.classes().end(); ++i)
-		serialize_class(*i, indent_level + 1);
-
-	for(auto i = entity.unions().begin(); i != entity.unions().end(); ++i)
-		serialize_union(*i, indent_level + 1);
-
-	for(auto i = entity.enums().begin(); i != entity.enums().end(); ++i)
-		serialize_enum(*i, indent_level + 1);
-
-	for(auto i = entity.typedefs().begin(); i != entity.typedefs().end(); ++i)
-		serialize_typedef(*i, indent_level + 1);
-
-	for(auto i = entity.constructors().begin(); i != entity.constructors().end(); ++i)
-		serialize_constructor(*i, indent_level + 1);
-
-	serialize_destructor(entity.get_destructor(), indent_level + 1);
-
-	for(auto i = entity.operator_functions().begin(); i != entity.operator_functions().end(); ++i)
-		serialize_operator_member_function(*i, indent_level + 1);
-
-	for(auto i = entity.conversion_functions().begin(); i != entity.conversion_functions().end(); ++i)
-		serialize_conversion_function(*i, indent_level + 1);
-
-	for(auto i = entity.simple_functions().begin(); i != entity.simple_functions().end(); ++i)
-		serialize_simple_member_function(*i, indent_level + 1);
-
-	for(auto i = entity.variables().begin(); i != entity.variables().end(); ++i)
-		serialize_variable(*i, indent_level + 1);
-
-	for(auto i = entity.bit_fields().begin(); i != entity.bit_fields().end(); ++i)
-		serialize_bit_field(*i, indent_level + 1);
-
-	output_ << indent(indent_level) << "</union>\n";
-}
-
-void
-semantic_graph_serializer::serialize_union
-(
-	const member_union& entity,
-	const unsigned int indent_level
-)
-{
-	output_ << indent(indent_level) << "<union";
-	output_ << " " << id_attribute_to_string(entity);
-	if(!entity.name().empty())
-		output_ << " name=\"" << entity.name() << "\"";
-	output_ << attribute(entity.access());
-	if(!entity.complete())
-		output_ << " complete=\"false\"";
-	output_ << ">\n";
-
-	for(auto i = entity.classes().begin(); i != entity.classes().end(); ++i)
-		serialize_class(*i, indent_level + 1);
-
-	for(auto i = entity.unions().begin(); i != entity.unions().end(); ++i)
-		serialize_union(*i, indent_level + 1);
-
-	for(auto i = entity.enums().begin(); i != entity.enums().end(); ++i)
-		serialize_enum(*i, indent_level + 1);
-
-	for(auto i = entity.typedefs().begin(); i != entity.typedefs().end(); ++i)
-		serialize_typedef(*i, indent_level + 1);
-
-	for(auto i = entity.constructors().begin(); i != entity.constructors().end(); ++i)
-		serialize_constructor(*i, indent_level + 1);
-
-	serialize_destructor(entity.get_destructor(), indent_level + 1);
-
-	for(auto i = entity.operator_functions().begin(); i != entity.operator_functions().end(); ++i)
-		serialize_operator_member_function(*i, indent_level + 1);
-
-	for(auto i = entity.conversion_functions().begin(); i != entity.conversion_functions().end(); ++i)
-		serialize_conversion_function(*i, indent_level + 1);
-
-	for(auto i = entity.simple_functions().begin(); i != entity.simple_functions().end(); ++i)
-		serialize_simple_member_function(*i, indent_level + 1);
-
-	for(auto i = entity.variables().begin(); i != entity.variables().end(); ++i)
-		serialize_variable(*i, indent_level + 1);
-
-	for(auto i = entity.bit_fields().begin(); i != entity.bit_fields().end(); ++i)
-		serialize_bit_field(*i, indent_level + 1);
-
-	output_ << indent(indent_level) << "</union>\n";
-}
-
-void
 semantic_graph_serializer::serialize_base_class
 (
 	const base_class& entity,
@@ -570,56 +170,6 @@ semantic_graph_serializer::serialize_base_class
 	if(entity.is_virtual())
 		output_ << " virtual=\"true\"";
 	output_ << "/>\n";
-}
-
-void
-semantic_graph_serializer::serialize_enum
-(
-	const enum_& entity,
-	const unsigned int indent_level
-)
-{
-	output_ << indent(indent_level) << "<enum";
-	if(!entity.name().empty())
-		output_ << " name=\"" << entity.name() << "\"";
-	output_ << " " << id_attribute_to_string(entity);
-	output_ << ">\n";
-
-	for(auto i = entity.constants().begin(); i != entity.constants().end(); ++i)
-	{
-		const enum_constant& constant = *i;
-		output_ << indent(indent_level + 1) << "<constant";
-		output_ << " name=\"" << constant.name() << "\"";
-		output_ << " value=\"" << constant.value() << "\"";
-		output_ << ">\n";
-	}
-
-	output_ << indent(indent_level) << "</enum>\n";
-}
-
-void
-semantic_graph_serializer::serialize_enum
-(
-	const member_enum& entity,
-	const unsigned int indent_level
-)
-{
-	output_ << indent(indent_level) << "<member_enum";
-	if(!entity.name().empty())
-		output_ << " name=\"" << entity.name() << "\"";
-	output_ << " " << id_attribute_to_string(entity);
-	output_ << ">\n";
-
-	for(auto i = entity.constants().begin(); i != entity.constants().end(); ++i)
-	{
-		const enum_constant& constant = *i;
-		output_ << indent(indent_level + 1) << "<constant";
-		output_ << " name=\"" << constant.name() << "\"";
-		output_ << " value=\"" << constant.value() << "\"";
-		output_ << ">\n";
-	}
-
-	output_ << indent(indent_level) << "</member_enum>\n";
 }
 
 void
@@ -895,47 +445,6 @@ semantic_graph_serializer::serialize_function_parameter
 }
 
 void
-semantic_graph_serializer::serialize_variable
-(
-	const variable& entity,
-	const unsigned int indent_level
-)
-{
-	output_ << indent(indent_level) << "<variable";
-	output_ << " " << id_attribute_to_string(entity);
-	output_ << " name=\"" << entity.name() << "\"";
-	if(entity.is_static())
-		output_ << " static=\"true\"";
-	output_ << ">\n";
-	output_ << indent(indent_level + 1) << "<type>\n";
-	serialize_type(entity.type(), indent_level + 2);
-	output_ << indent(indent_level + 1) << "</type>\n";
-	output_ << indent(indent_level) << "</variable>\n";
-}
-
-void
-semantic_graph_serializer::serialize_variable
-(
-	const member_variable& entity,
-	const unsigned int indent_level
-)
-{
-	output_ << indent(indent_level) << "<member_variable";
-	output_ << " " << id_attribute_to_string(entity);
-	output_ << " name=\"" << entity.name() << "\"";
-	output_ << attribute(entity.access());
-	if(entity.is_mutable())
-		output_ << " mutable=\"true\"";
-	if(entity.is_static())
-		output_ << " static=\"true\"";
-	output_ << ">\n";
-	output_ << indent(indent_level + 1) << "<type>\n";
-	serialize_type(entity.type(), indent_level + 2);
-	output_ << indent(indent_level + 1) << "</type>\n";
-	output_ << indent(indent_level) << "</member_variable>\n";
-}
-
-void
 semantic_graph_serializer::serialize_bit_field
 (
 	const bit_field& entity,
@@ -958,41 +467,6 @@ semantic_graph_serializer::serialize_bit_field
 }
 
 void
-semantic_graph_serializer::serialize_typedef
-(
-	const typedef_& entity,
-	const unsigned int indent_level
-)
-{
-	output_ << indent(indent_level) << "<typedef";
-	output_ << " " << id_attribute_to_string(entity);
-	output_ << " name=\"" << entity.name() << "\"";
-	output_ << ">\n";
-	output_ << indent(indent_level + 1) << "<type>\n";
-	serialize_type(entity.type(), indent_level + 2);
-	output_ << indent(indent_level + 1) << "</type>\n";
-	output_ << indent(indent_level) << "</typedef>\n";
-}
-
-void
-semantic_graph_serializer::serialize_typedef
-(
-	const member_typedef& entity,
-	const unsigned int indent_level
-)
-{
-	output_ << indent(indent_level) << "<member_typedef";
-	output_ << " " << id_attribute_to_string(entity);
-	output_ << " name=\"" << entity.name() << "\"";
-	output_ << attribute(entity.access());
-	output_ << ">\n";
-	output_ << indent(indent_level + 1) << "<type>\n";
-	serialize_type(entity.type(), indent_level + 2);
-	output_ << indent(indent_level + 1) << "</type>\n";
-	output_ << indent(indent_level) << "</member_typedef>\n";
-}
-
-void
 semantic_graph_serializer::serialize_namespace_alias
 (
 	const namespace_alias& entity,
@@ -1004,6 +478,46 @@ semantic_graph_serializer::serialize_namespace_alias
 	output_ << " namespace_id=\"" << get_id(entity.referred_namespace()) << "\"";
 	output_ << "/>\n";
 }
+
+
+
+#define serialize_member(TYPE, FUNCTION) \
+template<> \
+void \
+semantic_graph_serializer::serialize_member<semantic_entities::TYPE> \
+( \
+	const semantic_entities::TYPE& entity, \
+	const unsigned int indent_level \
+) \
+{ \
+	FUNCTION(entity, indent_level); \
+}
+
+serialize_member(namespace_alias, serialize_namespace_alias)
+serialize_member(namespace_, serialize_namespace)
+serialize_member(linked_namespace, serialize_namespace)
+serialize_member(unnamed_namespace, serialize_unnamed_namespace)
+serialize_member(linked_unnamed_namespace, serialize_unnamed_namespace)
+serialize_member(class_, serialize_class)
+serialize_member(member_class, serialize_class)
+serialize_member(union_, serialize_class)
+serialize_member(member_union, serialize_class)
+serialize_member(enum_, serialize_enum)
+serialize_member(member_enum, serialize_enum)
+serialize_member(typedef_, serialize_typedef)
+serialize_member(member_typedef, serialize_typedef)
+serialize_member(constructor, serialize_constructor)
+serialize_member(destructor, serialize_destructor)
+serialize_member(operator_member_function, serialize_operator_member_function)
+serialize_member(conversion_function, serialize_conversion_function)
+serialize_member(simple_member_function, serialize_simple_member_function)
+serialize_member(operator_function, serialize_operator_function)
+serialize_member(simple_function, serialize_simple_function)
+serialize_member(variable, serialize_variable)
+serialize_member(member_variable, serialize_variable)
+serialize_member(bit_field, serialize_bit_field)
+
+#undef serialize_member
 
 
 

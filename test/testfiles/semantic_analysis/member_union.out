@@ -3,16 +3,16 @@
   <union id="0" name="inner" access="private">
    <destructor access="public" defined="false">
    </destructor>
-   <member_variable id="0" name="d" access="public">
+   <variable id="0" name="d" access="public">
     <type>
      <fundamental_type type="double"/>
     </type>
-   </member_variable>
-   <member_variable id="1" name="i" access="public">
+   </variable>
+   <variable id="1" name="i" access="public">
     <type>
      <fundamental_type type="int"/>
     </type>
-   </member_variable>
+   </variable>
   </union>
   <destructor access="public" defined="false">
   </destructor>
@@ -21,29 +21,29 @@
   <union id="1" name="inner" access="public">
    <destructor access="public" defined="false">
    </destructor>
-   <member_variable id="2" name="d" access="public">
+   <variable id="2" name="d" access="public">
     <type>
      <fundamental_type type="double"/>
     </type>
-   </member_variable>
-   <member_variable id="3" name="i" access="public">
+   </variable>
+   <variable id="3" name="i" access="public">
     <type>
      <fundamental_type type="int"/>
     </type>
-   </member_variable>
+   </variable>
   </union>
   <destructor access="public" defined="false">
   </destructor>
-  <member_variable id="4" name="c" access="public">
+  <variable id="4" name="c" access="public">
    <type>
     <fundamental_type type="char"/>
    </type>
-  </member_variable>
-  <member_variable id="5" name="i" access="public">
+  </variable>
+  <variable id="5" name="i" access="public">
    <type>
     <member_union id="1"/>
    </type>
-  </member_variable>
+  </variable>
  </union>
  <variable id="0" name="ui">
   <type>

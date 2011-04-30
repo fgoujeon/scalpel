@@ -32,10 +32,10 @@
     </parameter>
    </parameters>
   </simple_member_function>
-  <member_variable id="0" name="size_" access="private">
+  <variable id="0" name="size_" access="private">
    <type>
     <fundamental_type type="unsigned int"/>
    </type>
-  </member_variable>
+  </variable>
  </class>
 </namespace>

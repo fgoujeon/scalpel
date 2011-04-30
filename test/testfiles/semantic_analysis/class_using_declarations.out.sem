@@ -1,16 +1,16 @@
 <namespace id="0">
  <class id="0" name="s">
-  <member_class id="0" name="inner" access="public">
+  <class id="0" name="inner" access="public">
    <destructor access="public" defined="false">
    </destructor>
-  </member_class>
-  <member_enum name="e" id="0">
-  </member_enum>
-  <member_typedef id="0" name="integer" access="public">
+  </class>
+  <enum id="0" name="e" access="public">
+  </enum>
+  <typedef id="0" name="integer" access="public">
    <type>
     <fundamental_type type="int"/>
    </type>
-  </member_typedef>
+  </typedef>
   <destructor access="public" defined="false">
   </destructor>
   <operator_member_function id="0" operator="[]" access="public" const="true" defined="false">
@@ -35,11 +35,11 @@
     <fundamental_type type="void"/>
    </return_type>
   </simple_member_function>
-  <member_variable id="0" name="i" access="public">
+  <variable id="0" name="i" access="public">
    <type>
     <fundamental_type type="int"/>
    </type>
-  </member_variable>
+  </variable>
   <bit_field id="0" name="j" size="0" access="public">
    <type>
     <fundamental_type type="int"/>
@@ -62,7 +62,7 @@
   <bit_field_alias bit_field_id="0" access="public"/>
  </class>
  <class id="2" name="s3">
-  <member_class id="1" name="inner3" access="public">
+  <class id="1" name="inner3" access="public">
    <base_classes>
     <base_class  class_id="0" access="private"/>
    </base_classes>
@@ -76,7 +76,7 @@
    <simple_member_function_alias simple_member_function_id="0" access="private"/>
    <member_variable_alias member_variable_id="0" access="private"/>
    <bit_field_alias bit_field_id="0" access="private"/>
-  </member_class>
+  </class>
   <destructor access="public" defined="false">
   </destructor>
  </class>

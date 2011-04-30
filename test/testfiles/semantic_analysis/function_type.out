@@ -1,6 +1,6 @@
 <namespace id="0">
  <class id="0" name="c">
-  <member_typedef id="0" name="const_fun_t" access="private">
+  <typedef id="0" name="const_fun_t" access="private">
    <type>
     <function_type const="true">
      <return_type>
@@ -10,7 +10,7 @@
      </parameter_types>
     </function_type>
    </type>
-  </member_typedef>
+  </typedef>
   <destructor access="public" defined="false">
   </destructor>
   <simple_member_function id="0" name="f" access="private">
