@@ -28,9 +28,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <scalpel/cpp/semantic_entities/type_traits/has_members_of_type.hpp>
 #include <scalpel/cpp/semantic_entities/type_traits/is_member.hpp>
 #include <scalpel/cpp/semantic_entities/type_traits/can_be_mutable.hpp>
+#include <scalpel/cpp/semantic_entities/type_traits/can_be_static.hpp>
 #include <scalpel/cpp/semantic_entities/generic_queries/detail/get_entity_aliases.hpp>
 #include <scalpel/cpp/semantic_entities/generic_queries/detail/get_members.hpp>
 #include <scalpel/cpp/semantic_graph.hpp>
+#include <boost/type_traits/is_same.hpp>
 #include <string>
 #include <map>
 #include <sstream>
@@ -65,6 +67,9 @@ MARKUP_NAME(class_, "class")
 MARKUP_NAME(member_class, "class")
 MARKUP_NAME(union_, "union")
 MARKUP_NAME(member_union, "union")
+MARKUP_NAME(variable, "variable")
+MARKUP_NAME(member_variable, "variable")
+MARKUP_NAME(bit_field, "bit_field")
 
 #undef MARKUP_NAME
 
@@ -209,13 +214,6 @@ class semantic_graph_serializer
 		serialize_variable
 		(
 			const Variable& entity,
-			const unsigned int indent_level
-		);
-
-		void
-		serialize_bit_field
-		(
-			const bit_field& entity,
 			const unsigned int indent_level
 		);
 
@@ -471,6 +469,25 @@ class semantic_graph_serializer
 
 		template<class Entity>
 		void
+		serialize_static_property
+		(
+			const Entity& entity,
+			typename boost::enable_if<scalpel::cpp::semantic_entities::type_traits::can_be_static<Entity>>::type* = 0
+		);
+
+		template<class Entity>
+		void
+		serialize_static_property
+		(
+			const Entity&,
+			typename boost::disable_if<scalpel::cpp::semantic_entities::type_traits::can_be_static<Entity>>::type* = 0
+		)
+		{
+			//does nothing
+		}
+
+		template<class Entity>
+		void
 		serialize_mutable_property
 		(
 			const Entity& entity,
@@ -483,6 +500,25 @@ class semantic_graph_serializer
 		(
 			const Entity&,
 			typename boost::disable_if<scalpel::cpp::semantic_entities::type_traits::can_be_mutable<Entity>>::type* = 0
+		)
+		{
+			//does nothing
+		}
+
+		template<class Entity>
+		void
+		serialize_bit_field_size_property
+		(
+			const Entity& entity,
+			typename boost::enable_if<boost::is_same<Entity, bit_field>>::type* = 0
+		);
+
+		template<class Entity>
+		void
+		serialize_bit_field_size_property
+		(
+			const Entity&,
+			typename boost::disable_if<boost::is_same<Entity, bit_field>>::type* = 0
 		)
 		{
 			//does nothing

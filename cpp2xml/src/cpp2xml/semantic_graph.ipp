@@ -119,18 +119,19 @@ semantic_graph_serializer::serialize_variable
 	const unsigned int indent_level
 )
 {
-	output_ << detail::indent(indent_level) << "<variable";
+	output_ << detail::indent(indent_level) << "<" << markup_name<Variable>::value;
 	output_ << " " << id_attribute_to_string(entity);
-	output_ << " name=\"" << entity.name() << "\"";
+	if(!entity.name().empty())
+		output_ << " name=\"" << entity.name() << "\"";
+	serialize_bit_field_size_property(entity);
 	serialize_access_property(entity);
 	serialize_mutable_property(entity);
-	if(entity.is_static())
-		output_ << " static=\"true\"";
+	serialize_static_property(entity);
 	output_ << ">\n";
 	output_ << detail::indent(indent_level + 1) << "<type>\n";
 	serialize_type(entity.type(), indent_level + 2);
 	output_ << detail::indent(indent_level + 1) << "</type>\n";
-	output_ << detail::indent(indent_level) << "</variable>\n";
+	output_ << detail::indent(indent_level) << "</" << markup_name<Variable>::value << ">\n";
 }
 
 template<class Typedef>
@@ -200,6 +201,18 @@ semantic_graph_serializer::serialize_access_property
 
 template<class Entity>
 void
+semantic_graph_serializer::serialize_static_property
+(
+	const Entity& entity,
+	typename boost::enable_if<scalpel::cpp::semantic_entities::type_traits::can_be_static<Entity>>::type*
+)
+{
+	if(entity.is_static())
+		output_ << " static=\"true\"";
+}
+
+template<class Entity>
+void
 semantic_graph_serializer::serialize_mutable_property
 (
 	const Entity& entity,
@@ -208,6 +221,17 @@ semantic_graph_serializer::serialize_mutable_property
 {
 	if(entity.is_mutable())
 		output_ << " mutable=\"true\"";
+}
+
+template<class Entity>
+void
+semantic_graph_serializer::serialize_bit_field_size_property
+(
+	const Entity& entity,
+	typename boost::enable_if<boost::is_same<Entity, bit_field>>::type*
+)
+{
+	output_ << " size=\"" << entity.size() << "\"";
 }
 
 } //namespace cpp2xml

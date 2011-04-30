@@ -445,28 +445,6 @@ semantic_graph_serializer::serialize_function_parameter
 }
 
 void
-semantic_graph_serializer::serialize_bit_field
-(
-	const bit_field& entity,
-	const unsigned int indent_level
-)
-{
-	output_ << indent(indent_level) << "<bit_field";
-	output_ << " " << id_attribute_to_string(entity);
-	if(!entity.name().empty())
-		output_ << " name=\"" << entity.name() << "\"";
-	output_ << " size=\"" << entity.size() << "\"";
-	output_ << attribute(entity.access());
-	if(entity.is_mutable())
-		output_ << " mutable=\"true\"";
-	output_ << ">\n";
-	output_ << indent(indent_level + 1) << "<type>\n";
-	serialize_type(entity.type(), indent_level + 2);
-	output_ << indent(indent_level + 1) << "</type>\n";
-	output_ << indent(indent_level) << "</bit_field>\n";
-}
-
-void
 semantic_graph_serializer::serialize_namespace_alias
 (
 	const namespace_alias& entity,
@@ -515,7 +493,7 @@ serialize_member(operator_function, serialize_operator_function)
 serialize_member(simple_function, serialize_simple_function)
 serialize_member(variable, serialize_variable)
 serialize_member(member_variable, serialize_variable)
-serialize_member(bit_field, serialize_bit_field)
+serialize_member(bit_field, serialize_variable)
 
 #undef serialize_member
 
