@@ -30,15 +30,16 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define GENERATE_CLASS_DEFINITION( \
 	CLASS_NAME, \
 	IS_MEMBER, \
+	HAS_NAME, \
 	HAS_BASE_CLASSES, \
 	HAS_ENTITY_ALIASES \
 ) \
 CLASS_NAME::CLASS_NAME \
 ( \
-	const std::string& name BOOST_PP_COMMA_IF(IS_MEMBER) \
+	BOOST_PP_IIF(HAS_NAME, const std::string& name,) BOOST_PP_COMMA_IF(BOOST_PP_AND(HAS_NAME, IS_MEMBER)) \
 	BOOST_PP_IIF(IS_MEMBER, const member_access access,) \
 ): \
-    name_(name), \
+    BOOST_PP_IIF(HAS_NAME, name_(name),) BOOST_PP_COMMA_IF(HAS_NAME) \
 	BOOST_PP_IIF(IS_MEMBER, access_(access),) BOOST_PP_COMMA_IF(IS_MEMBER) \
 	complete_(false) \
 { \
@@ -86,10 +87,12 @@ CLASS_NAME::reset_destructor() \
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-GENERATE_CLASS_DEFINITION(class_, 0, 1, 1)
-GENERATE_CLASS_DEFINITION(member_class, 1, 1, 1)
-GENERATE_CLASS_DEFINITION(union_, 0, 0, 0)
-GENERATE_CLASS_DEFINITION(member_union, 1, 0, 0)
+GENERATE_CLASS_DEFINITION(class_,                 0, 1, 1, 1)
+GENERATE_CLASS_DEFINITION(member_class,           1, 1, 1, 1)
+GENERATE_CLASS_DEFINITION(union_,                 0, 1, 0, 0)
+GENERATE_CLASS_DEFINITION(member_union,           1, 1, 0, 0)
+GENERATE_CLASS_DEFINITION(anonymous_union,        0, 0, 0, 0)
+GENERATE_CLASS_DEFINITION(anonymous_member_union, 1, 0, 0, 0)
 
 }}} //namespace scalpel::cpp::semantic_entities
 

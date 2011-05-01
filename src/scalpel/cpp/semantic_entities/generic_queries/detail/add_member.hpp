@@ -69,6 +69,22 @@ add_member(member_union& declarative_region, std::unique_ptr<destructor>&& entit
 template<>
 inline
 void
+add_member(anonymous_union&, std::unique_ptr<destructor>&&)
+{
+	assert(false);
+}
+
+template<>
+inline
+void
+add_member(anonymous_member_union&, std::unique_ptr<destructor>&&)
+{
+	assert(false);
+}
+
+template<>
+inline
+void
 add_member(linked_unnamed_namespace& declarative_region, std::unique_ptr<linked_unnamed_namespace>&& entity)
 {
 	assert(declarative_region.get_unnamed_namespace() == 0);

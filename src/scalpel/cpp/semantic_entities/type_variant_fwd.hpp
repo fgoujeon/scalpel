@@ -32,6 +32,8 @@ class class_;
 class member_class;
 class union_;
 class member_union;
+class anonymous_union;
+class anonymous_member_union;
 class cv_qualified_type;
 class enum_;
 class member_enum;
@@ -50,6 +52,8 @@ typedef
 		member_class*,
 		union_*,
 		member_union*,
+		anonymous_union*,
+		anonymous_member_union*,
 		cv_qualified_type,
 		enum_*,
 		member_enum*,

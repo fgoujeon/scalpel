@@ -123,6 +123,18 @@ namespace
 		}
 
 		std::string
+		operator()(const anonymous_union* entity)
+		{
+			return create_unique_id(*entity);
+		}
+
+		std::string
+		operator()(const anonymous_member_union* entity)
+		{
+			return create_unique_id(*entity);
+		}
+
+		std::string
 		operator()(const function_type& entity)
 		{
 			return to_string(entity.return_type()) + to_string(entity.parameter_types());
@@ -292,6 +304,18 @@ std::string
 create_unique_id(const semantic_entities::member_union& entity)
 {
 	return create_enclosing_declarative_region_unique_id(entity) + entity.name();
+}
+
+std::string
+create_unique_id(const semantic_entities::anonymous_union& entity)
+{
+	return create_enclosing_declarative_region_unique_id(entity);
+}
+
+std::string
+create_unique_id(const semantic_entities::anonymous_member_union& entity)
+{
+	return create_enclosing_declarative_region_unique_id(entity);
 }
 
 std::string

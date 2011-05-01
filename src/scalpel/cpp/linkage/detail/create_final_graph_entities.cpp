@@ -600,6 +600,22 @@ namespace
 			}
 
 			type_variant
+			operator()(const anonymous_union* type) const
+			{
+				auto it = final_entities_.anonymous_unions.find(type);
+				assert(it != final_entities_.anonymous_unions.end());
+				return it->second;
+			}
+
+			type_variant
+			operator()(const anonymous_member_union* type) const
+			{
+				auto it = final_entities_.anonymous_member_unions.find(type);
+				assert(it != final_entities_.anonymous_member_unions.end());
+				return it->second;
+			}
+
+			type_variant
 			operator()(const cv_qualified_type& type) const
 			{
 				return cv_qualified_type

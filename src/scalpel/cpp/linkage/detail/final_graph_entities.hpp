@@ -53,6 +53,8 @@ struct final_graph_entities
 	std::map<const semantic_entities::member_class*, semantic_entities::member_class*> member_classes;
 	std::map<const semantic_entities::union_*, semantic_entities::union_*> unions;
 	std::map<const semantic_entities::member_union*, semantic_entities::member_union*> member_unions;
+	std::map<const semantic_entities::anonymous_union*, semantic_entities::anonymous_union*> anonymous_unions;
+	std::map<const semantic_entities::anonymous_member_union*, semantic_entities::anonymous_member_union*> anonymous_member_unions;
 	std::map<const semantic_entities::enum_*, semantic_entities::enum_*> enums;
 	std::map<const semantic_entities::member_enum*, semantic_entities::member_enum*> member_enums;
 	std::map<const semantic_entities::typedef_*, semantic_entities::typedef_*> typedefs;

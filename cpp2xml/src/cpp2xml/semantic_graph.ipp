@@ -70,8 +70,7 @@ semantic_graph_serializer::serialize_class
 {
 	output_ << detail::indent(indent_level) << "<" << markup_name<Class>::value;
 	output_ << " " << id_attribute_to_string(entity);
-	if(!entity.name().empty())
-		output_ << " name=\"" << entity.name() << "\"";
+	serialize_name_property(entity);
 	serialize_access_property(entity);
 	if(!entity.complete())
 		output_ << " complete=\"false\"";
@@ -174,6 +173,18 @@ semantic_graph_serializer::serialize_base_classes
 }
 
 
+
+template<class Entity>
+void
+semantic_graph_serializer::serialize_name_property
+(
+	const Entity& entity,
+	typename boost::enable_if<scalpel::cpp::semantic_entities::type_traits::has_name<Entity>>::type*
+)
+{
+	if(!entity.name().empty())
+		output_ << " name=\"" << entity.name() << "\"";
+}
 
 template<class Entity>
 void

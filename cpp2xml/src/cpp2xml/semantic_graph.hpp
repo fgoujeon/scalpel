@@ -23,6 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "detail/type_to_string.hpp"
 #include "detail/basic_print_functions.hpp"
+#include <scalpel/cpp/semantic_entities/type_traits/has_name.hpp>
 #include <scalpel/cpp/semantic_entities/type_traits/has_base_classes.hpp>
 #include <scalpel/cpp/semantic_entities/type_traits/has_entity_aliases_of_type.hpp>
 #include <scalpel/cpp/semantic_entities/type_traits/has_members_of_type.hpp>
@@ -67,6 +68,8 @@ MARKUP_NAME(class_, "class")
 MARKUP_NAME(member_class, "class")
 MARKUP_NAME(union_, "union")
 MARKUP_NAME(member_union, "union")
+MARKUP_NAME(anonymous_union, "anonymous_union")
+MARKUP_NAME(anonymous_member_union, "anonymous_union")
 MARKUP_NAME(variable, "variable")
 MARKUP_NAME(member_variable, "variable")
 MARKUP_NAME(bit_field, "bit_field")
@@ -87,6 +90,67 @@ class semantic_graph_serializer
 		operator()(const linked_namespace& entity);
 
 	private:
+		class serialize_type_visitor: public scalpel::utility::static_visitor<void>
+		{
+			public:
+				serialize_type_visitor
+				(
+					semantic_graph_serializer& serializer,
+					const unsigned int indent_level
+				);
+
+				void
+				operator()(const fundamental_type& type);
+
+				void
+				operator()(const function_type& type);
+
+				void
+				operator()(const cv_qualified_type& type);
+
+				void
+				operator()(const pointer& type);
+
+				void
+				operator()(const pointer_to_member& type);
+
+				void
+				operator()(const reference& type);
+
+				void
+				operator()(const array& type);
+
+				void
+				operator()(const class_* type);
+
+				void
+				operator()(const member_class* type);
+
+				void
+				operator()(const union_* type);
+
+				void
+				operator()(const member_union* type);
+
+				void
+				operator()(const anonymous_union* type);
+
+				void
+				operator()(const anonymous_member_union* type);
+
+				void
+				operator()(const enum_* type);
+
+				void
+				operator()(const member_enum* type);
+
+			private:
+				semantic_graph_serializer& serializer_;
+				std::ostream& output_;
+				const unsigned int indent_level_;
+		};
+		friend class serialize_type_visitor;
+
 		void
 		serialize_type
 		(
@@ -274,6 +338,8 @@ class semantic_graph_serializer
 			serialize_members_of_type<member_class>(declarative_region, indent_level);
 			serialize_members_of_type<union_>(declarative_region, indent_level);
 			serialize_members_of_type<member_union>(declarative_region, indent_level);
+			serialize_members_of_type<anonymous_union>(declarative_region, indent_level);
+			serialize_members_of_type<anonymous_member_union>(declarative_region, indent_level);
 			serialize_members_of_type<enum_>(declarative_region, indent_level);
 			serialize_members_of_type<member_enum>(declarative_region, indent_level);
 			serialize_members_of_type<typedef_>(declarative_region, indent_level);
@@ -450,6 +516,25 @@ class semantic_graph_serializer
 
 		template<class Entity>
 		void
+		serialize_name_property
+		(
+			const Entity& entity,
+			typename boost::enable_if<scalpel::cpp::semantic_entities::type_traits::has_name<Entity>>::type* = 0
+		);
+
+		template<class Entity>
+		void
+		serialize_name_property
+		(
+			const Entity&,
+			typename boost::disable_if<scalpel::cpp::semantic_entities::type_traits::has_name<Entity>>::type* = 0
+		)
+		{
+			//does nothing
+		}
+
+		template<class Entity>
+		void
 		serialize_access_property
 		(
 			const Entity& entity,
@@ -545,6 +630,8 @@ class semantic_graph_serializer
 			set_id_of_members_of_type<member_class>(entity);
 			set_id_of_members_of_type<union_>(entity);
 			set_id_of_members_of_type<member_union>(entity);
+			set_id_of_members_of_type<anonymous_union>(entity);
+			set_id_of_members_of_type<anonymous_member_union>(entity);
 			set_id_of_members_of_type<enum_>(entity);
 			set_id_of_members_of_type<member_enum>(entity);
 			set_id_of_members_of_type<typedef_>(entity);
@@ -623,6 +710,8 @@ class semantic_graph_serializer
 		typename entity_id_map<semantic_entities::member_class>::type member_class_id_map_;
 		typename entity_id_map<semantic_entities::union_>::type union_id_map_;
 		typename entity_id_map<semantic_entities::member_union>::type member_union_id_map_;
+		typename entity_id_map<semantic_entities::anonymous_union>::type anonymous_union_id_map_;
+		typename entity_id_map<semantic_entities::anonymous_member_union>::type anonymous_member_union_id_map_;
 		typename entity_id_map<semantic_entities::enum_>::type enum_id_map_;
 		typename entity_id_map<semantic_entities::member_enum>::type member_enum_id_map_;
 		typename entity_id_map<semantic_entities::typedef_>::type typedef_id_map_;

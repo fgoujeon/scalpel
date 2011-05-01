@@ -41,6 +41,18 @@ namespace
 		}
 
 		const std::string&
+		operator()(anonymous_union*) const
+		{
+			return utility::extern_strings::empty;
+		}
+
+		const std::string&
+		operator()(anonymous_member_union*) const
+		{
+			return utility::extern_strings::empty;
+		}
+
+		const std::string&
 		operator()(unnamed_namespace*) const
 		{
 			return utility::extern_strings::empty;

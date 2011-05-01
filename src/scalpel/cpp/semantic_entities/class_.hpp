@@ -34,6 +34,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <scalpel/utility/vector_range.hpp>
 #include <scalpel/utility/unique_ptr_vector.hpp>
 #include <scalpel/utility/const_ptr_variant.hpp>
+#include <boost/preprocessor/logical/and.hpp>
 #include <boost/preprocessor/control/iif.hpp>
 #include <boost/preprocessor/punctuation/comma_if.hpp>
 #include <boost/preprocessor/punctuation/comma.hpp>
@@ -44,6 +45,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define GENERATE_CLASS_DECLARATION( \
 	CLASS_NAME, \
 	IS_MEMBER, \
+	HAS_NAME, \
 	HAS_BASE_CLASSES, \
 	HAS_ENTITY_ALIASES \
 ) \
@@ -87,7 +89,7 @@ class CLASS_NAME \
         explicit \
         CLASS_NAME \
 		( \
-			const std::string& name BOOST_PP_COMMA_IF(IS_MEMBER) \
+			BOOST_PP_IIF(HAS_NAME, const std::string& name,) BOOST_PP_COMMA_IF(BOOST_PP_AND(HAS_NAME, IS_MEMBER)) \
 			BOOST_PP_IIF(IS_MEMBER, const member_access access = member_access::PUBLIC,) \
 		); \
  \
@@ -96,11 +98,15 @@ class CLASS_NAME \
         const CLASS_NAME& \
 		operator=(const CLASS_NAME&) = delete; \
  \
-        const std::string& \
-        name() const \
-		{ \
-			return name_; \
-		} \
+		BOOST_PP_IIF \
+		( \
+			HAS_NAME, \
+			const std::string& \
+			name() const \
+			{ \
+				return name_; \
+			}, \
+		) \
  \
 		bool \
 		complete() const \
@@ -139,7 +145,11 @@ class CLASS_NAME \
 		reset_destructor(); \
  \
     private: \
-        std::string name_; \
+		BOOST_PP_IIF \
+		( \
+			HAS_NAME, \
+			std::string name_;, \
+		) \
 		BOOST_PP_IIF \
 		( \
 			IS_MEMBER, \
@@ -182,17 +192,19 @@ typedef
 ;
 
 typedef
-	impl::detail::declarative_region_member_impl<class_, member_class, union_, member_union>
+	impl::detail::declarative_region_member_impl<class_, member_class, union_, member_union, anonymous_union, anonymous_member_union>
 	member_class_declarative_region_member_impl_t
 ;
 
 class member_class;
 class union_;
 class member_union;
-GENERATE_CLASS_DECLARATION(class_, 0, 1, 1)
-GENERATE_CLASS_DECLARATION(member_class, 1, 1, 1)
-GENERATE_CLASS_DECLARATION(union_, 0, 0, 0)
-GENERATE_CLASS_DECLARATION(member_union, 1, 0, 0)
+GENERATE_CLASS_DECLARATION(class_,                 0, 1, 1, 1)
+GENERATE_CLASS_DECLARATION(member_class,           1, 1, 1, 1)
+GENERATE_CLASS_DECLARATION(union_,                 0, 1, 0, 0)
+GENERATE_CLASS_DECLARATION(member_union,           1, 1, 0, 0)
+GENERATE_CLASS_DECLARATION(anonymous_union,        0, 0, 0, 0)
+GENERATE_CLASS_DECLARATION(anonymous_member_union, 1, 0, 0, 0)
 
 }}} //namespace scalpel::cpp::semantic_entities
 

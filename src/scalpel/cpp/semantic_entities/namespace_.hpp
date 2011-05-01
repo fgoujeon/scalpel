@@ -86,6 +86,7 @@ struct CLASS_NAME \
 	) \
 	MEMBER_DECLARATION(class_, classes) \
 	MEMBER_DECLARATION(union_, unions) \
+	MEMBER_DECLARATION(anonymous_union, anonymous_unions) \
 	MEMBER_DECLARATION(enum_, enums) \
 	MEMBER_DECLARATION(typedef_, typedefs) \
 	MEMBER_DECLARATION(simple_function, simple_functions) \

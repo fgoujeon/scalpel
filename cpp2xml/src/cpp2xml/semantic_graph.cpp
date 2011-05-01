@@ -47,6 +47,128 @@ semantic_graph_serializer::operator()(const linked_namespace& entity)
 	serialize_namespace(entity);
 }
 
+
+
+semantic_graph_serializer::serialize_type_visitor::serialize_type_visitor
+(
+	semantic_graph_serializer& serializer,
+	const unsigned int indent_level
+):
+	serializer_(serializer),
+	output_(serializer_.output_),
+	indent_level_(indent_level)
+{
+}
+
+void
+semantic_graph_serializer::serialize_type_visitor::operator()(const fundamental_type& type)
+{
+	output_ << indent(indent_level_) << "<fundamental_type type=\"";
+	serializer_.serialize_fundamental_type(type);
+	output_ << "\"/>\n";
+}
+
+void
+semantic_graph_serializer::serialize_type_visitor::operator()(const function_type& type)
+{
+	serializer_.serialize_function_type(type, indent_level_);
+}
+
+void
+semantic_graph_serializer::serialize_type_visitor::operator()(const cv_qualified_type& type)
+{
+	output_ << indent(indent_level_) << "<cv_qualified_type";
+	if(type.const_qualified())
+		output_ << " const=\"true\"";
+	if(type.volatile_qualified())
+		output_ << " volatile=\"true\"";
+	output_ << ">\n";
+	serializer_.serialize_type((type).qualified_type(), indent_level_ + 1);
+	output_ << indent(indent_level_) << "</cv_qualified_type>\n";
+}
+
+void
+semantic_graph_serializer::serialize_type_visitor::operator()(const pointer& type)
+{
+	output_ << indent(indent_level_) << "<pointer>\n";
+	serializer_.serialize_type((type).qualified_type(), indent_level_ + 1);
+	output_ << indent(indent_level_) << "</pointer>\n";
+}
+
+void
+semantic_graph_serializer::serialize_type_visitor::operator()(const pointer_to_member& type)
+{
+	output_ << indent(indent_level_) << "<pointer_to_member ";
+	serializer_.serialize_class_id_attribute(type.parent_class());
+	output_ << ">\n";
+	serializer_.serialize_type((type).qualified_type(), indent_level_ + 1);
+	output_ << indent(indent_level_) << "</pointer_to_member>\n";
+}
+
+void
+semantic_graph_serializer::serialize_type_visitor::operator()(const reference& type)
+{
+	output_ << indent(indent_level_) << "<reference>\n";
+	serializer_.serialize_type((type).qualified_type(), indent_level_ + 1);
+	output_ << indent(indent_level_) << "</reference>\n";
+}
+
+void
+semantic_graph_serializer::serialize_type_visitor::operator()(const array& type)
+{
+	output_ << indent(indent_level_) << "<array size=\"" << type.size() << "\">\n";
+	serializer_.serialize_type(type.qualified_type(), indent_level_ + 1);
+	output_ << indent(indent_level_) << "</array>\n";
+}
+
+void
+semantic_graph_serializer::serialize_type_visitor::operator()(const class_* type)
+{
+	output_ << indent(indent_level_) << "<class id=\"" << serializer_.get_id(*type) << "\"/>\n";
+}
+
+void
+semantic_graph_serializer::serialize_type_visitor::operator()(const member_class* type)
+{
+	output_ << indent(indent_level_) << "<member_class id=\"" << serializer_.get_id(*type) << "\"/>\n";
+}
+
+void
+semantic_graph_serializer::serialize_type_visitor::operator()(const union_* type)
+{
+	output_ << indent(indent_level_) << "<union id=\"" << serializer_.get_id(*type) << "\"/>\n";
+}
+
+void
+semantic_graph_serializer::serialize_type_visitor::operator()(const member_union* type)
+{
+	output_ << indent(indent_level_) << "<member_union id=\"" << serializer_.get_id(*type) << "\"/>\n";
+}
+
+void
+semantic_graph_serializer::serialize_type_visitor::operator()(const anonymous_union* type)
+{
+	output_ << indent(indent_level_) << "<anonymous_union id=\"" << serializer_.get_id(*type) << "\"/>\n";
+}
+
+void
+semantic_graph_serializer::serialize_type_visitor::operator()(const anonymous_member_union* type)
+{
+	output_ << indent(indent_level_) << "<anonymous_member_union id=\"" << serializer_.get_id(*type) << "\"/>\n";
+}
+
+void
+semantic_graph_serializer::serialize_type_visitor::operator()(const enum_* type)
+{
+	output_ << indent(indent_level_) << "<enum id=\"" << serializer_.get_id(*type) << "\"/>\n";
+}
+
+void
+semantic_graph_serializer::serialize_type_visitor::operator()(const member_enum* type)
+{
+	output_ << indent(indent_level_) << "<member_enum id=\"" << serializer_.get_id(*type) << "\"/>\n";
+}
+
 void
 semantic_graph_serializer::serialize_type
 (
@@ -54,78 +176,11 @@ semantic_graph_serializer::serialize_type
 	const unsigned int indent_level
 )
 {
-	if(auto opt_type = scalpel::utility::get<fundamental_type>(&n))
-	{
-		output_ << indent(indent_level) << "<fundamental_type type=\"";
-		serialize_fundamental_type(*opt_type);
-	   	output_ << "\"/>\n";
-	}
-	else if(const function_type* opt_type = scalpel::utility::get<function_type>(&n))
-	{
-		serialize_function_type(*opt_type, indent_level);
-	}
-	else if(auto opt_type = scalpel::utility::get<cv_qualified_type>(&n))
-	{
-		output_ << indent(indent_level) << "<cv_qualified_type";
-		if(opt_type->const_qualified())
-			output_ << " const=\"true\"";
-		if(opt_type->volatile_qualified())
-			output_ << " volatile=\"true\"";
-		output_ << ">\n";
-		serialize_type((*opt_type).qualified_type(), indent_level + 1);
-		output_ << indent(indent_level) << "</cv_qualified_type>\n";
-	}
-	else if(auto opt_type = scalpel::utility::get<pointer>(&n))
-	{
-		output_ << indent(indent_level) << "<pointer>\n";
-		serialize_type((*opt_type).qualified_type(), indent_level + 1);
-		output_ << indent(indent_level) << "</pointer>\n";
-	}
-	else if(auto opt_type = scalpel::utility::get<pointer_to_member>(&n))
-	{
-		output_ << indent(indent_level) << "<pointer_to_member ";
-		serialize_class_id_attribute(opt_type->parent_class());
-		output_ << ">\n";
-		serialize_type((*opt_type).qualified_type(), indent_level + 1);
-		output_ << indent(indent_level) << "</pointer_to_member>\n";
-	}
-	else if(auto opt_type = scalpel::utility::get<reference>(&n))
-	{
-		output_ << indent(indent_level) << "<reference>\n";
-		serialize_type((*opt_type).qualified_type(), indent_level + 1);
-		output_ << indent(indent_level) << "</reference>\n";
-	}
-	else if(auto opt_type = scalpel::utility::get<array>(&n))
-	{
-		output_ << indent(indent_level) << "<array size=\"" << (*opt_type).size() << "\">\n";
-		serialize_type((*opt_type).qualified_type(), indent_level + 1);
-		output_ << indent(indent_level) << "</array>\n";
-	}
-	else if(auto opt_type = scalpel::utility::get<class_*>(&n))
-	{
-		output_ << indent(indent_level) << "<class id=\"" << get_id(**opt_type) << "\"/>\n";
-	}
-	else if(auto opt_type = scalpel::utility::get<member_class*>(&n))
-	{
-		output_ << indent(indent_level) << "<member_class id=\"" << get_id(**opt_type) << "\"/>\n";
-	}
-	else if(auto opt_type = scalpel::utility::get<union_*>(&n))
-	{
-		output_ << indent(indent_level) << "<union id=\"" << get_id(**opt_type) << "\"/>\n";
-	}
-	else if(auto opt_type = scalpel::utility::get<member_union*>(&n))
-	{
-		output_ << indent(indent_level) << "<member_union id=\"" << get_id(**opt_type) << "\"/>\n";
-	}
-	else if(auto opt_type = scalpel::utility::get<enum_*>(&n))
-	{
-		output_ << indent(indent_level) << "<enum id=\"" << get_id(**opt_type) << "\"/>\n";
-	}
-	else if(auto opt_type = scalpel::utility::get<member_enum*>(&n))
-	{
-		output_ << indent(indent_level) << "<member_enum id=\"" << get_id(**opt_type) << "\"/>\n";
-	}
+	serialize_type_visitor visitor(*this, indent_level);
+	apply_visitor(visitor, n);
 }
+
+
 
 void
 semantic_graph_serializer::serialize_fundamental_type
@@ -480,6 +535,8 @@ serialize_member(class_, serialize_class)
 serialize_member(member_class, serialize_class)
 serialize_member(union_, serialize_class)
 serialize_member(member_union, serialize_class)
+serialize_member(anonymous_union, serialize_class)
+serialize_member(anonymous_member_union, serialize_class)
 serialize_member(enum_, serialize_enum)
 serialize_member(member_enum, serialize_enum)
 serialize_member(typedef_, serialize_typedef)
@@ -699,6 +756,8 @@ ENTITY_ID_MAP_OF_TYPE(class_, class_id_map_)
 ENTITY_ID_MAP_OF_TYPE(member_class, member_class_id_map_)
 ENTITY_ID_MAP_OF_TYPE(union_, union_id_map_)
 ENTITY_ID_MAP_OF_TYPE(member_union, member_union_id_map_)
+ENTITY_ID_MAP_OF_TYPE(anonymous_union, anonymous_union_id_map_)
+ENTITY_ID_MAP_OF_TYPE(anonymous_member_union, anonymous_member_union_id_map_)
 ENTITY_ID_MAP_OF_TYPE(enum_, enum_id_map_)
 ENTITY_ID_MAP_OF_TYPE(member_enum, member_enum_id_map_)
 ENTITY_ID_MAP_OF_TYPE(typedef_, typedef_id_map_)

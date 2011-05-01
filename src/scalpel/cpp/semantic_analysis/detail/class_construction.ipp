@@ -272,14 +272,14 @@ template<class Class>
 void
 fill_class
 (
-	Class& class_entity,
+	Class&,
 	const semantic_entities::member_access,
 	const syntax_nodes::base_clause&,
 	typename boost::disable_if<semantic_entities::type_traits::has_base_classes<Class>>::type*
 )
 {
 	std::ostringstream oss;
-	oss << class_entity.name() << " is a union and cannot have base classes.";
+	oss << "A union cannot have base classes.";
 	throw std::runtime_error(oss.str().c_str());
 }
 
@@ -769,14 +769,14 @@ template<class Class>
 void
 fill_class
 (
-	Class& class_entity,
+	Class&,
 	const semantic_entities::member_access,
 	const syntax_nodes::using_declaration&,
 	typename boost::disable_if<semantic_entities::type_traits::has_entity_aliases<Class>>::type*
 )
 {
 	std::ostringstream oss;
-	oss << class_entity.name() << " is a union and cannot have using declarations.";
+	oss << "A union cannot have using declarations.";
 	throw std::runtime_error(oss.str().c_str());
 }
 

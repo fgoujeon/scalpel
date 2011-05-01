@@ -32,6 +32,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "syntax_node_analysis/declarator.hpp"
 #include "syntax_node_analysis/decl_specifier_seq.hpp"
 #include <scalpel/cpp/semantic_entities/generic_queries/detail/get_members.hpp>
+#include <iostream>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail
 {
@@ -243,11 +244,29 @@ fill_namespace
 				}
 				else
 				{
-					std::unique_ptr<union_> new_union = create_class<union_>(class_specifier_node);
-					union_& added_union = add_class(namespace_entity, std::move(new_union));
-					fill_class(added_union, class_specifier_node);
+					//is it an anonymous union?
+					const bool anonymous =
+						syntax_node_analysis::get_identifier(class_specifier_node).empty() &&
+						!get_init_declarator_list(simple_declaration_node)
+					;
 
-					opt_unqualified_type = &added_union;
+					if(anonymous)
+					{
+						std::unique_ptr<anonymous_union> new_union(new anonymous_union());
+						anonymous_union& added_union = *new_union;
+						namespace_entity.add_member(std::move(new_union));
+						fill_class(added_union, class_specifier_node);
+
+						opt_unqualified_type = &added_union;
+					}
+					else
+					{
+						std::unique_ptr<union_> new_union = create_class<union_>(class_specifier_node);
+						union_& added_union = add_class(namespace_entity, std::move(new_union));
+						fill_class(added_union, class_specifier_node);
+
+						opt_unqualified_type = &added_union;
+					}
 				}
 
 				break;

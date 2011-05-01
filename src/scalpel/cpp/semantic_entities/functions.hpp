@@ -306,7 +306,7 @@ typedef
 ;
 
 typedef
-	impl::detail::declarative_region_member_impl<class_, member_class, union_, member_union>
+	impl::detail::declarative_region_member_impl<class_, member_class, union_, member_union, anonymous_union, anonymous_member_union>
 	member_function_declarative_region_member_impl_t
 ;
 
