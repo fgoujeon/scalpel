@@ -54,6 +54,7 @@ class CLASS_NAME \
 { \
 	MEMBER_DECLARATION(member_class, classes) \
 	MEMBER_DECLARATION(member_union, unions) \
+	MEMBER_DECLARATION(anonymous_member_union, anonymous_unions) \
 	MEMBER_DECLARATION(member_enum, enums) \
 	MEMBER_DECLARATION(member_typedef, typedefs) \
 	BOOST_PP_IIF \

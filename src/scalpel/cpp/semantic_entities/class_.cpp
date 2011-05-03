@@ -49,6 +49,7 @@ CLASS_NAME::CLASS_NAME \
  \
 MEMBER_DEFINITION(CLASS_NAME, member_class, classes, 1) \
 MEMBER_DEFINITION(CLASS_NAME, member_union, unions, 1) \
+MEMBER_DEFINITION(CLASS_NAME, anonymous_member_union, anonymous_unions, 1) \
 MEMBER_DEFINITION(CLASS_NAME, member_enum, enums, 1) \
 MEMBER_DEFINITION(CLASS_NAME, member_typedef, typedefs, 1) \
 BOOST_PP_IIF \

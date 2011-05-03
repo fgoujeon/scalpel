@@ -392,7 +392,7 @@ fill_class
 
 				if(opt_nested_name_specifier_node)
 				{
-					//find the class
+					//find the union
 					member_union* found_union =
 						name_lookup::find<semantic_entity_analysis::identification_policies::by_name, false, false, member_union>
 						(
@@ -411,11 +411,29 @@ fill_class
 				}
 				else
 				{
-					std::unique_ptr<member_union> new_union = create_member_class<member_union>(class_specifier_node, current_access);
-					member_union& added_union = add_class(class_entity, std::move(new_union));
-					fill_class(added_union, class_specifier_node);
+					//is it an anonymous union?
+					const bool anonymous =
+						syntax_node_analysis::get_identifier(class_specifier_node).empty() &&
+						!get_member_declarator_list(member_declaration_member_declarator_list_node)
+					;
 
-					opt_unqualified_type = &added_union;
+					if(anonymous)
+					{
+						std::unique_ptr<anonymous_member_union> new_union(new anonymous_member_union());
+						anonymous_member_union& added_union = *new_union;
+						class_entity.add_member(std::move(new_union));
+						fill_class(added_union, class_specifier_node);
+
+						opt_unqualified_type = &added_union;
+					}
+					else
+					{
+						std::unique_ptr<member_union> new_union = create_member_class<member_union>(class_specifier_node, current_access);
+						member_union& added_union = add_class(class_entity, std::move(new_union));
+						fill_class(added_union, class_specifier_node);
+
+						opt_unqualified_type = &added_union;
+					}
 				}
 
 				break;

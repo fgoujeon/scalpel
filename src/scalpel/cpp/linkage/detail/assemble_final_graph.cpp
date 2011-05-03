@@ -104,7 +104,7 @@ namespace
 		typename linked_type<EnclosingDeclarativeRegion>::type* final_enclosing_declarative_region = it->second;
 
 		//add the final entity to the final declarative region entity
-		generic_queries::detail::add_entity_to_declarative_region(*final_enclosing_declarative_region, std::move(std::unique_ptr<Entity>(final_entity)));
+		generic_queries::detail::add_entity_to_declarative_region(std::move(std::unique_ptr<Entity>(final_entity)), *final_enclosing_declarative_region);
 	}
 
 	template<class Entity, class... DeclarativeRegions>
