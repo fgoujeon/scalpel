@@ -47,6 +47,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 	IS_MEMBER, \
 	HAS_NAME, \
 	HAS_BASE_CLASSES, \
+	HAS_FUNCTIONS, \
 	HAS_ENTITY_ALIASES \
 ) \
 class CLASS_NAME \
@@ -55,11 +56,15 @@ class CLASS_NAME \
 	MEMBER_DECLARATION(member_union, unions) \
 	MEMBER_DECLARATION(member_enum, enums) \
 	MEMBER_DECLARATION(member_typedef, typedefs) \
-	MEMBER_DECLARATION(constructor, constructors) \
-	SINGLE_MEMBER_DECLARATION(destructor, destructor, 0) \
-	MEMBER_DECLARATION(operator_member_function, operator_functions) \
-	MEMBER_DECLARATION(conversion_function, conversion_functions) \
-	MEMBER_DECLARATION(simple_member_function, simple_functions) \
+	BOOST_PP_IIF \
+	( \
+		HAS_FUNCTIONS, \
+		MEMBER_DECLARATION(constructor, constructors) \
+		SINGLE_MEMBER_DECLARATION(destructor, destructor, 0) \
+		MEMBER_DECLARATION(operator_member_function, operator_functions) \
+		MEMBER_DECLARATION(conversion_function, conversion_functions) \
+		MEMBER_DECLARATION(simple_member_function, simple_functions), \
+	) \
 	MEMBER_DECLARATION(member_variable, variables) \
 	MEMBER_DECLARATION(bit_field, bit_fields) \
  \
@@ -141,8 +146,12 @@ class CLASS_NAME \
 			add_base_class(const base_class& bc);, \
 		) \
  \
-		void \
-		reset_destructor(); \
+		BOOST_PP_IIF \
+		( \
+			HAS_FUNCTIONS, \
+			void \
+			reset_destructor();, \
+		) \
  \
     private: \
 		BOOST_PP_IIF \
@@ -199,12 +208,12 @@ typedef
 class member_class;
 class union_;
 class member_union;
-GENERATE_CLASS_DECLARATION(class_,                 0, 1, 1, 1)
-GENERATE_CLASS_DECLARATION(member_class,           1, 1, 1, 1)
-GENERATE_CLASS_DECLARATION(union_,                 0, 1, 0, 0)
-GENERATE_CLASS_DECLARATION(member_union,           1, 1, 0, 0)
-GENERATE_CLASS_DECLARATION(anonymous_union,        0, 0, 0, 0)
-GENERATE_CLASS_DECLARATION(anonymous_member_union, 1, 0, 0, 0)
+GENERATE_CLASS_DECLARATION(class_,                 0, 1, 1, 1, 1)
+GENERATE_CLASS_DECLARATION(member_class,           1, 1, 1, 1, 1)
+GENERATE_CLASS_DECLARATION(union_,                 0, 1, 0, 1, 0)
+GENERATE_CLASS_DECLARATION(member_union,           1, 1, 0, 1, 0)
+GENERATE_CLASS_DECLARATION(anonymous_union,        0, 0, 0, 0, 0)
+GENERATE_CLASS_DECLARATION(anonymous_member_union, 1, 0, 0, 0, 0)
 
 }}} //namespace scalpel::cpp::semantic_entities
 

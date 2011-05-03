@@ -31,6 +31,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "syntax_node_analysis/class_specifier.hpp"
 #include "syntax_node_analysis/declarator.hpp"
 #include "syntax_node_analysis/misc.hpp"
+#include <scalpel/cpp/semantic_entities/generic_queries/detail/add_entity_to_declarative_region.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail
 {
@@ -503,15 +504,15 @@ fill_class
 				);
 
 				if(auto opt_constructor_entity = get<constructor*>(&declarator_entity))
-					class_entity.add_member(std::unique_ptr<constructor>(*opt_constructor_entity));
+					generic_queries::detail::add_entity_to_declarative_region(class_entity, std::unique_ptr<constructor>(*opt_constructor_entity));
 				else if(auto opt_destructor_entity = get<destructor*>(&declarator_entity))
-					class_entity.set_destructor(std::unique_ptr<destructor>(*opt_destructor_entity));
+					generic_queries::detail::add_entity_to_declarative_region(class_entity, std::unique_ptr<destructor>(*opt_destructor_entity));
 				else if(auto opt_operator_function_entity = get<operator_member_function*>(&declarator_entity))
-					class_entity.add_member(std::unique_ptr<operator_member_function>(*opt_operator_function_entity));
+					generic_queries::detail::add_entity_to_declarative_region(class_entity, std::unique_ptr<operator_member_function>(*opt_operator_function_entity));
 				else if(auto opt_conversion_function_entity = get<conversion_function*>(&declarator_entity))
-					class_entity.add_member(std::unique_ptr<conversion_function>(*opt_conversion_function_entity));
+					generic_queries::detail::add_entity_to_declarative_region(class_entity, std::unique_ptr<conversion_function>(*opt_conversion_function_entity));
 				else if(auto opt_simple_function_entity = get<simple_member_function*>(&declarator_entity))
-					class_entity.add_member(std::unique_ptr<simple_member_function>(*opt_simple_function_entity));
+					generic_queries::detail::add_entity_to_declarative_region(class_entity, std::unique_ptr<simple_member_function>(*opt_simple_function_entity));
 				else if(auto opt_variable_entity = get<member_variable*>(&declarator_entity))
 					class_entity.add_member(std::unique_ptr<member_variable>(*opt_variable_entity));
 				else if(auto opt_typedef_entity = get<member_typedef*>(&declarator_entity))
@@ -562,25 +563,7 @@ namespace
 			void
 			operator()(T* function_entity) const
 			{
-				class_entity_.add_member(std::unique_ptr<T>(function_entity));
-			}
-
-			void
-			operator()(semantic_entities::destructor* function_entity) const
-			{
-				class_entity_.set_destructor(std::unique_ptr<semantic_entities::destructor>(function_entity));
-			}
-
-			void
-			operator()(semantic_entities::simple_function*) const
-			{
-				assert(false);
-			}
-
-			void
-			operator()(semantic_entities::operator_function*) const
-			{
-				assert(false);
+				semantic_entities::generic_queries::detail::add_entity_to_declarative_region(class_entity_, std::unique_ptr<T>(function_entity));
 			}
 
 		private:

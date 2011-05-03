@@ -19,7 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "assemble_final_graph.hpp"
-#include <scalpel/cpp/semantic_entities/generic_queries/detail/add_member.hpp>
+#include <scalpel/cpp/semantic_entities/generic_queries/detail/add_entity_to_declarative_region.hpp>
 #include <scalpel/utility/variant.hpp>
 #include <iostream>
 
@@ -104,7 +104,7 @@ namespace
 		typename linked_type<EnclosingDeclarativeRegion>::type* final_enclosing_declarative_region = it->second;
 
 		//add the final entity to the final declarative region entity
-		generic_queries::detail::add_member(*final_enclosing_declarative_region, std::move(std::unique_ptr<Entity>(final_entity)));
+		generic_queries::detail::add_entity_to_declarative_region(*final_enclosing_declarative_region, std::move(std::unique_ptr<Entity>(final_entity)));
 	}
 
 	template<class Entity, class... DeclarativeRegions>
