@@ -32,6 +32,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "syntax_node_analysis/declarator.hpp"
 #include "syntax_node_analysis/decl_specifier_seq.hpp"
 #include <scalpel/cpp/semantic_entities/generic_queries/detail/get_members.hpp>
+#include <scalpel/cpp/semantic_entities/generic_queries/detail/add_entity_to_declarative_region.hpp>
 #include <iostream>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail
@@ -340,16 +341,7 @@ fill_namespace
 				member_access::PUBLIC
 			);
 
-			if(auto opt_simple_function_entity = get<simple_function*>(&declarator_entity))
-				namespace_entity.add_member(std::unique_ptr<simple_function>(*opt_simple_function_entity));
-			else if(auto opt_operator_function_entity = get<operator_function*>(&declarator_entity))
-				namespace_entity.add_member(std::unique_ptr<operator_function>(*opt_operator_function_entity));
-			else if(auto opt_variable_entity = get<variable*>(&declarator_entity))
-				namespace_entity.add_member(std::unique_ptr<variable>(*opt_variable_entity));
-			else if(auto opt_typedef_entity = get<typedef_*>(&declarator_entity))
-				namespace_entity.add_member(std::unique_ptr<typedef_>(*opt_typedef_entity));
-			else
-				assert(false);
+			generic_queries::detail::add_entity_to_declarative_region(declarator_entity, namespace_entity);
 		}
 	}
 }
@@ -549,17 +541,8 @@ fill_namespace
 		}
 		else
 		{
-			//declare the function
-			if(is_class_member)
-			{
-				std::runtime_error("error: this function must be a nonstatic member function");
-			}
-			else if(auto opt_operator_function_entity = get<operator_function*>(&function_entity))
-				namespace_entity.add_member(std::unique_ptr<operator_function>(*opt_operator_function_entity));
-			else if(auto opt_simple_function_entity = get<simple_function*>(&function_entity))
-				namespace_entity.add_member(std::unique_ptr<simple_function>(*opt_simple_function_entity));
-			else
-				assert(false);
+			//add the function to the namespace
+			generic_queries::detail::add_entity_to_declarative_region(function_entity, namespace_entity);
 
 			//define the function
 			define_function

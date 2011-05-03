@@ -503,22 +503,7 @@ fill_class
 					current_access
 				);
 
-				if(auto opt_constructor_entity = get<constructor*>(&declarator_entity))
-					generic_queries::detail::add_entity_to_declarative_region(class_entity, std::unique_ptr<constructor>(*opt_constructor_entity));
-				else if(auto opt_destructor_entity = get<destructor*>(&declarator_entity))
-					generic_queries::detail::add_entity_to_declarative_region(class_entity, std::unique_ptr<destructor>(*opt_destructor_entity));
-				else if(auto opt_operator_function_entity = get<operator_member_function*>(&declarator_entity))
-					generic_queries::detail::add_entity_to_declarative_region(class_entity, std::unique_ptr<operator_member_function>(*opt_operator_function_entity));
-				else if(auto opt_conversion_function_entity = get<conversion_function*>(&declarator_entity))
-					generic_queries::detail::add_entity_to_declarative_region(class_entity, std::unique_ptr<conversion_function>(*opt_conversion_function_entity));
-				else if(auto opt_simple_function_entity = get<simple_member_function*>(&declarator_entity))
-					generic_queries::detail::add_entity_to_declarative_region(class_entity, std::unique_ptr<simple_member_function>(*opt_simple_function_entity));
-				else if(auto opt_variable_entity = get<member_variable*>(&declarator_entity))
-					class_entity.add_member(std::unique_ptr<member_variable>(*opt_variable_entity));
-				else if(auto opt_typedef_entity = get<member_typedef*>(&declarator_entity))
-					class_entity.add_member(std::unique_ptr<member_typedef>(*opt_typedef_entity));
-				else
-					assert(false);
+				generic_queries::detail::add_entity_to_declarative_region(declarator_entity, class_entity);
 			}
 			else if
 			(
@@ -546,29 +531,6 @@ fill_class
 			}
 		}
 	}
-}
-
-namespace
-{
-	template<class Class>
-	class add_function_to_class_visitor: public utility::static_visitor<void>
-	{
-		public:
-			add_function_to_class_visitor(Class& class_entity):
-				class_entity_(class_entity)
-			{
-			}
-
-			template<class T>
-			void
-			operator()(T* function_entity) const
-			{
-				semantic_entities::generic_queries::detail::add_entity_to_declarative_region(class_entity_, std::unique_ptr<T>(function_entity));
-			}
-
-		private:
-			Class& class_entity_;
-	};
 }
 
 template<class Class>
@@ -603,8 +565,7 @@ fill_class
 	);
 
 	//add the function to the class
-	add_function_to_class_visitor<Class> visitor(class_entity);
-	utility::apply_visitor(visitor, function_entity);
+	generic_queries::detail::add_entity_to_declarative_region(function_entity, class_entity);
 
 	//define the function
 	define_function
