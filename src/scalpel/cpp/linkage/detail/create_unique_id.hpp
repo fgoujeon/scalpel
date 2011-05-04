@@ -53,12 +53,6 @@ std::string
 create_unique_id(const semantic_entities::member_union& entity);
 
 std::string
-create_unique_id(const semantic_entities::anonymous_union& entity);
-
-std::string
-create_unique_id(const semantic_entities::anonymous_member_union& entity);
-
-std::string
 create_unique_id(const semantic_entities::enum_& entity);
 
 std::string

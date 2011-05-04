@@ -123,15 +123,17 @@ namespace
 		}
 
 		std::string
-		operator()(const anonymous_union* entity)
+		operator()(const anonymous_union*)
 		{
-			return create_unique_id(*entity);
+			assert(false);
+			return "";
 		}
 
 		std::string
-		operator()(const anonymous_member_union* entity)
+		operator()(const anonymous_member_union*)
 		{
-			return create_unique_id(*entity);
+			assert(false);
+			return "";
 		}
 
 		std::string
@@ -266,6 +268,20 @@ namespace
 			assert(false);
 			return "";
 		}
+
+		std::string
+		operator()(const anonymous_union*)
+		{
+			assert(false);
+			return "";
+		}
+
+		std::string
+		operator()(const anonymous_member_union*)
+		{
+			assert(false);
+			return "";
+		}
 	} create_unique_id_visitor;
 }
 
@@ -304,18 +320,6 @@ std::string
 create_unique_id(const semantic_entities::member_union& entity)
 {
 	return create_enclosing_declarative_region_unique_id(entity) + entity.name();
-}
-
-std::string
-create_unique_id(const semantic_entities::anonymous_union& entity)
-{
-	return create_enclosing_declarative_region_unique_id(entity);
-}
-
-std::string
-create_unique_id(const semantic_entities::anonymous_member_union& entity)
-{
-	return create_enclosing_declarative_region_unique_id(entity);
 }
 
 std::string
