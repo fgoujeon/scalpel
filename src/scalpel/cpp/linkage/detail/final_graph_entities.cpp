@@ -80,6 +80,8 @@ GENERATE_GET_PAIRS_SPECIALIZATION(class_, class_pairs)
 GENERATE_GET_PAIRS_SPECIALIZATION(member_class, member_class_pairs)
 GENERATE_GET_PAIRS_SPECIALIZATION(union_, union_pairs)
 GENERATE_GET_PAIRS_SPECIALIZATION(member_union, member_union_pairs)
+GENERATE_GET_PAIRS_SPECIALIZATION(anonymous_union, anonymous_union_pairs)
+GENERATE_GET_PAIRS_SPECIALIZATION(anonymous_member_union, anonymous_member_union_pairs)
 
 }}}} //namespace scalpel::cpp::linkage::detail
 

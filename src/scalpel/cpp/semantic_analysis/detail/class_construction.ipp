@@ -304,6 +304,7 @@ fill_class
 	bool has_inline_specifier = false;
 	bool has_virtual_specifier = false;
 	bool has_explicit_specifier = false;
+	bool create_anonymous_object = false; //true for anonymous unions
 
 	if
 	(
@@ -425,6 +426,7 @@ fill_class
 						fill_class(added_union, class_specifier_node);
 
 						opt_unqualified_type = &added_union;
+						create_anonymous_object = true;
 					}
 					else
 					{
@@ -548,6 +550,21 @@ fill_class
 				assert(false);
 			}
 		}
+	}
+	else if(create_anonymous_object) //the type could be an anonymous union
+	{
+		class_entity.add_member
+		(
+			std::unique_ptr<member_variable>
+			(
+				new member_variable
+				(
+					"",
+					*opt_unqualified_type,
+					has_static_specifier
+				)
+			)
+		);
 	}
 }
 

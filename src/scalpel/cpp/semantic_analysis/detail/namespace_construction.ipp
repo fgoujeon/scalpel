@@ -137,6 +137,7 @@ fill_namespace
 	bool has_typedef_specifier = false;
 	bool has_static_specifier = false;
 	bool has_inline_specifier = false;
+	bool create_anonymous_object = false; //true for anonymous unions only
 
 	if(const optional_node<decl_specifier_seq>& opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node))
 	{
@@ -259,6 +260,7 @@ fill_namespace
 						fill_class(added_union, class_specifier_node);
 
 						opt_unqualified_type = &added_union;
+						create_anonymous_object = true;
 					}
 					else
 					{
@@ -343,6 +345,21 @@ fill_namespace
 
 			generic_queries::detail::add_entity_to_declarative_region(declarator_entity, namespace_entity);
 		}
+	}
+	else if(create_anonymous_object) //the type could be an anonymous union
+	{
+		namespace_entity.add_member
+		(
+			std::unique_ptr<variable>
+			(
+				new variable
+				(
+					"",
+					*opt_unqualified_type,
+					has_static_specifier
+				)
+			)
+		);
 	}
 }
 

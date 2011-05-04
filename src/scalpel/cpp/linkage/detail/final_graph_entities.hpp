@@ -84,6 +84,8 @@ struct final_graph_entities
 	std::vector<old_and_new_entity_pair<semantic_entities::member_class>> member_class_pairs;
 	std::vector<old_and_new_entity_pair<semantic_entities::union_>> union_pairs;
 	std::vector<old_and_new_entity_pair<semantic_entities::member_union>> member_union_pairs;
+	std::vector<old_and_new_entity_pair<semantic_entities::anonymous_union>> anonymous_union_pairs;
+	std::vector<old_and_new_entity_pair<semantic_entities::anonymous_member_union>> anonymous_member_union_pairs;
 };
 
 }}}} //namespace scalpel::cpp::linkage::detail

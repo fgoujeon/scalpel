@@ -76,6 +76,8 @@ struct entity_groups
 	std::vector<const semantic_entities::member_class*> internal_member_classes;
 	std::vector<const semantic_entities::union_*> internal_unions;
 	std::vector<const semantic_entities::member_union*> internal_member_unions;
+	std::vector<const semantic_entities::anonymous_union*> internal_anonymous_unions;
+	std::vector<const semantic_entities::anonymous_member_union*> internal_anonymous_member_unions;
 	std::vector<const semantic_entities::enum_*> internal_enums;
 	std::vector<const semantic_entities::member_enum*> internal_member_enums;
 	std::vector<const semantic_entities::typedef_*> internal_typedefs;

@@ -1,0 +1,40 @@
+<namespace id="0">
+ <class id="0" name="c">
+  <anonymous_union id="0">
+   <variable id="0" name="d" access="public">
+    <type>
+     <fundamental_type type="double"/>
+    </type>
+   </variable>
+   <variable id="1" name="i" access="public">
+    <type>
+     <fundamental_type type="int"/>
+    </type>
+   </variable>
+  </anonymous_union>
+  <destructor access="public" defined="false">
+  </destructor>
+  <variable id="2" access="public">
+   <type>
+    <anonymous_member_union id="0"/>
+   </type>
+  </variable>
+ </class>
+ <anonymous_union id="0">
+  <variable id="3" name="d" access="public">
+   <type>
+    <fundamental_type type="double"/>
+   </type>
+  </variable>
+  <variable id="4" name="i" access="public">
+   <type>
+    <fundamental_type type="int"/>
+   </type>
+  </variable>
+ </anonymous_union>
+ <variable id="0" static="true">
+  <type>
+   <anonymous_union id="0"/>
+  </type>
+ </variable>
+</namespace>

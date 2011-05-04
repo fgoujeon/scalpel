@@ -138,6 +138,36 @@ namespace
 		return new_union;
 	}
 
+	anonymous_union*
+	create_entity
+	(
+		const anonymous_union& entity,
+		final_graph_entities& final_entities
+	)
+	{
+		anonymous_union* new_union = new anonymous_union();
+		new_union->complete(entity.complete());
+
+		final_entities.anonymous_union_pairs.push_back(old_and_new_entity_pair<anonymous_union>{&entity, new_union});
+
+		return new_union;
+	}
+
+	anonymous_member_union*
+	create_entity
+	(
+		const anonymous_member_union& entity,
+		final_graph_entities& final_entities
+	)
+	{
+		anonymous_member_union* new_union = new anonymous_member_union(entity.access());
+		new_union->complete(entity.complete());
+
+		final_entities.anonymous_member_union_pairs.push_back(old_and_new_entity_pair<anonymous_member_union>{&entity, new_union});
+
+		return new_union;
+	}
+
 	enum_*
 	create_entity
 	(
@@ -394,7 +424,8 @@ namespace
 			new variable
 			(
 				entity.name(),
-				create_type(entity.type(), final_entities)
+				create_type(entity.type(), final_entities),
+				entity.is_static()
 			)
 		;
 	}
@@ -815,6 +846,10 @@ create_final_graph_entities
 
 	create_entities_of_type<member_union, false>(groups.member_unions, final_entities);
 	create_internal_entities_of_type<member_union>(groups, final_entities);
+
+	create_internal_entities_of_type<anonymous_union>(groups, final_entities);
+
+	create_internal_entities_of_type<anonymous_member_union>(groups, final_entities);
 
 	create_entities_of_type<enum_, false>(groups.enums, final_entities);
 	create_internal_entities_of_type<enum_>(groups, final_entities);
