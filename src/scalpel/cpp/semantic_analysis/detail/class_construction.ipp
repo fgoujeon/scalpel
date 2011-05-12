@@ -44,6 +44,13 @@ create_class(const syntax_nodes::class_specifier& class_specifier_node)
 }
 
 template<class Class>
+Class*
+create_class2(const syntax_nodes::class_specifier& class_specifier_node)
+{
+	return new Class(syntax_node_analysis::get_identifier(class_specifier_node));
+}
+
+template<class Class>
 std::unique_ptr<Class>
 create_member_class
 (
@@ -59,6 +66,23 @@ create_member_class
 				syntax_node_analysis::get_identifier(class_specifier_node),
 				access
 			)
+		)
+	;
+}
+
+template<class Class>
+Class*
+create_member_class2
+(
+	const syntax_nodes::class_specifier& class_specifier_node,
+	const semantic_entities::member_access access
+)
+{
+	return
+		new Class
+		(
+			syntax_node_analysis::get_identifier(class_specifier_node),
+			access
 		)
 	;
 }
@@ -110,6 +134,31 @@ create_member_class
 	//create the class
 	assert(class_name != "");
 	return std::unique_ptr<Class>(new Class(class_name, access));
+}
+
+template<class Class>
+Class*
+create_member_class2
+(
+	const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node,
+	const semantic_entities::member_access access
+)
+{
+	using namespace syntax_nodes;
+	using namespace semantic_entities;
+
+	//get the name of the class
+	std::string class_name;
+	const identifier_or_template_id& identifier_or_template_id_node = get_identifier_or_template_id(class_elaborated_specifier_node);
+
+	if(const boost::optional<const identifier&> opt_identifier_node = get<identifier>(&identifier_or_template_id_node))
+	{
+		class_name = opt_identifier_node->value();
+	}
+
+	//create the class
+	assert(class_name != "");
+	return new Class(class_name, access);
 }
 
 template<class Class>
@@ -296,201 +345,45 @@ fill_class
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
 
-	boost::optional<type_variant> opt_unqualified_type;
-	bool has_typedef_specifier = false;
-	bool has_friend_specifier = false;
-	bool has_mutable_specifier = false;
-	bool has_static_specifier = false;
-	bool has_inline_specifier = false;
-	bool has_virtual_specifier = false;
-	bool has_explicit_specifier = false;
-	bool create_anonymous_object = false; //true for anonymous unions
+	const optional_node<decl_specifier_seq>& opt_decl_specifier_seq_node =
+		get_decl_specifier_seq(member_declaration_member_declarator_list_node)
+	;
+	const optional_node<member_declarator_list>& opt_member_declarator_list_node =
+		get_member_declarator_list(member_declaration_member_declarator_list_node)
+	;
 
-	if
-	(
-		const optional_node<decl_specifier_seq>& opt_decl_specifier_seq_node =
-			get_decl_specifier_seq(member_declaration_member_declarator_list_node)
-	)
+	//create and/or get the type defined by the decl-specifier-seq node
+	type_info info;
+	if(opt_decl_specifier_seq_node)
 	{
-		const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
-
-		has_typedef_specifier = syntax_node_analysis::has_typedef_specifier(decl_specifier_seq_node);
-		has_friend_specifier = syntax_node_analysis::has_friend_specifier(decl_specifier_seq_node);
-		has_mutable_specifier = syntax_node_analysis::has_mutable_specifier(decl_specifier_seq_node);
-		has_static_specifier = syntax_node_analysis::has_static_specifier(decl_specifier_seq_node);
-		has_inline_specifier = syntax_node_analysis::has_inline_specifier(decl_specifier_seq_node);
-		has_virtual_specifier = syntax_node_analysis::has_virtual_specifier(decl_specifier_seq_node);
-		has_explicit_specifier = syntax_node_analysis::has_explicit_specifier(decl_specifier_seq_node);
-
-		//friend specifications are not implemented yet
-		if(has_friend_specifier) return;
-
-		//create and/or get undecorated type
-		switch(syntax_node_analysis::get_decl_specifier_seq_type(decl_specifier_seq_node))
-		{
-			case syntax_node_analysis::type_specifier_seq_type::CLASS_DECLARATION:
-			{
-				const class_specifier& class_specifier_node =
-					syntax_node_analysis::get_class_specifier(decl_specifier_seq_node)
-				;
-				const class_head& class_head_node = get_class_head(class_specifier_node);
-				const optional_node<nested_name_specifier>& opt_nested_name_specifier_node =
-					get_nested_name_specifier(class_head_node)
-				;
-
-				if(opt_nested_name_specifier_node)
-				{
-					//find the class
-					class_* found_class =
-						name_lookup::find<semantic_entity_analysis::identification_policies::by_name, false, false, class_>
-						(
-							false,
-							opt_nested_name_specifier_node,
-							syntax_node_analysis::get_identifier(class_specifier_node),
-							&class_entity,
-							false
-						)
-					;
-
-					//and define it
-					fill_class(*found_class, class_specifier_node);
-
-					opt_unqualified_type = found_class;
-				}
-				else
-				{
-					std::unique_ptr<member_class> new_class = create_member_class<member_class>(class_specifier_node, current_access);
-					member_class& added_class = add_class(class_entity, std::move(new_class));
-					fill_class(added_class, class_specifier_node);
-
-					opt_unqualified_type = &added_class;
-				}
-
-				break;
-			}
-			case syntax_node_analysis::type_specifier_seq_type::CLASS_FORWARD_DECLARATION:
-			{
-				const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node =
-					syntax_node_analysis::get_class_elaborated_specifier(decl_specifier_seq_node)
-				;
-
-				std::unique_ptr<member_class> new_class = create_member_class<member_class>(class_elaborated_specifier_node, current_access);
-				member_class& added_class = add_class(class_entity, std::move(new_class));
-
-				opt_unqualified_type = &added_class;
-
-				break;
-			}
-			case syntax_node_analysis::type_specifier_seq_type::UNION_DECLARATION:
-			{
-				const class_specifier& class_specifier_node =
-					syntax_node_analysis::get_class_specifier(decl_specifier_seq_node)
-				;
-				const class_head& class_head_node = get_class_head(class_specifier_node);
-				const optional_node<nested_name_specifier>& opt_nested_name_specifier_node =
-					get_nested_name_specifier(class_head_node)
-				;
-
-				if(opt_nested_name_specifier_node)
-				{
-					//find the union
-					member_union* found_union =
-						name_lookup::find<semantic_entity_analysis::identification_policies::by_name, false, false, member_union>
-						(
-							false,
-							opt_nested_name_specifier_node,
-							syntax_node_analysis::get_identifier(class_specifier_node),
-							&class_entity,
-							false
-						)
-					;
-
-					//and define it
-					fill_class(*found_union, class_specifier_node);
-
-					opt_unqualified_type = found_union;
-				}
-				else
-				{
-					//is it an anonymous union?
-					const bool anonymous =
-						syntax_node_analysis::get_identifier(class_specifier_node).empty() &&
-						!get_member_declarator_list(member_declaration_member_declarator_list_node)
-					;
-
-					if(anonymous)
-					{
-						std::unique_ptr<anonymous_member_union> new_union(new anonymous_member_union());
-						anonymous_member_union& added_union = *new_union;
-						class_entity.add_member(std::move(new_union));
-						fill_class(added_union, class_specifier_node);
-
-						opt_unqualified_type = &added_union;
-						create_anonymous_object = true;
-					}
-					else
-					{
-						std::unique_ptr<member_union> new_union = create_member_class<member_union>(class_specifier_node, current_access);
-						member_union& added_union = add_class(class_entity, std::move(new_union));
-						fill_class(added_union, class_specifier_node);
-
-						opt_unqualified_type = &added_union;
-					}
-				}
-
-				break;
-			}
-			case syntax_node_analysis::type_specifier_seq_type::UNION_FORWARD_DECLARATION:
-			{
-				const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node =
-					syntax_node_analysis::get_class_elaborated_specifier(decl_specifier_seq_node)
-				;
-
-				std::unique_ptr<member_union> new_union = create_member_class<member_union>(class_elaborated_specifier_node, current_access);
-				member_union& added_union = add_class(class_entity, std::move(new_union));
-
-				opt_unqualified_type = &added_union;
-
-				break;
-			}
-			case syntax_node_analysis::type_specifier_seq_type::ENUMERATION_DECLARATION:
-			{
-				const enum_specifier& enum_specifier_node =
-					syntax_node_analysis::get_enum_specifier(decl_specifier_seq_node)
-				;
-
-				std::unique_ptr<member_enum> new_enum = create_member_enum(enum_specifier_node, current_access);
-				member_enum& new_enum_ref = *new_enum;
-				class_entity.add_member(std::move(new_enum));
-				fill_enum(new_enum_ref, enum_specifier_node);
-
-				opt_unqualified_type = &new_enum_ref;
-
-				break;
-			}
-			case syntax_node_analysis::type_specifier_seq_type::SIMPLE_TYPE:
-			{
-				opt_unqualified_type = create_type(decl_specifier_seq_node, &class_entity);
-				break;
-			}
-			case syntax_node_analysis::type_specifier_seq_type::NO_TYPE:
-			{
-				break;
-			}
-		}
-
-		//qualify type
-		if(opt_unqualified_type)
-			opt_unqualified_type = qualify_type(*opt_unqualified_type, decl_specifier_seq_node);
+		info =
+			create_type
+			(
+				*opt_decl_specifier_seq_node,
+				opt_member_declarator_list_node,
+				&class_entity,
+				true, //is member
+				current_access
+			)
+		;
 	}
 
-	if
-	(
-		const optional_node<member_declarator_list>& opt_member_declarator_list_node =
-			get_member_declarator_list(member_declaration_member_declarator_list_node)
-	)
+	//if the type is a new user defined type (class, union, enum, etc.)...
+	if(info.opt_new_type)
 	{
-		auto member_declarator_list_node = *opt_member_declarator_list_node;
+		assert(opt_decl_specifier_seq_node);
+
+		//add it to the class
+		generic_queries::detail::add_entity_to_declarative_region(*info.opt_new_type, class_entity);
+
+		//and complete it
+		fill_type(*info.opt_new_type, *opt_decl_specifier_seq_node);
+	}
+
+	//create function(s), variable(s), etc.
+	if(opt_member_declarator_list_node)
+	{
+		const member_declarator_list& member_declarator_list_node = *opt_member_declarator_list_node;
 
 		for
 		(
@@ -511,13 +404,13 @@ fill_class
 				(
 					declarator_node,
 					&class_entity,
-					opt_unqualified_type,
-					has_typedef_specifier,
-					has_mutable_specifier,
-					has_static_specifier,
-					has_inline_specifier,
-					has_virtual_specifier,
-					has_explicit_specifier,
+					info.opt_complete_type,
+					info.has_typedef_specifier,
+					info.has_mutable_specifier,
+					info.has_static_specifier,
+					info.has_inline_specifier,
+					info.has_virtual_specifier,
+					info.has_explicit_specifier,
 					has_pure_specifier,
 					true,
 					current_access
@@ -531,15 +424,15 @@ fill_class
 					get<member_declarator_bit_field_member>(&member_declarator_node)
 			)
 			{
-				assert(opt_unqualified_type);
+				assert(info.opt_complete_type);
 
 				class_entity.add_member
 				(
 					create_bit_field
 					(
 						*opt_member_declarator_bit_field_member_node,
-						*opt_unqualified_type,
-						has_mutable_specifier,
+						*info.opt_complete_type,
+						info.has_mutable_specifier,
 						current_access,
 						class_entity
 					)
@@ -551,7 +444,7 @@ fill_class
 			}
 		}
 	}
-	else if(create_anonymous_object) //the type could be an anonymous union
+	else if(info.create_anonymous_object) //the type could be an anonymous union
 	{
 		class_entity.add_member
 		(
@@ -560,8 +453,8 @@ fill_class
 				new member_variable
 				(
 					"",
-					*opt_unqualified_type,
-					has_static_specifier
+					*info.opt_complete_type,
+					info.has_static_specifier
 				)
 			)
 		);

@@ -23,17 +23,59 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <scalpel/cpp/syntax_tree.hpp>
+#include <scalpel/utility/ptr_variant.hpp>
 #include <scalpel/utility/variant.hpp>
 #include <memory>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail
 {
 
+typedef
+	typename utility::ptr_variant
+	<
+		semantic_entities::class_,
+		semantic_entities::member_class,
+		semantic_entities::union_,
+		semantic_entities::member_union,
+		semantic_entities::anonymous_union,
+		semantic_entities::anonymous_member_union,
+		semantic_entities::enum_,
+		semantic_entities::member_enum
+	>::type
+	user_defined_type_ptr_variant
+;
+
+struct type_info
+{
+	boost::optional<user_defined_type_ptr_variant> opt_new_type; //type object created by create_type() that must be stored
+	boost::optional<semantic_entities::type_variant> opt_complete_type; //qualified type
+	bool has_typedef_specifier;
+	bool has_friend_specifier;
+	bool has_mutable_specifier;
+	bool has_static_specifier;
+	bool has_inline_specifier;
+	bool has_virtual_specifier;
+	bool has_explicit_specifier;
+	bool create_anonymous_object;
+};
+
+type_info
+create_type
+(
+	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
+	const bool has_declarator,
+	const semantic_entities::declarative_region_ptr_variant current_declarative_region,
+	const bool is_member,
+	const semantic_entities::member_access access
+);
+
+
+
 //Create the type described by the given decl-specifier-seq.
 //The returned type is not qualified by the qualifiers of
 //the decl-specifier-seq.
 semantic_entities::type_variant
-create_type
+create_simple_type
 (
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
 	const semantic_entities::declarative_region_ptr_variant current_declarative_region
@@ -43,11 +85,22 @@ create_type
 //The returned type is not qualified by the qualifiers of
 //the type-specifier-seq.
 semantic_entities::type_variant
-create_type
+create_simple_type
 (
 	const syntax_nodes::type_specifier_seq& type_specifier_seq_node,
 	const semantic_entities::declarative_region_ptr_variant current_declarative_region
 );
+
+
+
+void
+fill_type
+(
+	const user_defined_type_ptr_variant& type,
+	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node
+);
+
+
 
 //qualify type with decl-specifier-seq's const and volatile specifiers
 semantic_entities::type_variant

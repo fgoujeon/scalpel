@@ -25,6 +25,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "semantic_entity_analysis/to_type_variant.hpp"
 #include "syntax_node_analysis/declarator.hpp"
 #include "syntax_node_analysis/decl_specifier_seq.hpp"
+#include <scalpel/cpp/semantic_entities/type_traits/is_class.hpp>
+#include <scalpel/cpp/semantic_entities/type_traits/is_union.hpp>
+#include <scalpel/cpp/semantic_entities/type_traits/is_enum.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail
 {
@@ -32,18 +35,191 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 using namespace syntax_nodes;
 using namespace semantic_entities;
 
-semantic_entities::type_variant
+type_info
 create_type
+(
+	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
+	const bool has_declarator,
+	const semantic_entities::declarative_region_ptr_variant current_declarative_region,
+	const bool /*is_member*/,
+	const semantic_entities::member_access access
+)
+{
+	type_info info;
+
+	info.has_typedef_specifier = syntax_node_analysis::has_typedef_specifier(decl_specifier_seq_node);
+	info.has_friend_specifier = syntax_node_analysis::has_friend_specifier(decl_specifier_seq_node);
+	info.has_mutable_specifier = syntax_node_analysis::has_mutable_specifier(decl_specifier_seq_node);
+	info.has_static_specifier = syntax_node_analysis::has_static_specifier(decl_specifier_seq_node);
+	info.has_inline_specifier = syntax_node_analysis::has_inline_specifier(decl_specifier_seq_node);
+	info.has_virtual_specifier = syntax_node_analysis::has_virtual_specifier(decl_specifier_seq_node);
+	info.has_explicit_specifier = syntax_node_analysis::has_explicit_specifier(decl_specifier_seq_node);
+	info.create_anonymous_object = false;
+
+	//friend specifications are not implemented yet
+	if(info.has_friend_specifier) return info;
+
+	//create and/or get undecorated type
+	switch(syntax_node_analysis::get_decl_specifier_seq_type(decl_specifier_seq_node))
+	{
+		case syntax_node_analysis::type_specifier_seq_type::CLASS_DECLARATION:
+		{
+			const class_specifier& class_specifier_node =
+				syntax_node_analysis::get_class_specifier(decl_specifier_seq_node)
+			;
+			const class_head& class_head_node = get_class_head(class_specifier_node);
+			const optional_node<nested_name_specifier>& opt_nested_name_specifier_node =
+				get_nested_name_specifier(class_head_node)
+			;
+
+			if(opt_nested_name_specifier_node)
+			{
+				//find the class
+				class_* found_class =
+					name_lookup::find<semantic_entity_analysis::identification_policies::by_name, false, false, class_>
+					(
+						false,
+						opt_nested_name_specifier_node,
+						syntax_node_analysis::get_identifier(class_specifier_node),
+						current_declarative_region,
+						false
+					)
+				;
+
+				info.opt_complete_type = found_class;
+			}
+			else
+			{
+				member_class* new_class = create_member_class2<member_class>(class_specifier_node, access);
+
+				info.opt_new_type = new_class;
+				info.opt_complete_type = new_class;
+			}
+
+			break;
+		}
+		case syntax_node_analysis::type_specifier_seq_type::CLASS_FORWARD_DECLARATION:
+		{
+			const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node =
+				syntax_node_analysis::get_class_elaborated_specifier(decl_specifier_seq_node)
+			;
+
+			member_class* new_class = create_member_class2<member_class>(class_elaborated_specifier_node, access);
+
+			info.opt_new_type = new_class;
+			info.opt_complete_type = new_class;
+
+			break;
+		}
+		case syntax_node_analysis::type_specifier_seq_type::UNION_DECLARATION:
+		{
+			const class_specifier& class_specifier_node =
+				syntax_node_analysis::get_class_specifier(decl_specifier_seq_node)
+			;
+			const class_head& class_head_node = get_class_head(class_specifier_node);
+			const optional_node<nested_name_specifier>& opt_nested_name_specifier_node =
+				get_nested_name_specifier(class_head_node)
+			;
+
+			if(opt_nested_name_specifier_node)
+			{
+				//find the union
+				member_union* found_union =
+					name_lookup::find<semantic_entity_analysis::identification_policies::by_name, false, false, member_union>
+					(
+						false,
+						opt_nested_name_specifier_node,
+						syntax_node_analysis::get_identifier(class_specifier_node),
+						current_declarative_region,
+						false
+					)
+				;
+
+				info.opt_complete_type = found_union;
+			}
+			else
+			{
+				//is it an anonymous union?
+				const bool anonymous =
+					syntax_node_analysis::get_identifier(class_specifier_node).empty() &&
+					!has_declarator
+				;
+
+				if(anonymous)
+				{
+					anonymous_member_union* new_union = new anonymous_member_union();
+
+					info.opt_new_type = new_union;
+					info.opt_complete_type = new_union;
+					info.create_anonymous_object = true;
+				}
+				else
+				{
+					member_union* new_union = create_member_class2<member_union>(class_specifier_node, access);
+
+					info.opt_new_type = new_union;
+					info.opt_complete_type = new_union;
+				}
+			}
+
+			break;
+		}
+		case syntax_node_analysis::type_specifier_seq_type::UNION_FORWARD_DECLARATION:
+		{
+			const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node =
+				syntax_node_analysis::get_class_elaborated_specifier(decl_specifier_seq_node)
+			;
+
+			member_union* new_union = create_member_class2<member_union>(class_elaborated_specifier_node, access);
+
+			info.opt_new_type = new_union;
+			info.opt_complete_type = new_union;
+
+			break;
+		}
+		case syntax_node_analysis::type_specifier_seq_type::ENUMERATION_DECLARATION:
+		{
+			const enum_specifier& enum_specifier_node =
+				syntax_node_analysis::get_enum_specifier(decl_specifier_seq_node)
+			;
+
+			member_enum* new_enum = create_member_enum2(enum_specifier_node, access);
+
+			info.opt_new_type = new_enum;
+			info.opt_complete_type = new_enum;
+
+			break;
+		}
+		case syntax_node_analysis::type_specifier_seq_type::SIMPLE_TYPE:
+		{
+			info.opt_complete_type = create_simple_type(decl_specifier_seq_node, current_declarative_region);
+			break;
+		}
+		case syntax_node_analysis::type_specifier_seq_type::NO_TYPE:
+		{
+			break;
+		}
+	}
+
+	//qualify type
+	if(info.opt_complete_type)
+		info.opt_complete_type = qualify_type(*info.opt_complete_type, decl_specifier_seq_node);
+
+	return info;
+}
+
+semantic_entities::type_variant
+create_simple_type
 (
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
 	const declarative_region_ptr_variant current_declarative_region
 )
 {
-	return create_type(syntax_node_analysis::to_type_specifier_seq(decl_specifier_seq_node), current_declarative_region);
+	return create_simple_type(syntax_node_analysis::to_type_specifier_seq(decl_specifier_seq_node), current_declarative_region);
 }
 
 semantic_entities::type_variant
-create_type
+create_simple_type
 (
 	const syntax_nodes::type_specifier_seq& type_specifier_seq_node,
 	const semantic_entities::declarative_region_ptr_variant current_declarative_region
@@ -182,6 +358,68 @@ create_type
 		return *opt_return_type;
 	}
 }
+
+
+
+namespace
+{
+	class fill_type_visitor: public utility::static_visitor<void>
+	{
+		public:
+			fill_type_visitor(const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node):
+				decl_specifier_seq_node_(decl_specifier_seq_node)
+			{
+			}
+
+			//class or union type
+			template<class Type>
+			void
+			operator()
+			(
+				Type* type,
+				typename boost::enable_if_c<type_traits::is_class<Type>::value || type_traits::is_union<Type>::value>::type* = 0
+			)
+			{
+				const class_specifier& class_specifier_node =
+					syntax_node_analysis::get_class_specifier(decl_specifier_seq_node_)
+				;
+
+				fill_class(*type, class_specifier_node);
+			}
+
+			//enum type
+			template<class Type>
+			void
+			operator()
+			(
+				Type* type,
+				typename boost::enable_if<type_traits::is_enum<Type>>::type* = 0
+			)
+			{
+				const enum_specifier& enum_specifier_node =
+					syntax_node_analysis::get_enum_specifier(decl_specifier_seq_node_)
+				;
+
+				fill_enum(*type, enum_specifier_node);
+			}
+
+		private:
+			const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node_;
+	};
+}
+
+void
+fill_type
+(
+	const user_defined_type_ptr_variant& type,
+	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node
+)
+{
+	fill_type_visitor visitor(decl_specifier_seq_node);
+	apply_visitor(visitor, type);
+}
+
+
 
 semantic_entities::type_variant
 qualify_type

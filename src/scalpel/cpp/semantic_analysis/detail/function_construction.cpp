@@ -95,7 +95,7 @@ create_function
 			}
 			case syntax_node_analysis::type_specifier_seq_type::SIMPLE_TYPE:
 			{
-				opt_unqualified_type = create_type(decl_specifier_seq_node, current_declarative_region);
+				opt_unqualified_type = create_simple_type(decl_specifier_seq_node, current_declarative_region);
 				break;
 			}
 			case syntax_node_analysis::type_specifier_seq_type::NO_TYPE:
@@ -388,7 +388,7 @@ get_conversion_function_type
 )
 {
 	const type_specifier_seq& type_specifier_seq_node = get_type_specifier_seq(conversion_function_id_node);
-	type_variant type = create_type(type_specifier_seq_node, current_declarative_region);
+	type_variant type = create_simple_type(type_specifier_seq_node, current_declarative_region);
 
 	if(const optional_node<ptr_operator_seq>& opt_ptr_operator_seq_node = get_ptr_operator_seq(conversion_function_id_node))
 	{
@@ -434,7 +434,7 @@ create_parameters
 		semantic_entities::type_variant type =
 			qualify_type
 			(
-				create_type
+				create_simple_type
 				(
 					decl_specifier_seq_node,
 					current_declarative_region

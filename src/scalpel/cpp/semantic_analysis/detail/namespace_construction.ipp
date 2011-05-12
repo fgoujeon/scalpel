@@ -304,7 +304,7 @@ fill_namespace
 			}
 			case syntax_node_analysis::type_specifier_seq_type::SIMPLE_TYPE:
 			{
-				opt_unqualified_type = create_type(decl_specifier_seq_node, &namespace_entity);
+				opt_unqualified_type = create_simple_type(decl_specifier_seq_node, &namespace_entity);
 				break;
 			}
 			case syntax_node_analysis::type_specifier_seq_type::NO_TYPE:

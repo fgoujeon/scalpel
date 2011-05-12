@@ -39,5 +39,11 @@ create_member_enum(const enum_specifier& enum_specifier_node, const member_acces
 	return std::unique_ptr<member_enum>(new member_enum(syntax_node_analysis::get_identifier(enum_specifier_node), access));
 }
 
+semantic_entities::member_enum*
+create_member_enum2(const syntax_nodes::enum_specifier& enum_specifier_node, const semantic_entities::member_access access)
+{
+	return new member_enum(syntax_node_analysis::get_identifier(enum_specifier_node), access);
+}
+
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
 
