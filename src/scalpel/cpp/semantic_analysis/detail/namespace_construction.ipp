@@ -133,192 +133,45 @@ fill_namespace
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
 
-	boost::optional<type_variant> opt_unqualified_type;
-	bool has_typedef_specifier = false;
-	bool has_static_specifier = false;
-	bool has_inline_specifier = false;
-	bool create_anonymous_object = false; //true for anonymous unions only
+	const optional_node<decl_specifier_seq>& opt_decl_specifier_seq_node =
+		get_decl_specifier_seq(simple_declaration_node)
+	;
+	const optional_node<init_declarator_list>& opt_init_declarator_list_node =
+		get_init_declarator_list(simple_declaration_node)
+	;
 
-	if(const optional_node<decl_specifier_seq>& opt_decl_specifier_seq_node = get_decl_specifier_seq(simple_declaration_node))
+	//create and/or get the type defined by the decl-specifier-seq node
+	type_info info;
+	if(opt_decl_specifier_seq_node)
 	{
-		const decl_specifier_seq& decl_specifier_seq_node = *opt_decl_specifier_seq_node;
-
-		has_typedef_specifier = syntax_node_analysis::has_typedef_specifier(decl_specifier_seq_node);
-		has_static_specifier = syntax_node_analysis::has_static_specifier(decl_specifier_seq_node);
-		has_inline_specifier = syntax_node_analysis::has_inline_specifier(decl_specifier_seq_node);
-
-		//create and/or get undecorated type
-		switch(syntax_node_analysis::get_decl_specifier_seq_type(decl_specifier_seq_node))
-		{
-			case syntax_node_analysis::type_specifier_seq_type::CLASS_DECLARATION:
-			{
-				const class_specifier& class_specifier_node =
-					syntax_node_analysis::get_class_specifier(decl_specifier_seq_node)
-				;
-				const class_head& class_head_node = get_class_head(class_specifier_node);
-				const optional_node<nested_name_specifier>& opt_nested_name_specifier_node =
-					get_nested_name_specifier(class_head_node)
-				;
-
-				if(opt_nested_name_specifier_node)
-				{
-					//find the class
-					class_* found_class =
-						name_lookup::find
-						<
-							semantic_entity_analysis::identification_policies::by_name,
-							false,
-							false,
-							class_
-						>
-						(
-							false,
-							opt_nested_name_specifier_node,
-							syntax_node_analysis::get_identifier(class_specifier_node),
-							&namespace_entity,
-							false
-						)
-					;
-
-					//and define it
-					fill_class(*found_class, class_specifier_node);
-
-					opt_unqualified_type = found_class;
-				}
-				else
-				{
-					std::unique_ptr<class_> new_class = create_class<class_>(class_specifier_node);
-					class_& added_class = add_class(namespace_entity, std::move(new_class));
-					fill_class(added_class, class_specifier_node);
-
-					opt_unqualified_type = &added_class;
-				}
-
-				break;
-			}
-			case syntax_node_analysis::type_specifier_seq_type::CLASS_FORWARD_DECLARATION:
-			{
-				const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node =
-					syntax_node_analysis::get_class_elaborated_specifier(decl_specifier_seq_node)
-				;
-
-				std::unique_ptr<class_> new_class = create_class<class_>(class_elaborated_specifier_node);
-				class_& added_class = add_class(namespace_entity, std::move(new_class));
-
-				opt_unqualified_type = &added_class;
-
-				break;
-			}
-			case syntax_node_analysis::type_specifier_seq_type::UNION_DECLARATION:
-			{
-				const class_specifier& class_specifier_node =
-					syntax_node_analysis::get_class_specifier(decl_specifier_seq_node)
-				;
-				const class_head& class_head_node = get_class_head(class_specifier_node);
-				const optional_node<nested_name_specifier>& opt_nested_name_specifier_node =
-					get_nested_name_specifier(class_head_node)
-				;
-
-				if(opt_nested_name_specifier_node)
-				{
-					//find the union
-					union_* found_union =
-						name_lookup::find
-						<
-							semantic_entity_analysis::identification_policies::by_name,
-							false,
-							false,
-							union_
-						>
-						(
-							false,
-							opt_nested_name_specifier_node,
-							syntax_node_analysis::get_identifier(class_specifier_node),
-							&namespace_entity,
-							false
-						)
-					;
-
-					//and define it
-					fill_class(*found_union, class_specifier_node);
-
-					opt_unqualified_type = found_union;
-				}
-				else
-				{
-					//is it an anonymous union?
-					const bool anonymous =
-						syntax_node_analysis::get_identifier(class_specifier_node).empty() &&
-						!get_init_declarator_list(simple_declaration_node)
-					;
-
-					if(anonymous)
-					{
-						std::unique_ptr<anonymous_union> new_union(new anonymous_union());
-						anonymous_union& added_union = *new_union;
-						namespace_entity.add_member(std::move(new_union));
-						fill_class(added_union, class_specifier_node);
-
-						opt_unqualified_type = &added_union;
-						create_anonymous_object = true;
-					}
-					else
-					{
-						std::unique_ptr<union_> new_union = create_class<union_>(class_specifier_node);
-						union_& added_union = add_class(namespace_entity, std::move(new_union));
-						fill_class(added_union, class_specifier_node);
-
-						opt_unqualified_type = &added_union;
-					}
-				}
-
-				break;
-			}
-			case syntax_node_analysis::type_specifier_seq_type::UNION_FORWARD_DECLARATION:
-			{
-				const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node =
-					syntax_node_analysis::get_class_elaborated_specifier(decl_specifier_seq_node)
-				;
-
-				std::unique_ptr<union_> new_union = create_class<union_>(class_elaborated_specifier_node);
-				union_& added_union = add_class(namespace_entity, std::move(new_union));
-
-				opt_unqualified_type = &added_union;
-
-				break;
-			}
-			case syntax_node_analysis::type_specifier_seq_type::ENUMERATION_DECLARATION:
-			{
-				const enum_specifier& enum_specifier_node =
-					syntax_node_analysis::get_enum_specifier(decl_specifier_seq_node)
-				;
-
-				std::unique_ptr<enum_> new_enum = create_enum(enum_specifier_node);
-				enum_& new_enum_ref = *new_enum;
-				namespace_entity.add_member(std::move(new_enum));
-				fill_enum(new_enum_ref, enum_specifier_node);
-
-				opt_unqualified_type = &new_enum_ref;
-
-				break;
-			}
-			case syntax_node_analysis::type_specifier_seq_type::SIMPLE_TYPE:
-			{
-				opt_unqualified_type = create_simple_type(decl_specifier_seq_node, &namespace_entity);
-				break;
-			}
-			case syntax_node_analysis::type_specifier_seq_type::NO_TYPE:
-			{
-				break;
-			}
-		}
-
-		//qualify type
-		if(opt_unqualified_type)
-			opt_unqualified_type = qualify_type(*opt_unqualified_type, decl_specifier_seq_node);
+		info =
+			create_type
+			(
+				*opt_decl_specifier_seq_node,
+				opt_init_declarator_list_node,
+				namespace_entity,
+				false, //is member
+				member_access::PUBLIC //ignored
+			)
+		;
 	}
 
-	if(const optional_node<init_declarator_list>& opt_init_declarator_list_node = get_init_declarator_list(simple_declaration_node))
+	//if the type is a new user defined type (class, union, enum, etc.)...
+	if(info.opt_new_type)
+	{
+		//add it to the class
+		generic_queries::detail::add_entity_to_declarative_region(*info.opt_new_type, namespace_entity);
+	}
+
+	//define the type, if appropriate
+	if(info.opt_defined_type)
+	{
+		assert(opt_decl_specifier_seq_node);
+		fill_type(*info.opt_defined_type, *opt_decl_specifier_seq_node);
+	}
+
+	//create function(s), variable(s), etc.
+	if(opt_init_declarator_list_node)
 	{
 		const init_declarator_list& init_declarator_list_node = *opt_init_declarator_list_node;
 
@@ -331,11 +184,11 @@ fill_namespace
 			(
 				declarator_node,
 				&namespace_entity,
-				opt_unqualified_type,
-				has_typedef_specifier,
+				info.opt_complete_type,
+				info.has_typedef_specifier,
 				false,
-				has_static_specifier,
-				has_inline_specifier,
+				info.has_static_specifier,
+				info.has_inline_specifier,
 				false,
 				false,
 				false,
@@ -346,7 +199,7 @@ fill_namespace
 			generic_queries::detail::add_entity_to_declarative_region(declarator_entity, namespace_entity);
 		}
 	}
-	else if(create_anonymous_object) //the type could be an anonymous union
+	else if(info.create_anonymous_object) //the type could be an anonymous union
 	{
 		namespace_entity.add_member
 		(
@@ -355,8 +208,8 @@ fill_namespace
 				new variable
 				(
 					"",
-					*opt_unqualified_type,
-					has_static_specifier
+					*info.opt_complete_type,
+					info.has_static_specifier
 				)
 			)
 		);
@@ -570,32 +423,6 @@ fill_namespace
 			);
 		}
 	}
-}
-
-template<class Namespace, class Class>
-Class&
-add_class
-(
-	Namespace& namespace_entity,
-	std::unique_ptr<Class>&& class_entity
-)
-{
-	using namespace syntax_nodes;
-	using namespace semantic_entities;
-
-	typename generic_queries::detail::get_members_return_type<Namespace, Class, false>::type classes =
-		generic_queries::detail::get_members<Class>(namespace_entity)
-	;
-	for(auto i = classes.begin(); i != classes.end(); ++i)
-	{
-		Class& current_class = *i;
-		if(!current_class.complete() && current_class.name() == class_entity->name())
-			return current_class;
-	}
-
-	Class& class_entity_ref = *class_entity;
-	namespace_entity.add_member(std::move(class_entity));
-	return class_entity_ref;
 }
 
 

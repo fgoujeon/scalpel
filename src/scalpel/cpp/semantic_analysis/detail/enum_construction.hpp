@@ -31,6 +31,9 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 std::unique_ptr<semantic_entities::enum_>
 create_enum(const syntax_nodes::enum_specifier& enum_specifier_node);
 
+semantic_entities::enum_*
+create_enum2(const syntax_nodes::enum_specifier& enum_specifier_node);
+
 std::unique_ptr<semantic_entities::member_enum>
 create_member_enum(const syntax_nodes::enum_specifier& enum_specifier_node, const semantic_entities::member_access access);
 

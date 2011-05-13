@@ -48,6 +48,7 @@ typedef
 struct type_info
 {
 	boost::optional<user_defined_type_ptr_variant> opt_new_type; //type object created by create_type() that must be stored
+	boost::optional<user_defined_type_ptr_variant> opt_defined_type; //type *defined* (not only declared) by the decl-specifier-seq node
 	boost::optional<semantic_entities::type_variant> opt_complete_type; //qualified type
 	bool has_typedef_specifier;
 	bool has_friend_specifier;
@@ -56,15 +57,16 @@ struct type_info
 	bool has_inline_specifier;
 	bool has_virtual_specifier;
 	bool has_explicit_specifier;
-	bool create_anonymous_object;
+	bool create_anonymous_object; //an anonymous object must be created
 };
 
+template<class DeclarativeRegion>
 type_info
 create_type
 (
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
 	const bool has_declarator,
-	const semantic_entities::declarative_region_ptr_variant current_declarative_region,
+	DeclarativeRegion& current_declarative_region,
 	const bool is_member,
 	const semantic_entities::member_access access
 );
@@ -184,6 +186,8 @@ get_fundamental_type
 );
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
+
+#include "type_construction.ipp"
 
 #endif
 

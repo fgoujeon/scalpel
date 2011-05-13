@@ -78,18 +78,6 @@ fill_namespace
 	const syntax_nodes::function_definition& function_definition_node
 );
 
-//Check whether the given class hasn't been forward declared in the given
-//namespace.
-//If so, return the forward declared class.
-//If not, add the given class to the given namespace and return the given class.
-template<class Namespace, class Class>
-Class&
-add_class
-(
-	Namespace& namespace_entity,
-	std::unique_ptr<Class>&& class_entity
-);
-
 //add the entity alias to the given namespace
 template<class Namespace, class... Entities>
 void

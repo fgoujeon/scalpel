@@ -1,0 +1,14 @@
+<namespace id="0">
+ <class id="0" name="c">
+  <union id="0" name="u" access="private">
+   <destructor access="public" defined="false">
+   </destructor>
+  </union>
+  <destructor access="public" defined="false">
+  </destructor>
+ </class>
+ <union id="0" name="u">
+  <destructor access="public" defined="false">
+  </destructor>
+ </union>
+</namespace>
