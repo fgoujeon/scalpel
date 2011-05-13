@@ -149,9 +149,7 @@ fill_namespace
 			(
 				*opt_decl_specifier_seq_node,
 				opt_init_declarator_list_node,
-				namespace_entity,
-				false, //is member
-				member_access::PUBLIC //ignored
+				namespace_entity
 			)
 		;
 	}

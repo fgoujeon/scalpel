@@ -36,20 +36,8 @@ std::unique_ptr<Class>
 create_class(const syntax_nodes::class_specifier& class_specifier_node);
 
 template<class Class>
-Class*
-create_class2(const syntax_nodes::class_specifier& class_specifier_node);
-
-template<class Class>
 std::unique_ptr<Class>
 create_member_class
-(
-	const syntax_nodes::class_specifier& class_specifier_node,
-	const semantic_entities::member_access access
-);
-
-template<class Class>
-Class*
-create_member_class2
 (
 	const syntax_nodes::class_specifier& class_specifier_node,
 	const semantic_entities::member_access access
@@ -63,23 +51,8 @@ create_class
 );
 
 template<class Class>
-Class*
-create_class2
-(
-	const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node
-);
-
-template<class Class>
 std::unique_ptr<Class>
 create_member_class
-(
-	const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node,
-	const semantic_entities::member_access access
-);
-
-template<class Class>
-Class*
-create_member_class2
 (
 	const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node,
 	const semantic_entities::member_access access

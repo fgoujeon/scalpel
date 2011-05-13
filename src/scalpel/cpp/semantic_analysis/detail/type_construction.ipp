@@ -24,7 +24,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "class_construction.hpp"
 #include "name_lookup.hpp"
 #include "syntax_node_analysis/class_specifier.hpp"
+#include "syntax_node_analysis/enum_specifier.hpp"
 #include "syntax_node_analysis/decl_specifier_seq.hpp"
+#include <scalpel/cpp/semantic_entities/type_traits/is_class.hpp>
+#include <scalpel/cpp/semantic_entities/type_traits/is_union.hpp>
+#include <scalpel/utility/type_alternative.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail
 {
@@ -36,12 +40,16 @@ create_type
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
 	const bool has_declarator,
 	DeclarativeRegion& current_declarative_region,
-	const bool is_member,
 	const semantic_entities::member_access access
 )
 {
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
+
+	const bool is_member =
+		type_traits::is_class<DeclarativeRegion>::value ||
+		type_traits::is_union<DeclarativeRegion>::value
+	;
 
 	type_info info;
 
@@ -107,39 +115,23 @@ create_type
 			}
 			else
 			{
+				const bool type_index = is_member ? 0 : 1;
+				typedef typename utility::type_alternative<type_index, member_class, class_>::type class_t;
+
 				const std::string& class_name = syntax_node_analysis::get_identifier(class_specifier_node);
 
-				if(is_member)
+				//has the class been already declared?
+				if(class_t* found_class = find_type<class_t>(current_declarative_region, class_name))
 				{
-					//has the class been already declared?
-					if(member_class* found_class = find_type<member_class>(current_declarative_region, class_name))
-					{
-						info.opt_defined_type = found_class;
-						info.opt_complete_type = found_class;
-					}
-					else
-					{
-						member_class* new_class = new member_class(class_name, access);
-						info.opt_new_type = new_class;
-						info.opt_defined_type = new_class;
-						info.opt_complete_type = new_class;
-					}
+					info.opt_defined_type = found_class;
+					info.opt_complete_type = found_class;
 				}
 				else
 				{
-					//has the class been already declared?
-					if(class_* found_class = find_type<class_>(current_declarative_region, class_name))
-					{
-						info.opt_defined_type = found_class;
-						info.opt_complete_type = found_class;
-					}
-					else
-					{
-						class_* new_class = new class_(class_name);
-						info.opt_new_type = new_class;
-						info.opt_defined_type = new_class;
-						info.opt_complete_type = new_class;
-					}
+					class_t* new_class = create_type<class_t>(class_name, access);
+					info.opt_new_type = new_class;
+					info.opt_defined_type = new_class;
+					info.opt_complete_type = new_class;
 				}
 			}
 
@@ -150,36 +142,32 @@ create_type
 			const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node =
 				syntax_node_analysis::get_class_elaborated_specifier(decl_specifier_seq_node)
 			;
+			const identifier_or_template_id& identifier_or_template_id_node =
+				get_identifier_or_template_id(class_elaborated_specifier_node)
+			;
 
-			if(is_member)
+			if(const boost::optional<const identifier&> opt_identifier_node = get<identifier>(&identifier_or_template_id_node))
 			{
-				member_class* new_class = create_member_class2<member_class>(class_elaborated_specifier_node, access);
+				const bool type_index = is_member ? 0 : 1;
+				typedef typename utility::type_alternative<type_index, member_class, class_>::type class_t;
+
+				const std::string& class_name = opt_identifier_node->value();
 
 				//has the class been already declared?
-				if(member_class* found_class = find_type<member_class>(current_declarative_region, new_class->name()))
+				if(class_t* found_class = find_type<class_t>(current_declarative_region, class_name))
 				{
 					info.opt_complete_type = found_class;
 				}
 				else
 				{
+					class_t* new_class = create_type<class_t>(class_name, access);
 					info.opt_new_type = new_class;
 					info.opt_complete_type = new_class;
 				}
 			}
 			else
 			{
-				class_* new_class = create_class2<class_>(class_elaborated_specifier_node);
-
-				//has the class been already declared?
-				if(class_* found_class = find_type<class_>(current_declarative_region, new_class->name()))
-				{
-					info.opt_complete_type = found_class;
-				}
-				else
-				{
-					info.opt_new_type = new_class;
-					info.opt_complete_type = new_class;
-				}
+				assert(false); //not implemented yet
 			}
 
 			break;
@@ -236,58 +224,35 @@ create_type
 
 				if(anonymous)
 				{
-					if(is_member)
-					{
-						anonymous_member_union* new_union = new anonymous_member_union();
-						info.opt_new_type = new_union;
-						info.opt_defined_type = new_union;
-						info.opt_complete_type = new_union;
-					}
-					else
-					{
-						anonymous_union* new_union = new anonymous_union();
-						info.opt_new_type = new_union;
-						info.opt_defined_type = new_union;
-						info.opt_complete_type = new_union;
-					}
+					const bool type_index = is_member ? 0 : 1;
+					typedef typename utility::type_alternative<type_index, anonymous_member_union, anonymous_union>::type union_t;
+
+					union_t* new_union = new union_t();
+					info.opt_new_type = new_union;
+					info.opt_defined_type = new_union;
+					info.opt_complete_type = new_union;
 
 					info.create_anonymous_object = true;
 				}
 				else
 				{
+					const bool type_index = is_member ? 0 : 1;
+					typedef typename utility::type_alternative<type_index, member_union, union_>::type union_t;
+
 					const std::string& union_name = syntax_node_analysis::get_identifier(class_specifier_node);
 
-					if(is_member)
+					//has the union been already declared?
+					if(union_t* found_union = find_type<union_t>(current_declarative_region, union_name))
 					{
-						//has the union been already declared?
-						if(member_union* found_union = find_type<member_union>(current_declarative_region, union_name))
-						{
-							info.opt_defined_type = found_union;
-							info.opt_complete_type = found_union;
-						}
-						else
-						{
-							member_union* new_union = new member_union(union_name, access);
-							info.opt_new_type = new_union;
-							info.opt_defined_type = new_union;
-							info.opt_complete_type = new_union;
-						}
+						info.opt_defined_type = found_union;
+						info.opt_complete_type = found_union;
 					}
 					else
 					{
-						//has the union been already declared?
-						if(union_* found_union = find_type<union_>(current_declarative_region, union_name))
-						{
-							info.opt_defined_type = found_union;
-							info.opt_complete_type = found_union;
-						}
-						else
-						{
-							union_* new_union = new union_(union_name);
-							info.opt_new_type = new_union;
-							info.opt_defined_type = new_union;
-							info.opt_complete_type = new_union;
-						}
+						union_t* new_union = create_type<union_t>(union_name, access);
+						info.opt_new_type = new_union;
+						info.opt_defined_type = new_union;
+						info.opt_complete_type = new_union;
 					}
 				}
 			}
@@ -299,60 +264,50 @@ create_type
 			const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node =
 				syntax_node_analysis::get_class_elaborated_specifier(decl_specifier_seq_node)
 			;
+			const identifier_or_template_id& identifier_or_template_id_node =
+				get_identifier_or_template_id(class_elaborated_specifier_node)
+			;
 
-			if(is_member)
+			if(const boost::optional<const identifier&> opt_identifier_node = get<identifier>(&identifier_or_template_id_node))
 			{
-				member_union* new_union = create_member_class2<member_union>(class_elaborated_specifier_node, access);
+				const bool type_index = is_member ? 0 : 1;
+				typedef typename utility::type_alternative<type_index, member_union, union_>::type union_t;
+
+				const std::string& union_name = opt_identifier_node->value();
 
 				//has the union been already declared?
-				if(member_union* found_union = find_type<member_union>(current_declarative_region, new_union->name()))
+				if(union_t* found_union = find_type<union_t>(current_declarative_region, union_name))
 				{
 					info.opt_complete_type = found_union;
 				}
 				else
 				{
+					union_t* new_union = create_type<union_t>(union_name, access);
 					info.opt_new_type = new_union;
 					info.opt_complete_type = new_union;
 				}
 			}
 			else
 			{
-				union_* new_union = create_class2<union_>(class_elaborated_specifier_node);
-
-				//has the union been already declared?
-				if(union_* found_union = find_type<union_>(current_declarative_region, new_union->name()))
-				{
-					info.opt_complete_type = found_union;
-				}
-				else
-				{
-					info.opt_new_type = new_union;
-					info.opt_complete_type = new_union;
-				}
+				assert(false); //not implemented yet
 			}
 
 			break;
 		}
 		case syntax_node_analysis::type_specifier_seq_type::ENUMERATION_DECLARATION:
 		{
+			const bool type_index = is_member ? 0 : 1;
+			typedef typename utility::type_alternative<type_index, member_enum, enum_>::type enum_t;
+
 			const enum_specifier& enum_specifier_node =
 				syntax_node_analysis::get_enum_specifier(decl_specifier_seq_node)
 			;
+			const std::string& enum_name = syntax_node_analysis::get_identifier(enum_specifier_node);
 
-			if(is_member)
-			{
-				member_enum* new_enum = create_member_enum2(enum_specifier_node, access);
-				info.opt_new_type = new_enum;
-				info.opt_defined_type = new_enum;
-				info.opt_complete_type = new_enum;
-			}
-			else
-			{
-				enum_* new_enum = create_enum2(enum_specifier_node);
-				info.opt_new_type = new_enum;
-				info.opt_defined_type = new_enum;
-				info.opt_complete_type = new_enum;
-			}
+			enum_t* new_enum = create_type<enum_t>(enum_name, access);
+			info.opt_new_type = new_enum;
+			info.opt_defined_type = new_enum;
+			info.opt_complete_type = new_enum;
 
 			break;
 		}
@@ -372,6 +327,32 @@ create_type
 		info.opt_complete_type = qualify_type(*info.opt_complete_type, decl_specifier_seq_node);
 
 	return info;
+}
+
+
+
+template<class Type>
+Type*
+create_type
+(
+	const std::string& type_name,
+	const semantic_entities::member_access access,
+	typename boost::enable_if<semantic_entities::type_traits::is_member<Type>>::type*
+)
+{
+	return new Type(type_name, access);
+}
+
+template<class Type>
+Type*
+create_type
+(
+	const std::string& type_name,
+	const semantic_entities::member_access, //ignored
+	typename boost::disable_if<semantic_entities::type_traits::is_member<Type>>::type*
+)
+{
+	return new Type(type_name);
 }
 
 

@@ -44,13 +44,6 @@ create_class(const syntax_nodes::class_specifier& class_specifier_node)
 }
 
 template<class Class>
-Class*
-create_class2(const syntax_nodes::class_specifier& class_specifier_node)
-{
-	return new Class(syntax_node_analysis::get_identifier(class_specifier_node));
-}
-
-template<class Class>
 std::unique_ptr<Class>
 create_member_class
 (
@@ -66,23 +59,6 @@ create_member_class
 				syntax_node_analysis::get_identifier(class_specifier_node),
 				access
 			)
-		)
-	;
-}
-
-template<class Class>
-Class*
-create_member_class2
-(
-	const syntax_nodes::class_specifier& class_specifier_node,
-	const semantic_entities::member_access access
-)
-{
-	return
-		new Class
-		(
-			syntax_node_analysis::get_identifier(class_specifier_node),
-			access
 		)
 	;
 }
@@ -112,30 +88,6 @@ create_class
 }
 
 template<class Class>
-Class*
-create_class2
-(
-	const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node
-)
-{
-	using namespace syntax_nodes;
-	using namespace semantic_entities;
-
-	//get the name of the class
-	std::string class_name;
-	const identifier_or_template_id& identifier_or_template_id_node = get_identifier_or_template_id(class_elaborated_specifier_node);
-
-	if(const boost::optional<const identifier&> opt_identifier_node = get<identifier>(&identifier_or_template_id_node))
-	{
-		class_name = opt_identifier_node->value();
-	}
-
-	//create the class
-	assert(class_name != "");
-	return new Class(class_name);
-}
-
-template<class Class>
 std::unique_ptr<Class>
 create_member_class
 (
@@ -158,31 +110,6 @@ create_member_class
 	//create the class
 	assert(class_name != "");
 	return std::unique_ptr<Class>(new Class(class_name, access));
-}
-
-template<class Class>
-Class*
-create_member_class2
-(
-	const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node,
-	const semantic_entities::member_access access
-)
-{
-	using namespace syntax_nodes;
-	using namespace semantic_entities;
-
-	//get the name of the class
-	std::string class_name;
-	const identifier_or_template_id& identifier_or_template_id_node = get_identifier_or_template_id(class_elaborated_specifier_node);
-
-	if(const boost::optional<const identifier&> opt_identifier_node = get<identifier>(&identifier_or_template_id_node))
-	{
-		class_name = opt_identifier_node->value();
-	}
-
-	//create the class
-	assert(class_name != "");
-	return new Class(class_name, access);
 }
 
 template<class Class>
@@ -386,7 +313,6 @@ fill_class
 				*opt_decl_specifier_seq_node,
 				opt_member_declarator_list_node,
 				class_entity,
-				true, //is member
 				current_access
 			)
 		;

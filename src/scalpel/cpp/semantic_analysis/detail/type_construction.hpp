@@ -21,6 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_TYPE_CONSTRUCTION_HPP
 #define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_TYPE_CONSTRUCTION_HPP
 
+#include <scalpel/cpp/semantic_entities/type_traits/is_member.hpp>
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <scalpel/cpp/syntax_tree.hpp>
 #include <scalpel/utility/ptr_variant.hpp>
@@ -60,6 +61,7 @@ struct type_info
 	bool create_anonymous_object; //an anonymous object must be created
 };
 
+//Create the type described by the given decl-specifier-seq.
 template<class DeclarativeRegion>
 type_info
 create_type
@@ -67,8 +69,27 @@ create_type
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
 	const bool has_declarator,
 	DeclarativeRegion& current_declarative_region,
-	const bool is_member,
-	const semantic_entities::member_access access
+	const semantic_entities::member_access access = semantic_entities::member_access::PUBLIC
+);
+
+
+
+template<class Type>
+Type*
+create_type
+(
+	const std::string& type_name,
+	const semantic_entities::member_access access,
+	typename boost::enable_if<semantic_entities::type_traits::is_member<Type>>::type* = 0
+);
+
+template<class Type>
+Type*
+create_type
+(
+	const std::string& type_name,
+	const semantic_entities::member_access, //ignored
+	typename boost::disable_if<semantic_entities::type_traits::is_member<Type>>::type* = 0
 );
 
 
