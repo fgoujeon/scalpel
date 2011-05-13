@@ -112,22 +112,7 @@ create_type
 				if(is_member)
 				{
 					//has the class been already declared?
-					member_class* found_class =
-						name_lookup::find_local
-						<
-							semantic_entity_analysis::identification_policies::by_name,
-							DeclarativeRegion,
-							true,
-							false,
-							member_class
-						>
-						(
-							class_name,
-							current_declarative_region
-						)
-					;
-
-					if(found_class)
+					if(member_class* found_class = find_type<member_class>(current_declarative_region, class_name))
 					{
 						info.opt_defined_type = found_class;
 						info.opt_complete_type = found_class;
@@ -143,22 +128,7 @@ create_type
 				else
 				{
 					//has the class been already declared?
-					class_* found_class =
-						name_lookup::find_local
-						<
-							semantic_entity_analysis::identification_policies::by_name,
-							DeclarativeRegion,
-							true,
-							false,
-							class_
-						>
-						(
-							class_name,
-							current_declarative_region
-						)
-					;
-
-					if(found_class)
+					if(class_* found_class = find_type<class_>(current_declarative_region, class_name))
 					{
 						info.opt_defined_type = found_class;
 						info.opt_complete_type = found_class;
@@ -186,22 +156,7 @@ create_type
 				member_class* new_class = create_member_class2<member_class>(class_elaborated_specifier_node, access);
 
 				//has the class been already declared?
-				member_class* found_class =
-					name_lookup::find_local
-					<
-						semantic_entity_analysis::identification_policies::by_name,
-						DeclarativeRegion,
-						true,
-						false,
-						member_class
-					>
-					(
-						new_class->name(),
-						current_declarative_region
-					)
-				;
-
-				if(found_class)
+				if(member_class* found_class = find_type<member_class>(current_declarative_region, new_class->name()))
 				{
 					info.opt_complete_type = found_class;
 				}
@@ -216,22 +171,7 @@ create_type
 				class_* new_class = create_class2<class_>(class_elaborated_specifier_node);
 
 				//has the class been already declared?
-				class_* found_class =
-					name_lookup::find_local
-					<
-						semantic_entity_analysis::identification_policies::by_name,
-						DeclarativeRegion,
-						true,
-						false,
-						class_
-					>
-					(
-						new_class->name(),
-						current_declarative_region
-					)
-				;
-
-				if(found_class)
+				if(class_* found_class = find_type<class_>(current_declarative_region, new_class->name()))
 				{
 					info.opt_complete_type = found_class;
 				}
@@ -294,18 +234,10 @@ create_type
 					!has_declarator
 				;
 
-
-
-
-
 				if(anonymous)
 				{
 					if(is_member)
 					{
-
-
-
-
 						anonymous_member_union* new_union = new anonymous_member_union();
 						info.opt_new_type = new_union;
 						info.opt_defined_type = new_union;
@@ -328,22 +260,7 @@ create_type
 					if(is_member)
 					{
 						//has the union been already declared?
-						member_union* found_union =
-							name_lookup::find_local
-							<
-								semantic_entity_analysis::identification_policies::by_name,
-								DeclarativeRegion,
-								true,
-								false,
-								member_union
-							>
-							(
-								union_name,
-								current_declarative_region
-							)
-						;
-
-						if(found_union)
+						if(member_union* found_union = find_type<member_union>(current_declarative_region, union_name))
 						{
 							info.opt_defined_type = found_union;
 							info.opt_complete_type = found_union;
@@ -359,22 +276,7 @@ create_type
 					else
 					{
 						//has the union been already declared?
-						union_* found_union =
-							name_lookup::find_local
-							<
-								semantic_entity_analysis::identification_policies::by_name,
-								DeclarativeRegion,
-								true,
-								false,
-								union_
-							>
-							(
-								union_name,
-								current_declarative_region
-							)
-						;
-
-						if(found_union)
+						if(union_* found_union = find_type<union_>(current_declarative_region, union_name))
 						{
 							info.opt_defined_type = found_union;
 							info.opt_complete_type = found_union;
@@ -403,22 +305,7 @@ create_type
 				member_union* new_union = create_member_class2<member_union>(class_elaborated_specifier_node, access);
 
 				//has the union been already declared?
-				member_union* found_union =
-					name_lookup::find_local
-					<
-						semantic_entity_analysis::identification_policies::by_name,
-						DeclarativeRegion,
-						true,
-						false,
-						member_union
-					>
-					(
-						new_union->name(),
-						current_declarative_region
-					)
-				;
-
-				if(found_union)
+				if(member_union* found_union = find_type<member_union>(current_declarative_region, new_union->name()))
 				{
 					info.opt_complete_type = found_union;
 				}
@@ -433,22 +320,7 @@ create_type
 				union_* new_union = create_class2<union_>(class_elaborated_specifier_node);
 
 				//has the union been already declared?
-				union_* found_union =
-					name_lookup::find_local
-					<
-						semantic_entity_analysis::identification_policies::by_name,
-						DeclarativeRegion,
-						true,
-						false,
-						union_
-					>
-					(
-						new_union->name(),
-						current_declarative_region
-					)
-				;
-
-				if(found_union)
+				if(union_* found_union = find_type<union_>(current_declarative_region, new_union->name()))
 				{
 					info.opt_complete_type = found_union;
 				}
@@ -461,26 +333,6 @@ create_type
 
 			break;
 		}
-//		{
-//			const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node =
-//				syntax_node_analysis::get_class_elaborated_specifier(decl_specifier_seq_node)
-//			;
-//
-//			if(is_member)
-//			{
-//				member_union* new_union = create_member_class2<member_union>(class_elaborated_specifier_node, access);
-//				info.opt_new_type = new_union;
-//				info.opt_complete_type = new_union;
-//			}
-//			else
-//			{
-//				union_* new_union = create_class2<union_>(class_elaborated_specifier_node);
-//				info.opt_new_type = new_union;
-//				info.opt_complete_type = new_union;
-//			}
-//
-//			break;
-//		}
 		case syntax_node_analysis::type_specifier_seq_type::ENUMERATION_DECLARATION:
 		{
 			const enum_specifier& enum_specifier_node =
@@ -520,6 +372,32 @@ create_type
 		info.opt_complete_type = qualify_type(*info.opt_complete_type, decl_specifier_seq_node);
 
 	return info;
+}
+
+
+
+template<class Type, class DeclarativeRegion>
+Type*
+find_type
+(
+	DeclarativeRegion& declarative_region,
+	const std::string& type_name
+)
+{
+	return
+		name_lookup::find_local
+		<
+			semantic_entity_analysis::identification_policies::by_name,
+			DeclarativeRegion,
+			true,
+			false,
+			Type
+		>
+		(
+			type_name,
+			declarative_region
+		)
+	;
 }
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail

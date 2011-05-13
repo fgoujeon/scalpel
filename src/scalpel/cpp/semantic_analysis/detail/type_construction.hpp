@@ -185,6 +185,18 @@ get_fundamental_type
 	const bool wchar_t_type
 );
 
+
+
+//Find a type named type_name in the given declarative_region.
+//Return 0 if nothing is found.
+template<class Type, class DeclarativeRegion>
+Type*
+find_type
+(
+	DeclarativeRegion& declarative_region,
+	const std::string& type_name
+);
+
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
 
 #include "type_construction.ipp"
