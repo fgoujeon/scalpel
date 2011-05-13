@@ -1,6 +1,6 @@
 <namespace id="0">
  <class id="0" name="s">
-  <constructor access="public" variadic="true">
+  <constructor access="public" variadic="true" inline="true">
    <parameters>
     <parameter>
      <type>

@@ -48,9 +48,16 @@ typedef
 
 struct type_info
 {
-	boost::optional<user_defined_type_ptr_variant> opt_new_type; //type object created by create_type() that must be stored
-	boost::optional<user_defined_type_ptr_variant> opt_defined_type; //type *defined* (not only declared) by the decl-specifier-seq node
-	boost::optional<semantic_entities::type_variant> opt_complete_type; //qualified type
+	//A type object allocated on the heap by create_type().
+	//This object is set when the given decl-specifier-seq declares a new type.
+	boost::optional<user_defined_type_ptr_variant> opt_new_type;
+
+	//This object is set when the given decl-specifier-seq defines a type, previously declared or not.
+	boost::optional<user_defined_type_ptr_variant> opt_defined_type;
+
+	//The full type definition described by the given decl-specifier-seq, including potential cv-qualifiers.
+	boost::optional<semantic_entities::type_variant> opt_complete_type;
+
 	bool has_typedef_specifier;
 	bool has_friend_specifier;
 	bool has_mutable_specifier;
@@ -58,10 +65,10 @@ struct type_info
 	bool has_inline_specifier;
 	bool has_virtual_specifier;
 	bool has_explicit_specifier;
-	bool create_anonymous_object; //an anonymous object must be created
+	bool create_anonymous_object; //true if an anonymous object must be created (anonymous union)
 };
 
-//Create the type described by the given decl-specifier-seq.
+//Create and/or get the type described by the given decl-specifier-seq.
 template<class DeclarativeRegion>
 type_info
 create_type

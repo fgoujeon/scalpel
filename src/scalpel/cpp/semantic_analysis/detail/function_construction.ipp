@@ -21,13 +21,110 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_FUNCTION_CONSTRUCTION_IPP
 #define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_FUNCTION_CONSTRUCTION_IPP
 
-#include "semantic_entity_analysis/identification_policies.hpp"
+#include "other_entity_construction.hpp"
+#include "type_construction.hpp"
 #include "name_lookup.hpp"
+#include "semantic_entity_analysis/identification_policies.hpp"
+#include "syntax_node_analysis/function_definition.hpp"
+#include "syntax_node_analysis/declarator.hpp"
+#include "syntax_node_analysis/decl_specifier_seq.hpp"
+#include <scalpel/cpp/semantic_entities/type_traits/is_class.hpp>
+#include <scalpel/cpp/semantic_entities/type_traits/is_union.hpp>
 #include <set>
 #include <iostream>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail
 {
+
+template<class DeclarativeRegion>
+function_ptr_variant
+create_function
+(
+	const syntax_nodes::function_definition& function_definition_node,
+	DeclarativeRegion& current_declarative_region,
+	const bool is_class_member,
+	const bool is_defined_in_class,
+	const semantic_entities::member_access access
+)
+{
+	using namespace syntax_nodes;
+	using namespace semantic_entities;
+
+
+
+	//
+	//Analyze the decl-specifier-seq node, which defines the return type.
+	//
+
+	const optional_node<decl_specifier_seq>& opt_decl_specifier_seq_node =
+		syntax_node_analysis::get_decl_specifier_seq(function_definition_node)
+	;
+
+	//create and/or get the type defined by the decl-specifier-seq node
+	type_info info;
+	if(opt_decl_specifier_seq_node)
+	{
+		info =
+			create_type
+			(
+				*opt_decl_specifier_seq_node,
+				true,
+				current_declarative_region
+			)
+		;
+	}
+
+	//if the type is a new user defined type (class, union, enum, etc.)...
+	if(info.opt_new_type)
+	{
+		assert(false); //not managed yet
+	}
+
+	//type definition -> error
+	if(info.opt_defined_type)
+	{
+		throw std::runtime_error("error: new types may not be defined in a return type");
+	}
+
+
+
+	//
+	//Analyze the declarator node.
+	//
+
+	declarator_entity_ptr_variant declarator_entity = create_entity
+	(
+		syntax_node_analysis::get_declarator(function_definition_node),
+		&current_declarative_region,
+		info.opt_complete_type,
+		info.has_typedef_specifier,
+		false,
+		info.has_static_specifier,
+		is_defined_in_class || info.has_inline_specifier,
+		info.has_virtual_specifier,
+		info.has_explicit_specifier,
+		false,
+		is_class_member,
+		access
+	);
+
+	if(auto opt_constructor_entity = get<constructor*>(&declarator_entity))
+		return *opt_constructor_entity;
+	else if(auto opt_destructor_entity = get<destructor*>(&declarator_entity))
+		return *opt_destructor_entity;
+	else if(auto opt_operator_member_function_entity = get<operator_member_function*>(&declarator_entity))
+		return *opt_operator_member_function_entity;
+	else if(auto opt_conversion_function_entity = get<conversion_function*>(&declarator_entity))
+		return *opt_conversion_function_entity;
+	else if(auto opt_simple_member_function_entity = get<simple_member_function*>(&declarator_entity))
+		return *opt_simple_member_function_entity;
+	else if(auto opt_operator_function_entity = get<operator_function*>(&declarator_entity))
+		return *opt_operator_function_entity;
+	else if(auto opt_simple_function_entity = get<simple_function*>(&declarator_entity))
+		return *opt_simple_function_entity;
+	else
+		assert(false);
+}
 
 template<class FunctionT>
 FunctionT*

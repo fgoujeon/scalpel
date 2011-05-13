@@ -24,6 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "class_construction.hpp"
 #include "function_construction.hpp"
 #include "type_construction.hpp"
+#include "name_lookup.hpp"
 #include "semantic_entity_analysis/get_namespace.hpp"
 #include "semantic_entity_analysis/identification_policies.hpp"
 #include "syntax_node_analysis/declarator.hpp"

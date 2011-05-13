@@ -438,7 +438,7 @@ fill_class
 	function_ptr_variant function_entity = create_function
 	(
 		function_definition_node,
-		&class_entity,
+		class_entity,
 		true,
 		true,
 		access

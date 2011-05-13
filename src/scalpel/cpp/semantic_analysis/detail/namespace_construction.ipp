@@ -356,14 +356,16 @@ fill_namespace
 	//is it a class member function?
 	const bool is_class_member =
 		utility::get<class_*>(&function_declarative_region) ||
-		utility::get<member_class*>(&function_declarative_region)
+		utility::get<member_class*>(&function_declarative_region) ||
+		utility::get<union_*>(&function_declarative_region) ||
+		utility::get<member_union*>(&function_declarative_region)
 	;
 
 	//create an empty function corresponding to the function-definition
 	function_ptr_variant function_entity = create_function
 	(
 		function_definition_node,
-		&namespace_entity,
+		namespace_entity,
 		is_class_member,
 		false,
 		member_access::PUBLIC
