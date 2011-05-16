@@ -181,7 +181,7 @@ fill_namespace
 			declarator_entity_ptr_variant declarator_entity = create_entity
 			(
 				declarator_node,
-				&namespace_entity,
+				namespace_entity,
 				info.opt_complete_type,
 				info.has_typedef_specifier,
 				false,

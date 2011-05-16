@@ -185,5 +185,16 @@ get_type_specifier_seq_type(const syntax_nodes::type_specifier_seq& type_specifi
 	throw std::runtime_error("get_type_specifier_seq_type error");
 }
 
+syntax_nodes::decl_specifier_seq
+to_decl_specifier_seq(const syntax_nodes::type_specifier_seq& type_specifier_seq_node)
+{
+	decl_specifier_seq decl_specifier_seq_node;
+
+	for(auto i = type_specifier_seq_node.begin(); i != type_specifier_seq_node.end(); ++i)
+		decl_specifier_seq_node.push_back(*i);
+
+	return decl_specifier_seq_node;
+}
+
 }}}}} //namespace scalpel::cpp::semantic_analysis::detail::syntax_node_analysis
 

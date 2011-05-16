@@ -1,0 +1,55 @@
+<namespace id="0">
+ <class id="0" name="point">
+  <destructor access="public" defined="false">
+  </destructor>
+  <variable id="0" name="x" access="public">
+   <type>
+    <fundamental_type type="int"/>
+   </type>
+  </variable>
+  <variable id="1" name="y" access="public">
+   <type>
+    <fundamental_type type="int"/>
+   </type>
+  </variable>
+ </class>
+ <simple_function id="0" name="create_point">
+  <return_type>
+   <class id="0"/>
+  </return_type>
+  <parameters>
+   <parameter name="x">
+    <type>
+     <fundamental_type type="int"/>
+    </type>
+   </parameter>
+   <parameter name="y">
+    <type>
+     <fundamental_type type="int"/>
+    </type>
+   </parameter>
+  </parameters>
+ </simple_function>
+ <simple_function id="1" name="distance">
+  <return_type>
+   <fundamental_type type="unsigned int"/>
+  </return_type>
+  <parameters>
+   <parameter name="p1">
+    <type>
+     <class id="0"/>
+    </type>
+   </parameter>
+   <parameter name="p2">
+    <type>
+     <class id="0"/>
+    </type>
+   </parameter>
+  </parameters>
+ </simple_function>
+ <variable id="0" name="p">
+  <type>
+   <class id="0"/>
+  </type>
+ </variable>
+</namespace>

@@ -95,7 +95,7 @@ create_function
 	declarator_entity_ptr_variant declarator_entity = create_entity
 	(
 		syntax_node_analysis::get_declarator(function_definition_node),
-		&current_declarative_region,
+		current_declarative_region,
 		info.opt_complete_type,
 		info.has_typedef_specifier,
 		false,
@@ -172,6 +172,267 @@ find_function
 
 	//if nothing is found
 	return 0;
+}
+
+template<class DeclarativeRegion>
+semantic_entities::type_variant
+get_conversion_function_type
+(
+	const syntax_nodes::declarator& declarator_node,
+	DeclarativeRegion& current_declarative_region
+)
+{
+	using namespace syntax_nodes;
+	using namespace semantic_entities;
+
+	const unqualified_id& unqualified_id_node = syntax_node_analysis::get_unqualified_id(declarator_node);
+	boost::optional<const conversion_function_id&> opt_conversion_function_id_node = syntax_nodes::get<conversion_function_id>(&unqualified_id_node);
+	assert(opt_conversion_function_id_node);
+	return get_conversion_function_type(*opt_conversion_function_id_node, current_declarative_region);
+}
+
+template<class DeclarativeRegion>
+semantic_entities::type_variant
+get_conversion_function_type
+(
+	const syntax_nodes::conversion_function_id& conversion_function_id_node,
+	DeclarativeRegion& current_declarative_region
+)
+{
+	using namespace syntax_nodes;
+	using namespace semantic_entities;
+
+	const type_specifier_seq& type_specifier_seq_node = get_type_specifier_seq(conversion_function_id_node);
+
+
+
+	//
+	//Analyze the type-specifier-seq node
+	//
+
+	type_info info =
+		create_type
+		(
+			type_specifier_seq_node,
+			true,
+			current_declarative_region
+		)
+	;
+
+	//if the type is a new user defined type (class, union, enum, etc.)...
+	if(info.opt_new_type)
+	{
+		assert(false); //TODO
+	}
+
+	//define the type, if appropriate
+	if(info.opt_defined_type)
+	{
+		throw std::runtime_error("types may not be defined in parameter types");
+	}
+
+	assert(info.opt_complete_type);
+	semantic_entities::type_variant type = *info.opt_complete_type;
+
+
+
+	//
+	//Add pointers and references
+	//
+
+	if(const optional_node<ptr_operator_seq>& opt_ptr_operator_seq_node = get_ptr_operator_seq(conversion_function_id_node))
+	{
+		const ptr_operator_seq& ptr_operator_seq_node = *opt_ptr_operator_seq_node;
+		type = qualify_type(type, ptr_operator_seq_node, &current_declarative_region);
+	}
+
+	return type;
+}
+
+template<class DeclarativeRegion>
+semantic_entities::function_parameter_list
+create_parameters
+(
+	boost::optional<const syntax_nodes::parameter_declaration_list&> opt_parameter_declaration_list_node,
+	DeclarativeRegion& current_declarative_region
+)
+{
+	if(opt_parameter_declaration_list_node)
+		return create_parameters(*opt_parameter_declaration_list_node, current_declarative_region);
+	else
+		return semantic_entities::function_parameter_list();
+}
+
+template<class DeclarativeRegion>
+semantic_entities::function_parameter_list
+create_parameters
+(
+	const syntax_nodes::parameter_declaration_list& parameter_declaration_list_node,
+	DeclarativeRegion& current_declarative_region
+)
+{
+	using namespace syntax_nodes;
+	using namespace semantic_entities;
+
+	function_parameter_list parameters;
+
+	for
+	(
+		auto j = parameter_declaration_list_node.begin();
+		j != parameter_declaration_list_node.end();
+		++j
+	)
+	{
+		const parameter_declaration& parameter_declaration_node = *j;
+		const decl_specifier_seq& decl_specifier_seq_node = get_decl_specifier_seq(parameter_declaration_node);
+
+
+
+		//
+		//Analyze the decl-specifier-seq node, which defines the parameter type
+		//
+
+		type_info info =
+			create_type
+			(
+				decl_specifier_seq_node,
+				true,
+				current_declarative_region
+			)
+		;
+
+		//if the type is a new user defined type (class, union, enum, etc.)...
+		if(info.opt_new_type)
+		{
+			assert(false); //TODO
+		}
+
+		//define the type, if appropriate
+		if(info.opt_defined_type)
+		{
+			throw std::runtime_error("types may not be defined in parameter types");
+		}
+
+		assert(info.opt_complete_type);
+		const semantic_entities::type_variant type = *info.opt_complete_type;
+
+
+
+		//
+		//Create the parameter
+		//
+
+		if(auto opt_declarator_node = get_declarator(parameter_declaration_node))
+		{
+			const declarator& declarator_node = *opt_declarator_node;
+
+			parameters.push_back
+			(
+				std::move
+				(
+					std::unique_ptr<function_parameter>
+					(
+						new function_parameter
+						(
+							qualify_type(type, declarator_node, current_declarative_region),
+							syntax_node_analysis::get_identifier(declarator_node).value()
+						)
+					)
+				)
+			);
+		}
+		else if(auto opt_abstract_declarator_node = get_abstract_declarator(parameter_declaration_node))
+		{
+			const abstract_declarator& abstract_declarator_node = *opt_abstract_declarator_node;
+
+			parameters.push_back
+			(
+				std::move
+				(
+					std::unique_ptr<function_parameter>
+					(
+						new function_parameter
+						(
+							qualify_type(type, abstract_declarator_node, current_declarative_region)
+						)
+					)
+				)
+			);
+		}
+		else
+		{
+			//void f(void) == void f()
+			bool empty_parameter_list = false;
+			if(const fundamental_type* const opt_fundamental_type = get<fundamental_type>(&type))
+			{
+				empty_parameter_list =
+					*opt_fundamental_type == fundamental_type::VOID &&
+					parameter_declaration_list_node.size() == 1
+				;
+			}
+
+			if(!empty_parameter_list)
+			{
+				parameters.push_back
+				(
+					std::move
+					(
+						std::unique_ptr<function_parameter>
+						(
+							new function_parameter
+							(
+								type
+							)
+						)
+					)
+				);
+			}
+		}
+	}
+
+	return parameters;
+}
+
+template<class DeclarativeRegion>
+std::vector<semantic_entities::type_variant>
+create_parameter_types
+(
+	boost::optional<const syntax_nodes::parameter_declaration_list&> opt_parameter_declaration_list_node,
+	DeclarativeRegion& current_declarative_region
+)
+{
+	using namespace syntax_nodes;
+	using namespace semantic_entities;
+
+	if(opt_parameter_declaration_list_node)
+		return create_parameter_types(*opt_parameter_declaration_list_node, current_declarative_region);
+	else
+		return std::vector<semantic_entities::type_variant>();
+}
+
+template<class DeclarativeRegion>
+std::vector<semantic_entities::type_variant>
+create_parameter_types
+(
+	const syntax_nodes::parameter_declaration_list& parameter_declaration_list_node,
+	DeclarativeRegion& current_declarative_region
+)
+{
+	using namespace syntax_nodes;
+	using namespace semantic_entities;
+
+	semantic_entities::function_parameter_list parameters =
+		create_parameters(parameter_declaration_list_node, current_declarative_region)
+	;
+
+	std::vector<semantic_entities::type_variant> parameter_types;
+	for(auto i = parameters.begin(); i != parameters.end(); ++i)
+	{
+		const function_parameter& p = *i;
+		parameter_types.push_back(p.type());
+	}
+
+	return parameter_types;
 }
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail

@@ -99,46 +99,52 @@ get_operator_function_operator
 	const syntax_nodes::operator_& operator_node
 );
 
+template<class DeclarativeRegion>
 semantic_entities::type_variant
 get_conversion_function_type
 (
 	const syntax_nodes::declarator& declarator_node,
-	const semantic_entities::declarative_region_ptr_variant current_declarative_region
+	DeclarativeRegion& current_declarative_region
 );
 
+template<class DeclarativeRegion>
 semantic_entities::type_variant
 get_conversion_function_type
 (
 	const syntax_nodes::conversion_function_id& conversion_function_id_node,
-	const semantic_entities::declarative_region_ptr_variant current_declarative_region
+	DeclarativeRegion& current_declarative_region
 );
 
+template<class DeclarativeRegion>
 semantic_entities::function_parameter_list
 create_parameters
 (
 	boost::optional<const syntax_nodes::parameter_declaration_list&> opt_parameter_declaration_list_node,
-	const semantic_entities::declarative_region_ptr_variant current_declarative_region
+	DeclarativeRegion& current_declarative_region
 );
 
+template<class DeclarativeRegion>
 semantic_entities::function_parameter_list
 create_parameters
 (
 	const syntax_nodes::parameter_declaration_list& parameter_declaration_list_node,
-	const semantic_entities::declarative_region_ptr_variant current_declarative_region
+	DeclarativeRegion& current_declarative_region
 );
 
+template<class DeclarativeRegion>
 std::vector<semantic_entities::type_variant>
 create_parameter_types
 (
 	boost::optional<const syntax_nodes::parameter_declaration_list&> opt_parameter_declaration_list_node,
-	const semantic_entities::declarative_region_ptr_variant current_declarative_region
+	DeclarativeRegion& current_declarative_region
 );
 
+template<class DeclarativeRegion>
 std::vector<semantic_entities::type_variant>
 create_parameter_types
 (
 	const syntax_nodes::parameter_declaration_list& parameter_declaration_list_node,
-	const semantic_entities::declarative_region_ptr_variant current_declarative_region
+	DeclarativeRegion& current_declarative_region
 );
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail

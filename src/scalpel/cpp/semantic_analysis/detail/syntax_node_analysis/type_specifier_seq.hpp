@@ -40,6 +40,9 @@ enum class type_specifier_seq_type
 type_specifier_seq_type
 get_type_specifier_seq_type(const syntax_nodes::type_specifier_seq& type_specifier_seq_node);
 
+syntax_nodes::decl_specifier_seq
+to_decl_specifier_seq(const syntax_nodes::type_specifier_seq& type_specifier_seq_node);
+
 }}}}} //namespace scalpel::cpp::semantic_analysis::detail::syntax_node_analysis
 
 #endif

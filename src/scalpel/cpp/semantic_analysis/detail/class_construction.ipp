@@ -355,7 +355,7 @@ fill_class
 				declarator_entity_ptr_variant declarator_entity = create_entity
 				(
 					declarator_node,
-					&class_entity,
+					class_entity,
 					info.opt_complete_type,
 					info.has_typedef_specifier,
 					info.has_mutable_specifier,
@@ -571,7 +571,7 @@ fill_class
 				conversion_function
 			>
 			(
-				get_conversion_function_type(*opt_conversion_function_id_node, &class_entity),
+				get_conversion_function_type(*opt_conversion_function_id_node, class_entity),
 				found_declarative_region
 			)
 		;

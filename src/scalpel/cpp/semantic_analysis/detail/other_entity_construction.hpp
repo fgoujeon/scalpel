@@ -47,11 +47,12 @@ typedef
 ;
 
 //Create variable/function/typedef/etc. corresponding to the given declarator.
+template<class DeclarativeRegion>
 declarator_entity_ptr_variant
 create_entity
 (
 	const syntax_nodes::declarator& declarator_node,
-	const semantic_entities::declarative_region_ptr_variant& current_declarative_region,
+	DeclarativeRegion& current_declarative_region,
 	boost::optional<semantic_entities::type_variant> opt_type,
 	const bool has_typedef_specifier,
 	const bool has_mutable_specifier,

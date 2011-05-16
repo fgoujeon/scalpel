@@ -79,46 +79,14 @@ create_type
 	const semantic_entities::member_access access = semantic_entities::member_access::PUBLIC
 );
 
-
-
-template<class Type>
-Type*
+template<class DeclarativeRegion>
+type_info
 create_type
-(
-	const std::string& type_name,
-	const semantic_entities::member_access access,
-	typename boost::enable_if<semantic_entities::type_traits::is_member<Type>>::type* = 0
-);
-
-template<class Type>
-Type*
-create_type
-(
-	const std::string& type_name,
-	const semantic_entities::member_access, //ignored
-	typename boost::disable_if<semantic_entities::type_traits::is_member<Type>>::type* = 0
-);
-
-
-
-//Create the type described by the given decl-specifier-seq.
-//The returned type is not qualified by the qualifiers of
-//the decl-specifier-seq.
-semantic_entities::type_variant
-create_simple_type
-(
-	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-	const semantic_entities::declarative_region_ptr_variant current_declarative_region
-);
-
-//Create the type described by the given type-specifier-seq.
-//The returned type is not qualified by the qualifiers of
-//the type-specifier-seq.
-semantic_entities::type_variant
-create_simple_type
 (
 	const syntax_nodes::type_specifier_seq& type_specifier_seq_node,
-	const semantic_entities::declarative_region_ptr_variant current_declarative_region
+	const bool has_declarator,
+	DeclarativeRegion& current_declarative_region,
+	const semantic_entities::member_access access = semantic_entities::member_access::PUBLIC
 );
 
 
@@ -141,41 +109,45 @@ qualify_type
 );
 
 //qualify type with declarator's pointers, references, arrays and function types
+template<class DeclarativeRegion>
 semantic_entities::type_variant
 qualify_type
 (
 	semantic_entities::type_variant type,
 	const syntax_nodes::declarator& declarator_node,
-	const semantic_entities::declarative_region_ptr_variant& current_declarative_region,
+	DeclarativeRegion& current_declarative_region,
 	const bool ignore_function_type = false
 );
 
 //qualify type with abstract-declarator's pointers, references, arrays and function types
+template<class DeclarativeRegion>
 semantic_entities::type_variant
 qualify_type
 (
 	semantic_entities::type_variant type,
 	const syntax_nodes::abstract_declarator& abstract_declarator_node,
-	const semantic_entities::declarative_region_ptr_variant& current_declarative_region
+	DeclarativeRegion& current_declarative_region
 );
 
 //qualify type with direct-declarator-last-part-seq's arrays and function types
+template<class DeclarativeRegion>
 semantic_entities::type_variant
 qualify_type
 (
 	semantic_entities::type_variant type,
 	const syntax_nodes::direct_declarator_last_part_seq& last_part_seq_node,
-	const semantic_entities::declarative_region_ptr_variant& current_declarative_region,
+	DeclarativeRegion& current_declarative_region,
 	const bool ignore_function_type
 );
 
 //qualify type with direct-declarator-last-part's array or function type
+template<class DeclarativeRegion>
 semantic_entities::type_variant
 qualify_type
 (
 	semantic_entities::type_variant type,
 	const syntax_nodes::direct_declarator_last_part& last_part_node,
-	const semantic_entities::declarative_region_ptr_variant& current_declarative_region,
+	DeclarativeRegion& current_declarative_region,
 	const bool ignore_function_type
 );
 
@@ -215,15 +187,60 @@ get_fundamental_type
 
 
 
-//Find a type named type_name in the given declarative_region.
-//Return 0 if nothing is found.
-template<class Type, class DeclarativeRegion>
-Type*
-find_type
-(
-	DeclarativeRegion& declarative_region,
-	const std::string& type_name
-);
+namespace detail
+{
+	template<class Type>
+	Type*
+	create_type
+	(
+		const std::string& type_name,
+		const semantic_entities::member_access access,
+		typename boost::enable_if<semantic_entities::type_traits::is_member<Type>>::type* = 0
+	);
+
+	template<class Type>
+	Type*
+	create_type
+	(
+		const std::string& type_name,
+		const semantic_entities::member_access, //ignored
+		typename boost::disable_if<semantic_entities::type_traits::is_member<Type>>::type* = 0
+	);
+
+
+
+	//Create the type described by the given decl-specifier-seq.
+	//The returned type is not qualified by the qualifiers of
+	//the decl-specifier-seq.
+	semantic_entities::type_variant
+	create_simple_type
+	(
+		const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
+		const semantic_entities::declarative_region_ptr_variant current_declarative_region
+	);
+
+	//Create the type described by the given type-specifier-seq.
+	//The returned type is not qualified by the qualifiers of
+	//the type-specifier-seq.
+	semantic_entities::type_variant
+	create_simple_type
+	(
+		const syntax_nodes::type_specifier_seq& type_specifier_seq_node,
+		const semantic_entities::declarative_region_ptr_variant current_declarative_region
+	);
+
+
+
+	//Find a type named type_name in the given declarative_region.
+	//Return 0 if nothing is found.
+	template<class Type, class DeclarativeRegion>
+	Type*
+	find_type
+	(
+		DeclarativeRegion& declarative_region,
+		const std::string& type_name
+	);
+}
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
 

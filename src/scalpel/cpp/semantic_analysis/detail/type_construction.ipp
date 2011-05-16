@@ -26,6 +26,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "syntax_node_analysis/class_specifier.hpp"
 #include "syntax_node_analysis/enum_specifier.hpp"
 #include "syntax_node_analysis/decl_specifier_seq.hpp"
+#include "syntax_node_analysis/type_specifier_seq.hpp"
+#include "syntax_node_analysis/declarator.hpp"
 #include <scalpel/cpp/semantic_entities/type_traits/is_class.hpp>
 #include <scalpel/cpp/semantic_entities/type_traits/is_union.hpp>
 #include <scalpel/utility/type_alternative.hpp>
@@ -121,14 +123,14 @@ create_type
 				const std::string& class_name = syntax_node_analysis::get_identifier(class_specifier_node);
 
 				//has the class been already declared?
-				if(class_t* found_class = find_type<class_t>(current_declarative_region, class_name))
+				if(class_t* found_class = detail::find_type<class_t>(current_declarative_region, class_name))
 				{
 					info.opt_defined_type = found_class;
 					info.opt_complete_type = found_class;
 				}
 				else
 				{
-					class_t* new_class = create_type<class_t>(class_name, access);
+					class_t* new_class = detail::create_type<class_t>(class_name, access);
 					info.opt_new_type = new_class;
 					info.opt_defined_type = new_class;
 					info.opt_complete_type = new_class;
@@ -154,13 +156,13 @@ create_type
 				const std::string& class_name = opt_identifier_node->value();
 
 				//has the class been already declared?
-				if(class_t* found_class = find_type<class_t>(current_declarative_region, class_name))
+				if(class_t* found_class = detail::find_type<class_t>(current_declarative_region, class_name))
 				{
 					info.opt_complete_type = found_class;
 				}
 				else
 				{
-					class_t* new_class = create_type<class_t>(class_name, access);
+					class_t* new_class = detail::create_type<class_t>(class_name, access);
 					info.opt_new_type = new_class;
 					info.opt_complete_type = new_class;
 				}
@@ -242,14 +244,14 @@ create_type
 					const std::string& union_name = syntax_node_analysis::get_identifier(class_specifier_node);
 
 					//has the union been already declared?
-					if(union_t* found_union = find_type<union_t>(current_declarative_region, union_name))
+					if(union_t* found_union = detail::find_type<union_t>(current_declarative_region, union_name))
 					{
 						info.opt_defined_type = found_union;
 						info.opt_complete_type = found_union;
 					}
 					else
 					{
-						union_t* new_union = create_type<union_t>(union_name, access);
+						union_t* new_union = detail::create_type<union_t>(union_name, access);
 						info.opt_new_type = new_union;
 						info.opt_defined_type = new_union;
 						info.opt_complete_type = new_union;
@@ -276,13 +278,13 @@ create_type
 				const std::string& union_name = opt_identifier_node->value();
 
 				//has the union been already declared?
-				if(union_t* found_union = find_type<union_t>(current_declarative_region, union_name))
+				if(union_t* found_union = detail::find_type<union_t>(current_declarative_region, union_name))
 				{
 					info.opt_complete_type = found_union;
 				}
 				else
 				{
-					union_t* new_union = create_type<union_t>(union_name, access);
+					union_t* new_union = detail::create_type<union_t>(union_name, access);
 					info.opt_new_type = new_union;
 					info.opt_complete_type = new_union;
 				}
@@ -304,7 +306,7 @@ create_type
 			;
 			const std::string& enum_name = syntax_node_analysis::get_identifier(enum_specifier_node);
 
-			enum_t* new_enum = create_type<enum_t>(enum_name, access);
+			enum_t* new_enum = detail::create_type<enum_t>(enum_name, access);
 			info.opt_new_type = new_enum;
 			info.opt_defined_type = new_enum;
 			info.opt_complete_type = new_enum;
@@ -313,7 +315,7 @@ create_type
 		}
 		case syntax_node_analysis::type_specifier_seq_type::SIMPLE_TYPE:
 		{
-			info.opt_complete_type = create_simple_type(decl_specifier_seq_node, &current_declarative_region);
+			info.opt_complete_type = detail::create_simple_type(decl_specifier_seq_node, &current_declarative_region);
 			break;
 		}
 		case syntax_node_analysis::type_specifier_seq_type::NO_TYPE:
@@ -329,56 +331,248 @@ create_type
 	return info;
 }
 
-
-
-template<class Type>
-Type*
+template<class DeclarativeRegion>
+type_info
 create_type
 (
-	const std::string& type_name,
-	const semantic_entities::member_access access,
-	typename boost::enable_if<semantic_entities::type_traits::is_member<Type>>::type*
+	const syntax_nodes::type_specifier_seq& type_specifier_seq_node,
+	const bool has_declarator,
+	DeclarativeRegion& current_declarative_region,
+	const semantic_entities::member_access access
 )
 {
-	return new Type(type_name, access);
-}
-
-template<class Type>
-Type*
-create_type
-(
-	const std::string& type_name,
-	const semantic_entities::member_access, //ignored
-	typename boost::disable_if<semantic_entities::type_traits::is_member<Type>>::type*
-)
-{
-	return new Type(type_name);
+	return create_type
+	(
+		syntax_node_analysis::to_decl_specifier_seq(type_specifier_seq_node),
+		has_declarator,
+		current_declarative_region,
+		access
+	);
 }
 
 
 
-template<class Type, class DeclarativeRegion>
-Type*
-find_type
+template<class DeclarativeRegion>
+semantic_entities::type_variant
+qualify_type
 (
-	DeclarativeRegion& declarative_region,
-	const std::string& type_name
+	semantic_entities::type_variant type,
+	const syntax_nodes::declarator& declarator_node,
+	DeclarativeRegion& current_declarative_region,
+	const bool ignore_function_type
 )
 {
-	return
-		name_lookup::find_local
-		<
-			semantic_entity_analysis::identification_policies::by_name,
-			DeclarativeRegion,
-			true,
-			false,
-			Type
-		>
+	using namespace syntax_nodes;
+	using namespace semantic_entities;
+
+	const direct_declarator& direct_declarator_node = get_direct_declarator(declarator_node);
+	const direct_declarator_first_part& first_part_node = get_first_part(direct_declarator_node);
+
+	//pointers
+	if(auto opt_ptr_operator_seq_node = get_ptr_operator_seq(declarator_node))
+	{
+		auto ptr_operator_seq_node = *opt_ptr_operator_seq_node;
+		type = qualify_type(type, ptr_operator_seq_node, &current_declarative_region);
+	}
+
+	//arrays and function type
+	if(const optional_node<direct_declarator_last_part_seq>& opt_last_part_seq_node = get_last_part_seq(direct_declarator_node))
+	{
+		const direct_declarator_last_part_seq& last_part_seq_node = *opt_last_part_seq_node;
+		type = qualify_type(type, last_part_seq_node, current_declarative_region, ignore_function_type);
+	}
+
+	//bracketed-declarator's qualifiers
+	if(const boost::optional<const bracketed_declarator&> opt_bracketed_declarator_node = get<bracketed_declarator>(&first_part_node))
+	{
+		const bracketed_declarator& bracketed_declarator_node = *opt_bracketed_declarator_node;
+		type = qualify_type(type, get_declarator(bracketed_declarator_node), current_declarative_region);
+	}
+
+	return type;
+}
+
+template<class DeclarativeRegion>
+semantic_entities::type_variant
+qualify_type
+(
+	semantic_entities::type_variant type,
+	const syntax_nodes::abstract_declarator& abstract_declarator_node,
+	DeclarativeRegion& current_declarative_region
+)
+{
+	using namespace syntax_nodes;
+	using namespace semantic_entities;
+
+	if(const optional_node<ptr_operator_seq>& opt_ptr_operator_seq_node = get_ptr_operator_seq(abstract_declarator_node))
+	{
+		type = qualify_type(type, *opt_ptr_operator_seq_node, &current_declarative_region);
+	}
+
+	if(const optional_node<direct_abstract_declarator>& opt_direct_abstract_declarator_node = get_direct_abstract_declarator(abstract_declarator_node))
+	{
+		const direct_abstract_declarator& direct_abstract_declarator_node = *opt_direct_abstract_declarator_node;
+
+		if
 		(
-			type_name,
-			declarative_region
+			boost::optional<const bracketed_abstract_declarator&> opt_bracketed_abstract_declarator_node =
+				get<bracketed_abstract_declarator>(&direct_abstract_declarator_node)
 		)
-	;
+		{
+			const bracketed_abstract_declarator& bracketed_abstract_declarator_node = *opt_bracketed_abstract_declarator_node;
+
+			if
+			(
+				const optional_node<direct_declarator_last_part>& opt_last_part_node =
+					get_last_part(bracketed_abstract_declarator_node)
+			)
+			{
+				const direct_declarator_last_part& last_part_node = *opt_last_part_node;
+				type = qualify_type(type, last_part_node, current_declarative_region, false);
+			}
+
+			const abstract_declarator& abstract_declarator_node = get_abstract_declarator(bracketed_abstract_declarator_node);
+			type = qualify_type(type, abstract_declarator_node, current_declarative_region);
+		}
+		else if
+		(
+			boost::optional<const direct_declarator_last_part_seq&> opt_direct_declarator_last_part_seq_node =
+				get<direct_declarator_last_part_seq>(&direct_abstract_declarator_node)
+		)
+		{
+			const direct_declarator_last_part_seq& last_part_seq_node = *opt_direct_declarator_last_part_seq_node;
+			type = qualify_type(type, last_part_seq_node, current_declarative_region, false);
+		}
+	}
+
+	return type;
+}
+
+template<class DeclarativeRegion>
+semantic_entities::type_variant
+qualify_type
+(
+	semantic_entities::type_variant type,
+	const syntax_nodes::direct_declarator_last_part_seq& last_part_seq_node,
+	DeclarativeRegion& current_declarative_region,
+	const bool ignore_function_type
+)
+{
+	using namespace syntax_nodes;
+	using namespace semantic_entities;
+
+	for(auto i = last_part_seq_node.begin(); i != last_part_seq_node.end(); ++i)
+	{
+		const direct_declarator_last_part& last_part_node = *i;
+		type = qualify_type(type, last_part_node, current_declarative_region, ignore_function_type);
+	}
+
+	return type;
+}
+
+template<class DeclarativeRegion>
+semantic_entities::type_variant
+qualify_type
+(
+	semantic_entities::type_variant type,
+	const syntax_nodes::direct_declarator_last_part& last_part_node,
+	DeclarativeRegion& current_declarative_region,
+	const bool ignore_function_type
+)
+{
+	using namespace syntax_nodes;
+	using namespace semantic_entities;
+
+	if(!ignore_function_type)
+	{
+		if(const boost::optional<const direct_declarator_function_part&> opt_function_part_node = get<direct_declarator_function_part>(&last_part_node))
+		{
+			type =
+				function_type
+				(
+					type, //return type
+					create_parameter_types(syntax_node_analysis::get_parameter_declaration_list(last_part_node), current_declarative_region),
+					syntax_node_analysis::has_ellipsis(last_part_node),
+					syntax_node_analysis::has_const_function_qualifier(last_part_node),
+					syntax_node_analysis::has_volatile_function_qualifier(last_part_node)
+				)
+			;
+		}
+	}
+
+	if
+	(
+		const boost::optional<const direct_declarator_array_part&> opt_array_part_node =
+			get<direct_declarator_array_part>(&last_part_node)
+	)
+	{
+		if(get_conditional_expression(*opt_array_part_node))
+		{
+			type = array(0, type);
+		}
+		else
+		{
+			//int i[] == int i*
+			type = pointer(type);
+		}
+	}
+
+	return type;
+}
+
+
+
+namespace detail
+{
+	template<class Type>
+	Type*
+	create_type
+	(
+		const std::string& type_name,
+		const semantic_entities::member_access access,
+		typename boost::enable_if<semantic_entities::type_traits::is_member<Type>>::type*
+	)
+	{
+		return new Type(type_name, access);
+	}
+
+	template<class Type>
+	Type*
+	create_type
+	(
+		const std::string& type_name,
+		const semantic_entities::member_access, //ignored
+		typename boost::disable_if<semantic_entities::type_traits::is_member<Type>>::type*
+	)
+	{
+		return new Type(type_name);
+	}
+
+
+
+	template<class Type, class DeclarativeRegion>
+	Type*
+	find_type
+	(
+		DeclarativeRegion& declarative_region,
+		const std::string& type_name
+	)
+	{
+		return
+			name_lookup::find_local
+			<
+				semantic_entity_analysis::identification_policies::by_name,
+				DeclarativeRegion,
+				true,
+				false,
+				Type
+			>
+			(
+				type_name,
+				declarative_region
+			)
+		;
+	}
 }
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
