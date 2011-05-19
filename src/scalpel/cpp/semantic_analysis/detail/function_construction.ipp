@@ -326,38 +326,28 @@ create_parameters
 		{
 			const declarator& declarator_node = *opt_declarator_node;
 
-			parameters.push_back
+			std::unique_ptr<function_parameter> new_parameter
 			(
-				std::move
+				new function_parameter
 				(
-					std::unique_ptr<function_parameter>
-					(
-						new function_parameter
-						(
-							qualify_type(type, declarator_node, current_declarative_region),
-							syntax_node_analysis::get_identifier(declarator_node).value()
-						)
-					)
+					qualify_type(type, declarator_node, current_declarative_region),
+					syntax_node_analysis::get_identifier(declarator_node).value()
 				)
 			);
+			parameters.push_back(std::move(new_parameter));
 		}
 		else if(auto opt_abstract_declarator_node = get_abstract_declarator(parameter_declaration_node))
 		{
 			const abstract_declarator& abstract_declarator_node = *opt_abstract_declarator_node;
 
-			parameters.push_back
+			std::unique_ptr<function_parameter> new_parameter
 			(
-				std::move
+				new function_parameter
 				(
-					std::unique_ptr<function_parameter>
-					(
-						new function_parameter
-						(
-							qualify_type(type, abstract_declarator_node, current_declarative_region)
-						)
-					)
+					qualify_type(type, abstract_declarator_node, current_declarative_region)
 				)
 			);
+			parameters.push_back(std::move(new_parameter));
 		}
 		else
 		{
@@ -373,19 +363,14 @@ create_parameters
 
 			if(!empty_parameter_list)
 			{
-				parameters.push_back
+				std::unique_ptr<function_parameter> new_parameter
 				(
-					std::move
+					new function_parameter
 					(
-						std::unique_ptr<function_parameter>
-						(
-							new function_parameter
-							(
-								type
-							)
-						)
+						type
 					)
 				);
+				parameters.push_back(std::move(new_parameter));
 			}
 		}
 	}

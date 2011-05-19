@@ -270,10 +270,9 @@ create_entity
 					for(auto i = parameter_types.begin(); i != parameter_types.end(); ++i)
 					{
 						const type_variant& parameter_type = *i;
-						parameter_list.push_back
-						(
-							std::move(std::unique_ptr<function_parameter>(new function_parameter(parameter_type)))
-						);
+
+						std::unique_ptr<function_parameter> new_parameter(new function_parameter(parameter_type));
+						parameter_list.push_back(std::move(new_parameter));
 					}
 
 					if(is_class_member)
