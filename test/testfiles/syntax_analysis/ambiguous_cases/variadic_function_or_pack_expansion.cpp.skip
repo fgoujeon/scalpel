@@ -1,0 +1,19 @@
+namespace n1
+{
+	template<class... T>
+	struct s
+	{
+		void f(T...); //pack expansion
+	};
+}
+
+namespace n2
+{
+	typedef int T;
+
+	struct s
+	{
+		void f(T...); //variadic function
+	};
+}
+
