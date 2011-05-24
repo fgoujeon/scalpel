@@ -28,11 +28,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 typedef
-	list_node
-	<
-		template_parameter,
-		common_nodes::comma
-	>
+	list_node<template_parameter>
 	template_parameter_list_t
 ;
 

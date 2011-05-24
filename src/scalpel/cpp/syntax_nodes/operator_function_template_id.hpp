@@ -30,7 +30,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 class template_argument;
-typedef list_node<template_argument, common_nodes::comma> template_argument_list;
+typedef list_node<template_argument> template_argument_list;
 
 /**
 operator_function_template_id

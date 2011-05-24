@@ -33,11 +33,7 @@ enumerator_list
 ;
 */
 typedef
-	list_node
-	<
-		enumerator_definition,
-		common_nodes::comma
-	>
+	list_node<enumerator_definition>
 	enumerator_list
 ;
 

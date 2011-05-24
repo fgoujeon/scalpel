@@ -28,11 +28,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 typedef
-	list_node
-	<
-		initializer_clause,
-		common_nodes::comma
-	>
+	list_node<initializer_clause>
 	initializer_list_t
 ;
 

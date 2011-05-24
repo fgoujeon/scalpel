@@ -632,39 +632,39 @@ grammar::grammar()
 	;
 
 	pm_ptr_expression
-		= cast_expression % ("->*")
+		= cast_expression % no_node_d[str_p("->*")]
 	;
 
 	pm_ref_expression
-		= pm_ptr_expression % (".*")
+		= pm_ptr_expression % no_node_d[str_p(".*")]
 	;
 
 	modulo_expression
-		= pm_ref_expression % ('%')
+		= pm_ref_expression % no_node_d[str_p('%')]
 	;
 
 	divisive_expression
-		= modulo_expression % ('/')
+		= modulo_expression % no_node_d[str_p('/')]
 	;
 
 	multiplicative_expression
-		= divisive_expression % ('*')
+		= divisive_expression % no_node_d[str_p('*')]
 	;
 
 	subtractive_expression
-		= multiplicative_expression % ('-')
+		= multiplicative_expression % no_node_d[str_p('-')]
 	;
 
 	additive_expression
-		= subtractive_expression % ('+')
+		= subtractive_expression % no_node_d[str_p('+')]
 	;
 
 	left_shift_expression
-		= additive_expression % ("<<")
+		= additive_expression % no_node_d[str_p("<<")]
 	;
 
 	right_shift_expression
-		= left_shift_expression % (">>")
+		= left_shift_expression % no_node_d[str_p(">>")]
 	;
 	//a shift expression used as a template argument must be placed between brackets if it contains any '>' characters
 	template_argument_right_shift_expression
@@ -676,28 +676,28 @@ grammar::grammar()
 	;
 
 	less_than_or_equal_to_expression
-		= right_shift_expression % ("<=")
+		= right_shift_expression % no_node_d[str_p("<=")]
 	;
 	template_argument_less_than_or_equal_to_expression
-		= template_argument_right_shift_expression % ("<=")
+		= template_argument_right_shift_expression % no_node_d[str_p("<=")]
 	;
 
 	less_than_expression
-		= less_than_or_equal_to_expression % ('<')
+		= less_than_or_equal_to_expression % no_node_d[str_p('<')]
 	;
 	template_argument_less_than_expression
-		= template_argument_less_than_or_equal_to_expression % ('<')
+		= template_argument_less_than_or_equal_to_expression % no_node_d[str_p('<')]
 	;
 
 	greater_than_or_equal_to_expression
-		= less_than_expression % (">=")
+		= less_than_expression % no_node_d[str_p(">=")]
 	;
 	template_argument_greater_than_or_equal_to_expression
-		= template_argument_less_than_expression % (">=")
+		= template_argument_less_than_expression % no_node_d[str_p(">=")]
 	;
 
 	greater_than_expression
-		= greater_than_or_equal_to_expression % ('>')
+		= greater_than_or_equal_to_expression % no_node_d[str_p('>')]
 	;
 	//a shift expression used as a template argument must be placed between brackets if it contains any '>' characters
 	template_argument_greater_than_expression
@@ -709,52 +709,52 @@ grammar::grammar()
 	;
 
 	inequality_expression
-		= greater_than_expression % ("!=")
+		= greater_than_expression % no_node_d[str_p("!=")]
 	;
 	template_argument_inequality_expression
-		= template_argument_greater_than_expression % ("!=")
+		= template_argument_greater_than_expression % no_node_d[str_p("!=")]
 	;
 
 	equality_expression
-		= inequality_expression % ("==")
+		= inequality_expression % no_node_d[str_p("==")]
 	;
 	template_argument_equality_expression
-		= template_argument_inequality_expression % ("==")
+		= template_argument_inequality_expression % no_node_d[str_p("==")]
 	;
 
 	and_expression
-		= equality_expression % ('&')
+		= equality_expression % no_node_d[str_p('&')]
 	;
 	template_argument_and_expression
-		= template_argument_equality_expression % ('&')
+		= template_argument_equality_expression % no_node_d[str_p('&')]
 	;
 
 	exclusive_or_expression
-		= and_expression % ('^')
+		= and_expression % no_node_d[str_p('^')]
 	;
 	template_argument_exclusive_or_expression
-		= template_argument_and_expression % ('^')
+		= template_argument_and_expression % no_node_d[str_p('^')]
 	;
 
 	inclusive_or_expression
-		= exclusive_or_expression % ('|')
+		= exclusive_or_expression % no_node_d[str_p('|')]
 	;
 	template_argument_inclusive_or_expression
-		= template_argument_exclusive_or_expression % ('|')
+		= template_argument_exclusive_or_expression % no_node_d[str_p('|')]
 	;
 
 	logical_and_expression
-		= inclusive_or_expression % ("&&")
+		= inclusive_or_expression % no_node_d[str_p("&&")]
 	;
 	template_argument_logical_and_expression
-		= template_argument_inclusive_or_expression % ("&&")
+		= template_argument_inclusive_or_expression % no_node_d[str_p("&&")]
 	;
 
 	logical_or_expression
-		= logical_and_expression % ("||")
+		= logical_and_expression % no_node_d[str_p("||")]
 	;
 	template_argument_logical_or_expression
-		= template_argument_logical_and_expression % ("||")
+		= template_argument_logical_and_expression % no_node_d[str_p("||")]
 	;
 
 	conditional_expression
@@ -815,7 +815,7 @@ grammar::grammar()
 	;
 
 	expression
-		= assignment_expression % ','
+		= assignment_expression % no_node_d[str_p(',')]
 	;
 
 	//1.5 - Statements [gram.stmt.stmt]
@@ -1064,7 +1064,7 @@ grammar::grammar()
 	;
 
 	enumerator_list
-		= enumerator_definition % ','
+		= enumerator_definition % no_node_d[str_p(',')]
 	;
 
 	enumerator_definition
@@ -1111,7 +1111,7 @@ grammar::grammar()
 
 	//1.7 - Declarators [gram.dcl.decl]
 	init_declarator_list
-		= init_declarator % ','
+		= init_declarator % no_node_d[ch_p(',')]
 	;
 
 	init_declarator
@@ -1337,7 +1337,7 @@ grammar::grammar()
 	;
 
 	parameter_declaration_list
-		= parameter_declaration % ','
+		= parameter_declaration % no_node_d[str_p(',')]
 	;
 
 	parameter_declaration
@@ -1408,7 +1408,7 @@ grammar::grammar()
 	;
 
 	initializer_list
-		= initializer_clause % ','
+		= initializer_clause % no_node_d[str_p(',')]
 	;
 
 	//1.8 - Classes [gram.class]
@@ -1459,7 +1459,7 @@ grammar::grammar()
 	;
 
 	member_declarator_list
-		= member_declarator % ','
+		= member_declarator % no_node_d[str_p(',')]
 	;
 
 	member_declarator
@@ -1489,7 +1489,7 @@ grammar::grammar()
 	;
 
 	base_specifier_list
-		= base_specifier % ','
+		= base_specifier % no_node_d[str_p(',')]
 	;
 
 	base_specifier
@@ -1514,7 +1514,7 @@ grammar::grammar()
 	;
 
 	mem_initializer_list
-		= mem_initializer % ','
+		= mem_initializer % no_node_d[str_p(',')]
 	;
 
 	mem_initializer
@@ -1598,7 +1598,7 @@ grammar::grammar()
 	;
 
 	template_parameter_list
-		= template_parameter % ','
+		= template_parameter % no_node_d[str_p(',')]
 	;
 
 	template_parameter
@@ -1638,7 +1638,7 @@ grammar::grammar()
 	;
 
 	template_argument_list
-		= template_argument % ','
+		= template_argument % no_node_d[str_p(',')]
 	;
 
 	/*
@@ -1717,7 +1717,7 @@ grammar::grammar()
 	;
 
 	type_id_list
-		= type_id % ','
+		= type_id % no_node_d[str_p(',')]
 	;
 
 

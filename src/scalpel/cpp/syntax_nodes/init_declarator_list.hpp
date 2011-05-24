@@ -28,7 +28,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 typedef
-	list_node<init_declarator, common_nodes::comma>
+	list_node<init_declarator>
    	init_declarator_list
 ;
 

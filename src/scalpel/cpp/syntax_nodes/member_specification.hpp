@@ -40,10 +40,6 @@ class member_specification: public member_specification_t
         member_specification(const member_specification& s): member_specification_t(static_cast<const member_specification_t&>(s)){};
 
         member_specification(member_specification&& s): member_specification_t(static_cast<member_specification_t&&>(s)){};
-
-		static
-		const leaf_node&
-		separator_node;
 };
 
 }}} //namespace scalpel::cpp::syntax_nodes

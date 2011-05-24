@@ -27,7 +27,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-template<class T, const leaf_node& SeparatorNode = common_nodes::empty>
+template<class T>
 class list_node
 {
     public:
@@ -95,48 +95,42 @@ class list_node
 			nodes_.push_back(std::move(t));
 		}
 
-		static const leaf_node& separator_node;
-
 	private:
 		nodes_t nodes_;
 };
 
-template<class T, const leaf_node& SeparatorNode>
-list_node<T, SeparatorNode>::list_node()
+template<class T>
+list_node<T>::list_node()
 {
 }
 
-template<class T, const leaf_node& SeparatorNode>
-list_node<T, SeparatorNode>::list_node(const list_node& rhs):
+template<class T>
+list_node<T>::list_node(const list_node& rhs):
 	nodes_(rhs.nodes_)
 {
 }
 
-template<class T, const leaf_node& SeparatorNode>
-list_node<T, SeparatorNode>::list_node(list_node&& rhs):
+template<class T>
+list_node<T>::list_node(list_node&& rhs):
 	nodes_(std::move(rhs.nodes_))
 {
 }
 
-template<class T, const leaf_node& SeparatorNode>
-const list_node<T, SeparatorNode>&
-list_node<T, SeparatorNode>::operator=(const list_node& rhs)
+template<class T>
+const list_node<T>&
+list_node<T>::operator=(const list_node& rhs)
 {
 	nodes_ = rhs.nodes_;
 	return *this;
 }
 
-template<class T, const leaf_node& SeparatorNode>
-const list_node<T, SeparatorNode>&
-list_node<T, SeparatorNode>::operator=(list_node&& rhs)
+template<class T>
+const list_node<T>&
+list_node<T>::operator=(list_node&& rhs)
 {
 	nodes_ = std::move(rhs.nodes_);
 	return *this;
 }
-
-template<class T, const leaf_node& SeparatorNode>
-const leaf_node&
-list_node<T, SeparatorNode>::separator_node = SeparatorNode;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

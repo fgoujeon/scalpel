@@ -29,182 +29,102 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 
 //primary expressions
 typedef
-	list_node
-	<
-		cast_expression,
-		common_nodes::arrow_and_asterisk
-	>
+	list_node<cast_expression>
 	pm_ptr_expression
 ;
 
 typedef
-	list_node
-	<
-		pm_ptr_expression,
-		common_nodes::dot_and_asterisk
-	>
+	list_node<pm_ptr_expression>
 	pm_ref_expression
 ;
 
 typedef
-	list_node
-	<
-		pm_ref_expression,
-		common_nodes::percent
-	>
+	list_node<pm_ref_expression>
 	modulo_expression
 ;
 
 typedef
-	list_node
-	<
-		modulo_expression,
-		common_nodes::slash
-	>
+	list_node<modulo_expression>
 	divisive_expression
 ;
 
 typedef
-	list_node
-	<
-		divisive_expression,
-		common_nodes::asterisk
-	>
+	list_node<divisive_expression>
 	multiplicative_expression
 ;
 
 typedef
-	list_node
-	<
-		multiplicative_expression,
-		common_nodes::minus
-	>
+	list_node<multiplicative_expression>
 	subtractive_expression
 ;
 
 typedef
-	list_node
-	<
-		subtractive_expression,
-		common_nodes::plus
-	>
+	list_node<subtractive_expression>
 	additive_expression
 ;
 
 typedef
-	list_node
-	<
-		additive_expression,
-		common_nodes::double_left_angle_bracket
-	>
+	list_node<additive_expression>
 	left_shift_expression
 ;
 
 typedef
-	list_node
-	<
-		left_shift_expression,
-		common_nodes::double_right_angle_bracket
-	>
+	list_node<left_shift_expression>
 	right_shift_expression
 ;
 
 typedef
-	list_node
-	<
-		right_shift_expression,
-		common_nodes::left_angle_bracket_and_equal
-	>
+	list_node<right_shift_expression>
 	less_than_or_equal_to_expression
 ;
 
 typedef
-	list_node
-	<
-		less_than_or_equal_to_expression,
-		common_nodes::left_angle_bracket
-	>
+	list_node<less_than_or_equal_to_expression>
 	less_than_expression
 ;
 
 typedef
-	list_node
-	<
-		less_than_expression,
-		common_nodes::right_angle_bracket_and_equal
-	>
+	list_node<less_than_expression>
 	greater_than_or_equal_to_expression
 ;
 
 typedef
-	list_node
-	<
-		greater_than_or_equal_to_expression,
-		common_nodes::right_angle_bracket
-	>
+	list_node<greater_than_or_equal_to_expression>
 	greater_than_expression
 ;
 
 typedef
-	list_node
-	<
-		greater_than_expression,
-		common_nodes::inequal
-	>
+	list_node<greater_than_expression>
 	inequality_expression
 ;
 
 typedef
-	list_node
-	<
-		inequality_expression,
-		common_nodes::double_equal
-	>
+	list_node<inequality_expression>
 	equality_expression
 ;
 
 typedef
-	list_node
-	<
-		equality_expression,
-		common_nodes::ampersand
-	>
+	list_node<equality_expression>
 	and_expression
 ;
 
 typedef
-	list_node
-	<
-		and_expression,
-		common_nodes::circumflex
-	>
+	list_node<and_expression>
 	exclusive_or_expression
 ;
 
 typedef
-	list_node
-	<
-		exclusive_or_expression,
-		common_nodes::pipe
-	>
+	list_node<exclusive_or_expression>
 	inclusive_or_expression
 ;
 
 typedef
-	list_node
-	<
-		inclusive_or_expression,
-		common_nodes::double_ampersand
-	>
+	list_node<inclusive_or_expression>
 	logical_and_expression
 ;
 
 typedef
-	list_node
-	<
-		logical_and_expression,
-		common_nodes::double_pipe
-	>
+	list_node<logical_and_expression>
 	logical_or_expression_t
 ;
 struct logical_or_expression: public logical_or_expression_t
@@ -260,29 +180,17 @@ typedef
 ;
 
 typedef
-	list_node
-	<
-		template_argument_right_shift_expression,
-		common_nodes::left_angle_bracket_and_equal
-	>
+	list_node<template_argument_right_shift_expression>
 	template_argument_less_than_or_equal_to_expression
 ;
 
 typedef
-	list_node
-	<
-		template_argument_less_than_or_equal_to_expression,
-		common_nodes::left_angle_bracket
-	>
+	list_node<template_argument_less_than_or_equal_to_expression>
 	template_argument_less_than_expression
 ;
 
 typedef
-	list_node
-	<
-		template_argument_less_than_expression,
-		common_nodes::right_angle_bracket_and_equal
-	>
+	list_node<template_argument_less_than_expression>
 	template_argument_greater_than_or_equal_to_expression
 ;
 
@@ -296,65 +204,37 @@ typedef
 ;
 
 typedef
-	list_node
-	<
-		template_argument_greater_than_expression,
-		common_nodes::inequal
-	>
+	list_node<template_argument_greater_than_expression>
 	template_argument_inequality_expression
 ;
 
 typedef
-	list_node
-	<
-		template_argument_inequality_expression,
-		common_nodes::double_equal
-	>
+	list_node<template_argument_inequality_expression>
 	template_argument_equality_expression
 ;
 
 typedef
-	list_node
-	<
-		template_argument_equality_expression,
-		common_nodes::ampersand
-	>
+	list_node<template_argument_equality_expression>
 	template_argument_and_expression
 ;
 
 typedef
-	list_node
-	<
-		template_argument_and_expression,
-		common_nodes::circumflex
-	>
+	list_node<template_argument_and_expression>
 	template_argument_exclusive_or_expression
 ;
 
 typedef
-	list_node
-	<
-		template_argument_exclusive_or_expression,
-		common_nodes::pipe
-	>
+	list_node<template_argument_exclusive_or_expression>
 	template_argument_inclusive_or_expression
 ;
 
 typedef
-	list_node
-	<
-		template_argument_inclusive_or_expression,
-		common_nodes::double_ampersand
-	>
+	list_node<template_argument_inclusive_or_expression>
 	template_argument_logical_and_expression
 ;
 
 typedef
-	list_node
-	<
-		template_argument_logical_and_expression,
-		common_nodes::double_pipe
-	>
+	list_node<template_argument_logical_and_expression>
 	template_argument_logical_or_expression
 ;
 

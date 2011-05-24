@@ -28,7 +28,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 typedef
-	list_node<assignment_expression, common_nodes::comma>
+	list_node<assignment_expression>
 	expression_t
 ;
 

@@ -35,25 +35,9 @@ convert_list_node(const tree_node_t& node)
 {
 	ContainerT list;
 
-	if(ContainerT::separator_node.value() == syntax_nodes::common_nodes::empty.value()) //if the list separator is empty
+	for(tree_node_iterator_t i = node.children.begin(); i != node.children.end(); ++i) //for each child node
 	{
-		for(tree_node_iterator_t i = node.children.begin(); i != node.children.end(); ++i) //for each child node
-		{
-			list.push_back(convert_node<typename ContainerT::type>(*i));
-		}
-	}
-	else
-	{
-		for(tree_node_iterator_t i = node.children.begin(); i != node.children.end(); ++i) //for each child node
-		{
-			const tree_node_t& child_node = *i;
-			const std::string child_value = get_value(child_node);
-
-			if(child_value != ContainerT::separator_node.value()) //if the node isn't a separator
-			{
-				list.push_back(convert_node<typename ContainerT::type>(child_node));
-			}
-		}
+		list.push_back(convert_node<typename ContainerT::type>(*i));
 	}
 
 	return list;
