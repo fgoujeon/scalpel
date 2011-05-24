@@ -23,45 +23,61 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "cast_expression.hpp"
 #include "common.hpp"
+#include "detail/macros/sequence_node_pimpl_declaration.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 //primary expressions
-typedef
-	list_node<cast_expression>
-	pm_ptr_expression
-;
 
 typedef
-	list_node<pm_ptr_expression>
-	pm_ref_expression
+	alternative_node
+	<
+		predefined_text_node<str::arrow_asterisk>,
+		predefined_text_node<str::dot_asterisk>
+	>
+	pm_operator
 ;
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	pm_expression,
+	(cast_expression)
+	(optional_node<pm_operator>)
+	(optional_node<pm_expression>)
+)
 
 typedef
-	list_node<pm_ref_expression>
-	modulo_expression
+	alternative_node
+	<
+		predefined_text_node<str::asterisk>,
+		predefined_text_node<str::slash>,
+		predefined_text_node<str::percent>
+	>
+	multiplicative_operator
 ;
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	multiplicative_expression,
+	(pm_expression)
+	(optional_node<multiplicative_operator>)
+	(optional_node<multiplicative_expression>)
+)
 
 typedef
-	list_node<modulo_expression>
-	divisive_expression
+	alternative_node
+	<
+		predefined_text_node<str::plus>,
+		predefined_text_node<str::minus>
+	>
+	additive_operator
 ;
-
-typedef
-	list_node<divisive_expression>
-	multiplicative_expression
-;
-
-typedef
-	list_node<multiplicative_expression>
-	subtractive_expression
-;
-
-typedef
-	list_node<subtractive_expression>
-	additive_expression
-;
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	additive_expression,
+	(multiplicative_expression)
+	(optional_node<additive_operator>)
+	(optional_node<additive_expression>)
+)
 
 typedef
 	list_node<additive_expression>
@@ -239,6 +255,8 @@ typedef
 ;
 
 }}} //namespace scalpel::cpp::syntax_nodes
+
+#include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
 
 #endif
 

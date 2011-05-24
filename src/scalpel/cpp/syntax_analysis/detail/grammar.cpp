@@ -432,10 +432,10 @@ grammar::grammar()
 			| postfix_expression >> '[' >> expression >> ']'
 			| postfix_expression >> '(' >> !expression >> ')'
 			| simple_type_specifier >> '(' >> !expression >> ')'
-			| str_p("typename")tr_p("::") >> nested_name_specifier >> lexeme_d[identifier] >> '(' >> !expression >> ')'
-			| str_p("typename")tr_p("::") >> nested_name_specifiertr_p("template") >> template_id >> '(' >> !expression >> ')'
-			| postfix_expression >> '.'tr_p("template") >> id_expression
-			| postfix_expression >> "->"tr_p("template") >> id_expression
+			| str_p("typename") >> !str_p("::") >> nested_name_specifier >> lexeme_d[identifier] >> '(' >> !expression >> ')'
+			| str_p("typename") >> !str_p("::") >> nested_name_specifiertr_p("template") >> template_id >> '(' >> !expression >> ')'
+			| postfix_expression >> '.' >> !str_p("template") >> id_expression
+			| postfix_expression >> "->" >> !str_p("template") >> id_expression
 			| postfix_expression >> '.' >> pseudo_destructor_name
 			| postfix_expression >> "->" >> pseudo_destructor_name
 			| postfix_expression >> "++"
@@ -631,32 +631,29 @@ grammar::grammar()
 		= '(' >> type_id >> ')'
 	;
 
-	pm_ptr_expression
-		= cast_expression % no_node_d[str_p("->*")]
+	pm_expression
+		= cast_expression >> !(pm_operator >> pm_expression)
 	;
-
-	pm_ref_expression
-		= pm_ptr_expression % no_node_d[str_p(".*")]
-	;
-
-	modulo_expression
-		= pm_ref_expression % no_node_d[str_p('%')]
-	;
-
-	divisive_expression
-		= modulo_expression % no_node_d[str_p('/')]
+	pm_operator
+		= str_p("->*")
+		| ".*"
 	;
 
 	multiplicative_expression
-		= divisive_expression % no_node_d[str_p('*')]
+		= pm_expression >> !(multiplicative_operator >> multiplicative_expression)
 	;
-
-	subtractive_expression
-		= multiplicative_expression % no_node_d[str_p('-')]
+	multiplicative_operator
+		= ch_p('*')
+		| '/'
+		| '%'
 	;
 
 	additive_expression
-		= subtractive_expression % no_node_d[str_p('+')]
+		= multiplicative_expression >> !(additive_operator >> additive_expression)
+	;
+	additive_operator
+		= ch_p('+')
+		| '-'
 	;
 
 	left_shift_expression

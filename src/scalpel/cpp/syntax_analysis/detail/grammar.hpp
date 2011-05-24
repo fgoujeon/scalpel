@@ -126,13 +126,12 @@ class grammar
             CAST_EXPRESSION,
 			CAST_EXPRESSION_FIRST_PART_SEQ,
 			CAST_EXPRESSION_FIRST_PART,
-			PM_PTR_EXPRESSION,
-			PM_REF_EXPRESSION,
-			MODULO_EXPRESSION,
-			DIVISIVE_EXPRESSION,
+			PM_EXPRESSION,
+			PM_OPERATOR,
             MULTIPLICATIVE_EXPRESSION,
-			SUBTRACTIVE_EXPRESSION,
+            MULTIPLICATIVE_OPERATOR,
             ADDITIVE_EXPRESSION,
+            ADDITIVE_OPERATOR,
 			LEFT_SHIFT_EXPRESSION,
 			RIGHT_SHIFT_EXPRESSION,
 			TEMPLATE_ARGUMENT_RIGHT_SHIFT_EXPRESSION,
@@ -440,13 +439,12 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CAST_EXPRESSION>> cast_expression;
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CAST_EXPRESSION_FIRST_PART_SEQ>> cast_expression_first_part_seq;
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CAST_EXPRESSION_FIRST_PART>> cast_expression_first_part;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PM_PTR_EXPRESSION>> pm_ptr_expression;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PM_REF_EXPRESSION>> pm_ref_expression;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MODULO_EXPRESSION>> modulo_expression;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DIVISIVE_EXPRESSION>> divisive_expression;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PM_EXPRESSION>> pm_expression;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PM_OPERATOR>> pm_operator;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MULTIPLICATIVE_EXPRESSION>> multiplicative_expression;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::SUBTRACTIVE_EXPRESSION>> subtractive_expression;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MULTIPLICATIVE_OPERATOR>> multiplicative_operator;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ADDITIVE_EXPRESSION>> additive_expression;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ADDITIVE_OPERATOR>> additive_operator;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::LEFT_SHIFT_EXPRESSION>> left_shift_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::RIGHT_SHIFT_EXPRESSION>> right_shift_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_RIGHT_SHIFT_EXPRESSION>> template_argument_right_shift_expression;
