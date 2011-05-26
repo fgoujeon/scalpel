@@ -80,37 +80,41 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 )
 
 typedef
-	list_node<additive_expression>
-	left_shift_expression
+	alternative_node
+	<
+		predefined_text_node<str::double_left_angle_bracket>,
+		predefined_text_node<str::double_right_angle_bracket>
+	>
+	shift_operator
 ;
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	shift_expression,
+	(additive_expression)
+	(optional_node<shift_operator>)
+	(optional_node<shift_expression>)
+)
 
 typedef
-	list_node<left_shift_expression>
-	right_shift_expression
+	alternative_node
+	<
+		predefined_text_node<str::left_angle_bracket>,
+		predefined_text_node<str::right_angle_bracket>,
+		predefined_text_node<str::left_angle_bracket_equal>,
+		predefined_text_node<str::right_angle_bracket_equal>
+	>
+	relational_operator
 ;
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	relational_expression,
+	(shift_expression)
+	(optional_node<relational_operator>)
+	(optional_node<relational_expression>)
+)
 
 typedef
-	list_node<right_shift_expression>
-	less_than_or_equal_to_expression
-;
-
-typedef
-	list_node<less_than_or_equal_to_expression>
-	less_than_expression
-;
-
-typedef
-	list_node<less_than_expression>
-	greater_than_or_equal_to_expression
-;
-
-typedef
-	list_node<greater_than_or_equal_to_expression>
-	greater_than_expression
-;
-
-typedef
-	list_node<greater_than_expression>
+	list_node<relational_expression>
 	inequality_expression
 ;
 
@@ -162,65 +166,41 @@ struct logical_or_expression: public logical_or_expression_t
 
 
 
-//round bracketed expressions
-typedef
-	sequence_node
-	<
-		predefined_text_node<str::opening_round_bracket>,
-		right_shift_expression,
-		predefined_text_node<str::closing_round_bracket>
-	>
-	round_bracketed_right_shift_expression
-;
-
-typedef
-	sequence_node
-	<
-		predefined_text_node<str::opening_round_bracket>,
-		greater_than_expression,
-		predefined_text_node<str::closing_round_bracket>
-	>
-	round_bracketed_greater_than_expression
-;
-
-
-
 //same expressions used as template arguments
 typedef
 	alternative_node
 	<
-		round_bracketed_right_shift_expression,
-		left_shift_expression
+		predefined_text_node<str::double_left_angle_bracket>
 	>
-	template_argument_right_shift_expression
+	template_argument_shift_operator
 ;
-
-typedef
-	list_node<template_argument_right_shift_expression>
-	template_argument_less_than_or_equal_to_expression
-;
-
-typedef
-	list_node<template_argument_less_than_or_equal_to_expression>
-	template_argument_less_than_expression
-;
-
-typedef
-	list_node<template_argument_less_than_expression>
-	template_argument_greater_than_or_equal_to_expression
-;
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	template_argument_shift_expression,
+	(additive_expression)
+	(optional_node<template_argument_shift_operator>)
+	(optional_node<template_argument_shift_expression>)
+)
 
 typedef
 	alternative_node
 	<
-		round_bracketed_greater_than_expression,
-		template_argument_greater_than_or_equal_to_expression
+		predefined_text_node<str::left_angle_bracket>,
+		predefined_text_node<str::left_angle_bracket_equal>,
+		predefined_text_node<str::right_angle_bracket_equal>
 	>
-	template_argument_greater_than_expression
+	template_argument_relational_operator
 ;
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	template_argument_relational_expression,
+	(template_argument_shift_expression)
+	(optional_node<template_argument_relational_operator>)
+	(optional_node<template_argument_relational_expression>)
+)
 
 typedef
-	list_node<template_argument_greater_than_expression>
+	list_node<template_argument_relational_expression>
 	template_argument_inequality_expression
 ;
 

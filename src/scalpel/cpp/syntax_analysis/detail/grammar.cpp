@@ -656,60 +656,45 @@ grammar::grammar()
 		| '-'
 	;
 
-	left_shift_expression
-		= additive_expression % no_node_d[str_p("<<")]
+	shift_expression
+		= additive_expression >> !(shift_operator >> shift_expression)
 	;
-
-	right_shift_expression
-		= left_shift_expression % no_node_d[str_p(">>")]
-	;
-	//a shift expression used as a template argument must be placed between brackets if it contains any '>' characters
-	template_argument_right_shift_expression
-		= round_bracketed_right_shift_expression
-		| left_shift_expression
-	;
-	round_bracketed_right_shift_expression
-		= '(' >> right_shift_expression >> ')'
-	;
-
-	less_than_or_equal_to_expression
-		= right_shift_expression % no_node_d[str_p("<=")]
-	;
-	template_argument_less_than_or_equal_to_expression
-		= template_argument_right_shift_expression % no_node_d[str_p("<=")]
-	;
-
-	less_than_expression
-		= less_than_or_equal_to_expression % no_node_d[str_p('<')]
-	;
-	template_argument_less_than_expression
-		= template_argument_less_than_or_equal_to_expression % no_node_d[str_p('<')]
-	;
-
-	greater_than_or_equal_to_expression
-		= less_than_expression % no_node_d[str_p(">=")]
-	;
-	template_argument_greater_than_or_equal_to_expression
-		= template_argument_less_than_expression % no_node_d[str_p(">=")]
-	;
-
-	greater_than_expression
-		= greater_than_or_equal_to_expression % no_node_d[str_p('>')]
+	shift_operator
+		= str_p("<<")
+		| ">>"
 	;
 	//a shift expression used as a template argument must be placed between brackets if it contains any '>' characters
-	template_argument_greater_than_expression
-		= round_bracketed_greater_than_expression
-		| template_argument_greater_than_or_equal_to_expression
+	template_argument_shift_expression
+		= additive_expression >> !(template_argument_shift_operator >> template_argument_shift_expression)
 	;
-	round_bracketed_greater_than_expression
-		= '(' >> greater_than_expression >> ')'
+	template_argument_shift_operator
+		= str_p("<<")
+	;
+
+	relational_expression
+		= shift_expression >> !(relational_operator >> relational_expression)
+	;
+	relational_operator
+		= str_p("<=")
+		| ">="
+		| "<"
+		| ">"
+	;
+	//a shift expression used as a template argument must be placed between brackets if it contains any '>' characters
+	template_argument_relational_expression
+		= template_argument_shift_expression >> !(template_argument_relational_operator >> template_argument_relational_expression)
+	;
+	template_argument_relational_operator
+		= str_p("<=")
+		| ">="
+		| "<"
 	;
 
 	inequality_expression
-		= greater_than_expression % no_node_d[str_p("!=")]
+		= relational_expression % no_node_d[str_p("!=")]
 	;
 	template_argument_inequality_expression
-		= template_argument_greater_than_expression % no_node_d[str_p("!=")]
+		= template_argument_relational_expression % no_node_d[str_p("!=")]
 	;
 
 	equality_expression

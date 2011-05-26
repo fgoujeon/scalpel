@@ -36,36 +36,28 @@ using namespace scalpel::cpp::syntax_nodes;
 using namespace detail;
 
 template<class T>
-struct type_getter
-{
-	static
-	const std::string
-	get()
-	{
-		return "";
-	}
-};
+struct type_getter;
 
-#define GET_TYPE_SPECIALIZATION(node_type)\
+#define GET_TYPE_SPECIALIZATION(NODE_TYPE)\
 template<> \
-struct type_getter<node_type> \
+struct type_getter<NODE_TYPE> \
 { \
 	static \
 	const std::string \
 	get() \
 	{ \
-		return #node_type; \
+		return #NODE_TYPE; \
 	} \
 }; \
  \
 template<> \
-struct type_getter<optional_node<node_type>> \
+struct type_getter<optional_node<NODE_TYPE>> \
 { \
 	static \
 	const std::string \
 	get() \
 	{ \
-		return "optional " #node_type; \
+		return "optional " #NODE_TYPE; \
 	} \
 };
 
@@ -162,8 +154,6 @@ GET_TYPE_SPECIALIZATION(function_specifier)
 GET_TYPE_SPECIALIZATION(function_try_block)
 GET_TYPE_SPECIALIZATION(fundamental_type_specifier)
 GET_TYPE_SPECIALIZATION(goto_statement)
-GET_TYPE_SPECIALIZATION(greater_than_expression)
-GET_TYPE_SPECIALIZATION(greater_than_or_equal_to_expression)
 GET_TYPE_SPECIALIZATION(handler)
 GET_TYPE_SPECIALIZATION(handler_seq)
 GET_TYPE_SPECIALIZATION(id_expression)
@@ -182,9 +172,6 @@ GET_TYPE_SPECIALIZATION(integer_literal)
 GET_TYPE_SPECIALIZATION(iteration_statement)
 GET_TYPE_SPECIALIZATION(jump_statement)
 GET_TYPE_SPECIALIZATION(labeled_statement)
-GET_TYPE_SPECIALIZATION(left_shift_expression)
-GET_TYPE_SPECIALIZATION(less_than_expression)
-GET_TYPE_SPECIALIZATION(less_than_or_equal_to_expression)
 GET_TYPE_SPECIALIZATION(linkage_specification)
 GET_TYPE_SPECIALIZATION(literal)
 GET_TYPE_SPECIALIZATION(logical_and_expression)
@@ -218,6 +205,7 @@ GET_TYPE_SPECIALIZATION(new_type_id)
 GET_TYPE_SPECIALIZATION(new_type_id_new_expression)
 GET_TYPE_SPECIALIZATION(operator_)
 GET_TYPE_SPECIALIZATION(operator_function_id)
+GET_TYPE_SPECIALIZATION(operator_function_template_id)
 GET_TYPE_SPECIALIZATION(parameter_declaration)
 GET_TYPE_SPECIALIZATION(parameter_declaration_clause)
 GET_TYPE_SPECIALIZATION(parameter_declaration_list)
@@ -240,13 +228,14 @@ GET_TYPE_SPECIALIZATION(qualified_operator_function_id)
 GET_TYPE_SPECIALIZATION(qualified_template_id)
 GET_TYPE_SPECIALIZATION(ref_ptr_operator)
 GET_TYPE_SPECIALIZATION(reinterpret_cast_expression)
+GET_TYPE_SPECIALIZATION(relational_expression)
+GET_TYPE_SPECIALIZATION(relational_operator)
 GET_TYPE_SPECIALIZATION(return_statement)
-GET_TYPE_SPECIALIZATION(right_shift_expression)
 GET_TYPE_SPECIALIZATION(round_bracketed_expression)
-GET_TYPE_SPECIALIZATION(round_bracketed_greater_than_expression)
 GET_TYPE_SPECIALIZATION(round_bracketed_optional_expression)
-GET_TYPE_SPECIALIZATION(round_bracketed_right_shift_expression)
 GET_TYPE_SPECIALIZATION(selection_statement)
+GET_TYPE_SPECIALIZATION(shift_expression)
+GET_TYPE_SPECIALIZATION(shift_operator)
 GET_TYPE_SPECIALIZATION(simple_declaration)
 GET_TYPE_SPECIALIZATION(simple_delete_expression)
 GET_TYPE_SPECIALIZATION(simple_function_definition)
@@ -272,16 +261,15 @@ GET_TYPE_SPECIALIZATION(template_argument_assignment_expression_last_part)
 GET_TYPE_SPECIALIZATION(template_argument_conditional_expression)
 GET_TYPE_SPECIALIZATION(template_argument_equality_expression)
 GET_TYPE_SPECIALIZATION(template_argument_exclusive_or_expression)
-GET_TYPE_SPECIALIZATION(template_argument_greater_than_expression)
-GET_TYPE_SPECIALIZATION(template_argument_greater_than_or_equal_to_expression)
 GET_TYPE_SPECIALIZATION(template_argument_inclusive_or_expression)
 GET_TYPE_SPECIALIZATION(template_argument_inequality_expression)
-GET_TYPE_SPECIALIZATION(template_argument_less_than_expression)
-GET_TYPE_SPECIALIZATION(template_argument_less_than_or_equal_to_expression)
 GET_TYPE_SPECIALIZATION(template_argument_list)
 GET_TYPE_SPECIALIZATION(template_argument_logical_and_expression)
 GET_TYPE_SPECIALIZATION(template_argument_logical_or_expression)
-GET_TYPE_SPECIALIZATION(template_argument_right_shift_expression)
+GET_TYPE_SPECIALIZATION(template_argument_relational_expression)
+GET_TYPE_SPECIALIZATION(template_argument_relational_operator)
+GET_TYPE_SPECIALIZATION(template_argument_shift_expression)
+GET_TYPE_SPECIALIZATION(template_argument_shift_operator)
 GET_TYPE_SPECIALIZATION(template_declaration)
 GET_TYPE_SPECIALIZATION(template_id)
 GET_TYPE_SPECIALIZATION(template_parameter)
@@ -332,78 +320,75 @@ void
 print_syntax_tree(const scalpel::cpp::syntax_tree& tree);
 
 //overload for sequence nodes
-template<class SyntaxNodeT>
+template<class SyntaxNode, bool PrintType = true>
 void
 print
 (
-	const SyntaxNodeT& node,
+	const SyntaxNode& node,
 	const unsigned int indent_level = 0,
-	bool print_type = true,
-	typename boost::enable_if<syntax_nodes::utility::is_sequence_node<SyntaxNodeT>>::type* = 0,
-	typename boost::disable_if<boost::is_same<typename SyntaxNodeT::head_node_t, void>>::type* = 0
+	typename boost::enable_if<syntax_nodes::utility::is_sequence_node<SyntaxNode>>::type* = 0,
+	typename boost::disable_if<boost::is_same<typename SyntaxNode::head_node_t, void>>::type* = 0
 );
 
 //overload for alternative nodes
-template<class SyntaxNodeT>
+template<class SyntaxNode, bool PrintType = true>
 void
 print
 (
-	const SyntaxNodeT& node,
+	const SyntaxNode& node,
 	const unsigned int indent_level = 0,
-	bool print_type = true,
-	typename boost::enable_if<syntax_nodes::utility::is_alternative_node<SyntaxNodeT>>::type* = 0,
-	typename boost::disable_if<boost::is_same<typename SyntaxNodeT::head_node_t, void>>::type* = 0
+	typename boost::enable_if<syntax_nodes::utility::is_alternative_node<SyntaxNode>>::type* = 0,
+	typename boost::disable_if<boost::is_same<typename SyntaxNode::head_node_t, void>>::type* = 0
 );
 
 //overload for list nodes
-template<class SyntaxNodeT>
+template<class SyntaxNode>
 void
 print
 (
-	const SyntaxNodeT& node,
+	const SyntaxNode& node,
 	const unsigned int indent_level = 0,
-	typename boost::enable_if<syntax_nodes::utility::is_list_node<SyntaxNodeT>>::type* = 0
+	typename boost::enable_if<syntax_nodes::utility::is_list_node<SyntaxNode>>::type* = 0
 );
 
 //overload for optional nodes
-template<class SyntaxNodeT>
+template<class SyntaxNode>
 void
 print
 (
-	const SyntaxNodeT& node,
+	const SyntaxNode& node,
 	const unsigned int indent_level = 0,
-	typename boost::enable_if<syntax_nodes::utility::is_optional_node<SyntaxNodeT>>::type* = 0
+	typename boost::enable_if<syntax_nodes::utility::is_optional_node<SyntaxNode>>::type* = 0
 );
 
 //overload for predefined_text nodes
-template<class SyntaxNodeT>
+template<class SyntaxNode>
 void
 print
 (
-	const SyntaxNodeT& node,
+	const SyntaxNode& node,
 	const unsigned int indent_level = 0,
-	typename boost::enable_if<syntax_nodes::utility::is_predefined_text_node<SyntaxNodeT>>::type* = 0
+	typename boost::enable_if<syntax_nodes::utility::is_predefined_text_node<SyntaxNode>>::type* = 0
 );
 
 //overload for leaf nodes
-template<class SyntaxNodeT>
+template<class SyntaxNode>
 void
 print
 (
-	const SyntaxNodeT& node,
+	const SyntaxNode& node,
 	const unsigned int indent_level = 0,
-	typename boost::enable_if<syntax_nodes::utility::is_leaf_node<SyntaxNodeT>>::type* = 0
+	typename boost::enable_if<syntax_nodes::utility::is_leaf_node<SyntaxNode>>::type* = 0
 );
 
 //overload for empty nodes (sequence and alternative tail nodes)
-template<class SyntaxNodeT>
+template<class SyntaxNode, bool PrintType = false>
 void
 print
 (
-	const SyntaxNodeT&,
+	const SyntaxNode&,
 	const unsigned int indent_level = 0,
-	bool print_type = true,
-	typename boost::enable_if<boost::is_same<typename SyntaxNodeT::head_node_t, void>>::type* = 0
+	typename boost::enable_if<boost::is_same<typename SyntaxNode::head_node_t, void>>::type* = 0
 );
 
 
@@ -416,99 +401,154 @@ print_syntax_tree(const scalpel::cpp::syntax_tree& tree)
 }
 
 //overload for sequence nodes
-template<class SyntaxNodeT>
+template<class SyntaxNode, bool PrintType>
+struct print_sequence_node_impl;
+
+template<class SyntaxNode>
+struct print_sequence_node_impl<SyntaxNode, true>
+{
+	static
+	void
+	print_node
+	(
+		const SyntaxNode& node,
+		const unsigned int indent_level
+	)
+	{
+		std::cout << indent(indent_level) << "<" << get_type<SyntaxNode>() << ">\n";
+		print(node.head(), indent_level + 1);
+		print<typename SyntaxNode::tail_sequence_node_t, false>(node.tail(), indent_level + 1);
+		std::cout << indent(indent_level) << "</" << get_type<SyntaxNode>() << ">\n";
+	}
+};
+
+template<class SyntaxNode>
+struct print_sequence_node_impl<SyntaxNode, false>
+{
+	static
+	void
+	print_node
+	(
+		const SyntaxNode& node,
+		const unsigned int indent_level
+	)
+	{
+		print(node.head(), indent_level);
+		print<typename SyntaxNode::tail_sequence_node_t, false>(node.tail(), indent_level);
+	}
+};
+
+template<class SyntaxNode, bool PrintType>
 void
 print
 (
-	const SyntaxNodeT& node,
+	const SyntaxNode& node,
 	const unsigned int indent_level,
-	bool print_type,
-	typename boost::enable_if<syntax_nodes::utility::is_sequence_node<SyntaxNodeT>>::type* = 0,
-	typename boost::disable_if<boost::is_same<typename SyntaxNodeT::head_node_t, void>>::type* = 0
+	typename boost::enable_if<syntax_nodes::utility::is_sequence_node<SyntaxNode>>::type* = 0,
+	typename boost::disable_if<boost::is_same<typename SyntaxNode::head_node_t, void>>::type* = 0
 )
 {
-	if(print_type)
-	{
-		std::cout << indent(indent_level) << "<" << get_type<SyntaxNodeT>() << ">\n";
-		print(node.head(), indent_level + 1);
-		print(node.tail(), indent_level + 1, false);
-		std::cout << indent(indent_level) << "</" << get_type<SyntaxNodeT>() << ">\n";
-	}
-	else
-	{
-		print(node.head(), indent_level);
-		print(node.tail(), indent_level, false);
-	}
+	print_sequence_node_impl<SyntaxNode, PrintType>::print_node(node, indent_level);
 }
 
 //overload for alternative nodes
-template<class SyntaxNodeT>
-void
-print
-(
-	const SyntaxNodeT& node,
-	const unsigned int indent_level,
-	bool print_type,
-	typename boost::enable_if<syntax_nodes::utility::is_alternative_node<SyntaxNodeT>>::type* = 0,
-	typename boost::disable_if<boost::is_same<typename SyntaxNodeT::head_node_t, void>>::type* = 0
-)
+template<class SyntaxNode, bool PrintType>
+struct print_alternative_node_impl;
+
+template<class SyntaxNode>
+struct print_alternative_node_impl<SyntaxNode, true>
 {
-	auto opt_node = get<typename SyntaxNodeT::head_node_t>(&node);
-	if(print_type)
+	static
+	void
+	print_node
+	(
+		const SyntaxNode& node,
+		const unsigned int indent_level
+	)
 	{
-		std::cout << indent(indent_level) << "<" << get_type<SyntaxNodeT>() << ">\n";
+		typedef typename SyntaxNode::head_node_t head_node_t;
+		boost::optional<const head_node_t&> opt_node = get<head_node_t>(&node);
+
+		std::cout << indent(indent_level) << "<" << get_type<SyntaxNode>() << ">\n";
 		if(opt_node)
 			print(*opt_node, indent_level + 1);
 		else
-			print(node.tail(), indent_level + 1, false);
-		std::cout << indent(indent_level) << "</" << get_type<SyntaxNodeT>() << ">\n";
+			print<typename SyntaxNode::tail_alternative_node_t, false>(node.tail(), indent_level + 1);
+		std::cout << indent(indent_level) << "</" << get_type<SyntaxNode>() << ">\n";
 	}
-	else
+};
+
+template<class SyntaxNode>
+struct print_alternative_node_impl<SyntaxNode, false>
+{
+	static
+	void
+	print_node
+	(
+		const SyntaxNode& node,
+		const unsigned int indent_level
+	)
 	{
+		typedef typename SyntaxNode::head_node_t head_node_t;
+		boost::optional<const head_node_t&> opt_node = get<head_node_t>(&node);
+
 		if(opt_node)
 			print(*opt_node, indent_level);
 		else
-			print(node.tail(), indent_level, false);
+			print<typename SyntaxNode::tail_alternative_node_t, false>(node.tail(), indent_level);
 	}
+};
+
+template<class SyntaxNode, bool PrintType>
+void
+print
+(
+	const SyntaxNode& node,
+	const unsigned int indent_level,
+	typename boost::enable_if<syntax_nodes::utility::is_alternative_node<SyntaxNode>>::type* = 0,
+	typename boost::disable_if<boost::is_same<typename SyntaxNode::head_node_t, void>>::type* = 0
+)
+{
+	print_alternative_node_impl<SyntaxNode, PrintType>::print_node(node, indent_level);
 }
 
 //overload for list nodes
-template<class SyntaxNodeT>
+template<class SyntaxNode>
 void
 print
 (
-	const SyntaxNodeT& node,
+	const SyntaxNode& node,
 	const unsigned int indent_level,
-	typename boost::enable_if<syntax_nodes::utility::is_list_node<SyntaxNodeT>>::type* = 0
+	typename boost::enable_if<syntax_nodes::utility::is_list_node<SyntaxNode>>::type* = 0
 )
 {
-	std::cout << indent(indent_level) << "<" << get_type<SyntaxNodeT>() << ">\n";
+	std::cout << indent(indent_level) << "<" << get_type<SyntaxNode>() << ">\n";
 	for(auto i = node.begin(); i != node.end(); ++i) //for each node of the list
 		print(*i, indent_level + 1);
-	std::cout << indent(indent_level) << "</" << get_type<SyntaxNodeT>() << ">\n";
+	std::cout << indent(indent_level) << "</" << get_type<SyntaxNode>() << ">\n";
 }
 
 //overload for optional nodes
-template<class SyntaxNodeT>
+template<class SyntaxNode>
 void
 print
 (
-	const SyntaxNodeT& node,
+	const SyntaxNode& node,
 	const unsigned int indent_level,
-	typename boost::enable_if<syntax_nodes::utility::is_optional_node<SyntaxNodeT>>::type* = 0
+	typename boost::enable_if<syntax_nodes::utility::is_optional_node<SyntaxNode>>::type* = 0
 )
 {
 	if(node) print(*node, indent_level);
 }
 
 //overload for predefined_text nodes
-template<class SyntaxNodeT>
+template<class SyntaxNode>
 void
 print
 (
-	const SyntaxNodeT& node,
+	const SyntaxNode& node,
 	const unsigned int indent_level,
-	typename boost::enable_if<syntax_nodes::utility::is_predefined_text_node<SyntaxNodeT>>::type* = 0
+	typename boost::enable_if<syntax_nodes::utility::is_predefined_text_node<SyntaxNode>>::type* = 0
 )
 {
 	std::cout << indent(indent_level) << "<predefined_text_node>";
@@ -518,13 +558,13 @@ print
 }
 
 //overload for leaf nodes
-template<class SyntaxNodeT>
+template<class SyntaxNode>
 void
 print
 (
-	const SyntaxNodeT& node,
+	const SyntaxNode& node,
 	const unsigned int indent_level,
-	typename boost::enable_if<syntax_nodes::utility::is_leaf_node<SyntaxNodeT>>::type* = 0
+	typename boost::enable_if<syntax_nodes::utility::is_leaf_node<SyntaxNode>>::type* = 0
 )
 {
 	std::cout << indent(indent_level) << "<leaf_node>";
@@ -534,14 +574,13 @@ print
 }
 
 //overload for empty nodes (sequence and alternative tail nodes)
-template<class SyntaxNodeT>
+template<class SyntaxNode, bool PrintType>
 void
 print
 (
-	const SyntaxNodeT&,
+	const SyntaxNode&,
 	const unsigned int,
-	bool,
-	typename boost::enable_if<boost::is_same<typename SyntaxNodeT::head_node_t, void>>::type* = 0
+	typename boost::enable_if<boost::is_same<typename SyntaxNode::head_node_t, void>>::type* = 0
 )
 {
 	//does nothing

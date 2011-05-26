@@ -132,19 +132,14 @@ class grammar
             MULTIPLICATIVE_OPERATOR,
             ADDITIVE_EXPRESSION,
             ADDITIVE_OPERATOR,
-			LEFT_SHIFT_EXPRESSION,
-			RIGHT_SHIFT_EXPRESSION,
-			TEMPLATE_ARGUMENT_RIGHT_SHIFT_EXPRESSION,
-			ROUND_BRACKETED_RIGHT_SHIFT_EXPRESSION,
-			LESS_THAN_OR_EQUAL_TO_EXPRESSION,
-			TEMPLATE_ARGUMENT_LESS_THAN_OR_EQUAL_TO_EXPRESSION,
-			LESS_THAN_EXPRESSION,
-			TEMPLATE_ARGUMENT_LESS_THAN_EXPRESSION,
-			GREATER_THAN_OR_EQUAL_TO_EXPRESSION,
-			TEMPLATE_ARGUMENT_GREATER_THAN_OR_EQUAL_TO_EXPRESSION,
-			GREATER_THAN_EXPRESSION,
-			TEMPLATE_ARGUMENT_GREATER_THAN_EXPRESSION,
-			ROUND_BRACKETED_GREATER_THAN_EXPRESSION,
+			SHIFT_EXPRESSION,
+			SHIFT_OPERATOR,
+			TEMPLATE_ARGUMENT_SHIFT_EXPRESSION,
+			TEMPLATE_ARGUMENT_SHIFT_OPERATOR,
+			RELATIONAL_EXPRESSION,
+			RELATIONAL_OPERATOR,
+			TEMPLATE_ARGUMENT_RELATIONAL_EXPRESSION,
+			TEMPLATE_ARGUMENT_RELATIONAL_OPERATOR,
 			INEQUALITY_EXPRESSION,
 			TEMPLATE_ARGUMENT_INEQUALITY_EXPRESSION,
             EQUALITY_EXPRESSION,
@@ -445,19 +440,14 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::MULTIPLICATIVE_OPERATOR>> multiplicative_operator;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ADDITIVE_EXPRESSION>> additive_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ADDITIVE_OPERATOR>> additive_operator;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::LEFT_SHIFT_EXPRESSION>> left_shift_expression;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::RIGHT_SHIFT_EXPRESSION>> right_shift_expression;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_RIGHT_SHIFT_EXPRESSION>> template_argument_right_shift_expression;
-		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ROUND_BRACKETED_RIGHT_SHIFT_EXPRESSION>> round_bracketed_right_shift_expression;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::LESS_THAN_OR_EQUAL_TO_EXPRESSION>> less_than_or_equal_to_expression;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_LESS_THAN_OR_EQUAL_TO_EXPRESSION>> template_argument_less_than_or_equal_to_expression;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::LESS_THAN_EXPRESSION>> less_than_expression;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_LESS_THAN_EXPRESSION>> template_argument_less_than_expression;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::GREATER_THAN_OR_EQUAL_TO_EXPRESSION>> greater_than_or_equal_to_expression;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_GREATER_THAN_OR_EQUAL_TO_EXPRESSION>> template_argument_greater_than_or_equal_to_expression;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::GREATER_THAN_EXPRESSION>> greater_than_expression;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_GREATER_THAN_EXPRESSION>> template_argument_greater_than_expression;
-		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ROUND_BRACKETED_GREATER_THAN_EXPRESSION>> round_bracketed_greater_than_expression;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::SHIFT_EXPRESSION>> shift_expression;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::SHIFT_OPERATOR>> shift_operator;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_SHIFT_EXPRESSION>> template_argument_shift_expression;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_SHIFT_OPERATOR>> template_argument_shift_operator;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::RELATIONAL_EXPRESSION>> relational_expression;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::RELATIONAL_OPERATOR>> relational_operator;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_RELATIONAL_EXPRESSION>> template_argument_relational_expression;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_RELATIONAL_OPERATOR>> template_argument_relational_operator;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::INEQUALITY_EXPRESSION>> inequality_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_INEQUALITY_EXPRESSION>> template_argument_inequality_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EQUALITY_EXPRESSION>> equality_expression;

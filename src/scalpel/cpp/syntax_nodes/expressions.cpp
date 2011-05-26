@@ -48,6 +48,40 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 	(optional_node<additive_expression>)
 )
 
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
+(
+	relational_expression,
+	(shift_expression)
+	(optional_node<relational_operator>)
+	(optional_node<relational_expression>)
+)
+
+
+
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
+(
+	shift_expression,
+	(additive_expression)
+	(optional_node<shift_operator>)
+	(optional_node<shift_expression>)
+)
+
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
+(
+	template_argument_shift_expression,
+	(additive_expression)
+	(optional_node<template_argument_shift_operator>)
+	(optional_node<template_argument_shift_expression>)
+)
+
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
+(
+	template_argument_relational_expression,
+	(template_argument_shift_expression)
+	(optional_node<template_argument_relational_operator>)
+	(optional_node<template_argument_relational_expression>)
+)
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #include "detail/macros/sequence_node_pimpl_definition_undef.hpp"
