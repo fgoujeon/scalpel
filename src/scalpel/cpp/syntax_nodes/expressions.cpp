@@ -56,6 +56,50 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 	(optional_node<relational_expression>)
 )
 
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
+(
+	equality_expression,
+	(relational_expression)
+	(optional_node<equality_operator>)
+	(optional_node<equality_expression>)
+)
+
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
+(
+	and_expression,
+	(equality_expression)
+	(optional_node<and_expression>)
+)
+
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
+(
+	exclusive_or_expression,
+	(and_expression)
+	(optional_node<exclusive_or_expression>)
+)
+
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
+(
+	inclusive_or_expression,
+	(exclusive_or_expression)
+	(optional_node<inclusive_or_expression>)
+)
+
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
+(
+	logical_and_expression,
+	(inclusive_or_expression)
+	(optional_node<logical_and_expression>)
+)
+
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
+(
+	logical_or_expression,
+	(logical_and_expression)
+	(optional_node<logical_or_expression>)
+)
+
+
 
 
 SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
@@ -80,6 +124,49 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 	(template_argument_shift_expression)
 	(optional_node<template_argument_relational_operator>)
 	(optional_node<template_argument_relational_expression>)
+)
+
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
+(
+	template_argument_equality_expression,
+	(template_argument_relational_expression)
+	(optional_node<equality_operator>)
+	(optional_node<template_argument_equality_expression>)
+)
+
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
+(
+	template_argument_and_expression,
+	(template_argument_equality_expression)
+	(optional_node<template_argument_and_expression>)
+)
+
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
+(
+	template_argument_exclusive_or_expression,
+	(template_argument_and_expression)
+	(optional_node<template_argument_exclusive_or_expression>)
+)
+
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
+(
+	template_argument_inclusive_or_expression,
+	(template_argument_exclusive_or_expression)
+	(optional_node<template_argument_inclusive_or_expression>)
+)
+
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
+(
+	template_argument_logical_and_expression,
+	(template_argument_inclusive_or_expression)
+	(optional_node<template_argument_logical_and_expression>)
+)
+
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
+(
+	template_argument_logical_or_expression,
+	(template_argument_logical_and_expression)
+	(optional_node<template_argument_logical_or_expression>)
 )
 
 }}} //namespace scalpel::cpp::syntax_nodes

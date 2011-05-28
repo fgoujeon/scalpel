@@ -140,10 +140,9 @@ class grammar
 			RELATIONAL_OPERATOR,
 			TEMPLATE_ARGUMENT_RELATIONAL_EXPRESSION,
 			TEMPLATE_ARGUMENT_RELATIONAL_OPERATOR,
-			INEQUALITY_EXPRESSION,
-			TEMPLATE_ARGUMENT_INEQUALITY_EXPRESSION,
             EQUALITY_EXPRESSION,
             TEMPLATE_ARGUMENT_EQUALITY_EXPRESSION,
+            EQUALITY_OPERATOR,
             AND_EXPRESSION,
             TEMPLATE_ARGUMENT_AND_EXPRESSION,
             EXCLUSIVE_OR_EXPRESSION,
@@ -448,10 +447,9 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::RELATIONAL_OPERATOR>> relational_operator;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_RELATIONAL_EXPRESSION>> template_argument_relational_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_RELATIONAL_OPERATOR>> template_argument_relational_operator;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::INEQUALITY_EXPRESSION>> inequality_expression;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_INEQUALITY_EXPRESSION>> template_argument_inequality_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EQUALITY_EXPRESSION>> equality_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_EQUALITY_EXPRESSION>> template_argument_equality_expression;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EQUALITY_OPERATOR>> equality_operator;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::AND_EXPRESSION>> and_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_AND_EXPRESSION>> template_argument_and_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EXCLUSIVE_OR_EXPRESSION>> exclusive_or_expression;

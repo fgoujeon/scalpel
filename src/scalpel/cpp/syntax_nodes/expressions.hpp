@@ -114,55 +114,55 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 )
 
 typedef
-	list_node<relational_expression>
-	inequality_expression
+	alternative_node
+	<
+		predefined_text_node<str::double_equal>,
+		predefined_text_node<str::exclamation_equal>
+	>
+	equality_operator
 ;
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	equality_expression,
+	(relational_expression)
+	(optional_node<equality_operator>)
+	(optional_node<equality_expression>)
+)
 
-typedef
-	list_node<inequality_expression>
-	equality_expression
-;
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	and_expression,
+	(equality_expression)
+	(optional_node<and_expression>)
+)
 
-typedef
-	list_node<equality_expression>
-	and_expression
-;
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	exclusive_or_expression,
+	(and_expression)
+	(optional_node<exclusive_or_expression>)
+)
 
-typedef
-	list_node<and_expression>
-	exclusive_or_expression
-;
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	inclusive_or_expression,
+	(exclusive_or_expression)
+	(optional_node<inclusive_or_expression>)
+)
 
-typedef
-	list_node<exclusive_or_expression>
-	inclusive_or_expression
-;
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	logical_and_expression,
+	(inclusive_or_expression)
+	(optional_node<logical_and_expression>)
+)
 
-typedef
-	list_node<inclusive_or_expression>
-	logical_and_expression
-;
-
-typedef
-	list_node<logical_and_expression>
-	logical_or_expression_t
-;
-struct logical_or_expression: public logical_or_expression_t
-{
-	logical_or_expression()
-	{
-	}
-
-	logical_or_expression(const logical_or_expression& o):
-		logical_or_expression_t(o)
-	{
-	}
-
-	logical_or_expression(logical_or_expression&& o):
-		logical_or_expression_t(o)
-	{
-	}
-};
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	logical_or_expression,
+	(logical_and_expression)
+	(optional_node<logical_or_expression>)
+)
 
 
 
@@ -199,40 +199,48 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 	(optional_node<template_argument_relational_expression>)
 )
 
-typedef
-	list_node<template_argument_relational_expression>
-	template_argument_inequality_expression
-;
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	template_argument_equality_expression,
+	(template_argument_relational_expression)
+	(optional_node<equality_operator>)
+	(optional_node<template_argument_equality_expression>)
+)
 
-typedef
-	list_node<template_argument_inequality_expression>
-	template_argument_equality_expression
-;
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	template_argument_and_expression,
+	(template_argument_equality_expression)
+	(optional_node<template_argument_and_expression>)
+)
 
-typedef
-	list_node<template_argument_equality_expression>
-	template_argument_and_expression
-;
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	template_argument_exclusive_or_expression,
+	(template_argument_and_expression)
+	(optional_node<template_argument_exclusive_or_expression>)
+)
 
-typedef
-	list_node<template_argument_and_expression>
-	template_argument_exclusive_or_expression
-;
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	template_argument_inclusive_or_expression,
+	(template_argument_exclusive_or_expression)
+	(optional_node<template_argument_inclusive_or_expression>)
+)
 
-typedef
-	list_node<template_argument_exclusive_or_expression>
-	template_argument_inclusive_or_expression
-;
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	template_argument_logical_and_expression,
+	(template_argument_inclusive_or_expression)
+	(optional_node<template_argument_logical_and_expression>)
+)
 
-typedef
-	list_node<template_argument_inclusive_or_expression>
-	template_argument_logical_and_expression
-;
-
-typedef
-	list_node<template_argument_logical_and_expression>
-	template_argument_logical_or_expression
-;
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	template_argument_logical_or_expression,
+	(template_argument_logical_and_expression)
+	(optional_node<template_argument_logical_or_expression>)
+)
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

@@ -690,53 +690,50 @@ grammar::grammar()
 		| "<"
 	;
 
-	inequality_expression
-		= relational_expression % no_node_d[str_p("!=")]
-	;
-	template_argument_inequality_expression
-		= template_argument_relational_expression % no_node_d[str_p("!=")]
-	;
-
 	equality_expression
-		= inequality_expression % no_node_d[str_p("==")]
+		= relational_expression >> !(equality_operator >> equality_expression)
 	;
 	template_argument_equality_expression
-		= template_argument_inequality_expression % no_node_d[str_p("==")]
+		= template_argument_relational_expression >> !(equality_operator >> template_argument_equality_expression)
+	;
+	equality_operator
+		= str_p("==")
+		| "!="
 	;
 
 	and_expression
-		= equality_expression % no_node_d[str_p('&')]
+		= equality_expression >> !(no_node_d[ch_p('&')] >> and_expression)
 	;
 	template_argument_and_expression
-		= template_argument_equality_expression % no_node_d[str_p('&')]
+		= template_argument_equality_expression >> !(no_node_d[ch_p('&')] >> template_argument_and_expression)
 	;
 
 	exclusive_or_expression
-		= and_expression % no_node_d[str_p('^')]
+		= and_expression >> !(no_node_d[ch_p('^')] >> exclusive_or_expression)
 	;
 	template_argument_exclusive_or_expression
-		= template_argument_and_expression % no_node_d[str_p('^')]
+		= template_argument_and_expression >> !(no_node_d[ch_p('^')] >> template_argument_exclusive_or_expression)
 	;
 
 	inclusive_or_expression
-		= exclusive_or_expression % no_node_d[str_p('|')]
+		= exclusive_or_expression >> !(no_node_d[ch_p('|')] >> inclusive_or_expression)
 	;
 	template_argument_inclusive_or_expression
-		= template_argument_exclusive_or_expression % no_node_d[str_p('|')]
+		= template_argument_exclusive_or_expression >> !(no_node_d[ch_p('|')] >> template_argument_inclusive_or_expression)
 	;
 
 	logical_and_expression
-		= inclusive_or_expression % no_node_d[str_p("&&")]
+		= inclusive_or_expression >> !(no_node_d[str_p("&&")] >> logical_and_expression)
 	;
 	template_argument_logical_and_expression
-		= template_argument_inclusive_or_expression % no_node_d[str_p("&&")]
+		= template_argument_inclusive_or_expression >> !(no_node_d[str_p("&&")] >> template_argument_logical_and_expression)
 	;
 
 	logical_or_expression
-		= logical_and_expression % no_node_d[str_p("||")]
+		= logical_and_expression >> !(no_node_d[str_p("||")] >> logical_or_expression)
 	;
 	template_argument_logical_or_expression
-		= template_argument_logical_and_expression % no_node_d[str_p("||")]
+		= template_argument_logical_and_expression >> !(no_node_d[str_p("||")] >> template_argument_logical_or_expression)
 	;
 
 	conditional_expression
