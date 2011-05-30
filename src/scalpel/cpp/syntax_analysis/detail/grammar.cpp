@@ -168,24 +168,25 @@ grammar::grammar()
 	;
 
 	integer_literal
-		= token_node_d
-		[
-			decimal_literal >> !integer_suffix
-			| hexadecimal_literal >> !integer_suffix
-			| octal_literal >> !integer_suffix
-		]
+		= integer_literal_no_suffix >> !integer_suffix
+	;
+
+	integer_literal_no_suffix
+		= decimal_literal
+		| hexadecimal_literal
+		| octal_literal
 	;
 
 	decimal_literal
-		= nonzero_digit >> *digit_p
+		= token_node_d[nonzero_digit >> *digit_p]
 	;
 
 	octal_literal
-		= '0' >> *octal_digit
+		= token_node_d[no_node_d[ch_p('0')] >> *octal_digit]
 	;
 
 	hexadecimal_literal
-		= (str_p("0x") | "0X") >> +hexadecimal_digit
+		= token_node_d[no_node_d[str_p("0x") | "0X"] >> +hexadecimal_digit]
 	;
 
 	hexadecimal_digit
@@ -206,15 +207,15 @@ grammar::grammar()
 	;
 
 	unsigned_suffix
-		= ch_p('u') | 'U'
+		= token_node_d[ch_p('u') | 'U']
 	;
 
 	long_suffix
-		= ch_p('l') | 'L'
+		= token_node_d[ch_p('l') | 'L']
 	;
 
 	long_long_suffix
-		= str_p("ll") | "LL"
+		= token_node_d[str_p("ll") | "LL"]
 	;
 
 	character_literal

@@ -70,12 +70,28 @@ typedef
 	assignment_expression_last_part
 ;
 
+
+
 SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	assignment_expression,
 	(optional_node<assignment_expression_first_part_seq>)
 	(assignment_expression_last_part)
 )
+
+inline
+const optional_node<assignment_expression_first_part_seq>&
+get_first_part_seq(const assignment_expression& o)
+{
+	return get<0>(o);
+}
+
+inline
+const assignment_expression_last_part&
+get_last_part(const assignment_expression& o)
+{
+	return get<1>(o);
+}
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

@@ -33,6 +33,12 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 	(unary_expression)
 )
 
+const unary_expression&
+get_operand(const cast_expression& o)
+{
+	return get<1>(o);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #include "detail/macros/sequence_node_pimpl_definition_undef.hpp"

@@ -38,6 +38,7 @@ typedef
 	>
 	pm_operator
 ;
+
 SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	pm_expression,
@@ -45,6 +46,15 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 	(optional_node<pm_operator>)
 	(optional_node<pm_expression>)
 )
+
+inline
+const cast_expression&
+get_left_operand(const pm_expression& o)
+{
+	return get<0>(o);
+}
+
+
 
 typedef
 	alternative_node
@@ -55,6 +65,7 @@ typedef
 	>
 	multiplicative_operator
 ;
+
 SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	multiplicative_expression,
@@ -62,6 +73,15 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 	(optional_node<multiplicative_operator>)
 	(optional_node<multiplicative_expression>)
 )
+
+inline
+const pm_expression&
+get_left_operand(const multiplicative_expression& o)
+{
+	return get<0>(o);
+}
+
+
 
 typedef
 	alternative_node
@@ -71,6 +91,7 @@ typedef
 	>
 	additive_operator
 ;
+
 SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	additive_expression,
@@ -78,6 +99,15 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 	(optional_node<additive_operator>)
 	(optional_node<additive_expression>)
 )
+
+inline
+const multiplicative_expression&
+get_left_operand(const additive_expression& o)
+{
+	return get<0>(o);
+}
+
+
 
 typedef
 	alternative_node
@@ -87,6 +117,7 @@ typedef
 	>
 	shift_operator
 ;
+
 SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	shift_expression,
@@ -94,6 +125,15 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 	(optional_node<shift_operator>)
 	(optional_node<shift_expression>)
 )
+
+inline
+const additive_expression&
+get_left_operand(const shift_expression& o)
+{
+	return get<0>(o);
+}
+
+
 
 typedef
 	alternative_node
@@ -105,6 +145,7 @@ typedef
 	>
 	relational_operator
 ;
+
 SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	relational_expression,
@@ -112,6 +153,15 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 	(optional_node<relational_operator>)
 	(optional_node<relational_expression>)
 )
+
+inline
+const shift_expression&
+get_left_operand(const relational_expression& o)
+{
+	return get<0>(o);
+}
+
+
 
 typedef
 	alternative_node
@@ -121,6 +171,7 @@ typedef
 	>
 	equality_operator
 ;
+
 SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	equality_expression,
@@ -129,12 +180,30 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 	(optional_node<equality_expression>)
 )
 
+inline
+const relational_expression&
+get_left_operand(const equality_expression& o)
+{
+	return get<0>(o);
+}
+
+
+
 SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	and_expression,
 	(equality_expression)
 	(optional_node<and_expression>)
 )
+
+inline
+const equality_expression&
+get_left_operand(const and_expression& o)
+{
+	return get<0>(o);
+}
+
+
 
 SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
@@ -143,12 +212,30 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 	(optional_node<exclusive_or_expression>)
 )
 
+inline
+const and_expression&
+get_left_operand(const exclusive_or_expression& o)
+{
+	return get<0>(o);
+}
+
+
+
 SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	inclusive_or_expression,
 	(exclusive_or_expression)
 	(optional_node<inclusive_or_expression>)
 )
+
+inline
+const exclusive_or_expression&
+get_left_operand(const inclusive_or_expression& o)
+{
+	return get<0>(o);
+}
+
+
 
 SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
@@ -157,12 +244,42 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 	(optional_node<logical_and_expression>)
 )
 
+inline
+const inclusive_or_expression&
+get_left_operand(const logical_and_expression& o)
+{
+	return get<0>(o);
+}
+
+inline
+const optional_node<logical_and_expression>&
+get_right_operand(const logical_and_expression& o)
+{
+	return get<1>(o);
+}
+
+
+
 SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	logical_or_expression,
 	(logical_and_expression)
 	(optional_node<logical_or_expression>)
 )
+
+inline
+const logical_and_expression&
+get_left_operand(const logical_or_expression& o)
+{
+	return get<0>(o);
+}
+
+inline
+const optional_node<logical_or_expression>&
+get_right_operand(const logical_or_expression& o)
+{
+	return get<1>(o);
+}
 
 
 

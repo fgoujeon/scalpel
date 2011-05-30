@@ -43,6 +43,13 @@ typedef
 	equal_initializer
 ;
 
+inline
+const initializer_clause&
+get_initializer_clause(const equal_initializer& o)
+{
+	return get<1>(o);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif

@@ -18,47 +18,28 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_INIT_DECLARATOR_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_INIT_DECLARATOR_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_INTEGER_VALUE_T_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_INTEGER_VALUE_T_HPP
 
-#include "declarator.hpp"
-#include "initializer.hpp"
-#include "common.hpp"
+#include <scalpel/utility/variant.hpp>
 
-namespace scalpel { namespace cpp { namespace syntax_nodes
+namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-/**
-\verbatim
-init_declarator
-	= declarator, [initializer]
-;
-\endverbatim
-*/
 typedef
-	sequence_node
+	utility::variant
 	<
-		declarator,
-		optional_node<initializer>
+		int,
+		long int,
+		long long int,
+		unsigned int,
+		unsigned long int,
+		unsigned long long int
 	>
-	init_declarator
+	integer_value_t
 ;
 
-inline
-const declarator&
-get_declarator(const init_declarator& o)
-{
-	return get<0>(o);
-}
-
-inline
-const optional_node<initializer>&
-get_initializer(const init_declarator& o)
-{
-	return get<1>(o);
-}
-
-}}} //namespace scalpel::cpp::syntax_nodes
+}}} //namespace scalpel::cpp::semantic_entities
 
 #endif
 

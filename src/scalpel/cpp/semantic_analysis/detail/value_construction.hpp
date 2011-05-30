@@ -18,47 +18,19 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_INIT_DECLARATOR_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_INIT_DECLARATOR_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_VALUE_CONSTRUCTION_HPP
+#define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_VALUE_CONSTRUCTION_HPP
 
-#include "declarator.hpp"
-#include "initializer.hpp"
-#include "common.hpp"
+#include <scalpel/cpp/semantic_graph.hpp>
+#include <scalpel/cpp/syntax_tree.hpp>
 
-namespace scalpel { namespace cpp { namespace syntax_nodes
+namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail
 {
 
-/**
-\verbatim
-init_declarator
-	= declarator, [initializer]
-;
-\endverbatim
-*/
-typedef
-	sequence_node
-	<
-		declarator,
-		optional_node<initializer>
-	>
-	init_declarator
-;
+semantic_entities::integer_value_t
+create_value(const syntax_nodes::integer_literal& integer_literal_node);
 
-inline
-const declarator&
-get_declarator(const init_declarator& o)
-{
-	return get<0>(o);
-}
-
-inline
-const optional_node<initializer>&
-get_initializer(const init_declarator& o)
-{
-	return get<1>(o);
-}
-
-}}} //namespace scalpel::cpp::syntax_nodes
+}}}} //namespace scalpel::cpp::semantic_analysis::detail
 
 #endif
 

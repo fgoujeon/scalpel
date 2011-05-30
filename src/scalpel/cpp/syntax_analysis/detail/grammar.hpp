@@ -48,12 +48,10 @@ class grammar
             NONDIGIT,
             LITERAL,
             INTEGER_LITERAL,
+			INTEGER_LITERAL_NO_SUFFIX,
             DECIMAL_LITERAL,
             OCTAL_LITERAL,
             HEXADECIMAL_LITERAL,
-            HEXADECIMAL_DIGIT,
-            OCTAL_DIGIT,
-            NONZERO_DIGIT,
             INTEGER_SUFFIX,
             UNSIGNED_SUFFIX,
             LONG_SUFFIX,
@@ -351,16 +349,17 @@ class grammar
         boost::spirit::rule<lexeme_scanner_t> nondigit;
         boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::LITERAL>> literal;
         boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::INTEGER_LITERAL>> integer_literal;
+        boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::INTEGER_LITERAL_NO_SUFFIX>> integer_literal_no_suffix;
         boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DECIMAL_LITERAL>> decimal_literal;
         boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::OCTAL_LITERAL>> octal_literal;
         boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::HEXADECIMAL_LITERAL>> hexadecimal_literal;
         boost::spirit::rule<lexeme_scanner_t> hexadecimal_digit;
         boost::spirit::rule<lexeme_scanner_t> octal_digit;
         boost::spirit::rule<lexeme_scanner_t> nonzero_digit;
-        boost::spirit::rule<lexeme_scanner_t> integer_suffix;
-        boost::spirit::rule<lexeme_scanner_t> unsigned_suffix;
-        boost::spirit::rule<lexeme_scanner_t> long_suffix;
-        boost::spirit::rule<lexeme_scanner_t> long_long_suffix;
+        boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::INTEGER_SUFFIX>> integer_suffix;
+        boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::UNSIGNED_SUFFIX>> unsigned_suffix;
+        boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::LONG_SUFFIX>> long_suffix;
+        boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::LONG_LONG_SUFFIX>> long_long_suffix;
         boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CHARACTER_LITERAL>> character_literal;
         boost::spirit::rule<lexeme_scanner_t> c_char_sequence;
         boost::spirit::rule<lexeme_scanner_t> c_char;

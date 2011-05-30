@@ -21,6 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_NAMESPACE_CONSTRUCTION_IPP
 #define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_NAMESPACE_CONSTRUCTION_IPP
 
+#include "expression_construction.hpp"
 #include "class_construction.hpp"
 #include "enum_construction.hpp"
 #include "function_construction.hpp"
@@ -178,6 +179,7 @@ fill_namespace
 			const init_declarator& init_declarator_node = *i;
 			const declarator& declarator_node = get_declarator(init_declarator_node);
 
+			//create the entity
 			declarator_entity_ptr_variant declarator_entity = create_entity
 			(
 				declarator_node,
@@ -194,7 +196,26 @@ fill_namespace
 				member_access::PUBLIC
 			);
 
+			//and add it to the namespace
 			generic_queries::detail::add_entity_to_declarative_region(declarator_entity, namespace_entity);
+
+			if(const optional_node<initializer>& opt_initializer_node = get_initializer(init_declarator_node))
+			{
+				const initializer& initializer_node = *opt_initializer_node;
+
+				if(const boost::optional<const equal_initializer&>& opt_equal_initializer_node = get<equal_initializer>(&initializer_node))
+				{
+					const equal_initializer& equal_initializer_node = *opt_equal_initializer_node;
+					const initializer_clause& initializer_clause_node = get_initializer_clause(equal_initializer_node);
+
+					if(const boost::optional<const assignment_expression&>& opt_assignment_expression_node = get<assignment_expression>(&initializer_clause_node))
+					{
+						const assignment_expression& assignment_expression_node = *opt_assignment_expression_node;
+
+						create_expression(assignment_expression_node, namespace_entity);
+					}
+				}
+			}
 		}
 	}
 	else if(info.create_anonymous_object) //the type could be an anonymous union

@@ -47,6 +47,13 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 	(optional_node<assignment_expression>)
 )
 
+inline
+const logical_or_expression&
+get_logical_or_expression(const conditional_expression& o)
+{
+	return get<0>(o);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
