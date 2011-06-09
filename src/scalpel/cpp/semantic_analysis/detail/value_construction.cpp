@@ -465,5 +465,16 @@ create_value(const syntax_nodes::integer_literal& integer_literal_node)
 	assert(false);
 }
 
+
+
+semantic_entities::expression_t
+create_boolean_value(const syntax_nodes::boolean_literal& boolean_literal_node)
+{
+	if(get<predefined_text_node<str::false_>>(&boolean_literal_node))
+		return false;
+	else
+		return true;
+}
+
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
 

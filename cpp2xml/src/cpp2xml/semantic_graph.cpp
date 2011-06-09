@@ -514,44 +514,26 @@ semantic_graph_serializer::serialize_namespace_alias
 
 namespace
 {
+
+#define EXPRESSION_TYPE(TYPE) \
+std::string \
+operator()(const TYPE) \
+{ \
+	return #TYPE; \
+}
+
 	struct: scalpel::utility::static_visitor<std::string>
 	{
-		std::string
-		operator()(const int)
-		{
-			return "int";
-		}
-
-		std::string
-		operator()(const long int)
-		{
-			return "long int";
-		}
-
-		std::string
-		operator()(const long long int)
-		{
-			return "long long int";
-		}
-
-		std::string
-		operator()(const unsigned int)
-		{
-			return "unsigned int";
-		}
-
-		std::string
-		operator()(const unsigned long int)
-		{
-			return "unsigned long int";
-		}
-
-		std::string
-		operator()(const unsigned long long int)
-		{
-			return "unsigned long long int";
-		}
+		EXPRESSION_TYPE(bool)
+		EXPRESSION_TYPE(int)
+		EXPRESSION_TYPE(long int)
+		EXPRESSION_TYPE(long long int)
+		EXPRESSION_TYPE(unsigned int)
+		EXPRESSION_TYPE(unsigned long int)
+		EXPRESSION_TYPE(unsigned long long int)
 	} get_expression_type_visitor;
+
+#undef EXPRESSION_TYPE
 
 	class print_expression_value_visitor: public scalpel::utility::static_visitor<void>
 	{
@@ -566,6 +548,12 @@ namespace
 			operator()(const T t)
 			{
 				output_ << t;
+			}
+
+			void
+			operator()(const bool b)
+			{
+				output_ << (b ? "true" : "false");
 			}
 
 		private:

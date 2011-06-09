@@ -29,6 +29,9 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 typedef
 	utility::variant
 	<
+		bool,
+
+		//integer values
 		int,
 		long int,
 		long long int,

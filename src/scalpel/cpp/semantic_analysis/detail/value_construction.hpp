@@ -30,6 +30,9 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 semantic_entities::expression_t
 create_value(const syntax_nodes::integer_literal& integer_literal_node);
 
+semantic_entities::expression_t
+create_boolean_value(const syntax_nodes::boolean_literal& boolean_literal_node);
+
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
 
 #endif
