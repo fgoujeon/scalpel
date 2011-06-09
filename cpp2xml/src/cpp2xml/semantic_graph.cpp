@@ -512,6 +512,86 @@ semantic_graph_serializer::serialize_namespace_alias
 	output_ << "/>\n";
 }
 
+namespace
+{
+	struct: scalpel::utility::static_visitor<std::string>
+	{
+		std::string
+		operator()(const int)
+		{
+			return "int";
+		}
+
+		std::string
+		operator()(const long int)
+		{
+			return "long int";
+		}
+
+		std::string
+		operator()(const long long int)
+		{
+			return "long long int";
+		}
+
+		std::string
+		operator()(const unsigned int)
+		{
+			return "unsigned int";
+		}
+
+		std::string
+		operator()(const unsigned long int)
+		{
+			return "unsigned long int";
+		}
+
+		std::string
+		operator()(const unsigned long long int)
+		{
+			return "unsigned long long int";
+		}
+	} get_expression_type_visitor;
+
+	class print_expression_value_visitor: public scalpel::utility::static_visitor<void>
+	{
+		public:
+			print_expression_value_visitor(std::ostream& output):
+				output_(output)
+			{
+			}
+
+			template<typename T>
+			void
+			operator()(const T t)
+			{
+				output_ << t;
+			}
+
+		private:
+			std::ostream& output_;
+	};
+}
+
+void
+semantic_graph_serializer::serialize_expression
+(
+	const semantic_entities::expression_t& entity,
+	const unsigned int indent_level
+)
+{
+	output_ << indent(indent_level) << "<expression";
+	output_ << " type=\"" << apply_visitor(get_expression_type_visitor, entity) << "\"";
+	output_ << ">\n";
+
+	output_ << indent(indent_level + 1);
+	print_expression_value_visitor visitor(output_);
+	apply_visitor(visitor, entity);
+	output_ << "\n";
+
+	output_ << indent(indent_level) << "</expression>\n";
+}
+
 
 
 #define serialize_member(TYPE, FUNCTION) \

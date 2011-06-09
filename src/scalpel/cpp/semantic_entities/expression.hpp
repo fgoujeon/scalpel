@@ -18,8 +18,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_INTEGER_VALUE_T_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_INTEGER_VALUE_T_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_EXPRESSION_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_EXPRESSION_HPP
 
 #include <scalpel/utility/variant.hpp>
 
@@ -36,7 +36,7 @@ typedef
 		unsigned long int,
 		unsigned long long int
 	>
-	integer_value_t
+	expression_t
 ;
 
 }}} //namespace scalpel::cpp::semantic_entities

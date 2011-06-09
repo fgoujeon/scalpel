@@ -130,6 +130,12 @@ semantic_graph_serializer::serialize_variable
 	output_ << detail::indent(indent_level + 1) << "<type>\n";
 	serialize_type(entity.type(), indent_level + 2);
 	output_ << detail::indent(indent_level + 1) << "</type>\n";
+	if(entity.default_value())
+	{
+		output_ << detail::indent(indent_level + 1) << "<default_value>\n";
+		serialize_expression(*entity.default_value(), indent_level + 2);
+		output_ << detail::indent(indent_level + 1) << "</default_value>\n";
+	}
 	output_ << detail::indent(indent_level) << "</" << markup_name<Variable>::value << ">\n";
 }
 

@@ -27,7 +27,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail
 {
 
-semantic_entities::integer_value_t
+semantic_entities::expression_t
 create_value(const syntax_nodes::integer_literal& integer_literal_node);
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail

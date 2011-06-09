@@ -199,6 +199,7 @@ fill_namespace
 			//and add it to the namespace
 			generic_queries::detail::add_entity_to_declarative_region(declarator_entity, namespace_entity);
 
+			//default value of the entity
 			if(const optional_node<initializer>& opt_initializer_node = get_initializer(init_declarator_node))
 			{
 				const initializer& initializer_node = *opt_initializer_node;
@@ -212,7 +213,11 @@ fill_namespace
 					{
 						const assignment_expression& assignment_expression_node = *opt_assignment_expression_node;
 
-						create_expression(assignment_expression_node, namespace_entity);
+						if(variable** opt_variable = get<variable*>(&declarator_entity))
+						{
+							variable& var = **opt_variable;
+							var.default_value(create_expression(assignment_expression_node, namespace_entity));
+						}
 					}
 				}
 			}

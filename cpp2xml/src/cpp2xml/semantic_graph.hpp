@@ -296,6 +296,13 @@ class semantic_graph_serializer
 			const unsigned int indent_level
 		);
 
+		void
+		serialize_expression
+		(
+			const semantic_entities::expression_t& entity,
+			const unsigned int indent_level
+		);
+
 
 
 		template<class Entity>

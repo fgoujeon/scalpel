@@ -101,10 +101,17 @@ namespace
 		Integer
 		convert(const std::string& str)
 		{
-			std::istringstream iss(str);
-			Integer i;
-			iss >> std::oct >> i;
-			return i;
+			if(str.empty())
+			{
+				return 0;
+			}
+			else
+			{
+				std::istringstream iss(str);
+				Integer i;
+				iss >> std::oct >> i;
+				return i;
+			}
 		}
 	};
 
@@ -157,7 +164,7 @@ namespace
 	struct to_first_integer_impl<MaxString, StringToIntegerConverter>
 	{
 		static
-		semantic_entities::integer_value_t
+		semantic_entities::expression_t
 		cast(const std::string&)
 		{
 			throw std::runtime_error("integer constant is too large for its type");
@@ -168,7 +175,7 @@ namespace
 	struct to_first_integer_impl<MaxString, StringToIntegerConverter, Integer, Integers...>
 	{
 		static
-		semantic_entities::integer_value_t
+		semantic_entities::expression_t
 		cast(const std::string& integer)
 		{
 			if(lower_than_or_equal_to(integer, MaxString<Integer>::value))
@@ -181,14 +188,14 @@ namespace
 	//Converts the given string to one of the given integer types.
 	//The selected type is the first big enough to hold the integer.
 	template<template<typename> class MaxString, class StringToIntegerConverter, typename... Integers>
-	semantic_entities::integer_value_t
+	semantic_entities::expression_t
 	to_first_integer(const std::string& integer)
 	{
 		return to_first_integer_impl<MaxString, StringToIntegerConverter, Integers...>::cast(integer);
 	}
 }
 
-semantic_entities::integer_value_t
+semantic_entities::expression_t
 create_value(const syntax_nodes::integer_literal& integer_literal_node)
 {
 	const integer_literal_no_suffix& integer_literal_no_suffix_node = get_integer_literal_no_suffix(integer_literal_node);
@@ -390,8 +397,8 @@ create_value(const syntax_nodes::integer_literal& integer_literal_node)
 				return
 					to_first_integer
 					<
-						max_hexadecimal_string,
-						hexadecimal_string_to_integer_converter,
+						max_octal_string,
+						octal_string_to_integer_converter,
 						int,
 						unsigned int,
 						long int,
@@ -404,8 +411,8 @@ create_value(const syntax_nodes::integer_literal& integer_literal_node)
 				return
 					to_first_integer
 					<
-						max_hexadecimal_string,
-						hexadecimal_string_to_integer_converter,
+						max_octal_string,
+						octal_string_to_integer_converter,
 						long int,
 						unsigned long int,
 						long long int,
@@ -416,8 +423,8 @@ create_value(const syntax_nodes::integer_literal& integer_literal_node)
 				return
 					to_first_integer
 					<
-						max_hexadecimal_string,
-						hexadecimal_string_to_integer_converter,
+						max_octal_string,
+						octal_string_to_integer_converter,
 						long long int,
 						unsigned long long int
 					>(integer_str)
@@ -426,8 +433,8 @@ create_value(const syntax_nodes::integer_literal& integer_literal_node)
 				return
 					to_first_integer
 					<
-						max_hexadecimal_string,
-						hexadecimal_string_to_integer_converter,
+						max_octal_string,
+						octal_string_to_integer_converter,
 						unsigned int,
 						unsigned long int,
 						unsigned long long int
@@ -437,8 +444,8 @@ create_value(const syntax_nodes::integer_literal& integer_literal_node)
 				return
 					to_first_integer
 					<
-						max_hexadecimal_string,
-						hexadecimal_string_to_integer_converter,
+						max_octal_string,
+						octal_string_to_integer_converter,
 						unsigned long int,
 						unsigned long long int
 					>(integer_str)
@@ -447,8 +454,8 @@ create_value(const syntax_nodes::integer_literal& integer_literal_node)
 				return
 					to_first_integer
 					<
-						max_hexadecimal_string,
-						hexadecimal_string_to_integer_converter,
+						max_octal_string,
+						octal_string_to_integer_converter,
 						unsigned long long int
 					>(integer_str)
 				;

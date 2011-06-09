@@ -20,52 +20,38 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "variable.hpp"
 
+#define GENERATE_VARIABLE_DEFINITION( \
+	CLASS_NAME, \
+	IS_MEMBER, \
+	HAS_STATIC, \
+	HAS_SIZE \
+) \
+CLASS_NAME::CLASS_NAME \
+( \
+	const std::string& name, \
+	const type_variant& type BOOST_PP_COMMA_IF(HAS_SIZE) \
+	BOOST_PP_IIF(HAS_SIZE, unsigned int size,) BOOST_PP_COMMA_IF(HAS_STATIC) \
+	BOOST_PP_IIF(HAS_STATIC, bool is_static,) BOOST_PP_COMMA_IF(IS_MEMBER) \
+	BOOST_PP_IIF(IS_MEMBER, const bool is_mutable,) BOOST_PP_COMMA_IF(IS_MEMBER) \
+	BOOST_PP_IIF(IS_MEMBER, const member_access access,) \
+): \
+	name_(name), \
+	type_(type) BOOST_PP_COMMA_IF(HAS_SIZE) \
+	BOOST_PP_IIF(HAS_SIZE, size_(size),) BOOST_PP_COMMA_IF(HAS_STATIC) \
+	BOOST_PP_IIF(HAS_STATIC, is_static_(is_static),) BOOST_PP_COMMA_IF(IS_MEMBER) \
+	BOOST_PP_IIF(IS_MEMBER, is_mutable_(is_mutable),) BOOST_PP_COMMA_IF(IS_MEMBER) \
+	BOOST_PP_IIF(IS_MEMBER, access_(access),) \
+{ \
+}
+
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-variable::variable
-(
-	const std::string& name,
-	const type_variant& type,
-	const bool is_static
-):
-	type_(type),
-	name_(name),
-	is_static_(is_static)
-{
-}
-
-member_variable::member_variable
-(
-	const std::string& name,
-	const type_variant& type,
-	const bool is_static,
-	const bool is_mutable,
-	const member_access access
-):
-	type_(type),
-	name_(name),
-	is_static_(is_static),
-	is_mutable_(is_mutable),
-	access_(access)
-{
-}
-
-bit_field::bit_field
-(
-	const std::string& name,
-	const type_variant& type,
-	const unsigned int size,
-	const bool is_mutable,
-	const member_access access
-):
-	type_(type),
-	name_(name),
-	size_(size),
-	is_mutable_(is_mutable),
-	access_(access)
-{
-}
+GENERATE_VARIABLE_DEFINITION(variable, 0, 1, 0)
+GENERATE_VARIABLE_DEFINITION(member_variable, 1, 1, 0)
+GENERATE_VARIABLE_DEFINITION(bit_field, 1, 0, 1)
 
 }}} //namespace scalpel::cpp::semantic_entities
+
+#undef GENERATE_VARIABLE_DEFINITION
 

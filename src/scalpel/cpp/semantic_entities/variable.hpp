@@ -22,6 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_VARIABLE_HPP
 
 #include "type_variant.hpp"
+#include "expression.hpp"
 #include "impl/detail/declarative_region_member_impl.hpp"
 #include "macros/detail/declarative_region_member_impl.hpp"
 #include <boost/preprocessor/control/iif.hpp>
@@ -105,9 +106,21 @@ class CLASS_NAME \
 			}, \
 		) \
  \
+		const boost::optional<expression_t>& \
+		default_value() const \
+		{ \
+			return default_value_; \
+		} \
+ \
+		void \
+		default_value(const expression_t& value) \
+		{ \
+			default_value_ = value; \
+		} \
+ \
 	private: \
-		type_variant type_; \
 		std::string name_; \
+		type_variant type_; \
 		BOOST_PP_IIF \
 		( \
 			HAS_SIZE, \
@@ -128,6 +141,7 @@ class CLASS_NAME \
 			IS_MEMBER, \
 			member_access access_;, \
 		) \
+		boost::optional<expression_t> default_value_; \
  \
 		BOOST_PP_IIF \
 		( \

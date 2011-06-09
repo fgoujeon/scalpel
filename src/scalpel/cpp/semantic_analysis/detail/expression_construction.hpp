@@ -28,7 +28,7 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 {
 
 template<class DeclarativeRegion>
-void
+semantic_entities::expression_t
 create_expression
 (
 	const syntax_nodes::assignment_expression& assignment_expression_node,
@@ -36,7 +36,7 @@ create_expression
 );
 
 template<class DeclarativeRegion>
-void
+semantic_entities::expression_t
 create_expression
 (
 	const syntax_nodes::conditional_expression& conditional_expression_node,
@@ -44,7 +44,7 @@ create_expression
 );
 
 template<class DeclarativeRegion>
-void
+semantic_entities::expression_t
 create_expression
 (
 	const syntax_nodes::logical_or_expression& logical_or_expression_node,
@@ -52,7 +52,7 @@ create_expression
 );
 
 template<class DeclarativeRegion>
-void
+semantic_entities::expression_t
 create_expression
 (
 	const syntax_nodes::logical_and_expression& logical_and_expression_node,
@@ -60,7 +60,7 @@ create_expression
 );
 
 template<class DeclarativeRegion>
-void
+semantic_entities::expression_t
 create_expression
 (
 	const syntax_nodes::inclusive_or_expression& inclusive_or_expression_node,
@@ -68,7 +68,7 @@ create_expression
 );
 
 template<class DeclarativeRegion>
-void
+semantic_entities::expression_t
 create_expression
 (
 	const syntax_nodes::exclusive_or_expression& exclusive_or_expression_node,
@@ -76,7 +76,7 @@ create_expression
 );
 
 template<class DeclarativeRegion>
-void
+semantic_entities::expression_t
 create_expression
 (
 	const syntax_nodes::and_expression& and_expression_node,
@@ -84,7 +84,7 @@ create_expression
 );
 
 template<class DeclarativeRegion>
-void
+semantic_entities::expression_t
 create_expression
 (
 	const syntax_nodes::equality_expression& equality_expression_node,
@@ -92,7 +92,7 @@ create_expression
 );
 
 template<class DeclarativeRegion>
-void
+semantic_entities::expression_t
 create_expression
 (
 	const syntax_nodes::relational_expression& relational_expression_node,
@@ -100,7 +100,7 @@ create_expression
 );
 
 template<class DeclarativeRegion>
-void
+semantic_entities::expression_t
 create_expression
 (
 	const syntax_nodes::shift_expression& shift_expression_node,
@@ -108,7 +108,7 @@ create_expression
 );
 
 template<class DeclarativeRegion>
-void
+semantic_entities::expression_t
 create_expression
 (
 	const syntax_nodes::additive_expression& additive_expression_node,
@@ -116,7 +116,7 @@ create_expression
 );
 
 template<class DeclarativeRegion>
-void
+semantic_entities::expression_t
 create_expression
 (
 	const syntax_nodes::multiplicative_expression& multiplicative_expression_node,
@@ -124,7 +124,7 @@ create_expression
 );
 
 template<class DeclarativeRegion>
-void
+semantic_entities::expression_t
 create_expression
 (
 	const syntax_nodes::pm_expression& pm_expression_node,
@@ -132,7 +132,7 @@ create_expression
 );
 
 template<class DeclarativeRegion>
-void
+semantic_entities::expression_t
 create_expression
 (
 	const syntax_nodes::cast_expression& cast_expression_node,
@@ -140,7 +140,7 @@ create_expression
 );
 
 template<class DeclarativeRegion>
-void
+semantic_entities::expression_t
 create_expression
 (
 	const syntax_nodes::unary_expression& unary_expression_node,
@@ -148,7 +148,7 @@ create_expression
 );
 
 template<class DeclarativeRegion>
-void
+semantic_entities::expression_t
 create_expression
 (
 	const syntax_nodes::postfix_expression& postfix_expression_node,
@@ -156,14 +156,14 @@ create_expression
 );
 
 template<class DeclarativeRegion>
-void
+semantic_entities::expression_t
 create_expression
 (
 	const syntax_nodes::primary_expression& primary_expression_node,
 	DeclarativeRegion& declarative_region
 );
 
-void
+semantic_entities::expression_t
 create_expression(const syntax_nodes::literal& literal_node);
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail

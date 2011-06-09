@@ -31,16 +31,12 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace cpp2xml
 {
 
-using namespace scalpel::cpp;
-using namespace scalpel::cpp::syntax_nodes;
-using namespace detail;
-
 template<class T>
 struct type_getter;
 
 #define GET_TYPE_SPECIALIZATION(NODE_TYPE)\
 template<> \
-struct type_getter<NODE_TYPE> \
+struct type_getter<scalpel::cpp::syntax_nodes::NODE_TYPE> \
 { \
 	static \
 	const std::string \
@@ -51,7 +47,7 @@ struct type_getter<NODE_TYPE> \
 }; \
  \
 template<> \
-struct type_getter<optional_node<NODE_TYPE>> \
+struct type_getter<scalpel::cpp::syntax_nodes::optional_node<scalpel::cpp::syntax_nodes::NODE_TYPE>> \
 { \
 	static \
 	const std::string \
@@ -419,10 +415,10 @@ struct print_sequence_node_impl<SyntaxNode, true>
 		const unsigned int indent_level
 	)
 	{
-		std::cout << indent(indent_level) << "<" << get_type<SyntaxNode>() << ">\n";
+		std::cout << detail::indent(indent_level) << "<" << get_type<SyntaxNode>() << ">\n";
 		print(node.head(), indent_level + 1);
 		print<typename SyntaxNode::tail_sequence_node_t, false>(node.tail(), indent_level + 1);
-		std::cout << indent(indent_level) << "</" << get_type<SyntaxNode>() << ">\n";
+		std::cout << detail::indent(indent_level) << "</" << get_type<SyntaxNode>() << ">\n";
 	}
 };
 
@@ -471,14 +467,14 @@ struct print_alternative_node_impl<SyntaxNode, true>
 	)
 	{
 		typedef typename SyntaxNode::head_node_t head_node_t;
-		boost::optional<const head_node_t&> opt_node = get<head_node_t>(&node);
+		boost::optional<const head_node_t&> opt_node = scalpel::cpp::syntax_nodes::get<head_node_t>(&node);
 
-		std::cout << indent(indent_level) << "<" << get_type<SyntaxNode>() << ">\n";
+		std::cout << detail::indent(indent_level) << "<" << get_type<SyntaxNode>() << ">\n";
 		if(opt_node)
 			print(*opt_node, indent_level + 1);
 		else
 			print<typename SyntaxNode::tail_alternative_node_t, false>(node.tail(), indent_level + 1);
-		std::cout << indent(indent_level) << "</" << get_type<SyntaxNode>() << ">\n";
+		std::cout << detail::indent(indent_level) << "</" << get_type<SyntaxNode>() << ">\n";
 	}
 };
 
@@ -494,7 +490,7 @@ struct print_alternative_node_impl<SyntaxNode, false>
 	)
 	{
 		typedef typename SyntaxNode::head_node_t head_node_t;
-		boost::optional<const head_node_t&> opt_node = get<head_node_t>(&node);
+		boost::optional<const head_node_t&> opt_node = scalpel::cpp::syntax_nodes::get<head_node_t>(&node);
 
 		if(opt_node)
 			print(*opt_node, indent_level);
@@ -526,10 +522,10 @@ print
 	typename boost::enable_if<syntax_nodes::utility::is_list_node<SyntaxNode>>::type* = 0
 )
 {
-	std::cout << indent(indent_level) << "<" << get_type<SyntaxNode>() << ">\n";
+	std::cout << detail::indent(indent_level) << "<" << get_type<SyntaxNode>() << ">\n";
 	for(auto i = node.begin(); i != node.end(); ++i) //for each node of the list
 		print(*i, indent_level + 1);
-	std::cout << indent(indent_level) << "</" << get_type<SyntaxNode>() << ">\n";
+	std::cout << detail::indent(indent_level) << "</" << get_type<SyntaxNode>() << ">\n";
 }
 
 //overload for optional nodes
@@ -555,8 +551,8 @@ print
 	typename boost::enable_if<syntax_nodes::utility::is_predefined_text_node<SyntaxNode>>::type* = 0
 )
 {
-	std::cout << indent(indent_level) << "<predefined_text_node>";
-	std::cout << strip_special_chars(node.text());
+	std::cout << detail::indent(indent_level) << "<predefined_text_node>";
+	std::cout << detail::strip_special_chars(node.text());
 	std::cout << "</predefined_text_node>";
 	std::cout << "\n";
 }
@@ -571,8 +567,8 @@ print
 	typename boost::enable_if<syntax_nodes::utility::is_leaf_node<SyntaxNode>>::type* = 0
 )
 {
-	std::cout << indent(indent_level) << "<leaf_node>";
-	std::cout << strip_special_chars(node.value());
+	std::cout << detail::indent(indent_level) << "<leaf_node>";
+	std::cout << detail::strip_special_chars(node.value());
 	std::cout << "</leaf_node>";
 	std::cout << "\n";
 }

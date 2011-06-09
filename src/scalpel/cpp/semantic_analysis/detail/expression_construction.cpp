@@ -28,55 +28,12 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 using namespace syntax_nodes;
 using namespace semantic_entities;
 
-namespace
-{
-	struct: public utility::static_visitor<void>
-	{
-		void
-		operator()(const int i)
-		{
-			std::cout << "type = int, value = " << i << std::endl;
-		}
-
-		void
-		operator()(const unsigned int i)
-		{
-			std::cout << "type = unsigned int, value = " << i << std::endl;
-		}
-
-		void
-		operator()(const unsigned long int i)
-		{
-			std::cout << "type = unsigned long int, value = " << i << std::endl;
-		}
-
-		void
-		operator()(const unsigned long long int i)
-		{
-			std::cout << "type = unsigned long long int, value = " << i << std::endl;
-		}
-
-		void
-		operator()(const long int i)
-		{
-			std::cout << "type = long int, value = " << i << std::endl;
-		}
-
-		void
-		operator()(const long long int i)
-		{
-			std::cout << "type = long long int, value = " << i << std::endl;
-		}
-	} print_visitor;
-}
-
-void
+semantic_entities::expression_t
 create_expression(const syntax_nodes::literal& literal_node)
 {
 	if(const boost::optional<const integer_literal&>& opt_integer_literal_node = get<integer_literal>(&literal_node))
 	{
-		integer_value_t integer_value = create_value(*opt_integer_literal_node);
-		apply_visitor(print_visitor, integer_value);
+		return create_value(*opt_integer_literal_node);
 	}
 	else
 	{
