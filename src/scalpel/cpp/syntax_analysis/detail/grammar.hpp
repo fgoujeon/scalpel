@@ -66,8 +66,11 @@ class grammar
             FLOATING_LITERAL,
             FRACTIONAL_CONSTANT,
             EXPONENT_PART,
+			SIGN,
             DIGIT_SEQUENCE,
             FLOATING_SUFFIX,
+			FLOAT_FLOATING_SUFFIX,
+			LONG_FLOATING_SUFFIX,
             STRING_LITERAL,
             S_CHAR_SEQUENCE,
             S_CHAR,
@@ -368,10 +371,12 @@ class grammar
         boost::spirit::rule<lexeme_scanner_t> octal_escape_sequence;
         boost::spirit::rule<lexeme_scanner_t> hexadecimal_escape_sequence;
         boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::FLOATING_LITERAL>> floating_literal;
-        boost::spirit::rule<lexeme_scanner_t> fractional_constant;
-        boost::spirit::rule<lexeme_scanner_t> exponent_part;
-        boost::spirit::rule<lexeme_scanner_t> digit_sequence;
-        boost::spirit::rule<lexeme_scanner_t> floating_suffix;
+        boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EXPONENT_PART>> exponent_part;
+        boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::SIGN>> sign;
+        boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::DIGIT_SEQUENCE>> digit_sequence;
+        boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::FLOATING_SUFFIX>> floating_suffix;
+        boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::FLOAT_FLOATING_SUFFIX>> float_floating_suffix;
+        boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::LONG_FLOATING_SUFFIX>> long_floating_suffix;
         boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::STRING_LITERAL>> string_literal;
         boost::spirit::rule<lexeme_scanner_t> single_string_literal;
         boost::spirit::rule<lexeme_scanner_t> s_char_sequence;

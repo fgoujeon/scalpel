@@ -27,23 +27,161 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-struct floating_literal: public leaf_node
+struct digit_sequence: public leaf_node
 {
-	floating_literal(std::string&& value):
+	digit_sequence(std::string&& value):
 		leaf_node(value)
 	{
 	}
 
-	floating_literal(const floating_literal& o):
+	digit_sequence(const digit_sequence& o):
 		leaf_node(o)
 	{
 	}
 
-	floating_literal(floating_literal&& o):
+	digit_sequence(digit_sequence&& o):
 		leaf_node(o)
 	{
 	}
 };
+
+struct sign: public leaf_node
+{
+	sign(std::string&& value):
+		leaf_node(value)
+	{
+	}
+
+	sign(const sign& o):
+		leaf_node(o)
+	{
+	}
+
+	sign(sign&& o):
+		leaf_node(o)
+	{
+	}
+};
+
+
+
+typedef
+	sequence_node
+	<
+		optional_node<sign>,
+		digit_sequence
+	>
+	exponent_part
+;
+
+inline
+const optional_node<sign>&
+get_sign(const exponent_part& o)
+{
+	return get<0>(o);
+}
+
+inline
+const digit_sequence&
+get_digit_sequence(const exponent_part& o)
+{
+	return get<1>(o);
+}
+
+
+
+struct float_floating_suffix: public leaf_node
+{
+	float_floating_suffix(std::string&& value):
+		leaf_node(value)
+	{
+	}
+
+	float_floating_suffix(const float_floating_suffix& o):
+		leaf_node(o)
+	{
+	}
+
+	float_floating_suffix(float_floating_suffix&& o):
+		leaf_node(o)
+	{
+	}
+};
+
+struct long_floating_suffix: public leaf_node
+{
+	long_floating_suffix(std::string&& value):
+		leaf_node(value)
+	{
+	}
+
+	long_floating_suffix(const long_floating_suffix& o):
+		leaf_node(o)
+	{
+	}
+
+	long_floating_suffix(long_floating_suffix&& o):
+		leaf_node(o)
+	{
+	}
+};
+
+typedef
+	alternative_node
+	<
+		float_floating_suffix,
+		long_floating_suffix
+	>
+	floating_suffix
+;
+
+
+
+/*
+floating_literal
+	= !digit_sequence >> no_node_d[ch_p('.')] >> digit_sequence >> !exponent_part >> !floating_suffix
+	| digit_sequence >> no_node_d[ch_p('.')] >> !exponent_part >> !floating_suffix
+	| digit_sequence >> exponent_part >> !floating_suffix
+;
+*/
+typedef
+	sequence_node
+	<
+		optional_node<digit_sequence>,
+		optional_node<digit_sequence>,
+		optional_node<exponent_part>,
+		optional_node<floating_suffix>
+	>
+	floating_literal
+;
+
+inline
+const optional_node<digit_sequence>&
+get_integer_part(const floating_literal& o)
+{
+	return get<0>(o);
+}
+
+inline
+const optional_node<digit_sequence>&
+get_fractional_part(const floating_literal& o)
+{
+	return get<1>(o);
+}
+
+inline
+const optional_node<exponent_part>&
+get_exponent_part(const floating_literal& o)
+{
+	return get<2>(o);
+}
+
+inline
+const optional_node<floating_suffix>&
+get_floating_suffix(const floating_literal& o)
+{
+	return get<3>(o);
+}
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

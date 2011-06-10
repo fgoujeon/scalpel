@@ -476,5 +476,80 @@ create_boolean_value(const syntax_nodes::boolean_literal& boolean_literal_node)
 		return true;
 }
 
+
+
+namespace
+{
+	template<typename Float>
+	Float
+	string_to_float(const syntax_nodes::floating_literal& floating_literal_node)
+	{
+		Float integer_part = 0;
+		if(get_integer_part(floating_literal_node))
+		{
+			const std::string& integer_part_str = get_integer_part(floating_literal_node)->value();
+			std::istringstream integer_part_iss(integer_part_str);
+			integer_part_iss >> integer_part;
+		}
+
+		Float fractional_part = 0;
+		if(get_fractional_part(floating_literal_node))
+		{
+			const std::string& fractional_part_str = get_fractional_part(floating_literal_node)->value();
+
+			for(int i = fractional_part_str.size() - 1; i >= 0; --i)
+			{
+				const unsigned char current_digit_char = fractional_part_str[i];
+				const unsigned int current_digit = current_digit_char - '0';
+
+				fractional_part += current_digit;
+				fractional_part /= 10;
+			}
+		}
+
+		Float value = integer_part + fractional_part;
+
+		if(const optional_node<exponent_part>& opt_exponent_part_node = get_exponent_part(floating_literal_node))
+		{
+			const exponent_part& exponent_part_node = *opt_exponent_part_node;
+			const std::string& exponent_str = get_digit_sequence(exponent_part_node).value();
+			const unsigned int exponent = decimal_string_to_integer_converter::convert<unsigned int>(exponent_str);
+
+			bool negative_exponent = false;
+			if(const optional_node<sign>& opt_sign_node = get_sign(exponent_part_node))
+			{
+				const std::string& sign = opt_sign_node->value();
+				negative_exponent = (sign == "-");
+			}
+
+			if(negative_exponent)
+				for(unsigned int i = 0; i < exponent; ++i)
+					value /= 10;
+			else
+				for(unsigned int i = 0; i < exponent; ++i)
+					value *= 10;
+		}
+
+		return value;
+	}
+}
+
+semantic_entities::expression_t
+create_floating_value(const syntax_nodes::floating_literal& floating_literal_node)
+{
+	if(const optional_node<floating_suffix>& opt_floating_suffix_node = get_floating_suffix(floating_literal_node))
+	{
+		const floating_suffix& floating_suffix_node = *opt_floating_suffix_node;
+
+		if(get<float_floating_suffix>(&floating_suffix_node))
+			return string_to_float<float>(floating_literal_node);
+		else
+			return string_to_float<long double>(floating_literal_node);
+	}
+
+	//double by default
+	return string_to_float<double>(floating_literal_node);
+}
+
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
 

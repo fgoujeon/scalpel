@@ -35,6 +35,8 @@ create_expression(const syntax_nodes::literal& literal_node)
 		return create_value(*opt_integer_literal_node);
 	if(const boost::optional<const boolean_literal&>& opt_boolean_literal_node = get<boolean_literal>(&literal_node))
 		return create_boolean_value(*opt_boolean_literal_node);
+	if(const boost::optional<const floating_literal&>& opt_floating_literal_node = get<floating_literal>(&literal_node))
+		return create_floating_value(*opt_floating_literal_node);
 
 	assert(false);
 

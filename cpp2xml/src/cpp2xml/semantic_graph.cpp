@@ -531,6 +531,9 @@ operator()(const TYPE) \
 		EXPRESSION_TYPE(unsigned int)
 		EXPRESSION_TYPE(unsigned long int)
 		EXPRESSION_TYPE(unsigned long long int)
+		EXPRESSION_TYPE(float)
+		EXPRESSION_TYPE(double)
+		EXPRESSION_TYPE(long double)
 	} get_expression_type_visitor;
 
 #undef EXPRESSION_TYPE

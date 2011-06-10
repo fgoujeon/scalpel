@@ -31,13 +31,18 @@ typedef
 	<
 		bool,
 
-		//integer values
+		//integer types
 		int,
 		long int,
 		long long int,
 		unsigned int,
 		unsigned long int,
-		unsigned long long int
+		unsigned long long int,
+
+		//floating types
+		float,
+		double,
+		long double
 	>
 	expression_t
 ;

@@ -261,32 +261,34 @@ grammar::grammar()
 	;
 
 	floating_literal
-		= token_node_d
-		[
-			fractional_constant >> !exponent_part >> !floating_suffix
-			| digit_sequence >> exponent_part >> !floating_suffix
-		]
-	;
-
-	fractional_constant
-		= !digit_sequence >> '.' >> digit_sequence
-		| digit_sequence >> '.'
+		= !digit_sequence >> no_node_d[ch_p('.')] >> digit_sequence >> !exponent_part >> !floating_suffix
+		| digit_sequence >> no_node_d[ch_p('.')] >> !exponent_part >> !floating_suffix
+		| digit_sequence >> exponent_part >> !floating_suffix
 	;
 
 	exponent_part
-		= ch_p('e') >> !sign_p >> digit_sequence
-		| ch_p('E') >> !sign_p >> digit_sequence
+		= no_node_d[ch_p('e') | ch_p('E')] >> !sign >> digit_sequence
+	;
+
+	sign
+		= token_node_d[sign_p]
 	;
 
 	digit_sequence
-		= +digit_p
+		= token_node_d[+digit_p]
 	;
 
 	floating_suffix
-		= ch_p('f')
-		| 'l'
-		| 'F'
-		| 'L'
+		= float_floating_suffix
+		| long_floating_suffix
+	;
+
+	float_floating_suffix
+		= token_node_d[ch_p('f') | 'F']
+	;
+
+	long_floating_suffix
+		= token_node_d[ch_p('l') | 'L']
 	;
 
 	string_literal
