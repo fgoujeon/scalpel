@@ -135,12 +135,12 @@ grammar::grammar()
 
 	//1.2 - Lexical conventions [gram.lex]
 	hex_quad
-		= hexadecimal_digit >> hexadecimal_digit >> hexadecimal_digit >> hexadecimal_digit
+		= token_node_d[hexadecimal_digit >> hexadecimal_digit >> hexadecimal_digit >> hexadecimal_digit]
 	;
 
 	universal_character_name
-		= str_p("\\u") >> hex_quad
-		| str_p("\\U") >> hex_quad >> hex_quad
+		= no_node_d[str_p("\\u")] >> hex_quad
+		| no_node_d[str_p("\\U")] >> hex_quad >> hex_quad
 	;
 
 	identifier

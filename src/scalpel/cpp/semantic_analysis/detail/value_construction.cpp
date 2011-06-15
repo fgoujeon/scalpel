@@ -580,9 +580,49 @@ create_floating_value(const syntax_nodes::floating_literal& floating_literal_nod
 
 namespace
 {
+	//execution character set = UTF-8
 	template<typename Char>
 	Char
-	convert_c_char_to_char(const c_char& c_char_node)
+	encode_to_utf8(const Char in)
+	{
+		if(in <= 0x7F) //1 byte long, 0xxxxxxx
+		{
+			return in;
+		}
+		else if(in <= 0x7FF) //2 byte long, 110xxxxx 10xxxxxx
+		{
+			const int in0 = in & 0x3F; //00000000 00xxxxxx
+			const int in1 = (in << 2) & 0x1F00; //000xxxxx 00000000
+			return 0xC080 | in0 | in1;
+		}
+		else if(in <= 0xFFFF) //3 byte long, 1110xxxx 10xxxxxx 10xxxxxx
+		{
+			const int in0 = in & 0x3F; //00000000 00000000 00xxxxxx
+			const int in1 = (in << 2) & 0x3F00; //00000000 00xxxxxx 00000000
+			const int in2 = (in << 4) & 0x0F0000; //0000xxxx 00000000 00000000
+			return 0xE08080 | in0 | in1 | in2;
+		}
+		else //4 byte long, 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+		{
+			const int in0 = in & 0x3F; //00000000 00000000 00000000 00xxxxxx
+			const int in1 = (in << 2) & 0x3F00; //00000000 00000000 00xxxxxx 00000000
+			const int in2 = (in << 4) & 0x3F0000; //00000000 00xxxxxx 00000000 00000000
+			const int in3 = (in << 6) & 0x07000000; //00000xxx 00000000 00000000 00000000
+			return 0xF0808080 | in0 | in1 | in2 | in3;
+		}
+	}
+
+	template<>
+	char
+	encode_to_utf8<char>(const char)
+	{
+		assert(false);
+		return 0;
+	}
+
+	template<typename Char>
+	Char
+	convert_c_char_to_char(const c_char& c_char_node, const bool encode_universal_character_name_to_utf8)
 	{
 		if(const boost::optional<const source_character_set&>& opt_source_character_set_node = get<source_character_set>(&c_char_node))
 		{
@@ -625,9 +665,40 @@ namespace
 				return hexadecimal_string_to_integer_converter::convert<char>(str);
 			}
 		}
-		else if(get<universal_character_name>(&c_char_node))
+		else if(const boost::optional<const universal_character_name&>& opt_universal_character_name_node = get<universal_character_name>(&c_char_node))
 		{
-			assert(false); //TODO
+			const universal_character_name& universal_character_name_node = *opt_universal_character_name_node;
+			const hex_quad& first_hex_quad = get_first_hex_quad(universal_character_name_node);
+			const optional_node<hex_quad>& second_hex_quad = get_second_hex_quad(universal_character_name_node);
+
+			if(second_hex_quad)
+			{
+				const std::string& str = first_hex_quad.value();
+				const std::string& str2 = second_hex_quad->value();
+
+				if(encode_universal_character_name_to_utf8)
+					return
+						encode_to_utf8<Char>
+						(
+							(hexadecimal_string_to_integer_converter::convert<Char>(str) << 16) |
+							hexadecimal_string_to_integer_converter::convert<Char>(str2)
+						)
+					;
+				else
+					return
+						(hexadecimal_string_to_integer_converter::convert<Char>(str) << 16) |
+						hexadecimal_string_to_integer_converter::convert<Char>(str2)
+					;
+			}
+			else
+			{
+				const std::string& str = first_hex_quad.value();
+
+				if(encode_universal_character_name_to_utf8)
+					return encode_to_utf8<Char>(hexadecimal_string_to_integer_converter::convert<Char>(str));
+				else
+					return hexadecimal_string_to_integer_converter::convert<Char>(str);
+			}
 		}
 
 		assert(false);
@@ -635,12 +706,12 @@ namespace
 
 	template<typename SingleChar, typename MultipleChar>
 	semantic_entities::expression_t
-	convert_c_char_sequence_to_char(const c_char_sequence& c_char_sequence_node)
+	convert_c_char_sequence_to_char(const c_char_sequence& c_char_sequence_node, const bool encode_universal_character_name_to_utf8)
 	{
 		if(c_char_sequence_node.size() == 1) //character literal containing a single c_char -> SingleChar
 		{
 			const c_char& c_char_node = c_char_sequence_node.front();
-			return convert_c_char_to_char<SingleChar>(c_char_node);
+			return convert_c_char_to_char<SingleChar>(c_char_node, encode_universal_character_name_to_utf8);
 		}
 		else //character literal containing multiple c_chars -> MultipleChar
 		{
@@ -653,7 +724,7 @@ namespace
 			for(unsigned int i = begin_index; i < c_char_sequence_node.size(); ++i)
 			{
 				const c_char& c_char_node = c_char_sequence_node[i];
-				const SingleChar c = convert_c_char_to_char<SingleChar>(c_char_node);
+				const SingleChar c = convert_c_char_to_char<SingleChar>(c_char_node, encode_universal_character_name_to_utf8);
 
 				value <<= 8;
 				value += c;
@@ -668,10 +739,24 @@ semantic_entities::expression_t
 create_character_value(const syntax_nodes::character_literal& character_literal_node)
 {
 	const c_char_sequence& c_char_sequence_node = get_char_sequence(character_literal_node);
+
+	//does the character literal contain a universal-character-name?
+	bool contains_universal_character_name = false;
+	for(const c_char& c_char_node: c_char_sequence_node)
+	{
+		if(get<universal_character_name>(&c_char_node))
+		{
+			contains_universal_character_name = true;
+			break;
+		}
+	}
+
 	if(has_leading_l(character_literal_node))
-		return convert_c_char_sequence_to_char<wchar_t, wchar_t>(c_char_sequence_node);
+		return convert_c_char_sequence_to_char<wchar_t, wchar_t>(c_char_sequence_node, false);
+	else if(contains_universal_character_name)
+		return convert_c_char_sequence_to_char<int, int>(c_char_sequence_node, true);
 	else
-		return convert_c_char_sequence_to_char<char, int>(c_char_sequence_node);
+		return convert_c_char_sequence_to_char<char, int>(c_char_sequence_node, true);
 }
 
 //semantic_entities::expression_t

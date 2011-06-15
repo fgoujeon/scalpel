@@ -346,7 +346,7 @@ class grammar
         boost::spirit::rule<lexeme_scanner_t> keyword;
 
         //1.2 - Lexical conventions [gram.lex]
-        boost::spirit::rule<lexeme_scanner_t> hex_quad;
+        boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::HEX_QUAD>> hex_quad;
         boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::UNIVERSAL_CHARACTER_NAME>> universal_character_name;
         boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::IDENTIFIER>> identifier;
         boost::spirit::rule<lexeme_scanner_t> nondigit;

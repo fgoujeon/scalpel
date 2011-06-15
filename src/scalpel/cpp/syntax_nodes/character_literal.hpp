@@ -49,10 +49,12 @@ class source_character_set: public leaf_node
 		}
 };
 
-class universal_character_name: public leaf_node
+
+
+class hex_quad: public leaf_node
 {
 	public:
-		universal_character_name
+		hex_quad
 		(
 			std::string&& value
 		):
@@ -60,16 +62,41 @@ class universal_character_name: public leaf_node
 		{
 		}
 
-		universal_character_name(const universal_character_name& o):
+		hex_quad(const hex_quad& o):
 			leaf_node(o)
 		{
 		}
 
-		universal_character_name(universal_character_name&& o):
+		hex_quad(hex_quad&& o):
 			leaf_node(o)
 		{
 		}
 };
+
+typedef
+	sequence_node
+	<
+		hex_quad,
+		optional_node<hex_quad>
+	>
+	universal_character_name
+;
+
+inline
+const hex_quad&
+get_first_hex_quad(const universal_character_name& o)
+{
+	return get<0>(o);
+}
+
+inline
+const optional_node<hex_quad>&
+get_second_hex_quad(const universal_character_name& o)
+{
+	return get<1>(o);
+}
+
+
 
 class simple_escape_sequence: public leaf_node
 {
