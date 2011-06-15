@@ -342,12 +342,12 @@ class grammar
         */
         //
         boost::spirit::rule<scanner_t> file;
-        boost::spirit::rule<scanner_t> source_character_set;
+        boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::SOURCE_CHARACTER_SET>> source_character_set;
         boost::spirit::rule<lexeme_scanner_t> keyword;
 
         //1.2 - Lexical conventions [gram.lex]
         boost::spirit::rule<lexeme_scanner_t> hex_quad;
-        boost::spirit::rule<lexeme_scanner_t> universal_character_name;
+        boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::UNIVERSAL_CHARACTER_NAME>> universal_character_name;
         boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::IDENTIFIER>> identifier;
         boost::spirit::rule<lexeme_scanner_t> nondigit;
         boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::LITERAL>> literal;
@@ -364,12 +364,12 @@ class grammar
         boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::LONG_SUFFIX>> long_suffix;
         boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::LONG_LONG_SUFFIX>> long_long_suffix;
         boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CHARACTER_LITERAL>> character_literal;
-        boost::spirit::rule<lexeme_scanner_t> c_char_sequence;
-        boost::spirit::rule<lexeme_scanner_t> c_char;
-        boost::spirit::rule<lexeme_scanner_t> escape_sequence;
-        boost::spirit::rule<lexeme_scanner_t> simple_escape_sequence;
-        boost::spirit::rule<lexeme_scanner_t> octal_escape_sequence;
-        boost::spirit::rule<lexeme_scanner_t> hexadecimal_escape_sequence;
+        boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::C_CHAR_SEQUENCE>> c_char_sequence;
+        boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::C_CHAR>> c_char;
+        boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ESCAPE_SEQUENCE>> escape_sequence;
+        boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::SIMPLE_ESCAPE_SEQUENCE>> simple_escape_sequence;
+        boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::OCTAL_ESCAPE_SEQUENCE>> octal_escape_sequence;
+        boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::HEXADECIMAL_ESCAPE_SEQUENCE>> hexadecimal_escape_sequence;
         boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::FLOATING_LITERAL>> floating_literal;
         boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EXPONENT_PART>> exponent_part;
         boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::SIGN>> sign;

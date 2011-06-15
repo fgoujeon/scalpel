@@ -66,52 +66,77 @@ namespace
 		return oss.str();
 	}
 
+	template<unsigned int Base>
+	unsigned int
+	convert_char_to_digit(const char c)
+	{
+		return c - '0';
+	}
+
+	template<>
+	unsigned int
+	convert_char_to_digit<16>(const char c)
+	{
+		if(c <= '9')
+			return c - '0';
+		else if(c <= 'F')
+			return c - 'A' + 10;
+		else
+			return c - 'a' + 10;
+	}
+
+	template<typename Integer, unsigned int Base>
+	Integer
+	convert_string_to_integer(const std::string& str)
+	{
+		Integer value = 0;
+
+		for(unsigned int i = 0; i < str.size(); ++i)
+		{
+			value *= Base;
+
+			const char current_digit_char = str[i];
+			const unsigned int current_digit = convert_char_to_digit<Base>(current_digit_char);
+
+			value += current_digit;
+		}
+
+		return value;
+	}
+
 	struct decimal_string_to_integer_converter
 	{
 		template<typename Integer>
+		inline
 		static
 		Integer
 		convert(const std::string& str)
 		{
-			std::istringstream iss(str);
-			Integer i;
-			iss >> i;
-			return i;
+			return convert_string_to_integer<Integer, 10>(str);
 		}
 	};
 
 	struct hexadecimal_string_to_integer_converter
 	{
 		template<typename Integer>
+		inline
 		static
 		Integer
 		convert(const std::string& str)
 		{
-			std::istringstream iss(str);
-			Integer i;
-			iss >> std::hex >> i;
-			return i;
+			return convert_string_to_integer<Integer, 16>(str);
 		}
 	};
 
 	struct octal_string_to_integer_converter
 	{
 		template<typename Integer>
+		inline
 		static
 		Integer
 		convert(const std::string& str)
 		{
-			if(str.empty())
-			{
-				return 0;
-			}
-			else
-			{
-				std::istringstream iss(str);
-				Integer i;
-				iss >> std::oct >> i;
-				return i;
-			}
+			return convert_string_to_integer<Integer, 8>(str);
 		}
 	};
 
@@ -550,6 +575,109 @@ create_floating_value(const syntax_nodes::floating_literal& floating_literal_nod
 	//double by default
 	return string_to_float<double>(floating_literal_node);
 }
+
+
+
+namespace
+{
+	template<typename Char>
+	Char
+	convert_c_char_to_char(const c_char& c_char_node)
+	{
+		if(const boost::optional<const source_character_set&>& opt_source_character_set_node = get<source_character_set>(&c_char_node))
+		{
+			const source_character_set& source_character_set_node = *opt_source_character_set_node;
+			const std::string& str = source_character_set_node.value();
+			assert(str.size() == 1);
+			return str.front();
+		}
+		else if(const boost::optional<const escape_sequence&>& opt_escape_sequence_node = get<escape_sequence>(&c_char_node))
+		{
+			const escape_sequence& escape_sequence_node = *opt_escape_sequence_node;
+
+			if(const boost::optional<const simple_escape_sequence&>& opt_simple_escape_sequence_node = get<simple_escape_sequence>(&escape_sequence_node))
+			{
+				const simple_escape_sequence& simple_escape_sequence_node = *opt_simple_escape_sequence_node;
+				const std::string& str = simple_escape_sequence_node.value();
+
+				if(str == "\\'") return '\'';
+				if(str == "\\\"") return '"';
+				if(str == "\\?") return '?';
+				if(str == "\\\\") return '\\';
+				if(str == "\\a") return '\a';
+				if(str == "\\b") return '\b';
+				if(str == "\\f") return '\f';
+				if(str == "\\n") return '\n';
+				if(str == "\\r") return '\r';
+				if(str == "\\t") return '\t';
+				if(str == "\\v") return '\v';
+			}
+			else if(const boost::optional<const octal_escape_sequence&>& opt_octal_escape_sequence_node = get<octal_escape_sequence>(&escape_sequence_node))
+			{
+				const octal_escape_sequence& octal_escape_sequence_node = *opt_octal_escape_sequence_node;
+				const std::string& str = octal_escape_sequence_node.value();
+				return octal_string_to_integer_converter::convert<char>(str);
+			}
+			else if(const boost::optional<const hexadecimal_escape_sequence&>& opt_hexadecimal_escape_sequence_node = get<hexadecimal_escape_sequence>(&escape_sequence_node))
+			{
+				const hexadecimal_escape_sequence& hexadecimal_escape_sequence_node = *opt_hexadecimal_escape_sequence_node;
+				const std::string& str = hexadecimal_escape_sequence_node.value();
+				return hexadecimal_string_to_integer_converter::convert<char>(str);
+			}
+		}
+		else if(get<universal_character_name>(&c_char_node))
+		{
+			assert(false); //TODO
+		}
+
+		assert(false);
+	}
+
+	template<typename SingleChar, typename MultipleChar>
+	semantic_entities::expression_t
+	convert_c_char_sequence_to_char(const c_char_sequence& c_char_sequence_node)
+	{
+		if(c_char_sequence_node.size() == 1) //character literal containing a single c_char -> SingleChar
+		{
+			const c_char& c_char_node = c_char_sequence_node.front();
+			return convert_c_char_to_char<SingleChar>(c_char_node);
+		}
+		else //character literal containing multiple c_chars -> MultipleChar
+		{
+			MultipleChar value = 0;
+
+			//read the last N chars, where Nmax = sizeof(MultipleChar)
+			const unsigned int char_sequence_size = c_char_sequence_node.size();
+			const unsigned int max_char_count = sizeof(MultipleChar);
+			const unsigned int begin_index = (char_sequence_size > max_char_count) ? char_sequence_size - max_char_count : 0;
+			for(unsigned int i = begin_index; i < c_char_sequence_node.size(); ++i)
+			{
+				const c_char& c_char_node = c_char_sequence_node[i];
+				const SingleChar c = convert_c_char_to_char<SingleChar>(c_char_node);
+
+				value <<= 8;
+				value += c;
+			}
+
+			return value;
+		}
+	}
+}
+
+semantic_entities::expression_t
+create_character_value(const syntax_nodes::character_literal& character_literal_node)
+{
+	const c_char_sequence& c_char_sequence_node = get_char_sequence(character_literal_node);
+	if(has_leading_l(character_literal_node))
+		return convert_c_char_sequence_to_char<wchar_t, wchar_t>(c_char_sequence_node);
+	else
+		return convert_c_char_sequence_to_char<char, int>(c_char_sequence_node);
+}
+
+//semantic_entities::expression_t
+//create_string_value(const syntax_nodes::string_literal& string_literal_node)
+//{
+//}
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
 

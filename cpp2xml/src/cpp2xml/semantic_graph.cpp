@@ -525,6 +525,8 @@ operator()(const TYPE) \
 	struct: scalpel::utility::static_visitor<std::string>
 	{
 		EXPRESSION_TYPE(bool)
+		EXPRESSION_TYPE(char)
+		EXPRESSION_TYPE(wchar_t)
 		EXPRESSION_TYPE(int)
 		EXPRESSION_TYPE(long int)
 		EXPRESSION_TYPE(long long int)
@@ -551,6 +553,12 @@ operator()(const TYPE) \
 			operator()(const T t)
 			{
 				output_ << t;
+			}
+
+			void
+			operator()(const char c)
+			{
+				output_ << static_cast<int>(c);
 			}
 
 			void

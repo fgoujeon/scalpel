@@ -29,7 +29,12 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 typedef
 	utility::variant
 	<
+		//boolean type
 		bool,
+
+		//char types
+		char,
+		wchar_t,
 
 		//integer types
 		int,

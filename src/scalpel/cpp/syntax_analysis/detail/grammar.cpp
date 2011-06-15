@@ -37,7 +37,7 @@ grammar::grammar()
 	;
 
 	source_character_set
-		= no_node_d
+		= token_node_d
 		[
 			anychar_p
 			| '\t' //horizontal tab
@@ -219,7 +219,7 @@ grammar::grammar()
 	;
 
 	character_literal
-		= token_node_d[!ch_p('L') >> '\'' >> c_char_sequence >> '\'']
+		= !ch_p('L') >> no_node_d[ch_p('\'')] >> c_char_sequence >> no_node_d[ch_p('\'')]
 	;
 
 	c_char_sequence
@@ -253,11 +253,11 @@ grammar::grammar()
 	;
 
 	octal_escape_sequence
-		= '\\' >> octal_digit >> !octal_digit >> !octal_digit
+		= no_node_d[ch_p('\\')] >> token_node_d[octal_digit >> !octal_digit >> !octal_digit]
 	;
 
 	hexadecimal_escape_sequence
-		= "\\x" >> +hexadecimal_digit
+		= no_node_d[str_p("\\x")] >> token_node_d[+hexadecimal_digit]
 	;
 
 	floating_literal

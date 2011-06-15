@@ -36,6 +36,12 @@ create_boolean_value(const syntax_nodes::boolean_literal& boolean_literal_node);
 semantic_entities::expression_t
 create_floating_value(const syntax_nodes::floating_literal& floating_literal_node);
 
+semantic_entities::expression_t
+create_character_value(const syntax_nodes::character_literal& character_literal_node);
+
+//semantic_entities::expression_t
+//create_string_value(const syntax_nodes::string_literal& string_literal_node);
+
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
 
 #endif
