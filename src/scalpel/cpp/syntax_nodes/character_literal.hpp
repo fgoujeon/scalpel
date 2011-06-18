@@ -73,28 +73,36 @@ class hex_quad: public leaf_node
 		}
 };
 
+class hex_octo: public leaf_node
+{
+	public:
+		hex_octo
+		(
+			std::string&& value
+		):
+			leaf_node(value)
+		{
+		}
+
+		hex_octo(const hex_octo& o):
+			leaf_node(o)
+		{
+		}
+
+		hex_octo(hex_octo&& o):
+			leaf_node(o)
+		{
+		}
+};
+
 typedef
-	sequence_node
+	alternative_node
 	<
 		hex_quad,
-		optional_node<hex_quad>
+		hex_octo
 	>
 	universal_character_name
 ;
-
-inline
-const hex_quad&
-get_first_hex_quad(const universal_character_name& o)
-{
-	return get<0>(o);
-}
-
-inline
-const optional_node<hex_quad>&
-get_second_hex_quad(const universal_character_name& o)
-{
-	return get<1>(o);
-}
 
 
 

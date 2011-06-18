@@ -21,38 +21,55 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_STRING_LITERAL_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_STRING_LITERAL_HPP
 
+#include "character_literal.hpp"
 #include "leaf_node.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-/**
-\verbatim
-string_literal
-	= ["L"], ´"´, string_value, ´"´
+typedef
+	alternative_node
+	<
+		source_character_set,
+		escape_sequence,
+		universal_character_name,
+		universal_character_name //just so that s_char != c_char, not actually used
+	>
+	s_char
 ;
-\endverbatim
-*/
-struct string_literal: public leaf_node
+
+typedef
+	list_node<s_char>
+	s_char_sequence
+;
+
+typedef
+	sequence_node
+	<
+		optional_node<predefined_text_node<str::capital_l>>,
+		optional_node<s_char_sequence>
+	>
+	single_string_literal
+;
+
+inline
+bool
+has_leading_l(const single_string_literal& o)
 {
+	return get<0>(o);
+}
+
+inline
+const optional_node<s_char_sequence>&
+get_char_sequence(const single_string_literal& o)
+{
+	return get<1>(o);
+}
+
+typedef
+	list_node<single_string_literal>
 	string_literal
-	(
-		std::string&& value
-	):
-		leaf_node(value)
-	{
-	}
-
-	string_literal(const string_literal& o):
-		leaf_node(o)
-	{
-	}
-
-	string_literal(string_literal&& o):
-		leaf_node(o)
-	{
-	}
-};
+;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

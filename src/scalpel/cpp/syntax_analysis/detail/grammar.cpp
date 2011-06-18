@@ -138,9 +138,13 @@ grammar::grammar()
 		= token_node_d[hexadecimal_digit >> hexadecimal_digit >> hexadecimal_digit >> hexadecimal_digit]
 	;
 
+	hex_octo
+		= token_node_d[hex_quad >> hex_quad]
+	;
+
 	universal_character_name
 		= no_node_d[str_p("\\u")] >> hex_quad
-		| no_node_d[str_p("\\U")] >> hex_quad >> hex_quad
+		| no_node_d[str_p("\\U")] >> hex_octo
 	;
 
 	identifier
@@ -292,10 +296,10 @@ grammar::grammar()
 	;
 
 	string_literal
-		= token_node_d[+single_string_literal]
+		= +single_string_literal
 	;
 	single_string_literal
-		= !ch_p('L') >> '"' >> !s_char_sequence >> '"'
+		= !ch_p('L') >> no_node_d[ch_p('"')] >> !s_char_sequence >> no_node_d[ch_p('"')]
 	;
 
 	s_char_sequence

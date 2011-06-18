@@ -47,7 +47,11 @@ typedef
 		//floating types
 		float,
 		double,
-		long double
+		long double,
+
+		//string types
+		std::string,
+		std::wstring
 	>
 	expression_t
 ;

@@ -221,7 +221,7 @@ namespace
 }
 
 semantic_entities::expression_t
-create_value(const syntax_nodes::integer_literal& integer_literal_node)
+create_integer_value(const syntax_nodes::integer_literal& integer_literal_node)
 {
 	const integer_literal_no_suffix& integer_literal_no_suffix_node = get_integer_literal_no_suffix(integer_literal_node);
 
@@ -580,73 +580,136 @@ create_floating_value(const syntax_nodes::floating_literal& floating_literal_nod
 
 namespace
 {
-	//execution character set = UTF-8
-	template<typename Char>
-	Char
-	encode_to_utf8(const unsigned int in)
+	template<typename Integer, class ByteSequence>
+	Integer
+	convert_byte_sequence_to_integer(const ByteSequence& bytes)
 	{
-		if(in <= 0x7F) //1 byte long, 0xxxxxxx
+		Integer out = 0;
+
+		for(const char byte: bytes)
 		{
-			return in;
+			out <<= 8;
+			out |= (byte & 0xff); //implicit cast to int may add leading 1's, so we need to clear them
 		}
-		else if(in <= 0x7FF) //2 byte long, 110xxxxx 10xxxxxx
+
+		return out;
+	}
+
+	//execution character set = UTF-8
+	template<class ByteSequence>
+	void
+	encode_to_utf8(const unsigned int in, ByteSequence& out)
+	{
+		if(in <= 0x7f) //1 byte long, 0xxxxxxx
 		{
-			const int in0 = in & 0x3F; //00000000 00xxxxxx
-			const int in1 = (in << 2) & 0x1F00; //000xxxxx 00000000
-			return 0xC080 | in0 | in1;
+			out.push_back(in);
 		}
-		else if(in <= 0xFFFF) //3 byte long, 1110xxxx 10xxxxxx 10xxxxxx
+		else if(in <= 0x7ff) //2 byte long, 110xxxxx 10xxxxxx
 		{
-			const int in0 = in & 0x3F; //00000000 00000000 00xxxxxx
-			const int in1 = (in << 2) & 0x3F00; //00000000 00xxxxxx 00000000
-			const int in2 = (in << 4) & 0x0F0000; //0000xxxx 00000000 00000000
-			return 0xE08080 | in0 | in1 | in2;
+			out.push_back(((in >> 6) & 0x1f) | 0xc0);
+			out.push_back((in & 0x3f) | 0x80);
+		}
+		else if(in <= 0xffff) //3 byte long, 1110xxxx 10xxxxxx 10xxxxxx
+		{
+			out.push_back(((in >> 12) & 0x0f) | 0xe0);
+			out.push_back(((in >> 6) & 0x3f) | 0x80);
+			out.push_back((in & 0x3f) | 0x80);
 		}
 		else //4 byte long, 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
 		{
-			const int in0 = in & 0x3F; //00000000 00000000 00000000 00xxxxxx
-			const int in1 = (in << 2) & 0x3F00; //00000000 00000000 00xxxxxx 00000000
-			const int in2 = (in << 4) & 0x3F0000; //00000000 00xxxxxx 00000000 00000000
-			const int in3 = (in << 6) & 0x07000000; //00000xxx 00000000 00000000 00000000
-			return 0xF0808080 | in0 | in1 | in2 | in3;
+			out.push_back(((in >> 18) & 0x07) | 0xf0);
+			out.push_back(((in >> 12) & 0x3f) | 0x80);
+			out.push_back(((in >> 6) & 0x3f) | 0x80);
+			out.push_back((in & 0x3f) | 0x80);
 		}
+	}
+
+	char
+	read_source_character_set(const source_character_set& source_character_set_node)
+	{
+		const std::string& str = source_character_set_node.value();
+		assert(str.size() == 1);
+		return str.front();
 	}
 
 	template<typename Char>
 	Char
-	read_universal_character_name(const universal_character_name& universal_character_name_node, const bool wide)
+	read_escape_sequence(const escape_sequence& escape_sequence_node)
 	{
-		const hex_quad& first_hex_quad = get_first_hex_quad(universal_character_name_node);
-		const optional_node<hex_quad>& second_hex_quad = get_second_hex_quad(universal_character_name_node);
-
-		if(second_hex_quad)
+		if(const boost::optional<const simple_escape_sequence&>& opt_simple_escape_sequence_node = get<simple_escape_sequence>(&escape_sequence_node))
 		{
-			const std::string& str = first_hex_quad.value();
-			const std::string& str2 = second_hex_quad->value();
+			const simple_escape_sequence& simple_escape_sequence_node = *opt_simple_escape_sequence_node;
+			const std::string& str = simple_escape_sequence_node.value();
 
-			if(wide)
-				return
-					(hexadecimal_string_to_integer_converter::convert<Char>(str) << 16) |
-					hexadecimal_string_to_integer_converter::convert<Char>(str2)
-				;
-			else
-				return
-					encode_to_utf8<Char>
-					(
-						(hexadecimal_string_to_integer_converter::convert<Char>(str) << 16) |
-						hexadecimal_string_to_integer_converter::convert<Char>(str2)
-					)
-				;
+			if(str == "\\'") return '\'';
+			if(str == "\\\"") return '"';
+			if(str == "\\?") return '?';
+			if(str == "\\\\") return '\\';
+			if(str == "\\a") return '\a';
+			if(str == "\\b") return '\b';
+			if(str == "\\f") return '\f';
+			if(str == "\\n") return '\n';
+			if(str == "\\r") return '\r';
+			if(str == "\\t") return '\t';
+			if(str == "\\v") return '\v';
+		}
+		else if(const boost::optional<const octal_escape_sequence&>& opt_octal_escape_sequence_node = get<octal_escape_sequence>(&escape_sequence_node))
+		{
+			const octal_escape_sequence& octal_escape_sequence_node = *opt_octal_escape_sequence_node;
+			const std::string& str = octal_escape_sequence_node.value();
+			return octal_string_to_integer_converter::convert<Char>(str);
+		}
+		else if(const boost::optional<const hexadecimal_escape_sequence&>& opt_hexadecimal_escape_sequence_node = get<hexadecimal_escape_sequence>(&escape_sequence_node))
+		{
+			const hexadecimal_escape_sequence& hexadecimal_escape_sequence_node = *opt_hexadecimal_escape_sequence_node;
+			const std::string& str = hexadecimal_escape_sequence_node.value();
+			return hexadecimal_string_to_integer_converter::convert<Char>(str);
+		}
+
+		assert(false);
+	}
+
+	std::string
+	get_universal_character_name_value
+	(
+		const universal_character_name& universal_character_name_node
+	)
+	{
+		if(const boost::optional<const hex_quad&>& opt_hex_quad_node = get<hex_quad>(&universal_character_name_node))
+		{
+			return opt_hex_quad_node->value();
 		}
 		else
 		{
-			const std::string& str = first_hex_quad.value();
-
-			if(wide)
-				return hexadecimal_string_to_integer_converter::convert<Char>(str);
-			else
-				return encode_to_utf8<Char>(hexadecimal_string_to_integer_converter::convert<Char>(str));
+			const boost::optional<const hex_octo&>& opt_hex_octo_node = get<hex_octo>(&universal_character_name_node);
+			assert(opt_hex_octo_node);
+			return opt_hex_octo_node->value();
 		}
+	}
+
+	//e.g. '\uXXXX' or '\UXXXXXXXX'
+	template<class ByteSequence>
+	void
+	read_narrow_character_universal_character_name
+	(
+		const universal_character_name& universal_character_name_node,
+		ByteSequence& out
+	)
+	{
+		const std::string& str = get_universal_character_name_value(universal_character_name_node);
+		encode_to_utf8
+		(
+			hexadecimal_string_to_integer_converter::convert<unsigned int>(str),
+			out
+		);
+	}
+
+	//e.g. L'\uXXXX' or L'\UXXXXXXXX'
+	wchar_t
+	read_wide_character_universal_character_name(const universal_character_name& universal_character_name_node)
+	{
+		const std::string& str = get_universal_character_name_value(universal_character_name_node);
+		return hexadecimal_string_to_integer_converter::convert<wchar_t>(str);
 	}
 
 	template<typename Char>
@@ -654,49 +717,19 @@ namespace
 	convert_c_char_to_char(const c_char& c_char_node, const bool wide)
 	{
 		if(const boost::optional<const source_character_set&>& opt_source_character_set_node = get<source_character_set>(&c_char_node))
-		{
-			const source_character_set& source_character_set_node = *opt_source_character_set_node;
-			const std::string& str = source_character_set_node.value();
-			assert(str.size() == 1);
-			return str.front();
-		}
+			return read_source_character_set(*opt_source_character_set_node);
 		else if(const boost::optional<const escape_sequence&>& opt_escape_sequence_node = get<escape_sequence>(&c_char_node))
-		{
-			const escape_sequence& escape_sequence_node = *opt_escape_sequence_node;
-
-			if(const boost::optional<const simple_escape_sequence&>& opt_simple_escape_sequence_node = get<simple_escape_sequence>(&escape_sequence_node))
-			{
-				const simple_escape_sequence& simple_escape_sequence_node = *opt_simple_escape_sequence_node;
-				const std::string& str = simple_escape_sequence_node.value();
-
-				if(str == "\\'") return '\'';
-				if(str == "\\\"") return '"';
-				if(str == "\\?") return '?';
-				if(str == "\\\\") return '\\';
-				if(str == "\\a") return '\a';
-				if(str == "\\b") return '\b';
-				if(str == "\\f") return '\f';
-				if(str == "\\n") return '\n';
-				if(str == "\\r") return '\r';
-				if(str == "\\t") return '\t';
-				if(str == "\\v") return '\v';
-			}
-			else if(const boost::optional<const octal_escape_sequence&>& opt_octal_escape_sequence_node = get<octal_escape_sequence>(&escape_sequence_node))
-			{
-				const octal_escape_sequence& octal_escape_sequence_node = *opt_octal_escape_sequence_node;
-				const std::string& str = octal_escape_sequence_node.value();
-				return octal_string_to_integer_converter::convert<Char>(str);
-			}
-			else if(const boost::optional<const hexadecimal_escape_sequence&>& opt_hexadecimal_escape_sequence_node = get<hexadecimal_escape_sequence>(&escape_sequence_node))
-			{
-				const hexadecimal_escape_sequence& hexadecimal_escape_sequence_node = *opt_hexadecimal_escape_sequence_node;
-				const std::string& str = hexadecimal_escape_sequence_node.value();
-				return hexadecimal_string_to_integer_converter::convert<Char>(str);
-			}
-		}
+			return read_escape_sequence<Char>(*opt_escape_sequence_node);
 		else if(const boost::optional<const universal_character_name&>& opt_universal_character_name_node = get<universal_character_name>(&c_char_node))
 		{
-			return read_universal_character_name<Char>(*opt_universal_character_name_node, wide);
+			if(wide)
+				return read_wide_character_universal_character_name(*opt_universal_character_name_node);
+			else
+			{
+				std::vector<char> bytes;
+				read_narrow_character_universal_character_name(*opt_universal_character_name_node, bytes);
+				return convert_byte_sequence_to_integer<Char>(bytes);
+			}
 		}
 
 		assert(false);
@@ -736,8 +769,8 @@ namespace
 semantic_entities::expression_t
 create_character_value(const syntax_nodes::character_literal& character_literal_node)
 {
-	const c_char_sequence& c_char_sequence_node = get_char_sequence(character_literal_node);
 	const bool wide = has_leading_l(character_literal_node);
+	const c_char_sequence& c_char_sequence_node = get_char_sequence(character_literal_node);
 
 	//does the character literal contain a multibyte universal-character-name?
 	bool multibyte = false;
@@ -745,8 +778,9 @@ create_character_value(const syntax_nodes::character_literal& character_literal_
 	{
 		if(const boost::optional<const universal_character_name&>& opt_universal_character_name_node = get<universal_character_name>(&c_char_node))
 		{
-			const int c = read_universal_character_name<int>(*opt_universal_character_name_node, wide);
-			if(c > 0xff) multibyte = true;
+			std::vector<char> bytes;
+			read_narrow_character_universal_character_name(*opt_universal_character_name_node, bytes);
+			if(bytes.size() > 1) multibyte = true;
 			break;
 		}
 	}
@@ -759,10 +793,49 @@ create_character_value(const syntax_nodes::character_literal& character_literal_
 		return convert_c_char_sequence_to_char<char, int>(c_char_sequence_node, false);
 }
 
-//semantic_entities::expression_t
-//create_string_value(const syntax_nodes::string_literal& string_literal_node)
-//{
-//}
+
+
+namespace
+{
+	template<typename Char>
+	std::basic_string<Char>
+	analyze_string_literal(const syntax_nodes::string_literal& string_literal_node, const bool wide)
+	{
+		std::basic_string<Char> value;
+
+		for(const single_string_literal& single_string_literal_node: string_literal_node)
+		{
+			if(const optional_node<s_char_sequence>& opt_s_char_sequence_node = get_char_sequence(single_string_literal_node))
+			{
+				for(const s_char& s_char_node: *opt_s_char_sequence_node)
+				{
+					if(const boost::optional<const source_character_set&>& opt_source_character_set_node = get<source_character_set>(&s_char_node))
+						value += read_source_character_set(*opt_source_character_set_node);
+					else if(const boost::optional<const escape_sequence&>& opt_escape_sequence_node = get<escape_sequence>(&s_char_node))
+						value += read_escape_sequence<Char>(*opt_escape_sequence_node);
+					else if(const boost::optional<const universal_character_name&>& opt_universal_character_name_node = get<universal_character_name>(&s_char_node))
+					{
+						if(wide)
+							value += read_wide_character_universal_character_name(*opt_universal_character_name_node);
+						else
+							read_narrow_character_universal_character_name(*opt_universal_character_name_node, value);
+					}
+				}
+			}
+		}
+
+		return value;
+	}
+}
+
+semantic_entities::expression_t
+create_string_value(const syntax_nodes::string_literal& string_literal_node)
+{
+	if(has_leading_l(string_literal_node.front()))
+		return analyze_string_literal<wchar_t>(string_literal_node, true);
+	else
+		return analyze_string_literal<char>(string_literal_node, false);
+}
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
 

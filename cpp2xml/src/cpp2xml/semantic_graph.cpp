@@ -536,6 +536,18 @@ operator()(const TYPE) \
 		EXPRESSION_TYPE(float)
 		EXPRESSION_TYPE(double)
 		EXPRESSION_TYPE(long double)
+
+		std::string
+		operator()(const std::string&)
+		{
+			return "string";
+		}
+
+		std::string
+		operator()(const std::wstring&)
+		{
+			return "wide string";
+		}
 	} get_expression_type_visitor;
 
 #undef EXPRESSION_TYPE
@@ -565,6 +577,24 @@ operator()(const TYPE) \
 			operator()(const bool b)
 			{
 				output_ << (b ? "true" : "false");
+			}
+
+			void
+			operator()(const std::string& str)
+			{
+				output_ << std::hex;
+				for(char c: str)
+					output_ << (static_cast<int>(c) & 0xff) << ' ';
+				output_ << std::dec;
+			}
+
+			void
+			operator()(const std::wstring& str)
+			{
+				output_ << std::hex;
+				for(wchar_t c: str)
+					output_ << static_cast<int>(c) << ' ';
+				output_ << std::dec;
 			}
 
 		private:

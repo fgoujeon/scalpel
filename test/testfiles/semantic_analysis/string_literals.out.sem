@@ -1,0 +1,98 @@
+<namespace id="0">
+ <variable id="0" name="str1">
+  <type>
+   <array size="0">
+    <fundamental_type type="char"/>
+   </array>
+  </type>
+  <default_value>
+   <expression type="string">
+    74 65 73 74 
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="1" name="str2">
+  <type>
+   <array size="0">
+    <fundamental_type type="char"/>
+   </array>
+  </type>
+  <default_value>
+   <expression type="string">
+    20 41 20 a 20 
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="2" name="str3">
+  <type>
+   <array size="0">
+    <fundamental_type type="char"/>
+   </array>
+  </type>
+  <default_value>
+   <expression type="string">
+    60 62 
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="3" name="str4">
+  <type>
+   <array size="0">
+    <fundamental_type type="char"/>
+   </array>
+  </type>
+  <default_value>
+   <expression type="string">
+    c3 bf 7a 
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="4" name="wstr1">
+  <type>
+   <array size="0">
+    <fundamental_type type="wchar_t"/>
+   </array>
+  </type>
+  <default_value>
+   <expression type="wide string">
+    74 65 73 74 
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="5" name="wstr2">
+  <type>
+   <array size="0">
+    <fundamental_type type="wchar_t"/>
+   </array>
+  </type>
+  <default_value>
+   <expression type="wide string">
+    20 41 20 a 20 
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="6" name="wstr3">
+  <type>
+   <array size="0">
+    <fundamental_type type="wchar_t"/>
+   </array>
+  </type>
+  <default_value>
+   <expression type="wide string">
+    60 62 
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="7" name="wstr4">
+  <type>
+   <array size="0">
+    <fundamental_type type="wchar_t"/>
+   </array>
+  </type>
+  <default_value>
+   <expression type="wide string">
+    ff 7a 
+   </expression>
+  </default_value>
+ </variable>
+</namespace>

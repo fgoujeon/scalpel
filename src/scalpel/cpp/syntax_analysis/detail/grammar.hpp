@@ -43,6 +43,7 @@ class grammar
             KEYWORD,
 
             HEX_QUAD,
+			HEX_OCTO,
             UNIVERSAL_CHARACTER_NAME,
             IDENTIFIER,
             NONDIGIT,
@@ -72,6 +73,7 @@ class grammar
 			FLOAT_FLOATING_SUFFIX,
 			LONG_FLOATING_SUFFIX,
             STRING_LITERAL,
+            SINGLE_STRING_LITERAL,
             S_CHAR_SEQUENCE,
             S_CHAR,
             BOOLEAN_LITERAL,
@@ -347,6 +349,7 @@ class grammar
 
         //1.2 - Lexical conventions [gram.lex]
         boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::HEX_QUAD>> hex_quad;
+        boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::HEX_OCTO>> hex_octo;
         boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::UNIVERSAL_CHARACTER_NAME>> universal_character_name;
         boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::IDENTIFIER>> identifier;
         boost::spirit::rule<lexeme_scanner_t> nondigit;
@@ -378,9 +381,9 @@ class grammar
         boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::FLOAT_FLOATING_SUFFIX>> float_floating_suffix;
         boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::LONG_FLOATING_SUFFIX>> long_floating_suffix;
         boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::STRING_LITERAL>> string_literal;
-        boost::spirit::rule<lexeme_scanner_t> single_string_literal;
-        boost::spirit::rule<lexeme_scanner_t> s_char_sequence;
-        boost::spirit::rule<lexeme_scanner_t> s_char;
+        boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::SINGLE_STRING_LITERAL>> single_string_literal;
+        boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::S_CHAR_SEQUENCE>> s_char_sequence;
+        boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::S_CHAR>> s_char;
         boost::spirit::rule<lexeme_scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::BOOLEAN_LITERAL>> boolean_literal;
 
         //1.3 - Basic concepts [gram.basic]

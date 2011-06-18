@@ -32,7 +32,7 @@ semantic_entities::expression_t
 create_expression(const syntax_nodes::literal& literal_node)
 {
 	if(const boost::optional<const integer_literal&>& opt_integer_literal_node = get<integer_literal>(&literal_node))
-		return create_value(*opt_integer_literal_node);
+		return create_integer_value(*opt_integer_literal_node);
 	if(const boost::optional<const boolean_literal&>& opt_boolean_literal_node = get<boolean_literal>(&literal_node))
 		return create_boolean_value(*opt_boolean_literal_node);
 	if(const boost::optional<const floating_literal&>& opt_floating_literal_node = get<floating_literal>(&literal_node))
@@ -40,8 +40,7 @@ create_expression(const syntax_nodes::literal& literal_node)
 	if(const boost::optional<const character_literal&>& opt_character_literal_node = get<character_literal>(&literal_node))
 		return create_character_value(*opt_character_literal_node);
 	if(const boost::optional<const string_literal&>& opt_string_literal_node = get<string_literal>(&literal_node))
-		assert(false); //TODO
-		//return create_string_value(*opt_string_literal_node);
+		return create_string_value(*opt_string_literal_node);
 
 	assert(false);
 }

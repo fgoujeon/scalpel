@@ -28,7 +28,7 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 {
 
 semantic_entities::expression_t
-create_value(const syntax_nodes::integer_literal& integer_literal_node);
+create_integer_value(const syntax_nodes::integer_literal& integer_literal_node);
 
 semantic_entities::expression_t
 create_boolean_value(const syntax_nodes::boolean_literal& boolean_literal_node);
@@ -39,8 +39,8 @@ create_floating_value(const syntax_nodes::floating_literal& floating_literal_nod
 semantic_entities::expression_t
 create_character_value(const syntax_nodes::character_literal& character_literal_node);
 
-//semantic_entities::expression_t
-//create_string_value(const syntax_nodes::string_literal& string_literal_node);
+semantic_entities::expression_t
+create_string_value(const syntax_nodes::string_literal& string_literal_node);
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
 
