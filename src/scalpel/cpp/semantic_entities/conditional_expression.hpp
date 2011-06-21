@@ -18,30 +18,53 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "conditional_operation.hpp"
-#include "expression.hpp"
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_CONDITIONAL_EXPRESSION_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_CONDITIONAL_EXPRESSION_HPP
+
+#include <memory>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-conditional_operation::conditional_operation
-(
-	const expression_t& condition_operand,
-	const expression_t& true_operand,
-	const expression_t& false_operand
-):
-	condition_operand_(new expression_t(condition_operand)),
-	true_operand_(new expression_t(true_operand)),
-	false_operand_(new expression_t(false_operand))
-{
-}
+class expression_t;
 
-conditional_operation::conditional_operation(const conditional_operation& rhs):
-	condition_operand_(new expression_t(rhs.condition_operand())),
-	true_operand_(new expression_t(rhs.true_operand())),
-	false_operand_(new expression_t(rhs.false_operand()))
+class conditional_expression
 {
-}
+	public:
+		conditional_expression
+		(
+			const expression_t& condition_operand,
+			const expression_t& true_operand,
+			const expression_t& false_operand
+		);
+
+		conditional_expression(const conditional_expression& rhs);
+
+		const expression_t&
+		condition_operand() const
+		{
+			return *condition_operand_;
+		}
+
+		const expression_t&
+		true_operand() const
+		{
+			return *true_operand_;
+		}
+
+		const expression_t&
+		false_operand() const
+		{
+			return *false_operand_;
+		}
+
+	private:
+		std::unique_ptr<expression_t> condition_operand_;
+		std::unique_ptr<expression_t> true_operand_;
+		std::unique_ptr<expression_t> false_operand_;
+};
 
 }}} //namespace scalpel::cpp::semantic_entities
+
+#endif
 

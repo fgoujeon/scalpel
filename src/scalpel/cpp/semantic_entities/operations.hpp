@@ -50,92 +50,92 @@ enum class operation_tag
 
 typedef
 	binary_operation<static_cast<int>(operation_tag::MULTIPLICATION)>
-	multiplication
+	multiplication_expression
 ;
 
 typedef
 	binary_operation<static_cast<int>(operation_tag::DIVISION)>
-	division
+	division_expression
 ;
 
 typedef
 	binary_operation<static_cast<int>(operation_tag::MODULO)>
-	modulo
+	modulo_expression
 ;
 
 typedef
 	binary_operation<static_cast<int>(operation_tag::ADDITION)>
-	addition
+	addition_expression
 ;
 
 typedef
 	binary_operation<static_cast<int>(operation_tag::SUBTRACTION)>
-	subtraction
+	subtraction_expression
 ;
 
 typedef
 	binary_operation<static_cast<int>(operation_tag::LEFT_SHIFT)>
-	left_shift
+	left_shift_expression
 ;
 
 typedef
 	binary_operation<static_cast<int>(operation_tag::RIGHT_SHIFT)>
-	right_shift
+	right_shift_expression
 ;
 
 typedef
 	binary_operation<static_cast<int>(operation_tag::LESS_THAN)>
-	less_than
+	less_than_expression
 ;
 
 typedef
 	binary_operation<static_cast<int>(operation_tag::LESS_THAN_OR_EQUAL_TO)>
-	less_than_or_equal_to
+	less_than_or_equal_to_expression
 ;
 
 typedef
 	binary_operation<static_cast<int>(operation_tag::GREATER_THAN)>
-	greater_than
+	greater_than_expression
 ;
 
 typedef
 	binary_operation<static_cast<int>(operation_tag::GREATER_THAN_OR_EQUAL_TO)>
-	greater_than_or_equal_to
+	greater_than_or_equal_to_expression
 ;
 
 typedef
 	binary_operation<static_cast<int>(operation_tag::EQUAL_TO)>
-	equal_to
+	equal_to_expression
 ;
 
 typedef
 	binary_operation<static_cast<int>(operation_tag::NOT_EQUAL_TO)>
-	not_equal_to
+	not_equal_to_expression
 ;
 
 typedef
 	binary_operation<static_cast<int>(operation_tag::BITWISE_AND)>
-	bitwise_and
+	bitwise_and_expression
 ;
 
 typedef
 	binary_operation<static_cast<int>(operation_tag::BITWISE_EXCLUSIVE_OR)>
-	bitwise_exclusive_or
+	bitwise_exclusive_or_expression
 ;
 
 typedef
 	binary_operation<static_cast<int>(operation_tag::BITWISE_INCLUSIVE_OR)>
-	bitwise_inclusive_or
+	bitwise_inclusive_or_expression
 ;
 
 typedef
 	binary_operation<static_cast<int>(operation_tag::LOGICAL_AND)>
-	logical_and
+	logical_and_expression
 ;
 
 typedef
 	binary_operation<static_cast<int>(operation_tag::LOGICAL_OR)>
-	logical_or
+	logical_or_expression
 ;
 
 }}} //namespace scalpel::cpp::semantic_entities

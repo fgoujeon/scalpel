@@ -169,7 +169,7 @@ class semantic_graph_serializer
 				operator()(const binary_operation<Tag>& operation);
 
 				void
-				operator()(const conditional_operation& operation);
+				operator()(const conditional_expression& operation);
 
 				void
 				operator()(const char c);

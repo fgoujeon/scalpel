@@ -55,7 +55,7 @@ create_expression
 	}
 
 	const assignment_expression_last_part& last_part_node = get_last_part(assignment_expression_node);
-	if(const boost::optional<const conditional_expression&>& opt_conditional_expression_node = get<conditional_expression>(&last_part_node))
+	if(const boost::optional<const syntax_nodes::conditional_expression&>& opt_conditional_expression_node = get<syntax_nodes::conditional_expression>(&last_part_node))
 	{
 		return create_expression(*opt_conditional_expression_node, declarative_region);
 	}
@@ -80,14 +80,14 @@ create_expression
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
 
-	const logical_or_expression& condition_operand_node = get_condition_operand(conditional_expression_node);
-	const optional_node<expression>& opt_true_operand_node = get_true_operand(conditional_expression_node);
-	const optional_node<assignment_expression>& opt_false_operand_node = get_false_operand(conditional_expression_node);
+	const syntax_nodes::logical_or_expression& condition_operand_node = get_condition_operand(conditional_expression_node);
+	const optional_node<syntax_nodes::expression>& opt_true_operand_node = get_true_operand(conditional_expression_node);
+	const optional_node<syntax_nodes::assignment_expression>& opt_false_operand_node = get_false_operand(conditional_expression_node);
 
 	if(opt_true_operand_node)
 	{
 		assert(opt_false_operand_node);
-		return conditional_operation
+		return semantic_entities::conditional_expression
 		(
 			create_expression(condition_operand_node, declarative_region),
 			create_expression(*opt_true_operand_node, declarative_region),
@@ -109,13 +109,13 @@ create_expression
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
 
-	const logical_and_expression& left_operand_node = get_left_operand(logical_or_expression_node);
-	const optional_node<logical_or_expression>& opt_right_operand_node = get_right_operand(logical_or_expression_node);
+	const syntax_nodes::logical_and_expression& left_operand_node = get_left_operand(logical_or_expression_node);
+	const optional_node<syntax_nodes::logical_or_expression>& opt_right_operand_node = get_right_operand(logical_or_expression_node);
 
 	if(opt_right_operand_node)
 	{
-		const logical_or_expression& right_operand_node = *opt_right_operand_node;
-		return logical_or
+		const syntax_nodes::logical_or_expression& right_operand_node = *opt_right_operand_node;
+		return semantic_entities::logical_or_expression
 		(
 			create_expression(left_operand_node, declarative_region),
 			create_expression(right_operand_node, declarative_region)
@@ -136,13 +136,13 @@ create_expression
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
 
-	const inclusive_or_expression& left_operand_node = get_left_operand(logical_and_expression_node);
-	const optional_node<logical_and_expression>& opt_right_operand_node = get_right_operand(logical_and_expression_node);
+	const syntax_nodes::inclusive_or_expression& left_operand_node = get_left_operand(logical_and_expression_node);
+	const optional_node<syntax_nodes::logical_and_expression>& opt_right_operand_node = get_right_operand(logical_and_expression_node);
 
 	if(opt_right_operand_node)
 	{
-		const logical_and_expression& right_operand_node = *opt_right_operand_node;
-		return logical_and
+		const syntax_nodes::logical_and_expression& right_operand_node = *opt_right_operand_node;
+		return semantic_entities::logical_and_expression
 		(
 			create_expression(left_operand_node, declarative_region),
 			create_expression(right_operand_node, declarative_region)
@@ -163,13 +163,13 @@ create_expression
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
 
-	const exclusive_or_expression& left_operand_node = get_left_operand(inclusive_or_expression_node);
-	const optional_node<inclusive_or_expression>& opt_right_operand_node = get_right_operand(inclusive_or_expression_node);
+	const syntax_nodes::exclusive_or_expression& left_operand_node = get_left_operand(inclusive_or_expression_node);
+	const optional_node<syntax_nodes::inclusive_or_expression>& opt_right_operand_node = get_right_operand(inclusive_or_expression_node);
 
 	if(opt_right_operand_node)
 	{
-		const inclusive_or_expression& right_operand_node = *opt_right_operand_node;
-		return bitwise_inclusive_or
+		const syntax_nodes::inclusive_or_expression& right_operand_node = *opt_right_operand_node;
+		return semantic_entities::bitwise_inclusive_or_expression
 		(
 			create_expression(left_operand_node, declarative_region),
 			create_expression(right_operand_node, declarative_region)
@@ -190,13 +190,13 @@ create_expression
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
 
-	const and_expression& left_operand_node = get_left_operand(exclusive_or_expression_node);
-	const optional_node<exclusive_or_expression>& opt_right_operand_node = get_right_operand(exclusive_or_expression_node);
+	const syntax_nodes::and_expression& left_operand_node = get_left_operand(exclusive_or_expression_node);
+	const optional_node<syntax_nodes::exclusive_or_expression>& opt_right_operand_node = get_right_operand(exclusive_or_expression_node);
 
 	if(opt_right_operand_node)
 	{
-		const exclusive_or_expression& right_operand_node = *opt_right_operand_node;
-		return bitwise_exclusive_or
+		const syntax_nodes::exclusive_or_expression& right_operand_node = *opt_right_operand_node;
+		return semantic_entities::bitwise_exclusive_or_expression
 		(
 			create_expression(left_operand_node, declarative_region),
 			create_expression(right_operand_node, declarative_region)
@@ -217,13 +217,13 @@ create_expression
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
 
-	const equality_expression& left_operand_node = get_left_operand(and_expression_node);
-	const optional_node<and_expression>& opt_right_operand_node = get_right_operand(and_expression_node);
+	const syntax_nodes::equality_expression& left_operand_node = get_left_operand(and_expression_node);
+	const optional_node<syntax_nodes::and_expression>& opt_right_operand_node = get_right_operand(and_expression_node);
 
 	if(opt_right_operand_node)
 	{
-		const and_expression& right_operand_node = *opt_right_operand_node;
-		return bitwise_and
+		const syntax_nodes::and_expression& right_operand_node = *opt_right_operand_node;
+		return semantic_entities::bitwise_and_expression
 		(
 			create_expression(left_operand_node, declarative_region),
 			create_expression(right_operand_node, declarative_region)
@@ -244,23 +244,23 @@ create_expression
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
 
-	const relational_expression& left_operand_node = get_left_operand(equality_expression_node);
-	const optional_node<equality_operator>& opt_operator_node = get_operator(equality_expression_node);
-	const optional_node<equality_expression>& opt_right_operand_node = get_right_operand(equality_expression_node);
+	const syntax_nodes::relational_expression& left_operand_node = get_left_operand(equality_expression_node);
+	const optional_node<syntax_nodes::equality_operator>& opt_operator_node = get_operator(equality_expression_node);
+	const optional_node<syntax_nodes::equality_expression>& opt_right_operand_node = get_right_operand(equality_expression_node);
 
 	if(opt_right_operand_node)
 	{
-		const equality_operator& operator_node = *opt_operator_node;
-		const equality_expression& right_operand_node = *opt_right_operand_node;
+		const syntax_nodes::equality_operator& operator_node = *opt_operator_node;
+		const syntax_nodes::equality_expression& right_operand_node = *opt_right_operand_node;
 
 		if(get<predefined_text_node<str::double_equal>>(&operator_node))
-			return equal_to
+			return semantic_entities::equal_to_expression
 			(
 				create_expression(left_operand_node, declarative_region),
 				create_expression(right_operand_node, declarative_region)
 			);
 		else if(get<predefined_text_node<str::exclamation_equal>>(&operator_node))
-			return not_equal_to
+			return semantic_entities::not_equal_to_expression
 			(
 				create_expression(left_operand_node, declarative_region),
 				create_expression(right_operand_node, declarative_region)
@@ -283,35 +283,35 @@ create_expression
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
 
-	const shift_expression& left_operand_node = get_left_operand(relational_expression_node);
-	const optional_node<relational_operator>& opt_operator_node = get_operator(relational_expression_node);
-	const optional_node<relational_expression>& opt_right_operand_node = get_right_operand(relational_expression_node);
+	const syntax_nodes::shift_expression& left_operand_node = get_left_operand(relational_expression_node);
+	const optional_node<syntax_nodes::relational_operator>& opt_operator_node = get_operator(relational_expression_node);
+	const optional_node<syntax_nodes::relational_expression>& opt_right_operand_node = get_right_operand(relational_expression_node);
 
 	if(opt_right_operand_node)
 	{
-		const relational_operator& operator_node = *opt_operator_node;
-		const relational_expression& right_operand_node = *opt_right_operand_node;
+		const syntax_nodes::relational_operator& operator_node = *opt_operator_node;
+		const syntax_nodes::relational_expression& right_operand_node = *opt_right_operand_node;
 
 		if(get<predefined_text_node<str::left_angle_bracket>>(&operator_node))
-			return less_than
+			return semantic_entities::less_than_expression
 			(
 				create_expression(left_operand_node, declarative_region),
 				create_expression(right_operand_node, declarative_region)
 			);
 		else if(get<predefined_text_node<str::left_angle_bracket_equal>>(&operator_node))
-			return less_than_or_equal_to
+			return semantic_entities::less_than_or_equal_to_expression
 			(
 				create_expression(left_operand_node, declarative_region),
 				create_expression(right_operand_node, declarative_region)
 			);
 		else if(get<predefined_text_node<str::right_angle_bracket>>(&operator_node))
-			return greater_than
+			return semantic_entities::greater_than_expression
 			(
 				create_expression(left_operand_node, declarative_region),
 				create_expression(right_operand_node, declarative_region)
 			);
 		else if(get<predefined_text_node<str::right_angle_bracket_equal>>(&operator_node))
-			return greater_than_or_equal_to
+			return semantic_entities::greater_than_or_equal_to_expression
 			(
 				create_expression(left_operand_node, declarative_region),
 				create_expression(right_operand_node, declarative_region)
@@ -334,23 +334,23 @@ create_expression
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
 
-	const additive_expression& left_operand_node = get_left_operand(shift_expression_node);
-	const optional_node<shift_operator>& opt_operator_node = get_operator(shift_expression_node);
-	const optional_node<shift_expression>& opt_right_operand_node = get_right_operand(shift_expression_node);
+	const syntax_nodes::additive_expression& left_operand_node = get_left_operand(shift_expression_node);
+	const optional_node<syntax_nodes::shift_operator>& opt_operator_node = get_operator(shift_expression_node);
+	const optional_node<syntax_nodes::shift_expression>& opt_right_operand_node = get_right_operand(shift_expression_node);
 
 	if(opt_right_operand_node)
 	{
-		const shift_operator& operator_node = *opt_operator_node;
-		const shift_expression& right_operand_node = *opt_right_operand_node;
+		const syntax_nodes::shift_operator& operator_node = *opt_operator_node;
+		const syntax_nodes::shift_expression& right_operand_node = *opt_right_operand_node;
 
 		if(get<predefined_text_node<str::double_left_angle_bracket>>(&operator_node))
-			return left_shift
+			return semantic_entities::left_shift_expression
 			(
 				create_expression(left_operand_node, declarative_region),
 				create_expression(right_operand_node, declarative_region)
 			);
 		else if(get<predefined_text_node<str::double_right_angle_bracket>>(&operator_node))
-			return right_shift
+			return semantic_entities::right_shift_expression
 			(
 				create_expression(left_operand_node, declarative_region),
 				create_expression(right_operand_node, declarative_region)
@@ -383,13 +383,13 @@ create_expression
 		const additive_expression& right_operand_node = *opt_right_operand_node;
 
 		if(get<predefined_text_node<str::plus>>(&operator_node))
-			return addition
+			return semantic_entities::addition_expression
 			(
 				create_expression(left_operand_node, declarative_region),
 				create_expression(right_operand_node, declarative_region)
 			);
 		else if(get<predefined_text_node<str::minus>>(&operator_node))
-			return subtraction
+			return semantic_entities::subtraction_expression
 			(
 				create_expression(left_operand_node, declarative_region),
 				create_expression(right_operand_node, declarative_region)
@@ -422,19 +422,19 @@ create_expression
 		const multiplicative_expression& right_operand_node = *opt_right_operand_node;
 
 		if(get<predefined_text_node<str::asterisk>>(&operator_node))
-			return multiplication
+			return semantic_entities::multiplication_expression
 			(
 				create_expression(left_operand_node, declarative_region),
 				create_expression(right_operand_node, declarative_region)
 			);
 		else if(get<predefined_text_node<str::slash>>(&operator_node))
-			return division
+			return semantic_entities::division_expression
 			(
 				create_expression(left_operand_node, declarative_region),
 				create_expression(right_operand_node, declarative_region)
 			);
 		else if(get<predefined_text_node<str::percent>>(&operator_node))
-			return modulo
+			return semantic_entities::modulo_expression
 			(
 				create_expression(left_operand_node, declarative_region),
 				create_expression(right_operand_node, declarative_region)

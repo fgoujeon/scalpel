@@ -514,9 +514,16 @@ semantic_graph_serializer::serialize_namespace_alias
 
 namespace
 {
-#define EXPRESSION_TYPE(TYPE) \
+#define SIMPLE_TYPE(TYPE) \
 std::string \
 operator()(const TYPE) \
+{ \
+	return #TYPE; \
+}
+
+#define EXPRESSION_TYPE(TYPE) \
+std::string \
+operator()(const TYPE##_expression) \
 { \
 	return #TYPE; \
 }
@@ -541,19 +548,19 @@ operator()(const TYPE) \
 		EXPRESSION_TYPE(bitwise_inclusive_or)
 		EXPRESSION_TYPE(logical_and)
 		EXPRESSION_TYPE(logical_or)
-		EXPRESSION_TYPE(conditional_operation)
-		EXPRESSION_TYPE(bool)
-		EXPRESSION_TYPE(char)
-		EXPRESSION_TYPE(wchar_t)
-		EXPRESSION_TYPE(int)
-		EXPRESSION_TYPE(long int)
-		EXPRESSION_TYPE(long long int)
-		EXPRESSION_TYPE(unsigned int)
-		EXPRESSION_TYPE(unsigned long int)
-		EXPRESSION_TYPE(unsigned long long int)
-		EXPRESSION_TYPE(float)
-		EXPRESSION_TYPE(double)
-		EXPRESSION_TYPE(long double)
+		EXPRESSION_TYPE(conditional)
+		SIMPLE_TYPE(bool)
+		SIMPLE_TYPE(char)
+		SIMPLE_TYPE(wchar_t)
+		SIMPLE_TYPE(int)
+		SIMPLE_TYPE(long int)
+		SIMPLE_TYPE(long long int)
+		SIMPLE_TYPE(unsigned int)
+		SIMPLE_TYPE(unsigned long int)
+		SIMPLE_TYPE(unsigned long long int)
+		SIMPLE_TYPE(float)
+		SIMPLE_TYPE(double)
+		SIMPLE_TYPE(long double)
 
 		std::string
 		operator()(const std::string&)
@@ -569,6 +576,7 @@ operator()(const TYPE) \
 	} get_expression_type_visitor;
 
 #undef EXPRESSION_TYPE
+#undef SIMPLE_TYPE
 }
 
 
@@ -604,7 +612,7 @@ semantic_graph_serializer::serialize_expression_visitor::operator()(const binary
 }
 
 void
-semantic_graph_serializer::serialize_expression_visitor::operator()(const conditional_operation& operation)
+semantic_graph_serializer::serialize_expression_visitor::operator()(const conditional_expression& operation)
 {
 	output_ << indent(indent_level_) << "<condition_operand>\n";
 	serializer_.serialize_expression(operation.condition_operand(), indent_level_ + 1);
