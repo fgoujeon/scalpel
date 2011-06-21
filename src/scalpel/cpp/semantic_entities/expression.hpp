@@ -36,6 +36,14 @@ typedef
 		modulo,
 		addition,
 		subtraction,
+		left_shift,
+		right_shift,
+		less_than,
+		less_than_or_equal_to,
+		greater_than,
+		greater_than_or_equal_to,
+		equal_to,
+		not_equal_to,
 
 		//boolean type
 		bool,

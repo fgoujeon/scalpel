@@ -151,7 +151,32 @@ create_expression
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
 
-	return create_expression(get_left_operand(equality_expression_node), declarative_region);
+	const relational_expression& left_operand_node = get_left_operand(equality_expression_node);
+	const optional_node<equality_operator>& opt_operator_node = get_operator(equality_expression_node);
+	const optional_node<equality_expression>& opt_right_operand_node = get_right_operand(equality_expression_node);
+
+	if(opt_right_operand_node)
+	{
+		const equality_operator& operator_node = *opt_operator_node;
+		const equality_expression& right_operand_node = *opt_right_operand_node;
+
+		if(get<predefined_text_node<str::double_equal>>(&operator_node))
+			return equal_to
+			(
+				create_expression(left_operand_node, declarative_region),
+				create_expression(right_operand_node, declarative_region)
+			);
+		else if(get<predefined_text_node<str::exclamation_equal>>(&operator_node))
+			return not_equal_to
+			(
+				create_expression(left_operand_node, declarative_region),
+				create_expression(right_operand_node, declarative_region)
+			);
+		else
+			assert(false);
+	}
+	else
+		return create_expression(left_operand_node, declarative_region);
 }
 
 template<class DeclarativeRegion>
@@ -165,7 +190,44 @@ create_expression
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
 
-	return create_expression(get_left_operand(relational_expression_node), declarative_region);
+	const shift_expression& left_operand_node = get_left_operand(relational_expression_node);
+	const optional_node<relational_operator>& opt_operator_node = get_operator(relational_expression_node);
+	const optional_node<relational_expression>& opt_right_operand_node = get_right_operand(relational_expression_node);
+
+	if(opt_right_operand_node)
+	{
+		const relational_operator& operator_node = *opt_operator_node;
+		const relational_expression& right_operand_node = *opt_right_operand_node;
+
+		if(get<predefined_text_node<str::left_angle_bracket>>(&operator_node))
+			return less_than
+			(
+				create_expression(left_operand_node, declarative_region),
+				create_expression(right_operand_node, declarative_region)
+			);
+		else if(get<predefined_text_node<str::left_angle_bracket_equal>>(&operator_node))
+			return less_than_or_equal_to
+			(
+				create_expression(left_operand_node, declarative_region),
+				create_expression(right_operand_node, declarative_region)
+			);
+		else if(get<predefined_text_node<str::right_angle_bracket>>(&operator_node))
+			return greater_than
+			(
+				create_expression(left_operand_node, declarative_region),
+				create_expression(right_operand_node, declarative_region)
+			);
+		else if(get<predefined_text_node<str::right_angle_bracket_equal>>(&operator_node))
+			return greater_than_or_equal_to
+			(
+				create_expression(left_operand_node, declarative_region),
+				create_expression(right_operand_node, declarative_region)
+			);
+		else
+			assert(false);
+	}
+	else
+		return create_expression(left_operand_node, declarative_region);
 }
 
 template<class DeclarativeRegion>
@@ -179,7 +241,32 @@ create_expression
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
 
-	return create_expression(get_left_operand(shift_expression_node), declarative_region);
+	const additive_expression& left_operand_node = get_left_operand(shift_expression_node);
+	const optional_node<shift_operator>& opt_operator_node = get_operator(shift_expression_node);
+	const optional_node<shift_expression>& opt_right_operand_node = get_right_operand(shift_expression_node);
+
+	if(opt_right_operand_node)
+	{
+		const shift_operator& operator_node = *opt_operator_node;
+		const shift_expression& right_operand_node = *opt_right_operand_node;
+
+		if(get<predefined_text_node<str::double_left_angle_bracket>>(&operator_node))
+			return left_shift
+			(
+				create_expression(left_operand_node, declarative_region),
+				create_expression(right_operand_node, declarative_region)
+			);
+		else if(get<predefined_text_node<str::double_right_angle_bracket>>(&operator_node))
+			return right_shift
+			(
+				create_expression(left_operand_node, declarative_region),
+				create_expression(right_operand_node, declarative_region)
+			);
+		else
+			assert(false);
+	}
+	else
+		return create_expression(left_operand_node, declarative_region);
 }
 
 template<class DeclarativeRegion>

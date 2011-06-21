@@ -161,6 +161,20 @@ get_left_operand(const shift_expression& o)
 	return get<0>(o);
 }
 
+inline
+const optional_node<shift_operator>&
+get_operator(const shift_expression& o)
+{
+	return get<1>(o);
+}
+
+inline
+const optional_node<shift_expression>&
+get_right_operand(const shift_expression& o)
+{
+	return get<2>(o);
+}
+
 
 
 typedef
@@ -189,6 +203,20 @@ get_left_operand(const relational_expression& o)
 	return get<0>(o);
 }
 
+inline
+const optional_node<relational_operator>&
+get_operator(const relational_expression& o)
+{
+	return get<1>(o);
+}
+
+inline
+const optional_node<relational_expression>&
+get_right_operand(const relational_expression& o)
+{
+	return get<2>(o);
+}
+
 
 
 typedef
@@ -213,6 +241,20 @@ const relational_expression&
 get_left_operand(const equality_expression& o)
 {
 	return get<0>(o);
+}
+
+inline
+const optional_node<equality_operator>&
+get_operator(const equality_expression& o)
+{
+	return get<1>(o);
+}
+
+inline
+const optional_node<equality_expression>&
+get_right_operand(const equality_expression& o)
+{
+	return get<2>(o);
 }
 
 

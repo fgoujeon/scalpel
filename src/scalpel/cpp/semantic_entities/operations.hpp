@@ -32,7 +32,15 @@ enum class operation_tag
 	DIVISION,
 	MODULO,
 	ADDITION,
-	SUBTRACTION
+	SUBTRACTION,
+	LEFT_SHIFT,
+	RIGHT_SHIFT,
+	LESS_THAN,
+	LESS_THAN_OR_EQUAL_TO,
+	GREATER_THAN,
+	GREATER_THAN_OR_EQUAL_TO,
+	EQUAL_TO,
+	NOT_EQUAL_TO
 };
 
 typedef
@@ -58,6 +66,46 @@ typedef
 typedef
 	binary_operation<static_cast<int>(operation_tag::SUBTRACTION)>
 	subtraction
+;
+
+typedef
+	binary_operation<static_cast<int>(operation_tag::LEFT_SHIFT)>
+	left_shift
+;
+
+typedef
+	binary_operation<static_cast<int>(operation_tag::RIGHT_SHIFT)>
+	right_shift
+;
+
+typedef
+	binary_operation<static_cast<int>(operation_tag::LESS_THAN)>
+	less_than
+;
+
+typedef
+	binary_operation<static_cast<int>(operation_tag::LESS_THAN_OR_EQUAL_TO)>
+	less_than_or_equal_to
+;
+
+typedef
+	binary_operation<static_cast<int>(operation_tag::GREATER_THAN)>
+	greater_than
+;
+
+typedef
+	binary_operation<static_cast<int>(operation_tag::GREATER_THAN_OR_EQUAL_TO)>
+	greater_than_or_equal_to
+;
+
+typedef
+	binary_operation<static_cast<int>(operation_tag::EQUAL_TO)>
+	equal_to
+;
+
+typedef
+	binary_operation<static_cast<int>(operation_tag::NOT_EQUAL_TO)>
+	not_equal_to
 ;
 
 }}} //namespace scalpel::cpp::semantic_entities
