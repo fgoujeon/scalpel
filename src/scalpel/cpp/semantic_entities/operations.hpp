@@ -18,48 +18,47 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_ARRAY_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_ARRAY_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_OPERATIONS_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_OPERATIONS_HPP
 
-#include "type_variant_fwd.hpp"
-#include <memory>
+#include "binary_operation.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-class array
+enum class operation_tag
 {
-	public:
-		array
-		(
-			const unsigned int size,
-			const type_variant& qualified_type
-		);
-
-		array(const array& rhs);
-
-		array&
-		operator=(const array& rhs);
-
-		unsigned int
-		size() const
-		{
-			return size_;
-		}
-
-		const type_variant&
-		qualified_type() const;
-
-	private:
-		unsigned int size_;
-		std::unique_ptr<type_variant> qualified_type_;
+	MULTIPLICATION,
+	DIVISION,
+	MODULO,
+	ADDITION,
+	SUBTRACTION
 };
 
-bool
-operator==(const array& lhs, const array& rhs);
+typedef
+	binary_operation<static_cast<int>(operation_tag::MULTIPLICATION)>
+	multiplication
+;
 
-bool
-operator!=(const array& lhs, const array& rhs);
+typedef
+	binary_operation<static_cast<int>(operation_tag::DIVISION)>
+	division
+;
+
+typedef
+	binary_operation<static_cast<int>(operation_tag::MODULO)>
+	modulo
+;
+
+typedef
+	binary_operation<static_cast<int>(operation_tag::ADDITION)>
+	addition
+;
+
+typedef
+	binary_operation<static_cast<int>(operation_tag::SUBTRACTION)>
+	subtraction
+;
 
 }}} //namespace scalpel::cpp::semantic_entities
 

@@ -514,7 +514,6 @@ semantic_graph_serializer::serialize_namespace_alias
 
 namespace
 {
-
 #define EXPRESSION_TYPE(TYPE) \
 std::string \
 operator()(const TYPE) \
@@ -524,6 +523,11 @@ operator()(const TYPE) \
 
 	struct: scalpel::utility::static_visitor<std::string>
 	{
+		EXPRESSION_TYPE(multiplication)
+		EXPRESSION_TYPE(division)
+		EXPRESSION_TYPE(modulo)
+		EXPRESSION_TYPE(addition)
+		EXPRESSION_TYPE(subtraction)
 		EXPRESSION_TYPE(bool)
 		EXPRESSION_TYPE(char)
 		EXPRESSION_TYPE(wchar_t)
@@ -551,56 +555,75 @@ operator()(const TYPE) \
 	} get_expression_type_visitor;
 
 #undef EXPRESSION_TYPE
-
-	class print_expression_value_visitor: public scalpel::utility::static_visitor<void>
-	{
-		public:
-			print_expression_value_visitor(std::ostream& output):
-				output_(output)
-			{
-			}
-
-			template<typename T>
-			void
-			operator()(const T t)
-			{
-				output_ << t;
-			}
-
-			void
-			operator()(const char c)
-			{
-				output_ << static_cast<int>(c);
-			}
-
-			void
-			operator()(const bool b)
-			{
-				output_ << (b ? "true" : "false");
-			}
-
-			void
-			operator()(const std::string& str)
-			{
-				output_ << std::hex;
-				for(char c: str)
-					output_ << (static_cast<int>(c) & 0xff) << ' ';
-				output_ << std::dec;
-			}
-
-			void
-			operator()(const std::wstring& str)
-			{
-				output_ << std::hex;
-				for(wchar_t c: str)
-					output_ << static_cast<int>(c) << ' ';
-				output_ << std::dec;
-			}
-
-		private:
-			std::ostream& output_;
-	};
 }
+
+
+
+semantic_graph_serializer::serialize_expression_visitor::serialize_expression_visitor
+(
+	semantic_graph_serializer& serializer,
+	const unsigned int indent_level
+):
+	serializer_(serializer),
+	output_(serializer_.output_),
+	indent_level_(indent_level)
+{
+}
+
+template<typename T>
+void
+semantic_graph_serializer::serialize_expression_visitor::operator()(const T t)
+{
+	output_ << indent(indent_level_) << t << '\n';
+}
+
+template<int Tag>
+void
+semantic_graph_serializer::serialize_expression_visitor::operator()(const binary_operation<Tag>& operation)
+{
+	output_ << indent(indent_level_) << "<left_operand>\n";
+	serializer_.serialize_expression(operation.left_operand(), indent_level_ + 1);
+	output_ << indent(indent_level_) << "</left_operand>\n";
+	output_ << indent(indent_level_) << "<right_operand>\n";
+	serializer_.serialize_expression(operation.right_operand(), indent_level_ + 1);
+	output_ << indent(indent_level_) << "</right_operand>\n";
+}
+
+void
+semantic_graph_serializer::serialize_expression_visitor::operator()(const char c)
+{
+	output_ << indent(indent_level_) << static_cast<int>(c) << '\n';
+}
+
+void
+semantic_graph_serializer::serialize_expression_visitor::operator()(const bool b)
+{
+	output_ << indent(indent_level_) << (b ? "true" : "false") << '\n';
+}
+
+void
+semantic_graph_serializer::serialize_expression_visitor::operator()(const std::string& str)
+{
+	output_ << indent(indent_level_);
+	output_ << std::hex;
+	for(char c: str)
+		output_ << (static_cast<int>(c) & 0xff) << ' ';
+	output_ << std::dec;
+	output_ << '\n';
+}
+
+void
+semantic_graph_serializer::serialize_expression_visitor::operator()(const std::wstring& str)
+{
+	output_ << indent(indent_level_);
+	output_ << std::hex;
+	for(wchar_t c: str)
+		output_ << static_cast<int>(c) << ' ';
+	output_ << std::dec;
+	output_ << '\n';
+}
+
+
 
 void
 semantic_graph_serializer::serialize_expression
@@ -613,10 +636,8 @@ semantic_graph_serializer::serialize_expression
 	output_ << " type=\"" << apply_visitor(get_expression_type_visitor, entity) << "\"";
 	output_ << ">\n";
 
-	output_ << indent(indent_level + 1);
-	print_expression_value_visitor visitor(output_);
+	serialize_expression_visitor visitor(*this, indent_level + 1);
 	apply_visitor(visitor, entity);
-	output_ << "\n";
 
 	output_ << indent(indent_level) << "</expression>\n";
 }

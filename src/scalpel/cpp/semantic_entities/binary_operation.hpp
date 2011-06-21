@@ -18,50 +18,46 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_ARRAY_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_ARRAY_HPP
-
-#include "type_variant_fwd.hpp"
-#include <memory>
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_BINARY_OPERATION_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_BINARY_OPERATION_HPP
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-class array
+class expression_t;
+
+template<int Tag>
+class binary_operation
 {
 	public:
-		array
+		binary_operation
 		(
-			const unsigned int size,
-			const type_variant& qualified_type
+			const expression_t& left_operand,
+			const expression_t& right_operand
 		);
 
-		array(const array& rhs);
+		binary_operation(const binary_operation& rhs);
 
-		array&
-		operator=(const array& rhs);
-
-		unsigned int
-		size() const
+		const expression_t&
+		left_operand() const
 		{
-			return size_;
+			return *left_operand_;
 		}
 
-		const type_variant&
-		qualified_type() const;
+		const expression_t&
+		right_operand() const
+		{
+			return *right_operand_;
+		}
 
 	private:
-		unsigned int size_;
-		std::unique_ptr<type_variant> qualified_type_;
+		std::unique_ptr<expression_t> left_operand_;
+		std::unique_ptr<expression_t> right_operand_;
 };
 
-bool
-operator==(const array& lhs, const array& rhs);
-
-bool
-operator!=(const array& lhs, const array& rhs);
-
 }}} //namespace scalpel::cpp::semantic_entities
+
+#include "binary_operation.ipp"
 
 #endif
 

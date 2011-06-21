@@ -36,6 +36,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "semantic_entities/namespace_.hpp"
 #include "semantic_entities/namespace_alias.hpp"
 #include "semantic_entities/namespace_variant_fwd.hpp"
+#include "semantic_entities/operations.hpp"
 #include "semantic_entities/overloadable_operator.hpp"
 #include "semantic_entities/pointer.hpp"
 #include "semantic_entities/pointer_to_member.hpp"
@@ -54,3 +55,4 @@ typedef semantic_entities::linked_namespace linked_semantic_graph;
 }} //namespace scalpel::cpp
 
 #endif
+

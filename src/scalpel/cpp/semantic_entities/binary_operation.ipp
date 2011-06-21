@@ -18,48 +18,31 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_ARRAY_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_ARRAY_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_BINARY_OPERATION_IPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_BINARY_OPERATION_IPP
 
-#include "type_variant_fwd.hpp"
-#include <memory>
+#include "utility_functions/detail/make_expression.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-class array
+template<int Tag>
+binary_operation<Tag>::binary_operation
+(
+	const expression_t& left_operand,
+	const expression_t& right_operand
+):
+	left_operand_(utility_functions::detail::make_expression(left_operand)),
+	right_operand_(utility_functions::detail::make_expression(right_operand))
 {
-	public:
-		array
-		(
-			const unsigned int size,
-			const type_variant& qualified_type
-		);
+}
 
-		array(const array& rhs);
-
-		array&
-		operator=(const array& rhs);
-
-		unsigned int
-		size() const
-		{
-			return size_;
-		}
-
-		const type_variant&
-		qualified_type() const;
-
-	private:
-		unsigned int size_;
-		std::unique_ptr<type_variant> qualified_type_;
-};
-
-bool
-operator==(const array& lhs, const array& rhs);
-
-bool
-operator!=(const array& lhs, const array& rhs);
+template<int Tag>
+binary_operation<Tag>::binary_operation(const binary_operation& rhs):
+	left_operand_(utility_functions::detail::make_expression(rhs.left_operand())),
+	right_operand_(utility_functions::detail::make_expression(rhs.right_operand()))
+{
+}
 
 }}} //namespace scalpel::cpp::semantic_entities
 

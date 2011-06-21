@@ -151,6 +151,42 @@ class semantic_graph_serializer
 		};
 		friend class serialize_type_visitor;
 
+		class serialize_expression_visitor: public scalpel::utility::static_visitor<void>
+		{
+			public:
+				serialize_expression_visitor
+				(
+					semantic_graph_serializer& serializer,
+					const unsigned int indent_level
+				);
+
+				template<typename T>
+				void
+				operator()(const T t);
+
+				template<int Tag>
+				void
+				operator()(const binary_operation<Tag>& operation);
+
+				void
+				operator()(const char c);
+
+				void
+				operator()(const bool b);
+
+				void
+				operator()(const std::string& str);
+
+				void
+				operator()(const std::wstring& str);
+
+			private:
+				semantic_graph_serializer& serializer_;
+				std::ostream& output_;
+				const unsigned int indent_level_;
+		};
+		friend class serialize_expression_visitor;
+
 		void
 		serialize_type
 		(

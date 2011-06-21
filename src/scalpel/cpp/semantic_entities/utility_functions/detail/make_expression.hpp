@@ -18,50 +18,23 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_ARRAY_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_ARRAY_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_UTILITY_FUNCTIONS_DETAIL_MAKE_EXPRESSION_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_UTILITY_FUNCTIONS_DETAIL_MAKE_EXPRESSION_HPP
 
-#include "type_variant_fwd.hpp"
 #include <memory>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-class array
+class expression_t;
+
+namespace utility_functions { namespace detail
 {
-	public:
-		array
-		(
-			const unsigned int size,
-			const type_variant& qualified_type
-		);
 
-		array(const array& rhs);
+std::unique_ptr<expression_t>
+make_expression(const expression_t& exp);
 
-		array&
-		operator=(const array& rhs);
-
-		unsigned int
-		size() const
-		{
-			return size_;
-		}
-
-		const type_variant&
-		qualified_type() const;
-
-	private:
-		unsigned int size_;
-		std::unique_ptr<type_variant> qualified_type_;
-};
-
-bool
-operator==(const array& lhs, const array& rhs);
-
-bool
-operator!=(const array& lhs, const array& rhs);
-
-}}} //namespace scalpel::cpp::semantic_entities
+}}}}} //namespace scalpel::cpp::semantic_entities::utility_functions::detail
 
 #endif
 

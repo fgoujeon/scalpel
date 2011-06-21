@@ -81,6 +81,20 @@ get_left_operand(const multiplicative_expression& o)
 	return get<0>(o);
 }
 
+inline
+const optional_node<multiplicative_operator>&
+get_operator(const multiplicative_expression& o)
+{
+	return get<1>(o);
+}
+
+inline
+const optional_node<multiplicative_expression>&
+get_right_operand(const multiplicative_expression& o)
+{
+	return get<2>(o);
+}
+
 
 
 typedef
@@ -105,6 +119,20 @@ const multiplicative_expression&
 get_left_operand(const additive_expression& o)
 {
 	return get<0>(o);
+}
+
+inline
+const optional_node<additive_operator>&
+get_operator(const additive_expression& o)
+{
+	return get<1>(o);
+}
+
+inline
+const optional_node<additive_expression>&
+get_right_operand(const additive_expression& o)
+{
+	return get<2>(o);
 }
 
 

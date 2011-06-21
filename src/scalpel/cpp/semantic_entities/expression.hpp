@@ -21,6 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_EXPRESSION_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_EXPRESSION_HPP
 
+#include "operations.hpp"
 #include <scalpel/utility/variant.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
@@ -29,6 +30,13 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 typedef
 	utility::variant
 	<
+		//operations
+		multiplication,
+		division,
+		modulo,
+		addition,
+		subtraction,
+
 		//boolean type
 		bool,
 
@@ -53,8 +61,39 @@ typedef
 		std::string,
 		std::wstring
 	>
-	expression_t
+	expression_t_t
 ;
+
+//make forward declarations of expression_t possible
+struct expression_t: public expression_t_t
+{
+	//general case
+	template<typename U>
+	expression_t
+	(
+		const U& value,
+		typename boost::disable_if<boost::is_same<U, variant>>::type* = 0
+	):
+		expression_t_t(value)
+	{
+	}
+
+	//if U is a reference of non-const
+	template<typename U>
+	expression_t
+	(
+		U& value,
+		typename boost::disable_if<boost::is_same<U, variant>>::type* = 0
+	):
+		expression_t_t(value)
+	{
+	}
+
+	expression_t(const expression_t_t& rhs):
+		expression_t_t(rhs)
+	{
+	}
+};
 
 }}} //namespace scalpel::cpp::semantic_entities
 
