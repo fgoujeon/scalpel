@@ -81,7 +81,20 @@ create_expression
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
 
-	return create_expression(get_left_operand(logical_or_expression_node), declarative_region);
+	const logical_and_expression& left_operand_node = get_left_operand(logical_or_expression_node);
+	const optional_node<logical_or_expression>& opt_right_operand_node = get_right_operand(logical_or_expression_node);
+
+	if(opt_right_operand_node)
+	{
+		const logical_or_expression& right_operand_node = *opt_right_operand_node;
+		return logical_or
+		(
+			create_expression(left_operand_node, declarative_region),
+			create_expression(right_operand_node, declarative_region)
+		);
+	}
+	else
+		return create_expression(left_operand_node, declarative_region);
 }
 
 template<class DeclarativeRegion>
@@ -95,7 +108,20 @@ create_expression
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
 
-	return create_expression(get_left_operand(logical_and_expression_node), declarative_region);
+	const inclusive_or_expression& left_operand_node = get_left_operand(logical_and_expression_node);
+	const optional_node<logical_and_expression>& opt_right_operand_node = get_right_operand(logical_and_expression_node);
+
+	if(opt_right_operand_node)
+	{
+		const logical_and_expression& right_operand_node = *opt_right_operand_node;
+		return logical_and
+		(
+			create_expression(left_operand_node, declarative_region),
+			create_expression(right_operand_node, declarative_region)
+		);
+	}
+	else
+		return create_expression(left_operand_node, declarative_region);
 }
 
 template<class DeclarativeRegion>
@@ -109,7 +135,20 @@ create_expression
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
 
-	return create_expression(get_left_operand(inclusive_or_expression_node), declarative_region);
+	const exclusive_or_expression& left_operand_node = get_left_operand(inclusive_or_expression_node);
+	const optional_node<inclusive_or_expression>& opt_right_operand_node = get_right_operand(inclusive_or_expression_node);
+
+	if(opt_right_operand_node)
+	{
+		const inclusive_or_expression& right_operand_node = *opt_right_operand_node;
+		return bitwise_inclusive_or
+		(
+			create_expression(left_operand_node, declarative_region),
+			create_expression(right_operand_node, declarative_region)
+		);
+	}
+	else
+		return create_expression(left_operand_node, declarative_region);
 }
 
 template<class DeclarativeRegion>
@@ -123,7 +162,20 @@ create_expression
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
 
-	return create_expression(get_left_operand(exclusive_or_expression_node), declarative_region);
+	const and_expression& left_operand_node = get_left_operand(exclusive_or_expression_node);
+	const optional_node<exclusive_or_expression>& opt_right_operand_node = get_right_operand(exclusive_or_expression_node);
+
+	if(opt_right_operand_node)
+	{
+		const exclusive_or_expression& right_operand_node = *opt_right_operand_node;
+		return bitwise_exclusive_or
+		(
+			create_expression(left_operand_node, declarative_region),
+			create_expression(right_operand_node, declarative_region)
+		);
+	}
+	else
+		return create_expression(left_operand_node, declarative_region);
 }
 
 template<class DeclarativeRegion>
@@ -137,7 +189,20 @@ create_expression
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
 
-	return create_expression(get_left_operand(and_expression_node), declarative_region);
+	const equality_expression& left_operand_node = get_left_operand(and_expression_node);
+	const optional_node<and_expression>& opt_right_operand_node = get_right_operand(and_expression_node);
+
+	if(opt_right_operand_node)
+	{
+		const and_expression& right_operand_node = *opt_right_operand_node;
+		return bitwise_and
+		(
+			create_expression(left_operand_node, declarative_region),
+			create_expression(right_operand_node, declarative_region)
+		);
+	}
+	else
+		return create_expression(left_operand_node, declarative_region);
 }
 
 template<class DeclarativeRegion>

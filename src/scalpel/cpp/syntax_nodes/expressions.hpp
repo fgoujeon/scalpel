@@ -273,6 +273,13 @@ get_left_operand(const and_expression& o)
 	return get<0>(o);
 }
 
+inline
+const optional_node<and_expression>&
+get_right_operand(const and_expression& o)
+{
+	return get<1>(o);
+}
+
 
 
 SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
@@ -289,6 +296,13 @@ get_left_operand(const exclusive_or_expression& o)
 	return get<0>(o);
 }
 
+inline
+const optional_node<exclusive_or_expression>&
+get_right_operand(const exclusive_or_expression& o)
+{
+	return get<1>(o);
+}
+
 
 
 SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
@@ -303,6 +317,13 @@ const exclusive_or_expression&
 get_left_operand(const inclusive_or_expression& o)
 {
 	return get<0>(o);
+}
+
+inline
+const optional_node<inclusive_or_expression>&
+get_right_operand(const inclusive_or_expression& o)
+{
+	return get<1>(o);
 }
 
 

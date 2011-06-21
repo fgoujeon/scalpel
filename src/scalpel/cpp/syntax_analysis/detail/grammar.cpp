@@ -709,10 +709,10 @@ grammar::grammar()
 	;
 
 	and_expression
-		= equality_expression >> !(no_node_d[ch_p('&')] >> and_expression)
+		= equality_expression >> !(no_node_d[ch_p('&') - str_p("&&")] >> and_expression)
 	;
 	template_argument_and_expression
-		= template_argument_equality_expression >> !(no_node_d[ch_p('&')] >> template_argument_and_expression)
+		= template_argument_equality_expression >> !(no_node_d[ch_p('&') - str_p("&&")] >> template_argument_and_expression)
 	;
 
 	exclusive_or_expression

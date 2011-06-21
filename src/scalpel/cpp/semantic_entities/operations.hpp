@@ -40,7 +40,12 @@ enum class operation_tag
 	GREATER_THAN,
 	GREATER_THAN_OR_EQUAL_TO,
 	EQUAL_TO,
-	NOT_EQUAL_TO
+	NOT_EQUAL_TO,
+	BITWISE_AND,
+	BITWISE_EXCLUSIVE_OR,
+	BITWISE_INCLUSIVE_OR,
+	LOGICAL_AND,
+	LOGICAL_OR
 };
 
 typedef
@@ -106,6 +111,31 @@ typedef
 typedef
 	binary_operation<static_cast<int>(operation_tag::NOT_EQUAL_TO)>
 	not_equal_to
+;
+
+typedef
+	binary_operation<static_cast<int>(operation_tag::BITWISE_AND)>
+	bitwise_and
+;
+
+typedef
+	binary_operation<static_cast<int>(operation_tag::BITWISE_EXCLUSIVE_OR)>
+	bitwise_exclusive_or
+;
+
+typedef
+	binary_operation<static_cast<int>(operation_tag::BITWISE_INCLUSIVE_OR)>
+	bitwise_inclusive_or
+;
+
+typedef
+	binary_operation<static_cast<int>(operation_tag::LOGICAL_AND)>
+	logical_and
+;
+
+typedef
+	binary_operation<static_cast<int>(operation_tag::LOGICAL_OR)>
+	logical_or
 ;
 
 }}} //namespace scalpel::cpp::semantic_entities

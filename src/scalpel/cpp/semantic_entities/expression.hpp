@@ -44,6 +44,11 @@ typedef
 		greater_than_or_equal_to,
 		equal_to,
 		not_equal_to,
+		bitwise_and,
+		bitwise_exclusive_or,
+		bitwise_inclusive_or,
+		logical_and,
+		logical_or,
 
 		//boolean type
 		bool,
