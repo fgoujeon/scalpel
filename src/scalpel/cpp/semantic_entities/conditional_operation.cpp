@@ -18,48 +18,30 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_BINARY_OPERATION_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_BINARY_OPERATION_HPP
-
-#include <memory>
+#include "conditional_operation.hpp"
+#include "expression.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-class expression_t;
-
-template<int Tag>
-class binary_operation
+conditional_operation::conditional_operation
+(
+	const expression_t& condition_operand,
+	const expression_t& true_operand,
+	const expression_t& false_operand
+):
+	condition_operand_(new expression_t(condition_operand)),
+	true_operand_(new expression_t(true_operand)),
+	false_operand_(new expression_t(false_operand))
 {
-	public:
-		binary_operation
-		(
-			const expression_t& left_operand,
-			const expression_t& right_operand
-		);
+}
 
-		binary_operation(const binary_operation& rhs);
-
-		const expression_t&
-		left_operand() const
-		{
-			return *left_operand_;
-		}
-
-		const expression_t&
-		right_operand() const
-		{
-			return *right_operand_;
-		}
-
-	private:
-		std::unique_ptr<expression_t> left_operand_;
-		std::unique_ptr<expression_t> right_operand_;
-};
+conditional_operation::conditional_operation(const conditional_operation& rhs):
+	condition_operand_(new expression_t(rhs.condition_operand())),
+	true_operand_(new expression_t(rhs.true_operand())),
+	false_operand_(new expression_t(rhs.false_operand()))
+{
+}
 
 }}} //namespace scalpel::cpp::semantic_entities
-
-#include "binary_operation.ipp"
-
-#endif
 

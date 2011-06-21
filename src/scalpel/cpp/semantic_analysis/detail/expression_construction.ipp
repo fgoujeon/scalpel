@@ -28,6 +28,20 @@ template<class DeclarativeRegion>
 semantic_entities::expression_t
 create_expression
 (
+	const syntax_nodes::expression& expression_node,
+	DeclarativeRegion& declarative_region
+)
+{
+	using namespace syntax_nodes;
+	using namespace semantic_entities;
+
+	return create_expression(expression_node.front(), declarative_region);
+}
+
+template<class DeclarativeRegion>
+semantic_entities::expression_t
+create_expression
+(
 	const syntax_nodes::assignment_expression& assignment_expression_node,
 	DeclarativeRegion& declarative_region
 )
@@ -66,8 +80,22 @@ create_expression
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
 
-	const logical_or_expression& logical_or_expression_node = get_logical_or_expression(conditional_expression_node);
-	return create_expression(logical_or_expression_node, declarative_region);
+	const logical_or_expression& condition_operand_node = get_condition_operand(conditional_expression_node);
+	const optional_node<expression>& opt_true_operand_node = get_true_operand(conditional_expression_node);
+	const optional_node<assignment_expression>& opt_false_operand_node = get_false_operand(conditional_expression_node);
+
+	if(opt_true_operand_node)
+	{
+		assert(opt_false_operand_node);
+		return conditional_operation
+		(
+			create_expression(condition_operand_node, declarative_region),
+			create_expression(*opt_true_operand_node, declarative_region),
+			create_expression(*opt_false_operand_node, declarative_region)
+		);
+	}
+	else
+		return create_expression(condition_operand_node, declarative_region);
 }
 
 template<class DeclarativeRegion>

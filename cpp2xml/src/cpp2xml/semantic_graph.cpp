@@ -541,6 +541,7 @@ operator()(const TYPE) \
 		EXPRESSION_TYPE(bitwise_inclusive_or)
 		EXPRESSION_TYPE(logical_and)
 		EXPRESSION_TYPE(logical_or)
+		EXPRESSION_TYPE(conditional_operation)
 		EXPRESSION_TYPE(bool)
 		EXPRESSION_TYPE(char)
 		EXPRESSION_TYPE(wchar_t)
@@ -600,6 +601,20 @@ semantic_graph_serializer::serialize_expression_visitor::operator()(const binary
 	output_ << indent(indent_level_) << "<right_operand>\n";
 	serializer_.serialize_expression(operation.right_operand(), indent_level_ + 1);
 	output_ << indent(indent_level_) << "</right_operand>\n";
+}
+
+void
+semantic_graph_serializer::serialize_expression_visitor::operator()(const conditional_operation& operation)
+{
+	output_ << indent(indent_level_) << "<condition_operand>\n";
+	serializer_.serialize_expression(operation.condition_operand(), indent_level_ + 1);
+	output_ << indent(indent_level_) << "</condition_operand>\n";
+	output_ << indent(indent_level_) << "<true_operand>\n";
+	serializer_.serialize_expression(operation.true_operand(), indent_level_ + 1);
+	output_ << indent(indent_level_) << "</true_operand>\n";
+	output_ << indent(indent_level_) << "<false_operand>\n";
+	serializer_.serialize_expression(operation.false_operand(), indent_level_ + 1);
+	output_ << indent(indent_level_) << "</false_operand>\n";
 }
 
 void

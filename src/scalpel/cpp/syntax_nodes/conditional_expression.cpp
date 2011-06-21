@@ -18,10 +18,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "conditional_expression_fwd.hpp"
-#include "expressions.hpp"
-#include "expression.hpp"
-#include "assignment_expression.hpp"
+#include "conditional_expression.hpp"
 
 #include "detail/macros/sequence_node_pimpl_definition.hpp"
 
@@ -32,9 +29,7 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
 	conditional_expression,
 	(logical_or_expression)
-	(optional_node<predefined_text_node<str::question_mark>>)
 	(optional_node<expression>)
-	(optional_node<predefined_text_node<str::colon>>)
 	(optional_node<assignment_expression>)
 )
 

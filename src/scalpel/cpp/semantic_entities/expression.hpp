@@ -22,6 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_EXPRESSION_HPP
 
 #include "operations.hpp"
+#include "conditional_operation.hpp"
 #include <scalpel/utility/variant.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
@@ -30,7 +31,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 typedef
 	utility::variant
 	<
-		//operations
+		//binary operations
 		multiplication,
 		division,
 		modulo,
@@ -49,6 +50,9 @@ typedef
 		bitwise_inclusive_or,
 		logical_and,
 		logical_or,
+
+		//ternary operation
+		conditional_operation,
 
 		//boolean type
 		bool,

@@ -41,17 +41,29 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 (
 	conditional_expression,
 	(logical_or_expression)
-	(optional_node<predefined_text_node<str::question_mark>>)
 	(optional_node<expression>)
-	(optional_node<predefined_text_node<str::colon>>)
 	(optional_node<assignment_expression>)
 )
 
 inline
 const logical_or_expression&
-get_logical_or_expression(const conditional_expression& o)
+get_condition_operand(const conditional_expression& o)
 {
 	return get<0>(o);
+}
+
+inline
+const optional_node<expression>&
+get_true_operand(const conditional_expression& o)
+{
+	return get<1>(o);
+}
+
+inline
+const optional_node<assignment_expression>&
+get_false_operand(const conditional_expression& o)
+{
+	return get<2>(o);
 }
 
 }}} //namespace scalpel::cpp::syntax_nodes

@@ -744,7 +744,7 @@ grammar::grammar()
 	;
 
 	conditional_expression
-		= logical_or_expression >> !('?' >> expression >> ':' >> assignment_expression)
+		= logical_or_expression >> !(no_node_d[ch_p('?')] >> expression >> no_node_d[ch_p(':')] >> assignment_expression)
 	;
 	template_argument_conditional_expression
 		= template_argument_logical_or_expression >> !('?' >> expression >> ':' >> template_argument_assignment_expression)
