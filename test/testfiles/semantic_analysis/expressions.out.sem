@@ -1,0 +1,368 @@
+<namespace id="0">
+ <variable id="0" name="b1">
+  <type>
+   <fundamental_type type="bool"/>
+  </type>
+  <default_value>
+   <expression type="less_than">
+    <left_operand>
+     <expression type="int">
+      7
+     </expression>
+    </left_operand>
+    <right_operand>
+     <expression type="int">
+      9
+     </expression>
+    </right_operand>
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="1" name="b2">
+  <type>
+   <fundamental_type type="bool"/>
+  </type>
+  <default_value>
+   <expression type="less_than_or_equal_to">
+    <left_operand>
+     <expression type="int">
+      7
+     </expression>
+    </left_operand>
+    <right_operand>
+     <expression type="int">
+      9
+     </expression>
+    </right_operand>
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="2" name="b3">
+  <type>
+   <fundamental_type type="bool"/>
+  </type>
+  <default_value>
+   <expression type="greater_than">
+    <left_operand>
+     <expression type="int">
+      7
+     </expression>
+    </left_operand>
+    <right_operand>
+     <expression type="int">
+      9
+     </expression>
+    </right_operand>
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="3" name="b4">
+  <type>
+   <fundamental_type type="bool"/>
+  </type>
+  <default_value>
+   <expression type="greater_than_or_equal_to">
+    <left_operand>
+     <expression type="int">
+      7
+     </expression>
+    </left_operand>
+    <right_operand>
+     <expression type="int">
+      9
+     </expression>
+    </right_operand>
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="4" name="b5">
+  <type>
+   <fundamental_type type="bool"/>
+  </type>
+  <default_value>
+   <expression type="equal_to">
+    <left_operand>
+     <expression type="int">
+      7
+     </expression>
+    </left_operand>
+    <right_operand>
+     <expression type="int">
+      9
+     </expression>
+    </right_operand>
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="5" name="b6">
+  <type>
+   <fundamental_type type="bool"/>
+  </type>
+  <default_value>
+   <expression type="not_equal_to">
+    <left_operand>
+     <expression type="int">
+      7
+     </expression>
+    </left_operand>
+    <right_operand>
+     <expression type="int">
+      9
+     </expression>
+    </right_operand>
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="6" name="b7">
+  <type>
+   <fundamental_type type="bool"/>
+  </type>
+  <default_value>
+   <expression type="logical_and">
+    <left_operand>
+     <expression type="bool">
+      true
+     </expression>
+    </left_operand>
+    <right_operand>
+     <expression type="bool">
+      false
+     </expression>
+    </right_operand>
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="7" name="b8">
+  <type>
+   <fundamental_type type="bool"/>
+  </type>
+  <default_value>
+   <expression type="logical_or">
+    <left_operand>
+     <expression type="bool">
+      true
+     </expression>
+    </left_operand>
+    <right_operand>
+     <expression type="bool">
+      false
+     </expression>
+    </right_operand>
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="8" name="i01">
+  <type>
+   <fundamental_type type="int"/>
+  </type>
+  <default_value>
+   <expression type="multiplication">
+    <left_operand>
+     <expression type="int">
+      7
+     </expression>
+    </left_operand>
+    <right_operand>
+     <expression type="int">
+      9
+     </expression>
+    </right_operand>
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="9" name="i02">
+  <type>
+   <fundamental_type type="int"/>
+  </type>
+  <default_value>
+   <expression type="division">
+    <left_operand>
+     <expression type="int">
+      7
+     </expression>
+    </left_operand>
+    <right_operand>
+     <expression type="int">
+      9
+     </expression>
+    </right_operand>
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="10" name="i03">
+  <type>
+   <fundamental_type type="int"/>
+  </type>
+  <default_value>
+   <expression type="modulo">
+    <left_operand>
+     <expression type="int">
+      7
+     </expression>
+    </left_operand>
+    <right_operand>
+     <expression type="int">
+      9
+     </expression>
+    </right_operand>
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="11" name="i04">
+  <type>
+   <fundamental_type type="int"/>
+  </type>
+  <default_value>
+   <expression type="addition">
+    <left_operand>
+     <expression type="int">
+      7
+     </expression>
+    </left_operand>
+    <right_operand>
+     <expression type="int">
+      9
+     </expression>
+    </right_operand>
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="12" name="i05">
+  <type>
+   <fundamental_type type="int"/>
+  </type>
+  <default_value>
+   <expression type="subtraction">
+    <left_operand>
+     <expression type="int">
+      7
+     </expression>
+    </left_operand>
+    <right_operand>
+     <expression type="int">
+      9
+     </expression>
+    </right_operand>
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="13" name="i06">
+  <type>
+   <fundamental_type type="int"/>
+  </type>
+  <default_value>
+   <expression type="left_shift">
+    <left_operand>
+     <expression type="int">
+      7
+     </expression>
+    </left_operand>
+    <right_operand>
+     <expression type="int">
+      2
+     </expression>
+    </right_operand>
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="14" name="i07">
+  <type>
+   <fundamental_type type="int"/>
+  </type>
+  <default_value>
+   <expression type="right_shift">
+    <left_operand>
+     <expression type="int">
+      7
+     </expression>
+    </left_operand>
+    <right_operand>
+     <expression type="int">
+      2
+     </expression>
+    </right_operand>
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="15" name="i08">
+  <type>
+   <fundamental_type type="int"/>
+  </type>
+  <default_value>
+   <expression type="bitwise_and">
+    <left_operand>
+     <expression type="int">
+      7
+     </expression>
+    </left_operand>
+    <right_operand>
+     <expression type="int">
+      9
+     </expression>
+    </right_operand>
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="16" name="i09">
+  <type>
+   <fundamental_type type="int"/>
+  </type>
+  <default_value>
+   <expression type="bitwise_exclusive_or">
+    <left_operand>
+     <expression type="int">
+      7
+     </expression>
+    </left_operand>
+    <right_operand>
+     <expression type="int">
+      9
+     </expression>
+    </right_operand>
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="17" name="i10">
+  <type>
+   <fundamental_type type="int"/>
+  </type>
+  <default_value>
+   <expression type="bitwise_inclusive_or">
+    <left_operand>
+     <expression type="int">
+      7
+     </expression>
+    </left_operand>
+    <right_operand>
+     <expression type="int">
+      9
+     </expression>
+    </right_operand>
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="18" name="i11">
+  <type>
+   <fundamental_type type="int"/>
+  </type>
+  <default_value>
+   <expression type="conditional">
+    <condition_operand>
+     <expression type="bool">
+      true
+     </expression>
+    </condition_operand>
+    <true_operand>
+     <expression type="int">
+      8
+     </expression>
+    </true_operand>
+    <false_operand>
+     <expression type="int">
+      6
+     </expression>
+    </false_operand>
+   </expression>
+  </default_value>
+ </variable>
+</namespace>
