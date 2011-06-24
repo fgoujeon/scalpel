@@ -166,7 +166,11 @@ class semantic_graph_serializer
 
 				template<int Tag>
 				void
-				operator()(const binary_operation<Tag>& operation);
+				operator()(const unary_expression<Tag>& operation);
+
+				template<int Tag>
+				void
+				operator()(const binary_expression<Tag>& operation);
 
 				void
 				operator()(const conditional_expression& operation);

@@ -167,6 +167,14 @@ template<class DeclarativeRegion>
 semantic_entities::expression_t
 create_expression
 (
+	const syntax_nodes::unary_operator_expression& unary_operator_expression_node,
+	DeclarativeRegion& declarative_region
+);
+
+template<class DeclarativeRegion>
+semantic_entities::expression_t
+create_expression
+(
 	const syntax_nodes::postfix_expression& postfix_expression_node,
 	DeclarativeRegion& declarative_region
 );

@@ -571,14 +571,75 @@ create_expression
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
 
-	if(const boost::optional<const postfix_expression&>& opt_postfix_expression_node = get<postfix_expression>(&unary_expression_node))
-	{
-		return create_expression(*opt_postfix_expression_node, declarative_region);
-	}
-	else
-	{
+	if(const boost::optional<const unary_operator_expression&>& opt_unary_operator_expression_node = get<unary_operator_expression>(&unary_expression_node))
+		return create_expression(*opt_unary_operator_expression_node, declarative_region);
+	else if(/*const boost::optional<const type_id_sizeof_expression&>& opt_type_id_sizeof_expression_node = */get<type_id_sizeof_expression>(&unary_expression_node))
 		assert(false); //TODO
-	}
+	else if(/*const boost::optional<const unary_sizeof_expression&>& opt_unary_sizeof_expression_node = */get<unary_sizeof_expression>(&unary_expression_node))
+		assert(false); //TODO
+	else if(const boost::optional<const postfix_expression&>& opt_postfix_expression_node = get<postfix_expression>(&unary_expression_node))
+		return create_expression(*opt_postfix_expression_node, declarative_region);
+	else if(/*const boost::optional<const new_expression&>& opt_new_expression_node = */get<new_expression>(&unary_expression_node))
+		assert(false); //TODO
+	else if(/*const boost::optional<const delete_expression&>& opt_delete_expression_node = */get<delete_expression>(&unary_expression_node))
+		assert(false); //TODO
+	else
+		assert(false);
+}
+
+template<class DeclarativeRegion>
+semantic_entities::expression_t
+create_expression
+(
+	const syntax_nodes::unary_operator_expression& unary_operator_expression_node,
+	DeclarativeRegion& declarative_region
+)
+{
+	using namespace syntax_nodes;
+	using namespace semantic_entities;
+
+	const unary_operator& operator_node = get_operator(unary_operator_expression_node);
+	const cast_expression& operand_node = get_operand(unary_operator_expression_node);
+
+	if(get<predefined_text_node<str::double_plus>>(&operator_node))
+		return semantic_entities::prefix_increment_expression
+		(
+			create_expression(operand_node, declarative_region)
+		);
+	else if(get<predefined_text_node<str::double_minus>>(&operator_node))
+		return semantic_entities::prefix_decrement_expression
+		(
+			create_expression(operand_node, declarative_region)
+		);
+	else if(get<predefined_text_node<str::asterisk>>(&operator_node))
+		return semantic_entities::indirection_expression
+		(
+			create_expression(operand_node, declarative_region)
+		);
+	else if(get<predefined_text_node<str::ampersand>>(&operator_node))
+		return semantic_entities::pointer_expression
+		(
+			create_expression(operand_node, declarative_region)
+		);
+	else if(get<predefined_text_node<str::plus>>(&operator_node))
+		return create_expression(operand_node, declarative_region);
+	else if(get<predefined_text_node<str::minus>>(&operator_node))
+		return semantic_entities::negation_expression
+		(
+			create_expression(operand_node, declarative_region)
+		);
+	else if(get<predefined_text_node<str::exclamation>>(&operator_node))
+		return semantic_entities::logical_negation_expression
+		(
+			create_expression(operand_node, declarative_region)
+		);
+	else if(get<predefined_text_node<str::tilde>>(&operator_node))
+		return semantic_entities::complement_expression
+		(
+			create_expression(operand_node, declarative_region)
+		);
+	else
+		assert(false);
 }
 
 template<class DeclarativeRegion>

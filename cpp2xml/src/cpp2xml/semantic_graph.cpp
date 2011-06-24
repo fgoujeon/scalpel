@@ -530,6 +530,13 @@ operator()(const TYPE##_expression) \
 
 	struct: scalpel::utility::static_visitor<std::string>
 	{
+		EXPRESSION_TYPE(prefix_increment)
+		EXPRESSION_TYPE(prefix_decrement)
+		EXPRESSION_TYPE(indirection)
+		EXPRESSION_TYPE(pointer)
+		EXPRESSION_TYPE(negation)
+		EXPRESSION_TYPE(logical_negation)
+		EXPRESSION_TYPE(complement)
 		EXPRESSION_TYPE(multiplication)
 		EXPRESSION_TYPE(division)
 		EXPRESSION_TYPE(modulo)
@@ -612,7 +619,16 @@ semantic_graph_serializer::serialize_expression_visitor::operator()(const T t)
 
 template<int Tag>
 void
-semantic_graph_serializer::serialize_expression_visitor::operator()(const binary_operation<Tag>& operation)
+semantic_graph_serializer::serialize_expression_visitor::operator()(const unary_expression<Tag>& operation)
+{
+	output_ << indent(indent_level_) << "<operand>\n";
+	serializer_.serialize_expression(operation.operand(), indent_level_ + 1);
+	output_ << indent(indent_level_) << "</operand>\n";
+}
+
+template<int Tag>
+void
+semantic_graph_serializer::serialize_expression_visitor::operator()(const binary_expression<Tag>& operation)
 {
 	output_ << indent(indent_level_) << "<left_operand>\n";
 	serializer_.serialize_expression(operation.left_operand(), indent_level_ + 1);

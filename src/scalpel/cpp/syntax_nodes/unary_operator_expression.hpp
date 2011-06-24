@@ -18,8 +18,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_UNARY_OPERATOR_UNARY_EXPRESSION_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_UNARY_OPERATOR_UNARY_EXPRESSION_HPP
+#ifndef SCALPEL_CPP_SYNTAX_NODES_UNARY_OPERATOR_EXPRESSION_HPP
+#define SCALPEL_CPP_SYNTAX_NODES_UNARY_OPERATOR_EXPRESSION_HPP
 
 #include "unary_operator.hpp"
 #include "cast_expression.hpp"
@@ -41,8 +41,22 @@ typedef
 		unary_operator,
 		cast_expression
 	>
-	unary_operator_unary_expression
+	unary_operator_expression
 ;
+
+inline
+const unary_operator&
+get_operator(const unary_operator_expression& o)
+{
+	return get<0>(o);
+}
+
+inline
+const cast_expression&
+get_operand(const unary_operator_expression& o)
+{
+	return get<1>(o);
+}
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

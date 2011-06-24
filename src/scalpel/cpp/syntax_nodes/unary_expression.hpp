@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SYNTAX_NODES_UNARY_EXPRESSION_HPP
 #define SCALPEL_CPP_SYNTAX_NODES_UNARY_EXPRESSION_HPP
 
-#include "unary_operator_unary_expression.hpp"
+#include "unary_operator_expression.hpp"
 #include "type_id_sizeof_expression.hpp"
 #include "unary_sizeof_expression.hpp"
 #include "postfix_expression.hpp"
@@ -36,7 +36,7 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 SCALPEL_ALTERNATIVE_NODE_PIMPL_DECLARATION
 (
 	unary_expression,
-	(unary_operator_unary_expression)
+	(unary_operator_expression)
 	(type_id_sizeof_expression)
 	(unary_sizeof_expression)
 	(postfix_expression)

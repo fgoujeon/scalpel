@@ -18,8 +18,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_BINARY_OPERATION_IPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_BINARY_OPERATION_IPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_UNARY_EXPRESSION_IPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_UNARY_EXPRESSION_IPP
 
 #include "utility_functions/detail/make_expression.hpp"
 
@@ -27,20 +27,17 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 template<int Tag>
-binary_operation<Tag>::binary_operation
+unary_expression<Tag>::unary_expression
 (
-	const expression_t& left_operand,
-	const expression_t& right_operand
+	const expression_t& operand
 ):
-	left_operand_(utility_functions::detail::make_expression(left_operand)),
-	right_operand_(utility_functions::detail::make_expression(right_operand))
+	operand_(utility_functions::detail::make_expression(operand))
 {
 }
 
 template<int Tag>
-binary_operation<Tag>::binary_operation(const binary_operation& rhs):
-	left_operand_(utility_functions::detail::make_expression(rhs.left_operand())),
-	right_operand_(utility_functions::detail::make_expression(rhs.right_operand()))
+unary_expression<Tag>::unary_expression(const unary_expression& rhs):
+	operand_(utility_functions::detail::make_expression(rhs.operand()))
 {
 }
 

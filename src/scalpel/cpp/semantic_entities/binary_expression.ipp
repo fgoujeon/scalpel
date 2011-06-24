@@ -18,48 +18,33 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_BINARY_OPERATION_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_BINARY_OPERATION_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_BINARY_EXPRESSION_IPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_BINARY_EXPRESSION_IPP
 
-#include <memory>
+#include "utility_functions/detail/make_expression.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-class expression_t;
+template<int Tag>
+binary_expression<Tag>::binary_expression
+(
+	const expression_t& left_operand,
+	const expression_t& right_operand
+):
+	left_operand_(utility_functions::detail::make_expression(left_operand)),
+	right_operand_(utility_functions::detail::make_expression(right_operand))
+{
+}
 
 template<int Tag>
-class binary_operation
+binary_expression<Tag>::binary_expression(const binary_expression& rhs):
+	left_operand_(utility_functions::detail::make_expression(rhs.left_operand())),
+	right_operand_(utility_functions::detail::make_expression(rhs.right_operand()))
 {
-	public:
-		binary_operation
-		(
-			const expression_t& left_operand,
-			const expression_t& right_operand
-		);
-
-		binary_operation(const binary_operation& rhs);
-
-		const expression_t&
-		left_operand() const
-		{
-			return *left_operand_;
-		}
-
-		const expression_t&
-		right_operand() const
-		{
-			return *right_operand_;
-		}
-
-	private:
-		std::unique_ptr<expression_t> left_operand_;
-		std::unique_ptr<expression_t> right_operand_;
-};
+}
 
 }}} //namespace scalpel::cpp::semantic_entities
-
-#include "binary_operation.ipp"
 
 #endif
 

@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_EXPRESSION_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_EXPRESSION_HPP
 
-#include "operations.hpp"
+#include "expressions.hpp"
 #include "conditional_expression.hpp"
 #include <scalpel/utility/variant.hpp>
 
@@ -31,7 +31,16 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 typedef
 	utility::variant
 	<
-		//binary operations
+		//unary expressions
+		prefix_increment_expression,
+		prefix_decrement_expression,
+		indirection_expression,
+		pointer_expression,
+		negation_expression,
+		logical_negation_expression,
+		complement_expression,
+
+		//binary expressions
 		multiplication_expression,
 		division_expression,
 		modulo_expression,
@@ -64,7 +73,7 @@ typedef
 		bitwise_exclusive_or_assignment_expression,
 		bitwise_inclusive_or_assignment_expression,
 
-		//ternary operation
+		//ternary expression
 		conditional_expression,
 
 		//boolean type

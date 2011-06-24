@@ -113,7 +113,7 @@ class grammar
 			ARROW_PSEUDO_DESTRUCTOR_NAME,
             PSEUDO_DESTRUCTOR_NAME,
             UNARY_EXPRESSION,
-			UNARY_OPERATOR_UNARY_EXPRESSION,
+			UNARY_OPERATOR_EXPRESSION,
 			TYPE_ID_SIZEOF_EXPRESSION,
 			UNARY_SIZEOF_EXPRESSION,
             UNARY_OPERATOR,
@@ -420,7 +420,7 @@ class grammar
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ARROW_PSEUDO_DESTRUCTOR_NAME>> arrow_pseudo_destructor_name;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::PSEUDO_DESTRUCTOR_NAME>> pseudo_destructor_name;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::UNARY_EXPRESSION>> unary_expression;
-		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::UNARY_OPERATOR_UNARY_EXPRESSION>> unary_operator_unary_expression;
+		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::UNARY_OPERATOR_EXPRESSION>> unary_operator_expression;
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TYPE_ID_SIZEOF_EXPRESSION>> type_id_sizeof_expression;
 		boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::UNARY_SIZEOF_EXPRESSION>> unary_sizeof_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::UNARY_OPERATOR>> unary_operator;

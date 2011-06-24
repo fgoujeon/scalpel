@@ -553,7 +553,7 @@ grammar::grammar()
 	;
 
 	unary_expression
-		= unary_operator_unary_expression
+		= unary_operator_expression
 		| type_id_sizeof_expression
 		| unary_sizeof_expression
 		| postfix_expression
@@ -561,7 +561,7 @@ grammar::grammar()
 		| delete_expression
 	;
 
-	unary_operator_unary_expression
+	unary_operator_expression
 		= unary_operator >> cast_expression
 	;
 

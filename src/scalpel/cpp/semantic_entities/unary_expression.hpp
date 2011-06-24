@@ -18,25 +18,40 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "unary_expression.hpp"
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_UNARY_EXPRESSION_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_UNARY_EXPRESSION_HPP
 
-#include "detail/macros/alternative_node_pimpl_definition.hpp"
+#include <memory>
 
-namespace scalpel { namespace cpp { namespace syntax_nodes
+namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-SCALPEL_ALTERNATIVE_NODE_PIMPL_DEFINITION
-(
-	unary_expression,
-	(unary_operator_expression)
-	(type_id_sizeof_expression)
-	(unary_sizeof_expression)
-	(postfix_expression)
-	(new_expression)
-	(delete_expression)
-)
+class expression_t;
 
-}}} //namespace scalpel::cpp::syntax_nodes
+template<int Tag>
+class unary_expression
+{
+	public:
+		unary_expression
+		(
+			const expression_t& operand
+		);
 
-#include "detail/macros/alternative_node_pimpl_definition_undef.hpp"
+		unary_expression(const unary_expression& rhs);
+
+		const expression_t&
+		operand() const
+		{
+			return *operand_;
+		}
+
+	private:
+		std::unique_ptr<expression_t> operand_;
+};
+
+}}} //namespace scalpel::cpp::semantic_entities
+
+#include "unary_expression.ipp"
+
+#endif
 
