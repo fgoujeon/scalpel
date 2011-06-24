@@ -22,6 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_NAMESPACE_CONSTRUCTION_IPP
 
 #include "expression_construction.hpp"
+#include "conversion_construction.hpp"
 #include "class_construction.hpp"
 #include "enum_construction.hpp"
 #include "function_construction.hpp"
@@ -216,7 +217,11 @@ fill_namespace
 						if(variable** opt_variable = get<variable*>(&declarator_entity))
 						{
 							variable& var = **opt_variable;
-							var.default_value(create_expression(assignment_expression_node, namespace_entity));
+
+							semantic_entities::expression_t expr = create_expression(assignment_expression_node, namespace_entity);
+							expr = create_conversion(expr, var.type());
+
+							var.default_value(expr);
 						}
 					}
 				}

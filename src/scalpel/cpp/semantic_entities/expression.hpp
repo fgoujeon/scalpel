@@ -21,8 +21,10 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_EXPRESSION_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_EXPRESSION_HPP
 
+#include "type_variant.hpp"
 #include "expressions.hpp"
 #include "conditional_expression.hpp"
+#include "boolean_conversion.hpp"
 #include <scalpel/utility/variant.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
@@ -75,6 +77,9 @@ typedef
 
 		//ternary expression
 		conditional_expression,
+
+		//conversions
+		boolean_conversion,
 
 		//boolean type
 		bool,
@@ -133,6 +138,9 @@ struct expression_t: public expression_t_t
 	{
 	}
 };
+
+type_variant
+get_type(const expression_t& expr);
 
 }}} //namespace scalpel::cpp::semantic_entities
 

@@ -567,6 +567,9 @@ operator()(const TYPE##_expression) \
 		EXPRESSION_TYPE(bitwise_and_assignment)
 		EXPRESSION_TYPE(bitwise_exclusive_or_assignment)
 		EXPRESSION_TYPE(bitwise_inclusive_or_assignment)
+
+		SIMPLE_TYPE(boolean_conversion)
+
 		SIMPLE_TYPE(bool)
 		SIMPLE_TYPE(char)
 		SIMPLE_TYPE(wchar_t)
@@ -650,6 +653,14 @@ semantic_graph_serializer::serialize_expression_visitor::operator()(const condit
 	output_ << indent(indent_level_) << "<false_operand>\n";
 	serializer_.serialize_expression(operation.false_operand(), indent_level_ + 1);
 	output_ << indent(indent_level_) << "</false_operand>\n";
+}
+
+void
+semantic_graph_serializer::serialize_expression_visitor::operator()(const boolean_conversion& conv)
+{
+	output_ << indent(indent_level_) << "<expression>\n";
+	serializer_.serialize_expression(conv.value(), indent_level_ + 1);
+	output_ << indent(indent_level_) << "</expression>\n";
 }
 
 void
