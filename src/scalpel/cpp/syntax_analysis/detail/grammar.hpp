@@ -159,13 +159,9 @@ class grammar
             CONDITIONAL_EXPRESSION,
             TEMPLATE_ARGUMENT_CONDITIONAL_EXPRESSION,
             ASSIGNMENT_EXPRESSION,
-            ASSIGNMENT_EXPRESSION_FIRST_PART_SEQ,
-            ASSIGNMENT_EXPRESSION_FIRST_PART,
-			ASSIGNMENT_EXPRESSION_LAST_PART,
+			ASSIGNMENT_ASSIGNMENT_EXPRESSION,
             TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION,
-			TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION_FIRST_PART_SEQ,
-			TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION_FIRST_PART,
-			TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION_LAST_PART,
+			TEMPLATE_ARGUMENT_ASSIGNMENT_ASSIGNMENT_EXPRESSION,
             ASSIGNMENT_OPERATOR,
             EXPRESSION,
 
@@ -470,13 +466,9 @@ class grammar
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::CONDITIONAL_EXPRESSION>> conditional_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_CONDITIONAL_EXPRESSION>> template_argument_conditional_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ASSIGNMENT_EXPRESSION>> assignment_expression;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ASSIGNMENT_EXPRESSION_FIRST_PART_SEQ>> assignment_expression_first_part_seq;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ASSIGNMENT_EXPRESSION_FIRST_PART>> assignment_expression_first_part;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ASSIGNMENT_EXPRESSION_LAST_PART>> assignment_expression_last_part;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ASSIGNMENT_ASSIGNMENT_EXPRESSION>> assignment_assignment_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION>> template_argument_assignment_expression;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION_FIRST_PART_SEQ>> template_argument_assignment_expression_first_part_seq;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION_FIRST_PART>> template_argument_assignment_expression_first_part;
-        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_ASSIGNMENT_EXPRESSION_LAST_PART>> template_argument_assignment_expression_last_part;
+        boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::TEMPLATE_ARGUMENT_ASSIGNMENT_ASSIGNMENT_EXPRESSION>> template_argument_assignment_assignment_expression;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::ASSIGNMENT_OPERATOR>> assignment_operator;
         boost::spirit::rule<scanner_t, boost::spirit::parser_context<>, boost::spirit::parser_tag<grammar::EXPRESSION>> expression;
 

@@ -51,6 +51,19 @@ typedef
 		logical_and_expression,
 		logical_or_expression,
 
+		//assignment expressions
+		assignment_expression,
+		multiplication_assignment_expression,
+		division_assignment_expression,
+		modulo_assignment_expression,
+		addition_assignment_expression,
+		subtraction_assignment_expression,
+		left_shift_assignment_expression,
+		right_shift_assignment_expression,
+		bitwise_and_assignment_expression,
+		bitwise_exclusive_or_assignment_expression,
+		bitwise_inclusive_or_assignment_expression,
+
 		//ternary operation
 		conditional_expression,
 

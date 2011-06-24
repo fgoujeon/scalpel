@@ -45,7 +45,19 @@ enum class operation_tag
 	BITWISE_EXCLUSIVE_OR,
 	BITWISE_INCLUSIVE_OR,
 	LOGICAL_AND,
-	LOGICAL_OR
+	LOGICAL_OR,
+
+	ASSIGNMENT,
+	MULTIPLICATION_ASSIGNMENT,
+	DIVISION_ASSIGNMENT,
+	MODULO_ASSIGNMENT,
+	ADDITION_ASSIGNMENT,
+	SUBTRACTION_ASSIGNMENT,
+	LEFT_SHIFT_ASSIGNMENT,
+	RIGHT_SHIFT_ASSIGNMENT,
+	BITWISE_AND_ASSIGNMENT,
+	BITWISE_EXCLUSIVE_OR_ASSIGNMENT,
+	BITWISE_INCLUSIVE_OR_ASSIGNMENT
 };
 
 typedef
@@ -136,6 +148,61 @@ typedef
 typedef
 	binary_operation<static_cast<int>(operation_tag::LOGICAL_OR)>
 	logical_or_expression
+;
+
+typedef
+	binary_operation<static_cast<int>(operation_tag::ASSIGNMENT)>
+	assignment_expression
+;
+
+typedef
+	binary_operation<static_cast<int>(operation_tag::MULTIPLICATION_ASSIGNMENT)>
+	multiplication_assignment_expression
+;
+
+typedef
+	binary_operation<static_cast<int>(operation_tag::DIVISION_ASSIGNMENT)>
+	division_assignment_expression
+;
+
+typedef
+	binary_operation<static_cast<int>(operation_tag::MODULO_ASSIGNMENT)>
+	modulo_assignment_expression
+;
+
+typedef
+	binary_operation<static_cast<int>(operation_tag::ADDITION_ASSIGNMENT)>
+	addition_assignment_expression
+;
+
+typedef
+	binary_operation<static_cast<int>(operation_tag::SUBTRACTION_ASSIGNMENT)>
+	subtraction_assignment_expression
+;
+
+typedef
+	binary_operation<static_cast<int>(operation_tag::LEFT_SHIFT_ASSIGNMENT)>
+	left_shift_assignment_expression
+;
+
+typedef
+	binary_operation<static_cast<int>(operation_tag::RIGHT_SHIFT_ASSIGNMENT)>
+	right_shift_assignment_expression
+;
+
+typedef
+	binary_operation<static_cast<int>(operation_tag::BITWISE_AND_ASSIGNMENT)>
+	bitwise_and_assignment_expression
+;
+
+typedef
+	binary_operation<static_cast<int>(operation_tag::BITWISE_EXCLUSIVE_OR_ASSIGNMENT)>
+	bitwise_exclusive_or_assignment_expression
+;
+
+typedef
+	binary_operation<static_cast<int>(operation_tag::BITWISE_INCLUSIVE_OR_ASSIGNMENT)>
+	bitwise_inclusive_or_assignment_expression
 ;
 
 }}} //namespace scalpel::cpp::semantic_entities

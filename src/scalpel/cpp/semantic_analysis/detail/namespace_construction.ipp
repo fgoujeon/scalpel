@@ -209,9 +209,9 @@ fill_namespace
 					const equal_initializer& equal_initializer_node = *opt_equal_initializer_node;
 					const initializer_clause& initializer_clause_node = get_initializer_clause(equal_initializer_node);
 
-					if(const boost::optional<const assignment_expression&>& opt_assignment_expression_node = get<assignment_expression>(&initializer_clause_node))
+					if(const boost::optional<const syntax_nodes::assignment_expression&>& opt_assignment_expression_node = get<syntax_nodes::assignment_expression>(&initializer_clause_node))
 					{
-						const assignment_expression& assignment_expression_node = *opt_assignment_expression_node;
+						const syntax_nodes::assignment_expression& assignment_expression_node = *opt_assignment_expression_node;
 
 						if(variable** opt_variable = get<variable*>(&declarator_entity))
 						{

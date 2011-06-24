@@ -750,40 +750,22 @@ grammar::grammar()
 		= template_argument_logical_or_expression >> !('?' >> expression >> ':' >> template_argument_assignment_expression)
 	;
 
-	/*
-	Original rule is:
-		assignment_expression
-			= logical_or_expression >> assignment_operator >> assignment_expression
-			| conditional_expression
-			| throw_expression
-		;
-	*/
 	assignment_expression
-		= !assignment_expression_first_part_seq >> assignment_expression_last_part
-	;
-	assignment_expression_first_part_seq
-		= +assignment_expression_first_part
-	;
-	assignment_expression_first_part
-		= logical_or_expression >> assignment_operator
-	;
-	assignment_expression_last_part
-		= conditional_expression
+		= assignment_assignment_expression
+		| conditional_expression
 		| throw_expression
+	;
+	assignment_assignment_expression
+		= logical_or_expression >> assignment_operator >> assignment_expression
 	;
 
 	template_argument_assignment_expression
-		= !template_argument_assignment_expression_first_part_seq >> template_argument_assignment_expression_last_part
-	;
-	template_argument_assignment_expression_first_part_seq
-		= +template_argument_assignment_expression_first_part
-	;
-	template_argument_assignment_expression_first_part
-		= template_argument_logical_or_expression >> assignment_operator
-	;
-	template_argument_assignment_expression_last_part
-		= template_argument_conditional_expression
+		= template_argument_assignment_assignment_expression
+		| template_argument_conditional_expression
 		| throw_expression
+	;
+	template_argument_assignment_assignment_expression
+		= template_argument_logical_or_expression >> assignment_operator >> template_argument_assignment_expression
 	;
 
 	assignment_operator

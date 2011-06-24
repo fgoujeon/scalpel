@@ -132,7 +132,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "syntax_nodes/string_literal.hpp"
 #include "syntax_nodes/switch_statement.hpp"
 #include "syntax_nodes/template_argument.hpp"
-#include "syntax_nodes/template_argument_assignment_expression.hpp"
 #include "syntax_nodes/template_argument_list.hpp"
 #include "syntax_nodes/template_declaration.hpp"
 #include "syntax_nodes/template_id.hpp"
@@ -157,3 +156,4 @@ typedef syntax_nodes::translation_unit syntax_tree;
 }} //namespace scalpel::cpp
 
 #endif
+

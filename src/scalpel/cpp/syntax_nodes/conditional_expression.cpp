@@ -33,6 +33,14 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 	(optional_node<assignment_expression>)
 )
 
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
+(
+	template_argument_conditional_expression,
+	(template_argument_logical_or_expression)
+	(optional_node<expression>)
+	(optional_node<template_argument_assignment_expression>)
+)
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #include "detail/macros/sequence_node_pimpl_definition_undef.hpp"

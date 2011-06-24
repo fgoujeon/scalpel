@@ -47,6 +47,14 @@ template<class DeclarativeRegion>
 semantic_entities::expression_t
 create_expression
 (
+	const syntax_nodes::assignment_assignment_expression& assignment_assignment_expression_node,
+	DeclarativeRegion& declarative_region
+);
+
+template<class DeclarativeRegion>
+semantic_entities::expression_t
+create_expression
+(
 	const syntax_nodes::conditional_expression& conditional_expression_node,
 	DeclarativeRegion& declarative_region
 );

@@ -66,6 +66,40 @@ get_false_operand(const conditional_expression& o)
 	return get<2>(o);
 }
 
+
+
+class template_argument_assignment_expression;
+class template_argument_logical_or_expression;
+
+SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
+(
+	template_argument_conditional_expression,
+	(template_argument_logical_or_expression)
+	(optional_node<expression>)
+	(optional_node<template_argument_assignment_expression>)
+)
+
+inline
+const template_argument_logical_or_expression&
+get_condition_operand(const template_argument_conditional_expression& o)
+{
+	return get<0>(o);
+}
+
+inline
+const optional_node<expression>&
+get_true_operand(const template_argument_conditional_expression& o)
+{
+	return get<1>(o);
+}
+
+inline
+const optional_node<template_argument_assignment_expression>&
+get_false_operand(const template_argument_conditional_expression& o)
+{
+	return get<2>(o);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"

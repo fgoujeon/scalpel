@@ -22,26 +22,66 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "expressions.hpp"
 #include "conditional_expression.hpp"
 
+#include "detail/macros/alternative_node_pimpl_definition.hpp"
 #include "detail/macros/sequence_node_pimpl_definition.hpp"
 
 namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
-SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
+SCALPEL_ALTERNATIVE_NODE_PIMPL_DEFINITION
 (
 	assignment_expression,
-	(optional_node<assignment_expression_first_part_seq>)
-	(assignment_expression_last_part)
+	(assignment_assignment_expression)
+	(conditional_expression)
+	(throw_expression)
 )
 
 SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
 (
-	assignment_expression_first_part,
+	assignment_assignment_expression,
 	(logical_or_expression)
 	(assignment_operator)
+	(assignment_expression)
+)
+
+const logical_or_expression&
+get_left_operand(const assignment_assignment_expression& o)
+{
+	return get<0>(o);
+}
+
+const assignment_operator&
+get_operator(const assignment_assignment_expression& o)
+{
+	return get<1>(o);
+}
+
+const assignment_expression&
+get_right_operand(const assignment_assignment_expression& o)
+{
+	return get<2>(o);
+}
+
+
+
+SCALPEL_ALTERNATIVE_NODE_PIMPL_DEFINITION
+(
+	template_argument_assignment_expression,
+	(template_argument_assignment_assignment_expression)
+	(template_argument_conditional_expression)
+	(throw_expression)
+)
+
+SCALPEL_SEQUENCE_NODE_PIMPL_DEFINITION
+(
+	template_argument_assignment_assignment_expression,
+	(template_argument_logical_or_expression)
+	(assignment_operator)
+	(template_argument_assignment_expression)
 )
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #include "detail/macros/sequence_node_pimpl_definition_undef.hpp"
+#include "detail/macros/alternative_node_pimpl_definition_undef.hpp"
 

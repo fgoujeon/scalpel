@@ -49,24 +49,110 @@ create_expression
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
 
-	if(/*const optional_node<assignment_expression_first_part_seq>& first_part_seq_node =*/ get_first_part_seq(assignment_expression_node))
+	if(const boost::optional<const assignment_assignment_expression&>& opt_assignment_assignment_expression_node = get<assignment_assignment_expression>(&assignment_expression_node))
 	{
-		assert(false); //TODO
+		const assignment_assignment_expression& assignment_assignment_expression_node = *opt_assignment_assignment_expression_node;
+		return create_expression(assignment_assignment_expression_node, declarative_region);
 	}
-
-	const assignment_expression_last_part& last_part_node = get_last_part(assignment_expression_node);
-	if(const boost::optional<const syntax_nodes::conditional_expression&>& opt_conditional_expression_node = get<syntax_nodes::conditional_expression>(&last_part_node))
+	else if(const boost::optional<const syntax_nodes::conditional_expression&>& opt_conditional_expression_node = get<syntax_nodes::conditional_expression>(&assignment_expression_node))
 	{
-		return create_expression(*opt_conditional_expression_node, declarative_region);
+		const syntax_nodes::conditional_expression& conditional_expression_node = *opt_conditional_expression_node;
+		return create_expression(conditional_expression_node, declarative_region);
 	}
-	else if(/*const boost::optional<const throw_expression&>& opt_throw_expression_node =*/ get<throw_expression>(&last_part_node))
+	else if(/*const boost::optional<const syntax_nodes::throw_expression&>& opt_throw_expression_node =*/ get<syntax_nodes::throw_expression>(&assignment_expression_node))
 	{
+		//const throw_expression& throw_expression_node = *opt_throw_expression_node;
 		assert(false); //TODO
 	}
 	else
 	{
 		assert(false);
 	}
+}
+
+template<class DeclarativeRegion>
+semantic_entities::expression_t
+create_expression
+(
+	const syntax_nodes::assignment_assignment_expression& assignment_assignment_expression_node,
+	DeclarativeRegion& declarative_region
+)
+{
+	using namespace syntax_nodes;
+	using namespace semantic_entities;
+
+	const syntax_nodes::logical_or_expression& left_operand_node = get_left_operand(assignment_assignment_expression_node);
+	const syntax_nodes::assignment_expression& right_operand_node = get_right_operand(assignment_assignment_expression_node);
+	const assignment_operator& operator_node = get_operator(assignment_assignment_expression_node);
+
+	if(get<predefined_text_node<str::equal>>(&operator_node))
+		return semantic_entities::assignment_expression
+		(
+			create_expression(left_operand_node, declarative_region),
+			create_expression(right_operand_node, declarative_region)
+		);
+	else if(get<predefined_text_node<str::asterisk_equal>>(&operator_node))
+		return semantic_entities::multiplication_assignment_expression
+		(
+			create_expression(left_operand_node, declarative_region),
+			create_expression(right_operand_node, declarative_region)
+		);
+	else if(get<predefined_text_node<str::slash_equal>>(&operator_node))
+		return semantic_entities::division_assignment_expression
+		(
+			create_expression(left_operand_node, declarative_region),
+			create_expression(right_operand_node, declarative_region)
+		);
+	else if(get<predefined_text_node<str::percent_equal>>(&operator_node))
+		return semantic_entities::modulo_assignment_expression
+		(
+			create_expression(left_operand_node, declarative_region),
+			create_expression(right_operand_node, declarative_region)
+		);
+	else if(get<predefined_text_node<str::plus_equal>>(&operator_node))
+		return semantic_entities::addition_assignment_expression
+		(
+			create_expression(left_operand_node, declarative_region),
+			create_expression(right_operand_node, declarative_region)
+		);
+	else if(get<predefined_text_node<str::minus_equal>>(&operator_node))
+		return semantic_entities::subtraction_assignment_expression
+		(
+			create_expression(left_operand_node, declarative_region),
+			create_expression(right_operand_node, declarative_region)
+		);
+	else if(get<predefined_text_node<str::double_right_angle_bracket_equal>>(&operator_node))
+		return semantic_entities::right_shift_assignment_expression
+		(
+			create_expression(left_operand_node, declarative_region),
+			create_expression(right_operand_node, declarative_region)
+		);
+	else if(get<predefined_text_node<str::double_left_angle_bracket_equal>>(&operator_node))
+		return semantic_entities::left_shift_assignment_expression
+		(
+			create_expression(left_operand_node, declarative_region),
+			create_expression(right_operand_node, declarative_region)
+		);
+	else if(get<predefined_text_node<str::ampersand_equal>>(&operator_node))
+		return semantic_entities::bitwise_and_assignment_expression
+		(
+			create_expression(left_operand_node, declarative_region),
+			create_expression(right_operand_node, declarative_region)
+		);
+	else if(get<predefined_text_node<str::circumflex_equal>>(&operator_node))
+		return semantic_entities::bitwise_exclusive_or_assignment_expression
+		(
+			create_expression(left_operand_node, declarative_region),
+			create_expression(right_operand_node, declarative_region)
+		);
+	else if(get<predefined_text_node<str::pipe_equal>>(&operator_node))
+		return semantic_entities::bitwise_inclusive_or_assignment_expression
+		(
+			create_expression(left_operand_node, declarative_region),
+			create_expression(right_operand_node, declarative_region)
+		);
+	else
+		assert(false);
 }
 
 template<class DeclarativeRegion>
