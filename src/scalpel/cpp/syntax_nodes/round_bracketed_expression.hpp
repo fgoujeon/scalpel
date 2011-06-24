@@ -35,12 +35,17 @@ round_bracketed_expression
 typedef
 	sequence_node
 	<
-		predefined_text_node<str::opening_round_bracket>,
-		expression,
-		predefined_text_node<str::closing_round_bracket>
+		expression
 	>
 	round_bracketed_expression
 ;
+
+inline
+const expression&
+get_expression(const round_bracketed_expression& o)
+{
+	return get<0>(o);
+}
 
 }}} //namespace scalpel::cpp::syntax_nodes
 

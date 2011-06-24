@@ -609,16 +609,16 @@ semantic_entities::expression_t
 create_expression
 (
 	const syntax_nodes::primary_expression& primary_expression_node,
-	DeclarativeRegion& /*declarative_region*/
+	DeclarativeRegion& declarative_region
 )
 {
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
 
 	if(const boost::optional<const literal&>& opt_literal_node = get<literal>(&primary_expression_node))
-	{
 		return create_expression(*opt_literal_node);
-	}
+	else if(const boost::optional<const round_bracketed_expression&>& opt_round_bracketed_expression_node = get<round_bracketed_expression>(&primary_expression_node))
+		return create_expression(get_expression(*opt_round_bracketed_expression_node), declarative_region);
 	else
 	{
 		assert(false); //TODO

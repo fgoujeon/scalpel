@@ -334,7 +334,7 @@ grammar::grammar()
 	;
 
 	round_bracketed_expression
-		= '(' >> expression >> ')'
+		= no_node_d[ch_p('(')] >> expression >> no_node_d[ch_p(')')]
 	;
 
 	id_expression
