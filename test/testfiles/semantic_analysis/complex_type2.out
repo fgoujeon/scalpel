@@ -3,11 +3,11 @@
   <type>
    <pointer>
     <pointer>
-     <array size="0">
+     <array size="3">
       <pointer>
        <cv_qualified_type const="true">
         <pointer>
-         <array size="0">
+         <array size="5">
           <fundamental_type type="int"/>
          </array>
         </pointer>

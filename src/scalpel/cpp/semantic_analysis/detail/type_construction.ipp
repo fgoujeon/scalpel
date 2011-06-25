@@ -21,6 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_TYPE_CONSTRUCTION_IPP
 #define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_TYPE_CONSTRUCTION_IPP
 
+#include "expression_construction.hpp"
+#include "expression_evaluation.hpp"
 #include "class_construction.hpp"
 #include "name_lookup.hpp"
 #include "syntax_node_analysis/class_specifier.hpp"
@@ -461,7 +463,7 @@ qualify_type
 	using namespace syntax_nodes;
 	using namespace semantic_entities;
 
-	for(auto i = last_part_seq_node.begin(); i != last_part_seq_node.end(); ++i)
+	for(auto i = last_part_seq_node.rbegin(); i != last_part_seq_node.rend(); ++i)
 	{
 		const direct_declarator_last_part& last_part_node = *i;
 		type = qualify_type(type, last_part_node, current_declarative_region, ignore_function_type);
@@ -506,9 +508,14 @@ qualify_type
 			get<direct_declarator_array_part>(&last_part_node)
 	)
 	{
-		if(get_conditional_expression(*opt_array_part_node))
+		if(const optional_node<syntax_nodes::conditional_expression>& opt_conditional_expression_node = get_conditional_expression(*opt_array_part_node))
 		{
-			type = array(0, type);
+			const syntax_nodes::conditional_expression& conditional_expression_node = *opt_conditional_expression_node;
+
+			const semantic_entities::expression_t expr = create_expression(conditional_expression_node, current_declarative_region);
+			const unsigned int size = evaluate_expression_to_unsigned_int(expr);
+
+			type = array(size, type);
 		}
 		else
 		{

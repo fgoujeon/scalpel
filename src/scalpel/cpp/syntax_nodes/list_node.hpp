@@ -34,6 +34,7 @@ class list_node
 		typedef std::vector<T> nodes_t;
 		typedef T type;
 		typedef typename nodes_t::const_iterator const_iterator;
+		typedef typename nodes_t::const_reverse_iterator const_reverse_iterator;
 
         list_node();
 
@@ -65,10 +66,22 @@ class list_node
 			return nodes_.begin();
 		}
 
+		const_reverse_iterator
+		rbegin() const
+		{
+			return nodes_.rbegin();
+		}
+
 		const_iterator
 		end() const
 		{
 			return nodes_.end();
+		}
+
+		const_reverse_iterator
+		rend() const
+		{
+			return nodes_.rend();
 		}
 
 		const T&
