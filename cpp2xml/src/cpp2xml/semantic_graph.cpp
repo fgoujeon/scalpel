@@ -734,7 +734,7 @@ semantic_graph_serializer::serialize_expression
 
 
 
-#define serialize_member(TYPE, FUNCTION) \
+#define SERIALIZE_MEMBER(TYPE, FUNCTION) \
 template<> \
 void \
 semantic_graph_serializer::serialize_member<semantic_entities::TYPE> \
@@ -746,33 +746,33 @@ semantic_graph_serializer::serialize_member<semantic_entities::TYPE> \
 	FUNCTION(entity, indent_level); \
 }
 
-serialize_member(namespace_alias, serialize_namespace_alias)
-serialize_member(namespace_, serialize_namespace)
-serialize_member(linked_namespace, serialize_namespace)
-serialize_member(unnamed_namespace, serialize_unnamed_namespace)
-serialize_member(linked_unnamed_namespace, serialize_unnamed_namespace)
-serialize_member(class_, serialize_class)
-serialize_member(member_class, serialize_class)
-serialize_member(union_, serialize_class)
-serialize_member(member_union, serialize_class)
-serialize_member(anonymous_union, serialize_class)
-serialize_member(anonymous_member_union, serialize_class)
-serialize_member(enum_, serialize_enum)
-serialize_member(member_enum, serialize_enum)
-serialize_member(typedef_, serialize_typedef)
-serialize_member(member_typedef, serialize_typedef)
-serialize_member(constructor, serialize_constructor)
-serialize_member(destructor, serialize_destructor)
-serialize_member(operator_member_function, serialize_operator_member_function)
-serialize_member(conversion_function, serialize_conversion_function)
-serialize_member(simple_member_function, serialize_simple_member_function)
-serialize_member(operator_function, serialize_operator_function)
-serialize_member(simple_function, serialize_simple_function)
-serialize_member(variable, serialize_variable)
-serialize_member(member_variable, serialize_variable)
-serialize_member(bit_field, serialize_variable)
+SERIALIZE_MEMBER(namespace_alias, serialize_namespace_alias)
+SERIALIZE_MEMBER(namespace_, serialize_namespace)
+SERIALIZE_MEMBER(linked_namespace, serialize_namespace)
+SERIALIZE_MEMBER(unnamed_namespace, serialize_unnamed_namespace)
+SERIALIZE_MEMBER(linked_unnamed_namespace, serialize_unnamed_namespace)
+SERIALIZE_MEMBER(class_, serialize_class)
+SERIALIZE_MEMBER(member_class, serialize_class)
+SERIALIZE_MEMBER(union_, serialize_class)
+SERIALIZE_MEMBER(member_union, serialize_class)
+SERIALIZE_MEMBER(anonymous_union, serialize_class)
+SERIALIZE_MEMBER(anonymous_member_union, serialize_class)
+SERIALIZE_MEMBER(enum_, serialize_enum)
+SERIALIZE_MEMBER(member_enum, serialize_enum)
+SERIALIZE_MEMBER(typedef_, serialize_typedef)
+SERIALIZE_MEMBER(member_typedef, serialize_typedef)
+SERIALIZE_MEMBER(constructor, serialize_constructor)
+SERIALIZE_MEMBER(destructor, serialize_destructor)
+SERIALIZE_MEMBER(operator_member_function, serialize_operator_member_function)
+SERIALIZE_MEMBER(conversion_function, serialize_conversion_function)
+SERIALIZE_MEMBER(simple_member_function, serialize_simple_member_function)
+SERIALIZE_MEMBER(operator_function, serialize_operator_function)
+SERIALIZE_MEMBER(simple_function, serialize_simple_function)
+SERIALIZE_MEMBER(variable, serialize_variable)
+SERIALIZE_MEMBER(member_variable, serialize_variable)
+SERIALIZE_MEMBER(bit_field, serialize_variable)
 
-#undef serialize_member
+#undef SERIALIZE_MEMBER
 
 
 

@@ -151,7 +151,21 @@
    </expression>
   </default_value>
  </variable>
- <variable id="8" name="i01">
+ <variable id="8" name="b9">
+  <type>
+   <fundamental_type type="bool"/>
+  </type>
+  <default_value>
+   <expression type="logical_negation">
+    <operand>
+     <expression type="bool">
+      true
+     </expression>
+    </operand>
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="9" name="i01">
   <type>
    <fundamental_type type="int"/>
   </type>
@@ -170,7 +184,7 @@
    </expression>
   </default_value>
  </variable>
- <variable id="9" name="i02">
+ <variable id="10" name="i02">
   <type>
    <fundamental_type type="int"/>
   </type>
@@ -189,7 +203,7 @@
    </expression>
   </default_value>
  </variable>
- <variable id="10" name="i03">
+ <variable id="11" name="i03">
   <type>
    <fundamental_type type="int"/>
   </type>
@@ -208,7 +222,7 @@
    </expression>
   </default_value>
  </variable>
- <variable id="11" name="i04">
+ <variable id="12" name="i04">
   <type>
    <fundamental_type type="int"/>
   </type>
@@ -227,7 +241,7 @@
    </expression>
   </default_value>
  </variable>
- <variable id="12" name="i05">
+ <variable id="13" name="i05">
   <type>
    <fundamental_type type="int"/>
   </type>
@@ -246,7 +260,7 @@
    </expression>
   </default_value>
  </variable>
- <variable id="13" name="i06">
+ <variable id="14" name="i06">
   <type>
    <fundamental_type type="int"/>
   </type>
@@ -265,7 +279,7 @@
    </expression>
   </default_value>
  </variable>
- <variable id="14" name="i07">
+ <variable id="15" name="i07">
   <type>
    <fundamental_type type="int"/>
   </type>
@@ -284,7 +298,7 @@
    </expression>
   </default_value>
  </variable>
- <variable id="15" name="i08">
+ <variable id="16" name="i08">
   <type>
    <fundamental_type type="int"/>
   </type>
@@ -303,7 +317,7 @@
    </expression>
   </default_value>
  </variable>
- <variable id="16" name="i09">
+ <variable id="17" name="i09">
   <type>
    <fundamental_type type="int"/>
   </type>
@@ -322,7 +336,7 @@
    </expression>
   </default_value>
  </variable>
- <variable id="17" name="i10">
+ <variable id="18" name="i10">
   <type>
    <fundamental_type type="int"/>
   </type>
@@ -341,7 +355,45 @@
    </expression>
   </default_value>
  </variable>
- <variable id="18" name="i11">
+ <variable id="19" name="i11">
+  <type>
+   <fundamental_type type="int"/>
+  </type>
+  <default_value>
+   <expression type="int">
+    7
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="20" name="i12">
+  <type>
+   <fundamental_type type="int"/>
+  </type>
+  <default_value>
+   <expression type="negation">
+    <operand>
+     <expression type="int">
+      7
+     </expression>
+    </operand>
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="21" name="i13">
+  <type>
+   <fundamental_type type="int"/>
+  </type>
+  <default_value>
+   <expression type="complement">
+    <operand>
+     <expression type="int">
+      7
+     </expression>
+    </operand>
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="22" name="i14">
   <type>
    <fundamental_type type="int"/>
   </type>

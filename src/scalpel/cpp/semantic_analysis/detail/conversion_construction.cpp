@@ -133,7 +133,7 @@ namespace
 			semantic_entities::expression_t
 			operator()(const pointer& /*type*/) const
 			{
-				assert(false);
+				return expr_; //TODO
 			}
 
 			semantic_entities::expression_t

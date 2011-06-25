@@ -1,0 +1,80 @@
+<namespace id="0">
+ <variable id="0" name="i">
+  <type>
+   <fundamental_type type="int"/>
+  </type>
+  <default_value>
+   <expression type="int">
+    0
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="1" name="i1">
+  <type>
+   <fundamental_type type="int"/>
+  </type>
+  <default_value>
+   <expression type="variable">
+    <variable id="0"/>
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="2" name="i2">
+  <type>
+   <fundamental_type type="int"/>
+  </type>
+  <default_value>
+   <expression type="prefix_increment">
+    <operand>
+     <expression type="variable">
+      <variable id="0"/>
+     </expression>
+    </operand>
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="3" name="i3">
+  <type>
+   <fundamental_type type="int"/>
+  </type>
+  <default_value>
+   <expression type="prefix_decrement">
+    <operand>
+     <expression type="variable">
+      <variable id="0"/>
+     </expression>
+    </operand>
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="4" name="i4">
+  <type>
+   <pointer>
+    <fundamental_type type="int"/>
+   </pointer>
+  </type>
+  <default_value>
+   <expression type="pointer">
+    <operand>
+     <expression type="variable">
+      <variable id="0"/>
+     </expression>
+    </operand>
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="5" name="i5">
+  <type>
+   <fundamental_type type="int"/>
+  </type>
+  <default_value>
+   <expression type="indirection">
+    <operand>
+     <expression type="variable">
+      <variable id="4"/>
+     </expression>
+    </operand>
+   </expression>
+  </default_value>
+ </variable>
+</namespace>

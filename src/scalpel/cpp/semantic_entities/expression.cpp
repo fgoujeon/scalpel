@@ -51,6 +51,14 @@ operator()(const TYPE&) \
 
 
 		//
+		//unary expressions
+		//
+
+		FUNDAMENTAL_TYPE(logical_negation_expression, fundamental_type::BOOL)
+
+
+
+		//
 		//binary expressions
 		//
 
