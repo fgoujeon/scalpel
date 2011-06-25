@@ -179,6 +179,9 @@ class semantic_graph_serializer
 				operator()(const boolean_conversion& conv);
 
 				void
+				operator()(variable* const& v);
+
+				void
 				operator()(const char c);
 
 				void

@@ -21,6 +21,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_EXPRESSION_CONSTRUCTION_IPP
 #define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_EXPRESSION_CONSTRUCTION_IPP
 
+#include "name_lookup.hpp"
+#include "semantic_entity_analysis/identification_policies.hpp"
+
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail
 {
 
@@ -680,10 +683,78 @@ create_expression
 		return create_expression(*opt_literal_node);
 	else if(const boost::optional<const round_bracketed_expression&>& opt_round_bracketed_expression_node = get<round_bracketed_expression>(&primary_expression_node))
 		return create_expression(get_expression(*opt_round_bracketed_expression_node), declarative_region);
+	else if(const boost::optional<const id_expression&>& opt_id_expression_node = get<id_expression>(&primary_expression_node))
+		return create_expression(*opt_id_expression_node, declarative_region);
 	else
-	{
 		assert(false); //TODO
-	}
+}
+
+template<class DeclarativeRegion>
+semantic_entities::expression_t
+create_expression
+(
+	const syntax_nodes::id_expression& id_expression_node,
+	DeclarativeRegion& declarative_region
+)
+{
+	using namespace syntax_nodes;
+	using namespace semantic_entities;
+
+	if(const boost::optional<const unqualified_id&>& opt_unqualified_id_node = get<unqualified_id>(&id_expression_node))
+		return create_expression(*opt_unqualified_id_node, declarative_region);
+	//else if(const boost::optional<const qualified_id&>& opt_qualified_id_node = get<qualified_id>(&id_expression_node))
+	//	return create_expression(*opt_qualified_id_node, declarative_region);
+	else
+		assert(false);
+}
+
+template<class DeclarativeRegion>
+semantic_entities::expression_t
+create_expression
+(
+	const syntax_nodes::unqualified_id& unqualified_id_node,
+	DeclarativeRegion& declarative_region
+)
+{
+	using namespace syntax_nodes;
+	using namespace semantic_entities;
+
+	//if(const boost::optional<const operator_function_id&>& opt_operator_function_id_node = get<operator_function_id>(&unqualified_id_node))
+	//	return create_expression(*opt_operator_function_id_node, declarative_region);
+	//else if(const boost::optional<const conversion_function_id&>& opt_conversion_function_id_node = get<conversion_function_id>(&unqualified_id_node))
+	//	return create_expression(*opt_conversion_function_id_node, declarative_region);
+	//else if(const boost::optional<const destructor_name&>& opt_destructor_name_node = get<destructor_name>(&unqualified_id_node))
+	//	return create_expression(*opt_destructor_name_node, declarative_region);
+	//else if(const boost::optional<const template_id&>& opt_template_id_node = get<template_id>(&unqualified_id_node))
+	//	return create_expression(*opt_template_id_node, declarative_region);
+	/*else*/ if(const boost::optional<const identifier&>& opt_identifier_node = get<identifier>(&unqualified_id_node))
+		return create_expression(*opt_identifier_node, declarative_region);
+	else
+		assert(false);
+}
+
+template<class DeclarativeRegion>
+semantic_entities::expression_t
+create_expression
+(
+	const syntax_nodes::identifier& identifier_node,
+	DeclarativeRegion& declarative_region
+)
+{
+	using namespace semantic_entities;
+
+	auto found_entity =
+		name_lookup::find<semantic_entity_analysis::identification_policies::by_name, false, false, variable, member_variable>
+		(
+			identifier_node.value(),
+			&declarative_region
+		)
+	;
+
+	if(variable** opt_variable = utility::get<variable*>(&found_entity))
+		return *opt_variable;
+	else
+		assert(false);
 }
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail

@@ -187,6 +187,30 @@ create_expression
 	DeclarativeRegion& declarative_region
 );
 
+template<class DeclarativeRegion>
+semantic_entities::expression_t
+create_expression
+(
+	const syntax_nodes::id_expression& id_expression_node,
+	DeclarativeRegion& declarative_region
+);
+
+template<class DeclarativeRegion>
+semantic_entities::expression_t
+create_expression
+(
+	const syntax_nodes::unqualified_id& unqualified_id_node,
+	DeclarativeRegion& declarative_region
+);
+
+template<class DeclarativeRegion>
+semantic_entities::expression_t
+create_expression
+(
+	const syntax_nodes::identifier& identifier_node,
+	DeclarativeRegion& declarative_region
+);
+
 semantic_entities::expression_t
 create_expression(const syntax_nodes::literal& literal_node);
 

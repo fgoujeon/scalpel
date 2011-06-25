@@ -514,6 +514,13 @@ semantic_graph_serializer::serialize_namespace_alias
 
 namespace
 {
+#define PTR_TYPE(TYPE) \
+std::string \
+operator()(const TYPE*) \
+{ \
+	return #TYPE; \
+}
+
 #define SIMPLE_TYPE(TYPE) \
 std::string \
 operator()(const TYPE) \
@@ -570,6 +577,8 @@ operator()(const TYPE##_expression) \
 
 		SIMPLE_TYPE(boolean_conversion)
 
+		PTR_TYPE(variable)
+
 		SIMPLE_TYPE(bool)
 		SIMPLE_TYPE(char)
 		SIMPLE_TYPE(wchar_t)
@@ -598,6 +607,7 @@ operator()(const TYPE##_expression) \
 
 #undef EXPRESSION_TYPE
 #undef SIMPLE_TYPE
+#undef PTR_TYPE
 }
 
 
@@ -661,6 +671,12 @@ semantic_graph_serializer::serialize_expression_visitor::operator()(const boolea
 	output_ << indent(indent_level_) << "<expression>\n";
 	serializer_.serialize_expression(conv.value(), indent_level_ + 1);
 	output_ << indent(indent_level_) << "</expression>\n";
+}
+
+void
+semantic_graph_serializer::serialize_expression_visitor::operator()(variable* const& v)
+{
+	output_ << indent(indent_level_) << "<variable id=\"" << serializer_.get_id(*v) << "\"/>\n";
 }
 
 void
