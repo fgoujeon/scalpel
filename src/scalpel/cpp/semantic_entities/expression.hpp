@@ -23,6 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "type_variant.hpp"
 #include "expressions.hpp"
+#include "conversions.hpp"
 #include "conditional_expression.hpp"
 #include "boolean_conversion.hpp"
 #include <scalpel/utility/variant.hpp>
@@ -82,6 +83,13 @@ typedef
 
 		//conversions
 		boolean_conversion,
+		conversion_to_int,
+		conversion_to_long_int,
+		conversion_to_unsigned_int,
+		conversion_to_unsigned_long_int,
+		conversion_to_float,
+		conversion_to_double,
+		conversion_to_long_double,
 
 		//entities
 		variable*,
@@ -146,6 +154,9 @@ struct expression_t: public expression_t_t
 
 type_variant
 get_type(const expression_t& expr);
+
+bool
+is_constant(const expression_t& expr);
 
 }}} //namespace scalpel::cpp::semantic_entities
 

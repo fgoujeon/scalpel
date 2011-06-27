@@ -175,6 +175,10 @@ class semantic_graph_serializer
 				void
 				operator()(const conditional_expression& operation);
 
+				template<int Tag>
+				void
+				operator()(const conversion<Tag>& conv);
+
 				void
 				operator()(const boolean_conversion& conv);
 

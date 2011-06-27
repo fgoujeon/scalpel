@@ -19,6 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "expression.hpp"
+#include "variable.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -74,6 +75,33 @@ operator()(const TYPE&) \
 
 
 		//
+		//conversions
+		//
+
+		FUNDAMENTAL_TYPE(boolean_conversion, fundamental_type::BOOL)
+		FUNDAMENTAL_TYPE(conversion_to_int, fundamental_type::INT)
+		FUNDAMENTAL_TYPE(conversion_to_long_int, fundamental_type::LONG_INT)
+		FUNDAMENTAL_TYPE(conversion_to_unsigned_int, fundamental_type::UNSIGNED_INT)
+		FUNDAMENTAL_TYPE(conversion_to_unsigned_long_int, fundamental_type::UNSIGNED_LONG_INT)
+		FUNDAMENTAL_TYPE(conversion_to_float, fundamental_type::FLOAT)
+		FUNDAMENTAL_TYPE(conversion_to_double, fundamental_type::DOUBLE)
+		FUNDAMENTAL_TYPE(conversion_to_long_double, fundamental_type::LONG_DOUBLE)
+
+
+
+		//
+		//entities
+		//
+
+		type_variant
+		operator()(variable* const& var)
+		{
+			return var->type();
+		}
+
+
+
+		//
 		//fundamental types
 		//
 
@@ -111,6 +139,54 @@ type_variant
 get_type(const expression_t& expr)
 {
 	return apply_visitor(get_type_visitor, expr);
+}
+
+
+
+namespace
+{
+
+#define RETURN_TRUE(TYPE) \
+bool \
+operator()(const TYPE&) \
+{ \
+	return true; \
+}
+
+	struct: utility::static_visitor<bool>
+	{
+		RETURN_TRUE(bool)
+		RETURN_TRUE(char)
+		RETURN_TRUE(wchar_t)
+		RETURN_TRUE(int)
+		RETURN_TRUE(long int)
+		RETURN_TRUE(long long int)
+		RETURN_TRUE(unsigned int)
+		RETURN_TRUE(unsigned long int)
+		RETURN_TRUE(unsigned long long int)
+		RETURN_TRUE(float)
+		RETURN_TRUE(double)
+		RETURN_TRUE(long double)
+		RETURN_TRUE(std::string)
+		RETURN_TRUE(std::wstring)
+
+		//otherwise, return false
+		template<typename T>
+		bool
+		operator()(const T&)
+		{
+			return false;
+		}
+	} is_constant_visitor;
+
+#undef RETURN_TRUE
+
+}
+
+bool
+is_constant(const expression_t& expr)
+{
+	return apply_visitor(is_constant_visitor, expr);
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

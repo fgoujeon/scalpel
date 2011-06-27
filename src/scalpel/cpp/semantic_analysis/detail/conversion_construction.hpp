@@ -21,6 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_CONVERSION_CONSTRUCTION_HPP
 #define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_CONVERSION_CONSTRUCTION_HPP
 
+#include "semantic_entity_analysis/type_category.hpp"
 #include <scalpel/cpp/semantic_graph.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail
@@ -34,7 +35,34 @@ create_conversion
 );
 
 semantic_entities::expression_t
+create_conversion_to_long_int(const semantic_entities::expression_t& expr);
+
+semantic_entities::expression_t
+create_conversion_to_unsigned_int(const semantic_entities::expression_t& expr);
+
+semantic_entities::expression_t
+create_conversion_to_unsigned_long_int(const semantic_entities::expression_t& expr);
+
+semantic_entities::expression_t
+create_conversion_to_float(const semantic_entities::expression_t& expr);
+
+semantic_entities::expression_t
+create_conversion_to_double(const semantic_entities::expression_t& expr);
+
+semantic_entities::expression_t
+create_conversion_to_long_double(const semantic_entities::expression_t& expr);
+
+semantic_entities::expression_t
 create_boolean_conversion(const semantic_entities::expression_t& expr);
+
+
+
+semantic_entities::expression_t
+create_integral_promotions
+(
+	const semantic_entities::expression_t& source,
+	const semantic_entity_analysis::type_category source_type_category
+);
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
 

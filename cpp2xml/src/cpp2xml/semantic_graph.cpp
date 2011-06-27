@@ -576,6 +576,13 @@ operator()(const TYPE##_expression) \
 		EXPRESSION_TYPE(bitwise_inclusive_or_assignment)
 
 		SIMPLE_TYPE(boolean_conversion)
+		SIMPLE_TYPE(conversion_to_int)
+		SIMPLE_TYPE(conversion_to_long_int)
+		SIMPLE_TYPE(conversion_to_unsigned_int)
+		SIMPLE_TYPE(conversion_to_unsigned_long_int)
+		SIMPLE_TYPE(conversion_to_float)
+		SIMPLE_TYPE(conversion_to_double)
+		SIMPLE_TYPE(conversion_to_long_double)
 
 		PTR_TYPE(variable)
 
@@ -663,6 +670,15 @@ semantic_graph_serializer::serialize_expression_visitor::operator()(const condit
 	output_ << indent(indent_level_) << "<false_operand>\n";
 	serializer_.serialize_expression(operation.false_operand(), indent_level_ + 1);
 	output_ << indent(indent_level_) << "</false_operand>\n";
+}
+
+template<int Tag>
+void
+semantic_graph_serializer::serialize_expression_visitor::operator()(const conversion<Tag>& conv)
+{
+	output_ << indent(indent_level_) << "<source_value>\n";
+	serializer_.serialize_expression(conv.source_value(), indent_level_ + 1);
+	output_ << indent(indent_level_) << "</source_value>\n";
 }
 
 void

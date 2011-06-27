@@ -27,6 +27,10 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail
 {
 
+//
+//create expressions through syntax tree analysis
+//
+
 template<class DeclarativeRegion>
 semantic_entities::expression_t
 create_expression
@@ -213,6 +217,19 @@ create_expression
 
 semantic_entities::expression_t
 create_expression(const syntax_nodes::literal& literal_node);
+
+
+
+//
+//create and simplify expressions objects
+//
+
+semantic_entities::expression_t
+create_addition_expression
+(
+	const semantic_entities::expression_t& left_operand,
+	const semantic_entities::expression_t& right_operand
+);
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
 

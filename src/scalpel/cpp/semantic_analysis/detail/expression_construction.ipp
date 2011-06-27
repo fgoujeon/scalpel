@@ -472,7 +472,7 @@ create_expression
 		const additive_expression& right_operand_node = *opt_right_operand_node;
 
 		if(get<predefined_text_node<str::plus>>(&operator_node))
-			return semantic_entities::addition_expression
+			return create_addition_expression
 			(
 				create_expression(left_operand_node, declarative_region),
 				create_expression(right_operand_node, declarative_region)
