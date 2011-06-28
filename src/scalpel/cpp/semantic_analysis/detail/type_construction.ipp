@@ -355,10 +355,10 @@ create_type
 
 
 template<class DeclarativeRegion>
-semantic_entities::type_variant
+semantic_entities::type_t
 qualify_type
 (
-	semantic_entities::type_variant type,
+	semantic_entities::type_t type,
 	const syntax_nodes::declarator& declarator_node,
 	DeclarativeRegion& current_declarative_region,
 	const bool ignore_function_type
@@ -395,10 +395,10 @@ qualify_type
 }
 
 template<class DeclarativeRegion>
-semantic_entities::type_variant
+semantic_entities::type_t
 qualify_type
 (
-	semantic_entities::type_variant type,
+	semantic_entities::type_t type,
 	const syntax_nodes::abstract_declarator& abstract_declarator_node,
 	DeclarativeRegion& current_declarative_region
 )
@@ -451,10 +451,10 @@ qualify_type
 }
 
 template<class DeclarativeRegion>
-semantic_entities::type_variant
+semantic_entities::type_t
 qualify_type
 (
-	semantic_entities::type_variant type,
+	semantic_entities::type_t type,
 	const syntax_nodes::direct_declarator_last_part_seq& last_part_seq_node,
 	DeclarativeRegion& current_declarative_region,
 	const bool ignore_function_type
@@ -473,10 +473,10 @@ qualify_type
 }
 
 template<class DeclarativeRegion>
-semantic_entities::type_variant
+semantic_entities::type_t
 qualify_type
 (
-	semantic_entities::type_variant type,
+	semantic_entities::type_t type,
 	const syntax_nodes::direct_declarator_last_part& last_part_node,
 	DeclarativeRegion& current_declarative_region,
 	const bool ignore_function_type

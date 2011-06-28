@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_FUNCTION_TYPE_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_FUNCTION_TYPE_HPP
 
-#include "type_variant_fwd.hpp"
+#include "type_fwd.hpp"
 #include <vector>
 #include <memory>
 
@@ -31,11 +31,11 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 class function_type
 {
 	public:
-		typedef std::vector<type_variant> parameter_types_t;
+		typedef std::vector<type_t> parameter_types_t;
 
 		function_type
 		(
-			const type_variant& return_type,
+			const type_t& return_type,
 			const parameter_types_t& parameter_types,
 			const bool variadic,
 			const bool const_qualified,
@@ -47,7 +47,7 @@ class function_type
 		function_type&
 		operator=(const function_type& rhs);
 
-		const type_variant&
+		const type_t&
 		return_type() const;
 
 		const parameter_types_t&
@@ -75,7 +75,7 @@ class function_type
 		}
 
 	private:
-		std::unique_ptr<type_variant> return_type_;
+		std::unique_ptr<type_t> return_type_;
 		parameter_types_t parameter_types_;
 		bool variadic_;
 		bool const_qualified_;

@@ -82,7 +82,7 @@ namespace
 }
 
 type_category
-get_category(const type_variant& type)
+get_category(const type_t& type)
 {
 	return apply_visitor(get_category_visitor, type);
 }

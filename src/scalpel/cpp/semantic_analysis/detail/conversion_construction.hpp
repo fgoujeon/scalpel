@@ -31,7 +31,7 @@ semantic_entities::expression_t
 create_conversion
 (
 	const semantic_entities::expression_t& expr,
-	const semantic_entities::type_variant& destination_type
+	const semantic_entities::type_t& destination_type
 );
 
 

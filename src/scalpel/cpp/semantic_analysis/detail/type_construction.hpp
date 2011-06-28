@@ -56,7 +56,7 @@ struct type_info
 	boost::optional<user_defined_type_ptr_variant> opt_defined_type;
 
 	//The full type definition described by the given decl-specifier-seq, including potential cv-qualifiers.
-	boost::optional<semantic_entities::type_variant> opt_complete_type;
+	boost::optional<semantic_entities::type_t> opt_complete_type;
 
 	bool has_typedef_specifier;
 	bool has_friend_specifier;
@@ -101,19 +101,19 @@ fill_type
 
 
 //qualify type with decl-specifier-seq's const and volatile specifiers
-semantic_entities::type_variant
+semantic_entities::type_t
 qualify_type
 (
-	semantic_entities::type_variant type,
+	semantic_entities::type_t type,
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node
 );
 
 //qualify type with declarator's pointers, references, arrays and function types
 template<class DeclarativeRegion>
-semantic_entities::type_variant
+semantic_entities::type_t
 qualify_type
 (
-	semantic_entities::type_variant type,
+	semantic_entities::type_t type,
 	const syntax_nodes::declarator& declarator_node,
 	DeclarativeRegion& current_declarative_region,
 	const bool ignore_function_type = false
@@ -121,20 +121,20 @@ qualify_type
 
 //qualify type with abstract-declarator's pointers, references, arrays and function types
 template<class DeclarativeRegion>
-semantic_entities::type_variant
+semantic_entities::type_t
 qualify_type
 (
-	semantic_entities::type_variant type,
+	semantic_entities::type_t type,
 	const syntax_nodes::abstract_declarator& abstract_declarator_node,
 	DeclarativeRegion& current_declarative_region
 );
 
 //qualify type with direct-declarator-last-part-seq's arrays and function types
 template<class DeclarativeRegion>
-semantic_entities::type_variant
+semantic_entities::type_t
 qualify_type
 (
-	semantic_entities::type_variant type,
+	semantic_entities::type_t type,
 	const syntax_nodes::direct_declarator_last_part_seq& last_part_seq_node,
 	DeclarativeRegion& current_declarative_region,
 	const bool ignore_function_type
@@ -142,29 +142,29 @@ qualify_type
 
 //qualify type with direct-declarator-last-part's array or function type
 template<class DeclarativeRegion>
-semantic_entities::type_variant
+semantic_entities::type_t
 qualify_type
 (
-	semantic_entities::type_variant type,
+	semantic_entities::type_t type,
 	const syntax_nodes::direct_declarator_last_part& last_part_node,
 	DeclarativeRegion& current_declarative_region,
 	const bool ignore_function_type
 );
 
 //qualify type with ptr-operator-seq's pointers and references
-semantic_entities::type_variant
+semantic_entities::type_t
 qualify_type
 (
-	semantic_entities::type_variant type,
+	semantic_entities::type_t type,
 	const syntax_nodes::ptr_operator_seq& ptr_operator_seq_node,
 	const semantic_entities::declarative_region_ptr_variant& current_declarative_region
 );
 
 //qualify type with cv-qualifier-seq's const and volatile
-semantic_entities::type_variant
+semantic_entities::type_t
 qualify_type
 (
-	semantic_entities::type_variant type,
+	semantic_entities::type_t type,
 	const syntax_nodes::cv_qualifier_seq& cv_qualifier_seq_node
 );
 
@@ -212,7 +212,7 @@ namespace detail
 	//Create the type described by the given decl-specifier-seq.
 	//The returned type is not qualified by the qualifiers of
 	//the decl-specifier-seq.
-	semantic_entities::type_variant
+	semantic_entities::type_t
 	create_simple_type
 	(
 		const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
@@ -222,7 +222,7 @@ namespace detail
 	//Create the type described by the given type-specifier-seq.
 	//The returned type is not qualified by the qualifiers of
 	//the type-specifier-seq.
-	semantic_entities::type_variant
+	semantic_entities::type_t
 	create_simple_type
 	(
 		const syntax_nodes::type_specifier_seq& type_specifier_seq_node,

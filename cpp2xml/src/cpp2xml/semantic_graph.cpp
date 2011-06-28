@@ -172,7 +172,7 @@ semantic_graph_serializer::serialize_type_visitor::operator()(const member_enum*
 void
 semantic_graph_serializer::serialize_type
 (
-	const semantic_entities::type_variant& n,
+	const semantic_entities::type_t& n,
 	const unsigned int indent_level
 )
 {
@@ -452,11 +452,11 @@ semantic_graph_serializer::serialize_function_type
 	serialize_type(entity.return_type(), indent_level + 2);
 	output_ << indent(indent_level + 1) << "</return_type>\n";
 
-	const std::vector<type_variant>& parameter_types = entity.parameter_types();
+	const std::vector<type_t>& parameter_types = entity.parameter_types();
 	output_ << indent(indent_level + 1) << "<parameter_types>\n";
 	for(auto i = parameter_types.begin(); i != parameter_types.end(); ++i)
 	{
-		const type_variant& type = *i;
+		const type_t& type = *i;
 		serialize_type(type, indent_level + 2);
 	}
 	output_ << indent(indent_level + 1) << "</parameter_types>\n";

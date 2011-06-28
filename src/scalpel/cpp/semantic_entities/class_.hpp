@@ -24,7 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "base_class.hpp"
 #include "entity_alias.hpp"
 #include "declarative_region_variants.hpp"
-#include "type_variant_fwd.hpp"
+#include "type_fwd.hpp"
 #include "member_access.hpp"
 #include "impl/detail/declarative_region_member_impl.hpp"
 #include "macros/detail/member_declaration.hpp"

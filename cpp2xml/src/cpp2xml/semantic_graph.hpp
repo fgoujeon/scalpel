@@ -204,7 +204,7 @@ class semantic_graph_serializer
 		void
 		serialize_type
 		(
-			const semantic_entities::type_variant& entity,
+			const semantic_entities::type_t& entity,
 			const unsigned int indent_level
 		);
 

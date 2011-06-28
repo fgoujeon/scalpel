@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_REFERENCE_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_REFERENCE_HPP
 
-#include "type_variant_fwd.hpp"
+#include "type_fwd.hpp"
 #include <memory>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
@@ -33,18 +33,18 @@ Represents the const qualifier.
 class reference
 {
 	public:
-		reference(const type_variant& qualified_type);
+		reference(const type_t& qualified_type);
 
 		reference(const reference& rhs);
 
 		reference&
 		operator=(const reference& rhs);
 
-		const type_variant&
+		const type_t&
 		qualified_type() const;
 
 	private:
-		std::unique_ptr<type_variant> qualified_type_;
+		std::unique_ptr<type_t> qualified_type_;
 };
 
 bool

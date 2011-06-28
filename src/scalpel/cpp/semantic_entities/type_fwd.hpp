@@ -18,8 +18,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_VARIANT_FWD_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_VARIANT_FWD_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_FWD_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_FWD_HPP
 
 #include "fundamental_type.hpp"
 #include <scalpel/utility/variant.hpp>
@@ -61,7 +61,7 @@ typedef
 		pointer_to_member,
 		reference
 	>
-	type_variant
+	type_t
 ;
 
 }}} //namespace scalpel::cpp::semantic_entities

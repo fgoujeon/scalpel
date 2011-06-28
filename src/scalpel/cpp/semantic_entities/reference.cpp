@@ -19,29 +19,29 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "reference.hpp"
-#include "type_variant.hpp"
+#include "type.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-reference::reference(const type_variant& qualified_type):
-	qualified_type_(std::unique_ptr<type_variant>(new type_variant(qualified_type)))
+reference::reference(const type_t& qualified_type):
+	qualified_type_(std::unique_ptr<type_t>(new type_t(qualified_type)))
 {
 }
 
 reference::reference(const reference& rhs):
-	qualified_type_(std::unique_ptr<type_variant>(new type_variant(*rhs.qualified_type_)))
+	qualified_type_(std::unique_ptr<type_t>(new type_t(*rhs.qualified_type_)))
 {
 }
 
 reference&
 reference::operator=(const reference& rhs)
 {
-	qualified_type_ = std::unique_ptr<type_variant>(new type_variant(*rhs.qualified_type_));
+	qualified_type_ = std::unique_ptr<type_t>(new type_t(*rhs.qualified_type_));
 	return *this;
 }
 
-const type_variant&
+const type_t&
 reference::qualified_type() const
 {
 	return *qualified_type_;

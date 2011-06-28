@@ -19,19 +19,19 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "cv_qualified_type.hpp"
-#include "type_variant.hpp"
+#include "type.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-cv_qualified_type::cv_qualified_type(const type_variant& qualified_type, const qualification_type qualification):
-	qualified_type_(std::unique_ptr<type_variant>(new type_variant(qualified_type))),
+cv_qualified_type::cv_qualified_type(const type_t& qualified_type, const qualification_type qualification):
+	qualified_type_(std::unique_ptr<type_t>(new type_t(qualified_type))),
 	qualification_(qualification)
 {
 }
 
 cv_qualified_type::cv_qualified_type(const cv_qualified_type& rhs):
-	qualified_type_(std::unique_ptr<type_variant>(new type_variant(*rhs.qualified_type_))),
+	qualified_type_(std::unique_ptr<type_t>(new type_t(*rhs.qualified_type_))),
 	qualification_(rhs.qualification_)
 {
 }
@@ -39,12 +39,12 @@ cv_qualified_type::cv_qualified_type(const cv_qualified_type& rhs):
 cv_qualified_type&
 cv_qualified_type::operator=(const cv_qualified_type& rhs)
 {
-	qualified_type_ = std::unique_ptr<type_variant>(new type_variant(*rhs.qualified_type_));
+	qualified_type_ = std::unique_ptr<type_t>(new type_t(*rhs.qualified_type_));
 	qualification_ = rhs.qualification_;
 	return *this;
 }
 
-const type_variant&
+const type_t&
 cv_qualified_type::qualified_type() const
 {
 	return *qualified_type_;

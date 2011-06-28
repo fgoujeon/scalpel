@@ -42,7 +42,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "semantic_entities/pointer_to_member.hpp"
 #include "semantic_entities/reference.hpp"
 #include "semantic_entities/statement_block.hpp"
-#include "semantic_entities/type_variant.hpp"
+#include "semantic_entities/type.hpp"
 #include "semantic_entities/typedef_.hpp"
 #include "semantic_entities/variable.hpp"
 

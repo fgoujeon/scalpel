@@ -49,7 +49,7 @@ namespace
 				switch(type)
 				{
 					case fundamental_type::BOOL:
-						if(get_type(expr_) == type_variant(fundamental_type::BOOL))
+						if(get_type(expr_) == type_t(fundamental_type::BOOL))
 							return expr_;
 						else
 							return create_conversion_to_bool(expr_);
@@ -162,7 +162,7 @@ semantic_entities::expression_t
 create_conversion
 (
 	const semantic_entities::expression_t& expr,
-	const semantic_entities::type_variant& destination_type
+	const semantic_entities::type_t& destination_type
 )
 {
 	create_conversion_visitor visitor(expr);

@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_POINTER_TO_MEMBER_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_POINTER_TO_MEMBER_HPP
 
-#include "type_variant_fwd.hpp"
+#include "type_fwd.hpp"
 #include "class_variant_fwd.hpp"
 #include <memory>
 
@@ -36,7 +36,7 @@ class pointer_to_member
 	public:
 		pointer_to_member
 		(
-			const type_variant& qualified_type,
+			const type_t& qualified_type,
 			const class_ptr_variant& member_class
 		);
 
@@ -45,7 +45,7 @@ class pointer_to_member
 		pointer_to_member&
 		operator=(const pointer_to_member& rhs);
 
-		const type_variant&
+		const type_t&
 		qualified_type() const;
 
 		const class_ptr_variant&
@@ -55,7 +55,7 @@ class pointer_to_member
 		}
 
 	private:
-		std::unique_ptr<type_variant> qualified_type_;
+		std::unique_ptr<type_t> qualified_type_;
 		class_ptr_variant parent_class_;
 };
 

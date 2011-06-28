@@ -29,7 +29,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 CLASS_NAME::CLASS_NAME \
 ( \
 	const std::string& name, \
-	const type_variant& type BOOST_PP_COMMA_IF(HAS_SIZE) \
+	const type_t& type BOOST_PP_COMMA_IF(HAS_SIZE) \
 	BOOST_PP_IIF(HAS_SIZE, unsigned int size,) BOOST_PP_COMMA_IF(HAS_STATIC) \
 	BOOST_PP_IIF(HAS_STATIC, bool is_static,) BOOST_PP_COMMA_IF(IS_MEMBER) \
 	BOOST_PP_IIF(IS_MEMBER, const bool is_mutable,) BOOST_PP_COMMA_IF(IS_MEMBER) \

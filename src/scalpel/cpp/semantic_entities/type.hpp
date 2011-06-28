@@ -18,8 +18,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_VARIANT_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_VARIANT_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_HPP
 
 #include "array.hpp"
 #include "class_.hpp"
@@ -29,7 +29,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "pointer.hpp"
 #include "pointer_to_member.hpp"
 #include "reference.hpp"
-#include "type_variant_fwd.hpp"
+#include "type_fwd.hpp"
 
 #endif
 

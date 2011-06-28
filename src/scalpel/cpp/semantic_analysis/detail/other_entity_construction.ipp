@@ -38,7 +38,7 @@ create_entity
 (
 	const syntax_nodes::declarator& declarator_node,
 	DeclarativeRegion& current_declarative_region,
-	boost::optional<semantic_entities::type_variant> opt_type,
+	boost::optional<semantic_entities::type_t> opt_type,
 	const bool has_typedef_specifier,
 	const bool has_mutable_specifier,
 	const bool has_static_specifier,
@@ -264,12 +264,12 @@ create_entity
 					//  fun_t f;
 
 					const function_type& ftype = *opt_function_type;
-					const std::vector<type_variant>& parameter_types = ftype.parameter_types();
+					const std::vector<type_t>& parameter_types = ftype.parameter_types();
 
 					function_parameter_list parameter_list;
 					for(auto i = parameter_types.begin(); i != parameter_types.end(); ++i)
 					{
-						const type_variant& parameter_type = *i;
+						const type_t& parameter_type = *i;
 
 						std::unique_ptr<function_parameter> new_parameter(new function_parameter(parameter_type));
 						parameter_list.push_back(std::move(new_parameter));
@@ -437,7 +437,7 @@ std::unique_ptr<semantic_entities::bit_field>
 create_bit_field
 (
 	const syntax_nodes::member_declarator_bit_field_member& member_declarator_bit_field_member_node,
-	const semantic_entities::type_variant& type,
+	const semantic_entities::type_t& type,
 	const bool is_mutable,
 	const semantic_entities::member_access access,
 	Class&

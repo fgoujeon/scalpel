@@ -43,10 +43,10 @@ namespace
 		const final_graph_entities& final_entities
 	);
 
-	type_variant
+	type_t
 	create_type
 	(
-		const type_variant& entity,
+		const type_t& entity,
 		const final_graph_entities& final_entities
 	);
 
@@ -570,7 +570,7 @@ namespace
 
 
 
-	struct create_type_visitor_struct: utility::static_visitor<type_variant>
+	struct create_type_visitor_struct: utility::static_visitor<type_t>
 	{
 		public:
 			create_type_visitor_struct(const final_graph_entities& final_entities):
@@ -578,19 +578,19 @@ namespace
 			{
 			}
 
-			type_variant
+			type_t
 			operator()(const array& type) const
 			{
 				return array(type.size(), create_type(type.qualified_type(), final_entities_));
 			}
 
-			type_variant
+			type_t
 			operator()(const fundamental_type& type) const
 			{
 				return type;
 			}
 
-			type_variant
+			type_t
 			operator()(const function_type& type) const
 			{
 				return function_type
@@ -603,7 +603,7 @@ namespace
 				);
 			}
 
-			type_variant
+			type_t
 			operator()(const class_* type) const
 			{
 				auto it = final_entities_.classes.find(type);
@@ -611,7 +611,7 @@ namespace
 				return it->second;
 			}
 
-			type_variant
+			type_t
 			operator()(const member_class* type) const
 			{
 				auto it = final_entities_.member_classes.find(type);
@@ -619,7 +619,7 @@ namespace
 				return it->second;
 			}
 
-			type_variant
+			type_t
 			operator()(const union_* type) const
 			{
 				auto it = final_entities_.unions.find(type);
@@ -627,7 +627,7 @@ namespace
 				return it->second;
 			}
 
-			type_variant
+			type_t
 			operator()(const member_union* type) const
 			{
 				auto it = final_entities_.member_unions.find(type);
@@ -635,7 +635,7 @@ namespace
 				return it->second;
 			}
 
-			type_variant
+			type_t
 			operator()(const anonymous_union* type) const
 			{
 				auto it = final_entities_.anonymous_unions.find(type);
@@ -643,7 +643,7 @@ namespace
 				return it->second;
 			}
 
-			type_variant
+			type_t
 			operator()(const anonymous_member_union* type) const
 			{
 				auto it = final_entities_.anonymous_member_unions.find(type);
@@ -651,7 +651,7 @@ namespace
 				return it->second;
 			}
 
-			type_variant
+			type_t
 			operator()(const cv_qualified_type& type) const
 			{
 				return cv_qualified_type
@@ -661,7 +661,7 @@ namespace
 				);
 			}
 
-			type_variant
+			type_t
 			operator()(const enum_* type) const
 			{
 				auto it = final_entities_.enums.find(type);
@@ -669,7 +669,7 @@ namespace
 				return it->second;
 			}
 
-			type_variant
+			type_t
 			operator()(const member_enum* type) const
 			{
 				auto it = final_entities_.member_enums.find(type);
@@ -677,13 +677,13 @@ namespace
 				return it->second;
 			}
 
-			type_variant
+			type_t
 			operator()(const pointer& type) const
 			{
 				return pointer(create_type(type.qualified_type(), final_entities_));
 			}
 
-			type_variant
+			type_t
 			operator()(const pointer_to_member& type) const
 			{
 				find_final_class_visitor visitor(final_entities_);
@@ -695,7 +695,7 @@ namespace
 				);
 			}
 
-			type_variant
+			type_t
 			operator()(const reference& type) const
 			{
 				return reference(create_type(type.qualified_type(), final_entities_));
@@ -705,10 +705,10 @@ namespace
 			const final_graph_entities& final_entities_;
 	};
 
-	type_variant
+	type_t
 	create_type
 	(
-		const type_variant& entity,
+		const type_t& entity,
 		const final_graph_entities& final_entities
 	)
 	{

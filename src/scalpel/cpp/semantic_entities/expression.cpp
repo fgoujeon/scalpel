@@ -28,22 +28,22 @@ namespace
 {
 
 #define FUNDAMENTAL_TYPE(TYPE, RETURN_TYPE) \
-type_variant \
+type_t \
 operator()(const TYPE&) \
 { \
 	return RETURN_TYPE; \
 }
 
-	struct: utility::static_visitor<type_variant>
+	struct: utility::static_visitor<type_t>
 	{
 		template<typename T>
-		type_variant
+		type_t
 		operator()(const T&)
 		{
 			assert(false);
 		}
 
-		type_variant
+		type_t
 		operator()(const negation_expression& expr)
 		{
 			return apply_visitor(*this, expr.operand());
@@ -93,7 +93,7 @@ operator()(const TYPE&) \
 		//entities
 		//
 
-		type_variant
+		type_t
 		operator()(variable* const& var)
 		{
 			return var->type();
@@ -118,13 +118,13 @@ operator()(const TYPE&) \
 		FUNDAMENTAL_TYPE(double, fundamental_type::DOUBLE)
 		FUNDAMENTAL_TYPE(long double, fundamental_type::LONG_DOUBLE)
 
-		type_variant
+		type_t
 		operator()(const std::string& str)
 		{
 			return array(str.size() + 1, fundamental_type::CHAR);
 		}
 
-		type_variant
+		type_t
 		operator()(const std::wstring& str)
 		{
 			return array(str.size() + 1, fundamental_type::WCHAR_T);
@@ -135,7 +135,7 @@ operator()(const TYPE&) \
 
 }
 
-type_variant
+type_t
 get_type(const expression_t& expr)
 {
 	return apply_visitor(get_type_visitor, expr);

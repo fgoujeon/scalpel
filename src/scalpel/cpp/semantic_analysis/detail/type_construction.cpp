@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "type_construction.hpp"
 #include "function_construction.hpp"
 #include "class_construction.hpp"
-#include "semantic_entity_analysis/to_type_variant.hpp"
+#include "semantic_entity_analysis/to_type.hpp"
 #include "syntax_node_analysis/declarator.hpp"
 #include "syntax_node_analysis/decl_specifier_seq.hpp"
 #include <scalpel/cpp/semantic_entities/type_traits/is_class.hpp>
@@ -94,10 +94,10 @@ fill_type
 
 
 
-semantic_entities::type_variant
+semantic_entities::type_t
 qualify_type
 (
-	semantic_entities::type_variant type,
+	semantic_entities::type_t type,
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node
 )
 {
@@ -138,10 +138,10 @@ qualify_type
 	return type;
 }
 
-semantic_entities::type_variant
+semantic_entities::type_t
 qualify_type
 (
-	semantic_entities::type_variant type,
+	semantic_entities::type_t type,
 	const syntax_nodes::ptr_operator_seq& ptr_operator_seq_node,
 	const semantic_entities::declarative_region_ptr_variant& current_declarative_region
 )
@@ -194,10 +194,10 @@ qualify_type
 	return type;
 }
 
-semantic_entities::type_variant
+semantic_entities::type_t
 qualify_type
 (
-	semantic_entities::type_variant type,
+	semantic_entities::type_t type,
 	const syntax_nodes::cv_qualifier_seq& cv_qualifier_seq_node
 )
 {
@@ -546,7 +546,7 @@ get_fundamental_type
 
 namespace detail
 {
-	semantic_entities::type_variant
+	semantic_entities::type_t
 	create_simple_type
 	(
 		const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
@@ -556,14 +556,14 @@ namespace detail
 		return create_simple_type(syntax_node_analysis::to_type_specifier_seq(decl_specifier_seq_node), current_declarative_region);
 	}
 
-	semantic_entities::type_variant
+	semantic_entities::type_t
 	create_simple_type
 	(
 		const syntax_nodes::type_specifier_seq& type_specifier_seq_node,
 		const semantic_entities::declarative_region_ptr_variant current_declarative_region
 	)
 	{
-		boost::optional<semantic_entities::type_variant> opt_return_type;
+		boost::optional<semantic_entities::type_t> opt_return_type;
 		bool is_fundamental_type = false;
 		bool bool_type = false;
 		bool char_type = false;
@@ -634,7 +634,7 @@ namespace detail
 						)
 					;
 
-					opt_return_type = semantic_entity_analysis::to_type_variant(found_type);
+					opt_return_type = semantic_entity_analysis::to_type(found_type);
 				}
 				else if(auto opt_fundamental_type_specifier_node = get<fundamental_type_specifier>(&simple_type_specifier_node))
 				{

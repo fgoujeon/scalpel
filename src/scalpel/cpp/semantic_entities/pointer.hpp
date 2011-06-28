@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_POINTER_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_POINTER_HPP
 
-#include "type_variant_fwd.hpp"
+#include "type_fwd.hpp"
 #include <memory>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
@@ -34,18 +34,18 @@ class pointer
 {
 	public:
 		explicit
-		pointer(const type_variant& qualified_type);
+		pointer(const type_t& qualified_type);
 
 		pointer(const pointer& rhs);
 
 		pointer&
 		operator=(const pointer& rhs);
 
-		const type_variant&
+		const type_t&
 		qualified_type() const;
 
 	private:
-		std::unique_ptr<type_variant> qualified_type_;
+		std::unique_ptr<type_t> qualified_type_;
 };
 
 bool

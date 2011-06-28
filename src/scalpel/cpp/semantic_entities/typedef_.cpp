@@ -23,13 +23,13 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-typedef_::typedef_(const std::string& name, const type_variant& type):
+typedef_::typedef_(const std::string& name, const type_t& type):
 	name_(name),
 	type_(type)
 {
 }
 
-member_typedef::member_typedef(const std::string& name, const type_variant& type, const member_access access):
+member_typedef::member_typedef(const std::string& name, const type_t& type, const member_access access):
 	name_(name),
 	type_(type),
 	access_(access)

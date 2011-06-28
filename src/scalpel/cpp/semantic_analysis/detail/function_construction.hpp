@@ -100,7 +100,7 @@ get_operator_function_operator
 );
 
 template<class DeclarativeRegion>
-semantic_entities::type_variant
+semantic_entities::type_t
 get_conversion_function_type
 (
 	const syntax_nodes::declarator& declarator_node,
@@ -108,7 +108,7 @@ get_conversion_function_type
 );
 
 template<class DeclarativeRegion>
-semantic_entities::type_variant
+semantic_entities::type_t
 get_conversion_function_type
 (
 	const syntax_nodes::conversion_function_id& conversion_function_id_node,
@@ -132,7 +132,7 @@ create_parameters
 );
 
 template<class DeclarativeRegion>
-std::vector<semantic_entities::type_variant>
+std::vector<semantic_entities::type_t>
 create_parameter_types
 (
 	boost::optional<const syntax_nodes::parameter_declaration_list&> opt_parameter_declaration_list_node,
@@ -140,7 +140,7 @@ create_parameter_types
 );
 
 template<class DeclarativeRegion>
-std::vector<semantic_entities::type_variant>
+std::vector<semantic_entities::type_t>
 create_parameter_types
 (
 	const syntax_nodes::parameter_declaration_list& parameter_declaration_list_node,

@@ -175,7 +175,7 @@ find_function
 }
 
 template<class DeclarativeRegion>
-semantic_entities::type_variant
+semantic_entities::type_t
 get_conversion_function_type
 (
 	const syntax_nodes::declarator& declarator_node,
@@ -192,7 +192,7 @@ get_conversion_function_type
 }
 
 template<class DeclarativeRegion>
-semantic_entities::type_variant
+semantic_entities::type_t
 get_conversion_function_type
 (
 	const syntax_nodes::conversion_function_id& conversion_function_id_node,
@@ -232,7 +232,7 @@ get_conversion_function_type
 	}
 
 	assert(info.opt_complete_type);
-	semantic_entities::type_variant type = *info.opt_complete_type;
+	semantic_entities::type_t type = *info.opt_complete_type;
 
 
 
@@ -314,7 +314,7 @@ create_parameters
 		}
 
 		assert(info.opt_complete_type);
-		const semantic_entities::type_variant type = *info.opt_complete_type;
+		const semantic_entities::type_t type = *info.opt_complete_type;
 
 
 
@@ -379,7 +379,7 @@ create_parameters
 }
 
 template<class DeclarativeRegion>
-std::vector<semantic_entities::type_variant>
+std::vector<semantic_entities::type_t>
 create_parameter_types
 (
 	boost::optional<const syntax_nodes::parameter_declaration_list&> opt_parameter_declaration_list_node,
@@ -392,11 +392,11 @@ create_parameter_types
 	if(opt_parameter_declaration_list_node)
 		return create_parameter_types(*opt_parameter_declaration_list_node, current_declarative_region);
 	else
-		return std::vector<semantic_entities::type_variant>();
+		return std::vector<semantic_entities::type_t>();
 }
 
 template<class DeclarativeRegion>
-std::vector<semantic_entities::type_variant>
+std::vector<semantic_entities::type_t>
 create_parameter_types
 (
 	const syntax_nodes::parameter_declaration_list& parameter_declaration_list_node,
@@ -410,7 +410,7 @@ create_parameter_types
 		create_parameters(parameter_declaration_list_node, current_declarative_region)
 	;
 
-	std::vector<semantic_entities::type_variant> parameter_types;
+	std::vector<semantic_entities::type_t> parameter_types;
 	for(auto i = parameters.begin(); i != parameters.end(); ++i)
 	{
 		const function_parameter& p = *i;

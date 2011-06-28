@@ -34,10 +34,10 @@ create_unique_id(const utility::variant<Entities...>& entity);
 namespace
 {
 	std::string
-	to_string(const type_variant& n);
+	to_string(const type_t& n);
 
 	std::string
-	to_string(const std::vector<type_variant>& parameter_types);
+	to_string(const std::vector<type_t>& parameter_types);
 }
 
 namespace
@@ -161,13 +161,13 @@ namespace
 	} to_string_visitor;
 
 	std::string
-	to_string(const semantic_entities::type_variant& n)
+	to_string(const semantic_entities::type_t& n)
 	{
 		return utility::apply_visitor(to_string_visitor, n);
 	}
 
 	std::string
-	to_string(const std::vector<type_variant>& parameter_types)
+	to_string(const std::vector<type_t>& parameter_types)
 	{
 		std::string str = "(";
 

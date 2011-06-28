@@ -18,41 +18,18 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "to_type_variant.hpp"
-#include <scalpel/utility/variant/apply_visitor.hpp>
+#ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_SEMANTIC_ENTITY_ANALYSIS_TO_TYPE_HPP
+#define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_SEMANTIC_ENTITY_ANALYSIS_TO_TYPE_HPP
+
+#include <scalpel/cpp/semantic_entities/type.hpp>
+#include <scalpel/cpp/semantic_entities/typedef_.hpp>
+#include <scalpel/utility/ptr_variant.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail { namespace semantic_entity_analysis
 {
 
-using namespace semantic_entities;
-
-namespace
-{
-	struct: public utility::static_visitor<type_variant>
-	{
-		template<class T>
-		type_variant
-		operator()(T* t) const
-		{
-			return t;
-		}
-
-		type_variant
-		operator()(typedef_* t) const
-		{
-			return t->type();
-		}
-
-		type_variant
-		operator()(member_typedef* t) const
-		{
-			return t->type();
-		}
-	} to_type_variant_impl;
-}
-
-semantic_entities::type_variant
-to_type_variant
+semantic_entities::type_t
+to_type
 (
 	const typename utility::ptr_variant
 	<
@@ -65,10 +42,9 @@ to_type_variant
 		semantic_entities::enum_,
 		semantic_entities::member_enum
 	>::type& var
-)
-{
-	return utility::apply_visitor(to_type_variant_impl, var);
-}
+);
 
 }}}}} //namespace scalpel::cpp::semantic_analysis::detail::semantic_entity_analysis
+
+#endif
 

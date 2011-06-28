@@ -19,23 +19,23 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "pointer_to_member.hpp"
-#include "type_variant.hpp"
+#include "type.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 pointer_to_member::pointer_to_member
 (
-	const type_variant& qualified_type,
+	const type_t& qualified_type,
 	const class_ptr_variant& parent_class
 ):
-	qualified_type_(std::unique_ptr<type_variant>(new type_variant(qualified_type))),
+	qualified_type_(std::unique_ptr<type_t>(new type_t(qualified_type))),
 	parent_class_(parent_class)
 {
 }
 
 pointer_to_member::pointer_to_member(const pointer_to_member& rhs):
-	qualified_type_(std::unique_ptr<type_variant>(new type_variant(*rhs.qualified_type_))),
+	qualified_type_(std::unique_ptr<type_t>(new type_t(*rhs.qualified_type_))),
 	parent_class_(rhs.parent_class_)
 {
 }
@@ -43,12 +43,12 @@ pointer_to_member::pointer_to_member(const pointer_to_member& rhs):
 pointer_to_member&
 pointer_to_member::operator=(const pointer_to_member& rhs)
 {
-	qualified_type_ = std::unique_ptr<type_variant>(new type_variant(*rhs.qualified_type_));
+	qualified_type_ = std::unique_ptr<type_t>(new type_t(*rhs.qualified_type_));
 	parent_class_ = rhs.parent_class_;
 	return *this;
 }
 
-const type_variant&
+const type_t&
 pointer_to_member::qualified_type() const
 {
 	return *qualified_type_;

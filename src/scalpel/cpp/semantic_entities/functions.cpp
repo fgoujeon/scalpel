@@ -19,7 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "functions.hpp"
-#include "type_variant.hpp"
+#include "type.hpp"
 #include <boost/preprocessor/control/iif.hpp>
 #include <boost/preprocessor/logical/or.hpp>
 #include <boost/preprocessor/punctuation/comma_if.hpp>
@@ -42,7 +42,7 @@ CLASS_NAME::CLASS_NAME \
 ( \
 	BOOST_PP_IIF(HAS_NAME, const std::string& name,) BOOST_PP_COMMA_IF(HAS_NAME) \
 	BOOST_PP_IIF(HAS_OPERATOR, const overloadable_operator overloaded_operator,) BOOST_PP_COMMA_IF(HAS_OPERATOR) \
-	BOOST_PP_IIF(HAS_RETURN_TYPE, const type_variant& return_type,) BOOST_PP_COMMA_IF(HAS_RETURN_TYPE) \
+	BOOST_PP_IIF(HAS_RETURN_TYPE, const type_t& return_type,) BOOST_PP_COMMA_IF(HAS_RETURN_TYPE) \
 	BOOST_PP_IIF(HAS_PARAMETERS, function_parameter_list&& parameters,) BOOST_PP_COMMA_IF(HAS_PARAMETERS) \
 	BOOST_PP_IIF(HAS_VARIADIC, const bool variadic,) BOOST_PP_COMMA_IF(HAS_VARIADIC) \
 	BOOST_PP_IIF(IS_MEMBER, const member_access access,) BOOST_PP_COMMA_IF(IS_MEMBER) \
@@ -80,7 +80,7 @@ BOOST_PP_IIF \
 			function_type \
 			( \
 				return_type_, \
-				BOOST_PP_IIF(HAS_PARAMETERS, parameter_types(), std::vector<type_variant>()), \
+				BOOST_PP_IIF(HAS_PARAMETERS, parameter_types(), std::vector<type_t>()), \
 				BOOST_PP_IIF(HAS_VARIADIC, variadic_, false), \
 				BOOST_PP_IIF(HAS_CV_QUALIFIER, is_const_, false), \
 				BOOST_PP_IIF(HAS_CV_QUALIFIER, is_volatile_, false) \
@@ -92,7 +92,7 @@ BOOST_PP_IIF \
 BOOST_PP_IIF \
 ( \
 	HAS_PARAMETERS, \
-	std::vector<type_variant> \
+	std::vector<type_t> \
 	CLASS_NAME::parameter_types() const \
 	{ \
 		return get_parameter_types(parameters_); \
@@ -147,15 +147,15 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 
 namespace
 {
-	std::vector<type_variant>
+	std::vector<type_t>
 	get_parameter_types(const function_parameter_list& parameters)
 	{
-		std::vector<type_variant> parameter_types;
+		std::vector<type_t> parameter_types;
 
 		for(auto i = parameters.begin(); i != parameters.end(); ++i)
 		{
 			const function_parameter& param = *i;
-			type_variant param_type = param.type();
+			type_t param_type = param.type();
 
 			//remove cv-qualifiers
 			if(cv_qualified_type* opt_cv_qualified_type = utility::get<cv_qualified_type>(&param_type))

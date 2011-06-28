@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_SEMANTIC_ENTITY_ANALYSIS_TYPE_CATEGORY_HPP
 #define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_SEMANTIC_ENTITY_ANALYSIS_TYPE_CATEGORY_HPP
 
-#include <scalpel/cpp/semantic_entities/type_variant.hpp>
+#include <scalpel/cpp/semantic_entities/type.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail { namespace semantic_entity_analysis
 {
@@ -230,7 +230,7 @@ is_integral_or_enumeration(const type_category cat)
 
 
 type_category
-get_category(const semantic_entities::type_variant& type);
+get_category(const semantic_entities::type_t& type);
 
 }}}}} //namespace scalpel::cpp::semantic_analysis::detail::semantic_entity_analysis
 

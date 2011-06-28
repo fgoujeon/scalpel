@@ -22,7 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "typedef_.hpp"
 #include "functions.hpp"
 #include "variable.hpp"
-#include "type_variant.hpp"
+#include "type.hpp"
 #include "macros/detail/member_definition.hpp"
 #include "macros/detail/single_member_definition.hpp"
 #include <memory>

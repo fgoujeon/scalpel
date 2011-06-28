@@ -19,23 +19,23 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "function_parameter.hpp"
-#include "type_variant.hpp"
+#include "type.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-function_parameter::function_parameter(const type_variant& type, const std::string& name):
+function_parameter::function_parameter(const type_t& type, const std::string& name):
 	type_(type),
 	name_(name)
 {
 }
 
-function_parameter::function_parameter(const type_variant& type):
+function_parameter::function_parameter(const type_t& type):
 	type_(type)
 {
 }
 
-const type_variant&
+const type_t&
 function_parameter::type() const
 {
 	return type_;

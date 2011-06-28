@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_VARIABLE_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_VARIABLE_HPP
 
-#include "type_variant.hpp"
+#include "type.hpp"
 #include "expression.hpp"
 #include "impl/detail/declarative_region_member_impl.hpp"
 #include "macros/detail/declarative_region_member_impl.hpp"
@@ -42,7 +42,7 @@ class CLASS_NAME \
 		CLASS_NAME \
 		( \
 			const std::string& name, \
-			const type_variant& type BOOST_PP_COMMA_IF(HAS_SIZE) \
+			const type_t& type BOOST_PP_COMMA_IF(HAS_SIZE) \
 			BOOST_PP_IIF(HAS_SIZE, unsigned int size,) BOOST_PP_COMMA_IF(HAS_STATIC) \
 			BOOST_PP_IIF(HAS_STATIC, bool is_static = false,) BOOST_PP_COMMA_IF(IS_MEMBER) \
 			BOOST_PP_IIF(IS_MEMBER, const bool is_mutable = false,) BOOST_PP_COMMA_IF(IS_MEMBER) \
@@ -54,7 +54,7 @@ class CLASS_NAME \
 		CLASS_NAME& \
 		operator=(const CLASS_NAME&) = delete; \
  \
-		const type_variant& \
+		const type_t& \
 		type() const \
 		{ \
 			return type_; \
@@ -120,7 +120,7 @@ class CLASS_NAME \
  \
 	private: \
 		std::string name_; \
-		type_variant type_; \
+		type_t type_; \
 		BOOST_PP_IIF \
 		( \
 			HAS_SIZE, \

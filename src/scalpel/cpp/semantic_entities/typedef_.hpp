@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_TYPEDEF_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_TYPEDEF_HPP
 
-#include "type_variant.hpp"
+#include "type.hpp"
 #include "impl/detail/declarative_region_member_impl.hpp"
 #include "macros/detail/declarative_region_member_impl.hpp"
 #include <boost/preprocessor/control/iif.hpp>
@@ -34,7 +34,7 @@ class CLASS_NAME \
 		CLASS_NAME \
 		( \
 			const std::string& name, \
-			const type_variant& type BOOST_PP_COMMA_IF(IS_MEMBER) \
+			const type_t& type BOOST_PP_COMMA_IF(IS_MEMBER) \
 			BOOST_PP_IIF(IS_MEMBER, const member_access access,) \
 		); \
  \
@@ -49,7 +49,7 @@ class CLASS_NAME \
 			return name_; \
 		} \
  \
-		const type_variant& \
+		const type_t& \
 		type() const \
 		{ \
 			return type_; \
@@ -67,7 +67,7 @@ class CLASS_NAME \
  \
 	private: \
 		std::string name_; \
-		type_variant type_; \
+		type_t type_; \
 		BOOST_PP_IIF \
 		( \
 			IS_MEMBER, \

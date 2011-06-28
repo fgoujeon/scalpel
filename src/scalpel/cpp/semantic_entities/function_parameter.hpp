@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_FUNCTION_PARAMETER_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_FUNCTION_PARAMETER_HPP
 
-#include "type_variant.hpp"
+#include "type.hpp"
 #include <string>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
@@ -30,24 +30,24 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 class function_parameter
 {
 	public:
-		function_parameter(const type_variant& type, const std::string& name);
+		function_parameter(const type_t& type, const std::string& name);
 
 		explicit
-		function_parameter(const type_variant& type);
+		function_parameter(const type_t& type);
 
 		function_parameter(const function_parameter&) = delete;
 
 		function_parameter&
 		operator=(const function_parameter& o) = delete;
 
-		const type_variant&
+		const type_t&
 		type() const;
 
 		const std::string&
 		name() const;
 
 	private:
-		type_variant type_;
+		type_t type_;
 		std::string name_;
 };
 

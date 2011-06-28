@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_EXPRESSION_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_EXPRESSION_HPP
 
-#include "type_variant.hpp"
+#include "type.hpp"
 #include "expressions.hpp"
 #include "conversions.hpp"
 #include "conditional_expression.hpp"
@@ -151,7 +151,7 @@ struct expression_t: public expression_t_t
 	}
 };
 
-type_variant
+type_t
 get_type(const expression_t& expr);
 
 bool

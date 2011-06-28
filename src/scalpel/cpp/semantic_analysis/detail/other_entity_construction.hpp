@@ -53,7 +53,7 @@ create_entity
 (
 	const syntax_nodes::declarator& declarator_node,
 	DeclarativeRegion& current_declarative_region,
-	boost::optional<semantic_entities::type_variant> opt_type,
+	boost::optional<semantic_entities::type_t> opt_type,
 	const bool has_typedef_specifier,
 	const bool has_mutable_specifier,
 	const bool has_static_specifier,
@@ -86,7 +86,7 @@ std::unique_ptr<semantic_entities::bit_field>
 create_bit_field
 (
 	const syntax_nodes::member_declarator_bit_field_member& member_declarator_bit_field_member_node,
-	const semantic_entities::type_variant& type,
+	const semantic_entities::type_t& type,
 	const bool is_mutable,
 	const semantic_entities::member_access access,
 	Class& current_class

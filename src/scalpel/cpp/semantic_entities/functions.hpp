@@ -27,7 +27,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "variable.hpp"
 #include "statement_block.hpp"
 #include "declarative_region_variants.hpp"
-#include "type_variant_fwd.hpp"
+#include "type_fwd.hpp"
 #include "impl/detail/declarative_region_member_impl.hpp"
 #include "macros/detail/declarative_region_member_impl.hpp"
 #include <boost/optional.hpp>
@@ -61,7 +61,7 @@ class CLASS_NAME \
 		( \
 			BOOST_PP_IIF(HAS_NAME, const std::string& name,) BOOST_PP_COMMA_IF(HAS_NAME) \
 			BOOST_PP_IIF(HAS_OPERATOR, const overloadable_operator overloaded_operator,) BOOST_PP_COMMA_IF(HAS_OPERATOR) \
-			BOOST_PP_IIF(HAS_RETURN_TYPE, const type_variant& return_type,) BOOST_PP_COMMA_IF(HAS_RETURN_TYPE) \
+			BOOST_PP_IIF(HAS_RETURN_TYPE, const type_t& return_type,) BOOST_PP_COMMA_IF(HAS_RETURN_TYPE) \
 			BOOST_PP_IIF(HAS_PARAMETERS, function_parameter_list&& parameters = function_parameter_list(),) BOOST_PP_COMMA_IF(HAS_PARAMETERS) \
 			BOOST_PP_IIF(HAS_VARIADIC, const bool variadic = false,) BOOST_PP_COMMA_IF(HAS_VARIADIC) \
 			BOOST_PP_IIF(IS_MEMBER, const member_access access = member_access::PUBLIC,) BOOST_PP_COMMA_IF(IS_MEMBER) \
@@ -102,7 +102,7 @@ class CLASS_NAME \
 		BOOST_PP_IIF \
 		( \
 			HAS_RETURN_TYPE, \
-			const type_variant& \
+			const type_t& \
 			return_type() const \
 			{ \
 				return return_type_; \
@@ -118,7 +118,7 @@ class CLASS_NAME \
 				return parameters_; \
 			} \
  \
-			std::vector<type_variant> \
+			std::vector<type_t> \
 			parameter_types() const; \
 			, \
 		) \
@@ -238,7 +238,7 @@ class CLASS_NAME \
 		BOOST_PP_IIF \
 		( \
 			HAS_RETURN_TYPE, \
-			type_variant return_type_;, \
+			type_t return_type_;, \
 		) \
 		BOOST_PP_IIF \
 		( \
