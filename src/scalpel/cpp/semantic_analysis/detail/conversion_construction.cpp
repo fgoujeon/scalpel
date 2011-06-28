@@ -49,7 +49,10 @@ namespace
 				switch(type)
 				{
 					case fundamental_type::BOOL:
-						return create_boolean_conversion(expr_);
+						if(get_type(expr_) == type_variant(fundamental_type::BOOL))
+							return expr_;
+						else
+							return create_conversion_to_bool(expr_);
 					case fundamental_type::CHAR:
 					case fundamental_type::DOUBLE:
 					case fundamental_type::FLOAT:
@@ -169,6 +172,12 @@ create_conversion
 
 
 semantic_entities::expression_t
+create_conversion_to_bool(const semantic_entities::expression_t& expr)
+{
+	return conversion_to_bool(expr);
+}
+
+semantic_entities::expression_t
 create_conversion_to_long_int(const semantic_entities::expression_t& expr)
 {
 	return conversion_to_long_int(expr);
@@ -202,15 +211,6 @@ semantic_entities::expression_t
 create_conversion_to_long_double(const semantic_entities::expression_t& expr)
 {
 	return conversion_to_long_double(expr);
-}
-
-semantic_entities::expression_t
-create_boolean_conversion(const semantic_entities::expression_t& expr)
-{
-	if(get_type(expr) == type_variant(fundamental_type::BOOL))
-		return expr;
-	else
-		return boolean_conversion(expr);
 }
 
 

@@ -4,12 +4,12 @@
    <fundamental_type type="bool"/>
   </type>
   <default_value>
-   <expression type="boolean_conversion">
-    <expression>
+   <expression type="conversion_to_bool">
+    <source_value>
      <expression type="int">
       0
      </expression>
-    </expression>
+    </source_value>
    </expression>
   </default_value>
  </variable>
@@ -20,12 +20,12 @@
    </cv_qualified_type>
   </type>
   <default_value>
-   <expression type="boolean_conversion">
-    <expression>
+   <expression type="conversion_to_bool">
+    <source_value>
      <expression type="int">
       1
      </expression>
-    </expression>
+    </source_value>
    </expression>
   </default_value>
  </variable>
@@ -38,8 +38,8 @@
    </reference>
   </type>
   <default_value>
-   <expression type="boolean_conversion">
-    <expression>
+   <expression type="conversion_to_bool">
+    <source_value>
      <expression type="negation">
       <operand>
        <expression type="int">
@@ -47,7 +47,7 @@
        </expression>
       </operand>
      </expression>
-    </expression>
+    </source_value>
    </expression>
   </default_value>
  </variable>

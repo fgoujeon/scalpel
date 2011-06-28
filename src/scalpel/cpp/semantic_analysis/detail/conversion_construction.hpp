@@ -34,6 +34,11 @@ create_conversion
 	const semantic_entities::type_variant& destination_type
 );
 
+
+
+semantic_entities::expression_t
+create_conversion_to_bool(const semantic_entities::expression_t& expr);
+
 semantic_entities::expression_t
 create_conversion_to_long_int(const semantic_entities::expression_t& expr);
 
@@ -51,9 +56,6 @@ create_conversion_to_double(const semantic_entities::expression_t& expr);
 
 semantic_entities::expression_t
 create_conversion_to_long_double(const semantic_entities::expression_t& expr);
-
-semantic_entities::expression_t
-create_boolean_conversion(const semantic_entities::expression_t& expr);
 
 
 

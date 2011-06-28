@@ -180,9 +180,6 @@ class semantic_graph_serializer
 				operator()(const conversion<Tag>& conv);
 
 				void
-				operator()(const boolean_conversion& conv);
-
-				void
 				operator()(variable* const& v);
 
 				void

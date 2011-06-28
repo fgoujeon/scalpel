@@ -25,7 +25,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "expressions.hpp"
 #include "conversions.hpp"
 #include "conditional_expression.hpp"
-#include "boolean_conversion.hpp"
 #include <scalpel/utility/variant.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
@@ -82,7 +81,7 @@ typedef
 		conditional_expression,
 
 		//conversions
-		boolean_conversion,
+		conversion_to_bool,
 		conversion_to_int,
 		conversion_to_long_int,
 		conversion_to_unsigned_int,

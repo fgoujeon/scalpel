@@ -575,7 +575,7 @@ operator()(const TYPE##_expression) \
 		EXPRESSION_TYPE(bitwise_exclusive_or_assignment)
 		EXPRESSION_TYPE(bitwise_inclusive_or_assignment)
 
-		SIMPLE_TYPE(boolean_conversion)
+		SIMPLE_TYPE(conversion_to_bool)
 		SIMPLE_TYPE(conversion_to_int)
 		SIMPLE_TYPE(conversion_to_long_int)
 		SIMPLE_TYPE(conversion_to_unsigned_int)
@@ -679,14 +679,6 @@ semantic_graph_serializer::serialize_expression_visitor::operator()(const conver
 	output_ << indent(indent_level_) << "<source_value>\n";
 	serializer_.serialize_expression(conv.source_value(), indent_level_ + 1);
 	output_ << indent(indent_level_) << "</source_value>\n";
-}
-
-void
-semantic_graph_serializer::serialize_expression_visitor::operator()(const boolean_conversion& conv)
-{
-	output_ << indent(indent_level_) << "<expression>\n";
-	serializer_.serialize_expression(conv.value(), indent_level_ + 1);
-	output_ << indent(indent_level_) << "</expression>\n";
 }
 
 void

@@ -28,6 +28,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 
 enum class conversion_tag
 {
+	BOOL,
 	INT,
 	LONG_INT,
 	UNSIGNED_INT,
@@ -36,6 +37,11 @@ enum class conversion_tag
 	DOUBLE,
 	LONG_DOUBLE
 };
+
+typedef
+	conversion<static_cast<int>(conversion_tag::BOOL)>
+	conversion_to_bool
+;
 
 typedef
 	conversion<static_cast<int>(conversion_tag::INT)>

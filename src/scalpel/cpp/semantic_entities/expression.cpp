@@ -78,7 +78,7 @@ operator()(const TYPE&) \
 		//conversions
 		//
 
-		FUNDAMENTAL_TYPE(boolean_conversion, fundamental_type::BOOL)
+		FUNDAMENTAL_TYPE(conversion_to_bool, fundamental_type::BOOL)
 		FUNDAMENTAL_TYPE(conversion_to_int, fundamental_type::INT)
 		FUNDAMENTAL_TYPE(conversion_to_long_int, fundamental_type::LONG_INT)
 		FUNDAMENTAL_TYPE(conversion_to_unsigned_int, fundamental_type::UNSIGNED_INT)
