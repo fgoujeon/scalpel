@@ -355,5 +355,93 @@ create_integral_promotions
 	}
 }
 
+void
+create_usual_arithmetic_conversions
+(
+	semantic_entities::expression_t& left_operand,
+	semantic_entities::expression_t& right_operand,
+	const type_category left_operand_type_category,
+	const type_category right_operand_type_category
+)
+{
+	if(is_arithmetic_or_enumeration(left_operand_type_category) && is_arithmetic_or_enumeration(right_operand_type_category))
+	{
+		//if either operand is of type long double, the other shall be converted to long double
+		if(is_long_double(left_operand_type_category))
+			right_operand = create_conversion_to_long_double(right_operand);
+		else if(is_long_double(right_operand_type_category))
+			left_operand = create_conversion_to_long_double(left_operand);
+		//otherwise, if either operand is double, the other shall be converted to double
+		else if(is_double(left_operand_type_category))
+			right_operand = create_conversion_to_double(right_operand);
+		else if(is_double(right_operand_type_category))
+			left_operand = create_conversion_to_double(left_operand);
+		//otherwise, if either operand is float, the other shall be converted to float
+		else if(is_float(left_operand_type_category))
+			right_operand = create_conversion_to_float(right_operand);
+		else if(is_float(right_operand_type_category))
+			left_operand = create_conversion_to_float(left_operand);
+		//otherwise...
+		else
+		{
+			//the integral promotions shall be performed on both operands
+			left_operand = create_integral_promotions(left_operand, left_operand_type_category);
+			right_operand = create_integral_promotions(right_operand, right_operand_type_category);
+
+			const type_category left_operand_type_category = get_category(get_type(left_operand));
+			const type_category right_operand_type_category = get_category(get_type(right_operand));
+
+			//if either operand is unsigned long the other shall be converted to unsigned long
+			if(is_unsigned_long_int(left_operand_type_category))
+				right_operand = create_conversion_to_unsigned_long_int(right_operand);
+			else if(is_unsigned_long_int(right_operand_type_category))
+				left_operand = create_conversion_to_unsigned_long_int(left_operand);
+			//otherwise, if one operand is a long int and the other unsigned int...
+			else if
+			(
+				is_long_int(left_operand_type_category) &&
+				is_unsigned_int(right_operand_type_category)
+			)
+			{
+				//if a long int can represent all the values of an unsigned int, the unsigned int shall be converted to a long int
+				if(can_represent_all_the_values_of<long int, unsigned int>::value)
+					right_operand = create_conversion_to_long_int(right_operand);
+				//otherwise both operands shall be converted to unsigned long int
+				else
+				{
+					left_operand = create_conversion_to_unsigned_long_int(left_operand);
+					right_operand = create_conversion_to_unsigned_long_int(right_operand);
+				}
+			}
+			else if
+			(
+				is_long_int(right_operand_type_category) &&
+				is_unsigned_int(left_operand_type_category)
+			)
+			{
+				if(can_represent_all_the_values_of<long int, unsigned int>::value)
+					left_operand = create_conversion_to_long_int(left_operand);
+				else
+				{
+					left_operand = create_conversion_to_unsigned_long_int(left_operand);
+					right_operand = create_conversion_to_unsigned_long_int(right_operand);
+				}
+			}
+			//otherwise, if either operand is long, the other shall be converted to long
+			else if(is_long_int(left_operand_type_category))
+				right_operand = create_conversion_to_long_int(right_operand);
+			else if(is_long_int(right_operand_type_category))
+				left_operand = create_conversion_to_long_int(left_operand);
+			//otherwise, if either operand is unsigned, the other shall be converted to unsigned.
+			else if(is_unsigned_int(left_operand_type_category))
+				right_operand = create_conversion_to_unsigned_int(right_operand);
+			else if(is_unsigned_int(right_operand_type_category))
+				left_operand = create_conversion_to_unsigned_int(left_operand);
+
+			//otherwise, the only remaining case is that both operands are int
+		}
+	}
+}
+
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
 

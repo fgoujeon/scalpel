@@ -99,7 +99,7 @@ init_unit_test()
 
 		//fill the test file list with testfiles/semantic_analysis/*.out files
 		{
-			std::vector<std::string> output_files = get_file_list("test/testfiles/semantic_analysis", boost::regex(".*\\.out"));
+			std::vector<std::string> output_files = get_file_list("test/testfiles/semantic_analysis", boost::regex(".*\\.out"), true);
 
 			for(auto i = output_files.begin(); i != output_files.end(); ++i) //for each output file...
 			{
@@ -121,7 +121,7 @@ init_unit_test()
 
 		//fill the test file list with testfiles/semantic_analysis/*.out.sem files
 		{
-			std::vector<std::string> output_files = get_file_list("test/testfiles/semantic_analysis", boost::regex(".*\\.out.sem"));
+			std::vector<std::string> output_files = get_file_list("test/testfiles/semantic_analysis", boost::regex(".*\\.out.sem"), true);
 
 			for(auto i = output_files.begin(); i != output_files.end(); ++i) //for each output file...
 			{
@@ -155,7 +155,7 @@ init_unit_test()
 		//fill the test file list with testfiles/linkage files
 		{
 			//find all output files
-			std::vector<std::string> output_files = get_file_list("test/testfiles/linkage", boost::regex(".*\\.out"));
+			std::vector<std::string> output_files = get_file_list("test/testfiles/linkage", boost::regex(".*\\.out"), true);
 
 			for(auto i = output_files.begin(); i != output_files.end(); ++i) //for each output file...
 			{
@@ -179,7 +179,7 @@ init_unit_test()
 
 		//fill the test file list with testfiles/semantic_analysis files (for single-file linkage tests)
 		{
-			std::vector<std::string> output_files = get_file_list("test/testfiles/semantic_analysis", boost::regex(".*\\.out"));
+			std::vector<std::string> output_files = get_file_list("test/testfiles/semantic_analysis", boost::regex(".*\\.out"), true);
 
 			for(auto i = output_files.begin(); i != output_files.end(); ++i) //for each output file...
 			{

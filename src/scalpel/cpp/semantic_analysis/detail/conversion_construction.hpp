@@ -66,6 +66,15 @@ create_integral_promotions
 	const semantic_entity_analysis::type_category source_type_category
 );
 
+void
+create_usual_arithmetic_conversions
+(
+	semantic_entities::expression_t& left_operand,
+	semantic_entities::expression_t& right_operand,
+	const semantic_entity_analysis::type_category left_operand_type_category,
+	const semantic_entity_analysis::type_category right_operand_type_category
+);
+
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
 
 #endif
