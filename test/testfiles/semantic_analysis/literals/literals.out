@@ -109,37 +109,7 @@
    </expression>
   </default_value>
  </variable>
- <variable id="11" name="cw0">
-  <type>
-   <fundamental_type type="wchar_t"/>
-  </type>
-  <default_value>
-   <expression type="wchar_t">
-    97
-   </expression>
-  </default_value>
- </variable>
- <variable id="12" name="cw1">
-  <type>
-   <fundamental_type type="wchar_t"/>
-  </type>
-  <default_value>
-   <expression type="wchar_t">
-    3647
-   </expression>
-  </default_value>
- </variable>
- <variable id="13" name="cw2">
-  <type>
-   <fundamental_type type="wchar_t"/>
-  </type>
-  <default_value>
-   <expression type="wchar_t">
-    233
-   </expression>
-  </default_value>
- </variable>
- <variable id="14" name="ci0">
+ <variable id="11" name="ci0">
   <type>
    <fundamental_type type="int"/>
   </type>
@@ -149,7 +119,7 @@
    </expression>
   </default_value>
  </variable>
- <variable id="15" name="ci1">
+ <variable id="12" name="ci1">
   <type>
    <fundamental_type type="int"/>
   </type>
@@ -159,7 +129,7 @@
    </expression>
   </default_value>
  </variable>
- <variable id="16" name="ci2">
+ <variable id="13" name="ci2">
   <type>
    <fundamental_type type="int"/>
   </type>
@@ -169,7 +139,7 @@
    </expression>
   </default_value>
  </variable>
- <variable id="17" name="ci3">
+ <variable id="14" name="ci3">
   <type>
    <fundamental_type type="int"/>
   </type>
@@ -179,13 +149,43 @@
    </expression>
   </default_value>
  </variable>
- <variable id="18" name="ci4">
+ <variable id="15" name="ci4">
   <type>
    <fundamental_type type="int"/>
   </type>
   <default_value>
    <expression type="int">
     12828464
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="16" name="cw0">
+  <type>
+   <fundamental_type type="wchar_t"/>
+  </type>
+  <default_value>
+   <expression type="wchar_t">
+    97
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="17" name="cw1">
+  <type>
+   <fundamental_type type="wchar_t"/>
+  </type>
+  <default_value>
+   <expression type="wchar_t">
+    3647
+   </expression>
+  </default_value>
+ </variable>
+ <variable id="18" name="cw2">
+  <type>
+   <fundamental_type type="wchar_t"/>
+  </type>
+  <default_value>
+   <expression type="wchar_t">
+    233
    </expression>
   </default_value>
  </variable>
@@ -239,7 +239,7 @@
    </expression>
   </default_value>
  </variable>
- <variable id="24" name="i">
+ <variable id="24" name="ii">
   <type>
    <fundamental_type type="int"/>
   </type>
@@ -249,7 +249,7 @@
    </expression>
   </default_value>
  </variable>
- <variable id="25" name="li">
+ <variable id="25" name="ili">
   <type>
    <fundamental_type type="long int"/>
   </type>
@@ -259,7 +259,7 @@
    </expression>
   </default_value>
  </variable>
- <variable id="26" name="lli">
+ <variable id="26" name="illi">
   <type>
    <fundamental_type type="long long int"/>
   </type>
@@ -269,7 +269,7 @@
    </expression>
   </default_value>
  </variable>
- <variable id="27" name="ui">
+ <variable id="27" name="iui">
   <type>
    <fundamental_type type="unsigned int"/>
   </type>
@@ -279,7 +279,7 @@
    </expression>
   </default_value>
  </variable>
- <variable id="28" name="uli">
+ <variable id="28" name="iuli">
   <type>
    <fundamental_type type="unsigned long int"/>
   </type>
@@ -289,7 +289,7 @@
    </expression>
   </default_value>
  </variable>
- <variable id="29" name="ulli">
+ <variable id="29" name="iulli">
   <type>
    <fundamental_type type="unsigned long long int"/>
   </type>

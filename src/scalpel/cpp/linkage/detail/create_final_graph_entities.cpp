@@ -420,7 +420,7 @@ namespace
 		const final_graph_entities& final_entities
 	)
 	{
-		return
+		variable* new_entity =
 			new variable
 			(
 				entity.name(),
@@ -428,6 +428,11 @@ namespace
 				entity.is_static()
 			)
 		;
+
+		if(entity.default_value())
+			new_entity->default_value(*entity.default_value());
+
+		return new_entity;
 	}
 
 	member_variable*
