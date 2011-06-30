@@ -26,7 +26,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "function_parameter_list.hpp"
 #include "variable.hpp"
 #include "statement_block.hpp"
-#include "declarative_region_variants.hpp"
+#include "declarative_regions.hpp"
 #include "type_fwd.hpp"
 #include "impl/detail/declarative_region_member_impl.hpp"
 #include "macros/detail/declarative_region_member_impl.hpp"
@@ -284,7 +284,7 @@ class CLASS_NAME \
 		bool is_inline_; \
 		std::unique_ptr<statement_block> body_; \
  \
-		boost::optional<declarative_region_ptr_variant> enclosing_declarative_region_; \
+		boost::optional<declarative_region_t> enclosing_declarative_region_; \
  \
 		BOOST_PP_IIF \
 		( \

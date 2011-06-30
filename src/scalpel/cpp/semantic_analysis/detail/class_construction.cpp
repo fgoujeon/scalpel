@@ -36,7 +36,7 @@ semantic_entities::class_ptr_variant
 find_class
 (
 	const ptr_to_member_operator& ptr_to_member_operator_node,
-	const declarative_region_ptr_variant& current_declarative_region
+	const declarative_region_t& current_declarative_region
 )
 {
 	const bool has_leading_double_colon = syntax_nodes::has_leading_double_colon(ptr_to_member_operator_node);

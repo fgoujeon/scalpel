@@ -137,7 +137,7 @@ typename return_type<Optional, Multiple, Entities...>::type
 find
 (
 	const typename EntityIdentificationPolicy::identifier_t& identifier,
-	semantic_entities::declarative_region_ptr_variant current_declarative_region
+	semantic_entities::declarative_region_t current_declarative_region
 );
 
 /**
@@ -155,7 +155,7 @@ find
 	const bool has_leading_double_colon,
 	const syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>& opt_nested_name_specifier_node,
 	const typename EntityIdentificationPolicy::identifier_t& identifier,
-	const semantic_entities::declarative_region_ptr_variant& current_declarative_region,
+	const semantic_entities::declarative_region_t& current_declarative_region,
 	const bool apply_using_directives_for_unqualified_id_part = true
 );
 
@@ -165,12 +165,12 @@ nested-identifier syntax node (i.e. Z in the expression "X::Y::Z::"),
 from the given declarative region.
 If has_leading_double_colon is false, the second argument cannot be omitted.
 */
-semantic_entities::open_declarative_region_ptr_variant
+semantic_entities::open_declarative_region_t
 find_declarative_region
 (
 	const bool has_leading_double_colon,
 	const syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>& opt_nested_name_specifier_node,
-	const semantic_entities::declarative_region_ptr_variant& current_declarative_region
+	const semantic_entities::declarative_region_t& current_declarative_region
 );
 
 /**
@@ -213,11 +213,11 @@ namespace detail
 	nested-identifier syntax node (i.e. Z in the expression "X::Y::Z::"),
 	from the given declarative region (where X must be declared).
 	*/
-	semantic_entities::open_declarative_region_ptr_variant
+	semantic_entities::open_declarative_region_t
 	find_declarative_region
 	(
 		const syntax_nodes::nested_name_specifier& nested_name_specifier_node,
-		const semantic_entities::open_declarative_region_ptr_variant& current_declarative_region
+		const semantic_entities::open_declarative_region_t& current_declarative_region
 	);
 
 
@@ -316,12 +316,12 @@ namespace detail
 		);
 	};
 
-	//Implementation of non-variadic find_local_entities(), with DeclarativeRegion = open_declarative_region_ptr_variant
+	//Implementation of non-variadic find_local_entities(), with DeclarativeRegion = open_declarative_region_t
 	template<class EntityIdentificationPolicy, class DeclarativeRegion, bool Optional, bool Multiple>
-	struct find_single_type_local_entities<EntityIdentificationPolicy, DeclarativeRegion, Optional, Multiple, semantic_entities::open_declarative_region_ptr_variant>
+	struct find_single_type_local_entities<EntityIdentificationPolicy, DeclarativeRegion, Optional, Multiple, semantic_entities::open_declarative_region_t>
 	{
 		static
-		typename return_type<Optional, Multiple, semantic_entities::open_declarative_region_ptr_variant>::type
+		typename return_type<Optional, Multiple, semantic_entities::open_declarative_region_t>::type
 		find
 		(
 			const typename EntityIdentificationPolicy::identifier_t& identifier,

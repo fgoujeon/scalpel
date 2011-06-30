@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_SEMANTIC_ENTITY_ANALYSIS_GET_GLOBAL_NAMESPACE_HPP
 #define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_SEMANTIC_ENTITY_ANALYSIS_GET_GLOBAL_NAMESPACE_HPP
 
-#include <scalpel/cpp/semantic_entities/declarative_region_variants.hpp>
+#include <scalpel/cpp/semantic_entities/declarative_regions.hpp>
 #include <scalpel/cpp/semantic_entities/namespace_.hpp>
 #include <memory>
 
@@ -29,7 +29,7 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 {
 
 semantic_entities::namespace_&
-get_global_namespace(semantic_entities::declarative_region_ptr_variant current_declarative_region);
+get_global_namespace(semantic_entities::declarative_region_t current_declarative_region);
 
 }}}}} //namespace scalpel::cpp::semantic_analysis::detail::semantic_entity_analysis
 

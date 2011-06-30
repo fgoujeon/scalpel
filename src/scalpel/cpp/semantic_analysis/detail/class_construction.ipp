@@ -476,7 +476,7 @@ fill_class
 		assert(false); //not implemented yet
 
 	//find the designated entity(ies)'s declarative region
-	open_declarative_region_ptr_variant found_declarative_region =
+	open_declarative_region_t found_declarative_region =
 		name_lookup::find_declarative_region
 		(
 			has_leading_double_colon(using_declaration_node),
@@ -493,7 +493,7 @@ fill_class
 			name_lookup::find_local
 			<
 				semantic_entity_analysis::identification_policies::by_name,
-				open_declarative_region_ptr_variant,
+				open_declarative_region_t,
 				true,
 				false,
 				member_class, member_enum, member_typedef, member_variable, bit_field
@@ -516,7 +516,7 @@ fill_class
 				name_lookup::find_local
 				<
 					semantic_entity_analysis::identification_policies::by_name,
-					open_declarative_region_ptr_variant,
+					open_declarative_region_t,
 					false,
 					true,
 					simple_member_function
@@ -541,7 +541,7 @@ fill_class
 			name_lookup::find_local
 			<
 				semantic_entity_analysis::identification_policies::by_overloaded_operator,
-				open_declarative_region_ptr_variant,
+				open_declarative_region_t,
 				false,
 				true,
 				operator_member_function
@@ -565,7 +565,7 @@ fill_class
 			name_lookup::find_local
 			<
 				semantic_entity_analysis::identification_policies::by_return_type,
-				open_declarative_region_ptr_variant,
+				open_declarative_region_t,
 				false,
 				true,
 				conversion_function

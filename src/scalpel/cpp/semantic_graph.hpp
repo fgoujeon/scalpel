@@ -25,7 +25,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "semantic_entities/base_class.hpp"
 #include "semantic_entities/class_.hpp"
 #include "semantic_entities/cv_qualified_type.hpp"
-#include "semantic_entities/declarative_region_variants.hpp"
+#include "semantic_entities/declarative_regions.hpp"
 #include "semantic_entities/enum_.hpp"
 #include "semantic_entities/enum_constant.hpp"
 #include "semantic_entities/expression.hpp"

@@ -36,7 +36,7 @@ typename return_type<Optional, Multiple, Entities...>::type
 find
 (
 	const typename EntityIdentificationPolicy::identifier_t& identifier,
-	semantic_entities::declarative_region_ptr_variant current_declarative_region
+	semantic_entities::declarative_region_t current_declarative_region
 )
 {
 	using namespace detail;
@@ -85,7 +85,7 @@ find
 			find_local_entities
 			<
 				EntityIdentificationPolicy,
-				declarative_region_ptr_variant,
+				declarative_region_t,
 				true,
 				Multiple,
 				Entities...
@@ -205,7 +205,7 @@ find
 	const bool has_leading_double_colon,
 	const syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>& opt_nested_name_specifier_node,
 	const typename EntityIdentificationPolicy::identifier_t& identifier,
-	const semantic_entities::declarative_region_ptr_variant& current_declarative_region,
+	const semantic_entities::declarative_region_t& current_declarative_region,
 	const bool apply_using_directives_for_unqualified_id_part
 )
 {
@@ -233,7 +233,7 @@ find
 
 	//Find the last declarative region of the nested identifier specifier
 	//(i.e. Z in "[::]X::Y::Z::").
-	open_declarative_region_ptr_variant last_declarative_region =
+	open_declarative_region_t last_declarative_region =
 		find_declarative_region
 		(
 			has_leading_double_colon,
@@ -264,7 +264,7 @@ find
 		find_local_entities
 		<
 			EntityIdentificationPolicy,
-			open_declarative_region_ptr_variant,
+			open_declarative_region_t,
 			true,
 			Multiple,
 			Entities...
@@ -568,8 +568,8 @@ find_variadic_local_entities<EntityIdentificationPolicy, DeclarativeRegion, Opti
 }
 
 template<class EntityIdentificationPolicy, class DeclarativeRegion, bool Optional, bool Multiple>
-typename return_type<Optional, Multiple, semantic_entities::open_declarative_region_ptr_variant>::type
-find_single_type_local_entities<EntityIdentificationPolicy, DeclarativeRegion, Optional, Multiple, semantic_entities::open_declarative_region_ptr_variant>::find
+typename return_type<Optional, Multiple, semantic_entities::open_declarative_region_t>::type
+find_single_type_local_entities<EntityIdentificationPolicy, DeclarativeRegion, Optional, Multiple, semantic_entities::open_declarative_region_t>::find
 (
 	const typename EntityIdentificationPolicy::identifier_t& identifier,
 	DeclarativeRegion& current_declarative_region
@@ -585,7 +585,7 @@ find_single_type_local_entities<EntityIdentificationPolicy, DeclarativeRegion, O
 			Optional,
 			Multiple,
 
-			//open_declarative_region_ptr_variant types
+			//open_declarative_region_t types
 			//TODO: this is redundant, it might be possible to fix this
 			//redundance using template aliases
 			namespace_,
@@ -1069,7 +1069,7 @@ find_common_enclosing_namespace
 {
 	using namespace semantic_entities;
 
-	declarative_region_ptr_variant current_declarative_region_a = &a;
+	declarative_region_t current_declarative_region_a = &a;
 	while(true) //from a to outermost declarative region...
 	{
 		namespace_** opt_namespace_ptr_a = utility::get<namespace_*>(&current_declarative_region_a);

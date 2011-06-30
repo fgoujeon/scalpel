@@ -151,7 +151,7 @@ semantic_entities::class_ptr_variant
 find_class
 (
 	const syntax_nodes::ptr_to_member_operator& ptr_to_member_operator_node,
-	const semantic_entities::declarative_region_ptr_variant& current_declarative_region
+	const semantic_entities::declarative_region_t& current_declarative_region
 );
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail

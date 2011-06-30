@@ -263,7 +263,7 @@ fill_namespace
 		assert(false); //not implemented yet
 
 	//find the designated entity(ies)'s declarative region
-	open_declarative_region_ptr_variant found_declarative_region =
+	open_declarative_region_t found_declarative_region =
 		name_lookup::find_declarative_region
 		(
 			has_leading_double_colon(using_declaration_node),
@@ -280,7 +280,7 @@ fill_namespace
 			name_lookup::find_local
 			<
 				semantic_entity_analysis::identification_policies::by_name,
-				open_declarative_region_ptr_variant,
+				open_declarative_region_t,
 				true,
 				false,
 				class_, enum_, typedef_, variable
@@ -303,7 +303,7 @@ fill_namespace
 				name_lookup::find_local
 				<
 					semantic_entity_analysis::identification_policies::by_name,
-					open_declarative_region_ptr_variant,
+					open_declarative_region_t,
 					false,
 					true,
 					simple_function
@@ -329,7 +329,7 @@ fill_namespace
 			name_lookup::find_local
 			<
 				semantic_entity_analysis::identification_policies::by_overloaded_operator,
-				open_declarative_region_ptr_variant,
+				open_declarative_region_t,
 				false,
 				true,
 				operator_function
@@ -373,7 +373,7 @@ fill_namespace
 	const bool is_qualified = has_leading_double_colon || opt_nested_name_specifier_node;
 
 	//find the enclosing declarative region of the function (xxx in void xxx::f())
-	function_enclosing_declarative_region_ptr_variant function_declarative_region =
+	function_enclosing_declarative_region_t function_declarative_region =
 		is_qualified ?
 		find_function_enclosing_declarative_region
 		(

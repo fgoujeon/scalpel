@@ -18,8 +18,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_DECLARATIVE_REGION_VARIANTS_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_DECLARATIVE_REGION_VARIANTS_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_DECLARATIVE_REGIONS_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_DECLARATIVE_REGIONS_HPP
 
 #include <scalpel/utility/variant.hpp>
 #include <scalpel/utility/ptr_variant.hpp>
@@ -71,7 +71,7 @@ typedef
 		simple_member_function,
 		statement_block
 	>::type
-	declarative_region_ptr_variant
+	declarative_region_t
 ;
 
 //Open declarative regions are those considered during a qualified name lookup.
@@ -88,7 +88,7 @@ typedef
 		member_union,
 		typedef_
 	>::type
-	open_declarative_region_ptr_variant
+	open_declarative_region_t
 ;
 
 typedef
@@ -101,20 +101,20 @@ typedef
 		union_,
 		member_union
 	>::type
-	function_enclosing_declarative_region_ptr_variant
+	function_enclosing_declarative_region_t
 ;
 
 const std::string&
-get_name(const declarative_region_ptr_variant& var);
+get_name(const declarative_region_t& var);
 
 const std::string&
-get_name(const open_declarative_region_ptr_variant& var);
+get_name(const open_declarative_region_t& var);
 
 bool
-has_enclosing_declarative_region(const declarative_region_ptr_variant& var);
+has_enclosing_declarative_region(const declarative_region_t& var);
 
-declarative_region_ptr_variant
-get_enclosing_declarative_region(const declarative_region_ptr_variant& var);
+declarative_region_t
+get_enclosing_declarative_region(const declarative_region_t& var);
 
 }}} //namespace scalpel::cpp::semantic_entities
 

@@ -18,7 +18,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "declarative_region_variants.hpp"
+#include "declarative_regions.hpp"
 #include "namespace_.hpp"
 #include "namespace_alias.hpp"
 #include "class_.hpp"
@@ -103,13 +103,13 @@ namespace
 }
 
 const std::string&
-get_name(const declarative_region_ptr_variant& var)
+get_name(const declarative_region_t& var)
 {
 	return utility::apply_visitor(get_name_visitor, var);
 }
 
 const std::string&
-get_name(const open_declarative_region_ptr_variant& var)
+get_name(const open_declarative_region_t& var)
 {
 	return utility::apply_visitor(get_name_visitor, var);
 }
@@ -130,7 +130,7 @@ namespace
 }
 
 bool
-has_enclosing_declarative_region(const declarative_region_ptr_variant& var)
+has_enclosing_declarative_region(const declarative_region_t& var)
 {
 	return utility::apply_visitor(has_enclosing_declarative_region_visitor, var);
 }
@@ -139,20 +139,20 @@ has_enclosing_declarative_region(const declarative_region_ptr_variant& var)
 
 namespace
 {
-	struct: public utility::static_visitor<declarative_region_ptr_variant>
+	struct: public utility::static_visitor<declarative_region_t>
 	{
 		template<class T>
-		declarative_region_ptr_variant
+		declarative_region_t
 		operator()(T* t) const
 		{
 			return t;
 		}
 	} to_declarative_region_ptr_variant;
 
-	struct: public utility::static_visitor<declarative_region_ptr_variant>
+	struct: public utility::static_visitor<declarative_region_t>
 	{
 		template<class Entity>
-		declarative_region_ptr_variant
+		declarative_region_t
 		operator()(Entity* t) const
 		{
 			return apply_visitor(to_declarative_region_ptr_variant, t->enclosing_declarative_region());
@@ -160,8 +160,8 @@ namespace
 	} get_enclosing_declarative_region_visitor;
 }
 
-declarative_region_ptr_variant
-get_enclosing_declarative_region(const declarative_region_ptr_variant& var)
+declarative_region_t
+get_enclosing_declarative_region(const declarative_region_t& var)
 {
 	return utility::apply_visitor(get_enclosing_declarative_region_visitor, var);
 }

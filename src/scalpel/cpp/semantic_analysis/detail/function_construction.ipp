@@ -131,7 +131,7 @@ FunctionT*
 find_function
 (
 	const FunctionT& function_signature,
-	semantic_entities::function_enclosing_declarative_region_ptr_variant& function_declarative_region
+	semantic_entities::function_enclosing_declarative_region_t& function_declarative_region
 )
 {
 	using namespace syntax_nodes;
@@ -144,7 +144,7 @@ find_function
 		name_lookup::find_local
 		<
 			identification_policy_t,
-			function_enclosing_declarative_region_ptr_variant,
+			function_enclosing_declarative_region_t,
 			true,
 			true,
 			FunctionT

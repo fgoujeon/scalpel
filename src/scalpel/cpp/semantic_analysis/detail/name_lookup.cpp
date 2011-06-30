@@ -26,12 +26,12 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 
 using namespace semantic_entities;
 
-semantic_entities::open_declarative_region_ptr_variant
+semantic_entities::open_declarative_region_t
 find_declarative_region
 (
 	const bool has_leading_double_colon,
 	const syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>& opt_nested_name_specifier_node,
-	const semantic_entities::declarative_region_ptr_variant& current_declarative_region
+	const semantic_entities::declarative_region_t& current_declarative_region
 )
 {
 	if(has_leading_double_colon)
@@ -53,14 +53,14 @@ find_declarative_region
 				assert(false);
 
 			//find the first declarative region
-			open_declarative_region_ptr_variant first_declarative_region =
+			open_declarative_region_t first_declarative_region =
 				detail::find_local_entities
 				<
 					semantic_entity_analysis::identification_policies::by_name,
 					semantic_entities::namespace_,
 					false,
 					false,
-					open_declarative_region_ptr_variant
+					open_declarative_region_t
 				>(first_declarative_region_name, global_namespace)
 			;
 
@@ -87,13 +87,13 @@ find_declarative_region
 				assert(false);
 
 			//find the first declarative region
-			open_declarative_region_ptr_variant first_declarative_region =
+			open_declarative_region_t first_declarative_region =
 				find
 				<
 					semantic_entity_analysis::identification_policies::by_name,
 					false,
 					false,
-					open_declarative_region_ptr_variant
+					open_declarative_region_t
 				>(first_declarative_region_name, current_declarative_region)
 			;
 
@@ -106,7 +106,7 @@ find_declarative_region
 			assert(false);
 
 			//we could simply return current_declarative_region here,
-			//but the cast to open_declarative_region_ptr_variant
+			//but the cast to open_declarative_region_t
 			//could raise an exception
 		}
 	}
@@ -115,18 +115,18 @@ find_declarative_region
 namespace detail
 {
 
-semantic_entities::open_declarative_region_ptr_variant
+semantic_entities::open_declarative_region_t
 find_declarative_region
 (
 	const syntax_nodes::nested_name_specifier& nested_name_specifier_node,
-	const semantic_entities::open_declarative_region_ptr_variant& current_declarative_region
+	const semantic_entities::open_declarative_region_t& current_declarative_region
 )
 {
 	if(auto opt_last_part_seq_node = get_last_part_seq(nested_name_specifier_node))
 	{
 		auto last_part_seq_node = *opt_last_part_seq_node;
 
-		open_declarative_region_ptr_variant found_declarative_region = current_declarative_region;
+		open_declarative_region_t found_declarative_region = current_declarative_region;
 		for
 		(
 			auto i = last_part_seq_node.begin();
@@ -149,10 +149,10 @@ find_declarative_region
 						find_local_entities
 						<
 							semantic_entity_analysis::identification_policies::by_name,
-							open_declarative_region_ptr_variant,
+							open_declarative_region_t,
 							false,
 							false,
-							open_declarative_region_ptr_variant
+							open_declarative_region_t
 						>
 						(
 							identifier_node.value(),

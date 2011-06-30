@@ -23,7 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "base_class.hpp"
 #include "entity_alias.hpp"
-#include "declarative_region_variants.hpp"
+#include "declarative_regions.hpp"
 #include "type_fwd.hpp"
 #include "member_access.hpp"
 #include "impl/detail/declarative_region_member_impl.hpp"

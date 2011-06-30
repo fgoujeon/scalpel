@@ -25,7 +25,7 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 {
 
 semantic_entities::namespace_&
-get_global_namespace(semantic_entities::declarative_region_ptr_variant current_declarative_region)
+get_global_namespace(semantic_entities::declarative_region_t current_declarative_region)
 {
 	//get the outermost declarative region
 	while(has_enclosing_declarative_region(current_declarative_region))

@@ -59,7 +59,7 @@ define_function
 (
 	const function_ptr_variant& function_entity,
 	const syntax_nodes::function_definition& function_definition_node,
-	const semantic_entities::declarative_region_ptr_variant current_declarative_region
+	const semantic_entities::declarative_region_t current_declarative_region
 );
 
 //find the function corresponding to the given function signature
@@ -67,7 +67,7 @@ boost::optional<function_ptr_variant>
 find_function
 (
 	const function_ptr_variant& function_signature,
-	semantic_entities::function_enclosing_declarative_region_ptr_variant& function_declarative_region
+	semantic_entities::function_enclosing_declarative_region_t& function_declarative_region
 );
 
 //find the function corresponding to the given function signature
@@ -76,15 +76,15 @@ FunctionT*
 find_function
 (
 	const FunctionT& function_signature,
-	semantic_entities::function_enclosing_declarative_region_ptr_variant& function_declarative_region
+	semantic_entities::function_enclosing_declarative_region_t& function_declarative_region
 );
 
-semantic_entities::function_enclosing_declarative_region_ptr_variant
+semantic_entities::function_enclosing_declarative_region_t
 find_function_enclosing_declarative_region
 (
 	const bool has_leading_double_colon,
 	const syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>& opt_nested_name_specifier_node,
-	const semantic_entities::declarative_region_ptr_variant& current_declarative_region
+	const semantic_entities::declarative_region_t& current_declarative_region
 );
 
 semantic_entities::overloadable_operator

@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_NAMESPACE_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_NAMESPACE_HPP
 
-#include "declarative_region_variants.hpp"
+#include "declarative_regions.hpp"
 #include "namespace_alias.hpp"
 #include "entity_alias.hpp"
 #include "class_.hpp"

@@ -143,7 +143,7 @@ qualify_type
 (
 	semantic_entities::type_t type,
 	const syntax_nodes::ptr_operator_seq& ptr_operator_seq_node,
-	const semantic_entities::declarative_region_ptr_variant& current_declarative_region
+	const semantic_entities::declarative_region_t& current_declarative_region
 )
 {
 	for(auto i = ptr_operator_seq_node.begin(); i != ptr_operator_seq_node.end(); ++i)
@@ -550,7 +550,7 @@ namespace detail
 	create_simple_type
 	(
 		const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-		const declarative_region_ptr_variant current_declarative_region
+		const declarative_region_t current_declarative_region
 	)
 	{
 		return create_simple_type(syntax_node_analysis::to_type_specifier_seq(decl_specifier_seq_node), current_declarative_region);
@@ -560,7 +560,7 @@ namespace detail
 	create_simple_type
 	(
 		const syntax_nodes::type_specifier_seq& type_specifier_seq_node,
-		const semantic_entities::declarative_region_ptr_variant current_declarative_region
+		const semantic_entities::declarative_region_t current_declarative_region
 	)
 	{
 		boost::optional<semantic_entities::type_t> opt_return_type;

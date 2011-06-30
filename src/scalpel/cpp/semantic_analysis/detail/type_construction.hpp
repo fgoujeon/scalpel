@@ -157,7 +157,7 @@ qualify_type
 (
 	semantic_entities::type_t type,
 	const syntax_nodes::ptr_operator_seq& ptr_operator_seq_node,
-	const semantic_entities::declarative_region_ptr_variant& current_declarative_region
+	const semantic_entities::declarative_region_t& current_declarative_region
 );
 
 //qualify type with cv-qualifier-seq's const and volatile
@@ -216,7 +216,7 @@ namespace detail
 	create_simple_type
 	(
 		const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
-		const semantic_entities::declarative_region_ptr_variant current_declarative_region
+		const semantic_entities::declarative_region_t current_declarative_region
 	);
 
 	//Create the type described by the given type-specifier-seq.
@@ -226,7 +226,7 @@ namespace detail
 	create_simple_type
 	(
 		const syntax_nodes::type_specifier_seq& type_specifier_seq_node,
-		const semantic_entities::declarative_region_ptr_variant current_declarative_region
+		const semantic_entities::declarative_region_t current_declarative_region
 	);
 
 

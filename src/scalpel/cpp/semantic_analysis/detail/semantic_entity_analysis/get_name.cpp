@@ -48,14 +48,14 @@ get_name<std::shared_ptr<semantic_entities::ENTITY_TYPE const>>(const std::share
 
 template<>
 const std::string&
-get_name<semantic_entities::declarative_region_ptr_variant>(const semantic_entities::declarative_region_ptr_variant& entity)
+get_name<semantic_entities::declarative_region_t>(const semantic_entities::declarative_region_t& entity)
 {
 	return semantic_entities::get_name(entity);
 }
 
 template<>
 const std::string&
-get_name<semantic_entities::open_declarative_region_ptr_variant>(const semantic_entities::open_declarative_region_ptr_variant& entity)
+get_name<semantic_entities::open_declarative_region_t>(const semantic_entities::open_declarative_region_t& entity)
 {
 	return semantic_entities::get_name(entity);
 }
