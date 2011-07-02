@@ -38,6 +38,12 @@ namespace
 		}
 
 		type_category
+		operator()(const cv_qualified_type& type)
+		{
+			return get_category(type.qualified_type());
+		}
+
+		type_category
 		operator()(const fundamental_type type)
 		{
 			switch(type)

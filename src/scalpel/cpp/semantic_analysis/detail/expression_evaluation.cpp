@@ -20,9 +20,13 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "expression_evaluation.hpp"
 #include <scalpel/utility/variant.hpp>
+#include <boost/type_traits/is_fundamental.hpp>
+#include <boost/utility/enable_if.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail
 {
+
+using namespace semantic_entities;
 
 namespace
 {
@@ -47,6 +51,112 @@ unsigned int
 evaluate_expression_to_unsigned_int(const semantic_entities::expression_t& expr)
 {
 	return apply_visitor(evaluate_expression_visitor, expr);
+}
+
+
+
+namespace
+{
+	template<class T>
+	class evaluate_addition_expression_visitor_2: public utility::static_visitor<semantic_entities::expression_t>
+	{
+		public:
+			evaluate_addition_expression_visitor_2(const T& right_operand):
+				right_operand_(right_operand)
+			{
+			}
+
+			//fundamental types
+			template<class U>
+			semantic_entities::expression_t
+			operator()
+			(
+				const U& left_operand,
+				typename boost::enable_if<boost::is_fundamental<U>>::type* = 0
+			) const
+			{
+				return left_operand + right_operand_;
+			}
+
+			//variable
+			semantic_entities::expression_t
+			operator()(variable* const var) const
+			{
+				assert(var->default_value());
+				return utility::apply_visitor(*this, *(var->default_value()));
+			}
+
+			//other types
+			template<class U>
+			semantic_entities::expression_t
+			operator()
+			(
+				const U&,
+				typename boost::disable_if<boost::is_fundamental<U>>::type* = 0
+			) const
+			{
+				assert(false);
+			}
+
+		private:
+			const T& right_operand_;
+	};
+
+	class evaluate_addition_expression_visitor: public utility::static_visitor<semantic_entities::expression_t>
+	{
+		public:
+			evaluate_addition_expression_visitor(const semantic_entities::expression_t& left_operand):
+				left_operand_(left_operand)
+			{
+			}
+
+			//fundamental types
+			template<class T>
+			semantic_entities::expression_t
+			operator()
+			(
+				const T& right_operand,
+				typename boost::enable_if<boost::is_fundamental<T>>::type* = 0
+			) const
+			{
+				evaluate_addition_expression_visitor_2<T> visitor(right_operand);
+				return utility::apply_visitor(visitor, left_operand_);
+			}
+
+			//variable
+			semantic_entities::expression_t
+			operator()(variable* const var) const
+			{
+				assert(var->default_value());
+				return utility::apply_visitor(*this, *(var->default_value()));
+			}
+
+			//other types
+			template<class T>
+			semantic_entities::expression_t
+			operator()
+			(
+				const T&,
+				typename boost::disable_if<boost::is_fundamental<T>>::type* = 0
+			) const
+			{
+				assert(false);
+			}
+
+		private:
+			const semantic_entities::expression_t& left_operand_;
+	};
+}
+
+semantic_entities::expression_t
+evaluate_addition_expression
+(
+	const semantic_entities::expression_t& left_operand,
+	const semantic_entities::expression_t& right_operand
+)
+{
+	evaluate_addition_expression_visitor visitor(left_operand);
+	return utility::apply_visitor(visitor, right_operand);
 }
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail

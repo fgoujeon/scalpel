@@ -36,26 +36,84 @@ create_conversion
 
 
 
-semantic_entities::expression_t
-create_conversion_to_bool(const semantic_entities::expression_t& expr);
+template<typename T>
+struct conversion_to_type;
 
-semantic_entities::expression_t
-create_conversion_to_long_int(const semantic_entities::expression_t& expr);
+#define CONVERSION_TO_TYPE(TYPE, CONVERSION_CLASS) \
+template<> \
+struct conversion_to_type<TYPE> \
+{ \
+	typedef semantic_entities::conversion_to_##CONVERSION_CLASS type; \
+};
 
-semantic_entities::expression_t
-create_conversion_to_unsigned_int(const semantic_entities::expression_t& expr);
+CONVERSION_TO_TYPE(bool, bool)
+CONVERSION_TO_TYPE(int, int)
+CONVERSION_TO_TYPE(long int, long_int)
+//CONVERSION_TO_TYPE(long long int, long_long_int)
+CONVERSION_TO_TYPE(unsigned int, unsigned_int)
+CONVERSION_TO_TYPE(unsigned long int, unsigned_long_int)
+//CONVERSION_TO_TYPE(unsigned long long int, unsigned_long_long_int)
+CONVERSION_TO_TYPE(float, float)
+CONVERSION_TO_TYPE(double, double)
+CONVERSION_TO_TYPE(long double, long_double)
 
-semantic_entities::expression_t
-create_conversion_to_unsigned_long_int(const semantic_entities::expression_t& expr);
+#undef CONVERSION_TO_TYPE
 
-semantic_entities::expression_t
-create_conversion_to_float(const semantic_entities::expression_t& expr);
 
-semantic_entities::expression_t
-create_conversion_to_double(const semantic_entities::expression_t& expr);
 
+//converts the given expression to T
+template<typename T>
+struct conversion_to_type_visitor: utility::static_visitor<T>
+{
+	conversion_to_type_visitor()
+	{
+	}
+
+	template<typename U>
+	T
+	operator()
+	(
+		const U& expr,
+		typename boost::enable_if<boost::is_arithmetic<U>>::type* = 0
+	) const
+	{
+		return expr;
+	}
+
+	T
+	operator()(semantic_entities::variable* const var) const
+	{
+		assert(var->default_value());
+		return apply_visitor(*this, *(var->default_value()));
+	}
+
+	template<class U>
+	T
+	operator()
+	(
+		const U&,
+		typename boost::disable_if<boost::is_arithmetic<U>>::type* = 0
+	) const
+	{
+		assert(false);
+	}
+};
+
+template<typename T>
 semantic_entities::expression_t
-create_conversion_to_long_double(const semantic_entities::expression_t& expr);
+create_conversion_to_type
+(
+	const semantic_entities::expression_t& expr,
+	const bool evaluate
+)
+{
+	static const conversion_to_type_visitor<T> visitor;
+
+	if(evaluate)
+		return apply_visitor(visitor, expr);
+	else
+		return typename conversion_to_type<T>::type(expr);
+}
 
 
 
@@ -71,6 +129,7 @@ create_usual_arithmetic_conversions
 (
 	semantic_entities::expression_t& left_operand,
 	semantic_entities::expression_t& right_operand,
+	const bool evaluate,
 	const semantic_entity_analysis::type_category left_operand_type_category,
 	const semantic_entity_analysis::type_category right_operand_type_category
 );

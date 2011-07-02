@@ -227,17 +227,8 @@
    <fundamental_type type="int"/>
   </type>
   <default_value>
-   <expression type="addition">
-    <left_operand>
-     <expression type="int">
-      7
-     </expression>
-    </left_operand>
-    <right_operand>
-     <expression type="int">
-      9
-     </expression>
-    </right_operand>
+   <expression type="int">
+    16
    </expression>
   </default_value>
  </variable>

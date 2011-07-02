@@ -19,7 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "conversion_construction.hpp"
-#include <scalpel/cpp/semantic_entities/conversions.hpp>
+#include <boost/type_traits/is_arithmetic.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail
 {
@@ -52,7 +52,7 @@ namespace
 						if(get_type(expr_) == type_t(fundamental_type::BOOL))
 							return expr_;
 						else
-							return create_conversion_to_bool(expr_);
+							return create_conversion_to_type<bool>(expr_, false);
 					case fundamental_type::CHAR:
 					case fundamental_type::DOUBLE:
 					case fundamental_type::FLOAT:
@@ -167,50 +167,6 @@ create_conversion
 {
 	create_conversion_visitor visitor(expr);
 	return apply_visitor(visitor, destination_type);
-}
-
-
-
-semantic_entities::expression_t
-create_conversion_to_bool(const semantic_entities::expression_t& expr)
-{
-	return conversion_to_bool(expr);
-}
-
-semantic_entities::expression_t
-create_conversion_to_long_int(const semantic_entities::expression_t& expr)
-{
-	return conversion_to_long_int(expr);
-}
-
-semantic_entities::expression_t
-create_conversion_to_unsigned_int(const semantic_entities::expression_t& expr)
-{
-	return conversion_to_unsigned_int(expr);
-}
-
-semantic_entities::expression_t
-create_conversion_to_unsigned_long_int(const semantic_entities::expression_t& expr)
-{
-	return conversion_to_unsigned_long_int(expr);
-}
-
-semantic_entities::expression_t
-create_conversion_to_float(const semantic_entities::expression_t& expr)
-{
-	return conversion_to_float(expr);
-}
-
-semantic_entities::expression_t
-create_conversion_to_double(const semantic_entities::expression_t& expr)
-{
-	return conversion_to_double(expr);
-}
-
-semantic_entities::expression_t
-create_conversion_to_long_double(const semantic_entities::expression_t& expr)
-{
-	return conversion_to_long_double(expr);
 }
 
 
@@ -360,86 +316,86 @@ create_usual_arithmetic_conversions
 (
 	semantic_entities::expression_t& left_operand,
 	semantic_entities::expression_t& right_operand,
+	const bool evaluate,
 	const type_category left_operand_type_category,
 	const type_category right_operand_type_category
 )
 {
-	if(is_arithmetic_or_enumeration(left_operand_type_category) && is_arithmetic_or_enumeration(right_operand_type_category))
+	assert(is_arithmetic_or_enumeration(left_operand_type_category) && is_arithmetic_or_enumeration(right_operand_type_category));
+
+	//if either operand is of type long double, the other shall be converted to long double
+	if(is_long_double(left_operand_type_category))
+		right_operand = create_conversion_to_type<long double>(right_operand, evaluate);
+	else if(is_long_double(right_operand_type_category))
+		left_operand = create_conversion_to_type<long double>(left_operand, evaluate);
+	//otherwise, if either operand is double, the other shall be converted to double
+	else if(is_double(left_operand_type_category))
+		right_operand = create_conversion_to_type<double>(right_operand, evaluate);
+	else if(is_double(right_operand_type_category))
+		left_operand = create_conversion_to_type<double>(left_operand, evaluate);
+	//otherwise, if either operand is float, the other shall be converted to float
+	else if(is_float(left_operand_type_category))
+		right_operand = create_conversion_to_type<float>(right_operand, evaluate);
+	else if(is_float(right_operand_type_category))
+		left_operand = create_conversion_to_type<float>(left_operand, evaluate);
+	//otherwise...
+	else
 	{
-		//if either operand is of type long double, the other shall be converted to long double
-		if(is_long_double(left_operand_type_category))
-			right_operand = create_conversion_to_long_double(right_operand);
-		else if(is_long_double(right_operand_type_category))
-			left_operand = create_conversion_to_long_double(left_operand);
-		//otherwise, if either operand is double, the other shall be converted to double
-		else if(is_double(left_operand_type_category))
-			right_operand = create_conversion_to_double(right_operand);
-		else if(is_double(right_operand_type_category))
-			left_operand = create_conversion_to_double(left_operand);
-		//otherwise, if either operand is float, the other shall be converted to float
-		else if(is_float(left_operand_type_category))
-			right_operand = create_conversion_to_float(right_operand);
-		else if(is_float(right_operand_type_category))
-			left_operand = create_conversion_to_float(left_operand);
-		//otherwise...
-		else
+		//the integral promotions shall be performed on both operands
+		left_operand = create_integral_promotions(left_operand, left_operand_type_category);
+		right_operand = create_integral_promotions(right_operand, right_operand_type_category);
+
+		const type_category left_operand_type_category = get_category(get_type(left_operand));
+		const type_category right_operand_type_category = get_category(get_type(right_operand));
+
+		//if either operand is unsigned long the other shall be converted to unsigned long
+		if(is_unsigned_long_int(left_operand_type_category))
+			right_operand = create_conversion_to_type<unsigned long int>(right_operand, evaluate);
+		else if(is_unsigned_long_int(right_operand_type_category))
+			left_operand = create_conversion_to_type<unsigned long int>(left_operand, evaluate);
+		//otherwise, if one operand is a long int and the other unsigned int...
+		else if
+		(
+			is_long_int(left_operand_type_category) &&
+			is_unsigned_int(right_operand_type_category)
+		)
 		{
-			//the integral promotions shall be performed on both operands
-			left_operand = create_integral_promotions(left_operand, left_operand_type_category);
-			right_operand = create_integral_promotions(right_operand, right_operand_type_category);
-
-			const type_category left_operand_type_category = get_category(get_type(left_operand));
-			const type_category right_operand_type_category = get_category(get_type(right_operand));
-
-			//if either operand is unsigned long the other shall be converted to unsigned long
-			if(is_unsigned_long_int(left_operand_type_category))
-				right_operand = create_conversion_to_unsigned_long_int(right_operand);
-			else if(is_unsigned_long_int(right_operand_type_category))
-				left_operand = create_conversion_to_unsigned_long_int(left_operand);
-			//otherwise, if one operand is a long int and the other unsigned int...
-			else if
-			(
-				is_long_int(left_operand_type_category) &&
-				is_unsigned_int(right_operand_type_category)
-			)
+			//if a long int can represent all the values of an unsigned int, the unsigned int shall be converted to a long int
+			if(can_represent_all_the_values_of<long int, unsigned int>::value)
+				right_operand = create_conversion_to_type<long int>(right_operand, evaluate);
+			//otherwise both operands shall be converted to unsigned long int
+			else
 			{
-				//if a long int can represent all the values of an unsigned int, the unsigned int shall be converted to a long int
-				if(can_represent_all_the_values_of<long int, unsigned int>::value)
-					right_operand = create_conversion_to_long_int(right_operand);
-				//otherwise both operands shall be converted to unsigned long int
-				else
-				{
-					left_operand = create_conversion_to_unsigned_long_int(left_operand);
-					right_operand = create_conversion_to_unsigned_long_int(right_operand);
-				}
+				left_operand = create_conversion_to_type<unsigned long int>(left_operand, evaluate);
+				right_operand = create_conversion_to_type<unsigned long int>(right_operand, evaluate);
 			}
-			else if
-			(
-				is_long_int(right_operand_type_category) &&
-				is_unsigned_int(left_operand_type_category)
-			)
-			{
-				if(can_represent_all_the_values_of<long int, unsigned int>::value)
-					left_operand = create_conversion_to_long_int(left_operand);
-				else
-				{
-					left_operand = create_conversion_to_unsigned_long_int(left_operand);
-					right_operand = create_conversion_to_unsigned_long_int(right_operand);
-				}
-			}
-			//otherwise, if either operand is long, the other shall be converted to long
-			else if(is_long_int(left_operand_type_category))
-				right_operand = create_conversion_to_long_int(right_operand);
-			else if(is_long_int(right_operand_type_category))
-				left_operand = create_conversion_to_long_int(left_operand);
-			//otherwise, if either operand is unsigned, the other shall be converted to unsigned.
-			else if(is_unsigned_int(left_operand_type_category))
-				right_operand = create_conversion_to_unsigned_int(right_operand);
-			else if(is_unsigned_int(right_operand_type_category))
-				left_operand = create_conversion_to_unsigned_int(left_operand);
-
-			//otherwise, the only remaining case is that both operands are int
 		}
+		else if
+		(
+			is_long_int(right_operand_type_category) &&
+			is_unsigned_int(left_operand_type_category)
+		)
+		{
+			if(can_represent_all_the_values_of<long int, unsigned int>::value)
+				left_operand = create_conversion_to_type<long int>(left_operand, evaluate);
+			else
+			{
+				left_operand = create_conversion_to_type<unsigned long int>(left_operand, evaluate);
+				right_operand = create_conversion_to_type<unsigned long int>(right_operand, evaluate);
+			}
+		}
+		//otherwise, if either operand is long, the other shall be converted to long
+		else if(is_long_int(left_operand_type_category))
+			right_operand = create_conversion_to_type<long int>(right_operand, evaluate);
+		else if(is_long_int(right_operand_type_category))
+			left_operand = create_conversion_to_type<long int>(left_operand, evaluate);
+		//otherwise, if either operand is unsigned, the other shall be converted to unsigned.
+		else if(is_unsigned_int(left_operand_type_category))
+			right_operand = create_conversion_to_type<unsigned int>(right_operand, evaluate);
+		else if(is_unsigned_int(right_operand_type_category))
+			left_operand = create_conversion_to_type<unsigned int>(left_operand, evaluate);
+
+		//otherwise, the only remaining case is that both operands are int
 	}
 }
 

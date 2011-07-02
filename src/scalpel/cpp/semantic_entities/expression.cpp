@@ -20,6 +20,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "expression.hpp"
 #include "variable.hpp"
+#include "type.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -169,6 +170,17 @@ operator()(const TYPE&) \
 		RETURN_TRUE(long double)
 		RETURN_TRUE(std::string)
 		RETURN_TRUE(std::wstring)
+
+		bool
+		operator()(variable* const& var)
+		{
+			const type_t type = var->type();
+
+			if(const cv_qualified_type* opt_cv_qualified_type = utility::get<cv_qualified_type>(&type))
+				return opt_cv_qualified_type->const_qualified();
+
+			return false;
+		}
 
 		//otherwise, return false
 		template<typename T>

@@ -19,6 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "expression_construction.hpp"
+#include "expression_evaluation.hpp"
 #include "conversion_construction.hpp"
 #include "value_construction.hpp"
 #include "semantic_entity_analysis/type_category.hpp"
@@ -63,12 +64,15 @@ create_addition_expression
 	const type_category left_operand_type_category = get_category(get_type(left_operand));
 	const type_category right_operand_type_category = get_category(get_type(right_operand));
 
+	const bool evaluate = is_constant(const_left_operand) && is_constant(const_right_operand);
+
 	if(is_arithmetic_or_enumeration(left_operand_type_category) && is_arithmetic_or_enumeration(right_operand_type_category))
 	{
 		create_usual_arithmetic_conversions
 		(
 			left_operand,
 			right_operand,
+			evaluate,
 			left_operand_type_category,
 			right_operand_type_category
 		);
@@ -84,11 +88,14 @@ create_addition_expression
 		throw std::runtime_error("create_addition_expression error");
 	}
 
-	return semantic_entities::addition_expression
-	(
-		left_operand,
-		right_operand
-	);
+	if(evaluate)
+		return evaluate_addition_expression(left_operand, right_operand);
+	else
+		return semantic_entities::addition_expression
+		(
+			left_operand,
+			right_operand
+		);
 }
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
