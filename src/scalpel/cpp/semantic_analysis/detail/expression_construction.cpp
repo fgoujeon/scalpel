@@ -22,7 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "expression_evaluation.hpp"
 #include "conversion_construction.hpp"
 #include "value_construction.hpp"
-#include "semantic_entity_analysis/type_category.hpp"
+#include "semantic_entity_analysis/expression_information.hpp"
 #include <limits>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail
@@ -61,26 +61,26 @@ create_addition_expression
 	semantic_entities::expression_t left_operand = const_left_operand;
 	semantic_entities::expression_t right_operand = const_right_operand;
 
-	const type_category left_operand_type_category = get_category(get_type(left_operand));
-	const type_category right_operand_type_category = get_category(get_type(right_operand));
+	const expression_information left_operand_info(left_operand);
+	const expression_information right_operand_info(right_operand);
 
 	const bool evaluate = is_constant(const_left_operand) && is_constant(const_right_operand);
 
-	if(is_arithmetic_or_enumeration(left_operand_type_category) && is_arithmetic_or_enumeration(right_operand_type_category))
+	if(left_operand_info.has_arithmetic_or_enumeration_type() && right_operand_info.has_arithmetic_or_enumeration_type())
 	{
 		create_usual_arithmetic_conversions
 		(
 			left_operand,
 			right_operand,
 			evaluate,
-			left_operand_type_category,
-			right_operand_type_category
+			left_operand_info,
+			right_operand_info
 		);
 	}
-	else if(is_pointer_to_defined_type(left_operand_type_category) && is_integral_or_enumeration(right_operand_type_category))
+	else if(left_operand_info.has_pointer_to_defined_type_type() && right_operand_info.has_integral_or_enumeration_type())
 	{
 	}
-	else if(is_integral_or_enumeration(left_operand_type_category) && is_pointer_to_defined_type(right_operand_type_category))
+	else if(left_operand_info.has_integral_or_enumeration_type() && right_operand_info.has_pointer_to_defined_type_type())
 	{
 	}
 	else

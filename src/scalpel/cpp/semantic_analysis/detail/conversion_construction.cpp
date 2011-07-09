@@ -226,7 +226,7 @@ semantic_entities::expression_t
 create_integral_promotions
 (
 	const semantic_entities::expression_t& source,
-	const type_category source_type_category
+	const expression_information& expr_info
 )
 {
 	//An rvalue of type char, signed char, unsigned char, short int, or
@@ -234,35 +234,35 @@ create_integral_promotions
 	//represent all the values of the source type.
 	//Otherwise, the source rvalue can be converted to an rvalue of type
 	//unsigned int.
-	if(is_char(source_type_category))
+	if(expr_info.has_char_type())
 	{
 		if(can_represent_all_the_values_of<int, char>::value)
 			return conversion_to_int(source);
 		else
 			return conversion_to_unsigned_int(source);
 	}
-	else if(is_signed_char(source_type_category))
+	else if(expr_info.has_signed_char_type())
 	{
 		if(can_represent_all_the_values_of<int, signed char>::value)
 			return conversion_to_int(source);
 		else
 			return conversion_to_unsigned_int(source);
 	}
-	else if(is_unsigned_char(source_type_category))
+	else if(expr_info.has_unsigned_char_type())
 	{
 		if(can_represent_all_the_values_of<int, unsigned char>::value)
 			return conversion_to_int(source);
 		else
 			return conversion_to_unsigned_int(source);
 	}
-	else if(is_short_int(source_type_category))
+	else if(expr_info.has_short_int_type())
 	{
 		if(can_represent_all_the_values_of<int, short int>::value)
 			return conversion_to_int(source);
 		else
 			return conversion_to_unsigned_int(source);
 	}
-	else if(is_unsigned_short_int(source_type_category))
+	else if(expr_info.has_unsigned_short_int_type())
 	{
 		if(can_represent_all_the_values_of<int, unsigned short int>::value)
 			return conversion_to_int(source);
@@ -272,7 +272,7 @@ create_integral_promotions
 	//An rvalue of type wchar_t or an enumeration type can be converted to an
 	//rvalue of the first of the following types that can represent all the
 	//values of its underlying type: int, unsigned int, long, or unsigned long.
-	else if(is_wchar_t(source_type_category))
+	else if(expr_info.has_wchar_t_type())
 	{
 		if(can_represent_all_the_values_of<int, wchar_t>::value)
 			return conversion_to_int(source);
@@ -285,23 +285,29 @@ create_integral_promotions
 		else
 			assert(false);
 	}
-	else if(is_enumeration(source_type_category))
+	else if(expr_info.has_enumeration_type())
 	{
 		assert(false); //TODO
 	}
-	//An rvalue for an integral bit-field can be converted to an rvalue
-	//of type int if int can represent all the values of the bit-field; otherwise,
-	//it can be converted to unsigned int if unsigned int can represent all the
-	//values of the bit-field. If the bit-field is larger yet, no integral
-	//promotion applies to it. If the bit-field has an enumerated type, it is
-	//treated as any other value of that type for promotion purposes.
-	else if(false)
+	//An rvalue for an integral bit-field...
+	else if(expr_info.is_bit_field())
 	{
-		//TODO
+		//... can be converted to an rvalue of type int if int can represent all
+		//the values of the bit-field
+
+		//otherwise, it can be converted to unsigned int if unsigned int can
+		//represent all the values of the bit-field.
+
+		//If the bit-field is larger yet, no integral promotion applies to it.
+
+		//If the bit-field has an enumerated type, it is treated as any other
+		//value of that type for promotion purposes.
+
+		assert(false); //TODO
 	}
 	//An rvalue of type bool can be converted to an rvalue of type int, with
 	//false becoming zero and true becoming one.
-	else if(is_bool(source_type_category))
+	else if(expr_info.has_bool_type())
 	{
 		return conversion_to_int(source);
 	}
@@ -317,47 +323,47 @@ create_usual_arithmetic_conversions
 	semantic_entities::expression_t& left_operand,
 	semantic_entities::expression_t& right_operand,
 	const bool evaluate,
-	const type_category left_operand_type_category,
-	const type_category right_operand_type_category
+	const expression_information& left_operand_info,
+	const expression_information& right_operand_info
 )
 {
-	assert(is_arithmetic_or_enumeration(left_operand_type_category) && is_arithmetic_or_enumeration(right_operand_type_category));
+	assert(left_operand_info.has_arithmetic_or_enumeration_type() && right_operand_info.has_arithmetic_or_enumeration_type());
 
 	//if either operand is of type long double, the other shall be converted to long double
-	if(is_long_double(left_operand_type_category))
+	if(left_operand_info.has_long_double_type())
 		right_operand = create_conversion_to_type<long double>(right_operand, evaluate);
-	else if(is_long_double(right_operand_type_category))
+	else if(right_operand_info.has_long_double_type())
 		left_operand = create_conversion_to_type<long double>(left_operand, evaluate);
 	//otherwise, if either operand is double, the other shall be converted to double
-	else if(is_double(left_operand_type_category))
+	else if(left_operand_info.has_double_type())
 		right_operand = create_conversion_to_type<double>(right_operand, evaluate);
-	else if(is_double(right_operand_type_category))
+	else if(right_operand_info.has_double_type())
 		left_operand = create_conversion_to_type<double>(left_operand, evaluate);
 	//otherwise, if either operand is float, the other shall be converted to float
-	else if(is_float(left_operand_type_category))
+	else if(left_operand_info.has_float_type())
 		right_operand = create_conversion_to_type<float>(right_operand, evaluate);
-	else if(is_float(right_operand_type_category))
+	else if(right_operand_info.has_float_type())
 		left_operand = create_conversion_to_type<float>(left_operand, evaluate);
 	//otherwise...
 	else
 	{
 		//the integral promotions shall be performed on both operands
-		left_operand = create_integral_promotions(left_operand, left_operand_type_category);
-		right_operand = create_integral_promotions(right_operand, right_operand_type_category);
+		left_operand = create_integral_promotions(left_operand, left_operand_info);
+		right_operand = create_integral_promotions(right_operand, right_operand_info);
 
-		const type_category left_operand_type_category = get_category(get_type(left_operand));
-		const type_category right_operand_type_category = get_category(get_type(right_operand));
+		const expression_information& left_operand_info(left_operand);
+		const expression_information& right_operand_info(right_operand);
 
 		//if either operand is unsigned long the other shall be converted to unsigned long
-		if(is_unsigned_long_int(left_operand_type_category))
+		if(left_operand_info.has_unsigned_long_int_type())
 			right_operand = create_conversion_to_type<unsigned long int>(right_operand, evaluate);
-		else if(is_unsigned_long_int(right_operand_type_category))
+		else if(right_operand_info.has_unsigned_long_int_type())
 			left_operand = create_conversion_to_type<unsigned long int>(left_operand, evaluate);
 		//otherwise, if one operand is a long int and the other unsigned int...
 		else if
 		(
-			is_long_int(left_operand_type_category) &&
-			is_unsigned_int(right_operand_type_category)
+			left_operand_info.has_long_int_type() &&
+			right_operand_info.has_unsigned_int_type()
 		)
 		{
 			//if a long int can represent all the values of an unsigned int, the unsigned int shall be converted to a long int
@@ -372,8 +378,8 @@ create_usual_arithmetic_conversions
 		}
 		else if
 		(
-			is_long_int(right_operand_type_category) &&
-			is_unsigned_int(left_operand_type_category)
+			right_operand_info.has_long_int_type() &&
+			left_operand_info.has_unsigned_int_type()
 		)
 		{
 			if(can_represent_all_the_values_of<long int, unsigned int>::value)
@@ -385,14 +391,14 @@ create_usual_arithmetic_conversions
 			}
 		}
 		//otherwise, if either operand is long, the other shall be converted to long
-		else if(is_long_int(left_operand_type_category))
+		else if(left_operand_info.has_long_int_type())
 			right_operand = create_conversion_to_type<long int>(right_operand, evaluate);
-		else if(is_long_int(right_operand_type_category))
+		else if(right_operand_info.has_long_int_type())
 			left_operand = create_conversion_to_type<long int>(left_operand, evaluate);
 		//otherwise, if either operand is unsigned, the other shall be converted to unsigned.
-		else if(is_unsigned_int(left_operand_type_category))
+		else if(left_operand_info.has_unsigned_int_type())
 			right_operand = create_conversion_to_type<unsigned int>(right_operand, evaluate);
-		else if(is_unsigned_int(right_operand_type_category))
+		else if(right_operand_info.has_unsigned_int_type())
 			left_operand = create_conversion_to_type<unsigned int>(left_operand, evaluate);
 
 		//otherwise, the only remaining case is that both operands are int

@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_CONVERSION_CONSTRUCTION_HPP
 #define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_CONVERSION_CONSTRUCTION_HPP
 
-#include "semantic_entity_analysis/type_category.hpp"
+#include "semantic_entity_analysis/expression_information.hpp"
 #include <scalpel/cpp/semantic_graph.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail
@@ -121,7 +121,7 @@ semantic_entities::expression_t
 create_integral_promotions
 (
 	const semantic_entities::expression_t& source,
-	const semantic_entity_analysis::type_category source_type_category
+	const semantic_entity_analysis::expression_information& source_type_category
 );
 
 void
@@ -130,8 +130,8 @@ create_usual_arithmetic_conversions
 	semantic_entities::expression_t& left_operand,
 	semantic_entities::expression_t& right_operand,
 	const bool evaluate,
-	const semantic_entity_analysis::type_category left_operand_type_category,
-	const semantic_entity_analysis::type_category right_operand_type_category
+	const semantic_entity_analysis::expression_information& left_operand_type_category,
+	const semantic_entity_analysis::expression_information& right_operand_type_category
 );
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
