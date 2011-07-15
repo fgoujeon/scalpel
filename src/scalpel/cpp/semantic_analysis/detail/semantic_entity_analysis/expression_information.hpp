@@ -23,6 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <scalpel/cpp/semantic_entities/type.hpp>
 #include <scalpel/cpp/semantic_entities/expression.hpp>
+#include <scalpel/cpp/semantic_entities/variable.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail { namespace semantic_entity_analysis
 {
@@ -53,6 +54,14 @@ class expression_information
 			OTHER
 		};
 
+		enum class bit_field_information
+		{
+			FITS_IN_INT,
+			FITS_IN_UNSIGNED_INT,
+			DOESNT_FIT,
+			NOT_BIT_FIELD
+		};
+
 		struct get_category_visitor_t: utility::static_visitor<type_category>
 		{
 			get_category_visitor_t()
@@ -74,26 +83,39 @@ class expression_information
 		};
 		friend struct get_category_visitor_t;
 
-		struct is_bit_field_visitor_t: utility::static_visitor<bool>
+		class bit_field_visitor_t: public utility::static_visitor<bit_field_information>
 		{
-			is_bit_field_visitor_t()
-			{
-			}
+			public:
+				bit_field_visitor_t(const bool is_signed_type):
+					is_signed_type_(is_signed_type)
+				{
+				}
 
-			template<typename T>
-			bool
-			operator()(const T&) const
-			{
-				return false;
-			}
+				template<typename T>
+				bit_field_information
+				operator()(const T&) const
+				{
+					return bit_field_information::NOT_BIT_FIELD;
+				}
 
-			bool
-			operator()(const semantic_entities::bit_field&) const
-			{
-				return true;
-			}
+				bit_field_information
+				operator()(const semantic_entities::bit_field& bf) const
+				{
+					if(bf.size() <= sizeof(int) * 8)
+					{
+						if(is_signed_type_)
+							return bit_field_information::FITS_IN_INT;
+						else
+							return bit_field_information::FITS_IN_UNSIGNED_INT;
+					}
+
+					return bit_field_information::DOESNT_FIT;
+				}
+
+			private:
+				const bool is_signed_type_;
 		};
-		friend struct is_bit_field_visitor_t;
+		friend struct bit_field_visitor_t;
 
 	public:
 		expression_information(const semantic_entities::expression_t& expr);
@@ -276,25 +298,58 @@ class expression_information
 			return has_integral_type() || has_enumeration_type();
 		}
 
+		inline
+		bool
+		has_signed_type() const
+		{
+			switch(type_category_)
+			{
+				case type_category::CHAR:
+					return std::numeric_limits<char>::is_signed;
+				case type_category::WCHAR_T:
+					return std::numeric_limits<wchar_t>::is_signed;
+				case type_category::INT:
+				case type_category::LONG_INT:
+				case type_category::LONG_LONG_INT:
+				case type_category::SHORT_INT:
+				case type_category::SIGNED_CHAR:
+					return true;
+				default:
+					return false;
+			}
+		}
 
 
 		//
-		//other categories
+		//other categories and properties
 		//
 
 		inline
 		bool
 		is_bit_field() const
 		{
-			return is_bit_field_;
+			return bit_field_information_ != bit_field_information::NOT_BIT_FIELD;
+		}
+
+		inline
+		bool
+		fits_in_int() const
+		{
+			return bit_field_information_ == bit_field_information::FITS_IN_INT;
+		}
+
+		inline
+		bool
+		fits_in_unsigned_int() const
+		{
+			return bit_field_information_ == bit_field_information::FITS_IN_UNSIGNED_INT;
 		}
 
 	private:
 		static const get_category_visitor_t get_category_visitor;
-		static const is_bit_field_visitor_t is_bit_field_visitor;
-
 		const type_category type_category_;
-		const bool is_bit_field_;
+		const bit_field_visitor_t bit_field_visitor_;
+		const bit_field_information bit_field_information_;
 };
 
 }}}}} //namespace scalpel::cpp::semantic_analysis::detail::semantic_entity_analysis

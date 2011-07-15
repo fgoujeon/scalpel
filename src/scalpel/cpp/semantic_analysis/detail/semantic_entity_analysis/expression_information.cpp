@@ -27,7 +27,6 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 using namespace semantic_entities;
 
 const expression_information::get_category_visitor_t expression_information::get_category_visitor;
-const expression_information::is_bit_field_visitor_t expression_information::is_bit_field_visitor;
 
 expression_information::type_category
 expression_information::get_category_visitor_t::operator()(const semantic_entities::cv_qualified_type& type) const
@@ -79,7 +78,8 @@ expression_information::get_category_visitor_t::operator()(const semantic_entiti
 
 expression_information::expression_information(const expression_t& expr):
 	type_category_(apply_visitor(get_category_visitor, get_type(expr))),
-	is_bit_field_(apply_visitor(is_bit_field_visitor, expr))
+	bit_field_visitor_(has_signed_type()),
+	bit_field_information_(apply_visitor(bit_field_visitor_, expr))
 {
 }
 
