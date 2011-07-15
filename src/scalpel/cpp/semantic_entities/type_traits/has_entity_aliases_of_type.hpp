@@ -60,6 +60,7 @@ HAS_ENTITY_ALIASES_OF_TYPE(class_, operator_member_function)
 HAS_ENTITY_ALIASES_OF_TYPE(class_, conversion_function)
 HAS_ENTITY_ALIASES_OF_TYPE(class_, simple_member_function)
 HAS_ENTITY_ALIASES_OF_TYPE(class_, member_variable)
+HAS_ENTITY_ALIASES_OF_TYPE(class_, static_member_variable)
 HAS_ENTITY_ALIASES_OF_TYPE(class_, bit_field)
 
 HAS_ENTITY_ALIASES_OF_TYPE(member_class, member_class)
@@ -69,6 +70,7 @@ HAS_ENTITY_ALIASES_OF_TYPE(member_class, operator_member_function)
 HAS_ENTITY_ALIASES_OF_TYPE(member_class, conversion_function)
 HAS_ENTITY_ALIASES_OF_TYPE(member_class, simple_member_function)
 HAS_ENTITY_ALIASES_OF_TYPE(member_class, member_variable)
+HAS_ENTITY_ALIASES_OF_TYPE(member_class, static_member_variable)
 HAS_ENTITY_ALIASES_OF_TYPE(member_class, bit_field)
 
 #undef HAS_ENTITY_ALIASES_OF_TYPE

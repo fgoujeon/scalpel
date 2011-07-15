@@ -59,6 +59,7 @@ TYPE_TO_STRING(operator_function, "operator_function")
 TYPE_TO_STRING(simple_function, "simple_function")
 TYPE_TO_STRING(variable, "variable")
 TYPE_TO_STRING(member_variable, "member_variable")
+TYPE_TO_STRING(static_member_variable, "static_member_variable")
 TYPE_TO_STRING(bit_field, "bit_field")
 
 #undef TYPE_TO_STRING

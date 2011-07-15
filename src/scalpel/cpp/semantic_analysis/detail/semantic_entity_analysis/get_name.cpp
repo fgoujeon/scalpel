@@ -74,6 +74,7 @@ GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(simple_member_function)
 GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(simple_function)
 GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(variable)
 GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(member_variable)
+GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(static_member_variable)
 GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(bit_field)
 
 }}}}} //namespace scalpel::cpp::semantic_analysis::detail::semantic_entity_analysis

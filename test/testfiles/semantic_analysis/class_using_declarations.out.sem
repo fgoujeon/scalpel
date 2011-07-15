@@ -40,6 +40,11 @@
     <fundamental_type type="int"/>
    </type>
   </variable>
+  <static_variable id="0" name="k" access="public">
+   <type>
+    <fundamental_type type="int"/>
+   </type>
+  </static_variable>
   <bit_field id="0" name="j" size="0" access="public">
    <type>
     <fundamental_type type="int"/>
@@ -59,6 +64,7 @@
   <conversion_function_alias conversion_function_id="0" access="public"/>
   <simple_member_function_alias simple_member_function_id="0" access="public"/>
   <member_variable_alias member_variable_id="0" access="public"/>
+  <static_member_variable_alias static_member_variable_id="0" access="public"/>
   <bit_field_alias bit_field_id="0" access="public"/>
  </class>
  <class id="2" name="s3">
@@ -75,6 +81,7 @@
    <conversion_function_alias conversion_function_id="0" access="private"/>
    <simple_member_function_alias simple_member_function_id="0" access="private"/>
    <member_variable_alias member_variable_id="0" access="private"/>
+   <static_member_variable_alias static_member_variable_id="0" access="private"/>
    <bit_field_alias bit_field_id="0" access="private"/>
   </class>
   <destructor access="public" defined="false">

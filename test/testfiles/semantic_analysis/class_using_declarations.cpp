@@ -18,6 +18,8 @@ struct s
 	int i;
 
 	int j: 4;
+
+	static int k;
 };
 
 struct s2: s
@@ -30,6 +32,7 @@ struct s2: s
 	using s::f;
 	using s::i;
 	using s::j;
+	using s::k;
 };
 
 struct s3
@@ -44,6 +47,7 @@ struct s3
 		using s::f;
 		using s::i;
 		using s::j;
+		using s::k;
 	};
 };
 

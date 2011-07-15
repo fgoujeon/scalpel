@@ -485,6 +485,7 @@ class semantic_graph_serializer
 			serialize_entity_aliases_of_type<simple_function>(declarative_region, indent_level);
 			serialize_entity_aliases_of_type<variable>(declarative_region, indent_level);
 			serialize_entity_aliases_of_type<member_variable>(declarative_region, indent_level);
+			serialize_entity_aliases_of_type<static_member_variable>(declarative_region, indent_level);
 			serialize_entity_aliases_of_type<bit_field>(declarative_region, indent_level);
 		}
 

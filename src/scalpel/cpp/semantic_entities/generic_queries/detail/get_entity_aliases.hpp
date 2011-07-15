@@ -180,6 +180,11 @@ FOR(member_variable)
 	RETURN_MEMBER_ENTITY_ALIASES(member_class, variable_aliases)
 END_FOR
 
+FOR(static_member_variable)
+	RETURN_MEMBER_ENTITY_ALIASES(class_, static_variable_aliases)
+	RETURN_MEMBER_ENTITY_ALIASES(member_class, static_variable_aliases)
+END_FOR
+
 FOR(bit_field)
 	RETURN_MEMBER_ENTITY_ALIASES(class_, bit_field_aliases)
 	RETURN_MEMBER_ENTITY_ALIASES(member_class, bit_field_aliases)
