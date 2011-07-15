@@ -62,6 +62,7 @@ BOOST_PP_IIF \
 	MEMBER_DEFINITION(CLASS_NAME, simple_member_function, simple_functions, 1), \
 ) \
 MEMBER_DEFINITION(CLASS_NAME, member_variable, variables, 1) \
+MEMBER_DEFINITION(CLASS_NAME, static_member_variable, static_variables, 1) \
 MEMBER_DEFINITION(CLASS_NAME, bit_field, bit_fields, 1) \
  \
 BOOST_PP_IIF \

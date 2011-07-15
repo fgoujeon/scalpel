@@ -240,6 +240,7 @@ namespace
 		list_child_entities_of_type<force_internal_linkage, conversion_function>(parent_entity, groups);
 		list_child_entities_of_type<force_internal_linkage, simple_member_function>(parent_entity, groups);
 		list_child_entities_of_type<force_internal_linkage, member_variable>(parent_entity, groups);
+		list_child_entities_of_type<force_internal_linkage, static_member_variable>(parent_entity, groups);
 		list_child_entities_of_type<force_internal_linkage, bit_field>(parent_entity, groups);
 	}
 }

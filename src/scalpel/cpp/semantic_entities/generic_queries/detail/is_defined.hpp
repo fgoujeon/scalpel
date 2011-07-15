@@ -105,6 +105,13 @@ is_defined(const member_variable&)
 
 inline
 bool
+is_defined(const static_member_variable&)
+{
+	return true;
+}
+
+inline
+bool
 is_defined(const bit_field&)
 {
 	return true;

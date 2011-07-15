@@ -89,14 +89,21 @@ create_entity
 
 						if(is_class_member)
 						{
-							return new member_variable
-							(
-								syntax_node_analysis::get_identifier(declarator_node).value(),
-								*opt_type,
-								has_static_specifier,
-								has_mutable_specifier,
-								access
-							);
+							if(has_static_specifier)
+								return new static_member_variable
+								(
+									syntax_node_analysis::get_identifier(declarator_node).value(),
+									*opt_type,
+									access
+								);
+							else
+								return new member_variable
+								(
+									syntax_node_analysis::get_identifier(declarator_node).value(),
+									*opt_type,
+									has_mutable_specifier,
+									access
+								);
 						}
 						else
 						{
@@ -309,14 +316,21 @@ create_entity
 				{
 					if(is_class_member)
 					{
-						return new member_variable
-						(
-							syntax_node_analysis::get_identifier(declarator_node).value(),
-							*opt_type,
-							has_static_specifier,
-							has_mutable_specifier,
-							access
-						);
+						if(has_static_specifier)
+							return new static_member_variable
+							(
+								syntax_node_analysis::get_identifier(declarator_node).value(),
+								*opt_type,
+								access
+							);
+						else
+							return new member_variable
+							(
+								syntax_node_analysis::get_identifier(declarator_node).value(),
+								*opt_type,
+								has_mutable_specifier,
+								access
+							);
 					}
 					else
 					{

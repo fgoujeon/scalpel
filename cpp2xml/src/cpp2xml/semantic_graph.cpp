@@ -778,6 +778,7 @@ SERIALIZE_MEMBER(operator_function, serialize_operator_function)
 SERIALIZE_MEMBER(simple_function, serialize_simple_function)
 SERIALIZE_MEMBER(variable, serialize_variable)
 SERIALIZE_MEMBER(member_variable, serialize_variable)
+SERIALIZE_MEMBER(static_member_variable, serialize_variable)
 SERIALIZE_MEMBER(bit_field, serialize_variable)
 
 #undef SERIALIZE_MEMBER
@@ -997,6 +998,7 @@ ENTITY_ID_MAP_OF_TYPE(operator_function, operator_function_id_map_)
 ENTITY_ID_MAP_OF_TYPE(simple_function, simple_function_id_map_)
 ENTITY_ID_MAP_OF_TYPE(variable, variable_id_map_)
 ENTITY_ID_MAP_OF_TYPE(member_variable, member_variable_id_map_)
+ENTITY_ID_MAP_OF_TYPE(static_member_variable, static_member_variable_id_map_)
 ENTITY_ID_MAP_OF_TYPE(bit_field, bit_field_id_map_)
 
 #undef ENTITY_ID_MAP_OF_TYPE

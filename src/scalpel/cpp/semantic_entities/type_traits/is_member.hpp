@@ -49,6 +49,7 @@ IS_MEMBER(operator_member_function)
 IS_MEMBER(conversion_function)
 IS_MEMBER(simple_member_function)
 IS_MEMBER(member_variable)
+IS_MEMBER(static_member_variable)
 IS_MEMBER(bit_field)
 
 #undef IS_MEMBER

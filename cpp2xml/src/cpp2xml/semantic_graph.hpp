@@ -72,6 +72,7 @@ MARKUP_NAME(anonymous_union, "anonymous_union")
 MARKUP_NAME(anonymous_member_union, "anonymous_union")
 MARKUP_NAME(variable, "variable")
 MARKUP_NAME(member_variable, "variable")
+MARKUP_NAME(static_member_variable, "static_variable")
 MARKUP_NAME(bit_field, "bit_field")
 
 #undef MARKUP_NAME
@@ -410,6 +411,7 @@ class semantic_graph_serializer
 			serialize_members_of_type<simple_function>(declarative_region, indent_level);
 			serialize_members_of_type<variable>(declarative_region, indent_level);
 			serialize_members_of_type<member_variable>(declarative_region, indent_level);
+			serialize_members_of_type<static_member_variable>(declarative_region, indent_level);
 			serialize_members_of_type<bit_field>(declarative_region, indent_level);
 		}
 
@@ -700,6 +702,7 @@ class semantic_graph_serializer
 			set_id_of_members_of_type<simple_function>(entity);
 			set_id_of_members_of_type<variable>(entity);
 			set_id_of_members_of_type<member_variable>(entity);
+			set_id_of_members_of_type<static_member_variable>(entity);
 			set_id_of_members_of_type<bit_field>(entity);
 		}
 
@@ -780,6 +783,7 @@ class semantic_graph_serializer
 		typename entity_id_map<semantic_entities::simple_function>::type simple_function_id_map_;
 		typename entity_id_map<semantic_entities::variable>::type variable_id_map_;
 		typename entity_id_map<semantic_entities::member_variable>::type member_variable_id_map_;
+		typename entity_id_map<semantic_entities::static_member_variable>::type static_member_variable_id_map_;
 		typename entity_id_map<semantic_entities::bit_field>::type bit_field_id_map_;
 };
 

@@ -67,6 +67,7 @@ class CLASS_NAME \
 		MEMBER_DECLARATION(simple_member_function, simple_functions), \
 	) \
 	MEMBER_DECLARATION(member_variable, variables) \
+	MEMBER_DECLARATION(static_member_variable, static_variables) \
 	MEMBER_DECLARATION(bit_field, bit_fields) \
  \
 	BOOST_PP_IIF \
@@ -81,6 +82,7 @@ class CLASS_NAME \
 		MEMBER_ENTITY_ALIASES_OF_TYPE(conversion_function, conversion_function) \
 		MEMBER_ENTITY_ALIASES_OF_TYPE(simple_member_function, simple_function) \
 		MEMBER_ENTITY_ALIASES_OF_TYPE(member_variable, variable) \
+		MEMBER_ENTITY_ALIASES_OF_TYPE(static_member_variable, static_variable) \
 		MEMBER_ENTITY_ALIASES_OF_TYPE(bit_field, bit_field), \
 	) \
  \
@@ -194,6 +196,7 @@ class operator_member_function;
 class conversion_function;
 class simple_member_function;
 class member_variable;
+class static_member_variable;
 class bit_field;
 
 typedef

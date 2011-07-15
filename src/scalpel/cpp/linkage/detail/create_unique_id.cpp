@@ -429,6 +429,15 @@ create_unique_id(const semantic_entities::member_variable& entity)
 }
 
 std::string
+create_unique_id(const semantic_entities::static_member_variable& entity)
+{
+	return
+		create_enclosing_declarative_region_unique_id(entity) +
+		entity.name()
+	;
+}
+
+std::string
 create_unique_id(const semantic_entities::bit_field& entity)
 {
 	assert(!entity.name().empty());

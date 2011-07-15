@@ -117,6 +117,7 @@ GENERATE_GET_MEMBERS_SPECIALIZATION(class_, operator_member_function, operator_f
 GENERATE_GET_MEMBERS_SPECIALIZATION(class_, conversion_function, conversion_functions)
 GENERATE_GET_MEMBERS_SPECIALIZATION(class_, simple_member_function, simple_functions)
 GENERATE_GET_MEMBERS_SPECIALIZATION(class_, member_variable, variables)
+GENERATE_GET_MEMBERS_SPECIALIZATION(class_, static_member_variable, static_variables)
 GENERATE_GET_MEMBERS_SPECIALIZATION(class_, bit_field, bit_fields)
 
 GENERATE_GET_MEMBERS_SPECIALIZATION(member_class, member_class, classes)
@@ -130,6 +131,7 @@ GENERATE_GET_MEMBERS_SPECIALIZATION(member_class, operator_member_function, oper
 GENERATE_GET_MEMBERS_SPECIALIZATION(member_class, conversion_function, conversion_functions)
 GENERATE_GET_MEMBERS_SPECIALIZATION(member_class, simple_member_function, simple_functions)
 GENERATE_GET_MEMBERS_SPECIALIZATION(member_class, member_variable, variables)
+GENERATE_GET_MEMBERS_SPECIALIZATION(member_class, static_member_variable, static_variables)
 GENERATE_GET_MEMBERS_SPECIALIZATION(member_class, bit_field, bit_fields)
 
 GENERATE_GET_MEMBERS_SPECIALIZATION(union_, member_class, classes)

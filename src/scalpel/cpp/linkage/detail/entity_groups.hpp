@@ -62,6 +62,7 @@ struct entity_groups
 	typename entity_groups_of_type<semantic_entities::simple_function>::type simple_functions;
 	typename entity_groups_of_type<semantic_entities::variable>::type variables;
 	typename entity_groups_of_type<semantic_entities::member_variable>::type member_variables;
+	typename entity_groups_of_type<semantic_entities::static_member_variable>::type static_member_variables;
 	typename entity_groups_of_type<semantic_entities::bit_field>::type bit_fields;
 
 
@@ -91,6 +92,7 @@ struct entity_groups
 	std::vector<const semantic_entities::simple_function*> internal_simple_functions;
 	std::vector<const semantic_entities::variable*> internal_variables;
 	std::vector<const semantic_entities::member_variable*> internal_member_variables;
+	std::vector<const semantic_entities::static_member_variable*> internal_static_member_variables;
 	std::vector<const semantic_entities::bit_field*> internal_bit_fields;
 
 	template<class Entity>

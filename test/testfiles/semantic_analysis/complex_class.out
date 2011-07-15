@@ -141,17 +141,17 @@
     <fundamental_type type="int"/>
    </return_type>
   </simple_member_function>
-  <variable id="0" name="b" access="private" static="true">
+  <variable id="0" name="value_" access="private">
+   <type>
+    <fundamental_type type="int"/>
+   </type>
+  </variable>
+  <static_variable id="0" name="b" access="private">
    <type>
     <cv_qualified_type const="true">
      <fundamental_type type="bool"/>
     </cv_qualified_type>
    </type>
-  </variable>
-  <variable id="1" name="value_" access="private">
-   <type>
-    <fundamental_type type="int"/>
-   </type>
-  </variable>
+  </static_variable>
  </class>
 </namespace>

@@ -40,6 +40,7 @@ typedef
 		semantic_entities::simple_member_function,
 		semantic_entities::variable,
 		semantic_entities::member_variable,
+		semantic_entities::static_member_variable,
 		semantic_entities::typedef_,
 		semantic_entities::member_typedef
 	>::type

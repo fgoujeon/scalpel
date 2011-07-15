@@ -24,6 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 	CLASS_NAME, \
 	IS_MEMBER, \
 	HAS_STATIC, \
+	HAS_MUTABLE, \
 	HAS_SIZE \
 ) \
 CLASS_NAME::CLASS_NAME \
@@ -31,15 +32,15 @@ CLASS_NAME::CLASS_NAME \
 	const std::string& name, \
 	const type_t& type BOOST_PP_COMMA_IF(HAS_SIZE) \
 	BOOST_PP_IIF(HAS_SIZE, unsigned int size,) BOOST_PP_COMMA_IF(HAS_STATIC) \
-	BOOST_PP_IIF(HAS_STATIC, bool is_static,) BOOST_PP_COMMA_IF(IS_MEMBER) \
-	BOOST_PP_IIF(IS_MEMBER, const bool is_mutable,) BOOST_PP_COMMA_IF(IS_MEMBER) \
+	BOOST_PP_IIF(HAS_STATIC, bool is_static,) BOOST_PP_COMMA_IF(HAS_MUTABLE) \
+	BOOST_PP_IIF(HAS_MUTABLE, const bool is_mutable,) BOOST_PP_COMMA_IF(IS_MEMBER) \
 	BOOST_PP_IIF(IS_MEMBER, const member_access access,) \
 ): \
 	name_(name), \
 	type_(type) BOOST_PP_COMMA_IF(HAS_SIZE) \
 	BOOST_PP_IIF(HAS_SIZE, size_(size),) BOOST_PP_COMMA_IF(HAS_STATIC) \
-	BOOST_PP_IIF(HAS_STATIC, is_static_(is_static),) BOOST_PP_COMMA_IF(IS_MEMBER) \
-	BOOST_PP_IIF(IS_MEMBER, is_mutable_(is_mutable),) BOOST_PP_COMMA_IF(IS_MEMBER) \
+	BOOST_PP_IIF(HAS_STATIC, is_static_(is_static),) BOOST_PP_COMMA_IF(HAS_MUTABLE) \
+	BOOST_PP_IIF(HAS_MUTABLE, is_mutable_(is_mutable),) BOOST_PP_COMMA_IF(IS_MEMBER) \
 	BOOST_PP_IIF(IS_MEMBER, access_(access),) \
 { \
 }
@@ -47,9 +48,10 @@ CLASS_NAME::CLASS_NAME \
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-GENERATE_VARIABLE_DEFINITION(variable, 0, 1, 0)
-GENERATE_VARIABLE_DEFINITION(member_variable, 1, 1, 0)
-GENERATE_VARIABLE_DEFINITION(bit_field, 1, 0, 1)
+GENERATE_VARIABLE_DEFINITION(variable,               0, 1, 0, 0)
+GENERATE_VARIABLE_DEFINITION(member_variable,        1, 0, 1, 0)
+GENERATE_VARIABLE_DEFINITION(static_member_variable, 1, 0, 0, 0)
+GENERATE_VARIABLE_DEFINITION(bit_field,              1, 0, 1, 1)
 
 }}} //namespace scalpel::cpp::semantic_entities
 

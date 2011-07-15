@@ -211,6 +211,7 @@ assemble_final_graph
 	assemble_entities_of_type<simple_function>(groups, final_entities);
 	assemble_entities_of_type<variable>(groups, final_entities);
 	assemble_entities_of_type<member_variable>(groups, final_entities);
+	assemble_entities_of_type<static_member_variable>(groups, final_entities);
 	assemble_entities_of_type<bit_field>(groups, final_entities);
 
 	assemble_internal_entities_of_type<linked_namespace>(groups, final_entities);
@@ -234,6 +235,7 @@ assemble_final_graph
 	assemble_internal_entities_of_type<simple_function>(groups, final_entities);
 	assemble_internal_entities_of_type<variable>(groups, final_entities);
 	assemble_internal_entities_of_type<member_variable>(groups, final_entities);
+	assemble_internal_entities_of_type<static_member_variable>(groups, final_entities);
 	assemble_internal_entities_of_type<bit_field>(groups, final_entities);
 
 	return std::move(final_entities.global_namespace);

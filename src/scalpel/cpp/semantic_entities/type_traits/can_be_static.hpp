@@ -42,7 +42,6 @@ struct can_be_static<ENTITY_TYPE> \
 CAN_BE_STATIC(simple_member_function)
 CAN_BE_STATIC(operator_function)
 CAN_BE_STATIC(simple_function)
-CAN_BE_STATIC(member_variable)
 CAN_BE_STATIC(variable)
 
 #undef CAN_BE_STATIC

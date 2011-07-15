@@ -447,12 +447,29 @@ namespace
 			(
 				entity.name(),
 				create_type(entity.type(), final_entities),
-				entity.is_static(),
 				entity.is_mutable(),
 				entity.access()
 			)
 		;
 	}
+
+	static_member_variable*
+	create_entity
+	(
+		const static_member_variable& entity,
+		const final_graph_entities& final_entities
+	)
+	{
+		return
+			new static_member_variable
+			(
+				entity.name(),
+				create_type(entity.type(), final_entities),
+				entity.access()
+			)
+		;
+	}
+
 
 	bit_field*
 	create_entity
@@ -894,6 +911,9 @@ create_final_graph_entities
 
 	create_entities_of_type<member_variable>(groups.member_variables, final_entities);
 	create_internal_entities_of_type<member_variable>(groups, final_entities);
+
+	create_entities_of_type<static_member_variable>(groups.static_member_variables, final_entities);
+	create_internal_entities_of_type<static_member_variable>(groups, final_entities);
 
 	create_entities_of_type<bit_field>(groups.bit_fields, final_entities);
 	create_internal_entities_of_type<bit_field>(groups, final_entities);
