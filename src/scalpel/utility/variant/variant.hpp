@@ -21,13 +21,13 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_UTILITY_VARIANT_VARIANT_HPP
 #define SCALPEL_UTILITY_VARIANT_VARIANT_HPP
 
-#include "is_reference_of_non_const.hpp"
 #include "select_type.hpp"
 #include "max_size.hpp"
 #include "any_container.hpp"
 #include "assign_visitor.hpp"
-#include "replace_reference_by_pointer.hpp"
 #include <boost/type_traits/is_same.hpp>
+#include <boost/type_traits/is_const.hpp>
+#include <boost/type_traits/is_reference.hpp>
 #include <boost/utility/enable_if.hpp>
 
 namespace scalpel { namespace utility
@@ -47,14 +47,18 @@ class variant
 		variant
 		(
 			const U& value,
+			typename boost::disable_if<boost::is_const<U>>::type* = 0,
+			typename boost::disable_if<boost::is_reference<U>>::type* = 0,
 			typename boost::disable_if<boost::is_same<U, variant>>::type* = 0
 		);
 
-		//if U is a reference of non-const
+		//for noncopyable movable types
 		template<typename U>
 		variant
 		(
-			U& value,
+			U&& value,
+			typename boost::disable_if<boost::is_const<U>>::type* = 0,
+			typename boost::disable_if<boost::is_reference<U>>::type* = 0,
 			typename boost::disable_if<boost::is_same<U, variant>>::type* = 0
 		);
 
@@ -69,11 +73,6 @@ class variant
 		template<typename U>
 		typename boost::disable_if<boost::is_same<U, variant<Ts...>>, variant<Ts...>&>::type
 		operator=(const U& value);
-
-		//if U is a reference of non-const
-		template<typename U>
-		typename boost::disable_if<boost::is_same<U, variant<Ts...>>, variant<Ts...>&>::type
-		operator=(U& value);
 
 		template<typename U>
 		U&
@@ -98,24 +97,16 @@ class variant
 		set
 		(
 			const U& value,
-			const bool clear = true,
-			typename boost::disable_if
-			<
-				is_reference_of_non_const<typename select_type<U, Ts...>::type>
-			>::type* = 0
+			const bool clear = true
 		);
 
-		//if U is a reference of non-const
+		//for noncopyable movable types
 		template<typename U>
 		void
-		set
+		set2
 		(
-			U& value,
-			const bool clear = true,
-			typename boost::enable_if
-			<
-				is_reference_of_non_const<typename select_type<U, Ts...>::type>
-			>::type* = 0
+			U&& value,
+			const bool clear = true
 		);
 
 	public:

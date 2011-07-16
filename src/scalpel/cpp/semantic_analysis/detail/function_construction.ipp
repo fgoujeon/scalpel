@@ -108,19 +108,19 @@ create_function
 		access
 	);
 
-	if(auto opt_constructor_entity = get<constructor*>(&declarator_entity))
+	if(constructor* const* opt_constructor_entity = get<constructor*>(&declarator_entity))
 		return *opt_constructor_entity;
-	else if(auto opt_destructor_entity = get<destructor*>(&declarator_entity))
+	else if(destructor* const* opt_destructor_entity = get<destructor*>(&declarator_entity))
 		return *opt_destructor_entity;
-	else if(auto opt_operator_member_function_entity = get<operator_member_function*>(&declarator_entity))
+	else if(operator_member_function* const* opt_operator_member_function_entity = get<operator_member_function*>(&declarator_entity))
 		return *opt_operator_member_function_entity;
-	else if(auto opt_conversion_function_entity = get<conversion_function*>(&declarator_entity))
+	else if(conversion_function* const* opt_conversion_function_entity = get<conversion_function*>(&declarator_entity))
 		return *opt_conversion_function_entity;
-	else if(auto opt_simple_member_function_entity = get<simple_member_function*>(&declarator_entity))
+	else if(simple_member_function* const* opt_simple_member_function_entity = get<simple_member_function*>(&declarator_entity))
 		return *opt_simple_member_function_entity;
-	else if(auto opt_operator_function_entity = get<operator_function*>(&declarator_entity))
+	else if(operator_function* const* opt_operator_function_entity = get<operator_function*>(&declarator_entity))
 		return *opt_operator_function_entity;
-	else if(auto opt_simple_function_entity = get<simple_function*>(&declarator_entity))
+	else if(simple_function* const* opt_simple_function_entity = get<simple_function*>(&declarator_entity))
 		return *opt_simple_function_entity;
 	else
 		assert(false);

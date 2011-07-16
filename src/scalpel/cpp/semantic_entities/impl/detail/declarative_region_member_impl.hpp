@@ -51,7 +51,7 @@ class declarative_region_member_impl<DeclarativeRegion1, DeclarativeRegion2, Dec
 		{
 			template<class T>
 			basic_const_declarative_region_t
-			operator()(const T* t)
+			operator()(const T* const& t)
 			{
 				return t;
 			}

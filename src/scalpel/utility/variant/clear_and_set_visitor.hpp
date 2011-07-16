@@ -49,6 +49,29 @@ struct clear_and_set_visitor: public static_visitor<void>
 		const Set& value_;
 };
 
+//variant for noncopyable objects
+template<unsigned int Size, typename Set>
+struct clear_and_set_visitor2: public static_visitor<void>
+{
+	public:
+		clear_and_set_visitor2(any_container<Size>& container, Set&& value):
+			container_(container),
+			value_(std::move(value))
+		{
+		}
+
+		template<typename Clear>
+		void
+		operator()(const Clear&) const
+		{
+			container_.template clear_and_set<Clear, Set>(std::move(value_));
+		}
+
+	private:
+		any_container<Size>& container_;
+		Set&& value_;
+};
+
 }} //namespace scalpel::utility
 
 #endif

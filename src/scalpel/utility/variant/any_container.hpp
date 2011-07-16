@@ -60,11 +60,33 @@ class any_container
 			(*reinterpret_cast<Clear*>(old_buffer)).~Clear();
 		}
 
+		template<typename Clear, typename Set>
+		void
+		clear_and_set(Set&& value)
+		{
+			char old_buffer[Size];
+			for(unsigned int i = 0; i < Size; ++i)
+			{
+				old_buffer[i] = buffer_[i];
+			}
+
+			set<Set>(std::move(value));
+
+			(*reinterpret_cast<Clear*>(old_buffer)).~Clear();
+		}
+
 		template<typename T>
 		void
 		set(const T& value)
 		{
 			new(buffer_) T(value);
+		}
+
+		template<typename T>
+		void
+		set(T&& value)
+		{
+			new(buffer_) T(std::move(value));
 		}
 
 		template<typename T>
