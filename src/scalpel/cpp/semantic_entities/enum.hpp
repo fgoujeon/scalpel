@@ -31,10 +31,12 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 
 #define GENERATE_ENUM_DECLARATION(CLASS_NAME, IS_MEMBER) \
+template<typename UnderlyingType> \
 class CLASS_NAME \
 { \
 	public: \
-		typedef utility::unique_ptr_vector<enum_constant> constants_t; \
+		typedef enum_constant<UnderlyingType> constant; \
+		typedef utility::unique_ptr_vector<constant> constants_t; \
  \
 		BOOST_PP_IIF \
 		( \
@@ -45,8 +47,13 @@ class CLASS_NAME \
  \
         CLASS_NAME(const CLASS_NAME&) = delete; \
  \
+        CLASS_NAME(CLASS_NAME&& rhs); \
+ \
         CLASS_NAME& \
 		operator=(const CLASS_NAME&) = delete; \
+ \
+        CLASS_NAME& \
+		operator=(CLASS_NAME&& rhs); \
  \
 		const std::string& \
 		name() const \
@@ -61,7 +68,7 @@ class CLASS_NAME \
 		} \
  \
 		void \
-		add(std::unique_ptr<enum_constant>&& c) \
+		add(std::unique_ptr<constant>&& c) \
 		{ \
 			constants_.push_back(std::move(c)); \
 		} \
@@ -117,12 +124,71 @@ typedef
 	member_enum_declarative_region_member_impl_t
 ;
 
-GENERATE_ENUM_DECLARATION(enum_, 0)
-GENERATE_ENUM_DECLARATION(member_enum, 1)
+GENERATE_ENUM_DECLARATION(basic_enum, 0)
+GENERATE_ENUM_DECLARATION(basic_member_enum, 1)
+
+typedef
+	utility::variant
+	<
+		basic_enum<int>,
+		basic_enum<unsigned int>
+	>
+	enum_typedef
+;
+typedef
+	utility::variant
+	<
+		basic_member_enum<int>,
+		basic_member_enum<unsigned int>
+	>
+	member_enum_typedef
+;
+
+struct enum_t: enum_typedef
+{
+	template<typename U>
+	enum_t
+	(
+		U&& value,
+		typename boost::disable_if<boost::is_const<U>>::type* = 0,
+		typename boost::disable_if<boost::is_reference<U>>::type* = 0,
+		typename boost::disable_if<boost::is_same<U, enum_typedef>>::type* = 0
+	): enum_typedef(std::move(value))
+	{
+	}
+};
+
+struct member_enum_t: member_enum_typedef
+{
+	template<typename U>
+	member_enum_t
+	(
+		U&& value,
+		typename boost::disable_if<boost::is_const<U>>::type* = 0,
+		typename boost::disable_if<boost::is_reference<U>>::type* = 0,
+		typename boost::disable_if<boost::is_same<U, member_enum_typedef>>::type* = 0
+	): member_enum_typedef(std::move(value))
+	{
+	}
+};
+
+
+
+//
+//free functions
+//
+
+const std::string&
+get_name(const enum_t& e);
+
+const std::string&
+get_name(const member_enum_t& e);
 
 }}} //namespace scalpel::cpp::semantic_entities
 
 #include "macros/detail/declarative_region_member_impl_undef.hpp"
+
+#include "enum.ipp"
 
 #endif
 

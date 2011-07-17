@@ -18,16 +18,20 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "enum_constant.hpp"
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_ENUM_CONSTANT_IPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_ENUM_CONSTANT_IPP
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-enum_constant::enum_constant(const std::string& name, const int value):
+template<typename T>
+enum_constant<T>::enum_constant(const std::string& name, const T value):
 	name_(name),
 	value_(value)
 {
 }
 
 }}} //namespace scalpel::cpp::semantic_entities
+
+#endif
 

@@ -26,10 +26,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
+template<typename T>
 class enum_constant
 {
 	public:
-        enum_constant(const std::string& name, const int value);
+        enum_constant(const std::string& name, const T value);
 
         enum_constant(const enum_constant&) = delete;
 
@@ -42,7 +43,7 @@ class enum_constant
 			return name_;
 		}
 
-		int
+		T
 		value() const
 		{
 			return value_;
@@ -50,10 +51,12 @@ class enum_constant
 
 	private:
 		std::string name_;
-		int value_;
+		T value_;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities
+
+#include "enum_constant.ipp"
 
 #endif
 

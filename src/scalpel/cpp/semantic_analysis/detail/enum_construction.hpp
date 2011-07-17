@@ -28,10 +28,10 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail
 {
 
-std::unique_ptr<semantic_entities::enum_>
+std::unique_ptr<semantic_entities::enum_t>
 create_enum(const syntax_nodes::enum_specifier& enum_specifier_node);
 
-std::unique_ptr<semantic_entities::member_enum>
+std::unique_ptr<semantic_entities::member_enum_t>
 create_member_enum(const syntax_nodes::enum_specifier& enum_specifier_node, const semantic_entities::member_access access);
 
 template<class Enum>

@@ -24,58 +24,41 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail { namespace semantic_entity_analysis
 {
 
-#define GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(ENTITY_TYPE) \
+#define MEMBER_VARIABLE_GET_NAME(ENTITY_TYPE) \
 template<> \
 const std::string& \
 get_name<semantic_entities::ENTITY_TYPE>(const semantic_entities::ENTITY_TYPE& entity) \
 { \
 	return entity.name(); \
-} \
-\
+}
+
+#define FREE_FUNCTION_GET_NAME(ENTITY_TYPE) \
 template<> \
 const std::string& \
-get_name<std::shared_ptr<semantic_entities::ENTITY_TYPE>>(const std::shared_ptr<semantic_entities::ENTITY_TYPE>& entity) \
+get_name<semantic_entities::ENTITY_TYPE>(const semantic_entities::ENTITY_TYPE& entity) \
 { \
-	return entity->name(); \
-} \
-\
-template<> \
-const std::string& \
-get_name<std::shared_ptr<semantic_entities::ENTITY_TYPE const>>(const std::shared_ptr<semantic_entities::ENTITY_TYPE const>& entity) \
-{ \
-	return entity->name(); \
+	return semantic_entities::get_name(entity); \
 }
 
-template<>
-const std::string&
-get_name<semantic_entities::declarative_region_t>(const semantic_entities::declarative_region_t& entity)
-{
-	return semantic_entities::get_name(entity);
-}
+MEMBER_VARIABLE_GET_NAME(namespace_alias)
+MEMBER_VARIABLE_GET_NAME(namespace_)
+MEMBER_VARIABLE_GET_NAME(class_)
+MEMBER_VARIABLE_GET_NAME(member_class)
+MEMBER_VARIABLE_GET_NAME(union_)
+MEMBER_VARIABLE_GET_NAME(member_union)
+MEMBER_VARIABLE_GET_NAME(typedef_)
+MEMBER_VARIABLE_GET_NAME(member_typedef)
+MEMBER_VARIABLE_GET_NAME(simple_member_function)
+MEMBER_VARIABLE_GET_NAME(simple_function)
+MEMBER_VARIABLE_GET_NAME(variable)
+MEMBER_VARIABLE_GET_NAME(member_variable)
+MEMBER_VARIABLE_GET_NAME(static_member_variable)
+MEMBER_VARIABLE_GET_NAME(bit_field)
 
-template<>
-const std::string&
-get_name<semantic_entities::open_declarative_region_t>(const semantic_entities::open_declarative_region_t& entity)
-{
-	return semantic_entities::get_name(entity);
-}
-
-GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(namespace_alias)
-GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(namespace_)
-GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(class_)
-GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(member_class)
-GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(union_)
-GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(member_union)
-GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(enum_)
-GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(member_enum)
-GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(typedef_)
-GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(member_typedef)
-GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(simple_member_function)
-GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(simple_function)
-GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(variable)
-GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(member_variable)
-GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(static_member_variable)
-GENERATE_SIMPLE_GET_NAME_SPECIALIZATION(bit_field)
+FREE_FUNCTION_GET_NAME(declarative_region_t)
+FREE_FUNCTION_GET_NAME(open_declarative_region_t)
+FREE_FUNCTION_GET_NAME(enum_t)
+FREE_FUNCTION_GET_NAME(member_enum_t)
 
 }}}}} //namespace scalpel::cpp::semantic_analysis::detail::semantic_entity_analysis
 

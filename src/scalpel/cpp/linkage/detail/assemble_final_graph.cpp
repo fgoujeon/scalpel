@@ -20,6 +20,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "assemble_final_graph.hpp"
 #include <scalpel/cpp/semantic_entities/generic_queries/detail/add_entity_to_declarative_region.hpp>
+#include <scalpel/cpp/semantic_entities/generic_queries/detail/has_enclosing_declarative_region.hpp>
+#include <scalpel/cpp/semantic_entities/generic_queries/detail/enclosing_declarative_region.hpp>
 #include <scalpel/utility/variant.hpp>
 #include <iostream>
 
@@ -144,12 +146,12 @@ namespace
 			Entity* final_entity = it->second;
 
 			//add the final entity to the final graph
-			assert(current_entity->has_enclosing_declarative_region());
+			assert(generic_queries::detail::has_enclosing_declarative_region(*current_entity));
 			add_entity_to_final_graph
 			(
 				final_entities,
 				final_entity,
-				current_entity->enclosing_declarative_region()
+				generic_queries::detail::get_enclosing_declarative_region(*current_entity)
 			);
 		}
 	}
@@ -175,12 +177,12 @@ namespace
 			Entity* final_entity = it->second;
 
 			//add the final entity to the final graph
-			assert(current_entity->has_enclosing_declarative_region());
+			assert(generic_queries::detail::has_enclosing_declarative_region(*current_entity));
 			add_entity_to_final_graph
 			(
 				final_entities,
 				final_entity,
-				current_entity->enclosing_declarative_region()
+				generic_queries::detail::get_enclosing_declarative_region(*current_entity)
 			);
 		}
 	}
@@ -198,8 +200,8 @@ assemble_final_graph
 	assemble_entities_of_type<member_class>(groups, final_entities);
 	assemble_entities_of_type<union_>(groups, final_entities);
 	assemble_entities_of_type<member_union>(groups, final_entities);
-	assemble_entities_of_type<enum_>(groups, final_entities);
-	assemble_entities_of_type<member_enum>(groups, final_entities);
+	assemble_entities_of_type<enum_t>(groups, final_entities);
+	assemble_entities_of_type<member_enum_t>(groups, final_entities);
 	assemble_entities_of_type<typedef_>(groups, final_entities);
 	assemble_entities_of_type<member_typedef>(groups, final_entities);
 	assemble_entities_of_type<constructor>(groups, final_entities);
@@ -222,8 +224,8 @@ assemble_final_graph
 	assemble_internal_entities_of_type<member_union>(groups, final_entities);
 	assemble_internal_entities_of_type<anonymous_union>(groups, final_entities);
 	assemble_internal_entities_of_type<anonymous_member_union>(groups, final_entities);
-	assemble_internal_entities_of_type<enum_>(groups, final_entities);
-	assemble_internal_entities_of_type<member_enum>(groups, final_entities);
+	assemble_internal_entities_of_type<enum_t>(groups, final_entities);
+	assemble_internal_entities_of_type<member_enum_t>(groups, final_entities);
 	assemble_internal_entities_of_type<typedef_>(groups, final_entities);
 	assemble_internal_entities_of_type<member_typedef>(groups, final_entities);
 	assemble_internal_entities_of_type<constructor>(groups, final_entities);

@@ -124,13 +124,13 @@ namespace
 			}
 
 			semantic_entities::expression_t
-			operator()(enum_* const& /*type*/) const
+			operator()(enum_t* const& /*type*/) const
 			{
 				assert(false);
 			}
 
 			semantic_entities::expression_t
-			operator()(member_enum* const& /*type*/) const
+			operator()(member_enum_t* const& /*type*/) const
 			{
 				assert(false);
 			}

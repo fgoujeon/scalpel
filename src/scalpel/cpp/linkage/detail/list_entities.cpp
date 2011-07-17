@@ -156,7 +156,7 @@ namespace
 		list_child_entities_of_type<force_internal_linkage, class_>(parent_entity, groups);
 		list_child_entities_of_type<force_internal_linkage, union_>(parent_entity, groups);
 		list_child_entities_of_type<true, anonymous_union>(parent_entity, groups);
-		list_child_entities_of_type<force_internal_linkage, enum_>(parent_entity, groups);
+		list_child_entities_of_type<force_internal_linkage, enum_t>(parent_entity, groups);
 		list_child_entities_of_type<force_internal_linkage, typedef_>(parent_entity, groups);
 		list_child_entities_of_type<force_internal_linkage, operator_function>(parent_entity, groups);
 		list_child_entities_of_type<force_internal_linkage, simple_function>(parent_entity, groups);
@@ -200,7 +200,7 @@ namespace
 		list_child_entities_of_type<true, class_>(parent_entity, groups);
 		list_child_entities_of_type<true, union_>(parent_entity, groups);
 		list_child_entities_of_type<true, anonymous_union>(parent_entity, groups);
-		list_child_entities_of_type<true, enum_>(parent_entity, groups);
+		list_child_entities_of_type<true, enum_t>(parent_entity, groups);
 		list_child_entities_of_type<true, typedef_>(parent_entity, groups);
 		list_child_entities_of_type<true, operator_function>(parent_entity, groups);
 		list_child_entities_of_type<true, simple_function>(parent_entity, groups);
@@ -232,7 +232,7 @@ namespace
 		list_child_entities_of_type<force_internal_linkage, member_class>(parent_entity, groups);
 		list_child_entities_of_type<force_internal_linkage, member_union>(parent_entity, groups);
 		list_child_entities_of_type<true, anonymous_member_union>(parent_entity, groups);
-		list_child_entities_of_type<force_internal_linkage, member_enum>(parent_entity, groups);
+		list_child_entities_of_type<force_internal_linkage, member_enum_t>(parent_entity, groups);
 		list_child_entities_of_type<force_internal_linkage, member_typedef>(parent_entity, groups);
 		list_child_entities_of_type<force_internal_linkage, constructor>(parent_entity, groups);
 		list_child_entities_of_type<force_internal_linkage, destructor>(parent_entity, groups);

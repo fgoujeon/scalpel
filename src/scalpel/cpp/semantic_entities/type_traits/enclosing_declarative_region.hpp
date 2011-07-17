@@ -18,45 +18,31 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_HAS_NAME_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_HAS_NAME_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_TRAITS_ENCLOSING_DECLARATIVE_REGION_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_TYPE_TRAITS_ENCLOSING_DECLARATIVE_REGION_HPP
 
 #include <scalpel/cpp/semantic_graph.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities { namespace type_traits
 {
 
-template<class DeclarativeRegion>
-struct has_name
+template<class Entity>
+struct const_enclosing_declarative_region
 {
-	static const bool value = false;
+	typedef typename Entity::const_enclosing_declarative_region_t type;
 };
 
-#define HAS_NAME(ENTITY_TYPE) \
-template<> \
-struct has_name<ENTITY_TYPE> \
-{ \
-	static const bool value = true; \
+template<>
+struct const_enclosing_declarative_region<enum_t>
+{
+	typedef enum_declarative_region_member_impl_t::const_declarative_region_t type;
 };
 
-HAS_NAME(namespace_alias)
-HAS_NAME(namespace_)
-HAS_NAME(linked_namespace)
-HAS_NAME(class_)
-HAS_NAME(member_class)
-HAS_NAME(union_)
-HAS_NAME(member_union)
-HAS_NAME(enum_t)
-HAS_NAME(member_enum_t)
-HAS_NAME(typedef_)
-HAS_NAME(member_typedef)
-HAS_NAME(simple_member_function)
-HAS_NAME(simple_function)
-HAS_NAME(variable)
-HAS_NAME(member_variable)
-HAS_NAME(bit_field)
-
-#undef HAS_NAME
+template<>
+struct const_enclosing_declarative_region<member_enum_t>
+{
+	typedef member_enum_declarative_region_member_impl_t::const_declarative_region_t type;
+};
 
 }}}} //namespace scalpel::cpp::semantic_entities::type_traits
 

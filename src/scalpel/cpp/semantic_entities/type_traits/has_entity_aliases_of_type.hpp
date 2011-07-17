@@ -40,21 +40,21 @@ struct has_entity_aliases_of_type<DECLARATIVE_REGION_TYPE, MEMBER_TYPE> \
 };
 
 HAS_ENTITY_ALIASES_OF_TYPE(namespace_, class_)
-HAS_ENTITY_ALIASES_OF_TYPE(namespace_, enum_)
+HAS_ENTITY_ALIASES_OF_TYPE(namespace_, enum_t)
 HAS_ENTITY_ALIASES_OF_TYPE(namespace_, typedef_)
 HAS_ENTITY_ALIASES_OF_TYPE(namespace_, operator_function)
 HAS_ENTITY_ALIASES_OF_TYPE(namespace_, simple_function)
 HAS_ENTITY_ALIASES_OF_TYPE(namespace_, variable)
 
 HAS_ENTITY_ALIASES_OF_TYPE(unnamed_namespace, class_)
-HAS_ENTITY_ALIASES_OF_TYPE(unnamed_namespace, enum_)
+HAS_ENTITY_ALIASES_OF_TYPE(unnamed_namespace, enum_t)
 HAS_ENTITY_ALIASES_OF_TYPE(unnamed_namespace, typedef_)
 HAS_ENTITY_ALIASES_OF_TYPE(unnamed_namespace, operator_function)
 HAS_ENTITY_ALIASES_OF_TYPE(unnamed_namespace, simple_function)
 HAS_ENTITY_ALIASES_OF_TYPE(unnamed_namespace, variable)
 
 HAS_ENTITY_ALIASES_OF_TYPE(class_, member_class)
-HAS_ENTITY_ALIASES_OF_TYPE(class_, member_enum)
+HAS_ENTITY_ALIASES_OF_TYPE(class_, member_enum_t)
 HAS_ENTITY_ALIASES_OF_TYPE(class_, member_typedef)
 HAS_ENTITY_ALIASES_OF_TYPE(class_, operator_member_function)
 HAS_ENTITY_ALIASES_OF_TYPE(class_, conversion_function)
@@ -64,7 +64,7 @@ HAS_ENTITY_ALIASES_OF_TYPE(class_, static_member_variable)
 HAS_ENTITY_ALIASES_OF_TYPE(class_, bit_field)
 
 HAS_ENTITY_ALIASES_OF_TYPE(member_class, member_class)
-HAS_ENTITY_ALIASES_OF_TYPE(member_class, member_enum)
+HAS_ENTITY_ALIASES_OF_TYPE(member_class, member_enum_t)
 HAS_ENTITY_ALIASES_OF_TYPE(member_class, member_typedef)
 HAS_ENTITY_ALIASES_OF_TYPE(member_class, operator_member_function)
 HAS_ENTITY_ALIASES_OF_TYPE(member_class, conversion_function)

@@ -609,8 +609,8 @@ namespace detail
 						member_union,
 						typedef_,
 						member_typedef,
-						enum_,
-						member_enum
+						enum_t,
+						member_enum_t
 					>::type found_type =
 						name_lookup::find
 						<
@@ -623,8 +623,8 @@ namespace detail
 							member_union,
 							typedef_,
 							member_typedef,
-							enum_,
-							member_enum
+							enum_t,
+							member_enum_t
 						>
 						(
 							has_leading_double_colon(nested_identifier_or_template_id_node),

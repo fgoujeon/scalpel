@@ -43,9 +43,16 @@ struct: utility::static_visitor<bool>
 {
 	template<class Entity>
 	bool
-	operator()(const Entity* entity) const
+	operator()(Entity* const entity) const
 	{
 		return entity->has_enclosing_declarative_region();
+	}
+
+	template<class Entity>
+	bool
+	operator()(const Entity& entity) const
+	{
+		return entity.has_enclosing_declarative_region();
 	}
 } has_enclosing_declarative_region_visitor;
 
@@ -62,6 +69,33 @@ struct has_enclosing_declarative_region_impl<utility::variant<Entities...>>
 
 
 
+template<>
+struct has_enclosing_declarative_region_impl<enum_t>
+{
+	static
+	bool
+	has(const enum_typedef& entity)
+	{
+		return apply_visitor(has_enclosing_declarative_region_visitor, entity);
+	}
+};
+
+
+
+template<>
+struct has_enclosing_declarative_region_impl<member_enum_t>
+{
+	static
+	bool
+	has(const member_enum_t& entity)
+	{
+		return apply_visitor(has_enclosing_declarative_region_visitor, entity);
+	}
+};
+
+
+
+//public function
 template<class Entity>
 inline
 bool

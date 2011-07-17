@@ -140,10 +140,10 @@ class semantic_graph_serializer
 				operator()(const anonymous_member_union* type);
 
 				void
-				operator()(const enum_* type);
+				operator()(const enum_t* type);
 
 				void
-				operator()(const member_enum* type);
+				operator()(const member_enum_t* type);
 
 			private:
 				semantic_graph_serializer& serializer_;
@@ -201,6 +201,28 @@ class semantic_graph_serializer
 				const unsigned int indent_level_;
 		};
 		friend class serialize_expression_visitor;
+
+		class serialize_enum_visitor: public utility::static_visitor<void>
+		{
+			public:
+				serialize_enum_visitor
+				(
+					semantic_graph_serializer& serializer,
+					const unsigned int indent_level,
+					const std::string& id_str
+				);
+
+				template<template<typename> class BasicEnum, typename UnderlyingType>
+				void
+				operator()(const BasicEnum<UnderlyingType>& entity) const;
+
+			private:
+				semantic_graph_serializer& serializer_;
+				std::ostream& output_;
+				const unsigned int indent_level_;
+				const std::string& id_str_;
+		};
+		friend class serialize_enum_visitor;
 
 		void
 		serialize_type
@@ -398,8 +420,8 @@ class semantic_graph_serializer
 			serialize_members_of_type<member_union>(declarative_region, indent_level);
 			serialize_members_of_type<anonymous_union>(declarative_region, indent_level);
 			serialize_members_of_type<anonymous_member_union>(declarative_region, indent_level);
-			serialize_members_of_type<enum_>(declarative_region, indent_level);
-			serialize_members_of_type<member_enum>(declarative_region, indent_level);
+			serialize_members_of_type<enum_t>(declarative_region, indent_level);
+			serialize_members_of_type<member_enum_t>(declarative_region, indent_level);
 			serialize_members_of_type<typedef_>(declarative_region, indent_level);
 			serialize_members_of_type<member_typedef>(declarative_region, indent_level);
 			serialize_members_of_type<constructor>(declarative_region, indent_level);
@@ -472,8 +494,8 @@ class semantic_graph_serializer
 			serialize_entity_aliases_of_type<member_class>(declarative_region, indent_level);
 			serialize_entity_aliases_of_type<union_>(declarative_region, indent_level);
 			serialize_entity_aliases_of_type<member_union>(declarative_region, indent_level);
-			serialize_entity_aliases_of_type<enum_>(declarative_region, indent_level);
-			serialize_entity_aliases_of_type<member_enum>(declarative_region, indent_level);
+			serialize_entity_aliases_of_type<enum_t>(declarative_region, indent_level);
+			serialize_entity_aliases_of_type<member_enum_t>(declarative_region, indent_level);
 			serialize_entity_aliases_of_type<typedef_>(declarative_region, indent_level);
 			serialize_entity_aliases_of_type<member_typedef>(declarative_region, indent_level);
 			serialize_entity_aliases_of_type<constructor>(declarative_region, indent_level);
@@ -692,8 +714,8 @@ class semantic_graph_serializer
 			set_id_of_members_of_type<member_union>(entity);
 			set_id_of_members_of_type<anonymous_union>(entity);
 			set_id_of_members_of_type<anonymous_member_union>(entity);
-			set_id_of_members_of_type<enum_>(entity);
-			set_id_of_members_of_type<member_enum>(entity);
+			set_id_of_members_of_type<enum_t>(entity);
+			set_id_of_members_of_type<member_enum_t>(entity);
 			set_id_of_members_of_type<typedef_>(entity);
 			set_id_of_members_of_type<member_typedef>(entity);
 			set_id_of_members_of_type<operator_member_function>(entity);
@@ -773,8 +795,8 @@ class semantic_graph_serializer
 		typename entity_id_map<semantic_entities::member_union>::type member_union_id_map_;
 		typename entity_id_map<semantic_entities::anonymous_union>::type anonymous_union_id_map_;
 		typename entity_id_map<semantic_entities::anonymous_member_union>::type anonymous_member_union_id_map_;
-		typename entity_id_map<semantic_entities::enum_>::type enum_id_map_;
-		typename entity_id_map<semantic_entities::member_enum>::type member_enum_id_map_;
+		typename entity_id_map<semantic_entities::enum_t>::type enum_id_map_;
+		typename entity_id_map<semantic_entities::member_enum_t>::type member_enum_id_map_;
 		typename entity_id_map<semantic_entities::typedef_>::type typedef_id_map_;
 		typename entity_id_map<semantic_entities::member_typedef>::type member_typedef_id_map_;
 		typename entity_id_map<semantic_entities::operator_member_function>::type operator_member_function_id_map_;

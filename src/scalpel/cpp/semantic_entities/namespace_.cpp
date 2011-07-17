@@ -19,6 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "namespace_.hpp"
+#include "generic_queries/detail/set_enclosing_declarative_region.hpp"
 #include "macros/detail/member_definition.hpp"
 #include "macros/detail/single_member_definition.hpp"
 
@@ -60,7 +61,7 @@ BOOST_PP_IIF \
 MEMBER_DEFINITION(CLASS_NAME, class_, classes, 1) \
 MEMBER_DEFINITION(CLASS_NAME, union_, unions, 1) \
 MEMBER_DEFINITION(CLASS_NAME, anonymous_union, anonymous_unions, 1) \
-MEMBER_DEFINITION(CLASS_NAME, enum_, enums, 1) \
+MEMBER_DEFINITION(CLASS_NAME, enum_t, enums, 1) \
 MEMBER_DEFINITION(CLASS_NAME, typedef_, typedefs, 1) \
 MEMBER_DEFINITION(CLASS_NAME, simple_function, simple_functions, 1) \
 MEMBER_DEFINITION(CLASS_NAME, operator_function, operator_functions, 1) \

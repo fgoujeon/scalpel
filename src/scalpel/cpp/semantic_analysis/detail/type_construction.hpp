@@ -40,8 +40,8 @@ typedef
 		semantic_entities::member_union,
 		semantic_entities::anonymous_union,
 		semantic_entities::anonymous_member_union,
-		semantic_entities::enum_,
-		semantic_entities::member_enum
+		semantic_entities::enum_t,
+		semantic_entities::member_enum_t
 	>::type
 	user_defined_type_ptr_variant
 ;
@@ -205,6 +205,26 @@ namespace detail
 		const std::string& type_name,
 		const semantic_entities::member_access, //ignored
 		typename boost::disable_if<semantic_entities::type_traits::is_member<Type>>::type* = 0
+	);
+
+
+
+	template<class VariantType, class BasicType>
+	VariantType*
+	create_enum
+	(
+		const std::string& type_name,
+		const semantic_entities::member_access access,
+		typename boost::enable_if<semantic_entities::type_traits::is_member<VariantType>>::type* = 0
+	);
+
+	template<class VariantType, class BasicType>
+	VariantType*
+	create_enum
+	(
+		const std::string& type_name,
+		const semantic_entities::member_access, //ignored
+		typename boost::disable_if<semantic_entities::type_traits::is_member<VariantType>>::type* = 0
 	);
 
 

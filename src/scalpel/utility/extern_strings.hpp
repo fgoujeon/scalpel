@@ -109,7 +109,7 @@ namespace extern_strings
 	extern const std::string double_;
 	extern const std::string dynamic_cast_;
 	extern const std::string else_;
-	extern const std::string enum_;
+	extern const std::string basic_enum;
 	extern const std::string explicit_;
 	extern const std::string export_;
 	extern const std::string extern_;

@@ -34,7 +34,7 @@ CLASS_NAME::NAME() const \
 void \
 CLASS_NAME::add_member(std::unique_ptr<TYPE>&& member) \
 { \
-	BOOST_PP_IIF(SET_ENCLOSING_DECLARATIVE_REGION, member->enclosing_declarative_region(this);,) \
+	BOOST_PP_IIF(SET_ENCLOSING_DECLARATIVE_REGION, generic_queries::detail::set_enclosing_declarative_region(*member, this);,) \
     NAME##_.push_back(std::move(member)); \
 }
 

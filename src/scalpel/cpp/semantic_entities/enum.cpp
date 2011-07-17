@@ -18,20 +18,34 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "enum_.hpp"
+#include "enum.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-enum_::enum_(const std::string& name):
-    name_(name)
+namespace
 {
+	struct: utility::static_visitor<const std::string&>
+	{
+		template<class T>
+		const std::string&
+		operator()(const T& e)
+		{
+			return e.name();
+		}
+	} get_name_visitor;
 }
 
-member_enum::member_enum(const std::string& name, const member_access access):
-    name_(name),
-	access_(access)
+const std::string&
+get_name(const enum_t& e)
 {
+	return apply_visitor(get_name_visitor, e);
+}
+
+const std::string&
+get_name(const member_enum_t& e)
+{
+	return apply_visitor(get_name_visitor, e);
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

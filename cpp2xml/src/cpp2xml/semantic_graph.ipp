@@ -83,6 +83,44 @@ semantic_graph_serializer::serialize_class
 	output_ << detail::indent(indent_level) << "</" << markup_name<Class>::value << ">\n";
 }
 
+
+
+semantic_graph_serializer::serialize_enum_visitor::serialize_enum_visitor
+(
+	semantic_graph_serializer& serializer,
+	const unsigned int indent_level,
+	const std::string& id_str
+):
+	serializer_(serializer),
+	output_(serializer.output_),
+	indent_level_(indent_level),
+	id_str_(id_str)
+{
+}
+
+template<template<typename> class BasicEnum, typename UnderlyingType>
+void
+semantic_graph_serializer::serialize_enum_visitor::operator()(const BasicEnum<UnderlyingType>& entity) const
+{
+	output_ << detail::indent(indent_level_) << "<enum";
+	output_ << " " << id_str_;
+	if(!entity.name().empty())
+		output_ << " name=\"" << entity.name() << "\"";
+	serializer_.serialize_access_property(entity);
+	output_ << ">\n";
+
+	for(auto i = entity.constants().begin(); i != entity.constants().end(); ++i)
+	{
+		const enum_constant<UnderlyingType>& constant = *i;
+		output_ << detail::indent(indent_level_ + 1) << "<constant";
+		output_ << " name=\"" << constant.name() << "\"";
+		output_ << " value=\"" << constant.value() << "\"";
+		output_ << ">\n";
+	}
+
+	output_ << detail::indent(indent_level_) << "</enum>\n";
+}
+
 template<class Enum>
 void
 semantic_graph_serializer::serialize_enum
@@ -91,24 +129,12 @@ semantic_graph_serializer::serialize_enum
 	const unsigned int indent_level
 )
 {
-	output_ << detail::indent(indent_level) << "<enum";
-	output_ << " " << id_attribute_to_string(entity);
-	if(!entity.name().empty())
-		output_ << " name=\"" << entity.name() << "\"";
-	serialize_access_property(entity);
-	output_ << ">\n";
-
-	for(auto i = entity.constants().begin(); i != entity.constants().end(); ++i)
-	{
-		const enum_constant& constant = *i;
-		output_ << detail::indent(indent_level + 1) << "<constant";
-		output_ << " name=\"" << constant.name() << "\"";
-		output_ << " value=\"" << constant.value() << "\"";
-		output_ << ">\n";
-	}
-
-	output_ << detail::indent(indent_level) << "</enum>\n";
+	const std::string id_str = id_attribute_to_string(entity);
+	serialize_enum_visitor visitor(*this, indent_level, id_str);
+	apply_visitor(visitor, entity);
 }
+
+
 
 template<class Variable>
 void

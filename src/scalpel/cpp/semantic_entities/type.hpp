@@ -24,7 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "array.hpp"
 #include "class_.hpp"
 #include "cv_qualified_type.hpp"
-#include "enum_.hpp"
+#include "enum.hpp"
 #include "function_type.hpp"
 #include "pointer.hpp"
 #include "pointer_to_member.hpp"

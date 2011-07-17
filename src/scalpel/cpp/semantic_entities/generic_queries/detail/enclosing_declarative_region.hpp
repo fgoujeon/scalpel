@@ -21,6 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_GENERIC_QUERIES_DETAIL_ENCLOSING_DECLARATIVE_REGION_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_GENERIC_QUERIES_DETAIL_ENCLOSING_DECLARATIVE_REGION_HPP
 
+#include <scalpel/cpp/semantic_entities/type_traits/enclosing_declarative_region.hpp>
 #include <scalpel/cpp/semantic_graph.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities { namespace generic_queries { namespace detail
@@ -28,6 +29,21 @@ namespace scalpel { namespace cpp { namespace semantic_entities { namespace gene
 
 namespace_ptr_variant
 enclosing_declarative_region(const namespace_ptr_variant& entity);
+
+
+
+template<class Entity>
+typename type_traits::const_enclosing_declarative_region<Entity>::type&
+get_enclosing_declarative_region(const Entity& entity)
+{
+	return entity.enclosing_declarative_region();
+}
+
+type_traits::const_enclosing_declarative_region<enum_t>::type&
+get_enclosing_declarative_region(const enum_t& entity);
+
+type_traits::const_enclosing_declarative_region<member_enum_t>::type&
+get_enclosing_declarative_region(const member_enum_t& entity);
 
 }}}}} //namespace scalpel::cpp::semantic_entities::generic_queries::detail
 

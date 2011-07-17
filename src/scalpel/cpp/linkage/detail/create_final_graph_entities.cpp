@@ -50,9 +50,9 @@ namespace
 		const final_graph_entities& final_entities
 	);
 
-	template<class Enum>
+	template<template<typename> class Enum, typename UnderlyingType>
 	void
-	copy_constants(const Enum& src, Enum& dest);
+	copy_constants(const Enum<UnderlyingType>& src, Enum<UnderlyingType>& dest);
 }
 
 //private function definitions
@@ -168,42 +168,62 @@ namespace
 		return new_union;
 	}
 
-	enum_*
+	struct: utility::static_visitor<enum_t*>
+	{
+		template<typename UnderlyingType>
+		enum_t*
+		operator()(const basic_enum<UnderlyingType>& entity)
+		{
+			basic_enum<UnderlyingType> new_enum(entity.name());
+			copy_constants(entity, new_enum);
+			return new enum_t(std::move(new_enum));
+		}
+	} copy_enum_visitor;
+
+	enum_t*
 	create_entity
 	(
-		const enum_& entity,
+		const enum_t& entity,
 		const final_graph_entities&
 	)
 	{
-		enum_* new_enum = new enum_(entity.name());
-		copy_constants(entity, *new_enum);
-		return new_enum;
+		return apply_visitor(copy_enum_visitor, entity);
 	}
 
-	member_enum*
+	struct: utility::static_visitor<member_enum_t*>
+	{
+		template<typename UnderlyingType>
+		member_enum_t*
+		operator()(const basic_member_enum<UnderlyingType>& entity)
+		{
+			basic_member_enum<UnderlyingType> new_enum(entity.name(), entity.access());
+			copy_constants(entity, new_enum);
+			return new member_enum_t(std::move(new_enum));
+		}
+	} copy_member_enum_visitor;
+
+	member_enum_t*
 	create_entity
 	(
-		const member_enum& entity,
+		const member_enum_t& entity,
 		const final_graph_entities&
 	)
 	{
-		member_enum* new_enum = new member_enum(entity.name(), entity.access());
-		copy_constants(entity, *new_enum);
-		return new_enum;
+		return apply_visitor(copy_member_enum_visitor, entity);
 	}
 
-	template<class Enum>
+	template<template<typename> class Enum, typename UnderlyingType>
 	void
-	copy_constants(const Enum& src, Enum& dest)
+	copy_constants(const Enum<UnderlyingType>& src, Enum<UnderlyingType>& dest)
 	{
 		for(auto i = src.constants().begin(); i != src.constants().end(); ++i)
 		{
-			const enum_constant& current_enum_constant = *i;
+			const enum_constant<UnderlyingType>& current_enum_constant = *i;
 			dest.add
 			(
-				std::unique_ptr<enum_constant>
+				std::unique_ptr<enum_constant<UnderlyingType>>
 				(
-					new enum_constant
+					new enum_constant<UnderlyingType>
 					(
 						current_enum_constant.name(),
 						current_enum_constant.value()
@@ -679,7 +699,7 @@ namespace
 			}
 
 			type_t
-			operator()(const enum_* type) const
+			operator()(const enum_t* type) const
 			{
 				auto it = final_entities_.enums.find(type);
 				assert(it != final_entities_.enums.end());
@@ -687,7 +707,7 @@ namespace
 			}
 
 			type_t
-			operator()(const member_enum* type) const
+			operator()(const member_enum_t* type) const
 			{
 				auto it = final_entities_.member_enums.find(type);
 				assert(it != final_entities_.member_enums.end());
@@ -873,11 +893,11 @@ create_final_graph_entities
 
 	create_internal_entities_of_type<anonymous_member_union>(groups, final_entities);
 
-	create_entities_of_type<enum_, false>(groups.enums, final_entities);
-	create_internal_entities_of_type<enum_>(groups, final_entities);
+	create_entities_of_type<enum_t, false>(groups.enums, final_entities);
+	create_internal_entities_of_type<enum_t>(groups, final_entities);
 
-	create_entities_of_type<member_enum, false>(groups.member_enums, final_entities);
-	create_internal_entities_of_type<member_enum>(groups, final_entities);
+	create_entities_of_type<member_enum_t, false>(groups.member_enums, final_entities);
+	create_internal_entities_of_type<member_enum_t>(groups, final_entities);
 
 	create_entities_of_type<typedef_, false>(groups.typedefs, final_entities);
 	create_internal_entities_of_type<typedef_>(groups, final_entities);

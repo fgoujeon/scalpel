@@ -39,8 +39,8 @@ struct is_enum<ENTITY_TYPE> \
 	static const bool value = true; \
 };
 
-IS_ENUM(enum_)
-IS_ENUM(member_enum)
+IS_ENUM(enum_t)
+IS_ENUM(member_enum_t)
 
 #undef IS_ENUM
 

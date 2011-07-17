@@ -26,7 +26,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities { namespace type_traits
 {
 
-template<class DeclarativeRegion>
+template<class Entity>
 struct is_member
 {
 	static const bool value = false;
@@ -41,7 +41,7 @@ struct is_member<ENTITY_TYPE> \
 
 IS_MEMBER(member_class)
 IS_MEMBER(member_union)
-IS_MEMBER(member_enum)
+IS_MEMBER(member_enum_t)
 IS_MEMBER(member_typedef)
 IS_MEMBER(constructor)
 IS_MEMBER(destructor)
@@ -53,6 +53,12 @@ IS_MEMBER(static_member_variable)
 IS_MEMBER(bit_field)
 
 #undef IS_MEMBER
+
+template<typename UnderlyingType>
+struct is_member<basic_member_enum<UnderlyingType>>
+{
+	static const bool value = true;
+};
 
 }}}} //namespace scalpel::cpp::semantic_entities::type_traits
 

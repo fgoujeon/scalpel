@@ -125,12 +125,12 @@ FOR(member_class)
 	RETURN_MEMBER_ENTITY_ALIASES(member_class, class_aliases)
 END_FOR
 
-FOR(enum_)
+FOR(enum_t)
 	RETURN_ENTITY_ALIASES(namespace_, enum_aliases)
 	RETURN_ENTITY_ALIASES(unnamed_namespace, enum_aliases)
 END_FOR
 
-FOR(member_enum)
+FOR(member_enum_t)
 	RETURN_MEMBER_ENTITY_ALIASES(class_, enum_aliases)
 	RETURN_MEMBER_ENTITY_ALIASES(member_class, enum_aliases)
 END_FOR

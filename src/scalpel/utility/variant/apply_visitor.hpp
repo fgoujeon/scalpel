@@ -43,7 +43,7 @@ namespace impl
 		visit
 		(
 			Visitor&,
-			const Variant&
+			Variant&
 		)
 		{
 			//won't be called
@@ -62,7 +62,7 @@ namespace impl
 		visit
 		(
 			Visitor& visitor,
-			const Variant& var
+			Variant& var
 		)
 		{
 			if(var.type_index() == index)
@@ -91,7 +91,7 @@ namespace impl
 		visit
 		(
 			Visitor&,
-			const Variant&
+			Variant&
 		)
 		{
 			//won't be called
@@ -110,7 +110,7 @@ namespace impl
 		visit
 		(
 			Visitor& visitor,
-			const Variant& var
+			Variant& var
 		)
 		{
 			if(var.type_index() == index)
@@ -132,7 +132,7 @@ void
 apply_visitor
 (
 	Visitor& visitor,
-	const variant<Ts...>& var,
+	variant<Ts...>& var,
 	typename boost::enable_if
 	<
 		boost::is_same<typename Visitor::result_type, void>
@@ -140,6 +140,36 @@ apply_visitor
 )
 {
 	impl::apply_void_visitor_impl<Visitor, variant<Ts...>, Ts...>::visit(visitor, var);
+}
+
+template<class Visitor, typename... Ts>
+void
+apply_visitor
+(
+	Visitor& visitor,
+	const variant<Ts...>& var,
+	typename boost::enable_if
+	<
+		boost::is_same<typename Visitor::result_type, void>
+	>::type* = 0
+)
+{
+	impl::apply_void_visitor_impl<Visitor, const variant<Ts...>, Ts...>::visit(visitor, var);
+}
+
+template<class Visitor, typename... Ts>
+typename Visitor::result_type
+apply_visitor
+(
+	Visitor& visitor,
+	variant<Ts...>& var,
+	typename boost::disable_if
+	<
+		boost::is_same<typename Visitor::result_type, void>
+	>::type* = 0
+)
+{
+	return impl::apply_return_visitor_impl<Visitor, variant<Ts...>, Ts...>::visit(visitor, var);
 }
 
 template<class Visitor, typename... Ts>
@@ -154,7 +184,7 @@ apply_visitor
 	>::type* = 0
 )
 {
-	return impl::apply_return_visitor_impl<Visitor, variant<Ts...>, Ts...>::visit(visitor, var);
+	return impl::apply_return_visitor_impl<Visitor, const variant<Ts...>, Ts...>::visit(visitor, var);
 }
 
 }} //namespace scalpel::utility

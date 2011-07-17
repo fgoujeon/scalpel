@@ -55,5 +55,35 @@ enclosing_declarative_region(const namespace_ptr_variant& entity)
 	return apply_visitor(enclosing_declarative_region_visitor, entity);
 }
 
+
+
+namespace
+{
+	template<class Entity>
+	struct get_enclosing_declarative_region_visitor: utility::static_visitor<typename type_traits::const_enclosing_declarative_region<Entity>::type&>
+	{
+		template<class Entity2>
+		typename type_traits::const_enclosing_declarative_region<Entity>::type&
+		operator()(const Entity2& entity)
+		{
+			return entity.enclosing_declarative_region();
+		}
+	};
+}
+
+type_traits::const_enclosing_declarative_region<enum_t>::type&
+get_enclosing_declarative_region(const enum_t& entity)
+{
+	get_enclosing_declarative_region_visitor<enum_t> visitor;
+	return apply_visitor(visitor, entity);
+}
+
+type_traits::const_enclosing_declarative_region<member_enum_t>::type&
+get_enclosing_declarative_region(const member_enum_t& entity)
+{
+	get_enclosing_declarative_region_visitor<member_enum_t> visitor;
+	return apply_visitor(visitor, entity);
+}
+
 }}}}} //namespace scalpel::cpp::semantic_entities::generic_queries::detail
 
