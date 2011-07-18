@@ -117,11 +117,11 @@ BOOST_AUTO_TEST_CASE(base_classes)
 	struct_c1base->add_member(std::unique_ptr<simple_member_function>(function_c1base_f));
 	struct_c1base->add_member(std::unique_ptr<simple_member_function>(function_c1base_g));
 	semantic_graph.add_member(std::unique_ptr<class_>(struct_c1));
-	struct_c1->add_base_class(base_class(struct_c1base));
+	struct_c1->add_base_class(base_class(struct_c1base, member_access::PUBLIC, false));
 	struct_c1->add_member(std::unique_ptr<simple_member_function>(function_c1_g));
 	semantic_graph.add_member(std::unique_ptr<class_>(struct_c));
-	struct_c->add_base_class(base_class(struct_c0));
-	struct_c->add_base_class(base_class(struct_c1));
+	struct_c->add_base_class(base_class(struct_c0, member_access::PUBLIC, false));
+	struct_c->add_base_class(base_class(struct_c1, member_access::PUBLIC, false));
 	struct_c->add_member(std::unique_ptr<simple_member_function>(function_g_test));
 
 

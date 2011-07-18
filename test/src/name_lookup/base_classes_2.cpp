@@ -60,7 +60,7 @@ BOOST_AUTO_TEST_CASE(base_classes_2)
 	semantic_graph.add_member(std::unique_ptr<class_>(class_s));
 	class_s->add_member(std::unique_ptr<member_typedef>(typedef_s_integer));
 	semantic_graph.add_member(std::unique_ptr<class_>(class_s2));
-	class_s2->add_base_class(base_class(class_s));
+	class_s2->add_base_class(base_class(class_s, member_access::PUBLIC, false));
 
 	//look up s2::integer from global namespace, must find s::integer
 	{

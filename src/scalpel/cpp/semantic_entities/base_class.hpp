@@ -38,8 +38,8 @@ class base_class
 		base_class
 		(
 			const class_ptr_variant& base,
-			const member_access access = member_access::PUBLIC,
-			bool is_virtual = false
+			const member_access access,
+			bool is_virtual
 		);
 
 		const class_ptr_variant&
