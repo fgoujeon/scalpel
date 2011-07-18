@@ -14,7 +14,7 @@
   </anonymous_union>
   <destructor access="public" defined="false">
   </destructor>
-  <variable id="2" access="public">
+  <variable id="2" access="private">
    <type>
     <anonymous_member_union id="0"/>
    </type>

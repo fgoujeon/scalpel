@@ -136,7 +136,8 @@ BOOST_AUTO_TEST_CASE(using_declarations)
 	auto variable_n_i = new variable
 	(
 		"i",
-		fundamental_type::INT
+		fundamental_type::INT,
+		false
 	);
 
 	//assembling

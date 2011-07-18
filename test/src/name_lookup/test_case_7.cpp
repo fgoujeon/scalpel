@@ -84,7 +84,8 @@ BOOST_AUTO_TEST_CASE(test_case_7)
 	auto variable_a_i = new variable
 	(
 		"i",
-		fundamental_type::INT
+		fundamental_type::INT,
+		false
 	);
 
 	//assembling

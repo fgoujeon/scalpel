@@ -71,32 +71,38 @@ BOOST_AUTO_TEST_CASE(test_case_5)
 	auto variable_a_i = new variable
 	(
 		"i",
-		fundamental_type::INT
+		fundamental_type::INT,
+		false
 	);
 	auto variable_b_i = new variable
 	(
 		"i",
-		fundamental_type::INT
+		fundamental_type::INT,
+		false
 	);
 	auto variable_b_j = new variable
 	(
 		"j",
-		fundamental_type::INT
+		fundamental_type::INT,
+		false
 	);
 	auto variable_c_k = new variable
 	(
 		"k",
-		fundamental_type::INT
+		fundamental_type::INT,
+		false
 	);
 	auto variable_d_j = new variable
 	(
 		"j",
-		fundamental_type::INT
+		fundamental_type::INT,
+		false
 	);
 	auto variable_d_k = new variable
 	(
 		"k",
-		fundamental_type::INT
+		fundamental_type::INT,
+		false
 	);
 
 	//assembling

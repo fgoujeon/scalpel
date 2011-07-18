@@ -406,7 +406,8 @@ fill_class
 				(
 					"",
 					*info.opt_complete_type,
-					info.has_static_specifier
+					info.has_static_specifier,
+					current_access
 				)
 			)
 		);

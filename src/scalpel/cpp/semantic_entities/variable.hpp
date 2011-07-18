@@ -45,9 +45,9 @@ class CLASS_NAME \
 			const std::string& name, \
 			const type_t& type BOOST_PP_COMMA_IF(HAS_SIZE) \
 			BOOST_PP_IIF(HAS_SIZE, unsigned int size,) BOOST_PP_COMMA_IF(HAS_STATIC) \
-			BOOST_PP_IIF(HAS_STATIC, bool is_static = false,) BOOST_PP_COMMA_IF(HAS_MUTABLE) \
-			BOOST_PP_IIF(HAS_MUTABLE, const bool is_mutable = false,) BOOST_PP_COMMA_IF(IS_MEMBER) \
-			BOOST_PP_IIF(IS_MEMBER, const member_access access = member_access::PUBLIC,) \
+			BOOST_PP_IIF(HAS_STATIC, bool is_static,) BOOST_PP_COMMA_IF(HAS_MUTABLE) \
+			BOOST_PP_IIF(HAS_MUTABLE, const bool is_mutable,) BOOST_PP_COMMA_IF(IS_MEMBER) \
+			BOOST_PP_IIF(IS_MEMBER, const member_access access,) \
 		); \
  \
 		CLASS_NAME(const CLASS_NAME&) = delete; \

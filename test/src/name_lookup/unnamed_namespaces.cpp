@@ -106,17 +106,20 @@ BOOST_AUTO_TEST_CASE(unnamed_namespaces)
 	auto variable_xxx_i = new variable
 	(
 		"i",
-		fundamental_type::INT
+		fundamental_type::INT,
+		false
 	);
 	auto variable_a_xxx_i = new variable
 	(
 		"i",
-		fundamental_type::INT
+		fundamental_type::INT,
+		false
 	);
 	auto variable_a_xxx_j = new variable
 	(
 		"j",
-		fundamental_type::INT
+		fundamental_type::INT,
+		false
 	);
 
 	//assembling

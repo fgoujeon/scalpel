@@ -67,7 +67,8 @@ BOOST_AUTO_TEST_CASE(test_case_1)
 	auto variable_a_i = new variable
 	(
 		"i",
-		fundamental_type::INT
+		fundamental_type::INT,
+		false
 	);
 	auto struct_a_b = new class_("B");
 	auto function_a_b_f = new simple_member_function
@@ -97,17 +98,20 @@ BOOST_AUTO_TEST_CASE(test_case_1)
 	auto variable_a_c_n = new variable
 	(
 		"n",
-		fundamental_type::INT
+		fundamental_type::INT,
+		false
 	);
 	auto variable_i = new variable
 	(
 		"i",
-		fundamental_type::INT
+		fundamental_type::INT,
+		false
 	);
 	auto variable_j = new variable
 	(
 		"j",
-		fundamental_type::INT
+		fundamental_type::INT,
+		false
 	);
 
 	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_a));
