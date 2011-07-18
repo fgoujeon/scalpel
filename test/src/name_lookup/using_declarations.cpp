@@ -82,7 +82,11 @@ BOOST_AUTO_TEST_CASE(using_declarations)
 	auto function_n_f = new simple_function
 	(
 		"f",
-		fundamental_type::VOID
+		fundamental_type::VOID,
+		function_parameter_list(),
+		false,
+		false,
+		false
 	);
 
 	function_parameter_list function_n_f_int_parameter_list;
@@ -94,7 +98,10 @@ BOOST_AUTO_TEST_CASE(using_declarations)
 	(
 		"f",
 		fundamental_type::VOID,
-		std::move(function_n_f_int_parameter_list)
+		std::move(function_n_f_int_parameter_list),
+		false,
+		false,
+		false
 	);
 
 	function_parameter_list function_operator_equal_parameter_list;
@@ -110,13 +117,19 @@ BOOST_AUTO_TEST_CASE(using_declarations)
 	(
 		overloadable_operator::EQUAL,
 		fundamental_type::VOID,
-		std::move(function_operator_equal_parameter_list)
+		std::move(function_operator_equal_parameter_list),
+		false,
+		false
 	);
 
 	auto function_test = new simple_function
 	(
 		"test",
-		fundamental_type::VOID
+		fundamental_type::VOID,
+		function_parameter_list(),
+		false,
+		false,
+		false
 	);
 
 	//variables

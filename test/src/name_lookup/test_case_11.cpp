@@ -62,30 +62,57 @@ BOOST_AUTO_TEST_CASE(test_case_11)
 	auto class_c = new class_("c");
 
 	//functions
-	auto c_constructor = new constructor();
-	auto c_destructor = new destructor();
+	auto c_constructor = new constructor(function_parameter_list(), false, member_access::PUBLIC, false, false);
+	auto c_destructor = new destructor(member_access::PUBLIC, false, false, false);
 	auto c_operator_function_plus = new operator_member_function
 	(
 		scalpel::cpp::semantic_entities::overloadable_operator::PLUS,
-		fundamental_type::BOOL
+		fundamental_type::BOOL,
+		function_parameter_list(),
+		member_access::PUBLIC,
+		false,
+		false,
+		false,
+		false,
+		false
 	);
 	auto c_conversion_function_double_ptr = new conversion_function
 	(
-		pointer(fundamental_type::DOUBLE)
+		pointer(fundamental_type::DOUBLE),
+		member_access::PUBLIC,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false
 	);
 	auto c_conversion_function_int_ptr = new conversion_function
 	(
-		pointer(fundamental_type::INT)
+		pointer(fundamental_type::INT),
+		member_access::PUBLIC,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false
 	);
 	auto operator_function_not_equal = new operator_function
 	(
 		scalpel::cpp::semantic_entities::overloadable_operator::EXCLAMATION_EQUAL,
-		fundamental_type::BOOL
+		fundamental_type::BOOL,
+		function_parameter_list(),
+		false,
+		false
 	);
 	auto operator_function_equal = new operator_function
 	(
 		scalpel::cpp::semantic_entities::overloadable_operator::DOUBLE_EQUAL,
-		fundamental_type::BOOL
+		fundamental_type::BOOL,
+		function_parameter_list(),
+		false,
+		false
 	);
 
 	//assembling

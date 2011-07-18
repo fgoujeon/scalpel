@@ -63,7 +63,11 @@ BOOST_AUTO_TEST_CASE(test_case_4)
 	auto function_f = new simple_function
 	(
 		"f",
-		fundamental_type::VOID
+		fundamental_type::VOID,
+		function_parameter_list(),
+		false,
+		false,
+		false
 	);
 
 	//variables

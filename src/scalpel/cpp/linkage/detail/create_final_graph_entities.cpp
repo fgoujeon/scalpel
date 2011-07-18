@@ -289,6 +289,7 @@ namespace
 			(
 				entity.access(),
 				entity.is_virtual(),
+				entity.is_pure(),
 				entity.is_inline()
 			)
 		;

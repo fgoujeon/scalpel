@@ -77,17 +77,29 @@ BOOST_AUTO_TEST_CASE(unnamed_namespaces)
 	auto function_f = new simple_function
 	(
 		"f",
-		fundamental_type::VOID
+		fundamental_type::VOID,
+		function_parameter_list(),
+		false,
+		false,
+		false
 	);
 	auto function_a_g = new simple_function
 	(
 		"g",
-		fundamental_type::VOID
+		fundamental_type::VOID,
+		function_parameter_list(),
+		false,
+		false,
+		false
 	);
 	auto function_h = new simple_function
 	(
 		"h",
-		fundamental_type::VOID
+		fundamental_type::VOID,
+		function_parameter_list(),
+		false,
+		false,
+		false
 	);
 
 	//variables

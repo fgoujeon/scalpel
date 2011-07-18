@@ -91,7 +91,7 @@ BOOST_PP_IIF \
 	{ \
 		set_destructor \
 		( \
-			std::unique_ptr<destructor>(new destructor(member_access::PUBLIC, false)) \
+			std::unique_ptr<destructor>(new destructor(member_access::PUBLIC, false, false, false)) \
 		); \
 	}, \
 )

@@ -78,35 +78,89 @@ BOOST_AUTO_TEST_CASE(base_classes)
 	auto function_c0_inner_f = new simple_member_function
 	(
 		"f",
-		fundamental_type::VOID
+		fundamental_type::VOID,
+		function_parameter_list(),
+		false,
+		member_access::PUBLIC,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false
 	);
 	auto function_c0_f = new simple_member_function
 	(
 		"f",
-		fundamental_type::VOID
+		fundamental_type::VOID,
+		function_parameter_list(),
+		false,
+		member_access::PUBLIC,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false
 	);
 	auto struct_c1base = new class_("c1base");
 	auto function_c1base_f = new simple_member_function
 	(
 		"f",
-		fundamental_type::VOID
+		fundamental_type::VOID,
+		function_parameter_list(),
+		false,
+		member_access::PUBLIC,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false
 	);
 	auto function_c1base_g = new simple_member_function
 	(
 		"g",
-		fundamental_type::VOID
+		fundamental_type::VOID,
+		function_parameter_list(),
+		false,
+		member_access::PUBLIC,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false
 	);
 	auto struct_c1 = new class_("c1");
 	auto function_c1_g = new simple_member_function
 	(
 		"g",
-		fundamental_type::VOID
+		fundamental_type::VOID,
+		function_parameter_list(),
+		false,
+		member_access::PUBLIC,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false
 	);
 	auto struct_c = new class_("c");
 	auto function_g_test = new simple_member_function
 	(
 		"test",
-		fundamental_type::VOID
+		fundamental_type::VOID,
+		function_parameter_list(),
+		false,
+		member_access::PUBLIC,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false
 	);
 
 	semantic_graph.add_member(std::unique_ptr<class_>(struct_c0));

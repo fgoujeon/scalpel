@@ -62,16 +62,16 @@ class CLASS_NAME \
 			BOOST_PP_IIF(HAS_NAME, const std::string& name,) BOOST_PP_COMMA_IF(HAS_NAME) \
 			BOOST_PP_IIF(HAS_OPERATOR, const overloadable_operator overloaded_operator,) BOOST_PP_COMMA_IF(HAS_OPERATOR) \
 			BOOST_PP_IIF(HAS_RETURN_TYPE, const type_t& return_type,) BOOST_PP_COMMA_IF(HAS_RETURN_TYPE) \
-			BOOST_PP_IIF(HAS_PARAMETERS, function_parameter_list&& parameters = function_parameter_list(),) BOOST_PP_COMMA_IF(HAS_PARAMETERS) \
-			BOOST_PP_IIF(HAS_VARIADIC, const bool variadic = false,) BOOST_PP_COMMA_IF(HAS_VARIADIC) \
-			BOOST_PP_IIF(IS_MEMBER, const member_access access = member_access::PUBLIC,) BOOST_PP_COMMA_IF(IS_MEMBER) \
-			BOOST_PP_IIF(HAS_CV_QUALIFIER, const bool is_const = false,) BOOST_PP_COMMA_IF(HAS_CV_QUALIFIER) \
-			BOOST_PP_IIF(HAS_CV_QUALIFIER, const bool is_volatile = false,) BOOST_PP_COMMA_IF(HAS_CV_QUALIFIER) \
-			BOOST_PP_IIF(HAS_STATIC, const bool is_static = false,) BOOST_PP_COMMA_IF(HAS_STATIC) \
-			BOOST_PP_IIF(HAS_EXPLICIT, const bool is_explicit = false,) BOOST_PP_COMMA_IF(HAS_EXPLICIT) \
-			BOOST_PP_IIF(HAS_VIRTUAL, const bool is_virtual = false,) BOOST_PP_COMMA_IF(HAS_VIRTUAL) \
-			BOOST_PP_IIF(HAS_VIRTUAL, const bool is_pure = false,) BOOST_PP_COMMA_IF(HAS_VIRTUAL) \
-			const bool is_inline = false \
+			BOOST_PP_IIF(HAS_PARAMETERS, function_parameter_list&& parameters,) BOOST_PP_COMMA_IF(HAS_PARAMETERS) \
+			BOOST_PP_IIF(HAS_VARIADIC, const bool variadic,) BOOST_PP_COMMA_IF(HAS_VARIADIC) \
+			BOOST_PP_IIF(IS_MEMBER, const member_access access,) BOOST_PP_COMMA_IF(IS_MEMBER) \
+			BOOST_PP_IIF(HAS_CV_QUALIFIER, const bool is_const,) BOOST_PP_COMMA_IF(HAS_CV_QUALIFIER) \
+			BOOST_PP_IIF(HAS_CV_QUALIFIER, const bool is_volatile,) BOOST_PP_COMMA_IF(HAS_CV_QUALIFIER) \
+			BOOST_PP_IIF(HAS_STATIC, const bool is_static,) BOOST_PP_COMMA_IF(HAS_STATIC) \
+			BOOST_PP_IIF(HAS_EXPLICIT, const bool is_explicit,) BOOST_PP_COMMA_IF(HAS_EXPLICIT) \
+			BOOST_PP_IIF(HAS_VIRTUAL, const bool is_virtual,) BOOST_PP_COMMA_IF(HAS_VIRTUAL) \
+			BOOST_PP_IIF(HAS_VIRTUAL, const bool is_pure,) BOOST_PP_COMMA_IF(HAS_VIRTUAL) \
+			const bool is_inline \
 		); \
  \
 		CLASS_NAME(const CLASS_NAME&) = delete; \

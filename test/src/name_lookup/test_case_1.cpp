@@ -73,12 +73,25 @@ BOOST_AUTO_TEST_CASE(test_case_1)
 	auto function_a_b_f = new simple_member_function
 	(
 		"f",
-		fundamental_type::VOID
+		fundamental_type::VOID,
+		function_parameter_list(),
+		false,
+		member_access::PUBLIC,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false
 	);
 	auto function_a_g = new simple_function
 	(
 		"g",
-		fundamental_type::VOID
+		fundamental_type::VOID,
+		function_parameter_list(),
+		false,
+		false,
+		false
 	);
 	auto namespace_a_c = new namespace_("C");
 	auto variable_a_c_n = new variable

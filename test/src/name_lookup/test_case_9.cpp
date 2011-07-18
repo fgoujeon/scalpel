@@ -71,12 +71,20 @@ BOOST_AUTO_TEST_CASE(test_case_9)
 	auto function_a_b_f = new simple_function
 	(
 		"f",
-		fundamental_type::VOID
+		fundamental_type::VOID,
+		function_parameter_list(),
+		false,
+		false,
+		false
 	);
 	auto function_c_d_f = new simple_function
 	(
 		"f",
-		fundamental_type::VOID
+		fundamental_type::VOID,
+		function_parameter_list(),
+		false,
+		false,
+		false
 	);
 
 	//assembling

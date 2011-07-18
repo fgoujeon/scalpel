@@ -81,22 +81,38 @@ BOOST_AUTO_TEST_CASE(test_case_3)
 	auto function_a_b_f1 = new simple_function
 	(
 		"f1",
-		fundamental_type::VOID
+		fundamental_type::VOID,
+		function_parameter_list(),
+		false,
+		false,
+		false
 	);
 	auto function_a_d_f2 = new simple_function
 	(
 		"f2",
-		fundamental_type::VOID
+		fundamental_type::VOID,
+		function_parameter_list(),
+		false,
+		false,
+		false
 	);
 	auto function_a_f3 = new simple_function
 	(
 		"f3",
-		fundamental_type::VOID
+		fundamental_type::VOID,
+		function_parameter_list(),
+		false,
+		false,
+		false
 	);
 	auto function_f4 = new simple_function
 	(
 		"f4",
-		fundamental_type::VOID
+		fundamental_type::VOID,
+		function_parameter_list(),
+		false,
+		false,
+		false
 	);
 
 	//variables

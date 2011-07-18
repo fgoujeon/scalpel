@@ -62,7 +62,16 @@ BOOST_AUTO_TEST_CASE(class_using_declarations)
 	auto function_s_f = new simple_member_function
 	(
 		"f",
-		fundamental_type::VOID
+		fundamental_type::VOID,
+		function_parameter_list(),
+		false,
+		member_access::PUBLIC,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false
 	);
 
 	function_parameter_list function_s2_f_parameter_list;
@@ -74,13 +83,30 @@ BOOST_AUTO_TEST_CASE(class_using_declarations)
 	(
 		"f",
 		fundamental_type::INT,
-		std::move(function_s2_f_parameter_list)
+		std::move(function_s2_f_parameter_list),
+		false,
+		member_access::PUBLIC,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false
 	);
 
 	auto function_s2_test = new simple_member_function
 	(
 		"test",
-		fundamental_type::VOID
+		fundamental_type::VOID,
+		function_parameter_list(),
+		false,
+		member_access::PUBLIC,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false
 	);
 
 	//assembling

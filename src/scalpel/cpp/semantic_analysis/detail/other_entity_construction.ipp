@@ -230,6 +230,7 @@ create_entity
 				access,
 				syntax_node_analysis::has_const_function_qualifier(declarator_node),
 				syntax_node_analysis::has_volatile_function_qualifier(declarator_node),
+				has_explicit_specifier,
 				has_virtual_specifier,
 				has_pure_specifier,
 				has_inline_specifier
