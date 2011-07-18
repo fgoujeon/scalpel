@@ -207,6 +207,22 @@ namespace detail
 		typename boost::disable_if<semantic_entities::type_traits::is_member<Type>>::type* = 0
 	);
 
+	template<class Type>
+	Type*
+	create_type
+	(
+		const semantic_entities::member_access access,
+		typename boost::enable_if<semantic_entities::type_traits::is_member<Type>>::type* = 0
+	);
+
+	template<class Type>
+	Type*
+	create_type
+	(
+		const semantic_entities::member_access, //ignored
+		typename boost::disable_if<semantic_entities::type_traits::is_member<Type>>::type* = 0
+	);
+
 
 
 	template<class VariantType, class BasicType>

@@ -74,7 +74,7 @@ BOOST_AUTO_TEST_CASE(base_classes)
 
 	scalpel::cpp::semantic_graph semantic_graph;
 	auto struct_c0 = new class_("c0");
-	auto struct_c0_inner = new member_class("inner");
+	auto struct_c0_inner = new member_class("inner", member_access::PUBLIC);
 	auto function_c0_inner_f = new simple_member_function
 	(
 		"f",

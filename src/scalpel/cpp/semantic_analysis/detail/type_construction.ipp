@@ -231,7 +231,7 @@ create_type
 					const bool type_index = is_member ? 0 : 1;
 					typedef typename utility::type_alternative<type_index, anonymous_member_union, anonymous_union>::type union_t;
 
-					union_t* new_union = new union_t();
+					union_t* new_union = detail::create_type<union_t>(access);
 					info.opt_new_type = new_union;
 					info.opt_defined_type = new_union;
 					info.opt_complete_type = new_union;
@@ -554,6 +554,28 @@ namespace detail
 	)
 	{
 		return new Type(type_name);
+	}
+
+	template<class Type>
+	Type*
+	create_type
+	(
+		const semantic_entities::member_access access,
+		typename boost::enable_if<semantic_entities::type_traits::is_member<Type>>::type*
+	)
+	{
+		return new Type(access);
+	}
+
+	template<class Type>
+	Type*
+	create_type
+	(
+		const semantic_entities::member_access, //ignored
+		typename boost::disable_if<semantic_entities::type_traits::is_member<Type>>::type*
+	)
+	{
+		return new Type();
 	}
 
 

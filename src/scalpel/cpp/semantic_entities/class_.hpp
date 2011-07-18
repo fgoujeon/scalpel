@@ -98,7 +98,7 @@ class CLASS_NAME \
         CLASS_NAME \
 		( \
 			BOOST_PP_IIF(HAS_NAME, const std::string& name,) BOOST_PP_COMMA_IF(BOOST_PP_AND(HAS_NAME, IS_MEMBER)) \
-			BOOST_PP_IIF(IS_MEMBER, const member_access access = member_access::PUBLIC,) \
+			BOOST_PP_IIF(IS_MEMBER, const member_access access,) \
 		); \
  \
         CLASS_NAME(const CLASS_NAME&) = delete; \

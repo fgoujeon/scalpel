@@ -1,6 +1,6 @@
 <namespace id="0">
  <class id="0" name="c">
-  <anonymous_union id="0">
+  <anonymous_union id="0" access="private">
    <variable id="0" name="d" access="public">
     <type>
      <fundamental_type type="double"/>
