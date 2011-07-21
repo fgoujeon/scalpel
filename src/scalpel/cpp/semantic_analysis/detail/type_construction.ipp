@@ -513,7 +513,7 @@ qualify_type
 		{
 			const syntax_nodes::conditional_expression& conditional_expression_node = *opt_conditional_expression_node;
 
-			const semantic_entities::expression_t expr = create_expression(conditional_expression_node, current_declarative_region);
+			const semantic_entities::expression_t expr = create_expression_from_conditional_expression(conditional_expression_node, current_declarative_region);
 			const unsigned int size = evaluate_expression_to_unsigned_int(expr);
 
 			type = array(size, type);

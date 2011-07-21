@@ -218,7 +218,7 @@ fill_namespace
 						{
 							variable& var = **opt_variable;
 
-							semantic_entities::expression_t expr = create_expression(assignment_expression_node, namespace_entity);
+							semantic_entities::expression_t expr = create_expression_from_assignment_expression(assignment_expression_node, namespace_entity);
 							expr = create_conversion(expr, var.type());
 
 							var.default_value(expr);

@@ -33,7 +33,7 @@ using namespace semantic_entities;
 using namespace semantic_entity_analysis;
 
 semantic_entities::expression_t
-create_expression(const syntax_nodes::literal& literal_node)
+create_expression_from_literal(const syntax_nodes::literal& literal_node)
 {
 	if(const boost::optional<const integer_literal&>& opt_integer_literal_node = get<integer_literal>(&literal_node))
 		return create_integer_value(*opt_integer_literal_node);
@@ -53,6 +53,57 @@ create_expression(const syntax_nodes::literal& literal_node)
 
 semantic_entities::expression_t
 create_addition_expression
+(
+	const semantic_entities::expression_t& const_left_operand,
+	const semantic_entities::expression_t& const_right_operand
+)
+{
+	//For addition, either both operands shall have arithmetic or enumeration
+	//type, or one operand shall be a pointer to a completely defined object
+	//type and the other shall have integral or enumeration type.
+
+	semantic_entities::expression_t left_operand = const_left_operand;
+	semantic_entities::expression_t right_operand = const_right_operand;
+
+	const expression_information left_operand_info(left_operand);
+	const expression_information right_operand_info(right_operand);
+
+	const bool evaluate = is_constant(const_left_operand) && is_constant(const_right_operand);
+
+	if(left_operand_info.has_arithmetic_or_enumeration_type() && right_operand_info.has_arithmetic_or_enumeration_type())
+	{
+		create_usual_arithmetic_conversions
+		(
+			left_operand,
+			right_operand,
+			evaluate,
+			left_operand_info,
+			right_operand_info
+		);
+	}
+	else if(left_operand_info.has_pointer_to_defined_type_type() && right_operand_info.has_integral_or_enumeration_type())
+	{
+	}
+	else if(left_operand_info.has_integral_or_enumeration_type() && right_operand_info.has_pointer_to_defined_type_type())
+	{
+	}
+	else
+	{
+		throw std::runtime_error("create_addition_expression error");
+	}
+
+	if(evaluate)
+		return evaluate_addition_expression(left_operand, right_operand);
+	else
+		return semantic_entities::addition_expression
+		(
+			left_operand,
+			right_operand
+		);
+}
+
+semantic_entities::expression_t
+create_subtraction_expression
 (
 	const semantic_entities::expression_t& const_left_operand,
 	const semantic_entities::expression_t& const_right_operand
