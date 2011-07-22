@@ -316,7 +316,7 @@ namespace detail
 		);
 	};
 
-	//Implementation of non-variadic find_local_entities(), with DeclarativeRegion = open_declarative_region_t
+	//Implementation of non-variadic find_local_entities(), with Entity = open_declarative_region_t
 	template<class EntityIdentificationPolicy, class DeclarativeRegion, bool Optional, bool Multiple>
 	struct find_single_type_local_entities<EntityIdentificationPolicy, DeclarativeRegion, Optional, Multiple, semantic_entities::open_declarative_region_t>
 	{

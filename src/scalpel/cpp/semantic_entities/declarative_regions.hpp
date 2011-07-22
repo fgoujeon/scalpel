@@ -75,18 +75,17 @@ typedef
 ;
 
 //Open declarative regions are those considered during a qualified name lookup.
-//E.g. if we look up to "X::Y::Z::name", X, Y and Z are the names of three
-//open declarative regions.
+//E.g. if we look up to "X::Y::Z::name", X, Y and Z refer directly or
+//indirectly (through a namespace alias or a typedef) to three open declarative
+//regions.
 typedef
 	scalpel::utility::ptr_variant
 	<
 		namespace_,
-		namespace_alias,
 		class_,
 		member_class,
 		union_,
-		member_union,
-		typedef_
+		member_union
 	>::type
 	open_declarative_region_t
 ;

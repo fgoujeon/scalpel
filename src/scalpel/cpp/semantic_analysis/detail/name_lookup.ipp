@@ -23,6 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "semantic_entity_analysis/get_global_namespace.hpp"
 #include "semantic_entity_analysis/get_name.hpp"
+#include "semantic_entity_analysis/to_open_declarative_region.hpp"
 #include <scalpel/cpp/semantic_entities/generic_queries/detail/has_enclosing_declarative_region.hpp>
 #include <scalpel/cpp/semantic_entities/generic_queries/detail/enclosing_declarative_region.hpp>
 #include <scalpel/cpp/semantic_entities/generic_queries/detail/get_members.hpp>
@@ -578,27 +579,26 @@ find_single_type_local_entities<EntityIdentificationPolicy, DeclarativeRegion, O
 	using namespace semantic_entities;
 
 	return
-		find_local_entities
-		<
-			EntityIdentificationPolicy,
-			DeclarativeRegion,
-			Optional,
-			Multiple,
-
-			//open_declarative_region_t types
-			//TODO: this is redundant, it might be possible to fix this
-			//redundance using template aliases
-			namespace_,
-			namespace_alias,
-			class_,
-			member_class,
-			union_,
-			member_union,
-			typedef_
-		>
+		semantic_entity_analysis::to_open_declarative_region
 		(
-			identifier,
-			current_declarative_region
+			find_local_entities
+			<
+				EntityIdentificationPolicy,
+				DeclarativeRegion,
+				Optional,
+				Multiple,
+				namespace_,
+				namespace_alias,
+				class_,
+				member_class,
+				union_,
+				member_union,
+				typedef_
+			>
+			(
+				identifier,
+				current_declarative_region
+			)
 		)
 	;
 }
