@@ -332,7 +332,7 @@ namespace detail
 
 
 	/*
-	Stage 2: Dispatch special declarative region types (variants, typedefs, etc.)
+	Stage 2: Dispatch declarative region types (single type or variant)
 	*/
 	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class Entity, class DeclarativeRegion>
 	struct find_local_entities2
@@ -356,45 +356,6 @@ namespace detail
 		(
 			const typename EntityIdentificationPolicy::identifier_t& identifier,
 			utility::variant<DeclarativeRegions...>& current_declarative_region,
-			typename return_type<Optional, Multiple, Entity>::type& found_entities
-		);
-	};
-
-	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class Entity>
-	struct find_local_entities2<EntityIdentificationPolicy, Optional, Multiple, Entity, semantic_entities::typedef_>
-	{
-		static
-		void
-		find
-		(
-			const typename EntityIdentificationPolicy::identifier_t& identifier,
-			semantic_entities::typedef_& current_declarative_region,
-			typename return_type<Optional, Multiple, Entity>::type& found_entities
-		);
-	};
-
-	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class Entity>
-	struct find_local_entities2<EntityIdentificationPolicy, Optional, Multiple, Entity, semantic_entities::member_typedef>
-	{
-		static
-		void
-		find
-		(
-			const typename EntityIdentificationPolicy::identifier_t& identifier,
-			semantic_entities::member_typedef& current_declarative_region,
-			typename return_type<Optional, Multiple, Entity>::type& found_entities
-		);
-	};
-
-	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class Entity>
-	struct find_local_entities2<EntityIdentificationPolicy, Optional, Multiple, Entity, semantic_entities::namespace_alias>
-	{
-		static
-		void
-		find
-		(
-			const typename EntityIdentificationPolicy::identifier_t& identifier,
-			semantic_entities::namespace_alias& current_declarative_region,
 			typename return_type<Optional, Multiple, Entity>::type& found_entities
 		);
 	};

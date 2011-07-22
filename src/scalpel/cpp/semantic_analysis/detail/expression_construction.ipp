@@ -798,18 +798,6 @@ class create_expression_from_unqualified_id_visitor: public utility::static_visi
 			;
 		}
 
-		semantic_entities::expression_t
-		operator()(semantic_entities::namespace_alias* const) const
-		{
-			assert(false);
-		}
-
-		semantic_entities::expression_t
-		operator()(semantic_entities::typedef_* const) const
-		{
-			assert(false);
-		}
-
 	private:
 		const syntax_nodes::unqualified_id& unqualified_id_node_;
 };

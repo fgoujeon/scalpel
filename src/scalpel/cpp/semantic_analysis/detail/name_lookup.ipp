@@ -707,68 +707,6 @@ find_local_entities2<EntityIdentificationPolicy, Optional, Multiple, Entity, uti
 	apply_visitor(visitor, current_declarative_region);
 }
 
-template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class Entity>
-void
-find_local_entities2<EntityIdentificationPolicy, Optional, Multiple, Entity, semantic_entities::typedef_>::find
-(
-	const typename EntityIdentificationPolicy::identifier_t& identifier,
-	semantic_entities::typedef_& current_declarative_region,
-	typename return_type<Optional, Multiple, Entity>::type& found_entities
-)
-{
-	find_local_entities2_visitor
-	<
-		EntityIdentificationPolicy,
-		Optional,
-		Multiple,
-		Entity
-	> visitor(identifier, found_entities);
-	apply_visitor(visitor, current_declarative_region.type());
-}
-
-template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class Entity>
-void
-find_local_entities2<EntityIdentificationPolicy, Optional, Multiple, Entity, semantic_entities::member_typedef>::find
-(
-	const typename EntityIdentificationPolicy::identifier_t& identifier,
-	semantic_entities::member_typedef& current_declarative_region,
-	typename return_type<Optional, Multiple, Entity>::type& found_entities
-)
-{
-	find_local_entities2_visitor
-	<
-		EntityIdentificationPolicy,
-		Optional,
-		Multiple,
-		Entity
-	> visitor(identifier, found_entities);
-	apply_visitor(visitor, current_declarative_region.type());
-}
-
-template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class Entity>
-void
-find_local_entities2<EntityIdentificationPolicy, Optional, Multiple, Entity, semantic_entities::namespace_alias>::find
-(
-	const typename EntityIdentificationPolicy::identifier_t& identifier,
-	semantic_entities::namespace_alias& current_declarative_region,
-	typename return_type<Optional, Multiple, Entity>::type& found_entities
-)
-{
-	find_in_declarative_region_members
-	<
-		EntityIdentificationPolicy,
-		Optional,
-		Multiple,
-		Entity,
-		semantic_entities::namespace_
-	>
-	(
-		identifier,
-		current_declarative_region.referred_namespace(),
-		found_entities
-	);
-}
-
 template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class Entity, class DeclarativeRegion>
 void
 find_local_entities2<EntityIdentificationPolicy, Optional, Multiple, Entity, DeclarativeRegion>::find

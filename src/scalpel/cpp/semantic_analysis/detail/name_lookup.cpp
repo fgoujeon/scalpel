@@ -36,7 +36,7 @@ find_declarative_region
 {
 	if(has_leading_double_colon)
 	{
-		//the first declarative region is in the global namespace
+		//the first declarative region is the global namespace
 		semantic_entities::namespace_& global_namespace =
 			semantic_entity_analysis::get_global_namespace(current_declarative_region)
 		;
@@ -52,7 +52,7 @@ find_declarative_region
 			else
 				assert(false);
 
-			//find the first declarative region
+			//find the second declarative region
 			open_declarative_region_t first_declarative_region =
 				detail::find_local_entities
 				<
