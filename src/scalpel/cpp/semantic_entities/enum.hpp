@@ -61,6 +61,12 @@ class CLASS_NAME \
 			return name_; \
 		} \
  \
+		typename constants_t::range \
+		constants() \
+		{ \
+			return constants_; \
+		} \
+ \
 		const constants_t& \
 		constants() const \
 		{ \

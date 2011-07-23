@@ -360,6 +360,19 @@ namespace detail
 		);
 	};
 
+	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class Entity>
+	struct find_local_entities2<EntityIdentificationPolicy, Optional, Multiple, Entity, semantic_entities::enum_t>
+	{
+		static
+		void
+		find
+		(
+			const typename EntityIdentificationPolicy::identifier_t& identifier,
+			semantic_entities::enum_t& current_declarative_region,
+			typename return_type<Optional, Multiple, Entity>::type& found_entities
+		);
+	};
+
 
 
 	/**

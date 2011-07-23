@@ -39,6 +39,8 @@ class union_;
 class member_union;
 class anonymous_union;
 class anonymous_member_union;
+class enum_t;
+class member_enum_t;
 class constructor;
 class destructor;
 class operator_function;
@@ -62,6 +64,8 @@ typedef
 		member_union,
 		anonymous_union,
 		anonymous_member_union,
+		enum_t,
+		member_enum_t,
 		constructor,
 		destructor,
 		operator_function,
@@ -85,7 +89,9 @@ typedef
 		class_,
 		member_class,
 		union_,
-		member_union
+		member_union,
+		enum_t,
+		member_enum_t
 	>::type
 	open_declarative_region_t
 ;

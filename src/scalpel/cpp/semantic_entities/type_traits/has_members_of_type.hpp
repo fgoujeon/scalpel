@@ -153,6 +153,8 @@ HAS_MEMBERS_OF_TYPE(anonymous_member_union, member_typedef)
 HAS_MEMBERS_OF_TYPE(anonymous_member_union, member_variable)
 HAS_MEMBERS_OF_TYPE(anonymous_member_union, bit_field)
 
+HAS_MEMBERS_OF_TYPE(basic_enum<int>, enum_constant<int>)
+
 HAS_MEMBERS_OF_TYPE(statement_block, namespace_alias)
 
 #undef HAS_MEMBERS_OF_TYPE

@@ -593,6 +593,8 @@ find_single_type_local_entities<EntityIdentificationPolicy, DeclarativeRegion, O
 				member_class,
 				union_,
 				member_union,
+				enum_t,
+				member_enum_t,
 				typedef_
 			>
 			(
@@ -675,6 +677,25 @@ class find_local_entities2_visitor: public utility::static_visitor<void>
 			apply_visitor(*this, current_declarative_region.qualified_type());
 		}
 
+		template<template<typename> class BasicEnum, typename UnderlyingType>
+		void
+		operator()(BasicEnum<UnderlyingType>& current_declarative_region)
+		{
+			find_local_entities2
+			<
+				EntityIdentificationPolicy,
+				Optional,
+				Multiple,
+				Entity,
+				BasicEnum<UnderlyingType>
+			>::find
+			(
+				identifier_,
+				current_declarative_region,
+				found_entities_
+			);
+		}
+
 		//non-declarative-region types
 		template<class DeclarativeRegion>
 		void
@@ -705,6 +726,25 @@ find_local_entities2<EntityIdentificationPolicy, Optional, Multiple, Entity, uti
 		Entity
 	> visitor(identifier, found_entities);
 	apply_visitor(visitor, current_declarative_region);
+}
+
+template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class Entity>
+void
+find_local_entities2<EntityIdentificationPolicy, Optional, Multiple, Entity, semantic_entities::enum_t>::find
+(
+	const typename EntityIdentificationPolicy::identifier_t& identifier,
+	semantic_entities::enum_t& current_declarative_region,
+	typename return_type<Optional, Multiple, Entity>::type& found_entities
+)
+{
+	find_local_entities2_visitor
+	<
+		EntityIdentificationPolicy,
+		Optional,
+		Multiple,
+		Entity
+	> visitor(identifier, found_entities);
+	utility::apply_visitor(visitor, current_declarative_region);
 }
 
 template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class Entity, class DeclarativeRegion>

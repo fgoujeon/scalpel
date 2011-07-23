@@ -68,6 +68,18 @@ struct to_open_declarative_region_visitor: utility::static_visitor<semantic_enti
 	}
 
 	semantic_entities::open_declarative_region_t
+	operator()(semantic_entities::enum_t* const entity) const
+	{
+		return entity;
+	}
+
+	semantic_entities::open_declarative_region_t
+	operator()(semantic_entities::member_enum_t* const entity) const
+	{
+		return entity;
+	}
+
+	semantic_entities::open_declarative_region_t
 	operator()(semantic_entities::namespace_alias* const alias) const
 	{
 		return &alias->referred_namespace();

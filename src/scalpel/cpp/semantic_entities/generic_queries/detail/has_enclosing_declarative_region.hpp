@@ -28,6 +28,24 @@ namespace scalpel { namespace cpp { namespace semantic_entities { namespace gene
 
 template<class Entity>
 bool
+has_enclosing_declarative_region(const Entity& entity);
+
+template<class... Entities>
+bool
+has_enclosing_declarative_region(const utility::variant<Entities...>& entity);
+
+inline
+bool
+has_enclosing_declarative_region(const enum_t& entity);
+
+inline
+bool
+has_enclosing_declarative_region(const member_enum_t& entity);
+
+
+
+template<class Entity>
+bool
 has_enclosing_declarative_region(const Entity& entity)
 {
 	return entity.has_enclosing_declarative_region();
@@ -41,21 +59,21 @@ struct: utility::static_visitor<bool>
 	bool
 	operator()(const Entity* const entity) const
 	{
-		return entity->has_enclosing_declarative_region();
+		return has_enclosing_declarative_region(*entity);
 	}
 
 	template<class Entity>
 	bool
 	operator()(Entity* const entity) const
 	{
-		return entity->has_enclosing_declarative_region();
+		return has_enclosing_declarative_region(*entity);
 	}
 
 	template<class Entity>
 	bool
 	operator()(const Entity& entity) const
 	{
-		return entity.has_enclosing_declarative_region();
+		return has_enclosing_declarative_region(entity);
 	}
 } has_enclosing_declarative_region_visitor;
 

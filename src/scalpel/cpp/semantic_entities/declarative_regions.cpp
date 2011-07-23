@@ -45,9 +45,31 @@ namespace
 	{
 		template<class Entity>
 		declarative_region_t
+		operator()(Entity& t) const
+		{
+			return apply_visitor(to_declarative_region_ptr_variant, t.enclosing_declarative_region());
+		}
+	} get_enum_enclosing_declarative_region_visitor;
+
+	struct: public utility::static_visitor<declarative_region_t>
+	{
+		template<class Entity>
+		declarative_region_t
 		operator()(Entity* t) const
 		{
 			return apply_visitor(to_declarative_region_ptr_variant, t->enclosing_declarative_region());
+		}
+
+		declarative_region_t
+		operator()(enum_t* const t) const
+		{
+			return apply_visitor(get_enum_enclosing_declarative_region_visitor, *t);
+		}
+
+		declarative_region_t
+		operator()(member_enum_t* const t) const
+		{
+			return apply_visitor(get_enum_enclosing_declarative_region_visitor, *t);
 		}
 	} get_enclosing_declarative_region_visitor;
 }
