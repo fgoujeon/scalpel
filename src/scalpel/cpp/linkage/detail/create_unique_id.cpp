@@ -21,6 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "create_unique_id.hpp"
 #include <scalpel/cpp/semantic_entities/generic_queries/detail/has_enclosing_declarative_region.hpp>
 #include <scalpel/cpp/semantic_entities/generic_queries/detail/enclosing_declarative_region.hpp>
+#include <scalpel/cpp/semantic_entities/generic_queries/get_name.hpp>
 #include <scalpel/cpp/semantic_entities/type_traits/enclosing_declarative_region.hpp>
 #include <sstream>
 #include <cassert>
@@ -328,13 +329,13 @@ create_unique_id(const semantic_entities::member_union& entity)
 std::string
 create_unique_id(const semantic_entities::enum_t& entity)
 {
-	return create_enclosing_declarative_region_unique_id(entity) + get_name(entity);
+	return create_enclosing_declarative_region_unique_id(entity) + semantic_entities::generic_queries::get_name(entity);
 }
 
 std::string
 create_unique_id(const semantic_entities::member_enum_t& entity)
 {
-	return create_enclosing_declarative_region_unique_id(entity) + get_name(entity);
+	return create_enclosing_declarative_region_unique_id(entity) + semantic_entities::generic_queries::get_name(entity);
 }
 
 std::string

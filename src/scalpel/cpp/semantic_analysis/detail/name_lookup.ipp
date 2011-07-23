@@ -22,12 +22,12 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_NAME_LOOKUP_IPP
 
 #include "semantic_entity_analysis/get_global_namespace.hpp"
-#include "semantic_entity_analysis/get_name.hpp"
 #include "semantic_entity_analysis/to_open_declarative_region.hpp"
 #include <scalpel/cpp/semantic_entities/generic_queries/detail/has_enclosing_declarative_region.hpp>
 #include <scalpel/cpp/semantic_entities/generic_queries/detail/enclosing_declarative_region.hpp>
 #include <scalpel/cpp/semantic_entities/generic_queries/detail/get_members.hpp>
 #include <scalpel/cpp/semantic_entities/generic_queries/detail/get_entity_aliases.hpp>
+#include <scalpel/cpp/semantic_entities/generic_queries/get_name.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail { namespace name_lookup
 {

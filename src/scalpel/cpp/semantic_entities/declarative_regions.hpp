@@ -103,12 +103,6 @@ typedef
 	function_enclosing_declarative_region_t
 ;
 
-const std::string&
-get_name(const declarative_region_t& var);
-
-const std::string&
-get_name(const open_declarative_region_t& var);
-
 bool
 has_enclosing_declarative_region(const declarative_region_t& var);
 

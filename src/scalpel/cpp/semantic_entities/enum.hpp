@@ -172,18 +172,6 @@ struct member_enum_t: member_enum_typedef
 	}
 };
 
-
-
-//
-//free functions
-//
-
-const std::string&
-get_name(const enum_t& e);
-
-const std::string&
-get_name(const member_enum_t& e);
-
 }}} //namespace scalpel::cpp::semantic_entities
 
 #include "macros/detail/declarative_region_member_impl_undef.hpp"

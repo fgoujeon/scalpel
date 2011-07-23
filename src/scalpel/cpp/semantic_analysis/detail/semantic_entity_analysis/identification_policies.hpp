@@ -21,8 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_SEMANTIC_ENTITY_ANALYSIS_IDENTIFICATION_POLICIES_HPP
 #define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_SEMANTIC_ENTITY_ANALYSIS_IDENTIFICATION_POLICIES_HPP
 
-#include "get_name.hpp"
 #include <scalpel/cpp/semantic_graph.hpp>
+#include <scalpel/cpp/semantic_entities/generic_queries/get_name.hpp>
 #include <string>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail { namespace semantic_entity_analysis
@@ -62,7 +62,7 @@ namespace identification_policies
 		const identifier_t&
 		get_identifier(const EntityT& entity)
 		{
-			return semantic_entity_analysis::get_name(entity);
+			return semantic_entities::generic_queries::get_name(entity);
 		}
 
 		template<class EntityT>

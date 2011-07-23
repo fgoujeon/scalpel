@@ -23,14 +23,59 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string>
 
-namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail { namespace semantic_entity_analysis
+namespace scalpel { namespace cpp { namespace semantic_entities { namespace generic_queries
 {
 
-template<class EntityT>
+template<class Entity>
 const std::string&
-get_name(const EntityT& entity);
+get_name(const Entity& entity)
+{
+	return entity.name();
+}
 
-}}}}} //namespace scalpel::cpp::semantic_analysis::detail::semantic_entity_analysis
+
+
+struct: utility::static_visitor<const std::string&>
+{
+	template<class Entity>
+	const std::string&
+	operator()(const Entity* const entity) const
+	{
+		return entity->name();
+	}
+
+	template<class Entity>
+	const std::string&
+	operator()(const Entity& entity) const
+	{
+		return entity.name();
+	}
+} get_name_visitor;
+
+template<class... Entities>
+const std::string&
+get_name(const utility::variant<Entities...>& entity)
+{
+	return apply_visitor(get_name_visitor, entity);
+}
+
+
+
+inline
+const std::string&
+get_name(const enum_t& entity)
+{
+	return apply_visitor(get_name_visitor, entity);
+}
+
+inline
+const std::string&
+get_name(const member_enum_t& entity)
+{
+	return apply_visitor(get_name_visitor, entity);
+}
+
+}}}} //namespace scalpel::cpp::semantic_entities::generic_queries
 
 #endif
 
