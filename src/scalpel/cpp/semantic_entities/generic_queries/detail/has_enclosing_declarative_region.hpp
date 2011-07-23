@@ -27,20 +27,23 @@ namespace scalpel { namespace cpp { namespace semantic_entities { namespace gene
 {
 
 template<class Entity>
-struct has_enclosing_declarative_region_impl
+bool
+has_enclosing_declarative_region(const Entity& entity)
 {
-	static
-	bool
-	has(const Entity& entity)
-	{
-		return entity.has_enclosing_declarative_region();
-	}
-};
+	return entity.has_enclosing_declarative_region();
+}
 
 
 
 struct: utility::static_visitor<bool>
 {
+	template<class Entity>
+	bool
+	operator()(const Entity* const entity) const
+	{
+		return entity->has_enclosing_declarative_region();
+	}
+
 	template<class Entity>
 	bool
 	operator()(Entity* const entity) const
@@ -57,51 +60,26 @@ struct: utility::static_visitor<bool>
 } has_enclosing_declarative_region_visitor;
 
 template<class... Entities>
-struct has_enclosing_declarative_region_impl<utility::variant<Entities...>>
+bool
+has_enclosing_declarative_region(const utility::variant<Entities...>& entity)
 {
-	static
-	bool
-	has(const utility::variant<Entities...>& entity)
-	{
-		return apply_visitor(has_enclosing_declarative_region_visitor, entity);
-	}
-};
+	return apply_visitor(has_enclosing_declarative_region_visitor, entity);
+}
 
 
 
-template<>
-struct has_enclosing_declarative_region_impl<enum_t>
-{
-	static
-	bool
-	has(const enum_typedef& entity)
-	{
-		return apply_visitor(has_enclosing_declarative_region_visitor, entity);
-	}
-};
-
-
-
-template<>
-struct has_enclosing_declarative_region_impl<member_enum_t>
-{
-	static
-	bool
-	has(const member_enum_t& entity)
-	{
-		return apply_visitor(has_enclosing_declarative_region_visitor, entity);
-	}
-};
-
-
-
-//public function
-template<class Entity>
 inline
 bool
-has_enclosing_declarative_region(const Entity& entity)
+has_enclosing_declarative_region(const enum_t& entity)
 {
-	return has_enclosing_declarative_region_impl<Entity>::has(entity);
+	return apply_visitor(has_enclosing_declarative_region_visitor, entity);
+}
+
+inline
+bool
+has_enclosing_declarative_region(const member_enum_t& entity)
+{
+	return apply_visitor(has_enclosing_declarative_region_visitor, entity);
 }
 
 }}}}} //namespace scalpel::cpp::semantic_entities::generic_queries::detail

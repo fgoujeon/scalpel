@@ -192,7 +192,7 @@ find
 		}
 
 		//iterate to the enclosing declarative region
-		if(!has_enclosing_declarative_region(current_declarative_region)) break;
+		if(!generic_queries::detail::has_enclosing_declarative_region(current_declarative_region)) break;
 		current_declarative_region = get_enclosing_declarative_region(current_declarative_region);
 	}
 
@@ -1033,7 +1033,7 @@ find_common_enclosing_namespace
 		}
 
 		//iterate to the enclosing declarative region
-		if(!has_enclosing_declarative_region(current_declarative_region_a)) break;
+		if(!generic_queries::detail::has_enclosing_declarative_region(current_declarative_region_a)) break;
 		current_declarative_region_a = get_enclosing_declarative_region(current_declarative_region_a);
 	}
 

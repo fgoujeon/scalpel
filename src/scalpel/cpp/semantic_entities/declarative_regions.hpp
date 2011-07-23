@@ -103,9 +103,6 @@ typedef
 	function_enclosing_declarative_region_t
 ;
 
-bool
-has_enclosing_declarative_region(const declarative_region_t& var);
-
 declarative_region_t
 get_enclosing_declarative_region(const declarative_region_t& var);
 

@@ -18,8 +18,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_SEMANTIC_ENTITY_ANALYSIS_GET_NAME_HPP
-#define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_SEMANTIC_ENTITY_ANALYSIS_GET_NAME_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_GENERIC_QUERIES_GET_NAME_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_GENERIC_QUERIES_GET_NAME_HPP
 
 #include <string>
 

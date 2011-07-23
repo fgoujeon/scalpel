@@ -31,27 +31,6 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 
 namespace
 {
-	struct: public utility::static_visitor<bool>
-	{
-		template<class T>
-		bool
-		operator()(T* t) const
-		{
-			return t->has_enclosing_declarative_region();
-		}
-	} has_enclosing_declarative_region_visitor;
-}
-
-bool
-has_enclosing_declarative_region(const declarative_region_t& var)
-{
-	return utility::apply_visitor(has_enclosing_declarative_region_visitor, var);
-}
-
-
-
-namespace
-{
 	struct: public utility::static_visitor<declarative_region_t>
 	{
 		template<class T>

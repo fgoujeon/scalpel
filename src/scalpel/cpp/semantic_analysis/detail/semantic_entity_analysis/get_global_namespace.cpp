@@ -19,6 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "get_global_namespace.hpp"
+#include <scalpel/cpp/semantic_entities/generic_queries/detail/has_enclosing_declarative_region.hpp>
 #include <cassert>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail { namespace semantic_entity_analysis
@@ -28,7 +29,7 @@ semantic_entities::namespace_&
 get_global_namespace(semantic_entities::declarative_region_t current_declarative_region)
 {
 	//get the outermost declarative region
-	while(has_enclosing_declarative_region(current_declarative_region))
+	while(semantic_entities::generic_queries::detail::has_enclosing_declarative_region(current_declarative_region))
 	{
 		current_declarative_region = get_enclosing_declarative_region(current_declarative_region);
 	}
