@@ -41,9 +41,9 @@ namespace
 				e.add(std::move(constant_));
 			}
 
-			template<template<typename> class Enum>
+			template<class Enum>
 			void
-			operator()(Enum<unsigned int>&)
+			operator()(Enum&)
 			{
 				assert(false);
 			}

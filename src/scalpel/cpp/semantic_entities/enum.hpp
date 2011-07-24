@@ -137,7 +137,9 @@ typedef
 	utility::variant
 	<
 		basic_enum<int>,
-		basic_enum<unsigned int>
+		basic_enum<unsigned int>,
+		basic_enum<long int>,
+		basic_enum<long unsigned int>
 	>
 	enum_typedef
 ;
@@ -145,7 +147,9 @@ typedef
 	utility::variant
 	<
 		basic_member_enum<int>,
-		basic_member_enum<unsigned int>
+		basic_member_enum<unsigned int>,
+		basic_member_enum<long int>,
+		basic_member_enum<long unsigned int>
 	>
 	member_enum_typedef
 ;

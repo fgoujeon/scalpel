@@ -176,8 +176,6 @@ GENERATE_GET_MEMBERS_SPECIALIZATION(anonymous_member_union, member_typedef, type
 GENERATE_GET_MEMBERS_SPECIALIZATION(anonymous_member_union, member_variable, variables)
 GENERATE_GET_MEMBERS_SPECIALIZATION(anonymous_member_union, bit_field, bit_fields)
 
-GENERATE_GET_MEMBERS_SPECIALIZATION(basic_enum<int>, enum_constant<int>, constants)
-
 GENERATE_GET_MEMBERS_SPECIALIZATION(statement_block, namespace_alias, namespace_aliases)
 
 #undef GENERATE_GET_MEMBERS_SPECIALIZATION

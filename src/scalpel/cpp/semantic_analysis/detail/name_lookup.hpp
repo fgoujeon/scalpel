@@ -373,6 +373,19 @@ namespace detail
 		);
 	};
 
+	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class Entity>
+	struct find_local_entities2<EntityIdentificationPolicy, Optional, Multiple, Entity, semantic_entities::member_enum_t>
+	{
+		static
+		void
+		find
+		(
+			const typename EntityIdentificationPolicy::identifier_t& identifier,
+			semantic_entities::member_enum_t& current_declarative_region,
+			typename return_type<Optional, Multiple, Entity>::type& found_entities
+		);
+	};
+
 
 
 	/**
@@ -469,6 +482,26 @@ namespace detail
 		DeclarativeRegion& declarative_region,
 		typename return_type<Optional, Multiple, Entity>::type& found_entities,
 		typename boost::disable_if<semantic_entities::type_traits::has_members_of_type<DeclarativeRegion, semantic_entities::enum_t>>::type* = 0
+	);
+
+	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class Entity, class DeclarativeRegion>
+	void
+	find_entities_in_member_enums
+	(
+		const typename EntityIdentificationPolicy::identifier_t& identifier,
+		DeclarativeRegion& declarative_region,
+		typename return_type<Optional, Multiple, Entity>::type& found_entities,
+		typename boost::enable_if<semantic_entities::type_traits::has_members_of_type<DeclarativeRegion, semantic_entities::member_enum_t>>::type* = 0
+	);
+
+	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class Entity, class DeclarativeRegion>
+	void
+	find_entities_in_member_enums
+	(
+		const typename EntityIdentificationPolicy::identifier_t& identifier,
+		DeclarativeRegion& declarative_region,
+		typename return_type<Optional, Multiple, Entity>::type& found_entities,
+		typename boost::disable_if<semantic_entities::type_traits::has_members_of_type<DeclarativeRegion, semantic_entities::member_enum_t>>::type* = 0
 	);
 
 

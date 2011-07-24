@@ -153,11 +153,21 @@ HAS_MEMBERS_OF_TYPE(anonymous_member_union, member_typedef)
 HAS_MEMBERS_OF_TYPE(anonymous_member_union, member_variable)
 HAS_MEMBERS_OF_TYPE(anonymous_member_union, bit_field)
 
-HAS_MEMBERS_OF_TYPE(basic_enum<int>, enum_constant<int>)
-
 HAS_MEMBERS_OF_TYPE(statement_block, namespace_alias)
 
 #undef HAS_MEMBERS_OF_TYPE
+
+template<typename UnderlyingType>
+struct has_members_of_type<basic_enum<UnderlyingType>, enum_constant<UnderlyingType>>
+{
+	static const bool value = true;
+};
+
+template<typename UnderlyingType>
+struct has_members_of_type<basic_member_enum<UnderlyingType>, enum_constant<UnderlyingType>>
+{
+	static const bool value = true;
+};
 
 }}}} //namespace scalpel::cpp::semantic_entities::type_traits
 
