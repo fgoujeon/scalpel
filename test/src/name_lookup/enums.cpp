@@ -93,6 +93,18 @@ BOOST_AUTO_TEST_CASE(enums)
 		;
 		BOOST_CHECK_EQUAL(found_entity, enum_constant_color_red);
 	}
+
+	//look up RED from the global namespace, must find color::RED
+	{
+		auto found_entity =
+			find<identification_policies::by_name, false, false, enum_constant<int>>
+			(
+				"RED",
+				&semantic_graph
+			)
+		;
+		BOOST_CHECK_EQUAL(found_entity, enum_constant_color_red);
+	}
 }
 
 } //namespace name_lookup

@@ -773,6 +773,23 @@ find_local_entities2<EntityIdentificationPolicy, Optional, Multiple, Entity, Dec
 	if(!Multiple && !utility::is_empty(found_entities))
 		return;
 
+	find_entities_in_enumerations
+	<
+		EntityIdentificationPolicy,
+		Optional,
+		Multiple,
+		Entity,
+		DeclarativeRegion
+	>
+	(
+		identifier,
+		current_declarative_region,
+		found_entities
+	);
+
+	if(!Multiple && !utility::is_empty(found_entities))
+		return;
+
 	find_in_declarative_region_entity_aliases
 	<
 		EntityIdentificationPolicy,
@@ -974,6 +991,61 @@ find_entities_in_base_classes
 	//If not Multiple, return the only one element of the list.
 	return std::move(return_result<Optional, Multiple, Entities...>::result(found_entities));
 }
+
+
+
+template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class Entity, class DeclarativeRegion>
+void
+find_entities_in_enumerations
+(
+	const typename EntityIdentificationPolicy::identifier_t& identifier,
+	DeclarativeRegion& declarative_region,
+	typename return_type<Optional, Multiple, Entity>::type& found_entities
+)
+{
+	find_entities_in_enums<EntityIdentificationPolicy, Optional, Multiple, Entity>
+	(
+		identifier,
+		declarative_region,
+		found_entities
+	);
+}
+
+template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class Entity, class DeclarativeRegion>
+void
+find_entities_in_enums
+(
+	const typename EntityIdentificationPolicy::identifier_t& identifier,
+	DeclarativeRegion& declarative_region,
+	typename return_type<Optional, Multiple, Entity>::type& found_entities,
+	typename boost::enable_if<semantic_entities::type_traits::has_members_of_type<DeclarativeRegion, semantic_entities::enum_t>>::type*
+)
+{
+	for(semantic_entities::enum_t& current_enum: declarative_region.enums())
+	{
+		find_local_entities2<EntityIdentificationPolicy, Optional, Multiple, Entity, semantic_entities::enum_t>::find
+		(
+			identifier,
+			current_enum,
+			found_entities
+		);
+	}
+}
+
+template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class Entity, class DeclarativeRegion>
+void
+find_entities_in_enums
+(
+	const typename EntityIdentificationPolicy::identifier_t&,
+	DeclarativeRegion&,
+	typename return_type<Optional, Multiple, Entity>::type&,
+	typename boost::disable_if<semantic_entities::type_traits::has_members_of_type<DeclarativeRegion, semantic_entities::enum_t>>::type*
+)
+{
+	//does nothing
+}
+
+
 
 template<class DeclarativeRegion>
 void
