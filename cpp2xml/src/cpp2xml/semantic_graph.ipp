@@ -114,6 +114,7 @@ semantic_graph_serializer::serialize_enum_visitor::operator()(const BasicEnum<Un
 		const enum_constant<UnderlyingType>& constant = *i;
 		output_ << detail::indent(indent_level_ + 1) << "<constant";
 		output_ << " name=\"" << constant.name() << "\"";
+		output_ << " " << serializer_.id_attribute_to_string(constant);
 		output_ << " value=\"" << constant.value() << "\"";
 		output_ << ">\n";
 	}

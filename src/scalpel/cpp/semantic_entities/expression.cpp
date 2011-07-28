@@ -35,14 +35,23 @@ operator()(const TYPE&) \
 	return RETURN_TYPE; \
 }
 
+#define ASSERTION_FAILURE(TYPE) \
+type_t \
+operator()(const TYPE&) \
+{ \
+	assert(false); \
+}
+
 	struct: utility::static_visitor<type_t>
 	{
-		template<typename T>
-		type_t
-		operator()(const T&)
-		{
-			assert(false);
-		}
+		//
+		//unary expressions
+		//
+
+		ASSERTION_FAILURE(prefix_increment_expression)
+		ASSERTION_FAILURE(prefix_decrement_expression)
+		ASSERTION_FAILURE(indirection_expression)
+		ASSERTION_FAILURE(pointer_expression)
 
 		type_t
 		operator()(const negation_expression& expr)
@@ -50,19 +59,22 @@ operator()(const TYPE&) \
 			return apply_visitor(*this, expr.operand());
 		}
 
-
-
-		//
-		//unary expressions
-		//
-
 		FUNDAMENTAL_TYPE(logical_negation_expression, fundamental_type::BOOL)
+		ASSERTION_FAILURE(complement_expression)
 
 
 
 		//
 		//binary expressions
 		//
+
+		ASSERTION_FAILURE(multiplication_expression)
+		ASSERTION_FAILURE(division_expression)
+		ASSERTION_FAILURE(modulo_expression)
+		ASSERTION_FAILURE(addition_expression)
+		ASSERTION_FAILURE(subtraction_expression)
+		ASSERTION_FAILURE(left_shift_expression)
+		ASSERTION_FAILURE(right_shift_expression)
 
 		FUNDAMENTAL_TYPE(less_than_expression, fundamental_type::BOOL)
 		FUNDAMENTAL_TYPE(less_than_or_equal_to_expression, fundamental_type::BOOL)
@@ -72,6 +84,36 @@ operator()(const TYPE&) \
 		FUNDAMENTAL_TYPE(not_equal_to_expression, fundamental_type::BOOL)
 		FUNDAMENTAL_TYPE(logical_or_expression, fundamental_type::BOOL)
 		FUNDAMENTAL_TYPE(logical_and_expression, fundamental_type::BOOL)
+
+		ASSERTION_FAILURE(bitwise_and_expression)
+		ASSERTION_FAILURE(bitwise_exclusive_or_expression)
+		ASSERTION_FAILURE(bitwise_inclusive_or_expression)
+
+
+
+		//
+		//assignment expressions
+		//
+
+		ASSERTION_FAILURE(assignment_expression)
+		ASSERTION_FAILURE(multiplication_assignment_expression)
+		ASSERTION_FAILURE(division_assignment_expression)
+		ASSERTION_FAILURE(modulo_assignment_expression)
+		ASSERTION_FAILURE(addition_assignment_expression)
+		ASSERTION_FAILURE(subtraction_assignment_expression)
+		ASSERTION_FAILURE(left_shift_assignment_expression)
+		ASSERTION_FAILURE(right_shift_assignment_expression)
+		ASSERTION_FAILURE(bitwise_and_assignment_expression)
+		ASSERTION_FAILURE(bitwise_exclusive_or_assignment_expression)
+		ASSERTION_FAILURE(bitwise_inclusive_or_assignment_expression)
+
+
+
+		//
+		//ternary expression
+		//
+
+		ASSERTION_FAILURE(conditional_expression)
 
 
 
@@ -99,6 +141,11 @@ operator()(const TYPE&) \
 		{
 			return var->type();
 		}
+
+		FUNDAMENTAL_TYPE(enum_constant<int>*, fundamental_type::INT)
+		FUNDAMENTAL_TYPE(enum_constant<unsigned int>*, fundamental_type::UNSIGNED_INT)
+		FUNDAMENTAL_TYPE(enum_constant<long int>*, fundamental_type::LONG_INT)
+		FUNDAMENTAL_TYPE(enum_constant<unsigned long int>*, fundamental_type::UNSIGNED_LONG_INT)
 
 
 
@@ -132,7 +179,8 @@ operator()(const TYPE&) \
 		}
 	} get_type_visitor;
 
-#undef EXPRESSION_TYPE
+#undef FUNDAMENTAL_TYPE
+#undef ASSERTION_FAILURE
 
 }
 

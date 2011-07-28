@@ -92,6 +92,10 @@ typedef
 
 		//entities
 		variable*,
+		enum_constant<int>*,
+		enum_constant<unsigned int>*,
+		enum_constant<long int>*,
+		enum_constant<unsigned long int>*,
 
 		//boolean type
 		bool,

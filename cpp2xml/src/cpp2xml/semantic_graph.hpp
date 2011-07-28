@@ -183,6 +183,10 @@ class semantic_graph_serializer
 				void
 				operator()(variable* const& v);
 
+				template<typename T>
+				void
+				operator()(enum_constant<T>* const constant);
+
 				void
 				operator()(const char c);
 
@@ -727,6 +731,10 @@ class semantic_graph_serializer
 			set_id_of_members_of_type<member_variable>(entity);
 			set_id_of_members_of_type<static_member_variable>(entity);
 			set_id_of_members_of_type<bit_field>(entity);
+			set_id_of_members_of_type<enum_constant<int>>(entity);
+			set_id_of_members_of_type<enum_constant<unsigned int>>(entity);
+			set_id_of_members_of_type<enum_constant<long int>>(entity);
+			set_id_of_members_of_type<enum_constant<unsigned long int>>(entity);
 		}
 
 		template<class Entity, class DeclarativeRegion>
@@ -753,6 +761,44 @@ class semantic_graph_serializer
 		)
 		{
 			//does nothing
+		}
+
+		template<class Entity>
+		class set_id_of_members_of_type_visitor: public utility::static_visitor<void>
+		{
+			public:
+				set_id_of_members_of_type_visitor(semantic_graph_serializer& serializer):
+					serializer_(serializer)
+				{
+				}
+
+				template<template<typename> class BasicEnum, typename UnderlyingType>
+				void
+				operator()(const BasicEnum<UnderlyingType>& e)
+				{
+					serializer_.set_id_of_members_of_type<Entity>(e);
+				}
+
+			private:
+				semantic_graph_serializer& serializer_;
+		};
+		template<class Entity>
+		friend class set_id_of_members_of_type_visitor;
+
+		template<class Entity>
+		void
+		set_id_of_members_of_type(const semantic_entities::enum_t& declarative_region)
+		{
+			set_id_of_members_of_type_visitor<Entity> visitor(*this);
+			apply_visitor(visitor, declarative_region);
+		}
+
+		template<class Entity>
+		void
+		set_id_of_members_of_type(const semantic_entities::member_enum_t& declarative_region)
+		{
+			set_id_of_members_of_type_visitor<Entity> visitor(*this);
+			apply_visitor(visitor, declarative_region);
 		}
 
 		template<class Entity>
@@ -808,6 +854,10 @@ class semantic_graph_serializer
 		typename entity_id_map<semantic_entities::member_variable>::type member_variable_id_map_;
 		typename entity_id_map<semantic_entities::static_member_variable>::type static_member_variable_id_map_;
 		typename entity_id_map<semantic_entities::bit_field>::type bit_field_id_map_;
+		typename entity_id_map<semantic_entities::enum_constant<int>>::type int_enum_constant_id_map_;
+		typename entity_id_map<semantic_entities::enum_constant<unsigned int>>::type unsigned_int_enum_constant_id_map_;
+		typename entity_id_map<semantic_entities::enum_constant<long int>>::type long_int_enum_constant_id_map_;
+		typename entity_id_map<semantic_entities::enum_constant<unsigned long int>>::type unsigned_long_int_enum_constant_id_map_;
 };
 
 

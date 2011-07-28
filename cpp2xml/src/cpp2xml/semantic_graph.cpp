@@ -514,107 +514,86 @@ semantic_graph_serializer::serialize_namespace_alias
 
 namespace
 {
-#define PTR_TYPE(TYPE) \
-std::string \
-operator()(const TYPE*) \
-{ \
-	return #TYPE; \
-}
 
-#define SIMPLE_TYPE(TYPE) \
+#define EXPRESSION_TYPE(TYPE, STR) \
 std::string \
 operator()(const TYPE) \
 { \
-	return #TYPE; \
-}
-
-#define EXPRESSION_TYPE(TYPE) \
-std::string \
-operator()(const TYPE##_expression) \
-{ \
-	return #TYPE; \
+	return #STR; \
 }
 
 	struct: scalpel::utility::static_visitor<std::string>
 	{
-		EXPRESSION_TYPE(prefix_increment)
-		EXPRESSION_TYPE(prefix_decrement)
-		EXPRESSION_TYPE(indirection)
-		EXPRESSION_TYPE(pointer)
-		EXPRESSION_TYPE(negation)
-		EXPRESSION_TYPE(logical_negation)
-		EXPRESSION_TYPE(complement)
-		EXPRESSION_TYPE(multiplication)
-		EXPRESSION_TYPE(division)
-		EXPRESSION_TYPE(modulo)
-		EXPRESSION_TYPE(addition)
-		EXPRESSION_TYPE(subtraction)
-		EXPRESSION_TYPE(left_shift)
-		EXPRESSION_TYPE(right_shift)
-		EXPRESSION_TYPE(less_than)
-		EXPRESSION_TYPE(less_than_or_equal_to)
-		EXPRESSION_TYPE(greater_than)
-		EXPRESSION_TYPE(greater_than_or_equal_to)
-		EXPRESSION_TYPE(equal_to)
-		EXPRESSION_TYPE(not_equal_to)
-		EXPRESSION_TYPE(bitwise_and)
-		EXPRESSION_TYPE(bitwise_exclusive_or)
-		EXPRESSION_TYPE(bitwise_inclusive_or)
-		EXPRESSION_TYPE(logical_and)
-		EXPRESSION_TYPE(logical_or)
-		EXPRESSION_TYPE(conditional)
-		EXPRESSION_TYPE(assignment)
-		EXPRESSION_TYPE(multiplication_assignment)
-		EXPRESSION_TYPE(division_assignment)
-		EXPRESSION_TYPE(modulo_assignment)
-		EXPRESSION_TYPE(addition_assignment)
-		EXPRESSION_TYPE(subtraction_assignment)
-		EXPRESSION_TYPE(left_shift_assignment)
-		EXPRESSION_TYPE(right_shift_assignment)
-		EXPRESSION_TYPE(bitwise_and_assignment)
-		EXPRESSION_TYPE(bitwise_exclusive_or_assignment)
-		EXPRESSION_TYPE(bitwise_inclusive_or_assignment)
+		EXPRESSION_TYPE(prefix_increment_expression, prefix_increment)
+		EXPRESSION_TYPE(prefix_decrement_expression, prefix_decrement)
+		EXPRESSION_TYPE(indirection_expression, indirection)
+		EXPRESSION_TYPE(pointer_expression, pointer)
+		EXPRESSION_TYPE(negation_expression, negation)
+		EXPRESSION_TYPE(logical_negation_expression, logical_negation)
+		EXPRESSION_TYPE(complement_expression, complement)
+		EXPRESSION_TYPE(multiplication_expression, multiplication)
+		EXPRESSION_TYPE(division_expression, division)
+		EXPRESSION_TYPE(modulo_expression, modulo)
+		EXPRESSION_TYPE(addition_expression, addition)
+		EXPRESSION_TYPE(subtraction_expression, subtraction)
+		EXPRESSION_TYPE(left_shift_expression, left_shift)
+		EXPRESSION_TYPE(right_shift_expression, right_shift)
+		EXPRESSION_TYPE(less_than_expression, less_than)
+		EXPRESSION_TYPE(less_than_or_equal_to_expression, less_than_or_equal_to)
+		EXPRESSION_TYPE(greater_than_expression, greater_than)
+		EXPRESSION_TYPE(greater_than_or_equal_to_expression, greater_than_or_equal_to)
+		EXPRESSION_TYPE(equal_to_expression, equal_to)
+		EXPRESSION_TYPE(not_equal_to_expression, not_equal_to)
+		EXPRESSION_TYPE(bitwise_and_expression, bitwise_and)
+		EXPRESSION_TYPE(bitwise_exclusive_or_expression, bitwise_exclusive_or)
+		EXPRESSION_TYPE(bitwise_inclusive_or_expression, bitwise_inclusive_or)
+		EXPRESSION_TYPE(logical_and_expression, logical_and)
+		EXPRESSION_TYPE(logical_or_expression, logical_or)
+		EXPRESSION_TYPE(conditional_expression, conditional)
+		EXPRESSION_TYPE(assignment_expression, assignment)
+		EXPRESSION_TYPE(multiplication_assignment_expression, multiplication_assignment)
+		EXPRESSION_TYPE(division_assignment_expression, division_assignment)
+		EXPRESSION_TYPE(modulo_assignment_expression, modulo_assignment)
+		EXPRESSION_TYPE(addition_assignment_expression, addition_assignment)
+		EXPRESSION_TYPE(subtraction_assignment_expression, subtraction_assignment)
+		EXPRESSION_TYPE(left_shift_assignment_expression, left_shift_assignment)
+		EXPRESSION_TYPE(right_shift_assignment_expression, right_shift_assignment)
+		EXPRESSION_TYPE(bitwise_and_assignment_expression, bitwise_and_assignment)
+		EXPRESSION_TYPE(bitwise_exclusive_or_assignment_expression, bitwise_exclusive_or_assignment)
+		EXPRESSION_TYPE(bitwise_inclusive_or_assignment_expression, bitwise_inclusive_or_assignment)
 
-		SIMPLE_TYPE(conversion_to_bool)
-		SIMPLE_TYPE(conversion_to_int)
-		SIMPLE_TYPE(conversion_to_long_int)
-		SIMPLE_TYPE(conversion_to_unsigned_int)
-		SIMPLE_TYPE(conversion_to_unsigned_long_int)
-		SIMPLE_TYPE(conversion_to_float)
-		SIMPLE_TYPE(conversion_to_double)
-		SIMPLE_TYPE(conversion_to_long_double)
+		EXPRESSION_TYPE(conversion_to_bool, conversion_to_bool)
+		EXPRESSION_TYPE(conversion_to_int, conversion_to_int)
+		EXPRESSION_TYPE(conversion_to_long_int, conversion_to_long_int)
+		EXPRESSION_TYPE(conversion_to_unsigned_int, conversion_to_unsigned_int)
+		EXPRESSION_TYPE(conversion_to_unsigned_long_int, conversion_to_unsigned_long_int)
+		EXPRESSION_TYPE(conversion_to_float, conversion_to_float)
+		EXPRESSION_TYPE(conversion_to_double, conversion_to_double)
+		EXPRESSION_TYPE(conversion_to_long_double, conversion_to_long_double)
 
-		PTR_TYPE(variable)
+		EXPRESSION_TYPE(variable*, variable)
+		EXPRESSION_TYPE(enum_constant<int>*, int_enum_constant)
+		EXPRESSION_TYPE(enum_constant<unsigned int>*, unsigned_int_enum_constant)
+		EXPRESSION_TYPE(enum_constant<long int>*, long_int_enum_constant)
+		EXPRESSION_TYPE(enum_constant<unsigned long int>*, unsigned_long_int_enum_constant)
 
-		SIMPLE_TYPE(bool)
-		SIMPLE_TYPE(char)
-		SIMPLE_TYPE(wchar_t)
-		SIMPLE_TYPE(int)
-		SIMPLE_TYPE(long int)
-		SIMPLE_TYPE(long long int)
-		SIMPLE_TYPE(unsigned int)
-		SIMPLE_TYPE(unsigned long int)
-		SIMPLE_TYPE(unsigned long long int)
-		SIMPLE_TYPE(float)
-		SIMPLE_TYPE(double)
-		SIMPLE_TYPE(long double)
-
-		std::string
-		operator()(const std::string&)
-		{
-			return "string";
-		}
-
-		std::string
-		operator()(const std::wstring&)
-		{
-			return "wide string";
-		}
+		EXPRESSION_TYPE(bool, bool)
+		EXPRESSION_TYPE(char, char)
+		EXPRESSION_TYPE(wchar_t, wchar_t)
+		EXPRESSION_TYPE(int, int)
+		EXPRESSION_TYPE(long int, long int)
+		EXPRESSION_TYPE(long long int, long long int)
+		EXPRESSION_TYPE(unsigned int, unsigned int)
+		EXPRESSION_TYPE(unsigned long int, unsigned long int)
+		EXPRESSION_TYPE(unsigned long long int, unsigned long long int)
+		EXPRESSION_TYPE(float, float)
+		EXPRESSION_TYPE(double, double)
+		EXPRESSION_TYPE(long double, long double)
+		EXPRESSION_TYPE(std::string, string)
+		EXPRESSION_TYPE(std::wstring, wide string)
 	} get_expression_type_visitor;
 
 #undef EXPRESSION_TYPE
-#undef SIMPLE_TYPE
-#undef PTR_TYPE
 }
 
 
@@ -685,6 +664,13 @@ void
 semantic_graph_serializer::serialize_expression_visitor::operator()(variable* const& v)
 {
 	output_ << indent(indent_level_) << "<variable id=\"" << serializer_.get_id(*v) << "\"/>\n";
+}
+
+template<typename T>
+void
+semantic_graph_serializer::serialize_expression_visitor::operator()(enum_constant<T>* const constant)
+{
+	output_ << indent(indent_level_) << "<enum_constant id=\"" << serializer_.get_id(*constant) << "\"/>\n";
 }
 
 void
@@ -1000,6 +986,10 @@ ENTITY_ID_MAP_OF_TYPE(variable, variable_id_map_)
 ENTITY_ID_MAP_OF_TYPE(member_variable, member_variable_id_map_)
 ENTITY_ID_MAP_OF_TYPE(static_member_variable, static_member_variable_id_map_)
 ENTITY_ID_MAP_OF_TYPE(bit_field, bit_field_id_map_)
+ENTITY_ID_MAP_OF_TYPE(enum_constant<int>, int_enum_constant_id_map_)
+ENTITY_ID_MAP_OF_TYPE(enum_constant<unsigned int>, unsigned_int_enum_constant_id_map_)
+ENTITY_ID_MAP_OF_TYPE(enum_constant<long int>, long_int_enum_constant_id_map_)
+ENTITY_ID_MAP_OF_TYPE(enum_constant<unsigned long int>, unsigned_long_int_enum_constant_id_map_)
 
 #undef ENTITY_ID_MAP_OF_TYPE
 

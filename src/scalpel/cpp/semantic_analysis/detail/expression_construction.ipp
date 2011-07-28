@@ -831,6 +831,16 @@ create_expression_from_qualified_nested_id
 	return apply_visitor(visitor, unqualified_id_declarative_region);
 }
 
+struct: utility::static_visitor<semantic_entities::expression_t>
+{
+	template<class Entity>
+	semantic_entities::expression_t
+	operator()(Entity* const entity) const
+	{
+		return entity;
+	}
+} entity_to_expression_visitor;
+
 template<class DeclarativeRegion>
 semantic_entities::expression_t
 create_expression_from_qualified_identifier
@@ -842,7 +852,17 @@ create_expression_from_qualified_identifier
 	using namespace semantic_entities;
 
 	auto found_entity =
-		name_lookup::find<semantic_entity_analysis::identification_policies::by_name, false, false, variable, member_variable>
+		name_lookup::find
+		<
+			semantic_entity_analysis::identification_policies::by_name,
+			false,
+			false,
+			variable,
+			enum_constant<int>,
+			enum_constant<unsigned int>,
+			enum_constant<long int>,
+			enum_constant<unsigned long int>
+		>
 		(
 			true,
 			syntax_nodes::optional_node<syntax_nodes::nested_name_specifier>(),
@@ -851,10 +871,7 @@ create_expression_from_qualified_identifier
 		)
 	;
 
-	if(variable** opt_variable = utility::get<variable*>(&found_entity))
-		return *opt_variable;
-	else
-		assert(false);
+	return utility::apply_visitor(entity_to_expression_visitor, found_entity);
 }
 
 template<class DeclarativeRegion>
@@ -870,22 +887,40 @@ create_expression_from_identifier
 
 	auto found_entity =
 		local_name_lookup ?
-		name_lookup::find_local<semantic_entity_analysis::identification_policies::by_name, DeclarativeRegion, false, false, variable, member_variable>
+		name_lookup::find_local
+		<
+			semantic_entity_analysis::identification_policies::by_name,
+			DeclarativeRegion,
+			false,
+			false,
+			variable,
+			enum_constant<int>,
+			enum_constant<unsigned int>,
+			enum_constant<long int>,
+			enum_constant<unsigned long int>
+		>
 		(
 			identifier_node.value(),
 			declarative_region
 		) :
-		name_lookup::find<semantic_entity_analysis::identification_policies::by_name, false, false, variable, member_variable>
+		name_lookup::find
+		<
+			semantic_entity_analysis::identification_policies::by_name,
+			false,
+			false,
+			variable,
+			enum_constant<int>,
+			enum_constant<unsigned int>,
+			enum_constant<long int>,
+			enum_constant<unsigned long int>
+		>
 		(
 			identifier_node.value(),
 			&declarative_region
 		)
 	;
 
-	if(variable** opt_variable = utility::get<variable*>(&found_entity))
-		return *opt_variable;
-	else
-		assert(false);
+	return apply_visitor(entity_to_expression_visitor, found_entity);
 }
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
