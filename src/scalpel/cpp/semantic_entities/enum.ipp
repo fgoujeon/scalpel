@@ -26,14 +26,16 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 
 template<typename UnderlyingType>
 basic_enum<UnderlyingType>::basic_enum(const std::string& name):
-    name_(name)
+    name_(name),
+	variant_enum_(nullptr)
 {
 }
 
 template<typename UnderlyingType>
 basic_enum<UnderlyingType>::basic_enum(basic_enum&& rhs):
 	name_(std::move(rhs.name_)),
-	constants_(std::move(rhs.constants_))
+	constants_(std::move(rhs.constants_)),
+	variant_enum_(nullptr)
 {
 }
 
@@ -43,6 +45,7 @@ basic_enum<UnderlyingType>::operator=(basic_enum&& rhs)
 {
 	name_ = std::move(rhs.name_);
 	constants_ = std::move(rhs.constants_);
+	variant_enum_ = rhs.variant_enum_;
 }
 
 
@@ -50,7 +53,8 @@ basic_enum<UnderlyingType>::operator=(basic_enum&& rhs)
 template<typename UnderlyingType>
 basic_member_enum<UnderlyingType>::basic_member_enum(const std::string& name, const member_access access):
     name_(name),
-	access_(access)
+	access_(access),
+	variant_enum_(nullptr)
 {
 }
 
@@ -58,7 +62,8 @@ template<typename UnderlyingType>
 basic_member_enum<UnderlyingType>::basic_member_enum(basic_member_enum&& rhs):
 	name_(std::move(rhs.name_)),
 	constants_(std::move(rhs.constants_)),
-	access_(rhs.access_)
+	access_(rhs.access_),
+	variant_enum_(nullptr)
 {
 }
 
@@ -69,6 +74,7 @@ basic_member_enum<UnderlyingType>::operator=(basic_member_enum&& rhs)
 	name_ = std::move(rhs.name_);
 	constants_ = std::move(rhs.constants_);
 	access_ = rhs.access_;
+	variant_enum_ = rhs.variant_enum_;
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

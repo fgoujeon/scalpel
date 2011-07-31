@@ -26,11 +26,38 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-template<typename T>
+template<typename UnderlyingType>
+class basic_enum;
+
+template<typename UnderlyingType>
+class basic_member_enum;
+
+class enum_t;
+class member_enum_t;
+
+template<typename UnderlyingType>
 class enum_constant
 {
 	public:
-        enum_constant(const std::string& name, const T value);
+		typedef
+			utility::variant
+			<
+				basic_enum<UnderlyingType>*,
+				basic_member_enum<UnderlyingType>*
+			>
+			parent_enum_t
+		;
+
+		typedef
+			utility::variant
+			<
+				enum_t*,
+				member_enum_t*
+			>
+			type_t
+		;
+
+        enum_constant(const std::string& name, const UnderlyingType value);
 
         enum_constant(const enum_constant&) = delete;
 
@@ -43,15 +70,26 @@ class enum_constant
 			return name_;
 		}
 
-		T
+		UnderlyingType
 		value() const
 		{
 			return value_;
 		}
 
+		template<template<typename> class BasicEnum, typename UnderlyingType2>
+		void
+		parent_enum(BasicEnum<UnderlyingType2>& e)
+		{
+			parent_enum_ = &e;
+		}
+
+		type_t
+		type();
+
 	private:
 		std::string name_;
-		T value_;
+		UnderlyingType value_;
+		boost::optional<parent_enum_t> parent_enum_;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

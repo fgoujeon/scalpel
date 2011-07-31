@@ -49,10 +49,7 @@ namespace
 				switch(type)
 				{
 					case fundamental_type::BOOL:
-						if(get_type(expr_) == type_t(fundamental_type::BOOL))
-							return expr_;
-						else
-							return create_conversion_to_type<bool>(expr_, false);
+						return create_conversion_to_type<bool>(expr_, false);
 					case fundamental_type::CHAR:
 					case fundamental_type::DOUBLE:
 					case fundamental_type::FLOAT:
@@ -165,8 +162,15 @@ create_conversion
 	const semantic_entities::type_t& destination_type
 )
 {
-	create_conversion_visitor visitor(expr);
-	return apply_visitor(visitor, destination_type);
+	if(get_type(expr) == destination_type)
+	{
+		return expr;
+	}
+	else
+	{
+		create_conversion_visitor visitor(expr);
+		return apply_visitor(visitor, destination_type);
+	}
 }
 
 

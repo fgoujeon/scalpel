@@ -30,7 +30,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/preprocessor/punctuation/comma_if.hpp>
 #include <string>
 
-#define GENERATE_ENUM_DECLARATION(CLASS_NAME, IS_MEMBER) \
+#define GENERATE_ENUM_DECLARATION(CLASS_NAME, VARIANT_TYPE, IS_MEMBER) \
 template<typename UnderlyingType> \
 class CLASS_NAME \
 { \
@@ -76,6 +76,7 @@ class CLASS_NAME \
 		void \
 		add(std::unique_ptr<constant>&& c) \
 		{ \
+			c->parent_enum(*this); \
 			constants_.push_back(std::move(c)); \
 		} \
  \
@@ -89,6 +90,20 @@ class CLASS_NAME \
 			}, \
 		) \
  \
+		VARIANT_TYPE& \
+		variant_enum() \
+		{ \
+			assert(variant_enum_); \
+			return *variant_enum_; \
+		} \
+ \
+		void \
+		variant_enum(VARIANT_TYPE& e) \
+		{ \
+			assert(variant_enum_ == 0); \
+			variant_enum_ = &e; \
+		} \
+ \
     private: \
         std::string name_; \
 		constants_t constants_; \
@@ -97,6 +112,7 @@ class CLASS_NAME \
 			IS_MEMBER, \
 			member_access access_;, \
 		) \
+		VARIANT_TYPE* variant_enum_; \
  \
 		BOOST_PP_IIF \
 		( \
@@ -120,6 +136,9 @@ class member_union;
 class anonymous_union;
 class anonymous_member_union;
 
+class enum_t;
+class member_enum_t;
+
 typedef
 	impl::detail::declarative_region_member_impl<namespace_, unnamed_namespace, linked_namespace, linked_unnamed_namespace>
 	enum_declarative_region_member_impl_t
@@ -130,8 +149,8 @@ typedef
 	member_enum_declarative_region_member_impl_t
 ;
 
-GENERATE_ENUM_DECLARATION(basic_enum, 0)
-GENERATE_ENUM_DECLARATION(basic_member_enum, 1)
+GENERATE_ENUM_DECLARATION(basic_enum, enum_t, 0)
+GENERATE_ENUM_DECLARATION(basic_member_enum, member_enum_t, 1)
 
 typedef
 	utility::variant
@@ -156,28 +175,20 @@ typedef
 
 struct enum_t: enum_typedef
 {
-	template<typename U>
-	enum_t
-	(
-		U&& value,
-		typename boost::disable_if<boost::is_const<U>>::type* = 0,
-		typename boost::disable_if<boost::is_reference<U>>::type* = 0,
-		typename boost::disable_if<boost::is_same<U, enum_typedef>>::type* = 0
-	): enum_typedef(std::move(value))
+	template<typename UnderlyingType>
+	enum_t(basic_enum<UnderlyingType>&& e):
+		enum_typedef(std::move(e))
 	{
+		enum_typedef& parent_this = *this;
+		utility::get<basic_enum<UnderlyingType>>(parent_this).variant_enum(*this);
 	}
 };
 
 struct member_enum_t: member_enum_typedef
 {
-	template<typename U>
-	member_enum_t
-	(
-		U&& value,
-		typename boost::disable_if<boost::is_const<U>>::type* = 0,
-		typename boost::disable_if<boost::is_reference<U>>::type* = 0,
-		typename boost::disable_if<boost::is_same<U, member_enum_typedef>>::type* = 0
-	): member_enum_typedef(std::move(value))
+	template<typename UnderlyingType>
+	member_enum_t(basic_member_enum<UnderlyingType>&& e):
+		member_enum_typedef(std::move(e))
 	{
 	}
 };

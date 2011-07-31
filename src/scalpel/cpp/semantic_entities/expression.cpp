@@ -27,12 +27,35 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 
 namespace
 {
+	struct: utility::static_visitor<type_t>
+	{
+		template<class T>
+		type_t
+		operator()(T* type)
+		{
+			return type;
+		}
+	} to_type_visitor;
 
 #define FUNDAMENTAL_TYPE(TYPE, RETURN_TYPE) \
 type_t \
 operator()(const TYPE&) \
 { \
 	return RETURN_TYPE; \
+}
+
+#define RETURN_SINGLE_OPERAND_TYPE(TYPE) \
+type_t \
+operator()(const TYPE& expr) \
+{ \
+	return apply_visitor(*this, expr.operand()); \
+}
+
+#define RETURN_LEFT_OPERAND_TYPE(TYPE) \
+type_t \
+operator()(const TYPE& expr) \
+{ \
+	return apply_visitor(*this, expr.left_operand()); \
 }
 
 #define ASSERTION_FAILURE(TYPE) \
@@ -48,19 +71,32 @@ operator()(const TYPE&) \
 		//unary expressions
 		//
 
-		ASSERTION_FAILURE(prefix_increment_expression)
-		ASSERTION_FAILURE(prefix_decrement_expression)
-		ASSERTION_FAILURE(indirection_expression)
-		ASSERTION_FAILURE(pointer_expression)
+		RETURN_SINGLE_OPERAND_TYPE(prefix_increment_expression)
+		RETURN_SINGLE_OPERAND_TYPE(prefix_decrement_expression)
 
 		type_t
-		operator()(const negation_expression& expr)
+		operator()(const indirection_expression& expr)
 		{
-			return apply_visitor(*this, expr.operand());
+			type_t expr_type = apply_visitor(*this, expr.operand());
+			if(pointer* opt_type = utility::get<pointer>(&expr_type))
+			{
+				return opt_type->qualified_type();
+			}
+			else
+			{
+				assert(false);
+			}
 		}
 
+		type_t
+		operator()(const pointer_expression& expr)
+		{
+			return pointer(apply_visitor(*this, expr.operand()));
+		}
+
+		RETURN_SINGLE_OPERAND_TYPE(negation_expression)
 		FUNDAMENTAL_TYPE(logical_negation_expression, fundamental_type::BOOL)
-		ASSERTION_FAILURE(complement_expression)
+		RETURN_SINGLE_OPERAND_TYPE(complement_expression)
 
 
 
@@ -68,13 +104,13 @@ operator()(const TYPE&) \
 		//binary expressions
 		//
 
-		ASSERTION_FAILURE(multiplication_expression)
-		ASSERTION_FAILURE(division_expression)
-		ASSERTION_FAILURE(modulo_expression)
-		ASSERTION_FAILURE(addition_expression)
-		ASSERTION_FAILURE(subtraction_expression)
-		ASSERTION_FAILURE(left_shift_expression)
-		ASSERTION_FAILURE(right_shift_expression)
+		RETURN_LEFT_OPERAND_TYPE(multiplication_expression)
+		RETURN_LEFT_OPERAND_TYPE(division_expression)
+		RETURN_LEFT_OPERAND_TYPE(modulo_expression)
+		RETURN_LEFT_OPERAND_TYPE(addition_expression) //TODO
+		RETURN_LEFT_OPERAND_TYPE(subtraction_expression) //TODO
+		RETURN_LEFT_OPERAND_TYPE(left_shift_expression) //TODO
+		RETURN_LEFT_OPERAND_TYPE(right_shift_expression) //TODO
 
 		FUNDAMENTAL_TYPE(less_than_expression, fundamental_type::BOOL)
 		FUNDAMENTAL_TYPE(less_than_or_equal_to_expression, fundamental_type::BOOL)
@@ -85,9 +121,9 @@ operator()(const TYPE&) \
 		FUNDAMENTAL_TYPE(logical_or_expression, fundamental_type::BOOL)
 		FUNDAMENTAL_TYPE(logical_and_expression, fundamental_type::BOOL)
 
-		ASSERTION_FAILURE(bitwise_and_expression)
-		ASSERTION_FAILURE(bitwise_exclusive_or_expression)
-		ASSERTION_FAILURE(bitwise_inclusive_or_expression)
+		RETURN_LEFT_OPERAND_TYPE(bitwise_and_expression) //TODO
+		RETURN_LEFT_OPERAND_TYPE(bitwise_exclusive_or_expression) //TODO
+		RETURN_LEFT_OPERAND_TYPE(bitwise_inclusive_or_expression) //TODO
 
 
 
@@ -113,7 +149,11 @@ operator()(const TYPE&) \
 		//ternary expression
 		//
 
-		ASSERTION_FAILURE(conditional_expression)
+		type_t
+		operator()(const conditional_expression& expr)
+		{
+			return apply_visitor(*this, expr.true_operand());
+		}
 
 
 
@@ -142,10 +182,12 @@ operator()(const TYPE&) \
 			return var->type();
 		}
 
-		FUNDAMENTAL_TYPE(enum_constant<int>*, fundamental_type::INT)
-		FUNDAMENTAL_TYPE(enum_constant<unsigned int>*, fundamental_type::UNSIGNED_INT)
-		FUNDAMENTAL_TYPE(enum_constant<long int>*, fundamental_type::LONG_INT)
-		FUNDAMENTAL_TYPE(enum_constant<unsigned long int>*, fundamental_type::UNSIGNED_LONG_INT)
+		template<typename UnderlyingType>
+		type_t
+		operator()(enum_constant<UnderlyingType>* const& c)
+		{
+			return apply_visitor(to_type_visitor, c->type());
+		}
 
 
 
@@ -180,6 +222,8 @@ operator()(const TYPE&) \
 	} get_type_visitor;
 
 #undef FUNDAMENTAL_TYPE
+#undef RETURN_SINGLE_OPERAND_TYPE
+#undef RETURN_LEFT_OPERAND_TYPE
 #undef ASSERTION_FAILURE
 
 }
