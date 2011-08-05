@@ -22,8 +22,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define CPP2XML_SEMANTIC_GRAPH_HPP
 
 #include "detail/json_writer.hpp"
-#include "detail/type_to_string.hpp"
-#include "detail/basic_print_functions.hpp"
 #include <scalpel/cpp/semantic_entities/type_traits/has_name.hpp>
 #include <scalpel/cpp/semantic_entities/type_traits/has_base_classes.hpp>
 #include <scalpel/cpp/semantic_entities/type_traits/has_entity_aliases_of_type.hpp>
@@ -52,31 +50,6 @@ struct entity_id_map
 {
 	typedef std::map<const Entity*, unsigned int> type;
 };
-
-
-
-template<class Entity>
-struct markup_name;
-
-#define MARKUP_NAME(TYPE, VALUE) \
-template<> \
-struct markup_name<TYPE> \
-{ \
-	static constexpr char const* value = VALUE; \
-};
-
-MARKUP_NAME(class_, "class")
-MARKUP_NAME(member_class, "class")
-MARKUP_NAME(union_, "union")
-MARKUP_NAME(member_union, "union")
-MARKUP_NAME(anonymous_union, "anonymous_union")
-MARKUP_NAME(anonymous_member_union, "anonymous_union")
-MARKUP_NAME(variable, "variable")
-MARKUP_NAME(member_variable, "variable")
-MARKUP_NAME(static_member_variable, "static_variable")
-MARKUP_NAME(bit_field, "bit_field")
-
-#undef MARKUP_NAME
 
 
 
@@ -639,12 +612,6 @@ class semantic_graph_serializer
 		//attributes
 		//
 
-		std::string
-		attribute(const member_access& a);
-
-		std::string
-		attribute(const semantic_entities::overloadable_operator op);
-
 		void
 		serialize_class_id_attribute
 		(
@@ -658,15 +625,6 @@ class semantic_graph_serializer
 		template<class Entity>
 		void
 		serialize_overloaded_operator(const Entity& entity);
-
-		template<class Entity>
-		std::string
-		id_attribute_to_string(const Entity& entity)
-		{
-			std::ostringstream oss;
-			oss << "id=\"" << get_id(entity) << "\"";
-			return oss.str();
-		}
 
 		template<class Entity>
 		void
