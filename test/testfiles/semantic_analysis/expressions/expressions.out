@@ -1,411 +1,507 @@
-<namespace id="0">
- <variable id="0" name="b1">
-  <type>
-   <fundamental_type type="bool"/>
-  </type>
-  <default_value>
-   <expression type="less_than">
-    <left_operand>
-     <expression type="int">
-      7
-     </expression>
-    </left_operand>
-    <right_operand>
-     <expression type="int">
-      9
-     </expression>
-    </right_operand>
-   </expression>
-  </default_value>
- </variable>
- <variable id="1" name="b2">
-  <type>
-   <fundamental_type type="bool"/>
-  </type>
-  <default_value>
-   <expression type="less_than_or_equal_to">
-    <left_operand>
-     <expression type="int">
-      7
-     </expression>
-    </left_operand>
-    <right_operand>
-     <expression type="int">
-      9
-     </expression>
-    </right_operand>
-   </expression>
-  </default_value>
- </variable>
- <variable id="2" name="b3">
-  <type>
-   <fundamental_type type="bool"/>
-  </type>
-  <default_value>
-   <expression type="greater_than">
-    <left_operand>
-     <expression type="int">
-      7
-     </expression>
-    </left_operand>
-    <right_operand>
-     <expression type="int">
-      9
-     </expression>
-    </right_operand>
-   </expression>
-  </default_value>
- </variable>
- <variable id="3" name="b4">
-  <type>
-   <fundamental_type type="bool"/>
-  </type>
-  <default_value>
-   <expression type="greater_than_or_equal_to">
-    <left_operand>
-     <expression type="int">
-      7
-     </expression>
-    </left_operand>
-    <right_operand>
-     <expression type="int">
-      9
-     </expression>
-    </right_operand>
-   </expression>
-  </default_value>
- </variable>
- <variable id="4" name="b5">
-  <type>
-   <fundamental_type type="bool"/>
-  </type>
-  <default_value>
-   <expression type="equal_to">
-    <left_operand>
-     <expression type="int">
-      7
-     </expression>
-    </left_operand>
-    <right_operand>
-     <expression type="int">
-      9
-     </expression>
-    </right_operand>
-   </expression>
-  </default_value>
- </variable>
- <variable id="5" name="b6">
-  <type>
-   <fundamental_type type="bool"/>
-  </type>
-  <default_value>
-   <expression type="not_equal_to">
-    <left_operand>
-     <expression type="int">
-      7
-     </expression>
-    </left_operand>
-    <right_operand>
-     <expression type="int">
-      9
-     </expression>
-    </right_operand>
-   </expression>
-  </default_value>
- </variable>
- <variable id="6" name="b7">
-  <type>
-   <fundamental_type type="bool"/>
-  </type>
-  <default_value>
-   <expression type="logical_and">
-    <left_operand>
-     <expression type="bool">
-      true
-     </expression>
-    </left_operand>
-    <right_operand>
-     <expression type="bool">
-      false
-     </expression>
-    </right_operand>
-   </expression>
-  </default_value>
- </variable>
- <variable id="7" name="b8">
-  <type>
-   <fundamental_type type="bool"/>
-  </type>
-  <default_value>
-   <expression type="logical_or">
-    <left_operand>
-     <expression type="bool">
-      true
-     </expression>
-    </left_operand>
-    <right_operand>
-     <expression type="bool">
-      false
-     </expression>
-    </right_operand>
-   </expression>
-  </default_value>
- </variable>
- <variable id="8" name="b9">
-  <type>
-   <fundamental_type type="bool"/>
-  </type>
-  <default_value>
-   <expression type="logical_negation">
-    <operand>
-     <expression type="bool">
-      true
-     </expression>
-    </operand>
-   </expression>
-  </default_value>
- </variable>
- <variable id="9" name="i01">
-  <type>
-   <fundamental_type type="int"/>
-  </type>
-  <default_value>
-   <expression type="multiplication">
-    <left_operand>
-     <expression type="int">
-      7
-     </expression>
-    </left_operand>
-    <right_operand>
-     <expression type="int">
-      9
-     </expression>
-    </right_operand>
-   </expression>
-  </default_value>
- </variable>
- <variable id="10" name="i02">
-  <type>
-   <fundamental_type type="int"/>
-  </type>
-  <default_value>
-   <expression type="division">
-    <left_operand>
-     <expression type="int">
-      7
-     </expression>
-    </left_operand>
-    <right_operand>
-     <expression type="int">
-      9
-     </expression>
-    </right_operand>
-   </expression>
-  </default_value>
- </variable>
- <variable id="11" name="i03">
-  <type>
-   <fundamental_type type="int"/>
-  </type>
-  <default_value>
-   <expression type="modulo">
-    <left_operand>
-     <expression type="int">
-      7
-     </expression>
-    </left_operand>
-    <right_operand>
-     <expression type="int">
-      9
-     </expression>
-    </right_operand>
-   </expression>
-  </default_value>
- </variable>
- <variable id="12" name="i04">
-  <type>
-   <fundamental_type type="int"/>
-  </type>
-  <default_value>
-   <expression type="int">
-    16
-   </expression>
-  </default_value>
- </variable>
- <variable id="13" name="i05">
-  <type>
-   <fundamental_type type="int"/>
-  </type>
-  <default_value>
-   <expression type="subtraction">
-    <left_operand>
-     <expression type="int">
-      7
-     </expression>
-    </left_operand>
-    <right_operand>
-     <expression type="int">
-      9
-     </expression>
-    </right_operand>
-   </expression>
-  </default_value>
- </variable>
- <variable id="14" name="i06">
-  <type>
-   <fundamental_type type="int"/>
-  </type>
-  <default_value>
-   <expression type="left_shift">
-    <left_operand>
-     <expression type="int">
-      7
-     </expression>
-    </left_operand>
-    <right_operand>
-     <expression type="int">
-      2
-     </expression>
-    </right_operand>
-   </expression>
-  </default_value>
- </variable>
- <variable id="15" name="i07">
-  <type>
-   <fundamental_type type="int"/>
-  </type>
-  <default_value>
-   <expression type="right_shift">
-    <left_operand>
-     <expression type="int">
-      7
-     </expression>
-    </left_operand>
-    <right_operand>
-     <expression type="int">
-      2
-     </expression>
-    </right_operand>
-   </expression>
-  </default_value>
- </variable>
- <variable id="16" name="i08">
-  <type>
-   <fundamental_type type="int"/>
-  </type>
-  <default_value>
-   <expression type="bitwise_and">
-    <left_operand>
-     <expression type="int">
-      7
-     </expression>
-    </left_operand>
-    <right_operand>
-     <expression type="int">
-      9
-     </expression>
-    </right_operand>
-   </expression>
-  </default_value>
- </variable>
- <variable id="17" name="i09">
-  <type>
-   <fundamental_type type="int"/>
-  </type>
-  <default_value>
-   <expression type="bitwise_exclusive_or">
-    <left_operand>
-     <expression type="int">
-      7
-     </expression>
-    </left_operand>
-    <right_operand>
-     <expression type="int">
-      9
-     </expression>
-    </right_operand>
-   </expression>
-  </default_value>
- </variable>
- <variable id="18" name="i10">
-  <type>
-   <fundamental_type type="int"/>
-  </type>
-  <default_value>
-   <expression type="bitwise_inclusive_or">
-    <left_operand>
-     <expression type="int">
-      7
-     </expression>
-    </left_operand>
-    <right_operand>
-     <expression type="int">
-      9
-     </expression>
-    </right_operand>
-   </expression>
-  </default_value>
- </variable>
- <variable id="19" name="i11">
-  <type>
-   <fundamental_type type="int"/>
-  </type>
-  <default_value>
-   <expression type="int">
-    7
-   </expression>
-  </default_value>
- </variable>
- <variable id="20" name="i12">
-  <type>
-   <fundamental_type type="int"/>
-  </type>
-  <default_value>
-   <expression type="negation">
-    <operand>
-     <expression type="int">
-      7
-     </expression>
-    </operand>
-   </expression>
-  </default_value>
- </variable>
- <variable id="21" name="i13">
-  <type>
-   <fundamental_type type="int"/>
-  </type>
-  <default_value>
-   <expression type="complement">
-    <operand>
-     <expression type="int">
-      7
-     </expression>
-    </operand>
-   </expression>
-  </default_value>
- </variable>
- <variable id="22" name="i14">
-  <type>
-   <fundamental_type type="int"/>
-  </type>
-  <default_value>
-   <expression type="conditional">
-    <condition_operand>
-     <expression type="bool">
-      true
-     </expression>
-    </condition_operand>
-    <true_operand>
-     <expression type="int">
-      8
-     </expression>
-    </true_operand>
-    <false_operand>
-     <expression type="int">
-      6
-     </expression>
-    </false_operand>
-   </expression>
-  </default_value>
- </variable>
-</namespace>
+{
+  "id": 0,
+  "variables":
+  [
+    {
+      "id": 0,
+      "name": "b1",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "bool"
+      },
+      "default value":
+      {
+        "type": "less than",
+        "left operand":
+        {
+          "type": "int",
+          "value": 7
+        },
+        "right operand":
+        {
+          "type": "int",
+          "value": 9
+        }
+      }
+    },
+    {
+      "id": 1,
+      "name": "b2",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "bool"
+      },
+      "default value":
+      {
+        "type": "less than or equal to",
+        "left operand":
+        {
+          "type": "int",
+          "value": 7
+        },
+        "right operand":
+        {
+          "type": "int",
+          "value": 9
+        }
+      }
+    },
+    {
+      "id": 2,
+      "name": "b3",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "bool"
+      },
+      "default value":
+      {
+        "type": "greater than",
+        "left operand":
+        {
+          "type": "int",
+          "value": 7
+        },
+        "right operand":
+        {
+          "type": "int",
+          "value": 9
+        }
+      }
+    },
+    {
+      "id": 3,
+      "name": "b4",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "bool"
+      },
+      "default value":
+      {
+        "type": "greater than or equal to",
+        "left operand":
+        {
+          "type": "int",
+          "value": 7
+        },
+        "right operand":
+        {
+          "type": "int",
+          "value": 9
+        }
+      }
+    },
+    {
+      "id": 4,
+      "name": "b5",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "bool"
+      },
+      "default value":
+      {
+        "type": "equal to",
+        "left operand":
+        {
+          "type": "int",
+          "value": 7
+        },
+        "right operand":
+        {
+          "type": "int",
+          "value": 9
+        }
+      }
+    },
+    {
+      "id": 5,
+      "name": "b6",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "bool"
+      },
+      "default value":
+      {
+        "type": "not equal to",
+        "left operand":
+        {
+          "type": "int",
+          "value": 7
+        },
+        "right operand":
+        {
+          "type": "int",
+          "value": 9
+        }
+      }
+    },
+    {
+      "id": 6,
+      "name": "b7",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "bool"
+      },
+      "default value":
+      {
+        "type": "logical and",
+        "left operand":
+        {
+          "type": "bool",
+          "value": true
+        },
+        "right operand":
+        {
+          "type": "bool",
+          "value": false
+        }
+      }
+    },
+    {
+      "id": 7,
+      "name": "b8",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "bool"
+      },
+      "default value":
+      {
+        "type": "logical or",
+        "left operand":
+        {
+          "type": "bool",
+          "value": true
+        },
+        "right operand":
+        {
+          "type": "bool",
+          "value": false
+        }
+      }
+    },
+    {
+      "id": 8,
+      "name": "b9",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "bool"
+      },
+      "default value":
+      {
+        "type": "logical negation",
+        "operand":
+        {
+          "type": "bool",
+          "value": true
+        }
+      }
+    },
+    {
+      "id": 9,
+      "name": "i01",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "int"
+      },
+      "default value":
+      {
+        "type": "multiplication",
+        "left operand":
+        {
+          "type": "int",
+          "value": 7
+        },
+        "right operand":
+        {
+          "type": "int",
+          "value": 9
+        }
+      }
+    },
+    {
+      "id": 10,
+      "name": "i02",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "int"
+      },
+      "default value":
+      {
+        "type": "division",
+        "left operand":
+        {
+          "type": "int",
+          "value": 7
+        },
+        "right operand":
+        {
+          "type": "int",
+          "value": 9
+        }
+      }
+    },
+    {
+      "id": 11,
+      "name": "i03",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "int"
+      },
+      "default value":
+      {
+        "type": "modulo",
+        "left operand":
+        {
+          "type": "int",
+          "value": 7
+        },
+        "right operand":
+        {
+          "type": "int",
+          "value": 9
+        }
+      }
+    },
+    {
+      "id": 12,
+      "name": "i04",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "int"
+      },
+      "default value":
+      {
+        "type": "int",
+        "value": 16
+      }
+    },
+    {
+      "id": 13,
+      "name": "i05",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "int"
+      },
+      "default value":
+      {
+        "type": "subtraction",
+        "left operand":
+        {
+          "type": "int",
+          "value": 7
+        },
+        "right operand":
+        {
+          "type": "int",
+          "value": 9
+        }
+      }
+    },
+    {
+      "id": 14,
+      "name": "i06",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "int"
+      },
+      "default value":
+      {
+        "type": "left shift",
+        "left operand":
+        {
+          "type": "int",
+          "value": 7
+        },
+        "right operand":
+        {
+          "type": "int",
+          "value": 2
+        }
+      }
+    },
+    {
+      "id": 15,
+      "name": "i07",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "int"
+      },
+      "default value":
+      {
+        "type": "right shift",
+        "left operand":
+        {
+          "type": "int",
+          "value": 7
+        },
+        "right operand":
+        {
+          "type": "int",
+          "value": 2
+        }
+      }
+    },
+    {
+      "id": 16,
+      "name": "i08",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "int"
+      },
+      "default value":
+      {
+        "type": "bitwise and",
+        "left operand":
+        {
+          "type": "int",
+          "value": 7
+        },
+        "right operand":
+        {
+          "type": "int",
+          "value": 9
+        }
+      }
+    },
+    {
+      "id": 17,
+      "name": "i09",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "int"
+      },
+      "default value":
+      {
+        "type": "bitwise exclusive or",
+        "left operand":
+        {
+          "type": "int",
+          "value": 7
+        },
+        "right operand":
+        {
+          "type": "int",
+          "value": 9
+        }
+      }
+    },
+    {
+      "id": 18,
+      "name": "i10",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "int"
+      },
+      "default value":
+      {
+        "type": "bitwise inclusive or",
+        "left operand":
+        {
+          "type": "int",
+          "value": 7
+        },
+        "right operand":
+        {
+          "type": "int",
+          "value": 9
+        }
+      }
+    },
+    {
+      "id": 19,
+      "name": "i11",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "int"
+      },
+      "default value":
+      {
+        "type": "int",
+        "value": 7
+      }
+    },
+    {
+      "id": 20,
+      "name": "i12",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "int"
+      },
+      "default value":
+      {
+        "type": "negation",
+        "operand":
+        {
+          "type": "int",
+          "value": 7
+        }
+      }
+    },
+    {
+      "id": 21,
+      "name": "i13",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "int"
+      },
+      "default value":
+      {
+        "type": "complement",
+        "operand":
+        {
+          "type": "int",
+          "value": 7
+        }
+      }
+    },
+    {
+      "id": 22,
+      "name": "i14",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "int"
+      },
+      "default value":
+      {
+        "type": "conditional",
+        "condition operand":
+        {
+          "type": "bool",
+          "value": true
+        },
+        "true operand":
+        {
+          "type": "int",
+          "value": 8
+        },
+        "false operand":
+        {
+          "type": "int",
+          "value": 6
+        }
+      }
+    }
+  ]
+}

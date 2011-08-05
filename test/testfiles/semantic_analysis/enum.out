@@ -1,25 +1,81 @@
-<namespace id="0">
- <class id="0" name="s">
-  <enum id="0" name="color" access="private">
-   <constant name="RED" id="0" value="0">
-   <constant name="GREEN" id="1" value="1">
-   <constant name="BLUE" id="2" value="2">
-  </enum>
-  <destructor access="public" defined="false">
-  </destructor>
- </class>
- <enum id="0" name="direction">
-  <constant name="LEFT" id="3" value="0">
-  <constant name="RIGHT" id="4" value="1">
- </enum>
- <variable id="0" name="c">
-  <type>
-   <member_enum id="0"/>
-  </type>
- </variable>
- <variable id="1" name="d">
-  <type>
-   <enum id="0"/>
-  </type>
- </variable>
-</namespace>
+{
+  "id": 0,
+  "classes":
+  [
+    {
+      "id": 0,
+      "name": "s",
+      "enums":
+      [
+        {
+          "id": 0,
+          "name": "color",
+          "access": "private",
+          "constants":
+          [
+            {
+              "name": "RED",
+              "id": 0,
+              "value": 0
+            },
+            {
+              "name": "GREEN",
+              "id": 1,
+              "value": 1
+            },
+            {
+              "name": "BLUE",
+              "id": 2,
+              "value": 2
+            }
+          ]
+        }
+      ],
+      "destructor":
+      {
+        "access": "public"
+      }
+    }
+  ],
+  "enums":
+  [
+    {
+      "id": 0,
+      "name": "direction",
+      "constants":
+      [
+        {
+          "name": "LEFT",
+          "id": 3,
+          "value": 0
+        },
+        {
+          "name": "RIGHT",
+          "id": 4,
+          "value": 1
+        }
+      ]
+    }
+  ],
+  "variables":
+  [
+    {
+      "id": 0,
+      "name": "c",
+      "type":
+      {
+        "category": "member enum",
+        "id": 0
+      }
+    },
+    {
+      "id": 1,
+      "name": "d",
+      "type":
+      {
+        "category": "enum",
+        "id": 0
+      }
+    }
+  ]
+}

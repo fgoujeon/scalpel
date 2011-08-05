@@ -1,27 +1,67 @@
-<namespace id="0">
- <class id="0" name="a_class">
-  <class id="0" name="nested_class" access="public">
-   <destructor access="public" defined="false">
-   </destructor>
-   <variable id="0" name="i" access="private">
-    <type>
-     <fundamental_type type="int"/>
-    </type>
-   </variable>
-  </class>
-  <class id="1" name="nested_class2" access="public">
-   <base_classes>
-    <base_class  member_class_id="0" access="public"/>
-   </base_classes>
-   <destructor access="public" defined="false">
-   </destructor>
-  </class>
-  <destructor access="public" defined="false">
-  </destructor>
- </class>
- <variable id="0" name="anc">
-  <type>
-   <member_class id="0"/>
-  </type>
- </variable>
-</namespace>
+{
+  "id": 0,
+  "classes":
+  [
+    {
+      "id": 0,
+      "name": "a_class",
+      "classes":
+      [
+        {
+          "id": 0,
+          "name": "nested_class",
+          "access": "public",
+          "destructor":
+          {
+            "access": "public"
+          },
+          "variables":
+          [
+            {
+              "id": 0,
+              "name": "i",
+              "access": "private",
+              "type":
+              {
+                "category": "fundamental type",
+                "type": "int"
+              }
+            }
+          ]
+        },
+        {
+          "id": 1,
+          "name": "nested_class2",
+          "access": "public",
+          "base classes":
+          [
+            {
+              "member class id": 0,
+              "access": "public"
+            }
+          ],
+          "destructor":
+          {
+            "access": "public"
+          }
+        }
+      ],
+      "destructor":
+      {
+        "access": "public"
+      }
+    }
+  ],
+  "variables":
+  [
+    {
+      "id": 0,
+      "name": "anc",
+      "type":
+      {
+        "category": "member class",
+        "id": 0
+      }
+    }
+  ]
+}

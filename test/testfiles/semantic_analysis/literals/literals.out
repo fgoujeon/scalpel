@@ -1,302 +1,426 @@
-<namespace id="0">
- <variable id="0" name="bf">
-  <type>
-   <fundamental_type type="bool"/>
-  </type>
-  <default_value>
-   <expression type="bool">
-    false
-   </expression>
-  </default_value>
- </variable>
- <variable id="1" name="bt">
-  <type>
-   <fundamental_type type="bool"/>
-  </type>
-  <default_value>
-   <expression type="bool">
-    true
-   </expression>
-  </default_value>
- </variable>
- <variable id="2" name="cc0">
-  <type>
-   <fundamental_type type="char"/>
-  </type>
-  <default_value>
-   <expression type="char">
-    97
-   </expression>
-  </default_value>
- </variable>
- <variable id="3" name="cc1">
-  <type>
-   <fundamental_type type="char"/>
-  </type>
-  <default_value>
-   <expression type="char">
-    9
-   </expression>
-  </default_value>
- </variable>
- <variable id="4" name="cc2">
-  <type>
-   <fundamental_type type="char"/>
-  </type>
-  <default_value>
-   <expression type="char">
-    7
-   </expression>
-  </default_value>
- </variable>
- <variable id="5" name="cc3">
-  <type>
-   <fundamental_type type="char"/>
-  </type>
-  <default_value>
-   <expression type="char">
-    35
-   </expression>
-  </default_value>
- </variable>
- <variable id="6" name="cc4">
-  <type>
-   <fundamental_type type="char"/>
-  </type>
-  <default_value>
-   <expression type="char">
-    66
-   </expression>
-  </default_value>
- </variable>
- <variable id="7" name="cc5">
-  <type>
-   <fundamental_type type="char"/>
-  </type>
-  <default_value>
-   <expression type="char">
-    2
-   </expression>
-  </default_value>
- </variable>
- <variable id="8" name="cc6">
-  <type>
-   <fundamental_type type="char"/>
-  </type>
-  <default_value>
-   <expression type="char">
-    47
-   </expression>
-  </default_value>
- </variable>
- <variable id="9" name="cc7">
-  <type>
-   <fundamental_type type="char"/>
-  </type>
-  <default_value>
-   <expression type="char">
-    96
-   </expression>
-  </default_value>
- </variable>
- <variable id="10" name="cc8">
-  <type>
-   <fundamental_type type="char"/>
-  </type>
-  <default_value>
-   <expression type="char">
-    96
-   </expression>
-  </default_value>
- </variable>
- <variable id="11" name="ci0">
-  <type>
-   <fundamental_type type="int"/>
-  </type>
-  <default_value>
-   <expression type="int">
-    24929
-   </expression>
-  </default_value>
- </variable>
- <variable id="12" name="ci1">
-  <type>
-   <fundamental_type type="int"/>
-  </type>
-  <default_value>
-   <expression type="int">
-    50089
-   </expression>
-  </default_value>
- </variable>
- <variable id="13" name="ci2">
-  <type>
-   <fundamental_type type="int"/>
-  </type>
-  <default_value>
-   <expression type="int">
-    52159
-   </expression>
-  </default_value>
- </variable>
- <variable id="14" name="ci3">
-  <type>
-   <fundamental_type type="int"/>
-  </type>
-  <default_value>
-   <expression type="int">
-    24624
-   </expression>
-  </default_value>
- </variable>
- <variable id="15" name="ci4">
-  <type>
-   <fundamental_type type="int"/>
-  </type>
-  <default_value>
-   <expression type="int">
-    12828464
-   </expression>
-  </default_value>
- </variable>
- <variable id="16" name="cw0">
-  <type>
-   <fundamental_type type="wchar_t"/>
-  </type>
-  <default_value>
-   <expression type="wchar_t">
-    97
-   </expression>
-  </default_value>
- </variable>
- <variable id="17" name="cw1">
-  <type>
-   <fundamental_type type="wchar_t"/>
-  </type>
-  <default_value>
-   <expression type="wchar_t">
-    3647
-   </expression>
-  </default_value>
- </variable>
- <variable id="18" name="cw2">
-  <type>
-   <fundamental_type type="wchar_t"/>
-  </type>
-  <default_value>
-   <expression type="wchar_t">
-    233
-   </expression>
-  </default_value>
- </variable>
- <variable id="19" name="fd0">
-  <type>
-   <fundamental_type type="double"/>
-  </type>
-  <default_value>
-   <expression type="double">
-    0
-   </expression>
-  </default_value>
- </variable>
- <variable id="20" name="fd1">
-  <type>
-   <fundamental_type type="double"/>
-  </type>
-  <default_value>
-   <expression type="double">
-    400000
-   </expression>
-  </default_value>
- </variable>
- <variable id="21" name="ff0">
-  <type>
-   <fundamental_type type="float"/>
-  </type>
-  <default_value>
-   <expression type="float">
-    1
-   </expression>
-  </default_value>
- </variable>
- <variable id="22" name="ff1">
-  <type>
-   <fundamental_type type="float"/>
-  </type>
-  <default_value>
-   <expression type="float">
-    0.01
-   </expression>
-  </default_value>
- </variable>
- <variable id="23" name="fld">
-  <type>
-   <fundamental_type type="long double"/>
-  </type>
-  <default_value>
-   <expression type="long double">
-    121000
-   </expression>
-  </default_value>
- </variable>
- <variable id="24" name="ii">
-  <type>
-   <fundamental_type type="int"/>
-  </type>
-  <default_value>
-   <expression type="int">
-    0
-   </expression>
-  </default_value>
- </variable>
- <variable id="25" name="ili">
-  <type>
-   <fundamental_type type="long int"/>
-  </type>
-  <default_value>
-   <expression type="long int">
-    1
-   </expression>
-  </default_value>
- </variable>
- <variable id="26" name="illi">
-  <type>
-   <fundamental_type type="long long int"/>
-  </type>
-  <default_value>
-   <expression type="long long int">
-    16
-   </expression>
-  </default_value>
- </variable>
- <variable id="27" name="iui">
-  <type>
-   <fundamental_type type="unsigned int"/>
-  </type>
-  <default_value>
-   <expression type="unsigned int">
-    943
-   </expression>
-  </default_value>
- </variable>
- <variable id="28" name="iuli">
-  <type>
-   <fundamental_type type="unsigned long int"/>
-  </type>
-  <default_value>
-   <expression type="unsigned long int">
-    1024
-   </expression>
-  </default_value>
- </variable>
- <variable id="29" name="iulli">
-  <type>
-   <fundamental_type type="unsigned long long int"/>
-  </type>
-  <default_value>
-   <expression type="unsigned long long int">
-    50000
-   </expression>
-  </default_value>
- </variable>
-</namespace>
+{
+  "id": 0,
+  "variables":
+  [
+    {
+      "id": 0,
+      "name": "bf",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "bool"
+      },
+      "default value":
+      {
+        "type": "bool",
+        "value": false
+      }
+    },
+    {
+      "id": 1,
+      "name": "bt",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "bool"
+      },
+      "default value":
+      {
+        "type": "bool",
+        "value": true
+      }
+    },
+    {
+      "id": 2,
+      "name": "cc0",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "char"
+      },
+      "default value":
+      {
+        "type": "char",
+        "value": 97
+      }
+    },
+    {
+      "id": 3,
+      "name": "cc1",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "char"
+      },
+      "default value":
+      {
+        "type": "char",
+        "value": 9
+      }
+    },
+    {
+      "id": 4,
+      "name": "cc2",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "char"
+      },
+      "default value":
+      {
+        "type": "char",
+        "value": 7
+      }
+    },
+    {
+      "id": 5,
+      "name": "cc3",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "char"
+      },
+      "default value":
+      {
+        "type": "char",
+        "value": 35
+      }
+    },
+    {
+      "id": 6,
+      "name": "cc4",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "char"
+      },
+      "default value":
+      {
+        "type": "char",
+        "value": 66
+      }
+    },
+    {
+      "id": 7,
+      "name": "cc5",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "char"
+      },
+      "default value":
+      {
+        "type": "char",
+        "value": 2
+      }
+    },
+    {
+      "id": 8,
+      "name": "cc6",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "char"
+      },
+      "default value":
+      {
+        "type": "char",
+        "value": 47
+      }
+    },
+    {
+      "id": 9,
+      "name": "cc7",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "char"
+      },
+      "default value":
+      {
+        "type": "char",
+        "value": 96
+      }
+    },
+    {
+      "id": 10,
+      "name": "cc8",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "char"
+      },
+      "default value":
+      {
+        "type": "char",
+        "value": 96
+      }
+    },
+    {
+      "id": 11,
+      "name": "ci0",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "int"
+      },
+      "default value":
+      {
+        "type": "int",
+        "value": 24929
+      }
+    },
+    {
+      "id": 12,
+      "name": "ci1",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "int"
+      },
+      "default value":
+      {
+        "type": "int",
+        "value": 50089
+      }
+    },
+    {
+      "id": 13,
+      "name": "ci2",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "int"
+      },
+      "default value":
+      {
+        "type": "int",
+        "value": 52159
+      }
+    },
+    {
+      "id": 14,
+      "name": "ci3",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "int"
+      },
+      "default value":
+      {
+        "type": "int",
+        "value": 24624
+      }
+    },
+    {
+      "id": 15,
+      "name": "ci4",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "int"
+      },
+      "default value":
+      {
+        "type": "int",
+        "value": 12828464
+      }
+    },
+    {
+      "id": 16,
+      "name": "cw0",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "wchar_t"
+      },
+      "default value":
+      {
+        "type": "wchar_t",
+        "value": 97
+      }
+    },
+    {
+      "id": 17,
+      "name": "cw1",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "wchar_t"
+      },
+      "default value":
+      {
+        "type": "wchar_t",
+        "value": 3647
+      }
+    },
+    {
+      "id": 18,
+      "name": "cw2",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "wchar_t"
+      },
+      "default value":
+      {
+        "type": "wchar_t",
+        "value": 233
+      }
+    },
+    {
+      "id": 19,
+      "name": "fd0",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "double"
+      },
+      "default value":
+      {
+        "type": "double",
+        "value": 0
+      }
+    },
+    {
+      "id": 20,
+      "name": "fd1",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "double"
+      },
+      "default value":
+      {
+        "type": "double",
+        "value": 400000
+      }
+    },
+    {
+      "id": 21,
+      "name": "ff0",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "float"
+      },
+      "default value":
+      {
+        "type": "float",
+        "value": 1
+      }
+    },
+    {
+      "id": 22,
+      "name": "ff1",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "float"
+      },
+      "default value":
+      {
+        "type": "float",
+        "value": 0.01
+      }
+    },
+    {
+      "id": 23,
+      "name": "fld",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "long double"
+      },
+      "default value":
+      {
+        "type": "long double",
+        "value": 121000
+      }
+    },
+    {
+      "id": 24,
+      "name": "ii",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "int"
+      },
+      "default value":
+      {
+        "type": "int",
+        "value": 0
+      }
+    },
+    {
+      "id": 25,
+      "name": "ili",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "long int"
+      },
+      "default value":
+      {
+        "type": "long int",
+        "value": 1
+      }
+    },
+    {
+      "id": 26,
+      "name": "illi",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "long long int"
+      },
+      "default value":
+      {
+        "type": "long long int",
+        "value": 16
+      }
+    },
+    {
+      "id": 27,
+      "name": "iui",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "unsigned int"
+      },
+      "default value":
+      {
+        "type": "unsigned int",
+        "value": 943
+      }
+    },
+    {
+      "id": 28,
+      "name": "iuli",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "unsigned long int"
+      },
+      "default value":
+      {
+        "type": "unsigned long int",
+        "value": 1024
+      }
+    },
+    {
+      "id": 29,
+      "name": "iulli",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "unsigned long long int"
+      },
+      "default value":
+      {
+        "type": "unsigned long long int",
+        "value": 50000
+      }
+    }
+  ]
+}

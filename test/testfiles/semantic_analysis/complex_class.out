@@ -1,157 +1,340 @@
-<namespace id="0">
- <namespace id="1" name="n">
-  <namespace id="2" name="n2">
-   <class id="0" name="base1">
-    <destructor access="public" defined="false">
-    </destructor>
-   </class>
-  </namespace>
- </namespace>
- <class id="1" name="base2">
-  <destructor access="public" defined="false">
-  </destructor>
- </class>
- <class id="2" name="base3">
-  <destructor access="public" defined="false">
-  </destructor>
- </class>
- <class id="3" name="test">
-  <base_classes>
-   <base_class  class_id="0" access="public"/>
-   <base_class  class_id="1" access="private" virtual="true"/>
-   <base_class  class_id="2" access="protected" virtual="true"/>
-  </base_classes>
-  <constructor access="public">
-   <parameters>
-    <parameter name="t">
-     <type>
-      <reference>
-       <cv_qualified_type const="true">
-        <class id="3"/>
-       </cv_qualified_type>
-      </reference>
-     </type>
-    </parameter>
-   </parameters>
-  </constructor>
-  <constructor access="public" explicit="true">
-   <parameters>
-    <parameter name="i">
-     <type>
-      <fundamental_type type="int"/>
-     </type>
-    </parameter>
-   </parameters>
-  </constructor>
-  <destructor access="public" virtual="true">
-  </destructor>
-  <operator_member_function id="0" operator="new[]" access="public">
-   <return_type>
-    <pointer>
-     <fundamental_type type="void"/>
-    </pointer>
-   </return_type>
-   <parameters>
-    <parameter>
-     <type>
-      <fundamental_type type="unsigned long int"/>
-     </type>
-    </parameter>
-    <parameter>
-     <type>
-      <pointer>
-       <fundamental_type type="void"/>
-      </pointer>
-     </type>
-    </parameter>
-   </parameters>
-  </operator_member_function>
-  <operator_member_function id="1" operator="delete[]" access="public">
-   <return_type>
-    <fundamental_type type="void"/>
-   </return_type>
-   <parameters>
-    <parameter>
-     <type>
-      <pointer>
-       <fundamental_type type="void"/>
-      </pointer>
-     </type>
-    </parameter>
-   </parameters>
-  </operator_member_function>
-  <operator_member_function id="2" operator="=" access="public">
-   <return_type>
-    <reference>
-     <cv_qualified_type const="true">
-      <class id="3"/>
-     </cv_qualified_type>
-    </reference>
-   </return_type>
-   <parameters>
-    <parameter name="t">
-     <type>
-      <reference>
-       <cv_qualified_type const="true">
-        <class id="3"/>
-       </cv_qualified_type>
-      </reference>
-     </type>
-    </parameter>
-   </parameters>
-  </operator_member_function>
-  <operator_member_function id="3" operator="==" access="public" const="true">
-   <return_type>
-    <fundamental_type type="bool"/>
-   </return_type>
-   <parameters>
-    <parameter name="t">
-     <type>
-      <reference>
-       <cv_qualified_type const="true">
-        <class id="3"/>
-       </cv_qualified_type>
-      </reference>
-     </type>
-    </parameter>
-   </parameters>
-  </operator_member_function>
-  <conversion_function id="0" access="public" const="true">
-   <return_type>
-    <fundamental_type type="int"/>
-   </return_type>
-  </conversion_function>
-  <simple_member_function id="0" name="pure_virtual" access="public" virtual="true" pure="true">
-   <return_type>
-    <fundamental_type type="void"/>
-   </return_type>
-  </simple_member_function>
-  <simple_member_function id="1" name="static_function" access="public" static="true">
-   <return_type>
-    <fundamental_type type="bool"/>
-   </return_type>
-  </simple_member_function>
-  <simple_member_function id="2" name="update" access="protected" inline="true">
-   <return_type>
-    <fundamental_type type="void"/>
-   </return_type>
-  </simple_member_function>
-  <simple_member_function id="3" name="value" access="public" inline="true" const="true">
-   <return_type>
-    <fundamental_type type="int"/>
-   </return_type>
-  </simple_member_function>
-  <variable id="0" name="value_" access="private">
-   <type>
-    <fundamental_type type="int"/>
-   </type>
-  </variable>
-  <static_variable id="0" name="b" access="private">
-   <type>
-    <cv_qualified_type const="true">
-     <fundamental_type type="bool"/>
-    </cv_qualified_type>
-   </type>
-  </static_variable>
- </class>
-</namespace>
+{
+  "id": 0,
+  "namespaces":
+  [
+    {
+      "id": 1,
+      "name": "n",
+      "namespaces":
+      [
+        {
+          "id": 2,
+          "name": "n2",
+          "classes":
+          [
+            {
+              "id": 0,
+              "name": "base1",
+              "destructor":
+              {
+                "access": "public"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "classes":
+  [
+    {
+      "id": 1,
+      "name": "base2",
+      "destructor":
+      {
+        "access": "public"
+      }
+    },
+    {
+      "id": 2,
+      "name": "base3",
+      "destructor":
+      {
+        "access": "public"
+      }
+    },
+    {
+      "id": 3,
+      "name": "test",
+      "base classes":
+      [
+        {
+          "class id": 0,
+          "access": "public"
+        },
+        {
+          "class id": 1,
+          "access": "private",
+          "virtual": true
+        },
+        {
+          "class id": 2,
+          "access": "protected",
+          "virtual": true
+        }
+      ],
+      "constructors":
+      [
+        {
+          "access": "public",
+          "defined": true,
+          "parameters":
+          [
+            {
+              "name": "t",
+              "type":
+              {
+                "category": "reference",
+                "qualified type":
+                {
+                  "category": "cv-qualified type",
+                  "const": true,
+                  "qualified type":
+                  {
+                    "category": "class",
+                    "id": 3
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "access": "public",
+          "explicit": true,
+          "defined": true,
+          "parameters":
+          [
+            {
+              "name": "i",
+              "type":
+              {
+                "category": "fundamental type",
+                "type": "int"
+              }
+            }
+          ]
+        }
+      ],
+      "destructor":
+      {
+        "access": "public",
+        "virtual": true,
+        "defined": true
+      },
+      "operator functions":
+      [
+        {
+          "id": 0,
+          "overloaded operator": "new[]",
+          "access": "public",
+          "return type":
+          {
+            "category": "pointer",
+            "qualified type":
+            {
+              "category": "fundamental type",
+              "type": "void"
+            }
+          },
+          "parameters":
+          [
+            {
+              "type":
+              {
+                "category": "fundamental type",
+                "type": "unsigned long int"
+              }
+            },
+            {
+              "type":
+              {
+                "category": "pointer",
+                "qualified type":
+                {
+                  "category": "fundamental type",
+                  "type": "void"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": 1,
+          "overloaded operator": "delete[]",
+          "access": "public",
+          "return type":
+          {
+            "category": "fundamental type",
+            "type": "void"
+          },
+          "parameters":
+          [
+            {
+              "type":
+              {
+                "category": "pointer",
+                "qualified type":
+                {
+                  "category": "fundamental type",
+                  "type": "void"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "overloaded operator": "=",
+          "access": "public",
+          "return type":
+          {
+            "category": "reference",
+            "qualified type":
+            {
+              "category": "cv-qualified type",
+              "const": true,
+              "qualified type":
+              {
+                "category": "class",
+                "id": 3
+              }
+            }
+          },
+          "parameters":
+          [
+            {
+              "name": "t",
+              "type":
+              {
+                "category": "reference",
+                "qualified type":
+                {
+                  "category": "cv-qualified type",
+                  "const": true,
+                  "qualified type":
+                  {
+                    "category": "class",
+                    "id": 3
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "overloaded operator": "==",
+          "access": "public",
+          "const": true,
+          "return type":
+          {
+            "category": "fundamental type",
+            "type": "bool"
+          },
+          "parameters":
+          [
+            {
+              "name": "t",
+              "type":
+              {
+                "category": "reference",
+                "qualified type":
+                {
+                  "category": "cv-qualified type",
+                  "const": true,
+                  "qualified type":
+                  {
+                    "category": "class",
+                    "id": 3
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "conversion functions":
+      [
+        {
+          "id": 0,
+          "access": "public",
+          "const": true,
+          "return type":
+          {
+            "category": "fundamental type",
+            "type": "int"
+          }
+        }
+      ],
+      "simple functions":
+      [
+        {
+          "id": 0,
+          "name": "pure_virtual",
+          "access": "public",
+          "virtual": true,
+          "pure": true,
+          "return type":
+          {
+            "category": "fundamental type",
+            "type": "void"
+          }
+        },
+        {
+          "id": 1,
+          "name": "static_function",
+          "access": "public",
+          "return type":
+          {
+            "category": "fundamental type",
+            "type": "bool"
+          }
+        },
+        {
+          "id": 2,
+          "name": "update",
+          "access": "protected",
+          "inline": true,
+          "return type":
+          {
+            "category": "fundamental type",
+            "type": "void"
+          }
+        },
+        {
+          "id": 3,
+          "name": "value",
+          "access": "public",
+          "inline": true,
+          "const": true,
+          "return type":
+          {
+            "category": "fundamental type",
+            "type": "int"
+          }
+        }
+      ],
+      "variables":
+      [
+        {
+          "id": 0,
+          "name": "value_",
+          "access": "private",
+          "type":
+          {
+            "category": "fundamental type",
+            "type": "int"
+          }
+        }
+      ],
+      "static variables":
+      [
+        {
+          "id": 0,
+          "access": "private",
+          "type":
+          {
+            "category": "cv-qualified type",
+            "const": true,
+            "qualified type":
+            {
+              "category": "fundamental type",
+              "type": "bool"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,21 +1,49 @@
-<namespace id="0">
- <class id="0" name="s">
-  <destructor access="public" defined="false">
-  </destructor>
-  <bit_field id="0" name="i" size="0" access="public" mutable="true">
-   <type>
-    <fundamental_type type="bool"/>
-   </type>
-  </bit_field>
-  <bit_field id="1" size="0" access="public">
-   <type>
-    <fundamental_type type="int"/>
-   </type>
-  </bit_field>
-  <bit_field id="2" size="0" access="public">
-   <type>
-    <fundamental_type type="unsigned int"/>
-   </type>
-  </bit_field>
- </class>
-</namespace>
+{
+  "id": 0,
+  "classes":
+  [
+    {
+      "id": 0,
+      "name": "s",
+      "destructor":
+      {
+        "access": "public"
+      },
+      "bit fields":
+      [
+        {
+          "id": 0,
+          "name": "i",
+          "size": 0,
+          "access": "public",
+          "mutable": "true",
+          "type":
+          {
+            "category": "fundamental type",
+            "type": "bool"
+          }
+        },
+        {
+          "id": 1,
+          "size": 0,
+          "access": "public",
+          "type":
+          {
+            "category": "fundamental type",
+            "type": "int"
+          }
+        },
+        {
+          "id": 2,
+          "size": 0,
+          "access": "public",
+          "type":
+          {
+            "category": "fundamental type",
+            "type": "unsigned int"
+          }
+        }
+      ]
+    }
+  ]
+}

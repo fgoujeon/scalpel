@@ -1,134 +1,244 @@
-<namespace id="0">
- <variable id="0" name="v01">
-  <type>
-   <fundamental_type type="char"/>
-  </type>
- </variable>
- <variable id="1" name="v02">
-  <type>
-   <fundamental_type type="unsigned char"/>
-  </type>
- </variable>
- <variable id="2" name="v03">
-  <type>
-   <fundamental_type type="signed char"/>
-  </type>
- </variable>
- <variable id="3" name="v04">
-  <type>
-   <fundamental_type type="bool"/>
-  </type>
- </variable>
- <variable id="4" name="v05">
-  <type>
-   <fundamental_type type="unsigned int"/>
-  </type>
- </variable>
- <variable id="5" name="v06">
-  <type>
-   <fundamental_type type="unsigned int"/>
-  </type>
- </variable>
- <variable id="6" name="v07">
-  <type>
-   <fundamental_type type="int"/>
-  </type>
- </variable>
- <variable id="7" name="v08">
-  <type>
-   <fundamental_type type="int"/>
-  </type>
- </variable>
- <variable id="8" name="v09">
-  <type>
-   <fundamental_type type="int"/>
-  </type>
- </variable>
- <variable id="9" name="v10">
-  <type>
-   <fundamental_type type="unsigned short int"/>
-  </type>
- </variable>
- <variable id="10" name="v11">
-  <type>
-   <fundamental_type type="unsigned short int"/>
-  </type>
- </variable>
- <variable id="11" name="v12">
-  <type>
-   <fundamental_type type="unsigned long int"/>
-  </type>
- </variable>
- <variable id="12" name="v13">
-  <type>
-   <fundamental_type type="unsigned long int"/>
-  </type>
- </variable>
- <variable id="13" name="v14">
-  <type>
-   <fundamental_type type="long int"/>
-  </type>
- </variable>
- <variable id="14" name="v15">
-  <type>
-   <fundamental_type type="long int"/>
-  </type>
- </variable>
- <variable id="15" name="v16">
-  <type>
-   <fundamental_type type="long int"/>
-  </type>
- </variable>
- <variable id="16" name="v17">
-  <type>
-   <fundamental_type type="long int"/>
-  </type>
- </variable>
- <variable id="17" name="v18">
-  <type>
-   <fundamental_type type="short int"/>
-  </type>
- </variable>
- <variable id="18" name="v19">
-  <type>
-   <fundamental_type type="short int"/>
-  </type>
- </variable>
- <variable id="19" name="v20">
-  <type>
-   <fundamental_type type="short int"/>
-  </type>
- </variable>
- <variable id="20" name="v21">
-  <type>
-   <fundamental_type type="short int"/>
-  </type>
- </variable>
- <variable id="21" name="v22">
-  <type>
-   <fundamental_type type="wchar_t"/>
-  </type>
- </variable>
- <variable id="22" name="v23">
-  <type>
-   <fundamental_type type="float"/>
-  </type>
- </variable>
- <variable id="23" name="v24">
-  <type>
-   <fundamental_type type="double"/>
-  </type>
- </variable>
- <variable id="24" name="v25">
-  <type>
-   <fundamental_type type="long double"/>
-  </type>
- </variable>
- <variable id="25" name="v26">
-  <type>
-   <pointer>
-    <fundamental_type type="void"/>
-   </pointer>
-  </type>
- </variable>
-</namespace>
+{
+  "id": 0,
+  "variables":
+  [
+    {
+      "id": 0,
+      "name": "v01",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "char"
+      }
+    },
+    {
+      "id": 1,
+      "name": "v02",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "unsigned char"
+      }
+    },
+    {
+      "id": 2,
+      "name": "v03",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "signed char"
+      }
+    },
+    {
+      "id": 3,
+      "name": "v04",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "bool"
+      }
+    },
+    {
+      "id": 4,
+      "name": "v05",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "unsigned int"
+      }
+    },
+    {
+      "id": 5,
+      "name": "v06",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "unsigned int"
+      }
+    },
+    {
+      "id": 6,
+      "name": "v07",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "int"
+      }
+    },
+    {
+      "id": 7,
+      "name": "v08",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "int"
+      }
+    },
+    {
+      "id": 8,
+      "name": "v09",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "int"
+      }
+    },
+    {
+      "id": 9,
+      "name": "v10",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "unsigned short int"
+      }
+    },
+    {
+      "id": 10,
+      "name": "v11",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "unsigned short int"
+      }
+    },
+    {
+      "id": 11,
+      "name": "v12",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "unsigned long int"
+      }
+    },
+    {
+      "id": 12,
+      "name": "v13",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "unsigned long int"
+      }
+    },
+    {
+      "id": 13,
+      "name": "v14",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "long int"
+      }
+    },
+    {
+      "id": 14,
+      "name": "v15",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "long int"
+      }
+    },
+    {
+      "id": 15,
+      "name": "v16",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "long int"
+      }
+    },
+    {
+      "id": 16,
+      "name": "v17",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "long int"
+      }
+    },
+    {
+      "id": 17,
+      "name": "v18",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "short int"
+      }
+    },
+    {
+      "id": 18,
+      "name": "v19",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "short int"
+      }
+    },
+    {
+      "id": 19,
+      "name": "v20",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "short int"
+      }
+    },
+    {
+      "id": 20,
+      "name": "v21",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "short int"
+      }
+    },
+    {
+      "id": 21,
+      "name": "v22",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "wchar_t"
+      }
+    },
+    {
+      "id": 22,
+      "name": "v23",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "float"
+      }
+    },
+    {
+      "id": 23,
+      "name": "v24",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "double"
+      }
+    },
+    {
+      "id": 24,
+      "name": "v25",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "long double"
+      }
+    },
+    {
+      "id": 25,
+      "name": "v26",
+      "type":
+      {
+        "category": "pointer",
+        "qualified type":
+        {
+          "category": "fundamental type",
+          "type": "void"
+        }
+      }
+    }
+  ]
+}

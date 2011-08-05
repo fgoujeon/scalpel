@@ -1,53 +1,130 @@
-<namespace id="0">
- <class id="0" name="c">
-  <union id="0" name="inner" access="private">
-   <destructor access="public" defined="false">
-   </destructor>
-   <variable id="0" name="d" access="public">
-    <type>
-     <fundamental_type type="double"/>
-    </type>
-   </variable>
-   <variable id="1" name="i" access="public">
-    <type>
-     <fundamental_type type="int"/>
-    </type>
-   </variable>
-  </union>
-  <destructor access="public" defined="false">
-  </destructor>
- </class>
- <union id="0" name="u">
-  <union id="1" name="inner" access="public">
-   <destructor access="public" defined="false">
-   </destructor>
-   <variable id="2" name="d" access="public">
-    <type>
-     <fundamental_type type="double"/>
-    </type>
-   </variable>
-   <variable id="3" name="i" access="public">
-    <type>
-     <fundamental_type type="int"/>
-    </type>
-   </variable>
-  </union>
-  <destructor access="public" defined="false">
-  </destructor>
-  <variable id="4" name="c" access="public">
-   <type>
-    <fundamental_type type="char"/>
-   </type>
-  </variable>
-  <variable id="5" name="i" access="public">
-   <type>
-    <member_union id="1"/>
-   </type>
-  </variable>
- </union>
- <variable id="0" name="ui">
-  <type>
-   <member_union id="1"/>
-  </type>
- </variable>
-</namespace>
+{
+  "id": 0,
+  "classes":
+  [
+    {
+      "id": 0,
+      "name": "c",
+      "unions":
+      [
+        {
+          "id": 0,
+          "name": "inner",
+          "access": "private",
+          "destructor":
+          {
+            "access": "public"
+          },
+          "variables":
+          [
+            {
+              "id": 0,
+              "name": "d",
+              "access": "public",
+              "type":
+              {
+                "category": "fundamental type",
+                "type": "double"
+              }
+            },
+            {
+              "id": 1,
+              "name": "i",
+              "access": "public",
+              "type":
+              {
+                "category": "fundamental type",
+                "type": "int"
+              }
+            }
+          ]
+        }
+      ],
+      "destructor":
+      {
+        "access": "public"
+      }
+    }
+  ],
+  "unions":
+  [
+    {
+      "id": 0,
+      "name": "u",
+      "unions":
+      [
+        {
+          "id": 1,
+          "name": "inner",
+          "access": "public",
+          "destructor":
+          {
+            "access": "public"
+          },
+          "variables":
+          [
+            {
+              "id": 2,
+              "name": "d",
+              "access": "public",
+              "type":
+              {
+                "category": "fundamental type",
+                "type": "double"
+              }
+            },
+            {
+              "id": 3,
+              "name": "i",
+              "access": "public",
+              "type":
+              {
+                "category": "fundamental type",
+                "type": "int"
+              }
+            }
+          ]
+        }
+      ],
+      "destructor":
+      {
+        "access": "public"
+      },
+      "variables":
+      [
+        {
+          "id": 4,
+          "name": "c",
+          "access": "public",
+          "type":
+          {
+            "category": "fundamental type",
+            "type": "char"
+          }
+        },
+        {
+          "id": 5,
+          "name": "i",
+          "access": "public",
+          "type":
+          {
+            "category": "member union",
+            "id": 1
+          }
+        }
+      ]
+    }
+  ],
+  "variables":
+  [
+    {
+      "id": 0,
+      "name": "ui",
+      "type":
+      {
+        "category": "member union",
+        "id": 1
+      }
+    }
+  ]
+}

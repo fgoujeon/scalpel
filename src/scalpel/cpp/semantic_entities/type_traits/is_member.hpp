@@ -61,6 +61,12 @@ struct is_member<basic_member_enum<UnderlyingType>>
 	static const bool value = true;
 };
 
+template<class T>
+struct is_member<member_entity_alias<T>>
+{
+	static const bool value = true;
+};
+
 }}}} //namespace scalpel::cpp::semantic_entities::type_traits
 
 #endif

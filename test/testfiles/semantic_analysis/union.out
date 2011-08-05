@@ -1,30 +1,74 @@
-<namespace id="0">
- <union id="0" name="u">
-  <class id="0" name="c" access="public">
-   <destructor access="public" defined="false">
-   </destructor>
-   <variable id="0" name="i" access="private">
-    <type>
-     <fundamental_type type="int"/>
-    </type>
-   </variable>
-  </class>
-  <destructor access="public" defined="false">
-  </destructor>
-  <variable id="1" name="d" access="public">
-   <type>
-    <fundamental_type type="double"/>
-   </type>
-  </variable>
-  <variable id="2" name="i" access="public">
-   <type>
-    <fundamental_type type="int"/>
-   </type>
-  </variable>
- </union>
- <variable id="0" name="u0">
-  <type>
-   <union id="0"/>
-  </type>
- </variable>
-</namespace>
+{
+  "id": 0,
+  "unions":
+  [
+    {
+      "id": 0,
+      "name": "u",
+      "classes":
+      [
+        {
+          "id": 0,
+          "name": "c",
+          "access": "public",
+          "destructor":
+          {
+            "access": "public"
+          },
+          "variables":
+          [
+            {
+              "id": 0,
+              "name": "i",
+              "access": "private",
+              "type":
+              {
+                "category": "fundamental type",
+                "type": "int"
+              }
+            }
+          ]
+        }
+      ],
+      "destructor":
+      {
+        "access": "public"
+      },
+      "variables":
+      [
+        {
+          "id": 1,
+          "name": "d",
+          "access": "public",
+          "type":
+          {
+            "category": "fundamental type",
+            "type": "double"
+          }
+        },
+        {
+          "id": 2,
+          "name": "i",
+          "access": "public",
+          "type":
+          {
+            "category": "fundamental type",
+            "type": "int"
+          }
+        }
+      ]
+    }
+  ],
+  "variables":
+  [
+    {
+      "id": 0,
+      "name": "u0",
+      "type":
+      {
+        "category": "union",
+        "id": 0
+      }
+    }
+  ]
+}

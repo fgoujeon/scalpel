@@ -21,6 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef CPP2XML_SEMANTIC_GRAPH_HPP
 #define CPP2XML_SEMANTIC_GRAPH_HPP
 
+#include "detail/json_writer.hpp"
 #include "detail/type_to_string.hpp"
 #include "detail/basic_print_functions.hpp"
 #include <scalpel/cpp/semantic_entities/type_traits/has_name.hpp>
@@ -79,6 +80,56 @@ MARKUP_NAME(bit_field, "bit_field")
 
 
 
+template<class Entity>
+struct singular_key_of_type;
+
+template<class Entity>
+struct plural_key_of_type;
+
+#define KEYS_OF_TYPE(TYPE, SINGULAR_KEY, PLURAL_KEY) \
+template<> \
+struct singular_key_of_type<TYPE> \
+{ \
+	static constexpr char const* value = SINGULAR_KEY; \
+}; \
+ \
+template<> \
+struct plural_key_of_type<TYPE> \
+{ \
+	static constexpr char const* value = PLURAL_KEY; \
+};
+
+KEYS_OF_TYPE(namespace_alias, "namespace alias", "namespace aliases")
+KEYS_OF_TYPE(namespace_, "namespace", "namespaces")
+KEYS_OF_TYPE(linked_namespace, "namespace", "namespaces")
+KEYS_OF_TYPE(unnamed_namespace, "unnamed namespace", "unnamed namespaces")
+KEYS_OF_TYPE(linked_unnamed_namespace, "unnamed namespace", "unnamed namespaces")
+KEYS_OF_TYPE(class_, "class", "classes")
+KEYS_OF_TYPE(member_class, "class", "classes")
+KEYS_OF_TYPE(union_, "union", "unions")
+KEYS_OF_TYPE(member_union, "union", "unions")
+KEYS_OF_TYPE(anonymous_union, "anonymous union", "anonymous unions")
+KEYS_OF_TYPE(anonymous_member_union, "anonymous union", "anonymous unions")
+KEYS_OF_TYPE(enum_t, "enum", "enums")
+KEYS_OF_TYPE(member_enum_t, "enum", "enums")
+KEYS_OF_TYPE(typedef_, "typedef", "typedefs")
+KEYS_OF_TYPE(member_typedef, "typedef", "typedefs")
+KEYS_OF_TYPE(constructor, "constructor", "constructors")
+KEYS_OF_TYPE(destructor, "destructor", "destructors")
+KEYS_OF_TYPE(operator_member_function, "operator function", "operator functions")
+KEYS_OF_TYPE(conversion_function, "conversion function", "conversion functions")
+KEYS_OF_TYPE(simple_member_function, "simple function", "simple functions")
+KEYS_OF_TYPE(operator_function, "operator function", "operator functions")
+KEYS_OF_TYPE(simple_function, "simple function", "simple functions")
+KEYS_OF_TYPE(variable, "variable", "variables")
+KEYS_OF_TYPE(member_variable, "variable", "variables")
+KEYS_OF_TYPE(static_member_variable, "static variable", "static variables")
+KEYS_OF_TYPE(bit_field, "bit field", "bit fields")
+
+#undef KEYS_OF_TYPE
+
+
+
 class semantic_graph_serializer
 {
 	public:
@@ -96,8 +147,7 @@ class semantic_graph_serializer
 			public:
 				serialize_type_visitor
 				(
-					semantic_graph_serializer& serializer,
-					const unsigned int indent_level
+					semantic_graph_serializer& serializer
 				);
 
 				void
@@ -148,7 +198,6 @@ class semantic_graph_serializer
 			private:
 				semantic_graph_serializer& serializer_;
 				std::ostream& output_;
-				const unsigned int indent_level_;
 		};
 		friend class serialize_type_visitor;
 
@@ -157,8 +206,7 @@ class semantic_graph_serializer
 			public:
 				serialize_expression_visitor
 				(
-					semantic_graph_serializer& serializer,
-					const unsigned int indent_level
+					semantic_graph_serializer& serializer
 				);
 
 				template<typename T>
@@ -191,9 +239,6 @@ class semantic_graph_serializer
 				operator()(const char c);
 
 				void
-				operator()(const bool b);
-
-				void
 				operator()(const std::string& str);
 
 				void
@@ -202,7 +247,6 @@ class semantic_graph_serializer
 			private:
 				semantic_graph_serializer& serializer_;
 				std::ostream& output_;
-				const unsigned int indent_level_;
 		};
 		friend class serialize_expression_visitor;
 
@@ -212,8 +256,7 @@ class semantic_graph_serializer
 				serialize_enum_visitor
 				(
 					semantic_graph_serializer& serializer,
-					const unsigned int indent_level,
-					const std::string& id_str
+					const unsigned int id
 				);
 
 				template<template<typename> class BasicEnum, typename UnderlyingType>
@@ -223,16 +266,14 @@ class semantic_graph_serializer
 			private:
 				semantic_graph_serializer& serializer_;
 				std::ostream& output_;
-				const unsigned int indent_level_;
-				const std::string& id_str_;
+				const unsigned int id_;
 		};
 		friend class serialize_enum_visitor;
 
 		void
 		serialize_type
 		(
-			const semantic_entities::type_t& entity,
-			const unsigned int indent_level
+			const semantic_entities::type_t& entity
 		);
 
 		void
@@ -245,139 +286,120 @@ class semantic_graph_serializer
 		void
 		serialize_namespace
 		(
-			const Namespace& entity,
-			const unsigned int indent_level = 0
+			const Namespace& entity
 		);
 
 		template<class Namespace>
 		void
 		serialize_unnamed_namespace
 		(
-			const Namespace& entity,
-			const unsigned int indent_level = 0
+			const Namespace& entity
 		);
 
 		template<class Class>
 		void
 		serialize_class
 		(
-			const Class& entity,
-			const unsigned int indent_level
+			const Class& entity
 		);
 
 		template<class Enum>
 		void
 		serialize_enum
 		(
-			const Enum& entity,
-			const unsigned int indent_level
+			const Enum& entity
 		);
 
 		void
 		serialize_base_class
 		(
-			const base_class& entity,
-			const unsigned int indent_level
+			const base_class& entity
 		);
 
 		void
 		serialize_constructor
 		(
-			const constructor& entity,
-			const unsigned int indent_level
+			const constructor& entity
 		);
 
 		void
 		serialize_destructor
 		(
-			const destructor& entity,
-			const unsigned int indent_level
+			const destructor& entity
 		);
 
 		void
 		serialize_operator_member_function
 		(
-			const operator_member_function& entity,
-			const unsigned int indent_level
+			const operator_member_function& entity
 		);
 
 		void
 		serialize_conversion_function
 		(
-			const conversion_function& entity,
-			const unsigned int indent_level
+			const conversion_function& entity
 		);
 
 		void
 		serialize_simple_member_function
 		(
-			const simple_member_function& entity,
-			const unsigned int indent_level
+			const simple_member_function& entity
 		);
 
 		void
 		serialize_operator_function
 		(
-			const operator_function& entity,
-			const unsigned int indent_level
+			const operator_function& entity
 		);
 
 		void
 		serialize_simple_function
 		(
-			const simple_function& entity,
-			const unsigned int indent_level
+			const simple_function& entity
 		);
 
 		void
 		serialize_function_type
 		(
-			const function_type& entity,
-			const unsigned int indent_level
+			const function_type& entity
 		);
 
 		void
 		serialize_function_parameter_list
 		(
-			const function_parameter_list& entity,
-			const unsigned int indent_level
+			const function_parameter_list& entity
 		);
 
 		void
 		serialize_function_parameter
 		(
-			const function_parameter& entity,
-			const unsigned int indent_level
+			const function_parameter& entity
 		);
 
 		template<class Variable>
 		void
 		serialize_variable
 		(
-			const Variable& entity,
-			const unsigned int indent_level
+			const Variable& entity
 		);
 
 		void
 		serialize_namespace_alias
 		(
-			const namespace_alias& entity,
-			const unsigned int indent_level
+			const namespace_alias& entity
 		);
 
 		template<class Typedef>
 		void
 		serialize_typedef
 		(
-			const Typedef& entity,
-			const unsigned int indent_level
+			const Typedef& entity
 		);
 
 		void
 		serialize_expression
 		(
-			const semantic_entities::expression_t& entity,
-			const unsigned int indent_level
+			const semantic_entities::expression_t& entity
 		);
 
 
@@ -387,7 +409,6 @@ class semantic_graph_serializer
 		serialize_base_classes
 		(
 			const Entity& entity,
-			const unsigned int indent_level,
 			typename boost::enable_if<scalpel::cpp::semantic_entities::type_traits::has_base_classes<Entity>>::type* = 0
 		);
 
@@ -396,7 +417,6 @@ class semantic_graph_serializer
 		serialize_base_classes
 		(
 			const Entity&,
-			const unsigned int,
 			typename boost::disable_if<scalpel::cpp::semantic_entities::type_traits::has_base_classes<Entity>>::type* = 0
 		)
 		{
@@ -409,36 +429,35 @@ class semantic_graph_serializer
 		void
 		serialize_members
 		(
-			const DeclarativeRegion& declarative_region,
-			const unsigned int indent_level
+			const DeclarativeRegion& declarative_region
 		)
 		{
-			serialize_members_of_type<namespace_alias>(declarative_region, indent_level);
-			serialize_members_of_type<namespace_>(declarative_region, indent_level);
-			serialize_members_of_type<linked_namespace>(declarative_region, indent_level);
-			serialize_members_of_type<unnamed_namespace>(declarative_region, indent_level);
-			serialize_members_of_type<linked_unnamed_namespace>(declarative_region, indent_level);
-			serialize_members_of_type<class_>(declarative_region, indent_level);
-			serialize_members_of_type<member_class>(declarative_region, indent_level);
-			serialize_members_of_type<union_>(declarative_region, indent_level);
-			serialize_members_of_type<member_union>(declarative_region, indent_level);
-			serialize_members_of_type<anonymous_union>(declarative_region, indent_level);
-			serialize_members_of_type<anonymous_member_union>(declarative_region, indent_level);
-			serialize_members_of_type<enum_t>(declarative_region, indent_level);
-			serialize_members_of_type<member_enum_t>(declarative_region, indent_level);
-			serialize_members_of_type<typedef_>(declarative_region, indent_level);
-			serialize_members_of_type<member_typedef>(declarative_region, indent_level);
-			serialize_members_of_type<constructor>(declarative_region, indent_level);
-			serialize_members_of_type<destructor>(declarative_region, indent_level);
-			serialize_members_of_type<operator_member_function>(declarative_region, indent_level);
-			serialize_members_of_type<conversion_function>(declarative_region, indent_level);
-			serialize_members_of_type<simple_member_function>(declarative_region, indent_level);
-			serialize_members_of_type<operator_function>(declarative_region, indent_level);
-			serialize_members_of_type<simple_function>(declarative_region, indent_level);
-			serialize_members_of_type<variable>(declarative_region, indent_level);
-			serialize_members_of_type<member_variable>(declarative_region, indent_level);
-			serialize_members_of_type<static_member_variable>(declarative_region, indent_level);
-			serialize_members_of_type<bit_field>(declarative_region, indent_level);
+			serialize_members_of_type<namespace_alias>(declarative_region);
+			serialize_members_of_type<namespace_>(declarative_region);
+			serialize_members_of_type<linked_namespace>(declarative_region);
+			serialize_members_of_type<unnamed_namespace>(declarative_region);
+			serialize_members_of_type<linked_unnamed_namespace>(declarative_region);
+			serialize_members_of_type<class_>(declarative_region);
+			serialize_members_of_type<member_class>(declarative_region);
+			serialize_members_of_type<union_>(declarative_region);
+			serialize_members_of_type<member_union>(declarative_region);
+			serialize_members_of_type<anonymous_union>(declarative_region);
+			serialize_members_of_type<anonymous_member_union>(declarative_region);
+			serialize_members_of_type<enum_t>(declarative_region);
+			serialize_members_of_type<member_enum_t>(declarative_region);
+			serialize_members_of_type<typedef_>(declarative_region);
+			serialize_members_of_type<member_typedef>(declarative_region);
+			serialize_members_of_type<constructor>(declarative_region);
+			serialize_members_of_type<destructor>(declarative_region);
+			serialize_members_of_type<operator_member_function>(declarative_region);
+			serialize_members_of_type<conversion_function>(declarative_region);
+			serialize_members_of_type<simple_member_function>(declarative_region);
+			serialize_members_of_type<operator_function>(declarative_region);
+			serialize_members_of_type<simple_function>(declarative_region);
+			serialize_members_of_type<variable>(declarative_region);
+			serialize_members_of_type<member_variable>(declarative_region);
+			serialize_members_of_type<static_member_variable>(declarative_region);
+			serialize_members_of_type<bit_field>(declarative_region);
 		}
 
 		template<class Entity, class DeclarativeRegion>
@@ -446,7 +465,6 @@ class semantic_graph_serializer
 		serialize_members_of_type
 		(
 			const DeclarativeRegion& declarative_region,
-			const unsigned int indent_level,
 			typename boost::enable_if<scalpel::cpp::semantic_entities::type_traits::has_members_of_type<DeclarativeRegion, Entity>>::type* = 0
 		)
 		{
@@ -456,8 +474,7 @@ class semantic_graph_serializer
 				get_members<Entity>(declarative_region)
 			;
 
-			for(auto i = members.begin(); i != members.end(); ++i)
-				serialize_member(*i, indent_level);
+			serialize_entities(members);
 		}
 
 		template<class Entity, class DeclarativeRegion>
@@ -465,7 +482,6 @@ class semantic_graph_serializer
 		serialize_members_of_type
 		(
 			const DeclarativeRegion&,
-			const unsigned int,
 			typename boost::disable_if<scalpel::cpp::semantic_entities::type_traits::has_members_of_type<DeclarativeRegion, Entity>>::type* = 0
 		)
 		{
@@ -474,10 +490,45 @@ class semantic_graph_serializer
 
 		template<class Entity>
 		void
+		serialize_entities
+		(
+			const scalpel::utility::unique_ptr_vector<Entity>& entities
+		)
+		{
+			if(!entities.empty())
+			{
+				writer_.open_array(plural_key_of_type<Entity>::value);
+				for(auto i = entities.begin(); i != entities.end(); ++i)
+				{
+					writer_.open_object();
+					serialize_member(*i);
+					writer_.close_object();
+				}
+				writer_.close_array();
+			}
+		}
+
+		template<class Entity>
+		void
+		serialize_entities
+		(
+			scalpel::utility::single_object_const_range<Entity>& entities
+		)
+		{
+			if(!entities.empty())
+			{
+				writer_.open_object(singular_key_of_type<Entity>::value);
+				for(auto i = entities.begin(); i != entities.end(); ++i)
+					serialize_member(*i);
+				writer_.close_object();
+			}
+		}
+
+		template<class Entity>
+		void
 		serialize_member
 		(
-			const Entity& entity,
-			const unsigned int indent_level
+			const Entity& entity
 		);
 
 
@@ -486,33 +537,32 @@ class semantic_graph_serializer
 		void
 		serialize_entity_aliases
 		(
-			const DeclarativeRegion& declarative_region,
-			const unsigned int indent_level
+			const DeclarativeRegion& declarative_region
 		)
 		{
-			serialize_entity_aliases_of_type<namespace_>(declarative_region, indent_level);
-			serialize_entity_aliases_of_type<linked_namespace>(declarative_region, indent_level);
-			serialize_entity_aliases_of_type<unnamed_namespace>(declarative_region, indent_level);
-			serialize_entity_aliases_of_type<linked_unnamed_namespace>(declarative_region, indent_level);
-			serialize_entity_aliases_of_type<class_>(declarative_region, indent_level);
-			serialize_entity_aliases_of_type<member_class>(declarative_region, indent_level);
-			serialize_entity_aliases_of_type<union_>(declarative_region, indent_level);
-			serialize_entity_aliases_of_type<member_union>(declarative_region, indent_level);
-			serialize_entity_aliases_of_type<enum_t>(declarative_region, indent_level);
-			serialize_entity_aliases_of_type<member_enum_t>(declarative_region, indent_level);
-			serialize_entity_aliases_of_type<typedef_>(declarative_region, indent_level);
-			serialize_entity_aliases_of_type<member_typedef>(declarative_region, indent_level);
-			serialize_entity_aliases_of_type<constructor>(declarative_region, indent_level);
-			serialize_entity_aliases_of_type<destructor>(declarative_region, indent_level);
-			serialize_entity_aliases_of_type<operator_member_function>(declarative_region, indent_level);
-			serialize_entity_aliases_of_type<conversion_function>(declarative_region, indent_level);
-			serialize_entity_aliases_of_type<simple_member_function>(declarative_region, indent_level);
-			serialize_entity_aliases_of_type<operator_function>(declarative_region, indent_level);
-			serialize_entity_aliases_of_type<simple_function>(declarative_region, indent_level);
-			serialize_entity_aliases_of_type<variable>(declarative_region, indent_level);
-			serialize_entity_aliases_of_type<member_variable>(declarative_region, indent_level);
-			serialize_entity_aliases_of_type<static_member_variable>(declarative_region, indent_level);
-			serialize_entity_aliases_of_type<bit_field>(declarative_region, indent_level);
+			serialize_entity_aliases_of_type<namespace_>(declarative_region);
+			serialize_entity_aliases_of_type<linked_namespace>(declarative_region);
+			serialize_entity_aliases_of_type<unnamed_namespace>(declarative_region);
+			serialize_entity_aliases_of_type<linked_unnamed_namespace>(declarative_region);
+			serialize_entity_aliases_of_type<class_>(declarative_region);
+			serialize_entity_aliases_of_type<member_class>(declarative_region);
+			serialize_entity_aliases_of_type<union_>(declarative_region);
+			serialize_entity_aliases_of_type<member_union>(declarative_region);
+			serialize_entity_aliases_of_type<enum_t>(declarative_region);
+			serialize_entity_aliases_of_type<member_enum_t>(declarative_region);
+			serialize_entity_aliases_of_type<typedef_>(declarative_region);
+			serialize_entity_aliases_of_type<member_typedef>(declarative_region);
+			serialize_entity_aliases_of_type<constructor>(declarative_region);
+			serialize_entity_aliases_of_type<destructor>(declarative_region);
+			serialize_entity_aliases_of_type<operator_member_function>(declarative_region);
+			serialize_entity_aliases_of_type<conversion_function>(declarative_region);
+			serialize_entity_aliases_of_type<simple_member_function>(declarative_region);
+			serialize_entity_aliases_of_type<operator_function>(declarative_region);
+			serialize_entity_aliases_of_type<simple_function>(declarative_region);
+			serialize_entity_aliases_of_type<variable>(declarative_region);
+			serialize_entity_aliases_of_type<member_variable>(declarative_region);
+			serialize_entity_aliases_of_type<static_member_variable>(declarative_region);
+			serialize_entity_aliases_of_type<bit_field>(declarative_region);
 		}
 
 		template<class Entity, class DeclarativeRegion>
@@ -520,7 +570,6 @@ class semantic_graph_serializer
 		serialize_entity_aliases_of_type
 		(
 			const DeclarativeRegion& declarative_region,
-			const unsigned int indent_level,
 			typename boost::enable_if<scalpel::cpp::semantic_entities::type_traits::has_entity_aliases_of_type<DeclarativeRegion, Entity>>::type* = 0
 		)
 		{
@@ -530,8 +579,17 @@ class semantic_graph_serializer
 				get_entity_aliases<Entity>(declarative_region)
 			;
 
-			for(auto i = entity_aliases.begin(); i != entity_aliases.end(); ++i)
-				serialize_entity_alias(*i, indent_level);
+			if(!entity_aliases.empty())
+			{
+				writer_.open_array(singular_key_of_type<Entity>::value + std::string(" aliases"));
+				for(auto i = entity_aliases.begin(); i != entity_aliases.end(); ++i)
+				{
+					writer_.open_object();
+					serialize_entity_alias(*i);
+					writer_.close_object();
+				}
+				writer_.close_array();
+			}
 		}
 
 		template<class Entity, class DeclarativeRegion>
@@ -539,7 +597,6 @@ class semantic_graph_serializer
 		serialize_entity_aliases_of_type
 		(
 			const DeclarativeRegion&,
-			const unsigned int,
 			typename boost::disable_if<scalpel::cpp::semantic_entities::type_traits::has_entity_aliases_of_type<DeclarativeRegion, Entity>>::type* = 0
 		)
 		{
@@ -550,28 +607,31 @@ class semantic_graph_serializer
 		void
 		serialize_entity_alias
 		(
-			const entity_alias<Entity>& entity,
-			const unsigned int indent_level
+			const entity_alias<Entity>& entity
 		)
 		{
-			output_ << detail::indent(indent_level) << "<" << detail::type_to_string<Entity>() << "_alias";
-			output_ << " " << detail::type_to_string<Entity>() << "_id=\"" << get_id(entity.referred_entity()) << "\"";
-			output_ << "/>\n";
+			writer_.write_key_value_pair("id", get_id(entity.referred_entity()));
 		}
 
 		template<class Entity>
 		void
 		serialize_entity_alias
 		(
-			const member_entity_alias<Entity>& entity,
-			const unsigned int indent_level
+			const member_entity_alias<Entity>& entity
 		)
 		{
-			output_ << detail::indent(indent_level) << "<" << detail::type_to_string<Entity>() << "_alias";
-			output_ << " " << detail::type_to_string<Entity>() << "_id=\"" << get_id(entity.referred_entity()) << "\"";
-			output_ << attribute(entity.access());
-			output_ << "/>\n";
+			writer_.write_key_value_pair("id", get_id(entity.referred_entity()));
+			serialize_access_property(entity);
 		}
+
+
+
+		//
+		//conversions to string
+		//
+
+		std::string
+		overloadable_operator_to_string(const semantic_entities::overloadable_operator op);
 
 
 
@@ -590,6 +650,14 @@ class semantic_graph_serializer
 		(
 			const scalpel::cpp::semantic_entities::class_ptr_variant& entity
 		);
+
+		template<class Entity>
+		void
+		serialize_id_attribute(const Entity& entity);
+
+		template<class Entity>
+		void
+		serialize_overloaded_operator(const Entity& entity);
 
 		template<class Entity>
 		std::string
@@ -831,6 +899,7 @@ class semantic_graph_serializer
 
 
 		std::ostream& output_;
+		detail::json_writer writer_;
 		typename entity_id_map<semantic_entities::namespace_>::type namespace_id_map_;
 		typename entity_id_map<semantic_entities::linked_namespace>::type linked_namespace_id_map_;
 		typename entity_id_map<semantic_entities::unnamed_namespace>::type unnamed_namespace_id_map_;

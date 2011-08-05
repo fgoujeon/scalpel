@@ -1,30 +1,70 @@
-<namespace id="0">
- <class id="0" name="base">
-  <destructor access="public" defined="false">
-  </destructor>
- </class>
- <class id="1" name="c">
-  <base_classes>
-   <base_class  class_id="0" access="private"/>
-  </base_classes>
-  <destructor access="public" defined="false">
-  </destructor>
-  <variable id="0" name="i" access="private">
-   <type>
-    <fundamental_type type="int"/>
-   </type>
-  </variable>
- </class>
- <class id="2" name="s">
-  <base_classes>
-   <base_class  class_id="0" access="public"/>
-  </base_classes>
-  <destructor access="public" defined="false">
-  </destructor>
-  <variable id="1" name="i" access="public">
-   <type>
-    <fundamental_type type="int"/>
-   </type>
-  </variable>
- </class>
-</namespace>
+{
+  "id": 0,
+  "classes":
+  [
+    {
+      "id": 0,
+      "name": "base",
+      "destructor":
+      {
+        "access": "public"
+      }
+    },
+    {
+      "id": 1,
+      "name": "c",
+      "base classes":
+      [
+        {
+          "class id": 0,
+          "access": "private"
+        }
+      ],
+      "destructor":
+      {
+        "access": "public"
+      },
+      "variables":
+      [
+        {
+          "id": 0,
+          "name": "i",
+          "access": "private",
+          "type":
+          {
+            "category": "fundamental type",
+            "type": "int"
+          }
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "s",
+      "base classes":
+      [
+        {
+          "class id": 0,
+          "access": "public"
+        }
+      ],
+      "destructor":
+      {
+        "access": "public"
+      },
+      "variables":
+      [
+        {
+          "id": 1,
+          "name": "i",
+          "access": "public",
+          "type":
+          {
+            "category": "fundamental type",
+            "type": "int"
+          }
+        }
+      ]
+    }
+  ]
+}

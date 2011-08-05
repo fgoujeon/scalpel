@@ -1,89 +1,157 @@
-<namespace id="0">
- <typedef id="0" name="fun_ptr_t">
-  <type>
-   <cv_qualified_type const="true">
-    <pointer>
-     <function_type>
-      <return_type>
-       <fundamental_type type="int"/>
-      </return_type>
-      <parameter_types>
-      </parameter_types>
-     </function_type>
-    </pointer>
-   </cv_qualified_type>
-  </type>
- </typedef>
- <simple_function id="0" name="f">
-  <return_type>
-   <fundamental_type type="void"/>
-  </return_type>
-  <parameters>
-   <parameter name="fun_ptr">
-    <type>
-     <pointer>
-      <function_type>
-       <return_type>
-        <fundamental_type type="void"/>
-       </return_type>
-       <parameter_types>
-        <fundamental_type type="int"/>
-       </parameter_types>
-      </function_type>
-     </pointer>
-    </type>
-   </parameter>
-  </parameters>
- </simple_function>
- <simple_function id="1" name="g" defined="false">
-  <return_type>
-   <fundamental_type type="void"/>
-  </return_type>
-  <parameters>
-   <parameter>
-    <type>
-     <pointer>
-      <function_type>
-       <return_type>
-        <fundamental_type type="int"/>
-       </return_type>
-       <parameter_types>
-        <fundamental_type type="double"/>
-       </parameter_types>
-      </function_type>
-     </pointer>
-    </type>
-   </parameter>
-  </parameters>
- </simple_function>
- <variable id="0" name="fun_ptr">
-  <type>
-   <cv_qualified_type const="true">
-    <pointer>
-     <function_type>
-      <return_type>
-       <fundamental_type type="int"/>
-      </return_type>
-      <parameter_types>
-      </parameter_types>
-     </function_type>
-    </pointer>
-   </cv_qualified_type>
-  </type>
- </variable>
- <variable id="1" name="fun_ptr2">
-  <type>
-   <cv_qualified_type const="true">
-    <pointer>
-     <function_type>
-      <return_type>
-       <fundamental_type type="int"/>
-      </return_type>
-      <parameter_types>
-      </parameter_types>
-     </function_type>
-    </pointer>
-   </cv_qualified_type>
-  </type>
- </variable>
-</namespace>
+{
+  "id": 0,
+  "typedefs":
+  [
+    {
+      "id": 0,
+      "name": "fun_ptr_t",
+      "type":
+      {
+        "category": "cv-qualified type",
+        "const": true,
+        "qualified type":
+        {
+          "category": "pointer",
+          "qualified type":
+          {
+            "category": "function type",
+            "return type":
+            {
+              "category": "fundamental type",
+              "type": "int"
+            },
+            "parameter types":
+            [
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "simple functions":
+  [
+    {
+      "id": 0,
+      "name": "f",
+      "return type":
+      {
+        "category": "fundamental type",
+        "type": "void"
+      },
+      "parameters":
+      [
+        {
+          "name": "fun_ptr",
+          "type":
+          {
+            "category": "pointer",
+            "qualified type":
+            {
+              "category": "function type",
+              "return type":
+              {
+                "category": "fundamental type",
+                "type": "void"
+              },
+              "parameter types":
+              [
+                {
+                  "category": "fundamental type",
+                  "type": "int"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "g",
+      "defined": false,
+      "return type":
+      {
+        "category": "fundamental type",
+        "type": "void"
+      },
+      "parameters":
+      [
+        {
+          "type":
+          {
+            "category": "pointer",
+            "qualified type":
+            {
+              "category": "function type",
+              "return type":
+              {
+                "category": "fundamental type",
+                "type": "int"
+              },
+              "parameter types":
+              [
+                {
+                  "category": "fundamental type",
+                  "type": "double"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variables":
+  [
+    {
+      "id": 0,
+      "name": "fun_ptr",
+      "type":
+      {
+        "category": "cv-qualified type",
+        "const": true,
+        "qualified type":
+        {
+          "category": "pointer",
+          "qualified type":
+          {
+            "category": "function type",
+            "return type":
+            {
+              "category": "fundamental type",
+              "type": "int"
+            },
+            "parameter types":
+            [
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 1,
+      "name": "fun_ptr2",
+      "type":
+      {
+        "category": "cv-qualified type",
+        "const": true,
+        "qualified type":
+        {
+          "category": "pointer",
+          "qualified type":
+          {
+            "category": "function type",
+            "return type":
+            {
+              "category": "fundamental type",
+              "type": "int"
+            },
+            "parameter types":
+            [
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

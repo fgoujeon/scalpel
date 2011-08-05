@@ -1,32 +1,59 @@
-<namespace id="0">
- <simple_function id="0" name="f">
-  <return_type>
-   <fundamental_type type="int"/>
-  </return_type>
-  <parameters>
-   <parameter name="d">
-    <type>
-     <reference>
-      <cv_qualified_type const="true">
-       <fundamental_type type="double"/>
-      </cv_qualified_type>
-     </reference>
-    </type>
-   </parameter>
-  </parameters>
- </simple_function>
- <simple_function id="1" name="f">
-  <return_type>
-   <fundamental_type type="int"/>
-  </return_type>
-  <parameters>
-   <parameter name="d">
-    <type>
-     <reference>
-      <fundamental_type type="double"/>
-     </reference>
-    </type>
-   </parameter>
-  </parameters>
- </simple_function>
-</namespace>
+{
+  "id": 0,
+  "simple functions":
+  [
+    {
+      "id": 0,
+      "name": "f",
+      "return type":
+      {
+        "category": "fundamental type",
+        "type": "int"
+      },
+      "parameters":
+      [
+        {
+          "name": "d",
+          "type":
+          {
+            "category": "reference",
+            "qualified type":
+            {
+              "category": "cv-qualified type",
+              "const": true,
+              "qualified type":
+              {
+                "category": "fundamental type",
+                "type": "double"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "f",
+      "return type":
+      {
+        "category": "fundamental type",
+        "type": "int"
+      },
+      "parameters":
+      [
+        {
+          "name": "d",
+          "type":
+          {
+            "category": "reference",
+            "qualified type":
+            {
+              "category": "fundamental type",
+              "type": "double"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

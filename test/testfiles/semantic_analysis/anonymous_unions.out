@@ -1,40 +1,97 @@
-<namespace id="0">
- <class id="0" name="c">
-  <anonymous_union id="0" access="private">
-   <variable id="0" name="d" access="public">
-    <type>
-     <fundamental_type type="double"/>
-    </type>
-   </variable>
-   <variable id="1" name="i" access="public">
-    <type>
-     <fundamental_type type="int"/>
-    </type>
-   </variable>
-  </anonymous_union>
-  <destructor access="public" defined="false">
-  </destructor>
-  <variable id="2" access="private">
-   <type>
-    <anonymous_member_union id="0"/>
-   </type>
-  </variable>
- </class>
- <anonymous_union id="0">
-  <variable id="3" name="d" access="public">
-   <type>
-    <fundamental_type type="double"/>
-   </type>
-  </variable>
-  <variable id="4" name="i" access="public">
-   <type>
-    <fundamental_type type="int"/>
-   </type>
-  </variable>
- </anonymous_union>
- <variable id="0" static="true">
-  <type>
-   <anonymous_union id="0"/>
-  </type>
- </variable>
-</namespace>
+{
+  "id": 0,
+  "classes":
+  [
+    {
+      "id": 0,
+      "name": "c",
+      "anonymous unions":
+      [
+        {
+          "id": 0,
+          "access": "private",
+          "variables":
+          [
+            {
+              "id": 0,
+              "name": "d",
+              "access": "public",
+              "type":
+              {
+                "category": "fundamental type",
+                "type": "double"
+              }
+            },
+            {
+              "id": 1,
+              "name": "i",
+              "access": "public",
+              "type":
+              {
+                "category": "fundamental type",
+                "type": "int"
+              }
+            }
+          ]
+        }
+      ],
+      "destructor":
+      {
+        "access": "public"
+      },
+      "variables":
+      [
+        {
+          "id": 2,
+          "access": "private",
+          "type":
+          {
+            "category": "anonymous member union",
+            "id": 0
+          }
+        }
+      ]
+    }
+  ],
+  "anonymous unions":
+  [
+    {
+      "id": 0,
+      "variables":
+      [
+        {
+          "id": 3,
+          "name": "d",
+          "access": "public",
+          "type":
+          {
+            "category": "fundamental type",
+            "type": "double"
+          }
+        },
+        {
+          "id": 4,
+          "name": "i",
+          "access": "public",
+          "type":
+          {
+            "category": "fundamental type",
+            "type": "int"
+          }
+        }
+      ]
+    }
+  ],
+  "variables":
+  [
+    {
+      "id": 0,
+      "static": "true",
+      "type":
+      {
+        "category": "anonymous union",
+        "id": 0
+      }
+    }
+  ]
+}

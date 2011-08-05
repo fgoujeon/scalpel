@@ -29,7 +29,8 @@ namespace cpp2xml
 using namespace detail;
 
 semantic_graph_serializer::semantic_graph_serializer(std::ostream& output):
-	output_(output)
+	output_(output),
+	writer_(output)
 {
 }
 
@@ -37,146 +38,167 @@ void
 semantic_graph_serializer::operator()(const namespace_& entity)
 {
 	set_ids(entity);
+
+	writer_.open_object();
 	serialize_namespace(entity);
+	writer_.close_object();
 }
 
 void
 semantic_graph_serializer::operator()(const linked_namespace& entity)
 {
 	set_ids(entity);
+
+	writer_.open_object();
 	serialize_namespace(entity);
+	writer_.close_object();
 }
 
 
 
 semantic_graph_serializer::serialize_type_visitor::serialize_type_visitor
 (
-	semantic_graph_serializer& serializer,
-	const unsigned int indent_level
+	semantic_graph_serializer& serializer
 ):
 	serializer_(serializer),
-	output_(serializer_.output_),
-	indent_level_(indent_level)
+	output_(serializer_.output_)
 {
 }
 
 void
 semantic_graph_serializer::serialize_type_visitor::operator()(const fundamental_type& type)
 {
-	output_ << indent(indent_level_) << "<fundamental_type type=\"";
+	serializer_.writer_.write_key_value_pair("category", "fundamental type");
 	serializer_.serialize_fundamental_type(type);
-	output_ << "\"/>\n";
 }
 
 void
 semantic_graph_serializer::serialize_type_visitor::operator()(const function_type& type)
 {
-	serializer_.serialize_function_type(type, indent_level_);
+	serializer_.writer_.write_key_value_pair("category", "function type");
+	serializer_.serialize_function_type(type);
 }
 
 void
 semantic_graph_serializer::serialize_type_visitor::operator()(const cv_qualified_type& type)
 {
-	output_ << indent(indent_level_) << "<cv_qualified_type";
+	serializer_.writer_.write_key_value_pair("category", "cv-qualified type");
+
 	if(type.const_qualified())
-		output_ << " const=\"true\"";
+		serializer_.writer_.write_key_value_pair("const", true);
 	if(type.volatile_qualified())
-		output_ << " volatile=\"true\"";
-	output_ << ">\n";
-	serializer_.serialize_type((type).qualified_type(), indent_level_ + 1);
-	output_ << indent(indent_level_) << "</cv_qualified_type>\n";
+		serializer_.writer_.write_key_value_pair("volatile", true);
+
+	serializer_.writer_.open_object("qualified type");
+	serializer_.serialize_type(type.qualified_type());
+	serializer_.writer_.close_object();
 }
 
 void
 semantic_graph_serializer::serialize_type_visitor::operator()(const pointer& type)
 {
-	output_ << indent(indent_level_) << "<pointer>\n";
-	serializer_.serialize_type((type).qualified_type(), indent_level_ + 1);
-	output_ << indent(indent_level_) << "</pointer>\n";
+	serializer_.writer_.write_key_value_pair("category", "pointer");
+
+	serializer_.writer_.open_object("qualified type");
+	serializer_.serialize_type(type.qualified_type());
+	serializer_.writer_.close_object();
 }
 
 void
 semantic_graph_serializer::serialize_type_visitor::operator()(const pointer_to_member& type)
 {
-	output_ << indent(indent_level_) << "<pointer_to_member ";
+	serializer_.writer_.write_key_value_pair("category", "pointer to member");
 	serializer_.serialize_class_id_attribute(type.parent_class());
-	output_ << ">\n";
-	serializer_.serialize_type((type).qualified_type(), indent_level_ + 1);
-	output_ << indent(indent_level_) << "</pointer_to_member>\n";
+
+	serializer_.writer_.open_object("qualified type");
+	serializer_.serialize_type(type.qualified_type());
+	serializer_.writer_.close_object();
 }
 
 void
 semantic_graph_serializer::serialize_type_visitor::operator()(const reference& type)
 {
-	output_ << indent(indent_level_) << "<reference>\n";
-	serializer_.serialize_type((type).qualified_type(), indent_level_ + 1);
-	output_ << indent(indent_level_) << "</reference>\n";
+	serializer_.writer_.write_key_value_pair("category", "reference");
+
+	serializer_.writer_.open_object("qualified type");
+	serializer_.serialize_type(type.qualified_type());
+	serializer_.writer_.close_object();
 }
 
 void
 semantic_graph_serializer::serialize_type_visitor::operator()(const array& type)
 {
-	output_ << indent(indent_level_) << "<array size=\"" << type.size() << "\">\n";
-	serializer_.serialize_type(type.qualified_type(), indent_level_ + 1);
-	output_ << indent(indent_level_) << "</array>\n";
+	serializer_.writer_.write_key_value_pair("category", "array");
+
+	serializer_.writer_.write_key_value_pair("size", type.size());
+	serializer_.writer_.open_object("qualified type");
+	serializer_.serialize_type(type.qualified_type());
+	serializer_.writer_.close_object();
 }
 
 void
 semantic_graph_serializer::serialize_type_visitor::operator()(const class_* type)
 {
-	output_ << indent(indent_level_) << "<class id=\"" << serializer_.get_id(*type) << "\"/>\n";
+	serializer_.writer_.write_key_value_pair("category", "class");
+	serializer_.writer_.write_key_value_pair("id", serializer_.get_id(*type));
 }
 
 void
 semantic_graph_serializer::serialize_type_visitor::operator()(const member_class* type)
 {
-	output_ << indent(indent_level_) << "<member_class id=\"" << serializer_.get_id(*type) << "\"/>\n";
+	serializer_.writer_.write_key_value_pair("category", "member class");
+	serializer_.writer_.write_key_value_pair("id", serializer_.get_id(*type));
 }
 
 void
 semantic_graph_serializer::serialize_type_visitor::operator()(const union_* type)
 {
-	output_ << indent(indent_level_) << "<union id=\"" << serializer_.get_id(*type) << "\"/>\n";
+	serializer_.writer_.write_key_value_pair("category", "union");
+	serializer_.writer_.write_key_value_pair("id", serializer_.get_id(*type));
 }
 
 void
 semantic_graph_serializer::serialize_type_visitor::operator()(const member_union* type)
 {
-	output_ << indent(indent_level_) << "<member_union id=\"" << serializer_.get_id(*type) << "\"/>\n";
+	serializer_.writer_.write_key_value_pair("category", "member union");
+	serializer_.writer_.write_key_value_pair("id", serializer_.get_id(*type));
 }
 
 void
 semantic_graph_serializer::serialize_type_visitor::operator()(const anonymous_union* type)
 {
-	output_ << indent(indent_level_) << "<anonymous_union id=\"" << serializer_.get_id(*type) << "\"/>\n";
+	serializer_.writer_.write_key_value_pair("category", "anonymous union");
+	serializer_.writer_.write_key_value_pair("id", serializer_.get_id(*type));
 }
 
 void
 semantic_graph_serializer::serialize_type_visitor::operator()(const anonymous_member_union* type)
 {
-	output_ << indent(indent_level_) << "<anonymous_member_union id=\"" << serializer_.get_id(*type) << "\"/>\n";
+	serializer_.writer_.write_key_value_pair("category", "anonymous member union");
+	serializer_.writer_.write_key_value_pair("id", serializer_.get_id(*type));
 }
 
 void
 semantic_graph_serializer::serialize_type_visitor::operator()(const enum_t* type)
 {
-	output_ << indent(indent_level_) << "<enum id=\"" << serializer_.get_id(*type) << "\"/>\n";
+	serializer_.writer_.write_key_value_pair("category", "enum");
+	serializer_.writer_.write_key_value_pair("id", serializer_.get_id(*type));
 }
 
 void
 semantic_graph_serializer::serialize_type_visitor::operator()(const member_enum_t* type)
 {
-	output_ << indent(indent_level_) << "<member_enum id=\"" << serializer_.get_id(*type) << "\"/>\n";
+	serializer_.writer_.write_key_value_pair("category", "member enum");
+	serializer_.writer_.write_key_value_pair("id", serializer_.get_id(*type));
 }
 
 void
 semantic_graph_serializer::serialize_type
 (
-	const semantic_entities::type_t& n,
-	const unsigned int indent_level
+	const semantic_entities::type_t& n
 )
 {
-	serialize_type_visitor visitor(*this, indent_level);
+	serialize_type_visitor visitor(*this);
 	apply_visitor(visitor, n);
 }
 
@@ -209,307 +231,280 @@ semantic_graph_serializer::serialize_fundamental_type
 		{fundamental_type::WCHAR_T, "wchar_t"}
 	};
 
-	output_ << fundamental_types_map[type];
+	writer_.write_key_value_pair("type", fundamental_types_map[type]);
 }
 
 void
 semantic_graph_serializer::serialize_base_class
 (
-	const base_class& entity,
-	const unsigned int indent_level
+	const base_class& entity
 )
 {
-	output_ << indent(indent_level) << "<base_class ";
+	writer_.open_object();
+
 	serialize_class_id_attribute(entity.base());
-	output_ << attribute(entity.access());
+
+	switch(entity.access())
+	{
+		case member_access::PUBLIC:
+			writer_.write_key_value_pair("access", "public");
+			break;
+		case member_access::PROTECTED:
+			writer_.write_key_value_pair("access", "protected");
+			break;
+		case member_access::PRIVATE:
+			writer_.write_key_value_pair("access", "private");
+			break;
+	}
+
 	if(entity.is_virtual())
-		output_ << " virtual=\"true\"";
-	output_ << "/>\n";
+		writer_.write_key_value_pair("virtual", true);
+
+	writer_.close_object();
 }
 
 void
 semantic_graph_serializer::serialize_constructor
 (
-	const constructor& entity,
-	const unsigned int indent_level
+	const constructor& entity
 )
 {
-	output_ << indent(indent_level) << "<constructor";
-	output_ << attribute(entity.access());
+	serialize_access_property(entity);
 	if(entity.variadic())
-		output_ << " variadic=\"true\"";
+		writer_.write_key_value_pair("variadic", true);
 	if(entity.is_inline())
-		output_ << " inline=\"true\"";
+		writer_.write_key_value_pair("inline", true);
 	if(entity.is_explicit())
-		output_ << " explicit=\"true\"";
-	if(!entity.defined())
-		output_ << " defined=\"false\"";
-	output_ << ">\n";
+		writer_.write_key_value_pair("explicit", true);
+	if(entity.defined())
+		writer_.write_key_value_pair("defined", true);
 
-	serialize_function_parameter_list(entity.parameters(), indent_level + 1);
-
-	output_ << indent(indent_level) << "</constructor>\n";
+	serialize_function_parameter_list(entity.parameters());
 }
 
 void
 semantic_graph_serializer::serialize_destructor
 (
-	const destructor& entity,
-	const unsigned int indent_level
+	const destructor& entity
 )
 {
-	output_ << indent(indent_level) << "<destructor";
-	output_ << attribute(entity.access());
+	serialize_access_property(entity);
 	if(entity.is_inline())
-		output_ << " inline=\"true\"";
+		writer_.write_key_value_pair("inline", true);
 	if(entity.is_virtual())
-		output_ << " virtual=\"true\"";
+		writer_.write_key_value_pair("virtual", true);
 	if(entity.is_pure())
-		output_ << " pure=\"true\"";
-	if(!entity.defined())
-		output_ << " defined=\"false\"";
-	output_ << ">\n";
-
-	output_ << indent(indent_level) << "</destructor>\n";
+		writer_.write_key_value_pair("pure", true);
+	if(entity.defined())
+		writer_.write_key_value_pair("defined", true);
 }
 
 void
 semantic_graph_serializer::serialize_operator_member_function
 (
-	const operator_member_function& entity,
-	const unsigned int indent_level
+	const operator_member_function& entity
 )
 {
-	output_ << indent(indent_level) << "<operator_member_function";
-	output_ << " " << id_attribute_to_string(entity);
-	output_ << attribute(entity.overloaded_operator());
-	output_ << attribute(entity.access());
+	serialize_id_attribute(entity);
+	serialize_overloaded_operator(entity);
+	serialize_access_property(entity);
 	if(entity.is_inline())
-		output_ << " inline=\"true\"";
+		writer_.write_key_value_pair("inline", true);
 	if(entity.is_const())
-		output_ << " const=\"true\"";
+		writer_.write_key_value_pair("const", true);
 	if(entity.is_volatile())
-		output_ << " volatile=\"true\"";
+		writer_.write_key_value_pair("volatile", true);
 	if(entity.is_virtual())
-		output_ << " virtual=\"true\"";
+		writer_.write_key_value_pair("virtual", true);
 	if(entity.is_pure())
-		output_ << " pure=\"true\"";
+		writer_.write_key_value_pair("pure", true);
 	if(!entity.defined())
-		output_ << " defined=\"false\"";
-	output_ << ">\n";
+		writer_.write_key_value_pair("defined", false);
 
-	output_ << indent(indent_level + 1) << "<return_type>\n";
-	serialize_type(entity.return_type(), indent_level + 2);
-	output_ << indent(indent_level + 1) << "</return_type>\n";
+	writer_.open_object("return type");
+	serialize_type(entity.return_type());
+	writer_.close_object();
 
-	serialize_function_parameter_list(entity.parameters(), indent_level + 1);
-
-	output_ << indent(indent_level) << "</operator_member_function>\n";
+	serialize_function_parameter_list(entity.parameters());
 }
 
 void
 semantic_graph_serializer::serialize_conversion_function
 (
-	const conversion_function& entity,
-	const unsigned int indent_level
+	const conversion_function& entity
 )
 {
-	output_ << indent(indent_level) << "<conversion_function";
-	output_ << " " << id_attribute_to_string(entity);
-	output_ << attribute(entity.access());
+	serialize_id_attribute(entity);
+	serialize_access_property(entity);
 	if(entity.is_inline())
-		output_ << " inline=\"true\"";
+		writer_.write_key_value_pair("inline", true);
 	if(entity.is_const())
-		output_ << " const=\"true\"";
+		writer_.write_key_value_pair("const", true);
 	if(entity.is_volatile())
-		output_ << " volatile=\"true\"";
+		writer_.write_key_value_pair("volatile", true);
 	if(entity.is_virtual())
-		output_ << " virtual=\"true\"";
+		writer_.write_key_value_pair("virtual", true);
 	if(entity.is_pure())
-		output_ << " pure=\"true\"";
+		writer_.write_key_value_pair("pure", true);
 	if(!entity.defined())
-		output_ << " defined=\"false\"";
-	output_ << ">\n";
+		writer_.write_key_value_pair("defined", false);
 
-	output_ << indent(indent_level + 1) << "<return_type>\n";
-	serialize_type(entity.return_type(), indent_level + 2);
-	output_ << indent(indent_level + 1) << "</return_type>\n";
-
-	output_ << indent(indent_level) << "</conversion_function>\n";
+	writer_.open_object("return type");
+	serialize_type(entity.return_type());
+	writer_.close_object();
 }
 
 void
 semantic_graph_serializer::serialize_simple_member_function
 (
-	const simple_member_function& entity,
-	const unsigned int indent_level
+	const simple_member_function& entity
 )
 {
-	output_ << indent(indent_level) << "<simple_member_function";
-	output_ << " " << id_attribute_to_string(entity);
-	output_ << " name=\"" << entity.name() << "\"";
-	output_ << attribute(entity.access());
-	if(entity.variadic())
-		output_ << " variadic=\"true\"";
+	serialize_id_attribute(entity);
+	serialize_name_property(entity);
+	serialize_access_property(entity);
+
 	if(entity.is_inline())
-		output_ << " inline=\"true\"";
-	if(entity.is_static())
-		output_ << " static=\"true\"";
+		writer_.write_key_value_pair("inline", true);
+	if(entity.variadic())
+		writer_.write_key_value_pair("variadic", true);
 	if(entity.is_const())
-		output_ << " const=\"true\"";
+		writer_.write_key_value_pair("const", true);
 	if(entity.is_volatile())
-		output_ << " volatile=\"true\"";
+		writer_.write_key_value_pair("volatile", true);
 	if(entity.is_virtual())
-		output_ << " virtual=\"true\"";
+		writer_.write_key_value_pair("virtual", true);
 	if(entity.is_pure())
-		output_ << " pure=\"true\"";
+		writer_.write_key_value_pair("pure", true);
 	if(!entity.defined())
-		output_ << " defined=\"false\"";
-	output_ << ">\n";
+		writer_.write_key_value_pair("defined", false);
 
-	output_ << indent(indent_level + 1) << "<return_type>\n";
-	serialize_type(entity.return_type(), indent_level + 2);
-	output_ << indent(indent_level + 1) << "</return_type>\n";
+	writer_.open_object("return type");
+	serialize_type(entity.return_type());
+	writer_.close_object();
 
-	serialize_function_parameter_list(entity.parameters(), indent_level + 1);
-
-	output_ << indent(indent_level) << "</simple_member_function>\n";
+	serialize_function_parameter_list(entity.parameters());
 }
 
 void
 semantic_graph_serializer::serialize_operator_function
 (
-	const operator_function& entity,
-	const unsigned int indent_level
+	const operator_function& entity
 )
 {
-	output_ << indent(indent_level) << "<operator_function";
-	output_ << " " << id_attribute_to_string(entity);
-	output_ << attribute(entity.overloaded_operator());
+	serialize_id_attribute(entity);
+	serialize_overloaded_operator(entity);
+
 	if(entity.is_inline())
-		output_ << " inline=\"true\"";
+		writer_.write_key_value_pair("inline", true);
 	if(entity.is_static())
-		output_ << " static=\"true\"";
+		writer_.write_key_value_pair("static", true);
 	if(!entity.defined())
-		output_ << " defined=\"false\"";
-	output_ << ">\n";
+		writer_.write_key_value_pair("defined", false);
 
-	output_ << indent(indent_level + 1) << "<return_type>\n";
-	serialize_type(entity.return_type(), indent_level + 2);
-	output_ << indent(indent_level + 1) << "</return_type>\n";
+	writer_.open_object("return type");
+	serialize_type(entity.return_type());
+	writer_.close_object();
 
-	serialize_function_parameter_list(entity.parameters(), indent_level + 1);
-
-	output_ << indent(indent_level) << "</operator_function>\n";
+	serialize_function_parameter_list(entity.parameters());
 }
 
 void
 semantic_graph_serializer::serialize_simple_function
 (
-	const simple_function& entity,
-	const unsigned int indent_level
+	const simple_function& entity
 )
 {
-	output_ << indent(indent_level) << "<simple_function";
-	output_ << " " << id_attribute_to_string(entity);
-	output_ << " name=\"" << entity.name() << "\"";
+	serialize_id_attribute(entity);
+	serialize_name_property(entity);
+
 	if(entity.variadic())
-		output_ << " variadic=\"true\"";
-	if(entity.is_static())
-		output_ << " static=\"true\"";
+		writer_.write_key_value_pair("variadic", true);
 	if(entity.is_inline())
-		output_ << " inline=\"true\"";
+		writer_.write_key_value_pair("inline", true);
+	if(entity.is_static())
+		writer_.write_key_value_pair("static", true);
 	if(!entity.defined())
-		output_ << " defined=\"false\"";
-	output_ << ">\n";
+		writer_.write_key_value_pair("defined", false);
 
-	output_ << indent(indent_level + 1) << "<return_type>\n";
-	serialize_type(entity.return_type(), indent_level + 2);
-	output_ << indent(indent_level + 1) << "</return_type>\n";
+	writer_.open_object("return type");
+	serialize_type(entity.return_type());
+	writer_.close_object();
 
-	serialize_function_parameter_list(entity.parameters(), indent_level + 1);
-
-	output_ << indent(indent_level) << "</simple_function>\n";
+	serialize_function_parameter_list(entity.parameters());
 }
 
 void
 semantic_graph_serializer::serialize_function_type
 (
-	const function_type& entity,
-	const unsigned int indent_level
+	const function_type& entity
 )
 {
-	output_ << indent(indent_level) << "<function_type";
 	if(entity.variadic())
-		output_ << " variadic=\"true\"";
+		writer_.write_key_value_pair("variadic", true);
 	if(entity.const_qualified())
-		output_ << " const=\"true\"";
+		writer_.write_key_value_pair("const", true);
 	if(entity.volatile_qualified())
-		output_ << " volatile=\"true\"";
-	output_ << ">\n";
+		writer_.write_key_value_pair("volatile", true);
 
-	output_ << indent(indent_level + 1) << "<return_type>\n";
-	serialize_type(entity.return_type(), indent_level + 2);
-	output_ << indent(indent_level + 1) << "</return_type>\n";
+	writer_.open_object("return type");
+	serialize_type(entity.return_type());
+	writer_.close_object();
 
 	const std::vector<type_t>& parameter_types = entity.parameter_types();
-	output_ << indent(indent_level + 1) << "<parameter_types>\n";
+
+	writer_.open_array("parameter types");
 	for(auto i = parameter_types.begin(); i != parameter_types.end(); ++i)
 	{
 		const type_t& type = *i;
-		serialize_type(type, indent_level + 2);
-	}
-	output_ << indent(indent_level + 1) << "</parameter_types>\n";
 
-	output_ << indent(indent_level) << "</function_type>\n";
+		writer_.open_object();
+		serialize_type(type);
+		writer_.close_object();
+	}
+	writer_.close_array();
 }
 
 void
 semantic_graph_serializer::serialize_function_parameter_list
 (
-	const function_parameter_list& entity,
-	const unsigned int indent_level
+	const function_parameter_list& entity
 )
 {
 	if(!entity.empty())
 	{
-		output_ << indent(indent_level) << "<parameters>\n";
+		writer_.open_array("parameters");
 		for(auto i = entity.begin(); i != entity.end(); ++i)
 		{
-			serialize_function_parameter(*i, indent_level + 1);
+			writer_.open_object();
+			serialize_function_parameter(*i);
+			writer_.close_object();
 		}
-		output_ << indent(indent_level) << "</parameters>\n";
+		writer_.close_array();
 	}
 }
 
 void
 semantic_graph_serializer::serialize_function_parameter
 (
-	const function_parameter& entity,
-	const unsigned int indent_level
+	const function_parameter& entity
 )
 {
-	output_ << indent(indent_level) << "<parameter";
 	if(!entity.name().empty())
-		output_ << " name=\"" << entity.name() << "\"";
-	output_ << ">\n";
-	output_ << indent(indent_level + 1) << "<type>\n";
-	serialize_type(entity.type(), indent_level + 2);
-	output_ << indent(indent_level + 1) << "</type>\n";
-	output_ << indent(indent_level) << "</parameter>\n";
+		writer_.write_key_value_pair("name", entity.name());
+	writer_.open_object("type");
+	serialize_type(entity.type());
+	writer_.close_object();
 }
 
 void
 semantic_graph_serializer::serialize_namespace_alias
 (
-	const namespace_alias& entity,
-	const unsigned int indent_level
+	const namespace_alias& entity
 )
 {
-	output_ << indent(indent_level) << "<namespace_alias";
-	output_ << " name=\"" << entity.name() << "\"";
-	output_ << " namespace_id=\"" << get_id(entity.referred_namespace()) << "\"";
-	output_ << "/>\n";
+	serialize_name_property(entity);
+	writer_.write_key_value_pair("namespace id", get_id(entity.referred_namespace()));
 }
 
 namespace
@@ -519,78 +514,78 @@ namespace
 std::string \
 operator()(const TYPE) \
 { \
-	return #STR; \
+	return STR; \
 }
 
 	struct: scalpel::utility::static_visitor<std::string>
 	{
-		EXPRESSION_TYPE(prefix_increment_expression, prefix_increment)
-		EXPRESSION_TYPE(prefix_decrement_expression, prefix_decrement)
-		EXPRESSION_TYPE(indirection_expression, indirection)
-		EXPRESSION_TYPE(pointer_expression, pointer)
-		EXPRESSION_TYPE(negation_expression, negation)
-		EXPRESSION_TYPE(logical_negation_expression, logical_negation)
-		EXPRESSION_TYPE(complement_expression, complement)
-		EXPRESSION_TYPE(multiplication_expression, multiplication)
-		EXPRESSION_TYPE(division_expression, division)
-		EXPRESSION_TYPE(modulo_expression, modulo)
-		EXPRESSION_TYPE(addition_expression, addition)
-		EXPRESSION_TYPE(subtraction_expression, subtraction)
-		EXPRESSION_TYPE(left_shift_expression, left_shift)
-		EXPRESSION_TYPE(right_shift_expression, right_shift)
-		EXPRESSION_TYPE(less_than_expression, less_than)
-		EXPRESSION_TYPE(less_than_or_equal_to_expression, less_than_or_equal_to)
-		EXPRESSION_TYPE(greater_than_expression, greater_than)
-		EXPRESSION_TYPE(greater_than_or_equal_to_expression, greater_than_or_equal_to)
-		EXPRESSION_TYPE(equal_to_expression, equal_to)
-		EXPRESSION_TYPE(not_equal_to_expression, not_equal_to)
-		EXPRESSION_TYPE(bitwise_and_expression, bitwise_and)
-		EXPRESSION_TYPE(bitwise_exclusive_or_expression, bitwise_exclusive_or)
-		EXPRESSION_TYPE(bitwise_inclusive_or_expression, bitwise_inclusive_or)
-		EXPRESSION_TYPE(logical_and_expression, logical_and)
-		EXPRESSION_TYPE(logical_or_expression, logical_or)
-		EXPRESSION_TYPE(conditional_expression, conditional)
-		EXPRESSION_TYPE(assignment_expression, assignment)
-		EXPRESSION_TYPE(multiplication_assignment_expression, multiplication_assignment)
-		EXPRESSION_TYPE(division_assignment_expression, division_assignment)
-		EXPRESSION_TYPE(modulo_assignment_expression, modulo_assignment)
-		EXPRESSION_TYPE(addition_assignment_expression, addition_assignment)
-		EXPRESSION_TYPE(subtraction_assignment_expression, subtraction_assignment)
-		EXPRESSION_TYPE(left_shift_assignment_expression, left_shift_assignment)
-		EXPRESSION_TYPE(right_shift_assignment_expression, right_shift_assignment)
-		EXPRESSION_TYPE(bitwise_and_assignment_expression, bitwise_and_assignment)
-		EXPRESSION_TYPE(bitwise_exclusive_or_assignment_expression, bitwise_exclusive_or_assignment)
-		EXPRESSION_TYPE(bitwise_inclusive_or_assignment_expression, bitwise_inclusive_or_assignment)
+		EXPRESSION_TYPE(prefix_increment_expression, "prefix increment")
+		EXPRESSION_TYPE(prefix_decrement_expression, "prefix decrement")
+		EXPRESSION_TYPE(indirection_expression, "indirection")
+		EXPRESSION_TYPE(pointer_expression, "pointer")
+		EXPRESSION_TYPE(negation_expression, "negation")
+		EXPRESSION_TYPE(logical_negation_expression, "logical negation")
+		EXPRESSION_TYPE(complement_expression, "complement")
+		EXPRESSION_TYPE(multiplication_expression, "multiplication")
+		EXPRESSION_TYPE(division_expression, "division")
+		EXPRESSION_TYPE(modulo_expression, "modulo")
+		EXPRESSION_TYPE(addition_expression, "addition")
+		EXPRESSION_TYPE(subtraction_expression, "subtraction")
+		EXPRESSION_TYPE(left_shift_expression, "left shift")
+		EXPRESSION_TYPE(right_shift_expression, "right shift")
+		EXPRESSION_TYPE(less_than_expression, "less than")
+		EXPRESSION_TYPE(less_than_or_equal_to_expression, "less than or equal to")
+		EXPRESSION_TYPE(greater_than_expression, "greater than")
+		EXPRESSION_TYPE(greater_than_or_equal_to_expression, "greater than or equal to")
+		EXPRESSION_TYPE(equal_to_expression, "equal to")
+		EXPRESSION_TYPE(not_equal_to_expression, "not equal to")
+		EXPRESSION_TYPE(bitwise_and_expression, "bitwise and")
+		EXPRESSION_TYPE(bitwise_exclusive_or_expression, "bitwise exclusive or")
+		EXPRESSION_TYPE(bitwise_inclusive_or_expression, "bitwise inclusive or")
+		EXPRESSION_TYPE(logical_and_expression, "logical and")
+		EXPRESSION_TYPE(logical_or_expression, "logical or")
+		EXPRESSION_TYPE(conditional_expression, "conditional")
+		EXPRESSION_TYPE(assignment_expression, "assignment")
+		EXPRESSION_TYPE(multiplication_assignment_expression, "multiplication assignment")
+		EXPRESSION_TYPE(division_assignment_expression, "division assignment")
+		EXPRESSION_TYPE(modulo_assignment_expression, "modulo assignment")
+		EXPRESSION_TYPE(addition_assignment_expression, "addition assignment")
+		EXPRESSION_TYPE(subtraction_assignment_expression, "subtraction assignment")
+		EXPRESSION_TYPE(left_shift_assignment_expression, "left shift assignment")
+		EXPRESSION_TYPE(right_shift_assignment_expression, "right shift assignment")
+		EXPRESSION_TYPE(bitwise_and_assignment_expression, "bitwise and assignment")
+		EXPRESSION_TYPE(bitwise_exclusive_or_assignment_expression, "bitwise exclusive or assignment")
+		EXPRESSION_TYPE(bitwise_inclusive_or_assignment_expression, "bitwise inclusive or assignment")
 
-		EXPRESSION_TYPE(conversion_to_bool, conversion_to_bool)
-		EXPRESSION_TYPE(conversion_to_int, conversion_to_int)
-		EXPRESSION_TYPE(conversion_to_long_int, conversion_to_long_int)
-		EXPRESSION_TYPE(conversion_to_unsigned_int, conversion_to_unsigned_int)
-		EXPRESSION_TYPE(conversion_to_unsigned_long_int, conversion_to_unsigned_long_int)
-		EXPRESSION_TYPE(conversion_to_float, conversion_to_float)
-		EXPRESSION_TYPE(conversion_to_double, conversion_to_double)
-		EXPRESSION_TYPE(conversion_to_long_double, conversion_to_long_double)
+		EXPRESSION_TYPE(conversion_to_bool, "conversion to bool")
+		EXPRESSION_TYPE(conversion_to_int, "conversion to int")
+		EXPRESSION_TYPE(conversion_to_long_int, "conversion to long int")
+		EXPRESSION_TYPE(conversion_to_unsigned_int, "conversion to unsigned int")
+		EXPRESSION_TYPE(conversion_to_unsigned_long_int, "conversion to unsigned long int")
+		EXPRESSION_TYPE(conversion_to_float, "conversion to float")
+		EXPRESSION_TYPE(conversion_to_double, "conversion to double")
+		EXPRESSION_TYPE(conversion_to_long_double, "conversion to long double")
 
-		EXPRESSION_TYPE(variable*, variable)
-		EXPRESSION_TYPE(enum_constant<int>*, int_enum_constant)
-		EXPRESSION_TYPE(enum_constant<unsigned int>*, unsigned_int_enum_constant)
-		EXPRESSION_TYPE(enum_constant<long int>*, long_int_enum_constant)
-		EXPRESSION_TYPE(enum_constant<unsigned long int>*, unsigned_long_int_enum_constant)
+		EXPRESSION_TYPE(variable*, "variable")
+		EXPRESSION_TYPE(enum_constant<int>*, "int enum constant")
+		EXPRESSION_TYPE(enum_constant<unsigned int>*, "unsigned int enum constant")
+		EXPRESSION_TYPE(enum_constant<long int>*, "long int enum constant")
+		EXPRESSION_TYPE(enum_constant<unsigned long int>*, "unsigned long int enum constant")
 
-		EXPRESSION_TYPE(bool, bool)
-		EXPRESSION_TYPE(char, char)
-		EXPRESSION_TYPE(wchar_t, wchar_t)
-		EXPRESSION_TYPE(int, int)
-		EXPRESSION_TYPE(long int, long int)
-		EXPRESSION_TYPE(long long int, long long int)
-		EXPRESSION_TYPE(unsigned int, unsigned int)
-		EXPRESSION_TYPE(unsigned long int, unsigned long int)
-		EXPRESSION_TYPE(unsigned long long int, unsigned long long int)
-		EXPRESSION_TYPE(float, float)
-		EXPRESSION_TYPE(double, double)
-		EXPRESSION_TYPE(long double, long double)
-		EXPRESSION_TYPE(std::string, string)
-		EXPRESSION_TYPE(std::wstring, wide string)
+		EXPRESSION_TYPE(bool, "bool")
+		EXPRESSION_TYPE(char, "char")
+		EXPRESSION_TYPE(wchar_t, "wchar_t")
+		EXPRESSION_TYPE(int, "int")
+		EXPRESSION_TYPE(long int, "long int")
+		EXPRESSION_TYPE(long long int, "long long int")
+		EXPRESSION_TYPE(unsigned int, "unsigned int")
+		EXPRESSION_TYPE(unsigned long int, "unsigned long int")
+		EXPRESSION_TYPE(unsigned long long int, "unsigned long long int")
+		EXPRESSION_TYPE(float, "float")
+		EXPRESSION_TYPE(double, "double")
+		EXPRESSION_TYPE(long double, "long double")
+		EXPRESSION_TYPE(std::string, "string")
+		EXPRESSION_TYPE(std::wstring, "wide string")
 	} get_expression_type_visitor;
 
 #undef EXPRESSION_TYPE
@@ -600,12 +595,10 @@ operator()(const TYPE) \
 
 semantic_graph_serializer::serialize_expression_visitor::serialize_expression_visitor
 (
-	semantic_graph_serializer& serializer,
-	const unsigned int indent_level
+	semantic_graph_serializer& serializer
 ):
 	serializer_(serializer),
-	output_(serializer_.output_),
-	indent_level_(indent_level)
+	output_(serializer_.output_)
 {
 }
 
@@ -613,98 +606,88 @@ template<typename T>
 void
 semantic_graph_serializer::serialize_expression_visitor::operator()(const T t)
 {
-	output_ << indent(indent_level_) << t << '\n';
+	serializer_.writer_.write_key_value_pair("value", t);
 }
 
 template<int Tag>
 void
 semantic_graph_serializer::serialize_expression_visitor::operator()(const unary_expression<Tag>& operation)
 {
-	output_ << indent(indent_level_) << "<operand>\n";
-	serializer_.serialize_expression(operation.operand(), indent_level_ + 1);
-	output_ << indent(indent_level_) << "</operand>\n";
+	serializer_.writer_.open_object("operand");
+	serializer_.serialize_expression(operation.operand());
+	serializer_.writer_.close_object();
 }
 
 template<int Tag>
 void
 semantic_graph_serializer::serialize_expression_visitor::operator()(const binary_expression<Tag>& operation)
 {
-	output_ << indent(indent_level_) << "<left_operand>\n";
-	serializer_.serialize_expression(operation.left_operand(), indent_level_ + 1);
-	output_ << indent(indent_level_) << "</left_operand>\n";
-	output_ << indent(indent_level_) << "<right_operand>\n";
-	serializer_.serialize_expression(operation.right_operand(), indent_level_ + 1);
-	output_ << indent(indent_level_) << "</right_operand>\n";
+	serializer_.writer_.open_object("left operand");
+	serializer_.serialize_expression(operation.left_operand());
+	serializer_.writer_.close_object();
+	serializer_.writer_.open_object("right operand");
+	serializer_.serialize_expression(operation.right_operand());
+	serializer_.writer_.close_object();
 }
 
 void
 semantic_graph_serializer::serialize_expression_visitor::operator()(const conditional_expression& operation)
 {
-	output_ << indent(indent_level_) << "<condition_operand>\n";
-	serializer_.serialize_expression(operation.condition_operand(), indent_level_ + 1);
-	output_ << indent(indent_level_) << "</condition_operand>\n";
-	output_ << indent(indent_level_) << "<true_operand>\n";
-	serializer_.serialize_expression(operation.true_operand(), indent_level_ + 1);
-	output_ << indent(indent_level_) << "</true_operand>\n";
-	output_ << indent(indent_level_) << "<false_operand>\n";
-	serializer_.serialize_expression(operation.false_operand(), indent_level_ + 1);
-	output_ << indent(indent_level_) << "</false_operand>\n";
+	serializer_.writer_.open_object("condition operand");
+	serializer_.serialize_expression(operation.condition_operand());
+	serializer_.writer_.close_object();
+	serializer_.writer_.open_object("true operand");
+	serializer_.serialize_expression(operation.true_operand());
+	serializer_.writer_.close_object();
+	serializer_.writer_.open_object("false operand");
+	serializer_.serialize_expression(operation.false_operand());
+	serializer_.writer_.close_object();
 }
 
 template<int Tag>
 void
 semantic_graph_serializer::serialize_expression_visitor::operator()(const conversion<Tag>& conv)
 {
-	output_ << indent(indent_level_) << "<source_value>\n";
-	serializer_.serialize_expression(conv.source_value(), indent_level_ + 1);
-	output_ << indent(indent_level_) << "</source_value>\n";
+	serializer_.writer_.open_object("source value");
+	serializer_.serialize_expression(conv.source_value());
+	serializer_.writer_.close_object();
 }
 
 void
 semantic_graph_serializer::serialize_expression_visitor::operator()(variable* const& v)
 {
-	output_ << indent(indent_level_) << "<variable id=\"" << serializer_.get_id(*v) << "\"/>\n";
+	serializer_.writer_.write_key_value_pair("id", serializer_.get_id(*v));
 }
 
 template<typename T>
 void
 semantic_graph_serializer::serialize_expression_visitor::operator()(enum_constant<T>* const constant)
 {
-	output_ << indent(indent_level_) << "<enum_constant id=\"" << serializer_.get_id(*constant) << "\"/>\n";
+	serializer_.writer_.write_key_value_pair("id", serializer_.get_id(*constant));
 }
 
 void
 semantic_graph_serializer::serialize_expression_visitor::operator()(const char c)
 {
-	output_ << indent(indent_level_) << static_cast<int>(c) << '\n';
-}
-
-void
-semantic_graph_serializer::serialize_expression_visitor::operator()(const bool b)
-{
-	output_ << indent(indent_level_) << (b ? "true" : "false") << '\n';
+	serializer_.writer_.write_key_value_pair("value", static_cast<int>(c));
 }
 
 void
 semantic_graph_serializer::serialize_expression_visitor::operator()(const std::string& str)
 {
-	output_ << indent(indent_level_);
-	output_ << std::hex;
+	serializer_.writer_.open_array("bytes");
 	for(char c: str)
-		output_ << (static_cast<int>(c) & 0xff) << ' ';
-	output_ << std::dec;
-	output_ << '\n';
+		serializer_.writer_.write_array_value(static_cast<int>(c) & 0xff);
+	serializer_.writer_.close_array();
 }
 
 void
 semantic_graph_serializer::serialize_expression_visitor::operator()(const std::wstring& str)
 {
-	output_ << indent(indent_level_);
-	output_ << std::hex;
+	serializer_.writer_.open_array("bytes");
 	for(wchar_t c: str)
-		output_ << static_cast<int>(c) << ' ';
-	output_ << std::dec;
-	output_ << '\n';
+		serializer_.writer_.write_array_value(static_cast<int>(c));
+	serializer_.writer_.close_array();
 }
 
 
@@ -712,18 +695,13 @@ semantic_graph_serializer::serialize_expression_visitor::operator()(const std::w
 void
 semantic_graph_serializer::serialize_expression
 (
-	const semantic_entities::expression_t& entity,
-	const unsigned int indent_level
+	const semantic_entities::expression_t& entity
 )
 {
-	output_ << indent(indent_level) << "<expression";
-	output_ << " type=\"" << apply_visitor(get_expression_type_visitor, entity) << "\"";
-	output_ << ">\n";
+	writer_.write_key_value_pair("type", apply_visitor(get_expression_type_visitor, entity));
 
-	serialize_expression_visitor visitor(*this, indent_level + 1);
+	serialize_expression_visitor visitor(*this);
 	apply_visitor(visitor, entity);
-
-	output_ << indent(indent_level) << "</expression>\n";
 }
 
 
@@ -733,11 +711,10 @@ template<> \
 void \
 semantic_graph_serializer::serialize_member<semantic_entities::TYPE> \
 ( \
-	const semantic_entities::TYPE& entity, \
-	const unsigned int indent_level \
+	const semantic_entities::TYPE& entity \
 ) \
 { \
-	FUNCTION(entity, indent_level); \
+	FUNCTION(entity); \
 }
 
 SERIALIZE_MEMBER(namespace_alias, serialize_namespace_alias)
@@ -934,6 +911,100 @@ semantic_graph_serializer::attribute(const semantic_entities::overloadable_opera
 	return oss.str();
 }
 
+std::string
+semantic_graph_serializer::overloadable_operator_to_string(const semantic_entities::overloadable_operator op)
+{
+	switch(op)
+	{
+		case semantic_entities::overloadable_operator::NEW:
+			return "new";
+		case semantic_entities::overloadable_operator::NEW_ARRAY:
+			return "new[]";
+		case semantic_entities::overloadable_operator::DELETE:
+			return "delete";
+		case semantic_entities::overloadable_operator::DELETE_ARRAY:
+			return "delete[]";
+		case semantic_entities::overloadable_operator::DOUBLE_RIGHT_ANGLE_BRACKET_EQUAL:
+			return ">>=";
+		case semantic_entities::overloadable_operator::DOUBLE_LEFT_ANGLE_BRACKET_EQUAL:
+			return "<<=";
+		case semantic_entities::overloadable_operator::ARROW_ASTERISK:
+			return "->*";
+		case semantic_entities::overloadable_operator::PLUS_EQUAL:
+			return "+=";
+		case semantic_entities::overloadable_operator::MINUS_EQUAL:
+			return "-=";
+		case semantic_entities::overloadable_operator::ASTERISK_EQUAL:
+			return "*=";
+		case semantic_entities::overloadable_operator::SLASH_EQUAL:
+			return "/=";
+		case semantic_entities::overloadable_operator::PERCENT_EQUAL:
+			return "%=";
+		case semantic_entities::overloadable_operator::CIRCUMFLEX_EQUAL:
+			return "^=";
+		case semantic_entities::overloadable_operator::AMPERSAND_EQUAL:
+			return "&=";
+		case semantic_entities::overloadable_operator::PIPE_EQUAL:
+			return "|=";
+		case semantic_entities::overloadable_operator::DOUBLE_LEFT_ANGLE_BRACKET:
+			return "<<";
+		case semantic_entities::overloadable_operator::DOUBLE_RIGHT_ANGLE_BRACKET:
+			return ">>";
+		case semantic_entities::overloadable_operator::DOUBLE_EQUAL:
+			return "==";
+		case semantic_entities::overloadable_operator::EXCLAMATION_EQUAL:
+			return "!=";
+		case semantic_entities::overloadable_operator::LEFT_ANGLE_BRACKET_EQUAL:
+			return "<=";
+		case semantic_entities::overloadable_operator::RIGHT_ANGLE_BRACKET_EQUAL:
+			return ">=";
+		case semantic_entities::overloadable_operator::DOUBLE_AMPERSAND:
+			return "&&";
+		case semantic_entities::overloadable_operator::DOUBLE_PIPE:
+			return "||";
+		case semantic_entities::overloadable_operator::DOUBLE_PLUS:
+			return "++";
+		case semantic_entities::overloadable_operator::DOUBLE_MINUS:
+			return "--";
+		case semantic_entities::overloadable_operator::ARROW:
+			return "->";
+		case semantic_entities::overloadable_operator::ROUND_BRACKETS:
+			return "()";
+		case semantic_entities::overloadable_operator::SQUARE_BRACKETS:
+			return "[]";
+		case semantic_entities::overloadable_operator::COMMA:
+			return ",";
+		case semantic_entities::overloadable_operator::PLUS:
+			return "+";
+		case semantic_entities::overloadable_operator::MINUS:
+			return "-";
+		case semantic_entities::overloadable_operator::ASTERISK:
+			return "*";
+		case semantic_entities::overloadable_operator::SLASH:
+			return "/";
+		case semantic_entities::overloadable_operator::PERCENT:
+			return "%";
+		case semantic_entities::overloadable_operator::CIRCUMFLEX:
+			return "^";
+		case semantic_entities::overloadable_operator::AMPERSAND:
+			return "&";
+		case semantic_entities::overloadable_operator::PIPE:
+			return "|";
+		case semantic_entities::overloadable_operator::TILDE:
+			return "~";
+		case semantic_entities::overloadable_operator::EXCLAMATION:
+			return "!";
+		case semantic_entities::overloadable_operator::EQUAL:
+			return "=";
+		case semantic_entities::overloadable_operator::LEFT_ANGLE_BRACKET:
+			return "<";
+		case semantic_entities::overloadable_operator::RIGHT_ANGLE_BRACKET:
+			return ">";
+	}
+
+	assert(false);
+}
+
 void
 semantic_graph_serializer::serialize_class_id_attribute
 (
@@ -941,9 +1012,9 @@ semantic_graph_serializer::serialize_class_id_attribute
 )
 {
 	if(const class_* const* opt = scalpel::utility::get<class_*>(&entity))
-		output_ << " class_id=\"" << get_id(**opt) << "\"";
+		writer_.write_key_value_pair("class id", get_id(**opt));
 	else if(const member_class* const* opt = scalpel::utility::get<member_class*>(&entity))
-		output_ << " member_class_id=\"" << get_id(**opt) << "\"";
+		writer_.write_key_value_pair("member class id", get_id(**opt));
 }
 
 

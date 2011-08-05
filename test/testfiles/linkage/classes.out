@@ -1,36 +1,68 @@
-<namespace id="0">
- <class id="0" name="c">
-  <destructor access="public" defined="false">
-  </destructor>
- </class>
- <simple_function id="0" name="f">
-  <return_type>
-   <fundamental_type type="void"/>
-  </return_type>
-  <parameters>
-   <parameter>
-    <type>
-     <reference>
-      <cv_qualified_type const="true">
-       <class id="0"/>
-      </cv_qualified_type>
-     </reference>
-    </type>
-   </parameter>
-  </parameters>
- </simple_function>
- <simple_function id="1" name="f">
-  <return_type>
-   <fundamental_type type="void"/>
-  </return_type>
-  <parameters>
-   <parameter>
-    <type>
-     <reference>
-      <class id="0"/>
-     </reference>
-    </type>
-   </parameter>
-  </parameters>
- </simple_function>
-</namespace>
+{
+  "id": 0,
+  "classes":
+  [
+    {
+      "id": 0,
+      "name": "c",
+      "destructor":
+      {
+        "access": "public"
+      }
+    }
+  ],
+  "simple functions":
+  [
+    {
+      "id": 0,
+      "name": "f",
+      "return type":
+      {
+        "category": "fundamental type",
+        "type": "void"
+      },
+      "parameters":
+      [
+        {
+          "type":
+          {
+            "category": "reference",
+            "qualified type":
+            {
+              "category": "cv-qualified type",
+              "const": true,
+              "qualified type":
+              {
+                "category": "class",
+                "id": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "f",
+      "return type":
+      {
+        "category": "fundamental type",
+        "type": "void"
+      },
+      "parameters":
+      [
+        {
+          "type":
+          {
+            "category": "reference",
+            "qualified type":
+            {
+              "category": "class",
+              "id": 0
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

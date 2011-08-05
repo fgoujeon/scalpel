@@ -28,59 +28,47 @@ template<class Namespace>
 void
 semantic_graph_serializer::serialize_namespace
 (
-	const Namespace& entity,
-	const unsigned int indent_level
+	const Namespace& entity
 )
 {
-	output_ << detail::indent(indent_level) << "<namespace";
-	output_ << " " << id_attribute_to_string(entity);
-	if(entity.name() != "")
+	writer_.write_key_value_pair("id", get_id(entity));
+	if(!entity.name().empty())
 	{
-		output_ << " name=\"" << entity.name() << "\"";
+		writer_.write_key_value_pair("name", entity.name());
 	}
-	output_ << ">\n";
 
-	serialize_members(entity, indent_level + 1);
-	serialize_entity_aliases(entity, indent_level + 1);
-
-	output_ << detail::indent(indent_level) << "</namespace>\n";
+	serialize_members(entity);
+	serialize_entity_aliases(entity);
 }
 
 template<class Namespace>
 void
 semantic_graph_serializer::serialize_unnamed_namespace
 (
-	const Namespace& entity,
-	const unsigned int indent_level
+	const Namespace& entity
 )
 {
-	output_ << detail::indent(indent_level) << "<unnamed_namespace>\n";
-	serialize_members(entity, indent_level + 1);
-	serialize_entity_aliases(entity, indent_level + 1);
-	output_ << detail::indent(indent_level) << "</unnamed_namespace>\n";
+	serialize_members(entity);
+	serialize_entity_aliases(entity);
 }
 
 template<class Class>
 void
 semantic_graph_serializer::serialize_class
 (
-	const Class& entity,
-	const unsigned int indent_level
+	const Class& entity
 )
 {
-	output_ << detail::indent(indent_level) << "<" << markup_name<Class>::value;
-	output_ << " " << id_attribute_to_string(entity);
+	writer_.write_key_value_pair("id", get_id(entity));
 	serialize_name_property(entity);
 	serialize_access_property(entity);
+
 	if(!entity.complete())
-		output_ << " complete=\"false\"";
-	output_ << ">\n";
+		writer_.write_key_value_pair("complete", false);
 
-	serialize_base_classes(entity, indent_level + 1);
-	serialize_members(entity, indent_level + 1);
-	serialize_entity_aliases(entity, indent_level + 1);
-
-	output_ << detail::indent(indent_level) << "</" << markup_name<Class>::value << ">\n";
+	serialize_base_classes(entity);
+	serialize_members(entity);
+	serialize_entity_aliases(entity);
 }
 
 
@@ -88,13 +76,11 @@ semantic_graph_serializer::serialize_class
 semantic_graph_serializer::serialize_enum_visitor::serialize_enum_visitor
 (
 	semantic_graph_serializer& serializer,
-	const unsigned int indent_level,
-	const std::string& id_str
+	const unsigned int id
 ):
 	serializer_(serializer),
 	output_(serializer.output_),
-	indent_level_(indent_level),
-	id_str_(id_str)
+	id_(id)
 {
 }
 
@@ -102,36 +88,32 @@ template<template<typename> class BasicEnum, typename UnderlyingType>
 void
 semantic_graph_serializer::serialize_enum_visitor::operator()(const BasicEnum<UnderlyingType>& entity) const
 {
-	output_ << detail::indent(indent_level_) << "<enum";
-	output_ << " " << id_str_;
+	serializer_.writer_.write_key_value_pair("id", id_);
 	if(!entity.name().empty())
-		output_ << " name=\"" << entity.name() << "\"";
+		serializer_.writer_.write_key_value_pair("name", entity.name());
 	serializer_.serialize_access_property(entity);
-	output_ << ">\n";
 
-	for(auto i = entity.constants().begin(); i != entity.constants().end(); ++i)
+	serializer_.writer_.open_array("constants");
+	for(const enum_constant<UnderlyingType>& constant: entity.constants())
 	{
-		const enum_constant<UnderlyingType>& constant = *i;
-		output_ << detail::indent(indent_level_ + 1) << "<constant";
-		output_ << " name=\"" << constant.name() << "\"";
-		output_ << " " << serializer_.id_attribute_to_string(constant);
-		output_ << " value=\"" << constant.value() << "\"";
-		output_ << ">\n";
+		serializer_.writer_.open_object();
+		serializer_.writer_.write_key_value_pair("name", constant.name());
+		serializer_.writer_.write_key_value_pair("id", serializer_.get_id(constant));
+		serializer_.writer_.write_key_value_pair("value", constant.value());
+		serializer_.writer_.close_object();
 	}
-
-	output_ << detail::indent(indent_level_) << "</enum>\n";
+	serializer_.writer_.close_array();
 }
 
 template<class Enum>
 void
 semantic_graph_serializer::serialize_enum
 (
-	const Enum& entity,
-	const unsigned int indent_level
+	const Enum& entity
 )
 {
-	const std::string id_str = id_attribute_to_string(entity);
-	serialize_enum_visitor visitor(*this, indent_level, id_str);
+	unsigned int id = get_id(entity);
+	serialize_enum_visitor visitor(*this, id);
 	apply_visitor(visitor, entity);
 }
 
@@ -141,48 +123,42 @@ template<class Variable>
 void
 semantic_graph_serializer::serialize_variable
 (
-	const Variable& entity,
-	const unsigned int indent_level
+	const Variable& entity
 )
 {
-	output_ << detail::indent(indent_level) << "<" << markup_name<Variable>::value;
-	output_ << " " << id_attribute_to_string(entity);
-	if(!entity.name().empty())
-		output_ << " name=\"" << entity.name() << "\"";
+	serialize_id_attribute(entity);
+	serialize_name_property(entity);
 	serialize_bit_field_size_property(entity);
 	serialize_access_property(entity);
 	serialize_mutable_property(entity);
 	serialize_static_property(entity);
-	output_ << ">\n";
-	output_ << detail::indent(indent_level + 1) << "<type>\n";
-	serialize_type(entity.type(), indent_level + 2);
-	output_ << detail::indent(indent_level + 1) << "</type>\n";
+
+	writer_.open_object("type");
+	serialize_type(entity.type());
+	writer_.close_object();
+
 	if(entity.default_value())
 	{
-		output_ << detail::indent(indent_level + 1) << "<default_value>\n";
-		serialize_expression(*entity.default_value(), indent_level + 2);
-		output_ << detail::indent(indent_level + 1) << "</default_value>\n";
+		writer_.open_object("default value");
+		serialize_expression(*entity.default_value());
+		writer_.close_object();
 	}
-	output_ << detail::indent(indent_level) << "</" << markup_name<Variable>::value << ">\n";
 }
 
 template<class Typedef>
 void
 semantic_graph_serializer::serialize_typedef
 (
-	const Typedef& entity,
-	const unsigned int indent_level
+	const Typedef& entity
 )
 {
-	output_ << detail::indent(indent_level) << "<typedef";
-	output_ << " " << id_attribute_to_string(entity);
-	output_ << " name=\"" << entity.name() << "\"";
+	serialize_id_attribute(entity);
+	serialize_name_property(entity);
 	serialize_access_property(entity);
-	output_ << ">\n";
-	output_ << detail::indent(indent_level + 1) << "<type>\n";
-	serialize_type(entity.type(), indent_level + 2);
-	output_ << detail::indent(indent_level + 1) << "</type>\n";
-	output_ << detail::indent(indent_level) << "</typedef>\n";
+
+	writer_.open_object("type");
+	serialize_type(entity.type());
+	writer_.close_object();
 }
 
 
@@ -192,20 +168,33 @@ void
 semantic_graph_serializer::serialize_base_classes
 (
 	const Entity& entity,
-	const unsigned int indent_level,
 	typename boost::enable_if<scalpel::cpp::semantic_entities::type_traits::has_base_classes<Entity>>::type*
 )
 {
 	if(!entity.base_classes().empty())
 	{
-		output_ << detail::indent(indent_level) << "<base_classes>\n";
+		writer_.open_array("base classes");
 		for(auto i = entity.base_classes().begin(); i != entity.base_classes().end(); ++i)
-			serialize_base_class(*i, indent_level + 1);
-		output_ << detail::indent(indent_level) << "</base_classes>\n";
+			serialize_base_class(*i);
+		writer_.close_array();
 	}
 }
 
 
+
+template<class Entity>
+void
+semantic_graph_serializer::serialize_id_attribute(const Entity& entity)
+{
+	writer_.write_key_value_pair("id", get_id(entity));
+}
+
+template<class Entity>
+void
+semantic_graph_serializer::serialize_overloaded_operator(const Entity& entity)
+{
+	writer_.write_key_value_pair("overloaded operator", overloadable_operator_to_string(entity.overloaded_operator()));
+}
 
 template<class Entity>
 void
@@ -216,7 +205,7 @@ semantic_graph_serializer::serialize_name_property
 )
 {
 	if(!entity.name().empty())
-		output_ << " name=\"" << entity.name() << "\"";
+		writer_.write_key_value_pair("name", entity.name());
 }
 
 template<class Entity>
@@ -227,20 +216,18 @@ semantic_graph_serializer::serialize_access_property
 	typename boost::enable_if<scalpel::cpp::semantic_entities::type_traits::is_member<Entity>>::type*
 )
 {
-	output_ << " access=\"";
 	switch(entity.access())
 	{
 		case member_access::PUBLIC:
-			output_ << "public";
+			writer_.write_key_value_pair("access", "public");
 			break;
 		case member_access::PROTECTED:
-			output_ << "protected";
+			writer_.write_key_value_pair("access", "protected");
 			break;
 		case member_access::PRIVATE:
-			output_ << "private";
+			writer_.write_key_value_pair("access", "private");
 			break;
 	}
-	output_ << "\"";
 }
 
 template<class Entity>
@@ -252,7 +239,7 @@ semantic_graph_serializer::serialize_static_property
 )
 {
 	if(entity.is_static())
-		output_ << " static=\"true\"";
+		writer_.write_key_value_pair("static", "true");
 }
 
 template<class Entity>
@@ -264,7 +251,7 @@ semantic_graph_serializer::serialize_mutable_property
 )
 {
 	if(entity.is_mutable())
-		output_ << " mutable=\"true\"";
+		writer_.write_key_value_pair("mutable", "true");
 }
 
 template<class Entity>
@@ -275,7 +262,7 @@ semantic_graph_serializer::serialize_bit_field_size_property
 	typename boost::enable_if<boost::is_same<Entity, bit_field>>::type*
 )
 {
-	output_ << " size=\"" << entity.size() << "\"";
+	writer_.write_key_value_pair("size", entity.size());
 }
 
 } //namespace cpp2xml

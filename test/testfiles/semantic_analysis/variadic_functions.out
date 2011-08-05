@@ -1,37 +1,82 @@
-<namespace id="0">
- <class id="0" name="s">
-  <constructor access="public" variadic="true" inline="true">
-   <parameters>
-    <parameter>
-     <type>
-      <fundamental_type type="int"/>
-     </type>
-    </parameter>
-   </parameters>
-  </constructor>
-  <destructor access="public" defined="false">
-  </destructor>
-  <simple_member_function id="0" name="f" access="public" variadic="true" defined="false">
-   <return_type>
-    <fundamental_type type="bool"/>
-   </return_type>
-  </simple_member_function>
- </class>
- <simple_function id="0" name="f" variadic="true">
-  <return_type>
-   <fundamental_type type="void"/>
-  </return_type>
- </simple_function>
- <simple_function id="1" name="g" variadic="true" defined="false">
-  <return_type>
-   <fundamental_type type="void"/>
-  </return_type>
-  <parameters>
-   <parameter>
-    <type>
-     <fundamental_type type="double"/>
-    </type>
-   </parameter>
-  </parameters>
- </simple_function>
-</namespace>
+{
+  "id": 0,
+  "classes":
+  [
+    {
+      "id": 0,
+      "name": "s",
+      "constructors":
+      [
+        {
+          "access": "public",
+          "variadic": true,
+          "inline": true,
+          "defined": true,
+          "parameters":
+          [
+            {
+              "type":
+              {
+                "category": "fundamental type",
+                "type": "int"
+              }
+            }
+          ]
+        }
+      ],
+      "destructor":
+      {
+        "access": "public"
+      },
+      "simple functions":
+      [
+        {
+          "id": 0,
+          "name": "f",
+          "access": "public",
+          "variadic": true,
+          "defined": false,
+          "return type":
+          {
+            "category": "fundamental type",
+            "type": "bool"
+          }
+        }
+      ]
+    }
+  ],
+  "simple functions":
+  [
+    {
+      "id": 0,
+      "name": "f",
+      "variadic": true,
+      "return type":
+      {
+        "category": "fundamental type",
+        "type": "void"
+      }
+    },
+    {
+      "id": 1,
+      "name": "g",
+      "variadic": true,
+      "defined": false,
+      "return type":
+      {
+        "category": "fundamental type",
+        "type": "void"
+      },
+      "parameters":
+      [
+        {
+          "type":
+          {
+            "category": "fundamental type",
+            "type": "double"
+          }
+        }
+      ]
+    }
+  ]
+}

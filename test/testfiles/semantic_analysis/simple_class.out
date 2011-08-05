@@ -1,41 +1,90 @@
-<namespace id="0">
- <class id="0" name="square">
-  <constructor access="public">
-   <parameters>
-    <parameter name="size">
-     <type>
-      <cv_qualified_type const="true">
-       <fundamental_type type="unsigned int"/>
-      </cv_qualified_type>
-     </type>
-    </parameter>
-   </parameters>
-  </constructor>
-  <destructor access="public" defined="false">
-  </destructor>
-  <simple_member_function id="0" name="size" access="public" const="true">
-   <return_type>
-    <fundamental_type type="unsigned int"/>
-   </return_type>
-  </simple_member_function>
-  <simple_member_function id="1" name="size" access="public">
-   <return_type>
-    <fundamental_type type="void"/>
-   </return_type>
-   <parameters>
-    <parameter name="size">
-     <type>
-      <cv_qualified_type const="true">
-       <fundamental_type type="unsigned int"/>
-      </cv_qualified_type>
-     </type>
-    </parameter>
-   </parameters>
-  </simple_member_function>
-  <variable id="0" name="size_" access="private">
-   <type>
-    <fundamental_type type="unsigned int"/>
-   </type>
-  </variable>
- </class>
-</namespace>
+{
+  "id": 0,
+  "classes":
+  [
+    {
+      "id": 0,
+      "name": "square",
+      "constructors":
+      [
+        {
+          "access": "public",
+          "defined": true,
+          "parameters":
+          [
+            {
+              "name": "size",
+              "type":
+              {
+                "category": "cv-qualified type",
+                "const": true,
+                "qualified type":
+                {
+                  "category": "fundamental type",
+                  "type": "unsigned int"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "destructor":
+      {
+        "access": "public"
+      },
+      "simple functions":
+      [
+        {
+          "id": 0,
+          "name": "size",
+          "access": "public",
+          "const": true,
+          "return type":
+          {
+            "category": "fundamental type",
+            "type": "unsigned int"
+          }
+        },
+        {
+          "id": 1,
+          "name": "size",
+          "access": "public",
+          "return type":
+          {
+            "category": "fundamental type",
+            "type": "void"
+          },
+          "parameters":
+          [
+            {
+              "name": "size",
+              "type":
+              {
+                "category": "cv-qualified type",
+                "const": true,
+                "qualified type":
+                {
+                  "category": "fundamental type",
+                  "type": "unsigned int"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "variables":
+      [
+        {
+          "id": 0,
+          "name": "size_",
+          "access": "private",
+          "type":
+          {
+            "category": "fundamental type",
+            "type": "unsigned int"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,64 +1,117 @@
-<namespace id="0">
- <simple_function id="0" name="f">
-  <return_type>
-   <fundamental_type type="void"/>
-  </return_type>
-  <parameters>
-   <parameter>
-    <type>
-     <cv_qualified_type const="true">
-      <fundamental_type type="int"/>
-     </cv_qualified_type>
-    </type>
-   </parameter>
-  </parameters>
- </simple_function>
- <simple_function id="1" name="g">
-  <return_type>
-   <fundamental_type type="void"/>
-  </return_type>
-  <parameters>
-   <parameter>
-    <type>
-     <cv_qualified_type const="true" volatile="true">
-      <fundamental_type type="int"/>
-     </cv_qualified_type>
-    </type>
-   </parameter>
-  </parameters>
- </simple_function>
- <simple_function id="2" name="h">
-  <return_type>
-   <fundamental_type type="void"/>
-  </return_type>
-  <parameters>
-   <parameter>
-    <type>
-     <cv_qualified_type const="true" volatile="true">
-      <pointer>
-       <fundamental_type type="int"/>
-      </pointer>
-     </cv_qualified_type>
-    </type>
-   </parameter>
-  </parameters>
- </simple_function>
- <simple_function id="3" name="i">
-  <return_type>
-   <fundamental_type type="void"/>
-  </return_type>
-  <parameters>
-   <parameter>
-    <type>
-     <cv_qualified_type const="true">
-      <pointer>
-       <cv_qualified_type const="true">
-        <fundamental_type type="double"/>
-       </cv_qualified_type>
-      </pointer>
-     </cv_qualified_type>
-    </type>
-   </parameter>
-  </parameters>
- </simple_function>
-</namespace>
+{
+  "id": 0,
+  "simple functions":
+  [
+    {
+      "id": 0,
+      "name": "f",
+      "return type":
+      {
+        "category": "fundamental type",
+        "type": "void"
+      },
+      "parameters":
+      [
+        {
+          "type":
+          {
+            "category": "cv-qualified type",
+            "const": true,
+            "qualified type":
+            {
+              "category": "fundamental type",
+              "type": "int"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "g",
+      "return type":
+      {
+        "category": "fundamental type",
+        "type": "void"
+      },
+      "parameters":
+      [
+        {
+          "type":
+          {
+            "category": "cv-qualified type",
+            "const": true,
+            "volatile": true,
+            "qualified type":
+            {
+              "category": "fundamental type",
+              "type": "int"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "h",
+      "return type":
+      {
+        "category": "fundamental type",
+        "type": "void"
+      },
+      "parameters":
+      [
+        {
+          "type":
+          {
+            "category": "cv-qualified type",
+            "const": true,
+            "volatile": true,
+            "qualified type":
+            {
+              "category": "pointer",
+              "qualified type":
+              {
+                "category": "fundamental type",
+                "type": "int"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "i",
+      "return type":
+      {
+        "category": "fundamental type",
+        "type": "void"
+      },
+      "parameters":
+      [
+        {
+          "type":
+          {
+            "category": "cv-qualified type",
+            "const": true,
+            "qualified type":
+            {
+              "category": "pointer",
+              "qualified type":
+              {
+                "category": "cv-qualified type",
+                "const": true,
+                "qualified type":
+                {
+                  "category": "fundamental type",
+                  "type": "double"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

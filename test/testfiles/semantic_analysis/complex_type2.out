@@ -1,21 +1,46 @@
-<namespace id="0">
- <variable id="0" name="i">
-  <type>
-   <pointer>
-    <pointer>
-     <array size="3">
-      <pointer>
-       <cv_qualified_type const="true">
-        <pointer>
-         <array size="5">
-          <fundamental_type type="int"/>
-         </array>
-        </pointer>
-       </cv_qualified_type>
-      </pointer>
-     </array>
-    </pointer>
-   </pointer>
-  </type>
- </variable>
-</namespace>
+{
+  "id": 0,
+  "variables":
+  [
+    {
+      "id": 0,
+      "name": "i",
+      "type":
+      {
+        "category": "pointer",
+        "qualified type":
+        {
+          "category": "pointer",
+          "qualified type":
+          {
+            "category": "array",
+            "size": 3,
+            "qualified type":
+            {
+              "category": "pointer",
+              "qualified type":
+              {
+                "category": "cv-qualified type",
+                "const": true,
+                "qualified type":
+                {
+                  "category": "pointer",
+                  "qualified type":
+                  {
+                    "category": "array",
+                    "size": 5,
+                    "qualified type":
+                    {
+                      "category": "fundamental type",
+                      "type": "int"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

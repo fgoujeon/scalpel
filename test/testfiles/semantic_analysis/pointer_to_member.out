@@ -1,47 +1,102 @@
-<namespace id="0">
- <namespace id="1" name="n">
-  <class id="0" name="c">
-   <destructor access="public" defined="false">
-   </destructor>
-  </class>
-  <variable id="0" name="fun_ptr">
-   <type>
-    <pointer_to_member  class_id="0">
-     <function_type>
-      <return_type>
-       <fundamental_type type="void"/>
-      </return_type>
-      <parameter_types>
-       <fundamental_type type="int"/>
-      </parameter_types>
-     </function_type>
-    </pointer_to_member>
-   </type>
-  </variable>
-  <variable id="1" name="int_ptr">
-   <type>
-    <pointer_to_member  class_id="1">
-     <fundamental_type type="int"/>
-    </pointer_to_member>
-   </type>
-  </variable>
- </namespace>
- <class id="1" name="c">
-  <destructor access="public" defined="false">
-  </destructor>
- </class>
- <simple_function id="0" name="f">
-  <return_type>
-   <fundamental_type type="void"/>
-  </return_type>
-  <parameters>
-   <parameter name="int_ptr">
-    <type>
-     <pointer_to_member  class_id="1">
-      <fundamental_type type="int"/>
-     </pointer_to_member>
-    </type>
-   </parameter>
-  </parameters>
- </simple_function>
-</namespace>
+{
+  "id": 0,
+  "namespaces":
+  [
+    {
+      "id": 1,
+      "name": "n",
+      "classes":
+      [
+        {
+          "id": 0,
+          "name": "c",
+          "destructor":
+          {
+            "access": "public"
+          }
+        }
+      ],
+      "variables":
+      [
+        {
+          "id": 0,
+          "name": "fun_ptr",
+          "type":
+          {
+            "category": "pointer to member",
+            "class id": 0,
+            "qualified type":
+            {
+              "category": "function type",
+              "return type":
+              {
+                "category": "fundamental type",
+                "type": "void"
+              },
+              "parameter types":
+              [
+                {
+                  "category": "fundamental type",
+                  "type": "int"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": 1,
+          "name": "int_ptr",
+          "type":
+          {
+            "category": "pointer to member",
+            "class id": 1,
+            "qualified type":
+            {
+              "category": "fundamental type",
+              "type": "int"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "classes":
+  [
+    {
+      "id": 1,
+      "name": "c",
+      "destructor":
+      {
+        "access": "public"
+      }
+    }
+  ],
+  "simple functions":
+  [
+    {
+      "id": 0,
+      "name": "f",
+      "return type":
+      {
+        "category": "fundamental type",
+        "type": "void"
+      },
+      "parameters":
+      [
+        {
+          "name": "int_ptr",
+          "type":
+          {
+            "category": "pointer to member",
+            "class id": 1,
+            "qualified type":
+            {
+              "category": "fundamental type",
+              "type": "int"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

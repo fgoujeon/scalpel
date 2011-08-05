@@ -1,34 +1,73 @@
-<namespace id="0">
- <variable id="0" name="i">
-  <type>
-   <pointer>
-    <pointer>
-     <pointer>
-      <pointer>
-       <cv_qualified_type const="true">
-        <pointer>
-         <pointer>
-          <cv_qualified_type const="true" volatile="true">
-           <pointer>
-            <cv_qualified_type const="true">
-             <fundamental_type type="unsigned long int"/>
-            </cv_qualified_type>
-           </pointer>
-          </cv_qualified_type>
-         </pointer>
-        </pointer>
-       </cv_qualified_type>
-      </pointer>
-     </pointer>
-    </pointer>
-   </pointer>
-  </type>
- </variable>
- <variable id="1" name="j">
-  <type>
-   <cv_qualified_type const="true">
-    <fundamental_type type="unsigned long int"/>
-   </cv_qualified_type>
-  </type>
- </variable>
-</namespace>
+{
+  "id": 0,
+  "variables":
+  [
+    {
+      "id": 0,
+      "name": "i",
+      "type":
+      {
+        "category": "pointer",
+        "qualified type":
+        {
+          "category": "pointer",
+          "qualified type":
+          {
+            "category": "pointer",
+            "qualified type":
+            {
+              "category": "pointer",
+              "qualified type":
+              {
+                "category": "cv-qualified type",
+                "const": true,
+                "qualified type":
+                {
+                  "category": "pointer",
+                  "qualified type":
+                  {
+                    "category": "pointer",
+                    "qualified type":
+                    {
+                      "category": "cv-qualified type",
+                      "const": true,
+                      "volatile": true,
+                      "qualified type":
+                      {
+                        "category": "pointer",
+                        "qualified type":
+                        {
+                          "category": "cv-qualified type",
+                          "const": true,
+                          "qualified type":
+                          {
+                            "category": "fundamental type",
+                            "type": "unsigned long int"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": 1,
+      "name": "j",
+      "type":
+      {
+        "category": "cv-qualified type",
+        "const": true,
+        "qualified type":
+        {
+          "category": "fundamental type",
+          "type": "unsigned long int"
+        }
+      }
+    }
+  ]
+}

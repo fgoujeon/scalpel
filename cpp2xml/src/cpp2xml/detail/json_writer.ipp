@@ -18,69 +18,46 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_UTILITY_SINGLE_OBJECT_RANGE_HPP
-#define SCALPEL_UTILITY_SINGLE_OBJECT_RANGE_HPP
+#ifndef CPP2XML_DETAIL_JSON_WRITER_IPP
+#define CPP2XML_DETAIL_JSON_WRITER_IPP
 
-#include "single_object_const_range.hpp"
-
-namespace scalpel { namespace utility
+namespace cpp2xml { namespace detail
 {
 
 template<typename T>
-class single_object_range
+void
+json_writer::write_key_value_pair
+(
+	const std::string& key,
+	const T value,
+	typename boost::enable_if<boost::is_arithmetic<T>>::type*
+)
 {
-	public:
-		typedef T value_type;
-		typedef T& reference;
-		class iterator;
+	if(!first_item_) output_ << ',';
+	first_item_ = false;
 
-		//empty range
-		single_object_range();
-
-		single_object_range(T& object);
-
-		operator single_object_const_range<T>() const;
-
-		bool
-		empty() const;
-
-		iterator
-		begin();
-
-		iterator
-		end();
-
-	private:
-		T* object_;
-};
+	output_ << '\n';
+	indent();
+	output_ << '"' << key << "\": " << value;
+}
 
 template<typename T>
-class single_object_range<T>::iterator
+void
+json_writer::write_array_value
+(
+	const T value,
+	typename boost::enable_if<boost::is_arithmetic<T>>::type*
+)
 {
-	public:
-		iterator();
+	if(!first_item_) output_ << ',';
+	first_item_ = false;
 
-		iterator(T& object);
+	output_ << '\n';
+	indent();
+	output_ << value;
+}
 
-		bool
-		operator==(const iterator& rhs);
-
-		bool
-		operator!=(const iterator& rhs);
-
-		iterator
-		operator++();
-
-		T&
-		operator*();
-
-	private:
-		T* object_;
-};
-
-}} //namespace scalpel::utility
-
-#include "single_object_range.ipp"
+}} //namespace cpp2xml::detail
 
 #endif
 

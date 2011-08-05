@@ -46,6 +46,13 @@ single_object_range<T>::operator single_object_const_range<T>() const
 }
 
 template<typename T>
+bool
+single_object_range<T>::empty() const
+{
+	return !object_;
+}
+
+template<typename T>
 typename single_object_range<T>::iterator
 single_object_range<T>::begin()
 {

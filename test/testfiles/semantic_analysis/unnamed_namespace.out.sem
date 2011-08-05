@@ -1,0 +1,50 @@
+{
+  "id": 0,
+  "unnamed namespace":
+  {
+    "classes":
+    [
+      {
+        "id": 0,
+        "name": "c",
+        "destructor":
+        {
+          "access": "public"
+        }
+      }
+    ],
+    "variables":
+    [
+      {
+        "id": 0,
+        "name": "i",
+        "type":
+        {
+          "category": "fundamental type",
+          "type": "int"
+        }
+      }
+    ]
+  },
+  "variables":
+  [
+    {
+      "id": 1,
+      "name": "c0",
+      "type":
+      {
+        "category": "class",
+        "id": 0
+      }
+    },
+    {
+      "id": 2,
+      "name": "i",
+      "type":
+      {
+        "category": "fundamental type",
+        "type": "int"
+      }
+    }
+  ]
+}

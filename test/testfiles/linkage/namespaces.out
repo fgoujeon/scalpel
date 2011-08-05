@@ -1,10 +1,25 @@
-<namespace id="0">
- <namespace id="1" name="m">
- </namespace>
- <namespace id="2" name="n">
-  <namespace id="3" name="n2">
-  </namespace>
-  <namespace id="4" name="n3">
-  </namespace>
- </namespace>
-</namespace>
+{
+  "id": 0,
+  "namespaces":
+  [
+    {
+      "id": 1,
+      "name": "m"
+    },
+    {
+      "id": 2,
+      "name": "n",
+      "namespaces":
+      [
+        {
+          "id": 3,
+          "name": "n2"
+        },
+        {
+          "id": 4,
+          "name": "n3"
+        }
+      ]
+    }
+  ]
+}

@@ -1,13 +1,33 @@
-<namespace id="0">
- <namespace id="1" name="n">
-  <class id="0" name="c">
-   <destructor access="public" defined="false">
-   </destructor>
-  </class>
- </namespace>
- <variable id="0" name="a_c">
-  <type>
-   <class id="0"/>
-  </type>
- </variable>
-</namespace>
+{
+  "id": 0,
+  "namespaces":
+  [
+    {
+      "id": 1,
+      "name": "n",
+      "classes":
+      [
+        {
+          "id": 0,
+          "name": "c",
+          "destructor":
+          {
+            "access": "public"
+          }
+        }
+      ]
+    }
+  ],
+  "variables":
+  [
+    {
+      "id": 0,
+      "name": "a_c",
+      "type":
+      {
+        "category": "class",
+        "id": 0
+      }
+    }
+  ]
+}

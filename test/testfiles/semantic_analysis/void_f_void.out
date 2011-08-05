@@ -1,7 +1,15 @@
-<namespace id="0">
- <simple_function id="0" name="f">
-  <return_type>
-   <fundamental_type type="void"/>
-  </return_type>
- </simple_function>
-</namespace>
+{
+  "id": 0,
+  "simple functions":
+  [
+    {
+      "id": 0,
+      "name": "f",
+      "return type":
+      {
+        "category": "fundamental type",
+        "type": "void"
+      }
+    }
+  ]
+}

@@ -1,14 +1,37 @@
-<namespace id="0">
- <class id="0" name="c">
-  <union id="0" name="u" access="private">
-   <destructor access="public" defined="false">
-   </destructor>
-  </union>
-  <destructor access="public" defined="false">
-  </destructor>
- </class>
- <union id="0" name="u">
-  <destructor access="public" defined="false">
-  </destructor>
- </union>
-</namespace>
+{
+  "id": 0,
+  "classes":
+  [
+    {
+      "id": 0,
+      "name": "c",
+      "unions":
+      [
+        {
+          "id": 0,
+          "name": "u",
+          "access": "private",
+          "destructor":
+          {
+            "access": "public"
+          }
+        }
+      ],
+      "destructor":
+      {
+        "access": "public"
+      }
+    }
+  ],
+  "unions":
+  [
+    {
+      "id": 0,
+      "name": "u",
+      "destructor":
+      {
+        "access": "public"
+      }
+    }
+  ]
+}

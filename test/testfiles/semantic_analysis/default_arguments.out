@@ -1,26 +1,47 @@
-<namespace id="0">
- <simple_function id="0" name="f" defined="false">
-  <return_type>
-   <fundamental_type type="void"/>
-  </return_type>
-  <parameters>
-   <parameter name="i">
-    <type>
-     <fundamental_type type="int"/>
-    </type>
-   </parameter>
-  </parameters>
- </simple_function>
- <simple_function id="1" name="g" defined="false">
-  <return_type>
-   <fundamental_type type="void"/>
-  </return_type>
-  <parameters>
-   <parameter>
-    <type>
-     <fundamental_type type="int"/>
-    </type>
-   </parameter>
-  </parameters>
- </simple_function>
-</namespace>
+{
+  "id": 0,
+  "simple functions":
+  [
+    {
+      "id": 0,
+      "name": "f",
+      "defined": false,
+      "return type":
+      {
+        "category": "fundamental type",
+        "type": "void"
+      },
+      "parameters":
+      [
+        {
+          "name": "i",
+          "type":
+          {
+            "category": "fundamental type",
+            "type": "int"
+          }
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "g",
+      "defined": false,
+      "return type":
+      {
+        "category": "fundamental type",
+        "type": "void"
+      },
+      "parameters":
+      [
+        {
+          "type":
+          {
+            "category": "fundamental type",
+            "type": "int"
+          }
+        }
+      ]
+    }
+  ]
+}

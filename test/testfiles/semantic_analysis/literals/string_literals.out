@@ -1,98 +1,201 @@
-<namespace id="0">
- <variable id="0" name="str1">
-  <type>
-   <array size="5">
-    <fundamental_type type="char"/>
-   </array>
-  </type>
-  <default_value>
-   <expression type="string">
-    74 65 73 74 
-   </expression>
-  </default_value>
- </variable>
- <variable id="1" name="str2">
-  <type>
-   <array size="6">
-    <fundamental_type type="char"/>
-   </array>
-  </type>
-  <default_value>
-   <expression type="string">
-    20 41 20 a 20 
-   </expression>
-  </default_value>
- </variable>
- <variable id="2" name="str3">
-  <type>
-   <array size="3">
-    <fundamental_type type="char"/>
-   </array>
-  </type>
-  <default_value>
-   <expression type="string">
-    60 62 
-   </expression>
-  </default_value>
- </variable>
- <variable id="3" name="str4">
-  <type>
-   <array size="4">
-    <fundamental_type type="char"/>
-   </array>
-  </type>
-  <default_value>
-   <expression type="string">
-    c3 bf 7a 
-   </expression>
-  </default_value>
- </variable>
- <variable id="4" name="wstr1">
-  <type>
-   <array size="5">
-    <fundamental_type type="wchar_t"/>
-   </array>
-  </type>
-  <default_value>
-   <expression type="wide string">
-    74 65 73 74 
-   </expression>
-  </default_value>
- </variable>
- <variable id="5" name="wstr2">
-  <type>
-   <array size="6">
-    <fundamental_type type="wchar_t"/>
-   </array>
-  </type>
-  <default_value>
-   <expression type="wide string">
-    20 41 20 a 20 
-   </expression>
-  </default_value>
- </variable>
- <variable id="6" name="wstr3">
-  <type>
-   <array size="3">
-    <fundamental_type type="wchar_t"/>
-   </array>
-  </type>
-  <default_value>
-   <expression type="wide string">
-    60 62 
-   </expression>
-  </default_value>
- </variable>
- <variable id="7" name="wstr4">
-  <type>
-   <array size="3">
-    <fundamental_type type="wchar_t"/>
-   </array>
-  </type>
-  <default_value>
-   <expression type="wide string">
-    ff 7a 
-   </expression>
-  </default_value>
- </variable>
-</namespace>
+{
+  "id": 0,
+  "variables":
+  [
+    {
+      "id": 0,
+      "name": "str1",
+      "type":
+      {
+        "category": "array",
+        "size": 5,
+        "qualified type":
+        {
+          "category": "fundamental type",
+          "type": "char"
+        }
+      },
+      "default value":
+      {
+        "type": "string",
+        "bytes":
+        [
+          116,
+          101,
+          115,
+          116
+        ]
+      }
+    },
+    {
+      "id": 1,
+      "name": "str2",
+      "type":
+      {
+        "category": "array",
+        "size": 6,
+        "qualified type":
+        {
+          "category": "fundamental type",
+          "type": "char"
+        }
+      },
+      "default value":
+      {
+        "type": "string",
+        "bytes":
+        [
+          32,
+          65,
+          32,
+          10,
+          32
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "name": "str3",
+      "type":
+      {
+        "category": "array",
+        "size": 3,
+        "qualified type":
+        {
+          "category": "fundamental type",
+          "type": "char"
+        }
+      },
+      "default value":
+      {
+        "type": "string",
+        "bytes":
+        [
+          96,
+          98
+        ]
+      }
+    },
+    {
+      "id": 3,
+      "name": "str4",
+      "type":
+      {
+        "category": "array",
+        "size": 4,
+        "qualified type":
+        {
+          "category": "fundamental type",
+          "type": "char"
+        }
+      },
+      "default value":
+      {
+        "type": "string",
+        "bytes":
+        [
+          195,
+          191,
+          122
+        ]
+      }
+    },
+    {
+      "id": 4,
+      "name": "wstr1",
+      "type":
+      {
+        "category": "array",
+        "size": 5,
+        "qualified type":
+        {
+          "category": "fundamental type",
+          "type": "wchar_t"
+        }
+      },
+      "default value":
+      {
+        "type": "wide string",
+        "bytes":
+        [
+          116,
+          101,
+          115,
+          116
+        ]
+      }
+    },
+    {
+      "id": 5,
+      "name": "wstr2",
+      "type":
+      {
+        "category": "array",
+        "size": 6,
+        "qualified type":
+        {
+          "category": "fundamental type",
+          "type": "wchar_t"
+        }
+      },
+      "default value":
+      {
+        "type": "wide string",
+        "bytes":
+        [
+          32,
+          65,
+          32,
+          10,
+          32
+        ]
+      }
+    },
+    {
+      "id": 6,
+      "name": "wstr3",
+      "type":
+      {
+        "category": "array",
+        "size": 3,
+        "qualified type":
+        {
+          "category": "fundamental type",
+          "type": "wchar_t"
+        }
+      },
+      "default value":
+      {
+        "type": "wide string",
+        "bytes":
+        [
+          96,
+          98
+        ]
+      }
+    },
+    {
+      "id": 7,
+      "name": "wstr4",
+      "type":
+      {
+        "category": "array",
+        "size": 3,
+        "qualified type":
+        {
+          "category": "fundamental type",
+          "type": "wchar_t"
+        }
+      },
+      "default value":
+      {
+        "type": "wide string",
+        "bytes":
+        [
+          255,
+          122
+        ]
+      }
+    }
+  ]
+}

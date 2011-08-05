@@ -37,6 +37,9 @@ class single_object_const_range
 
 		single_object_const_range(const T& object);
 
+		bool
+		empty() const;
+
 		iterator
 		begin();
 

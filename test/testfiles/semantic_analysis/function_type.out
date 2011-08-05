@@ -1,100 +1,189 @@
-<namespace id="0">
- <class id="0" name="c">
-  <typedef id="0" name="const_fun_t" access="private">
-   <type>
-    <function_type const="true">
-     <return_type>
-      <fundamental_type type="int"/>
-     </return_type>
-     <parameter_types>
-     </parameter_types>
-    </function_type>
-   </type>
-  </typedef>
-  <destructor access="public" defined="false">
-  </destructor>
-  <simple_member_function id="0" name="f" access="private">
-   <return_type>
-    <fundamental_type type="int"/>
-   </return_type>
-  </simple_member_function>
-  <simple_member_function id="1" name="g" access="private" static="true" defined="false">
-   <return_type>
-    <fundamental_type type="int"/>
-   </return_type>
-  </simple_member_function>
-  <simple_member_function id="2" name="h" access="private" const="true" defined="false">
-   <return_type>
-    <fundamental_type type="int"/>
-   </return_type>
-  </simple_member_function>
- </class>
- <typedef id="0" name="fun_t">
-  <type>
-   <function_type>
-    <return_type>
-     <fundamental_type type="int"/>
-    </return_type>
-    <parameter_types>
-    </parameter_types>
-   </function_type>
-  </type>
- </typedef>
- <simple_function id="0" name="f" defined="false">
-  <return_type>
-   <fundamental_type type="int"/>
-  </return_type>
- </simple_function>
- <simple_function id="1" name="g" defined="false">
-  <return_type>
-   <fundamental_type type="void"/>
-  </return_type>
-  <parameters>
-   <parameter>
-    <type>
-     <function_type>
-      <return_type>
-       <fundamental_type type="int"/>
-      </return_type>
-      <parameter_types>
-      </parameter_types>
-     </function_type>
-    </type>
-   </parameter>
-  </parameters>
- </simple_function>
- <simple_function id="2" name="h" defined="false">
-  <return_type>
-   <fundamental_type type="void"/>
-  </return_type>
-  <parameters>
-   <parameter>
-    <type>
-     <function_type variadic="true">
-      <return_type>
-       <pointer>
-        <fundamental_type type="int"/>
-       </pointer>
-      </return_type>
-      <parameter_types>
-       <fundamental_type type="unsigned int"/>
-      </parameter_types>
-     </function_type>
-    </type>
-   </parameter>
-  </parameters>
- </simple_function>
- <variable id="0" name="f_ptr">
-  <type>
-   <pointer>
-    <function_type>
-     <return_type>
-      <fundamental_type type="int"/>
-     </return_type>
-     <parameter_types>
-     </parameter_types>
-    </function_type>
-   </pointer>
-  </type>
- </variable>
-</namespace>
+{
+  "id": 0,
+  "classes":
+  [
+    {
+      "id": 0,
+      "name": "c",
+      "typedefs":
+      [
+        {
+          "id": 0,
+          "name": "const_fun_t",
+          "access": "private",
+          "type":
+          {
+            "category": "function type",
+            "const": true,
+            "return type":
+            {
+              "category": "fundamental type",
+              "type": "int"
+            },
+            "parameter types":
+            [
+            ]
+          }
+        }
+      ],
+      "destructor":
+      {
+        "access": "public"
+      },
+      "simple functions":
+      [
+        {
+          "id": 0,
+          "name": "f",
+          "access": "private",
+          "return type":
+          {
+            "category": "fundamental type",
+            "type": "int"
+          }
+        },
+        {
+          "id": 1,
+          "name": "g",
+          "access": "private",
+          "defined": false,
+          "return type":
+          {
+            "category": "fundamental type",
+            "type": "int"
+          }
+        },
+        {
+          "id": 2,
+          "name": "h",
+          "access": "private",
+          "const": true,
+          "defined": false,
+          "return type":
+          {
+            "category": "fundamental type",
+            "type": "int"
+          }
+        }
+      ]
+    }
+  ],
+  "typedefs":
+  [
+    {
+      "id": 0,
+      "name": "fun_t",
+      "type":
+      {
+        "category": "function type",
+        "return type":
+        {
+          "category": "fundamental type",
+          "type": "int"
+        },
+        "parameter types":
+        [
+        ]
+      }
+    }
+  ],
+  "simple functions":
+  [
+    {
+      "id": 0,
+      "name": "f",
+      "defined": false,
+      "return type":
+      {
+        "category": "fundamental type",
+        "type": "int"
+      }
+    },
+    {
+      "id": 1,
+      "name": "g",
+      "defined": false,
+      "return type":
+      {
+        "category": "fundamental type",
+        "type": "void"
+      },
+      "parameters":
+      [
+        {
+          "type":
+          {
+            "category": "function type",
+            "return type":
+            {
+              "category": "fundamental type",
+              "type": "int"
+            },
+            "parameter types":
+            [
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "h",
+      "defined": false,
+      "return type":
+      {
+        "category": "fundamental type",
+        "type": "void"
+      },
+      "parameters":
+      [
+        {
+          "type":
+          {
+            "category": "function type",
+            "variadic": true,
+            "return type":
+            {
+              "category": "pointer",
+              "qualified type":
+              {
+                "category": "fundamental type",
+                "type": "int"
+              }
+            },
+            "parameter types":
+            [
+              {
+                "category": "fundamental type",
+                "type": "unsigned int"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "variables":
+  [
+    {
+      "id": 0,
+      "name": "f_ptr",
+      "type":
+      {
+        "category": "pointer",
+        "qualified type":
+        {
+          "category": "function type",
+          "return type":
+          {
+            "category": "fundamental type",
+            "type": "int"
+          },
+          "parameter types":
+          [
+          ]
+        }
+      }
+    }
+  ]
+}
