@@ -25,33 +25,13 @@ namespace scalpel { namespace cpp { namespace syntax_nodes
 {
 
 template<const std::string& Text>
-class predefined_text_node
+struct predefined_text_node
 {
-	public:
-		predefined_text_node();
-
-		inline
-		const std::string&
-		text() const;
-
-	private:
-		static const std::string& text_;
+	static const std::string& text;
 };
 
 template<const std::string& Text>
-predefined_text_node<Text>::predefined_text_node()
-{
-}
-
-template<const std::string& Text>
-const std::string&
-predefined_text_node<Text>::text() const
-{
-	return text_;
-}
-
-template<const std::string& Text>
-const std::string& predefined_text_node<Text>::text_ = Text;
+const std::string& predefined_text_node<Text>::text = Text;
 
 }}} //namespace scalpel::cpp::syntax_nodes
 
