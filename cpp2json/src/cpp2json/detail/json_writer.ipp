@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef CPP2XML_DETAIL_JSON_WRITER_IPP
 #define CPP2XML_DETAIL_JSON_WRITER_IPP
 
-namespace cpp2xml { namespace detail
+namespace cpp2json { namespace detail
 {
 
 template<typename T>
@@ -57,7 +57,7 @@ json_writer::write_array_value
 	output_ << value;
 }
 
-}} //namespace cpp2xml::detail
+}} //namespace cpp2json::detail
 
 #endif
 

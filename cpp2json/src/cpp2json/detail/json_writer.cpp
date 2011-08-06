@@ -20,7 +20,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "json_writer.hpp"
 
-namespace cpp2xml { namespace detail
+namespace cpp2json { namespace detail
 {
 
 json_writer::json_writer(std::ostream& output):
@@ -136,5 +136,5 @@ json_writer::indent()
 		output_ << "  ";
 }
 
-}} //namespace cpp2xml::detail
+}} //namespace cpp2json::detail
 

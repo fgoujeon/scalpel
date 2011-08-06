@@ -38,9 +38,9 @@ include_directories(
 	../src
 )
 
-#cpp2xml
+#cpp2json
 include_directories(
-	../cpp2xml/src
+	../cpp2json/src
 )
 
 #Boost
@@ -56,7 +56,7 @@ include_directories(${Boost_INCLUDE_DIRS})
 target_link_libraries(
 	demo
 	scalpel
-	cpp2xml
+	cpp2json
 	${Boost_LIBRARIES}
 )
 

@@ -27,7 +27,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <iostream>
 
-namespace cpp2xml { namespace detail
+namespace cpp2json { namespace detail
 {
 
 class json_writer
@@ -94,7 +94,7 @@ class json_writer
 		bool first_item_;
 };
 
-}} //namespace cpp2xml::detail
+}} //namespace cpp2json::detail
 
 #include "json_writer.ipp"
 

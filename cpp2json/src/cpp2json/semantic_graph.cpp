@@ -23,7 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <vector>
 #include <sstream>
 
-namespace cpp2xml
+namespace cpp2json
 {
 
 using namespace detail;
@@ -925,5 +925,5 @@ serialize_semantic_graph
 	serializer(graph);
 }
 
-} //namespace cpp2xml
+} //namespace cpp2json
 

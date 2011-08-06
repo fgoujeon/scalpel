@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef CPP2XML_SEMANTIC_GRAPH_IPP
 #define CPP2XML_SEMANTIC_GRAPH_IPP
 
-namespace cpp2xml
+namespace cpp2json
 {
 
 template<class Namespace>
@@ -265,7 +265,7 @@ semantic_graph_serializer::serialize_bit_field_size_property
 	writer_.write_key_value_pair("size", entity.size());
 }
 
-} //namespace cpp2xml
+} //namespace cpp2json
 
 #endif
 

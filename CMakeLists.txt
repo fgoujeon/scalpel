@@ -84,7 +84,7 @@ target_link_libraries(
 )
 
 add_subdirectory(
-	cpp2xml
+	cpp2json
 )
 add_subdirectory(
 	test

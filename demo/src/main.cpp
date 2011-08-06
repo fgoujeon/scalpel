@@ -18,8 +18,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <cpp2xml/semantic_graph.hpp>
-#include <cpp2xml/syntax_tree.hpp>
+#include <cpp2json/semantic_graph.hpp>
+#include <cpp2json/syntax_tree.hpp>
 #include <scalpel/cpp/linkage.hpp>
 #include <scalpel/cpp/semantic_analysis.hpp>
 #include <scalpel/cpp/syntax_analyzer.hpp>
@@ -130,7 +130,7 @@ main(int argc, char** argv)
 					std::cout << " of " << filename;
 				std::cout << ":\n";
 			}
-			cpp2xml::print_syntax_tree(tree);
+			cpp2json::print_syntax_tree(tree);
 		}
 
 		//semantic analysis
@@ -146,7 +146,7 @@ main(int argc, char** argv)
 					std::cout << " of " << filename;
 				std::cout << ":\n";
 			}
-			cpp2xml::serialize_semantic_graph(*graph, std::cout);
+			cpp2json::serialize_semantic_graph(*graph, std::cout);
 		}
 
 		semantic_graphs.push_back(std::move(graph));
@@ -160,7 +160,7 @@ main(int argc, char** argv)
 		//print linked semantic graph
 		if(print_syntax_tree || print_semantic_graph)
 			std::cout << "Linked semantic graph:\n";
-		cpp2xml::serialize_semantic_graph(*linked_graph, std::cout);
+		cpp2json::serialize_semantic_graph(*linked_graph, std::cout);
 	}
 
 	return 0;

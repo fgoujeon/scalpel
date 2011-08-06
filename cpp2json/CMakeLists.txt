@@ -19,7 +19,7 @@
 cmake_minimum_required(VERSION 2.6)
 
 #Project
-project(Scalpel.Cpp2Xml)
+project(Scalpel.Cpp2Json)
 set(LIBRARY_OUTPUT_PATH lib)
 
 #Library
@@ -28,7 +28,7 @@ file(
 	src/*.cpp
 )
 add_library(
-	cpp2xml
+	cpp2json
 	SHARED
 	${sources}
 )
@@ -50,7 +50,7 @@ include_directories(${Boost_INCLUDE_DIRS})
 
 #Linking
 target_link_libraries(
-	cpp2xml
+	cpp2json
 	${Boost_LIBRARIES}
 )
 

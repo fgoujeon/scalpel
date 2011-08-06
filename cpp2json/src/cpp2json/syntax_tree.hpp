@@ -26,7 +26,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <scalpel/cpp/syntax_nodes/utility/type_traits.hpp>
 #include <iostream>
 
-namespace cpp2xml
+namespace cpp2json
 {
 
 inline
@@ -95,7 +95,7 @@ print
 	typename boost::enable_if<syntax_nodes::utility::is_leaf_node<SyntaxNode>>::type* = 0
 );
 
-} //namespace cpp2xml
+} //namespace cpp2json
 
 #include "syntax_tree.ipp"
 

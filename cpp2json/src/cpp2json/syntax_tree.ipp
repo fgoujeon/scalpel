@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef CPP2XML_SYNTAX_TREE_IPP
 #define CPP2XML_SYNTAX_TREE_IPP
 
-namespace cpp2xml
+namespace cpp2json
 {
 
 template<class T>
@@ -476,7 +476,7 @@ print
 	writer.write_key_value_pair("text", node.value());
 }
 
-} //namespace cpp2xml
+} //namespace cpp2json
 
 #endif
 

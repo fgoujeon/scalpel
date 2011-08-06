@@ -38,7 +38,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <sstream>
 #include <ostream>
 
-namespace cpp2xml
+namespace cpp2json
 {
 
 using namespace scalpel;
@@ -903,7 +903,7 @@ serialize_semantic_graph
 	std::ostream& output
 );
 
-} //namespace cpp2xml
+} //namespace cpp2json
 
 #include "semantic_graph.ipp"
 

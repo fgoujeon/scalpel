@@ -19,7 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "single_file_tester.hpp"
-#include <cpp2xml/semantic_graph.hpp>
+#include <cpp2json/semantic_graph.hpp>
 #include <scalpel/cpp/linkage.hpp>
 #include <scalpel/cpp/semantic_analysis.hpp>
 #include <boost/test/unit_test.hpp>
@@ -110,8 +110,8 @@ single_file_tester::test_semantic_analysis(const semantic_analysis_test_file_set
 	}
 
 	//serialize the semantic graph
-	std::ostringstream semantic_graph_xml;
-	cpp2xml::serialize_semantic_graph(*semantic_graph, semantic_graph_xml);
+	std::ostringstream semantic_graph_json;
+	cpp2json::serialize_semantic_graph(*semantic_graph, semantic_graph_json);
 
 	//open the result file
 	std::ifstream expected_output_file(expected_output_filename.c_str());
@@ -128,7 +128,7 @@ single_file_tester::test_semantic_analysis(const semantic_analysis_test_file_set
 	expected_output_file.close();
 
 	//compare the results
-	BOOST_CHECK_EQUAL(semantic_graph_xml.str(), expected_output_buffer.str());
+	BOOST_CHECK_EQUAL(semantic_graph_json.str(), expected_output_buffer.str());
 }
 
 void
@@ -178,8 +178,8 @@ single_file_tester::test_linkage(const linkage_test_file_set& file_set)
 	std::unique_ptr<scalpel::cpp::linked_semantic_graph> final_semantic_graph = scalpel::cpp::linkage::link(semantic_graphs);
 
 	//serialize the semantic graph
-	std::ostringstream semantic_graph_xml;
-	cpp2xml::serialize_semantic_graph(*final_semantic_graph, semantic_graph_xml);
+	std::ostringstream semantic_graph_json;
+	cpp2json::serialize_semantic_graph(*final_semantic_graph, semantic_graph_json);
 
 	//open the result file
 	std::ifstream expected_output_file(file_set.output_file.c_str());
@@ -196,7 +196,7 @@ single_file_tester::test_linkage(const linkage_test_file_set& file_set)
 	expected_output_file.close();
 
 	//compare the results
-	BOOST_CHECK_EQUAL(semantic_graph_xml.str(), expected_output_buffer.str());
+	BOOST_CHECK_EQUAL(semantic_graph_json.str(), expected_output_buffer.str());
 }
 
 void
