@@ -493,86 +493,85 @@ semantic_graph_serializer::serialize_namespace_alias
 
 namespace
 {
+	template<class Expression>
+	struct expression_to_string;
 
-#define EXPRESSION_TYPE(TYPE, STR) \
-std::string \
-operator()(const TYPE) \
+#define EXPRESSION_TO_STRING(EXPRESSION, STR) \
+template<> \
+struct expression_to_string<EXPRESSION> \
 { \
-	return STR; \
-}
+	static constexpr const char* value = STR; \
+};
 
-	struct: scalpel::utility::static_visitor<std::string>
-	{
-		EXPRESSION_TYPE(prefix_increment_expression, "prefix increment")
-		EXPRESSION_TYPE(prefix_decrement_expression, "prefix decrement")
-		EXPRESSION_TYPE(indirection_expression, "indirection")
-		EXPRESSION_TYPE(pointer_expression, "pointer")
-		EXPRESSION_TYPE(negation_expression, "negation")
-		EXPRESSION_TYPE(logical_negation_expression, "logical negation")
-		EXPRESSION_TYPE(complement_expression, "complement")
-		EXPRESSION_TYPE(multiplication_expression, "multiplication")
-		EXPRESSION_TYPE(division_expression, "division")
-		EXPRESSION_TYPE(modulo_expression, "modulo")
-		EXPRESSION_TYPE(addition_expression, "addition")
-		EXPRESSION_TYPE(subtraction_expression, "subtraction")
-		EXPRESSION_TYPE(left_shift_expression, "left shift")
-		EXPRESSION_TYPE(right_shift_expression, "right shift")
-		EXPRESSION_TYPE(less_than_expression, "less than")
-		EXPRESSION_TYPE(less_than_or_equal_to_expression, "less than or equal to")
-		EXPRESSION_TYPE(greater_than_expression, "greater than")
-		EXPRESSION_TYPE(greater_than_or_equal_to_expression, "greater than or equal to")
-		EXPRESSION_TYPE(equal_to_expression, "equal to")
-		EXPRESSION_TYPE(not_equal_to_expression, "not equal to")
-		EXPRESSION_TYPE(bitwise_and_expression, "bitwise and")
-		EXPRESSION_TYPE(bitwise_exclusive_or_expression, "bitwise exclusive or")
-		EXPRESSION_TYPE(bitwise_inclusive_or_expression, "bitwise inclusive or")
-		EXPRESSION_TYPE(logical_and_expression, "logical and")
-		EXPRESSION_TYPE(logical_or_expression, "logical or")
-		EXPRESSION_TYPE(conditional_expression, "conditional")
-		EXPRESSION_TYPE(assignment_expression, "assignment")
-		EXPRESSION_TYPE(multiplication_assignment_expression, "multiplication assignment")
-		EXPRESSION_TYPE(division_assignment_expression, "division assignment")
-		EXPRESSION_TYPE(modulo_assignment_expression, "modulo assignment")
-		EXPRESSION_TYPE(addition_assignment_expression, "addition assignment")
-		EXPRESSION_TYPE(subtraction_assignment_expression, "subtraction assignment")
-		EXPRESSION_TYPE(left_shift_assignment_expression, "left shift assignment")
-		EXPRESSION_TYPE(right_shift_assignment_expression, "right shift assignment")
-		EXPRESSION_TYPE(bitwise_and_assignment_expression, "bitwise and assignment")
-		EXPRESSION_TYPE(bitwise_exclusive_or_assignment_expression, "bitwise exclusive or assignment")
-		EXPRESSION_TYPE(bitwise_inclusive_or_assignment_expression, "bitwise inclusive or assignment")
+	EXPRESSION_TO_STRING(prefix_increment_expression, "prefix increment")
+	EXPRESSION_TO_STRING(prefix_decrement_expression, "prefix decrement")
+	EXPRESSION_TO_STRING(indirection_expression, "indirection")
+	EXPRESSION_TO_STRING(pointer_expression, "pointer")
+	EXPRESSION_TO_STRING(negation_expression, "negation")
+	EXPRESSION_TO_STRING(logical_negation_expression, "logical negation")
+	EXPRESSION_TO_STRING(complement_expression, "complement")
+	EXPRESSION_TO_STRING(multiplication_expression, "multiplication")
+	EXPRESSION_TO_STRING(division_expression, "division")
+	EXPRESSION_TO_STRING(modulo_expression, "modulo")
+	EXPRESSION_TO_STRING(addition_expression, "addition")
+	EXPRESSION_TO_STRING(subtraction_expression, "subtraction")
+	EXPRESSION_TO_STRING(left_shift_expression, "left shift")
+	EXPRESSION_TO_STRING(right_shift_expression, "right shift")
+	EXPRESSION_TO_STRING(less_than_expression, "less than")
+	EXPRESSION_TO_STRING(less_than_or_equal_to_expression, "less than or equal to")
+	EXPRESSION_TO_STRING(greater_than_expression, "greater than")
+	EXPRESSION_TO_STRING(greater_than_or_equal_to_expression, "greater than or equal to")
+	EXPRESSION_TO_STRING(equal_to_expression, "equal to")
+	EXPRESSION_TO_STRING(not_equal_to_expression, "not equal to")
+	EXPRESSION_TO_STRING(bitwise_and_expression, "bitwise and")
+	EXPRESSION_TO_STRING(bitwise_exclusive_or_expression, "bitwise exclusive or")
+	EXPRESSION_TO_STRING(bitwise_inclusive_or_expression, "bitwise inclusive or")
+	EXPRESSION_TO_STRING(logical_and_expression, "logical and")
+	EXPRESSION_TO_STRING(logical_or_expression, "logical or")
+	EXPRESSION_TO_STRING(conditional_expression, "conditional")
+	EXPRESSION_TO_STRING(assignment_expression, "assignment")
+	EXPRESSION_TO_STRING(multiplication_assignment_expression, "multiplication assignment")
+	EXPRESSION_TO_STRING(division_assignment_expression, "division assignment")
+	EXPRESSION_TO_STRING(modulo_assignment_expression, "modulo assignment")
+	EXPRESSION_TO_STRING(addition_assignment_expression, "addition assignment")
+	EXPRESSION_TO_STRING(subtraction_assignment_expression, "subtraction assignment")
+	EXPRESSION_TO_STRING(left_shift_assignment_expression, "left shift assignment")
+	EXPRESSION_TO_STRING(right_shift_assignment_expression, "right shift assignment")
+	EXPRESSION_TO_STRING(bitwise_and_assignment_expression, "bitwise and assignment")
+	EXPRESSION_TO_STRING(bitwise_exclusive_or_assignment_expression, "bitwise exclusive or assignment")
+	EXPRESSION_TO_STRING(bitwise_inclusive_or_assignment_expression, "bitwise inclusive or assignment")
 
-		EXPRESSION_TYPE(conversion_to_bool, "conversion to bool")
-		EXPRESSION_TYPE(conversion_to_int, "conversion to int")
-		EXPRESSION_TYPE(conversion_to_long_int, "conversion to long int")
-		EXPRESSION_TYPE(conversion_to_unsigned_int, "conversion to unsigned int")
-		EXPRESSION_TYPE(conversion_to_unsigned_long_int, "conversion to unsigned long int")
-		EXPRESSION_TYPE(conversion_to_float, "conversion to float")
-		EXPRESSION_TYPE(conversion_to_double, "conversion to double")
-		EXPRESSION_TYPE(conversion_to_long_double, "conversion to long double")
+	EXPRESSION_TO_STRING(conversion_to_bool, "conversion to bool")
+	EXPRESSION_TO_STRING(conversion_to_int, "conversion to int")
+	EXPRESSION_TO_STRING(conversion_to_long_int, "conversion to long int")
+	EXPRESSION_TO_STRING(conversion_to_unsigned_int, "conversion to unsigned int")
+	EXPRESSION_TO_STRING(conversion_to_unsigned_long_int, "conversion to unsigned long int")
+	EXPRESSION_TO_STRING(conversion_to_float, "conversion to float")
+	EXPRESSION_TO_STRING(conversion_to_double, "conversion to double")
+	EXPRESSION_TO_STRING(conversion_to_long_double, "conversion to long double")
 
-		EXPRESSION_TYPE(variable*, "variable")
-		EXPRESSION_TYPE(enum_constant<int>*, "int enum constant")
-		EXPRESSION_TYPE(enum_constant<unsigned int>*, "unsigned int enum constant")
-		EXPRESSION_TYPE(enum_constant<long int>*, "long int enum constant")
-		EXPRESSION_TYPE(enum_constant<unsigned long int>*, "unsigned long int enum constant")
+	EXPRESSION_TO_STRING(variable*, "variable")
+	EXPRESSION_TO_STRING(enum_constant<int>*, "int enum constant")
+	EXPRESSION_TO_STRING(enum_constant<unsigned int>*, "unsigned int enum constant")
+	EXPRESSION_TO_STRING(enum_constant<long int>*, "long int enum constant")
+	EXPRESSION_TO_STRING(enum_constant<unsigned long int>*, "unsigned long int enum constant")
 
-		EXPRESSION_TYPE(bool, "bool")
-		EXPRESSION_TYPE(char, "char")
-		EXPRESSION_TYPE(wchar_t, "wchar_t")
-		EXPRESSION_TYPE(int, "int")
-		EXPRESSION_TYPE(long int, "long int")
-		EXPRESSION_TYPE(long long int, "long long int")
-		EXPRESSION_TYPE(unsigned int, "unsigned int")
-		EXPRESSION_TYPE(unsigned long int, "unsigned long int")
-		EXPRESSION_TYPE(unsigned long long int, "unsigned long long int")
-		EXPRESSION_TYPE(float, "float")
-		EXPRESSION_TYPE(double, "double")
-		EXPRESSION_TYPE(long double, "long double")
-		EXPRESSION_TYPE(std::string, "string")
-		EXPRESSION_TYPE(std::wstring, "wide string")
-	} get_expression_type_visitor;
+	EXPRESSION_TO_STRING(bool, "bool")
+	EXPRESSION_TO_STRING(char, "char")
+	EXPRESSION_TO_STRING(wchar_t, "wchar_t")
+	EXPRESSION_TO_STRING(int, "int")
+	EXPRESSION_TO_STRING(long int, "long int")
+	EXPRESSION_TO_STRING(long long int, "long long int")
+	EXPRESSION_TO_STRING(unsigned int, "unsigned int")
+	EXPRESSION_TO_STRING(unsigned long int, "unsigned long int")
+	EXPRESSION_TO_STRING(unsigned long long int, "unsigned long long int")
+	EXPRESSION_TO_STRING(float, "float")
+	EXPRESSION_TO_STRING(double, "double")
+	EXPRESSION_TO_STRING(long double, "long double")
+	EXPRESSION_TO_STRING(std::string, "string")
+	EXPRESSION_TO_STRING(std::wstring, "wide string")
 
-#undef EXPRESSION_TYPE
+#undef EXPRESSION_TO_STRING
 }
 
 
@@ -587,17 +586,21 @@ semantic_graph_serializer::serialize_expression_visitor::serialize_expression_vi
 
 template<typename T>
 void
-semantic_graph_serializer::serialize_expression_visitor::operator()(const T t)
+semantic_graph_serializer::serialize_expression_visitor::operator()(const T expr)
 {
-	serializer_.writer_.write_key_value_pair("value", t);
+	serializer_.writer_.write_key_value_pair(expression_to_string<T>::value, expr);
 }
 
 template<int Tag>
 void
 semantic_graph_serializer::serialize_expression_visitor::operator()(const unary_expression<Tag>& operation)
 {
+	serializer_.writer_.open_object(expression_to_string<unary_expression<Tag>>::value);
+
 	serializer_.writer_.open_object("operand");
 	serializer_.serialize_expression(operation.operand());
+	serializer_.writer_.close_object();
+
 	serializer_.writer_.close_object();
 }
 
@@ -605,17 +608,23 @@ template<int Tag>
 void
 semantic_graph_serializer::serialize_expression_visitor::operator()(const binary_expression<Tag>& operation)
 {
+	serializer_.writer_.open_object(expression_to_string<binary_expression<Tag>>::value);
+
 	serializer_.writer_.open_object("left operand");
 	serializer_.serialize_expression(operation.left_operand());
 	serializer_.writer_.close_object();
 	serializer_.writer_.open_object("right operand");
 	serializer_.serialize_expression(operation.right_operand());
 	serializer_.writer_.close_object();
+
+	serializer_.writer_.close_object();
 }
 
 void
 semantic_graph_serializer::serialize_expression_visitor::operator()(const conditional_expression& operation)
 {
+	serializer_.writer_.open_object(expression_to_string<conditional_expression>::value);
+
 	serializer_.writer_.open_object("condition operand");
 	serializer_.serialize_expression(operation.condition_operand());
 	serializer_.writer_.close_object();
@@ -625,52 +634,62 @@ semantic_graph_serializer::serialize_expression_visitor::operator()(const condit
 	serializer_.writer_.open_object("false operand");
 	serializer_.serialize_expression(operation.false_operand());
 	serializer_.writer_.close_object();
+
+	serializer_.writer_.close_object();
 }
 
 template<int Tag>
 void
 semantic_graph_serializer::serialize_expression_visitor::operator()(const conversion<Tag>& conv)
 {
+	serializer_.writer_.open_object(expression_to_string<conversion<Tag>>::value);
+
 	serializer_.writer_.open_object("source value");
 	serializer_.serialize_expression(conv.source_value());
+	serializer_.writer_.close_object();
+
 	serializer_.writer_.close_object();
 }
 
 void
 semantic_graph_serializer::serialize_expression_visitor::operator()(variable* const& v)
 {
-	serializer_.writer_.write_key_value_pair("id", serializer_.get_id(*v));
+	serializer_.writer_.write_key_value_pair(expression_to_string<variable*>::value, serializer_.get_id(*v));
 }
 
 template<typename T>
 void
 semantic_graph_serializer::serialize_expression_visitor::operator()(enum_constant<T>* const constant)
 {
-	serializer_.writer_.write_key_value_pair("id", serializer_.get_id(*constant));
+	serializer_.writer_.write_key_value_pair(expression_to_string<enum_constant<T>*>::value, serializer_.get_id(*constant));
 }
 
 void
 semantic_graph_serializer::serialize_expression_visitor::operator()(const char c)
 {
-	serializer_.writer_.write_key_value_pair("value", static_cast<int>(c));
+	serializer_.writer_.write_key_value_pair(expression_to_string<char>::value, static_cast<int>(c));
 }
 
 void
 semantic_graph_serializer::serialize_expression_visitor::operator()(const std::string& str)
 {
-	serializer_.writer_.open_array("bytes");
+	serializer_.writer_.open_object(expression_to_string<std::string>::value);
+
 	for(char c: str)
 		serializer_.writer_.write_array_value(static_cast<int>(c) & 0xff);
-	serializer_.writer_.close_array();
+
+	serializer_.writer_.close_object();
 }
 
 void
 semantic_graph_serializer::serialize_expression_visitor::operator()(const std::wstring& str)
 {
-	serializer_.writer_.open_array("bytes");
+	serializer_.writer_.open_object(expression_to_string<std::wstring>::value);
+
 	for(wchar_t c: str)
 		serializer_.writer_.write_array_value(static_cast<int>(c));
-	serializer_.writer_.close_array();
+
+	serializer_.writer_.close_object();
 }
 
 
@@ -681,7 +700,7 @@ semantic_graph_serializer::serialize_expression
 	const semantic_entities::expression_t& entity
 )
 {
-	writer_.write_key_value_pair("type", apply_visitor(get_expression_type_visitor, entity));
+	//writer_.write_key_value_pair("type", apply_visitor(get_expression_type_visitor, entity));
 
 	serialize_expression_visitor visitor(*this);
 	apply_visitor(visitor, entity);

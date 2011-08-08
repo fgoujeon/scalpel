@@ -11,8 +11,7 @@
       },
       "default value":
       {
-        "type": "int",
-        "value": 0
+        "int": 0
       }
     },
     {
@@ -24,8 +23,7 @@
       },
       "default value":
       {
-        "type": "variable",
-        "id": 0
+        "variable": 0
       }
     },
     {
@@ -37,11 +35,12 @@
       },
       "default value":
       {
-        "type": "prefix increment",
-        "operand":
+        "prefix increment":
         {
-          "type": "variable",
-          "id": 0
+          "operand":
+          {
+            "variable": 0
+          }
         }
       }
     },
@@ -54,11 +53,12 @@
       },
       "default value":
       {
-        "type": "prefix decrement",
-        "operand":
+        "prefix decrement":
         {
-          "type": "variable",
-          "id": 0
+          "operand":
+          {
+            "variable": 0
+          }
         }
       }
     },
@@ -77,11 +77,12 @@
       },
       "default value":
       {
-        "type": "pointer",
-        "operand":
+        "pointer":
         {
-          "type": "variable",
-          "id": 0
+          "operand":
+          {
+            "variable": 0
+          }
         }
       }
     },
@@ -94,11 +95,12 @@
       },
       "default value":
       {
-        "type": "indirection",
-        "operand":
+        "indirection":
         {
-          "type": "variable",
-          "id": 4
+          "operand":
+          {
+            "variable": 4
+          }
         }
       }
     }

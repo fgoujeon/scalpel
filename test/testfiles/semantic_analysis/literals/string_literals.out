@@ -18,14 +18,13 @@
       },
       "default value":
       {
-        "type": "string",
-        "bytes":
-        [
+        "string":
+        {
           116,
           101,
           115,
           116
-        ]
+        }
       }
     },
     {
@@ -44,15 +43,14 @@
       },
       "default value":
       {
-        "type": "string",
-        "bytes":
-        [
+        "string":
+        {
           32,
           65,
           32,
           10,
           32
-        ]
+        }
       }
     },
     {
@@ -71,12 +69,11 @@
       },
       "default value":
       {
-        "type": "string",
-        "bytes":
-        [
+        "string":
+        {
           96,
           98
-        ]
+        }
       }
     },
     {
@@ -95,13 +92,12 @@
       },
       "default value":
       {
-        "type": "string",
-        "bytes":
-        [
+        "string":
+        {
           195,
           191,
           122
-        ]
+        }
       }
     },
     {
@@ -120,14 +116,13 @@
       },
       "default value":
       {
-        "type": "wide string",
-        "bytes":
-        [
+        "wide string":
+        {
           116,
           101,
           115,
           116
-        ]
+        }
       }
     },
     {
@@ -146,15 +141,14 @@
       },
       "default value":
       {
-        "type": "wide string",
-        "bytes":
-        [
+        "wide string":
+        {
           32,
           65,
           32,
           10,
           32
-        ]
+        }
       }
     },
     {
@@ -173,12 +167,11 @@
       },
       "default value":
       {
-        "type": "wide string",
-        "bytes":
-        [
+        "wide string":
+        {
           96,
           98
-        ]
+        }
       }
     },
     {
@@ -197,12 +190,11 @@
       },
       "default value":
       {
-        "type": "wide string",
-        "bytes":
-        [
+        "wide string":
+        {
           255,
           122
-        ]
+        }
       }
     }
   ]

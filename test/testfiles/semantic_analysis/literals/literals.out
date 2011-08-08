@@ -11,8 +11,7 @@
       },
       "default value":
       {
-        "type": "bool",
-        "value": false
+        "bool": false
       }
     },
     {
@@ -24,8 +23,7 @@
       },
       "default value":
       {
-        "type": "bool",
-        "value": true
+        "bool": true
       }
     },
     {
@@ -37,8 +35,7 @@
       },
       "default value":
       {
-        "type": "char",
-        "value": 97
+        "char": 97
       }
     },
     {
@@ -50,8 +47,7 @@
       },
       "default value":
       {
-        "type": "char",
-        "value": 9
+        "char": 9
       }
     },
     {
@@ -63,8 +59,7 @@
       },
       "default value":
       {
-        "type": "char",
-        "value": 7
+        "char": 7
       }
     },
     {
@@ -76,8 +71,7 @@
       },
       "default value":
       {
-        "type": "char",
-        "value": 35
+        "char": 35
       }
     },
     {
@@ -89,8 +83,7 @@
       },
       "default value":
       {
-        "type": "char",
-        "value": 66
+        "char": 66
       }
     },
     {
@@ -102,8 +95,7 @@
       },
       "default value":
       {
-        "type": "char",
-        "value": 2
+        "char": 2
       }
     },
     {
@@ -115,8 +107,7 @@
       },
       "default value":
       {
-        "type": "char",
-        "value": 47
+        "char": 47
       }
     },
     {
@@ -128,8 +119,7 @@
       },
       "default value":
       {
-        "type": "char",
-        "value": 96
+        "char": 96
       }
     },
     {
@@ -141,8 +131,7 @@
       },
       "default value":
       {
-        "type": "char",
-        "value": 96
+        "char": 96
       }
     },
     {
@@ -154,8 +143,7 @@
       },
       "default value":
       {
-        "type": "int",
-        "value": 24929
+        "int": 24929
       }
     },
     {
@@ -167,8 +155,7 @@
       },
       "default value":
       {
-        "type": "int",
-        "value": 50089
+        "int": 50089
       }
     },
     {
@@ -180,8 +167,7 @@
       },
       "default value":
       {
-        "type": "int",
-        "value": 52159
+        "int": 52159
       }
     },
     {
@@ -193,8 +179,7 @@
       },
       "default value":
       {
-        "type": "int",
-        "value": 24624
+        "int": 24624
       }
     },
     {
@@ -206,8 +191,7 @@
       },
       "default value":
       {
-        "type": "int",
-        "value": 12828464
+        "int": 12828464
       }
     },
     {
@@ -219,8 +203,7 @@
       },
       "default value":
       {
-        "type": "wchar_t",
-        "value": 97
+        "wchar_t": 97
       }
     },
     {
@@ -232,8 +215,7 @@
       },
       "default value":
       {
-        "type": "wchar_t",
-        "value": 3647
+        "wchar_t": 3647
       }
     },
     {
@@ -245,8 +227,7 @@
       },
       "default value":
       {
-        "type": "wchar_t",
-        "value": 233
+        "wchar_t": 233
       }
     },
     {
@@ -258,8 +239,7 @@
       },
       "default value":
       {
-        "type": "double",
-        "value": 0
+        "double": 0
       }
     },
     {
@@ -271,8 +251,7 @@
       },
       "default value":
       {
-        "type": "double",
-        "value": 400000
+        "double": 400000
       }
     },
     {
@@ -284,8 +263,7 @@
       },
       "default value":
       {
-        "type": "float",
-        "value": 1
+        "float": 1
       }
     },
     {
@@ -297,8 +275,7 @@
       },
       "default value":
       {
-        "type": "float",
-        "value": 0.01
+        "float": 0.01
       }
     },
     {
@@ -310,8 +287,7 @@
       },
       "default value":
       {
-        "type": "long double",
-        "value": 121000
+        "long double": 121000
       }
     },
     {
@@ -323,8 +299,7 @@
       },
       "default value":
       {
-        "type": "int",
-        "value": 0
+        "int": 0
       }
     },
     {
@@ -336,8 +311,7 @@
       },
       "default value":
       {
-        "type": "long int",
-        "value": 1
+        "long int": 1
       }
     },
     {
@@ -349,8 +323,7 @@
       },
       "default value":
       {
-        "type": "long long int",
-        "value": 16
+        "long long int": 16
       }
     },
     {
@@ -362,8 +335,7 @@
       },
       "default value":
       {
-        "type": "unsigned int",
-        "value": 943
+        "unsigned int": 943
       }
     },
     {
@@ -375,8 +347,7 @@
       },
       "default value":
       {
-        "type": "unsigned long int",
-        "value": 1024
+        "unsigned long int": 1024
       }
     },
     {
@@ -388,8 +359,7 @@
       },
       "default value":
       {
-        "type": "unsigned long long int",
-        "value": 50000
+        "unsigned long long int": 50000
       }
     }
   ]

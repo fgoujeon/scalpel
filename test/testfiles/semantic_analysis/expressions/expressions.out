@@ -11,16 +11,16 @@
       },
       "default value":
       {
-        "type": "less than",
-        "left operand":
+        "less than":
         {
-          "type": "int",
-          "value": 7
-        },
-        "right operand":
-        {
-          "type": "int",
-          "value": 9
+          "left operand":
+          {
+            "int": 7
+          },
+          "right operand":
+          {
+            "int": 9
+          }
         }
       }
     },
@@ -33,16 +33,16 @@
       },
       "default value":
       {
-        "type": "less than or equal to",
-        "left operand":
+        "less than or equal to":
         {
-          "type": "int",
-          "value": 7
-        },
-        "right operand":
-        {
-          "type": "int",
-          "value": 9
+          "left operand":
+          {
+            "int": 7
+          },
+          "right operand":
+          {
+            "int": 9
+          }
         }
       }
     },
@@ -55,16 +55,16 @@
       },
       "default value":
       {
-        "type": "greater than",
-        "left operand":
+        "greater than":
         {
-          "type": "int",
-          "value": 7
-        },
-        "right operand":
-        {
-          "type": "int",
-          "value": 9
+          "left operand":
+          {
+            "int": 7
+          },
+          "right operand":
+          {
+            "int": 9
+          }
         }
       }
     },
@@ -77,16 +77,16 @@
       },
       "default value":
       {
-        "type": "greater than or equal to",
-        "left operand":
+        "greater than or equal to":
         {
-          "type": "int",
-          "value": 7
-        },
-        "right operand":
-        {
-          "type": "int",
-          "value": 9
+          "left operand":
+          {
+            "int": 7
+          },
+          "right operand":
+          {
+            "int": 9
+          }
         }
       }
     },
@@ -99,16 +99,16 @@
       },
       "default value":
       {
-        "type": "equal to",
-        "left operand":
+        "equal to":
         {
-          "type": "int",
-          "value": 7
-        },
-        "right operand":
-        {
-          "type": "int",
-          "value": 9
+          "left operand":
+          {
+            "int": 7
+          },
+          "right operand":
+          {
+            "int": 9
+          }
         }
       }
     },
@@ -121,16 +121,16 @@
       },
       "default value":
       {
-        "type": "not equal to",
-        "left operand":
+        "not equal to":
         {
-          "type": "int",
-          "value": 7
-        },
-        "right operand":
-        {
-          "type": "int",
-          "value": 9
+          "left operand":
+          {
+            "int": 7
+          },
+          "right operand":
+          {
+            "int": 9
+          }
         }
       }
     },
@@ -143,16 +143,16 @@
       },
       "default value":
       {
-        "type": "logical and",
-        "left operand":
+        "logical and":
         {
-          "type": "bool",
-          "value": true
-        },
-        "right operand":
-        {
-          "type": "bool",
-          "value": false
+          "left operand":
+          {
+            "bool": true
+          },
+          "right operand":
+          {
+            "bool": false
+          }
         }
       }
     },
@@ -165,16 +165,16 @@
       },
       "default value":
       {
-        "type": "logical or",
-        "left operand":
+        "logical or":
         {
-          "type": "bool",
-          "value": true
-        },
-        "right operand":
-        {
-          "type": "bool",
-          "value": false
+          "left operand":
+          {
+            "bool": true
+          },
+          "right operand":
+          {
+            "bool": false
+          }
         }
       }
     },
@@ -187,11 +187,12 @@
       },
       "default value":
       {
-        "type": "logical negation",
-        "operand":
+        "logical negation":
         {
-          "type": "bool",
-          "value": true
+          "operand":
+          {
+            "bool": true
+          }
         }
       }
     },
@@ -204,16 +205,16 @@
       },
       "default value":
       {
-        "type": "multiplication",
-        "left operand":
+        "multiplication":
         {
-          "type": "int",
-          "value": 7
-        },
-        "right operand":
-        {
-          "type": "int",
-          "value": 9
+          "left operand":
+          {
+            "int": 7
+          },
+          "right operand":
+          {
+            "int": 9
+          }
         }
       }
     },
@@ -226,16 +227,16 @@
       },
       "default value":
       {
-        "type": "division",
-        "left operand":
+        "division":
         {
-          "type": "int",
-          "value": 7
-        },
-        "right operand":
-        {
-          "type": "int",
-          "value": 9
+          "left operand":
+          {
+            "int": 7
+          },
+          "right operand":
+          {
+            "int": 9
+          }
         }
       }
     },
@@ -248,16 +249,16 @@
       },
       "default value":
       {
-        "type": "modulo",
-        "left operand":
+        "modulo":
         {
-          "type": "int",
-          "value": 7
-        },
-        "right operand":
-        {
-          "type": "int",
-          "value": 9
+          "left operand":
+          {
+            "int": 7
+          },
+          "right operand":
+          {
+            "int": 9
+          }
         }
       }
     },
@@ -270,8 +271,7 @@
       },
       "default value":
       {
-        "type": "int",
-        "value": 16
+        "int": 16
       }
     },
     {
@@ -283,16 +283,16 @@
       },
       "default value":
       {
-        "type": "subtraction",
-        "left operand":
+        "subtraction":
         {
-          "type": "int",
-          "value": 7
-        },
-        "right operand":
-        {
-          "type": "int",
-          "value": 9
+          "left operand":
+          {
+            "int": 7
+          },
+          "right operand":
+          {
+            "int": 9
+          }
         }
       }
     },
@@ -305,16 +305,16 @@
       },
       "default value":
       {
-        "type": "left shift",
-        "left operand":
+        "left shift":
         {
-          "type": "int",
-          "value": 7
-        },
-        "right operand":
-        {
-          "type": "int",
-          "value": 2
+          "left operand":
+          {
+            "int": 7
+          },
+          "right operand":
+          {
+            "int": 2
+          }
         }
       }
     },
@@ -327,16 +327,16 @@
       },
       "default value":
       {
-        "type": "right shift",
-        "left operand":
+        "right shift":
         {
-          "type": "int",
-          "value": 7
-        },
-        "right operand":
-        {
-          "type": "int",
-          "value": 2
+          "left operand":
+          {
+            "int": 7
+          },
+          "right operand":
+          {
+            "int": 2
+          }
         }
       }
     },
@@ -349,16 +349,16 @@
       },
       "default value":
       {
-        "type": "bitwise and",
-        "left operand":
+        "bitwise and":
         {
-          "type": "int",
-          "value": 7
-        },
-        "right operand":
-        {
-          "type": "int",
-          "value": 9
+          "left operand":
+          {
+            "int": 7
+          },
+          "right operand":
+          {
+            "int": 9
+          }
         }
       }
     },
@@ -371,16 +371,16 @@
       },
       "default value":
       {
-        "type": "bitwise exclusive or",
-        "left operand":
+        "bitwise exclusive or":
         {
-          "type": "int",
-          "value": 7
-        },
-        "right operand":
-        {
-          "type": "int",
-          "value": 9
+          "left operand":
+          {
+            "int": 7
+          },
+          "right operand":
+          {
+            "int": 9
+          }
         }
       }
     },
@@ -393,16 +393,16 @@
       },
       "default value":
       {
-        "type": "bitwise inclusive or",
-        "left operand":
+        "bitwise inclusive or":
         {
-          "type": "int",
-          "value": 7
-        },
-        "right operand":
-        {
-          "type": "int",
-          "value": 9
+          "left operand":
+          {
+            "int": 7
+          },
+          "right operand":
+          {
+            "int": 9
+          }
         }
       }
     },
@@ -415,8 +415,7 @@
       },
       "default value":
       {
-        "type": "int",
-        "value": 7
+        "int": 7
       }
     },
     {
@@ -428,11 +427,12 @@
       },
       "default value":
       {
-        "type": "negation",
-        "operand":
+        "negation":
         {
-          "type": "int",
-          "value": 7
+          "operand":
+          {
+            "int": 7
+          }
         }
       }
     },
@@ -445,11 +445,12 @@
       },
       "default value":
       {
-        "type": "complement",
-        "operand":
+        "complement":
         {
-          "type": "int",
-          "value": 7
+          "operand":
+          {
+            "int": 7
+          }
         }
       }
     },
@@ -462,21 +463,20 @@
       },
       "default value":
       {
-        "type": "conditional",
-        "condition operand":
+        "conditional":
         {
-          "type": "bool",
-          "value": true
-        },
-        "true operand":
-        {
-          "type": "int",
-          "value": 8
-        },
-        "false operand":
-        {
-          "type": "int",
-          "value": 6
+          "condition operand":
+          {
+            "bool": true
+          },
+          "true operand":
+          {
+            "int": 8
+          },
+          "false operand":
+          {
+            "int": 6
+          }
         }
       }
     }

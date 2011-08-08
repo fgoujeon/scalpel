@@ -11,11 +11,12 @@
       },
       "default value":
       {
-        "type": "conversion to bool",
-        "source value":
+        "conversion to bool":
         {
-          "type": "int",
-          "value": 0
+          "source value":
+          {
+            "int": 0
+          }
         }
       }
     },
@@ -35,11 +36,12 @@
       },
       "default value":
       {
-        "type": "conversion to bool",
-        "source value":
+        "conversion to bool":
         {
-          "type": "int",
-          "value": 1
+          "source value":
+          {
+            "int": 1
+          }
         }
       }
     },
@@ -65,14 +67,17 @@
       },
       "default value":
       {
-        "type": "conversion to bool",
-        "source value":
+        "conversion to bool":
         {
-          "type": "negation",
-          "operand":
+          "source value":
           {
-            "type": "int",
-            "value": 2
+            "negation":
+            {
+              "operand":
+              {
+                "int": 2
+              }
+            }
           }
         }
       }
