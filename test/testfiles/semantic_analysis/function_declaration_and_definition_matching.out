@@ -1,9 +1,9 @@
 {
-  "id": 0,
+  "id": "namespace-0",
   "simple functions":
   [
     {
-      "id": 0,
+      "id": "simple-function-0",
       "name": "f",
       "return type":
       {
@@ -27,7 +27,7 @@
       ]
     },
     {
-      "id": 1,
+      "id": "simple-function-1",
       "name": "g",
       "return type":
       {
@@ -52,7 +52,7 @@
       ]
     },
     {
-      "id": 2,
+      "id": "simple-function-2",
       "name": "h",
       "return type":
       {
@@ -83,7 +83,7 @@
       ]
     },
     {
-      "id": 3,
+      "id": "simple-function-3",
       "name": "i",
       "return type":
       {

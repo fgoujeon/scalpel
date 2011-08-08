@@ -1,9 +1,9 @@
 {
-  "id": 0,
+  "id": "namespace-0",
   "variables":
   [
     {
-      "id": 0,
+      "id": "variable-0",
       "name": "str1",
       "type":
       {
@@ -28,7 +28,7 @@
       }
     },
     {
-      "id": 1,
+      "id": "variable-1",
       "name": "str2",
       "type":
       {
@@ -54,7 +54,7 @@
       }
     },
     {
-      "id": 2,
+      "id": "variable-2",
       "name": "str3",
       "type":
       {
@@ -77,7 +77,7 @@
       }
     },
     {
-      "id": 3,
+      "id": "variable-3",
       "name": "str4",
       "type":
       {
@@ -101,7 +101,7 @@
       }
     },
     {
-      "id": 4,
+      "id": "variable-4",
       "name": "wstr1",
       "type":
       {
@@ -126,7 +126,7 @@
       }
     },
     {
-      "id": 5,
+      "id": "variable-5",
       "name": "wstr2",
       "type":
       {
@@ -152,7 +152,7 @@
       }
     },
     {
-      "id": 6,
+      "id": "variable-6",
       "name": "wstr3",
       "type":
       {
@@ -175,7 +175,7 @@
       }
     },
     {
-      "id": 7,
+      "id": "variable-7",
       "name": "wstr4",
       "type":
       {

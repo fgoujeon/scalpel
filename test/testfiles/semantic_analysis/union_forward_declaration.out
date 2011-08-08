@@ -1,14 +1,14 @@
 {
-  "id": 0,
+  "id": "namespace-0",
   "classes":
   [
     {
-      "id": 0,
+      "id": "class-0",
       "name": "c",
       "unions":
       [
         {
-          "id": 0,
+          "id": "member-union-0",
           "name": "u",
           "access": "private",
           "destructor":
@@ -26,7 +26,7 @@
   "unions":
   [
     {
-      "id": 0,
+      "id": "union-0",
       "name": "u",
       "destructor":
       {

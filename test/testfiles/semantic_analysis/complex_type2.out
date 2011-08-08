@@ -1,9 +1,9 @@
 {
-  "id": 0,
+  "id": "namespace-0",
   "variables":
   [
     {
-      "id": 0,
+      "id": "variable-0",
       "name": "i",
       "type":
       {

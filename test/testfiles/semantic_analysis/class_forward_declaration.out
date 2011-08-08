@@ -1,14 +1,14 @@
 {
-  "id": 0,
+  "id": "namespace-0",
   "namespaces":
   [
     {
-      "id": 1,
+      "id": "namespace-1",
       "name": "n",
       "classes":
       [
         {
-          "id": 0,
+          "id": "class-0",
           "name": "s",
           "destructor":
           {
@@ -21,7 +21,7 @@
   "classes":
   [
     {
-      "id": 1,
+      "id": "class-1",
       "name": "s",
       "destructor":
       {

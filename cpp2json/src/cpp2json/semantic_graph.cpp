@@ -192,49 +192,49 @@ semantic_graph_serializer::serialize_type_visitor::operator()(const array& type)
 void
 semantic_graph_serializer::serialize_type_visitor::operator()(const class_* type)
 {
-	writer_.write_key_value_pair("class", serializer_.get_id(*type));
+	writer_.write_key_value_pair("class", serializer_.get_id_str(*type));
 }
 
 void
 semantic_graph_serializer::serialize_type_visitor::operator()(const member_class* type)
 {
-	writer_.write_key_value_pair("member class", serializer_.get_id(*type));
+	writer_.write_key_value_pair("member class", serializer_.get_id_str(*type));
 }
 
 void
 semantic_graph_serializer::serialize_type_visitor::operator()(const union_* type)
 {
-	writer_.write_key_value_pair("union", serializer_.get_id(*type));
+	writer_.write_key_value_pair("union", serializer_.get_id_str(*type));
 }
 
 void
 semantic_graph_serializer::serialize_type_visitor::operator()(const member_union* type)
 {
-	writer_.write_key_value_pair("member union", serializer_.get_id(*type));
+	writer_.write_key_value_pair("member union", serializer_.get_id_str(*type));
 }
 
 void
 semantic_graph_serializer::serialize_type_visitor::operator()(const anonymous_union* type)
 {
-	writer_.write_key_value_pair("anonymous union", serializer_.get_id(*type));
+	writer_.write_key_value_pair("anonymous union", serializer_.get_id_str(*type));
 }
 
 void
 semantic_graph_serializer::serialize_type_visitor::operator()(const anonymous_member_union* type)
 {
-	writer_.write_key_value_pair("anonymous member union", serializer_.get_id(*type));
+	writer_.write_key_value_pair("anonymous member union", serializer_.get_id_str(*type));
 }
 
 void
 semantic_graph_serializer::serialize_type_visitor::operator()(const enum_t* type)
 {
-	writer_.write_key_value_pair("enum", serializer_.get_id(*type));
+	writer_.write_key_value_pair("enum", serializer_.get_id_str(*type));
 }
 
 void
 semantic_graph_serializer::serialize_type_visitor::operator()(const member_enum_t* type)
 {
-	writer_.write_key_value_pair("member enum", serializer_.get_id(*type));
+	writer_.write_key_value_pair("member enum", serializer_.get_id_str(*type));
 }
 
 void
@@ -488,7 +488,7 @@ semantic_graph_serializer::serialize_namespace_alias
 )
 {
 	serialize_name_property(entity);
-	writer_.write_key_value_pair("namespace id", get_id(entity.referred_namespace()));
+	writer_.write_key_value_pair("namespace id", get_id_str(entity.referred_namespace()));
 }
 
 namespace
@@ -654,14 +654,14 @@ semantic_graph_serializer::serialize_expression_visitor::operator()(const conver
 void
 semantic_graph_serializer::serialize_expression_visitor::operator()(variable* const& v)
 {
-	serializer_.writer_.write_key_value_pair(expression_to_string<variable*>::value, serializer_.get_id(*v));
+	serializer_.writer_.write_key_value_pair(expression_to_string<variable*>::value, serializer_.get_id_str(*v));
 }
 
 template<typename T>
 void
 semantic_graph_serializer::serialize_expression_visitor::operator()(enum_constant<T>* const constant)
 {
-	serializer_.writer_.write_key_value_pair(expression_to_string<enum_constant<T>*>::value, serializer_.get_id(*constant));
+	serializer_.writer_.write_key_value_pair(expression_to_string<enum_constant<T>*>::value, serializer_.get_id_str(*constant));
 }
 
 void
@@ -851,9 +851,9 @@ semantic_graph_serializer::serialize_class_id_attribute
 )
 {
 	if(const class_* const* opt = scalpel::utility::get<class_*>(&entity))
-		writer_.write_key_value_pair("class id", get_id(**opt));
+		writer_.write_key_value_pair("class id", get_id_str(**opt));
 	else if(const member_class* const* opt = scalpel::utility::get<member_class*>(&entity))
-		writer_.write_key_value_pair("member class id", get_id(**opt));
+		writer_.write_key_value_pair("member class id", get_id_str(**opt));
 }
 
 

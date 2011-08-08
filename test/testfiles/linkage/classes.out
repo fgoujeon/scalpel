@@ -1,9 +1,9 @@
 {
-  "id": 0,
+  "id": "namespace-0",
   "classes":
   [
     {
-      "id": 0,
+      "id": "class-0",
       "name": "c",
       "destructor":
       {
@@ -14,7 +14,7 @@
   "simple functions":
   [
     {
-      "id": 0,
+      "id": "simple-function-0",
       "name": "f",
       "return type":
       {
@@ -34,7 +34,7 @@
                   "const": true,
                   "type":
                   {
-                    "class": 0
+                    "class": "class-0"
                   }
                 }
               }
@@ -44,7 +44,7 @@
       ]
     },
     {
-      "id": 1,
+      "id": "simple-function-1",
       "name": "f",
       "return type":
       {
@@ -59,7 +59,7 @@
             {
               "type":
               {
-                "class": 0
+                "class": "class-0"
               }
             }
           }

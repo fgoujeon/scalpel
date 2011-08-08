@@ -1,9 +1,9 @@
 {
-  "id": 0,
+  "id": "namespace-0",
   "variables":
   [
     {
-      "id": 0,
+      "id": "variable-0",
       "name": "i",
       "type":
       {
@@ -15,7 +15,7 @@
       }
     },
     {
-      "id": 1,
+      "id": "variable-1",
       "name": "i1",
       "type":
       {
@@ -23,11 +23,11 @@
       },
       "default value":
       {
-        "variable": 0
+        "variable": "variable-0"
       }
     },
     {
-      "id": 2,
+      "id": "variable-2",
       "name": "i2",
       "type":
       {
@@ -39,13 +39,13 @@
         {
           "operand":
           {
-            "variable": 0
+            "variable": "variable-0"
           }
         }
       }
     },
     {
-      "id": 3,
+      "id": "variable-3",
       "name": "i3",
       "type":
       {
@@ -57,13 +57,13 @@
         {
           "operand":
           {
-            "variable": 0
+            "variable": "variable-0"
           }
         }
       }
     },
     {
-      "id": 4,
+      "id": "variable-4",
       "name": "i4",
       "type":
       {
@@ -81,13 +81,13 @@
         {
           "operand":
           {
-            "variable": 0
+            "variable": "variable-0"
           }
         }
       }
     },
     {
-      "id": 5,
+      "id": "variable-5",
       "name": "i5",
       "type":
       {
@@ -99,7 +99,7 @@
         {
           "operand":
           {
-            "variable": 4
+            "variable": "variable-4"
           }
         }
       }

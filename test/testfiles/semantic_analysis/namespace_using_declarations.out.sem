@@ -1,14 +1,14 @@
 {
-  "id": 0,
+  "id": "namespace-0",
   "namespaces":
   [
     {
-      "id": 1,
+      "id": "namespace-1",
       "name": "n",
       "classes":
       [
         {
-          "id": 0,
+          "id": "class-0",
           "name": "c",
           "complete": false,
           "destructor":
@@ -20,7 +20,7 @@
       "enums":
       [
         {
-          "id": 0,
+          "id": "enum-0",
           "name": "e",
           "constants":
           [
@@ -30,7 +30,7 @@
       "typedefs":
       [
         {
-          "id": 0,
+          "id": "typedef-0",
           "name": "integer",
           "type":
           {
@@ -41,7 +41,7 @@
       "operator functions":
       [
         {
-          "id": 0,
+          "id": "operator-function-0",
           "overloaded operator": "==",
           "defined": false,
           "return type":
@@ -57,7 +57,7 @@
                 {
                   "type":
                   {
-                    "class": 0
+                    "class": "class-0"
                   }
                 }
               }
@@ -69,7 +69,7 @@
                 {
                   "type":
                   {
-                    "class": 0
+                    "class": "class-0"
                   }
                 }
               }
@@ -80,7 +80,7 @@
       "simple functions":
       [
         {
-          "id": 0,
+          "id": "simple-function-0",
           "name": "f",
           "defined": false,
           "return type":
@@ -89,7 +89,7 @@
           }
         },
         {
-          "id": 1,
+          "id": "simple-function-1",
           "name": "f",
           "defined": false,
           "return type":
@@ -110,7 +110,7 @@
       "variables":
       [
         {
-          "id": 0,
+          "id": "variable-0",
           "name": "i",
           "type":
           {
@@ -123,40 +123,40 @@
   "class aliases":
   [
     {
-      "id": 0
+      "id": "class-0"
     }
   ],
   "enum aliases":
   [
     {
-      "id": 0
+      "id": "enum-0"
     }
   ],
   "typedef aliases":
   [
     {
-      "id": 0
+      "id": "typedef-0"
     }
   ],
   "operator function aliases":
   [
     {
-      "id": 0
+      "id": "operator-function-0"
     }
   ],
   "simple function aliases":
   [
     {
-      "id": 1
+      "id": "simple-function-1"
     },
     {
-      "id": 0
+      "id": "simple-function-0"
     }
   ],
   "variable aliases":
   [
     {
-      "id": 0
+      "id": "variable-0"
     }
   ]
 }

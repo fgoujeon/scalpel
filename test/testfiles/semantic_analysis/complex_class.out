@@ -1,19 +1,19 @@
 {
-  "id": 0,
+  "id": "namespace-0",
   "namespaces":
   [
     {
-      "id": 1,
+      "id": "namespace-1",
       "name": "n",
       "namespaces":
       [
         {
-          "id": 2,
+          "id": "namespace-2",
           "name": "n2",
           "classes":
           [
             {
-              "id": 0,
+              "id": "class-0",
               "name": "base1",
               "destructor":
               {
@@ -28,7 +28,7 @@
   "classes":
   [
     {
-      "id": 1,
+      "id": "class-1",
       "name": "base2",
       "destructor":
       {
@@ -36,7 +36,7 @@
       }
     },
     {
-      "id": 2,
+      "id": "class-2",
       "name": "base3",
       "destructor":
       {
@@ -44,21 +44,21 @@
       }
     },
     {
-      "id": 3,
+      "id": "class-3",
       "name": "test",
       "base classes":
       [
         {
-          "class id": 0,
+          "class id": "class-0",
           "access": "public"
         },
         {
-          "class id": 1,
+          "class id": "class-1",
           "access": "private",
           "virtual": true
         },
         {
-          "class id": 2,
+          "class id": "class-2",
           "access": "protected",
           "virtual": true
         }
@@ -83,7 +83,7 @@
                       "const": true,
                       "type":
                       {
-                        "class": 3
+                        "class": "class-3"
                       }
                     }
                   }
@@ -117,7 +117,7 @@
       "operator functions":
       [
         {
-          "id": 0,
+          "id": "operator-member-function-0",
           "overloaded operator": "new[]",
           "access": "public",
           "return type":
@@ -153,7 +153,7 @@
           ]
         },
         {
-          "id": 1,
+          "id": "operator-member-function-1",
           "overloaded operator": "delete[]",
           "access": "public",
           "return type":
@@ -177,7 +177,7 @@
           ]
         },
         {
-          "id": 2,
+          "id": "operator-member-function-2",
           "overloaded operator": "=",
           "access": "public",
           "return type":
@@ -191,7 +191,7 @@
                   "const": true,
                   "type":
                   {
-                    "class": 3
+                    "class": "class-3"
                   }
                 }
               }
@@ -212,7 +212,7 @@
                       "const": true,
                       "type":
                       {
-                        "class": 3
+                        "class": "class-3"
                       }
                     }
                   }
@@ -222,7 +222,7 @@
           ]
         },
         {
-          "id": 3,
+          "id": "operator-member-function-3",
           "overloaded operator": "==",
           "access": "public",
           "const": true,
@@ -245,7 +245,7 @@
                       "const": true,
                       "type":
                       {
-                        "class": 3
+                        "class": "class-3"
                       }
                     }
                   }
@@ -258,7 +258,7 @@
       "conversion functions":
       [
         {
-          "id": 0,
+          "id": "conversion-function-0",
           "access": "public",
           "const": true,
           "return type":
@@ -270,7 +270,7 @@
       "simple functions":
       [
         {
-          "id": 0,
+          "id": "simple-member-function-0",
           "name": "pure_virtual",
           "access": "public",
           "virtual": true,
@@ -281,7 +281,7 @@
           }
         },
         {
-          "id": 1,
+          "id": "simple-member-function-1",
           "name": "static_function",
           "access": "public",
           "return type":
@@ -290,7 +290,7 @@
           }
         },
         {
-          "id": 2,
+          "id": "simple-member-function-2",
           "name": "update",
           "access": "protected",
           "inline": true,
@@ -300,7 +300,7 @@
           }
         },
         {
-          "id": 3,
+          "id": "simple-member-function-3",
           "name": "value",
           "access": "public",
           "inline": true,
@@ -314,7 +314,7 @@
       "variables":
       [
         {
-          "id": 0,
+          "id": "member-variable-0",
           "name": "value_",
           "access": "private",
           "type":
@@ -326,7 +326,7 @@
       "static variables":
       [
         {
-          "id": 0,
+          "id": "static-member-variable-0",
           "access": "private",
           "type":
           {

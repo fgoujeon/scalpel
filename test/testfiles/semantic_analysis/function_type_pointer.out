@@ -1,9 +1,9 @@
 {
-  "id": 0,
+  "id": "namespace-0",
   "typedefs":
   [
     {
-      "id": 0,
+      "id": "typedef-0",
       "name": "fun_ptr_t",
       "type":
       {
@@ -36,7 +36,7 @@
   "simple functions":
   [
     {
-      "id": 0,
+      "id": "simple-function-0",
       "name": "f",
       "return type":
       {
@@ -72,7 +72,7 @@
       ]
     },
     {
-      "id": 1,
+      "id": "simple-function-1",
       "name": "g",
       "defined": false,
       "return type":
@@ -111,7 +111,7 @@
   "variables":
   [
     {
-      "id": 0,
+      "id": "variable-0",
       "name": "fun_ptr",
       "type":
       {
@@ -141,7 +141,7 @@
       }
     },
     {
-      "id": 1,
+      "id": "variable-1",
       "name": "fun_ptr2",
       "type":
       {

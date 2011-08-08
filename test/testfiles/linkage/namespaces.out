@@ -1,22 +1,22 @@
 {
-  "id": 0,
+  "id": "namespace-0",
   "namespaces":
   [
     {
-      "id": 1,
+      "id": "namespace-1",
       "name": "m"
     },
     {
-      "id": 2,
+      "id": "namespace-2",
       "name": "n",
       "namespaces":
       [
         {
-          "id": 3,
+          "id": "namespace-3",
           "name": "n2"
         },
         {
-          "id": 4,
+          "id": "namespace-4",
           "name": "n3"
         }
       ]

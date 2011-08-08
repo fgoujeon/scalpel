@@ -1,14 +1,14 @@
 {
-  "id": 0,
+  "id": "namespace-0",
   "namespaces":
   [
     {
-      "id": 1,
+      "id": "namespace-1",
       "name": "n",
       "classes":
       [
         {
-          "id": 0,
+          "id": "class-0",
           "name": "c",
           "destructor":
           {
@@ -19,13 +19,13 @@
       "variables":
       [
         {
-          "id": 0,
+          "id": "variable-0",
           "name": "fun_ptr",
           "type":
           {
             "pointer to member":
             {
-              "class id": 0,
+              "class id": "class-0",
               "type":
               {
                 "function type":
@@ -46,13 +46,13 @@
           }
         },
         {
-          "id": 1,
+          "id": "variable-1",
           "name": "int_ptr",
           "type":
           {
             "pointer to member":
             {
-              "class id": 1,
+              "class id": "class-1",
               "type":
               {
                 "fundamental type": "int"
@@ -66,7 +66,7 @@
   "classes":
   [
     {
-      "id": 1,
+      "id": "class-1",
       "name": "c",
       "destructor":
       {
@@ -77,7 +77,7 @@
   "simple functions":
   [
     {
-      "id": 0,
+      "id": "simple-function-0",
       "name": "f",
       "return type":
       {
@@ -91,7 +91,7 @@
           {
             "pointer to member":
             {
-              "class id": 1,
+              "class id": "class-1",
               "type":
               {
                 "fundamental type": "int"

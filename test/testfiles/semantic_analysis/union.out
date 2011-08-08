@@ -1,14 +1,14 @@
 {
-  "id": 0,
+  "id": "namespace-0",
   "unions":
   [
     {
-      "id": 0,
+      "id": "union-0",
       "name": "u",
       "classes":
       [
         {
-          "id": 0,
+          "id": "member-class-0",
           "name": "c",
           "access": "public",
           "destructor":
@@ -18,7 +18,7 @@
           "variables":
           [
             {
-              "id": 0,
+              "id": "member-variable-0",
               "name": "i",
               "access": "private",
               "type":
@@ -36,7 +36,7 @@
       "variables":
       [
         {
-          "id": 1,
+          "id": "member-variable-1",
           "name": "d",
           "access": "public",
           "type":
@@ -45,7 +45,7 @@
           }
         },
         {
-          "id": 2,
+          "id": "member-variable-2",
           "name": "i",
           "access": "public",
           "type":
@@ -59,11 +59,11 @@
   "variables":
   [
     {
-      "id": 0,
+      "id": "variable-0",
       "name": "u0",
       "type":
       {
-        "union": 0
+        "union": "union-0"
       }
     }
   ]

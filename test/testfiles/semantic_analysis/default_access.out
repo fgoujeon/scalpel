@@ -1,9 +1,9 @@
 {
-  "id": 0,
+  "id": "namespace-0",
   "classes":
   [
     {
-      "id": 0,
+      "id": "class-0",
       "name": "base",
       "destructor":
       {
@@ -11,12 +11,12 @@
       }
     },
     {
-      "id": 1,
+      "id": "class-1",
       "name": "c",
       "base classes":
       [
         {
-          "class id": 0,
+          "class id": "class-0",
           "access": "private"
         }
       ],
@@ -27,7 +27,7 @@
       "variables":
       [
         {
-          "id": 0,
+          "id": "member-variable-0",
           "name": "i",
           "access": "private",
           "type":
@@ -38,12 +38,12 @@
       ]
     },
     {
-      "id": 2,
+      "id": "class-2",
       "name": "s",
       "base classes":
       [
         {
-          "class id": 0,
+          "class id": "class-0",
           "access": "public"
         }
       ],
@@ -54,7 +54,7 @@
       "variables":
       [
         {
-          "id": 1,
+          "id": "member-variable-1",
           "name": "i",
           "access": "public",
           "type":

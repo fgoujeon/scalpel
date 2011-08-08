@@ -1,9 +1,9 @@
 {
-  "id": 0,
+  "id": "namespace-0",
   "simple functions":
   [
     {
-      "id": 0,
+      "id": "simple-function-0",
       "name": "f",
       "return type":
       {

@@ -1,11 +1,11 @@
 {
-  "id": 0,
+  "id": "namespace-0",
   "unnamed namespace":
   {
     "classes":
     [
       {
-        "id": 0,
+        "id": "class-0",
         "name": "c",
         "destructor":
         {
@@ -16,7 +16,7 @@
     "variables":
     [
       {
-        "id": 0,
+        "id": "variable-0",
         "name": "i",
         "type":
         {
@@ -28,15 +28,15 @@
   "variables":
   [
     {
-      "id": 1,
+      "id": "variable-1",
       "name": "c0",
       "type":
       {
-        "class": 0
+        "class": "class-0"
       }
     },
     {
-      "id": 2,
+      "id": "variable-2",
       "name": "i",
       "type":
       {

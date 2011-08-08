@@ -1,9 +1,9 @@
 {
-  "id": 0,
+  "id": "namespace-0",
   "classes":
   [
     {
-      "id": 0,
+      "id": "class-0",
       "name": "square",
       "constructors":
       [
@@ -36,7 +36,7 @@
       "simple functions":
       [
         {
-          "id": 0,
+          "id": "simple-member-function-0",
           "name": "size",
           "access": "public",
           "const": true,
@@ -46,7 +46,7 @@
           }
         },
         {
-          "id": 1,
+          "id": "simple-member-function-1",
           "name": "size",
           "access": "public",
           "return type":
@@ -75,7 +75,7 @@
       "variables":
       [
         {
-          "id": 0,
+          "id": "member-variable-0",
           "name": "size_",
           "access": "private",
           "type":

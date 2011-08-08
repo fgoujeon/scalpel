@@ -1,9 +1,9 @@
 {
-  "id": 0,
+  "id": "namespace-0",
   "variables":
   [
     {
-      "id": 0,
+      "id": "variable-0",
       "name": "v01",
       "type":
       {
@@ -11,7 +11,7 @@
       }
     },
     {
-      "id": 1,
+      "id": "variable-1",
       "name": "v02",
       "type":
       {
@@ -19,7 +19,7 @@
       }
     },
     {
-      "id": 2,
+      "id": "variable-2",
       "name": "v03",
       "type":
       {
@@ -27,7 +27,7 @@
       }
     },
     {
-      "id": 3,
+      "id": "variable-3",
       "name": "v04",
       "type":
       {
@@ -35,7 +35,7 @@
       }
     },
     {
-      "id": 4,
+      "id": "variable-4",
       "name": "v05",
       "type":
       {
@@ -43,7 +43,7 @@
       }
     },
     {
-      "id": 5,
+      "id": "variable-5",
       "name": "v06",
       "type":
       {
@@ -51,7 +51,7 @@
       }
     },
     {
-      "id": 6,
+      "id": "variable-6",
       "name": "v07",
       "type":
       {
@@ -59,7 +59,7 @@
       }
     },
     {
-      "id": 7,
+      "id": "variable-7",
       "name": "v08",
       "type":
       {
@@ -67,7 +67,7 @@
       }
     },
     {
-      "id": 8,
+      "id": "variable-8",
       "name": "v09",
       "type":
       {
@@ -75,7 +75,7 @@
       }
     },
     {
-      "id": 9,
+      "id": "variable-9",
       "name": "v10",
       "type":
       {
@@ -83,7 +83,7 @@
       }
     },
     {
-      "id": 10,
+      "id": "variable-10",
       "name": "v11",
       "type":
       {
@@ -91,7 +91,7 @@
       }
     },
     {
-      "id": 11,
+      "id": "variable-11",
       "name": "v12",
       "type":
       {
@@ -99,7 +99,7 @@
       }
     },
     {
-      "id": 12,
+      "id": "variable-12",
       "name": "v13",
       "type":
       {
@@ -107,7 +107,7 @@
       }
     },
     {
-      "id": 13,
+      "id": "variable-13",
       "name": "v14",
       "type":
       {
@@ -115,7 +115,7 @@
       }
     },
     {
-      "id": 14,
+      "id": "variable-14",
       "name": "v15",
       "type":
       {
@@ -123,7 +123,7 @@
       }
     },
     {
-      "id": 15,
+      "id": "variable-15",
       "name": "v16",
       "type":
       {
@@ -131,7 +131,7 @@
       }
     },
     {
-      "id": 16,
+      "id": "variable-16",
       "name": "v17",
       "type":
       {
@@ -139,7 +139,7 @@
       }
     },
     {
-      "id": 17,
+      "id": "variable-17",
       "name": "v18",
       "type":
       {
@@ -147,7 +147,7 @@
       }
     },
     {
-      "id": 18,
+      "id": "variable-18",
       "name": "v19",
       "type":
       {
@@ -155,7 +155,7 @@
       }
     },
     {
-      "id": 19,
+      "id": "variable-19",
       "name": "v20",
       "type":
       {
@@ -163,7 +163,7 @@
       }
     },
     {
-      "id": 20,
+      "id": "variable-20",
       "name": "v21",
       "type":
       {
@@ -171,7 +171,7 @@
       }
     },
     {
-      "id": 21,
+      "id": "variable-21",
       "name": "v22",
       "type":
       {
@@ -179,7 +179,7 @@
       }
     },
     {
-      "id": 22,
+      "id": "variable-22",
       "name": "v23",
       "type":
       {
@@ -187,7 +187,7 @@
       }
     },
     {
-      "id": 23,
+      "id": "variable-23",
       "name": "v24",
       "type":
       {
@@ -195,7 +195,7 @@
       }
     },
     {
-      "id": 24,
+      "id": "variable-24",
       "name": "v25",
       "type":
       {
@@ -203,7 +203,7 @@
       }
     },
     {
-      "id": 25,
+      "id": "variable-25",
       "name": "v26",
       "type":
       {

@@ -1,31 +1,31 @@
 {
-  "id": 0,
+  "id": "namespace-0",
   "classes":
   [
     {
-      "id": 0,
+      "id": "class-0",
       "name": "s",
       "enums":
       [
         {
-          "id": 0,
+          "id": "member-enum-0",
           "name": "color",
           "access": "private",
           "constants":
           [
             {
               "name": "RED",
-              "id": 0,
+              "id": "int-enum-constant-0",
               "value": 0
             },
             {
               "name": "GREEN",
-              "id": 1,
+              "id": "int-enum-constant-1",
               "value": 1
             },
             {
               "name": "BLUE",
-              "id": 2,
+              "id": "int-enum-constant-2",
               "value": 2
             }
           ]
@@ -40,18 +40,18 @@
   "enums":
   [
     {
-      "id": 0,
+      "id": "enum-0",
       "name": "direction",
       "constants":
       [
         {
           "name": "LEFT",
-          "id": 3,
+          "id": "int-enum-constant-3",
           "value": 0
         },
         {
           "name": "RIGHT",
-          "id": 4,
+          "id": "int-enum-constant-4",
           "value": 1
         }
       ]
@@ -60,19 +60,19 @@
   "variables":
   [
     {
-      "id": 0,
+      "id": "variable-0",
       "name": "c",
       "type":
       {
-        "member enum": 0
+        "member enum": "member-enum-0"
       }
     },
     {
-      "id": 1,
+      "id": "variable-1",
       "name": "d",
       "type":
       {
-        "enum": 0
+        "enum": "enum-0"
       }
     }
   ]

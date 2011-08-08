@@ -1,14 +1,14 @@
 {
-  "id": 0,
+  "id": "namespace-0",
   "classes":
   [
     {
-      "id": 0,
+      "id": "class-0",
       "name": "c",
       "unions":
       [
         {
-          "id": 0,
+          "id": "member-union-0",
           "name": "inner",
           "access": "private",
           "destructor":
@@ -18,7 +18,7 @@
           "variables":
           [
             {
-              "id": 0,
+              "id": "member-variable-0",
               "name": "d",
               "access": "public",
               "type":
@@ -27,7 +27,7 @@
               }
             },
             {
-              "id": 1,
+              "id": "member-variable-1",
               "name": "i",
               "access": "public",
               "type":
@@ -47,12 +47,12 @@
   "unions":
   [
     {
-      "id": 0,
+      "id": "union-0",
       "name": "u",
       "unions":
       [
         {
-          "id": 1,
+          "id": "member-union-1",
           "name": "inner",
           "access": "public",
           "destructor":
@@ -62,7 +62,7 @@
           "variables":
           [
             {
-              "id": 2,
+              "id": "member-variable-2",
               "name": "d",
               "access": "public",
               "type":
@@ -71,7 +71,7 @@
               }
             },
             {
-              "id": 3,
+              "id": "member-variable-3",
               "name": "i",
               "access": "public",
               "type":
@@ -89,7 +89,7 @@
       "variables":
       [
         {
-          "id": 4,
+          "id": "member-variable-4",
           "name": "c",
           "access": "public",
           "type":
@@ -98,12 +98,12 @@
           }
         },
         {
-          "id": 5,
+          "id": "member-variable-5",
           "name": "i",
           "access": "public",
           "type":
           {
-            "member union": 1
+            "member union": "member-union-1"
           }
         }
       ]
@@ -112,11 +112,11 @@
   "variables":
   [
     {
-      "id": 0,
+      "id": "variable-0",
       "name": "ui",
       "type":
       {
-        "member union": 1
+        "member union": "member-union-1"
       }
     }
   ]

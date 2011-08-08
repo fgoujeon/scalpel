@@ -1,19 +1,19 @@
 {
-  "id": 0,
+  "id": "namespace-0",
   "classes":
   [
     {
-      "id": 0,
+      "id": "class-0",
       "name": "c",
       "anonymous unions":
       [
         {
-          "id": 0,
+          "id": "anonymous-member-union-0",
           "access": "private",
           "variables":
           [
             {
-              "id": 0,
+              "id": "member-variable-0",
               "name": "d",
               "access": "public",
               "type":
@@ -22,7 +22,7 @@
               }
             },
             {
-              "id": 1,
+              "id": "member-variable-1",
               "name": "i",
               "access": "public",
               "type":
@@ -40,11 +40,11 @@
       "variables":
       [
         {
-          "id": 2,
+          "id": "member-variable-2",
           "access": "private",
           "type":
           {
-            "anonymous member union": 0
+            "anonymous member union": "anonymous-member-union-0"
           }
         }
       ]
@@ -53,11 +53,11 @@
   "anonymous unions":
   [
     {
-      "id": 0,
+      "id": "anonymous-union-0",
       "variables":
       [
         {
-          "id": 3,
+          "id": "member-variable-3",
           "name": "d",
           "access": "public",
           "type":
@@ -66,7 +66,7 @@
           }
         },
         {
-          "id": 4,
+          "id": "member-variable-4",
           "name": "i",
           "access": "public",
           "type":
@@ -80,11 +80,11 @@
   "variables":
   [
     {
-      "id": 0,
+      "id": "variable-0",
       "static": "true",
       "type":
       {
-        "anonymous union": 0
+        "anonymous union": "anonymous-union-0"
       }
     }
   ]

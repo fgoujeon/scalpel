@@ -1,14 +1,14 @@
 {
-  "id": 0,
+  "id": "namespace-0",
   "classes":
   [
     {
-      "id": 0,
+      "id": "class-0",
       "name": "s",
       "classes":
       [
         {
-          "id": 0,
+          "id": "member-class-0",
           "name": "inner",
           "access": "public",
           "destructor":
@@ -20,7 +20,7 @@
       "enums":
       [
         {
-          "id": 0,
+          "id": "member-enum-0",
           "name": "e",
           "access": "public",
           "constants":
@@ -31,7 +31,7 @@
       "typedefs":
       [
         {
-          "id": 0,
+          "id": "member-typedef-0",
           "name": "integer",
           "access": "public",
           "type":
@@ -47,7 +47,7 @@
       "operator functions":
       [
         {
-          "id": 0,
+          "id": "operator-member-function-0",
           "overloaded operator": "[]",
           "access": "public",
           "const": true,
@@ -70,7 +70,7 @@
       "conversion functions":
       [
         {
-          "id": 0,
+          "id": "conversion-function-0",
           "access": "public",
           "const": true,
           "defined": false,
@@ -83,7 +83,7 @@
       "simple functions":
       [
         {
-          "id": 0,
+          "id": "simple-member-function-0",
           "name": "f",
           "access": "public",
           "defined": false,
@@ -96,7 +96,7 @@
       "variables":
       [
         {
-          "id": 0,
+          "id": "member-variable-0",
           "name": "i",
           "access": "public",
           "type":
@@ -108,7 +108,7 @@
       "static variables":
       [
         {
-          "id": 0,
+          "id": "static-member-variable-0",
           "access": "public",
           "type":
           {
@@ -119,7 +119,7 @@
       "bit fields":
       [
         {
-          "id": 0,
+          "id": "bit-field-0",
           "name": "j",
           "size": 0,
           "access": "public",
@@ -131,12 +131,12 @@
       ]
     },
     {
-      "id": 1,
+      "id": "class-1",
       "name": "s2",
       "base classes":
       [
         {
-          "class id": 0,
+          "class id": "class-0",
           "access": "public"
         }
       ],
@@ -147,80 +147,80 @@
       "class aliases":
       [
         {
-          "id": 0,
+          "id": "member-class-0",
           "access": "public"
         }
       ],
       "enum aliases":
       [
         {
-          "id": 0,
+          "id": "member-enum-0",
           "access": "public"
         }
       ],
       "typedef aliases":
       [
         {
-          "id": 0,
+          "id": "member-typedef-0",
           "access": "public"
         }
       ],
       "operator function aliases":
       [
         {
-          "id": 0,
+          "id": "operator-member-function-0",
           "access": "public"
         }
       ],
       "conversion function aliases":
       [
         {
-          "id": 0,
+          "id": "conversion-function-0",
           "access": "public"
         }
       ],
       "simple function aliases":
       [
         {
-          "id": 0,
+          "id": "simple-member-function-0",
           "access": "public"
         }
       ],
       "variable aliases":
       [
         {
-          "id": 0,
+          "id": "member-variable-0",
           "access": "public"
         }
       ],
       "static variable aliases":
       [
         {
-          "id": 0,
+          "id": "static-member-variable-0",
           "access": "public"
         }
       ],
       "bit field aliases":
       [
         {
-          "id": 0,
+          "id": "bit-field-0",
           "access": "public"
         }
       ]
     },
     {
-      "id": 2,
+      "id": "class-2",
       "name": "s3",
       "classes":
       [
         {
-          "id": 1,
+          "id": "member-class-1",
           "name": "inner3",
           "access": "public",
           "base classes":
           [
             {
-              "class id": 0,
+              "class id": "class-0",
               "access": "private"
             }
           ],
@@ -231,63 +231,63 @@
           "class aliases":
           [
             {
-              "id": 0,
+              "id": "member-class-0",
               "access": "private"
             }
           ],
           "enum aliases":
           [
             {
-              "id": 0,
+              "id": "member-enum-0",
               "access": "private"
             }
           ],
           "typedef aliases":
           [
             {
-              "id": 0,
+              "id": "member-typedef-0",
               "access": "private"
             }
           ],
           "operator function aliases":
           [
             {
-              "id": 0,
+              "id": "operator-member-function-0",
               "access": "private"
             }
           ],
           "conversion function aliases":
           [
             {
-              "id": 0,
+              "id": "conversion-function-0",
               "access": "private"
             }
           ],
           "simple function aliases":
           [
             {
-              "id": 0,
+              "id": "simple-member-function-0",
               "access": "private"
             }
           ],
           "variable aliases":
           [
             {
-              "id": 0,
+              "id": "member-variable-0",
               "access": "private"
             }
           ],
           "static variable aliases":
           [
             {
-              "id": 0,
+              "id": "static-member-variable-0",
               "access": "private"
             }
           ],
           "bit field aliases":
           [
             {
-              "id": 0,
+              "id": "bit-field-0",
               "access": "private"
             }
           ]

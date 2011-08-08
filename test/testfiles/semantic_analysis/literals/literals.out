@@ -1,9 +1,9 @@
 {
-  "id": 0,
+  "id": "namespace-0",
   "variables":
   [
     {
-      "id": 0,
+      "id": "variable-0",
       "name": "bf",
       "type":
       {
@@ -15,7 +15,7 @@
       }
     },
     {
-      "id": 1,
+      "id": "variable-1",
       "name": "bt",
       "type":
       {
@@ -27,7 +27,7 @@
       }
     },
     {
-      "id": 2,
+      "id": "variable-2",
       "name": "cc0",
       "type":
       {
@@ -39,7 +39,7 @@
       }
     },
     {
-      "id": 3,
+      "id": "variable-3",
       "name": "cc1",
       "type":
       {
@@ -51,7 +51,7 @@
       }
     },
     {
-      "id": 4,
+      "id": "variable-4",
       "name": "cc2",
       "type":
       {
@@ -63,7 +63,7 @@
       }
     },
     {
-      "id": 5,
+      "id": "variable-5",
       "name": "cc3",
       "type":
       {
@@ -75,7 +75,7 @@
       }
     },
     {
-      "id": 6,
+      "id": "variable-6",
       "name": "cc4",
       "type":
       {
@@ -87,7 +87,7 @@
       }
     },
     {
-      "id": 7,
+      "id": "variable-7",
       "name": "cc5",
       "type":
       {
@@ -99,7 +99,7 @@
       }
     },
     {
-      "id": 8,
+      "id": "variable-8",
       "name": "cc6",
       "type":
       {
@@ -111,7 +111,7 @@
       }
     },
     {
-      "id": 9,
+      "id": "variable-9",
       "name": "cc7",
       "type":
       {
@@ -123,7 +123,7 @@
       }
     },
     {
-      "id": 10,
+      "id": "variable-10",
       "name": "cc8",
       "type":
       {
@@ -135,7 +135,7 @@
       }
     },
     {
-      "id": 11,
+      "id": "variable-11",
       "name": "ci0",
       "type":
       {
@@ -147,7 +147,7 @@
       }
     },
     {
-      "id": 12,
+      "id": "variable-12",
       "name": "ci1",
       "type":
       {
@@ -159,7 +159,7 @@
       }
     },
     {
-      "id": 13,
+      "id": "variable-13",
       "name": "ci2",
       "type":
       {
@@ -171,7 +171,7 @@
       }
     },
     {
-      "id": 14,
+      "id": "variable-14",
       "name": "ci3",
       "type":
       {
@@ -183,7 +183,7 @@
       }
     },
     {
-      "id": 15,
+      "id": "variable-15",
       "name": "ci4",
       "type":
       {
@@ -195,7 +195,7 @@
       }
     },
     {
-      "id": 16,
+      "id": "variable-16",
       "name": "cw0",
       "type":
       {
@@ -207,7 +207,7 @@
       }
     },
     {
-      "id": 17,
+      "id": "variable-17",
       "name": "cw1",
       "type":
       {
@@ -219,7 +219,7 @@
       }
     },
     {
-      "id": 18,
+      "id": "variable-18",
       "name": "cw2",
       "type":
       {
@@ -231,7 +231,7 @@
       }
     },
     {
-      "id": 19,
+      "id": "variable-19",
       "name": "fd0",
       "type":
       {
@@ -243,7 +243,7 @@
       }
     },
     {
-      "id": 20,
+      "id": "variable-20",
       "name": "fd1",
       "type":
       {
@@ -255,7 +255,7 @@
       }
     },
     {
-      "id": 21,
+      "id": "variable-21",
       "name": "ff0",
       "type":
       {
@@ -267,7 +267,7 @@
       }
     },
     {
-      "id": 22,
+      "id": "variable-22",
       "name": "ff1",
       "type":
       {
@@ -279,7 +279,7 @@
       }
     },
     {
-      "id": 23,
+      "id": "variable-23",
       "name": "fld",
       "type":
       {
@@ -291,7 +291,7 @@
       }
     },
     {
-      "id": 24,
+      "id": "variable-24",
       "name": "ii",
       "type":
       {
@@ -303,7 +303,7 @@
       }
     },
     {
-      "id": 25,
+      "id": "variable-25",
       "name": "ili",
       "type":
       {
@@ -315,7 +315,7 @@
       }
     },
     {
-      "id": 26,
+      "id": "variable-26",
       "name": "illi",
       "type":
       {
@@ -327,7 +327,7 @@
       }
     },
     {
-      "id": 27,
+      "id": "variable-27",
       "name": "iui",
       "type":
       {
@@ -339,7 +339,7 @@
       }
     },
     {
-      "id": 28,
+      "id": "variable-28",
       "name": "iuli",
       "type":
       {
@@ -351,7 +351,7 @@
       }
     },
     {
-      "id": 29,
+      "id": "variable-29",
       "name": "iulli",
       "type":
       {

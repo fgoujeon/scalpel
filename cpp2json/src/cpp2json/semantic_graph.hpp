@@ -59,7 +59,10 @@ struct singular_key_of_type;
 template<class Entity>
 struct plural_key_of_type;
 
-#define KEYS_OF_TYPE(TYPE, SINGULAR_KEY, PLURAL_KEY) \
+template<class Entity>
+struct id_prefix;
+
+#define KEYS_OF_TYPE(TYPE, SINGULAR_KEY, PLURAL_KEY, ID_PREFIX) \
 template<> \
 struct singular_key_of_type<TYPE> \
 { \
@@ -70,34 +73,44 @@ template<> \
 struct plural_key_of_type<TYPE> \
 { \
 	static constexpr char const* value = PLURAL_KEY; \
+}; \
+ \
+template<> \
+struct id_prefix<TYPE> \
+{ \
+	static constexpr char const* value = ID_PREFIX; \
 };
 
-KEYS_OF_TYPE(namespace_alias, "namespace alias", "namespace aliases")
-KEYS_OF_TYPE(namespace_, "namespace", "namespaces")
-KEYS_OF_TYPE(linked_namespace, "namespace", "namespaces")
-KEYS_OF_TYPE(unnamed_namespace, "unnamed namespace", "unnamed namespaces")
-KEYS_OF_TYPE(linked_unnamed_namespace, "unnamed namespace", "unnamed namespaces")
-KEYS_OF_TYPE(class_, "class", "classes")
-KEYS_OF_TYPE(member_class, "class", "classes")
-KEYS_OF_TYPE(union_, "union", "unions")
-KEYS_OF_TYPE(member_union, "union", "unions")
-KEYS_OF_TYPE(anonymous_union, "anonymous union", "anonymous unions")
-KEYS_OF_TYPE(anonymous_member_union, "anonymous union", "anonymous unions")
-KEYS_OF_TYPE(enum_t, "enum", "enums")
-KEYS_OF_TYPE(member_enum_t, "enum", "enums")
-KEYS_OF_TYPE(typedef_, "typedef", "typedefs")
-KEYS_OF_TYPE(member_typedef, "typedef", "typedefs")
-KEYS_OF_TYPE(constructor, "constructor", "constructors")
-KEYS_OF_TYPE(destructor, "destructor", "destructors")
-KEYS_OF_TYPE(operator_member_function, "operator function", "operator functions")
-KEYS_OF_TYPE(conversion_function, "conversion function", "conversion functions")
-KEYS_OF_TYPE(simple_member_function, "simple function", "simple functions")
-KEYS_OF_TYPE(operator_function, "operator function", "operator functions")
-KEYS_OF_TYPE(simple_function, "simple function", "simple functions")
-KEYS_OF_TYPE(variable, "variable", "variables")
-KEYS_OF_TYPE(member_variable, "variable", "variables")
-KEYS_OF_TYPE(static_member_variable, "static variable", "static variables")
-KEYS_OF_TYPE(bit_field, "bit field", "bit fields")
+KEYS_OF_TYPE(namespace_alias, "namespace alias", "namespace aliases", "namespace-alias")
+KEYS_OF_TYPE(namespace_, "namespace", "namespaces", "namespace")
+KEYS_OF_TYPE(linked_namespace, "namespace", "namespaces", "namespace")
+KEYS_OF_TYPE(unnamed_namespace, "unnamed namespace", "unnamed namespaces", "unnamed-namespace")
+KEYS_OF_TYPE(linked_unnamed_namespace, "unnamed namespace", "unnamed namespaces", "unnamed-namespace")
+KEYS_OF_TYPE(class_, "class", "classes", "class")
+KEYS_OF_TYPE(member_class, "class", "classes", "member-class")
+KEYS_OF_TYPE(union_, "union", "unions", "union")
+KEYS_OF_TYPE(member_union, "union", "unions", "member-union")
+KEYS_OF_TYPE(anonymous_union, "anonymous union", "anonymous unions", "anonymous-union")
+KEYS_OF_TYPE(anonymous_member_union, "anonymous union", "anonymous unions", "anonymous-member-union")
+KEYS_OF_TYPE(enum_t, "enum", "enums", "enum")
+KEYS_OF_TYPE(member_enum_t, "enum", "enums", "member-enum")
+KEYS_OF_TYPE(typedef_, "typedef", "typedefs", "typedef")
+KEYS_OF_TYPE(member_typedef, "typedef", "typedefs", "member-typedef")
+KEYS_OF_TYPE(constructor, "constructor", "constructors", "constructor")
+KEYS_OF_TYPE(destructor, "destructor", "destructors", "destructor")
+KEYS_OF_TYPE(operator_member_function, "operator function", "operator functions", "operator-member-function")
+KEYS_OF_TYPE(conversion_function, "conversion function", "conversion functions", "conversion-function")
+KEYS_OF_TYPE(simple_member_function, "simple function", "simple functions", "simple-member-function")
+KEYS_OF_TYPE(operator_function, "operator function", "operator functions", "operator-function")
+KEYS_OF_TYPE(simple_function, "simple function", "simple functions", "simple-function")
+KEYS_OF_TYPE(variable, "variable", "variables", "variable")
+KEYS_OF_TYPE(member_variable, "variable", "variables", "member-variable")
+KEYS_OF_TYPE(static_member_variable, "static variable", "static variables", "static-member-variable")
+KEYS_OF_TYPE(bit_field, "bit field", "bit fields", "bit-field")
+KEYS_OF_TYPE(enum_constant<int>, "int enum constant", "int enum constants", "int-enum-constant")
+KEYS_OF_TYPE(enum_constant<unsigned int>, "unsigned int enum constant", "unsigned int enum constants", "unsigned-int-enum-constant")
+KEYS_OF_TYPE(enum_constant<long>, "long enum constant", "long enum constants", "long-enum-constant")
+KEYS_OF_TYPE(enum_constant<unsigned long>, "unsigned long enum constant", "unsigned long enum constants", "unsigned-long-enum-constant")
 
 #undef KEYS_OF_TYPE
 
@@ -228,7 +241,7 @@ class semantic_graph_serializer
 				serialize_enum_visitor
 				(
 					semantic_graph_serializer& serializer,
-					const unsigned int id
+					const std::string& id
 				);
 
 				template<template<typename> class BasicEnum, typename UnderlyingType>
@@ -237,7 +250,7 @@ class semantic_graph_serializer
 
 			private:
 				semantic_graph_serializer& serializer_;
-				const unsigned int id_;
+				const std::string id_;
 		};
 		friend class serialize_enum_visitor;
 
@@ -569,7 +582,7 @@ class semantic_graph_serializer
 			const entity_alias<Entity>& entity
 		)
 		{
-			writer_.write_key_value_pair("id", get_id(entity.referred_entity()));
+			writer_.write_key_value_pair("id", get_id_str(entity.referred_entity()));
 		}
 
 		template<class Entity>
@@ -579,7 +592,7 @@ class semantic_graph_serializer
 			const member_entity_alias<Entity>& entity
 		)
 		{
-			writer_.write_key_value_pair("id", get_id(entity.referred_entity()));
+			writer_.write_key_value_pair("id", get_id_str(entity.referred_entity()));
 			serialize_access_property(entity);
 		}
 
@@ -822,6 +835,16 @@ class semantic_graph_serializer
 				return it->second;
 			else
 				assert(false);
+		}
+
+		//return prefix-#id (e.g. "variable-12")
+		template<class Entity>
+		std::string
+		get_id_str(const Entity& entity) const
+		{
+			std::ostringstream oss;
+			oss << id_prefix<Entity>::value << '-' << get_id(entity);
+			return oss.str();
 		}
 
 		template<class Entity>

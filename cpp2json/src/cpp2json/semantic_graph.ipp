@@ -31,7 +31,7 @@ semantic_graph_serializer::serialize_namespace
 	const Namespace& entity
 )
 {
-	writer_.write_key_value_pair("id", get_id(entity));
+	writer_.write_key_value_pair("id", get_id_str(entity));
 	if(!entity.name().empty())
 	{
 		writer_.write_key_value_pair("name", entity.name());
@@ -59,7 +59,7 @@ semantic_graph_serializer::serialize_class
 	const Class& entity
 )
 {
-	writer_.write_key_value_pair("id", get_id(entity));
+	writer_.write_key_value_pair("id", get_id_str(entity));
 	serialize_name_property(entity);
 	serialize_access_property(entity);
 
@@ -76,7 +76,7 @@ semantic_graph_serializer::serialize_class
 semantic_graph_serializer::serialize_enum_visitor::serialize_enum_visitor
 (
 	semantic_graph_serializer& serializer,
-	const unsigned int id
+	const std::string& id
 ):
 	serializer_(serializer),
 	id_(id)
@@ -97,7 +97,7 @@ semantic_graph_serializer::serialize_enum_visitor::operator()(const BasicEnum<Un
 	{
 		serializer_.writer_.open_object();
 		serializer_.writer_.write_key_value_pair("name", constant.name());
-		serializer_.writer_.write_key_value_pair("id", serializer_.get_id(constant));
+		serializer_.writer_.write_key_value_pair("id", serializer_.get_id_str(constant));
 		serializer_.writer_.write_key_value_pair("value", constant.value());
 		serializer_.writer_.close_object();
 	}
@@ -111,8 +111,7 @@ semantic_graph_serializer::serialize_enum
 	const Enum& entity
 )
 {
-	unsigned int id = get_id(entity);
-	serialize_enum_visitor visitor(*this, id);
+	serialize_enum_visitor visitor(*this, get_id_str(entity));
 	apply_visitor(visitor, entity);
 }
 
@@ -185,7 +184,7 @@ template<class Entity>
 void
 semantic_graph_serializer::serialize_id_attribute(const Entity& entity)
 {
-	writer_.write_key_value_pair("id", get_id(entity));
+	writer_.write_key_value_pair("id", get_id_str(entity));
 }
 
 template<class Entity>

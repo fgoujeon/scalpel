@@ -1,9 +1,9 @@
 {
-  "id": 0,
+  "id": "namespace-0",
   "classes":
   [
     {
-      "id": 0,
+      "id": "class-0",
       "name": "s",
       "constructors":
       [
@@ -30,7 +30,7 @@
       "simple functions":
       [
         {
-          "id": 0,
+          "id": "simple-member-function-0",
           "name": "f",
           "access": "public",
           "variadic": true,
@@ -46,7 +46,7 @@
   "simple functions":
   [
     {
-      "id": 0,
+      "id": "simple-function-0",
       "name": "f",
       "variadic": true,
       "return type":
@@ -55,7 +55,7 @@
       }
     },
     {
-      "id": 1,
+      "id": "simple-function-1",
       "name": "g",
       "variadic": true,
       "defined": false,

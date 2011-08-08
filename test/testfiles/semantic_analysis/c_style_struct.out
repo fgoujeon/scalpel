@@ -1,9 +1,9 @@
 {
-  "id": 0,
+  "id": "namespace-0",
   "classes":
   [
     {
-      "id": 0,
+      "id": "class-0",
       "name": "point",
       "destructor":
       {
@@ -12,7 +12,7 @@
       "variables":
       [
         {
-          "id": 0,
+          "id": "member-variable-0",
           "name": "x",
           "access": "public",
           "type":
@@ -21,7 +21,7 @@
           }
         },
         {
-          "id": 1,
+          "id": "member-variable-1",
           "name": "y",
           "access": "public",
           "type":
@@ -35,11 +35,11 @@
   "simple functions":
   [
     {
-      "id": 0,
+      "id": "simple-function-0",
       "name": "create_point",
       "return type":
       {
-        "class": 0
+        "class": "class-0"
       },
       "parameters":
       [
@@ -60,7 +60,7 @@
       ]
     },
     {
-      "id": 1,
+      "id": "simple-function-1",
       "name": "distance",
       "return type":
       {
@@ -72,14 +72,14 @@
           "name": "p1",
           "type":
           {
-            "class": 0
+            "class": "class-0"
           }
         },
         {
           "name": "p2",
           "type":
           {
-            "class": 0
+            "class": "class-0"
           }
         }
       ]
@@ -88,11 +88,11 @@
   "variables":
   [
     {
-      "id": 0,
+      "id": "variable-0",
       "name": "p",
       "type":
       {
-        "class": 0
+        "class": "class-0"
       }
     }
   ]

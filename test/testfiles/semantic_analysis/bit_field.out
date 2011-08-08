@@ -1,9 +1,9 @@
 {
-  "id": 0,
+  "id": "namespace-0",
   "classes":
   [
     {
-      "id": 0,
+      "id": "class-0",
       "name": "s",
       "destructor":
       {
@@ -12,7 +12,7 @@
       "bit fields":
       [
         {
-          "id": 0,
+          "id": "bit-field-0",
           "name": "i",
           "size": 0,
           "access": "public",
@@ -23,7 +23,7 @@
           }
         },
         {
-          "id": 1,
+          "id": "bit-field-1",
           "size": 0,
           "access": "public",
           "type":
@@ -32,7 +32,7 @@
           }
         },
         {
-          "id": 2,
+          "id": "bit-field-2",
           "size": 0,
           "access": "public",
           "type":
