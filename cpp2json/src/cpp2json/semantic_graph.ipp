@@ -83,6 +83,23 @@ semantic_graph_serializer::serialize_enum_visitor::serialize_enum_visitor
 {
 }
 
+template<typename T>
+struct fundamental_type_to_string;
+
+#define FUNDAMENTAL_TYPE_TO_STRING(TYPE, STRING) \
+template<> \
+struct fundamental_type_to_string<TYPE> \
+{ \
+	static constexpr const char* value = STRING; \
+};
+
+FUNDAMENTAL_TYPE_TO_STRING(int, "int")
+FUNDAMENTAL_TYPE_TO_STRING(unsigned int, "unsigned int")
+FUNDAMENTAL_TYPE_TO_STRING(long int, "long int")
+FUNDAMENTAL_TYPE_TO_STRING(long unsigned int, "long unsigned int")
+
+#undef FUNDAMENTAL_TYPE_TO_STRING
+
 template<template<typename> class BasicEnum, typename UnderlyingType>
 void
 semantic_graph_serializer::serialize_enum_visitor::operator()(const BasicEnum<UnderlyingType>& entity) const
@@ -90,6 +107,7 @@ semantic_graph_serializer::serialize_enum_visitor::operator()(const BasicEnum<Un
 	serializer_.writer_.write_key_value_pair("id", id_);
 	if(!entity.name().empty())
 		serializer_.writer_.write_key_value_pair("name", entity.name());
+	serializer_.writer_.write_key_value_pair("underlying type", fundamental_type_to_string<UnderlyingType>::value);
 	serializer_.serialize_access_property(entity);
 
 	serializer_.writer_.open_array("constants");

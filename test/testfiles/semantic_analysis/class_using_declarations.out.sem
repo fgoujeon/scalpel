@@ -22,6 +22,7 @@
         {
           "id": "member-enum-0",
           "name": "e",
+          "underlying type": "int",
           "access": "public",
           "constants":
           [

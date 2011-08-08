@@ -10,6 +10,7 @@
         {
           "id": "member-enum-0",
           "name": "color",
+          "underlying type": "int",
           "access": "private",
           "constants":
           [
@@ -42,6 +43,7 @@
     {
       "id": "enum-0",
       "name": "direction",
+      "underlying type": "int",
       "constants":
       [
         {
