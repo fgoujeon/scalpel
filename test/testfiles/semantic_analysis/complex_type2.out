@@ -7,32 +7,45 @@
       "name": "i",
       "type":
       {
-        "category": "pointer",
-        "qualified type":
+        "pointer":
         {
-          "category": "pointer",
-          "qualified type":
+          "type":
           {
-            "category": "array",
-            "size": 3,
-            "qualified type":
+            "pointer":
             {
-              "category": "pointer",
-              "qualified type":
+              "type":
               {
-                "category": "cv-qualified type",
-                "const": true,
-                "qualified type":
+                "array":
                 {
-                  "category": "pointer",
-                  "qualified type":
+                  "size": 3,
+                  "type":
                   {
-                    "category": "array",
-                    "size": 5,
-                    "qualified type":
+                    "pointer":
                     {
-                      "category": "fundamental type",
-                      "type": "int"
+                      "type":
+                      {
+                        "cv-qualified type":
+                        {
+                          "const": true,
+                          "type":
+                          {
+                            "pointer":
+                            {
+                              "type":
+                              {
+                                "array":
+                                {
+                                  "size": 5,
+                                  "type":
+                                  {
+                                    "fundamental type": "int"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
                     }
                   }
                 }

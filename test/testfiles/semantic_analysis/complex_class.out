@@ -74,15 +74,18 @@
               "name": "t",
               "type":
               {
-                "category": "reference",
-                "qualified type":
+                "reference":
                 {
-                  "category": "cv-qualified type",
-                  "const": true,
-                  "qualified type":
+                  "type":
                   {
-                    "category": "class",
-                    "id": 3
+                    "cv-qualified type":
+                    {
+                      "const": true,
+                      "type":
+                      {
+                        "class": 3
+                      }
+                    }
                   }
                 }
               }
@@ -99,8 +102,7 @@
               "name": "i",
               "type":
               {
-                "category": "fundamental type",
-                "type": "int"
+                "fundamental type": "int"
               }
             }
           ]
@@ -120,11 +122,12 @@
           "access": "public",
           "return type":
           {
-            "category": "pointer",
-            "qualified type":
+            "pointer":
             {
-              "category": "fundamental type",
-              "type": "void"
+              "type":
+              {
+                "fundamental type": "void"
+              }
             }
           },
           "parameters":
@@ -132,18 +135,18 @@
             {
               "type":
               {
-                "category": "fundamental type",
-                "type": "unsigned long int"
+                "fundamental type": "unsigned long int"
               }
             },
             {
               "type":
               {
-                "category": "pointer",
-                "qualified type":
+                "pointer":
                 {
-                  "category": "fundamental type",
-                  "type": "void"
+                  "type":
+                  {
+                    "fundamental type": "void"
+                  }
                 }
               }
             }
@@ -155,19 +158,19 @@
           "access": "public",
           "return type":
           {
-            "category": "fundamental type",
-            "type": "void"
+            "fundamental type": "void"
           },
           "parameters":
           [
             {
               "type":
               {
-                "category": "pointer",
-                "qualified type":
+                "pointer":
                 {
-                  "category": "fundamental type",
-                  "type": "void"
+                  "type":
+                  {
+                    "fundamental type": "void"
+                  }
                 }
               }
             }
@@ -179,15 +182,18 @@
           "access": "public",
           "return type":
           {
-            "category": "reference",
-            "qualified type":
+            "reference":
             {
-              "category": "cv-qualified type",
-              "const": true,
-              "qualified type":
+              "type":
               {
-                "category": "class",
-                "id": 3
+                "cv-qualified type":
+                {
+                  "const": true,
+                  "type":
+                  {
+                    "class": 3
+                  }
+                }
               }
             }
           },
@@ -197,15 +203,18 @@
               "name": "t",
               "type":
               {
-                "category": "reference",
-                "qualified type":
+                "reference":
                 {
-                  "category": "cv-qualified type",
-                  "const": true,
-                  "qualified type":
+                  "type":
                   {
-                    "category": "class",
-                    "id": 3
+                    "cv-qualified type":
+                    {
+                      "const": true,
+                      "type":
+                      {
+                        "class": 3
+                      }
+                    }
                   }
                 }
               }
@@ -219,8 +228,7 @@
           "const": true,
           "return type":
           {
-            "category": "fundamental type",
-            "type": "bool"
+            "fundamental type": "bool"
           },
           "parameters":
           [
@@ -228,15 +236,18 @@
               "name": "t",
               "type":
               {
-                "category": "reference",
-                "qualified type":
+                "reference":
                 {
-                  "category": "cv-qualified type",
-                  "const": true,
-                  "qualified type":
+                  "type":
                   {
-                    "category": "class",
-                    "id": 3
+                    "cv-qualified type":
+                    {
+                      "const": true,
+                      "type":
+                      {
+                        "class": 3
+                      }
+                    }
                   }
                 }
               }
@@ -252,8 +263,7 @@
           "const": true,
           "return type":
           {
-            "category": "fundamental type",
-            "type": "int"
+            "fundamental type": "int"
           }
         }
       ],
@@ -267,8 +277,7 @@
           "pure": true,
           "return type":
           {
-            "category": "fundamental type",
-            "type": "void"
+            "fundamental type": "void"
           }
         },
         {
@@ -277,8 +286,7 @@
           "access": "public",
           "return type":
           {
-            "category": "fundamental type",
-            "type": "bool"
+            "fundamental type": "bool"
           }
         },
         {
@@ -288,8 +296,7 @@
           "inline": true,
           "return type":
           {
-            "category": "fundamental type",
-            "type": "void"
+            "fundamental type": "void"
           }
         },
         {
@@ -300,8 +307,7 @@
           "const": true,
           "return type":
           {
-            "category": "fundamental type",
-            "type": "int"
+            "fundamental type": "int"
           }
         }
       ],
@@ -313,8 +319,7 @@
           "access": "private",
           "type":
           {
-            "category": "fundamental type",
-            "type": "int"
+            "fundamental type": "int"
           }
         }
       ],
@@ -325,12 +330,13 @@
           "access": "private",
           "type":
           {
-            "category": "cv-qualified type",
-            "const": true,
-            "qualified type":
+            "cv-qualified type":
             {
-              "category": "fundamental type",
-              "type": "bool"
+              "const": true,
+              "type":
+              {
+                "fundamental type": "bool"
+              }
             }
           }
         }

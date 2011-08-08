@@ -7,8 +7,7 @@
       "name": "bf",
       "type":
       {
-        "category": "fundamental type",
-        "type": "bool"
+        "fundamental type": "bool"
       },
       "default value":
       {
@@ -21,8 +20,7 @@
       "name": "bt",
       "type":
       {
-        "category": "fundamental type",
-        "type": "bool"
+        "fundamental type": "bool"
       },
       "default value":
       {
@@ -35,8 +33,7 @@
       "name": "cc0",
       "type":
       {
-        "category": "fundamental type",
-        "type": "char"
+        "fundamental type": "char"
       },
       "default value":
       {
@@ -49,8 +46,7 @@
       "name": "cc1",
       "type":
       {
-        "category": "fundamental type",
-        "type": "char"
+        "fundamental type": "char"
       },
       "default value":
       {
@@ -63,8 +59,7 @@
       "name": "cc2",
       "type":
       {
-        "category": "fundamental type",
-        "type": "char"
+        "fundamental type": "char"
       },
       "default value":
       {
@@ -77,8 +72,7 @@
       "name": "cc3",
       "type":
       {
-        "category": "fundamental type",
-        "type": "char"
+        "fundamental type": "char"
       },
       "default value":
       {
@@ -91,8 +85,7 @@
       "name": "cc4",
       "type":
       {
-        "category": "fundamental type",
-        "type": "char"
+        "fundamental type": "char"
       },
       "default value":
       {
@@ -105,8 +98,7 @@
       "name": "cc5",
       "type":
       {
-        "category": "fundamental type",
-        "type": "char"
+        "fundamental type": "char"
       },
       "default value":
       {
@@ -119,8 +111,7 @@
       "name": "cc6",
       "type":
       {
-        "category": "fundamental type",
-        "type": "char"
+        "fundamental type": "char"
       },
       "default value":
       {
@@ -133,8 +124,7 @@
       "name": "cc7",
       "type":
       {
-        "category": "fundamental type",
-        "type": "char"
+        "fundamental type": "char"
       },
       "default value":
       {
@@ -147,8 +137,7 @@
       "name": "cc8",
       "type":
       {
-        "category": "fundamental type",
-        "type": "char"
+        "fundamental type": "char"
       },
       "default value":
       {
@@ -161,8 +150,7 @@
       "name": "ci0",
       "type":
       {
-        "category": "fundamental type",
-        "type": "int"
+        "fundamental type": "int"
       },
       "default value":
       {
@@ -175,8 +163,7 @@
       "name": "ci1",
       "type":
       {
-        "category": "fundamental type",
-        "type": "int"
+        "fundamental type": "int"
       },
       "default value":
       {
@@ -189,8 +176,7 @@
       "name": "ci2",
       "type":
       {
-        "category": "fundamental type",
-        "type": "int"
+        "fundamental type": "int"
       },
       "default value":
       {
@@ -203,8 +189,7 @@
       "name": "ci3",
       "type":
       {
-        "category": "fundamental type",
-        "type": "int"
+        "fundamental type": "int"
       },
       "default value":
       {
@@ -217,8 +202,7 @@
       "name": "ci4",
       "type":
       {
-        "category": "fundamental type",
-        "type": "int"
+        "fundamental type": "int"
       },
       "default value":
       {
@@ -231,8 +215,7 @@
       "name": "cw0",
       "type":
       {
-        "category": "fundamental type",
-        "type": "wchar_t"
+        "fundamental type": "wchar_t"
       },
       "default value":
       {
@@ -245,8 +228,7 @@
       "name": "cw1",
       "type":
       {
-        "category": "fundamental type",
-        "type": "wchar_t"
+        "fundamental type": "wchar_t"
       },
       "default value":
       {
@@ -259,8 +241,7 @@
       "name": "cw2",
       "type":
       {
-        "category": "fundamental type",
-        "type": "wchar_t"
+        "fundamental type": "wchar_t"
       },
       "default value":
       {
@@ -273,8 +254,7 @@
       "name": "fd0",
       "type":
       {
-        "category": "fundamental type",
-        "type": "double"
+        "fundamental type": "double"
       },
       "default value":
       {
@@ -287,8 +267,7 @@
       "name": "fd1",
       "type":
       {
-        "category": "fundamental type",
-        "type": "double"
+        "fundamental type": "double"
       },
       "default value":
       {
@@ -301,8 +280,7 @@
       "name": "ff0",
       "type":
       {
-        "category": "fundamental type",
-        "type": "float"
+        "fundamental type": "float"
       },
       "default value":
       {
@@ -315,8 +293,7 @@
       "name": "ff1",
       "type":
       {
-        "category": "fundamental type",
-        "type": "float"
+        "fundamental type": "float"
       },
       "default value":
       {
@@ -329,8 +306,7 @@
       "name": "fld",
       "type":
       {
-        "category": "fundamental type",
-        "type": "long double"
+        "fundamental type": "long double"
       },
       "default value":
       {
@@ -343,8 +319,7 @@
       "name": "ii",
       "type":
       {
-        "category": "fundamental type",
-        "type": "int"
+        "fundamental type": "int"
       },
       "default value":
       {
@@ -357,8 +332,7 @@
       "name": "ili",
       "type":
       {
-        "category": "fundamental type",
-        "type": "long int"
+        "fundamental type": "long int"
       },
       "default value":
       {
@@ -371,8 +345,7 @@
       "name": "illi",
       "type":
       {
-        "category": "fundamental type",
-        "type": "long long int"
+        "fundamental type": "long long int"
       },
       "default value":
       {
@@ -385,8 +358,7 @@
       "name": "iui",
       "type":
       {
-        "category": "fundamental type",
-        "type": "unsigned int"
+        "fundamental type": "unsigned int"
       },
       "default value":
       {
@@ -399,8 +371,7 @@
       "name": "iuli",
       "type":
       {
-        "category": "fundamental type",
-        "type": "unsigned long int"
+        "fundamental type": "unsigned long int"
       },
       "default value":
       {
@@ -413,8 +384,7 @@
       "name": "iulli",
       "type":
       {
-        "category": "fundamental type",
-        "type": "unsigned long long int"
+        "fundamental type": "unsigned long long int"
       },
       "default value":
       {

@@ -7,8 +7,7 @@
       "name": "f",
       "return type":
       {
-        "category": "fundamental type",
-        "type": "int"
+        "fundamental type": "int"
       },
       "parameters":
       [
@@ -16,15 +15,18 @@
           "name": "d",
           "type":
           {
-            "category": "reference",
-            "qualified type":
+            "reference":
             {
-              "category": "cv-qualified type",
-              "const": true,
-              "qualified type":
+              "type":
               {
-                "category": "fundamental type",
-                "type": "double"
+                "cv-qualified type":
+                {
+                  "const": true,
+                  "type":
+                  {
+                    "fundamental type": "double"
+                  }
+                }
               }
             }
           }
@@ -36,8 +38,7 @@
       "name": "f",
       "return type":
       {
-        "category": "fundamental type",
-        "type": "int"
+        "fundamental type": "int"
       },
       "parameters":
       [
@@ -45,11 +46,12 @@
           "name": "d",
           "type":
           {
-            "category": "reference",
-            "qualified type":
+            "reference":
             {
-              "category": "fundamental type",
-              "type": "double"
+              "type":
+              {
+                "fundamental type": "double"
+              }
             }
           }
         }

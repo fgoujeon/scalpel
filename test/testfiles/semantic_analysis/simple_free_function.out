@@ -7,8 +7,7 @@
       "name": "main",
       "return type":
       {
-        "category": "fundamental type",
-        "type": "int"
+        "fundamental type": "int"
       }
     }
   ]

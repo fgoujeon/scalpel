@@ -7,22 +7,27 @@
       "name": "fun_ptr_t",
       "type":
       {
-        "category": "cv-qualified type",
-        "const": true,
-        "qualified type":
+        "cv-qualified type":
         {
-          "category": "pointer",
-          "qualified type":
+          "const": true,
+          "type":
           {
-            "category": "function type",
-            "return type":
+            "pointer":
             {
-              "category": "fundamental type",
-              "type": "int"
-            },
-            "parameter types":
-            [
-            ]
+              "type":
+              {
+                "function type":
+                {
+                  "return type":
+                  {
+                    "fundamental type": "int"
+                  },
+                  "parameter types":
+                  [
+                  ]
+                }
+              }
+            }
           }
         }
       }
@@ -35,8 +40,7 @@
       "name": "f",
       "return type":
       {
-        "category": "fundamental type",
-        "type": "void"
+        "fundamental type": "void"
       },
       "parameters":
       [
@@ -44,22 +48,24 @@
           "name": "fun_ptr",
           "type":
           {
-            "category": "pointer",
-            "qualified type":
+            "pointer":
             {
-              "category": "function type",
-              "return type":
+              "type":
               {
-                "category": "fundamental type",
-                "type": "void"
-              },
-              "parameter types":
-              [
+                "function type":
                 {
-                  "category": "fundamental type",
-                  "type": "int"
+                  "return type":
+                  {
+                    "fundamental type": "void"
+                  },
+                  "parameter types":
+                  [
+                    {
+                      "fundamental type": "int"
+                    }
+                  ]
                 }
-              ]
+              }
             }
           }
         }
@@ -71,30 +77,31 @@
       "defined": false,
       "return type":
       {
-        "category": "fundamental type",
-        "type": "void"
+        "fundamental type": "void"
       },
       "parameters":
       [
         {
           "type":
           {
-            "category": "pointer",
-            "qualified type":
+            "pointer":
             {
-              "category": "function type",
-              "return type":
+              "type":
               {
-                "category": "fundamental type",
-                "type": "int"
-              },
-              "parameter types":
-              [
+                "function type":
                 {
-                  "category": "fundamental type",
-                  "type": "double"
+                  "return type":
+                  {
+                    "fundamental type": "int"
+                  },
+                  "parameter types":
+                  [
+                    {
+                      "fundamental type": "double"
+                    }
+                  ]
                 }
-              ]
+              }
             }
           }
         }
@@ -108,22 +115,27 @@
       "name": "fun_ptr",
       "type":
       {
-        "category": "cv-qualified type",
-        "const": true,
-        "qualified type":
+        "cv-qualified type":
         {
-          "category": "pointer",
-          "qualified type":
+          "const": true,
+          "type":
           {
-            "category": "function type",
-            "return type":
+            "pointer":
             {
-              "category": "fundamental type",
-              "type": "int"
-            },
-            "parameter types":
-            [
-            ]
+              "type":
+              {
+                "function type":
+                {
+                  "return type":
+                  {
+                    "fundamental type": "int"
+                  },
+                  "parameter types":
+                  [
+                  ]
+                }
+              }
+            }
           }
         }
       }
@@ -133,22 +145,27 @@
       "name": "fun_ptr2",
       "type":
       {
-        "category": "cv-qualified type",
-        "const": true,
-        "qualified type":
+        "cv-qualified type":
         {
-          "category": "pointer",
-          "qualified type":
+          "const": true,
+          "type":
           {
-            "category": "function type",
-            "return type":
+            "pointer":
             {
-              "category": "fundamental type",
-              "type": "int"
-            },
-            "parameter types":
-            [
-            ]
+              "type":
+              {
+                "function type":
+                {
+                  "return type":
+                  {
+                    "fundamental type": "int"
+                  },
+                  "parameter types":
+                  [
+                  ]
+                }
+              }
+            }
           }
         }
       }

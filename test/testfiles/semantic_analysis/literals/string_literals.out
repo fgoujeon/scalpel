@@ -7,12 +7,13 @@
       "name": "str1",
       "type":
       {
-        "category": "array",
-        "size": 5,
-        "qualified type":
+        "array":
         {
-          "category": "fundamental type",
-          "type": "char"
+          "size": 5,
+          "type":
+          {
+            "fundamental type": "char"
+          }
         }
       },
       "default value":
@@ -32,12 +33,13 @@
       "name": "str2",
       "type":
       {
-        "category": "array",
-        "size": 6,
-        "qualified type":
+        "array":
         {
-          "category": "fundamental type",
-          "type": "char"
+          "size": 6,
+          "type":
+          {
+            "fundamental type": "char"
+          }
         }
       },
       "default value":
@@ -58,12 +60,13 @@
       "name": "str3",
       "type":
       {
-        "category": "array",
-        "size": 3,
-        "qualified type":
+        "array":
         {
-          "category": "fundamental type",
-          "type": "char"
+          "size": 3,
+          "type":
+          {
+            "fundamental type": "char"
+          }
         }
       },
       "default value":
@@ -81,12 +84,13 @@
       "name": "str4",
       "type":
       {
-        "category": "array",
-        "size": 4,
-        "qualified type":
+        "array":
         {
-          "category": "fundamental type",
-          "type": "char"
+          "size": 4,
+          "type":
+          {
+            "fundamental type": "char"
+          }
         }
       },
       "default value":
@@ -105,12 +109,13 @@
       "name": "wstr1",
       "type":
       {
-        "category": "array",
-        "size": 5,
-        "qualified type":
+        "array":
         {
-          "category": "fundamental type",
-          "type": "wchar_t"
+          "size": 5,
+          "type":
+          {
+            "fundamental type": "wchar_t"
+          }
         }
       },
       "default value":
@@ -130,12 +135,13 @@
       "name": "wstr2",
       "type":
       {
-        "category": "array",
-        "size": 6,
-        "qualified type":
+        "array":
         {
-          "category": "fundamental type",
-          "type": "wchar_t"
+          "size": 6,
+          "type":
+          {
+            "fundamental type": "wchar_t"
+          }
         }
       },
       "default value":
@@ -156,12 +162,13 @@
       "name": "wstr3",
       "type":
       {
-        "category": "array",
-        "size": 3,
-        "qualified type":
+        "array":
         {
-          "category": "fundamental type",
-          "type": "wchar_t"
+          "size": 3,
+          "type":
+          {
+            "fundamental type": "wchar_t"
+          }
         }
       },
       "default value":
@@ -179,12 +186,13 @@
       "name": "wstr4",
       "type":
       {
-        "category": "array",
-        "size": 3,
-        "qualified type":
+        "array":
         {
-          "category": "fundamental type",
-          "type": "wchar_t"
+          "size": 3,
+          "type":
+          {
+            "fundamental type": "wchar_t"
+          }
         }
       },
       "default value":

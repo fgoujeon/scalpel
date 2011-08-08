@@ -34,8 +34,7 @@
           "name": "integer",
           "type":
           {
-            "category": "fundamental type",
-            "type": "int"
+            "fundamental type": "int"
           }
         }
       ],
@@ -47,30 +46,31 @@
           "defined": false,
           "return type":
           {
-            "category": "fundamental type",
-            "type": "bool"
+            "fundamental type": "bool"
           },
           "parameters":
           [
             {
               "type":
               {
-                "category": "reference",
-                "qualified type":
+                "reference":
                 {
-                  "category": "class",
-                  "id": 0
+                  "type":
+                  {
+                    "class": 0
+                  }
                 }
               }
             },
             {
               "type":
               {
-                "category": "reference",
-                "qualified type":
+                "reference":
                 {
-                  "category": "class",
-                  "id": 0
+                  "type":
+                  {
+                    "class": 0
+                  }
                 }
               }
             }
@@ -85,8 +85,7 @@
           "defined": false,
           "return type":
           {
-            "category": "fundamental type",
-            "type": "void"
+            "fundamental type": "void"
           }
         },
         {
@@ -95,16 +94,14 @@
           "defined": false,
           "return type":
           {
-            "category": "fundamental type",
-            "type": "void"
+            "fundamental type": "void"
           },
           "parameters":
           [
             {
               "type":
               {
-                "category": "fundamental type",
-                "type": "int"
+                "fundamental type": "int"
               }
             }
           ]
@@ -117,8 +114,7 @@
           "name": "i",
           "type":
           {
-            "category": "fundamental type",
-            "type": "int"
+            "fundamental type": "int"
           }
         }
       ]

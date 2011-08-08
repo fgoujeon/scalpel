@@ -36,8 +36,7 @@
           "access": "public",
           "type":
           {
-            "category": "fundamental type",
-            "type": "int"
+            "fundamental type": "int"
           }
         }
       ],
@@ -55,16 +54,14 @@
           "defined": false,
           "return type":
           {
-            "category": "fundamental type",
-            "type": "int"
+            "fundamental type": "int"
           },
           "parameters":
           [
             {
               "type":
               {
-                "category": "fundamental type",
-                "type": "int"
+                "fundamental type": "int"
               }
             }
           ]
@@ -79,8 +76,7 @@
           "defined": false,
           "return type":
           {
-            "category": "fundamental type",
-            "type": "bool"
+            "fundamental type": "bool"
           }
         }
       ],
@@ -93,8 +89,7 @@
           "defined": false,
           "return type":
           {
-            "category": "fundamental type",
-            "type": "void"
+            "fundamental type": "void"
           }
         }
       ],
@@ -106,8 +101,7 @@
           "access": "public",
           "type":
           {
-            "category": "fundamental type",
-            "type": "int"
+            "fundamental type": "int"
           }
         }
       ],
@@ -118,8 +112,7 @@
           "access": "public",
           "type":
           {
-            "category": "fundamental type",
-            "type": "int"
+            "fundamental type": "int"
           }
         }
       ],
@@ -132,8 +125,7 @@
           "access": "public",
           "type":
           {
-            "category": "fundamental type",
-            "type": "int"
+            "fundamental type": "int"
           }
         }
       ]

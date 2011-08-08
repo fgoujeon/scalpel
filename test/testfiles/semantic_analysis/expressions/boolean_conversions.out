@@ -7,8 +7,7 @@
       "name": "b1",
       "type":
       {
-        "category": "fundamental type",
-        "type": "bool"
+        "fundamental type": "bool"
       },
       "default value":
       {
@@ -25,12 +24,13 @@
       "name": "b2",
       "type":
       {
-        "category": "cv-qualified type",
-        "const": true,
-        "qualified type":
+        "cv-qualified type":
         {
-          "category": "fundamental type",
-          "type": "bool"
+          "const": true,
+          "type":
+          {
+            "fundamental type": "bool"
+          }
         }
       },
       "default value":
@@ -48,15 +48,18 @@
       "name": "b3",
       "type":
       {
-        "category": "reference",
-        "qualified type":
+        "reference":
         {
-          "category": "cv-qualified type",
-          "const": true,
-          "qualified type":
+          "type":
           {
-            "category": "fundamental type",
-            "type": "bool"
+            "cv-qualified type":
+            {
+              "const": true,
+              "type":
+              {
+                "fundamental type": "bool"
+              }
+            }
           }
         }
       },

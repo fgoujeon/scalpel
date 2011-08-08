@@ -17,8 +17,7 @@
           "access": "public",
           "type":
           {
-            "category": "fundamental type",
-            "type": "int"
+            "fundamental type": "int"
           }
         },
         {
@@ -27,8 +26,7 @@
           "access": "public",
           "type":
           {
-            "category": "fundamental type",
-            "type": "int"
+            "fundamental type": "int"
           }
         }
       ]
@@ -41,8 +39,7 @@
       "name": "create_point",
       "return type":
       {
-        "category": "class",
-        "id": 0
+        "class": 0
       },
       "parameters":
       [
@@ -50,16 +47,14 @@
           "name": "x",
           "type":
           {
-            "category": "fundamental type",
-            "type": "int"
+            "fundamental type": "int"
           }
         },
         {
           "name": "y",
           "type":
           {
-            "category": "fundamental type",
-            "type": "int"
+            "fundamental type": "int"
           }
         }
       ]
@@ -69,8 +64,7 @@
       "name": "distance",
       "return type":
       {
-        "category": "fundamental type",
-        "type": "unsigned int"
+        "fundamental type": "unsigned int"
       },
       "parameters":
       [
@@ -78,16 +72,14 @@
           "name": "p1",
           "type":
           {
-            "category": "class",
-            "id": 0
+            "class": 0
           }
         },
         {
           "name": "p2",
           "type":
           {
-            "category": "class",
-            "id": 0
+            "class": 0
           }
         }
       ]
@@ -100,8 +92,7 @@
       "name": "p",
       "type":
       {
-        "category": "class",
-        "id": 0
+        "class": 0
       }
     }
   ]

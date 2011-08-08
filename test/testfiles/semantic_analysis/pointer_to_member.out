@@ -23,23 +23,25 @@
           "name": "fun_ptr",
           "type":
           {
-            "category": "pointer to member",
-            "class id": 0,
-            "qualified type":
+            "pointer to member":
             {
-              "category": "function type",
-              "return type":
+              "class id": 0,
+              "type":
               {
-                "category": "fundamental type",
-                "type": "void"
-              },
-              "parameter types":
-              [
+                "function type":
                 {
-                  "category": "fundamental type",
-                  "type": "int"
+                  "return type":
+                  {
+                    "fundamental type": "void"
+                  },
+                  "parameter types":
+                  [
+                    {
+                      "fundamental type": "int"
+                    }
+                  ]
                 }
-              ]
+              }
             }
           }
         },
@@ -48,12 +50,13 @@
           "name": "int_ptr",
           "type":
           {
-            "category": "pointer to member",
-            "class id": 1,
-            "qualified type":
+            "pointer to member":
             {
-              "category": "fundamental type",
-              "type": "int"
+              "class id": 1,
+              "type":
+              {
+                "fundamental type": "int"
+              }
             }
           }
         }
@@ -78,8 +81,7 @@
       "name": "f",
       "return type":
       {
-        "category": "fundamental type",
-        "type": "void"
+        "fundamental type": "void"
       },
       "parameters":
       [
@@ -87,12 +89,13 @@
           "name": "int_ptr",
           "type":
           {
-            "category": "pointer to member",
-            "class id": 1,
-            "qualified type":
+            "pointer to member":
             {
-              "category": "fundamental type",
-              "type": "int"
+              "class id": 1,
+              "type":
+              {
+                "fundamental type": "int"
+              }
             }
           }
         }

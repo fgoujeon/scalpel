@@ -17,8 +17,7 @@
             {
               "type":
               {
-                "category": "fundamental type",
-                "type": "int"
+                "fundamental type": "int"
               }
             }
           ]
@@ -38,8 +37,7 @@
           "defined": false,
           "return type":
           {
-            "category": "fundamental type",
-            "type": "bool"
+            "fundamental type": "bool"
           }
         }
       ]
@@ -53,8 +51,7 @@
       "variadic": true,
       "return type":
       {
-        "category": "fundamental type",
-        "type": "void"
+        "fundamental type": "void"
       }
     },
     {
@@ -64,16 +61,14 @@
       "defined": false,
       "return type":
       {
-        "category": "fundamental type",
-        "type": "void"
+        "fundamental type": "void"
       },
       "parameters":
       [
         {
           "type":
           {
-            "category": "fundamental type",
-            "type": "double"
+            "fundamental type": "double"
           }
         }
       ]

@@ -20,8 +20,7 @@
         "name": "i",
         "type":
         {
-          "category": "fundamental type",
-          "type": "int"
+          "fundamental type": "int"
         }
       }
     ]
@@ -33,8 +32,7 @@
       "name": "c0",
       "type":
       {
-        "category": "class",
-        "id": 0
+        "class": 0
       }
     },
     {
@@ -42,8 +40,7 @@
       "name": "i",
       "type":
       {
-        "category": "fundamental type",
-        "type": "int"
+        "fundamental type": "int"
       }
     }
   ]

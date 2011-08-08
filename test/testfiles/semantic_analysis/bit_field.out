@@ -19,8 +19,7 @@
           "mutable": "true",
           "type":
           {
-            "category": "fundamental type",
-            "type": "bool"
+            "fundamental type": "bool"
           }
         },
         {
@@ -29,8 +28,7 @@
           "access": "public",
           "type":
           {
-            "category": "fundamental type",
-            "type": "int"
+            "fundamental type": "int"
           }
         },
         {
@@ -39,8 +37,7 @@
           "access": "public",
           "type":
           {
-            "category": "fundamental type",
-            "type": "unsigned int"
+            "fundamental type": "unsigned int"
           }
         }
       ]

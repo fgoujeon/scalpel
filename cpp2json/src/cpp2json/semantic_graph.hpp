@@ -170,7 +170,7 @@ class semantic_graph_serializer
 
 			private:
 				semantic_graph_serializer& serializer_;
-				std::ostream& output_;
+				detail::json_writer& writer_;
 		};
 		friend class serialize_type_visitor;
 
@@ -219,7 +219,6 @@ class semantic_graph_serializer
 
 			private:
 				semantic_graph_serializer& serializer_;
-				std::ostream& output_;
 		};
 		friend class serialize_expression_visitor;
 
@@ -238,7 +237,6 @@ class semantic_graph_serializer
 
 			private:
 				semantic_graph_serializer& serializer_;
-				std::ostream& output_;
 				const unsigned int id_;
 		};
 		friend class serialize_enum_visitor;
@@ -247,12 +245,6 @@ class semantic_graph_serializer
 		serialize_type
 		(
 			const semantic_entities::type_t& entity
-		);
-
-		void
-		serialize_fundamental_type
-		(
-			const fundamental_type type
 		);
 
 		template<class Namespace>
@@ -329,12 +321,6 @@ class semantic_graph_serializer
 		serialize_simple_function
 		(
 			const simple_function& entity
-		);
-
-		void
-		serialize_function_type
-		(
-			const function_type& entity
 		);
 
 		void
@@ -856,7 +842,6 @@ class semantic_graph_serializer
 
 
 
-		std::ostream& output_;
 		detail::json_writer writer_;
 		typename entity_id_map<semantic_entities::namespace_>::type namespace_id_map_;
 		typename entity_id_map<semantic_entities::linked_namespace>::type linked_namespace_id_map_;

@@ -16,12 +16,13 @@
               "name": "size",
               "type":
               {
-                "category": "cv-qualified type",
-                "const": true,
-                "qualified type":
+                "cv-qualified type":
                 {
-                  "category": "fundamental type",
-                  "type": "unsigned int"
+                  "const": true,
+                  "type":
+                  {
+                    "fundamental type": "unsigned int"
+                  }
                 }
               }
             }
@@ -41,8 +42,7 @@
           "const": true,
           "return type":
           {
-            "category": "fundamental type",
-            "type": "unsigned int"
+            "fundamental type": "unsigned int"
           }
         },
         {
@@ -51,8 +51,7 @@
           "access": "public",
           "return type":
           {
-            "category": "fundamental type",
-            "type": "void"
+            "fundamental type": "void"
           },
           "parameters":
           [
@@ -60,12 +59,13 @@
               "name": "size",
               "type":
               {
-                "category": "cv-qualified type",
-                "const": true,
-                "qualified type":
+                "cv-qualified type":
                 {
-                  "category": "fundamental type",
-                  "type": "unsigned int"
+                  "const": true,
+                  "type":
+                  {
+                    "fundamental type": "unsigned int"
+                  }
                 }
               }
             }
@@ -80,8 +80,7 @@
           "access": "private",
           "type":
           {
-            "category": "fundamental type",
-            "type": "unsigned int"
+            "fundamental type": "unsigned int"
           }
         }
       ]

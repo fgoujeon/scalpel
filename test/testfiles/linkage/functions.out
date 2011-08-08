@@ -7,8 +7,7 @@
       "name": "f",
       "return type":
       {
-        "category": "fundamental type",
-        "type": "void"
+        "fundamental type": "void"
       }
     },
     {
@@ -16,8 +15,7 @@
       "name": "g",
       "return type":
       {
-        "category": "fundamental type",
-        "type": "void"
+        "fundamental type": "void"
       }
     },
     {
@@ -26,8 +24,7 @@
       "defined": false,
       "return type":
       {
-        "category": "fundamental type",
-        "type": "void"
+        "fundamental type": "void"
       }
     }
   ]

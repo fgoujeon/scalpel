@@ -7,20 +7,20 @@
       "name": "f",
       "return type":
       {
-        "category": "fundamental type",
-        "type": "void"
+        "fundamental type": "void"
       },
       "parameters":
       [
         {
           "type":
           {
-            "category": "cv-qualified type",
-            "const": true,
-            "qualified type":
+            "cv-qualified type":
             {
-              "category": "fundamental type",
-              "type": "int"
+              "const": true,
+              "type":
+              {
+                "fundamental type": "int"
+              }
             }
           }
         }
@@ -31,21 +31,21 @@
       "name": "g",
       "return type":
       {
-        "category": "fundamental type",
-        "type": "void"
+        "fundamental type": "void"
       },
       "parameters":
       [
         {
           "type":
           {
-            "category": "cv-qualified type",
-            "const": true,
-            "volatile": true,
-            "qualified type":
+            "cv-qualified type":
             {
-              "category": "fundamental type",
-              "type": "int"
+              "const": true,
+              "volatile": true,
+              "type":
+              {
+                "fundamental type": "int"
+              }
             }
           }
         }
@@ -56,24 +56,26 @@
       "name": "h",
       "return type":
       {
-        "category": "fundamental type",
-        "type": "void"
+        "fundamental type": "void"
       },
       "parameters":
       [
         {
           "type":
           {
-            "category": "cv-qualified type",
-            "const": true,
-            "volatile": true,
-            "qualified type":
+            "cv-qualified type":
             {
-              "category": "pointer",
-              "qualified type":
+              "const": true,
+              "volatile": true,
+              "type":
               {
-                "category": "fundamental type",
-                "type": "int"
+                "pointer":
+                {
+                  "type":
+                  {
+                    "fundamental type": "int"
+                  }
+                }
               }
             }
           }
@@ -85,27 +87,31 @@
       "name": "i",
       "return type":
       {
-        "category": "fundamental type",
-        "type": "void"
+        "fundamental type": "void"
       },
       "parameters":
       [
         {
           "type":
           {
-            "category": "cv-qualified type",
-            "const": true,
-            "qualified type":
+            "cv-qualified type":
             {
-              "category": "pointer",
-              "qualified type":
+              "const": true,
+              "type":
               {
-                "category": "cv-qualified type",
-                "const": true,
-                "qualified type":
+                "pointer":
                 {
-                  "category": "fundamental type",
-                  "type": "double"
+                  "type":
+                  {
+                    "cv-qualified type":
+                    {
+                      "const": true,
+                      "type":
+                      {
+                        "fundamental type": "double"
+                      }
+                    }
+                  }
                 }
               }
             }

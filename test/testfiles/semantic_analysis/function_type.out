@@ -13,16 +13,17 @@
           "access": "private",
           "type":
           {
-            "category": "function type",
-            "const": true,
-            "return type":
+            "function type":
             {
-              "category": "fundamental type",
-              "type": "int"
-            },
-            "parameter types":
-            [
-            ]
+              "const": true,
+              "return type":
+              {
+                "fundamental type": "int"
+              },
+              "parameter types":
+              [
+              ]
+            }
           }
         }
       ],
@@ -38,8 +39,7 @@
           "access": "private",
           "return type":
           {
-            "category": "fundamental type",
-            "type": "int"
+            "fundamental type": "int"
           }
         },
         {
@@ -49,8 +49,7 @@
           "defined": false,
           "return type":
           {
-            "category": "fundamental type",
-            "type": "int"
+            "fundamental type": "int"
           }
         },
         {
@@ -61,8 +60,7 @@
           "defined": false,
           "return type":
           {
-            "category": "fundamental type",
-            "type": "int"
+            "fundamental type": "int"
           }
         }
       ]
@@ -75,15 +73,16 @@
       "name": "fun_t",
       "type":
       {
-        "category": "function type",
-        "return type":
+        "function type":
         {
-          "category": "fundamental type",
-          "type": "int"
-        },
-        "parameter types":
-        [
-        ]
+          "return type":
+          {
+            "fundamental type": "int"
+          },
+          "parameter types":
+          [
+          ]
+        }
       }
     }
   ],
@@ -95,8 +94,7 @@
       "defined": false,
       "return type":
       {
-        "category": "fundamental type",
-        "type": "int"
+        "fundamental type": "int"
       }
     },
     {
@@ -105,23 +103,23 @@
       "defined": false,
       "return type":
       {
-        "category": "fundamental type",
-        "type": "void"
+        "fundamental type": "void"
       },
       "parameters":
       [
         {
           "type":
           {
-            "category": "function type",
-            "return type":
+            "function type":
             {
-              "category": "fundamental type",
-              "type": "int"
-            },
-            "parameter types":
-            [
-            ]
+              "return type":
+              {
+                "fundamental type": "int"
+              },
+              "parameter types":
+              [
+              ]
+            }
           }
         }
       ]
@@ -132,32 +130,33 @@
       "defined": false,
       "return type":
       {
-        "category": "fundamental type",
-        "type": "void"
+        "fundamental type": "void"
       },
       "parameters":
       [
         {
           "type":
           {
-            "category": "function type",
-            "variadic": true,
-            "return type":
+            "function type":
             {
-              "category": "pointer",
-              "qualified type":
+              "variadic": true,
+              "return type":
               {
-                "category": "fundamental type",
-                "type": "int"
-              }
-            },
-            "parameter types":
-            [
-              {
-                "category": "fundamental type",
-                "type": "unsigned int"
-              }
-            ]
+                "pointer":
+                {
+                  "type":
+                  {
+                    "fundamental type": "int"
+                  }
+                }
+              },
+              "parameter types":
+              [
+                {
+                  "fundamental type": "unsigned int"
+                }
+              ]
+            }
           }
         }
       ]
@@ -170,18 +169,21 @@
       "name": "f_ptr",
       "type":
       {
-        "category": "pointer",
-        "qualified type":
+        "pointer":
         {
-          "category": "function type",
-          "return type":
+          "type":
           {
-            "category": "fundamental type",
-            "type": "int"
-          },
-          "parameter types":
-          [
-          ]
+            "function type":
+            {
+              "return type":
+              {
+                "fundamental type": "int"
+              },
+              "parameter types":
+              [
+              ]
+            }
+          }
         }
       }
     }

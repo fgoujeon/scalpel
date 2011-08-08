@@ -7,8 +7,7 @@
       "name": "b1",
       "type":
       {
-        "category": "fundamental type",
-        "type": "bool"
+        "fundamental type": "bool"
       },
       "default value":
       {
@@ -30,8 +29,7 @@
       "name": "b2",
       "type":
       {
-        "category": "fundamental type",
-        "type": "bool"
+        "fundamental type": "bool"
       },
       "default value":
       {
@@ -53,8 +51,7 @@
       "name": "b3",
       "type":
       {
-        "category": "fundamental type",
-        "type": "bool"
+        "fundamental type": "bool"
       },
       "default value":
       {
@@ -76,8 +73,7 @@
       "name": "b4",
       "type":
       {
-        "category": "fundamental type",
-        "type": "bool"
+        "fundamental type": "bool"
       },
       "default value":
       {
@@ -99,8 +95,7 @@
       "name": "b5",
       "type":
       {
-        "category": "fundamental type",
-        "type": "bool"
+        "fundamental type": "bool"
       },
       "default value":
       {
@@ -122,8 +117,7 @@
       "name": "b6",
       "type":
       {
-        "category": "fundamental type",
-        "type": "bool"
+        "fundamental type": "bool"
       },
       "default value":
       {
@@ -145,8 +139,7 @@
       "name": "b7",
       "type":
       {
-        "category": "fundamental type",
-        "type": "bool"
+        "fundamental type": "bool"
       },
       "default value":
       {
@@ -168,8 +161,7 @@
       "name": "b8",
       "type":
       {
-        "category": "fundamental type",
-        "type": "bool"
+        "fundamental type": "bool"
       },
       "default value":
       {
@@ -191,8 +183,7 @@
       "name": "b9",
       "type":
       {
-        "category": "fundamental type",
-        "type": "bool"
+        "fundamental type": "bool"
       },
       "default value":
       {
@@ -209,8 +200,7 @@
       "name": "i01",
       "type":
       {
-        "category": "fundamental type",
-        "type": "int"
+        "fundamental type": "int"
       },
       "default value":
       {
@@ -232,8 +222,7 @@
       "name": "i02",
       "type":
       {
-        "category": "fundamental type",
-        "type": "int"
+        "fundamental type": "int"
       },
       "default value":
       {
@@ -255,8 +244,7 @@
       "name": "i03",
       "type":
       {
-        "category": "fundamental type",
-        "type": "int"
+        "fundamental type": "int"
       },
       "default value":
       {
@@ -278,8 +266,7 @@
       "name": "i04",
       "type":
       {
-        "category": "fundamental type",
-        "type": "int"
+        "fundamental type": "int"
       },
       "default value":
       {
@@ -292,8 +279,7 @@
       "name": "i05",
       "type":
       {
-        "category": "fundamental type",
-        "type": "int"
+        "fundamental type": "int"
       },
       "default value":
       {
@@ -315,8 +301,7 @@
       "name": "i06",
       "type":
       {
-        "category": "fundamental type",
-        "type": "int"
+        "fundamental type": "int"
       },
       "default value":
       {
@@ -338,8 +323,7 @@
       "name": "i07",
       "type":
       {
-        "category": "fundamental type",
-        "type": "int"
+        "fundamental type": "int"
       },
       "default value":
       {
@@ -361,8 +345,7 @@
       "name": "i08",
       "type":
       {
-        "category": "fundamental type",
-        "type": "int"
+        "fundamental type": "int"
       },
       "default value":
       {
@@ -384,8 +367,7 @@
       "name": "i09",
       "type":
       {
-        "category": "fundamental type",
-        "type": "int"
+        "fundamental type": "int"
       },
       "default value":
       {
@@ -407,8 +389,7 @@
       "name": "i10",
       "type":
       {
-        "category": "fundamental type",
-        "type": "int"
+        "fundamental type": "int"
       },
       "default value":
       {
@@ -430,8 +411,7 @@
       "name": "i11",
       "type":
       {
-        "category": "fundamental type",
-        "type": "int"
+        "fundamental type": "int"
       },
       "default value":
       {
@@ -444,8 +424,7 @@
       "name": "i12",
       "type":
       {
-        "category": "fundamental type",
-        "type": "int"
+        "fundamental type": "int"
       },
       "default value":
       {
@@ -462,8 +441,7 @@
       "name": "i13",
       "type":
       {
-        "category": "fundamental type",
-        "type": "int"
+        "fundamental type": "int"
       },
       "default value":
       {
@@ -480,8 +458,7 @@
       "name": "i14",
       "type":
       {
-        "category": "fundamental type",
-        "type": "int"
+        "fundamental type": "int"
       },
       "default value":
       {

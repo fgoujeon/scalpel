@@ -25,8 +25,7 @@
       "name": "a_c",
       "type":
       {
-        "category": "class",
-        "id": 0
+        "class": 0
       }
     }
   ]

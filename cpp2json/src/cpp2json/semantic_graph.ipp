@@ -79,7 +79,6 @@ semantic_graph_serializer::serialize_enum_visitor::serialize_enum_visitor
 	const unsigned int id
 ):
 	serializer_(serializer),
-	output_(serializer.output_),
 	id_(id)
 {
 }

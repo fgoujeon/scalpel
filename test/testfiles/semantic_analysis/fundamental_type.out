@@ -7,8 +7,7 @@
       "name": "v01",
       "type":
       {
-        "category": "fundamental type",
-        "type": "char"
+        "fundamental type": "char"
       }
     },
     {
@@ -16,8 +15,7 @@
       "name": "v02",
       "type":
       {
-        "category": "fundamental type",
-        "type": "unsigned char"
+        "fundamental type": "unsigned char"
       }
     },
     {
@@ -25,8 +23,7 @@
       "name": "v03",
       "type":
       {
-        "category": "fundamental type",
-        "type": "signed char"
+        "fundamental type": "signed char"
       }
     },
     {
@@ -34,8 +31,7 @@
       "name": "v04",
       "type":
       {
-        "category": "fundamental type",
-        "type": "bool"
+        "fundamental type": "bool"
       }
     },
     {
@@ -43,8 +39,7 @@
       "name": "v05",
       "type":
       {
-        "category": "fundamental type",
-        "type": "unsigned int"
+        "fundamental type": "unsigned int"
       }
     },
     {
@@ -52,8 +47,7 @@
       "name": "v06",
       "type":
       {
-        "category": "fundamental type",
-        "type": "unsigned int"
+        "fundamental type": "unsigned int"
       }
     },
     {
@@ -61,8 +55,7 @@
       "name": "v07",
       "type":
       {
-        "category": "fundamental type",
-        "type": "int"
+        "fundamental type": "int"
       }
     },
     {
@@ -70,8 +63,7 @@
       "name": "v08",
       "type":
       {
-        "category": "fundamental type",
-        "type": "int"
+        "fundamental type": "int"
       }
     },
     {
@@ -79,8 +71,7 @@
       "name": "v09",
       "type":
       {
-        "category": "fundamental type",
-        "type": "int"
+        "fundamental type": "int"
       }
     },
     {
@@ -88,8 +79,7 @@
       "name": "v10",
       "type":
       {
-        "category": "fundamental type",
-        "type": "unsigned short int"
+        "fundamental type": "unsigned short int"
       }
     },
     {
@@ -97,8 +87,7 @@
       "name": "v11",
       "type":
       {
-        "category": "fundamental type",
-        "type": "unsigned short int"
+        "fundamental type": "unsigned short int"
       }
     },
     {
@@ -106,8 +95,7 @@
       "name": "v12",
       "type":
       {
-        "category": "fundamental type",
-        "type": "unsigned long int"
+        "fundamental type": "unsigned long int"
       }
     },
     {
@@ -115,8 +103,7 @@
       "name": "v13",
       "type":
       {
-        "category": "fundamental type",
-        "type": "unsigned long int"
+        "fundamental type": "unsigned long int"
       }
     },
     {
@@ -124,8 +111,7 @@
       "name": "v14",
       "type":
       {
-        "category": "fundamental type",
-        "type": "long int"
+        "fundamental type": "long int"
       }
     },
     {
@@ -133,8 +119,7 @@
       "name": "v15",
       "type":
       {
-        "category": "fundamental type",
-        "type": "long int"
+        "fundamental type": "long int"
       }
     },
     {
@@ -142,8 +127,7 @@
       "name": "v16",
       "type":
       {
-        "category": "fundamental type",
-        "type": "long int"
+        "fundamental type": "long int"
       }
     },
     {
@@ -151,8 +135,7 @@
       "name": "v17",
       "type":
       {
-        "category": "fundamental type",
-        "type": "long int"
+        "fundamental type": "long int"
       }
     },
     {
@@ -160,8 +143,7 @@
       "name": "v18",
       "type":
       {
-        "category": "fundamental type",
-        "type": "short int"
+        "fundamental type": "short int"
       }
     },
     {
@@ -169,8 +151,7 @@
       "name": "v19",
       "type":
       {
-        "category": "fundamental type",
-        "type": "short int"
+        "fundamental type": "short int"
       }
     },
     {
@@ -178,8 +159,7 @@
       "name": "v20",
       "type":
       {
-        "category": "fundamental type",
-        "type": "short int"
+        "fundamental type": "short int"
       }
     },
     {
@@ -187,8 +167,7 @@
       "name": "v21",
       "type":
       {
-        "category": "fundamental type",
-        "type": "short int"
+        "fundamental type": "short int"
       }
     },
     {
@@ -196,8 +175,7 @@
       "name": "v22",
       "type":
       {
-        "category": "fundamental type",
-        "type": "wchar_t"
+        "fundamental type": "wchar_t"
       }
     },
     {
@@ -205,8 +183,7 @@
       "name": "v23",
       "type":
       {
-        "category": "fundamental type",
-        "type": "float"
+        "fundamental type": "float"
       }
     },
     {
@@ -214,8 +191,7 @@
       "name": "v24",
       "type":
       {
-        "category": "fundamental type",
-        "type": "double"
+        "fundamental type": "double"
       }
     },
     {
@@ -223,8 +199,7 @@
       "name": "v25",
       "type":
       {
-        "category": "fundamental type",
-        "type": "long double"
+        "fundamental type": "long double"
       }
     },
     {
@@ -232,11 +207,12 @@
       "name": "v26",
       "type":
       {
-        "category": "pointer",
-        "qualified type":
+        "pointer":
         {
-          "category": "fundamental type",
-          "type": "void"
+          "type":
+          {
+            "fundamental type": "void"
+          }
         }
       }
     }

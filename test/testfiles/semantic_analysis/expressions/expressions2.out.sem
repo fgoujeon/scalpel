@@ -7,8 +7,7 @@
       "name": "i",
       "type":
       {
-        "category": "fundamental type",
-        "type": "int"
+        "fundamental type": "int"
       },
       "default value":
       {
@@ -21,8 +20,7 @@
       "name": "i1",
       "type":
       {
-        "category": "fundamental type",
-        "type": "int"
+        "fundamental type": "int"
       },
       "default value":
       {
@@ -35,8 +33,7 @@
       "name": "i2",
       "type":
       {
-        "category": "fundamental type",
-        "type": "int"
+        "fundamental type": "int"
       },
       "default value":
       {
@@ -53,8 +50,7 @@
       "name": "i3",
       "type":
       {
-        "category": "fundamental type",
-        "type": "int"
+        "fundamental type": "int"
       },
       "default value":
       {
@@ -71,11 +67,12 @@
       "name": "i4",
       "type":
       {
-        "category": "pointer",
-        "qualified type":
+        "pointer":
         {
-          "category": "fundamental type",
-          "type": "int"
+          "type":
+          {
+            "fundamental type": "int"
+          }
         }
       },
       "default value":
@@ -93,8 +90,7 @@
       "name": "i5",
       "type":
       {
-        "category": "fundamental type",
-        "type": "int"
+        "fundamental type": "int"
       },
       "default value":
       {

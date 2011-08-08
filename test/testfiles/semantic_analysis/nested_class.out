@@ -23,8 +23,7 @@
               "access": "private",
               "type":
               {
-                "category": "fundamental type",
-                "type": "int"
+                "fundamental type": "int"
               }
             }
           ]
@@ -59,8 +58,7 @@
       "name": "anc",
       "type":
       {
-        "category": "member class",
-        "id": 0
+        "member class": 0
       }
     }
   ]

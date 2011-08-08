@@ -64,8 +64,7 @@
       "name": "c",
       "type":
       {
-        "category": "member enum",
-        "id": 0
+        "member enum": 0
       }
     },
     {
@@ -73,8 +72,7 @@
       "name": "d",
       "type":
       {
-        "category": "enum",
-        "id": 0
+        "enum": 0
       }
     }
   ]

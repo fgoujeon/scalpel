@@ -23,8 +23,7 @@
               "access": "private",
               "type":
               {
-                "category": "fundamental type",
-                "type": "int"
+                "fundamental type": "int"
               }
             }
           ]
@@ -42,8 +41,7 @@
           "access": "public",
           "type":
           {
-            "category": "fundamental type",
-            "type": "double"
+            "fundamental type": "double"
           }
         },
         {
@@ -52,8 +50,7 @@
           "access": "public",
           "type":
           {
-            "category": "fundamental type",
-            "type": "int"
+            "fundamental type": "int"
           }
         }
       ]
@@ -66,8 +63,7 @@
       "name": "u0",
       "type":
       {
-        "category": "union",
-        "id": 0
+        "union": 0
       }
     }
   ]

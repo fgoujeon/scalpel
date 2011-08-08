@@ -18,23 +18,25 @@
       "name": "f",
       "return type":
       {
-        "category": "fundamental type",
-        "type": "void"
+        "fundamental type": "void"
       },
       "parameters":
       [
         {
           "type":
           {
-            "category": "reference",
-            "qualified type":
+            "reference":
             {
-              "category": "cv-qualified type",
-              "const": true,
-              "qualified type":
+              "type":
               {
-                "category": "class",
-                "id": 0
+                "cv-qualified type":
+                {
+                  "const": true,
+                  "type":
+                  {
+                    "class": 0
+                  }
+                }
               }
             }
           }
@@ -46,19 +48,19 @@
       "name": "f",
       "return type":
       {
-        "category": "fundamental type",
-        "type": "void"
+        "fundamental type": "void"
       },
       "parameters":
       [
         {
           "type":
           {
-            "category": "reference",
-            "qualified type":
+            "reference":
             {
-              "category": "class",
-              "id": 0
+              "type":
+              {
+                "class": 0
+              }
             }
           }
         }

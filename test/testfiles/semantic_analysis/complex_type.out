@@ -7,42 +7,61 @@
       "name": "i",
       "type":
       {
-        "category": "pointer",
-        "qualified type":
+        "pointer":
         {
-          "category": "pointer",
-          "qualified type":
+          "type":
           {
-            "category": "pointer",
-            "qualified type":
+            "pointer":
             {
-              "category": "pointer",
-              "qualified type":
+              "type":
               {
-                "category": "cv-qualified type",
-                "const": true,
-                "qualified type":
+                "pointer":
                 {
-                  "category": "pointer",
-                  "qualified type":
+                  "type":
                   {
-                    "category": "pointer",
-                    "qualified type":
+                    "pointer":
                     {
-                      "category": "cv-qualified type",
-                      "const": true,
-                      "volatile": true,
-                      "qualified type":
+                      "type":
                       {
-                        "category": "pointer",
-                        "qualified type":
+                        "cv-qualified type":
                         {
-                          "category": "cv-qualified type",
                           "const": true,
-                          "qualified type":
+                          "type":
                           {
-                            "category": "fundamental type",
-                            "type": "unsigned long int"
+                            "pointer":
+                            {
+                              "type":
+                              {
+                                "pointer":
+                                {
+                                  "type":
+                                  {
+                                    "cv-qualified type":
+                                    {
+                                      "const": true,
+                                      "volatile": true,
+                                      "type":
+                                      {
+                                        "pointer":
+                                        {
+                                          "type":
+                                          {
+                                            "cv-qualified type":
+                                            {
+                                              "const": true,
+                                              "type":
+                                              {
+                                                "fundamental type": "unsigned long int"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
                           }
                         }
                       }
@@ -60,12 +79,13 @@
       "name": "j",
       "type":
       {
-        "category": "cv-qualified type",
-        "const": true,
-        "qualified type":
+        "cv-qualified type":
         {
-          "category": "fundamental type",
-          "type": "unsigned long int"
+          "const": true,
+          "type":
+          {
+            "fundamental type": "unsigned long int"
+          }
         }
       }
     }

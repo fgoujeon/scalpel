@@ -18,8 +18,7 @@
               "access": "public",
               "type":
               {
-                "category": "fundamental type",
-                "type": "double"
+                "fundamental type": "double"
               }
             },
             {
@@ -28,8 +27,7 @@
               "access": "public",
               "type":
               {
-                "category": "fundamental type",
-                "type": "int"
+                "fundamental type": "int"
               }
             }
           ]
@@ -46,8 +44,7 @@
           "access": "private",
           "type":
           {
-            "category": "anonymous member union",
-            "id": 0
+            "anonymous member union": 0
           }
         }
       ]
@@ -65,8 +62,7 @@
           "access": "public",
           "type":
           {
-            "category": "fundamental type",
-            "type": "double"
+            "fundamental type": "double"
           }
         },
         {
@@ -75,8 +71,7 @@
           "access": "public",
           "type":
           {
-            "category": "fundamental type",
-            "type": "int"
+            "fundamental type": "int"
           }
         }
       ]
@@ -89,8 +84,7 @@
       "static": "true",
       "type":
       {
-        "category": "anonymous union",
-        "id": 0
+        "anonymous union": 0
       }
     }
   ]

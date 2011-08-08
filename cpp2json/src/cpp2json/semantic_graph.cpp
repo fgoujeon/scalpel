@@ -29,7 +29,6 @@ namespace cpp2json
 using namespace detail;
 
 semantic_graph_serializer::semantic_graph_serializer(std::ostream& output):
-	output_(output),
 	writer_(output)
 {
 }
@@ -61,154 +60,12 @@ semantic_graph_serializer::serialize_type_visitor::serialize_type_visitor
 	semantic_graph_serializer& serializer
 ):
 	serializer_(serializer),
-	output_(serializer_.output_)
+	writer_(serializer_.writer_)
 {
 }
 
 void
 semantic_graph_serializer::serialize_type_visitor::operator()(const fundamental_type& type)
-{
-	serializer_.writer_.write_key_value_pair("category", "fundamental type");
-	serializer_.serialize_fundamental_type(type);
-}
-
-void
-semantic_graph_serializer::serialize_type_visitor::operator()(const function_type& type)
-{
-	serializer_.writer_.write_key_value_pair("category", "function type");
-	serializer_.serialize_function_type(type);
-}
-
-void
-semantic_graph_serializer::serialize_type_visitor::operator()(const cv_qualified_type& type)
-{
-	serializer_.writer_.write_key_value_pair("category", "cv-qualified type");
-
-	if(type.const_qualified())
-		serializer_.writer_.write_key_value_pair("const", true);
-	if(type.volatile_qualified())
-		serializer_.writer_.write_key_value_pair("volatile", true);
-
-	serializer_.writer_.open_object("qualified type");
-	serializer_.serialize_type(type.qualified_type());
-	serializer_.writer_.close_object();
-}
-
-void
-semantic_graph_serializer::serialize_type_visitor::operator()(const pointer& type)
-{
-	serializer_.writer_.write_key_value_pair("category", "pointer");
-
-	serializer_.writer_.open_object("qualified type");
-	serializer_.serialize_type(type.qualified_type());
-	serializer_.writer_.close_object();
-}
-
-void
-semantic_graph_serializer::serialize_type_visitor::operator()(const pointer_to_member& type)
-{
-	serializer_.writer_.write_key_value_pair("category", "pointer to member");
-	serializer_.serialize_class_id_attribute(type.parent_class());
-
-	serializer_.writer_.open_object("qualified type");
-	serializer_.serialize_type(type.qualified_type());
-	serializer_.writer_.close_object();
-}
-
-void
-semantic_graph_serializer::serialize_type_visitor::operator()(const reference& type)
-{
-	serializer_.writer_.write_key_value_pair("category", "reference");
-
-	serializer_.writer_.open_object("qualified type");
-	serializer_.serialize_type(type.qualified_type());
-	serializer_.writer_.close_object();
-}
-
-void
-semantic_graph_serializer::serialize_type_visitor::operator()(const array& type)
-{
-	serializer_.writer_.write_key_value_pair("category", "array");
-
-	serializer_.writer_.write_key_value_pair("size", type.size());
-	serializer_.writer_.open_object("qualified type");
-	serializer_.serialize_type(type.qualified_type());
-	serializer_.writer_.close_object();
-}
-
-void
-semantic_graph_serializer::serialize_type_visitor::operator()(const class_* type)
-{
-	serializer_.writer_.write_key_value_pair("category", "class");
-	serializer_.writer_.write_key_value_pair("id", serializer_.get_id(*type));
-}
-
-void
-semantic_graph_serializer::serialize_type_visitor::operator()(const member_class* type)
-{
-	serializer_.writer_.write_key_value_pair("category", "member class");
-	serializer_.writer_.write_key_value_pair("id", serializer_.get_id(*type));
-}
-
-void
-semantic_graph_serializer::serialize_type_visitor::operator()(const union_* type)
-{
-	serializer_.writer_.write_key_value_pair("category", "union");
-	serializer_.writer_.write_key_value_pair("id", serializer_.get_id(*type));
-}
-
-void
-semantic_graph_serializer::serialize_type_visitor::operator()(const member_union* type)
-{
-	serializer_.writer_.write_key_value_pair("category", "member union");
-	serializer_.writer_.write_key_value_pair("id", serializer_.get_id(*type));
-}
-
-void
-semantic_graph_serializer::serialize_type_visitor::operator()(const anonymous_union* type)
-{
-	serializer_.writer_.write_key_value_pair("category", "anonymous union");
-	serializer_.writer_.write_key_value_pair("id", serializer_.get_id(*type));
-}
-
-void
-semantic_graph_serializer::serialize_type_visitor::operator()(const anonymous_member_union* type)
-{
-	serializer_.writer_.write_key_value_pair("category", "anonymous member union");
-	serializer_.writer_.write_key_value_pair("id", serializer_.get_id(*type));
-}
-
-void
-semantic_graph_serializer::serialize_type_visitor::operator()(const enum_t* type)
-{
-	serializer_.writer_.write_key_value_pair("category", "enum");
-	serializer_.writer_.write_key_value_pair("id", serializer_.get_id(*type));
-}
-
-void
-semantic_graph_serializer::serialize_type_visitor::operator()(const member_enum_t* type)
-{
-	serializer_.writer_.write_key_value_pair("category", "member enum");
-	serializer_.writer_.write_key_value_pair("id", serializer_.get_id(*type));
-}
-
-void
-semantic_graph_serializer::serialize_type
-(
-	const semantic_entities::type_t& n
-)
-{
-	serialize_type_visitor visitor(*this);
-	apply_visitor(visitor, n);
-}
-
-
-
-void
-semantic_graph_serializer::serialize_fundamental_type
-(
-	const fundamental_type type
-)
 {
 	std::map<fundamental_type, const char*> fundamental_types_map =
 	{
@@ -231,8 +88,166 @@ semantic_graph_serializer::serialize_fundamental_type
 		{fundamental_type::WCHAR_T, "wchar_t"}
 	};
 
-	writer_.write_key_value_pair("type", fundamental_types_map[type]);
+	writer_.write_key_value_pair("fundamental type", fundamental_types_map[type]);
 }
+
+void
+semantic_graph_serializer::serialize_type_visitor::operator()(const function_type& type)
+{
+	writer_.open_object("function type");
+
+	if(type.variadic())
+		writer_.write_key_value_pair("variadic", true);
+	if(type.const_qualified())
+		writer_.write_key_value_pair("const", true);
+	if(type.volatile_qualified())
+		writer_.write_key_value_pair("volatile", true);
+
+	writer_.open_object("return type");
+	serializer_.serialize_type(type.return_type());
+	writer_.close_object();
+
+	writer_.open_array("parameter types");
+	const std::vector<type_t>& parameter_types = type.parameter_types();
+	for(const type_t& type: parameter_types)
+	{
+		writer_.open_object();
+		serializer_.serialize_type(type);
+		writer_.close_object();
+	}
+	writer_.close_array();
+
+	writer_.close_object();
+}
+
+void
+semantic_graph_serializer::serialize_type_visitor::operator()(const cv_qualified_type& type)
+{
+	writer_.open_object("cv-qualified type");
+
+	if(type.const_qualified())
+		writer_.write_key_value_pair("const", true);
+	if(type.volatile_qualified())
+		writer_.write_key_value_pair("volatile", true);
+
+	writer_.open_object("type");
+	serializer_.serialize_type(type.qualified_type());
+	writer_.close_object();
+
+	writer_.close_object();
+}
+
+void
+semantic_graph_serializer::serialize_type_visitor::operator()(const pointer& type)
+{
+	writer_.open_object("pointer");
+
+	writer_.open_object("type");
+	serializer_.serialize_type(type.qualified_type());
+	writer_.close_object();
+
+	writer_.close_object();
+}
+
+void
+semantic_graph_serializer::serialize_type_visitor::operator()(const pointer_to_member& type)
+{
+	writer_.open_object("pointer to member");
+
+	serializer_.serialize_class_id_attribute(type.parent_class());
+
+	writer_.open_object("type");
+	serializer_.serialize_type(type.qualified_type());
+	writer_.close_object();
+
+	writer_.close_object();
+}
+
+void
+semantic_graph_serializer::serialize_type_visitor::operator()(const reference& type)
+{
+	writer_.open_object("reference");
+
+	writer_.open_object("type");
+	serializer_.serialize_type(type.qualified_type());
+	writer_.close_object();
+
+	writer_.close_object();
+}
+
+void
+semantic_graph_serializer::serialize_type_visitor::operator()(const array& type)
+{
+	writer_.open_object("array");
+
+	writer_.write_key_value_pair("size", type.size());
+
+	writer_.open_object("type");
+	serializer_.serialize_type(type.qualified_type());
+	writer_.close_object();
+
+	writer_.close_object();
+}
+
+void
+semantic_graph_serializer::serialize_type_visitor::operator()(const class_* type)
+{
+	writer_.write_key_value_pair("class", serializer_.get_id(*type));
+}
+
+void
+semantic_graph_serializer::serialize_type_visitor::operator()(const member_class* type)
+{
+	writer_.write_key_value_pair("member class", serializer_.get_id(*type));
+}
+
+void
+semantic_graph_serializer::serialize_type_visitor::operator()(const union_* type)
+{
+	writer_.write_key_value_pair("union", serializer_.get_id(*type));
+}
+
+void
+semantic_graph_serializer::serialize_type_visitor::operator()(const member_union* type)
+{
+	writer_.write_key_value_pair("member union", serializer_.get_id(*type));
+}
+
+void
+semantic_graph_serializer::serialize_type_visitor::operator()(const anonymous_union* type)
+{
+	writer_.write_key_value_pair("anonymous union", serializer_.get_id(*type));
+}
+
+void
+semantic_graph_serializer::serialize_type_visitor::operator()(const anonymous_member_union* type)
+{
+	writer_.write_key_value_pair("anonymous member union", serializer_.get_id(*type));
+}
+
+void
+semantic_graph_serializer::serialize_type_visitor::operator()(const enum_t* type)
+{
+	writer_.write_key_value_pair("enum", serializer_.get_id(*type));
+}
+
+void
+semantic_graph_serializer::serialize_type_visitor::operator()(const member_enum_t* type)
+{
+	writer_.write_key_value_pair("member enum", serializer_.get_id(*type));
+}
+
+void
+semantic_graph_serializer::serialize_type
+(
+	const semantic_entities::type_t& n
+)
+{
+	serialize_type_visitor visitor(*this);
+	apply_visitor(visitor, n);
+}
+
+
 
 void
 semantic_graph_serializer::serialize_base_class
@@ -435,37 +450,6 @@ semantic_graph_serializer::serialize_simple_function
 }
 
 void
-semantic_graph_serializer::serialize_function_type
-(
-	const function_type& entity
-)
-{
-	if(entity.variadic())
-		writer_.write_key_value_pair("variadic", true);
-	if(entity.const_qualified())
-		writer_.write_key_value_pair("const", true);
-	if(entity.volatile_qualified())
-		writer_.write_key_value_pair("volatile", true);
-
-	writer_.open_object("return type");
-	serialize_type(entity.return_type());
-	writer_.close_object();
-
-	const std::vector<type_t>& parameter_types = entity.parameter_types();
-
-	writer_.open_array("parameter types");
-	for(auto i = parameter_types.begin(); i != parameter_types.end(); ++i)
-	{
-		const type_t& type = *i;
-
-		writer_.open_object();
-		serialize_type(type);
-		writer_.close_object();
-	}
-	writer_.close_array();
-}
-
-void
 semantic_graph_serializer::serialize_function_parameter_list
 (
 	const function_parameter_list& entity
@@ -597,8 +581,7 @@ semantic_graph_serializer::serialize_expression_visitor::serialize_expression_vi
 (
 	semantic_graph_serializer& serializer
 ):
-	serializer_(serializer),
-	output_(serializer_.output_)
+	serializer_(serializer)
 {
 }
 
