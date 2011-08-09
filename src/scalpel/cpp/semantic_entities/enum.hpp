@@ -100,7 +100,7 @@ class CLASS_NAME \
 		void \
 		variant_enum(VARIANT_TYPE& e) \
 		{ \
-			assert(variant_enum_ == 0); \
+			assert(variant_enum_ == nullptr); \
 			variant_enum_ = &e; \
 		} \
  \
@@ -190,6 +190,8 @@ struct member_enum_t: member_enum_typedef
 	member_enum_t(basic_member_enum<UnderlyingType>&& e):
 		member_enum_typedef(std::move(e))
 	{
+		member_enum_typedef& parent_this = *this;
+		utility::get<basic_member_enum<UnderlyingType>>(parent_this).variant_enum(*this);
 	}
 };
 

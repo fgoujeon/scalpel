@@ -67,6 +67,10 @@
       "type":
       {
         "member enum": "member-enum-0"
+      },
+      "default value":
+      {
+        "int enum constant": "int-enum-constant-0"
       }
     },
     {
@@ -75,6 +79,10 @@
       "type":
       {
         "enum": "enum-0"
+      },
+      "default value":
+      {
+        "int enum constant": "int-enum-constant-4"
       }
     }
   ]

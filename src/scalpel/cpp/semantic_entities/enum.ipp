@@ -35,7 +35,7 @@ template<typename UnderlyingType>
 basic_enum<UnderlyingType>::basic_enum(basic_enum&& rhs):
 	name_(std::move(rhs.name_)),
 	constants_(std::move(rhs.constants_)),
-	variant_enum_(nullptr)
+	variant_enum_(rhs.variant_enum_)
 {
 }
 
@@ -63,7 +63,7 @@ basic_member_enum<UnderlyingType>::basic_member_enum(basic_member_enum&& rhs):
 	name_(std::move(rhs.name_)),
 	constants_(std::move(rhs.constants_)),
 	access_(rhs.access_),
-	variant_enum_(nullptr)
+	variant_enum_(rhs.variant_enum_)
 {
 }
 

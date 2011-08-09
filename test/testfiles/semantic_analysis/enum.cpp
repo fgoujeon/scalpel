@@ -14,7 +14,6 @@ enum direction
 	RIGHT,
 };
 
-s::color c;
-direction d;
-
+s::color c = s::color::RED;
+direction d = RIGHT;
 
