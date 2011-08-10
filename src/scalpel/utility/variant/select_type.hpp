@@ -67,6 +67,14 @@ struct select_type<const T&, T, Ts...>
 	typedef T type;
 };
 
+//U == X*
+//T == const X*
+template<typename T, typename... Ts>
+struct select_type<T*, const T*, Ts...>
+{
+	typedef const T* type;
+};
+
 //U == X&
 //T == const X&
 template<typename T, typename... Ts>

@@ -64,6 +64,10 @@ struct entity_groups
 	typename entity_groups_of_type<semantic_entities::member_variable>::type member_variables;
 	typename entity_groups_of_type<semantic_entities::static_member_variable>::type static_member_variables;
 	typename entity_groups_of_type<semantic_entities::bit_field>::type bit_fields;
+	typename entity_groups_of_type<semantic_entities::enum_constant<int>>::type int_enum_constants;
+	typename entity_groups_of_type<semantic_entities::enum_constant<unsigned int>>::type unsigned_int_enum_constants;
+	typename entity_groups_of_type<semantic_entities::enum_constant<long int>>::type long_int_enum_constants;
+	typename entity_groups_of_type<semantic_entities::enum_constant<unsigned long int>>::type unsigned_long_int_enum_constants;
 
 
 
@@ -94,6 +98,10 @@ struct entity_groups
 	std::vector<const semantic_entities::member_variable*> internal_member_variables;
 	std::vector<const semantic_entities::static_member_variable*> internal_static_member_variables;
 	std::vector<const semantic_entities::bit_field*> internal_bit_fields;
+	std::vector<const semantic_entities::enum_constant<int>*> internal_int_enum_constants;
+	std::vector<const semantic_entities::enum_constant<unsigned int>*> internal_unsigned_int_enum_constants;
+	std::vector<const semantic_entities::enum_constant<long int>*> internal_long_int_enum_constants;
+	std::vector<const semantic_entities::enum_constant<unsigned long int>*> internal_unsigned_long_int_enum_constants;
 
 	template<class Entity>
 	std::vector<const Entity*>&

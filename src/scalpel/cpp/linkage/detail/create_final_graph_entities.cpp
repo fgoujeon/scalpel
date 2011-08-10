@@ -19,6 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "create_final_graph_entities.hpp"
+#include "entity_pairs.hpp"
 #include <scalpel/cpp/semantic_entities/generic_queries/detail/is_defined.hpp>
 
 namespace scalpel { namespace cpp { namespace linkage { namespace detail
@@ -53,6 +54,13 @@ namespace
 	template<template<typename> class Enum, typename UnderlyingType>
 	void
 	copy_constants(const Enum<UnderlyingType>& src, Enum<UnderlyingType>& dest);
+
+	expression_t
+	copy_expression
+	(
+		const expression_t& source,
+		const final_graph_entities& final_entities
+	);
 }
 
 //private function definitions
@@ -62,7 +70,8 @@ namespace
 	create_entity
 	(
 		const namespace_& entity,
-		const final_graph_entities&
+		const final_graph_entities&,
+		entity_pairs&
 	)
 	{
 		return new linked_namespace(entity.name());
@@ -72,7 +81,8 @@ namespace
 	create_entity
 	(
 		const unnamed_namespace&,
-		const final_graph_entities&
+		const final_graph_entities&,
+		entity_pairs&
 	)
 	{
 		return new linked_unnamed_namespace();
@@ -82,13 +92,14 @@ namespace
 	create_entity
 	(
 		const class_& entity,
-		final_graph_entities& final_entities
+		final_graph_entities&,
+		entity_pairs& pairs
 	)
 	{
 		class_* new_class = new class_(entity.name());
 		new_class->complete(entity.complete());
 
-		final_entities.class_pairs.push_back(old_and_new_entity_pair<class_>{&entity, new_class});
+		pairs.class_pairs.push_back(old_and_new_entity_pair<class_>{&entity, new_class});
 
 		return new_class;
 	}
@@ -97,13 +108,14 @@ namespace
 	create_entity
 	(
 		const member_class& entity,
-		final_graph_entities& final_entities
+		final_graph_entities&,
+		entity_pairs& pairs
 	)
 	{
 		member_class* new_class = new member_class(entity.name(), entity.access());
 		new_class->complete(entity.complete());
 
-		final_entities.member_class_pairs.push_back(old_and_new_entity_pair<member_class>{&entity, new_class});
+		pairs.member_class_pairs.push_back(old_and_new_entity_pair<member_class>{&entity, new_class});
 
 		return new_class;
 	}
@@ -112,13 +124,14 @@ namespace
 	create_entity
 	(
 		const union_& entity,
-		final_graph_entities& final_entities
+		final_graph_entities&,
+		entity_pairs& pairs
 	)
 	{
 		union_* new_union = new union_(entity.name());
 		new_union->complete(entity.complete());
 
-		final_entities.union_pairs.push_back(old_and_new_entity_pair<union_>{&entity, new_union});
+		pairs.union_pairs.push_back(old_and_new_entity_pair<union_>{&entity, new_union});
 
 		return new_union;
 	}
@@ -127,13 +140,14 @@ namespace
 	create_entity
 	(
 		const member_union& entity,
-		final_graph_entities& final_entities
+		final_graph_entities&,
+		entity_pairs& pairs
 	)
 	{
 		member_union* new_union = new member_union(entity.name(), entity.access());
 		new_union->complete(entity.complete());
 
-		final_entities.member_union_pairs.push_back(old_and_new_entity_pair<member_union>{&entity, new_union});
+		pairs.member_union_pairs.push_back(old_and_new_entity_pair<member_union>{&entity, new_union});
 
 		return new_union;
 	}
@@ -142,13 +156,14 @@ namespace
 	create_entity
 	(
 		const anonymous_union& entity,
-		final_graph_entities& final_entities
+		final_graph_entities&,
+		entity_pairs& pairs
 	)
 	{
 		anonymous_union* new_union = new anonymous_union();
 		new_union->complete(entity.complete());
 
-		final_entities.anonymous_union_pairs.push_back(old_and_new_entity_pair<anonymous_union>{&entity, new_union});
+		pairs.anonymous_union_pairs.push_back(old_and_new_entity_pair<anonymous_union>{&entity, new_union});
 
 		return new_union;
 	}
@@ -157,13 +172,14 @@ namespace
 	create_entity
 	(
 		const anonymous_member_union& entity,
-		final_graph_entities& final_entities
+		final_graph_entities&,
+		entity_pairs& pairs
 	)
 	{
 		anonymous_member_union* new_union = new anonymous_member_union(entity.access());
 		new_union->complete(entity.complete());
 
-		final_entities.anonymous_member_union_pairs.push_back(old_and_new_entity_pair<anonymous_member_union>{&entity, new_union});
+		pairs.anonymous_member_union_pairs.push_back(old_and_new_entity_pair<anonymous_member_union>{&entity, new_union});
 
 		return new_union;
 	}
@@ -184,7 +200,8 @@ namespace
 	create_entity
 	(
 		const enum_t& entity,
-		const final_graph_entities&
+		const final_graph_entities&,
+		entity_pairs&
 	)
 	{
 		return apply_visitor(copy_enum_visitor, entity);
@@ -206,7 +223,8 @@ namespace
 	create_entity
 	(
 		const member_enum_t& entity,
-		const final_graph_entities&
+		const final_graph_entities&,
+		entity_pairs&
 	)
 	{
 		return apply_visitor(copy_member_enum_visitor, entity);
@@ -237,7 +255,8 @@ namespace
 	create_entity
 	(
 		const typedef_& entity,
-		const final_graph_entities& final_entities
+		const final_graph_entities& final_entities,
+		entity_pairs&
 	)
 	{
 		return new typedef_(entity.name(), create_type(entity.type(), final_entities));
@@ -247,7 +266,8 @@ namespace
 	create_entity
 	(
 		const member_typedef& entity,
-		const final_graph_entities& final_entities
+		const final_graph_entities& final_entities,
+		entity_pairs&
 	)
 	{
 		return new member_typedef(entity.name(), create_type(entity.type(), final_entities), entity.access());
@@ -257,7 +277,8 @@ namespace
 	create_entity
 	(
 		const constructor& entity,
-		const final_graph_entities& final_entities
+		const final_graph_entities& final_entities,
+		entity_pairs&
 	)
 	{
 		constructor* new_entity =
@@ -281,7 +302,8 @@ namespace
 	create_entity
 	(
 		const destructor& entity,
-		const final_graph_entities&
+		const final_graph_entities&,
+		entity_pairs&
 	)
 	{
 		destructor* new_entity =
@@ -304,7 +326,8 @@ namespace
 	create_entity
 	(
 		const operator_member_function& entity,
-		const final_graph_entities& final_entities
+		const final_graph_entities& final_entities,
+		entity_pairs&
 	)
 	{
 		operator_member_function* new_entity =
@@ -332,7 +355,8 @@ namespace
 	create_entity
 	(
 		const conversion_function& entity,
-		const final_graph_entities& final_entities
+		const final_graph_entities& final_entities,
+		entity_pairs&
 	)
 	{
 		conversion_function* new_entity =
@@ -359,7 +383,8 @@ namespace
 	create_entity
 	(
 		const simple_member_function& entity,
-		const final_graph_entities& final_entities
+		const final_graph_entities& final_entities,
+		entity_pairs&
 	)
 	{
 		simple_member_function* new_entity =
@@ -389,7 +414,8 @@ namespace
 	create_entity
 	(
 		const operator_function& entity,
-		const final_graph_entities& final_entities
+		const final_graph_entities& final_entities,
+		entity_pairs&
 	)
 	{
 		operator_function* new_entity =
@@ -413,7 +439,8 @@ namespace
 	create_entity
 	(
 		const simple_function& entity,
-		const final_graph_entities& final_entities
+		const final_graph_entities& final_entities,
+		entity_pairs&
 	)
 	{
 		simple_function* new_entity =
@@ -438,7 +465,8 @@ namespace
 	create_entity
 	(
 		const variable& entity,
-		const final_graph_entities& final_entities
+		const final_graph_entities& final_entities,
+		entity_pairs& pairs
 	)
 	{
 		variable* new_entity =
@@ -450,8 +478,7 @@ namespace
 			)
 		;
 
-		if(entity.default_value())
-			new_entity->default_value(*entity.default_value());
+		pairs.variable_pairs.push_back(old_and_new_entity_pair<variable>{&entity, new_entity});
 
 		return new_entity;
 	}
@@ -460,7 +487,8 @@ namespace
 	create_entity
 	(
 		const member_variable& entity,
-		const final_graph_entities& final_entities
+		const final_graph_entities& final_entities,
+		entity_pairs&
 	)
 	{
 		return
@@ -478,7 +506,8 @@ namespace
 	create_entity
 	(
 		const static_member_variable& entity,
-		const final_graph_entities& final_entities
+		const final_graph_entities& final_entities,
+		entity_pairs&
 	)
 	{
 		return
@@ -496,7 +525,8 @@ namespace
 	create_entity
 	(
 		const bit_field& entity,
-		const final_graph_entities& final_entities
+		const final_graph_entities& final_entities,
+		entity_pairs&
 	)
 	{
 		return
@@ -753,6 +783,98 @@ namespace
 		create_type_visitor_struct visitor(final_entities);
 		return utility::apply_visitor(visitor, entity);
 	}
+
+
+
+	struct copy_expression_visitor: utility::static_visitor<expression_t>
+	{
+		public:
+			copy_expression_visitor(const final_graph_entities& final_entities):
+				final_entities_(final_entities)
+			{
+			}
+
+			template<typename T>
+			expression_t
+			operator()(const T& value)
+			{
+				return value;
+			}
+
+			template<int Tag>
+			expression_t
+			operator()(const unary_expression<Tag>& expr)
+			{
+				return
+					unary_expression<Tag>
+					(
+						apply_visitor(*this, expr.operand())
+					)
+				;
+			}
+
+			template<int Tag>
+			expression_t
+			operator()(const binary_expression<Tag>& expr)
+			{
+				return
+					binary_expression<Tag>
+					(
+						apply_visitor(*this, expr.left_operand()),
+						apply_visitor(*this, expr.right_operand())
+					)
+				;
+			}
+
+			expression_t
+			operator()(const conditional_expression& expr)
+			{
+				return
+					conditional_expression
+					(
+						apply_visitor(*this, expr.condition_operand()),
+						apply_visitor(*this, expr.true_operand()),
+						apply_visitor(*this, expr.false_operand())
+					)
+				;
+			}
+
+			template<int Tag>
+			expression_t
+			operator()(const conversion<Tag>& expr)
+			{
+				return
+					conversion<Tag>
+					(
+						apply_visitor(*this, expr.source_value())
+					)
+				;
+			}
+
+			//variables, enum constants, etc.
+			template<typename Entity>
+			expression_t
+			operator()(Entity* const& entity)
+			{
+				auto it = final_entities_.get_map_of_linked_type<Entity>().find(entity);
+				assert(it != final_entities_.get_map_of_linked_type<Entity>().end());
+				return it->second;
+			}
+
+		private:
+			const final_graph_entities& final_entities_;
+	};
+
+	expression_t
+	copy_expression
+	(
+		const expression_t& source,
+		const final_graph_entities& final_entities
+	)
+	{
+		copy_expression_visitor visitor(final_entities);
+		return apply_visitor(visitor, source);
+	}
 }
 
 namespace
@@ -779,7 +901,8 @@ namespace
 	create_entities_of_type
 	(
 		const typename detail::entity_groups_of_type<typename nonlinked_type<Entity>::type>::type& groups,
-		final_graph_entities& final_entities
+		final_graph_entities& final_entities,
+		entity_pairs& pairs
 	)
 	{
 		typedef typename nonlinked_type<Entity>::type nonlinked_entity_t;
@@ -806,7 +929,7 @@ namespace
 			const nonlinked_entity_t& selected_entity = defined_entity ? *defined_entity : *group.front();
 
 			//create a new entity by copying the selected one
-			Entity* new_entity = create_entity(selected_entity, final_entities);
+			Entity* new_entity = create_entity(selected_entity, final_entities, pairs);
 
 			//add links between groups' entities and the new entity
 			for(auto j = group.begin(); j != group.end(); ++j)
@@ -821,7 +944,8 @@ namespace
 	create_internal_entities_of_type
 	(
 		const entity_groups& groups,
-		final_graph_entities& final_entities
+		final_graph_entities& final_entities,
+		entity_pairs& pairs
 	)
 	{
 		typedef typename nonlinked_type<Entity>::type nonlinked_entity_t;
@@ -832,7 +956,7 @@ namespace
 			const nonlinked_entity_t& entity = **i;
 
 			//create a new entity by copying the selected one
-			Entity* new_entity = create_entity(entity, final_entities);
+			Entity* new_entity = create_entity(entity, final_entities, pairs);
 
 			//add a link between the nonlinked entity and the new linked one
 			final_entities.get_map_of_linked_type<Entity>().insert
@@ -848,9 +972,13 @@ namespace
 
 	template<class Class>
 	void
-	add_base_classes(final_graph_entities& final_entities)
+	add_base_classes
+	(
+		final_graph_entities& final_entities,
+		entity_pairs& pairs
+	)
 	{
-		for(auto i = final_entities.get_pairs_of_type<Class>().begin(); i != final_entities.get_pairs_of_type<Class>().end(); ++i)
+		for(auto i = pairs.get_pairs_of_type<Class>().begin(); i != pairs.get_pairs_of_type<Class>().end(); ++i)
 		{
 			const Class& old_entity = *(i->old_entity);
 			Class& new_entity = *(i->new_entity);
@@ -862,6 +990,23 @@ namespace
 			}
 		}
 	}
+
+	void
+	set_default_values
+	(
+		final_graph_entities& final_entities,
+		entity_pairs& pairs
+	)
+	{
+		for(auto i = pairs.get_pairs_of_type<variable>().begin(); i != pairs.get_pairs_of_type<variable>().end(); ++i)
+		{
+			const variable& old_entity = *(i->old_entity);
+			variable& new_entity = *(i->new_entity);
+
+			if(old_entity.default_value())
+				new_entity.default_value(copy_expression(*old_entity.default_value(), final_entities));
+		}
+	}
 }
 
 void
@@ -871,76 +1016,80 @@ create_final_graph_entities
 	final_graph_entities& final_entities
 )
 {
+	entity_pairs pairs;
+
 	create_global_namespace(groups, final_entities);
 
-	create_entities_of_type<linked_namespace, false>(groups.namespaces, final_entities);
-	create_internal_entities_of_type<linked_namespace>(groups, final_entities);
+	create_entities_of_type<linked_namespace, false>(groups.namespaces, final_entities, pairs);
+	create_internal_entities_of_type<linked_namespace>(groups, final_entities, pairs);
 
-	create_internal_entities_of_type<linked_unnamed_namespace>(groups, final_entities);
+	create_internal_entities_of_type<linked_unnamed_namespace>(groups, final_entities, pairs);
 
-	create_entities_of_type<class_, false>(groups.classes, final_entities);
-	create_internal_entities_of_type<class_>(groups, final_entities);
+	create_entities_of_type<class_, false>(groups.classes, final_entities, pairs);
+	create_internal_entities_of_type<class_>(groups, final_entities, pairs);
 
-	create_entities_of_type<member_class, false>(groups.member_classes, final_entities);
-	create_internal_entities_of_type<member_class>(groups, final_entities);
+	create_entities_of_type<member_class, false>(groups.member_classes, final_entities, pairs);
+	create_internal_entities_of_type<member_class>(groups, final_entities, pairs);
 
-	create_entities_of_type<union_, false>(groups.unions, final_entities);
-	create_internal_entities_of_type<union_>(groups, final_entities);
+	create_entities_of_type<union_, false>(groups.unions, final_entities, pairs);
+	create_internal_entities_of_type<union_>(groups, final_entities, pairs);
 
-	create_entities_of_type<member_union, false>(groups.member_unions, final_entities);
-	create_internal_entities_of_type<member_union>(groups, final_entities);
+	create_entities_of_type<member_union, false>(groups.member_unions, final_entities, pairs);
+	create_internal_entities_of_type<member_union>(groups, final_entities, pairs);
 
-	create_internal_entities_of_type<anonymous_union>(groups, final_entities);
+	create_internal_entities_of_type<anonymous_union>(groups, final_entities, pairs);
 
-	create_internal_entities_of_type<anonymous_member_union>(groups, final_entities);
+	create_internal_entities_of_type<anonymous_member_union>(groups, final_entities, pairs);
 
-	create_entities_of_type<enum_t, false>(groups.enums, final_entities);
-	create_internal_entities_of_type<enum_t>(groups, final_entities);
+	create_entities_of_type<enum_t, false>(groups.enums, final_entities, pairs);
+	create_internal_entities_of_type<enum_t>(groups, final_entities, pairs);
 
-	create_entities_of_type<member_enum_t, false>(groups.member_enums, final_entities);
-	create_internal_entities_of_type<member_enum_t>(groups, final_entities);
+	create_entities_of_type<member_enum_t, false>(groups.member_enums, final_entities, pairs);
+	create_internal_entities_of_type<member_enum_t>(groups, final_entities, pairs);
 
-	create_entities_of_type<typedef_, false>(groups.typedefs, final_entities);
-	create_internal_entities_of_type<typedef_>(groups, final_entities);
+	create_entities_of_type<typedef_, false>(groups.typedefs, final_entities, pairs);
+	create_internal_entities_of_type<typedef_>(groups, final_entities, pairs);
 
-	create_entities_of_type<member_typedef, false>(groups.member_typedefs, final_entities);
-	create_internal_entities_of_type<member_typedef>(groups, final_entities);
+	create_entities_of_type<member_typedef, false>(groups.member_typedefs, final_entities, pairs);
+	create_internal_entities_of_type<member_typedef>(groups, final_entities, pairs);
 
-	create_entities_of_type<constructor>(groups.constructors, final_entities);
-	create_internal_entities_of_type<constructor>(groups, final_entities);
+	create_entities_of_type<constructor>(groups.constructors, final_entities, pairs);
+	create_internal_entities_of_type<constructor>(groups, final_entities, pairs);
 
-	create_entities_of_type<destructor>(groups.destructors, final_entities);
-	create_internal_entities_of_type<destructor>(groups, final_entities);
+	create_entities_of_type<destructor>(groups.destructors, final_entities, pairs);
+	create_internal_entities_of_type<destructor>(groups, final_entities, pairs);
 
-	create_entities_of_type<operator_member_function>(groups.operator_member_functions, final_entities);
-	create_internal_entities_of_type<operator_member_function>(groups, final_entities);
+	create_entities_of_type<operator_member_function>(groups.operator_member_functions, final_entities, pairs);
+	create_internal_entities_of_type<operator_member_function>(groups, final_entities, pairs);
 
-	create_entities_of_type<conversion_function>(groups.conversion_functions, final_entities);
-	create_internal_entities_of_type<conversion_function>(groups, final_entities);
+	create_entities_of_type<conversion_function>(groups.conversion_functions, final_entities, pairs);
+	create_internal_entities_of_type<conversion_function>(groups, final_entities, pairs);
 
-	create_entities_of_type<simple_member_function>(groups.simple_member_functions, final_entities);
-	create_internal_entities_of_type<simple_member_function>(groups, final_entities);
+	create_entities_of_type<simple_member_function>(groups.simple_member_functions, final_entities, pairs);
+	create_internal_entities_of_type<simple_member_function>(groups, final_entities, pairs);
 
-	create_entities_of_type<operator_function>(groups.operator_functions, final_entities);
-	create_internal_entities_of_type<operator_function>(groups, final_entities);
+	create_entities_of_type<operator_function>(groups.operator_functions, final_entities, pairs);
+	create_internal_entities_of_type<operator_function>(groups, final_entities, pairs);
 
-	create_entities_of_type<simple_function>(groups.simple_functions, final_entities);
-	create_internal_entities_of_type<simple_function>(groups, final_entities);
+	create_entities_of_type<simple_function>(groups.simple_functions, final_entities, pairs);
+	create_internal_entities_of_type<simple_function>(groups, final_entities, pairs);
 
-	create_entities_of_type<variable>(groups.variables, final_entities);
-	create_internal_entities_of_type<variable>(groups, final_entities);
+	create_entities_of_type<variable>(groups.variables, final_entities, pairs);
+	create_internal_entities_of_type<variable>(groups, final_entities, pairs);
 
-	create_entities_of_type<member_variable>(groups.member_variables, final_entities);
-	create_internal_entities_of_type<member_variable>(groups, final_entities);
+	create_entities_of_type<member_variable>(groups.member_variables, final_entities, pairs);
+	create_internal_entities_of_type<member_variable>(groups, final_entities, pairs);
 
-	create_entities_of_type<static_member_variable>(groups.static_member_variables, final_entities);
-	create_internal_entities_of_type<static_member_variable>(groups, final_entities);
+	create_entities_of_type<static_member_variable>(groups.static_member_variables, final_entities, pairs);
+	create_internal_entities_of_type<static_member_variable>(groups, final_entities, pairs);
 
-	create_entities_of_type<bit_field>(groups.bit_fields, final_entities);
-	create_internal_entities_of_type<bit_field>(groups, final_entities);
+	create_entities_of_type<bit_field>(groups.bit_fields, final_entities, pairs);
+	create_internal_entities_of_type<bit_field>(groups, final_entities, pairs);
 
-	add_base_classes<class_>(final_entities);
-	add_base_classes<member_class>(final_entities);
+	add_base_classes<class_>(final_entities, pairs);
+	add_base_classes<member_class>(final_entities, pairs);
+
+	set_default_values(final_entities, pairs);
 }
 
 }}}} //namespace scalpel::cpp::linkage::detail

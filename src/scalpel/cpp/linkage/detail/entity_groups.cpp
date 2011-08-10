@@ -73,6 +73,10 @@ GENERATE_GET_ENTITY_LIST_SPECIALIZATION(variable, variables)
 GENERATE_GET_ENTITY_LIST_SPECIALIZATION(member_variable, member_variables)
 GENERATE_GET_ENTITY_LIST_SPECIALIZATION(static_member_variable, static_member_variables)
 GENERATE_GET_ENTITY_LIST_SPECIALIZATION(bit_field, bit_fields)
+GENERATE_GET_ENTITY_LIST_SPECIALIZATION(enum_constant<int>, int_enum_constants)
+GENERATE_GET_ENTITY_LIST_SPECIALIZATION(enum_constant<unsigned int>, unsigned_int_enum_constants)
+GENERATE_GET_ENTITY_LIST_SPECIALIZATION(enum_constant<long int>, long_int_enum_constants)
+GENERATE_GET_ENTITY_LIST_SPECIALIZATION(enum_constant<unsigned long int>, unsigned_long_int_enum_constants)
 
 INTERNAL_ENTITIES_OF_TYPE(namespace_, internal_namespaces)
 INTERNAL_ENTITIES_OF_TYPE(unnamed_namespace, internal_unnamed_namespaces)
@@ -97,6 +101,10 @@ INTERNAL_ENTITIES_OF_TYPE(variable, internal_variables)
 INTERNAL_ENTITIES_OF_TYPE(member_variable, internal_member_variables)
 INTERNAL_ENTITIES_OF_TYPE(static_member_variable, internal_static_member_variables)
 INTERNAL_ENTITIES_OF_TYPE(bit_field, internal_bit_fields)
+INTERNAL_ENTITIES_OF_TYPE(enum_constant<int>, internal_int_enum_constants)
+INTERNAL_ENTITIES_OF_TYPE(enum_constant<unsigned int>, internal_unsigned_int_enum_constants)
+INTERNAL_ENTITIES_OF_TYPE(enum_constant<long int>, internal_long_int_enum_constants)
+INTERNAL_ENTITIES_OF_TYPE(enum_constant<unsigned long int>, internal_unsigned_long_int_enum_constants)
 
 }}}} //namespace scalpel::cpp::linkage::detail
 

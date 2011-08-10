@@ -33,11 +33,11 @@ enum_constant<UnderlyingType>::enum_constant(const std::string& name, const Unde
 
 
 
-template<typename UnderlyingType>
-struct get_enum_constant_type_visitor: utility::static_visitor<typename enum_constant<UnderlyingType>::type_t>
+template<typename UnderlyingType, class ReturnType>
+struct get_enum_constant_type_visitor: utility::static_visitor<ReturnType>
 {
 	template<template<typename> class BasicEnum>
-	typename enum_constant<UnderlyingType>::type_t
+	ReturnType
 	operator()(BasicEnum<UnderlyingType>* e)
 	{
 		return &e->variant_enum();
@@ -49,7 +49,16 @@ typename enum_constant<UnderlyingType>::type_t
 enum_constant<UnderlyingType>::type()
 {
 	assert(parent_enum_);
-	get_enum_constant_type_visitor<UnderlyingType> visitor;
+	get_enum_constant_type_visitor<UnderlyingType, typename enum_constant<UnderlyingType>::type_t> visitor;
+	return apply_visitor(visitor, *parent_enum_);
+}
+
+template<typename UnderlyingType>
+typename enum_constant<UnderlyingType>::const_type_t
+enum_constant<UnderlyingType>::type() const
+{
+	assert(parent_enum_);
+	get_enum_constant_type_visitor<UnderlyingType, typename enum_constant<UnderlyingType>::const_type_t> visitor;
 	return apply_visitor(visitor, *parent_enum_);
 }
 

@@ -22,6 +22,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_LINKAGE_DETAIL_CREATE_UNIQUE_ID_HPP
 
 #include <scalpel/cpp/semantic_graph.hpp>
+#include <scalpel/cpp/semantic_entities/generic_queries/detail/has_enclosing_declarative_region.hpp>
+#include <scalpel/cpp/semantic_entities/generic_queries/detail/enclosing_declarative_region.hpp>
+#include <scalpel/cpp/semantic_entities/type_traits/enclosing_declarative_region.hpp>
 
 namespace scalpel { namespace cpp { namespace linkage { namespace detail
 {
@@ -36,6 +39,14 @@ namespace scalpel { namespace cpp { namespace linkage { namespace detail
 //
 //The method employed by create_unique_id() is somewhat similar to the
 //name mangling performed by conventional compilers.
+
+template<class Entity>
+std::string
+create_enclosing_declarative_region_unique_id(const Entity& entity);
+
+template<class... Entities>
+std::string
+create_unique_id(const utility::variant<Entities...>& entity);
 
 std::string
 create_unique_id(const semantic_entities::namespace_& entity);
@@ -97,7 +108,13 @@ create_unique_id(const semantic_entities::static_member_variable& entity);
 std::string
 create_unique_id(const semantic_entities::bit_field& entity);
 
+template<typename UnderlyingType>
+std::string
+create_unique_id(const semantic_entities::enum_constant<UnderlyingType>& entity);
+
 }}}} //namespace scalpel::cpp::linkage::detail
+
+#include "create_unique_id.ipp"
 
 #endif
 

@@ -19,10 +19,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "create_unique_id.hpp"
-#include <scalpel/cpp/semantic_entities/generic_queries/detail/has_enclosing_declarative_region.hpp>
-#include <scalpel/cpp/semantic_entities/generic_queries/detail/enclosing_declarative_region.hpp>
 #include <scalpel/cpp/semantic_entities/generic_queries/get_name.hpp>
-#include <scalpel/cpp/semantic_entities/type_traits/enclosing_declarative_region.hpp>
 #include <sstream>
 #include <cassert>
 
@@ -202,98 +199,6 @@ namespace
 		else
 			return "";
 	}
-
-	template<class Entity>
-	std::string
-	create_enclosing_declarative_region_unique_id(const Entity& entity)
-	{
-		typedef typename type_traits::const_enclosing_declarative_region<Entity>::type enclosing_declarative_region_t;
-
-		if(generic_queries::detail::has_enclosing_declarative_region(entity))
-		{
-			const enclosing_declarative_region_t& enclosing_declarative_region =
-				generic_queries::detail::get_enclosing_declarative_region(entity)
-			;
-
-			//if(enclosing_declarative_region.has_enclosing_declarative_region()) //global namespace?
-			{
-				return create_unique_id(enclosing_declarative_region) + "::";
-			}
-		}
-
-		return "";
-	}
-}
-
-
-
-namespace
-{
-	struct: utility::static_visitor<std::string>
-	{
-		template<typename T>
-		std::string
-		operator()(const T& t)
-		{
-			return create_unique_id(t);
-		}
-
-		template<typename T>
-		std::string
-		operator()(const T* t)
-		{
-			return create_unique_id(*t);
-		}
-
-		template<typename T>
-		std::string
-		operator()(T* const& t)
-		{
-			return create_unique_id(*t);
-		}
-
-		std::string
-		operator()(const unnamed_namespace*)
-		{
-			assert(false);
-			return "";
-		}
-
-		std::string
-		operator()(const linked_namespace*)
-		{
-			assert(false);
-			return "";
-		}
-
-		std::string
-		operator()(const linked_unnamed_namespace*)
-		{
-			assert(false);
-			return "";
-		}
-
-		std::string
-		operator()(const anonymous_union*)
-		{
-			assert(false);
-			return "";
-		}
-
-		std::string
-		operator()(const anonymous_member_union*)
-		{
-			assert(false);
-			return "";
-		}
-	} create_unique_id_visitor;
-}
-
-template<class... Entities>
-std::string
-create_unique_id(const utility::variant<Entities...>& entity)
-{
-	return apply_visitor(create_unique_id_visitor, entity);
 }
 
 std::string

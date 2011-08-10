@@ -29,13 +29,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace linkage { namespace detail
 {
 
-template<class Entity>
-struct old_and_new_entity_pair
-{
-	const Entity* old_entity;
-	Entity* new_entity;
-};
-
 struct final_graph_entities
 {
 	template<class Entity>
@@ -70,23 +63,10 @@ struct final_graph_entities
 	std::map<const semantic_entities::member_variable*, semantic_entities::member_variable*> member_variables;
 	std::map<const semantic_entities::static_member_variable*, semantic_entities::static_member_variable*> static_member_variables;
 	std::map<const semantic_entities::bit_field*, semantic_entities::bit_field*> bit_fields;
-
-
-
-	template<class Entity>
-	std::vector<old_and_new_entity_pair<Entity>>&
-	get_pairs_of_type();
-
-	template<class Entity>
-	const std::vector<old_and_new_entity_pair<Entity>>&
-	get_pairs_of_type() const;
-
-	std::vector<old_and_new_entity_pair<semantic_entities::class_>> class_pairs;
-	std::vector<old_and_new_entity_pair<semantic_entities::member_class>> member_class_pairs;
-	std::vector<old_and_new_entity_pair<semantic_entities::union_>> union_pairs;
-	std::vector<old_and_new_entity_pair<semantic_entities::member_union>> member_union_pairs;
-	std::vector<old_and_new_entity_pair<semantic_entities::anonymous_union>> anonymous_union_pairs;
-	std::vector<old_and_new_entity_pair<semantic_entities::anonymous_member_union>> anonymous_member_union_pairs;
+	std::map<const semantic_entities::enum_constant<int>*, semantic_entities::enum_constant<int>*> int_enum_constants;
+	std::map<const semantic_entities::enum_constant<unsigned int>*, semantic_entities::enum_constant<unsigned int>*> unsigned_int_enum_constants;
+	std::map<const semantic_entities::enum_constant<long int>*, semantic_entities::enum_constant<long int>*> long_int_enum_constants;
+	std::map<const semantic_entities::enum_constant<unsigned long int>*, semantic_entities::enum_constant<unsigned long int>*> unsigned_long_int_enum_constants;
 };
 
 }}}} //namespace scalpel::cpp::linkage::detail

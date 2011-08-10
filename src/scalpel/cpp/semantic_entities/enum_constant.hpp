@@ -57,6 +57,15 @@ class enum_constant
 			type_t
 		;
 
+		typedef
+			utility::variant
+			<
+				const enum_t*,
+				const member_enum_t*
+			>
+			const_type_t
+		;
+
         enum_constant(const std::string& name, const UnderlyingType value);
 
         enum_constant(const enum_constant&) = delete;
@@ -85,6 +94,9 @@ class enum_constant
 
 		type_t
 		type();
+
+		const_type_t
+		type() const;
 
 	private:
 		std::string name_;

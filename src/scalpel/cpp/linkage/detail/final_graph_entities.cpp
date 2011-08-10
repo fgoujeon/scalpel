@@ -35,21 +35,6 @@ final_graph_entities::get_map_of_linked_type<semantic_entities::ENTITY_TYPE>() c
 	return VARIABLE; \
 }
 
-#define GENERATE_GET_PAIRS_SPECIALIZATION(ENTITY_TYPE, VARIABLE) \
-template<> \
-std::vector<old_and_new_entity_pair<semantic_entities::ENTITY_TYPE>>& \
-final_graph_entities::get_pairs_of_type<semantic_entities::ENTITY_TYPE>() \
-{ \
-	return VARIABLE; \
-} \
- \
-template<> \
-const std::vector<old_and_new_entity_pair<semantic_entities::ENTITY_TYPE>>& \
-final_graph_entities::get_pairs_of_type<semantic_entities::ENTITY_TYPE>() const \
-{ \
-	return VARIABLE; \
-}
-
 namespace scalpel { namespace cpp { namespace linkage { namespace detail
 {
 
@@ -76,17 +61,12 @@ GET_MAP_OF_LINKED_TYPE(variable, variables)
 GET_MAP_OF_LINKED_TYPE(member_variable, member_variables)
 GET_MAP_OF_LINKED_TYPE(static_member_variable, static_member_variables)
 GET_MAP_OF_LINKED_TYPE(bit_field, bit_fields)
-
-GENERATE_GET_PAIRS_SPECIALIZATION(class_, class_pairs)
-GENERATE_GET_PAIRS_SPECIALIZATION(member_class, member_class_pairs)
-GENERATE_GET_PAIRS_SPECIALIZATION(union_, union_pairs)
-GENERATE_GET_PAIRS_SPECIALIZATION(member_union, member_union_pairs)
-GENERATE_GET_PAIRS_SPECIALIZATION(anonymous_union, anonymous_union_pairs)
-GENERATE_GET_PAIRS_SPECIALIZATION(anonymous_member_union, anonymous_member_union_pairs)
+GET_MAP_OF_LINKED_TYPE(enum_constant<int>, int_enum_constants)
+GET_MAP_OF_LINKED_TYPE(enum_constant<unsigned int>, unsigned_int_enum_constants)
+GET_MAP_OF_LINKED_TYPE(enum_constant<long int>, long_int_enum_constants)
+GET_MAP_OF_LINKED_TYPE(enum_constant<unsigned long int>, unsigned_long_int_enum_constants)
 
 }}}} //namespace scalpel::cpp::linkage::detail
 
-#undef GET_MAP_OF_NONLINKED_TYPE
 #undef GET_MAP_OF_LINKED_TYPE
-#undef GENERATE_GET_PAIRS_SPECIALIZATION
 

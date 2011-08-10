@@ -23,6 +23,9 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <scalpel/cpp/semantic_entities/generic_queries/detail/get_members.hpp>
 #include <scalpel/cpp/semantic_entities/generic_queries/detail/has_external_linkage.hpp>
 #include <scalpel/cpp/semantic_entities/type_traits/has_members_of_type.hpp>
+#include <scalpel/cpp/semantic_entities/type_traits/is_class.hpp>
+#include <scalpel/cpp/semantic_entities/type_traits/is_union.hpp>
+#include <scalpel/cpp/semantic_entities/type_traits/is_enum.hpp>
 
 namespace scalpel { namespace cpp { namespace linkage { namespace detail
 {
@@ -36,7 +39,25 @@ namespace
 
 	template<bool force_internal_linkage, class Class>
 	void
-	list_child_entities(const Class& parent_entity, entity_groups& groups);
+	list_child_entities
+	(
+		const Class& parent_entity,
+		entity_groups& groups,
+		typename boost::enable_if_c
+		<
+			semantic_entities::type_traits::is_class<Class>::value ||
+			semantic_entities::type_traits::is_union<Class>::value
+		>::type* = 0
+	);
+
+	template<bool force_internal_linkage, class Enum>
+	void
+	list_child_entities
+	(
+		const Enum& parent_entity,
+		entity_groups& groups,
+		typename boost::enable_if<semantic_entities::type_traits::is_enum<Enum>>::type* = 0
+	);
 }
 
 namespace
@@ -152,6 +173,12 @@ namespace
 			list_child_entities<true>(*i, groups);
 		}
 
+		const utility::unique_ptr_vector<enum_t>& child_enums = parent_entity.enums();
+		for(auto i = child_enums.begin(); i != child_enums.end(); ++i)
+		{
+			list_child_entities<force_internal_linkage>(*i, groups);
+		}
+
 		list_child_entities_of_type<force_internal_linkage, namespace_>(parent_entity, groups);
 		list_child_entities_of_type<force_internal_linkage, class_>(parent_entity, groups);
 		list_child_entities_of_type<force_internal_linkage, union_>(parent_entity, groups);
@@ -209,7 +236,16 @@ namespace
 
 	template<bool force_internal_linkage, class Class>
 	void
-	list_child_entities(const Class& parent_entity, entity_groups& groups)
+	list_child_entities
+	(
+		const Class& parent_entity,
+		entity_groups& groups,
+		typename boost::enable_if_c
+		<
+			semantic_entities::type_traits::is_class<Class>::value ||
+			semantic_entities::type_traits::is_union<Class>::value
+		>::type*
+	)
 	{
 		const utility::unique_ptr_vector<member_class>& child_classes = parent_entity.classes();
 		for(auto i = child_classes.begin(); i != child_classes.end(); ++i)
@@ -242,6 +278,39 @@ namespace
 		list_child_entities_of_type<force_internal_linkage, member_variable>(parent_entity, groups);
 		list_child_entities_of_type<force_internal_linkage, static_member_variable>(parent_entity, groups);
 		list_child_entities_of_type<force_internal_linkage, bit_field>(parent_entity, groups);
+	}
+
+	template<bool force_internal_linkage>
+	class list_enum_child_entities_visitor: public utility::static_visitor<void>
+	{
+		public:
+			list_enum_child_entities_visitor(entity_groups& groups):
+				groups_(groups)
+			{
+			}
+
+			template<template<typename> class BasicEnum, typename UnderlyingType>
+			void
+			operator()(const BasicEnum<UnderlyingType>& parent_enum)
+			{
+				list_child_entities_of_type<force_internal_linkage, enum_constant<UnderlyingType>>(parent_enum, groups_);
+			}
+
+		private:
+			entity_groups& groups_;
+	};
+
+	template<bool force_internal_linkage, class Enum>
+	void
+	list_child_entities
+	(
+		const Enum& parent_entity,
+		entity_groups& groups,
+		typename boost::enable_if<semantic_entities::type_traits::is_enum<Enum>>::type*
+	)
+	{
+		list_enum_child_entities_visitor<force_internal_linkage> visitor(groups);
+		apply_visitor(visitor, parent_entity);
 	}
 }
 
