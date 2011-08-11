@@ -238,19 +238,14 @@ class semantic_graph_serializer
 		class serialize_enum_visitor: public utility::static_visitor<void>
 		{
 			public:
-				serialize_enum_visitor
-				(
-					semantic_graph_serializer& serializer,
-					const std::string& id
-				);
+				serialize_enum_visitor(semantic_graph_serializer& serializer);
 
-				template<template<typename> class BasicEnum, typename UnderlyingType>
+				template<typename UnderlyingType>
 				void
-				operator()(const BasicEnum<UnderlyingType>& entity) const;
+				operator()(const enum_constant_list<UnderlyingType>& constant_list) const;
 
 			private:
 				semantic_graph_serializer& serializer_;
-				const std::string id_;
 		};
 		friend class serialize_enum_visitor;
 
@@ -743,8 +738,8 @@ class semantic_graph_serializer
 			set_id_of_members_of_type<member_union>(entity);
 			set_id_of_members_of_type<anonymous_union>(entity);
 			set_id_of_members_of_type<anonymous_member_union>(entity);
-			set_id_of_members_of_type<enum_t>(entity);
-			set_id_of_members_of_type<member_enum_t>(entity);
+			//set_id_of_members_of_type<enum_t>(entity);
+			//set_id_of_members_of_type<member_enum_t>(entity);
 			set_id_of_members_of_type<typedef_>(entity);
 			set_id_of_members_of_type<member_typedef>(entity);
 			set_id_of_members_of_type<operator_member_function>(entity);
@@ -788,43 +783,43 @@ class semantic_graph_serializer
 			//does nothing
 		}
 
-		template<class Entity>
-		class set_id_of_members_of_type_visitor: public utility::static_visitor<void>
-		{
-			public:
-				set_id_of_members_of_type_visitor(semantic_graph_serializer& serializer):
-					serializer_(serializer)
-				{
-				}
-
-				template<template<typename> class BasicEnum, typename UnderlyingType>
-				void
-				operator()(const BasicEnum<UnderlyingType>& e)
-				{
-					serializer_.set_id_of_members_of_type<Entity>(e);
-				}
-
-			private:
-				semantic_graph_serializer& serializer_;
-		};
-		template<class Entity>
-		friend class set_id_of_members_of_type_visitor;
-
-		template<class Entity>
-		void
-		set_id_of_members_of_type(const semantic_entities::enum_t& declarative_region)
-		{
-			set_id_of_members_of_type_visitor<Entity> visitor(*this);
-			apply_visitor(visitor, declarative_region);
-		}
-
-		template<class Entity>
-		void
-		set_id_of_members_of_type(const semantic_entities::member_enum_t& declarative_region)
-		{
-			set_id_of_members_of_type_visitor<Entity> visitor(*this);
-			apply_visitor(visitor, declarative_region);
-		}
+//		template<class Entity>
+//		class set_id_of_members_of_type_visitor: public utility::static_visitor<void>
+//		{
+//			public:
+//				set_id_of_members_of_type_visitor(semantic_graph_serializer& serializer):
+//					serializer_(serializer)
+//				{
+//				}
+//
+//				template<typename UnderlyingType>
+//				void
+//				operator()(const enum_constant_list<UnderlyingType>& e)
+//				{
+//					serializer_.set_id_of_members_of_type<Entity>(e);
+//				}
+//
+//			private:
+//				semantic_graph_serializer& serializer_;
+//		};
+//		template<class Entity>
+//		friend class set_id_of_members_of_type_visitor;
+//
+//		template<class Entity>
+//		void
+//		set_id_of_members_of_type(const semantic_entities::enum_t& declarative_region)
+//		{
+//			set_id_of_members_of_type_visitor<Entity> visitor(*this);
+//			apply_visitor(visitor, declarative_region.constants());
+//		}
+//
+//		template<class Entity>
+//		void
+//		set_id_of_members_of_type(const semantic_entities::member_enum_t& declarative_region)
+//		{
+//			set_id_of_members_of_type_visitor<Entity> visitor(*this);
+//			apply_visitor(visitor, declarative_region.constants());
+//		}
 
 		template<class Entity>
 		unsigned int

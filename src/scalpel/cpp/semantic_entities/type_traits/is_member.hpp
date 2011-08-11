@@ -55,12 +55,6 @@ IS_MEMBER(bit_field)
 
 #undef IS_MEMBER
 
-template<typename UnderlyingType>
-struct is_member<basic_member_enum<UnderlyingType>>
-{
-	static const bool value = true;
-};
-
 template<class T>
 struct is_member<member_entity_alias<T>>
 {

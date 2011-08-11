@@ -301,7 +301,6 @@ create_type
 		case syntax_node_analysis::type_specifier_seq_type::ENUMERATION_DECLARATION:
 		{
 			const bool type_index = is_member ? 0 : 1;
-			typedef typename utility::type_alternative<type_index, basic_member_enum<int>, basic_enum<int>>::type basic_enum_type;
 			typedef typename utility::type_alternative<type_index, member_enum_t, enum_t>::type enum_type;
 
 			const enum_specifier& enum_specifier_node =
@@ -309,7 +308,7 @@ create_type
 			;
 			const std::string& enum_name = syntax_node_analysis::get_identifier(enum_specifier_node);
 
-			enum_type* new_enum = detail::create_enum<enum_type, basic_enum_type>(enum_name, access);
+			enum_type* new_enum = detail::create_type<enum_type>(enum_name, access);
 			info.opt_new_type = new_enum;
 			info.opt_defined_type = new_enum;
 			info.opt_complete_type = new_enum;
@@ -576,32 +575,6 @@ namespace detail
 	)
 	{
 		return new Type();
-	}
-
-
-
-	template<class VariantType, class BasicType>
-	VariantType*
-	create_enum
-	(
-		const std::string& type_name,
-		const semantic_entities::member_access access,
-		typename boost::enable_if<semantic_entities::type_traits::is_member<VariantType>>::type*
-	)
-	{
-		return new VariantType(BasicType(type_name, access));
-	}
-
-	template<class VariantType, class BasicType>
-	VariantType*
-	create_enum
-	(
-		const std::string& type_name,
-		const semantic_entities::member_access, //ignored
-		typename boost::disable_if<semantic_entities::type_traits::is_member<VariantType>>::type*
-	)
-	{
-		return new VariantType(BasicType(type_name));
 	}
 
 

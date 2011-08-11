@@ -59,22 +59,6 @@ get_name(const utility::variant<Entities...>& entity)
 	return apply_visitor(get_name_visitor, entity);
 }
 
-
-
-inline
-const std::string&
-get_name(const enum_t& entity)
-{
-	return apply_visitor(get_name_visitor, entity);
-}
-
-inline
-const std::string&
-get_name(const member_enum_t& entity)
-{
-	return apply_visitor(get_name_visitor, entity);
-}
-
 }}}} //namespace scalpel::cpp::semantic_entities::generic_queries
 
 #endif

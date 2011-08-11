@@ -113,36 +113,6 @@ GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(statement_block)
 
 #undef GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE
 
-
-
-template<class, typename UnderlyingType>
-typename get_members_return_type<basic_enum<UnderlyingType>, semantic_entities::enum_constant<UnderlyingType>, false>::type
-get_members(semantic_entities::basic_enum<UnderlyingType>& parent)
-{
-	return parent.constants();
-}
-
-template<class, typename UnderlyingType>
-typename get_members_return_type<basic_enum<UnderlyingType>, semantic_entities::enum_constant<UnderlyingType>, true>::type
-get_members(const semantic_entities::basic_enum<UnderlyingType>& parent)
-{
-	return parent.constants();
-}
-
-template<class, typename UnderlyingType>
-typename get_members_return_type<basic_member_enum<UnderlyingType>, semantic_entities::enum_constant<UnderlyingType>, false>::type
-get_members(semantic_entities::basic_member_enum<UnderlyingType>& parent)
-{
-	return parent.constants();
-}
-
-template<class, typename UnderlyingType>
-typename get_members_return_type<basic_member_enum<UnderlyingType>, semantic_entities::enum_constant<UnderlyingType>, true>::type
-get_members(const semantic_entities::basic_member_enum<UnderlyingType>& parent)
-{
-	return parent.constants();
-}
-
 }}}}} //namespace scalpel::cpp::semantic_entities::generic_queries::detail
 
 #endif

@@ -157,18 +157,6 @@ HAS_MEMBERS_OF_TYPE(statement_block, namespace_alias)
 
 #undef HAS_MEMBERS_OF_TYPE
 
-template<typename UnderlyingType>
-struct has_members_of_type<basic_enum<UnderlyingType>, enum_constant<UnderlyingType>>
-{
-	static const bool value = true;
-};
-
-template<typename UnderlyingType>
-struct has_members_of_type<basic_member_enum<UnderlyingType>, enum_constant<UnderlyingType>>
-{
-	static const bool value = true;
-};
-
 }}}} //namespace scalpel::cpp::semantic_entities::type_traits
 
 #endif

@@ -73,7 +73,7 @@ BOOST_AUTO_TEST_CASE(using_declarations)
 	auto class_n_c = new class_("c");
 
 	//enums
-	auto enum_n_e = new enum_t(basic_enum<int>("e"));
+	auto enum_n_e = new enum_t("e");
 
 	//typedef
 	auto typedef_n_integer = new typedef_("integer", fundamental_type::INT);

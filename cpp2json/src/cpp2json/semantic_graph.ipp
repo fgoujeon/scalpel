@@ -75,11 +75,9 @@ semantic_graph_serializer::serialize_class
 
 semantic_graph_serializer::serialize_enum_visitor::serialize_enum_visitor
 (
-	semantic_graph_serializer& serializer,
-	const std::string& id
+	semantic_graph_serializer& serializer
 ):
-	serializer_(serializer),
-	id_(id)
+	serializer_(serializer)
 {
 }
 
@@ -100,18 +98,14 @@ FUNDAMENTAL_TYPE_TO_STRING(long unsigned int, "long unsigned int")
 
 #undef FUNDAMENTAL_TYPE_TO_STRING
 
-template<template<typename> class BasicEnum, typename UnderlyingType>
+template<typename UnderlyingType>
 void
-semantic_graph_serializer::serialize_enum_visitor::operator()(const BasicEnum<UnderlyingType>& entity) const
+semantic_graph_serializer::serialize_enum_visitor::operator()(const enum_constant_list<UnderlyingType>& constant_list) const
 {
-	serializer_.writer_.write_key_value_pair("id", id_);
-	if(!entity.name().empty())
-		serializer_.writer_.write_key_value_pair("name", entity.name());
 	serializer_.writer_.write_key_value_pair("underlying type", fundamental_type_to_string<UnderlyingType>::value);
-	serializer_.serialize_access_property(entity);
 
 	serializer_.writer_.open_array("constants");
-	for(const enum_constant<UnderlyingType>& constant: entity.constants())
+	for(const enum_constant<UnderlyingType>& constant: constant_list.constants())
 	{
 		serializer_.writer_.open_object();
 		serializer_.writer_.write_key_value_pair("name", constant.name());
@@ -124,13 +118,15 @@ semantic_graph_serializer::serialize_enum_visitor::operator()(const BasicEnum<Un
 
 template<class Enum>
 void
-semantic_graph_serializer::serialize_enum
-(
-	const Enum& entity
-)
+semantic_graph_serializer::serialize_enum(const Enum& entity)
 {
-	serialize_enum_visitor visitor(*this, get_id_str(entity));
-	apply_visitor(visitor, entity);
+	writer_.write_key_value_pair("id", get_id_str(entity));
+	if(!entity.name().empty())
+		writer_.write_key_value_pair("name", entity.name());
+	serialize_access_property(entity);
+
+	serialize_enum_visitor visitor(*this);
+	apply_visitor(visitor, entity.constants());
 }
 
 

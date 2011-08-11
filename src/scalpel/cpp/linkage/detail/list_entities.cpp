@@ -289,11 +289,14 @@ namespace
 			{
 			}
 
-			template<template<typename> class BasicEnum, typename UnderlyingType>
+			template<typename UnderlyingType>
 			void
-			operator()(const BasicEnum<UnderlyingType>& parent_enum)
+			operator()(const enum_constant_list<UnderlyingType>& list)
 			{
-				list_child_entities_of_type<force_internal_linkage, enum_constant<UnderlyingType>>(parent_enum, groups_);
+				for(const enum_constant<UnderlyingType>& c: list.constants())
+				{
+					list_entity_impl<force_internal_linkage, enum_constant<UnderlyingType>>::list_entity(c, groups_);
+				}
 			}
 
 		private:
@@ -310,7 +313,7 @@ namespace
 	)
 	{
 		list_enum_child_entities_visitor<force_internal_linkage> visitor(groups);
-		apply_visitor(visitor, parent_entity);
+		apply_visitor(visitor, parent_entity.constants());
 	}
 }
 

@@ -184,18 +184,6 @@ namespace
 		return new_union;
 	}
 
-	struct: utility::static_visitor<enum_t*>
-	{
-		template<typename UnderlyingType>
-		enum_t*
-		operator()(const basic_enum<UnderlyingType>& entity)
-		{
-			basic_enum<UnderlyingType> new_enum(entity.name());
-			copy_constants(entity, new_enum);
-			return new enum_t(std::move(new_enum));
-		}
-	} copy_enum_visitor;
-
 	enum_t*
 	create_entity
 	(
@@ -204,20 +192,8 @@ namespace
 		entity_pairs&
 	)
 	{
-		return apply_visitor(copy_enum_visitor, entity);
+		return new enum_t(entity.name());
 	}
-
-	struct: utility::static_visitor<member_enum_t*>
-	{
-		template<typename UnderlyingType>
-		member_enum_t*
-		operator()(const basic_member_enum<UnderlyingType>& entity)
-		{
-			basic_member_enum<UnderlyingType> new_enum(entity.name(), entity.access());
-			copy_constants(entity, new_enum);
-			return new member_enum_t(std::move(new_enum));
-		}
-	} copy_member_enum_visitor;
 
 	member_enum_t*
 	create_entity
@@ -227,7 +203,7 @@ namespace
 		entity_pairs&
 	)
 	{
-		return apply_visitor(copy_member_enum_visitor, entity);
+		return new member_enum_t(entity.name(), entity.access());
 	}
 
 	template<template<typename> class Enum, typename UnderlyingType>

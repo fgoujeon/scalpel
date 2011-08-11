@@ -67,16 +67,16 @@ BOOST_AUTO_TEST_CASE(enums)
 	auto enum_constant_s_direction_right = new enum_constant<long int>("RIGHT", 1);
 
 	//enums
-	basic_enum<int> basic_enum_color("color");
-	basic_enum_color.add(std::unique_ptr<enum_constant<int>>(enum_constant_color_red));
-	basic_enum_color.add(std::unique_ptr<enum_constant<int>>(enum_constant_color_green));
-	basic_enum_color.add(std::unique_ptr<enum_constant<int>>(enum_constant_color_blue));
-	enum_t* enum_color = new enum_t(std::move(basic_enum_color));
+	enum_constant_list<int> enum_constant_list_color;
+	enum_constant_list_color.add(std::unique_ptr<enum_constant<int>>(enum_constant_color_red));
+	enum_constant_list_color.add(std::unique_ptr<enum_constant<int>>(enum_constant_color_green));
+	enum_constant_list_color.add(std::unique_ptr<enum_constant<int>>(enum_constant_color_blue));
+	enum_t* enum_color = new enum_t("color", std::move(enum_constant_list_color));
 
-	basic_member_enum<long int> basic_enum_s_direction("direction", member_access::PUBLIC);
-	basic_enum_s_direction.add(std::unique_ptr<enum_constant<long int>>(enum_constant_s_direction_left));
-	basic_enum_s_direction.add(std::unique_ptr<enum_constant<long int>>(enum_constant_s_direction_right));
-	member_enum_t* enum_s_direction = new member_enum_t(std::move(basic_enum_s_direction));
+	enum_constant_list<long int> enum_constant_list_direction;
+	enum_constant_list_direction.add(std::unique_ptr<enum_constant<long int>>(enum_constant_s_direction_left));
+	enum_constant_list_direction.add(std::unique_ptr<enum_constant<long int>>(enum_constant_s_direction_right));
+	member_enum_t* enum_s_direction = new member_enum_t("direction", member_access::PUBLIC, std::move(enum_constant_list_direction));
 
 	//assembling
 	semantic_graph.add_member(std::unique_ptr<enum_t>(enum_color));

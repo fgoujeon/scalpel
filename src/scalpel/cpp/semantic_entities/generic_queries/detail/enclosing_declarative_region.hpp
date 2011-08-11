@@ -39,12 +39,6 @@ get_enclosing_declarative_region(const Entity& entity)
 	return entity.enclosing_declarative_region();
 }
 
-type_traits::const_enclosing_declarative_region<enum_t>::type&
-get_enclosing_declarative_region(const enum_t& entity);
-
-type_traits::const_enclosing_declarative_region<member_enum_t>::type&
-get_enclosing_declarative_region(const member_enum_t& entity);
-
 }}}}} //namespace scalpel::cpp::semantic_entities::generic_queries::detail
 
 #endif

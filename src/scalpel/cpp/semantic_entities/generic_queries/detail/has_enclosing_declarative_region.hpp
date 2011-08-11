@@ -34,14 +34,6 @@ template<class... Entities>
 bool
 has_enclosing_declarative_region(const utility::variant<Entities...>& entity);
 
-inline
-bool
-has_enclosing_declarative_region(const enum_t& entity);
-
-inline
-bool
-has_enclosing_declarative_region(const member_enum_t& entity);
-
 
 
 template<class Entity>
@@ -80,22 +72,6 @@ struct: utility::static_visitor<bool>
 template<class... Entities>
 bool
 has_enclosing_declarative_region(const utility::variant<Entities...>& entity)
-{
-	return apply_visitor(has_enclosing_declarative_region_visitor, entity);
-}
-
-
-
-inline
-bool
-has_enclosing_declarative_region(const enum_t& entity)
-{
-	return apply_visitor(has_enclosing_declarative_region_visitor, entity);
-}
-
-inline
-bool
-has_enclosing_declarative_region(const member_enum_t& entity)
 {
 	return apply_visitor(has_enclosing_declarative_region_visitor, entity);
 }

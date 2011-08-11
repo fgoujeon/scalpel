@@ -27,10 +27,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
 template<typename UnderlyingType>
-class basic_enum;
-
-template<typename UnderlyingType>
-class basic_member_enum;
+class enum_constant_list;
 
 class enum_t;
 class member_enum_t;
@@ -42,28 +39,10 @@ class enum_constant
 		typedef
 			utility::variant
 			<
-				basic_enum<UnderlyingType>*,
-				basic_member_enum<UnderlyingType>*
-			>
-			parent_enum_t
-		;
-
-		typedef
-			utility::variant
-			<
 				enum_t*,
 				member_enum_t*
 			>
 			type_t
-		;
-
-		typedef
-			utility::variant
-			<
-				const enum_t*,
-				const member_enum_t*
-			>
-			const_type_t
 		;
 
         enum_constant(const std::string& name, const UnderlyingType value);
@@ -85,23 +64,20 @@ class enum_constant
 			return value_;
 		}
 
-		template<template<typename> class BasicEnum, typename UnderlyingType2>
 		void
-		parent_enum(BasicEnum<UnderlyingType2>& e)
+		parent_list(enum_constant_list<UnderlyingType>& list)
 		{
-			parent_enum_ = &e;
+			assert(parent_list_ == nullptr);
+			parent_list_ = &list;
 		}
 
 		type_t
-		type();
-
-		const_type_t
 		type() const;
 
 	private:
 		std::string name_;
 		UnderlyingType value_;
-		boost::optional<parent_enum_t> parent_enum_;
+		enum_constant_list<UnderlyingType>* parent_list_;
 };
 
 }}} //namespace scalpel::cpp::semantic_entities

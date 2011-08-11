@@ -732,38 +732,38 @@ template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class E
 void
 find_local_entities2<EntityIdentificationPolicy, Optional, Multiple, Entity, semantic_entities::enum_t>::find
 (
-	const typename EntityIdentificationPolicy::identifier_t& identifier,
-	semantic_entities::enum_t& current_declarative_region,
-	typename return_type<Optional, Multiple, Entity>::type& found_entities
+	const typename EntityIdentificationPolicy::identifier_t& /*identifier*/,
+	semantic_entities::enum_t& /*current_declarative_region*/,
+	typename return_type<Optional, Multiple, Entity>::type& /*found_entities*/
 )
 {
-	find_local_entities2_visitor
-	<
-		EntityIdentificationPolicy,
-		Optional,
-		Multiple,
-		Entity
-	> visitor(identifier, found_entities);
-	utility::apply_visitor(visitor, current_declarative_region);
+//	find_local_entities2_visitor
+//	<
+//		EntityIdentificationPolicy,
+//		Optional,
+//		Multiple,
+//		Entity
+//	> visitor(identifier, found_entities);
+//	utility::apply_visitor(visitor, current_declarative_region);
 }
 
 template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class Entity>
 void
 find_local_entities2<EntityIdentificationPolicy, Optional, Multiple, Entity, semantic_entities::member_enum_t>::find
 (
-	const typename EntityIdentificationPolicy::identifier_t& identifier,
-	semantic_entities::member_enum_t& current_declarative_region,
-	typename return_type<Optional, Multiple, Entity>::type& found_entities
+	const typename EntityIdentificationPolicy::identifier_t& /*identifier*/,
+	semantic_entities::member_enum_t& /*current_declarative_region*/,
+	typename return_type<Optional, Multiple, Entity>::type& /*found_entities*/
 )
 {
-	find_local_entities2_visitor
-	<
-		EntityIdentificationPolicy,
-		Optional,
-		Multiple,
-		Entity
-	> visitor(identifier, found_entities);
-	utility::apply_visitor(visitor, current_declarative_region);
+//	find_local_entities2_visitor
+//	<
+//		EntityIdentificationPolicy,
+//		Optional,
+//		Multiple,
+//		Entity
+//	> visitor(identifier, found_entities);
+//	utility::apply_visitor(visitor, current_declarative_region);
 }
 
 template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class Entity, class DeclarativeRegion>

@@ -33,60 +33,6 @@ set_enclosing_declarative_region(Entity& entity, DeclarativeRegion& declarative_
 	entity.enclosing_declarative_region(declarative_region);
 }
 
-
-
-template<class DeclarativeRegion>
-class set_enclosing_declarative_region_visitor: public utility::static_visitor<void>
-{
-	public:
-		set_enclosing_declarative_region_visitor(DeclarativeRegion& declarative_region):
-			declarative_region_(declarative_region)
-		{
-		}
-
-		/*
-		template<class Entity>
-		void
-		operator()(Entity& entity)
-		{
-			entity.enclosing_declarative_region(declarative_region_);
-		}
-		*/
-
-		template<typename T>
-		void
-		operator()(basic_enum<T>& entity)
-		{
-			entity.enclosing_declarative_region(declarative_region_);
-		}
-
-		template<typename T>
-		void
-		operator()(basic_member_enum<T>& entity)
-		{
-			entity.enclosing_declarative_region(declarative_region_);
-		}
-
-	private:
-		DeclarativeRegion& declarative_region_;
-};
-
-template<class DeclarativeRegion>
-void
-set_enclosing_declarative_region(enum_t& entity, DeclarativeRegion& declarative_region)
-{
-	set_enclosing_declarative_region_visitor<DeclarativeRegion> visitor(declarative_region);
-	apply_visitor(visitor, entity);
-}
-
-template<class DeclarativeRegion>
-void
-set_enclosing_declarative_region(member_enum_t& entity, DeclarativeRegion& declarative_region)
-{
-	set_enclosing_declarative_region_visitor<DeclarativeRegion> visitor(declarative_region);
-	apply_visitor(visitor, entity);
-}
-
 }}}}} //namespace scalpel::cpp::semantic_entities::generic_queries::detail
 
 #endif

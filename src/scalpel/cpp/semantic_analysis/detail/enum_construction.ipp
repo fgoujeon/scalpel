@@ -24,47 +24,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail
 {
 
-namespace
-{
-	class add_to_enum_visitor: public utility::static_visitor<void>
-	{
-		public:
-			add_to_enum_visitor(std::unique_ptr<semantic_entities::enum_constant<int>>&& constant):
-				constant_(std::move(constant))
-			{
-			}
-
-			template<template<typename> class Enum>
-			void
-			operator()(Enum<int>& e)
-			{
-				e.add(std::move(constant_));
-			}
-
-			template<class Enum>
-			void
-			operator()(Enum&)
-			{
-				assert(false);
-			}
-
-		private:
-			std::unique_ptr<semantic_entities::enum_constant<int>>&& constant_;
-	};
-
-	template<class Enum>
-	void
-	add_to_enum
-	(
-		Enum& enum_entity,
-		std::unique_ptr<semantic_entities::enum_constant<int>>&& constant
-	)
-	{
-		add_to_enum_visitor visitor(std::move(constant));
-		utility::apply_visitor(visitor, enum_entity);
-	}
-}
-
 template<class Enum>
 void
 fill_enum
@@ -81,29 +40,20 @@ fill_enum
 		for(auto i = enumerator_list_node.begin(); i != enumerator_list_node.end(); ++i)
 		{
 			const syntax_nodes::enumerator_definition& enumerator_definition_node = *i;
-			add_to_enum
+
+			//create the enum constant
+			std::unique_ptr<semantic_entities::enum_constant<int>> new_enum_constant
 			(
-				enum_entity,
-				std::unique_ptr<semantic_entities::enum_constant<int>>
+				new semantic_entities::enum_constant<int>
 				(
-					new semantic_entities::enum_constant<int>
-					(
-						get_identifier(enumerator_definition_node).value(),
-						value_counter++
-					)
+					get_identifier(enumerator_definition_node).value(),
+					value_counter++
 				)
 			);
-//			enum_entity.add
-//			(
-//				std::unique_ptr<semantic_entities::enum_constant<int>>
-//				(
-//					new semantic_entities::enum_constant<int>
-//					(
-//						get_identifier(enumerator_definition_node).value(),
-//						value_counter++
-//					)
-//				)
-//			);
+
+			//add it to the enum
+			semantic_entities::enum_constant_list<int>& constant_list = utility::get<semantic_entities::enum_constant_list<int>>(enum_entity.constants());
+			constant_list.add(std::move(new_enum_constant));
 		}
 	}
 }
