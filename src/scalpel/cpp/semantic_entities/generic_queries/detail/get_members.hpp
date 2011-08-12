@@ -102,6 +102,8 @@ GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(union_)
 GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(member_union)
 GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(anonymous_union)
 GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(anonymous_member_union)
+GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(enum_t) //implemented in the .ipp file
+GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(member_enum_t) //implemented in the .ipp file
 GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(constructor)
 GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(destructor)
 GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(operator_function)
@@ -114,6 +116,8 @@ GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE(statement_block)
 #undef GENERATE_GET_MEMBERS_FUNCTION_TEMPLATE
 
 }}}}} //namespace scalpel::cpp::semantic_entities::generic_queries::detail
+
+#include "get_members.ipp"
 
 #endif
 
