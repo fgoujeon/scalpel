@@ -51,10 +51,6 @@ namespace
 		const final_graph_entities& final_entities
 	);
 
-	template<template<typename> class Enum, typename UnderlyingType>
-	void
-	copy_constants(const Enum<UnderlyingType>& src, Enum<UnderlyingType>& dest);
-
 	expression_t
 	copy_expression
 	(
@@ -204,27 +200,6 @@ namespace
 	)
 	{
 		return member_enum_t::create<int>(entity.name(), entity.access());
-	}
-
-	template<template<typename> class Enum, typename UnderlyingType>
-	void
-	copy_constants(const Enum<UnderlyingType>& src, Enum<UnderlyingType>& dest)
-	{
-		for(auto i = src.constants().begin(); i != src.constants().end(); ++i)
-		{
-			const enum_constant<UnderlyingType>& current_enum_constant = *i;
-			dest.add
-			(
-				std::unique_ptr<enum_constant<UnderlyingType>>
-				(
-					new enum_constant<UnderlyingType>
-					(
-						current_enum_constant.name(),
-						current_enum_constant.value()
-					)
-				)
-			);
-		}
 	}
 
 	typedef_*
@@ -496,7 +471,6 @@ namespace
 		;
 	}
 
-
 	bit_field*
 	create_entity
 	(
@@ -513,6 +487,24 @@ namespace
 				entity.size(),
 				entity.is_mutable(),
 				entity.access()
+			)
+		;
+	}
+
+	template<typename UnderlyingType>
+	enum_constant<UnderlyingType>*
+	create_entity
+	(
+		const enum_constant<UnderlyingType>& entity,
+		const final_graph_entities&,
+		entity_pairs&
+	)
+	{
+		return
+			new enum_constant<UnderlyingType>
+			(
+				entity.name(),
+				entity.value()
 			)
 		;
 	}
@@ -1061,6 +1053,9 @@ create_final_graph_entities
 
 	create_entities_of_type<bit_field>(groups.bit_fields, final_entities, pairs);
 	create_internal_entities_of_type<bit_field>(groups, final_entities, pairs);
+
+	create_entities_of_type<enum_constant<int>>(groups.int_enum_constants, final_entities, pairs);
+	create_internal_entities_of_type<enum_constant<int>>(groups, final_entities, pairs);
 
 	add_base_classes<class_>(final_entities, pairs);
 	add_base_classes<member_class>(final_entities, pairs);

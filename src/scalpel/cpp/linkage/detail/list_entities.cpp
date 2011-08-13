@@ -223,6 +223,12 @@ namespace
 			list_child_entities<true>(*i, groups);
 		}
 
+		const utility::unique_ptr_vector<enum_t>& child_enums = parent_entity.enums();
+		for(auto i = child_enums.begin(); i != child_enums.end(); ++i)
+		{
+			list_child_entities<true>(*i, groups);
+		}
+
 		list_child_entities_of_type<true, namespace_>(parent_entity, groups);
 		list_child_entities_of_type<true, class_>(parent_entity, groups);
 		list_child_entities_of_type<true, union_>(parent_entity, groups);
@@ -263,6 +269,12 @@ namespace
 		for(auto i = child_anonymous_unions.begin(); i != child_anonymous_unions.end(); ++i)
 		{
 			list_child_entities<true>(*i, groups);
+		}
+
+		const utility::unique_ptr_vector<member_enum_t>& child_enums = parent_entity.enums();
+		for(auto i = child_enums.begin(); i != child_enums.end(); ++i)
+		{
+			list_child_entities<force_internal_linkage>(*i, groups);
 		}
 
 		list_child_entities_of_type<force_internal_linkage, member_class>(parent_entity, groups);

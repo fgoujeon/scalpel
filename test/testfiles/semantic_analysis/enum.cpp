@@ -2,9 +2,9 @@ class s
 {
 	enum color
 	{
-		RED,
+		BLUE,
 		GREEN,
-		BLUE
+		RED
 	};
 };
 

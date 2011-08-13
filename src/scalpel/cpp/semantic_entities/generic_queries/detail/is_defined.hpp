@@ -117,6 +117,14 @@ is_defined(const bit_field&)
 	return true;
 }
 
+template<typename UnderlyingType>
+inline
+bool
+is_defined(const enum_constant<UnderlyingType>&)
+{
+	return true;
+}
+
 template<class Entity>
 inline
 bool

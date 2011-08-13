@@ -78,6 +78,21 @@ struct add_entity_to_declarative_region_impl_3<linked_unnamed_namespace, linked_
 	}
 };
 
+template<typename UnderlyingType, class Enum>
+struct add_entity_to_declarative_region_impl_3<enum_constant<UnderlyingType>, Enum>
+{
+	static
+	void
+	add
+	(
+		std::unique_ptr<enum_constant<UnderlyingType>>&& entity,
+		Enum& parent_enum
+	)
+	{
+		utility::get<enum_constant_list<UnderlyingType>>(parent_enum.constants()).add(std::move(entity));
+	}
+};
+
 
 
 //
@@ -127,6 +142,7 @@ add_entity_to_declarative_region
 {
 	add_entity_to_declarative_region_2(std::move(entity), declarative_region);
 }
+
 
 
 template<class DeclarativeRegion>
