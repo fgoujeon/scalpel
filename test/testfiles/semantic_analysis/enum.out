@@ -10,8 +10,8 @@
         {
           "id": "member-enum-0",
           "name": "color",
-          "underlying type": "int",
           "access": "private",
+          "underlying type": "int",
           "constants":
           [
             {
