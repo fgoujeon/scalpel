@@ -192,7 +192,7 @@ namespace
 		entity_pairs&
 	)
 	{
-		return new enum_t(entity.name());
+		return enum_t::create<int>(entity.name());
 	}
 
 	member_enum_t*
@@ -203,7 +203,7 @@ namespace
 		entity_pairs&
 	)
 	{
-		return new member_enum_t(entity.name(), entity.access());
+		return member_enum_t::create<int>(entity.name(), entity.access());
 	}
 
 	template<template<typename> class Enum, typename UnderlyingType>

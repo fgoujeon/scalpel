@@ -119,9 +119,7 @@ template<typename UnderlyingType>
 std::string
 create_unique_id(const semantic_entities::enum_constant<UnderlyingType>& entity)
 {
-	return
-		create_unique_id(entity.type()) + "::" + entity.name()
-	;
+	return create_enclosing_declarative_region_unique_id(entity) + entity.name();
 }
 
 }}}} //namespace scalpel::cpp::linkage::detail

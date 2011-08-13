@@ -308,7 +308,7 @@ create_type
 			;
 			const std::string& enum_name = syntax_node_analysis::get_identifier(enum_specifier_node);
 
-			enum_type* new_enum = detail::create_type<enum_type>(enum_name, access);
+			enum_type* new_enum = detail::create_enum<enum_type, int>(enum_name, access);
 			info.opt_new_type = new_enum;
 			info.opt_defined_type = new_enum;
 			info.opt_complete_type = new_enum;
@@ -575,6 +575,30 @@ namespace detail
 	)
 	{
 		return new Type();
+	}
+
+	template<class Enum, typename UnderlyingType>
+	Enum*
+	create_enum
+	(
+		const std::string& name,
+		const semantic_entities::member_access access,
+		typename boost::enable_if<semantic_entities::type_traits::is_member<Enum>>::type*
+	)
+	{
+		return Enum::template create<UnderlyingType>(name, access);
+	}
+
+	template<class Enum, typename UnderlyingType>
+	Enum*
+	create_enum
+	(
+		const std::string& name,
+		const semantic_entities::member_access, //ignored
+		typename boost::disable_if<semantic_entities::type_traits::is_member<Enum>>::type*
+	)
+	{
+		return Enum::template create<UnderlyingType>(name);
 	}
 
 

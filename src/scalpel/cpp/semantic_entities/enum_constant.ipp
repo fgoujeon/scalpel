@@ -27,19 +27,8 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 template<typename UnderlyingType>
 enum_constant<UnderlyingType>::enum_constant(const std::string& name, const UnderlyingType value):
 	name_(name),
-	value_(value),
-	parent_list_(nullptr)
+	value_(value)
 {
-}
-
-
-
-template<typename UnderlyingType>
-typename enum_constant<UnderlyingType>::type_t
-enum_constant<UnderlyingType>::type() const
-{
-	assert(parent_list_);
-	return parent_list_->parent_enum();
 }
 
 }}} //namespace scalpel::cpp::semantic_entities

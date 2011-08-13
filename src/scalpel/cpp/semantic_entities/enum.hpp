@@ -33,30 +33,36 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_ENUM(CLASS_NAME, IS_MEMBER) \
 class CLASS_NAME \
 { \
-	public: \
+	private: \
 		template<typename UnderlyingType> \
 		CLASS_NAME \
 		( \
 			const std::string& name, \
 			BOOST_PP_IIF(IS_MEMBER, const member_access access,) BOOST_PP_COMMA_IF(IS_MEMBER) \
-			enum_constant_list<UnderlyingType>&& constants \
+			UnderlyingType* \
 		): \
 			name_(name), \
 			BOOST_PP_IIF(IS_MEMBER, access_(access),) BOOST_PP_COMMA_IF(IS_MEMBER) \
-			constants_(std::move(constants)) \
+			constants_(enum_constant_list<UnderlyingType>(*this)) \
 		{ \
-			constants.parent_enum(*this); \
 		} \
  \
-		CLASS_NAME \
+	public: \
+		template<typename UnderlyingType> \
+		static \
+		CLASS_NAME* \
+		create \
 		( \
 			const std::string& name BOOST_PP_COMMA_IF(IS_MEMBER) \
 			BOOST_PP_IIF(IS_MEMBER, const member_access access,) \
-		): \
-			name_(name), \
-			BOOST_PP_IIF(IS_MEMBER, access_(access),) BOOST_PP_COMMA_IF(IS_MEMBER) \
-			constants_(enum_constant_list<int>()) \
+		) \
 		{ \
+			return new CLASS_NAME \
+			( \
+				name, \
+				BOOST_PP_IIF(IS_MEMBER, access,) BOOST_PP_COMMA_IF(IS_MEMBER) \
+				static_cast<UnderlyingType*>(nullptr) \
+			); \
 		} \
  \
 		CLASS_NAME(const CLASS_NAME&) = delete; \
@@ -151,13 +157,16 @@ class enum_constant_list
 			parent_enum_t
 		;
 
-		enum_constant_list()
+		template<class Enum>
+		enum_constant_list(Enum& parent):
+			parent_enum_(&parent)
 		{
 		}
 
 		enum_constant_list(const enum_constant_list&) = delete;
 
 		enum_constant_list(enum_constant_list&& rhs):
+			parent_enum_(rhs.parent_enum_),
 			constants_(std::move(rhs.constants_))
 		{
 		}
@@ -168,7 +177,8 @@ class enum_constant_list
 		enum_constant_list&
 		operator=(enum_constant_list&& rhs)
 		{
-			constants_ = std::move(rhs.constants);
+			parent_enum_ = rhs.parent_enum_;
+			constants_ = std::move(rhs.constants_);
 		}
 
 		typename constants_t::range
@@ -186,28 +196,13 @@ class enum_constant_list
 		void
 		add(std::unique_ptr<constant>&& c)
 		{
-			c->parent_list(*this);
+			c->enclosing_declarative_region(parent_enum_);
 			constants_.push_back(std::move(c));
 		}
 
-		const parent_enum_t&
-		parent_enum() const
-		{
-			assert(parent_enum_);
-			return *parent_enum_;
-		}
-
-		template<class Enum>
-		void
-		parent_enum(Enum& parent)
-		{
-			assert(!parent_enum_);
-			parent_enum_ = &parent;
-		}
-
 	private:
+		parent_enum_t parent_enum_;
 		constants_t constants_;
-		boost::optional<parent_enum_t> parent_enum_;
 };
 
 typedef

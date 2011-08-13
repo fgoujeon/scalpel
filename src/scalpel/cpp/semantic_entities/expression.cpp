@@ -186,7 +186,7 @@ operator()(const TYPE&) \
 		type_t
 		operator()(enum_constant<UnderlyingType>* const& c)
 		{
-			return apply_visitor(to_type_visitor, c->type());
+			return apply_visitor(to_type_visitor, c->enclosing_declarative_region());
 		}
 
 
