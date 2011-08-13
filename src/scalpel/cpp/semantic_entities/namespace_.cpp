@@ -61,7 +61,7 @@ BOOST_PP_IIF \
 MEMBER_DEFINITION(CLASS_NAME, class_, classes, 1) \
 MEMBER_DEFINITION(CLASS_NAME, union_, unions, 1) \
 MEMBER_DEFINITION(CLASS_NAME, anonymous_union, anonymous_unions, 1) \
-MEMBER_DEFINITION(CLASS_NAME, enum_t, enums, 1) \
+MEMBER_DEFINITION(CLASS_NAME, enum_, enums, 1) \
 MEMBER_DEFINITION(CLASS_NAME, typedef_, typedefs, 1) \
 MEMBER_DEFINITION(CLASS_NAME, simple_function, simple_functions, 1) \
 MEMBER_DEFINITION(CLASS_NAME, operator_function, operator_functions, 1) \

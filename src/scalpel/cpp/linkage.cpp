@@ -53,8 +53,8 @@ namespace
 		print<semantic_entities::namespace_>("namespace_", groups.namespaces);
 		print<semantic_entities::class_>("class_", groups.classes);
 		print<semantic_entities::member_class>("member_class", groups.member_classes);
-		print<semantic_entities::enum_t>("enum_t", groups.enums);
-		print<semantic_entities::member_enum_t>("member_enum_t", groups.member_enums);
+		print<semantic_entities::enum_>("enum_", groups.enums);
+		print<semantic_entities::member_enum>("member_enum", groups.member_enums);
 		print<semantic_entities::typedef_>("typedef_", groups.typedefs);
 		print<semantic_entities::member_typedef>("member_typedef", groups.member_typedefs);
 		print<semantic_entities::constructor>("constructor", groups.constructors);

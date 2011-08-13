@@ -63,14 +63,14 @@ is_defined(const member_union& entity)
 
 inline
 bool
-is_defined(const enum_t&)
+is_defined(const enum_&)
 {
 	return true;
 }
 
 inline
 bool
-is_defined(const member_enum_t&)
+is_defined(const member_enum&)
 {
 	return true;
 }

@@ -104,31 +104,31 @@ struct get_enum_members_impl<Enum, enum_constant<UnderlyingType>>
 };
 
 template<class Member>
-typename get_members_return_type<enum_t, Member, false>::type
-get_members(semantic_entities::enum_t& parent)
+typename get_members_return_type<enum_, Member, false>::type
+get_members(semantic_entities::enum_& parent)
 {
-	return get_enum_members_impl<enum_t, Member>::get(parent);
+	return get_enum_members_impl<enum_, Member>::get(parent);
 }
 
 template<class Member>
-typename get_members_return_type<enum_t, Member, true>::type
-get_members(const semantic_entities::enum_t& parent)
+typename get_members_return_type<enum_, Member, true>::type
+get_members(const semantic_entities::enum_& parent)
 {
-	return get_enum_members_impl<enum_t, Member>::get(parent);
+	return get_enum_members_impl<enum_, Member>::get(parent);
 }
 
 template<class Member>
-typename get_members_return_type<member_enum_t, Member, false>::type
-get_members(semantic_entities::member_enum_t& parent)
+typename get_members_return_type<member_enum, Member, false>::type
+get_members(semantic_entities::member_enum& parent)
 {
-	return get_enum_members_impl<member_enum_t, Member>::get(parent);
+	return get_enum_members_impl<member_enum, Member>::get(parent);
 }
 
 template<class Member>
-typename get_members_return_type<member_enum_t, Member, true>::type
-get_members(const semantic_entities::member_enum_t& parent)
+typename get_members_return_type<member_enum, Member, true>::type
+get_members(const semantic_entities::member_enum& parent)
 {
-	return get_enum_members_impl<member_enum_t, Member>::get(parent);
+	return get_enum_members_impl<member_enum, Member>::get(parent);
 }
 
 }}}}} //namespace scalpel::cpp::semantic_entities::generic_queries::detail

@@ -73,7 +73,7 @@ BOOST_AUTO_TEST_CASE(using_declarations)
 	auto class_n_c = new class_("c");
 
 	//enums
-	auto enum_n_e = enum_t::create<int>("e");
+	auto enum_n_e = enum_::create<int>("e");
 
 	//typedef
 	auto typedef_n_integer = new typedef_("integer", fundamental_type::INT);
@@ -143,14 +143,14 @@ BOOST_AUTO_TEST_CASE(using_declarations)
 	//assembling
 	semantic_graph.add_member(std::unique_ptr<namespace_>(namespace_n));
 	namespace_n->add_member(std::unique_ptr<class_>(class_n_c));
-	namespace_n->add_member(std::unique_ptr<enum_t>(enum_n_e));
+	namespace_n->add_member(std::unique_ptr<enum_>(enum_n_e));
 	namespace_n->add_member(std::unique_ptr<typedef_>(typedef_n_integer));
 	namespace_n->add_member(std::unique_ptr<simple_function>(function_n_f));
 	namespace_n->add_member(std::unique_ptr<simple_function>(function_n_f_int));
 	namespace_n->add_member(std::unique_ptr<operator_function>(function_n_operator_equal));
 	namespace_n->add_member(std::unique_ptr<variable>(variable_n_i));
 	semantic_graph.add_member(entity_alias<class_>(*class_n_c));
-	semantic_graph.add_member(entity_alias<enum_t>(*enum_n_e));
+	semantic_graph.add_member(entity_alias<enum_>(*enum_n_e));
 	semantic_graph.add_member(entity_alias<typedef_>(*typedef_n_integer));
 	semantic_graph.add_member(entity_alias<simple_function>(*function_n_f));
 	semantic_graph.add_member(entity_alias<simple_function>(*function_n_f_int));
@@ -174,7 +174,7 @@ BOOST_AUTO_TEST_CASE(using_declarations)
 	//look up e from function test(), must find n::e
 	{
 		auto found_entity =
-			find<identification_policies::by_name, false, false, enum_t>
+			find<identification_policies::by_name, false, false, enum_>
 			(
 				"e",
 				function_test

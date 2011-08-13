@@ -33,13 +33,13 @@ struct const_enclosing_declarative_region
 };
 
 template<>
-struct const_enclosing_declarative_region<enum_t>
+struct const_enclosing_declarative_region<enum_>
 {
 	typedef enum_declarative_region_member_impl_t::const_declarative_region_t type;
 };
 
 template<>
-struct const_enclosing_declarative_region<member_enum_t>
+struct const_enclosing_declarative_region<member_enum>
 {
 	typedef member_enum_declarative_region_member_impl_t::const_declarative_region_t type;
 };

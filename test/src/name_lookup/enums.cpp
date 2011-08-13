@@ -67,26 +67,26 @@ BOOST_AUTO_TEST_CASE(enums)
 	auto enum_constant_s_direction_right = new enum_constant<long int>("RIGHT", 1);
 
 	//enums
-	enum_t* enum_color = enum_t::create<int>("color");
+	enum_* enum_color = enum_::create<int>("color");
 	enum_constant_list<int>& enum_constant_list_color = scalpel::utility::get<enum_constant_list<int>>(enum_color->constants());
 	enum_constant_list_color.add(std::unique_ptr<enum_constant<int>>(enum_constant_color_red));
 	enum_constant_list_color.add(std::unique_ptr<enum_constant<int>>(enum_constant_color_green));
 	enum_constant_list_color.add(std::unique_ptr<enum_constant<int>>(enum_constant_color_blue));
 
-	member_enum_t* enum_s_direction = member_enum_t::create<long int>("direction", member_access::PUBLIC);
+	member_enum* enum_s_direction = member_enum::create<long int>("direction", member_access::PUBLIC);
 	enum_constant_list<long int>& enum_constant_list_direction = scalpel::utility::get<enum_constant_list<long int>>(enum_s_direction->constants());
 	enum_constant_list_direction.add(std::unique_ptr<enum_constant<long int>>(enum_constant_s_direction_left));
 	enum_constant_list_direction.add(std::unique_ptr<enum_constant<long int>>(enum_constant_s_direction_right));
 
 	//assembling
-	semantic_graph.add_member(std::unique_ptr<enum_t>(enum_color));
+	semantic_graph.add_member(std::unique_ptr<enum_>(enum_color));
 	semantic_graph.add_member(std::unique_ptr<class_>(class_s));
-	class_s->add_member(std::unique_ptr<member_enum_t>(enum_s_direction));
+	class_s->add_member(std::unique_ptr<member_enum>(enum_s_direction));
 
 	//look up color from the global namespace, must find it
 	{
 		auto found_entity =
-			find<identification_policies::by_name, false, false, enum_t>
+			find<identification_policies::by_name, false, false, enum_>
 			(
 				"color",
 				&semantic_graph

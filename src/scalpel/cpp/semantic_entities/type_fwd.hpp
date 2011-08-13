@@ -35,8 +35,8 @@ class member_union;
 class anonymous_union;
 class anonymous_member_union;
 class cv_qualified_type;
-class enum_t;
-class member_enum_t;
+class enum_;
+class member_enum;
 class function_type;
 class pointer;
 class pointer_to_member;
@@ -55,8 +55,8 @@ typedef
 		anonymous_union*,
 		anonymous_member_union*,
 		cv_qualified_type,
-		enum_t*,
-		member_enum_t*,
+		enum_*,
+		member_enum*,
 		pointer,
 		pointer_to_member,
 		reference

@@ -27,11 +27,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-class enum_t;
-class member_enum_t;
+class enum_;
+class member_enum;
 
 typedef
-	impl::detail::declarative_region_member_impl<enum_t, member_enum_t>
+	impl::detail::declarative_region_member_impl<enum_, member_enum>
 	enum_constant_declarative_region_member_impl_t
 ;
 

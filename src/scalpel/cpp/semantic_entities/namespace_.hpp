@@ -87,7 +87,7 @@ struct CLASS_NAME \
 	MEMBER_DECLARATION(class_, classes) \
 	MEMBER_DECLARATION(union_, unions) \
 	MEMBER_DECLARATION(anonymous_union, anonymous_unions) \
-	MEMBER_DECLARATION(enum_t, enums) \
+	MEMBER_DECLARATION(enum_, enums) \
 	MEMBER_DECLARATION(typedef_, typedefs) \
 	MEMBER_DECLARATION(simple_function, simple_functions) \
 	MEMBER_DECLARATION(operator_function, operator_functions) \
@@ -103,7 +103,7 @@ struct CLASS_NAME \
 		HAS_ENTITY_ALIASES, \
 		ENTITY_ALIASES_OF_TYPE(class_, class) \
 		ENTITY_ALIASES_OF_TYPE(union_, union) \
-		ENTITY_ALIASES_OF_TYPE(enum_t, enum) \
+		ENTITY_ALIASES_OF_TYPE(enum_, enum) \
 		ENTITY_ALIASES_OF_TYPE(typedef_, typedef) \
 		ENTITY_ALIASES_OF_TYPE(simple_function, simple_function) \
 		ENTITY_ALIASES_OF_TYPE(operator_function, operator_function) \

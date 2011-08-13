@@ -226,13 +226,13 @@ semantic_graph_serializer::serialize_type_visitor::operator()(const anonymous_me
 }
 
 void
-semantic_graph_serializer::serialize_type_visitor::operator()(const enum_t* type)
+semantic_graph_serializer::serialize_type_visitor::operator()(const enum_* type)
 {
 	writer_.write_key_value_pair("enum", serializer_.get_id_str(*type));
 }
 
 void
-semantic_graph_serializer::serialize_type_visitor::operator()(const member_enum_t* type)
+semantic_graph_serializer::serialize_type_visitor::operator()(const member_enum* type)
 {
 	writer_.write_key_value_pair("member enum", serializer_.get_id_str(*type));
 }
@@ -730,8 +730,8 @@ SERIALIZE_MEMBER(union_, serialize_class)
 SERIALIZE_MEMBER(member_union, serialize_class)
 SERIALIZE_MEMBER(anonymous_union, serialize_class)
 SERIALIZE_MEMBER(anonymous_member_union, serialize_class)
-SERIALIZE_MEMBER(enum_t, serialize_enum)
-SERIALIZE_MEMBER(member_enum_t, serialize_enum)
+SERIALIZE_MEMBER(enum_, serialize_enum)
+SERIALIZE_MEMBER(member_enum, serialize_enum)
 SERIALIZE_MEMBER(typedef_, serialize_typedef)
 SERIALIZE_MEMBER(member_typedef, serialize_typedef)
 SERIALIZE_MEMBER(constructor, serialize_constructor)
@@ -883,8 +883,8 @@ ENTITY_ID_MAP_OF_TYPE(union_, union_id_map_)
 ENTITY_ID_MAP_OF_TYPE(member_union, member_union_id_map_)
 ENTITY_ID_MAP_OF_TYPE(anonymous_union, anonymous_union_id_map_)
 ENTITY_ID_MAP_OF_TYPE(anonymous_member_union, anonymous_member_union_id_map_)
-ENTITY_ID_MAP_OF_TYPE(enum_t, enum_id_map_)
-ENTITY_ID_MAP_OF_TYPE(member_enum_t, member_enum_id_map_)
+ENTITY_ID_MAP_OF_TYPE(enum_, enum_id_map_)
+ENTITY_ID_MAP_OF_TYPE(member_enum, member_enum_id_map_)
 ENTITY_ID_MAP_OF_TYPE(typedef_, typedef_id_map_)
 ENTITY_ID_MAP_OF_TYPE(member_typedef, member_typedef_id_map_)
 ENTITY_ID_MAP_OF_TYPE(operator_member_function, operator_member_function_id_map_)

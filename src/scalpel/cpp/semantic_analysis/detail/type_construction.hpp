@@ -40,8 +40,8 @@ typedef
 		semantic_entities::member_union,
 		semantic_entities::anonymous_union,
 		semantic_entities::anonymous_member_union,
-		semantic_entities::enum_t,
-		semantic_entities::member_enum_t
+		semantic_entities::enum_,
+		semantic_entities::member_enum
 	>::type
 	user_defined_type_ptr_variant
 ;

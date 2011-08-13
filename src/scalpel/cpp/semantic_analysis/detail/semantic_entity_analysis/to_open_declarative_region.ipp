@@ -68,13 +68,13 @@ struct to_open_declarative_region_visitor: utility::static_visitor<semantic_enti
 	}
 
 	semantic_entities::open_declarative_region_t
-	operator()(semantic_entities::enum_t* const entity) const
+	operator()(semantic_entities::enum_* const entity) const
 	{
 		return entity;
 	}
 
 	semantic_entities::open_declarative_region_t
-	operator()(semantic_entities::member_enum_t* const entity) const
+	operator()(semantic_entities::member_enum* const entity) const
 	{
 		return entity;
 	}

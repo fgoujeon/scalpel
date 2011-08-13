@@ -22,6 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_ENUM_HPP
 
 #include "enum_constant.hpp"
+#include "enum_constant_list.hpp"
 #include "member_access.hpp"
 #include "impl/detail/declarative_region_member_impl.hpp"
 #include "macros/detail/declarative_region_member_impl.hpp"
@@ -130,82 +131,6 @@ class anonymous_union;
 class anonymous_member_union;
 
 typedef
-	impl::detail::declarative_region_member_impl<namespace_, unnamed_namespace, linked_namespace, linked_unnamed_namespace>
-	enum_declarative_region_member_impl_t
-;
-
-typedef
-	impl::detail::declarative_region_member_impl<class_, member_class, union_, member_union, anonymous_union, anonymous_member_union>
-	member_enum_declarative_region_member_impl_t
-;
-
-
-
-template<typename UnderlyingType>
-class enum_constant_list
-{
-	public:
-		typedef enum_constant<UnderlyingType> constant;
-		typedef utility::unique_ptr_vector<constant> constants_t;
-
-		typedef
-			utility::variant
-			<
-				enum_t*,
-				member_enum_t*
-			>
-			parent_enum_t
-		;
-
-		template<class Enum>
-		enum_constant_list(Enum& parent):
-			parent_enum_(&parent)
-		{
-		}
-
-		enum_constant_list(const enum_constant_list&) = delete;
-
-		enum_constant_list(enum_constant_list&& rhs):
-			parent_enum_(rhs.parent_enum_),
-			constants_(std::move(rhs.constants_))
-		{
-		}
-
-		enum_constant_list&
-		operator=(const enum_constant_list&) = delete;
-
-		enum_constant_list&
-		operator=(enum_constant_list&& rhs)
-		{
-			parent_enum_ = rhs.parent_enum_;
-			constants_ = std::move(rhs.constants_);
-		}
-
-		typename constants_t::range
-		constants()
-		{
-			return constants_;
-		}
-
-		const constants_t&
-		constants() const
-		{
-			return constants_;
-		}
-
-		void
-		add(std::unique_ptr<constant>&& c)
-		{
-			c->enclosing_declarative_region(parent_enum_);
-			constants_.push_back(std::move(c));
-		}
-
-	private:
-		parent_enum_t parent_enum_;
-		constants_t constants_;
-};
-
-typedef
 	utility::variant
 	<
 		enum_constant_list<int>,
@@ -216,8 +141,18 @@ typedef
 	enum_constant_list_t
 ;
 
-SCALPEL_ENUM(enum_t, 0)
-SCALPEL_ENUM(member_enum_t, 1)
+typedef
+	impl::detail::declarative_region_member_impl<namespace_, unnamed_namespace, linked_namespace, linked_unnamed_namespace>
+	enum_declarative_region_member_impl_t
+;
+
+typedef
+	impl::detail::declarative_region_member_impl<class_, member_class, union_, member_union, anonymous_union, anonymous_member_union>
+	member_enum_declarative_region_member_impl_t
+;
+
+SCALPEL_ENUM(enum_, 0)
+SCALPEL_ENUM(member_enum, 1)
 
 }}} //namespace scalpel::cpp::semantic_entities
 

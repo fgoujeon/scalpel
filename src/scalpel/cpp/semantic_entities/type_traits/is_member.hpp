@@ -42,7 +42,7 @@ struct is_member<ENTITY_TYPE> \
 IS_MEMBER(member_class)
 IS_MEMBER(member_union)
 IS_MEMBER(anonymous_member_union)
-IS_MEMBER(member_enum_t)
+IS_MEMBER(member_enum)
 IS_MEMBER(member_typedef)
 IS_MEMBER(constructor)
 IS_MEMBER(destructor)

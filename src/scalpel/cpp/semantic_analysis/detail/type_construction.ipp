@@ -301,7 +301,7 @@ create_type
 		case syntax_node_analysis::type_specifier_seq_type::ENUMERATION_DECLARATION:
 		{
 			const bool type_index = is_member ? 0 : 1;
-			typedef typename utility::type_alternative<type_index, member_enum_t, enum_t>::type enum_type;
+			typedef typename utility::type_alternative<type_index, member_enum, enum_>::type enum_type;
 
 			const enum_specifier& enum_specifier_node =
 				syntax_node_analysis::get_enum_specifier(decl_specifier_seq_node)

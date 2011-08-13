@@ -27,16 +27,16 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 using namespace syntax_nodes;
 using namespace semantic_entities;
 
-std::unique_ptr<enum_t>
+std::unique_ptr<enum_>
 create_enum(const enum_specifier& enum_specifier_node)
 {
-	return std::unique_ptr<enum_t>(enum_t::create<int>(syntax_node_analysis::get_identifier(enum_specifier_node)));
+	return std::unique_ptr<enum_>(enum_::create<int>(syntax_node_analysis::get_identifier(enum_specifier_node)));
 }
 
-std::unique_ptr<member_enum_t>
+std::unique_ptr<member_enum>
 create_member_enum(const enum_specifier& enum_specifier_node, const member_access access)
 {
-	return std::unique_ptr<member_enum_t>(member_enum_t::create<int>(syntax_node_analysis::get_identifier(enum_specifier_node), access));
+	return std::unique_ptr<member_enum>(member_enum::create<int>(syntax_node_analysis::get_identifier(enum_specifier_node), access));
 }
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail

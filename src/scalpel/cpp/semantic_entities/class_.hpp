@@ -55,7 +55,7 @@ class CLASS_NAME \
 	MEMBER_DECLARATION(member_class, classes) \
 	MEMBER_DECLARATION(member_union, unions) \
 	MEMBER_DECLARATION(anonymous_member_union, anonymous_unions) \
-	MEMBER_DECLARATION(member_enum_t, enums) \
+	MEMBER_DECLARATION(member_enum, enums) \
 	MEMBER_DECLARATION(member_typedef, typedefs) \
 	BOOST_PP_IIF \
 	( \
@@ -76,7 +76,7 @@ class CLASS_NAME \
  \
 		MEMBER_ENTITY_ALIASES_OF_TYPE(member_class, class) \
 		MEMBER_ENTITY_ALIASES_OF_TYPE(member_union, union) \
-		MEMBER_ENTITY_ALIASES_OF_TYPE(member_enum_t, enum) \
+		MEMBER_ENTITY_ALIASES_OF_TYPE(member_enum, enum) \
 		MEMBER_ENTITY_ALIASES_OF_TYPE(member_typedef, typedef) \
 		MEMBER_ENTITY_ALIASES_OF_TYPE(operator_member_function, operator_function) \
 		MEMBER_ENTITY_ALIASES_OF_TYPE(conversion_function, conversion_function) \
@@ -188,7 +188,7 @@ namespace scalpel { namespace cpp { namespace semantic_entities
 
 class namespace_;
 class unnamed_namespace;
-class member_enum_t;
+class member_enum;
 class member_typedef;
 class constructor;
 class destructor;

@@ -92,8 +92,8 @@ KEYS_OF_TYPE(union_, "union", "unions", "union")
 KEYS_OF_TYPE(member_union, "union", "unions", "member-union")
 KEYS_OF_TYPE(anonymous_union, "anonymous union", "anonymous unions", "anonymous-union")
 KEYS_OF_TYPE(anonymous_member_union, "anonymous union", "anonymous unions", "anonymous-member-union")
-KEYS_OF_TYPE(enum_t, "enum", "enums", "enum")
-KEYS_OF_TYPE(member_enum_t, "enum", "enums", "member-enum")
+KEYS_OF_TYPE(enum_, "enum", "enums", "enum")
+KEYS_OF_TYPE(member_enum, "enum", "enums", "member-enum")
 KEYS_OF_TYPE(typedef_, "typedef", "typedefs", "typedef")
 KEYS_OF_TYPE(member_typedef, "typedef", "typedefs", "member-typedef")
 KEYS_OF_TYPE(constructor, "constructor", "constructors", "constructor")
@@ -176,10 +176,10 @@ class semantic_graph_serializer
 				operator()(const anonymous_member_union* type);
 
 				void
-				operator()(const enum_t* type);
+				operator()(const enum_* type);
 
 				void
-				operator()(const member_enum_t* type);
+				operator()(const member_enum* type);
 
 			private:
 				semantic_graph_serializer& serializer_;
@@ -410,8 +410,8 @@ class semantic_graph_serializer
 			serialize_members_of_type<member_union>(declarative_region);
 			serialize_members_of_type<anonymous_union>(declarative_region);
 			serialize_members_of_type<anonymous_member_union>(declarative_region);
-			serialize_members_of_type<enum_t>(declarative_region);
-			serialize_members_of_type<member_enum_t>(declarative_region);
+			serialize_members_of_type<enum_>(declarative_region);
+			serialize_members_of_type<member_enum>(declarative_region);
 			serialize_members_of_type<typedef_>(declarative_region);
 			serialize_members_of_type<member_typedef>(declarative_region);
 			serialize_members_of_type<constructor>(declarative_region);
@@ -515,8 +515,8 @@ class semantic_graph_serializer
 			serialize_entity_aliases_of_type<member_class>(declarative_region);
 			serialize_entity_aliases_of_type<union_>(declarative_region);
 			serialize_entity_aliases_of_type<member_union>(declarative_region);
-			serialize_entity_aliases_of_type<enum_t>(declarative_region);
-			serialize_entity_aliases_of_type<member_enum_t>(declarative_region);
+			serialize_entity_aliases_of_type<enum_>(declarative_region);
+			serialize_entity_aliases_of_type<member_enum>(declarative_region);
 			serialize_entity_aliases_of_type<typedef_>(declarative_region);
 			serialize_entity_aliases_of_type<member_typedef>(declarative_region);
 			serialize_entity_aliases_of_type<constructor>(declarative_region);
@@ -738,8 +738,8 @@ class semantic_graph_serializer
 			set_id_of_members_of_type<member_union>(entity);
 			set_id_of_members_of_type<anonymous_union>(entity);
 			set_id_of_members_of_type<anonymous_member_union>(entity);
-			set_id_of_members_of_type<enum_t>(entity);
-			set_id_of_members_of_type<member_enum_t>(entity);
+			set_id_of_members_of_type<enum_>(entity);
+			set_id_of_members_of_type<member_enum>(entity);
 			set_id_of_members_of_type<typedef_>(entity);
 			set_id_of_members_of_type<member_typedef>(entity);
 			set_id_of_members_of_type<operator_member_function>(entity);
@@ -833,8 +833,8 @@ class semantic_graph_serializer
 		typename entity_id_map<semantic_entities::member_union>::type member_union_id_map_;
 		typename entity_id_map<semantic_entities::anonymous_union>::type anonymous_union_id_map_;
 		typename entity_id_map<semantic_entities::anonymous_member_union>::type anonymous_member_union_id_map_;
-		typename entity_id_map<semantic_entities::enum_t>::type enum_id_map_;
-		typename entity_id_map<semantic_entities::member_enum_t>::type member_enum_id_map_;
+		typename entity_id_map<semantic_entities::enum_>::type enum_id_map_;
+		typename entity_id_map<semantic_entities::member_enum>::type member_enum_id_map_;
 		typename entity_id_map<semantic_entities::typedef_>::type typedef_id_map_;
 		typename entity_id_map<semantic_entities::member_typedef>::type member_typedef_id_map_;
 		typename entity_id_map<semantic_entities::operator_member_function>::type operator_member_function_id_map_;

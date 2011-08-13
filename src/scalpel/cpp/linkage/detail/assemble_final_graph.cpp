@@ -200,8 +200,8 @@ assemble_final_graph
 	assemble_entities_of_type<member_class>(groups, final_entities);
 	assemble_entities_of_type<union_>(groups, final_entities);
 	assemble_entities_of_type<member_union>(groups, final_entities);
-	assemble_entities_of_type<enum_t>(groups, final_entities);
-	assemble_entities_of_type<member_enum_t>(groups, final_entities);
+	assemble_entities_of_type<enum_>(groups, final_entities);
+	assemble_entities_of_type<member_enum>(groups, final_entities);
 	assemble_entities_of_type<typedef_>(groups, final_entities);
 	assemble_entities_of_type<member_typedef>(groups, final_entities);
 	assemble_entities_of_type<constructor>(groups, final_entities);
@@ -225,8 +225,8 @@ assemble_final_graph
 	assemble_internal_entities_of_type<member_union>(groups, final_entities);
 	assemble_internal_entities_of_type<anonymous_union>(groups, final_entities);
 	assemble_internal_entities_of_type<anonymous_member_union>(groups, final_entities);
-	assemble_internal_entities_of_type<enum_t>(groups, final_entities);
-	assemble_internal_entities_of_type<member_enum_t>(groups, final_entities);
+	assemble_internal_entities_of_type<enum_>(groups, final_entities);
+	assemble_internal_entities_of_type<member_enum>(groups, final_entities);
 	assemble_internal_entities_of_type<typedef_>(groups, final_entities);
 	assemble_internal_entities_of_type<member_typedef>(groups, final_entities);
 	assemble_internal_entities_of_type<constructor>(groups, final_entities);

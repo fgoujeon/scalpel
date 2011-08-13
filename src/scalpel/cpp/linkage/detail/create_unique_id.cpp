@@ -88,13 +88,13 @@ namespace
 		}
 
 		std::string
-		operator()(const enum_t* entity)
+		operator()(const enum_* entity)
 		{
 			return create_unique_id(*entity);
 		}
 
 		std::string
-		operator()(const member_enum_t* entity)
+		operator()(const member_enum* entity)
 		{
 			return create_unique_id(*entity);
 		}
@@ -232,13 +232,13 @@ create_unique_id(const semantic_entities::member_union& entity)
 }
 
 std::string
-create_unique_id(const semantic_entities::enum_t& entity)
+create_unique_id(const semantic_entities::enum_& entity)
 {
 	return create_enclosing_declarative_region_unique_id(entity) + semantic_entities::generic_queries::get_name(entity);
 }
 
 std::string
-create_unique_id(const semantic_entities::member_enum_t& entity)
+create_unique_id(const semantic_entities::member_enum& entity)
 {
 	return create_enclosing_declarative_region_unique_id(entity) + semantic_entities::generic_queries::get_name(entity);
 }

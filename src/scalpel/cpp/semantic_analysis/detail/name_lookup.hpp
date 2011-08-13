@@ -427,7 +427,7 @@ namespace detail
 
 	/**
 	Find entities of the given identifier, in the enumerations
-	(enum_t or member_enum_t) of the given declarative region.
+	(enum_ or member_enum) of the given declarative region.
 	*/
 	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class Entity, class DeclarativeRegion>
 	void
@@ -445,7 +445,7 @@ namespace detail
 		const typename EntityIdentificationPolicy::identifier_t& identifier,
 		DeclarativeRegion& declarative_region,
 		typename return_type<Optional, Multiple, Entity>::type& found_entities,
-		typename boost::enable_if<semantic_entities::type_traits::has_members_of_type<DeclarativeRegion, semantic_entities::enum_t>>::type* = 0
+		typename boost::enable_if<semantic_entities::type_traits::has_members_of_type<DeclarativeRegion, semantic_entities::enum_>>::type* = 0
 	);
 
 	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class Entity, class DeclarativeRegion>
@@ -455,7 +455,7 @@ namespace detail
 		const typename EntityIdentificationPolicy::identifier_t& identifier,
 		DeclarativeRegion& declarative_region,
 		typename return_type<Optional, Multiple, Entity>::type& found_entities,
-		typename boost::disable_if<semantic_entities::type_traits::has_members_of_type<DeclarativeRegion, semantic_entities::enum_t>>::type* = 0
+		typename boost::disable_if<semantic_entities::type_traits::has_members_of_type<DeclarativeRegion, semantic_entities::enum_>>::type* = 0
 	);
 
 	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class Entity, class DeclarativeRegion>
@@ -465,7 +465,7 @@ namespace detail
 		const typename EntityIdentificationPolicy::identifier_t& identifier,
 		DeclarativeRegion& declarative_region,
 		typename return_type<Optional, Multiple, Entity>::type& found_entities,
-		typename boost::enable_if<semantic_entities::type_traits::has_members_of_type<DeclarativeRegion, semantic_entities::member_enum_t>>::type* = 0
+		typename boost::enable_if<semantic_entities::type_traits::has_members_of_type<DeclarativeRegion, semantic_entities::member_enum>>::type* = 0
 	);
 
 	template<class EntityIdentificationPolicy, bool Optional, bool Multiple, class Entity, class DeclarativeRegion>
@@ -475,7 +475,7 @@ namespace detail
 		const typename EntityIdentificationPolicy::identifier_t& identifier,
 		DeclarativeRegion& declarative_region,
 		typename return_type<Optional, Multiple, Entity>::type& found_entities,
-		typename boost::disable_if<semantic_entities::type_traits::has_members_of_type<DeclarativeRegion, semantic_entities::member_enum_t>>::type* = 0
+		typename boost::disable_if<semantic_entities::type_traits::has_members_of_type<DeclarativeRegion, semantic_entities::member_enum>>::type* = 0
 	);
 
 

@@ -276,14 +276,14 @@ fill_namespace
 	if(boost::optional<const identifier&> opt_identifier_node = get<identifier>(&unqualified_id_node))
 	{
 		//first, try to find a class, enum, typedef or variable
-		typename boost::optional<utility::ptr_variant<class_, enum_t, typedef_, variable>::type> found_entity =
+		typename boost::optional<utility::ptr_variant<class_, enum_, typedef_, variable>::type> found_entity =
 			name_lookup::find_local
 			<
 				semantic_entity_analysis::identification_policies::by_name,
 				open_declarative_region_t,
 				true,
 				false,
-				class_, enum_t, typedef_, variable
+				class_, enum_, typedef_, variable
 			>
 			(
 				opt_identifier_node->value(),

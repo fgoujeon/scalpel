@@ -180,26 +180,26 @@ namespace
 		return new_union;
 	}
 
-	enum_t*
+	enum_*
 	create_entity
 	(
-		const enum_t& entity,
+		const enum_& entity,
 		const final_graph_entities&,
 		entity_pairs&
 	)
 	{
-		return enum_t::create<int>(entity.name());
+		return enum_::create<int>(entity.name());
 	}
 
-	member_enum_t*
+	member_enum*
 	create_entity
 	(
-		const member_enum_t& entity,
+		const member_enum& entity,
 		const final_graph_entities&,
 		entity_pairs&
 	)
 	{
-		return member_enum_t::create<int>(entity.name(), entity.access());
+		return member_enum::create<int>(entity.name(), entity.access());
 	}
 
 	typedef_*
@@ -698,7 +698,7 @@ namespace
 			}
 
 			type_t
-			operator()(const enum_t* type) const
+			operator()(const enum_* type) const
 			{
 				auto it = final_entities_.enums.find(type);
 				assert(it != final_entities_.enums.end());
@@ -706,7 +706,7 @@ namespace
 			}
 
 			type_t
-			operator()(const member_enum_t* type) const
+			operator()(const member_enum* type) const
 			{
 				auto it = final_entities_.member_enums.find(type);
 				assert(it != final_entities_.member_enums.end());
@@ -1009,11 +1009,11 @@ create_final_graph_entities
 
 	create_internal_entities_of_type<anonymous_member_union>(groups, final_entities, pairs);
 
-	create_entities_of_type<enum_t, false>(groups.enums, final_entities, pairs);
-	create_internal_entities_of_type<enum_t>(groups, final_entities, pairs);
+	create_entities_of_type<enum_, false>(groups.enums, final_entities, pairs);
+	create_internal_entities_of_type<enum_>(groups, final_entities, pairs);
 
-	create_entities_of_type<member_enum_t, false>(groups.member_enums, final_entities, pairs);
-	create_internal_entities_of_type<member_enum_t>(groups, final_entities, pairs);
+	create_entities_of_type<member_enum, false>(groups.member_enums, final_entities, pairs);
+	create_internal_entities_of_type<member_enum>(groups, final_entities, pairs);
 
 	create_entities_of_type<typedef_, false>(groups.typedefs, final_entities, pairs);
 	create_internal_entities_of_type<typedef_>(groups, final_entities, pairs);

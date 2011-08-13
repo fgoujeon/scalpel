@@ -593,8 +593,8 @@ find_single_type_local_entities<EntityIdentificationPolicy, DeclarativeRegion, O
 				member_class,
 				union_,
 				member_union,
-				enum_t,
-				member_enum_t,
+				enum_,
+				member_enum,
 				typedef_
 			>
 			(
@@ -1006,12 +1006,12 @@ find_entities_in_enums
 	const typename EntityIdentificationPolicy::identifier_t& identifier,
 	DeclarativeRegion& declarative_region,
 	typename return_type<Optional, Multiple, Entity>::type& found_entities,
-	typename boost::enable_if<semantic_entities::type_traits::has_members_of_type<DeclarativeRegion, semantic_entities::enum_t>>::type*
+	typename boost::enable_if<semantic_entities::type_traits::has_members_of_type<DeclarativeRegion, semantic_entities::enum_>>::type*
 )
 {
-	for(semantic_entities::enum_t& current_enum: declarative_region.enums())
+	for(semantic_entities::enum_& current_enum: declarative_region.enums())
 	{
-		find_local_entities2<EntityIdentificationPolicy, Optional, Multiple, Entity, semantic_entities::enum_t>::find
+		find_local_entities2<EntityIdentificationPolicy, Optional, Multiple, Entity, semantic_entities::enum_>::find
 		(
 			identifier,
 			current_enum,
@@ -1027,7 +1027,7 @@ find_entities_in_enums
 	const typename EntityIdentificationPolicy::identifier_t&,
 	DeclarativeRegion&,
 	typename return_type<Optional, Multiple, Entity>::type&,
-	typename boost::disable_if<semantic_entities::type_traits::has_members_of_type<DeclarativeRegion, semantic_entities::enum_t>>::type*
+	typename boost::disable_if<semantic_entities::type_traits::has_members_of_type<DeclarativeRegion, semantic_entities::enum_>>::type*
 )
 {
 	//does nothing
@@ -1040,12 +1040,12 @@ find_entities_in_member_enums
 	const typename EntityIdentificationPolicy::identifier_t& identifier,
 	DeclarativeRegion& declarative_region,
 	typename return_type<Optional, Multiple, Entity>::type& found_entities,
-	typename boost::enable_if<semantic_entities::type_traits::has_members_of_type<DeclarativeRegion, semantic_entities::member_enum_t>>::type*
+	typename boost::enable_if<semantic_entities::type_traits::has_members_of_type<DeclarativeRegion, semantic_entities::member_enum>>::type*
 )
 {
-	for(semantic_entities::member_enum_t& current_member_enum: declarative_region.enums())
+	for(semantic_entities::member_enum& current_member_enum: declarative_region.enums())
 	{
-		find_local_entities2<EntityIdentificationPolicy, Optional, Multiple, Entity, semantic_entities::member_enum_t>::find
+		find_local_entities2<EntityIdentificationPolicy, Optional, Multiple, Entity, semantic_entities::member_enum>::find
 		(
 			identifier,
 			current_member_enum,
@@ -1061,7 +1061,7 @@ find_entities_in_member_enums
 	const typename EntityIdentificationPolicy::identifier_t&,
 	DeclarativeRegion&,
 	typename return_type<Optional, Multiple, Entity>::type&,
-	typename boost::disable_if<semantic_entities::type_traits::has_members_of_type<DeclarativeRegion, semantic_entities::member_enum_t>>::type*
+	typename boost::disable_if<semantic_entities::type_traits::has_members_of_type<DeclarativeRegion, semantic_entities::member_enum>>::type*
 )
 {
 	//does nothing

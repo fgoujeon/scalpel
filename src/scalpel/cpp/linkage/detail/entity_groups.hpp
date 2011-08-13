@@ -49,8 +49,8 @@ struct entity_groups
 	typename entity_groups_of_type<semantic_entities::member_class>::type member_classes;
 	typename entity_groups_of_type<semantic_entities::union_>::type unions;
 	typename entity_groups_of_type<semantic_entities::member_union>::type member_unions;
-	typename entity_groups_of_type<semantic_entities::enum_t>::type enums;
-	typename entity_groups_of_type<semantic_entities::member_enum_t>::type member_enums;
+	typename entity_groups_of_type<semantic_entities::enum_>::type enums;
+	typename entity_groups_of_type<semantic_entities::member_enum>::type member_enums;
 	typename entity_groups_of_type<semantic_entities::typedef_>::type typedefs;
 	typename entity_groups_of_type<semantic_entities::member_typedef>::type member_typedefs;
 	typename entity_groups_of_type<semantic_entities::constructor>::type constructors;
@@ -83,8 +83,8 @@ struct entity_groups
 	std::vector<const semantic_entities::member_union*> internal_member_unions;
 	std::vector<const semantic_entities::anonymous_union*> internal_anonymous_unions;
 	std::vector<const semantic_entities::anonymous_member_union*> internal_anonymous_member_unions;
-	std::vector<const semantic_entities::enum_t*> internal_enums;
-	std::vector<const semantic_entities::member_enum_t*> internal_member_enums;
+	std::vector<const semantic_entities::enum_*> internal_enums;
+	std::vector<const semantic_entities::member_enum*> internal_member_enums;
 	std::vector<const semantic_entities::typedef_*> internal_typedefs;
 	std::vector<const semantic_entities::member_typedef*> internal_member_typedefs;
 	std::vector<const semantic_entities::constructor*> internal_constructors;
