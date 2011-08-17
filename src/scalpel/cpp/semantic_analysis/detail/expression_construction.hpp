@@ -23,6 +23,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <scalpel/cpp/syntax_tree.hpp>
+#include "semantic_entity_analysis/get_type_size.hpp"
+#include "type_construction.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail
 {
@@ -172,6 +174,14 @@ semantic_entities::expression_t
 create_expression_from_unary_operator_expression
 (
 	const syntax_nodes::unary_operator_expression& unary_operator_expression_node,
+	DeclarativeRegion& declarative_region
+);
+
+template<class DeclarativeRegion>
+semantic_entities::expression_t
+create_expression_from_type_sizeof_expression
+(
+	const syntax_nodes::type_id_sizeof_expression& type_sizeof_expression_node,
 	DeclarativeRegion& declarative_region
 );
 

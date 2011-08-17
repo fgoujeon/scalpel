@@ -42,6 +42,20 @@ typedef
 	type_id
 ;
 
+inline
+const type_specifier_seq&
+get_type_specifier_seq(const type_id& o)
+{
+	return get<0>(o);
+}
+
+inline
+const optional_node<abstract_declarator>&
+get_abstract_declarator(const type_id& o)
+{
+	return get<1>(o);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif

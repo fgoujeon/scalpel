@@ -18,39 +18,19 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_TYPE_ID_SIZEOF_EXPRESSION_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_TYPE_ID_SIZEOF_EXPRESSION_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_SEMANTIC_ENTITY_ANALYSIS_GET_TYPE_SIZE_HPP
+#define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_SEMANTIC_ENTITY_ANALYSIS_GET_TYPE_SIZE_HPP
 
-#include "type_id.hpp"
-#include "common.hpp"
+#include <scalpel/cpp/semantic_entities/type.hpp>
+#include <cstddef>
 
-namespace scalpel { namespace cpp { namespace syntax_nodes
+namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail { namespace semantic_entity_analysis
 {
 
-/**
-type_id_sizeof_expression
-	= str_p("sizeof") >> !s >> '(' >> !s >> type_id >> !s >> ')'
-;
-*/
-typedef
-	sequence_node
-	<
-		predefined_text_node<str::sizeof_>,
-		predefined_text_node<str::opening_round_bracket>,
-		type_id,
-		predefined_text_node<str::closing_round_bracket>
-	>
-	type_id_sizeof_expression
-;
+size_t
+get_type_size(const semantic_entities::type_t& type);
 
-inline
-const type_id&
-get_type_id(const type_id_sizeof_expression& o)
-{
-	return get<2>(o);
-}
-
-}}} //namespace scalpel::cpp::syntax_nodes
+}}}}} //namespace scalpel::cpp::semantic_analysis::detail::semantic_entity_analysis
 
 #endif
 

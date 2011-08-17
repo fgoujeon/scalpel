@@ -352,6 +352,39 @@ create_type
 	);
 }
 
+template<class DeclarativeRegion>
+semantic_entities::type_t
+create_type
+(
+	const syntax_nodes::type_id& type_id_node,
+	DeclarativeRegion& current_declarative_region
+)
+{
+	using namespace syntax_nodes;
+	using namespace semantic_entities;
+
+	const type_specifier_seq& type_specifier_seq_node = syntax_nodes::get_type_specifier_seq(type_id_node);
+	type_info info = create_type(type_specifier_seq_node, false, current_declarative_region);
+
+	assert(info.opt_complete_type);
+	const type_t& complete_type = *info.opt_complete_type;
+
+	const optional_node<abstract_declarator>& opt_abstract_declarator_node = syntax_nodes::get_abstract_declarator(type_id_node);
+	if(opt_abstract_declarator_node)
+	{
+		return qualify_type
+		(
+			complete_type,
+			*opt_abstract_declarator_node,
+			current_declarative_region
+		);
+	}
+	else
+	{
+		return complete_type;
+	}
+}
+
 
 
 template<class DeclarativeRegion>

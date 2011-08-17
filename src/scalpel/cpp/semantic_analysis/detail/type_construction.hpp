@@ -89,6 +89,14 @@ create_type
 	const semantic_entities::member_access access = semantic_entities::member_access::PUBLIC
 );
 
+template<class DeclarativeRegion>
+semantic_entities::type_t
+create_type
+(
+	const syntax_nodes::type_id& type_id_node,
+	DeclarativeRegion& current_declarative_region
+);
+
 
 
 void

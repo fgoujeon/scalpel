@@ -595,8 +595,8 @@ create_expression_from_unary_expression
 
 	if(const boost::optional<const unary_operator_expression&>& opt_unary_operator_expression_node = get<unary_operator_expression>(&unary_expression_node))
 		return create_expression_from_unary_operator_expression(*opt_unary_operator_expression_node, declarative_region);
-	else if(/*const boost::optional<const type_id_sizeof_expression&>& opt_type_id_sizeof_expression_node = */get<type_id_sizeof_expression>(&unary_expression_node))
-		assert(false); //TODO
+	else if(const boost::optional<const type_id_sizeof_expression&>& opt_type_sizeof_expression_node = get<type_id_sizeof_expression>(&unary_expression_node))
+		return create_expression_from_type_sizeof_expression(*opt_type_sizeof_expression_node, declarative_region);
 	else if(/*const boost::optional<const unary_sizeof_expression&>& opt_unary_sizeof_expression_node = */get<unary_sizeof_expression>(&unary_expression_node))
 		assert(false); //TODO
 	else if(const boost::optional<const postfix_expression&>& opt_postfix_expression_node = get<postfix_expression>(&unary_expression_node))
@@ -663,6 +663,19 @@ create_expression_from_unary_operator_expression
 		);
 	else
 		assert(false);
+}
+
+template<class DeclarativeRegion>
+semantic_entities::expression_t
+create_expression_from_type_sizeof_expression
+(
+	const syntax_nodes::type_id_sizeof_expression& type_sizeof_expression_node,
+	DeclarativeRegion& declarative_region
+)
+{
+	const syntax_nodes::type_id& type_id_node = syntax_nodes::get_type_id(type_sizeof_expression_node);
+	semantic_entities::type_t type = create_type(type_id_node, declarative_region);
+	return semantic_entity_analysis::get_type_size(type);
 }
 
 template<class DeclarativeRegion>
