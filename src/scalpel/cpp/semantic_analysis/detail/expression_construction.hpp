@@ -187,6 +187,14 @@ create_expression_from_type_sizeof_expression
 
 template<class DeclarativeRegion>
 semantic_entities::expression_t
+create_expression_from_expression_sizeof_expression
+(
+	const syntax_nodes::unary_sizeof_expression& expression_sizeof_expression_node,
+	DeclarativeRegion& declarative_region
+);
+
+template<class DeclarativeRegion>
+semantic_entities::expression_t
 create_expression_from_postfix_expression
 (
 	const syntax_nodes::postfix_expression& postfix_expression_node,

@@ -597,8 +597,8 @@ create_expression_from_unary_expression
 		return create_expression_from_unary_operator_expression(*opt_unary_operator_expression_node, declarative_region);
 	else if(const boost::optional<const type_id_sizeof_expression&>& opt_type_sizeof_expression_node = get<type_id_sizeof_expression>(&unary_expression_node))
 		return create_expression_from_type_sizeof_expression(*opt_type_sizeof_expression_node, declarative_region);
-	else if(/*const boost::optional<const unary_sizeof_expression&>& opt_unary_sizeof_expression_node = */get<unary_sizeof_expression>(&unary_expression_node))
-		assert(false); //TODO
+	else if(const boost::optional<const unary_sizeof_expression&>& opt_expression_sizeof_expression_node = get<unary_sizeof_expression>(&unary_expression_node))
+		return create_expression_from_expression_sizeof_expression(*opt_expression_sizeof_expression_node, declarative_region);
 	else if(const boost::optional<const postfix_expression&>& opt_postfix_expression_node = get<postfix_expression>(&unary_expression_node))
 		return create_expression_from_postfix_expression(*opt_postfix_expression_node, declarative_region);
 	else if(/*const boost::optional<const new_expression&>& opt_new_expression_node = */get<new_expression>(&unary_expression_node))
@@ -675,6 +675,20 @@ create_expression_from_type_sizeof_expression
 {
 	const syntax_nodes::type_id& type_id_node = syntax_nodes::get_type_id(type_sizeof_expression_node);
 	semantic_entities::type_t type = create_type(type_id_node, declarative_region);
+	return semantic_entity_analysis::get_type_size(type);
+}
+
+template<class DeclarativeRegion>
+semantic_entities::expression_t
+create_expression_from_expression_sizeof_expression
+(
+	const syntax_nodes::unary_sizeof_expression& expression_sizeof_expression_node,
+	DeclarativeRegion& declarative_region
+)
+{
+	const syntax_nodes::unary_expression& unary_expression_node = syntax_nodes::get_unary_expression(expression_sizeof_expression_node);
+	semantic_entities::expression_t expr = create_expression_from_unary_expression(unary_expression_node, declarative_region);
+	semantic_entities::type_t type = semantic_entities::get_type(expr);
 	return semantic_entity_analysis::get_type_size(type);
 }
 

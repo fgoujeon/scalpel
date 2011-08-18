@@ -40,6 +40,9 @@ SCALPEL_SEQUENCE_NODE_PIMPL_DECLARATION
 	(unary_expression)
 )
 
+const unary_expression&
+get_unary_expression(const unary_sizeof_expression& o);
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"
