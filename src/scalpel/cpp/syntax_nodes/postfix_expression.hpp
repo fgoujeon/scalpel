@@ -104,6 +104,13 @@ get_first_part(const postfix_expression& o)
 	return get<0>(o);
 }
 
+inline
+const optional_node<postfix_expression_last_part_seq>&
+get_last_part_seq(const postfix_expression& o)
+{
+	return get<1>(o);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #include "detail/macros/sequence_node_pimpl_declaration_undef.hpp"

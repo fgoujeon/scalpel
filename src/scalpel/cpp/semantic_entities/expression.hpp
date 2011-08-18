@@ -38,6 +38,8 @@ typedef
 		//unary expressions
 		prefix_increment_expression,
 		prefix_decrement_expression,
+		postfix_increment_expression,
+		postfix_decrement_expression,
 		indirection_expression,
 		pointer_expression,
 		negation_expression,
@@ -132,25 +134,29 @@ struct expression_t: public expression_t_t
 	expression_t
 	(
 		const U& value,
-		typename boost::disable_if<boost::is_same<U, variant>>::type* = 0
+		typename boost::disable_if<boost::is_const<U>>::type* = 0,
+		typename boost::disable_if<boost::is_reference<U>>::type* = 0,
+		typename boost::disable_if<boost::is_same<U, expression_t>>::type* = 0
 	):
 		expression_t_t(value)
 	{
 	}
 
-	//if U is a reference of non-const
+	//for noncopyable movable types
 	template<typename U>
 	expression_t
 	(
-		U& value,
-		typename boost::disable_if<boost::is_same<U, variant>>::type* = 0
+		U&& value,
+		typename boost::disable_if<boost::is_const<U>>::type* = 0,
+		typename boost::disable_if<boost::is_reference<U>>::type* = 0,
+		typename boost::disable_if<boost::is_same<U, expression_t>>::type* = 0
 	):
 		expression_t_t(value)
 	{
 	}
 
-	expression_t(const expression_t_t& rhs):
-		expression_t_t(rhs)
+	expression_t(const expression_t& rhs):
+		expression_t_t(static_cast<const expression_t_t&>(rhs))
 	{
 	}
 };

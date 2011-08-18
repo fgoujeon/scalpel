@@ -704,8 +704,34 @@ create_expression_from_postfix_expression
 	using namespace semantic_entities;
 
 	const postfix_expression_first_part& first_part_node = get_first_part(postfix_expression_node);
+	semantic_entities::expression_t expr = create_expression_from_postfix_expression_first_part(first_part_node, declarative_region);
 
-	if(const boost::optional<const primary_expression&>& opt_primary_expression_node = get<primary_expression>(&first_part_node))
+	const optional_node<postfix_expression_last_part_seq>& opt_postfix_expression_last_part_seq_node = get_last_part_seq(postfix_expression_node);
+	if(opt_postfix_expression_last_part_seq_node)
+		return
+			create_expression_from_postfix_expression_last_part_seq
+			(
+				*opt_postfix_expression_last_part_seq_node,
+				expr,
+				declarative_region
+			)
+		;
+	else
+		return expr;
+}
+
+template<class DeclarativeRegion>
+semantic_entities::expression_t
+create_expression_from_postfix_expression_first_part
+(
+	const syntax_nodes::postfix_expression_first_part& postfix_expression_first_part_node,
+	DeclarativeRegion& declarative_region
+)
+{
+	using namespace syntax_nodes;
+	using namespace semantic_entities;
+
+	if(const boost::optional<const primary_expression&>& opt_primary_expression_node = get<primary_expression>(&postfix_expression_first_part_node))
 	{
 		return create_expression_from_primary_expression(*opt_primary_expression_node, declarative_region);
 	}
@@ -713,6 +739,56 @@ create_expression_from_postfix_expression
 	{
 		assert(false); //TODO
 	}
+}
+
+template<class DeclarativeRegion>
+semantic_entities::expression_t
+create_expression_from_postfix_expression_last_part_seq
+(
+	const syntax_nodes::postfix_expression_last_part_seq& postfix_expression_last_part_seq_node,
+	semantic_entities::expression_t expr,
+	DeclarativeRegion& declarative_region
+)
+{
+	for(const syntax_nodes::postfix_expression_last_part& node: postfix_expression_last_part_seq_node)
+		expr = create_expression_from_postfix_expression_last_part(node, expr, declarative_region);
+
+	return expr;
+}
+
+template<class DeclarativeRegion>
+semantic_entities::expression_t
+create_expression_from_postfix_expression_last_part
+(
+	const syntax_nodes::postfix_expression_last_part& postfix_expression_last_part_node,
+	const semantic_entities::expression_t& expr,
+	DeclarativeRegion& /*declarative_region*/
+)
+{
+	using namespace syntax_nodes;
+	using namespace semantic_entities;
+
+	//square_bracketed_expression,
+	//round_bracketed_optional_expression,
+	//dot_id_expression,
+	//arrow_id_expression,
+	//dot_pseudo_destructor_name,
+	//arrow_pseudo_destructor_name,
+	//predefined_text_node<str::double_plus>,
+	//predefined_text_node<str::double_minus>
+
+	if(get<predefined_text_node<str::double_plus>>(&postfix_expression_last_part_node))
+		return semantic_entities::postfix_increment_expression
+		(
+			expr
+		);
+	else if(get<predefined_text_node<str::double_minus>>(&postfix_expression_last_part_node))
+		return semantic_entities::postfix_decrement_expression
+		(
+			expr
+		);
+	else
+		assert(false); //TODO
 }
 
 template<class DeclarativeRegion>

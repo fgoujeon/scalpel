@@ -505,6 +505,8 @@ struct expression_to_string<EXPRESSION> \
 
 	EXPRESSION_TO_STRING(prefix_increment_expression, "prefix increment")
 	EXPRESSION_TO_STRING(prefix_decrement_expression, "prefix decrement")
+	EXPRESSION_TO_STRING(postfix_increment_expression, "postfix increment")
+	EXPRESSION_TO_STRING(postfix_decrement_expression, "postfix decrement")
 	EXPRESSION_TO_STRING(indirection_expression, "indirection")
 	EXPRESSION_TO_STRING(pointer_expression, "pointer")
 	EXPRESSION_TO_STRING(negation_expression, "negation")

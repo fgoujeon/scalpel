@@ -31,6 +31,8 @@ enum class expression_tag
 {
 	PREFIX_INCREMENT_EXPRESSION,
 	PREFIX_DECREMENT_EXPRESSION,
+	POSTFIX_INCREMENT_EXPRESSION,
+	POSTFIX_DECREMENT_EXPRESSION,
 	INDIRECTION_EXPRESSION,
 	POINTER_EXPRESSION,
 	NEGATION_EXPRESSION,
@@ -77,6 +79,16 @@ typedef
 typedef
 	unary_expression<static_cast<int>(expression_tag::PREFIX_DECREMENT_EXPRESSION)>
 	prefix_decrement_expression
+;
+
+typedef
+	unary_expression<static_cast<int>(expression_tag::POSTFIX_INCREMENT_EXPRESSION)>
+	postfix_increment_expression
+;
+
+typedef
+	unary_expression<static_cast<int>(expression_tag::POSTFIX_DECREMENT_EXPRESSION)>
+	postfix_decrement_expression
 ;
 
 typedef

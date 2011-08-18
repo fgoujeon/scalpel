@@ -73,6 +73,8 @@ operator()(const TYPE&) \
 
 		RETURN_SINGLE_OPERAND_TYPE(prefix_increment_expression)
 		RETURN_SINGLE_OPERAND_TYPE(prefix_decrement_expression)
+		RETURN_SINGLE_OPERAND_TYPE(postfix_increment_expression)
+		RETURN_SINGLE_OPERAND_TYPE(postfix_decrement_expression)
 
 		type_t
 		operator()(const indirection_expression& expr)

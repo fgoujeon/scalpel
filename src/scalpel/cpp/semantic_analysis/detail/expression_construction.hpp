@@ -203,6 +203,32 @@ create_expression_from_postfix_expression
 
 template<class DeclarativeRegion>
 semantic_entities::expression_t
+create_expression_from_postfix_expression_first_part
+(
+	const syntax_nodes::postfix_expression_first_part& postfix_expression_first_part_node,
+	DeclarativeRegion& declarative_region
+);
+
+template<class DeclarativeRegion>
+semantic_entities::expression_t
+create_expression_from_postfix_expression_last_part_seq
+(
+	const syntax_nodes::postfix_expression_last_part_seq& postfix_expression_last_part_seq_node,
+	semantic_entities::expression_t expr,
+	DeclarativeRegion& declarative_region
+);
+
+template<class DeclarativeRegion>
+semantic_entities::expression_t
+create_expression_from_postfix_expression_last_part
+(
+	const syntax_nodes::postfix_expression_last_part& postfix_expression_last_part_node,
+	const semantic_entities::expression_t& expr,
+	DeclarativeRegion& declarative_region
+);
+
+template<class DeclarativeRegion>
+semantic_entities::expression_t
 create_expression_from_primary_expression
 (
 	const syntax_nodes::primary_expression& primary_expression_node,
