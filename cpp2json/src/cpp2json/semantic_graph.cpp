@@ -558,6 +558,9 @@ struct expression_to_string<EXPRESSION> \
 	EXPRESSION_TO_STRING(enum_constant<long int>*, "long int enum constant")
 	EXPRESSION_TO_STRING(enum_constant<unsigned long int>*, "unsigned long int enum constant")
 
+	EXPRESSION_TO_STRING(function_call<simple_function>, "simple function call")
+	EXPRESSION_TO_STRING(function_call<operator_function>, "operator function call")
+
 	EXPRESSION_TO_STRING(bool, "bool")
 	EXPRESSION_TO_STRING(char, "char")
 	EXPRESSION_TO_STRING(wchar_t, "wchar_t")
@@ -666,6 +669,24 @@ semantic_graph_serializer::serialize_expression_visitor::operator()(enum_constan
 	serializer_.writer_.write_key_value_pair(expression_to_string<enum_constant<T>*>::value, serializer_.get_id_str(*constant));
 }
 
+template<class Function>
+void
+semantic_graph_serializer::serialize_expression_visitor::operator()(function_call<Function> const& call)
+{
+	serializer_.writer_.open_object(expression_to_string<function_call<Function>>::value);
+
+	serializer_.writer_.write_key_value_pair("function id", serializer_.get_id_str(call.function()));
+
+	serializer_.writer_.open_array("arguments");
+	for(const expression_t& argument: call.arguments())
+	{
+		serializer_.serialize_expression(argument);
+	}
+	serializer_.writer_.close_array();
+
+	serializer_.writer_.close_object();
+}
+
 void
 semantic_graph_serializer::serialize_expression_visitor::operator()(const char c)
 {
@@ -702,8 +723,6 @@ semantic_graph_serializer::serialize_expression
 	const semantic_entities::expression_t& entity
 )
 {
-	//writer_.write_key_value_pair("type", apply_visitor(get_expression_type_visitor, entity));
-
 	serialize_expression_visitor visitor(*this);
 	apply_visitor(visitor, entity);
 }

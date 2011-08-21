@@ -25,6 +25,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "expressions.hpp"
 #include "conversions.hpp"
 #include "conditional_expression.hpp"
+#include "function_call.hpp"
 #include <scalpel/utility/variant.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
@@ -98,6 +99,10 @@ typedef
 		enum_constant<unsigned int>*,
 		enum_constant<long int>*,
 		enum_constant<unsigned long int>*,
+
+		//function calls
+		function_call<simple_function>,
+		function_call<operator_function>,
 
 		//boolean type
 		bool,

@@ -221,6 +221,10 @@ class semantic_graph_serializer
 				void
 				operator()(enum_constant<T>* const constant);
 
+				template<class Function>
+				void
+				operator()(function_call<Function> const& call);
+
 				void
 				operator()(const char c);
 

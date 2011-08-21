@@ -20,6 +20,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "expression.hpp"
 #include "variable.hpp"
+#include "functions.hpp"
 #include "type.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_entities
@@ -189,6 +190,19 @@ operator()(const TYPE&) \
 		operator()(enum_constant<UnderlyingType>* const& c)
 		{
 			return apply_visitor(to_type_visitor, c->enclosing_declarative_region());
+		}
+
+
+
+		//
+		//function calls
+		//
+
+		template<class Function>
+		type_t
+		operator()(const function_call<Function>& call)
+		{
+			return call.function().return_type();
 		}
 
 
