@@ -829,6 +829,29 @@ namespace
 				return it->second;
 			}
 
+			template<class Function>
+			expression_t
+			operator()(const function_call<Function>& call)
+			{
+				//get the post-linkage called function
+				auto it = final_entities_.get_map_of_linked_type<Function>().find(&call.function());
+				assert(it != final_entities_.get_map_of_linked_type<Function>().end());
+				Function* called_function = it->second;
+
+				//get the post-linkage arguments
+				std::vector<semantic_entities::expression_t> arguments;
+				for(const semantic_entities::expression_t& argument: call.arguments())
+				{
+					arguments.push_back(copy_expression(argument, final_entities_));
+				}
+
+				return function_call<Function>
+				(
+					*called_function,
+					arguments
+				);
+			}
+
 		private:
 			const final_graph_entities& final_entities_;
 	};

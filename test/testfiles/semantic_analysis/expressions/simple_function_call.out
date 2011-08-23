@@ -43,12 +43,24 @@
       },
       "default value":
       {
+        "int": 0
+      }
+    },
+    {
+      "id": "variable-1",
+      "name": "j",
+      "type":
+      {
+        "fundamental type": "int"
+      },
+      "default value":
+      {
         "simple function call":
         {
           "function id": "simple-function-0",
           "arguments":
           [
-            "int": 1,
+            "variable": "variable-1",
             "double": 1.8,
             "unsigned int": 1
           ]
