@@ -21,6 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_EXPRESSION_CONSTRUCTION_IPP
 #define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_EXPRESSION_CONSTRUCTION_IPP
 
+#include "function_call_construction.hpp"
 #include "name_lookup.hpp"
 #include "semantic_entity_analysis/identification_policies.hpp"
 
@@ -692,21 +693,6 @@ create_expression_from_expression_sizeof_expression
 	return semantic_entity_analysis::get_type_size(type);
 }
 
-struct: utility::static_visitor<semantic_entities::function_call<semantic_entities::simple_function>>
-{
-	semantic_entities::function_call<semantic_entities::simple_function>
-	operator()(semantic_entities::variable* const) const
-	{
-		assert(false); //TODO
-	}
-
-	semantic_entities::function_call<semantic_entities::simple_function>
-	operator()(semantic_entities::simple_function* const entity) const
-	{
-		return semantic_entities::function_call<semantic_entities::simple_function>(*entity, std::vector<semantic_entities::expression_t>());
-	}
-} create_function_call_visitor;
-
 template<class DeclarativeRegion>
 semantic_entities::expression_t
 create_expression_from_postfix_expression
@@ -728,7 +714,7 @@ create_expression_from_postfix_expression
 	)
 	{
 		const syntax_nodes::postfix_expression_last_part& last_part_node = opt_postfix_expression_last_part_seq_node->front();
-		if(get<round_bracketed_optional_expression>(&last_part_node))
+		if(const boost::optional<const round_bracketed_optional_expression&>& opt_round_bracketed_optional_expression_node = get<round_bracketed_optional_expression>(&last_part_node))
 		{
 			//find the function
 			if(const boost::optional<const primary_expression&>& opt_primary_expression_node = get<primary_expression>(&first_part_node))
@@ -739,22 +725,12 @@ create_expression_from_postfix_expression
 					{
 						if(const boost::optional<const identifier&>& opt_identifier_node = get<identifier>(&*opt_unqualified_id_node))
 						{
-							auto found_entity =
-								name_lookup::find
-								<
-									semantic_entity_analysis::identification_policies::by_name,
-									false,
-									false,
-									simple_function,
-									variable
-								>
-								(
-									(*opt_identifier_node).value(),
-									&declarative_region
-								)
-							;
-
-							return apply_visitor(create_function_call_visitor, found_entity);
+							return create_simple_function_call
+							(
+								(*opt_identifier_node).value(),
+								*opt_round_bracketed_optional_expression_node,
+								declarative_region
+							);
 						}
 					}
 					else if(/*const boost::optional<const qualified_id&>& opt_qualified_id_node =*/ get<qualified_id>(&*opt_id_expression_node))

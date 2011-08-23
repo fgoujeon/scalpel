@@ -1,0 +1,59 @@
+{
+  "id": "namespace-0",
+  "simple functions":
+  [
+    {
+      "id": "simple-function-0",
+      "name": "f",
+      "return type":
+      {
+        "fundamental type": "int"
+      },
+      "parameters":
+      [
+        {
+          "type":
+          {
+            "fundamental type": "int"
+          }
+        },
+        {
+          "type":
+          {
+            "fundamental type": "double"
+          }
+        },
+        {
+          "type":
+          {
+            "fundamental type": "unsigned int"
+          }
+        }
+      ]
+    }
+  ],
+  "variables":
+  [
+    {
+      "id": "variable-0",
+      "name": "i",
+      "type":
+      {
+        "fundamental type": "int"
+      },
+      "default value":
+      {
+        "simple function call":
+        {
+          "function id": "simple-function-0",
+          "arguments":
+          [
+            "int": 1,
+            "double": 1.8,
+            "unsigned int": 1
+          ]
+        }
+      }
+    }
+  ]
+}

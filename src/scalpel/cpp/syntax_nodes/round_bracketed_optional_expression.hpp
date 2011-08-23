@@ -42,6 +42,13 @@ typedef
 	round_bracketed_optional_expression
 ;
 
+inline
+const optional_node<expression>&
+get_expression(const round_bracketed_optional_expression& o)
+{
+	return get<1>(o);
+}
+
 }}} //namespace scalpel::cpp::syntax_nodes
 
 #endif

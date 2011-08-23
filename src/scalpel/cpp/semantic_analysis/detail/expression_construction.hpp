@@ -30,7 +30,7 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 {
 
 //
-//create expressions through syntax tree analysis
+//create expression from syntax nodes
 //
 
 template<class DeclarativeRegion>
@@ -291,7 +291,7 @@ create_expression_from_literal(const syntax_nodes::literal& literal_node);
 
 
 //
-//create and simplify expressions objects
+//create and simplify expression objects
 //
 
 semantic_entities::expression_t

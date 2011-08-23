@@ -677,12 +677,15 @@ semantic_graph_serializer::serialize_expression_visitor::operator()(function_cal
 
 	serializer_.writer_.write_key_value_pair("function id", serializer_.get_id_str(call.function()));
 
-	serializer_.writer_.open_array("arguments");
-	for(const expression_t& argument: call.arguments())
+	if(!call.arguments().empty())
 	{
-		serializer_.serialize_expression(argument);
+		serializer_.writer_.open_array("arguments");
+		for(const expression_t& argument: call.arguments())
+		{
+			serializer_.serialize_expression(argument);
+		}
+		serializer_.writer_.close_array();
 	}
-	serializer_.writer_.close_array();
 
 	serializer_.writer_.close_object();
 }
