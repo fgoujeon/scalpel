@@ -192,6 +192,12 @@ operator()(const TYPE&) \
 			return apply_visitor(to_type_visitor, c->enclosing_declarative_region());
 		}
 
+		type_t
+		operator()(member_access_expression<member_variable> const& expr)
+		{
+			return expr.member().type();
+		}
+
 
 
 		//

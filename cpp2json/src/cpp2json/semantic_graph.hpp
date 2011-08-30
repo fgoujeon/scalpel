@@ -225,6 +225,10 @@ class semantic_graph_serializer
 				void
 				operator()(function_call<Function> const& call);
 
+				template<class Member>
+				void
+				operator()(member_access_expression<Member> const& expr);
+
 				void
 				operator()(const char c);
 

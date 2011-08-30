@@ -561,6 +561,8 @@ struct expression_to_string<EXPRESSION> \
 	EXPRESSION_TO_STRING(function_call<simple_function>, "simple function call")
 	EXPRESSION_TO_STRING(function_call<operator_function>, "operator function call")
 
+	EXPRESSION_TO_STRING(member_access_expression<member_variable>, "member variable access")
+
 	EXPRESSION_TO_STRING(bool, "bool")
 	EXPRESSION_TO_STRING(char, "char")
 	EXPRESSION_TO_STRING(wchar_t, "wchar_t")
@@ -686,6 +688,21 @@ semantic_graph_serializer::serialize_expression_visitor::operator()(function_cal
 		}
 		serializer_.writer_.close_array();
 	}
+
+	serializer_.writer_.close_object();
+}
+
+template<class Member>
+void
+semantic_graph_serializer::serialize_expression_visitor::operator()(member_access_expression<Member> const& expr)
+{
+	serializer_.writer_.open_object(expression_to_string<member_access_expression<Member>>::value);
+
+	serializer_.writer_.open_object("object");
+	serializer_.serialize_expression(expr.object());
+	serializer_.writer_.close_object();
+
+	serializer_.writer_.write_key_value_pair("member", serializer_.get_id_str(expr.member()));
 
 	serializer_.writer_.close_object();
 }

@@ -229,6 +229,15 @@ create_expression_from_postfix_expression_last_part
 
 template<class DeclarativeRegion>
 semantic_entities::expression_t
+create_expression_from_dot_id_expression
+(
+	const syntax_nodes::dot_id_expression& dot_id_expression_node,
+	const semantic_entities::expression_t& object,
+	DeclarativeRegion& declarative_region
+);
+
+template<class DeclarativeRegion>
+semantic_entities::expression_t
 create_expression_from_primary_expression
 (
 	const syntax_nodes::primary_expression& primary_expression_node,

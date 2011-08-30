@@ -18,47 +18,49 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SYNTAX_NODES_DOT_ID_EXPRESSION_HPP
-#define SCALPEL_CPP_SYNTAX_NODES_DOT_ID_EXPRESSION_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_MEMBER_ACCESS_EXPRESSION_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_MEMBER_ACCESS_EXPRESSION_HPP
 
-#include "id_expression.hpp"
-#include "common.hpp"
+#include <memory>
 
-namespace scalpel { namespace cpp { namespace syntax_nodes
+namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-/**
-\verbatim
-dot_id_expression
-	= '.' >> !s >> !(str_p("template") >> !s) >> id_expression
-;
-\endverbatim
-*/
-typedef
-	sequence_node
-	<
-		predefined_text_node<str::dot>,
-		optional_node<predefined_text_node<str::template_>>,
-		id_expression
-	>
-	dot_id_expression
-;
+class expression_t;
 
-inline
-bool
-has_template_keyword(const dot_id_expression& o)
+template<class Member>
+class member_access_expression
 {
-	return get<1>(o);
-}
+	public:
+		member_access_expression
+		(
+			const expression_t& object,
+			Member& member
+		);
 
-inline
-const id_expression&
-get_id_expression(const dot_id_expression& o)
-{
-	return get<2>(o);
-}
+		member_access_expression(const member_access_expression& rhs);
 
-}}} //namespace scalpel::cpp::syntax_nodes
+		const expression_t&
+		object() const
+		{
+			return *object_;
+		}
+
+		Member&
+		member() const
+		{
+			return member_;
+		}
+
+	private:
+		std::unique_ptr<expression_t> object_;
+		Member& member_;
+};
+
+}}} //namespace scalpel::cpp::semantic_entities
+
+#include "member_access_expression.ipp"
 
 #endif
+
 

@@ -801,7 +801,7 @@ create_expression_from_postfix_expression_last_part
 (
 	const syntax_nodes::postfix_expression_last_part& postfix_expression_last_part_node,
 	const semantic_entities::expression_t& expr,
-	DeclarativeRegion& /*declarative_region*/
+	DeclarativeRegion& declarative_region
 )
 {
 	using namespace syntax_nodes;
@@ -816,7 +816,14 @@ create_expression_from_postfix_expression_last_part
 	//predefined_text_node<str::double_plus>,
 	//predefined_text_node<str::double_minus>
 
-	if(get<predefined_text_node<str::double_plus>>(&postfix_expression_last_part_node))
+	if(const boost::optional<const dot_id_expression&>& opt_dot_id_expression_node = get<dot_id_expression>(&postfix_expression_last_part_node))
+		return create_expression_from_dot_id_expression
+		(
+			*opt_dot_id_expression_node,
+			expr,
+			declarative_region
+		);
+	else if(get<predefined_text_node<str::double_plus>>(&postfix_expression_last_part_node))
 		return semantic_entities::postfix_increment_expression
 		(
 			expr
@@ -828,6 +835,53 @@ create_expression_from_postfix_expression_last_part
 		);
 	else
 		assert(false); //TODO
+}
+
+template<class DeclarativeRegion>
+semantic_entities::expression_t
+create_expression_from_dot_id_expression
+(
+	const syntax_nodes::dot_id_expression& dot_id_expression_node,
+	const semantic_entities::expression_t& object,
+	DeclarativeRegion& /*declarative_region*/
+)
+{
+	using namespace syntax_nodes;
+	using namespace semantic_entities;
+
+	const id_expression& id_expression_node = get_id_expression(dot_id_expression_node);
+
+	if(const boost::optional<const unqualified_id&>& opt_unqualified_id_node = get<unqualified_id>(&id_expression_node))
+	{
+		if(const boost::optional<const identifier&>& opt_identifier_node = get<identifier>(&*opt_unqualified_id_node))
+		{
+			type_t type = get_type(object);
+			class_& class_type = *get<class_*>(type);
+
+			member_variable& member =
+				*name_lookup::find_local
+				<
+					semantic_entity_analysis::identification_policies::by_name,
+					class_,
+					false,
+					false,
+					member_variable
+				>
+				(
+					(*opt_identifier_node).value(),
+					class_type
+				)
+			;
+
+			return member_access_expression<member_variable>
+			(
+				object,
+				member
+			);
+		}
+	}
+
+	assert(false);
 }
 
 template<class DeclarativeRegion>

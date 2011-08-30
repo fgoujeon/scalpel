@@ -26,6 +26,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "conversions.hpp"
 #include "conditional_expression.hpp"
 #include "function_call.hpp"
+#include "member_access_expression.hpp"
 #include <scalpel/utility/variant.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
@@ -99,6 +100,7 @@ typedef
 		enum_constant<unsigned int>*,
 		enum_constant<long int>*,
 		enum_constant<unsigned long int>*,
+		member_access_expression<member_variable>,
 
 		//function calls
 		function_call<simple_function>,
