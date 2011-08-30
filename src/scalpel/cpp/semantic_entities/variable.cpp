@@ -34,14 +34,14 @@ CLASS_NAME::CLASS_NAME \
 	BOOST_PP_IIF(HAS_SIZE, unsigned int size,) BOOST_PP_COMMA_IF(HAS_STATIC) \
 	BOOST_PP_IIF(HAS_STATIC, bool is_static,) BOOST_PP_COMMA_IF(HAS_MUTABLE) \
 	BOOST_PP_IIF(HAS_MUTABLE, const bool is_mutable,) BOOST_PP_COMMA_IF(IS_MEMBER) \
-	BOOST_PP_IIF(IS_MEMBER, const member_access access,) \
+	BOOST_PP_IIF(IS_MEMBER, const member_accessibility access,) \
 ): \
 	name_(name), \
 	type_(type) BOOST_PP_COMMA_IF(HAS_SIZE) \
 	BOOST_PP_IIF(HAS_SIZE, size_(size),) BOOST_PP_COMMA_IF(HAS_STATIC) \
 	BOOST_PP_IIF(HAS_STATIC, is_static_(is_static),) BOOST_PP_COMMA_IF(HAS_MUTABLE) \
 	BOOST_PP_IIF(HAS_MUTABLE, is_mutable_(is_mutable),) BOOST_PP_COMMA_IF(IS_MEMBER) \
-	BOOST_PP_IIF(IS_MEMBER, access_(access),) \
+	BOOST_PP_IIF(IS_MEMBER, accessibility_(access),) \
 { \
 }
 

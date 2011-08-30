@@ -64,7 +64,7 @@ class CLASS_NAME \
 			BOOST_PP_IIF(HAS_RETURN_TYPE, const type_t& return_type,) BOOST_PP_COMMA_IF(HAS_RETURN_TYPE) \
 			BOOST_PP_IIF(HAS_PARAMETERS, function_parameter_list&& parameters,) BOOST_PP_COMMA_IF(HAS_PARAMETERS) \
 			BOOST_PP_IIF(HAS_VARIADIC, const bool variadic,) BOOST_PP_COMMA_IF(HAS_VARIADIC) \
-			BOOST_PP_IIF(IS_MEMBER, const member_access access,) BOOST_PP_COMMA_IF(IS_MEMBER) \
+			BOOST_PP_IIF(IS_MEMBER, const member_accessibility access,) BOOST_PP_COMMA_IF(IS_MEMBER) \
 			BOOST_PP_IIF(HAS_CV_QUALIFIER, const bool is_const,) BOOST_PP_COMMA_IF(HAS_CV_QUALIFIER) \
 			BOOST_PP_IIF(HAS_CV_QUALIFIER, const bool is_volatile,) BOOST_PP_COMMA_IF(HAS_CV_QUALIFIER) \
 			BOOST_PP_IIF(HAS_STATIC, const bool is_static,) BOOST_PP_COMMA_IF(HAS_STATIC) \
@@ -136,10 +136,10 @@ class CLASS_NAME \
 		BOOST_PP_IIF \
 		( \
 			IS_MEMBER, \
-			member_access \
-			access() const \
+			member_accessibility \
+			accessibility() const \
 			{ \
-				return access_; \
+				return accessibility_; \
 			}, \
 		) \
  \
@@ -253,7 +253,7 @@ class CLASS_NAME \
 		BOOST_PP_IIF \
 		( \
 			IS_MEMBER, \
-			member_access access_;, \
+			member_accessibility accessibility_;, \
 		) \
 		BOOST_PP_IIF \
 		( \

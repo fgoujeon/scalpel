@@ -76,7 +76,7 @@ create_type
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
 	const bool has_declarator,
 	DeclarativeRegion& current_declarative_region,
-	const semantic_entities::member_access access = semantic_entities::member_access::PUBLIC
+	const semantic_entities::member_accessibility access = semantic_entities::member_accessibility::PUBLIC
 );
 
 template<class DeclarativeRegion>
@@ -86,7 +86,7 @@ create_type
 	const syntax_nodes::type_specifier_seq& type_specifier_seq_node,
 	const bool has_declarator,
 	DeclarativeRegion& current_declarative_region,
-	const semantic_entities::member_access access = semantic_entities::member_access::PUBLIC
+	const semantic_entities::member_accessibility access = semantic_entities::member_accessibility::PUBLIC
 );
 
 template<class DeclarativeRegion>
@@ -202,7 +202,7 @@ namespace detail
 	create_type
 	(
 		const std::string& type_name,
-		const semantic_entities::member_access access,
+		const semantic_entities::member_accessibility access,
 		typename boost::enable_if<semantic_entities::type_traits::is_member<Type>>::type* = 0
 	);
 
@@ -211,7 +211,7 @@ namespace detail
 	create_type
 	(
 		const std::string& type_name,
-		const semantic_entities::member_access, //ignored
+		const semantic_entities::member_accessibility, //ignored
 		typename boost::disable_if<semantic_entities::type_traits::is_member<Type>>::type* = 0
 	);
 
@@ -219,7 +219,7 @@ namespace detail
 	Type*
 	create_type
 	(
-		const semantic_entities::member_access access,
+		const semantic_entities::member_accessibility access,
 		typename boost::enable_if<semantic_entities::type_traits::is_member<Type>>::type* = 0
 	);
 
@@ -227,7 +227,7 @@ namespace detail
 	Type*
 	create_type
 	(
-		const semantic_entities::member_access, //ignored
+		const semantic_entities::member_accessibility, //ignored
 		typename boost::disable_if<semantic_entities::type_traits::is_member<Type>>::type* = 0
 	);
 
@@ -238,7 +238,7 @@ namespace detail
 	create_enum
 	(
 		const std::string& type_name,
-		const semantic_entities::member_access access,
+		const semantic_entities::member_accessibility access,
 		typename boost::enable_if<semantic_entities::type_traits::is_member<VariantType>>::type* = 0
 	);
 
@@ -247,7 +247,7 @@ namespace detail
 	create_enum
 	(
 		const std::string& type_name,
-		const semantic_entities::member_access, //ignored
+		const semantic_entities::member_accessibility, //ignored
 		typename boost::disable_if<semantic_entities::type_traits::is_member<VariantType>>::type* = 0
 	);
 

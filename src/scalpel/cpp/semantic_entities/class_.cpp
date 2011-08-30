@@ -39,10 +39,10 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 CLASS_NAME::CLASS_NAME \
 ( \
 	BOOST_PP_IIF(HAS_NAME, const std::string& name,) BOOST_PP_COMMA_IF(BOOST_PP_AND(HAS_NAME, IS_MEMBER)) \
-	BOOST_PP_IIF(IS_MEMBER, const member_access access,) \
+	BOOST_PP_IIF(IS_MEMBER, const member_accessibility access,) \
 ): \
     BOOST_PP_IIF(HAS_NAME, name_(name),) BOOST_PP_COMMA_IF(HAS_NAME) \
-	BOOST_PP_IIF(IS_MEMBER, access_(access),) BOOST_PP_COMMA_IF(IS_MEMBER) \
+	BOOST_PP_IIF(IS_MEMBER, accessibility_(access),) BOOST_PP_COMMA_IF(IS_MEMBER) \
 	complete_(false) \
 { \
 	BOOST_PP_IIF(HAS_FUNCTIONS, reset_destructor();,) \
@@ -91,7 +91,7 @@ BOOST_PP_IIF \
 	{ \
 		set_destructor \
 		( \
-			std::unique_ptr<destructor>(new destructor(member_access::PUBLIC, false, false, false)) \
+			std::unique_ptr<destructor>(new destructor(member_accessibility::PUBLIC, false, false, false)) \
 		); \
 	}, \
 )

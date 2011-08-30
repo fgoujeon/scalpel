@@ -47,7 +47,7 @@ class CLASS_NAME \
 			BOOST_PP_IIF(HAS_SIZE, unsigned int size,) BOOST_PP_COMMA_IF(HAS_STATIC) \
 			BOOST_PP_IIF(HAS_STATIC, bool is_static,) BOOST_PP_COMMA_IF(HAS_MUTABLE) \
 			BOOST_PP_IIF(HAS_MUTABLE, const bool is_mutable,) BOOST_PP_COMMA_IF(IS_MEMBER) \
-			BOOST_PP_IIF(IS_MEMBER, const member_access access,) \
+			BOOST_PP_IIF(IS_MEMBER, const member_accessibility access,) \
 		); \
  \
 		CLASS_NAME(const CLASS_NAME&) = delete; \
@@ -100,10 +100,10 @@ class CLASS_NAME \
 		BOOST_PP_IIF \
 		( \
 			IS_MEMBER, \
-			member_access \
-			access() const \
+			member_accessibility \
+			accessibility() const \
 			{ \
-				return access_; \
+				return accessibility_; \
 			}, \
 		) \
  \
@@ -140,7 +140,7 @@ class CLASS_NAME \
 		BOOST_PP_IIF \
 		( \
 			IS_MEMBER, \
-			member_access access_;, \
+			member_accessibility accessibility_;, \
 		) \
 		boost::optional<expression_t> default_value_; \
  \

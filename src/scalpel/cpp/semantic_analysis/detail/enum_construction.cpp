@@ -34,7 +34,7 @@ create_enum(const enum_specifier& enum_specifier_node)
 }
 
 std::unique_ptr<member_enum>
-create_member_enum(const enum_specifier& enum_specifier_node, const member_access access)
+create_member_enum(const enum_specifier& enum_specifier_node, const member_accessibility access)
 {
 	return std::unique_ptr<member_enum>(member_enum::create<int>(syntax_node_analysis::get_identifier(enum_specifier_node), access));
 }

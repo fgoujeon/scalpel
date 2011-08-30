@@ -35,7 +35,7 @@ class CLASS_NAME \
 		( \
 			const std::string& name, \
 			const type_t& type BOOST_PP_COMMA_IF(IS_MEMBER) \
-			BOOST_PP_IIF(IS_MEMBER, const member_access access,) \
+			BOOST_PP_IIF(IS_MEMBER, const member_accessibility access,) \
 		); \
  \
 		CLASS_NAME(const CLASS_NAME&) = delete; \
@@ -58,10 +58,10 @@ class CLASS_NAME \
 		BOOST_PP_IIF \
 		( \
 			IS_MEMBER, \
-			member_access \
-			access() const \
+			member_accessibility \
+			accessibility() const \
 			{ \
-				return access_; \
+				return accessibility_; \
 			}, \
 		) \
  \
@@ -71,7 +71,7 @@ class CLASS_NAME \
 		BOOST_PP_IIF \
 		( \
 			IS_MEMBER, \
-			member_access access_;, \
+			member_accessibility accessibility_;, \
 		) \
  \
 		BOOST_PP_IIF \

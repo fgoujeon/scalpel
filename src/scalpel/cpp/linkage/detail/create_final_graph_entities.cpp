@@ -108,7 +108,7 @@ namespace
 		entity_pairs& pairs
 	)
 	{
-		member_class* new_class = new member_class(entity.name(), entity.access());
+		member_class* new_class = new member_class(entity.name(), entity.accessibility());
 		new_class->complete(entity.complete());
 
 		pairs.member_class_pairs.push_back(old_and_new_entity_pair<member_class>{&entity, new_class});
@@ -140,7 +140,7 @@ namespace
 		entity_pairs& pairs
 	)
 	{
-		member_union* new_union = new member_union(entity.name(), entity.access());
+		member_union* new_union = new member_union(entity.name(), entity.accessibility());
 		new_union->complete(entity.complete());
 
 		pairs.member_union_pairs.push_back(old_and_new_entity_pair<member_union>{&entity, new_union});
@@ -172,7 +172,7 @@ namespace
 		entity_pairs& pairs
 	)
 	{
-		anonymous_member_union* new_union = new anonymous_member_union(entity.access());
+		anonymous_member_union* new_union = new anonymous_member_union(entity.accessibility());
 		new_union->complete(entity.complete());
 
 		pairs.anonymous_member_union_pairs.push_back(old_and_new_entity_pair<anonymous_member_union>{&entity, new_union});
@@ -199,7 +199,7 @@ namespace
 		entity_pairs&
 	)
 	{
-		return member_enum::create<int>(entity.name(), entity.access());
+		return member_enum::create<int>(entity.name(), entity.accessibility());
 	}
 
 	typedef_*
@@ -221,7 +221,7 @@ namespace
 		entity_pairs&
 	)
 	{
-		return new member_typedef(entity.name(), create_type(entity.type(), final_entities), entity.access());
+		return new member_typedef(entity.name(), create_type(entity.type(), final_entities), entity.accessibility());
 	}
 
 	constructor*
@@ -237,7 +237,7 @@ namespace
 			(
 				create_function_parameter_list(entity.parameters(), final_entities),
 				entity.variadic(),
-				entity.access(),
+				entity.accessibility(),
 				entity.is_explicit(),
 				entity.is_inline()
 			)
@@ -260,7 +260,7 @@ namespace
 		destructor* new_entity =
 			new destructor
 			(
-				entity.access(),
+				entity.accessibility(),
 				entity.is_virtual(),
 				entity.is_pure(),
 				entity.is_inline()
@@ -287,7 +287,7 @@ namespace
 				entity.overloaded_operator(),
 				create_type(entity.return_type(), final_entities),
 				create_function_parameter_list(entity.parameters(), final_entities),
-				entity.access(),
+				entity.accessibility(),
 				entity.is_const(),
 				entity.is_volatile(),
 				entity.is_virtual(),
@@ -314,7 +314,7 @@ namespace
 			new conversion_function
 			(
 				create_type(entity.return_type(), final_entities),
-				entity.access(),
+				entity.accessibility(),
 				entity.is_const(),
 				entity.is_volatile(),
 				entity.is_explicit(),
@@ -345,7 +345,7 @@ namespace
 				create_type(entity.return_type(), final_entities),
 				create_function_parameter_list(entity.parameters(), final_entities),
 				entity.variadic(),
-				entity.access(),
+				entity.accessibility(),
 				entity.is_const(),
 				entity.is_volatile(),
 				entity.is_static(),
@@ -448,7 +448,7 @@ namespace
 				entity.name(),
 				create_type(entity.type(), final_entities),
 				entity.is_mutable(),
-				entity.access()
+				entity.accessibility()
 			)
 		;
 	}
@@ -466,7 +466,7 @@ namespace
 			(
 				entity.name(),
 				create_type(entity.type(), final_entities),
-				entity.access()
+				entity.accessibility()
 			)
 		;
 	}
@@ -486,7 +486,7 @@ namespace
 				create_type(entity.type(), final_entities),
 				entity.size(),
 				entity.is_mutable(),
-				entity.access()
+				entity.accessibility()
 			)
 		;
 	}
@@ -598,7 +598,7 @@ namespace
 			base_class
 			(
 				apply_visitor(visitor, entity.base()),
-				entity.access(),
+				entity.accessibility(),
 				entity.is_virtual()
 			)
 		;

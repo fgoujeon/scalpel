@@ -18,13 +18,13 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_MEMBER_ACCESS_HPP
-#define SCALPEL_CPP_SEMANTIC_ENTITIES_MEMBER_ACCESS_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_MEMBER_ACCESSIBILITY_HPP
+#define SCALPEL_CPP_SEMANTIC_ENTITIES_MEMBER_ACCESSIBILITY_HPP
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-enum class member_access
+enum class member_accessibility
 {
 	PUBLIC,
 	PROTECTED,

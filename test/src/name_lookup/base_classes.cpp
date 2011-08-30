@@ -74,14 +74,14 @@ BOOST_AUTO_TEST_CASE(base_classes)
 
 	scalpel::cpp::semantic_graph semantic_graph;
 	auto struct_c0 = new class_("c0");
-	auto struct_c0_inner = new member_class("inner", member_access::PUBLIC);
+	auto struct_c0_inner = new member_class("inner", member_accessibility::PUBLIC);
 	auto function_c0_inner_f = new simple_member_function
 	(
 		"f",
 		fundamental_type::VOID,
 		function_parameter_list(),
 		false,
-		member_access::PUBLIC,
+		member_accessibility::PUBLIC,
 		false,
 		false,
 		false,
@@ -95,7 +95,7 @@ BOOST_AUTO_TEST_CASE(base_classes)
 		fundamental_type::VOID,
 		function_parameter_list(),
 		false,
-		member_access::PUBLIC,
+		member_accessibility::PUBLIC,
 		false,
 		false,
 		false,
@@ -110,7 +110,7 @@ BOOST_AUTO_TEST_CASE(base_classes)
 		fundamental_type::VOID,
 		function_parameter_list(),
 		false,
-		member_access::PUBLIC,
+		member_accessibility::PUBLIC,
 		false,
 		false,
 		false,
@@ -124,7 +124,7 @@ BOOST_AUTO_TEST_CASE(base_classes)
 		fundamental_type::VOID,
 		function_parameter_list(),
 		false,
-		member_access::PUBLIC,
+		member_accessibility::PUBLIC,
 		false,
 		false,
 		false,
@@ -139,7 +139,7 @@ BOOST_AUTO_TEST_CASE(base_classes)
 		fundamental_type::VOID,
 		function_parameter_list(),
 		false,
-		member_access::PUBLIC,
+		member_accessibility::PUBLIC,
 		false,
 		false,
 		false,
@@ -154,7 +154,7 @@ BOOST_AUTO_TEST_CASE(base_classes)
 		fundamental_type::VOID,
 		function_parameter_list(),
 		false,
-		member_access::PUBLIC,
+		member_accessibility::PUBLIC,
 		false,
 		false,
 		false,
@@ -171,11 +171,11 @@ BOOST_AUTO_TEST_CASE(base_classes)
 	struct_c1base->add_member(std::unique_ptr<simple_member_function>(function_c1base_f));
 	struct_c1base->add_member(std::unique_ptr<simple_member_function>(function_c1base_g));
 	semantic_graph.add_member(std::unique_ptr<class_>(struct_c1));
-	struct_c1->add_base_class(base_class(struct_c1base, member_access::PUBLIC, false));
+	struct_c1->add_base_class(base_class(struct_c1base, member_accessibility::PUBLIC, false));
 	struct_c1->add_member(std::unique_ptr<simple_member_function>(function_c1_g));
 	semantic_graph.add_member(std::unique_ptr<class_>(struct_c));
-	struct_c->add_base_class(base_class(struct_c0, member_access::PUBLIC, false));
-	struct_c->add_base_class(base_class(struct_c1, member_access::PUBLIC, false));
+	struct_c->add_base_class(base_class(struct_c0, member_accessibility::PUBLIC, false));
+	struct_c->add_base_class(base_class(struct_c1, member_accessibility::PUBLIC, false));
 	struct_c->add_member(std::unique_ptr<simple_member_function>(function_g_test));
 
 

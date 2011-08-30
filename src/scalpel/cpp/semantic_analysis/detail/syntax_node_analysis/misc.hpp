@@ -21,13 +21,13 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_SYNTAX_NODE_ANALYSIS_MISC_HPP
 #define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_SYNTAX_NODE_ANALYSIS_MISC_HPP
 
-#include <scalpel/cpp/semantic_entities/member_access.hpp>
+#include <scalpel/cpp/semantic_entities/member_accessibility.hpp>
 #include <scalpel/cpp/syntax_tree.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail { namespace syntax_node_analysis
 {
 
-semantic_entities::member_access
+semantic_entities::member_accessibility
 get_access(const syntax_nodes::access_specifier access_specifier_node);
 
 bool

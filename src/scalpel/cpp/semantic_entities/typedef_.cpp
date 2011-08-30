@@ -29,10 +29,10 @@ typedef_::typedef_(const std::string& name, const type_t& type):
 {
 }
 
-member_typedef::member_typedef(const std::string& name, const type_t& type, const member_access access):
+member_typedef::member_typedef(const std::string& name, const type_t& type, const member_accessibility access):
 	name_(name),
 	type_(type),
-	access_(access)
+	accessibility_(access)
 {
 }
 

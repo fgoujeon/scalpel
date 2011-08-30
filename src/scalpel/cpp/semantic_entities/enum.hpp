@@ -23,7 +23,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "enum_constant.hpp"
 #include "enum_constant_list.hpp"
-#include "member_access.hpp"
+#include "member_accessibility.hpp"
 #include "impl/detail/declarative_region_member_impl.hpp"
 #include "macros/detail/declarative_region_member_impl.hpp"
 #include <scalpel/utility/unique_ptr_vector.hpp>
@@ -39,11 +39,11 @@ class CLASS_NAME \
 		CLASS_NAME \
 		( \
 			const std::string& name, \
-			BOOST_PP_IIF(IS_MEMBER, const member_access access,) BOOST_PP_COMMA_IF(IS_MEMBER) \
+			BOOST_PP_IIF(IS_MEMBER, const member_accessibility access,) BOOST_PP_COMMA_IF(IS_MEMBER) \
 			UnderlyingType* \
 		): \
 			name_(name), \
-			BOOST_PP_IIF(IS_MEMBER, access_(access),) BOOST_PP_COMMA_IF(IS_MEMBER) \
+			BOOST_PP_IIF(IS_MEMBER, accessibility_(access),) BOOST_PP_COMMA_IF(IS_MEMBER) \
 			constants_(enum_constant_list<UnderlyingType>(*this)) \
 		{ \
 		} \
@@ -55,7 +55,7 @@ class CLASS_NAME \
 		create \
 		( \
 			const std::string& name BOOST_PP_COMMA_IF(IS_MEMBER) \
-			BOOST_PP_IIF(IS_MEMBER, const member_access access,) \
+			BOOST_PP_IIF(IS_MEMBER, const member_accessibility access,) \
 		) \
 		{ \
 			return new CLASS_NAME \
@@ -80,10 +80,10 @@ class CLASS_NAME \
 		BOOST_PP_IIF \
 		( \
 			IS_MEMBER, \
-			member_access \
-			access() const \
+			member_accessibility \
+			accessibility() const \
 			{ \
-				return access_; \
+				return accessibility_; \
 			}, \
 		) \
  \
@@ -104,7 +104,7 @@ class CLASS_NAME \
 		BOOST_PP_IIF \
 		( \
 			IS_MEMBER, \
-			member_access access_;, \
+			member_accessibility accessibility_;, \
 		) \
 		enum_constant_list_t constants_; \
  \

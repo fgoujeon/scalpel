@@ -29,17 +29,17 @@ template<class Entity> \
 CLASS_NAME<Entity>::CLASS_NAME \
 ( \
 	Entity& referred_entity BOOST_PP_COMMA_IF(IS_MEMBER) \
-	BOOST_PP_IIF(IS_MEMBER, const member_access access,) \
+	BOOST_PP_IIF(IS_MEMBER, const member_accessibility access,) \
 ): \
 	referred_entity_(&referred_entity) BOOST_PP_COMMA_IF(IS_MEMBER) \
-	BOOST_PP_IIF(IS_MEMBER, access_(access),) \
+	BOOST_PP_IIF(IS_MEMBER, accessibility_(access),) \
 { \
 } \
  \
 template<class Entity> \
 CLASS_NAME<Entity>::CLASS_NAME(const CLASS_NAME& rhs): \
 	referred_entity_(rhs.referred_entity_) BOOST_PP_COMMA_IF(IS_MEMBER) \
-	BOOST_PP_IIF(IS_MEMBER, access_(rhs.access_),) \
+	BOOST_PP_IIF(IS_MEMBER, accessibility_(rhs.accessibility_),) \
 { \
 } \
  \
@@ -48,7 +48,7 @@ CLASS_NAME<Entity>& \
 CLASS_NAME<Entity>::operator=(const CLASS_NAME& rhs) \
 { \
 	referred_entity_ = rhs.referred_entity_; \
-	BOOST_PP_IIF(IS_MEMBER, access_ = rhs.access_;,) \
+	BOOST_PP_IIF(IS_MEMBER, accessibility_ = rhs.accessibility_;,) \
 	return *this; \
 }
 

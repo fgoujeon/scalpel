@@ -54,13 +54,13 @@ BOOST_AUTO_TEST_CASE(base_classes_2)
 	auto class_s2 = new class_("s2");
 
 	//typedefs
-	auto typedef_s_integer = new member_typedef("integer", fundamental_type::INT, member_access::PUBLIC);
+	auto typedef_s_integer = new member_typedef("integer", fundamental_type::INT, member_accessibility::PUBLIC);
 
 	//assembling
 	semantic_graph.add_member(std::unique_ptr<class_>(class_s));
 	class_s->add_member(std::unique_ptr<member_typedef>(typedef_s_integer));
 	semantic_graph.add_member(std::unique_ptr<class_>(class_s2));
-	class_s2->add_base_class(base_class(class_s, member_access::PUBLIC, false));
+	class_s2->add_base_class(base_class(class_s, member_accessibility::PUBLIC, false));
 
 	//look up s2::integer from global namespace, must find s::integer
 	{

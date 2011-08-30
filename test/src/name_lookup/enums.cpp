@@ -73,7 +73,7 @@ BOOST_AUTO_TEST_CASE(enums)
 	enum_constant_list_color.add(std::unique_ptr<enum_constant<int>>(enum_constant_color_green));
 	enum_constant_list_color.add(std::unique_ptr<enum_constant<int>>(enum_constant_color_blue));
 
-	member_enum* enum_s_direction = member_enum::create<long int>("direction", member_access::PUBLIC);
+	member_enum* enum_s_direction = member_enum::create<long int>("direction", member_accessibility::PUBLIC);
 	enum_constant_list<long int>& enum_constant_list_direction = scalpel::utility::get<enum_constant_list<long int>>(enum_s_direction->constants());
 	enum_constant_list_direction.add(std::unique_ptr<enum_constant<long int>>(enum_constant_s_direction_left));
 	enum_constant_list_direction.add(std::unique_ptr<enum_constant<long int>>(enum_constant_s_direction_right));

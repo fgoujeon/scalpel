@@ -44,7 +44,7 @@ create_type
 	const syntax_nodes::decl_specifier_seq& decl_specifier_seq_node,
 	const bool has_declarator,
 	DeclarativeRegion& current_declarative_region,
-	const semantic_entities::member_access access
+	const semantic_entities::member_accessibility access
 )
 {
 	using namespace syntax_nodes;
@@ -340,7 +340,7 @@ create_type
 	const syntax_nodes::type_specifier_seq& type_specifier_seq_node,
 	const bool has_declarator,
 	DeclarativeRegion& current_declarative_region,
-	const semantic_entities::member_access access
+	const semantic_entities::member_accessibility access
 )
 {
 	return create_type
@@ -569,7 +569,7 @@ namespace detail
 	create_type
 	(
 		const std::string& type_name,
-		const semantic_entities::member_access access,
+		const semantic_entities::member_accessibility access,
 		typename boost::enable_if<semantic_entities::type_traits::is_member<Type>>::type*
 	)
 	{
@@ -581,7 +581,7 @@ namespace detail
 	create_type
 	(
 		const std::string& type_name,
-		const semantic_entities::member_access, //ignored
+		const semantic_entities::member_accessibility, //ignored
 		typename boost::disable_if<semantic_entities::type_traits::is_member<Type>>::type*
 	)
 	{
@@ -592,7 +592,7 @@ namespace detail
 	Type*
 	create_type
 	(
-		const semantic_entities::member_access access,
+		const semantic_entities::member_accessibility access,
 		typename boost::enable_if<semantic_entities::type_traits::is_member<Type>>::type*
 	)
 	{
@@ -603,7 +603,7 @@ namespace detail
 	Type*
 	create_type
 	(
-		const semantic_entities::member_access, //ignored
+		const semantic_entities::member_accessibility, //ignored
 		typename boost::disable_if<semantic_entities::type_traits::is_member<Type>>::type*
 	)
 	{
@@ -615,7 +615,7 @@ namespace detail
 	create_enum
 	(
 		const std::string& name,
-		const semantic_entities::member_access access,
+		const semantic_entities::member_accessibility access,
 		typename boost::enable_if<semantic_entities::type_traits::is_member<Enum>>::type*
 	)
 	{
@@ -627,7 +627,7 @@ namespace detail
 	create_enum
 	(
 		const std::string& name,
-		const semantic_entities::member_access, //ignored
+		const semantic_entities::member_accessibility, //ignored
 		typename boost::disable_if<semantic_entities::type_traits::is_member<Enum>>::type*
 	)
 	{

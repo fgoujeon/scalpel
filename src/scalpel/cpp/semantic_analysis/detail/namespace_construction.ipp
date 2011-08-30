@@ -194,7 +194,7 @@ fill_namespace
 				false,
 				false,
 				false,
-				member_access::PUBLIC
+				member_accessibility::PUBLIC
 			);
 
 			//and add it to the namespace
@@ -399,7 +399,7 @@ fill_namespace
 		namespace_entity,
 		is_class_member,
 		false,
-		member_access::PUBLIC
+		member_accessibility::PUBLIC
 	);
 
 	//The function entity may have already been declared previously in the code.

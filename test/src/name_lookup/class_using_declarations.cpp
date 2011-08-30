@@ -65,7 +65,7 @@ BOOST_AUTO_TEST_CASE(class_using_declarations)
 		fundamental_type::VOID,
 		function_parameter_list(),
 		false,
-		member_access::PUBLIC,
+		member_accessibility::PUBLIC,
 		false,
 		false,
 		false,
@@ -85,7 +85,7 @@ BOOST_AUTO_TEST_CASE(class_using_declarations)
 		fundamental_type::INT,
 		std::move(function_s2_f_parameter_list),
 		false,
-		member_access::PUBLIC,
+		member_accessibility::PUBLIC,
 		false,
 		false,
 		false,
@@ -100,7 +100,7 @@ BOOST_AUTO_TEST_CASE(class_using_declarations)
 		fundamental_type::VOID,
 		function_parameter_list(),
 		false,
-		member_access::PUBLIC,
+		member_accessibility::PUBLIC,
 		false,
 		false,
 		false,
@@ -113,8 +113,8 @@ BOOST_AUTO_TEST_CASE(class_using_declarations)
 	semantic_graph.add_member(std::unique_ptr<class_>(class_s));
 	class_s->add_member(std::unique_ptr<simple_member_function>(function_s_f));
 	semantic_graph.add_member(std::unique_ptr<class_>(class_s2));
-	class_s2->add_base_class(base_class(class_s, member_access::PUBLIC, false));
-	class_s2->add_member(member_entity_alias<simple_member_function>(*function_s_f, member_access::PUBLIC));
+	class_s2->add_base_class(base_class(class_s, member_accessibility::PUBLIC, false));
+	class_s2->add_member(member_entity_alias<simple_member_function>(*function_s_f, member_accessibility::PUBLIC));
 	class_s2->add_member(std::unique_ptr<simple_member_function>(function_s2_f));
 	class_s2->add_member(std::unique_ptr<simple_member_function>(function_s2_test));
 

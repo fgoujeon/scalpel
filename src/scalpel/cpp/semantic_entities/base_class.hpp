@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_BASE_CLASS_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_BASE_CLASS_HPP
 
-#include "member_access.hpp"
+#include "member_accessibility.hpp"
 #include "class_variant_fwd.hpp"
 #include <scalpel/utility/ptr_variant.hpp>
 
@@ -38,7 +38,7 @@ class base_class
 		base_class
 		(
 			const class_ptr_variant& base,
-			const member_access access,
+			const member_accessibility access,
 			bool is_virtual
 		);
 
@@ -48,10 +48,10 @@ class base_class
 			return base_;
 		}
 
-		member_access
-		access() const
+		member_accessibility
+		accessibility() const
 		{
-			return access_;
+			return accessibility_;
 		}
 
 		bool
@@ -62,7 +62,7 @@ class base_class
 
 	private:
 		class_ptr_variant base_;
-		member_access access_;
+		member_accessibility accessibility_;
 		bool is_virtual_;
 };
 

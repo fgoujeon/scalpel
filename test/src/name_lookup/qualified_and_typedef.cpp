@@ -55,7 +55,7 @@ BOOST_AUTO_TEST_CASE(qualified_and_typedef)
 	auto struct_s = new class_("s");
 
 	//typedefs
-	auto typedef_s_integer = new member_typedef("integer", fundamental_type::INT, member_access::PUBLIC);
+	auto typedef_s_integer = new member_typedef("integer", fundamental_type::INT, member_accessibility::PUBLIC);
 	auto typedef_alias = new typedef_("alias", struct_s);
 	auto typedef_cv_alias = new typedef_("cv_alias", cv_qualified_type(struct_s, cv_qualified_type::qualification_type::CONST_AND_VOLATILE));
 

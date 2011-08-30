@@ -77,7 +77,7 @@ BOOST_AUTO_TEST_CASE(test_case_1)
 		fundamental_type::VOID,
 		function_parameter_list(),
 		false,
-		member_access::PUBLIC,
+		member_accessibility::PUBLIC,
 		false,
 		false,
 		false,

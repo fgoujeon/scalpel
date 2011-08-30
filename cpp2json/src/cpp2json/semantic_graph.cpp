@@ -259,15 +259,15 @@ semantic_graph_serializer::serialize_base_class
 
 	serialize_class_id_attribute(entity.base());
 
-	switch(entity.access())
+	switch(entity.accessibility())
 	{
-		case member_access::PUBLIC:
+		case member_accessibility::PUBLIC:
 			writer_.write_key_value_pair("access", "public");
 			break;
-		case member_access::PROTECTED:
+		case member_accessibility::PROTECTED:
 			writer_.write_key_value_pair("access", "protected");
 			break;
-		case member_access::PRIVATE:
+		case member_accessibility::PRIVATE:
 			writer_.write_key_value_pair("access", "private");
 			break;
 	}

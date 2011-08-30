@@ -228,15 +228,15 @@ semantic_graph_serializer::serialize_access_property
 	typename boost::enable_if<scalpel::cpp::semantic_entities::type_traits::is_member<Entity>>::type*
 )
 {
-	switch(entity.access())
+	switch(entity.accessibility())
 	{
-		case member_access::PUBLIC:
+		case member_accessibility::PUBLIC:
 			writer_.write_key_value_pair("access", "public");
 			break;
-		case member_access::PROTECTED:
+		case member_accessibility::PROTECTED:
 			writer_.write_key_value_pair("access", "protected");
 			break;
-		case member_access::PRIVATE:
+		case member_accessibility::PRIVATE:
 			writer_.write_key_value_pair("access", "private");
 			break;
 	}

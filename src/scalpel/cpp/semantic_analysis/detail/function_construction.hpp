@@ -51,7 +51,7 @@ create_function
 	DeclarativeRegion& current_declarative_region,
 	const bool is_class_member,
 	const bool is_defined_in_class,
-	const semantic_entities::member_access access
+	const semantic_entities::member_accessibility access
 );
 
 void

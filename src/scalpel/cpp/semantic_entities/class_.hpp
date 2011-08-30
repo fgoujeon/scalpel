@@ -25,7 +25,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "entity_alias.hpp"
 #include "declarative_regions.hpp"
 #include "type_fwd.hpp"
-#include "member_access.hpp"
+#include "member_accessibility.hpp"
 #include "impl/detail/declarative_region_member_impl.hpp"
 #include "macros/detail/member_declaration.hpp"
 #include "macros/detail/single_member_declaration.hpp"
@@ -98,7 +98,7 @@ class CLASS_NAME \
         CLASS_NAME \
 		( \
 			BOOST_PP_IIF(HAS_NAME, const std::string& name,) BOOST_PP_COMMA_IF(BOOST_PP_AND(HAS_NAME, IS_MEMBER)) \
-			BOOST_PP_IIF(IS_MEMBER, const member_access access,) \
+			BOOST_PP_IIF(IS_MEMBER, const member_accessibility access,) \
 		); \
  \
         CLASS_NAME(const CLASS_NAME&) = delete; \
@@ -131,10 +131,10 @@ class CLASS_NAME \
 		BOOST_PP_IIF \
 		( \
 			IS_MEMBER, \
-			member_access \
-			access() const \
+			member_accessibility \
+			accessibility() const \
 			{ \
-				return access_; \
+				return accessibility_; \
 			}, \
 		) \
  \
@@ -165,7 +165,7 @@ class CLASS_NAME \
 		BOOST_PP_IIF \
 		( \
 			IS_MEMBER, \
-			member_access access_;, \
+			member_accessibility accessibility_;, \
 		) \
 		bool complete_; \
  \

@@ -21,7 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ENTITIES_ENTITY_ALIAS_HPP
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_ENTITY_ALIAS_HPP
 
-#include "member_access.hpp"
+#include "member_accessibility.hpp"
 #include <boost/preprocessor/control/iif.hpp>
 #include <boost/preprocessor/punctuation/comma_if.hpp>
 
@@ -33,7 +33,7 @@ class CLASS_NAME \
 		CLASS_NAME \
 		( \
 			Entity& referred_entity BOOST_PP_COMMA_IF(IS_MEMBER) \
-			BOOST_PP_IIF(IS_MEMBER, const member_access access,) \
+			BOOST_PP_IIF(IS_MEMBER, const member_accessibility access,) \
 		); \
  \
 		CLASS_NAME(const CLASS_NAME& rhs); \
@@ -56,10 +56,10 @@ class CLASS_NAME \
 		BOOST_PP_IIF \
 		( \
 			IS_MEMBER, \
-			member_access \
-			access() const \
+			member_accessibility \
+			accessibility() const \
 			{ \
-				return access_; \
+				return accessibility_; \
 			}, \
 		) \
  \
@@ -68,7 +68,7 @@ class CLASS_NAME \
 		BOOST_PP_IIF \
 		( \
 			IS_MEMBER, \
-			member_access access_;, \
+			member_accessibility accessibility_;, \
 		) \
 };
 

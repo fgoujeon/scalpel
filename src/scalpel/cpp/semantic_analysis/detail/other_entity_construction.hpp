@@ -63,7 +63,7 @@ create_entity
 	const bool has_explicit_specifier,
 	const bool has_pure_specifier,
 	const bool is_class_member,
-	const semantic_entities::member_access access
+	const semantic_entities::member_accessibility access
 );
 
 template<class Namespace>
@@ -89,7 +89,7 @@ create_bit_field
 	const syntax_nodes::member_declarator_bit_field_member& member_declarator_bit_field_member_node,
 	const semantic_entities::type_t& type,
 	const bool is_mutable,
-	const semantic_entities::member_access access,
+	const semantic_entities::member_accessibility access,
 	Class& current_class
 );
 

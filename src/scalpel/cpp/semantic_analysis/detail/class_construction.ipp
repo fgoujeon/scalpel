@@ -48,7 +48,7 @@ std::unique_ptr<Class>
 create_member_class
 (
 	const syntax_nodes::class_specifier& class_specifier_node,
-	const semantic_entities::member_access access
+	const semantic_entities::member_accessibility access
 )
 {
 	return
@@ -92,7 +92,7 @@ std::unique_ptr<Class>
 create_member_class
 (
 	const syntax_nodes::class_elaborated_specifier& class_elaborated_specifier_node,
-	const semantic_entities::member_access access
+	const semantic_entities::member_accessibility access
 )
 {
 	using namespace syntax_nodes;
@@ -127,20 +127,20 @@ fill_class
 	auto class_key_node = get_class_key(class_head_node);
 
 	//default access: public for structs and unions, private for classes
-	const member_access default_access =
+	const member_accessibility default_accessibility =
 		get<predefined_text_node<str::class_>>(&class_key_node) ?
-		member_access::PRIVATE :
-		member_access::PUBLIC
+		member_accessibility::PRIVATE :
+		member_accessibility::PUBLIC
 	;
 
 	//get base classes
 	if(const optional_node<base_clause>& opt_base_clause_node = get_base_clause(class_head_node))
 	{
-		fill_class(class_entity, default_access, *opt_base_clause_node);
+		fill_class(class_entity, default_accessibility, *opt_base_clause_node);
 	}
 
 	//get the members of the class
-	member_access current_access = default_access;
+	member_accessibility current_accessibility = default_accessibility;
 	auto opt_member_specification = get_member_specification(class_specifier_node);
 	if(opt_member_specification)
 	{
@@ -157,7 +157,7 @@ fill_class
 					fill_class
 					(
 						class_entity,
-						current_access,
+						current_accessibility,
 						function_definition_node
 					);
 				}
@@ -166,7 +166,7 @@ fill_class
 					fill_class
 					(
 						class_entity,
-						current_access,
+						current_accessibility,
 						*opt_member_declaration_member_declarator_list_node
 					);
 				}
@@ -178,7 +178,7 @@ fill_class
 					fill_class
 					(
 						class_entity,
-						current_access,
+						current_accessibility,
 						*opt_using_declaration_node
 					);
 				}
@@ -193,7 +193,7 @@ fill_class
 			else if(auto opt_member_specification_access_specifier_node = get<member_specification_access_specifier>(&part))
 			{
 				auto access_specifier_node = get_access_specifier(*opt_member_specification_access_specifier_node);
-				current_access = syntax_node_analysis::get_access(access_specifier_node);
+				current_accessibility = syntax_node_analysis::get_access(access_specifier_node);
 			}
 			else
 			{
@@ -210,7 +210,7 @@ void
 fill_class
 (
 	Class& class_entity,
-	const semantic_entities::member_access default_access,
+	const semantic_entities::member_accessibility default_accessibility,
 	const syntax_nodes::base_clause& base_clause_node,
 	typename boost::enable_if<semantic_entities::type_traits::has_base_classes<Class>>::type*
 )
@@ -233,7 +233,7 @@ fill_class
 		bool is_virtual = has_virtual_keyword(base_specifier_node);
 
 		//get base class access
-		member_access access = default_access;
+		member_accessibility access = default_accessibility;
 		if(const optional_node<access_specifier>& opt_access_specifier_node = get_access_specifier(base_specifier_node))
 		{
 			access = syntax_node_analysis::get_access(*opt_access_specifier_node);
@@ -274,7 +274,7 @@ void
 fill_class
 (
 	Class&,
-	const semantic_entities::member_access,
+	const semantic_entities::member_accessibility,
 	const syntax_nodes::base_clause&,
 	typename boost::disable_if<semantic_entities::type_traits::has_base_classes<Class>>::type*
 )
@@ -289,7 +289,7 @@ void
 fill_class
 (
 	Class& class_entity,
-	const semantic_entities::member_access current_access,
+	const semantic_entities::member_accessibility current_accessibility,
 	const syntax_nodes::member_declaration_member_declarator_list& member_declaration_member_declarator_list_node
 )
 {
@@ -313,7 +313,7 @@ fill_class
 				*opt_decl_specifier_seq_node,
 				opt_member_declarator_list_node,
 				class_entity,
-				current_access
+				current_accessibility
 			)
 		;
 	}
@@ -365,7 +365,7 @@ fill_class
 					info.has_explicit_specifier,
 					has_pure_specifier,
 					true,
-					current_access
+					current_accessibility
 				);
 
 				generic_queries::detail::add_entity_to_declarative_region(declarator_entity, class_entity);
@@ -385,7 +385,7 @@ fill_class
 						*opt_member_declarator_bit_field_member_node,
 						*info.opt_complete_type,
 						info.has_mutable_specifier,
-						current_access,
+						current_accessibility,
 						class_entity
 					)
 				);
@@ -407,7 +407,7 @@ fill_class
 					"",
 					*info.opt_complete_type,
 					info.has_static_specifier,
-					current_access
+					current_accessibility
 				)
 			)
 		);
@@ -419,7 +419,7 @@ void
 fill_class
 (
 	Class& class_entity,
-	const semantic_entities::member_access access,
+	const semantic_entities::member_accessibility access,
 	const syntax_nodes::function_definition& function_definition_node
 )
 {
@@ -462,7 +462,7 @@ void
 fill_class
 (
 	Class& class_entity,
-	const semantic_entities::member_access access,
+	const semantic_entities::member_accessibility access,
 	const syntax_nodes::using_declaration& using_declaration_node,
 	typename boost::enable_if<semantic_entities::type_traits::has_entity_aliases<Class>>::type*
 )
@@ -595,7 +595,7 @@ void
 fill_class
 (
 	Class&,
-	const semantic_entities::member_access,
+	const semantic_entities::member_accessibility,
 	const syntax_nodes::using_declaration&,
 	typename boost::disable_if<semantic_entities::type_traits::has_entity_aliases<Class>>::type*
 )
@@ -638,10 +638,10 @@ class add_alias_to_class_visitor: public utility::static_visitor<void>
 		add_alias_to_class_visitor
 		(
 			Class& class_entity,
-			const semantic_entities::member_access access
+			const semantic_entities::member_accessibility access
 		):
 			class_entity_(class_entity),
-			access_(access)
+			accessibility_(access)
 		{
 		}
 
@@ -649,12 +649,12 @@ class add_alias_to_class_visitor: public utility::static_visitor<void>
 		void
 		operator()(Entity* entity)
 		{
-			class_entity_.add_member(semantic_entities::member_entity_alias<Entity>(*entity, access_));
+			class_entity_.add_member(semantic_entities::member_entity_alias<Entity>(*entity, accessibility_));
 		}
 
 	private:
 		Class& class_entity_;
-		const semantic_entities::member_access access_;
+		const semantic_entities::member_accessibility accessibility_;
 };
 
 template<class Class, class... Entities>
@@ -663,7 +663,7 @@ add_alias
 (
 	Class& class_entity,
 	const utility::variant<Entities...>& entity,
-	const semantic_entities::member_access access
+	const semantic_entities::member_accessibility access
 )
 {
 	add_alias_to_class_visitor<Class> visitor(class_entity, access);
