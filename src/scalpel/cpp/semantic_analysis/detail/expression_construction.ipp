@@ -859,7 +859,7 @@ create_expression_from_dot_id_expression
 			class_& class_type = *get<class_*>(type);
 
 			member_variable& member =
-				*name_lookup::find_local
+				*name_lookup::find_in_class
 				<
 					semantic_entity_analysis::identification_policies::by_name,
 					class_,

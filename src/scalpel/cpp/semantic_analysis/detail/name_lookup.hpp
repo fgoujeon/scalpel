@@ -186,6 +186,18 @@ find_local
 	DeclarativeRegion& current_declarative_region
 );
 
+/**
+Find entities corresponding to the given identifier,
+in the given class and in its base classes.
+*/
+template<class EntityIdentificationPolicy, class Class, bool Optional, bool Multiple, class... Entities>
+typename return_type<Optional, Multiple, Entities...>::type
+find_in_class
+(
+	const typename EntityIdentificationPolicy::identifier_t& identifier,
+	Class& current_declarative_region
+);
+
 
 
 namespace detail

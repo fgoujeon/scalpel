@@ -330,6 +330,50 @@ find_local
 	;
 }
 
+template<class EntityIdentificationPolicy, class Class, bool Optional, bool Multiple, class... Entities>
+typename return_type<Optional, Multiple, Entities...>::type
+find_in_class
+(
+	const typename EntityIdentificationPolicy::identifier_t& identifier,
+	Class& current_declarative_region
+)
+{
+	using namespace detail;
+	using namespace semantic_entities;
+
+	//find entities in this declarative region only
+	{
+		typename return_type<true, Multiple, Entities...>::type found_entities =
+			find_local_entities
+			<
+				EntityIdentificationPolicy,
+				Class,
+				true,
+				Multiple,
+				Entities...
+			>(identifier, current_declarative_region)
+		;
+
+		//stop lookup if entities have been found
+		if(!utility::is_empty(found_entities))
+			return std::move(return_result<Optional, Multiple, Entities...>::result(found_entities));
+	}
+
+	//find entities in the base classes
+	{
+		return
+			find_entities_in_base_classes
+			<
+				EntityIdentificationPolicy,
+				Class,
+				Optional,
+				Multiple,
+				Entities...
+			>(identifier, current_declarative_region)
+		;
+	}
+}
+
 
 
 namespace detail
@@ -891,12 +935,12 @@ find_entities_in_base_classes
 			class_& current_class = **opt;
 
 			//find entities in the current declarative region (i.e. current class)
-			typename return_type<Optional, Multiple, Entities...>::type current_class_found_entities =
+			typename return_type<true, Multiple, Entities...>::type current_class_found_entities =
 				find_local_entities
 				<
 					EntityIdentificationPolicy,
-					semantic_entities::class_,
-					Optional,
+					class_,
+					true,
 					Multiple,
 					Entities...
 				>(identifier, current_class)
@@ -911,12 +955,12 @@ find_entities_in_base_classes
 			else
 			{
 				//find entities in the base classes of the current declarative region
-				typename return_type<Optional, Multiple, Entities...>::type current_class_base_classes_found_entities =
+				typename return_type<true, Multiple, Entities...>::type current_class_base_classes_found_entities =
 					find_entities_in_base_classes
 					<
 						EntityIdentificationPolicy,
 						class_,
-						Optional,
+						true,
 						Multiple,
 						Entities...
 					>(identifier, current_class)
@@ -931,12 +975,12 @@ find_entities_in_base_classes
 			member_class& current_class = **opt;
 
 			//find entities in the current declarative region (i.e. current class)
-			typename return_type<Optional, Multiple, Entities...>::type current_class_found_entities =
+			typename return_type<true, Multiple, Entities...>::type current_class_found_entities =
 				find_local_entities
 				<
 					EntityIdentificationPolicy,
-					semantic_entities::member_class,
-					Optional,
+					member_class,
+					true,
 					Multiple,
 					Entities...
 				>(identifier, current_class)
@@ -951,12 +995,12 @@ find_entities_in_base_classes
 			else
 			{
 				//find entities in the current declarative region's base classes
-				typename return_type<Optional, Multiple, Entities...>::type current_class_base_classes_found_entities =
+				typename return_type<true, Multiple, Entities...>::type current_class_base_classes_found_entities =
 					find_entities_in_base_classes
 					<
 						EntityIdentificationPolicy,
 						member_class,
-						Optional,
+						true,
 						Multiple,
 						Entities...
 					>(identifier, current_class)
