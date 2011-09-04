@@ -562,6 +562,7 @@ struct expression_to_string<EXPRESSION> \
 	EXPRESSION_TO_STRING(function_call<operator_function>, "operator function call")
 
 	EXPRESSION_TO_STRING(member_access_expression<member_variable>, "member variable access")
+	EXPRESSION_TO_STRING(member_access_expression<bit_field>, "bit-field access")
 
 	EXPRESSION_TO_STRING(bool, "bool")
 	EXPRESSION_TO_STRING(char, "char")

@@ -22,6 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_EXPRESSION_CONSTRUCTION_IPP
 
 #include "function_call_construction.hpp"
+#include "member_access_expression_construction.hpp"
 #include "name_lookup.hpp"
 #include "semantic_entity_analysis/identification_policies.hpp"
 
@@ -858,14 +859,15 @@ create_expression_from_dot_id_expression
 			type_t type = get_type(object);
 			class_& class_type = *get<class_*>(type);
 
-			member_variable& member =
-				*name_lookup::find_in_class
+			utility::variant<member_variable*, bit_field*> member =
+				name_lookup::find_in_class
 				<
 					semantic_entity_analysis::identification_policies::by_name,
 					class_,
 					false,
 					false,
-					member_variable
+					member_variable,
+					bit_field
 				>
 				(
 					(*opt_identifier_node).value(),
@@ -873,11 +875,7 @@ create_expression_from_dot_id_expression
 				)
 			;
 
-			return member_access_expression<member_variable>
-			(
-				object,
-				member
-			);
+			return create_member_access_expression(object, member);
 		}
 	}
 

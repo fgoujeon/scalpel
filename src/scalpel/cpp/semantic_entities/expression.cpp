@@ -198,6 +198,12 @@ operator()(const TYPE&) \
 			return expr.member().type();
 		}
 
+		type_t
+		operator()(member_access_expression<bit_field> const& expr)
+		{
+			return expr.member().type();
+		}
+
 
 
 		//

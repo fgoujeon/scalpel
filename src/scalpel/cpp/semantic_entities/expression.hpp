@@ -101,6 +101,7 @@ typedef
 		enum_constant<long int>*,
 		enum_constant<unsigned long int>*,
 		member_access_expression<member_variable>,
+		member_access_expression<bit_field>,
 
 		//function calls
 		function_call<simple_function>,
