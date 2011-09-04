@@ -856,26 +856,8 @@ create_expression_from_dot_id_expression
 	{
 		if(const boost::optional<const identifier&>& opt_identifier_node = get<identifier>(&*opt_unqualified_id_node))
 		{
-			type_t type = get_type(object);
-			class_& class_type = *get<class_*>(type);
-
-			utility::variant<member_variable*, bit_field*> member =
-				name_lookup::find_in_class
-				<
-					semantic_entity_analysis::identification_policies::by_name,
-					class_,
-					false,
-					false,
-					member_variable,
-					bit_field
-				>
-				(
-					(*opt_identifier_node).value(),
-					class_type
-				)
-			;
-
-			return create_member_access_expression(object, member);
+			const std::string& member_name = (*opt_identifier_node).value();
+			return create_member_access_expression(object, member_name);
 		}
 	}
 
