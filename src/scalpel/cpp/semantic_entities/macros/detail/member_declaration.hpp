@@ -20,12 +20,12 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #define MEMBER_DECLARATION(TYPE, NAME) \
 	public: \
-		typedef utility::unique_ptr_vector<TYPE> NAME##_t; \
+		typedef std::vector<std::unique_ptr<TYPE>> NAME##_t; \
  \
-		NAME##_t::range \
+		utility::unique_ptr_vector_range<TYPE>::type \
 		NAME(); \
  \
-		const NAME##_t& \
+		utility::unique_ptr_vector_const_range<TYPE>::type \
 		NAME() const; \
  \
 		void \

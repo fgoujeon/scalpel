@@ -23,13 +23,13 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "entity_groups.hpp"
 #include <scalpel/cpp/semantic_graph.hpp>
-#include <scalpel/utility/unique_ptr_vector.hpp>
+#include <scalpel/utility/unique_ptr_vector_range.hpp>
 
 namespace scalpel { namespace cpp { namespace linkage { namespace detail
 {
 
 entity_groups
-list_entities(const utility::unique_ptr_vector<semantic_graph>& semantic_graphs);
+list_entities(const utility::unique_ptr_vector_const_range<semantic_graph>::type& semantic_graphs);
 
 }}}} //namespace scalpel::cpp::linking::detail
 

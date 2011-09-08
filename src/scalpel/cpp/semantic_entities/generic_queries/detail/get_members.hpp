@@ -24,7 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <scalpel/utility/single_object_range.hpp>
 #include <scalpel/utility/single_object_const_range.hpp>
-#include <scalpel/utility/unique_ptr_vector.hpp>
+#include <scalpel/utility/unique_ptr_vector_range.hpp>
 #include <vector>
 
 namespace scalpel { namespace cpp { namespace semantic_entities { namespace generic_queries { namespace detail
@@ -36,13 +36,13 @@ struct get_members_return_type;
 template<class DeclarativeRegion, class Entity>
 struct get_members_return_type<DeclarativeRegion, Entity, false>
 {
-	typedef typename utility::unique_ptr_vector<Entity>::range type;
+	typedef typename utility::unique_ptr_vector_range<Entity>::type type;
 };
 
 template<class DeclarativeRegion, class Entity>
 struct get_members_return_type<DeclarativeRegion, Entity, true>
 {
-	typedef const utility::unique_ptr_vector<Entity>& type;
+	typedef typename utility::unique_ptr_vector_const_range<Entity>::type type;
 };
 
 template<class DeclarativeRegion>

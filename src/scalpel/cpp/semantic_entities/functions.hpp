@@ -112,10 +112,10 @@ class CLASS_NAME \
 		BOOST_PP_IIF \
 		( \
 			HAS_PARAMETERS, \
-			const function_parameter_list& \
+			utility::unique_ptr_vector_const_range<function_parameter>::type \
 			parameters() const \
 			{ \
-				return parameters_; \
+				return utility::make_unique_ptr_vector_const_range(parameters_); \
 			} \
  \
 			std::vector<type_t> \

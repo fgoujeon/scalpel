@@ -152,10 +152,9 @@ namespace
 	{
 		std::vector<type_t> parameter_types;
 
-		for(auto i = parameters.begin(); i != parameters.end(); ++i)
+		for(const std::unique_ptr<function_parameter>& param: parameters)
 		{
-			const function_parameter& param = *i;
-			type_t param_type = param.type();
+			type_t param_type = param->type();
 
 			//remove cv-qualifiers
 			if(cv_qualified_type* opt_cv_qualified_type = utility::get<cv_qualified_type>(&param_type))

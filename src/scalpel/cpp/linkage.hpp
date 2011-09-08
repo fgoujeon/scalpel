@@ -22,7 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_LINKAGE_HPP
 
 #include "semantic_graph.hpp"
-#include <scalpel/utility/unique_ptr_vector.hpp>
+#include <scalpel/utility/unique_ptr_vector_range.hpp>
 #include <memory>
 
 namespace scalpel { namespace cpp
@@ -32,7 +32,7 @@ namespace linkage
 {
 
 std::unique_ptr<semantic_entities::linked_namespace>
-link(const utility::unique_ptr_vector<semantic_graph>& semantic_graphs);
+link(const utility::unique_ptr_vector_const_range<semantic_graph>::type& semantic_graphs);
 
 } //namespace semantic_analysis
 

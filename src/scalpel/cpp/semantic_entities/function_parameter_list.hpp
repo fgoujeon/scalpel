@@ -22,12 +22,13 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_FUNCTION_PARAMETER_LIST_HPP
 
 #include "function_parameter.hpp"
-#include <scalpel/utility/unique_ptr_vector.hpp>
+#include <vector>
+#include <memory>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
 
-typedef utility::unique_ptr_vector<function_parameter> function_parameter_list;
+typedef std::vector<std::unique_ptr<function_parameter>> function_parameter_list;
 
 }}} //namespace scalpel::cpp::semantic_entities
 

@@ -134,7 +134,7 @@ single_file_tester::test_semantic_analysis(const semantic_analysis_test_file_set
 void
 single_file_tester::test_linkage(const linkage_test_file_set& file_set)
 {
-	scalpel::utility::unique_ptr_vector<scalpel::cpp::semantic_graph> semantic_graphs;
+	std::vector<std::unique_ptr<scalpel::cpp::semantic_graph>> semantic_graphs;
 	for(auto i = file_set.cpp_files.begin(); i != file_set.cpp_files.end(); ++i) //for each input file
 	{
 		const std::string& filename = *i;
@@ -175,7 +175,12 @@ single_file_tester::test_linkage(const linkage_test_file_set& file_set)
 	}
 
 	//linkage
-	std::unique_ptr<scalpel::cpp::linked_semantic_graph> final_semantic_graph = scalpel::cpp::linkage::link(semantic_graphs);
+	std::unique_ptr<scalpel::cpp::linked_semantic_graph> final_semantic_graph =
+		scalpel::cpp::linkage::link
+		(
+			scalpel::utility::make_unique_ptr_vector_const_range(semantic_graphs)
+		)
+	;
 
 	//serialize the semantic graph
 	std::ostringstream semantic_graph_json;

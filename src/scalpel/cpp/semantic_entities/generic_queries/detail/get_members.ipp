@@ -28,35 +28,38 @@ template<typename UnderlyingType>
 class empty_constant_list
 {
 	private:
-		static utility::unique_ptr_vector<enum_constant<UnderlyingType>> list;
+		static std::vector<std::unique_ptr<enum_constant<UnderlyingType>>> list;
 
 	public:
-		static typename utility::unique_ptr_vector<enum_constant<UnderlyingType>>::range range;
-		static const utility::unique_ptr_vector<enum_constant<UnderlyingType>>& const_list;
+		static typename utility::unique_ptr_vector_range<enum_constant<UnderlyingType>>::type range;
+		static typename utility::unique_ptr_vector_const_range<enum_constant<UnderlyingType>>::type const_range;
 };
 
 template<typename UnderlyingType>
-utility::unique_ptr_vector<enum_constant<UnderlyingType>> empty_constant_list<UnderlyingType>::list;
+std::vector<std::unique_ptr<enum_constant<UnderlyingType>>>
+empty_constant_list<UnderlyingType>::list;
 
 template<typename UnderlyingType>
-typename utility::unique_ptr_vector<enum_constant<UnderlyingType>>::range empty_constant_list<UnderlyingType>::range(list);
+typename utility::unique_ptr_vector_range<enum_constant<UnderlyingType>>::type
+empty_constant_list<UnderlyingType>::range(utility::make_unique_ptr_vector_range(list));
 
 template<typename UnderlyingType>
-const utility::unique_ptr_vector<enum_constant<UnderlyingType>>& empty_constant_list<UnderlyingType>::const_list(list);
+typename utility::unique_ptr_vector_const_range<enum_constant<UnderlyingType>>::type
+empty_constant_list<UnderlyingType>::const_range(utility::make_unique_ptr_vector_const_range(list));
 
 
 
 template<typename UnderlyingType>
-struct get_enum_constant_visitor: utility::static_visitor<typename utility::unique_ptr_vector<enum_constant<UnderlyingType>>::range>
+struct get_enum_constant_visitor: utility::static_visitor<typename utility::unique_ptr_vector_range<enum_constant<UnderlyingType>>::type>
 {
-	typename utility::unique_ptr_vector<enum_constant<UnderlyingType>>::range
+	typename utility::unique_ptr_vector_range<enum_constant<UnderlyingType>>::type
 	operator()(enum_constant_list<UnderlyingType>& list) const
 	{
 		return list.constants();
 	}
 
 	template<typename DifferentUnderlyingType>
-	typename utility::unique_ptr_vector<enum_constant<UnderlyingType>>::range
+	typename utility::unique_ptr_vector_range<enum_constant<UnderlyingType>>::type
 	operator()(enum_constant_list<DifferentUnderlyingType>&) const
 	{
 		return empty_constant_list<UnderlyingType>::range;
@@ -64,19 +67,19 @@ struct get_enum_constant_visitor: utility::static_visitor<typename utility::uniq
 };
 
 template<typename UnderlyingType>
-struct get_const_enum_constant_visitor: utility::static_visitor<const utility::unique_ptr_vector<enum_constant<UnderlyingType>>&>
+struct get_const_enum_constant_visitor: utility::static_visitor<typename utility::unique_ptr_vector_const_range<enum_constant<UnderlyingType>>::type>
 {
-	const utility::unique_ptr_vector<enum_constant<UnderlyingType>>&
+	typename utility::unique_ptr_vector_const_range<enum_constant<UnderlyingType>>::type
 	operator()(const enum_constant_list<UnderlyingType>& list) const
 	{
 		return list.constants();
 	}
 
 	template<typename DifferentUnderlyingType>
-	const utility::unique_ptr_vector<enum_constant<UnderlyingType>>&
+	typename utility::unique_ptr_vector_const_range<enum_constant<UnderlyingType>>::type
 	operator()(const enum_constant_list<DifferentUnderlyingType>&) const
 	{
-		return empty_constant_list<UnderlyingType>::const_list;
+		return empty_constant_list<UnderlyingType>::const_range;
 	}
 };
 

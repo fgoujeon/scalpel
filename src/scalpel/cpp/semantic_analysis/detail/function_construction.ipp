@@ -411,10 +411,9 @@ create_parameter_types
 	;
 
 	std::vector<semantic_entities::type_t> parameter_types;
-	for(auto i = parameters.begin(); i != parameters.end(); ++i)
+	for(const std::unique_ptr<function_parameter>& param: parameters)
 	{
-		const function_parameter& p = *i;
-		parameter_types.push_back(p.type());
+		parameter_types.push_back(param->type());
 	}
 
 	return parameter_types;

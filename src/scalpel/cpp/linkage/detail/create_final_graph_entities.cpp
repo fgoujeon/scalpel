@@ -33,7 +33,7 @@ namespace
 	function_parameter_list
 	create_function_parameter_list
 	(
-		const function_parameter_list& entity,
+		const utility::unique_ptr_vector_const_range<function_parameter>::type& entity,
 		const final_graph_entities& final_entities
 	);
 
@@ -531,7 +531,7 @@ namespace
 	function_parameter_list
 	create_function_parameter_list
 	(
-		const function_parameter_list& entity,
+		const utility::unique_ptr_vector_const_range<function_parameter>::type& entity,
 		const final_graph_entities& final_entities
 	)
 	{

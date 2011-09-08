@@ -19,16 +19,16 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #define MEMBER_DEFINITION(CLASS_NAME, TYPE, NAME, SET_ENCLOSING_DECLARATIVE_REGION) \
-CLASS_NAME::NAME##_t::range \
+utility::unique_ptr_vector_range<TYPE>::type \
 CLASS_NAME::NAME() \
 { \
-	return NAME##_; \
+	return utility::make_unique_ptr_vector_range(NAME##_); \
 } \
  \
-const CLASS_NAME::NAME##_t& \
+utility::unique_ptr_vector_const_range<TYPE>::type \
 CLASS_NAME::NAME() const \
 { \
-	return NAME##_; \
+	return utility::make_unique_ptr_vector_const_range(NAME##_); \
 } \
  \
 void \

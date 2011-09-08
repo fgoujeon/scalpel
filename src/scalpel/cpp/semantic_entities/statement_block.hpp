@@ -24,7 +24,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "variable.hpp"
 #include "namespace_alias.hpp"
 #include "macros/detail/declarative_region_member_impl.hpp"
-#include <scalpel/utility/unique_ptr_vector.hpp>
+#include <scalpel/utility/unique_ptr_vector_range.hpp>
 #include <string>
 #include <memory>
 
@@ -41,9 +41,9 @@ class statement_block
 {
     public:
 		typedef std::vector<namespace_*> namespace_ptrs_t;
-		typedef utility::unique_ptr_vector<statement_block> statement_blocks_t;
-		typedef utility::unique_ptr_vector<variable> variables_t;
-		typedef utility::unique_ptr_vector<namespace_alias> namespace_aliases_t;
+		typedef std::vector<std::unique_ptr<statement_block>> statement_blocks_t;
+		typedef std::vector<std::unique_ptr<variable>> variables_t;
+		typedef std::vector<std::unique_ptr<namespace_alias>> namespace_aliases_t;
 
         statement_block();
 
@@ -52,16 +52,16 @@ class statement_block
 		const statement_block&
 		operator=(const statement_block&) = delete;
 
-		const statement_blocks_t&
+		utility::unique_ptr_vector_const_range<statement_block>::type
 		statement_blocks() const;
 
-		const variables_t&
+		utility::unique_ptr_vector_const_range<variable>::type
 		variables() const;
 
-		namespace_aliases_t::range
+		utility::unique_ptr_vector_range<namespace_alias>::type
 		namespace_aliases();
 
-		const namespace_aliases_t&
+		utility::unique_ptr_vector_const_range<namespace_alias>::type
 		namespace_aliases() const;
 
 		const namespace_ptrs_t&

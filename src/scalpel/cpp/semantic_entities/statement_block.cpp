@@ -27,28 +27,28 @@ statement_block::statement_block()
 {
 }
 
-const statement_block::statement_blocks_t&
+utility::unique_ptr_vector_const_range<statement_block>::type
 statement_block::statement_blocks() const
 {
-	return statement_blocks_;
+	return utility::make_unique_ptr_vector_const_range(statement_blocks_);
 }
 
-const statement_block::variables_t&
+utility::unique_ptr_vector_const_range<variable>::type
 statement_block::variables() const
 {
-	return variables_;
+	return utility::make_unique_ptr_vector_const_range(variables_);
 }
 
-statement_block::namespace_aliases_t::range
+utility::unique_ptr_vector_range<namespace_alias>::type
 statement_block::namespace_aliases()
 {
-	return namespace_aliases_;
+	return utility::make_unique_ptr_vector_range(namespace_aliases_);
 }
 
-const statement_block::namespace_aliases_t&
+utility::unique_ptr_vector_const_range<namespace_alias>::type
 statement_block::namespace_aliases() const
 {
-	return namespace_aliases_;
+	return utility::make_unique_ptr_vector_const_range(namespace_aliases_);
 }
 
 const statement_block::namespace_ptrs_t&

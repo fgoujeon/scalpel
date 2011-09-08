@@ -32,7 +32,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "macros/detail/declarative_region_member_impl.hpp"
 #include "macros/detail/hpp/member_entity_aliases_of_type.hpp"
 #include <scalpel/utility/vector_range.hpp>
-#include <scalpel/utility/unique_ptr_vector.hpp>
+#include <scalpel/utility/unique_ptr_vector_range.hpp>
 #include <scalpel/utility/const_ptr_variant.hpp>
 #include <boost/preprocessor/logical/and.hpp>
 #include <boost/preprocessor/control/iif.hpp>

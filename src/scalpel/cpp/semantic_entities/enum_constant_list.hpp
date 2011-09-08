@@ -22,7 +22,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #define SCALPEL_CPP_SEMANTIC_ENTITIES_ENUM_CONSTANT_LIST_HPP
 
 #include "enum_constant.hpp"
-#include <scalpel/utility/unique_ptr_vector.hpp>
+#include <scalpel/utility/unique_ptr_vector_range.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_entities
 {
@@ -35,7 +35,7 @@ class enum_constant_list
 {
 	public:
 		typedef enum_constant<UnderlyingType> constant;
-		typedef utility::unique_ptr_vector<constant> constants_t;
+		typedef std::vector<std::unique_ptr<constant>> constants_t;
 
 		typedef
 			utility::variant
@@ -70,16 +70,16 @@ class enum_constant_list
 			constants_ = std::move(rhs.constants_);
 		}
 
-		typename constants_t::range
+		typename utility::unique_ptr_vector_range<constant>::type
 		constants()
 		{
-			return constants_;
+			return utility::make_unique_ptr_vector_range(constants_);
 		}
 
-		const constants_t&
+		typename utility::unique_ptr_vector_const_range<constant>::type
 		constants() const
 		{
-			return constants_;
+			return utility::make_unique_ptr_vector_const_range(constants_);
 		}
 
 		void

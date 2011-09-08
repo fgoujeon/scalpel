@@ -94,7 +94,7 @@ main(int argc, char** argv)
 	scalpel::cpp::preprocessor preprocessor;
 	scalpel::cpp::syntax_analyzer syntax_analyzer;
 
-	scalpel::utility::unique_ptr_vector<scalpel::cpp::semantic_graph> semantic_graphs;
+	std::vector<std::unique_ptr<scalpel::cpp::semantic_graph>> semantic_graphs;
 	for(auto i = input_files.begin(); i != input_files.end(); ++i) //for each input file
 	{
 		const std::string& filename = *i;

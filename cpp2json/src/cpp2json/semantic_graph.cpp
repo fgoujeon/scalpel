@@ -452,16 +452,16 @@ semantic_graph_serializer::serialize_simple_function
 void
 semantic_graph_serializer::serialize_function_parameter_list
 (
-	const function_parameter_list& entity
+	const utility::unique_ptr_vector_const_range<function_parameter>::type& entity
 )
 {
 	if(!entity.empty())
 	{
 		writer_.open_array("parameters");
-		for(auto i = entity.begin(); i != entity.end(); ++i)
+		for(const function_parameter& param: entity)
 		{
 			writer_.open_object();
-			serialize_function_parameter(*i);
+			serialize_function_parameter(param);
 			writer_.close_object();
 		}
 		writer_.close_array();

@@ -342,7 +342,7 @@ class semantic_graph_serializer
 		void
 		serialize_function_parameter_list
 		(
-			const function_parameter_list& entity
+			const utility::unique_ptr_vector_const_range<function_parameter>::type& entity
 		);
 
 		void
@@ -449,7 +449,7 @@ class semantic_graph_serializer
 				get_members<Entity>(declarative_region)
 			;
 
-			serialize_entities(members);
+			serialize_entities<Entity>(members);
 		}
 
 		template<class Entity, class DeclarativeRegion>
@@ -467,7 +467,7 @@ class semantic_graph_serializer
 		void
 		serialize_entities
 		(
-			const scalpel::utility::unique_ptr_vector<Entity>& entities
+			const typename scalpel::utility::unique_ptr_vector_const_range<Entity>::type& entities
 		)
 		{
 			if(!entities.empty())

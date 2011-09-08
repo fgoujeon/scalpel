@@ -143,7 +143,7 @@ namespace
 	void
 	list_child_entities(const namespace_& parent_entity, entity_groups& groups)
 	{
-		const utility::unique_ptr_vector<namespace_>& child_namespaces = parent_entity.namespaces();
+		const utility::unique_ptr_vector_const_range<namespace_>::type child_namespaces = parent_entity.namespaces();
 		for(auto i = child_namespaces.begin(); i != child_namespaces.end(); ++i)
 		{
 			list_child_entities<force_internal_linkage>(*i, groups);
@@ -155,25 +155,25 @@ namespace
 			list_child_entities(*opt_unnamed_namespace, groups);
 		}
 
-		const utility::unique_ptr_vector<class_>& child_classes = parent_entity.classes();
+		const utility::unique_ptr_vector_const_range<class_>::type child_classes = parent_entity.classes();
 		for(auto i = child_classes.begin(); i != child_classes.end(); ++i)
 		{
 			list_child_entities<force_internal_linkage>(*i, groups);
 		}
 
-		const utility::unique_ptr_vector<union_>& child_unions = parent_entity.unions();
+		const utility::unique_ptr_vector_const_range<union_>::type child_unions = parent_entity.unions();
 		for(auto i = child_unions.begin(); i != child_unions.end(); ++i)
 		{
 			list_child_entities<force_internal_linkage>(*i, groups);
 		}
 
-		const utility::unique_ptr_vector<anonymous_union>& child_anonymous_unions = parent_entity.anonymous_unions();
+		const utility::unique_ptr_vector_const_range<anonymous_union>::type child_anonymous_unions = parent_entity.anonymous_unions();
 		for(auto i = child_anonymous_unions.begin(); i != child_anonymous_unions.end(); ++i)
 		{
 			list_child_entities<true>(*i, groups);
 		}
 
-		const utility::unique_ptr_vector<enum_>& child_enums = parent_entity.enums();
+		const utility::unique_ptr_vector_const_range<enum_>::type child_enums = parent_entity.enums();
 		for(auto i = child_enums.begin(); i != child_enums.end(); ++i)
 		{
 			list_child_entities<force_internal_linkage>(*i, groups);
@@ -193,7 +193,7 @@ namespace
 	void
 	list_child_entities(const unnamed_namespace& parent_entity, entity_groups& groups)
 	{
-		const utility::unique_ptr_vector<namespace_>& child_namespaces = parent_entity.namespaces();
+		const utility::unique_ptr_vector_const_range<namespace_>::type child_namespaces = parent_entity.namespaces();
 		for(auto i = child_namespaces.begin(); i != child_namespaces.end(); ++i)
 		{
 			list_child_entities<true>(*i, groups);
@@ -205,25 +205,25 @@ namespace
 			list_child_entities(*opt_unnamed_namespace, groups);
 		}
 
-		const utility::unique_ptr_vector<class_>& child_classes = parent_entity.classes();
+		const utility::unique_ptr_vector_const_range<class_>::type child_classes = parent_entity.classes();
 		for(auto i = child_classes.begin(); i != child_classes.end(); ++i)
 		{
 			list_child_entities<true>(*i, groups);
 		}
 
-		const utility::unique_ptr_vector<union_>& child_unions = parent_entity.unions();
+		const utility::unique_ptr_vector_const_range<union_>::type child_unions = parent_entity.unions();
 		for(auto i = child_unions.begin(); i != child_unions.end(); ++i)
 		{
 			list_child_entities<true>(*i, groups);
 		}
 
-		const utility::unique_ptr_vector<anonymous_union>& child_anonymous_unions = parent_entity.anonymous_unions();
+		const utility::unique_ptr_vector_const_range<anonymous_union>::type child_anonymous_unions = parent_entity.anonymous_unions();
 		for(auto i = child_anonymous_unions.begin(); i != child_anonymous_unions.end(); ++i)
 		{
 			list_child_entities<true>(*i, groups);
 		}
 
-		const utility::unique_ptr_vector<enum_>& child_enums = parent_entity.enums();
+		const utility::unique_ptr_vector_const_range<enum_>::type child_enums = parent_entity.enums();
 		for(auto i = child_enums.begin(); i != child_enums.end(); ++i)
 		{
 			list_child_entities<true>(*i, groups);
@@ -253,25 +253,25 @@ namespace
 		>::type*
 	)
 	{
-		const utility::unique_ptr_vector<member_class>& child_classes = parent_entity.classes();
+		const utility::unique_ptr_vector_const_range<member_class>::type child_classes = parent_entity.classes();
 		for(auto i = child_classes.begin(); i != child_classes.end(); ++i)
 		{
 			list_child_entities<force_internal_linkage>(*i, groups);
 		}
 
-		const utility::unique_ptr_vector<member_union>& child_unions = parent_entity.unions();
+		const utility::unique_ptr_vector_const_range<member_union>::type child_unions = parent_entity.unions();
 		for(auto i = child_unions.begin(); i != child_unions.end(); ++i)
 		{
 			list_child_entities<force_internal_linkage>(*i, groups);
 		}
 
-		const utility::unique_ptr_vector<anonymous_member_union>& child_anonymous_unions = parent_entity.anonymous_unions();
+		const utility::unique_ptr_vector_const_range<anonymous_member_union>::type child_anonymous_unions = parent_entity.anonymous_unions();
 		for(auto i = child_anonymous_unions.begin(); i != child_anonymous_unions.end(); ++i)
 		{
 			list_child_entities<true>(*i, groups);
 		}
 
-		const utility::unique_ptr_vector<member_enum>& child_enums = parent_entity.enums();
+		const utility::unique_ptr_vector_const_range<member_enum>::type child_enums = parent_entity.enums();
 		for(auto i = child_enums.begin(); i != child_enums.end(); ++i)
 		{
 			list_child_entities<force_internal_linkage>(*i, groups);
@@ -330,7 +330,7 @@ namespace
 }
 
 entity_groups
-list_entities(const utility::unique_ptr_vector<semantic_graph>& semantic_graphs)
+list_entities(const utility::unique_ptr_vector_const_range<semantic_graph>::type& semantic_graphs)
 {
 	entity_groups groups;
 

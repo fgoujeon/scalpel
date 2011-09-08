@@ -35,8 +35,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "macros/detail/using_directive_namespace_declaration.hpp"
 #include "macros/detail/declarative_region_member_impl.hpp"
 #include "macros/detail/hpp/entity_aliases_of_type.hpp"
-#include <scalpel/utility/unique_ptr_vector.hpp>
-#include <scalpel/utility/vector_range.hpp>
+#include <scalpel/utility/unique_ptr_vector_range.hpp>
 #include <boost/preprocessor/control/iif.hpp>
 #include <boost/preprocessor/punctuation/comma_if.hpp>
 #include <boost/preprocessor/punctuation/comma.hpp>

@@ -71,7 +71,7 @@ namespace
 }
 
 std::unique_ptr<semantic_entities::linked_namespace>
-link(const utility::unique_ptr_vector<semantic_graph>& semantic_graphs)
+link(const utility::unique_ptr_vector_const_range<semantic_graph>::type& semantic_graphs)
 {
 	//List all the entities of every semantic graph, and group them.
 	//1 group corresponds to 1 entity in the post-linkage semantic graph
