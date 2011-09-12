@@ -1,0 +1,271 @@
+{
+  "id": "namespace-0",
+  "classes":
+  [
+    {
+      "id": "class-0",
+      "name": "A",
+      "destructor":
+      {
+        "access": "public"
+      },
+      "bit fields":
+      [
+        {
+          "id": "bit-field-0",
+          "name": "c",
+          "size": 0,
+          "access": "public",
+          "type":
+          {
+            "fundamental type": "char"
+          }
+        }
+      ]
+    },
+    {
+      "id": "class-1",
+      "name": "B",
+      "base classes":
+      [
+        {
+          "class id": "class-0",
+          "access": "public"
+        }
+      ],
+      "destructor":
+      {
+        "access": "public"
+      }
+    },
+    {
+      "id": "class-2",
+      "name": "C",
+      "destructor":
+      {
+        "access": "public"
+      },
+      "variables":
+      [
+        {
+          "id": "member-variable-0",
+          "name": "d",
+          "access": "public",
+          "type":
+          {
+            "fundamental type": "double"
+          }
+        }
+      ]
+    },
+    {
+      "id": "class-3",
+      "name": "test",
+      "classes":
+      [
+        {
+          "id": "member-class-0",
+          "name": "inner",
+          "access": "public",
+          "base classes":
+          [
+            {
+              "class id": "class-1",
+              "access": "public"
+            },
+            {
+              "class id": "class-2",
+              "access": "public"
+            }
+          ],
+          "destructor":
+          {
+            "access": "public"
+          },
+          "bit fields":
+          [
+            {
+              "id": "bit-field-1",
+              "name": "i",
+              "size": 0,
+              "access": "public",
+              "type":
+              {
+                "fundamental type": "int"
+              }
+            }
+          ]
+        }
+      ],
+      "destructor":
+      {
+        "access": "public"
+      }
+    },
+    {
+      "id": "class-4",
+      "name": "test2",
+      "base classes":
+      [
+        {
+          "class id": "class-1",
+          "access": "public"
+        },
+        {
+          "class id": "class-2",
+          "access": "public"
+        }
+      ],
+      "destructor":
+      {
+        "access": "public"
+      },
+      "bit fields":
+      [
+        {
+          "id": "bit-field-2",
+          "name": "i",
+          "size": 0,
+          "access": "public",
+          "type":
+          {
+            "fundamental type": "int"
+          }
+        }
+      ]
+    }
+  ],
+  "variables":
+  [
+    {
+      "id": "variable-0",
+      "name": "v0",
+      "type":
+      {
+        "member class": "member-class-0"
+      }
+    },
+    {
+      "id": "variable-1",
+      "name": "v1",
+      "type":
+      {
+        "fundamental type": "int"
+      },
+      "default value":
+      {
+        "bit-field access":
+        {
+          "object":
+          {
+            "variable": "variable-0"
+          },
+          "member": "bit-field-1"
+        }
+      }
+    },
+    {
+      "id": "variable-2",
+      "name": "v2",
+      "type":
+      {
+        "fundamental type": "char"
+      },
+      "default value":
+      {
+        "bit-field access":
+        {
+          "object":
+          {
+            "variable": "variable-0"
+          },
+          "member": "bit-field-0"
+        }
+      }
+    },
+    {
+      "id": "variable-3",
+      "name": "v3",
+      "type":
+      {
+        "fundamental type": "double"
+      },
+      "default value":
+      {
+        "member variable access":
+        {
+          "object":
+          {
+            "variable": "variable-0"
+          },
+          "member": "member-variable-0"
+        }
+      }
+    },
+    {
+      "id": "variable-4",
+      "name": "v4",
+      "type":
+      {
+        "class": "class-4"
+      }
+    },
+    {
+      "id": "variable-5",
+      "name": "v5",
+      "type":
+      {
+        "fundamental type": "int"
+      },
+      "default value":
+      {
+        "bit-field access":
+        {
+          "object":
+          {
+            "variable": "variable-4"
+          },
+          "member": "bit-field-2"
+        }
+      }
+    },
+    {
+      "id": "variable-6",
+      "name": "v6",
+      "type":
+      {
+        "fundamental type": "char"
+      },
+      "default value":
+      {
+        "bit-field access":
+        {
+          "object":
+          {
+            "variable": "variable-4"
+          },
+          "member": "bit-field-0"
+        }
+      }
+    },
+    {
+      "id": "variable-7",
+      "name": "v7",
+      "type":
+      {
+        "fundamental type": "double"
+      },
+      "default value":
+      {
+        "member variable access":
+        {
+          "object":
+          {
+            "variable": "variable-4"
+          },
+          "member": "member-variable-0"
+        }
+      }
+    }
+  ]
+}
