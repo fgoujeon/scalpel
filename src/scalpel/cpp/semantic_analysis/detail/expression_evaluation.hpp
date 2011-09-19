@@ -29,6 +29,8 @@ namespace scalpel { namespace cpp { namespace semantic_analysis { namespace deta
 unsigned int
 evaluate_expression_to_unsigned_int(const semantic_entities::expression_t& expr);
 
+
+
 semantic_entities::expression_t
 evaluate_addition_expression
 (
@@ -59,6 +61,13 @@ evaluate_division_expression
 
 semantic_entities::expression_t
 evaluate_modulo_expression
+(
+	const semantic_entities::expression_t& left_operand,
+	const semantic_entities::expression_t& right_operand
+);
+
+semantic_entities::expression_t
+evaluate_left_shift_expression
 (
 	const semantic_entities::expression_t& left_operand,
 	const semantic_entities::expression_t& right_operand

@@ -21,10 +21,11 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_EXPRESSION_CONSTRUCTION_HPP
 #define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_EXPRESSION_CONSTRUCTION_HPP
 
+#include "expression_evaluation.hpp"
+#include "type_construction.hpp"
+#include "semantic_entity_analysis/get_type_size.hpp"
 #include <scalpel/cpp/semantic_graph.hpp>
 #include <scalpel/cpp/syntax_tree.hpp>
-#include "semantic_entity_analysis/get_type_size.hpp"
-#include "type_construction.hpp"
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail
 {
@@ -303,40 +304,154 @@ create_expression_from_literal(const syntax_nodes::literal& literal_node);
 //create and simplify expression objects
 //
 
-semantic_entities::expression_t
-create_addition_expression
-(
-	const semantic_entities::expression_t& left_operand,
-	const semantic_entities::expression_t& right_operand
-);
+namespace expression_creation_or_evaluation_policies
+{
+	struct addition
+	{
+		static
+		semantic_entities::expression_t
+		evaluate
+		(
+			const semantic_entities::expression_t& left_operand,
+			const semantic_entities::expression_t& right_operand
+		)
+		{
+			return evaluate_addition_expression(left_operand, right_operand);
+		}
 
-semantic_entities::expression_t
-create_subtraction_expression
-(
-	const semantic_entities::expression_t& left_operand,
-	const semantic_entities::expression_t& right_operand
-);
+		static
+		semantic_entities::expression_t
+		create
+		(
+			semantic_entities::expression_t left_operand,
+			semantic_entities::expression_t right_operand
+		);
+	};
 
-semantic_entities::expression_t
-create_multiplication_expression
-(
-	const semantic_entities::expression_t& left_operand,
-	const semantic_entities::expression_t& right_operand
-);
+	struct subtraction
+	{
+		static
+		semantic_entities::expression_t
+		evaluate
+		(
+			const semantic_entities::expression_t& left_operand,
+			const semantic_entities::expression_t& right_operand
+		)
+		{
+			return evaluate_subtraction_expression(left_operand, right_operand);
+		}
 
-semantic_entities::expression_t
-create_division_expression
-(
-	const semantic_entities::expression_t& left_operand,
-	const semantic_entities::expression_t& right_operand
-);
+		static
+		semantic_entities::expression_t
+		create
+		(
+			semantic_entities::expression_t left_operand,
+			semantic_entities::expression_t right_operand
+		);
+	};
 
+	struct multiplication
+	{
+		static
+		semantic_entities::expression_t
+		evaluate
+		(
+			const semantic_entities::expression_t& left_operand,
+			const semantic_entities::expression_t& right_operand
+		)
+		{
+			return evaluate_multiplication_expression(left_operand, right_operand);
+		}
+
+		static
+		semantic_entities::expression_t
+		create
+		(
+			semantic_entities::expression_t left_operand,
+			semantic_entities::expression_t right_operand
+		);
+	};
+
+	struct division
+	{
+		static
+		semantic_entities::expression_t
+		evaluate
+		(
+			const semantic_entities::expression_t& left_operand,
+			const semantic_entities::expression_t& right_operand
+		)
+		{
+			return evaluate_division_expression(left_operand, right_operand);
+		}
+
+		static
+		semantic_entities::expression_t
+		create
+		(
+			semantic_entities::expression_t left_operand,
+			semantic_entities::expression_t right_operand
+		);
+	};
+
+	struct modulo
+	{
+		static
+		semantic_entities::expression_t
+		evaluate
+		(
+			const semantic_entities::expression_t& left_operand,
+			const semantic_entities::expression_t& right_operand
+		)
+		{
+			return evaluate_modulo_expression(left_operand, right_operand);
+		}
+
+		static
+		semantic_entities::expression_t
+		create
+		(
+			semantic_entities::expression_t left_operand,
+			semantic_entities::expression_t right_operand
+		);
+	};
+
+	struct left_shift
+	{
+		static
+		semantic_entities::expression_t
+		evaluate
+		(
+			const semantic_entities::expression_t& left_operand,
+			const semantic_entities::expression_t& right_operand
+		)
+		{
+			return evaluate_left_shift_expression(left_operand, right_operand);
+		}
+
+		static
+		semantic_entities::expression_t
+		create
+		(
+			semantic_entities::expression_t left_operand,
+			semantic_entities::expression_t right_operand
+		);
+	};
+}
+
+template<class Policy>
 semantic_entities::expression_t
-create_modulo_expression
+create_or_evaluate_binary_expression
 (
 	const semantic_entities::expression_t& left_operand,
 	const semantic_entities::expression_t& right_operand
-);
+)
+{
+	if(is_constant(left_operand) && is_constant(right_operand))
+		return Policy::evaluate(left_operand, right_operand);
+	else
+		return Policy::create(left_operand, right_operand);
+}
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
 

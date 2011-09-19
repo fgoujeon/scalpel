@@ -446,7 +446,7 @@ create_expression_from_shift_expression
 		const semantic_entities::expression_t right_operand = create_expression_from_shift_expression(right_operand_node, declarative_region);
 
 		if(get<predefined_text_node<str::double_left_angle_bracket>>(&operator_node))
-			return semantic_entities::left_shift_expression
+			return create_or_evaluate_binary_expression<expression_creation_or_evaluation_policies::left_shift>
 			(
 				left_operand,
 				right_operand
@@ -489,13 +489,13 @@ create_expression_from_additive_expression
 		const semantic_entities::expression_t right_operand = create_expression_from_additive_expression(right_operand_node, declarative_region);
 
 		if(get<predefined_text_node<str::plus>>(&operator_node))
-			return create_addition_expression
+			return create_or_evaluate_binary_expression<expression_creation_or_evaluation_policies::addition>
 			(
 				left_operand,
 				right_operand
 			);
 		else if(get<predefined_text_node<str::minus>>(&operator_node))
-			return create_subtraction_expression
+			return create_or_evaluate_binary_expression<expression_creation_or_evaluation_policies::subtraction>
 			(
 				left_operand,
 				right_operand
@@ -532,19 +532,19 @@ create_expression_from_multiplicative_expression
 		const semantic_entities::expression_t right_operand = create_expression_from_multiplicative_expression(right_operand_node, declarative_region);
 
 		if(get<predefined_text_node<str::asterisk>>(&operator_node))
-			return create_multiplication_expression
+			return create_or_evaluate_binary_expression<expression_creation_or_evaluation_policies::multiplication>
 			(
 				left_operand,
 				right_operand
 			);
 		else if(get<predefined_text_node<str::slash>>(&operator_node))
-			return create_division_expression
+			return create_or_evaluate_binary_expression<expression_creation_or_evaluation_policies::division>
 			(
 				left_operand,
 				right_operand
 			);
 		else if(get<predefined_text_node<str::percent>>(&operator_node))
-			return create_modulo_expression
+			return create_or_evaluate_binary_expression<expression_creation_or_evaluation_policies::modulo>
 			(
 				left_operand,
 				right_operand

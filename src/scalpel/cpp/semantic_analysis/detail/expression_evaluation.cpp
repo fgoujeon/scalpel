@@ -214,6 +214,30 @@ namespace
 				assert(false);
 			}
 		};
+
+		struct left_shift
+		{
+			template<typename T1, typename T2>
+			static
+			auto apply(T1 a, T2 b) -> decltype(a << b)
+			{
+				return a << b;
+			}
+
+			//the left shift operator can't be applied to floating types
+			template<typename T1, typename T2>
+			static
+			int
+			apply
+			(
+				T1,
+				T2,
+				typename boost::enable_if_c<boost::is_floating_point<T1>::value || boost::is_floating_point<T2>::value>::type* = 0
+			)
+			{
+				assert(false);
+			}
+		};
 	}
 }
 
@@ -269,6 +293,17 @@ evaluate_modulo_expression
 )
 {
 	evaluate_binary_expression_visitor<operation_policies::modulo> visitor(left_operand);
+	return utility::apply_visitor(visitor, right_operand);
+}
+
+semantic_entities::expression_t
+evaluate_left_shift_expression
+(
+	const semantic_entities::expression_t& left_operand,
+	const semantic_entities::expression_t& right_operand
+)
+{
+	evaluate_binary_expression_visitor<operation_policies::left_shift> visitor(left_operand);
 	return utility::apply_visitor(visitor, right_operand);
 }
 
