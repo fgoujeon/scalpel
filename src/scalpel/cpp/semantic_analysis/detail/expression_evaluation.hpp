@@ -36,6 +36,34 @@ evaluate_addition_expression
 	const semantic_entities::expression_t& right_operand
 );
 
+semantic_entities::expression_t
+evaluate_subtraction_expression
+(
+	const semantic_entities::expression_t& left_operand,
+	const semantic_entities::expression_t& right_operand
+);
+
+semantic_entities::expression_t
+evaluate_multiplication_expression
+(
+	const semantic_entities::expression_t& left_operand,
+	const semantic_entities::expression_t& right_operand
+);
+
+semantic_entities::expression_t
+evaluate_division_expression
+(
+	const semantic_entities::expression_t& left_operand,
+	const semantic_entities::expression_t& right_operand
+);
+
+semantic_entities::expression_t
+evaluate_modulo_expression
+(
+	const semantic_entities::expression_t& left_operand,
+	const semantic_entities::expression_t& right_operand
+);
+
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
 
 #endif

@@ -83,9 +83,11 @@ create_addition_expression
 	}
 	else if(left_operand_info.has_pointer_to_defined_type_type() && right_operand_info.has_integral_or_enumeration_type())
 	{
+		//TODO
 	}
 	else if(left_operand_info.has_integral_or_enumeration_type() && right_operand_info.has_pointer_to_defined_type_type())
 	{
+		//TODO
 	}
 	else
 	{
@@ -109,6 +111,13 @@ create_subtraction_expression
 	const semantic_entities::expression_t& const_right_operand
 )
 {
+	//For subtraction, one of the following shall hold:
+	//- both operands have arithmetic or enumeration type; or
+	//- both operands are pointers to cv-qualified or cv-unqualified versions of the same completely defined
+	//object type; or
+	//- the left operand is a pointer to a completely defined object type and the right operand has integral or
+	//enumeration type.
+
 	semantic_entities::expression_t left_operand = const_left_operand;
 	semantic_entities::expression_t right_operand = const_right_operand;
 
@@ -128,21 +137,144 @@ create_subtraction_expression
 			right_operand_info
 		);
 	}
-	else if(left_operand_info.has_pointer_to_defined_type_type() && right_operand_info.has_integral_or_enumeration_type())
-	{
-	}
-	else if(left_operand_info.has_integral_or_enumeration_type() && right_operand_info.has_pointer_to_defined_type_type())
-	{
-	}
 	else
 	{
-		throw std::runtime_error("create_addition_expression error");
+		throw std::runtime_error("create_subtraction_expression error");
 	}
 
 	if(evaluate)
-		return evaluate_addition_expression(left_operand, right_operand);
+		return evaluate_subtraction_expression(left_operand, right_operand);
 	else
-		return semantic_entities::addition_expression
+		return semantic_entities::subtraction_expression
+		(
+			left_operand,
+			right_operand
+		);
+}
+
+semantic_entities::expression_t
+create_multiplication_expression
+(
+	const semantic_entities::expression_t& const_left_operand,
+	const semantic_entities::expression_t& const_right_operand
+)
+{
+	//the operands of * shall have arithmetic or enumeration type
+
+	semantic_entities::expression_t left_operand = const_left_operand;
+	semantic_entities::expression_t right_operand = const_right_operand;
+
+	const expression_information left_operand_info(left_operand);
+	const expression_information right_operand_info(right_operand);
+
+	const bool evaluate = is_constant(const_left_operand) && is_constant(const_right_operand);
+
+	if(left_operand_info.has_arithmetic_or_enumeration_type() && right_operand_info.has_arithmetic_or_enumeration_type())
+	{
+		create_usual_arithmetic_conversions
+		(
+			left_operand,
+			right_operand,
+			evaluate,
+			left_operand_info,
+			right_operand_info
+		);
+	}
+	else
+	{
+		throw std::runtime_error("create_multiplication_expression error");
+	}
+
+	if(evaluate)
+		return evaluate_multiplication_expression(left_operand, right_operand);
+	else
+		return semantic_entities::multiplication_expression
+		(
+			left_operand,
+			right_operand
+		);
+}
+
+semantic_entities::expression_t
+create_division_expression
+(
+	const semantic_entities::expression_t& const_left_operand,
+	const semantic_entities::expression_t& const_right_operand
+)
+{
+	//the operands of / shall have arithmetic or enumeration type
+
+	semantic_entities::expression_t left_operand = const_left_operand;
+	semantic_entities::expression_t right_operand = const_right_operand;
+
+	const expression_information left_operand_info(left_operand);
+	const expression_information right_operand_info(right_operand);
+
+	const bool evaluate = is_constant(const_left_operand) && is_constant(const_right_operand);
+
+	if(left_operand_info.has_arithmetic_or_enumeration_type() && right_operand_info.has_arithmetic_or_enumeration_type())
+	{
+		create_usual_arithmetic_conversions
+		(
+			left_operand,
+			right_operand,
+			evaluate,
+			left_operand_info,
+			right_operand_info
+		);
+	}
+	else
+	{
+		throw std::runtime_error("create_division_expression error");
+	}
+
+	if(evaluate)
+		return evaluate_division_expression(left_operand, right_operand);
+	else
+		return semantic_entities::division_expression
+		(
+			left_operand,
+			right_operand
+		);
+}
+
+semantic_entities::expression_t
+create_modulo_expression
+(
+	const semantic_entities::expression_t& const_left_operand,
+	const semantic_entities::expression_t& const_right_operand
+)
+{
+	//the operands of % shall have integral or enumeration type
+
+	semantic_entities::expression_t left_operand = const_left_operand;
+	semantic_entities::expression_t right_operand = const_right_operand;
+
+	const expression_information left_operand_info(left_operand);
+	const expression_information right_operand_info(right_operand);
+
+	const bool evaluate = is_constant(const_left_operand) && is_constant(const_right_operand);
+
+	if(left_operand_info.has_integral_or_enumeration_type() && right_operand_info.has_integral_or_enumeration_type())
+	{
+		create_usual_arithmetic_conversions
+		(
+			left_operand,
+			right_operand,
+			evaluate,
+			left_operand_info,
+			right_operand_info
+		);
+	}
+	else
+	{
+		throw std::runtime_error("create_modulo_expression error");
+	}
+
+	if(evaluate)
+		return evaluate_modulo_expression(left_operand, right_operand);
+	else
+		return semantic_entities::modulo_expression
 		(
 			left_operand,
 			right_operand

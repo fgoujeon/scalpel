@@ -317,6 +317,27 @@ create_subtraction_expression
 	const semantic_entities::expression_t& right_operand
 );
 
+semantic_entities::expression_t
+create_multiplication_expression
+(
+	const semantic_entities::expression_t& left_operand,
+	const semantic_entities::expression_t& right_operand
+);
+
+semantic_entities::expression_t
+create_division_expression
+(
+	const semantic_entities::expression_t& left_operand,
+	const semantic_entities::expression_t& right_operand
+);
+
+semantic_entities::expression_t
+create_modulo_expression
+(
+	const semantic_entities::expression_t& left_operand,
+	const semantic_entities::expression_t& right_operand
+);
+
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
 
 #include "expression_construction.ipp"

@@ -495,7 +495,7 @@ create_expression_from_additive_expression
 				right_operand
 			);
 		else if(get<predefined_text_node<str::minus>>(&operator_node))
-			return semantic_entities::subtraction_expression
+			return create_subtraction_expression
 			(
 				left_operand,
 				right_operand
@@ -532,19 +532,19 @@ create_expression_from_multiplicative_expression
 		const semantic_entities::expression_t right_operand = create_expression_from_multiplicative_expression(right_operand_node, declarative_region);
 
 		if(get<predefined_text_node<str::asterisk>>(&operator_node))
-			return semantic_entities::multiplication_expression
+			return create_multiplication_expression
 			(
 				left_operand,
 				right_operand
 			);
 		else if(get<predefined_text_node<str::slash>>(&operator_node))
-			return semantic_entities::division_expression
+			return create_division_expression
 			(
 				left_operand,
 				right_operand
 			);
 		else if(get<predefined_text_node<str::percent>>(&operator_node))
-			return semantic_entities::modulo_expression
+			return create_modulo_expression
 			(
 				left_operand,
 				right_operand

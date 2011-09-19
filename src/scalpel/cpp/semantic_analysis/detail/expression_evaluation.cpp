@@ -21,6 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "expression_evaluation.hpp"
 #include <scalpel/utility/variant.hpp>
 #include <boost/type_traits/is_fundamental.hpp>
+#include <boost/type_traits/is_floating_point.hpp>
 #include <boost/utility/enable_if.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail
@@ -57,11 +58,11 @@ evaluate_expression_to_unsigned_int(const semantic_entities::expression_t& expr)
 
 namespace
 {
-	template<class T>
-	class evaluate_addition_expression_visitor_2: public utility::static_visitor<semantic_entities::expression_t>
+	template<class OperationPolicy, class T>
+	class evaluate_binary_expression_visitor_2: public utility::static_visitor<semantic_entities::expression_t>
 	{
 		public:
-			evaluate_addition_expression_visitor_2(const T& right_operand):
+			evaluate_binary_expression_visitor_2(const T& right_operand):
 				right_operand_(right_operand)
 			{
 			}
@@ -75,7 +76,7 @@ namespace
 				typename boost::enable_if<boost::is_fundamental<U>>::type* = 0
 			) const
 			{
-				return left_operand + right_operand_;
+				return OperationPolicy::apply(left_operand, right_operand_);
 			}
 
 			//variable
@@ -102,10 +103,11 @@ namespace
 			const T& right_operand_;
 	};
 
-	class evaluate_addition_expression_visitor: public utility::static_visitor<semantic_entities::expression_t>
+	template<class OperationPolicy>
+	class evaluate_binary_expression_visitor: public utility::static_visitor<semantic_entities::expression_t>
 	{
 		public:
-			evaluate_addition_expression_visitor(const semantic_entities::expression_t& left_operand):
+			evaluate_binary_expression_visitor(const semantic_entities::expression_t& left_operand):
 				left_operand_(left_operand)
 			{
 			}
@@ -119,7 +121,7 @@ namespace
 				typename boost::enable_if<boost::is_fundamental<T>>::type* = 0
 			) const
 			{
-				evaluate_addition_expression_visitor_2<T> visitor(right_operand);
+				evaluate_binary_expression_visitor_2<OperationPolicy, T> visitor(right_operand);
 				return utility::apply_visitor(visitor, left_operand_);
 			}
 
@@ -146,6 +148,73 @@ namespace
 		private:
 			const semantic_entities::expression_t& left_operand_;
 	};
+
+	namespace operation_policies
+	{
+		struct addition
+		{
+			template<typename T1, typename T2>
+			static
+			auto apply(T1 a, T2 b) -> decltype(a + b)
+			{
+				return a + b;
+			}
+		};
+
+		struct subtraction
+		{
+			template<typename T1, typename T2>
+			static
+			auto apply(T1 a, T2 b) -> decltype(a - b)
+			{
+				return a - b;
+			}
+		};
+
+		struct multiplication
+		{
+			template<typename T1, typename T2>
+			static
+			auto apply(T1 a, T2 b) -> decltype(a * b)
+			{
+				return a * b;
+			}
+		};
+
+		struct division
+		{
+			template<typename T1, typename T2>
+			static
+			auto apply(T1 a, T2 b) -> decltype(a / b)
+			{
+				return a / b;
+			}
+		};
+
+		struct modulo
+		{
+			template<typename T1, typename T2>
+			static
+			auto apply(T1 a, T2 b) -> decltype(a % b)
+			{
+				return a % b;
+			}
+
+			//the modulo operator can't be applied to floating types
+			template<typename T1, typename T2>
+			static
+			int
+			apply
+			(
+				T1,
+				T2,
+				typename boost::enable_if_c<boost::is_floating_point<T1>::value || boost::is_floating_point<T2>::value>::type* = 0
+			)
+			{
+				assert(false);
+			}
+		};
+	}
 }
 
 semantic_entities::expression_t
@@ -155,7 +224,51 @@ evaluate_addition_expression
 	const semantic_entities::expression_t& right_operand
 )
 {
-	evaluate_addition_expression_visitor visitor(left_operand);
+	evaluate_binary_expression_visitor<operation_policies::addition> visitor(left_operand);
+	return utility::apply_visitor(visitor, right_operand);
+}
+
+semantic_entities::expression_t
+evaluate_subtraction_expression
+(
+	const semantic_entities::expression_t& left_operand,
+	const semantic_entities::expression_t& right_operand
+)
+{
+	evaluate_binary_expression_visitor<operation_policies::subtraction> visitor(left_operand);
+	return utility::apply_visitor(visitor, right_operand);
+}
+
+semantic_entities::expression_t
+evaluate_multiplication_expression
+(
+	const semantic_entities::expression_t& left_operand,
+	const semantic_entities::expression_t& right_operand
+)
+{
+	evaluate_binary_expression_visitor<operation_policies::multiplication> visitor(left_operand);
+	return utility::apply_visitor(visitor, right_operand);
+}
+
+semantic_entities::expression_t
+evaluate_division_expression
+(
+	const semantic_entities::expression_t& left_operand,
+	const semantic_entities::expression_t& right_operand
+)
+{
+	evaluate_binary_expression_visitor<operation_policies::division> visitor(left_operand);
+	return utility::apply_visitor(visitor, right_operand);
+}
+
+semantic_entities::expression_t
+evaluate_modulo_expression
+(
+	const semantic_entities::expression_t& left_operand,
+	const semantic_entities::expression_t& right_operand
+)
+{
+	evaluate_binary_expression_visitor<operation_policies::modulo> visitor(left_operand);
 	return utility::apply_visitor(visitor, right_operand);
 }
 
