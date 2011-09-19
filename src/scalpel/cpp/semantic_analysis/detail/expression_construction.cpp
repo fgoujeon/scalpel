@@ -269,5 +269,119 @@ expression_creation_or_evaluation_policies::left_shift::create
 	);
 }
 
+semantic_entities::expression_t
+expression_creation_or_evaluation_policies::right_shift::create
+(
+	semantic_entities::expression_t left_operand,
+	semantic_entities::expression_t right_operand
+)
+{
+	const expression_information left_operand_info(left_operand);
+	const expression_information right_operand_info(right_operand);
+
+	//The operands shall be of integral or enumeration type and integral promotions are performed.
+	if(left_operand_info.has_integral_or_enumeration_type() && right_operand_info.has_integral_or_enumeration_type())
+	{
+		create_usual_arithmetic_conversions
+		(
+			left_operand,
+			right_operand,
+			true,
+			left_operand_info,
+			right_operand_info
+		);
+	}
+	else
+	{
+		throw std::runtime_error("create_right_shift_expression error");
+	}
+
+	return semantic_entities::right_shift_expression
+	(
+		left_operand,
+		right_operand
+	);
+}
+
+semantic_entities::expression_t
+expression_creation_or_evaluation_policies::less_than_or_equal_to::create
+(
+	semantic_entities::expression_t left_operand,
+	semantic_entities::expression_t right_operand
+)
+{
+	//const expression_information left_operand_info(left_operand);
+	//const expression_information right_operand_info(right_operand);
+
+	//The operands shall have arithmetic, enumeration or pointer type
+	//TODO
+
+	return semantic_entities::less_than_or_equal_to_expression
+	(
+		left_operand,
+		right_operand
+	);
+}
+
+semantic_entities::expression_t
+expression_creation_or_evaluation_policies::less_than::create
+(
+	semantic_entities::expression_t left_operand,
+	semantic_entities::expression_t right_operand
+)
+{
+	//const expression_information left_operand_info(left_operand);
+	//const expression_information right_operand_info(right_operand);
+
+	//The operands shall have arithmetic, enumeration or pointer type
+	//TODO
+
+	return semantic_entities::less_than_expression
+	(
+		left_operand,
+		right_operand
+	);
+}
+
+semantic_entities::expression_t
+expression_creation_or_evaluation_policies::greater_than::create
+(
+	semantic_entities::expression_t left_operand,
+	semantic_entities::expression_t right_operand
+)
+{
+	//const expression_information left_operand_info(left_operand);
+	//const expression_information right_operand_info(right_operand);
+
+	//The operands shall have arithmetic, enumeration or pointer type
+	//TODO
+
+	return semantic_entities::greater_than_expression
+	(
+		left_operand,
+		right_operand
+	);
+}
+
+semantic_entities::expression_t
+expression_creation_or_evaluation_policies::greater_than_or_equal_to::create
+(
+	semantic_entities::expression_t left_operand,
+	semantic_entities::expression_t right_operand
+)
+{
+	//const expression_information left_operand_info(left_operand);
+	//const expression_information right_operand_info(right_operand);
+
+	//The operands shall have arithmetic, enumeration or pointer type
+	//TODO
+
+	return semantic_entities::greater_than_or_equal_to_expression
+	(
+		left_operand,
+		right_operand
+	);
+}
+
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
 

@@ -391,25 +391,25 @@ create_expression_from_relational_expression
 		const semantic_entities::expression_t right_operand = create_expression_from_relational_expression(right_operand_node, declarative_region);
 
 		if(get<predefined_text_node<str::left_angle_bracket>>(&operator_node))
-			return semantic_entities::less_than_expression
+			return create_or_evaluate_binary_expression<expression_creation_or_evaluation_policies::less_than>
 			(
 				left_operand,
 				right_operand
 			);
 		else if(get<predefined_text_node<str::left_angle_bracket_equal>>(&operator_node))
-			return semantic_entities::less_than_or_equal_to_expression
+			return create_or_evaluate_binary_expression<expression_creation_or_evaluation_policies::less_than_or_equal_to>
 			(
 				left_operand,
 				right_operand
 			);
 		else if(get<predefined_text_node<str::right_angle_bracket>>(&operator_node))
-			return semantic_entities::greater_than_expression
+			return create_or_evaluate_binary_expression<expression_creation_or_evaluation_policies::greater_than>
 			(
 				left_operand,
 				right_operand
 			);
 		else if(get<predefined_text_node<str::right_angle_bracket_equal>>(&operator_node))
-			return semantic_entities::greater_than_or_equal_to_expression
+			return create_or_evaluate_binary_expression<expression_creation_or_evaluation_policies::greater_than_or_equal_to>
 			(
 				left_operand,
 				right_operand
@@ -452,7 +452,7 @@ create_expression_from_shift_expression
 				right_operand
 			);
 		else if(get<predefined_text_node<str::double_right_angle_bracket>>(&operator_node))
-			return semantic_entities::right_shift_expression
+			return create_or_evaluate_binary_expression<expression_creation_or_evaluation_policies::right_shift>
 			(
 				left_operand,
 				right_operand

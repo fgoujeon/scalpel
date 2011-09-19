@@ -437,6 +437,117 @@ namespace expression_creation_or_evaluation_policies
 			semantic_entities::expression_t right_operand
 		);
 	};
+
+	struct right_shift
+	{
+		static
+		semantic_entities::expression_t
+		evaluate
+		(
+			const semantic_entities::expression_t& left_operand,
+			const semantic_entities::expression_t& right_operand
+		)
+		{
+			return evaluate_right_shift_expression(left_operand, right_operand);
+		}
+
+		static
+		semantic_entities::expression_t
+		create
+		(
+			semantic_entities::expression_t left_operand,
+			semantic_entities::expression_t right_operand
+		);
+	};
+
+	struct less_than
+	{
+		static
+		semantic_entities::expression_t
+		evaluate
+		(
+			const semantic_entities::expression_t& left_operand,
+			const semantic_entities::expression_t& right_operand
+		)
+		{
+			return evaluate_less_than_expression(left_operand, right_operand);
+		}
+
+		static
+		semantic_entities::expression_t
+		create
+		(
+			semantic_entities::expression_t left_operand,
+			semantic_entities::expression_t right_operand
+		);
+	};
+
+	struct less_than_or_equal_to
+	{
+		static
+		semantic_entities::expression_t
+		evaluate
+		(
+			const semantic_entities::expression_t& left_operand,
+			const semantic_entities::expression_t& right_operand
+		)
+		{
+			return evaluate_less_than_or_equal_to_expression(left_operand, right_operand);
+		}
+
+		static
+		semantic_entities::expression_t
+		create
+		(
+			semantic_entities::expression_t left_operand,
+			semantic_entities::expression_t right_operand
+		);
+	};
+
+	struct greater_than
+	{
+		static
+		semantic_entities::expression_t
+		evaluate
+		(
+			const semantic_entities::expression_t& left_operand,
+			const semantic_entities::expression_t& right_operand
+		)
+		{
+			return evaluate_greater_than_expression(left_operand, right_operand);
+		}
+
+		static
+		semantic_entities::expression_t
+		create
+		(
+			semantic_entities::expression_t left_operand,
+			semantic_entities::expression_t right_operand
+		);
+	};
+
+	struct greater_than_or_equal_to
+	{
+		static
+		semantic_entities::expression_t
+		evaluate
+		(
+			const semantic_entities::expression_t& left_operand,
+			const semantic_entities::expression_t& right_operand
+		)
+		{
+			return evaluate_greater_than_or_equal_to_expression(left_operand, right_operand);
+		}
+
+		static
+		semantic_entities::expression_t
+		create
+		(
+			semantic_entities::expression_t left_operand,
+			semantic_entities::expression_t right_operand
+		);
+	};
+
 }
 
 template<class Policy>

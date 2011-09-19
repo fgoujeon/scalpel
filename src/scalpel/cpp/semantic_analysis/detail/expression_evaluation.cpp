@@ -20,6 +20,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "expression_evaluation.hpp"
 #include <scalpel/utility/variant.hpp>
+#include <boost/type_traits/is_signed.hpp>
+#include <boost/type_traits/is_unsigned.hpp>
 #include <boost/type_traits/is_fundamental.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/utility/enable_if.hpp>
@@ -238,6 +240,247 @@ namespace
 				assert(false);
 			}
 		};
+
+		struct right_shift
+		{
+			template<typename T1, typename T2>
+			static
+			auto apply(T1 a, T2 b) -> decltype(a >> b)
+			{
+				return a >> b;
+			}
+
+			//the left shift operator can't be applied to floating types
+			template<typename T1, typename T2>
+			static
+			int
+			apply
+			(
+				T1,
+				T2,
+				typename boost::enable_if_c<boost::is_floating_point<T1>::value || boost::is_floating_point<T2>::value>::type* = 0
+			)
+			{
+				assert(false);
+			}
+		};
+
+		struct less_than
+		{
+			template<typename T1, typename T2>
+			static
+			bool
+			apply
+			(
+				T1 a,
+				T2 b,
+				typename boost::disable_if_c
+				<
+					(boost::is_signed<T1>::value && boost::is_unsigned<T2>::value) ||
+					(boost::is_unsigned<T1>::value && boost::is_signed<T2>::value)
+				>::type* = 0,
+				typename boost::disable_if_c<boost::is_same<T1, bool>::value || boost::is_same<T2, bool>::value>::type* = 0
+			)
+			{
+				return a < b;
+			}
+
+			//avoid "comparison between signed and unsigned integer" warning
+			template<typename T1, typename T2>
+			static
+			bool
+			apply
+			(
+				T1,
+				T2,
+				typename boost::enable_if_c
+				<
+					(boost::is_signed<T1>::value && boost::is_unsigned<T2>::value) ||
+					(boost::is_unsigned<T1>::value && boost::is_signed<T2>::value)
+				>::type* = 0,
+				typename boost::disable_if_c<boost::is_same<T1, bool>::value || boost::is_same<T2, bool>::value>::type* = 0
+			)
+			{
+				assert(false);
+			}
+
+			//the relational operators can't be applied to bool
+			template<typename T1, typename T2>
+			static
+			bool
+			apply
+			(
+				T1,
+				T2,
+				typename boost::enable_if_c<boost::is_same<T1, bool>::value || boost::is_same<T2, bool>::value>::type* = 0
+			)
+			{
+				assert(false);
+			}
+		};
+
+		struct less_than_or_equal_to
+		{
+			template<typename T1, typename T2>
+			static
+			bool
+			apply
+			(
+				T1 a,
+				T2 b,
+				typename boost::disable_if_c
+				<
+					(boost::is_signed<T1>::value && boost::is_unsigned<T2>::value) ||
+					(boost::is_unsigned<T1>::value && boost::is_signed<T2>::value)
+				>::type* = 0,
+				typename boost::disable_if_c<boost::is_same<T1, bool>::value || boost::is_same<T2, bool>::value>::type* = 0
+			)
+			{
+				return a <= b;
+			}
+
+			//avoid "comparison between signed and unsigned integer" warning
+			template<typename T1, typename T2>
+			static
+			bool
+			apply
+			(
+				T1,
+				T2,
+				typename boost::enable_if_c
+				<
+					(boost::is_signed<T1>::value && boost::is_unsigned<T2>::value) ||
+					(boost::is_unsigned<T1>::value && boost::is_signed<T2>::value)
+				>::type* = 0,
+				typename boost::disable_if_c<boost::is_same<T1, bool>::value || boost::is_same<T2, bool>::value>::type* = 0
+			)
+			{
+				assert(false);
+			}
+
+			//the relational operators can't be applied to bool
+			template<typename T1, typename T2>
+			static
+			bool
+			apply
+			(
+				T1,
+				T2,
+				typename boost::enable_if_c<boost::is_same<T1, bool>::value || boost::is_same<T2, bool>::value>::type* = 0
+			)
+			{
+				assert(false);
+			}
+		};
+
+		struct greater_than
+		{
+			template<typename T1, typename T2>
+			static
+			bool
+			apply
+			(
+				T1 a,
+				T2 b,
+				typename boost::disable_if_c
+				<
+					(boost::is_signed<T1>::value && boost::is_unsigned<T2>::value) ||
+					(boost::is_unsigned<T1>::value && boost::is_signed<T2>::value)
+				>::type* = 0,
+				typename boost::disable_if_c<boost::is_same<T1, bool>::value || boost::is_same<T2, bool>::value>::type* = 0
+			)
+			{
+				return a > b;
+			}
+
+			//avoid "comparison between signed and unsigned integer" warning
+			template<typename T1, typename T2>
+			static
+			bool
+			apply
+			(
+				T1,
+				T2,
+				typename boost::enable_if_c
+				<
+					(boost::is_signed<T1>::value && boost::is_unsigned<T2>::value) ||
+					(boost::is_unsigned<T1>::value && boost::is_signed<T2>::value)
+				>::type* = 0,
+				typename boost::disable_if_c<boost::is_same<T1, bool>::value || boost::is_same<T2, bool>::value>::type* = 0
+			)
+			{
+				assert(false);
+			}
+
+			//the relational operators can't be applied to bool
+			template<typename T1, typename T2>
+			static
+			bool
+			apply
+			(
+				T1,
+				T2,
+				typename boost::enable_if_c<boost::is_same<T1, bool>::value || boost::is_same<T2, bool>::value>::type* = 0
+			)
+			{
+				assert(false);
+			}
+		};
+
+		struct greater_than_or_equal_to
+		{
+			template<typename T1, typename T2>
+			static
+			bool
+			apply
+			(
+				T1 a,
+				T2 b,
+				typename boost::disable_if_c
+				<
+					(boost::is_signed<T1>::value && boost::is_unsigned<T2>::value) ||
+					(boost::is_unsigned<T1>::value && boost::is_signed<T2>::value)
+				>::type* = 0,
+				typename boost::disable_if_c<boost::is_same<T1, bool>::value || boost::is_same<T2, bool>::value>::type* = 0
+			)
+			{
+				return a >= b;
+			}
+
+			//avoid "comparison between signed and unsigned integer" warning
+			template<typename T1, typename T2>
+			static
+			bool
+			apply
+			(
+				T1,
+				T2,
+				typename boost::enable_if_c
+				<
+					(boost::is_signed<T1>::value && boost::is_unsigned<T2>::value) ||
+					(boost::is_unsigned<T1>::value && boost::is_signed<T2>::value)
+				>::type* = 0,
+				typename boost::disable_if_c<boost::is_same<T1, bool>::value || boost::is_same<T2, bool>::value>::type* = 0
+			)
+			{
+				assert(false);
+			}
+
+			//the relational operators can't be applied to bool
+			template<typename T1, typename T2>
+			static
+			bool
+			apply
+			(
+				T1,
+				T2,
+				typename boost::enable_if_c<boost::is_same<T1, bool>::value || boost::is_same<T2, bool>::value>::type* = 0
+			)
+			{
+				assert(false);
+			}
+		};
+
 	}
 }
 
@@ -304,6 +547,61 @@ evaluate_left_shift_expression
 )
 {
 	evaluate_binary_expression_visitor<operation_policies::left_shift> visitor(left_operand);
+	return utility::apply_visitor(visitor, right_operand);
+}
+
+semantic_entities::expression_t
+evaluate_right_shift_expression
+(
+	const semantic_entities::expression_t& left_operand,
+	const semantic_entities::expression_t& right_operand
+)
+{
+	evaluate_binary_expression_visitor<operation_policies::right_shift> visitor(left_operand);
+	return utility::apply_visitor(visitor, right_operand);
+}
+
+semantic_entities::expression_t
+evaluate_less_than_expression
+(
+	const semantic_entities::expression_t& left_operand,
+	const semantic_entities::expression_t& right_operand
+)
+{
+	evaluate_binary_expression_visitor<operation_policies::less_than> visitor(left_operand);
+	return utility::apply_visitor(visitor, right_operand);
+}
+
+semantic_entities::expression_t
+evaluate_less_than_or_equal_to_expression
+(
+	const semantic_entities::expression_t& left_operand,
+	const semantic_entities::expression_t& right_operand
+)
+{
+	evaluate_binary_expression_visitor<operation_policies::less_than_or_equal_to> visitor(left_operand);
+	return utility::apply_visitor(visitor, right_operand);
+}
+
+semantic_entities::expression_t
+evaluate_greater_than_expression
+(
+	const semantic_entities::expression_t& left_operand,
+	const semantic_entities::expression_t& right_operand
+)
+{
+	evaluate_binary_expression_visitor<operation_policies::greater_than> visitor(left_operand);
+	return utility::apply_visitor(visitor, right_operand);
+}
+
+semantic_entities::expression_t
+evaluate_greater_than_or_equal_to_expression
+(
+	const semantic_entities::expression_t& left_operand,
+	const semantic_entities::expression_t& right_operand
+)
+{
+	evaluate_binary_expression_visitor<operation_policies::greater_than_or_equal_to> visitor(left_operand);
 	return utility::apply_visitor(visitor, right_operand);
 }
 
