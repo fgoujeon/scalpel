@@ -492,6 +492,27 @@ namespace
 			}
 		};
 
+		struct logical_and
+		{
+			template<typename T1, typename T2>
+			static
+			bool
+			apply(T1 a, T2 b)
+			{
+				return a && b;
+			}
+		};
+
+		struct logical_or
+		{
+			template<typename T1, typename T2>
+			static
+			bool
+			apply(T1 a, T2 b)
+			{
+				return a || b;
+			}
+		};
 	}
 }
 
@@ -523,6 +544,8 @@ EVALUATE_EXPRESSION(not_equal_to)
 EVALUATE_EXPRESSION(bitwise_and)
 EVALUATE_EXPRESSION(bitwise_exclusive_or)
 EVALUATE_EXPRESSION(bitwise_inclusive_or)
+EVALUATE_EXPRESSION(logical_and)
+EVALUATE_EXPRESSION(logical_or)
 
 #undef EVALUATE_EXPRESSION
 

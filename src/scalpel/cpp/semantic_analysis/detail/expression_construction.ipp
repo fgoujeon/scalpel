@@ -209,7 +209,7 @@ create_expression_from_logical_or_expression
 	if(opt_right_operand_node)
 	{
 		const syntax_nodes::logical_or_expression& right_operand_node = *opt_right_operand_node;
-		return semantic_entities::logical_or_expression
+		return create_or_evaluate_binary_expression<expression_creation_or_evaluation_policies::logical_or>
 		(
 			create_expression_from_logical_and_expression(left_operand_node, declarative_region),
 			create_expression_from_logical_or_expression(right_operand_node, declarative_region)
@@ -236,7 +236,7 @@ create_expression_from_logical_and_expression
 	if(opt_right_operand_node)
 	{
 		const syntax_nodes::logical_and_expression& right_operand_node = *opt_right_operand_node;
-		return semantic_entities::logical_and_expression
+		return create_or_evaluate_binary_expression<expression_creation_or_evaluation_policies::logical_and>
 		(
 			create_expression_from_inclusive_or_expression(left_operand_node, declarative_region),
 			create_expression_from_logical_and_expression(right_operand_node, declarative_region)

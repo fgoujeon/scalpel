@@ -463,5 +463,37 @@ expression_creation_or_evaluation_policies::bitwise_inclusive_or::create
 	);
 }
 
+semantic_entities::expression_t
+expression_creation_or_evaluation_policies::logical_and::create
+(
+	semantic_entities::expression_t left_operand,
+	semantic_entities::expression_t right_operand
+)
+{
+	//TODO
+
+	return semantic_entities::logical_and_expression
+	(
+		left_operand,
+		right_operand
+	);
+}
+
+semantic_entities::expression_t
+expression_creation_or_evaluation_policies::logical_or::create
+(
+	semantic_entities::expression_t left_operand,
+	semantic_entities::expression_t right_operand
+)
+{
+	//TODO
+
+	return semantic_entities::logical_or_expression
+	(
+		left_operand,
+		right_operand
+	);
+}
+
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
 
