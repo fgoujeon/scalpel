@@ -419,6 +419,79 @@ namespace
 			comparison_operation_policies::comparison<comparison_operation_policies::not_equal_to>
 			not_equal_to
 		;
+
+		struct bitwise_and
+		{
+			template<typename T1, typename T2>
+			static
+			auto apply(T1 a, T2 b) -> decltype(a & b)
+			{
+				return a & b;
+			}
+
+			//the & operator can't be applied to floating types
+			template<typename T1, typename T2>
+			static
+			int
+			apply
+			(
+				T1,
+				T2,
+				typename boost::enable_if_c<boost::is_floating_point<T1>::value || boost::is_floating_point<T2>::value>::type* = 0
+			)
+			{
+				assert(false);
+			}
+		};
+
+		struct bitwise_exclusive_or
+		{
+			template<typename T1, typename T2>
+			static
+			auto apply(T1 a, T2 b) -> decltype(a ^ b)
+			{
+				return a ^ b;
+			}
+
+			//the ^ operator can't be applied to floating types
+			template<typename T1, typename T2>
+			static
+			int
+			apply
+			(
+				T1,
+				T2,
+				typename boost::enable_if_c<boost::is_floating_point<T1>::value || boost::is_floating_point<T2>::value>::type* = 0
+			)
+			{
+				assert(false);
+			}
+		};
+
+		struct bitwise_inclusive_or
+		{
+			template<typename T1, typename T2>
+			static
+			auto apply(T1 a, T2 b) -> decltype(a | b)
+			{
+				return a | b;
+			}
+
+			//the | operator can't be applied to floating types
+			template<typename T1, typename T2>
+			static
+			int
+			apply
+			(
+				T1,
+				T2,
+				typename boost::enable_if_c<boost::is_floating_point<T1>::value || boost::is_floating_point<T2>::value>::type* = 0
+			)
+			{
+				assert(false);
+			}
+		};
+
 	}
 }
 
@@ -447,6 +520,9 @@ EVALUATE_EXPRESSION(greater_than)
 EVALUATE_EXPRESSION(greater_than_or_equal_to)
 EVALUATE_EXPRESSION(equal_to)
 EVALUATE_EXPRESSION(not_equal_to)
+EVALUATE_EXPRESSION(bitwise_and)
+EVALUATE_EXPRESSION(bitwise_exclusive_or)
+EVALUATE_EXPRESSION(bitwise_inclusive_or)
 
 #undef EVALUATE_EXPRESSION
 

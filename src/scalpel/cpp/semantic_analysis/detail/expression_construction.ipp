@@ -263,7 +263,7 @@ create_expression_from_inclusive_or_expression
 	if(opt_right_operand_node)
 	{
 		const syntax_nodes::inclusive_or_expression& right_operand_node = *opt_right_operand_node;
-		return semantic_entities::bitwise_inclusive_or_expression
+		return create_or_evaluate_binary_expression<expression_creation_or_evaluation_policies::bitwise_inclusive_or>
 		(
 			create_expression_from_exclusive_or_expression(left_operand_node, declarative_region),
 			create_expression_from_inclusive_or_expression(right_operand_node, declarative_region)
@@ -290,7 +290,7 @@ create_expression_from_exclusive_or_expression
 	if(opt_right_operand_node)
 	{
 		const syntax_nodes::exclusive_or_expression& right_operand_node = *opt_right_operand_node;
-		return semantic_entities::bitwise_exclusive_or_expression
+		return create_or_evaluate_binary_expression<expression_creation_or_evaluation_policies::bitwise_exclusive_or>
 		(
 			create_expression_from_and_expression(left_operand_node, declarative_region),
 			create_expression_from_exclusive_or_expression(right_operand_node, declarative_region)
@@ -317,7 +317,7 @@ create_expression_from_and_expression
 	if(opt_right_operand_node)
 	{
 		const syntax_nodes::and_expression& right_operand_node = *opt_right_operand_node;
-		return semantic_entities::bitwise_and_expression
+		return create_or_evaluate_binary_expression<expression_creation_or_evaluation_policies::bitwise_and>
 		(
 			create_expression_from_equality_expression(left_operand_node, declarative_region),
 			create_expression_from_and_expression(right_operand_node, declarative_region)

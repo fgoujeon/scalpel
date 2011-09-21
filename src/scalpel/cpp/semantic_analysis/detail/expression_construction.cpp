@@ -415,5 +415,53 @@ expression_creation_or_evaluation_policies::not_equal_to::create
 	);
 }
 
+semantic_entities::expression_t
+expression_creation_or_evaluation_policies::bitwise_and::create
+(
+	semantic_entities::expression_t left_operand,
+	semantic_entities::expression_t right_operand
+)
+{
+	//TODO
+
+	return semantic_entities::bitwise_and_expression
+	(
+		left_operand,
+		right_operand
+	);
+}
+
+semantic_entities::expression_t
+expression_creation_or_evaluation_policies::bitwise_exclusive_or::create
+(
+	semantic_entities::expression_t left_operand,
+	semantic_entities::expression_t right_operand
+)
+{
+	//TODO
+
+	return semantic_entities::bitwise_exclusive_or_expression
+	(
+		left_operand,
+		right_operand
+	);
+}
+
+semantic_entities::expression_t
+expression_creation_or_evaluation_policies::bitwise_inclusive_or::create
+(
+	semantic_entities::expression_t left_operand,
+	semantic_entities::expression_t right_operand
+)
+{
+	//TODO
+
+	return semantic_entities::bitwise_inclusive_or_expression
+	(
+		left_operand,
+		right_operand
+	);
+}
+
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
 

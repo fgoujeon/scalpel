@@ -52,6 +52,9 @@ EVALUATE_EXPRESSION(greater_than)
 EVALUATE_EXPRESSION(greater_than_or_equal_to)
 EVALUATE_EXPRESSION(equal_to)
 EVALUATE_EXPRESSION(not_equal_to)
+EVALUATE_EXPRESSION(bitwise_and)
+EVALUATE_EXPRESSION(bitwise_exclusive_or)
+EVALUATE_EXPRESSION(bitwise_inclusive_or)
 
 #undef EVALUATE_EXPRESSION
 
